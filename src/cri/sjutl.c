@@ -1,14 +1,11 @@
 /* CRI SJ utilities: chunk splitting and the tags that frame data inside a chunk. A tag is a 16-byte
  * header: a 7-character id at 0, its content length as seven hex digits at 8, the content from 16. */
 #include "dw4/cri/sfdsj.h"
+#include <string.h>
 
 #define SJ_TAG_ID_LEN 7
 #define SJ_TAG_LEN_OFS 8
 #define SJ_TAG_HDR_LEN 16
-
-void *memset(void *dst, int value, unsigned int size);
-char *strncpy(char *dst, const char *src, unsigned int size);
-int strncmp(const char *a, const char *b, unsigned int size);
 
 char sj_hex_digit[] = "0123456789abcdef";
 /* Digit value by character code; every other character reads 0. */
@@ -17,7 +14,6 @@ int sj_hex_value[112] = {
     ['A'] = 10, ['B'] = 11, ['C'] = 12, ['D'] = 13, ['E'] = 14, ['F'] = 15,
     ['a'] = 10, ['b'] = 11, ['c'] = 12, ['d'] = 13, ['e'] = 14, ['f'] = 15,
 };
-
 
 /* head gets the first nbyte of a chunk (all of it if shorter), rest the remainder, with no data pointer
  * when nothing is left. */

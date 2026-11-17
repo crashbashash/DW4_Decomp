@@ -1,9 +1,6 @@
 /* The conversions and comparisons MWCC calls for double arithmetic, which the EE's FPU cannot do: each forwards to
  * the software double-precision routines (__floatdidf, dpadd, dpcmp). */
-
-double __floatdidf(long long value);
-double dpadd(double a, double b);
-int dpcmp(double a, double b);
+#include "dw4/softfloat.h"
 
 double _d_ulltod(unsigned long long value) {
     double half;

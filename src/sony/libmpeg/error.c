@@ -1,7 +1,6 @@
 #include "dw4/sony/libmpeg.h"
 #include "dw4/libkernl.h"
-
-int sprintf(char *buf, const char *format, ...);
+#include <stdio.h>
 
 void _ErrMessage(char *message) {
     scePrintf("[MPEG ERROR]%s\n", message);

@@ -2,6 +2,7 @@
  * chunk can run over the wrap point. The upper-case entry points take the SJ critical section around the
  * lower-case bodies. */
 #include "dw4/cri/sfdsj.h"
+#include <string.h>
 
 #define SJRBF_MAX_OBJ 256
 #define SJ_ERR_PRM (-3)
@@ -50,9 +51,6 @@ struct SjRbfObj {
 };
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
-
-void *memset(void *dst, int value, unsigned int size);
-void *memcpy(void *dst, const void *src, unsigned int size);
 
 void SJCRS_Lock(void);
 void SJCRS_Unlock(void);

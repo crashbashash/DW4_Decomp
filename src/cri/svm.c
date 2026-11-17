@@ -1,6 +1,7 @@
 /* CRI SVM (server manager): the critical section, error reporting and the server functions the CRI
  * libraries register per server type, which the host's threads run. The lock itself is a pair of
  * callbacks the host registers; every lock records its type, and the outermost unlock checks it. */
+#include <string.h>
 
 #define SVM_SVTYPE_NUM 8
 #define SVM_SVR_NUM 6
@@ -53,10 +54,6 @@ typedef __builtin_va_list va_list;
 #define va_start(ap, last) __builtin_stdarg_start((ap), (last))
 #define va_end(ap) __builtin_va_end(ap)
 
-void *memset(void *dst, int value, unsigned int size);
-unsigned int strlen(const char *s);
-char *strncpy(char *dst, const char *src, unsigned int size);
-char *strncat(char *dst, const char *src, unsigned int size);
 int vsprintf(char *buf, const char *format, va_list args);
 
 extern volatile int svm_init_cnt;

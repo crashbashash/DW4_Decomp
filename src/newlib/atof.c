@@ -1,4 +1,4 @@
-double strtod(const char *s, char **end);
+#include <stdlib.h>
 
 double atof(const char *s)
 {

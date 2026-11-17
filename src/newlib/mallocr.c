@@ -1,4 +1,5 @@
 #include "dw4/newlib_mallocr.h"
+#include "dw4/newlib_stdio.h"
 
 #define RARG struct _reent *reent_ptr,
 #define RCALL reent_ptr,
@@ -8,7 +9,6 @@
 #define check_malloced_chunk(P, N)
 #define POINTER_UINT unsigned long
 #define assert(x)
-void _free_r(struct _reent *, void *);
 #define fREe _free_r
 #define next_bin(b) ((mbinptr)((char *)(b) + 2 * sizeof(mbinptr)))
 #define prev_bin(b) ((mbinptr)((char *)(b) - 2 * sizeof(mbinptr)))

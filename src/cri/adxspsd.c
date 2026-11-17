@@ -1,5 +1,6 @@
 /* CRI ADXB SPSD reader: plays raw PCM from an SPSD header through an ADXB decoder handle. */
 #include "dw4/cri/adxb.h"
+#include <string.h>
 
 typedef struct AdxbSpsdHeader {
     char pad0[7];
@@ -11,8 +12,6 @@ typedef struct AdxbSpsdHeader {
     char pad16[26];
     unsigned short sfreq;
 } AdxbSpsdHeader;
-
-int memcmp(const void *a, const void *b, unsigned int size);
 
 int ADX_DecodeInfoSpsd(AdxbSpsdHeader *hdr, int size, short *hdrlen, signed char *type, signed char *bits,
                      signed char *blklen, signed char *nch, int *sfreq, int *nsmpl, int *blksmpl,

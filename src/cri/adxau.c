@@ -1,6 +1,7 @@
 /* CRI ADXB AU reader: plays PCM from a Sun/NeXT audio (".snd") file through an ADXB decoder handle: 16-bit,
  * 8-bit scaled to 16 bits, or 8-bit u-law expanded through a table. */
 #include "dw4/cri/adxb.h"
+#include <string.h>
 
 /* AdxbObj.pcmfmt for an AU stream */
 enum AdxbAuFmt {
@@ -18,8 +19,6 @@ enum AuEncoding {
 
 #define GET32(p) ((p)[0] | ((p)[1] << 8) | ((p)[2] << 16) | ((p)[3] << 24))
 #define SWAP32(x) ((((x) >> 24) & 0xFF) | (((x) >> 8) & 0xFF00) | (((x) << 8) & 0xFF0000) | ((x) << 24))
-
-int memcmp(const void *a, const void *b, unsigned int size);
 
 /* u-law byte -> 16-bit sample */
 static short adxb_ulaw_tbl[256] = {

@@ -1,8 +1,5 @@
 #include "dw4/newlib_reent.h"
-
-extern int errno;
-int kill(int pid, int sig);
-int getpid(void);
+#include "dw4/libkernl.h"
 
 int _kill_r(struct _reent *ptr, int pid, int sig)
 {

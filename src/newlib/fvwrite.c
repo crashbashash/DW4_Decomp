@@ -1,7 +1,7 @@
 #include "dw4/newlib_stdio.h"
+#include <string.h>
 
 void *memmove();
-void *memchr();
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define COPY(n)	  (void) memmove((void *) fp->_p, (void *) p, (size_t) (n))
 

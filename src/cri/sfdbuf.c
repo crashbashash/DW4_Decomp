@@ -1,4 +1,5 @@
 #include "dw4/cri/sfdsj.h"
+#include <string.h>
 
 typedef struct SfdBufInf {
     char *data;  /* 0 */
@@ -69,7 +70,6 @@ typedef struct SfdBufCrePrm {
 extern int DAT_0057fab0;
 extern int DAT_0057fab4;
 
-extern void *memcpy(void *dst, const void *src, unsigned int n);
 int sfd_ReportError();
 void sfd_Lock(int *lock);
 void sfd_Unlock(int *lock);

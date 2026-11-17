@@ -1,5 +1,6 @@
 #include "dw4/sony/sif.h"
 #include "dw4/libkernl.h"
+#include <string.h>
 
 /* One frame of the pad state padman.irx DMAs to the EE; the caller's 64-byte aligned area holds two,
    and the one with the higher frame count is the current one. */
@@ -82,10 +83,6 @@ typedef struct PadPortState {
 
 #define LIBPAD_VERSION_MAJOR 4
 #define LIBPAD_VERSION_MINOR 0
-
-void *memcpy(void *dst, const void *src, unsigned int n);
-void *memset(void *dst, int value, unsigned int n);
-char *strcpy(char *dst, const char *src);
 
 int scePadGetModVersion(void);
 int padPortInit(int mode);

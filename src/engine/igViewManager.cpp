@@ -19,14 +19,11 @@
 #include "dw4/igReport.h"
 #include "dw4/igMatrix44f.h"
 #include "dw4/igNamedObject.h"
+#include <math.h>
 extern "C" {
 
 int FUN_002377c0(...);
 int FUN_002370c0(...);
-
-
-
-
 
 int FUN_00236ca0(int);
 int FUN_002371f0(int);
@@ -52,7 +49,6 @@ struct L1 { char pad[44]; L2 *p44; };
 struct B { char pad[16]; long long ll16; };
 extern "C" void FUN_00237730(igInsightCore *);
 
-
 typedef struct S2 { char pad[8]; igObject *obj; int f12; } S2;
 
 class ViewerClock {
@@ -61,7 +57,6 @@ public:
     virtual void setSeconds(float seconds);
 };
 
-
 extern int DAT_0058cd80[4];
 
 int igViewManager_OnKeyEvent(void *arg0);
@@ -69,7 +64,6 @@ class DW4VC_100_0 { public: virtual void d0(); virtual void d1(); virtual void d
 
 igBoundingBoxesMaker *FUN_001a4830(int pool);
 igAABox *FUN_001b2ed0(igBoundingBoxesMaker *maker, igNode *node);
-extern float sqrtf(float);
 
 /* The maker hands back a box that already holds one reference; the smart pointer takes its own. */
 static inline void dropCreatedReference(igAABox *box) {
@@ -129,7 +123,6 @@ struct StringRef {
     void *p;
     ~StringRef() { releaseString(p); }
 };
-
 
 ViewerSetup::ViewerSetup(igObject *w)
     : core((InsightCore *)igInsightCore_CreateInstance(0), AdoptReference()), sceneInfo(FUN_00459340(0), AdoptReference()),

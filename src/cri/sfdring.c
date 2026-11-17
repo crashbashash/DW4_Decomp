@@ -1,6 +1,6 @@
 #include "dw4/cri/sfdply.h"
+#include <string.h>
 
-extern void *memset(void *dst, int value, unsigned int size);
 int sfd_ReportError();
 int SFLIB_CheckHn(SfdPly *h);
 

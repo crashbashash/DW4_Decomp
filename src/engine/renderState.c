@@ -5,6 +5,7 @@
 #include "dw4/p2draw.h"
 #include "dw4/p2gs.h"
 #include "dw4/renderState.h"
+#include "dw4/p2multipass.h"
 int *FUN_00202f60(int *arg0, long long arg1);
 int FUN_00202fa0(long long arg0);
 extern int FUN_001f8b50();
@@ -207,7 +208,6 @@ enum {
 /* The STMASK pattern that leaves the first word of each lighting-table vector written and the
  * other three unchanged. */
 #define P2_LIGHTING_FUNCTIONS_MASK 0xFCFCFCFC
-
 
 p2DmaTag p2FunctionTablesTag = {{ 0x10000001, 0, 0, 0 }};
 p2VifUnpack p2LightingFunctionsUnpack = { 0x70004027 };
@@ -493,8 +493,6 @@ int FUN_00200830(struct P *p, long long *out) {
     return res;
 }
 
-int p2GetPassCombineMode(void);
-void p2GetPassMasks(int pass, unsigned int *frameMask, unsigned int *zbufMask);
 /* Declared without a prototype: p2SendPassSetup passes the combine mode too, which it ignores. */
 int p2GetPassProgramAddress();
 
@@ -574,7 +572,6 @@ void p2SendPassSetup(void) {
         }
     }
 }
-
 
 unsigned int p2VuBufferLayoutTag[4] = { 0x10000003, 0, 0, 0 };
 unsigned int p2VuBufferBytesUnpack = 0x6E02404A;

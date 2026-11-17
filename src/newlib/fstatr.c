@@ -1,7 +1,5 @@
 #include "dw4/newlib_reent.h"
-
-extern int errno;
-int fstat(int fd, void *st);
+#include "dw4/libkernl.h"
 
 int _fstat_r(struct _reent *ptr, int fd, void *st)
 {

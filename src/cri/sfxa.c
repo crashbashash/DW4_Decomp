@@ -1,7 +1,7 @@
 /* SFX alpha: the alpha handles an SFX handle keeps (SfxHn.ahn): the parameters of the CFT colour
  * conversion table and the three alpha levels of the alpha tables, and the frame helpers after them. */
+#include <string.h>
 
-void *memset(void *dst, int value, unsigned int size);
 void cft_MakeYccTbl(int mode, int lo, int hi, int table);
 void cft_MakeAlpha3Tbl(int table, int alpha0, int alpha1, int alpha2);
 void cft_MakeAlpha3TblBlack(int table, int alpha0, int alpha1, int alpha2);

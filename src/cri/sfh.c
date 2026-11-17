@@ -3,10 +3,7 @@
  * stream descriptors. */
 
 #include "dw4/cri/sfh.h"
-
-void *memset(void *dst, int value, unsigned int size);
-int memcmp(const void *a, const void *b, unsigned int size);
-char *strstr(const char *text, const char *pattern);
+#include <string.h>
 
 typedef struct SfhStr12 {
     char text[12];

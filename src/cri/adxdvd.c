@@ -1,7 +1,6 @@
 /* CRI ADX on PS2, disc side: the disc and memory devices, the disc read mode and file cache, and memory files named by address. */
 #include "dw4/cri/adxfs.h"
-
-int sprintf(char *buf, const char *fmt, ...);
+#include <stdio.h>
 
 int dvCiLoadDirInfo(const char *flist, void *buf, int bufsize, int fnamelen);
 int dvCiLoadDirInfoMem(const char *list, int listlen, void *buf, int bufsize, int fnamelen);

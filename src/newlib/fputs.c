@@ -1,6 +1,5 @@
 #include "dw4/newlib_stdio.h"
-
-unsigned int strlen(const char *s);
+#include <string.h>
 
 int fputs(const char *s, FILE *fp)
 {

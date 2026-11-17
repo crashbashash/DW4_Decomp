@@ -1,8 +1,7 @@
 #include "dw4/ieee_words.h"
 #include "dw4/newlib_math.h"
+#include <math.h>
 
-extern double atan(double);
-extern double fabs(double);
 #define tiny 1.0e-300
 #define zero 0.0
 #define pi_o_4 7.8539816339744827900E-01

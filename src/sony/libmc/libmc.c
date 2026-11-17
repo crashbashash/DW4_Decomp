@@ -1,6 +1,7 @@
 #include "dw4/eekernel.h"
 #include "dw4/libkernl.h"
 #include "dw4/sony/sif.h"
+#include <string.h>
 
 typedef struct sceMcStDateTime {
     unsigned char Resv2;
@@ -104,10 +105,6 @@ typedef union McApdx {
     McReadApdx read;
     unsigned char raw[192];
 } McApdx;
-
-char *strncpy(char *dst, const char *src, unsigned int n);
-unsigned int strlen(const char *s);
-void *memcpy(void *dst, const void *src, unsigned int n);
 
 int sceMcSync(int mode, int *cmd, int *result);
 

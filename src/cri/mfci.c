@@ -1,4 +1,7 @@
 #include "dw4/cri/cvfs.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct MfCiFile {
     signed char used;       /* 0x00 */
@@ -15,14 +18,6 @@ typedef struct MfCiFile {
     int len;                /* 0x34 */
 } MfCiFile;
 
-
-
-unsigned int strlen(const char *s);
-int sprintf(char *dst, const char *format, ...);
-char *strcpy(char *dst, const char *src);
-void *memcpy(void *dst, const void *src, unsigned int n);
-void *memset(void *dst, int value, unsigned int n);
-unsigned long strtoul(const char *s, char **end, int base);
 void SVM_Lock(void);
 void SVM_Unlock(void);
 

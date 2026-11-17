@@ -1,6 +1,8 @@
 /* CRI SJUNI: an SJ whose four lines are lists of chunks, the list nodes drawn from a pool in the caller's
  * work area. The upper-case entry points take the SJ critical section around the lower-case bodies. */
 #include "dw4/cri/sfdsj.h"
+#include <string.h>
+#include "dw4/cri/adxt.h"
 
 #define SJUNI_MAX_OBJ 64
 #define SJUNI_NLINE 4
@@ -48,12 +50,9 @@ struct SjUniObj {
     void *errobj;
 };
 
-void *memset(void *dst, int value, unsigned int size);
-
 void SJCRS_Lock(void);
 void SJCRS_Unlock(void);
 void SJERR_CallErr(const char *message);
-void SJ_SplitChunk(SfdSjChunk *ck, int nbyte, SfdSjChunk *head, SfdSjChunk *rest);
 
 void SJUNI_Destroy(SjUniObj *sj);
 const char *SJUNI_GetUuid(SjUniObj *sj);
@@ -73,7 +72,6 @@ static SjUniVtbl sjuni_vtbl = {
 static int sjuni_init_cnt = 0;
 static SjUniObj sjuni_obj[SJUNI_MAX_OBJ] = {0};
 static const char sjuni_uuid[16] = "\xa3\x4f\x53\x2e\x97\xaf\xd2\x11\xa5\x27\x00\x60\x08\x94\x48\xbc";
-
 
 void sjuni_Init(void);
 void sjuni_Finish(void);

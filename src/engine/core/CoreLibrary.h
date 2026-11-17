@@ -106,7 +106,6 @@ template <class T, class U> static inline void assignReference(T *&field, const 
     field = (T *)next;
 }
 
-
 /* Reallocates the list to hold `capacity` elements; a capacity below the count is ignored. */
 template <class T> static inline void setCapacity(igTDataList<T> *list, int capacity) {
     if (capacity >= list->_count) {
@@ -518,7 +517,6 @@ extern "C" void igObjectList_GetMetaObjectFunction(void);
 extern "C" void igObjectList_InitFields(void);
 extern "C" int igObjectDirEntry_Create(int arg0);
 extern "C" int igSmartPointer_igMetaObject_Destruct(...);
-extern "C" struct igDirEntry *igDirEntry_Destroy(struct igDirEntry *self, short deleteFlag);
 extern "C" int igObjectDirEntry_GetVTable(void);
 extern "C" void igObjectDirEntry_EnsureRegistered(void);
 extern "C" CallbackArray *igObjectDirEntry_Register(void);
@@ -2873,7 +2871,6 @@ extern "C" void igObjectSystem_AppendMetaObject(void *system,igMetaObject *meta)
 /* Looks a registered metaobject up by class name. The object system's metadata registry (the
  * pointer list at +24) is searched on the `_name` field of igMetaObject; an inactive object system
  * (flag byte at +0 clear) finds nothing. */
-
 
 /* The object system behind &g_objectSystem: the activity flags, the metadata registry and the
  * counts it held at boot, the callbacks run for every registered meta object, the configuration

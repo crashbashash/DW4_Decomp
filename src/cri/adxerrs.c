@@ -1,9 +1,7 @@
+#include <string.h>
+
 typedef void (*AdxErrFunc)(int obj, char *msg);
 
-void *memset(void *dst, int c, unsigned int n);
-char *strncpy(char *dst, const char *src, unsigned int n);
-char *strncat(char *dst, const char *src, unsigned int n);
-unsigned int strlen(const char *s);
 void SVM_SetCbErr(void);
 void SVM_CallErr(char *msg);
 

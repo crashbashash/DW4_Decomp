@@ -1,4 +1,5 @@
 #include "dw4/cri/adxt.h"
+#include <string.h>
 
 typedef struct CriSjChunk {
     void *ptr;
@@ -38,18 +39,15 @@ char adxt_enc_obuf[64] = {0};
 static char *volatile adxt_build_ref;
 extern int DAT_004a9b1c;
 
-void ADXERR_CallErrFunc1(const char *message);
 int ADXT_ExecServer();
 int ADXT_ExecFsSvr();
 int LSC_ExecServer();
-void *memcpy(void *dst, const void *src, unsigned int n);
 void ADXT_Init(void);
 void ADXT_DestroyAll(void);
 void ADXRNA_Finish(void);
 void FUN_00260b30(void);
 void ADXSTM_Finish(void);
 void LSC_Finish(void);
-void ADXCRS_Lock(void);
 void SVM_DelCbSvr(int key, int value);
 void SVM_Finish(void);
 void ADXSJD_Finish(void);
@@ -57,7 +55,6 @@ void ADXERR_Finish(void);
 void SJMEM_Finish(void);
 void SJRBF_Finish(void);
 void SJUNI_Finish(void);
-void ADXCRS_Unlock(void);
 void ADXSJE_Init(void);
 void ADXSJE_Finish(void);
 AdxEnc *ADXSJE_Create(int nch, Sj **out, Sj *in);
@@ -69,7 +66,6 @@ void ADXSJE_Destroy(AdxEnc *enc);
 Sj *SJRBF_Create(void *buf, int size, int f8);
 Sj *SJMEM_Create(void *buf, int size);
 
-void *memset(void *dst, int value, unsigned int size);
 int ADXCRS_Init();
 int SJUNI_Init();
 int SJRBF_Init();

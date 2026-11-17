@@ -2,15 +2,15 @@
  * and decodes the sequence, group and picture headers and the user data in front of a picture. */
 #include "dw4/cri/mpv.h"
 #include "dw4/cri/mpvbits.h"
+#include <string.h>
+#include "dw4/cri/adxt.h"
 
 int MPVLIB_CheckHn(MpvHn *mpv);
 int mpv_ReportError(MpvHn *mpv, int code);
 SfdSj *SJMEM_Create(void *buf, int size);
-void SJ_SplitChunk(SfdSjChunk *ck, int len, SfdSjChunk *head, SfdSjChunk *rest);
 int MPV_CheckDelim(const unsigned char *p);
 char *MPV_SearchDelim(char *buf, int len, int mask);
 int atoi(const char *s);
-int strncmp(const char *a, const char *b, unsigned int n);
 
 extern char mpv_tag_idcprec[];  /* "IDCPREC" */
 extern char mpv_tag_stccode[];  /* "STCCODE" */
@@ -327,7 +327,6 @@ int mpvhdec_DecEscSj(MpvHn *mpv, SfdSj *sj, int type) {
 
 int mpv_ScanUsrTags(MpvHn *mpv, char *buf, int size);
 int mpvhdec_AnalyUd(MpvHn *mpv, char *data, int len);
-extern void *memcpy(void *dst, const void *src, unsigned int n);
 
 /* Decodes the user data at the head of the stream joint and moves past it. */
 int mpvhdec_DecUdscSj(MpvHn *mpv, SfdSj *sj, int type) {

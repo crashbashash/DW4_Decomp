@@ -1,4 +1,5 @@
 #include "dw4/newlib_stdio.h"
+#include <string.h>
 
 struct lconv {
     char *decimal_point;
@@ -14,8 +15,6 @@ typedef unsigned long u_long;
 extern int __mb_cur_max;
 int _mbtowc_r (struct _reent *, wchar_t *, const char *, size_t, int *);
 char * _dtoa_r (struct _reent *, double, int, int, int *, int*, char**);
-void * memchr (const void *, int, size_t);
-size_t strlen (const char *);
 int isnan (double);
 int isinf (double);
 union double_union

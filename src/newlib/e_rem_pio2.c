@@ -1,7 +1,7 @@
 #include "dw4/ieee_words.h"
 #include "dw4/newlib_math.h"
+#include <math.h>
 
-extern double fabs(double);
 static const __int32_t two_over_pi[] = {
 0xA2F983, 0x6E4E44, 0x1529FC, 0x2757D1, 0xF534DD, 0xC0DB62, 
 0x95993C, 0x439041, 0xFE5163, 0xABDEBB, 0xC561B7, 0x246E3A, 

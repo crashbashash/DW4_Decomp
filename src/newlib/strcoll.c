@@ -1,4 +1,4 @@
-int strcmp(const char *, const char *);
+#include <string.h>
 
 int strcoll(const char *a, const char *b)
 {

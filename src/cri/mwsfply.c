@@ -2,6 +2,7 @@
  * range, an AFS entry, memory and an SJ, and the stop and pause. */
 #include "dw4/cri/mwsfd.h"
 #include "dw4/cri/sfdsj.h"
+#include <stdio.h>
 
 /* an object that opens a stream by name (vtbl +24) */
 typedef struct MwsfdNameObj MwsfdNameObj;
@@ -13,12 +14,10 @@ struct MwsfdNameObj {
     MwsfdNameObjVtbl *vtbl;
 };
 
-
 void *memset(void *dst, int c, unsigned int n);
 int strlen(const char *s);
 char *strcpy(char *dst, const char *src);
 char *strncpy(char *dst, const char *src, int n);
-int sprintf(char *buf, const char *fmt, ...);
 void MWSFSVM_Error(const char *message, ...);
 int ADXF_GetFnameRangeEx(int dir, int ofst, char *fname, void **outDir, int *outOfst, int *outNsct);
 SfdSj *SJMEM_Create(char *buf, int size);
@@ -64,7 +63,6 @@ void mwply_SetAfsRange(MwsfdPly *ply, int dir, int ofst);
 int MWSFD_GetPauseBdr(void);
 int MWSFLIB_SetErrCode(int code);
 void mwply_ResetPicLog(MwsfdPly *ply);
-
 
 int mwPlySfdStandby(MwsfdPly *ply)
 {

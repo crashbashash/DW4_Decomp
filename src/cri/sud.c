@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 typedef struct SudChars2 {
     char c[2];
 } SudChars2;
@@ -22,13 +26,7 @@ typedef struct SudStats {
     int count;
 } SudStats;
 
-char *strncpy(char *dst, const char *src, unsigned int count);
-int sprintf(char *dst, const char *format, ...);
-char *strcat(char *dst, const char *src);
-int strncmp(const char *a, const char *b, unsigned int count);
-int memcmp(const void *a, const void *b, unsigned int count);
 int atoi(const char *text);
-unsigned long strtoul(const char *text, char **end, int radix);
 int CRICFG_Read(const char *name, int *value);
 
 extern char DAT_004f59c0[];

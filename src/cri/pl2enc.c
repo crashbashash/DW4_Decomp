@@ -1,11 +1,10 @@
 /* CRI PL2ENC: the Dolby Pro Logic II encoder. One mono sample becomes a left/right pair whose front
  * part follows the position's pan and whose surround part goes out of phase through a short delay. */
 #include "dw4/cri/pl2enc.h"
+#include <string.h>
 
 void SVM_Lock(void);
 void SVM_Unlock(void);
-void *memset(void *dst, int value, unsigned int size);
-
 
 extern int pl2enc_init_cnt;
 extern volatile char pl2enc_ver_str[45];   /* the build string, read so it is linked */

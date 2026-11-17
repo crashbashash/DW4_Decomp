@@ -1,4 +1,7 @@
 #include "dw4/cri/adxb.h"
+#include <stdio.h>
+#include <string.h>
+#include "dw4/cri/adxt.h"
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
@@ -9,10 +12,6 @@ static unsigned short adxb_key0 = 0;
 static unsigned short adxb_key1 = 0;
 static unsigned short adxb_key2 = 0;
 static AdxbObj adxb_obj[16] = {0};
-
-void *memset(void *dst, int value, unsigned int size);
-unsigned int strlen(const char *string);
-int sprintf(char *dst, const char *format, ...);
 
 void SKG_Init(void);
 void SKG_Finish(void);
@@ -26,10 +25,6 @@ int ADX_DecodeInfoExIdly(unsigned short *hdr, int size, unsigned short *dly1, un
 void ADX_DecodeInfoExLoop(unsigned short *hdr, int size, int *f32, short *f36, short *f38, int *f40, int *f44, int *f48,
                   int *f52);
 void ADX_DecodeInfoAinf(unsigned short *hdr, int size, int *f204, char *f208, short *f224, short *f226);
-void ADXERR_CallErrFunc2(const char *code, const char *message);
-
-void ADXCRS_Lock(void);
-void ADXCRS_Unlock(void);
 
 int ADXB_CheckSpsd(unsigned short *hdr);
 int ADXB_DecodeHeaderSpsd(AdxbObj *dec, unsigned short *hdr, int size);

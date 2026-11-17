@@ -1,9 +1,8 @@
 /* The ADX file-system server: one pass over the file-reading layers, guarded against re-entry. */
+#include "dw4/cri/adxt.h"
+#include "dw4/cri/cvfs.h"
 
-void ADXCRS_Lock(void);
-void ADXCRS_Unlock(void);
 void SRD_ExecServer(void);
-void cvFsExecServer(void);
 void ADXSTM_ExecServer(void);
 void ADXF_ExecServer(void);
 

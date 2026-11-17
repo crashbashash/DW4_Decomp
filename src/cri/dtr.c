@@ -1,3 +1,6 @@
+#include <string.h>
+#include "dw4/cri/adxt.h"
+
 typedef struct SjObj SjObj;
 
 typedef struct SjChunk {
@@ -44,9 +47,7 @@ const char *dtr_build = "\nDTR Ver.1.06 Build:Oct  6 2004 11:47:40\n";
 int dtr_init_cnt = 0;
 DtrObj dtr_obj[32] = {0};
 
-void *memset(void *dst, int value, unsigned int n);
 void ADXMSG_PrintErr(const char *format, ...);
-void SJ_SplitChunk(SjChunk *ck, int nbyte, SjChunk *ck1, SjChunk *ck2);
 void SyncDCache(char *start, char *end);
 int sceSifDmaStat(unsigned int id);
 unsigned int sceSifSetDma(SifDmaData *sdd, int len);

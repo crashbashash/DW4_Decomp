@@ -1,7 +1,5 @@
-float sqrtf(float);
-float cosf(float);
-int memcmp(const void *a, const void *b, unsigned int size);
-void *memcpy(void *dst, const void *src, unsigned int size);
+#include <math.h>
+#include <string.h>
 
 extern int DAT_00499cd0;
 

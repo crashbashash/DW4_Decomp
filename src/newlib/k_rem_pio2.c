@@ -1,7 +1,7 @@
 #include "dw4/ieee_words.h"
 #include "dw4/newlib_math.h"
+#include <math.h>
 
-extern double floor(double);
 extern double scalbn(double, int);
 static const int init_jk[] = {2,3,4,6};
 static const double PIo2[] = {

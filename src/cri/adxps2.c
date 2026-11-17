@@ -92,7 +92,6 @@ extern int adxm_main_init_prio;
 extern char text_1060102_Internal_Error_adxm_goto[];
 extern char ADXM_UsrVsyncThread_Stack_pointe[];
 extern char ADXM_UsrIdleThread_Stack_pointer[];
-extern char _gp[];
 extern AdxmCallback adxm_vsync_frame_cb;
 extern AdxmCallback adxm_mwidle_sleep_cb;
 extern char *volatile adxps2_build;

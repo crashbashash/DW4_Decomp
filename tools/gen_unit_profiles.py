@@ -506,7 +506,7 @@ class Evidence:
         return None
 
 
-EEGCC_FLAGS = "-O2 -G0 -Iinclude"
+EEGCC_FLAGS = "-O2 -G0 -Iinclude -Isrc/third_party/libc"
 
 
 def candidates_for(u):

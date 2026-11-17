@@ -1,4 +1,5 @@
 #include "dw4/newlib_stdio.h"
+#include <string.h>
 
 typedef int wchar_t;
 typedef unsigned short u_short;
@@ -6,8 +7,6 @@ typedef unsigned int u_int;
 typedef unsigned long u_long;
 extern int __mb_cur_max;
 int _mbtowc_r (struct _reent *, wchar_t *, const char *, size_t, int *);
-void * memchr (const void *, int, size_t);
-size_t strlen (const char *);
 
 int __sprint_vfiprintf(FILE *fp, register struct __suio *uio)
 {

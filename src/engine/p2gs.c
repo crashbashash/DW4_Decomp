@@ -7,6 +7,7 @@
 #include "dw4/p2swap.h"
 #include "dw4/p2timer.h"
 #include "dw4/dmaChannel.h"
+#include "dw4/libkernl.h"
 extern long long DAT_00562cc0[4];
 extern int DAT_005690ac[4];
 extern int DAT_005690b0[4];
@@ -326,9 +327,7 @@ void FUN_001f7500(void *arg0) {
 }
 
 void FUN_001f8190(int registerIndex);
-void p2FinishHandler(void);
 void p2VsyncHandler(void);
-void p2GsSignalHandler(void);
 
 typedef struct {
     unsigned long long SIGNAL:1;
@@ -444,7 +443,6 @@ void p2FlushGsRegisters(void) {
         FUN_001f78d0();
     }
 }
-
 
 extern unsigned int DAT_00491000, DAT_00491004, DAT_00491008, DAT_0049100c, DAT_00491010, DAT_00491018;
 extern VifCode DAT_00491020;
@@ -662,7 +660,6 @@ void FUN_001f8320(void) {
 }
 
 int AddIntcHandler(int cause, int (*handler)(int cause), int next);
-int EnableIntc(int cause);
 extern int p2FirstOpen;
 extern int p2GsIntcHandlerId;
 

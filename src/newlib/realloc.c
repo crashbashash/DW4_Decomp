@@ -1,8 +1,7 @@
 #include "dw4/newlib_reent.h"
+#include "dw4/newlib_mallocr.h"
 
 void *_realloc_r(struct _reent *ptr, void *mem, unsigned int size);
-void __malloc_lock(struct _reent *ptr);
-void __malloc_unlock(struct _reent *ptr);
 
 void *realloc(void *mem, unsigned int size)
 {

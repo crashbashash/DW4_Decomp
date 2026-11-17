@@ -1,4 +1,5 @@
 #include "dw4/cri/mwply.h"
+#include <string.h>
 
 typedef struct SjObj SjObj;
 
@@ -99,7 +100,6 @@ extern char DAT_004f4588[];
 extern char DAT_004f45c0[];
 
 SjObj *SJRBF_Create(char *buf, int size, int flags);
-void *memcpy(void *dst, const void *src, unsigned int size);
 int SJ_SearchTag(SjChunk *in, const char *start, const char *end, SjChunk *out);
 void mwSfdDestroy(MwsfdPly *ply);
 void mwPlyCalcYccPlane(int addr, int width, int height, int *out);

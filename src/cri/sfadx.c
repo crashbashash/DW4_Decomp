@@ -1,5 +1,7 @@
 #include "dw4/cri/sfdsj.h"
 #include "dw4/cri/mcp.h"
+#include <string.h>
+#include "dw4/cri/mps.h"
 
 typedef struct SfdAdxHn SfdAdxHn;
 
@@ -112,8 +114,6 @@ extern int sfadxt_stat;
 extern void *DAT_004bead8[4];
 
 float logf(float);
-int strncmp();
-int memcmp(const void *a, const void *b, unsigned int n);
 int ADXT_Init();
 int ADXT_Finish();
 void FUN_00263548();
@@ -145,7 +145,6 @@ int ADXT_IsEndcode();
 int ADXT_InsertSilence();
 SfdSj *SJRBF_Create();
 int SJ_SplitChunk();
-int UTY_MemsetDword();
 int UTY_MulDiv();
 int SFBUF_RingGetRead();
 int SFBUF_RingAddRead();

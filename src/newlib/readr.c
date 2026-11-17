@@ -1,7 +1,5 @@
 #include "dw4/newlib_reent.h"
-
-extern int errno;
-int read(int fd, void *buf, int count);
+#include "dw4/libkernl.h"
 
 long _read_r(struct _reent *ptr, int fd, void *buf, int count)
 {

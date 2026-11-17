@@ -1,4 +1,5 @@
 #include "dw4/cri/m2v.h"
+#include <string.h>
 
 extern char M2VLIB_version_str[];
 extern char *volatile m2vlib_version_ptr;
@@ -16,7 +17,6 @@ extern M2vObj *m2vlib_m2vobj;
         }                                     \
     } while (0)
 
-void *memset(void *dst, int c, unsigned int n);
 char *MPV_SearchDelim(char *buf, int size, int mask);
 int MPV_CheckDelim(char *p);
 int M2VERR_SetCode(void *hn, int code);

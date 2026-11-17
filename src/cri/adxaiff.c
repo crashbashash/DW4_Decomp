@@ -1,6 +1,7 @@
 /* CRI ADXB AIFF reader: plays big-endian PCM from an AIFF ("FORM" ... "AIFF") file through an ADXB decoder
  * handle. The samples reach the output as they are, the 8-bit ones scaled to 16 bits. */
 #include "dw4/cri/adxb.h"
+#include <string.h>
 
 /* AdxbObj.pcmfmt for an AIFF stream */
 enum AdxbAiffFmt {
@@ -9,8 +10,6 @@ enum AdxbAiffFmt {
 };
 
 #define BSWAP16(x) (((x) >> 8) | (((x) << 8) & 0xFF00))
-
-int memcmp(const void *a, const void *b, unsigned int size);
 
 extern char FORM[];
 extern char AIFF[];

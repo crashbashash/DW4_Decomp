@@ -918,8 +918,6 @@ extern "C" void p2EnableWatchdog(int on);
 extern "C" void p2SetClearPasses(int on);
 extern "C" int p2OpenDisplay(int mode, int colorBits, int depthBits, const char *config, const char *symbols, int width, int height);
 extern "C" void FUN_0020c9e0(int mode);
-extern "C" void p2SetPoolSize(int type, int size);
-extern "C" void p2FixDmaPacketPool(int channel);
 class OpenResult {
 public:
     int v;
@@ -927,8 +925,6 @@ public:
     OpenResult(const OpenResult &o) : v(o.v) {}
 };
 extern "C" OpenResult Gap__Gfx__igPsx2VisualContext__vfunc_32(OpenContext *self);
-
-
 
 OpenResult Gap__Gfx__igPsx2VisualContext__vfunc_32(OpenContext *self) {
     BufferRecord *record;
@@ -1394,4 +1390,3 @@ void igPsx2VisualContext_CallDmaChain(igPsx2VisualContext *self, void *packet, i
 int igPsx2VisualContext_IsDisplayingFirstBuffer(igPsx2VisualContext *self) {
     return swapbuffersDrawPredicate(1);
 }
-

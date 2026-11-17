@@ -1,4 +1,5 @@
 #include "dw4/cri/sfx.h"
+#include <string.h>
 
 typedef struct SfxPicInf {
     int pad0[19];
@@ -32,7 +33,6 @@ extern char DAT_004f5840[];
 extern char DAT_004f5860[];
 extern char DAT_004f5868[];
 
-void *memset(void *dst, int value, unsigned int size);
 int SJ_SearchTag(SfxMem *in, char *tag, char *endtag, SfxMem *out);
 void FUN_00283038();
 void FUN_00283058(void);

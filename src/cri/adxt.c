@@ -1,5 +1,7 @@
 /* CRI ADXT: creating and destroying playback handles, starting and stopping them, and their settings. */
 #include "dw4/cri/adxt.h"
+#include <string.h>
+#include "dw4/libkernl.h"
 
 #define ADXT_OBUF_SIZE 8192         /* bytes of output per channel */
 #define ADXT_OBUF_DIST 8288         /* stride between channel buffers, ADXT_OBUF_SIZE plus the extra area */
@@ -103,8 +105,6 @@ extern char E8101207_can_t_create_sj_ADXT_StartMem[];
 extern char E02080810_ADXT_StartMemIdx_parameter_error[];
 extern char E8101207_can_t_create_sj_ADXT_StartMemIdx[];
 
-void scePrintf(const char *format, ...);
-char *strcpy(char *dst, const char *src);
 SfdSj *PS2RNA_GetSjUni(AdxRna *rna, int ch);
 int PS2RNA_GetSjRmt(AdxRna *rna, int ch);
 int SJRMT_GetNumData(int sjrmt, int line);

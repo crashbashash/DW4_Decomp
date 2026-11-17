@@ -1,6 +1,8 @@
 /* MWSFD: the Sofdec player library's core (MWSFD/PS2EE Ver.3.33s281). The version string, the work
  * area and its settings, the library init and finish over SFD and the SFD time hooks. */
 #include "dw4/cri/mwsfd.h"
+#include <stdio.h>
+#include <string.h>
 
 /* the parameter block of the SFD library init */
 typedef struct SfdInitPrm {
@@ -35,9 +37,6 @@ extern char mwsfd_err_text[];          /* the formatted SFD error report */
 extern int mwsfd_init_flag;
 extern volatile int mwsfsvr_vsync_cnt2; /* bumped by the vsync server */
 
-void *memset(void *dst, int c, unsigned int n);
-int sprintf(char *buf, const char *format, ...);
-char *strncat(char *dst, const char *src, unsigned int n);
 void ADXT_Init(void);
 void SJRBF_Init(void);
 void SJMEM_Init(void);
@@ -90,7 +89,6 @@ void mwsflib_SetDefCond(MwsfdInitPrm *prm);
 int MWSFD_GetPauseBdr(void);
 int MWSFLIB_SetErrCode(int code);
 int mwPlySfdFinish(void);
-
 
 char *MWSFD_GetVersionStr(void)
 {
@@ -329,4 +327,3 @@ void mwply_ExecTime(MwsfdPly *ply)
     }
     SFD_UpdateTime(0);
 }
-

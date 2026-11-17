@@ -1,3 +1,5 @@
+#include "dw4/cri/mps.h"
+
 typedef struct SjObj SjObj;
 
 typedef struct SjVtbl {
@@ -286,7 +288,6 @@ typedef struct SfdEntry44 {
     int f32;
 } SfdEntry44;
 
-int UTY_MemsetDword();
 int UTY_MulDiv(int value, int scale, int divisor);
 void SFHDS_InitFhd(void *blk);
 int SFCON_IsEndcodeSkip(SfdPly *hn);
@@ -317,7 +318,6 @@ void sfsee_SearchPosToTime(int delegate, int value, int *out, int *out_scale);
 void sfsee_ExecFinAnaly(SfdPly *hn);
 int FUN_002ad828(char *ctx);
 int sfsee_UpdateEByteRate(SfdPly *hn);
-
 
 void SFSEE_InitHn(SfdRecSlot *slot)
 {

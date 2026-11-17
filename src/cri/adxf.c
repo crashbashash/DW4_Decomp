@@ -1,3 +1,5 @@
+#include <string.h>
+
 typedef struct AdxfSj AdxfSj;
 typedef struct AdxfSjVtbl {
     void (*f0)(AdxfSj *sj);
@@ -77,9 +79,6 @@ static char adxf_ldptnw_work[8528] = {0};
 /* The 64-byte aligned transfer buffer inside the work area. */
 #define ADXF_LDPTNW_TMPBUF ((void *)((int)&adxf_ldptnw_work[144] & ~0x3F))
 
-void *memset(void *dst, int value, unsigned int size);
-int memcmp(const void *a, const void *b, unsigned int size);
-char *strncpy(char *dst, const char *src, unsigned int n);
 void InvalidDCache(void *start, void *last);
 void ADXCRS_Lock(void);
 void ADXCRS_Unlock(void);

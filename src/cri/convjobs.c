@@ -1,9 +1,9 @@
 #include "dw4/cri/adxpd.h"
+#include <string.h>
 
 int adxpd_odd_block_error = 0;
 AdxPdObj adxpd_obj[ADXPD_MAX_OBJ] = {0};
 
-int memset();
 void ADX_GetCoefficient(int cutoff, int sfreq, short *k0, short *k1);
 int ADX_DecodeMono4(unsigned char *ibuf, int nblk, short *obuf, short *dly, int k0, int k1,
                     short *seed, int mul, int add);

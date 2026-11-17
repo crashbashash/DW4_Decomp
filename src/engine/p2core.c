@@ -25,6 +25,8 @@
 #include "dw4/p2swap.h"
 #include "dw4/p2timer.h"
 #include "dw4/p2vu1Symbols.h"
+#include "dw4/p2multipass.h"
+#include "dw4/p2watchdog.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -183,9 +185,6 @@ int Memory_AllocateAligned16();
 int Memory_FreeToSelector();
 char *Memory_ReallocateAligned16(unsigned int data, int size, int heap);
 p2Texture *p2LoadTexture(void *pixels, int width, int height, int psm, int flags);
-void p2UploadTex0Context2(void);
-void p2CopyContext1ToContext2(void);
-
 
 void p2SetCapability(int capability, int on);
 void p2UploadFog(void);
@@ -249,7 +248,6 @@ extern int p2RequestedFrameMode;
 extern int p2GsIntcHandlerId;
 extern int p2VblankStartIntcHandlerId;
 extern int p2Vif1IntcHandlerId;
-extern int p2WatchdogThread;
 
 extern p2DmaPacket *p2SavedVif1Packet;
 extern p2DmaPacket p2DisplayListPacket;

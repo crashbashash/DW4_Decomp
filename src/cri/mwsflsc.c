@@ -2,9 +2,9 @@
  * loops and releases the queue; the file names, AFS entries and file ranges become LSC entries. */
 #include "dw4/cri/mwply.h"
 #include "dw4/cri/lsc.h"
+#include <stdio.h>
+#include <string.h>
 
-int sprintf(char *buf, const char *format, ...);
-void *memset(void *dst, int value, unsigned int size);
 void MWSFSVM_Error(const char *format, ...);
 int MWSFD_IsEnableHndl(void *ply);
 void mwSfdStartSj(MwsfdPly *ply, SfdSj *sj);

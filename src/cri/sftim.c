@@ -1,3 +1,5 @@
+#include "dw4/softfloat.h"
+
 typedef struct SfdTimeCode {
     int rate;
     int drop;
@@ -140,7 +142,6 @@ void sfd_Unlock(void *guard);
 int SFSET_GetCond();
 void SFSET_SetCond();
 long __muldi3(long a, long b);
-long __divdi3(long a, long b);
 
 void SFTIM_InitHn(SfdHn *hn, SfdTim *tim);
 void SFTIM_InitTtu(SfdTimeRec *rec, int time);
@@ -275,7 +276,6 @@ void SFTIM_InitTcode(SfdTimeCode *tc)
     tc->fieldFlag = 0;
     tc->half = 0;
 }
-
 
 void SFTIM_UpdateItime(SfdTim *tim, int now)
 {

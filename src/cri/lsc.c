@@ -1,5 +1,7 @@
 /* CRI LSC (link stream controller): plays a queue of file ranges into one SJ stream, one after another. */
 #include "dw4/cri/lsc.h"
+#include <string.h>
+#include "dw4/cri/adxstm.h"
 
 #define LSC_MAX_OBJ 32
 
@@ -27,22 +29,10 @@ typedef __builtin_va_list va_list;
 #define va_start(ap, last) __builtin_stdarg_start((ap), (last))
 #define va_end(ap) __builtin_va_end(ap)
 
-void *memset(void *dst, int value, unsigned int size);
-unsigned int strlen(const char *s);
 int vsprintf(char *buf, const char *format, va_list args);
 
 void SJCRS_Lock(void);
 void SJCRS_Unlock(void);
-void ADXSTM_BindFileNw(void *stm, char *fname, void *dir, int ofst, int nsct);
-void ADXSTM_ReleaseFileNw(void *stm);
-int ADXSTM_GetStat(void *stm);
-void ADXSTM_Seek(void *stm, int pos);
-int ADXSTM_Tell(void *stm);
-int ADXSTM_Start(void *stm);
-void ADXSTM_StopNw(void *stm);
-void ADXSTM_Stop(void *stm);
-void ADXSTM_SetEos(void *stm, int size);
-void ADXSTM_SetBufSize(void *stm, int min, int max);
 
 static LscObj lsc_objs[LSC_MAX_OBJ];
 

@@ -1,3 +1,8 @@
+#include <string.h>
+#include "dw4/libkernl.h"
+#include "dw4/sony/libcdvd.h"
+#include "dw4/sony/sifdev.h"
+
 typedef struct CdReadMode {
     unsigned char trycount;
     unsigned char spindlctrl;
@@ -67,19 +72,12 @@ extern char DAT_004efec0[];
 extern char DAT_004efee0[];
 extern char DAT_004eff00[];
 
-void *memset(void *dst, int value, unsigned int size);
-void scePrintf(const char *format, ...);
-int sceCdSync(int mode);
 int sceCdRead(int lsn, int sectors, void *buf, void *mode);
 int sceCdBreak(void);
 int sceCdSeek(int lsn);
 int sceCdGetError(void);
 int sceIoctl(int fd, int cmd, void *arg);
-int sceOpen(int name, int flags);
-int sceClose(int fd);
-int sceRead(int fd, void *buf, int size);
 long sceLseek64(int fd, long offset, int whence);
-int sceLseek(int fd, int offset, int whence);
 void SVM_Lock(void);
 void SVM_Unlock(void);
 void SVM_LockVar(void);

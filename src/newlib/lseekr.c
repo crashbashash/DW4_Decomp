@@ -1,7 +1,5 @@
 #include "dw4/newlib_reent.h"
-
-extern int errno;
-int lseek(int fd, int offset, int whence);
+#include "dw4/libkernl.h"
 
 int _lseek_r(struct _reent *ptr, int fd, int offset, int whence)
 {

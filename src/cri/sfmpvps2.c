@@ -1,5 +1,8 @@
 #include "dw4/cri/sfmpv.h"
 #include "dw4/eekernel.h"
+#include <string.h>
+#include "dw4/cri/mps.h"
+#include "dw4/libkernl.h"
 
 #define D_ENABLER ((volatile unsigned int *)0x1000F520)
 #define D_ENABLEW ((volatile unsigned int *)0x1000F590)
@@ -17,17 +20,10 @@ extern SfdMpegCtx sfmpvp_bkup_buf;
 extern int DAT_00585678;
 extern char DAT_00585680[8];
 
-extern int WaitSema(int sema);
-extern int SignalSema(int sema);
 extern int DeleteSema(int sema);
 extern int sceMpegInit(void);
-extern void *memcpy(void *dst, const void *src, unsigned int size);
 void sceMpegDelete(SfdMpegCtx *mpeg);
 void sceMpegReset(void);
-void DIntr(void);
-void EIntr(void);
-void UTY_MemcpyByte(void *dst, void *src, int size);
-void UTY_MemsetByte(void *dst, int value, int size);
 int sfd_ReportError();
 int SFPLY_GetResetFlg(void);
 typedef struct SfdPicOut {

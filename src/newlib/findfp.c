@@ -1,4 +1,6 @@
 #include "dw4/newlib_stdio.h"
+#include <string.h>
+#include "dw4/newlib_mallocr.h"
 
 #define NDYNAMIC 4
 #define ENOMEM 12
@@ -7,8 +9,6 @@ int __sread(void *, char *, int);
 int __swrite(void *, const char *, int);
 long __sseek(void *, long, int);
 int __sclose(void *);
-void *_malloc_r(struct _reent *, unsigned int);
-void *memset(void *, int, unsigned int);
 void _cleanup_r(struct _reent *);
 void std(FILE *, int, int, struct _reent *);
 

@@ -4,6 +4,7 @@
 #include "dw4/sony/sif.h"
 #include "dw4/sony/sifdev.h"
 #include "dw4/libkernl.h"
+#include <string.h>
 
 #define LF_SERVER 0x80000006
 
@@ -68,11 +69,6 @@ typedef union {
     LfModuleRequest module;
     LfAddrRequest addr;
 } LfSendData;
-
-int memcmp(const void *a, const void *b, unsigned int size);
-void *memcpy(void *dst, const void *src, unsigned int size);
-void *memset(void *dst, int value, unsigned int size);
-char *strncpy(char *dst, const char *src, unsigned int size);
 
 /* negative until the server is bound */
 static int _bind_check = -1;

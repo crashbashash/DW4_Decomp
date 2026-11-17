@@ -16,7 +16,6 @@
 
 void p2RunWatchdog(void *arg);
 
-extern char _gp[];
 int p2WatchdogThread = -1;
 int p2WatchdogDisabled = 1;
 volatile int p2WatchdogTicks;

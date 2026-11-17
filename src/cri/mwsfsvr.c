@@ -4,10 +4,10 @@
 #include "dw4/cri/mwply.h"
 #include "dw4/cri/mwsfd.h"
 #include "dw4/cri/sfdsj.h"
+#include <string.h>
 
 typedef __builtin_va_list va_list;
 
-void *memset(void *dst, int value, unsigned int size);
 int vsprintf(char *buf, const char *format, va_list args);
 
 /* SVM: server manager */

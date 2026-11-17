@@ -1,7 +1,7 @@
 #include "dw4/ieee_words.h"
 #include "dw4/newlib_math.h"
+#include <math.h>
 
-extern float atanf(float);
 extern float fabsf(float);
 #define tiny ((float)1.0e-30)
 #define zero ((float)0.0)

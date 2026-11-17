@@ -1,6 +1,6 @@
 #include "dw4/newlib_mallocr.h"
+#include <string.h>
 
-extern void *memset(void *, int, unsigned int);
 #define MALLOC_ZERO(charp, nbytes) \
     do { \
         INTERNAL_SIZE_T mzsz = (nbytes); \

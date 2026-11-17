@@ -5,6 +5,7 @@
 #include "dw4/p2draw.h"
 #include "dw4/p2lighting.h"
 #include "dw4/renderState.h"
+#include <math.h>
 
 /* A VIF code, written to the packet as one word. */
 typedef union p2VifCode {
@@ -32,7 +33,6 @@ enum {
     P2_NORMAL_ARRAYS = 0xE180
 };
 
-float sqrtf(float x);
 void FUN_001fb710(unsigned int *cursor, int sameCount);
 
 extern char p2LightingEnabled;

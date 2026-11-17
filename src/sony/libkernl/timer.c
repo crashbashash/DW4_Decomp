@@ -3,6 +3,7 @@
  * that cbTimerHandler calls when the counter reaches its schedule. */
 #include "dw4/eekernel.h"
 #include "dw4/libkernl.h"
+#include <string.h>
 
 typedef unsigned long u_long;
 
@@ -80,7 +81,6 @@ typedef struct {
 #define COUNTER_OF(id) ((Counter *)(((unsigned int)(id) >> 10) << 6))
 #define COUNTER_ID(c) (((int)(c) << 4) | (c)->key)
 
-void *memset(void *dst, int value, unsigned int size);
 int AddIntcHandler2(int cause, int (*handler)(int), int next, void *arg);
 void SetT2(unsigned int addr, unsigned int value);
 int cbTimerHandler(int cause, void *arg, void *addr);

@@ -1,6 +1,7 @@
 /* CRI MPV (M2V/PS2EE) decoder library: initialisation, the handle pool, conditions, the bridge to the
  * lower-layer decoder and the 64-bit multiply-divide helpers. */
 #include "dw4/cri/mpv.h"
+#include "dw4/cri/mps.h"
 
 extern char cri_mpv_version[];
 extern char *volatile mpv_version_ptr;
@@ -16,8 +17,6 @@ extern unsigned char *mpv_clamp;        /* mpv_clamp_table + 384 */
 unsigned char *MPV_SearchDelim(unsigned char *data, int size, int code);
 int MPV_CheckDelim(unsigned char *p);
 int mpv_ReportError(void *hn, int error);
-void UTY_MemcpyDword(void *dst, const void *src, int words);
-void UTY_MemsetDword(void *dst, int value, int size);
 void mpv_ResetErr(MpvErrObj *err);
 void MPV_SetUsrSj(MpvHn *hn, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj);
 void MPV_SetPicUsrBuf(MpvHn *hn, int a, int b);

@@ -1,6 +1,8 @@
 /* CRI ADXAMP: measures the peak amplitude of each channel of decoded samples, one frame at a time, and writes
  * one record per frame to the channel's output stream joint. */
 #include "dw4/cri/sfdsj.h"
+#include <string.h>
+#include "dw4/cri/adxt.h"
 
 #define ADXAMP_MAX_OBJ 16
 #define ADXAMP_MAX_CH 2
@@ -29,9 +31,6 @@ typedef struct AdxAmpObj {
 static int adxamp_init_cnt = 0;
 static AdxAmpObj adxamp_obj[ADXAMP_MAX_OBJ] = {0};
 
-void *memset(void *dst, int value, unsigned int size);
-void ADXCRS_Lock(void);
-void ADXCRS_Unlock(void);
 void adxamp_extract(AdxAmpObj *amp);
 
 void ADXAMP_Init(void)

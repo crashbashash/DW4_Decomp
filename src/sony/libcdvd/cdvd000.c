@@ -4,6 +4,7 @@
 #include "dw4/eekernel.h"
 #include "dw4/libkernl.h"
 #include "dw4/sony/libcdvd.h"
+#include <string.h>
 
 /* The search request the N-command server takes and the record it answers with. */
 typedef struct _CdSearchBuffer {
@@ -15,8 +16,6 @@ typedef struct _CdSearchBuffer {
 
 /* the SIF command cdvdman sends when the console is powered off */
 #define CD_CMD_POWER_OFF 0x80000012
-
-void *memcpy(void *dst, const void *src, unsigned int n);
 
 static void _sceCd_cbLoop(void *arg);
 static int PowerOffCB(void);

@@ -1,5 +1,6 @@
 /* MWSFD settings and the scratchpad swap: while Sofdec runs its server, the game's scratchpad is
  * parked in mwsfd_spr_save_buf and Sofdec's own scratchpad image is loaded from mwsfd_spr_work_buf. */
+#include <string.h>
 
 #define MWSFD_SPR_SIZE 0x4000
 #define MWSFD_SPR_ADDR 0x70000000
@@ -21,7 +22,6 @@ static int mwsfd_spr_cpu_copy = 0;
 static char mwsfd_spr_save_buf[MWSFD_SPR_SIZE];
 static char mwsfd_spr_work_buf[MWSFD_SPR_SIZE];
 
-void *memcpy(void *dst, const void *src, unsigned int size);
 DmaChan *sceDmaGetChan(int id);
 int sceDmaSync(DmaChan *ch, int mode, int timeout);
 void sceDmaRecvN(DmaChan *ch, void *data, int qwc);

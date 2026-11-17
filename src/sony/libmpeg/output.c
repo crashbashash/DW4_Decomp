@@ -1,7 +1,7 @@
 #include "dw4/sony/libmpeg.h"
 #include "dw4/libkernl.h"
+#include <stdio.h>
 
-int sprintf(char *buf, const char *format, ...);
 long __muldi3(long a, long b);
 
 /* The fields a frame is shown for, by its repeat_first_field and top_field_first flags. */

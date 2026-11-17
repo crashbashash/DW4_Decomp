@@ -1,5 +1,6 @@
 /* CRI SFX conversion: checks a conversion format and, per composition kind, builds the lookup table the
  * conversion reads. Fields of the handles are named by offset. */
+#include "dw4/cri/sfx.h"
 
 /* The format handle sfxcnv_IsCnvUpHalf checks. */
 typedef struct SfxCnvHn {
@@ -28,7 +29,6 @@ extern char DAT_004f53e0[];
 extern int D_004f5758[];
 extern int D_004f5788[];
 
-void SFXLIB_Error(void *hn, void *info, void *msg);
 void sfxcnv_MakeTable(SfxCnvTbl *tbl, SfxCnvSrc *src, unsigned int compo);
 int FUN_002b3bf0(void *hn);
 int SFXZ_MakeCnvZ32Tbl();

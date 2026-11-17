@@ -1,8 +1,7 @@
 /* CRI's mcp_not.c: memory copies with a transfer unit in the name (plain, 4, 8, 32 bytes) and their
  * "Sq" variants. Without the vector hardware (the "not" build) all of them are memcpy. */
 #include "dw4/cri/mcp.h"
-
-void *memcpy(void *dst, const void *src, unsigned int n);
+#include <string.h>
 
 void MEM_Copy(void *dst, void *src, int n)
 {

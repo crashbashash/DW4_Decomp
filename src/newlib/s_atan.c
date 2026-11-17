@@ -1,6 +1,6 @@
 #include "dw4/ieee_words.h"
+#include <math.h>
 
-extern double fabs(double);
 static const double atanhi[] = {
     4.63647609000806093515e-01,
     7.85398163397448278999e-01,

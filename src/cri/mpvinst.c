@@ -1,4 +1,5 @@
 /* Points the MPEG-2 video decoder hooks (mpvhook.c) at the M2V entry points and marks them installed. */
+#include "dw4/cri/m2v.h"
 void M2V_SetErrFunc();
 void M2V_GetErrInf();
 void M2V_SkipFrm();
@@ -13,7 +14,6 @@ void FUN_00285a68();
 void M2V_DecodePicAtr();
 void M2V_GetVersionStr();
 void FUN_0028ab10();
-void M2V_Init();
 void M2V_Finish();
 void M2V_Create();
 void M2V_Destroy();

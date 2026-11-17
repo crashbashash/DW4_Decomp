@@ -1,3 +1,6 @@
+#include <string.h>
+#include "dw4/cri/adxt.h"
+
 typedef struct CriSjChunk {
     void *ptr;
     int len;
@@ -112,11 +115,7 @@ extern const short skg_tbl[1024];
 extern const char DAT_004ee3e8[];
 extern const char DAT_004ee428[];
 
-void *memset(void *dst, int value, unsigned int size);
-void *memcpy(void *dst, const void *src, unsigned int size);
-unsigned int strlen(const char *s);
 int abs(int value);
-char *strncpy(char *dst, const char *src, unsigned int size);
 int ADX_GetCoefficient(short id, int arg, short *first, short *second);
 int ADX_DecodeInfo(unsigned short *data, int size, short *out_a, char *out_b, char *out_c, char *out_d, char *out_e, int *out_f, int *out_g, int *out_h);
 
@@ -932,7 +931,6 @@ AdxEnc *ADXSJE_Create(int nch, Sj **in, Sj *out)
 
 /* matching construct: statement-order sweep of the five trailing stores */
 void ADXCRS_Lock(void);
-void ADXCRS_Unlock(void);
 
 void ADXSJE_Destroy(AdxEnc *e)
 {

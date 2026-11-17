@@ -1,3 +1,5 @@
+#include "dw4/libkernl.h"
+
 typedef __builtin_va_list va_list;
 #define va_start(ap, last) __builtin_stdarg_start((ap), (last))
 #define va_end(ap) __builtin_va_end(ap)
@@ -7,7 +9,6 @@ int adxmsg_level = 0;
 int dvCiSetOutputDebugLevel();
 int htCiSetOutputDebugLevel();
 int vsprintf(char *buffer, const char *format, va_list args);
-void scePrintf(const char *format, ...);
 
 int FUN_00265868(void) {
     return adxmsg_level;

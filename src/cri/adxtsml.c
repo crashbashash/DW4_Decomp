@@ -1,3 +1,6 @@
+#include "dw4/cri/adxfs.h"
+#include "dw4/cri/adxt.h"
+
 typedef struct AdxtSj AdxtSj;
 typedef struct AdxtSjVtbl {
     void (*slot[6])(AdxtSj *self);
@@ -32,8 +35,6 @@ extern char DAT_004ee210[];
 extern char DAT_004ee240[];
 extern char DAT_004ee270[];
 
-void ADXERR_CallErrFunc1(const char *message);
-void ADXERR_CallErrFunc2(const char *message, const char *detail);
 int LSC_EntryFileRange(void *stm, const char *name, void *dir, int ofst, int nsct);
 void LSC_Stop(void *stm);
 void LSC_SetLpFlg(void *stm, int enable);
@@ -42,11 +43,6 @@ void LSC_ResetEntry(void *stm);
 void LSC_Start(void *stm);
 void LSC_SetFlowLimit(void *stm, int bytes);
 void ADXT_StopWithoutLsc(void);
-void ADXCRS_Lock(void);
-void ADXCRS_Unlock(void);
-void adxt_start_sj(AdxtHandle *adxt, int value);
-void ADXT_SetLnkSw(AdxtHandle *adxt, int value);
-void ADXERR_ItoA2(int value, int extra, char *text, int size);
 int ADXF_GetFnameRangeEx(int ptid, int flid, char *fname, void **dir, int *ofst, int *nsct);
 char *ADXF_GetFnameFromPt(int ptid);
 void ADXT_EntryFnameRange(AdxtHandle *adxt, const char *name, int first, int last);

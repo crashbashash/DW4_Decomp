@@ -1,8 +1,8 @@
 #include "dw4/ieee_words.h"
+#include "dw4/newlib_reent.h"
 
 extern int finite(double);
 extern double scalbn(double, int);
-extern int *__errno(void);
 
 double ldexp(double value, int exp)
 {

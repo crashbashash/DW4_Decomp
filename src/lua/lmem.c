@@ -10,11 +10,10 @@
 #include "lobject.h"
 #include "lstate.h"
 #include "dw4/lua_game_state.h"
+#include "dw4/igMemory.h"
 
 extern "C" {
-void *Memory_AllocateDefaultBuffer(size_t size);
 void *Memory_ReallocateBufferAlias(void *block, size_t size);
-void Memory_FreeBufferAliasA(void *block);
 }
 
 void *luaM_growaux (lua_State *L, void *block, size_t nelems,

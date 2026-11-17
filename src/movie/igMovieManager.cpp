@@ -7,6 +7,7 @@
 #include "dw4/igTransformDispatchView.h"
 #include "dw4/igMovieManagerDispatchView.h"
 #include "dw4/igMovieInfo.h"
+#include "dw4/igMathConstants.h"
 
 /* igMovieInfo::_type: an ADX audio stream, which plays without a scene. */
 enum { kMovieTypeAdx = 2 };
@@ -226,7 +227,6 @@ int snprintf(char *buffer, unsigned int size, const char *format, ...);
 #include "dw4/igPlanarShadowShader.h"
 extern int g_movieDefaultTileWidth;
 extern int g_movieDefaultTileHeight;
-extern igVec3f g_vec3ZAxis;
 extern char emptyString[];
 extern unsigned char g_movieUnknownCodecMuted;
 extern unsigned char g_movieStartFailedMuted;

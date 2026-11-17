@@ -1,5 +1,7 @@
 #include "dw4/cri/m2v.h"
 #include "dw4/cri/mpv.h"
+#include <string.h>
+#include "dw4/cri/adxt.h"
 
 /* MPEG-2 extension_data() parser of the CRI movie decoder: reads one
  * extension_start_code_identifier and its payload from the video elementary stream (ISO/IEC
@@ -56,9 +58,6 @@
             } \
         } \
     }
-
-
-void *memset(void *dst, int c, unsigned int n);
 
 void M2VHDEC_Init(void)
 {
@@ -187,7 +186,6 @@ void m2vhdec_SetPicAtr(Mpeg2Ctx *hn)
     a->matrix_coefficients = h->matrix_coefficients;
 }
 
-void SJ_SplitChunk(SfdSjChunk *ck, int len, SfdSjChunk *head, SfdSjChunk *rest);
 char *parseShc(Mpeg2Ctx *ctx, char *buf);
 char *FUN_00286838(Mpeg2Ctx *ctx, char *buf);
 char *FUN_00286958(Mpeg2Ctx *ctx, char *buf);
@@ -448,7 +446,6 @@ char *FUN_00286958(Mpeg2Ctx *ctx, char *buf)
 }
 
 void FUN_00286ce8(Mpeg2Ctx *ctx, void *src, int len);
-void *memcpy();
 extern char D_004f28a8[];
 
 /* Hands n bytes of header data to the user stream the current header level selects, in up to two

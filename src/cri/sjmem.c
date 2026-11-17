@@ -1,6 +1,7 @@
 /* CRI SJMEM: a stream joint over a memory block the caller owns. Its data line hands out the block
  * front to back; nothing is ever free to put back. Every entry point takes SJCRS around the work. */
 #include "dw4/cri/sfdsj.h"
+#include <string.h>
 
 #define SJMEM_MAX_OBJ 32
 
@@ -27,7 +28,6 @@ typedef struct SjMem {
     void *errobj;       /* 0x20 */
 } SjMem;
 
-void *memset(void *dst, int value, unsigned int size);
 void SJERR_CallErr(const char *message);
 void SJCRS_Lock(void);
 void SJCRS_Unlock(void);

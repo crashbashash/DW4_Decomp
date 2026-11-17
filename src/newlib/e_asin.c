@@ -1,7 +1,7 @@
 #include "dw4/ieee_words.h"
 #include "dw4/newlib_math.h"
+#include <math.h>
 
-extern double fabs(double);
 static const double one = 1.00000000000000000000e+00,
                     huge = 1.000e+300,
                     pio2_hi = 1.57079632679489655800e+00,

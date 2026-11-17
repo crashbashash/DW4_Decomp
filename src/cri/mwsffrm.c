@@ -3,6 +3,7 @@
  * data, and the per-picture log ring the SFD's picture callback fills. */
 #include "dw4/cri/mwply.h"
 #include "dw4/cri/sfmpv.h"
+#include <string.h>
 
 /* a picture's user data chunk as the SFD frame points at it; its first 4 bytes are a header */
 typedef struct MwsfdUsrChunk {
@@ -140,7 +141,6 @@ extern char E3122201_mwPlyGetNextPicUsr_inv_hn[]; /* "E3122201: mwPlyGetNextPicU
 extern char E202231_mwPlyGetNumSkipDisp_inv_hn[]; /* "E202231: mwPlyGetNumSkipDisp: handle is invalid." */
 extern char E409171_mwPlyGetNumRemainFrm_inv_hn[]; /* "E409171: mwPlyGetNumRemainFrm: handle is invalid." */
 
-void *memset(void *dst, int c, unsigned int n);
 int SFD_GetFrm(void *sfd, void **frm);
 int SFD_GetFps(void *sfd, int *rate);
 void FUN_00297ee8(MwsfdPly *ply, int mode);
@@ -149,7 +149,6 @@ void mwply_SetFrmInf(MwsfdPly *ply, MwsfdSfdFrm *frm, MwsfdFrm *out);
 void mwply_GetFrmUsrData(MwsfdPly *ply, MwsfdSfdFrm *frm, MwsfdFrm *out);
 int mwply_MulDivMs(int a, int b, int sec);
 void mwply_GetPicInf(char *buf, unsigned int size, MwsfdHdrInf *hdr);
-void *memcpy(void *dst, const void *src, unsigned int n);
 void MWSFSVM_Error(const char *message, ...);
 int MWSFD_GetUsePicUsr(void);
 int MWSFD_IsEnableHndl(MwsfdPly *ply);

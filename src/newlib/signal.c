@@ -1,4 +1,5 @@
 #include "dw4/newlib_reent.h"
+#include "dw4/newlib_mallocr.h"
 
 typedef void (*_sig_func_ptr)(int);
 #define NSIG 32
@@ -6,7 +7,6 @@ typedef void (*_sig_func_ptr)(int);
 #define SIG_IGN ((_sig_func_ptr)1)
 #define SIG_ERR ((_sig_func_ptr)-1)
 #define EINVAL 22
-void *_malloc_r(struct _reent *ptr, unsigned int size);
 int _kill_r(struct _reent *ptr, int pid, int sig);
 int _getpid_r(struct _reent *ptr);
 

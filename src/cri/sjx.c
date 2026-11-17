@@ -2,6 +2,8 @@
  * gathers the chunks waiting on each joined line into a list for the IOP, and the receive callback puts
  * back the chunks the IOP returns. */
 #include "dw4/cri/sfdsj.h"
+#include <string.h>
+#include "dw4/cri/sndf.h"
 
 #define SJX_MAX_OBJ 32
 #define SJX_MAX_SEND 128
@@ -42,12 +44,9 @@ typedef struct SjxList {
 
 typedef void (*DtxCbf)(void *obj, SjxList *list, int size);
 
-void *memset(void *dst, int value, unsigned int size);
 void SJCRS_Lock(void);
 void SJCRS_Unlock(void);
 void ADXMSG_PrintErr(const char *format, ...);
-int sceSifAllocIopHeap(int size);
-int sceSifFreeIopHeap(int addr);
 void DTX_Init(void);
 void DTX_Finish(void);
 void *DTX_Create(int id, unsigned int eewk, unsigned int iopwk, int wklen);

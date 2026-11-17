@@ -19,6 +19,7 @@
 #include "dw4/igSwitch.h"
 #include <math.h>
 #include <string.h>
+#include "dw4/igStringObj.h"
 
 extern "C" igMetaObject *beHitLandModel_GetInfoMeta(void);
 extern "C" void beHitLandModel_UpdateRam(void);
@@ -34,7 +35,6 @@ extern "C" void beHitLandModel_CheckWallFull(beHitLandModel *self);
 static void beHitLandModel_FindLand(beHitLandModel *self);
 extern "C" igMetaObject *g_igStringObjList_metaObject[4];
 extern "C" igMetaObject *g_igNamedObjectList_metaObject[4];
-extern "C" char *g_stringObjEmptyText;
 extern "C" int emptyString[4];
 extern "C" void beHitLandModel_Prepare(beHitLandModel *self);
 extern "C" char HITLANDMODEL[];
@@ -1025,4 +1025,3 @@ igMetaObject *beHitLandModel_GetMeta(void)
 {
     return g_beHitLandModel_metaObject;
 }
-

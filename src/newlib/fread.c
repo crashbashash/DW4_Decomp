@@ -1,6 +1,5 @@
 #include "dw4/newlib_stdio.h"
-
-void *memcpy(void *, const void *, size_t);
+#include <string.h>
 
 size_t
 fread(void * buf, size_t size, size_t count, FILE * fp)

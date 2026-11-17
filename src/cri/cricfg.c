@@ -1,13 +1,10 @@
 /* CRI CFG: a small table of named integer settings the other CRI libraries read at start-up. */
+#include <string.h>
 
 typedef struct CriCfgEntry {
     char name[12];
     int value;
 } CriCfgEntry;
-
-void *memset(void *dst, int value, unsigned int size);
-char *strncpy(char *dst, const char *src, unsigned int size);
-int strncmp(const char *a, const char *b, unsigned int size);
 
 extern char CRI_CFG_PS2EE_Ver_1_002_Build_Oct_6_2004_11_47_45[];
 extern char *volatile cricfg_build;

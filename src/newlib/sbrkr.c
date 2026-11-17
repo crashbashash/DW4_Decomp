@@ -1,7 +1,5 @@
 #include "dw4/newlib_reent.h"
-
-extern int errno;
-int sbrk(int increment);
+#include "dw4/libkernl.h"
 
 int _sbrk_r(struct _reent *ptr, int increment)
 {

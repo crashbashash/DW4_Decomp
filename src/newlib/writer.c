@@ -1,7 +1,5 @@
 #include "dw4/newlib_reent.h"
-
-extern int errno;
-int write(int fd, const void *buf, int count);
+#include "dw4/libkernl.h"
 
 long _write_r(struct _reent *ptr, int fd, const void *buf, int count)
 {

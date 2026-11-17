@@ -4,6 +4,7 @@ extern "C" {
 #include "dw4/eekernel.h"
 #include "dw4/p2core.h"
 #include "dw4/p2timer.h"
+#include "dw4/p2vu0.h"
 }
 
 /* The VU0 lock: its semaphore and the tag of the code holding it. */
@@ -13,8 +14,6 @@ struct p2Vu0Lock {
     const char *owner;
     int semaphore() const { return sema; }
 };
-
-extern "C" p2Vu0Lock p2Vu0LockState;
 
 /* Waits for the VU0 lock, takes it for `owner` (a trace tag such as "p2lighting") and adds the time
  * waited to p2Vu0LockWaitTime. */

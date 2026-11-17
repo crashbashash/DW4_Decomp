@@ -1,4 +1,6 @@
 #include "dw4/cri/sfx.h"
+#include <stdio.h>
+#include <string.h>
 
 typedef struct SfxZLib {
     int nhn;
@@ -44,8 +46,6 @@ typedef struct CftYccPln {
     void *f24;
 } CftYccPln;
 
-void *memset(void *dst, int value, unsigned int size);
-int sscanf(const char *s, const char *fmt, ...);
 long long __muldi3(long long n, int k);
 int SJ_SearchTag(SfxMem *in, char *tag, char *endtag, SfxMem *out);
 int SFXINF_GetStmInf(SfxFrame *frm, char *tag);

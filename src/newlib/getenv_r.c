@@ -1,11 +1,11 @@
 #include "dw4/newlib_stdio.h"
+#include <string.h>
 
 char *_findenv_r(struct _reent *, const char *, int *);
 void __env_lock(struct _reent *);
 void __env_unlock(struct _reent *);
 #define ENV_LOCK __env_lock(reent_ptr)
 #define ENV_UNLOCK __env_unlock(reent_ptr)
-int strncmp(const char *, const char *, size_t);
 extern char ***p_environ;
 
 char *

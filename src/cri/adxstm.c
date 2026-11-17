@@ -1,7 +1,6 @@
 /* CRI ADXSTM: file streams that read sectors through cvFs into an SJ, served from the file-system thread. */
 #include "dw4/cri/adxstm.h"
-
-void *memset(void *dst, int value, unsigned int size);
+#include <string.h>
 
 void ADXCRS_Lock(void);
 void ADXCRS_Unlock(void);

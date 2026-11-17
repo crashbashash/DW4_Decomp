@@ -2,6 +2,7 @@
  * library's own 32 and those of a buffer the program supplies. */
 #include "dw4/eekernel_gp.h"
 #include "dw4/libkernl.h"
+#include <string.h>
 
 /* an index with this bit set names a slot of the library's own table */
 #define SCE_SIF_SYSTEM_NOTIFY 0x80000000
@@ -19,8 +20,6 @@ typedef struct {
     void *gp;
     int pad;
 } NotifyEntry;
-
-void *memset(void *dst, int value, unsigned int size);
 
 NotifyEntry *rebootNotifyTable = 0;
 unsigned int rebootNotifyCount = 0;

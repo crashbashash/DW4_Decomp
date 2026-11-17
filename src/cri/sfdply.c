@@ -1,6 +1,7 @@
 #include "dw4/cri/sfdply.h"
 #include "dw4/cri/sfdsj.h"
 #include "dw4/cri/mcp.h"
+#include "dw4/cri/mps.h"
 
 typedef void (*SfdCntFn)(SfdPly *h, int arg, int *counter);
 typedef void (*SfdTmrFn)(SfdPly *h, int arg, SfdTimer *tmr);
@@ -46,7 +47,6 @@ int SFTIM_GetTimeSub(SfdPly *h, int *pos, int *len);
 int SFTIM_IsStagnant(SfdPly *h);
 int SFD_CmpTime(int a, int b, int c, int d);
 int UTY_CmpTime(int a, int b, int c, int d);
-void UTY_MemsetDword(void *dst, int value, int n);
 void SFHDS_InitFhd(void *blk);
 void SFHDS_FinishFhd(void *blk);
 void sfd_ClearErr(SfdErrBlk *err);

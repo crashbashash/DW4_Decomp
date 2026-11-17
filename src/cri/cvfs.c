@@ -1,11 +1,6 @@
 #include "dw4/cri/cvfs.h"
-
-unsigned int strlen(const char *s);
-int strncmp(const char *a, const char *b, unsigned int n);
-char *strcpy(char *dst, const char *src);
-void *memcpy(void *dst, const void *src, unsigned int n);
-void *memset(void *dst, int value, unsigned int n);
-int sprintf(char *dst, const char *format, ...);
+#include <stdio.h>
+#include <string.h>
 
 extern char cvFsAddDev_1_illegal_device_name[];
 extern char cvFsAddDev_2_illegal_I_F_func_name[];

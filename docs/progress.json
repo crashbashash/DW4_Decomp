@@ -240,15 +240,15 @@
    },
    "decl.local_externs": {
     "reason": null,
-    "value": 2833
+    "value": 2529
    },
    "decl.type_conflicts": {
-    "reason": "sfdply.c declares SFTIM_InitHn with its own player-handle type (SfdPly *), now in conflict with the definition, as its sibling init functions already are",
-    "value": 1833
+    "reason": null,
+    "value": 1788
    },
    "decl.varargs": {
     "reason": null,
-    "value": 878
+    "value": 874
    },
    "foreign_profile.bytes": {
     "reason": null,
@@ -363,9 +363,9 @@
    "compile.bytes": 0,
    "compile.functions": 0,
    "decl.header_conflicts": 558,
-   "decl.local_externs": 2833,
-   "decl.type_conflicts": 1833,
-   "decl.varargs": 878,
+   "decl.local_externs": 2529,
+   "decl.type_conflicts": 1788,
+   "decl.varargs": 874,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
    "fun_dat_refs": 1509,
@@ -492,15 +492,15 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 1697296,
+  "bytes": 1742640,
   "failing": {
    "addresses": {
     "bytes": 749848,
     "functions": 4310
    },
    "declarations": {
-    "bytes": 1046104,
-    "functions": 3128
+    "bytes": 983388,
+    "functions": 2853
    },
    "fields": {
     "bytes": 450116,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 11699,
+  "functions": 11905,
   "matched_functions": 20431
  },
  "regions": [

@@ -1,6 +1,6 @@
 #include "dw4/newlib_reent.h"
+#include <string.h>
 
-int strcmp(const char *a, const char *b);
 extern char C_locale[];
 extern char empty_locale[];
 extern struct lconv lconv;

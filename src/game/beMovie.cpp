@@ -31,8 +31,6 @@
 #pragma push
 #pragma readonly_strings on
 
-extern "C" int igAdxAudio_CreateHandle(igAdxAudio *audio, int maxChannels, int type, int maxStreams, int maxFrequency,
-                                       int initialize);
 /* Both read only the handle; retail calls them with the voice type and the ADX-file flag left in the
  * argument registers. */
 extern "C" int SNDF_SeqCommand(int command, unsigned char requestId, int argument);

@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <string.h>
+#include "dw4/eekernel.h"
+
 typedef struct SifDmaData {
     unsigned int data;
     unsigned int addr;
@@ -60,8 +64,6 @@ extern char illeagal_ID_d[];
 extern char DTX_Create_can_t_create_DTX_of_server[];
 extern char E0092101_DTX_Init_bind_errr[];
 
-void *memset(void *dst, int value, unsigned int n);
-int sprintf(char *buffer, const char *format, ...);
 void ADXMSG_PrintErr(const char *format, ...);
 void SyncDCache(char *start, char *end);
 void InvalidDCache(char *start, char *end);
@@ -69,7 +71,6 @@ unsigned int sceSifSetDma(SifDmaData *sdd, int len);
 int sceSifCallRpc(SifClientData *cd, int fno, int mode, void *send, int ssize, void *recv, int rsize,
                  void *end, void *endarg);
 int sceSifBindRpc(SifClientData *cd, unsigned int request, unsigned int mode);
-int GetThreadId(void);
 void sceSifSetRpcQueue(void *queue, int thread_id);
 void sceSifRegisterRpc(void *server, int command, void *handler, void *buffer, void *cancel_handler,
                        void *cancel_buffer, void *queue);

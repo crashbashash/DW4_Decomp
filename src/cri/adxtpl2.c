@@ -3,6 +3,7 @@
  * the hooks this file installs in ADXB, ADXSJD and ADXT. */
 #include "dw4/cri/adxb.h"
 #include "dw4/cri/pl2enc.h"
+#include "dw4/cri/adxfs.h"
 
 typedef struct AdxSjdObj {
     signed char used;
@@ -23,7 +24,6 @@ typedef struct AdxtObj {
 void ADXT_Stop(AdxtObj *adxt);
 void ADXM_Lock(void);
 void ADXM_Unlock(void);
-void ADXERR_CallErrFunc1(const char *message);
 
 extern void (*adxt_detach_pl2)(AdxtObj *adxt);
 extern void (*adxb_pl2_exec_func)(AdxbObj *adxb, short in, short *out_l, short *out_r);

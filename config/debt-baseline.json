@@ -15,12 +15,9 @@
   "compile.bytes": 0,
   "compile.functions": 0,
   "decl.header_conflicts": 558,
-  "decl.local_externs": 2833,
-  "decl.type_conflicts": {
-   "reason": "sfdply.c declares SFTIM_InitHn with its own player-handle type (SfdPly *), now in conflict with the definition, as its sibling init functions already are",
-   "value": 1833
-  },
-  "decl.varargs": 878,
+  "decl.local_externs": 2529,
+  "decl.type_conflicts": 1788,
+  "decl.varargs": 874,
   "foreign_profile.bytes": 0,
   "foreign_profile.functions": 0,
   "fun_dat_refs": 1509,

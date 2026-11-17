@@ -1,5 +1,6 @@
 #include "dw4/cri/sfdhn.h"
 #include "dw4/cri/mcp.h"
+#include "dw4/cri/mps.h"
 
 #define SFD_HN_SIZE 14072
 
@@ -34,7 +35,6 @@ extern SfdLibInf sfd_lib;
 extern int sfd_cond_defaults[100];
 extern SfdHandle *sfd_cur_hn;
 
-void UTY_MemsetDword(int *dst, int value, unsigned int count);
 void SJRBF_Init(void);
 void SJRBF_Finish(void);
 void SVM_Lock(void);

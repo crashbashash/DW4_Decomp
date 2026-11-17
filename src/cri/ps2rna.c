@@ -3,6 +3,7 @@
  * as set and as last sent, and the DTX send callback turns every difference into an IOP command.
  * With voices set up but none to play, the library is off and every entry point does nothing. */
 #include "dw4/cri/sfdsj.h"
+#include <string.h>
 
 #define PS2RNA_MAX_OBJ 16
 #define PS2RNA_MAX_PSJ 32
@@ -81,7 +82,6 @@ typedef struct Ps2Rna {
 } Ps2Rna;
 
 void ADXMSG_PrintErr(const char *format, ...);
-void *memset(void *dst, int value, unsigned int size);
 void *sceSifAllocIopHeap(int size);
 int sceSifFreeIopHeap(void *addr);
 int CRICFG_Read(const char *name, int *value);

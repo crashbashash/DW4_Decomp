@@ -1,13 +1,12 @@
 /* CRI ADXB WAV reader: plays PCM from a RIFF WAVE file through an ADXB decoder handle. */
 #include "dw4/cri/adxb.h"
+#include <string.h>
 
 enum AdxbPcmFmt {
     ADXB_PCM_16 = 0,
     ADXB_PCM_8 = 1,
     ADXB_PCM_4 = 2
 };
-
-int memcmp(const void *a, const void *b, unsigned int size);
 
 extern char RIFF[];
 extern char WAVE[];

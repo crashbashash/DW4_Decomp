@@ -1,12 +1,12 @@
 /* exit.c - leaving the program: ExecPS2, LoadExecPS2, Exit and ExecOSD, which hand the kernel their
  * arguments through the kernel's argument area. */
 #include "dw4/libkernl.h"
+#include <string.h>
 
 /* argv slots at the start of the argument area; the strings follow them */
 #define EXEC_ARG_SLOTS 16
 #define EXEC_ARGC_MAX (EXEC_ARG_SLOTS - 1)
 
-unsigned int strlen(const char *s);
 int _ExecPS2(void *entry, void *gp, int argc, char **argv);
 void _LoadExecPS2(const char *filename, int argc, char **argv);
 void _Exit(int status);

@@ -3,6 +3,7 @@
 #include "dw4/sony/libmpeg.h"
 #include "dw4/eekernel_gp.h"
 #include "dw4/libkernl.h"
+#include <string.h>
 
 /* The DMA controller's suspend bit (D_ENABLEW), a channel's start bit (Dn_CHCR), the IPU's reset bit (IPU_CTRL). */
 #define D_ENABLE_SUSPEND 0x10000
@@ -16,7 +17,6 @@
 
 #define SPR 0x70000000
 
-void *memset(void *dst, int value, unsigned int size);
 int sceMpegReset(sceMpeg *mp);
 int sceMpegClearRefBuff(sceMpeg *mp);
 void _sceMpegAlalcInit(_sceMpegAlalc *alalc, char *start, int size);

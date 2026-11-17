@@ -1,6 +1,6 @@
 #include "dw4/newlib_stdio.h"
+#include <string.h>
 
-unsigned int strlen(const char *s);
 int eofread(void *cookie, char *buf, int len);
 
 int eofread(void *cookie, char *buf, int len)

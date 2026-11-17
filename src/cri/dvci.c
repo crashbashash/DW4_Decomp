@@ -1,4 +1,6 @@
 #include "dw4/cri/cvfs.h"
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct SrdObj SrdObj;
 
@@ -82,14 +84,6 @@ static char dvci_root_dir[264];
 static char dvci_dir_path[128];
 static char dvci_dir_buf[4096];
 
-void *memset(void *dst, int value, unsigned int n);
-void *memcpy(void *dst, const void *src, unsigned int n);
-char *strcpy(char *dst, const char *src);
-char *strcat(char *dst, const char *src);
-unsigned int strlen(const char *s);
-int strcmp(const char *a, const char *b);
-int strcasecmp(const char *a, const char *b);
-unsigned long strtoul(const char *s, char **end, int base);
 void FUN_00265928(const char *format, ...);
 void ADXMSG_PrintErr(const char *format, ...);
 void InvalidDCache(void *start, void *end);

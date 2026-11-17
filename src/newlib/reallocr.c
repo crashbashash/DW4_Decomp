@@ -1,6 +1,6 @@
 #include "dw4/newlib_mallocr.h"
+#include "dw4/newlib_stdio.h"
 
-void _free_r(struct _reent *, void *);
 #define long_sub_size_t(x, y) ( (long)(x - y) )
 
 void *_realloc_r(struct _reent *reent_ptr, void *oldmem, unsigned int bytes)

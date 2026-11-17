@@ -1,7 +1,7 @@
 #include "dw4/ieee_words.h"
 #include "dw4/newlib_math.h"
+#include <math.h>
 
-extern double fabs(double);
 static const double T[] = {
     3.33333333333334091986e-01,
     1.33333333333201242699e-01,

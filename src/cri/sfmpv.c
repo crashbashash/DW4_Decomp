@@ -1,4 +1,6 @@
 #include "dw4/cri/sfmpv.h"
+#include <string.h>
+#include "dw4/cri/mps.h"
 
 /* Start-code kinds: the bit MPV_CheckDelim returns for a delimiter, and the masks the searches take. */
 typedef enum SfdDelim {
@@ -24,15 +26,13 @@ extern int DAT_004f4e08[];
 extern int DAT_004f4e30[];
 extern int DAT_004f4e50[];
 
-extern void *memset(void *dst, int value, unsigned int size);
-extern void *memcpy(void *dst, const void *src, unsigned int size);
+/* kept here: the <string.h> prototype changes the code emitted for the memcmp call in sfmpv_ComplementPts */
 extern int memcmp(const void *a, const void *b, unsigned int size);
 int SJRBF_GetFlowCnt(int sj, int id, int mode);
 int UTY_CmpTime(int id, int arg, int a, int b);
 /* matching construct: MEM_Copy (mcp.h, void) is declared returning int here; with the void
  * prototype sfmpv_SetMpvHd allocates its registers differently from retail. */
 int MEM_Copy(void *dst, void *src, int n);
-void UTY_MemsetDword(void *dst, int value, int size);
 int MPV_CheckDelim(const unsigned char *p);
 int MPV_EntryErrFunc(void *handle, void (*callback)(SfdPlayer *, int), SfdPlayer *player);
 char *MPV_SearchDelim(char *data, int size, int mask);

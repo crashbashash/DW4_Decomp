@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <string.h>
+
 typedef struct SfdTst {
     int f0;
     unsigned int pastat;
@@ -55,10 +58,6 @@ extern char *DAT_004beb4c;
 extern char *DAT_004beb50;
 extern SfdTst *sftst_last;
 
-void *memset();
-char *strcpy();
-int strlen();
-int sprintf();
 int UTY_MulDiv(int value, int scale, int divisor);
 
 void sftst_ResetHist(SfdTst *tst);
@@ -358,4 +357,3 @@ void sftst_DebWrite(SfdTst *tst)
     if (DAT_004beb4c >= sftst_debout_buf + sftst_debout_siz - 1024)
         DAT_004beb4c = DAT_004beb50;
 }
-

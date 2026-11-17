@@ -2,6 +2,7 @@
  * handle set-up and teardown, mwPlyGetHdrInf and the player's work-area allocator (MWSFD_Malloc). */
 #include "dw4/cri/mwsfd.h"
 #include "dw4/cri/sfdsj.h"
+#include <string.h>
 
 #define MWSFD_MALLOC_MAX 32
 #define MWSFD_ADDINF_BUF_SIZE 0x20000
@@ -162,7 +163,6 @@ int mwsfcre_MallocCompoWork(MwsfdPly *ply);
 int mwsfcre_ConvBufFmtFromMwsfd(int format);
 void mwSfdDestroy(MwsfdPly *ply);
 
-void *memset(void *s, int c, unsigned int n);
 void MWSFSVM_Error(const char *msg);
 void MWSFLIB_SetErrCode(int code);
 int MWSFD_GetUsePicUsr(void);

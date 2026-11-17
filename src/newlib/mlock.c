@@ -1,6 +1,5 @@
-int GetThreadId(void);
-int WaitSema(int sema_id);
-int SignalSema(int sema_id);
+#include "dw4/eekernel.h"
+
 extern int __malloc_lock_owner;
 extern int call_count;
 extern int __sce_sema_id;

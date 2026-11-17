@@ -1,6 +1,7 @@
 /* CRI ADXSJD: decodes an ADX stream from an input SJ into one output SJ per channel through an ADXB handle. */
 #include "dw4/cri/adxb.h"
 #include "dw4/cri/sfdsj.h"
+#include <string.h>
 
 #define ADXSJD_MAX_OBJ 16
 #define ADXSJD_MAX_HDR 0xc800
@@ -41,9 +42,6 @@ typedef struct AdxSjdObj {
     int fill;
     int skip;
 } AdxSjdObj;
-
-void *memset(void *dst, int value, unsigned int size);
-void *memcpy(void *dst, const void *src, unsigned int size);
 
 void ADXCRS_Lock(void);
 void ADXCRS_Unlock(void);

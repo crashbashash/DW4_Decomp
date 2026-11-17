@@ -1,4 +1,5 @@
 #include "dw4/cri/adxt.h"
+#include <string.h>
 
 typedef struct AdxLoopInfo {
     short f0;
@@ -37,10 +38,6 @@ typedef struct AdxHeader {
     signed char flags;
     char pad62[2];
 } AdxHeader;
-
-
-void ADXERR_CallErrFunc1(const char *message);
-void *memset(void *dst, int value, unsigned int size);
 
 void ADXHDR_WriteBeShort(unsigned char *bytes, short value) {
     bytes[1] = value;

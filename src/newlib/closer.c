@@ -1,7 +1,5 @@
 #include "dw4/newlib_reent.h"
-
-extern int errno;
-int close(int fd);
+#include "dw4/libkernl.h"
 
 int _close_r(struct _reent *ptr, int fd)
 {
