@@ -93,7 +93,7 @@ void beModelCtrlInfoDataTrc_InitFields(void) {
     found = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
     clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
-    igStringMetaField_SetDefaultText(clone, "TRC");
+    igStringMetaField_SetDefaultText((igMetaField *)clone, "TRC");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataTrc_nameStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;

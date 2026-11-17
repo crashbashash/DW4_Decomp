@@ -2,21 +2,21 @@ igMetaObject *g_igEnumMetaField_metaObject;
 int *g_igEnumMetaField_descriptor;
 igMetaField *g_igEnumMetaField_getMetaEnumFunctionMetaField;
 
-void **igEnumMetaField_Create(int pool) {
+igMetaField *igEnumMetaField_Create(igMemoryPoolView *pool) {
     void **field;
 
     if (g_objectSystem->active != 0) {
         igEnumMetaField_EnsureRegistered();
-        field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igEnumMetaField_metaObject, (igMemoryPoolView *)pool)));
+        field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igEnumMetaField_metaObject, pool)));
     } else {
-        field = (void **)(((void **)igObject_AllocateRawStorage(0x38, 0, (igMemoryPoolView *)pool)));
+        field = (void **)(((void **)igObject_AllocateRawStorage(0x38, 0, pool)));
         if (field != 0) {
             field = (void **)(((void **)igEnumMetaField_Construct((int **)field, 1)));
         }
         ((igObjectDispatchView *)(field))->InitDefaults();
         ((igObjectDispatchView *)(field))->userConstruct((int)(0));
     }
-    return field;
+    return (igMetaField *)field;
 }
 
 int igEnumMetaField_Clone(int source, int pool) {

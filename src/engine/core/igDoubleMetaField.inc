@@ -1,9 +1,9 @@
 igMetaObject *g_igDoubleMetaField_metaObject;
 void *g_igDoubleMetaField_descriptor;
 
-void igDoubleMetaField_Create(int pool) {
+igMetaField *igDoubleMetaField_Create(igMemoryPoolView *pool) {
     igDoubleMetaField_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igDoubleMetaField_metaObject, (igMemoryPoolView *)pool);
+    return (igMetaField *)igMetaObject_CreateInstance(g_igDoubleMetaField_metaObject, pool);
 }
 
 igMetaObject *igDoubleMetaField_GetMetaObject(void)

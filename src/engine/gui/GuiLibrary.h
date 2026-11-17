@@ -32,9 +32,19 @@
 #include "dw4/ClassRegistration.h"
 extern "C" void igRay_EnsureRegistered(void);
 extern "C" void FUN_00138160(void);
-extern "C" igMetaField *igVec3fMetaField_CreateInstance(void *);
-extern "C" igMetaField *igMatrix44fMetaField_CreateInstance(void *);
-extern "C" igMetaField *igVec4fMetaField_CreateInstance(void *);
+#include "dw4/igBoolMetaField.h"
+#include "dw4/igEnumMetaField.h"
+#include "dw4/igFloatMetaField.h"
+#include "dw4/igIntMetaField.h"
+#include "dw4/igMatrix44fMetaField.h"
+#include "dw4/igMetaEnum.h"
+#include "dw4/igObjectRefMetaField.h"
+#include "dw4/igStringMetaField.h"
+#include "dw4/igUnsignedIntMetaField.h"
+#include "dw4/igUnsignedShortMetaField.h"
+#include "dw4/igVec2fMetaField.h"
+#include "dw4/igVec3fMetaField.h"
+#include "dw4/igVec4fMetaField.h"
 #include "dw4/igMetaField.h"
 extern "C" void FUN_0019e440(void);
 #include "dw4/igNode.h"
@@ -43,14 +53,6 @@ extern "C" igMetaField *FUN_00187560(void *);
 extern "C" void FUN_00146700(void);
 extern "C" void FUN_001378f0(void);
 class igMemoryPoolView;
-extern "C" igMetaField *igBoolMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igEnumMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igFloatMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igIntMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igObjectRefMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igStringMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igUnsignedIntMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igUnsignedShortMetaField_Create(igMemoryPoolView *pool);
 
 #include "dw4/igMetaObject.h"
 extern "C" int igDependencyOrderedList_AddDependency(...);
@@ -105,7 +107,6 @@ extern "C" void thunk_igTextElement_GetMetaObject(void);
 extern "C" igMetaObject *g_igGeometryElement_metaObject;
 extern "C" igMetaObject *FUN_0044c030(void);
 extern "C" int FUN_00137850(...);
-extern "C" int igStringMetaField_SetDefaultText(...);
 extern "C" void igTextElement_InitFields(void);
 extern "C" int g_igModel_vtable[4];
 struct S {
@@ -189,8 +190,6 @@ union U_44ce90 { int vt; char b[32]; };
 extern "C" int igRadioGroup_GetVTable(void);
 extern "C" CallbackArray *igRadioGroup_Register(void);
 extern "C" void thunk_igRadioGroup_GetMetaObject(void);
-extern "C" int igBoolMetaField_SetDefaultValue(...);
-extern "C" int igIntMetaField_SetDefault(...);
 extern "C" void igRadioGroup_InitFields(void);
 extern "C" igMetaObject *g_igRadioGroupModel_metaObject;
 extern "C" igMetaObject *FUN_0044d170(void);
@@ -249,7 +248,6 @@ extern "C" int igHotKeyBinding_GetVTable(void);
 extern "C" void igHotKeyBinding_RunStaticInit(void);
 extern "C" CallbackArray *igHotKeyBinding_Register(void);
 extern "C" void thunk_igHotKeyBinding_GetMetaObject(void);
-extern "C" int igEnumMetaField_SetDefaultValue(void *field, const int &value);
 extern "C" void FUN_00145eb0(void);
 extern "C" void FUN_00146850(void);
 extern "C" void igHotKeyBinding_InitFields(void);
@@ -281,7 +279,6 @@ extern "C" int g_igMouseCursor_vtable[4];
 extern "C" int igMouseCursor_GetVTable(void);
 extern "C" CallbackArray *igMouseCursor_Register(void);
 extern "C" void thunk_igMouseCursor_GetMetaObject(void);
-extern "C" int igVec2fMetaField_SetDefault(void *, int *);
 extern "C" void igMouseCursor_InitFields(void);
 extern "C" igMetaObject *g_igGuiSystemRenderer_metaObject;
 extern "C" igMetaObject *FUN_0044e6b0(void);
@@ -326,7 +323,6 @@ extern "C" void thunk_igMousePosObserver_GetMetaObject(void);
 extern "C" int FUN_00188260(...);
 extern "C" int FUN_0019dfd0(...);
 #include "dw4/igGraphPath.h"
-extern "C" int igFloatMetaField_SetDefault(int, float);
 extern "C" void igMousePosObserver_InitFields(void);
 extern "C" int FUN_0044f0b0(int arg0);
 extern "C" igMetaObject *g_igWindowSizeObserver_metaObject;
@@ -366,7 +362,6 @@ extern "C" int igGuiComponentModel_GetVTable(void);
 extern "C" void igGuiComponentModel_RunStaticInit(void);
 extern "C" CallbackArray *igGuiComponentModel_Register(void);
 extern "C" void thunk_igGuiComponentModel_GetMetaObject(void);
-extern "C" int igVec3fMetaField_SetDefault(...);
 extern "C" void igGuiComponentModel_InitFields(void);
 extern "C" igMetaObject *g_igGuiComponentController_metaObject;
 extern "C" igMetaObject *FUN_0044fa40(void);
@@ -413,7 +408,6 @@ extern "C" void igGeometryElement_EnsureRegistered(void);
 extern "C" CallbackArray *igGeometryElement_Register(void);
 extern "C" void thunk_igGeometryElement_GetMetaObject(void);
 #include "dw4/igAttrList.h"
-extern "C" int igVec4fMetaField_SetDefault(...);
 #include "dw4/igGeometry.h"
 extern "C" void igGeometryElement_InitFields(void);
 extern "C" igMetaObject *g_igFont_metaObject;
@@ -516,7 +510,6 @@ extern "C" int igDefaultAspectElementList_GetVTable(void);
 extern "C" void igDefaultAspectElementList_EnsureRegistered(void);
 extern "C" CallbackArray *igDefaultAspectElementList_Register(void);
 extern "C" void thunk_igDefaultAspectElementList_GetMetaObject(void);
-extern "C" igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count);
 extern "C" igMetaEnum *FUN_00451ac0(void);
 extern "C" igMetaObject *g_igDefaultAspectElement_metaObject;
 extern "C" igMetaObject *igDefaultAspectElement_GetMetaObject(void);
@@ -608,7 +601,6 @@ extern "C" void FUN_00452b70(void);
 extern "C" int FUN_00452c40(void);
 extern "C" int Gap__Gui__igCharMetricsMetaField__vfunc_25(void);
 extern "C" void Gap__Gui__igCharMetricsMetaField__vfunc_11(void *arg0);
-extern "C" igMetaField *igVec2fMetaField_CreateInstance(void *);
 extern "C" void FUN_00452ca0(int arg0);
 extern "C" igMetaObject *FUN_00453250(void);
 extern "C" igMetaObject *igAction_GetMetaObject(void);

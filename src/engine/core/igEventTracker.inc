@@ -285,11 +285,11 @@ void igEventTracker_InitFields(void) {
     meta = g_igEventTracker_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igEventTracker_ctorTable, 0x21);
-    igUnsignedIntMetaField_SetDefaultValue((void **)(((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1))), -1);
-    igUnsignedIntMetaField_SetDefaultValue((void **)(((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2))), -1);
-    igUnsignedIntMetaField_SetDefaultValue((void **)(((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3))), -1);
-    igUnsignedIntMetaField_SetDefaultValue((void **)(((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4))), -1);
-    igUnsignedIntMetaField_SetDefaultValue((void **)(((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5))), -1);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1), -1);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2), -1);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3), -1);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4), -1);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5), -1);
     ((igMetaField *)((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 8)))->_persistent = 0;
     names = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 9));
     ((igObjectRefMetaField *)names)->_metaObject = (int)igStringTable_GetOrCreateMetaObject();
@@ -327,7 +327,7 @@ void igEventTracker_InitFields(void) {
     callStackTracer->_persistent = 0;
     { igIntArrayMetaField *q = (igIntArrayMetaField *)((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x15)); q->_num = 0x20; }
     defaultMemoryEventFormat = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x16));
-    igStringMetaField_SetDefaultText((int *)defaultMemoryEventFormat, 0);
+    igStringMetaField_SetDefaultText((igMetaField *)defaultMemoryEventFormat, 0);
     ((igStringMetaField *)defaultMemoryEventFormat)->_refCounted = 0;
     defaultMemoryEventFormat->_persistent = 0;
     { igIntArrayMetaField *q = (igIntArrayMetaField *)((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x17)); q->_num = 0x20; }
@@ -341,13 +341,13 @@ void igEventTracker_InitFields(void) {
     ((igCharArrayMetaField *)eventTag)->_num = 0x100;
     eventTag->_persistent = 0;
     eventTagOffset = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x1D));
-    igIntMetaField_SetDefault((void **)eventTagOffset, -1);
+    igIntMetaField_SetDefault((igMetaField *)eventTagOffset, -1);
     eventTagOffset->_persistent = 0;
     eventClassName = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x1E));
     ((igCharArrayMetaField *)eventClassName)->_num = 0x100;
     eventClassName->_persistent = 0;
     eventClassNameOffset = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x1F));
-    igIntMetaField_SetDefault((void **)eventClassNameOffset, -1);
+    igIntMetaField_SetDefault((igMetaField *)eventClassNameOffset, -1);
     eventClassNameOffset->_persistent = 0;
     lock = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x20));
     ((igObjectRefMetaField *)lock)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();

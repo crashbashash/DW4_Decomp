@@ -148,7 +148,7 @@ void igRegistry_InitFields(void) {
     sectionNamesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2)));
     ((igObjectRefMetaField *)sectionNamesField)->_metaObject = (int)igStringObjList_GetOrCreateMetaObject();
     ((igRefMetaField *)sectionNamesField)->_construct = 1;
-    igBoolMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 4))), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 4), 1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igRegistry_fieldTable, g_igRegistry_fieldDescriptors, g_igRegistry_fieldOffsets, first);
 }
 

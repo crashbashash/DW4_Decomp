@@ -3,9 +3,9 @@ int *g_igEnumArrayMetaField_descriptor;
 igMetaField *g_igEnumArrayMetaField_numMetaField;
 int g_sectionOverrideModeMetaEnum;
 
-void igEnumArrayMetaField_Create(int pool) {
+igMetaField *igEnumArrayMetaField_Create(igMemoryPoolView *pool) {
     igEnumArrayMetaField_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igEnumArrayMetaField_metaObject, (igMemoryPoolView *)pool);
+    return (igMetaField *)igMetaObject_CreateInstance(g_igEnumArrayMetaField_metaObject, pool);
 }
 
 igMetaObject *igEnumArrayMetaField_GetMetaObject(void)
@@ -95,7 +95,7 @@ void igEnumArrayMetaField_InitFields(void) {
     meta = (void *)g_igEnumArrayMetaField_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igEnumArrayMetaField_ctorTable, 1);
-    igIntMetaField_SetDefault((void **)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)), 1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base), 1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igEnumArrayMetaField_fieldTable, g_igEnumArrayMetaField_fieldDescriptors, g_igEnumArrayMetaField_fieldOffsets, base);
 }
 

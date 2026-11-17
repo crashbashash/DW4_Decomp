@@ -1,9 +1,9 @@
 igMetaObject *g_igUnsignedCharMetaField_metaObject;
 void *g_igUnsignedCharMetaField_descriptor;
 
-void igUnsignedCharMetaField_Create(int pool) {
+igMetaField *igUnsignedCharMetaField_Create(igMemoryPoolView *pool) {
     igUnsignedCharMetaField_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igUnsignedCharMetaField_metaObject, (igMemoryPoolView *)pool);
+    return (igMetaField *)igMetaObject_CreateInstance(g_igUnsignedCharMetaField_metaObject, pool);
 }
 
 igMetaObject *igUnsignedCharMetaField_GetMetaObject(void)

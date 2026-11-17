@@ -7,7 +7,7 @@
 #include "dw4/igObjectSystem.h"
 
 typedef void (*igMetaObjectCallback)();
-typedef igMetaField *(*FieldFactory)(void *);
+typedef igMetaField *(*FieldFactory)(struct igMemoryPoolView *pool);
 
 /* Library front: the register list, its one registrar and the registration latch. */
 extern "C" void igSearchSceneGraph_EnsureRegistered(void);
@@ -16,7 +16,10 @@ extern "C" void igMetaObject_RunStaticInit(...);
 extern "C" int igMetaObject_RegisterClass(...);
 
 /* The igSearchSceneGraph enum field's metaenum (3 values), created on first use. */
-extern "C" igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count);
+#include "dw4/igEnumMetaField.h"
+#include "dw4/igMetaEnum.h"
+#include "dw4/igObjectRefMetaField.h"
+#include "dw4/igStringMetaField.h"
 extern "C" int FUN_00238d70(void);
 
 /* igSearchSceneGraph: an igNamedObject, 0x1C bytes. */
@@ -42,15 +45,10 @@ struct ObjectSystemView { char pad[916]; int vtableProbeOffset; };
 /* InitFields' field tables and field helpers. */
 extern "C" int igMetaObject_GetFieldCount(...);
 extern "C" int igMetaObject_CreateFields(...);
-extern "C" void *igMetaObject_GetFieldAt(...);
+extern "C" igMetaField *igMetaObject_GetFieldAt(...);
 extern "C" int igMetaObject_NameFields(...);
-extern "C" int igStringMetaField_SetDefaultText(...);
 extern "C" int FUN_002274a0(void);
 extern "C" int igMetaObject_GetOrCreateMetaObject(void);
-extern "C" int igEnumMetaField_SetDefaultValue(void *field, const int &value);
-extern "C" igMetaField *igObjectRefMetaField_Create(void *);
-extern "C" igMetaField *igStringMetaField_Create(void *);
-extern "C" igMetaField *igEnumMetaField_Create(void *);
 extern "C" void FUN_00227620(void);
 extern "C" void igMetaObject_EnsureRegistered(void);
 

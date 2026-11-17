@@ -123,21 +123,14 @@ extern int DAT_00560f98[4];
 extern int DAT_00561010[4];
 
 extern "C" {
-igMetaField *igIntMetaField_Create(void *);
-igMetaField *igMemoryRefMetaField_Create(void *);
-igMetaField *igStringMetaField_Create(void *);
-igMetaField *igBoolMetaField_Create(void *);
-igMetaField *igUnsignedIntMetaField_Create(void *);
 int igUnsignedCharMetaField_GetDefaultDescriptor(...);
 int igSmartPointer_igMetaObjectList_Destruct(...);
 int igSmartPointer_igInfoList_Destruct(...);
 void igStringRef_Destruct(...);
-int igStringMetaField_SetDefaultText(...);
 int igSmartPointer_igObjectList_Destruct(...);
 int FUN_0019c8c0(...);
 int ObjectPointerList_FindIndex(...);
 int MetaRefList_AppendRetained(...);
-igMetaField *igObjectRefMetaField_Create(void *);
 int igNamedObject_Destroy(...);
 int igSmartPointer_igDirectory_Destruct(...);
 int Memory_GetDefaultHandleAllocator(...);

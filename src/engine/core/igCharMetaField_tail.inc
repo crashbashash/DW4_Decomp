@@ -60,7 +60,7 @@ int igCharMetaField_GetSize(void) {
     return 1;
 }
 
-void igCharMetaField_SetDefaultValue(void **self, char value) {
+void igCharMetaField_SetDefaultValue(igMetaField *self, char value) {
     char defaultValue;
 
     defaultValue = value;

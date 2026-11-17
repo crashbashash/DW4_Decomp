@@ -70,7 +70,7 @@ void beModelCtrlInfo_InitFields(void) {
     meta = g_beModelCtrlInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlInfo_ctorTable, 1);
-    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base)), 0);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base), 0);
     igMetaObject_NameFields(meta, g_beModelCtrlInfo_fieldTable, g_beModelCtrlInfo_fieldHandles, g_beModelCtrlInfo_fieldOffsets, base);
 }
 

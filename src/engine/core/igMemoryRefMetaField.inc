@@ -11,21 +11,21 @@ igMetaField *g_igMemoryRefMetaField_alignmentTypeMetaField;
 igMetaField *g_igMemoryRefMetaField_memTypeRefMetaField;
 igMetaField *g_igMemoryRefMetaField_poolNameMetaField;
 
-void **igMemoryRefMetaField_Create(int pool) {
+igMetaField *igMemoryRefMetaField_Create(igMemoryPoolView *pool) {
     void **instance;
 
     if (g_objectSystem->active != 0) {
         igMemoryRefMetaField_EnsureRegistered();
-        instance = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)((int)g_igMemoryRefMetaField_metaObject), (igMemoryPoolView *)pool)));
+        instance = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)((int)g_igMemoryRefMetaField_metaObject), pool)));
     } else {
-        instance = (void **)(((void **)igObject_AllocateRawStorage(0x50, 0, (igMemoryPoolView *)pool)));
+        instance = (void **)(((void **)igObject_AllocateRawStorage(0x50, 0, pool)));
         if (instance != 0) {
             instance = (void **)(((void **)igMemoryRefMetaField_Construct((igMemoryRefMetaField *)instance, 1)));
         }
         ((igObjectDispatchView *)(instance))->InitDefaults();
         ((igObjectDispatchView *)(instance))->userConstruct((int)(0));
     }
-    return instance;
+    return (igMetaField *)instance;
 }
 
 igMemoryRefMetaField *igMemoryRefMetaField_Clone(igMemoryRefMetaField *source, int copyMode) {
@@ -222,7 +222,7 @@ void igMemoryRefMetaField_InitFields(void) {
     field = (igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_shallowCopyMethod);
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
     field = (igMetaField *)((igObjectDispatchView *)field)->CloneViaMetadata(1);
-    igCharMetaField_SetDefaultValue((void **)field, 2);
+    igCharMetaField_SetDefaultValue((igMetaField *)field, 2);
     field->_externalEnumStorage = (int)&g_igMemoryRefMetaField_shallowCopyMethodStorage;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);
     releaseField(field);
@@ -231,19 +231,19 @@ void igMemoryRefMetaField_InitFields(void) {
     ref->_metaObject = (int)igMetaField_GetOrCreateMetaObject();
     ref->_refCounted = 0;
     ref->_deepCopyMethod = 1;
-    igBoolMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt(meta, base + 2), 1);
-    igBoolMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt(meta, base + 3), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 2), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 3), 1);
     fields = meta->_metaFields;
     index = ObjectPointerList_FindIndex((char *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_resetMethod));
-    field = (igMetaField *)igEnumMetaField_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    field = (igMetaField *)igEnumMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     igMetaField_Configure(field, (const char *)text_resetMethod, &g_igMemoryRefMetaField_resetMethodStorage, 0x24, meta);
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)field, g_igMemoryRefMetaField_resetMethodDefault);
+    igEnumMetaField_SetDefaultValue((igMetaField *)field, g_igMemoryRefMetaField_resetMethodDefault);
     ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)igMetaField_GetResetTypeMetaEnum;
     field->_externalEnumStorage = (int)&g_igMemoryRefMetaField_resetMethodStorage;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);
     releaseField(field);
-    igBoolMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt(meta, base + 4), 1);
-    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base + 5), -1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 4), 1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 5), -1);
     ref = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 6);
     ref->_metaObject = (int)igMetaField_GetOrCreateMetaObject();
     ref->_deepCopyMethod = 1;

@@ -56,7 +56,7 @@ void igIntMetaField_Destruct(int extra0) {
     igMetaField_Destruct((igMetaField *)extra0);
 }
 
-void igIntMetaField_SetDefault(void **self, int value) {
+void igIntMetaField_SetDefault(igMetaField *self, int value) {
     int defaultValue;
 
     defaultValue = value;

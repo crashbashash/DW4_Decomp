@@ -21,9 +21,9 @@ int igVec4fMetaField_GetSize(void) {
     return 0x10;
 }
 
-void igVec4fMetaField_SetDefault(igVec4fMetaFieldView *self, const float *value)
+void igVec4fMetaField_SetDefault(igMetaField *self, const float *value)
 {
-    self->SetDefault(value);
+    ((igVec4fMetaFieldView *)self)->SetDefault(value);
 }
 
 int Gap__igVec4fMetaField__vfunc_27(void) {

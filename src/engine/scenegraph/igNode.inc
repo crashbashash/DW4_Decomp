@@ -146,7 +146,7 @@ void igNode_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_2)->_shallowCopyMethod = 4;
     ((igObjectRefMetaField *)temp_s2_2)->_constructCopyMethod = 4;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
-    igIntMetaField_SetDefault((void **)temp_v0, -1);
+    igIntMetaField_SetDefault((igMetaField *)temp_v0, -1);
     ((igIntMetaField *)temp_v0)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igNode_fieldTable, g_igNode_fieldHandles, g_igNode_fieldOffsets, temp_s0);
 }

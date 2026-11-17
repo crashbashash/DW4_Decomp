@@ -1,9 +1,9 @@
 igMetaObject *g_igLongMetaField_metaObject;
 void *g_igLongMetaField_descriptor;
 
-void igLongMetaField_Create(int allocator) {
+igMetaField *igLongMetaField_Create(igMemoryPoolView *pool) {
     igLongMetaField_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)g_igLongMetaField_metaObject, (igMemoryPoolView *)allocator);
+    return (igMetaField *)igMetaObject_CreateInstance((igMetaObject *)g_igLongMetaField_metaObject, pool);
 }
 
 igMetaObject *igLongMetaField_GetMetaObject(void)

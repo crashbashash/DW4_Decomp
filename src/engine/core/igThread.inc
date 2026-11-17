@@ -180,18 +180,18 @@ void igThread_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igThread_ctorTable, 0xA);
     priority = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)priority, g_igThread_defaultPriority);
+    igEnumMetaField_SetDefaultValue((igMetaField *)priority, g_igThread_defaultPriority);
     ((igEnumMetaField *)priority)->_getMetaEnumFunction = (int)(igThread_GetPriorityMetaEnum);
     type = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)type, 0);
+    igEnumMetaField_SetDefaultValue((igMetaField *)type, 0);
     ((igEnumMetaField *)type)->_getMetaEnumFunction = (int)(&igThread_GetTypeMetaEnum);
     scope = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)scope, 0);
+    igEnumMetaField_SetDefaultValue((igMetaField *)scope, 0);
     ((igEnumMetaField *)scope)->_getMetaEnumFunction = (int)(&igThread_GetScopeMetaEnum);
     state = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)state, 0);
+    igEnumMetaField_SetDefaultValue((igMetaField *)state, 0);
     ((igEnumMetaField *)state)->_getMetaEnumFunction = (int)(&igThread_GetStateMetaEnum);
-    igUnsignedIntMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6))), 0x1000);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6), 0x1000);
     igMetaObject_NameFields((igMetaObject *)meta, g_igThread_fieldTable, g_igThread_fieldDescriptors, g_igThread_fieldOffsets, base);
     *(int *)((char *)((void *)g_igThread_metaObject) + 60) = (int)igPsx2Thread_GetMetaObjectFunction;
 }

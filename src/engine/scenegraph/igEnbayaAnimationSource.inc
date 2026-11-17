@@ -122,14 +122,14 @@ void igEnbayaAnimationSource_InitFields(void) {
     temp_s2->_releaseOnReset = 1;
     tf = (igUnsignedCharArrayMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1);
     tf->_num = 3;
-    igUnsignedCharMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2), 3);
+    igUnsignedCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2), 3);
     tf2 = (igEnumMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3);
     tf2->_getMetaEnumFunction = (int)FUN_001a21b0;
     temp_v0 = (igFloatMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4);
-    igFloatMetaField_SetDefault((void **)temp_v0, -1.0f);
+    igFloatMetaField_SetDefault((igMetaField *)temp_v0, -1.0f);
     temp_v0->_persistent = 0;
     temp_v0_2 = (igLongMetaField *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5);
-    igLongMetaField_SetDefault((void **)temp_v0_2, -1);
+    igLongMetaField_SetDefault((igMetaField *)temp_v0_2, -1);
     temp_v0_2->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igEnbayaAnimationSource_fieldTable, g_igEnbayaAnimationSource_fieldHandles, g_igEnbayaAnimationSource_fieldOffsets, temp_s0);
     igMetaObject_AddExitCallback((int)FUN_001a24e0);

@@ -120,7 +120,7 @@ void igMemoryDescriptorMetaField_AddSubFields(int fieldList) {
     void *field;
     void *name;
 
-    field = (void *)(((void *)igUnsignedIntMetaField_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+    field = (void *)(((void *)igUnsignedIntMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
     if ("_sizeAndStatus" == 0) {
         name = (void *)(0);
     } else {

@@ -98,17 +98,17 @@ void igExternalDirEntry_InitFields(void) {
     igMetaObject_CreateFields(meta, g_igExternalDirEntry_ctorTable, 4);
     fields = meta->_metaFields;
     index = ObjectPointerList_FindIndex((char *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_ref));
-    field = (igMetaField *)igObjectRefMetaField_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    field = (igMetaField *)igObjectRefMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     igMetaField_Configure(field, (const char *)text_ref, &g_igExternalDirEntry_refDescriptorCell, 0x18, meta);
     ((igObjectRefMetaField *)field)->_metaObject = (int)g_igObject_metaObject;
     field->_persistent = 0;
     field->_externalEnumStorage = (int)&g_igExternalDirEntry_refDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);
     releaseField(field);
-    igStringMetaField_SetDefaultText((int *)igMetaObject_GetFieldAt(meta, base), (int)"Intrinsic");
-    igStringMetaField_SetDefaultText((int *)igMetaObject_GetFieldAt(meta, base + 1), (int)"default");
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base), "Intrinsic");
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 1), "default");
     field = (igMetaField *)igMetaObject_GetFieldAt(meta, base + 3);
-    igStringMetaField_SetDefaultText((int *)field, (int)"");
+    igStringMetaField_SetDefaultText((igMetaField *)field, "");
     field->_persistent = 0;
     igMetaObject_NameFields(meta, g_igExternalDirEntry_fieldTable, g_igExternalDirEntry_fieldDescriptors, g_igExternalDirEntry_fieldOffsets, base);
 }

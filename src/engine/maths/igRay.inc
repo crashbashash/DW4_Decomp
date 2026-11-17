@@ -95,12 +95,12 @@ void igRay_InitFields(void) {
     sp40[0] = 0;
     sp40[1] = 0;
     sp40[2] = 0;
-    igVec3fMetaField_SetDefault((igVec3fMetaFieldView *)temp_a0, (const float *)&sp40[0]);
+    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)&sp40[0]);
     temp_a0_2 = (int)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1);
     sp30[0] = 0;
     sp30[1] = 0x3F800000;
     sp30[2] = 0;
-    igVec3fMetaField_SetDefault((igVec3fMetaFieldView *)temp_a0_2, (const float *)&sp30[0]);
+    igVec3fMetaField_SetDefault((igMetaField *)temp_a0_2, (const float *)&sp30[0]);
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)g_igRay_fieldTable, (igMetaField ***)g_igRay_fieldHandles, (int *)g_igRay_fieldOffsets, temp_s1);
 }
 

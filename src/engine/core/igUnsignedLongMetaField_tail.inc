@@ -56,7 +56,7 @@ void igUnsignedLongMetaField_Destruct(int extra0) {
     igMetaField_Destruct((igMetaField *)extra0);
 }
 
-void igUnsignedLongMetaField_SetDefaultValue(void **field, unsigned long long value) {
+void igUnsignedLongMetaField_SetDefaultValue(igMetaField *field, unsigned long long value) {
     unsigned long long defaultValue = value;
     ((igMetaFieldView *)field)->SetDefault(&defaultValue);
 }

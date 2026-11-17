@@ -33,7 +33,7 @@ int igLongMetaField_GetSize(void) {
     return 8;
 }
 
-void igLongMetaField_SetDefault(void **self, long long value) {
+void igLongMetaField_SetDefault(igMetaField *self, long long value) {
     long long stored;
 
     stored = value;

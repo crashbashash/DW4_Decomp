@@ -69,7 +69,7 @@ void igAttr_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igAttr_ctorTable, 2);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    igShortMetaField_SetDefault(temp_v0, -1);
+    igShortMetaField_SetDefault((igMetaField *)temp_v0, -1);
     ((igShortMetaField *)temp_v0)->_persistent = 0;
     igMetaObject_NameFields(temp_s0, g_igAttr_fieldTable, g_igAttr_fieldHandles, g_igAttr_fieldOffsets, temp_s2);
 }

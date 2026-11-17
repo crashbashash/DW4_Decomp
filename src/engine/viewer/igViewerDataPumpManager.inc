@@ -113,7 +113,7 @@ void FUN_0045c040(void) {
     temp_v0 = (void **)(igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_name"));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, "Viewer data pump manager");
+    igStringMetaField_SetDefaultText((igMetaField *)temp_v0_2, "Viewer data pump manager");
     *(int *)((char *)(temp_v0_2) + 28) = (int)(&g_igViewerDataPumpManager_nameMetaField);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s1, temp_s3, (igMetaField *)temp_v0_2);
     *(int *)((char *)(temp_v0_2) + 4) = (int)((int) (*(int *)((char *)(temp_v0_2) + 4) - 1));

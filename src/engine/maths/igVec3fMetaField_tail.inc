@@ -36,9 +36,9 @@ int igVec3fMetaField_GetSize(void) {
     return 0xC;
 }
 
-void igVec3fMetaField_SetDefault(igVec3fMetaFieldView *self, const float *value)
+void igVec3fMetaField_SetDefault(igMetaField *self, const float *value)
 {
-    self->SetDefault(value);
+    ((igVec3fMetaFieldView *)self)->SetDefault(value);
 }
 
 /* Override of the igMetaField slot at vtable +0x6c (slot 27): returns 16, one quadword rather than

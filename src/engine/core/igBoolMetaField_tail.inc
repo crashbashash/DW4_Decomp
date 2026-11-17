@@ -76,7 +76,7 @@ int igBoolMetaField_GetSize(void) {
     return 1;
 }
 
-void igBoolMetaField_SetDefaultValue(void **self, char value) {
+void igBoolMetaField_SetDefaultValue(igMetaField *self, char value) {
     char defaultValue;
 
     defaultValue = value;

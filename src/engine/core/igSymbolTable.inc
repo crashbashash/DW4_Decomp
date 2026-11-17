@@ -169,8 +169,8 @@ void igSymbolTable_InitFields(void) {
     meta = (void *)g_igSymbolTable_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igSymbolTable_ctorTable, 9);
-    igUnsignedIntMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3))), -1);
-    igUnsignedIntMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4))), 1);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3), -1);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4), 1);
     symbolsField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)));
     ((igObjectRefMetaField *)symbolsField)->_metaObject = (int)igUnsignedIntListNoClean_GetOrCreateMetaObject();
     ((igRefMetaField *)symbolsField)->_construct = 1;

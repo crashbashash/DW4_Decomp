@@ -92,12 +92,12 @@ void igAABox_InitFields(void) {
     va[0] = 3.402823466e+38f;
     va[1] = 3.402823466e+38f;
     va[2] = 3.402823466e+38f;
-    igVec3fMetaField_SetDefault((igVec3fMetaFieldView *)temp_a0, va);
+    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, va);
     temp_a0_2 = (int)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1);
     vb[0] = -3.402823466e+38f;
     vb[1] = -3.402823466e+38f;
     vb[2] = -3.402823466e+38f;
-    igVec3fMetaField_SetDefault((igVec3fMetaFieldView *)temp_a0_2, vb);
+    igVec3fMetaField_SetDefault((igMetaField *)temp_a0_2, vb);
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)g_igAABox_fieldTable, (igMetaField ***)g_igAABox_fieldHandles, (int *)g_igAABox_fieldOffsets, temp_s1);
 }
 

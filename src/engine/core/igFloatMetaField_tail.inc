@@ -2,7 +2,7 @@ int igFloatMetaField_GetSize(void) {
     return 4;
 }
 
-void igFloatMetaField_SetDefault(void **self, float value) {
+void igFloatMetaField_SetDefault(igMetaField *self, float value) {
     float defaultValue;
 
     defaultValue = value;

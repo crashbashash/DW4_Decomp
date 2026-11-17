@@ -976,7 +976,7 @@ void igPsx2VisualContext_InitFields(void) {
     igIntArrayMetaField_SetDefaultValue(temp_v0_3, -1);
     temp_v0_4 = igMetaObject_GetFieldAt(meta, fieldStart + 0xB);
     ((igBoolArrayMetaField *)temp_v0_4)->_num = 0x10;
-    igBoolArrayMetaField_SetDefaultAll(temp_v0_4, 1);
+    igBoolArrayMetaField_SetDefaultAll((igBoolArrayMetaField *)temp_v0_4, 1);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 0xC), 1);
     { igMetaField *q = igMetaObject_GetFieldAt(meta, fieldStart + 0xE); ((igBoolArrayMetaField *)q)->_num = 0x10; }
     temp_v0_5 = igMetaObject_GetFieldAt(meta, fieldStart + 0xF);
@@ -1006,7 +1006,7 @@ void igPsx2VisualContext_InitFields(void) {
     sp60[1] = 0;
     sp60[2] = 0;
     sp60[3] = 0;
-    igVec4fMetaField_SetDefault(temp_a0, sp60);
+    igVec4fMetaField_SetDefault(temp_a0, (const float *)sp60);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x1E), 1.0f);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x26), 0x280);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x27), 0x1C0);
@@ -1106,7 +1106,7 @@ void igPsx2VisualContext_InitFields(void) {
     sp50[1] = 0;
     sp50[2] = 0;
     sp50[3] = 0;
-    igVec4fMetaField_SetDefault(temp_a0_2, sp50);
+    igVec4fMetaField_SetDefault(temp_a0_2, (const float *)sp50);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x61), 1.0f);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x62), 10000.0f);
     { igMetaField *q = igMetaObject_GetFieldAt(meta, fieldStart + 0x66); ((igMetaField *)q)->_size = 0x18; }

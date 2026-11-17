@@ -31,7 +31,7 @@ int igDoubleMetaField_GetSize(void) {
     return 8;
 }
 
-void igDoubleMetaField_SetDefaultDouble(void **field, double value) {
+void igDoubleMetaField_SetDefaultDouble(igMetaField *field, double value) {
     double defaultValue;
 
     defaultValue = value;

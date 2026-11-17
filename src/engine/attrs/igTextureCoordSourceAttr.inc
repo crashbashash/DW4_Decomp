@@ -92,7 +92,7 @@ void igTextureCoordSourceAttr_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s0);
     igMetaObject_CreateFields(temp_s0, g_igTextureCoordSourceAttr_ctorTable, 3);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    igEnumMetaField_SetDefaultValue(temp_v0, 0);
+    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
     *(int *)((char *)(temp_v0) + 52) = (int)(&FUN_001497a0);
     temp_v0_2 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2);
     *(int *)((char *)(temp_v0_2) + 48) = (int)(FUN_00140fd0);

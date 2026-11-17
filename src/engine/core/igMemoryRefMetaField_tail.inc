@@ -2,7 +2,7 @@ int igMemoryRefMetaField_GetSize(void) {
     return 4;
 }
 
-void igMemoryRefMetaField_SetDefaultWord(void **self, int defaultWord) {
+void igMemoryRefMetaField_SetDefaultWord(igMetaField *self, int defaultWord) {
     int defaultCell;
 
     defaultCell = defaultWord;

@@ -9,7 +9,7 @@ int igIntArrayMetaField_GetSize(igIntArrayMetaField *self) {
     return (self->_num * 4) & 0xFFFF;
 }
 
-void igIntArrayMetaField_SetDefaultValue(void **field, int value) {
+void igIntArrayMetaField_SetDefaultValue(igMetaField *field, int value) {
     int *p;
     igIntArrayMetaField *o = (igIntArrayMetaField *)field;
     ((igMetaFieldView *)field)->SetDefault(0);

@@ -26,18 +26,19 @@
 #include "dw4/igViewerStatisticsManager.h"
 
 
-extern "C" igMetaField *igVec3fMetaField_CreateInstance(void *);
-extern "C" igMetaField *igVec2fMetaField_CreateInstance(void *);
-extern "C" igMetaField *igMatrix44fMetaField_CreateInstance(void *);
+#include "dw4/igBoolMetaField.h"
+#include "dw4/igEnumMetaField.h"
+#include "dw4/igFloatMetaField.h"
+#include "dw4/igIntMetaField.h"
+#include "dw4/igLongMetaField.h"
+#include "dw4/igMatrix44fMetaField.h"
+#include "dw4/igMetaEnum.h"
+#include "dw4/igObjectRefMetaField.h"
+#include "dw4/igStringMetaField.h"
+#include "dw4/igStructMetaField.h"
+#include "dw4/igVec2fMetaField.h"
+#include "dw4/igVec3fMetaField.h"
 class igMemoryPoolView;
-extern "C" igMetaField *igBoolMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igEnumMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igFloatMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igIntMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igLongMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igObjectRefMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igStringMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igStructMetaField_Create(igMemoryPoolView *pool);
 #include "dw4/ClassRegistration.h"
 extern "C" void FUN_00134a20(void);
 extern "C" void FUN_001378f0(void);
@@ -125,9 +126,6 @@ extern "C" ObjectRefWord *FUN_00458e40(ObjectRefWord *self,int delete_storage);
 extern "C" igMetaObject *igView_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igStatisticsItem_Register(void);
 extern "C" void thunk_igStatisticsItem_GetMetaObject(void);
-extern "C" int igEnumMetaField_SetDefaultValue(void *field, const int &value);
-extern "C" int igFloatMetaField_SetDefault(void *, float);
-extern "C" int igIntMetaField_SetDefault(...);
 extern "C" int FUN_0044bce0(void);
 extern "C" int FUN_004516e0(void);
 extern "C" int FUN_00149b60(void);
@@ -159,8 +157,6 @@ extern "C" int FUN_00458610(...);
 extern "C" int FUN_00458620(...);
 extern "C" int FUN_00458630(...);
 extern "C" int ObjectPointerList_FindIndex(...);
-extern "C" igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count);
-extern "C" int igStringMetaField_SetDefaultText(...);
 extern "C" igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 extern "C" int text_name_3[4];
 extern "C" int text_Viewer_scene_manager[4];
@@ -310,13 +306,10 @@ extern "C" igMetaObject *igModel_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igViewerParameters_Register(void);
 extern "C" void thunk_igViewerParameters_GetMetaObject(void);
 struct Fld { char p0[52]; char f52; char p53[3]; int f56; };
-extern "C" int igVec2fMetaField_SetDefault(...);
-extern "C" int igVec3fMetaField_SetDefault(...);
 #include "dw4/igGroup.h"
 extern "C" int FUN_0019f4c0(void);
 #include "dw4/igGraphPath.h"
 extern "C" int FUN_001a4d90(void);
-extern "C" int igBoolMetaField_SetDefaultValue(...);
 extern "C" void igViewerParameters_InitFields(void);
 extern "C" igMetaObject *FUN_0045b8d0(void);
 extern "C" igMetaObject *igViewerGuiFactory_GetMetaObject(void);

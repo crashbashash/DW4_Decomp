@@ -181,11 +181,11 @@ void bePadData_InitFields(void) {
     LStick = ((int)igMetaObject_GetFieldAt(meta, base + 1));
     lStickDefault[0] = 0;
     lStickDefault[1] = 0;
-    igVec2fMetaField_SetDefault(LStick, lStickDefault);
+    igVec2fMetaField_SetDefault((igMetaField *)LStick, (const float *)lStickDefault);
     RStick = ((int)igMetaObject_GetFieldAt(meta, base + 2));
     rStickDefault[0] = 0;
     rStickDefault[1] = 0;
-    igVec2fMetaField_SetDefault(RStick, rStickDefault);
+    igVec2fMetaField_SetDefault((igMetaField *)RStick, (const float *)rStickDefault);
     igMetaObject_NameFields(meta, g_bePadData_fieldTable, g_bePadData_fieldHandles, g_bePadData_fieldOffsets, base);
 }
 

@@ -129,7 +129,7 @@ void igVertexBlendMatrixListAttr_InitFields(void) {
     ((igMetaField *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4)))->_persistent = 0;
     ((igMetaField *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5)))->_persistent = 0;
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6));
-    igIntMetaField_SetDefault(temp_v0_2, -1);
+    igIntMetaField_SetDefault((igMetaField *)temp_v0_2, -1);
     ((igMetaField *)temp_v0_2)->_persistent = 0;
     igMetaObject_NameFields(temp_s0, g_igVertexBlendMatrixListAttr_fieldTable, g_igVertexBlendMatrixListAttr_fieldHandles, g_igVertexBlendMatrixListAttr_fieldOffsets, temp_s2);
 }

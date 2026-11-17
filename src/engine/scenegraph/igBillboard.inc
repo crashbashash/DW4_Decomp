@@ -99,12 +99,12 @@ void igBillboard_InitFields(void) {
     spA[0] = 0;
     spA[2] = 1.0f;
     spA[1] = 0;
-    igVec3fMetaField_SetDefault(temp_a0, spA);
+    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, spA);
     temp_a0_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
     spB[0] = 0;
     spB[1] = 0;
     spB[2] = 0;
-    igVec3fMetaField_SetDefault(temp_a0_2, spB);
+    igVec3fMetaField_SetDefault((igMetaField *)temp_a0_2, spB);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3)));
     *(int *)((char *)(temp_s1) + 56) = FUN_001356f0();
     *(char *)((char *)(temp_s1) + 38) = 0;

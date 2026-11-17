@@ -252,12 +252,12 @@ extern "C" {
 #include "dw4/igResult.h"
 extern "C" {
 class igMemoryPoolView;
-igMetaField *igBoolMetaField_Create(igMemoryPoolView *pool);
-igMetaField *igObjectRefMetaField_Create(igMemoryPoolView *pool);
-igMetaField *igUnsignedIntMetaField_Create(igMemoryPoolView *pool);
-igMetaField *igRawRefMetaField_Create(igMemoryPoolView *pool);
-igMetaField *igMemoryRefMetaField_Create(igMemoryPoolView *pool);
-igMetaField *igIntMetaField_Create(igMemoryPoolView *pool);
+#include "dw4/igBoolMetaField.h"
+#include "dw4/igIntMetaField.h"
+#include "dw4/igMemoryRefMetaField.h"
+#include "dw4/igObjectRefMetaField.h"
+#include "dw4/igRawRefMetaField.h"
+#include "dw4/igUnsignedIntMetaField.h"
 void igPsx2IopRpcConnection_EnsureRegistered(void);
 void igThread_EnsureRegistered(void);
 void FUN_00145de0(void);
@@ -266,12 +266,10 @@ igMetaObject *igAudioContext_GetPublishedMetaObject(void);
 extern int g_igPsx2AudioContext_vtable[4];
 extern int g_igPsx2AudioSourceList_vtable[4];
 
-int igBoolMetaField_SetDefaultValue(...);
 int FUN_00145d40(...);
 int igUnsignedIntMetaField_GetDefaultDescriptor(...);
 int igThread_GetOrCreateMetaObject(...);
 int igPsx2IopRpcConnection_GetOrCreateMetaObject(...);
-int igUnsignedIntMetaField_SetDefaultValue(...);
 int igPsx2IopRpcConnection_CallNoData(...);
 int igPsx2IopRpcConnection_Call(...);
 int igPsx2IopRpcConnection_CallWithData(...);

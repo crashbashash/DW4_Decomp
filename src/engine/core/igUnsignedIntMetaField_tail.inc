@@ -60,7 +60,7 @@ void igUnsignedIntMetaField_Destruct(int extra0) {
     igMetaField_Destruct((igMetaField *)extra0);
 }
 
-void igUnsignedIntMetaField_SetDefaultValue(void **self, int value) {
+void igUnsignedIntMetaField_SetDefaultValue(igMetaField *self, int value) {
     int stored;
 
     stored = value;

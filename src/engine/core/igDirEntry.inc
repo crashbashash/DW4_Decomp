@@ -131,14 +131,14 @@ void igDirEntry_InitFields(void) {
     first = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igDirEntry_ctorTable, 4);
     indexField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first)));
-    igIntMetaField_SetDefault((void **)indexField, -1);
+    igIntMetaField_SetDefault((igMetaField *)indexField, -1);
     ((igIntMetaField *)indexField)->_persistent = 0;
     resolveMethodField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 1)));
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)resolveMethodField, 0);
+    igEnumMetaField_SetDefaultValue((igMetaField *)resolveMethodField, 0);
     ((igEnumMetaField *)resolveMethodField)->_persistent = 0;
     ((igEnumMetaField *)resolveMethodField)->_getMetaEnumFunction = (int)(&igDirEntry_GetResolveMethodMetaEnum);
     refTypeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2)));
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)refTypeField, 0);
+    igEnumMetaField_SetDefaultValue((igMetaField *)refTypeField, 0);
     ((igEnumMetaField *)refTypeField)->_persistent = 0;
     ((igEnumMetaField *)refTypeField)->_getMetaEnumFunction = (int)(igDirEntry_GetRefTypeMetaEnum);
     *(char *)((char *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 3))) + 38) = 0;

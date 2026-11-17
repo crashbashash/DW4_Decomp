@@ -84,7 +84,7 @@ void beHitLandResultData_InitFields(void) {
     meta = g_beHitLandResultData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beHitLandResultData_ctorTable, 2);
-    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base)), "");
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base), "");
     igMetaObject_NameFields(meta, g_beHitLandResultData_fieldTable, g_beHitLandResultData_fieldHandles, g_beHitLandResultData_fieldOffsets, base);
 }
 

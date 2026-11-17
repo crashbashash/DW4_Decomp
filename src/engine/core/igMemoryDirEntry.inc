@@ -124,17 +124,17 @@ void igMemoryDirEntry_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igMemoryDirEntry_ctorTable, 7);
     memTypeSizeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    igIntMetaField_SetDefault((void **)memTypeSizeField, -1);
+    igIntMetaField_SetDefault((igMetaField *)memTypeSizeField, -1);
     ((igMetaField *)memTypeSizeField)->_persistent = 0;
     memTypeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
     ((igObjectRefMetaField *)memTypeField)->_metaObject = (int)igMetaField_GetOrCreateMetaObject();
     igObjectRefMetaField_SetDefault((igObjectRefMetaField *)memTypeField, (igObject *)(igCharMetaField_GetDefaultDescriptor()));
     ((igObjectRefMetaField *)memTypeField)->_refCounted = 0;
     ((igObjectRefMetaField *)memTypeField)->_persistent = 0;
-    igIntMetaField_SetDefault((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3))), -1);
-    igBoolMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4))), 1);
-    igIntMetaField_SetDefault((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5))), -1);
-    igIntMetaField_SetDefault((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6))), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3), -1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4), 1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6), -1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igMemoryDirEntry_fieldTable, g_igMemoryDirEntry_fieldDescriptors, g_igMemoryDirEntry_fieldOffsets, base);
 }
 

@@ -96,10 +96,10 @@ void ParticleTimer_InitFields(void) {
     igMetaObject_CreateFields(meta, g_ParticleTimer_ctorTable, 3);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base), 1);
     timeBias = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    igLongMetaField_SetDefault(timeBias, 0);
+    igLongMetaField_SetDefault((igMetaField *)timeBias, 0);
     ((igLongMetaField *)timeBias)->_persistent = 0;
     time = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    igLongMetaField_SetDefault(time, 0);
+    igLongMetaField_SetDefault((igMetaField *)time, 0);
     ((igLongMetaField *)time)->_persistent = 0;
     igMetaObject_NameFields(meta, g_ParticleTimer_fieldTable, g_ParticleTimer_fieldHandles, g_ParticleTimer_fieldOffsets, base);
 }

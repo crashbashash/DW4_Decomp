@@ -239,15 +239,15 @@ void igVisualContext_InitFields(void) {
     ((igRawRefMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 9))->_persistent = 0;
     ((igUnsignedIntMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0xA))->_persistent = 0;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xB));
-    igLongMetaField_SetDefault(temp_v0, 0);
+    igLongMetaField_SetDefault((igMetaField *)temp_v0, 0);
     ((igLongMetaField *)temp_v0)->_persistent = 0;
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xC));
-    igEnumMetaField_SetDefaultValue(temp_v0_2, 0);
+    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_2, 0);
     ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(&FUN_00149440);
     ((igMatrix44fMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0xD))->_persistent = 0;
     ((igMatrix44fMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0xE))->_persistent = 0;
     temp_v0_3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xF));
-    igBoolMetaField_SetDefaultValue(temp_v0_3, 1);
+    igBoolMetaField_SetDefaultValue((igMetaField *)temp_v0_3, 1);
     ((igBoolMetaField *)temp_v0_3)->_persistent = 0;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x10));
     ((igObjectRefArrayMetaField *)temp_s2_3)->_metaObject = (int)FUN_0014a7c0();

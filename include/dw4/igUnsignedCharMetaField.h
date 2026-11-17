@@ -2,6 +2,8 @@
 #define DW4_IGUNSIGNEDCHARMETAFIELD_H
 
 /* igUnsignedCharMetaField: the metafield class's metaobject and descriptor calls. */
+struct igMemoryPoolView;
+struct igMetaField;
 struct igMetaObject;
 
 #ifdef __cplusplus
@@ -9,8 +11,8 @@ extern "C" {
 #endif
 
 extern struct igMetaObject *g_igUnsignedCharMetaField_metaObject;
-void igUnsignedCharMetaField_Create(int pool);
-void igUnsignedCharMetaField_SetDefaultValue(void **self, char value);
+struct igMetaField *igUnsignedCharMetaField_Create(struct igMemoryPoolView *pool);
+void igUnsignedCharMetaField_SetDefaultValue(struct igMetaField *self, unsigned char value);
 
 #ifdef __cplusplus
 }

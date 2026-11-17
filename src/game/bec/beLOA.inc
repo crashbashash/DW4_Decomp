@@ -145,7 +145,7 @@ void beLOA_InitFields(void) {
     colorDefault[1] = 0x3F800000;
     colorDefault[2] = 0x3F800000;
     colorDefault[3] = 0x3F800000;
-    igVec4fMetaField_SetDefault(color, colorDefault);
+    igVec4fMetaField_SetDefault((igMetaField *)color, (const float *)colorDefault);
     overrideAttrList = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
     ((igObjectRefMetaField *)overrideAttrList)->_metaObject = (int)igAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)overrideAttrList)->_construct = 1;

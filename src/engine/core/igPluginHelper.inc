@@ -147,7 +147,7 @@ void igPluginHelper_InitFields(void) {
     meta = (void *)g_igPluginHelper_metaObject;
     first = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igPluginHelper_ctorTable, 4);
-    igStringMetaField_SetDefaultText((int *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first))), (int)".so");
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, first), ".so");
     repositoryField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 1)));
     ((igObjectRefMetaField *)repositoryField)->_metaObject = (int)igPluginRepositoryList_GetOrCreateMetaObject();
     ((igRefMetaField *)repositoryField)->_construct = 1;

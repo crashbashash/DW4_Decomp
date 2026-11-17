@@ -73,7 +73,7 @@ void igLongTimer_InitFields(void) {
     meta = (void *)((void *)g_igLongTimer_metaObject);
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igLongTimer_ctorTable, 4);
-    igBoolMetaField_SetDefaultValue((void **)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3), 1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igLongTimer_fieldTable, g_igLongTimer_fieldDescriptors, g_igLongTimer_fieldOffsets, base);
     *(int *)((char *)((void *)g_igLongTimer_metaObject) + 60) = (int)igPsx2LongTimer_GetMetaObjectFunction;
 }

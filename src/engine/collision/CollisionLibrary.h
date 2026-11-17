@@ -7,12 +7,12 @@
 
 #include "dw4/igMetaObject.h"
 class igMemoryPoolView;
-extern "C" igMetaField *igBoolMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igFloatMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igIntMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igObjectRefMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igStringMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igVec3fMetaField_CreateInstance(void *);
+#include "dw4/igBoolMetaField.h"
+#include "dw4/igFloatMetaField.h"
+#include "dw4/igIntMetaField.h"
+#include "dw4/igObjectRefMetaField.h"
+#include "dw4/igStringMetaField.h"
+#include "dw4/igVec3fMetaField.h"
 extern "C" void FUN_00187f30(void);
 struct Rc;
 extern "C" unsigned char g_CollisionLibrary_registered;
@@ -35,9 +35,6 @@ extern "C" igMetaObject *igOptBase_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igOptBase_Register(void);
 extern "C" CallbackArray *igCreateCollisionDatabase_Register(void);
 extern "C" void thunk_igCreateCollisionDatabase_GetMetaObject(void);
-extern "C" int igIntMetaField_SetDefault(...);
-extern "C" int igObjectRefMetaField_SetDefault(...);
-extern "C" int igStringMetaField_SetDefaultText(...);
 extern "C" void igCreateCollisionDatabase_InitFields(void);
 extern "C" Rc *FUN_002397a0(int arg0);
 extern "C" igMetaObject *g_igCollisionInfo_metaObject;

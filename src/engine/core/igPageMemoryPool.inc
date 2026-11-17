@@ -144,17 +144,17 @@ void igPageMemoryPool_InitFields(void) {
     igObjectRefMetaField *allocationLock;
     igEnumMetaField *messageLevel;
     igMetaObject_CreateFields(meta, g_igPageMemoryPool_ctorTable, 7);
-    igUnsignedLongMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt(meta, base), 0xFFFFFFFFFFFFFFFFULL);
+    igUnsignedLongMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base), 0xFFFFFFFFFFFFFFFFULL);
     eventTracker = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 1);
     eventTracker->_metaObject = (int)igEventTracker_GetOrCreateMetaObject();
     allocationLock = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 3);
     allocationLock->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
-    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base + 4), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 4), -1);
     messageLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
     defaultMessageLevel = g_igPageMemoryPool_defaultMessageLevel;
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)messageLevel, defaultMessageLevel);
+    igEnumMetaField_SetDefaultValue((igMetaField *)messageLevel, defaultMessageLevel);
     messageLevel->_getMetaEnumFunction = (int)igPageMemoryPool_GetMessageLevelMetaEnum;
-    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt(meta, base + 6), g_igPageMemoryPool_defaultPoolOptionFlags);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 6), g_igPageMemoryPool_defaultPoolOptionFlags);
     igMetaObject_NameFields(meta, g_igPageMemoryPool_fieldTable, g_igPageMemoryPool_fieldDescriptors, g_igPageMemoryPool_fieldOffsets, base);
     g_igPageMemoryPool_metaObject->_writeProxy = (int)igMemoryPool_GetMetaObjectFunction;
 }

@@ -260,29 +260,30 @@ static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
     } }
 #define BEDATABASE_NO_INDEX (-1)
 #include "dw4/igTDataList.h"
-extern "C" igMetaField *igObjectRefMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igStringMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igFloatMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igUnsignedIntMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igVec3fMetaField_CreateInstance(igMemoryPoolView *pool);
-extern "C" igMetaField *igLongMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igIntMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igBoolMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igMemoryRefMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igShortMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igIntArrayMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igUnsignedShortMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igShortArrayMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igFloatArrayMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igCharArrayMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igUnsignedLongMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igCharMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igVec2fMetaField_CreateInstance(igMemoryPoolView *pool);
-extern "C" igMetaField *igMatrix44fMetaField_CreateInstance(igMemoryPoolView *pool);
-extern "C" igMetaField *igBoolArrayMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igRawRefMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igVec4fMetaField_CreateInstance(igMemoryPoolView *pool);
-extern "C" igMetaField *igEnumMetaField_Create(igMemoryPoolView *pool);
+#include "dw4/igBoolArrayMetaField.h"
+#include "dw4/igBoolMetaField.h"
+#include "dw4/igCharArrayMetaField.h"
+#include "dw4/igCharMetaField.h"
+#include "dw4/igEnumMetaField.h"
+#include "dw4/igFloatArrayMetaField.h"
+#include "dw4/igFloatMetaField.h"
+#include "dw4/igIntArrayMetaField.h"
+#include "dw4/igIntMetaField.h"
+#include "dw4/igLongMetaField.h"
+#include "dw4/igMatrix44fMetaField.h"
+#include "dw4/igMemoryRefMetaField.h"
+#include "dw4/igMetaEnum.h"
+#include "dw4/igObjectRefMetaField.h"
+#include "dw4/igRawRefMetaField.h"
+#include "dw4/igShortArrayMetaField.h"
+#include "dw4/igShortMetaField.h"
+#include "dw4/igStringMetaField.h"
+#include "dw4/igUnsignedIntMetaField.h"
+#include "dw4/igUnsignedLongMetaField.h"
+#include "dw4/igUnsignedShortMetaField.h"
+#include "dw4/igVec2fMetaField.h"
+#include "dw4/igVec3fMetaField.h"
+#include "dw4/igVec4fMetaField.h"
 extern "C" void igAABoxList_EnsureRegistered(void);
 extern "C" void igMatrix44fList_EnsureRegistered(void);
 extern "C" void igIntListList_EnsureRegistered(void);
@@ -409,7 +410,6 @@ extern "C" void beWeaponSeqData_EnsureRegistered(void);
 extern "C" CallbackArray *beWeaponSeqData_Register(void);
 extern "C" void beWeaponSeqData_GetMetaObjectFunction(void);
 extern "C" void beWeaponSeqData_InitFields(void);
-extern "C" igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count);
 extern "C" igMetaObject *beWeapon_GetOrCreateMetaObject(void);
 extern "C" void *beWeapon_GetMetaObject(void);
 extern "C" int beWeapon_GetVTable(void);
@@ -510,7 +510,6 @@ extern "C" int beTimerData_GetVTable(void);
 extern "C" void beTimerData_EnsureRegistered(void);
 extern "C" CallbackArray *beTimerData_Register(void);
 extern "C" void beTimerData_GetMetaObjectFunction(void);
-extern "C" int igStringMetaField_SetDefaultText(...);
 extern "C" void beTimerData_InitFields(void);
 extern "C" int beTextureCtrlInfoList_GetVTable(void);
 extern "C" void beTextureCtrlInfoList_EnsureRegistered(void);
@@ -567,8 +566,6 @@ extern "C" igSmartPointer<igObject> *igSmartPointer_igRandomNumber_Destruct(igSm
 extern "C" CallbackArray *beSystem_Register(void);
 extern "C" void beSystem_GetMetaObjectFunction(void);
 extern "C" int igStringObj_GetOrCreateMetaObject(void);
-extern "C" int igBoolMetaField_SetDefaultValue(void *, int);
-extern "C" int igFloatMetaField_SetDefault(void *, float);
 extern "C" void beSystem_InitFields(void);
 extern "C" void *beSwitchCtrlInfo_GetMetaObject(void);
 extern "C" int beSwitchCtrlInfo_GetVTable(void);
@@ -598,7 +595,6 @@ extern "C" void *beBinDataObject_GetMetaObject(void);
 extern "C" void beBinDataObject_EnsureRegistered(void);
 extern "C" CallbackArray *beBinDataObject_Register(void);
 extern "C" void beBinDataObject_GetMetaObjectFunction(void);
-extern "C" int igCharMetaField_GetDefaultDescriptor(...);
 extern "C" void beBinDataObject_InitFields(void);
 extern "C" int beSoundInfo_GetVTable(void);
 extern "C" void beSoundInfo_EnsureRegistered(void);
@@ -609,8 +605,6 @@ extern "C" int beSoundData_GetVTable(void);
 extern "C" void beSoundData_EnsureRegistered(void);
 extern "C" CallbackArray *beSoundData_Register(void);
 extern "C" void beSoundData_GetMetaObjectFunction(void);
-extern "C" int igIntMetaField_SetDefault(...);
-extern "C" int igShortMetaField_SetDefault(int, int);
 extern "C" void beSoundData_InitFields(void);
 extern "C" igMetaObject *beSound_GetOrCreateMetaObject(void);
 extern "C" int beSound_GetVTable(void);
@@ -870,7 +864,6 @@ extern "C" int beSvDeliver_GetVTable(void);
 extern "C" void beSvDeliver_EnsureRegistered(void);
 extern "C" CallbackArray *beSvDeliver_Register(void);
 extern "C" void beSvDeliver_GetMetaObjectFunction(void);
-extern "C" int igCharMetaField_SetDefaultValue(void *, int);
 extern "C" void beSvDeliver_InitFields(void);
 extern "C" int beResetNode_GetVTable(void);
 extern "C" void beResetNode_EnsureRegistered(void);
@@ -934,7 +927,6 @@ extern "C" int bePadData_GetVTable(void);
 extern "C" void bePadData_EnsureRegistered(void);
 extern "C" CallbackArray *bePadData_Register(void);
 extern "C" void bePadData_GetMetaObjectFunction(void);
-extern "C" int igVec2fMetaField_SetDefault(int, int *);
 extern "C" void bePadData_InitFields(void);
 extern "C" int igInfo_Destroy(...);
 extern "C" int beOptInfo_GetVTable(void);
@@ -1009,7 +1001,6 @@ extern "C" int beNodeAnim_GetVTable(void);
 extern "C" void beNodeAnim_EnsureRegistered(void);
 extern "C" CallbackArray *beNodeAnim_Register(void);
 extern "C" void beNodeAnim_GetMetaObject(void);
-extern "C" int igLongMetaField_SetDefault(...);
 extern "C" void beNodeAnim_InitFields(void);
 extern "C" void beNodeAnim_StaticInitCallback(void);
 extern "C" void *beMovieInfo_GetMetaObject(void);
@@ -1541,7 +1532,6 @@ extern "C" int beLOA_GetVTable(void);
 extern "C" void beLOA_EnsureRegistered(void);
 extern "C" CallbackArray *beLOA_Register(void);
 extern "C" void beLOA_GetMetaObjectFunction(void);
-extern "C" int igVec4fMetaField_SetDefault(void *, int *);
 extern "C" void beLOA_InitFields(void);
 extern "C" void beLOA_StaticInitCallback(void);
 extern "C" igMetaObject *beKeyboardReceiver_GetOrCreateMetaObject(void);
@@ -1583,7 +1573,6 @@ extern "C" void beHitLandModelOrder_EnsureRegistered(void);
 extern "C" CallbackArray *beHitLandModelOrder_Register(void);
 extern "C" void beHitLandModelOrder_GetMetaObjectFunction(void);
 extern "C" int igRayList_GetOrCreateMetaObject(void);
-extern "C" int igVec3fMetaField_SetDefault(void *, int *);
 extern "C" void beHitLandModelOrder_InitFields(void);
 extern "C" igMetaObject *beHitLandResultDataList_GetOrCreateMetaObject(void);
 extern "C" void *beHitLandResultDataList_GetMetaObject(void);
@@ -2233,7 +2222,6 @@ extern "C" void ParticleInfo_EnsureRegistered(void);
 extern "C" CallbackArray *ParticleInfo_Register(void);
 extern "C" void ParticleInfo_GetMetaObjectFunction(void);
 extern "C" igMetaObject *igSceneInfo_GetPublishedMetaObject(void);
-extern "C" int igEnumMetaField_SetDefaultValue(void *field, const int &value);
 extern "C" void ParticleInfo_InitFields(void);
 extern "C" igMetaObject *beAction2Data_GetMeta(void);
 extern "C" igMetaObject *beAction2DataList_GetMeta(void);

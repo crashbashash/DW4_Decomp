@@ -31,8 +31,8 @@ int igUnsignedShortMetaField_GetSize(void) {
     return 2;
 }
 
-void igUnsignedShortMetaField_SetDefaultValue(void **self, short value) {
-    short stored;
+void igUnsignedShortMetaField_SetDefaultValue(igMetaField *self, unsigned short value) {
+    unsigned short stored;
 
     stored = value;
     ((igMetaFieldView *)(self))->SetDefault(&stored);

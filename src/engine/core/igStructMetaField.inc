@@ -5,9 +5,9 @@ igMetaField *g_igStructMetaField_alignmentMetaField;
 igMetaField *g_igStructMetaField_cppConstructorMetaField;
 igMetaField *g_igStructMetaField_cppDestructorMetaField;
 
-void igStructMetaField_Create(int allocator) {
+igMetaField *igStructMetaField_Create(igMemoryPoolView *pool) {
     igStructMetaField_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igStructMetaField_metaObject, (igMemoryPoolView *)allocator);
+    return (igMetaField *)igMetaObject_CreateInstance(g_igStructMetaField_metaObject, pool);
 }
 
 igMetaObject *igStructMetaField_GetMetaObject(void)
@@ -106,13 +106,13 @@ void igStructMetaField_InitFields(void) {
     field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_size));
     index = ObjectPointerList_FindIndex((char *)meta->_metaFields, (int)field);
     field = (igMetaField *)((igObjectDispatchView *)field)->CloneViaMetadata(1);
-    igUnsignedShortMetaField_SetDefaultValue((void **)field, (short)1);
+    igUnsignedShortMetaField_SetDefaultValue((igMetaField *)field, (short)1);
     field->_persistent = 0;
     field->_externalEnumStorage = (int)&g_igStructMetaField_sizeDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);
     releaseField(field);
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base));
-    igIntMetaField_SetDefault((void **)field, 1);
+    igIntMetaField_SetDefault((igMetaField *)field, 1);
     field->_persistent = 0;
     igMetaObject_NameFields(meta, g_igStructMetaField_fieldTable, g_igStructMetaField_fieldDescriptors, g_igStructMetaField_fieldOffsets, base);
 }

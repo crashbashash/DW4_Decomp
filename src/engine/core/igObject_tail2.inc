@@ -257,7 +257,7 @@ void igObject_InitFields(void) {
     void *interned;
     void *interned2;
 
-    refCountField = ((igUnsignedIntMetaField *)igUnsignedIntMetaField_Create((int)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+    refCountField = ((igUnsignedIntMetaField *)igUnsignedIntMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     refCountField->_offset = 4;
     refCountField->_externalEnumStorage = (int)(&g_igObject_refCountDescriptorCell);
     if ("_refCount" == 0) {
@@ -289,7 +289,7 @@ void igObject_InitFields(void) {
     if (((unsigned long long)((long long)(int)refCountField->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy(refCountField);
     }
-    poolIndexField = ((igUnsignedIntMetaField *)igUnsignedIntMetaField_Create((int)(((void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+    poolIndexField = ((igUnsignedIntMetaField *)igUnsignedIntMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     poolIndexField->_offset = 4;
     poolIndexField->_externalEnumStorage = (int)(&g_igObject_memPoolIndexDescriptorCell);
     if ("_memPoolIndex" == 0) {

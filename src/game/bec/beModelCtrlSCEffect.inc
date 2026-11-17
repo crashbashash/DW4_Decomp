@@ -110,7 +110,7 @@ void beModelCtrlSCEffect_InitFields(void) {
     meta = g_beModelCtrlSCEffect_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlSCEffect_ctorTable, 7);
-    igIntMetaField_SetDefault(((int)igMetaObject_GetFieldAt(meta, base)), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base), -1);
     igMetaObject_NameFields(meta, g_beModelCtrlSCEffect_fieldTable, g_beModelCtrlSCEffect_fieldHandles, g_beModelCtrlSCEffect_fieldOffsets, base);
 }
 

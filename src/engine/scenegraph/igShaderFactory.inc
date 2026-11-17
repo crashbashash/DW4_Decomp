@@ -214,7 +214,7 @@ void igShaderFactory_InitFields(void) {
     *(int *)((char *)(temp_s1_2) + 56) = (int)igNamedObjectList_GetOrCreateMetaObject();
     *(unsigned char *)((char *)(temp_s1_2) + 52) = 1;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
-    igEnumMetaField_SetDefaultValue(temp_v0, 3);
+    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 3);
     *(int *)((char *)(temp_v0) + 52) = (int)(FUN_00199110);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igShaderFactory_fieldTable, g_igShaderFactory_fieldHandles, g_igShaderFactory_fieldOffsets, temp_s2);
 }

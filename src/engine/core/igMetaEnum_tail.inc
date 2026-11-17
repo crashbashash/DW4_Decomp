@@ -102,7 +102,7 @@ static inline void dropValues(igTDataList<int> *o) {
 
 static inline void setValue(igTDataList<int> *l, int i, int *v) { if (l->_count != 0 && i >= 0 && i < l->_count) { l->_data[i] = *v; } }
 
-MetaEnumView *igMetaEnum_Create(const char *name, const char **names, int *values, int count) {
+igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count) {
     MetaEnumView *metaEnum;
     int i;
     char *interned;
@@ -155,6 +155,6 @@ MetaEnumView *igMetaEnum_Create(const char *name, const char **names, int *value
     igObjectSystem_AppendMetaEnum((int *)(((*(int *)&g_objectSystem))), (int)metaEnum);
     metaEnum->_refCount = metaEnum->_refCount - 1;
     if (((unsigned long long)((long long)metaEnum->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy((igObject *)metaEnum); }
-    return metaEnum;
+    return (igMetaEnum *)metaEnum;
 }
 

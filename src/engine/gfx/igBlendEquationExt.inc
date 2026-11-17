@@ -64,7 +64,7 @@ void igBlendEquationExt_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igBlendEquationExt_ctorTable, 1);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    igEnumMetaField_SetDefaultValue(temp_v0, 0);
+    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
     *(int *)((char *)(temp_v0) + 52) = (int)(&igMetaEnum_GetEmpty);
     igMetaObject_NameFields(meta, g_igBlendEquationExt_fieldTable, g_igBlendEquationExt_fieldHandles, g_igBlendEquationExt_fieldOffsets, fieldStart);
     *(int *)((char *)(g_igBlendEquationExt_metaObject) + 60) = (int)(&thunk_igPsx2BlendEquationExt_GetMetaObject);

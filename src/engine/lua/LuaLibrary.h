@@ -23,10 +23,10 @@ extern "C" void LuaLibrary_MarkRegistered(void);
 
 /* A class's registration: a field factory builds each reflected field, a callback list runs when the
  * class registers. */
-typedef igMetaField *(*FieldFactory)(void *);
+typedef igMetaField *(*FieldFactory)(struct igMemoryPoolView *pool);
 typedef void (*igMetaObjectCallback)(void);
-extern "C" igMetaField *igRawRefMetaField_Create(void *);
-extern "C" igMetaField *igObjectRefMetaField_Create(void *);
+#include "dw4/igObjectRefMetaField.h"
+#include "dw4/igRawRefMetaField.h"
 extern "C" void igMemoryPool_EnsureRegistered(void);
 
 extern "C" void StringChunk_ReleaseHeader(void *owner, void *header);
@@ -35,7 +35,7 @@ extern "C" CallbackArray *igMetaObject_RegisterClass(...);
 extern "C" int igMetaObject_Create(int allocator);
 extern "C" int igMetaObject_GetFieldCount(igMetaObject *meta);
 extern "C" void igMetaObject_CreateFields(igMetaObject *meta, FieldFactory *factories, int count);
-extern "C" void *igMetaObject_GetFieldAt(igMetaObject *meta, int index);
+extern "C" igMetaField *igMetaObject_GetFieldAt(igMetaObject *meta, int index);
 extern "C" void igMetaObject_NameFields(igMetaObject *meta, const char **names, igMetaField ***handles, int *offsets, int first);
 extern "C" int Memory_GetAllocatorBySelector(int key);
 

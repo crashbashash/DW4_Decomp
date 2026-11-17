@@ -2,9 +2,9 @@ igMetaObject *g_igCharArrayMetaField_metaObject;
 igCharArrayMetaField *g_igCharArrayMetaField_descriptor;
 igMetaField *g_igCharArrayMetaField_numMetaField;
 
-void igCharArrayMetaField_Create(int allocator) {
+igMetaField *igCharArrayMetaField_Create(igMemoryPoolView *pool) {
     igCharArrayMetaField_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igCharArrayMetaField_metaObject, (igMemoryPoolView *)allocator);
+    return (igMetaField *)igMetaObject_CreateInstance(g_igCharArrayMetaField_metaObject, pool);
 }
 
 igMetaObject *igCharArrayMetaField_GetMetaObject(void)
@@ -92,7 +92,7 @@ void igCharArrayMetaField_InitFields(void) {
     meta = (void *)g_igCharArrayMetaField_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igCharArrayMetaField_ctorTable, 1);
-    igIntMetaField_SetDefault((void **)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)), 1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base), 1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igCharArrayMetaField_fieldTable, g_igCharArrayMetaField_fieldDescriptors, g_igCharArrayMetaField_fieldOffsets, base);
 }
 

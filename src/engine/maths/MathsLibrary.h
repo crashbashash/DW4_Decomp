@@ -51,10 +51,10 @@ typedef enum Intersection {
 } Intersection;
 
 typedef void (*igMetaObjectCallback)();
-igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count);
-igMetaField *igEnumMetaField_Create(void *);
-igMetaField *igFloatMetaField_Create(void *);
-igMetaField *igIntMetaField_Create(void *);
+#include "dw4/igEnumMetaField.h"
+#include "dw4/igFloatMetaField.h"
+#include "dw4/igIntMetaField.h"
+#include "dw4/igMetaEnum.h"
 void FUN_00187190(void);
 void FUN_00187450(void);
 void FUN_001877c0(void);
@@ -164,7 +164,6 @@ void thunk_igVec4fArrayMetaField_GetMetaObject(void);
 extern char igVec4fMetaField_GetPublishedMetaObject[];
 
 void igVec4fArrayMetaField_InitFields(void);
-int igIntMetaField_SetDefault(...);
 
 
 
@@ -205,9 +204,7 @@ void thunk_FUN_0018d480(void);
 
 
 void igSphere_InitFields(void);
-void igVec3fMetaField_SetDefault(igVec3fMetaFieldView *self, const float *value);
 
-int igFloatMetaField_SetDefault(int, float);
 
 void FUN_0018d480(void);
 

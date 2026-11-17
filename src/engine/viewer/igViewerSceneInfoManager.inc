@@ -699,7 +699,7 @@ void FUN_00459ee0(void) {
     temp_v0 = (void **)(igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_name"));
     temp_s3 = ObjectPointerList_FindIndex(*(int *)((char *)(temp_s1) + 40), temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igStringMetaField_SetDefaultText(temp_v0_2, "Viewer scene manager");
+    igStringMetaField_SetDefaultText((igMetaField *)temp_v0_2, "Viewer scene manager");
     *(int *)((char *)(temp_v0_2) + 28) = (int)(&g_igViewerSceneInfoManager_nameMetaField);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s1, temp_s3, (igMetaField *)temp_v0_2);
     *(int *)((char *)(temp_v0_2) + 4) = (int)((int) (*(int *)((char *)(temp_v0_2) + 4) - 1));
@@ -793,7 +793,7 @@ void FUN_00459ee0(void) {
     *(int *)((char *)(temp_s0_35) + 56) = (int)igObjectList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_35) + 52) = 1;
     temp_v0_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x26));
-    igEnumMetaField_SetDefaultValue(temp_v0_3, 0);
+    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_3, 0);
     *(int *)((char *)(temp_v0_3) + 52) = (int)(&FUN_004592e0);
     temp_s0_36 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x27));
     *(int *)((char *)(temp_s0_36) + 56) = (int)igTextureList_GetOrCreateMetaObject();

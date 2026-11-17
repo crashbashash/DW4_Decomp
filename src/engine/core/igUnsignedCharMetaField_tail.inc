@@ -35,8 +35,8 @@ int igUnsignedCharMetaField_GetSize(void) {
     return 1;
 }
 
-void igUnsignedCharMetaField_SetDefaultValue(void **self, char value) {
-    char defaultValue;
+void igUnsignedCharMetaField_SetDefaultValue(igMetaField *self, unsigned char value) {
+    unsigned char defaultValue;
 
     defaultValue = value;
     ((igMetaFieldView *)(self))->SetDefault(&defaultValue);

@@ -108,19 +108,19 @@ void igClearAttr_InitFields(void) {
     v1.w = 0x3F800000;
     v1.y = 0;
     v1.z = 0;
-    igVec4fMetaField_SetDefault(temp_a0, &v1);
+    igVec4fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)&v1);
     temp_a0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2));
     v2.x = 0;
     v2.y = 0;
     v2.z = 0;
     v2.w = 0;
-    igVec4fMetaField_SetDefault(temp_a0_2, &v2);
-    igDoubleMetaField_SetDefaultDouble(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3), 0x3FF00000LL << 0x20);
+    igVec4fMetaField_SetDefault((igMetaField *)temp_a0_2, (const float *)&v2);
+    igDoubleMetaField_SetDefaultDouble(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3), 1.0);
     temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5));
-    igUnsignedIntMetaField_SetDefaultValue(temp_v0, -1);
+    igUnsignedIntMetaField_SetDefaultValue((igMetaField *)temp_v0, -1);
     *(char *)((char *)(temp_v0) + 38) = 0;
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6));
-    igFloatMetaField_SetDefault(temp_v0_2, 1.0f);
+    igFloatMetaField_SetDefault((igMetaField *)temp_v0_2, 1.0f);
     *(char *)((char *)(temp_v0_2) + 38) = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igClearAttr_fieldTable, g_igClearAttr_fieldHandles, g_igClearAttr_fieldOffsets, temp_s0);
 }

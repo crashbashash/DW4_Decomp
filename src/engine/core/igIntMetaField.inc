@@ -2,21 +2,21 @@ igMetaObject *g_igIntMetaField_metaObject;
 void *g_igIntMetaField_descriptor;
 
 /* Same factory shape for an igIntMetaField (52-byte instance). */
-void **igIntMetaField_Create(int allocator) {
+igMetaField *igIntMetaField_Create(igMemoryPoolView *pool) {
     void **field;
 
     if (g_objectSystem->active != 0) {
         igIntMetaField_EnsureRegistered();
-        field = ((void **)igMetaObject_CreateInstance((igMetaObject *)((int)g_igIntMetaField_metaObject), (igMemoryPoolView *)allocator));
+        field = ((void **)igMetaObject_CreateInstance((igMetaObject *)((int)g_igIntMetaField_metaObject), pool));
     } else {
-        field = ((void **)igObject_AllocateRawStorage(0x34, 0, (igMemoryPoolView *)allocator));
+        field = ((void **)igObject_AllocateRawStorage(0x34, 0, pool));
         if (field != 0) {
             field = ((void **)igIntMetaField_Construct((igMetaField *)field, 1));
         }
         ((igObjectDispatchView *)field)->InitDefaults();
         ((igObjectDispatchView *)field)->userConstruct(0);
     }
-    return field;
+    return (igMetaField *)field;
 }
 
 void *igIntMetaField_Clone(void *self, void *src) {

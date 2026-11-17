@@ -86,12 +86,12 @@ void igGuiComponentAspect_InitFields(void) {
     v1[0] = 0.0f;
     v1[1] = 0.0f;
     v1[2] = 0.0f;
-    igVec3fMetaField_SetDefault(temp_a0, v1);
+    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, v1);
     temp_a0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
     v2[2] = 1.0f;
     v2[0] = 3.4028235e+38f;
     v2[1] = 3.4028235e+38f;
-    igVec3fMetaField_SetDefault(temp_a0_2, v2);
+    igVec3fMetaField_SetDefault((igMetaField *)temp_a0_2, v2);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igGuiComponentAspect_fieldTable, g_igGuiComponentAspect_fieldHandles, g_igGuiComponentAspect_fieldOffsets, temp_s2);
 }
 

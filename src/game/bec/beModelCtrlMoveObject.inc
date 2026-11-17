@@ -109,10 +109,10 @@ void beModelCtrlMoveObject_InitFields(void) {
     meta = g_beModelCtrlMoveObject_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlMoveObject_ctorTable, 9);
-    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(meta, base + 1))), 0.0f);
-    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(meta, base + 3))), 0.0f);
-    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(meta, base + 4))), 0.0f);
-    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(meta, base + 5))), 0.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), 0.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 3), 0.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 4), 0.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 5), 0.0f);
     igMetaObject_NameFields(meta, g_beModelCtrlMoveObject_fieldTable, g_beModelCtrlMoveObject_fieldHandles, g_beModelCtrlMoveObject_fieldOffsets, base);
 }
 

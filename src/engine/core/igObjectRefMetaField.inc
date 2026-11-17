@@ -5,21 +5,21 @@ igMetaField *g_igObjectRefMetaField_refCountedMetaField;
 igMetaField *g_igObjectRefMetaField_poolNameMetaField;
 
 /* Same factory shape for an igObjectRefMetaField (68-byte instance). */
-void **igObjectRefMetaField_Create(int allocator) {
+igMetaField *igObjectRefMetaField_Create(igMemoryPoolView *pool) {
     void **field;
 
     if (g_objectSystem->active != 0) {
         igObjectRefMetaField_EnsureRegistered();
-        field = ((void **)igMetaObject_CreateInstance((igMetaObject *)((int)g_igObjectRefMetaField_metaObject), (igMemoryPoolView *)allocator));
+        field = ((void **)igMetaObject_CreateInstance((igMetaObject *)((int)g_igObjectRefMetaField_metaObject), pool));
     } else {
-        field = ((void **)igObject_AllocateRawStorage(0x44, 0, (igMemoryPoolView *)allocator));
+        field = ((void **)igObject_AllocateRawStorage(0x44, 0, pool));
         if (field != 0) {
             field = ((void **)igObjectRefMetaField_Construct((igObjectRefMetaField *)field, 1));
         }
         ((igObjectDispatchView *)field)->InitDefaults();
         ((igObjectDispatchView *)field)->userConstruct(0);
     }
-    return field;
+    return (igMetaField *)field;
 }
 
 int igObjectRefMetaField_Clone(int source, int flags) {
@@ -141,7 +141,7 @@ void igObjectRefMetaField_InitFields(void) {
     ((igObjectRefMetaField *)metaObjectField)->_refCounted = 0;
     ((igMetaField *)metaObjectField)->_deepCopyMethod = 1;
     ((igMetaField *)metaObjectField)->_shallowCopyMethod = 1;
-    igBoolMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1))), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1), 1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igObjectRefMetaField_fieldTable, g_igObjectRefMetaField_fieldDescriptors, g_igObjectRefMetaField_fieldOffsets, base);
 }
 

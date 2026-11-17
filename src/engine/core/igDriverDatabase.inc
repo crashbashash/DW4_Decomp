@@ -178,9 +178,9 @@ void igDriverDatabase_InitFields(void) {
     ((igObjectRefMetaField *)subPropertyValuesField)->_construct = 1;
     overrideSourceField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
     ((igObjectRefMetaField *)overrideSourceField)->_metaObject = (int)igRegistry_GetOrCreateMetaObject();
-    igIntMetaField_SetDefault((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4))), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4), -1);
     overrideModeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)));
-    igEnumMetaField_SetDefaultValue((igMetaFieldView *)overrideModeField, 0);
+    igEnumMetaField_SetDefaultValue((igMetaField *)overrideModeField, 0);
     ((igEnumMetaField *)overrideModeField)->_getMetaEnumFunction = (int)(&igDriverDatabase_GetSectionOverrideModeMetaEnum);
     databaseFileField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)));
     ((igObjectRefMetaField *)databaseFileField)->_metaObject = (int)igFile_GetOrCreateMetaObject();

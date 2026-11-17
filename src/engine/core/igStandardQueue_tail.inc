@@ -150,13 +150,13 @@ void igStandardQueue_InitFields(void) {
     queueSema = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
     ((igObjectRefMetaField *)queueSema)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)queueSema)->_construct = 1;
-    igUnsignedIntMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3))), 4);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3), 4);
     data = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)));
     ((igMemoryRefMetaField *)data)->_memType = igRawRefMetaField_GetDefaultDescriptor();
     ((igMemoryRefMetaField *)data)->_destruct = 1;
     ((igMemoryRefMetaField *)data)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)data)->_releaseOnReset = 1;
-    igUnsignedIntMetaField_SetDefaultValue((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7))), 0x2000);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7), 0x2000);
     igMetaObject_NameFields((igMetaObject *)meta, g_igStandardQueue_fieldTable, g_igStandardQueue_fieldDescriptors, g_igStandardQueue_fieldOffsets, base);
     ((igMetaObject *)g_igStandardQueue_metaObject)->_writeProxy = (int)igQueue_GetMetaObjectFunction;
 }

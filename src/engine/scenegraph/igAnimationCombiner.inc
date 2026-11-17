@@ -252,9 +252,9 @@ void igAnimationCombiner_InitFields(void) {
     temp_s2_7->f53 = 1;
     temp_s2_7->f64 = 1;
     temp_s2_7->f65 = 1;
-    igLongMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA), -1);
-    igLongMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC), 0x05F5E100);
-    igLongMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xD), 0xFED260);
+    igLongMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA), -1);
+    igLongMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC), 0x05F5E100);
+    igLongMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xD), 0xFED260);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationCombiner_fieldTable, g_igAnimationCombiner_fieldHandles, g_igAnimationCombiner_fieldOffsets, temp_s1);
     igMetaObject_AddExitCallback((int)&thunk_FUN_001abdf0);
 }

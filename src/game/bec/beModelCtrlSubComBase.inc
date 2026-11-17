@@ -66,7 +66,7 @@ void beModelCtrlSubComBase_InitFields(void) {
     meta = g_beModelCtrlSubComBase_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlSubComBase_ctorTable, 3);
-    igFloatMetaField_SetDefault((void *)(((int)igMetaObject_GetFieldAt(meta, base + 1))), 0.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), 0.0f);
     igMetaObject_NameFields(meta, g_beModelCtrlSubComBase_fieldTable, g_beModelCtrlSubComBase_fieldHandles, g_beModelCtrlSubComBase_fieldOffsets, base);
 }
 

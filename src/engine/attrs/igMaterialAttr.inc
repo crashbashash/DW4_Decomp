@@ -101,25 +101,25 @@ void igMaterialAttr_InitFields(void) {
     v1.w = 0x3F800000;
     v1.y = 0;
     v1.z = 0;
-    igVec4fMetaField_SetDefault(temp_a0, &v1);
+    igVec4fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)&v1);
     temp_a0_2 = (int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2);
     v2.x = 0;
     v2.w = 0x3F800000;
     v2.y = 0;
     v2.z = 0;
-    igVec4fMetaField_SetDefault(temp_a0_2, &v2);
+    igVec4fMetaField_SetDefault((igMetaField *)temp_a0_2, (const float *)&v2);
     temp_a0_3 = (int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3);
     v3.x = 0;
     v3.w = 0x3F800000;
     v3.y = 0;
     v3.z = 0;
-    igVec4fMetaField_SetDefault(temp_a0_3, &v3);
+    igVec4fMetaField_SetDefault((igMetaField *)temp_a0_3, (const float *)&v3);
     temp_a0_4 = (int)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4);
     v4.x = 0;
     v4.w = 0x3F800000;
     v4.y = 0;
     v4.z = 0;
-    igVec4fMetaField_SetDefault(temp_a0_4, &v4);
+    igVec4fMetaField_SetDefault((igMetaField *)temp_a0_4, (const float *)&v4);
     igMetaObject_NameFields(temp_s0, g_igMaterialAttr_fieldTable, g_igMaterialAttr_fieldHandles, g_igMaterialAttr_fieldOffsets, temp_s1);
 }
 

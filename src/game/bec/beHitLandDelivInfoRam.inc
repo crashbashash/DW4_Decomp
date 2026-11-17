@@ -134,17 +134,17 @@ void beHitLandDelivInfoRam_InitFields(void) {
     va[0] = 0;
     va[1] = 0;
     va[2] = 0;
-    igVec3fMetaField_SetDefault(pos, va);
+    igVec3fMetaField_SetDefault((igMetaField *)pos, (const float *)va);
     oldPos = (void *)(igMetaObject_GetFieldAt(meta, 6 + base));
     vb[0] = 0;
     vb[1] = 0;
     vb[2] = 0;
-    igVec3fMetaField_SetDefault(oldPos, vb);
+    igVec3fMetaField_SetDefault((igMetaField *)oldPos, (const float *)vb);
     landPos = (void *)(igMetaObject_GetFieldAt(meta, 7 + base));
     vc[0] = 0;
     vc[1] = 0;
     vc[2] = 0;
-    igVec3fMetaField_SetDefault(landPos, vc);
+    igVec3fMetaField_SetDefault((igMetaField *)landPos, (const float *)vc);
     igMetaObject_NameFields(meta, g_beHitLandDelivInfoRam_fieldTable, g_beHitLandDelivInfoRam_fieldHandles, g_beHitLandDelivInfoRam_fieldOffsets, base);
 }
 

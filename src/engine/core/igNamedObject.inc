@@ -95,7 +95,7 @@ void igNamedObject_InitFields(void) {
     meta = (void *)g_igNamedObject_metaObject;
     first = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igNamedObject_ctorTable, 1);
-    igStringMetaField_SetDefaultText((int *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first)), 0);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, first), 0);
     igMetaObject_NameFields((igMetaObject *)meta, g_igNamedObject_fieldTable, g_igNamedObject_fieldDescriptors, g_igNamedObject_fieldOffsets, first);
 }
 

@@ -131,7 +131,7 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
     void *beforeText;
     void *afterText;
 
-    beforeField = (void *)(((void *)igRawRefMetaField_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+    beforeField = (void *)(((void *)igRawRefMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
     if ("_before" == 0) {
         beforeText = (void *)(0);
     } else {
@@ -161,7 +161,7 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
     if (((unsigned long long) ((long long) (int) ((igObject *)beforeField)->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)beforeField);
     }
-    afterField = (void *)(((void *)igRawRefMetaField_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)))));
+    afterField = (void *)(((void *)igRawRefMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
     if ("_after" == 0) {
         afterText = (void *)(0);
     } else {

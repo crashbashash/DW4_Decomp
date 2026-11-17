@@ -147,12 +147,12 @@ void beHitLandModelOrder_InitFields(void) {
     rayMaxDefault[0] = 0;
     rayMaxDefault[1] = 0;
     rayMaxDefault[2] = 0;
-    igVec3fMetaField_SetDefault(raymax, rayMaxDefault);
+    igVec3fMetaField_SetDefault((igMetaField *)raymax, (const float *)rayMaxDefault);
     raymin = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
     rayMinDefault[0] = 0;
     rayMinDefault[1] = 0;
     rayMinDefault[2] = 0;
-    igVec3fMetaField_SetDefault(raymin, rayMinDefault);
+    igVec3fMetaField_SetDefault((igMetaField *)raymin, (const float *)rayMinDefault);
     rayList = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
     ((igObjectRefMetaField *)rayList)->_metaObject = (int)igRayList_GetOrCreateMetaObject();
     ((igRefMetaField *)rayList)->_construct = 1;

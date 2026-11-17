@@ -91,7 +91,7 @@ void FUN_0019fca0(void) {
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_trigger")));
     temp_s3 = ObjectPointerList_FindIndex((char *)(*(int *)((char *)(temp_s1) + 40)), (int)temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    igBoolMetaField_SetDefaultValue((void **)temp_v0_2, 1);
+    igBoolMetaField_SetDefaultValue((igMetaField *)temp_v0_2, 1);
     *(int *)((char *)(temp_v0_2) + 28) = (int)(&g_igGeometry_triggerMetaField);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s1, temp_s3, (igMetaField *)temp_v0_2);
     *(int *)((char *)(temp_v0_2) + 4) = (int)((int) (*(int *)((char *)(temp_v0_2) + 4) - 1));

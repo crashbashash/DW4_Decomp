@@ -1,21 +1,21 @@
 igMetaObject *g_igBoolMetaField_metaObject;
 void *g_igBoolMetaField_descriptor;
 
-void **igBoolMetaField_Create(int pool) {
+igMetaField *igBoolMetaField_Create(igMemoryPoolView *pool) {
     void **instance;
 
     if (g_objectSystem->active != 0) {
         igBoolMetaField_EnsureRegistered();
-        instance = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igBoolMetaField_metaObject, (igMemoryPoolView *)pool)));
+        instance = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igBoolMetaField_metaObject, pool)));
     } else {
-        instance = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, (igMemoryPoolView *)pool)));
+        instance = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, pool)));
         if (instance != 0) {
             instance = (void **)(((void **)igBoolMetaField_Construct((int **)instance, 1)));
         }
         ((igObjectDispatchView *)(instance))->InitDefaults();
         ((igObjectDispatchView *)(instance))->userConstruct((int)(0));
     }
-    return instance;
+    return (igMetaField *)instance;
 }
 
 int igBoolMetaField_Clone(int source, int pool) {

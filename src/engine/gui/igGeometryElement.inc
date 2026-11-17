@@ -93,13 +93,13 @@ void igGeometryElement_InitFields(void) {
     v3[0] = 0.0f;
     v3[1] = 0.0f;
     v3[2] = 0.0f;
-    igVec3fMetaField_SetDefault(temp_a0, v3);
+    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, v3);
     temp_a0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
     v4[0] = 1.0f;
     v4[1] = 1.0f;
     v4[2] = 1.0f;
     v4[3] = 1.0f;
-    igVec4fMetaField_SetDefault(temp_a0_2, v4);
+    igVec4fMetaField_SetDefault((igMetaField *)temp_a0_2, v4);
     temp_s1_2 = (struct GeometryMetaFieldView *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3));
     temp_s1_2->f56 = (int)(igAttrList_GetOrCreateMetaObject());
     temp_s1_2->f52 = 1;

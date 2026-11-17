@@ -1,9 +1,9 @@
 igMetaObject *g_igVec4fMetaField_metaObject;
 int g_igVec4fMetaField_descriptor;
 
-void igVec4fMetaField_CreateInstance(int arg0) {
+igMetaField *igVec4fMetaField_CreateInstance(igMemoryPoolView *pool) {
     igVec4fMetaField_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)g_igVec4fMetaField_metaObject, (igMemoryPoolView *)arg0);
+    return (igMetaField *)igMetaObject_CreateInstance((igMetaObject *)g_igVec4fMetaField_metaObject, pool);
 }
 
 igMetaObject *igVec4fMetaField_GetMetaObject(void)

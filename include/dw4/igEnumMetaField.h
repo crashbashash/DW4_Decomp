@@ -2,6 +2,8 @@
 #define DW4_IGENUMMETAFIELD_H
 
 /* igEnumMetaField: the metafield class's metaobject and descriptor calls. */
+struct igMemoryPoolView;
+struct igMetaField;
 struct igMetaObject;
 
 #ifdef __cplusplus
@@ -9,10 +11,15 @@ extern "C" {
 #endif
 
 extern struct igMetaObject *g_igEnumMetaField_metaObject;
-void **igEnumMetaField_Create(int pool);
+struct igMetaField *igEnumMetaField_Create(struct igMemoryPoolView *pool);
 
 #ifdef __cplusplus
 }
+#endif
+
+/* The default arrives by reference, which only C++ can declare. */
+#ifdef __cplusplus
+extern "C" void igEnumMetaField_SetDefaultValue(struct igMetaField *self, const int &value);
 #endif
 
 #endif

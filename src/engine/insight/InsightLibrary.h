@@ -20,11 +20,11 @@
 #define OPTION_FLOAT(name, help, value) { const char *optionName = name; if (optionName) FUN_00234300(optionName, help, value); }
 
 class igMemoryPoolView;
-extern "C" igMetaField *igIntMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igLongMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igObjectRefMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igStructMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igVec2fMetaField_CreateInstance(void *);
+#include "dw4/igIntMetaField.h"
+#include "dw4/igLongMetaField.h"
+#include "dw4/igObjectRefMetaField.h"
+#include "dw4/igStructMetaField.h"
+#include "dw4/igVec2fMetaField.h"
 #include "dw4/igMetaObject.h"
 #include "dw4/igObject.h"
 #include "dw4/igInfoList.h"

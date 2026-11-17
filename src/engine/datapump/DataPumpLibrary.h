@@ -10,13 +10,13 @@
 
 
 class igMemoryPoolView;
-extern "C" igMetaField *igBoolMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igFloatMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igIntMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igObjectRefMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igStringMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igUnsignedIntArrayMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igMatrix44fMetaField_CreateInstance(void *);
+#include "dw4/igBoolMetaField.h"
+#include "dw4/igFloatMetaField.h"
+#include "dw4/igIntMetaField.h"
+#include "dw4/igMatrix44fMetaField.h"
+#include "dw4/igObjectRefMetaField.h"
+#include "dw4/igStringMetaField.h"
+#include "dw4/igUnsignedIntArrayMetaField.h"
 #include "dw4/igObject.h"
 #include "dw4/igMetaField.h"
 extern "C" char text_value[];
@@ -205,7 +205,6 @@ extern "C" void FUN_001e5ab0(void);
 extern "C" CallbackArray *igDataPump_Register(void);
 extern "C" void thunk_igDataPump_GetMetaObject(void);
 extern "C" int igMetaField_GetOrCreateMetaObject(...);
-extern "C" int igStringMetaField_SetDefaultText(...);
 extern "C" int g_igObject_metaObject[4];
 extern "C" void igDataPump_InitFields(void);
 extern "C" igMetaObject *igBoolObject_GetMetaObject(void);

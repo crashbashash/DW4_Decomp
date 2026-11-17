@@ -114,11 +114,11 @@ void igAnimationModifier_InitFields(void) {
     temp_s0 = (void *)g_igAnimationModifier_metaObject;
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationModifier_ctorTable, 3);
-    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2), -1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igTransform_GetOrCreateMetaObject();
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
-    igEnumMetaField_SetDefaultValue(temp_v0, 2);
+    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 2);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_001a7440);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationModifier_fieldTable, g_igAnimationModifier_fieldHandles, g_igAnimationModifier_fieldOffsets, temp_s2);
 }

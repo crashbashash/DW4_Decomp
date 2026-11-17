@@ -90,10 +90,10 @@ void igColorAttr_InitFields(void) {
     sp40[1] = 0x3F800000;
     sp40[2] = 0x3F800000;
     sp40[3] = 0x3F800000;
-    igVec4fMetaField_SetDefault(temp_a0, sp40);
+    igVec4fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)sp40);
     *(int *)((char *)(temp_s1) + 48) = (int)(&FUN_0013c870);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    igUnsignedIntMetaField_SetDefaultValue(temp_v0, -1);
+    igUnsignedIntMetaField_SetDefaultValue((igMetaField *)temp_v0, -1);
     *(char *)((char *)(temp_v0) + 38) = 0;
     igMetaObject_NameFields(temp_s0, g_igColorAttr_fieldTable, g_igColorAttr_fieldHandles, g_igColorAttr_fieldOffsets, temp_s2);
 }

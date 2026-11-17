@@ -933,7 +933,7 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
                 }
                 target = field->slot + (*slotShifts.p)[parentIndex] - inherited;
                 while (slot < target) {
-                    created = (igMetaField *)igCharMetaField_Create((int)file->_temporaryMemoryPool);
+                    created = (igMetaField *)igCharMetaField_Create((igMemoryPoolView *)file->_temporaryMemoryPool);
                     created->_persistent = 0;
                     igMetaField_Configure(created, "fakeField", 0, -1, blind);
                     created->_internalIndex = slot;

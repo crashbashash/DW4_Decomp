@@ -129,7 +129,7 @@ void igGuiComponentModel_InitFields(void) {
     z.a = 0;
     z.b = 0;
     z.c = 0;
-    igVec3fMetaField_SetDefault(temp_a0, &z);
+    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)&z);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igGuiComponentModel_fieldTable, g_igGuiComponentModel_fieldHandles, g_igGuiComponentModel_fieldOffsets, temp_s2);
 }
 

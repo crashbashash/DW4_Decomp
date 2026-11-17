@@ -86,7 +86,7 @@ void beModelCtrlInfoDataAIM_InitFields(void) {
     found = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
     clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
-    igStringMetaField_SetDefaultText(clone, "AIM");
+    igStringMetaField_SetDefaultText((igMetaField *)clone, "AIM");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataAIM_nameStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;

@@ -230,7 +230,7 @@ void igSceneInfo_InitFields(void) {
     v.x = 0;
     v.y = 0x3F800000;
     v.z = 0;
-    igVec3fMetaField_SetDefault(temp_a0, &v);
+    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)&v);
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;

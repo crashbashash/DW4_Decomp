@@ -98,7 +98,7 @@ void igMouseCursor_InitFields(void) {
     temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     buf[0] = 0;
     buf[1] = 0;
-    igVec2fMetaField_SetDefault(temp_a0, buf);
+    igVec2fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)buf);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igMouseCursor_fieldTable, g_igMouseCursor_fieldHandles, g_igMouseCursor_fieldOffsets, temp_s2);
 }
 

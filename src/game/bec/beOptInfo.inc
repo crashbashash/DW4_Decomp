@@ -89,8 +89,8 @@ void beOptInfo_InitFields(void) {
     meta = g_beOptInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beOptInfo_ctorTable, 4);
-    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base + 2)), 0);
-    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base + 3)), 0);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 2), 0);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 3), 0);
     igMetaObject_NameFields(meta, g_beOptInfo_fieldTable, g_beOptInfo_fieldHandles, g_beOptInfo_fieldOffsets, base);
 }
 

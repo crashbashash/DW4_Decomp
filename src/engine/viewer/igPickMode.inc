@@ -174,7 +174,7 @@ void igPickMode_InitFields(void) {
     temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xB));
     sp48[0] = 0;
     sp48[1] = 0;
-    igVec2fMetaField_SetDefault(temp_a0, sp48);
+    igVec2fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)sp48);
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igPickMode_fieldTable, g_igPickMode_fieldHandles, g_igPickMode_fieldOffsets, temp_s0);
 }
 

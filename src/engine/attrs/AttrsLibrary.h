@@ -69,23 +69,24 @@ extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_241(igPsx2VisualContext *se
 #include "dw4/igInfo.h"
 #define REL(pp) if (*(pp) != 0) { (*(pp))->refs = (*(pp))->refs - 1; if (((unsigned long long)(long long)(*(pp))->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)(*(pp))); }
 typedef void (*igMetaObjectCallback)();
-extern "C" igMetaField *igVec4fMetaField_CreateInstance(void *);
-extern "C" igMetaField *igVec3fMetaField_CreateInstance(void *);
-extern "C" igMetaField *igMatrix44fMetaField_CreateInstance(void *);
-extern "C" igMetaField *igBoolMetaField_Create(void *);
-extern "C" igMetaField *igDoubleMetaField_Create(void *);
-extern "C" igMetaField *igEnumMetaField_Create(void *);
-extern "C" igMetaField *igFloatMetaField_Create(void *);
-extern "C" igMetaField *igIntMetaField_Create(void *);
-extern "C" igMetaField *igLongMetaField_Create(void *);
-extern "C" igMetaField *igMemoryRefMetaField_Create(void *);
-extern "C" igMetaField *igObjectRefArrayMetaField_Create(void *);
-extern "C" igMetaField *igObjectRefMetaField_Create(void *);
-extern "C" igMetaField *igRawRefMetaField_Create(void *);
-extern "C" igMetaField *igShortMetaField_Create(void *);
-extern "C" igMetaField *igUnsignedCharMetaField_Create(void *);
-extern "C" igMetaField *igUnsignedIntMetaField_Create(void *);
-extern "C" igMetaField *igUnsignedShortMetaField_Create(void *);
+#include "dw4/igBoolMetaField.h"
+#include "dw4/igDoubleMetaField.h"
+#include "dw4/igEnumMetaField.h"
+#include "dw4/igFloatMetaField.h"
+#include "dw4/igIntMetaField.h"
+#include "dw4/igLongMetaField.h"
+#include "dw4/igMatrix44fMetaField.h"
+#include "dw4/igMemoryRefMetaField.h"
+#include "dw4/igMetaEnum.h"
+#include "dw4/igObjectRefArrayMetaField.h"
+#include "dw4/igObjectRefMetaField.h"
+#include "dw4/igRawRefMetaField.h"
+#include "dw4/igShortMetaField.h"
+#include "dw4/igUnsignedCharMetaField.h"
+#include "dw4/igUnsignedIntMetaField.h"
+#include "dw4/igUnsignedShortMetaField.h"
+#include "dw4/igVec3fMetaField.h"
+#include "dw4/igVec4fMetaField.h"
 
 extern "C" void FUN_0014bd20(void);
 extern "C" void FUN_0014c0d0(void);
@@ -137,8 +138,6 @@ extern "C" CallbackArray *igViewportAttr_Register(void);
 extern "C" void thunk_igViewportAttr_GetMetaObject(void);
 extern "C" igMetaObject *FUN_00130610(void);
 extern "C" int FUN_0014bc80(...);
-extern "C" int igFloatMetaField_SetDefault(void *, float);
-extern "C" int igIntMetaField_SetDefault(...);
 extern "C" void igViewportAttr_InitFields(void);
 /* Interned-string wrapper cleanup. */
 typedef struct StringRefWord { char *value; } StringRefWord;
@@ -185,7 +184,6 @@ extern "C" int igTimeAttr_GetVTable(void);
 extern "C" void FUN_00131040(void);
 extern "C" CallbackArray *igTimeAttr_Register(void);
 extern "C" void thunk_igTimeAttr_GetMetaObject(void);
-extern "C" int igLongMetaField_SetDefault(...);
 extern "C" void igTimeAttr_InitFields(void);
 extern "C" igMetaObject *g_igTextureUnloadAttr_metaObject;
 extern "C" igMetaObject *FUN_00131160(void);
@@ -223,7 +221,6 @@ extern "C" int igTextureMatrixAttr_GetVTable(void);
 extern "C" CallbackArray *igTextureMatrixAttr_Register(void);
 extern "C" void thunk_igTextureMatrixAttr_GetMetaObject(void);
 struct Fld { char pad[48]; int f48; };
-extern "C" int igShortMetaField_SetDefault(...);
 extern "C" void igTextureMatrixAttr_InitFields(void);
 extern "C" void **igSmartPointer_igTextureList_Destruct(void **arg0, short arg1);
 
@@ -251,15 +248,11 @@ extern "C" int igTextureFunctionAttr_GetVTable(void);
 extern "C" CallbackArray *igTextureFunctionAttr_Register(void);
 extern "C" void thunk_igTextureFunctionAttr_GetMetaObject(void);
 struct TextureMetaFieldView { char pad[48]; void (*f48)(void); void (*f52)(void); int f56; };
-extern "C" int igEnumMetaField_SetDefaultValue(void *field, const int &value);
-extern "C" int igUnsignedCharMetaField_SetDefaultValue(...);
 extern "C" void FUN_0014d450(void);
 extern "C" void FUN_0014d4b0(void);
 extern "C" void FUN_0014d510(void);
-extern "C" void igMetaEnum_GetEmpty(void);
 extern "C" void igTextureFunctionAttr_InitFields(void);
 extern "C" void FUN_00131f70(void);
-extern "C" igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count);
 extern "C" igMetaEnum *FUN_00131f80(void);
 extern "C" igMetaObject *g_igTextureCubeAttr_metaObject;
 extern "C" igMetaObject *FUN_00131fe0(void);
@@ -370,7 +363,6 @@ extern "C" int igStencilFunctionAttr_GetVTable(void);
 extern "C" void FUN_001336e0(void);
 extern "C" CallbackArray *igStencilFunctionAttr_Register(void);
 extern "C" void thunk_igStencilFunctionAttr_GetMetaObject(void);
-extern "C" int igUnsignedIntMetaField_SetDefaultValue(...);
 extern "C" int FUN_001494a0(...);
 extern "C" int FUN_00149500(...);
 extern "C" void igStencilFunctionAttr_InitFields(void);
@@ -509,7 +501,6 @@ extern "C" int igMatrixOptStateAttr_GetVTable(void);
 extern "C" void FUN_00135ac0(void);
 extern "C" CallbackArray *igMatrixOptStateAttr_Register(void);
 extern "C" void thunk_igMatrixOptStateAttr_GetMetaObject(void);
-extern "C" int igBoolMetaField_SetDefaultValue(...);
 extern "C" void igMatrixOptStateAttr_InitFields(void);
 extern "C" igMetaObject *g_igMaterialAttr_metaObject;
 extern "C" igMetaObject *igMaterialAttr_GetMetaObject(void);
@@ -518,7 +509,6 @@ extern "C" int g_igMaterialAttr_vtable[4];
 extern "C" int igMaterialAttr_GetVTable(void);
 extern "C" CallbackArray *igMaterialAttr_Register(void);
 extern "C" void thunk_igMaterialAttr_GetMetaObject(void);
-extern "C" int igVec4fMetaField_SetDefault(...);
 extern "C" void igMaterialAttr_InitFields(void);
 extern "C" igMetaObject *g_igLightingStateAttr_metaObject;
 extern "C" igMetaObject *igLightingStateAttr_GetMetaObject(void);
@@ -561,7 +551,6 @@ union U_1367f0 { int vt; char b[160]; };
 extern "C" int igLightAttr_GetVTable(void);
 extern "C" CallbackArray *igLightAttr_Register(void);
 extern "C" void thunk_igLightAttr_GetMetaObject(void);
-extern "C" int igVec3fMetaField_SetDefault(...);
 extern "C" int FUN_00149a40(...);
 struct LightMetaFieldView { char p0[38]; char f38; char f39; char f40; char p41[3]; char f44; char p45[3]; void (*f48)(void); void (*f52)(void); int f56; };
 extern "C" void igLightAttr_InitFields(void);
@@ -719,7 +708,6 @@ extern "C" int g_igClearAttr_vtable[4];
 extern "C" int igClearAttr_GetVTable(void);
 extern "C" CallbackArray *igClearAttr_Register(void);
 extern "C" void thunk_igClearAttr_GetMetaObject(void);
-extern "C" int igDoubleMetaField_SetDefaultDouble(void *, long long);
 extern "C" void igClearAttr_InitFields(void);
 extern "C" igMetaObject *g_igBlendStateAttr_metaObject;
 extern "C" igMetaObject *igBlendStateAttr_GetMetaObject(void);

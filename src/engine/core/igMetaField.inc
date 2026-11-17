@@ -155,10 +155,10 @@ void igMetaField_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_igMetaField_ctorTable, 0x12);
     ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, first))->_persistent = 0;
     typeIndexField = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2));
-    igShortMetaField_SetDefault((void **)typeIndexField, -1);
+    igShortMetaField_SetDefault((igMetaField *)typeIndexField, -1);
     typeIndexField->_persistent = 0;
     internalIndexField = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 3));
-    igShortMetaField_SetDefault((void **)internalIndexField, -1);
+    igShortMetaField_SetDefault((igMetaField *)internalIndexField, -1);
     internalIndexField->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 4))->_persistent = 0;
     parentField = ((igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 5));
@@ -175,14 +175,14 @@ void igMetaField_InitFields(void) {
     defaultField->_releaseOnCopy = 1;
     defaultField->_releaseOnReset = 1;
     defaultField->_persistent = 0;
-    igCharMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 8), 0);
-    igBoolMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0xA), 1);
-    igCharMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0xB), 1);
-    igCharMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0xC), 0);
-    igCharMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0xD), 0);
-    igCharMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0xE), 0);
-    igCharMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0xF), 1);
-    igCharMetaField_SetDefaultValue((void **)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0x10), 2);
+    igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 8), 0);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0xA), 1);
+    igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0xB), 1);
+    igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0xC), 0);
+    igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0xD), 0);
+    igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0xE), 0);
+    igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0xF), 1);
+    igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0x10), 2);
     ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 0x11))->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)meta, g_igMetaField_fieldTable, g_igMetaField_fieldDescriptors, g_igMetaField_fieldOffsets, first);
 }

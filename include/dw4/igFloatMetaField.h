@@ -2,6 +2,8 @@
 #define DW4_IGFLOATMETAFIELD_H
 
 /* igFloatMetaField: the metafield class's metaobject and descriptor calls. */
+struct igMemoryPoolView;
+struct igMetaField;
 struct igMetaObject;
 
 #ifdef __cplusplus
@@ -9,8 +11,8 @@ extern "C" {
 #endif
 
 extern struct igMetaObject *g_igFloatMetaField_metaObject;
-void igFloatMetaField_Create(int allocator);
-void igFloatMetaField_SetDefault(void **self, float value);
+struct igMetaField *igFloatMetaField_Create(struct igMemoryPoolView *pool);
+void igFloatMetaField_SetDefault(struct igMetaField *self, float value);
 
 #ifdef __cplusplus
 }

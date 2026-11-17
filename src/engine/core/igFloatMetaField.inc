@@ -1,9 +1,9 @@
 igMetaObject *g_igFloatMetaField_metaObject;
 void *g_igFloatMetaField_descriptor;
 
-void igFloatMetaField_Create(int allocator) {
+igMetaField *igFloatMetaField_Create(igMemoryPoolView *pool) {
     igFloatMetaField_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igFloatMetaField_metaObject, (igMemoryPoolView *)allocator);
+    return (igMetaField *)igMetaObject_CreateInstance(g_igFloatMetaField_metaObject, pool);
 }
 
 igMetaObject *igFloatMetaField_GetMetaObject(void)

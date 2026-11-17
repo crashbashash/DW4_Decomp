@@ -160,7 +160,7 @@ void igPsx2VertexArray1_1_InitFields(void) {
     ((igObjectRefMetaField *)f3)->_metaObject = FUN_00152800();
     ((igObjectRefMetaField *)f3)->_persistent = 0;
     f4 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 3));
-    igIntMetaField_SetDefault(f4, -1);
+    igIntMetaField_SetDefault((igMetaField *)f4, -1);
     ((igIntMetaField *)f4)->_persistent = 0;
     ((igLongMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 4)))->_persistent = 0;
     f5 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 5));

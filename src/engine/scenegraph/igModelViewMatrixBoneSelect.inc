@@ -76,7 +76,7 @@ void igModelViewMatrixBoneSelect_InitFields(void) {
     temp_s0 = (void *)g_igModelViewMatrixBoneSelect_metaObject;
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igModelViewMatrixBoneSelect_ctorTable, 1);
-    igIntMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1), -1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igModelViewMatrixBoneSelect_fieldTable, g_igModelViewMatrixBoneSelect_fieldHandles, g_igModelViewMatrixBoneSelect_fieldOffsets, temp_s1);
 }
 

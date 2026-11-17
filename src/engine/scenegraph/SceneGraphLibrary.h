@@ -183,14 +183,10 @@ extern "C" void FUN_001e5810(void);
 
 
 
-extern "C" igMetaField *igVec4fMetaField_CreateInstance(void *);
-extern "C" igMetaField *igMatrix44fMetaField_CreateInstance(void *);
-extern "C" igMetaField *igBoolMetaField_Create(void *);
-extern "C" igMetaField *igIntMetaField_Create(void *);
-extern "C" igMetaField *igMemoryRefMetaField_Create(void *);
-extern "C" igMetaField *igObjectRefMetaField_Create(void *);
-extern "C" igMetaField *igStringMetaField_Create(void *);
-extern "C" igMetaField *igUnsignedIntMetaField_Create(void *);
+#include "dw4/igMatrix44fMetaField.h"
+#include "dw4/igMemoryRefMetaField.h"
+#include "dw4/igUnsignedIntMetaField.h"
+#include "dw4/igVec4fMetaField.h"
 extern igMetaObject *g_igActorInfo_metaObject;
 extern igMetaObject *g_igActorList_metaObject;
 extern igMetaObject *g_igAnimation_metaObject;
@@ -358,8 +354,6 @@ extern "C" igMetaObject *igTransformSequence_GetPublishedMetaObject(void);
 extern "C" void igTransformSequence1_5_InitFields(void);
 extern "C" igMetaObject *igTransformSource_GetPublishedMetaObject(void);
 extern "C" int FUN_00189c10(...);
-extern "C" int igVec3fMetaField_SetDefault(...);
-extern "C" int igEnumMetaField_SetDefaultValue(void *field, const int &value);
 struct Fld { char p0[38]; char f38; char p39[13]; char f52; char p53[3]; int f56; int f60; };
 struct Obj_195860 { int *vt; int f4; int f8; int f12; int f16; int f20; int f24; int f28; char sub1[64]; char sub2[64]; };
 
@@ -435,7 +429,6 @@ extern "C" int g_igShaderInfo_vtable[4];
 extern "C" void FUN_001d8ab0(void);
 struct Obj_199040 { int *vt; char pad[28]; };
 extern "C" int g_igShaderFactoryList_vtable[4];
-extern "C" igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count);
 extern "C" int g_igShaderFactory_vtable[4];
 struct T_199330 { int *vt; int w4; char *f8; struct Rc *f12; struct Rc *f16; };
 struct Obj_1996b0 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; };
@@ -508,7 +501,6 @@ extern "C" int FUN_00135540(...);
 extern "C" int FUN_001365e0(...);
 
 extern "C" int FUN_00186a80(...);
-extern "C" int igVec4fMetaField_SetDefault(void *, void *);
 typedef struct { float x, y, z, w; } V4;
 struct F { int *vt; int w[11]; };
 extern "C" int g_igOverrideAttrSet_vtable[4];
@@ -553,7 +545,6 @@ extern "C" int igStringRef_Destruct(...);
 extern "C" int g_igIniShaderFactory_vtable[4];
 extern "C" igMetaObject *igShaderFactory_GetPublishedMetaObject(void);
 
-extern "C" int igStringMetaField_SetDefaultText(...);
 struct Obj_19f2b0 { int *vt; int f4; int f8; int fC; int f10; int f14; int f18; int f1C; };
 extern "C" int g_igGraphPathList_vtable[4];
 typedef struct { int *vt; int p1[1]; int *ref; int pad[5]; } Obj_19f710;

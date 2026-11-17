@@ -149,11 +149,11 @@ void igGuiSystemModel_InitFields(void) {
     temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     sp48[0] = 0;
     sp48[1] = 0;
-    igVec2fMetaField_SetDefault(temp_a0, sp48);
+    igVec2fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)sp48);
     temp_a0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     sp40[0] = 0;
     sp40[1] = 0;
-    igVec2fMetaField_SetDefault(temp_a0_2, sp40);
+    igVec2fMetaField_SetDefault((igMetaField *)temp_a0_2, (const float *)sp40);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 5), 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6));
     *(int *)((char *)(temp_s1) + 56) = (int)igGuiComponent_GetOrCreateMetaObject();

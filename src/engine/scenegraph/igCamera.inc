@@ -114,9 +114,9 @@ void igCamera_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCamera_ctorTable, 7);
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    igEnumMetaField_SetDefaultValue(temp_v0, 0);
+    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
     *(int *)((char *)(temp_v0) + 52) = (int)(&FUN_001a47d0);
-    igFloatMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1), 45.0f);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1), 45.0f);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCamera_fieldTable, g_igCamera_fieldHandles, g_igCamera_fieldOffsets, temp_s2);
 }
 

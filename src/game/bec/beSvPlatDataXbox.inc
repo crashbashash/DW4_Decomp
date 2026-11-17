@@ -102,7 +102,7 @@ void beSvPlatDataXbox_InitFields(void) {
     found = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_connectMax"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
     clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
-    igIntMetaField_SetDefault(clone, 9);
+    igIntMetaField_SetDefault((igMetaField *)clone, 9);
     clone->_externalEnumStorage = (int)(&g_beSvPlatDataXbox_connectMaxStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;

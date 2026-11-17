@@ -10,18 +10,18 @@ struct Rt;
 struct Fld;
 class VisualContext;
 #include "dw4/igMetaObject.h"
-extern "C" igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count);
+#include "dw4/igBoolMetaField.h"
+#include "dw4/igEnumMetaField.h"
+#include "dw4/igFloatArrayMetaField.h"
+#include "dw4/igIntMetaField.h"
+#include "dw4/igMemoryRefMetaField.h"
+#include "dw4/igMetaEnum.h"
+#include "dw4/igObjectRefMetaField.h"
+#include "dw4/igRawRefMetaField.h"
+#include "dw4/igStringMetaField.h"
+#include "dw4/igUnsignedCharArrayMetaField.h"
+#include "dw4/igUnsignedShortMetaField.h"
 class igMemoryPoolView;
-extern "C" igMetaField *igBoolMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igEnumMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igFloatArrayMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igIntMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igMemoryRefMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igObjectRefMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igRawRefMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igStringMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igUnsignedCharArrayMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igUnsignedShortMetaField_Create(igMemoryPoolView *pool);
 #include "dw4/igVisualContext.h"
 extern "C" unsigned char g_WindowInputLibrary_registered;
 extern "C" void WindowInputLibrary_MarkRegistered(void);
@@ -97,7 +97,6 @@ extern "C" igMetaObject *igController_GetMetaObject(void);
 extern "C" void FUN_00146900(void);
 extern "C" CallbackArray *igController_Register(void);
 extern "C" void thunk_igController_GetMetaObject(void);
-extern "C" int igIntMetaField_GetDefaultDescriptor(...);
 extern "C" void igController_InitFields(void);
 extern "C" void thunk_igPsx2Controller_GetMetaObject(void);
 extern "C" igMetaObject *g_igPsx2Window_metaObject;
@@ -110,9 +109,6 @@ extern "C" void FUN_00146b80(void);
 extern "C" igMetaObject *igWindow_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igPsx2Window_Register(void);
 extern "C" igMetaObject *FUN_00146c10(void);
-extern "C" int igBoolMetaField_SetDefaultValue(...);
-extern "C" int igIntMetaField_SetDefault(...);
-extern "C" int igStringMetaField_SetDefaultText(...);
 extern "C" void igPsx2Window_InitFields(void);
 extern "C" igMetaEnum *FUN_00146d90(void);
 extern "C" igMetaObject *g_igPsx2ControllerManager_metaObject;
@@ -125,7 +121,6 @@ extern "C" void FUN_00146ee0(void);
 extern "C" igMetaObject *igControllerManager_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igPsx2ControllerManager_Register(void);
 extern "C" igMetaObject *FUN_00146f60(void);
-extern "C" int igEnumMetaField_SetDefaultValue(void *field, const int &value);
 extern "C" void igPsx2ControllerManager_InitFields(void);
 extern "C" igMetaEnum *FUN_00147030(void);
 extern "C" int FUN_00147090(int arg0);
@@ -138,9 +133,7 @@ extern "C" void FUN_001471b0(void);
 extern "C" igMetaObject *igController_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igPsx2Controller_Register(void);
 extern "C" igMetaObject *FUN_00147240(void);
-extern "C" int igUnsignedShortMetaField_SetDefaultValue(...);
 struct Fld { char p0[52]; int f52; int f56; };
-extern "C" int igMetaEnum_GetEmpty(...);
 extern "C" void igPsx2Controller_InitFields(void);
 extern "C" int FUN_00147430(void *arg0, int arg1);
 extern "C" int FUN_00147450(void *arg0, int arg1);

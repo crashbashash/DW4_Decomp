@@ -101,7 +101,7 @@ void beModelCtrlInfoDataHit_InitFields(void) {
     found = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
     clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
-    igStringMetaField_SetDefaultText(clone, "HIT");
+    igStringMetaField_SetDefaultText((igMetaField *)clone, "HIT");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataHit_nameStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;

@@ -1,21 +1,21 @@
 igMetaObject *g_igCharMetaField_metaObject;
 void *g_igCharMetaField_descriptor;
 
-void **igCharMetaField_Create(int pool) {
+igMetaField *igCharMetaField_Create(igMemoryPoolView *pool) {
     void **field;
 
     if (g_objectSystem->active != 0) {
         igCharMetaField_EnsureRegistered();
-        field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igCharMetaField_metaObject, (igMemoryPoolView *)pool)));
+        field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igCharMetaField_metaObject, pool)));
     } else {
-        field = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, (igMemoryPoolView *)pool)));
+        field = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, pool)));
         if (field != 0) {
             field = (void **)(((void **)igCharMetaField_Construct((int **)field, 1)));
         }
         ((igObjectDispatchView *)(field))->InitDefaults();
         ((igObjectDispatchView *)(field))->userConstruct((int)(0));
     }
-    return field;
+    return (igMetaField *)field;
 }
 
 void *igCharMetaField_Clone(void *source, void *copyMode) {

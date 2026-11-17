@@ -2,6 +2,8 @@
 #define DW4_IGUNSIGNEDSHORTMETAFIELD_H
 
 /* igUnsignedShortMetaField: the metafield class's metaobject and descriptor calls. */
+struct igMemoryPoolView;
+struct igMetaField;
 struct igMetaObject;
 
 #ifdef __cplusplus
@@ -9,6 +11,8 @@ extern "C" {
 #endif
 
 extern struct igMetaObject *g_igUnsignedShortMetaField_metaObject;
+struct igMetaField *igUnsignedShortMetaField_Create(struct igMemoryPoolView *pool);
+void igUnsignedShortMetaField_SetDefaultValue(struct igMetaField *self, unsigned short value);
 
 #ifdef __cplusplus
 }

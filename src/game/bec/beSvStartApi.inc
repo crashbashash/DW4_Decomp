@@ -76,7 +76,7 @@ void beSvStartApi_InitFields(void) {
     found = (void **)(igMetaObject_FindFieldByName(meta, "_orderType"));
     index = ObjectPointerList_FindIndex(((igMetaObject *)meta)->_metaFields, found);
     clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
-    igIntMetaField_SetDefault(clone, 0xA);
+    igIntMetaField_SetDefault((igMetaField *)clone, 0xA);
     clone->_externalEnumStorage = (int)(&g_beSvStartApi_orderTypeStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;

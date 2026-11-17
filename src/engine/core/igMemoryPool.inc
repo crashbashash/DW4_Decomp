@@ -126,8 +126,8 @@ void igMemoryPool_InitFields(void) {
     meta = (void *)((void *)g_igMemoryPool_metaObject);
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igMemoryPool_ctorTable, 0xE);
-    igBoolMetaField_SetDefaultValue((void **)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xC)), 1);
-    igBoolMetaField_SetDefaultValue((void **)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xD)), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xC), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xD), 1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igMemoryPool_fieldTable, g_igMemoryPool_fieldDescriptors, g_igMemoryPool_fieldOffsets, base);
     *(int *)((char *)((void *)g_igMemoryPool_metaObject) + 60) = (int)igArenaMemoryPool_GetMetaObjectFunction;
 }

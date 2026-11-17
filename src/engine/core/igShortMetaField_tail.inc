@@ -57,7 +57,7 @@ int igShortMetaField_GetSize(igRegistryValueList *self) {
     return 2;
 }
 
-void igShortMetaField_SetDefault(void **self, short value) {
+void igShortMetaField_SetDefault(igMetaField *self, short value) {
     short defaultValue;
 
     defaultValue = value;

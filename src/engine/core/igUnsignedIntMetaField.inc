@@ -1,21 +1,21 @@
 igMetaObject *g_igUnsignedIntMetaField_metaObject;
 void *g_igUnsignedIntMetaField_descriptor;
 
-void **igUnsignedIntMetaField_Create(int allocator) {
+igMetaField *igUnsignedIntMetaField_Create(igMemoryPoolView *pool) {
     void **field;
 
     if (g_objectSystem->active != 0) {
         igUnsignedIntMetaField_EnsureRegistered();
-        field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)((int)g_igUnsignedIntMetaField_metaObject), (igMemoryPoolView *)allocator)));
+        field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)((int)g_igUnsignedIntMetaField_metaObject), pool)));
     } else {
-        field = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, (igMemoryPoolView *)allocator)));
+        field = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, pool)));
         if (field != 0) {
             field = (void **)(((void **)igUnsignedIntMetaField_Construct((igMetaField *)field, 1)));
         }
         ((igObjectDispatchView *)(field))->InitDefaults();
         ((igObjectDispatchView *)(field))->userConstruct((int)(0));
     }
-    return field;
+    return (igMetaField *)field;
 }
 
 int igUnsignedIntMetaField_Clone(int source, int pool) {

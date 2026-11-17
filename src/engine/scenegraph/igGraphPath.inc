@@ -114,8 +114,8 @@ void igGraphPath_InitFields(void) {
     z.a = 0;
     z.b = 0;
     z.c = 0;
-    igVec3fMetaField_SetDefault(temp_a0, &z);
-    igFloatMetaField_SetDefault((void **)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2), 1.0f);
+    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)&z);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2), 1.0f);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igGraphPath_fieldTable, g_igGraphPath_fieldHandles, g_igGraphPath_fieldOffsets, temp_s2);
 }
 

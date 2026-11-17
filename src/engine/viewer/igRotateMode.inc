@@ -174,17 +174,17 @@ void igRotateMode_InitFields(void) {
     temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     spA[0] = 0;
     spA[1] = 0;
-    igVec2fMetaField_SetDefault(temp_a0, spA);
+    igVec2fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)spA);
     temp_a0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 5));
     spB[0] = 0;
     spB[1] = 0;
-    igVec2fMetaField_SetDefault(temp_a0_2, spB);
+    igVec2fMetaField_SetDefault((igMetaField *)temp_a0_2, (const float *)spB);
     temp_a0_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6));
     spC[0] = 0;
     spC[1] = 0;
-    igVec2fMetaField_SetDefault(temp_a0_3, spC);
+    igVec2fMetaField_SetDefault((igMetaField *)temp_a0_3, (const float *)spC);
     temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 8));
-    igEnumMetaField_SetDefaultValue(temp_v0, 0);
+    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
     *(int *)((char *)(temp_v0) + 52) = (int)(&FUN_0045c540);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 9), 1);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 0xB), 0.0f);
@@ -195,7 +195,7 @@ void igRotateMode_InitFields(void) {
     spD[0] = 0;
     spD[1] = 0;
     spD[2] = 0;
-    igVec3fMetaField_SetDefault(temp_a0_4, spD);
+    igVec3fMetaField_SetDefault((igMetaField *)temp_a0_4, (const float *)spD);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igRotateMode_fieldTable, g_igRotateMode_fieldHandles, g_igRotateMode_fieldOffsets, temp_s2);
 }
 

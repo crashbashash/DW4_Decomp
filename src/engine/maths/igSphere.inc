@@ -92,8 +92,8 @@ void igSphere_InitFields(void) {
     v[0] = 0;
     v[1] = 0;
     v[2] = 0;
-    igVec3fMetaField_SetDefault((igVec3fMetaFieldView *)temp_a0, (const float *)v);
-    igFloatMetaField_SetDefault((int)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1), -1.0f);
+    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)v);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1), -1.0f);
     igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)g_igSphere_fieldTable, (igMetaField ***)g_igSphere_fieldHandles, (int *)g_igSphere_fieldOffsets, temp_s1);
 }
 

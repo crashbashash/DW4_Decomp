@@ -104,11 +104,11 @@ void igExternalIndexedEntry_InitFields(void) {
     entryTypeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2)));
     ((igObjectRefMetaField *)entryTypeField)->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
     ((igMetaField *)entryTypeField)->_persistent = 0;
-    igIntMetaField_SetDefault((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 3))), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 3), -1);
     objectTypeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 4)));
     ((igObjectRefMetaField *)objectTypeField)->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
     ((igMetaField *)objectTypeField)->_persistent = 0;
-    igIntMetaField_SetDefault((void **)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 5))), -1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 5), -1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igExternalIndexedEntry_fieldTable, g_igExternalIndexedEntry_fieldDescriptors, g_igExternalIndexedEntry_fieldOffsets, first);
 }
 

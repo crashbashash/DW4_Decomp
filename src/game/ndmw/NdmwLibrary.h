@@ -198,16 +198,17 @@ static inline void releaseString(const char *string) {
 #include "dw4/igObjectDispatchView.h"
 #include "dw4/igTDataList.h"
 /* kept local: the metafield types' Create functions have no include/dw4 home; typed as FieldFactory. */
-extern "C" igMetaField *igVec3fMetaField_CreateInstance(igMemoryPoolView *pool);
-extern "C" igMetaField *igBoolMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igCharArrayMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igFloatMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igIntMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igLongMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igMemoryRefMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igObjectRefMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igStringMetaField_Create(igMemoryPoolView *pool);
-extern "C" igMetaField *igUnsignedShortArrayMetaField_Create(igMemoryPoolView *pool);
+#include "dw4/igBoolMetaField.h"
+#include "dw4/igCharArrayMetaField.h"
+#include "dw4/igFloatMetaField.h"
+#include "dw4/igIntMetaField.h"
+#include "dw4/igLongMetaField.h"
+#include "dw4/igMemoryRefMetaField.h"
+#include "dw4/igMetaEnum.h"
+#include "dw4/igObjectRefMetaField.h"
+#include "dw4/igStringMetaField.h"
+#include "dw4/igUnsignedShortArrayMetaField.h"
+#include "dw4/igVec3fMetaField.h"
 /* kept local: no include/dw4 home declares it. */
 extern "C" void igIntListList_EnsureRegistered(void);
 
@@ -305,14 +306,12 @@ extern "C" void beNDMWWindowList_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWWindowList_Register(void);
 extern "C" void beNDMWWindowList_GetMetaObjectFunction(void);
 /* kept local: no include/dw4 home; the definition still returns a placeholder view. */
-extern "C" igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count);
 extern "C" igMetaObject *beNDMWWindow_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWWindow_GetMetaObject(void);
 extern "C" void beNDMWWindow_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWWindow_Register(void);
 extern "C" void beNDMWWindow_GetMetaObjectFunction(void);
 /* kept local: no include/dw4 home declares it. */
-extern "C" void igBoolMetaField_SetDefaultValue(igMetaField *field, char value);
 extern "C" void beNDMWWindow_InitFields(void);
 extern "C" void *beNDMWTitle2Info_GetMetaObject(void);
 extern "C" int beNDMWTitle2Info_GetVTable(void);
@@ -326,7 +325,6 @@ extern "C" CallbackArray *beNDMWTitle2Option_Register(void);
 extern "C" void beNDMWTitle2Option_GetMetaObjectFunction(void);
 /* kept local: no include/dw4 home declares it. */
 extern "C" int ObjectPointerList_FindIndex(char *list, int object);
-extern "C" void igStringMetaField_SetDefaultText(igMetaField *field, const char *text);
 extern "C" void beNDMWTitle2Option_InitFields(void);
 extern "C" void *beNDMWTitle2CtrlData_GetMetaObject(void);
 extern "C" int beNDMWTitle2CtrlData_GetVTable(void);
@@ -648,7 +646,6 @@ extern "C" void beNDMWStatusCtrlBaseEquip_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWStatusCtrlBaseEquip_Register(void);
 extern "C" void beNDMWStatusCtrlBaseEquip_GetMetaObjectFunction(void);
 /* kept local: no include/dw4 home declares it. */
-extern "C" void igIntMetaField_SetDefault(igMetaField *field, int value);
 extern "C" void beNDMWStatusCtrlBaseEquip_InitFields(void);
 extern "C" void *beNDMWStatusCtrlEquip_GetMetaObject(void);
 extern "C" int beNDMWStatusCtrlEquip_GetVTable(void);

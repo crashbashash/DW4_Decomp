@@ -1,5 +1,5 @@
 void igStringMetaField_ReleaseDefaults(int self) {
-    igStringMetaField_SetDefaultText((int *)self, 0);
+    igStringMetaField_SetDefaultText((igMetaField *)self, 0);
     igObject_ReleaseDefaults((igObject *)self);
 }
 
@@ -93,7 +93,7 @@ int igStringMetaField_GetTypeSize(void) {
     return 4;
 }
 
-void igStringMetaField_SetDefaultText(int *self, int text) {
+void igStringMetaField_SetDefaultText(igMetaField *self, const char *text) {
     int *header;
     int refCount;
     int pool;
@@ -101,7 +101,7 @@ void igStringMetaField_SetDefaultText(int *self, int text) {
     void *previous;
     void *interned;
 
-    slot = (void **)self[8];
+    slot = (void **)self->_default;
     if (g_stringPool == 0) {
         pool = ((int)StringPool_Allocate(0x10));
         if (pool != 0) {
@@ -109,7 +109,7 @@ void igStringMetaField_SetDefaultText(int *self, int text) {
         }
         g_stringPool = (StringPool *)pool;
     }
-    interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)text)));
+    interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, text)));
     previous = (void *)(*slot);
     if (previous != 0) {
         header = (int *)((char *)previous - 8);

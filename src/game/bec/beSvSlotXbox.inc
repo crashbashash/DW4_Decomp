@@ -86,7 +86,7 @@ void beSvSlotXbox_InitFields(void) {
     meta = g_beSvSlotXbox_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSvSlotXbox_ctorTable, 4);
-    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base)), "");
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base), "");
     igMetaObject_NameFields(meta, g_beSvSlotXbox_fieldTable, g_beSvSlotXbox_fieldHandles, g_beSvSlotXbox_fieldOffsets, base);
 }
 

@@ -91,8 +91,8 @@ void beTimerData_InitFields(void) {
     meta = g_beTimerData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beTimerData_ctorTable, 4);
-    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base + 1)), 0);
-    igStringMetaField_SetDefaultText(((int)igMetaObject_GetFieldAt(meta, base + 2)), 0);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 1), 0);
+    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 2), 0);
     igMetaObject_NameFields(meta, g_beTimerData_fieldTable, g_beTimerData_fieldHandles, g_beTimerData_fieldOffsets, base);
 }
 
