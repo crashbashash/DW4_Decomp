@@ -1,6 +1,8 @@
 #ifndef SFMPV_H
 #define SFMPV_H
 
+#include "dw4/cri/m2v.h"
+
 typedef struct SfdPlanes {
     char *luma;
     char *chroma;
@@ -76,54 +78,11 @@ typedef struct SfdTimer {
     SfdFieldEntry fields[64];
 } SfdTimer;
 
-typedef struct SfdPicInfo {
-    int width;
-    int height;
-    int f8;
-    int f12;
-    int rateIndex;
-    int number;
-    unsigned int type;
-    int f28;
-    int f32;
-    int f36;
-    int f40;
-    int f44;
-    int f48;
-    int f52;
-    int f56;
-    int f60;
-    int f64;
-    int f68;
-    int f72;
-    int f76;
-    unsigned short f80;
-    unsigned short f82;
-    unsigned char f84;
-    unsigned char f85;
-    unsigned char f86;
-    signed char f87;
-    signed char f88;
-    unsigned char f89;
-    unsigned char f90;
-    unsigned char f91;
-    unsigned char f92;
-    unsigned char f93;
-    unsigned char f94;
-    unsigned char f95;
-    unsigned char f96;
-    unsigned char f97;
-    unsigned char f98;
-    unsigned char f99;
-    unsigned char f100;
-    char pad101[27];
-} SfdPicInfo;
-
 /* what one picture decode writes and predicts from (SDK SFMPV_MPVFRM) */
 typedef struct SfdFrmPara {
     SfdPlanes ref[2];
     char *dst;
-    SfdPicInfo *pic;
+    M2vPicAtr *pic;
     int nfrm;
     int nbyte;
 } SfdFrmPara;
@@ -144,7 +103,7 @@ typedef struct SfdPicture {
 typedef struct SfdSlot {
     int state;
     int refs;
-    int id;
+    void *buf;               /* the frame's picture buffer */
     SfdTimeStamp stamp;
     int f56;
     int f60;
@@ -154,7 +113,7 @@ typedef struct SfdSlot {
     int f76;
     int f80;
     SfdChunk *blob;
-    SfdPicInfo info;
+    M2vPicAtr info;
     long f216;
     int f224;
     int pad228;
@@ -170,7 +129,7 @@ typedef struct SfdBufPool {
 typedef struct SfdPlaneSet {
     SfdPlanes planes[2];
     int id;
-    struct SfdPicInfo *pic;
+    M2vPicAtr *pic;
     int f40;
     int f44;
 } SfdPlaneSet;
@@ -288,7 +247,7 @@ typedef struct SfdMpv {
     int f128;
     int f132;
     int f136;
-    SfdPicInfo pic;
+    M2vPicAtr pic;
     int f268;
     int f272;
     int limit;
@@ -405,13 +364,19 @@ typedef struct SfdTblEnt {
     char pad0[32];
 } SfdTblEnt;
 
+/* The frame buffer format the player was created with (MWSFD converts it with
+ * mwl_convBufFmtFromSFD); an enum in CRI's header. */
+typedef enum SfdBufFmt {
+    SFD_BUFFMT_0 = 0
+} SfdBufFmt;
+
 typedef struct SfdPlayer {
     SfdAudioMod *audio;
     char pad4[36];
     int f40;
     int f44;
     char pad48[8];
-    int f56;
+    SfdBufFmt bufFmt;
     char pad60[12];
     int f72;
     char pad76[44];
@@ -469,25 +434,20 @@ typedef struct SfdRecord {
     SfdRecordTail tail;
 } SfdRecord;
 
-typedef struct SfdFrameInfo {
-    int f0;
-    int f4;
-    int f8;
-    int f12;
-    int f16;
-    int f20;
-    int f24;
-    int f28;
-    int f32;
-    int f36;
-    int f40;
-    int f44;
-    int f48;
-    int f52;
-    int f56;
-    int f60;
-    int f64;
-    char pad68[4];
+/* The MPEG picture type of a frame handed out (MWSFD converts it with mwl_convPtypeFromSFD). */
+typedef enum SfdPicType {
+    SFD_PICTYPE_I = 1,
+    SFD_PICTYPE_P = 2,
+    SFD_PICTYPE_B = 3
+} SfdPicType;
+
+/* SfdFrameInfo.f60, a copy of the picture attributes' f64; SfdFrmInfF60 is a placeholder for an
+ * unknown enum of its own. */
+typedef enum SfdFrmInfF60 {
+    SFD_FRMINF_F60_0 = 0
+} SfdFrmInfF60;
+
+typedef struct SfdFrameDetail {
     int f72;
     char pad76[4];
     long f80;
@@ -513,6 +473,34 @@ typedef struct SfdFrameInfo {
     unsigned char f121;
     unsigned char f122;
     char pad123[5];
+} SfdFrameDetail;
+
+/* The frame information handed to the application. Its fields are enums, pointers and a union as
+ * in CRI's header: the details from 72 on are also the seven words MWSFD hands on unchanged, and
+ * a store through the union conflicts with every load. */
+typedef struct SfdFrameInfo {
+    int f0;
+    int f4;
+    int f8;
+    int f12;
+    SfdPicType picType;      /* 16 */
+    int f20;
+    int f24;
+    SfdBufFmt bufFmt;        /* 28 */
+    void *buf;               /* 32 */
+    int f36;
+    int f40;
+    int f44;
+    int f48;
+    int f52;
+    SfdChunk *picUsr;        /* 56 */
+    SfdFrmInfF60 f60;
+    int f64;
+    char pad68[4];
+    union {
+        SfdFrameDetail detail;
+        long words[7];
+    } tail;                  /* 72 */
 } SfdFrameInfo;
 
 #endif

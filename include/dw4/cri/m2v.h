@@ -215,8 +215,8 @@ typedef struct M2vPicAtr {
     unsigned char field_count;  /* +84 */
     unsigned char progressive_frame;  /* +85 */
     unsigned char top_field_first;  /* +86 */
-    unsigned char repeat_first_field;  /* +87 */
-    unsigned char field_964;  /* +88 */
+    signed char repeat_first_field;  /* +87 */
+    signed char field_964;  /* +88 */
     unsigned char aspect_ratio_information;  /* +89 */
     unsigned char constrained_parameters_flag;  /* +90 */
     unsigned char frame_rate_extension_n;  /* +91 */

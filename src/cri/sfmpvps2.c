@@ -332,7 +332,7 @@ int SFMPVP_DecodeFrmSj(int a, int b, SfdPicOut *out, SfdPlayer *player) {
     cond = &mpv->cond;
     viBufRestartDMA(stream);
     viBufAddDMA(stream);
-    mode = player->f56;
+    mode = player->bufFmt;
     ipu->endRequest = 1;
     mbs = (cond->f8 / 16) * (cond->f12 / 16);
     if (mode == 2) {

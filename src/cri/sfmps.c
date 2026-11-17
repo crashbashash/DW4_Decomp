@@ -70,7 +70,7 @@ void sfmps_SetSysHdFn(SfdHandle *hn);
 int sfmps_Demux(SfdHandle *hn);
 int sfmps_RingGetRead(SfdHandle *hn, unsigned char **addr, int *len, int limit, int *total);
 int sfmps_RingAddRead(SfdHandle *hn, int len);
-int sfmps_DemuxChunk(SfdHandle *hn, unsigned char *addr, int len, int *used, int *packs, int total);
+int sfmps_DemuxChunk(SfdHandle *hn, unsigned char *addr, int len, int *used, int *skip, int total);
 int sfmps_IsZero(unsigned char *p, int n);
 int sfmps_IsEndOfRingBuf(SfdHandle *hn, unsigned char *pos);
 SfdChanInf *sfmps_GetSupSj(SfdHandle *hn);
@@ -105,6 +105,11 @@ int sfmps_PutEs(SfdHandle *hn, int ch, unsigned char *data, int len, long pts);
 int SFMPVP_Put(SfdHandle *hn, unsigned char *data, int len);
 int SFMPVP_Unput(SfdHandle *hn, int len);
 void FUN_002aa050(SfdHandle *hn, unsigned char *data, int len);
+int sfmps_ChkEnd(SfdHandle *hn, unsigned char *addr, int len, int total);
+void sfmps_SkipNext(SfdHandle *hn, unsigned char *buf, int size, int *skip);
+int sfmps_PutPes(SfdHandle *hn, unsigned char *data, int len, int *used, int *result);
+void sfmps_Concat(SfdHandle *hn);
+void sfmps_SetMpsRaw(SfdHandle *hn, MpsHn *mps, unsigned char *data, int len);
 
 /* Attaches an object to stream id 0xBC..0xFF in the handle's stream table, with the callback run
  * on its data. */
@@ -238,6 +243,82 @@ int sfmps_RingAddRead(SfdHandle *hn, int len) {
     do {
         SFBUF_RingAddRead(hn, hn->mps.from, len);
     } while (0);
+}
+
+/* Demultiplexes the pack, system header or packet at addr: *used bytes are consumed, *skip of them
+ * skipped as padding. */
+int sfmps_DemuxChunk(SfdHandle *hn, unsigned char *addr, int len, int *used, int *skip, int total) {
+    SfdMpsPrm *prm;
+    MpsHn *mps;
+    int ret;
+    int kind;
+    int hdrLen;
+    int flags;
+    int term;
+    int copied;
+    int result;
+
+    *used = 0;
+    *skip = 0;
+    prm = hn->mps.hn.prm;
+    mps = prm->mps;
+    ret = 0;
+    if (sfmps_ChkEnd(hn, addr, len, total) == 0) {
+        return ret;
+    }
+    if (len >= 4) {
+        kind = MPS_GetStartCodeKind(addr);
+    } else {
+        kind = 0;
+    }
+    MPS_SetAuxFn(mps, (MpsCbFn)SFSET_GetCond(hn, 87), (void *)SFSET_GetCond(hn, 88));
+    MPS_SetPesFn(mps, (MpsCbFn)SFSET_GetCond(hn, 91), (void *)SFSET_GetCond(hn, 92));
+    if (MPS_DecodeChunk(mps, addr, len, &hdrLen, &flags) != 0) {
+        ret = sfd_ReportError(hn, 0xFF000D03);
+    }
+    if (flags & MPS_SC_SYSHDR) {
+        sfmps_SetMpsRaw(hn, mps, addr, len);
+    }
+    if (flags == MPS_SC_END && SFCON_IsEndcodeSkip(hn) != 0) {
+        sfmps_Concat(hn);
+        *used = 4;
+        prm->f344 = 4;
+    } else if (flags == MPS_SC_END && SFCON_IsSystemEndcodeSkip(hn) != 0) {
+        *used = 4;
+        prm->f344 = 4;
+    } else if (kind == 0) {
+        sfmps_SkipNext(hn, addr, len, skip);
+        *used = *skip;
+        if (*skip > 0 && prm->f344 >= 0) {
+            if (prm->f344 >= hn->zeroPad) {
+                prm->f344 += *skip;
+            } else if (prm->f344 + *skip > hn->zeroPad) {
+                *skip = *skip - (hn->zeroPad - prm->f344);
+                prm->f344 = hn->zeroPad + *skip;
+            } else {
+                prm->f344 += *skip;
+                *skip = 0;
+            }
+        }
+    } else if (!(flags & MPS_SC_PES)) {
+        sfmps_ChkInEnd(hn, &term);
+        if (term == 0 && len > hn->zeroPad) {
+            if (hdrLen > 0) {
+                *used = hdrLen;
+                *skip = hdrLen;
+            } else {
+                *used = 1;
+                *skip = 1;
+            }
+        }
+    } else {
+        ret = sfmps_PutPes(hn, addr + hdrLen, len - hdrLen, &copied, &result);
+        if (result == 1) {
+            *used = hdrLen + copied;
+        }
+        prm->f344 = -1;
+    }
+    return ret;
 }
 
 /* How many bytes to skip before the next start code: the zero padding, or up to the first start code. */
@@ -555,10 +636,10 @@ int sfmps_GetTermDst(SfdHandle *hn) {
     return a & b & c;
 }
 
-int sfmps_Concat(SfdHandle *hn) {
+void sfmps_Concat(SfdHandle *hn) {
     SfdMpsPrm *prm = hn->mps.hn.prm;
 
-    return prm->nPics = prm->nPics + 1;
+    prm->nPics++;
 }
 
 int sfmps_ChkEnd(SfdHandle *hn, unsigned char *addr, int len, int total) {

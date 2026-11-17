@@ -1361,7 +1361,14 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   - *Spelling:* the field as a union of the types it holds. The work handle of a Sofdec transfer slot is
     `union { void *obj; SfdMpv *mpv; } hn` (`SfdMpsPrm *prm` in the MPS slot), read as `streams.hn.mpv`. Retail's
     order then follows in three functions with no other change, and a fourth matches with its natural
-    `SfdSlot **` out-parameters in place of `void **` ones.
+    `SfdSlot **` out-parameters in place of `void **` ones. A *store* through a union conflicts the same way:
+    where retail reloads `*out` before every store of a block, the destination fields sit in a union (the
+    Sofdec frame information keeps its details from offset 72 in a union with the seven words the MWSFD
+    player copies on unchanged), and the block's other loads stay behind each store. The fields before it
+    are enums and pointers (`SfdPicType`, `SfdBufFmt`, `void *buf`, `SfdChunk *picUsr`), copied from the
+    MPEG-2 picture attributes whose coded-picture fields are enums too (`M2vPicAtr`, one definition shared
+    with the M2V decoder): a source field read once for a store and a test needs its enum type to differ
+    from the destination's.
   - *Units:* `src/cri/sfmpv.c` (0x2a2f30), `src/cri/sfmps.c` (0x2a0f98).
 - **An address-taken local's alias set depends on what the file compiled before it.**
   - *Symptom:* loads of address-taken locals (a local whose address went to a call, read afterwards) ordered against

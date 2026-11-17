@@ -34,6 +34,10 @@ int MPV_CheckDelim(const unsigned char *p);
 int MPV_EntryErrFunc(void *handle, void (*callback)(SfdPlayer *, int), SfdPlayer *player);
 char *MPV_SearchDelim(char *data, int size, int mask);
 char *MPV_BsearchDelim(char *end, int len, int mask);
+void MPV_SetPicUsrBuf(void *handle, char *buf, int size);
+int MPV_DecodePicAtrSj(void *handle, int sj);
+int MPV_GetPicInf(void *handle, M2vPicAtr *pic);
+void MPV_GetPicUsr(void *handle, char **buf, int *size);
 int MPV_SkipFrmSj(void *handle, int sj);
 int MPV_GetBitRate(void *handle, int *value);
 void MPV_GetVbvBufSiz(void *handle, int *x, int *y, int *z);
@@ -108,16 +112,17 @@ void sfmpv_DiscardSec(SfdPlayer *player, SfdStream *stream);
 void FUN_002a4b20(SfdPlayer *player, int amount);
 int sfmpv_GetTermSrc(SfdPlayer *player);
 int sfmpv_ChkMpvErr(SfdPlayer *player, int status, int n, int code);
-long sfmpv_ComplementPts(SfdTimer *timer, SfdRecord *record, SfdPicInfo *pic, SfdRecordTail *entry, int newGop, long *pts);
+void sfmpv_ReadPtsQue(SfdPlayer *player, M2vPicAtr *pic, char *pos, long *time, long *pts, int newGop);
+long sfmpv_ComplementPts(SfdTimer *timer, SfdRecord *record, M2vPicAtr *pic, SfdRecordTail *entry, int newGop, long *pts);
 long FUN_002a5208(int count, int rate);
 void FUN_002a54d0(SfdPlayer *player, SfdSlot *slot);
-void sfmpv_ReadTcode(SfdPicInfo *pic, SfdTimeCode *out);
-int sfmpv_DetectTcErr(SfdPlayer *player, SfdPicInfo *pic);
-void FUN_002a5740(SfdPlayer *player, SfdPicInfo *pic, long id, int flag);
+void sfmpv_ReadTcode(M2vPicAtr *pic, SfdTimeCode *out);
+int sfmpv_DetectTcErr(SfdPlayer *player, M2vPicAtr *pic);
+void FUN_002a5740(SfdPlayer *player, M2vPicAtr *pic, long id, int flag);
 void sfmpv_Pts2Tc(long id, int a, int b, int c, SfdTimeCode *tc);
 void FUN_002a5a50(SfdTimeCode *src, SfdTimeCode *dst);
 void sfmpv_SetMpvHd(SfdPlayer *player, int pts, SfdChunk *chunk);
-void sfmpv_SetMvInf(SfdPicGeom *geom, int pts, SfdPicInfo *pic, int x);
+void sfmpv_SetMvInf(SfdPicGeom *geom, int pts, M2vPicAtr *pic, int x);
 int sfmpv_ChkBufSiz(SfdPlayer *player, SfdPicGeom *geom);
 int sfmpv_IsDefect(SfdPlayer *player, int kind);
 int sfmpv_IsPtypeSkip(SfdPlayer *player, unsigned int kind);
@@ -130,7 +135,7 @@ void SFTIM_UpdateItime(SfdTimer *tim, int now);
 int SFTIM_GetNextItime(SfdTimer *tim, int now);
 int SFTIM_GetSpeed(SfdPlayer *player);
 int SFTIM_GetTime(SfdPlayer *player, int *time, int *unit);
-void FUN_002a6368(SfdPlayer *player, SfdPicInfo *pic, int kind);
+void FUN_002a6368(SfdPlayer *player, M2vPicAtr *pic, int kind);
 void FUN_002a70e8(SfdPlayer *player, SfdSlot *slot);
 void FUN_002a73f0(SfdChunk *dst, SfdChunk *src);
 void sfmpv_RingAddRead(SfdPlayer *player, int n);
@@ -138,7 +143,7 @@ int SFBUF_GetRTot(SfdPlayer *player, int index);
 int sfmpv_InitInf(SfdPlayer *player, SfdMpv *mpv);
 int sfmpv_CheckMpvPara(void);
 void sfmpv_InitFrmObj(SfdSlot *slot, int *ids, int count);
-void sfmpv_InitPicAtr(SfdPicInfo *info);
+void sfmpv_InitPicAtr(M2vPicAtr *info);
 void FUN_002a7b48(SfdPlayer *player, int code);
 int sfmpv_DestroySub(void *handle);
 int FUN_002a8088(SfdPlayer *player, char *body);
@@ -962,6 +967,101 @@ int sfmpv_ChkMpvErr(SfdPlayer *player, int status, int n, int code)
     }
 }
 
+/* decodes the picture header at the delimiter: the picture user data, a size change, the reference
+ * order of the picture, the new group of pictures and the picture's time stamp */
+int sfmpv_DecodePicAtr(SfdPlayer *player, SfdChunk *chunk, int sj, int code, int *result) {
+    SfdMpv *mpv = player->streams.hn.mpv;
+    void *handle = mpv->handle;
+    M2vPicAtr *pic = &mpv->pic;
+    SfdBufPool *pool = &mpv->pool;
+    long time;
+    long pts;
+    int before;
+    int moved;
+    int err;
+    int seq;
+    int last;
+    char *pos;
+    int (*seqFn)(void *obj, int width, int height);
+    void *seqObj;
+    void (*hdrFn)(void *obj, char *data, int size);
+    void *hdrObj;
+
+    pool->slot[0].size = 0;
+    MPV_SetPicUsrBuf(handle, pool->slot[0].addr, pool->size);
+    before = SJRBF_GetFlowCnt(sj, 0, 1);
+    *result = MPV_DecodePicAtrSj(handle, sj);
+    moved = SJRBF_GetFlowCnt(sj, 0, 1) - before;
+    err = sfmpv_ChkMpvErr(player, *result, moved, 0xFF000F04);
+    FUN_002a4b20(player, moved);
+    if (err != 0) {
+        return err;
+    }
+    if (*result == -2) {
+        return 0;
+    }
+    *result = MPV_GetPicInf(handle, pic);
+    if (*result != 0) {
+        return sfd_ReportError(player, 0xFF000F05);
+    }
+    seq = code & 0x40;
+    if (seq) {
+        if (player->geom.width > 0
+            && (player->geom.width != pic->horizontal_size || player->geom.height != pic->vertical_size)) {
+            *result = -2;
+            return 0;
+        }
+        seqFn = (int (*)(void *, int, int))SFSET_GetCond(player, 95);
+        seqObj = (void *)SFSET_GetCond(player, 95);
+        if (seqFn != 0 && seqFn(seqObj, pic->horizontal_size, pic->vertical_size) != 0) {
+            *result = -2;
+            return 0;
+        }
+    }
+    if (pic->picture_coding_type == 1) {
+        mpv->f372 = 0;
+    } else if (player->bufFmt == 3 && mpv->second != 0) {
+        last = mpv->second->info.temporal_reference;
+        if (pic->picture_coding_type == 2) {
+            if (pic->temporal_reference < last && last < 512) {
+                mpv->f372 = 1;
+            }
+        } else if (pic->picture_coding_type == 3) {
+            if (pic->temporal_reference >= last) {
+                mpv->f372 = 1;
+            }
+        }
+    }
+    MPV_GetPicUsr(handle, 0, &pool->slot[0].size);
+    if (mpv->f268 != pic->gsc_count) {
+        mpv->f268 = pic->gsc_count;
+        mpv->f272 = 1;
+    } else {
+        mpv->f272 = 0;
+    }
+    if (seq) {
+        hdrFn = (void (*)(void *, char *, int))SFSET_GetCond(player, 77);
+        hdrObj = (void *)SFSET_GetCond(player, 78);
+        if (hdrFn != 0) {
+            pos = MPV_SearchDelim(chunk->addr, chunk->size, 1);
+            if (pos != 0) {
+                hdrFn(hdrObj, chunk->addr, pos + 4 - chunk->addr);
+            }
+        }
+    }
+    pos = MPV_SearchDelim(chunk->addr, chunk->size, 4);
+    sfmpv_ReadPtsQue(player, pic, pos, &time, &pts, mpv->f272);
+    mpv->f4256 = pts;
+    if ((code & mpv->state) == 0) {
+        return 0;
+    }
+    sfmpv_CalcRepeatField(player, pic, mpv->f272);
+    sfmpv_ReformTc(player, pic, time, mpv->f272);
+    FUN_002a5b48(player, pic);
+    FUN_002a5c28(player, pic);
+    return sfmpv_FirstPicAtr(player, handle, pic, chunk);
+}
+
 void sfmpv_InitComplementPts(SfdRecord *record) {
     SfdRecordTail *tail = &record->tail;
     record->f0 = 0;
@@ -972,9 +1072,9 @@ void sfmpv_InitComplementPts(SfdRecord *record) {
     tail->f8 = 0;
 }
 
-long sfmpv_ComplementPts(SfdTimer *timer, SfdRecord *record, SfdPicInfo *pic, SfdRecordTail *entry, int newGop, long *pts) {
-    int rate = DAT_004f5060[pic->rateIndex];
-    int number = pic->number;
+long sfmpv_ComplementPts(SfdTimer *timer, SfdRecord *record, M2vPicAtr *pic, SfdRecordTail *entry, int newGop, long *pts) {
+    int rate = DAT_004f5060[pic->frame_rate_code];
+    int number = pic->temporal_reference;
     long origin;
     long time;
     int distance;
@@ -991,7 +1091,7 @@ long sfmpv_ComplementPts(SfdTimer *timer, SfdRecord *record, SfdPicInfo *pic, Sf
         time = 0;
     }
     if (memcmp(&record->tail, entry, 4) != 0) {
-        int type = pic->type;
+        int type = pic->picture_coding_type;
 
         record->tail = *entry;
         record->f0 = number;
@@ -1023,7 +1123,7 @@ long FUN_002a5208(int count, int rate) {
 }
 
 /* repeat_first_field accounting: the field offset of each picture of the group, kept by temporal reference */
-void sfmpv_CalcRepeatField(SfdPlayer *player, SfdPicInfo *pic, int newGop) {
+void sfmpv_CalcRepeatField(SfdPlayer *player, M2vPicAtr *pic, int newGop) {
     SfdTimer *timer = &player->timer;
     SfdFieldEntry *fields = timer->fields;
     SfdMpv *mpv = player->streams.hn.mpv;
@@ -1041,10 +1141,10 @@ void sfmpv_CalcRepeatField(SfdPlayer *player, SfdPicInfo *pic, int newGop) {
             fields[i].f0 = -1;
         }
         fields[0].f2 = -1;
-    } else if (pic->type == 1 || pic->type == 2) {
+    } else if (pic->picture_coding_type == 1 || pic->picture_coding_type == 2) {
         ref = mpv->second;
-        cur = pic->number;
-        last = ref->info.number;
+        cur = pic->temporal_reference;
+        last = ref->info.temporal_reference;
         if (cur < last) {
             cur += 1024;
         }
@@ -1052,11 +1152,11 @@ void sfmpv_CalcRepeatField(SfdPlayer *player, SfdPicInfo *pic, int newGop) {
             fields[t % 64].f0 = -1;
         }
     }
-    idx = pic->number % 64;
+    idx = pic->temporal_reference % 64;
     fields[idx].f0 = timer->tc.field0;
     if (newGop != 0) {
         fields[idx].f2 = 0;
-    } else if (pic->number == 0 && (short)fields[0].f2 == -1) {
+    } else if (pic->temporal_reference == 0 && (short)fields[0].f2 == -1) {
         fields[0].f2 = 0;
     } else {
         for (i = 0; i < 64; i++) {
@@ -1068,8 +1168,8 @@ void sfmpv_CalcRepeatField(SfdPlayer *player, SfdPicInfo *pic, int newGop) {
         }
     }
     timer->tc.field = fields[idx].f2;
-    if (pic->type == 3 && fields[idx].f0 != 0) {
-        j = mpv->second->info.number % 64;
+    if (pic->picture_coding_type == 3 && fields[idx].f0 != 0) {
+        j = mpv->second->info.temporal_reference % 64;
         fields[j].f2 = fields[idx].f0 + fields[idx].f2;
         mpv->second->stamp.tc.field = fields[j].f2;
         FUN_002a54d0(player, mpv->second);
@@ -1092,10 +1192,10 @@ void FUN_002a54d0(SfdPlayer *player, SfdSlot *slot) {
     }
 }
 
-void sfmpv_ReformTc(SfdPlayer *player, SfdPicInfo *pic, long a, int b) {
+void sfmpv_ReformTc(SfdPlayer *player, M2vPicAtr *pic, long a, int b) {
     int enabled = SFSET_GetCond(player, 52);
     if (enabled == 0) {
-        if (a >= 0 || pic->f48 == 0 || pic->f87 != 0
+        if (a >= 0 || pic->gsc_count == 0 || pic->repeat_first_field != 0
             || (b != 0 && sfmpv_DetectTcErr(player, pic) != 0)) {
             enabled = 1;
             SFSET_SetCond(player, 52, 1);
@@ -1106,7 +1206,7 @@ void sfmpv_ReformTc(SfdPlayer *player, SfdPicInfo *pic, long a, int b) {
     }
 }
 
-int sfmpv_DetectTcErr(SfdPlayer *player, SfdPicInfo *pic) {
+int sfmpv_DetectTcErr(SfdPlayer *player, M2vPicAtr *pic) {
     SfdTimeCode tc;
     int now;
     int rate;
@@ -1128,12 +1228,12 @@ int sfmpv_DetectTcErr(SfdPlayer *player, SfdPicInfo *pic) {
     return 1;
 }
 
-void FUN_002a5740(SfdPlayer *player, SfdPicInfo *pic, long id, int flag)
+void FUN_002a5740(SfdPlayer *player, M2vPicAtr *pic, long id, int flag)
 {
     SfdTimer *timer = &player->timer;
-    int b = pic->f28;
-    int a = pic->rateIndex;
-    int idx = pic->number;
+    int b = pic->drop_frame_flag;
+    int a = pic->frame_rate_code;
+    int idx = pic->temporal_reference;
     if (flag != 0 && id >= 0) {
         sfmpv_Pts2Tc(id, a, b, idx, &player->timer.tc);
         return;
@@ -1161,7 +1261,7 @@ void FUN_002a5740(SfdPlayer *player, SfdPicInfo *pic, long id, int flag)
     }
 }
 
-void FUN_002a5b48(SfdPlayer *player, SfdPicInfo *pic)
+void FUN_002a5b48(SfdPlayer *player, M2vPicAtr *pic)
 {
     SfdTimeStamp *state = &player->timer.state;
     SfdTimeCode tc;
@@ -1177,7 +1277,7 @@ void FUN_002a5b48(SfdPlayer *player, SfdPicInfo *pic)
     state->done = 1;
 }
 
-void FUN_002a5c28(SfdPlayer *player, SfdPicInfo *pic)
+void FUN_002a5c28(SfdPlayer *player, M2vPicAtr *pic)
 {
     SfdTimeStamp *state = &player->timer.state;
     SfdTimeCode tc;
@@ -1198,19 +1298,19 @@ void FUN_002a5c28(SfdPlayer *player, SfdPicInfo *pic)
         *best = *cur;
 }
 
-void sfmpv_ReadTcode(SfdPicInfo *pic, SfdTimeCode *out) {
-    out->rate = pic->rateIndex;
-    out->drop = pic->f28;
-    out->hour = pic->f32;
-    out->minute = pic->f36;
-    out->second = pic->f40;
-    out->frame = pic->f44;
-    out->add = pic->number;
-    out->field0 = (signed char)pic->f84;
+void sfmpv_ReadTcode(M2vPicAtr *pic, SfdTimeCode *out) {
+    out->rate = pic->frame_rate_code;
+    out->drop = pic->drop_frame_flag;
+    out->hour = pic->time_code_hours;
+    out->minute = pic->time_code_minutes;
+    out->second = pic->time_code_seconds;
+    out->frame = pic->time_code_pictures;
+    out->add = pic->temporal_reference;
+    out->field0 = (signed char)pic->field_count;
     out->field = 0;
 }
 
-int sfmpv_FirstPicAtr(SfdPlayer *player, void *sj, SfdPicInfo *pic, SfdChunk *chunk)
+int sfmpv_FirstPicAtr(SfdPlayer *player, void *sj, M2vPicAtr *pic, SfdChunk *chunk)
 {
     SfdPicGeom *geom = &player->geom;
     SfdMpv *mpv = player->streams.hn.mpv;
@@ -1262,13 +1362,13 @@ void sfmpv_SetMpvHd(SfdPlayer *player, int pts, SfdChunk *chunk)
     picture->valid = 1;
 }
 
-void sfmpv_SetMvInf(SfdPicGeom *geom, int pts, SfdPicInfo *pic, int x) {
-    /* matching construct: statement-order sweep — pic->rateIndex is read before the copies */
-    int fifth = pic->rateIndex;
-    geom->width = pic->width;
-    geom->height = pic->height;
-    geom->f8 = pic->f8;
-    geom->f12 = pic->f12;
+void sfmpv_SetMvInf(SfdPicGeom *geom, int pts, M2vPicAtr *pic, int x) {
+    /* matching construct: statement-order sweep — pic->frame_rate_code is read before the copies */
+    int fifth = pic->frame_rate_code;
+    geom->width = pic->horizontal_size;
+    geom->height = pic->vertical_size;
+    geom->f8 = pic->mb_width;
+    geom->f12 = pic->mb_height;
     geom->f20 = fifth;
     geom->f16 = pts;
     geom->f32 = x;
@@ -1279,7 +1379,7 @@ void sfmpv_SetMvInf(SfdPicGeom *geom, int pts, SfdPicInfo *pic, int x) {
 int sfmpv_ChkBufSiz(SfdPlayer *player, SfdPicGeom *geom) {
     SfdMpv *mpv = player->streams.hn.mpv;
     SfdMpvCond *cond = &mpv->cond;
-    int fmt = player->f56;
+    int fmt = player->bufFmt;
     int count = cond->count;
     unsigned int frmsize;
     int buf;
@@ -1316,7 +1416,7 @@ int sfmpv_IsConcatTimeFix(SfdPlayer *player) {
 
 int sfmpv_IsSkip(SfdPlayer *player, SfdChunk *chunk) {
     SfdMpv *mpv = player->streams.hn.mpv;
-    SfdPicInfo *pic = &mpv->pic;
+    M2vPicAtr *pic = &mpv->pic;
     int skip;
     int busy;
     unsigned int type;
@@ -1324,9 +1424,9 @@ int sfmpv_IsSkip(SfdPlayer *player, SfdChunk *chunk) {
         return 1;
     if (SFSET_GetCond(player, 39) == 1)
         return 0;
-    if (pic->f88 != 0)
+    if (pic->field_964 != 0)
         return mpv->f364;
-    type = pic->type;
+    type = pic->picture_coding_type;
     busy = sfmpv_IsSeekSkip(player);
     skip = 1;
     if (busy == 0 && sfmpv_IsPtypeSkip(player, type) == 0 && sfmpv_IsEmptySkip(player, type, chunk) == 0
@@ -1355,7 +1455,7 @@ int sfmpv_IsDefect(SfdPlayer *player, int kind) {
     return result;
 }
 
-void FUN_002a6368(SfdPlayer *player, SfdPicInfo *pic, int kind)
+void FUN_002a6368(SfdPlayer *player, M2vPicAtr *pic, int kind)
 {
     SfdMpv *mpv = player->streams.hn.mpv;
     void *handle = mpv->handle;
@@ -1373,7 +1473,7 @@ void FUN_002a6368(SfdPlayer *player, SfdPicInfo *pic, int kind)
         }
     }
     if (kind == 1) {
-        if (pic->type == 1 || pic->type == 2)
+        if (pic->picture_coding_type == 1 || pic->picture_coding_type == 2)
             mode = 2;
     } else if (mode == 2)
         mode = 3;
@@ -1498,7 +1598,7 @@ int sfmpv_SkipFrm(SfdPlayer *player, int sj)
 {
     SfdMpv *mpv = player->streams.hn.mpv;
     void *handle = mpv->handle;
-    SfdPicInfo *pic;
+    M2vPicAtr *pic;
     int before;
     int status;
     int used;
@@ -1512,9 +1612,9 @@ int sfmpv_SkipFrm(SfdPlayer *player, int sj)
     FUN_002a4b20(player, used);
     if (ret != 0)
         return ret;
-    if (pic->f88 == 0)
+    if (pic->field_964 == 0)
         mpv->f364 = 1;
-    SFPLY_AddSkipPic(player, 1, pic->type);
+    SFPLY_AddSkipPic(player, 1, pic->picture_coding_type);
     return 0;
 }
 
@@ -1527,7 +1627,7 @@ void sfmpv_SetSkipTtu(SfdPlayer *player) {
 }
 
 /* takes the frame the picture is decoded into and the reference planes it predicts from */
-int sfmpv_SetFrmPara(SfdPlayer *player, SfdPicInfo *pic, SfdFrmPara *para, SfdSlot **out) {
+int sfmpv_SetFrmPara(SfdPlayer *player, M2vPicAtr *pic, SfdFrmPara *para, SfdSlot **out) {
     SfdMpv *mpv = player->streams.hn.mpv;
     SfdDecodeFlags *decode = &player->decode;
     SfdPlanes *planes;
@@ -1549,30 +1649,30 @@ int sfmpv_SetFrmPara(SfdPlayer *player, SfdPicInfo *pic, SfdFrmPara *para, SfdSl
     }
     (*out)->info = *pic;
     (*out)->f216 = mpv->f4256;
-    if (player->f56 == 3) {
-        if ((pic->type == 1 || pic->type == 2) && mpv->f360 == 0) {
+    if (player->bufFmt == 3) {
+        if ((pic->picture_coding_type == 1 || pic->picture_coding_type == 2) && mpv->f360 == 0) {
             SFMPVF_EndRefFrm(mpv->first);
             mpv->first = mpv->second;
             mpv->second = *out;
         }
-        columns = (pic->width + 15) / 16;
+        columns = (pic->horizontal_size + 15) / 16;
         lumaBlocks = (columns * 16 + 63) / 64;
-        rows = (pic->height + 15) / 16;
+        rows = (pic->vertical_size + 15) / 16;
         chromaBlocks = (columns * 8 + 63) / 64;
         lumaSize = (lumaBlocks * rows) << 10;
         chromaSize = (chromaBlocks * rows) << 9;
         para->ref[0].lumaStride = lumaBlocks << 6;
         para->ref[0].chromaStride = chromaBlocks << 6;
-        para->ref[0].base = (char *)mpv->first->id;
+        para->ref[0].base = mpv->first->buf;
         para->ref[0].luma = para->ref[0].base + lumaSize;
         para->ref[0].chroma = para->ref[0].luma + chromaSize;
         para->ref[1].lumaStride = lumaBlocks << 6;
         para->ref[1].chromaStride = chromaBlocks << 6;
-        para->ref[1].base = (char *)mpv->second->id;
+        para->ref[1].base = mpv->second->buf;
         para->ref[1].luma = para->ref[1].base + lumaSize;
         para->ref[1].chroma = para->ref[1].luma + chromaSize;
     } else {
-        if (pic->type == 1 || pic->type == 2) {
+        if (pic->picture_coding_type == 1 || pic->picture_coding_type == 2) {
             mpv->f312 ^= 1;
             mpv->f316 ^= 1;
             mpv->second = *out;
@@ -1581,7 +1681,7 @@ int sfmpv_SetFrmPara(SfdPlayer *player, SfdPicInfo *pic, SfdFrmPara *para, SfdSl
         para->ref[0] = planes[mpv->f312];
         para->ref[1] = planes[mpv->f316];
     }
-    para->dst = (char *)(*out)->id;
+    para->dst = (*out)->buf;
     para->pic = &(*out)->info;
     para->nfrm = 0;
     para->nbyte = 0;
@@ -1590,8 +1690,8 @@ int sfmpv_SetFrmPara(SfdPlayer *player, SfdPicInfo *pic, SfdFrmPara *para, SfdSl
 }
 
 void FUN_002a6ea0(SfdPlayer *player, SfdMpv *mpv, int *out64, int *out68) {
-    if (player->f56 == 3) {
-        switch (mpv->pic.type) {
+    if (player->bufFmt == 3) {
+        switch (mpv->pic.picture_coding_type) {
         case 1: /* matching construct: manual — explicit single-layer case shapes the compare tree */
             break;
         case 2:
@@ -1643,7 +1743,7 @@ void FUN_002a70e8(SfdPlayer *player, SfdSlot *slot) {
     slot->f76 = in->a;
     slot->f80 = in->a + timer->base;
     if (SFMPVP_IsSceMpegUsed(player) != 0) {
-        t = UTY_MulDiv(slot->f60, (slot->f224 - timer->f352) * 1000, DAT_004f5060[slot->info.rateIndex]);
+        t = UTY_MulDiv(slot->f60, (slot->f224 - timer->f352) * 1000, DAT_004f5060[slot->info.frame_rate_code]);
         slot->f76 = t;
         slot->f56 = slot->f80 = t + timer->base;
     }
@@ -1658,7 +1758,7 @@ void FUN_002a71d0(SfdPlayer *player, SfdSlot *slot, void *source) {
     int kind;
     char *data;
     int size;
-    if ((unsigned int)(slot->info.type - 1) < 2) {
+    if ((unsigned int)(slot->info.picture_coding_type - 1) < 2) {
         FUN_002a73f0(&mpv->pool.slot[1], slot->blob);
     }
     FUN_002a7278(source, &kind, &data, &size);
@@ -1797,7 +1897,7 @@ int SFMPV_Create(SfdPlayer *player)
     }
     MPV_SetCond(dec, 1, SFSET_GetCond(player, 0));
     MPV_SetCond(dec, 2, SFSET_GetCond(player, 1));
-    MPV_SetCond(dec, 6, player->f56);
+    MPV_SetCond(dec, 6, player->bufFmt);
     mpv->handle = dec;
     if (SFPLY_GetResetFlg() != 0)
         FUN_002a3558(player, DAT_00585620, DAT_00585624, DAT_00585628);
@@ -1867,7 +1967,7 @@ void sfmpv_InitFrmObj(SfdSlot *slot, int *ids, int count) {
             slot->state = 0;
             slot->refs = 0;
             SFTIM_InitTtu(&slot->stamp, 0);
-            slot->id = *id++;
+            slot->buf = (void *)*id++;
             slot->f56 = 0;
             slot->f60 = 1;
             slot->f64 = 0;
@@ -1882,7 +1982,7 @@ void sfmpv_InitFrmObj(SfdSlot *slot, int *ids, int count) {
     }
 }
 
-void sfmpv_InitPicAtr(SfdPicInfo *info) {
+void sfmpv_InitPicAtr(M2vPicAtr *info) {
     UTY_MemsetDword(info, -1, 32);
 }
 
@@ -1971,6 +2071,67 @@ int SFMPV_GetRead(SfdPlayer *player, SfdFrameInfo **out) {
     timer->f636 = (*out)->f20;
     timer->f640 = (*out)->f24;
     return 0;
+}
+
+/* matching construct: placement — declared here; with the other declarations it changes the
+ * address-taken local loads of FUN_002a5c28 */
+SfdPicRecord *FUN_002a8488(SfdPlayer *player, SfdSlot *target);
+
+/* fills the frame information handed to the application from the frame's slot and marks its record
+ * in use */
+void sfmpv_SetFrmInf(SfdPlayer *player, SfdSlot *slot, SfdFrameInfo **out) {
+    SfdMpv *mpv = player->streams.hn.mpv;
+    M2vPicAtr *pic = &slot->info;
+    SfdPicRecord *record;
+
+    record = FUN_002a8488(player, slot);
+    *out = (SfdFrameInfo *)record->body;
+    record->f0 = 1;
+    mpv->current = slot;
+    (*out)->f0 = pic->horizontal_size;
+    (*out)->f4 = pic->vertical_size;
+    (*out)->f8 = pic->mb_width;
+    (*out)->f12 = pic->mb_height;
+    (*out)->picType = pic->picture_coding_type;
+    (*out)->f20 = slot->f56;
+    (*out)->f24 = slot->f60;
+    (*out)->bufFmt = player->bufFmt;
+    (*out)->buf = slot->buf;
+    (*out)->f36 = slot->f64;
+    (*out)->f40 = slot->f68;
+    (*out)->f44 = slot->f72;
+    (*out)->f48 = slot->f76;
+    (*out)->f52 = slot->f80;
+    (*out)->picUsr = slot->blob;
+    (*out)->f60 = pic->f64;
+    (*out)->f64 = pic->f68;
+    if (pic->f64 == 0) {
+        (*out)->tail.detail.f72 = 2;
+    } else {
+        (*out)->tail.detail.f72 = 1;
+    }
+    (*out)->tail.detail.f80 = slot->f216;
+    (*out)->tail.detail.f88 = pic->picture_structure;
+    (*out)->tail.detail.f92 = pic->chroma_format;
+    (*out)->tail.detail.f96 = pic->bit_rate;
+    (*out)->tail.detail.f100 = pic->vbv_buffer_size;
+    (*out)->tail.detail.f104 = pic->display_horizontal_size;
+    (*out)->tail.detail.f106 = pic->display_vertical_size;
+    (*out)->tail.detail.f108 = pic->progressive_frame;
+    (*out)->tail.detail.f109 = pic->top_field_first;
+    (*out)->tail.detail.f110 = pic->repeat_first_field;
+    (*out)->tail.detail.f111 = pic->aspect_ratio_information;
+    (*out)->tail.detail.f112 = pic->constrained_parameters_flag;
+    (*out)->tail.detail.f113 = pic->frame_rate_extension_n;
+    (*out)->tail.detail.f114 = pic->frame_rate_extension_d;
+    (*out)->tail.detail.f115 = pic->profile_and_level_indication;
+    (*out)->tail.detail.f116 = pic->progressive_sequence;
+    (*out)->tail.detail.f117 = pic->low_delay;
+    (*out)->tail.detail.f118 = pic->video_format;
+    (*out)->tail.detail.f119 = pic->colour_description;
+    (*out)->tail.detail.f120 = pic->colour_primaries;
+    (*out)->tail.detail.f121 = pic->transfer_characteristics;
+    (*out)->tail.detail.f122 = pic->matrix_coefficients;
 }
 
 int SFMPV_AddRead(SfdPlayer *player, char *body) {
