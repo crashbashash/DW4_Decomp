@@ -61,7 +61,7 @@ linker symbols stay unique.
 
 ## Cached gates
 
-A cold `make check-fresh` takes about 3 minutes on the full tree (16 cores) and a cold `make link-fresh` about 4, though
+A cold `make check-fresh` takes about a minute on the full tree (16 cores) and a cold `make link-fresh` about 4, though
 each answer is a pure function of its inputs (*The build runs on every core*, below). `tools/buildcache.py`
 stores definite results in `build/cache/` (untracked), keyed by content:
 
@@ -75,10 +75,20 @@ stores definite results in `build/cache/` (untracked), keyed by content:
 * A rerun after editing a few functions therefore recompiles only those. Any change to a header, the compiler, the ELF, a config
   table or a tool module changes every key (a coarse miss, never a stale hit). A run rewrites the store with only the entries it
   used, so it cannot grow without bound.
+* A warm run still works out every key, and a key needs its file split into definitions (and the source-approval verdict
+  that grades a cached match needs the file's expanded text and reach plan). `check.py` computes both first, a batch of one
+  file's members at a time on every core, so each file is read and planned once per batch rather than once per member; the
+  sweep that reads the cache is forked afterwards and inherits the answers.
 * **Run uncached before publishing a milestone:** `make check-fresh` / `make link-fresh` (or `--no-cache`, or `DW4_NOCACHE=1`). The
   cached and uncached `.text`/`.rodata` of a 256-unit range were compared and are identical; `testing/test_buildcache.py` covers the
   key and store rules. Whole-file comparison of raw-unit objects is not meaningful (their symbol tables embed a per-run temp path).
 * Testing aids, not gates: `check.py --cover-limit N`, `linkgen.py --unit-range LO:HI`.
+* **The edit-verify loop of a slice:** `python3 tools/check.py --changed-since main` checks only the units whose source, or a
+  file they include (transitively), differs from `main` in the working tree, with the cache as usual
+  (`tools/changedunits.py`). After a header edit, which misses every key, it recompiles only the units that include the
+  header (a comment added to `beAction2.h`: 3 files, 2,498 functions, 20 s, against about a minute for the whole tree). It
+  names any changed `config/` table, tool module `check.py` runs or kernel patch source, which it cannot follow, and leaves
+  `data/` untouched; the gates are still the four make targets.
 
 ## Translation units
 
@@ -583,6 +593,21 @@ Part of the gain is outside the pools: `unitprofiles.asm_body_names` asked
 members, which was about 6 minutes of `tools/progress.py` and 2–3 minutes of the serial
 parts of `check.py` and `linkgen.py`; `included` now reads a file's include lines once per
 modification time.
+
+Per-member work did the same to every later `make check`, warm or cold: each member's cache key split
+its file into definitions, and grading a match rebuilt its file's expanded text, reach plan and
+reachable text, so with members dealt out one by one every worker redid nearly every file, and a
+library unit's reachable text was rebuilt (megabytes) for each of its thousands of members. `check.py`
+now computes the keys and approval verdicts a batch of one file's members at a time, the reach is
+answered from the plan's spans without building the text, a member names its unit's data-span list
+by digest (one copy, sent back once, where every member used to carry and pickle its own), and
+`tools/progress.py` runs its two slowest parts side by side. Measured with `make check` on the full
+tree, 16 cores, identical outputs (peak real memory under a memory guard; `asm/` already generated):
+
+| `make check` | before | after |
+| --- | --- | --- |
+| every lookup a hit | 3 m 14 s, 5.8 GB | 29 s, 1.3 GB |
+| empty cache | 3 m 37 s, 5.4 GB | 57 s, 1.2 GB |
 
 `--jobs` defaults to the core count; `--jobs 1` forces the serial path in one process. Two
 things make the pool safe, and there is one trap:

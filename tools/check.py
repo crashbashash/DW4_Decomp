@@ -17,6 +17,7 @@ Usage:
   check.py --split-only       # just verify asm/ round-trips
   check.py --function 0x151090 --cand src/f1.c   # one candidate, through tools/verify.py
   check.py --list-mismatch    # names of functions whose C does not match
+  check.py --changed-since main   # only the units a change since `main` reaches (tools/changedunits.py)
 
 The single-function mode is `tools/verify.py` with the unit profile table
 (config/SLUS-20836/units.tsv), the per-function override tables and the ownership table
@@ -88,6 +89,11 @@ A whole-tree run ends with the section census of the last relink's objects
 must be in tools/verify.py's COMPARED_SECTIONS or DEBT_SECTIONS, and an unknown
 name is a failure (tools/test_section_census.py checks the same).
 
+`--changed-since REV` checks only the members of the units whose source, or a file they include, differs
+from REV in the working tree (tools/changedunits.py), with the cache as usual. It is for the edit-verify loop
+of a slice, not a gate: like `--cover-limit` it leaves data/ as it is, and it names the changed config/ tables,
+check tool modules and kernel patch sources it cannot follow (those need the full run).
+
 Exit status: 0 no mismatch/compile failure, 1 otherwise or a split failure.
 """
 import argparse
@@ -103,6 +109,7 @@ import asmsources
 import sourceapprovals
 import buildcache
 import cc
+import changedunits
 import forkpool
 import srctree
 import unitobjects
@@ -126,6 +133,9 @@ ELF_DEFAULT = os.path.join(ROOT, "orig", "SLUS-20836", "SLUS_208.36")
 MWCC_DEFAULT = os.path.join(ROOT, "local", "mwcps2", "3.0-011126", "mwccps2.exe")
 WIBO_DEFAULT = os.path.join(ROOT, "local", "wibo")
 FLAGS_DEFAULT = "-O3 -Iinclude"     # the Makefile's FLAGS; a unit row in config/SLUS-20836/unit-flags.tsv overrides it
+# the most members of one source file a worker takes at once when it computes their cache keys and approval
+# problems: one file's reads and plans serve the batch, and a library unit's thousands still spread over the workers
+MEMBER_BATCH = 256
 
 
 def read_elf(path):
@@ -206,27 +216,6 @@ def tool_versions():
         out.append((r.stdout or r.stderr).splitlines()[0] if (r.stdout or r.stderr) else "?")
     return "|".join(out)
 
-class _InternedMemo(forkpool.Memo):
-    """A forkpool.Memo whose equal values are one object. Every member of a whole-file unit carries its
-    unit's data spans, the same list thousands of times over: held as copies, they took gigabytes in the
-    caller and in each worker, which keeps every entry it computes."""
-
-    def __init__(self):
-        super().__init__()
-        self._pool = {}
-
-    def _intern(self, value):
-        value = tuple(tuple(item) for item in value)
-        return self._pool.setdefault(value, value)
-
-    def __setitem__(self, key, value):
-        super().__setitem__(key, self._intern(value))
-
-    def merge(self, taken):
-        for key, value in taken:
-            dict.__setitem__(self, key, self._intern(value))
-
-
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__,
@@ -256,6 +245,9 @@ def main(argv=None):
                          "milestone. Results are otherwise cached by content in build/cache/ (tools/buildcache.py)")
     ap.add_argument("--cover-limit", type=int, default=0,
                     help="check only the first N decompiled functions (for testing the tool; not a gate)")
+    ap.add_argument("--changed-since", metavar="REV",
+                    help="check only the units whose source or included headers differ from REV in the working tree "
+                         "(tools/changedunits.py; for the edit-verify loop, not a gate)")
     a = ap.parse_args(argv)
     use_cache = buildcache.enabled(a.no_cache)
 
@@ -373,7 +365,20 @@ def main(argv=None):
         unit's data sections (named rows, anonymous data, its switch tables) and a group's jump tables."""
         return [[found.group(1) or "jump-table", int(found.group(3), 16), int(found.group(4))]
                 for found in map(data_line.match, report.splitlines()) if found]
-    unit_data = _InternedMemo()    # name -> data_spans of its report
+    # Every member of a whole-file unit carries its unit's data spans, the same list thousands of times over: a
+    # member names its list by digest, and each distinct list is held (and sent back from a worker) once.
+    unit_data = forkpool.Memo()     # name -> digest of the data_spans of its report, a key of span_lists
+    span_lists = forkpool.Memo()    # digest -> ((section, address, size), ...)
+
+    def keep_spans(nm, spans, ref=None):
+        """Record `spans` as nm's data; -> the digest naming them (`ref` when the cache gave it)."""
+        if ref is None or ref not in span_lists:
+            spans = tuple(tuple(span) for span in spans)
+            ref = ref or buildcache.sha("spans", repr(spans))
+            if ref not in span_lists:
+                span_lists[ref] = spans
+        unit_data[nm] = ref
+        return ref
 
     def classify(ok, report):
         """(category, exc, diagnostic, override) from a verify report; see the docstring.
@@ -400,7 +405,9 @@ def main(argv=None):
     src_index = units.scan(a.src_dir, symbols=a.symbols, unit_objects=a.unit_objects)
     cands = [(va, sz, nm, src_index[nm]) for va, sz, nm in syms if nm in src_index]
     by_name = {nm: va for va, _, nm in syms}
-    asm_bodies = {nm for _, _, nm, path in cands if nm in unitprofiles.asm_body_names(path)}
+    # once per file: a library unit's thousands of members share one answer, and each call stats its fragments
+    asm_names = {path: unitprofiles.asm_body_names(path) for path in {path for _, _, _, path in cands}}
+    asm_bodies = {nm for _, _, nm, path in cands if nm in asm_names[path]}
     approvals = sourceapprovals.load()
     # an MWCC `asm` function the owner approved (an `asm-function` row) was written in assembly in the
     # original source: it is counted with the hand-written assembly sources, not as an asm body
@@ -411,6 +418,20 @@ def main(argv=None):
     decompiled = [nm for _, _, nm, _ in cands if nm not in asm_bodies and nm not in assembly]
     if a.cover_limit:
         cands = cands[:a.cover_limit]
+    partial = bool(a.cover_limit or a.changed_since)
+    reached = None   # with --changed-since: the source paths (as cands name them) the change reaches
+    if a.changed_since:
+        changed = changedunits.changed_files(a.changed_since, ROOT)
+        data_sources = [os.path.join(a.src_dir, group.source) for group in unitobjects.data_only_units(a.unit_objects)]
+        rel = {path: os.path.relpath(os.path.abspath(path), ROOT)
+               for path in {path for _, _, _, path in cands} | set(data_sources)}
+        hit = changedunits.affected(set(rel.values()), changed, ROOT)
+        reached = {path for path, relative in rel.items() if relative in hit}
+        cands = [cand for cand in cands if cand[3] in reached]
+        unfollowed = changedunits.not_followed(changed)
+        print("changed: %d files since %s reach %d source files (%d functions)%s"
+              % (len(changed), a.changed_since, len(reached), len(cands),
+                 "; not followed, run the full check for: %s" % ", ".join(unfollowed) if unfollowed else ""))
     cover_store = buildcache.Store("check-cover", use_cache)
     profile_files = vfy.profile_input_files(a.unit_flags, a.unit_compilers, a.units)
     stale_overrides = {}   # name -> unused | redundant
@@ -422,28 +443,70 @@ def main(argv=None):
                               buildcache.tools_sha("check.py"), buildcache.tools_sha("eegcc_compile.py"), a.flags, a.mwcc, a.wibo,
                               buildcache.file_sha(a.mwcc), buildcache.file_sha(a.wibo), tool_versions())
 
+    def approval_owner(nm):
+        """(the definition in nm's source whose uses count for it, the symbol its approval row names when
+        that differs, else None)."""
+        src_path = src_index[nm]
+        if sourceapprovals.defines(src_path, nm):
+            # a whole-file member is its own definition: it answers for its own uses
+            return nm, None
+        # a static the symbol map names apart (`Copy_tlbfunc` for the source's `Copy`): its
+        # uses are counted under the source's name, and its row names the symbol
+        member = unitobjects.source_name(nm, a.symbols, a.unit_objects)
+        if member != nm and sourceapprovals.defines(src_path, member):
+            return member, nm
+        return unitobjects.source_owner(nm, a.symbols, a.unit_objects), None
+
+    def member_inputs(batch):
+        """[(name, cache key, (approval problem,) or ())] for a batch of members of one source file: the
+        cache key needs the file split into its definitions and the approval rule its expanded text and
+        reach plan, and a library unit has thousands of members, so each batch reads them once (a worker
+        asked member by member, in address order across files, would rebuild them for nearly every one).
+        The problem is the one `graded` applies to a match; one that raises is left for `graded` to raise."""
+        path = cands[batch[0]][3]
+        text = defined = None
+        out = []
+        for i in batch:
+            va, sz, nm, _path = cands[i]
+            key = None
+            if use_cache:
+                if text is None:
+                    # the text the compiler will see: the file itself, or the one function extracted from it
+                    text = open(path).read()
+                    defined = {d[0] for d in units.definitions(text)}
+                owner = unitobjects.source_owner(nm, a.symbols, a.unit_objects)
+                # an owner the file spells as a special member (`Class::Class`) is not a definition name
+                # extract can isolate: key on the whole file, which is at least what the compiler sees
+                body = text if len(defined) <= 1 or owner not in defined else units.extract(text, owner)
+                key = buildcache.sha(cover_fp, nm, va, sz, body,
+                                     buildcache.unit_profile_sha(va, a.flags, a.mwcc, a.unit_objects, units=a.units,
+                                                                 unit_flags=a.unit_flags,
+                                                                 unit_compilers=a.unit_compilers, symbols=a.symbols))
+            why = ()
+            if nm not in asm_bodies and nm not in assembly:
+                try:
+                    why = (approval_problem(nm),)
+                except Exception:
+                    pass
+            out.append((nm, key, why))
+        return out
+
+    def approval_problem(nm):
+        owner, row = approval_owner(nm)
+        return sourceapprovals.problem(src_index[nm], owner, approvals, row=row)
+
     def cover_one(item):
         va, sz, nm, path = item
-        key = None
-        if use_cache:
-            # the text the compiler will see: the file itself, or the one function extracted from it
-            text = open(path).read()
-            owner = unitobjects.source_owner(nm, a.symbols, a.unit_objects)
-            # an owner the file spells as a special member (`Class::Class`) is not a definition name
-            # extract can isolate: key on the whole file, which is at least what the compiler sees
-            defined = {d[0] for d in units.definitions(text)}
-            body = text if len(defined) <= 1 or owner not in defined else units.extract(text, owner)
-            key = buildcache.sha(cover_fp, nm, va, sz, body,
-                                 buildcache.unit_profile_sha(va, a.flags, a.mwcc, a.unit_objects, units=a.units,
-                                                             unit_flags=a.unit_flags, unit_compilers=a.unit_compilers,
-                                                             symbols=a.symbols))
+        key = inputs[nm][0]
+        if key:
             hit = cover_store.get(key)
             if isinstance(hit, dict):
                 # the data spans are stored once per distinct list (every member of a whole-file unit
                 # carries its unit's): an entry names its list, which a hit must also find
-                spans = hit.get("data") if "data" in hit else cover_store.get("spans:" + hit.get("data_ref", ""))
+                ref = None if "data" in hit else hit.get("data_ref", "")
+                spans = hit["data"] if ref is None else cover_store.get("spans:" + ref)
                 if spans is not None:
-                    unit_data[nm] = spans
+                    keep_spans(nm, spans, ref)
                     return (nm, hit["category"], hit.get("exc"), hit.get("diagnostic", "-"), hit.get("override"))
         src, tmp = units.standalone(path, nm, symbols=a.symbols, unit_objects=a.unit_objects)
         try:
@@ -455,11 +518,10 @@ def main(argv=None):
             if tmp:
                 os.remove(tmp)
         kind, exc, diagnostic, override = classify(ok, report)
-        unit_data[nm] = data_spans(report)
+        ref = keep_spans(nm, data_spans(report))
         if key and kind != "compile":
             # the category is the cached answer, so a hit reproduces the same lines
-            ref = buildcache.sha("spans", repr(unit_data[nm]))
-            cover_store.put("spans:" + ref, [list(span) for span in unit_data[nm]])
+            cover_store.put("spans:" + ref, [list(span) for span in span_lists[ref]])
             cover_store.put(key, {"category": kind, "exc": exc, "diagnostic": diagnostic, "override": override,
                                   "data_ref": ref})
         return (nm, kind, exc, diagnostic, override)
@@ -473,21 +535,20 @@ def main(argv=None):
         elif nm in assembly and kind == "match":
             kind = "assembly"
         elif kind == "match":
-            src_path, row = src_index[nm], None
-            owner = unitobjects.source_owner(nm, a.symbols, a.unit_objects)
-            if sourceapprovals.defines(src_path, nm):
-                # a whole-file member is its own definition: it answers for its own uses
-                owner = nm
-            else:
-                # a static the symbol map names apart (`Copy_tlbfunc` for the source's `Copy`): its
-                # uses are counted under the source's name, and its row names the symbol
-                member = unitobjects.source_name(nm, a.symbols, a.unit_objects)
-                if member != nm and sourceapprovals.defines(src_path, member):
-                    owner, row = member, nm
-            why = sourceapprovals.problem(src_path, owner, approvals, row=row)
+            found = inputs[nm][1]
+            why = found[0] if found else approval_problem(nm)
             if why:
                 kind, diagnostic = "unapproved", "unapproved: " + why
         return nm, kind, exc, diagnostic, override
+
+    # Each member's cache key and approval problem first, a batch of one file's members at a time, the
+    # largest files first; the sweep's workers are forked after, so they inherit the answers.
+    by_path = {}
+    for i, (_va, _sz, _nm, path) in enumerate(cands):
+        by_path.setdefault(path, []).append(i)
+    batches = sorted((members[at:at + MEMBER_BATCH] for members in by_path.values()
+                      for at in range(0, len(members), MEMBER_BATCH)), key=lambda batch: (-len(batch), batch[0]))
+    inputs = {nm: (key, why) for found in forkpool.imap(member_inputs, batches, a.jobs) for nm, key, why in found}
 
     # The members of a compiler unit share one verification (verify._unit_result): every unit's first member
     # is verified first, the largest units first, and the other members after, when the shared results they
@@ -499,7 +560,7 @@ def main(argv=None):
     order = [i for _rank, _size, _owner, i in sorted(
         (rank, -len(members), owner, i) for owner, members in by_unit.items() for rank, i in enumerate(members))]
     results = [None] * len(cands)
-    shared = (cover_store, unit_data, vfy._UNIT_RESULTS)
+    shared = (cover_store, unit_data, span_lists, vfy._UNIT_RESULTS)
     for part in (order[:len(by_unit)], order[len(by_unit):]):
         for i, result in zip(part, forkpool.imap(graded, [cands[i] for i in part], a.jobs, shared)):
             results[i] = result
@@ -552,14 +613,15 @@ def main(argv=None):
     # tree its rows belong to must hold every row's source
     own_rows = a.unit_objects is not None or os.path.abspath(a.src_dir) == os.path.join(ROOT, "src")
     data_only_groups = [group for group in ([] if a.cover_limit else unitobjects.data_only_units(a.unit_objects))
-                        if own_rows or os.path.exists(os.path.join(a.src_dir, group.source))]
+                        if (own_rows or os.path.exists(os.path.join(a.src_dir, group.source)))
+                        and (reached is None or os.path.join(a.src_dir, group.source) in reached)]
     for group, label, kind, diagnostic, found in forkpool.imap(data_only_one, data_only_groups, a.jobs,
                                                                (cover_store, vfy._UNIT_RESULTS)):
         data_only[group.owner] = (kind, diagnostic, label, found)
         if kind == "compile":
             failed.append((label, diagnostic))
 
-    cover_store.save(prune=whole_tree_run and not a.cover_limit)
+    cover_store.save(prune=whole_tree_run and not partial)
     print(cover_store.summary("functions compiled and compared"))
     print("code  : %d functions, %d bytes laid out in %s" % (total, code_bytes, a.symbols))
     print("cover : %d/%d decompiled in %s/ (%.1f%%), %d match byte-for-byte, %d asm bodies not counted%s"
@@ -611,7 +673,7 @@ def main(argv=None):
     # The same table is committed as data/check-categories.tsv so tools/progress.py (which runs
     # without the compiler) can report the verified/debt split. Written only by a complete run:
     # a compile failure means the classification is partial, and the committed copy stays as it was.
-    if whole_tree and not failed and not a.cover_limit:
+    if whole_tree and not failed and not partial:
         with open(os.path.join(ROOT, "data", "check-categories.tsv"), "w") as fh:
             fh.write("# va\tname\tcategory\tdiagnostic — GENERATED by tools/check.py (make check) and committed; "
                      "do not edit. Read by tools/progress.py.\n")
@@ -620,12 +682,16 @@ def main(argv=None):
         # order) whose report compared it; read by tools/datamap.py and tools/progress.py.
         spans = {}
         name_at = {va: nm for nm, va in by_va_name.items()}
-        for nm, found in unit_data.items():
+        owned = set()   # (owner, category, list): a whole-file unit's members all bring its one list
+        for nm, ref in unit_data.items():
             group = unitobjects.group_for(by_va_name[nm], a.unit_objects)
             owner = group.owner if group else by_va_name[nm]
             # a unit's data stands or falls with its owner's verdict
             category = categories.get(name_at.get(owner), categories.get(nm, ("compile",)))[0]
-            for section, address, size in found:
+            if (owner, category, ref) in owned:
+                continue
+            owned.add((owner, category, ref))
+            for section, address, size in span_lists[ref]:
                 spans[(address, size)] = min(spans.get((address, size), (owner, section, category)),
                                              (owner, section, category))
         for owner, (category, _diagnostic, _label, found) in data_only.items():

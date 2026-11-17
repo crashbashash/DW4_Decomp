@@ -23,6 +23,7 @@ one name, tools/kpatch.py `functions`).
   python3 tools/sourceapprovals.py --stale    # rows whose function no longer uses what they approve
 """
 import argparse
+import bisect
 import functools
 import srctext
 import os
@@ -111,10 +112,10 @@ def _use_sites(text):
 def _reaching_count(text, name):
     """`_count(_reachable_text(text, name))` without scanning the text again for each of a library unit's
     thousands of members: a use reaches the function when the reachable text still holds its first character."""
-    reachable = _reachable_text(text, name)
+    reach = _Reach(text, name)
     asm, volatile = _use_sites(text)
-    return (sum(1 for at in asm if reachable[at] == text[at]),
-            sum(1 for at in volatile if reachable[at] == text[at]))
+    return (sum(1 for at in asm if _reachable_slice(text, reach, at, at + 1) == text[at]),
+            sum(1 for at in volatile if _reachable_slice(text, reach, at, at + 1) == text[at]))
 
 
 def _reachable_text(text, name):
@@ -122,41 +123,83 @@ def _reachable_text(text, name):
     helpers it reaches by name: those are compiled into it. A file-scope declaration or macro
     stays only when the function or a kept helper names something it declares, directly or through
     a type definition or macro it reaches (C keywords aside, so a shared type name keeps it): a `volatile`
-    global reaches the functions that use it, and a `volatile` member the functions that reach its type."""
-    defs, bodies, statements, blanked = _reach_plan(text)
-    if not defs:
-        return text
-    if name not in bodies:
-        raise KeyError("%s is not defined here" % name)
-    keep, pending = {name}, [name]
-    while pending:
-        for word in bodies[pending.pop()][2]:
-            if word in bodies and word not in keep and bodies[word][4]:
-                keep.add(word)
-                pending.append(word)
-    used = set()
-    for nm in keep:
-        used.update(bodies[nm][3])
-    reached, grew = set(), True
-    while grew:
-        grew = False
-        for k, (_s, _e, keys, passes) in enumerate(statements):
-            if k not in reached and keys & used:
-                reached.add(k)
-                used |= passes
-                grew = True
-    gone = sorted([(s, e) for nm, s, e in defs if nm not in keep]
-                  + [(s, e) for k, (s, e, _keys, _passes) in enumerate(statements) if k not in reached])
-    out, at = [], 0
-    for s, e in gone:
-        if e <= at:
-            continue
-        s = max(s, at)
-        out.append(text[at:s])
-        out.append(blanked[s:e])
-        at = e
-    out.append(text[at:])
+    global reaches the functions that use it, and a `volatile` member the functions that reach its type.
+    Blanking keeps newlines and spaces out every other character, so offsets still index `text`."""
+    return _reachable_slice(text, _Reach(text, name), 0, len(text))
+
+
+def _reachable_slice(text, reach, start, end):
+    """`_reachable_text(text, name)[start:end]`, given `_Reach(text, name)`, without building the whole text: a
+    library unit's thousands of members each ask about a few offsets of a text of megabytes."""
+    if reach.plan is None:
+        return text[start:end]
+    starts, spans, reach_end = reach.plan[4]
+    out, at = [], max(0, start)
+    end = min(end, len(text))
+    while at < end:
+        # the spans that can hold `at` start at or before it and end after it: walk back from the last
+        # one starting at or before it while some span so far still ends after it
+        k = bisect.bisect_right(starts, at) - 1
+        gone_to = None
+        while k >= 0 and reach_end[k] > at:
+            s, e, definition, statement = spans[k]
+            if e > at and (definition not in reach.keep if statement is None else statement not in reach.reached()):
+                gone_to = e if gone_to is None else max(gone_to, e)
+            k -= 1
+        if gone_to is None:
+            # kept up to the next span's start
+            k = bisect.bisect_right(starts, at)
+            stop = min(end, starts[k]) if k < len(starts) else end
+            out.append(text[at:stop])
+        else:
+            stop = min(end, gone_to)
+            out.append(_NOT_NEWLINE.sub(" ", text[at:stop]))
+        at = stop
     return "".join(out)
+
+
+class _Reach:
+    """What function `name` reaches in `text` (see `_reachable_text`): `keep`, the definitions kept (itself and
+    the inline helpers it names), and `reached()`, the file-scope statements reached, worked out on first
+    use (a use inside a definition needs only `keep`). `plan` is None when the text defines nothing."""
+
+    def __init__(self, text, name):
+        self.plan = _reach_plan(text)
+        self._reached = None
+        defs, bodies = self.plan[:2]
+        if not defs:
+            self.plan, self.keep = None, set()
+            return
+        if name not in bodies:
+            raise KeyError("%s is not defined here" % name)
+        keep, pending = {name}, [name]
+        while pending:
+            for word in bodies[pending.pop()][2]:
+                if word in bodies and word not in keep and bodies[word][4]:
+                    keep.add(word)
+                    pending.append(word)
+        self.keep = keep
+
+    def reached(self):
+        if self._reached is None:
+            _defs, bodies, statements, by_key, _spans = self.plan
+            # a statement is reached when one of its keys is used; reaching it uses what it passes on
+            used, pending, reached = set(), [], set()
+            for nm in self.keep:
+                for word in bodies[nm][3]:
+                    if word not in used:
+                        used.add(word)
+                        pending.append(word)
+            while pending:
+                for k in by_key.get(pending.pop(), ()):
+                    if k not in reached:
+                        reached.add(k)
+                        for word in statements[k][3]:
+                            if word not in used:
+                                used.add(word)
+                                pending.append(word)
+            self._reached = reached
+        return self._reached
 
 
 _NOT_NEWLINE = re.compile(r"[^\n]")
@@ -164,12 +207,14 @@ _NOT_NEWLINE = re.compile(r"[^\n]")
 
 @functools.lru_cache(maxsize=64)
 def _reach_plan(text):
-    """What `_reachable_text` needs of one source text, built once: a library unit's thousands of members each
+    """What `_reach` needs of one source text, built once: a library unit's thousands of members each
     ask about the same text. -> (definitions, {name: (start, end, words, names, is inline)}, the file-scope
-    statements as (start, end, keys, passes), the text with everything but its newlines spaced out)."""
+    statements as (start, end, keys, passes), {key: [statement indices]}, the spans `_reachable_slice` looks
+    an offset up in: (their starts, [(start, end, definition name, None) or (start, end, None, statement
+    index)] in start order, the furthest end of each span and those before it))."""
     defs = units.definitions(text)
     if not defs:
-        return defs, {}, [], ""
+        return defs, {}, [], {}, ([], [], [])
     bodies = {}
     for nm, s, e in defs:
         body = _blank(text[s:e])
@@ -191,7 +236,18 @@ def _reach_plan(text):
             # a variable or function declaration passes on its type names, not its parameter names
             keys, passes = words, set(_NAME.findall(_unnest(body, "()"))) - _C_KEYWORDS
         statements.append((s, e, keys, passes))
-    return defs, bodies, statements, _NOT_NEWLINE.sub(" ", text)
+    by_key = {}
+    for k, (_s, _e, keys, _passes) in enumerate(statements):
+        for key in keys:
+            by_key.setdefault(key, []).append(k)
+    spans = sorted([(s, e, nm, None) for nm, s, e in defs]
+                   + [(s, e, None, k) for k, (s, e, _keys, _passes) in enumerate(statements)],
+                   key=lambda span: (span[0], span[1]))
+    reach_end, furthest = [], -1
+    for span in spans:
+        furthest = max(furthest, span[1])
+        reach_end.append(furthest)
+    return defs, bodies, statements, by_key, ([span[0] for span in spans], spans, reach_end)
 
 
 _C_KEYWORDS = frozenset(
@@ -338,18 +394,20 @@ def uses(path, name):
     """{"asm": n, "volatile": n} reaching function `name` as defined in `path`."""
     if not in_scope(path):
         return {"asm": 0, "volatile": 0, "asm-function": 0}
-    text, counted, _offsets = _source(path)
+    text, _offsets, asm_bodies = _source(path)
     # blanking only removes text, so a source with nothing to count has nothing to count for any of its
     # functions; a whole library unit holds thousands, and its reachable text is costly to build
+    counted = bool(_USE_WORD.search(text)) and _text_count(text) != (0, 0)
     a, v = _reaching_count(text, name) if counted else (0, 0)
-    return {"asm": a, "volatile": v, "asm-function": int(name in unitprofiles.asm_body_names(path))}
+    return {"asm": a, "volatile": v, "asm-function": int(name in asm_bodies)}
 
 
 def _source(path):
-    """(text, whether it has anything to count, {header: offset}) of one source, read once per version of
-    the file: its project headers come first, as the preprocessor reads them, so a header's helpers,
-    macros and declarations reach a function the same way the file's own do, and the offsets place each
-    header in the text. A library unit's thousands of members would each expand and scan it again."""
+    """(text, {header: offset}, its asm bodies' names) of one source, read once per version of the file: its
+    project headers come first, as the preprocessor reads them, so a header's helpers, macros and declarations
+    reach a function the same way the file's own do, and the offsets place each header in the text. A library
+    unit's thousands of members would each expand it again (and stat each of its fragments again for
+    `unitprofiles.asm_body_names`)."""
     st = os.stat(path)
     stamp = (st.st_mtime_ns, st.st_size)
     hit = _source_cache.get(path)
@@ -361,8 +419,7 @@ def _source(path):
             parts.append(header_text + "\n")
             at += len(header_text) + 1
         text = "".join(parts) + own
-        counted = bool(_USE_WORD.search(text)) and _text_count(text) != (0, 0)
-        hit = _source_cache[path] = (stamp, (text, counted, offsets))
+        hit = _source_cache[path] = (stamp, (text, offsets, unitprofiles.asm_body_names(path)))
     return hit[1]
 
 
@@ -446,14 +503,14 @@ def approved_statements(paths, rows=None):
             for source, source_text in sources:
                 if source.endswith((".h", ".hpp")) or not in_scope(source):
                     continue
-                combined, _counted, offsets = _source(source)
+                combined, offsets, _asm_bodies = _source(source)
                 at = offsets.get(header)
                 if at is None:
                     continue
                 for name in _callers(source_text):
-                    reachable = _reachable_text(combined, name)
+                    reaching = _Reach(combined, name)
                     for start in found:
-                        if reachable[at + start:at + start + 3] == text[start:start + 3]:
+                        if _reachable_slice(combined, reaching, at + start, at + start + 3) == text[start:start + 3]:
                             reach[start].append((source, name))
             for start in found:
                 if reach[start] and all(_covered(source, name, rows, aliases) for source, name in reach[start]):
@@ -461,9 +518,9 @@ def approved_statements(paths, rows=None):
             continue
         reach = {start: [] for start in found}
         for name in _callers(text):
-            reachable = _reachable_text(text, name)
+            reaching = _Reach(text, name)
             for start in found:
-                if reachable[start:start + 3] == text[start:start + 3]:
+                if _reachable_slice(text, reaching, start, start + 3) == text[start:start + 3]:
                     reach[start].append(name)
         for start in found:
             if reach[start] and all(_covered(path, name, rows, aliases) for name in reach[start]):

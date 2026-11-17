@@ -50,6 +50,7 @@ import datamap
 import kpatch
 import srctext
 import declarations
+import forkpool
 import re
 import statistics
 import sys
@@ -243,10 +244,12 @@ def collect():
     syms = load_symbols()
     paths = have_src_paths()
     approvals = sourceapprovals.load()
-    asm_functions = {s[2] for s in syms if s[2] in paths and is_asm_body(s[2], paths[s[2]])
-                     and sourceapprovals.approved_asm_function(paths[s[2]], s[2], approvals)}
-    asm_body = [s for s in syms if s[2] in paths and is_asm_body(s[2], paths[s[2]])
-                and s[2] not in asm_functions]
+    # once per file: a library unit's thousands of members share one answer, and each call stats its fragments
+    asm_names = {path: asm_body_names(path) for path in set(paths.values())}
+    asm_body_all = [s for s in syms if s[2] in paths and s[2] in asm_names[paths[s[2]]]]
+    asm_functions = {s[2] for s in asm_body_all
+                     if sourceapprovals.approved_asm_function(paths[s[2]], s[2], approvals)}
+    asm_body = [s for s in asm_body_all if s[2] not in asm_functions]
     asm_body_names_set = {s[2] for s in asm_body}
     # an owner-approved assembly source (tools/asmsources.py), or an MWCC `asm` function with an
     # `asm-function` row, is matched, but it is not C: it stays out of `matched` and the C/C++ figures
@@ -449,8 +452,13 @@ def collect():
         largest=[dict(va="0x%08x" % s[0], size=s[1], name=s[2]) for s in biggest],
         metadata=meta,
     )
-    d["debt"] = debt_summary(d, syms, matched, asm_body, paths, typed)
-    clear = readable(syms, paths)
+    # The two slowest parts read only committed files: they run side by side in forked workers
+    # (tools/forkpool.py), after the declaration index both read is built once here.
+    declarations.index(ROOT)
+    inline, clear = forkpool.imap(lambda job: job(), (inline_asm.counts, lambda: readable(syms, paths)),
+                                  min(2, forkpool.default_jobs()))
+    _READABLE.update(clear)
+    d["debt"] = debt_summary(d, syms, matched, asm_body, paths, typed, inline)
     d["readable"] = dict(functions=clear["functions"], bytes=clear["bytes"],
                          matched_functions=clear["matched_functions"], failing=clear["failing"])
     return d
@@ -651,8 +659,9 @@ def opt_pragmas():
     return n
 
 
-def debt_summary(d, syms, matched, asm_body, paths, typed):
-    """{counter: int|None} for every DEBT_COUNTERS entry, plus the recorded baseline."""
+def debt_summary(d, syms, matched, asm_body, paths, typed, inline):
+    """{counter: int|None} for every DEBT_COUNTERS entry, plus the recorded baseline. `inline` is
+    `inline_asm.counts()`."""
     from typed_coverage import strip_comments_and_strings
     cats = d["categories"]
     by, exc = cats["by"], cats["code_only_by_exc"]
@@ -671,7 +680,6 @@ def debt_summary(d, syms, matched, asm_body, paths, typed):
         c["code_only.%s.bytes" % r] = exc[r]["bytes"] if rec else None
     c["asm_body.functions"] = len(asm_body)
     c["asm_body.bytes"] = sum(s[1] for s in asm_body)
-    inline = inline_asm.counts()
     c["inline_asm.other"] = inline["other"]
     left = [s for s in syms if s[2] not in paths]
     c["unmatched.functions"] = len(left)

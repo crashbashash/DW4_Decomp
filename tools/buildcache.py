@@ -219,6 +219,7 @@ class Store:
         self.active = active
         self.entries = {}
         self.used = {}
+        self._sent = {}     # what take() handed over already: an entry many members share goes back once
         self.hits = self.misses = 0
         self._lock = threading.Lock()
         if active:
@@ -249,9 +250,14 @@ class Store:
             self.used[key] = value
 
     def take(self):
-        """What this process used and counted since the last call, forgotten here (tools/forkpool.py)."""
+        """What this process used and counted since the last call, forgotten here (tools/forkpool.py). An entry
+        handed over before with the same value is left out: the caller holds it already, and every member of a
+        whole-file unit reads its unit's one data-span list."""
         with self._lock:
-            taken = (self.used, self.hits, self.misses)
+            used = {key: value for key, value in self.used.items()
+                    if key not in self._sent or self._sent[key] != value}
+            self._sent.update(used)
+            taken = (used, self.hits, self.misses)
             self.used, self.hits, self.misses = {}, 0, 0
             return taken
 

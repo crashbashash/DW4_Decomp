@@ -199,6 +199,23 @@ class SourceApprovals(unittest.TestCase):
         self.assertEqual(sa.problem(path, "g", {}), "1 asm without an approval row; 1 volatile without an approval row")
         self.assertIsNone(sa.problem(path, "h", {}))
 
+    def test_a_slice_of_the_reachable_text_is_that_text_blanked_by_its_spans(self):
+        # what `_reachable_text` means, built the slow way: every definition not kept and every statement not
+        # reached spaced out, newlines kept; the counts read windows of it without building it
+        text = ('#define M(x) asm("nop")\ntypedef struct { volatile int n; } Q;\nextern Q q;\nextern volatile int v;\n'
+                "static inline int h(void) { return v; }\nint f(void) { M(1); return q.n + h(); }\n"
+                "int g(void) {\n  return 0;\n}\n")
+        for name in ("f", "g", "h"):
+            reach = sa._Reach(text, name)
+            defs, _bodies, statements = reach.plan[:3]
+            gone = [(s, e) for nm, s, e in defs if nm not in reach.keep]
+            gone += [(s, e) for k, (s, e, _keys, _passes) in enumerate(statements) if k not in reach.reached()]
+            expected = "".join(" " if c != "\n" and any(s <= i < e for s, e in gone) else c
+                               for i, c in enumerate(text))
+            self.assertEqual(sa._reachable_text(text, name), expected, name)
+            for start in range(len(text)):
+                self.assertEqual(sa._reachable_slice(text, reach, start, start + 3), expected[start:start + 3])
+
     def test_table_rows_are_checked(self):
         path = self.write("t.tsv", "volatile\tf\t1\t#x\n")
         self.assertEqual(sa.load(path), {("volatile", "f"): (1, "#x")})

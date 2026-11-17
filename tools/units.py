@@ -146,11 +146,12 @@ def _kr_head(clean, starts, brace):
 def definitions(text):
     """-> [(name, start, end)] top-level function definitions, in file order (see `_definitions`).
 
-    Kept per text: every member of a multi-function file asks for the same file's definitions."""
+    Kept per text: every member of a multi-function file asks for the same file's definitions, and one run of
+    tools/progress.py or tools/check.py asks for every file's several times over (about 550 distinct texts)."""
     return list(_cached_definitions(text))
 
 
-@functools.lru_cache(maxsize=32)
+@functools.lru_cache(maxsize=1024)
 def _cached_definitions(text):
     return tuple(_definitions(text))
 
@@ -303,6 +304,9 @@ def scan(src_dir="src", symbols="config/SLUS-20836/symbols.txt", unit_objects=No
     return unitobjects.augment_sources(out, symbols, unit_objects)
 
 
+_NOT_NEWLINE = re.compile(r"[^\n]")
+
+
 def extract(text, name):
     """`text` with every top-level definition except `name` blanked out.
 
@@ -310,19 +314,24 @@ def extract(text, name):
     prototypes and declarations.
     """
     kept = False
-    buf = list(text)
+    out, at = [], 0
     for nm, s, e in definitions(text):
         if nm == name:
             kept = True
             continue
         if re.search(r"\binline\b", text[s:text.index("{", s)]):
             continue
-        for k in range(s, e):
-            if buf[k] != "\n":
-                buf[k] = " "
+        # blanked in place: newlines stay, so line numbers and offsets do not move
+        if e <= at:
+            continue
+        s = max(s, at)
+        out.append(text[at:s])
+        out.append(_NOT_NEWLINE.sub(" ", text[s:e]))
+        at = e
     if not kept:
         raise KeyError("%s is not defined here" % name)
-    return "".join(buf)
+    out.append(text[at:])
+    return "".join(out)
 
 
 def standalone(path, name, symbols="config/SLUS-20836/symbols.txt", unit_objects=None):

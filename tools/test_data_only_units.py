@@ -8,6 +8,7 @@ import shutil
 import struct
 import tempfile
 import unittest
+from unittest import mock
 
 import check
 import eegcc_compile
@@ -242,6 +243,22 @@ class Check(Fixture):
         rc, out = self.run_check("--src", str(self.root / "src"), "--asm", str(self.root / "asm"))
         self.assertEqual(rc, 1)
         self.assertIn("data-only 0x%08x lib/fixture.c: its source" % self.DATA, out)
+
+    def test_changed_since_checks_only_the_units_the_change_reaches(self):
+        (self.root / "asm").mkdir()
+        (self.root / "src" / "lib" / "fixture.h").write_text("/* the fixture's header */\n")
+        (self.root / "src" / "lib" / "other.h").write_text("/* nobody includes this */\n")
+        self.compile('#include "fixture.h"\n' + DATA_SOURCE)
+        for header, reached in (("other.h", False), ("fixture.h", True)):
+            changed = {os.path.relpath(self.root / "src" / "lib" / header, check.ROOT), "tools/check.py"}
+            with mock.patch.object(check.changedunits, "changed_files", return_value=changed) as changed_files:
+                rc, out = self.run_check("--src", str(self.root / "src"), "--asm", str(self.root / "asm"),
+                                         "--changed-since", "main")
+            changed_files.assert_called_once_with("main", check.ROOT)
+            self.assertEqual(rc, 0, out)
+            self.assertIn("changed: 2 files since main reach %d source files (0 functions); not followed, run the full "
+                          "check for: tools/check.py" % reached, out)
+            self.assertEqual("data-only: 1 units" in out, reached, out)
 
 
 class Rows(Fixture):

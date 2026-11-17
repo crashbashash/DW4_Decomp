@@ -45,6 +45,11 @@ python3 tools/check.py --function 0xVA --cand src/<module>/<file>.c
 Every function in the file should print `MATCH`. If you change which functions a file holds, re-measure its
 rows with `tools/whole_file_rows.py` (its help text gives the command).
 
+While you work, `python3 tools/check.py --changed-since main` checks only the files your change reaches: each
+source that differs from `main` and each one that includes a changed header, however indirectly, so a header
+edit no longer means checking the whole game. It is not one of the four checks below, and it names any changed
+`config/` table or checking tool it cannot follow; those need `make check`.
+
 For a side-by-side view, run `make objdiff` and open the folder in
 [objdiff](https://github.com/encounter/objdiff).
 

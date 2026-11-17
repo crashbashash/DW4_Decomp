@@ -7,7 +7,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | Tool | Purpose |
 | --- | --- |
 | [`download_tools.py`](download_tools.py) | fetch wibo, the pinned MWCC and EE GCC builds into `local/` and verify their SHA-256; build a host `luac` from the verified Lua 4.0.1 tarball for `scripts/lua_roundtrip.py` |
-| [`check.py`](check.py) | coverage and correctness for the matching-decompilation build |
+| [`check.py`](check.py) | coverage and correctness for the matching-decompilation build; `--changed-since REV` checks only the units a change since REV reaches (the edit-verify loop of a slice, not a gate) |
 | [`verify.py`](verify.py) | verify a candidate C function against the retail binary, WITH relocations |
 | [`linkgen.py`](linkgen.py) | build the relink inputs from config/SLUS-20836/layout.txt |
 | [`linkcheck.py`](linkcheck.py) | compare a relinked section against the retail binary |
@@ -18,6 +18,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`split.py`](split.py) | lay out the retail code and emit one assembly unit per function |
 | [`buildcache.py`](buildcache.py) | a content-addressed result cache for tools/check.py and tools/linkgen.py |
 | [`forkpool.py`](forkpool.py) | run a sweep of tools/check.py or tools/linkgen.py in forked worker processes, so its Python work uses every core |
+| [`changedunits.py`](changedunits.py) | the files changed since a git revision (committed, staged or not, new) and the translation units whose source or transitive `#include`s they touch, for `check.py --changed-since` |
 | [`units.py`](units.py) | resolve a symbol to its definition in a multi-function source file |
 | [`srctext.py`](srctext.py) | read a source as the compiler sees it, with a unity-built unit's `#include "src/..."` fragments expanded |
 | [`asmsources.py`](asmsources.py) | the owner-approved hand-written `.S` sources in `src/` (`config/assembly-sources.tsv`); refuses any other |

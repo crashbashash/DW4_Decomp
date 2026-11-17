@@ -81,6 +81,19 @@ class Shared(unittest.TestCase):
             self.assertEqual((store.hits, store.misses), (1, 5))
             self.assertEqual(store.used, dict({"hit": {"v": 1}}, **{"k%d" % n: {"v": n} for n in range(1, 6)}))
 
+    def test_an_entry_already_handed_over_is_not_sent_again_unless_it_changed(self):
+        store = buildcache.Store("forkpool-test", active=False)
+        store.active = True
+        store.entries = {"spans": [1, 2]}
+        store.get("spans")
+        store.put("k1", {"v": 1})
+        self.assertEqual(store.take(), ({"spans": [1, 2], "k1": {"v": 1}}, 1, 0))
+        store.get("spans")
+        store.put("k2", {"v": 2})
+        self.assertEqual(store.take(), ({"k2": {"v": 2}}, 1, 0))
+        store.put("k1", {"v": 3})
+        self.assertEqual(store.take(), ({"k1": {"v": 3}}, 0, 0))
+
     def test_the_unit_result_marker_unpickles_as_itself(self):
         self.assertIs(pickle.loads(pickle.dumps(verify._NOT_SHARED)), verify._NOT_SHARED)
 

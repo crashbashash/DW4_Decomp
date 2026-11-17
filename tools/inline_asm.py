@@ -25,11 +25,12 @@ _START = re.compile(r"(?:__asm__|__asm|\basm)\s*(?:volatile|__volatile__)?\s*([{
 _COMMENT = re.compile(r"/\*.*?\*/|//[^\n]*", re.S)
 # `sync`, `ei`, or a statement of nothing else, as the SDK's `ExitHandler()` writes `"sync\nei\n"`
 _HARDWARE = re.compile(r"^(?:sync|ei)(?:(?:\\n|;|\s)+(?:sync|ei))*(?:\\n|;|\s)*$")
+_NOT_NEWLINE = re.compile(r"[^\n]")
 
 
 def blank_comments(text):
     """The text with comments spaced out, so offsets still index the original."""
-    return _COMMENT.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), text)
+    return _COMMENT.sub(lambda m: _NOT_NEWLINE.sub(" ", m.group(0)), text)
 
 
 def _close(text, i):
