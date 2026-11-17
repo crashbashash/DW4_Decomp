@@ -11,17 +11,17 @@ int adxmsg_level = 0;
 
 int vsprintf(char *buffer, const char *format, va_list args);
 
-int FUN_00265868(void) {
+int ADXPS2_GetOutputDebugLevel(void) {
     return adxmsg_level;
 }
 
-void FUN_00265878(int level) {
+void ADXPS2_SetOutputDebugLevel(int level) {
     adxmsg_level = level;
     htCiSetOutputDebugLevel(level);
     dvCiSetOutputDebugLevel(level);
 }
 
-void FUN_002658a8(const char *format, ...) {
+void ADXPS2_PrintfErr(const char *format, ...) {
     char buffer[128];
     va_list args;
     va_start(args, format);
@@ -32,7 +32,7 @@ void FUN_002658a8(const char *format, ...) {
     va_end(args);
 }
 
-void FUN_00265928(const char *format, ...) {
+void ADXPS2_PrintfWarn(const char *format, ...) {
     char buffer[128];
     va_list args;
     va_start(args, format);

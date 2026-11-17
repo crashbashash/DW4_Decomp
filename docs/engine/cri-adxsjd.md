@@ -26,8 +26,14 @@ skip count, each under the ADX critical section.
 
 ## Open questions
 
-- No string names the functions: their names follow CRI's `ADXSJD_` / `adxsjd_` spelling from what each does
-  and from ADXB's matching calls, and stay best guesses.
+- No string names the functions. CRI's names come from the 2002 SDK's `adx_sjd.o`
+  ([recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)) and the Street Fighter III 3rd Strike
+  libadxe ([3s-decomp](https://github.com/crowded-street/3s-decomp)) where they agree (`adxsjd_decode_exec`,
+  `ADXSJD_GetBlkLen`, `ADXSJD_GetCof`, `ADXSJD_GetLpInsNsmpl`); medium: `adxsjd_insert_proc` and
+  `adxsjd_discard_proc` from the CRI names the Persona 4 decompilation matched in unstripped PS2 builds
+  ([Raikaru/Persona4-Decompilation](https://github.com/Raikaru/Persona4-Decompilation), `docs/cri/proven_names.json`),
+  and `ADXSJD_SetDefExtString` by 3rd Strike's order. The other entries follow CRI's `ADXSJD_` / `adxsjd_`
+  spelling from what each does and stay best guesses.
 - Five ADXB getters are declared returning `int` here: their wrappers tail-call them, which a `short` or
   `char` return would not allow; `src/cri/adxb.c` defines them with the narrower types.
 - The reset (`0x265fb0`) and the counter update (`0x266be0`) keep the permuter-found constructs their drafts

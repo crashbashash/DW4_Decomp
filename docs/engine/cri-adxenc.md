@@ -12,7 +12,7 @@ encoders of 0x2f8 bytes, 16 predictors and 16 filters, derives the encryption ke
 | part | range | evidence |
 | --- | --- | --- |
 | code | `0x2674e8` up to `0x269c30` | one call cluster: the API near the end calls the init and key functions at the start; the functions from `0x269c30` use the next module's data |
-| read-only data | `0x4ee3e8` up to `0x4ee460` | `CRI-MW`, the version string, the DLL name, two `32767.0` constants and `(c)CRI`; the next module's `adxstmf_stat_exec` message follows |
+| read-only data | `0x4ee3e8` up to `0x4ee460` | `CRI-MW`, the version string, the DLL name, two `32767.0` constants and `(c)CRI`; the next module's `ADXSTMF_ExecHndl` message follows |
 | data | `0x4a5d58` up to `0x4a7ef0` | the init count, the error callback and its object, the build-string pointer, the maximum scale, the `(c)CRI` pointer, then the encoder, predictor and filter tables, which end where the next module's data begins |
 
 Compiling the file whole matters: the block encoder at `0x268960` matches only with the two functions it calls
@@ -40,8 +40,23 @@ four bytes back.
 
 ## Open questions
 
-- The functions have no names from strings beyond the module's; the fields are named from use.
-- The first function, at `0x2674e8`, is an unreferenced `return 0` that could instead end the ADXB wrappers
-  before it.
+- The functions have no names from strings beyond the module's; the fields are named from use. CRI's names
+  come from the 2002 SDK's `adx_sje.o` ([recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri))
+  and the CRI names the Persona 4 decompilation matched in unstripped PS2 builds
+  ([Raikaru/Persona4-Decompilation](https://github.com/Raikaru/Persona4-Decompilation), `docs/cri/proven_names.json`).
+  Medium: `adxsje_output_sdata`, `ADXSJE_SetExtString` (SDK order), and the AINF setters
+  `ADXSJE_SetAinfOutputVol`, `ADXSJE_SetAinfOutputPan`, `ADXSJE_SetAinfDataId`, `ADXSJE_ClearAinf` and
+  `ADXSJE_SetCommonInf` (that list, same order; it also has an `ADXSJE_SetAinfDataIdMem` this build lacks).
+  The data take the SDK's names: `adxkey_init_cnt`, `AdxGainDataMax`, `cri_str`, `adxsje_obj`; the two error
+  callback words are named like them from use (`adxkey_err_func`, `adxkey_err_obj`). The two strings around the
+  build string are extern names of their text (`CRI_MW`, `text_ADXENC_DLL_Ver_1_09_Oct_6_2004`): written as
+  literals they would precede the build string, which no function of the file reads, and the file defines none
+  of its data, so the build string has no place in its source yet.
+- The file opens with a static copy of the SKG key functions under the SDK's `ADXKEY_` prefix: `ADXKEY_NopFunc`,
+  `ADXKEY_EntryErrFunc`, `ADXKEY_CallErrFunc`, `ADXKEY_Init`, `ADXKEY_Finish`, `ADXKEY_GenerateKey`,
+  `ADXKEY_GetDefKey`, `ADXKEY_GetNextKey`. `ADXKEY_Init`, `ADXKEY_Finish`, `ADXKEY_GenerateKey` and
+  `ADXKEY_GetDefKey` are the SDK's own static names in this file; the other four are the SKG library's names in
+  that prefix (medium; alternative: the SKG names with a file prefix, as the RE4 GameCube table spells this
+  file's copy of the SKG data `skg_*`).
 - The block encoder at `0x268188` matches only with the sample filter at `0x267e50` defined above it in the
   file: with the filter only declared, one branch becomes `blezl`.

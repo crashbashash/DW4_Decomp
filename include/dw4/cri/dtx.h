@@ -11,6 +11,9 @@ typedef struct DtxObj DtxObj;
 
 typedef void (*DtxCbf)(void *obj, void *buf, int size);
 
+/* nonzero: DTX_ExecHndl sends to the IOP; ADXT_Init and ADXT_Finish switch it */
+extern int dtx_send_sw;
+
 DtxObj *DTX_Open(unsigned int id);
 void DTX_Close(DtxObj *dtx);
 DtxObj *DTX_Create(unsigned int id, char *eewk, int iopwk, int wklen);

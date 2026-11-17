@@ -68,14 +68,11 @@ static char htci_root_dir[264];
 static char htci_prefix[40];
 static char htci_dir_buf[4096];
 
-void FUN_00265928(const char *format, ...);
-
-
 long htCiGetFileSize64(const char *fname);
 void htCiStopTr(HtCiFile *h);
 int htCiGetStat(HtCiFile *h);
 void htci_conv_fname(const char *name, char *out);
-int FUN_00276440(char *buf, char *list, int n, int nameLen);
+int htci_analysis_flist(char *buf, char *list, int n, int nameLen);
 int open_file_all(HtCiFileLoc *files, int n);
 int close_file_all(void);
 void htci_init_flist(void);
@@ -328,7 +325,7 @@ HtCiFile *htCiOpen(const char *fname, void *atr, int rw)
     htci_get_finf(fname, &loc);
     if (loc.size == 0) {
         htci_conv_fname(fname, htci_path);
-        FUN_00265928("HTCI: File cache was not hit. \"%s\"\n", fname);
+        ADXPS2_PrintfWarn("HTCI: File cache was not hit. \"%s\"\n", fname);
         h->size = htCiGetFileSize64(fname);
         if (h->size == 0) {
             return 0;
@@ -369,7 +366,7 @@ void htCiClose(HtCiFile *h)
             result = SRD_SceClose(h->fd);
             SRD_SetHistory(0x5001);
             if (result < 0) {
-                FUN_00265928("HTCI: Failed sceClose\n");
+                ADXPS2_PrintfWarn("HTCI: Failed sceClose\n");
             }
         }
         h->used = 0;
@@ -663,7 +660,7 @@ int htci_stricmp(const char *a, const char *b)
     return 0;
 }
 
-int FUN_00276440(char *buf, char *list, int n, int nameLen)
+int htci_analysis_flist(char *buf, char *list, int n, int nameLen)
 {
     int i;
     int start;
@@ -776,13 +773,13 @@ int open_file_all(HtCiFileLoc *files, int n)
         SRD_SetHistory(0x6601);
         if (fd < 0) {
             failed++;
-            FUN_00265928("HTCI: \"%s\" can't Open.(sceOpen)\n", path);
+            ADXPS2_PrintfWarn("HTCI: \"%s\" can't Open.(sceOpen)\n", path);
             continue;
         }
         files[i].fd = fd;
         opened++;
         files[i].size = htci_get_fsize_opened(fd);
-        FUN_00265928("HTCI: \"%s\" Opened.(sceOpen)\n", name);
+        ADXPS2_PrintfWarn("HTCI: \"%s\" Opened.(sceOpen)\n", name);
         SRD_SetHistory(0x6800);
         SRD_SceClose(fd);
         SRD_SetHistory(0x6801);
@@ -790,7 +787,7 @@ int open_file_all(HtCiFileLoc *files, int n)
         SRD_SceOpen(path, htci_open_mode);
         SRD_SetHistory(0x6701);
     }
-    FUN_00265928("HTCI: Total %d files.\n", opened);
+    ADXPS2_PrintfWarn("HTCI: Total %d files.\n", opened);
     if (failed > 0) {
         ADXMSG_PrintErr("HTCI: Error, Can't load all cache file.%c", 10);
     }
@@ -863,7 +860,7 @@ void htci_get_finf(const char *name, HtCiFileLoc *loc)
     }
 }
 
-int htCiLoadDirInfo(const char *path, void *buf, unsigned int size, int nameLen)
+int htCiLoadFcache(const char *path, void *buf, unsigned int size, int nameLen)
 {
     int n;
     int found;
@@ -877,20 +874,20 @@ int htCiLoadDirInfo(const char *path, void *buf, unsigned int size, int nameLen)
         return 0;
     }
     if (buf == 0) {
-        FUN_00265928("HTCI: Invalidate filelist buffer pointer.\r\n", 0);
+        ADXPS2_PrintfWarn("HTCI: Invalidate filelist buffer pointer.\r\n", 0);
         return 0;
     }
     if (size == 0) {
-        FUN_00265928("HTCI: Invalidate filelist buffer size.\r\n", 0);
+        ADXPS2_PrintfWarn("HTCI: Invalidate filelist buffer size.\r\n", 0);
         return 0;
     }
     memset(buf, 0, size);
     if (htci_load_flist(path, htci_dir_buf) == 0) {
-        FUN_00265928("HTCI: Can't read filelist file.(%s)\n", path);
+        ADXPS2_PrintfWarn("HTCI: Can't read filelist file.(%s)\n", path);
         htci_call_errfn(0, "E0111501:can't read filelist.(htCiLoadDirInfo)");
         return 0;
     }
-    n = FUN_00276440(buf, htci_dir_buf, size / (nameLen + 9), nameLen);
+    n = htci_analysis_flist(buf, htci_dir_buf, size / (nameLen + 9), nameLen);
     stride = nameLen + 1;
     found = open_file_all(buf, n);
     return size / (nameLen + 9) * 8 + found * stride;

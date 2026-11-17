@@ -978,7 +978,7 @@ int cvFsSetCurVolume(const char *devname, void *image)
     return -1;
 }
 
-int FUN_00270f68(void)
+int cvFsAddVolume(void)
 {
     return 0;
 }

@@ -73,7 +73,7 @@ void mfci_call_errfn(void *detail, const char *message)
     }
 }
 
-unsigned long FUN_00277e18(const char *s, char **end, int base)
+unsigned long mfci_strtoul(const char *s, char **end, int base)
 {
     return strtoul(s, end, base);
 }
@@ -92,12 +92,12 @@ char *mfci_get_adr_size(char *name, int *size)
         mfci_call_errfn(0, mfci_msg);
     }
     p = name;
-    data = (char *)FUN_00277e18(p, &p, 16);
+    data = (char *)mfci_strtoul(p, &p, 16);
     if (*p != 0) {
         p++;
     }
     if (size != 0) {
-        *size = FUN_00277e18(p, &p, 16);
+        *size = mfci_strtoul(p, &p, 16);
     }
     return data;
 }

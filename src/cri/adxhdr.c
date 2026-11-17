@@ -129,7 +129,7 @@ void adxhdr_get_ply_prm(unsigned char *src, AdxChannelInfo *dst)
     }
 }
 
-int FUN_00262d30(void *data, int size, int *hdrSize, AdxHeader *hdr)
+int ADX_DecodeHeader(void *data, int size, int *hdrSize, AdxHeader *hdr)
 {
     unsigned char *buf = data;
     int sig;
@@ -243,7 +243,7 @@ void ADXT_GetHdrInfo(void *buf, int size, AdxtHdrInfo *out)
     }
     memset(&info, 0, sizeof(info));
     memset(&hdr, 0, sizeof(hdr));
-    ret = FUN_00262d30(buf, size, work, &hdr);
+    ret = ADX_DecodeHeader(buf, size, work, &hdr);
     if (ret == -4) {
         ADXERR_CallErrFunc1("E02041201: Can not get header information.(ADXT_GetHdrInfo)");
         return;

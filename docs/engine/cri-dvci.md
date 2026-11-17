@@ -26,8 +26,19 @@ one function's load and test come out in another order.
 
 ## Open questions
 
-- The functions are named from use beyond the `dvCi` names the messages give.
+- The functions are named from use beyond the `dvCi` names the messages give, and from the Street Fighter III
+  3rd Strike libadxe ([3s-decomp](https://github.com/crowded-street/3s-decomp)) and the 2002 SDK's `dvci_sub.o`
+  ([recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)). `dvCiLoadFcache` is both sources'
+  name; its message still says `dvCiLoadDirInfo`, as the 3rd Strike body's does, so the text is older than the
+  name. Medium: `dvCiSetFcache` (the in-memory list twin, also in the CRI names the Persona 4 decompilation
+  matched in unstripped PS2 builds, [Raikaru/Persona4-Decompilation](https://github.com/Raikaru/Persona4-Decompilation)),
+  `dvci_get_fstate` (3rd Strike's body plus a branch for sector names) and `dvci_analysis_flist` (3rd Strike's
+  `analysis_flist`, prefixed like `dvci_conv_cmp` because HTCI has its own). Medium from behaviour:
+  `dvci_is_lsn_fname` (a 17-character name with a dot at 8; alternative `dvci_is_sector_fname`) and
+  `dvci_get_lsn_fname`, which reads the LSN and sector count from such a name.
 - Four helpers that `0x2744f8` calls are defined old-style and called without arguments, as in HTCI: retail
   never loads their argument register at those calls.
 - The five 20-byte SRD wrappers at `0x2752f8` up to `0x27536c` are called from game code and reference
-  nothing that places them; their file is unknown.
+  nothing that places them. 3rd Strike's order makes the first, `dvCiSetSeekPos`, the end of `dvci_sub` and
+  the other four (`htCiSetFileSystem64`, `htCiGetFileSystem64`, `htCiSetLockHost`, `htCiGetLockHost`, medium
+  by that order and their SRD callees) the start of `htci`.

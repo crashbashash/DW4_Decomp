@@ -90,51 +90,51 @@ struct AdxEnc {
     int cinf_len;               /* 0x2f4 */
 };
 
-extern int skg_init_count;
-extern void (*DAT_004a5d5c)(void *obj, const char *msg);
-extern void *DAT_004a5d60;
-extern int DAT_004a5d68;
-extern char *DAT_004a5d6c;
-extern AdxEnc DAT_004a5d70[8];
+extern int adxkey_init_cnt;
+extern void (*adxkey_err_func)(void *obj, const char *msg);
+extern void *adxkey_err_obj;
+extern int AdxGainDataMax;
+extern char *cri_str;
+extern AdxEnc adxsje_obj[8];
 extern AdxEncPredictor adxsje_iirflt_obj[16];
 extern AdxEncFilter adxsje_prdflt_obj[16];
-extern const char DAT_004ee3e8[];
-extern const char DAT_004ee428[];
+extern const char CRI_MW[];
+extern const char text_ADXENC_DLL_Ver_1_09_Oct_6_2004[];
 
 int abs(int value);
 int adxsje_calc_rsig(AdxEnc *e, int ch);
 void adxsje_set_rsig(AdxEnc *e, int ch);
 int adxsje_output_header(AdxEnc *e, SfdSj *out);
 
-int FUN_002674e8(void)
+int ADXKEY_NopFunc(void)
 {
     return 0;
 }
 
-int FUN_002674f0(void (*func)(void *obj, const char *msg), void *obj)
+int ADXKEY_EntryErrFunc(void (*func)(void *obj, const char *msg), void *obj)
 {
-    DAT_004a5d5c = func;
-    DAT_004a5d60 = obj;
+    adxkey_err_func = func;
+    adxkey_err_obj = obj;
     return 0;
 }
 
-int FUN_00267508(const char *msg)
+int ADXKEY_CallErrFunc(const char *msg)
 {
-    if (DAT_004a5d5c != 0) {
-        DAT_004a5d5c(DAT_004a5d60, msg);
+    if (adxkey_err_func != 0) {
+        adxkey_err_func(adxkey_err_obj, msg);
     }
     return 0;
 }
 
-int FUN_00267540(void)
+int ADXKEY_Init(void)
 {
-    skg_init_count += 1;
+    adxkey_init_cnt += 1;
     return 0;
 }
 
-int FUN_00267560(void)
+int ADXKEY_Finish(void)
 {
-    skg_init_count -= 1;
+    adxkey_init_cnt -= 1;
     return 0;
 }
 
@@ -145,8 +145,8 @@ int ADXKEY_GenerateKey(const char *str, int len, unsigned short *k0, unsigned sh
     short b;
     short c;
 
-    if (skg_init_count == 0) {
-        FUN_00267540();
+    if (adxkey_init_cnt == 0) {
+        ADXKEY_Init();
     }
     *k0 = 0;
     *k1 = 0;
@@ -174,14 +174,14 @@ int ADXKEY_GenerateKey(const char *str, int len, unsigned short *k0, unsigned sh
 
 int ADXKEY_GetDefKey(unsigned short *k0, unsigned short *k1, unsigned short *k2)
 {
-    if (skg_init_count == 0) {
-        FUN_00267540();
+    if (adxkey_init_cnt == 0) {
+        ADXKEY_Init();
     }
-    ADXKEY_GenerateKey(DAT_004ee3e8, 6, k0, k1, k2);
+    ADXKEY_GenerateKey(CRI_MW, 6, k0, k1, k2);
     return 0;
 }
 
-int SKG_GetNextKey(unsigned short *x, unsigned short *mul, unsigned short *add)
+int ADXKEY_GetNextKey(unsigned short *x, unsigned short *mul, unsigned short *add)
 {
     *x = *x * *mul + *add;
     return 0;
@@ -194,7 +194,7 @@ int ADXSJE_GetVersion(void)
 
 const char *ADXSJE_GetVerStr(void)
 {
-    return DAT_004ee428;
+    return text_ADXENC_DLL_Ver_1_09_Oct_6_2004;
 }
 
 int adxsje_nsmpl_to_ofst(int count, int base, int bits)
@@ -438,7 +438,7 @@ void pflt_calc_gain(AdxEncFilter *f)
     int n;
 
     n = (f->peak - 1) / 7 + 1;
-    scale = (n < DAT_004a5d68) ? n : DAT_004a5d68;
+    scale = (n < AdxGainDataMax) ? n : AdxGainDataMax;
     scale = (scale < 1) ? 1 : scale;
     f->scale = scale;
     if (f->peak == 0) {
@@ -628,7 +628,7 @@ int adxsje_encode_blk(AdxEnc *e)
     return e->blklen;
 }
 
-int FUN_00268830(AdxEnc *e)
+int adxsje_output_sdata(AdxEnc *e)
 {
     int *blk;
     SfdSj *sj;
@@ -670,7 +670,7 @@ int adxsje_encode_data(AdxEnc *e)
         if (adxsje_encode_blk(e) == 0) {
             break;
         }
-        total += FUN_00268830(e);
+        total += adxsje_output_sdata(e);
     } while (e->pos < e->end);
     return total;
 }
@@ -730,7 +730,7 @@ int adxsje_output_header(AdxEnc *e, SfdSj *sj)
     int len;
     int i;
 
-    crilen = strlen(DAT_004a5d6c);
+    crilen = strlen(cri_str);
     sj->vtbl->getChunk(sj, 0, 0x7fffffff, &ck);
     room = ck.len;
     sj->vtbl->ungetChunk(sj, 0, &ck);
@@ -835,7 +835,7 @@ int adxsje_output_header(AdxEnc *e, SfdSj *sj)
     while (len < padlen) {
         ADXSJE_PUT(&i1, 1, 1);
     }
-    ADXSJE_PUT(DAT_004a5d6c, 1, crilen);
+    ADXSJE_PUT(cri_str, 1, crilen);
     return len + 4;
 err:
     return 0;
@@ -843,14 +843,14 @@ err:
 
 void ADXSJE_Init(void)
 {
-    FUN_00267540();
-    memset(DAT_004a5d70, 0, sizeof(DAT_004a5d70));
+    ADXKEY_Init();
+    memset(adxsje_obj, 0, sizeof(adxsje_obj));
 }
 
 void ADXSJE_Finish(void)
 {
-    FUN_00267560();
-    memset(DAT_004a5d70, 0, sizeof(DAT_004a5d70));
+    ADXKEY_Finish();
+    memset(adxsje_obj, 0, sizeof(adxsje_obj));
 }
 
 /* Takes a free encoder for nch input streams and one output stream, with the defaults: 4-bit ADX at 44100 Hz
@@ -862,14 +862,14 @@ AdxEnc *ADXSJE_Create(int nch, SfdSj **in, SfdSj *out)
     int j;
 
     for (i = 0; i < 8; i++) {
-        if (DAT_004a5d70[i].used == 0) {
+        if (adxsje_obj[i].used == 0) {
             break;
         }
     }
     if (i == 8) {
         return 0;
     }
-    e = &DAT_004a5d70[i];
+    e = &adxsje_obj[i];
     e->nch_b = nch;
     for (j = 0; j < nch; j++) {
         e->in[j] = in[j];
@@ -1047,7 +1047,7 @@ void ADXSJE_SetLpEndOfst(AdxEnc *e, int v)
     e->f124 = v;
 }
 
-void FUN_00269718(AdxEnc *e, int v)
+void ADXSJE_SetAinfOutputVol(AdxEnc *e, int v)
 {
     if (e->has_name != 1) {
         e->has_name = 1;
@@ -1056,7 +1056,7 @@ void FUN_00269718(AdxEnc *e, int v)
     e->f744 = v;
 }
 
-void FUN_00269740(AdxEnc *e, int i, int v)
+void ADXSJE_SetAinfOutputPan(AdxEnc *e, int i, int v)
 {
     if (e->has_name != 1) {
         e->has_name = 1;
@@ -1065,7 +1065,7 @@ void FUN_00269740(AdxEnc *e, int i, int v)
     e->f746[i] = v;
 }
 
-void FUN_00269770(AdxEnc *e, const char *name)
+void ADXSJE_SetAinfDataId(AdxEnc *e, const char *name)
 {
     if (e->has_name != 1) {
         e->has_name = 1;
@@ -1075,7 +1075,7 @@ void FUN_00269770(AdxEnc *e, const char *name)
     strncpy(e->name, name, 16);
 }
 
-void FUN_002697d8(AdxEnc *e)
+void ADXSJE_ClearAinf(AdxEnc *e)
 {
     if (e->has_name == 1) {
         e->has_name = 0;
@@ -1087,7 +1087,7 @@ void FUN_002697d8(AdxEnc *e)
     memset(e->name, 0, 16);
 }
 
-void FUN_00269828(AdxEnc *e, void *cinf, int len)
+void ADXSJE_SetCommonInf(AdxEnc *e, void *cinf, int len)
 {
     if (e->cinf_flg != 1) {
         e->cinf_flg = 1;
@@ -1097,18 +1097,18 @@ void FUN_00269828(AdxEnc *e, void *cinf, int len)
     }
 }
 
-void ADXSJE_SetConfigSfa(AdxEnc *e, int nch, int f92, int end)
+void ADXSJE_SetConfigSfa(AdxEnc *e, int nch, int sfreq, int nsmpl)
 {
     /* matching construct: permuter — the no-op a2++/a2-- raises a2's use count so ee-gcc gives it s0 (retail order s0=a2, s1=object, s2=a3) */
-    f92++;
-    f92--;
+    sfreq++;
+    sfreq--;
     ADXSJE_SetNumChan(e, nch);
-    ADXSJE_SetSfreq(e, f92);
-    ADXSJE_SetTotalNumSmpl(e, end);
+    ADXSJE_SetSfreq(e, sfreq);
+    ADXSJE_SetTotalNumSmpl(e, nsmpl);
     ADXSJE_SetHdInfoSize(e, 284);
 }
 
-void FUN_002698d8(AdxEnc *e, const char *text)
+void ADXSJE_SetExtString(AdxEnc *e, const char *text)
 {
     unsigned short a, b, c;
 
@@ -1219,7 +1219,7 @@ void ADXSJE_ExecServer(void)
     int i;
     AdxEnc *e;
 
-    e = DAT_004a5d70;
+    e = adxsje_obj;
     i = 7;
     do {
         if (e->used == 1) {

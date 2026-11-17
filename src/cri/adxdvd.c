@@ -41,9 +41,9 @@ int ADXPS2_LoadFcacheDvd(AdxFcachePrm *prm)
     int size = 0;
 
     if (prm != 0) {
-        size = dvCiLoadDirInfo(prm->flist, prm->buf, prm->bufsize, prm->fnamelen);
+        size = dvCiLoadFcache(prm->flist, prm->buf, prm->bufsize, prm->fnamelen);
     } else {
-        dvCiLoadDirInfo(0, 0, 0, 0);
+        dvCiLoadFcache(0, 0, 0, 0);
     }
     return size;
 }
@@ -53,9 +53,9 @@ int ADXPS2_LoadFcacheDvdMem(AdxFcachePrm *prm, char *list, int listlen)
     int size = 0;
 
     if (prm != 0) {
-        size = dvCiLoadDirInfoMem(list, listlen, prm->buf, prm->bufsize, prm->fnamelen);
+        size = dvCiSetFcache(list, listlen, prm->buf, prm->bufsize, prm->fnamelen);
     } else {
-        dvCiLoadDirInfo(0, 0, 0, 0);
+        dvCiLoadFcache(0, 0, 0, 0);
     }
     return size;
 }
@@ -88,7 +88,7 @@ int ADXPS2_GetDvdLayer(void)
 
 int ADXPS2_SeekDvd(int lsn)
 {
-    return dvCiSrdSeek(lsn);
+    return dvCiSetSeekPos(lsn);
 }
 
 /* A memory file is named by its address and its size in sectors. */
@@ -105,7 +105,7 @@ void ADXT_EntryMfs(void *adxt, void *addr, unsigned int size)
     char fname[32];
 
     sprintf(fname, "%08x.%08x", addr, (size + 2047) / 2048);
-    ADXT_EntryFname(adxt, fname);
+    ADXT_StartFnameLp(adxt, fname);
 }
 
 void *ADXF_OpenMfs(void *addr, unsigned int size, void *dir)

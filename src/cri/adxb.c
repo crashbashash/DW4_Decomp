@@ -22,7 +22,7 @@ void ADXB_Destroy(AdxbObj *p);
 void ADXB_EvokeDecode(AdxbObj *d);
 int adxb_get_key(AdxbObj *adx, unsigned char ver, unsigned char type, int name,
                  unsigned short *k0, unsigned short *k1, unsigned short *k2);
-void FUN_0025e5a0(AdxbObj *obj);
+void adxb_dec_cb_proc(AdxbObj *obj);
 
 void ADXB_Init(void)
 {
@@ -178,12 +178,12 @@ int ADXB_DecodeHeaderAdx(AdxbObj *obj, unsigned char *hdr, int size)
     return hdrlen;
 }
 
-void FUN_0025d830(AdxbObj *obj)
+void ADXB_ResetDefFmt(AdxbObj *obj)
 {
     obj->def_format = 0;
 }
 
-void adxb_SetDefaultFmt(AdxbObj *block)
+void ADXB_SetDefPrm(AdxbObj *block)
 {
     block->hdr_set = 1;
     block->sfreq = 48000;
@@ -335,7 +335,7 @@ int ADXB_GetLpStartPos(AdxbObj *obj)
     return obj->lp_start_pos;
 }
 
-int FUN_0025db48(AdxbObj *obj)
+int ADXB_GetLpStartOfst(AdxbObj *obj)
 {
     int var_v0;
     var_v0 = 0;
@@ -355,12 +355,12 @@ int ADXB_GetLpEndOfst(AdxbObj *obj)
     return obj->lp_end_ofst;
 }
 
-int FUN_0025db70(AdxbObj *obj)
+int ADXB_GetAinfLen(AdxbObj *obj)
 {
     return obj->f204;
 }
 
-short FUN_0025db78(AdxbObj *obj)
+short ADXB_GetDefOutVol(AdxbObj *obj)
 {
     return obj->f224;
 }
@@ -370,7 +370,7 @@ short ADXB_GetDefPan(AdxbObj *adxb, int ch)
     return adxb->f226[ch];
 }
 
-char *FUN_0025db90(AdxbObj *obj)
+char *ADXB_GetDataId(AdxbObj *obj)
 {
     return obj->f208;
 }
@@ -381,13 +381,13 @@ void ADXB_TakeSnapshot(AdxbObj *obj)
     ADXPD_GetExtPrm(obj->adxpd, &obj->f166, &obj->f168, &obj->f170);
 }
 
-void FUN_0025dbd8(AdxbObj *rec)
+void ADXB_RestoreSnapshot(AdxbObj *rec)
 {
     ADXPD_SetDly(rec->adxpd, rec->dly1, rec->dly2);
     ADXPD_SetExtPrm(rec->adxpd, rec->f166, rec->f168, rec->f170);
 }
 
-void FUN_0025dc18(AdxbObj *block, const char *text)
+void ADXB_SetExtString(AdxbObj *block, const char *text)
 {
     unsigned short first;
     unsigned short second;
@@ -398,7 +398,7 @@ void FUN_0025dc18(AdxbObj *block, const char *text)
     block->f164 = third;
 }
 
-void FUN_0025dc80(const char *text)
+void ADXB_SetDefExtString(const char *text)
 {
     SKG_GenerateKey(text, strlen(text), &adxb_key0, &adxb_key1, &adxb_key2);
 }
@@ -488,7 +488,7 @@ int ADXB_GetDecNumSmpl(AdxbObj *obj)
     return obj->f144;
 }
 
-void FUN_0025df00(AdxbObj *obj, void (*cb)(void *context, int count, int bytes), void *context)
+void ADXB_EntryDecFunc(AdxbObj *obj, void (*cb)(void *context, int count, int bytes), void *context)
 {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     obj->f252 = cb;
@@ -675,7 +675,7 @@ void ADXB_ExecOneAdx(AdxbObj *w)
     }
 }
 
-void FUN_0025e4b8(AdxbObj *v)
+void ADXB_ExecHndl(AdxbObj *v)
 {
     if (v->format == 0) {
         ADXB_ExecOneAdx(v);
@@ -693,11 +693,11 @@ void FUN_0025e4b8(AdxbObj *v)
         ADXB_ExecOneAc3(v);
     }
     if (v->f252 != 0) {
-        FUN_0025e5a0(v);
+        adxb_dec_cb_proc(v);
     }
 }
 
-void FUN_0025e5a0(AdxbObj *block)
+void adxb_dec_cb_proc(AdxbObj *block)
 {
     int frames;
     int count = block->f148 - block->f244;
@@ -715,7 +715,7 @@ void ADXB_ExecServer(void)
     int remaining = 15;
     do {
         if (slot->used == 1) {
-            FUN_0025e4b8(slot);
+            ADXB_ExecHndl(slot);
         }
         remaining--;
         slot++;

@@ -34,7 +34,7 @@ void ADXSJE_SetLpStartPos(AdxEnc *enc, int pos);
 void ADXSJE_SetLpStartOfst(AdxEnc *enc, int ofst);
 void ADXSJE_SetLpEndPos(AdxEnc *enc, int pos);
 void ADXSJE_SetLpEndOfst(AdxEnc *enc, int ofst);
-void ADXSJE_SetConfigSfa(AdxEnc *enc, int nch, int f92, int end);
+void ADXSJE_SetConfigSfa(AdxEnc *enc, int nch, int sfreq, int nsmpl);
 int ADXSJE_GetEncDtLen(AdxEnc *enc);
 int ADXSJE_GetEncNumSmpl(AdxEnc *enc);
 void ADXSJE_SetEncPos(AdxEnc *enc, int pos);

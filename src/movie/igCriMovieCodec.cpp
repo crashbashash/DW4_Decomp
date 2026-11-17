@@ -576,7 +576,7 @@ int igCriMovieCodec_Open(igCriMovieCodec *self, igMovieInfo *movie) {
             afsFile = ((igAdxAfsFile **)g_adxAfsFileList.p->_data)[afsIndex];
             ADXT_StartAfs(Adxt(data), afsFile->_ptNumber, afsFile->_fileNumber);
         } else if (movie->_loop != 0) {
-            ADXT_EntryFname(Adxt(data), path);
+            ADXT_StartFnameLp(Adxt(data), path);
         } else {
             ADXT_StartFname(Adxt(data), path);
         }

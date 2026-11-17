@@ -11,7 +11,7 @@ extern "C" {
 
 CvFsVtbl *htCiGetInterface(void);
 int htci_load_flist(const char *name, void *buf);
-int htCiLoadDirInfo(const char *path, void *buf, unsigned int size, int nameLen);
+int htCiLoadFcache(const char *path, void *buf, unsigned int size, int nameLen);
 int htCiIsExistFcache(const char *name);
 void htCiSetOpenMode(int mode);
 void htCiSetRootDir(const char *path);
@@ -21,9 +21,11 @@ char *htCiGetAccessName(void);
 void htCiSetOutputDebugLevel(int value);
 int htCiGetOutputDebugLevel(void);
 
-/* htCiSetHost64.c, htCiSetHostLock.c */
-void htCiSetHost64(int sw);
-void htCiSetHostLock(int sw);
+/* htCiSetFileSystem64.c, htCiGetFileSystem64.c, htCiSetLockHost.c, htCiGetLockHost.c: the SRD host switches */
+void htCiSetFileSystem64(int sw);
+int htCiGetFileSystem64(void);
+void htCiSetLockHost(int sw);
+int htCiGetLockHost(void);
 
 #ifdef __cplusplus
 }

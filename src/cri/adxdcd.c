@@ -2,7 +2,7 @@
 #include <string.h>
 #include "dw4/cri/adxdcd.h"
 
-extern int DAT_00499cd0;
+extern int adx_decode_output_mono_flag;
 
 /* Clamp a 32-bit sample to the 16-bit range. A bare if, not do { } while (0): the loop wrapper changes the decoders'
  * code. */
@@ -530,7 +530,7 @@ int ADX_DecodeSte4AsSte(unsigned char *ibuf, int nblk, short *obufl, short *dlyl
 int ADX_DecodeSte4(unsigned char *ibuf, int nblk, short *obufl, short *dlyl, short *obufr, short *dlyr,
                  short k0, short k1, unsigned short *seed, short mul, short add)
 {
-    if (DAT_00499cd0 == 0) {
+    if (adx_decode_output_mono_flag == 0) {
         return ADX_DecodeSte4AsSte(ibuf, nblk, obufl, dlyl, obufr, dlyr, k0, k1, seed, mul, add);
     }
     return ADX_DecodeSte4AsMono(ibuf, nblk, obufl, dlyl, obufr, dlyr, k0, k1, seed, mul, add);

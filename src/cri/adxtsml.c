@@ -5,7 +5,7 @@
 #include "dw4/cri/cri_adxf.h"
 #include "dw4/cri/lsc.h"
 
-void FUN_00263748(AdxtObj *adxt, const char *name) {
+void ADXT_EntryFname(AdxtObj *adxt, const char *name) {
     ADXT_EntryFnameRange(adxt, name, 0, 0xFFFFF);
 }
 
@@ -67,12 +67,12 @@ void ADXT_SetSeamlessLp(AdxtObj *adxt, int enable) {
 }
 
 
-void ADXT_EntryFname(AdxtObj *adxt, const char *name)
+void ADXT_StartFnameLp(AdxtObj *adxt, const char *name)
 {
-    ADXT_StartFnameLp(adxt, name, 0, 0xfffff);
+    ADXT_StartFnameRangeLp(adxt, name, 0, 0xfffff);
 }
 
-void ADXT_StartFnameLp(AdxtObj *adxt, const char *name, int first, int last) {
+void ADXT_StartFnameRangeLp(AdxtObj *adxt, const char *name, int first, int last) {
     LscObj *lsc;
     if (adxt == 0 || name == 0) {
         ADXERR_CallErrFunc1("E02080852 ADXT_StartFnameRangeLp: parameter error");

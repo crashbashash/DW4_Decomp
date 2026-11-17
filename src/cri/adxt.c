@@ -1283,7 +1283,7 @@ void ADXT_SetKeyString(AdxtObj *adxt, char *str)
 
 void ADXT_SetDefKeyString(char *str)
 {
-    ADXSJD_SetDefKeyString(str);
+    ADXSJD_SetDefExtString(str);
 }
 
 Ps2Rna *ADXT_GetRna(AdxtObj *adxt)

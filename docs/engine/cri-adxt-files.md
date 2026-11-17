@@ -15,10 +15,29 @@ with Sony EE GCC 2.96 at `-O2 -G0` (their rows in `units.tsv` and `unit-objects.
 
 ## Open questions
 
-- `0x263548`, whose buffers (`0x49d538`, `0x49d938`) lie between the ADXT table and ADXPS2's data, is placed
-  in the init file on that layout alone.
-- The message helpers could belong to ADXPS2 or ADXRNA: they have no strings or pool of their own to place
-  them.
+- `ADXT_InsertHdrSfa` (`0x263548`), whose buffers (`0x49d538`, `0x49d938`) lie between the ADXT table and
+  ADXPS2's data, is placed in the init file on that layout alone; the RE4 GameCube symbol table
+  ([adonis-singh/re4](https://github.com/adonis-singh/re4), `config/G4BE08/sym_map.tsv`) gives it a file of its
+  own, `adx_insh.c`.
+- The message helpers (`ADXPS2_GetOutputDebugLevel`, `ADXPS2_SetOutputDebugLevel`, `ADXPS2_PrintfErr`,
+  `ADXPS2_PrintfWarn`) could belong to ADXPS2 or ADXRNA: they have no strings or pool of their own to place
+  them. The Set/Printf names are medium, from the CRI names the Persona 4 decompilation matched in unstripped
+  PS2 builds ([Raikaru/Persona4-Decompilation](https://github.com/Raikaru/Persona4-Decompilation),
+  `docs/cri/proven_names.json`, same order and sizes) and the SDK's `adx_psfs.o`
+  ([recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)); the getter is medium from
+  behaviour (alternative `adxmsg_GetLevel`). `ADX_DecodeHeader` and `ADXT_InsertHdrSfa` are medium from the
+  same list and the SDK's `adx_hdr.o` order.
+- The seamless file splits 3rd Strike's two file entries into a wrapper over the whole file and a ranged body:
+  `ADXT_EntryFname` calls `ADXT_EntryFnameRange`, and `ADXT_StartFnameLp` calls `ADXT_StartFnameRangeLp`, the
+  name the ranged body's own error message gives. The two wrappers' names are medium (3rd Strike order).
+- ADXPS2 entries that only pass to PS2RNA (`ADXPS2_SendOutMode`, `ADXPS2_StartAux`, `ADXPS2_StopAux`,
+  `ADXPS2_OpenPort`, `ADXPS2_ClosePort`, `ADXPS2_IsPortOpen`) take their PS2RNA callee's name, medium, and
+  inherit its doubt ([PS2RNA](cri-ps2rna-sj.md)). 3rd Strike's ADXPS2 has four 24-byte entries in this place
+  (`ADXPS2_RestoreIopSnd`, `ADXPS2_BeginDolbyDigital`, `ADXPS2_EndDolbyDigital`, `ADXPS2_SetStmType`), whose
+  callees DW4's PS2RNA does not have; the first three names sit on DW4's per-handle aux and dual switches by
+  order only, and may be wrong.
+- `ADXRNA_SetStartSmpl` is medium (3rd Strike and SDK order). `SFA_Init`/`SFA_Finish` and their count
+  `sfa_init_cnt` are CRI's `adx_sfa` file (SDK body, RE4 GameCube names), kept at the head of the ADXSJD file.
 - `ADXT_Init` (`0x2632c0`) declares its build-string word `volatile`, which it needs to match
   ([build-string stores](source-approvals.md#build-string-stores)); the V-sync tick count `adxt_vsync_cnt`
   is declared plain, and `ADXT_Init` clears it through a `volatile int` cast of its address. The stream

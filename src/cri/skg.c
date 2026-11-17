@@ -1,11 +1,11 @@
 /* CRI SKG (SKG/PS2EE Ver.0.64): derives the three 16-bit ADX decryption keys from a key string, and the
- * ADXKEY entry points around it: a key callback the application registers, and one step of the key's seed. */
+ * entry points around it: an error callback the application registers, and one step of the key's seed. */
 #include "dw4/cri/skg.h"
 
 const char *skg_build = "\nSKG/PS2EE Ver.0.64 Build:Oct  6 2004 11:47:26\n";
-int skg_init_cnt = 0;
-AdxKeyCbFunc adxkey_cbfunc = 0;
-void *adxkey_cbobj = 0;
+int skg_init_count = 0;
+SkgErrFunc skg_err_func = 0;
+void *skg_err_obj = 0;
 const short skg_tbl[SKG_TBL_NUM] = {
     16411, 16417, 16421, 16427, 16433, 16447, 16451, 16453,
     16477, 16481, 16487, 16493, 16519, 16529, 16547, 16553,
@@ -139,35 +139,35 @@ const short skg_tbl[SKG_TBL_NUM] = {
 /* "CRI-MW", the middleware's default key string */
 const signed char skg_def_key[] = "CRI-MW";
 
-int ADXKEY_Nop(void)
+int SKG_NopFunc(void)
 {
     return 0;
 }
 
-int ADXKEY_EntryCbFunc(AdxKeyCbFunc func, void *obj)
+int SKG_EntryErrFunc(SkgErrFunc func, void *obj)
 {
-    adxkey_cbfunc = func;
-    adxkey_cbobj = obj;
+    skg_err_func = func;
+    skg_err_obj = obj;
     return 0;
 }
 
-int ADXKEY_ExecCbFunc(int arg)
+int SKG_CallErrFunc(int arg)
 {
-    if (adxkey_cbfunc != 0) {
-        adxkey_cbfunc(adxkey_cbobj, arg);
+    if (skg_err_func != 0) {
+        skg_err_func(skg_err_obj, arg);
     }
     return 0;
 }
 
 int SKG_Init(void)
 {
-    skg_init_cnt++;
+    skg_init_count++;
     return 0;
 }
 
 int SKG_Finish(void)
 {
-    skg_init_cnt--;
+    skg_init_count--;
     return 0;
 }
 
@@ -178,7 +178,7 @@ int SKG_GenerateKey(const char *str, int len, unsigned short *k0, unsigned short
     short key1;
     short key2;
 
-    if (skg_init_cnt == 0) {
+    if (skg_init_count == 0) {
         SKG_Init();
     }
     *k0 = 0;
@@ -208,7 +208,7 @@ int SKG_GenerateKey(const char *str, int len, unsigned short *k0, unsigned short
 /* The keys of the default key string "CRI-MW". */
 int SKG_GetDefKey(unsigned short *k0, unsigned short *k1, unsigned short *k2)
 {
-    if (skg_init_cnt == 0) {
+    if (skg_init_count == 0) {
         SKG_Init();
     }
     SKG_GenerateKey(skg_def_key, 6, k0, k1, k2);
@@ -216,7 +216,7 @@ int SKG_GetDefKey(unsigned short *k0, unsigned short *k1, unsigned short *k2)
 }
 
 /* One step of the ADX key generator: seed = seed * mul + add, 16 bits. */
-int ADXKEY_NextSeed(unsigned short *seed, unsigned short *mul, unsigned short *add)
+int SKG_GetNextKey(unsigned short *seed, unsigned short *mul, unsigned short *add)
 {
     *seed = *add + (*seed * *mul);
     return 0;

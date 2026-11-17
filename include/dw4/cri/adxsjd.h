@@ -50,6 +50,10 @@ typedef struct AdxSjdObj {
 
 extern void (*adxsjd_header_hook)(AdxbObj *adxb, int rate);
 
+/* CRI's adx_sfa file, kept at the head of adxsjd.c */
+void SFA_Init(void);
+void SFA_Finish(void);
+
 void ADXSJD_Init(void);
 void ADXSJD_Finish(void);
 AdxSjdObj *ADXSJD_Create(SfdSj *sji, int nch, SfdSj **sjo);
@@ -70,7 +74,7 @@ int ADXSJD_GetDecPos(AdxSjdObj *sjd);
 void ADXSJD_SetLnkSw(AdxSjdObj *sjd, int sw);
 int ADXSJD_GetLnkSw(AdxSjdObj *sjd);
 void ADXSJD_SetExtString(AdxSjdObj *sjd, const char *str);
-void ADXSJD_SetDefKeyString(const char *str);
+void ADXSJD_SetDefExtString(const char *str);
 void ADXSJD_ResetDefFmt(AdxSjdObj *sjd);
 int ADXSJD_AdjustSmpl(AdxSjdObj *sjd, int nsmpl);
 void ADXSJD_EntryFltFunc(AdxSjdObj *sjd, void (*func)(void *obj, int ch, char *data, int len), void *obj);

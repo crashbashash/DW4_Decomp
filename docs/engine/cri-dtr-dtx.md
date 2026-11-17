@@ -16,6 +16,13 @@ function after DTR's code is the first to use DTX's data.
 
 ## Open questions
 
-- The RPC server's thread function at `0x273128` matches only with its ready flag (`0x4a9b18`) `volatile`;
-  the owner approved that keyword on CRI's own 2002 object (`dtx.o` in `libadxe.a`), see
+- The RPC server's thread function `dtx_svr_proc` matches only with its ready flag `dtx_proc_init_flag`
+  `volatile`; the owner approved that keyword on CRI's own 2002 object (`dtx.o` in `libadxe.a`), see
   [dtx-server-flag](source-approvals.md#dtx-server-flag).
+- Names: `DTR_ExecHndl` from its own message; `dtx_rpc_func` and `dtx_svr_proc` medium, by the order of the
+  2002 SDK's `dtx.o` ([recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)) and the
+  Street Fighter III 3rd Strike libadxe ([3s-decomp](https://github.com/crowded-street/3s-decomp)). The data take
+  the SDK object's names, which lie in the same order: `dtx_proc_init_flag`, `dtx_send_sw`, `dtx_clnt`, `dtx_sd`,
+  `dtx_svrbuf`, `dtx_urpc_fn`, `dtx_urpc_obj`. `DTX_ExecHndl`'s call count is the SDK's third function-local
+  `cnt`, spelled `dtx_exechndl_cnt` like the two callback counts. The SDK builds the RPC queue on the server
+  thread's stack; this build keeps it in data, named `dtx_qd` after `dtx_sd`/`dtx_cd` (medium, from use).

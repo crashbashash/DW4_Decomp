@@ -25,15 +25,15 @@ unsigned int ADXPS2_GetNumRoomSjiop(AdxtObj *adxt, int ch) {
     return (unsigned int)SJRMT_GetNumData(adxt->rna->psj[ch]->sjrmt, SJ_LIN_FREE) >> 1;
 }
 
-void FUN_00265b28(int outmode) {
+void ADXPS2_SendOutMode(int outmode) {
     PS2RNA_SendOutMode(outmode);
 }
 
-void FUN_00265b40(void) {
+void ADXPS2_StartAux(void) {
     PS2RNA_StartAux();
 }
 
-void FUN_00265b58(void) {
+void ADXPS2_StopAux(void) {
     PS2RNA_StopAux();
 }
 
@@ -50,15 +50,15 @@ void ADXPS2_EndDolbyDigital(AdxtObj *adxt)
     PS2RNA_GetDualSw(adxt->rna);
 }
 
-void FUN_00265bb8(unsigned int port) {
+void ADXPS2_OpenPort(unsigned int port) {
     PS2RNA_OpenPort(port);
 }
 
-void FUN_00265bd0(unsigned int port) {
+void ADXPS2_ClosePort(unsigned int port) {
     PS2RNA_ClosePort(port);
 }
 
-int FUN_00265be8(unsigned int port) {
+int ADXPS2_IsPortOpen(unsigned int port) {
     return PS2RNA_IsPortOpen(port);
 }
 
@@ -122,7 +122,7 @@ void ADXRNA_ExecServer(void) {
     PS2RNA_ExecServer();
 }
 
-void FUN_00265d80(void) {
+void ADXRNA_SetStartSmpl(void) {
     PS2RNA_SetStartSmpl();
 }
 

@@ -27,7 +27,7 @@ const char *dtr_build = "\nDTR Ver.1.06 Build:Oct  6 2004 11:47:40\n";
 int dtr_init_cnt = 0;
 DtrObj dtr_obj[32] = {0};
 
-void FUN_002729e8(DtrObj *dtr)
+void DTR_ExecHndl(DtrObj *dtr)
 {
     SfdSjChunk cks;
     SfdSjChunk cks2;
@@ -118,7 +118,7 @@ void DTR_ExecServer(void)
     }
     for (i = 0; i < 32; i++) {
         if (dtr_obj[i].used == 1) {
-            FUN_002729e8(&dtr_obj[i]);
+            DTR_ExecHndl(&dtr_obj[i]);
         }
     }
     DTX_ExecServer();

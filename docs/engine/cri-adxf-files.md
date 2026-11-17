@@ -13,9 +13,21 @@ Three CRI ADX files after the SPSD and WAV readers, each compiled as one whole f
 
 - The cutoff-coefficient function at `0x25f300` (called from ADXT and the encoder) has no data of its own; it
   is placed in the decode file rather than with the stream-lock helpers before it.
-- The cache-sync wrapper at `0x260a40` is placed in ADXF; its callers match either way.
+- `ADXF_Ocbi` (`0x260a40`, the cache invalidate) is placed in ADXF; its callers match either way. 3rd Strike
+  keeps it in a file of its own (`adx_fcch`), and `ADXF_Init`/`ADXF_Finish` in another (`adx_fini`).
+- Names of the 2004 additions, medium: `ADXF_Ocbi`, `ADXF_Init`, `ADXF_Finish`, `ADXF_LoadPartition`,
+  `ADXF_LoadPartitionEx`, `ADXF_LoadPtFromAfsNwEx`, `ADXF_GetFsizeByte` and `ADXF_GetFileSize` by order and size in
+  the Street Fighter III 3rd Strike libadxe ([3s-decomp](https://github.com/crowded-street/3s-decomp)), the first
+  three also in the CRI names the Persona 4 decompilation matched in unstripped PS2 builds
+  ([Raikaru/Persona4-Decompilation](https://github.com/Raikaru/Persona4-Decompilation), `docs/cri/proven_names.json`);
+  `adxf_SetFileInfoRange` and `ADXF_OpenRange` from that list alone (it spells the open `adxf_OpenRange`, an
+  internal function behind a public one in that later version; here it is the public entry, written like
+  `ADXF_Open`). `ADXF_GetFsizeByte` keeps the `ADXF_GetFsizeSct` error text of the body it was split from.
 - The sync-code search at `0x25f460` compares through a local holding the code, which keeps the constant
   out of the loop; the spelling was found by trial.
+- `ADX_DecodeSte4` chooses its mono or stereo decoder by `adx_decode_output_mono_flag`, the 2002 SDK's name
+  for the word (`adx_dcd3.o` defines it, `adx_dcd5.o` reads it the same way;
+  [recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)).
 - ADXF's init (`0x260a60`) reads its build-string pointer through a `const volatile`-compatible word and discards
   it: retail performs the discarded read in the PS2, GameCube and Xbox builds alike, and the keyword is approved
   ([source approvals](source-approvals.md#build-string-reads)). Its six stores follow retail's order, which is

@@ -119,9 +119,9 @@ extern void *DAT_004bead8[4];
 float logf(float);
 int ADXT_Init();
 int ADXT_Finish();
-void FUN_00263548();
-int FUN_00265f28();
-int FUN_00265f40();
+void ADXT_InsertHdrSfa();
+int SFA_Init();
+int SFA_Finish();
 void *ADXT_Create();
 int ADXT_Destroy();
 void ADXT_StartSj();
@@ -272,13 +272,13 @@ void SFD_SetAdxtPara(SfdAdxCfg *cfg) {
 
 int SFADXT_Init(void) {
     ADXT_Init();
-    FUN_00265f28();
+    SFA_Init();
     UTY_MemsetDword(&sfadxt_para, 0, 7);
     return 0;
 }
 
 int SFADXT_Finish(void) {
-    FUN_00265f40();
+    SFA_Finish();
     ADXT_Finish();
     return 0;
 }
@@ -961,7 +961,7 @@ int SFADXT_Seek(SfdAdxHn *h) {
         return 0;
     if (info->ready == 0)
         return 0;
-    FUN_00263548(adxt, info->f12, info->f16, info->f20);
+    ADXT_InsertHdrSfa(adxt, info->f12, info->f16, info->f20);
     ADXT_SetTimeOfst(adxt, 0);
     ctx->started = 1;
     ctx->step = sfadxt_ExcludeSilence;

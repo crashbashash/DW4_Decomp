@@ -22,6 +22,11 @@ passes the AHX handle to the key hook of its own data.
 ## Open questions
 
 - Names come from behaviour, in the ADXB, ADXAMP and SKG API styles. The AC-3 slot `0x498a44` is never read.
+  SKG's names are the Street Fighter III 3rd Strike libadxe's ([3s-decomp](https://github.com/crowded-street/3s-decomp)),
+  by order and size (medium): `SKG_NopFunc`, `SKG_EntryErrFunc`, `SKG_CallErrFunc` and `SKG_GetNextKey` replace
+  guesses in the ADXKEY style; its words take the RE4 GameCube table's names for the same library
+  ([adonis-singh/re4](https://github.com/adonis-singh/re4), `config/G4BE08/sym_map.tsv`): `skg_init_count`,
+  `skg_err_func`, `skg_err_obj`. The encoder's static copy keeps the `ADXKEY_` prefix ([ADXENC](cri-adxenc.md)).
 - No source yet: `adxamp_extract` (`0x25b618`, the per-frame peak scan; retail holds five undecoded words in a
   loop that spins when an output chunk is empty), `AIFF_GetInfo` (`0x25bc40`, the chunk walk with the
   80-bit sample rate), `ADXB_ExecOneAiff16` and `ADXB_ExecOneAu16` (`0x25c260`, `0x25cb20`, byte-swapped

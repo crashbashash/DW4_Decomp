@@ -27,8 +27,18 @@ callback at +120, and the three decryption key values at +160, +162 and +164 as 
 
 ## Open questions
 
-- Function and field names beyond `ADXB_DecodeHeaderAdx`.
-- The 32-byte helper at `0x25d2e0`, between the SKG and ADXB pools, is unreferenced; it most likely ends SKG.
+- Names come from the Street Fighter III 3rd Strike decompilation's libadxe
+  ([3s-decomp](https://github.com/crowded-street/3s-decomp), order and size), the RE4 GameCube symbol table
+  ([adonis-singh/re4](https://github.com/adonis-singh/re4), `config/G4BE08/sym_map.tsv`) and the CRI names the
+  Persona 4 decompilation matched in unstripped PS2 builds
+  ([Raikaru/Persona4-Decompilation](https://github.com/Raikaru/Persona4-Decompilation), `docs/cri/proven_names.json`).
+  Medium, by position in those lists: `ADXB_SetDefPrm`, `ADXB_GetLpStartOfst`, `ADXB_GetAinfLen`,
+  `ADXB_GetDefOutVol`, `ADXB_GetDataId`, `ADXB_RestoreSnapshot`, `ADXB_SetExtString`, `ADXB_SetDefExtString`,
+  `ADXB_ExecHndl`, `adxb_dec_cb_proc`. Medium from behaviour: `ADXB_ResetDefFmt` (alternative `ADXB_ClearDefFmt`)
+  and `ADXB_EntryDecFunc`, named like `ADXSJD_EntryDecFunc` above it (alternative `ADXB_SetCbDec`, a name found
+  only in a list ported from Persona 3 FES). The fields beyond the 2002 layout stay named by offset.
+- `SKG_GetNextKey` (`0x25d2e0`), between the SKG and ADXB pools, is unreferenced; 3rd Strike's order puts it
+  last in SKG.
 - The buffer-position function at `0x25e018` has no source and links from the retail image (24 words off:
   register choice and where an offset is added).
 - `adxb_DefGetWr` matches only with the handle's PCM buffer typed `short *` and the callback at +120 returning

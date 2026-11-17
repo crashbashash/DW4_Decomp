@@ -10,19 +10,7 @@
 #define ADXSJD_MAX_HDR 0xc800
 #define SWAP16(x) ((unsigned short)(((x) << 8) | ((x) >> 8)))
 
-
-void FUN_0025d830(AdxbObj *adxb);
-int FUN_0025db48(AdxbObj *adxb);
-int FUN_0025db70(AdxbObj *adxb);
-short FUN_0025db78(AdxbObj *adxb);
-char *FUN_0025db90(AdxbObj *adxb);
-void FUN_0025dbd8(AdxbObj *adxb);
-void FUN_0025dc18();
-void FUN_0025dc80();
-void FUN_0025df00();
-void FUN_0025e4b8(AdxbObj *adxb);
-
-int adxsjd_use_cnt = 0;
+int sfa_init_cnt = 0;
 int adxsjd_use_reserved = 0; /* no function reads it */
 void (*adxsjd_header_hook)(AdxbObj *adxb, int rate) = 0;
 AdxSjdObj adxsjd_objs[ADXSJD_MAX_OBJ] = {0};
@@ -32,14 +20,14 @@ short *adxsjd_get_wr(void *obj, int *offset, int *room, int *until_trap);
 void adxsjd_decexec_start(AdxSjdObj *sjd);
 void adxsjd_decexec_end(AdxSjdObj *sjd);
 
-void FUN_00265f28(void)
+void SFA_Init(void)
 {
-    adxsjd_use_cnt += 1;
+    sfa_init_cnt += 1;
 }
 
-void FUN_00265f40(void)
+void SFA_Finish(void)
 {
-    adxsjd_use_cnt -= 1;
+    sfa_init_cnt -= 1;
 }
 
 void ADXSJD_Init(void)
@@ -203,7 +191,7 @@ void adxsjd_decode_prep(AdxSjdObj *sjd)
     }
     if (hdrlen < 0) {
         if ((short)adxb->def_format != 0) {
-            adxb_SetDefaultFmt(adxb);
+            ADXB_SetDefPrm(adxb);
             hdrlen = 0;
         } else {
             sji->vtbl->ungetChunk(sji, 1, &ck);
@@ -384,7 +372,7 @@ void adxsjd_decexec_extra(AdxSjdObj *sjd)
     sjd->dec_pos += remaining;
 }
 
-void FUN_00266c70(AdxSjdObj *sjd)
+void adxsjd_decode_exec(AdxSjdObj *sjd)
 {
     AdxbObj *adxb;
     short type;
@@ -393,7 +381,7 @@ void FUN_00266c70(AdxSjdObj *sjd)
     if (ADXB_GetStat(adxb) == 0) {
         adxsjd_decexec_start(sjd);
     }
-    FUN_0025e4b8(adxb);
+    ADXB_ExecHndl(adxb);
     if (ADXB_GetStat(adxb) == 3) {
         adxsjd_decexec_end(sjd);
     }
@@ -403,29 +391,29 @@ void FUN_00266c70(AdxSjdObj *sjd)
     }
 }
 
-void FUN_00266dc8(AdxSjdObj *sjd);
-void FUN_00266f18(AdxSjdObj *sjd);
+void adxsjd_insert_proc(AdxSjdObj *sjd);
+void adxsjd_discard_proc(AdxSjdObj *sjd);
 
 void ADXSJD_ExecHndl(AdxSjdObj *sjd)
 {
     if (sjd->fill > 0) {
         ADXCRS_Lock();
-        FUN_00266dc8(sjd);
+        adxsjd_insert_proc(sjd);
         ADXCRS_Unlock();
     }
     if (sjd->stat == ADXSJD_STAT_DECODE) {
-        FUN_00266c70(sjd);
+        adxsjd_decode_exec(sjd);
     } else if (sjd->stat == ADXSJD_STAT_DECHDR) {
         adxsjd_decode_prep(sjd);
     }
     if (sjd->skip > 0) {
         ADXCRS_Lock();
-        FUN_00266f18(sjd);
+        adxsjd_discard_proc(sjd);
         ADXCRS_Unlock();
     }
 }
 
-void FUN_00266dc8(AdxSjdObj *sjd)
+void adxsjd_insert_proc(AdxSjdObj *sjd)
 {
     SfdSjChunk ck;
     int i;
@@ -453,7 +441,7 @@ void FUN_00266dc8(AdxSjdObj *sjd)
     sjd->fill -= half;
 }
 
-void FUN_00266f18(AdxSjdObj *sjd)
+void adxsjd_discard_proc(AdxSjdObj *sjd)
 {
     SfdSjChunk ck;
     int i;
@@ -504,7 +492,7 @@ int ADXSJD_GetDecNumSmpl(AdxSjdObj *sjd)
 
 void ADXSJD_EntryDecFunc(AdxSjdObj *sjd, void (*func)(void *context, int count, int bytes), void *context)
 {
-    FUN_0025df00(sjd->adxb, func, context);
+    ADXB_EntryDecFunc(sjd->adxb, func, context);
 }
 
 void ADXSJD_SetDecPos(AdxSjdObj *sjd, int value)
@@ -529,17 +517,17 @@ int ADXSJD_GetLnkSw(AdxSjdObj *sjd)
 
 void ADXSJD_SetExtString(AdxSjdObj *sjd, const char *text)
 {
-    FUN_0025dc18(sjd->adxb, text);
+    ADXB_SetExtString(sjd->adxb, text);
 }
 
-void ADXSJD_SetDefKeyString(const char *text)
+void ADXSJD_SetDefExtString(const char *text)
 {
-    FUN_0025dc80(text);
+    ADXB_SetDefExtString(text);
 }
 
 void ADXSJD_ResetDefFmt(AdxSjdObj *sjd)
 {
-    FUN_0025d830(sjd->adxb);
+    ADXB_ResetDefFmt(sjd->adxb);
 }
 
 int ADXSJD_AdjustSmpl(AdxSjdObj *sjd, int amount)
@@ -621,7 +609,7 @@ int ADXSJD_GetBlkSmpl(AdxSjdObj *sjd)
     return ADXB_GetBlkSmpl(sjd->adxb);
 }
 
-int FUN_00267270(AdxSjdObj *sjd)
+int ADXSJD_GetBlkLen(AdxSjdObj *sjd)
 {
     return ADXB_GetBlkLen(sjd->adxb);
 }
@@ -631,7 +619,7 @@ int ADXSJD_GetTotalNumSmpl(AdxSjdObj *sjd)
     return ADXB_GetTotalNumSmpl(sjd->adxb);
 }
 
-int FUN_002672a0(AdxSjdObj *sjd)
+int ADXSJD_GetCof(AdxSjdObj *sjd)
 {
     return ADXB_GetCof(sjd->adxb);
 }
@@ -641,7 +629,7 @@ int ADXSJD_GetNumLoop(AdxSjdObj *sjd)
     return ADXB_GetNumLoop(sjd->adxb);
 }
 
-int FUN_002672d0(AdxSjdObj *sjd)
+int ADXSJD_GetLpInsNsmpl(AdxSjdObj *sjd)
 {
     return ADXB_GetLpInsNsmpl(sjd->adxb);
 }
@@ -656,7 +644,7 @@ int ADXSJD_GetLpStartOfst(AdxSjdObj *sjd)
     if (sjd == 0) {
         return 0;
     }
-    return FUN_0025db48(sjd->adxb);
+    return ADXB_GetLpStartOfst(sjd->adxb);
 }
 
 int ADXSJD_GetLpEndPos(AdxSjdObj *sjd)
@@ -671,20 +659,20 @@ int ADXSJD_GetLpEndOfst(AdxSjdObj *sjd)
 
 int ADXSJD_GetAinfLen(AdxSjdObj *sjd)
 {
-    return FUN_0025db70(sjd->adxb);
+    return ADXB_GetAinfLen(sjd->adxb);
 }
 
 short ADXSJD_GetDefOutVol(AdxSjdObj *sjd)
 {
-    if (FUN_0025db70(sjd->adxb) > 0 && (sjd->stat == ADXSJD_STAT_DECODE || sjd->stat == ADXSJD_STAT_DECEND)) {
-        return FUN_0025db78(sjd->adxb);
+    if (ADXB_GetAinfLen(sjd->adxb) > 0 && (sjd->stat == ADXSJD_STAT_DECODE || sjd->stat == ADXSJD_STAT_DECEND)) {
+        return ADXB_GetDefOutVol(sjd->adxb);
     }
     return 0;
 }
 
 short ADXSJD_GetDefPan(AdxSjdObj *sjd, int arg)
 {
-    if (FUN_0025db70(sjd->adxb) > 0) {
+    if (ADXB_GetAinfLen(sjd->adxb) > 0) {
         if (sjd->stat == ADXSJD_STAT_DECODE || sjd->stat == ADXSJD_STAT_DECEND) {
             return ADXB_GetDefPan(sjd->adxb, arg);
         }
@@ -694,8 +682,8 @@ short ADXSJD_GetDefPan(AdxSjdObj *sjd, int arg)
 
 char *ADXSJD_GetDataId(AdxSjdObj *sjd)
 {
-    if (FUN_0025db70(sjd->adxb) > 0 && (sjd->stat == ADXSJD_STAT_DECODE || sjd->stat == ADXSJD_STAT_DECEND)) {
-        return FUN_0025db90(sjd->adxb);
+    if (ADXB_GetAinfLen(sjd->adxb) > 0 && (sjd->stat == ADXSJD_STAT_DECODE || sjd->stat == ADXSJD_STAT_DECEND)) {
+        return ADXB_GetDataId(sjd->adxb);
     }
     return 0;
 }
@@ -722,5 +710,5 @@ void ADXSJD_TakeSnapshot(AdxSjdObj *sjd)
 
 void ADXSJD_RestoreSnapshot(AdxSjdObj *sjd)
 {
-    FUN_0025dbd8(sjd->adxb);
+    ADXB_RestoreSnapshot(sjd->adxb);
 }

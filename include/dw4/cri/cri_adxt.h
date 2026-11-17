@@ -244,6 +244,7 @@ void ADXT_VsyncProc(void);
 void ADXT_Init(void);
 void ADXT_ResetLibrary(void);
 void ADXT_Finish(void);
+void ADXT_InsertHdrSfa(AdxtObj *adxt, int nch, int sfreq, int nsmpl);
 
 /* adxtsvr.c */
 AdxtDecInfoFunc ADXT_EntryDecInfoFunc(AdxtDecInfoFunc func);
@@ -254,12 +255,13 @@ void ADXT_ExecHndl(AdxtObj *adxt);
 int ADXT_GetStatRead(AdxtObj *adxt);
 
 /* adxtsml.c */
+void ADXT_EntryFname(AdxtObj *adxt, const char *fname);
 void ADXT_EntryFnameRange(AdxtObj *adxt, const char *fname, int ofst, int nsct);
 void ADXT_EntryAfs(AdxtObj *adxt, int ptid, int flid);
 void ADXT_StartSeamless(AdxtObj *adxt);
 void ADXT_SetSeamlessLp(AdxtObj *adxt, int sw);
-void ADXT_EntryFname(AdxtObj *adxt, const char *fname);
-void ADXT_StartFnameLp(AdxtObj *adxt, const char *fname, int ofst, int nsct);
+void ADXT_StartFnameLp(AdxtObj *adxt, const char *fname);
+void ADXT_StartFnameRangeLp(AdxtObj *adxt, const char *fname, int ofst, int nsct);
 void ADXT_StartAfsLp(AdxtObj *adxt, int ptid, unsigned int flid);
 void ADXT_ReleaseSeamless(void);
 int ADXT_GetNumFiles(AdxtObj *adxt);

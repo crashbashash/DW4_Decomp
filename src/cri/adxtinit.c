@@ -10,13 +10,10 @@
 #include "dw4/cri/sj.h"
 #include "dw4/cri/lsc.h"
 #include "dw4/cri/adxenc.h"
+#include "dw4/cri/cri_adxf.h"
+#include "dw4/cri/dtx.h"
 
 typedef struct AdxEnc AdxEnc;
-
-typedef struct AdxtObject {
-    char pad0[20];
-    SfdSj *sji;
-} AdxtObject;
 
 int adxt_init_cnt = 0;
 int adxt_init_reserved = 0; /* no function reads it */
@@ -29,11 +26,7 @@ AdxtObj adxt_obj[ADXT_MAX_OBJ] = {0};
 char adxt_enc_ibuf[1024] = {0};
 char adxt_enc_obuf[64] = {0};
 static char *volatile adxt_build_ref;
-extern int DAT_004a9b1c;
 
-void FUN_00260b30(void);
-
-int FUN_00260a60();
 void ADXT_ConfigVsyncSvr(int value) {
     adxt_thrd_svr_sw = value;
 }
@@ -88,7 +81,7 @@ void ADXT_Init(void)
         ADXERR_Init();
         ADXSTM_Init();
         ADXSJD_Init();
-        FUN_00260a60();
+        ADXF_Init();
         ADXRNA_Init();
         LSC_Init();
         SVM_Init();
@@ -117,10 +110,10 @@ void ADXT_ResetLibrary(void) {
 
 void ADXT_Finish(void) {
     if (--adxt_init_cnt == 0) {
-        DAT_004a9b1c = 0;
+        dtx_send_sw = 0;
         ADXT_DestroyAll();
         ADXRNA_Finish();
-        FUN_00260b30();
+        ADXF_Finish();
         ADXSTM_Finish();
         LSC_Finish();
         ADXCRS_Lock();
@@ -134,11 +127,11 @@ void ADXT_Finish(void) {
         SJRBF_Finish();
         SJUNI_Finish();
         ADXCRS_Unlock();
-        DAT_004a9b1c = 1;
+        dtx_send_sw = 1;
     }
 }
 
-void FUN_00263548(AdxtObject *adxt, int nch, int f92, int end)
+void ADXT_InsertHdrSfa(AdxtObj *adxt, int nch, int sfreq, int nsmpl)
 {
     SfdSj *out[2];
     SfdSjChunk ckIn;
@@ -152,7 +145,7 @@ void FUN_00263548(AdxtObject *adxt, int nch, int f92, int end)
     out[1] = SJMEM_Create(adxt_enc_obuf + 32, 32);
     dst = adxt->sji;
     enc = ADXSJE_Create(2, out, in);
-    ADXSJE_SetConfigSfa(enc, nch, f92, end);
+    ADXSJE_SetConfigSfa(enc, nch, sfreq, nsmpl);
     ADXSJE_Start(enc);
     ADXSJE_ExecServer();
     in->vtbl->getChunk(in, 1, 1024, &ckIn);

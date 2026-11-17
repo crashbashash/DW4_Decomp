@@ -21,9 +21,17 @@ int SRD_ReqRdDvd(SrdObj *srd, int lsn, int sectors, void *buf, sceCdRMode *mode)
 int SRD_ReqRdHst(SrdObj *srd, int fd, long long sector, long long size, void *buf);
 char SRD_GetStat(SrdObj *srd);
 void SRD_Break(SrdObj *srd);
+void SRD_WaitComplete(SrdObj *srd);
+void SRD_WaitCompleteVoid(void);
+int SRD_IsExecute(void);
 void SRD_ExecServer(void);
 void SRD_WaitForExecServer(void);
 void SRD_SetHistory(int value);
+void SRD_SetFilesystem64(int mode);
+int SRD_GetFilesystem64(void);
+void SRD_SetLockHost(int sw);
+int SRD_GetLockHost(void);
+int SRD_SetDvdSeekPos(int lsn);
 long long SRD_SceLseek(int fd, long long offset, int whence);
 int SRD_SceIoctl(int fd, int cmd, int *result);
 int SRD_SceOpen(const char *name, int flags);

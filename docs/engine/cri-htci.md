@@ -40,9 +40,12 @@ With a pointer type, GCC's alias analysis lets the first scheduling pass move th
 
 ## Open questions
 
-- The functions and fields have names from the messages only (`htCiGetFileSize`, `htCiOpen`, `htCiReqRd`,
-  `htCiStopTr`, `htCiLoadDirInfo`); the rest are named from use.
-- The five 20-byte wrappers just before the file (`0x2752f8` up to `0x27536c`) call SRD functions and are
-  called from game code; whether they end DVCI or are a file of their own is unknown.
+- The functions and fields have names from the messages (`htCiGetFileSize`, `htCiOpen`, `htCiReqRd`,
+  `htCiStopTr`) and from use. `htCiLoadFcache` is the name of the 2002 SDK's `htci_sub.o`
+  ([recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)) and the Street Fighter III 3rd Strike
+  libadxe ([3s-decomp](https://github.com/crowded-street/3s-decomp)); its message says `htCiLoadDirInfo`, as
+  DVCI's twin does. `htci_analysis_flist` is 3rd Strike's `analysis_flist` (medium), prefixed like `htci_conv_cmp`.
+- The four 20-byte SRD wrappers before the file (`htCiSetFileSystem64` up to `htCiGetLockHost`) open `htci` in
+  3rd Strike's order; they are still one-function files ([DVCI](cri-dvci.md)).
 - Four helpers that `0x276090` calls are defined old-style and called without arguments: retail never loads
   their argument register at those calls.

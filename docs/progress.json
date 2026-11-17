@@ -159,10 +159,10 @@
    "handle": 0,
    "jtbl": 380,
    "literal": 244,
-   "named": 90943,
+   "named": 100139,
    "pad": 211427,
    "ptr": 3040,
-   "ref": 91072,
+   "ref": 81876,
    "region": 109384,
    "source": 496497,
    "str": 71570,
@@ -239,16 +239,16 @@
     "value": 558
    },
    "decl.local_externs": {
-    "reason": null,
-    "value": 1375
+    "reason": "decl.local_externs 1375 -> 1378: src/cri/sfadx.c (Sofdec slice, not edited here) keeps its local declarations of SFA_Init, SFA_Finish and ADXT_InsertHdrSfa, exempt while they were FUN_ placeholders; CRI ADX wave 3/4 named them and declared them in adxsjd.h and cri_adxt.h, so the Sofdec slice can drop the three lines",
+    "value": 1378
    },
    "decl.type_conflicts": {
     "reason": null,
-    "value": 1196
+    "value": 1195
    },
    "decl.varargs": {
     "reason": null,
-    "value": 730
+    "value": 728
    },
    "foreign_profile.bytes": {
     "reason": null,
@@ -260,7 +260,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 1308
+    "value": 1160
    },
    "inline_asm.other": {
     "reason": null,
@@ -363,12 +363,12 @@
    "compile.bytes": 0,
    "compile.functions": 0,
    "decl.header_conflicts": 558,
-   "decl.local_externs": 1375,
-   "decl.type_conflicts": 1196,
-   "decl.varargs": 730,
+   "decl.local_externs": 1378,
+   "decl.type_conflicts": 1195,
+   "decl.varargs": 728,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "fun_dat_refs": 1308,
+   "fun_dat_refs": 1160,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
@@ -396,9 +396,9 @@
   "fully_matched": 20431,
   "fully_verified": 20267,
   "matched": 20267,
-  "named": 17385,
-  "named_semantic": 11904,
-  "named_semantic_matched": 11701,
+  "named": 17464,
+  "named_semantic": 11983,
+  "named_semantic_matched": 11780,
   "total": 20576
  },
  "kernel_patches": {
@@ -492,15 +492,15 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 1841956,
+  "bytes": 1859128,
   "failing": {
    "addresses": {
-    "bytes": 732024,
-    "functions": 4262
+    "bytes": 710740,
+    "functions": 4117
    },
    "declarations": {
-    "bytes": 846616,
-    "functions": 1834
+    "bytes": 846176,
+    "functions": 1831
    },
    "fields": {
     "bytes": 449396,
@@ -511,16 +511,16 @@
     "functions": 2125
    },
    "name": {
-    "bytes": 570272,
-    "functions": 4770
+    "bytes": 562100,
+    "functions": 4691
    },
    "placed": {
-    "bytes": 668,
-    "functions": 11
+    "bytes": 628,
+    "functions": 9
    },
    "references": {
-    "bytes": 507400,
-    "functions": 2006
+    "bytes": 492532,
+    "functions": 1926
    },
    "types": {
     "bytes": 324884,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 12730,
+  "functions": 12854,
   "matched_functions": 20431
  },
  "regions": [

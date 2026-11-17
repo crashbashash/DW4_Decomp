@@ -89,7 +89,7 @@ volatile	svm_unlock	2	#svm-lock-counts
 volatile	SVM_Init	1	#svm-lock-counts
 volatile	SVM_Finish	1	#svm-lock-counts
 volatile	SVM_GetLockType	1	#svm-lock-counts
-volatile	FUN_00272620	1	#srd-server-words
+volatile	SRD_SetLockHost	1	#srd-server-words
 volatile	viBufStopDMA	1	#sony-hardware-registers
 volatile	srd_reset_obj	1	#build-string-reads
 volatile	dvCiGetInterface	1	#build-string-reads
@@ -268,9 +268,9 @@ volatile	adxm_fs_proc	6	#adxm-thread-flags
 volatile	adxm_mwidle_thrd	7	#adxm-thread-flags
 volatile	adxm_usrvsync_proc	3	#adxm-thread-flags
 volatile	adxm_usridle_thrd	4	#adxm-thread-flags
-volatile	FUN_00273128	1	#dtx-server-flag
+volatile	dtx_svr_proc	1	#dtx-server-flag
 volatile	SRD_Create	1	#srd-module-words
-volatile	FUN_00271a68	1	#srd-module-words
+volatile	SRD_WaitComplete	1	#srd-module-words
 volatile	srd_check_dvd_error	3	#srd-module-words
 volatile	srd_exec_dvd	3	#srd-module-words
 volatile	srd_exec_hst	2	#srd-module-words
@@ -344,7 +344,7 @@ volatile	QueueInit	1	#sony-interrupt-shared-state
 volatile	QueuePeekWriteDone	1	#sony-interrupt-shared-state
 volatile	QueuePeekReadDone	1	#sony-interrupt-shared-state
 volatile	ADXT_ExecServer	1	#adx-server-guards
-volatile	FUN_00260a60	1	#build-string-reads
+volatile	ADXF_Init	1	#build-string-reads
 volatile	adxt_stat_prep	1	#adxt-ready-count
 volatile	ADXSTM_ExecServer	1	#adx-server-guards
 volatile	ADXT_IsActiveFsSvr	1	#adx-server-guards

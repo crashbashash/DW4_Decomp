@@ -23,21 +23,21 @@ void ADXPS2_SetupHostFs(AdxHstFsPrm *prm)
         htCiSetOpenMode(prm->openmode);
         htCiSetRootDir(prm->rootdir);
         if (prm->host64 == 0) {
-            htCiSetHost64(0);
+            htCiSetFileSystem64(0);
         } else {
-            htCiSetHost64(1);
+            htCiSetFileSystem64(1);
         }
         if (prm->hostlock == 0) {
-            htCiSetHostLock(0);
+            htCiSetLockHost(0);
             return;
         }
-        htCiSetHostLock(1);
+        htCiSetLockHost(1);
         return;
     }
     htCiSetOpenMode(0);
     htCiSetRootDir(0);
-    htCiSetHost64(0);
-    htCiSetHostLock(0);
+    htCiSetFileSystem64(0);
+    htCiSetLockHost(0);
 }
 
 int ADXPS2_LoadFcacheHost(AdxFcachePrm *prm)
@@ -45,9 +45,9 @@ int ADXPS2_LoadFcacheHost(AdxFcachePrm *prm)
     int size;
 
     if (prm != 0) {
-        size = htCiLoadDirInfo(prm->flist, prm->buf, prm->bufsize, prm->fnamelen);
+        size = htCiLoadFcache(prm->flist, prm->buf, prm->bufsize, prm->fnamelen);
     } else {
-        size = htCiLoadDirInfo(0, 0, 0, 0);
+        size = htCiLoadFcache(0, 0, 0, 0);
     }
     return size;
 }

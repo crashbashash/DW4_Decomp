@@ -76,11 +76,11 @@ static char adxf_ldptnw_work[8528] = {0};
 #define ADXF_LDPTNW_TMPBUF ((void *)((int)&adxf_ldptnw_work[144] & ~0x3F))
 
 
-void FUN_00260a40(void *base, int length) {
+void ADXF_Ocbi(void *base, int length) {
     InvalidDCache(base, (char *)base + length - 1);
 }
 
-void FUN_00260a60(void)
+void ADXF_Init(void)
 {
     /* The discarded read keeps the build string in the link. */
     (void)adxf_build;
@@ -99,7 +99,7 @@ void FUN_00260a60(void)
     adxf_init_cnt++;
 }
 
-void FUN_00260b30(void)
+void ADXF_Finish(void)
 {
     void ADXF_CloseAll(void);
     if (--adxf_init_cnt != 0) {
@@ -158,14 +158,12 @@ int adxf_ChkPrmPt(unsigned int ptid, AdxfPtInfo *ptinfo) {
     return 0;
 }
 
-int FUN_00260d68(int ptid, const char *fname, void *dir, AdxfPtInfo *ptinfo);
-
-int FUN_00260d48(int ptid, const char *fname, AdxfPtInfo *ptinfo) {
-    return FUN_00260d68(ptid, fname, 0, ptinfo);
+int ADXF_LoadPartition(int ptid, const char *fname, AdxfPtInfo *ptinfo) {
+    return ADXF_LoadPartitionEx(ptid, fname, 0, ptinfo);
 }
 
 
-int FUN_00260d68(int ptid, const char *fname, void *dir, AdxfPtInfo *ptinfo) {
+int ADXF_LoadPartitionEx(int ptid, const char *fname, void *dir, AdxfPtInfo *ptinfo) {
     int result = ADXF_LoadPartitionNw(ptid, fname, dir, ptinfo);
     int status;
     if (result < 0) {
@@ -187,14 +185,12 @@ int FUN_00260d68(int ptid, const char *fname, void *dir, AdxfPtInfo *ptinfo) {
     return result;
 }
 
-int FUN_00260ed0(int ptid, int afsid, int flid, AdxfPtInfo *ptinfo, void *tmpbuf, int tbsize);
-
 int ADXF_LoadPartitionNw(int ptid, const char *fname, void *dir, AdxfPtInfo *ptinfo) {
     return ADXF_LoadPtNwEx(ptid, fname, dir, ptinfo, ADXF_LDPTNW_TMPBUF, 0x800);
 }
 
 int ADXF_LoadPartitionFromAfsNw(int ptid, int afsid, int flid, AdxfPtInfo *ptinfo) {
-    return FUN_00260ed0(ptid, afsid, flid, ptinfo, ADXF_LDPTNW_TMPBUF, 0x800);
+    return ADXF_LoadPtFromAfsNwEx(ptid, afsid, flid, ptinfo, ADXF_LDPTNW_TMPBUF, 0x800);
 }
 
 int ADXF_LoadPartitionFmgLongNw(int ptid, const char *fname, void *dir, AdxfPtInfo *ptinfo) {
@@ -212,7 +208,7 @@ int ADXF_LoadPtNwEx(int ptid, const char *fname, void *dir, AdxfPtInfo *ptinfo, 
     return adxf_LoadPtBothNw(ptid, 0, 0, fname, dir, ptinfo, tmpbuf, tbsize, 0);
 }
 
-int FUN_00260ed0(int ptid, int afsid, int flid, AdxfPtInfo *ptinfo, void *tmpbuf, int tbsize) {
+int ADXF_LoadPtFromAfsNwEx(int ptid, int afsid, int flid, AdxfPtInfo *ptinfo, void *tmpbuf, int tbsize) {
     return adxf_LoadPtBothNw(ptid, afsid, flid, 0, 0, ptinfo, tmpbuf, tbsize, 0);
 }
 
@@ -509,7 +505,7 @@ AdxfHandle *ADXF_Open(const char *fname, void *dir) {
     return var_s0;
 }
 
-int FUN_00261960(AdxfHandle *adxf, const char *fname, void *dir, int ofst, int nsct) {
+int adxf_SetFileInfoRange(AdxfHandle *adxf, const char *fname, void *dir, int ofst, int nsct) {
     adxf->dir = dir;
     adxf->fname = fname;
     adxf->skpsct = ofst;
@@ -526,13 +522,13 @@ int FUN_00261960(AdxfHandle *adxf, const char *fname, void *dir, int ofst, int n
     return 0;
 }
 
-AdxfHandle *FUN_002619e0(const char *fname, void *dir, int ofst, int nsct) {
+AdxfHandle *ADXF_OpenRange(const char *fname, void *dir, int ofst, int nsct) {
     AdxfHandle *temp_a0;
     AdxfHandle *var_s2;
     adxf_SetCmdHstry(1, 0, (int)fname, (int)dir, -1);
     var_s2 = adxf_CreateAdxFs();
     if (var_s2 != 0) {
-        if (FUN_00261960(var_s2, fname, dir, ofst, nsct) < 0) {
+        if (adxf_SetFileInfoRange(var_s2, fname, dir, ofst, nsct) < 0) {
             temp_a0 = var_s2;
             var_s2 = 0;
             ADXF_Close(temp_a0);
@@ -591,7 +587,7 @@ void adxf_CloseSjStm(AdxfHandle *adxf) {
     SfdSj *sj;
     if (adxf->sj != 0 && adxf->sjflag == 0) {
         if (adxf_dcache_sw == 1) {
-            FUN_00260a40(adxf->buf, adxf->bsize);
+            ADXF_Ocbi(adxf->buf, adxf->bsize);
         }
         sj = adxf->sj;
         adxf->sj = 0;
@@ -723,7 +719,7 @@ int ADXF_ReadNw32(AdxfHandle *adxf, int nsct, void *buf)
     adxf->sj = sj;
     adxf->bsize = size;
     if (adxf_dcache_sw == 1)
-        FUN_00260a40(buf, size);
+        ADXF_Ocbi(buf, size);
     ADXCRS_Unlock();
     ret = adxf_read_sj32(adxf, nsct, adxf->sj);
     if (ret <= 0) {
@@ -877,13 +873,11 @@ int ADXF_Tell(AdxfHandle *adxf) {
     return adxf->ofst;
 }
 
-int FUN_00262580(AdxfHandle *adxf);
-
 int ADXF_GetFsizeSct(AdxfHandle *adxf) {
-    return adxf->fsize_sct = (FUN_00262580(adxf) + 2047) / 2048;
+    return adxf->fsize_sct = (ADXF_GetFsizeByte(adxf) + 2047) / 2048;
 }
 
-int FUN_00262580(AdxfHandle *adxf) {
+int ADXF_GetFsizeByte(AdxfHandle *adxf) {
     if (adxf == 0) {
         ADXERR_CallErrFunc1("E9040828:'adxf' is NULL.(ADXF_GetFsizeSct)");
         return -3;
@@ -1012,6 +1006,6 @@ int ADXF_GetStatRead(AdxfHandle *adxf)
     return ADXSTM_GetReadFlg(adxf->stm);
 }
 
-int FUN_00262938(void *a0) {
-    return cvFsGetFileSize(a0);
+int ADXF_GetFileSize(const char *fname) {
+    return cvFsGetFileSize(fname);
 }

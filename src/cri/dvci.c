@@ -73,15 +73,12 @@ static char dvci_root_dir[264];
 static char dvci_dir_path[128];
 static char dvci_dir_buf[4096];
 
-void FUN_00265928(const char *format, ...);
-void FUN_00271a68(SrdObj *stm);
-
 void dvci_to_large_to_yen(char *path);
 void dvCiStopTr(DvCiFile *h);
 int dvCiGetStat(DvCiFile *h);
 void dvci_conv_fname(const char *name, char *path);
 void get_fp_from_fname(sceCdlFILE *out, const char *name, DvCiFileLoc *files, int n);
-int FUN_00274e30(const char *name, sceCdlFILE *fp);
+int dvci_get_fstate(const char *name, sceCdlFILE *fp);
 
 CvFsVtbl *dvCiGetInterface(void)
 {
@@ -186,7 +183,7 @@ int dvCiIsExistFileOnDisc(const char *name)
     if (name == 0) {
         return 0;
     }
-    FUN_00274e30(name, &fp);
+    dvci_get_fstate(name, &fp);
     if (fp.size == 0) {
         dvci_conv_fname(name, dvci_path);
         SRD_SetHistory(0x8100);
@@ -206,7 +203,7 @@ int dvCiGetFileSize(const char *fname)
         dvci_call_errfn(0, "E0092901:fname is null.(dvCiGetFileSize)");
         return 0;
     }
-    FUN_00274e30(fname, &fp);
+    dvci_get_fstate(fname, &fp);
     if (fp.size == 0) {
         dvci_conv_fname(fname, dvci_path);
         SRD_SetHistory(0x8200);
@@ -254,7 +251,7 @@ DvCiFile *dvCiOpen(const char *fname, void *atr, int rw)
         dvci_call_errfn(0, "E0092910:not enough handle resource.(dvCiOpen)");
         return 0;
     }
-    ret = FUN_00274e30(fname, &h->fp);
+    ret = dvci_get_fstate(fname, &h->fp);
     if (h->fp.size == 0) {
         dvci_conv_fname(fname, dvci_path);
         ADXMSG_PrintErr("DVCI: File cache was not hit. \"%s\"\n", dvci_path);
@@ -373,7 +370,7 @@ int dvCiReqRd(DvCiFile *h, int nsct, char *buf)
         sceCdSync(0);
         SRD_WaitForExecServer();
         SRD_ExecServer();
-        FUN_00271a68(h->stm);
+        SRD_WaitComplete(h->stm);
         SRD_Destroy(h->stm);
         h->stm = 0;
         h->done = nsct;
@@ -467,7 +464,7 @@ int dvCiGetDvdLayer(void)
 int dvci_getfilesize32(const char *fname)
 {
     sceCdlFILE fp;
-    FUN_00274e30(fname, &fp);
+    dvci_get_fstate(fname, &fp);
     if (fp.size == 0) {
         dvci_conv_fname(fname, dvci_path);
         SRD_SetHistory(0x8400);
@@ -583,7 +580,7 @@ int dvci_stricmp(const char *a, const char *b)
     return 0;
 }
 
-int FUN_00274790(char *buf, char *list, int listlen, int n, int nameLen)
+int dvci_analysis_flist(char *buf, char *list, int listlen, int n, int nameLen)
 {
     int i;
     int start;
@@ -693,14 +690,14 @@ int search_fstate(DvCiFileLoc *files, int n)
             found++;
             files[i].lsn = fp.lsn;
             files[i].size = fp.size;
-            FUN_00265928("DVCI: \"%s\" found.\n", name);
+            ADXPS2_PrintfWarn("DVCI: \"%s\" found.\n", name);
         } else {
             SRD_SetHistory(0x9502);
             missing++;
-            FUN_00265928("DVCI: \"%s\" Not found.\n", name);
+            ADXPS2_PrintfWarn("DVCI: \"%s\" Not found.\n", name);
         }
     }
-    FUN_00265928("DVCI: Total %d files.\n", found);
+    ADXPS2_PrintfWarn("DVCI: Total %d files.\n", found);
     if (missing > 0)
         ADXMSG_PrintErr("DVCI: Warning, Can't load all cache file.%c", 10);
     return found;
@@ -725,7 +722,7 @@ void dvci_init_flist(void)
     memset(&dvci_dir_table, 0, sizeof(DvCiTable));
 }
 
-int FUN_00274d30(const char *name)
+int dvci_is_lsn_fname(const char *name)
 {
     if (strlen(name) != 17) {
         return 0;
@@ -733,7 +730,7 @@ int FUN_00274d30(const char *name)
     return name[8] == '.';
 }
 
-int FUN_00274d70(const char *name, int *lsn, int *nsct)
+int dvci_get_lsn_fname(const char *name, int *lsn, int *nsct)
 {
     char *p;
     p = (char *)name;
@@ -744,13 +741,13 @@ int FUN_00274d70(const char *name, int *lsn, int *nsct)
     if (nsct != 0) {
         *nsct = strtoul(p, &p, 16);
     }
-    FUN_00265928("DVCI: \"%s\" opened. ", name);
-    FUN_00265928("LSN=%d, ", *lsn);
-    FUN_00265928("Size=%d[sector]\n", *nsct);
+    ADXPS2_PrintfWarn("DVCI: \"%s\" opened. ", name);
+    ADXPS2_PrintfWarn("LSN=%d, ", *lsn);
+    ADXPS2_PrintfWarn("Size=%d[sector]\n", *nsct);
     return 1;
 }
 
-int FUN_00274e30(const char *name, sceCdlFILE *fp)
+int dvci_get_fstate(const char *name, sceCdlFILE *fp)
 {
     int lsn;
     int nsct;
@@ -760,8 +757,8 @@ int FUN_00274e30(const char *name, sceCdlFILE *fp)
         ADXMSG_PrintErr("DVCI: CD/DVD-ROM Image opened%c\n", '.');
         return 1;
     }
-    if (FUN_00274d30(name) == 1) {
-        FUN_00274d70(name, &lsn, &nsct);
+    if (dvci_is_lsn_fname(name) == 1) {
+        dvci_get_lsn_fname(name, &lsn, &nsct);
         fp->lsn = lsn;
         fp->size = nsct << 11;
         return 0;
@@ -774,7 +771,7 @@ int FUN_00274e30(const char *name, sceCdlFILE *fp)
     return 0;
 }
 
-int dvCiLoadDirInfo(const char *path, char *buf, unsigned int size, int nameLen)
+int dvCiLoadFcache(const char *path, char *buf, unsigned int size, int nameLen)
 {
     int n;
     int found;
@@ -789,25 +786,25 @@ int dvCiLoadDirInfo(const char *path, char *buf, unsigned int size, int nameLen)
         return 0;
     }
     if (buf == 0) {
-        FUN_00265928("DVCI: Invalidate filelist buffer pointer.\r\n", 0);
+        ADXPS2_PrintfWarn("DVCI: Invalidate filelist buffer pointer.\r\n", 0);
         return 0;
     }
     if (size == 0) {
-        FUN_00265928("DVCI: Invalidate filelist buffer size.\r\n", 0);
+        ADXPS2_PrintfWarn("DVCI: Invalidate filelist buffer size.\r\n", 0);
         return 0;
     }
     memset(buf, 0, size);
     if (load_flist(path, dvci_dir_buf) == 0) {
-        FUN_00265928("DVCI: Can't read filelist file.(%s)\n", path);
+        ADXPS2_PrintfWarn("DVCI: Can't read filelist file.(%s)\n", path);
         dvci_call_errfn(0, "E0111501:can't read filelist.(dvCiLoadDirInfo)");
         return 0;
     }
-    n = FUN_00274790(buf, dvci_dir_buf, 4096, size / (nameLen + 9), nameLen);
+    n = dvci_analysis_flist(buf, dvci_dir_buf, 4096, size / (nameLen + 9), nameLen);
     found = search_fstate((DvCiFileLoc *)buf, n);
     return size / (nameLen + 9) * 8 + found * (nameLen + 1);
 }
 
-int dvCiLoadDirInfoMem(char *list, int listlen, char *buf, unsigned int size, int nameLen)
+int dvCiSetFcache(char *list, int listlen, char *buf, unsigned int size, int nameLen)
 {
     int n;
     int found;
@@ -822,14 +819,14 @@ int dvCiLoadDirInfoMem(char *list, int listlen, char *buf, unsigned int size, in
         return 0;
     }
     if (buf == 0) {
-        FUN_00265928("DVCI: Invalidate filelist buffer pointer.\r\n", 0);
+        ADXPS2_PrintfWarn("DVCI: Invalidate filelist buffer pointer.\r\n", 0);
         return 0;
     }
     if (listlen == 0 || size == 0) {
-        FUN_00265928("DVCI: Invalidate filelist buffer size.\r\n", 0);
+        ADXPS2_PrintfWarn("DVCI: Invalidate filelist buffer size.\r\n", 0);
         return 0;
     }
-    n = FUN_00274790(buf, list, listlen, size / (nameLen + 9), nameLen);
+    n = dvci_analysis_flist(buf, list, listlen, size / (nameLen + 9), nameLen);
     found = search_fstate((DvCiFileLoc *)buf, n);
     return size / (nameLen + 9) * 8 + found * (nameLen + 1);
 }
@@ -837,7 +834,7 @@ int dvCiLoadDirInfoMem(char *list, int listlen, char *buf, unsigned int size, in
 int dvCiIsExistFcache(const char *name)
 {
     sceCdlFILE fp;
-    FUN_00274e30(name, &fp);
+    dvci_get_fstate(name, &fp);
     return fp.lsn != 0;
 }
 

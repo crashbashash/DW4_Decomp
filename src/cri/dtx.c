@@ -33,20 +33,19 @@ struct DtxObj {
     unsigned int dmaid;     /* 0x40 */
 };
 
-extern volatile int DAT_004a9b18;
+extern volatile int dtx_proc_init_flag;
 extern int dtx_rpc_id;
-extern int DAT_004a9b1c;
 extern int dtx_def_rcvcbf_cnt;
 extern int dtx_def_sndcbf_cnt;
-extern int DAT_004a9b28;
+extern int dtx_exechndl_cnt;
 extern int dtx_init_cnt;
-extern DtxObj DAT_004a9b30[16];
+extern DtxObj dtx_clnt[16];
 extern sceSifClientData dtx_rpc_client;
-extern sceSifServeData DAT_004aa3d8;
-extern sceSifQueueData DAT_004aa420;
-extern char DAT_004aa440[];
-extern void (*DAT_004aa540[64])(int object, int *data, unsigned int words);
-extern int DAT_004aa640[64];
+extern sceSifServeData dtx_sd;
+extern sceSifQueueData dtx_qd;
+extern char dtx_svrbuf[];
+extern void (*dtx_urpc_fn[64])(int object, int *data, unsigned int words);
+extern int dtx_urpc_obj[64];
 extern int dtx_sbuf[64];
 extern int dtx_rbuf[64];
 
@@ -59,7 +58,7 @@ extern char DTX_Create_can_t_create_DTX_of_server[];
 extern char E0092101_DTX_Init_bind_errr[];
 
 
-void *FUN_00273078(unsigned int command, void *buf, int size)
+void *dtx_rpc_func(unsigned int command, void *buf, int size)
 {
     int *data = buf;
 
@@ -74,20 +73,20 @@ void *FUN_00273078(unsigned int command, void *buf, int size)
         DTX_Destroy((DtxObj *)data[0]);
         break;
     default:
-        if (command - 0x400 < 64 && DAT_004aa540[command - 0x400] != 0) {
-            DAT_004aa540[command - 0x400](DAT_004aa640[command - 0x400], data, (unsigned int)size / 4);
+        if (command - 0x400 < 64 && dtx_urpc_fn[command - 0x400] != 0) {
+            dtx_urpc_fn[command - 0x400](dtx_urpc_obj[command - 0x400], data, (unsigned int)size / 4);
         }
         break;
     }
     return data;
 }
 
-int FUN_00273128(void)
+int dtx_svr_proc(void)
 {
-    sceSifSetRpcQueue(&DAT_004aa420, GetThreadId());
-    sceSifRegisterRpc(&DAT_004aa3d8, dtx_rpc_id, FUN_00273078, DAT_004aa440, 0, 0, &DAT_004aa420);
-    DAT_004a9b18 = 1;
-    sceSifRpcLoop(&DAT_004aa420);
+    sceSifSetRpcQueue(&dtx_qd, GetThreadId());
+    sceSifRegisterRpc(&dtx_sd, dtx_rpc_id, dtx_rpc_func, dtx_svrbuf, 0, 0, &dtx_qd);
+    dtx_proc_init_flag = 1;
+    sceSifRpcLoop(&dtx_qd);
     return 0;
 }
 
@@ -127,7 +126,7 @@ DtxObj *DTX_Open(unsigned int id)
     if (id >= 16) {
         return 0;
     }
-    return &DAT_004a9b30[id];
+    return &dtx_clnt[id];
 }
 
 void DTX_Close(DtxObj *dtx)
@@ -158,7 +157,7 @@ DtxObj *DTX_Create(unsigned int id, char *eewk, int iopwk, int wklen)
         ADXMSG_PrintErr(illeagal_ID_d, id);
         return 0;
     }
-    dtx = &DAT_004a9b30[id];
+    dtx = &dtx_clnt[id];
     if (dtx->used != 0) {
         return 0;
     }
@@ -215,7 +214,7 @@ void DTX_SetSndCbf(DtxObj *dtx, DtxCbf send, void *obj)
 /* matching construct: statement-order sweep of the four DMA stores */
 void DTX_ExecHndl(DtxObj *dtx)
 {
-    DAT_004a9b28++;
+    dtx_exechndl_cnt++;
     if (dtx->state == 1) {
         if (dtx->count < dtx->peer->count) {
             InvalidDCache(dtx->eewk, dtx->eewk + dtx->size - 1);
@@ -225,7 +224,7 @@ void DTX_ExecHndl(DtxObj *dtx)
         }
     }
     if (dtx->state == 0 && dtx->flag == 1) {
-        if (DAT_004a9b1c == 1) {
+        if (dtx_send_sw == 1) {
             dtx->send(dtx->send_obj, dtx->eewk, dtx->size);
             dtx->count++;
             dtx->peer->count = dtx->count;
@@ -270,7 +269,7 @@ void DTX_Finish(void)
     DtxObj *dtx;
     int i;
     if (--dtx_init_cnt == 0) {
-        dtx = DAT_004a9b30;
+        dtx = dtx_clnt;
         for (i = 0; i < 16; i++, dtx++) {
             if (dtx->used == 1) {
                 DTX_Destroy(dtx);
@@ -299,7 +298,7 @@ void DTX_ExecServer(void)
     DtxObj *dtx;
     int i;
     SJCRS_Lock();
-    dtx = DAT_004a9b30;
+    dtx = dtx_clnt;
     for (i = 0; i < 16; i++, dtx++) {
         if (dtx->used == 1) {
             DTX_ExecHndl(dtx);

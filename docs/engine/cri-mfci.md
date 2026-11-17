@@ -29,6 +29,8 @@ progress.
 ## Open questions
 
 - The functions have no names from strings beyond the `mfCi` names the messages give (`mfCiOpen`,
-  `mfCiOpenEntry`, `mfCiReqRd`). The handle fields are named from use.
+  `mfCiOpenEntry`, `mfCiReqRd`). The handle fields are named from use. `mfci_strtoul` (medium, from behaviour)
+  is the bare `strtoul` that `mfci_get_adr_size` reads the address and size of a name with; the 2002 SDK's
+  `mfci.o` calls `strtoul` directly.
 - Opening by entry number (`mfCiOpenEntry`) checks the number and the mode but never stores the entry, so
   the handle's name is whatever the previous user left.

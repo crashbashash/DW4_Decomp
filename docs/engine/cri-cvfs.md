@@ -82,6 +82,9 @@ was found in the SDK objects.
   `GetNumFiles` and `LoadDirInfo`; that ordering is not shown by this binary. `cvFsLoadDirInfo` reports
   `cvFsIsExistFile #2:illegal device name`, apparently a message copied from `cvFsIsExistFile` in the
   original source.
+- `cvFsAddVolume` (`0x270f68`) is an unreferenced `return 0` before `cvFsAddVolumeEx`; the name is medium,
+  from the Street Fighter III 3rd Strike libadxe's order and size
+  ([3s-decomp](https://github.com/crowded-street/3s-decomp)).
 - The helpers have names from what they do, in CRI's spelling: `cvFsCallUsrErrFn`, `cvFsError`, `addDevice`,
   `getDevice`, `toUpperStr`, `allocCvFsHdl`, `releaseCvFsHdl`, `getDefDev`, `splitPath`, `getPathDevice`,
   `isExistDevName`, `isFullPathDev`, `makeFullPath`, `cvFsIsExistDev`.

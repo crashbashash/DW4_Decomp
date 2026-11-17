@@ -28,17 +28,17 @@ extern char *volatile srd_build;
 extern int srd_enter_fg;
 extern volatile int srd_dvd_exec_locked;
 extern volatile int srd_hst_exec_locked;
-extern volatile int DAT_004a92d0;
-extern volatile int DAT_004a92d4;
-extern volatile unsigned int DAT_004a92d8;
-extern volatile int DAT_004a92dc;
-extern volatile int DAT_004a92e0;
-extern volatile int DAT_004a92e4;
-extern volatile int DAT_004a92e8;
+extern volatile int srd_geterror_locked;
+extern volatile int srd_geterror_call;
+extern volatile unsigned int srd_wait_svr_cnt;
+extern volatile int srd_debug_geterror;
+extern volatile int srd_debug_rdbg_cnt;
+extern volatile int srd_debug_rded_cnt;
+extern volatile int srd_create_cnt;
 extern int srd_destroy_cnt;
 extern volatile int srd_history_pre;
 extern volatile int srd_history;
-extern int srd_host_mode;
+extern int srd_filesystem64;
 extern int srd_host_lock;
 
 void srd_sw_lock(void);
@@ -61,7 +61,7 @@ SrdObj *SRD_Create(void)
         srd_obj.stat = 0;
         srd_obj.mode = -1;
         srd_obj.abort_request = 0;
-        DAT_004a92e8++;
+        srd_create_cnt++;
         srd = &srd_obj;
     }
     SVM_UnlockVar();
@@ -179,7 +179,7 @@ void srd_wait_hst(SrdObj *f)
     }
 }
 
-void FUN_00271a68(SrdObj *h)
+void SRD_WaitComplete(SrdObj *h)
 {
     short i;
     int stat;
@@ -207,15 +207,15 @@ void FUN_00271a68(SrdObj *h)
         }
         if (h->stat != 9) {
             h->stat = 3;
-            DAT_004a92e4++;
+            srd_debug_rded_cnt++;
         }
     }
     srd_enter_fg = 0;
 }
 
-void FUN_00271b78(void)
+void SRD_WaitCompleteVoid(void)
 {
-    FUN_00271a68(&srd_obj);
+    SRD_WaitComplete(&srd_obj);
 }
 
 void SRD_Break(SrdObj *object)
@@ -235,14 +235,14 @@ int srd_check_dvd_error(SrdObj *h)
 {
     int err;
 
-    if (DAT_004a92d4 == 0) {
+    if (srd_geterror_call == 0) {
         return 0;
     }
     if (h->stat != 2) {
         return 0;
     }
-    DAT_004a92dc = 1;
-    if (DAT_004a92d0 == 1) {
+    srd_debug_geterror = 1;
+    if (srd_geterror_locked == 1) {
         SVM_LockDev();
         SRD_SetHistory(0x1400);
         err = sceCdGetError();
@@ -253,7 +253,7 @@ int srd_check_dvd_error(SrdObj *h)
         err = sceCdGetError();
         SRD_SetHistory(0x1501);
     }
-    DAT_004a92dc = 0;
+    srd_debug_geterror = 0;
     if (err != 0 && err != -1) {
         if (err != 32) {
             h->error = err;
@@ -264,22 +264,22 @@ int srd_check_dvd_error(SrdObj *h)
     return 0;
 }
 
-void FUN_00271d10(unsigned char value)
+void SRD_SetSpindlCtrl(unsigned char value)
 {
     srd_spindlctrl = value;
 }
 
-void FUN_00271d20(int value)
+void SRD_SetSpindlCtrlSw(int value)
 {
     srd_spindlctrl_sw = value;
 }
 
-unsigned char FUN_00271d30(void)
+unsigned char SRD_GetSpindlCtrl(void)
 {
     return srd_spindlctrl;
 }
 
-int FUN_00271d40(void)
+int SRD_GetSpindlCtrlSw(void)
 {
     return srd_spindlctrl_sw;
 }
@@ -296,12 +296,12 @@ void srd_exec_dvd(SrdObj *srd)
             busy = sceCdBreak();
             SRD_SetHistory(0x1601);
             if (busy == 0)
-                scePrintf("SRD: sceCdBreak is fail. %d\n", DAT_004a92dc);
+                scePrintf("SRD: sceCdBreak is fail. %d\n", srd_debug_geterror);
             SRD_SetHistory(0x1700);
             sceCdSync(0);
             SRD_SetHistory(0x1701);
             srd->stat = 0;
-            DAT_004a92e4++;
+            srd_debug_rded_cnt++;
             break;
         case 1:
         case 3:
@@ -325,7 +325,7 @@ void srd_exec_dvd(SrdObj *srd)
         busy = sceCdRead(srd->lsn, srd->sectors, srd->buf, &srd->rmode);
         SRD_SetHistory(0x1801);
         if (busy == 1) {
-            DAT_004a92e0++;
+            srd_debug_rdbg_cnt++;
             srd->stat = 2;
         } else {
             srd->stat = 9;
@@ -339,7 +339,7 @@ void srd_exec_dvd(SrdObj *srd)
         result = srd_check_dvd_error(srd);
         if (busy == 0) {
             srd->stat = (result == 1) ? 9 : 3;
-            DAT_004a92e4++;
+            srd_debug_rded_cnt++;
         }
     }
 }
@@ -354,7 +354,7 @@ void srd_exec_hst(SrdObj *srd)
         case 2:
             srd_wait_hst(srd);
             srd->stat = 0;
-            DAT_004a92e4++;
+            srd_debug_rded_cnt++;
             /* fall through */
         case 1:
         case 3:
@@ -384,7 +384,7 @@ void srd_exec_hst(SrdObj *srd)
         SRD_SetHistory(0x2101);
         if (ret >= 0) {
             srd->stat = 2;
-            DAT_004a92e0++;
+            srd_debug_rdbg_cnt++;
         } else {
             srd->stat = 9;
             srd->error = (int) ret;
@@ -400,13 +400,13 @@ void srd_exec_hst(SrdObj *srd)
             SRD_SetHistory(0x2202);
             if (busy == 0) {
                 srd->stat = 3;
-                DAT_004a92e4++;
+                srd_debug_rded_cnt++;
             }
         }
     }
 }
 
-int FUN_00272108(void)
+int SRD_IsExecute(void)
 {
     return srd_enter_fg;
 }
@@ -451,10 +451,10 @@ int SRD_GetErrCode(void)
 
 void SRD_WaitForExecServer(void)
 {
-    DAT_004a92d8 = 0;
+    srd_wait_svr_cnt = 0;
     while (srd_enter_fg == 1) {
-        DAT_004a92d8++;
-        if (DAT_004a92d8 > 0x19640000) {
+        srd_wait_svr_cnt++;
+        if (srd_wait_svr_cnt > 0x19640000) {
             scePrintf("SRD: SRD_WaitForExecServer timeout.(10sec)\n");
             break;
         }
@@ -476,13 +476,13 @@ void SRD_LockedForHstExec(int value)
 void SRD_LockedForGetError(int value)
 {
     SRD_WaitForExecServer();
-    DAT_004a92d0 = (char)value;
+    srd_geterror_locked = (char)value;
 }
 
 void SRD_CallForGetError(int value)
 {
     SRD_WaitForExecServer();
-    DAT_004a92d4 = (char)value;
+    srd_geterror_call = (char)value;
 }
 
 void SRD_SetError(void)
@@ -536,7 +536,7 @@ int SRD_DebugPrint(void)
 {
     scePrintf("SRD: SRD Info.\n");
     scePrintf(" srd_enter_fg       = %d\n", srd_enter_fg);
-    scePrintf(" srd_debug_geterror = %d\n", DAT_004a92dc);
+    scePrintf(" srd_debug_geterror = %d\n", srd_debug_geterror);
     scePrintf(" srd_obj.stat       = %d\n", srd_obj.stat);
     if (srd_obj.devtype == 1) {
         scePrintf(" srd_obj.devtype    = DVD\n");
@@ -550,12 +550,12 @@ int SRD_DebugPrint(void)
 
 int SRD_GetReadEndCount(void)
 {
-    return DAT_004a92e4;
+    return srd_debug_rded_cnt;
 }
 
 int SRD_GetReadBeginCount(void)
 {
-    return DAT_004a92e0;
+    return srd_debug_rdbg_cnt;
 }
 
 void SRD_SetHistory(int value)
@@ -569,20 +569,20 @@ int SRD_GetHistory(void)
     return srd_history;
 }
 
-void FUN_002725d0(int mode)
+void SRD_SetFilesystem64(int mode)
 {
-    srd_host_mode = mode;
+    srd_filesystem64 = mode;
     if (mode == 1) {
         scePrintf("SRD: 64bit Host filesystem.\r\n");
     }
 }
 
-int FUN_00272610(void)
+int SRD_GetFilesystem64(void)
 {
-    return srd_host_mode;
+    return srd_filesystem64;
 }
 
-void FUN_00272620(int value)
+void SRD_SetLockHost(int value)
 {
     srd_hst_exec_locked = (char)value;
     srd_host_lock = srd_hst_exec_locked;
@@ -591,7 +591,7 @@ void FUN_00272620(int value)
     }
 }
 
-int FUN_00272678(void)
+int SRD_GetLockHost(void)
 {
     return srd_host_lock;
 }
@@ -610,7 +610,7 @@ void srd_sw_unlock(void)
     }
 }
 
-int FUN_002726f8(int lsn)
+int SRD_SetDvdSeekPos(int lsn)
 {
     int ok;
     int err;
@@ -638,7 +638,7 @@ long long SRD_SceLseek(int fd, long long offset, int whence)
     long long ret;
 
     srd_sw_lock();
-    if (srd_host_mode == 1) {
+    if (srd_filesystem64 == 1) {
         ret = sceLseek64(fd, offset, whence);
         if (ret < 0) {
             scePrintf("SRD: sceLseek64 error = %d\r\n", ret);

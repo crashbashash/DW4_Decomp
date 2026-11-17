@@ -153,10 +153,6 @@
 0x0025b958	ADXAMP_SetFrmPrd	cri
 0x0025b960	ADXAMP_GetFrmPrd	cri
 0x0025ba18	ADXB_DecodeHeaderAc3	cri
-0x0025d020	ADXKEY_Nop	cri
-0x0025d028	ADXKEY_EntryCbFunc	cri
-0x0025d2e0	ADXKEY_NextSeed	cri
-0x0025d838	adxb_SetDefaultFmt	cri
 0x0025d8d8	ADXB_DecodeHeader	cri
 0x0025da60	ADXB_GetPcmBuf	cri
 0x0025da68	ADXB_GetFormat	cri
@@ -705,13 +701,11 @@
 0x0025ccb8	ADXB_ExecOneAu8	cri
 0x0025ce38	ADXB_ExecOneAuUlaw	cri
 0x0025cfe0	ADXB_ExecOneAu	cri
-0x0025d040	ADXKEY_ExecCbFunc	cri
 0x0025d078	SKG_Init	cri
 0x0025d098	SKG_Finish	cri
 0x0025d0b8	SKG_GenerateKey	cri
 0x0025d270	SKG_GetDefKey	cri
 0x002618c0	ADXF_Open	cri
-0x00263980	ADXT_EntryFname	cri
 0x00269c60	ADXSTM_Init	cri
 0x00269c98	ADXSTM_Finish	cri
 0x00269da8	ADXSTMF_CreateCvfs	cri
@@ -726,8 +720,6 @@
 0x0026a1f0	ADXSTM_Start2	cri
 0x0026a238	ADXSTM_StopNw	cri
 0x0026a2a0	ADXSTM_Stop	cri
-0x0026a330	adxstmf_rd_exec	cri
-0x0026a728	adxstmf_stat_exec	cri
 0x0026a908	ADXSTM_ExecServer	cri
 0x0026a988	ADXSTM_GetCurSct	cri
 0x0026a9b8	ADXSTM_GetBufSize	cri
@@ -754,15 +746,9 @@
 0x0026b008	ADXPS2_SetupHostFs	cri
 0x0026d7a0	ADXT_StartFname	cri
 0x00273988	dvCiGetInterface	cri
-0x00274f10	dvCiLoadDirInfo	cri
-0x00275090	dvCiLoadDirInfoMem	cri
 0x00275200	dvCiSetRdMode	cri
 0x00275220	dvCiSetRootDir	cri
-0x002752f8	dvCiSrdSeek	cri
-0x00275310	htCiSetHost64	cri
-0x00275340	htCiSetHostLock	cri
 0x00275370	htCiGetInterface	cri
-0x00276b68	htCiLoadDirInfo	cri
 0x00276ce8	htCiSetOpenMode	cri
 0x00276d18	htCiSetRootDir	cri
 0x00277dd0	mfCiGetInterface	cri
@@ -785,7 +771,6 @@
 0x002670c8	ADXSJD_EntryDecFunc	cri
 0x002670e0	ADXSJD_SetDecPos	cri
 0x002670f0	ADXSJD_SetLnkSw	cri
-0x00267118	ADXSJD_SetDefKeyString	cri
 0x00267130	ADXSJD_ResetDefFmt	cri
 0x00267148	ADXSJD_AdjustSmpl	cri
 0x002671a8	ADXSJD_EntryFltFunc	cri

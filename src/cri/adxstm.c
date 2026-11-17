@@ -298,7 +298,7 @@ void adxstm_sj_internal_error(void)
 
 /* One read step: completes the read in flight, handing its sectors to the SJ, then starts the next one
  * into the free part of the SJ while the SJ holds less than minrdsz bytes. */
-void adxstmf_rd_exec(AdxStmObj *stm)
+void adxstmf_stat_exec(AdxStmObj *stm)
 {
     SfdSj *sj;
     int fsstat;
@@ -423,7 +423,7 @@ void adxstmf_rd_exec(AdxStmObj *stm)
     }
 }
 
-void adxstmf_stat_exec(AdxStmObj *stm)
+void ADXSTMF_ExecHndl(AdxStmObj *stm)
 {
     CvFsHandle *fd;
     int nsct;
@@ -487,7 +487,7 @@ void adxstmf_stat_exec(AdxStmObj *stm)
         }
     }
     if (stm->stat == ADXSTM_STAT_READ && stm->opened == 1) {
-        adxstmf_rd_exec(stm);
+        adxstmf_stat_exec(stm);
     }
 }
 
@@ -498,7 +498,7 @@ void ADXSTM_ExecServer(void)
     if (SVM_TestAndSet(&adxstmf_svr_busy) != 0) {
         for (i = 0; i < ADXSTM_MAX_OBJ; i++) {
             if (adxstmf_obj[i].used == 1) {
-                adxstmf_stat_exec(&adxstmf_obj[i]);
+                ADXSTMF_ExecHndl(&adxstmf_obj[i]);
             }
         }
         *(volatile int *)&adxstmf_svr_busy = 0;
@@ -632,7 +632,7 @@ void ADXSTM_OpenCvfs(AdxStmObj *stm)
         stm->open_req = 1;
         do {
             if (SVM_TestAndSet(&adxstmf_svr_busy) == 1) {
-                adxstmf_stat_exec(stm);
+                ADXSTMF_ExecHndl(stm);
                 adxstmf_svr_busy = 0;
             }
         } while (stm->open_req != 0);
