@@ -36,21 +36,18 @@ void beLightCtrl_UpdateRam(void)
 
 int beLightCtrl_OnMessageText(beLightCtrl *self, beBaseInfoRam *ram, const char *message) {
     beLightCtrlInfo *info;
-    igVec3f ambient;
     igLightAttrDispatchView *light;
     igLightAttrDispatchView **lights;
-    igVec3f diffuse;
-    igVec3f specular;
     int name;
     igLightSet *lightSet;
-    igVec4f colour;
     info = (beLightCtrlInfo *)ram->_parentInfo;
     switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beLightCtrl_GetMsgActionEnum(), message)) {
-    case 0:
+    case 0: {
         name = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 0));
-        beMessenger_GetVec3((float *)&ambient, (beMessenger *)self->_messenger, 0);
-        beMessenger_GetVec3((float *)&diffuse, (beMessenger *)self->_messenger, 1);
-        beMessenger_GetVec3((float *)&specular, (beMessenger *)self->_messenger, 2);
+        igVec3f ambient = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
+        igVec3f diffuse = beMessenger_GetVec3((beMessenger *)self->_messenger, 1);
+        igVec3f specular = beMessenger_GetVec3((beMessenger *)self->_messenger, 2);
+        igVec4f colour;
         lightSet = (igLightSet *)igProperty_FindByName((igObjectList *)info->_lightSetList, g_propertyNameField, (const char *)name);
         if (lightSet != 0) {
             lights = (igLightAttrDispatchView **)((igLightList *)lightSet->_lights)->_data;
@@ -64,6 +61,7 @@ int beLightCtrl_OnMessageText(beLightCtrl *self, beBaseInfoRam *ram, const char 
             light->setSpecular(&colour.x);
         }
         return 1;
+    }
     default:
         return 0;
     }

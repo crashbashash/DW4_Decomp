@@ -1146,6 +1146,7 @@
 0x2af1d8	sftim_Tc2Time29N	high	sdk:libmwsfde.a/sfd_tim.o A (3s - -)
 0x2af210	sftim_Tc2Time59N	high	sdk:libmwsfde.a/sfd_tim.o A (3s - -)
 0x2af248	sftim_Tc2Time23D	medium	sdk:libmwsfde.a/sfd_tim.o C by order and size
+0x2af2e8	sftim_Tc2Time29D	medium	RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfd_tim.c sftim_Tc2Time29D) by order between sftim_Tc2Time23D and sftim_Tc2Time59D and the 29.97 drop-frame constants [re4 github.com/adonis-singh/re4]
 0x2af380	sftim_Tc2Time59D	medium	sdk:libmwsfde.a/sfd_tim.o C by order and size
 0x2af540	SFTIM_GetTimeOneFrmVideo	medium	sdk:libmwsfde.a/sfd_tim.o B
 0x2af580	SFD_GetFps	medium	sdk:libmwsfde.a/sfd_tim.o B
@@ -1242,6 +1243,7 @@
 0x2b2f40	SFXA_Finish	high	sdk:libmwsfde.a/sfx_alp.o A (3s - -)
 0x2b30c0	SFXA_MakeAlp3Tbl	medium	sdk:libmwsfde.a/sfx_alp.o C by order and size
 0x2b31d8	sfxcnv_IsCnvUpHalf	medium	own error string only
+0x2b32b0	SFX_DecideTableAlph3	medium	RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfx_cnv.c SFX_DecideTableAlph3) by body: the 3110/3211 alpha-table choice from the compo [re4 github.com/adonis-singh/re4]
 0x2b3318	sfxcnv_MakeTable	medium	own error string only
 0x2b3690	SFX_MakeTblZ16	medium	own error string only
 0x2b3708	SFX_MakeTblZ32	medium	own error string only

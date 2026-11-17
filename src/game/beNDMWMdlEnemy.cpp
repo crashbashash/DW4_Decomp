@@ -55,7 +55,7 @@ struct DataListSlot {
     static inline void adopt(beBaseInfoRam *ram, igObject *created) { igSmartPointer<igObject> list(created); set(ram, list); }
 };
 
-extern "C" int beNDMWMdlEnemy_IsKind(int self, int kind);
+extern "C" unsigned char beNDMWMdlEnemy_IsKind(int self, int kind);
 extern "C" void beNDMWMdlEnemy_RegisterReceiver(beNDMWMdlEnemy *self, int info, char *unused);
 extern "C" void beNDMWMdlEnemy_OnGenerate(beNDMWMdlEnemy *self, beBaseInfoRam *ram);
 extern "C" void beNDMWMdlEnemy_OnSequenceChange(beNDMWMdlEnemy *self, beBaseInfoRam *ram);
@@ -64,7 +64,7 @@ extern "C" int beNDMWMdlEnemy__GetMeta(void);
 #pragma push
 #pragma readonly_strings on
 
-int beNDMWMdlEnemy_IsKind(int self, int kind) {
+unsigned char beNDMWMdlEnemy_IsKind(int self, int kind) {
     return strcmp((const char *)kind, (const char *)KIND_ENEMY) == 0;
 }
 

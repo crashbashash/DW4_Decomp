@@ -15,7 +15,7 @@
 #include <string.h>
 #include "dw4/igMathConstants.h"
 
-extern "C" int beNDMWMdlMapBase_IsKind(int dummy0, int kind);
+extern "C" unsigned char beNDMWMdlMapBase_IsKind(int dummy0, int kind);
 extern "C" int beNDMWMdlMapBase_GetMeta(void);
 extern "C" int KIND_MAPBASE[4];
 extern "C" char MAPBASE[];
@@ -51,7 +51,7 @@ extern "C" void beNDMWMdlMapBase_OnUpdateRam(beNDMWMdlMapBase *self, beBaseInfoR
 #pragma push
 #pragma readonly_strings on
 
-int beNDMWMdlMapBase_IsKind(int dummy0, int kind) {
+unsigned char beNDMWMdlMapBase_IsKind(int dummy0, int kind) {
     return strcmp((const char *)kind, (const char *)KIND_MAPBASE) == 0;
 }
 

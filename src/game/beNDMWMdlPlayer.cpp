@@ -71,7 +71,7 @@ extern "C" igResult igMatrix44f_Invert(void *matrix, int source);
 extern "C" igResult igMetaEnum_GetValueByName(igMetaEnum *meta, const char *name, int *value);
 
 extern "C" void beNDMWMdlPlayer_Start(beNDMWMdlPlayer *self);
-extern "C" int beNDMWMdlPlayer_IsKind(int self, int kind);
+extern "C" unsigned char beNDMWMdlPlayer_IsKind(int self, int kind);
 extern "C" void beNDMWMdlPlayer_RegisterReceiver(beNDMWMdlPlayer *self, int info, char *unused);
 extern "C" void beNDMWMdlPlayer_UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
 extern "C" void beNDMWMdlPlayer_OnWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram);
@@ -174,7 +174,7 @@ void beNDMWMdlPlayer_Start(beNDMWMdlPlayer *self) {
     self->_viewerSIManager = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_igViewerSceneInfoManager_metaObject);
 }
 
-int beNDMWMdlPlayer_IsKind(int self, int kind) {
+unsigned char beNDMWMdlPlayer_IsKind(int self, int kind) {
     return strcmp((const char *)kind, "KIND_PLAYER") == 0;
 }
 
@@ -348,7 +348,7 @@ void beNDMWMdlPlayer_UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
                     beMessenger_AppendInt((beMessenger *)self->_messenger, ram->_ramNo);
                     beMessenger_SetRunCheck((beMessenger *)self->_messenger, 1);
                     beMessenger_DispatchSelected((beMessenger *)self->_messenger, "ACTION1");
-                    if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) == 0 && beBaseInfoRam_IsTimerExpired(ram, "ATDELAY") != 0) {
+                    if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) == 0 && beBaseInfoRam_IsTimerExpired(ram, "ATDELAY")) {
                         int delay;
                         int delayStep;
                         if (turnTimersFull) {

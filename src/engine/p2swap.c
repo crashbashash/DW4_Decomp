@@ -22,6 +22,12 @@
 #include "dw4/p2swap.h"
 #include "dw4/p2timer.h"
 
+/* The GS privileged CSR register and its FIELD bit: set while the odd field is shown. */
+enum {
+    P2_GS_CSR = 0x40,
+    P2_GS_CSR_FIELD = 0x2000
+};
+
 /* p2DmaWatchFlags bits of the waits here */
 enum {
     P2_WATCH_SWAPBUFFERS = 0x4,
@@ -64,12 +70,12 @@ extern struct SemaParam p2SwapSemaParam;
 
 extern p2FinishFunc *p2FinishTail;
 extern p2FinishFunc *p2FinishHead;
-extern int p2VsyncSwapPending;
-extern int p2FrameDrawn;
+
 extern int p2LastDrawBuffer;
 extern long long p2FramesSwapped;
 extern int p2FinishFuncSema;
 extern long long p2VsyncsWaited;
+extern long long p2Vsyncs;
 extern unsigned int p2DisplayPacket;
 extern int p2DisplayPacketQwc;
 extern int p2FinishSequence;
@@ -87,6 +93,9 @@ extern int p2GsSignalCount;
 extern volatile int p2FinishSema;
 extern volatile int p2SwapSema;
 extern volatile long long p2FramesShown;
+/* Set by the vertical-blank and FINISH handlers and cleared by thread code. */
+extern volatile int p2VsyncSwapPending;
+extern volatile int p2FrameDrawn;
 extern volatile p2DmaWatch p2DmaWatchFlags;
 
 /* Queued at the end of a frame: the GS has drawn it. */
@@ -273,6 +282,91 @@ void p2SwapBuffers(void) {
         if (p2Display.frameMode == 0 && p2Display.frameCount == 2) {
             p2UploadViewport();
         }
+    }
+}
+
+/* The vertical-blank handler: counts the vertical blanks and, when the display flips here, shows the
+ * frame drawn last once the swap interval has passed. */
+void p2VsyncHandler(void) {
+    struct SemaParam status;
+    long long csr;
+    int displayBuffer;
+    int page;
+
+    p2VsyncsWaited += 1;
+    p2VsyncsSinceSwap += 1;
+    p2Vsyncs += 1;
+    if (p2SwapOnVsync != 0) {
+        csr = p2readGSPrivRegister(P2_GS_CSR);
+        if (p2Display.singleBuffered != 0) {
+            if (p2FrameDrawn != 0 && (p2VsyncsSinceSwap >= 2 || p2SwapInterval == 0)) {
+                p2VsyncsSinceSwap = 0;
+                p2FramesShown += 1;
+                p2VsyncSwapPending = 1;
+                p2FrameDrawn = 0;
+                p2ReadClock(&p2FrameStartTime);
+            }
+        } else if (p2Display.frameCount == 1) {
+            if (p2Display.frameMode != 0) {
+                p2Display.displayBuffer = csr & P2_GS_CSR_FIELD;
+                page = 0;
+                p2GsDispfb2.field.fbp = page;
+                p2GsDispfb1.field.fbp = page;
+                if (p2FrameDrawn != 0 && (p2VsyncsSinceSwap >= 2 || p2SwapInterval == 0)) {
+                    p2VsyncsSinceSwap = 0;
+                    p2FramesShown += 1;
+                    p2VsyncSwapPending = 1;
+                    p2FrameDrawn = 0;
+                    p2ReadClock(&p2FrameStartTime);
+                }
+            }
+        } else if (p2Display.frameMode != 0 || p2Display.interlaced == 0) {
+            if (p2FrameDrawn != 0 && (p2VsyncsSinceSwap >= 2 || p2SwapInterval == 0)) {
+                p2VsyncsSinceSwap = 0;
+                p2FramesShown += 1;
+                p2Display.displayBuffer ^= 1;
+                if (p2GetDisplayFlags() == 0) {
+                    displayBuffer = p2Display.displayBuffer;
+                    p2GsDispfb2.field.fbp = (displayBuffer != 0) ? p2Display.secondBufferPage : 0;
+                    if (displayBuffer != 0) {
+                        page = p2Display.secondBufferPage;
+                    } else {
+                        page = 0;
+                    }
+                    p2GsDispfb1.field.fbp = page;
+                }
+                p2VsyncSwapPending = 1;
+                p2FrameDrawn = 0;
+                p2ReadClock(&p2FrameStartTime);
+            }
+        } else if ((p2Display.displayBuffer == 1 && (csr & P2_GS_CSR_FIELD)) ||
+                   (p2Display.displayBuffer == 0 && !(csr & P2_GS_CSR_FIELD))) {
+            p2Display.displayBuffer ^= 1;
+            if (p2GetDisplayFlags() == 0) {
+                displayBuffer = p2Display.displayBuffer;
+                p2GsDispfb2.field.fbp = (displayBuffer != 0) ? p2Display.secondBufferPage : 0;
+                if (displayBuffer != 0) {
+                    page = p2Display.secondBufferPage;
+                } else {
+                    page = 0;
+                }
+                p2GsDispfb1.field.fbp = page;
+            }
+            if (p2FrameDrawn != 0 && (p2VsyncsSinceSwap >= 2 || p2SwapInterval == 0)) {
+                p2VsyncsSinceSwap = 0;
+                p2FramesShown += 1;
+                p2VsyncSwapPending = 1;
+                p2FrameDrawn = 0;
+                p2ReadClock(&p2FrameStartTime);
+            }
+        }
+        iReferSemaStatus(p2SwapSema, &status);
+        if (status.currentCount != status.maxCount) {
+            iSignalSema(p2SwapSema);
+        }
+        FUN_001f8190(9);
+        FUN_001f8190(7);
+        p2TryStartDmaPacket(P2_DMA_VIF1);
     }
 }
 

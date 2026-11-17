@@ -20,11 +20,11 @@ class PackTest(unittest.TestCase):
                 return md, fh.read()
 
     def test_target_kept_others_elided(self):
-        # src/cri/sjcrs.c holds six small matched functions in one unit
+        # src/cri/sjcrs.c holds seven small matched functions in one unit
         md, c = self.run_pack("SJCRS_Lock", "--keep", "0")
         self.assertIn("{\n    SVM_Lock();\n}", c)
         self.assertNotIn("SVM_Unlock();\n}", c)
-        self.assertEqual(c.count("body elided"), 5)
+        self.assertEqual(c.count("body elided"), 6)
         self.assertIn("{ /* body elided: 20 B, MATCH */ }", c)
         self.assertIn("- function: `SJCRS_Lock` at 0x0027b2b0, 20 B", md)
         self.assertIn("- source: `src/cri/sjcrs.c`", md)
@@ -32,7 +32,7 @@ class PackTest(unittest.TestCase):
     def test_neighbours_kept(self):
         _md, c = self.run_pack("SJCRS_Lock", "--keep", "1")
         self.assertIn("SVM_Unlock();\n}", c)
-        self.assertEqual(c.count("body elided"), 3)
+        self.assertEqual(c.count("body elided"), 4)
 
     def test_notes_and_near_misses_optional(self):
         with tempfile.TemporaryDirectory() as notes:

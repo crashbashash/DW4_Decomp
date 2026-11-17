@@ -472,12 +472,12 @@ void beBaseInfoRam_StartTimer(beBaseInfoRam *self, const char *name, long long e
     timer->_endTime = endTime;
 }
 
-int beBaseInfoRam_HasTimer(beBaseInfoRam *self, const char *name) {
+unsigned char beBaseInfoRam_HasTimer(beBaseInfoRam *self, const char *name) {
     ensureTimerList(self);
     return igProperty_FindByName((igObjectList *)self->_dataList, g_propertyNameField, name) != 0;
 }
 
-int beBaseInfoRam_IsTimerExpired(beBaseInfoRam *self, const char *name) {
+unsigned char beBaseInfoRam_IsTimerExpired(beBaseInfoRam *self, const char *name) {
     beBaseInfoRamTimer *timer;
     long long endTime;
     ensureTimerList(self);

@@ -9,7 +9,7 @@
 #include "dw4/igObject.h"
 #include <string.h>
 
-extern "C" int beNDMWMdlEffect_IsKind(int dummy0, int kind);
+extern "C" unsigned char beNDMWMdlEffect_IsKind(int dummy0, int kind);
 extern "C" void beNDMWMdlEffect_RegisterReceiver(void);
 extern "C" int beNDMWMdlEffect_GetMeta(void);
 extern "C" int KIND_EFFECT[4];
@@ -52,7 +52,7 @@ extern "C" void beNDMWMdlEffect_OnGenerate(beNDMWMdlEffect *self, beBaseInfoRam 
 #pragma push
 #pragma readonly_strings on
 
-int beNDMWMdlEffect_IsKind(int dummy0, int kind) {
+unsigned char beNDMWMdlEffect_IsKind(int dummy0, int kind) {
     return strcmp((const char *)kind, (const char *)KIND_EFFECT) == 0;
 }
 

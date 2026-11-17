@@ -42,7 +42,6 @@ int beMessenger_GetObjectCount(struct beMessenger *self);
 struct igMetaObject *beMessenger_GetOrCreateMetaObject(void);
 const char *beMessenger_GetString(struct beMessenger *self, int index);
 int beMessenger_GetStringCount(struct beMessenger *self);
-void beMessenger_GetVec3(float *out, struct beMessenger *self, int index);
 int beMessenger_GetVec3Count(struct beMessenger *self);
 void beMessenger_PopArgContext(struct beMessenger *self);
 void beMessenger_PrepareDelayedGroup(struct beMessenger *self, const char *group);
@@ -78,11 +77,8 @@ inline void beMessenger_AppendVec3(struct beMessenger *self, igVec3f value) {
     beMessenger_AppendVec3(self, &value.x);
 }
 
-/* The vector reply as a value: callers that take it by value get it built in a temporary. */
-struct beMessengerVec3 : igVec3f {
-    beMessengerVec3(struct beMessenger *self, int index) { beMessenger_GetVec3(&x, self, index); }
-    const float *data() const { return &x; }
-};
+/* The vector reply, returned by value. */
+extern "C" igVec3f beMessenger_GetVec3(struct beMessenger *self, int index);
 #endif
 
 #endif

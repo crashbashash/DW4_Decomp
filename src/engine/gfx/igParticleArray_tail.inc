@@ -64,7 +64,7 @@ L24:
     ((O40 *)self->_internalVertexArray)->v112(sp70, 2);
     temp_s0 = ((HI *)self->_particleFormat)->f44 > 0;
     if (self->_setConstant == 0 && temp_s0 == 0) {
-        FUN_0015b880((PA *)self);
+        FUN_0015b880((igParticleArrayRefs *)self);
     }
     if (((int (*)(float, unsigned int, unsigned int, int, unsigned int, O40 *, O48 *))self->_updateFunction) != 0) {
         if (((O48 *)self->_pointSpriteInterface) != 0) {
@@ -72,12 +72,73 @@ L24:
         }
         ((int (*)(float, unsigned int, unsigned int, int, unsigned int, O40 *, O48 *))self->_updateFunction)(time, num, offset, self->_particleArray, self->_particleDataSize, ((O40 *)self->_internalVertexArray), ((O48 *)self->_pointSpriteInterface));
     } else if (temp_s0 == 0) {
-        FUN_0015bc20((PA *)self, temp_s0, 1);
+        FUN_0015bc20((igParticleArrayRefs *)self, temp_s0, 1);
     } else {
-        FUN_0015bc20((PA *)self, temp_s0, 0);
+        FUN_0015bc20((igParticleArrayRefs *)self, temp_s0, 0);
     }
     self->_setConstant = 1;
     *status = 0;
     return 1;
 }
 
+void Gap__Bec__ParticleArray__vfunc_27(igParticleArrayRefs *self) {
+    if (!(self->_currentTime <= self->_particleLifeEnd + self->_particleLifetimeEndOffset) ||
+        self->_currentTime < self->_particleLifeStart) {
+        return;
+    }
+    ((ParticleContextView *)self->_context.p)->v59(self->_internalVertexArray);
+    DAT_00560660[0] += self->_aliveParticleNum;
+    if (self->_pointSpriteInterface != 0) {
+        ((PointSpriteExtView *)self->_pointSpriteInterface.p)->v30();
+        ((PointSpriteExtView *)self->_pointSpriteInterface.p)->v32(self->_aliveParticleNum, self->_particleOffset);
+        ((PointSpriteExtView *)self->_pointSpriteInterface.p)->v31();
+    } else {
+        int count = 0;
+        bool strip = false;
+        int stripType = 0;
+        switch (self->_particleFormat->_primType) {
+        case 0:
+            count = self->_aliveParticleNum;
+            break;
+        case 1:
+            count = self->_aliveParticleNum >> 1;
+            break;
+        case 3:
+            count = self->_aliveParticleNum / 3;
+            break;
+        case 2:
+            strip = true;
+            if (self->_primLengthArray == 0) {
+                count = self->_aliveParticleNum - 1;
+            } else {
+                count = ((igPrimLengthArrayView *)self->_primLengthArray.p)->v27(0) - 1;
+            }
+            break;
+        case 4:
+            stripType = 1;
+            strip = true;
+            if (self->_primLengthArray == 0) {
+                count = self->_aliveParticleNum - 2;
+            } else {
+                count = ((igPrimLengthArrayView *)self->_primLengthArray.p)->v27(0) - 2;
+            }
+            break;
+        case 5:
+            strip = true;
+            stripType = 2;
+            if (self->_primLengthArray == 0) {
+                count = self->_aliveParticleNum - 2;
+            } else {
+                count = ((igPrimLengthArrayView *)self->_primLengthArray.p)->v27(0) - 2;
+            }
+            break;
+        }
+        if (strip && self->_primLengthArrayNum > 1) {
+            ((ParticleContextView *)self->_context.p)->v63(self->_primLengthArray);
+            ((ParticleContextView *)self->_context.p)->v74(stripType, self->_primLengthArrayNum, self->_particleOffset, self->_primLengthArrayOffset);
+        } else {
+            ((ParticleContextView *)self->_context.p)->v71(self->_particleFormat->_primType, count, self->_particleOffset);
+        }
+    }
+    ((ParticleContextView *)self->_context.p)->v59(0);
+}

@@ -2,6 +2,9 @@
 #include "dw4/igSmartPointer.h"
 #include "dw4/ViewerSetup.h"
 #include "dw4/igViewManager.h"
+#include "dw4/igVec3f.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igViewerParameters.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -64,7 +67,16 @@ extern int DAT_0058cd80[4];
 int igViewManager_OnKeyEvent(void *arg0);
 class DW4VC_100_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(); };
 
-int FUN_00464170(...);
+igBoundingBoxesMaker *FUN_001a4830(int pool);
+igAABox *FUN_001b2ed0(igBoundingBoxesMaker *maker, igNode *node);
+extern float sqrtf(float);
+
+/* The maker hands back a box that already holds one reference; the smart pointer takes its own. */
+static inline void dropCreatedReference(igAABox *box) {
+    box->_refCount = box->_refCount - 1;
+    if ((box->_refCount & 0x7FFFFF) == 0) igObject_Destroy(box);
+}
+void FUN_00464170(igNode *scene, float *center, float *size, bool wholeAnimation, long long time);
 
 typedef struct Obj { char p[80]; float f80; float f84; float f88; } Obj;
 typedef struct Arg { char p[12]; Obj *o; } Arg;
@@ -221,6 +233,49 @@ int ViewerSetup_ClearInfos(ViewerSetup *setup)
     return FUN_002370c0((int)setup->core.p);
 }
 
+igFieldSynchronizer *FUN_004509c0(int pool);
+void FUN_004551f0(igFieldSynchronizer *synchronizer, igObject *model, igMetaField *field);
+
+static inline void createSynchronizer(igSmartPointer<igFieldSynchronizer> &synchronizer, AdoptReference) {
+    igRelease(synchronizer.p);
+    synchronizer.p = FUN_004509c0(0);
+}
+
+/* Keeps each view-model field and the parameters' field of the same name equal. */
+void igViewManager_SynchronizeParameters(igViewManager *manager, igViewerParameters *parameters) {
+    igSmartPointer<igFieldSynchronizer> synchronizer;
+
+    createSynchronizer(synchronizer, AdoptReference());
+    FUN_004551f0(synchronizer, (igObject *)manager->_viewModel, g_igViewModel_viewMatrixMetaField);
+    FUN_004551f0(synchronizer, parameters, g_igViewerParameters_viewMatrixMetaField);
+    ObjectList_AppendRetained((igObjectList *)manager->_synchronizers, synchronizer);
+
+    createSynchronizer(synchronizer, AdoptReference());
+    FUN_004551f0(synchronizer, (igObject *)manager->_viewModel, g_igViewModel_ratioMetaField);
+    FUN_004551f0(synchronizer, parameters, g_igViewerParameters_ratioMetaField);
+    ObjectList_AppendRetained((igObjectList *)manager->_synchronizers, synchronizer);
+
+    createSynchronizer(synchronizer, AdoptReference());
+    FUN_004551f0(synchronizer, (igObject *)manager->_viewModel, g_igViewModel_hfovMetaField);
+    FUN_004551f0(synchronizer, parameters, g_igViewerParameters_hfovMetaField);
+    ObjectList_AppendRetained((igObjectList *)manager->_synchronizers, synchronizer);
+
+    createSynchronizer(synchronizer, AdoptReference());
+    FUN_004551f0(synchronizer, (igObject *)manager->_viewModel, g_igViewModel_nearPlaneMetaField);
+    FUN_004551f0(synchronizer, parameters, g_igViewerParameters_nearPlaneMetaField);
+    ObjectList_AppendRetained((igObjectList *)manager->_synchronizers, synchronizer);
+
+    createSynchronizer(synchronizer, AdoptReference());
+    FUN_004551f0(synchronizer, (igObject *)manager->_viewModel, g_igViewModel_farPlaneMetaField);
+    FUN_004551f0(synchronizer, parameters, g_igViewerParameters_farPlaneMetaField);
+    ObjectList_AppendRetained((igObjectList *)manager->_synchronizers, synchronizer);
+
+    createSynchronizer(synchronizer, AdoptReference());
+    FUN_004551f0(synchronizer, (igObject *)manager->_viewModel, g_igViewModel_drawTimeMetaField);
+    FUN_004551f0(synchronizer, parameters, g_igViewerParameters_drawTimeMetaField);
+    ObjectList_AppendRetained((igObjectList *)manager->_synchronizers, synchronizer);
+}
+
 void igViewManager_SetViewMode(igViewManager *manager, igViewMode *mode) {
     S2 *arg0 = (S2 *)manager;
     igObject *arg1 = (igObject *)mode;
@@ -269,12 +324,84 @@ void igViewManager_SetSceneUpVector(igViewManager *manager, const float *upVecto
     igModel_NotifyViews((igModel *)manager->_viewModel, (ModelChange *)buf);
 }
 
+/* Bounds at one time instead of over the whole animation. */
+static inline void setMakerTime(igBoundingBoxesMaker *maker, long long time) {
+    maker->_useWholeAnimation = 0;
+    maker->_time = time;
+}
+
+/* The centre of `scene`'s bounding box and the length of its diagonal, over the whole animation or at `time`. */
+void FUN_00464170(igNode *scene, float *center, float *size, bool wholeAnimation, long long time) {
+    igSmartPointer<igBoundingBoxesMaker> maker(FUN_001a4830(0), AdoptReference());
+    if (wholeAnimation) {
+        maker->_useWholeAnimation = 1;
+    } else {
+        setMakerTime(maker, time);
+    }
+    igSmartPointer<igAABox> box(FUN_001b2ed0(maker, scene), kRetainReference);
+    dropCreatedReference(box);
+    const igAABox *bounds = box;
+    float minX = bounds->_min[0];
+    float maxX = bounds->_max[0];
+    if (!(minX <= maxX)) {
+        center[0] = 0.0f;
+        center[1] = 0.0f;
+        center[2] = 0.0f;
+        *size = 0.0f;
+    } else {
+        center[0] = 0.5f * minX + 0.5f * maxX;
+        center[1] = 0.5f * bounds->_min[1] + 0.5f * bounds->_max[1];
+        center[2] = 0.5f * bounds->_min[2] + 0.5f * bounds->_max[2];
+        float dx = box->_max[0] - box->_min[0];
+        float dy = box->_max[1] - box->_min[1];
+        float dz = box->_max[2] - box->_min[2];
+        *size = sqrtf(dx * dx + dy * dy + dz * dz);
+    }
+}
+
 int igViewManager_OnKeyEvent(void *arg0) {
     void **temp_a0;
 
     temp_a0 = (void **)(*(int *)((char *)(arg0) + 8));
     ((DW4VC_100_0 *)(temp_a0))->vX();
     return 1;
+}
+
+int igMatrix44f_MakeLookAt(...);
+
+/* Looks at `object` from one and a half of its sizes away, across the scene's up vector. */
+void igViewManager_FrameObject(igViewManager *manager, igNode *object) {
+    igVec3f center;
+    float size;
+    igVec3f eye;
+    igVec3f up;
+    ViewModelEvent event;
+
+    center.set(0.0f, 0.0f, 0.0f);
+    size = 0.0f;
+    FUN_00464170(object, &center.x, &size, true, -1);
+    if (size == 0.0f) {
+        size = 1.0f;
+    }
+    size *= 1.5f;
+    up.copy(((igViewModel *)manager->_viewModel)->_sceneUpVector);
+    eye[0] = up[2];
+    eye[1] = up[0];
+    eye[2] = up[1];
+    eye.scale(size);
+    eye[0] += center[0];
+    eye[1] += center[1];
+    eye[2] += center[2];
+    igMatrix44f_MakeLookAt(((igViewModel *)manager->_viewModel)->_viewMatrix, &eye, &center, &up);
+    event.type = 2;
+    event.arg = 0;
+    event.data = (int)g_igViewModel_viewMatrixMetaField;
+    igModel_NotifyViews((igModel *)manager->_viewModel, (ModelChange *)&event);
+    igViewModel *model = (igViewModel *)manager->_viewModel;
+    model->_selectedCenter[0] = center[0];
+    model->_selectedCenter[1] = center[1];
+    model->_selectedCenter[2] = center[2];
+    ((igViewModel *)manager->_viewModel)->_selectedLength = size;
 }
 
 void igViewManager_ApplyOptions(igViewManager *manager, igObject *scene) {
@@ -289,7 +416,7 @@ void igViewManager_ApplyOptions(igViewManager *manager, igObject *scene) {
     void *p;
     int *h;
     int rc;
-    FUN_00464170(scene, sp60, &sp6C, 1, -1);
+    FUN_00464170((igNode *)scene, (float *)sp60, &sp6C, 1, -1);
     if (g_sharedViewerOptions == 0) {
         f = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
         if (f != 0) f = ViewerOptions_Construct(f);
@@ -348,6 +475,63 @@ void igViewManager_ApplyOptions(igViewManager *manager, igObject *scene) {
             g_sharedViewerOptions = 0;
         }
     }
+}
+
+/* igViewModel's vector fields are igVec3f values (igVec3fMetaField). */
+static inline const igVec3f &asVec3f(const float *v) { return *(const igVec3f *)v; }
+
+/* Looks at the selection's centre: from the current eye, or (`resetEye`) from one and a half selection
+ * lengths across the scene's up vector. */
+void igViewManager_CenterSelection(igViewManager *manager, bool resetEye) {
+    igVec3f center(asVec3f(((igViewModel *)manager->_viewModel)->_selectedCenter));
+    igVec3f eye;
+    igVec3f up;
+    ViewModelEvent event;
+
+    if (resetEye) {
+        up.copy(((igViewModel *)manager->_viewModel)->_sceneUpVector);
+        float distance = 1.5f * ((igViewModel *)manager->_viewModel)->_selectedLength;
+        eye[0] = up[2];
+        eye[1] = up[0];
+        eye[2] = up[1];
+        eye.scale(distance);
+        eye.add(center);
+        igMatrix44f_MakeLookAt(((igViewModel *)manager->_viewModel)->_viewMatrix, &eye, &center, &up);
+    } else {
+        igViewModel *model = (igViewModel *)manager->_viewModel;
+        igMatrix44f_MakeLookAt(model->_viewMatrix, model->_position, &center, model->_viewUpVector);
+    }
+    event.type = 2;
+    event.arg = 0;
+    event.data = (int)g_igViewModel_viewMatrixMetaField;
+    igModel_NotifyViews((igModel *)manager->_viewModel, (ModelChange *)&event);
+}
+
+/* Moves the eye along its line to the selection's centre until the selection fills the view. */
+void igViewManager_FitSelection(igViewManager *manager) {
+    igVec3f center(asVec3f(((igViewModel *)manager->_viewModel)->_selectedCenter));
+    igVec3f eye;
+    ViewModelEvent event;
+
+    eye.copy(((igViewModel *)manager->_viewModel)->_position);
+    eye[0] -= center[0];
+    eye[1] -= center[1];
+    eye[2] -= center[2];
+    float distance = sqrtf(eye.x * eye.x + eye.y * eye.y + eye.z * eye.z);
+    if (distance == 0.0) {
+        eye.copy(((igViewModel *)manager->_viewModel)->_direction);
+        distance = 1.0f;
+    }
+    eye.scale(1.5f * ((igViewModel *)manager->_viewModel)->_selectedLength / distance);
+    eye[0] += center[0];
+    eye[1] += center[1];
+    eye[2] += center[2];
+    igViewModel *model = (igViewModel *)manager->_viewModel;
+    igMatrix44f_MakeLookAt(model->_viewMatrix, &eye, &center, model->_viewUpVector);
+    event.type = 2;
+    event.arg = 0;
+    event.data = (int)g_igViewModel_viewMatrixMetaField;
+    igModel_NotifyViews((igModel *)manager->_viewModel, (ModelChange *)&event);
 }
 
 int Gap__Viewer__igViewManager__vfunc_24(void *arg0) {

@@ -198,12 +198,153 @@ int igCompileTraversal_TraverseJointTransform(igTraversal *traversal, igTransfor
     return result;
 }
 
-int FUN_001bcd60(int arg0, int arg1) {
-    return arg0 + (arg1 * 4);
+/* A geometry's compiled transform record (FUN_001a3590 creates it). */
+struct XformInfo_1bc1e0 : igObject {
+    int _matrixIndex;
+    igSmartPointer<igObject> _transform;
+    char _pad16[12];
+    unsigned char _shared;
+    char _pad29[3];
+    int _blendIndex;
+};
+class MatrixAttrView_1bc1e0 : public igVirtualObject {
+public:
+    virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4();
+    virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
+    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
+    virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
+    virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24();
+    virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
+    virtual void setMatrix(const void *matrix);
+};
+class GeometryAttrView_1bc1e0 {
+public:
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4();
+    virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
+    virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
+    virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
+    virtual int getMeta();
+};
+struct BoolAttr_1bc1e0 { char _pad0[12]; unsigned char _enabled; };
+static inline void releaseKnown_1bc1e0(igObject *o) {
+    o->_refCount = o->_refCount - 1;
+    if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
+}
+static inline AttrObjectStack *stackFor_1bc1e0(igAttrStackManager *m, igMetaObject *meta) {
+    return ((AttrObjectStackList *)m->_attrStacks)->_data[((int *)m->_attrStackIndexTable)[meta->_id]];
+}
+static inline igObject *current_1bc1e0(AttrObjectStack *s) {
+    if (s->_cachedOverride >= 0) return s->_data[s->_cachedOverride];
+    if (s->_count != 0) return s->get(s->_count - 1);
+    return (igObject *)s->_default;
+}
+/* Grows [mn, mx] to cover [bmin, bmax], one component at a time through igVec3f::operator[]. */
+static inline void grow_1bc1e0(igVec3f &mn, igVec3f &mx, const igVec3f &bmin, const igVec3f &bmax) {
+    if (FUN_001bcd70(&bmin.x, 0) < *FUN_001bcd60(&mn.x, 0)) *FUN_001bcd60(&mn.x, 0) = FUN_001bcd70(&bmin.x, 0);
+    if (FUN_001bcd70(&bmax.x, 0) > *FUN_001bcd60(&mx.x, 0)) *FUN_001bcd60(&mx.x, 0) = FUN_001bcd70(&bmax.x, 0);
+    if (FUN_001bcd70(&bmin.x, 1) < *FUN_001bcd60(&mn.x, 1)) *FUN_001bcd60(&mn.x, 1) = FUN_001bcd70(&bmin.x, 1);
+    if (FUN_001bcd70(&bmax.x, 1) > *FUN_001bcd60(&mx.x, 1)) *FUN_001bcd60(&mx.x, 1) = FUN_001bcd70(&bmax.x, 1);
+    if (FUN_001bcd70(&bmin.x, 2) < *FUN_001bcd60(&mn.x, 2)) *FUN_001bcd60(&mn.x, 2) = FUN_001bcd70(&bmin.x, 2);
+    if (FUN_001bcd70(&bmax.x, 2) > *FUN_001bcd60(&mx.x, 2)) *FUN_001bcd60(&mx.x, 2) = FUN_001bcd70(&bmax.x, 2);
 }
 
-float FUN_001bcd70(float *arg0, int arg1) {
-    return arg0[arg1];
+int FUN_001bc1e0(igCompileTraversal *self, igGeometry *geometry) {
+    if (geometry->_trigger == 0) {
+        return 0;
+    }
+    int n = ((igTDataList<igObject *> *)geometry->_attributes)->_count;
+    igVec3f mn;
+    igVec3f mx;
+    mn.x = mn.y = mn.z = 1e20f;
+    mx.x = mx.y = mx.z = -1e20f;
+    igTDataList<igObject *> *list = (igTDataList<igObject *> *)geometry->_attributes;
+    int i;
+    /* matching construct: `found` declared after `i` gives it s3 (retail); declared first it takes s0 */
+    bool found = false;
+    for (i = 0; i < n; i++) {
+        igVec3f bmin;
+        igVec3f bmax;
+        igObject *attr = list->_data[i];
+        if (igObject_IsKindOf(attr, g_igGeometryAttr_metaObject) != 0) {
+            FUN_001b1fa0((igGeometryAttr *)attr, &bmin, &bmax);
+            grow_1bc1e0(mn, mx, bmin, bmax);
+            found = true;
+        } else if (DAT_0055f158[0] == ((GeometryAttrView_1bc1e0 *)attr)->getMeta()) {
+            FUN_001b21d0((A_1b21d0 *)attr, (V3_1b21d0 *)&bmin, (V3_1b21d0 *)&bmax);
+            grow_1bc1e0(mn, mx, bmin, bmax);
+            found = true;
+        }
+    }
+    if (found) {
+        if (self->_bound == 0) {
+            igAABox *box = (igAABox *)igAABox_CreateInstance(igObject_GetAllocator(self));
+            ((igSmartPointer<igAABox> &)self->_bound) = box;
+            *(igVec3f *)((igAABox *)self->_bound)->_min = mn;
+            *(igVec3f *)((igAABox *)self->_bound)->_max = mx;
+            releaseKnown_1bc1e0(box);
+        } else {
+            igVec3f curMin = *(igVec3f *)((igAABox *)self->_bound)->_min;
+            igVec3f curMax = *(igVec3f *)((igAABox *)self->_bound)->_max;
+            grow_1bc1e0(curMin, curMax, mn, mx);
+            *(igVec3f *)((igAABox *)self->_bound)->_min = curMin;
+            *(igVec3f *)((igAABox *)self->_bound)->_max = curMax;
+        }
+    }
+    if ((geometry->_flags & 0x20) != 0) {
+        return 0;
+    }
+    {
+        /* matching construct: the meta before the stack test, and `hasList` before `restore` (s4 vs s3) */
+        igMetaObject *listMeta = g_igVertexBlendMatrixListAttr_metaObject;
+        bool hasList = !(stackFor_1bc1e0((igAttrStackManager *)self->_attrStack, listMeta)->_count == 0);
+        igObject *restore = 0;
+        bool pushed = false;
+        if (hasList) {
+            igSmartPointer<XformInfo_1bc1e0> info((XformInfo_1bc1e0 *)FUN_001a3590((int)igObject_GetAllocator(self)));
+            info->_transform = 0;
+            info->_matrixIndex = -2;
+            info->_blendIndex = -1;
+            info->_shared = 0;
+            igObject *mvm = (igObject *)FUN_0013f680();
+            ObjectList_AppendRetained((igObjectList *)self->_mvmList, mvm);
+            ObjectList_AppendRetained((igObjectList *)self->_xformInfoList, (igObject *)info.p);
+            FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)mvm);
+            restore = topAttr(stackFor_1bc1e0((igAttrStackManager *)self->_attrStack, listMeta));
+            FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)restore);
+        } else if (((BoolAttr_1bc1e0 *)current_1bc1e0(stackFor_1bc1e0((igAttrStackManager *)self->_attrStack, (igMetaObject *)g_igVertexBlendStateAttr_metaObject[0])))->_enabled != 0) {
+            igTDataList<igObject *> *palettes = (igTDataList<igObject *> *)self->_boneMatrixPaletteList;
+            igObject *palette = palettes->_count > 0 ? palettes->get(palettes->_count - 1) : 0;
+            if (palette != 0) {
+                igSmartPointer<MatrixAttrView_1bc1e0> mvm((MatrixAttrView_1bc1e0 *)igModelViewMatrixAttr_CreateInstance((int)igObject_GetAllocator(self)));
+                igSmartPointer<XformInfo_1bc1e0> info((XformInfo_1bc1e0 *)FUN_001a3590((int)igObject_GetAllocator(self)));
+                info->_transform = 0;
+                info->_matrixIndex = 0;
+                info->_blendIndex = -1;
+                info->_shared = 0;
+                mvm->setMatrix(&g_matrix44Identity);
+                ObjectList_AppendRetained((igObjectList *)self->_mvmList, (igObject *)mvm.p);
+                ObjectList_AppendRetained((igObjectList *)self->_xformInfoList, (igObject *)info.p);
+                FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)mvm.p);
+                pushed = true;
+            }
+        }
+        FUN_001db720(self->_sorter, geometry, self->_attrStack);
+        if (hasList) {
+            FUN_001b1100((struct A_1b1100 *)self->_attrStack, (struct B_1b1100 *)restore);
+            FUN_001b11b0((struct A_1b11b0 *)self->_attrStack, (struct B_1b11b0 *)g_igModelViewMatrixAttr_metaObject);
+        } else if (pushed) {
+            FUN_001b11b0((struct A_1b11b0 *)self->_attrStack, (struct B_1b11b0 *)g_igModelViewMatrixAttr_metaObject);
+        }
+    }
+    return 0;
+}
+
+float *FUN_001bcd60(float *v, int i) {
+    return &v[i];
+}
+
+float FUN_001bcd70(const float *v, int i) {
+    return v[i];
 }
 
 int FUN_001bcd80(void *arg0) {

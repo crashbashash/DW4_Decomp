@@ -248,13 +248,14 @@ declarations; every other combination differs by 39 to 41 bytes. The owner appro
 ### build-string-stores
 
 A module's init stores the address of its version string in a word that nothing else reads or points to, in the
-`lui`, `addiu`, `0(reg)` form, ahead of the code a plain spelling would let it sink into. Nine inits do it: ADXT
+`lui`, `addiu`, `0(reg)` form, ahead of the code a plain spelling would let it sink into. Ten inits do it: ADXT
 (`0x56dfa8`), SUD (`0x5856a8`), SFX (`0x5856a0`), CFT (`0x573ea8`), SFD (`0x580d58`), MPS (`0x573f08`), MPV
-(`0x573f10`), MWSFD (`0x577820`) and CFG (`0x56dfd0`). In each the store is the word's only access in the
+(`0x573f10`), M2V (`0x573eb0`), MWSFD (`0x577820`) and CFG (`0x56dfd0`). In each the store is the word's only access in the
 executable, and stripping changes only the address form and where the store sits, never whether it happens. The
 owner approved the stores in the CFG init and in the functions at `0x283058` (CFT), `0x2b3788` (SFX) and `0x2b50e8`
 (SUD), the same kind of store as `ADXT_Init`'s approved `0x56dfa8` word, and later those of `SFD_Init`, `MPS_Init`,
-`MPV_Init` and `mwPlyInitSfdFx`, on the evidence below.
+`MPV_Init`, `M2V_Init` and `mwPlyInitSfdFx`, on the evidence below. The SDK's own `M2V_Init` (`m2v_lib.o`) stores its
+`cri_verstr_ptr` in the same unfolded form.
 
 * CRI's own 2002 SDK objects (`libmwsfde.a` in [SkeletonPicture/recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri))
   keep a file-local `.bss` word in sixteen files (`*_version_dummy`, `*_dummy`, `cri_verstr_ptr`), and each is stored
@@ -843,6 +844,13 @@ work there; the files match with every declaration `volatile`.
   reads the second word twice, and retail loads it twice. It also counts ticks at `0x56d680` and aborts after 60;
   one store in `p2SubmitDmaPacket` (`0x1ef050`, called from 40 sites in 32 functions, on other threads) resets
   the counter, and the watchdog polls it in its loop, where the keyword keeps the order of its accesses.
+* The swap flags at `0x56bf58` (a swap is pending at the next vertical blank) and `0x56bf60` (the GS has drawn the
+  frame) are shared between the vertical-blank handler, reached from the GS interrupt handler, and thread code:
+  `p2VsyncHandler` tests the drawn flag and sets the pending flag and clears the drawn one on every flip path;
+  `p2SwapBuffers` and `p2InitSwap` write both from the game thread; `p2RecordFrameTime`, a finish function the
+  GS FINISH handler (`p2FinishHandler`) runs, sets the drawn flag. The vertical-blank handler reads the drawn flag
+  again on each path where retail reloads it. Both words are declared `volatile` once in the file, so `p2InitSwap`
+  counts 5, `p2SwapBuffers` 4, `p2VsyncHandler` 4 and `p2RecordFrameTime` 1.
 
 ### dma-packet-kick
 
@@ -984,6 +992,75 @@ file: `p2SoftwareBlendFourWeights`, `p2SoftwareBlendThreeWeights`, `p2SoftwareBl
   [enbaya-vu0-macro](#enbaya-vu0-macro), recommends the GCC-style form.
 * Each block is one `asm` use, so each function has one row.
 
+The same anchor covers the product of two aligned matrices (0x190470) in the Maths whole file
+(`src/engine/maths/igMatrix44f.inc`): a C function around one `asm { }` block holding only COP2 instructions (`lqc2`
+of both matrices, the `vmulax`/`vmadday`/`vmaddaz`/`vmaddw` row products, `sqc2` of the result). One `asm` use, one
+row.
+
+`igMatrix44f_Multiply` and `igMatrix44f_PreMultiply` have no source: an MWCC `asm` function reproduces each, but the
+owner held that form out (2026-11-17). A SceneGraph function (0x1be190) inlines Multiply's body (C alignment test, then
+the instructions), so the original is likely an inline C function with `asm` blocks; that form is still 4 rows short.
+`igMatrix44f_Copy` has no source either: its `lq`/`sq`/`lwc1`/`swc1` all have C spellings, so this anchor does not
+cover it.
+
+The frustum test of a box (0x1c47f0, SceneGraph whole file, `src/engine/scenegraph/igFrustCullTraversal_tail.inc`) is
+C around three `asm volatile { }` blocks: the unaligned loads of the matrix and the two corners (`mtsab; lq; qfsrv;
+qmtc2`), the eight corner transforms with `vclipw` and the `cfc2` clip-flag reads, and the narrow and full guard-band
+re-tests with the I register loaded through `mfc1`, `nop`, `ctc2 $vi21`. The return codes, the flag masks and the
+scale choice are C. Three `asm` uses and three `volatile` keywords, one row each.
+
+* Without `volatile` on the narrow re-test block, MWCC's PCode peephole folds the C `lwc1` of the second I value and
+  the block's `mfc1` into one `lw` (2 of 180 words differ); a block that opens with a volatile asm statement is not
+  scanned. Every plain `asm { }` spelling tried (the load inside the block, a second block, address operands, a
+  pointer, a function-scope or `register` local, an `int` destination) folds; the tries are in the function's attempt
+  file. This `volatile` is not a scheduling pin of a C load: it keeps retail's `lwc1`/`mfc1` pair intact.
+* With all three blocks written `asm volatile` the function still matches, so the qualifier reads as the PS2 VU0
+  inline-asm idiom's uniform form rather than a one-block hack, and the source writes every block that way
+  (owner's conditional standing rule, 2026-11-17).
+
+### scratchpad-traversal-stack
+
+The hit-land model traversal's traverse hook (SceneGraph whole file, `src/engine/scenegraph/igTraversal_tail.inc`)
+runs the outermost traversal on a stack at the top of the scratchpad when `useScratchPadForTraversal` is set: on the
+first nesting level it saves `sp` to 0x562a48 and moves the scratchpad top (0x70003fe0) into `sp`, and when the level
+count returns to zero it reloads `sp` from 0x562a48.
+
+* Neither MWCC nor ee-gcc writes `sp` from C, so the two GCC-style statements (`sd $sp, 0(%0); move $sp, %1` and
+  `ld $sp, 0(%0)`) have no C spelling; their operands (the save slot and the scratchpad top) come from C, and the
+  nesting count, the hook calls and the traversal stay C. Two `asm` uses, one row.
+
+### p2-debug-breakpoint
+
+Two routines of the engine's `p2` renderer in `src/engine/p2core.c` (0x1eba30, 0x1eba74) arm the EE's instruction
+breakpoint: the first reads the breakpoint control register (`mfbpc`), clears its enable bit when it is set and writes
+it back (`mtbpc`, `sync.p`), then calls the second, which points the instruction address register at its own return
+address plus 92 (`mtiab`, mask `mtiabm`) and sets the control bits (`mfbpc`, `and`, `or`, `mtbpc`, `sync.p`). Both
+are MWCC `asm` functions (`asm-function` rows, one each).
+
+* The COP0 debug registers have no C spelling: neither MWCC nor ee-gcc emits `mfbpc`, `mtbpc`, `mtiab`, `mtiabm` or
+  `sync.p` from C, and the MWCC builtins stop short of them.
+* They are `asm` functions rather than C around blocks: the first builds its own frame and the second restores it
+  (`ld ra` and the frame pop in the second's epilogue), the 64-bit constants are the assembler's `dli` expansion
+  (`ori`/`dsll` chains) written out by hand, and the delay slots are filled by hand under `.set noreorder`.
+
+### sfx-handle-used-flag
+
+The in-use word of the SFX handles (`SfxHn`, `SfxaHn`, `SfxZHn`): the free-handle searches of `sfx.c`, `sfxa.c`
+and `sfxz.c` read it and the alpha and Z frees clear it, through a `volatile` pointer. The keyword adds or drops no
+access; it decides only delay-slot filling (stripped, the searches take the loop head's load into a `bnezl` slot
+where retail has `bnez; nop`, and the frees move the `lui` into the `beqz` slot). The owner approved it on this
+evidence:
+
+* DW4's Sofdec is a later build than CRI's public SDK: `CRI SFX/PS2EE Ver.2.08` and `MWSFD/PS2EE Ver.3.33s281`
+  (Oct 6 2004) against `Ver.1.09` and `Ver.2.27` (Sep 26 2002) in the SDK's `libmwsfde.a`
+  ([SkeletonPicture/recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)). Plain C compiles to the
+  2002 objects (`sfx_lib.o`, `sfx_alp.o`, `sfx_zmv.o`) exactly, filled slots included, while DW4 leaves the slots
+  empty, the shape only a `volatile` access gives under ee-gcc 2.96
+  ([understanding shapes](understanding-shapes.md#delay-slots-b52)).
+* The Persona 4 decompilation ([Raikaru/Persona4-Decompilation](https://github.com/Raikaru/Persona4-Decompilation)),
+  built with the same ee-gcc 2.96 at `-O2 -G0` from SFX 2.08-generation sources, needs a non-C construct for the
+  same empty slot in its alpha free (`src/cri/re4/sfx_alp.c`, lines 57-68: an empty `asm` memory barrier).
+
 ## Open questions
 
 * **libcdvd's semaphore ids.** Two command pre-checks and `sceCdBreak` match only with a `volatile` on the command
@@ -999,22 +1076,6 @@ file: `p2SoftwareBlendFourWeights`, `p2SoftwareBlendThreeWeights`, `p2SoftwareBl
   to the stack and reads back. Locals, structs, arrays,
   references and conversion temporaries all fold the slot away or load a wider value, so what keeps the
   slot in the original is not known.
-
-* **A single store with only the address form.** The function at `0x27b2a0` stores zero to a `.data` word
-  (`0x4b5140`) that is its only access in the executable; written plain it is `lui; jr; sw zero,%lo` (12 bytes
-  against 16), and only a `*(volatile int *)` store gives retail's form. A `memset` or `__builtin_memset` of four
-  bytes, an array element through a pointer, a `long long` reinterpretation, a pointer copy and a struct copy all
-  fold or load. It has the shape of the [DTX server flag](#dtx-server-flag), but no vendor object holds this
-  function (the 3rd Strike decompilation's SJCRS predates it).
-
-* **The SFX handle's in-use word.** Five functions keep a `volatile` that decides only delay-slot filling and keeps
-  no access: the handle searches at `0x2b39e0` (`sfx.c`), `sfxalp_SearchFreeHn` (`sfxa.c`) and `0x2b42c8`
-  (`sfxz.c`), and the frees `SFXA_Destroy` and `0x2b4330`. Stripped, the search reloads nothing different and
-  the `sfxz.c` search has the same size with a `bnezl` slot where retail has `bnez; nop`; the free's `lui` moves into the
-  `beqz` slot. Nothing else writes or reads the word, MSVC 7.1 and MWCC 1.3.2 to 2.6 compile the idiom to the same
-  code with or without the qualifier, and one `volatile int used;` member declaration would fit all three files
-  byte for byte, but nothing shows the original declared it. A row for each, under a proposed `#sfx-handle-used`,
-  was not approved: it is the case "Testing a `volatile`" says is never approved.
 
 * **`_sceFs_Poff_Intr`.** Written with Sony's header statements, `GetGp()` and a separate `__asm__ volatile("lw $28,
   %0")`, it is one word off: the `lui` is scheduled after `move s0, gp`, because a volatile `asm` is a scheduling

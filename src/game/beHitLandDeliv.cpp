@@ -110,9 +110,9 @@ int beHitLandDeliv_OnMessageText(beHitLandDeliv *self, beHitLandDelivInfoRam *ra
                 moved = true;
                 wallHit = moved;
                 float *matrix = TransformMatrix(ram);
-                igMatrix44f_SetTranslation(matrix, beMessengerVec3((beMessenger *)self->_messenger, 0).data());
+                igMatrix44f_SetTranslation(matrix, &beMessenger_GetVec3((beMessenger *)self->_messenger, 0).x);
             }
-            *(igVec3f *)ram->_oldPos = beMessengerVec3((beMessenger *)self->_messenger, 0);
+            *(igVec3f *)ram->_oldPos = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
         }
         beMessenger_ResizeBool((beMessenger *)self->_messenger, 3);
         beMessenger_SetBool((beMessenger *)self->_messenger, 0, moved);
@@ -143,9 +143,9 @@ int beHitLandDeliv_OnMessageText(beHitLandDeliv *self, beHitLandDelivInfoRam *ra
                 moved = true;
                 wallHit = moved;
                 float *matrix = TransformMatrix(ram);
-                igMatrix44f_SetTranslation(matrix, beMessengerVec3((beMessenger *)self->_messenger, 0).data());
+                igMatrix44f_SetTranslation(matrix, &beMessenger_GetVec3((beMessenger *)self->_messenger, 0).x);
             }
-            *(igVec3f *)ram->_oldPos = beMessengerVec3((beMessenger *)self->_messenger, 0);
+            *(igVec3f *)ram->_oldPos = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
         }
         beMessenger_ResizeBool((beMessenger *)self->_messenger, 3);
         beMessenger_SetBool((beMessenger *)self->_messenger, 0, moved);
@@ -168,7 +168,7 @@ int beHitLandDeliv_OnMessageText(beHitLandDeliv *self, beHitLandDelivInfoRam *ra
         if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) < 3 || beMessenger_GetVec3Count((beMessenger *)self->_messenger) < 1) {
             floor.set(0.0f, -1.0f, 0.0f);
         } else {
-            floor = beMessengerVec3((beMessenger *)self->_messenger, 0);
+            floor = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
             landed = beMessenger_GetBool((beMessenger *)self->_messenger, 0);
             floorHit = beMessenger_GetBool((beMessenger *)self->_messenger, 1);
             landPosOK = beMessenger_GetBool((beMessenger *)self->_messenger, 2);

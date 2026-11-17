@@ -81,7 +81,7 @@ int g_sfpTransferState[32];
 }
 
 /* The registry the object system reads its ini settings into. */
-struct ObjectSystemView { char pad[56]; int registry; };
+struct ObjectSystemView { char pad[56]; igRegistry *configRegistry; };
 
 extern "C" {
 int beCopyModelCtrl2_TraverseCallback(igCommonTraversal *traversal, beCopyModelCtrl2 *node);
@@ -279,16 +279,16 @@ void beCopyTransform_RegisterTraversal(void) {
  * through igAdxFile. */
 void beCri_Activate(beCri *self) {
     int section;
-    int registry;
+    igRegistry *registry;
     igInsightCore_AddToScheduler((igInsightCore *)self->_insight, (igObject *)self);
-    registry = g_objectSystem->registry;
+    registry = g_objectSystem->configRegistry;
     if (registry == 0) return;
-    section = igRegistry_GetSectionIndex((igRegistry *)registry, "BECRUNTIME", 0);
+    section = igRegistry_GetSectionIndex(registry, "BECRUNTIME", 0);
     if (section == -1) return;
     int allocator = (int)igObject_GetAllocator(self);
     allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     igSmartPointer<igStringObj> path((igStringObj *)igStringObj_Create(allocator));
-    if (igRegistry_GetValueStringObj((igRegistry *)registry, section, "AdxModulePath", (igStringObj **)&path, "", 0) == 0) {
+    if (igRegistry_GetValueStringObj(registry, section, "AdxModulePath", (igStringObj **)&path, "", 0) == 0) {
         if (strcmp("9.31s281", "9.18") == 0)
             igStringObj_Set((igStringObj *)path, "C:/cri/ps2/iop/modules");
         else

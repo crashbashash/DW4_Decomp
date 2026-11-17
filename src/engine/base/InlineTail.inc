@@ -140,6 +140,42 @@ void Gap__igItemInterface__vfunc_13(igInterface *arg0, int flags) {
     arg0->_itemInterface = (int)(arg0);
 }
 
+/* Rebuilds the item registry when the igItemBase meta-object tree has grown: every concrete
+ * igItemBase type is instantiated once and, when its slot-31 flag is set, registered by name and
+ * kind through slot 28 or slot 27 by its slot-30 flag. */
+void FUN_002299c0(ItemRegistry *self) {
+    int count = igMetaObject_CountTree(igItemBase_GetMetaObject());
+    if (count == self->typeCount) {
+        return;
+    }
+    self->typeCount = count;
+    igSmartPointer<Rc> iterator(createIterator());
+    FUN_0022a8d0((S0 *)iterator.p, (S1 *)g_igItemBase_metaObject);
+    for (;;) {
+        int meta = FUN_0022a950((S22 *)iterator.p);
+        if (((meta != 0) ^ 1) != 0) {
+            break;
+        }
+        FUN_0022a9b0((S22a9d0 *)iterator.p);
+        igSmartPointer<igItemBaseDispatchView> item(igMetaObject_CreateInstanceDefaultRef(meta));
+        if (item.get() == 0) {
+            continue;
+        }
+        int kind = item->vfunc_29();
+        int flag30 = item->vfunc_30();
+        int flag31 = item->vfunc_31();
+        StringRef_2 name = item->vfunc_32();
+        if (flag31 == 0) {
+            continue;
+        }
+        if (flag30 != 0) {
+            ((ItemInterface *)self)->vfunc_28(StringRef_2(name), kind, meta);
+        } else {
+            ((ItemInterface *)self)->vX(StringRef_2(name), kind, meta);
+        }
+    }
+}
+
 extern "C" R_3 Gap__igItemInterface__vfunc_28(Obj_10 *arg1, void *arg2, int arg3) {
     RecoveryString h;
     void *var_v0;
@@ -227,11 +263,28 @@ int FUN_0022a030(int *p)
     return *(int *)((char *)p + 16);
 }
 
-extern "C" int FUN_0022a040(ItemRegistry *self, StringRef name, int kind);
-
+/* The item type registered under (kind, name), or 0. */
+extern "C" int FUN_0022a040(ItemRegistry *self, StringRef name, igMetaObject *kind) {
+    int slot;
+    FUN_002299c0(self);
+    igTDataList<igMetaObject *> *kinds = (igTDataList<igMetaObject *> *)self->kinds;
+    int index = kinds->sortedIndex(kind);
+    if (index == -1) {
+        return 0;
+    }
+    L *names = self->names->data[index];
+    {
+        StringRef copy(name);
+        slot = FUN_00229e20(names, (int *)&copy);
+    }
+    if (slot == -1) {
+        return 0;
+    }
+    return self->items->data[index]->data[slot];
+}
 
 extern "C" igSmartPointer<InterfaceItem> Gap__igItemInterface__vfunc_27(int self, const StringRef &name, int kind) {
-    int key = FUN_0022a040((ItemRegistry *)self, name, kind);
+    int key = FUN_0022a040((ItemRegistry *)self, name, (igMetaObject *)kind);
     if (key == 0) {
         return igSmartPointer<InterfaceItem>((InterfaceItem *)0, kRetainReference);
     }
@@ -240,6 +293,65 @@ extern "C" igSmartPointer<InterfaceItem> Gap__igItemInterface__vfunc_27(int self
         igInterface_BindInterfaceFields((igMetaTyped *)self, (igMetaTyped *)item.get());
     }
     return item;
+}
+
+/* Inserts word at index of list, which takes its own reference (HeldWord, igSmartPointer.h). */
+static inline void insertHeld(void *list, int index, const HeldWord &word) {
+    word.retain();
+    List_InsertWords((igDataList *)list, index, 1, &word);
+}
+
+/* The empty Tag temporary is the byte retail stores to the stack beside the create call; as an
+ * inline's local it takes the last stack slots. */
+static inline igObject *createMetaObjectList() {
+    Tag tag = Tag();
+    return igMetaObjectList_Create(0);
+}
+
+static inline igObject *createStringRefList() {
+    Tag tag = Tag();
+    return (igObject *)igStringRefList_Create(0);
+}
+
+template <class T> static inline int insertObjectSorted(void *list, T *object) {
+    RetainedWord<T> word(object);
+    int index = FUN_00142bb0(list, &word);
+    List_InsertWords((igDataList *)list, index, 1, &word);
+    return index;
+}
+
+/* Registers item under (kind, name): a new kind gets its sorted slot in the kind list with empty
+ * item and name lists; a new name is inserted in sorted order, a known one has its item replaced. */
+extern "C" void Gap__igItemInterface__vfunc_29(ItemRegistry *self, const StringRef &name, igMetaObject *kind, igObject *item) {
+    int index = ((igTDataList<igMetaObject *> *)self->kinds)->sortedIndex(kind);
+    if (index == -1) {
+        index = insertObjectSorted(self->kinds, kind);
+        igSmartPointer<igObject> items(createMetaObjectList());
+        insertHeld(self->items, index, HeldWord(items));
+        igSmartPointer<igObject> names(createStringRefList());
+        insertHeld(self->names, index, HeldWord(names));
+    }
+    int slot;
+    L *names = self->names->data[index];
+    {
+        StringRef copy(name);
+        slot = FUN_00229e20(names, (int *)&copy);
+    }
+    igTDataList<igObject *> *items = (igTDataList<igObject *> *)self->items->data[index];
+    if (slot == -1) {
+        {
+            StringRef copy(name);
+            slot = FUN_0022a740((int)names, (void **)&copy);
+        }
+        insertHeld(items, slot, HeldWord(item));
+    } else {
+        if (item != 0) item->_refCount = item->_refCount + 1;
+        igObject *old = items->_data[slot];
+        igRelease(old);
+        if (items->_count != 0 && slot >= 0 && slot < items->_count) {
+            items->_data[slot] = item;
+        }
+    }
 }
 
 int FUN_0022a740(int arg0, void **arg1) {
@@ -690,6 +802,109 @@ void FUN_0022bc10(int *arg0, int arg1, int arg2, int arg3, int arg4) {
     }
 }
 
+static inline const char *stringObjText(const igStringObj &string) {
+    if (string._buffer == 0) {
+        return g_stringObjEmptyText;
+    }
+    return (const char *)string._buffer;
+}
+
+static inline igStringObj *createStringObj() {
+    Tag tag = Tag();
+    return (igStringObj *)igStringObj_Create(0);
+}
+
+static inline void *internString(const char *text) {
+    if (text == 0) {
+        return 0;
+    }
+    if (g_stringPool == 0) {
+        StringPool *pool = (StringPool *)StringPool_Allocate(0x10);
+        if (pool != 0) {
+            pool = StringPool_Construct(pool);
+        }
+        g_stringPool = pool;
+    }
+    return StringPool_Intern(g_stringPool, text);
+}
+
+/* Reads one field of object from the registry entry key in section, by the field's type (int, enum,
+ * unsigned int, float, bool, string, or a reference to a meta-object by name), and logs the value
+ * read. Returns whether the field was set. */
+static inline void assignToken(igMetaField *field, void *object, const RecoveryString &token) {
+    igStringMetaField_AssignRetainedToken(field, object, &token);
+}
+
+extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, int section, igMetaField *field, void *object) {
+    if (igObject_IsKindOf(field, g_igIntMetaField_metaObject) != 0) {
+        int value;
+        if (igRegistry_GetValueInt(registry, section, stringObjText(*key), &value, 0, 0)) {
+            *(int *)((char *)object + field->_offset) = value;
+            log->put("(%s:%d) ", stringObjText(*key), value);
+            return true;
+        }
+    }
+    if (igObject_IsKindOf(field, g_igEnumMetaField_metaObject) != 0) {
+        int value;
+        if (igRegistry_GetValueInt(registry, section, stringObjText(*key), &value, 0, 0)) {
+            *(int *)((char *)object + field->_offset) = value;
+            log->put("(%s:%d) ", stringObjText(*key), value);
+            return true;
+        }
+    }
+    if (igObject_IsKindOf(field, g_igUnsignedIntMetaField_metaObject) != 0) {
+        int value;
+        if (igRegistry_GetValueInt(registry, section, stringObjText(*key), &value, 0, 0)) {
+            if (value < 0) {
+                printf("(%s:%d skipped: not >0!) ", stringObjText(*key), value);
+            }
+            *(int *)((char *)object + field->_offset) = value;
+            log->put("(%s:%d) ", stringObjText(*key), value);
+            return true;
+        }
+    }
+    if (igObject_IsKindOf(field, g_igFloatMetaField_metaObject) != 0) {
+        float value;
+        if (igRegistry_GetValueFloat(registry, section, stringObjText(*key), &value, 0, 0.0f)) {
+            *(float *)((char *)object + field->_offset) = value;
+            log->put("(%s:%f) ", stringObjText(*key), value);
+            return true;
+        }
+    }
+    if (igObject_IsKindOf(field, g_igBoolMetaField_metaObject) != 0) {
+        bool value;
+        if (igRegistry_GetValueBool(registry, section, stringObjText(*key), (unsigned char *)&value, 0, 0)) {
+            *(bool *)((char *)object + field->_offset) = value;
+            log->put("(%s:%s) ", stringObjText(*key), value ? "true" : "false");
+            return true;
+        }
+    }
+    if (igObject_IsKindOf(field, g_igStringMetaField_metaObject) != 0) {
+        igSmartPointer<igStringObj> value(createStringObj());
+        if (igRegistry_GetValueStringObj(registry, section, stringObjText(*key), (igStringObj **)&value, "", 0)) {
+            assignToken(field, object, RecoveryString(internString(stringObjText(*value))));
+            log->put("(%s:%s) ", stringObjText(*key), stringObjText(*value));
+            return true;
+        }
+    }
+    if (igObject_IsKindOf(field, g_igObjectRefMetaField_metaObject) != 0) {
+        if ((igMetaObject *)((igObjectRefMetaField *)field)->_metaObject == g_igMetaObject_metaObject) {
+            igSmartPointer<igStringObj> value(createStringObj());
+            if (igRegistry_GetValueStringObj(registry, section, stringObjText(*key), (igStringObj **)&value, "", 0)) {
+                igMetaObject *meta = (igMetaObject *)igObjectSystem_FindMetaByNameDefault(stringObjText(*value));
+                if (meta != 0) {
+                    igObjectRefMetaField_Assign(field, object, meta);
+                    log->put("(%s:%s) ", stringObjText(*key), stringObjText(*value));
+                } else {
+                    log->put("(%s:%s not found) ", stringObjText(*key), stringObjText(*value));
+                }
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 extern "C" int FUN_0022c7f0(A_2 *arg0, int arg1, B_2 *arg2, int arg3) {
     bool found;
     Lst_2 *l;
@@ -706,11 +921,11 @@ extern "C" int FUN_0022c7f0(A_2 *arg0, int arg1, B_2 *arg2, int arg3) {
         e = l->arr[i];
         nm = e->name;
         igStringObj_Set((igStringObj *)buffer.p, nm);
-        if (FUN_0022c150(arg1, arg2, buffer.p, arg3, e, arg0) != 0) {
+        if (FUN_0022c150((igRegistry *)arg1, arg2, (igStringObj *)buffer.p, arg3, (igMetaField *)e, arg0) != 0) {
             found = 1;
         } else if (*nm == 0x5f) {
             igStringObj_Set((igStringObj *)buffer.p, e->name + 1);
-            if (0 != FUN_0022c150(arg1, arg2, buffer.p, arg3, e, arg0)) found = 1;
+            if (0 != FUN_0022c150((igRegistry *)arg1, arg2, (igStringObj *)buffer.p, arg3, (igMetaField *)e, arg0)) found = 1;
         }
     }
     if (found) arg2->put("\n");

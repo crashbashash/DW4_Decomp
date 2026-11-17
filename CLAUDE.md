@@ -22,18 +22,31 @@ readable, evidence-named source that rebuilds to a byte-identical retail ELF.
   `config/assembly-sources.tsv` ([assembly sources](docs/engine/assembly-sources.md)); inline `asm`, `volatile`
   or an MWCC `asm` function in C and C++ needs a row in `config/source-approvals.tsv`
   ([source approvals](docs/engine/source-approvals.md)). The owner adds a row after reviewing the evidence
-  that the original source used it. An agent writes one only when the owner has explicitly told it to add
-  that specific routine or function, never on its own initiative or as part of a broader request ("match
-  everything", "clear the queue").
+  that the original source used it. An agent writes one when the owner has explicitly told it to add that
+  specific routine or function, or when one of the owner's standing rules below covers it; never otherwise, and
+  never as part of a broader request ("match everything", "clear the queue"). A row written under a standing
+  rule names its evidence at the anchor and is listed for the owner's review, who may withdraw it.
+  - **Hardware and shared state:** a `volatile` on a hardware register, or on state an interrupt handler or
+    another thread also writes, with that writer or the register named in the evidence.
+  - **Instructions C cannot spell:** an `asm` statement for COP0, COP2/VU0 macro instructions
+    (`lqc2`/`sqc2`/`qmtc2`/`qmfc2`, `v*`, `cfc2`/`ctc2`), `qfsrv`/`mtsab`, `di`, writes to `sp`, `syscall`,
+    `plzcw` and trapping `add`/`sub`/`addi`, with every operand and the logic around it in C. Instructions
+    C has a spelling for (`lq`, `sq`, `lwc1`, `swc1`, …) are not covered.
+  - **Volatile VU0 or hardware blocks:** an `asm volatile` qualifier on an asm block that drives VU0 or
+    hardware state, when no plain `asm { }` spelling matches (the tries recorded with the function) and the
+    function still matches with every one of its asm blocks written `asm volatile`. The function then writes
+    all its blocks that way, the usual form of PS2 inline VU0 code.
 - **Scope.** The repository holds the decompilation and what it needs: source, build tables, tools,
   evidence and reference documentation. Agent handoffs, session logs, per-wave work reports, changelogs and
   accounts of how the repository was reorganised, player-facing guides and catalogues, and tools that
   drive or read a running emulator (with their captures) go to the workspace's archive outside Git. Write
   what a wave learned into the topic's document, not a dated log.
 - **One build at a time.** At most one full build (`make check`, `make link`, `make objdiff`) runs on a
-  host, from the integrating session, never from a sub-agent. Where several sessions share a host, take a
-  lock: `flock <shared lock file> make check`; `tools/apply_names.py --check` takes the file `DW4_BUILD_LOCK`
-  names for its own builds.
+  host at once. The integrating session and sub-agents working in their own worktree outside the repository
+  both run builds under the shared lock: `flock <shared lock file> make check`; `tools/apply_names.py --check`
+  takes the file `DW4_BUILD_LOCK` names for its own builds. Gate stamps are kept per tree in the clone's git
+  common directory, so a branch whose final tree passed the four gates in its own worktree lands without
+  running them again; a merge of several branches is a new tree and runs them.
 - **Sub-agents write only to a scratch directory outside the repository**, never `src/`, `config/`, `asm/`,
   `docs/` or the repository root. The integrator promotes work ([Delegated work](#delegated-work)).
 - **Commits.** Sync with `git fetch && git merge origin/main` (never rebase shared history).
@@ -48,7 +61,8 @@ readable, evidence-named source that rebuilds to a byte-identical retail ELF.
   and fixes what it could not match or explain (and does the readability pass). The integrator does no bulk
   mechanical work itself, and names each sub-agent's model to the owner.
 - **Owner decisions are presented one at a time, as a question** the owner answers (the options with a
-  recommendation, and the evidence), and an approval row is written only on the owner's instruction for it.
+  recommendation, and the evidence), and an approval row is written only on the owner's instruction for it or
+  under one of the standing rules in [Hard rules](#hard-rules).
 - **Everything a Sonnet sub-agent hands back as needing the owner's approval gets an Opus 5.5 check first.**
   That covers an `asm`, a `volatile`, a hand-written assembly source, an owner-counted pragma, or any other
   approval row. The integrator starts the check as soon as the item comes back, without being asked, and
@@ -134,7 +148,8 @@ scratch; what lands is both matched and readable.
 - **No unapproved inline `asm` or `volatile`.** Either passes the byte check whether or not C could produce
   the same bytes, so it can hide a spelling nobody found: find the C. A function using one without its row
   is `unapproved`: it links, but it is not matched. Only `sync` and `ei` need no row, as C cannot spell
-  them. A `volatile` that only pins when a load is scheduled, where retail reads once, is never approved.
+  them. A `volatile` that only pins when a load is scheduled, where retail reads once, is never approved; the
+  one exception is an `asm volatile` block under the standing rule for VU0 and hardware blocks.
   `python3 tools/sourceapprovals.py --list` is the queue, `tools/inline_asm.py --test <source>` shows which
   `asm` statements can go, and `tools/progress.py --debt-check` fails on any rise in `inline_asm.other`.
 - **Names** follow [Readable](#matched-and-readable) item 2. Apply overlays with `tools/apply_names.py`
@@ -259,7 +274,7 @@ The sub-agent's model is set by the kind of work. This is a requirement, not a p
   readability pass done. It fixes what Sonnet left unmatched or unexplained. Opus 5.5 sub-agents take the review,
   one per slice, when it is too large for the integrator alone or when several Sonnet results are waiting at once,
   so the reviews run in parallel. Understanding work with no Sonnet pass (a resisting shape, a tool change) starts
-  at Opus 5.5.
+  at Opus 5.5, and the hardest cases stay on Opus 5.5. Fable 5.2 runs only when the owner asks for it.
 
 How it is enforced:
 

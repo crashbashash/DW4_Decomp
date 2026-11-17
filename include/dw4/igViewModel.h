@@ -17,6 +17,8 @@ extern struct igMetaField *g_igViewModel_positionMetaField;
 extern struct igMetaField *g_igViewModel_directionMetaField;
 extern struct igMetaField *g_igViewModel_viewUpVectorMetaField;
 extern struct igMetaField *g_igViewModel_viewLeftVectorMetaField;
+extern struct igMetaField *g_igViewModel_ratioMetaField;
+extern struct igMetaField *g_igViewModel_drawTimeMetaField;
 
 #ifdef __cplusplus
 }

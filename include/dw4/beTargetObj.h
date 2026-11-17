@@ -16,8 +16,8 @@ float beTargetObj_GetTargetBearing(float offset);
 float beTargetObj_GetTargetDistanceSq(void);
 struct igVec3f *beTargetObj_GetTargetPosition(void);
 int beTargetObj_GetTargetRamNo(void);
-int beTargetObj_SelectTarget(float *matrix, const char *group, const char *mode);
-int beTargetObj_SetTarget(float *matrix, float *position);
+unsigned char beTargetObj_SelectTarget(float *matrix, const char *group, const char *mode);
+unsigned char beTargetObj_SetTarget(float *matrix, float *position);
 
 extern struct igMetaObject *g_beTargetObj_metaObject;
 

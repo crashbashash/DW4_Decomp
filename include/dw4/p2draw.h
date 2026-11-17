@@ -27,6 +27,7 @@ void p2DrawTriangleFan(unsigned int count);
 void p2DrawTriangleStrip(unsigned int count);
 void p2DrawTriangleStrips(int count, const int *lengths);
 void p2DrawTriangles(unsigned int count);
+void p2SetSpriteByteArray(const unsigned char *bytes);
 void p2SetTexCoordArray(int unit, const float *texCoords);
 void p2SetVertexArrays(const float *positions, const float *normals, const unsigned int *colours, const float *texCoords);
 

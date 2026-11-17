@@ -22,6 +22,135 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_261(int *arg0, int *arg1, int arg2) {
     }
 }
 
+/* Bind the position, normal, color and texture-coordinate streams of `vertexData` for drawing and
+ * return their base addresses through the four out pointers (zero for an absent optional stream).
+ * Float streams (igVec3fList / igVec2fList) bind as they are; char/short streams set a fixed-point
+ * component layout from the entry's shift, which the return value reports. Without an index
+ * array the streams are advanced to `firstVertex`. */
+static inline bool isListOf(VC_17e590 *list, int meta) { return meta == list->vX(); }
+
+bool FUN_0017df40(B_17eb90 *context, int vertexData, int firstVertex, int *positions, int *normals, int *colors, int *texCoords) {
+    igPsx2VisualContext *vc = (igPsx2VisualContext *)context;
+    bool integerFormat = false;
+    Node *entry;
+    VC_17e590 *source;
+    VC_17e590 *list;
+    VC_17e590 *floatList;
+    VC_17e590 *other;
+
+    entry = (Node *)FUN_0015f4a0((S_15f430 *)vertexData, 1, 0);
+    source = (VC_17e590 *)dw4_cast_or_null((char *)entry->obj, g_igVec3fList_metaObject);
+    if (source != 0) {
+        *positions = source->f16;
+        p2SetComponentLayout(0, 0, 0, 0);
+    } else {
+        source = entry->obj;
+        if (isListOf(source, g_igCharList_metaObject[0])) {
+            p2SetComponentLayout(0, 1, 7 - entry->f32, entry->f32);
+            integerFormat = true;
+            *positions = source->f16;
+        } else if (isListOf(source, g_igUnsignedCharList_metaObject[0])) {
+            p2SetComponentLayout(0, 0, 8 - entry->f32, entry->f32);
+            integerFormat = true;
+            *positions = source->f16;
+        } else if (isListOf(source, g_igShortList_metaObject[0])) {
+            p2SetComponentLayout(0, 1, 15 - entry->f32, entry->f32);
+            integerFormat = true;
+            *positions = source->f16;
+        } else if (isListOf(source, g_igUnsignedShortList_metaObject[0])) {
+            p2SetComponentLayout(0, 0, 16 - entry->f32, entry->f32);
+            integerFormat = true;
+            *positions = source->f16;
+        }
+    }
+    entry = (Node *)FUN_0015f4a0((S_15f430 *)vertexData, 3, 0);
+    if (entry != 0) {
+        list = entry->obj;
+        if (list != 0 && igObject_IsKindOf(list, (igMetaObject *)g_igVec3fList_metaObject[0]) != 0) {
+            floatList = list;
+        } else {
+            floatList = 0;
+        }
+        if (floatList != 0) {
+            *normals = floatList->f16;
+            p2SetComponentLayout(1, 0, 0, 0);
+        } else {
+            other = entry->obj;
+            if (isListOf(other, g_igCharList_metaObject[0])) {
+                p2SetComponentLayout(1, 1, 7 - entry->f32, entry->f32);
+                integerFormat = true;
+                *normals = other->f16;
+            } else if (isListOf(other, g_igUnsignedCharList_metaObject[0])) {
+                p2SetComponentLayout(1, 0, 8 - entry->f32, entry->f32);
+                integerFormat = true;
+                *normals = other->f16;
+            } else if (isListOf(other, g_igShortList_metaObject[0])) {
+                p2SetComponentLayout(1, 1, 15 - entry->f32, entry->f32);
+                integerFormat = true;
+                *normals = other->f16;
+            } else if (isListOf(other, g_igUnsignedShortList_metaObject[0])) {
+                p2SetComponentLayout(1, 0, 16 - entry->f32, entry->f32);
+                integerFormat = true;
+                *normals = other->f16;
+            }
+        }
+    } else {
+        *normals = 0;
+    }
+    entry = (Node *)FUN_0015f4a0((S_15f430 *)vertexData, 2, 0);
+    if (entry != 0) {
+        if (isListOf(entry->obj, g_igUnsignedIntList_metaObject[0])) {
+            *colors = entry->obj->f16;
+        } else if (isListOf(entry->obj, g_igVec4ucList_metaObject[0])) {
+            *colors = entry->obj->f16;
+        }
+    } else {
+        *colors = 0;
+    }
+    entry = (Node *)FUN_0015f4a0((S_15f430 *)vertexData, 4, vc->_texCoordIndex[0]);
+    if (entry != 0) {
+        list = entry->obj;
+        if (list != 0 && igObject_IsKindOf(list, (igMetaObject *)g_igVec2fList_metaObject[0]) != 0) {
+            floatList = list;
+        } else {
+            floatList = 0;
+        }
+        if (floatList != 0) {
+            *texCoords = floatList->f16;
+            p2SetComponentLayout(2, 0, 0, 0);
+        } else {
+            source = entry->obj;
+            if (isListOf(source, g_igCharList_metaObject[0])) {
+                p2SetComponentLayout(2, 1, 7 - entry->f32, entry->f32);
+                integerFormat = true;
+                *texCoords = source->f16;
+            } else if (isListOf(source, g_igUnsignedCharList_metaObject[0])) {
+                p2SetComponentLayout(2, 0, 8 - entry->f32, entry->f32);
+                integerFormat = true;
+                *texCoords = source->f16;
+            } else if (isListOf(source, g_igShortList_metaObject[0])) {
+                p2SetComponentLayout(2, 1, 15 - entry->f32, entry->f32);
+                integerFormat = true;
+                *texCoords = source->f16;
+            } else if (isListOf(source, g_igUnsignedShortList_metaObject[0])) {
+                p2SetComponentLayout(2, 0, 16 - entry->f32, entry->f32);
+                integerFormat = true;
+                *texCoords = source->f16;
+            }
+        }
+    } else {
+        *texCoords = 0;
+    }
+    if (vc->_pIndexArray == 0) {
+        *positions = *positions + firstVertex * 12;
+        if (*normals != 0) *normals = *normals + firstVertex * 12;
+        if (*colors != 0) *colors = *colors + firstVertex * 4;
+        if (*texCoords != 0) *texCoords = *texCoords + firstVertex * 8;
+    }
+    return integerFormat;
+}
+
+
 bool FUN_0017e590(Self_17e590 *arg0, int arg1, int arg2, int *arg3, int *arg4) {
     Node *n2; VC_17e590 *s; VC_17e590 *r; VC_17e590 *o2;
     bool var_s2 = false;

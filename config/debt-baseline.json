@@ -14,13 +14,22 @@
   "code_only.other.functions": 0,
   "compile.bytes": 0,
   "compile.functions": 0,
-  "decl.header_conflicts": 562,
-  "decl.local_externs": 3010,
-  "decl.type_conflicts": 1909,
-  "decl.varargs": 940,
+  "decl.header_conflicts": {
+   "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
+   "value": 585
+  },
+  "decl.local_externs": {
+   "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
+   "value": 3079
+  },
+  "decl.type_conflicts": {
+   "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
+   "value": 1966
+  },
+  "decl.varargs": 932,
   "foreign_profile.bytes": 0,
   "foreign_profile.functions": 0,
-  "fun_dat_refs": 1356,
+  "fun_dat_refs": 1494,
   "inline_asm.other": 0,
   "inventory.unsymbolised_bytes": 0,
   "inventory_gap.bytes": 0,
@@ -41,13 +50,19 @@
    "value": 3
   },
   "raw_casts.reflected": 262,
-  "struct.a": 10,
-  "struct.b": 0,
+  "struct.a": {
+   "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
+   "value": 11
+  },
+  "struct.b": {
+   "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
+   "value": 1
+  },
   "struct.c": 28,
   "unapproved.bytes": 320,
   "unapproved.functions": 5,
-  "unmatched.bytes": 271172,
-  "unmatched.functions": 252
+  "unmatched.bytes": 211672,
+  "unmatched.functions": 177
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }

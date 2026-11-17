@@ -19,7 +19,6 @@
 #include "dw4/igMemoryPoolContext.h"
 #include "dw4/igObject.h"
 
-extern "C" void __dl__FPv(...);
 extern "C" igMetaObject *beSaveUtil_GetInfoMeta(void);
 extern "C" igMetaObject *beSaveUtil_GetMeta(void);
 extern "C" unsigned char beSaveUtil_StartApi(beSaveUtil *self, beSaveUtilInfoRam *info, beSaveApi *request);

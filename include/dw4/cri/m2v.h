@@ -280,4 +280,8 @@ typedef struct M2vLibWork {
 
 #define M2V_OBJ_WORK_SIZE 0x700
 
+void M2V_Init(int nobj, char *work, unsigned int size);
+void M2VERR_Init(void);
+void M2VHDEC_Init(void);
+
 #endif

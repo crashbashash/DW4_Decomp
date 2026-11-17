@@ -139,6 +139,33 @@ void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount) {
     }
 }
 
+static inline void reserveContexts(igTDataList<void *> *list, int count) {
+    if (count >= list->getCount()) {
+        List_Reserve((igDataList *)list, count, 4);
+    }
+    if (count >= 0) {
+        if (count <= list->_capacity) {
+            list->_count = count;
+        } else {
+            List_Resize(list, count, 4);
+        }
+    }
+}
+
+void FUN_001c1950(T_1c1a80 *pool, igTDataList<void *> *list, int boneCount, int count) {
+    unsigned int n = list->_count;
+    if (n < count) {
+        reserveContexts(list, count);
+        for (unsigned int i = n; i < count; i++) {
+            int size = FUN_0027ede0(boneCount);
+            void *context = FUN_0027ee00(((igMemoryPoolView *)igObject_GetAllocator((igObject *)pool))->AllocateAligned(size, 16), boneCount);
+            if (list->_count != 0 && (int)i >= 0 && (int)i < list->_count) {
+                list->_data[i] = context;
+            }
+        }
+    }
+}
+
 void FUN_001c1a80(T_1c1a80 *arg0, int arg1, int arg2) {
     int i;
     int r;
@@ -154,6 +181,6 @@ found:
         FUN_001c17e0((EnbayaContextPoolView *)arg0, arg1);
         r = arg0->f8->n - 1;
     }
-    FUN_001c1950(arg0, arg0->f8->d[r], arg1, arg2);
+    FUN_001c1950(arg0, (igTDataList<void *> *)arg0->f8->d[r], arg1, arg2);
 }
 

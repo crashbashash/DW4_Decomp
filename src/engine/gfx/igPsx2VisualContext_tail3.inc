@@ -139,6 +139,67 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_62(void *arg0) {
     return *(int *)((char *)(arg0) + 944);
 }
 
+/* The second texture-coordinate stream, which sprites read; an indexed draw addresses it from the start. */
+static inline int SpriteTexCoordArray(igPsx2VisualContext *vc, int *components, int first) {
+    int start = vc->_pIndexArray != 0 ? 0 : first;
+    return components[12] != 0 ? components[12] + start * 8 : 0;
+}
+
+void Gap__Gfx__igPsx2VisualContext__vfunc_71(igPsx2VisualContext *vc, int primitive, unsigned int count, int first) {
+    int positions;
+    int normals;
+    int blendState;
+
+    if (vc->_pVertexArray != 0) {
+        positions = 0;
+        normals = 0;
+        blendState = FUN_00177010(vc, &positions, &normals, -1, -1);
+        FUN_0016cc60((char *)vc);
+        switch (primitive) {
+        case 0:
+            FUN_0016d910(vc, count, first, (float *)positions, (float *)normals, (int (*)(...))p2DrawPoints, 0);
+            break;
+        case 1:
+            FUN_0016d910(vc, count * 2, first, (float *)positions, (float *)normals, (int (*)(...))p2DrawLines, 0);
+            break;
+        case 2:
+            FUN_0016d910(vc, count + 1, first, (float *)positions, (float *)normals, (int (*)(...))p2DrawLineStrip, 0);
+            break;
+        case 3:
+            FUN_0016d910(vc, count * 3, first, (float *)positions, (float *)normals, (int (*)(...))p2DrawTriangles, (int (*)(...))p2DrawIndexedTriangles);
+            break;
+        case 4:
+            FUN_0016d910(vc, count + 2, first, (float *)positions, (float *)normals, (int (*)(...))p2DrawTriangleStrip, (int (*)(...))p2DrawIndexedTriangleStrip);
+            break;
+        case 5:
+            FUN_0016d910(vc, count + 2, first, (float *)positions, (float *)normals, (int (*)(...))p2DrawTriangleFan, (int (*)(...))p2DrawIndexedTriangleFan);
+            break;
+        default: {
+            int *components = ((VertexArray177 *)vc->_pVertexArray)->f8;
+            int sizes = components[15] != 0 ? components[15] : 0;
+            int bytes = components[19] != 0 ? components[19] : 0;
+            p2SetTexCoordArray(1, (const float *)SpriteTexCoordArray(vc, components, first));
+            p2SetSpriteByteArray((const unsigned char *)bytes);
+            FUN_0016d910(vc, count, first, (float *)positions, (float *)sizes, (int (*)(...))p2DrawSprites, (int (*)(...))p2DrawIndexedSprites);
+            break;
+        }
+        }
+        if (blendState == 1) {
+            void *array = (void *)vc->_pVertexArray;
+            FUN_0016e140(array, (int)p2GetVif1WaitSequence());
+        }
+        FUN_0016cd10(vc);
+        {
+            Q_16d660 *q = (Q_16d660 *)vc->_pVertexArray;
+            if (q->f20 & 4) {
+                q->f64 = p2GetVif1WaitSequence();
+            }
+        }
+    } else {
+        FUN_0017f080(vc, primitive, count, first, 0);
+    }
+}
+
 void Gap__Gfx__igPsx2VisualContext__vfunc_74(igPsx2VisualContext *self, int arg1, int arg2, int arg3, int arg4) {
     int sp8C;
     int sp88;
@@ -157,14 +218,14 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_74(igPsx2VisualContext *self, int arg1
         switch (arg1) {
         case 0:
             for (i = 0; i < arg2; i++) {
-                FUN_0016d910(self, *p, arg3, sp8C, sp88, p2DrawLineStrip, 0);
+                FUN_0016d910(self, *p, arg3, (float *)sp8C, (float *)sp88, (int (*)(...))p2DrawLineStrip, 0);
                 arg3 += *p;
                 p++;
             }
             break;
         case 2:
             for (i = 0; i < arg2; i++) {
-                FUN_0016d910(self, *p, arg3, sp8C, sp88, p2DrawTriangleFan, p2DrawIndexedTriangleFan);
+                FUN_0016d910(self, *p, arg3, (float *)sp8C, (float *)sp88, (int (*)(...))p2DrawTriangleFan, (int (*)(...))p2DrawIndexedTriangleFan);
                 arg3 += *p;
                 p++;
             }
@@ -173,7 +234,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_74(igPsx2VisualContext *self, int arg1
             i = 0;
             if (self->_pIndexArray != 0) {
                 for (; i < arg2; i++) {
-                    FUN_0016d910(self, *p, arg3, sp8C, sp88, p2DrawTriangleStrip, p2DrawIndexedTriangleStrip);
+                    FUN_0016d910(self, *p, arg3, (float *)sp8C, (float *)sp88, (int (*)(...))p2DrawTriangleStrip, (int (*)(...))p2DrawIndexedTriangleStrip);
                     arg3 += *p;
                     p++;
                 }
@@ -207,6 +268,51 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_74(igPsx2VisualContext *self, int arg1
     } else {
         FUN_0017f080(self, arg1 + 0x2000);
     }
+}
+
+/* The vertex array's colour and texture-coordinate streams for a draw starting at `first`; an indexed
+ * draw addresses them from the start. */
+static inline int ColourArray(igPsx2VisualContext *vc, int first) {
+    int start = first;
+    int colours;
+    if (vc->_pIndexArray != 0) start = 0;
+    colours = ((VertexArray177 *)vc->_pVertexArray)->f8[2];
+    return colours != 0 ? colours + start * 4 : 0;
+}
+
+static inline int TexCoordArray(igPsx2VisualContext *vc, int unit, int first) {
+    int start = vc->_pIndexArray != 0 ? 0 : first;
+    int component = vc->_texCoordIndex[unit] + 11;
+    int texCoords = ((VertexArray177 *)vc->_pVertexArray)->f8[component];
+    return texCoords != 0 ? texCoords + start * 8 : 0;
+}
+
+void FUN_0016d910(igPsx2VisualContext *vc, unsigned int count, int first, const float *positions, const float *normals,
+                  int (*draw)(...), int (*drawIndexed)(...)) {
+    unsigned int *colours = (unsigned int *)ColourArray(vc, first);
+    float *coords = (float *)TexCoordArray(vc, 0, first);
+    const float *normalArray;
+
+    FUN_0016db20(vc, first);
+    if (vc->_pIndexArray != 0) {
+        unsigned short *indices = (unsigned short *)((igPsx2IndexArray *)vc->_pIndexArray)->_indexData;
+        p2SetVertexArrays(positions, normals, colours, coords);
+        drawIndexed(count, indices + first);
+        return;
+    }
+    if (normals == 0) {
+        normalArray = 0;
+    } else if (*((VertexFormat177 *)vc->_pVertexArray)->format() & 2) {
+        normalArray = normals + first * 3;
+    } else if ((unsigned char)(((unsigned int)*((VertexFormat177 *)vc->_pVertexArray)->format() & 0x300000) >> 20) == 1) {
+        normalArray = normals + first;
+    } else if ((unsigned char)(((unsigned int)*((VertexFormat177 *)vc->_pVertexArray)->format() & 0x300000) >> 20) == 2) {
+        normalArray = normals + first * 2;
+    } else {
+        normalArray = 0;
+    }
+    p2SetVertexArrays(positions + first * 3, normalArray, colours, coords);
+    draw(count);
 }
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_173(A_16dbe0 *arg0) {

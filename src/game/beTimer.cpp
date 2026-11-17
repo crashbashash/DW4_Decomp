@@ -92,7 +92,7 @@ void beTimer_Update(beTimer *self) {
         now = ((igInsightCore *)self->_insight)->_worldTime;
         delta = now - old;
         self->_oldWorldTime = now;
-        if (beSystem_IsRunning((beSystem *)self->_system) & 0xFF) {
+        if (beSystem_IsRunning((beSystem *)self->_system) != 0) {
             n = ((beTimerDataList *)self->_dataList)->_count;
             i = 0;
             if (n > 0) {

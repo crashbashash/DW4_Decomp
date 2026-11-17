@@ -142,6 +142,8 @@ int igNamedObject_Destroy(...);
 int igSmartPointer_igDirectory_Destruct(...);
 int Memory_GetDefaultHandleAllocator(...);
 int FUN_002fdef0(void *meta, void *field);
+int FUN_00142bb0(void *list, void *key);
+igObject *igMetaObjectList_Create(int allocator);
 struct GraphIterator;
 int FUN_0022ad00(struct GraphIterator *it);
 int igMatrix44f_Multiply(...);
@@ -149,7 +151,7 @@ int igMatrix44f_Copy(...);
 igSmartPointer<igObject> igMetaObject_CreateInstanceDefaultRef(int);
 void *igInfoList_Create(int arg0);
 int FUN_001d6340(...);
-int FUN_0022c150(...);
+
 int FUN_00190330(...);
 int igStringMetaField_AssignRetainedToken(...);
 int igObjectRefMetaField_Assign(...);
@@ -246,7 +248,12 @@ struct S_3 {
     igSmartPointer_2<Obj_9> a; igSmartPointer_2<Obj_9> b; igSmartPointer_2<Obj_9> c;
 };
 struct R_3 { int a, b, c, d; };
-struct RecoveryString { void *p; ~RecoveryString() { if (p != 0) { int *t = (int *)((char *)p - 8); int v = *(int *)((char *)p - 4) - 1; *(int *)((char *)p - 4) = v; if (v == 0) StringChunk_ReleaseHeader((StringChunk *)*t, (StringTokenHeader *)t); } } };
+struct RecoveryString {
+    void *p;
+    RecoveryString() {}
+    RecoveryString(void *token) : p(token) {}
+    ~RecoveryString() { if (p != 0) { int *t = (int *)((char *)p - 8); int v = *(int *)((char *)p - 4) - 1; *(int *)((char *)p - 4) = v; if (v == 0) StringChunk_ReleaseHeader((StringChunk *)*t, (StringTokenHeader *)t); } }
+};
 class Obj_10 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual R_3 vf(RecoveryString *, int); };
 struct L { char p[8]; int n; };
 struct UIntList { char pad[8]; int count; int cap; unsigned int *data; };
@@ -286,7 +293,11 @@ struct StringRef_2 {
     }
 };
 struct IteratorType {};
-class ItemInterface { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void vX(const StringRef_2 &, int, int); };
+class ItemInterface { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void vX(const StringRef_2 &, int, int); virtual void vfunc_28(const StringRef_2 &, int, int); };
+/* An igItemBase instance as FUN_002299c0 queries it: slot 29 the item kind, slots 30 and 31 two
+ * flags, slot 32 the item name. */
+class igItemBaseDispatchView : public igVirtualObject { public: virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28();
+    virtual int vfunc_29(); virtual unsigned char vfunc_30(); virtual unsigned char vfunc_31(); virtual StringRef_2 vfunc_32(); };
 typedef struct S1 { char pad4[4]; int f4; } S1;
 typedef struct S0 { char pad8[8]; int f8; int fC; } S0;
 struct S22 { int a0, a1, b, c; };
@@ -353,7 +364,8 @@ struct Ent { char pad[12]; char *name; };
 struct Lst_2 { char pad[8]; Ent **arr; unsigned int count; };
 struct Obj_11 { char pad[40]; Lst_2 *lst; };
 class A_2 { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual Obj_11 *getObj(); };
-class B_2 { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void put(char *); };
+class B_2 { public: virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3(); virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7(); virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11(); virtual void p12(); virtual void p13(); virtual void p14(); virtual void p15(); virtual void p16(); virtual void p17(); virtual void p18(); virtual void p19(); virtual void p20(); virtual void put(const char *format, ...); };
+extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, int section, igMetaField *field, void *object);
 struct RecoveryString_2 {
     int *p;
     RecoveryString_2() : p(0) {}

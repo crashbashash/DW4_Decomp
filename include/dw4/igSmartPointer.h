@@ -37,6 +37,33 @@ static inline void igRelease(igObjectDispatchView *o) {
 struct AdoptReference {};
 enum RetainReference { kRetainReference };
 
+/* The pointer word an object list copies in on insert, holding the reference the list takes. It is
+ * a class member, not a plain pointer local: igDirectory_InsertObject and igIGBFile_ShareEntries store the word and load
+ * it back from its stack slot before the null test (`sw v0,104(sp); lw v1,104(sp); beqz v1`), which
+ * MWCC emits for a member read after the constructor's store. A scalar local or parameter is tested
+ * from the register and stored in the branch delay slot (712 bytes against retail's 716, and 720
+ * against 724). */
+template <class T> struct RetainedWord {
+    T *p;
+    RetainedWord(T *object) : p(object) {
+        if (p != 0) {
+            p->_refCount = p->_refCount + 1;
+        }
+    }
+};
+
+/* A pointer word handed to a list insert as a temporary argument, which the insert helper retains
+ * after it is stored: retail stores the word, then loads the list into the null test's delay slot
+ * (`sw v0,124(sp); lw v1,124(sp); beqz v1; lw a0,16(s1)`). RetainedWord, which retains in its
+ * constructor, leaves that slot empty (+4 B per insert). */
+struct HeldWord {
+    igObject *p;
+    HeldWord(igObject *object) : p(object) {}
+    void retain() const {
+        if (p != 0) p->_refCount = p->_refCount + 1;
+    }
+};
+
 /* A temporary smart pointer (one built in an argument bound to a const reference, or a by-value
  * return used in place) is released with p reloaded from its stack slot after the count store. A
  * named local passed the same way is released from one read. So a caller that shows the reload

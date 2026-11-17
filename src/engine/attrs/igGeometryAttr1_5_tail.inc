@@ -12,6 +12,27 @@ void thunk_FUN_0013cf70(void) {
     FUN_0013cf70();
 }
 
+extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_32(igGeometryAttr1_5 *self, int a, int b, int c, int d) {
+    if (self->_vertexArray == 0) {
+        igObject *created = (igObject *)igVertexArray_Create((int)igObject_GetAllocator(self));
+        igObject *previous;
+        if (created != 0) {
+            created->_refCount = created->_refCount + 1;
+        }
+        previous = (igObject *)self->_vertexArray;
+        igRelease(previous);
+        self->_vertexArray = (int)created;
+        {
+            igObject *vertexArray = (igObject *)self->_vertexArray;
+            vertexArray->_refCount = vertexArray->_refCount - 1;
+            if ((vertexArray->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(vertexArray);
+            }
+        }
+    }
+    ((VertexArrayConfigureView *)self->_vertexArray)->configure(a, b, c, d);
+}
+
 void Gap__Attrs__igGeometryAttr1_5__vfunc_20(S_13d180 *arg0, int arg1) {
     Rc *sp3C;
     Rc *s0;
@@ -117,6 +138,166 @@ int Gap__Attrs__igGeometryAttr1_5__vfunc_39(T_13d460 *arg0, int arg1, unsigned a
         }
     }
     return 1;
+}
+
+/* Position of vertex `index` in a locked vertex component. */
+static inline float *lockedVertex(const igVertexArrayLock &lock, unsigned int index) {
+    return (float *)(lock.data + index * lock.stride);
+}
+
+/* Ray test over the triangles of a triangle list (type 3) or triangle strips (type 4), plain or indexed. Each
+ * triangle goes through FUN_0018b9e0; the first hit after (*primIndex, *vertexIndex) wins, and that position is
+ * written back, so a caller passing `resume` walks every hit in turn. */
+extern "C" bool Gap__Attrs__igGeometryAttr1_5__vfunc_36(igGeometryAttr1_5 *self, const void *ray, float *hit,
+                                                        float *normal, int *primIndex, int *vertexIndex, int mode,
+                                                        bool resume) {
+    igVertexArrayLock lock;
+    int prim = 0;
+    int vertex = 0;
+    unsigned short *indices;
+    /* matching construct: the strip corners a, b, c are function-scope variables shared by both strip loops */
+    int a;
+    int b;
+    int c;
+    bool found;
+    igVertexArrayLock_Init(&lock);
+    indices = 0;
+    found = false;
+    if (!resume || *primIndex == -1 || *vertexIndex == -1) {
+        *primIndex = -1;
+        *vertexIndex = -1;
+    }
+    lock.component = 0;
+    lock.firstVertex = 0;
+    lock.componentIndex = self->_offset;
+    lock.count = 0;
+    ((igVertexArrayView *)self->_vertexArray)->lock(&lock, 0);
+    if (self->_primType == 3) {
+        if (self->_indexArray != 0) {
+            indices = ((igIndexArrayView *)self->_indexArray)->lock(0, 0, -1);
+            for (vertex = 0, prim = 0; prim < lock.count; prim++, vertex += 3) {
+                unsigned short *triangle = indices + vertex;
+                if (FUN_0018b9e0(ray, lockedVertex(lock, triangle[0]), lockedVertex(lock, triangle[1]),
+                                 lockedVertex(lock, triangle[2]), hit, normal, mode) >= 0.0f &&
+                    prim > *primIndex) {
+                    found = true;
+                    break;
+                }
+            }
+        } else {
+            for (vertex = 0, prim = 0; prim < lock.count; prim++, vertex += 3) {
+                if (FUN_0018b9e0(ray, lockedVertex(lock, vertex), lockedVertex(lock, vertex + 1),
+                                 lockedVertex(lock, vertex + 2), hit, normal, mode) >= 0.0f &&
+                    prim > *primIndex) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+    } else if (self->_primType == 4) {
+        if (self->_indexArray != 0) {
+            indices = ((igIndexArrayView *)self->_indexArray)->lock(0, 0, -1);
+            int first = 0;
+            for (prim = 0; prim < lock.count; prim++) {
+                unsigned int length = ((PrimLengthArray *)self->_stripLengths)->getLength(prim);
+                a = first;
+                b = first + 1;
+                for (vertex = 2; vertex < length; vertex++) {
+                    c = first + vertex;
+                    float t;
+                    if (vertex & 1) {
+                        t = FUN_0018b9e0(ray, lockedVertex(lock, indices[a]), lockedVertex(lock, indices[c]),
+                                         lockedVertex(lock, indices[b]), hit, normal, mode);
+                    } else {
+                        t = FUN_0018b9e0(ray, lockedVertex(lock, indices[a]), lockedVertex(lock, indices[b]),
+                                         lockedVertex(lock, indices[c]), hit, normal, mode);
+                    }
+                    if (t >= 0.0f && (prim > *primIndex || (prim == *primIndex && vertex > *vertexIndex))) {
+                        found = true;
+                        goto done;
+                    }
+                    a = b;
+                    b = c;
+                }
+                first += length;
+            }
+        } else {
+            int first = 0;
+            for (prim = 0; prim < lock.count; prim++) {
+                unsigned int length = ((PrimLengthArray *)self->_stripLengths)->getLength(prim);
+                a = first;
+                b = first + 1;
+                for (vertex = 2; vertex < length; vertex++) {
+                    c = first + vertex;
+                    float t;
+                    if (vertex & 1) {
+                        t = FUN_0018b9e0(ray, lockedVertex(lock, a), lockedVertex(lock, c), lockedVertex(lock, b), hit,
+                                         normal, mode);
+                    } else {
+                        t = FUN_0018b9e0(ray, lockedVertex(lock, a), lockedVertex(lock, b), lockedVertex(lock, c), hit,
+                                         normal, mode);
+                    }
+                    if (t >= 0.0f && (prim > *primIndex || (prim == *primIndex && vertex > *vertexIndex))) {
+                        found = true;
+                        goto done;
+                    }
+                    a = b;
+                    b = c;
+                }
+                first += length;
+            }
+        }
+    }
+done:
+    *primIndex = prim;
+    *vertexIndex = vertex;
+    ((igVertexArrayView *)self->_vertexArray)->unlock(&lock, 1);
+    if (indices != 0) {
+        ((igIndexArrayView *)self->_indexArray)->unlock(indices, 1, 0, -1);
+    }
+    return found;
+}
+
+extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_33(igGeometryAttr1_5 *self, const float *matrix) {
+    /* matching construct: declaration-order sweep — vertex and i declared before format */
+    char *vertex;
+    unsigned int i;
+    unsigned int format = *((igVertexFormatView *)self->_vertexArray)->getFormat();
+    if (format & 1) {
+        igVertexArrayLock lock;
+        igVertexArrayLock_Init(&lock);
+        lock.component = 0;
+        lock.firstVertex = 0;
+        lock.componentIndex = self->_offset;
+        lock.count = 0;
+        ((igVertexArrayView *)self->_vertexArray)->lock(&lock, 0);
+        if (lock.stride == 12) {
+            FUN_00192430(matrix, (float *)lock.data, (float *)lock.data, lock.count);
+        } else {
+            vertex = lock.data;
+            for (i = 0; i < lock.count; i++) {
+                FUN_00192430(matrix, (float *)vertex, (float *)vertex, 1);
+                vertex += lock.stride;
+            }
+        }
+        ((igVertexArrayView *)self->_vertexArray)->unlock(&lock, 0);
+    }
+    {
+        float normalMatrix[16];
+        int invertible;
+        igMatrix44f_SetIdentity(normalMatrix);
+        igMatrix44f_Invert(&invertible, normalMatrix, (int)matrix);
+        FUN_001903d0(normalMatrix);
+        if (format & 2) {
+            FUN_0013dbb0(1, (igVertexArrayView *)self->_vertexArray, normalMatrix);
+        }
+        if (format & 0x400000) {
+            FUN_0013dbb0(7, (igVertexArrayView *)self->_vertexArray, normalMatrix);
+        }
+        if (format & 0x800000) {
+            FUN_0013dbb0(8, (igVertexArrayView *)self->_vertexArray, normalMatrix);
+        }
+    }
 }
 
 void Gap__Attrs__igGeometryAttr1_5__vfunc_40(S_13de80 *arg0, int arg1, int arg2) {

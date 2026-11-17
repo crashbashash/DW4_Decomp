@@ -36,7 +36,7 @@
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 #define STORE_REF(slot, fresh) { igObject *held2 = fresh; if (held2 != 0) held2->_refCount = held2->_refCount + 1; REL((igObject *)slot) slot = (int)held2; }
 
-extern "C" int beNDMWMdlItem_IsKind(int unused, int kind);
+extern "C" unsigned char beNDMWMdlItem_IsKind(int unused, int kind);
 extern "C" int beNDMWMdlItem_GetMeta(void);
 /* kept local: beNDMWItemBase.h is not included: its by-value GetRevisionColor moves the colour off retail's frame slot (load-bearing). */
 extern "C" int beNDMWItemBase_IndexOfRecNo(igObjectList *items, int recNo);
@@ -108,7 +108,7 @@ void beNDMWMdlItem_PlayPickupEffect(beNDMWMdlItem *self, int recNo, int playerNo
     beMessenger_EnqueueSelected((beMessenger *)self->_messenger, "SETEFFECT", 1);
 }
 
-int beNDMWMdlItem_IsKind(int unused, int kind) {
+unsigned char beNDMWMdlItem_IsKind(int unused, int kind) {
     return strcmp((const char *)kind, "KIND_ITEM") == 0;
 }
 
@@ -319,7 +319,7 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
     }
     isNear = 0;
     ramNo = 0;
-    if (beTargetObj_SelectTarget((float *)((char *)ramData->_node + 32), "PLAYER", "NEAR") != 0) {
+    if (beTargetObj_SelectTarget((float *)((char *)ramData->_node + 32), "PLAYER", "NEAR")) {
         float distSq = beTargetObj_GetTargetDistanceSq();
         ramNo = beTargetObj_GetTargetRamNo();
         isNear = distSq < 64.0f;
@@ -416,7 +416,7 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
         }
         if (ram->_st0 == 0) break;
     case 1:
-        if (beBaseInfoRam_IsTimerExpired(ram, "COLOR") != 0) {
+        if (beBaseInfoRam_IsTimerExpired(ram, "COLOR")) {
             beNDMWItemBase_GetRevisionColor(color, work->_itemObject);
             if (work->_isColorLight != 0) {
                 work->_isColorLight = 0;

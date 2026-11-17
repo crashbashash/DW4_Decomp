@@ -290,6 +290,50 @@ int FUN_0018b110(void *arg0, void *arg1) {
     return FUN_0018d060((P2 *)arg1, (float *)sp20) == 2;
 }
 
+int FUN_0018b170(void *volume, igRay *ray) {
+    igAABox *box = (igAABox *)volume;
+    float tNear, tFar;
+    int i;
+    if (igAABox_IntersectPoint((B4 *)box, (V *)ray->_pos) == 2) {
+        return 1;
+    }
+    tNear = -3.402823466e+38f;
+    tFar = 3.402823466e+38f;
+    for (i = 0; i < 3; i++) {
+        if (fabs_(ray->_dir[i]) < 5e-7f) {
+            if (box->_max[i] < ray->_pos[i] || ray->_pos[i] < box->_min[i]) {
+                return 0;
+            }
+        } else {
+            float t0 = (box->_min[i] - ray->_pos[i]) / ray->_dir[i];
+            float t1 = (box->_max[i] - ray->_pos[i]) / ray->_dir[i];
+            if (!(t0 <= t1)) {
+                float swap = t0;
+                t0 = t1;
+                t1 = swap;
+            }
+            if (!(t0 <= tNear)) {
+                tNear = t0;
+            }
+            if (t1 < tFar) {
+                tFar = t1;
+            }
+            if (!(tNear <= tFar) || tFar < 0.0f) {
+                return 0;
+            }
+        }
+    }
+    {
+        float dist = fabs_(tNear);
+        /* matching construct: hand enumeration under C++ — int result set then cleared, no bool narrowing */
+        int hit = 1;
+        if (!(dist <= ray->_len)) {
+            hit = 0;
+        }
+        return hit;
+    }
+}
+
 int FUN_0018b300(igAABox *box, void *other) {
     unsigned char inside;
     if (!(box->_min[0] <= box->_max[0])) {
@@ -342,7 +386,7 @@ int FUN_0018b540(void *parg0, P *b) {
     v[2] = b->f16 + t * b->f28;
     v0 = igAABox_IntersectPoint((B4 *)a, (V *)v) != 0;
     if (s0 != 0 && v0 != 0) return 2;
-    if (s0 != 0 || v0 != 0 || FUN_0018b170(a, b) != 0) return 1;
+    if (s0 != 0 || v0 != 0 || FUN_0018b170((void *)a, (igRay *)b) != 0) return 1;
     return 0;
 }
 

@@ -712,7 +712,7 @@ void sftim_Tc2Time23D(int rate, SfdTimeCode *tc, int *ticks, int *out_rate)
     *out_rate = rate;
 }
 
-void FUN_002af2e8(int rate, SfdTimeCode *tc, int *ticks, int *out_rate)
+void sftim_Tc2Time29D(int rate, SfdTimeCode *tc, int *ticks, int *out_rate)
 {
     int m, days, secs, rest;
     m = tc->minutes;

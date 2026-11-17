@@ -17,7 +17,7 @@ void Gap__Attrs__igTextureCubeAttr__vfunc_24(int *arg0, int *arg1) {
             }
             break;
         case 2:
-            Gap__Attrs__igTextureAttr__vfunc_24();
+            Gap__Attrs__igTextureAttr__vfunc_24((igTextureAttr *)arg0, (igObject *)arg1);
             break;
         }
         if (arg0[9] >= 0) {
@@ -25,7 +25,7 @@ void Gap__Attrs__igTextureCubeAttr__vfunc_24(int *arg0, int *arg1) {
         }
     } else {
 b14:
-        Gap__Attrs__igTextureAttr__vfunc_24(arg0, arg1);
+        Gap__Attrs__igTextureAttr__vfunc_24((igTextureAttr *)arg0, (igObject *)arg1);
     }
 }
 

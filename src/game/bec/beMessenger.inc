@@ -59,7 +59,7 @@ igSmartPointer<igObject> *igSmartPointer_beMessengerArgData_Destruct(igSmartPoin
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy((void *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -72,7 +72,7 @@ igSmartPointer<igObject> *igSmartPointer_beMessengerGroupList_Destruct(igSmartPo
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy((void *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -85,7 +85,7 @@ igSmartPointer<igObject> *igSmartPointer_beMessengerWorkList_Destruct(igSmartPoi
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy((void *)object);
         }
-        if (delete_storage > 0) __dl__FPv(self);
+        if (delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -98,7 +98,7 @@ igSmartPointer<igObject> *igSmartPointer_beMessengerDelayList_Destruct(igSmartPo
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy((void *)object);
         }
-        if (delete_storage > 0) __dl__FPv(self);
+        if (delete_storage > 0) operator delete(self);
     }
     return self;
 }
@@ -111,7 +111,7 @@ igSmartPointer<igObject> *igSmartPointer_beMessengerArgDataList_Destruct(igSmart
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy((void *)object);
         }
-        if ((short)delete_storage > 0) __dl__FPv(self);
+        if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
 }

@@ -11,7 +11,7 @@
 #include "dw4/igObject.h"
 #include <string.h>
 
-extern "C" int beNDMWMdlObject_IsKind(int dummy0, int kind);
+extern "C" unsigned char beNDMWMdlObject_IsKind(int dummy0, int kind);
 extern "C" void beNDMWMdlObject_RegisterReceiver(void);
 extern "C" int beNDMWMdlObject_GetMeta(void);
 extern "C" int KIND_OBJECT[4];
@@ -36,7 +36,7 @@ extern "C" void beNDMWMdlObject_OnGenerate(beNDMWMdlObject *self, beBaseInfoRam 
 #pragma push
 #pragma readonly_strings on
 
-int beNDMWMdlObject_IsKind(int dummy0, int kind) {
+unsigned char beNDMWMdlObject_IsKind(int dummy0, int kind) {
     return strcmp((const char *)kind, (const char *)KIND_OBJECT) == 0;
 }
 

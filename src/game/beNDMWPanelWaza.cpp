@@ -842,7 +842,7 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
             emg = 1;
             switch (ramState->_st1) {
             case 0:
-                if ((unsigned char)beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)ramState, "FIRE")) {
+                if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)ramState, "FIRE") != 0) {
                     emg = 0;
                     if (panel->_isEmg != 0 ||
                         (blocked == 0 && (trig & 0x4000) && panel->_listKazu != 0 && work->_page != 2)) {
@@ -930,7 +930,7 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
                 }
                 break;
             case 1:
-                if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)ramState, "FIRE") != 0) {
+                if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)ramState, "FIRE")) {
                     ramState->_st1 = 0;
                     ramState->_st3 = 0;
                     ramState->_st2 = 0;
@@ -1202,7 +1202,7 @@ int beNDMWPanelWaza_OnMessage(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram
             beNDMWPanelWaza_OpenPanel((int)self, (beNDMWPanelWazaInfoRam *)ram, 1, (igObject *)obj);
         } else if (beNDMWPanelWaza_FindEmergencyHealWaza((beNDMWPanelWaza *)self, (beNDMWPanelWazaInfoRam *)ram) != 0) {
             beNDMWPanelWaza_OpenPanel((int)self, (beNDMWPanelWazaInfoRam *)ram, 0, (igObject *)obj);
-        } else if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)ram, (const char *)"EMGHEAL") != 0) {
+        } else if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)ram, (const char *)"EMGHEAL")) {
             beMessenger_PushArgContext((beMessenger *)self->_messenger);
             beMessenger_SelectGroup((beMessenger *)self->_messenger, "SOUND");
             beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)(int)"CURSOR_NG");

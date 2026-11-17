@@ -14,7 +14,7 @@
 #include <string.h>
 #include "dw4/igMathConstants.h"
 
-extern "C" int beNDMWMdlMapCursor_IsKind(int dummy0, const char *kind);
+extern "C" unsigned char beNDMWMdlMapCursor_IsKind(int dummy0, const char *kind);
 extern "C" int beNDMWMdlMapCursor_GetMeta(void);
 /* matching construct: inline retain/release helpers reproduce the retail inlined refcount code */
 struct RefCount { static inline void addref(igObject *o) { if (o != 0) o->_refCount = o->_refCount + 1; }
@@ -59,7 +59,7 @@ extern "C" void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *self, beBaseI
 #pragma push
 #pragma readonly_strings on
 
-int beNDMWMdlMapCursor_IsKind(int dummy0, const char *kind) {
+unsigned char beNDMWMdlMapCursor_IsKind(int dummy0, const char *kind) {
     return strcmp(kind, "KIND_MAPCURSOR") == 0;
 }
 

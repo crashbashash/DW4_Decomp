@@ -4,6 +4,7 @@ void SVM_Lock(void);
 void SVM_Unlock(void);
 
 extern int sjcrs_svr_cnt;
+extern int D_004b5140;
 
 void SJCRS_Init(void)
 {
@@ -23,6 +24,14 @@ void SJCRS_BeginSvr(void)
 void SJCRS_EndSvr(void)
 {
     sjcrs_svr_cnt--;
+}
+
+/* Clears the word after the server count; nothing in the executable calls it. Retail leaves the word's
+ * address in v0 and stores through it, the code of a function that returns that address. */
+int *FUN_0027b2a0(void)
+{
+    D_004b5140 = 0;
+    return &D_004b5140;  /* matching construct: no caller reads the result */
 }
 
 void SJCRS_Lock(void)

@@ -1,8 +1,20 @@
 #include "dw4/cri/m2v.h"
 
 extern char M2VLIB_version_str[];
+extern char *volatile m2vlib_version_ptr;
+extern unsigned char m2vlib_endian_mark[4];
 extern M2vLibWork m2vlib_libwork;
 extern M2vObj *m2vlib_m2vobj;
+
+/* A library built for the other byte order stops here. */
+#define M2V_CHK_ENDIAN()                      \
+    do {                                      \
+        if (m2vlib_endian_mark[0] != 4) {     \
+            for (;;) {                        \
+                ((void (*)(void))-1)();       \
+            }                                 \
+        }                                     \
+    } while (0)
 
 void *memset(void *dst, int c, unsigned int n);
 char *MPV_SearchDelim(char *buf, int size, int mask);
@@ -15,6 +27,8 @@ M2vObj *m2vlib_SearchFreeHn(void);
 M2vObj *m2vlib_InitHn(M2vObj *hn);
 void m2vlib_InitPicAtr(M2vPicAtr *picatr);
 int M2VLIB_CheckHn(M2vObj *hn);
+void m2vlib_InitObjTbl(void);
+void m2vlib_InitWork(int nobj, char *work, unsigned int size);
 
 char *M2V_GetVersionStr(void)
 {
@@ -48,6 +62,17 @@ int FUN_0028ab10(char *buf, int size)
         return 0;
     }
     return (*(unsigned char *)p >> 4) == 1;
+}
+
+/* matching construct: manual — the byte-order check is a do-while(0) macro; as a bare if its load is hoisted into the prologue */
+void M2V_Init(int nobj, char *work, unsigned int size)
+{
+    M2V_CHK_ENDIAN();
+    m2vlib_version_ptr = M2VLIB_version_str;
+    M2VERR_Init();
+    M2VHDEC_Init();
+    m2vlib_InitWork(nobj, work, size);
+    m2vlib_InitObjTbl();
 }
 
 void m2vlib_InitObjTbl(void)

@@ -40,6 +40,15 @@ void Gap__Insight__igSerialScheduler__vfunc_25(Obj_238020 *arg0, int arg1) {
     igObjectList_RemoveRetained(&sp1C, arg0->f8, arg1);
 }
 
+/* Whether the scheduler already holds manager. */
+int Gap__Insight__igSerialScheduler__vfunc_26(igSerialScheduler *scheduler, igObject *manager) {
+    igDependencyOrderedList *managers = (igDependencyOrderedList *)scheduler->_managerList;
+    /* matching construct: the copy taken by address keeps the manager in the 12(sp) slot, stored after the first list load. */
+    igObject *item = manager;
+    igObjectList *list = (igObjectList *)managers->_objectList;
+    return indexOfItem(list, &item) >= 0;
+}
+
 void Gap__Insight__igSerialScheduler__vfunc_27(int a0) {
     igDependencyOrderedList_AddDependency(*(int *)((char *)a0 + 8));
 }

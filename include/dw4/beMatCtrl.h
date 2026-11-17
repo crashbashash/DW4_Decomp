@@ -17,7 +17,7 @@ bool beMatCtrl_IsAllPlayer(struct beMatCtrl *self);
 bool beMatCtrl_IsPlayer(struct beMatCtrl *self);
 bool beMatCtrl_IsRideOffPlayer(struct beMatCtrl *self, int player);
 bool beMatCtrl_IsRidePlayer(struct beMatCtrl *self, int player);
-void beMatCtrl_SetRun(struct beMatCtrl *self, bool run);
+void beMatCtrl_SetRun(struct beMatCtrl *self, unsigned char run);
 
 extern struct igMetaObject *g_beMatCtrl_metaObject;
 

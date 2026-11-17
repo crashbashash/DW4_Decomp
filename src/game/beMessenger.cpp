@@ -27,7 +27,6 @@ int igMetaEnum_GetValueByName(int *, igMetaEnum *, const char *, int *);
 void StringList_CopyRetained(void *, void *, int);
 void StringList_AppendRetained(void *, const StringRef &);
 void igMatrix44f_Copy(void *, void *);
-int __dl__FPv(void *);
 
 extern int g_resolveEnumLastMetaEnum[4];
 extern int g_resolveEnumLastName[4];
@@ -865,7 +864,7 @@ void beMessenger_DispatchSelected(beMessenger *self, const char *name)
                 if (!(sid == -1 || have == -1 || have == sid)) continue;
             }
             r = (MsgReceiver *)obj->_parentManager;
-            if (!(r->Check(obj, work) & 0xff)) r->Send(obj, (int)name);
+            if (r->Check(obj, work) == 0) r->Send(obj, (int)name);
             if (work->_ramNo == -2) break;
         }
     }
@@ -1226,15 +1225,10 @@ void beMessenger_ClearVec3(beMessenger *self) {
     list->_count = 0;
 }
 
-void beMessenger_GetVec3(float *out, beMessenger *self, int index) {
+igVec3f beMessenger_GetVec3(beMessenger *self, int index) {
     beMessengerArgData *args = (beMessengerArgData *)self->_argData;
     igVec3fList *list = (igVec3fList *)args->_vec3fList;
-    float *element;
-
-    element = (float *)(list->_data + (index * 0xC));
-    out[0] = element[0];
-    out[1] = element[1];
-    out[2] = element[2];
+    return ((igVec3f *)list->_data)[index];
 }
 
 int beMessenger_GetMatrixCount(beMessenger *self) {

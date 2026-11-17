@@ -10,9 +10,9 @@ igMetaField *g_igParticleFormat_spriteSpaceMetaField;
 igMetaField *g_igParticleFormat_rotationMetaField;
 igMetaField *g_igParticleFormat_lifetimeMetaField;
 
-void FUN_0014d070(int arg0) {
+int FUN_0014d070(int arg0) {
     igParticleFormat_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igParticleFormat_metaObject, (igMemoryPoolView *)arg0);
+    return (int)igMetaObject_CreateInstance(g_igParticleFormat_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_0014d0b0(void) {

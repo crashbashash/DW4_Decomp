@@ -815,6 +815,81 @@ void FUN_0017a300(Self_17a070 *self) {
     }
 }
 
+void FUN_0017a540(igPsx2VisualContext *vc, int keepLists) {
+    int index, s3, v, old;
+    int *hd;
+    T9f0 *t;
+    index = ((T9f0 *)vc->_pTexList)->f0 - 1;
+    for (; index > -1; index--) {
+        if (((T9f0 *)vc->_pTexList)->Chk(index)) {
+            ((TexContext *)vc)->vfunc_131(index);
+        }
+    }
+    if (keepLists != 0) {
+        igDataList *loaded = (igDataList *)vc->_pTexLoadedList;
+        loaded->_count = 0;
+        loaded = (igDataList *)vc->_pTexLoadedList;
+        if ((loaded->_count > 0) == false) {
+            List_Reserve(loaded, 0, 4);
+        }
+    } else {
+        t = (T9f0 *)vc->_pTexList;
+        if (t != 0) {
+            if (g_stringPool == 0) {
+                v = (int)StringPool_Allocate(16);
+                if (v != 0) {
+                    v = (int)StringPool_Construct((StringPool *)v);
+                }
+                g_stringPool = (StringPool *)v;
+            }
+            s3 = (int)StringPool_Intern(g_stringPool, 0);
+            old = t->f8;
+            if (old != 0) {
+                hd = (int *)(old - 8);
+                v = *(int *)(old - 4) - 1;
+                *(int *)(old - 4) = v;
+                if (v == 0) {
+                    StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
+                }
+            }
+            t->f8 = s3;
+            Memory_FreeBuffer((void *)t->f16);
+            Memory_FreeBuffer((void *)t->f12);
+            if (&t->f8 != 0) {
+                old = t->f8;
+                if (old != 0) {
+                    hd = (int *)(old - 8);
+                    v = *(int *)(old - 4) - 1;
+                    *(int *)(old - 4) = v;
+                    if (v == 0) {
+                        StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
+                    }
+                }
+            }
+            FUN_002ed5c0(t);
+        }
+        vc->_pTexList = 0;
+        igRelease((igObject *)vc->_pTexLoadedList);
+        vc->_pTexLoadedList = 0;
+    }
+    if (vc->_iCLUT_A8 != -1) FUN_0016ab80((Oab80 *)vc, vc->_iCLUT_A8);
+    if (vc->_iCLUT_I8 != -1) FUN_0016ab80((Oab80 *)vc, vc->_iCLUT_I8);
+    if (vc->_iCLUT_IA16 != -1) FUN_0016ab80((Oab80 *)vc, vc->_iCLUT_IA16);
+    if (vc->_pCLUT_I8 != 0) {
+        Memory_FreeBuffer((void *)vc->_pCLUT_I8);
+        vc->_pCLUT_I8 = 0;
+    }
+    if (vc->_pCLUT_A8 != 0) {
+        Memory_FreeBuffer((void *)vc->_pCLUT_A8);
+        vc->_pCLUT_A8 = 0;
+    }
+    if (vc->_pCLUT_IA16 != 0) {
+        Memory_FreeBuffer((void *)vc->_pCLUT_IA16);
+        vc->_pCLUT_IA16 = 0;
+    }
+    FUN_0017a870((S0_17a070 *)vc, keepLists);
+}
+
 void FUN_0017a7e0(S0_17a070 *arg0) {
     /* matching construct: variant search — decl order [3, 2, 1, 0]; the unit compiler (combat build -O3 -Iinclude) assigns stack slots and registers in declaration order, the reverse of the 2001 default */
     int sp2C;
@@ -993,6 +1068,89 @@ int FUN_0017aa20(TexContext *context, int width, int height, int format, int kin
 
 int Gap__Gfx__igPsx2VisualContext__vfunc_124(void) {
     return 0;
+}
+
+struct TexBits { char pad0[112]; int pixelFormat; int redBits; int greenBits; int blueBits; int alphaBits; char pad132[4]; };
+struct TexBitsList { char pad0[16]; TexBits *data; };
+static inline unsigned int colourBits(unsigned int r, unsigned int g, unsigned int b) {
+    if (r != 0) return r;
+    if (g != 0) return g;
+    return b;
+}
+extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_123(igPsx2VisualContext *vc, int index, unsigned int redBits, unsigned int greenBits, unsigned int blueBits, unsigned int alphaBits) {
+    TexBits *entry = &((TexBitsList *)vc->_pTexList)->data[index];
+    int kind;
+    unsigned int bits;
+
+    entry->redBits = redBits;
+    entry->greenBits = greenBits;
+    entry->blueBits = blueBits;
+    entry->alphaBits = alphaBits;
+    if (redBits == 0 && greenBits == 0 && blueBits == 0 && alphaBits != 0) {
+        kind = 16;
+        bits = alphaBits;
+    } else if (alphaBits == 0) {
+        if (redBits == 0 || greenBits == 0 || blueBits == 0) {
+            kind = 4;
+            bits = colourBits(redBits, greenBits, blueBits);
+        } else {
+            kind = 2;
+            bits = redBits + greenBits + blueBits;
+        }
+    } else {
+        if (redBits == 0 || greenBits == 0 || blueBits == 0) {
+            kind = 8;
+            bits = colourBits(redBits, greenBits, blueBits);
+            bits += alphaBits;
+        } else {
+            kind = 1;
+            bits = redBits + greenBits + blueBits + alphaBits;
+        }
+    }
+    switch (kind) {
+    case 1:
+        if (bits < 9) {
+            entry->pixelFormat = 6;
+        } else if (bits < 17 && alphaBits < 2) {
+            entry->pixelFormat = 7;
+        }
+        break;
+    case 2:
+        if (bits == 8) {
+            entry->pixelFormat = 5;
+        } else if (bits == 32) {
+            entry->pixelFormat = 8;
+        }
+        break;
+    case 8:
+        if (bits == 8) {
+            if (alphaBits == 4) {
+                entry->pixelFormat = 2;
+            } else if (alphaBits == 2) {
+                entry->pixelFormat = 3;
+            } else if (alphaBits == 1) {
+                entry->pixelFormat = 4;
+            }
+        }
+        break;
+    case 4:
+        if (bits == 8) {
+            entry->pixelFormat = 1;
+        } else if (bits == 4) {
+            entry->pixelFormat = 0;
+        }
+        break;
+    case 16:
+        if (bits == 8) {
+            entry->pixelFormat = 10;
+        } else if (bits == 4) {
+            entry->pixelFormat = 9;
+        }
+        break;
+    default:
+        return 0;
+    }
+    return 1;
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_126(void) {

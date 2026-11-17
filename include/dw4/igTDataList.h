@@ -61,6 +61,44 @@ public:
         }
         return lo;
     }
+    /* sortedFind for a key passed by reference: the key is copied into a local whose address is
+     * taken, so a by-value argument stays in its own stack slot, read before the loop and again
+     * after it (Gap::igItemInterface::vfunc_29). */
+    int sortedIndex(const T &item) const {
+        T value;
+        int lo;
+        int hi;
+        T key;
+        int n;
+        int mid;
+        const T *p;
+        T e;
+        value = item;
+        p = &value;
+        lo = 0;
+        n = _count;
+        key = *p;
+        hi = n - 1;
+        while (lo < hi) {
+            mid = (lo + hi) >> 1;
+            e = _data[mid];
+            if (e < key) {
+                lo = mid + 1;
+            } else if (key < e) {
+                hi = mid - 1;
+            } else {
+                return mid;
+            }
+        }
+        if (n == 0) {
+            return -1;
+        }
+        e = _data[lo];
+        if (value < e || e < value) {
+            return -1;
+        }
+        return lo;
+    }
     void append(T v) {
         int n = count();
         if (n < _capacity) {

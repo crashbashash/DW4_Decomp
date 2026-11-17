@@ -1,3 +1,4 @@
+
 int Gap__Bec__ParticleArray__vfunc_22(ParticleArray *arg0, int arg1) {
     ((DW4VC_100_1 *)arg0)->vX(arg1, arg0->_arrayIndex);
     return arg0->_arrayIndex - 1;
@@ -60,6 +61,7 @@ int Gap__Bec__ParticleArray__vfunc_24(ParticleArray *arg0, unsigned int arg1) {
 void Gap__Bec__ParticleArray__vfunc_25(ParticleArray *arg0) {
     arg0->_setConstant = 0;
 }
+
 
 bool FUN_0015bb50(A_15bb50 *arg0, V_15bb50 *arg1, float *arg2) {
     bool ok = true;

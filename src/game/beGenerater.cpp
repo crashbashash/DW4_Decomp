@@ -354,7 +354,7 @@ void beGenerater_UpdateRam(beGenerater *self, beBaseInfoRam *ram)
             break;
         case 't':
             /* matching construct: the timer queries return a byte, masked before the test as retail does */
-            if (!(beBaseInfoRam_HasTimer((beBaseInfoRam *)geneRam, "BOOT_TIMER") & 0xFF)) {
+            if (beBaseInfoRam_HasTimer((beBaseInfoRam *)geneRam, "BOOT_TIMER") == 0) {
                 beBaseInfoRam_StartTimer((beBaseInfoRam *)geneRam, "BOOT_TIMER", framesToTime(data->_startData));
             } else if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)geneRam, "BOOT_TIMER")) {
                 ready = true;
@@ -365,7 +365,7 @@ void beGenerater_UpdateRam(beGenerater *self, beBaseInfoRam *ram)
             float matrix[16];
             igMatrix44f_SetIdentity(matrix);
             igMatrix44f_SetTranslation(matrix, data->_pos);
-            if (beTargetObj_SelectTarget(matrix, "PLAYER", "NEAR") & 0xFF) {
+            if (beTargetObj_SelectTarget(matrix, "PLAYER", "NEAR") != 0) {
                 float range = data->_startData;
                 if (beTargetObj_GetTargetDistanceSq() <= range) {
                     ready = true;

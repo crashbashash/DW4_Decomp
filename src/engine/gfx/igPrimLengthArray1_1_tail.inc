@@ -412,9 +412,9 @@ int FUN_0015ed00(V_15ed00 *arg0, int arg1, unsigned int arg2, int arg3, int arg4
     r = resized.p->v22(arg1, arg2, arg3, arg4);
     n = arg0->f12;
     n = (n < arg2) ? n : arg2;
-    FUN_00164e90(&sp88, arg1, arg0->v23());
+    FUN_00164e90((igVertexFormat *)&sp88, (const igVertexFormat *)arg1, (const igVertexFormat *)arg0->v23());
     for (i = 0; i < n; i++) {
-        FUN_0015dbc0(resized.p, i, arg0, i, &sp88);
+        FUN_0015dbc0((igVertexArrayAccess *)resized.p, i, (igVertexArrayAccess *)arg0, i, (const igVertexFormat *)&sp88);
     }
     resized.p->v45();
     resized.p->v17((int)g_igVertexArray1_1_metaObject);

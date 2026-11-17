@@ -1,6 +1,6 @@
-void FUN_001a2ef0(int arg0) {
+void *FUN_001a2ef0(int arg0) {
     FUN_001a3170();
-    igMetaObject_CreateInstance((igMetaObject *)g_igCompileTraversal_metaObject, (igMemoryPoolView *)arg0);
+    return (void *)igMetaObject_CreateInstance((igMetaObject *)g_igCompileTraversal_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *g_igCompileTraversal_metaObject;

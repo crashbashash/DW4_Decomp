@@ -9,7 +9,7 @@
 #include "dw4/igObject.h"
 #include <string.h>
 
-extern "C" int beNDMWMdlEBullet_IsKind(int dummy0, int kind);
+extern "C" unsigned char beNDMWMdlEBullet_IsKind(int dummy0, int kind);
 extern "C" void beNDMWMdlEBullet_RegisterReceiver(void);
 extern "C" int beNDMWMdlEBullet_GetMeta(void);
 extern "C" int KIND_EBULLET[4];
@@ -58,7 +58,7 @@ extern "C" void beNDMWMdlEBullet_OnGenerate(beNDMWMdlEBullet *self, beBaseInfoRa
 #pragma push
 #pragma readonly_strings on
 
-int beNDMWMdlEBullet_IsKind(int dummy0, int kind) {
+unsigned char beNDMWMdlEBullet_IsKind(int dummy0, int kind) {
     return strcmp((const char *)kind, (const char *)KIND_EBULLET) == 0;
 }
 

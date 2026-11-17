@@ -245,7 +245,7 @@ extern "C" int beTargetObj_GetPlayerCentre(float *out)
     return 1;
 }
 
-extern "C" int beTargetObj_TargetPlayer(beTargetObj *self, float *from, int nearest)
+extern "C" unsigned char beTargetObj_TargetPlayer(beTargetObj *self, float *from, int nearest)
 {
     float nearFrom[3];
     float facingFrom[3];
@@ -273,7 +273,7 @@ extern "C" int beTargetObj_TargetPlayer(beTargetObj *self, float *from, int near
     return 1;
 }
 
-extern "C" int beTargetObj_TargetEnemy(beTargetObj *self, float *from, int nearest)
+extern "C" unsigned char beTargetObj_TargetEnemy(beTargetObj *self, float *from, int nearest)
 {
     float nearFrom[4];
     float facingFrom[4];
@@ -303,7 +303,7 @@ extern "C" int beTargetObj_TargetEnemy(beTargetObj *self, float *from, int neare
 
 /* Targets a member of `group` ("PLAYER" or "ENEMY") as seen from `matrix`: the nearest one when
  * `mode` is "NEAR", otherwise the one most nearly ahead. */
-extern "C" int beTargetObj_SelectTarget(float *matrix, const char *group, const char *mode)
+extern "C" unsigned char beTargetObj_SelectTarget(float *matrix, const char *group, const char *mode)
 {
     igVec3f origin;
     igVec3f playerFrom;
@@ -333,7 +333,7 @@ extern "C" int beTargetObj_SelectTarget(float *matrix, const char *group, const 
 }
 
 /* Makes `position` the target as seen from `matrix`, with no RAM number. */
-extern "C" int beTargetObj_SetTarget(float *matrix, float *position)
+extern "C" unsigned char beTargetObj_SetTarget(float *matrix, float *position)
 {
     float origin[3];
     float dx, dy, dz;

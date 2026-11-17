@@ -2,9 +2,9 @@ igMetaObject *g_igCustomStateCollection_metaObject;
 igMetaField *g_igCustomStateCollection_nameMetaField;
 igMetaField *g_igCustomStateCollection_flagsMetaField;
 
-void FUN_0014efb0(int arg0) {
+igCustomStateCollectionView *FUN_0014efb0(int arg0) {
     FUN_0014f0c0();
-    igMetaObject_CreateInstance(g_igCustomStateCollection_metaObject, (igMemoryPoolView *)arg0);
+    return (igCustomStateCollectionView *)igMetaObject_CreateInstance(g_igCustomStateCollection_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igCustomStateCollection_GetMetaObject(void)

@@ -513,6 +513,32 @@ def patch_problems(rows=None):
     return out
 
 
+def awaiting(index, rows=None):
+    """[(name, path, reason)] of the functions in `index` awaiting approval, then the kernel patches'. An
+    inline helper is not listed: it is compiled into its callers, whose rows cover it (`approved_statements`)."""
+    rows = load() if rows is None else rows
+    callers = {}
+
+    def listed(path, name):
+        if path not in callers:
+            callers[path] = set(_callers(_read(path)))
+        return name in callers[path]
+
+    waiting = []
+    for name, path in sorted(index.items()):
+        if defines(path, name):
+            if listed(path, name):
+                waiting.append((name, path, problem(path, name, rows)))
+            continue
+        # a static the symbol map names apart is counted under its source name; an emitted copy
+        # answers through its owner, which the index lists itself
+        member = unitobjects.source_name(name)
+        if member != name and defines(path, member) and listed(path, member):
+            waiting.append((name, path, problem(path, member, rows, row=name)))
+    # the kernel patches' functions are listed under their keys
+    return [w for w in waiting if w[2]] + patch_problems(rows)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--list", action="store_true", help="print the functions awaiting approval")
@@ -525,20 +551,7 @@ def main(argv=None):
         print("\n".join(lines) if lines else "source approvals: no stale rows")
         return 1 if lines else 0
     if a.list:
-        rows = load()
-        waiting = []
-        for name, path in sorted(index.items()):
-            if defines(path, name):
-                waiting.append((name, path, problem(path, name, rows)))
-                continue
-            # a static the symbol map names apart is counted under its source name; an emitted copy
-            # answers through its owner, which the index lists itself
-            member = unitobjects.source_name(name)
-            if member != name and defines(path, member):
-                waiting.append((name, path, problem(path, member, rows, row=name)))
-        waiting = [w for w in waiting if w[2]]
-        # the kernel patches' functions are listed under their keys
-        waiting += patch_problems(rows)
+        waiting = awaiting(index)
         for name, path, why in waiting:
             print("%s\t%s\t%s" % (name, path, why))
         print("%d functions await approval" % len(waiting))

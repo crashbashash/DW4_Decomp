@@ -296,7 +296,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
                 ctrl->_st3 = 0;
                 goto done;
             case 1:
-                if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+                if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
                     ctrl->_st1 = ctrl->_st1 + 1;
                     ctrl->_st3 = 0;
                     ctrl->_st2 = 0;
@@ -314,7 +314,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
                     ctrl->_st3 = ctrl->_st3 + 1;
                     goto done;
                 case 1:
-                    if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+                    if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
                         ctrl->_st2 = ctrl->_st2 + 1;
                         ctrl->_st3 = 0;
                         goto done;
@@ -371,7 +371,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
                     ctrl->_st3 = ctrl->_st3 + 1;
                     goto done;
                 case 1:
-                    if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
+                    if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) {
                         ctrl->_st0 = TitleStateMenu;
                         ctrl->_st3 = 0;
                         ctrl->_st2 = 0;
@@ -398,7 +398,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
                 ctrl->_st3 = 0;
                 goto done;
             case 1:
-                if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+                if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
                     ctrl->_st1 = ctrl->_st1 + 1;
                     ctrl->_st3 = 0;
                     ctrl->_st2 = 0;
@@ -456,7 +456,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
             case 2:
                 switch (ctrl->_st3) {
                 case 0:
-                    if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+                    if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
                         switch (ctrl->_gameMenuNext) {
                         case 0:
                             ctrl->_st2 = 1;
@@ -477,7 +477,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
                     }
                     break;
                 case 1:
-                    if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
+                    if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) {
                         switch (ctrl->_gameMenuNext) {
                         case 1:
                             ctrl->_st0 = TitleStateFadeOut;
@@ -497,7 +497,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
                 }
                 break;
             case 3:
-                if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
+                if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) {
                     ctrl->_st0 = TitleStateLogo;
                     ctrl->_st3 = 0;
                     ctrl->_st2 = 0;
@@ -550,7 +550,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
                 ctrl->_st3 = 0;
                 goto done;
             case 1:
-                if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+                if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
                     beNDMWLoadIntf2TextOrder_PublishIdLines(text, 0xF0001, 0);
                     if (option->_selLang != 0) {
                         beNDMWLoadIntf2TextOrder_PublishIdLines(text, 0xF0006, 0);
@@ -772,7 +772,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
                 }
                 break;
             case 1:
-                if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+                if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
                     switch (option->_ctrlPos) {
                     case OptionRowCamera:
                         beNDMWLoadIntf2ComMdlCtrl__Play(models, 0, "j_optioncursor11", "SQ_LINESL00", 0);
@@ -897,7 +897,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
                 ctrl->_st3 = 0;
                 goto done;
             case 1:
-                if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
+                if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) {
                     ctrl->_st2 = ctrl->_st2 + 1;
                     ctrl->_st3 = 0;
                     goto done;
@@ -909,7 +909,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
                 ctrl->_st3 = 0;
                 goto done;
             case 3:
-                if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
+                if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) {
                     if (option->_isOK == 1) {
                         option->_comConf = (int)((int)option->_dispComConf);
                         option->_lightConf = (int)((int)option->_dispLightConf);
@@ -936,7 +936,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
                 ctrl->_st3 = 0;
                 goto done;
             case 1:
-                if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) & 0xFF) == 1) {
+                if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(models) == 1) {
                     ctrl->_st0 = TitleStateMenu;
                     ctrl->_st3 = 0;
                     ctrl->_st2 = 0;
@@ -1002,7 +1002,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
             ctrl->_st2 = 0;
             goto done;
         case 1:
-            if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) & 0xFF) == 1) {
+            if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(models) == 1) {
                 ctrl->_st0 = TitleStateLoadHandoff;
                 ctrl->_st3 = 0;
                 ctrl->_st2 = 0;

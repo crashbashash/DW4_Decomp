@@ -1291,7 +1291,7 @@ int beNDMWLoadCtrl2CommonIntf__StepCreateSaveFile(beNDMWLoadCtrl2CommonIntf *int
         break;
     case 3:
         if (MCSLOT(intf, slot)->_isConnect == 1) {
-            if ((unsigned char)beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)intf->_inforam, "MakeDataTime") == 1) {
+            if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)intf->_inforam, "MakeDataTime") == 1) {
                 state += 1;
                 goto waitResult;
             }
@@ -1466,7 +1466,7 @@ int beNDMWLoadCtrl2CommonIntf__StepWriteSaveData(beNDMWLoadCtrl2CommonIntf *intf
         break;
     case 1:
         if (MCSLOT(intf, slot)->_isConnect == 1) {
-            if ((unsigned char)beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)intf->_inforam, "SaveDataTime") == 1) {
+            if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)intf->_inforam, "SaveDataTime") == 1) {
                 state += 1;
                 goto waitResult;
             }

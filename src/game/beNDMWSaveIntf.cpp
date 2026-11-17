@@ -169,10 +169,10 @@ static inline int AllEntriesReady(void *works) {
     int readyCount = 0;
     int index;
     for (index = 0; index < igDataList_GetCount((int *)works); index++) {
-        if ((beNDMWLoadSavePlWork__GetIsEntry((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index)) & 0xFF) == 1) {
+        if (beNDMWLoadSavePlWork__GetIsEntry((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index)) == 1) {
             entryCount += 1;
         }
-        if ((beNDMWLoadSavePlWork__GetIsRdy((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index)) & 0xFF) == 1) {
+        if (beNDMWLoadSavePlWork__GetIsRdy((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index)) == 1) {
             readyCount += 1;
         }
     }
@@ -321,7 +321,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         return;
                     }
                     case 1:
-                        if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(comMdl) & 0xFF) == 1) {
+                        if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(comMdl) == 1) {
                             NextStep(ctrl);
                             return;
                         }
@@ -370,7 +370,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         return;
                     }
                     case 1:
-                        if ((beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(comMdl) & 0xFF) == 1) {
+                        if (beNDMWLoadIntf2ComMdlCtrl__IsOpenQueueEmpty(comMdl) == 1) {
                             beNDMWLoadIntf2MesWin__RequestMesErase(mesWin);
                             EnterState(ctrl, SAVE_ASK);
                             return;
@@ -385,7 +385,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         NextStep(ctrl);
                         return;
                     case 1:
-                        if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+                        if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
                             switch (beNDMWLoadIntf2MesWin__GetCurPoint(mesWin)) {
                             case 0:
                                 EnterState(ctrl, SAVE_SELECT_CARD);
@@ -405,7 +405,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 1:
-                            if ((beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0)) & 0xFF) == 1) {
+                            if (beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0)) == 1) {
                                 if (ram->_ramNo == 0) {
                                     player = 1;
                                     otherEntry = 0;
@@ -442,7 +442,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 1:
-                            if ((beNDMWLoadIntf2SelSlot__Open(selSlot, -1) & 0xFF) == 1) {
+                            if (beNDMWLoadIntf2SelSlot__Open(selSlot, -1) == 1) {
                                 textId = -1;
                                 switch (common->_kindHard) {
                                 case 0:
@@ -466,7 +466,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     case 1:
                         switch (ctrl->_st2) {
                         case 0:
-                            if ((beNDMWLoadIntf2SelSlot__UpdateSelection(selSlot, ((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo)))->_isCtrl, 1) & 0xFF) == 1) {
+                            if (beNDMWLoadIntf2SelSlot__UpdateSelection(selSlot, ((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo)))->_isCtrl, 1) == 1) {
                                 if (selSlot->_isReOpenReq == 1) {
                                     NextStep(ctrl);
                                     return;
@@ -551,7 +551,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 1:
-                            if ((beNDMWLoadIntf2SelSlot__Close(selSlot) & 0xFF) == 1) {
+                            if (beNDMWLoadIntf2SelSlot__Close(selSlot) == 1) {
                                 if (selSlot->_isReOpenReq == 1) {
                                     EnterState(ctrl, SAVE_SELECT_CARD);
                                     return;
@@ -581,7 +581,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 1:
-                            if ((beNDMWLoadIntf2DataSelIntf__OpenSaveArea(dataSel, 0) & 0xFF) == 1) {
+                            if (beNDMWLoadIntf2DataSelIntf__OpenSaveArea(dataSel, 0) == 1) {
                                 EnterState(ctrl, SAVE_SELECT_DATA);
                                 return;
                             }
@@ -603,7 +603,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 1:
-                            if ((beNDMWLoadIntf2DataSelIntf__UpdateSelection(dataSel, 0) & 0xFF) == 1) {
+                            if (beNDMWLoadIntf2DataSelIntf__UpdateSelection(dataSel, 0) == 1) {
                                 if (dataSel->_isCancel != 0) {
                                     NextSubstep(ctrl);
                                     return;
@@ -617,7 +617,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 3:
-                            if ((beNDMWLoadIntf2DataSelIntf__CloseAll(dataSel, 0) & 0xFF) == 1) {
+                            if (beNDMWLoadIntf2DataSelIntf__CloseAll(dataSel, 0) == 1) {
                                 EnterState(ctrl, SAVE_SELECT_CARD);
                                 return;
                             }
@@ -653,7 +653,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 0x33:
-                            if ((beNDMWLoadIntf2SelSlot__Close(selSlot) & 0xFF) == 1) {
+                            if (beNDMWLoadIntf2SelSlot__Close(selSlot) == 1) {
                                 SetStep(ctrl, 0x64);
                                 return;
                             }
@@ -672,7 +672,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 1:
-                            if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+                            if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
                                 NextSubstep(ctrl);
                                 return;
                             }
@@ -682,7 +682,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 3:
-                            if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+                            if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
                                 switch (beNDMWLoadIntf2MesWin__GetCurPoint(mesWin)) {
                                 case 0:
                                     SetSubstep(ctrl, 5);
@@ -700,7 +700,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                                 NextTick(ctrl);
                                 return;
                             case 1:
-                                if ((beNDMWLoadIntf2DataSelIntf__OpenAreaCursor(dataSel, 0) & 0xFF) == 1) {
+                                if (beNDMWLoadIntf2DataSelIntf__OpenAreaCursor(dataSel, 0) == 1) {
                                     EnterState(ctrl, SAVE_SELECT_DATA);
                                     return;
                                 }
@@ -715,7 +715,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                                 NextTick(ctrl);
                                 return;
                             case 1:
-                                if ((beNDMWLoadIntf2DataSelIntf__CloseSaveArea(dataSel, 0) & 0xFF) == 1) {
+                                if (beNDMWLoadIntf2DataSelIntf__CloseSaveArea(dataSel, 0) == 1) {
                                     if (ram->_ramNo == 0) {
                                         player = 1;
                                         otherEntry = 0;
@@ -749,7 +749,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 1:
-                            if ((beNDMWLoadIntf2DataSelIntf__CloseAll(dataSel, 0) & 0xFF) == 1) {
+                            if (beNDMWLoadIntf2DataSelIntf__CloseAll(dataSel, 0) == 1) {
                                 EnterState(ctrl, SAVE_SELECT_CARD);
                                 return;
                             }
@@ -768,7 +768,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 1:
-                            if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+                            if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
                                 NextSubstep(ctrl);
                                 return;
                             }
@@ -778,7 +778,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 3:
-                            if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+                            if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
                                 switch (beNDMWLoadIntf2MesWin__GetCurPoint(mesWin)) {
                                 case 0:
                                     EnterState(ctrl, SAVE_WAIT_PLAYERS);
@@ -802,7 +802,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 1:
-                            if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+                            if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
                                 NextSubstep(ctrl);
                                 return;
                             }
@@ -812,7 +812,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 3:
-                            if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+                            if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
                                 switch (beNDMWLoadIntf2MesWin__GetCurPoint(mesWin)) {
                                 case 0:
                                     SetSubstep(ctrl, 4);
@@ -832,7 +832,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                                 NextTick(ctrl);
                                 return;
                             case 1:
-                                if (((beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0)) & 0xFF) == 1) && ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(comMdl) & 0xFF) == 1)) {
+                                if ((beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0)) == 1) && (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(comMdl) == 1)) {
                                     EnterState(ctrl, SAVE_DONE);
                                     { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isEntry = 0; }
                                     { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isRdy = 0; }
@@ -848,7 +848,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                                 NextTick(ctrl);
                                 return;
                             case 1:
-                                if ((beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0)) & 0xFF) == 1) {
+                                if (beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0)) == 1) {
                                     EnterState(ctrl, SAVE_ASK);
                                     return;
                                 }
@@ -924,7 +924,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextSubstep(ctrl);
                             return;
                         case 1:
-                            if ((beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0)) & 0xFF) == 1) {
+                            if (beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0)) == 1) {
                                 EnterState(ctrl, SAVE_ASK);
                                 return;
                             }
@@ -994,14 +994,14 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                 beNDMWLoadIntf2ComMdlCtrl__Close(comMdl, ram->_ramNo, "j_chrselbase", "SQ_CLOSE", 1);
                 return;
             case 1:
-                if ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(comMdl) & 0xFF) == 1) {
+                if (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(comMdl) == 1) {
                     { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isClose = 1; }
                     SetStageStep(((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)common->_flagWork, ram->_ramNo))), 3);
                     return;
                 }
                 break;
             case 2:
-                if (((beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0)) & 0xFF) == 1) && ((beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(comMdl) & 0xFF) == 1)) {
+                if ((beNDMWLoadIntf2DegiState__Update((beNDMWLoadIntf2DegiState *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)degiStates->_statDataList, 0)) == 1) && (beNDMWLoadIntf2ComMdlCtrl__IsCloseQueueEmpty(comMdl) == 1)) {
                     { beNDMWLoadSavePlWork *work = (beNDMWLoadSavePlWork *)beNDMWLoadIntf2_igObjectList_Get((igDataList *)common->_flagWork, ram->_ramNo); work->_isClose = 1; }
                     SetStageStep(((beNDMWLoadSavePlWork *)(beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)common->_flagWork, ram->_ramNo))), 3);
                     return;
@@ -1021,7 +1021,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     NextStageSubstep(selectWork);
                     return;
                 case 1:
-                    if ((beNDMWLoadIntf2DataSelIntf__ShowSelectedStatus(dataSel, 0) & 0xFF) == 1) {
+                    if (beNDMWLoadIntf2DataSelIntf__ShowSelectedStatus(dataSel, 0) == 1) {
                         NextStageStep(selectWork);
                         return;
                     }
@@ -1045,7 +1045,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         NextStageTick(selectWork);
                         return;
                     case 1:
-                        if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+                        if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
                             NextStageTick(selectWork);
                             return;
                         }
@@ -1059,7 +1059,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         NextStageTick(selectWork);
                         return;
                     case 3:
-                        if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+                        if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
                             NextStageSubstep(selectWork);
                             return;
                         }
@@ -1074,11 +1074,11 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         return;
                     case 1:
                         if (beNDMWLoadIntf2MesWin__GetCurPoint(mesWin) == 0) {
-                            if ((beNDMWLoadIntf2DataSelIntf__CloseStatusWindows(dataSel, 0) & 0xFF) == 1) {
+                            if (beNDMWLoadIntf2DataSelIntf__CloseStatusWindows(dataSel, 0) == 1) {
                                 NextStageSubstep(selectWork);
                                 return;
                             }
-                        } else if ((beNDMWLoadIntf2DataSelIntf__RestoreSaveArea(dataSel, 0) & 0xFF) == 1) {
+                        } else if (beNDMWLoadIntf2DataSelIntf__RestoreSaveArea(dataSel, 0) == 1) {
                             NextStageSubstep(selectWork);
                             return;
                         }
@@ -1115,7 +1115,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         NextStageTick(selectWork);
                         return;
                     case 1:
-                        if ((beNDMWLoadIntf2DataSelIntf__OpenAreaCursor(dataSel, 0) & 0xFF) == 1) {
+                        if (beNDMWLoadIntf2DataSelIntf__OpenAreaCursor(dataSel, 0) == 1) {
                             EnterStage(selectWork, STAGE_UTIL_DONE);
                             selectWork->_utilReturn = 3;
                             return;
@@ -1140,13 +1140,13 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                             NextStageTick(selectWork);
                             return;
                         }
-                        if ((beNDMWLoadIntf2SelSlot__Open(selSlot, -1) & 0xFF) == 1) {
+                        if (beNDMWLoadIntf2SelSlot__Open(selSlot, -1) == 1) {
                             NextStageSubstep(selectWork);
                             return;
                         }
                         break;
                     case 2:
-                        if ((beNDMWLoadIntf2SelSlot__Open(selSlot, -1) & 0xFF) == 1) {
+                        if (beNDMWLoadIntf2SelSlot__Open(selSlot, -1) == 1) {
                             ((beNDMWMcUtilCtrl *)(common->_mcUtilCtrl))->_result = 0xC;
                             ((beSystem *)self->_system_)->_isResetEnable = 1;
                             EnterStage(selectWork, STAGE_UTIL_ERROR);
@@ -1208,7 +1208,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     NextStageSubstep(selectWork);
                     return;
                 case 1:
-                    if ((beNDMWLoadIntf2SelSlot__Close(selSlot) & 0xFF) == 1) {
+                    if (beNDMWLoadIntf2SelSlot__Close(selSlot) == 1) {
                         NextStageSubstep(selectWork);
                         return;
                     }
@@ -1218,7 +1218,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     NextStageSubstep(selectWork);
                     return;
                 case 3:
-                    if ((beNDMWLoadIntf2DataSelIntf__OpenSlotSaveArea(dataSel, 0) & 0xFF) == 1) {
+                    if (beNDMWLoadIntf2DataSelIntf__OpenSlotSaveArea(dataSel, 0) == 1) {
                         NextStageSubstep(selectWork);
                         return;
                     }
@@ -1228,7 +1228,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     NextStageSubstep(selectWork);
                     return;
                 case 5:
-                    if ((beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers(dataSel, 0) & 0xFF) == 1) {
+                    if (beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers(dataSel, 0) == 1) {
                         if (selectWork->_sysStat3 == 0) {
                             EnterStage(selectWork, STAGE_UTIL_DONE);
                             selectWork->_utilReturn = 0;
@@ -1247,7 +1247,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     NextStageTick(selectWork);
                     return;
                 case 1:
-                    if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+                    if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
                         SetStageStep(selectWork, 0x64);
                         return;
                     }
@@ -1262,7 +1262,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     beNDMWLoadIntf2DataSelIntf__ClearStatesFrom(dataSel, 0);
                     return;
                 case 1:
-                    if ((beNDMWLoadIntf2DataSelIntf__CloseAll(dataSel, 0) & 0xFF) == 1) {
+                    if (beNDMWLoadIntf2DataSelIntf__CloseAll(dataSel, 0) == 1) {
                         EnterStage(selectWork, STAGE_UTIL_DONE);
                         selectWork->_utilReturn = 2;
                         return;
@@ -1565,7 +1565,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     NextStageSubstep(cardWork);
                     return;
                 case 1:
-                    if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+                    if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
                         NextStageSubstep(cardWork);
                         return;
                     }
@@ -1587,7 +1587,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     NextStageSubstep(cardWork);
                     return;
                 case 3:
-                    if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+                    if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
                         NextStageSubstep(cardWork);
                         return;
                     }
@@ -1609,7 +1609,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     NextStageSubstep(cardWork);
                     return;
                 case 5:
-                    if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+                    if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
                         switch (beNDMWLoadIntf2MesWin__GetCurPoint(mesWin)) {
                         case 0:
                             NextStageSubstep(cardWork);
@@ -1857,7 +1857,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                 NextStageSubstep(errorWork);
                 return;
             case 1:
-                if (!(beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) & 0xFF)) {
+                if (beNDMWLoadIntf2MesWin__GetIsCtrl(mesWin) == 0) {
                     errorWork->_utilReturn = 1;
                     EnterStage(errorWork, STAGE_UTIL_DONE);
                     return;

@@ -11,7 +11,7 @@ extern "C" {
 struct beSystem *beSystem_CreateInstance(int allocator);
 void beSystem_EnsureRegistered(void);
 struct igMetaObject *beSystem_GetOrCreateMetaObject(void);
-int beSystem_IsRunning(struct beSystem *self);
+unsigned char beSystem_IsRunning(struct beSystem *self);
 
 extern struct igMetaObject *g_beSystem_metaObject;
 

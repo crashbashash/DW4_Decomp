@@ -28,14 +28,20 @@ the previous samples of each channel and the key. A predictor (`AdxEncPredictor`
 Destroying an encoder clears the four status bytes with one word store, which the source writes as a 4-byte
 `memset` (inline under GCC). Creating one sets the in-use byte alone, and the server tests it alone.
 
+`ADXSJE_Create` computes the samples per block as `(f80 - 2) * 8 / f84` from the two fields it has just
+stored, and the end position as that count rounded up from `0x7fff0000`. GCC keeps the divide (with its
+divide-by-zero check) for the stored count but folds the other uses to 32, which leaves the dead `li t3,32`
+retail has. Both functions follow `adx_sje.c` of the Resident Evil 4 decompilation's CRI library (ADXT/GC 9.31,
+carried as `src/cri/re4` in [Raikaru/Persona4-Decompilation](https://github.com/Raikaru/Persona4-Decompilation)).
+`adxsje_output_header` writes each header item through a macro that checks the write, jumps to one
+`err:` label (the shared `move v0,zero` before the epilogue) and adds the item's size to the length; the
+length starts after the signature and the header size, which are written apart, and the result adds their
+four bytes back.
+
 ## Open questions
 
 - The functions have no names from strings beyond the module's; the fields are named from use.
 - The first function, at `0x2674e8`, is an unreferenced `return 0` that could instead end the ADXB wrappers
   before it.
-- The create function at `0x2692c8` and three encoder steps have no source and link from the retail image.
-  The create function's free-slot search loop matches (the three zero words after its short loops are GCC's
-  own alignment padding, which a disassembler shows as `...`); what remains is a dead `li t3,32` in retail
-  and where the divide-by-zero check of `128 / f84` falls among the stores.
 - The block encoder at `0x268188` matches only with the sample filter at `0x267e50` defined above it in the
   file: with the filter only declared, one branch becomes `blezl`.

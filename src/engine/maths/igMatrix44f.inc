@@ -38,6 +38,40 @@ void FUN_001903d0(float *a) {
     igMatrix44f_Copy(a, m);
 }
 
+/* product = a * b, all three 16-byte aligned. */
+void FUN_00190470(float *product, const float *a, const float *b) {
+    asm {
+            lqc2 vf1, 0(a)
+            lqc2 vf2, 16(a)
+            lqc2 vf3, 32(a)
+            lqc2 vf4, 48(a)
+            lqc2 vf5, 0(b)
+            lqc2 vf6, 16(b)
+            lqc2 vf7, 32(b)
+            lqc2 vf8, 48(b)
+            vmulax.xyzw ACC, vf5, vf1x
+            vmadday.xyzw ACC, vf6, vf1y
+            vmaddaz.xyzw ACC, vf7, vf1z
+            vmaddw.xyzw vf9, vf8, vf1w
+            vmulax.xyzw ACC, vf5, vf2x
+            vmadday.xyzw ACC, vf6, vf2y
+            vmaddaz.xyzw ACC, vf7, vf2z
+            vmaddw.xyzw vf10, vf8, vf2w
+            vmulax.xyzw ACC, vf5, vf3x
+            vmadday.xyzw ACC, vf6, vf3y
+            vmaddaz.xyzw ACC, vf7, vf3z
+            vmaddw.xyzw vf11, vf8, vf3w
+            vmulax.xyzw ACC, vf5, vf4x
+            vmadday.xyzw ACC, vf6, vf4y
+            vmaddaz.xyzw ACC, vf7, vf4z
+            vmaddw.xyzw vf12, vf8, vf4w
+            sqc2 vf9, 0(product)
+            sqc2 vf10, 16(product)
+            sqc2 vf11, 32(product)
+            sqc2 vf12, 48(product)
+    }
+}
+
 void igMatrix44f_FromTranslation(float *matrix, const igVec3f &translation) {
     matrix[0]=1.0f; matrix[1]=0; matrix[2]=0; matrix[3]=0;
     matrix[4]=0; matrix[5]=1.0f; matrix[6]=0; matrix[7]=0;
@@ -246,13 +280,13 @@ void igMatrix44f_PreRotateAxisAngle(int arg0, float *arg1, float fparg0) {
     int buf[16];
 
     FUN_00190e50(buf, arg1, fparg0);
-    igMatrix44f_PreMultiply(arg0, buf);
+    igMatrix44f_PreMultiply((float *)arg0, (float *)buf);
 }
 
 void FUN_001916b0(int arg0, float *arg1, float fparg0) {
     int sp20[14];
     FUN_00190e50(sp20, arg1, fparg0);
-    igMatrix44f_Multiply(arg0, arg0, sp20);
+    igMatrix44f_Multiply((float *)arg0, (float *)arg0, (float *)sp20);
 }
 
 void FUN_001916f0(void *arg0, float *arg1) {
@@ -660,6 +694,34 @@ void FUN_00192990(int arg0, float *arg1, float *arg2, float *arg3) {
     }
     *arg2 = atan2f(m[4], m[5]);
     *arg3 = 0.0f;
+}
+
+void Quaternion_Lerp(float *out, float t, const float *from, const float *to) {
+    float toX, toY, toZ, toW;
+    float scale;
+    if (from[0] * to[0] + from[1] * to[1] + from[2] * to[2] + from[3] * to[3] < 0.0f) {
+        toX = -1.0f * to[0];
+        toY = -1.0f * to[1];
+        toZ = -1.0f * to[2];
+        toW = -1.0f * to[3];
+    } else {
+        toX = to[0];
+        toY = to[1];
+        toZ = to[2];
+        toW = to[3];
+    }
+    scale = 1.0f - t;
+    out[0] = scale * from[0] + t * toX;
+    out[1] = scale * from[1] + t * toY;
+    out[2] = scale * from[2] + t * toZ;
+    out[3] = scale * from[3] + t * toW;
+    {
+        float inv = 1.0f / quatLength(out);
+        out[0] *= inv;
+        out[1] *= inv;
+        out[2] *= inv;
+        out[3] *= inv;
+    }
 }
 
 void FUN_00192dd0(float *arg0, float *arg1, float *arg2) {

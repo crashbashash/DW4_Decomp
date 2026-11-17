@@ -110,6 +110,7 @@ StringRef FUN_001554a0(int arg1) {
     return StringRef((char *)r);
 }
 
+
 void *igObject_GetMetaObject_Virtual(void){return (void *)g_igObject_metaObject[0];}
 
 void FUN_00155c00(igResult *out, Owner *owner, int id) {
@@ -309,6 +310,61 @@ void FUN_00156340(S0_156340 *arg0, void **arg1) {
     arg0->f58 = (int)((int) *arg1);
 }
 
+void FUN_001563b0(igImage *self, igImage *source, int deep) {
+    if (source == self) {
+        if (!self->_localImage && deep && self->_pImage != 0) {
+            void **allocator = (void **)igObject_GetAllocator(self);
+            void *pixels;
+            allocator = (g_useOwnerAllocator != 0) ? allocator : (void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
+            pixels = ((VAlloc *)allocator)->v53(self->_imageSize, 0x80);
+            memcpy(pixels, (const void *)self->_pImage, self->_imageSize);
+            self->_localImage = 1;
+            self->_pImage = (int)pixels;
+        }
+        return;
+    }
+    self->_px = source->_px;
+    self->_py = source->_py;
+    self->_pz = source->_pz;
+    self->_ps = source->_ps;
+    self->_order = source->_order;
+    self->_pfmt = source->_pfmt;
+    self->_compressed = source->_compressed;
+    FUN_00156340((S0_156340 *)self, (void **)&ImageName(source->_pNameString).text);
+    self->_imageSize = source->_imageSize;
+    self->_bytesPerRow = source->_bytesPerRow;
+    self->_bitsInt = source->_bitsInt;
+    self->_bitsRed = source->_bitsRed;
+    self->_bitsGrn = source->_bitsGrn;
+    self->_bitsBlu = source->_bitsBlu;
+    self->_bitsAlpha = source->_bitsAlpha;
+    self->_bitsIdx = source->_bitsIdx;
+    self->_bitsDepth = source->_bitsDepth;
+    if (self->_pImage != 0 && self->_localImage) {
+        Memory_FreeBuffer((void *)self->_pImage);
+    }
+    self->_pImage = 0;
+    if (self->_pClut != 0) {
+        igRelease((igObject *)self->_pClut);
+        self->_pClut = 0;
+    }
+    if (deep) {
+        if (source->_pImage != 0) {
+            void **allocator = (void **)igObject_GetAllocator(self);
+            allocator = (g_useOwnerAllocator != 0) ? allocator : (void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
+            self->_pImage = (int)((VAlloc *)allocator)->v53(self->_imageSize, 0x80);
+            self->_localImage = 1;
+            memcpy((void *)self->_pImage, (const void *)source->_pImage, self->_imageSize);
+        }
+        if (source->_pClut != 0) {
+            int allocator = (int)igObject_GetAllocator(self);
+            igRelease((igObject *)self->_pClut);
+            self->_pClut = FUN_0014fa50(allocator);
+            FUN_00154c90((igClut *)self->_pClut, (igClut *)source->_pClut, 1);
+        }
+    }
+}
+
 static inline void release(T_1566c0 *object) {
     if (object != 0) {
         object->_refCount = object->_refCount - 1;
@@ -333,7 +389,7 @@ void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, 
         release(converted.p);
         converted.p = (T_1566c0 *)igImage_CreateInstance((int)a);
         T_1566c0 *created = converted.p;
-        if (!(FUN_00157200(created, FUN_0015ac10(arg1->f44), arg1) & 0xFF)) {
+        if (!(FUN_00157200((igImage *)created, FUN_0015ac10(arg1->f44), (igImage *)arg1) & 0xFF)) {
             return;
         }
         ((V92a *)arg0)->vX(converted.p, 0);
@@ -378,7 +434,7 @@ void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, 
         FUN_00154c90((igClut *)arg0->f68, (igClut *)arg1->f68, 1);
     }
     if ((arg1->f84 + (arg1->f64 + (arg1->f72 + (arg1->f40 + (arg1->f36 + (arg1->f28 + arg1->f32)))))) & 7) {
-        FUN_00157200(arg0, arg1->f44, arg0);
+        FUN_00157200((igImage *)arg0, arg1->f44, (igImage *)arg0);
     }
 }
 
@@ -406,13 +462,112 @@ void FUN_00156b20(S0_156b20 *arg0, S1_156b20 *arg1) {
     }
     arg0->f44 = (int)(arg1);
 }
+void FUN_00156ba0(igImage *self, int width, int height, igImage *source) {
+    igSmartPointer<igImageConvertRows> convert((igImageConvertRows *)FUN_0014db20((int)igObject_GetAllocator(self)));
+    if (source == 0) {
+        source = self;
+    } else {
+        ((igImageCopy *)self)->v23(source, 0);
+    }
+    int format;
+    char *sourceRow;
+    int sourceBytesPerRow;
+    int sourceWidth;
+    int sourceHeight;
+    int pixelSize;
+    int order;
+    char *sourcePixels;
+    igImageRowConvert toPlain;
+    igImageRowConvert fromPlain;
+    int plainSize;
+    int plainComponents;
+    int plainRow;
+    int scaledRow;
+    int scaledSize;
+    int newSize;
+    int newRow;
+    int newComponents;
+    char *destRow;
+    float xScale;
+    float yScale;
+    char *pixels;
+    int y;
+    char *row;
+    int x;
+    format = source->_pfmt;
+    sourceRow = 0;
+    toPlain = 0;
+    sourceBytesPerRow = source->_bytesPerRow;
+    fromPlain = 0;
+    sourceWidth = source->_px;
+    sourceHeight = source->_py;
+    pixelSize = source->_pz;
+    order = source->_order;
+    sourcePixels = (char *)source->_pImage;
+    plainSize = source->_imageSize;
+    plainComponents = pixelSize;
+    plainRow = sourceBytesPerRow;
+    destRow = 0;
+    if (FUN_00159f80(source->_pfmt)) {
+        int plainFormat = FUN_0015ac10(format);
+        FUN_00159320(self, plainFormat, sourceWidth, sourceHeight, &plainSize, &plainComponents, &plainRow);
+        sourceRow = (char *)poolOf(self, kIGMemoryPoolHandleTemporary)->allocateAligned(plainRow, 0x80);
+        toPlain = convert->v23(order, format, 1);
+        fromPlain = convert->v23(order, format, 0);
+        FUN_00159320(self, plainFormat, width, height, &scaledSize, &plainComponents, &scaledRow);
+        destRow = (char *)poolOf(self, kIGMemoryPoolHandleTemporary)->allocateAligned(scaledRow, 0x80);
+    }
+    xScale = (float)(unsigned int)sourceWidth / (float)width;
+    yScale = (float)(unsigned int)sourceHeight / (float)height;
+    self->_px = width;
+    self->_py = height;
+    FUN_00159320(self, format, self->_px, self->_py, &newSize, &newComponents, &newRow);
+    self->_imageSize = newSize;
+    self->_pz = newComponents;
+    self->_bytesPerRow = newRow;
+    pixels = (char *)poolOf(self, kIGMemoryPoolHandleImage)->allocateAligned(self->_imageSize, 0x80);
+    row = pixels;
+    for (y = 0; y < height; y++) {
+        int sourceY = FUN_00156ae0(y, sourceHeight, yScale);
+        /* Without a conversion the rows are read and written in place, through the same two pointers. */
+        if (toPlain != 0) {
+            toPlain(sourceRow, sourcePixels + sourceY * sourceBytesPerRow, sourceWidth, 0);
+        } else {
+            destRow = row;
+            sourceRow = sourcePixels + sourceY * sourceBytesPerRow;
+        }
+        for (x = 0; x < width; x++) {
+            int sourceX = FUN_00156ae0(x, sourceWidth, xScale);
+            memcpy(destRow + x * pixelSize, sourceRow + sourceX * pixelSize, pixelSize);
+        }
+        if (fromPlain != 0) {
+            fromPlain(row, destRow, width, 0);
+        }
+        row += self->_bytesPerRow;
+    }
+    if (FUN_00159f80(source->_pfmt)) {
+        poolOf(self, kIGMemoryPoolHandleTemporary)->free(destRow);
+        poolOf(self, kIGMemoryPoolHandleTemporary)->free(sourceRow);
+    }
+    if (self->_pImage != 0 && self->_localImage != 0) {
+        Memory_FreeBuffer((void *)self->_pImage);
+    }
+    self->_pImage = (int)pixels;
+    self->_localImage = 1;
+    if (FUN_00159f70(source->_pfmt) && source != self && source->_pClut != 0) {
+        igSmartPointer<igObject> clut((igObject *)FUN_0014fa50((int)igObject_GetAllocator(self)));
+        FUN_00154c90((igClut *)clut.p, (igClut *)source->_pClut, 1);
+        FUN_00156b20((S0_156b20 *)self, (S1_156b20 *)clut.p);
+    }
+}
 
-bool FUN_00157140(O_157140 *arg0, int arg1, V_157140 **arg2) {
+
+bool FUN_00157140(O_157140 *arg0, int arg1, igSmartPointer<igImageConvertRows> converter) {
     bool r = false;
     if (arg1 == arg0->f44) {
         return true;
     }
-    if ((*arg2)->vm(arg0->f24, arg0->f44, arg1, arg0->f8, arg0->f12) != 0) {
+    if (converter->findConverter(arg0->f24, arg0->f44, arg1, arg0->f8, arg0->f12) != 0) {
         r = true;
         if (arg0->f44 == 0x10000 && arg1 == 0x10001) {
             P *p = arg0->f68;
@@ -425,6 +580,7 @@ bool FUN_00157140(O_157140 *arg0, int arg1, V_157140 **arg2) {
     }
     return r;
 }
+
 
 /* igFileImagePng vtable slot 42: constant-zero leaf. Slots 40 and 41 also return 0 and slot 45
  * returns 1. The receiver is not read. */
@@ -473,6 +629,7 @@ void FUN_00157a50(void **arg0, void **arg1) {
     ((DW4VC_152_2 *)(arg0))->vX((int)(var_s0), (int)(0));
 }
 
+
 void FUN_00158400(S0_158400 *arg0, int arg1, int arg2) {
     int temp_a0;
 
@@ -491,7 +648,7 @@ void igImage_SetDefaultOrder(void *arg0) {
 }
 
 void igImage_UpdateFormatInfo(igImage *arg0) {
-    unsigned int sp5C;
+    int sp5C;
     int sp58;
     int sp54;
     int sp50;
@@ -557,6 +714,129 @@ void FUN_001585d0(S_1585d0 *arg0) {
 void FUN_00158670(ImageView *img, int x, int y, const void *src) {
     int bpp = (img->f84 + (img->f64 + (img->f72 + (img->aBits + (img->bBits + (img->rBits + img->gBits)))))) >> 3;
     memcpy(img->pixels + (y * img->stride + bpp * x), src, bpp);
+}
+
+bool FUN_001586d0(igImage *self) {
+    bool result = true;
+    igSmartPointer<igImageConvertView> convert((igImageConvertView *)FUN_0014db20((int)igObject_GetAllocator(self)));
+    switch (self->_pfmt) {
+    case 7:
+        convert->v25((void *)self->_pImage, self->_px * self->_py, &self->_order);
+        break;
+    case 5: {
+        char *row = (char *)self->_pImage;
+        int rows = self->_py;
+        while (rows != 0) {
+            convert->v26(row, self->_px, &self->_order);
+            rows--;
+            row += self->_bytesPerRow;
+        }
+        break;
+    }
+    case 8:
+        convert->v27((void *)self->_pImage, (self->_bytesPerRow >> 1) * self->_py, &self->_order);
+        break;
+    case 9:
+        convert->v28((void *)self->_pImage, (self->_bytesPerRow >> 1) * self->_py, &self->_order);
+        break;
+    case 4:
+        convert->v30((void *)self->_pImage, self->_imageSize, &self->_order);
+        break;
+    case 11:
+        convert->v34((void *)self->_pImage, (self->_bytesPerRow >> 1) * self->_py, &self->_order);
+        break;
+    case 10:
+        convert->v29((void *)self->_pImage, (self->_bytesPerRow >> 1) * self->_py, &self->_order);
+        break;
+    case 3:
+        convert->v31((void *)self->_pImage, (self->_bytesPerRow >> 1) * self->_py, &self->_order);
+        break;
+    case 6:
+        convert->v32((void *)self->_pImage, self->_imageSize, &self->_order);
+        break;
+    case 2:
+        convert->v33((void *)self->_pImage, self->_imageSize, &self->_order);
+        break;
+    case 0:
+    case 1:
+    case 0x10000:
+    case 0x10001:
+    case 0x8001:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+        break;
+    case 22:
+    case 21:
+    case 34:
+    case 12:
+    case 23:
+    case 24:
+    case 25:
+    case 35:
+        igImage_SetDefaultOrder(self);
+        return true;
+    default:
+        result = false;
+        break;
+    }
+    if (result) {
+        result = ((igImageVirtuals *)self)->v45();
+    }
+    return result;
+}
+
+int FUN_00158ab0(igImage *self, VStream *file) {
+    int imageSize;
+    int components;
+    int bytesPerRow;
+    int bitsInt, bitsIdx, bitsRed, bitsGrn, bitsBlu, bitsAlpha, bitsDepth;
+    int format;
+    void **allocator;
+
+    file->v25(&self->_imageSize, 4, 1);
+    file->v25(&self->_pz, 4, 1);
+    file->v25(&self->_px, 4, 1);
+    file->v25(&self->_py, 4, 1);
+    self->_ps = 1;
+    allocator = (void **)igObject_GetAllocator(self);
+    allocator = (g_useOwnerAllocator != 0) ? allocator : (void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
+    self->_pImage = (int)((VAlloc *)allocator)->v53(self->_imageSize, 0x80);
+    self->_localImage = 1;
+    file->v25((void *)self->_pImage, 1, self->_imageSize);
+    file->v24();
+    switch (self->_pz) {
+    case 1:
+        self->_pfmt = 0;
+        break;
+    case 2:
+        self->_pfmt = 3;
+        break;
+    case 3:
+        self->_pfmt = 5;
+        break;
+    case 4:
+        self->_pfmt = 7;
+        break;
+    default:
+        self->_pfmt = 5;
+        self->_pz = 3;
+        break;
+    }
+    format = self->_pfmt;
+    FUN_00159320(self, format, self->_px, self->_py, &imageSize, &components, &bytesPerRow);
+    self->_bytesPerRow = bytesPerRow;
+    FUN_00159a80(format, &bitsInt, &bitsIdx, &bitsRed, &bitsGrn, &bitsBlu, &bitsAlpha, &bitsDepth);
+    self->_bitsInt = bitsInt;
+    self->_bitsIdx = bitsIdx;
+    self->_bitsRed = bitsRed;
+    self->_bitsGrn = bitsGrn;
+    self->_bitsBlu = bitsBlu;
+    self->_bitsAlpha = bitsAlpha;
+    self->_bitsDepth = bitsDepth;
+    self->_order = 100;
+    return 1;
 }
 
 int FUN_00158cc0(S_158cc0 *arg0, void **arg1) {
@@ -687,9 +967,391 @@ void FUN_001592c0(LongListStorageView *self) {
     }
 }
 
+int FUN_00159320(void *self, int format, unsigned int width, unsigned int height, int *imageSize, int *components, int *bytesPerRow) {
+    if (format == 0x8000) {
+        return -1;
+    }
+    switch (format) {
+    case 0:
+        *components = 1;
+        *bytesPerRow = width;
+        break;
+    case 1:
+        *components = 1;
+        *bytesPerRow = width;
+        break;
+    case 2:
+        *components = 2;
+        *bytesPerRow = width;
+        break;
+    case 3:
+        *components = 2;
+        *bytesPerRow = width * 2;
+        break;
+    case 4:
+        *components = 3;
+        *bytesPerRow = width;
+        break;
+    case 5:
+        *components = 3;
+        *bytesPerRow = width * 3;
+        break;
+    case 17:
+        *components = 1;
+        *bytesPerRow = width;
+        break;
+    case 18:
+        *components = 2;
+        *bytesPerRow = width * 2;
+        break;
+    case 19:
+        *components = 3;
+        *bytesPerRow = width * 3;
+        break;
+    case 20:
+        *components = 4;
+        *bytesPerRow = width * 4;
+        break;
+    case 6:
+        *components = 4;
+        *bytesPerRow = width;
+        break;
+    case 7:
+    case 35:
+        *components = 4;
+        *bytesPerRow = width * 4;
+        break;
+    case 8:
+        *components = 4;
+        *bytesPerRow = width * 2;
+        break;
+    case 10:
+        *components = 3;
+        *bytesPerRow = width * 2;
+        break;
+    case 9:
+        *components = 4;
+        *bytesPerRow = width * 2;
+        break;
+    case 11:
+        *components = 4;
+        *bytesPerRow = width * 2;
+        break;
+    case 0x10000:
+        *components = 1;
+        *bytesPerRow = width;
+        break;
+    case 0x10001:
+        *components = 1;
+        *bytesPerRow = (width + 1) >> 1;
+        break;
+    case 0x10002:
+        *components = 2;
+        *bytesPerRow = width * 2;
+        break;
+    case 12:
+    case 21:
+    {
+        int blocksWide = width >> 2;
+        int blocksHigh = height >> 2;
+        *components = 4;
+        blocksWide = blocksWide > 1 ? blocksWide : 1;
+        blocksHigh = blocksHigh > 1 ? blocksHigh : 1;
+        *imageSize = (blocksWide * blocksHigh) << 5;
+        *bytesPerRow = blocksWide * 8;
+        return *imageSize;
+    }
+    case 24:
+    {
+        int blocksWide = width >> 2;
+        int blocksHigh = height >> 2;
+        *components = 2;
+        blocksWide = blocksWide > 1 ? blocksWide : 1;
+        blocksHigh = blocksHigh > 1 ? blocksHigh : 1;
+        *imageSize = (blocksWide * blocksHigh) << 5;
+        *bytesPerRow = blocksWide * 8;
+        return *imageSize;
+    }
+    case 23:
+    {
+        int blocksWide = width >> 2;
+        int blocksHigh = height >> 3;
+        *components = 1;
+        blocksWide = blocksWide > 1 ? blocksWide : 1;
+        blocksHigh = blocksHigh > 1 ? blocksHigh : 1;
+        *imageSize = (blocksWide * blocksHigh) << 5;
+        *bytesPerRow = blocksWide * 4;
+        return *imageSize;
+    }
+    case 25:
+    {
+        int blocksWide = width >> 2;
+        int blocksHigh = height >> 3;
+        *components = 2;
+        blocksWide = blocksWide > 1 ? blocksWide : 1;
+        blocksHigh = blocksHigh > 1 ? blocksHigh : 1;
+        *imageSize = (blocksWide * blocksHigh) << 5;
+        *bytesPerRow = blocksWide * 4;
+        return *imageSize;
+    }
+    case 22:
+    {
+        int blocksWide = width >> 2;
+        int blocksHigh = height >> 2;
+        *components = 3;
+        blocksWide = blocksWide > 1 ? blocksWide : 1;
+        blocksHigh = blocksHigh > 1 ? blocksHigh : 1;
+        *imageSize = (blocksWide * blocksHigh) << 5;
+        *bytesPerRow = blocksWide * 8;
+        return *imageSize;
+    }
+    case 26:
+    {
+        int blocksWide = width >> 2;
+        int blocksHigh = height >> 3;
+        *components = 1;
+        blocksWide = blocksWide > 1 ? blocksWide : 1;
+        blocksHigh = blocksHigh > 1 ? blocksHigh : 1;
+        *imageSize = (blocksWide * blocksHigh) << 6;
+        *bytesPerRow = blocksWide * 4;
+        return *imageSize;
+    }
+    case 27:
+    {
+        int blocksWide = width >> 2;
+        int blocksHigh = height >> 2;
+        *components = 1;
+        blocksWide = blocksWide > 1 ? blocksWide : 1;
+        blocksHigh = blocksHigh > 1 ? blocksHigh : 1;
+        *imageSize = (blocksWide * blocksHigh) << 5;
+        *bytesPerRow = blocksWide * 8;
+        return *imageSize;
+    }
+    case 28:
+    {
+        int blocksWide = width >> 2;
+        int blocksHigh = height >> 2;
+        *components = 1;
+        blocksWide = blocksWide > 1 ? blocksWide : 1;
+        blocksHigh = blocksHigh > 1 ? blocksHigh : 1;
+        *imageSize = (blocksWide * blocksHigh) << 6;
+        *bytesPerRow = blocksWide * 16;
+        return *imageSize;
+    }
+    case 34:
+    case 13:
+    case 14:
+    {
+        int blocksWide = width >> 2;
+        int blocksHigh;
+        *components = 4;
+        blocksWide = blocksWide > 1 ? blocksWide : 1;
+        blocksHigh = height >> 2;
+        blocksHigh = blocksHigh > 1 ? blocksHigh : 1;
+        *imageSize = blocksWide * blocksHigh * 8;
+        *bytesPerRow = blocksWide * 8;
+        return *imageSize;
+    }
+    case 15:
+    case 16:
+    {
+        int blocksWide = width >> 2;
+        int blocksHigh;
+        *components = 4;
+        blocksWide = blocksWide > 1 ? blocksWide : 1;
+        blocksHigh = height >> 2;
+        blocksHigh = blocksHigh > 1 ? blocksHigh : 1;
+        *imageSize = blocksWide * blocksHigh * 16;
+        *bytesPerRow = blocksWide * 16;
+        return *imageSize;
+    }
+    case 29:
+        *components = 2;
+        *bytesPerRow = width * 2;
+        break;
+    case 30:
+        *components = 2;
+        *bytesPerRow = width * 4;
+        break;
+    case 31:
+        *components = 3;
+        *bytesPerRow = width * 2;
+        break;
+    case 32:
+        *components = 4;
+        *bytesPerRow = width * 4;
+        break;
+    case 33:
+        *components = 4;
+        *bytesPerRow = width * 4;
+        break;
+    default:
+        return *imageSize;
+    }
+    ((igImageVirtuals *)self)->v43(bytesPerRow);
+    *imageSize = height * *bytesPerRow;
+    return *imageSize;
+}
+
 void FUN_00159a70(void) {
 
 }
+void FUN_00159a80(int format, int *bitsInt, int *bitsIdx, int *bitsRed, int *bitsGrn, int *bitsBlu, int *bitsAlpha, int *bitsDepth) {
+    if (FUN_0015a270(format) == 0) {
+        *bitsInt = 0;
+        *bitsIdx = 0;
+        *bitsRed = 0;
+        *bitsGrn = 0;
+        *bitsBlu = 0;
+        *bitsAlpha = 0;
+        *bitsDepth = 0;
+        switch (format) {
+        case 0:
+        case 23:
+            *bitsInt = 8;
+            break;
+        case 1:
+            *bitsAlpha = 8;
+            break;
+        case 2:
+        case 25:
+            *bitsInt = 4;
+            *bitsAlpha = 4;
+            break;
+        case 3:
+        case 24:
+            *bitsInt = 8;
+            *bitsAlpha = 8;
+            break;
+        case 4:
+            *bitsRed = 3;
+            *bitsGrn = 3;
+            *bitsBlu = 2;
+            *bitsAlpha = 0;
+            break;
+        case 26:
+        case 17:
+            *bitsDepth = 8;
+            break;
+        case 27:
+        case 18:
+            *bitsDepth = 16;
+            break;
+        case 19:
+            *bitsDepth = 24;
+            break;
+        case 28:
+        case 20:
+            *bitsDepth = 32;
+            break;
+        case 5:
+            *bitsRed = 8;
+            *bitsGrn = 8;
+            *bitsBlu = 8;
+            *bitsAlpha = 0;
+            break;
+        case 6:
+            *bitsRed = 2;
+            *bitsGrn = 2;
+            *bitsBlu = 2;
+            *bitsAlpha = 2;
+            break;
+        case 7:
+        case 35:
+            *bitsRed = 8;
+            *bitsGrn = 8;
+            *bitsBlu = 8;
+            *bitsAlpha = 8;
+            break;
+        case 8:
+            *bitsRed = 5;
+            *bitsGrn = 5;
+            *bitsBlu = 5;
+            *bitsAlpha = 1;
+            break;
+        case 22:
+        case 10:
+            *bitsRed = 5;
+            *bitsGrn = 6;
+            *bitsBlu = 5;
+            break;
+        case 9:
+            *bitsRed = 4;
+            *bitsGrn = 4;
+            *bitsBlu = 4;
+            *bitsAlpha = 4;
+            break;
+        case 11:
+            *bitsRed = 3;
+            *bitsGrn = 3;
+            *bitsBlu = 2;
+            *bitsAlpha = 8;
+            break;
+        case 0x10000:
+            *bitsIdx = 8;
+            break;
+        case 0x10001:
+            *bitsIdx = 4;
+            break;
+        case 0x10002:
+            *bitsIdx = 8;
+            *bitsAlpha = 8;
+            break;
+        case 12:
+        case 21:
+            *bitsRed = 4;
+            *bitsGrn = 4;
+            *bitsBlu = 4;
+            *bitsAlpha = 4;
+            break;
+        case 34:
+        case 13:
+        case 14:
+            *bitsRed = 1;
+            *bitsGrn = 1;
+            *bitsBlu = 1;
+            *bitsAlpha = 1;
+            break;
+        case 15:
+        case 16:
+            *bitsRed = 2;
+            *bitsGrn = 2;
+            *bitsBlu = 2;
+            *bitsAlpha = 2;
+            break;
+        case 29:
+            *bitsRed = 8;
+            *bitsGrn = 8;
+            break;
+        case 30:
+            *bitsRed = 16;
+            *bitsGrn = 16;
+            break;
+        case 31:
+            *bitsRed = 5;
+            *bitsGrn = 5;
+            *bitsAlpha = 6;
+            break;
+        case 32:
+            *bitsRed = 8;
+            *bitsGrn = 8;
+            *bitsBlu = 8;
+            *bitsAlpha = 8;
+            break;
+        case 33:
+            *bitsRed = 8;
+            *bitsGrn = 8;
+            *bitsBlu = 8;
+            *bitsAlpha = 8;
+            /* matching construct: variant search — the closing case and default end in `return;`; the deleted
+             * jumps stop fall-through slot filling, so the case blocks keep retail's copied first instructions */
+            return;
+        default:
+            return;
+        }
+    }
+}
+
 
 int FUN_00159f00(int a) {
     int r;
@@ -922,6 +1584,7 @@ void FUN_0015a6a0(Img *arg0, E *out) {
     }
 }
 
+
 void FUN_0015aaf0(unsigned char *dst, unsigned char *src, int count)
 {
     int i;
@@ -993,13 +1656,14 @@ int FUN_0015ac10(int x) {
     return x;
 }
 
-void FUN_0015ad20(int a0, int a1, int a2)
+void FUN_0015ad20(void *loader, igImage *image, void *pixels)
 {
-    *(int *)((char *)a1 + 52) = a2;
+    image->_pImage = (int)pixels;
 }
 
-void FUN_0015ad30(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) {
-    FUN_00159320(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+void FUN_0015ad30(void *loader, igImage *image, int format, int width, int height, int *size, int *components,
+                  int *rowBytes) {
+    FUN_00159320(image, format, width, height, size, components, rowBytes);
 }
 
 int FUN_0015ad50(char *arg0) {

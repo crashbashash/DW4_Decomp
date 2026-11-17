@@ -838,7 +838,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_10(S10 *arg0) {
         arg0->f50 = 0;
     }
     FUN_00169260((igPsx2VisualContext *)arg0, 0);
-    FUN_0017a540(arg0, 0);
+    FUN_0017a540((igPsx2VisualContext *)arg0, 0);
     FUN_0016a9f0((igPsx2VisualContext *)arg0, 0);
     FUN_00170510((Obj_170510 *)arg0, 0);
     FUN_0016c650((igPsx2VisualContext *)arg0, 0);
@@ -847,6 +847,281 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_10(S10 *arg0) {
         p2CloseDisplay();
     }
     FUN_00165bb0((char *)arg0);
+}
+
+/* The buffer-format record _pBufList holds per buffer (BUFFER_RECORD_SIZE bytes). */
+struct BufferRecord {
+    int width;
+    int height;
+    int colorBits;
+    int depthBits;
+    int stencilBits;
+    int f20;
+    int f24;
+    int kind;
+    char pad32[16];
+};
+struct BufferRecordList {
+    unsigned short count;
+    unsigned short f2;
+    unsigned short reserved;
+    unsigned short f6;
+    char pad8[8];
+    BufferRecord *data;
+};
+/* _videoMode: display timing the context opens with. */
+struct VideoMode {
+    unsigned char f0;
+    unsigned char custom;
+    short pad2;
+    int frameCount;
+    int frameMode;
+    float refreshRate;
+    int f16;
+    int standard;
+};
+/* igPsx2VisualContext as its open slot sees it. */
+class OpenContext {
+public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void openBase(); virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39(); virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43(); virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47();
+    virtual void v48(); virtual void v49(); virtual void v50(); virtual void v51(); virtual int getColorBits(int buffer); virtual int getStencilBits(int buffer); virtual int getDepthBits(int buffer);
+    char pad4[318];
+    unsigned char _iContextOpen;       /* +322 */
+    char pad323[545];
+    BufferRecordList *_pBufList;       /* +868 */
+    int _currentBuf;                   /* +872 */
+    char pad876[32];
+    int _iDisplayWidth;                /* +908 */
+    int _iDisplayHeight;               /* +912 */
+    char pad916[432];
+    VideoMode _videoMode;              /* +1348 */
+    char pad1372[100];
+    int _maxStageNum;                  /* +1472 */
+    BufferRecord *bufferRecord(int i) { return &_pBufList->data[i]; }
+};
+struct ContextText : public igObject {
+    const char *_text;
+    int _length;
+    const char *text() const {
+        const char *t = _text;
+        if (t == 0) t = (const char *)g_stringObjEmptyText;
+        return t;
+    }
+};
+extern "C" void p2SetFrameMode(int on);
+extern "C" void p2SetDisplayFrameCount(int count);
+extern "C" void p2SetSwapInterval(int vsyncs);
+extern "C" void p2EnableWatchdog(int on);
+extern "C" void p2SetClearPasses(int on);
+extern "C" int p2OpenDisplay(int mode, int colorBits, int depthBits, const char *config, const char *symbols, int width, int height);
+extern "C" void FUN_0020c9e0(int mode);
+extern "C" void p2SetPoolSize(int type, int size);
+extern "C" void p2FixDmaPacketPool(int channel);
+class OpenResult {
+public:
+    int v;
+    OpenResult(int x) : v(x) {}
+    OpenResult(const OpenResult &o) : v(o.v) {}
+};
+extern "C" OpenResult Gap__Gfx__igPsx2VisualContext__vfunc_32(OpenContext *self);
+
+
+
+OpenResult Gap__Gfx__igPsx2VisualContext__vfunc_32(OpenContext *self) {
+    BufferRecord *record;
+    igRegistry *registry;
+    int colorBits;
+    int stencilBits;
+    int depthBits;
+    bool useWatchdog;
+    int width;
+    int height;
+
+    self->openBase();
+    igSmartPointer<ContextText> ucodeConfig((ContextText *)igStringObj_Create(FUN_00165ce0((int *)self)));
+    igSmartPointer<ContextText> ucodeSym((ContextText *)igStringObj_Create(FUN_00165ce0((int *)self)));
+    int size;
+    int syncMode;
+    record = self->bufferRecord(self->_currentBuf);
+    if (record->kind != 0 && record->kind != 1 && record->kind != 2) {
+        BufferRecordList *list = self->_pBufList;
+        record = 0;
+        for (int i = 0; i < list->count - list->reserved; i++) {
+            record = self->bufferRecord(i);
+            if (record->kind == 0 || record->kind == 1 || record->kind == 2) {
+                self->_currentBuf = i;
+                break;
+            }
+        }
+    }
+    if (record == 0) {
+        return OpenResult(g_resultFailure.v);
+    }
+    if (self->_videoMode.custom == 1) {
+        if (self->_videoMode.frameMode == 0) {
+            p2SetFrameMode(0);
+        } else if (self->_videoMode.frameMode == 1) {
+            p2SetFrameMode(1);
+        }
+        p2SetDisplayFrameCount(self->_videoMode.frameCount);
+    } else {
+        p2SetFrameMode(0);
+        p2SetDisplayFrameCount(2);
+    }
+    if (self->_videoMode.refreshRate < 40.0f) {
+        p2SetSwapInterval(1);
+    }
+    colorBits = self->getColorBits(self->_currentBuf);
+    stencilBits = self->getStencilBits(self->_currentBuf);
+    depthBits = self->getDepthBits(self->_currentBuf);
+    if (colorBits >= 32 || colorBits <= 0) {
+        colorBits = 32;
+    } else if (colorBits >= 24) {
+        colorBits = 24;
+    } else {
+        colorBits = 16;
+    }
+    if (stencilBits >= 8) {
+        stencilBits = 8;
+    } else if (stencilBits >= 6) {
+        stencilBits = 6;
+    } else if (stencilBits >= 4) {
+        stencilBits = 4;
+    } else {
+        stencilBits = 0;
+    }
+    if (depthBits >= 32) {
+        depthBits = 32;
+    } else if (depthBits >= 24) {
+        depthBits = 24;
+    } else {
+        depthBits = 16;
+    }
+    record->colorBits = colorBits;
+    record->stencilBits = stencilBits;
+    record->depthBits = depthBits;
+    record->f20 = 0;
+    registry = (igRegistry *)((G_1778e0 *)g_objectSystem)->f56;
+    thunk_igRegistry_GetValueStringObj(registry, 4, "ucodeConfig", (igStringObj **)&ucodeConfig, "", 0);
+    thunk_igRegistry_GetValueStringObj(registry, 4, "ucodeSym", (igStringObj **)&ucodeSym, "", 0);
+    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_CLUT_PSX2", &size, -1, 0);
+    if (size > 0) p2SetPoolSize(3, size);
+    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMAPREDICATE_PSX2", &size, -1, 0);
+    if (size > 0) p2SetPoolSize(7, size);
+    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMACOMPLETION_PSX2", &size, -1, 0);
+    if (size > 0) p2SetPoolSize(8, size);
+    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_FINISH_PSX2", &size, -1, 0);
+    if (size > 0) p2SetPoolSize(9, size);
+    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_TEXTURE_PSX2", &size, -1, 0);
+    if (size > 0) p2SetPoolSize(10, size);
+    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF0_SIZE_PSX2", &size, -1, 0);
+    if (size >= 0) p2SetPoolSize(4, size);
+    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF1_SIZE_PSX2", &size, -1, 0);
+    if (size > 0) p2SetPoolSize(5, size);
+    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_GIF_SIZE_PSX2", &size, -1, 0);
+    if (size > 0) p2SetPoolSize(6, size);
+    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF0_PSX2", &size, -1, 0);
+    if (size >= 0) p2SetPoolSize(0, size);
+    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF1_PSX2", &size, -1, 0);
+    if (size > 0) p2SetPoolSize(1, size);
+    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_GIF_PSX2", &size, -1, 0);
+    if (size > 0) p2SetPoolSize(2, size);
+    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_STATE_CACHE_PSX2", &size, -1, 0);
+    if (size > 0) p2SetPoolSize(11, size);
+    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_MULTIPASS_PSX2", &size, -1, 0);
+    if (size > 0) p2SetPoolSize(12, size);
+    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_RENDERLIST_PSX2", &size, -1, 0);
+    if (size > 0) p2SetPoolSize(13, size);
+    igRegistry_GetValueInt(registry, 4, "IG_GFX_CAPABILITY_MAX_TEXTURE_STAGES", &self->_maxStageNum, 1, 0);
+    self->_maxStageNum = self->_maxStageNum < 16 ? self->_maxStageNum : 16;
+    self->_maxStageNum = self->_maxStageNum > 1 ? self->_maxStageNum : 1;
+    syncMode = 0;
+    igRegistry_GetValueInt(registry, 4, "IG_GFX_TEXTURE_SYNC_MODE_PSX2", &syncMode, 1, 0);
+    FUN_0020c9e0(syncMode);
+    useWatchdog = true;
+    igRegistry_GetValueBool(registry, 4, "useWatchdog", (unsigned char *)&useWatchdog, 1, 0);
+    p2EnableWatchdog(useWatchdog);
+    FUN_00179e00((StatContext *)self);
+    {
+        int bits = colorBits + stencilBits;
+        bits = bits < 32 ? bits : 32;
+        int standard = self->_videoMode.standard;
+        if (standard != 2 && standard != 3) {
+            if (standard == 0) {
+                int mode;
+                switch (record->width) {
+                case 256: mode = 0; break;
+                case 320: mode = 1; break;
+                case 384: mode = 2; break;
+                case 512: mode = 3; break;
+                default:
+                    mode = 4;
+                    record->width = 640;
+                    record->height = 448;
+                    break;
+                }
+                const char *config = ucodeConfig->text();
+                const char *symbols = ucodeSym->text();
+                p2OpenDisplay(mode, bits, depthBits, config, symbols, record->width, record->height);
+            } else if (self->_videoMode.standard == 1) {
+                int mode;
+                switch (record->width) {
+                case 256: mode = 5; break;
+                case 320: mode = 6; break;
+                case 384: mode = 7; break;
+                case 512: mode = 8; break;
+                default:
+                    mode = 9;
+                    record->width = 640;
+                    record->height = 576;
+                    break;
+                }
+                const char *config = ucodeConfig->text();
+                const char *symbols = ucodeSym->text();
+                p2OpenDisplay(mode, bits, depthBits, config, symbols, record->width, record->height);
+            }
+        }
+    }
+    p2GetDisplaySize(&width, &height, 0, 0);
+    self->_iDisplayWidth = width;
+    self->_iDisplayHeight = height;
+    {
+        bool slowSpotLight;
+        if (thunk_igRegistry_GetValueBool(registry, 4, "useSlowSpotLight", (unsigned char *)&slowSpotLight, 0, 0) != 0 && slowSpotLight) {
+            p2DisableCapability(24);
+        } else {
+            p2EnableCapability(24);
+        }
+    }
+    {
+        bool eyeLocalLight;
+        thunk_igRegistry_GetValueBool(registry, 4, "useEyeLocalLight", (unsigned char *)&eyeLocalLight, 0, 0);
+        if (eyeLocalLight) p2EnableCapability(20); else p2DisableCapability(20);
+    }
+    {
+        bool cpuLightLoading;
+        thunk_igRegistry_GetValueBool(registry, 4, "useCpuLightLoading", (unsigned char *)&cpuLightLoading, 0, 0);
+        if (cpuLightLoading) p2EnableCapability(21); else p2DisableCapability(21);
+    }
+    {
+        bool lock;
+        thunk_igRegistry_GetValueBool(registry, 4, "lockDMAVif1", (unsigned char *)&lock, 0, 0);
+        if (lock) p2FixDmaPacketPool(1);
+        thunk_igRegistry_GetValueBool(registry, 4, "lockDMAGif", (unsigned char *)&lock, 0, 0);
+        if (lock) p2FixDmaPacketPool(2);
+    }
+    {
+        bool showGuardBand;
+        thunk_igRegistry_GetValueBool(registry, 4, "showGuardBand", (unsigned char *)&showGuardBand, 0, 0);
+        if (showGuardBand) p2SetClearPasses(1);
+    }
+    FUN_00174090(self);
+    self->_iContextOpen = 1;
+    FUN_0017a7e0((S0_17a070 *)self);
+    return OpenResult(g_resultSuccess.v);
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_35(Obj35 *arg0) {

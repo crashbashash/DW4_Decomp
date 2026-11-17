@@ -342,8 +342,8 @@ int FUN_001b7c70(void **arg0, void *arg1) {
     if (*(int *)((char *)(arg1) + 20) & 0x20) {
         return 0;
     }
-    FUN_001d1550((void *)arg1, ((DW4VC_104_0 *)(arg0))->vX());
-    return igCommonTraversal_TraverseGeometry(arg0, arg1);
+    FUN_001d1550((void *)arg1, ((C_1b7ce0 *)(arg0))->vX());
+    return igCommonTraversal_TraverseGeometry((igCommonTraversal *)arg0, (igGeometry *)arg1);
 }
 
 int FUN_001b7ce0(C_1b7ce0 *arg0, A_1b7ce0 *arg1) {
@@ -354,7 +354,7 @@ int FUN_001b7ce0(C_1b7ce0 *arg0, A_1b7ce0 *arg1) {
     }
     FUN_001d1760((void *)arg1, arg0->vX());
     FUN_001b1030((igAttrStackManager *)arg0->f52, (igAttr *)arg0->f236);
-    temp_s0 = igCommonTraversal_TraverseGeometry(arg0, arg1);
+    temp_s0 = igCommonTraversal_TraverseGeometry((igCommonTraversal *)arg0, (igGeometry *)arg1);
     FUN_001b1100((struct A_1b1100 *)arg0->f52, (struct B_1b1100 *)arg0->f236);
     return temp_s0;
 }
@@ -418,7 +418,7 @@ int FUN_001b7d70(void *arg0, void *arg1) {
             }
         }
     }
-    return igCommonTraversal_TraverseGeometry(arg0, arg1);
+    return igCommonTraversal_TraverseGeometry((igCommonTraversal *)arg0, (igGeometry *)arg1);
 }
 
 static inline void pushMatrixAttr(igAttrStackManager *manager, MatrixAttrView *attr) {

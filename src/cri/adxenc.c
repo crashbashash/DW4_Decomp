@@ -94,16 +94,17 @@ typedef struct AdxEnc {
     char pad743;
     short f744;                 /* 0x2e8 */
     short f746[2];              /* 0x2ea */
-    signed char has_loop;       /* 0x2ee */
+    signed char cinf_flg;       /* 0x2ee */
     char pad751;
-    int lsmpl;                  /* 0x2f0 */
-    int esmpl;                  /* 0x2f4 */
+    void *cinf;                 /* 0x2f0 */
+    int cinf_len;               /* 0x2f4 */
 } AdxEnc;
 
 extern int skg_init_count;
 extern void (*DAT_004a5d5c)(void *obj, const char *msg);
 extern void *DAT_004a5d60;
 extern int DAT_004a5d68;
+extern char *DAT_004a5d6c;
 extern AdxEnc DAT_004a5d70[8];
 extern AdxEncPredictor adxsje_iirflt_obj[16];
 extern AdxEncFilter adxsje_prdflt_obj[16];
@@ -725,6 +726,140 @@ int adxsje_write_end_code(AdxEnc *e)
     return len;
 }
 
+/* Writes one item of the header and counts its bytes; a short write abandons the header. */
+#define ADXSJE_PUT(p, size, n)                                    \
+    if (adxsje_write68((p), (size), (n), sj) != (n)) {            \
+        goto err;                                                 \
+    }                                                             \
+    len += (size) * (n)
+
+/* Writes the ADX header: the fixed part, the loop records, the AINF and CINF chunks, zero padding and the
+ * copyright string. Returns its size, or 0 when the output stream has no room or a write falls short. */
+int adxsje_output_header(AdxEnc *e, Sj *sj)
+{
+    CriSjChunk ck;
+    int i4;
+    unsigned short tag;
+    short hdr;
+    short i2;
+    signed char i1;
+    int padlen;
+    int crilen;
+    int room;
+    int len;
+    int i;
+
+    crilen = strlen(DAT_004a5d6c);
+    sj->vt->get_chunk(sj, 0, 0x7fffffff, &ck);
+    room = ck.len;
+    sj->vt->unget_chunk(sj, 0, &ck);
+    if (room < e->hdrsize + 4) {
+        return 0;
+    }
+    tag = 0x8000;
+    if (adxsje_write68(&tag, 2, 1, sj) != 1) {
+        goto err;
+    }
+    hdr = e->hdrsize;
+    if (adxsje_write68(&hdr, 2, 1, sj) != 1) {
+        goto err;
+    }
+    len = 0;
+    i1 = e->f76;
+    ADXSJE_PUT(&i1, 1, 1);
+    i1 = e->f80;
+    ADXSJE_PUT(&i1, 1, 1);
+    i1 = e->f84;
+    ADXSJE_PUT(&i1, 1, 1);
+    i1 = e->nch;
+    ADXSJE_PUT(&i1, 1, 1);
+    i4 = e->f92;
+    ADXSJE_PUT(&i4, 4, 1);
+    i4 = e->f96;
+    ADXSJE_PUT(&i4, 4, 1);
+    i2 = e->f100;
+    ADXSJE_PUT(&i2, 2, 1);
+    i1 = 4;
+    ADXSJE_PUT(&i1, 1, 1);
+    if ((short)e->key_x == 0) {  /* matching construct: the key is read signed */
+        i1 = 0;
+    } else {
+        i1 = 8;
+    }
+    ADXSJE_PUT(&i1, 1, 1);
+    i4 = 0;
+    ADXSJE_PUT(&i4, 4, 1);
+    i2 = e->first1[0];
+    ADXSJE_PUT(&i2, 2, 1);
+    i2 = e->first2[0];
+    ADXSJE_PUT(&i2, 2, 1);
+    i2 = e->first1[1];
+    ADXSJE_PUT(&i2, 2, 1);
+    i2 = e->first2[1];
+    ADXSJE_PUT(&i2, 2, 1);
+    if (e->f108 > 0) {
+        i2 = e->nsmpl;
+        ADXSJE_PUT(&i2, 2, 1);
+        i2 = e->f108;
+        ADXSJE_PUT(&i2, 2, 1);
+        for (i = 0; i < e->f108; i++) {
+            i2 = i;
+            ADXSJE_PUT(&i2, 2, 1);
+            i2 = 1;
+            ADXSJE_PUT(&i2, 2, 1);
+            i4 = e->f112;
+            ADXSJE_PUT(&i4, 4, 1);
+            i4 = e->f116;
+            ADXSJE_PUT(&i4, 4, 1);
+            i4 = e->f120;
+            ADXSJE_PUT(&i4, 4, 1);
+            i4 = e->f124;
+            ADXSJE_PUT(&i4, 4, 1);
+        }
+    }
+    if (e->has_name == 1) {
+        if (e->f108 == 0) {
+            i4 = 0;
+            ADXSJE_PUT(&i4, 4, 1);
+        }
+        i4 = 0x41494e46;  /* "AINF" */
+        ADXSJE_PUT(&i4, 4, 1);
+        i4 = 24;
+        ADXSJE_PUT(&i4, 4, 1);
+        ADXSJE_PUT(e->name, 1, 16);
+        i2 = e->f744;
+        ADXSJE_PUT(&i2, 2, 1);
+        i2 = 0;
+        ADXSJE_PUT(&i2, 2, 1);
+        i2 = e->f746[0];
+        ADXSJE_PUT(&i2, 2, 1);
+        i2 = e->f746[1];
+        ADXSJE_PUT(&i2, 2, 1);
+    }
+    if (e->cinf_flg == 1) {
+        if (e->f108 == 0) {
+            i4 = 0;
+            ADXSJE_PUT(&i4, 4, 1);
+        }
+        i4 = 0x43494e46;  /* "CINF" */
+        ADXSJE_PUT(&i4, 4, 1);
+        i4 = e->cinf_len;
+        ADXSJE_PUT(&i4, 4, 1);
+        if (e->cinf_len != 0 && e->cinf != 0) {
+            ADXSJE_PUT(e->cinf, 1, e->cinf_len);
+        }
+    }
+    i1 = 0;
+    padlen = e->hdrsize - crilen;
+    while (len < padlen) {
+        ADXSJE_PUT(&i1, 1, 1);
+    }
+    ADXSJE_PUT(DAT_004a5d6c, 1, crilen);
+    return len + 4;
+err:
+    return 0;
+}
+
 void ADXSJE_Init(void)
 {
     FUN_00267540();
@@ -735,6 +870,64 @@ void ADXSJE_Finish(void)
 {
     FUN_00267560();
     memset(DAT_004a5d70, 0, sizeof(DAT_004a5d70));
+}
+
+/* Takes a free encoder for nch input streams and one output stream, with the defaults: 4-bit ADX at 44100 Hz
+ * in 18-byte blocks, a cutoff of 500 and no loop. */
+AdxEnc *ADXSJE_Create(int nch, Sj **in, Sj *out)
+{
+    AdxEnc *e;
+    int i;
+    int j;
+
+    for (i = 0; i < 8; i++) {
+        if (DAT_004a5d70[i].used == 0) {
+            break;
+        }
+    }
+    if (i == 8) {
+        return 0;
+    }
+    e = &DAT_004a5d70[i];
+    e->nch_b = nch;
+    for (j = 0; j < nch; j++) {
+        e->in[j] = in[j];
+    }
+    e->out = out;
+    e->stat = 0;
+    e->f40 = 0;
+    e->total = 0;
+    e->pos = 0;
+    e->f52 = 0x7fff0000;
+    e->hdrsize = ADX_CalcHdrInfoLen(0, 0, 4, 4);
+    e->f76 = 3;
+    e->nch = nch;
+    e->f92 = 44100;
+    e->f84 = 4;
+    e->f80 = 18;
+    e->blklen = (e->f80 - 2) * 8 / e->f84;
+    e->f96 = 0x7fff0000;
+    e->f100 = 500;
+    e->nsmpl = 0;
+    e->f108 = 0;
+    e->f112 = 0;
+    e->f116 = 0;
+    e->f120 = 0;
+    e->f124 = 0;
+    e->f56 = 0;
+    e->end = 0;
+    e->f64 = ((e->f96 - 1) / e->blklen + 1) * e->blklen;
+    e->flt[0] = pflt_create(e->blklen);
+    e->flt[1] = pflt_create(e->blklen);
+    e->first1[0] = e->first2[0] = 0;
+    e->first1[1] = e->first2[1] = 0;
+    e->has_name = 0;
+    e->f744 = 0;
+    e->f746[0] = -128;
+    e->f746[1] = -128;
+    memset(e->name, 0, 16);
+    e->used = 1;
+    return e;
 }
 
 /* matching construct: statement-order sweep of the five trailing stores */
@@ -914,13 +1107,13 @@ void FUN_002697d8(AdxEnc *e)
     memset(e->name, 0, 16);
 }
 
-void FUN_00269828(AdxEnc *e, int lsmpl, int esmpl)
+void FUN_00269828(AdxEnc *e, void *cinf, int len)
 {
-    if (e->has_loop != 1) {
-        e->has_loop = 1;
-        e->lsmpl = lsmpl;
-        e->esmpl = esmpl;
-        e->hdrsize += (esmpl + 2047) / 2048 * 2048 + 4;
+    if (e->cinf_flg != 1) {
+        e->cinf_flg = 1;
+        e->cinf = cinf;
+        e->cinf_len = len;
+        e->hdrsize += (len + 2047) / 2048 * 2048 + 4;
     }
 }
 

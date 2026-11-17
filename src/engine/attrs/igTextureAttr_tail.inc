@@ -88,6 +88,60 @@ void Gap__Attrs__igTextureAttr__vfunc_17(S0 *arg0) {
     FUN_0013b820(arg0);
 }
 
+void Gap__Attrs__igTextureAttr__vfunc_24(igTextureAttr *self, igObject *context) {
+    if (self->_texId < 0) {
+        igImage *image;
+        switch (self->_source) {
+        case 0:
+        case 1:
+        default: {
+            int level;
+            image = (igImage *)self->_image;
+            if (image == 0) {
+                return;
+            }
+            self->_texId = thunk_FUN_0017aa20(context, image->_px, image->_py, image->_pfmt, 0, self->_mipmapMode, self->_imageCount);
+            for (level = 0; level < self->_imageCount; level++) {
+                igImage *levelImage;
+                if (level == 0) {
+                    levelImage = (igImage *)self->_image;
+                } else {
+                    levelImage = ((igImage **)((igObjectList *)self->_imageMipMaps)->_data)[level - 1];
+                }
+                Gap__Gfx__igPsx2VisualContext__vfunc_133(context, self->_texId, levelImage, level);
+            }
+            break;
+        }
+        case 2:
+            image = (igImage *)self->_image;
+            if (image == 0) {
+                return;
+            }
+            self->_texId = thunk_FUN_0017aa20(context, image->_px, image->_py, image->_pfmt, 2, 0, 1);
+            break;
+        case 3:
+        case 4:
+            image = (igImage *)self->_image;
+            if (image == 0) {
+                return;
+            }
+            self->_texId = thunk_FUN_0017aa20(context, image->_px, image->_py, image->_pfmt, 3, 0, 1);
+            break;
+        }
+        if (context != 0) {
+            context->_refCount = context->_refCount + 1;
+        }
+        igRelease((igObject *)self->_vc);
+        self->_vc = (int)context;
+    }
+    if (self->_source == 2) {
+        Gap__Gfx__igPsx2VisualContext__vfunc_260(context, self->_texId, self->_videoBuffer);
+    }
+    Gap__Gfx__igPsx2VisualContext__vfunc_136(context, self->_texId, (IG_GFX_TEXTURE_WRAP)self->_wrapS, (IG_GFX_TEXTURE_WRAP)self->_wrapT);
+    Gap__Gfx__igPsx2VisualContext__vfunc_138(context, self->_texId, (IG_GFX_TEXTURE_FILTER)self->_minFilter);
+    Gap__Gfx__igPsx2VisualContext__vfunc_140(context, self->_texId, (IG_GFX_TEXTURE_FILTER)self->_magFilter);
+}
+
 void igTextureAttr_SetImage(igTextureAttr *self, igImage *image, int level) {
     T_140ad0 *arg0 = (T_140ad0 *)self;
     L_140ad0 *s1;

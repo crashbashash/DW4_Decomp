@@ -221,9 +221,9 @@ void mwSfdStartSj(MwsfdPly *ply, SfdSj *sj)
     mwSfdStopDec(ply);
     ply->sj = sj;
     ply->srcType = 2;
-    ply->src488 = 0;
-    ply->src492 = 0;
-    ply->src496 = 0;
+    ply->srcBuf = 0;
+    ply->srcSize = 0;
+    ply->srcXSize = 0;
     mw_sfd_start_ex(ply);
     MWSFCRE_SetSupplySj(ply);
 }

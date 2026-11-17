@@ -18,6 +18,30 @@ void FUN_0018d480(void) {
     FUN_0018ff10((int *)g_igSphere_metaObject, (int)FUN_0018e190);
 }
 
+void FUN_0018d630(igSphere *sphere, const float *matrix) {
+    if (sphere->_radius < 0.0f) {
+        return;
+    }
+    {
+        igVec3f rowX(matrix[0], matrix[1], matrix[2]);
+        igVec3f rowY(matrix[4], matrix[5], matrix[6]);
+        igVec3f rowZ(matrix[8], matrix[9], matrix[10]);
+        float scaleX = rowX.dot(rowX);
+        float scaleY = rowY.dot(rowY);
+        float scaleZ = rowZ.dot(rowZ);
+        float maxScale;
+        if (scaleX > scaleY && scaleX > scaleZ) {
+            maxScale = scaleX;
+        } else if (scaleY > scaleZ) {
+            maxScale = scaleY;
+        } else {
+            maxScale = scaleZ;
+        }
+        sphere->_radius *= sqrtf(maxScale);
+        Vec3f_TransformProjective(sphere->_center, sphere->_center, (float *)matrix);
+    }
+}
+
 int FUN_0018d700(igSphere *sphere, igAABox *box) {
     float dist;
     int i;
@@ -125,6 +149,29 @@ int FUN_0018db20(igSphere *a, igSphere *b) {
     }
 }
 
+int FUN_0018dbc0(void *volume, igRay *ray) {
+    igSphere *sphere = (igSphere *)volume;
+    float end[3];
+    float len;
+    int startInside, endInside;
+    if (sphere->_radius < 0.0f) {
+        return 0;
+    }
+    startInside = FUN_0018ff50((void **)sphere, ray->_pos) != 0;
+    len = ray->_len;
+    end[0] = ray->_pos[0] + len * ray->_dir[0];
+    end[1] = ray->_pos[1] + len * ray->_dir[1];
+    end[2] = ray->_pos[2] + len * ray->_dir[2];
+    endInside = FUN_0018ff50((void **)sphere, end) != 0;
+    if (startInside != 0 && endInside != 0) {
+        return 2;
+    }
+    if (startInside != 0 || endInside != 0 || FUN_00190010((void **)sphere, (int)ray) != 0) {
+        return 1;
+    }
+    return 0;
+}
+
 /* matching construct: declaration-order sweep — dy, dx, dz order */
 int FUN_0018dcb0(igSphere *sphere, float *point) {
     float radius = sphere->_radius;
@@ -171,8 +218,8 @@ void FUN_0018dfc0(void *parg0, S5 *arg1) {
     FUN_001900d0((void **)arg0, (int)v);
 }
 
-void thunk_FUN_0018d630(void) {
-    FUN_0018d630();
+void thunk_FUN_0018d630(igSphere *sphere, const float *matrix) {
+    FUN_0018d630(sphere, matrix);
 }
 
 void FUN_0018e150(void *arg0) {

@@ -88,6 +88,31 @@ void Gap__Sg__igTraversal__vfunc_24(void *, int)
 {
 }
 
+/* Traverses {node} between the pre- and post-traversal hooks. With useScratchPadForTraversal set, the
+ * outermost traversal runs on a stack at the top of the scratchpad and restores the caller's stack after. */
+void Gap__Bec__beHitLandModelTraversal__vfunc_23(TraversalHooksView *self, V_1e04c0 *node) {
+    if (g_useScratchPadForTraversal) {
+        DAT_00562a50 = node;
+        if (DAT_00562a40 == 0) {
+            long long *savedStack = &DAT_00562a48;
+            unsigned int scratchPadTop = 0x70003fe0;
+            __asm__("sd $sp, 0(%0)\n\tmove $sp, %1" : : "r"(savedStack), "r"(scratchPadTop));
+        }
+        DAT_00562a40 = DAT_00562a40 + 1;
+        self->preTraverse(node);
+        igTraversal_TraverseNode((igTraversal *)self, (igNode *)DAT_00562a50);
+        self->postTraverse(DAT_00562a50);
+        DAT_00562a40 = DAT_00562a40 - 1;
+        if (DAT_00562a40 == 0) {
+            __asm__("ld $sp, 0(%0)" : : "r"(&DAT_00562a48));
+        }
+    } else {
+        self->preTraverse(node);
+        igTraversal_TraverseNode((igTraversal *)self, (igNode *)node);
+        self->postTraverse(node);
+    }
+}
+
 void igTraversal_RegisterFunction(igTraversalFunctionList *table, igMetaObject *meta, void *function) {
     int a1;
     int v1;

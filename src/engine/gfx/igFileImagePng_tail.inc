@@ -9,8 +9,8 @@ void thunk_FUN_001592c0(LongListStorageView *self) {
     FUN_001592c0(self);
 }
 
-void Gap__Gfx__igFileImagePng__vfunc_23(int dummy0, void **arg1) {
-    FUN_001563b0();
+void Gap__Gfx__igFileImagePng__vfunc_23(igImage *self, void **arg1, int deep) {
+    FUN_001563b0(self, (igImage *)arg1, deep);
     ((DW4VC_88_0 *)(arg1))->vX();
 }
 
@@ -146,7 +146,8 @@ int FUN_00167540(void *png, int bitDepth, int colorType, PngSignificantBits *bit
     return result;
 }
 
-int FUN_001681c0(int arg0, int arg1, int arg2) {
+
+int FUN_001681c0(igImage *self, void *png, void *info) {
     int sp5C;
     int sp58;
     int sp54;
@@ -155,20 +156,20 @@ int FUN_001681c0(int arg0, int arg1, int arg2) {
     int sp48;
     int sp44;
 
-    png_get_IHDR(arg1, arg2, &sp5C, &sp58, &sp54, &sp50, &sp4C, &sp48, &sp44);
-    png_set_strip_16(arg1);
+    png_get_IHDR(png, info, &sp5C, &sp58, &sp54, &sp50, &sp4C, &sp48, &sp44);
+    png_set_strip_16(png);
     if ((sp54 < 8) && (sp50 == 3)) {
-        png_set_packing(arg1);
+        png_set_packing(png);
     }
     if (sp54 < 8) {
         if (sp50 == 0) {
-            png_set_gray_1_2_4_to_8(arg1);
+            png_set_gray_1_2_4_to_8(png);
         }
     }
-    if ((png_get_valid(arg1, arg2, 0x10) != 0) && !(sp50 & 4) && !(sp50 & 1)) {
-        png_set_tRNS_to_alpha(arg1);
+    if ((png_get_valid(png, info, 0x10) != 0) && !(sp50 & 4) && !(sp50 & 1)) {
+        png_set_tRNS_to_alpha(png);
     }
-    png_set_read_user_transform_fn(arg1, FUN_001673a0);
+    png_set_read_user_transform_fn(png, FUN_001673a0);
     return 1;
 }
 

@@ -239,7 +239,7 @@ void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *self) {
  * it sorts its infos: a Lua info goes straight to the insight core, a scene with cameras or whose
  * scene graph is named ROOTATTR is important, any other scene is a plain info, and every other
  * info is a read info. */
-int beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, igStringRefList *fileNames) {
+unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, igStringRefList *fileNames) {
     igDirectory *dir;
     igInfoList *infos;
     int offset;

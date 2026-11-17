@@ -151,6 +151,45 @@ void Gap__Sg__igTransformSequence1_5__vfunc_37(igTransformSequence1_5 *t, int id
     }
 }
 
+/* Builds key {index}'s transform: rotation (quaternion, or Euler angles in degrees) about the centre of
+ * rotation, then the translation, then the scale. */
+void Gap__Sg__igTransformSequence1_5__vfunc_35(igTransformSequence1_5 *self, int index, float *matrix) {
+    bool rotated = false;
+    igMatrix44f_SetIdentity(matrix);
+    if (self->_drivenChannels & 2) {
+        FUN_00192810(&((igTDataList<KeyQuatView> *)self->_quatList)->_data[index], matrix);
+        rotated = true;
+    } else if (self->_drivenChannels & 4) {
+        KeyQuatView *euler = &((igTDataList<KeyQuatView> *)self->_quatList)->_data[index];
+        igMatrix44f_SetEulerRotation(matrix, degToRad(euler->x), degToRad(euler->y), degToRad(euler->z));
+        rotated = true;
+    }
+    if (rotated) {
+        float center[3];
+        float moved[3];
+        center[0] = self->_centerOfRotation[0];
+        center[1] = self->_centerOfRotation[1];
+        center[2] = self->_centerOfRotation[2];
+        Vec3f_TransformDirection(moved, center, matrix);
+        center[0] -= moved[0];
+        center[1] -= moved[1];
+        center[2] -= moved[2];
+        matrix[12] = center[0];
+        matrix[13] = center[1];
+        matrix[14] = center[2];
+    }
+    if (self->_drivenChannels & 1) {
+        igVec3f translation = ((igTDataList<igVec3f> *)self->_xlateList)->_data[index];
+        matrix[12] += translation.x;
+        matrix[13] += translation.y;
+        matrix[14] += translation.z;
+    }
+    if (self->_drivenChannels & 8) {
+        igVec3f scale = ((igTDataList<igVec3f> *)self->_scaleList)->_data[index];
+        FUN_00190cb0(matrix, &scale);
+    }
+}
+
 void FUN_001ddfd0(void) {
     int temp_v0;
 
@@ -361,6 +400,36 @@ void igTransformSequence1_5_InterpolateRotation(igTransformSequence1_5 *self, fl
     }
 }
 
+static inline long long keyTime(igLongList *times, unsigned int index) { return ((long long *)times->_data)[index]; }
+static inline igLongList *keyTimes(igTransformSequence1_5 *self) { return (igLongList *)self->_timeListLong; }
+
+/* Finds the keys bracketing {time}: walks {lastKey} forward or back from the previous search, returns the
+ * pair in {key0}/{key1} and the fraction of the way from one to the other in {t}. The two loop tests read the
+ * list through the cast and the other reads through keyTimes() (matching construct: the mix decides which
+ * register holds the first list pointer). */
+void igTransformSequence1_5_FindKeys(igTransformSequence1_5 *self, long long time, int *key0, int *key1, float *t, int *lastKey) {
+    float elapsed;
+    float span;
+    if (time > keyTime(keyTimes(self), *lastKey)) {
+        do {
+            (*lastKey)++;
+        } while (time > keyTime((igLongList *)self->_timeListLong, *lastKey));
+    } else if (time < keyTime(keyTimes(self), *lastKey - 1)) {
+        do {
+            (*lastKey)--;
+        } while (time < keyTime((igLongList *)self->_timeListLong, *lastKey - 1));
+    }
+    *key1 = *lastKey;
+    *key0 = *lastKey - 1;
+    elapsed = (float)(unsigned int)(int)((time - keyTime(keyTimes(self), *key0)) >> 18);
+    span = (float)(unsigned int)(int)((keyTime(keyTimes(self), *key1) - keyTime(keyTimes(self), *key0)) >> 18);
+    if (span < 9.99999997e-07f) {
+        *t = 0.0f;
+    } else {
+        *t = elapsed / span;
+    }
+}
+
 void igTransformSequence1_5_FindUniformKeys(SequenceKeyTimes *arg0, long long arg1, int *arg2, int *arg3, float *arg4) {
     float a = (float)(unsigned int)(arg1 >> 18);
     float b = (float)(unsigned int)(*arg0->_timeListLong->_data >> 18);
@@ -401,7 +470,6 @@ public:
     virtual void slot43(); virtual void slot44();
     virtual float *getQuaternionKey(int index);     /* vfunc_45 */
 };
-static inline long long keyTime(igLongList *times, unsigned int index) { return ((long long *)times->_data)[index]; }
 static inline void copyTranslation(float *dst, const float *src) { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; }
 static inline void copyQuaternion(float *dst, const float *src) { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; dst[3] = src[3]; }
 extern "C" void igTransformSequence1_5_FindKeys(igTransformSequence1_5 *self, long long time, int *key0, int *key1, float *t, int *lastKey);

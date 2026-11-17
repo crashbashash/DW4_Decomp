@@ -168,6 +168,23 @@ void Gap__Sg__igTransformSequence1_5__vfunc_64(void *arg0, long long arg1) {
     *(long long *)((char *)arg0 + 88) = arg1;
 }
 
+/* Caches the sequence length: the span from the first to the last key time, computed once while the
+ * duration is still unset (-1). The first key time is read through self->_timeListLong again rather than
+ * through {times} (matching construct: the second read makes the data pointer take its register before
+ * the scaled index). */
+void Gap__Sg__igTransformSequence1_5__vfunc_17(igTransformSequence1_5 *self) {
+    if (self->_animationDuration == -1) {
+        igTDataList<long long> *times = (igTDataList<long long> *)self->_timeListLong;
+        int count = times->count();
+        int last = count - 1;
+        if (count != 0) {
+            self->_animationDuration = times->get(last) - ((igTDataList<long long> *)self->_timeListLong)->get(0);
+        } else {
+            self->_animationDuration = 0;
+        }
+    }
+}
+
 void FUN_001e2cd0(IgForwardTarget_1e2cd0 *o) { o->slot21(); }
 
 /* Setter for the reflected bool field _uniformTimeEnabled. */

@@ -253,7 +253,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
             igStringRefList *s6;
             int n;
             int k;
-            if (beFileListInfoManager_LoadNextFile(self, (igStringRefList *)self->_fnames) == 0) {
+            if (!beFileListInfoManager_LoadNextFile(self, (igStringRefList *)self->_fnames)) {
                 break;
             }
             beFileListInfoManager_AddReadInfos(self);
@@ -322,7 +322,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
             break;
         }
         case 2:
-            if (beFileListInfoManager_LoadNextFile(self, (igStringRefList *)self->_fnames) != 0) {
+            if (beFileListInfoManager_LoadNextFile(self, (igStringRefList *)self->_fnames)) {
                 self->_loaded = 0;
                 self->_proc = 3;
                 break;
@@ -355,11 +355,11 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
             if (cnt > 0) {
                 igInfoList *il = (igInfoList *)li; int *ob = *(int **)il->_data;
                 if (ob != 0 && igObject_IsKindOf(ob, g_beLoadingNode_metaObject) != 0) { s1 = (int)ob; } else { s1 = 0; }
-                if (s1 != 0) { s3 = beLoadingNode_IsPastPlayLimit((beLoadingNode *)s1) & 0xFF; } else { s3 = 1; }
+                if (s1 != 0) { s3 = beLoadingNode_IsPastPlayLimit((beLoadingNode *)s1); } else { s3 = 1; }
             } else {
                 s3 = 1;
             }
-            v1 = beFileListInfoManager_LoadNextFile(self, (igStringRefList *)s0) & 0xFF;
+            v1 = beFileListInfoManager_LoadNextFile(self, (igStringRefList *)s0);
             if (s3 && v1) {
                 self->_loaded = 0;
                 self->_proc = 0x14;

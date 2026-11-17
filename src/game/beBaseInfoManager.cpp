@@ -117,7 +117,7 @@ void beBaseInfoManager_Update(beBaseInfoManager *self) {
     int ramCount;
     int ramIndex;
     beBaseInfoRamList *rams;
-    if (beSystem_IsRunning((beSystem *)self->_system) != 0 && self->_isUpdateRun != 0 && ((beSystem *)self->_system)->_isFrameSkip == 0) {
+    if (beSystem_IsRunning((beSystem *)self->_system) && self->_isUpdateRun != 0 && ((beSystem *)self->_system)->_isFrameSkip == 0) {
         infoCount = ((beBaseInfoList *)self->_infoList)->_count;
         for (infoIndex = 0; infoIndex < infoCount; infoIndex++) {
             rams = (beBaseInfoRamList *)((beBaseInfo **)((beBaseInfoList *)self->_infoList)->_data)[infoIndex]->_ramList;

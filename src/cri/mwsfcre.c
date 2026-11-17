@@ -43,6 +43,7 @@ extern char E1122613_mwPlyCalcWorkCprmSfd_cprm_is_NULL[];
 extern char E02120501_Internal_Error_mwsfcre_AttachPicUsrBuf[];
 extern char E02120502_mwsfcre_AttachPicUsrBuf_usrdatbuf_is_short[];
 extern char mwPlyAttachPicUsrBuf_short_msg[];
+extern char E20010703B_MWSFCRE_SetSupplySj[];
 extern char E20010703E_MWSFCRE_DestroySfd[];
 extern char E0203261_MWSFCRE_ResetSfdHn_SFD_Stop_failed[];
 extern char E0203262_MWSFCRE_ResetSfdHn_SFD_SetErrFn_failed[];
@@ -100,11 +101,18 @@ typedef struct MwsfdAdxCfg {
     void *f24;
 } MwsfdAdxCfg;
 
-/* where SFD reads its input from (SFD_SetSupplySj's argument) */
+/* what an SFD's input SJ is laid over */
+typedef enum SfdSupplyKind {
+    SFD_SUPPLY_INPUT_RING = 0,    /* the player's input ring */
+    SFD_SUPPLY_MEM = 1,           /* a memory buffer */
+    SFD_SUPPLY_USR = 2            /* a caller's SJ */
+} SfdSupplyKind;
+
+/* where SFD reads its input from (SFD_SetSupplySj's argument); the buffer is passed as an address */
 typedef struct SfdSupplyPrm {
-    int type;     /* 0: the player's input ring, 1: a memory buffer, else the caller's */
+    SfdSupplyKind kind;
     SfdSj *sj;
-    char *buf;
+    unsigned int buf;
     int size;
     int xsize;
     int f20;
@@ -336,7 +344,41 @@ void MPV_SetFrameBuffers(int num, int size, void **bufs) {
 }
 
 /* hands the SFD the SJ it reads from, described by where its buffer is */
-void MWSFCRE_SetSupplySj(MwsfdPly *ply);
+void MWSFCRE_SetSupplySj(MwsfdPly *ply) {
+    SfdSj *sj = ply->sj;
+    void *sfd = ply->sfd;
+    SfdSupplyPrm prm;
+
+    if (sj == 0) {
+        return;
+    }
+    if (sj == ply->memSj) {
+        prm.kind = SFD_SUPPLY_MEM;
+        prm.sj = sj;
+        prm.buf = (unsigned int)ply->memBuf;
+        prm.size = ply->memSize;
+        prm.xsize = 0;
+        prm.f20 = 0;
+    } else if (sj == ply->defSj) {
+        prm.kind = SFD_SUPPLY_INPUT_RING;
+        prm.sj = sj;
+        prm.buf = (unsigned int)ply->inputBuf;
+        prm.size = ply->inputBufSize;
+        prm.xsize = ply->inputXSize;
+        prm.f20 = 0;
+    } else {
+        prm.kind = ply->srcType;
+        prm.sj = sj;
+        prm.buf = ply->srcBuf;
+        prm.size = ply->srcSize;
+        prm.xsize = ply->srcXSize;
+        prm.f20 = 0;
+    }
+    if (SFD_SetSupplySj(sfd, &prm) != 0) {
+        MWSFLIB_SetErrCode(-312);
+        MWSFSVM_Error(E20010703B_MWSFCRE_SetSupplySj);
+    }
+}
 
 /* matching construct: two orders tried: the buffer pointers read into locals first */
 int mwsfcre_MallocRfb(MwsfdPly *ply, MwsfdCreInf *cprm, MwsfdFrmBufs *bufs) {

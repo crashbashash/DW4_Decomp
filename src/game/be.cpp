@@ -10,17 +10,28 @@
 #include "dw4/listSet.h"
 #include "dw4/ClassRegistration.h"
 #include "dw4/be.h"
+#include "dw4/StringPool.h"
+#include "dw4/beBaseInfoDataList.h"
+#include "dw4/beDBManager.h"
+#include "dw4/beMatCtrl.h"
+#include "dw4/beMessenger.h"
+#include "dw4/beSystem.h"
+#include "dw4/igDataLists.h"
+#include "dw4/igInsightCore.h"
+#include "dw4/igMathConstants.h"
+#include "dw4/igMatrix44f.h"
+#include "dw4/igMemoryPoolContext.h"
+#include "dw4/igNamedObject.h"
+#include "dw4/igObject.h"
+#include "dw4/igStringObj.h"
+#include "dw4/list-services.h"
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
 
-
-/* The C runtime and the Alchemy memory services this file uses. */
-extern "C" unsigned int strlen(const char *s);
-extern "C" int strcmp(const char *a, const char *b);
-extern "C" int sprintf(char *buffer, const char *format, ...);
-extern "C" void StringChunk_ReleaseHeader(void *owner, void *header);
-extern "C" int Memory_GetAllocatorBySelector(int key);
+/* Kept local: lua.h declares Memory_FreeBufferWithAllocator with an igObject pool, so igMemory.h
+ * cannot be included next to it. */
 extern "C" void *Memory_AllocateBufferDirect(unsigned int size, igObject *pool);
-extern "C" void Memory_FreeBufferWithAllocator(void *buffer, igObject *pool);
-extern "C" igObject *igObject_GetAllocator(void *object);
 
 /* A reference-counted string: the text follows its chunk owner and its count. */
 static inline void releaseString(char *text) {
@@ -29,7 +40,7 @@ static inline void releaseString(char *text) {
         int count = header[1] - 1;
         header[1] = count;
         if (count == 0) {
-            StringChunk_ReleaseHeader((void *)header[0], header);
+            StringChunk_ReleaseHeader((StringChunk *)header[0], (StringTokenHeader *)header);
         }
     }
 }
@@ -81,9 +92,9 @@ struct FloatingNumberStyleData {
  * p[-2]); releases the token on scope exit. */
 class StringRef {
 public:
-    void *p;
-    StringRef(void *s) : p(s) {}
-    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((void *)*h, h); } }
+    char *p;
+    StringRef(char *s) : p(s) {}
+    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
 };
 
 namespace Gap {
@@ -118,7 +129,7 @@ void be_Stop(void);
 int be_AddInfo(void);
 void be_RemoveAllInfo(void);
 void be_Update(void);
-int bePlayer_GetStruct(int slot);
+igObject *bePlayer_GetStruct(int slot);
 unsigned char SYSisJoinPlayer(int playerIndex);
 const char *SYSgetPlayerName(int playerIndex);
 const char *SYSgetWeaponName(int playerIndex, int slot);
@@ -157,7 +168,7 @@ int MATgetPlayerNo(void);
 unsigned char MATisRidePlayer(int player);
 unsigned char MATisRideOffPlayer(int player);
 int MATgetPlayerMatStat(int player);
-void MATsetRun(int run);
+void MATsetRun(unsigned char run);
 void DMsetSD_40(const char *group, const char *infoName, int ramNo, const char *message, const char *param, long long sendTime);
 void DMsetSD_41(const char *group, const char *infoName, int ramNo, const char *message, const char *param);
 void DMsetSD_42(const char *group, const char *infoName, int ramNo, const char *message, long long sendTime);
@@ -235,59 +246,12 @@ int BLPgetPowerDownTime(const char *effectKey);
 int BLPcalcKoukaMagic(void);
 void LISsetDifficultMax(int maxDifficulty);
 
-/* Other files. */
-int igInsightCore_FindManager(int insight, igMetaObject *meta);
-void *StringPool_Allocate(int size);
-void *StringPool_Construct(void *pool);
-void *StringPool_Intern(void *pool, const char *text);
-void List_Reserve(void *list, int count, int capacity);
-void StringList_AppendRetained(igStringRefList *list, StringRef *value);
+/* Other files, with no home yet. */
 StringRef StringList_CopyRetained(igStringRefList *list, int index);
-beDataObjInt *igProperty_GetRecord(int record, const char *name);
-beDataObjBool *igProperty_GetRecordByte(int record, const char *name);
-beDataObjString *igProperty_GetRecordString(int record, const char *name);
-beDataObjBoolList *igProperty_GetRecordArray(int record, const char *name);
-beDataObjIntList *igProperty_GetRecordIntList(int record, const char *name);
-beDataObjStringList *igProperty_GetRecordStringList(int record, const char *name);
-beModelCtrlInfoRamData *igProperty_FindByName(int list, int nameField, const char *name);
-igObject *beBaseInfoDataList_Create(int allocator);
-void beMessenger_SelectReceivers(beMessenger *self, const char *group, const char *infoName, int ramNo);
-void beMessenger_DispatchSelected(beMessenger *self, const char *message);
-void beMessenger_SelectGroup(beMessenger *self, const char *group);
-void beMessenger_SendNamed(beMessenger *self, const char *group, const char *infoName, int ramNo, const char *message);
-void beMessenger_SendGroup(beMessenger *self, const char *group, const char *message);
-void beMessenger_PrepareDelayedSelection(beMessenger *self, const char *group, const char *infoName, int ramNo);
-void beMessenger_EnqueueSelected(beMessenger *self, const char *message, long long delay);
-void beMessenger_SendDelayedNamed(beMessenger *self, const char *group, const char *infoName, int ramNo, const char *message, long long delay);
-int beMessenger_GetBoolCount(beMessenger *self);
-unsigned char beMessenger_GetBool(beMessenger *self, int index);
-void beMessenger_AppendInt(beMessenger *self, int value);
-int beMessenger_GetInt(beMessenger *self, int index);
-void beMessenger_AppendFloat(beMessenger *self, float value);
-void beMessenger_AppendLong(beMessenger *self, long long value);
-void beMessenger_AppendVec3(beMessenger *self, float *value);
-int beMessenger_GetMatrixCount(beMessenger *self);
-void beMessenger_GetMatrix(float *out, beMessenger *self, int index);
-int beMessenger_GetObjectCount(beMessenger *self);
-void beMessenger_AppendObject(beMessenger *self, void *object);
-int beMessenger_GetObject(beMessenger *self, int index);
-void beMessenger_AppendString(beMessenger *self, const char *text);
-unsigned char beMatCtrl_IsPlayer(beMatCtrl *self);
-unsigned char beMatCtrl_IsAllPlayer(beMatCtrl *self);
-int beMatCtrl_GetPlayerNo(beMatCtrl *self);
-unsigned char beMatCtrl_IsRidePlayer(beMatCtrl *self, int player);
-unsigned char beMatCtrl_IsRideOffPlayer(beMatCtrl *self, int player);
-int beMatCtrl_GetPlayerMatStat(beMatCtrl *self, int player);
-void beMatCtrl_SetRun(beMatCtrl *self, int run);
-void igMatrix44f_SetIdentity(float *matrix);
 void igMatrix44f_Copy(float *matrix, const float *source);
-void igMatrix44f_GetTranslation(const float *matrix, float *vector);
 void igMatrix44f_TranslateLocal(float *matrix, const float *offset);
 void Vec3f_TransformDirection(float *out, const float *vector, const float *matrix);
-void igStringObj_Set(igStringObj *string, const char *text);
 void igStringObj_ToFloat(igStringObj *string, float *value);
-void igStringObj_Erase(igStringObj *string, unsigned int position, unsigned int length);
-float atan2f(float y, float x);
 
 /* The managers be_Start finds, and the be itself. */
 extern beSystem *g_beSystem;
@@ -295,22 +259,11 @@ extern beMessenger *g_beMessenger;
 extern beMatCtrl *g_matCtrl;
 extern beDemoManager *g_beDemoManager;
 extern be *g_be;
-extern igMetaObject *g_beSystem_metaObject[4];
-extern igMetaObject *g_beMessenger_metaObject[4];
-extern igMetaObject *g_beMatCtrl_metaObject[4];
-extern void *g_stringPool[4];
-extern int kIGMemoryPoolHandleUser1[4];
-extern unsigned char g_useOwnerAllocator;
-extern int g_propertyNameField[4];
 
 /* The last FIGHTCALC damage reply: damage, attribute index and rank flag. */
 extern int g_damageResult;
 extern int g_attackZokusei;
 extern int g_damageFlag;
-
-/* The Lua class tables `be` hands the binding. */
-
-extern const float g_vec3ZAxis[4];
 
 /* Result strings the string getters return. */
 extern char g_mdlPosStrBuffer[64];
@@ -321,27 +274,27 @@ extern char g_playerPosStrBuffer[64];
 }
 
 /* The game's string pool, created on first use. */
-static inline void *stringPool(void) {
-    if (g_stringPool[0] == 0) {
-        void *pool = StringPool_Allocate(16);
+static inline StringPool *stringPool(void) {
+    if (g_stringPool == 0) {
+        StringPool *pool = (StringPool *)StringPool_Allocate(16);
         if (pool != 0) {
             pool = StringPool_Construct(pool);
         }
-        g_stringPool[0] = pool;
+        g_stringPool = pool;
     }
-    return g_stringPool[0];
+    return g_stringPool;
 }
 
 /* Points a string field at the pooled copy of `text`, releasing the string it held. */
 static inline void setPooledString(int &field, const char *text) {
-    char *token = (char *)StringPool_Intern(stringPool(), text);
+    char *token = StringPool_Intern(stringPool(), text);
     releaseString((char *)field);
     field = (int)token;
 }
 
 /* Points a property record's string at the pooled copy of `text`, releasing the one it held. */
 static inline void setRecordString(beDataObjString *record, const char *text) {
-    char *token = (char *)StringPool_Intern(stringPool(), text);
+    char *token = StringPool_Intern(stringPool(), text);
     releaseString((char *)record->_data);
     record->_data = (int)token;
 }
@@ -359,7 +312,7 @@ static inline void clearStringList(igStringRefList *list) {
         offset = 0;
         do {
             slot = (char **)((char *)list->_data + offset);
-            empty = (char *)StringPool_Intern(stringPool(), 0);
+            empty = StringPool_Intern(stringPool(), (const char *)0);
             releaseString(*slot);
             i += 1;
             *slot = empty;
@@ -370,9 +323,9 @@ static inline void clearStringList(igStringRefList *list) {
 }
 
 /* The allocator an object's new members come from: its own, or the default one. */
-static inline int allocatorFor(void *object) {
+static inline int allocatorFor(igObject *object) {
     int allocator = (int)igObject_GetAllocator(object);
-    return g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1[0]);
+    return g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 }
 
 /* The Lua functions `be` hands the binding, with the argument codes of each. */
@@ -777,14 +730,14 @@ void be_Deactivate(void)
 
 /* Finds the managers the script functions talk to and records itself as the game's be. */
 void be_Start(be *self) {
-    int demoManager;
+    beDemoManager *demoManager;
 
-    g_beSystem = (beSystem *)igInsightCore_FindManager(self->_insight, g_beSystem_metaObject[0]);
-    g_beMessenger = (beMessenger *)igInsightCore_FindManager(self->_insight, g_beMessenger_metaObject[0]);
-    g_matCtrl = (beMatCtrl *)igInsightCore_FindManager(self->_insight, g_beMatCtrl_metaObject[0]);
-    demoManager = igInsightCore_FindManager(self->_insight, g_beDemoManager_metaObject);
+    g_beSystem = (beSystem *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSystem_metaObject);
+    g_beMessenger = (beMessenger *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beMessenger_metaObject);
+    g_matCtrl = (beMatCtrl *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beMatCtrl_metaObject);
+    demoManager = (beDemoManager *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beDemoManager_metaObject);
     g_be = self;
-    g_beDemoManager = (beDemoManager *)demoManager;
+    g_beDemoManager = demoManager;
 }
 
 void be_Stop(void)
@@ -802,7 +755,7 @@ void be_RemoveAllInfo(void) {
     {
         igStringRefList *list = (igStringRefList *)g_be->_stringRefList;
         if (!(0 < list->_count)) {
-            List_Reserve(list, 0, 4);
+            List_Reserve((igDataList *)list, 0, 4);
         }
     }
 }
@@ -814,7 +767,7 @@ void be_Update(void)
 /* Asks GAMERAM for a property record: the shared one (PLAYER_SLOT_COMMON) or a player's. */
 const char *g_getRecordCommands[5] = {"GETCOMMON", "GETPLAYER1", "GETPLAYER2", "GETPLAYER3", "GETPLAYER4"};
 
-int bePlayer_GetStruct(int slot) {
+igObject *bePlayer_GetStruct(int slot) {
     beMessenger_SendNamed(g_beMessenger, "GAMERAM", 0, 0, g_getRecordCommands[slot]);
     return beMessenger_GetObject(g_beMessenger, 0);
 }
@@ -893,7 +846,7 @@ unsigned int SYSgetRandom(unsigned int range) {
 
 /* Records the gate stage; a null name stores the empty string. */
 void SYSsetGateStage(const char *stageName, int stageNo) {
-    int common;
+    igObject *common;
 
     beMessenger_SendGroup(g_beMessenger, "GAMERAM", "GETCOMMON");
     common = beMessenger_GetObject(g_beMessenger, 0);
@@ -1054,7 +1007,7 @@ void CFLclear(void) {
     {
         igStringRefList *list = (igStringRefList *)g_beSystem->_readFileList;
         if (!(0 < list->_count)) {
-            List_Reserve(list, 0, 4);
+            List_Reserve((igDataList *)list, 0, 4);
         }
     }
 }
@@ -1090,8 +1043,8 @@ void CFLsetName(const char *name) {
             pooled = (const char *)StringPool_Intern(stringPool(), name);
         }
         {
-            StringRef entry((void *)pooled);
-            StringList_AppendRetained(list, &entry);
+            StringRef entry((char *)pooled);
+            StringList_AppendRetained(list, &entry.p);
         }
     }
 }
@@ -1242,7 +1195,7 @@ unsigned char MATisRideOffPlayer(int player) { return beMatCtrl_IsRideOffPlayer(
 
 int MATgetPlayerMatStat(int player) { return beMatCtrl_GetPlayerMatStat(g_matCtrl, player); }
 
-void MATsetRun(int run) { beMatCtrl_SetRun(g_matCtrl, run); }
+void MATsetRun(unsigned char run) { beMatCtrl_SetRun(g_matCtrl, run); }
 
 /* DM: queue messages on the demo manager's build data; DMrun hands the queue over to play. */
 void DMsetSD_40(const char *group, const char *infoName, int ramNo, const char *message, const char *param, long long sendTime) {
@@ -1326,7 +1279,7 @@ int DMgetCount(void) {
 
 /* FLG / COUNTER: the shared record's FLAG bool list and COUNTER int list. */
 unsigned char FLGisOn(int flagNo) {
-    int common;
+    igObject *common;
 
     beMessenger_SendNamed(g_beMessenger, "GAMERAM", 0, 0, "GETCOMMON");
     common = beMessenger_GetObject(g_beMessenger, 0);
@@ -1350,7 +1303,7 @@ void FLGset(int flagNo, unsigned char on) {
 }
 
 void FLGflip(int flagNo) {
-    int common;
+    igObject *common;
     unsigned char *values;
     beMessenger_SendNamed(g_beMessenger, "GAMERAM", 0, 0, "GETCOMMON");
     common = beMessenger_GetObject(g_beMessenger, 0);
@@ -1413,7 +1366,7 @@ char *MDLgetRotStr(float x, float y, float z) {
     float heading;
     igMatrix44f_SetIdentity(matrix);
     igMatrix44f_Copy(matrix, g_mdlMatrix);
-    Vec3f_TransformDirection(forward, g_vec3ZAxis, matrix);
+    Vec3f_TransformDirection(forward, &g_vec3ZAxis.x, matrix);
     heading = atan2f(forward[0], forward[2]);
     sprintf(g_mdlRotStrBuffer, "V<%f,%f,%f>", x, RADIANS_TO_DEGREES * heading + y, z);
     return g_mdlRotStrBuffer;
@@ -1607,7 +1560,7 @@ unsigned char MDLisSeqName(const char *sequence) {
         }
         model->_dataList = (int)list;
     }
-    beModelCtrlInfoRamData *data = igProperty_FindByName(model->_dataList, g_propertyNameField[0], "ONE");
+    beModelCtrlInfoRamData *data = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)model->_dataList, g_propertyNameField, "ONE");
     return strcmp((const char *)((beModelCtrlInfoWork *)data->_work)->_seqCodeName, sequence) == 0;
 }
 
@@ -1639,7 +1592,7 @@ char *PLAYERgetDataStr(int point, int index, float yaw) {
     beMessenger_DispatchSelected(g_beMessenger, "GETMATRIXDIRECT");
     beMessenger_GetMatrix(matrix, g_beMessenger, 0);
     igMatrix44f_GetTranslation(matrix, position);
-    Vec3f_TransformDirection(forward, g_vec3ZAxis, matrix);
+    Vec3f_TransformDirection(forward, &g_vec3ZAxis.x, matrix);
     heading = atan2f(forward[0], forward[2]);
     sprintf(g_playerDataStrBuffer, "V<%f,%f,%f>/V<0,%f,0>", position[0], position[1], position[2], (RADIANS_TO_DEGREES * heading) + yaw);
     return g_playerDataStrBuffer;
@@ -1714,7 +1667,7 @@ int BLTgetShootRamNo(void)
 /* Whether the cached player attack hits (P2EISHITCHECK). When the model has an info name, the
  * named ENEMY's base work (GETPEBASEWORK reply, object 1) goes with it. */
 unsigned char BLTisHitCheck(void) {
-    int baseWork;
+    igObject *baseWork;
 
     baseWork = 0;
     if (g_mdlInfoName != 0) {
@@ -1728,7 +1681,7 @@ unsigned char BLTisHitCheck(void) {
     beMessenger_AppendInt(g_beMessenger, g_bltShootRamNo);
     beMessenger_AppendInt(g_beMessenger, g_mdlRecNo);
     beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
-    beMessenger_AppendObject(g_beMessenger, (void *)baseWork);
+    beMessenger_AppendObject(g_beMessenger, baseWork);
     beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
     return beMessenger_GetBool(g_beMessenger, 0);
 }
@@ -1747,7 +1700,7 @@ unsigned char BLTisCritical(void) {
  * index, rank flag) are cached for BLTgetDamageRank and BLTgetAttributeStr, and the damage is
  * returned. */
 int BLTgetDamageValue(unsigned char critical) {
-    int baseWork;
+    igObject *baseWork;
 
     baseWork = 0;
     if (g_mdlInfoName != 0) {
@@ -1762,7 +1715,7 @@ int BLTgetDamageValue(unsigned char critical) {
     beMessenger_AppendInt(g_beMessenger, g_mdlRecNo);
     beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
     beMessenger_AppendInt(g_beMessenger, critical);
-    beMessenger_AppendObject(g_beMessenger, (void *)baseWork);
+    beMessenger_AppendObject(g_beMessenger, baseWork);
     beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
     g_damageResult = beMessenger_GetInt(g_beMessenger, 0);
     g_attackZokusei = beMessenger_GetInt(g_beMessenger, 1);
@@ -1949,7 +1902,7 @@ unsigned char BLPisHitCheck(void) {
 /* E2PDAMAGE, the enemy-to-player counterpart of BLTgetDamageValue: the hitter's base work goes
  * with it, and the reply is cached the same way. */
 int BLPgetDamageValue(void) {
-    int baseWork;
+    igObject *baseWork;
 
     baseWork = 0;
     if (g_hitterInfoName != 0) {
@@ -1963,7 +1916,7 @@ int BLPgetDamageValue(void) {
     beMessenger_AppendInt(g_beMessenger, g_mdlRamNo);
     beMessenger_AppendInt(g_beMessenger, g_hitterRecNo);
     beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
-    beMessenger_AppendObject(g_beMessenger, (void *)baseWork);
+    beMessenger_AppendObject(g_beMessenger, baseWork);
     beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
     g_damageResult = beMessenger_GetInt(g_beMessenger, 0);
     g_attackZokusei = beMessenger_GetInt(g_beMessenger, 1);
@@ -2005,7 +1958,7 @@ int BLPgetDamageRank(int scriptArg1, int scriptArg2) {
 /* E2PSTUNTIME. `scriptArg1`/`scriptArg2` are appended unchanged; the reply's first integer is the
  * stun duration. */
 int BLPgetStunTime(int scriptArg1, int scriptArg2) {
-    int baseWork;
+    igObject *baseWork;
 
     baseWork = 0;
     if (g_hitterInfoName != 0) {
@@ -2021,7 +1974,7 @@ int BLPgetStunTime(int scriptArg1, int scriptArg2) {
     beMessenger_AppendInt(g_beMessenger, g_mdlBulletKind);
     beMessenger_AppendInt(g_beMessenger, scriptArg1);
     beMessenger_AppendInt(g_beMessenger, scriptArg2);
-    beMessenger_AppendObject(g_beMessenger, (void *)baseWork);
+    beMessenger_AppendObject(g_beMessenger, baseWork);
     beMessenger_DispatchSelected(g_beMessenger, "FIGHTCALC");
     return beMessenger_GetInt(g_beMessenger, 0);
 }

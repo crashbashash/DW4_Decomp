@@ -61,6 +61,110 @@ void Gap__igPsx2AudioContext__vfunc_45(igPsx2AudioContextView *self)
     self->vfunc_44();
 }
 
+/* A voice's pending changes (byte 11) as the flush reads them, and the fields they send. */
+struct VoiceChanges {
+    unsigned char used : 1;
+    unsigned char flags8 : 4;
+    unsigned char streamed : 1;
+    unsigned char flags8b : 2;
+    unsigned char flags9 : 4;
+    unsigned char dirty : 1;
+    unsigned char flags9b : 3;
+    unsigned char pad10;
+    union {
+        unsigned char pending;
+        struct {
+            unsigned char volumeChanged : 1;
+            unsigned char pitchChanged : 1;
+            unsigned char panChanged : 1;
+            unsigned char playChanged : 1;
+            unsigned char sourceChanged : 1;
+            unsigned char stopChanged : 1;
+            unsigned char changes2 : 2;
+        } changed;
+    };
+};
+struct VoiceView {
+    unsigned int position;
+    int f4;
+    VoiceChanges state;
+    int pitch;
+    char pad16[12];
+    int pan;
+    char pad32[4];
+};
+struct CommandBuffer { char pad[40]; int *commands; int offset; };
+
+/* Sends every voice's pending changes to the IOP as one batch of 16-byte commands. */
+void Gap__igPsx2AudioContext__vfunc_46(igPsx2AudioContext *self) {
+    if (self->_immediateMode) return;
+    CommandBuffer *buffer = (CommandBuffer *)self;
+    int sent = 0;
+    int *command = buffer->commands + buffer->offset;
+    int count = ((igPsx2AudioSourceList *)g_audioTableOwner.p)->_count;
+    for (int i = 0; i < count; i++) {
+        VoiceView *v = &((VoiceView *)((igPsx2AudioSourceList *)g_audioTableOwner.p)->_data)[i];
+        if (!v->state.used) continue;
+        if (v->state.pending == 0) continue;
+        if (v->state.changed.sourceChanged) {
+            command[0] = i | 0xD0000;
+            command[1] = FUN_00145a10(self, v);
+            v->state.changed.sourceChanged = 0;
+            v->state.dirty = 0;
+            sent++;
+            command += 4;
+        }
+        if (v->state.changed.pitchChanged) {
+            sent++;
+            command[0] = i | 0x250000;
+            command[1] = v->pitch;
+            command += 4;
+        }
+        if (v->state.changed.volumeChanged) {
+            command[0] = i | 0x270000;
+            command[1] = FUN_00145960(self, v);
+            sent++;
+            command += 4;
+        }
+        if (v->state.changed.panChanged) {
+            sent++;
+            command[0] = i | 0x260000;
+            command[1] = v->pan;
+            command += 4;
+        }
+        if (v->state.changed.stopChanged) {
+            sent++;
+            command[0] = i | 0x2D0000;
+            command += 4;
+        }
+        if (v->state.changed.playChanged) {
+            if (v->state.streamed) {
+                command[1] = FUN_00145960(self, v);
+                command[2] = v->pitch;
+                if (v->state.dirty) {
+                    command[0] = i | 0x200000;
+                    command[3] = FUN_00145a10(self, v);
+                    v->state.dirty = 0;
+                } else {
+                    command[0] = i | 0x2A0000;
+                }
+                sent++;
+                command += 4;
+            } else {
+                sent++;
+                command[0] = i | 0x210000;
+                command += 4;
+            }
+        }
+        v->state.pending = 0;
+    }
+    if (sent <= 256 && sent != 0) {
+        int status;
+        igPsx2IopRpcConnection_Call(&status, self->_connection, 0x50000, buffer->commands + buffer->offset, sent * 16, 0, 0, 0);
+        buffer->offset = 1024 - buffer->offset;
+    }
+}
+
 int Gap__igPsx2AudioContext__vfunc_38(igPsx2AudioContext *arg0, int arg1) {
     int sp1C;
     int sp18;

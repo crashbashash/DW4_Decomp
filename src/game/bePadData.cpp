@@ -92,7 +92,7 @@ extern "C" void beLoadingNode_Lock(beLoadingNode *node)
     node->_stopTime = node->_lockTime;
 }
 
-extern "C" int beLoadingNode_IsPastPlayLimit(beLoadingNode *node)
+extern "C" unsigned char beLoadingNode_IsPastPlayLimit(beLoadingNode *node)
 {
     return node->_playTime > node->_playLimitTime;
 }

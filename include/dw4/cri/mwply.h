@@ -192,10 +192,10 @@ struct MwsfdPly {
     char *inputBuf;                 /* 472: the input ring buffer */
     int inputBufSize;               /* 476 */
     int inputXSize;                 /* 480 */
-    int srcType;                    /* 484: 2 for a caller's SJ */
-    int src488;                     /* 488 */
-    int src492;                     /* 492 */
-    int src496;                     /* 496 */
+    int srcType;                    /* 484: SfdSupplyKind of a caller's SJ (2) */
+    unsigned int srcBuf;            /* 488: the caller's SJ: buffer address, size and extra size, all 0 */
+    int srcSize;                    /* 492 */
+    int srcXSize;                   /* 496 */
     SfdSj *memSj;                   /* 500: the SJ made over mwSfdStartMem's buffer */
     char *memBuf;                   /* 504 */
     int memSize;                    /* 508 */

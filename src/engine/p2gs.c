@@ -448,9 +448,102 @@ void p2FlushGsRegisters(void) {
 
 extern unsigned int DAT_00491000, DAT_00491004, DAT_00491008, DAT_0049100c, DAT_00491010, DAT_00491018;
 extern VifCode DAT_00491020;
-extern unsigned long long DAT_00491030, DAT_00491038;
+/* A GIF tag as its two doublewords: the tag proper and the register descriptors. */
+typedef struct GifTagWords {
+    unsigned long long tag;
+    unsigned long long regs;
+} GifTagWords;
+
+extern GifTagWords DAT_00491030;
 extern unsigned int DAT_0056aec8;
 
+/* A packet write position, stepped by words, doublewords or quadwords. */
+typedef union p2PacketPointer {
+    unsigned int *w;
+    unsigned long long *d;
+    unsigned __int128 *q;
+} p2PacketPointer;
+
+static inline void p2PutWord(unsigned int *dest, unsigned int word) {
+    *dest = word;
+}
+
+static inline void p2PutGifTag(unsigned __int128 *dest, const GifTagWords *tag) {
+    ((unsigned long long *)dest)[0] = tag->tag;
+    ((unsigned long long *)dest)[1] = tag->regs;
+}
+
+extern DmaTag DAT_00490fc0;
+extern VifCode DAT_00490fd0;
+extern VifCode DAT_00490fd8;
+extern VifCode DAT_00490fe0;
+extern unsigned int DAT_00490fe8;
+extern GifQuad DAT_00490ff0;
+extern unsigned int DAT_0056aec0;
+
+/* Loads the VU1 program with two GS registers set through the GIF (A+D): a DMA tag, the VIF codes
+ * ahead of the GIF tag, the GIF tag with its two register writes, then the VIF codes that start the
+ * program. */
+void FUN_001f7b00(void) {
+    p2PacketPointer p;
+    p2PacketPointer q;
+    GifQuad tag;
+
+    p.w = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
+    tag = DAT_00490ff0;
+    DAT_00490fe0.field.immediate = p2GetVuProgramAddress(DAT_0056ae40);
+    tag.f.nreg = 2;
+    DAT_00490fc0.f.qwc = 5;
+    p.w[0] = DAT_00490fc0.w[0];
+    p.w[1] = DAT_00490fc0.w[1];
+    p.w[2] = DAT_00490fc0.w[2];
+    p.w[3] = DAT_00490fc0.w[3];
+    p.q++;
+    DAT_00490fd8.field.immediate = 2;
+    DAT_00490fd0.field.num = 3;
+    p.w[0] = DAT_00490fe8;
+    p.w[1] = DAT_0056aec0;
+    p.w[2] = DAT_00490fd8.word;
+    p.w[3] = DAT_00490fd0.word;
+    p.q++;
+    p2PutGifTag(p.q, (GifTagWords *)&tag);
+    q.q = p.q + 1;
+    *q.d++ = ((unsigned long long *)p2CurrentGsRegisters)[55];
+    *q.d++ = 0x62;
+    *q.d++ = ((unsigned long long *)p2CurrentGsRegisters)[54];
+    *q.d++ = 0x61;
+    ((unsigned long long *)p.q)[1] = (~0ULL << 8) | 0xEE;
+    DAT_00490fd8.field.immediate = 3;
+    q.w[0] = DAT_00490fd8.word;
+    q.w[1] = DAT_00490fe0.word;
+    q.w[2] = DAT_0056aec0;
+    q.w[3] = DAT_00490fe8;
+    p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)(q.w + 4);
+}
+
+/* Restarts the VU1 program: a DMA tag, the VIF codes around the program's GIF tag, then an MSCAL of
+ * its entry address. */
+void FUN_001f7c90(void) {
+    p2PacketPointer p;
+
+    p.w = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
+    DAT_00491020.field.immediate = p2GetVuProgramAddress(DAT_0056ae40);
+    p.w[0] = DAT_00491000;
+    p.w[1] = DAT_00491004;
+    p.w[2] = DAT_00491008;
+    p.w[3] = DAT_0049100c;
+    p.w += 4;
+    p2PutWord(p.w++, DAT_0056aec8);
+    p2PutWord(p.w++, DAT_0056aec8);
+    p2PutWord(p.w++, DAT_00491018);
+    p2PutWord(p.w++, DAT_00491010);
+    p2PutGifTag(p.q++, &DAT_00491030);
+    p2PutWord(p.w++, DAT_00491020.word);
+    p2PutWord(p.w++, DAT_0056aec8);
+    p2PutWord(p.w++, DAT_0056aec8);
+    p2PutWord(p.w++, DAT_0056aec8);
+    p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)p.w;
+}
 
 void FUN_001f7db0(unsigned int addr, int unused, int flush) {
     unsigned int *p = (unsigned int *)p2DmaCurrentPacket[P2_DMA_GIF]->cursor;
@@ -470,6 +563,9 @@ void FUN_001f7db0(unsigned int addr, int unused, int flush) {
         }
     }
 }
+
+extern DmaTag DAT_00491050;
+extern GifQuad DAT_00491060;
 
 /* Reads one of the Graphics Synthesizer privileged registers by register number. The numbers are
  * the GS register-map indices; the memory-mapped address is 0x12000000 + (index << 4) for the
@@ -563,6 +659,35 @@ void FUN_001f8320(void) {
     if (*(int *)0x490B60 != 0) {
         p2readGSPrivRegister(0x48);
     }
+}
+
+int AddIntcHandler(int cause, int (*handler)(int cause), int next);
+int EnableIntc(int cause);
+extern int p2FirstOpen;
+extern int p2GsIntcHandlerId;
+
+void FUN_001f8350(void) {
+    VifCode unpack = { 0x8000, 0, 0x6c };
+    VifCode nop = { 0 };
+    VifCode mark = { 2, 0, 7 };
+    VifCode mscal = { 0, 0, 0x14 };
+    VifCode flusha = { 0, 0, 0x13 };
+
+    p2GsIntcHandlerId = AddIntcHandler(0, FUN_001f7530, 0);
+    if (p2FirstOpen != 0) {
+        FUN_001f7490();
+    }
+    EnableIntc(0);
+    *(int *)0x10003010 = 4;
+    DAT_0056ae38[0] = 0;
+    DAT_0056aea0.code[0].word = nop.word;
+    DAT_0056aea0.code[1].word = nop.word;
+    DAT_0056aea0.code[2].word = mark.word;
+    DAT_0056aea0.code[3].word = unpack.word;
+    DAT_0056aeb0.code[0].word = mark.word;
+    DAT_0056aeb0.code[1].word = flusha.word;
+    DAT_0056aeb0.code[2].word = mscal.word;
+    DAT_0056aeb0.code[3].word = flusha.word;
 }
 
 void FUN_001f8490(void) {

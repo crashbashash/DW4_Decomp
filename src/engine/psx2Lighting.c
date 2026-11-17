@@ -1,7 +1,26 @@
 #include <string.h>
 #include "dw4/p2core.h"
+#include "dw4/p2dma.h"
+#include "dw4/dmaChannel.h"
+#include "dw4/p2draw.h"
 #include "dw4/p2lighting.h"
 #include "dw4/renderState.h"
+
+/* A VIF code, written to the packet as one word. */
+typedef union p2VifCode {
+    struct {
+        unsigned short immediate;
+        unsigned char num;
+        unsigned char command;
+    } field;
+    unsigned int word;
+} p2VifCode;
+
+/* A DMA tag with its quadword count in the low half, written to the packet as four words. */
+typedef union p2DmaTag {
+    unsigned short qwc;
+    unsigned int word[4];
+} p2DmaTag;
 
 /* p2DirtyFlags: the renderer state the next draw must send again. */
 enum {
@@ -14,6 +33,7 @@ enum {
 };
 
 float sqrtf(float x);
+void FUN_001fb710(unsigned int *cursor, int sameCount);
 
 extern char p2LightingEnabled;
 extern char p2LightsNeedTransform;
@@ -30,6 +50,16 @@ extern int p2NormalArraySource;
 extern int p2NormalArrayMask;
 extern int p2LightSpecular;
 extern float p2LightMatrix[16];
+extern p2DmaTag p2LightingTag;
+extern p2VifCode p2LightingFlush;
+extern p2VifCode p2LightingUnpack;
+extern p2VifCode p2LightingMark;
+extern p2VifCode p2LightingNop;
+extern int DAT_0056af90;
+extern int DAT_0056af94;
+extern int DAT_0056afa4;
+extern int DAT_0056afa8;
+extern char DAT_0056afac[5];
 
 void p2InitLighting(void) {
     int i;
@@ -130,11 +160,126 @@ void p2SetMaterial(int slot, p2Material *material) {
     p2DirtyFlags |= P2_DIRTY_LIGHTING;
 }
 
+/* the lighting mode lights with the texgen variant */
+static inline int p2IsMode51(void) {
+    unsigned char r = 1;
+
+    if (p2LightingMode != 1 && p2LightingMode != 5) {
+        r = 0;
+    }
+    return r;
+}
+
+static inline int p2NoSpot(void) {
+    return !DAT_0056afa4;
+}
+
+static inline int p2SameCount(void) {
+    unsigned char r = 0;
+
+    if (DAT_0056afa8 == DAT_0056af94 && p2NoSpot()) {
+        r = 1;
+    }
+    return r;
+}
+
 void p2SetLightingMode(int mode) {
     p2LightingMode = mode;
     p2LightsChanged = 1;
     p2StatLightingModeSets += 1;
     p2DirtyFlags |= P2_DIRTY_LIGHTING | 0x01;
+}
+
+unsigned int *FUN_001fb0e0(unsigned int *cursor) {
+    unsigned char newPacket;
+    int refresh;
+    unsigned int *tag;
+    int texgen;
+    int mode51;
+    int sameCount;
+    int words;
+    unsigned int *p;
+
+    if (p2LightingEnabled != 0) {
+        refresh = cursor == (unsigned int *)-1;
+        newPacket = cursor == 0 || refresh;
+        tag = 0;
+        texgen = (p2ProgramFlags[p2CurrentProgram] >> 12) & 1;
+        mode51 = p2IsMode51();
+        sameCount = p2SameCount();
+        if ((refresh && (p2DirtyFlags & P2_DIRTY_LIGHTING)) ||
+            (DAT_0056af90 == 0 && DAT_0056afac[1] == 0)) {
+            return 0;
+        }
+        if (newPacket) {
+            cursor = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
+            tag = cursor;
+            cursor += 4;
+        }
+        if (DAT_0056afac[1] != 0) {
+            p2LightingTag.qwc = DAT_0056af94 * (sameCount ? 2 : 4) + 5;
+            p2LightingUnpack.field.num = DAT_0056af94 * (sameCount ? 2 : 4) + 4;
+            words = p2LightingUnpack.field.num * 4;
+            if (DAT_0056afac[2] != 0) {
+                p2LightingTag.qwc += 7;
+                p2LightingUnpack.field.num += 7;
+                words += 28;
+                if (texgen && mode51) {
+                    words += 4;
+                    p2LightingTag.qwc += 1;
+                    p2LightingUnpack.field.num += 1;
+                }
+            }
+            p2LightingUnpack.field.immediate = p2VuBuffers.address7;
+            /* matching construct: hand search — the word written through a copy of the cursor */
+            p = cursor++;
+            *p = p2LightingFlush.word;
+            p = cursor++;
+            *p = p2LightingMark.word;
+            p = cursor++;
+            *p = p2LightingNop.word;
+            p = cursor++;
+            *p = p2LightingUnpack.word;
+            FUN_001fb710(cursor, sameCount);
+            cursor += words;
+        } else {
+            if (p2LightSpecular != 0) {
+                p2LightingUnpack.field.num = 6;
+                p2LightingTag.qwc = 7;
+                words = 24;
+            } else {
+                p2LightingUnpack.field.num = 3;
+                p2LightingTag.qwc = 4;
+                words = 12;
+            }
+            p2LightingUnpack.field.immediate = p2VuBuffers.address7;
+            p = cursor++;
+            *p = p2LightingFlush.word;
+            p = cursor++;
+            *p = p2LightingNop.word;
+            p = cursor++;
+            *p = p2LightingMark.word;
+            p = cursor++;
+            *p = p2LightingUnpack.word;
+            p2WriteDirectionalLights((float (*)[4])cursor);
+            cursor += words;
+        }
+        if (newPacket) {
+            tag[0] = p2LightingTag.word[0];
+            tag[1] = p2LightingTag.word[1];
+            tag[2] = p2LightingTag.word[2];
+            tag[3] = p2LightingTag.word[3];
+            p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)cursor;
+            if (p2DmaCurrentPacket[P2_DMA_VIF1]->cursor >= p2DmaCurrentPacket[P2_DMA_VIF1]->limit) {
+                if (p2DisplayListMode != 0) {
+                    p2GrowDisplayList();
+                } else {
+                    p2SubmitDmaPacket(P2_DMA_VIF1);
+                }
+            }
+        }
+    }
+    return cursor;
 }
 
 /* Writes the first four directional lights' directions as three rows (x, y, z of each light),
@@ -201,9 +346,21 @@ void p2WriteDirectionalLights(float rows[][4]) {
     }
 }
 
-/* Stores the adjoint (the transposed cofactors) of the row-major 4x4 matrix m. The value returned
- * takes the first row against the adjoint's first column with alternating signs, which is the
- * determinant only when m[1] * adjoint[4] + m[3] * adjoint[12] is zero. */
+static inline void p2CopyMatrix(float *dst, const float *src) {
+    int i;
+
+    if ((((unsigned int)dst | (unsigned int)src) & 0xF) == 0) {
+        ((__int128 *)dst)[0] = ((const __int128 *)src)[0];
+        ((__int128 *)dst)[1] = ((const __int128 *)src)[1];
+        ((__int128 *)dst)[2] = ((const __int128 *)src)[2];
+        ((__int128 *)dst)[3] = ((const __int128 *)src)[3];
+    } else {
+        for (i = 0; i < 16; i++) {
+            *dst++ = *src++;
+        }
+    }
+}
+
 float p2AdjointMatrix(const float *m, float *adjoint) {
     /* matching construct: declaration-order search — MWCC hands out the float registers in this order */
     float m0;

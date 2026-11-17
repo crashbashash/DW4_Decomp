@@ -23,8 +23,8 @@ void thunk_FUN_001592c0__0016e390(LongListStorageView *self) {
     FUN_001592c0(self);
 }
 
-void Gap__Gfx__igPsx2Image__vfunc_23(int dummy0, void **arg1) {
-    FUN_001563b0();
+void Gap__Gfx__igPsx2Image__vfunc_23(igImage *self, void **arg1, int deep) {
+    FUN_001563b0(self, (igImage *)arg1, deep);
     ((DW4VC_88_0 *)(arg1))->vX();
 }
 

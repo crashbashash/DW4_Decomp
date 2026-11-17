@@ -209,6 +209,21 @@ class SourceApprovals(unittest.TestCase):
     def test_the_shipped_table_has_no_stale_row(self):
         self.assertEqual(sa.stale(), [])
 
+    def test_an_inline_helper_is_not_listed_as_awaiting_approval(self):
+        path = self.write("a.c", 'static inline int h(void) { volatile int x; asm("nop"); return x; }\n'
+                                 "int f(void) { return h(); }\n")
+        waiting = {name for name, _path, _why in sa.awaiting({"h": path, "f": path}, {})}
+        self.assertIn("f", waiting)
+        self.assertNotIn("h", waiting)
+
+    def test_the_semaphore_interrupt_helper_answers_through_its_callers(self):
+        # interruptEnableStatus (static inline) is covered by igPsx2Semaphore_Signal/_Wait's rows
+        index = sa._index()
+        self.assertIn("interruptEnableStatus", index)
+        listed = {name for name, _path, _why in sa.awaiting(index)}
+        self.assertNotIn("interruptEnableStatus", listed)
+        self.assertFalse({"igPsx2Semaphore_Signal", "igPsx2Semaphore_Wait"} & listed)
+
 
 if __name__ == "__main__":
     unittest.main()

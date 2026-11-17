@@ -8,7 +8,7 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-int beLoadingNode_IsPastPlayLimit(struct beLoadingNode *node);
+unsigned char beLoadingNode_IsPastPlayLimit(struct beLoadingNode *node);
 void beLoadingNode_Lock(struct beLoadingNode *node);
 void beLoadingNode_RegisterTraversalFunction(void);
 struct igMetaObject *beLoadingNode_ResolveMetaObject(void);

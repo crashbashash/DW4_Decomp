@@ -92,7 +92,8 @@ typedef struct UploadEntry {
     unsigned char a0 : 2;
     unsigned char b2 : 1;
     unsigned char b3 : 1;
-    unsigned char a4 : 3;
+    unsigned char a4 : 2;
+    unsigned char b6 : 1;
     unsigned char b7 : 1;
     unsigned char c0 : 1;
     unsigned char c1 : 3;

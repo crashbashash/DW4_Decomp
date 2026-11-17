@@ -305,8 +305,8 @@ void FUN_0018ff10(int *arg0, int arg1) {
     }
 }
 
-void FUN_0018ff50(void **arg0, int arg1) {
-    FUN_0018fb40(((DW4VC_88_0 *)(arg0))->vX())(arg0, arg1);
+int FUN_0018ff50(void **arg0, const float *arg1) {
+    return FUN_0018fb40(((DW4VC_88_0 *)(arg0))->vX())(arg0, (int)arg1);
 }
 
 int FUN_0018ffa0(void **arg0, void **arg1) {
@@ -316,8 +316,8 @@ int FUN_0018ffa0(void **arg0, void **arg1) {
     return FUN_0018fa80(temp_s0, ((DW4VC_88_0 *)(arg1))->vX())(arg0, arg1);
 }
 
-void FUN_00190010(void **arg0, int arg1) {
-    FUN_0018fb20(((DW4VC_88_0 *)(arg0))->vX())(arg0, arg1);
+int FUN_00190010(void **arg0, int arg1) {
+    return FUN_0018fb20(((DW4VC_88_0 *)(arg0))->vX())(arg0, arg1);
 }
 
 void igVolume_ExtendBy(void **arg0, void **arg1) {

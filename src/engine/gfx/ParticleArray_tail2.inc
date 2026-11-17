@@ -7,6 +7,7 @@ void Gap__Bec__ParticleArray__vfunc_15(void *arg0) {
     }
 }
 
+
 void Gap__Bec__ParticleArray__vfunc_36(ParticleArray *arg0) {
     igObject *t;
     PointSpriteView *s0;
@@ -206,6 +207,7 @@ void FUN_0015d0a0(igPointSpriteExt *arg0, int arg1, void *arg2) {
     *(float *)((char *)(arg2) + 4) = (float) *(float *)((char *)(temp_v1) + 4);
 }
 
+
 void FUN_0015d4d0(S4d0 *s)
 {
   int sw, sh;
@@ -343,10 +345,10 @@ void FUN_0015dae0(igPointSpriteExtView *self, unsigned int index, float value)
     self->_vertexArray->vfunc_51(index, value);
 }
 
-void igPointSpriteExt_SetSize(Sdb00 *arg0, int arg1, V2f *arg2) {
+void igPointSpriteExt_SetSize(Sdb00 *arg0, int arg1, igVec2f arg2) {
     V2f v;
-    v.x = arg2->x;
-    v.y = arg2->y;
+    v.x = arg2.x;
+    v.y = arg2.y;
     arg0->o->vX(arg1, &v);
 }
 

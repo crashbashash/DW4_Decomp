@@ -36,6 +36,61 @@ void FUN_00170210(void *arg0) {
     *(int *)((char *)(arg0) + 108) = 8;
 }
 
+void FUN_001702c0(igPsx2VisualContext *vc) {
+    int sp5C;
+    int bi;
+    Buf_17a070 *b;
+    void *lights;
+    int i;
+    sp5C = 0x20;
+    thunk_igRegistry_GetValueInt(*(igRegistry **)((char *)g_objectSystem + 56), 4, "IG_GFX_VC_LIGHT_ARRAY_SIZE", &sp5C, 0x20, 0);
+    Buf_17a070 *r = (Buf_17a070 *)Memory_AllocateBufferDirect(0x14, (igMemoryPoolView *)FUN_00165d10((int *)vc));
+    if (r != 0) {
+        bi = (int)r;
+        b = (Buf_17a070 *)bi;
+        int n = sp5C;
+        Owner_17a070 *ow;
+        int k;
+        int *old;
+        int *tok;
+        b->f8 = 0;
+        if (g_stringPool == 0) {
+            StringPool *pool = (StringPool *)StringPool_Allocate(0x10);
+            if (pool != 0) pool = StringPool_Construct(pool);
+            g_stringPool = pool;
+        }
+        tok = (int *)StringPool_Intern(g_stringPool, "IG_GFX_VC_LIGHT_ARRAY_SIZE");
+        old = (int *)b->f8;
+        if (old != 0) {
+            int *h = old - 2;
+            int c = old[-1] - 1;
+            old[-1] = c;
+            if (c == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
+        }
+        b->f8 = (int)tok;
+        if (n == 0) n = 1;
+        ow = (Owner_17a070 *)Memory_FindBufferOwner(b);
+        b->f16 = ow->v228(n, 0xA0, 0x10);
+        b->f12 = (short *)ow->v224(n, 2);
+        b->s2 = n;
+        b->s0 = n;
+        b->s4 = n;
+        for (k = 0; k < n; k++) b->f12[k] = (short)k;
+        r = (Buf_17a070 *)bi;
+    }
+    vc->_pLightList = (int)r;
+    lights = Memory_AllocateAlignedWithAllocator(0x70, 0x10, (igMemoryPoolView *)FUN_00165ce0((int *)vc));
+    if (lights != 0) FUN_001716c0(lights);
+    vc->_currentMaterial = (int)lights;
+    FUN_001716c0((void *)vc->_currentMaterial);
+    DAT_00560850[0] = ((LightCapsDispatch *)vc)->getCapability(9);
+    DAT_00560858[0] = ((PoolAllocDispatch *)FUN_00165ce0((int *)vc))->allocate(DAT_00560850[0] * 4);
+    for (i = 0; i < DAT_00560850[0]; i++) {
+        ((int *)DAT_00560858[0])[i] = -1;
+    }
+    igMatrix44f_SetIdentity(g_gfxIdentityMatrix.m);
+}
+
 void FUN_00170510(Obj_170510 *o, int arg1) {
     int s0;
     T_170510 *t;
@@ -902,6 +957,114 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_203(igPsx2VisualContext *self, int arg
         igMatrix44f_Invert(&sp150, sp50, arg2);
         FUN_001903d0(sp50);
         SET((St_172b00 *)self->_invTransBlendMat3, sp50)
+        break;
+    }
+}
+
+void Gap__Gfx__igPsx2VisualContext__vfunc_204(igPsx2VisualContext *self, int arg1, char *arg2) {
+    int det0, det1, det2, det3;
+    char inverse0[64];
+    char inverse1[64];
+    char inverse2[64];
+    char inverse3[64];
+    St_172b00 *t;
+    switch (arg1) {
+    case 0:
+        FUN_001e68e0((St_172b00 *)self->_projMat, arg2);
+        t = (St_172b00 *)self->_projMat;
+        FUN_001fbce0(3, t->data + ((t->n - 1) << 6));
+        break;
+    case 1:
+        FUN_001e68e0((St_172b00 *)self->_mvMat, arg2);
+        t = (St_172b00 *)self->_mvMat;
+        FUN_001fbce0(0, t->data + ((t->n - 1) << 6));
+        break;
+    case 2:
+        FUN_001e68e0((St_172b00 *)self->_texMat, arg2);
+        t = (St_172b00 *)self->_texMat;
+        FUN_001fbce0(4, t->data + ((t->n - 1) << 6));
+        break;
+    case 10:
+        igMatrix44f_SetIdentity((float *)inverse0);
+        FUN_001e68e0((St_172b00 *)self->_blendMat0, arg2);
+        igMatrix44f_Invert(&det0, inverse0, arg2);
+        FUN_001903d0(inverse0);
+        SET((St_172b00 *)self->_invTransBlendMat0, inverse0)
+        break;
+    case 11:
+        igMatrix44f_SetIdentity((float *)inverse1);
+        FUN_001e68e0((St_172b00 *)self->_blendMat1, arg2);
+        igMatrix44f_Invert(&det1, inverse1, arg2);
+        FUN_001903d0(inverse1);
+        SET((St_172b00 *)self->_invTransBlendMat1, inverse1)
+        break;
+    case 12:
+        igMatrix44f_SetIdentity((float *)inverse2);
+        FUN_001e68e0((St_172b00 *)self->_blendMat2, arg2);
+        igMatrix44f_Invert(&det2, inverse2, arg2);
+        FUN_001903d0(inverse2);
+        SET((St_172b00 *)self->_invTransBlendMat2, inverse2)
+        break;
+    case 13:
+        igMatrix44f_SetIdentity((float *)inverse3);
+        FUN_001e68e0((St_172b00 *)self->_blendMat3, arg2);
+        igMatrix44f_Invert(&det3, inverse3, arg2);
+        FUN_001903d0(inverse3);
+        SET((St_172b00 *)self->_invTransBlendMat3, inverse3)
+        break;
+    }
+}
+
+void Gap__Gfx__igPsx2VisualContext__vfunc_205(igPsx2VisualContext *self, int arg1, char *arg2) {
+    int det0, det1, det2, det3;
+    char inverse0[64];
+    char inverse1[64];
+    char inverse2[64];
+    char inverse3[64];
+    St_172b00 *t;
+    switch (arg1) {
+    case 0:
+        FUN_001e69e0((St_172b00 *)self->_projMat, arg2);
+        t = (St_172b00 *)self->_projMat;
+        FUN_001fbce0(3, t->data + ((t->n - 1) << 6));
+        break;
+    case 1:
+        FUN_001e69e0((St_172b00 *)self->_mvMat, arg2);
+        t = (St_172b00 *)self->_mvMat;
+        FUN_001fbce0(0, t->data + ((t->n - 1) << 6));
+        break;
+    case 2:
+        FUN_001e69e0((St_172b00 *)self->_texMat, arg2);
+        t = (St_172b00 *)self->_texMat;
+        FUN_001fbce0(4, t->data + ((t->n - 1) << 6));
+        break;
+    case 10:
+        igMatrix44f_SetIdentity((float *)inverse0);
+        FUN_001e69e0((St_172b00 *)self->_blendMat0, arg2);
+        igMatrix44f_Invert(&det0, inverse0, arg2);
+        FUN_001903d0(inverse0);
+        SET((St_172b00 *)self->_invTransBlendMat0, inverse0)
+        break;
+    case 11:
+        igMatrix44f_SetIdentity((float *)inverse1);
+        FUN_001e69e0((St_172b00 *)self->_blendMat1, arg2);
+        igMatrix44f_Invert(&det1, inverse1, arg2);
+        FUN_001903d0(inverse1);
+        SET((St_172b00 *)self->_invTransBlendMat1, inverse1)
+        break;
+    case 12:
+        igMatrix44f_SetIdentity((float *)inverse2);
+        FUN_001e69e0((St_172b00 *)self->_blendMat2, arg2);
+        igMatrix44f_Invert(&det2, inverse2, arg2);
+        FUN_001903d0(inverse2);
+        SET((St_172b00 *)self->_invTransBlendMat2, inverse2)
+        break;
+    case 13:
+        igMatrix44f_SetIdentity((float *)inverse3);
+        FUN_001e69e0((St_172b00 *)self->_blendMat3, arg2);
+        igMatrix44f_Invert(&det3, inverse3, arg2);
+        FUN_001903d0(inverse3);
+        SET((St_172b00 *)self->_invTransBlendMat3, inverse3)
         break;
     }
 }

@@ -17,9 +17,7 @@ void FUN_001815b0(int n, unsigned i, int base, int stride, CountedVertexWriter *
     int x2;
     float A[3];
     unsigned end;
-    float B[2];
-    float C[2];
-    float D[2];
+    igVec2f B;
     int x;
     if (a5 != 0) {
         if (a4 != 0) ++a4->refs;
@@ -38,10 +36,9 @@ void FUN_001815b0(int n, unsigned i, int base, int stride, CountedVertexWriter *
             x = FUN_001818b0(p);
             FUN_00181860((float *)A, (float *)x, (float *)(FUN_001818a0(p)), f);
             x = FUN_00181850(p);
-            FUN_00181810((float *)B, (float *)x, (float *)(FUN_00181840(p)), f);
+            FUN_00181810((float *)&B, (float *)x, (float *)(FUN_00181840(p)), f);
             a5->v144(i, A);
-            C[0] = B[0]; C[1] = B[1];
-            igPointSpriteExt_SetSize((Sdb00 *)a5, i, (V2f *)C);
+            igPointSpriteExt_SetSize((Sdb00 *)a5, i, B);
         }
         {
             CountedVertexWriter *old = a5->f24;
@@ -60,10 +57,9 @@ void FUN_001815b0(int n, unsigned i, int base, int stride, CountedVertexWriter *
         x2 = FUN_001818b0(p2);
         FUN_00181860((float *)A, (float *)x2, (float *)(FUN_001818a0(p2)), f);
         x2 = FUN_00181850(p2);
-        FUN_00181810((float *)B, (float *)x2, (float *)(FUN_00181840(p2)), f);
+        FUN_00181810((float *)&B, (float *)x2, (float *)(FUN_00181840(p2)), f);
         a4->v116(i, A);
-        D[0] = B[0]; D[1] = B[1];
-        a4->v220(i, D);
+        a4->v220(i, B);
     }
 }
 
@@ -183,6 +179,70 @@ void FUN_00181b30(float *a, float *b, float *c, float *d, float x, float y) {
 
 int FUN_00181b50(int arg0) {
     return arg0 + 0x64;
+}
+
+void FUN_00181b60(int n, unsigned int i, int particles, int particleSize, CountedVertexWriter *array, CountedVertexWriter *sprite, float time) {
+    float position[3];
+    igVec2f size;
+    float timeSquared;
+    int particle;
+    int particle2;
+    int pos2;
+    CountedVertexWriter *old2;
+    CountedVertexWriter *old;
+    int sizePos;
+    int pos;
+    unsigned end;
+    unsigned end2;
+    int sizePos2;
+    int sizeVel;
+    int sizeVel2;
+
+    timeSquared = time * time;
+    if (sprite != 0) {
+        if (array != 0) {
+            array->refs = array->refs + 1;
+        }
+        old = sprite->f24;
+        if (old != 0) {
+            old->refs = old->refs - 1;
+            if (((unsigned long long)((long long)(int)old->refs << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(old);
+            }
+        }
+        sprite->f24 = array;
+        end = i + n;
+        for (; i < end; i++) {
+            particle = particles + i * particleSize;
+            pos = FUN_001818b0(particle);
+            FUN_00181860(position, (float *)pos, (float *)FUN_001818a0(particle), time);
+            sizePos = FUN_00181850(particle);
+            sizeVel = FUN_00181840(particle);
+            FUN_00181df0((float *)&size, (float *)sizePos, (float *)sizeVel, (float *)FUN_00181b50(particle), time, timeSquared);
+            sprite->v144(i, position);
+            igPointSpriteExt_SetSize((Sdb00 *)sprite, i, size);
+        }
+        old2 = sprite->f24;
+        if (old2 != 0) {
+            old2->refs = old2->refs - 1;
+            if (((unsigned long long)((long long)(int)old2->refs << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(old2);
+            }
+        }
+        sprite->f24 = 0;
+    } else {
+        end2 = i + n;
+        for (; i < end2; i++) {
+            particle2 = particles + i * particleSize;
+            pos2 = FUN_001818b0(particle2);
+            FUN_00181860(position, (float *)pos2, (float *)FUN_001818a0(particle2), time);
+            sizePos2 = FUN_00181850(particle2);
+            sizeVel2 = FUN_00181840(particle2);
+            FUN_00181df0((float *)&size, (float *)sizePos2, (float *)sizeVel2, (float *)FUN_00181b50(particle2), time, timeSquared);
+            array->v116(i, position);
+            array->v220(i, size);
+        }
+    }
 }
 
 static inline void scale(float *r, const float *v, float s) { r[0] = v[0]*s; r[1] = v[1]*s; }
@@ -311,7 +371,7 @@ void FUN_00182110(int arg0, unsigned arg1, int arg2, int arg3, B_182110 *arg4, B
             FUN_00181860((float *)spB0, (float *)temp_s0, (float *)(FUN_001818a0(temp_s1)), fparg0);
             temp_s0_2 = FUN_00182100(temp_s1);
             temp_s6 = FUN_001820f0(temp_s1);
-            FUN_00182440(spA0, temp_s0_2, temp_s6, FUN_001824c0(temp_s1), fparg0, temp_f20);
+            FUN_00182440((igVec4f *)spA0, (igVec4f *)temp_s0_2, (igVec4f *)temp_s6, (igVec4f *)(FUN_001824c0(temp_s1)), fparg0, temp_f20);
             temp_s0_3 = FUN_00181850(temp_s1);
             FUN_00182420(&spBC, (float *)temp_s0_3, (float *)(FUN_00181840(temp_s1)), fparg0);
             arg5->v144(arg1, spB0);
@@ -334,7 +394,7 @@ void FUN_00182110(int arg0, unsigned arg1, int arg2, int arg3, B_182110 *arg4, B
             FUN_00181860((float *)spB0, (float *)temp_s1_2, (float *)(FUN_001818a0(temp_s2)), fparg0);
             temp_s1_3 = FUN_00182100(temp_s2);
             temp_s6_2 = FUN_001820f0(temp_s2);
-            FUN_00182440(spA0, temp_s1_3, temp_s6_2, FUN_001824c0(temp_s2), fparg0, temp_f20);
+            FUN_00182440((igVec4f *)spA0, (igVec4f *)temp_s1_3, (igVec4f *)temp_s6_2, (igVec4f *)(FUN_001824c0(temp_s2)), fparg0, temp_f20);
             temp_s1_4 = FUN_00181850(temp_s2);
             FUN_00182420(&spBC, (float *)temp_s1_4, (float *)(FUN_00181840(temp_s2)), fparg0);
             arg4->v116(arg1, spB0);
@@ -348,13 +408,17 @@ void FUN_00182420(float *arg0, float *arg1, float *arg2, float fparg0) {
     *arg0 = *arg1 + (*arg2 * fparg0);
 }
 
+void FUN_00182440(igVec4f *out, const igVec4f *a, const igVec4f *b, const igVec4f *c, float s, float t) {
+    *out = *a + *b * s + *c * t;
+}
+
 int FUN_001824c0(int arg0) {
     return arg0 + 0x44;
 }
 
 void FUN_001824d0(int arg0, unsigned arg1, int arg2, int arg3, B_1824d0 *arg4, B_1824d0 *arg5, float fparg0) {
     int spD0[3];
-    Vec2 spC8;
+    igVec2f spC8;
     int spA0[4];
     float sq;
     B_1824d0 *t;
@@ -389,13 +453,13 @@ void FUN_001824d0(int arg0, unsigned arg1, int arg2, int arg3, B_1824d0 *arg4, B
             FUN_00181860((float *)spD0, (float *)a, (float *)b, fparg0);
             a = FUN_00182100(p);
             b = FUN_001820f0(p);
-            FUN_00182440(spA0, a, b, FUN_001824c0(p), fparg0, sq);
+            FUN_00182440((igVec4f *)spA0, (igVec4f *)a, (igVec4f *)b, (igVec4f *)(FUN_001824c0(p)), fparg0, sq);
             a = FUN_00181850(p);
             b = FUN_00181840(p);
             FUN_00181810((float *)&spC8, (float *)a, (float *)b, fparg0);
             arg5->v144(arg1, spD0);
             arg5->v152(arg1, igVec4f_PackColor((float *)spA0, 1));
-            { Vec2 copy = spC8; igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, (V2f *)&copy); };
+            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, spC8);
         }
         t2 = arg5->f24;
         if (t2 != 0) {
@@ -414,7 +478,7 @@ void FUN_001824d0(int arg0, unsigned arg1, int arg2, int arg3, B_1824d0 *arg4, B
             FUN_00181860((float *)spD0, (float *)a2, (float *)b2, fparg0);
             a2 = FUN_00182100(p2);
             b2 = FUN_001820f0(p2);
-            FUN_00182440(spA0, a2, b2, FUN_001824c0(p2), fparg0, sq);
+            FUN_00182440((igVec4f *)spA0, (igVec4f *)a2, (igVec4f *)b2, (igVec4f *)(FUN_001824c0(p2)), fparg0, sq);
             a2 = FUN_00181850(p2);
             b2 = FUN_00181840(p2);
             FUN_00181810((float *)&spC8, (float *)a2, (float *)b2, fparg0);
@@ -499,9 +563,7 @@ void FUN_00182800(int arg0, unsigned arg1, int arg2, int arg3, Ref_182800 *arg4,
 
 void FUN_00182b00(int arg0, unsigned arg1, int arg2, int arg3, VertexArrayTargetEx *arg4, VertexArrayTargetEx *arg5, float fparg0) {
     int spC0[3];
-    TexCoordPair spB8;
-    TexCoordPair spB0;
-    TexCoordPair spA8;
+    igVec2f spB8;
     int sp90[4];
     float temp_f20;
     VertexArrayTargetEx *t;
@@ -544,8 +606,7 @@ void FUN_00182b00(int arg0, unsigned arg1, int arg2, int arg3, VertexArrayTarget
             FUN_00181df0((float *)&spB8, (float *)temp_s1_3, (float *)temp_s2_2, (float *)(FUN_00181b50(temp_s2)), fparg0, temp_f20);
             arg5->v144(arg1, spC0);
             arg5->v152(arg1, igVec4f_PackColor((float *)sp90, 1));
-            spB0 = spB8;
-            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, (V2f *)&spB0);
+            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, spB8);
         }
         t2 = arg5->f24;
         if (t2 != 0) {
@@ -568,8 +629,7 @@ void FUN_00182b00(int arg0, unsigned arg1, int arg2, int arg3, VertexArrayTarget
             FUN_00181df0((float *)&spB8, (float *)temp_s0_3, (float *)temp_s1_5, (float *)(FUN_00181b50(temp_s1_4)), fparg0, temp_f20);
             arg4->v116(arg1, spC0);
             arg4->v164(arg1, igVec4f_PackColor((float *)sp90, 1));
-            spA8 = spB8;
-            arg4->v220(arg1, &spA8);
+            arg4->v220(arg1, spB8);
         }
     }
 }
@@ -611,7 +671,7 @@ void FUN_00182e20(int arg0, unsigned arg1, int arg2, int arg3, B_182e20 *arg4, B
             FUN_00181860((float *)spA0, (float *)temp_s0, (float *)(FUN_001818a0(temp_s1)), fparg0);
             temp_s0_2 = FUN_00182100(temp_s1);
             temp_s1_2 = FUN_001820f0(temp_s1);
-            FUN_00182440(sp90, temp_s0_2, temp_s1_2, FUN_001824c0(temp_s1), fparg0, temp_f20);
+            FUN_00182440((igVec4f *)sp90, (igVec4f *)temp_s0_2, (igVec4f *)temp_s1_2, (igVec4f *)(FUN_001824c0(temp_s1)), fparg0, temp_f20);
             arg5->v144(arg1, spA0);
             arg5->v152(arg1, igVec4f_PackColor(sp90, 1));
         }
@@ -631,7 +691,7 @@ void FUN_00182e20(int arg0, unsigned arg1, int arg2, int arg3, B_182e20 *arg4, B
             FUN_00181860((float *)spA0, (float *)temp_s1_3, (float *)(FUN_001818a0(temp_s6_2)), fparg0);
             temp_s1_4 = FUN_00182100(temp_s6_2);
             temp_s6_3 = FUN_001820f0(temp_s6_2);
-            FUN_00182440(sp90, temp_s1_4, temp_s6_3, FUN_001824c0(temp_s6_2), fparg0, temp_f20);
+            FUN_00182440((igVec4f *)sp90, (igVec4f *)temp_s1_4, (igVec4f *)temp_s6_3, (igVec4f *)(FUN_001824c0(temp_s6_2)), fparg0, temp_f20);
             arg4->v116(arg1, spA0);
             arg4->v164(arg1, igVec4f_PackColor(sp90, 1));
         }
@@ -664,7 +724,7 @@ void FUN_001830b0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             FUN_00181860((float *)&spB0, (float *)s0, (float *)(FUN_001818a0(e)), fparg0);
             s7 = FUN_00182100(e);
             s6 = FUN_001820f0(e);
-            FUN_00182440(&spA0, s7, s6, FUN_001824c0(e), fparg0, f20);
+            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
             s8 = FUN_00181850(e);
             FUN_00182420(&spBC, (float *)s8, (float *)(FUN_00181840(e)), fparg0);
             arg5->v144(i, &spB0);
@@ -691,13 +751,66 @@ void FUN_001830b0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             FUN_00181860((float *)&spB0, (float *)s0, (float *)(FUN_001818a0(e)), fparg0);
             s7 = FUN_00182100(e);
             s6 = FUN_001820f0(e);
-            FUN_00182440(&spA0, s7, s6, FUN_001824c0(e), fparg0, f20);
+            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
             s8 = FUN_00181850(e);
             FUN_00182420(&spBC, (float *)s8, (float *)(FUN_00181840(e)), fparg0);
             b->v116(i, &spB0);
             b->v164(i, igVec4f_PackColor((float *)&spA0, 1));
             b->v212(i, spBC);
             i++;
+        }
+    }
+}
+
+void FUN_001833c0(int n, unsigned int i, int particles, int particleSize, MeshTarget *array, MeshTarget *sprite, float time) {
+    MeshVec3 position;
+    igVec2f size;
+    MeshVec4 color;
+    float timeSquared;
+    unsigned end;
+    MeshTarget *old;
+    int particle;
+    timeSquared = time * time;
+    if (sprite != 0) {
+        if (array != 0) {
+            array->f4 = array->f4 + 1;
+        }
+        old = sprite->f24;
+        if (old != 0) {
+            old->f4 = old->f4 - 1;
+            if (((unsigned long long)((long long)old->f4 << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(old);
+            }
+        }
+        sprite->f24 = array;
+        end = i + n;
+        for (; i < end; i++) {
+            particle = particles + i * particleSize;
+            FUN_00181860((float *)&position, (float *)(FUN_001818b0(particle)), (float *)(FUN_001818a0(particle)), time);
+            FUN_00182440((igVec4f *)&color, (igVec4f *)(FUN_00182100(particle)), (igVec4f *)(FUN_001820f0(particle)), (igVec4f *)(FUN_001824c0(particle)), time, timeSquared);
+            FUN_00181810((float *)&size, (float *)(FUN_00181850(particle)), (float *)(FUN_00181840(particle)), time);
+            sprite->v144(i, &position);
+            sprite->v152(i, igVec4f_PackColor((float *)&color, 1));
+            igPointSpriteExt_SetSize((Sdb00 *)sprite, i, size);
+        }
+        old = sprite->f24;
+        if (old != 0) {
+            old->f4 = old->f4 - 1;
+            if (((unsigned long long)((long long)old->f4 << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(old);
+            }
+        }
+        sprite->f24 = 0;
+    } else {
+        end = i + n;
+        for (; i < end; i++) {
+            particle = particles + i * particleSize;
+            FUN_00181860((float *)&position, (float *)(FUN_001818b0(particle)), (float *)(FUN_001818a0(particle)), time);
+            FUN_00182440((igVec4f *)&color, (igVec4f *)(FUN_00182100(particle)), (igVec4f *)(FUN_001820f0(particle)), (igVec4f *)(FUN_001824c0(particle)), time, timeSquared);
+            FUN_00181810((float *)&size, (float *)(FUN_00181850(particle)), (float *)(FUN_00181840(particle)), time);
+            array->v116(i, &position);
+            array->v164(i, igVec4f_PackColor((float *)&color, 1));
+            array->v220(i, size);
         }
     }
 }
@@ -727,7 +840,7 @@ void FUN_001836f0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             FUN_00181860((float *)&spB0, (float *)s0, (float *)(FUN_001818a0(e)), fparg0);
             s7 = FUN_00182100(e);
             s6 = FUN_001820f0(e);
-            FUN_00182440(&spA0, s7, s6, FUN_001824c0(e), fparg0, f20);
+            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
             s8 = FUN_00181850(e);
             FUN_00181b30(&spBC, (float *)s8, (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, f20);
             arg5->v144(i, &spB0);
@@ -754,7 +867,7 @@ void FUN_001836f0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             FUN_00181860((float *)&spB0, (float *)s0, (float *)(FUN_001818a0(e)), fparg0);
             s7 = FUN_00182100(e);
             s6 = FUN_001820f0(e);
-            FUN_00182440(&spA0, s7, s6, FUN_001824c0(e), fparg0, f20);
+            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
             s8 = FUN_00181850(e);
             FUN_00181b30(&spBC, (float *)s8, (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, f20);
             b->v116(i, &spB0);
@@ -767,9 +880,7 @@ void FUN_001836f0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
 
 void FUN_00183a20(int arg0, unsigned arg1, int arg2, int arg3, MeshTarget *arg4, MeshTarget *arg5, float fparg0) {
     MeshVec3 spD0;
-    MeshVec2 spC8;
-    MeshVec2 spC0;
-    MeshVec2 spB8;
+    igVec2f spC8;
     MeshVec4 spA0;
     float temp_f20;
     unsigned end;
@@ -793,12 +904,11 @@ void FUN_00183a20(int arg0, unsigned arg1, int arg2, int arg3, MeshTarget *arg4,
         for (; arg1 < end; arg1++) {
             e = arg2 + arg1 * arg3;
             FUN_00181860((float *)&spD0, (float *)(FUN_001818b0(e)), (float *)(FUN_001818a0(e)), fparg0);
-            FUN_00182440(&spA0, FUN_00182100(e), FUN_001820f0(e), FUN_001824c0(e), fparg0, temp_f20);
+            FUN_00182440((igVec4f *)&spA0, (igVec4f *)(FUN_00182100(e)), (igVec4f *)(FUN_001820f0(e)), (igVec4f *)(FUN_001824c0(e)), fparg0, temp_f20);
             FUN_00181df0((float *)&spC8, (float *)(FUN_00181850(e)), (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, temp_f20);
             arg5->v144(arg1, &spD0);
             arg5->v152(arg1, igVec4f_PackColor((float *)&spA0, 1));
-            spC0 = spC8;
-            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, (V2f *)&spC0);
+            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, spC8);
         }
         t = arg5->f24;
         if (t != 0) {
@@ -813,12 +923,11 @@ void FUN_00183a20(int arg0, unsigned arg1, int arg2, int arg3, MeshTarget *arg4,
         for (; arg1 < end; arg1++) {
             e = arg2 + arg1 * arg3;
             FUN_00181860((float *)&spD0, (float *)(FUN_001818b0(e)), (float *)(FUN_001818a0(e)), fparg0);
-            FUN_00182440(&spA0, FUN_00182100(e), FUN_001820f0(e), FUN_001824c0(e), fparg0, temp_f20);
+            FUN_00182440((igVec4f *)&spA0, (igVec4f *)(FUN_00182100(e)), (igVec4f *)(FUN_001820f0(e)), (igVec4f *)(FUN_001824c0(e)), fparg0, temp_f20);
             FUN_00181df0((float *)&spC8, (float *)(FUN_00181850(e)), (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, temp_f20);
             arg4->v116(arg1, &spD0);
             arg4->v164(arg1, igVec4f_PackColor((float *)&spA0, 1));
-            spB8 = spC8;
-            arg4->v220(arg1, &spB8);
+            arg4->v220(arg1, spC8);
         }
     }
 }
@@ -849,7 +958,7 @@ void FUN_00183d70(int n, unsigned i, int base, int stride, IndexedValueWriter *a
             p = base + i * stride;
             x = FUN_001818b0(p);
             y = FUN_001818a0(p);
-            FUN_00183f60(sp90, x, y, FUN_00183fc0(p), f, f2);
+            FUN_00183f60((igVec3f *)sp90, (igVec3f *)x, (igVec3f *)y, (igVec3f *)(FUN_00183fc0(p)), f, f2);
             a5->v144(i, sp90);
         }
         {
@@ -867,9 +976,13 @@ void FUN_00183d70(int n, unsigned i, int base, int stride, IndexedValueWriter *a
         p2 = base + i * stride;
         x2 = FUN_001818b0(p2);
         y2 = FUN_001818a0(p2);
-        FUN_00183f60(sp90, x2, y2, FUN_00183fc0(p2), f, f2);
+        FUN_00183f60((igVec3f *)sp90, (igVec3f *)x2, (igVec3f *)y2, (igVec3f *)(FUN_00183fc0(p2)), f, f2);
         a4->v116(i, sp90);
     }
+}
+
+void FUN_00183f60(igVec3f *out, const igVec3f *a, const igVec3f *b, const igVec3f *c, float s, float t) {
+    *out = *a + *b * s + *c * t;
 }
 
 int FUN_00183fc0(int arg0) {
@@ -895,7 +1008,7 @@ void FUN_00183fd0(int n, unsigned i, int base, int stride, Ref_183fd0 *a4, Ref_1
             p = base + i * stride;
             x = FUN_001818b0(p);
             x2 = FUN_001818a0(p);
-            FUN_00183f60(A, x, x2, FUN_00183fc0(p), f, ff);
+            FUN_00183f60((igVec3f *)A, (igVec3f *)x, (igVec3f *)x2, (igVec3f *)(FUN_00183fc0(p)), f, ff);
             x = FUN_00181850(p);
             FUN_00182420(&B, (float *)x, (float *)(FUN_00181840(p)), f);
             a5->v144(i, A);
@@ -916,7 +1029,7 @@ void FUN_00183fd0(int n, unsigned i, int base, int stride, Ref_183fd0 *a4, Ref_1
         p2 = base + i * stride;
         x = FUN_001818b0(p2);
         x2 = FUN_001818a0(p2);
-        FUN_00183f60(A, x, x2, FUN_00183fc0(p2), f, ff);
+        FUN_00183f60((igVec3f *)A, (igVec3f *)x, (igVec3f *)x2, (igVec3f *)(FUN_00183fc0(p2)), f, ff);
         x = FUN_00181850(p2);
         FUN_00182420(&B, (float *)x, (float *)(FUN_00181840(p2)), f);
         a4->v116(i, A);
@@ -930,9 +1043,7 @@ void FUN_00184240(int n, unsigned i, int base, int stride, CountedVertexWriter *
     int p;
     float A[3];
     unsigned end;
-    float B[2];
-    float C[2];
-    float D[2];
+    igVec2f B;
     int x;
     int x2;
     float ff;
@@ -953,12 +1064,11 @@ void FUN_00184240(int n, unsigned i, int base, int stride, CountedVertexWriter *
             p = base + i * stride;
             x = FUN_001818b0(p);
             x2 = FUN_001818a0(p);
-            FUN_00183f60(A, x, x2, FUN_00183fc0(p), f, ff);
+            FUN_00183f60((igVec3f *)A, (igVec3f *)x, (igVec3f *)x2, (igVec3f *)(FUN_00183fc0(p)), f, ff);
             x = FUN_00181850(p);
-            FUN_00181810((float *)B, (float *)x, (float *)(FUN_00181840(p)), f);
+            FUN_00181810((float *)&B, (float *)x, (float *)(FUN_00181840(p)), f);
             a5->v144(i, A);
-            C[0] = B[0]; C[1] = B[1];
-            igPointSpriteExt_SetSize((Sdb00 *)a5, i, (V2f *)C);
+            igPointSpriteExt_SetSize((Sdb00 *)a5, i, B);
         }
         {
             CountedVertexWriter *old = a5->f24;
@@ -976,12 +1086,11 @@ void FUN_00184240(int n, unsigned i, int base, int stride, CountedVertexWriter *
         p2 = base + i * stride;
         x = FUN_001818b0(p2);
         x2 = FUN_001818a0(p2);
-        FUN_00183f60(A, x, x2, FUN_00183fc0(p2), f, ff);
+        FUN_00183f60((igVec3f *)A, (igVec3f *)x, (igVec3f *)x2, (igVec3f *)(FUN_00183fc0(p2)), f, ff);
         x2 = FUN_00181850(p2);
-        FUN_00181810((float *)B, (float *)x2, (float *)(FUN_00181840(p2)), f);
+        FUN_00181810((float *)&B, (float *)x2, (float *)(FUN_00181840(p2)), f);
         a4->v116(i, A);
-        D[0] = B[0]; D[1] = B[1];
-        a4->v220(i, D);
+        a4->v220(i, B);
     }
 }
 
@@ -1010,7 +1119,7 @@ void FUN_001844d0(int arg0, unsigned int arg1, int arg2, int arg3, A4 *arg4, A5 
             p = arg2 + (i * arg3);
             a = FUN_001818b0(p);
             b = FUN_001818a0(p);
-            FUN_00183f60(spA0, a, b, FUN_00183fc0(p), fparg0, temp_f20);
+            FUN_00183f60((igVec3f *)spA0, (igVec3f *)a, (igVec3f *)b, (igVec3f *)(FUN_00183fc0(p)), fparg0, temp_f20);
             a = FUN_00181850(p);
             b = FUN_00181840(p);
             FUN_00181b30(&spAC, (float *)a, (float *)b, (float *)(FUN_00181b50(p)), fparg0, temp_f20);
@@ -1034,7 +1143,7 @@ void FUN_001844d0(int arg0, unsigned int arg1, int arg2, int arg3, A4 *arg4, A5 
         p = arg2 + (i * arg3);
         a = FUN_001818b0(p);
         b = FUN_001818a0(p);
-        FUN_00183f60(spA0, a, b, FUN_00183fc0(p), fparg0, temp_f20);
+        FUN_00183f60((igVec3f *)spA0, (igVec3f *)a, (igVec3f *)b, (igVec3f *)(FUN_00183fc0(p)), fparg0, temp_f20);
         a = FUN_00181850(p);
         b = FUN_00181840(p);
         FUN_00181b30(&spAC, (float *)a, (float *)b, (float *)(FUN_00181b50(p)), fparg0, temp_f20);
@@ -1046,7 +1155,7 @@ void FUN_001844d0(int arg0, unsigned int arg1, int arg2, int arg3, A4 *arg4, A5 
 
 void FUN_00184770(int arg0, unsigned arg1, int arg2, int arg3, B_184770 *arg4, B_184770 *arg5, float fparg0) {
     int spC0[3];
-    Vec2 spB8;
+    igVec2f spB8;
     float sq;
     B_184770 *t;
     B_184770 *t2;
@@ -1075,12 +1184,12 @@ void FUN_00184770(int arg0, unsigned arg1, int arg2, int arg3, B_184770 *arg4, B
             p = arg2 + arg1 * arg3;
             a = FUN_001818b0(p);
             b = FUN_001818a0(p);
-            FUN_00183f60(spC0, a, b, FUN_00183fc0(p), fparg0, sq);
+            FUN_00183f60((igVec3f *)spC0, (igVec3f *)a, (igVec3f *)b, (igVec3f *)(FUN_00183fc0(p)), fparg0, sq);
             a = FUN_00181850(p);
             b = FUN_00181840(p);
             FUN_00181df0((float *)&spB8, (float *)a, (float *)b, (float *)(FUN_00181b50(p)), fparg0, sq);
             arg5->v144(arg1, spC0);
-            { Vec2 copy = spB8; igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, (V2f *)&copy); };
+            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, spB8);
         }
         t2 = arg5->f24;
         if (t2 != 0) {
@@ -1096,7 +1205,7 @@ void FUN_00184770(int arg0, unsigned arg1, int arg2, int arg3, B_184770 *arg4, B
             p2 = arg2 + arg1 * arg3;
             a = FUN_001818b0(p2);
             b = FUN_001818a0(p2);
-            FUN_00183f60(spC0, a, b, FUN_00183fc0(p2), fparg0, sq);
+            FUN_00183f60((igVec3f *)spC0, (igVec3f *)a, (igVec3f *)b, (igVec3f *)(FUN_00183fc0(p2)), fparg0, sq);
             a = FUN_00181850(p2);
             b = FUN_00181840(p2);
             FUN_00181df0((float *)&spB8, (float *)a, (float *)b, (float *)(FUN_00181b50(p2)), fparg0, sq);
@@ -1141,7 +1250,7 @@ void FUN_00184a30(int arg0, unsigned arg1, int arg2, int arg3, B_184a30 *arg4, B
             temp_s1 = arg2 + arg1 * arg3;
             temp_s6 = FUN_001818b0(temp_s1);
             temp_s7 = FUN_001818a0(temp_s1);
-            FUN_00183f60(spB0, temp_s6, temp_s7, FUN_00183fc0(temp_s1), fparg0, temp_f20);
+            FUN_00183f60((igVec3f *)spB0, (igVec3f *)temp_s6, (igVec3f *)temp_s7, (igVec3f *)(FUN_00183fc0(temp_s1)), fparg0, temp_f20);
             temp_s1_2 = FUN_00182100(temp_s1);
             FUN_00182090((void *)spA0, (void *)temp_s1_2, (void *)(FUN_001820f0(temp_s1)), fparg0);
             arg5->v144(arg1, spB0);
@@ -1161,7 +1270,7 @@ void FUN_00184a30(int arg0, unsigned arg1, int arg2, int arg3, B_184a30 *arg4, B
             temp_s1_3 = arg2 + arg1 * arg3;
             temp_s6_2 = FUN_001818b0(temp_s1_3);
             temp_s7_2 = FUN_001818a0(temp_s1_3);
-            FUN_00183f60(spB0, temp_s6_2, temp_s7_2, FUN_00183fc0(temp_s1_3), fparg0, temp_f20);
+            FUN_00183f60((igVec3f *)spB0, (igVec3f *)temp_s6_2, (igVec3f *)temp_s7_2, (igVec3f *)(FUN_00183fc0(temp_s1_3)), fparg0, temp_f20);
             temp_s1_4 = FUN_00182100(temp_s1_3);
             FUN_00182090((void *)spA0, (void *)temp_s1_4, (void *)(FUN_001820f0(temp_s1_3)), fparg0);
             arg4->v116(arg1, spB0);
@@ -1192,10 +1301,10 @@ void FUN_00184cc0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             int s0;
             e = arg2 + i * arg3;
             s0 = FUN_001818b0(e);
-            FUN_00183f60(&spB0, s0, FUN_001818a0(e), FUN_00183fc0(e), fparg0, f20);
+            FUN_00183f60((igVec3f *)&spB0, (igVec3f *)s0, (igVec3f *)(FUN_001818a0(e)), (igVec3f *)(FUN_00183fc0(e)), fparg0, f20);
             s7 = FUN_00182100(e);
             s6 = FUN_001820f0(e);
-            FUN_00182440(&spA0, s7, s6, FUN_001824c0(e), fparg0, f20);
+            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
             s8 = FUN_00181850(e);
             FUN_00182420(&spBC, (float *)s8, (float *)(FUN_00181840(e)), fparg0);
             arg5->v144(i, &spB0);
@@ -1219,16 +1328,69 @@ void FUN_00184cc0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             int s6;
             e = arg2 + i * arg3;
             s0 = FUN_001818b0(e);
-            FUN_00183f60(&spB0, s0, FUN_001818a0(e), FUN_00183fc0(e), fparg0, f20);
+            FUN_00183f60((igVec3f *)&spB0, (igVec3f *)s0, (igVec3f *)(FUN_001818a0(e)), (igVec3f *)(FUN_00183fc0(e)), fparg0, f20);
             s7 = FUN_00182100(e);
             s6 = FUN_001820f0(e);
-            FUN_00182440(&spA0, s7, s6, FUN_001824c0(e), fparg0, f20);
+            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
             s8 = FUN_00181850(e);
             FUN_00182420(&spBC, (float *)s8, (float *)(FUN_00181840(e)), fparg0);
             b->v116(i, &spB0);
             b->v164(i, igVec4f_PackColor((float *)&spA0, 1));
             b->v212(i, spBC);
             i++;
+        }
+    }
+}
+
+void FUN_00184ff0(int n, unsigned int i, int particles, int particleSize, MeshTarget *array, MeshTarget *sprite, float time) {
+    MeshVec3 position;
+    igVec2f size;
+    MeshVec4 color;
+    float timeSquared;
+    unsigned end;
+    MeshTarget *old;
+    int particle;
+    timeSquared = time * time;
+    if (sprite != 0) {
+        if (array != 0) {
+            array->f4 = array->f4 + 1;
+        }
+        old = sprite->f24;
+        if (old != 0) {
+            old->f4 = old->f4 - 1;
+            if (((unsigned long long)((long long)old->f4 << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(old);
+            }
+        }
+        sprite->f24 = array;
+        end = i + n;
+        for (; i < end; i++) {
+            particle = particles + i * particleSize;
+            FUN_00183f60((igVec3f *)&position, (igVec3f *)(FUN_001818b0(particle)), (igVec3f *)(FUN_001818a0(particle)), (igVec3f *)(FUN_00183fc0(particle)), time, timeSquared);
+            FUN_00182440((igVec4f *)&color, (igVec4f *)(FUN_00182100(particle)), (igVec4f *)(FUN_001820f0(particle)), (igVec4f *)(FUN_001824c0(particle)), time, timeSquared);
+            FUN_00181810((float *)&size, (float *)(FUN_00181850(particle)), (float *)(FUN_00181840(particle)), time);
+            sprite->v144(i, &position);
+            sprite->v152(i, igVec4f_PackColor((float *)&color, 1));
+            igPointSpriteExt_SetSize((Sdb00 *)sprite, i, size);
+        }
+        old = sprite->f24;
+        if (old != 0) {
+            old->f4 = old->f4 - 1;
+            if (((unsigned long long)((long long)old->f4 << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(old);
+            }
+        }
+        sprite->f24 = 0;
+    } else {
+        end = i + n;
+        for (; i < end; i++) {
+            particle = particles + i * particleSize;
+            FUN_00183f60((igVec3f *)&position, (igVec3f *)(FUN_001818b0(particle)), (igVec3f *)(FUN_001818a0(particle)), (igVec3f *)(FUN_00183fc0(particle)), time, timeSquared);
+            FUN_00182440((igVec4f *)&color, (igVec4f *)(FUN_00182100(particle)), (igVec4f *)(FUN_001820f0(particle)), (igVec4f *)(FUN_001824c0(particle)), time, timeSquared);
+            FUN_00181810((float *)&size, (float *)(FUN_00181850(particle)), (float *)(FUN_00181840(particle)), time);
+            array->v116(i, &position);
+            array->v164(i, igVec4f_PackColor((float *)&color, 1));
+            array->v220(i, size);
         }
     }
 }
@@ -1273,7 +1435,7 @@ void FUN_00185340(int arg0, unsigned arg1, int arg2, int arg3, B_185340 *arg4, B
             temp_s1 = arg2 + arg1 * arg3;
             temp_s0 = FUN_001818b0(temp_s1);
             temp_s6 = FUN_001818a0(temp_s1);
-            FUN_00183f60(spB0, temp_s0, temp_s6, FUN_00183fc0(temp_s1), fparg0, temp_f20);
+            FUN_00183f60((igVec3f *)spB0, (igVec3f *)temp_s0, (igVec3f *)temp_s6, (igVec3f *)(FUN_00183fc0(temp_s1)), fparg0, temp_f20);
             temp_s0_2 = FUN_00182100(temp_s1);
             FUN_00182090((void *)spA0, (void *)temp_s0_2, (void *)(FUN_001820f0(temp_s1)), fparg0);
             temp_s0_3 = FUN_00181850(temp_s1);
@@ -1294,7 +1456,7 @@ void FUN_00185340(int arg0, unsigned arg1, int arg2, int arg3, B_185340 *arg4, B
         temp_s7_2 = arg1 + arg0;
         for (; arg1 < temp_s7_2; arg1++) {
             temp_s2 = arg2 + arg1 * arg3;
-            FUN_00183f60(spB0, (FUN_001818b0(temp_s2)), (FUN_001818a0(temp_s2)), FUN_00183fc0(temp_s2), fparg0, temp_f20);
+            FUN_00183f60((igVec3f *)spB0, (igVec3f *)(FUN_001818b0(temp_s2)), (igVec3f *)(FUN_001818a0(temp_s2)), (igVec3f *)(FUN_00183fc0(temp_s2)), fparg0, temp_f20);
             temp_s1_4 = FUN_00182100(temp_s2);
             FUN_00182090((void *)spA0, (void *)temp_s1_4, (void *)(FUN_001820f0(temp_s2)), fparg0);
             temp_s1_5 = FUN_00181850(temp_s2);
@@ -1311,11 +1473,9 @@ void FUN_00185670(int arg0, unsigned arg1, int arg2, int arg3, B_185670 *arg4, B
     float temp_f20;
     V3_185670 spD0;
     int e;
-    V2_185670 spC8;
+    igVec2f spC8;
     V4_185670 spA0;
     B_185670 *t;
-    V2_185670 spC0;
-    V2_185670 spB8;
     int p, r;
     temp_f20 = fparg0 * fparg0;
     if (arg5) {
@@ -1333,13 +1493,12 @@ void FUN_00185670(int arg0, unsigned arg1, int arg2, int arg3, B_185670 *arg4, B
         end = arg1 + arg0;
         for (; arg1 < end; arg1++) {
             e = arg2 + arg1 * arg3;
-            FUN_00183f60(&spD0, FUN_001818b0(e), FUN_001818a0(e), FUN_00183fc0(e), fparg0, temp_f20);
+            FUN_00183f60((igVec3f *)&spD0, (igVec3f *)(FUN_001818b0(e)), (igVec3f *)(FUN_001818a0(e)), (igVec3f *)(FUN_00183fc0(e)), fparg0, temp_f20);
             FUN_00182090((void *)&spA0, (void *)(FUN_00182100(e)), (void *)(FUN_001820f0(e)), fparg0);
             FUN_00181df0((float *)&spC8, (float *)(FUN_00181850(e)), (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, temp_f20);
             arg5->v144(arg1, &spD0);
             arg5->v152(arg1, igVec4f_PackColor((float *)&spA0, 1));
-            spC0 = spC8;
-            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, (V2f *)&spC0);
+            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, spC8);
         }
         t = arg5->f24;
         if (t != 0) {
@@ -1353,13 +1512,12 @@ void FUN_00185670(int arg0, unsigned arg1, int arg2, int arg3, B_185670 *arg4, B
         end = arg1 + arg0;
         for (; arg1 < end; arg1++) {
             e = arg2 + arg1 * arg3;
-            FUN_00183f60(&spD0, FUN_001818b0(e), FUN_001818a0(e), FUN_00183fc0(e), fparg0, temp_f20);
+            FUN_00183f60((igVec3f *)&spD0, (igVec3f *)(FUN_001818b0(e)), (igVec3f *)(FUN_001818a0(e)), (igVec3f *)(FUN_00183fc0(e)), fparg0, temp_f20);
             FUN_00182090((void *)&spA0, (void *)(FUN_00182100(e)), (void *)(FUN_001820f0(e)), fparg0);
             FUN_00181df0((float *)&spC8, (float *)(FUN_00181850(e)), (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, temp_f20);
             arg4->v116(arg1, &spD0);
             arg4->v164(arg1, igVec4f_PackColor((float *)&spA0, 1));
-            spB8 = spC8;
-            arg4->v220(arg1, &spB8);
+            arg4->v220(arg1, spC8);
         }
     }
 }
@@ -1402,10 +1560,10 @@ void FUN_001859c0(int arg0, unsigned arg1, int arg2, int arg3, B_1859c0 *arg4, B
             temp_s1 = arg2 + arg1 * arg3;
             temp_s0 = FUN_001818b0(temp_s1);
             temp_s6 = FUN_001818a0(temp_s1);
-            FUN_00183f60(spB0, temp_s0, temp_s6, FUN_00183fc0(temp_s1), fparg0, temp_f20);
+            FUN_00183f60((igVec3f *)spB0, (igVec3f *)temp_s0, (igVec3f *)temp_s6, (igVec3f *)(FUN_00183fc0(temp_s1)), fparg0, temp_f20);
             temp_s0_2 = FUN_00182100(temp_s1);
             temp_s1_2 = FUN_001820f0(temp_s1);
-            FUN_00182440(spA0, temp_s0_2, temp_s1_2, FUN_001824c0(temp_s1), fparg0, temp_f20);
+            FUN_00182440((igVec4f *)spA0, (igVec4f *)temp_s0_2, (igVec4f *)temp_s1_2, (igVec4f *)(FUN_001824c0(temp_s1)), fparg0, temp_f20);
             arg5->v144(arg1, spB0);
             arg5->v152(arg1, igVec4f_PackColor(spA0, 1));
         }
@@ -1423,10 +1581,10 @@ void FUN_001859c0(int arg0, unsigned arg1, int arg2, int arg3, B_1859c0 *arg4, B
             temp_s2 = arg2 + arg1 * arg3;
             temp_s1_3 = FUN_001818b0(temp_s2);
             temp_s6_2 = FUN_001818a0(temp_s2);
-            FUN_00183f60(spB0, temp_s1_3, temp_s6_2, FUN_00183fc0(temp_s2), fparg0, temp_f20);
+            FUN_00183f60((igVec3f *)spB0, (igVec3f *)temp_s1_3, (igVec3f *)temp_s6_2, (igVec3f *)(FUN_00183fc0(temp_s2)), fparg0, temp_f20);
             temp_s1_4 = FUN_00182100(temp_s2);
             temp_s2_2 = FUN_001820f0(temp_s2);
-            FUN_00182440(spA0, temp_s1_4, temp_s2_2, FUN_001824c0(temp_s2), fparg0, temp_f20);
+            FUN_00182440((igVec4f *)spA0, (igVec4f *)temp_s1_4, (igVec4f *)temp_s2_2, (igVec4f *)(FUN_001824c0(temp_s2)), fparg0, temp_f20);
             arg4->v116(arg1, spB0);
             arg4->v164(arg1, igVec4f_PackColor(spA0, 1));
         }
@@ -1466,10 +1624,10 @@ int f2;
             a1 = arg2 + i * arg3;
             b1 = FUN_001818b0(a1);
             c1 = FUN_001818a0(a1);
-            FUN_00183f60(&spB0, b1, c1, FUN_00183fc0(a1), fparg0, f20);
+            FUN_00183f60((igVec3f *)&spB0, (igVec3f *)b1, (igVec3f *)c1, (igVec3f *)(FUN_00183fc0(a1)), fparg0, f20);
             d1 = FUN_00182100(a1);
             e1 = FUN_001820f0(a1);
-            FUN_00182440(&spA0, d1, e1, FUN_001824c0(a1), fparg0, f20);
+            FUN_00182440((igVec4f *)&spA0, (igVec4f *)d1, (igVec4f *)e1, (igVec4f *)(FUN_001824c0(a1)), fparg0, f20);
             f1 = FUN_00181850(a1);
             FUN_00182420(&spBC, (float *)f1, (float *)(FUN_00181840(a1)), fparg0);
             arg5->v144(i, &spB0);
@@ -1488,10 +1646,10 @@ int f2;
         a2 = arg2 + i * arg3;
         b2 = FUN_001818b0(a2);
         c2 = FUN_001818a0(a2);
-        FUN_00183f60(&spB0, b2, c2, FUN_00183fc0(a2), fparg0, f20);
+        FUN_00183f60((igVec3f *)&spB0, (igVec3f *)b2, (igVec3f *)c2, (igVec3f *)(FUN_00183fc0(a2)), fparg0, f20);
         d2 = FUN_00182100(a2);
         e2 = FUN_001820f0(a2);
-        FUN_00182440(&spA0, d2, e2, FUN_001824c0(a2), fparg0, f20);
+        FUN_00182440((igVec4f *)&spA0, (igVec4f *)d2, (igVec4f *)e2, (igVec4f *)(FUN_001824c0(a2)), fparg0, f20);
         f2 = FUN_00181850(a2);
         FUN_00182420(&spBC, (float *)f2, (float *)(FUN_00181840(a2)), fparg0);
         b->v116(i, &spB0);
@@ -1507,9 +1665,8 @@ void FUN_00185fb0(int arg0, unsigned arg1, int arg2, int arg3, VertexSink *arg4,
     float temp_f20;
     float spD0[3];
     int i2;
-    TexCoordPair spC8;
+    igVec2f spC8;
     float spA0[4];
-    TexCoordPair spC0;
     unsigned end;
     int i1;
     int b2;
@@ -1520,7 +1677,6 @@ void FUN_00185fb0(int arg0, unsigned arg1, int arg2, int arg3, VertexSink *arg4,
     int f2;
     int d1;
     int e1;
-    TexCoordPair spB8;
     int d2;
     int e2;
     unsigned end2;
@@ -1543,16 +1699,15 @@ void FUN_00185fb0(int arg0, unsigned arg1, int arg2, int arg3, VertexSink *arg4,
             i1 = arg2 + arg1 * arg3;
             b1 = FUN_001818b0(i1);
             c1 = FUN_001818a0(i1);
-            FUN_00183f60(spD0, b1, c1, FUN_00183fc0(i1), fparg0, temp_f20);
+            FUN_00183f60((igVec3f *)spD0, (igVec3f *)b1, (igVec3f *)c1, (igVec3f *)(FUN_00183fc0(i1)), fparg0, temp_f20);
             d1 = FUN_00182100(i1);
             e1 = FUN_001820f0(i1);
-            FUN_00182440(spA0, d1, e1, FUN_001824c0(i1), fparg0, temp_f20);
+            FUN_00182440((igVec4f *)spA0, (igVec4f *)d1, (igVec4f *)e1, (igVec4f *)(FUN_001824c0(i1)), fparg0, temp_f20);
             f1 = FUN_00181850(i1);
             FUN_00181810((float *)&spC8, (float *)f1, (float *)(FUN_00181840(i1)), fparg0);
             arg5->v144(arg1, spD0);
             arg5->v152(arg1, igVec4f_PackColor(spA0, 1));
-            spC0 = spC8;
-            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, (V2f *)&spC0);
+            igPointSpriteExt_SetSize((Sdb00 *)arg5, arg1, spC8);
         }
         t2 = arg5->f24;
         if (t2 != 0) {
@@ -1568,16 +1723,15 @@ void FUN_00185fb0(int arg0, unsigned arg1, int arg2, int arg3, VertexSink *arg4,
             i2 = arg2 + arg1 * arg3;
             b2 = FUN_001818b0(i2);
             c2 = FUN_001818a0(i2);
-            FUN_00183f60(spD0, b2, c2, FUN_00183fc0(i2), fparg0, temp_f20);
+            FUN_00183f60((igVec3f *)spD0, (igVec3f *)b2, (igVec3f *)c2, (igVec3f *)(FUN_00183fc0(i2)), fparg0, temp_f20);
             d2 = FUN_00182100(i2);
             e2 = FUN_001820f0(i2);
-            FUN_00182440(spA0, d2, e2, FUN_001824c0(i2), fparg0, temp_f20);
+            FUN_00182440((igVec4f *)spA0, (igVec4f *)d2, (igVec4f *)e2, (igVec4f *)(FUN_001824c0(i2)), fparg0, temp_f20);
             f2 = FUN_00181850(i2);
             FUN_00181810((float *)&spC8, (float *)f2, (float *)(FUN_00181840(i2)), fparg0);
             arg4->v116(arg1, spD0);
             arg4->v164(arg1, igVec4f_PackColor(spA0, 1));
-            spB8 = spC8;
-            arg4->v220(arg1, &spB8);
+            arg4->v220(arg1, spC8);
         }
     }
 }
@@ -1604,10 +1758,10 @@ void FUN_00186300(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             int s0;
             e = arg2 + i * arg3;
             s0 = FUN_001818b0(e);
-            FUN_00183f60(&spB0, s0, FUN_001818a0(e), FUN_00183fc0(e), fparg0, f20);
+            FUN_00183f60((igVec3f *)&spB0, (igVec3f *)s0, (igVec3f *)(FUN_001818a0(e)), (igVec3f *)(FUN_00183fc0(e)), fparg0, f20);
             s7 = FUN_00182100(e);
             s6 = FUN_001820f0(e);
-            FUN_00182440(&spA0, s7, s6, FUN_001824c0(e), fparg0, f20);
+            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
             s8 = FUN_00181850(e);
             FUN_00181b30(&spBC, (float *)s8, (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, f20);
             arg5->v144(i, &spB0);
@@ -1631,10 +1785,10 @@ void FUN_00186300(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             int s6;
             e = arg2 + i * arg3;
             s0 = FUN_001818b0(e);
-            FUN_00183f60(&spB0, s0, FUN_001818a0(e), FUN_00183fc0(e), fparg0, f20);
+            FUN_00183f60((igVec3f *)&spB0, (igVec3f *)s0, (igVec3f *)(FUN_001818a0(e)), (igVec3f *)(FUN_00183fc0(e)), fparg0, f20);
             s7 = FUN_00182100(e);
             s6 = FUN_001820f0(e);
-            FUN_00182440(&spA0, s7, s6, FUN_001824c0(e), fparg0, f20);
+            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
             s8 = FUN_00181850(e);
             FUN_00181b30(&spBC, (float *)s8, (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, f20);
             b->v116(i, &spB0);
@@ -1648,9 +1802,7 @@ void FUN_00186300(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
 void FUN_00186660(int arg0, unsigned int arg1, int arg2, int arg3, PackedVertexWriter *arg4, VertexArrayWriter *arg5, float fparg0) {
     int spD0[3];
     int spA0[4];
-    TexCoordPairXY spC8;
-    TexCoordPairXY spC0;
-    TexCoordPairXY spB8;
+    igVec2f spC8;
     float f20;
     unsigned s5;
     unsigned s7;
@@ -1669,14 +1821,12 @@ void FUN_00186660(int arg0, unsigned int arg1, int arg2, int arg3, PackedVertexW
         s7 = s5 + arg0;
         while (s5 < s7) {
             s1 = arg2 + s5 * arg3;
-            FUN_00183f60(spD0, FUN_001818b0(s1), FUN_001818a0(s1), FUN_00183fc0(s1), fparg0, f20);
-            FUN_00182440(spA0, FUN_00182100(s1), FUN_001820f0(s1), FUN_001824c0(s1), fparg0, f20);
+            FUN_00183f60((igVec3f *)spD0, (igVec3f *)(FUN_001818b0(s1)), (igVec3f *)(FUN_001818a0(s1)), (igVec3f *)(FUN_00183fc0(s1)), fparg0, f20);
+            FUN_00182440((igVec4f *)spA0, (igVec4f *)(FUN_00182100(s1)), (igVec4f *)(FUN_001820f0(s1)), (igVec4f *)(FUN_001824c0(s1)), fparg0, f20);
             FUN_00181df0((float *)&spC8, (float *)(FUN_00181850(s1)), (float *)(FUN_00181840(s1)), (float *)(FUN_00181b50(s1)), fparg0, f20);
             arg5->v144(s5, spD0);
             arg5->v152(s5, igVec4f_PackColor((float *)spA0, 1));
-            spC0.x = spC8.x;
-            spC0.y = spC8.y;
-            igPointSpriteExt_SetSize((Sdb00 *)arg5, s5, (V2f *)&spC0);
+            igPointSpriteExt_SetSize((Sdb00 *)arg5, s5, spC8);
             s5 += 1;
         }
         o = arg5->f24;
@@ -1690,14 +1840,12 @@ void FUN_00186660(int arg0, unsigned int arg1, int arg2, int arg3, PackedVertexW
     s7 = s5 + arg0;
     while (s5 < s7) {
         s1 = arg2 + s5 * arg3;
-        FUN_00183f60(spD0, FUN_001818b0(s1), FUN_001818a0(s1), FUN_00183fc0(s1), fparg0, f20);
-        FUN_00182440(spA0, FUN_00182100(s1), FUN_001820f0(s1), FUN_001824c0(s1), fparg0, f20);
+        FUN_00183f60((igVec3f *)spD0, (igVec3f *)(FUN_001818b0(s1)), (igVec3f *)(FUN_001818a0(s1)), (igVec3f *)(FUN_00183fc0(s1)), fparg0, f20);
+        FUN_00182440((igVec4f *)spA0, (igVec4f *)(FUN_00182100(s1)), (igVec4f *)(FUN_001820f0(s1)), (igVec4f *)(FUN_001824c0(s1)), fparg0, f20);
         FUN_00181df0((float *)&spC8, (float *)(FUN_00181850(s1)), (float *)(FUN_00181840(s1)), (float *)(FUN_00181b50(s1)), fparg0, f20);
         arg4->v116(s5, spD0);
         arg4->v164(s5, igVec4f_PackColor((float *)spA0, 1));
-        spB8.x = spC8.x;
-        spB8.y = spC8.y;
-        arg4->v220(s5, &spB8);
+        arg4->v220(s5, spC8);
         s5 += 1;
     }
 }

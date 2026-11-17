@@ -1,9 +1,9 @@
 igMetaObject *g_igVertexArray2Helper_metaObject;
 igMetaField *g_igVertexArray2Helper_vertexArrayMetaField;
 
-void FUN_0014a4d0(int arg0) {
+igVertexArray2HelperAccess *FUN_0014a4d0(int arg0) {
     FUN_0014a640();
-    igMetaObject_CreateInstance(g_igVertexArray2Helper_metaObject, (igMemoryPoolView *)arg0);
+    return (igVertexArray2HelperAccess *)igMetaObject_CreateInstance(g_igVertexArray2Helper_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igVertexArray2Helper_GetMetaObject(void)

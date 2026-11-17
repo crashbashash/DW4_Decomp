@@ -428,7 +428,7 @@ void beModelCtrlSubCom_Update(beModelCtrlSubCom *self, beBaseInfoRam *ram) {
     i = 0;
     if (count > 0) {
         do {
-            if (!(beModelCtrlSubComBase_Advance(((beModelCtrlSubComBase **)((igObjectList *)self->_comList)->_data)[i], ram) & 0xFF)) {
+            if (beModelCtrlSubComBase_Advance(((beModelCtrlSubComBase **)((igObjectList *)self->_comList)->_data)[i], ram) == 0) {
                 list = (igObjectList *)(self->_comList);
                 igRelease(((igObject **)list->_data)[i]);
                 List_RemoveWordAt((igDataList *)list, i);
@@ -532,7 +532,7 @@ static inline void setInternedString(int *field, int text) {
 }
 
 /* Appends an effect sub-command with interned model and sequence names. */
-void beModelCtrlSubCom_AddEffect(beModelCtrlSubCom *self, const char *modelName, const char *seqName, float *offset, float *rotation, unsigned char isSeqDead, unsigned char isPositionLock, float startFrame) {
+void beModelCtrlSubCom_AddEffect(beModelCtrlSubCom *self, const char *modelName, const char *seqName, float startFrame, const igVec3f &offset, igVec3f rotation, unsigned char isSeqDead, unsigned char isPositionLock) {
     int own;
     beModelCtrlSCEffect *record;
     own = (int)igObject_GetAllocator(self);
@@ -544,13 +544,13 @@ void beModelCtrlSubCom_AddEffect(beModelCtrlSubCom *self, const char *modelName,
     setInternedString(&record->_seqName, (int)seqName);
     effect.p->_startFrame = startFrame;
     record = effect.p;
-    record->_offset[0] = offset[0];
-    record->_offset[1] = offset[1];
-    record->_offset[2] = offset[2];
+    record->_offset[0] = offset.x;
+    record->_offset[1] = offset.y;
+    record->_offset[2] = offset.z;
     record = effect.p;
-    record->_rotation[0] = rotation[0];
-    record->_rotation[1] = rotation[1];
-    record->_rotation[2] = rotation[2];
+    record->_rotation[0] = rotation.x;
+    record->_rotation[1] = rotation.y;
+    record->_rotation[2] = rotation.z;
     effect.p->_isSeqDead = isSeqDead;
     effect.p->_isPositionLock = isPositionLock;
     ObjectList_AppendRetained((igObjectList *)self->_comList, (igObject *)effect.p);

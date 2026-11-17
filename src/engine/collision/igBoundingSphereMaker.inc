@@ -1,9 +1,9 @@
 igMetaObject *g_igBoundingSphereMaker_metaObject;
 igMetaField *g_igBoundingSphereMaker_sphereMetaField;
 
-void FUN_0023a9d0(int arg0) {
+igObject *FUN_0023a9d0(int arg0) {
     FUN_0023aaf0();
-    igMetaObject_CreateInstance(g_igBoundingSphereMaker_metaObject, (igMemoryPoolView *)arg0);
+    return igMetaObject_CreateInstance(g_igBoundingSphereMaker_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *igBoundingSphereMaker_GetMetaObject(void)

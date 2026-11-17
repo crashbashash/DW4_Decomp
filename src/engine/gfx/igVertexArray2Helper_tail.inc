@@ -1091,7 +1091,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_60(igVertexArray2Helper *self, int ty
 
 /* Union read-back through the stack; the exponent bias is subtracted after the join, not inside
  * the condition. */
-int FUN_00163770(unsigned int arg0, float fparg0) {
+int FUN_00163770(float fparg0, unsigned int arg0) {
     union { float f; unsigned u; struct { unsigned frac:23; } b; } x;
     int e, v;
     unsigned int s, t, r, m;
@@ -1122,6 +1122,7 @@ int FUN_00163770(unsigned int arg0, float fparg0) {
 float FUN_00163800(int arg0, int arg1) {
     return (float) (arg0 >> arg1);
 }
+
 
 ObjectRefWord *FUN_00164870(ObjectRefWord *self,int delete_storage) {
     if(self) {

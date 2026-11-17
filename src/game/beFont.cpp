@@ -573,8 +573,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
         case kFontMessageSetPosition: {
             int dataName = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 0));
             int setName = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 1));
-            igColor4f position;
-            beMessenger_GetVec3((float *)&position, (beMessenger *)self->_messenger, 0);
+            igVec3f position = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
             index = beFont_FindFirstLayoutEntry(self, ram, dataName, setName);
             if (index != -1) {
                 do {
@@ -593,16 +592,15 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
             float red;
             float green;
             float blue;
-            igColor4f requested;
             if (message == kFontMessageDefaultColor) {
                 blue = green = red = 0.9f;
             } else if (message == kFontMessageCancelColor) {
                 blue = green = red = 0.5f;
             } else {
-                beMessenger_GetVec3((float *)&requested, (beMessenger *)self->_messenger, 0);
-                red = requested.r;
-                green = requested.g;
-                blue = requested.b;
+                igVec3f requested = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
+                red = requested.x;
+                green = requested.y;
+                blue = requested.z;
             }
             index = beFont_FindFirstLayoutEntry(self, ram, dataName, setName);
             if (index != -1) {

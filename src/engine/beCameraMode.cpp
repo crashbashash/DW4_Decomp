@@ -1,6 +1,7 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igMath.h"
+#include "dw4/igVec3f.h"
 #include "dw4/igCameraDispatchView.h"
 #include "dw4/igCameraMode.h"
 
@@ -75,7 +76,7 @@ void igViewMode_UpdateInverseMatrix(igViewMode *self);
 void igViewMode_UpdateModelVectors(igViewMode *self);
 void igViewMode_UpdateViewMatrix(igViewMode *self);
 void igFlyMode_AimingChanged(igFlyMode *self);
-void igFlyMode_ApplyTranslation(igFlyMode *self);
+void igFlyMode_ApplyTranslation(igFlyMode *self, float seconds);
 void igFlyMode_ApplyRotation(igFlyMode *self, float seconds);
 void igFlyMode_ApplyAim(igFlyMode *self);
 void igPickMode_RecordHit(igPickMode *self, IntersectHit *hit);
@@ -395,12 +396,72 @@ void igFlyMode_AimingChanged(igFlyMode *self)
 {
 }
 
+void FUN_00190b30(float *matrix, const igVec3f &translation);
+static inline float toRadians(float degrees) { return 0.017453292f * degrees; }
+void FUN_001916b0(float *matrix, const igVec3f *axis, float angle);
+static inline void rotateRef(float *m, const igVec3f *axis, const float &angle) { FUN_001916b0(m, axis, angle); }
+static inline float vecLength(const igVec3f &v) { return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z); }
+
+/* Turns the eye by the right stick, at most 120 degrees per second more than the last frame: about the
+ * scene's up vector, then about the view's x axis. */
+void igFlyMode_ApplyRotation(igFlyMode *self, float seconds) {
+    float maxStep = 120.0f * seconds;
+    float head = self->_joystickR[0];
+    float pitch = self->_joystickR[1];
+    head *= 60.0f;
+    pitch *= 60.0f;
+    float dHead = head - self->_lastRotation[0];
+    float dPitch = pitch - self->_lastRotation[1];
+    float distance = sqrtf(dHead * dHead + dPitch * dPitch);
+    if (!(distance <= maxStep)) {
+        float limit = maxStep / distance;
+        dHead *= limit;
+        dPitch *= limit;
+        head = dHead + self->_lastRotation[0];
+        pitch = dPitch + self->_lastRotation[1];
+    }
+    self->_lastRotation[0] = head;
+    self->_lastRotation[1] = pitch;
+    head *= seconds;
+    pitch *= seconds;
+    igViewModel *model = (igViewModel *)self->_model;
+    igVec3f up;
+    Vec3f_TransformDirection(&up, model->_sceneUpVector, model->_viewMatrix);
+    float scale = 1.0f / vecLength(up);
+    up.x *= scale;
+    up.y *= scale;
+    up.z *= scale;
+    FUN_001916b0(model->_viewMatrix, &up, toRadians(head));
+    FUN_001916b0(model->_viewMatrix, &g_vec3XAxis, toRadians(pitch));
+}
+
+/* While aiming, turns the eye by the mouse's movement since the last frame. */
+void igFlyMode_ApplyAim(igFlyMode *self) {
+    igViewModel *model = (igViewModel *)self->_model;
+    if (self->_lastAimValid) {
+        float pitch = 30.0f * (self->_mousePos[1] - self->_lastAim[1]);
+        float head = 60.0f * (self->_mousePos[0] - self->_lastAim[0]);
+        igVec3f up;
+        Vec3f_TransformDirection(&up, model->_sceneUpVector, model->_viewMatrix);
+        float scale = 1.0f / vecLength(up);
+        up.x *= scale;
+        up.y *= scale;
+        up.z *= scale;
+        FUN_001916b0(model->_viewMatrix, &up, toRadians(head));
+        /* matching construct: the (float) cast on the negated pitch orders the pi/180 constant before it. */
+        FUN_001916b0(model->_viewMatrix, &g_vec3XAxis, toRadians((float)(-pitch)));
+    }
+    self->_lastAim[0] = self->_mousePos[0];
+    self->_lastAim[1] = self->_mousePos[1];
+    self->_lastAimValid = 1;
+}
+
 void igFlyMode_Update(igFlyMode *self, float seconds) {
     int changed[3];
     int model;
 
     model = self->_model;
-    igFlyMode_ApplyTranslation(self);
+    igFlyMode_ApplyTranslation(self, seconds);
     if (self->_aiming != 0) {
         igFlyMode_ApplyAim(self);
     }
@@ -470,6 +531,51 @@ void igRotateMode_OnMouseButton(igRotateMode *self, int button, char pressed) {
         break;
     }
     self->_constraintAxis = 0;
+}
+
+/* igRotateMode's drag handlers past igViewMode's slots: slot 31 the default button layout, slot 32 Maya's.
+ * ABI view only: never instantiated. */
+class igRotateModeDispatchView : public igViewModeDispatchView {
+public:
+    virtual void applyDrag(igVec2f *delta);                                 /* slot 31 */
+    virtual void applyMayaDrag(igVec2f *delta);                             /* slot 32 */
+};
+
+typedef struct FloatBits { unsigned int mantissa : 23; unsigned int exponent : 8; unsigned int sign : 1; } FloatBits;
+static inline float absf(float x) { ((FloatBits *)&x)->sign = 0; return x; }
+
+/* While rotating, hands the mouse's movement since the last event to the drag handler; with the
+ * constraint key held the drag keeps to the axis it first moved along. */
+void igRotateMode_OnMouseMove(igRotateMode *self, float x, float y) {
+    igViewModel *model = (igViewModel *)self->_model;
+    if (self->_active) {
+        igVec2f delta;
+        delta[0] = x;
+        delta[1] = y;
+        delta[0] -= self->_lastMousePos[0];
+        delta[1] -= self->_lastMousePos[1];
+        if (self->_constraint) {
+            if (self->_constraintAxis == 0) {
+                if (!(absf(delta[0]) <= absf(delta[1]) * model->_ratio)) {
+                    self->_constraintAxis = 1;
+                } else {
+                    self->_constraintAxis = 2;
+                }
+            }
+            if (self->_constraintAxis == 1) {
+                delta[1] = 0.0f;
+            } else {
+                delta[0] = 0.0f;
+            }
+        }
+        if (self->_maya) {
+            ((igRotateModeDispatchView *)self)->applyMayaDrag(&delta);
+        } else {
+            ((igRotateModeDispatchView *)self)->applyDrag(&delta);
+        }
+    }
+    self->_lastMousePos[0] = x;
+    self->_lastMousePos[1] = y;
 }
 
 /* Applies a mouse drag of `delta` with the default button layout: the left button rotates, the
@@ -547,6 +653,63 @@ void igRotateMode_OnAttach(igRotateMode *state) {
     dy -= model->_position[1];
     dz -= model->_position[2];
     state->_distance = sqrtf(dx * dx + dy * dy + dz * dz);
+}
+
+/* Applies the stick and the drags gathered since the last frame: turns the view about the selection's
+ * centre, zooms towards it and pans, then starts the next frame's gathering from rest. */
+void igRotateMode_Update(igRotateMode *self, float seconds) {
+    igViewModel *model = (igViewModel *)self->_model;
+    float frames = 60.0f * seconds;
+    float step = 0.1f * frames;
+    self->_head += step * self->_joystickR[0];
+    self->_pitch += step * self->_joystickR[1];
+    self->_roll += step * self->_joystickT[0];
+    self->_zoom *= 1.0f - 0.1f * (frames * self->_joystickT[1]);
+    if (self->_active) {
+        igVec3f center;
+        Vec3f_TransformProjective(&center, model->_selectedCenter, model->_viewMatrix);
+        center[0] = -center[0];
+        center[1] = -center[1];
+        center[2] = -center[2];
+        FUN_00190b30(model->_viewMatrix, center);
+        if (self->_maya) {
+            if (self->_head != 0.0f) {
+                igVec3f up;
+                Vec3f_TransformDirection(&up, model->_sceneUpVector, model->_viewMatrix);
+                float scale = 1.0f / vecLength(up);
+                up.x *= scale;
+                up.y *= scale;
+                up.z *= scale;
+                rotateRef(model->_viewMatrix, &up, self->_head);
+            }
+        } else if (self->_head != 0.0f) {
+            rotateRef(model->_viewMatrix, &g_vec3YAxis, self->_head);
+        }
+        if (self->_pitch != 0.0f) {
+            rotateRef(model->_viewMatrix, &g_vec3XAxis, -self->_pitch);
+        }
+        if (self->_roll != 0.0f) {
+            rotateRef(model->_viewMatrix, &g_vec3ZAxis, self->_roll);
+        }
+        center.scale(-self->_zoom);
+        center[0] += self->_translation[0];
+        center[1] += self->_translation[1];
+        center[2] += self->_translation[2];
+        self->_distance = vecLength(center);
+        FUN_00190b30(model->_viewMatrix, center);
+        ViewModelEvent changed;
+        changed.type = VIEW_MODEL_FIELD_CHANGED;
+        changed.sender = 0;
+        changed.field = g_igViewModel_viewMatrixMetaField;
+        igModel_NotifyViews((igModel *)model, (ModelChange *)&changed);
+    }
+    self->_head = 0.0f;
+    self->_roll = 0.0f;
+    self->_pitch = 0.0f;
+    self->_zoom = 1.0f;
+    self->_translation[0] = g_vec3Zero[0];
+    self->_translation[1] = g_vec3Zero[1];
+    self->_translation[2] = g_vec3Zero[2];
 }
 
 int igPickMode_HitProc(int traversal, int data, int hit) {

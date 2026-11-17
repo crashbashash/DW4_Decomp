@@ -17,6 +17,7 @@ struct igVec2f {
         x = x_;
         y = y_;
     }
+    float &operator[](int i) { return (&x)[i]; }
     igVec2f operator*(float s) const { return igVec2f(x * s, y * s); }
     igVec2f operator+(const igVec2f &o) const { return igVec2f(x + o.x, y + o.y); }
     void set(float x_, float y_) {

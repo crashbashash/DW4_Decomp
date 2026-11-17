@@ -133,15 +133,15 @@ void beAction2_Prepare(void);
 igMetaObject *beAction2_GetInfoMeta(void);
 void beAction2_OnAddRam(beAction2 *self, beAction2InfoRam *ram);
 void beAction2FLASHSET_Update(beAction2 *manager, beAction2InfoRam *ram);
-int beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2FLASHSET *component);
+unsigned char beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2FLASHSET *component);
 void beAction2WAITCHECK_Update(beAction2 *manager, beAction2InfoRam *ram);
-int beAction2WAITCHECK_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2WAITCHECK *component);
+unsigned char beAction2WAITCHECK_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2WAITCHECK *component);
 void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram);
-int beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2FADESET *component);
+unsigned char beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2FADESET *component);
 void beAction2JOINTSET_Update(beAction2 *manager, beAction2InfoRam *ram);
-int beAction2JOINTSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2JOINTSET *component);
+unsigned char beAction2JOINTSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2JOINTSET *component);
 void beAction2MOTIONSET_Update(beAction2 *manager, beAction2InfoRam *ram);
-int beAction2MOTIONSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2MOTIONSET *component);
+unsigned char beAction2MOTIONSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2MOTIONSET *component);
 void beAction2_StartComponents(beAction2 *manager, beAction2InfoRam *ram);
 void beAction2_UpdateRam(beAction2 *self, beAction2InfoRam *ram);
 int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name);
@@ -183,7 +183,7 @@ void beAction2FLASHSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
     case 0:
         break;
     case 1:
-        if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)ram, "FLASH") != 0) {
+        if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)ram, "FLASH")) {
             list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
             if (work->_blendStateAttr == 0) {
                 ObjectList_RemoveFirstRetained(&removed2, list, work->_colorAttr, 0);
@@ -208,7 +208,7 @@ void beAction2FLASHSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
 /* Puts colour, texture-state and lighting-state overrides on the node (creating the missing ones),
  * sets the colour's red and green to full with texturing and lighting off, and flashes for four
  * frames. */
-int beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2FLASHSET *component) {
+unsigned char beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2FLASHSET *component) {
     beAction2InfoWork *work = (beAction2InfoWork *)ram->_work;
     int list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
     if (work->_colorAttr == 0) {
@@ -277,7 +277,7 @@ void beAction2WAITCHECK_Update(beAction2 *manager, beAction2InfoRam *ram) {
     info = (beAction2Info *)ram->_parentInfo;
     switch (work->_waitSt0) {
     case 1:
-        if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)ram, "WAIT") != 0) {
+        if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)ram, "WAIT")) {
             work->_waitSt0 = 0;
             beAction2_StartComponents(manager, ram);
         }
@@ -314,7 +314,7 @@ void beAction2WAITCHECK_Update(beAction2 *manager, beAction2InfoRam *ram) {
 /* Arms the wait the component's type names: Frame (a WAIT timer of the given frames), Motion, Joint,
  * or Random (a timer of a random length between the stored minimum and the given frames; RandomSet
  * stores the minimum and lets the list continue). */
-int beAction2WAITCHECK_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2WAITCHECK *component) {
+unsigned char beAction2WAITCHECK_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2WAITCHECK *component) {
     beAction2InfoWork *work = (beAction2InfoWork *)ram->_work;
     const char *name = (const char *)component->_name;
     float frames = component->_waitTime;
@@ -420,7 +420,7 @@ void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
 /* A name starting with H hides the ram's child of the info's switch. Otherwise puts colour,
  * blend-state and lighting-state overrides on the node and starts a fade over the given frames:
  * In fades the alpha up from zero to the given value, anything else fades it down from it. */
-int beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2FADESET *component) {
+unsigned char beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2FADESET *component) {
     beAction2InfoWork *work = (beAction2InfoWork *)ram->_work;
     int list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
     char *name = (char *)component->_name;
@@ -537,7 +537,7 @@ void beAction2JOINTSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
 
 /* Converts the component's frame range to nanoseconds, picks loop (L) or one-shot, and rebases the
  * node clock so it reads the start of the range now. */
-int beAction2JOINTSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2JOINTSET *component) {
+unsigned char beAction2JOINTSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2JOINTSET *component) {
     long long start;
     beAction2InfoWork *work;
     beModelCtrlNode2 *node;
@@ -624,7 +624,7 @@ void beAction2MOTIONSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
 /* Plays the named animation on the ram's combiner, blending in over the hokan (transition) frames
  * unless the ram asked for no transition. Hokan mode S at [0]/[1] freezes the outgoing/incoming
  * state; loop mode L loops the animation's sources, anything else plays them once. */
-int beAction2MOTIONSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2MOTIONSET *component) {
+unsigned char beAction2MOTIONSET_Start(beAction2 *manager, beAction2InfoRam *ram, beAction2MOTIONSET *component) {
     beAction2Info *info = (beAction2Info *)ram->_parentInfo;
     beAction2InfoWork *work = (beAction2InfoWork *)ram->_work;
     int animations = ((igAnimationDatabase *)info->_animationDatabase)->_animationList;
@@ -716,19 +716,19 @@ void beAction2_StartComponents(beAction2 *manager, beAction2InfoRam *ram)
             keepGoing = true;
             component = (((Action2ComponentList *)data->_comList)->_data)[index];
             if (g_beAction2MOTIONSET_metaObject == component->GetMeta()) {
-                keepGoing = beAction2MOTIONSET_Start(manager, ram, (beAction2MOTIONSET *)component) & 0xFF;
+                keepGoing = beAction2MOTIONSET_Start(manager, ram, (beAction2MOTIONSET *)component);
                 index += 1;
             } else if (g_beAction2JOINTSET_metaObject == component->GetMeta()) {
-                keepGoing = beAction2JOINTSET_Start(manager, ram, (beAction2JOINTSET *)component) & 0xFF;
+                keepGoing = beAction2JOINTSET_Start(manager, ram, (beAction2JOINTSET *)component);
                 index += 1;
             } else if (g_beAction2FADESET_metaObject == component->GetMeta()) {
-                keepGoing = beAction2FADESET_Start(manager, ram, (beAction2FADESET *)component) & 0xFF;
+                keepGoing = beAction2FADESET_Start(manager, ram, (beAction2FADESET *)component);
                 index += 1;
             } else if (g_beAction2WAITCHECK_metaObject == component->GetMeta()) {
-                keepGoing = beAction2WAITCHECK_Start(manager, ram, (beAction2WAITCHECK *)component) & 0xFF;
+                keepGoing = beAction2WAITCHECK_Start(manager, ram, (beAction2WAITCHECK *)component);
                 index += 1;
             } else if (g_beAction2FLASHSET_metaObject == component->GetMeta()) {
-                keepGoing = beAction2FLASHSET_Start(manager, ram, (beAction2FLASHSET *)component) & 0xFF;
+                keepGoing = beAction2FLASHSET_Start(manager, ram, (beAction2FLASHSET *)component);
                 index += 1;
             }
         } while ((keepGoing & 0xFF) && index != ((Action2ComponentList *)data->_comList)->_count);

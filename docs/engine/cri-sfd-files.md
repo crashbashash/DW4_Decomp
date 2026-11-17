@@ -25,6 +25,8 @@ guesses from what each file does.
 
 `sfadx.c` and `sfdbuf.c` share `include/dw4/cri/sfdsj.h`; `sfmpv.c` and `sfmpvps2.c` share `include/dw4/cri/sfmpv.h`; `sfdply.c` and `sfdring.c` share
 `include/dw4/cri/sfdply.h`. The other files declare their types themselves.
+`sftim_Tc2Time29D`, the 29.97 drop-frame time-code converter, is named from the RE4 GameCube symbol table
+([adonis-singh/re4](https://github.com/adonis-singh/re4), `config/G4BE08/sym_map.tsv`, unit `lib/sfd_tim.c`).
 
 ## Types
 

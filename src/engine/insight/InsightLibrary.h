@@ -672,7 +672,7 @@ extern "C" float DAT_004e0fa4[4];
 struct WindowInfo { char p[40]; int f40; };
 struct Receiver { char p[8]; WindowInfo *f8; };
 extern "C" int Gap__Insight__igWindowResizeEventReceiver__vfunc_32(Receiver *self, int width, int height);
-extern "C" int FUN_00236b70(...);
+extern "C" int FUN_00236b70(igInsightCore *core, igObject *manager);
 class DW4VC_92_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(); };
 extern "C" int igObjectList_RemoveRetained(...);
 class DW4VC_96_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(); };
@@ -844,6 +844,7 @@ extern "C" void Gap__Insight__igSerialScheduler__vfunc_23(igSerialScheduler *sch
 extern "C" void Gap__Insight__igSerialScheduler__vfunc_24(void *arg0, int arg1);
 typedef struct Obj_238020 { char pad[8]; int f8; } Obj_238020;
 extern "C" void Gap__Insight__igSerialScheduler__vfunc_25(Obj_238020 *arg0, int arg1);
+extern "C" int Gap__Insight__igSerialScheduler__vfunc_26(igSerialScheduler *scheduler, igObject *manager);
 extern "C" void Gap__Insight__igSerialScheduler__vfunc_27(int a0);
 typedef struct S0 { char pad8[8]; int f8; } S0;
 extern "C" int igDependencyOrderedList_RemoveDependency(...);

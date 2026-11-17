@@ -479,7 +479,7 @@ void FUN_001c3ab0(int width, int height, int bpp, void *face1, void *face0, void
                 if (color == 0) {
                     mask[x + row] = 1;
                 } else {
-                    FUN_001c4140(dir, color, &face, dst);
+                    FUN_001c4140(dir, (igImage *)color, &face, dst);
                 }
             }
         }
@@ -562,3 +562,79 @@ int FUN_001c3fd0(float *v) {
     return r;
 }
 
+static inline void scale3(float *v, const float &s) {
+    v[0] *= s;
+    v[1] *= s;
+    v[2] *= s;
+}
+
+/* Texel of the cube-map face `*face` that direction `dir` points at, copied to dst (one byte per
+ * channel). dir is projected onto the face in place. */
+void FUN_001c4140(float *dir, igImage *image, int *face, unsigned char *dst) {
+    unsigned char *pixels;
+    int x;
+    int width;
+    int bpp;
+    int height;
+    int y;
+    pixels = (unsigned char *)image->_pImage;
+    x = 0;
+    width = image->_px;
+    height = image->_py;
+    bpp = image->_pz;
+    y = 0;
+    if (*face == 0 || *face == 1) {
+        if (dir[0] != 0.0f) {
+            scale3(dir, -1.0f / dir[0]);
+        }
+        dir[1] *= -1.0f;
+        dir[1] += 1.0f;
+        dir[2] += 1.0f;
+        scale3(dir, 0.5f);
+        if (*face == 1) {
+            y = (int)((1.0f - dir[1]) * (float)height);
+        } else {
+            y = (int)(dir[1] * (float)height);
+        }
+        x = (int)(dir[2] * (float)width);
+    } else if (*face == 4 || *face == 5) {
+        if (dir[2] != 0.0f) {
+            scale3(dir, -1.0f / dir[2]);
+        }
+        dir[1] *= -1.0f;
+        dir[1] += 1.0f;
+        if (*face == 5) {
+            dir[0] *= -1.0f;
+        }
+        dir[0] += 1.0f;
+        scale3(dir, 0.5f);
+        if (*face == 4) {
+            x = (int)((1.0f - dir[0]) * (float)width);
+        } else {
+            x = (int)(dir[0] * (float)width);
+        }
+        if (*face == 5) {
+            y = (int)((1.0f - dir[1]) * (float)height);
+        } else {
+            y = (int)(dir[1] * (float)height);
+        }
+    } else if (*face == 2 || *face == 3) {
+        if (dir[1] != 0.0f) {
+            scale3(dir, -1.0f / dir[1]);
+        }
+        dir[2] *= -1.0f;
+        dir[2] += 1.0f;
+        dir[0] += 1.0f;
+        scale3(dir, 0.5f);
+        if (*face == 3) {
+            x = (int)((1.0f - dir[0]) * (float)width);
+        } else {
+            x = (int)(dir[0] * (float)width);
+        }
+        y = (int)(dir[2] * (float)height);
+    }
+    unsigned char *src = pixels + bpp * (x + y * width);
+    for (int i = 0; i < bpp; i++) {
+        dst[i] = src[i];
+    }
+}

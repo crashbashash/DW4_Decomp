@@ -37,7 +37,7 @@ int Gap__Gfx__igPsx2ParticleArray__vfunc_28(igPsx2ParticleArray *self, float tim
 
 void Gap__Gfx__igPsx2ParticleArray__vfunc_29(PA_175ba0 *arg0) {
     if (arg0->f92 == 0) {
-        Gap__Bec__ParticleArray__vfunc_27(arg0);
+        Gap__Bec__ParticleArray__vfunc_27((igParticleArrayRefs *)arg0);
         return;
     }
     float t = arg0->f28;
@@ -199,7 +199,7 @@ void FUN_00176800(int *arg0, int arg1, int arg2) {
     int *q;
     int s3, a1, a0_3, s3_2;
     if (!(((int *)arg0[6])[5] & 0x10)) {
-        FUN_0015d0d0(arg0);
+        FUN_0015d0d0((PointSpriteDraw *)arg0, arg1, arg2);
         return;
     }
     p = ((VA_1767c0 *)arg0[6])->vX();

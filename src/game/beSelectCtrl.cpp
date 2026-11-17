@@ -375,7 +375,6 @@ void beSelectCtrl_UpdateRam(beSelectCtrl *self, beBaseInfoRam *ram) {
 }
 
 int beSelectCtrl_OnMessageText(beSelectCtrl *self, beBaseInfoRam *ram, int message) {
-    float offset[3];
     int count;
     int i;
     int allocator;
@@ -419,10 +418,10 @@ int beSelectCtrl_OnMessageText(beSelectCtrl *self, beBaseInfoRam *ram, int messa
             created->_selectMax = data->_maxSelect;
         }
         if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) != 0) {
-            beMessenger_GetVec3(offset, (beMessenger *)self->_messenger, 0);
-            created->_offsetPos[0] = offset[0];
-            created->_offsetPos[1] = offset[1];
-            created->_offsetPos[2] = offset[2];
+            igVec3f offset = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
+            created->_offsetPos[0] = offset.x;
+            created->_offsetPos[1] = offset.y;
+            created->_offsetPos[2] = offset.z;
         } else {
             created->_offsetPos[0] = g_vec3Zero.x;
             created->_offsetPos[1] = g_vec3Zero.y;

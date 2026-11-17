@@ -297,7 +297,6 @@ extern "C" void igShortList_EnsureRegistered(void);
 
 extern "C" void BecLibrary_MarkRegistered(void);
 extern "C" void *libBecRuntimePlugin_GetMetaObject(void);
-extern "C" int __dl__FPv(...);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beLua_Destruct(igSmartPointer<igObject> *self, short delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beWaterPlain_Destruct(igSmartPointer<igObject> *self, long long delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beAction2_Destruct(igSmartPointer<igObject> *self, int delete_storage);

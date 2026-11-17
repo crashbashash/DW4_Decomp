@@ -74,6 +74,24 @@ int sfxcnv_IsCnvUpHalf(SfxCnvHn *hn) {
     return 0;
 }
 
+int SFX_DecideTableAlph3(void *hn, int compo) {
+    int frmcompo;
+
+    if (compo == 81) {
+        return 4;
+    }
+    if (compo == 97) {
+        return 5;
+    }
+    frmcompo = FUN_002b3bf0(hn);
+    if (frmcompo == 81) {
+        return 4;
+    }
+    if (frmcompo == 97) {
+        return 5;
+    }
+    return 5;
+}
 
 void FUN_002b3300(SfxCnvTbl *tbl, SfxCnvSrc *src, unsigned int compo) {
     sfxcnv_MakeTable(tbl, src, compo);

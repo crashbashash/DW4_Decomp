@@ -128,7 +128,7 @@ bool beMatCtrl_IsRideOffPlayer(beMatCtrl *self, int player) {
 }
 
 /* Asks the update to set the running material's run flag once its script returns. */
-void beMatCtrl_SetRun(beMatCtrl *self, bool run) {
+void beMatCtrl_SetRun(beMatCtrl *self, unsigned char run) {
     self->_wkChgFlagNO = self->_wkChkMat;
     self->_wkChgFlag = run;
 }

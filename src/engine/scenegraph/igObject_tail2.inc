@@ -29,7 +29,7 @@ bool FUN_001d08d0(Self *arg0, int arg1) {
     return r;
 }
 
-void FUN_001d1550(void *arg0, int arg1) {
+void FUN_001d1550(void *arg0, long long arg1) {
     int temp_a0;
 
     temp_a0 = *(int *)((char *)arg0 + 68);
@@ -82,12 +82,12 @@ void FUN_001d15a0(KeyReducer *self) {
     }
 }
 
-void FUN_001d1760(void *arg0, int arg1) {
+void FUN_001d1760(void *arg0, long long arg1) {
     int temp_a0;
 
     temp_a0 = *(int *)((char *)arg0 + 52);
     if (temp_a0 != 0) {
-        FUN_001d1a90(temp_a0, *(int *)((char *)arg0 + 44), arg1);
+        FUN_001d1a90((KeyAnim *)temp_a0, *(igFloatListView **)((char *)arg0 + 44), arg1);
     }
     FUN_001d15a0((KeyReducer *)arg0);
 }
@@ -148,8 +148,8 @@ void FUN_001d18a0(S_1d18a0 *arg0, int *arg1, int *arg2, float *arg3, K_1d18a0 *a
     *arg3 = (float)(arg6 - a) / (float)(keys[*arg2] - a);
 }
 
-void FUN_001d1a80(int a0, int a1, int) {
-    FUN_001d1a90(a0, *(int *)((char *)a1 + 48));
+void FUN_001d1a80(int a0, int a1, long long time) {
+    FUN_001d1a90((KeyAnim *)a0, *(igFloatListView **)((char *)a1 + 48), time);
 }
 
 void FUN_001d1da0(MorphLevelState *self, float t) {

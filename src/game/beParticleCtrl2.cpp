@@ -7,6 +7,7 @@
 #include "dw4/beParticleCtrl2.h"
 #include "dw4/beParticleCtrl2Info.h"
 #include "dw4/beParticleCtrl2InfoWork.h"
+#include "dw4/igMathConstants.h"
 #include "dw4/igMatrix44f.h"
 #include "dw4/igMemoryPoolContext.h"
 #include "dw4/igObject.h"
@@ -22,10 +23,6 @@ extern "C" void beParticleCtrl2_Prepare(beParticleCtrl2 *self);
 extern "C" int emptyString[4];
 extern "C" int MODELCTRL_12[4];
 extern "C" void beParticleCtrl2_OnAddRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram);
-extern "C" float g_vec3Zero[4];
-extern "C" int g_vec3XAxis[4];
-extern "C" int g_vec3YAxis[4];
-extern "C" int g_vec3ZAxis[4];
 extern "C" int GETMATRIX_5[4];
 extern "C" int GENERATE_9[4];
 extern "C" int SQ_ERAS_3[4];
@@ -180,16 +177,14 @@ int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram
     switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beParticleCtrl2_GetMessageEnum(), (const char *)work->_message)) {
     case 0:
         if (beMessenger_GetStringCount((beMessenger *)self->_messenger) != 0) {
-            igVec3f offset;
-            igVec3f rotation;
             float matrix[16];
             float rotationX, rotationY, rotationZ;
             int modelName = (int)(beMessenger_GetString((beMessenger *)self->_messenger, 0));
             int ramNo = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
-            beMessenger_GetVec3((float *)&offset, (beMessenger *)self->_messenger, 0);
+            igVec3f offset = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
             unsigned char lockToNode = beMessenger_GetBool((beMessenger *)self->_messenger, 0);
             if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) == 2) {
-                beMessenger_GetVec3((float *)&rotation, (beMessenger *)self->_messenger, 1);
+                igVec3f rotation = beMessenger_GetVec3((beMessenger *)self->_messenger, 1);
                 rotationY = rotation.y;
                 rotationX = rotation.x;
                 rotationZ = rotation.z;
@@ -197,9 +192,9 @@ int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram
                     rotationY = (float)(((igRandomNumberDispatchView *)((beSystem *)self->_system)->_random)->genrand() % 6144U) / 1000.0f;
                 }
             } else {
-                rotationX = g_vec3Zero[0];
-                rotationY = g_vec3Zero[1];
-                rotationZ = g_vec3Zero[2];
+                rotationX = g_vec3Zero.x;
+                rotationY = g_vec3Zero.y;
+                rotationZ = g_vec3Zero.z;
             }
             beMessenger_SendNamed((beMessenger *)self->_messenger, (const char *)MODELCTRL_12, (const char *)modelName, ramNo, (const char *)GETMATRIX_5);
             beMessenger_GetMatrix(matrix, (beMessenger *)self->_messenger, 0);
@@ -233,13 +228,13 @@ int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram
             }
             igMatrix44f_TranslateLocal(matrix, &offset);
             if (rotationX != 0.0f) {
-                igMatrix44f_PreRotateAxisAngle(matrix, g_vec3XAxis, rotationX);
+                igMatrix44f_PreRotateAxisAngle(matrix, (void *)&g_vec3XAxis, rotationX);
             }
             if (rotationY != 0.0f) {
-                igMatrix44f_PreRotateAxisAngle(matrix, g_vec3YAxis, rotationY);
+                igMatrix44f_PreRotateAxisAngle(matrix, (void *)&g_vec3YAxis, rotationY);
             }
             if (rotationZ != 0.0f) {
-                igMatrix44f_PreRotateAxisAngle(matrix, g_vec3ZAxis, rotationZ);
+                igMatrix44f_PreRotateAxisAngle(matrix, (void *)&g_vec3ZAxis, rotationZ);
             }
             ((igTransformDispatchView *)ram->_transform)->SetMatrix(matrix);
         } else {

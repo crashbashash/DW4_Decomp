@@ -23,7 +23,7 @@
 #include "dw4/beDBManager.h"
 
 extern "C" int beNDMWMdlPlayer2_GetMeta(void);
-extern "C" int beNDMWMdlPlayer2_IsKind(int dummy0, int kind);
+extern "C" unsigned char beNDMWMdlPlayer2_IsKind(int dummy0, int kind);
 extern "C" void beNDMWMdlPlayer2_Start(beNDMWMdlPlayer2 *self);
 extern "C" char KIND_PLAYER2[];
 extern "C" char PLAYER2_2[];
@@ -112,7 +112,7 @@ void beNDMWMdlPlayer2_Start(beNDMWMdlPlayer2 *self) {
     self->_padManager = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
 }
 
-int beNDMWMdlPlayer2_IsKind(int dummy0, int kind) {
+unsigned char beNDMWMdlPlayer2_IsKind(int dummy0, int kind) {
     return strcmp((const char *)kind, KIND_PLAYER2) == 0;
 }
 
@@ -225,7 +225,7 @@ void beNDMWMdlPlayer2_UpdateControl(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) 
         q->_timerCount = q->_timerCount + 1;
     }
     bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, ram->_ramNo);
-    if (beTargetObj_SelectTarget((float *)(prop->_node + 32), PLAYER_8, NEAR_3) != 0) {
+    if (beTargetObj_SelectTarget((float *)(prop->_node + 32), PLAYER_8, NEAR_3)) {
         f = beTargetObj_GetTargetDistanceSq();
         if (q->_isPowerOn == 0) {
             if (f < 900.0f) {

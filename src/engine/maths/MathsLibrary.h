@@ -456,7 +456,7 @@ void FUN_0018a8f0(void);
 int FUN_0018afa0(igAABox *box, igSphere *sphere);
 int igAABox_IntersectBox(struct B *arg0, struct B *arg1);
 int FUN_0018b110(void *arg0, void *arg1);
-int FUN_0018b170(...);
+int FUN_0018b170(void *volume, igRay *ray);
 int FUN_0018b300(igAABox *box, void *other);
 int FUN_0018b350(struct B2 *arg0, struct B2 *arg1);
 int FUN_0018b450(float *a, float *b);
@@ -532,6 +532,7 @@ static inline float madd_(float o, float t, float d) { return o + t * d; }
 struct Ray { char pad[8]; V2 o; V2 d; float maxT; };
 
 void FUN_00192dd0(float *arg0, float *arg1, float *arg2);
+void Quaternion_Lerp(float *out, float t, const float *from, const float *to);
 
 static inline float dot(const V2 *a, const V2 *b) { return a->x * b->x + a->y * b->y + a->z * b->z; }
 static inline float dot3(float ax, float ay, float az, float bx, float by, float bz) { return ax * bx + ay * by + az * bz; }
@@ -584,6 +585,10 @@ static inline float lengthOf(const float *v) {
     return sqrtf(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 }
 
+static inline float quatLength(const float *q) {
+    return sqrtf(q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3]);
+}
+
 typedef struct Plane { char pad[8]; float x, y, z, d; } Plane;
 
 static inline float fabs_(float x) { ((FB *)&x)->sign = 0; return x; }
@@ -615,9 +620,9 @@ struct igVec3f2 {
 void igRay_Transform(igRay *ray, const void *matrix);
 Intersection FUN_0018d9b0(igSphere *sphere, void *other);
 void FUN_0018dd20(struct S4 *p, struct S4 *q);
-void thunk_FUN_0018d630(void);
+void thunk_FUN_0018d630(igSphere *sphere, const float *matrix);
 
-void FUN_0018da00(void);
+int FUN_0018da00(igSphere *sphere, igAABox *box);
 
 int FUN_0018d700(igSphere *sphere, igAABox *box);
 int FUN_0018d7b0(igSphere *sphere, igPlane *plane);
@@ -628,13 +633,15 @@ int igSphere_IntersectsRay(igSphere *sphere, igRay *ray);
 int FUN_0018db20(igSphere *a, igSphere *b);
 int FUN_0018dcb0(igSphere *sphere, float *point);
 
-void FUN_0018e040(void);
+void FUN_0018e040(igSphere *sphere, const float *point);
 
 void FUN_0018e150(void *arg0);
 int FUN_0018e160(void *arg0);
 void FUN_0018e190(void *arg0, void *arg1);
-int FUN_0018dbc0(...);
-int FUN_0018de10(...);
+int FUN_0018dbc0(void *volume, igRay *ray);
+int FUN_0018ff50(void **volume, const float *point);
+int FUN_00190010(void **volume, int ray);
+void FUN_0018de10(igSphere *sphere, igSphere *other);
 void FUN_0018dfc0(void *parg0, struct S5 *arg1);
 
 typedef struct S4 { int pad[2]; float x, y, z, r, ax, ay, az; } S4;
@@ -642,7 +649,7 @@ typedef struct S4 { int pad[2]; float x, y, z, r, ax, ay, az; } S4;
 typedef struct S5 { char pad[8]; float x, y, z; float dx, dy, dz; float s; } S5;
 
 void FUN_001900d0(void **arg0, int arg1);
-int FUN_0018d630(...);
+void FUN_0018d630(igSphere *sphere, const float *matrix);
 void igVec2fMetaField_SwapBytes(igVec2fMetaField *arg0, int arg1, int arg2);
 
 
@@ -808,7 +815,7 @@ int FUN_0018f470(void);
 void FUN_0018f480(void);
 int FUN_0018f490(void);
 
-int igMatrix44f_Copy(float *, float *);
+void igMatrix44f_Copy(float *destination, const float *source);
 
 class ScaleVec { public: float _v[3]; float operator[](int i) const { return _v[i]; } };
 
@@ -824,8 +831,8 @@ extern "C" {
 
 typedef union U5 { float f; struct { unsigned char p0, p1, p2; unsigned char lo : 7; unsigned char sign : 1; } b; } U5;
 
-int igMatrix44f_PreMultiply(...);
-int igMatrix44f_Multiply(...);
+void igMatrix44f_PreMultiply(float *matrix, const float *a);
+void igMatrix44f_Multiply(float *product, const float *a, const float *b);
 
 
 

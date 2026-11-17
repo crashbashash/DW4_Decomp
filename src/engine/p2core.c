@@ -186,6 +186,7 @@ p2Texture *p2LoadTexture(void *pixels, int width, int height, int psm, int flags
 void p2UploadTex0Context2(void);
 void p2CopyContext1ToContext2(void);
 
+
 void p2SetCapability(int capability, int on);
 void p2UploadFog(void);
 void p2SoftwareBlendOneWeight(int count, float *out);
@@ -1068,6 +1069,91 @@ void p2SetBlendMatrices(int base, int count) {
     p2DirtyFlags |= 0xA0;
 }
 
+/* The blend matrices' packet: a DMA tag over every batch, then per batch of up to 64 matrices
+ * a STCYCL, two NOPs and an UNPACK V4-32 of the batch into VU1 data memory. */
+typedef struct p2BlendMatrixUploadTemplate {
+    p2DmaChainTag tag;
+    p2VifCode unpack;
+    unsigned int f20;
+    unsigned int stcycl;
+} p2BlendMatrixUploadTemplate;
+
+extern p2BlendMatrixUploadTemplate p2BlendMatrixUpload;
+extern unsigned int p2BlendMatrixUploadNop;
+extern p2VuBufferLayout p2VuBuffers;
+
+typedef struct p2BlendMatrix {
+    unsigned __int128 row[4];
+} p2BlendMatrix;
+
+/* Sends the current blend matrices to VU1 when the program blends vertices and they changed. */
+void p2UploadBlendMatrices(void) {
+    unsigned int flags = p2ProgramFlags[p2CurrentProgram];
+    unsigned int *tag;
+    p2BlendMatrix *dest;
+    unsigned int count;
+    unsigned int batches;
+    p2BlendMatrix *src;
+    unsigned int i;
+    int address;
+    unsigned __int128 *matrices;
+    unsigned int n;
+    unsigned __int128 *p;
+    unsigned int quadwords;
+
+    if (!((flags >> P2_CAP_VERTEX_BLEND) & 1) || !(p2DirtyFlags & P2_DIRTY_BLEND_MATRICES) || ((flags >> 22) & 1) ||
+        p2BlendMatrixBase == 0) {
+        return;
+    }
+    p = (unsigned __int128 *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
+    if ((unsigned int)p + p2BlendMatrixCount * 64 + 48 > p2DmaCurrentPacket[P2_DMA_VIF1]->end) {
+        p2FlushVif1Packet();
+        p = (unsigned __int128 *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
+    }
+    count = p2BlendMatrixCount;
+    batches = (count - 1) / 64 + 1;
+    p2BlendMatrixUpload.tag.field.qwc = batches + count * 4;
+    tag = (unsigned int *)p++;
+    tag[0] = p2BlendMatrixUpload.tag.word[0];
+    tag[1] = p2BlendMatrixUpload.tag.word[1];
+    tag[2] = p2BlendMatrixUpload.tag.word[2];
+    tag[3] = p2BlendMatrixUpload.tag.word[3];
+    address = p2VuBuffers.address8;
+    matrices = (unsigned __int128 *)p2BlendMatrixBase;
+    while (batches != 0) {
+        n = count < 64 ? count : 64;
+        quadwords = n * 4;
+        p2BlendMatrixUpload.unpack.field.immediate = address;
+        p2BlendMatrixUpload.unpack.field.num = quadwords;
+        ((unsigned int *)p)[0] = p2BlendMatrixUpload.stcycl;
+        ((unsigned int *)p)[1] = p2BlendMatrixUploadNop;
+        ((unsigned int *)p)[2] = p2BlendMatrixUploadNop;
+        ((unsigned int *)p)[3] = p2BlendMatrixUpload.unpack.word;
+        p++;
+        src = (p2BlendMatrix *)matrices;
+        dest = (p2BlendMatrix *)p;
+        for (i = 0; i < n; i++) {
+            unsigned __int128 row0 = src->row[0];
+            unsigned __int128 row1 = src->row[1];
+            unsigned __int128 row2 = src->row[2];
+            unsigned __int128 row3 = src->row[3];
+            dest->row[0] = row0;
+            dest->row[1] = row1;
+            dest->row[2] = row2;
+            dest->row[3] = row3;
+            src++;
+            dest++;
+        }
+        p = (unsigned __int128 *)dest;
+        count -= n;
+        batches--;
+        address += quadwords;
+        matrices += quadwords;
+    }
+    p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)p;
+    p2EndVif1Write();
+}
+
 void p2SetClearWidth(int width) {
     p2ClearWidth = width;
     p2BuildDisplayPacket();
@@ -1538,6 +1624,64 @@ void p2UploadComponentScales(void) {
     ((float *)p)[11] = (float)scale[3];
     p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)(p + 12);
     p2EndVif1Write();
+}
+
+void FUN_001eba74(void);
+
+asm void FUN_001eba30(void) {
+    .set noreorder
+    addiu   sp, sp, -16
+    sd      ra, 0(sp)
+    sync.p
+    mfbpc   a0
+    bgez    a0, set_breakpoint
+    nop
+    nop
+    ori     a1, zero, 0
+    dsll    a1, a1, 16
+    dsll    a1, a1, 16
+    ori     a1, a1, 0x8000
+    dsll    a1, a1, 16
+    xor     a0, a1, a0
+    mtbpc   a0
+    sync.p
+set_breakpoint:
+    jal     FUN_001eba74
+    nop
+}
+
+asm void FUN_001eba74(void) {
+    .set noreorder
+    addiu   a0, ra, 92
+    mtiab   a0
+    ori     a1, zero, 0
+    dsll    a1, a1, 16
+    dsll    a1, a1, 16
+    ori     a1, a1, 0xffff
+    dsll    a1, a1, 16
+    ori     a1, a1, 0xfff0
+    mtiabm  a1
+    nop
+    mfbpc   a0
+    lui     at, 0xf87d
+    ori     a1, at, 0xfffe
+    and     a0, a0, a1
+    ori     a2, zero, 0
+    dsll    a2, a2, 16
+    dsll    a2, a2, 16
+    ori     a2, a2, 0x8412
+    dsll    a2, a2, 16
+    ori     a2, a2, 0x8000
+    or      a1, a0, a2
+    mtbpc   a1
+    sync.p
+    nop
+    nop
+    nop
+    nop
+    ld      ra, 0(sp)
+    jr      ra
+    addiu   sp, sp, 16
 }
 
 void p2SetFrameMode(int on) {

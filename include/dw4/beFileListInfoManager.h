@@ -11,7 +11,7 @@ extern "C" {
 
 int beFileListInfoManager_AddReadInfos(struct beFileListInfoManager *self);
 struct beFileListInfoManager *beFileListInfoManager_CreateInstance(int allocator);
-int beFileListInfoManager_LoadNextFile(struct beFileListInfoManager *self, struct igStringRefList *fileNames);
+unsigned char beFileListInfoManager_LoadNextFile(struct beFileListInfoManager *self, struct igStringRefList *fileNames);
 
 extern struct igMetaObject *g_beFileListInfoManager_metaObject;
 

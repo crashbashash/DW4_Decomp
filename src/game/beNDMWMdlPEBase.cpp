@@ -339,7 +339,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
                 }
                 BoolList_Set((igBoolList *)work->_isFirstList, STATUS_POISON, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(ram, "POISON") != 0) {
+            if (beBaseInfoRam_IsTimerExpired(ram, "POISON")) {
                 beDataObjInt *hp = (beDataObjInt *)work->_hp;
                 int left = hp->_data - work->_poisonDamage;
                 hp->_data = left >= 0 ? left : 0;
@@ -382,7 +382,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
                 if (strcmp((const char *)work->_seqCodeName, "SQ_SLEP") != 0) ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, "SQ_SLEP");
                 BoolList_Set((igBoolList *)work->_isFirstList, STATUS_SLEEP, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(ram, "SLEEP") != 0) {
+            if (beBaseInfoRam_IsTimerExpired(ram, "SLEEP")) {
                 ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, "SQ_WAIT");
                 beBaseInfoRam_RemoveTimer(ram, "SLEEP");
                 IntList_Set((igIntList *)work->_timerList, STATUS_SLEEP, 0);
@@ -393,7 +393,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
                 beBaseInfoRam_StartTimer(ram, "STUN", FramesToTime(IntAt(work->_timerList, STATUS_STUN)));
                 BoolList_Set((igBoolList *)work->_isFirstList, STATUS_STUN, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(ram, "STUN") != 0) {
+            if (beBaseInfoRam_IsTimerExpired(ram, "STUN")) {
                 IntList_Set((igIntList *)work->_timerList, STATUS_STUN, 0);
                 beBaseInfoRam_RemoveTimer(ram, "STUN");
                 ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, "SQ_WAIT");
@@ -404,7 +404,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
                 beBaseInfoRam_StartTimer(ram, "BIND", FramesToTime(IntAt(work->_timerList, STATUS_BIND)));
                 BoolList_Set((igBoolList *)work->_isFirstList, STATUS_BIND, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(ram, "BIND") != 0) {
+            if (beBaseInfoRam_IsTimerExpired(ram, "BIND")) {
                 beBaseInfoRam_RemoveTimer(ram, "BIND");
                 IntList_Set((igIntList *)work->_timerList, STATUS_BIND, 0);
                 ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, "SQ_WAIT");
@@ -428,7 +428,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
                 beBaseInfoRam_StartTimer(ram, "ATKDOWN", FramesToTime(IntAt(work->_timerList, STATUS_ATTACKDOWN)));
                 BoolList_Set((igBoolList *)work->_isFirstList, STATUS_ATTACKDOWN, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(ram, "ATKDOWN") != 0) {
+            if (beBaseInfoRam_IsTimerExpired(ram, "ATKDOWN")) {
                 beBaseInfoRam_RemoveTimer(ram, "ATKDOWN");
                 IntList_Set((igIntList *)work->_timerList, STATUS_ATTACKDOWN, 0);
                 IntList_Set((igIntList *)work->_downDataList, DOWN_ATTACK + 0, 0);
@@ -443,7 +443,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
                 beBaseInfoRam_StartTimer(ram, "POWDOWN", FramesToTime(IntAt(work->_timerList, STATUS_POWERDOWN)));
                 BoolList_Set((igBoolList *)work->_isFirstList, STATUS_POWERDOWN, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(ram, "POWDOWN") != 0) {
+            if (beBaseInfoRam_IsTimerExpired(ram, "POWDOWN")) {
                 beBaseInfoRam_RemoveTimer(ram, "POWDOWN");
                 IntList_Set((igIntList *)work->_timerList, STATUS_POWERDOWN, 0);
                 IntList_Set((igIntList *)work->_downDataList, DOWN_POWER + 0, 0);
@@ -456,7 +456,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
                 beBaseInfoRam_StartTimer(ram, "SPEEDUP", FramesToTime(IntAt(work->_timerList, STATUS_SPEEDUP)));
                 BoolList_Set((igBoolList *)work->_isFirstList, STATUS_SPEEDUP, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(ram, "SPEEDUP") != 0) {
+            if (beBaseInfoRam_IsTimerExpired(ram, "SPEEDUP")) {
                 beBaseInfoRam_RemoveTimer(ram, "SPEEDUP");
                 IntList_Set((igIntList *)work->_timerList, STATUS_SPEEDUP, 0);
                 IntList_Set((igIntList *)work->_upDataList, UP_SPEED + 0, 0);
@@ -471,7 +471,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
                 beBaseInfoRam_StartTimer(ram, "POWERUP", FramesToTime(IntAt(work->_timerList, STATUS_POWERUP)));
                 BoolList_Set((igBoolList *)work->_isFirstList, STATUS_POWERUP, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(ram, "POWERUP") != 0) {
+            if (beBaseInfoRam_IsTimerExpired(ram, "POWERUP")) {
                 beBaseInfoRam_RemoveTimer(ram, "POWERUP");
                 IntList_Set((igIntList *)work->_timerList, STATUS_POWERUP, 0);
                 IntList_Set((igIntList *)work->_upDataList, UP_POWER + 0, 0);
@@ -485,7 +485,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
                 beBaseInfoRam_StartTimer(ram, "REFRACT", FramesToTime(IntAt(work->_timerList, STATUS_REFRACT)));
                 BoolList_Set((igBoolList *)work->_isFirstList, STATUS_REFRACT, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(ram, "REFRACT") != 0) {
+            if (beBaseInfoRam_IsTimerExpired(ram, "REFRACT")) {
                 beBaseInfoRam_RemoveTimer(ram, "REFRACT");
                 IntList_Set((igIntList *)work->_timerList, STATUS_REFRACT, 0);
                 IntList_Set((igIntList *)work->_upDataList, UP_REFRACT + 0, 0);
@@ -501,7 +501,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
                 beBaseInfoRam_StartTimer(ram, "METAL", 0);
                 BoolList_Set((igBoolList *)work->_isFirstList, STATUS_METAL, false);
             }
-            if (beBaseInfoRam_IsTimerExpired(ram, "METAL") != 0) {
+            if (beBaseInfoRam_IsTimerExpired(ram, "METAL")) {
                 int delay;
                 {
                     int metal = IntAt(work->_downDataList, DOWN_METAL) + METAL_STEP;

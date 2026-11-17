@@ -52,8 +52,12 @@ handle's error callback with -3.
 - No source yet: `pl2enc_Init` and `pl2enc_Create` (the `memcmp` that keeps PL2ENC's build string comes out
   scheduled differently: retail sets up the stack and return address around the first argument), the
   `PS2RNA_Init` and `PS2RNA_Create` bodies, the DTX send callback `ps2rna_sndcbf` and the per-handle
-  server step `ps2rna_exec_one` (all four long, not attempted), and `FUN_0027b2a0` in SJCRS, which clears
-  the word at `0x4b5140` in the `lui`, `addiu`, `0(reg)` form only a `volatile` gives.
+  server step `ps2rna_exec_one` (all four long, not attempted).
+- `FUN_0027b2a0` in SJCRS clears the word at `0x4b5140`, its only access, and nothing calls it. Retail
+  keeps the word's address in `v0` and stores through it (`lui`, `addiu`, `sw zero, 0(v0)`), which is what
+  a function returning that address compiles to; written as `void`, the store folds to `sw zero, %lo` and is
+  four bytes short. The source returns the address. What the word is, and whether the original returned it,
+  is not known.
 - The PS2RNA names not taken from strings are guesses from behaviour: the global output mode
   (`ps2rna_outmode`, IOP command 11), the aux pair (`PS2RNA_StartAux`/`StopAux`, commands 14 and 15, and
   the per-handle `auxsw`, command 10), the two output ports (`PS2RNA_OpenPort`/`ClosePort`, commands 16 and

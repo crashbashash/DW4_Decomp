@@ -725,6 +725,7 @@
 0x002af1d8	sftim_Tc2Time29N	cri	high	recvx-decomp-cri libmwsfde.a sfd_tim.o A [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
 0x002af210	sftim_Tc2Time59N	cri	high	recvx-decomp-cri libmwsfde.a sfd_tim.o A [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
 0x002af248	sftim_Tc2Time23D	cri	medium	recvx-decomp-cri libmwsfde.a sfd_tim.o C by order and size [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
+0x002af2e8	sftim_Tc2Time29D	cri	medium	RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfd_tim.c sftim_Tc2Time29D) by order between sftim_Tc2Time23D and sftim_Tc2Time59D and the 29.97 drop-frame constants [re4 github.com/adonis-singh/re4]
 0x002af380	sftim_Tc2Time59D	cri	medium	recvx-decomp-cri libmwsfde.a sfd_tim.o C by order and size [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
 0x002af540	SFTIM_GetTimeOneFrmVideo	cri	medium	recvx-decomp-cri libmwsfde.a sfd_tim.o B [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
 0x002af580	SFD_GetFps	cri	medium	recvx-decomp-cri libmwsfde.a sfd_tim.o B [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
@@ -821,6 +822,7 @@
 0x002b2f40	SFXA_Finish	cri	high	recvx-decomp-cri libmwsfde.a sfx_alp.o A [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
 0x002b30c0	SFXA_MakeAlp3Tbl	cri	medium	recvx-decomp-cri libmwsfde.a sfx_alp.o C by order and size [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
 0x002b31d8	sfxcnv_IsCnvUpHalf	cri	medium	own error string only
+0x002b32b0	SFX_DecideTableAlph3	cri	medium	RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfx_cnv.c SFX_DecideTableAlph3) by body: the 3110/3211 alpha-table choice from the compo [re4 github.com/adonis-singh/re4]
 0x002b3318	sfxcnv_MakeTable	cri	medium	own error string only
 0x002b3690	SFX_MakeTblZ16	cri	medium	own error string only
 0x002b3708	SFX_MakeTblZ32	cri	medium	own error string only

@@ -318,8 +318,6 @@ static inline HitRecord *OrderHit(beHitLandModelOrder *order, int index)
  * was hit. */
 void beHitLandModel_CheckWall(beHitLandModel *self)
 {
-    igVec3f position;
-    igVec3f direction;
     float radius;
     float height;
     float reach;
@@ -332,8 +330,8 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
     if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) == 0) return;
     if (beMessenger_GetFloatCount((beMessenger *)self->_messenger) == 0) return;
     if (beMessenger_GetIntCount((beMessenger *)self->_messenger) == 0) return;
-    beMessenger_GetVec3((float *)&position, (beMessenger *)self->_messenger, 0);
-    beMessenger_GetVec3((float *)&direction, (beMessenger *)self->_messenger, 1);
+    igVec3f position = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
+    igVec3f direction = beMessenger_GetVec3((beMessenger *)self->_messenger, 1);
     radius = beMessenger_GetFloat((beMessenger *)self->_messenger, 0);
     beMessenger_GetFloat((beMessenger *)self->_messenger, 1);
     height = beMessenger_GetFloat((beMessenger *)self->_messenger, 2);
@@ -522,7 +520,6 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
  * normal; posts the hit's ram number and info name, the position and whether a wall was hit. */
 void beHitLandModel_CheckWallFull(beHitLandModel *self)
 {
-    igVec3f position;
     float radius;
     float height;
     int kind;
@@ -532,7 +529,7 @@ void beHitLandModel_CheckWallFull(beHitLandModel *self)
     if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) == 0) return;
     if (beMessenger_GetFloatCount((beMessenger *)self->_messenger) == 0) return;
     if (beMessenger_GetIntCount((beMessenger *)self->_messenger) == 0) return;
-    beMessenger_GetVec3((float *)&position, (beMessenger *)self->_messenger, 0);
+    igVec3f position = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
     radius = beMessenger_GetFloat((beMessenger *)self->_messenger, 0);
     beMessenger_GetFloat((beMessenger *)self->_messenger, 1);
     height = beMessenger_GetFloat((beMessenger *)self->_messenger, 2);
@@ -646,9 +643,6 @@ static void beHitLandModel_FindLand(beHitLandModel *self)
     bool inWindow;
     bool grounded;
     bool found;
-    igVec3f position;
-    igVec3f start;
-    igVec3f end;
     float radius;
     float up;
     float down;
@@ -662,7 +656,9 @@ static void beHitLandModel_FindLand(beHitLandModel *self)
     if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) != 0) return;
     if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) == 0) return;
     if (beMessenger_GetFloatCount((beMessenger *)self->_messenger) == 0) return;
-    beMessenger_GetVec3((float *)&position, (beMessenger *)self->_messenger, 0);
+    igVec3f position = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
+    igVec3f start;
+    igVec3f end;
     radius = beMessenger_GetFloat((beMessenger *)self->_messenger, 0);
     up = beMessenger_GetFloat((beMessenger *)self->_messenger, 1);
     down = beMessenger_GetFloat((beMessenger *)self->_messenger, 2);

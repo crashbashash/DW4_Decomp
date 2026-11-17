@@ -342,7 +342,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                     igMatrix44f_SetQuaternion(out, fromRot);
                     j += 1;
                 } while (j < 2);
-                if (!(beBaseInfoRam_HasTimer(ram, "CAMHOKAN") & 0xFF)) {
+                if (beBaseInfoRam_HasTimer(ram, "CAMHOKAN") == 0) {
                     beBaseInfoRam_StartTimer(ram, "CAMHOKAN", 0);
                 }
                 if (self->_isPosChange == 0) {
@@ -382,13 +382,13 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                         igMatrix44f_SetTranslation(matrix44, shakePos);
                         k += 1;
                     } while (k < 2);
-                    if (beBaseInfoRam_IsTimerExpired(ram, "SHAKEONE") != 0) {
+                    if (beBaseInfoRam_IsTimerExpired(ram, "SHAKEONE")) {
                         int next = shake->_movePoint + 1;
                         if (((char *)(next + shake->_moveCode))[0] == 0) next = 0;
                         shake->_movePoint = next;
                         beBaseInfoRam_StartTimer(ram, "SHAKEONE", FramesToTime(shake->_oneTime));
                     }
-                    if (beBaseInfoRam_IsTimerExpired(ram, "SHAKEALL") != 0) {
+                    if (beBaseInfoRam_IsTimerExpired(ram, "SHAKEALL")) {
                         int removed;
                         igMatrix44f_SetTranslation(TRANSFORM_AT(box->_eyePosList, 0)->_m, shake->_svEyePos);
                         igMatrix44f_SetTranslation(TRANSFORM_AT(box->_intPosList, 0)->_m, shake->_svIntPos);

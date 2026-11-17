@@ -58,7 +58,7 @@ igSmartPointer<igObject> *igSmartPointer_bePlaySEList_Destruct(igSmartPointer<ig
             if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
                 igObject_Destroy((void *)object);
         }
-        if (delete_storage > 0) __dl__FPv(self);
+        if (delete_storage > 0) operator delete(self);
     }
     return self;
 }

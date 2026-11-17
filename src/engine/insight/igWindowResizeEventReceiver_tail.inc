@@ -15,7 +15,7 @@ int Gap__Insight__igWindowResizeEventReceiver__vfunc_32(Receiver *self, int widt
 }
 
 void igInsightCore_AddManager(igInsightCore *core, igObject *manager) {
-    if (FUN_00236b70() == 0) {
+    if (FUN_00236b70(core, manager) == 0) {
         igRendererOrderedList_Append((igDependencyOrderedList *)core->_managerList, manager, 0);
         *(int *)((char *)(manager) + 12) = (int)(core);
         ((DW4VC_92_0 *)manager)->vX();
@@ -25,11 +25,29 @@ void igInsightCore_AddManager(igInsightCore *core, igObject *manager) {
 void igInsightCore_RemoveManager(igInsightCore *core, igObject *manager) {
     int sp3C;
 
-    if (FUN_00236b70() != 0) {
+    if (FUN_00236b70(core, manager) != 0) {
         ((DW4VC_96_0 *)manager)->vX();
         *(int *)((char *)(manager) + 12) = 0;
         igObjectList_RemoveRetained(&sp3C, core->_managerList, manager);
     }
+}
+
+/* Index of *item in list, or -1. */
+static inline int indexOfItem(const igObjectList *list, igObject *const *item) {
+    int count = list->_count;
+    for (int i = 0; i < count; i++) {
+        if (*item == ((igObject **)list->_data)[i]) return i;
+    }
+    return -1;
+}
+
+/* Whether the core already holds manager in its manager list. */
+int FUN_00236b70(igInsightCore *core, igObject *manager) {
+    igInfoManagerOrderedList *managers = (igInfoManagerOrderedList *)core->_managerList;
+    /* matching construct: the copy taken by address keeps the manager in the 12(sp) slot, stored after the first list load. */
+    igObject *item = manager;
+    igObjectList *list = (igObjectList *)managers->_objectList;
+    return indexOfItem(list, &item) >= 0;
 }
 
 void igInsightCore_AddToScheduler(igInsightCore *core, igObject *object) {

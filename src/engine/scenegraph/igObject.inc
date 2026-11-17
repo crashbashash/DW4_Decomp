@@ -1,3 +1,33 @@
+/* Bounds of the geometry's vertex positions, grown about their centre by g_unitScale. */
+void FUN_001b1fa0(igGeometryAttr *geometry, igVec3f *min, igVec3f *max) {
+    igVertexArrayLock lock;
+    igVec3f *v;
+    min->x = min->y = min->z = 1.00000002e+20f;
+    max->x = max->y = max->z = -1.00000002e+20f;
+    igVertexArrayLock_Init(&lock);
+    lock.component = 0;
+    lock.firstVertex = 0;
+    lock.componentIndex = geometry->_offset;
+    lock.count = 0;
+    ((igVertexArrayView *)geometry->_vertexArray)->lock(&lock, 0);
+    for (unsigned int i = 0; i < lock.count; i++) {
+        v = (igVec3f *)(lock.getData() + i * lock.getStride());
+        if (!(min->x <= v->x)) min->x = v->x;
+        if (!(min->y <= v->y)) min->y = v->y;
+        if (!(min->z <= v->z)) min->z = v->z;
+        v = (igVec3f *)(lock.getData() + i * lock.getStride());
+        if (max->x < v->x) max->x = v->x;
+        if (max->y < v->y) max->y = v->y;
+        if (max->z < v->z) max->z = v->z;
+    }
+    igVec3f half = (*max - *min) * 0.5f;
+    half.scale(g_unitScale);
+    igVec3f center = (*min + *max) * 0.5f;
+    *min = center - half;
+    *max = center + half;
+    ((igVertexArrayView *)geometry->_vertexArray)->unlock(&lock, 0);
+}
+
 /* matching construct: the receiver class is not established (the +12 vertex array and +32 index base are accessed through FUN_001b23b0 / f32 below), so it keeps a local layout; _objList data, _data and the vertex array reference are 4-byte handles, so the handle and the array stay ONE variable */
 void FUN_001b21d0(A_1b21d0 *arg0, V3_1b21d0 *arg1, V3_1b21d0 *arg2) {
     igVertexArray2 *sp7C;
@@ -47,7 +77,7 @@ int FUN_001b23e0(int arg0, Y *arg1) {
     V3_1b23e0 sp40;
     V3_1b23e0 sp30;
     igSmartPointer<X_1b23e0> created(((X_1b23e0 *)igAABox_CreateInstance(igObject_GetAllocator((igObject *)arg0))));
-    FUN_001b1fa0(arg1, &sp40, &sp30);
+    FUN_001b1fa0((igGeometryAttr *)arg1, (igVec3f *)&sp40, (igVec3f *)&sp30);
     created.get()->a = sp40;
     created.get()->b = sp30;
     igVolume_ExtendBy(arg0, created.get());

@@ -3172,20 +3172,6 @@ extern "C" void igDirectory_RemoveInfo(igDirectoryView *h, igObject *object);
 extern "C" int igDirectory_FindObjectReferenceInInfos(igDirectoryView *arg0, int arg1, int arg2);
 extern "C" int igDirectory_AddObjectCallback(int arg0, igMetaFieldView *arg1, igDirectoryView *arg2);
 extern "C" int igDirectory_FindSortedInsertIndex(igDirectoryView *arg0, igMetaField *arg1, unsigned arg2);
-/* The pointer word an object list copies in on insert, holding the reference the list takes. It is
- * a class member, not a plain pointer local: igDirectory_InsertObject and igIGBFile_ShareEntries store the word and load
- * it back from its stack slot before the null test (`sw v0,104(sp); lw v1,104(sp); beqz v1`), which
- * MWCC emits for a member read after the constructor's store. A scalar local or parameter is tested
- * from the register and stored in the branch delay slot (712 bytes against retail's 716, and 720
- * against 724). */
-template <class T> struct RetainedWord {
-    T *p;
-    RetainedWord(T *object) : p(object) {
-        if (p != 0) {
-            p->_refCount = p->_refCount + 1;
-        }
-    }
-};
 /* An object list's insert: the list takes its own reference, then copies the pointer word in. */
 template <class T> static inline void insertObject(igDataList *list, int index, T *object) {
     RetainedWord<T> word(object);

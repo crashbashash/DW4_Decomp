@@ -530,10 +530,10 @@ static inline int AllEntriesReady(beNDMWLoadCtrl2CommonIntf *common) {
   int readyCount = 0;
   int index;
   for (index = 0; index < igDataList_GetCount((int *)works); index++) {
-    if ((beNDMWLoadSavePlWork__GetIsEntry((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index)) & 0xFF) == 1) {
+    if (beNDMWLoadSavePlWork__GetIsEntry((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index)) == 1) {
       entryCount += 1;
     }
-    if ((beNDMWLoadSavePlWork__GetIsRdy((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index)) & 0xFF) == 1) {
+    if (beNDMWLoadSavePlWork__GetIsRdy((beNDMWLoadSavePlWork *)beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get((igDataList *)works, index)) == 1) {
       readyCount += 1;
     }
   }
@@ -1172,7 +1172,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           NextSubstep(control);
           break;
         case 1:
-          if ((beNDMWLoadIntf2SelSlot__Open(slots, -1) & 0xFF) == 1) {
+          if (beNDMWLoadIntf2SelSlot__Open(slots, -1) == 1) {
             EnterSlotState(slots, 1);
             NextStep(control);
           }
@@ -1182,7 +1182,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
       case 1:
         switch (control->_st2) {
         case 0:
-          if ((beNDMWLoadIntf2SelSlot__UpdateSelection(slots, HostWork(common, host)->_isCtrl, 1) & 0xFF) == 1) {
+          if (beNDMWLoadIntf2SelSlot__UpdateSelection(slots, HostWork(common, host)->_isCtrl, 1) == 1) {
             if (slots->_isReOpenReq == 1) {
               NextStep(control);
             } else if (slots->_isCansel == 1) {
@@ -1228,7 +1228,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           NextSubstep(control);
           break;
         case 1:
-          if ((beNDMWLoadIntf2SelSlot__Close(slots) & 0xFF) == 1) {
+          if (beNDMWLoadIntf2SelSlot__Close(slots) == 1) {
             if (slots->_isReOpenReq == 1) {
               EnterState(control, LOAD_SCREEN_SLOT);
             } else if (slots->_isCansel == 1) {
@@ -1258,7 +1258,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           NextSubstep(control);
           break;
         case 1:
-          if ((beNDMWLoadIntf2DataSelIntf__OpenSaveArea(dataSelection, 0) & 0xFF) == 1) {
+          if (beNDMWLoadIntf2DataSelIntf__OpenSaveArea(dataSelection, 0) == 1) {
             NextSubstep(control);
           }
           break;
@@ -1271,14 +1271,14 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
             beNDMWLoadIntf2DataSelIntf__ClearStatesFrom(dataSelection, 0);
             NextSubstep(control);
             control->_st3 = 1;
-          } else if ((beNDMWLoadIntf2DataSelIntf__UpdateSelection(dataSelection, 0) & 0xFF) == 1) {
+          } else if (beNDMWLoadIntf2DataSelIntf__UpdateSelection(dataSelection, 0) == 1) {
             beNDMWLoadIntf2DataSelIntf__ClearStatesFrom(dataSelection, 0);
             NextSubstep(control);
             control->_st3 = 0;
           }
           break;
         case 4:
-          if ((beNDMWLoadIntf2DataSelIntf__CloseAll(dataSelection, 0) & 0xFF) == 1) {
+          if (beNDMWLoadIntf2DataSelIntf__CloseAll(dataSelection, 0) == 1) {
             switch (control->_st3) {
             case 0:
               NextStep(control);
@@ -1306,7 +1306,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           NextSubstep(control);
           break;
         case 1:
-          if ((beNDMWLoadIntf2DataSelIntf__CloseAll(dataSelection, 0) & 0xFF) == 1) {
+          if (beNDMWLoadIntf2DataSelIntf__CloseAll(dataSelection, 0) == 1) {
             int allocator = SelectAllocator(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
             {
               DegiDataRef freshData(beNDMWDegiData_Create(allocator));
@@ -1411,7 +1411,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
             break;
           }
           case 1:
-            if ((beNDMWLoadIntf2Diffselect__Update(difficulty, HostWork(common, host)->_isCtrl) & 0xFF) == 1) {
+            if (beNDMWLoadIntf2Diffselect__Update(difficulty, HostWork(common, host)->_isCtrl) == 1) {
               if (difficulty->_isCancel == 1) {
                 int allocator = SelectAllocator(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
                 {
@@ -2858,7 +2858,7 @@ unsigned char beNDMWLoadIntf2DataSelIntf__CloseSaveArea(beNDMWLoadIntf2DataSelIn
     return done;
 }
 
-int beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers(beNDMWLoadIntf2DataSelIntf *self, int level) {
+unsigned char beNDMWLoadIntf2DataSelIntf__ShowAccessPlayers(beNDMWLoadIntf2DataSelIntf *self, int level) {
     beNDMWLoadCtrl2CommonIntf *common = (beNDMWLoadCtrl2CommonIntf *)self->_commonIntf;
     beNDMWLoadIntf2ComMdlCtrl *models = (beNDMWLoadIntf2ComMdlCtrl *)self->_comMdlCtrl;
     int textOrder = self->_textOrder;

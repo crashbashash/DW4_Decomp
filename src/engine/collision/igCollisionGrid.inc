@@ -15,9 +15,9 @@ igMetaField *g_igCollisionGrid_deltasMetaField;
 igMetaField *g_igCollisionGrid_rateMetaField;
 igMetaField *g_igCollisionGrid_maxPriorityMetaField;
 
-void FUN_0023a040(int arg0) {
+igObject *FUN_0023a040(int arg0) {
     FUN_0023a340();
-    igMetaObject_CreateInstance(g_igCollisionGrid_metaObject, (igMemoryPoolView *)arg0);
+    return igMetaObject_CreateInstance(g_igCollisionGrid_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *FUN_0023a080(void) {

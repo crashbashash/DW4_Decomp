@@ -31,10 +31,6 @@ address sits in `v1` and the loop comes out with the move in the slot and a pad 
 
 ## Open questions
 
-- `sfxalp_SearchFreeHn` (`0x2b2fa0`) matches with a `volatile`-qualified read of the in-use word. Retail leaves
-  the loop branch's delay slot empty where the compiler fills it, and plain C cannot change that fill under this
-  compiler, so the function is `unapproved`, like SFX's own free-handle search
-  ([CRI SFX and SUD](cri-sfx-sud.md#open-questions)).
 - The handler tables at `0x4f5278` and `0x4f52b0` are not defined in C; nothing in the code references them, only
   the module lists in MWSFD's data.
 - What the stream graph slots 6 and 8 carry: the file names `sfdout` and `sfdainf` rest on behaviour and on the

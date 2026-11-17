@@ -273,7 +273,7 @@ void beSystem_Update(beSystem *self)
 }
 
 /* Active and past its first frame: the gate every manager checks before updating. */
-int beSystem_IsRunning(beSystem *self)
+unsigned char beSystem_IsRunning(beSystem *self)
 {
     return (self->_isActive & !self->_isFirstTime) != 0;
 }

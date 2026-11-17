@@ -7,7 +7,7 @@
  * ABI view only: never instantiated. */
 class beModelCtrlDispatchView : public beBaseInfoManagerDispatchView {
 public:
-    virtual int IsKind(const char *kind);                                   /* slot 35 */
+    virtual unsigned char IsKind(const char *kind);                         /* slot 35 */
     virtual void OnGenerate(beBaseInfoRam *ram);
     virtual void RegisterReceiver(beBaseInfoRam *ram);
     virtual void UpdateControl(beBaseInfoRam *ram);

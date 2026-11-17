@@ -66,6 +66,181 @@ void FUN_001c47a0(void *arg0, int arg1, int arg2) {
     *(int *)((char *)(arg0) + 544) = arg2;
 }
 
+/* Classifies a box against the view frustum: the box corners are transformed to clip space and their
+ * clip flags combined. */
+int FUN_001c47f0(const float *matrix, const float *boxMin, const float *boxMax) {
+    unsigned int all;
+    unsigned int any;
+    unsigned char narrow;
+    float scale = DAT_0048da28[0];
+
+    if (scale == 1.0f) {
+        scale = DAT_0048da28[2];
+        narrow = 0;
+    } else {
+        narrow = 1;
+    }
+    asm volatile {
+            mtsab matrix, 0
+            lq a2,0(matrix)
+            lq a3,16(matrix)
+            lq t0,32(matrix)
+            lq t1,48(matrix)
+            lq t2,64(matrix)
+            qfsrv a2,a3,a2
+            qfsrv a3,t0,a3
+            qfsrv t0,t1,t0
+            qfsrv t1,t2,t1
+            qmtc2 a2,vf1
+            qmtc2 a3,vf2
+            qmtc2 t0,vf3
+            qmtc2 t1,vf4
+            lq a2,0(boxMin)
+            lq a3,16(boxMin)
+            mtsab boxMin, 0
+            qfsrv a2,a3,a2
+            lq a3,0(boxMax)
+            lq t0,16(boxMax)
+            qmtc2 a2,vf5
+            mtsab boxMax, 0
+            qfsrv a3,t0,a3
+            vmulax.xyzw ACC,vf1,vf5x
+            qmtc2 a3,vf6
+            vmadday.xyzw ACC,vf2,vf5y
+            vmaddaz.xyzw ACC,vf3,vf5z
+            vmaddw.xyzw vf20,vf4,vf0w
+            vmulax.xyzw ACC,vf1,vf6x
+            vmadday.xyzw ACC,vf2,vf5y
+            vmaddaz.xyzw ACC,vf3,vf5z
+            vclipw.xyz vf20,vf20w
+            vmaddw.xyzw vf21,vf4,vf0w
+            vmulax.xyzw ACC,vf1,vf5x
+            vmadday.xyzw ACC,vf2,vf6y
+            vmaddaz.xyzw ACC,vf3,vf5z
+            cfc2 all, vi18
+            vclipw.xyz vf21,vf21w
+            vmaddw.xyzw vf22,vf4,vf0w
+            vmulax.xyzw ACC,vf1,vf5x
+            vmadday.xyzw ACC,vf2,vf5y
+            vmaddaz.xyzw ACC,vf3,vf6z
+            cfc2 a2,vi18
+            vclipw.xyz vf22,vf22w
+            vmaddw.xyzw vf23,vf4,vf0w
+            and all, all, a2
+            vmulax.xyzw ACC,vf1,vf6x
+            vmadday.xyzw ACC,vf2,vf6y
+            vmaddaz.xyzw ACC,vf3,vf5z
+            cfc2 a2,vi18
+            vclipw.xyz vf23,vf23w
+            vmaddw.xyzw vf24,vf4,vf0w
+            and all, all, a2
+            vmulax.xyzw ACC,vf1,vf6x
+            vmadday.xyzw ACC,vf2,vf5y
+            vmaddaz.xyzw ACC,vf3,vf6z
+            cfc2 a2,vi18
+            cfc2 any, vi18
+            vclipw.xyz vf24,vf24w
+            vmaddw.xyzw vf25,vf4,vf0w
+            and all, all, a2
+            vmulax.xyzw ACC,vf1,vf5x
+            vmadday.xyzw ACC,vf2,vf6y
+            vmaddaz.xyzw ACC,vf3,vf6z
+            cfc2 a2,vi18
+            vclipw.xyz vf25,vf25w
+            vmaddw.xyzw vf26,vf4,vf0w
+            and all, all, a2
+            vmulax.xyzw ACC,vf1,vf6x
+            vmadday.xyzw ACC,vf2,vf6y
+            vmaddaz.xyzw ACC,vf3,vf6z
+            cfc2 a2,vi18
+            vclipw.xyz vf26,vf26w
+            vmaddw.xyzw vf27,vf4,vf0w
+            and all, all, a2
+            mfc1 v0, scale
+            nop
+            ctc2 v0,vi21
+            vmuli.xy vf10,vf20,I
+            cfc2 a2,vi18
+            vclipw.xyz vf27,vf27w
+            and all, all, a2
+            vmuli.xy vf11,vf21,I
+            vmuli.xy vf12,vf22,I
+            vmuli.xy vf13,vf23,I
+            vnop
+            cfc2 a2,vi18
+            vmuli.xy vf14,vf24,I
+            or any, any, a2
+            and all, all, a2
+    }
+    if ((any & 0xffffff) == 0) {
+        return 1;
+    }
+    if ((all & 0x3f) != 0) {
+        return 2;
+    }
+    if ((any & 0xc30c30) == 0) {
+        if (narrow) {
+            /* matching construct: a separate local and a volatile asm statement: the PCode peephole skips a block
+             * that starts at a volatile asm statement, so this lwc1 and the block's mfc1 are not folded into lw.
+             * Every block of this function is written `asm volatile`, the VU0 inline-asm idiom's uniform form. */
+            float full = DAT_0048da28[2];
+            asm volatile {
+                    vclipw.xyz vf10,vf20w
+                    vclipw.xyz vf11,vf21w
+                    vclipw.xyz vf12,vf22w
+                    vclipw.xyz vf13,vf23w
+                    vmuli.xy vf15,vf25,I
+                    vmuli.xy vf16,vf26,I
+                    vmuli.xy vf17,vf27,I
+                    mfc1 v0, full
+                    nop
+                    ctc2 v0,vi21
+                    cfc2 a3, vi18
+                    vclipw.xyz vf14,vf24w
+                    vclipw.xyz vf15,vf25w
+                    vclipw.xyz vf16,vf26w
+                    vclipw.xyz vf17,vf27w
+                    vmuli.xy vf10,vf20,I
+                    vmuli.xy vf11,vf21,I
+                    vmuli.xy vf12,vf22,I
+                    cfc2 a2,vi18
+                    vmuli.xy vf13,vf23,I
+                    or any, a3, a2
+                    vmuli.xy vf14,vf24,I
+            }
+            if ((any & 0x3cf3cf) == 0) {
+                return 5;
+            }
+        }
+        asm volatile {
+            vclipw.xyz vf10,vf20w
+            vclipw.xyz vf11,vf21w
+            vclipw.xyz vf12,vf22w
+            vclipw.xyz vf13,vf23w
+            vmuli.xy vf15,vf25,I
+            vmuli.xy vf16,vf26,I
+            vmuli.xy vf17,vf27,I
+            vnop
+            cfc2 a3,vi18
+            vclipw.xyz vf14,vf24w
+            vclipw.xyz vf15,vf25w
+            vclipw.xyz vf16,vf26w
+            vclipw.xyz vf17,vf27w
+            vnop
+            vnop
+            vnop
+            cfc2 a2,vi18
+            nop
+            or any, a3, a2
+            nop
+        }
+        if ((any & 0x3cf3cf) == 0) {
+            return 4;
+        }
+    }
+    return 3;
+}
+
 int FUN_001c4ac0(CullFrustumView *o, CullBoundsView *b) {
     CullAttrState *st;
     /* matching construct: permuter — st assigned inside the first lookup, so the second reloads its fields */
@@ -79,6 +254,74 @@ int FUN_001c4ac0(CullFrustumView *o, CullBoundsView *b) {
         FUN_001c47a0((void *)o, (int)(world), (int)(view));
     }
     return FUN_001c47f0(o->_frustum, b->_min, b->_max);
+}
+
+static inline void pushCullAttr(igFrustCullTraversal *self, igAttr *attr) {
+    /* matching construct: declaration-order search — the order of these locals */
+    int n;
+    igAttrStackManager *manager;
+    AttrObjectStack *stack;
+    int slot;
+    igObject *pushed;
+    manager = (igAttrStackManager *)self->_attrStack;
+    slot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
+    stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
+    pushed = attr;
+    n = stack->getCount();
+    if (n < stack->_capacity) {
+        stack->_count = stack->_count + 1;
+    } else {
+        List_Resize(stack, n + 1, 4);
+    }
+    stack->set(n, &pushed);
+    igAttrStackManager_MarkStackChanged(manager, (igAttrStack *)stack, slot);
+}
+
+static inline void popCullAttr(igAttrStackManager *manager, igAttr *attr) {
+    int slot = attr->_cachedUnitID + ((int *)manager->_attrStackIndexTable)[attr->_cachedAttrIndex];
+    AttrObjectStack *stack = ((AttrObjectStackList *)manager->_attrStacks)->_data[slot];
+    igObject *top = stack->get(stack->_count - 1);
+    void (*pop)(igObject *, int) = stack->_popProc;
+    if (pop != 0) {
+        pop(top, manager->_popProcData);
+    }
+    stack->_count = stack->_count - 1;
+    igAttrStackManager_MarkStackChanged(manager, (igAttrStack *)stack, slot);
+}
+
+int FUN_001c4c20(igFrustCullTraversal *self, igNode *node, int result) {
+    int status;
+    switch (result) {
+    case 2:
+        return 0;
+    case 5:
+    case 1: {
+        pushCullAttr(self, (igAttr *)self->_cd);
+        igObject *saved = (igObject *)self->_travProcs;
+        ((igSmartPointer<igObject> &)self->_travProcs) = (igObject *)g_igCommonTraversal_travProcs[0];
+        status = ((CullTravProc)g_igCommonTraversal_travProcs[0]->_data[(unsigned)node->_handle])(self, node);
+        ((igSmartPointer<igObject> &)self->_travProcs) = saved;
+        popCullAttr((igAttrStackManager *)self->_attrStack, (igAttr *)self->_cd);
+        if (status == 2) {
+            return 2;
+        }
+        return 0;
+    }
+    case 3:
+        if (((CullTravProc)g_igCommonTraversal_travProcs[0]->_data[(unsigned)node->_handle])(self, node) == 2) {
+            return 2;
+        }
+        return 0;
+    case 4:
+        pushCullAttr(self, (igAttr *)self->_cd);
+        status = ((CullTravProc)g_igCommonTraversal_travProcs[0]->_data[(unsigned)node->_handle])(self, node);
+        popCullAttr((igAttrStackManager *)self->_attrStack, (igAttr *)self->_cd);
+        if (status == 2) {
+            return 2;
+        }
+        return 0;
+    }
+    return 0;
 }
 
 void FUN_001c5030(igFrustCullTraversal *arg0, igNode *arg1) {

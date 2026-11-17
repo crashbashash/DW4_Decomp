@@ -92,12 +92,9 @@ The four look-up tables of slots 28–39 are the same three bodies over four
 
 ## Matching
 
-The `0x0015ff10`-`0x00164870` unit uses the `combat` profile (`-O3`, alternate compiler,
-exceptions off), which the accessors need, `vfunc_30`, `vfunc_40` and `vfunc_42` included.
-The duplicated-null-load cast and the
-scheduler residuals below are default-compiler results, so neither stands as a wall.
-Spellings and flags that failed under the default compiler say nothing about the
-alternate compiler.
+These functions belong to the whole-file Gfx unit (`src/engine/gfx/GfxLibrary.cpp`) and verify under its
+profile: MWCC 3.0b52, `-O4,s -sdatathreshold 2 -str readonly -RTTI off -inline level=8,bottomup`, exceptions
+off. No per-function profile applies to this range.
 
 * **The null-checked cast (slots 28-39, 40-54).** Every accessor checks the class of
   `vd->_data` and nulls the pointer on failure. Retail duplicates the following load of

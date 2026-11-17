@@ -1,8 +1,8 @@
 igMetaObject *g_igAttrList_metaObject;
 
-void FUN_0013aec0(int arg0) {
+igAttrList *FUN_0013aec0(int allocator) {
     igAttrList_EnsureRegistered();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F460, (igMemoryPoolView *)arg0);
+    return (igAttrList *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55F460, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igAttrList_GetOrCreateMetaObject(void) {

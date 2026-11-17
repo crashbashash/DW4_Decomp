@@ -3,6 +3,7 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igTDataList.h"
 #include "dw4/ClassRegistration.h"
 #include "dw4/igAttr.h"
 #include "dw4/igAttrList.h"
@@ -837,7 +838,7 @@ extern "C" CallbackArray *igNonRefCountedAttrList_Register(void);
 extern "C" void thunk_igNonRefCountedAttrList_GetMetaObject(void);
 extern "C" int g_igNonRefCountedObjectList_metaObject[4];
 extern "C" int FUN_0013aeb0(void);
-extern "C" void FUN_0013aec0(int arg0);
+extern "C" igAttrList *FUN_0013aec0(int allocator);
 extern "C" igMetaObject *igAttrList_GetMetaObject(void);
 struct Obj_13afa0 { int *vt; char pad[28]; };
 extern "C" int g_igAttrList_vtable[4];
@@ -906,7 +907,10 @@ extern "C" void FUN_0013b860(void *p);
 extern "C" void FUN_0013b8a0(void *arg0);
 typedef igSmartPointer<igObject> igObjectPointer;
 class DefaultSource { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual igObjectPointer create(); };
-extern "C" igObjectPointer FUN_0013ba30(int, igObjectPointer);
+extern "C" igObjectPointer FUN_0013ba30(igAttrPool *pool, igObjectPointer attr);
+extern "C" int igObject_IsAlikeShallow(igObjectDispatchView *object, igObjectDispatchView *other);
+extern "C" igObjectPointer igObject_Clone(igObjectDispatchView *object, int deep);
+extern "C" int ObjectList_AppendRetained(igObjectList *list, igObject *object);
 extern "C" igObjectPointer Gap__Attrs__igAttrDefaultManager__vfunc_23(DefaultSource *source);
 extern "C" void **igSmartPointer_igAttrList_Destruct(void **arg0, short arg1);
 
@@ -1145,7 +1149,19 @@ extern "C" int FUN_0013d030(void *arg0, int arg1);
 extern "C" void thunk_FUN_0013cf70(void);
 struct Rc { int w0; int refs; };
 extern "C" void *FUN_0014bff0(...);
-
+#include "dw4/igVertexArrayLock.h"
+extern "C" float sqrtf(float);
+extern "C" void FUN_00192360(const float *matrix, float *out, float *in, int count);
+extern "C" void FUN_0013dbb0(int component, igVertexArrayView *vertexArray, const float *matrix);
+extern "C" void FUN_00192430(const float *matrix, float *out, float *in, unsigned int count);
+extern "C" void igMatrix44f_Invert(int *invertible, float *out, int matrix);
+extern "C" void FUN_001903d0(float *matrix);
+extern "C" float FUN_0018b9e0(const void *ray, const float *a, const float *b, const float *c, float *hit,
+                               float *normal, int mode);
+class igIndexArrayView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22();
+    virtual unsigned short *lock(int first, int, int count); virtual void d24(); virtual void unlock(unsigned short *indices, int, int, int); };
+class igVertexFormatView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual unsigned int *getFormat(); };
+class VertexArrayConfigureView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void configure(int a, int b, int c, int d); };
 class X_13d180 { public:
 virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void grow(unsigned, int, int);
 virtual void e0(); virtual void e1(); virtual void setAt(int, int);
@@ -1617,7 +1633,20 @@ public:
     virtual void getTextureCoordSource(int unitID, int *mode, int *texCoordIndex);
 };
 extern "C" void Gap__Attrs__igTextureCoordSourceAttr__vfunc_26(igTextureCoordSourceAttr *self, VisualContextDispatch *context);
-extern "C" int Gap__Attrs__igTextureAttr__vfunc_24(...);
+extern "C" void Gap__Attrs__igTextureAttr__vfunc_24(igTextureAttr *self, igObject *context);
+enum IG_GFX_TEXTURE_WRAP {
+    IG_GFX_TEXTURE_WRAP_CLAMP, IG_GFX_TEXTURE_WRAP_REPEAT, IG_GFX_TEXTURE_WRAP_REGION_CLAMP, IG_GFX_TEXTURE_WRAP_REGION_REPEAT
+};
+enum IG_GFX_TEXTURE_FILTER {
+    IG_GFX_TEXTURE_FILTER_NEAREST, IG_GFX_TEXTURE_FILTER_LINEAR, IG_GFX_TEXTURE_FILTER_NEAREST_MIPMAP_NEAREST,
+    IG_GFX_TEXTURE_FILTER_NEAREST_MIPMAP_LINEAR, IG_GFX_TEXTURE_FILTER_LINEAR_MIPMAP_NEAREST, IG_GFX_TEXTURE_FILTER_LINEAR_MIPMAP_LINEAR
+};
+extern "C" int thunk_FUN_0017aa20(igObject *context, int width, int height, int format, int kind, int mipmapMode, int levels);
+extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_133(igObject *context, int texture, igImage *image, int level);
+extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_260(igObject *context, int texture, int videoBuffer);
+extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_136(igObject *context, int texture, IG_GFX_TEXTURE_WRAP wrapS, IG_GFX_TEXTURE_WRAP wrapT);
+extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_138(igObject *context, int texture, IG_GFX_TEXTURE_FILTER minFilter);
+extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_140(igObject *context, int texture, IG_GFX_TEXTURE_FILTER magFilter);
 class VA_141080 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int v96(int *); };
 class VB_141080 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual int v148(int,int); };
 extern "C" void Gap__Attrs__igTextureCubeAttr__vfunc_24(int *arg0, int *arg1);
