@@ -102,8 +102,8 @@ int ParticleInfo_GetVTable(void) {
     obj._geometry = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_ParticleInfo_vtable[0];
-    igSmartPointer_igGeometry_Destruct(&obj._geometry, -1);
-    igSmartPointer_igImage_Destruct(&obj._texture, -1);
+    igSmartPointer_igGeometry_Destruct((igSmartPointer<igObject> *)&obj._geometry, -1);
+    igSmartPointer_igImage_Destruct((igSmartPointer<igObject> *)&obj._texture, -1);
     igSceneInfo_Destroy((igSceneInfo *)&obj, 0);
     return vtable;
 }

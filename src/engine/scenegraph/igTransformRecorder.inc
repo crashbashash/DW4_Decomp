@@ -23,22 +23,17 @@ int igTransformRecorder_GetVTable(void) { struct Obj_195860 o; int *p = (int *)&
  t = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
  o.vt = &g_igTransformRecorder_vtable[0]; igGroup_Destroy((igGroup *)((struct Obj_195860 *)p), 0); return t; }
 
-void **igSmartPointer_igNodeList_Destruct(void **arg0, short arg1) {
-    S_temp_a0_1958f0 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_1958f0 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
+igSmartPointer<igObject> *igSmartPointer_igNodeList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 igNode *igNode_Destroy(igNode *self, short deleteFlag) {

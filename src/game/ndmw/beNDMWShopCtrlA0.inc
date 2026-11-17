@@ -32,7 +32,7 @@ int beNDMWShopCtrlA0_GetVTable(void) {
     obj._playerNoList = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrlA0_vtable[0];
-    igSmartPointer_igIntList_Destruct(&obj._playerNoList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._playerNoList, -1);
     igSmartPointer_beNDMWStatusTitle03_Destruct((igSmartPointer<igObject> *)&obj._account, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return vtable;

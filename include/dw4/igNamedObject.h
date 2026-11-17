@@ -19,6 +19,7 @@ struct CallbackArray *igNamedObject_Register(void);
 void igNamedObject_EnsureRegistered(void);
 void igNamedObject_SetName(struct igNamedObject *self, const char *name);
 struct igMetaObject *igNamedObject_GetPublishedMetaObject(void);
+struct igNamedObject *igNamedObject_Destroy(struct igNamedObject *self, short deleteFlag);
 
 #ifdef __cplusplus
 }

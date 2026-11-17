@@ -123,35 +123,30 @@ void igTextureMatrixAttr_InitFields(void) {
     igMetaObject_NameFields(temp_s0, g_igTextureMatrixAttr_fieldTable, g_igTextureMatrixAttr_fieldHandles, g_igTextureMatrixAttr_fieldOffsets, temp_s2);
 }
 
-void **igSmartPointer_igTextureList_Destruct(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igTextureList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
-void *igInfo_Destroy(struct S *arg0, short arg1) {
-    void *p;
+igInfo *igInfo_Destroy(igInfo *self, short deleteFlag) {
+    char *p;
     int *h;
     int rc;
 
-    if (arg0 != 0) {
-        arg0->f0 = &g_igInfo_vtable[0];
-        if (arg0 != 0) {
-            arg0->f0 = &g_igNamedObject_vtable[0];
-            if (&arg0->f8) {
-                p = arg0->f8;
+    if (self != 0) {
+        self->_vtable = (int)&g_igInfo_vtable[0];
+        if (self != 0) {
+            self->_vtable = (int)&g_igNamedObject_vtable[0];
+            if (&self->_name) {
+                p = (char *)self->_name;
                 if (p != 0) {
                     h = (int *)((char *)(p) - 8);
                     rc = *(int *)((char *)(p) - 4) - 1;
@@ -162,22 +157,22 @@ void *igInfo_Destroy(struct S *arg0, short arg1) {
                 }
             }
         }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (deleteFlag > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
-void *igNamedObject_Destroy(struct S_131bc0 *arg0, short arg1) {
-    void *p;
+igNamedObject *igNamedObject_Destroy(igNamedObject *self, short deleteFlag) {
+    char *p;
     int *h;
     int rc;
 
-    if (arg0 != 0) {
-        arg0->f0 = &g_igNamedObject_vtable[0];
-        if (&arg0->f8) {
-            p = arg0->f8;
+    if (self != 0) {
+        self->_vtable = (int)&g_igNamedObject_vtable[0];
+        if (&self->_name) {
+            p = (char *)self->_name;
             if (p != 0) {
                 h = (int *)((char *)(p) - 8);
                 rc = *(int *)((char *)(p) - 4) - 1;
@@ -187,11 +182,11 @@ void *igNamedObject_Destroy(struct S_131bc0 *arg0, short arg1) {
                 }
             }
         }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (deleteFlag > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 int FUN_00131c50(void) {

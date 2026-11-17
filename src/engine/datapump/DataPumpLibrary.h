@@ -3,6 +3,7 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/igDataPumpInfo.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igNonRefCountedObjectStack.h"
@@ -195,10 +196,7 @@ extern "C" void igDataPumpInfo_InitFields(void);
 extern "C" void FUN_001e5950(int arg0);
 extern "C" igMetaObject *igDataPump_GetMetaObject(void);
 struct Obj_1e59e0 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; };
-extern "C" int igSmartPointer_igMetaField_Destruct(...);
 extern "C" int FUN_001c7600(...);
-extern "C" int igSmartPointer_igObject_Destruct(...);
-extern "C" int igStringRef_Destruct(...);
 extern "C" int g_igDataPump_vtable[4];
 extern "C" int igDataPump_GetVTable(void);
 extern "C" void FUN_001e5ab0(void);

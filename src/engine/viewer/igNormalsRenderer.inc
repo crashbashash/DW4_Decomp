@@ -41,10 +41,10 @@ int igNormalsRenderer_GetVTable(void) {
     obj.vt = &g_igNormalsRenderer_vtable[0];
     FUN_001d6560(&obj.w10, -1);
     FUN_00136e10(&obj.w8, -1);
-    igSmartPointer_igColorAttr_Destruct(&obj.w7, -1);
+    igSmartPointer_igColorAttr_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
     FUN_00142d10(&obj.w6, -1);
-    igSmartPointer_igAttrList_Destruct(&obj.w5, -1);
-    igSmartPointer_igAttrList_Destruct(&obj.w4, -1);
+    igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
+    igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&obj.w4, -1);
     FUN_00459860((ObjectRefWord *)&obj.w3, -1);
     FUN_00230f70(&obj, 0);
     return t;

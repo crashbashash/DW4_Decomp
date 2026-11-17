@@ -3,6 +3,7 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/igVec3f.h"
 #include "dw4/igobject_release.h"
 #include "dw4/fun_00235370_refs.h"
@@ -195,10 +196,8 @@ extern "C" void thunk_igInsightPlugin_GetMetaObject(void);
 extern "C" igMetaObject *g_igInsightCore_metaObject;
 extern "C" igMetaObject *igInsightCore_GetMetaObject(void);
 struct Obj_2328e0 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; int w12; int w13; int w14; int w15; int w16; int w17; int w18; int w19; int w20; int w21; int w22; int w23; int w24; int w25; int w26; int w27; };
-extern "C" int igSmartPointer_igVisualContext_Destruct(...);
 extern "C" int FUN_00143350(...);
 extern "C" int FUN_00150a70(...);
-extern "C" int igSmartPointer_igInfoList_Destruct(...);
 extern "C" int g_igInsightCore_vtable[4];
 extern "C" int igInsightCore_GetVTable(void);
 struct S_temp_a0 { char pad4[4]; int f4; };
@@ -207,7 +206,6 @@ extern "C" O *FUN_00232a60(O *arg0, short arg1);
 /* Deleting destructor; the deletion flag is a signed short. */
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
-extern "C" ObjectRefWord *igSmartPointer_igRendererOrderedList_Destruct(ObjectRefWord *self,int delete_storage);
 typedef struct S_temp_a0_232b60 { char pad4[4]; int f4; } S_temp_a0_232b60;
 extern "C" void **FUN_00232b60(void **arg0, short arg1);
 extern "C" ObjectRefWord *FUN_00232be0(ObjectRefWord *self,int delete_storage);
@@ -252,10 +250,6 @@ extern "C" igMetaObject *igInfoManagerOrderedList_GetMetaObject(void);
 typedef struct { int *vt; int w[5]; } Obj_233520;
 extern "C" int g_igInfoManagerOrderedList_vtable[4];
 extern "C" int igInfoManagerOrderedList_GetVTable(void);
-extern "C" ObjectRefWord *igSmartPointer_igDependencyList_Destruct(ObjectRefWord *self,int delete_storage);
-extern "C" int igSmartPointer_igPointerList_Destruct(...);
-extern "C" int igSmartPointer_igObjectList_Destruct(...);
-extern "C" int igSmartPointer_igStringRefList_Destruct(...);
 extern "C" int DAT_0052cbc0[4];
 #include "dw4/igDependencyOrderedList.h"
 extern "C" int **FUN_00233610(int **arg0, long long arg1);

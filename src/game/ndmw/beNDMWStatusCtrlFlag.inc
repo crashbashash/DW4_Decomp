@@ -32,7 +32,7 @@ int beNDMWStatusCtrlFlag_GetVTable(void) {
     *impItemsRef = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWStatusCtrlFlag_vtable[0];
-    igSmartPointer_igIntList_Destruct(impItemsRef, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)impItemsRef, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return vtable;
 }

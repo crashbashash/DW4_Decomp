@@ -7,6 +7,7 @@
 #include <ctype.h>
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/igObjectDispatchView.h"
 #include "dw4/igTDataList.h"
 #include "dw4/igMemoryPoolView.h"
@@ -430,14 +431,7 @@ extern "C" void **igSmartPointer_igLocationTable_Destruct(void **arg0, int arg1)
 extern "C" void **igSmartPointer_igCallStackTable_Destruct(void **arg0, short arg1);
 extern "C" void *igResource_Create(int pool);
 extern "C" igMetaObject *igResource_GetOrCreateMetaObject(void);
-extern "C" int igSmartPointer_igThread_Destruct(...);
-extern "C" int igSmartPointer_igMemoryPool_Destruct(...);
-extern "C" int igSmartPointer_igStringObjList_Destruct(...);
-extern "C" int igSmartPointer_igDirectory_Destruct(...);
-extern "C" int igSmartPointer_igIntList_Destruct(...);
-extern "C" int igStringRef_Destruct(...);
 extern "C" int igResource_GetVTable(void);
-extern "C" void **igSmartPointer_igDirectoryList_Destruct(void **arg0, long long arg1);
 extern "C" void igResource_EnsureRegistered(void);
 extern "C" CallbackArray *igResource_Register(void);
 extern "C" void igResource_GetMetaObjectFunction(void);
@@ -525,7 +519,6 @@ extern "C" int igObjectList_GetVTable(void);
 extern "C" void igObjectList_GetMetaObjectFunction(void);
 extern "C" void igObjectList_InitFields(void);
 extern "C" int igObjectDirEntry_Create(int arg0);
-extern "C" int igSmartPointer_igMetaObject_Destruct(...);
 extern "C" int igObjectDirEntry_GetVTable(void);
 extern "C" void igObjectDirEntry_EnsureRegistered(void);
 extern "C" CallbackArray *igObjectDirEntry_Register(void);
@@ -568,7 +561,6 @@ extern "C" void igMetaEnum_EnsureRegistered(void);
 extern "C" CallbackArray *igMetaEnum_Register(void);
 extern "C" void igMetaEnum_GetMetaObjectFunction(void);
 extern "C" void igMetaEnum_InitFields(void);
-extern "C" int igSmartPointer_igMetaField_Destruct(...);
 extern "C" int igMemoryRefMetaField_GetVTable(void);
 extern "C" void igMemoryRefMetaField_EnsureRegistered(void);
 extern "C" CallbackArray *igMemoryRefMetaField_Register(void);
@@ -588,7 +580,6 @@ extern "C" void igMemoryPoolInfoList_EnsureRegistered(void);
 extern "C" CallbackArray *igMemoryPoolInfoList_Register(void);
 extern "C" void igMemoryPoolInfoList_GetMetaObjectFunction(void);
 extern "C" void * igMemoryPoolInfo_Create(int arg0);
-extern "C" int igInfo_Destroy(...);
 extern "C" int igMemoryPoolInfo_GetVTable(void);
 extern "C" void igMemoryPoolInfo_EnsureRegistered(void);
 extern "C" CallbackArray *igMemoryPoolInfo_Register(void);
@@ -731,10 +722,6 @@ extern "C" void igInfo_EnsureRegistered(void);
 extern "C" void igInfo_GetMetaObjectFunction(void);
 extern "C" void igInfo_InitFields(void);
 extern "C" void * igIGBFile_Create(int arg0);
-extern "C" int igSmartPointer_igMetaObjectList_Destruct(...);
-extern "C" int igSmartPointer_igObjectList_Destruct(...);
-extern "C" int igSmartPointer_igMetaFieldList_Destruct(...);
-extern "C" int igSmartPointer_igFile_Destruct(...);
 extern "C" int igSmartPointer_igIntList_Construct(...);
 extern "C" int igSmartPointer_igMetaObjectList_Construct(...);
 extern "C" int igStringRef_Construct(...);
@@ -820,9 +807,6 @@ extern "C" igMetaObject *igEnumMetaField_GetPublishedMetaObject(void);
 extern "C" void igEnumArrayMetaField_InitFields(void);
 extern "C" void igEnumArrayMetaField_CreateDefaultDescriptor(void);
 extern "C" int igDriverDatabase_GetSectionOverrideModeMetaEnum(void);
-extern "C" int igSmartPointer_igStringObj_Destruct(...);
-extern "C" int igSmartPointer_igRegistry_Destruct(...);
-extern "C" int igSmartPointer_igStringRefListList_Destruct(...);
 extern "C" int igDriverDatabase_GetVTable(void);
 extern "C" void igDriverDatabase_EnsureRegistered(void);
 extern "C" CallbackArray *igDriverDatabase_Register(void);
@@ -844,8 +828,6 @@ extern "C" int igDirectoryList_GetVTable(void);
 extern "C" void igDirectoryList_EnsureRegistered(void);
 extern "C" CallbackArray *igDirectoryList_Register(void);
 extern "C" void igDirectoryList_GetMetaObjectFunction(void);
-extern "C" int igSmartPointer_igPointerList_Destruct(...);
-extern "C" int igSmartPointer_igInfoList_Destruct(...);
 extern "C" int igDirectory_GetVTable(void);
 extern "C" CallbackArray *igDirectory_Register(void);
 extern "C" void igDirectory_GetMetaObjectFunction(void);
@@ -859,8 +841,6 @@ extern "C" void igDirEntry_EnsureRegistered(void);
 extern "C" CallbackArray *igDirEntry_Register(void);
 extern "C" void igDirEntry_GetMetaObjectFunction(void);
 extern "C" void igDirEntry_InitFields(void);
-extern "C" int igSmartPointer_igStringRefList_Destruct(...);
-extern "C" int igSmartPointer_igDependencyList_Destruct(...);
 extern "C" int igDependencyOrderedList_GetVTable(void);
 extern "C" void igDependencyOrderedList_EnsureRegistered(void);
 extern "C" CallbackArray *igDependencyOrderedList_Register(void);
@@ -2729,66 +2709,7 @@ extern "C" int DAT_00530d80[4];
 struct ObjectSystemView;
 class igEventTrackerView;
 extern "C" void igObjectSystem_Startup(ObjectSystemView *self);
-/* Header stored in front of every interned string token. */
-struct StringTokenHeader { int owner; int refCount; };
-static inline void retainString(const char *string) {
-    if (string != 0) {
-        StringTokenHeader *header = (StringTokenHeader *)string - 1;
-        header->refCount = header->refCount + 1;
-    }
-}
-static inline void releaseString(const char *string) {
-    if (string != 0) {
-        StringTokenHeader *header = (StringTokenHeader *)string - 1;
-        int count = header->refCount - 1;
-        header->refCount = count;
-        if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)header->owner, (StringTokenHeader *)header);
-        }
-    }
-}
-/* The shared intern pool g_stringPool, created on first use. */
-struct InternedStrings {
-    static inline StringPool *get() {
-        if (g_stringPool == 0) {
-            StringPool *pool = (StringPool *)StringPool_Allocate(16);
-            if (pool != 0) {
-                pool = StringPool_Construct(pool);
-            }
-            g_stringPool = pool;
-        }
-        return (StringPool *)g_stringPool;
-    }
-};
-/* A reference to a string interned in the shared pool. Constructing or assigning from characters
- * interns them; copies share the token and count it. */
-struct igStringRef {
-    char *p;
-    igStringRef() : p(0) {}
-    igStringRef(char *chars) {
-        char *interned;
-        if (chars == 0) {
-            interned = 0;
-        } else {
-            interned = (char *)StringPool_Intern(InternedStrings::get(), chars);
-        }
-        p = interned;
-    }
-    igStringRef(const igStringRef &other) : p(other.p) { retainString(p); }
-    ~igStringRef() { releaseString(p); }
-    igStringRef &operator=(const igStringRef &other) {
-        retainString(other.p);
-        releaseString(p);
-        p = other.p;
-        return *this;
-    }
-    igStringRef &operator=(char *chars) {
-        char *interned = (char *)StringPool_Intern(InternedStrings::get(), chars);
-        releaseString(p);
-        p = interned;
-        return *this;
-    }
-};
+#include "dw4/igStringRef.h"
 extern "C" void igObjectSystem_InitPaths(ObjectSystemView *arg0);
 extern "C" void igObjectSystem_PreExit(ObjectSystemView *arg0);
 extern "C" void igObjectSystem_Exit(ObjectSystemView *arg0);

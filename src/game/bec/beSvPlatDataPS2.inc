@@ -46,12 +46,12 @@ int beSvPlatDataPS2_GetVTable(void) {
     obj._image = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSvPlatDataPS2_vtable[0];
-    igSmartPointer_igObjectList_Destruct(&obj._image, -1);
-    igStringRef_Destruct(&obj._fnameIcon2, -1);
-    igStringRef_Destruct(&obj._fnameIcon1, -1);
-    igStringRef_Destruct(&obj._fnameIcon0, -1);
-    igStringRef_Destruct(&obj._title, -1);
-    igStringRef_Destruct(&obj._dirName, -1);
+    igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj._image, -1);
+    igStringRef_Destruct((igStringRef *)&obj._fnameIcon2, -1);
+    igStringRef_Destruct((igStringRef *)&obj._fnameIcon1, -1);
+    igStringRef_Destruct((igStringRef *)&obj._fnameIcon0, -1);
+    igStringRef_Destruct((igStringRef *)&obj._title, -1);
+    igStringRef_Destruct((igStringRef *)&obj._dirName, -1);
     beSvPlatBaseData_Destroy((beSvPlatBaseData *)&obj, (short)0);
     return vtable;
 }

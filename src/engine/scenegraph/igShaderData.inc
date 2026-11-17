@@ -102,15 +102,15 @@ void igShaderData_InitFields(void) {
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igShaderData_fieldTable, g_igShaderData_fieldHandles, g_igShaderData_fieldOffsets, temp_s0);
 }
 
-ObjectRefWord *igSmartPointer_igMatrix44fList_Destruct(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
+igSmartPointer<igObject> *igSmartPointer_igMatrix44fList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if((short)delete_storage>0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
     return self;
 }

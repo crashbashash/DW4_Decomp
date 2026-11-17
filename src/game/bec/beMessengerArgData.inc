@@ -44,15 +44,15 @@ int beMessengerArgData_GetVTable(void) {
     obj._stringList = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMessengerArgData_vtable[0];
-    igSmartPointer_igStringRefList_Destruct(&obj._stringList, -1);
-    igSmartPointer_igObjectList_Destruct(&obj._objectList, -1);
-    igSmartPointer_igMatrix44fList_Destruct(&obj._matrix44fList, -1);
-    igSmartPointer_igVec3fList_Destruct(&obj._vec3fList, -1);
-    igSmartPointer_igLongList_Destruct(&obj._longList, -1);
-    igSmartPointer_igFloatList_Destruct(&obj._floatList, -1);
-    igSmartPointer_igIntList_Destruct(&obj._intList, -1);
-    igSmartPointer_igBoolList_Destruct(&obj._boolList, -1);
-    igStringRef_Destruct(&obj._debugString, -1);
+    igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)&obj._stringList, -1);
+    igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj._objectList, -1);
+    igSmartPointer_igMatrix44fList_Destruct((igSmartPointer<igObject> *)&obj._matrix44fList, -1);
+    igSmartPointer_igVec3fList_Destruct((igSmartPointer<igObject> *)&obj._vec3fList, -1);
+    igSmartPointer_igLongList_Destruct((igSmartPointer<igObject> *)&obj._longList, -1);
+    igSmartPointer_igFloatList_Destruct((igSmartPointer<igObject> *)&obj._floatList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._intList, -1);
+    igSmartPointer_igBoolList_Destruct((igSmartPointer<igObject> *)&obj._boolList, -1);
+    igStringRef_Destruct((igStringRef *)&obj._debugString, -1);
     return vtable;
 }
 

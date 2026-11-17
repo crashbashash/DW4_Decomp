@@ -30,10 +30,10 @@ int igOptInterface_GetVTable(void) {
     obj.w11 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igOptInterface_vtable[0];
-    igSmartPointer_igInfoList_Destruct(&obj.w11, -1);
+    igSmartPointer_igInfoList_Destruct((igSmartPointer<igObject> *)&obj.w11, -1);
     FUN_00225b90((void **)&obj.w10, -1);
-    igStringRef_Destruct(&obj.w9, -1);
-    igSmartPointer_igMetaObjectList_Destruct(&obj.w8, -1);
+    igStringRef_Destruct((igStringRef *)&obj.w9, -1);
+    igSmartPointer_igMetaObjectList_Destruct((igSmartPointer<igObject> *)&obj.w8, -1);
     return t;
 }
 

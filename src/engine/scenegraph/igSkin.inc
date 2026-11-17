@@ -70,33 +70,28 @@ int igSkin_GetVTable(void) {
     return temp_s2;
 }
 
-void **igSmartPointer_igAABox_Destruct(void **arg0, short arg1) {
-    S_temp_a0_198190 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_198190 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
+igSmartPointer<igObject> *igSmartPointer_igAABox_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
-ObjectRefWord *igSmartPointer_igNode_Destruct(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
+igSmartPointer<igObject> *igSmartPointer_igNode_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if((short)delete_storage>0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
     return self;
 }

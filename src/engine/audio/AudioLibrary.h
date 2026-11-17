@@ -3,10 +3,10 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/igAudioContext.h"
 
 union AudioContextProbe { int vt; char b[64]; };
-struct RefCountBits { int pad; union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
 struct SourceListProbe { int *vt; char pad[28]; };
 struct DW4SR4 { int w0; };
 
@@ -289,7 +289,6 @@ void igAudioContext_InitFields(void);
 void thunk_FUN_00143150(void);
 igMetaObject *FUN_00143150(void);
 void **FUN_00143250(void **arg0, short arg1);
-void **igSmartPointer_igThread_Destruct(struct RefCountBits **self, short flag);
 void **FUN_00143350(void **arg0, long long arg1);
 void FUN_001433d0(void);
 CallbackArray *igPsx2AudioContext_Register(void);

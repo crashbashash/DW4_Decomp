@@ -25,7 +25,7 @@ int beHitLandModelInfo_GetVTable(void) {
     obj._vtable = (int)&g_beHitLandModelInfo_vtable[0];
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._checkSwitch, -1);
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._switchgraph, -1);
-    igSmartPointer_igObjectList_Destruct(&obj._nameList, -1);
+    igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj._nameList, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
 }

@@ -28,9 +28,9 @@ int igExternalDirEntry_GetVTable(void) {
     entry._externalFilePath = 0;
     vtable = *(int *)((char *)&entry + g_objectSystem->vtableProbeOffset);
     entry._vtable = (int)&g_igExternalDirEntry_vtable[0];
-    igStringRef_Destruct(&entry._externalFilePath, -1);
-    igStringRef_Destruct(&entry._entryName, -1);
-    igStringRef_Destruct(&entry._directoryName, -1);
+    igStringRef_Destruct((igStringRef *)&entry._externalFilePath, -1);
+    igStringRef_Destruct((igStringRef *)&entry._entryName, -1);
+    igStringRef_Destruct((igStringRef *)&entry._directoryName, -1);
     igDirEntry_Destroy((igDirEntry *)&entry, 0);
     return vtable;
 }

@@ -71,7 +71,7 @@ int igViewerParameters_GetVTable(void) {
     FUN_001d6560(&u.b[240], -1);
     FUN_0019b1f0(&u.b[220], -1);
     FUN_00196a50(&u.b[204], -1);
-    igSmartPointer_igGroup_Destruct(p, -1);
+    igSmartPointer_igGroup_Destruct((igSmartPointer<igObject> *)p, -1);
     FUN_0044c110(u.b, 0);
     return temp_s1;
 }

@@ -25,7 +25,7 @@ int beTextureCtrlInfo_GetVTable(void) {
     obj._dataList_ = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beTextureCtrlInfo_vtable[0];
-    igSmartPointer_igNamedObjectList_Destruct(&obj._dataList_, -1);
+    igSmartPointer_igNamedObjectList_Destruct((igSmartPointer<igObject> *)&obj._dataList_, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
 }

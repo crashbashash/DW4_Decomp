@@ -29,8 +29,8 @@ int beNDMWShopCtrlA1_GetVTable(void) {
     obj._cardRamNoList = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrlA1_vtable[0];
-    igSmartPointer_igIntList_Destruct(&obj._cardRamNoList, -1);
-    igSmartPointer_igStringRefList_Destruct(&obj._cardInfoList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._cardRamNoList, -1);
+    igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)&obj._cardInfoList, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return vtable;
 }

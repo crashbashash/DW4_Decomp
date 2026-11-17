@@ -57,8 +57,8 @@ int igMemoryRefMetaField_GetVTable(void) {
     igMemoryRefMetaField_Init((igMemoryRefMetaField *)&prototype);
     vtable = *(int *)((char *)&prototype + g_objectSystem->vtableProbeOffset);
     prototype._vtable = (int)&g_igMemoryRefMetaField_vtable[0];
-    igStringRef_Destruct((char *)&prototype._poolName, -1);
-    igSmartPointer_igMetaField_Destruct((char *)&prototype._memTypeRef, -1);
+    igStringRef_Destruct((igStringRef *)&prototype._poolName, -1);
+    igSmartPointer_igMetaField_Destruct((igSmartPointer<igObject> *)&prototype._memTypeRef, -1);
     igRefMetaField_Destroy((igRefMetaField *)&prototype, 0);
     return vtable;
 }

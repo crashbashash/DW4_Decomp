@@ -64,10 +64,10 @@ int igInsightCore_GetVTable(void) {
     FUN_00232c60((void **)&obj.w10, -1);
     FUN_00232be0((ObjectRefWord *)&obj.w9, -1);
     FUN_00232b60((void **)&obj.w8, -1);
-    igSmartPointer_igRendererOrderedList_Destruct((ObjectRefWord *)&obj.w7, -1);
-    igSmartPointer_igVisualContext_Destruct(&obj.w6, -1);
+    igSmartPointer_igRendererOrderedList_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
+    igSmartPointer_igVisualContext_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
     FUN_00143350(&obj.w5, -1);
-    igSmartPointer_igInfoList_Destruct(&obj.w4, -1);
+    igSmartPointer_igInfoList_Destruct((igSmartPointer<igObject> *)&obj.w4, -1);
     FUN_00232a60((O *)&obj.w3, -1);
     FUN_00231210((void **)&obj.w2, -1);
     return t;
@@ -82,15 +82,15 @@ O *FUN_00232a60(O *arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *igSmartPointer_igRendererOrderedList_Destruct(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
+igSmartPointer<igObject> *igSmartPointer_igRendererOrderedList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if((short)delete_storage>0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
     return self;
 }

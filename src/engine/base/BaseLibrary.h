@@ -3,6 +3,7 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/typecast.h"
 #include "dw4/igTDataList.h"
 #include "dw4/igMetaObject.h"
@@ -124,15 +125,9 @@ extern int DAT_00561010[4];
 
 extern "C" {
 int igUnsignedCharMetaField_GetDefaultDescriptor(...);
-int igSmartPointer_igMetaObjectList_Destruct(...);
-int igSmartPointer_igInfoList_Destruct(...);
-void igStringRef_Destruct(...);
-int igSmartPointer_igObjectList_Destruct(...);
 int FUN_0019c8c0(...);
 int ObjectPointerList_FindIndex(...);
 int MetaRefList_AppendRetained(...);
-int igNamedObject_Destroy(...);
-int igSmartPointer_igDirectory_Destruct(...);
 int Memory_GetDefaultHandleAllocator(...);
 int FUN_002fdef0(void *meta, void *field);
 int FUN_00142bb0(void *list, void *key);
@@ -166,7 +161,6 @@ union U_2 { int vt; int w[12]; void *p[12]; char b[48]; };
 typedef struct S_ref { char pad4[4]; int f4; } S_ref;
 union U_3 { int vt; char b[48]; };
 struct S_temp_a0 { char pad4[4]; int f4; };
-struct O { S_temp_a0 *m; };
 struct Obj_5 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; };
 struct T_2 { int w0; int refs; };
 struct T_3 { int word0; int references; };
@@ -454,7 +448,6 @@ void igLogInterface_InitFields(void);
 igMetaObject *FUN_002267c0(void);
 igMetaObject *igLockInterface_GetMetaObject(void);
 int igLockInterface_GetVTable(void);
-O *igSmartPointer_igBoolList_Destruct(O *arg0, short arg1);
 void FUN_00226a10(void);
 CallbackArray *igLockInterface_Register(void);
 void thunk_igLockInterface_GetMetaObject(void);
@@ -519,7 +512,6 @@ igMetaObject *igItemInterface_GetMetaObject(void);
 int igItemInterface_GetVTable(void);
 void **FUN_00227d70(void **arg0, short arg1);
 ObjectRefWord *FUN_00227df0(ObjectRefWord *self,int delete_storage);
-void **igSmartPointer_igStringRefListList_Destruct(void **arg0, short arg1);
 void FUN_00227ef0(void);
 CallbackArray *igItemInterface_Register(void);
 void thunk_igItemInterface_GetMetaObject(void);
@@ -578,7 +570,6 @@ igMetaObject *igBase_GetMetaObject(void);
 void FUN_002292d0(void);
 CallbackArray *igBase_Register(void);
 void thunk_igBase_GetMetaObject(void);
-void **igSmartPointer_igGroup_Destruct(void **arg0, short arg1);
 void **FUN_002293d0(void **arg0, int arg1);
 int Gap__igOptInterface__vfunc_29(void);
 void **FUN_00229460(void **arg0, short arg1);

@@ -31,9 +31,9 @@ int igItemInterface_GetVTable(void) {
     obj.w11 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igItemInterface_vtable[0];
-    igSmartPointer_igStringRefListList_Destruct((void **)&obj.w11, -1);
+    igSmartPointer_igStringRefListList_Destruct((igSmartPointer<igObject> *)&obj.w11, -1);
     FUN_00227df0((ObjectRefWord *)&obj.w10, -1);
-    igSmartPointer_igMetaObjectList_Destruct(&obj.w9, -1);
+    igSmartPointer_igMetaObjectList_Destruct((igSmartPointer<igObject> *)&obj.w9, -1);
     FUN_00227d70((void **)&obj.w8, -1);
     return t;
 }
@@ -70,21 +70,17 @@ ObjectRefWord *FUN_00227df0(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void **igSmartPointer_igStringRefListList_Destruct(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy((igObject *)r);
-            }
+igSmartPointer<igObject> *igSmartPointer_igStringRefListList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 void FUN_00227ef0(void)

@@ -94,11 +94,11 @@ beNDMWWindowTitle *beNDMWWindowTitle_Destroy(beNDMWWindowTitle *self, short flag
         *(int **)&self->_vtable = &g_beNDMWWindowTitle_vtable[0];
         if (self != 0) {
             *(int **)&self->_vtable = &g_beNDMWWindow_vtable[0];
-            igSmartPointer_igStringRefList_Destruct(&self->_modelCloseSeqNameList, -1);
-            igSmartPointer_igIntList_Destruct(&self->_modelCloseRamNoList, -1);
-            igSmartPointer_igStringRefList_Destruct(&self->_modelCloseInfoNameList, -1);
-            igSmartPointer_igStringRefList_Destruct(&self->_textCloseNameList, -1);
-            igSmartPointer_igStringRefList_Destruct(&self->_textCloseTypeList, -1);
+            igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)&self->_modelCloseSeqNameList, -1);
+            igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&self->_modelCloseRamNoList, -1);
+            igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)&self->_modelCloseInfoNameList, -1);
+            igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)&self->_textCloseNameList, -1);
+            igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)&self->_textCloseTypeList, -1);
             beNDMWWindow_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)&self->_mother, -1);
             igSmartPointer_beNDMWWindowList_Destruct((igSmartPointer<igObject> *)&self->_subWindow, -1);
         }

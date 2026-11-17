@@ -29,7 +29,7 @@ int beCameraBoxData_GetVTable(void) {
     igSmartPointer_igTransformList_Destruct((igSmartPointer<igObject> *)(&obj._intPosList), (short)(-1));
     igSmartPointer_igTransformList_Destruct((igSmartPointer<igObject> *)(&obj._eyePosList), (short)(-1));
     igSmartPointer_igTransformList_Destruct((igSmartPointer<igObject> *)(&obj._transformList), (short)(-1));
-    igSmartPointer_igGeometryList_Destruct(&obj._geometryList, -1);
+    igSmartPointer_igGeometryList_Destruct((igSmartPointer<igObject> *)&obj._geometryList, -1);
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)(&obj._switch), -1);
     return vtable;
 }

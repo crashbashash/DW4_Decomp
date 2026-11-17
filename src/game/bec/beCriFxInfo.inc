@@ -31,8 +31,8 @@ int beCriFxInfo_GetVTable(void) {
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beCriFxInfo_vtable[0];
     igSmartPointer_beCriFxXbData_Destruct((igSmartPointer<igObject> *)xbFxParamSlot, -1);
-    igStringRef_Destruct(targetSlot, -1);
-    igInfo_Destroy(&obj, 0);
+    igStringRef_Destruct((igStringRef *)targetSlot, -1);
+    igInfo_Destroy((igInfo *)&obj, 0);
     return vtable;
 }
 

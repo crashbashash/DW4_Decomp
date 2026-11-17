@@ -58,21 +58,17 @@ igObjectPointer FUN_0013ba30(igAttrPool *pool, igObjectPointer attr) {
     return shared;
 }
 
-void **igSmartPointer_igAttrList_Destruct(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy((igObject *)r);
-            }
+igSmartPointer<igObject> *igSmartPointer_igAttrList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 igAttrPool *FUN_0013c060(void) {

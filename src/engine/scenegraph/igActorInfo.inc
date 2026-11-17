@@ -26,12 +26,12 @@ int igActorInfo_GetVTable(void) {
     obj.w9 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igActorInfo_vtable[0];
-    igSmartPointer_igAppearanceList_Destruct((ObjectRefWord *)&obj.w9, -1);
+    igSmartPointer_igAppearanceList_Destruct((igSmartPointer<igObject> *)&obj.w9, -1);
     FUN_001a7a80((void * *)&obj.w8, -1);
-    igSmartPointer_igAnimationDatabase_Destruct((void * *)&obj.w7, -1);
-    igSmartPointer_igActorList_Destruct((void * *)&obj.w6, -1);
+    igSmartPointer_igAnimationDatabase_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
+    igSmartPointer_igActorList_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
     FUN_001aa290((void * *)&obj.w5, -1);
-    igInfo_Destroy(&obj, 0);
+    igInfo_Destroy((igInfo *)&obj, 0);
     return t;
 }
 
@@ -53,40 +53,30 @@ void **FUN_001aa290(void **arg0, long long arg1) {
     return arg0;
 }
 
-void **igSmartPointer_igActorList_Destruct(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igActorList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if ((short)arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
-void **igSmartPointer_igAnimationDatabase_Destruct(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igAnimationDatabase_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 void FUN_001aa410(void)

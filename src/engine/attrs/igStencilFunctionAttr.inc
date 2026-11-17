@@ -117,21 +117,16 @@ void igStencilFunctionAttr_InitFields(void) {
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igStencilFunctionAttr_fieldTable, g_igStencilFunctionAttr_fieldHandles, g_igStencilFunctionAttr_fieldOffsets, temp_s0);
 }
 
-void **igSmartPointer_igVertexArray_Destruct(void **arg0, short arg1) {
-    S_temp_a0_1338d0 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_1338d0 *)((void *)(*arg0));
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
+igSmartPointer<igObject> *igSmartPointer_igVertexArray_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 

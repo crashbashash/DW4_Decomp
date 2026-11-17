@@ -31,7 +31,7 @@ int igCollisionGroup_GetVTable(void) {
     *p = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
     u.vt = (int)&g_igCollisionGroup_vtable[0];
-    igSmartPointer_igTransform_Destruct(p, -1);
+    igSmartPointer_igTransform_Destruct((igSmartPointer<igObject> *)p, -1);
     igGroup_Destroy((igGroup *)u.b, 0);
     return temp_s0;
 }

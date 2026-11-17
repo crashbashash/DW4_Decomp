@@ -42,7 +42,7 @@ int igPsx2AudioContext_GetVTable(void) {
     u.vt = (int)&g_igPsx2AudioContext_vtable[0];
     FUN_00143350((void **)&u.b[48], -1);
     FUN_00143350((void **)&u.b[20], -1);
-    igSmartPointer_igThread_Destruct((struct RefCountBits **)&u.b[16], -1);
+    igSmartPointer_igThread_Destruct((igSmartPointer<igObject> *)&u.b[16], -1);
     FUN_00143250((void **)&u.b[12], -1);
     return t;
 }
@@ -65,17 +65,17 @@ void **FUN_00143250(void **arg0, short arg1) {
     return arg0;
 }
 
-void **igSmartPointer_igThread_Destruct(struct RefCountBits **self, short flag) {
-    struct RefCountBits *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p);
+igSmartPointer<igObject> *igSmartPointer_igThread_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (flag > 0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
-    return (void **)self;
+    return self;
 }
 
 void **FUN_00143350(void **arg0, long long arg1) {

@@ -133,7 +133,7 @@ int igProjectiveShadowShader_GetVTable(void) {
     FUN_00136370(p360, -1);
     FUN_0019ab90((ObjectRefWord *)p356, -1);
     FUN_0019ab90((ObjectRefWord *)p352, -1);
-    igSmartPointer_igImage_Destruct(p348, -1);
+    igSmartPointer_igImage_Destruct((igSmartPointer<igObject> *)p348, -1);
     FUN_0019a990((void * *)p344, -1);
     FUN_0019aa10((struct Ref * *)p340, -1);
     FUN_00132980((char *)&s + 176, -1);
@@ -144,16 +144,16 @@ int igProjectiveShadowShader_GetVTable(void) {
     FUN_0019a910((void * *)((char *)&s + 156), -1);
     FUN_00133ca0((char *)&s + 152, -1);
     FUN_001966b0((ObjectRefWord *)((char *)&s + 144), -1);
-    igSmartPointer_igColorAttr_Destruct((O *)((char *)&s + 116), -1);
+    igSmartPointer_igColorAttr_Destruct((igSmartPointer<igObject> *)((char *)&s + 116), -1);
     FUN_001353b0((char *)&s + 112, -1);
-    igSmartPointer_igGeometry_Destruct((O *)((char *)&s + 108), -1);
+    igSmartPointer_igGeometry_Destruct((igSmartPointer<igObject> *)((char *)&s + 108), -1);
     FUN_0019a890((ObjectRefWord *)((char *)&s + 100), -1);
     FUN_00142d10((char *)&s + 96, -1);
     FUN_0019a890((ObjectRefWord *)((char *)&s + 92), -1);
     FUN_00142d10((char *)&s + 88, -1);
     FUN_001380e0((char *)&s + 84, -1);
-    igSmartPointer_igNodeList_Destruct((void * *)((char *)&s + 64), -1);
-    igSmartPointer_igNodeList_Destruct((void * *)((char *)&s + 60), -1);
+    igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)((char *)&s + 64), -1);
+    igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)((char *)&s + 60), -1);
     igGroup_Destroy((igGroup *)&s, 0);
     return r;
 }

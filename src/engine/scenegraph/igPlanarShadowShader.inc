@@ -43,11 +43,11 @@ int igPlanarShadowShader_GetVTable(void) {
     temp_s5 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&D_005289f0[0];
     FUN_0019c2a0((ObjectRefWord *)&u.b[104], -1);
-    igSmartPointer_igColorAttr_Destruct((O *)&u.b[100], -1);
+    igSmartPointer_igColorAttr_Destruct((igSmartPointer<igObject> *)&u.b[100], -1);
     FUN_0018f980(&u.b[96], -1);
     FUN_0018f980(&u.b[92], -1);
-    igSmartPointer_igAttrList_Destruct(&u.b[88], -1);
-    igSmartPointer_igGeometryList_Destruct((void * *)&u.b[84], -1);
+    igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&u.b[88], -1);
+    igSmartPointer_igGeometryList_Destruct((igSmartPointer<igObject> *)&u.b[84], -1);
     FUN_00199970((struct R * *)&u.b[80], -1);
     FUN_00199970((struct R * *)&u.b[44], -1);
     FUN_0019c1a0((ObjectRefWord *)&u.b[40], -1);
@@ -73,7 +73,7 @@ void *FUN_0019c0e0(struct S_19c0e0 *arg0, short arg1) {
         }
         if (arg0 != 0) {
             arg0->f0 = &g_igGroup_vtable[0];
-            igSmartPointer_igNodeList_Destruct((void * *)((char *)arg0 + 0x1C), -1);
+            igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 0x1C), -1);
             igNode_Destroy((igNode *)arg0, 0);
         }
         if (arg1 > 0) {
@@ -96,21 +96,17 @@ ObjectRefWord *FUN_0019c1a0(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void **igSmartPointer_igGeometryList_Destruct(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy((igObject *)r);
-            }
+igSmartPointer<igObject> *igSmartPointer_igGeometryList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 ObjectRefWord *FUN_0019c2a0(ObjectRefWord *self,int delete_storage) {

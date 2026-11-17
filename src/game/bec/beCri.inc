@@ -46,8 +46,8 @@ int beCri_GetVTable(void) {
     obj._lsBinObjs = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beCri_vtable[0];
-    igSmartPointer_igObjectList_Destruct(&obj._lsBinObjs, -1);
-    igSmartPointer_igInfoList_Destruct(&obj._infoList, -1);
+    igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj._lsBinObjs, -1);
+    igSmartPointer_igInfoList_Destruct((igSmartPointer<igObject> *)&obj._infoList, -1);
     igSmartPointer_beCriHandleList_Destruct((igSmartPointer<igObject> *)(&obj._hdSEs), (short)(-1));
     igSmartPointer_beCriHandle_Destruct((igSmartPointer<igObject> *)(&obj._hdENV), (short)(-1));
     igSmartPointer_beCriHandle_Destruct((igSmartPointer<igObject> *)(&obj._hdBGM), (short)(-1));

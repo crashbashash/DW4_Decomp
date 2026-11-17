@@ -31,8 +31,8 @@ int igObjectDirEntry_GetVTable(void) {
     o._typeMetaName = 0;
     r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o._vtable = (int)&g_igObjectDirEntry_vtable[0];
-    igStringRef_Destruct(&o._typeMetaName, -1);
-    igSmartPointer_igMetaObject_Destruct(&o._typeMeta, -1);
+    igStringRef_Destruct((igStringRef *)&o._typeMetaName, -1);
+    igSmartPointer_igMetaObject_Destruct((igSmartPointer<igObject> *)&o._typeMeta, -1);
     igDirEntry_Destroy((igDirEntry *)&o, 0);
     return r;
 }

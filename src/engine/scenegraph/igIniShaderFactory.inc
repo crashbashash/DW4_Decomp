@@ -38,30 +38,26 @@ int igIniShaderFactory_GetVTable(void) {
     FUN_0014dd40(&obj.w14, -1);
     FUN_0014dd40(&obj.w13, -1);
     FUN_0019ef30((ObjectRefWord *)&obj.w12, -1);
-    igSmartPointer_igMemoryPool_Destruct(&obj.w11, -1);
-    igStringRef_Destruct(&obj.w9, -1);
-    igSmartPointer_igRegistry_Destruct((void * *)&obj.w8, -1);
-    igSmartPointer_igRegistry_Destruct((void * *)&obj.w7, -1);
-    igStringRef_Destruct(&obj.w6, -1);
+    igSmartPointer_igMemoryPool_Destruct((igSmartPointer<igObject> *)&obj.w11, -1);
+    igStringRef_Destruct((igStringRef *)&obj.w9, -1);
+    igSmartPointer_igRegistry_Destruct((igSmartPointer<igObject> *)&obj.w8, -1);
+    igSmartPointer_igRegistry_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
+    igStringRef_Destruct((igStringRef *)&obj.w6, -1);
     FUN_00199330((struct T_199330 *)&obj, 0);
     return t;
 }
 
-void **igSmartPointer_igRegistry_Destruct(void **arg0, short arg1) {
-    int *r;
-    if (arg0 != 0) {
-        r = (int *)*arg0;
-        if (r != 0) {
-            r[1] = r[1] - 1;
-            if ((r[1] & 0x7fffff) == 0) {
-                igObject_Destroy((igObject *)r);
-            }
+igSmartPointer<igObject> *igSmartPointer_igRegistry_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 ObjectRefWord *FUN_0019ef30(ObjectRefWord *self,int delete_storage) {

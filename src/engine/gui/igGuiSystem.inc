@@ -35,9 +35,9 @@ int igGuiSystem_GetVTable(void) {
     obj.w7 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     obj.vt = &g_igGuiSystem_vtable[0];
-    igSmartPointer_igTransform_Destruct(&obj.w7, -1);
+    igSmartPointer_igTransform_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
     FUN_0044e1e0((O_44e1e0 *)&obj.w6, -1);
-    igSmartPointer_igAttrSet_Destruct(&obj.w5, -1);
+    igSmartPointer_igAttrSet_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
     FUN_0044e160((void **)&obj.w4, -1);
     FUN_0044e0e0((Ref **)&obj.w3, -1);
     FUN_0044e060((void **)&obj.w2, -1);

@@ -204,21 +204,21 @@ int FUN_00229e20(struct L *arg0, int *arg1) {
         igStringRef_Assign((void **)&h, (void **)(base + mid * 4));
         if (FUN_00229f90(&h, arg1) != 0) { lo = mid + 1; continue; }
         if (FUN_00229f70(&h, arg1) != 0) { hi = mid - 1; continue; }
-        igStringRef_Destruct(&h, -1);
+        igStringRef_Destruct((igStringRef *)&h, -1);
         res = mid;
         goto done;
     }
     if (arg0->n == 0) {
-        igStringRef_Destruct(&h, -1);
+        igStringRef_Destruct((igStringRef *)&h, -1);
         res = -1;
     } else {
         base = FUN_0022a030((int *)arg0);
         igStringRef_Assign((void **)&h, (void **)(base + lo * 4));
         if (FUN_00229f90(arg1, &h) != 0 || FUN_00229f70(arg1, &h) != 0) {
-            igStringRef_Destruct(&h, -1);
+            igStringRef_Destruct((igStringRef *)&h, -1);
             res = -1;
         } else {
-            igStringRef_Destruct(&h, -1);
+            igStringRef_Destruct((igStringRef *)&h, -1);
             res = lo;
         }
     }

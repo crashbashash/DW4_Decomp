@@ -30,7 +30,7 @@ int igGroup_GetVTable(void) {
     obj.f1C = 0;
     temp_s0 = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = (&g_igGroup_vtable[0]);
-    igSmartPointer_igNodeList_Destruct((void * *)&obj.f1C, -1);
+    igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)&obj.f1C, -1);
     igNode_Destroy((igNode *)&obj, 0);
     return temp_s0;
 }

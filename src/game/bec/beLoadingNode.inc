@@ -32,7 +32,7 @@ beNodeAnim *beNodeAnim_Destroy(beNodeAnim *self, long long delete_storage) {
         /* ~igGroup is inlined here with its own null check on `this` */
         if (self != 0) {
             self->_vtable = (int)&g_igGroup_vtable[0];
-            igSmartPointer_igNodeList_Destruct(&self->_childList, -1);
+            igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)&self->_childList, -1);
             igNode_Destroy((igNode *)self, 0);
         }
         if ((short)delete_storage > 0) {

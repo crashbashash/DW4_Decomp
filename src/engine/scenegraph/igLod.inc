@@ -33,9 +33,9 @@ int igLod_GetVTable(void) {
     o.f[15] = 0;
     r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
     o.vt = &g_igLod_vtable[0];
-    igSmartPointer_igFloatList_Destruct(&o.f[15], -1);
-    igSmartPointer_igNode_Destruct((ObjectRefWord *)p17, -1);
-    igSmartPointer_igFloatList_Destruct(p16, -1);
+    igSmartPointer_igFloatList_Destruct((igSmartPointer<igObject> *)&o.f[15], -1);
+    igSmartPointer_igNode_Destruct((igSmartPointer<igObject> *)p17, -1);
+    igSmartPointer_igFloatList_Destruct((igSmartPointer<igObject> *)p16, -1);
     igGroup_Destroy((igGroup *)&o, 0);
     return r;
 }

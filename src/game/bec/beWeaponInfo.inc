@@ -26,8 +26,8 @@ int beWeaponInfo_GetVTable(void) {
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beWeaponInfo_vtable[0];
     igSmartPointer_beWeaponSeqDataList_Destruct((igSmartPointer<igObject> *)&obj._seqDataList, (short)(-1));
-    igSmartPointer_igNamedObjectList_Destruct(&obj._boneNameList, -1);
-    igSmartPointer_igNodeList_Destruct(&obj._nodeList, -1);
+    igSmartPointer_igNamedObjectList_Destruct((igSmartPointer<igObject> *)&obj._boneNameList, -1);
+    igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)&obj._nodeList, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
 }

@@ -3,6 +3,7 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/ClassRegistration.h"
 
 #include "dw4/igMetaObject.h"
@@ -21,9 +22,7 @@ extern "C" igMetaObject *g_igCreateCollisionDatabase_metaObject;
 extern "C" igMetaObject *igCreateCollisionDatabase_GetMetaObject(void);
 struct W { int *vt; int f[19]; };
 #include "dw4/igObject.h"
-extern "C" int igSmartPointer_igMetaObject_Destruct(...);
 extern "C" int FUN_00225790(...);
-extern "C" int igStringRef_Destruct(...);
 extern "C" int g_igCreateCollisionDatabase_vtable[4];
 #include "dw4/igObjectSystem.h"
 extern "C" int igCreateCollisionDatabase_GetVTable(void);
@@ -64,7 +63,6 @@ extern "C" CallbackArray *igCollisionGroupList_Register(void);
 extern "C" void thunk_igCollisionGroupList_GetMetaObject(void);
 extern "C" igMetaObject *g_igCollisionGroup_metaObject;
 extern "C" igMetaObject *igCollisionGroup_GetMetaObject(void);
-extern "C" int igSmartPointer_igTransform_Destruct(...);
 extern "C" int g_igCollisionGroup_vtable[4];
 union U_239c00 { int vt; char b[96]; };
 extern "C" int igCollisionGroup_GetVTable(void);
@@ -88,7 +86,6 @@ extern "C" igObject *FUN_0023a040(int arg0);
 extern "C" igMetaObject *g_igCollisionGrid_metaObject;
 extern "C" igMetaObject *FUN_0023a080(void);
 extern "C" igMetaObject *igCollisionGrid_GetMetaObject(void);
-extern "C" int igSmartPointer_igAABox_Destruct(...);
 extern "C" int g_igCollisionGrid_vtable[4];
 union U_23a120 { int vt; char b[80]; };
 extern "C" int igCollisionGrid_GetVTable(void);

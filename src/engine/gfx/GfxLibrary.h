@@ -3,6 +3,7 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/typecast.h"
 #include "dw4/igobject_release.h"
 #include "dw4/igTDataList.h"
@@ -240,8 +241,6 @@ extern "C" int FUN_0014a780(int arg0);
 extern "C" igMetaObject *FUN_0014a7c0(void);
 extern "C" igMetaObject *igVertexArray2_GetMetaObject(void);
 struct Obj_14a860 { int *vt; int w[7]; };
-extern "C" int igNamedObject_Destroy(...);
-extern "C" int igSmartPointer_igObject_Destruct(...);
 extern "C" int g_igVertexArray2_vtable[4];
 extern "C" int igVertexArray2_GetVTable(void);
 
@@ -273,7 +272,6 @@ struct Obj_14a910 {
 };
 extern "C" Obj_14a910 *FUN_0014a910(Obj_14a910 *arg0, short arg1);
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
-extern "C" void **igSmartPointer_igObjectList_Destruct(void **arg0, short arg1);
 /* Deleting destructor; the deletion flag is a signed short. */
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
@@ -380,7 +378,6 @@ extern "C" int FUN_0014c230(void);
 extern "C" int FUN_0014c290(void);
 extern "C" igMetaObject *FUN_0014c2f0(void);
 extern "C" igMetaObject *igPointSpriteExt_GetMetaObject(void);
-extern "C" int igSmartPointer_igVertexArray_Destruct(...);
 extern "C" int g_igPointSpriteExt_vtable[4];
 struct PointSpriteExtInstance { int *vt; int f4; int f8; int f12; int f16; int f20; int f24; int f28; char t[368]; };
 extern "C" int igPointSpriteExt_GetVTable(void);
@@ -401,7 +398,6 @@ extern "C" igMetaObject *FUN_0014c980(void);
 extern "C" igMetaObject *igParticleArray_GetMetaObject(void);
 struct Obj_14ca20 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; int w12; int w13; int w14; int w15; int w16; int w17; int w18; int w19; int w20; int w21; int w22; int w23; };
 extern "C" int FUN_00137260(...);
-extern "C" int igSmartPointer_igVisualContext_Destruct(...);
 extern "C" int g_igParticleArray_vtable[4];
 extern "C" int igParticleArray_GetVTable(void);
 extern "C" void **FUN_0014cc90(void **arg0, short arg1);
@@ -494,7 +490,6 @@ extern "C" int g_igTrackedElementMetaField_vtable[4];
 
 union U_14e350 { int vt; char b[64]; };
 extern "C" int igTrackedElementMetaField_GetVTable(void);
-extern "C" ObjectRefWord *igSmartPointer_igMetaFieldList_Destruct(ObjectRefWord *self,int delete_storage);
 
 extern "C" CallbackArray *igTrackedElementMetaField_Register(void);
 extern "C" void thunk_igTrackedElementMetaField_GetMetaObject(void);
@@ -524,7 +519,6 @@ extern "C" igMetaObject *igCustomStateField_GetMetaObject(void);
 extern "C" int g_igCustomStateField_vtable[4];
 union U_14eb70 { int vt; char b[32]; };
 extern "C" int igCustomStateField_GetVTable(void);
-extern "C" void **igSmartPointer_igMetaField_Destruct(void **arg0, int arg1);
 extern "C" void FUN_0014ecd0(void);
 extern "C" CallbackArray *igCustomStateField_Register(void);
 extern "C" void thunk_igCustomStateField_GetMetaObject(void);
@@ -619,7 +613,6 @@ extern "C" igMetaObject *igTgaLoader_GetMetaObject(void);
 typedef struct { int *vt; int p1[1]; int *ref; int pad[9]; } Obj_1500f0;
 extern "C" int g_igTgaLoader_vtable[4];
 extern "C" int igTgaLoader_GetVTable(void);
-extern "C" void **igSmartPointer_igFile_Destruct(void **arg0, short arg1);
 extern "C" void FUN_00150200(void);
 extern "C" igMetaObject *igImageLoader_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igTgaLoader_Register(void);
@@ -680,10 +673,8 @@ extern "C" int FUN_00150710(void);
 extern "C" igMetaObject *FUN_00150770(void);
 extern "C" igMetaObject *igPsx2VisualContext_GetMetaObject(void);
 extern "C" int igPsx2VisualContext_GetVTable(void);
-extern "C" void **igSmartPointer_igMemoryPool_Destruct(struct Ref **self, short flag);
 extern "C" void **FUN_00150a70(void **arg0, long long arg1);
 extern "C" Obj_1506b0 *FUN_00150af0(Obj_1506b0 *arg0, short arg1);
-extern "C" ObjectRefWord *igSmartPointer_igIntList_Destruct(ObjectRefWord *self,int delete_storage);
 extern "C" O_1506b0 *FUN_00150f30(O_1506b0 *arg0, short arg1);
 extern "C" ObjectRefWord *FUN_00150fb0(ObjectRefWord *self,int delete_storage);
 extern "C" void *FUN_00151030(void *arg0);
@@ -724,7 +715,6 @@ extern "C" void FUN_00152350(void);
 extern "C" igMetaObject *FUN_00152370(void);
 extern "C" igMetaObject *igPsx2VertexArray1_1_GetMetaObject(void);
 struct Obj_152410 { int *vt; int w[35]; };
-extern "C" int igSmartPointer_igPointerList_Destruct(int *, int);
 extern "C" int g_igPsx2VertexArray1_1_vtable[4];
 extern "C" int igPsx2VertexArray1_1_GetVTable(void);
 extern "C" int DAT_00526480[4];
@@ -2425,8 +2415,6 @@ extern "C" igTDataList<unsigned short> *igUnsignedShortList_Create(int pool);
 extern "C" float Gap__Gfx__igVertexArray2Helper__vfunc_61(igVertexArray2Helper *self, int type, int bytes,
                                                           bool useFixed, bool isSigned, int bits, int index);
 extern "C" ObjectRefWord *FUN_00164870(ObjectRefWord *self,int delete_storage);
-extern "C" struct R **igSmartPointer_igShortList_Destruct(struct R **arg0, short arg1);
-extern "C" void **igSmartPointer_igCharList_Destruct(void **arg0, long long arg1);
 extern "C" int *FUN_001649f0(void);
 extern "C" int *FUN_00164a60(void);
 extern "C" int *FUN_00164aa0(void);

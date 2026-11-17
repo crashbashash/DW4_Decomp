@@ -57,10 +57,10 @@ int igSearchSceneGraph_GetVTable(void) {
     obj.f14 = 0;
     vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igSearchSceneGraph_vtable[0];
-    igSmartPointer_igMetaObject_Destruct(&obj.f14, -1);
-    igStringRef_Destruct(&obj.f10, -1);
+    igSmartPointer_igMetaObject_Destruct((igSmartPointer<igObject> *)&obj.f14, -1);
+    igStringRef_Destruct((igStringRef *)&obj.f10, -1);
     FUN_002293d0(&obj.fC, -1);
-    igNamedObject_Destroy(&obj, 0);
+    igNamedObject_Destroy((igNamedObject *)&obj, 0);
     return vtable;
 }
 
@@ -192,22 +192,17 @@ void igActor_SetAnimationSystem(int *self, RefCounted *scene) {
 }
 
 /* Three smart-pointer destructors: release the held object, then free the pointer when flags > 0. */
-void **igSmartPointer_igLightingStateAttr_Destruct(void **ref, short flags) {
-    RefCounted *held;
-
-    if (ref != 0) {
-        held = (RefCounted *)*ref;
-        if (held != 0) {
-            held->refs = held->refs - 1;
-            if ((held->refs & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)held);
-            }
+igSmartPointer<igObject> *igSmartPointer_igLightingStateAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (flags > 0) {
-            operator delete(ref);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return ref;
+    return self;
 }
 
 void **FUN_00239280(void **ref, short flags) {

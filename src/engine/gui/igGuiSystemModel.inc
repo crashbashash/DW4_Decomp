@@ -42,10 +42,10 @@ int igGuiSystemModel_GetVTable(void) {
     ((struct igGuiSystemModel *)p)->_pushedComponent = 0;
     r = *(int *)((char *)&s + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&s._vtable = &g_igGuiSystemModel_vtable[0];
-    igSmartPointer_igGuiComponent_Destruct(&s._pushedComponent, -1);
-    igSmartPointer_igGuiComponent_Destruct(&s._componentUnderMouse, -1);
-    igSmartPointer_igGuiComponent_Destruct(&s._focusedComponent, -1);
-    igSmartPointer_igGuiComponent_Destruct(&s._rootComponent, -1);
+    igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&s._pushedComponent, -1);
+    igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&s._componentUnderMouse, -1);
+    igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&s._focusedComponent, -1);
+    igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&s._rootComponent, -1);
     FUN_0044c110((S *)&s, 0);
     return r;
 }

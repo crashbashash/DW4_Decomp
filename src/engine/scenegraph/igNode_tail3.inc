@@ -36,43 +36,42 @@ void Gap__Sg__igNode__vfunc_17(void *arg0) {
     *(int *)((char *)(arg0) + 24) = (int)((int) *(int *)((char *)(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX()) + 8));
 }
 
-void **igSmartPointer_igInfoList_Destruct(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p);
+igSmartPointer<igObject> *igSmartPointer_igInfoList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (flag > 0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
-    return (void **)self;
+    return self;
 }
 
-void **igSmartPointer_igSceneInfo_Destruct(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igSceneInfo_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if ((short)arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
-O *igSmartPointer_igDirectory_Destruct(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
-        if (arg1 > 0) operator delete(arg0);
+igSmartPointer<igObject> *igSmartPointer_igDirectory_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
+        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 

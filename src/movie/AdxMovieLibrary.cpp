@@ -1,5 +1,6 @@
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/ClassRegistration.h"
 #include "dw4/igAdx.h"
 #include "dw4/igAdxAfsFileList.h"
@@ -113,7 +114,6 @@ extern "C" int igMovieCodec_GetVTable(void);
 extern "C" void igMovieCodec_EnsureRegistered(void);
 extern "C" CallbackArray *igMovieCodec_Register(void);
 extern "C" void igMovieCodec_GetMetaObjectFunction(void);
-extern "C" int igSmartPointer_igVisualContext_Destruct(int *, int);
 extern "C" int igCriMovieCodec_GetVTable(void);
 extern "C" void igCriMovieCodec_EnsureRegistered(void);
 extern "C" CallbackArray *igCriMovieCodec_Register(void);
@@ -138,11 +138,6 @@ extern "C" void igTextureBindAttrList_GetMetaObjectFunction(void);
 extern "C" igMetaEnum *igMovieInfo_GetMovieStateMetaEnum(void);
 extern "C" igMetaEnum *igMovieInfo_GetMovieTypeMetaEnum(void);
 extern "C" void *igMovieInfo_GetMetaObject(void);
-extern "C" int igSmartPointer_igTextureList_Destruct(int *, int);
-extern "C" int igSmartPointer_igImage_Destruct(int *, int);
-extern "C" int igSmartPointer_igSceneInfo_Destruct(int *, int);
-extern "C" int igSmartPointer_igObject_Destruct(int *, int);
-extern "C" int igStringRef_Destruct(int *, int);
 extern "C" int igMovieInfo_GetVTable(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igTextureBindAttrList_Destruct(igSmartPointer<igObject> *self, short flag);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieCodec_Destruct(igSmartPointer<igObject> *self, short flag);
@@ -158,7 +153,6 @@ extern "C" void igMovieInfo_InitFields(void);
 extern "C" igMetaObject *igMovieRenderer_GetOrCreateMetaObject(void);
 extern "C" void *igMovieRenderer_GetMetaObject(void);
 extern "C" int igMovieRenderer_GetVTable(void);
-extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieManager_Destruct(igSmartPointer<igObject> *self, short flag);
 extern "C" void igMovieRenderer_EnsureRegistered(void);
 #include "dw4/igRenderer.h"
 extern "C" CallbackArray *igMovieRenderer_Register(void);
@@ -166,7 +160,6 @@ extern "C" void igMovieRenderer_GetMetaObjectFunction(void);
 extern "C" void igMovieRenderer_InitFields(void);
 extern "C" void *igMovieManager_GetMetaObject(void);
 #include "dw4/igInfoManager.h"
-extern "C" int igSmartPointer_igRendererOrderedList_Destruct(int *, int);
 extern "C" int igMovieManager_GetVTable(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieCodecList_Destruct(igSmartPointer<igObject> *self, short flag);
 extern "C" CallbackArray *igMovieManager_Register(void);
@@ -225,7 +218,6 @@ extern "C" igMetaObject *g_igTextureBindAttrList_metaObject;
 extern "C" igMetaObject *igTextureBindAttrList_GetMetaObject(void);
 /* Stack object, vtable slot read through the object plus a runtime offset. */
 extern "C" int g_igTextureBindAttrList_vtable[4];
-extern "C" int igInfo_Destroy(igInfo *, int);
 extern "C" int g_igMovieInfo_vtable[4];
 #include "dw4/igInfo.h"
 extern "C" int g_igObject_metaObject[4];
@@ -1081,7 +1073,7 @@ int igCriMovieCodec_GetVTable(void) {
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_igCriMovieCodec_vtable[0];
     igSmartPointer_igAudioContext_Destruct((igSmartPointer<igObject> *)&obj._audioContext, (short)(-1));
-    igSmartPointer_igVisualContext_Destruct(&obj._visualContext, -1);
+    igSmartPointer_igVisualContext_Destruct((igSmartPointer<igObject> *)&obj._visualContext, -1);
     igMovieCodec_Destroy((igMovieCodec *)&obj, (long long)0);
     return vtable;
 }
@@ -1493,14 +1485,14 @@ int igMovieInfo_GetVTable(void) {
     obj._userdata = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_igMovieInfo_vtable[0];
-    igSmartPointer_igObject_Destruct(&obj._userdata, -1);
-    igSmartPointer_igTextureList_Destruct(&obj._runtimeTextures, -1);
-    igSmartPointer_igImage_Destruct(&obj._runtimeImage, -1);
-    igSmartPointer_igSceneInfo_Destruct(&obj._sceneInfo, -1);
+    igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj._userdata, -1);
+    igSmartPointer_igTextureList_Destruct((igSmartPointer<igObject> *)&obj._runtimeTextures, -1);
+    igSmartPointer_igImage_Destruct((igSmartPointer<igObject> *)&obj._runtimeImage, -1);
+    igSmartPointer_igSceneInfo_Destruct((igSmartPointer<igObject> *)&obj._sceneInfo, -1);
     igSmartPointer_igMovieCodec_Destruct((igSmartPointer<igObject> *)&obj._codec, -1);
-    igStringRef_Destruct(&obj._codecType, -1);
+    igStringRef_Destruct((igStringRef *)&obj._codecType, -1);
     igSmartPointer_igTextureBindAttrList_Destruct((igSmartPointer<igObject> *)&obj._videoTextures, -1);
-    igStringRef_Destruct(&obj._path, -1);
+    igStringRef_Destruct((igStringRef *)&obj._path, -1);
     igInfo_Destroy((igInfo *)&obj, 0);
     return vtable;
 }
@@ -1869,7 +1861,7 @@ int igMovieManager_GetVTable(void) {
     obj._rendererList = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_igMovieManager_vtable[0];
-    igSmartPointer_igRendererOrderedList_Destruct(&obj._rendererList, -1);
+    igSmartPointer_igRendererOrderedList_Destruct((igSmartPointer<igObject> *)&obj._rendererList, -1);
     igSmartPointer_igMovieRenderer_Destruct((igSmartPointer<igObject> *)&obj._movieRenderer, (short)(-1));
     igSmartPointer_igMovieCodecList_Destruct((igSmartPointer<igObject> *)&obj._codecList, (long long)(-1));
     igSmartPointer_igAudioContext_Destruct((igSmartPointer<igObject> *)&obj._audio, (short)(-1));

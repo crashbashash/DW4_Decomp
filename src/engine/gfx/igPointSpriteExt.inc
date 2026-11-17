@@ -64,7 +64,7 @@ int igPointSpriteExt_GetVTable(void) {
     igMatrix44f_SetIdentity((float *)(pa + 296));
     r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
     o.vt = &g_igPointSpriteExt_vtable[0];
-    igSmartPointer_igVertexArray_Destruct(&o.f24, -1);
+    igSmartPointer_igVertexArray_Destruct((igSmartPointer<igObject> *)&o.f24, -1);
     FUN_0014c580((O_14c580 *)&o, 0);
     return r;
 }

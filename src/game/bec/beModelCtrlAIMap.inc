@@ -33,13 +33,13 @@ int beModelCtrlAIMap_GetVTable(void) {
     obj._targetMode = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beModelCtrlAIMap_vtable[0];
-    igStringRef_Destruct(&obj._targetMode, -1);
-    igStringRef_Destruct(&obj._targetType, -1);
+    igStringRef_Destruct((igStringRef *)&obj._targetMode, -1);
+    igStringRef_Destruct((igStringRef *)&obj._targetType, -1);
     igSmartPointer_beModelCtrlAIDataList_Destruct((igSmartPointer<igObject> *)(&obj._zoneD), (short)(-1));
     igSmartPointer_beModelCtrlAIDataList_Destruct((igSmartPointer<igObject> *)(&obj._zoneC), (short)(-1));
     igSmartPointer_beModelCtrlAIDataList_Destruct((igSmartPointer<igObject> *)(&obj._zoneB), (short)(-1));
     igSmartPointer_beModelCtrlAIDataList_Destruct((igSmartPointer<igObject> *)(&obj._zoneA), (short)(-1));
-    igNamedObject_Destroy(&obj, 0);
+    igNamedObject_Destroy((igNamedObject *)&obj, 0);
     return vtable;
 }
 

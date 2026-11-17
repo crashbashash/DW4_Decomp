@@ -33,10 +33,10 @@ int beMessengerWork_GetVTable(void) {
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMessengerWork_vtable[0];
     igSmartPointer_beBaseInfoRamList_Destruct((igSmartPointer<igObject> *)&obj._findRamList, (short)(-1));
-    igSmartPointer_igIntList_Destruct(&obj._findRamNoList, -1);
-    igStringRef_Destruct(&obj._message, -1);
-    igStringRef_Destruct(&obj._infoName, -1);
-    igStringRef_Destruct(&obj._groupName, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._findRamNoList, -1);
+    igStringRef_Destruct((igStringRef *)&obj._message, -1);
+    igStringRef_Destruct((igStringRef *)&obj._infoName, -1);
+    igStringRef_Destruct((igStringRef *)&obj._groupName, -1);
     return vtable;
 }
 

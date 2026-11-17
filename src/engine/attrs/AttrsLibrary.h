@@ -3,6 +3,8 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igSmartPointerDestruct.h"
+#include "dw4/igStringRef.h"
 #include "dw4/igTDataList.h"
 #include "dw4/ClassRegistration.h"
 #include "dw4/igAttr.h"
@@ -108,7 +110,6 @@ extern "C" int g_igVisualContextAttrDefaultManager_vtable[4];
 
 union U { int vt; char b[16]; };
 extern "C" int igVisualContextAttrDefaultManager_GetVTable(void);
-extern "C" void **igSmartPointer_igVisualContext_Destruct(void **arg0, int arg1);
 extern "C" void FUN_001301c0(void);
 extern "C" igMetaObject *igAttrDefaultManager_GetPublishedMetaObject(void);
 
@@ -139,10 +140,6 @@ extern "C" void thunk_igViewportAttr_GetMetaObject(void);
 extern "C" igMetaObject *FUN_00130610(void);
 extern "C" int FUN_0014bc80(...);
 extern "C" void igViewportAttr_InitFields(void);
-/* Interned-string wrapper cleanup. */
-typedef struct StringRefWord { char *value; } StringRefWord;
-
-extern "C" StringRefWord *igStringRef_Destruct(StringRefWord *self,int delete_storage);
 extern "C" igMetaObject *igVertexBlendStateAttr_GetMetaObject(void);
 struct Obj { int *vt; char pad[12]; };
 extern "C" int g_igVertexBlendStateAttr_vtable[4];
@@ -222,20 +219,7 @@ extern "C" CallbackArray *igTextureMatrixAttr_Register(void);
 extern "C" void thunk_igTextureMatrixAttr_GetMetaObject(void);
 struct Fld { char pad[48]; int f48; };
 extern "C" void igTextureMatrixAttr_InitFields(void);
-extern "C" void **igSmartPointer_igTextureList_Destruct(void **arg0, short arg1);
 
-struct S {
-    void *f0;
-    char pad[4];
-    void *f8;
-};
-extern "C" void *igInfo_Destroy(struct S *arg0, short arg1);
-struct S_131bc0 {
-    void *f0;
-    void *f4;
-    void *f8;
-};
-extern "C" void *igNamedObject_Destroy(struct S_131bc0 *arg0, short arg1);
 
 extern "C" int FUN_00131c50(void);
 extern "C" void FUN_00131c60(int arg0);
@@ -279,9 +263,6 @@ struct S_132230 {
     struct R *f64;
 };
 extern "C" void *FUN_00132230(struct S_132230 *arg0, short arg1);
-struct S_temp_a0 { char pad4[4]; int f4; };
-struct O { S_temp_a0 *m; };
-extern "C" O *igSmartPointer_igImage_Destruct(O *arg0, short arg1);
 extern "C" int *FUN_00132410(int *p);
 extern "C" void FUN_00132420(void);
 extern "C" igMetaObject *igTextureAttr_GetPublishedMetaObject(void);
@@ -367,7 +348,6 @@ extern "C" int FUN_001494a0(...);
 extern "C" int FUN_00149500(...);
 extern "C" void igStencilFunctionAttr_InitFields(void);
 typedef struct S_temp_a0_1338d0 { char pad4[4]; int f4; } S_temp_a0_1338d0;
-extern "C" void **igSmartPointer_igVertexArray_Destruct(void **arg0, short arg1);
 extern "C" igMetaObject *g_igShadeModelAttr_metaObject;
 extern "C" igMetaObject *FUN_00133950(void);
 extern "C" igMetaObject *igShadeModelAttr_GetMetaObject(void);
@@ -469,9 +449,6 @@ extern "C" CallbackArray *igMultiPassStateAttr_Register(void);
 extern "C" void thunk_igMultiPassStateAttr_GetMetaObject(void);
 extern "C" void igMultiPassStateAttr_InitFields(void);
 extern "C" void **FUN_001353b0(void **arg0, short arg1);
-extern "C" ObjectRefWord *igSmartPointer_igPointerList_Destruct(ObjectRefWord *self,int delete_storage);
-struct R_1354b0 { int vt; unsigned int rc; };
-extern "C" struct R_1354b0 **igSmartPointer_igFloatList_Destruct(struct R_1354b0 **arg0, short arg1);
 extern "C" igMetaObject *g_igObject_metaObject[4];
 extern "C" igMetaObject *g_igModelViewMatrixAttrList_metaObject;
 extern "C" igMetaObject *FUN_00135540(void);
@@ -532,7 +509,6 @@ extern "C" int g_igLightStateAttr_vtable[4];
 union U_136290 { int vt; char b[32]; };
 extern "C" int igLightStateAttr_GetVTable(void);
 extern "C" ObjectRefWord *FUN_00136370(ObjectRefWord *self,int delete_storage);
-extern "C" ObjectRefWord *igSmartPointer_igObject_Destruct(ObjectRefWord *self,int delete_storage);
 extern "C" CallbackArray *igLightStateAttr_Register(void);
 extern "C" void thunk_igLightStateAttr_GetMetaObject(void);
 extern "C" void igLightStateAttr_InitFields(void);
@@ -581,7 +557,6 @@ extern "C" igMetaObject *igGeometryAttr1_5_GetMetaObject(void);
 struct W_137430 { int *vt; int f[15]; };
 extern "C" int g_igGeometryAttr1_5_vtable[4];
 extern "C" int igGeometryAttr1_5_GetVTable(void);
-extern "C" O *igSmartPointer_igVec3fList_Destruct(O *arg0, short arg1);
 extern "C" int DAT_00523970[4];
 struct S1 { char pad4[4]; int f4; };
 struct O_137530 { int *vt; char pad4[8]; S1 *m12; S1 *m16; char pad20[12]; S1 *m32; char pad36[4]; S1 *m40; S1 *m44; };
@@ -781,7 +756,6 @@ union U_13a6d0 { int vt; char b[32]; };
 extern "C" int igAttrPool_GetVTable(void);
 typedef struct S_temp_a0_13a800 { char pad4[4]; int f4; } S_temp_a0_13a800;
 extern "C" void **FUN_0013a800(void **arg0, short arg1);
-extern "C" ObjectRefWord *igSmartPointer_igMetaObjectList_Destruct(ObjectRefWord *self,int delete_storage);
 
 extern "C" CallbackArray *igAttrPool_Register(void);
 extern "C" void thunk_igAttrPool_GetMetaObject(void);
@@ -886,7 +860,6 @@ extern "C" igObjectPointer FUN_0013ba30(igAttrPool *pool, igObjectPointer attr);
 extern "C" int igObject_IsAlikeShallow(igObjectDispatchView *object, igObjectDispatchView *other);
 extern "C" igObjectPointer igObject_Clone(igObjectDispatchView *object, int deep);
 extern "C" igObjectPointer Gap__Attrs__igAttrDefaultManager__vfunc_23(DefaultSource *source);
-extern "C" void **igSmartPointer_igAttrList_Destruct(void **arg0, short arg1);
 
 extern "C" igAttrPool *FUN_0013c060(void);
 extern "C" void FUN_0013c110(void);

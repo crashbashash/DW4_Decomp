@@ -41,8 +41,8 @@ int beMatCtrl_GetVTable(void) {
     obj._wkMatOldOnList = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMatCtrl_vtable[0];
-    igSmartPointer_igIntList_Destruct(&obj._wkMatOldOnList, -1);
-    igSmartPointer_igIntList_Destruct(&obj._wkMatOnList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._wkMatOldOnList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._wkMatOnList, -1);
     beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);
     return vtable;
 }

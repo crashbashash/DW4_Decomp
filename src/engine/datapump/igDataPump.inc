@@ -31,10 +31,10 @@ int igDataPump_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     obj.vt = &g_igDataPump_vtable[0];
     FUN_001c7600(&obj.w6, -1);
-    igStringRef_Destruct(&obj.w5, -1);
-    igStringRef_Destruct(&obj.w4, -1);
-    igSmartPointer_igMetaField_Destruct(&obj.w3, -1);
-    igSmartPointer_igObject_Destruct(&obj.w2, -1);
+    igStringRef_Destruct((igStringRef *)&obj.w5, -1);
+    igStringRef_Destruct((igStringRef *)&obj.w4, -1);
+    igSmartPointer_igMetaField_Destruct((igSmartPointer<igObject> *)&obj.w3, -1);
+    igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj.w2, -1);
     return t;
 }
 

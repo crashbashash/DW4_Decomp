@@ -34,10 +34,10 @@ int igCreateCollisionDatabase_GetVTable(void) {
     o.f[15] = 0;
     r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem) + 916));
     o.vt = &g_igCreateCollisionDatabase_vtable[0];
-    igSmartPointer_igMetaObject_Destruct(&o.f[15], -1);
-    igSmartPointer_igMetaObject_Destruct(p18, -1);
+    igSmartPointer_igMetaObject_Destruct((igSmartPointer<igObject> *)&o.f[15], -1);
+    igSmartPointer_igMetaObject_Destruct((igSmartPointer<igObject> *)p18, -1);
     FUN_00239530((O *)p17, -1);
-    igStringRef_Destruct(p16, -1);
+    igStringRef_Destruct((igStringRef *)p16, -1);
     FUN_00225790(&o, 0);
     return r;
 }

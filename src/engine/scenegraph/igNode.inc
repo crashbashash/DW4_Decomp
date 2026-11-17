@@ -181,7 +181,7 @@ igGeometry *igGeometry_Destroy(igGeometry *self, short deleteFlag) {
         }
         if (self != 0) {
             self->_vtable = (int)&g_igAttrSet_vtable[0];
-            igSmartPointer_igAttrList_Destruct(&self->_attributes, -1);
+            igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&self->_attributes, -1);
             igGroup_Destroy((igGroup *)self, 0);
         }
         if (deleteFlag > 0) {
@@ -205,22 +205,17 @@ int *FUN_0019d1f0(int *p)
     return p;
 }
 
-void **igSmartPointer_igIntListList_Destruct(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igIntListList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if ((short)arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 igMetaObject *g_igModelViewMatrixBoneSelectListSg_metaObject;

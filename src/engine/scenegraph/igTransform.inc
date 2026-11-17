@@ -73,7 +73,7 @@ void *FUN_001962d0(struct S_1962d0 *arg0, short arg1) {
         }
         if (arg0 != 0) {
             arg0->f0 = &g_igGroup_vtable[0];
-            igSmartPointer_igNodeList_Destruct((void * *)((char *)arg0 + 0x1C), -1);
+            igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 0x1C), -1);
             igNode_Destroy((igNode *)arg0, 0);
         }
         if (arg1 > 0) {

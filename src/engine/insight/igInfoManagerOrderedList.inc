@@ -31,15 +31,15 @@ int igInfoManagerOrderedList_GetVTable(void) {
     return r;
 }
 
-ObjectRefWord *igSmartPointer_igDependencyList_Destruct(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
+igSmartPointer<igObject> *igSmartPointer_igDependencyList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if((short)delete_storage>0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
     return self;
 }
@@ -49,10 +49,10 @@ int **FUN_00233610(int **arg0, long long arg1) {
         *arg0 = &DAT_0052cbc0[0];
         if (arg0 != 0) {
             *arg0 = &g_igDependencyOrderedList_vtable[0];
-            igSmartPointer_igStringRefList_Destruct((int **)((char *)arg0 + 0x14), -1);
-            igSmartPointer_igPointerList_Destruct((int **)((char *)arg0 + 0x10), -1);
-            igSmartPointer_igDependencyList_Destruct((ObjectRefWord *)((char *)arg0 + 0xC), -1);
-            igSmartPointer_igObjectList_Destruct((int **)((char *)arg0 + 8), -1);
+            igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 0x14), -1);
+            igSmartPointer_igPointerList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 0x10), -1);
+            igSmartPointer_igDependencyList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 0xC), -1);
+            igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 8), -1);
         }
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
             Memory_FreeBufferAliasC(arg0);

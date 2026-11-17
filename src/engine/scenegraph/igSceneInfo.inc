@@ -39,11 +39,11 @@ int igSceneInfo_GetVTable(void) {
     obj.w15 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igSceneInfo_vtable[0];
-    igSmartPointer_igNodeList_Destruct((void * *)&obj.w15, -1);
+    igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)&obj.w15, -1);
     FUN_0019b1f0((void * *)&obj.w7, -1);
-    igSmartPointer_igTextureList_Destruct(&obj.w6, -1);
-    igSmartPointer_igNode_Destruct((ObjectRefWord *)&obj.w5, -1);
-    igInfo_Destroy(&obj, 0);
+    igSmartPointer_igTextureList_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
+    igSmartPointer_igNode_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
+    igInfo_Destroy((igInfo *)&obj, 0);
     return t;
 }
 

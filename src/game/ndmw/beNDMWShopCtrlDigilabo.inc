@@ -38,9 +38,9 @@ int beNDMWShopCtrlDigilabo_GetVTable(void) {
     obj._wpuNoListList = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrlDigilabo_vtable[0];
-    igSmartPointer_igIntListList_Destruct(&obj._wpuNoListList, -1);
-    igSmartPointer_igIntList_Destruct(&obj._digimonNoList, -1);
-    igSmartPointer_igIntList_Destruct(&obj._playerNoList, -1);
+    igSmartPointer_igIntListList_Destruct((igSmartPointer<igObject> *)&obj._wpuNoListList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._digimonNoList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._playerNoList, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return vtable;
 }

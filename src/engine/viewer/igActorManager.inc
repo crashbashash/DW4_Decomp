@@ -41,16 +41,16 @@ int igActorManager_GetVTable(void) {
     obj.w13 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem)) + 916));
     obj.vt = &g_igActorManager_vtable[0];
-    igSmartPointer_igObjectList_Destruct(&obj.w13, -1);
+    igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj.w13, -1);
     FUN_004584f0(&obj.w12, -1);
     FUN_0019ab90(&obj.w11, -1);
     FUN_0019ab90(&obj.w10, -1);
-    igSmartPointer_igMetaObjectList_Destruct(&obj.w9, -1);
-    igSmartPointer_igPointerList_Destruct(&obj.w8, -1);
+    igSmartPointer_igMetaObjectList_Destruct((igSmartPointer<igObject> *)&obj.w9, -1);
+    igSmartPointer_igPointerList_Destruct((igSmartPointer<igObject> *)&obj.w8, -1);
     FUN_0045e420((O *)&obj.w7, -1);
-    igSmartPointer_igActorList_Destruct(&obj.w6, -1);
-    igSmartPointer_igNodeList_Destruct(&obj.w5, -1);
-    igSmartPointer_igAppearanceList_Destruct(&obj.w4, -1);
+    igSmartPointer_igActorList_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
+    igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
+    igSmartPointer_igAppearanceList_Destruct((igSmartPointer<igObject> *)&obj.w4, -1);
     igInfoManager_Destroy((igInfoManager *)&obj, 0);
     return t;
 }

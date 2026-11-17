@@ -48,8 +48,8 @@ int beNDMWStatusInfoWork_GetVTable(void) {
     igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._chipSalesList, -1);
     igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._armorSalesList, -1);
     igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._weaponSalesList, -1);
-    igSmartPointer_igIntList_Destruct(&obj._preview, -1);
-    igSmartPointer_igIntList_Destruct(&obj._parameter, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._preview, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._parameter, -1);
     return vtable;
 }
 

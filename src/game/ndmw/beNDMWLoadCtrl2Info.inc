@@ -27,7 +27,7 @@ int beNDMWLoadCtrl2Info_GetVTable(void) {
     *nameSelListRef = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWLoadCtrl2Info_vtable[0];
-    igSmartPointer_igObjectList_Destruct(nameSelListRef, -1);
+    igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)nameSelListRef, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, 0);
     return vtable;
 }

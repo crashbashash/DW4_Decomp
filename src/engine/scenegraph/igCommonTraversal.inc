@@ -54,7 +54,7 @@ int igCommonTraversal_GetVTable(void) {
     FUN_001a0890((ObjectRefWord *)((char*)&o + 336), -1);
     FUN_001a0810((O *)((char*)&o + 268), -1);
     FUN_00194830((struct Ref * *)((char*)&o + 264), -1);
-    igSmartPointer_igStringObjList_Destruct((void * *)((char*)&o + 260), -1);
+    igSmartPointer_igStringObjList_Destruct((igSmartPointer<igObject> *)((char*)&o + 260), -1);
     FUN_00150eb0((char*)&o + 256, -1);
     FUN_001a0710((struct Ref * *)((char*)&o + 252), -1);
     FUN_001a0710((struct Ref * *)((char*)&o + 248), -1);
@@ -71,7 +71,7 @@ int igCommonTraversal_GetVTable(void) {
     FUN_001a0190((void * *)q7, -1);
     FUN_001a0110((struct Ref * *)q8, -1);
     FUN_001380e0((char*)&o + 64, -1);
-    igSmartPointer_igVisualContext_Destruct((char*)&o + 60, -1);
+    igSmartPointer_igVisualContext_Destruct((igSmartPointer<igObject> *)((char*)&o + 60), -1);
     FUN_001a0090((void * *)((char*)&o + 56), -1);
     FUN_001a0010((void * *)((char*)&o + 52), -1);
     FUN_0019ff90((struct T_19fde0 * *)((char*)&o + 36), -1);

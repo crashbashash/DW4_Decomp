@@ -47,18 +47,18 @@ int beDataBase_GetVTable(void) {
     obj._stringData = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beDataBase_vtable[0];
-    igSmartPointer_igNamedObjectList_Destruct(&obj._stringData, -1);
-    igSmartPointer_igNamedObjectList_Destruct(&obj._stringOffsetList, -1);
-    igSmartPointer_igBoolList_Destruct(&obj._boolData, -1);
-    igSmartPointer_igNamedObjectList_Destruct(&obj._boolOffsetList, -1);
-    igSmartPointer_igFloatList_Destruct(&obj._floatData, -1);
-    igSmartPointer_igNamedObjectList_Destruct(&obj._floatOffsetList, -1);
-    igSmartPointer_igIntList_Destruct(&obj._intData, -1);
-    igSmartPointer_igNamedObjectList_Destruct(&obj._intOffsetList, -1);
-    igSmartPointer_igShortList_Destruct(&obj._shortData, -1);
-    igSmartPointer_igNamedObjectList_Destruct(&obj._shortOffsetList, -1);
-    igSmartPointer_igCharList_Destruct(&obj._charData, -1);
-    igSmartPointer_igNamedObjectList_Destruct(&obj._charOffsetList, -1);
+    igSmartPointer_igNamedObjectList_Destruct((igSmartPointer<igObject> *)&obj._stringData, -1);
+    igSmartPointer_igNamedObjectList_Destruct((igSmartPointer<igObject> *)&obj._stringOffsetList, -1);
+    igSmartPointer_igBoolList_Destruct((igSmartPointer<igObject> *)&obj._boolData, -1);
+    igSmartPointer_igNamedObjectList_Destruct((igSmartPointer<igObject> *)&obj._boolOffsetList, -1);
+    igSmartPointer_igFloatList_Destruct((igSmartPointer<igObject> *)&obj._floatData, -1);
+    igSmartPointer_igNamedObjectList_Destruct((igSmartPointer<igObject> *)&obj._floatOffsetList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._intData, -1);
+    igSmartPointer_igNamedObjectList_Destruct((igSmartPointer<igObject> *)&obj._intOffsetList, -1);
+    igSmartPointer_igShortList_Destruct((igSmartPointer<igObject> *)&obj._shortData, -1);
+    igSmartPointer_igNamedObjectList_Destruct((igSmartPointer<igObject> *)&obj._shortOffsetList, -1);
+    igSmartPointer_igCharList_Destruct((igSmartPointer<igObject> *)&obj._charData, -1);
+    igSmartPointer_igNamedObjectList_Destruct((igSmartPointer<igObject> *)&obj._charOffsetList, -1);
     return vtable;
 }
 

@@ -46,11 +46,11 @@ int beFileListInfoManager_GetVTable(void) {
     obj._importantInfoList = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beFileListInfoManager_vtable[0];
-    igSmartPointer_igInfoList_Destruct(&obj._importantInfoList, -1);
-    igSmartPointer_igInfoList_Destruct(&obj._readInfoList, -1);
-    igSmartPointer_igDirectoryList_Destruct(&obj._dirList, -1);
-    igSmartPointer_igInfoList_Destruct(&obj._infoList, -1);
-    igSmartPointer_igStringRefList_Destruct(&obj._fnames, -1);
+    igSmartPointer_igInfoList_Destruct((igSmartPointer<igObject> *)&obj._importantInfoList, -1);
+    igSmartPointer_igInfoList_Destruct((igSmartPointer<igObject> *)&obj._readInfoList, -1);
+    igSmartPointer_igDirectoryList_Destruct((igSmartPointer<igObject> *)&obj._dirList, -1);
+    igSmartPointer_igInfoList_Destruct((igSmartPointer<igObject> *)&obj._infoList, -1);
+    igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)&obj._fnames, -1);
     igInfoManager_Destroy((igInfoManager *)&obj, 0);
     return vtable;
 }

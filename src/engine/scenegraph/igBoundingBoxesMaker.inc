@@ -33,10 +33,10 @@ int igBoundingBoxesMaker_GetVTable(void) {
     obj.w[8] = 0;
     r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igBoundingBoxesMaker_vtable[0];
-    igSmartPointer_igMetaObjectList_Destruct(&obj.w[8], -1);
-    igSmartPointer_igStringObj_Destruct(&obj.w[7], -1);
+    igSmartPointer_igMetaObjectList_Destruct((igSmartPointer<igObject> *)&obj.w[8], -1);
+    igSmartPointer_igStringObj_Destruct((igSmartPointer<igObject> *)&obj.w[7], -1);
     FUN_0014dd40(&obj.w[5], -1);
-    igSmartPointer_igAABox_Destruct((void * *)&obj.w[4], -1);
+    igSmartPointer_igAABox_Destruct((igSmartPointer<igObject> *)&obj.w[4], -1);
     return r;
 }
 

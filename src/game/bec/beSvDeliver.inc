@@ -45,11 +45,11 @@ int beSvDeliver_GetVTable(void) {
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSvDeliver_vtable[0];
     igSmartPointer_beSvPlatBaseData_Destruct((igSmartPointer<igObject> *)(&obj._platformData), (long long)(-1));
-    igSmartPointer_igIntList_Destruct(&obj._totalSizeList, -1);
-    igSmartPointer_igIntList_Destruct(&obj._formatList, -1);
-    igSmartPointer_igIntList_Destruct(&obj._freeFileList, -1);
-    igSmartPointer_igIntList_Destruct(&obj._freeSizeList, -1);
-    igSmartPointer_igIntList_Destruct(&obj._actConnect, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._totalSizeList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._formatList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._freeFileList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._freeSizeList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._actConnect, -1);
     return vtable;
 }
 

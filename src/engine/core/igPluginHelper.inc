@@ -31,7 +31,7 @@ int igPluginHelper_GetVTable(void) {
     igSmartPointer_igLibraryList_Destruct((igSmartPointer<igObject> *)(&helper._loadedPlugins), -1);
     igSmartPointer_igLibraryLoader_Destruct((void **)(&helper._libraryLoader), (short)(-1));
     igSmartPointer_igPluginRepositoryList_Destruct((void **)(&helper._repositoryList), (long long)(-1));
-    igStringRef_Destruct(&helper._pluginExtension, -1);
+    igStringRef_Destruct((igStringRef *)&helper._pluginExtension, -1);
     return vtable;
 }
 

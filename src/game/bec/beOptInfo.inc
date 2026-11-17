@@ -24,9 +24,9 @@ int beOptInfo_GetVTable(void) {
     obj._libAsm = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beOptInfo_vtable[0];
-    igStringRef_Destruct(&obj._libAsm, -1);
-    igStringRef_Destruct(&obj._libOpt, -1);
-    igInfo_Destroy(&obj, 0);
+    igStringRef_Destruct((igStringRef *)&obj._libAsm, -1);
+    igStringRef_Destruct((igStringRef *)&obj._libOpt, -1);
+    igInfo_Destroy((igInfo *)&obj, 0);
     return vtable;
 }
 

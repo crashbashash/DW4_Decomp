@@ -65,13 +65,17 @@ int igLockInterface_GetVTable(void) {
     return temp_s0;
 }
 
-extern "C" O *igSmartPointer_igBoolList_Destruct(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
-        if (arg1 > 0) operator delete(arg0);
+igSmartPointer<igObject> *igSmartPointer_igBoolList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
+        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 void FUN_00226a10(void)

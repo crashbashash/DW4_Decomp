@@ -27,7 +27,7 @@ int igFileImagePng_GetVTable(void) {
     *p = 0;
     temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&g_igFileImagePng_vtable[0];
-    igSmartPointer_igFile_Destruct((void **)p, -1);
+    igSmartPointer_igFile_Destruct((igSmartPointer<igObject> *)p, -1);
     FUN_00150490((S_150490 *)u.b, 0);
     return temp_s0;
 }

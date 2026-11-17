@@ -35,10 +35,10 @@ int igTransformSequence1_5_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igTransformSequence1_5_vtable[0];
     FUN_00195210((ObjectRefWord *)&obj.w[23], -1);
-    igSmartPointer_igVec3fList_Destruct(&obj.w[16], -1);
-    igSmartPointer_igVec3fList_Destruct(&obj.w[15], -1);
-    igSmartPointer_igVec3fList_Destruct(&obj.w[14], -1);
-    igSmartPointer_igLongList_Destruct((O *)&obj.w[13], -1);
+    igSmartPointer_igVec3fList_Destruct((igSmartPointer<igObject> *)&obj.w[16], -1);
+    igSmartPointer_igVec3fList_Destruct((igSmartPointer<igObject> *)&obj.w[15], -1);
+    igSmartPointer_igVec3fList_Destruct((igSmartPointer<igObject> *)&obj.w[14], -1);
+    igSmartPointer_igLongList_Destruct((igSmartPointer<igObject> *)&obj.w[13], -1);
     FUN_00195030((Obj_195030 *)((int *)&obj), 0);
     return t;
 }
@@ -57,13 +57,17 @@ Obj_195030 *FUN_00195030(Obj_195030 *arg0, short arg1) {
     return arg0;
 }
 
-O *igSmartPointer_igLongList_Destruct(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
-        if (arg1 > 0) operator delete(arg0);
+igSmartPointer<igObject> *igSmartPointer_igLongList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
+        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 ObjectRefWord *FUN_00195210(ObjectRefWord *self,int delete_storage) {

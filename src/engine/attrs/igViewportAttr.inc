@@ -134,14 +134,14 @@ void igViewportAttr_InitFields(void) {
     igMetaObject_NameFields(temp_s0, g_igViewportAttr_fieldTable, g_igViewportAttr_fieldHandles, g_igViewportAttr_fieldOffsets, temp_s2);
 }
 
-StringRefWord *igStringRef_Destruct(StringRefWord *self,int delete_storage) {
-    if(self) {
-        char *value=self->value;
-        if(value) {
-            int *header=(int *)(value-8);
-            if(--header[1]==0) StringChunk_ReleaseHeader((StringChunk *)((void *)header[0]), (StringTokenHeader *)header);
+igStringRef *igStringRef_Destruct(igStringRef *self, short deleteFlag) {
+    if (self) {
+        char *value = self->p;
+        if (value) {
+            StringTokenHeader *header = (StringTokenHeader *)value - 1;
+            if (--header->refCount == 0) StringChunk_ReleaseHeader((StringChunk *)header->owner, header);
         }
-        if((short)delete_storage>0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
     return self;
 }

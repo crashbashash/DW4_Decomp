@@ -90,22 +90,22 @@ int igPsx2VisualContext_GetVTable(void) {
     FUN_00137260((char *)&s + 948, -1);
     FUN_001372e0((char *)&s + 944, -1);
     FUN_00150f30((O_1506b0 *)((char *)&s + 940), -1);
-    igSmartPointer_igIntList_Destruct((ObjectRefWord *)q, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)q, -1);
     FUN_00150af0((Obj_1506b0 *)&s, 0);
     return r;
 }
 
-void **igSmartPointer_igMemoryPool_Destruct(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p);
+igSmartPointer<igObject> *igSmartPointer_igMemoryPool_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (flag > 0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
-    return (void **)self;
+    return self;
 }
 
 void **FUN_00150a70(void **arg0, long long arg1) {
@@ -153,15 +153,15 @@ Obj_1506b0 *FUN_00150af0(Obj_1506b0 *arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *igSmartPointer_igIntList_Destruct(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
+igSmartPointer<igObject> *igSmartPointer_igIntList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if((short)delete_storage>0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
     return self;
 }

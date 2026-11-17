@@ -18,7 +18,7 @@ int beModelCtrlInfo_GetVTable(void) {
     obj._kindString = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beModelCtrlInfo_vtable[0];
-    igStringRef_Destruct(&obj._kindString, -1);
+    igStringRef_Destruct((igStringRef *)&obj._kindString, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
 }

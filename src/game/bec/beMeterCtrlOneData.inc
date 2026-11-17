@@ -37,7 +37,7 @@ int beMeterCtrlOneData_GetVTable(void) {
     igSmartPointer_beDataObjInt_Destruct((igSmartPointer<igObject> *)&obj._mHp, (short)(-1));
     igSmartPointer_beDataObjInt_Destruct((igSmartPointer<igObject> *)&obj._hp, (short)(-1));
     igSmartPointer_beMeterCtrlNode_Destruct((igSmartPointer<igObject> *)&obj._node, (long long)(-1));
-    igNamedObject_Destroy(&obj, 0);
+    igNamedObject_Destroy((igNamedObject *)&obj, 0);
     return vtable;
 }
 

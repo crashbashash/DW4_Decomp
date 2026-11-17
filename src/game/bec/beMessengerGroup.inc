@@ -29,9 +29,9 @@ int beMessengerGroup_GetVTable(void) {
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMessengerGroup_vtable[0];
     igSmartPointer_beBaseInfoRamList_Destruct((igSmartPointer<igObject> *)&obj._ramList, (short)(-1));
-    igSmartPointer_igIntList_Destruct(&obj._ramNoList, -1);
-    igSmartPointer_igStringRefList_Destruct(&obj._infoNameList, -1);
-    igNamedObject_Destroy(&obj, 0);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._ramNoList, -1);
+    igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)&obj._infoNameList, -1);
+    igNamedObject_Destroy((igNamedObject *)&obj, 0);
     return vtable;
 }
 

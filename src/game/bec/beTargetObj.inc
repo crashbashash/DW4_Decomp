@@ -35,9 +35,9 @@ int beTargetObj_GetVTable(void) {
     obj._enemyPosList = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beTargetObj_vtable[0];
-    igSmartPointer_igVec3fList_Destruct(&obj._enemyPosList, -1);
-    igSmartPointer_igIntList_Destruct(&obj._playerRamNoList, -1);
-    igSmartPointer_igVec3fList_Destruct(&obj._playerPosList, -1);
+    igSmartPointer_igVec3fList_Destruct((igSmartPointer<igObject> *)&obj._enemyPosList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._playerRamNoList, -1);
+    igSmartPointer_igVec3fList_Destruct((igSmartPointer<igObject> *)&obj._playerPosList, -1);
     igInfoManager_Destroy((igInfoManager *)&obj, 0);
     return vtable;
 }

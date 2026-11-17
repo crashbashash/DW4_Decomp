@@ -35,7 +35,7 @@ int igAnimationCombiner_GetVTable(void) {
     t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igAnimationCombiner_vtable[0];
     FUN_001a8780((struct R * *)&obj.w14, -1);
-    igSmartPointer_igIntList_Destruct(&obj.w13, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj.w13, -1);
     FUN_001a8700((ObjectRefWord *)&obj.w12, -1);
     FUN_001a8620((struct S_1a8620 *)&obj, 0);
     return t;

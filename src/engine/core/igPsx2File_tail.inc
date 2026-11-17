@@ -33,7 +33,7 @@ int igPsx2File_GetVTable(void) {
     f._prefix = 0;
     vtable = *(int *)((char *)&f + g_objectSystem->vtableProbeOffset);
     f._vtable = (int)&g_igPsx2File_vtable[0];
-    igStringRef_Destruct(&f._prefix, -1);
+    igStringRef_Destruct((igStringRef *)&f._prefix, -1);
     igFile_Destroy((igFile *)&f, (short)0);
     return vtable;
 }

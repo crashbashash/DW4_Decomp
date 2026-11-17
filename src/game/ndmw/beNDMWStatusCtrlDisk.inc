@@ -40,7 +40,7 @@ int beNDMWStatusCtrlDisk_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWStatusCtrlDisk_vtable[0];
     igSmartPointer_beNDMWItemDisk_Destruct((igSmartPointer<igObject> *)&obj._sendDisk, -1);
     igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._diskList, -1);
-    igSmartPointer_igIntList_Destruct(&obj._playerNoList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._playerNoList, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return vtable;
 }

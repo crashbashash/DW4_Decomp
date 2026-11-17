@@ -34,8 +34,8 @@ int beNDMWPanelObjectWaza_GetVTable(void) {
     obj._listColor = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWPanelObjectWaza_vtable[0];
-    igSmartPointer_igIntList_Destruct(&obj._listColor, -1);
-    igSmartPointer_igObjectList_Destruct(&obj._listFolder, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._listColor, -1);
+    igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj._listFolder, -1);
     beNDMWPanelObject_Destroy((beNDMWPanelObject *)&obj, 0);
     return vtable;
 }

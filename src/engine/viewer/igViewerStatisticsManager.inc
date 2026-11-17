@@ -21,13 +21,13 @@ int igViewerStatisticsManager_GetVTable(void) {
     obj.w10 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem)) + 916));
     obj.vt = &g_igViewerStatisticsManager_vtable[0];
-    igSmartPointer_igMetaFieldList_Destruct(&obj.w10, -1);
-    igSmartPointer_igMetaObjectList_Destruct(&obj.w9, -1);
-    igSmartPointer_igStringObj_Destruct(&obj.w7, -1);
+    igSmartPointer_igMetaFieldList_Destruct((igSmartPointer<igObject> *)&obj.w10, -1);
+    igSmartPointer_igMetaObjectList_Destruct((igSmartPointer<igObject> *)&obj.w9, -1);
+    igSmartPointer_igStringObj_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
     GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
     GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
     FUN_004583f0(&obj.w4, -1);
-    igSmartPointer_igVisualContext_Destruct(&obj.w3, -1);
+    igSmartPointer_igVisualContext_Destruct((igSmartPointer<igObject> *)&obj.w3, -1);
     FUN_00458860((ObjectRefWord *)&obj.w2, -1);
     return t;
 }

@@ -28,8 +28,8 @@ int beSoundInfo_GetVTable(void) {
     obj._dataType = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSoundInfo_vtable[0];
-    igStringRef_Destruct(&obj._dataType, -1);
-    igSmartPointer_igNamedObjectList_Destruct(fnameListSlot, -1);
+    igStringRef_Destruct((igStringRef *)&obj._dataType, -1);
+    igSmartPointer_igNamedObjectList_Destruct((igSmartPointer<igObject> *)fnameListSlot, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;
 }

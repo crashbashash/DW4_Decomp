@@ -41,10 +41,10 @@ int beLOA_GetVTable(void) {
     obj._colorAttr = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beLOA_vtable[0];
-    igSmartPointer_igColorAttr_Destruct(&obj._colorAttr, -1);
-    igSmartPointer_igBlendFunctionAttr_Destruct(blendFunctionAttrSlot, -1);
-    igSmartPointer_igBlendStateAttr_Destruct(blendStateAttrSlot, -1);
-    igSmartPointer_igAttrList_Destruct(overrideAttrListSlot, -1);
+    igSmartPointer_igColorAttr_Destruct((igSmartPointer<igObject> *)&obj._colorAttr, -1);
+    igSmartPointer_igBlendFunctionAttr_Destruct((igSmartPointer<igObject> *)blendFunctionAttrSlot, -1);
+    igSmartPointer_igBlendStateAttr_Destruct((igSmartPointer<igObject> *)blendStateAttrSlot, -1);
+    igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)overrideAttrListSlot, -1);
     igGroup_Destroy((igGroup *)&obj, 0);
     return vtable;
 }

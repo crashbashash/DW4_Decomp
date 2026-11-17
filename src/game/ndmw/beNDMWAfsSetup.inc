@@ -40,20 +40,20 @@ int beNDMWAfsSetup_GetVTable(void) {
     igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&obj._subMenuHolder, -1);
     GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj._subMenu, -1);
     GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj._customMenu, -1);
-    igSmartPointer_igInfoList_Destruct(&obj._infoList, -1);
+    igSmartPointer_igInfoList_Destruct((igSmartPointer<igObject> *)&obj._infoList, -1);
     igInfoManager_Destroy((igInfoManager *)&obj, 0);
     return vtable;
 }
 
-igSmartPointer<igObject> *igSmartPointer_igGuiComponent_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
+igSmartPointer<igObject> *igSmartPointer_igGuiComponent_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
         if (object) {
             --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if ((short)delete_storage > 0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
     return self;
 }

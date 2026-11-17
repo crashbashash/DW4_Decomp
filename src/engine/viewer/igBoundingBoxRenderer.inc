@@ -43,7 +43,7 @@ int igBoundingBoxRenderer_GetVTable(void) {
     FUN_001353b0(&obj.w8, -1);
     FUN_001353b0(&obj.w7, -1);
     FUN_00142d10(&obj.w6, -1);
-    igSmartPointer_igAttrList_Destruct(&obj.w5, -1);
+    igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
     FUN_00197160(&obj.w4, -1);
     FUN_00459860((ObjectRefWord *)&obj.w3, -1);
     FUN_00230f70(&obj, 0);

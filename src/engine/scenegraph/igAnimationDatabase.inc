@@ -42,11 +42,11 @@ int igAnimationDatabase_GetVTable(void) {
     r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
     o.vt = &g_igAnimationDatabase_vtable[0];
     FUN_001a7a80((void * *)&o.f[8], -1);
-    igSmartPointer_igAppearanceList_Destruct((ObjectRefWord *)p19, -1);
+    igSmartPointer_igAppearanceList_Destruct((igSmartPointer<igObject> *)p19, -1);
     FUN_001a6350((struct Ref * *)p18, -1);
     FUN_001a7980((void * *)p17, -1);
     FUN_001a7900((ObjectRefWord *)p16, -1);
-    igInfo_Destroy(&o, 0);
+    igInfo_Destroy((igInfo *)&o, 0);
     return r;
 }
 
@@ -81,15 +81,15 @@ void **FUN_001a7980(void **arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *igSmartPointer_igAppearanceList_Destruct(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
+igSmartPointer<igObject> *igSmartPointer_igAppearanceList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if((short)delete_storage>0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
     return self;
 }

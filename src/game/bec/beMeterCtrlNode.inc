@@ -31,7 +31,7 @@ int beMeterCtrlNode_GetVTable(void) {
     obj._timeList = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMeterCtrlNode_vtable[0];
-    igSmartPointer_igLongList_Destruct(&obj._timeList, -1);
+    igSmartPointer_igLongList_Destruct((igSmartPointer<igObject> *)&obj._timeList, -1);
     igGroup_Destroy((igGroup *)&obj, 0);
     return vtable;
 }

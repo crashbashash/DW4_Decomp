@@ -31,7 +31,7 @@ int igFrustCullTraversal_GetVTable(void) {
     r = *(int *)((char *)&s + *(int *)((char *)g_objectSystem + 916));
     s.vt = &g_igFrustCullTraversal_vtable[0];
     FUN_001a1000((void **)&s.c, -1);
-    igSmartPointer_igAABox_Destruct((void * *)&s.a, -1);
+    igSmartPointer_igAABox_Destruct((igSmartPointer<igObject> *)&s.a, -1);
     FUN_001a0910((Obj_19fde0 *)&s, 0);
     return r;
 }
@@ -288,22 +288,17 @@ void **FUN_001a0710(struct Ref **self, short flag) {
     return (void **)self;
 }
 
-void **igSmartPointer_igStringObjList_Destruct(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igStringObjList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if ((short)arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 O *FUN_001a0810(O *arg0, short arg1) {

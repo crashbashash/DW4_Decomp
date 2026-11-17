@@ -35,10 +35,10 @@ int **FUN_00451160(int **arg0, long long arg1) {
         *arg0 = &DAT_00541970[0];
         if (arg0 != 0) {
             *arg0 = &g_igDependencyOrderedList_vtable[0];
-            igSmartPointer_igStringRefList_Destruct((int **)((char *)arg0 + 0x14), -1);
-            igSmartPointer_igPointerList_Destruct((int **)((char *)arg0 + 0x10), -1);
-            igSmartPointer_igDependencyList_Destruct((int **)((char *)arg0 + 0xC), -1);
-            igSmartPointer_igObjectList_Destruct((int **)((char *)arg0 + 8), -1);
+            igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 0x14), -1);
+            igSmartPointer_igPointerList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 0x10), -1);
+            igSmartPointer_igDependencyList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 0xC), -1);
+            igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 8), -1);
         }
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
             Memory_FreeBufferAliasC(arg0);

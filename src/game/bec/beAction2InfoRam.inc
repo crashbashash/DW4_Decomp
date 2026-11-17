@@ -26,8 +26,8 @@ int beAction2InfoRam_GetVTable(void) {
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beAction2InfoRam_vtable[0];
     igSmartPointer_beAction2InfoWork_Destruct((igSmartPointer<igObject> *)(&obj._work), (short)(-1));
-    igSmartPointer_igActorList_Destruct(&obj._actorList, -1);
-    igSmartPointer_igAppearanceList_Destruct(&obj._appearanceList, -1);
+    igSmartPointer_igActorList_Destruct((igSmartPointer<igObject> *)&obj._actorList, -1);
+    igSmartPointer_igAppearanceList_Destruct((igSmartPointer<igObject> *)&obj._appearanceList, -1);
     igSmartPointer_beModelCtrlNode2_Destruct((igSmartPointer<igObject> *)&obj._node, -1);
     beBaseInfoRam_Destroy((beBaseInfoRam *)&obj, (long long)0);
     return vtable;

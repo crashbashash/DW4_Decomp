@@ -30,7 +30,7 @@ int beNDMWShopCtrlDeviceSell_GetVTable(void) {
     obj._decideList = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrlDeviceSell_vtable[0];
-    igSmartPointer_igBoolList_Destruct(&obj._decideList, -1);
+    igSmartPointer_igBoolList_Destruct((igSmartPointer<igObject> *)&obj._decideList, -1);
     beNDMWListCtrl_Destroy((beNDMWListCtrl *)&obj, 0);
     return vtable;
 }

@@ -94,20 +94,20 @@ int igSorter_GetVTable(void) {
     temp_s5 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
     u.vt = (int)&DAT_00528620[4];
     FUN_00197260((void **)p276, -1);
-    igSmartPointer_igIntList_Destruct(p268, -1);
-    igSmartPointer_igIntList_Destruct(p264, -1);
-    igSmartPointer_igGeometry_Destruct((O *)p260, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)p268, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)p264, -1);
+    igSmartPointer_igGeometry_Destruct((igSmartPointer<igObject> *)p260, -1);
     FUN_00197160((void **)p256, -1);
     FUN_00197160((void **)p252, -1);
-    igSmartPointer_igIntList_Destruct(p248, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)p248, -1);
     FUN_001970e0((struct Ref **)p244, -1);
     FUN_00197260((void **)p240, -1);
     FUN_00197060((void **)&u.b[72], -1);
     FUN_00197060((void **)&u.b[68], -1);
     FUN_00196fe0((void **)&u.b[64], -1);
-    igSmartPointer_igIntList_Destruct(&u.b[60], -1);
-    igSmartPointer_igIntList_Destruct(&u.b[56], -1);
-    igSmartPointer_igIntList_Destruct(&u.b[52], -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&u.b[60], -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&u.b[56], -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&u.b[52], -1);
     FUN_00197160((void **)&u.b[48], -1);
     FUN_00197160((void **)&u.b[44], -1);
     FUN_00197160((void **)&u.b[40], -1);
@@ -206,13 +206,17 @@ void **FUN_00197160(void **arg0, long long arg1) {
     return arg0;
 }
 
-O *igSmartPointer_igGeometry_Destruct(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
-        if (arg1 > 0) operator delete(arg0);
+igSmartPointer<igObject> *igSmartPointer_igGeometry_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
+        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 void **FUN_00197260(void **arg0, long long arg1) {

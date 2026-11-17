@@ -33,9 +33,9 @@ int beMessengerDelay_GetVTable(void) {
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beMessengerDelay_vtable[0];
     igSmartPointer_beMessengerArgData_Destruct((igSmartPointer<igObject> *)&obj._argData, -1);
-    igStringRef_Destruct(&obj._message, -1);
-    igStringRef_Destruct(&obj._infoName, -1);
-    igStringRef_Destruct(&obj._groupName, -1);
+    igStringRef_Destruct((igStringRef *)&obj._message, -1);
+    igStringRef_Destruct((igStringRef *)&obj._infoName, -1);
+    igStringRef_Destruct((igStringRef *)&obj._groupName, -1);
     return vtable;
 }
 

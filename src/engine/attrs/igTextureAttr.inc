@@ -58,8 +58,8 @@ int igTextureAttr_GetVTable(void) {
     u.vt = (int)&g_igTextureAttr_vtable[0];
     FUN_00132130((Ref **)&u.b[64], -1);
     FUN_001321b0((void **)p136, -1);
-    igSmartPointer_igImage_Destruct((O *)p128, -1);
-    igSmartPointer_igVisualContext_Destruct((void **)p92, -1);
+    igSmartPointer_igImage_Destruct((igSmartPointer<igObject> *)p128, -1);
+    igSmartPointer_igVisualContext_Destruct((igSmartPointer<igObject> *)p92, -1);
     return temp_s;
 }
 

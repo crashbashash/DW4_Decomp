@@ -63,10 +63,10 @@ int beAction2InfoWork_GetVTable(void) {
     obj._lightingStateAttr = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beAction2InfoWork_vtable[0];
-    igSmartPointer_igLightingStateAttr_Destruct(&obj._lightingStateAttr, -1);
+    igSmartPointer_igLightingStateAttr_Destruct((igSmartPointer<igObject> *)&obj._lightingStateAttr, -1);
     igSmartPointer_igTextureStateAttr_Destruct(textureStateAttrSlot, -1);
-    igSmartPointer_igBlendStateAttr_Destruct(blendStateAttrSlot, -1);
-    igSmartPointer_igColorAttr_Destruct(colorAttrSlot, -1);
+    igSmartPointer_igBlendStateAttr_Destruct((igSmartPointer<igObject> *)blendStateAttrSlot, -1);
+    igSmartPointer_igColorAttr_Destruct((igSmartPointer<igObject> *)colorAttrSlot, -1);
     igSmartPointer_beAction2Data_Destruct((igSmartPointer<igObject> *)comDataSlot, (short)(-1));
     return vtable;
 }

@@ -31,8 +31,8 @@ int igExternalInfoEntry_GetVTable(void) {
     *q = 0;
     vtable = *(int *)((char *)&entry + g_objectSystem->vtableProbeOffset);
     entry._vtable = (int)&g_igExternalInfoEntry_vtable[0];
-    igStringRef_Destruct(q, -1);
-    igStringRef_Destruct(p, -1);
+    igStringRef_Destruct((igStringRef *)q, -1);
+    igStringRef_Destruct((igStringRef *)p, -1);
     igDirEntry_Destroy((igDirEntry *)&entry, 0);
     return vtable;
 }

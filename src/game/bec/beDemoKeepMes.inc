@@ -32,10 +32,10 @@ int beDemoKeepMes_GetVTable(void) {
     obj._mesParam = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beDemoKeepMes_vtable[0];
-    igStringRef_Destruct(&obj._mesParam, -1);
-    igStringRef_Destruct(&obj._message, -1);
-    igStringRef_Destruct(&obj._infoName, -1);
-    igStringRef_Destruct(&obj._groupName, -1);
+    igStringRef_Destruct((igStringRef *)&obj._mesParam, -1);
+    igStringRef_Destruct((igStringRef *)&obj._message, -1);
+    igStringRef_Destruct((igStringRef *)&obj._infoName, -1);
+    igStringRef_Destruct((igStringRef *)&obj._groupName, -1);
     return vtable;
 }
 

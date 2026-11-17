@@ -38,7 +38,7 @@ int igIntersectTraversal_GetVTable(void) {
     FUN_0019e3c0((void * *)&obj.w[13], -1);
     FUN_0018fa00(&obj.w[12], -1);
     FUN_0019e340((void * *)&obj.w[9], -1);
-    igSmartPointer_igNodeList_Destruct((void * *)&obj.w[8], -1);
+    igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)&obj.w[8], -1);
     FUN_00150fb0(&obj.w[7], -1);
     FUN_00194490((struct S *)((int *)&obj), 0);
     return t;

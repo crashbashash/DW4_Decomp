@@ -50,10 +50,10 @@ int beNDMWPanelWazaInfoWork_GetVTable(void) {
     obj._textColorList = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWPanelWazaInfoWork_vtable[0];
-    igSmartPointer_igIntList_Destruct(&obj._textColorList, -1);
-    igSmartPointer_igStringRefList_Destruct(&obj._textSetList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._textColorList, -1);
+    igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)&obj._textSetList, -1);
     igSmartPointer_beNDMWMdlPlayerInfoWork_Destruct((igSmartPointer<igObject> *)&obj._playerWork, -1);
-    igStringRef_Destruct(&obj._retWazaLabel, -1);
+    igStringRef_Destruct((igStringRef *)&obj._retWazaLabel, -1);
     igSmartPointer_beNDMWPanelObjectStat_Destruct((igSmartPointer<igObject> *)&obj._panelStat, -1);
     igSmartPointer_beNDMWPanelObjectItem_Destruct((igSmartPointer<igObject> *)&obj._panelItem, -1);
     igSmartPointer_beNDMWPanelObjectWaza_Destruct((igSmartPointer<igObject> *)&obj._panelWaza, -1);

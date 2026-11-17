@@ -29,26 +29,22 @@ int igPsx2EnvironmentMapShader_GetVTable(void) {
     u.vt = &g_igPsx2EnvironmentMapShader_vtable[0];
     FUN_001ab400((ObjectRefWord *)p2, -1);
     FUN_0019aa90((void * *)p1, -1);
-    igSmartPointer_igBlendFunctionAttr_Destruct((void * *)p0, -1);
+    igSmartPointer_igBlendFunctionAttr_Destruct((igSmartPointer<igObject> *)p0, -1);
     FUN_001aaf80((Obj_1aaf80 *)u.b, 0);
     return temp_s2;
 }
 
-void **igSmartPointer_igBlendStateAttr_Destruct(void **arg0, long long arg1) {
-    char *o;
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igBlendStateAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if ((short)arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 Obj_1aaf80 *FUN_001aaf80(Obj_1aaf80 *arg0, short arg1) {
@@ -70,7 +66,7 @@ Obj_1aaf80 *FUN_001aaf80(Obj_1aaf80 *arg0, short arg1) {
         arg0->rel(&arg0->m32);
         if (arg0) {
             arg0->vt = g_igGroup_vtable;
-            igSmartPointer_igNodeList_Destruct((void * *)((char *)arg0 + 28), -1);
+            igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)((char *)arg0 + 28), -1);
             igNode_Destroy((igNode *)arg0, 0);
         }
         if (arg1 > 0) {

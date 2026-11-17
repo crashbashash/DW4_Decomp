@@ -108,18 +108,18 @@ int igIGBFile_GetVTable(void) {
     igSmartPointer_igIntList_Construct(&file._memoryPoolHandles);
     vtable = *(int *)((char *)&file + g_objectSystem->vtableProbeOffset);
     file._vtable = (int)(&g_igInfo_vtable[28]); /* matching construct: igIGBFile's vtable address (it follows igInfo's 28 words) spelled through another symbol, so it is rematerialised rather than reused */
-    igSmartPointer_igIntList_Destruct(&file._memoryPoolHandles, -1);
-    igSmartPointer_igMemoryPool_Destruct(&file._objectMemoryPool, -1);
-    igSmartPointer_igMemoryPool_Destruct(&file._dataMemoryPool, -1);
-    igSmartPointer_igMemoryPool_Destruct(&file._temporaryMemoryPool, -1);
-    igSmartPointer_igIntList_Destruct(&file._alignmentListInFile, -1);
-    igStringRef_Destruct(&file._previousResourceFilePath, -1);
-    igSmartPointer_igMetaField_Destruct(&file.smf, -1);
-    igSmartPointer_igMetaField_Destruct(&file.imf, -1);
-    igSmartPointer_igMetaObjectList_Destruct(&file._metaObjectListInFile, -1);
-    igSmartPointer_igMetaFieldList_Destruct(&file._metaFieldListInFile, -1);
-    igSmartPointer_igFile_Destruct(&file._file, -1);
-    igSmartPointer_igObjectList_Destruct(&file._entryPool, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&file._memoryPoolHandles, -1);
+    igSmartPointer_igMemoryPool_Destruct((igSmartPointer<igObject> *)&file._objectMemoryPool, -1);
+    igSmartPointer_igMemoryPool_Destruct((igSmartPointer<igObject> *)&file._dataMemoryPool, -1);
+    igSmartPointer_igMemoryPool_Destruct((igSmartPointer<igObject> *)&file._temporaryMemoryPool, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&file._alignmentListInFile, -1);
+    igStringRef_Destruct((igStringRef *)&file._previousResourceFilePath, -1);
+    igSmartPointer_igMetaField_Destruct((igSmartPointer<igObject> *)&file.smf, -1);
+    igSmartPointer_igMetaField_Destruct((igSmartPointer<igObject> *)&file.imf, -1);
+    igSmartPointer_igMetaObjectList_Destruct((igSmartPointer<igObject> *)&file._metaObjectListInFile, -1);
+    igSmartPointer_igMetaFieldList_Destruct((igSmartPointer<igObject> *)&file._metaFieldListInFile, -1);
+    igSmartPointer_igFile_Destruct((igSmartPointer<igObject> *)&file._file, -1);
+    igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&file._entryPool, -1);
     igDirectory_Destroy((igDirectory *)&file, 0);
     return vtable;
 }

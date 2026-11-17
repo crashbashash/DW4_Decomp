@@ -34,7 +34,7 @@ int beNDMWShopCtrlDiskSell_GetVTable(void) {
     obj._diskIdList = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopCtrlDiskSell_vtable[0];
-    igSmartPointer_igIntList_Destruct(&obj._diskIdList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._diskIdList, -1);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return vtable;
 }

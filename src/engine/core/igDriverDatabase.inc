@@ -55,13 +55,13 @@ int igDriverDatabase_GetVTable(void) {
     db._rawDatabase = 0;
     r = *(int *)((char *)&db + g_objectSystem->vtableProbeOffset);
     db._vtable = (int)&g_igDriverDatabase_vtable[0];
-    igSmartPointer_igStringObj_Destruct(&db._rawDatabase, -1);
-    igSmartPointer_igStringObj_Destruct(&db._databaseFileName, -1);
-    igSmartPointer_igFile_Destruct(&db._databaseFile, -1);
-    igSmartPointer_igRegistry_Destruct(&db._overrideSource, -1);
-    igSmartPointer_igStringRefListList_Destruct(&db._subPropertyValues, -1);
-    igSmartPointer_igStringRefListList_Destruct(&db._subPropertyNames, -1);
-    igSmartPointer_igStringObjList_Destruct(&db._currentProperties, -1);
+    igSmartPointer_igStringObj_Destruct((igSmartPointer<igObject> *)&db._rawDatabase, -1);
+    igSmartPointer_igStringObj_Destruct((igSmartPointer<igObject> *)&db._databaseFileName, -1);
+    igSmartPointer_igFile_Destruct((igSmartPointer<igObject> *)&db._databaseFile, -1);
+    igSmartPointer_igRegistry_Destruct((igSmartPointer<igObject> *)&db._overrideSource, -1);
+    igSmartPointer_igStringRefListList_Destruct((igSmartPointer<igObject> *)&db._subPropertyValues, -1);
+    igSmartPointer_igStringRefListList_Destruct((igSmartPointer<igObject> *)&db._subPropertyNames, -1);
+    igSmartPointer_igStringObjList_Destruct((igSmartPointer<igObject> *)&db._currentProperties, -1);
     return r;
 }
 

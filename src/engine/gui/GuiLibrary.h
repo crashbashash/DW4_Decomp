@@ -3,6 +3,7 @@
 
 #include "dw4/reflected.h"
 #include "dw4/igSmartPointer.h"
+#include "dw4/igSmartPointerDestruct.h"
 #include "dw4/igTDataList.h"
 #include "dw4/igVec3f.h"
 #include "dw4/beFontImage.h"
@@ -94,7 +95,6 @@ extern "C" igMetaObject *g_igTextElement_metaObject;
 extern "C" igMetaObject *FUN_0044bce0(void);
 extern "C" igMetaObject *igTextElement_GetMetaObject(void);
 extern "C" int FUN_001353b0(...);
-extern "C" int igStringRef_Destruct(...);
 union U { int vt; int w[16]; void *p[16]; char b[64]; };
 extern "C" int g_igTextElement_vtable[4];
 extern "C" int igTextElement_GetVTable(void);
@@ -137,10 +137,6 @@ extern "C" igMetaObject *igRendererOrderedList_GetMetaObject(void);
 struct Obj_44c570 { int *vt; int w[7]; };
 extern "C" int g_igRendererOrderedList_vtable[4];
 extern "C" int igRendererOrderedList_GetVTable(void);
-extern "C" int igSmartPointer_igPointerList_Destruct(...);
-extern "C" int igSmartPointer_igObjectList_Destruct(...);
-extern "C" int igSmartPointer_igStringRefList_Destruct(...);
-extern "C" int igSmartPointer_igDependencyList_Destruct(...);
 #include "dw4/igDependencyOrderedList.h"
 extern "C" int DAT_00541dd0[4];
 extern "C" int **FUN_0044c5e0(int **arg0, long long arg1);
@@ -255,8 +251,6 @@ extern "C" igMetaObject *g_igGuiSystem_metaObject;
 extern "C" igMetaObject *FUN_0044ded0(void);
 extern "C" igMetaObject *igGuiSystem_GetMetaObject(void);
 struct Obj_44df70 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; };
-extern "C" int igSmartPointer_igTransform_Destruct(...);
-extern "C" int igSmartPointer_igAttrSet_Destruct(...);
 extern "C" int g_igGuiSystem_vtable[4];
 extern "C" int igGuiSystem_GetVTable(void);
 extern "C" void **FUN_0044e060(void **arg0, short arg1);
@@ -285,7 +279,6 @@ extern "C" igMetaObject *FUN_0044e6b0(void);
 extern "C" igMetaObject *igGuiSystemRenderer_GetMetaObject(void);
 struct Obj_44e750 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; };
 extern "C" int FUN_00197160(...);
-extern "C" int igSmartPointer_igNode_Destruct(...);
 extern "C" int FUN_001d9870(...);
 extern "C" int FUN_00230f70(...);
 extern "C" int g_igGuiSystemRenderer_vtable[4];
@@ -335,7 +328,6 @@ extern "C" void thunk_igWindowSizeObserver_GetMetaObject(void);
 extern "C" igMetaObject *g_igGuiSystemModel_metaObject;
 extern "C" igMetaObject *FUN_0044f210(void);
 extern "C" igMetaObject *igGuiSystemModel_GetMetaObject(void);
-extern "C" int igSmartPointer_igGuiComponent_Destruct(...);
 extern "C" int g_igGuiSystemModel_vtable[4];
 extern "C" int igGuiSystemModel_GetVTable(void);
 extern "C" void igGuiSystemModel_RunStaticInit(void);
@@ -565,7 +557,6 @@ extern "C" igMetaObject *FUN_004524f0(void);
 extern "C" igMetaObject *igBitmapFont_GetMetaObject(void);
 struct Obj_452590 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; };
 extern "C" int FUN_0019aa10(...);
-extern "C" int igSmartPointer_igCharMetricsList_Destruct(...);
 #include "dw4/igFont.h"
 extern "C" int g_igBitmapFont_vtable[4];
 extern "C" int igBitmapFont_GetVTable(void);

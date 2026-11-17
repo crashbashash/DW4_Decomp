@@ -343,9 +343,6 @@ extern "C" void *beNDMWShopTitle03_GetMetaObject(void);
 extern "C" int beNDMWShopTitle03_GetVTable(void);
 extern "C" igSmartPointer<igObject> *beNDMWWindow_igSmartPointer_beNDMWWindow_Destruct(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWWindowList_Destruct(igSmartPointer<igObject> *self,int delete_storage);
-/* kept local: their engine definers still take view types, so igSmartPointerDestruct.h does not declare them yet. */
-extern "C" int igSmartPointer_igStringRefList_Destruct(...);
-extern "C" int igSmartPointer_igIntList_Destruct(...);
 extern "C" beNDMWWindowTitle *beNDMWWindowTitle_Destroy(beNDMWWindowTitle *self, short flags);
 extern "C" void beNDMWShopTitle03_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWShopTitle03_Register(void);
@@ -431,8 +428,6 @@ extern "C" void beNDMWShopSelect01_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWShopSelect01_Register(void);
 extern "C" void beNDMWShopSelect01_GetMetaObjectFunction(void);
 extern "C" void *beNDMWShopSelect00_GetMetaObject(void);
-/* kept local: its engine definer still takes a view type, so igSmartPointerDestruct.h does not declare it yet. */
-extern "C" int igStringRef_Destruct(...);
 extern "C" int beNDMWShopSelect00_GetVTable(void);
 extern "C" void beNDMWShopSelect00_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWShopSelect00_Register(void);
@@ -500,8 +495,6 @@ extern "C" CallbackArray *beNDMWShopCtrlXdataChip_Register(void);
 extern "C" void beNDMWShopCtrlXdataChip_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrlXdataChip_InitFields(void);
 extern "C" void *beNDMWShopCtrlSales_GetMetaObject(void);
-/* kept local: its engine definer still takes a view type, so igSmartPointerDestruct.h does not declare it yet. */
-extern "C" int igSmartPointer_igBoolList_Destruct(...);
 extern "C" int beNDMWShopCtrlSales_GetVTable(void);
 extern "C" void beNDMWShopCtrlSales_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWShopCtrlSales_Register(void);
@@ -529,8 +522,6 @@ extern "C" void beNDMWShopCtrlEditBit_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWShopCtrlEditBit_Register(void);
 extern "C" void beNDMWShopCtrlEditBit_GetMetaObjectFunction(void);
 extern "C" void beNDMWShopCtrlEditBit_InitFields(void);
-/* kept local: its engine definer still takes a view type, so igSmartPointerDestruct.h does not declare it yet. */
-extern "C" int igSmartPointer_igIntListList_Destruct(int *, int);
 extern "C" int beNDMWShopCtrlDigilabo_GetVTable(void);
 extern "C" void beNDMWShopCtrlDigilabo_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWShopCtrlDigilabo_Register(void);
@@ -777,8 +768,6 @@ extern "C" void beNDMWPanelObjectStat_GetMetaObject(void);
 extern "C" igMetaObject *beNDMWPanelObject_GetPublishedMetaObject(void);
 extern "C" void beNDMWPanelObjectStat_InitFields(void);
 extern "C" igMetaObject *beNDMWPanelObjectItem_GetOrCreateMetaObject(void);
-/* kept local: its engine definer still takes a view type, so igSmartPointerDestruct.h does not declare it yet. */
-extern "C" int igSmartPointer_igObjectList_Destruct(...);
 extern "C" int beNDMWPanelObjectItem_GetVTable(void);
 extern "C" void beNDMWPanelObjectItem_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWPanelObjectItem_Register(void);
@@ -826,10 +815,6 @@ extern "C" igMetaObject *beNDMWMdlPEBase_GetPublishedMetaObject(void);
 extern "C" void beNDMWMdlPlayer_InitFields(void);
 extern "C" igMetaObject *beNDMWMdlPlayerInfoWork_GetOrCreateMetaObject(void);
 extern "C" int beNDMWMdlPlayerInfoWork_GetVTable(void);
-/* kept local: their engine definers still take view types, so igSmartPointerDestruct.h does not declare them yet. */
-extern "C" void igSmartPointer_igFloatList_Destruct(void *, int);
-extern "C" void igSmartPointer_igAABox_Destruct(void *, int);
-extern "C" void igSmartPointer_igGroup_Destruct(void *, int);
 extern "C" void beNDMWMdlPlayerInfoWork_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWMdlPlayerInfoWork_Register(void);
 extern "C" void beNDMWMdlPlayerInfoWork_GetMetaObject(void);
@@ -1248,8 +1233,6 @@ extern "C" igMetaObject *igNamedObject_GetOrCreateMetaObject(void);
 extern "C" void beNDMWAfsStageLoad_InitFields(void);
 extern "C" igMetaObject *beNDMWAfsSetup_GetOrCreateMetaObject(void);
 extern "C" void *beNDMWAfsSetup_ResolveMetaObject(void);
-/* kept local: its engine definer still takes a view type, so igSmartPointerDestruct.h does not declare it yet. */
-extern "C" int igSmartPointer_igInfoList_Destruct(void *, int);
 extern "C" int beNDMWAfsSetup_GetVTable(void);
 extern "C" void beNDMWAfsSetup_EnsureRegistered(void);
 extern "C" CallbackArray *beNDMWAfsSetup_Register(void);
@@ -1794,7 +1777,6 @@ extern "C" int g_beNDMWGameRamInfoRam_vtable[4];
 extern "C" igMetaObject *g_beNDMWGameRamInfo_metaObject;
 extern "C" int g_beNDMWGameRamInfo_vtable[4];
 /* kept local: no include/dw4 home; the definition still takes a placeholder view. */
-extern "C" int igInfo_Destroy(igInfo *, int);
 extern "C" int g_beNDMWAfsSetupInfo_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_beNDMWAfsSetupDataList_Destruct(igSmartPointer<igObject> *self,int delete_storage);
 extern "C" igMetaObject *g_beNDMWAfsSetupDataList_metaObject;
@@ -1805,7 +1787,6 @@ extern "C" int g_beNDMWAfsSetupData_vtable[4];
 extern "C" igMetaObject *beNDMWAfsStageLoad_ResolveMetaObject(void);
 extern "C" int g_beNDMWAfsStageLoad_vtable[4];
 extern "C" int g_beNDMWAfsSetup_vtable[4];
-extern "C" igSmartPointer<igObject> *igSmartPointer_igGuiComponent_Destruct(igSmartPointer<igObject> *self,int delete_storage);
 /* kept local: no include/dw4 home (asm-only). */
 extern "C" igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 extern "C" void beNDMWDegiData_userConstruct(beNDMWDegiData *self, int flag);

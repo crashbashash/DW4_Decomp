@@ -29,7 +29,7 @@ int beSvReadMediaApi_GetVTable(void) {
     obj._loadWorkList = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beSvReadMediaApi_vtable[0];
-    igSmartPointer_igObjectList_Destruct(&obj._loadWorkList, -1);
+    igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj._loadWorkList, -1);
     igSmartPointer_beSaveDataDeliver_Destruct((igSmartPointer<igObject> *)&obj._lodeData, (short)(-1));
     igSmartPointer_beSvPlatBaseData_Destruct((igSmartPointer<igObject> *)&obj._outputGamedata, (long long)(-1));
     beSaveApi_Destroy((beSaveApi *)&obj, (short)0);

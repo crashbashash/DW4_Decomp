@@ -36,9 +36,9 @@ int igVertexArray2_GetVTable(void) {
     r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igVertexArray2_vtable[0];
     FUN_0014aaf0((ObjectRefWord *)&obj.w[4], -1);
-    igSmartPointer_igObjectList_Destruct((void **)&obj.w[3], -1);
-    igSmartPointer_igObject_Destruct(&obj.w[2], -1);
-    igNamedObject_Destroy(&obj, 0);
+    igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj.w[3], -1);
+    igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj.w[2], -1);
+    igNamedObject_Destroy((igNamedObject *)&obj, 0);
     return r;
 }
 
@@ -59,22 +59,17 @@ Obj_14a910 *FUN_0014a910(Obj_14a910 *arg0, short arg1) {
     return arg0;
 }
 
-void **igSmartPointer_igObjectList_Destruct(void **arg0, short arg1) {
-    S_temp_a0 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0 *)((void *)(*arg0));
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
+igSmartPointer<igObject> *igSmartPointer_igObjectList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 ObjectRefWord *FUN_0014aaf0(ObjectRefWord *self,int delete_storage) {

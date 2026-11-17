@@ -32,7 +32,7 @@ int beNDMWShopSelect02_GetVTable(void) {
     obj._playerNoList = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWShopSelect02_vtable[0];
-    igSmartPointer_igIntList_Destruct(&obj._playerNoList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._playerNoList, -1);
     beNDMWWindowSelect_Destroy((beNDMWWindowSelect *)&obj, 0);
     return vtable;
 }

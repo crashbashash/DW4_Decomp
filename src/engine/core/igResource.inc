@@ -55,34 +55,29 @@ int igResource_GetVTable(void) {
     resource._objectMemoryPool = 0;
     t = *(int *)((char *)&resource + g_objectSystem->vtableProbeOffset);
     resource._vtable = (int)&g_igResource_vtable[0];
-    igSmartPointer_igMemoryPool_Destruct(&resource._objectMemoryPool, -1);
-    igSmartPointer_igMemoryPool_Destruct(&resource._dataMemoryPool, -1);
-    igSmartPointer_igMemoryPool_Destruct(&resource._temporaryMemoryPool, -1);
-    igSmartPointer_igIntList_Destruct(&resource._alignmentValues, -1);
-    igSmartPointer_igStringObjList_Destruct(&resource._alignmentStrings, -1);
-    igSmartPointer_igThread_Destruct(&resource._loadThread, -1);
+    igSmartPointer_igMemoryPool_Destruct((igSmartPointer<igObject> *)&resource._objectMemoryPool, -1);
+    igSmartPointer_igMemoryPool_Destruct((igSmartPointer<igObject> *)&resource._dataMemoryPool, -1);
+    igSmartPointer_igMemoryPool_Destruct((igSmartPointer<igObject> *)&resource._temporaryMemoryPool, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&resource._alignmentValues, -1);
+    igSmartPointer_igStringObjList_Destruct((igSmartPointer<igObject> *)&resource._alignmentStrings, -1);
+    igSmartPointer_igThread_Destruct((igSmartPointer<igObject> *)&resource._loadThread, -1);
     igSmartPointer_igQueue_Destruct((igQueue **)&resource._loadQueue, -1);
-    igStringRef_Destruct(&resource._absoluteFilePath, -1);
-    igStringRef_Destruct(&resource._relativeFilePath, -1);
-    igSmartPointer_igDirectoryList_Destruct((void **)&resource._directoryList, -1);
-    igSmartPointer_igDirectory_Destruct(&resource._imageDirectory, -1);
+    igStringRef_Destruct((igStringRef *)&resource._absoluteFilePath, -1);
+    igStringRef_Destruct((igStringRef *)&resource._relativeFilePath, -1);
+    igSmartPointer_igDirectoryList_Destruct((igSmartPointer<igObject> *)&resource._directoryList, -1);
+    igSmartPointer_igDirectory_Destruct((igSmartPointer<igObject> *)&resource._imageDirectory, -1);
     return t;
 }
 
-void **igSmartPointer_igDirectoryList_Destruct(void **self, long long deleteFlag) {
-    igObject *object;
-
-    if (self != 0) {
-        object = (igObject *)*self;
-        if (object != 0) {
-            object->_refCount = object->_refCount - 1;
-            if ((object->_refCount & 0x7FFFFF) == 0) {
+igSmartPointer<igObject> *igSmartPointer_igDirectoryList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
                 igObject_Destroy(object);
-            }
         }
-        if ((short)deleteFlag > 0) {
-            operator delete(self);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
     return self;
 }

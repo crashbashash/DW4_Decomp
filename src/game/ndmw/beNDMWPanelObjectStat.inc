@@ -35,8 +35,8 @@ int beNDMWPanelObjectStat_GetVTable(void) {
     vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
     *(int **)&obj._vtable = &g_beNDMWPanelObjectStat_vtable[0];
     igSmartPointer_beNDMWMdlPlayerInfoWork_Destruct((igSmartPointer<igObject> *)&obj._playerWork, -1);
-    igSmartPointer_igIntList_Destruct(&obj._listColor, -1);
-    igSmartPointer_igStringRefList_Destruct(&obj._listFolder, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._listColor, -1);
+    igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)&obj._listFolder, -1);
     beNDMWPanelObject_Destroy((beNDMWPanelObject *)&obj, 0);
     return vtable;
 }

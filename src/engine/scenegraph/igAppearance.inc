@@ -33,12 +33,12 @@ int igAppearance_GetVTable(void) {
     obj.w7 = 0;
     t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj.vt = &g_igAppearance_vtable[0];
-    igSmartPointer_igNodeList_Destruct((void * *)&obj.w7, -1);
-    igSmartPointer_igStringObjList_Destruct((void * *)&obj.w6, -1);
+    igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
+    igSmartPointer_igStringObjList_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
     FUN_001a63d0((void * *)&obj.w5, -1);
     FUN_001a6350((struct Ref * *)&obj.w4, -1);
     FUN_001a62d0((void * *)&obj.w3, -1);
-    igNamedObject_Destroy(&obj, 0);
+    igNamedObject_Destroy((igNamedObject *)&obj, 0);
     return t;
 }
 

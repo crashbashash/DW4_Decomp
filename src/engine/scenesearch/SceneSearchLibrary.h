@@ -29,15 +29,12 @@ extern "C" void igSearchSceneGraph_Register(void);
 extern "C" void thunk_igSearchSceneGraph_GetMetaObject(void);
 extern "C" void igSearchSceneGraph_InitFields(void);
 extern "C" igMetaObject *Gap__igSearchSceneGraph__vfunc_22(void);
-extern "C" char igNamedObject_Register[];
-extern "C" char igNamedObject_GetPublishedMetaObject[];
 
 /* GetVTable's stack instance and its member destructors. */
 struct SearchSceneGraphFrame { int *vt; int f4; int f8; int fC; int f10; int f14; int f18; int f1C; };
-extern "C" int igSmartPointer_igMetaObject_Destruct(...);
+#include "dw4/igNamedObject.h"
+#include "dw4/igSmartPointerDestruct.h"
 extern "C" int FUN_002293d0(...);
-extern "C" int igNamedObject_Destroy(...);
-extern "C" int igStringRef_Destruct(...);
 extern "C" int g_igSearchSceneGraph_vtable[4];
 /* The object system's byte offset of the vtable word inside an object. */
 struct ObjectSystemView { char pad[916]; int vtableProbeOffset; };
@@ -72,7 +69,6 @@ public:
 };
 extern "C" void igActor_SetAnimationSystem(int *self, RefCounted *scene);
 
-extern "C" void **igSmartPointer_igLightingStateAttr_Destruct(void **ref, short flags);
 extern "C" void **FUN_00239280(void **ref, short flags);
 extern "C" void **FUN_00239300(void **ref, short flags);
 

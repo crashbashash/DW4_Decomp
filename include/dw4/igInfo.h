@@ -2,6 +2,7 @@
 #define DW4_IGINFO_H
 
 /* igInfo: class registration. */
+struct igInfo;
 struct CallbackArray;
 struct igMetaObject;
 
@@ -14,6 +15,7 @@ extern struct igMetaObject *g_igInfo_metaObject;
 
 struct igMetaObject *igInfo_GetPublishedMetaObject(void);
 struct CallbackArray *igInfo_Register(void);
+struct igInfo *igInfo_Destroy(struct igInfo *self, short deleteFlag);
 
 #ifdef __cplusplus
 }

@@ -48,14 +48,14 @@ int beFont_GetVTable(void) {
     obj._condition01 = 0;
     vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
     obj._vtable = (int)&g_beFont_vtable[0];
-    igStringRef_Destruct(&obj._condition01, -1);
-    igStringRef_Destruct(&obj._condition00, -1);
-    igSmartPointer_igStringObj_Destruct(&obj._convertData, -1);
-    igSmartPointer_igFloatList_Destruct(&obj._alignList, -1);
-    igSmartPointer_igIntList_Destruct(&obj._lineFeedList, -1);
+    igStringRef_Destruct((igStringRef *)&obj._condition01, -1);
+    igStringRef_Destruct((igStringRef *)&obj._condition00, -1);
+    igSmartPointer_igStringObj_Destruct((igSmartPointer<igObject> *)&obj._convertData, -1);
+    igSmartPointer_igFloatList_Destruct((igSmartPointer<igObject> *)&obj._alignList, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._lineFeedList, -1);
     igSmartPointer_beFontGeomAttrPairList_Destruct((igSmartPointer<igObject> *)&obj._gaPairList, (short)(-1));
     igSmartPointer_beFontImageList_Destruct((igSmartPointer<igObject> *)&obj._fonts, -1);
-    igSmartPointer_igAttrSet_Destruct(&obj._root, -1);
+    igSmartPointer_igAttrSet_Destruct((igSmartPointer<igObject> *)&obj._root, -1);
     beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);
     return vtable;
 }
