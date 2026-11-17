@@ -69,3 +69,7 @@ guesses from what each file does.
   (the SDK's `ADXRNA` is `void *`), so `sfadx.c` keeps them untyped; typed pointers reorder the stores.
 - `sfxcnv_CnvFrmYcc420plnToZ` and `sfxcnv_CnvFrmArgb8888mbToZ` of the SDK's `sfx_cnv.o` are `0x2b4dc8` and `0x2b4f58` with
   only the handle offsets changed; both still differ in where a constant store into the source block is scheduled.
+- `sfmpv_ReadPtsQue` (`0x2a4fb8`) is the SDK's `sfd_mpv.o` member at that position before `sfmpv_InitComplementPts`; the SDK body is an older 32-bit form, so the name is medium.
+- `sfmpv_IsEmptySkip` (`0x2a6510`) is named from the Resident Evil 4 CRI source `sfd_mpv.c` in the Persona 4 decompilation (`src/cri/re4/`), where the same-signature test follows `sfmpv_IsPtypeSkip` in the chunk-accept chain.
+- `SFTIM_GetTime` (`0x2ae968`) is the time-and-unit read that the Resident Evil 4 `sfmpv_IsLateSkip` calls (`sfd_mpv.c` in the Persona 4 decompilation), at the SDK `sfd_tim.o` position before `SFD_GetNowTime`.
+- `SFADXT_SetSpeed` (`0x29b4c8`) is the `SetSpeed` slot of the ADXT output interface that `SFADXT_Create` installs, named from the Resident Evil 4 `sfd_adxt.c` in the Persona 4 decompilation and the SDK `sfd_adxt.o` order.

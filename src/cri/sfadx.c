@@ -185,7 +185,7 @@ void SFADXT_SetOutPan(SfdAdxHn *h);
 void SFADXT_GetOutPan(SfdAdxHn *h);
 void SFADXT_SetOutVol(SfdAdxHn *h);
 void SFADXT_GetOutVol(SfdAdxHn *h);
-void FUN_0029b4c8(SfdAdxHn *h, int volume);
+void SFADXT_SetSpeed(SfdAdxHn *h, int volume);
 void sfadxt_HeadDecCallBack(SfdAdxHn *h);
 int sfadxt_ExecServerSub(SfdAdxHn *h);
 void FUN_0029b788(SfdAdxHn *h);
@@ -272,7 +272,7 @@ void SFADXT_GetOutVol(SfdAdxHn *h) {
     ADXT_GetOutVol(((SfdAdxCtx *)h->sub.ctx)->adxt);
 }
 
-void FUN_0029b4c8(SfdAdxHn *h, int volume) {
+void SFADXT_SetSpeed(SfdAdxHn *h, int volume) {
     void *adxt = ((SfdAdxCtx *)h->sub.ctx)->adxt;
     int hi;
     int lo;
@@ -746,7 +746,7 @@ int SFADXT_Create(SfdAdxHn *h) {
     iface->getOutPan = SFADXT_GetOutPan;
     iface->setOutVol = SFADXT_SetOutVol;
     iface->getOutVol = SFADXT_GetOutVol;
-    iface->setSpeed = FUN_0029b4c8;
+    iface->setSpeed = SFADXT_SetSpeed;
     ADXT_StartSj(adxt, sj);
     sfadxt_WaitStart(h, 1);
     FUN_0029c890(h);

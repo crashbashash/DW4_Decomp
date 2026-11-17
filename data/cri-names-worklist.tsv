@@ -700,6 +700,7 @@
 0x29b468	SFADXT_GetOutPan	medium	sdk:libmwsfde.a/sfd_adxt.o B
 0x29b488	SFADXT_SetOutVol	medium	sdk:libmwsfde.a/sfd_adxt.o B
 0x29b4a8	SFADXT_GetOutVol	medium	sdk:libmwsfde.a/sfd_adxt.o B
+0x29b4c8	SFADXT_SetSpeed	medium	RE4 CRI library kept in the Persona 4 decompilation (Raikaru/Persona4-Decompilation src/cri/re4/sfd_adxt.c: SFADXT_SetSpeed is the SetSpeed slot of the ADXT output interface, installed by SFADXT_Create as DW4 installs 0x29b4c8) and sdk:libmwsfde.a/sfd_adxt.o by order after SFADXT_GetOutVol; alternative SFADXT_SetTranspose [recvx-decomp-cri; re4 github.com/Raikaru/Persona4-Decompilation]
 0x29b580	SFD_SetAdxtPara	medium	sdk:libmwsfde.a/sfd_adxt.o B
 0x29b5d8	SFADXT_Init	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
 0x29b618	SFADXT_Finish	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
@@ -949,6 +950,7 @@
 0x2a4b68	sfmpv_IsTerm	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
 0x2a4bb0	sfmpv_GetTermSrc	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a4bc8	sfmpv_ChkMpvErr	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a4fb8	sfmpv_ReadPtsQue	medium	sdk:libmwsfde.a/sfd_mpv.o by position (between sfmpv_ChkMpvErr and sfmpv_InitComplementPts) and role (reads a PTS queue entry; sfmpv_ComplementPts consumes it); the SDK body is an older 32-bit form so the match is not exact; alternative sfpts_ReadPtsQueSub [recvx-decomp-cri]
 0x2a5060	sfmpv_InitComplementPts	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
 0x2a5088	sfmpv_ComplementPts	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
 0x2a55a0	sfmpv_ReformTc	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
@@ -964,6 +966,7 @@
 0x2a6308	sfmpv_IsDefect	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
 0x2a6470	sfmpv_IsSeekSkip	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a64c0	sfmpv_IsPtypeSkip	medium	sdk:libmwsfde.a/sfd_mpv.o B
+0x2a6510	sfmpv_IsEmptySkip	medium	RE4 CRI library kept in the Persona 4 decompilation (Raikaru/Persona4-Decompilation src/cri/re4/sfd_mpv.c: sfmpv_IsEmptySkip(sfd, ptype, ck) is called in the chunk-accept chain after sfmpv_IsPtypeSkip, the same call chain as DW4's 0x2a6510 with the same (player, type, chunk) arguments); alternative sfmpv_IsSkipChunk [re4 github.com/Raikaru/Persona4-Decompilation]
 0x2a65f0	sfmpv_IsLate	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a6768	sfmpv_GetDtime	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a6780	sfmpv_SkipFrm	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
@@ -1129,6 +1132,7 @@
 0x2ae828	SFTIM_GetTimeSub	medium	sdk:libmwsfde.a/sfd_tim.o B
 0x2ae8d8	SFD_GetTimeAfterSeek	medium	sdk:libmwsfde.a/sfd_tim.o B
 0x2ae950	sfdtim_GetTimeAfterSeek	high	sdk:libmwsfde.a/sfd_tim.o A (3s - -)
+0x2ae968	SFTIM_GetTime	medium	RE4 CRI library kept in the Persona 4 decompilation (Raikaru/Persona4-Decompilation src/cri/re4/sfd_mpv.c: sfmpv_IsLateSkip calls SFTIM_GetTime(sfd, &cur, &curunit), as DW4's sfmpv_IsLate-side caller calls 0x2ae968 for a time and unit pair) and sdk:libmwsfde.a/sfd_tim.o by position between sfdtim_GetTimeAfterSeek and SFD_GetNowTime; alternative SFD_GetTime [recvx-decomp-cri; re4 github.com/Raikaru/Persona4-Decompilation]
 0x2ae988	SFD_GetNowTime	medium	sdk:libmwsfde.a/sfd_tim.o B
 0x2aea00	SFTIM_GetNowTime	medium	sdk:libmwsfde.a/sfd_tim.o B
 0x2aea98	sftim_GetTimeNone	high	sdk:libmwsfde.a/sfd_tim.o A (3s - -)
@@ -1307,6 +1311,8 @@
 0x2b4b88	SFXZ_SetZbufType	high	sdk:libmwsfde.a/sfx_zmv.o A (3s - -)
 0x2b4b98	SFXZ_GetZbufType	high	sdk:libmwsfde.a/sfx_zmv.o A (3s - -)
 0x2b4c98	sfxcnv_CnvFrmZcmn	medium	own error string only
+0x2b4dc8	sfxcnv_CnvFrmYcc420plnToZ	high	sdk:libmwsfde.a/sfx_cnv.o A (body matches the SDK member with only the handle offsets changed)
+0x2b4f58	sfxcnv_CnvFrmArgb8888mbToZ	high	sdk:libmwsfde.a/sfx_cnv.o A (body matches the SDK member with only the handle offsets changed)
 0x2b5068	sfxcnv_CnvZbitToCft	medium	own error string only
 0x2b50e8	SUD_Init	high	sdk:libmwsfde.a/sud_lib.o A (3s - -)
 0x2b5138	sud_GetVersionStr	high	sdk:libmwsfde.a/sud_lib.o A (3s - -)

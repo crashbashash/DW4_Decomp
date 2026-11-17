@@ -121,13 +121,13 @@ int sfmpv_IsDefect(SfdPlayer *player, int kind);
 int sfmpv_IsPtypeSkip(SfdPlayer *player, unsigned int kind);
 void sfmpv_SetSkipTtu(SfdPlayer *player);
 int sfmpv_IsSeekSkip(SfdPlayer *player);
-int FUN_002a6510(SfdPlayer *player, unsigned int type, SfdChunk *chunk);
+int sfmpv_IsEmptySkip(SfdPlayer *player, unsigned int type, SfdChunk *chunk);
 int sfmpv_IsLate(SfdPlayer *player, unsigned int type);
 void sfmpv_GetDtime(SfdPlayer *player, int unused, int *first, int *second);
 void SFTIM_UpdateItime(SfdTimer *tim, int now);
 int SFTIM_GetNextItime(SfdTimer *tim, int now);
 int SFTIM_GetSpeed(SfdPlayer *player);
-int FUN_002ae968(SfdPlayer *player, int *time, int *unit);
+int SFTIM_GetTime(SfdPlayer *player, int *time, int *unit);
 void FUN_002a6368(SfdPlayer *player, SfdPicInfo *pic, int kind);
 void FUN_002a70e8(SfdPlayer *player, SfdSlot *slot);
 void FUN_002a73f0(SfdChunk *dst, SfdChunk *src);
@@ -992,7 +992,7 @@ int sfmpv_IsSkip(SfdPlayer *player, SfdChunk *chunk) {
     type = pic->type;
     busy = sfmpv_IsSeekSkip(player);
     skip = 1;
-    if (busy == 0 && sfmpv_IsPtypeSkip(player, type) == 0 && FUN_002a6510(player, type, chunk) == 0
+    if (busy == 0 && sfmpv_IsPtypeSkip(player, type) == 0 && sfmpv_IsEmptySkip(player, type, chunk) == 0
         && sfmpv_IsDefect(player, type) == 0)
         skip = sfmpv_IsLate(player, type) != 0;
     FUN_002a6368(player, pic, skip);
@@ -1080,7 +1080,7 @@ int sfmpv_IsPtypeSkip(SfdPlayer *player, unsigned int kind) {
 int MPV_IsEmptyBpic(unsigned char *buf, int nbyte, int nmb);
 int MPV_IsEmptyPpic(unsigned char *buf, int nbyte, int nmb);
 
-int FUN_002a6510(SfdPlayer *player, unsigned int type, SfdChunk *chunk) {
+int sfmpv_IsEmptySkip(SfdPlayer *player, unsigned int type, SfdChunk *chunk) {
     SfdDecodeFlags *dec;
     SfdPicGeom *geom;
     int r;
@@ -1138,7 +1138,7 @@ int sfmpv_IsLate(SfdPlayer *player, unsigned int type) {
     if (SFTIM_GetSpeed(player) <= 1000 && mpv->f132 >= player->pending.f152) {
         return 0;
     }
-    FUN_002ae968(player, &now, &nowUnit);
+    SFTIM_GetTime(player, &now, &nowUnit);
     if (now < 0) {
         return 0;
     }

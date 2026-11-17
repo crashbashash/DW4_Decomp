@@ -16,8 +16,8 @@
   "compile.functions": 0,
   "decl.header_conflicts": 563,
   "decl.local_externs": {
-   "reason": "CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views",
-   "value": 2824
+   "reason": "CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views the six CRI names turn address-named placeholder externs (FUN_) into named local externs in the files that call them (two counted declarations), until the CRI headers take those declarations",
+   "value": 2826
   },
   "decl.type_conflicts": {
    "reason": "CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views",
@@ -26,7 +26,7 @@
   "decl.varargs": 881,
   "foreign_profile.bytes": 0,
   "foreign_profile.functions": 0,
-  "fun_dat_refs": 1503,
+  "fun_dat_refs": 1493,
   "inline_asm.other": 0,
   "inventory.unsymbolised_bytes": 0,
   "inventory_gap.bytes": 0,

@@ -43,8 +43,8 @@ int SFXZ_IsSetZclip(SfxZHn *zhn);
 void SFXZ_SetZbufType(int value);
 int SFXZ_GetZbufType(void);
 void sfxcnv_CnvFrmZcmn(SfxHn *hn, SfxFrame *frm, int zbit, int arg);
-void FUN_002b4dc8(SfxHn *hn, SfxFrame *frm, int zbit, int arg);
-void FUN_002b4f58(SfxHn *hn, SfxFrame *frm, int zbit, int arg);
+void sfxcnv_CnvFrmYcc420plnToZ(SfxHn *hn, SfxFrame *frm, int zbit, int arg);
+void sfxcnv_CnvFrmArgb8888mbToZ(SfxHn *hn, SfxFrame *frm, int zbit, int arg);
 int sfxcnv_CnvZbitToCft(int zbit);
 SfxZHn *FUN_002b50c8(SfxHn *hn, int zbit);
 
@@ -329,10 +329,10 @@ void sfxcnv_CnvFrmZcmn(SfxHn *hn, SfxFrame *frm, int zbit, int arg) {
     }
     switch (frm->frmfmt) {
     case 3:
-        FUN_002b4dc8(hn, frm, zbit, arg);
+        sfxcnv_CnvFrmYcc420plnToZ(hn, frm, zbit, arg);
         return;
     case 2:
-        FUN_002b4f58(hn, frm, zbit, arg);
+        sfxcnv_CnvFrmArgb8888mbToZ(hn, frm, zbit, arg);
         return;
     case 1:
     default:

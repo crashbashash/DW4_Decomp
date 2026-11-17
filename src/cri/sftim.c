@@ -154,7 +154,7 @@ void sftim_GetVtimeTmr(SfdHn *hn, SfdTim *tim, int *pos, int *rate);
 int sftim_IsAudioStagnant(SfdHn *hn);
 int SFTIM_GetTimeSub(SfdHn *hn, int *time, int *unit);
 int sfdtim_GetTimeAfterSeek();
-int FUN_002ae968(SfdHn *hn, int *time, int *unit);
+int SFTIM_GetTime(SfdHn *hn, int *time, int *unit);
 int SFTIM_GetNowTime(SfdHn *hn, int *time, int *unit);
 int sftim_GetTimeNone(SfdHn *hn, int *time, int *unit);
 int sftim_GetTimeVsync(SfdHn *hn, int *time, int *unit);
@@ -436,10 +436,10 @@ int SFD_GetTimeAfterSeek(SfdHn *hn, int *time, int *unit)
 
 int sfdtim_GetTimeAfterSeek(SfdHn *hn, int *time, int *unit)
 {
-    FUN_002ae968(hn, time, unit);
+    SFTIM_GetTime(hn, time, unit);
 }
 
-int FUN_002ae968(SfdHn *hn, int *time, int *unit)
+int SFTIM_GetTime(SfdHn *hn, int *time, int *unit)
 {
     SfdTim *tim = &hn->tim;
     *time = tim->cached_pos;
@@ -875,7 +875,7 @@ void SFTIM_IsExecTime(SfdHn *hn, int time, int unit, int *decision, int delay)
     int t, u;
     float vt;
     float at;
-    FUN_002ae968(hn, &t, &u);
+    SFTIM_GetTime(hn, &t, &u);
     if (u == 1) {
         if (t == -2) {
             *decision = 1;
@@ -955,7 +955,7 @@ int SFTIM_IsVideoTerm(SfdHn *hn)
     if (base == -5) {
         return 0;
     }
-    FUN_002ae968(hn, &first, &second);
+    SFTIM_GetTime(hn, &first, &second);
     return UTY_CmpTime(base + frames * 2000 / 59940, frames, first, second) != 0;
 }
 

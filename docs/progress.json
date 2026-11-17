@@ -239,8 +239,8 @@
     "value": 563
    },
    "decl.local_externs": {
-    "reason": "CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views",
-    "value": 2824
+    "reason": "CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views the six CRI names turn address-named placeholder externs (FUN_) into named local externs in the files that call them (two counted declarations), until the CRI headers take those declarations",
+    "value": 2826
    },
    "decl.type_conflicts": {
     "reason": "CRI Sofdec R6: four new matched functions declare unhomed CRI callees locally (MPV_BsearchDelim, SFTIM_UpdateItime/GetNextItime/GetSpeed, the SFTIM time getter) with this unit's handle views",
@@ -260,7 +260,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 1503
+    "value": 1493
    },
    "inline_asm.other": {
     "reason": null,
@@ -363,12 +363,12 @@
    "compile.bytes": 0,
    "compile.functions": 0,
    "decl.header_conflicts": 563,
-   "decl.local_externs": 2824,
+   "decl.local_externs": 2826,
    "decl.type_conflicts": 1832,
    "decl.varargs": 881,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "fun_dat_refs": 1503,
+   "fun_dat_refs": 1493,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
@@ -396,9 +396,9 @@
   "fully_matched": 20411,
   "fully_verified": 20247,
   "matched": 20247,
-  "named": 17369,
-  "named_semantic": 11888,
-  "named_semantic_matched": 11676,
+  "named": 17375,
+  "named_semantic": 11894,
+  "named_semantic_matched": 11679,
   "total": 20576
  },
  "kernel_patches": {
@@ -492,11 +492,11 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 1696848,
+  "bytes": 1696896,
   "failing": {
    "addresses": {
-    "bytes": 746508,
-    "functions": 4311
+    "bytes": 745416,
+    "functions": 4304
    },
    "declarations": {
     "bytes": 1036516,
@@ -511,16 +511,16 @@
     "functions": 2126
    },
    "name": {
-    "bytes": 570124,
-    "functions": 4775
+    "bytes": 569688,
+    "functions": 4772
    },
    "placed": {
     "bytes": 668,
     "functions": 11
    },
    "references": {
-    "bytes": 509300,
-    "functions": 2053
+    "bytes": 508644,
+    "functions": 2049
    },
    "types": {
     "bytes": 329672,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 11694,
+  "functions": 11696,
   "matched_functions": 20411
  },
  "regions": [

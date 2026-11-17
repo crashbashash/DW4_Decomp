@@ -40,7 +40,7 @@ int UTY_MulDiv(int a, int b, int c);
 int SFBUF_RingGetDataSiz(SfdPly *h, int id);
 int SFBUF_GetTermFlg(SfdPly *h, int id);
 void SFBUF_SetTermFlg(SfdPly *h, int id, int value);
-int FUN_002ae968(SfdPly *h, int *pos, int *len);
+int SFTIM_GetTime(SfdPly *h, int *pos, int *len);
 int SFTIM_GetTimeSub(SfdPly *h, int *pos, int *len);
 int SFTIM_IsStagnant(SfdPly *h);
 int SFD_CmpTime(int a, int b, int c, int d);
@@ -516,7 +516,7 @@ int sfply_IsBpaOn(SfdPly *h) {
     if (SFSET_GetCond(h, 6) == 1 && SFBUF_RingGetDataSiz(h, 2) > 0) return 0;
     if (FUN_002b03e8(h, 1) != 0 && SFBUF_RingGetDataSiz(h, 0) > 0) return 0;
     if (SFSET_GetCond(h, 5) == 1 && sfply_EnoughViData(h) != 0) return 0;
-    FUN_002ae968(h, &v[0], &v[1]);
+    SFTIM_GetTime(h, &v[0], &v[1]);
     d = &h->d28;
     a = d->f648;
     b = d->f644;
@@ -532,7 +532,7 @@ int sfply_IsBpaOff(SfdPly *h) {
     if (sfply_IsAnyoneTerm(h) != 0) return 1;
     if (SFSET_GetCond(h, 5) == 1 && sfply_EnoughViData(h) != 0) return 1;
     if (SFSET_GetCond(h, 6) == 1 && FUN_002ab370(h) != 0) return 1;
-    FUN_002ae968(h, &v[0], &v[1]);
+    SFTIM_GetTime(h, &v[0], &v[1]);
     d = &h->d28;
     a = d->f648;
     b = d->f644;
@@ -594,7 +594,7 @@ int sfply_IsEtime(SfdPly *h) {
     if (request == -4) {
         return 0;
     }
-    FUN_002ae968(h, &first, &second);
+    SFTIM_GetTime(h, &first, &second);
     if (first < 0) {
         return 0;
     }
