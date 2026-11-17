@@ -8,6 +8,7 @@ struct igMetaField;
 struct igMetaObject;
 struct __internalObjectList;
 struct CallbackArray;
+struct igMetaFieldView;
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,6 +25,8 @@ void igMetaField_FinalizeDescriptor(struct igMetaField *field);
 struct __internalObjectList *igMetaField_GetMetaFieldList(void);
 extern int g_igMetaField_vtable[4];
 void igMetaField_AllocateArray(int *outStatus, struct igMemoryRefMetaField *field, void *object, int count, struct igMemoryPoolView *allocator);
+struct igMetaObject *igMetaField_GetOrCreateMetaObject(void);
+void igMetaField_SetValueFromField(struct igMetaFieldView *self, void *object, struct igMetaFieldView *field, char *source);
 
 #ifdef __cplusplus
 }

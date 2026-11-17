@@ -10,6 +10,7 @@ extern "C" {
 
 struct igMetaObject *igMetaObjectList_GetOrCreateMetaObject(void);
 void igMetaObjectList_EnsureRegistered(void);
+void *igMetaObjectList_Create(int pool);
 
 #ifdef __cplusplus
 }

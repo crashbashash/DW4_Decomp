@@ -24,6 +24,8 @@ int sceSifLoadModule(const char *path, int arglen, const char *args);
 int sceSifLoadFileReset(void);
 int sceSifSyncIop(void);
 int sceSifRebootIop(const char *arg);
+int sceSifInitIopHeap(void);
+int sceSifSearchModuleByName(const char *name);
 
 /* IOP heap: carve a block out of the IOP's memory (0 when none is left) and give it back. */
 void *sceSifAllocIopHeap(unsigned int size);

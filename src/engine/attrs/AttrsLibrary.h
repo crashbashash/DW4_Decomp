@@ -91,6 +91,8 @@ typedef void (*igMetaObjectCallback)();
 #include "dw4/list-services.h"
 #include "dw4/igVec3fList.h"
 #include "dw4/igVec4f.h"
+#include "dw4/igUnsignedIntList.h"
+#include "dw4/runtime/New.h"
 
 extern "C" void FUN_0014bd20(void);
 extern "C" void FUN_0014c0d0(void);
@@ -98,7 +100,6 @@ extern "C" void FUN_0014cd90(void);
 extern "C" void FUN_0014ff00(void);
 extern "C" void FUN_001e4bc0(void);
 
-extern "C" void igUnsignedIntList_EnsureRegistered(void);
 
 extern "C" void AttrsLibrary_MarkRegistered(void);
 
@@ -243,8 +244,6 @@ extern "C" igMetaObject *g_igTextureCubeAttr_metaObject;
 extern "C" igMetaObject *FUN_00131fe0(void);
 extern "C" igMetaObject *igTextureCubeAttr_GetMetaObject(void);
 struct W { int *vt; int f[27]; };
-extern "C" int __destroy_arr(...);
-extern "C" int __construct_array(...);
 extern "C" int g_igTextureCubeAttr_vtable[4];
 extern "C" int igTextureCubeAttr_GetVTable(void);
 struct Ref { int pad; union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
@@ -574,7 +573,6 @@ extern "C" CallbackArray *igGeometryAttr_Register(void);
 extern "C" void thunk_igGeometryAttr_GetMetaObject(void);
 
 extern "C" int FUN_0014d7f0(...);
-extern "C" int igUnsignedIntList_GetOrCreateMetaObject(...);
 extern "C" int FUN_00149aa0(...);
 extern "C" void igGeometryAttr_InitFields(void);
 extern "C" void FUN_00137ab0(int arg0);
@@ -708,7 +706,6 @@ extern "C" void FUN_00139ab0(void);
 extern "C" CallbackArray *igBlendMatrixPaletteAttr_Register(void);
 extern "C" void thunk_igBlendMatrixPaletteAttr_GetMetaObject(void);
 extern "C" int FUN_001888e0(...);
-extern "C" int igUnsignedIntMetaField_GetDefaultDescriptor(...);
 extern "C" void igBlendMatrixPaletteAttr_InitFields(void);
 extern "C" void FUN_00139c10(int arg0);
 extern "C" igMetaObject *g_igBlendMatricesAttr_metaObject;
@@ -782,7 +779,6 @@ struct Obj_13ade0 { int *vt; char pad[28]; };
 extern "C" int g_igNonRefCountedAttrList_vtable[4];
 extern "C" int igNonRefCountedAttrList_GetVTable(void);
 
-extern "C" CallbackArray *igNonRefCountedObjectList_Register(void);
 extern "C" CallbackArray *igNonRefCountedAttrList_Register(void);
 extern "C" void thunk_igNonRefCountedAttrList_GetMetaObject(void);
 extern "C" int FUN_0013aeb0(void);
@@ -855,8 +851,6 @@ extern "C" void FUN_0013b8a0(void *arg0);
 typedef igSmartPointer<igObject> igObjectPointer;
 class DefaultSource { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual igObjectPointer create(); };
 extern "C" igObjectPointer FUN_0013ba30(igAttrPool *pool, igObjectPointer attr);
-extern "C" int igObject_IsAlikeShallow(igObjectDispatchView *object, igObjectDispatchView *other);
-extern "C" igObjectPointer igObject_Clone(igObjectDispatchView *object, int deep);
 extern "C" igObjectPointer Gap__Attrs__igAttrDefaultManager__vfunc_23(DefaultSource *source);
 
 extern "C" igAttrPool *FUN_0013c060(void);

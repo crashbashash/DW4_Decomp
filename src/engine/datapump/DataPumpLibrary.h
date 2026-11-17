@@ -34,10 +34,10 @@ extern "C" int igLongStack_GetVTable(void);
 extern "C" void FUN_001e40f0(void);
 #include "dw4/igDataLists.h"
 #include "dw4/internalNonRefCountedObjectList.h"
+#include "dw4/igLongMetaField.h"
 extern "C" void igLongStack_InitFields_001e4180(void);
 extern "C" CallbackArray *igLongStack_Register(void);
 extern "C" void thunk_igLongStack_GetMetaObject(void);
-extern "C" int igLongMetaField_GetDefaultDescriptor(...);
 class DW4VC_84_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual int vX(int); };
 extern "C" void FUN_001e4180(void);
 extern "C" igMetaObject *igRandomNumber_GetMetaObject(void);
@@ -52,7 +52,6 @@ extern "C" int igNonRefCountedObjectStack_GetVTable(void);
 extern "C" void FUN_001e4430(void);
 extern "C" void igNonRefCountedObjectStack_InitFields_001e44c0(void);
 extern "C" void thunk_igNonRefCountedObjectStack_GetMetaObject(void);
-extern "C" int igObjectRefMetaField_GetDefaultDescriptor(...);
 extern "C" void FUN_001e44c0(void);
 extern "C" igMetaObject *igMersenneTwisterRandomNumber_GetMetaObject(void);
 struct Obj_1e45e0 { int *vt; char pad[2508]; };
@@ -80,7 +79,6 @@ extern "C" int g_igNonRefCountedMatrixObjectList_vtable[4];
 extern "C" int igNonRefCountedMatrixObjectList_GetVTable(void);
 extern "C" void FUN_001e4a50(void);
 #include "dw4/igNonRefCountedObjectList.h"
-extern "C" CallbackArray *igNonRefCountedObjectList_Register(void);
 extern "C" CallbackArray *igNonRefCountedMatrixObjectList_Register(void);
 extern "C" void thunk_igNonRefCountedMatrixObjectList_GetMetaObject(void);
 extern "C" igMetaObject *FUN_001e4ae0(void);
@@ -201,7 +199,6 @@ extern "C" int igDataPump_GetVTable(void);
 extern "C" void FUN_001e5ab0(void);
 extern "C" CallbackArray *igDataPump_Register(void);
 extern "C" void thunk_igDataPump_GetMetaObject(void);
-extern "C" int igMetaField_GetOrCreateMetaObject(...);
 extern "C" void igDataPump_InitFields(void);
 extern "C" igMetaObject *igBoolObject_GetMetaObject(void);
 struct O { int *vt; char post[12]; };

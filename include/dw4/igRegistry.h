@@ -35,6 +35,7 @@ int igRegistry_Merge(void *self, struct igRegistry *inc, int overwrite);
 extern struct igMetaObject *g_igRegistry_metaObject;
 int igRegistry_GetValueEntry(void *self, int index);
 int igRegistry_GetValueCount(void *self);
+int igRegistry_IsLoadingEnabled(void);
 }
 
 #endif

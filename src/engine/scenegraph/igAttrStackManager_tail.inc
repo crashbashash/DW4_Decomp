@@ -81,7 +81,7 @@ void FUN_001afb60(char *arg0) {
     int idx;
     if (igMetaObject_IsOfType((igMetaObject *)arg0, igAttr_GetMetaObject()) != 0 && *(unsigned char *)(arg0 + 26) == 0) {
         if (((RefObj * *)DAT_00562578)[0] == 0) {
-            ((RefObj * *)DAT_00562578)[0] = igMetaObjectList_Create(((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
+            ((RefObj * *)DAT_00562578)[0] = (RefObj *)igMetaObjectList_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
         }
         K key(arg0);
         idx = Finder_1afb60::Find(((RefObj * *)DAT_00562578)[0], key);

@@ -37,8 +37,6 @@ enum { kReportContinue = 1, kReportIgnoreAlways = 2 };
 extern "C" {
 /* CRI ADXF, on the handle in `_adxf` */
 
-int igReport_Printf(const char *format, ...);  /* prints */
-int igReport_Flush(...);
 
 unsigned char g_igAdxFile_ignoreReadModeWarning;
 unsigned char g_igAdxFile_ignoreWriteWarning;

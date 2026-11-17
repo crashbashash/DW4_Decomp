@@ -149,7 +149,7 @@ void igVertexData_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igVertexData_ctorTable, 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igDataList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igDataList_GetOrCreateMetaObject();
     temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_0014b330);

@@ -151,10 +151,10 @@ void igPsx2VertexArray1_1_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igPsx2VertexArray1_1_ctorTable, 7);
     f1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)f1)->_metaObject = igPointerList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)f1)->_metaObject = (int)igPointerList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)f1)->_persistent = 0;
     f2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
-    ((igObjectRefMetaField *)f2)->_metaObject = igPointerList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)f2)->_metaObject = (int)igPointerList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)f2)->_persistent = 0;
     f3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
     ((igObjectRefMetaField *)f3)->_metaObject = FUN_00152800();

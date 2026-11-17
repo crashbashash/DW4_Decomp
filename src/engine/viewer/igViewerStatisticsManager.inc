@@ -176,7 +176,7 @@ void igViewerStatisticsManager_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)(igMetaObjectList_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s2_7)->_construct = 1;
     temp_s2_8 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 8));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = igMetaFieldList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)igMetaFieldList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igViewerStatisticsManager_fieldTable, g_igViewerStatisticsManager_fieldHandles, g_igViewerStatisticsManager_fieldOffsets, temp_s0);
 }

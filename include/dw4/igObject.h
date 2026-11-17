@@ -48,6 +48,7 @@ void igObject_DeepCopy(struct igObjectDispatchView *self, struct igObjectDispatc
 int igObject_GetFieldValueByName(void **self, int name);
 void igObject_ResetFields(struct igObjectDispatchView *object);
 int igObject_IsAlikeShallow(struct igObjectDispatchView *a, struct igObjectDispatchView *b);
+void igObject_UserPostRead(void);
 
 #ifdef __cplusplus
 }

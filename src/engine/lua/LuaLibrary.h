@@ -30,7 +30,8 @@ typedef void (*igMetaObjectCallback)(void);
 #include "dw4/igFile.h"
 #include "dw4/igMetaObject.h"
 #include "dw4/list-services.h"
-extern "C" void igMemoryPool_EnsureRegistered(void);
+#include "dw4/igMemoryPool.h"
+#include "dw4/igSemaphore.h"
 
 extern "C" void StringChunk_ReleaseHeader(void *owner, void *header);
 extern "C" int Memory_GetAllocatorBySelector(int key);
@@ -39,7 +40,6 @@ extern "C" int Memory_GetAllocatorBySelector(int key);
 struct ObjectSystemView { char pad[916]; int vtableProbeOffset; };
 extern "C" int kIGMemoryPoolHandleMetaData[4];
 
-extern "C" int igMemoryPool_GetOrCreateMetaObject(void);
 
 extern "C" int g_igLuaState_vtable[4];
 
@@ -88,7 +88,6 @@ static inline char *internString(const char *text) {
 
 /* A reflected field's setters: a string field takes a reference to a pooled string, an object
  * reference field a reference to the object. */
-extern "C" void igObjectRefMetaField_Assign(igMetaField *field, void *object, void *value);
 
 /* `<Class>_GetVTable` runs a class's inline constructor and destructor on a stack instance and
  * reads the vtable word in between; igObject_InitHeader is igObject's constructor. igLuaState's
@@ -747,7 +746,6 @@ public:
     virtual igResult wait(int block);                           /* slot 31 */
     unsigned int _refCount;
 };
-extern "C" LuaSemaphoreView *igSemaphore_Create(igObject *pool);
 
 /* Holds the semaphore for its lifetime. */
 struct LuaSemaphoreLock {

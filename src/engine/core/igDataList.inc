@@ -9,11 +9,11 @@ void * igDataList_Create(int pool) {
 }
 
 /* Created with allocation only when missing. */
-int igDataList_GetOrCreateMetaObject(void) {
-    if ((int)g_igDataList_metaObject == 0) {
-        g_igDataList_metaObject = (igMetaObject *)(int)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+igMetaObject *igDataList_GetOrCreateMetaObject(void) {
+    if (g_igDataList_metaObject == 0) {
+        g_igDataList_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
-    return (int)g_igDataList_metaObject;
+    return g_igDataList_metaObject;
 }
 
 igMetaObject *igDataList_GetMetaObject(void)

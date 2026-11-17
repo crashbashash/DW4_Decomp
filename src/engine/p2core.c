@@ -28,6 +28,7 @@
 #include "dw4/p2multipass.h"
 #include "dw4/p2watchdog.h"
 #include "dw4/igMemory.h"
+#include "dw4/p2texture.h"
 
 #pragma push
 #pragma readonly_strings on
@@ -182,7 +183,6 @@ void FUN_001f76f0(int count, int *regs);
 int FUN_00202300();
 int FUN_00203500();
 int FUN_00208200();
-p2Texture *p2LoadTexture(void *pixels, int width, int height, int psm, int flags);
 
 void p2SetCapability(int capability, int on);
 void p2UploadFog(void);
@@ -228,7 +228,6 @@ extern const void *p2BlendIndexArray;
 extern const void *p2BlendWeightArray;
 
 extern int p2ClearWidth;
-extern int p2ClearPasses;
 extern int p2ClearPass;
 extern int p2ClearRegisters[8];
 
@@ -243,7 +242,6 @@ extern p2ComponentLayout p2ComponentLayouts[P2_COMPONENT_COUNT];
 extern int p2WatchdogEnabled;
 extern int p2DisplayFrameCount;
 extern int p2RequestedFrameMode;
-extern int p2GsIntcHandlerId;
 extern int p2VblankStartIntcHandlerId;
 extern int p2Vif1IntcHandlerId;
 
@@ -1279,7 +1277,7 @@ p2Image *p2CreateImage(int format, int order, int layout, void *pixels) {
     image->format = format;
     image->order = order;
     image->layout = layout;
-    image->texture = p2LoadTexture(image->pixels, width, height, psm, 0);
+    image->texture = (struct p2Texture *)p2LoadTexture(image->pixels, width, height, psm, 0);
     if (image->texture != 0) image->texture->owner = image;
     return image;
 }

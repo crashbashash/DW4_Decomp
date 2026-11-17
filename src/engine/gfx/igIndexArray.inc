@@ -96,7 +96,7 @@ void igIndexArray_InitFields(void) {
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_001493e0);
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 4));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igMemoryPool_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
     ((igMetaField *)temp_s1_2)->_resetMethod = 3;
     ((igMetaField *)temp_s1_2)->_persistent = 0;
     ((igMetaField *)temp_s1_2)->_deepCopyMethod = 1;

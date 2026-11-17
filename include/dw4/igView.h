@@ -3,6 +3,8 @@
 
 struct igView;
 struct igModel;
+struct igMetaObject;
+struct CallbackArray;
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,6 +12,7 @@ extern "C" {
 
 struct CallbackArray *igView_Register(void);
 void igView_SetModel(struct igView *view, struct igModel *model);
+struct igMetaObject *igView_GetPublishedMetaObject(void);
 
 #ifdef __cplusplus
 }

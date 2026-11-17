@@ -5,6 +5,8 @@
 
 #include "dw4/cri/mwply.h"
 
+struct MwsfdFrm;
+
 #define MWSFD_NPLY 8
 
 /* the init parameters of mwPlyInitSfdFx, which copies all 32 bytes into the work area */
@@ -84,6 +86,7 @@ int MWSFD_GetPauseBdr(void);
 void mwPlyFinishSfdFx(void);
 int MWSFLIB_SetErrCode(int code);
 void MWSFLIB_SfdErrFunc(MwsfdPly *ply, int code);
+void mwPlyGetCurFrm(MwsfdPly *ply, struct MwsfdFrm *out);
 
 /* 1 while MWSFD is initialised */
 extern int mwsfd_init_flag;

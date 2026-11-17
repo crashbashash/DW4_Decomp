@@ -107,6 +107,12 @@ typedef void (*igMetaObjectCallback)();
 #include "dw4/igVec2fList.h"
 #include "dw4/igVec3fList.h"
 #include "dw4/igVec4ucList.h"
+#include "dw4/igMemoryPool.h"
+#include "dw4/igPointerList.h"
+#include "dw4/igReport.h"
+#include "dw4/igContextList.h"
+#include "dw4/igDriverDatabase.h"
+#include "dw4/runtime/New.h"
 
 extern "C" igMetaObject *g_igVertexArray_metaObject;
 extern "C" igMetaObject *g_igScissorExt_metaObject;
@@ -116,14 +122,8 @@ extern "C" igMetaObject *g_igDisableExt_metaObject;
 extern "C" igMetaObject *g_igCapabilityManager_metaObject;
 extern "C" igMetaObject *g_igPsx2LongList_metaObject;
 extern "C" void FUN_001e4820(void);
-extern "C" void igDataList_EnsureRegistered(void);
 
-extern "C" void igIntMetaField_EnsureRegistered(void);
-extern "C" void igMemoryPool_EnsureRegistered(void);
 
-extern "C" void igPointerList_EnsureRegistered(void);
-extern "C" void igRawRefMetaField_EnsureRegistered(void);
-extern "C" void igTimer_EnsureRegistered(void);
 struct StringRef {
     char *p;
     StringRef();
@@ -196,19 +196,15 @@ extern "C" int g_igVisualContextList_vtable[4];
 extern "C" int igVisualContextList_GetVTable(void);
 extern "C" void FUN_00149f70(void);
 
-extern "C" CallbackArray *igNonRefCountedObjectList_Register(void);
 extern "C" CallbackArray *igVisualContextList_Register(void);
 extern "C" void thunk_igVisualContextList_GetMetaObject(void);
 
 extern "C" igMetaObject *igVisualContext_GetMetaObject(void);
 
-extern "C" CallbackArray *igContext_Register(void);
 extern "C" CallbackArray *igVisualContext_Register(void);
 extern "C" void thunk_igVisualContext_GetMetaObject(void);
 extern "C" int FUN_0014a170(void);
 extern "C" int FUN_001888e0(...);
-extern "C" int igTimer_GetOrCreateMetaObject(...);
-extern "C" int igMemoryPool_GetOrCreateMetaObject(...);
 extern "C" void igVisualContext_InitFields(void);
 extern "C" void thunk_igPsx2VisualContext_GetMetaObject(void);
 extern "C" class igVertexArray2HelperAccess *FUN_0014a4d0(int arg0);
@@ -328,7 +324,6 @@ extern "C" int igVertexData_GetVTable(void);
 extern "C" void FUN_0014b500(void);
 extern "C" CallbackArray *igVertexData_Register(void);
 extern "C" void thunk_igVertexData_GetMetaObject(void);
-extern "C" int igDataList_GetOrCreateMetaObject(...);
 extern "C" void igVertexData_InitFields(void);
 extern "C" int FUN_0014b680(int arg0);
 extern "C" igMetaObject *igVertexArray1_1_GetMetaObject(void);
@@ -336,8 +331,6 @@ extern "C" igMetaObject *igVertexArray_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igVertexArray1_1_Register(void);
 extern "C" void thunk_igVertexArray1_1_GetMetaObject(void);
 extern "C" igMetaObject *FUN_0014b7b0(void);
-extern "C" int igFloatMetaField_GetDefaultDescriptor(...);
-extern "C" int igUnsignedCharMetaField_GetDefaultDescriptor(...);
 struct F { char p[20]; short f20; char p1[14]; char f36; char p2; char f38; char f39; char f40; char p3[12]; char f53; char p4[2]; int f56; int f60; char f64; char f65; };
 extern "C" void igVertexArray1_1_InitFields(void);
 extern "C" void thunk_igPsx2VertexArray1_1_GetMetaObject(void);
@@ -351,7 +344,6 @@ extern "C" void igVertexArray_InitFields(void);
 extern "C" igMetaObject *igUserUCodeExt_GetMetaObject(void);
 extern "C" void FUN_0014bbb0(void);
 extern "C" igMetaObject *igContextExt_GetPublishedMetaObject(void);
-extern "C" CallbackArray *igContextExt_Register(void);
 extern "C" CallbackArray *igUserUCodeExt_Register(void);
 extern "C" void thunk_igUserUCodeExt_GetMetaObject(void);
 extern "C" int FUN_0014bc40(void);
@@ -373,7 +365,6 @@ extern "C" igMetaObject *igPrimLengthArray_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igPrimLengthArray1_1_Register(void);
 extern "C" void thunk_FUN_0014bde0(void);
 extern "C" igMetaObject *FUN_0014bf00(void);
-extern "C" int igUnsignedIntMetaField_GetDefaultDescriptor(...);
 
 struct T_14bf10 { int vt; int ref; char pad8[20]; int f28; char pad32[21]; char f53; char pad54[2]; int f56; int f60; char f64; char f65; };
 class DW4VC_84_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual T_14bf10 *vX(int); };
@@ -531,7 +522,6 @@ extern "C" int igCustomStateField_GetVTable(void);
 extern "C" void FUN_0014ecd0(void);
 extern "C" CallbackArray *igCustomStateField_Register(void);
 extern "C" void thunk_igCustomStateField_GetMetaObject(void);
-extern "C" int igMetaField_GetOrCreateMetaObject(...);
 extern "C" void igCustomStateField_InitFields(void);
 extern "C" int FUN_0014ee00(int arg0);
 extern "C" igMetaObject *FUN_0014ee40(void);
@@ -576,7 +566,6 @@ struct W_14f580 { int *vt; Str s4; Str s8; char pad[16]; Str s28; Str s32; char 
 extern "C" W_14f580 *FUN_0014f580(W_14f580 *t, short flag);
 extern "C" void thunk_igExternalImageEntry_GetMetaObject_0014f750(void);
 extern "C" igMetaObject *igExternalDirEntry_GetPublishedMetaObject(void);
-extern "C" CallbackArray *igExternalDirEntry_Register(void);
 extern "C" CallbackArray *igExternalImageEntry_Register(void);
 extern "C" void thunk_FUN_0014f420(void);
 extern "C" int FUN_0014f760(void);
@@ -652,8 +641,6 @@ struct VTableProbe { int *vt; char pad[1564]; };
 struct Ref { int pad; union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
 struct S_temp_a0_1506b0 { char pad4[4]; int f4; };
 struct O_1506b0 { S_temp_a0_1506b0 *m; };
-extern "C" void __destroy_arr(void *, void *, int, int);
-extern "C" int __construct_array(...);
 extern "C" int FUN_001372e0(...);
 extern "C" void *FUN_00137360(void *, short);
 
@@ -691,7 +678,6 @@ extern "C" int *FUN_00151070(int *p);
 extern "C" int *FUN_00151080(int *p);
 extern "C" int FUN_00151090(int a);
 extern "C" int FUN_001510a0(int arg0);
-extern "C" int *igSmartPointer_igIntList_Construct(int *p);
 extern "C" void *FUN_001510e0(igVisualContext *arg0);
 extern "C" int *FUN_00151190(int *arg0);
 extern "C" void FUN_001511a0(void);
@@ -736,7 +722,6 @@ extern "C" void FUN_001525e0(void);
 extern "C" igMetaObject *igVertexArray1_1_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igPsx2VertexArray1_1_Register(void);
 extern "C" igMetaObject *FUN_00152670(void);
-extern "C" int igPointerList_GetOrCreateMetaObject(...);
 extern "C" void igPsx2VertexArray1_1_InitFields(void);
 extern "C" int FUN_001527c0(int arg0);
 extern "C" int FUN_00152800(void);
@@ -749,7 +734,6 @@ extern "C" void FUN_001528e0(void);
 extern "C" void igPsx2LongList_InitFields_00152970(void);
 extern "C" CallbackArray *igPsx2LongList_Register(void);
 extern "C" void thunk_igPsx2LongList_GetMetaObject(void);
-extern "C" int igLongMetaField_GetDefaultDescriptor(...);
 class DW4VC_84_1_152970 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual int vX(int); };
 extern "C" void FUN_00152970(void);
 extern "C" igMetaObject *igPsx2UserUCodeExt_GetMetaObject(void);
@@ -771,8 +755,6 @@ extern "C" void FUN_00152d10(void);
 extern "C" igMetaObject *igUserUCodeExt_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igPsx2UserUCodeExt_Register(void);
 extern "C" igMetaObject *FUN_00152da0(void);
-extern "C" int igRawRefMetaField_GetOrCreateMetaObject(...);
-extern "C" int igIntMetaField_GetOrCreateMetaObject(...);
 extern "C" void igPsx2UserUCodeExt_InitFields(void);
 extern "C" igMetaObject *FUN_00152e80(void);
 extern "C" igMetaObject *igPsx2ScissorExt_GetMetaObject(void);
@@ -906,7 +888,6 @@ extern "C" CallbackArray *igPsx2BlendEquationExt_Register(void);
 extern "C" igMetaObject *FUN_001547a0(void);
 extern "C" void igPsx2BlendEquationExt_InitFields(void);
 
-extern "C" int igDriverDatabase_SetSubPropertyValue(int, int, const char *, char *);
 class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(int); };
 extern "C" void Gap__Gfx__igCapabilityManager__vfunc_24(V *arg0, int arg1);
 struct S_154980 { char pad[8]; int f8; int f12; int f16; int f20; int f24; };
@@ -940,8 +921,6 @@ class V_1551f0 { public: virtual void d0(); virtual void d1(); virtual void d2()
 struct S_1551f0 { char pad0[32]; char *f32; char pad1[4]; char *f40; };
 
 extern "C" int FUN_001551f0(S_1551f0 *arg0, V_1551f0 *arg1);
-extern "C" int igExternalDirEntry_SetDirectoryName(...);
-extern "C" int igExternalDirEntry_InitDefaults(...);
 extern "C" int text_igImageDirectory[4];
 extern "C" void Gap__Gfx__igExternalImageEntry__vfunc_11(int arg0);
 extern "C" int Gap__Gfx__igGenericCapabilityManager__vfunc_23(void);
@@ -1243,7 +1222,6 @@ extern "C" int FUN_0015a010(int arg0);
 
 struct A_15a030 { char pad[56]; int f56; char pad2[28]; int *f88; };
 extern "C" void FUN_0015a030(struct A_15a030 *arg0);
-extern "C" int igObject_UserPostRead(...);
 extern "C" void FUN_0015a0f0(void);
 struct S_15a100 { char p0[12]; unsigned f12; char p1[32]; int f48; unsigned char *f52; char p2[20]; int f76; };
 class A_15a100 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual unsigned char *vX(int, int); };
@@ -1348,7 +1326,6 @@ extern "C" void *FUN_0015b7f0(void *arg0, void *arg1);
 extern "C" void *FUN_0015b820(void *arg0, void *arg1);
 extern "C" int Gap__Bec__ParticleArray__vfunc_24(ParticleArray *arg0, unsigned int arg1);
 extern "C" void Gap__Bec__ParticleArray__vfunc_25(ParticleArray *arg0);
-extern "C" float fmodf(float, float);
 struct B_15bb50 { char pad[44]; int f44; };
 struct A_15bb50 { char p0[8]; B_15bb50 *b; char p1[8]; float f20; float f24; float f28; char p2[48]; unsigned f80; };
 struct V_15bb50 { float x; float y; };
@@ -2681,8 +2658,6 @@ struct SystemConfig { char pad[56]; void *settings; };
 extern "C" void FUN_00166400(igVisualContext_166400 *ctx, int flags);
 extern "C" void FUN_00166a60(void *arg0, char arg1);
 
-extern "C" int igReport_Printf(...);
-extern "C" int igReport_Flush(...);
 extern "C" float DAT_0048a470[4];
 extern "C" float DAT_005607a0[4];
 extern "C" float DAT_005607a8[4];
@@ -2704,12 +2679,7 @@ struct ShaderSetup {
     void *registry;
     void *builder;
 };
-extern "C" igIntList *igContextList_Create(void *allocator);
 
-extern "C" void igDriverDatabase_GatherProperties(void *builder, igIntList *list);
-extern "C" int igRegistry_IsLoadingEnabled(void);
-extern "C" int igDriverDatabase_Load(void *builder, const char *a, const char *b);
-extern "C" void igDriverDatabase_ApplyToRegistry(void *builder, void *registry, int kind, int flags);
 extern "C" void FUN_002daab0(void *builder, void *registry, int kind, int flags);
 extern "C" void FUN_00166de0(int value);
 extern "C" void FUN_00166f90(void);
@@ -2877,7 +2847,6 @@ struct OB1d0;
 
 extern "C" int p2CallDisplayList(...);
 
-extern "C" int igDriverDatabase_SetCurrentProperty(...);
 extern "C" void *FUN_002ed240(int, int);
 extern "C" void *FUN_002ed450(void *, int, int);
 extern "C" void FUN_0017a540(igPsx2VisualContext *vc, int keepLists);
@@ -4404,8 +4373,6 @@ class W_1767c0;
 struct Geometry1774;
 extern "C" int FUN_001f7340(...);
 extern "C" int FUN_001f7360(...);
-/* Home at landing: the maths library header (libm). */
-extern "C" float cosf(float);
 extern "C" void FUN_00193c50(igVec4f *out, igVec3f *in, float *matrix);
 /* igPointSpriteExt drawn without hardware sprites: a camera-facing quad (two triangles, six vertices) per sprite. */
 struct VertexArrayLock { int f0; int f4; char pad8[20]; };
@@ -5061,7 +5028,6 @@ class VC_17d0c0 { public: virtual void d0(); virtual void d1(); virtual void d2(
 struct S_17d0c0 { char pad8[8]; int f8; int fc; int f10; int f14; char pad18[4]; int f1c; };
 extern "C" int Gap__Gfx__igPsx2VertexArray1_1__vfunc_24(S_17d0c0 *arg0, int *arg1, int arg2, int arg3);
 struct Obj_17d170 { int w0; unsigned refs; };
-extern "C" Obj_17d170 *igPointerList_Create(...);
 class V_17d170 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual unsigned *g(); char pad[44]; Obj_17d170 *f48; Obj_17d170 *f52; Obj_17d170 *f56; };
 extern "C" void FUN_0017d170(V_17d170 *arg0);
 struct R_17d2b0 { int w0; int rc; };
@@ -5088,7 +5054,6 @@ extern "C" void Gap__Gfx__igPsx2VertexArray1_1__vfunc_51(igPsx2VertexArray1_1 *s
 extern "C" int Gap__Gfx__igPsx2VertexArray1_1__vfunc_52(igPsx2VertexArray1_1 *self, int index, int element);
 typedef struct VertexDataView { char pad[76]; float *data; } VertexDataView;
 typedef struct VertexArrayView_17d910 { char pad[8]; VertexDataView *b; } VertexArrayView_17d910;
-extern "C" int _dpflt(double, double);
 extern "C" void Gap__Gfx__igPsx2VertexArray1_1__vfunc_57(VertexArrayView_17d910 *arg0, int arg1, float x);
 extern "C" float Gap__Gfx__igPsx2VertexArray1_1__vfunc_58(igPsx2VertexArray1_1 *arg0, int arg1);
 struct P_17da90 { int f0; int f4; int f8; int pad[12]; int f60; int pad2[1]; int f68; int f72; };

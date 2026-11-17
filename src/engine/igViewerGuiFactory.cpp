@@ -197,8 +197,7 @@ extern "C" igSmartPointer<ViewerAction> igViewerGuiFactory_CreateAction(void *fa
     return action;
 }
 
-/* The factory has no widget of this kind: an empty reference. */
-extern "C" igSmartPointer<igObject> igViewerGuiFactory_CreateEmpty(void *factory, int kind) {
+extern "C" igSmartPointer<igObject> igViewerGuiFactory_CreateEmpty(igViewerGuiFactory *factory, int kind) {
     return igSmartPointer<igObject>(0, kRetainReference);
 }
 

@@ -12,7 +12,7 @@ void Gap__Gui__igFieldChangeView__vfunc_24(void *arg0, void *arg1) {
 void FUN_004551a0(struct S_4551a0 *arg0, int arg1, int arg2) {
     int sp[3];
     int b;
-    igMetaField_SetValueFromField(arg0->b, arg0->a, arg2, arg1);
+    igMetaField_SetValueFromField((igMetaFieldView *)arg0->b, (void *)arg0->a, (igMetaFieldView *)arg2, (char *)arg1);
     b = arg0->b;
     sp[0] = 2;
     sp[2] = b;

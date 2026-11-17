@@ -31,6 +31,7 @@ double exp(double);
 double frexp(double, int *);
 double ldexp(double, int);
 float logf(float);
+float log10f(float);
 float sinf(float);
 float cosf(float);
 float tanf(float);

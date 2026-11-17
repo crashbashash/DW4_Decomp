@@ -131,7 +131,7 @@ Obj_1506b0 *FUN_00150af0(Obj_1506b0 *arg0, short arg1) {
         arg0->vt = DAT_00525e50;
         arg0->rel(&arg0->m308);
         arg0->rel(&arg0->m304);
-        __destroy_arr((char *)arg0 + 240, (void *)&FUN_00137360, 4, 16);
+        __destroy_arr((char *)arg0 + 240, (void (*)(void *, short))((ConstructorDestructor)&FUN_00137360), 4, 16);
         arg0->rel(&arg0->m56);
         arg0->rel(&arg0->m52);
         arg0->rel(&arg0->m48);
@@ -251,7 +251,8 @@ void *FUN_001510e0(igVisualContext *arg0) {
     arg0->_timer = 0;
     igMatrix44f_SetIdentity(&arg0->_viewMatrixHint[0]);
     igMatrix44f_SetIdentity(&arg0->_viewMatrixInverse[0]);
-    __construct_array(&arg0->_vertexArray2[0], FUN_00151190, &FUN_00137360, 4, 0x10);
+    /* the element constructor and destructor in the runtime's ConstructorDestructor form */
+    __construct_array(&arg0->_vertexArray2[0], (ConstructorDestructor)FUN_00151190, (ConstructorDestructor)&FUN_00137360, 4, 0x10);
     arg0->_customStates = 0;
     arg0->_customFields = 0;
     return arg0;

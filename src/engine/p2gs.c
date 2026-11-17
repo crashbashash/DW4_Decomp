@@ -327,7 +327,6 @@ void FUN_001f7500(void *arg0) {
 }
 
 void FUN_001f8190(int registerIndex);
-void p2VsyncHandler(void);
 
 typedef struct {
     unsigned long long SIGNAL:1;
@@ -661,7 +660,6 @@ void FUN_001f8320(void) {
 
 int AddIntcHandler(int cause, int (*handler)(int cause), int next);
 extern int p2FirstOpen;
-extern int p2GsIntcHandlerId;
 
 void FUN_001f8350(void) {
     VifCode unpack = { 0x8000, 0, 0x6c };

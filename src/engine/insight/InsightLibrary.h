@@ -31,7 +31,9 @@ class igMemoryPoolView;
 #include "dw4/igRendererOrderedList.h"
 #include "dw4/igEventDispatcher.h"
 #include "dw4/igClearRenderer.h"
-extern "C" void igTimer_EnsureRegistered(void);
+#include "dw4/igTimer.h"
+#include "dw4/igReport.h"
+#include "dw4/igPluginHelper.h"
 extern "C" void FUN_00145de0(void);
 #include "dw4/igVisualContext.h"
 extern "C" void InsightLibrary_MarkRegistered(void);
@@ -212,7 +214,6 @@ extern "C" struct R **FUN_00232d60(struct R **arg0, short arg1);
 extern "C" CallbackArray *igInsightCore_Register(void);
 extern "C" void thunk_igInsightCore_GetMetaObject(void);
 extern "C" int FUN_00145d40(...);
-extern "C" int igTimer_GetOrCreateMetaObject(...);
 extern "C" int FUN_0044c250(...);
 extern "C" int FUN_004513b0(...);
 extern "C" void igInsightCore_InitFields(void);
@@ -236,7 +237,6 @@ struct Obj_233340 { int *vt; char pad[28]; };
 extern "C" int g_igViewportResizedMessage_vtable[4];
 extern "C" int igViewportResizedMessage_GetVTable(void);
 extern "C" void FUN_00233380(void);
-extern "C" igMetaObject *igMessage_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igViewportResizedMessage_Register(void);
 extern "C" void thunk_igViewportResizedMessage_GetMetaObject(void);
 extern "C" void igViewportResizedMessage_InitFields(void);
@@ -272,7 +272,6 @@ extern "C" igMetaObject *g_igFlushRenderer_metaObject;
 extern "C" igMetaObject *FUN_00233a40(void);
 union U_233a90 { int vt; int w[3]; char b[12]; };
 extern "C" int g_igFlushRenderer_vtable[4];
-extern "C" igMetaObject *igRenderer_GetPublishedMetaObject(void);
 extern "C" igMetaObject *igFlushRenderer_GetMetaObject(void);
 extern "C" int igFlushRenderer_GetVTable(void);
 extern "C" void FUN_00233b80(void);
@@ -627,7 +626,6 @@ public:
     virtual int setVisualContext(igVisualContextView *context);
 };
 #include "dw4/igWindow.h"
-extern "C" int igReportError(const char *format, ...);
 class igFlushRendererView {
 public:
     int _vtable;
@@ -637,8 +635,6 @@ public:
 extern "C" void Gap__Insight__igFlushRenderer__vfunc_26(igFlushRendererView *self);
 struct NamedObject : public igObject { int name; };
 #include "dw4/igFolder.h"
-extern "C" int igFolder_SetFolderName(...);
-extern "C" int igPluginHelper_AddRepository(...);
 struct G { char p[76]; int f76; };
 extern "C" void FUN_00236140(void);
 struct TextValue : public igObject { char *text; };

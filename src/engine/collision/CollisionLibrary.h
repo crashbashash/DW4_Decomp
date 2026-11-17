@@ -24,13 +24,15 @@ struct W { int *vt; int f[19]; };
 extern "C" int FUN_00225790(...);
 extern "C" int g_igCreateCollisionDatabase_vtable[4];
 #include "dw4/igObjectSystem.h"
+#include "dw4/igOptBase.h"
+#include "dw4/igIGBFile.h"
+#include "dw4/igDirectory.h"
 extern "C" int igCreateCollisionDatabase_GetVTable(void);
 struct S_temp_a0 { char pad4[4]; int f4; };
 struct O { S_temp_a0 *m; };
 extern "C" O *FUN_00239530(O *arg0, short arg1);
 extern "C" void FUN_002395b0(void);
 extern "C" igMetaObject *igOptBase_GetPublishedMetaObject(void);
-extern "C" CallbackArray *igOptBase_Register(void);
 extern "C" CallbackArray *igCreateCollisionDatabase_Register(void);
 extern "C" void thunk_igCreateCollisionDatabase_GetMetaObject(void);
 extern "C" void igCreateCollisionDatabase_InitFields(void);
@@ -237,9 +239,6 @@ extern "C" int Gap__igCreateCollisionDatabase__vfunc_33(void);
 typedef struct Rc : public igObject { } Rc;
 class Obj_23c250 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void vX(int); };
 typedef struct Inst { int pad[5]; Rc *f20; } Inst;
-extern "C" Rc *igIGBFile_Create(int);
-extern "C" int igDirectory_SetName(Rc *, int);
-extern "C" int igDirectory_AddInfo(Rc *, Rc *);
 extern "C" void FUN_0023c250(int *arg0);
 extern "C" igMetaObject *Gap__igCreateCollisionDatabase__vfunc_22(void);
 extern "C" igMetaObject *Gap__igCollisionGrid__vfunc_22(void);

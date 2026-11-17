@@ -3,6 +3,7 @@
 
 /* igContext: class registration. */
 struct igMetaObject;
+struct CallbackArray;
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,6 +11,7 @@ extern "C" {
 extern struct igMetaObject *g_igContext_metaObject;
 
 struct igMetaObject *igContext_GetPublishedMetaObject(void);
+struct CallbackArray *igContext_Register(void);
 
 #ifdef __cplusplus
 }

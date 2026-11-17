@@ -257,22 +257,19 @@ class igMemoryPoolView;
 #include "dw4/igObjectRefMetaField.h"
 #include "dw4/igRawRefMetaField.h"
 #include "dw4/igUnsignedIntMetaField.h"
+#include "dw4/igSemaphore.h"
+#include "dw4/sony/sifdev.h"
 void igPsx2IopRpcConnection_EnsureRegistered(void);
-void igThread_EnsureRegistered(void);
 void FUN_00145de0(void);
 igMetaObject *igAudioContext_GetPublishedMetaObject(void);
 extern int g_igPsx2AudioContext_vtable[4];
 extern int g_igPsx2AudioSourceList_vtable[4];
 
 int FUN_00145d40(...);
-int igUnsignedIntMetaField_GetDefaultDescriptor(...);
-int igThread_GetOrCreateMetaObject(...);
 int igPsx2IopRpcConnection_GetOrCreateMetaObject(...);
 int igPsx2IopRpcConnection_CallNoData(...);
 int igPsx2IopRpcConnection_Call(...);
 int igPsx2IopRpcConnection_CallWithData(...);
-void *igSemaphore_Create(...);
-int sceSifSearchModuleByName(const char *);
 RpcStatus igPsx2_LoadIopModule(const char *, int, int, int);
 int FUN_00301000(InitContext *);
 int igPsx2IopRpcConnection_Create(int);

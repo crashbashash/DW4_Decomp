@@ -512,7 +512,7 @@ void FUN_00166de0(int value)
     int count;
     void *registry = ((ShaderSetup *)g_objectSystem)->registry;
     void *builder = ((ShaderSetup *)g_objectSystem)->builder;
-    igSmartPointer<igIntList> list(igContextList_Create((void *)(FUN_00165ce0((int *)value))));
+    igSmartPointer<igIntList> list((igIntList *)igContextList_Create((int)FUN_00165ce0((int *)value)));
     bool found = false;
 
     igRegistry_GetValueBool((igRegistry *)registry, 4, "ignoreDriverDatabase", (unsigned char *)&found, 0, 1);
@@ -525,9 +525,9 @@ void FUN_00166de0(int value)
         List_Resize(l, count + 1, 4);
     }
     ((int *)l->_data)[count] = value;
-    igDriverDatabase_GatherProperties(builder, list);
+    igDriverDatabase_GatherProperties(builder, (igTDataList<igVisualContextView *> *)(igIntList *)list);
     if (igRegistry_IsLoadingEnabled() != 0) {
-        if (igDriverDatabase_Load(builder, (const char *)"", (const char *)"") != 0) igDriverDatabase_ApplyToRegistry(builder, registry, 4, 0);
+        if (igDriverDatabase_Load((igDriverDatabase *)builder, (const char *)"", (const char *)"") != 0) igDriverDatabase_ApplyToRegistry((igDriverDatabase *)builder, (int)registry, 4, 0);
     }
     FUN_002daab0(builder, registry, 4, 0);
 }

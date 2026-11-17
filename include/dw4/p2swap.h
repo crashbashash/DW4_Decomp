@@ -34,6 +34,8 @@ void p2SetSingleFrameLatency(void);
 void p2SwapBuffers(void);
 void p2WaitFinishSequence(unsigned int sequence);
 int swapbuffersDrawPredicate(long long buffer);
+void p2SetSwapInterval(int vsyncs);
+void p2VsyncHandler(void);
 
 #ifdef __cplusplus
 }

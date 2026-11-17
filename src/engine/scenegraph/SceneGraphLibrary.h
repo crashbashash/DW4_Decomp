@@ -394,7 +394,6 @@ extern int g_igSorter_vtable[4];
 extern int DAT_00528620[8];
 
 extern "C" int FUN_001380e0(...);
-extern "C" int igSmartPointer_igIntList_Construct(...);
 extern "C" int FUN_00137fb0(...);
 extern "C" int FUN_001382a0(...);
 extern "C" int FUN_001386d0(...);
@@ -1057,7 +1056,6 @@ struct Finder {
 typedef struct R_1afb00 { char pad4[4]; int f4; } R_1afb00;
 extern "C" R_1afb00 *DAT_00562578[4];
 struct RefObj { int w0; int references; int count; int capacity; void **data; };
-extern "C" RefObj *igMetaObjectList_Create(void *);
 
 struct Finder_1afb60 {
     static int Find(RefObj *l, K &key) {
@@ -4265,7 +4263,6 @@ extern "C" void thunk_igCommonTraversal_GetMetaObject(void);
 extern "C" void igCommonTraversal_InitFields(void);
 extern "C" void FUN_001a44d0(void);
 extern "C" void thunk_FUN_001b6c50(void);
-extern "C" int *igSmartPointer_igMetaObjectList_Construct(int *p);
 extern "C" igMetaObject *igCamera_GetMetaObject(void);
 extern "C" int igCamera_GetVTable(void);
 extern "C" CallbackArray *igCamera_Register(void);
@@ -4912,7 +4909,6 @@ public:
 };
 struct IniItemList { char pad0[8]; int count; char pad1[4]; void **data; };
 struct IniFieldView { char pad0[56]; void *refMeta; };
-extern "C" void igObjectRefMetaField_Assign(IniFieldView *, IniFieldTarget *, void *);
 static inline IniFieldView *asObjectRefField(IniFieldView *f) {
     if (f != 0 && igObject_IsKindOf((igObject *)f, g_igObjectRefMetaField_metaObject) != 0) {
         return f;

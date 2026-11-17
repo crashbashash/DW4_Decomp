@@ -217,7 +217,6 @@ extern "C" int g_igTextureBindAttrList_vtable[4];
 extern "C" int g_igMovieInfo_vtable[4];
 #include "dw4/igInfo.h"
 extern "C" int g_igMovieRenderer_vtable[4];
-extern "C" igMetaObject *igRenderer_GetPublishedMetaObject(void);
 extern "C" int g_igMovieManager_vtable[4];
 extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieInfoList_Destruct(igSmartPointer<igObject> *self, short flag);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igMovieRenderer_Destruct(igSmartPointer<igObject> *self, short flag);

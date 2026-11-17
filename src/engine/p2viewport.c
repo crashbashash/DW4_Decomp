@@ -36,7 +36,6 @@ typedef struct P2Texture {
 
 int FUN_00208200(int texture);
 
-extern int p2ClearPasses;
 extern int DAT_00568e30;
 
 extern p2ViewportRect p2Viewport;

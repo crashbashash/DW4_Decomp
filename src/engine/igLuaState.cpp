@@ -1,13 +1,10 @@
 #include "dw4/reflected.h"
+#include <stdlib.h>
 
 class DW4VC_12_1 { public: virtual void d0(); virtual int vX(int); };
 
 extern "C" {
 
-int malloc(...);
-int free(...);
-int realloc(...);
-int calloc(...);
 
 /* Vtable images of the derived and base classes; the array form keeps the address load absolute. */
 extern int g_derivedVtable_0052d6d0[4];
@@ -103,7 +100,7 @@ int FUN_002809f0(int a0, int a1)
 void FUN_00280a00(void **arg0) {
     if (g_luaAllocator == 0) {
         if (arg0 == 0) {
-            g_luaAllocator = malloc(4);
+            g_luaAllocator = (int)malloc(4);
         } else {
             g_luaAllocator = ((DW4VC_12_1 *)(arg0))->vX((int)(4));
         }
@@ -154,15 +151,15 @@ igObject *FUN_00280b20(igObject *self) {
 }
 
 void FUN_00280b50(int a0, int a1) {
-    malloc(a1, a1);
+    malloc(a1);
 }
 
 void FUN_00280b60(int a0, int a1) {
-    free(a1, a1);
+    free((void *)a1);
 }
 
 void FUN_00280b70(int unused, int a, int b) {
-    realloc(a, b);
+    realloc((void *)a, b);
 }
 
 void FUN_00280b80(int unused, int a, int b) {
@@ -170,7 +167,7 @@ void FUN_00280b80(int unused, int a, int b) {
 }
 
 void FUN_00280b90(int a0, int a1) {
-    free(a1, a1);
+    free((void *)a1);
 }
 
 }

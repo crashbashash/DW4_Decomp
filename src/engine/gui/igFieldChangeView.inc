@@ -94,7 +94,7 @@ void igFieldChangeView_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00450a00();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igMetaField_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igMetaField_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igFieldChangeView_fieldTable, g_igFieldChangeView_fieldHandles, g_igFieldChangeView_fieldOffsets, temp_s2);
 }
 

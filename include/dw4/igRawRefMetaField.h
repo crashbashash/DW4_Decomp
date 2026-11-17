@@ -12,6 +12,8 @@ extern "C" {
 
 extern struct igMetaObject *g_igRawRefMetaField_metaObject;
 struct igMetaField *igRawRefMetaField_Create(struct igMemoryPoolView *pool);
+void igRawRefMetaField_EnsureRegistered(void);
+struct igMetaObject *igRawRefMetaField_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

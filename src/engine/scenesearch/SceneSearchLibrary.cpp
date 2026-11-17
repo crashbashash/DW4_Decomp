@@ -173,8 +173,8 @@ void igActor_SetAnimationSystem(int *self, RefCounted *scene) {
         Memory_FreeBuffer((void *)self[10]);
         self[10] = 0;
     }
-    igMetaField_AllocateArray(&firstArray, DAT_00562498[0], self, firstCount, igObject_GetAllocator((igObject *)self));
-    igMetaField_AllocateArray(&secondArray, DAT_005624a0[0], self, secondCount, igObject_GetAllocator((igObject *)self));
+    igMetaField_AllocateArray(&firstArray, (igMemoryRefMetaField *)DAT_00562498[0], self, firstCount, igObject_GetAllocator((igObject *)self));
+    igMetaField_AllocateArray(&secondArray, (igMemoryRefMetaField *)DAT_005624a0[0], self, secondCount, igObject_GetAllocator((igObject *)self));
     firstMatrix = self[9];
     i = 0;
     while (i < firstCount) {

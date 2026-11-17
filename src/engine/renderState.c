@@ -215,7 +215,6 @@ p2VifUnpack p2FunctionTable1Unpack = { 0x61004021 };
 unsigned int p2FunctionTablesFlush = 0x10000000;
 unsigned int p2LightingFunctionsStmask = 0x20000000;
 void p2UpdateLights();
-void p2UploadBlendMatrices();
 void p2StoreStateCacheEntry();
 void p2SendGifTags(void);
 void p2SendPassSetup(void);

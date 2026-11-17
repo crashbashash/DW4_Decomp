@@ -1,12 +1,7 @@
 #ifndef DW4_DP_BIT_H
 #define DW4_DP_BIT_H
 
-typedef int SItype __attribute__((mode(SI)));
-typedef unsigned int USItype __attribute__((mode(SI)));
-typedef int DItype __attribute__((mode(DI)));
-typedef unsigned int UDItype __attribute__((mode(DI)));
-typedef float SFtype __attribute__((mode(SF)));
-typedef float DFtype __attribute__((mode(DF)));
+#include "dw4/fp_bit_common.h"
 
 typedef UDItype fractype;
 typedef DFtype FLO_type;
@@ -24,8 +19,6 @@ typedef DItype intfrac;
 #define IMPLICIT_1 (1LL << (FRACBITS + NGARDS))
 #define IMPLICIT_2 (1LL << (FRACBITS + 1 + NGARDS))
 #define LSHIFT(a) { a = (a & 1) | (a >> 1); }
-
-typedef enum { CLASS_SNAN, CLASS_QNAN, CLASS_ZERO, CLASS_NUMBER, CLASS_INFINITY } fp_class_type;
 
 typedef struct {
     fp_class_type class;
@@ -67,7 +60,6 @@ FLO_type __pack_d(fp_number_type *);
 void __unpack_d(FLO_union_type *, fp_number_type *);
 int __fpcmp_parts_d(fp_number_type *, fp_number_type *);
 fp_number_type *_fpadd_parts(fp_number_type *, fp_number_type *, fp_number_type *);
-SFtype __make_fp(fp_class_type, unsigned int, int, USItype);
 
 static __inline__ fp_number_type *_fpmul_parts(fp_number_type *a, fp_number_type *b, fp_number_type *tmp) {
     fractype low = 0;

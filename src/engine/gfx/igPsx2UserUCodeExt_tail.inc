@@ -159,9 +159,9 @@ void igPsx2UserUCodeExt_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00150770();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntMetaField_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igIntMetaField_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igRawRefMetaField_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)igRawRefMetaField_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_igPsx2UserUCodeExt_fieldTable, g_igPsx2UserUCodeExt_fieldHandles, g_igPsx2UserUCodeExt_fieldOffsets, fieldStart);
 }
 

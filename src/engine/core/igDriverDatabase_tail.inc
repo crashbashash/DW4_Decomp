@@ -24,8 +24,8 @@ void igDriverDatabase_ReleaseDefaults(int self) {
     igObject_ReleaseDefaults((igObject *)self);
 }
 
-void igDriverDatabase_SetCurrentProperty(void *self, int property, int value) {
-    igStringObj_Set((igStringObj *)(((int *)((igObjectList *)((igDriverDatabase *)self)->_currentProperties)->_data)[property]), (const char *)value);
+void igDriverDatabase_SetCurrentProperty(void *self, int property, const char *value) {
+    igStringObj_Set((igStringObj *)(((int *)((igObjectList *)((igDriverDatabase *)self)->_currentProperties)->_data)[property]), value);
 }
 
 char *g_stringObjEmptyText = "";
@@ -84,13 +84,13 @@ void igDriverDatabase_GatherProperties(void *self, igTDataList<igVisualContextVi
     int i;
     igSmartPointer<igStringObj> text(((igStringObj *)igStringObj_Create((int)(((void *)igObject_GetAllocator((igObject *)self))))));
     if (igDriverDatabase_GetOSName((void *)(text.get())) != 0) {
-        igDriverDatabase_SetCurrentProperty(self, 0, (int)(textOf(text)));
+        igDriverDatabase_SetCurrentProperty(self, 0, textOf(text));
     }
     if (igDriverDatabase_GetCpuVendor((void *)(text.get())) != 0) {
-        igDriverDatabase_SetCurrentProperty(self, 6, (int)(textOf(text)));
+        igDriverDatabase_SetCurrentProperty(self, 6, textOf(text));
     }
     if (igDriverDatabase_GetCpuType((void *)(text.get())) != 0) {
-        igDriverDatabase_SetCurrentProperty(self, 7, (int)(textOf(text)));
+        igDriverDatabase_SetCurrentProperty(self, 7, textOf(text));
     }
     if (list == 0 || list->_count == 0) {
         return;

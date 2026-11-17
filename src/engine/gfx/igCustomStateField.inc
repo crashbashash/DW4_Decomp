@@ -123,7 +123,7 @@ void igCustomStateField_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igCustomStateField_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igMetaField_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igMetaField_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_igCustomStateField_fieldTable, g_igCustomStateField_fieldHandles, g_igCustomStateField_fieldOffsets, fieldStart);
 }
 

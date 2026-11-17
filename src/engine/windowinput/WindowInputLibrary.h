@@ -61,6 +61,7 @@ extern "C" void FUN_00146270(void);
 extern "C" CallbackArray *igEventProducer_Register(void);
 extern "C" void thunk_igEventProducer_GetMetaObject(void);
 #include "dw4/igNonRefCountedObjectStack.h"
+#include "dw4/sony/libpad.h"
 extern "C" igMetaObject *FUN_001462f0(void);
 extern "C" igMetaObject *g_igControllerList_metaObject;
 extern "C" igMetaObject *FUN_00146300(void);
@@ -79,7 +80,6 @@ extern "C" int DAT_00524da0[4];
 union U { int vt; char b[80]; };
 extern "C" int igDefaultInterfaceManager_GetVTable(void);
 extern "C" void FUN_00146560(void);
-extern "C" igMetaObject *igInterfaceManager_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igDefaultInterfaceManager_Register(void);
 extern "C" igMetaObject *FUN_001465e0(void);
 extern "C" void igDefaultInterfaceManager_InitFields(void);
@@ -170,7 +170,6 @@ class S { public: char pad[8]; L_147930 *list; };
 extern "C" void FUN_00147930(S *arg0);
 extern "C" void FUN_001479b0(igPsx2Controller *arg0);
 extern "C" void Gap__igPsx2Controller__vfunc_11(igPsx2Controller *self);
-extern "C" int scePadPortClose(int, int);
 #include "dw4/igMemory.h"
 extern "C" void Gap__igPsx2Controller__vfunc_12(void *arg0);
 extern "C" void Gap__igPsx2Controller__vfunc_31(void *arg0, int arg1, float *arg2, float *arg3);
@@ -185,18 +184,8 @@ public:
 struct PadActAlign {
     unsigned char data[6];
 };
-extern "C" int scePadGetState(int port, int slot);
-extern "C" int scePadGetReqState(int port, int slot);
-extern "C" int scePadInfoComb(int port, int slot, int actno, int term);
-extern "C" int scePadInfoMode(int port, int slot, int term, int offs);
-extern "C" int scePadInfoPressMode(int port, int slot);
-extern "C" int scePadSetMainMode(int port, int slot, int offs, int lock);
-extern "C" int scePadSetActAlign(int port, int slot, const unsigned char *data);
-extern "C" int scePadEnterPressMode(int port, int slot);
-extern "C" int scePadExitPressMode(int port, int slot);
 extern "C" void FUN_00148160(igPsx2Controller *pad, ControllerListener *listener);
 extern "C" void Gap__igPsx2Controller__vfunc_23(igPsx2Controller *self, ControllerListener *listener);
-extern "C" int scePadSetActDirect(...);
 typedef struct C { char pad[60]; int f60; int f64; char pad68[23]; unsigned char b91[6]; } C;
 extern "C" void Gap__igPsx2Controller__vfunc_37(C *arg0, int arg1, float fparg0);
 extern "C" int FUN_00147ff0(void *arg0, unsigned int arg1);
@@ -208,8 +197,6 @@ class Pe { public: virtual void d0(); virtual void d1(); virtual void d2(); virt
 struct Rt { char pad[56]; int f56; };
 #include "dw4/igResult.h"
 struct LoadStatus { int v; bool ok() const { return v == g_resultSuccess.v; } };
-extern "C" int scePadInit(...);
-extern "C" int scePadPortOpen(...);
 #include <string.h>
 extern "C" int sceMtapInit(...);
 #include "dw4/igStringObj.h"

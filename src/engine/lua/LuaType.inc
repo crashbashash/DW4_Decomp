@@ -591,7 +591,7 @@ int LuaObject_StoreField(lua_State *L, igMetaField *field, LuaBoundObject *objec
             break;
         case LUA_KIND_OBJECT:
             if (type.metaObject != 0) {
-                igObjectRefMetaField_Assign(field, object, value.data.object);
+                igObjectRefMetaField_Assign((igObjectRefMetaField *)field, object, (igObject *)value.data.object);
             } else if (type.indirection == 1) {
                 LuaObject_Field<LuaBoundObject *>(object, field) = (LuaBoundObject *)value.data.object;
             } else {

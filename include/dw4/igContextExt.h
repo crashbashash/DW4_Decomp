@@ -3,11 +3,13 @@
 
 /* igContextExt: the context-extension class's metaobject. */
 struct igMetaObject;
+struct CallbackArray;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 extern struct igMetaObject *g_igContextExt_metaObject;
+struct CallbackArray *igContextExt_Register(void);
 #ifdef __cplusplus
 }
 #endif

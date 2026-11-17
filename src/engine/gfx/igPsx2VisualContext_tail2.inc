@@ -911,11 +911,8 @@ struct ContextText : public igObject {
         return t;
     }
 };
-extern "C" void p2SetFrameMode(int on);
-extern "C" void p2SetDisplayFrameCount(int count);
-extern "C" void p2SetSwapInterval(int vsyncs);
-extern "C" void p2EnableWatchdog(int on);
-extern "C" void p2SetClearPasses(int on);
+#include "dw4/p2core.h"
+#include "dw4/p2swap.h"
 extern "C" int p2OpenDisplay(int mode, int colorBits, int depthBits, const char *config, const char *symbols, int width, int height);
 extern "C" void FUN_0020c9e0(int mode);
 class OpenResult {
@@ -1376,11 +1373,11 @@ void FUN_0016cd10(void *arg0) {
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_27(int dummy0, int arg1) {
-    igDriverDatabase_SetCurrentProperty(arg1, 1, "psx2");
-    igDriverDatabase_SetCurrentProperty(arg1, 2, "1.0");
-    igDriverDatabase_SetCurrentProperty(arg1, 3, "sony");
-    igDriverDatabase_SetCurrentProperty(arg1, 4, "psx2");
-    igDriverDatabase_SetCurrentProperty(arg1, 5, "1.0");
+    igDriverDatabase_SetCurrentProperty((void *)arg1, 1, "psx2");
+    igDriverDatabase_SetCurrentProperty((void *)arg1, 2, "1.0");
+    igDriverDatabase_SetCurrentProperty((void *)arg1, 3, "sony");
+    igDriverDatabase_SetCurrentProperty((void *)arg1, 4, "psx2");
+    igDriverDatabase_SetCurrentProperty((void *)arg1, 5, "1.0");
 }
 
 void igPsx2VisualContext_CallDmaChain(igPsx2VisualContext *self, void *packet, int size, int flush) {

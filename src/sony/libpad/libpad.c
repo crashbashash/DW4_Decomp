@@ -1,5 +1,6 @@
 #include "dw4/sony/sif.h"
 #include "dw4/libkernl.h"
+#include "dw4/sony/libpad.h"
 #include <string.h>
 
 /* One frame of the pad state padman.irx DMAs to the EE; the caller's 64-byte aligned area holds two,

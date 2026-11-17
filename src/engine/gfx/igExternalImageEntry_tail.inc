@@ -43,7 +43,7 @@ int FUN_001551f0(S_1551f0 *arg0, V_1551f0 *arg1) {
 }
 
 void Gap__Gfx__igExternalImageEntry__vfunc_11(int arg0) {
-    igExternalDirEntry_InitDefaults();
-    igExternalDirEntry_SetDirectoryName(arg0, &text_igImageDirectory[0]);
+    igExternalDirEntry_InitDefaults((igDirEntry *)arg0);
+    igExternalDirEntry_SetDirectoryName((igExternalDirEntry *)arg0, (int)&text_igImageDirectory[0]);
 }
 

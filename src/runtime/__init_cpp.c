@@ -2,6 +2,7 @@
  * destructors after. */
 
 #include "dw4/runtime/exception.h"
+#include "dw4/runtime/init_cpp.h"
 
 void __fini_cpp(void) {
     __destroy_global_chain();

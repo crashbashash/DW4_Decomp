@@ -530,14 +530,14 @@ void igAliasMemoryPool_Destruct(igAliasMemoryPool *self){
     igMemoryPool_Destruct((int)self);
 }
 
-int __do_global_ctors()
+void __do_global_ctors()
 {
-    return __init_cpp();
+    __init_cpp();
 }
 
-int __do_global_dtors()
+void __do_global_dtors()
 {
-    return __fini_cpp();
+    __fini_cpp();
 }
 
 void FUN_002d1660(void) {

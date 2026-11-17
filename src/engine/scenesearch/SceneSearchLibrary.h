@@ -35,6 +35,7 @@ struct SearchSceneGraphFrame { int *vt; int f4; int f8; int fC; int f10; int f14
 #include "dw4/igNamedObject.h"
 #include "dw4/igSmartPointer.h"
 #include "dw4/igMatrix44f.h"
+#include "dw4/igMetaField.h"
 extern "C" int FUN_002293d0(...);
 extern "C" int g_igSearchSceneGraph_vtable[4];
 /* The object system's byte offset of the vtable word inside an object. */
@@ -45,7 +46,6 @@ extern "C" int FUN_002274a0(void);
 extern "C" void FUN_00227620(void);
 
 /* The searched scene and the two matrix arrays sized from it (igActor_SetAnimationSystem). */
-extern "C" int igMetaField_AllocateArray(...);
 extern "C" int DAT_00562498[4];
 extern "C" int DAT_005624a0[4];
 

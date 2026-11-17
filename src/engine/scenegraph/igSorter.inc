@@ -67,9 +67,9 @@ int igSorter_GetVTable(void) {
     FUN_00197350((int *)&u.b[40]);
     FUN_00197350((int *)&u.b[44]);
     FUN_00197350((int *)&u.b[48]);
-    igSmartPointer_igIntList_Construct(&u.b[52]);
-    igSmartPointer_igIntList_Construct(&u.b[56]);
-    igSmartPointer_igIntList_Construct(&u.b[60]);
+    igSmartPointer_igIntList_Construct((int *)&u.b[52]);
+    igSmartPointer_igIntList_Construct((int *)&u.b[56]);
+    igSmartPointer_igIntList_Construct((int *)&u.b[60]);
     FUN_00197310((int *)&u.b[64]);
     FUN_00197300((int *)&u.b[68]);
     FUN_00197300((int *)&u.b[72]);
@@ -78,7 +78,7 @@ int igSorter_GetVTable(void) {
     p244 = &u.b[84];
     FUN_00197320((int *)p244);
     p248 = &u.b[88];
-    igSmartPointer_igIntList_Construct(p248);
+    igSmartPointer_igIntList_Construct((int *)p248);
     p252 = &u.b[92];
     FUN_00197350((int *)p252);
     p256 = &u.b[96];
@@ -86,9 +86,9 @@ int igSorter_GetVTable(void) {
     p260 = &u.b[100];
     FUN_001972e0((int *)p260);
     p264 = &u.b[104];
-    igSmartPointer_igIntList_Construct(p264);
+    igSmartPointer_igIntList_Construct((int *)p264);
     p268 = &u.b[108];
-    igSmartPointer_igIntList_Construct(p268);
+    igSmartPointer_igIntList_Construct((int *)p268);
     p276 = &u.b[116];
     FUN_001972f0((int *)p276);
     temp_s5 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];

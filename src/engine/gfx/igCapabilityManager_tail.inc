@@ -33,7 +33,7 @@ void Gap__Gfx__igCapabilityManager__vfunc_24(V *arg0, int arg1) {
     int i;
     for (i = 0; i < 27; i++) {
         sprintf(sp50, "%d", arg0->vX(capabilityIds[i]));
-        igDriverDatabase_SetSubPropertyValue(arg1, 8, capabilityNames[i], sp50);
+        igDriverDatabase_SetSubPropertyValue((igDriverDatabase *)arg1, 8, capabilityNames[i], sp50);
     }
 }
 

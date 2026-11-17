@@ -69,7 +69,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
                     al2 = (Al *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
                 }
                 mem = al2->vX(0x100, 0x40);
-                if (scePadPortOpen(s3, s1, mem) != 1) {
+                if (scePadPortOpen(s3, s1, (void *)mem) != 1) {
                     Memory_FreeBuffer((void *)mem);
                 } else {
                     igSmartPointer<igPsx2Controller> controller((igPsx2Controller *)FUN_00147090((int)igObject_GetAllocator(arg0)));

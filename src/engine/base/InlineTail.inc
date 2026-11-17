@@ -289,7 +289,7 @@ static inline void insertHeld(void *list, int index, const HeldWord &word) {
  * inline's local it takes the last stack slots. */
 static inline igObject *createMetaObjectList() {
     Tag tag = Tag();
-    return igMetaObjectList_Create(0);
+    return (igObject *)igMetaObjectList_Create(0);
 }
 
 static inline igObject *createStringRefList() {
@@ -877,7 +877,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
             if (igRegistry_GetValueStringObj(registry, section, stringObjText(*key), (igStringObj **)&value, "", 0)) {
                 igMetaObject *meta = (igMetaObject *)igObjectSystem_FindMetaByNameDefault(stringObjText(*value));
                 if (meta != 0) {
-                    igObjectRefMetaField_Assign(field, object, meta);
+                    igObjectRefMetaField_Assign((igObjectRefMetaField *)field, object, (igObject *)meta);
                     log->put("(%s:%s) ", stringObjText(*key), stringObjText(*value));
                 } else {
                     log->put("(%s:%s not found) ", stringObjText(*key), stringObjText(*value));
@@ -1430,7 +1430,7 @@ int FUN_0022db60(struct M *arg0, int arg1, int arg2, int arg3, int arg4) {
     arg0 = (M *)cast0_6(arg0);
     arg2 = (int)cast0_6((void *)arg2);
     if ((arg0 != 0) && (arg2 != 0)) {
-        igObjectRefMetaField_Assign(arg2, arg3, *(int *)(arg1 + arg0->f8));
+        igObjectRefMetaField_Assign((igObjectRefMetaField *)arg2, (void *)arg3, (igObject *)(*(int *)(arg1 + arg0->f8)));
         var_v0 = 1;
     }
     else { var_v0 = 0; }

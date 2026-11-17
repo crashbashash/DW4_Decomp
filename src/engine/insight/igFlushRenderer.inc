@@ -848,8 +848,8 @@ void FUN_00236140(void) {
         }
     }
     s0->name = (int)s1;
-    igFolder_SetFolderName(r.get(), "insight");
-    igPluginHelper_AddRepository(((G *)g_objectSystem)->f76, "Insight", r->name, 1);
+    igFolder_SetFolderName((igFolderView *)(r.get()), "insight");
+    igPluginHelper_AddRepository((igPluginHelper *)(((G *)g_objectSystem)->f76), (int)("Insight"), r->name, 1);
 }
 
 static inline void describe(const igSmartPointer<TextValue> &text, int value) {

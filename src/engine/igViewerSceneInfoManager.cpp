@@ -30,6 +30,7 @@
 #include "dw4/igCameraMode.h"
 #include "dw4/igMathConstants.h"
 #include "dw4/list-services.h"
+#include "dw4/igViewerGuiFactory.h"
 extern "C" {
 
 /* The igMetaField handles of igViewerParameters' fields; a change notification names its field by one. */
@@ -53,7 +54,6 @@ typedef struct ViewerMessage { int type; void *source; igMetaField *field; } Vie
 
 
 
-int igViewManager_SynchronizeParameters(...);
 
 
 
@@ -130,19 +130,15 @@ int igGroup_RemoveChildAt(igObject **removed, igGroup *group, int index);
 
 
 
-int igViewManager_FrameObject(...);
 
 
 
 
-void igViewManager_CenterSelection(int, int);
 
-void igViewManager_FitSelection(int);
 
 
 
 /* The view mode objects igViewManager_SetViewMode installs; references are counted. */
-igSmartPointer<igObject> igViewerGuiFactory_CreateEmpty(igViewerGuiFactory *factory, int kind);
 struct Tag { };
 static inline igPickMode *createPickMode() {
     Tag tag = Tag();
@@ -381,7 +377,7 @@ void Gap__Viewer__igViewerSceneInfoManager__resetFields(igViewerSceneInfoManager
             g_sharedViewerOptions = 0;
         }
     }
-    igViewManager_SynchronizeParameters(self->_viewManager, self->_parameters);
+    igViewManager_SynchronizeParameters((igViewManager *)self->_viewManager, (igViewerParameters *)self->_parameters);
     {
         igObject *s2 = (igObject *)self->_parameters;
         RendererLink *s1 = (RendererLink *)self->_viewerRenderer;
@@ -787,7 +783,7 @@ void igViewerSceneInfoManager_HomeView(igViewerSceneInfoManager *self) {
     modeChanged.field = g_igViewerParameters_operationModeMetaField;
     igModel_NotifyViews((igModel *)self->_parameters, (ModelChange *)&modeChanged);
     igViewManager_SetSceneUpVector((igViewManager *)self->_viewManager, (const float *)(((igViewerParameters *)self->_parameters)->_upVector));
-    igViewManager_FrameObject(self->_viewManager, ((igViewerParameters *)self->_parameters)->_scene);
+    igViewManager_FrameObject((igViewManager *)self->_viewManager, (igNode *)(((igViewerParameters *)self->_parameters)->_scene));
 }
 
 void igViewerSceneInfoManager_ResetView(igViewerSceneInfoManager *self) {
@@ -936,11 +932,11 @@ void igViewerSceneInfoManager_OnGuiShown(igViewerSceneInfoManager *self)
 }
 
 void igViewerSceneInfoManager_CenterSelection(igViewerSceneInfoManager *self) {
-    igViewManager_CenterSelection(self->_viewManager, 0);
+    igViewManager_CenterSelection((igViewManager *)self->_viewManager, (bool)0);
 }
 
 void igViewerSceneInfoManager_FitSelection(igViewerSceneInfoManager *self) {
-    igViewManager_FitSelection(self->_viewManager);
+    igViewManager_FitSelection((igViewManager *)self->_viewManager);
 }
 
 void igViewerSceneInfoManager_PrintViewMatrix(igViewerSceneInfoManager *self) {

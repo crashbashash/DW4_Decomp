@@ -109,7 +109,7 @@ void igDataPump_InitFields(void) {
     *(int *)((char *)(destObjField) + 56) = (int)g_igObject_metaObject;
     *(char *)((char *)(destObjField) + 52) = 1;
     destMetaField = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 1));
-    *(int *)((char *)(destMetaField) + 56) = igMetaField_GetOrCreateMetaObject();
+    *(int *)((char *)(destMetaField) + 56) = (int)igMetaField_GetOrCreateMetaObject();
     *(char *)((char *)(destMetaField) + 38) = 0;
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 2), 0);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 3), 0);

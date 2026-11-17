@@ -57,6 +57,8 @@ public:
 #include "dw4/cri/adx_ps2.h"
 #include "dw4/cri/cri_adxf.h"
 #include "dw4/igFile.h"
+#include "dw4/igReport.h"
+#include <math.h>
 extern "C" {
 int CriMovie_BuildTileUpload(void *packet, char *image, int tileBytes, int x, int y, int width, int height, int called);
 static void Dma_SetTag(unsigned long long *tag, unsigned spr, unsigned addr, unsigned irq, unsigned id, unsigned pce, unsigned qwc);
@@ -86,14 +88,9 @@ int igCriMovieCodec_Update(igCriMovieCodecView *self, igMovieInfo *movie);
 igMetaObject *igCriMovieCodec_GetMeta(void);
 igMetaObject *igCriMovieData_GetMeta(void);
 
-int igReportError(const char *format, ...);
 void mwPlySetMallocFn(void *(*allocate)(igCriMovieCodec *, unsigned int),
                          void (*release)(igCriMovieCodec *, void *), igCriMovieCodec *context);
-void mwPlyGetCurFrm(MwsfdPly *ply, MwsfdFrmObj *frame);
 
-float log10f(float x);
-int igReportNotice(const char *format, ...);
-int igReport_Warning(const char *format, ...);
 extern unsigned char g_criMovieUseRawPath;
 extern unsigned char g_criMovieOpenFailedMuted;
 extern unsigned char g_criMovieAllocFailedMuted;
@@ -683,7 +680,7 @@ int igCriMovieCodec_Update(igCriMovieCodecView *self, igMovieInfo *movie) {
             MWSFD_ExecVsyncFrame();
             MWSFD_ExecVsyncFrame();
             ADXM_ExecMain();
-            mwPlyGetCurFrm(Player(data), &frame);
+            mwPlyGetCurFrm(Player(data), (struct MwsfdFrm *)&frame); /* MwsfdFrmObj: this unit's view of the frame (only bufadr read) */
             if (frame.bufadr != 0) {
                 if (data->_macroFunction == 0) {
                     igMovieInfo_GetTiling(movie, &tileWidth, &tileHeight, &tilesAcross, &tilesDown);

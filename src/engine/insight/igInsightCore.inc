@@ -335,7 +335,7 @@ void igInsightCore_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_10)->_metaObject = FUN_0044c250();
     ((igRefMetaField *)temp_s2_10)->_construct = 1;
     temp_s2_11 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA));
-    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = igTimer_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)igTimer_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_11)->_construct = 1;
     temp_s2_12 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x12));
     ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)FUN_002325c0();

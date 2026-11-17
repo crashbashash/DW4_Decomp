@@ -1,11 +1,7 @@
 /* Array construction and destruction for new[]/delete[] and the array members of classes, operator delete,
  * operator new[] and the default new handler. */
 #include "dw4/runtime/cxxlib.h"
-
-
-/* A constructor or destructor as the compiler calls it for an array element: the element and the
- * constructor's "complete object" flag or the destructor's "delete" flag (-1: destroy only). */
-typedef void (*ConstructorDestructor)(void *object, short flag);
+#include "dw4/runtime/New.h"
 
 /* Destroys the elements constructed so far when an element's constructor throws. */
 class __partial_array_destructor {

@@ -114,7 +114,7 @@ void igVertexArray1_1_InitFields(void) {
     temp_s2_3->f64 = 1;
     temp_s2_3->f65 = 1;
     temp_s2_4 = (struct F *)(igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 5));
-    temp_s2_4->f56 = igMemoryPool_GetOrCreateMetaObject();
+    temp_s2_4->f56 = (int)igMemoryPool_GetOrCreateMetaObject();
     temp_s2_4->f36 = 3;
     temp_s2_4->f38 = 0;
     temp_s2_4->f40 = 1;

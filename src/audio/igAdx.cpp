@@ -13,8 +13,8 @@ extern "C" {
 }
 #include "dw4/igStringObj.h"
 #include "dw4/libkernl.h"
-extern "C" int SNDF_Finish(...);
-extern "C" int mwPlyFinishSfdFx(...);
+#include "dw4/cri/cri_sndf.h"
+#include "dw4/cri/cri_mwsfd.h"
 #include "dw4/eekernel.h"
 extern "C" void Gap__igAdx__constructFields(igObject *self, int flags);
 extern "C" void Gap__igAdx__resetFields(igObject *self, int flags);
@@ -27,19 +27,14 @@ extern "C" void igAdx_ErrorCallback(void *obj, char *msg);
 #include <string.h>
 extern "C" {
 #include "dw4/sony/sif.h"
+#include "dw4/sony/sifdev.h"
+#include "dw4/sony/libcdvd_calls.h"
+#include "dw4/sony/libsdr.h"
 }
-extern "C" int sceSifInitIopHeap(...);
-extern "C" int sceCdInit(int);
-extern "C" int sceCdMmode(int);
-extern "C" int sceSdRemoteInit(...);
-/* Kept here: its only declaration is in cri/sndf.h, whose own libc and SIF prototypes conflict with the Sony homes. */
-extern "C" int sceSdRemote(int arg, int command, ...);
 #include <stdio.h>
 extern "C" int igPsx2_LoadIopModule(...);
 extern "C" int igAdx_SetupIop(void);
 extern "C" int igAdx_SetupOptional(void);
-extern "C" int SNDF_Start(...);
-extern "C" int SNDF_ExecServer(...);
 #include "dw4/igDataLists.h"
 #include "dw4/StringPool.h"
 extern "C" unsigned char igAdxAudio_CreateHandleAndStartFile(igAdxAudio *audio, const char *name, int maxChannels, int type,

@@ -21,6 +21,7 @@
 #include "dw4/p2pool.h"
 #include "dw4/p2swap.h"
 #include "dw4/p2timer.h"
+#include "dw4/p2viewport.h"
 
 /* The GS privileged CSR register and its FIELD bit: set while the odd field is shown. */
 enum {
@@ -59,7 +60,6 @@ typedef union p2GsDispfb {
 } p2GsDispfb;
 
 void FUN_001f8190(int reg);
-void p2UploadViewport(void);
 int swapbuffersPredicate(long long frame);
 void p2AddFinishFunc(void (*func)(p2FinishFunc *finish, int arg), int arg);
 

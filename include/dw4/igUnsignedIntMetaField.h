@@ -13,6 +13,7 @@ extern "C" {
 extern struct igMetaObject *g_igUnsignedIntMetaField_metaObject;
 struct igMetaField *igUnsignedIntMetaField_Create(struct igMemoryPoolView *pool);
 void igUnsignedIntMetaField_SetDefaultValue(struct igMetaField *self, int value);
+int igUnsignedIntMetaField_GetDefaultDescriptor(void);
 
 #ifdef __cplusplus
 }

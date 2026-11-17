@@ -34,7 +34,7 @@ The function count is flattered by small functions: the ones done have a median 
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**13,619** of the 20,431 matched functions are readable: **2,126,240** code bytes, **61.2 %** of the code.
+**13,677** of the 20,431 matched functions are readable: **2,151,148** code bytes, **61.9 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
@@ -46,7 +46,7 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 2,069 | 380,604 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,425 | 446,392 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 557 | 146,400 |
-| what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol, no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 734 | 438,484 |
+| what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol, no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 609 | 394,356 |
 
 ## Debt
 
@@ -92,10 +92,10 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `profile_split.units` | 3 | 3 | 0 | units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build); increase recorded: profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile |
 | `profile_split.bytes` | 19,492 | 19,492 | 0 | bytes of those; increase recorded: profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile |
 | `opt_pragma.statements` | 0 | 0 | 0 | optimiser, inlining, code-generation and data pragmas in src/ (`peephole`, `optimize_for_size`, `schedule`, `pool_strings`, ...; docs/engine/mwcc-pragmas.md): a flag change written in the source |
-| `decl.local_externs` | 330 | 330 | 0 | declarations, in a unit's own text (its file, its `.inc` fragments, a header only it includes), of a symbol another unit defines; FUN_/DAT_ placeholders and assembly symbols one unit uses are exempt (tools/declarations.py) |
-| `decl.varargs` | 354 | 354 | 0 | prototypes that leave out a symbol's parameters: `(...)` unless the C definition is variadic (counted with no C definition too), or a C `()` for a definition that takes parameters |
-| `decl.type_conflicts` | 505 | 505 | 0 | declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters |
-| `decl.header_conflicts` | 321 | 321 | 0 | symbols declared in two or more headers that disagree on the type |
+| `decl.local_externs` | 176 | 176 | 0 | declarations, in a unit's own text (its file, its `.inc` fragments, a header only it includes), of a symbol another unit defines; FUN_/DAT_ placeholders and assembly symbols one unit uses are exempt (tools/declarations.py) |
+| `decl.varargs` | 289 | 289 | 0 | prototypes that leave out a symbol's parameters: `(...)` unless the C definition is variadic (counted with no C definition too), or a C `()` for a definition that takes parameters |
+| `decl.type_conflicts` | 438 | 438 | 0 | declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters |
+| `decl.header_conflicts` | 280 | 280 | 0 | symbols declared in two or more headers that disagree on the type |
 
 ## The data half
 

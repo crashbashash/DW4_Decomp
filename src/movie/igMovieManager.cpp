@@ -195,7 +195,7 @@ igMetaObject *igMovieManager_GetMeta(void);
 #include <string.h>
 #include "dw4/igMetaObject.h"
 #include "dw4/igDataLists.h"
-int igReportError(const char *format, ...);
+#include "dw4/igReport.h"
 #include "dw4/igMovieCodecList.h"
 #include "dw4/igMovieInfoList.h"
 #include "dw4/igAudioContext.h"
@@ -217,7 +217,7 @@ int igReportError(const char *format, ...);
 #include "dw4/igVertexArray.h"
 #include "dw4/igNamedObject.h"
 #include "dw4/igGroup.h"
-int snprintf(char *buffer, unsigned int size, const char *format, ...);
+#include <stdio.h>
 #include "dw4/cri/cri_adxt.h"
 
 #include "dw4/igMovieManager.h"

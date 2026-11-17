@@ -459,6 +459,13 @@ void p2SetSoftwareBlendSource(const float *positions, const float *matrices, con
 /* `matrixCount`, the context's blend matrix count, is passed by the caller and not read. */
 int p2SoftwareBlend(int count, int weights, float *out, int matrixCount);
 void p2UploadComponentScales(void);
+extern int p2ClearPasses;
+extern int p2GsIntcHandlerId;
+void p2EnableWatchdog(int on);
+void p2SetClearPasses(int on);
+void p2SetDisplayFrameCount(int count);
+void p2SetFrameMode(int on);
+void p2UploadBlendMatrices(void);
 
 #ifdef __cplusplus
 }

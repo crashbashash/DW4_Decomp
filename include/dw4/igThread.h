@@ -5,6 +5,7 @@
 struct igThread;
 class igPsx2ThreadView;
 class igSemaphoreView;
+struct igMetaObject;
 
 /* igPsx2ThreadManager: slot 21 finds the calling thread, slots 22 and 23 add and remove a thread. */
 class igPsx2ThreadManagerView {
@@ -24,6 +25,8 @@ extern "C" {
 extern igPsx2ThreadManagerView *g_threadManager;
 
 igThread *igThread_Create(int allocator);
+void igThread_EnsureRegistered(void);
+struct igMetaObject *igThread_GetOrCreateMetaObject(void);
 }
 
 #endif

@@ -53,6 +53,7 @@ typedef void (*igMetaObjectCallback)();
 #include "dw4/igMetaEnum.h"
 #include "dw4/internalNonRefCountedObjectList.h"
 #include "dw4/list-services.h"
+#include "dw4/igUnsignedCharMetaField.h"
 void FUN_00187190(void);
 void FUN_00187450(void);
 void FUN_001877c0(void);
@@ -514,7 +515,6 @@ static inline float dot(const V2 *a, const V2 *b) { return a->x * b->x + a->y * 
 static inline float dot3(float ax, float ay, float az, float bx, float by, float bz) { return ax * bx + ay * by + az * bz; }
 static inline float lerp(float o, float t, float d) { float m = t * d; return o + m; }
 
-void **igFloatMetaField_GetDefaultDescriptor(...);
 
 void igMatrix44fMetaField_SwapBytes(igMatrix44fMetaField *arg0, int arg1, int arg2);
 
@@ -675,7 +675,6 @@ public:
     virtual void SetDefault(const void *value);
 };
 
-void **igUnsignedCharMetaField_GetDefaultDescriptor(...);
 
 void igVec4ucMetaField_SwapBytes(igVec4ucMetaField *arg0, int arg1, int arg2);
 

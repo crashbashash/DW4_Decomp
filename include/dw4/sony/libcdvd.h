@@ -6,6 +6,7 @@
 
 #include "dw4/sony/sif.h"
 #include "dw4/libkernl.h"
+#include "dw4/sony/libcdvd_calls.h"
 
 #define UNCACHED(p) ((void *)((unsigned int)(p) | 0x20000000))
 #define UNCACHED_WORD(p) (*(int *)UNCACHED(p))

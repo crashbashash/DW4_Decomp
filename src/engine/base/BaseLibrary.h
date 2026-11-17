@@ -62,6 +62,7 @@
 #include "dw4/igStringRef.h"
 #include "dw4/internalNonRefCountedObjectList.h"
 #include "dw4/list-services.h"
+#include "dw4/igOptBase.h"
 
 typedef void (*igMetaObjectCallback)();
 
@@ -126,19 +127,15 @@ extern int DAT_00560f98[4];
 extern int DAT_00561010[4];
 
 extern "C" {
-int igUnsignedCharMetaField_GetDefaultDescriptor(...);
 int FUN_0019c8c0(...);
 
 int FUN_002fdef0(void *meta, void *field);
 int FUN_00142bb0(void *list, void *key);
-igObject *igMetaObjectList_Create(int allocator);
 struct GraphIterator;
 int FUN_0022ad00(struct GraphIterator *it);
-void *igInfoList_Create(int arg0);
 int FUN_001d6340(...);
 
 int FUN_00190330(...);
-int igObjectRefMetaField_Assign(...);
 }
 
 struct S {
@@ -411,7 +408,6 @@ CallbackArray *igOptConfiguration_Register(void);
 void thunk_igOptConfiguration_GetMetaObject(void);
 igMetaObject *igOptBase_GetMetaObject(void);
 void FUN_00225f80(void);
-CallbackArray *igOptBase_Register(void);
 void thunk_igOptBase_GetMetaObject(void);
 igMetaObject *FUN_00226010(void);
 void igOptBase_InitFields(void);

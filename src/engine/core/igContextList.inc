@@ -1,8 +1,8 @@
 igMetaObject *g_igContextList_metaObject;
 
-void igContextList_Create(int pool) {
+void *igContextList_Create(int pool) {
     igContextList_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igContextList_metaObject, (igMemoryPoolView *)pool);
+    return igMetaObject_CreateInstance(g_igContextList_metaObject, (igMemoryPoolView *)pool);
 }
 
 igMetaObject *igContextList_GetMetaObject(void)

@@ -59,7 +59,7 @@ void FUN_0017d170(V_17d170 *arg0) {
                 igObject_Destroy((igObject *)o);
             }
         }
-        arg0->f48 = igPointerList_Create(a);
+        arg0->f48 = (Obj_17d170 *)igPointerList_Create(a);
         if (*flags & 2) {
             a = (int)igObject_GetAllocator((igObject *)arg0);
             o = arg0->f52;
@@ -69,7 +69,7 @@ void FUN_0017d170(V_17d170 *arg0) {
                     igObject_Destroy((igObject *)o);
                 }
             }
-            arg0->f52 = igPointerList_Create(a);
+            arg0->f52 = (Obj_17d170 *)igPointerList_Create(a);
         }
     }
 }

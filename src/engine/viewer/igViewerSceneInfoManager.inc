@@ -131,11 +131,11 @@ int igViewerSceneInfoManager_GetVTable(void) {
     p304 = &u.b[144];
     FUN_00459d90((int *)p304);
     p308 = &u.b[148];
-    igSmartPointer_igObjectList_Construct(p308);
+    igSmartPointer_igObjectList_Construct((int *)p308);
     p312 = &u.b[152];
     FUN_00459d80((int *)p312);
     p316 = &u.b[156];
-    igSmartPointer_igObjectList_Construct(p316);
+    igSmartPointer_igObjectList_Construct((int *)p316);
     p340 = &u.b[180];
     FUN_00459d70((int *)p340);
     p344 = &u.b[184];
