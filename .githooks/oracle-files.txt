@@ -9,6 +9,7 @@ tools/linkgen.py
 tools/linkcheck.py
 tools/exceptions.py
 tools/buildcache.py
+tools/forkpool.py
 tools/cc.py
 tools/eegcc_compile.py
 .githooks/*

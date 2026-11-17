@@ -91,7 +91,6 @@ name is a failure (tools/test_section_census.py checks the same).
 Exit status: 0 no mismatch/compile failure, 1 otherwise or a split failure.
 """
 import argparse
-import concurrent.futures
 import json
 import os
 import re
@@ -104,6 +103,7 @@ import asmsources
 import sourceapprovals
 import buildcache
 import cc
+import forkpool
 import srctree
 import unitobjects
 import unitprofiles
@@ -225,8 +225,8 @@ def main(argv=None):
     ap.add_argument("--split-only", action="store_true")
     ap.add_argument("--split-limit", type=int, default=0)
     ap.add_argument("--jobs", type=int, default=os.cpu_count() or 1,
-                    help="worker threads for the split and coverage sweeps "
-                         "(default: all cores; 1 = serial)")
+                    help="worker processes for the split and coverage sweeps "
+                         "(default: all cores; 1 = serial; tools/forkpool.py)")
     ap.add_argument("--function", help="single VA to check against --cand")
     ap.add_argument("--cand", help="C file for --function")
     ap.add_argument("--list-mismatch", action="store_true")
@@ -303,15 +303,14 @@ def main(argv=None):
             split_store.put(key, "ok")
         return None
 
-    # `ex.map` yields in input order, so the report stays byte-for-byte identical
+    # `imap` yields in input order, so the report stays byte-for-byte identical
     # to the serial one whatever order the workers finish in.
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.jobs)) as ex:
-        for res in ex.map(split_one, todo):
-            if res is None:
-                continue
-            nm, why = res
-            (missing if why == "missing" else bad_split).append(
-                nm if why == "missing" else res)
+    for res in forkpool.imap(split_one, todo, a.jobs, (split_store,)):
+        if res is None:
+            continue
+        nm, why = res
+        (missing if why == "missing" else bad_split).append(
+            nm if why == "missing" else res)
     split_store.save(prune=whole_tree_run)
     print(split_store.summary("split units"))
     print("split : %d/%d units round-trip byte-exactly%s%s"
@@ -353,7 +352,7 @@ def main(argv=None):
         unit's data sections (named rows, anonymous data, its switch tables) and a group's jump tables."""
         return [[found.group(1) or "jump-table", int(found.group(3), 16), int(found.group(4))]
                 for found in map(data_line.match, report.splitlines()) if found]
-    unit_data = {}         # name -> data_spans of its report
+    unit_data = forkpool.Memo()    # name -> data_spans of its report
 
     def classify(ok, report):
         """(category, exc, diagnostic, override) from a verify report; see the docstring.
@@ -438,10 +437,34 @@ def main(argv=None):
                                   "data": unit_data[nm]})
         return (nm, kind, exc, diagnostic, override)
 
-    # The members of a compiler unit share one verification (verify._unit_result), so a worker that takes
-    # a member waits until its unit is built. In address order the workers take consecutive members of one
-    # file and all but one wait: run every unit's first member before any second one, the largest units
-    # first, and read the results back in address order so the report is unchanged.
+    def graded(item):
+        """cover_one's answer with the categories read after the cache: asm bodies, approved assembly and
+        the source-approval rule (approving a row changes the category, not the compile)."""
+        nm, kind, exc, diagnostic, override = cover_one(item)
+        if nm in asm_bodies and kind not in ("mismatch", "compile"):
+            kind = "asm-body"
+        elif nm in assembly and kind == "match":
+            kind = "assembly"
+        elif kind == "match":
+            src_path, row = src_index[nm], None
+            owner = unitobjects.source_owner(nm, a.symbols, a.unit_objects)
+            if sourceapprovals.defines(src_path, nm):
+                # a whole-file member is its own definition: it answers for its own uses
+                owner = nm
+            else:
+                # a static the symbol map names apart (`Copy_tlbfunc` for the source's `Copy`): its
+                # uses are counted under the source's name, and its row names the symbol
+                member = unitobjects.source_name(nm, a.symbols, a.unit_objects)
+                if member != nm and sourceapprovals.defines(src_path, member):
+                    owner, row = member, nm
+            why = sourceapprovals.problem(src_path, owner, approvals, row=row)
+            if why:
+                kind, diagnostic = "unapproved", "unapproved: " + why
+        return nm, kind, exc, diagnostic, override
+
+    # The members of a compiler unit share one verification (verify._unit_result): every unit's first member
+    # is verified first, the largest units first, and the other members after, when the shared results they
+    # reuse are back from the workers; the results are read back in address order so the report is unchanged.
     by_unit = {}
     for i, (va, _sz, _nm, _path) in enumerate(cands):
         group = unitobjects.group_for(va, a.unit_objects)
@@ -449,44 +472,25 @@ def main(argv=None):
     order = [i for _rank, _size, _owner, i in sorted(
         (rank, -len(members), owner, i) for owner, members in by_unit.items() for rank, i in enumerate(members))]
     results = [None] * len(cands)
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.jobs)) as ex:
-        for i, result in zip(order, ex.map(cover_one, [cands[i] for i in order])):
+    shared = (cover_store, unit_data, vfy._UNIT_RESULTS)
+    for part in (order[:len(by_unit)], order[len(by_unit):]):
+        for i, result in zip(part, forkpool.imap(graded, [cands[i] for i in part], a.jobs, shared)):
             results[i] = result
-        for nm, kind, exc, diagnostic, override in results:
-            if nm in asm_bodies and kind not in ("mismatch", "compile"):
-                kind = "asm-body"
-            elif nm in assembly and kind == "match":
-                kind = "assembly"
-            elif kind == "match":
-                # read after the cache: approving a row changes the category, not the compile
-                src_path, row = src_index[nm], None
-                owner = unitobjects.source_owner(nm, a.symbols, a.unit_objects)
-                if sourceapprovals.defines(src_path, nm):
-                    # a whole-file member is its own definition: it answers for its own uses
-                    owner = nm
-                else:
-                    # a static the symbol map names apart (`Copy_tlbfunc` for the source's `Copy`): its
-                    # uses are counted under the source's name, and its row names the symbol
-                    member = unitobjects.source_name(nm, a.symbols, a.unit_objects)
-                    if member != nm and sourceapprovals.defines(src_path, member):
-                        owner, row = member, nm
-                why = sourceapprovals.problem(src_path, owner, approvals, row=row)
-                if why:
-                    kind, diagnostic = "unapproved", "unapproved: " + why
-            categories[nm] = (kind, diagnostic)
-            if override in ("unused", "redundant"):
-                stale_overrides[nm] = override
-            if kind == "match":
-                matched.append(nm)
-            elif kind in ("asm-body", "assembly"):
-                pass
-            elif kind == "compile":
-                failed.append((nm, diagnostic))
-                continue
-            else:
-                mismatched.append(nm)
-            if exc:
-                exc_status[nm] = exc
+    for nm, kind, exc, diagnostic, override in results:
+        categories[nm] = (kind, diagnostic)
+        if override in ("unused", "redundant"):
+            stale_overrides[nm] = override
+        if kind == "match":
+            matched.append(nm)
+        elif kind in ("asm-body", "assembly"):
+            pass
+        elif kind == "compile":
+            failed.append((nm, diagnostic))
+            continue
+        else:
+            mismatched.append(nm)
+        if exc:
+            exc_status[nm] = exc
 
     # ---- data-only units: files the retail linker kept the data of and no function --------------------
     # No function definition reaches them, so each is verified from its row's `source`; its data joins
@@ -522,11 +526,11 @@ def main(argv=None):
     own_rows = a.unit_objects is not None or os.path.abspath(a.src_dir) == os.path.join(ROOT, "src")
     data_only_groups = [group for group in ([] if a.cover_limit else unitobjects.data_only_units(a.unit_objects))
                         if own_rows or os.path.exists(os.path.join(a.src_dir, group.source))]
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.jobs)) as ex:
-        for group, label, kind, diagnostic, found in ex.map(data_only_one, data_only_groups):
-            data_only[group.owner] = (kind, diagnostic, label, found)
-            if kind == "compile":
-                failed.append((label, diagnostic))
+    for group, label, kind, diagnostic, found in forkpool.imap(data_only_one, data_only_groups, a.jobs,
+                                                               (cover_store, vfy._UNIT_RESULTS)):
+        data_only[group.owner] = (kind, diagnostic, label, found)
+        if kind == "compile":
+            failed.append((label, diagnostic))
 
     cover_store.save(prune=whole_tree_run and not a.cover_limit)
     print(cover_store.summary("functions compiled and compared"))

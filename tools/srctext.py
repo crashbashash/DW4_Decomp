@@ -34,15 +34,29 @@ def read(path, root=None, errors=None, _stack=()):
     return _INCLUDE.sub(expand, text)
 
 
+_DIRECT = {}    # (path, root) -> ((mtime_ns, size), [repository paths its `#include "src/..."` lines name])
+
+
 def included(path, root=None):
-    """The repository paths `path` includes through `#include "src/..."`, recursively."""
+    """The repository paths `path` includes through `#include "src/..."`, recursively.
+
+    Each file's own include lines are read once per modification time: tools ask this of every member
+    of a unity-built unit (unitprofiles.asm_body_names), and re-reading its fragments for each one was
+    most of an uncached `make check`."""
     root = root or ROOT
+    key = (path, root)
+    st = os.stat(path)
+    stamp = (st.st_mtime_ns, st.st_size)
+    hit = _DIRECT.get(key)
+    if hit is None or hit[0] != stamp:
+        with open(path, errors="replace") as fh:
+            text = fh.read()
+        hit = _DIRECT[key] = (stamp, [os.path.relpath(os.path.join(root, m.group(1)), root)
+                                      for m in _INCLUDE.finditer(text)])
     out = []
-    with open(path, errors="replace") as fh:
-        text = fh.read()
-    for m in _INCLUDE.finditer(text):
-        inc = os.path.join(root, m.group(1))
+    for rel in hit[1]:
+        inc = os.path.join(root, rel)
         if os.path.isfile(inc):
-            out.append(os.path.relpath(inc, root))
+            out.append(rel)
             out.extend(included(inc, root))
     return out

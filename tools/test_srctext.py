@@ -51,6 +51,14 @@ class Expansion(unittest.TestCase):
                          ["src/engine/lib/Lib.h", "src/engine/lib/First.inc",
                           "src/engine/lib/Second.inc", "src/engine/lib/Nested.inc"])
 
+    def test_included_sees_an_edited_fragment(self):
+        self.assertIn("src/engine/lib/Nested.inc", srctext.included(self.unit, root=self.root))
+        second = os.path.join(self.root, "src/engine/lib/Second.inc")
+        write(self.root, "src/engine/lib/Second.inc", "int second(void) { return 2; }\n")
+        os.utime(second, ns=(1, 1))     # a new stamp whatever the clock's resolution
+        self.assertEqual(srctext.included(self.unit, root=self.root),
+                         ["src/engine/lib/Lib.h", "src/engine/lib/First.inc", "src/engine/lib/Second.inc"])
+
     def test_plain_file_unchanged(self):
         path = write(self.root, "src/engine/Plain.c", "int plain(void) { return 0; }\n")
         self.assertEqual(srctext.read(path, root=self.root), "int plain(void) { return 0; }\n")

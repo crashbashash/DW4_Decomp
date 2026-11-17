@@ -248,6 +248,21 @@ class Store:
         with self._lock:
             self.used[key] = value
 
+    def take(self):
+        """What this process used and counted since the last call, forgotten here (tools/forkpool.py)."""
+        with self._lock:
+            taken = (self.used, self.hits, self.misses)
+            self.used, self.hits, self.misses = {}, 0, 0
+            return taken
+
+    def merge(self, taken):
+        """Add a worker's `take()` to this store."""
+        used, hits, misses = taken
+        with self._lock:
+            self.used.update(used)
+            self.hits += hits
+            self.misses += misses
+
     def save(self, prune=False):
         """Write the store back. By default the entries this run used are merged over what was
         loaded, so a partial run (a `--unit-range`, a `--cover-limit`, the build-option tests driving the

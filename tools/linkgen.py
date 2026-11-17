@@ -37,7 +37,6 @@ Usage:
 """
 import argparse
 import bisect
-import concurrent.futures
 import os
 import re
 import shutil
@@ -49,6 +48,7 @@ import threading
 import asmsources
 import buildcache
 import exceptions as exception_records
+import forkpool
 import srctree
 import units as unitfiles
 import unitobjects
@@ -185,7 +185,7 @@ def main(argv=None):
     ap.add_argument("--no-c", action="store_true",
                     help="use retail bytes for every code unit (ignore src/)")
     ap.add_argument("--jobs", type=int, default=os.cpu_count() or 1,
-                    help="worker threads for object building (default: all cores)")
+                    help="worker processes for object building (default: all cores; tools/forkpool.py)")
     ap.add_argument("--no-cache", action="store_true",
                     help="rebuild every object and write no cache (also DW4_NOCACHE=1). Objects are otherwise reused when their "
                          "inputs are unchanged (build/cache/, tools/buildcache.py)")
@@ -244,7 +244,8 @@ def main(argv=None):
     # The link script must be emitted in layout order because a jump-table unit
     # reads its owner's `.rodata` size — so the work is split: build the objects
     # here (expensive, order-independent, one output path per unit), emit the
-    # script below.  Every scratch path is thread-tagged, so `--jobs` is safe.
+    # script below.  The work is mostly Python, so it runs in forked worker processes
+    # (tools/forkpool.py); every scratch path is process- and thread-tagged.
     built = {}
     store = buildcache.Store("linkgen", use_cache)
     profile_files = verify.profile_input_files(a.unit_flags, a.unit_compilers, a.units)
@@ -261,13 +262,10 @@ def main(argv=None):
     records = exception_records.load(exception_records.config_path(a.symbols))
     # C++ exception metadata accounting: how many compiled records/tables are
     # placed at their retail slots, and which units `make check` flags instead.
-    exception_stats = {"placed": 0, "tables": 0, "bytes": 0, "extra": 0, "missing": 0, "differ": 0,
-                       "ctors": 0}
-    stats_lock = threading.Lock()
+    exception_stats = forkpool.Tally(placed=0, tables=0, bytes=0, extra=0, missing=0, differ=0, ctors=0)
 
     def count(what):
-        with stats_lock:
-            exception_stats[what] += 1
+        exception_stats[what] += 1
 
     def build_raw(va, sz, kind, name, obj):
         """Retail bytes -> `obj`, an object of exactly `sz` bytes (the asm side of the link)."""
@@ -375,9 +373,7 @@ def main(argv=None):
         return placement, ""
 
     retail_image, retail_gp = verify.read_elf(a.elf), reginfo_gp(a.elf)
-    unit_objects_built = {}
-    unit_locks = {}
-    unit_locks_guard = threading.Lock()
+    unit_objects_built = forkpool.Memo()    # a worker's compiles travel back for the later passes
 
     def verify_unit(group, profile, compiler, cflags, csrc_path, env):
         """Compile a compiler unit and verify every body -> (object or None, report, records)."""
@@ -407,12 +403,9 @@ def main(argv=None):
         """`compute()` once per `key` (None: every call computes)."""
         if key is None:
             return compute()
-        with unit_locks_guard:
-            lock = unit_locks.setdefault(key, threading.Lock())
-        with lock:
-            if key not in unit_objects_built:
-                unit_objects_built[key] = compute()
-            return unit_objects_built[key]
+        if key not in unit_objects_built:
+            unit_objects_built[key] = compute()
+        return unit_objects_built[key]
 
     def unit_profile(va, csrc_path):
         """The profile the unit owned at `va` builds `csrc_path` with. The unit profile
@@ -582,18 +575,19 @@ def main(argv=None):
     # Two passes: the C units first, because where their exception metadata and table entries
     # land decides how the raw data units are carved; then everything else.
     c_units = [u for u in to_build if u[2] == "code" and not a.no_c and u[3] in src_index]
-    # The members of a compiler unit share one compile (`unit_object`), so a worker that takes a member
-    # waits until that unit is built. In layout order the workers take consecutive members of one file and
-    # all but one of them wait; the schedule below hands out every unit's first member before any
-    # second one, the largest units first, so the compiles of different files run side by side.
+    # The members of a compiler unit share one compile (`unit_object`): every unit's first member is built
+    # first, the largest units first, and the other members after, when the shared compiles they reuse are back
+    # from the workers, so the compiles of different files run side by side.
     by_unit = {}
     for u in c_units:
         group = unitobjects.group_for(u[0], a.unit_objects)
         by_unit.setdefault(group.owner if group else u[0], []).append(u)
     schedule = [u for _rank, _size, _owner, u in sorted(
         (rank, -len(members), owner, u) for owner, members in by_unit.items() for rank, u in enumerate(members))]
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.jobs)) as ex:
-        for va, info in ex.map(build_one, schedule):
+    shared = (store, exception_stats, unit_objects_built)
+    firsts = len(by_unit)
+    for part in (schedule[:firsts], schedule[firsts:]):
+        for va, info in forkpool.imap(build_one, part, a.jobs, shared):
             built[va] = info
 
     # ---- the data-only units: files the retail linker kept the data of and no function ----------------
@@ -635,12 +629,11 @@ def main(argv=None):
         return group.owner, {"data_pins": pins, "key": key}
 
     data_only_built = {}
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.jobs)) as ex:
-        for va, info in ex.map(build_data_only, data_only.values()):
-            if info.get("fatal"):
-                print("linkgen: " + info["fatal"], file=sys.stderr)
-                return 2
-            data_only_built[va] = info
+    for va, info in forkpool.imap(build_data_only, data_only.values(), a.jobs, shared):
+        if info.get("fatal"):
+            print("linkgen: " + info["fatal"], file=sys.stderr)
+            return 2
+        data_only_built[va] = info
 
     # ---- the data whole-file units proved equal to retail, each address placed from one unit ---------
     # Units that define one datum (a header's static, a merged string) all verify it at the same address;
@@ -707,12 +700,11 @@ def main(argv=None):
         return va, {"obj": obj, "undef": undef}
 
     data_objects = {}
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.jobs)) as ex:
-        for va, info in ex.map(build_data, sorted(chosen)):
-            if info.get("fatal"):
-                print("linkgen: " + info["fatal"], file=sys.stderr)
-                return 2
-            data_objects[va] = info
+    for va, info in forkpool.imap(build_data, sorted(chosen), a.jobs, shared):
+        if info.get("fatal"):
+            print("linkgen: " + info["fatal"], file=sys.stderr)
+            return 2
+        data_objects[va] = info
 
     # ---- carve the raw data units around everything compiled that is pinned inside them --------------
     # exception metadata, static-initializer table entries and the units' data; a placed section may
@@ -779,9 +771,8 @@ def main(argv=None):
             return va, {"obj": None, "undef": [], "use_c": False, "tables": {}, "fragments": fragments}
         return build_one(item)
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, a.jobs)) as ex:
-        for va, info in ex.map(build_rest, [u for u in to_build if u[0] not in built]):
-            built[va] = info
+    for va, info in forkpool.imap(build_rest, [u for u in to_build if u[0] not in built], a.jobs, shared):
+        built[va] = info
     # only a complete run over the repository's own tree may prune: the build-option tests
     # drive this tool on their own tree against the same cache directory
     whole_tree = (os.path.abspath(a.src) == os.path.join(ROOT, "src")

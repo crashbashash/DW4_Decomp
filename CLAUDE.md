@@ -193,8 +193,11 @@ only `docs/` and `*.md` files through ([the local stamp](docs/engine/oracle-runn
 
 Run `make check-fresh` and `make link-fresh` (cache ignored) before any commit that changes
 `config/<GAMEID>/units.tsv`, `unit-*`, `extent-overrides.tsv`, `jumptables.txt`, `compiler-runtime-symbols.tsv`
-or `tools/`, and before a milestone. A drop in the `match` count is a regression, including a function
-moving to `unapproved` (such as through a new `volatile`): find the cause, never explain it away. A debt
+or `tools/`, and before a milestone. A commit that changes only the recorded baselines
+(`config/typed-coverage.json`, `config/debt-baseline.json`) and/or tools test files (`tools/test_*.py`) may use
+the cached `make check` and `make link`; any other change under `tools/` or `config/` still needs the fresh
+variants. A drop in the `match` count is a regression, including a function moving to `unapproved` (such as
+through a new `volatile`): find the cause, never explain it away. A debt
 counter that rises (`tools/progress.py --debt-check`) is re-recorded only with a reason
 (`--debt-baseline --allow-increase "<reason>"`; [debt ratchet](docs/engine/debt-ratchet.md)).
 

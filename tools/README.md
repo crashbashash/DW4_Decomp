@@ -17,6 +17,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`whole_file_rows.py`](whole_file_rows.py) | measure a stock library's whole-file rows from retail: members (a file's static initialiser included, found in the static-initializer table), duplicates (reached by call, vtable or exception table; profile twins included), stripped functions, named data, the addresses of anonymous data (`anon`), externals and the owner's `symbol`; a data-only row for a file the linker kept the data of and no function |
 | [`split.py`](split.py) | lay out the retail code and emit one assembly unit per function |
 | [`buildcache.py`](buildcache.py) | a content-addressed result cache for tools/check.py and tools/linkgen.py |
+| [`forkpool.py`](forkpool.py) | run a sweep of tools/check.py or tools/linkgen.py in forked worker processes, so its Python work uses every core |
 | [`units.py`](units.py) | resolve a symbol to its definition in a multi-function source file |
 | [`srctext.py`](srctext.py) | read a source as the compiler sees it, with a unity-built unit's `#include "src/..."` fragments expanded |
 | [`asmsources.py`](asmsources.py) | the owner-approved hand-written `.S` sources in `src/` (`config/assembly-sources.tsv`); refuses any other |

@@ -61,9 +61,8 @@ linker symbols stay unique.
 
 ## Cached gates
 
-A cold `make check` takes about 47 minutes on the full tree and a cold `make link` about 70, though each answer is a pure
-function of its inputs. (The "~40 s" figures further down were measured at a
-few thousand matched functions; they describe the thread pool's scaling, not the full tree's cold run time.) `tools/buildcache.py`
+A cold `make check-fresh` takes about 3 minutes on the full tree (16 cores) and a cold `make link-fresh` about 4, though
+each answer is a pure function of its inputs (*The build runs on every core*, below). `tools/buildcache.py`
 stores definite results in `build/cache/` (untracked), keyed by content:
 
 * **`tools/check.py`** caches two sweeps: split integrity per `asm/*.s` unit (key: the assembly bytes, the retail bytes, the
@@ -565,30 +564,40 @@ linker script) → `mipsel-linux-gnu-ld -G0 --no-warn-mismatch` → `tools/linkc
 
 ## The build runs on every core (`--jobs`)
 
-`make check` and `make link` are thread pools over the compiler and binutils
-subprocesses. The work is subprocess-bound (which releases the GIL), so it scales
-until the cores run out. The timings below were measured on a tree of a
-few thousand matched functions; on the full tree a cold `make check` takes about 47
-minutes (see *Cached gates*), and the scaling is what this table shows:
+Most of a cold `make check` or `make link` is Python (reading objects, applying relocations,
+comparing), not the compiler, so a thread pool kept about one core busy whatever its size:
+the threads take turns on the interpreter. `check.py` and `linkgen.py` therefore run their
+sweeps in forked worker processes (`tools/forkpool.py`): only an item's index goes to a
+worker and only its result comes back, in input order, so the report is the serial one. What a
+worker adds to the caller's state (the cache's entries, `linkgen`'s compiled units and
+exception counts, `verify`'s per-unit results) travels back with each result. Measured on the
+full tree, 16 cores, same tree before and after (identical output, `.text` and `link.ld`):
 
-| step | serial | 16 threads |
+| step | thread pool | worker processes |
 | --- | --- | --- |
-| `make check` (split + coverage) | 2 m 40 s | ~40 s |
-| `tools/linkgen.py --all` | 4 m 59 s | ~28 s |
-| `make link` (layout + linkgen + ld + compare) | 5 m 51 s | ~1 m 10 s |
+| `make check-fresh` | 18 m 39 s | 3 m 11 s |
+| `make link-fresh` | 15 m 7 s | 3 m 34 s |
 
-`--jobs` defaults to the core count; `--jobs 1` forces the serial path. Two things
-make the pool safe, and there is one trap:
+Part of the gain is outside the pools: `unitprofiles.asm_body_names` asked
+`srctext.included` to re-read every fragment of a unity-built unit for each of its
+members, which was about 6 minutes of `tools/progress.py` and 2–3 minutes of the serial
+parts of `check.py` and `linkgen.py`; `included` now reads a file's include lines once per
+modification time.
 
-* **Thread-tagged scratch paths.** Scratch files live in the process's private folder
-  (`cc.scratch_dir()`, removed at exit). Names keyed on the *process* alone would make two workers
-  collide on the same file, so `check.py` and `linkgen.py` use `verify.TMP_TAG()` (pid + thread ident), the
+`--jobs` defaults to the core count; `--jobs 1` forces the serial path in one process. Two
+things make the pool safe, and there is one trap:
+
+* **Process- and thread-tagged scratch paths.** Scratch files live in the process's private folder
+  (`cc.scratch_dir()`, removed at exit; the workers share the caller's, created before they fork).
+  `check.py` and `linkgen.py` name them with `verify.TMP_TAG()` (pid + thread ident), the
   same convention `m2c_batch --jobs` uses ([`m2c-bulk.md`](m2c-bulk.md) §*The loop runs
   on every core*).
 * **Build the objects before emitting the script.** A jump-table unit reads its owner's
   `.rodata` size, so `linkgen` is two phases: build every object (parallel, one output
   path per unit), then walk the layout in order to emit `link.ld`. The serial error
-  report is kept by reporting the first failure in layout order.
+  report is kept by reporting the first failure in layout order. The members of one
+  compiler unit share its compile: every unit's first member is built first, the others once
+  that compile is back in the caller.
 * **The trap: never let the compiler create its output in a large directory.**
   `build/link/` holds ~34k objects, and wibo/MWCC writes its output through a
   *freshly-named* temp file in the destination directory. Creating a new name in a

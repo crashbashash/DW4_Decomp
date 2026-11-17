@@ -42,6 +42,7 @@ import subprocess
 import sys
 
 import cc
+import forkpool
 import exceptions as exception_records
 import units
 import unitcompilers
@@ -2412,11 +2413,21 @@ def verify_one(va, source, flags=FLAGS_DEFAULT, elf=ELF_DEFAULT,
 
 
 # One verification per compiler unit and run: {key: (ok, report)}, and a lock per key so the members
-# a thread pool takes up together wait for the first instead of each compiling the unit again.
-_UNIT_RESULTS = {}
+# a thread pool takes up together wait for the first instead of each compiling the unit again. A
+# tools/forkpool.py worker's new results travel back to the caller (tools/check.py names this memo).
+_UNIT_RESULTS = forkpool.Memo()
 _UNIT_LOCKS = {}
 _UNIT_LOCKS_GUARD = threading.Lock()
-_NOT_SHARED = object()
+
+
+class _NotShared:
+    """The marker of a unit whose result depends on the member asked about; unpickles as itself."""
+
+    def __reduce__(self):
+        return "_NOT_SHARED"
+
+
+_NOT_SHARED = _NotShared()
 
 
 def _source_key(source):
