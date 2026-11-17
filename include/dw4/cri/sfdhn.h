@@ -193,7 +193,10 @@ typedef struct SfdTrnSlot {
 typedef struct SfdMpsSlot {
     int f0;
     int f4;
-    SfdMpsPrm *prm;      /* 8 */
+    union {
+        void *obj;
+        SfdMpsPrm *prm;
+    } hn;                /* 8: the work, a union of the drivers' work types */
     void *fns;           /* 12 */
     int from;            /* 16: the channel it demultiplexes */
     int outputs[3];      /* 20: video, audio and user-data channels */

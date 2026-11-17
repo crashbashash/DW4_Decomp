@@ -1345,8 +1345,24 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     scheduler moves them across it. Every field involved has to be an enum (one left `int` leaves 2 to 22 words);
     one shared enum type works as well as four, `long` does not.
   - *Spelling:* the SDK's enum types: the coded-picture fields of the MPEG-2 picture attributes (`M2vFrameRate`,
-    `M2vPicType`, `M2vPicStruct`), the luminance key `MwsfdLumiKey *` of the Sofdec effect getter.
-  - *Units:* `src/cri/m2vhdec.c` (0x285b10), `src/cri/mwsfsfx.c` (0x298880).
+    `M2vPicType`, `M2vPicStruct`), the luminance key `MwsfdLumiKey *` of the Sofdec effect getter, the user-data
+    level of the MPV handle (`MpvUdLevel`, whose store otherwise holds back the header counter's increment) and
+    the ring id a Sofdec transfer slot reads (`SfdBufId`, whose load retail issues past the out-parameter stores).
+  - *Units:* `src/cri/m2vhdec.c` (0x285b10), `src/cri/mwsfsfx.c` (0x298880), `src/cri/mpvhdr.c` (0x28f098),
+    `src/cri/sfmpv.c` (0x2a2f30).
+- **A read through a union member conflicts with every store.**
+  - *Symptom:* a pointer load retail keeps behind stores of every type: `int` out-parameters and pointer
+    out-parameters alike, where a `void *` field is reordered past the `int` stores and an `int` field past the
+    pointer ones, so no single field type fits all its readers.
+  - *Cause:* ee-gcc 2.96 gives any access whose path passes through a union member alias set 0, which conflicts
+    with every other set. A small test file under `-O2 -G0` shows it: a field read twice around an `int *` store
+    is loaded once when the field is an enum, `short` or pointer, and twice when it is `int`, `unsigned`, `long`
+    or a member of a union.
+  - *Spelling:* the field as a union of the types it holds. The work handle of a Sofdec transfer slot is
+    `union { void *obj; SfdMpv *mpv; } hn` (`SfdMpsPrm *prm` in the MPS slot), read as `streams.hn.mpv`. Retail's
+    order then follows in three functions with no other change, and a fourth matches with its natural
+    `SfdSlot **` out-parameters in place of `void **` ones.
+  - *Units:* `src/cri/sfmpv.c` (0x2a2f30), `src/cri/sfmps.c` (0x2a0f98).
 - **An address-taken local's alias set depends on what the file compiled before it.**
   - *Symptom:* loads of address-taken locals (a local whose address went to a call, read afterwards) ordered against
     a store differently from retail with unchanged C, in a function that matches or stops matching when another
@@ -1360,7 +1376,9 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   - *Reading it:* draft the unit in address order, add each function in its place and re-run the whole unit after
     each; when a function differs only in such loads, the missing piece is an earlier function, not its own source.
     A function that matches in a small file can lose it in the full unit, and the reverse.
-  - *Unit:* `src/cri/sfmpv.c` (0x2a49b8 and 0x2a4468, not matched; 0x2a6f28 flips with the functions before it).
+  - *Unit:* `src/cri/sfmpv.c` (0x2a49b8 not matched; 0x2a6f28 flips with the functions before it; in 0x2a4468
+    a picture-attribute result is copied to a local, since read from the address-taken slot it reloads after
+    the stores to the handle).
 - **In a run of independent stores, the one that ends a register's life is issued first.** Before register
   allocation the scheduler breaks a tie between equally ready instructions in favour of the one that frees
   registers. Stores of one value through one pointer all become ready together, so the last statement, which holds

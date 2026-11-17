@@ -42,6 +42,13 @@ typedef struct MpvPicInf {
     char pad101[128 - 101];
 } MpvPicInf;
 
+/* the header level the user data that follows belongs to */
+typedef enum MpvUdLevel {
+    MPV_UDLVL_SEQ = 1,
+    MPV_UDLVL_GOP = 2,
+    MPV_UDLVL_PIC = 3
+} MpvUdLevel;
+
 /* called with the level after user data was written to a sink */
 typedef void (*MpvUsrDatFn)(void *obj, int level);
 
@@ -132,7 +139,7 @@ typedef struct MpvHn {
     int maxCount;             /* 932: from condition 7 */
     char pad936[8];
     int lower;                /* 944: the lower-layer decoder handle */
-    int usrDatLevel;          /* 948: the level the next user data belongs to */
+    MpvUdLevel usrDatLevel;   /* 948: the level the next user data belongs to */
     MpvBufEnt bufEnt[4];      /* 952: the user-data sink of each level */
     MpvLowSize low;           /* 1000 */
     char pad1012[MPV_HN_SIZE - 1012];

@@ -158,6 +158,93 @@ int mpvhdec_GetCodec(MpvHn *mpv, SfdSjChunk *buf) {
     return mpv->strmType;
 }
 
+/* The sequence header: picture size, rate, buffer size and the optional quantiser matrices (skipped). */
+int mpv_DecSeqHdr(MpvHn *mpv, SfdSj *sj) {
+    MpvPicInf *inf = &mpv->picInf;
+    SfdSjChunk *ck = &mpv->chunk;
+    SfdSjChunk rest;
+    unsigned int cur, nxt;
+    unsigned int val;
+    int bit;
+    char *rp;
+    char *end;
+    int i;
+
+    mpv->usrDatLevel = MPV_UDLVL_SEQ;
+    inf->seqCount++;
+    sj->vtbl->getChunk(sj, 1, 0x7FFFFFFF, ck);
+    BITS_INIT(ck->data, cur, nxt, bit, rp);
+    BITS_GET32(val, cur, nxt, bit, rp);
+    BITS_GET(inf->horizontalSize, 12, cur, nxt, bit, rp);
+    BITS_GET(inf->verticalSize, 12, cur, nxt, bit, rp);
+    BITS_GET(mpv->pelAspectRatio, 4, cur, nxt, bit, rp);
+    BITS_GET(val, 4, cur, nxt, bit, rp);
+    inf->frameRateCode = val;
+    BITS_GET(mpv->bitRate, 18, cur, nxt, bit, rp);
+    BITS_SKIP(1, cur, nxt, bit, rp);
+    BITS_GET(mpv->vbvBufferSize, 10, cur, nxt, bit, rp);
+    BITS_GET1(mpv->constrainedParams, cur, nxt, bit, rp);
+    BITS_GET1(val, cur, nxt, bit, rp);
+    if (val != 0) {
+        for (i = 0; i < 64; i++) {
+            BITS_GET(val, 8, cur, nxt, bit, rp);
+        }
+    }
+    BITS_GET1(val, cur, nxt, bit, rp);
+    if (val != 0) {
+        for (i = 0; i < 64; i++) {
+            BITS_GET(val, 8, cur, nxt, bit, rp);
+        }
+    }
+    inf->mbWidth = (inf->horizontalSize + 15) >> 4;
+    inf->mbHeight = (inf->verticalSize + 15) >> 4;
+    mpv->lastMbAddr = inf->mbHeight * inf->mbWidth - 1;
+    inf->bitRate = mpv->bitRate;
+    inf->vbvBufferSize = mpv->vbvBufferSize;
+    inf->pelAspectRatio = mpv->pelAspectRatio;
+    inf->constrainedParams = mpv->constrainedParams;
+    end = rp + ((bit + 7) >> 3);
+    end -= 8;
+    SJ_SplitChunk(ck, end - mpv->chunk.data, ck, &rest);
+    sj->vtbl->putChunk(sj, 0, ck);
+    sj->vtbl->ungetChunk(sj, 1, &rest);
+    return 0;
+}
+
+/* Decodes the group of pictures header at the head of the stream joint: its time code and flags. */
+int mpvhdec_DecGscSj(MpvHn *mpv, SfdSj *sj) {
+    MpvPicInf *inf = &mpv->picInf;
+    SfdSjChunk *ck = &mpv->chunk;
+    SfdSjChunk rest;
+    unsigned int cur, nxt;
+    unsigned int val;
+    int bit;
+    char *rp;
+    char *end;
+
+    mpv->usrDatLevel = MPV_UDLVL_GOP;
+    inf->gopCount++;
+    sj->vtbl->getChunk(sj, 1, 0x7FFFFFFF, ck);
+    BITS_INIT(ck->data, cur, nxt, bit, rp);
+    BITS_GET32(val, cur, nxt, bit, rp);
+    BITS_GET(val, 25, cur, nxt, bit, rp);
+    inf->pictures = val & 0x3F;
+    val >>= 6;
+    inf->seconds = val & 0x3F;
+    val >>= 7;
+    inf->minutes = val & 0x3F;
+    val >>= 6;
+    inf->hours = val & 0x1F;
+    inf->dropFrameFlag = val >> 5;
+    BITS_GET1(mpv->closedGop, cur, nxt, bit, rp);
+    BITS_GET1(mpv->brokenLink, cur, nxt, bit, rp);
+    end = rp + ((bit + 7) >> 3) - 8;
+    SJ_SplitChunk(ck, end - mpv->chunk.data, ck, &rest);
+    sj->vtbl->putChunk(sj, 0, ck);
+    sj->vtbl->ungetChunk(sj, 1, &rest);
+    return 0;
+}
+
 /* The picture header: temporal reference, coding type, VBV delay and the motion vector ranges of a P or B
  * picture; the extra picture bytes are skipped. -3 when the header runs past the chunk. */
 int mpv_DecPicHdr(MpvHn *mpv, SfdSj *sj) {
@@ -174,7 +261,7 @@ int mpv_DecPicHdr(MpvHn *mpv, SfdSj *sj) {
     char *q;
     char *end;
 
-    mpv->usrDatLevel = 3;
+    mpv->usrDatLevel = MPV_UDLVL_PIC;
     sj->vtbl->getChunk(sj, 1, 0x7FFFFFFF, ck);
     BITS_INIT(ck->data, cur, nxt, bit, rp);
     BITS_GET32(val, cur, nxt, bit, rp);
@@ -270,7 +357,7 @@ int mpvhdec_DecUdscSj(MpvHn *mpv, SfdSj *sj, int type) {
  * complete start-code-terminated block. */
 int mpvhdec_AnalyUd(MpvHn *mpv, char *data, int len) {
     int result = 0;
-    int level = mpv->usrDatLevel;
+    MpvUdLevel level = mpv->usrDatLevel;
     int i;
     int incomplete;
     SfdSjChunk ck;
@@ -287,7 +374,7 @@ int mpvhdec_AnalyUd(MpvHn *mpv, char *data, int len) {
     if (i != len - 3) {
         incomplete = 0;
     }
-    if (level == 1) {
+    if (level == MPV_UDLVL_SEQ) {
         result = mpv_ScanUsrTags(mpv, data, i);
     }
     sj = mpv->bufEnt[level].sj;

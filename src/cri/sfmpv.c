@@ -99,8 +99,8 @@ void sfmpv_FixedStartTtu(SfdPlayer *player);
 void sfmpv_ChkTermFlg(SfdPlayer *player);
 void sfmpv_SetTermDst(SfdPlayer *player, int value);
 int FUN_002a3c38(SfdPlayer *player);
-int sfmpv_GetActiveSize(SfdPlayer *player, int *a, int *b, int *c);
-int sfmpv_DecodeOneUnit(SfdPlayer *player, int a, int b, int c, int *more);
+int sfmpv_GetActiveSize(SfdPlayer *player, int *size, int *code, int *flag);
+int sfmpv_DecodeOneUnit(SfdPlayer *player, int size, int code, int flag, int *done);
 int sfmpv_ConcatSub(SfdPlayer *player);
 int FUN_002a4958(SfdPlayer *player);
 int sfmpv_CalcAudioTotTime(SfdPlayer *player);
@@ -154,9 +154,28 @@ SfdSlot *SFMPVF_AllocFrm(SfdPlayer *player);
 void SFMPVF_EndRefFrm(SfdSlot *slot);
 int FUN_002a8878(SfdPlayer *player);
 SfdSlot *FUN_002a8998(SfdPlayer *player);
-void FUN_002a8a30();
+void FUN_002a8a30(SfdPlayer *player, SfdSlot **best, SfdSlot **second);
 int sfmpvf_IsChkFirst(SfdSlot *a, SfdSlot *b);
 void FUN_002a75b8(SfdPlayer *player);
+int sfmpv_NeedSafeDlmRefresh(SfdRingInfo *ring, SfdDelim code, char *dlm);
+int sfmpv_CalcDistance(SfdRingInfo *ring, char *addr);
+int sfmpv_CheckViBufSiz(SfdPlayer *player);
+void SFBUF_RingGetDlm(SfdPlayer *player, int index, char **dlm, char **end);
+void SFBUF_RingSetDlm(SfdPlayer *player, int index, char *dlm, char *end);
+int SFMPVP_IsPscEnough(SfdPlayer *player);
+int SFCON_IsEndcodeSkip(SfdPlayer *player);
+int SFCON_IsVideoEndcodeSkip(SfdPlayer *player);
+void SFMPVF_TermDec(SfdPlayer *player);
+SfdMpv *SFMPVF_SetGopStat(SfdPlayer *player, int value);
+void sfmpv_PeekChnk(SfdPlayer *player, SfdChunk *out);
+void sfmpv_FixedForSeek(SfdPlayer *player);
+int sfmpv_Concat(SfdPlayer *player, SfdStream *stream);
+int sfmpv_IsTerm(SfdPlayer *player, int level, int kind);
+int sfmpv_IsSkip(SfdPlayer *player, SfdChunk *chunk);
+int sfmpv_SkipFrm(SfdPlayer *player, int sj);
+int sfmpv_DecodePicAtr(SfdPlayer *player, SfdChunk *chunk, int sj, int code, int *result);
+int sfmpv_DecodeFrm(SfdPlayer *player, int sj);
+int sfmpv_GoDdelim(SfdPlayer *player, int unused, int mask);
 
 void SFD_SetMpvPara(SfdMpvCond *cond) {
     DAT_005855b0 = *cond;
@@ -222,7 +241,7 @@ void SFD_SetMpvCond(SfdPlayer *player, int mode, int value) {
             sfd_ReportError(0, 0xff000181);
             return;
         }
-        mpv = player->streams.mpv;
+        mpv = player->streams.hn.mpv;
         h = mpv->handle;
     }
     if (MPV_SetCond(h, mode, mode != 5 ? value : 0) != 0) {
@@ -232,7 +251,7 @@ void SFD_SetMpvCond(SfdPlayer *player, int mode, int value) {
 }
 
 int FUN_002a32b8(SfdPlayer *player, int *values, unsigned int size) {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     void *handle = mpv->handle;
     int count;
     int i;
@@ -251,7 +270,7 @@ void FUN_002a3340(SfdPlayer *player, int *values, int count) {
     int *value;
     int index;
     void *handle;
-    mpv = player->streams.mpv;
+    mpv = player->streams.hn.mpv;
     handle = mpv->handle;
     if (handle != 0) {
         index = 0;
@@ -278,7 +297,7 @@ int SFD_SetVideoUsrSj(SfdPlayer *player, int index, int a, int b, int c) {
     if (SFLIB_CheckHn(player) != 0) {
         return sfd_ReportError(0, 0xFF000184, a, b, c);
     }
-    mpv = player->streams.mpv;
+    mpv = player->streams.hn.mpv;
     MPV_SetUsrSj(mpv->handle, index, a, b, c);
     return 0;
 }
@@ -293,7 +312,7 @@ void SFD_SetPicUsrBuf(SfdPlayer *player, char *base, int count, int size) {
 
 int FUN_002a3558(SfdPlayer *player, char *base, int count, int size)
 {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     SfdBufPool *pool = &mpv->pool;
     int i;
     if (base == 0 || count == 0 || size == 0) {
@@ -394,7 +413,7 @@ void sfmpv_SetCondY16(SfdPlayer *player) {
 }
 
 void FUN_002a3850(SfdPlayer *player) {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     void *handle = mpv->handle;
     int pair[2];
     int result[4];
@@ -446,7 +465,7 @@ int sfmpv_IsPrepFrmEnough(SfdPlayer *player) {
 
 int sfmpv_IsVbvEnough(SfdPlayer *player)
 {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     void *handle = mpv->handle;
     SfdPicWait *wait = &player->picWait;
     int value;
@@ -506,6 +525,85 @@ int FUN_002a3c38(SfdPlayer *player) {
     } while (more != 0);
     FUN_002a75b8(player);
     return status;
+}
+
+/* Sizes the unit at the video ring's read position: *size bytes up to the next start code, *code the
+ * kind of the start code at the read position, and *flag set when the read position holds no start code. */
+int sfmpv_GetActiveSize(SfdPlayer *player, int *size, int *code, int *flag) {
+    SfdRingInfo inf;
+    int bufin = player->streams.f16;
+    char *p;
+    SfdDelim dcode;
+    char *dlm;
+    char *dlmend;
+    char *end;
+    SfdDelim found;
+    int ret;
+    int n;
+
+    *size = 0;
+    *code = 0;
+    *flag = 0;
+    ret = SFBUF_RingGetRead(player, bufin, &inf);
+    if (ret != 0)
+        return ret;
+    if (inf.len0 == 0)
+        return 0;
+    p = sfmpv_SearchDelim(&inf, SFD_DLM_END | SFD_DLM_SEQ | SFD_DLM_GOP | SFD_DLM_PIC | SFD_DLM_SLICE, &dcode);
+    if (p != inf.addr0) {
+        if (p != 0) {
+            *size = sfmpv_CalcDistance(&inf, p);
+        } else {
+            n = inf.len0 + inf.len1 - 3;
+            *size = (n < 0) ? 0 : n;
+        }
+        if (*size > 0)
+            *flag = 1;
+        return 0;
+    }
+    *size = 4;
+    *code = dcode;
+    if (dcode & SFD_DLM_END)
+        return 0;
+    SFBUF_RingGetDlm(player, bufin, &dlm, &dlmend);
+    if (sfmpv_NeedSafeDlmRefresh(&inf, dcode, dlm)) {
+        dlm = 0;
+        if (inf.len1 == 0)
+            end = inf.addr0 + inf.len0;
+        else
+            end = inf.addr1 + inf.len1;
+        if (dlmend != end) {
+            dlmend = end;
+            p = sfmpv_BsearchDelim(&inf, SFD_DLM_END | SFD_DLM_SEQ | SFD_DLM_GOP | SFD_DLM_PIC, &found);
+            dlm = p;
+            SFBUF_RingSetDlm(player, bufin, p, dlmend);
+        }
+    }
+    if (dlm == 0)
+        return sfmpv_CheckViBufSiz(player);
+    found = MPV_CheckDelim((unsigned char *)dlm);
+    switch ((int)found) {
+    case SFD_DLM_GOP:
+        if (dcode & SFD_DLM_SEQ) {
+            p = sfmpv_SearchDelim(&inf, SFD_DLM_GOP, &dcode);
+            if (p == 0 || p == dlm)
+                return sfmpv_CheckViBufSiz(player);
+        }
+        break;
+    case SFD_DLM_PIC:
+        if (dcode & (SFD_DLM_SEQ | SFD_DLM_GOP)) {
+            p = sfmpv_SearchDelim(&inf, SFD_DLM_PIC, &dcode);
+            if (p == 0 || p == dlm)
+                return sfmpv_CheckViBufSiz(player);
+        }
+        break;
+    case SFD_DLM_SEQ:
+    case SFD_DLM_END:
+    default:
+        break;
+    }
+    *size = sfmpv_CalcDistance(&inf, dlm);
+    return 0;
 }
 
 /* Whether the delimiter the ring remembers is no longer a safe next start code (1) or still is (0). */
@@ -659,6 +757,94 @@ char *sfmpv_BsearchDelim(SfdRingInfo *ring, int mask, SfdDelim *code) {
     return 0;
 }
 
+/* Decodes the start-code-delimited unit at the read position. */
+int sfmpv_DecodeOneUnit(SfdPlayer *player, int size, int code, int flag, int *done) {
+    SfdDecodeFlags *decode = &player->decode;
+    SfdStreams *streams;
+    SfdMpv *mpv;
+    int bufin;
+    int ret;
+    int sj;
+    int result;
+    int picResult;
+    SfdChunk chunk;
+
+    *done = 0;
+    streams = &player->streams;
+    bufin = streams->f16;
+    mpv = streams->hn.mpv;
+    decode->f36 = 0;
+    if (SFMPVP_IsPscEnough(player) == 0) {
+        if (sfmpv_GetTermSrc(player) == 1) {
+            SFMPVF_TermDec(player);
+            return 0;
+        }
+        decode->f36 = 1;
+        return sfmpv_CheckViBufSiz(player);
+    }
+    if (mpv->state != (SFD_DLM_END | SFD_DLM_SEQ | SFD_DLM_GOP | SFD_DLM_PIC) || mpv->f368 == 0) {
+        code &= SFD_DLM_END | SFD_DLM_SEQ | SFD_DLM_GOP | SFD_DLM_PIC;
+    }
+    ret = SFBUF_RingGetSj(player, bufin, &sj);
+    if (ret != 0) {
+        return 0;
+    }
+    if (sj == 0) {
+        return ret;
+    }
+    if (code & (SFD_DLM_END | SFD_DLM_SEQ | SFD_DLM_GOP)) {
+        SFMPVF_SetGopStat(player, 1);
+    }
+    if (code == SFD_DLM_END) {
+        sfmpv_FixedForSeek(player);
+    }
+    if (code == SFD_DLM_END && SFCON_IsEndcodeSkip(player) != 0) {
+        if (sfmpv_Concat(player, (SfdStream *)sj) == 0) {
+            *done = 1;
+        }
+    } else if (code == SFD_DLM_END && SFCON_IsVideoEndcodeSkip(player) != 0) {
+        sfmpv_DiscardSec(player, (SfdStream *)sj);
+        *done = 1;
+    } else if (flag == 0 && sfmpv_IsTerm(player, size, code)) {
+        SFMPVF_TermDec(player);
+    } else if (flag == 0 && size <= 4) {
+        decode->f36 = 1;
+    } else if (code & (SFD_DLM_SEQ | SFD_DLM_GOP | SFD_DLM_PIC)) {
+        sfmpv_PeekChnk(player, &chunk);
+        ret = sfmpv_DecodePicAtr(player, &chunk, sj, code, &result);
+        if (ret != 0) {
+            return ret;
+        }
+        /* held in a local: read from result, it is reloaded after the mpv stores below */
+        picResult = result;
+        if (picResult == 0) {
+            if (code & mpv->state) {
+                mpv->state = SFD_DLM_END | SFD_DLM_SEQ | SFD_DLM_GOP | SFD_DLM_PIC;
+            }
+            mpv->f368 = 1;
+        }
+        if (code == SFD_DLM_SEQ && picResult == -2) {
+            mpv->state = SFD_DLM_END | SFD_DLM_SEQ;
+        }
+        *done = 1;
+    } else if (code & SFD_DLM_SLICE) {
+        sfmpv_PeekChnk(player, &chunk);
+        if (sfmpv_IsSkip(player, &chunk)) {
+            ret = sfmpv_SkipFrm(player, sj);
+            if (ret == 0) {
+                *done = 1;
+            }
+        } else {
+            ret = sfmpv_DecodeFrm(player, sj);
+        }
+    } else if (code != SFD_DLM_END) {
+        if (sfmpv_GoDdelim(player, sj, SFD_DLM_END | SFD_DLM_SEQ | SFD_DLM_GOP | SFD_DLM_PIC) > 0) {
+            *done = 1;
+        }
+    }
+    return ret;
+}
+
 void sfmpv_PeekChnk(SfdPlayer *player, SfdChunk *out) {
     SfdRingInfo info;
     if (SFBUF_RingGetRead(player, player->streams.f16, &info) != 0) {
@@ -688,7 +874,7 @@ int sfmpv_Concat(SfdPlayer *player, SfdStream *stream) {
 
 int sfmpv_ConcatSub(SfdPlayer *player) {
     SfdTimer *timer = &player->timer;
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     int count;
     if (SFSET_GetCond(player, 6) == 0) {
         count = FUN_002a4958(player);
@@ -840,7 +1026,7 @@ long FUN_002a5208(int count, int rate) {
 void sfmpv_CalcRepeatField(SfdPlayer *player, SfdPicInfo *pic, int newGop) {
     SfdTimer *timer = &player->timer;
     SfdFieldEntry *fields = timer->fields;
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     SfdSlot *ref;
     int i;
     int idx;
@@ -1027,7 +1213,7 @@ void sfmpv_ReadTcode(SfdPicInfo *pic, SfdTimeCode *out) {
 int sfmpv_FirstPicAtr(SfdPlayer *player, void *sj, SfdPicInfo *pic, SfdChunk *chunk)
 {
     SfdPicGeom *geom = &player->geom;
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     int pts;
     int x, y, z;
     int n;
@@ -1091,7 +1277,7 @@ void sfmpv_SetMvInf(SfdPicGeom *geom, int pts, SfdPicInfo *pic, int x) {
 /* The pictures must fit the frame size the decoder was set up for, and its frame buffers must hold a
  * picture: a macroblock takes 1024 bytes as ARGB8888 output (format 2), 384 as YCC 4:2:0. */
 int sfmpv_ChkBufSiz(SfdPlayer *player, SfdPicGeom *geom) {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     SfdMpvCond *cond = &mpv->cond;
     int fmt = player->f56;
     int count = cond->count;
@@ -1129,7 +1315,7 @@ int sfmpv_IsConcatTimeFix(SfdPlayer *player) {
 }
 
 int sfmpv_IsSkip(SfdPlayer *player, SfdChunk *chunk) {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     SfdPicInfo *pic = &mpv->pic;
     int skip;
     int busy;
@@ -1151,7 +1337,7 @@ int sfmpv_IsSkip(SfdPlayer *player, SfdChunk *chunk) {
 }
 
 int sfmpv_IsDefect(SfdPlayer *player, int kind) {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     unsigned int mode = mpv->f116;
     int result = 0;
     switch (mode) {
@@ -1171,7 +1357,7 @@ int sfmpv_IsDefect(SfdPlayer *player, int kind) {
 
 void FUN_002a6368(SfdPlayer *player, SfdPicInfo *pic, int kind)
 {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     void *handle = mpv->handle;
     int mode = mpv->f116;
     int a, b;
@@ -1260,7 +1446,7 @@ int sfmpv_IsEmptySkip(SfdPlayer *player, unsigned int type, SfdChunk *chunk) {
 /* Whether the picture would be shown late: the timer's skip hook decides when one is set, otherwise
  * its display time against the current time, within the allowed number of skips. */
 int sfmpv_IsLate(SfdPlayer *player, unsigned int type) {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     SfdTimer *timer = &player->timer;
     SfdTimeStamp *cur = &timer->cur;
     SfdTimeStamp *ofs = &timer->f280;
@@ -1310,7 +1496,7 @@ void sfmpv_GetDtime(SfdPlayer *player, int unused, int *first, int *second) {
 
 int sfmpv_SkipFrm(SfdPlayer *player, int sj)
 {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     void *handle = mpv->handle;
     SfdPicInfo *pic;
     int before;
@@ -1342,7 +1528,7 @@ void sfmpv_SetSkipTtu(SfdPlayer *player) {
 
 /* takes the frame the picture is decoded into and the reference planes it predicts from */
 int sfmpv_SetFrmPara(SfdPlayer *player, SfdPicInfo *pic, SfdFrmPara *para, SfdSlot **out) {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     SfdDecodeFlags *decode = &player->decode;
     SfdPlanes *planes;
     int columns;
@@ -1468,7 +1654,7 @@ void FUN_002a70e8(SfdPlayer *player, SfdSlot *slot) {
 }
 
 void FUN_002a71d0(SfdPlayer *player, SfdSlot *slot, void *source) {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     int kind;
     char *data;
     int size;
@@ -1597,7 +1783,7 @@ int SFMPV_Create(SfdPlayer *player)
     ret = SFSET_GetCond(player, 5);
     if (ret == 0)
         return ret;
-    player->streams.mpv = mpv;
+    player->streams.hn.mpv = mpv;
     ret = sfmpv_InitInf(player, mpv);
     if (ret != 0)
         return ret;
@@ -1723,7 +1909,7 @@ void FUN_002a7b48(SfdPlayer *player, int code) {
 
 int FUN_002a7b88(SfdPlayer *player)
 {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     void *dec = mpv->handle;
     if (dec == 0)
         return 0;
@@ -1797,7 +1983,7 @@ int SFMPV_AddRead(SfdPlayer *player, char *body) {
 }
 
 int FUN_002a8088(SfdPlayer *player, char *body) {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     SfdPicRecord *record = FUN_002a8158(player, body);
     SfdSlot *found;
     SfdSlot *current;
@@ -1819,7 +2005,7 @@ SfdPicRecord *FUN_002a8158(SfdPlayer *player, char *body) {
 }
 
 int SFMPV_Seek(SfdPlayer *player) {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     int flag[4];
     int ready;
     int status;
@@ -1861,7 +2047,7 @@ int sfmpv_ReprocessShc(SfdPlayer *player, SfdMpv *mpv, int *ok)
 
 SfdPicture *sfmpv_GetHd(SfdPlayer *player) {
     char *work = player->userWork;
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     if (work == 0) {
         return 0;
     }
@@ -1905,7 +2091,7 @@ void FUN_002a8398(SfdPlayer *player, char *body) {
 
 SfdSlot *FUN_002a8440(SfdPlayer *player, char *body) {
     SfdPicRecord *record = player->records;
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     SfdSlot *slot = mpv->slots;
     int i;
     for (i = 0; i < 16; i++) {
@@ -1919,7 +2105,7 @@ SfdSlot *FUN_002a8440(SfdPlayer *player, char *body) {
 }
 
 SfdPicRecord *FUN_002a8488(SfdPlayer *player, SfdSlot *target) {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     int i = 0;
     int count = mpv->slotCount;
     SfdSlot *slot = mpv->slots;
@@ -1942,17 +2128,17 @@ SfdPicRecord *FUN_002a8488(SfdPlayer *player, SfdSlot *target) {
 }
 
 void SFMPVF_TermDec(SfdPlayer *player) {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     mpv->f124 = 1;
 }
 
 int SFMPVF_IsTermDec(SfdPlayer *player) {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     return mpv->f124;
 }
 
 SfdMpv *SFMPVF_SetGopStat(SfdPlayer *player, int value) {
-    SfdMpv *mpv = player->streams.mpv;
+    SfdMpv *mpv = player->streams.hn.mpv;
     mpv->f128 = value;
     return mpv;
 }
@@ -1965,7 +2151,7 @@ int SFMPVF_GetNumFrm(SfdPlayer *player) {
     int i;
     int n;
     sfd_Lock(guard);
-    mpv = player->streams.mpv;
+    mpv = player->streams.hn.mpv;
     count = 0;
     slot = mpv->slots;
     n = mpv->slotCount;
@@ -1989,7 +2175,7 @@ SfdSlot *SFMPVF_AllocFrm(SfdPlayer *player) {
     int i;
     int n;
     sfd_Lock(guard);
-    mpv = player->streams.mpv;
+    mpv = player->streams.hn.mpv;
     n = mpv->slotCount;
     slot = mpv->slots;
     for (i = 0; i < n; i++, slot++) {
@@ -2051,7 +2237,7 @@ SfdSlot *SFMPVF_HoldFrm(SfdPlayer *player, int *out) {
     SfdSlot *slot;
     int i, cnt;
     sfd_Lock(&c);
-    mpv = player->streams.mpv;
+    mpv = player->streams.hn.mpv;
     cnt = mpv->slotCount;
     slot = mpv->slots;
     *out = 0;
@@ -2147,14 +2333,13 @@ SfdSlot *FUN_002a8998(SfdPlayer *player) {
     return second;
 }
 
-/* matching construct: manual — out-parameters and the context link are void * (same alias set), which keeps the clearing stores after the context load */
-void FUN_002a8a30(SfdPlayer *player, void **best, void **second) {
+void FUN_002a8a30(SfdPlayer *player, SfdSlot **best, SfdSlot **second) {
     SfdMpv *mpv;
     SfdSlot *slot;
     int held = 0;
     int i;
     int n;
-    mpv = player->streams.mpv;
+    mpv = player->streams.hn.mpv;
     *best = 0;
     *second = 0;
     n = mpv->slotCount;

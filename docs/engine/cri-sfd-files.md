@@ -98,7 +98,9 @@ guesses from what each file does.
 - `sfmpv_SetFrmPara` follows the RE4 `sfd_mpv.c` body with `SFD_CalcYccPlane`'s 64-byte stride arithmetic; its frame
   parameter block (SDK `SFMPV_MPVFRM`) is `SfdFrmPara`. `0x2a5248` is the RE4 `sfmpv_CalcRepeatField` with the time-code
   copy and the backward-reference retime moved into calls.
-- Several Sofdec bodies differ only where retail treats an `int` access as outside `int`'s alias set: the transfer slot's
-  input channel read in `sfmpv_GetActiveSize` (matches when read through an enum or pointer lvalue), the group-count
-  increment in `mpvhdec_DecGscSj` (matches through a pointer lvalue), and the frame counters stored by `0x2a68e8`
-  (SDK `sfmpv_DecodeFrm`). None of these has source evidence for a non-`int` type, so they stay unmatched.
+- The transfer slot's ring id is the enum `SfdBufId` and its work handle a union of the drivers' work types
+  ([a read through a union member](understanding-shapes.md#scheduling-ee-gcc)): with those types `sfmpv_GetActiveSize`,
+  `sfmpv_DecodeOneUnit` and `0x2a8a30` (with `SfdSlot **` out-parameters) match. `sfmps_DemuxChunk` still differs
+  in the register of one constant, which keeps a shared store from merging, and `sfmpv_DecodeFrm` hoists the stack
+  loads of its address-taken counts above the frame-counter stores, which neither an array for the counts nor
+  pointer-typed stores reproduces.

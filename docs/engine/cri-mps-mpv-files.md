@@ -28,7 +28,7 @@ onwards, from `0x290b28`) is described with the rest of the MPV library.
 - `MPS_Init` stores the version pointer through a `char *volatile` word, approved under
   [build-string stores](source-approvals.md#build-string-stores). `mpslib_InitSys` matches only under MWCC (its
   stores come out in another order under EE GCC) and links from retail.
-- `mpv_DecSeqHdr`, `mpvhdec_DecGscSj` and `mpv_DecPicHdr` have no source (the last two lose a few words to the
-  register choice and the prologue's store order); their names are guesses from their size and the start codes
-  `MPV_DecodePicAtrSj` dispatches on. `MPV_DecodePicAtrSj`, `mpvhdec_DecEscSj` and `mpvhdec_AnalyUd` match.
+- `mpv_DecSeqHdr`, `mpvhdec_DecGscSj` and `mpv_DecPicHdr` match with the user-data level typed `MpvUdLevel`; their
+  names are guesses from their size and the start codes `MPV_DecodePicAtrSj` dispatches on. `MPV_DecodePicAtrSj`,
+  `mpvhdec_DecEscSj` and `mpvhdec_AnalyUd` match.
 - The handle field pair at `MpsHn` +236 is set by `MPS_SetAuxFn` but no MPS code with source calls it.

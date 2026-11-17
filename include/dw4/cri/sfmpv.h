@@ -362,12 +362,21 @@ typedef struct SfdPicRecord {
     char body[128];
 } SfdPicRecord;
 
+/* An SFBUF ring id; SFD_BUF_NONE marks a transfer slot with no ring connected. */
+typedef enum SfdBufId {
+    SFD_BUF_NONE = 8
+} SfdBufId;
+
+/* The video driver's transfer slot: its work, a union of the drivers' work types, and the ring it reads. */
 typedef struct SfdStreams {
     int f0;
     int f4;
-    void *mpv;
+    union {
+        void *obj;
+        SfdMpv *mpv;
+    } hn;
     int f12;
-    int f16;
+    SfdBufId f16;
     int f20;
     int pad24[2];
     int f32;
