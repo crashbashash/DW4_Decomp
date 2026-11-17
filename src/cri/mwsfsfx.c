@@ -38,38 +38,6 @@ typedef struct MwsfdFrm {
     int f48;        /* 48 */
 } MwsfdFrm;
 
-extern char DAT_004f4028[];
-extern char DAT_004f4050[];
-extern char DAT_004f4078[];
-extern char DAT_004f40a0[];
-extern char DAT_004f40c0[];
-extern char DAT_004f40f0[];
-extern char DAT_004f4120[];
-extern char DAT_004f4150[];
-extern char DAT_004f4180[];
-extern char DAT_004f41b8[];
-extern char DAT_004f4200[];
-extern char DAT_004f4250[];
-extern char DAT_004f4288[];
-extern char DAT_004f42c8[];
-extern char DAT_004f4300[];
-extern char DAT_004f4338[];
-extern char DAT_004f4370[];
-extern char DAT_004f43a8[];
-extern char DAT_004f43e0[];
-extern char CRITAGS[];
-extern char CRITAGE[];
-extern char DAT_004f4420[];
-extern char DAT_004f4458[];
-extern char DAT_004f4460[];
-extern char DAT_004f4468[];
-extern char DAT_004f4498[];
-extern char DAT_004f44c8[];
-extern char DAT_004f44f8[];
-extern char DAT_004f4528[];
-extern char DAT_004f4558[];
-extern char DAT_004f4588[];
-extern char DAT_004f45c0[];
 
 void FUN_002b3b78(void);
 void FUN_002b3b88(void);
@@ -184,7 +152,7 @@ int mwsfsfx_CnvFrmFmtTypeToSfx(unsigned int format)
         result = 3;
         break;
     default:
-        MWSFSVM_Error(DAT_004f4028);
+        MWSFSVM_Error("E201184 : MwsfdBufFmt value is invalid.");
         result = 3;
         break;
     }
@@ -265,7 +233,7 @@ int FUN_00297aa8(MwsfdPly *ply)
         result = 3;
         break;
     default:
-        MWSFSVM_Error(DAT_004f4050);
+        MWSFSVM_Error("E301272 : picture_structure is invalid.");
         break;
     }
     return result;
@@ -286,7 +254,7 @@ SfxChromaFmt FUN_00297b18(MwsfdPly *ply)
         result = 3;
         break;
     default:
-        MWSFSVM_Error(DAT_004f4078);
+        MWSFSVM_Error("E301273 : chroma_format is invalid.");
         break;
     }
     return result;
@@ -304,7 +272,7 @@ int FUN_00297b88(MwsfdChromaPos position)
         result = 1;
         break;
     default:
-        MWSFSVM_Error(DAT_004f40a0);
+        MWSFSVM_Error("E301274 : chromapos is invalid.");
         break;
     }
     return result;
@@ -326,9 +294,9 @@ void mwPlyFxCnvFrmZ16(MwsfdPly *ply, MwsfdFrm *frm, int arg)
     void *sfx;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        MWSFSVM_Error(DAT_004f40c0);
+        MWSFSVM_Error("E2011911: mwPlyFxCnvFrmZ16: handle is invalid.");
     } else if (frm->addr == 0) {
-        MWSFSVM_Error(DAT_004f40f0);
+        MWSFSVM_Error("E2011912: mwPlyFxCnvFrmZ16: getfrm is failed.");
     } else {
         sfx = MWSFSFX_GetSfxHn(ply);
         mwsfsfx_CnvFrmInfToSfx(ply, frm, &prm);
@@ -342,9 +310,9 @@ void mwPlyFxCnvFrmZ32(MwsfdPly *ply, MwsfdFrm *frm, int arg)
     void *sfx;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        MWSFSVM_Error(DAT_004f4120);
+        MWSFSVM_Error("E2011913: mwPlyFxCnvFrmZ32: handle is invalid.");
     } else if (frm->addr == 0) {
-        MWSFSVM_Error(DAT_004f4150);
+        MWSFSVM_Error("E2011914: mwPlyFxCnvFrmZ32: getfrm is failed.");
     } else {
         sfx = MWSFSFX_GetSfxHn(ply);
         mwsfsfx_CnvFrmInfToSfx(ply, frm, &prm);
@@ -357,16 +325,16 @@ void mwPlyFxSetCompoMode(MwsfdPly *ply, int mode)
     int compo = mode;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        MWSFSVM_Error(DAT_004f4180);
+        MWSFSVM_Error("E201214: mwPlyFxSetCompoMode: handle is invalid.");
         return;
     }
     if (ply->addInfSj == 0) {
         if (mode == 0x101) {
-            MWSFSVM_Error(DAT_004f41b8);
+            MWSFSVM_Error("E204011: mwPlyFxSetCompoMode: COMPO_Z needs setting in MWPLY Creation.");
             return;
         }
         if (mode == 0) {
-            MWSFSVM_Error(DAT_004f4200);
+            MWSFSVM_Error("E204012: mwPlyFxSetCompoMode: COMPO_AUTO needs setting in MWPLY Creation.");
             return;
         }
     }
@@ -388,7 +356,7 @@ void MWSFSFX_SetCompoMode(MwsfdPly *ply, int mode)
 int mwPlyFxGetCompoMode(MwsfdPly *ply)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        MWSFSVM_Error(DAT_004f4250);
+        MWSFSVM_Error("E2011915: mwPlyFxGetCompoMode: handle is invalid.");
         return 0;
     }
     return SFX_GetCompoMode(MWSFSFX_GetSfxHn(ply));
@@ -422,7 +390,7 @@ void FUN_00297f60(MwsfdPly *ply, int a, int b)
 void mwPlyFxSetOutBufSize(MwsfdPly *ply, int *width, int *height)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        MWSFSVM_Error(DAT_004f4288);
+        MWSFSVM_Error("E307092: mwPlyFxGetOutBufPitchHeight: handle is invalid.");
         return;
     }
     SFX_GetOutBufSize(MWSFSFX_GetSfxHn(ply), width, height);
@@ -443,7 +411,7 @@ void mwPlyFxGetOutBufSize(MwsfdPly *ply, int a, int b, int c)
     void *sfx;
 
     if (!MWSFD_IsEnableHndl(ply)) {
-        MWSFSVM_Error(DAT_004f42c8);
+        MWSFSVM_Error("E306091: MWSFSFX_SetOutBufSize: handle is invalid.");
         return;
     }
     sfx = MWSFSFX_GetSfxHn(ply);
@@ -454,7 +422,7 @@ void mwPlyFxGetOutBufSize(MwsfdPly *ply, int a, int b, int c)
 void mwPlyFxSetOutZscale(MwsfdPly *ply, int value)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        MWSFSVM_Error(DAT_004f4300);
+        MWSFSVM_Error("E2011918: mwPlyFxSetOutZscale: handle is invalid.");
         return;
     }
     SFX_SetOutZscale(MWSFSFX_GetSfxHn(ply), value);
@@ -463,7 +431,7 @@ void mwPlyFxSetOutZscale(MwsfdPly *ply, int value)
 int mwPlyFxGetOutZscale(MwsfdPly *ply)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        MWSFSVM_Error(DAT_004f4338);
+        MWSFSVM_Error("E2011919: mwPlyFxGetOutZscale: handle is invalid.");
         return 0;
     }
     return SFX_GetOutZscale(MWSFSFX_GetSfxHn(ply));
@@ -472,7 +440,7 @@ int mwPlyFxGetOutZscale(MwsfdPly *ply)
 void mwPlyFxSetOutZoffset(MwsfdPly *ply, int value)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        MWSFSVM_Error(DAT_004f4370);
+        MWSFSVM_Error("E2011920: mwPlyFxSetOutZoffset: handle is invalid.");
         return;
     }
     SFX_SetOutZoffset(MWSFSFX_GetSfxHn(ply), value);
@@ -481,7 +449,7 @@ void mwPlyFxSetOutZoffset(MwsfdPly *ply, int value)
 int mwPlyFxGetOutZoffset(MwsfdPly *ply)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        MWSFSVM_Error(DAT_004f43a8);
+        MWSFSVM_Error("E2011921: mwPlyFxGetOutZoffset: handle is invalid.");
         return 0;
     }
     return SFX_GetOutZoffset(MWSFSFX_GetSfxHn(ply));
@@ -517,7 +485,7 @@ SjObj *MWSFTAG_CreateAinfSj(MwsfdPly *ply)
     }
     sj = SJRBF_Create(ply->addInfBase, ply->addInfSize, 0);
     if (sj == 0) {
-        MWSFSVM_Error(DAT_004f43e0);
+        MWSFSVM_Error("E201211 mwPlyCreate: can't create AddInfSJ");
         mwSfdDestroy(ply);
         return 0;
     }
@@ -607,7 +575,7 @@ void mwsfd_GetCriTags(MwsfdPly *ply)
     }
     in.addr = ply->addInfBase;
     in.size = size;
-    if (SJ_SearchTag(&in, CRITAGS, CRITAGE, &out) == 0) {
+    if (SJ_SearchTag(&in, "CRITAGS", "CRITAGE", &out) == 0) {
         inf->addr = 0;
         inf->size = 0;
         inf->valid = 1;
@@ -635,7 +603,7 @@ void mwPlyAttachAddInfBuf(MwsfdPly *ply, char *buf, int size)
     MwsfdUsrBuf *ub = &ply->usrBuf;
 
     if (size < 0x20000) {
-        MWSFSVM_Error(DAT_004f4420);
+        MWSFSVM_Error("W2121001 : mwPlyAttachAddInfBuf(): bufsize is short.");
     }
     ub->buf = buf;
     ub->size = size;
@@ -654,7 +622,7 @@ void mwsftag_GetSFXinfFromAinf(MwsfdPly *ply)
     }
     in.addr = inf->addr;
     in.size = inf->size;
-    if (SJ_SearchTag(&in, DAT_004f4458, DAT_004f4460, &out) == 0) {
+    if (SJ_SearchTag(&in, "SFXINFS", "SFXINFE", &out) == 0) {
         SFX_SetTagInf(sfx, 0, 0);
         return;
     }
@@ -750,11 +718,11 @@ void MWSFD_MakeTblZ16(MwsfdPly *ply, MwsfdFrm *frm)
     void *sfx;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        MWSFSVM_Error(DAT_004f4468);
+        MWSFSVM_Error("E202283: MWSFD_MakeTblZ16: handle is invalid.");
         return;
     }
     if (frm->addr == 0) {
-        MWSFSVM_Error(DAT_004f4498);
+        MWSFSVM_Error("E202284: MWSFD_MakeTblZ16: getfrm is failed.");
         return;
     }
     sfx = MWSFSFX_GetSfxHn(ply);
@@ -768,11 +736,11 @@ void MWSFD_MakeTblZ32(MwsfdPly *ply, MwsfdFrm *frm)
     void *sfx;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        MWSFSVM_Error(DAT_004f44c8);
+        MWSFSVM_Error("E202285: MWSFD_MakeTblZ32: handle is invalid.");
         return;
     }
     if (frm->addr == 0) {
-        MWSFSVM_Error(DAT_004f44f8);
+        MWSFSVM_Error("E202286: MWSFD_MakeTblZ32: getfrm is failed.");
         return;
     }
     sfx = MWSFSFX_GetSfxHn(ply);
@@ -873,7 +841,7 @@ void FUN_00298c68(void)
 void FUN_00298c80(MwsfdPly *ply, int value)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        MWSFSVM_Error(DAT_004f4528);
+        MWSFSVM_Error("E304162: MWSFD_GetMaxAlpha: handle is invalid.");
         return;
     }
     FUN_002b3ff8(MWSFSFX_GetSfxHn(ply), value);
@@ -882,7 +850,7 @@ void FUN_00298c80(MwsfdPly *ply, int value)
 int FUN_00298ce8(MwsfdPly *ply)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        MWSFSVM_Error(DAT_004f4558);
+        MWSFSVM_Error("E304161: MWSFD_GetMaxAlpha: handle is invalid.");
         return 0;
     }
     return FUN_002b4050(MWSFSFX_GetSfxHn(ply));
@@ -911,7 +879,7 @@ void mwsfsfx_SetCompoMode(MwsfdPly *ply)
 void mwPlySetCnvBottomUp(MwsfdPly *ply, int value)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        MWSFSVM_Error(DAT_004f4588);
+        MWSFSVM_Error("E404010: mwPlySetCnvBottomUp: handle is invalid.");
         return;
     }
     SFX_SetProgOut(MWSFSFX_GetSfxHn(ply), value);
@@ -920,7 +888,7 @@ void mwPlySetCnvBottomUp(MwsfdPly *ply, int value)
 int mwPlyGetCnvBottomUp(MwsfdPly *ply)
 {
     if (MWSFD_IsEnableHndl(ply) == 0) {
-        MWSFSVM_Error(DAT_004f45c0);
+        MWSFSVM_Error("E404011: mwPlyGetCnvBottomUp: handle is invalid.");
         return 0;
     }
     return SFX_GetProgOut(MWSFSFX_GetSfxHn(ply));

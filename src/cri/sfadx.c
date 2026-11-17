@@ -111,7 +111,6 @@ struct SfdAdxHn {
     char *work;             /* 13864 */
 };
 
-extern char DAT_004f4b68[];
 extern char sfadx_silent_block[];
 extern SfdAdxCfg sfadxt_para;
 extern int DAT_0057faac;
@@ -211,7 +210,7 @@ int SFADXT_IsHeader(unsigned char *header, int length, int *headerSize) {
     if (header[1] != 0) {
         return 0;
     }
-    return strncmp(header + 282, DAT_004f4b68, 6) == 0;
+    return strncmp(header + 282, "(c)CRI", 6) == 0;
 }
 
 int SFADXT_IsEndcode(unsigned char *header, int length, int *headerSize) {

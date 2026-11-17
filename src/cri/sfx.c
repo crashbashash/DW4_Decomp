@@ -23,12 +23,6 @@ extern int DAT_004bec24;
 extern SfxLib DAT_004bec28;
 extern char *volatile DAT_005856a0; /* matching construct: volatile — stored through a materialised address */
 
-extern char DAT_004f57b8[];
-extern char DAT_004f57f0[];
-extern char DAT_004f5820[];
-extern char DAT_004f5840[];
-extern char DAT_004f5860[];
-extern char DAT_004f5868[];
 
 void FUN_00283038();
 void FUN_00283058(void);
@@ -75,7 +69,7 @@ void SFX_Init(void) {
 }
 
 char *sfx_GetVersionStr(void) {
-    return DAT_004f57b8;
+    return "\nCRI SFX/PS2EE Ver.2.08 Build:Oct  6 2004 11:36:34\n";
 }
 
 void sfx_InitLibWork(void) {
@@ -109,20 +103,20 @@ SfxHn *SFX_Create(int work, int wksize, int a2, int a3) {
     hn = sfx_SearchFreeHn();
     if (hn == 0) return hn;
     if (sfx_IsEnoughHnWorkSize(wksize, a2, a3) != 1) {
-        SFXLIB_Error(0, 0, DAT_004f57f0);
+        SFXLIB_Error(0, 0, "E201194: sfx_InitHn: work size is short.");
         return 0;
     }
     sfx_InitHn(hn, work, wksize);
     zhn = SFXZ_Create();
     if (zhn == 0) {
-        SFXLIB_Error(0, 0, DAT_004f5820);
+        SFXLIB_Error(0, 0, "E201281: SfxZHn: can't create.");
         SFX_Destroy(hn);
         return 0;
     }
     hn->zhn = zhn;
     ahn = SFXA_Create();
     if (ahn == 0) {
-        SFXLIB_Error(0, 0, DAT_004f5840);
+        SFXLIB_Error(0, 0, "E202011: SfxAHn: can't create.");
         SFX_Destroy(hn);
         return 0;
     }
@@ -279,7 +273,7 @@ void SFX_SetTagInf(SfxHn *hn, char *data, int size) {
     zhn = hn->zhn;
     in.data = data;
     in.size = size;
-    if (SJ_SearchTag(&in, DAT_004f5860, DAT_004f5868, &out) == 0)
+    if (SJ_SearchTag(&in, "SFXZ", "SFXINFE", &out) == 0)
         SFXZ_SetTagInf(zhn, 0, 0);
     else
         SFXZ_SetTagInf(zhn, out.data, out.size);

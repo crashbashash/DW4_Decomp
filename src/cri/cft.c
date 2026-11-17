@@ -22,7 +22,6 @@ extern char *DAT_004bb3e8;
 extern int DAT_004bb3ec;
 extern int cft_ver_str;
 extern CftGifPacket DAT_004bb3f8;
-extern char DAT_004f2800[];
 extern char *volatile DAT_00573ea8;
 
 int *CFT_GetVersionStr(void);
@@ -50,7 +49,7 @@ int FUN_00283048(void)
 
 void FUN_00283058(void)
 {
-    DAT_00573ea8 = DAT_004f2800;
+    DAT_00573ea8 = "\nCRI CFT/PS2EE Ver.1.57 Build:Oct  6 2004 11:36:30\n";
     *CFT_GetVersionStr() = 0;
     FUN_002830a8(128);
 }

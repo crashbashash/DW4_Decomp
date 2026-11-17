@@ -19,11 +19,6 @@ struct SfxCnvTbl {
     void *table;
 };
 
-extern char DAT_004f53b0[];
-extern char DAT_004f53e0[];
-extern int D_004f5758[];
-extern int D_004f5788[];
-
 void sfxcnv_MakeTable(SfxCnvTbl *tbl, SfxFrame *frm, unsigned int compo);
 int FUN_002b3bf0(void *hn);
 void FUN_002b50c8(SfxCnvTbl *tbl, int n);
@@ -57,7 +52,7 @@ int sfxcnv_IsCnvUpHalf(SfxCnvHn *hn) {
     case 273:
         break;
     default:
-        SFXLIB_Error(0, 0, DAT_004f53b0);
+        SFXLIB_Error(0, 0, "E201312: sfxcnv_IsCnvUpHalf : compo is invalid.");
         break;
     }
     return 0;
@@ -117,7 +112,7 @@ void sfxcnv_MakeTable(SfxCnvTbl *tbl, SfxFrame *frm, unsigned int compo)
     case 0:
     case 100:
     default:
-        SFXLIB_Error(tbl, frm, DAT_004f53e0);
+        SFXLIB_Error(tbl, frm, "E201311: sfxcnv_MakeTable : compo is not support.");
         return;
     }
 }
@@ -193,7 +188,7 @@ void FUN_002b3678(SfxCnvTbl *tbl, SfxFrame *frm) {
 
 void SFX_MakeTblZ16(SfxCnvTbl *tbl, SfxFrame *frm) {
     if (SFXZ_IsSetZclip(tbl->zhn) != 1) {
-        SFXLIB_Error(tbl, frm, D_004f5758);
+        SFXLIB_Error(tbl, frm, "E202282: SFX_MakeTblZ16 : zclip is not set.");
         return;
     }
     FUN_002b50c8(tbl, 16);
@@ -202,7 +197,7 @@ void SFX_MakeTblZ16(SfxCnvTbl *tbl, SfxFrame *frm) {
 
 void SFX_MakeTblZ32(SfxCnvTbl *tbl, SfxFrame *frm) {
     if (SFXZ_IsSetZclip(tbl->zhn) != 1) {
-        SFXLIB_Error(tbl, frm, D_004f5788);
+        SFXLIB_Error(tbl, frm, "E202281: SFX_MakeTblZ32 : zclip is not set.");
         return;
     }
     FUN_002b50c8(tbl, 32);

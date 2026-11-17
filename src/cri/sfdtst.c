@@ -50,12 +50,6 @@ typedef struct SfdRatio {
     long den;
 } SfdRatio;
 
-typedef struct SfdTstHeader {
-    char text[274];
-} SfdTstHeader;
-
-extern SfdTstHeader DAT_004f50d0;
-extern char DAT_004f51e8[];
 extern int sftst_debout_siz;
 extern char *sftst_debout_buf;
 extern char *DAT_004beb4c;
@@ -326,17 +320,17 @@ void SFDEB_InitTst(char *buf, int size)
 
 void sftst_DebInit(void)
 {
-    SfdTstHeader s = DAT_004f50d0;
+    char s[] = "tst, help_time_sec, help_time_msec, help_time_64, help_time, mt_max, master_time, out_time,  mt_ot, mtmax_ot,  diff_l_max, diff_l_min, diff_a_max, tst->diff_a_min, pastat, adjmode, resethist, excesserr, adj_limit, adj_front, adj_rear,  movave_1st, movave_2nd,  adxt_stat \n\n";
     if (sftst_debout_buf != 0) {
         memset(sftst_debout_buf, 0, sftst_debout_siz);
         DAT_004beb4c = sftst_debout_buf;
-        strcpy(DAT_004beb4c, s.text);
-        DAT_004beb4c += strlen(s.text);
+        strcpy(DAT_004beb4c, s);
+        DAT_004beb4c += strlen(s);
         DAT_004beb50 = DAT_004beb4c;
     }
 }
 
-/* Appends one line of the timing state under the DAT_004f50d0 header; the log wraps back to its first
+/* Appends one line of the timing state under the header text; the log wraps back to its first
  * line when less than 1 KB is left. */
 void sftst_DebWrite(SfdTst *tst)
 {
@@ -345,7 +339,7 @@ void sftst_DebWrite(SfdTst *tst)
 
     if (sftst_debout_buf == 0)
         return;
-    len = sprintf(buf, DAT_004f51e8, tst,
+    len = sprintf(buf, "%p, %ld, %ld, %08lX%08lX, %ld, %ld, %ld, %ld,   %ld, %ld,   %ld, %ld, %ld, %ld,   %ld, %ld,   %ld, %ld, %ld, %ld, %ld,   %ld, %ld,   %ld \n", tst,
                   tst->help_time / tst->help_unit,
                   (long)UTY_MulDiv(1000, tst->help_time, tst->help_unit),
                   tst->help_time >> 32, tst->help_time, tst->help_time & 0x7FFFFFFF,

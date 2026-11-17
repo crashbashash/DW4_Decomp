@@ -150,30 +150,30 @@
   "total": 3472700
  },
  "data_bytes": {
-  "identified": 1294797,
+  "identified": 1294821,
   "kind_mismatch": 190,
   "kinds": {
-   "?": 4983,
+   "?": 4959,
    "code": 3472700,
    "exc": 73132,
    "handle": 0,
    "jtbl": 380,
    "literal": 244,
    "named": 90943,
-   "pad": 211635,
+   "pad": 211427,
    "ptr": 3040,
-   "ref": 91184,
+   "ref": 91072,
    "region": 109384,
-   "source": 493522,
-   "str": 74177,
-   "table": 22236,
+   "source": 496497,
+   "str": 71570,
+   "table": 22212,
    "vtable": 124920
   },
-  "matched": 493522,
-  "matched_pct": 37.97,
+  "matched": 496497,
+  "matched_pct": 38.2,
   "pct": 99.62,
-  "start_only": 185167,
-  "start_only_pct": 14.25,
+  "start_only": 185055,
+  "start_only_pct": 14.24,
   "total": 1299780
  },
  "debt": {
@@ -260,7 +260,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 1464
+    "value": 1308
    },
    "inline_asm.other": {
     "reason": null,
@@ -368,7 +368,7 @@
    "decl.varargs": 730,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "fun_dat_refs": 1464,
+   "fun_dat_refs": 1308,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
@@ -460,14 +460,14 @@
  ],
  "link": {
   "asm_bytes": 193824,
-  "data_bytes": 383869,
+  "data_bytes": 386844,
   "from_asm_body_bytes": 0,
   "from_asm_body_pct": 0.0,
   "from_asm_body_units": 0,
   "from_assembly_bytes": 8160,
   "from_assembly_units": 164,
-  "from_c_bytes": 3654585,
-  "from_c_pct": 80.48,
+  "from_c_bytes": 3657560,
+  "from_c_pct": 80.54,
   "from_c_units": 20267,
   "image_bytes": 4772480,
   "jtbl_asm_body_bytes": 0,
@@ -492,11 +492,11 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 1838652,
+  "bytes": 1841956,
   "failing": {
    "addresses": {
-    "bytes": 747940,
-    "functions": 4291
+    "bytes": 732024,
+    "functions": 4262
    },
    "declarations": {
     "bytes": 846616,
@@ -519,8 +519,8 @@
     "functions": 11
    },
    "references": {
-    "bytes": 511496,
-    "functions": 2038
+    "bytes": 507400,
+    "functions": 2006
    },
    "types": {
     "bytes": 324884,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 12703,
+  "functions": 12730,
   "matched_functions": 20431
  },
  "regions": [

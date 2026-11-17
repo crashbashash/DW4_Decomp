@@ -3679,8 +3679,6 @@
 0x004f3400	ERR20010421A_mwPlyInitSfdFx	string-literal
 0x004f3420	mwsfd_sfd_version	recovered-global
 0x004f3428	E011081_mwPlySfdInit_Not_compatible_SFD_Version	recovered-global
-0x004f4410	CRITAGS	recovered-global
-0x004f4418	CRITAGE	recovered-global
 0x004f4988	E303111_MWSST_Create_worksize_is_short	string-literal
 0x004f49b8	E303112_MWSST_Create_cant_create_SJ	string-literal
 0x004f49e0	E303112_MWSST_Create_cant_create_corehn	string-literal

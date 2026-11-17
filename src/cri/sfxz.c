@@ -12,19 +12,6 @@ typedef struct SfxZLib {
 
 extern SfxZLib sfxz_work;
 
-extern char DAT_004f5870[];
-extern char DAT_004f5878[];
-extern char DAT_004f5880[];
-extern char DAT_004f5888[];
-extern char DAT_004f5890[];
-extern char DAT_004f5898[];
-extern char DAT_004f58a0[];
-extern char DAT_004f58b0[];
-extern char DAT_004f58f0[];
-extern char DAT_004f5920[];
-extern char DAT_004f5928[];
-extern char DAT_004f5958[];
-extern char DAT_004f5990[];
 
 long long __muldi3(long long n, int k);
 void FUN_002b3300(SfxHn *hn, SfxFrame *frm, unsigned int compo);
@@ -130,11 +117,11 @@ void sfxzmv_SetTagGrp(SfxZHn *zhn) {
     }
     in.data = info->data;
     in.size = info->size;
-    SJ_SearchTag(&in, DAT_004f5870, DAT_004f5878, &out);
+    SJ_SearchTag(&in, "ZMHDR", "SFXINFE", &out);
     hdr->data = out.data;
     hdr->size = out.size;
     hdr->valid = 1;
-    SJ_SearchTag(&in, DAT_004f5880, DAT_004f5878, &out);
+    SJ_SearchTag(&in, "ZMVFRM", "SFXINFE", &out);
     vfrm->valid = 1;
     vfrm->data = out.data;
     vfrm->size = out.size;
@@ -161,20 +148,20 @@ void FUN_002b4498(SfxZHn *zhn, int frame, int *first, int *second) {
     long long n;
     long long x, y, z;
     char *str;
-    sfxzmv_GetZfrmInf(zhn, DAT_004f5888, DAT_004f5878, &p, &len);
+    sfxzmv_GetZfrmInf(zhn, "ZMFSIZE", "SFXINFE", &p, &len);
     if (p == 0) {
         *first = 0;
         *second = 0x7FFFFFFF;
         return;
     }
-    sscanf(p, DAT_004f5890, &n);
-    sfxzmv_GetZfrmInf(zhn, DAT_004f5898, DAT_004f5878, &p, &len);
+    sscanf(p, "%lx", &n);
+    sfxzmv_GetZfrmInf(zhn, "ZMFDATA", "SFXINFE", &p, &len);
     str = p;
     if (str == 0) {
         *first = 0x7FFFFFFF;
         return;
     }
-    sscanf(str + (int)__muldi3(n, frame), DAT_004f58a0, &x, &y, &z);
+    sscanf(str + (int)__muldi3(n, frame), "%lx %lx %lx", &x, &y, &z);
     *first = y;
     *second = z;
 }
@@ -238,7 +225,7 @@ void sfxzmv_MakeZ16TblFromOrgZ32(SfxZHn *zhn, unsigned int *src, short *dst) {
             dst[i] = src[i] >> 15;
         }
     } else {
-        SFXLIB_Error(0, 0, DAT_004f58b0);
+        SFXLIB_Error(0, 0, "E405241: sfxzmv_MakeZ16TblFromOrgZ32() is not support yet.");
     }
 }
 
@@ -262,7 +249,7 @@ void FUN_002b4960(SfxZHn *zhn, unsigned int *src, unsigned int *dst)
 
 void SFXZ_SetZclip(SfxZHn *zhn, float zmin, float zmax) {
     if (sfxzmv_IsOkZclip(zmin, zmax) != 1) {
-        SFXLIB_Error(0, 0, DAT_004f58f0);
+        SFXLIB_Error(0, 0, "E201314: SFXZ_SetZclip : zclip is invalid.");
     }
     zhn->zmin = zmin;
     zhn->zmax = zmax;
@@ -320,10 +307,10 @@ void FUN_002b4c48(SfxHn *hn, SfxFrame *frm, int arg) {
 
 void sfxcnv_CnvFrmZcmn(SfxHn *hn, SfxFrame *frm, int zbit, int arg) {
     if (hn->compo == 0) {
-        hn->compo = SFXINF_GetStmInf(frm, DAT_004f5920);
+        hn->compo = SFXINF_GetStmInf(frm, "COMPO");
     }
     if (SFXZ_IsSetZclip(hn->zhn) != 1) {
-        SFXLIB_Error(hn, frm, DAT_004f5928);
+        SFXLIB_Error(hn, frm, "E201315: sfxcnv_CnvFrmZcmn : zclip is not set.");
         return;
     }
     switch (frm->frmfmt) {
@@ -335,7 +322,7 @@ void sfxcnv_CnvFrmZcmn(SfxHn *hn, SfxFrame *frm, int zbit, int arg) {
         return;
     case 1:
     default:
-        SFXLIB_Error(hn, frm, DAT_004f5958);
+        SFXLIB_Error(hn, frm, "E201191: SFX_CnvFrmZcmn : frmfmt is not support.");
         return;
     }
 }
@@ -392,7 +379,7 @@ int sfxcnv_CnvZbitToCft(int zbit) {
     case 32: r = 3; break;
     case 8:
     default:
-        SFXLIB_Error(0, 0, DAT_004f5990);
+        SFXLIB_Error(0, 0, "E201313: sfxcnv_CnvZbitToCft : zbit is invalid.");
         r = 0;
         break;
     }

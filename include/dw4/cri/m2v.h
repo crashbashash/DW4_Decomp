@@ -255,16 +255,12 @@ typedef struct M2vObj {
     Mpeg2Ext ext;  /* +352 */
     char pad1656[8];  /* +1656 */
 } M2vObj;
-extern unsigned char D_004f28a0[];
-extern int tbl_dc_dct_pred_reset[4];
-extern int tbl_intra_dc_mult[4];
 
 extern void calcHvSize(Mpeg2Ext *);
 extern void calcNumberOfFrameCentreOffsets(Mpeg2Ext *);
 extern void calcPictureCodingExt(Mpeg2Ext *);
 extern void calcDarSar(Mpeg2Ext *);
 extern void resetQuantiserMatrix(Mpeg2Ext *);
-extern int D_004f2890[];   /* blocks per macroblock, indexed by chroma_format: 0, 6, 8, 12 */
 
 
 typedef struct M2vLibWork {

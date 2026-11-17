@@ -3,6 +3,16 @@
 #include <string.h>
 #include "dw4/cri/cri_adxt.h"
 
+/* Header-parser constant tables, in retail's order. */
+/* Blocks per macroblock, indexed by chroma_format (0 is the reserved value). */
+static const int tbl_blocks_per_macroblock[4] = {0, 6, 8, 12};
+/* PicAtr field_count, indexed by (progressive_sequence * 2 + repeat_first_field) * 2 + top_field_first. */
+static const unsigned char tbl_field_count[8] = {0, 0, 1, 1, 0, 0, 2, 4};
+/* The user_data_start_code and the tag the second field's user data is preceded by. */
+static const unsigned char m2vhdec_usrdat_2nd_mark[8] = {0x00, 0x00, 0x01, 0xB2, '2', 'n', 'd', 0x00};
+static const int tbl_dc_dct_pred_reset[4] = {128, 256, 512, 1024};
+static const int tbl_intra_dc_mult[4] = {8, 4, 2, 1};
+
 /* MPEG-2 extension_data() parser of the CRI movie decoder: reads one
  * extension_start_code_identifier and its payload from the video elementary stream (ISO/IEC
  * 13818-2 section 6.2.2.x) into the decoder's header state, using an inlined MSB-first bit reader.
@@ -165,7 +175,7 @@ void m2vhdec_SetPicAtr(M2vObj *hn)
     a->vbv_buffer_size = h->vbv_buffer_size;
     a->display_horizontal_size = h->display_horizontal_size;
     a->display_vertical_size = h->display_vertical_size;
-    a->field_count = D_004f28a0[(h->progressive_sequence * 2 + h->repeat_first_field) * 2 + h->top_field_first];
+    a->field_count = tbl_field_count[(h->progressive_sequence * 2 + h->repeat_first_field) * 2 + h->top_field_first];
     a->progressive_frame = h->progressive_frame;
     a->top_field_first = h->top_field_first;
     a->repeat_first_field = h->repeat_first_field;
@@ -444,7 +454,6 @@ char *FUN_00286958(M2vObj *ctx, char *buf)
 }
 
 void FUN_00286ce8(M2vObj *ctx, void *src, int len);
-extern char D_004f28a8[];
 
 /* Hands n bytes of header data to the user stream the current header level selects, in up to two
  * chunks, and runs its callback; with level 3 and a picture user buffer set, the bytes (behind an 8 byte
@@ -471,7 +480,7 @@ void FUN_00286b70(M2vObj *ctx, char *src, int n)
     }
     if (idx == 3 && ctx->picusr.buf != 0) {
         if (ctx->ext.field_964 != 0) {
-            FUN_00286ce8(ctx, D_004f28a8, 8);
+            FUN_00286ce8(ctx, m2vhdec_usrdat_2nd_mark, 8);
         }
         FUN_00286ce8(ctx, src, n);
     }
@@ -550,7 +559,7 @@ char *parseEsc(M2vObj *ctx, char *buf)
             h->error_count++;
             h->chroma_format = 1;
         }
-        h->blocks_per_macroblock = D_004f2890[h->chroma_format];
+        h->blocks_per_macroblock = tbl_blocks_per_macroblock[h->chroma_format];
         calcHvSize(h);
         h->bit_rate = (h->bit_rate_extension << 18) | h->bit_rate_value;
         h->vbv_buffer_size = (h->vbv_buffer_size_extension << 10) | h->vbv_buffer_size_value;

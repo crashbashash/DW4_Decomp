@@ -31,25 +31,6 @@ typedef struct SudStats {
 
 int atoi(const char *text);
 
-extern char DAT_004f59c0[];
-extern char DAT_004f59f8[];
-extern char DAT_004f5a08[];
-extern char DAT_004f5a10[];
-extern char DAT_004f5a18[];
-extern char DAT_004f5a20[];
-extern char DAT_004f5a28[];
-extern SudFlagChars DAT_004f5a30;
-extern char DAT_004f5a40[];
-extern SudFlagChars DAT_004f5a48;
-extern char DAT_004f5a50[];
-extern char DAT_004f5a58[];
-extern SudFlagChars DAT_004f5a60;
-extern char DAT_004f5a68[];
-extern volatile unsigned int *DAT_004f5a70[];
-extern volatile unsigned int *DAT_004f5a80[];
-extern char DAT_004f5a90[];
-extern char DAT_004f5a98[];
-
 extern int sud_init_cnt;
 extern long long utytmr_unit;
 extern volatile int DAT_004bf290;
@@ -74,7 +55,7 @@ void SUD_Init(void) {
 }
 
 char *sud_GetVersionStr(void) {
-    return DAT_004f59c0;
+    return "\nCRI SUD/PS2EE Ver.0.05 Build:Oct  6 2004 11:36:33\n";
 }
 
 void SUD_Finish(void) {
@@ -88,19 +69,19 @@ void FUN_002b51f8(char *dst, int *flags);
 void SUD_MakePicUsrDat(char *out, int unused, int *flags) {
     char number[16];
     char *field;
-    strncpy(out, DAT_004f59f8, 8);
-    sprintf(number, DAT_004f5a08, 19);
+    strncpy(out, "<SUDPS_>", 8);
+    sprintf(number, "<%06X>", 19);
     field = out + 16;
     strcat(out, number);
-    strncpy(field, DAT_004f5a10, 2);
+    strncpy(field, "02", 2);
     FUN_002b51f8(field, flags);
-    strcat(field, DAT_004f5a18);
+    strcat(field, "\n");
 }
 
 void FUN_002b51f8(char *dst, int *flags) {
-    SudFlagChars a = DAT_004f5a30;
-    SudFlagChars b = DAT_004f5a48;
-    SudFlagChars c = DAT_004f5a60;
+    SudFlagChars a = {{"A", "D"}};
+    SudFlagChars b = {{"N", "C"}};
+    SudFlagChars c = {{"P", "I"}};
     strncpy(dst + 2, a.s[flags[0]], 1);
     strncpy(dst + 3, b.s[flags[1]], 1);
     strncpy(dst + 4, c.s[flags[2]], 1);
@@ -119,14 +100,14 @@ int SUD_AnalyTypeDivField(char *header, int index) {
     if (header == 0 || index < 0) {
         return 0;
     }
-    return strncmp(header + 18, DAT_004f5a28, 1) == 0;
+    return strncmp(header + 18, "D", 1) == 0;
 }
 
 int SUD_AnalyTypeCcs(char *header, int index) {
     if (header == 0 || index < 0) {
         return 0;
     }
-    return strncmp(header + 19, DAT_004f5a40, 1) == 0;
+    return strncmp(header + 19, "C", 1) == 0;
 }
 
 int FUN_002b53a0(char *header, int index) {
@@ -136,7 +117,7 @@ int FUN_002b53a0(char *header, int index) {
     if (FUN_002b52d8(header, index) == 0) {
         return 0;
     }
-    return strncmp(header + 20, DAT_004f5a58, 1) == 0;
+    return strncmp(header + 20, "I", 1) == 0;
 }
 
 int FUN_002b5400(char *header, int index) {
@@ -149,10 +130,10 @@ int FUN_002b5400(char *header, int index) {
         return 0;
     }
     field = header + 21;
-    if (strncmp(field, DAT_004f5a50, 1) == 0) {
+    if (strncmp(field, "P", 1) == 0) {
         kind = 1;
     } else {
-        kind = strncmp(field, DAT_004f5a58, 1) != 0 ? 0 : 2;
+        kind = strncmp(field, "I", 1) != 0 ? 0 : 2;
     }
     return kind;
 }
@@ -164,7 +145,7 @@ int FUN_002b5490(char *header, int index) {
     if (FUN_002b52d8(header, index) < 2) {
         return 0;
     }
-    return strncmp(header + 22, DAT_004f5a20, 1) != 0;
+    return strncmp(header + 22, "A", 1) != 0;
 }
 
 int FUN_002b56f8(char *base, int index, int offset);
@@ -235,7 +216,7 @@ void SUD_FindTag(char *text, int length, char **found, int *value) {
         return;
     }
     for (i = 0; i < length; i++, text++) {
-        if (memcmp(text, DAT_004f5a68, 1) == 0 && memcmp(text, DAT_004f59f8, 8) == 0) {
+        if (memcmp(text, "<", 1) == 0 && memcmp(text, "<SUDPS_>", 8) == 0) {
             *found = text;
             *value = FUN_002b5838(text);
         }
@@ -246,9 +227,19 @@ int FUN_002b5838(char *header) {
     return header ? 0x23 : 0;
 }
 
+/* The hardware timers' mode and count registers, indexed by timer channel. */
+static volatile unsigned int *const sud_tmr_mode[] = {
+    (unsigned int *)0x10000010, (unsigned int *)0x10000810,
+    (unsigned int *)0x10001010, (unsigned int *)0x10001810,
+};
+static volatile unsigned int *const sud_tmr_count[] = {
+    (unsigned int *)0x10000000, (unsigned int *)0x10000800,
+    (unsigned int *)0x10001000, (unsigned int *)0x10001800,
+};
+
 void FUN_002b5848(int channel) {
     int value;
-    if (CRICFG_Read(DAT_004f5a90, &value) == 0) {
+    if (CRICFG_Read("TMR_CH", &value) == 0) {
         channel = value;
     }
     DAT_004bf290++;
@@ -260,13 +251,13 @@ void FUN_002b5848(int channel) {
         FUN_002b5ce0(1);
         return;
     }
-    FUN_002b5ce0(CRICFG_Read(DAT_004f5a98, &value) == 0 ? (unsigned int)value : 0x8CA00);
-    DAT_004bf298 = *DAT_004f5a70[channel];
+    FUN_002b5ce0(CRICFG_Read("TMR_CLK", &value) == 0 ? (unsigned int)value : 0x8CA00);
+    DAT_004bf298 = *sud_tmr_mode[channel];
     if ((DAT_004bf298 & 0xC7) != 0x82) {
-        *DAT_004f5a80[channel] = 0;
-        *DAT_004f5a70[channel] = 0x82;
+        *sud_tmr_count[channel] = 0;
+        *sud_tmr_mode[channel] = 0x82;
     }
-    DAT_005856b0.last = *DAT_004f5a80[channel];
+    DAT_005856b0.last = *sud_tmr_count[channel];
     DAT_005856b0.base = 0;
     DAT_005856c0 = DAT_005856b0;
     DAT_005856d0 = &DAT_005856b0;
@@ -276,7 +267,7 @@ void FUN_002b5848(int channel) {
 void FUN_002b59a0(void) {
     DAT_004bf290--;
     if (DAT_004bf290 == 0 && DAT_004bf294 != -1 && (DAT_004bf298 & 0xC7) != 0x82) {
-        *DAT_004f5a70[DAT_004bf294] = DAT_004bf298 ^ 0xC00;
+        *sud_tmr_mode[DAT_004bf294] = DAT_004bf298 ^ 0xC00;
     }
     if (DAT_004bf290 < 0) {
         DAT_004bf290 = 0;
@@ -293,7 +284,7 @@ long long FUN_002b5a10(void) {
     if (DAT_005856d4 == 1) {
         DAT_005856c0 = DAT_005856b0;
         DAT_005856d0 = &DAT_005856c0;
-        count = *DAT_004f5a80[DAT_004bf294] & 0xFFFF;
+        count = *sud_tmr_count[DAT_004bf294] & 0xFFFF;
         if (count < DAT_005856b0.last) {
             DAT_005856b0.base += 0x10000;
         }
@@ -301,7 +292,7 @@ long long FUN_002b5a10(void) {
         now = count + DAT_005856b0.base;
         DAT_005856d0 = &DAT_005856b0;
     } else {
-        count = *DAT_004f5a80[DAT_004bf294] & 0xFFFF;
+        count = *sud_tmr_count[DAT_004bf294] & 0xFFFF;
         now = count + DAT_005856d0->base;
         if (count < DAT_005856d0->last) {
             now += 0x10000;
