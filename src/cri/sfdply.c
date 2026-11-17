@@ -1,4 +1,5 @@
 #include "dw4/cri/sfdply.h"
+#include "dw4/cri/sfdsj.h"
 #include "dw4/cri/mcp.h"
 
 typedef void (*SfdCntFn)(SfdPly *h, int arg, int *counter);
@@ -11,7 +12,7 @@ extern int sfply_sys_stat;
 extern unsigned int DAT_004beb20;
 extern SfdCond sfd_lib;
 extern int DAT_004bead4;
-extern void (*DAT_004beb18)(SfdTriple *tc);
+extern void (*DAT_004beb18)(SfdPtsm *ptsm);
 
 int sfd_ReportError();
 int SFLIB_CheckHn(SfdPly *h);
@@ -57,10 +58,10 @@ void FUN_002afba8(void *acc);
 void SFBUF_DestroySj(SfdPly *h);
 int FUN_002a32b8(SfdPly *h, char *buf, int size);
 void FUN_002a3340(SfdPly *h, char *buf, int size);
-void SFD_SetErrFn(SfdPly *h, int a, int b);
-void SFD_SetUsrTimeFn(SfdPly *h, int a);
-void SFD_SetExtClockFn(SfdPly *h, int a, int b, int c);
-void SFD_SetUsrIsSkipFn(SfdPly *h, int a);
+void SFD_SetErrFn(SfdPly *h, SfdErrFn fn, void *obj);
+void SFD_SetUsrTimeFn(SfdPly *h, SfdTimeFn fn);
+void SFD_SetExtClockFn(SfdPly *h, SfdTimeFn fn, int wrap, void *obj);
+void SFD_SetUsrIsSkipFn(SfdPly *h, int (*fn)());
 int SFD_EntrySeek(SfdPly *h, SfdRec *rec);
 void SFD_SetByteRate(SfdPly *h, int a);
 void SFD_SetFileSize(SfdPly *h, int a);
@@ -117,7 +118,7 @@ int SFPLY_Stop(SfdPly *h);
 void SFPLY_SetResetFlg(int on);
 int sfply_TrStop(SfdPly *h);
 int FUN_002abfd8(SfdPly *h);
-int SFD_GetWritePtr(SfdPly *h, int value);
+int SFD_GetWritePtr(SfdPly *h, SfdBufStat *inf);
 int SFD_AddWritePtr(SfdPly *h, int a, int b);
 int SFD_TermSupply(SfdPly *h);
 
@@ -943,11 +944,131 @@ int sfply_TrStop(SfdPly *h) {
     return 0;
 }
 
-int SFD_GetWritePtr(SfdPly *h, int value) {
+int FUN_002abfd8(SfdPly *h) {
+    int nmpv;
+    SfdCrePrm prm;
+    SfdBufStat inf;
+    SfdCond cond;
+    char mpvcond[64];
+    SfdPtsm ptsm;
+    int keepsup;
+    int supadr = 0;
+    SfdErrFn errfn;
+    void *errobj;
+    SfdTimeFn usrtimefn;
+    SfdTimeFn extfn;
+    int extwrap;
+    void *extobj;
+    int (*isskipfn)();
+    int speed;
+    SfdRec *see;
+    int byterate;
+    int fsize;
+    int tottime;
+    int tunit;
+    int seekpos;
+    SfdRing *ptsque;
+    SfdItem *ptsent;
+    int ptssiz;
+    int ret;
+
+    prm = h->cre;
+    keepsup = h->cond.f32;
+    if (keepsup) {
+        SFD_GetWritePtr(h, &inf);
+        supadr = inf.tailLen;
+    }
+    SFHDS_FinishFhd(h->blk120);
+    SFBUF_DestroySj(h);
+    errfn = h->err.fn;
+    errobj = h->err.obj;
+    ptsm = h->d28.ptsm;
+    usrtimefn = h->d28.timefn[4];
+    extfn = h->d28.extClockFn;
+    extwrap = h->d28.extClockWrap;
+    extobj = h->d28.extClockObj;
+    isskipfn = h->d28.isSkipFn;
+    speed = h->d28.speed;
+    see = h->recSlot.rec;
+    if (see != 0) {
+        byterate = see->f3536;
+        fsize = see->f3524;
+        tottime = see->f3528;
+        tunit = see->f3532;
+        seekpos = see->f3540;
+    } else {
+        seekpos = 0;
+        tunit = 0;
+        tottime = 0;
+        fsize = 0;
+        byterate = 0;
+    }
+    ptsque = &h->ent[1].ring;
+    ptssiz = ptsque->size * sizeof(SfdItem);
+    ptsent = ptsque->items;
+    nmpv = FUN_002a32b8(h, mpvcond, sizeof(mpvcond));
+    ret = sfply_TrDestroy(h);
+    if (ret != 0) {
+        return ret;
+    }
+    MEM_Copy(&cond, &h->cond2, sizeof(cond));
+    h = sfply_InitHn(&prm, 0);
+    if (h == 0) {
+        return sfd_ReportError(0, 0xFF000202);
+    }
+    MEM_Copy(&h->cond, &cond, sizeof(cond));
+    MEM_Copy(&h->cond2, &cond, sizeof(cond));
+    FUN_002a3340(h, mpvcond, nmpv);
+    if (keepsup) {
+        ret = SFD_GetWritePtr(h, &inf);
+        if (ret != 0) {
+            return ret;
+        }
+        ret = SFD_AddWritePtr(h, supadr, inf.tailLen);
+        if (ret != 0) {
+            return ret;
+        }
+        SFD_TermSupply(h);
+    }
+    if (errfn != 0) {
+        SFD_SetErrFn(h, errfn, errobj);
+    }
+    if (usrtimefn != 0) {
+        SFD_SetUsrTimeFn(h, usrtimefn);
+    }
+    if (extfn != 0) {
+        SFD_SetExtClockFn(h, extfn, extwrap, extobj);
+    }
+    if (isskipfn != 0) {
+        SFD_SetUsrIsSkipFn(h, isskipfn);
+    }
+    if (speed != 1000) {
+        SFD_SetSpeed(h, speed);
+    }
+    if (ptsm.f0 != 0) {
+        h->d28.ptsm = ptsm;
+        if (DAT_004beb18 != 0) {
+            DAT_004beb18(&ptsm);
+        }
+    }
+    if (see != 0) {
+        SFD_EntrySeek(h, see);
+        SFD_SetByteRate(h, byterate);
+        SFD_SetFileSize(h, fsize);
+        SFD_SetTotTime(h, tottime, tunit);
+        SFD_SetSeekPos(h, seekpos);
+    }
+    if (ptsent != 0) {
+        FUN_002ac6e8(h, ptsent, ptssiz);
+    }
+    return 0;
+}
+
+int SFD_GetWritePtr(SfdPly *h, SfdBufStat *inf) {
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000134);
     }
-    return FUN_002b0338(h, 0, 9, value, 0);
+    return FUN_002b0338(h, 0, 9, inf, 0);
 }
 
 int SFD_AddWritePtr(SfdPly *h, int a, int b) {

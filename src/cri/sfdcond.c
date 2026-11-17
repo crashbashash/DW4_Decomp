@@ -166,6 +166,24 @@ int SFD_GetPlyInf(SfdHn *hn, SfdStatus160 *out)
     return 0;
 }
 
+
+int SFD_GetTmrInf(SfdHn *hn, SfdReport *report)
+{
+    int i;
+
+    if (SFLIB_CheckHn(hn) != 0) {
+        return sfd_ReportError(0, 0xFF00011A);
+    }
+    *report = hn->report;
+    for (i = 1; i < 4; i++) {
+        report->stat[0].sum += report->stat[i].sum;
+        report->stat[0].min = (report->stat[i].min < report->stat[0].min) ? report->stat[i].min : report->stat[0].min;
+        report->stat[0].max = (report->stat[0].max < report->stat[i].max) ? report->stat[i].max : report->stat[0].max;
+        report->stat[0].count += report->stat[i].count;
+    }
+    return 0;
+}
+
 int SFD_GetTrHn(SfdHn *hn, int index, int *out)
 {
     if (SFLIB_CheckHn(hn) != 0) {

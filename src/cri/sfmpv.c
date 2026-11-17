@@ -20,6 +20,9 @@ extern int DAT_004f4e70[];
 extern int DAT_00585628;
 extern int DAT_004beb08;
 extern int DAT_004f5060[];
+extern int DAT_004f4e08[];
+extern int DAT_004f4e30[];
+extern int DAT_004f4e50[];
 
 extern void *memset(void *dst, int value, unsigned int size);
 extern void *memcpy(void *dst, const void *src, unsigned int size);
@@ -51,6 +54,7 @@ int MPV_Destroy();
 int MPV_SetCond(void *handle, int index, int value);
 int MPV_GetCond(void *handle, int index, int *value);
 int UTY_MulDiv(int a, int b, int c);
+long long UTY_MulDivRound64(long long a, long long b, long long c);
 int SFBUF_RingGetRead(SfdPlayer *player, int index, SfdRingInfo *info);
 void SFBUF_RingAddRead(SfdPlayer *player, int index, int n);
 int SFBUF_GetRingBufSiz(SfdPlayer *player, int index);
@@ -119,7 +123,7 @@ void FUN_002a54d0(SfdPlayer *player, SfdSlot *slot);
 void sfmpv_ReadTcode(M2vPicAtr *pic, SfdTimeCode *out);
 int sfmpv_DetectTcErr(SfdPlayer *player, M2vPicAtr *pic);
 void FUN_002a5740(SfdPlayer *player, M2vPicAtr *pic, long id, int flag);
-void sfmpv_Pts2Tc(long id, int a, int b, int c, SfdTimeCode *tc);
+void sfmpv_Pts2Tc(long pts, int prate, int drop, int tmpref, SfdTimeCode *tc);
 void FUN_002a5a50(SfdTimeCode *src, SfdTimeCode *dst);
 void sfmpv_SetMpvHd(SfdPlayer *player, int pts, SfdChunk *chunk);
 void sfmpv_SetMvInf(SfdPicGeom *geom, int pts, M2vPicAtr *pic, int x);
@@ -1259,6 +1263,65 @@ void FUN_002a5740(SfdPlayer *player, M2vPicAtr *pic, long id, int flag)
         timer->tc.second = timer->best.tc.second;
         timer->tc.frame = timer->best.tc.frame;
     }
+}
+
+void sfmpv_Pts2Tc(long pts, int prate, int drop, int tmpref, SfdTimeCode *tc)
+{
+    int rnd = DAT_004f4e08[prate];
+    int rate = DAT_004f5060[prate];
+    const int *tbl;
+    int fno;
+    int hour;
+    int ten;
+    int min;
+    int sec;
+    int frm;
+    int sec_tot;
+    int min_tot;
+
+    fno = UTY_MulDivRound64(pts, rate * 2, 90000000);
+    tc->field = fno & 1;
+    fno >>= 1;
+    fno -= tmpref;
+    fno = (fno > 0) ? fno : 0;
+    tc->rate = prate;
+    tc->drop = drop;
+    if (drop != 0 && (rate == 29970 || rate == 59940)) {
+        tbl = (rate == 29970) ? DAT_004f4e30 : DAT_004f4e50;
+        hour = fno / tbl[0];
+        fno = fno % tbl[0];
+        ten = fno / tbl[1];
+        fno = fno % tbl[1];
+        if (fno < tbl[2]) {
+            min = 0;
+            sec = fno / tbl[5];
+            frm = fno % tbl[5];
+        } else {
+            fno -= tbl[2];
+            min = fno / tbl[3] + 1;
+            fno = fno % tbl[3];
+            if (fno < tbl[4]) {
+                sec = 0;
+                frm = fno + tbl[7];
+            } else {
+                fno -= tbl[4];
+                sec = fno / tbl[5] + 1;
+                frm = fno % tbl[5];
+            }
+        }
+        min += tbl[6] * ten;
+    } else {
+        sec_tot = fno / rnd;
+        frm = fno % rnd;
+        min_tot = sec_tot / 60;
+        sec = sec_tot % 60;
+        hour = min_tot / 60;
+        min = min_tot % 60;
+    }
+    tc->hour = hour;
+    tc->minute = min;
+    tc->second = sec;
+    tc->frame = frm;
 }
 
 void FUN_002a5b48(SfdPlayer *player, M2vPicAtr *pic)

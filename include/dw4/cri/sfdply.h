@@ -54,9 +54,11 @@ typedef struct SfdTimer {
     SfdSub24 sub[4]; /* 48 */
 } SfdTimer;
 
+typedef void (*SfdErrFn)(void *obj, int code);
+
 typedef struct SfdErrBlk {
-    int f0;
-    int f4;
+    void (*fn)(void *obj, int code);  /* 0 */
+    void *obj;    /* 4 */
     char pad8[12];
 } SfdErrBlk;
 
@@ -81,32 +83,35 @@ typedef struct SfdCond {
     char pad184[216];
 } SfdCond;
 
-typedef struct SfdTriple {
+/* The video PTS manager entry kept across a player reset. */
+typedef struct SfdPtsm {
     int f0;
     int f4;
     int f8;
-} SfdTriple;
+} SfdPtsm;
+
+typedef struct SfdPly SfdPly;
+
+typedef int (*SfdTimeFn)(SfdPly *h, int *ncount, int *tscale);
 
 typedef struct SfdD28 {
-    char pad0[16];
-    int f16;
-    char pad20[4];
-    int f24;
+    int (*timefn[6])(SfdPly *h, int *ncount, int *tscale); /* 0: clock sources; [4] is the user's */
+    int (*isSkipFn)(void);     /* 24 */
     char pad28[616];
     int f644;
     int f648;
     char pad652[32];
-    int f684;
+    int speed;                 /* 684: 1000 = normal */
     int f688;
     char pad692[24];
     int f716;
     char pad720[4];
-    int f724;
+    int (*extClockFn)(SfdPly *h, int *ncount, int *tscale); /* 724 */
     char pad728[12];
-    int f740;
-    int f744;
+    int extClockWrap;          /* 740 */
+    void *extClockObj;         /* 744 */
     char pad748[708];
-    SfdTriple f1456;
+    SfdPtsm ptsm;              /* 1456 */
     char pad1468[36];
 } SfdD28;
 
@@ -229,8 +234,6 @@ typedef struct SfdPlyInf {
     int f20;
     char pad24[8];
 } SfdPlyInf;
-
-typedef struct SfdPly SfdPly;
 
 struct SfdPly {
     SfdCrePrm cre;        /* 0 */

@@ -21421,6 +21421,7 @@
       "sfmpv_ReformTc": "0x002a55a0",
       "sfmpv_DetectTcErr": "0x002a5680",
       "FUN_002a5740": "0x002a5740",
+      "sfmpv_Pts2Tc": "0x002a5838",
       "FUN_002a5b48": "0x002a5b48",
       "FUN_002a5c28": "0x002a5c28",
       "sfmpv_ReadTcode": "0x002a5d70",
@@ -21630,6 +21631,7 @@
       "SFPLY_SetResetFlg": "0x002abf58",
       "SFPLY_GetResetFlg": "0x002abf68",
       "sfply_TrStop": "0x002abf78",
+      "FUN_002abfd8": "0x002abfd8",
       "SFD_GetWritePtr": "0x002ac3a8",
       "SFD_AddWritePtr": "0x002ac418",
       "SFD_TermSupply": "0x002ac498",
@@ -21710,6 +21712,7 @@
       "SFSET_GetCond": "0x002adc40",
       "SFD_GetHnHdrInf": "0x002adc50",
       "SFD_GetPlyInf": "0x002add28",
+      "SFD_GetTmrInf": "0x002addc0",
       "SFD_GetTrHn": "0x002adec8",
       "FUN_002adf48": "0x002adf48",
       "SFD_GetSofdecHeader": "0x002adf78"

@@ -101,6 +101,15 @@ guesses from what each file does.
 - The transfer slot's ring id is the enum `SfdBufId` and its work handle a union of the drivers' work types
   ([a read through a union member](understanding-shapes.md#scheduling-ee-gcc)): with those types `sfmpv_GetActiveSize`,
   `sfmpv_DecodeOneUnit` and `0x2a8a30` (with `SfdSlot **` out-parameters) match. `sfmps_DemuxChunk` still differs
-  in the register of one constant, which keeps a shared store from merging, and `sfmpv_DecodeFrm` hoists the stack
-  loads of its address-taken counts above the frame-counter stores, which neither an array for the counts nor
-  pointer-typed stores reproduces.
+  in the register of one constant, which keeps a shared store from merging. `sfmpv_DecodeFrm` hoists the stack
+  load of its address-taken byte count above the frame-counter stores and keeps the frame count's load below them:
+  forcing only the byte count's alias-set high word non-zero under gdb reproduces retail, so it is the
+  [address-taken local](understanding-shapes.md#scheduling-ee-gcc) case and waits on the text compiled before it
+  (`sfmpv_CalcAudioTotTime`, which differs by the same mechanism, among it).
+- `0x2abfd8` is the RE4 `sfd_ply.c` `sfply_ResetHn` ([Resident Evil 4 decompilation](https://github.com/adonis-singh/re4)):
+  it keeps the error callback, the timer's clock callbacks, speed and PTS-manager entry, and the seek work across
+  a re-create. It matches with those `SfdD28` fields and the error block typed as the callbacks and pointers
+  they are; `sfdrec.c` still keeps its own untyped copy of `SfdD28`.
+- `mwPlyCreateSofdec` differs only in the delay slot of the first free-handle test, which retail fills from the
+  branch target; `mwsfcre_CreateSfd` in the registers holding two of the buffer-size globals. Both need names for
+  the size globals and the three SFD create-parameter templates, and the player status as an enum.
