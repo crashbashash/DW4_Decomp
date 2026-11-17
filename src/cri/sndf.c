@@ -280,6 +280,30 @@ int FUN_00281660(unsigned int channel, int index, int kind)
     return -128;
 }
 
+int FUN_002816f8(unsigned int channel)
+{
+    int result = 0;
+    int i;
+    SndfStatus *status;
+    SndfStream *streams;
+
+    if (channel >= 32) {
+        return -1;
+    }
+    status = &sndf_status;
+    streams = status->streams;
+    for (i = 0; i < 16; i++) {
+        if ((streams[i].flags & 0x80) && streams[i].channel == (unsigned char)channel) {
+            result = 256;
+            if (streams[i].flags & 1) {
+                result = 257;
+            }
+            break;
+        }
+    }
+    return result;
+}
+
 void FUN_00281770(void)
 {
     FUN_00281a00(0xE00, 0, 0, 4);

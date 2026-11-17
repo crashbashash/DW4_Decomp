@@ -10,7 +10,7 @@ readable source that rebuilds the retail executable byte for byte.
 | Alchemy engine | 1573 KB | 88.4 % | 37.7 % |
 | Lua 4.0.1 interpreter | 70 KB | 100.0 % | 99.6 % |
 | CRI ADX | 140 KB | 100.0 % | 30.7 % |
-| CRI Sofdec | 209 KB | 89.8 % | 27.1 % |
+| CRI Sofdec | 209 KB | 90.1 % | 27.1 % |
 | libpng and zlib | 90 KB | 100.0 % | 100.0 % |
 | Sony SDK | 97 KB | 100.0 % | 89.8 % |
 | newlib | 84 KB | 100.0 % | 50.9 % |

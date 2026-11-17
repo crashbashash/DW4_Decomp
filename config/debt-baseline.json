@@ -18,12 +18,15 @@
    "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
    "value": 585
   },
-  "decl.local_externs": 2868,
+  "decl.local_externs": {
+   "reason": "sfmpv_ComplementPts calls memcmp; src/cri/sfmpv.c builds with EE GCC, whose profile has no libc include path, so it is declared locally beside the file's memcpy and memset",
+   "value": 2869
+  },
   "decl.type_conflicts": 1854,
   "decl.varargs": 896,
   "foreign_profile.bytes": 0,
   "foreign_profile.functions": 0,
-  "fun_dat_refs": 1500,
+  "fun_dat_refs": 1501,
   "inline_asm.other": 0,
   "inventory.unsymbolised_bytes": 0,
   "inventory_gap.bytes": 0,
@@ -55,8 +58,8 @@
   "struct.c": 28,
   "unapproved.bytes": 0,
   "unapproved.functions": 0,
-  "unmatched.bytes": 208888,
-  "unmatched.functions": 171
+  "unmatched.bytes": 208388,
+  "unmatched.functions": 169
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }

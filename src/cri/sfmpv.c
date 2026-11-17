@@ -23,6 +23,7 @@ extern int DAT_004f5060[];
 
 extern void *memset(void *dst, int value, unsigned int size);
 extern void *memcpy(void *dst, const void *src, unsigned int size);
+extern int memcmp(const void *a, const void *b, unsigned int size);
 int SJRBF_GetFlowCnt(int sj, int id, int mode);
 int UTY_CmpTime(int id, int arg, int a, int b);
 /* matching construct: MEM_Copy (mcp.h, void) is declared returning int here; with the void
@@ -105,6 +106,8 @@ void sfmpv_DiscardSec(SfdPlayer *player, SfdStream *stream);
 void FUN_002a4b20(SfdPlayer *player, int amount);
 int sfmpv_GetTermSrc(SfdPlayer *player);
 int sfmpv_ChkMpvErr(SfdPlayer *player, int status, int n, int code);
+long sfmpv_ComplementPts(SfdTimer *timer, SfdRecord *record, SfdPicInfo *pic, SfdRecordTail *entry, int newGop, long *pts);
+long FUN_002a5208(int count, int rate);
 int sfmpv_DetectTcErr(SfdPlayer *player, SfdPicInfo *pic);
 void FUN_002a5740(SfdPlayer *player, SfdPicInfo *pic, long id, int flag);
 void sfmpv_Pts2Tc(long id, int a, int b, int c, SfdTimeCode *tc);
@@ -678,6 +681,52 @@ void sfmpv_InitComplementPts(SfdRecord *record) {
     tail->f0 = -1;
     tail->f12 = -1;
     tail->f8 = 0;
+}
+
+long sfmpv_ComplementPts(SfdTimer *timer, SfdRecord *record, SfdPicInfo *pic, SfdRecordTail *entry, int newGop, long *pts) {
+    int rate = DAT_004f5060[pic->rateIndex];
+    int number = pic->number;
+    long origin;
+    long time;
+    int distance;
+
+    if (timer->f336 < 0) {
+        origin = entry->f0 - FUN_002a5208(number, rate);
+        if (origin < 0) {
+            origin = 0;
+        }
+        timer->f336 = origin;
+    }
+    time = entry->f0 - timer->f336;
+    if (time < 0) {
+        time = 0;
+    }
+    if (memcmp(&record->tail, entry, 4) != 0) {
+        int type = pic->type;
+
+        record->tail = *entry;
+        record->f0 = number;
+        record->f4 = 0;
+        if (type == 3) {
+            record->f8 = 1;
+        } else {
+            record->f8 = 0;
+        }
+        *pts = entry->f0;
+    } else {
+        if (newGop) {
+            record->f4 += record->f8 + 1;
+            record->f8 = 0;
+            record->f0 = 0;
+        }
+        distance = number - record->f0;
+        record->f8 = (record->f8 > distance) ? record->f8 : distance;
+        time += FUN_002a5208(record->f4 + distance, rate);
+        if (time < 0) {
+            time = 0;
+        }
+    }
+    return time;
 }
 
 long FUN_002a5208(int count, int rate) {
