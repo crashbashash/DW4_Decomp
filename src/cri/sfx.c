@@ -260,17 +260,17 @@ int SFXSET_GetTblPtn(SfxHn *hn) {
 void SFX_SetTagInf(SfxHn *hn, char *data, int size) {
     SfxChunk *zinf = &hn->zinf;
     SfxZHn *zhn;
-    SfxMem in;
-    SfxMem out;
+    SfdSjChunk in;
+    SfdSjChunk out;
     zinf->data = data;
     zinf->size = size;
     zhn = hn->zhn;
     in.data = data;
-    in.size = size;
+    in.len = size;
     if (SJ_SearchTag(&in, "SFXZ", "SFXINFE", &out) == 0)
         SFXZ_SetTagInf(zhn, 0, 0);
     else
-        SFXZ_SetTagInf(zhn, out.data, out.size);
+        SFXZ_SetTagInf(zhn, out.data, out.len);
     zinf->valid = 1;
 }
 

@@ -1,13 +1,9 @@
-typedef struct SjObj SjObj;
+/* The SFD handle as the player files (sfdply.c, sfdring.c, sfdrec.c) see it. */
+#ifndef DW4_CRI_SFDPLY_H
+#define DW4_CRI_SFDPLY_H
 
-typedef struct SjVtbl {
-    char pad0[36];
-    int (*getNumData)(SjObj *sj, int id); /* 36 */
-} SjVtbl;
-
-struct SjObj {
-    SjVtbl *vtbl;
-};
+#include "dw4/cri/sj.h"
+#include "dw4/cri/sfd.h"
 
 typedef struct SfdCrePrm {
     int f0;
@@ -16,51 +12,6 @@ typedef struct SfdCrePrm {
     char *work;            /* 60 */
     unsigned int workSize; /* 64 */
 } SfdCrePrm;
-
-typedef struct SfdRec48 {
-    int f0;
-    int f4;
-    int f8;
-    int f12;
-    int f16;
-    int f20;
-    int f24;
-    int enabled; /* 28 */
-    int f32;
-    int id36;    /* 36 */
-    int id40;    /* 40 */
-    int id44;    /* 44 */
-} SfdRec48;
-
-typedef struct SfdSub24 {
-    long f0;
-    long f8;
-    long f16;
-} SfdSub24;
-
-typedef struct SfdTimer {
-    int count;       /* 0 */
-    int count2;      /* 4 */
-    int f8;
-    int f12;
-    int f16;
-    int f20;
-    int f24;
-    int active;      /* 28 */
-    int activations; /* 32 */
-    int f36;
-    int f40;
-    int f44;
-    SfdSub24 sub[4]; /* 48 */
-} SfdTimer;
-
-typedef void (*SfdErrFn)(void *obj, int code);
-
-typedef struct SfdErrBlk {
-    void (*fn)(void *obj, int code);  /* 0 */
-    void *obj;    /* 4 */
-    char pad8[12];
-} SfdErrBlk;
 
 typedef struct SfdCond {
     int f0;
@@ -83,39 +34,11 @@ typedef struct SfdCond {
     char pad184[216];
 } SfdCond;
 
-/* The video PTS manager entry kept across a player reset. */
-typedef struct SfdPtsm {
-    int f0;
-    int f4;
-    int f8;
-} SfdPtsm;
-
 typedef struct SfdPly SfdPly;
 
 
-typedef struct SfdD28 {
-    int (*timefn[6])(SfdPly *h, int *ncount, int *tscale); /* 0: clock sources; [4] is the user's */
-    int (*isSkipFn)(void);     /* 24 */
-    char pad28[616];
-    int f644;
-    int f648;
-    char pad652[32];
-    int speed;                 /* 684: 1000 = normal */
-    int f688;
-    char pad692[24];
-    int f716;
-    char pad720[4];
-    int (*extClockFn)(SfdPly *h, int *ncount, int *tscale); /* 724 */
-    char pad728[12];
-    int extClockWrap;          /* 740 */
-    void *extClockObj;         /* 744 */
-    char pad748[708];
-    SfdPtsm ptsm;              /* 1456 */
-    char pad1468[36];
-} SfdD28;
-
 typedef struct SfdItem {
-    long pos;          /* 0; negative = none */
+    long long pos;          /* 0; negative = none */
     unsigned int addr; /* 8 */
     unsigned int size; /* 12 */
 } SfdItem;
@@ -130,7 +53,7 @@ typedef struct SfdRing {
 
 typedef struct SfdStmInf {
     int f0;
-    SjObj *sj;         /* 4 */
+    SfdSj *sj;         /* 4 */
     int base;          /* 8 */
     int size;          /* 12 */
 } SfdStmInf;
@@ -166,57 +89,61 @@ typedef struct SfdRecSlot {
     SfdRecSub sub; /* 4 */
 } SfdRecSlot;
 
-typedef struct SfdRecB2208 {
-    int f0;
-    int f4;
-    int f8;
+/* The system stream analysis kept in the seek record (sfd_mps.c in RE4's library). */
+typedef struct SfdRecSysTime {
+    int set;              /* 0: analysed */
+    int time;             /* 4 */
+    int unit;             /* 8 */
+    int nvid;             /* 12: video streams of the system header */
+    int naud;             /* 16: audio streams */
+    int f20;
+    long long scr_base;   /* 24 */
+    long long pts_min;    /* 32 */
+    int stmid_vid;        /* 40: the first video stream id */
+    int stmid_aud;        /* 44: the first audio stream id */
+} SfdRecSysTime;
+
+typedef struct SfdRecAudioTime {
+    int set;
+    int time;
+    int unit;
+} SfdRecAudioTime;
+
+typedef struct SfdRecVideoTime {
+    int set;
+    int time;
+    int unit;
     int f12;
     int f16;
     int f20;
-    long f24;
-    long f32;
-    int f40;
-    int f44;
-} SfdRecB2208;
+} SfdRecVideoTime;
 
-typedef struct SfdRecB2768 {
-    int f0;
-    int f4;
-    int f8;
-} SfdRecB2768;
-
-typedef struct SfdRecB3340 {
-    int f0;
-    int f4;
-    int f8;
-    int f12;
-    int f16;
-    int f20;
-} SfdRecB3340;
-
+/* The seek record SFD_EntrySeek hands a handle (sfdrec.c): the header and stream analysis of the movie,
+ * then the totals the application sets. */
 struct SfdRec {
-    int state;            /* 0 */
-    int f4;
-    int f8;
-    char blk12[2196];     /* 12 */
-    SfdRecB2208 b2208;    /* 2208 */
+    int state;                    /* 0 */
+    int time;                     /* 4 */
+    int unit;                     /* 8 */
+    SfdHdrInf hdrInf;             /* 12 */
+    SfdRecSysTime sysTime;        /* 2208 */
     char pad2256[512];
-    SfdRecB2768 b2768;    /* 2768 */
-    char blk2780[560];    /* 2780 */
-    SfdRecB3340 b3340;    /* 3340 */
+    SfdRecAudioTime audioTime;    /* 2768 */
+    SfdTimeRec startTime;         /* 2780 */
+    char pad2824[516];
+    SfdRecVideoTime videoTime;    /* 3340 */
     char pad3364[132];
-    int f3496;
-    int f3500;
-    int f3504;
-    int f3508;
-    int f3512;
-    int f3516;
-    int f3520;
-    int f3524;
-    int f3528;
-    int f3532;
-    int f3536;
-    int f3540;
+    int derived;                  /* 3496 */
+    int default_value;            /* 3500 */
+    int default_divisor;          /* 3504 */
+    int default_scale;            /* 3508 */
+    int id3512;
+    int id3516;
+    int delegate;                 /* 3520 */
+    int fsize;                    /* 3524: SFD_SetFileSize */
+    int tottime;                  /* 3528: SFD_SetTotTime */
+    int tunit;                    /* 3532 */
+    int byterate;                 /* 3536: SFD_SetByteRate */
+    int seekpos;                  /* 3540: SFD_SetSeekPos */
 };
 
 typedef struct SfdTblEnt {
@@ -228,12 +155,6 @@ typedef struct SfdTable {
     char trailer[64];  /* 160 */
 } SfdTable;
 
-typedef struct SfdPlyInf {
-    char pad0[20];
-    int f20;
-    char pad24[8];
-} SfdPlyInf;
-
 struct SfdPly {
     SfdCrePrm cre;        /* 0 */
     int pending;          /* 68 */
@@ -242,19 +163,20 @@ struct SfdPly {
     int pause;            /* 80 */
     int pauseCnt;         /* 84 */
     char pad88[32];
-    char blk120[2196];    /* 120 */
-    SfdRec48 rec2316;     /* 2316 */
-    char pad2364[20];
-    SfdTimer tmr;         /* 2384 */
-    char pad2528[16];
-    SfdErrBlk err;        /* 2544 */
+    SfdHdrInf hdr;        /* 120 */
+    SfdMvInf mvInf;       /* 2316 */
+    char pad2380[4];
+    SfdPlyInf plyInf;     /* 2384 */
+    SfdErrInf err;        /* 2544 */
     SfdCond cond;         /* 2564 */
     SfdCond cond2;        /* 2964 */
     char pad3364[4];
-    SfdD28 d28;           /* 3368 */
+    SfdTim tim;           /* 3368 */
     SfdStmEnt ent[8];     /* 4872 */
     char pad5800[2176];
     SfdF28 f28;           /* 7976 */
     SfdRecSlot recSlot;   /* 13864 */
     SfdTable tbl;         /* 13880 */
 };
+
+#endif

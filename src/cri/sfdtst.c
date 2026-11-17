@@ -6,50 +6,6 @@
 /* kept here: with this declaration in sfd.h, sfmpv.c (which includes it) schedules sfmpv_SetDecTtu differently */
 extern int sfadxt_stat;
 
-typedef struct SfdTst {
-    int f0;
-    unsigned int pastat;
-    unsigned int adjmode;
-    int paused;
-    int count;
-    int pos;
-    int values[60];
-    long master_time;
-    long f272;
-    long help_time;
-    long help_unit;
-    long out_time;
-    long f304;
-    long f312;
-    long f320;
-    long f328;
-    long f336;
-    long f344;
-    long f352;
-    long f360;
-    long f368;
-    long f376;
-    long f384;
-    long mt_max;
-    int adj_limit;
-    int adj_front;
-    int adj_rear;
-    int resethist;
-    int excesserr;
-    int movave_1st;
-    int movave_2nd;
-    int diff_l_max;
-    int diff_l_min;
-    int diff_a_max;
-    int diff_a_min;
-    int pad444;
-} SfdTst;
-
-typedef struct SfdRatio {
-    long num;
-    long den;
-} SfdRatio;
-
 extern int sftst_debout_siz;
 extern char *sftst_debout_buf;
 extern char *sftst_debout_write;

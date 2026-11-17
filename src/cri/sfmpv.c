@@ -63,14 +63,14 @@ void sfmpv_DiscardSec(SfdPlayer *player, SfdStream *stream);
 void sfmpv_AddRtotSj(SfdPlayer *player, int amount);
 int sfmpv_GetTermSrc(SfdPlayer *player);
 int sfmpv_ChkMpvErr(SfdPlayer *player, int status, int n, int code);
-void sfmpv_ReadPtsQue(SfdPlayer *player, M2vPicAtr *pic, char *pos, long *time, long *pts, int newGop);
-long sfmpv_ComplementPts(SfdTimer *timer, SfdRecord *record, M2vPicAtr *pic, SfdRecordTail *entry, int newGop, long *pts);
-long sfmpv_Nfrm2Pts(int count, int rate);
+void sfmpv_ReadPtsQue(SfdPlayer *player, M2vPicAtr *pic, char *pos, long long *time, long long *pts, int newGop);
+long long sfmpv_ComplementPts(SfdTim *timer, SfdRecord *record, M2vPicAtr *pic, SfdRecordTail *entry, int newGop, long long *pts);
+long long sfmpv_Nfrm2Pts(int count, int rate);
 void FUN_002a54d0(SfdPlayer *player, SfdSlot *slot);
 void sfmpv_ReadTcode(M2vPicAtr *pic, SfdTimeCode *out);
 int sfmpv_DetectTcErr(SfdPlayer *player, M2vPicAtr *pic);
-void sfmpv_DoReformTc(SfdPlayer *player, M2vPicAtr *pic, long id, int flag);
-void sfmpv_Pts2Tc(long pts, int prate, int drop, int tmpref, SfdTimeCode *tc);
+void sfmpv_DoReformTc(SfdPlayer *player, M2vPicAtr *pic, long long id, int flag);
+void sfmpv_Pts2Tc(long long pts, int prate, int drop, int tmpref, SfdTimeCode *tc);
 void sfmpv_NextTc(SfdTimeCode *src, SfdTimeCode *dst);
 void sfmpv_SetMpvHd(SfdPlayer *player, int pts, SfdChunk *chunk);
 void sfmpv_SetMvInf(SfdPicGeom *geom, int pts, M2vPicAtr *pic, int x);
@@ -242,13 +242,13 @@ int SFD_GetNumFrm(void *sfd, int *out) {
     return 0;
 }
 
-int SFD_SetVideoUsrSj(SfdPlayer *player, int index, int a, int b, int c) {
+int SFD_SetVideoUsrSj(SfdPlayer *player, int index, SfdSj *sj, M2vUsrDatFn fn, void *obj) {
     SfdMpv *mpv;
     if (SFLIB_CheckHn(player) != 0) {
         return sfd_ReportError(0, 0xFF000184);
     }
     mpv = player->streams.hn.mpv;
-    MPV_SetUsrSj(mpv->handle, index, a, b, c);
+    MPV_SetUsrSj(mpv->handle, index, sj, fn, obj);
     return 0;
 }
 
@@ -437,9 +437,9 @@ int sfmpv_IsVbvEnough(SfdPlayer *player)
 }
 
 void sfmpv_FixedStartTtu(SfdPlayer *player) {
-    SfdTimeStamp *stamp = &player->timer.f280;
-    if (stamp->a != 0x7FFFFFFF) {
-        stamp->done = 1;
+    SfdTimeRec *stamp = &player->tim.vofst;
+    if (stamp->time != 0x7FFFFFFF) {
+        stamp->valid = 1;
     }
 }
 
@@ -808,11 +808,11 @@ void sfmpv_PeekChnk(SfdPlayer *player, SfdChunk *out) {
 }
 
 void sfmpv_FixedForSeek(SfdPlayer *player) {
-    SfdTimeStamp *stamp = &player->timer.f148;
+    SfdTimeRec *stamp = &player->tim.tot;
     SfdStreams *streams = &player->streams;
     int index = streams->f16;
     if (streams->f32 < 0) streams->f32 = SFBUF_GetRTot(player, index) + 4;
-    if (stamp->a < 0) *stamp = player->timer.best;
+    if (stamp->time < 0) *stamp = player->tim.best;
 }
 
 int sfmpv_Concat(SfdPlayer *player, SfdStream *stream) {
@@ -824,7 +824,7 @@ int sfmpv_Concat(SfdPlayer *player, SfdStream *stream) {
 }
 
 int sfmpv_ConcatSub(SfdPlayer *player) {
-    SfdTimer *timer = &player->timer;
+    SfdTim *timer = &player->tim;
     SfdMpv *mpv = player->streams.hn.mpv;
     int count;
     if (SFSET_GetCond(player, 6) == 0) {
@@ -849,18 +849,18 @@ int sfmpv_ConcatSub(SfdPlayer *player) {
 }
 
 int sfmpv_CalcVideoTotTime(SfdPlayer *player) {
-    SfdTimeStamp *state = &player->timer.state;
+    SfdTimeRec *state = &player->tim.state;
     SfdTimeCode tc;
     int position;
     int size;
     /* matching construct: manual — best.done/best.tc read through the player, state.a through the state pointer */
-    if (player->timer.best.done == 0) {
+    if (player->tim.best.valid == 0) {
         return 0;
     }
-    sfmpv_NextTc(&player->timer.best.tc, &tc);
+    sfmpv_NextTc(&player->tim.best.tc, &tc);
     tc.add = 0;
     SFTIM_Tc2Time(&tc, &position, &size);
-    return position - state->a;
+    return position - state->time;
 }
 
 void sfmpv_DiscardSec(SfdPlayer *player, SfdStream *stream) {
@@ -920,8 +920,8 @@ int sfmpv_DecodePicAtr(SfdPlayer *player, SfdChunk *chunk, int sj, int code, int
     void *handle = mpv->handle;
     M2vPicAtr *pic = &mpv->pic;
     SfdBufPool *pool = &mpv->pool;
-    long time;
-    long pts;
+    long long time;
+    long long pts;
     int before;
     int moved;
     int err;
@@ -1018,21 +1018,21 @@ void sfmpv_InitComplementPts(SfdRecord *record) {
     tail->f8 = 0;
 }
 
-long sfmpv_ComplementPts(SfdTimer *timer, SfdRecord *record, M2vPicAtr *pic, SfdRecordTail *entry, int newGop, long *pts) {
+long long sfmpv_ComplementPts(SfdTim *timer, SfdRecord *record, M2vPicAtr *pic, SfdRecordTail *entry, int newGop, long long *pts) {
     int rate = SFTIM_prate[pic->frame_rate_code];
     int number = pic->temporal_reference;
-    long origin;
-    long time;
+    long long origin;
+    long long time;
     int distance;
 
-    if (timer->f336 < 0) {
+    if (timer->baseTime < 0) {
         origin = entry->f0 - sfmpv_Nfrm2Pts(number, rate);
         if (origin < 0) {
             origin = 0;
         }
-        timer->f336 = origin;
+        timer->baseTime = origin;
     }
-    time = entry->f0 - timer->f336;
+    time = entry->f0 - timer->baseTime;
     if (time < 0) {
         time = 0;
     }
@@ -1064,13 +1064,13 @@ long sfmpv_ComplementPts(SfdTimer *timer, SfdRecord *record, M2vPicAtr *pic, Sfd
     return time;
 }
 
-long sfmpv_Nfrm2Pts(int count, int rate) {
-    return (long)count * 90000000 / rate;
+long long sfmpv_Nfrm2Pts(int count, int rate) {
+    return (long long)count * 90000000 / rate;
 }
 
 /* repeat_first_field accounting: the field offset of each picture of the group, kept by temporal reference */
 void sfmpv_CalcRepeatField(SfdPlayer *player, M2vPicAtr *pic, int newGop) {
-    SfdTimer *timer = &player->timer;
+    SfdTim *timer = &player->tim;
     SfdFieldEntry *fields = timer->fields;
     SfdMpv *mpv = player->streams.hn.mpv;
     SfdSlot *ref;
@@ -1084,9 +1084,9 @@ void sfmpv_CalcRepeatField(SfdPlayer *player, M2vPicAtr *pic, int newGop) {
     sfmpv_ReadTcode(pic, &timer->tc);
     if (newGop != 0) {
         for (i = 0; i < 64; i++) {
-            fields[i].f0 = -1;
+            fields[i].repeat = -1;
         }
-        fields[0].f2 = -1;
+        fields[0].total = -1;
     } else if (pic->picture_coding_type == 1 || pic->picture_coding_type == 2) {
         ref = mpv->second;
         cur = pic->temporal_reference;
@@ -1095,29 +1095,29 @@ void sfmpv_CalcRepeatField(SfdPlayer *player, M2vPicAtr *pic, int newGop) {
             cur += 1024;
         }
         for (t = last + 1; t < cur; t++) {
-            fields[t % 64].f0 = -1;
+            fields[t % 64].repeat = -1;
         }
     }
     idx = pic->temporal_reference % 64;
-    fields[idx].f0 = timer->tc.field0;
+    fields[idx].repeat = timer->tc.repeat;
     if (newGop != 0) {
-        fields[idx].f2 = 0;
-    } else if (pic->temporal_reference == 0 && (short)fields[0].f2 == -1) {
-        fields[0].f2 = 0;
+        fields[idx].total = 0;
+    } else if (pic->temporal_reference == 0 && (short)fields[0].total == -1) {
+        fields[0].total = 0;
     } else {
         for (i = 0; i < 64; i++) {
             j = (idx - i + 63) % 64;
-            if (fields[j].f0 != -1) {
-                fields[idx].f2 = fields[j].f0 + fields[j].f2;
+            if (fields[j].repeat != -1) {
+                fields[idx].total = fields[j].repeat + fields[j].total;
                 break;
             }
         }
     }
-    timer->tc.field = fields[idx].f2;
-    if (pic->picture_coding_type == 3 && fields[idx].f0 != 0) {
+    timer->tc.field = fields[idx].total;
+    if (pic->picture_coding_type == 3 && fields[idx].repeat != 0) {
         j = mpv->second->info.temporal_reference % 64;
-        fields[j].f2 = fields[idx].f0 + fields[idx].f2;
-        mpv->second->stamp.tc.field = fields[j].f2;
+        fields[j].total = fields[idx].repeat + fields[idx].total;
+        mpv->second->stamp.tc.field = fields[j].total;
         FUN_002a54d0(player, mpv->second);
         sfmpv_SetFrmTime(player, mpv->second);
     }
@@ -1125,20 +1125,20 @@ void sfmpv_CalcRepeatField(SfdPlayer *player, M2vPicAtr *pic, int newGop) {
 
 void FUN_002a54d0(SfdPlayer *player, SfdSlot *slot) {
     int t[2];
-    SfdTimer *timer;
+    SfdTim *timer;
     int d;
-    timer = &player->timer;
+    timer = &player->tim;
     SFTIM_Tc2Time(&slot->stamp.tc, &t[0], &t[1]);
-    d = t[0] - timer->state.a;
-    slot->stamp.done = 1;
-    slot->stamp.a = d;
-    slot->stamp.b = t[1];
-    if (d >= timer->best.a) {
+    d = t[0] - timer->state.time;
+    slot->stamp.valid = 1;
+    slot->stamp.time = d;
+    slot->stamp.unit = t[1];
+    if (d >= timer->best.time) {
         timer->best = slot->stamp;
     }
 }
 
-void sfmpv_ReformTc(SfdPlayer *player, M2vPicAtr *pic, long a, int b) {
+void sfmpv_ReformTc(SfdPlayer *player, M2vPicAtr *pic, long long a, int b) {
     int enabled = SFSET_GetCond(player, 52);
     if (enabled == 0) {
         if (a >= 0 || pic->gsc_count == 0 || pic->repeat_first_field != 0
@@ -1158,12 +1158,12 @@ int sfmpv_DetectTcErr(SfdPlayer *player, M2vPicAtr *pic) {
     int rate;
     int start;
     int span;
-    if (player->timer.best.done == 0) {
+    if (player->tim.best.valid == 0) {
         return 0;
     }
-    tc = player->timer.tc;
+    tc = player->tim.tc;
     SFTIM_Tc2Time(&tc, &now, &rate);
-    SFTIM_Tc2Time(&player->timer.best.tc, &start, &rate);
+    SFTIM_Tc2Time(&player->tim.best.tc, &start, &rate);
     span = SFSET_GetCond(player, 53) * rate;
     if (now <= start) {
         return 1;
@@ -1174,17 +1174,17 @@ int sfmpv_DetectTcErr(SfdPlayer *player, M2vPicAtr *pic) {
     return 1;
 }
 
-void sfmpv_DoReformTc(SfdPlayer *player, M2vPicAtr *pic, long id, int flag)
+void sfmpv_DoReformTc(SfdPlayer *player, M2vPicAtr *pic, long long id, int flag)
 {
-    SfdTimer *timer = &player->timer;
+    SfdTim *timer = &player->tim;
     int b = pic->drop_frame_flag;
     int a = pic->frame_rate_code;
     int idx = pic->temporal_reference;
     if (flag != 0 && id >= 0) {
-        sfmpv_Pts2Tc(id, a, b, idx, &player->timer.tc);
+        sfmpv_Pts2Tc(id, a, b, idx, &player->tim.tc);
         return;
     }
-    if (timer->best.done == 0) {
+    if (timer->best.valid == 0) {
         if (player->userWork == 0) {
             timer->tc.rate = a;
             timer->tc.drop = 0;
@@ -1195,8 +1195,8 @@ void sfmpv_DoReformTc(SfdPlayer *player, M2vPicAtr *pic, long id, int flag)
         }
     } else if (flag != 0) {
         sfmpv_NextTc(&timer->best.tc, &timer->tc);
-        timer->fields[0].f2 = timer->tc.field;
-        timer->fields[idx].f2 = timer->tc.field;
+        timer->fields[0].total = timer->tc.field;
+        timer->fields[idx].total = timer->tc.field;
     } else {
         timer->tc.rate = timer->best.tc.rate;
         timer->tc.drop = timer->best.tc.drop;
@@ -1207,7 +1207,7 @@ void sfmpv_DoReformTc(SfdPlayer *player, M2vPicAtr *pic, long id, int flag)
     }
 }
 
-void sfmpv_Pts2Tc(long pts, int prate, int drop, int tmpref, SfdTimeCode *tc)
+void sfmpv_Pts2Tc(long long pts, int prate, int drop, int tmpref, SfdTimeCode *tc)
 {
     int rnd = sfmpv_fps_round[prate];
     int rate = SFTIM_prate[prate];
@@ -1268,38 +1268,38 @@ void sfmpv_Pts2Tc(long pts, int prate, int drop, int tmpref, SfdTimeCode *tc)
 
 void sfmpv_SetHeadTtu(SfdPlayer *player, M2vPicAtr *pic)
 {
-    SfdTimeStamp *state = &player->timer.state;
+    SfdTimeRec *state = &player->tim.state;
     SfdTimeCode tc;
     int a, b;
-    if (state->done != 0)
+    if (state->valid != 0)
         return;
-    tc = player->timer.tc;
+    tc = player->tim.tc;
     tc.add = 0;
     SFTIM_Tc2Time(&tc, &a, &b);
     state->tc = tc;
-    state->a = a;
-    state->b = b;
-    state->done = 1;
+    state->time = a;
+    state->unit = b;
+    state->valid = 1;
 }
 
 void sfmpv_SetDecTtu(SfdPlayer *player, M2vPicAtr *pic)
 {
-    SfdTimeStamp *state = &player->timer.state;
+    SfdTimeRec *state = &player->tim.state;
     SfdTimeCode tc;
     int a, b;
-    SfdTimeStamp *cur;
-    SfdTimeStamp *best;
+    SfdTimeRec *cur;
+    SfdTimeRec *best;
     int d;
-    tc = player->timer.tc;
+    tc = player->tim.tc;
     SFTIM_Tc2Time(&tc, &a, &b);
-    player->timer.cur.tc = tc;
-    cur = &player->timer.cur;
-    best = &player->timer.best;
-    d = a - state->a;
-    cur->done = 1;
-    cur->a = d;
-    cur->b = b;
-    if (d >= best->a)
+    player->tim.cur.tc = tc;
+    cur = &player->tim.cur;
+    best = &player->tim.best;
+    d = a - state->time;
+    cur->valid = 1;
+    cur->time = d;
+    cur->unit = b;
+    if (d >= best->time)
         *best = *cur;
 }
 
@@ -1311,7 +1311,7 @@ void sfmpv_ReadTcode(M2vPicAtr *pic, SfdTimeCode *out) {
     out->second = pic->time_code_seconds;
     out->frame = pic->time_code_pictures;
     out->add = pic->temporal_reference;
-    out->field0 = (signed char)pic->field_count;
+    out->repeat = (signed char)pic->field_count;
     out->field = 0;
 }
 
@@ -1345,7 +1345,7 @@ void sfmpv_SetMpvHd(SfdPlayer *player, int pts, SfdChunk *chunk)
     SfdPicture *picture;
     SfdUserData *user;
     int len;
-    SfdTimer *timer;
+    SfdTim *timer;
     picture = sfmpv_GetHd(player);
     if (picture == 0 || picture->valid != 0)
         return;
@@ -1353,7 +1353,7 @@ void sfmpv_SetMpvHd(SfdPlayer *player, int pts, SfdChunk *chunk)
     user = &picture->user;
     if (len > 512)
         len = 512;
-    timer = &player->timer;
+    timer = &player->tim;
     user->size = len;
     MEM_Copy(user->data, chunk->addr, len);
     if (pts == 0x3FFFF) {
@@ -1416,7 +1416,7 @@ int sfmpv_ChkBufSiz(SfdPlayer *player, SfdPicGeom *geom) {
 }
 
 int sfmpv_IsConcatTimeFix(SfdPlayer *player) {
-    return player->timer.base >= 0;
+    return player->tim.tally.total >= 0;
 }
 
 int sfmpv_IsSkip(SfdPlayer *player, SfdChunk *chunk) {
@@ -1471,7 +1471,7 @@ void sfmpv_UpdateDefect(SfdPlayer *player, M2vPicAtr *pic, int kind)
         if (a == 1)
             mode = 5;
         else {
-            if (player->timer.f280.done == 0 && SFSET_GetCond(player, 73) == 1)
+            if (player->tim.vofst.valid == 0 && SFSET_GetCond(player, 73) == 1)
                 b = 1;
             if (b == 1)
                 mode = 2;
@@ -1489,15 +1489,15 @@ void sfmpv_UpdateDefect(SfdPlayer *player, M2vPicAtr *pic, int kind)
 
 int sfmpv_IsSeekSkip(SfdPlayer *player) {
     SfdLink *link = &player->link;
-    SfdTimeStamp *cur = &player->timer.cur;
-    SfdTimeStamp *f280 = &player->timer.f280;
+    SfdTimeRec *cur = &player->tim.cur;
+    SfdTimeRec *f280 = &player->tim.vofst;
     if (link->id < 0) {
         return 0;
     }
-    if (f280->done != 0) {
+    if (f280->valid != 0) {
         return 0;
     }
-    return UTY_CmpTime(link->id, link->arg, cur->a, cur->b) == 0;
+    return UTY_CmpTime(link->id, link->arg, cur->time, cur->unit) == 0;
 }
 
 int sfmpv_IsPtypeSkip(SfdPlayer *player, unsigned int kind) {
@@ -1550,9 +1550,9 @@ int sfmpv_IsEmptySkip(SfdPlayer *player, unsigned int type, SfdChunk *chunk) {
  * its display time against the current time, within the allowed number of skips. */
 int sfmpv_IsLate(SfdPlayer *player, unsigned int type) {
     SfdMpv *mpv = player->streams.hn.mpv;
-    SfdTimer *timer = &player->timer;
-    SfdTimeStamp *cur = &timer->cur;
-    SfdTimeStamp *ofs = &timer->f280;
+    SfdTim *timer = &player->tim;
+    SfdTimeRec *cur = &timer->cur;
+    SfdTimeRec *ofs = &timer->vofst;
     int time;
     int unit;
     int now;
@@ -1560,14 +1560,14 @@ int sfmpv_IsLate(SfdPlayer *player, unsigned int type) {
     int dnum;
     int dden;
 
-    if (ofs->done == 0) {
+    if (ofs->valid == 0) {
         time = 0;
     } else {
-        time = cur->a - ofs->a + timer->base;
+        time = cur->time - ofs->time + timer->tally.total;
     }
-    unit = cur->b;
-    if (timer->hook != 0) {
-        return timer->hook(player, type, time, unit);
+    unit = cur->unit;
+    if (timer->isSkipFn != 0) {
+        return timer->isSkipFn(player, type, time, unit);
     }
     if (type == 1) {
         SFTIM_UpdateItime(timer, time);
@@ -1622,9 +1622,9 @@ int sfmpv_SkipFrm(SfdPlayer *player, int sj)
 }
 
 void sfmpv_SetSkipTtu(SfdPlayer *player) {
-    SfdTimeStamp *current = &player->timer.cur;
-    SfdTimeStamp *latest = &player->timer.latest;
-    if (current->a < player->timer.f280.a) {
+    SfdTimeRec *current = &player->tim.cur;
+    SfdTimeRec *latest = &player->tim.latest;
+    if (current->time < player->tim.vofst.time) {
         *latest = *current;
     }
 }
@@ -1713,24 +1713,24 @@ void FUN_002a6ea0(SfdPlayer *player, SfdMpv *mpv, int *out64, int *out68) {
 
 void sfmpv_SetStartTtu(SfdPlayer *player)
 {
-    SfdTimeStamp *state2 = &player->timer.f280;
-    SfdTimeStamp *state = &player->timer.state;
+    SfdTimeRec *state2 = &player->tim.vofst;
+    SfdTimeRec *state = &player->tim.state;
     SfdTimeCode tc;
     int a, b;
-    if (state2->done != 0)
+    if (state2->valid != 0)
         return;
-    tc = player->timer.cur.tc;
+    tc = player->tim.cur.tc;
     if (sfmpv_IsDefect(player, 3) == 0 && sfmpv_IsPtypeSkip(player, 3) == 0)
         tc.add = 0;
     SFTIM_Tc2Time(&tc, &a, &b);
     state2->tc = tc;
-    state2->a = a - state->a;
-    state2->b = b;
-    state2->done = 1;
+    state2->time = a - state->time;
+    state2->unit = b;
+    state2->valid = 1;
 }
 
 void FUN_002a7040(SfdPlayer *player, SfdSlot *slot) {
-    slot->stamp = player->timer.cur;
+    slot->stamp = player->tim.cur;
     if (SFMPVP_IsSceMpegUsed(player) != 0) {
         slot->f224 = SFMPVP_GetFrameCount(player);
     }
@@ -1738,17 +1738,17 @@ void FUN_002a7040(SfdPlayer *player, SfdSlot *slot) {
 }
 
 void sfmpv_SetFrmTime(SfdPlayer *player, SfdSlot *slot) {
-    SfdTimer *timer = &player->timer;
-    SfdTimeStamp *in = &slot->stamp;
+    SfdTim *timer = &player->tim;
+    SfdTimeRec *in = &slot->stamp;
     int t;
-    slot->f60 = in->b;
-    slot->f56 = in->a - player->timer.f280.a + timer->base;
-    slot->f76 = in->a;
-    slot->f80 = in->a + timer->base;
+    slot->f60 = in->unit;
+    slot->f56 = in->time - player->tim.vofst.time + timer->tally.total;
+    slot->f76 = in->time;
+    slot->f80 = in->time + timer->tally.total;
     if (SFMPVP_IsSceMpegUsed(player) != 0) {
         t = UTY_MulDiv(slot->f60, (slot->f224 - timer->f352) * 1000, SFTIM_prate[slot->info.frame_rate_code]);
         slot->f76 = t;
-        slot->f56 = slot->f80 = t + timer->base;
+        slot->f56 = slot->f80 = t + timer->tally.total;
     }
     if (timer->f644 < slot->f56) {
         timer->f644 = slot->f56;
@@ -2059,7 +2059,7 @@ void SFMPV_AddWrite(SfdPlayer *player) {
 
 int SFMPV_GetRead(SfdPlayer *player, SfdFrameInfo **out) {
     int buf[4];
-    SfdTimer *timer = &player->timer;
+    SfdTim *timer = &player->tim;
     SfdSlot *slot;
     if (SFMPVF_GetNumFrm(player) == -1) {
         *out = 0;
@@ -2071,8 +2071,8 @@ int SFMPV_GetRead(SfdPlayer *player, SfdFrameInfo **out) {
         return 0;
     }
     sfmpv_SetFrmInf(player, slot, out);
-    timer->f636 = (*out)->f20;
-    timer->f640 = (*out)->f24;
+    timer->base = (*out)->f20;
+    timer->base_frames = (*out)->f24;
     return 0;
 }
 
@@ -2199,7 +2199,7 @@ int sfmpv_ReprocessShc(SfdPlayer *player, SfdMpv *mpv, int *ok)
         return 0;
     if (picture->valid == 0)
         return 0;
-    player->timer.state = picture->stamp;
+    player->tim.state = picture->stamp;
     user = &picture->user;
     chunk.addr = user->data;
     chunk.size = user->size;
@@ -2343,7 +2343,7 @@ SfdSlot *SFMPVF_AllocFrm(SfdPlayer *player) {
     n = mpv->slotCount;
     slot = mpv->slots;
     for (i = 0; i < n; i++, slot++) {
-        if (*(long *)slot == 0) {
+        if (*(long long *)slot == 0) {
             slot->state = 1;
             break;
         }

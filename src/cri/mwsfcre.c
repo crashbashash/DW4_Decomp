@@ -15,26 +15,6 @@ typedef struct MwsfdFrmBufs {
     void *dec;  /* the decoder's fixed work */
 } MwsfdFrmBufs;
 
-/* the SFD header analysis mwPlyGetHdrInf reads */
-typedef struct SfdHdrInf {
-    signed char ok0;
-    signed char ok1;
-    char pad2[2];
-    int video;    /* 4 */
-    int audio;    /* 8 */
-    int f12;      /* 12 */
-    int f16;
-    int width;    /* 20 */
-    int height;   /* 24 */
-    int f28;
-    int rate;     /* 32 */
-    int f36;
-    signed char f40;
-    char pad41[3];
-    int audioFreq; /* 44 */
-    int pad48[4];
-} SfdHdrInf;
-
 extern int mwsfd_option;
 extern int mpv_frm_buf_num;     /* caller frame buffers (0: allocate per player) */
 extern int mpv_frm_buf_size;
@@ -137,7 +117,7 @@ extern MwsfdMpvCond mwsfcre_mpvCond;
 extern MwsfdAdxCfg mwsfcre_adxCfg;
 
 void *mwsfsfx_Create(char *work, int size, int width, int height);
-struct SjObj *mwsfd_CreateAddInfSj(MwsfdPly *ply);
+SfdSj *mwsfd_CreateAddInfSj(MwsfdPly *ply);
 MwsfdPly *mwsfcre_CreateSfd(MwsfdPly *ply, MwsfdCreInf *cprm);
 int mwsfcre_CheckCprm(MwsfdCreInf *cprm);
 int mwsfcre_IsOkUsrMalloc(MwsfdCreInf *cprm);
@@ -145,7 +125,6 @@ void mwsfcre_InitMemMng(MwsfdPly *ply, MwsfdCreInf *cprm);
 int mwsfcre_MallocCompoWork(MwsfdPly *ply);
 int mwsfcre_ConvBufFmtFromMwsfd(int format);
 
-int SFD_SetErrFn(void *sfd, void (*fn)(void), void *obj);
 
 int mwPlyCalcWorkSfd(MwsfdCreInf *cprm);
 int mwPlyCalcWorkCompo(MwsfdCreInf *cprm);
@@ -158,7 +137,7 @@ int mwsfcre_GetMallocCnt(MwsfdPly *ply);
 void mwsfcre_OrgFree(MwsfdPly *ply, void *ptr);
 void mwsfcre_UsrFree(void *ptr);
 void mwsfcre_AllFree(MwsfdPly *ply);
-int mwsfcre_DecideFtypeByHdrInf(SfdHdrInf *inf);
+int mwsfcre_DecideFtypeByHdrInf(SfdAnaInf *inf);
 int mwsfdcre_IsPlayableByHdrInf(MwsfdHdrInf *hdr);
 
 /* matching construct: permuter, reduced by hand: the type read in each test */
@@ -705,7 +684,7 @@ void mwsfd_SetOption(int value) {
 /* matching construct: 120-order sweep of the field copies */
 void mwPlyGetHdrInf(char *buf, int size, MwsfdHdrInf *out) {
     MwsfdHdrInf hdr;
-    SfdHdrInf inf;
+    SfdAnaInf inf;
 
     if (buf == 0 || out == 0) {
         MWSFSVM_Error(E204161_mwPlyGetHdrInf_NULL_pointer);
@@ -717,7 +696,7 @@ void mwPlyGetHdrInf(char *buf, int size, MwsfdHdrInf *out) {
     }
     memset(&hdr, 0, sizeof(hdr));
     SFD_AnalyCreInf(buf, size, &inf);
-    if (inf.ok0 == 0 || inf.ok1 == 0) {
+    if (inf.found == 0 || inf.isAv == 0) {
         *out = hdr;
         out->valid = 0;
         return;
@@ -725,26 +704,26 @@ void mwPlyGetHdrInf(char *buf, int size, MwsfdHdrInf *out) {
     hdr.type = mwsfcre_DecideFtypeByHdrInf(&inf);
     hdr.width = inf.width;
     hdr.height = inf.height;
-    hdr.rate = inf.rate;
-    hdr.audioFreq = inf.audioFreq;
-    hdr.f40 = inf.f40;
+    hdr.rate = inf.frameRate;
+    hdr.audioFreq = inf.sfreq;
+    hdr.f40 = inf.nch;
     mwply_GetPicInf(buf, size, &hdr);
     hdr.valid = mwsfdcre_IsPlayableByHdrInf(&hdr);
     *out = hdr;
 }
 
-/* video with audio 1, video alone 3, audio alone 2, else 0 */
-int mwsfcre_DecideFtypeByHdrInf(SfdHdrInf *inf) {
+/* the MWSFD file type: an SFD system stream 1, one without audio 3, an MPEG video stream 2, else 0 */
+int mwsfcre_DecideFtypeByHdrInf(SfdAnaInf *inf) {
     int kind = 0;
 
-    if (inf->video == 0) {
-        if (inf->audio != 0) {
-            if (inf->f12 == 0) {
+    if (inf->system == 0) {
+        if (inf->video != 0) {
+            if (inf->audio == 0) {
                 kind = 2;
             }
         }
     } else {
-        kind = (inf->f12 == 0) ? 3 : 1;
+        kind = (inf->audio == 0) ? 3 : 1;
     }
     return kind;
 }

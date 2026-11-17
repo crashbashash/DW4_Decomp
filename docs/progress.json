@@ -320,7 +320,7 @@
    },
    "struct.a": {
     "reason": null,
-    "value": 9
+    "value": 5
    },
    "struct.b": {
     "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
@@ -328,7 +328,7 @@
    },
    "struct.c": {
     "reason": null,
-    "value": 25
+    "value": 9
    },
    "unapproved.bytes": {
     "reason": null,
@@ -383,9 +383,9 @@
    "profile_split.bytes": 19492,
    "profile_split.units": 3,
    "raw_casts.reflected": 262,
-   "struct.a": 9,
+   "struct.a": 5,
    "struct.b": 1,
-   "struct.c": 25,
+   "struct.c": 9,
    "unapproved.bytes": 0,
    "unapproved.functions": 0,
    "unmatched.bytes": 193824,
@@ -492,7 +492,7 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2266412,
+  "bytes": 2268684,
   "failing": {
    "addresses": {
     "bytes": 673740,
@@ -503,8 +503,8 @@
     "functions": 497
    },
    "fields": {
-    "bytes": 446356,
-    "functions": 2424
+    "bytes": 443256,
+    "functions": 2403
    },
    "idioms": {
     "bytes": 380512,
@@ -523,15 +523,15 @@
     "functions": 1723
    },
    "types": {
-    "bytes": 314920,
-    "functions": 1167
+    "bytes": 314768,
+    "functions": 1166
    },
    "virtuals": {
     "bytes": 146400,
     "functions": 557
    }
   },
-  "functions": 13775,
+  "functions": 13793,
   "matched_functions": 20431
  },
  "regions": [
@@ -669,8 +669,8 @@
   "offset_casts": 3950,
   "pct": 45.46,
   "recovered": 32742,
-  "synthetic": 6281,
-  "total": 72021,
+  "synthetic": 6207,
+  "total": 72018,
   "typeable": 262,
   "typeable_pct": 0.36
  }

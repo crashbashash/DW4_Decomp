@@ -5,30 +5,6 @@
 #include "dw4/cri/sfd.h"
 #include "dw4/cri/sj.h"
 
-typedef struct SjObj SjObj;
-
-typedef struct SjChunk {
-    char *addr;
-    int size;
-} SjChunk;
-
-typedef struct SjVtbl {
-    void *f0;
-    void *f4;
-    void *f8;
-    void (*destroy)(SjObj *sj);                                   /* 12 */
-    void *getUuid;                                                /* 16 */
-    void (*reset)(SjObj *sj);                                     /* 20 */
-    void (*getChunk)(SjObj *sj, int id, int size, SjChunk *chunk); /* 24 */
-    void *ungetChunk;                                             /* 28 */
-    void (*putChunk)(SjObj *sj, int id, SjChunk *chunk);          /* 32 */
-    int (*getNumData)(SjObj *sj, int id);                         /* 36 */
-} SjVtbl;
-
-struct SjObj {
-    SjVtbl *vtbl;
-};
-
 typedef struct MwsfdFrm {
     int addr;       /* 0 */
     unsigned int bufFmt; /* 4 */
@@ -460,9 +436,9 @@ int MWSFTAG_IsUseAinfSj(MwsfdCreInf *cre)
     return result;
 }
 
-SjObj *MWSFTAG_CreateAinfSj(MwsfdPly *ply)
+SfdSj *MWSFTAG_CreateAinfSj(MwsfdPly *ply)
 {
-    SjObj *sj;
+    SfdSj *sj;
 
     if (MWSFTAG_IsUseAinfSj(&ply->cre) == 0) {
         return 0;
@@ -478,7 +454,7 @@ SjObj *MWSFTAG_CreateAinfSj(MwsfdPly *ply)
 
 void MWSFTAG_DestroyAinfSj(MwsfdPly *ply)
 {
-    SjObj *sj = ply->addInfSj;
+    SfdSj *sj = ply->addInfSj;
 
     if (sj != 0) {
         sj->vtbl->destroy(sj);
@@ -487,7 +463,7 @@ void MWSFTAG_DestroyAinfSj(MwsfdPly *ply)
 
 int MWSFTAG_SetAinfSj(MwsfdPly *ply)
 {
-    SjObj *sj;
+    SfdSj *sj;
 
     if (mwsftag_IsPlayM1V(ply) == 1) {
         return 0;
@@ -514,7 +490,7 @@ void mwsfsfx_ResetAddInf(MwsfdPly *ply)
 
 void MWSFTAG_ResetAinfSj(MwsfdPly *ply)
 {
-    SjObj *sj = ply->addInfSj;
+    SfdSj *sj = ply->addInfSj;
 
     if (sj != 0) {
         sj->vtbl->reset(sj);
@@ -542,11 +518,11 @@ void mwsfsfx_UpdateAddInf(MwsfdPly *ply)
 
 void mwsfd_GetCriTags(MwsfdPly *ply)
 {
-    SjChunk in;
-    SjChunk out;
-    SjChunk chunk;
+    SfdSjChunk in;
+    SfdSjChunk out;
+    SfdSjChunk chunk;
     MwsfdAddInf *inf = &ply->addInf;
-    SjObj *sj = ply->addInfSj;
+    SfdSj *sj = ply->addInfSj;
     MwsfdUsrBuf *ub;
     int size;
 
@@ -557,8 +533,8 @@ void mwsfd_GetCriTags(MwsfdPly *ply)
         inf->valid = 1;
         return;
     }
-    in.addr = ply->addInfBase;
-    in.size = size;
+    in.data = ply->addInfBase;
+    in.len = size;
     if (SJ_SearchTag(&in, "CRITAGS", "CRITAGE", &out) == 0) {
         inf->addr = 0;
         inf->size = 0;
@@ -567,17 +543,17 @@ void mwsfd_GetCriTags(MwsfdPly *ply)
     }
     ub = &ply->usrBuf;
     if (ub->buf != 0) {
-        memcpy(ub->buf, out.addr, out.size);
+        memcpy(ub->buf, out.data, out.len);
         inf->addr = ub->buf;
-        inf->size = out.size;
+        inf->size = out.len;
         inf->valid = 1;
         sj->vtbl->getChunk(sj, 1, 0x7FFFFFFF, &chunk);
         sj->vtbl->putChunk(sj, 0, &chunk);
         sj->vtbl->reset(sj);
         return;
     }
-    inf->addr = out.addr;
-    inf->size = out.size;
+    inf->addr = out.data;
+    inf->size = out.len;
     inf->valid = 1;
     MWSFTAG_ClearUsrSj(ply);
 }
@@ -595,8 +571,8 @@ void mwPlyAttachAddInfBuf(MwsfdPly *ply, char *buf, int size)
 
 void mwsftag_GetSFXinfFromAinf(MwsfdPly *ply)
 {
-    SjChunk in;
-    SjChunk out;
+    SfdSjChunk in;
+    SfdSjChunk out;
     MwsfdAddInf *inf = &ply->addInf;
     void *sfx = ply->sfx;
 
@@ -604,13 +580,13 @@ void mwsftag_GetSFXinfFromAinf(MwsfdPly *ply)
         SFX_SetTagInf(sfx, 0, 0);
         return;
     }
-    in.addr = inf->addr;
-    in.size = inf->size;
+    in.data = inf->addr;
+    in.len = inf->size;
     if (SJ_SearchTag(&in, "SFXINFS", "SFXINFE", &out) == 0) {
         SFX_SetTagInf(sfx, 0, 0);
         return;
     }
-    SFX_SetTagInf(sfx, out.addr, out.size);
+    SFX_SetTagInf(sfx, out.data, out.len);
 }
 
 int MWSFTAG_ClearUsrSj(MwsfdPly *ply)
@@ -647,11 +623,11 @@ void MWSFD_GetAinfAll(MwsfdPly *ply, char **addr, int *size)
 
 void MWSFD_GetAinfFx(MwsfdPly *ply, char **data, int *size)
 {
-    SjChunk zinf;
+    SfdSjChunk zinf;
 
-    SFX_GetTagInf(ply->sfx, &zinf.addr, &zinf.size);
-    *data = zinf.addr;
-    *size = zinf.size;
+    SFX_GetTagInf(ply->sfx, &zinf.data, &zinf.len);
+    *data = zinf.data;
+    *size = zinf.len;
 }
 
 void MWSFD_GetZfrmRange(MwsfdPly *ply, MwsfdFrm *frm, int *first, int *second)

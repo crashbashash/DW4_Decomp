@@ -34,17 +34,17 @@ The function count is flattered by small functions: the ones done have a median 
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**13,775** of the 20,431 matched functions are readable: **2,266,412** code bytes, **65.3 %** of the code.
+**13,793** of the 20,431 matched functions are readable: **2,268,684** code bytes, **65.3 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 4,541 | 546,580 |
 | no name holds an address: not the function's own, nor any function, variable or type it uses | 3,834 | 673,740 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,167 | 314,920 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,166 | 314,768 |
 | it sits in its class or module file, not `src/unmatched/` | 9 | 628 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 1,723 | 462,168 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 2,067 | 380,512 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,424 | 446,356 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,403 | 443,256 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 557 | 146,400 |
 | what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol, no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 497 | 273,820 |
 
@@ -77,9 +77,9 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `inline_asm.other` | 0 | 0 | 0 | `asm` statements other than `sync` and `ei` without an owner's approval row for each function they reach (tools/inline_asm.py) |
 | `unmatched.functions` | 145 | 145 | 0 | functions in the layout with no definition in src/ |
 | `unmatched.bytes` | 193,824 | 193,824 | 0 | bytes of those |
-| `struct.a` | 9 | 9 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
+| `struct.a` | 5 | 5 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
 | `struct.b` | 1 | 1 | 0 | struct-report groups: receiver view disagrees with the reflected class; increase recorded: engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes |
-| `struct.c` | 25 | 25 | 0 | struct-report groups: offset-named member whose number is not its offset |
+| `struct.c` | 9 | 9 | 0 | struct-report groups: offset-named member whose number is not its offset |
 | `m2c_idiom.units` | 26 | 26 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 262 | 262 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
 | `fun_dat_refs` | 772 | 772 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
@@ -193,7 +193,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 32,742 of 72,021 (45.46 %) |
+| field accesses using a **recovered** type (not an offset cast) | 32,742 of 72,018 (45.46 %) |
 | functions in the retail split (`asm/`, generated) | 20,576 |
 
 ## How these numbers are produced

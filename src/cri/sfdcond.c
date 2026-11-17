@@ -1,13 +1,5 @@
 #include "dw4/cri/sfd.h"
 
-typedef struct SfdInfo64 {
-    char c[64];
-} SfdInfo64;
-
-typedef struct SfdStatus160 {
-    long words[20];
-} SfdStatus160;
-
 typedef struct SfdStat64 {
     long sum;
     long min;
@@ -28,9 +20,9 @@ typedef struct SfdHn {
     char pad124[264 - 124];
     int f264;
     char f268[2316 - 268];
-    SfdInfo64 info;
+    SfdMvInf mvInf;
     char pad2380[2384 - 2380];
-    SfdStatus160 status;
+    SfdPlyInf plyInf;
     char pad2544[2564 - 2544];
     int cond[100];
     int cond2[100];
@@ -149,24 +141,24 @@ int SFSET_GetCond(void *sfd, int index)
     return hn->cond[index];
 }
 
-int SFD_GetMvInf(void *sfd, SfdInfo64 *out)
+int SFD_GetMvInf(void *sfd, SfdMvInf *out)
 {
     SfdHn *hn = sfd;
     int r = SFLIB_CheckHn(hn);
     if (r != 0) {
         return sfd_ReportError(0, 0xFF000114);
     }
-    *out = hn->info;
+    *out = hn->mvInf;
     return r;
 }
 
-int SFD_GetPlyInf(void *sfd, SfdStatus160 *out)
+int SFD_GetPlyInf(void *sfd, SfdPlyInf *out)
 {
     SfdHn *hn = sfd;
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000119);
     }
-    *out = hn->status;
+    *out = hn->plyInf;
     return 0;
 }
 

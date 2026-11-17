@@ -229,13 +229,18 @@ typedef struct M2vPicAtr {
     unsigned char matrix_coefficients;  /* +100 */
     char pad101[27];  /* +101 */
 } M2vPicAtr;
+/* called with the header level (MPV_UDLVL_*) after user data was put to its stream joint */
+typedef void (*M2vUsrDatFn)(void *obj, int level);
+/* where the user data of one header level goes: the stream joint it is put to, and the callback told
+ * when it was */
 typedef struct M2vUsrSj {
-    void *sj;
-    void (*cb)(int arg, int index); /* called after a chunk was put to sj */
-    int cbArg;
+    struct SfdSj *sj;
+    M2vUsrDatFn fn;
+    void *obj;
 } M2vUsrSj;
+/* the buffer the user data in front of a picture is copied to, and the length copied */
 typedef struct M2vPicUsr {
-    void *buf;
+    char *buf;
     int size;
     int len;
 } M2vPicUsr;
@@ -280,9 +285,9 @@ void M2V_Destroy(M2vObj *hn);
 void M2V_MbCbFn(void);
 void M2V_SetCond(M2vObj *hn, int no, M2vCondFn fn);
 int M2VLIB_CheckHn(M2vObj *hn);
-void M2V_SetUsrSj(M2vObj *hn, int no, void *sj, void (*cb)(int arg, int index), int cbArg);
-void M2V_SetPicUsrBuf(M2vObj *hn, void *buf, int size);
-void M2V_GetPicUsr(M2vObj *hn, void **buf, int *size);
+void M2V_SetUsrSj(M2vObj *hn, int no, struct SfdSj *sj, M2vUsrDatFn fn, void *obj);
+void M2V_SetPicUsrBuf(M2vObj *hn, char *buf, int size);
+void M2V_GetPicUsr(M2vObj *hn, char **buf, int *size);
 
 void M2VERR_Init(void);
 void M2V_SetErrFunc(M2vObj *hn, int (*func)(void *obj), void *obj);

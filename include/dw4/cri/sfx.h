@@ -8,11 +8,6 @@
 extern "C" {
 #endif
 
-typedef struct SfxMem {
-    char *data;
-    int size;
-} SfxMem;
-
 typedef struct SfxChunk {
     int valid;
     char *data;

@@ -6,7 +6,7 @@
 #include "dw4/cri/sfd.h"
 
 typedef void (*SfdCntFn)(SfdPly *h, int arg, int *counter);
-typedef void (*SfdTmrFn)(SfdPly *h, int arg, SfdTimer *tmr);
+typedef void (*SfdTmrFn)(SfdPly *h, int arg, SfdPlyInf *tmr);
 
 extern int DAT_004f5020[];
 extern void (*sfply_vbin_nest)(SfdPly *h, int value);
@@ -18,8 +18,6 @@ extern SfdCond sfd_lib;
 extern int sfply_reset_flg;
 extern void (*SFPLY_ResetPtsm)(SfdPtsm *ptsm);
 
-void SFD_SetErrFn(SfdPly *h, SfdErrFn fn, void *obj);
-void SFD_SetUsrIsSkipFn(SfdPly *h, int (*fn)());
 
 long SFPL2_Pause(SfdPly *h, unsigned int mode);
 long sfpl2_PauseExec(SfdPly *h, int mode);
@@ -54,9 +52,9 @@ int sfply_Fin(SfdPly *h);
 int sfply_ChkCrePara(SfdCrePrm *prm);
 int sfply_SearchFreeHn(void);
 SfdPly *sfply_InitHn(SfdCrePrm *prm, int arg);
-void sfply_InitMvInf(SfdRec48 *rec);
-void sfply_InitPlyInf(SfdTimer *tmr);
-void FUN_002abbc0(SfdSub24 *sub);
+void sfply_InitMvInf(SfdMvInf *rec);
+void sfply_InitPlyInf(SfdPlyInf *tmr);
+void FUN_002abbc0(long long *cnt);
 void sfply_InitTmrInf(SfdTable *tbl);
 int sfply_TrCreate(SfdPly *h);
 int sfply_TrDestroy(SfdPly *h);
@@ -427,28 +425,28 @@ int sfply_StatFin(SfdPly *h) {
 
 int sfply_IsStartSync(SfdPly *h) {
     SfdCond *c = &h->cond;
-    SfdD28 *d = &h->d28;
+    SfdTim *d = &h->tim;
     if (c->f56 == 0) return 1;
     if (c->req1 == 0) return 1;
     if (d->f688 != 0) return 1;
-    if (d->f716 >= c->f180) return 1;
+    if (d->count >= c->f180) return 1;
     return sfply_IsEtrg(h) != 0;
 }
 
 long sfply_ChkBpa(SfdPly *h) {
     char lock[16];
-    SfdTimer *t = &h->tmr;
+    SfdPlyInf *t = &h->plyInf;
     long result;
     sfd_Lock(lock);
     result = 0;
-    if (t->active == 0) {
+    if (t->bpaActive == 0) {
         if (sfply_IsBpaOn(h) != 0) {
-            t->active = 1;
-            t->activations++;
+            t->bpaActive = 1;
+            t->noSupply++;
             result = SFPL2_Pause(h, 1);
         }
     } else if (sfply_IsBpaOff(h) != 0) {
-        t->active = 0;
+        t->bpaActive = 0;
         result = SFPL2_Pause(h, 0);
     }
     sfd_Unlock(lock);
@@ -456,9 +454,9 @@ long sfply_ChkBpa(SfdPly *h) {
 }
 
 int sfply_IsBpaOn(SfdPly *h) {
-    SfdTimer *t = &h->tmr;
+    SfdPlyInf *t = &h->plyInf;
     int v[2];
-    SfdD28 *d;
+    SfdTim *d;
     int a, b;
     if (SFSET_GetCond(h, 67) == 0) return 0;
     if (SFSET_GetCond(h, 15) == 0) return 0;
@@ -470,7 +468,7 @@ int sfply_IsBpaOn(SfdPly *h) {
     if (SFTRN_IsSetup(h, 1) != 0 && SFBUF_RingGetDataSiz(h, 0) > 0) return 0;
     if (SFSET_GetCond(h, 5) == 1 && sfply_EnoughViData(h) != 0) return 0;
     SFTIM_GetTime(h, &v[0], &v[1]);
-    d = &h->d28;
+    d = &h->tim;
     a = d->f648;
     b = d->f644;
     b -= UTY_MulDiv(SFSET_GetCond(h, 68), a, 1000000);
@@ -480,13 +478,13 @@ int sfply_IsBpaOn(SfdPly *h) {
 
 int sfply_IsBpaOff(SfdPly *h) {
     int v[2];
-    SfdD28 *d;
+    SfdTim *d;
     int a, b;
     if (sfply_IsAnyoneTerm(h) != 0) return 1;
     if (SFSET_GetCond(h, 5) == 1 && sfply_EnoughViData(h) != 0) return 1;
     if (SFSET_GetCond(h, 6) == 1 && sfply_EnoughAiData(h) != 0) return 1;
     SFTIM_GetTime(h, &v[0], &v[1]);
-    d = &h->d28;
+    d = &h->tim;
     a = d->f648;
     b = d->f644;
     return SFD_CmpTime(v[0], v[1], b - UTY_MulDiv(SFSET_GetCond(h, 69), a, 1000000), a) != 0;
@@ -512,7 +510,7 @@ int sfply_IsAnyoneTerm(SfdPly *h) {
 
 int sfply_EnoughViData(SfdPly *h) {
     SfdStmInf *e = &h->ent[h->f28.f152].info;
-    SjObj *sj = e->sj;
+    SfdSj *sj = e->sj;
     int v = sj->vtbl->getNumData(sj, 1);
     if (v < e->size * 80 / 100 && v < SFSET_GetCond(h, 70)) {
         return 0;
@@ -522,7 +520,7 @@ int sfply_EnoughViData(SfdPly *h) {
 
 int sfply_EnoughAiData(SfdPly *h) {
     SfdStmInf *e = &h->ent[h->f28.f220].info;
-    SjObj *sj = e->sj;
+    SfdSj *sj = e->sj;
     if (sj->vtbl->getNumData(sj, 1) < e->size * 80 / 100) {
         return 0;
     }
@@ -585,15 +583,15 @@ int sfply_IsEtrg(SfdPly *h) {
 }
 
 int sfply_IsStagnant(SfdPly *h) {
-    SfdTimer *t = &h->tmr;
-    if (h->stat != 4 || h->pause == 1 || t->active == 1) return 0;
+    SfdPlyInf *t = &h->plyInf;
+    if (h->stat != 4 || h->pause == 1 || t->bpaActive == 1) return 0;
     return SFTIM_IsStagnant(h) != 0;
 }
 
 int sfply_IsPlayTimeAutoStop(SfdPly *h) {
-    SfdTimer *t = &h->tmr;
+    SfdPlyInf *t = &h->plyInf;
     int v[2];
-    if (h->stat != 4 || h->pause == 1 || t->active == 1) return 0;
+    if (h->stat != 4 || h->pause == 1 || t->bpaActive == 1) return 0;
     if (SFTIM_GetTimeSub(h, &v[0], &v[1]) != 0) return 0;
     if (v[0] < 0) return 0;
     return SFD_CmpTime(SFSET_GetCond(h, 54), 1000, v[0], v[1]) != 0;
@@ -705,14 +703,14 @@ SfdPly *sfply_InitHn(SfdCrePrm *prm, int arg) {
     h->pause = 0;
     h->pending = 1;
     h->pauseCnt = 0;
-    SFHDS_InitFhd(h->blk120);
-    sfply_InitMvInf(&h->rec2316);
-    sfply_InitPlyInf(&h->tmr);
+    SFHDS_InitFhd(&h->hdr);
+    sfply_InitMvInf(&h->mvInf);
+    sfply_InitPlyInf(&h->plyInf);
     sfply_InitTmrInf(&h->tbl);
     sfd_ClearErr(&h->err);
     MEM_Copy(&h->cond, &sfd_lib, sizeof(h->cond));
     MEM_Copy(&h->cond2, &sfd_lib, sizeof(h->cond2));
-    SFTIM_InitHn(h, &h->d28);
+    SFTIM_InitHn(h, &h->tim);
     if (SFBUF_InitHn(h, h->ent, prm) != 0)
         return 0;
     SFTRN_InitHn(h, &h->f28, prm, arg);
@@ -724,7 +722,7 @@ SfdPly *sfply_InitHn(SfdCrePrm *prm, int arg) {
     return h;
 }
 
-void sfply_InitMvInf(SfdRec48 *rec) {
+void sfply_InitMvInf(SfdMvInf *rec) {
     UTY_MemsetDword(rec, 0, 16);
     rec->f0 = 0;
     rec->f4 = 0;
@@ -732,38 +730,38 @@ void sfply_InitMvInf(SfdRec48 *rec) {
     rec->f12 = 0;
     rec->f16 = 0;
     rec->f20 = 0;
-    rec->f24 = 0;
+    rec->muxRate = 0;
     rec->f32 = 0;
-    rec->enabled = 1;
-    rec->id36 = -1;
-    rec->id40 = -1;
-    rec->id44 = -1;
+    rec->fixedFlag = 1;
+    rec->audioBound = -1;
+    rec->videoBound = -1;
+    rec->privateBound = -1;
 }
 
-void sfply_InitPlyInf(SfdTimer *tmr) {
-    UTY_MemsetDword(tmr, 0, 40);
-    tmr->count = 0;
-    tmr->count2 = 0;
-    tmr->f8 = 0;
-    tmr->f12 = 0;
-    tmr->f16 = 0;
-    tmr->f24 = 0;
-    tmr->active = 0;
-    tmr->activations = 0;
-    tmr->f36 = 0;
-    tmr->f40 = 0;
-    tmr->f44 = 0;
-    FUN_002abbc0(&tmr->sub[0]);
-    FUN_002abbc0(&tmr->sub[1]);
-    FUN_002abbc0(&tmr->sub[2]);
-    FUN_002abbc0(&tmr->sub[3]);
+void sfply_InitPlyInf(SfdPlyInf *inf) {
+    UTY_MemsetDword(inf, 0, 40);
+    inf->numTotalDec = 0;
+    inf->numSkip = 0;
+    inf->f8 = 0;
+    inf->f12 = 0;
+    inf->numSkipEmptyB = 0;
+    inf->f24 = 0;
+    inf->bpaActive = 0;
+    inf->noSupply = 0;
+    inf->f36 = 0;
+    inf->f40 = 0;
+    inf->f44 = 0;
+    FUN_002abbc0(&inf->sysFlow);
+    FUN_002abbc0(&inf->vidFlow);
+    FUN_002abbc0(&inf->audInWr);
+    FUN_002abbc0(&inf->audSjWr);
 }
 
-void FUN_002abbc0(SfdSub24 *sub) {
+void FUN_002abbc0(long long *cnt) {
     /* matching construct: variant search — stmt order [1, 2, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
-    sub->f0 = 0;
-    sub->f8 = 0;
-    sub->f16 = 0;
+    cnt[0] = 0;
+    cnt[1] = 0;
+    cnt[2] = 0;
 }
 
 void sfply_InitTmrInf(SfdTable *tbl) {
@@ -778,7 +776,7 @@ void sfply_InitTmrInf(SfdTable *tbl) {
 }
 
 void SFPLY_AddDecPic(SfdPly *h, int delta, int arg) {
-    int *counter = &h->tmr.count;
+    int *counter = &h->plyInf.numTotalDec;
     SfdCntFn fn;
     *counter += delta;
     fn = (SfdCntFn)SFSET_GetCond(h, 36);
@@ -789,9 +787,9 @@ void SFPLY_AddDecPic(SfdPly *h, int delta, int arg) {
 
 void SFPLY_AddSkipPic(void *sfd, int delta, int arg) {
     SfdPly *h = sfd;
-    SfdTimer *t = &h->tmr;
+    SfdPlyInf *t = &h->plyInf;
     SfdTmrFn fn;
-    t->count2 += delta;
+    t->numSkip += delta;
     fn = (SfdTmrFn)SFSET_GetCond(h, 37);
     if (fn != 0) {
         fn(h, arg, t);
@@ -810,7 +808,7 @@ int SFD_Destroy(void *sfd) {
         return sfd_ReportError(0, 0xFF000131);
     }
     SFPLY_Stop(h);
-    SFHDS_FinishFhd(h->blk120);
+    SFHDS_FinishFhd(&h->hdr);
     SFBUF_DestroySj(h);
     result = sfply_TrDestroy(h);
     for (i = 0; i < 8; i++) {
@@ -913,10 +911,10 @@ int sfply_ResetHn(SfdPly *h) {
     SfdErrFn errfn;
     void *errobj;
     SfdTimeFn usrtimefn;
-    SfdTimeFn extfn;
+    SfdExtClockFn extfn;
     int extwrap;
-    void *extobj;
-    int (*isskipfn)();
+    int extobj;
+    SfdIsSkipFn isskipfn;
     int speed;
     SfdRec *see;
     int byterate;
@@ -935,24 +933,24 @@ int sfply_ResetHn(SfdPly *h) {
         SFD_GetWritePtr(h, &inf);
         supadr = inf.tailLen;
     }
-    SFHDS_FinishFhd(h->blk120);
+    SFHDS_FinishFhd(&h->hdr);
     SFBUF_DestroySj(h);
-    errfn = h->err.fn;
+    errfn = h->err.func;
     errobj = h->err.obj;
-    ptsm = h->d28.ptsm;
-    usrtimefn = h->d28.timefn[4];
-    extfn = h->d28.extClockFn;
-    extwrap = h->d28.extClockWrap;
-    extobj = h->d28.extClockObj;
-    isskipfn = h->d28.isSkipFn;
-    speed = h->d28.speed;
+    ptsm = h->tim.ptsm;
+    usrtimefn = h->tim.timefn[4];
+    extfn = h->tim.clock_get;
+    extwrap = h->tim.clock_wrap;
+    extobj = h->tim.clock_ctx;
+    isskipfn = h->tim.isSkipFn;
+    speed = h->tim.speed;
     see = h->recSlot.rec;
     if (see != 0) {
-        byterate = see->f3536;
-        fsize = see->f3524;
-        tottime = see->f3528;
-        tunit = see->f3532;
-        seekpos = see->f3540;
+        byterate = see->byterate;
+        fsize = see->fsize;
+        tottime = see->tottime;
+        tunit = see->tunit;
+        seekpos = see->seekpos;
     } else {
         seekpos = 0;
         tunit = 0;
@@ -1003,7 +1001,7 @@ int sfply_ResetHn(SfdPly *h) {
         SFD_SetSpeed(h, speed);
     }
     if (ptsm.f0 != 0) {
-        h->d28.ptsm = ptsm;
+        h->tim.ptsm = ptsm;
         if (SFPLY_ResetPtsm != 0) {
             SFPLY_ResetPtsm(&ptsm);
         }
@@ -1067,7 +1065,7 @@ int SFD_GetFrm(void *sfd, int *out) {
     result = SFTRN_CallTrtTrif(h, 6, 11, out, 0);
     value = *out;
     if (value != 0) {
-        h->tmr.f24 = 1;
+        h->plyInf.f24 = 1;
     }
     if (sfply_vbin_nest != 0) {
         sfply_vbin_nest(h, value);
@@ -1080,7 +1078,7 @@ int SFD_RelFrm(void *sfd, int value) {
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000137);
     }
-    h->tmr.f24 = 0;
+    h->plyInf.f24 = 0;
     return SFTRN_CallTrtTrif(h, 6, 12, value, 0);
 }
 

@@ -3,6 +3,7 @@
 #define DW4_CRI_MPV_H
 
 #include "dw4/cri/sj.h"
+#include "dw4/cri/m2v.h"
 
 #define MPV_COND_MAX 16
 #define MPV_COND_CBFN 8   /* the condition holding the decoder's callback */
@@ -11,37 +12,6 @@
 #define MPV_HN_SIZE 1016  /* the part of a pool entry a handle uses */
 #define MPV_POOL_SIZE 7136
 
-/* the picture information reset by mpv_ResetPicInf and filled from the lower layer by mpv_GetLowerInf */
-typedef struct MpvPicInf {
-    int horizontalSize;     /* 0 */
-    int verticalSize;       /* 4 */
-    int mbWidth;            /* 8 */
-    int mbHeight;           /* 12 */
-    int frameRateCode;      /* 16: picture_rate */
-    int temporalReference;  /* 20 */
-    int pictureCodingType;  /* 24: 1 I, 2 P, 3 B */
-    int dropFrameFlag;      /* 28: the group's time code */
-    int hours;              /* 32 */
-    int minutes;            /* 36 */
-    int seconds;            /* 40 */
-    int pictures;           /* 44 */
-    int gopCount;           /* 48: group headers decoded */
-    int seqCount;           /* 52: sequence headers decoded */
-    int f56;    /* 3 after a reset */
-    int f60;    /* 1 after a reset */
-    int f64;    /* 1 after a reset */
-    int f68;    /* 1 after a reset */
-    int bitRate;            /* 72 */
-    int vbvBufferSize;      /* 76 */
-    short f80, f82;
-    signed char f84, f85, f86, f87, f88;
-    signed char pelAspectRatio;      /* 89: aspect_ratio_information */
-    signed char constrainedParams;   /* 90 */
-    signed char f91, f92, f93;
-    signed char f94, f95, f96, f97, f98, f99, f100;
-    char pad101[128 - 101];
-} MpvPicInf;
-
 /* the header level the user data that follows belongs to */
 typedef enum MpvUdLevel {
     MPV_UDLVL_SEQ = 1,
@@ -49,30 +19,12 @@ typedef enum MpvUdLevel {
     MPV_UDLVL_PIC = 3
 } MpvUdLevel;
 
-/* called with the level after user data was written to a sink */
-typedef void (*MpvUsrDatFn)(void *obj, int level);
-
-/* where the user data of one level goes: a stream joint to write it to, and a callback told when it was */
-typedef struct MpvBufEnt {
-    SfdSj *sj;
-    MpvUsrDatFn fn;
-    void *obj;
-} MpvBufEnt;
-
 /* the sequence header values of a handle */
 typedef struct MpvSeqInf {
     char pad0[24];
     int width;   /* 24 */
     int height;  /* 28 */
 } MpvSeqInf;
-
-/* the size the lower layer decodes at, with its flag */
-/* the buffer the user data in front of a picture is copied to, and the length copied */
-typedef struct MpvPicUsr {
-    char *buf;
-    int size;
-    int len;
-} MpvPicUsr;
 
 /* the motion vector range of one direction of a P or B picture */
 typedef struct MpvMotionRange {
@@ -107,7 +59,7 @@ typedef struct MpvHn {
     int stat;                 /* 392: MPV_HN_FREE or MPV_HN_USED */
     int f396;
     int cond[MPV_COND_MAX];   /* 400: conditions, copied from the library defaults */
-    MpvPicInf picInf;         /* 464 */
+    M2vPicAtr picInf;         /* 464 */
     MpvErrObj err;            /* 592: reset by FUN_0028ea30 */
     char pad612[64];
     int pelAspectRatio;       /* 676 */
@@ -139,10 +91,10 @@ typedef struct MpvHn {
     char pad920[12];
     int maxCount;             /* 932: from condition 7 */
     char pad936[8];
-    int lower;                /* 944: the lower-layer decoder handle */
+    M2vObj *lower;            /* 944: the lower-layer decoder handle */
     MpvUdLevel usrDatLevel;   /* 948: the level the next user data belongs to */
-    MpvBufEnt bufEnt[4];      /* 952: the user-data sink of each level */
-    MpvPicUsr picusr;         /* 1000 */
+    M2vUsrSj bufEnt[4];       /* 952: the user-data sink of each level */
+    M2vPicUsr picusr;         /* 1000 */
     char pad1012[MPV_HN_SIZE - 1012];
     char pad1016[1024 - MPV_HN_SIZE];
 } MpvHn;
@@ -187,12 +139,12 @@ int mpv_ReportError(MpvHn *mpv, int code);
 void mpvapi_Init(void);
 int MPV_DecPicSj(MpvHn *mpv, SfdSj *sj, int arg);
 int MPV_SkipFrmSj(MpvHn *mpv, SfdSj *sj);
-int MPV_GetPicInf(MpvHn *mpv, MpvPicInf *out);
+int MPV_GetPicInf(MpvHn *mpv, M2vPicAtr *out);
 int MPV_GetBitRate(MpvHn *mpv, int *bitRate);
 int MPV_GetVbvBufSiz(MpvHn *mpv, int *size, int *delay, int *bytes);
 int MPV_GetLinkFlg(MpvHn *mpv, int *inf3, int *inf4);
 
-void MPV_SetUsrSj(MpvHn *mpv, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj);
+void MPV_SetUsrSj(MpvHn *mpv, int index, SfdSj *sj, M2vUsrDatFn fn, void *obj);
 void MPV_SetPicUsrBuf(MpvHn *mpv, char *buf, int size);
 void MPV_GetPicUsr(MpvHn *mpv, char **buf, int *len);
 int MPV_DecodePicAtrSj(MpvHn *mpv, SfdSj *sj);
@@ -205,26 +157,26 @@ int MPV_IsEmptyBpic(unsigned char *buf, int nbyte, int nmb);
 int MPV_IsEmptyPpic(unsigned char *buf, int nbyte, int nmb);
 
 int mpvhook_IsInstalled(void);
-void mpvhook_Init(int nobj, void *work, int size);
+void mpvhook_Init(int nobj, char *work, unsigned int size);
 void mpvhook_Finish(void);
-int mpvhook_Create(void);
-void mpvhook_Destroy(int lower);
-void mpvhook_SetCond(int lower, int no, int value);
-void mpvhook_SetUsrSj(int lower, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj);
-void mpvhook_SetPicUsrBuf(int lower, char *buf, int size);
-void mpvhook_GetPicUsr(int lower, int index, int *flag);
-int mpvhook_DecodePicAtr(int lower, SfdSj *sj);
-void mpvhook_GetPicAtr(int lower, MpvPicInf *inf);
-void mpvhook_GetBitRate(int lower, int *inf);
-void mpvhook_GetVbvBufSiz(int lower, int *a, int *b, int *c);
-void mpvhook_GetLinkFlg(int lower, int *width, int *height);
-int mpvhook_GetVersionStr(void);
+M2vObj *mpvhook_Create(void);
+void mpvhook_Destroy(M2vObj *lower);
+void mpvhook_SetCond(M2vObj *lower, int no, M2vCondFn fn);
+void mpvhook_SetUsrSj(M2vObj *lower, int index, SfdSj *sj, M2vUsrDatFn fn, void *obj);
+void mpvhook_SetPicUsrBuf(M2vObj *lower, char *buf, int size);
+void mpvhook_GetPicUsr(M2vObj *lower, char **buf, int *len);
+int mpvhook_DecodePicAtr(M2vObj *lower, SfdSj *sj);
+void mpvhook_GetPicAtr(M2vObj *lower, M2vPicAtr *picatr);
+void mpvhook_GetBitRate(M2vObj *lower, int *bit_rate);
+void mpvhook_GetVbvBufSiz(M2vObj *lower, int *vbv_size, int *vbv_delay, int *reserved);
+void mpvhook_GetLinkFlg(M2vObj *lower, int *closed_gop, int *broken_link);
+char *mpvhook_GetVersionStr(void);
 int mpvhook_IsConformable(char *buf, int size);
 void mpvhook_MbCbFn(void);
-void mpvhook_SetErrFunc(void);
-void mpvhook_GetErrInf(void);
+void mpvhook_SetErrFunc(M2vObj *lower, int (*func)(void *obj), void *obj);
+void mpvhook_GetErrInf(M2vObj *lower, M2vErrInf *inf);
 void mpvhook_DecodeFrm(void);
-void mpvhook_SkipFrm(void);
+void mpvhook_SkipFrm(M2vObj *lower, SfdSj *sj);
 void mpv_InstallHooks(void);
 
 #endif

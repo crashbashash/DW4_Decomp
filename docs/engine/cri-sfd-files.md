@@ -111,8 +111,8 @@ the 2002 one. Names from what a function does are in the medium list below.
   (`sfmpv_CalcAudioTotTime`, which differs by the same mechanism, among it).
 - `sfply_ResetHn` is the RE4 `sfd_ply.c` `sfply_ResetHn` ([Resident Evil 4 decompilation](https://github.com/adonis-singh/re4)):
   it keeps the error callback, the timer's clock callbacks, speed and PTS-manager entry, and the seek work across
-  a re-create. It matches with those `SfdD28` fields and the error block typed as the callbacks and pointers
-  they are; `sfdrec.c` still keeps its own untyped copy of `SfdD28`.
+  a re-create. It matches with those `SfdTim` fields and the error block typed as the callbacks and pointers
+  they are.
 - `mwPlyCreateSofdec` differs only in the delay slot of the first free-handle test, which retail fills from the
   branch target; `mwsfcre_CreateSfd` in the registers holding two of the buffer-size globals. Both need names for
   the size globals and the three SFD create-parameter templates, and the player status as an enum.

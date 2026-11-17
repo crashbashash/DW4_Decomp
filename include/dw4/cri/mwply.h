@@ -168,7 +168,7 @@ struct MwsfdPly {
     int udbufsize;                  /* 388 */
     char *ud;                       /* 392: the current picture's user data */
     int udsize;                     /* 396 */
-    struct SjObj *addInfSj;         /* 400 */
+    SfdSj *addInfSj;               /* 400 */
     char *addInfBase;               /* 404 */
     int addInfSize;                 /* 408 */
     MwsfdUsrBuf usrBuf;             /* 412 */

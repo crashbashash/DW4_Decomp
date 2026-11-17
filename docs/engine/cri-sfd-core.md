@@ -25,6 +25,20 @@ handle as these six files see it are in `include/dw4/cri/sfdhn.h`. The MPS types
 - `SfdHandle` declares only the fields these files use; the other files of the library declare their own views
   of the same handle (`SfdPly`, `SfdHn`, `SfdBufHn`, `SfdPlayer`), as [CRI SFD files](cri-sfd-files.md#open-questions)
   notes.
+- The sub-objects of the handle have one definition each in `include/dw4/cri/sfd.h`, embedded in every handle
+  view: the header record (`SfdHdrInf`, +120), the stream information (`SfdMvInf`, +2316), the playback information
+  (`SfdPlyInf`, +2384), the error block (`SfdErrInf`, +2544) and the time work (`SfdTim`, +3368, with the time
+  stabiliser `SfdTst`, the field table and the PTS manager entry inside it), plus the creation analysis
+  (`SfdAnaInf`). Their layout and the member names the DW4 files did not already give follow the SFD object of the
+  Resident Evil 4 decompilation's CRI library (`sfd.h`, carried as `src/cri/re4` in
+  [Raikaru/Persona4-Decompilation](https://github.com/Raikaru/Persona4-Decompilation)), whose offsets match DW4's;
+  those names are medium (the RE4 names are inferred from use). `MwsfdPlyInf` takes the public names of the 2002
+  SDK's `crimwsfd.h`.
+- `SfdAnaInf`'s three handler words are the system, video and audio handlers (RE4 `strif`/`vtrif`/`atrif`):
+  `mwsfcre_DecideFtypeByHdrInf` maps them to the SDK's `MWSFD_FTYPE_SFD`, `_MPV` and `_VONLYSFD`.
+- Medium names with an alternative: `SfdMvInf.fixedFlag` (+28; RE4 leaves it unnamed, DW4's init sets it to 1) and
+  `privateBound` (+44, the header's private stream count); `SfdPlyInf.noSupply` (+32, the alternative
+  `bpaCount`: it counts the buffer pauses `sfply_ChkBpa` starts).
 - The library state `sfd_lib` (`SfdLibInf`) holds the default conditions, the init parameters, the system status
   (`sfply_sys_stat` is its field at +408), the library error block, the time, buffer and stream-graph blocks of
   `sftim.c`, `sfdbuf.c` and `sfdtrn.c`, and the handle table (`sfply_handles`, +516).

@@ -19,39 +19,13 @@
 #define MWSFD_SYNC_AUDIO 2
 #define MWSFD_SYNC_EXT 3
 
-/* the decoder's header information (SFD_GetMvInf) */
-typedef struct SfdHdrInf {
-    int f0[9];
-    int numAudioCh;  /* 36 */
-    int numVideoCh;  /* 40 */
-    int f44[5];
-} SfdHdrInf;
-
-/* the decoder's playback information (SFD_GetPlyInf) */
-typedef struct SfdPlyInf {
-    int numTotalDec;    /* 0 */
-    int numSkip;        /* 4: skipped decodes, empty B pictures included */
-    int f8;
-    int f12;
-    int numSkipEmptyB;  /* 16 */
-    int f20;
-    int f24;
-    int f28;
-    int stat8;          /* 32 */
-    int f36;
-    int f40;
-    int f44;
-    long long flow[12]; /* 48: the input flow counters */
-    int f144[4];
-} SfdPlyInf;
-
 /* mwPlyGetPlyInf */
 typedef struct MwsfdPlyInf {
-    int numDropFrm;
-    int numSkipDec;
-    int numSkipDisp;
-    int numSkipEmptyB;
-    int stat8;
+    int drop_frm_cnt;
+    int skip_dec_cnt;
+    int skip_disp_cnt;
+    int skip_emptyb_cnt;
+    int no_supply_cnt;
 } MwsfdPlyInf;
 
 /* mwPlyGetFlowInf */
@@ -67,7 +41,7 @@ void *MWSFD_GetAdxtHn(MwsfdPly *ply);
 int mwPlyGetNumSkipDec(MwsfdPly *ply);
 void mwply_SetPicSkip(MwsfdPly *ply, int mode, int param);
 void MWSFD_GetPlyInf(MwsfdPly *ply, SfdPlyInf *inf);
-void MWSFD_GetMvInf(MwsfdPly *ply, SfdHdrInf *inf);
+void MWSFD_GetMvInf(MwsfdPly *ply, SfdMvInf *inf);
 int mwPlyGetNumSkipEmptyB(MwsfdPly *ply);
 
 void mwPlySetAudioSw(MwsfdPly *ply, int sw) {
@@ -152,14 +126,14 @@ int mwPlyGetAudioCh(MwsfdPly *ply) {
 }
 
 int mwPlyGetNumAudioCh(MwsfdPly *ply) {
-    SfdHdrInf inf;
+    SfdMvInf inf;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
         MWSFSVM_Error("E2080801 mwPlyGetNumAudioCh: handle is invalid.");
         return -1;
     }
     MWSFD_GetMvInf(ply, &inf);
-    return inf.numAudioCh;
+    return inf.audioBound;
 }
 
 void mwPlySetVideoCh(MwsfdPly *ply, int ch) {
@@ -178,21 +152,21 @@ int mwPlyGetVideoCh(MwsfdPly *ply) {
 }
 
 int mwPlyGetNumVideoCh(MwsfdPly *ply) {
-    SfdHdrInf inf;
+    SfdMvInf inf;
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
         MWSFSVM_Error("E2080802 mwPlyGetNumVideoCh: handle is invalid.");
         return -1;
     }
     MWSFD_GetMvInf(ply, &inf);
-    return inf.numVideoCh;
+    return inf.videoBound;
 }
 
 void MWSFD_GetPlyInf(MwsfdPly *ply, SfdPlyInf *inf) {
     SFD_GetPlyInf(ply->sfd, inf);
 }
 
-void MWSFD_GetMvInf(MwsfdPly *ply, SfdHdrInf *inf) {
+void MWSFD_GetMvInf(MwsfdPly *ply, SfdMvInf *inf) {
     SFD_GetMvInf(ply->sfd, inf);
 }
 
@@ -558,11 +532,11 @@ void mwPlyGetPlyInf(MwsfdPly *ply, MwsfdPlyInf *out) {
         return;
     }
     SFD_GetPlyInf(mwPlyGetSfdHn(ply), &inf);
-    out->numDropFrm = mwPlyGetNumDropFrm(ply);
-    out->numSkipDec = mwPlyGetNumSkipDec(ply);
-    out->numSkipDisp = mwPlyGetNumSkipDisp(ply);
-    out->numSkipEmptyB = mwPlyGetNumSkipEmptyB(ply);
-    out->stat8 = inf.stat8;
+    out->drop_frm_cnt = mwPlyGetNumDropFrm(ply);
+    out->skip_dec_cnt = mwPlyGetNumSkipDec(ply);
+    out->skip_disp_cnt = mwPlyGetNumSkipDisp(ply);
+    out->skip_emptyb_cnt = mwPlyGetNumSkipEmptyB(ply);
+    out->no_supply_cnt = inf.noSupply;
 }
 
 void mwPlyGetFlowInf(MwsfdPly *ply, MwsfdFlowInf *out) {
@@ -573,18 +547,18 @@ void mwPlyGetFlowInf(MwsfdPly *ply, MwsfdFlowInf *out) {
         return;
     }
     SFD_GetPlyInf(mwPlyGetSfdHn(ply), &inf);
-    out->flow[0] = inf.flow[0];
-    out->flow[1] = inf.flow[1];
-    out->flow[2] = inf.flow[2];
-    out->flow[3] = inf.flow[3];
-    out->flow[4] = inf.flow[4];
-    out->flow[5] = inf.flow[5];
-    out->flow[6] = inf.flow[6];
-    out->flow[7] = inf.flow[7];
-    out->flow[8] = inf.flow[8];
-    out->flow[9] = inf.flow[9];
-    out->flow[10] = inf.flow[10];
-    out->flow[11] = inf.flow[11];
+    out->flow[0] = inf.sysFlow;
+    out->flow[1] = inf.sysByte;
+    out->flow[2] = inf.sysSkip;
+    out->flow[3] = inf.vidFlow;
+    out->flow[4] = inf.vidByte;
+    out->flow[5] = inf.vidSkip;
+    out->flow[6] = inf.audInWr;
+    out->flow[7] = inf.audInRd;
+    out->flow[8] = inf.audByte;
+    out->flow[9] = inf.audSjWr;
+    out->flow[10] = inf.audSjRd;
+    out->flow[11] = inf.f136;
 }
 
 /* The stream's byte rate (maxBps / 8, rounded down to whole 2 KiB sectors) times `ratio`, capped

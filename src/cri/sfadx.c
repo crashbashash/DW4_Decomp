@@ -12,14 +12,16 @@ extern int sfadxt_stat;
 
 typedef struct SfdAdxHn SfdAdxHn;
 
+/* The ADX audio parameters (SFD_SetAdxtPara): the ring buffer and the ADXT work, both aligned to 32
+ * bytes when set. */
 typedef struct SfdAdxCfg {
-    void *f0;
-    void *f4;
-    int f8;
-    void *f12;
-    void *f16;
-    void *f20;
-    int f24;
+    int bsize;         /* 0: ring buffer size */
+    int xsize;         /* 4: its extra size */
+    char *buf;         /* 8: the ring buffer */
+    int maxnch;        /* 12 */
+    int f16;
+    int worksize;      /* 20 */
+    char *work;        /* 24: the ADXT work */
 } SfdAdxCfg;
 
 typedef void (*SfdAdxStep)(SfdAdxHn *h, char *buf, int size, int *used);
@@ -67,13 +69,6 @@ typedef struct SfdAdxSub {
     int sidx2;         /* 20 */
 } SfdAdxSub;
 
-typedef struct SfdAdxD28 {
-    char pad0[500];
-    int f500;
-    int f504;
-    char pad508[244];
-} SfdAdxD28;
-
 typedef struct SfdAdxInfo {
     int ready;
     int rate;
@@ -83,25 +78,16 @@ typedef struct SfdAdxInfo {
     int f20;
 } SfdAdxInfo;
 
-typedef struct SfdAdxPair {
-    long a;
-    long b;
-} SfdAdxPair;
-
 struct SfdAdxHn {
     char pad0[72];
     int state;              /* 72 */
     char pad76[4];
     int f80;                /* 80 */
-    char pad84[2396];
-    long f2480;             /* 2480 */
-    long f2488;             /* 2488 */
-    long total;             /* 2496 */
-    long f2504;             /* 2504 */
-    long f2512;             /* 2512 */
-    char pad2520[848];
-    SfdAdxD28 d28;          /* 3368 */
-    char blk4120[4060];     /* 4120 */
+    char pad84[2300];
+    SfdPlyInf plyInf;       /* 2384 */
+    char pad2544[824];
+    SfdTim tim;             /* 3368 */
+    char pad4872[3308];
     SfdAdxSub sub;          /* 8180 */
     char pad8204[256];
     void *iface;            /* 8460: slot 7's work, ifbuf */
@@ -155,7 +141,7 @@ int SFADXT_Create(SfdAdxHn *h);
 AdxtObj *sfadxt_CreateEx(SfdAdxCfg *cfg);
 AdxtObj *sfadxt_RestoreAdxtHn(void);
 void sfadxt_SetTimeFn(SfdAdxHn *h);
-int sfadxt_GetTime(SfdAdxHn *h, int *time, int *unit);
+int sfadxt_GetTime(void *sfd, int *time, int *unit);
 void sfadxt_GetTimeTst(void *blk, AdxtObj *adxt, int *out0, int *out1);
 int sfadxt_DestroySub(AdxtObj *adxt);
 int sfadxt_SaveAdxtHn(AdxtObj *adxt);
@@ -228,13 +214,13 @@ void SFADXT_SetSpeed(SfdAdxHn *h, int volume) {
 }
 
 void SFD_SetAdxtPara(SfdAdxCfg *cfg) {
-    sfadxt_para.f0 = cfg->f0;
-    sfadxt_para.f8 = (cfg->f8 + 31) & ~31;
-    sfadxt_para.f4 = cfg->f4;
-    sfadxt_para.f12 = cfg->f12;
-    sfadxt_para.f24 = (cfg->f24 + 31) & ~31;
+    sfadxt_para.bsize = cfg->bsize;
+    sfadxt_para.buf = (char *)(((int)cfg->buf + 31) & ~31);
+    sfadxt_para.xsize = cfg->xsize;
+    sfadxt_para.maxnch = cfg->maxnch;
+    sfadxt_para.work = (char *)(((int)cfg->work + 31) & ~31);
     sfadxt_para.f16 = cfg->f16;
-    sfadxt_para.f20 = cfg->f20;
+    sfadxt_para.worksize = cfg->worksize;
 }
 
 int SFADXT_Init(void) {
@@ -251,11 +237,11 @@ int SFADXT_Finish(void) {
 }
 
 void sfadxt_HeadDecCallBack(SfdAdxHn *h) {
-    SfdAdxD28 *d28 = &h->d28;
+    SfdTim *tim = &h->tim;
     AdxtObj *adxt = ((SfdAdxCtx *)h->sub.ctx)->adxt;
     int w;
     int ht;
-    if (d28->f500 == d28->f504) {
+    if (tim->queue.wr == tim->queue.rd) {
         w = ADXT_GetNumSmpl(adxt);
         ht = ADXT_GetSfreq(adxt);
         if (w > 0 && ht > 0) {
@@ -330,7 +316,7 @@ void sfadxt_CopyData(SfdAdxHn *h, char *dst, int max, int *out) {
     SfdSj *sj = ctx->sj;
     SfdSjChunk ck;
     int n;
-    sfadxt_GetFreeChunk(sj, (int)ctx->cfg.f0, &ck);
+    sfadxt_GetFreeChunk(sj, ctx->cfg.bsize, &ck);
     n = ck.len;
     if (max < n)
         n = max;
@@ -346,7 +332,7 @@ void sfadxt_CopyData(SfdAdxHn *h, char *dst, int max, int *out) {
  * records the ring still lacks, backs off when it is ahead, and hands over to the plain copy step at the
  * end of the stream */
 void sfadxt_AdjustSync(SfdAdxHn *h, char *buf, int size, int *used) {
-    SfdAdxD28 *ring = &h->d28;
+    SfdTim *ring = &h->tim;
     SfdAdxCtx *ctx;
     int nch;
     int rate;
@@ -409,15 +395,15 @@ void sfadxt_AdjustSync(SfdAdxHn *h, char *buf, int size, int *used) {
             ctx->step = sfadxt_CopyData;
     }
     *used = result;
-    h->total += result;
+    h->plyInf.audByte += result;
 }
 
 int sfadxt_AdjDiscard(char *records, int length, int *found) {
-    char scratch[16];
+    int ftrlen;
     int pos;
     *found = 0;
     for (pos = 0; pos < length; pos += 18) {
-        if (ADXT_IsEndcode(records, 18, scratch) != 0) {
+        if (ADXT_IsEndcode(records, 18, &ftrlen) != 0) {
             *found = 1;
             break;
         }
@@ -446,11 +432,11 @@ void sfadxt_ExcludeHdr(SfdAdxHn *h, char *buf, int size, int *used) {
         n = 0;
     *used = n;
     ctx->step = sfadxt_AdjustSync;
-    h->total += n;
+    h->plyInf.audByte += n;
 }
 
 char *sfadxt_SearchAlign(SfdAdxHn *h, char *buf, int size) {
-    char scratch[16];
+    int ftrlen;
     char *end = buf + size;
     char *base;
     char *p;
@@ -463,7 +449,7 @@ char *sfadxt_SearchAlign(SfdAdxHn *h, char *buf, int size) {
         for (p = base; p < end; p += 18) {
             if (*p < 0) {
                 found = 1;
-                if (ADXT_IsEndcode(p, 18, scratch) != 0 && best < p) {
+                if (ADXT_IsEndcode(p, 18, &ftrlen) != 0 && best < p) {
                     best = p;
                     bestBase = base;
                 }
@@ -502,7 +488,7 @@ void sfadxt_ExcludeSilence(SfdAdxHn *h, char *buf, int size, int *used) {
         buf += 18;
     }
     *used = pos;
-    h->total += pos;
+    h->plyInf.audByte += pos;
     if (sfadxt_GetNchSfreq(h, &nch, &rate) == 0)
         ctx->pos += pos / (nch * 18) * 32;
 }
@@ -533,7 +519,7 @@ int sfadxt_IsPrepEnd(SfdAdxHn *h) {
 void sfadxt_ChkTermFlg(SfdAdxHn *h, int flag) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
     AdxtObj *adxt = ctx->adxt;
-    void *blk = h->blk4120;
+    SfdTst *blk = &h->tim.tst;
     int st;
     int err;
     st = ADXT_GetStat(adxt);
@@ -591,11 +577,11 @@ void sfadxt_UpdateFlowCnt(SfdAdxHn *h) {
     SFBUF_RingGetSj(h, sub->sidx, &entry);
     if (entry != 0) {
         sfbuf_GetSjPos(entry, &a, &b);
-        h->f2480 = sfbuf_MergeTotal(h->f2480, a);
-        h->f2488 = sfbuf_MergeTotal(h->f2488, b);
+        h->plyInf.audInWr = sfbuf_MergeTotal(h->plyInf.audInWr, a);
+        h->plyInf.audInRd = sfbuf_MergeTotal(h->plyInf.audInRd, b);
         sfbuf_GetSjPos(other->sj, &a, &b);
-        h->f2504 = sfbuf_MergeTotal(h->f2504, a);
-        h->f2512 = sfbuf_MergeTotal(h->f2512, b);
+        h->plyInf.audSjWr = sfbuf_MergeTotal(h->plyInf.audSjWr, a);
+        h->plyInf.audSjRd = sfbuf_MergeTotal(h->plyInf.audSjRd, b);
     }
 }
 
@@ -668,7 +654,7 @@ int SFADXT_Create(SfdAdxHn *h) {
     if (adxt == 0) {
         return sfd_ReportError(0, 0xFF000C04);
     }
-    sj = SJRBF_Create(cfg->f8, cfg->f0, cfg->f4);
+    sj = SJRBF_Create(cfg->buf, cfg->bsize, cfg->xsize);
     if (sj == 0) {
         return sfd_ReportError(0, 0xFF000C05);
     }
@@ -689,8 +675,8 @@ int SFADXT_Create(SfdAdxHn *h) {
 }
 
 int sfadxt_InitInf(SfdAdxHn *h, SfdAdxCtx *ctx) {
-    SfdAdxPair pair[4];
-    if (sfadxt_para.f8 == 0 || sfadxt_para.f24 == 0)
+    SfdRatio pair[4];
+    if (sfadxt_para.buf == 0 || sfadxt_para.work == 0)
         return sfd_ReportError(0, 0xFF000C06);
     ctx->cfg = sfadxt_para;
     ctx->adxt = 0;
@@ -706,21 +692,21 @@ int sfadxt_InitInf(SfdAdxHn *h, SfdAdxCtx *ctx) {
     ctx->opt27 = -1;
     ctx->total = 0;
     ctx->f76 = 0;
-    pair[0].a = SFSET_GetCond(h, 63);
-    pair[0].b = 1000000;
-    pair[1].a = SFSET_GetCond(h, 64);
-    pair[1].b = 1000000;
-    pair[2].a = SFSET_GetCond(h, 65);
-    pair[2].b = 1000000;
-    pair[3].a = SFSET_GetCond(h, 66);
-    pair[3].b = 1000000;
-    SFTST_Create(h->blk4120);
-    SFTST_SetTstFlg(h->blk4120, SFSET_GetCond(h, 72));
-    SFTST_SetTolerance(h->blk4120, &pair[0]);
-    SFTST_SetExcessErr(h->blk4120, &pair[1]);
-    SFTST_SetAdjStart(h->blk4120, &pair[2]);
-    SFTST_SetAdjPoff(h->blk4120, &pair[3]);
-    SFTST_SetMovaveRange(h->blk4120, SFSET_GetCond(h, 62));
+    pair[0].num = SFSET_GetCond(h, 63);
+    pair[0].den = 1000000;
+    pair[1].num = SFSET_GetCond(h, 64);
+    pair[1].den = 1000000;
+    pair[2].num = SFSET_GetCond(h, 65);
+    pair[2].den = 1000000;
+    pair[3].num = SFSET_GetCond(h, 66);
+    pair[3].den = 1000000;
+    SFTST_Create(&h->tim.tst);
+    SFTST_SetTstFlg(&h->tim.tst, SFSET_GetCond(h, 72));
+    SFTST_SetTolerance(&h->tim.tst, &pair[0]);
+    SFTST_SetExcessErr(&h->tim.tst, &pair[1]);
+    SFTST_SetAdjStart(&h->tim.tst, &pair[2]);
+    SFTST_SetAdjPoff(&h->tim.tst, &pair[3]);
+    SFTST_SetMovaveRange(&h->tim.tst, SFSET_GetCond(h, 62));
     UTY_InitTmr(SFSET_GetCond(h, 61));
     return 0;
 }
@@ -729,7 +715,7 @@ AdxtObj *sfadxt_CreateEx(SfdAdxCfg *cfg) {
     AdxtObj *adxt;
     AdxtObj *ret;
     if (SFPLY_GetResetFlg() != 1) {
-        adxt = ADXT_Create((int)cfg->f12, (char *)cfg->f24, (int)cfg->f20);
+        adxt = ADXT_Create(cfg->maxnch, cfg->work, cfg->worksize);
     } else {
         adxt = sfadxt_RestoreAdxtHn();
     }
@@ -750,10 +736,11 @@ void sfadxt_SetTimeFn(SfdAdxHn *h) {
     SFSET_SetCond(h, 15, 2);
 }
 
-int sfadxt_GetTime(SfdAdxHn *h, int *time, int *unit) {
+int sfadxt_GetTime(void *sfd, int *time, int *unit) {
+    SfdAdxHn *h = sfd;
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
     AdxtObj *adxt = ctx->adxt;
-    void *blk = h->blk4120;
+    SfdTst *blk = &h->tim.tst;
     int nowTime;
     int nowUnit;
     if (SFTIM_ChkRegularTime(h, time, unit) == 0)
@@ -773,20 +760,20 @@ int sfadxt_GetTime(SfdAdxHn *h, int *time, int *unit) {
 }
 
 void sfadxt_GetTimeTst(void *blk, AdxtObj *adxt, int *out0, int *out1) {
-    SfdAdxPair size;
-    SfdAdxPair extra;
-    SfdAdxPair result;
+    SfdRatio size;
+    SfdRatio extra;
+    SfdRatio result;
     int width;
     int height;
     sfadxt_stat = ADXT_GetStat(adxt);
     ADXT_GetTime(adxt, &width, &height);
-    size.a = width;
-    size.b = height;
-    extra.a = UTY_GetTmr();
-    extra.b = UTY_GetTmrUnit();
+    size.num = width;
+    size.den = height;
+    extra.num = UTY_GetTmr();
+    extra.den = UTY_GetTmrUnit();
     SFTST_Calc(blk, &size, &extra, &result);
-    *out0 = result.a;
-    *out1 = result.b;
+    *out0 = result.num;
+    *out1 = result.den;
 }
 
 int SFADXT_Destroy(SfdAdxHn *h) {
@@ -840,7 +827,7 @@ int SFADXT_Pause(SfdAdxHn *h, unsigned int mode) {
     int pos;
     int at;
     int carry;
-    SfdAdxPair pair;
+    SfdRatio pair;
     ctx = (SfdAdxCtx *)h->sub.ctx;
     adxt = ctx->adxt;
     switch (mode) {
@@ -858,10 +845,10 @@ int SFADXT_Pause(SfdAdxHn *h, unsigned int mode) {
         sfadxt_GetTimeOneFrmAudio(h, &pos, size);
         at = pos + ctx->carry;
         carry = at - ADXT_DiscardSmpl(adxt, at);
-        pair.a = pos;
-        pair.b = size;
+        pair.num = pos;
+        pair.den = size;
         ctx->carry = carry;
-        SFTST_GoNextFrame(h->blk4120, &pair);
+        SFTST_GoNextFrame(&h->tim.tst, &pair);
         break;
     }
     return 0;
@@ -869,7 +856,7 @@ int SFADXT_Pause(SfdAdxHn *h, unsigned int mode) {
 
 void sfadxt_WaitStart(SfdAdxHn *h, int value) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
-    void *blk = h->blk4120;
+    SfdTst *blk = &h->tim.tst;
     AdxtObj *adxt;
     ctx->f44 = value;
     adxt = ctx->adxt;
@@ -880,7 +867,7 @@ void sfadxt_WaitStart(SfdAdxHn *h, int value) {
 
 void sfadxt_DoPause(SfdAdxHn *h, int value) {
     SfdAdxCtx *ctx = (SfdAdxCtx *)h->sub.ctx;
-    void *blk = h->blk4120;
+    SfdTst *blk = &h->tim.tst;
     AdxtObj *adxt = ctx->adxt;
     if (value != 0 || ctx->f44 != 1) {
         sfadxt_WtPause(adxt, blk, value);

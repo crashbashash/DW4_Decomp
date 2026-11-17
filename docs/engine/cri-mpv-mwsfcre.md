@@ -15,8 +15,10 @@ bridge to the lower-layer hooks and the 64-bit multiply-divide helpers.
   and `mpv_lower_work`. The next file's first string is at `0x4f2b28`, and its `.data`/`.bss` start at
   `0x4bd0e0`/`0x5777b8`.
 - Types (`include/dw4/cri/mpv.h`): `MpvLib` (the work area: default conditions, option flags, the handle table
-  and the 7136-byte pool), `MpvHn` (a 1024-byte pool entry; `stat` 1 free, 2 used), `MpvPicInf`, `MpvErrObj`,
-  `MpvSeqInf`, `MpvBufEnt`, `MpvLowSize` and `MpvBuildInf`. The library checks its own build with
+  and the 7136-byte pool), `MpvHn` (a 1024-byte pool entry; `stat` 1 free, 2 used), `MpvErrObj`,
+  `MpvSeqInf`, `MpvLowSize` and `MpvBuildInf`. The picture attributes, the user-data sinks and the picture
+  user buffer of a handle are the lower layer's `M2vPicAtr`, `M2vUsrSj` and `M2vPicUsr` (`m2v.h`), and the
+  hook table (`mpvhook.h`) is typed as the M2V entry points it holds. The library checks its own build with
   `mpv_build_inf`: magic `0x5a5a5a5a`, `sizeof(MpvLib)`, the handle size and the pool size.
 - Handles: `MPV_Create` takes the first free entry (`mpvlib_SearchFreeHn`), clears it, binds the pool buffers and
   clamp tables (`mpv_BindHnBuffers`), copies the default conditions and creates its lower-layer half
@@ -56,7 +58,7 @@ MWSFD player creation: work-area sizes, frame buffers, picture user buffers, the
   [build-string stores](source-approvals.md#build-string-stores).
 - Without source: `mwPlyCalcWorkSfd`, `MWSFCRE_SetSupplySj`, `mwsfcre_MallocTab`, `mwsfcre_CreateSfd`,
   `mwPlyCreateSofdec` and `mwsfdcre_IsPlayableByHdrInf`: not decompiled yet.
-- Most field names in `MpvPicInf` and the outputs of `mwsfcre_CalcWorkStmBuf` are placeholders; their meaning
+- The outputs of `mwsfcre_CalcWorkStmBuf` are placeholders; their meaning
   needs the lower layer and the SFD work-size users.
 - `mpv_GetFixedWorkSizes` and `MPV_SetFrameBuffers` keep `mpv` names though they sit in the MWSFD file.
 - Medium confidence, from the Persona 3 FES PlayStation 2 symbol list (provenance not stated) placing the names by slot and size, with

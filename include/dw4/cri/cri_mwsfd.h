@@ -85,7 +85,7 @@ int MWSFD_GetUsePicUsr(void);
 int MWSFD_GetPauseBdr(void);
 void mwPlyFinishSfdFx(void);
 int MWSFLIB_SetErrCode(int code);
-void MWSFLIB_SfdErrFunc(MwsfdPly *ply, int code);
+void MWSFLIB_SfdErrFunc(void *obj, int code);
 void mwPlyGetCurFrm(MwsfdPly *ply, struct MwsfdFrm *out);
 
 /* 1 while MWSFD is initialised */

@@ -46,7 +46,6 @@ int mwPlySfdInit(int arg);
 void MWSFSVM_EntryIdVfunc(int n, void (*fn)(), int arg);
 void MWSFSVM_EntryIdleFunc(void (*fn)(), int arg);
 void MWSFSVM_EntryMainFunc(void (*fn)(), int arg);
-int SFD_SetErrFn(int a, void (*fn)(), int b);
 
 void mwsflib_LscErrFunc(void *obj, const char *msg);
 void mwsflib_SetSvrFunc(MwsfdInitPrm *iprm);

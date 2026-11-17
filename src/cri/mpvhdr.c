@@ -11,8 +11,8 @@
 extern char mpv_tag_idcprec[];  /* "IDCPREC" */
 extern char mpv_tag_stccode[];  /* "STCCODE" */
 
-void MPV_SetUsrSj(MpvHn *mpv, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj) {
-    MpvBufEnt *ent = &mpv->bufEnt[index];
+void MPV_SetUsrSj(MpvHn *mpv, int index, SfdSj *sj, M2vUsrDatFn fn, void *obj) {
+    M2vUsrSj *ent = &mpv->bufEnt[index];
 
     ent->sj = sj;
     ent->fn = fn;
@@ -20,7 +20,7 @@ void MPV_SetUsrSj(MpvHn *mpv, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj) {
 }
 
 void MPV_SetPicUsrBuf(MpvHn *mpv, char *buf, int size) {
-    MpvPicUsr *usr = &mpv->picusr;
+    M2vPicUsr *usr = &mpv->picusr;
 
     usr->buf = buf;
     usr->size = size;
@@ -28,7 +28,7 @@ void MPV_SetPicUsrBuf(MpvHn *mpv, char *buf, int size) {
 }
 
 void MPV_GetPicUsr(MpvHn *mpv, char **buf, int *len) {
-    MpvPicUsr *usr = &mpv->picusr;
+    M2vPicUsr *usr = &mpv->picusr;
 
     if (buf != 0) {
         *buf = usr->buf;
@@ -155,7 +155,7 @@ int mpvhdec_GetCodec(MpvHn *mpv, SfdSjChunk *buf) {
 
 /* The sequence header: picture size, rate, buffer size and the optional quantiser matrices (skipped). */
 int mpv_DecSeqHdr(MpvHn *mpv, SfdSj *sj) {
-    MpvPicInf *inf = &mpv->picInf;
+    M2vPicAtr *inf = &mpv->picInf;
     SfdSjChunk *ck = &mpv->chunk;
     SfdSjChunk rest;
     unsigned int cur, nxt;
@@ -166,15 +166,15 @@ int mpv_DecSeqHdr(MpvHn *mpv, SfdSj *sj) {
     int i;
 
     mpv->usrDatLevel = MPV_UDLVL_SEQ;
-    inf->seqCount++;
+    inf->shc_count++;
     sj->vtbl->getChunk(sj, 1, 0x7FFFFFFF, ck);
     BITS_INIT(ck->data, cur, nxt, bit, rp);
     BITS_GET32(val, cur, nxt, bit, rp);
-    BITS_GET(inf->horizontalSize, 12, cur, nxt, bit, rp);
-    BITS_GET(inf->verticalSize, 12, cur, nxt, bit, rp);
+    BITS_GET(inf->horizontal_size, 12, cur, nxt, bit, rp);
+    BITS_GET(inf->vertical_size, 12, cur, nxt, bit, rp);
     BITS_GET(mpv->pelAspectRatio, 4, cur, nxt, bit, rp);
     BITS_GET(val, 4, cur, nxt, bit, rp);
-    inf->frameRateCode = val;
+    inf->frame_rate_code = val;
     BITS_GET(mpv->bitRate, 18, cur, nxt, bit, rp);
     BITS_SKIP(1, cur, nxt, bit, rp);
     BITS_GET(mpv->vbvBufferSize, 10, cur, nxt, bit, rp);
@@ -191,13 +191,13 @@ int mpv_DecSeqHdr(MpvHn *mpv, SfdSj *sj) {
             BITS_GET(val, 8, cur, nxt, bit, rp);
         }
     }
-    inf->mbWidth = (inf->horizontalSize + 15) >> 4;
-    inf->mbHeight = (inf->verticalSize + 15) >> 4;
-    mpv->lastMbAddr = inf->mbHeight * inf->mbWidth - 1;
-    inf->bitRate = mpv->bitRate;
-    inf->vbvBufferSize = mpv->vbvBufferSize;
-    inf->pelAspectRatio = mpv->pelAspectRatio;
-    inf->constrainedParams = mpv->constrainedParams;
+    inf->mb_width = (inf->horizontal_size + 15) >> 4;
+    inf->mb_height = (inf->vertical_size + 15) >> 4;
+    mpv->lastMbAddr = inf->mb_height * inf->mb_width - 1;
+    inf->bit_rate = mpv->bitRate;
+    inf->vbv_buffer_size = mpv->vbvBufferSize;
+    inf->aspect_ratio_information = mpv->pelAspectRatio;
+    inf->constrained_parameters_flag = mpv->constrainedParams;
     end = rp + ((bit + 7) >> 3);
     end -= 8;
     SJ_SplitChunk(ck, end - mpv->chunk.data, ck, &rest);
@@ -208,7 +208,7 @@ int mpv_DecSeqHdr(MpvHn *mpv, SfdSj *sj) {
 
 /* Decodes the group of pictures header at the head of the stream joint: its time code and flags. */
 int mpvhdec_DecGscSj(MpvHn *mpv, SfdSj *sj) {
-    MpvPicInf *inf = &mpv->picInf;
+    M2vPicAtr *inf = &mpv->picInf;
     SfdSjChunk *ck = &mpv->chunk;
     SfdSjChunk rest;
     unsigned int cur, nxt;
@@ -218,19 +218,19 @@ int mpvhdec_DecGscSj(MpvHn *mpv, SfdSj *sj) {
     char *end;
 
     mpv->usrDatLevel = MPV_UDLVL_GOP;
-    inf->gopCount++;
+    inf->gsc_count++;
     sj->vtbl->getChunk(sj, 1, 0x7FFFFFFF, ck);
     BITS_INIT(ck->data, cur, nxt, bit, rp);
     BITS_GET32(val, cur, nxt, bit, rp);
     BITS_GET(val, 25, cur, nxt, bit, rp);
-    inf->pictures = val & 0x3F;
+    inf->time_code_pictures = val & 0x3F;
     val >>= 6;
-    inf->seconds = val & 0x3F;
+    inf->time_code_seconds = val & 0x3F;
     val >>= 7;
-    inf->minutes = val & 0x3F;
+    inf->time_code_minutes = val & 0x3F;
     val >>= 6;
-    inf->hours = val & 0x1F;
-    inf->dropFrameFlag = val >> 5;
+    inf->time_code_hours = val & 0x1F;
+    inf->drop_frame_flag = val >> 5;
     BITS_GET1(mpv->closedGop, cur, nxt, bit, rp);
     BITS_GET1(mpv->brokenLink, cur, nxt, bit, rp);
     end = rp + ((bit + 7) >> 3) - 8;
@@ -243,7 +243,7 @@ int mpvhdec_DecGscSj(MpvHn *mpv, SfdSj *sj) {
 /* The picture header: temporal reference, coding type, VBV delay and the motion vector ranges of a P or B
  * picture; the extra picture bytes are skipped. -3 when the header runs past the chunk. */
 int mpv_DecPicHdr(MpvHn *mpv, SfdSj *sj) {
-    MpvPicInf *inf = &mpv->picInf;
+    M2vPicAtr *inf = &mpv->picInf;
     SfdSjChunk *ck = &mpv->chunk;
     SfdSjChunk rest;
     unsigned int cur, nxt;
@@ -260,11 +260,11 @@ int mpv_DecPicHdr(MpvHn *mpv, SfdSj *sj) {
     sj->vtbl->getChunk(sj, 1, 0x7FFFFFFF, ck);
     BITS_INIT(ck->data, cur, nxt, bit, rp);
     BITS_GET32(val, cur, nxt, bit, rp);
-    BITS_GET(inf->temporalReference, 10, cur, nxt, bit, rp);
+    BITS_GET(inf->temporal_reference, 10, cur, nxt, bit, rp);
     BITS_GET(val, 3, cur, nxt, bit, rp);
-    inf->pictureCodingType = val;
+    inf->picture_coding_type = val;
     BITS_GET(mpv->vbvDelay, 16, cur, nxt, bit, rp);
-    type = inf->pictureCodingType;
+    type = inf->picture_coding_type;
     if (type == 2 || type == 3) {
         range = &mpv->fwd;
         BITS_GET1(range->fullPel, cur, nxt, bit, rp);

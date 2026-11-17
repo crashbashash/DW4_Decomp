@@ -138,7 +138,7 @@ int MPV_SkipFrmSj(MpvHn *mpv, SfdSj *sj) {
     return mpv_ReportError(mpv, code);
 }
 
-int MPV_GetPicInf(MpvHn *mpv, MpvPicInf *out) {
+int MPV_GetPicInf(MpvHn *mpv, M2vPicAtr *out) {
     if (MPVLIB_CheckHn(mpv) != 0)
         return mpv_ReportError(0, 0xFF03020C);
     *out = mpv->picInf;

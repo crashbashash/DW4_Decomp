@@ -86,7 +86,7 @@ int mpslib_InitLibWork(int nhn, MpsWork *work) {
     int i;
 
     mps_work = work;
-    UTY_MemsetDword((int *)work, 0, nhn * 64 + 4);
+    UTY_MemsetDword(work, 0, nhn * 64 + 4);
     mpslib_InitErr(&mps_work->err);
     mps_work->nhn = nhn;
     hn = mps_work->hn;
@@ -221,7 +221,7 @@ void mpslib_InitSys(MpsSysHd *sysHd);
 void mps_ResetPesInf(MpsPesInf *pes);
 
 MpsHn *mpslib_InitHn(MpsHn *mps) {
-    UTY_MemsetDword((int *)mps, 0, 64);
+    UTY_MemsetDword(mps, 0, 64);
     mps->stat = MPS_HN_USED;
     MPSLIB_InitErrInf(&mps->err);
     mps->pesSw = 2;

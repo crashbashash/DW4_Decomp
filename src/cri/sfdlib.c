@@ -44,7 +44,7 @@ long sfd_InitLib(SfdInitPrm *prm);
 void sfd_ClearSvrCnt(SfdLibInf *lib);
 void sfd_InitErr(SfdErrInf *err);
 void sfd_RecordError(SfdErrInf *err, int code);
-void sfd_SetErrFn(SfdErrInf *err, void (*func)(void *obj, int code), void *obj);
+void sfd_SetErrFn(SfdErrInf *err, SfdErrFn func, void *obj);
 void sfd_InitSj(int size);
 void sfd_FinishSj(void);
 void sfd_InitModules(void);
@@ -86,7 +86,7 @@ long sfd_InitLib(SfdInitPrm *prm) {
     SfdLibInf *lib = &sfd_lib;
     int i;
 
-    UTY_MemsetDword((int *)lib, 0, sizeof(SfdLibInf) / 4);
+    UTY_MemsetDword(lib, 0, sizeof(SfdLibInf) / 4);
     MEM_Copy((char *)lib->cond, (char *)sfd_cond_defaults, sizeof(lib->cond));
     lib->prm = *prm;
     lib->sysStat = 0;
@@ -175,7 +175,9 @@ void sfd_RecordError(SfdErrInf *err, int code) {
     }
 }
 
-int SFD_SetErrFn(SfdHandle *hn, void (*func)(void *obj, int code), void *obj) {
+int SFD_SetErrFn(void *sfd, SfdErrFn func, void *obj) {
+    SfdHandle *hn = sfd;
+
     if (hn == 0) {
         sfd_SetErrFn(&sfd_lib.err, func, obj);
     } else {
@@ -188,7 +190,7 @@ int SFD_SetErrFn(SfdHandle *hn, void (*func)(void *obj, int code), void *obj) {
 }
 
 /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
-void sfd_SetErrFn(SfdErrInf *err, void (*func)(void *obj, int code), void *obj) {
+void sfd_SetErrFn(SfdErrInf *err, SfdErrFn func, void *obj) {
     err->func = func;
     err->obj = obj;
 }

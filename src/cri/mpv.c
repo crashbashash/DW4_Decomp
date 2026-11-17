@@ -12,7 +12,7 @@ extern unsigned char mpv_endian_mark[4]; /* 4, 3, 2, 1 */
 extern int mpv_default_cond[MPV_COND_MAX];
 extern MpvLib mpv_lib;
 extern MpvHn *mpv_cur_hn;               /* the handle last given to MPVLIB_CheckHn */
-extern int mpv_lower_work[];            /* 0x3840 bytes for the lower layer */
+extern char mpv_lower_work[];            /* 0x3840 bytes for the lower layer */
 extern unsigned char mpv_clamp_table[1024];
 extern unsigned char *mpv_clamp;        /* mpv_clamp_table + 384 */
 
@@ -24,9 +24,9 @@ void mpvlib_FreeLc(void *p, int size);
 void mpvlib_AllocLc(void *p, int size);
 MpvHn *mpvlib_SearchFreeHn(void);
 MpvHn *mpvlib_InitHn(MpvHn *hn);
-int mpvcmc_OneMakeMbTa(MpvHn *hn);
+M2vObj *mpvcmc_OneMakeMbTa(MpvHn *hn);
 void mpv_BindHnBuffers(MpvHn *hn);
-void mpv_ResetPicInf(MpvPicInf *inf);
+void mpv_ResetPicInf(M2vPicAtr *inf);
 void mpvcmc_BiMakeMbTa(MpvHn *hn);
 void MPV_MbCbFn(void);
 void mpvlib_SetCondAll(int no, int value);
@@ -194,46 +194,46 @@ void mpvlib_InitWork(int nhn, char *work) {
     mpv_lib.hn = (MpvHn *)base;
 }
 
-void mpv_ResetPicInf(MpvPicInf *inf) {
-    inf->horizontalSize = 0;
-    inf->verticalSize = 0;
-    inf->mbWidth = 0;
-    inf->mbHeight = 0;
-    inf->frameRateCode = 0;
-    inf->temporalReference = 0;
-    inf->pictureCodingType = 0;
-    inf->dropFrameFlag = 0;
-    inf->hours = 0;
-    inf->minutes = 0;
-    inf->seconds = 0;
-    inf->pictures = 0;
-    inf->gopCount = 0;
-    inf->seqCount = 0;
-    inf->f56 = 3;
-    inf->f60 = 1;
+void mpv_ResetPicInf(M2vPicAtr *inf) {
+    inf->horizontal_size = 0;
+    inf->vertical_size = 0;
+    inf->mb_width = 0;
+    inf->mb_height = 0;
+    inf->frame_rate_code = 0;
+    inf->temporal_reference = 0;
+    inf->picture_coding_type = 0;
+    inf->drop_frame_flag = 0;
+    inf->time_code_hours = 0;
+    inf->time_code_minutes = 0;
+    inf->time_code_seconds = 0;
+    inf->time_code_pictures = 0;
+    inf->gsc_count = 0;
+    inf->shc_count = 0;
+    inf->picture_structure = 3;
+    inf->chroma_format = 1;
     inf->f64 = 1;
     inf->f68 = 1;
-    inf->bitRate = 0;
-    inf->vbvBufferSize = 0;
-    inf->f80 = -1;
-    inf->f82 = -1;
-    inf->f84 = 0;
-    inf->f85 = -1;
-    inf->f86 = -1;
-    inf->f87 = -1;
-    inf->f88 = 0;
-    inf->pelAspectRatio = 1;
-    inf->constrainedParams = 0;
-    inf->f91 = 0;
-    inf->f92 = 0;
-    inf->f93 = -1;
-    inf->f94 = -1;
-    inf->f95 = -1;
-    inf->f96 = -1;
-    inf->f97 = 0;
-    inf->f98 = -1;
-    inf->f99 = -1;
-    inf->f100 = -1;
+    inf->bit_rate = 0;
+    inf->vbv_buffer_size = 0;
+    inf->display_horizontal_size = -1;
+    inf->display_vertical_size = -1;
+    inf->field_count = 0;
+    inf->progressive_frame = -1;
+    inf->top_field_first = -1;
+    inf->repeat_first_field = -1;
+    inf->field_964 = 0;
+    inf->aspect_ratio_information = 1;
+    inf->constrained_parameters_flag = 0;
+    inf->frame_rate_extension_n = 0;
+    inf->frame_rate_extension_d = 0;
+    inf->profile_and_level_indication = -1;
+    inf->progressive_sequence = -1;
+    inf->low_delay = -1;
+    inf->video_format = -1;
+    inf->colour_description = 0;
+    inf->colour_primaries = -1;
+    inf->transfer_characteristics = -1;
+    inf->matrix_coefficients = -1;
 }
 
 void MPV_Finish(void) {
@@ -389,7 +389,7 @@ void mpv_FinishLower(void) {
     mpvhook_Finish();
 }
 
-int mpvcmc_OneMakeMbTa(MpvHn *hn) {
+M2vObj *mpvcmc_OneMakeMbTa(MpvHn *hn) {
     return mpvhook_Create();
 }
 
@@ -398,18 +398,18 @@ void mpvcmc_BiMakeMbTa(MpvHn *hn) {
 }
 
 void mpv_SetLowerCond(MpvHn *hn, int no, int value) {
-    int lower = 0;
+    M2vObj *lower = 0;
 
     if (hn != 0) {
         lower = hn->lower;
     }
-    mpvhook_SetCond(lower, no, value);
+    mpvhook_SetCond(lower, no, (M2vCondFn)value);
 }
 
 /* hands the handle's buffers to the lower layer and starts it; -1 without a lower layer, -2 when it
  * refuses */
 int mpv_StartLower(MpvHn *hn, SfdSj *sj) {
-    MpvBufEnt *ent;
+    M2vUsrSj *ent;
     int i;
 
     if (mpvhook_IsInstalled() != 0) {
@@ -430,21 +430,21 @@ int mpv_StartLower(MpvHn *hn, SfdSj *sj) {
 
 /* matching construct: 120-order sweep of the five field stores */
 void mpv_GetLowerInf(MpvHn *hn) {
-    MpvPicInf inf;
-    int a;
-    int b, c, d;
-    int e, f;
+    M2vPicAtr inf;
+    int bitRate;
+    int vbvSize, vbvDelay, reserved;
+    int closedGop, brokenLink;
 
     mpvhook_GetPicAtr(hn->lower, &inf);
-    mpvhook_GetBitRate(hn->lower, &a);
-    mpvhook_GetVbvBufSiz(hn->lower, &b, &c, &d);
-    mpvhook_GetLinkFlg(hn->lower, &e, &f);
+    mpvhook_GetBitRate(hn->lower, &bitRate);
+    mpvhook_GetVbvBufSiz(hn->lower, &vbvSize, &vbvDelay, &reserved);
+    mpvhook_GetLinkFlg(hn->lower, &closedGop, &brokenLink);
     hn->picInf = inf;
-    hn->bitRate = a;
-    hn->vbvBufferSize = b / 2048;
-    hn->vbvDelay = c;
-    hn->closedGop = e;
-    hn->brokenLink = f;
+    hn->bitRate = bitRate;
+    hn->vbvBufferSize = vbvSize / 2048;
+    hn->vbvDelay = vbvDelay;
+    hn->closedGop = closedGop;
+    hn->brokenLink = brokenLink;
 }
 
 int mpv_MulDiv(int a, int b, int c) {

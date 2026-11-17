@@ -102,8 +102,8 @@ void sfxzmv_SetTagGrp(SfxZHn *zhn) {
     SfxChunk *hdr = &zhn->hdr;
     SfxChunk *vfrm = &zhn->vfrm;
     SfxChunk *info = &zhn->info;
-    SfxMem in;
-    SfxMem out;
+    SfdSjChunk in;
+    SfdSjChunk out;
     if (info->data == 0) {
         hdr->size = 0;
         hdr->valid = 1;
@@ -114,15 +114,15 @@ void sfxzmv_SetTagGrp(SfxZHn *zhn) {
         return;
     }
     in.data = info->data;
-    in.size = info->size;
+    in.len = info->size;
     SJ_SearchTag(&in, "ZMHDR", "SFXINFE", &out);
     hdr->data = out.data;
-    hdr->size = out.size;
+    hdr->size = out.len;
     hdr->valid = 1;
     SJ_SearchTag(&in, "ZMVFRM", "SFXINFE", &out);
     vfrm->valid = 1;
     vfrm->data = out.data;
-    vfrm->size = out.size;
+    vfrm->size = out.len;
 }
 
 void SFXZ_GetTagInf(SfxZHn *zhn, char **data, int *size) {

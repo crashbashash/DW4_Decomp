@@ -2,6 +2,7 @@
 #define SFMPV_H
 
 #include "dw4/cri/m2v.h"
+#include "dw4/cri/sfd.h"
 #include "dw4/sony/libmpeg.h"
 
 typedef struct SfdPlanes {
@@ -28,57 +29,6 @@ typedef struct SfdRingInfo {
     int f28;
 } SfdRingInfo;
 
-typedef struct SfdTimeCode {
-    int rate;
-    int drop;
-    int hour;
-    int minute;
-    int second;
-    int frame;
-    int add;
-    short field0;
-    short field;
-} SfdTimeCode;
-
-typedef struct SfdTimeStamp {
-    int done;
-    SfdTimeCode tc;
-    int a;
-    int b;
-} SfdTimeStamp;
-
-typedef struct SfdFieldEntry {
-    short f0;
-    unsigned short f2;
-} SfdFieldEntry;
-
-typedef struct SfdTimer {
-    char pad0[24];
-    int (*hook)(void *player, int kind, int offset, int extra);
-
-    SfdTimeCode tc;
-    SfdTimeStamp state;
-    SfdTimeStamp best;
-    SfdTimeStamp f148;
-    SfdTimeStamp cur;
-    SfdTimeStamp latest;
-    SfdTimeStamp f280;
-    char pad324[12];
-    long f336;
-    char pad344[8];
-    int f352;
-    int base;
-    char pad360[136];
-    int pos;
-    char pad500[136];
-    int f636;
-    int f640;
-    int f644;
-    int f648;
-    char pad652[548];
-    SfdFieldEntry fields[64];
-} SfdTimer;
-
 /* what one picture decode writes and predicts from (SDK SFMPV_MPVFRM) */
 typedef struct SfdFrmPara {
     SfdPlanes ref[2];
@@ -97,7 +47,7 @@ typedef struct SfdPicture {
     int valid;
     int pts;
     int hasPts;
-    SfdTimeStamp stamp;
+    SfdTimeRec stamp;
     SfdUserData user;
 } SfdPicture;
 
@@ -105,7 +55,7 @@ typedef struct SfdSlot {
     int state;
     int refs;
     void *buf;               /* the frame's picture buffer */
-    SfdTimeStamp stamp;
+    SfdTimeRec stamp;
     int f56;
     int f60;
     int f64;
@@ -115,7 +65,7 @@ typedef struct SfdSlot {
     int f80;
     SfdChunk *blob;
     M2vPicAtr info;
-    long f216;
+    long long f216;
     int f224;
     int pad228;
 } SfdSlot;
@@ -156,16 +106,16 @@ typedef struct SfdMpvFrameBufs {
 } SfdMpvFrameBufs;
 
 typedef struct SfdIpuEntry {
-    long f0;
-    long f8;
+    long long f0;
+    long long f8;
     int f16;
     int f20;
 } SfdIpuEntry;
 
 /* One DMA tag quadword of the IPU input chain. */
 typedef struct SfdDmaTag {
-    long tag;
-    long pad;
+    long long tag;
+    long long pad;
 } SfdDmaTag;
 
 typedef struct SfdIpuStream {
@@ -187,7 +137,7 @@ typedef struct SfdIpuStream {
     unsigned int r60;
     int sema;
     int f68;
-    long f72;
+    long long f72;
     SfdIpuEntry *entries;
     int entryCount;
     int f88;
@@ -225,8 +175,8 @@ typedef struct SfdPicTrack {
     int base;
     int count;
     int pad12;
-    long pos;
-    long timeSum;
+    long long pos;
+    long long timeSum;
 } SfdPicTrack;
 
 typedef struct SfdMpv {
@@ -260,7 +210,7 @@ typedef struct SfdMpv {
     SfdSlot slots[16];
     SfdBufPool pool;
     int pad4252;
-    long f4256;
+    long long f4256;
     SfdIpuCtl ipu;
 } SfdMpv;
 
@@ -380,15 +330,15 @@ typedef struct SfdPlayer {
     char pad2352[32];
     SfdDecodeFlags decode;
     char pad2432[24];
-    long f2456;
-    long f2464;
-    long f2472;
+    long long f2456;
+    long long f2464;
+    long long f2472;
     char pad2480[64];
     SfdDecStat stat;
     SfdPending pending;
     char pad2740[628];
-    SfdTimer timer;
-    char pad4824[976];
+    SfdTim tim;
+    char pad4872[928];
     SfdPicRecord records[16];
     char pad7976[136];
     SfdStreams streams;
@@ -415,7 +365,7 @@ struct SfdStream {
 };
 
 typedef struct SfdRecordTail {
-    long f0;
+    long long f0;
     int f8;
     int f12;
 } SfdRecordTail;
@@ -444,7 +394,7 @@ typedef enum SfdFrmInfF60 {
 typedef struct SfdFrameDetail {
     int f72;
     char pad76[4];
-    long f80;
+    long long f80;
     int f88;
     int f92;
     int f96;
@@ -493,7 +443,7 @@ typedef struct SfdFrameInfo {
     char pad68[4];
     union {
         SfdFrameDetail detail;
-        long words[7];
+        long long words[7];
     } tail;                  /* 72 */
 } SfdFrameInfo;
 

@@ -119,10 +119,10 @@ typedef struct MpsWork {
     MpsHn hn[1];
 } MpsWork;
 
-void UTY_MemcpyByte(char *dst, char *src, unsigned int n);
-void UTY_MemcpyDword(int *dst, int *src, unsigned int n);
-void UTY_MemsetByte(char *dst, char value, unsigned int count);
-void UTY_MemsetDword(int *dst, int value, unsigned int count);
+void UTY_MemcpyByte(void *dst, void *src, unsigned int n);
+void UTY_MemcpyDword(void *dst, void *src, unsigned int n);
+void UTY_MemsetByte(void *dst, char value, unsigned int count);
+void UTY_MemsetDword(void *dst, int value, unsigned int count);
 void mpsutl_Init(void);
 void mpsutl_Finish(void);
 

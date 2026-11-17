@@ -1,284 +1,7 @@
 #include "dw4/cri/mps.h"
 #include "dw4/cri/uty.h"
 #include "dw4/cri/sfd.h"
-
-typedef struct SjObj SjObj;
-
-typedef struct SjVtbl {
-    char pad0[36];
-    int (*getNumData)(SjObj *sj, int id); /* 36 */
-} SjVtbl;
-
-struct SjObj {
-    SjVtbl *vtbl;
-};
-
-typedef struct SfdCrePrm {
-    int f0;
-    int f4;
-    char pad8[52];
-    char *work;            /* 60 */
-    unsigned int workSize; /* 64 */
-} SfdCrePrm;
-
-typedef struct SfdRec48 {
-    int f0;
-    int f4;
-    int f8;
-    int f12;
-    int f16;
-    int f20;
-    int f24;
-    int enabled; /* 28 */
-    int f32;
-    int id36;    /* 36 */
-    int id40;    /* 40 */
-    int id44;    /* 44 */
-} SfdRec48;
-
-typedef struct SfdSub24 {
-    long f0;
-    long f8;
-    long f16;
-} SfdSub24;
-
-typedef struct SfdTimer {
-    int count;       /* 0 */
-    int count2;      /* 4 */
-    int f8;
-    int f12;
-    int f16;
-    int f20;
-    int f24;
-    int active;      /* 28 */
-    int activations; /* 32 */
-    int f36;
-    int f40;
-    int f44;
-    SfdSub24 sub[4]; /* 48 */
-} SfdTimer;
-
-typedef struct SfdErrBlk {
-    int f0;
-    int f4;
-    char pad8[12];
-} SfdErrBlk;
-
-typedef struct SfdCond {
-    int f0;
-    int f4;
-    int f8;
-    int f12;
-    int f16;
-    int req1;    /* 20 */
-    int req2;    /* 24 */
-    int f28;
-    int f32;
-    char pad36[20];
-    int f56;
-    int mode;    /* 60 */
-    char pad64[16];
-    int request; /* 80; -4 = none */
-    int value;   /* 84 */
-    char pad88[92];
-    int f180;
-    char pad184[216];
-} SfdCond;
-
-typedef struct SfdTriple {
-    int f0;
-    int f4;
-    int f8;
-} SfdTriple;
-
-typedef struct SfdTimeRec {
-    int valid;
-    int tc[8];
-    int time;
-    int unit;
-} SfdTimeRec;
-
-typedef struct SfdD28 {
-    char pad0[16];
-    int f16;
-    char pad20[4];
-    int f24;
-    char pad28[148 - 28];
-    SfdTimeRec rec148;
-    char pad192[644 - 192];
-    int f644;
-    int f648;
-    char pad652[32];
-    int f684;
-    int f688;
-    char pad692[24];
-    int f716;
-    char pad720[4];
-    int f724;
-    char pad728[12];
-    int f740;
-    int f744;
-    char pad748[708];
-    SfdTriple f1456;
-    char pad1468[36];
-} SfdD28;
-
-typedef struct SfdItem {
-    long pos;          /* 0; negative = none */
-    unsigned int addr; /* 8 */
-    unsigned int size; /* 12 */
-} SfdItem;
-
-typedef struct SfdRing {
-    SfdItem *items; /* 0 */
-    int size;       /* 4 */
-    int count;      /* 8 */
-    int wr;         /* 12 */
-    int rd;         /* 16 */
-} SfdRing;
-
-typedef struct SfdStmInf {
-    int f0;
-    SjObj *sj;         /* 4 */
-    int base;          /* 8 */
-    int size;          /* 12 */
-} SfdStmInf;
-
-typedef struct SfdStmEnt {
-    char pad0[16];
-    SfdStmInf info; /* 16 */
-    char pad32[24];
-    SfdRing ring;   /* 56 */
-    char pad76[40];
-} SfdStmEnt;
-
-typedef struct SfdF28 {
-    char pad0[20];
-    int f20;
-    char pad24[128];
-    int f152;
-    char pad156[64];
-    int f220;
-    char pad224[5664];
-} SfdF28;
-
-typedef struct SfdRec SfdRec;
-
-typedef struct SfdRecSub {
-    int f0;
-    int f4;
-    int f8;
-} SfdRecSub;
-
-typedef struct SfdRecSlot {
-    SfdRec *rec;   /* 0 */
-    SfdRecSub sub; /* 4 */
-} SfdRecSlot;
-
-typedef struct SfdRecHdrInf {
-    int valid;
-    int f4;
-    int f8;
-    int count;
-    char pad16[36];
-    int countBase;
-    char pad56[2140];
-} SfdRecHdrInf;
-
-typedef struct SfdRecSysTime {
-    int set;
-    int time;
-    int unit;
-    int f12;
-    int f16;
-    int f20;
-    long f24;
-    long f32;
-    int f40;
-    int f44;
-} SfdRecSysTime;
-
-typedef struct SfdRecAudioTime {
-    int set;
-    int time;
-    int unit;
-} SfdRecAudioTime;
-
-typedef struct SfdRecVideoTime {
-    int set;
-    int time;
-    int unit;
-    int f12;
-    int f16;
-    int f20;
-} SfdRecVideoTime;
-
-struct SfdRec {
-    int state;            /* 0 */
-    int time;
-    int unit;
-    SfdRecHdrInf hdrInf;    /* 12 */
-    SfdRecSysTime sysTime;    /* 2208 */
-    char pad2256[512];
-    SfdRecAudioTime audioTime;    /* 2768 */
-    char blk2780[560];    /* 2780 */
-    SfdRecVideoTime videoTime;    /* 3340 */
-    char pad3364[132];
-    int derived;
-    int default_value;
-    int default_divisor;
-    int default_scale;
-    int id3512;
-    int id3516;
-    int delegate;
-    int value;
-    int divisor;
-    int scale;
-    int explicit_value;
-    int offset;
-};
-
-typedef struct SfdTblEnt {
-    char pad0[32];
-} SfdTblEnt;
-
-typedef struct SfdTable {
-    SfdTblEnt ent[5];  /* 0 */
-    char trailer[64];  /* 160 */
-} SfdTable;
-
-typedef struct SfdPlyInf {
-    char pad0[20];
-    int f20;
-    char pad24[8];
-} SfdPlyInf;
-
-typedef struct SfdPly SfdPly;
-
-struct SfdPly {
-    SfdCrePrm cre;        /* 0 */
-    int pending;          /* 68 */
-    int stat;             /* 72 */
-    int reqStat;          /* 76 */
-    int pause;            /* 80 */
-    int pauseCnt;         /* 84 */
-    char pad88[32];
-    char blk120[2196];    /* 120 */
-    SfdRec48 rec2316;     /* 2316 */
-    char pad2364[20];
-    SfdTimer tmr;         /* 2384 */
-    char pad2528[16];
-    SfdErrBlk err;        /* 2544 */
-    SfdCond cond;         /* 2564 */
-    SfdCond cond2;        /* 2964 */
-    char pad3364[4];
-    SfdD28 d28;           /* 3368 */
-    SfdStmEnt ent[8];     /* 4872 */
-    char pad5800[2176];
-    SfdF28 f28;           /* 7976 */
-    SfdRecSlot recSlot;   /* 13864 */
-    SfdTable tbl;         /* 13880 */
-};
+#include "dw4/cri/sfdply.h"
 
 typedef struct SfdEntry74 {
     char pad[4952];
@@ -334,11 +57,11 @@ void sfsee_InitSeekInf(SfdRec *rec) {
     rec->id3512 = -1;
     rec->id3516 = -1;
     rec->delegate = 0;
-    rec->value = 0;
-    rec->divisor = -8;
-    rec->scale = 1;
-    rec->explicit_value = 0;
-    rec->offset = -1;
+    rec->fsize = 0;
+    rec->tottime = -8;
+    rec->tunit = 1;
+    rec->byterate = 0;
+    rec->seekpos = -1;
 }
 
 void sfsee_InitHeadInf(SfdRec *rec) {
@@ -352,16 +75,16 @@ void sfsee_InitHeadInf(SfdRec *rec) {
     a->set = 0;
     a->time = 0;
     a->unit = 0;
-    a->f12 = 0;
-    a->f16 = 0;
-    a->f24 = 0;
-    a->f32 = 0;
-    a->f40 = 0;
-    a->f44 = 0;
+    a->nvid = 0;
+    a->naud = 0;
+    a->scr_base = 0;
+    a->pts_min = 0;
+    a->stmid_vid = 0;
+    a->stmid_aud = 0;
     b->set = 0;
     b->time = 0;
     b->unit = 0;
-    SFTIM_InitTtu(rec->blk2780, 0x7FFFFFFF);
+    SFTIM_InitTtu(&rec->startTime, 0x7FFFFFFF);
     c->set = 0;
     c->time = 0;
     c->f12 = 0;
@@ -439,7 +162,7 @@ void SFSEE_ExecServer(void *sfd)
 void sfsee_ExecHeadAnaly(SfdPly *hn)
 {
     SfdRec *record = hn->recSlot.rec;
-    SfdRecHdrInf *hdr = &record->hdrInf;
+    SfdHdrInf *hdr = &record->hdrInf;
     SfdRecSysTime *sys = &record->sysTime;
     SfdRecAudioTime *audio = &record->audioTime;
     SfdRecVideoTime *video = &record->videoTime;
@@ -461,10 +184,10 @@ void sfsee_ExecHeadAnaly(SfdPly *hn)
         sys->set = 1;
         if (hdr->valid == 0) {
             time = sys->time;
-        } else if (hdr->count > 0) {
-            int count = hdr->count;
-            int rate = record->value;
-            int base = hdr->countBase;
+        } else if (hdr->muxRate > 0) {
+            int count = hdr->muxRate;
+            int rate = record->fsize;
+            int base = hdr->mux.totalTime;
             if (rate > 0 && base > 0) {
                 time = UTY_MulDiv(rate, 1000, base);
             } else {
@@ -661,7 +384,7 @@ int SFD_SetFileSize(void *sfd, int value)
     if (record == 0) {
         return 0;
     }
-    record->value = value;
+    record->fsize = value;
     sfsee_UpdateEByteRate(hn);
     return 0;
 }
@@ -677,8 +400,8 @@ int SFD_SetTotTime(void *sfd, int divisor, int scale)
     if (timing == 0) {
         return 0;
     }
-    timing->divisor = divisor;
-    timing->scale = scale;
+    timing->tottime = divisor;
+    timing->tunit = scale;
     sfsee_UpdateEByteRate(hn);
     return 0;
 }
@@ -694,7 +417,7 @@ int SFD_SetByteRate(void *sfd, int value)
     if (record == 0) {
         return 0;
     }
-    record->explicit_value = value;
+    record->byterate = value;
     sfsee_UpdateEByteRate(hn);
     return 0;
 }
@@ -709,13 +432,13 @@ void SFD_SetSeekPos(void *sfd, int offset)
     }
     record = hn->recSlot.rec;
     if (record != 0) {
-        record->offset = offset;
+        record->seekpos = offset;
     }
 }
 
 void sfsee_ExecFinAnaly(SfdPly *hn)
 {
-    SfdTimeRec *rec = &hn->d28.rec148;
+    SfdTimeRec *rec = &hn->tim.tot;
     SfdRecSub *settings = &hn->recSlot.sub;
     SfdRec *s = hn->recSlot.rec;
     int changed, base, t;
@@ -723,7 +446,7 @@ void sfsee_ExecFinAnaly(SfdPly *hn)
     changed = 0;
     if (s->default_value <= 0) {
         base = 0;
-        if (settings->f4 != -3) base = s->offset;
+        if (settings->f4 != -3) base = s->seekpos;
         if (base >= 0) {
             t = sfsee_GetInSjReadTot((char *)hn);
             if (t != -1) {
@@ -758,12 +481,12 @@ int sfsee_GetInSjReadTot(char *ctx)
 int sfsee_UpdateEByteRate(SfdPly *hn)
 {
     SfdRec *record = hn->recSlot.rec;
-    int value = record->explicit_value;
+    int value = record->byterate;
     int numerator, scale, divisor;
     if (value <= 0) {
-        numerator = record->value;
-        divisor = record->divisor;
-        scale = record->scale;
+        numerator = record->fsize;
+        divisor = record->tottime;
+        scale = record->tunit;
         if (numerator <= 0 || divisor <= 0) {
             value = record->time;
             if (value > 0) {

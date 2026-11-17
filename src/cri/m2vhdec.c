@@ -101,16 +101,16 @@ void M2VHDEC_InitHn(M2vObj *hn)
     h->field_1292 = 0;
 }
 
-void M2V_SetUsrSj(M2vObj *hn, int no, void *sj, void (*cb)(int arg, int index), int cbArg)
+void M2V_SetUsrSj(M2vObj *hn, int no, SfdSj *sj, M2vUsrDatFn fn, void *obj)
 {
     M2vUsrSj *usr = &hn->usrsj[no];
 
     usr->sj = sj;
-    usr->cb = cb;
-    usr->cbArg = cbArg;
+    usr->fn = fn;
+    usr->obj = obj;
 }
 
-void M2V_SetPicUsrBuf(M2vObj *hn, void *buf, int size)
+void M2V_SetPicUsrBuf(M2vObj *hn, char *buf, int size)
 {
     M2vPicUsr *usr = &hn->picusr;
 
@@ -118,7 +118,7 @@ void M2V_SetPicUsrBuf(M2vObj *hn, void *buf, int size)
     usr->size = size;
 }
 
-void M2V_GetPicUsr(M2vObj *hn, void **buf, int *size)
+void M2V_GetPicUsr(M2vObj *hn, char **buf, int *size)
 {
     M2vPicUsr *usr = &hn->picusr;
 
@@ -474,8 +474,8 @@ void m2vhdec_PutUsrDat(M2vObj *ctx, char *src, int n)
             memcpy(ck2.data, src + ck.len, ck2.len);
             sj->vtbl->putChunk(sj, 1, &ck2);
         }
-        if (ctx->usrsj[idx].cb != 0) {
-            ctx->usrsj[idx].cb(ctx->usrsj[idx].cbArg, idx);
+        if (ctx->usrsj[idx].fn != 0) {
+            ctx->usrsj[idx].fn(ctx->usrsj[idx].obj, idx);
         }
     }
     if (idx == 3 && ctx->picusr.buf != 0) {
@@ -491,7 +491,7 @@ void m2vhdec_AppendPicUsr(M2vObj *ctx, void *src, int len)
 {
     M2vPicUsr *b = &ctx->picusr;
     int n = b->size - b->len;
-    char *dst = (char *)b->buf + b->len;
+    char *dst = b->buf + b->len;
 
     if (len < n) {
         n = len;

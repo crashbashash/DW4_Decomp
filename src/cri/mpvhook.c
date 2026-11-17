@@ -8,7 +8,7 @@ int mpvhook_IsInstalled(void) {
     return mpvhook_installed;
 }
 
-int mpvhook_GetVersionStr(void) {
+char *mpvhook_GetVersionStr(void) {
     if (mpvhook_fn_GetVersionStr != 0) {
         return mpvhook_fn_GetVersionStr();
     }
@@ -22,7 +22,7 @@ int mpvhook_IsConformable(char *buf, int size) {
     return 0;
 }
 
-void mpvhook_Init(int nobj, void *work, int size) {
+void mpvhook_Init(int nobj, char *work, unsigned int size) {
     if (mpvhook_fn_Init != 0) {
         mpvhook_fn_Init(nobj, work, size);
     }
@@ -34,14 +34,14 @@ void mpvhook_Finish(void) {
     }
 }
 
-int mpvhook_Create(void) {
+M2vObj *mpvhook_Create(void) {
     if (mpvhook_fn_Create != 0) {
         return mpvhook_fn_Create();
     }
     return 0;
 }
 
-void mpvhook_Destroy(int lower) {
+void mpvhook_Destroy(M2vObj *lower) {
     if (mpvhook_fn_Destroy != 0) {
         mpvhook_fn_Destroy(lower);
     }
@@ -53,21 +53,21 @@ void mpvhook_MbCbFn(void) {
     }
 }
 
-void mpvhook_SetCond(int lower, int no, int value) {
+void mpvhook_SetCond(M2vObj *lower, int no, M2vCondFn fn) {
     if (mpvhook_fn_SetCond != 0) {
-        mpvhook_fn_SetCond(lower, no, value);
+        mpvhook_fn_SetCond(lower, no, fn);
     }
 }
 
-void mpvhook_SetErrFunc(void) {
+void mpvhook_SetErrFunc(M2vObj *lower, int (*func)(void *obj), void *obj) {
     if (mpvhook_fn_SetErrFunc != 0) {
-        mpvhook_fn_SetErrFunc();
+        mpvhook_fn_SetErrFunc(lower, func, obj);
     }
 }
 
-void mpvhook_GetErrInf(void) {
+void mpvhook_GetErrInf(M2vObj *lower, M2vErrInf *inf) {
     if (mpvhook_fn_GetErrInf != 0) {
-        mpvhook_fn_GetErrInf();
+        mpvhook_fn_GetErrInf(lower, inf);
     }
 }
 
@@ -77,57 +77,57 @@ void mpvhook_DecodeFrm(void) {
     }
 }
 
-void mpvhook_SkipFrm(void) {
+void mpvhook_SkipFrm(M2vObj *lower, SfdSj *sj) {
     if (mpvhook_fn_SkipFrm != 0) {
-        mpvhook_fn_SkipFrm();
+        mpvhook_fn_SkipFrm(lower, sj);
     }
 }
 
-void mpvhook_SetUsrSj(int lower, int index, SfdSj *sj, MpvUsrDatFn fn, void *obj) {
+void mpvhook_SetUsrSj(M2vObj *lower, int index, SfdSj *sj, M2vUsrDatFn fn, void *obj) {
     if (mpvhook_fn_SetUsrSj != 0) {
         mpvhook_fn_SetUsrSj(lower, index, sj, fn, obj);
     }
 }
 
-void mpvhook_SetPicUsrBuf(int lower, char *buf, int size) {
+void mpvhook_SetPicUsrBuf(M2vObj *lower, char *buf, int size) {
     if (mpvhook_fn_SetPicUsrBuf != 0) {
         mpvhook_fn_SetPicUsrBuf(lower, buf, size);
     }
 }
 
-void mpvhook_GetPicUsr(int lower, int index, int *flag) {
+void mpvhook_GetPicUsr(M2vObj *lower, char **buf, int *len) {
     if (mpvhook_fn_GetPicUsr != 0) {
-        mpvhook_fn_GetPicUsr(lower, index, flag);
+        mpvhook_fn_GetPicUsr(lower, buf, len);
     }
 }
 
-int mpvhook_DecodePicAtr(int lower, SfdSj *sj) {
+int mpvhook_DecodePicAtr(M2vObj *lower, SfdSj *sj) {
     if (mpvhook_fn_DecodePicAtr != 0) {
         return mpvhook_fn_DecodePicAtr(lower, sj);
     }
     return 0;
 }
 
-void mpvhook_GetPicAtr(int lower, MpvPicInf *inf) {
+void mpvhook_GetPicAtr(M2vObj *lower, M2vPicAtr *picatr) {
     if (mpvhook_fn_GetPicAtr != 0) {
-        mpvhook_fn_GetPicAtr(lower, inf);
+        mpvhook_fn_GetPicAtr(lower, picatr);
     }
 }
 
-void mpvhook_GetBitRate(int lower, int *inf) {
+void mpvhook_GetBitRate(M2vObj *lower, int *bit_rate) {
     if (mpvhook_fn_GetBitRate != 0) {
-        mpvhook_fn_GetBitRate(lower, inf);
+        mpvhook_fn_GetBitRate(lower, bit_rate);
     }
 }
 
-void mpvhook_GetVbvBufSiz(int lower, int *a, int *b, int *c) {
+void mpvhook_GetVbvBufSiz(M2vObj *lower, int *vbv_size, int *vbv_delay, int *reserved) {
     if (mpvhook_fn_GetVbvBufSiz != 0) {
-        mpvhook_fn_GetVbvBufSiz(lower, a, b, c);
+        mpvhook_fn_GetVbvBufSiz(lower, vbv_size, vbv_delay, reserved);
     }
 }
 
-void mpvhook_GetLinkFlg(int lower, int *width, int *height) {
+void mpvhook_GetLinkFlg(M2vObj *lower, int *closed_gop, int *broken_link) {
     if (mpvhook_fn_GetLinkFlg != 0) {
-        mpvhook_fn_GetLinkFlg(lower, width, height);
+        mpvhook_fn_GetLinkFlg(lower, closed_gop, broken_link);
     }
 }

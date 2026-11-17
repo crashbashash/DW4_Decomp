@@ -2,84 +2,6 @@
 #include "dw4/cri/uty.h"
 #include "dw4/cri/sfd.h"
 
-typedef struct SfdTimeCode {
-    int rate;
-    int drop;
-    int hours;
-    int minutes;
-    int seconds;
-    int frames;
-    int add;
-    short fieldFlag;
-    short half;
-} SfdTimeCode;
-
-typedef struct SfdTimeRec {
-    int valid;
-    SfdTimeCode tc;
-    int time;
-    int unit;
-} SfdTimeRec;
-
-
-typedef struct SfdTim {
-    SfdTimeFn getters[6];
-    int f24;
-    SfdTimeCode tc;
-    SfdTimeRec rec60;
-    SfdTimeRec rec104;
-    SfdTimeRec rec148;
-    SfdTimeRec rec192;
-    SfdTimeRec rec236;
-    SfdTimeRec rec280;
-    int f324;
-    int f328;
-    int pad332;
-    long f336;
-    long f344;
-    int f352;
-    int f356;
-    int f360;
-    int f364[32];
-    int f492;
-    int f496;
-    int f500;
-    int f504;
-    int f508[32];
-    int base;
-    int base_frames;
-    int f644;
-    int f648;
-    int cached_pos;
-    int cached_rate;
-    int last;
-    int estimate;
-    int largest;
-    int smallest;
-    int f676;
-    int stream_pos;
-    int step;
-    int f688;
-    int f692;
-    int f696;
-    int sync_count;
-    float sync_pending;
-    int sync_last;
-    float sync_time;
-    int count;
-    int f720;
-    int (*clock_get)(int ctx, int *time, int *unit);
-    int clock_last;
-    int decoded_pos;
-    int rate;
-    int clock_wrap;
-    int clock_ctx;
-    char pad748[1456 - 748];
-    int f1456;
-    int f1460;
-    int f1464;
-} SfdTim;
-
 typedef struct SfdHnSub {
     int active;
     int f4[6];
@@ -112,11 +34,6 @@ typedef struct SfdLib {
 
 typedef void (*SfdTcFn)(int rate, SfdTimeCode *tc, int *time, int *unit);
 
-typedef struct SfdTcDesc {
-    int type;
-    int variant;
-} SfdTcDesc;
-
 typedef struct SfdStat64 {
     long sum;
     long min;
@@ -144,9 +61,9 @@ void sftim_GetVtimeTmr(SfdHn *hn, SfdTim *tim, int *pos, int *rate);
 int sftim_IsAudioStagnant(SfdHn *hn);
 int sfdtim_GetTimeAfterSeek();
 int SFTIM_GetNowTime(SfdHn *hn, int *time, int *unit);
-int sftim_GetTimeNone(SfdHn *hn, int *time, int *unit);
-int sftim_GetTimeVsync(SfdHn *hn, int *time, int *unit);
-int sftim_GetTimeExtClock(SfdHn *hn, int *time, int *unit);
+int sftim_GetTimeNone(void *sfd, int *time, int *unit);
+int sftim_GetTimeVsync(void *sfd, int *time, int *unit);
+int sftim_GetTimeExtClock(void *sfd, int *time, int *unit);
 int sftim_GetTimeUfrm();
 int sftim_UpdateTimeHn(SfdHn *hn);
 void sftim_UpdateTime(SfdHn *hn);
@@ -182,30 +99,30 @@ void SFTIM_InitHn(void *sfd, SfdTim *tim)
     SFTIM_SetTimeFn(hn, sftim_GetTimeUfrm, 3);
     SFTIM_SetTimeFn(hn, 0, 4);
     SFTIM_SetTimeFn(hn, sftim_GetTimeExtClock, 5);
-    tim->f24 = 0;
+    tim->isSkipFn = 0;
     SFTIM_InitTcode(&tim->tc);
-    SFTIM_InitTtu(&tim->rec192, 0);
-    SFTIM_InitTtu(&tim->rec60, 0x7FFFFFFF);
-    SFTIM_InitTtu(&tim->rec104, -1);
-    SFTIM_InitTtu(&tim->rec148, -1);
-    SFTIM_InitTtu(&tim->rec236, -1);
-    SFTIM_InitTtu(&tim->rec280, 0x7FFFFFFF);
-    tim->f324 = 0;
-    tim->f328 = 0;
-    tim->f336 = -1;
-    tim->f344 = -1;
+    SFTIM_InitTtu(&tim->cur, 0);
+    SFTIM_InitTtu(&tim->state, 0x7FFFFFFF);
+    SFTIM_InitTtu(&tim->best, -1);
+    SFTIM_InitTtu(&tim->tot, -1);
+    SFTIM_InitTtu(&tim->latest, -1);
+    SFTIM_InitTtu(&tim->vofst, 0x7FFFFFFF);
+    tim->astart_smpl = 0;
+    tim->astart_sfreq = 0;
+    tim->baseTime = -1;
+    tim->ofsTime = -1;
     tim->f352 = 0;
-    tim->f356 = 0;
-    tim->f360 = 0;
+    tim->tally.total = 0;
+    tim->tally.count = 0;
     for (i = 0; i < 32; i++) {
-        tim->f364[i] = 0;
+        tim->tally.history[i] = 0;
     }
-    tim->f492 = 1;
-    tim->f496 = 0;
-    tim->f500 = 0;
-    tim->f504 = 0;
+    tim->queue.last = 1;
+    tim->queue.f4 = 0;
+    tim->queue.wr = 0;
+    tim->queue.rd = 0;
     for (i = 0; i < 32; i++) {
-        tim->f508[i] = 0;
+        tim->queue.items[i] = 0;
     }
     tim->base = -5;
     tim->base_frames = 1;
@@ -219,7 +136,7 @@ void SFTIM_InitHn(void *sfd, SfdTim *tim)
     tim->smallest = 0x7FFFFFFF;
     tim->f676 = 0;
     tim->stream_pos = 0;
-    tim->step = 1000;
+    tim->speed = 1000;
     tim->f688 = 0;
     tim->f692 = 0;
     tim->f696 = 1;
@@ -228,16 +145,16 @@ void SFTIM_InitHn(void *sfd, SfdTim *tim)
     tim->sync_last = 0;
     tim->sync_time = -1.0f;
     *(volatile int *)&tim->count = -1;
-    tim->f720 = *(volatile int *)&tim->stream_pos;
+    tim->chg_base = *(volatile int *)&tim->stream_pos;
     tim->clock_get = 0;
     *(volatile int *)&tim->clock_last = -5;
     *(volatile int *)&tim->decoded_pos = 0;
     *(volatile int *)&tim->rate = 1;
     *(volatile int *)&tim->clock_wrap = -1;
     tim->clock_ctx = 0;
-    tim->f1456 = 0;
-    tim->f1460 = 0;
-    tim->f1464 = 0;
+    tim->ptsm.f0 = 0;
+    tim->ptsm.f4 = 0;
+    tim->ptsm.f8 = 0;
 }
 
 void SFTIM_InitTtu(SfdTimeRec *rec, int time)
@@ -252,13 +169,13 @@ void SFTIM_InitTcode(SfdTimeCode *tc)
 {
     tc->rate = 0;
     tc->drop = 0;
-    tc->hours = 0;
-    tc->minutes = 0;
-    tc->seconds = 0;
-    tc->frames = 0;
+    tc->hour = 0;
+    tc->minute = 0;
+    tc->second = 0;
+    tc->frame = 0;
     tc->add = 0;
-    tc->fieldFlag = 0;
-    tc->half = 0;
+    tc->repeat = 0;
+    tc->field = 0;
 }
 
 void SFTIM_UpdateItime(SfdTim *tim, int now)
@@ -337,10 +254,10 @@ void sftim_CntupHnVbIn(SfdHn *hn)
 {
     SfdTim *tim = &hn->tim;
     if (sftim_IsTimeIncre(hn)) {
-        tim->stream_pos += tim->step;
+        tim->stream_pos += tim->speed;
     }
     if (sftim_IsVbinStIncre(hn, tim)) {
-        *(volatile int *)&tim->count += tim->step;
+        *(volatile int *)&tim->count += tim->speed;
     }
 }
 
@@ -368,9 +285,9 @@ int sftim_IsVbinStIncre(SfdHn *hn, SfdTim *tim)
 void sftim_ResetVtimeTmr(SfdHn *hn, SfdTim *tim)
 {
     if (SFSET_GetCond(hn, 71) == 1) {
-        tim->f720 = *(volatile int *)&tim->stream_pos;
+        tim->chg_base = *(volatile int *)&tim->stream_pos;
     } else {
-        tim->f720 = *(volatile int *)&tim->decoded_pos;
+        tim->chg_base = *(volatile int *)&tim->decoded_pos;
     }
 }
 
@@ -378,10 +295,10 @@ void sftim_GetVtimeTmr(SfdHn *hn, SfdTim *tim, int *pos, int *rate)
 {
     SfdLib *lib = &DAT_004bea88;
     if (SFSET_GetCond(hn, 71) == 1) {
-        *pos = tim->stream_pos - tim->f720;
+        *pos = tim->stream_pos - tim->chg_base;
         *rate = lib->rate;
     } else {
-        *pos = *(volatile int *)&tim->decoded_pos - tim->f720;
+        *pos = *(volatile int *)&tim->decoded_pos - tim->chg_base;
         *rate = *(volatile int *)&tim->rate;
     }
 }
@@ -415,7 +332,7 @@ int sftim_IsAudioStagnant(SfdHn *hn)
 int SFTIM_GetAudioStartSample(void *timp, int scale)
 {
     SfdTim *tim = timp;
-    long value = tim->f344;
+    long value = tim->ofsTime;
     int result;
     if (value < 0) {
         return -1;
@@ -428,8 +345,8 @@ int SFTIM_GetAudioStartSample(void *timp, int scale)
 
 int SFTIM_GetVideoStartSample(SfdTim *tim, int scale, int *valid)
 {
-    SfdTimeRec *rec = &tim->rec280;
-    SfdTimeRec *fallback = &tim->rec236;
+    SfdTimeRec *rec = &tim->vofst;
+    SfdTimeRec *fallback = &tim->latest;
     int time;
     int unit;
     int result;
@@ -453,8 +370,8 @@ int SFTIM_GetVideoStartSample(SfdTim *tim, int scale, int *valid)
 void SFTIM_SetStartTime(SfdTim *tim, int a, int b)
 {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
-    tim->f324 = a;
-    tim->f328 = b;
+    tim->astart_smpl = a;
+    tim->astart_sfreq = b;
 }
 
 int SFD_GetTime(void *sfd, int *time, int *unit)
@@ -469,13 +386,13 @@ int SFD_GetTime(void *sfd, int *time, int *unit)
 int SFTIM_GetTimeSub(void *sfd, int *time, int *unit)
 {
     SfdHn *hn = sfd;
-    SfdTimeRec *rec = &hn->tim.rec280;
+    SfdTimeRec *rec = &hn->tim.vofst;
     SfdTim *tim = &hn->tim;
     int r = sfdtim_GetTimeAfterSeek(hn, time, unit);
     int k = *unit;
     if (k == 1) return r;
-    if (k == tim->f328) {
-        *time += tim->f324;
+    if (k == tim->astart_sfreq) {
+        *time += tim->astart_smpl;
     } else if (rec->valid != 0) {
         *time += UTY_MulDiv(rec->time, k, rec->unit);
     }
@@ -519,19 +436,21 @@ int SFTIM_GetNowTime(SfdHn *hn, int *time, int *unit)
     SfdTimeFn fn;
     int ret;
     sfd_Lock(guard);
-    table = hn->tim.getters;
+    table = hn->tim.timefn;
     table += SFSET_GetCond(hn, 15);
     fn = *table;
     if (fn == 0) {
-        fn = (SfdTimeFn)sftim_GetTimeNone;
+        fn = sftim_GetTimeNone;
     }
     ret = fn(hn, time, unit);
     sfd_Unlock(guard);
     return ret;
 }
 
-int sftim_GetTimeNone(SfdHn *hn, int *time, int *unit)
+int sftim_GetTimeNone(void *sfd, int *time, int *unit)
 {
+    SfdHn *hn = sfd;
+
     if (SFTIM_ChkRegularTime(hn, time, unit) == 0) {
         return 0;
     }
@@ -540,8 +459,9 @@ int sftim_GetTimeNone(SfdHn *hn, int *time, int *unit)
     return 0;
 }
 
-int sftim_GetTimeVsync(SfdHn *hn, int *time, int *unit)
+int sftim_GetTimeVsync(void *sfd, int *time, int *unit)
 {
+    SfdHn *hn = sfd;
     int r = SFTIM_ChkRegularTime(hn, time, unit);
     SfdTim *tim = &hn->tim;
     if (r == 0) {
@@ -558,8 +478,9 @@ int sftim_GetTimeUfrm(SfdHn *hn, int *time, int *unit)
     return 0;
 }
 
-int sftim_GetTimeExtClock(SfdHn *hn, int *time, int *unit)
+int sftim_GetTimeExtClock(void *sfd, int *time, int *unit)
 {
+    SfdHn *hn = sfd;
     SfdTim *tim;
     int ret;
     int now;
@@ -614,12 +535,14 @@ int SFD_OutUsrFrmSync(SfdHn *hn)
     return r;
 }
 
-int SFD_SetUsrIsSkipFn(SfdHn *hn, int value)
+int SFD_SetUsrIsSkipFn(void *sfd, SfdIsSkipFn fn)
 {
+    SfdHn *hn = sfd;
+
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000124);
     }
-    hn->tim.f24 = value;
+    hn->tim.isSkipFn = fn;
     return 0;
 }
 
@@ -718,30 +641,30 @@ void SFTIM_SetTimeFn(void *sfd, SfdTimeFn fn, int index)
     SfdHn *hn = sfd;
     /* matching construct: manual — stepping the object pointer by `index` words (a0 += index*4) is retail's address order */
     hn = (SfdHn *)((int *)hn + index);
-    hn->tim.getters[0] = fn;
+    hn->tim.timefn[0] = fn;
 }
 
-void SFTIM_Tc2Time(SfdTcDesc *desc, int *time, int *unit)
+void SFTIM_Tc2Time(SfdTimeCode *tc, int *time, int *unit)
 {
-    int type = desc->type;
+    int type = tc->rate;
     int context = SFTIM_prate[type];
-    SfdTcFn handler = sftim_tc2time[type][desc->variant];
+    SfdTcFn handler = sftim_tc2time[type][tc->drop];
     if (handler == 0) {
         sfd_ReportError(0, 0xFF000221);
         *time = 0;
         *unit = 1;
         return;
     }
-    handler(context, (SfdTimeCode *)desc, time, unit);
+    handler(context, tc, time, unit);
 }
 
 /* matching construct: permuter — `rate` unsigned and the hour/minute products in locals fix the multiply order */
 void sftim_Tc2TimeN(unsigned int rate, SfdTimeCode *tc, int *ticks, int *out_rate)
 {
-    int hours = tc->hours * rate;
-    int minutes = tc->minutes * rate;
-    int frames = tc->frames + tc->add;
-    *ticks = tc->seconds * rate + tc->half * 500 + (hours * 3600 + minutes * 60 + frames * 1000);
+    int hours = tc->hour * rate;
+    int minutes = tc->minute * rate;
+    int frames = tc->frame + tc->add;
+    *ticks = tc->second * rate + tc->field * 500 + (hours * 3600 + minutes * 60 + frames * 1000);
     *out_rate = rate;
 }
 
@@ -766,22 +689,22 @@ void sftim_Tc2Time59N(int rate, SfdTimeCode *tc, int *ticks, int *out_rate)
 void sftim_Tc2Time23D(int rate, SfdTimeCode *tc, int *ticks, int *out_rate)
 {
     int m, days, secs, rest;
-    m = tc->minutes;
-    secs = tc->hours * 86292 + m * 1438;
-    rest = tc->frames + tc->add;
-    days = (tc->seconds * 12 + m / 10) * 2;
-    *ticks = (days + secs + rest) * 1000 + tc->half * 500;
+    m = tc->minute;
+    secs = tc->hour * 86292 + m * 1438;
+    rest = tc->frame + tc->add;
+    days = (tc->second * 12 + m / 10) * 2;
+    *ticks = (days + secs + rest) * 1000 + tc->field * 500;
     *out_rate = rate;
 }
 
 void sftim_Tc2Time29D(int rate, SfdTimeCode *tc, int *ticks, int *out_rate)
 {
     int m, days, secs, rest;
-    m = tc->minutes;
-    secs = tc->hours * 107892 + m * 1798;
-    rest = tc->frames + tc->add;
-    days = (tc->seconds * 15 + m / 10) * 2;
-    *ticks = (days + secs + rest) * 1000 + tc->half * 500;
+    m = tc->minute;
+    secs = tc->hour * 107892 + m * 1798;
+    rest = tc->frame + tc->add;
+    days = (tc->second * 15 + m / 10) * 2;
+    *ticks = (days + secs + rest) * 1000 + tc->field * 500;
     *out_rate = rate;
 }
 
@@ -868,7 +791,7 @@ int SFD_GetPlayFps(SfdHn *hn, int *out)
     if (type == 0) {
         return 0;
     }
-    *out = UTY_MulDiv(SFTIM_prate[type], tim->step, 1000);
+    *out = UTY_MulDiv(SFTIM_prate[type], tim->speed, 1000);
     return 0;
 }
 
@@ -997,7 +920,7 @@ void sftim_IsGrExecTime(SfdHn *hn, int *decision, float t, float ref)
     }
     limit = 0;
     if (DAT_004bea88.rate == 0xEA24 && hn->rate_index < 3)
-        limit = tim->step == 1000;
+        limit = tim->speed == 1000;
     if (limit >= tim->sync_count)
         *decision = tim->sync_last;
     else if (ref < t)

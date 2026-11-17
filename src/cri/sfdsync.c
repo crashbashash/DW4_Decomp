@@ -43,7 +43,7 @@ int SFCON_IsVideoEndcodeSkip(void *sfd) {
 int SFCON_UpdateConcatTime(void *sfd, int amount) {
     SfdHandle *hn = sfd;
     char guard[16];
-    SfdTimView *tim = &hn->tim;
+    SfdTim *tim = &hn->tim;
     int total;
     int count;
 
@@ -59,7 +59,7 @@ int SFCON_UpdateConcatTime(void *sfd, int amount) {
 
 int SFCON_WriteTotSmplQue(void *sfd, int pts, int last) {
     SfdHandle *hn = sfd;
-    SfdTimView *tim = &hn->tim;
+    SfdTim *tim = &hn->tim;
     char guard[16];
     int ok = 0;
 
@@ -75,7 +75,7 @@ int SFCON_WriteTotSmplQue(void *sfd, int pts, int last) {
 }
 
 int SFCON_ReadTotSmplQue(SfdHandle *hn, int *pts, int *last) {
-    SfdTimView *tim = &hn->tim;
+    SfdTim *tim = &hn->tim;
     char guard[16];
     int ok;
 
@@ -101,12 +101,12 @@ int SFD_GetTimePerFile(SfdHandle *hn, int *time, int *unit, int *pos) {
     int elapsed;
     int i;
     int n;
-    SfdTimView *tim;
+    SfdTim *tim;
 
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000162);
     }
-    rate = hn->tim.rate;
+    rate = hn->tim.vofst.unit;
     tim = &hn->tim;
     *pos = 0;
     ret = SFTIM_GetTimeSub(hn, time, unit);

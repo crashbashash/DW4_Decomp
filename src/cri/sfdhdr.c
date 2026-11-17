@@ -294,11 +294,11 @@ int sfhds_CallS(SfhHn *sfh, int id, SfhGetStmFn get) {
 
 void sfhds_SetMvInf(SfdHandle *hn) {
     SfdHdrMux *mux = &hn->hdr.mux;
-    SfdVideoInf *video = &hn->video;
+    SfdMvInf *video = &hn->mvInf;
 
     video->audioBound = mux->kind[1];
     video->videoBound = mux->kind[2];
-    video->f44 = mux->kind[3];
+    video->privateBound = mux->kind[3];
 }
 
 int SFHDS_GetPketLenField(void) {

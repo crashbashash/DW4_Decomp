@@ -5,26 +5,6 @@
 #include "dw4/cri/mpv.h"
 #include "dw4/cri/sfd.h"
 
-/* What the start of a stream says it is: which handlers would play it and the movie's parameters. */
-typedef struct SfdAnaInf {
-    char found;          /* 0 */
-    char isAv;           /* 1 */
-    char pad2[2];
-    void *system;        /* 4: the MPS handler when the data is a system stream */
-    void *video;         /* 8: the video handler */
-    void *audio;         /* 12: the audio handler */
-    int packSize;        /* 16; -1 when the packs are not evenly spaced */
-    int width;           /* 20 */
-    int height;          /* 24 */
-    int bps;             /* 28 */
-    int frameRate;       /* 32 */
-    int vbvSize;         /* 36 */
-    unsigned char nch;   /* 40 */
-    char pad41[3];
-    int sfreq;           /* 44 */
-    char pad48[16];
-} SfdAnaInf;
-
 /* The fields of an MPEG audio frame header. */
 typedef struct SfdMpaHdr {
     unsigned char layer;

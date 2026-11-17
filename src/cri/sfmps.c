@@ -573,7 +573,7 @@ int sfmps_PutEs(SfdHandle *hn, int ch, unsigned char *data, int len, long pts) {
         if (sfmps_audio_fn != 0) {
             inf.pts = pts;
             inf.len = len;
-            if (sfmps_audio_fn(hn->audioFnObj, &inf) == -1) {
+            if (sfmps_audio_fn(&hn->tim.ptsm, &inf) == -1) {
                 return 0;
             }
         }
@@ -770,7 +770,7 @@ void sfmps_GetStmNum(SfdHandle *hn, int *audio, int *video) {
 }
 
 void sfmps_SetMvInf(SfdHandle *hn) {
-    SfdVideoInf *video = &hn->video;
+    SfdMvInf *video = &hn->mvInf;
     SfdMpsPrm *prm = hn->mps.hn.prm;
     MpsHn *mps = prm->mps;
     MpsPackHd pack;
@@ -782,7 +782,7 @@ void sfmps_SetMvInf(SfdHandle *hn) {
     }
     MPS_GetSysHdOfKind(mps, &sys, 1);
     if (sys.fixedFlag != -1) {
-        video->f28 = sys.fixedFlag;
+        video->fixedFlag = sys.fixedFlag;
     }
     if (video->audioBound == -1) {
         video->audioBound = prm->audioBound;
@@ -795,22 +795,22 @@ void sfmps_SetMvInf(SfdHandle *hn) {
 /* Keeps the time offset of the first picture and, in a fresh record, the stream's parameters. */
 void sfmps_SetPicRec(SfdHandle *hn) {
     SfdPicRec *rec = sfmps_GetHd(hn);
-    SfdTimView *tim = &hn->tim;
+    SfdTim *tim = &hn->tim;
     SfdMpsPrm *prm;
-    SfdVideoInf *video;
+    SfdMvInf *video;
     long first;
 
     if (rec != 0) {
         prm = hn->mps.hn.prm;
         first = prm->firstPts;
         if (first != 0x7FFFFFFFFFFFFFFF) {
-            video = &hn->video;
+            video = &hn->mvInf;
             tim->ofsTime = first - rec->startPts;
             if (rec->valid == 0) {
                 rec->baseTime = tim->baseTime;
                 rec->bps = video->muxRate * 50;
                 rec->startPts = prm->startPts;
-                rec->f8 = video->f28;
+                rec->f8 = video->fixedFlag;
                 rec->videoBound = prm->videoBound;
                 rec->audioBound = prm->audioBound;
                 rec->f40 = prm->f44;
@@ -857,9 +857,9 @@ void sfmps_AddTotals(SfdHandle *hn, int bytes, int packs) {
 
     if (sj != 0) {
         sfbuf_GetSjPos(sj, &total, &rest);
-        hn->readBytes = sfbuf_MergeTotal(hn->readBytes, total);
-        hn->demuxBytes += bytes;
-        hn->demuxPacks += packs;
+        hn->plyInf.sysFlow = sfbuf_MergeTotal(hn->plyInf.sysFlow, total);
+        hn->plyInf.sysByte += bytes;
+        hn->plyInf.sysSkip += packs;
     }
 }
 
@@ -954,7 +954,7 @@ void SFMPS_AddRead(SfdHandle *hn) {
 int SFMPS_Seek(SfdHandle *hn) {
     SfdPicRec *rec = sfmps_GetHd(hn);
     SfdMpsPrm *prm;
-    SfdTimView *tim;
+    SfdTim *tim;
     int ret;
 
     if (rec == 0) {
