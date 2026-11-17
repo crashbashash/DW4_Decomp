@@ -2,7 +2,7 @@
 """pack.py — a compact reading view of one function's translation unit.
 
     pack.py --function <name|0xVA> [--repo <worktree>] [--keep N] [--out DIR] [--decl-depth D]
-            [--notes-dir DIR] [--near-misses TSV]
+            [--notes-dir DIR] [--near-misses TSV] [--ref-dir DIR]...
 
 Writes DIR/pack.md and DIR/pack.c|.cpp (default DIR: build/packs/<function>/):
 
@@ -16,7 +16,13 @@ Writes DIR/pack.md and DIR/pack.c|.cpp (default DIR: build/packs/<function>/):
                its row in the --near-misses table),
                the headers the unit includes (transitively) and the declarations the kept functions
                use, from those headers and from the elided fragments (globals, tables, types, unplaced
-               helpers), plus, to --decl-depth, the declarations those mention.
+               helpers), plus, to --decl-depth, the declarations those mention; then
+               `## Retail assembly`: the function's lines from the generated asm/<name>.s (a note instead when
+               asm/ is absent); `## Callees without a prototype`: the symbols the function calls (retail `jal`
+               and tail-call `j` targets, and calls in its C body) that no declaration visible to the unit
+               names, whose implicit `int` return silently changes code; `## Reference sources`: with
+               --ref-dir (repeatable), the files under those directories that mention the function's name or an
+               alias, as path and line numbers (no content).
 
 N B is the retail size from symbols.txt; STATUS is the data/check-categories.tsv category
 (MATCH, UNAPPROVED, ...), `unchecked` for a placed function without a row, `unplaced` for a
@@ -390,6 +396,161 @@ def header_tree(text, includer_dir, include_dirs, repo, seen, depth=0):
     return out
 
 
+# ---------------------------------------------------------------- retail assembly, callees, references
+
+ASM_INSN = re.compile(r"/\* ([0-9a-f]{8}): (\w[\w.]*)\s*([^*]*?)\s*\*/")
+ASM_HEADER = re.compile(r"^/\* \S+ \u2014 0x([0-9a-f]+), ")
+REF_MAX_LINES = 20
+REF_MAX_BYTES = 4 << 20
+
+
+def find_asm(repo, name, va):
+    """Path of the generated asm file holding the function at `va`: asm/<name>.s, else the file under asm/
+    whose header comment gives that address; None when asm/ is absent or has no such file."""
+    adir = os.path.join(repo, "asm")
+    if not os.path.isdir(adir):
+        return None
+    path = os.path.join(adir, name + ".s")
+    if os.path.isfile(path):
+        return path
+    for fn in sorted(os.listdir(adir)):
+        if not fn.endswith(".s"):
+            continue
+        with open(os.path.join(adir, fn), errors="replace") as fh:
+            m = ASM_HEADER.match(fh.readline())
+        if m and int(m.group(1), 16) == va:
+            return os.path.join(adir, fn)
+    return None
+
+
+def asm_body(path):
+    """[(va, mnemonic, operands)] of the instruction comments of a generated asm file."""
+    out = []
+    with open(path, errors="replace") as fh:
+        for line in fh:
+            m = ASM_INSN.search(line)
+            if m:
+                out.append((int(m.group(1), 16), m.group(2), m.group(3).strip()))
+    return out
+
+
+def asm_callees(insns, va, size):
+    """Sorted target addresses of the `jal`s, and of the `j`s that leave [va, va+size) (tail calls)."""
+    out = set()
+    for _at, mn, ops in insns:
+        m = re.fullmatch(r"0x([0-9a-f]+)", ops)
+        if m and mn in ("jal", "j"):
+            tgt = int(m.group(1), 16)
+            if mn == "jal" or not va <= tgt < va + size:
+                out.add(tgt)
+    return sorted(out)
+
+
+def called_names(body):
+    """Identifiers followed by `(` in a function's C text, in first-use order."""
+    seen = {}
+    for m in re.finditer(r"([A-Za-z_]\w*)\s*\(", units._clean(body)):
+        if m.group(1) not in KEYWORDS:
+            seen.setdefault(m.group(1), None)
+    return list(seen)
+
+
+def unprototyped(callees, declared, self_va):
+    """[(va, name, alias, why)] of `callees` ({va: (name, alias, why)}) with no name in `declared`."""
+    return [(va, n, g, why) for va, (n, g, why) in sorted(callees.items())
+            if va != self_va and n not in declared and (not g or g not in declared)]
+
+
+def reference_hits(ref_dirs, names):
+    """[(path, [line numbers])] for the files under `ref_dirs` (each as written) that mention any of
+    `names` as a whole word; sorted by path, unreadable and binary files skipped."""
+    pat = re.compile(r"(?<![A-Za-z0-9_])(?:%s)(?![A-Za-z0-9_])" % "|".join(re.escape(n) for n in sorted(names)))
+    hits = []
+    for d in ref_dirs:
+        for root, dirs, files in os.walk(d):
+            dirs[:] = sorted(x for x in dirs if x != ".git")
+            for fn in sorted(files):
+                path = os.path.join(root, fn)
+                try:
+                    if os.path.getsize(path) > REF_MAX_BYTES:
+                        continue
+                    with open(path, "rb") as fh:
+                        raw = fh.read()
+                except OSError:
+                    continue
+                if b"\0" in raw:
+                    continue
+                lines = [i for i, l in enumerate(raw.decode("utf-8", "replace").splitlines(), 1) if pat.search(l)]
+                if lines:
+                    hits.append((path, lines))
+    return sorted(hits)
+
+
+def tail_sections(md, repo, tname, tghidra, tva, tsize, by_va, symbols, declared, body, ref_dirs):
+    """Append `## Retail assembly`, `## Callees without a prototype` and `## Reference sources` to `md`.
+
+    `declared` is the set of names a declaration visible to the unit gives, None when there is no unit;
+    `body` the target's C text or None."""
+    md("")
+    md("## Retail assembly")
+    md("")
+    apath = find_asm(repo, tname, tva)
+    insns = asm_body(apath) if apath else []
+    if apath:
+        md("From `%s`." % os.path.relpath(apath, repo))
+        md("")
+        md("```")
+        with open(apath, errors="replace") as fh:
+            md("".join(l for l in fh if ASM_INSN.search(l) or re.match(r"\S+:\s*$", l)).rstrip("\n"))
+        md("```")
+    elif not os.path.isdir(os.path.join(repo, "asm")):
+        md("none: `asm/` is absent (generate it with `tools/split.py`)")
+    else:
+        md("none: no file under `asm/` holds 0x%08x" % tva)
+    md("")
+    md("## Callees without a prototype")
+    md("")
+    if declared is None:
+        md("not checked: no source unit for this function")
+    else:
+        by_name = {}
+        for va, _s, n, g in symbols:
+            by_name.setdefault(n, va)
+            if g:
+                by_name.setdefault(g, va)
+        callees = {}
+        for va in asm_callees(insns, tva, tsize):
+            row = by_va.get(va)
+            callees[va] = (row[2], row[3], "retail jal/j") if row else ("0x%08x" % va, "", "retail jal/j, no symbol")
+        for n in called_names(body or ""):
+            va = by_name.get(n)
+            if va is not None and va not in callees:
+                callees[va] = (by_va[va][2], by_va[va][3], "C body")
+        miss = unprototyped(callees, declared, tva)
+        if not apath and not body:
+            md("not checked: neither asm nor a C body to read the calls from")
+        elif miss:
+            for va, n, g, why in miss:
+                md("- `%s`%s at 0x%08x (%s)" % (n, " (`%s`)" % g if g else "", va, why))
+        else:
+            md("none%s" % ("" if apath else " (retail asm absent: C body calls only)"))
+    if ref_dirs:
+        md("")
+        md("## Reference sources")
+        md("")
+        names = {n for n in (tname, tghidra, "FUN_%08x" % tva) if n}
+        hits = reference_hits(ref_dirs, names)
+        md("Files mentioning %s (no content copied):" % ", ".join("`%s`" % n for n in sorted(names)))
+        md("")
+        for path, lines in hits:
+            more = len(lines) - REF_MAX_LINES
+            md("- `%s`: line%s %s%s" % (path, "" if len(lines) == 1 else "s",
+                                       ", ".join(map(str, lines[:REF_MAX_LINES])),
+                                       " (+%d more)" % more if more > 0 else ""))
+        if not hits:
+            md("- none")
+
+
 # ---------------------------------------------------------------- main
 
 def main(argv=None):
@@ -400,6 +561,9 @@ def main(argv=None):
     ap.add_argument("--out", help="output directory (default build/packs/<function> under the checkout)")
     ap.add_argument("--notes-dir", help="directory of per-function note files <name>.md to point at")
     ap.add_argument("--near-misses", help="near-miss table (TSV with a header row) to quote the function's row from")
+    ap.add_argument("--ref-dir", action="append", default=[], metavar="DIR",
+                    help="directory to search for files mentioning the function (repeatable); listed as path and "
+                         "line numbers under 'Reference sources'")
     ap.add_argument("--decl-depth", type=int, default=1,
                     help="rounds of following the names a picked header declaration mentions (default 1)")
     a = ap.parse_args(argv)
@@ -474,6 +638,7 @@ def main(argv=None):
             md("- near-miss row: none")
 
     if path is None:
+        tail_sections(md, repo, tname, tghidra, tva, tsize, by_va, symbols, None, None, a.ref_dir)
         os.makedirs(out_dir, exist_ok=True)
         with open(os.path.join(out_dir, "pack.md"), "w") as fh:
             fh.write("\n".join(lines_md) + "\n")
@@ -664,6 +829,18 @@ def main(argv=None):
             md(stext[s:e].rstrip())
         md("```")
         md("")
+
+    declared = set()
+    for s, _e, kind, names in unit_chunks:
+        if kind == "func" and s >= (defs[ti][1] if ti is not None else marker_pos):
+            continue    # a definition after the target is not yet visible to it
+        declared |= names
+    for _d, _w, p in tree:
+        if p:
+            for _s, _e, _kind, names in sources[p][1]:
+                declared |= names
+    tail_sections(md, repo, tname, tghidra, tva, tsize, by_va, symbols, declared,
+                  text[defs[ti][1]:defs[ti][2]] if ti is not None else None, a.ref_dir)
 
     os.makedirs(out_dir, exist_ok=True)
     md_text = "\n".join(lines_md) + "\n"

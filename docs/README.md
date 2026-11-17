@@ -153,7 +153,7 @@ retail. Both take `--help`.
 | `layout.py`, `linkgen.py`, `linkcheck.py` | The relink: disjoint tiling → objects and a linker script → comparison with retail |
 | `check.py` | Split round-trip and coverage; backs `make check` |
 | `verify.py` | The oracle: compile one candidate and diff it against retail, relocation-aware |
-| `pack.py` | A function's context pack: its unity file with every other body elided plus the declarations the kept code uses, to `build/packs/<function>/`; `--notes-dir` and `--near-misses` add optional pointers |
+| `pack.py` | A function's context pack: its unity file with every other body elided plus the declarations the kept code uses, to `build/packs/<function>/`; `--notes-dir`, `--near-misses` and repeatable `--ref-dir` add optional pointers; pack.md lists the retail assembly and the callees without a prototype |
 | `region_board.py` | Per-0x100-byte scoreboard of one function of a candidate unit against retail (EXACT or `n/m words differ` per region); `--record <label>` keeps the best draft per region under `build/regions/<function>/` (`--board-dir`), `--show <function>` prints the board |
 | `automatch.py` | Bulk decompilation by instruction-shape template |
 | `m2c_one.py`, `m2c_batch.py`, `m2c_context.py` | The bulk m2c pass: assembly in, cleaned C out, verified before writing |

@@ -725,11 +725,11 @@
   "cri": {
    "files": 110,
    "offset_casts": 11,
-   "other_members": 7867,
+   "other_members": 7892,
    "recovered": 0,
    "recovered_pct": 0.0,
    "synthetic": 369,
-   "total": 8247
+   "total": 8272
   },
   "engine": {
    "files": 49,
@@ -826,6 +826,6 @@
  "offset_casts": 3994,
  "recovered": 32581,
  "synthetic": 5812,
- "total": 71366,
+ "total": 71391,
  "typeable": 262
 }
