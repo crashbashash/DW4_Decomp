@@ -37,10 +37,5 @@ shorter than the first chunk splits it.
   so it changes nothing; the name is the intent.
 - `SVM_ItoA` stores the digit values themselves into the caller's buffer and then copies out, reversed,
   whatever `svm_itoa_work` holds; retail does the same.
-- No source yet:
-  - `sjuni_IsGetChunk` (`0x27d248`): retail computes `len < nbyte` in join mode and `len ^ nbyte` otherwise and
-    tests both with one shared `== 0`; every spelling tried merges or reorders the branches.
-  - `SVM_GetLockType` (`0x27e2e0`), `SVM_Init` (`0x27ec10`) and `SVM_Finish` (`0x27ec50`) reproduce only
-    with the lock type and the init count `volatile` (the finish re-reads the count after its store), the same
-    mechanism the lock counts already have an approval for; they need the owner's approval first.
-  - `SVM_GetExecCount` (`0x27eb40`): the bounds test and the scaled index land in each other's registers.
+- `SVM_GetLockType`, `SVM_Init` and `SVM_Finish` match only with the lock type and the init count `volatile` (the
+  finish re-reads the count after its store), approved under [svm-lock-counts](source-approvals.md#svm-lock-counts).

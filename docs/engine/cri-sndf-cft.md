@@ -18,9 +18,11 @@ The first two files of the Sofdec block, each compiled as one whole file with So
   store and fills the call's delay slot with the read, where the C computes the address last; and two loads of
   the parameter copy at the end are swapped. Statement orders, a local client pointer, `do`/`for` loop shapes, an
   inline bind helper, the real `sceSifInitRpc` prototype and a permuter run left the prologue unchanged.
-- CFT's init stores its version string in a `volatile` word and is `unapproved`
-  ([build-string stores](source-approvals.md#build-string-stores)). Two table builders and two alpha-plane loops have no source (store order; a multiply retail
-  recomputes on each pass).
+- CFT's init stores its version string in a `volatile` word, approved under
+  [build-string stores](source-approvals.md#build-string-stores).
+- The function at `0x281568`, whose shared tail serves the `0xA009` and `0xA00A` commands, has no source: the best
+  C is 3 words off, the voice address built in another operand order (retail loads the status-block address first,
+  then shifts the channel and adds).
 - The SNDF entry points the game calls for its sound banks (port sizes, transfer start and status, freeing a
   port, the control and master-parameter messages) are named from what they do and how the game uses them;
   no string or other build carries the library's own names for them.

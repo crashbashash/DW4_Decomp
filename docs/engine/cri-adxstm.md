@@ -50,8 +50,9 @@ own error callback, which passes cvFs's message to `ADXERR_CallErrFunc1`.
   closing store, which a `volatile int` cast on that one store reproduces; the word stays plain, so
   `ADXSTM_OpenCvfs`, the other user of the word, is unchanged. The word is shared with the ADXM threads
   through `SVM_TestAndSet`.
-- `ADXPS2_SetupDvdFs` (`0x26ac50`) has no source: it calls `memcmp` twice on a datum with itself (128 bytes
-  at the ADXRT build string, 232 bytes 16 bytes into it) and drops the results, a shape with no reading yet.
+- `ADXPS2_SetupDvdFs` (`0x26ac50`) reads the ADXRT build string in two parts (128 bytes, then 232 bytes 16 bytes
+  into it) and drops the results: the source writes both as `volatile` array reads
+  ([build-string reads](source-approvals.md#build-string-reads)). Why the original read the string twice is unknown.
 - `0x4a8e44`, between the read-mode switch and `adxt_stm_eos`, is read by no function; which file owns it is
   unknown, and with it whether `ADXT_GetStmEos`/`ADXT_SetStmEos` close the memory-setup file or are a file
   of their own.

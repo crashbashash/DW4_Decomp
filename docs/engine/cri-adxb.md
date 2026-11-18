@@ -53,14 +53,11 @@ the SJ function table's first three slots (`_sj_vtbl`). The encoder's 2004 membe
   Medium, by position in those lists: `ADXB_SetDefPrm`, `ADXB_GetLpStartOfst`, `ADXB_GetAinfLen`,
   `ADXB_GetDefOutVol`, `ADXB_GetDataId`, `ADXB_RestoreSnapshot`, `ADXB_SetExtString`, `ADXB_SetDefExtString`,
   `ADXB_ExecHndl`, `adxb_dec_cb_proc`. Medium from behaviour: `ADXB_ResetDefFmt` (alternative `ADXB_ClearDefFmt`)
-  and `ADXB_EntryDecFunc`, named like `ADXSJD_EntryDecFunc` above it (alternative `ADXB_SetCbDec`, a name found
-  only in a list ported from Persona 3 FES).
+  and `ADXB_EntryDecFunc`, named like `ADXSJD_EntryDecFunc` above it (alternative `ADXB_SetCbDec`).
 - `AdxbObj` +158 and +248 have no reader: +158 is a gap before the keys, +248 is only cleared with
   `cb_ndeclen`. `AdxSjdObj` keeps `hdr` for the 64-byte header copy that the 2002 STABS call `spsdinfo`, as this
   build copies every format's header there.
 - `SKG_GetNextKey` (`0x25d2e0`), between the SKG and ADXB pools, is unreferenced; 3rd Strike's order puts it
   last in SKG.
-- The buffer-position function at `0x25e018` has no source and links from the retail image (24 words off:
-  register choice and where an offset is added).
 - `adxb_DefGetWr` matches only with the handle's PCM buffer typed `short *` and the callback at +120 returning
   `short *`; an `int` buffer address adds the casts that move its loads.

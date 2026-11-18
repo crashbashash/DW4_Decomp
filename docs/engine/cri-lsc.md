@@ -36,8 +36,3 @@ The object and entry types are in `include/dw4/cri/lsc.h`, which the MWSFD playe
 - The lock wrapper keeps its call out of tail position with an empty statement found by hand; the unlock
   wrapper, written the same way without it, tail-calls.
 - `LSC_Init` reads its build-string pointer and discards it (an approved `volatile` read).
-- Pending renames, held back because they rewrite callers in many Sofdec files: `0x276fb8` LSC_Destroy,
-  `0x277010` LSC_EntryFname, `0x277038` LSC_EntryFileRange, `0x277210` LSC_Start, `0x277278` LSC_Stop,
-  `0x2773a0` LSC_GetStat, `0x2773d0` LSC_GetNumStm, `0x277400` LSC_GetStmId, `0x277490` LSC_GetStmFname,
-  `0x277528` LSC_GetStmStat, `0x2775c0` LSC_GetStmRdSct, `0x277658` LSC_SetFlowLimit, `0x2776c0`
-  LSC_GetFlowLimit, `0x277768` LSC_SetLpFlg, `0x277918` LSC_Finish.

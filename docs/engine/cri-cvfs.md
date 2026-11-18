@@ -19,8 +19,7 @@ but without strict aliasing ([below](#argument-block-and-aliasing)).
 Code outside the module calls only the API functions, never the helpers. The module is one
 whole-file unit (`cri_cvfs` in `units.tsv`, its rows in `unit-objects.json`;
 [whole-file units](emitted-functions.md#whole-file-units)): the file compiles as one object with
-`-ffunction-sections`, and each function is checked and placed at its retail address. The functions it
-does not define yet link from the retail image between its members. Compiling the file whole matters
+`-ffunction-sections`, and each function is checked and placed at its retail address. Compiling the file whole matters
 here: `splitPath` matches only with `toUpperStr` compiled before it, because a call to a function GCC
 has already compiled is known not to throw and that changes how its delay slots are filled, and
 `cvFsGetFreeSize` matches only when the file is compiled whole (alone, one branch takes the likely form).

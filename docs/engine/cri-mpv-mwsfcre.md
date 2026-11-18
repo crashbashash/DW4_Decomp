@@ -16,7 +16,7 @@ bridge to the lower-layer hooks and the 64-bit multiply-divide helpers.
   `0x4bd0e0`/`0x5777b8`.
 - Types (`include/dw4/cri/mpv.h`): `MpvLib` (the work area: default conditions, option flags, the handle table
   and the 7136-byte pool), `MpvHn` (a 1024-byte pool entry; `stat` 1 free, 2 used), `MpvErrObj`,
-  `MpvSeqInf`, `MpvLowSize` and `MpvBuildInf`. The picture attributes, the user-data sinks and the picture
+  `MpvSeqInf`, `MpvMotionRange`, `MpvUdLevel` and `MpvBuildInf`. The picture attributes, the user-data sinks and the picture
   user buffer of a handle are the lower layer's `M2vPicAtr`, `M2vUsrSj` and `M2vPicUsr` (`m2v.h`), and the
   hook table (`mpvhook.h`) is typed as the M2V entry points it holds. The library checks its own build with
   `mpv_build_inf`: magic `0x5a5a5a5a`, `sizeof(MpvLib)`, the handle size and the pool size.
@@ -40,9 +40,9 @@ MWSFD player creation: work-area sizes, frame buffers, picture user buffers, the
   `mpv_frm_buf_size` (`0x4bd0e0`-`0x4bd250`) and `.bss` up to `mpv_frm_buf_table` (`0x5777b8`-`0x5777e8`). The
   first function, `mwsfcre_CalcWorkStmBuf`, is called only by this file. The next file (the MWSFD frame
   functions, from `0x293730`) begins with the `mwPlySetFrmSync` message.
-- Types: `MwsfdPly`, `MwsfdCreInf` (the 48-byte creation parameters, copied into the handle) and `MwsfdMemPool`
-  from `dw4/cri/mwply.h`, `MwsfdWork` from `dw4/cri/mwsfd.h`; file-local `MwsfdFrmBufs`, `MwsfdHdrInf` and
-  `SfdHdrInf`.
+- Types: `MwsfdPly`, `MwsfdCreInf` (the 48-byte creation parameters, copied into the handle), `MwsfdHdrInf` and
+  `MwsfdMemPool` from `dw4/cri/mwply.h`, `MwsfdWork` from `dw4/cri/cri_mwsfd.h` and `SfdHdrInf` from `dw4/cri/sfd.h`;
+  file-local `MwsfdFrmBufs`, `MwsfdSfdPrm`, `MwsfdMpvCond`, `MwsfdAdxCfg`, `SfdSupplyKind` and `SfdSupplyPrm`.
 - Allocation: `MWSFD_Malloc` takes from the creation parameters' work area (`mwsfcre_OrgMalloc`) when one was given,
   else from the functions installed with `mwPlySetMallocFn`; it records up to 32 blocks, which
   `mwsfcre_AllFree` releases through `MWSFD_Free`. `mwsfcre_IsOkUsrMalloc` refuses a creation without a work area
@@ -56,8 +56,12 @@ MWSFD player creation: work-area sizes, frame buffers, picture user buffers, the
 
 - `MPV_Init` stores the version pointer through a `char *volatile` word, approved under
   [build-string stores](source-approvals.md#build-string-stores).
-- Without source: `mwPlyCalcWorkSfd`, `MWSFCRE_SetSupplySj`, `mwsfcre_MallocTab`, `mwsfcre_CreateSfd`,
-  `mwPlyCreateSofdec` and `mwsfdcre_IsPlayableByHdrInf`: not decompiled yet.
+- Without source: `mwsfcre_CreateSfd` (`0x292078`) and `mwPlyCreateSofdec` (`0x292ba8`). The best C for
+  `mwsfcre_CreateSfd` differs in about 12 words: the addresses of buffer-size globals (`0x5777b8` up to `0x5777d8`
+  and `0x4bd128` up to `0x4bd228`) swap callee-saved registers and the MPV condition store order differs; those
+  globals and the three SFD create-parameter templates have no names yet. `mwPlyCreateSofdec` differs in one word: the
+  delay slot of the first free-handle test, which retail fills from the branch target, not the fall-through; its
+  player status would be an enum.
 - The outputs of `mwsfcre_CalcWorkStmBuf` are placeholders; their meaning
   needs the lower layer and the SFD work-size users.
 - `mpv_GetFixedWorkSizes` and `MPV_SetFrameBuffers` keep `mpv` names though they sit in the MWSFD file.

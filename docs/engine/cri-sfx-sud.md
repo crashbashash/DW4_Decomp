@@ -5,18 +5,18 @@ The last CRI files of the Sofdec block, each compiled as one whole file with Son
 
 | file | unit | range | what it is | evidence |
 | --- | --- | --- | --- | --- |
+| `src/cri/sfxcnv.c` | `cri_sfxcnv` | `0x2b31d8` up to `0x2b3788` | SFX conversion: the check that a conversion table must be rebuilt, the table makers per composition kind and the stream-information lookup | it starts with the `sfxcnv_` messages that follow SFX alpha's data; the SFX file (`0x2b3788`) opens with its own version string |
 | `src/cri/sfx.c` | `cri_sfx` | `0x2b3788` up to `0x2b4210` | SFX (`CRI SFX/PS2EE Ver.2.08`), the frame-conversion library's handles and conversion entry points | its messages start with the version string at `0x4f57b8`; its library object at `0x4bec28` (1000 bytes) ends where the Z file's data begins |
 | `src/cri/sfxz.c` | `cri_sfxz` | `0x2b4210` up to `0x2b50e8` | SFX's Z-buffer conversion | it repeats `SFXINFE` (GCC shares identical strings only within a file); its messages run to `sfxcnv_CnvZbitToCft`; its object at `0x4bf010` |
 | `src/cri/sud.c` | `cri_sud` | `0x2b50e8` up to `0x2b5d50` | SUD (`CRI SUD/PS2EE Ver.0.05`): user-data headers and the EE timer | its init returns the version string at `0x4f59c0`; its messages and tables follow SFX's; its data at `0x4bf280` |
 
-SUD's timer words and the timer-register tables are declared `volatile`
-([source approvals](source-approvals.md#sud-timer)); the timer tick is approved, the timer init and read are
-`unapproved`. SFX's and SUD's inits store their version strings in `volatile` words
-([build-string stores](source-approvals.md#build-string-stores)), and the SFX handles' in-use word is read and cleared
-through a `volatile` pointer ([sfx-handle-used-flag](source-approvals.md#sfx-handle-used-flag)); all are approved.
-The two SFX files share `include/dw4/cri/sfx.h`. A plane's address (`SfxPlane.addr`) is declared `int` and
-cast at use, as the owner approved for the cvFs, HTCI and DVCI pointers on the same condition
-([CRI cvFs](cri-cvfs.md#integer-typed-slots)).
+SUD's timer words and the timer-register tables are declared `volatile`, and the timer init, read and finish are
+approved ([source approvals](source-approvals.md#sud-timer)). SFX's and SUD's inits store their version strings in
+`volatile` words ([build-string stores](source-approvals.md#build-string-stores)), and the SFX handles' in-use word is
+read and cleared through a `volatile` pointer ([sfx-handle-used-flag](source-approvals.md#sfx-handle-used-flag)); all
+are approved. The SFX files share `include/dw4/cri/sfx.h`. A plane's address (`SfxPlane.addr`) is declared `int` and
+cast at use; the owner approved that on the condition that the typing describes the types rather than one call site
+([the same condition as HTCI](cri-htci.md#integer-typed-list-pointer)).
 `SFX_DecideTableAlph3` (the conversion file's alpha-3 table choice) is named from the RE4 GameCube symbol table
 ([adonis-singh/re4](https://github.com/adonis-singh/re4), `config/G4BE08/sym_map.tsv`, unit `lib/sfx_cnv.c`).
 The setters, the user-data forwards and the Z, alpha and colour-adjust table makers follow the SDK's `sfx_set.o`,
@@ -58,3 +58,7 @@ are `SFX_SetCnvBottomUp`/`SFX_GetCnvBottomUp` (the SFX side of `mwPlySetCnvBotto
   three `float` timer conversions after `UTY_TmrToSec`, the one-word timer-unit store before `UTY_InitTsum` (whether it
   or the wrapper before `UTY_GetTmrUnit` is the SDK's `UTY_SetTmrUnit`; the order picks the wrapper), and the PS2 timer
   accumulation words `UTY_InitTmr` sets up after `utytmr_save_mode`, which have no RE4 counterpart.
+- Without source: `sfxzmv_GetZfrmInf` (`0x2b45b0`, 4 words off: retail fills the first branch's delay slot from the
+  branch target and schedules the copy of the size parameter before the return-address save) and
+  `sfxcnv_CnvFrmArgb8888mbToZ` (`0x2b4f58`, 18 words off: the height load and a constant store into the source block
+  are scheduled later than in the SDK body it follows; the other conversion, `sfxcnv_CnvFrmYcc420plnToZ`, matches).

@@ -68,7 +68,7 @@ which; it is placed at `0x295358`.
 The player handle (`MwsfdPly`, 696 bytes) is in `include/dw4/cri/mwply.h`, its creation parameters
 (`MwsfdCreInf`, the 48-byte `cprm`), the picture log entry (`MwsfdPicLog`), the SST input (`MwsfdSst`)
 and the allocation pool with it. The work area (`MwsfdWork`: the init parameters, the malloc hooks, the
-settings, the server hooks and the 8 players) is in `include/dw4/cri/mwsfd.h`.
+settings, the server hooks and the 8 players) is in `include/dw4/cri/cri_mwsfd.h`.
 
 Two spellings are what the retail code needs, not style:
 
@@ -78,8 +78,10 @@ Two spellings are what the retail code needs, not style:
 
 ## Open questions
 
-- Without source, linking from retail: `mwPlyGetCurFrm` (`0x2937e0`) and the SFD error
-  callback `MWSFLIB_SfdErrFunc` (`0x295010`, the `SFD ERROR(%08X)` messages). They were never decompiled.
+- Without source, linking from retail: the SFD error callback `MWSFLIB_SfdErrFunc` (`0x295010`, the `SFD ERROR(%08X)`
+  messages). The best C, which is the SDK `mwsfdlib.o` body plus the DW4 cases (read buffer, frame pool, ADXT count),
+  differs only in register allocation: retail keeps the player in `s0`, the code in `s1` and the high half of the
+  text address in `s4`, and so does the SDK object, but a compile of the SDK-exact C does not.
 - Whether `mwply_SetTimeFn` and `mwply_ExecTime` end `mwsfd.c` or open `mwsfply.c`; CRI's names for
   them would settle it by their prefix.
 - `mwply_SetTimeFn` and `mwply_ExecTime` wrap `SFD_SetExtClockFn` and `SFD_UpdateTime` (the names a later build of

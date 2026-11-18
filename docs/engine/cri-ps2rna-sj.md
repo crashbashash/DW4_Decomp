@@ -49,10 +49,6 @@ handle's error callback with -3.
 
 ## Open questions
 
-- No source yet: `pl2enc_Init` and `pl2enc_Create` (the `memcmp` that keeps PL2ENC's build string comes out
-  scheduled differently: retail sets up the stack and return address around the first argument), the
-  `PS2RNA_Init` and `PS2RNA_Create` bodies, the DTX send callback `ps2rna_sndcbf` and the per-handle
-  server step `ps2rna_exec_one` (all four long, not attempted).
 - The function at `0x27b2a0` in SJCRS clears the word at `0x4b5140`, its only access, and nothing calls it.
   Retail keeps the word's address in `v0` and stores through it (`lui`, `addiu`, `sw zero, 0(v0)`), which is
   what a function returning that address compiles to; written as `void`, the store folds to `sw zero, %lo` and

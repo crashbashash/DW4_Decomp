@@ -33,7 +33,7 @@ Four files of the Sofdec player (MWSFD, `MWSFD/PS2EE Ver.3.33s281`) between the 
 ## Types
 
 The player and its SST sub-object (`MwsfdSst`) are in `include/dw4/cri/mwply.h`, the work area
-(`MwsfdWork`) in `include/dw4/cri/mwsfd.h`, the ADXSTM handle in `include/dw4/cri/adxstm.h`. The input
+(`MwsfdWork`) in `include/dw4/cri/cri_mwsfd.h`, the ADXSTM handle in `include/dw4/cri/adxstm.h`. The input
 callback table (`MwsfdInputCbTbl`) is local to the SST file.
 
 ## Notes
@@ -43,12 +43,11 @@ callback table (`MwsfdInputCbTbl`) is local to the SST file.
 - `MWSST_Restart` and `MWSST_Destroy` pass the external handle (`sst->extHn`) to `mwsst_Stop`, which takes
   the SST; retail does this.
 - The two copies of the `mwPlyStartXX` message are one static string: retail has one.
-- `mwsfsvr_VsyncProc` and `mwPlyExecSvrHndl` keep the `volatile` they had as one-function files
-  (no approval row, category `unapproved`).
+- `mwsfsvr_VsyncProc` and `mwPlyExecSvrHndl` carry `volatile` ([mwsfsvr-vsync-count](source-approvals.md#mwsfsvr-vsync-count)
+  and [mwsfd-handle-used](source-approvals.md#mwsfd-handle-used)); both are approved.
 
 ## Open questions
 
-- `MWSST_Create` (`0x299ce8`) and `mwsfsvr_ExecServer` (`0x29ac78`) have no source and link from retail.
 - `mwsfsvr_VsyncProc` and `mwPlyExecSvrHndl` match only with a `volatile`: no plain ordering tried reproduces
   the reload/branch shapes.
 - Names beyond the messages are from behaviour: the SST table's slots at 32 (`mwsst_SetPrm`) and the work-size

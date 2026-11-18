@@ -32,8 +32,8 @@ entry count, its file count and the length of each name.
 
 ## Integer-typed list pointer
 
-The table's pointer to its entries is declared `int` and cast to the entry type at each use, as the owner
-approved on the condition already applied to cvFs ([CRI cvFs](cri-cvfs.md#integer-typed-slots)): one
+The table's pointer to its entries is declared `int` and cast to the entry type at each use. The owner approved
+this on the condition that the typing describes the types rather than one call site: one
 declaration, used by every function that touches it, all of them matching, none needing the pointer form.
 With a pointer type, GCC's alias analysis lets the first scheduling pass move the pointer's load above the
 `int` stores that precede it in the cache lookup by name, and ten words differ.

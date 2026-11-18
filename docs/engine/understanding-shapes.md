@@ -1335,8 +1335,8 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     property of a whole unit, never a fix for one function: on every CRI unit at once it breaks about 50 of them.
     The CVFS unit keeps its SDK types (function-pointer slots, a `void *` argument block) and its row carries the
     flag ([CRI CVFS](cri-cvfs.md#argument-block-and-aliasing)).
-  - *Units:* `src/sony/libpad/libpad.c`, `src/cri/sndf.c` (0x281df0), `src/cri/sfadx.c` (0x29c500, not matched: 3
-    words off without strict aliasing), `src/cri/cvfs.c`.
+  - *Units:* `src/sony/libpad/libpad.c`, `src/cri/sndf.c` (0x281df0), `src/cri/sfadx.c` (0x29c500, matched with the
+    renderer pointer and its neighbours left untyped), `src/cri/cvfs.c`.
 - **An enum field or parameter has an alias set of its own.**
   - *Symptom:* a load from a header or state struct issued above stores retail keeps it after, or stores out of
     retail's order, around a few fields that look like plain `int`s.

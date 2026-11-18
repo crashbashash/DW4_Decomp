@@ -15,9 +15,8 @@ file (`cri_mfci` in `units.tsv`, its rows in `unit-objects.json`;
 | strings | `0x4f0c50` up to `0x4f0f08` | the version string, then the `mfCi` messages in code order |
 | data | `0x4b0370` to the message buffer at `0x4b0ca8` | the build-string pointer, the error callback and its context, the 40 handles (56 bytes each, at `0x4b03e8`) and the message buffer |
 
-The function at `0x277dd0` reads the build-string pointer and discards it, the shape of an approved
-`volatile` read ([source approvals](source-approvals.md#build-string-reads)). It has no row, so it has no
-source and links from the retail image between the file's members.
+`mfCiGetInterface` (`0x277dd0`) reads the build-string pointer and discards it; the source keeps that read as a
+`volatile` word ([source approvals](source-approvals.md#build-string-reads)).
 
 ## Layout
 

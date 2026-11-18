@@ -20,7 +20,7 @@ which only a literal gives, so the whole pool is written that way and links from
 ## Integer-typed list pointer
 
 The file-list table's pointer to its entries is declared `int` and cast to the entry type at each use, as the
-owner approved for HTCI and then for DVCI on the same condition ([CRI cvFs](cri-cvfs.md#integer-typed-slots)):
+owner approved for HTCI and then for DVCI on the same condition ([CRI HTCI](cri-htci.md#integer-typed-list-pointer)):
 one declaration, every function that touches it matching, none needing the pointer form. With a pointer type
 one function's load and test come out in another order.
 

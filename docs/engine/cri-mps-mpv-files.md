@@ -23,11 +23,10 @@ onwards, from `0x290b28`) is described with the rest of the MPV library.
 
 - The split of the MPS getters (`MPS_GetPackHd` up to `MPS_GetPesInf`) from the demultiplexer and the split
   between `mpvapi.c` and `mpvhdr.c` rest on the init hooks and the error-code groups, not on data.
-- `mpsdmx_ParsePack`, `mpsdmx_ParseSysHd` and `mpsdmx_ParsePes` have no source: large bit-field parsers that
-  read the stream a byte at a time through an expanded bit reader.
+- `mpsdmx_ParsePack`, `mpsdmx_ParseSysHd` and `mpsdmx_ParsePes` are large bit-field parsers that read the stream a
+  byte at a time through an expanded bit reader.
 - `MPS_Init` stores the version pointer through a `char *volatile` word, approved under
-  [build-string stores](source-approvals.md#build-string-stores). `mpslib_InitSys` matches only under MWCC (its
-  stores come out in another order under EE GCC) and links from retail.
+  [build-string stores](source-approvals.md#build-string-stores).
 - `mpv_DecSeqHdr`, `mpvhdec_DecGscSj` and `mpv_DecPicHdr` match with the user-data level typed `MpvUdLevel`; their
   names are guesses from their size and the start codes `MPV_DecodePicAtrSj` dispatches on. `MPV_DecodePicAtrSj`,
   `mpvhdec_DecEscSj` and `mpvhdec_AnalyUd` match.

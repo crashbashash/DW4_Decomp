@@ -23,8 +23,9 @@ guesses from what each file does.
 | `src/cri/sfdtrn.c` | `0x2afc08` up to `0x2b0408` | the module table and the per-handle stream graph at handle +7976 | its first function is the library's second init; code `0x302` |
 | `src/cri/sfdtst.c` | `0x2b0408` up to `0x2b0ed0` | the time-stamp debug object (`tst`) and its moving averages | its data `0x4beb40` up to `0x4beb54` and its read-only data `0x4f50d0` up to `0x4f5278` (the field-name header and its print format) |
 
-`sfadx.c` and `sfdbuf.c` share `include/dw4/cri/sj.h`; `sfmpv.c` and `sfmpvps2.c` share `include/dw4/cri/sfmpv.h`; `sfdply.c` and `sfdring.c` share
-`include/dw4/cri/sfdply.h`. The other files declare their types themselves.
+The files read the handle as `SfdPly` (`include/dw4/cri/sfdply.h`) and its parts from `include/dw4/cri/sfd.h`
+([CRI SFD core files](cri-sfd-core.md#types)); `sfdply.h` brings in `include/dw4/cri/sfmpv.h` (the video driver's plane
+and frame types), and `sfadx.c`, `sfdbuf.c` and `sfdply.c` also use `include/dw4/cri/sj.h`.
 `sftim_Tc2Time29D`, the 29.97 drop-frame time-code converter, is named from the RE4 GameCube symbol table
 ([adonis-singh/re4](https://github.com/adonis-singh/re4), `config/G4BE08/sym_map.tsv`, unit `lib/sfd_tim.c`).
 Names the SDK alone could not settle follow three more sources, cited by name: the order of the same files in the
@@ -37,9 +38,8 @@ the 2002 one. Names from what a function does are in the medium list below.
 
 ## Types
 
-- The ADX handler's sub-context at handle +8188 is declared `int` and cast to its struct at each use, as the
-  owner approved for the cvFs, HTCI, DVCI and SFX pointers on the same condition
-  ([CRI cvFs](cri-cvfs.md#integer-typed-slots)).
+- The ADX handler's work is `SfdAdxCtx` (a stream-graph slot's work word is a union of the modules' work types,
+  `SfdTrnSlot.hn`); the player's renderer pointer stays `void *` ([the alias note](#open-questions)).
 - A buffer channel's field at +20 is typed as a stream pointer, and memory-kind channels keep a byte size
   there through a cast; its position is cast to and from `int`. The owner approved landing it this way.
   The original most likely declared the entry body as a union of channel kinds.
@@ -50,20 +50,15 @@ the 2002 one. Names from what a function does are in the medium list below.
 
 ## Open questions
 
-- The same handle is declared separately in several files (`SfdPly`, `SfdAdxHn`, `SfdUsrHn`, `SfdBufHn`), and
-  the interface at +8460 has different slot signatures in the ADX handler and the wrappers; one shared
-  declaration is a readability task.
 - Where the ADX handler file starts rests on the data order alone.
 - Whether `0x2a8b50` up to `0x2a96d0` (the IPU and DMA helpers, called only from later functions) is a file of its
   own in front of the MPV PS2 file.
 - The ring file's split from the player file, and the one-line wrapper at `0x2ad8f8` (record file or condition
   file), have no evidence in the code either way.
-- Some time-block counters at handle +0xD28 +680 up to +744 are updated from the V-sync path, and several
-  functions that use them read them as `volatile` accesses would, but a `volatile` on the whole block breaks
-  other functions. Which fields the original declared `volatile` is open; those functions have no source and
-  link from the retail image.
-- The free-slot claim at `0x2a85a0` reads a slot's state and reference count in one 64-bit load. No plain C
-  with the slot's shared `int` fields reproduces that, so it has no source.
+- Some time-block counters at handle +0xD28 +680 up to +744 are updated from the V-sync path. The ones the
+  functions read as `volatile` accesses are written as `volatile` casts at the access, approved under
+  [sfd-time-counts](source-approvals.md#sfd-time-counts); a `volatile` on the whole block breaks other functions,
+  so which fields the original declared `volatile` stays open.
 - Medium confidence: `SFTIM_Init`, `SFTIM_Finish`, `SFTIM_InitHn`, `SFTIM_InitTtu` and `SFTIM_InitTcode` (`0x2ae010`, `0x2ae020`,
   `0x2ae028`, `0x2ae248`, `0x2ae290`) come from the order of the Persona 3 FES PlayStation 2 symbol list (provenance not stated) and the
   GameCube library's map (`sfd_tim.c`), which has the same five in the same sequence; the bodies of `SFTIM_Init` agree with the
@@ -103,8 +98,7 @@ the 2002 one. Names from what a function does are in the medium list below.
   copy and the backward-reference retime moved into calls.
 - The transfer slot's ring id is the enum `SfdBufId` and its work handle a union of the drivers' work types
   ([a read through a union member](understanding-shapes.md#scheduling-ee-gcc)): with those types `sfmpv_GetActiveSize`,
-  `sfmpv_DecodeOneUnit` and `sfmpvf_SearchStbyFrm` (with `SfdSlot **` out-parameters) match. `sfmps_DemuxChunk` still differs
-  in the register of one constant, which keeps a shared store from merging. `sfmpv_DecodeFrm` hoists the stack
+  `sfmpv_DecodeOneUnit` and `sfmpvf_SearchStbyFrm` (with `SfdSlot **` out-parameters) match. `sfmpv_DecodeFrm` hoists the stack
   load of its address-taken byte count above the frame-counter stores and keeps the frame count's load below them:
   forcing only the byte count's alias-set high word non-zero under gdb reproduces retail, so it is the
   [address-taken local](understanding-shapes.md#scheduling-ee-gcc) case and waits on the text compiled before it
@@ -116,6 +110,15 @@ the 2002 one. Names from what a function does are in the medium list below.
 - `mwPlyCreateSofdec` differs only in the delay slot of the first free-handle test, which retail fills from the
   branch target; `mwsfcre_CreateSfd` in the registers holding two of the buffer-size globals. Both need names for
   the size globals and the three SFD create-parameter templates, and the player status as an enum.
+- The rest without source, each a scheduling or register difference in the best C: `sfmpv_ReadPtsQue` (`0x2a4fb8`,
+  about 10 words: the player and PTS pointers swap `s0`/`s1`, and the `-1` constant and the stream base swap
+  `v0`/`v1`); `sfmpv_NextTc` (`0x2a5a50`, the RE4 time-code advance: the instructions and their order are retail's, the
+  temporaries sit one register off); `SFMPVP_Create` (`0x2a97a0`, 24 differing lines: the tail constants and the last store
+  differ, and neither pointer-typed work-buffer words nor locals for them fix it; the type of the MPV work-buffer
+  words or a macro form of the 64-byte alignment is the suspect); `sftim_Tc2Time59D` (`0x2af380`, 33 of 42 words: the
+  same instructions with a different load and arithmetic schedule: retail loads seconds then hours and adds before the
+  frames; none of 576 expression and statement orders reproduces it); and `sfmpv_CalcAudioTotTime` and
+  `sfmpv_DecodeFrm` above.
 - Medium confidence, from the RE4 GameCube order alone: `SFMPV_SaveCond` and `SFMPV_RestoreCond` (after `SFD_SetMpvCond`),
   `SFMPVF_SearchFrmObj` and `SFMPVF_SearchVfrmData` (the first two of `sfd_mpvf.c`), `sfmpvf_ReferNextFrmReady` and
   `sfmpvf_SearchStbyFrm` (after `SFD_IsNextFrmReady`), `SFPTS_IsPtsQueFull` (last of `sfd_pts.c`) and `SFTST_SetTstFlg`

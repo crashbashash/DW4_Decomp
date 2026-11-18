@@ -37,14 +37,12 @@ or restarts it from the start of its input.
 - `adxt.c`'s start is placed where the MFS/HST device file's strings end; the settings words before its own
   (`adxt_srd_rmode_sw`, `adxt_stm_eos`, `0x4a8e40`/`0x4a8e48`) belong to that file's getters and setters and are
   read here as externs.
-- No source yet: `ADXT_InsertSilence` (`0x26d328`: the drafts reproduce its shape but keep the frame length in a
-  second saved register).
 - `adxt_stat_prep` reads the V-sync count in the `lui`, `addiu`, `0(reg)` form, so `adxtsvr.c` redeclares the
   count `volatile` for itself, as [the ADXT tick count](source-approvals.md#adxt-ready-count) describes, and the
   other files keep the plain declaration. `ADXT_ExecHndl` follows it in the file: a call to a function already
   compiled in the file carries an exception-region note that fills the delay slot of the branch after it.
 - `ADXT_ExecServer` reads and writes its phase word in the `lui`, `addiu`, `0(reg)` form and declares it
-  `volatile`; it has no approval row, so it stays `unapproved`.
+  `volatile`, approved under [adx-server-guards](source-approvals.md#adx-server-guards).
 - One error code, `ADXT_ERR_SHRTBUF` (-1), stands for a starved input, a file that cannot be opened and a read
   error.
 - Names from behaviour, without a string: `ADXT_CreatePl2`, `ADXT_DestroyAll`, `ADXT_CloseAllHandles`,
@@ -56,5 +54,3 @@ or restarts it from the start of its input.
   `ADXT_SetDefKeyString`, `ADXT_ResetDefFmt`, `ADXT_StartMem`, `ADXT_InsertSilence`, `adxt_trap_entry` (its
   message names it), `adxt_stat_prep`, `adxt_stat_playing`, `adxt_stat_playend`, `ADXT_ExecRdErrChk`,
   `ADXT_ExecRdCompChk`; the hook at `0x4a8e64` that `ADXT_Stop` calls is `adxt_stop_func`.
-- `src/cri/adxtinit.c` and `src/cri/adxtsml.c` still declare their own handle layouts; they should use
-  `AdxtObj` from `adxt.h`.

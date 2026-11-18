@@ -48,9 +48,7 @@ with Sony EE GCC 2.96 at `-O2 -G0` (their rows in `units.tsv` and `unit-objects.
   its re-entry word `adxps2_exec_vint` is clear it wakes the V-sync, FS and user V-sync threads whose busy
   flags are not set, counts `adxm_vint_cnt`, runs `SVM_ExecSvrVint` and calls the callback in `adxm_old_cbf`.
   `ADXM_ExecVint` is a wrapper that returns its result. `adxm_vint_cnt` (the wake counter),
-  `adxps2_exec_vint` and `adxm_old_cbf` take their names from the Street Fighter III decomp. The two
-  thread-setup functions (`ADXM_SetupThrd`, `ADXM_SetupThrdEx`) still have no source and link from the
-  retail image.
+  `adxps2_exec_vint` and `adxm_old_cbf` take their names from the Street Fighter III decomp.
 - ADXPS2's names: `adxm_goto_svr_border` is named by its own internal-error message, and the user V-sync and
   user idle threads by the messages that print their stacks. The other threads are named from the server
   type each runs through SVM (`0x27e910`): 1 user V-sync, 2 V-sync (woken from the V-blank handler
@@ -59,6 +57,3 @@ with Sony EE GCC 2.96 at `-O2 -G0` (their rows in `units.tsv` and `unit-objects.
   `_adxm_lock` resumes while the lock is held. "FS" for type 4 and "main" for type 5 are guesses; that
   thread 4's loop sets the GS background colour from `adxm_fs_bgcolor` only says it is a debug aid.
   The `ADXPS2_*` and `ADXM_*` API spellings follow CRI's convention; none of them survives as a string.
-- The SVM functions ADXPS2 calls (`0x27e1c0` lock, `0x27e1d8` unlock, `0x27e398` error, `0x27e748`
-  `SVM_SetCbSvrId`, the per-type servers `0x27ea98` to `0x27eb28`) and ADXT's servers (`0x26cbd8`, `0x262950`)
-  keep their placeholder names until the SVM and ADXT units are named.

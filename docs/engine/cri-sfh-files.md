@@ -14,13 +14,13 @@ SFX alpha functions carry CRI's own names, taken from the GameCube builds of the
 | `src/cri/sfh.c` | `cri_sfh` | `0x2b16e0` up to `0x2b2ee8` | SFH (`CRI SFH/PS2EE Ver.1.19`): the header sector of a Sofdec stream: handle pool, magic and version checks, file information and the per-stream audio and video descriptors | its read-only data `0x4f52f0` up to `0x4f53b0` (the `SFH Version` and copyright strings, the build string `SFH_GetSbverStr` returns, `SofdecStream`, `Ver.` and the jump table of `getPicRate`) follows the second handler table; its bss is `0x585688` up to `0x5856a0` |
 | `src/cri/sfxa.c` | `cri_sfxa` | `0x2b2ee8` up to `0x2b31d8` | SFX alpha: the alpha handles an SFX handle keeps (`SfxHn.ahn`): the parameters of the CFT colour table and the three alpha levels of the CFT alpha tables, then three frame helpers | its data `sfxa_lib` (`0x4beb58`, 200 bytes) sits between the time-stamp file's data and SFX's library object at `0x4bec28`; `SFXA_Init` and `SFXA_Finish` are called from SFX's init and finish; the SFX conversion code at `0x2b31d8` starts with the next read-only data (`sfxcnv_` messages) |
 
-Each file declares its own types. The two handlers see the stream graph entry (`0x44` bytes at handle +7976) only
-as far as they use it; `SfainfTrn.list` is the word the graph code keeps as `f8`. SFH's handle (`SfhHn`, 16 bytes)
+The two handlers read the handle as `SfdPly` and the stream graph entry (`SfdTrnSlot`, `0x44` bytes at handle +7976)
+and the user outputs (`SfainfList`) from `include/dw4/cri/sfd.h`; SFH and SFX alpha declare their own types. SFH's handle (`SfhHn`, 16 bytes)
 points at the header in memory (`SfhHdr`); a stream descriptor (`SfhStm`, 64 bytes, 26 of them at +384) is read
 as `SfhAudioStm` or `SfhVideoStm` by its MPEG stream id (`chkStmId`). The audio descriptor's bytes at `0x1A` and `0x1B` are the MPEG audio layer (`SfhAudioStm.layer`, read by
 `SFH_AnlyElemLayer`) and the channel count (`SfhAudioStm.chNum`, `SFH_AnlyElemChNum`), followed by the sampling rate
-(`smpHz`); the other descriptor field names are guesses from what the getters return. `SFXA_Destroy` writes the in-use word through a `volatile` pointer and is
-`unapproved`.
+(`smpHz`); the other descriptor field names are guesses from what the getters return. `SFXA_Destroy` writes the in-use
+word through a `volatile` pointer, approved under [sfx-handle-used-flag](source-approvals.md#sfx-handle-used-flag).
 
 `SFH_Create` reads the pool's three words (capacity, count, table) into locals of their own before its full-pool
 test. That decides more than the loads: the pool's address then sits in `a0`, the table load fills the delay slot of

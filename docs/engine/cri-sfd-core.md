@@ -83,11 +83,10 @@ its public API, begin it.
 
 ## Open questions
 
-- Functions without source, linking from retail: `SFD_GetTimePerFile`,
-  `sfcre_AnalyAudio` (the loop's test placed after its body),
-  `sfcre_AnalyMpv` (register choice for the unpacked sequence-header bytes), `SFHDS_SetHdr` and `sfhdr_SetHdr`
-  (register choice), `sfmps_IsPrepEnd` (the condition array's address is kept in a register), and
-  `sfmps_DemuxChunk`, `sfmps_PutPes`, `sfmps_CopyAudio`, `sfmps_CopyVideo`, `sfmps_ChkEnd`, which have no draft yet.
+- Without source, linking from retail: `sfmps_PutPes` (`0x2a17f8`), which exists only in DW4 (neither the SDK's
+  `sfd_mps.o` nor the RE4 sources have it). The best C is 24 words off, all of them the swap of two callee-saved
+  registers (retail keeps the handle in `s2` and the parameter block in `s1`); it also needs the PES fields read into
+  locals right after `MPS_GetPesInf` and the copy table `sfmps_pes_funcs` (`0x4f4dc0`).
 - `SFH_IsExistStmId` returns nothing in `sfh.c`, yet `sfhds_AnlyUsedStmid` tests its result; this file declares it `int`.
 - The supply and MPS handlers' entries 5 to 8 are named after the ADX handler's (prepare, start, stop, pause) and
   entry 13 (`*_LoadRec`) after what the MPS handler does there; the other handlers have not been checked against

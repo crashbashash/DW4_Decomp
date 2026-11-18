@@ -23,15 +23,8 @@ format the header parse stored in the handle.
   ones.
 - The SPSD parse writes the block, sample and format values from the codec byte and then overwrites all but
   the format with the 16-bit values; retail keeps both sets of stores.
-- No source yet: the SPSD and WAV header decoders (`0x25e788`, `0x25ec50`: their drafts store two pairs of
-  handle fields in the opposite order) and the WAV header parse (`0x25ea20`: one register choice, and
-  retail reuses the `-1` already in the return register for the last check).
-- ADXCRS's lock and unlock (`0x25f2d0`, `0x25f2e8`) keep their address names: renaming them rewrites callers
-  across the ADX, LSC and Sofdec files.
-- The file-system server's activity check (`0x262a18`) matches only with the step word declared `volatile`
-  (it reads it in the `lui`, `addiu`, `0(reg)` form); the word is shared with the ADXM threads. It has no
-  source until the owner rules on it.
-- CRI CFG's init (`0x26f2b8`) stores the build string's address in the `lui`, `addiu`, `0(reg)` form, the
-  shape of the build-string stores ([source approvals](source-approvals.md#build-string-stores)); it
-  has no row, so it has no source. `0x26f4b0` reads a setting by name (`CRICFG_Read`); its rename waits on
-  its Sofdec caller.
+- The file-system server's activity check matches only with the step word declared `volatile` (it reads it in
+  the `lui`, `addiu`, `0(reg)` form); the word is shared with the ADXM threads, and the keyword is approved under
+  [adx-server-guards](source-approvals.md#adx-server-guards).
+- CRI CFG's init stores the build string's address through a `char *volatile` word, approved under
+  [build-string stores](source-approvals.md#build-string-stores).

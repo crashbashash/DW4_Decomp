@@ -27,9 +27,4 @@ passes the AHX handle to the key hook of its own data.
   guesses in the ADXKEY style; its words take the RE4 GameCube table's names for the same library
   ([adonis-singh/re4](https://github.com/adonis-singh/re4), `config/G4BE08/sym_map.tsv`): `skg_init_count`,
   `skg_err_func`, `skg_err_obj`. The encoder's static copy keeps the `ADXKEY_` prefix ([ADXENC](cri-adxenc.md)).
-- No source yet: `adxamp_extract` (`0x25b618`, the per-frame peak scan; retail holds five undecoded words in a
-  loop that spins when an output chunk is empty), `AIFF_GetInfo` (`0x25bc40`, the chunk walk with the
-  80-bit sample rate), `ADXB_ExecOneAiff16` and `ADXB_ExecOneAu16` (`0x25c260`, `0x25cb20`, byte-swapped
-  16-bit samples), and `ADXB_DecodeHeaderAu` (`0x25ca20`: the copies after the call differ from retail in
-  the registers of the two buffer-size loads; reordering them has not found retail's order).
 - SKG's build string pointer is data no code reads; it links from retail.
