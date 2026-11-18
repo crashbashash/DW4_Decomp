@@ -1,7 +1,7 @@
 igMetaObject *g_igLogInterface_metaObject;
 igMetaField *g_igLogInterface_verboseMetaField;
 
-igMetaObject *FUN_002265e0(void) {
+igMetaObject *igLogInterface_GetOrCreateMetaObject(void) {
     if (g_igLogInterface_metaObject == 0) {
         g_igLogInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -36,7 +36,7 @@ CallbackArray *igLogInterface_Register(void) {
         &g_igLogInterface_metaObject,
         (igMetaObjectRegisterFunction)igInterface_Register,
         (igMetaObjectGetFunction)igInterface_GetPublishedMetaObject,
-        thunk_igLogInterface_GetMetaObject,
+        igLogInterface_GetMetaObjectFunction,
         "igLogInterface",
         0x24, /* instance size */
         igLogInterface_GetVTable,
@@ -46,7 +46,7 @@ CallbackArray *igLogInterface_Register(void) {
     );
 }
 
-void thunk_igLogInterface_GetMetaObject(void) {
+void igLogInterface_GetMetaObjectFunction(void) {
     igLogInterface_GetMetaObject();
 }
 
@@ -64,12 +64,12 @@ static int g_igLogInterface_fieldOffsets[] = {
 };
 
 void igLogInterface_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_igLogInterface_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igLogInterface_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_igLogInterface_fieldTable, g_igLogInterface_fieldHandles, g_igLogInterface_fieldOffsets, temp_s1);
+    meta = g_igLogInterface_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igLogInterface_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_igLogInterface_fieldTable, g_igLogInterface_fieldHandles, g_igLogInterface_fieldOffsets, base);
 }
 

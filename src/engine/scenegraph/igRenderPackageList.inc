@@ -1,6 +1,6 @@
 igMetaObject *g_igRenderPackageList_metaObject;
 
-igMetaObject *FUN_001977c0(void) {
+igMetaObject *igRenderPackageList_GetOrCreateMetaObject(void) {
     if (g_igRenderPackageList_metaObject == 0) {
         g_igRenderPackageList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igRenderPackageList_GetMetaObject(void)
 {
     igMetaObject *g = g_igRenderPackageList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001978a0();
+        igRenderPackageList_EnsureRegistered();
     return g_igRenderPackageList_metaObject;
 }
 
@@ -23,12 +23,12 @@ int igRenderPackageList_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_001978a0(void)
+void igRenderPackageList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igRenderPackageList_Register);
 }
 
-static igMetaObjectCallback g_igRenderPackageList_callbackList[] = { FUN_00197cc0, 0 };
+static igMetaObjectCallback g_igRenderPackageList_callbackList[] = { igRenderPackage_EnsureRegistered, 0 };
 
 CallbackArray *igRenderPackageList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ CallbackArray *igRenderPackageList_Register(void) {
         &g_igRenderPackageList_metaObject,
         igNonRefCountedObjectList_Register,
         igNonRefCountedObjectList_GetPublishedMetaObject,
-        thunk_igRenderPackageList_GetMetaObject,
+        igRenderPackageList_GetMetaObjectFunction,
         "igRenderPackageList",
         0x14, /* instance size */
         igRenderPackageList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igRenderPackageList_Register(void) {
     );
 }
 
-void thunk_igRenderPackageList_GetMetaObject(void) {
+void igRenderPackageList_GetMetaObjectFunction(void) {
     igRenderPackageList_GetMetaObject();
 }
 

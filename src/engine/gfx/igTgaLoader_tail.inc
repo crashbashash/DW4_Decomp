@@ -1,4 +1,4 @@
-void Gap__Gfx__igTgaLoader__vfunc_12(igObject *self) {
+void igTgaLoader_ReleaseDefaults(igObject *self) {
     igObject_ReleaseDefaults(self);
 }
 
@@ -156,8 +156,8 @@ void FUN_001690d0(Arg0d0 *arg0) {
     int *s3;
     Buf860 *b;
     sp5C = 4;
-    thunk_igRegistry_GetValueInt((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 4, "IG_GFX_VC_RD_ARRAY_SIZE", &sp5C, 4, 0);
-    p = (P_1690d0 *)Memory_AllocateBufferDirect(20, (igMemoryPoolView *)FUN_00165d10((int *)arg0));
+    igGetRegistryValue_Int((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 4, "IG_GFX_VC_RD_ARRAY_SIZE", &sp5C, 4, 0);
+    p = (P_1690d0 *)Memory_AllocateBufferDirect(20, (igMemoryPoolView *)igVisualContext_GetListMemoryPool((int *)arg0));
     if (p != 0) {
         n = sp5C;
         p->f8 = 0;

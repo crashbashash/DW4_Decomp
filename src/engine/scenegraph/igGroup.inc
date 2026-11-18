@@ -49,7 +49,7 @@ CallbackArray *igGroup_Register(void) {
         &g_igGroup_metaObject,
         igNode_Register,
         igNode_GetPublishedMetaObject,
-        thunk_igGroup_GetMetaObject,
+        igGroup_GetMetaObjectFunction,
         "igGroup",
         0x20, /* instance size */
         igGroup_GetVTable,
@@ -59,7 +59,7 @@ CallbackArray *igGroup_Register(void) {
     );
 }
 
-void thunk_igGroup_GetMetaObject(void) {
+void igGroup_GetMetaObjectFunction(void) {
     igGroup_GetMetaObject();
 }
 
@@ -77,19 +77,19 @@ static int g_igGroup_fieldOffsets[] = {
 };
 
 void igGroup_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *childListField;
+    void *meta;
 
-    temp_s0 = (void *)g_igGroup_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igGroup_ctorTable, 1);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
-    ((igMetaField *)temp_s1)->_resetMethod = 3;
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    ((igMetaField *)temp_s1)->_deepCopyMethod = 0;
-    ((igMetaField *)temp_s1)->_shallowCopyMethod = 2;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igGroup_fieldTable, g_igGroup_fieldHandles, g_igGroup_fieldOffsets, temp_s2);
+    meta = (void *)g_igGroup_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igGroup_ctorTable, 1);
+    childListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igObjectRefMetaField *)childListField)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
+    ((igMetaField *)childListField)->_resetMethod = 3;
+    ((igRefMetaField *)childListField)->_construct = 1;
+    ((igMetaField *)childListField)->_deepCopyMethod = 0;
+    ((igMetaField *)childListField)->_shallowCopyMethod = 2;
+    igMetaObject_NameFields((igMetaObject *)meta, g_igGroup_fieldTable, g_igGroup_fieldHandles, g_igGroup_fieldOffsets, base);
 }
 

@@ -252,19 +252,19 @@ void FUN_001b4500(struct O4500 *o, struct S4500 *s, int b) {
     }
 }
 
-int FUN_001b4bb0(igCommonTraversal *arg0, int arg1) {
-    igAttrStackManager *b;
+int FUN_001b4bb0(igCommonTraversal *traversal, int node) {
+    igAttrStackManager *manager;
     igAttrStack *l;
     int v;
 
-    b = (igAttrStackManager *)arg0->_attrStack;
-    l = ((igAttrStack **)((igAttrStackList *)b->_attrStacks)->_data)[((int *)b->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject->_id]];
+    manager = (igAttrStackManager *)traversal->_attrStack;
+    l = ((igAttrStack **)((igAttrStackList *)manager->_attrStacks)->_data)[((int *)manager->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject->_id]];
     if (l->_count == 0) {
         v = 0;
     } else {
         v = *(int *)(l->_data + ((l->_count - 1) * 4));
     }
-    DAT_00562638[0]->vX(arg1, v);
+    DAT_00562638[0]->vX(node, v);
     return 0;
 }
 
@@ -449,12 +449,12 @@ void FUN_001b4c40(TexGenShaderView_1b4c40 *self, igCommonTraversal *traversal) {
     FUN_001dc610(traversal->_sorter);
 }
 
-void FUN_001b68b0(int arg0) {
-    FUN_001b68c0(g_igCommonTraversal_travProcs, (void *)arg0);
+void igCommonTraversal_RegisterClass(int arg0) {
+    igCommonTraversal_RegisterClassFunction(g_igCommonTraversal_travProcs, (void *)arg0);
 }
 
-void FUN_001b68c0(void *self, void *meta) {
-    FUN_001e02f0((int)(self), (int)(meta));
+void igCommonTraversal_RegisterClassFunction(void *self, void *meta) {
+    igTraversal_RegisterClassFunction((int)(self), (int)(meta));
     if (igMetaObject_IsOfType((igMetaObject *)meta, (igMetaObject *)(((int)igNode_GetMetaObject()))) != 0) {
         NodeProcTable t = DAT_0048d8f0;
         int i;
@@ -502,11 +502,11 @@ void FUN_001b68c0(void *self, void *meta) {
     }
 }
 
-void Gap__Sg__igCommonTraversal__vfunc_09(igCommonTraversal *arg0, int arg1) {
+void igCommonTraversal_userConstruct(igCommonTraversal *arg0, int arg1) {
     igObject *s0;
     igObject *a0;
 
-    Gap__Sg__igTraversal__vfunc_09((A_1e0380 *)arg0, arg1);
+    igTraversal_userConstruct((A_1e0380 *)arg0, arg1);
     if (arg1 == 0) {
         s0 = g_igCommonTraversal_travProcs;
         if (s0 != 0) {
@@ -525,18 +525,18 @@ void Gap__Sg__igCommonTraversal__vfunc_09(igCommonTraversal *arg0, int arg1) {
     }
 }
 
-void FUN_001b6be0(void) {
-    g_igCommonTraversal_travProcs = (igTDataList<igTraversalFunctionPtr> *)FUN_0019a6e0((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
-    FUN_0013b110();
+void igCommonTraversal_UserRegister(void) {
+    g_igCommonTraversal_travProcs = (igTDataList<igTraversalFunctionPtr> *)igTraversalFunctionList_CreateInstance((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
+    igAttr_EnsureRegistered();
     igTextureBindAttr_EnsureRegistered();
     igModelViewMatrixAttr_EnsureRegistered();
-    FUN_00130cf0();
+    igVertexBlendMatrixAttr_EnsureRegistered();
     igTextureMatrixAttr_EnsureRegistered();
     igVertexBlendStateAttr_EnsureRegistered();
-    FUN_00130a70();
+    igVertexBlendMatrixListAttr_EnsureRegistered();
 }
 
-void FUN_001b6c50(void) {
+void igCommonTraversal_UserUnregister(void) {
     igTDataList<igTraversalFunctionPtr> *procs = g_igCommonTraversal_travProcs;
     IG_OBJECT_RELEASE(procs);
 }

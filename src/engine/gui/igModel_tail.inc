@@ -51,7 +51,7 @@ void igModel_NotifyViews(igModel *model, ModelChange *change) {
     }
 }
 
-void Gap__Gui__igModel__vfunc_10(struct O_457950 *arg0) {
+void igModel_userDestruct(struct O_457950 *arg0) {
     int n;
     int i;
     int p;

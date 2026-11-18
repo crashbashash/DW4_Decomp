@@ -1,8 +1,8 @@
-void Gap__Gui__igGuiComponentController__vfunc_23(igGuiComponentController *self, int model) {
+void igGuiComponentController_IsCompatible(igGuiComponentController *self, int model) {
     igObject_IsKindOf((igObject *)model, igGuiComponentModel_GetMetaObject());
 }
 
-void Gap__Gui__igGuiComponentController__vfunc_24(igGuiComponentController *arg0, void *arg1) {
+void igGuiComponentController_OnModelChange(igGuiComponentController *arg0, void *arg1) {
     int temp_a1;
     igGuiComponentModel *temp_a2;
 

@@ -1,6 +1,6 @@
 igMetaObject *g_igLightStateAttrPool_metaObject;
 
-igMetaObject *FUN_0019a570(void) {
+igMetaObject *igLightStateAttrPool_GetOrCreateMetaObject(void) {
     if (g_igLightStateAttrPool_metaObject == 0) {
         g_igLightStateAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igLightStateAttrPool_GetMetaObject(void)
 {
     igMetaObject *g = g_igLightStateAttrPool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019a650();
+        igLightStateAttrPool_EnsureRegistered();
     return g_igLightStateAttrPool_metaObject;
 }
 
@@ -23,7 +23,7 @@ int igLightStateAttrPool_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_0019a650(void)
+void igLightStateAttrPool_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igLightStateAttrPool_Register);
 }
@@ -37,7 +37,7 @@ CallbackArray *igLightStateAttrPool_Register(void) {
         &g_igLightStateAttrPool_metaObject,
         igObjectPool_Register,
         igObjectPool_GetPublishedMetaObject,
-        thunk_igLightStateAttrPool_GetMetaObject,
+        igLightStateAttrPool_GetMetaObjectFunction,
         "igLightStateAttrPool",
         0x20, /* instance size */
         igLightStateAttrPool_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igLightStateAttrPool_Register(void) {
     );
 }
 
-void thunk_igLightStateAttrPool_GetMetaObject(void) {
+void igLightStateAttrPool_GetMetaObjectFunction(void) {
     igLightStateAttrPool_GetMetaObject();
 }
 

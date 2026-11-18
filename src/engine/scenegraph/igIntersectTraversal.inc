@@ -7,7 +7,7 @@ igMetaField *g_igIntersectTraversal_hitProcMetaField;
 igMetaField *g_igIntersectTraversal_volumesMetaField;
 igMetaField *g_igIntersectTraversal_rayMetaField;
 
-igMetaObject *FUN_0019dfd0(void) {
+igMetaObject *igIntersectTraversal_GetOrCreateMetaObject(void) {
     if (g_igIntersectTraversal_metaObject == 0) {
         g_igIntersectTraversal_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -35,9 +35,9 @@ int igIntersectTraversal_GetVTable(void) {
     obj.w[13] = 0;
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igIntersectTraversal_vtable[0];
-    FUN_0019e3c0((void * *)&obj.w[13], -1);
+    igIntersectTraversal_igSmartPointer_igObject_Destruct((void * *)&obj.w[13], -1);
     FUN_0018fa00(&obj.w[12], -1);
-    FUN_0019e340((void * *)&obj.w[9], -1);
+    igSmartPointer_igProbe_Destruct((void * *)&obj.w[9], -1);
     igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)&obj.w[8], -1);
     FUN_00150fb0(&obj.w[7], -1);
     FUN_00194490((struct S *)((int *)&obj), 0);
@@ -79,7 +79,7 @@ igIntersectTraversal *igIntersectTraversal_Destroy(igIntersectTraversal *self, s
     return self;
 }
 
-void **FUN_0019e340(void **arg0, short arg1) {
+void **igSmartPointer_igProbe_Destruct(void **arg0, short arg1) {
     S_temp_a0_19e340 *temp_a0;
 
     if (arg0 != 0) {
@@ -97,7 +97,7 @@ void **FUN_0019e340(void **arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_0019e3c0(void **arg0, short arg1) {
+void **igIntersectTraversal_igSmartPointer_igObject_Destruct(void **arg0, short arg1) {
     S_temp_a0_19e3c0 *temp_a0;
 
     if (arg0 != 0) {
@@ -120,7 +120,7 @@ void FUN_0019e440(void)
     igMetaObject_RunStaticInit((CallbackArray * (*)())igIntersectTraversal_Register);
 }
 
-static igMetaObjectCallback g_igIntersectTraversal_callbackList[] = { FUN_001e4820, igNodeList_EnsureRegistered, igProbe_EnsureRegistered, FUN_00186d20, igRay_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igIntersectTraversal_callbackList[] = { igMatrixStack_EnsureRegistered, igNodeList_EnsureRegistered, igProbe_EnsureRegistered, igVolumeList_EnsureRegistered, igRay_EnsureRegistered, 0 };
 
 CallbackArray *igIntersectTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -129,7 +129,7 @@ CallbackArray *igIntersectTraversal_Register(void) {
         &g_igIntersectTraversal_metaObject,
         igTraversal_Register,
         igTraversal_GetPublishedMetaObject,
-        thunk_igIntersectTraversal_GetMetaObject,
+        igIntersectTraversal_GetMetaObjectFunction,
         "igIntersectTraversal",
         0x40, /* instance size */
         igIntersectTraversal_GetVTable,
@@ -139,11 +139,11 @@ CallbackArray *igIntersectTraversal_Register(void) {
     );
 }
 
-void thunk_igIntersectTraversal_GetMetaObject(void) {
+void igIntersectTraversal_GetMetaObjectFunction(void) {
     igIntersectTraversal_GetMetaObject();
 }
 
-igMetaObject *FUN_0019e4e0(void) {
+igMetaObject *igTraversal_GetPublishedMetaObject(void) {
     return g_igTraversal_metaObject;
 }
 
@@ -197,7 +197,7 @@ void igIntersectTraversal_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igIntersectTraversal_ctorTable, 7);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_001e4740();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
@@ -208,14 +208,14 @@ void igIntersectTraversal_InitFields(void) {
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3), 5);
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, 4 + temp_s0))))->_persistent = 0;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_00186c40();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igVolumeList_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_4)->_persistent = 0;
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6)));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_00188260();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igRay_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     ((igMetaField *)temp_s2_5)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igIntersectTraversal_fieldTable, g_igIntersectTraversal_fieldHandles, g_igIntersectTraversal_fieldOffsets, temp_s0);
-    igMetaObject_AddExitCallback((int)&thunk_FUN_001ce740);
+    igMetaObject_AddExitCallback((int)&thunk_igIntersectTraversal_UserUnregister);
 }
 
 void FUN_0019e640(void) {
@@ -223,7 +223,7 @@ void FUN_0019e640(void) {
     igMetaObject_AddRegistrationCallback((int)FUN_001ce660);
 }
 
-void thunk_FUN_001ce740(void) {
-    FUN_001ce740();
+void thunk_igIntersectTraversal_UserUnregister(void) {
+    igIntersectTraversal_UserUnregister();
 }
 

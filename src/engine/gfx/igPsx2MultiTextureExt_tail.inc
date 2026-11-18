@@ -6,7 +6,7 @@ static int g_igPsx2MultiTextureExt_blendingFunctionAlphaPsx2Values[] = {
 };
 igMetaEnum *g_igPsx2MultiTextureExt_blendingFunctionAlphaPsx2MetaEnum;
 
-int FUN_001535d0(void) {
+int BLENDING_FUNCTION_ALPHA_PSX2_GetMetaEnum(void) {
     if (g_igPsx2MultiTextureExt_blendingFunctionAlphaPsx2MetaEnum == 0) {
         g_igPsx2MultiTextureExt_blendingFunctionAlphaPsx2MetaEnum = igMetaEnum_Create("BLENDING_FUNCTION_ALPHA_PSX2", g_igPsx2MultiTextureExt_blendingFunctionAlphaPsx2Names, g_igPsx2MultiTextureExt_blendingFunctionAlphaPsx2Values, 3);
     }
@@ -21,7 +21,7 @@ static int g_igPsx2MultiTextureExt_blendingFunctionColorPsx2Values[] = {
 };
 igMetaEnum *g_igPsx2MultiTextureExt_blendingFunctionColorPsx2MetaEnum;
 
-int FUN_00153630(void) {
+int BLENDING_FUNCTION_COLOR_PSX2_GetMetaEnum(void) {
     if (g_igPsx2MultiTextureExt_blendingFunctionColorPsx2MetaEnum == 0) {
         g_igPsx2MultiTextureExt_blendingFunctionColorPsx2MetaEnum = igMetaEnum_Create("BLENDING_FUNCTION_COLOR_PSX2", g_igPsx2MultiTextureExt_blendingFunctionColorPsx2Names, g_igPsx2MultiTextureExt_blendingFunctionColorPsx2Values, 3);
     }
@@ -39,7 +39,7 @@ static int g_igPsx2MultiTextureExt_textureFunctionPsx2Values[] = {
 };
 igMetaEnum *g_igPsx2MultiTextureExt_textureFunctionPsx2MetaEnum;
 
-int FUN_00153690(void) {
+int TEXTURE_FUNCTION_PSX2_GetMetaEnum(void) {
     if (g_igPsx2MultiTextureExt_textureFunctionPsx2MetaEnum == 0) {
         g_igPsx2MultiTextureExt_textureFunctionPsx2MetaEnum = igMetaEnum_Create("TEXTURE_FUNCTION_PSX2", g_igPsx2MultiTextureExt_textureFunctionPsx2Names, g_igPsx2MultiTextureExt_textureFunctionPsx2Values, 12);
     }
@@ -50,7 +50,7 @@ igMetaObject *igPsx2MultiTextureExt_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2MultiTextureExt_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00153820();
+        igPsx2MultiTextureExt_EnsureRegistered();
     return g_igPsx2MultiTextureExt_metaObject;
 }
 
@@ -70,12 +70,12 @@ int igPsx2MultiTextureExt_GetVTable(void) {
     return r;
 }
 
-void FUN_00153820(void)
+void igPsx2MultiTextureExt_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2MultiTextureExt_Register);
 }
 
-static igMetaObjectCallback g_igPsx2MultiTextureExt_callbackList[] = { FUN_001511a0, 0 };
+static igMetaObjectCallback g_igPsx2MultiTextureExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2MultiTextureExt_Register(void) {
     FUN_00149bc0();
@@ -84,7 +84,7 @@ CallbackArray *igPsx2MultiTextureExt_Register(void) {
         &g_igPsx2MultiTextureExt_metaObject,
         igMultiTextureExt_Register,
         igMultiTextureExt_GetPublishedMetaObject,
-        thunk_igPsx2MultiTextureExt_GetMetaObject,
+        igPsx2MultiTextureExt_GetMetaObjectFunction,
         "igPsx2MultiTextureExt",
         0x34, /* instance size */
         igPsx2MultiTextureExt_GetVTable,
@@ -152,23 +152,23 @@ void igPsx2MultiTextureExt_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igPsx2MultiTextureExt_ctorTable, 8);
     f = igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart);
-    ((igObjectRefMetaField *)f)->_metaObject = (int)FUN_00150770();
+    ((igObjectRefMetaField *)f)->_metaObject = (int)igPsx2VisualContext_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)f)->_refCounted = 0;
     f = igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 1);
     igEnumMetaField_SetDefaultValue((igMetaField *)f, 0);
-    ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)(&FUN_00153690);
+    ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)(&TEXTURE_FUNCTION_PSX2_GetMetaEnum);
     f = igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 3);
     igEnumMetaField_SetDefaultValue((igMetaField *)f, 0);
-    ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)(&FUN_00153630);
+    ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)(&BLENDING_FUNCTION_COLOR_PSX2_GetMetaEnum);
     f = igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 4);
     igEnumMetaField_SetDefaultValue((igMetaField *)f, g_igPsx2MultiTextureExt_blendBDefault);
-    *(void **)&((igEnumMetaField *)f)->_getMetaEnumFunction = (void *)FUN_00153630;
+    *(void **)&((igEnumMetaField *)f)->_getMetaEnumFunction = (void *)BLENDING_FUNCTION_COLOR_PSX2_GetMetaEnum;
     f = igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 5);
     igEnumMetaField_SetDefaultValue((igMetaField *)f, g_igPsx2MultiTextureExt_blendCDefault);
-    ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)(&FUN_001535d0);
+    ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)(&BLENDING_FUNCTION_ALPHA_PSX2_GetMetaEnum);
     f = igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 6);
     igEnumMetaField_SetDefaultValue((igMetaField *)f, g_igPsx2MultiTextureExt_blendDDefault);
-    *(void **)&((igEnumMetaField *)f)->_getMetaEnumFunction = (void *)FUN_00153630;
+    *(void **)&((igEnumMetaField *)f)->_getMetaEnumFunction = (void *)BLENDING_FUNCTION_COLOR_PSX2_GetMetaEnum;
     igUnsignedCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 7), 0x80);
     igMetaObject_NameFields((igMetaObject *)meta, g_igPsx2MultiTextureExt_fieldTable, g_igPsx2MultiTextureExt_fieldHandles, g_igPsx2MultiTextureExt_fieldOffsets, fieldStart);
 }

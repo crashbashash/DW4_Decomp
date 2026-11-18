@@ -1,7 +1,7 @@
 igMetaObject *g_igLightSet_metaObject;
 igMetaField *g_igLightSet_lightsMetaField;
 
-igMetaObject *FUN_0019dbb0(void) {
+igMetaObject *igLightSet_GetOrCreateMetaObject(void) {
     if (g_igLightSet_metaObject == 0) {
         g_igLightSet_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -27,7 +27,7 @@ int igLightSet_GetVTable(void) {
     o.f28 = 0;
     r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = &g_igLightSet_vtable[0];
-    FUN_0019c1a0((ObjectRefWord *)&o.f28, -1);
+    igSmartPointer_igLightList_Destruct((igSmartPointer<igObject> *)&o.f28, -1);
     igNode_Destroy((igNode *)&o, 0);
     return r;
 }
@@ -46,7 +46,7 @@ CallbackArray *igLightSet_Register(void) {
         &g_igLightSet_metaObject,
         igNode_Register,
         igNode_GetPublishedMetaObject,
-        thunk_igLightSet_GetMetaObject,
+        igLightSet_GetMetaObjectFunction,
         "igLightSet",
         0x20, /* instance size */
         igLightSet_GetVTable,
@@ -56,11 +56,11 @@ CallbackArray *igLightSet_Register(void) {
     );
 }
 
-void thunk_igLightSet_GetMetaObject(void) {
+void igLightSet_GetMetaObjectFunction(void) {
     igLightSet_GetMetaObject();
 }
 
-igMetaObject *FUN_0019dd70(void) {
+igMetaObject *igNode_GetPublishedMetaObject(void) {
     return g_igNode_metaObject;
 }
 
@@ -86,60 +86,59 @@ void igLightSet_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igLightSet_ctorTable, 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_001365e0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igLightList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     ((igMetaField *)temp_s1)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s1)->_shallowCopyMethod = 2;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igLightSet_fieldTable, g_igLightSet_fieldHandles, g_igLightSet_fieldOffsets, temp_s2);
 }
 
-igMetaObject *FUN_0019de30(void) {
+igMetaObject *igTransform_GetPublishedMetaObject(void) {
     return g_igTransform_metaObject;
 }
 
 igMetaObject *g_igAnimationSequence_metaObject;
 
-igMetaObject *FUN_0019de40(void) {
+igMetaObject *igAnimationSequence_GetPublishedMetaObject(void) {
     return g_igAnimationSequence_metaObject;
 }
 
-void **FUN_0019de50(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p);
+igSmartPointer<igObject> *igSmartPointer_igAnimationTransitionDefinitionList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (flag > 0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
-    return (void **)self;
+    return self;
 }
 
-void **FUN_0019ded0(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igAnimationTrackList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if ((short)arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
-O *FUN_0019df50(O *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
-        if (arg1 > 0) operator delete(arg0);
+igSmartPointer<igObject> *igSmartPointer_igAnimationBindingList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
+        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 

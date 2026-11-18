@@ -33,6 +33,6 @@ int ViewerSetup_Update(ViewerSetup *setup);
 void ViewerSetup_ResetView(ViewerSetup *setup);
 int ViewerSetup_ClearInfos(ViewerSetup *setup);
 /* Creates the display: the window, its visual context and frame buffer, from the shared viewer options. */
-igSmartPointer<igWindow> Viewer_CreateDisplay(int allocator);
+igSmartPointer<igWindow> igInsightCore_CreateWindow(int allocator);
 }
 #endif

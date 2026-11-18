@@ -70,7 +70,7 @@ void igAnimationBinding_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAnimationBinding_Register);
 }
 
-static igMetaObjectCallback g_igAnimationBinding_callbackList[] = { FUN_001a71a0, igIntList_EnsureRegistered, igBitMask_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAnimationBinding_callbackList[] = { igAnimationHierarchy_EnsureRegistered, igIntList_EnsureRegistered, igBitMask_EnsureRegistered, 0 };
 
 CallbackArray *igAnimationBinding_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -79,7 +79,7 @@ CallbackArray *igAnimationBinding_Register(void) {
         &g_igAnimationBinding_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igAnimationBinding_GetMetaObject,
+        igAnimationBinding_GetMetaObjectFunction,
         "igAnimationBinding",
         0x1C, /* instance size */
         igAnimationBinding_GetVTable,
@@ -89,7 +89,7 @@ CallbackArray *igAnimationBinding_Register(void) {
     );
 }
 
-void thunk_igAnimationBinding_GetMetaObject(void) {
+void igAnimationBinding_GetMetaObjectFunction(void) {
     igAnimationBinding_GetMetaObject();
 }
 
@@ -123,27 +123,27 @@ static int g_igAnimationBinding_fieldOffsets[] = {
 };
 
 void igAnimationBinding_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_4;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *reflectTrackField;
+    void *chainSwapListField;
+    void *boneTrackIdxArrayField;
+    void *hierarchyField;
+    void *meta;
 
-    temp_s0 = (void *)g_igAnimationBinding_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationBinding_ctorTable, 5);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a7100();
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    ((igMemoryRefMetaField *)temp_s1_2)->_memType = igIntMetaField_GetDefaultDescriptor();
-    ((igRefMetaField *)temp_s1_2)->_destruct = 1;
-    ((igMemoryRefMetaField *)temp_s1_2)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)temp_s1_2)->_releaseOnReset = 1;
-    temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3)));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
-    temp_s1_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 4)));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)FUN_001a4d90();
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationBinding_fieldTable, g_igAnimationBinding_fieldHandles, g_igAnimationBinding_fieldOffsets, temp_s2);
+    meta = (void *)g_igAnimationBinding_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igAnimationBinding_ctorTable, 5);
+    hierarchyField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igObjectRefMetaField *)hierarchyField)->_metaObject = (int)igAnimationHierarchy_GetOrCreateMetaObject();
+    boneTrackIdxArrayField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    ((igMemoryRefMetaField *)boneTrackIdxArrayField)->_memType = igIntMetaField_GetDefaultDescriptor();
+    ((igRefMetaField *)boneTrackIdxArrayField)->_destruct = 1;
+    ((igMemoryRefMetaField *)boneTrackIdxArrayField)->_releaseOnCopy = 1;
+    ((igMemoryRefMetaField *)boneTrackIdxArrayField)->_releaseOnReset = 1;
+    chainSwapListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
+    ((igObjectRefMetaField *)chainSwapListField)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    reflectTrackField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)));
+    ((igObjectRefMetaField *)reflectTrackField)->_metaObject = (int)igBitMask_GetOrCreateMetaObject();
+    igMetaObject_NameFields((igMetaObject *)meta, g_igAnimationBinding_fieldTable, g_igAnimationBinding_fieldHandles, g_igAnimationBinding_fieldOffsets, base);
 }
 

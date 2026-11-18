@@ -4,11 +4,11 @@ igMetaObject *igCustomState_GetMetaObject(void)
 {
     igMetaObject *g = g_igCustomState_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014f240();
+        igCustomState_EnsureRegistered();
     return g_igCustomState_metaObject;
 }
 
-void FUN_0014f240(void)
+void igCustomState_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igCustomState_Register);
 }
@@ -20,7 +20,7 @@ CallbackArray *igCustomState_Register(void) {
         &g_igCustomState_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igCustomState_GetMetaObject,
+        igCustomState_GetMetaObjectFunction,
         "igCustomState",
         0xC, /* instance size */
         0,
@@ -30,7 +30,7 @@ CallbackArray *igCustomState_Register(void) {
     );
 }
 
-void thunk_igCustomState_GetMetaObject(void) {
+void igCustomState_GetMetaObjectFunction(void) {
     igCustomState_GetMetaObject();
 }
 

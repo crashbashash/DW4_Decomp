@@ -1,11 +1,11 @@
 igMetaObject *g_igVolumeList_metaObject;
 
 InstanceNode *FUN_00186c00(int arg0) {
-    FUN_00186d20();
+    igVolumeList_EnsureRegistered();
     return (InstanceNode *)igMetaObject_CreateInstance((igMetaObject *)g_igVolumeList_metaObject, (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *FUN_00186c40(void) {
+igMetaObject *igVolumeList_GetOrCreateMetaObject(void) {
     if (g_igVolumeList_metaObject == 0) {
         g_igVolumeList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -16,7 +16,7 @@ igMetaObject *igVolumeList_GetMetaObject(void)
 {
     igMetaObject *g = g_igVolumeList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00186d20();
+        igVolumeList_EnsureRegistered();
     return g_igVolumeList_metaObject;
 }
 
@@ -28,12 +28,12 @@ int igVolumeList_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00186d20(void)
+void igVolumeList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVolumeList_Register);
 }
 
-static igMetaObjectCallback g_igVolumeList_callbackList[] = { FUN_00186b20, 0 };
+static igMetaObjectCallback g_igVolumeList_callbackList[] = { igVolume_EnsureRegistered, 0 };
 
 CallbackArray *igVolumeList_Register(void) {
     FUN_00186a40();
@@ -42,7 +42,7 @@ CallbackArray *igVolumeList_Register(void) {
         &g_igVolumeList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igVolumeList_GetMetaObject,
+        igVolumeList_GetMetaObjectFunction,
         "igVolumeList",
         0x14, /* instance size */
         igVolumeList_GetVTable,
@@ -52,7 +52,7 @@ CallbackArray *igVolumeList_Register(void) {
     );
 }
 
-void thunk_igVolumeList_GetMetaObject(void) {
+void igVolumeList_GetMetaObjectFunction(void) {
     igVolumeList_GetMetaObject();
 }
 

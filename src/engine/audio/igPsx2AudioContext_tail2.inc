@@ -198,7 +198,7 @@ int FUN_00145a10(void *arg0, void *voice) {
     return u.i;
 }
 
-igMetaObject *Gap__igPsx2AudioContext__vfunc_22(void)
+igMetaObject *igPsx2AudioContext_GetMeta(void)
 {
     return g_igPsx2AudioContext_metaObject;
 }

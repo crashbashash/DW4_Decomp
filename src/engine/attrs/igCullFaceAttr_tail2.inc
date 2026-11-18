@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igCullFaceAttr__vfunc_22(void) {
+igMetaObject *igCullFaceAttr_GetMeta(void) {
     return g_igCullFaceAttr_metaObject;
 }
 

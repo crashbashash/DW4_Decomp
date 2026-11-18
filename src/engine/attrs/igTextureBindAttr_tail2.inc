@@ -1,11 +1,11 @@
-igMetaObject *Gap__Attrs__igTextureBindAttr__vfunc_22(void) {
+igMetaObject *igTextureBindAttr_GetMeta(void) {
     return g_igTextureBindAttr_metaObject;
 }
 
 /* slot 33 of igTextureBindAttr: set the _texture reference (+12). Reference-counted assignment:
  * retain the new object, release the old one (destroying it when its 23-bit count reaches zero),
  * then store the new one. */
-void Gap__Attrs__igTextureBindAttr__vfunc_33(igTextureBindAttr *self, igObject *texture) {
+void igTextureBindAttr_SetTexture(igTextureBindAttr *self, igObject *texture) {
     igObject *previousTexture;
     if (texture != 0) {
         texture->_refCount = texture->_refCount + 1;

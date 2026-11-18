@@ -1,6 +1,6 @@
 igMetaObject *g_igOverrideAttrSet_metaObject;
 
-igMetaObject *FUN_0019c6a0(void) {
+igMetaObject *igOverrideAttrSet_GetOrCreateMetaObject(void) {
     if (g_igOverrideAttrSet_metaObject == 0) {
         g_igOverrideAttrSet_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igOverrideAttrSet_GetMetaObject(void)
 {
     igMetaObject *g = g_igOverrideAttrSet_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019c7b0();
+        igOverrideAttrSet_EnsureRegistered();
     return g_igOverrideAttrSet_metaObject;
 }
 
@@ -32,7 +32,7 @@ int igOverrideAttrSet_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0019c7b0(void)
+void igOverrideAttrSet_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igOverrideAttrSet_Register);
 }
@@ -44,7 +44,7 @@ CallbackArray *igOverrideAttrSet_Register(void) {
         &g_igOverrideAttrSet_metaObject,
         igAttrSet_Register,
         igAttrSet_GetPublishedMetaObject,
-        thunk_igOverrideAttrSet_GetMetaObject,
+        igOverrideAttrSet_GetMetaObjectFunction,
         "igOverrideAttrSet",
         0x28, /* instance size */
         igOverrideAttrSet_GetVTable,
@@ -54,7 +54,7 @@ CallbackArray *igOverrideAttrSet_Register(void) {
     );
 }
 
-void thunk_igOverrideAttrSet_GetMetaObject(void) {
+void igOverrideAttrSet_GetMetaObjectFunction(void) {
     igOverrideAttrSet_GetMetaObject();
 }
 

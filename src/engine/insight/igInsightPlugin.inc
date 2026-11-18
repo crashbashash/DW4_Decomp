@@ -4,11 +4,11 @@ igMetaObject *igInsightPlugin_GetMetaObject(void)
 {
     igMetaObject *g = g_igInsightPlugin_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00232780();
+        igInsightPlugin_EnsureRegistered();
     return g_igInsightPlugin_metaObject;
 }
 
-void FUN_00232780(void)
+void igInsightPlugin_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igInsightPlugin_Register);
 }
@@ -20,7 +20,7 @@ CallbackArray *igInsightPlugin_Register(void) {
         &g_igInsightPlugin_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igInsightPlugin_GetMetaObject,
+        igInsightPlugin_GetMetaObjectFunction,
         "igInsightPlugin",
         8, /* instance size */
         0,
@@ -30,7 +30,7 @@ CallbackArray *igInsightPlugin_Register(void) {
     );
 }
 
-void thunk_igInsightPlugin_GetMetaObject(void) {
+void igInsightPlugin_GetMetaObjectFunction(void) {
     igInsightPlugin_GetMetaObject();
 }
 

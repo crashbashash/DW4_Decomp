@@ -1,11 +1,11 @@
-igMetaObject *Gap__Attrs__igRenderListAttr__vfunc_22(void) {
+igMetaObject *igRenderListAttr_GetMeta(void) {
     return g_igRenderListAttr_metaObject;
 }
 
 /* slot 32 of igRenderListAttr: set the _vc reference (+16). Reference-counted assignment: retain
  * the new object, release the old one (destroying it when its 23-bit count reaches zero), then
  * store the new one. */
-void Gap__Attrs__igRenderListAttr__vfunc_32(igRenderListAttr *self, igObject *vertexCache) {
+void igRenderListAttr_SetVisualContext(igRenderListAttr *self, igObject *vertexCache) {
     igObject *previousVertexCache;
     if (vertexCache != 0) {
         vertexCache->_refCount = vertexCache->_refCount + 1;

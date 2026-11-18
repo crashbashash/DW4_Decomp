@@ -4,11 +4,11 @@ igMetaObject *igDisableExt_GetMetaObject(void)
 {
     igMetaObject *g = g_igDisableExt_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014f810();
+        igDisableExt_EnsureRegistered();
     return g_igDisableExt_metaObject;
 }
 
-void FUN_0014f810(void)
+void igDisableExt_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igDisableExt_Register);
 }
@@ -20,7 +20,7 @@ CallbackArray *igDisableExt_Register(void) {
         &g_igDisableExt_metaObject,
         igContextExt_Register,
         igContextExt_GetPublishedMetaObject,
-        thunk_igDisableExt_GetMetaObject,
+        igDisableExt_GetMetaObjectFunction,
         "igDisableExt",
         0x14, /* instance size */
         0,
@@ -30,7 +30,7 @@ CallbackArray *igDisableExt_Register(void) {
     );
 }
 
-void thunk_igDisableExt_GetMetaObject(void) {
+void igDisableExt_GetMetaObjectFunction(void) {
     igDisableExt_GetMetaObject();
 }
 

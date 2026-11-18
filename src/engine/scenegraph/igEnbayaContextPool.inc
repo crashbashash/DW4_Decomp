@@ -113,27 +113,27 @@ static int g_igEnbayaContextPool_fieldOffsets[] = {
 };
 
 void igEnbayaContextPool_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *freeIndexListField;
+    void *boneCountListField;
+    void *poolListField;
+    void *meta;
 
-    temp_s0 = (void *)g_igEnbayaContextPool_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igEnbayaContextPool_ctorTable, 3);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igPointerListList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    ((igMetaField *)temp_s1)->_persistent = 0;
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igUnsignedIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    ((igMetaField *)temp_s1_2)->_persistent = 0;
-    temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)igUnsignedIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_3)->_construct = 1;
-    ((igMetaField *)temp_s1_3)->_persistent = 0;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igEnbayaContextPool_fieldTable, g_igEnbayaContextPool_fieldHandles, g_igEnbayaContextPool_fieldOffsets, temp_s2);
+    meta = (void *)g_igEnbayaContextPool_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igEnbayaContextPool_ctorTable, 3);
+    poolListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igObjectRefMetaField *)poolListField)->_metaObject = (int)igPointerListList_GetOrCreateMetaObject();
+    ((igRefMetaField *)poolListField)->_construct = 1;
+    ((igMetaField *)poolListField)->_persistent = 0;
+    boneCountListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    ((igObjectRefMetaField *)boneCountListField)->_metaObject = (int)igUnsignedIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)boneCountListField)->_construct = 1;
+    ((igMetaField *)boneCountListField)->_persistent = 0;
+    freeIndexListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
+    ((igObjectRefMetaField *)freeIndexListField)->_metaObject = (int)igUnsignedIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)freeIndexListField)->_construct = 1;
+    ((igMetaField *)freeIndexListField)->_persistent = 0;
+    igMetaObject_NameFields((igMetaObject *)meta, g_igEnbayaContextPool_fieldTable, g_igEnbayaContextPool_fieldHandles, g_igEnbayaContextPool_fieldOffsets, base);
 }
 

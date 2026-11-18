@@ -1,6 +1,6 @@
 igMetaObject *g_igNonRefCountedAttrList_metaObject;
 
-igMetaObject *FUN_0013ad40(void) {
+igMetaObject *igNonRefCountedAttrList_GetOrCreateMetaObject(void) {
     if (g_igNonRefCountedAttrList_metaObject == 0) {
         g_igNonRefCountedAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -28,7 +28,7 @@ void igNonRefCountedAttrList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igNonRefCountedAttrList_Register);
 }
 
-static igMetaObjectCallback g_igNonRefCountedAttrList_callbackList[] = { FUN_0013b110, 0 };
+static igMetaObjectCallback g_igNonRefCountedAttrList_callbackList[] = { igAttr_EnsureRegistered, 0 };
 
 CallbackArray *igNonRefCountedAttrList_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ CallbackArray *igNonRefCountedAttrList_Register(void) {
         &g_igNonRefCountedAttrList_metaObject,
         igNonRefCountedObjectList_Register,
         igNonRefCountedObjectList_GetPublishedMetaObject,
-        thunk_igNonRefCountedAttrList_GetMetaObject,
+        igNonRefCountedAttrList_GetMetaObjectFunction,
         "igNonRefCountedAttrList",
         0x14, /* instance size */
         igNonRefCountedAttrList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igNonRefCountedAttrList_Register(void) {
     );
 }
 
-void thunk_igNonRefCountedAttrList_GetMetaObject(void) {
+void igNonRefCountedAttrList_GetMetaObjectFunction(void) {
     igNonRefCountedAttrList_GetMetaObject();
 }
 

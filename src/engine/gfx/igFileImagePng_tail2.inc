@@ -1,4 +1,4 @@
-igMetaObject *Gap__Gfx__igFileImagePng__vfunc_22(void) {
+igMetaObject *igFileImagePng_GetMeta(void) {
     return g_igFileImagePng_metaObject;
 }
 

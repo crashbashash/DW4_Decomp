@@ -1,6 +1,6 @@
 igMetaObject *g_igFieldChangeViewList_metaObject;
 
-igMetaObject *FUN_00450c70(void) {
+igMetaObject *igFieldChangeViewList_GetOrCreateMetaObject(void) {
     if (g_igFieldChangeViewList_metaObject == 0) {
         g_igFieldChangeViewList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -37,7 +37,7 @@ CallbackArray *igFieldChangeViewList_Register(void) {
         &g_igFieldChangeViewList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igFieldChangeViewList_GetMetaObject,
+        igFieldChangeViewList_GetMetaObjectFunction,
         "igFieldChangeViewList",
         0x14, /* instance size */
         igFieldChangeViewList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igFieldChangeViewList_Register(void) {
     );
 }
 
-void thunk_igFieldChangeViewList_GetMetaObject(void) {
+void igFieldChangeViewList_GetMetaObjectFunction(void) {
     igFieldChangeViewList_GetMetaObject();
 }
 

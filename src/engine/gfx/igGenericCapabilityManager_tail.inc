@@ -359,7 +359,7 @@ void FUN_001563b0(igImage *self, igImage *source, int deep) {
         if (source->_pClut != 0) {
             int allocator = (int)igObject_GetAllocator(self);
             igRelease((igObject *)self->_pClut);
-            self->_pClut = FUN_0014fa50(allocator);
+            self->_pClut = igClut_Create(allocator);
             FUN_00154c90((igClut *)self->_pClut, (igClut *)source->_pClut, 1);
         }
     }
@@ -376,7 +376,7 @@ static inline void release(T_1566c0 *object) {
 
 void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, int arg5) {
     igSmartPointer<T_1566c0> converted(0);
-    igSmartPointer<T_1566c0> spare((T_1566c0 *)FUN_0014db20((int)igObject_GetAllocator((igObject *)arg0)));
+    igSmartPointer<T_1566c0> spare((T_1566c0 *)igImageConvert_Create((int)igObject_GetAllocator((igObject *)arg0)));
     int spA4;
     int spA0;
     int sp9C;
@@ -430,7 +430,7 @@ void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, 
     if (arg1->f68 != 0) {
         void **a2 = (void **)igObject_GetAllocator((igObject *)arg0);
         release(arg0->f68);
-        arg0->f68 = (T_1566c0 *)FUN_0014fa50((int)a2);
+        arg0->f68 = (T_1566c0 *)igClut_Create((int)a2);
         FUN_00154c90((igClut *)arg0->f68, (igClut *)arg1->f68, 1);
     }
     if ((arg1->f84 + (arg1->f64 + (arg1->f72 + (arg1->f40 + (arg1->f36 + (arg1->f28 + arg1->f32)))))) & 7) {
@@ -463,7 +463,7 @@ void FUN_00156b20(S0_156b20 *arg0, S1_156b20 *arg1) {
     arg0->f44 = (int)(arg1);
 }
 void FUN_00156ba0(igImage *self, int width, int height, igImage *source) {
-    igSmartPointer<igImageConvertRows> convert((igImageConvertRows *)FUN_0014db20((int)igObject_GetAllocator(self)));
+    igSmartPointer<igImageConvertRows> convert((igImageConvertRows *)igImageConvert_Create((int)igObject_GetAllocator(self)));
     if (source == 0) {
         source = self;
     } else {
@@ -555,7 +555,7 @@ void FUN_00156ba0(igImage *self, int width, int height, igImage *source) {
     self->_pImage = (int)pixels;
     self->_localImage = 1;
     if (FUN_00159f70(source->_pfmt) && source != self && source->_pClut != 0) {
-        igSmartPointer<igObject> clut((igObject *)FUN_0014fa50((int)igObject_GetAllocator(self)));
+        igSmartPointer<igObject> clut((igObject *)igClut_Create((int)igObject_GetAllocator(self)));
         FUN_00154c90((igClut *)clut.p, (igClut *)source->_pClut, 1);
         FUN_00156b20((S0_156b20 *)self, (S1_156b20 *)clut.p);
     }
@@ -718,7 +718,7 @@ void FUN_00158670(ImageView *img, int x, int y, const void *src) {
 
 bool FUN_001586d0(igImage *self) {
     bool result = true;
-    igSmartPointer<igImageConvertView> convert((igImageConvertView *)FUN_0014db20((int)igObject_GetAllocator(self)));
+    igSmartPointer<igImageConvertView> convert((igImageConvertView *)igImageConvert_Create((int)igObject_GetAllocator(self)));
     switch (self->_pfmt) {
     case 7:
         convert->v25((void *)self->_pImage, self->_px * self->_py, &self->_order);
@@ -1392,7 +1392,7 @@ int FUN_0015a010(int arg0) {
     return arg0 == 0x10001;
 }
 
-void FUN_0015a030(struct A_15a030 *arg0) {
+void igImage_UserPostLoad(struct A_15a030 *arg0) {
     int *a1;
     int v1;
     int var_v0;
@@ -1427,7 +1427,7 @@ void FUN_0015a030(struct A_15a030 *arg0) {
     FUN_0015a100((S_15a100 *)arg0);
 }
 
-void FUN_0015a0f0(void) {
+void igImage_UserPostRead(void) {
     igObject_UserPostRead();
 }
 

@@ -1,7 +1,7 @@
 igMetaObject *g_igFlushRenderer_metaObject;
 SharedViewerOptions *g_sharedViewerOptions;
 
-igMetaObject *FUN_00233a40(void) {
+igMetaObject *igFlushRenderer_GetOrCreateMetaObject(void) {
     if (g_igFlushRenderer_metaObject == 0) {
         g_igFlushRenderer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -17,7 +17,7 @@ igMetaObject *igFlushRenderer_GetMetaObject(void)
         ready = (g_igFlushRenderer_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_00233b80();
+    igFlushRenderer_EnsureRegistered();
 done:
     return g_igFlushRenderer_metaObject;
 }
@@ -47,7 +47,7 @@ int igFlushRenderer_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00233b80(void)
+void igFlushRenderer_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igFlushRenderer_Register);
 }
@@ -59,7 +59,7 @@ CallbackArray *igFlushRenderer_Register(void) {
         &g_igFlushRenderer_metaObject,
         igRenderer_Register,
         igRenderer_GetPublishedMetaObject,
-        thunk_igFlushRenderer_GetMetaObject,
+        igFlushRenderer_GetMetaObjectFunction,
         "igFlushRenderer",
         0xC, /* instance size */
         igFlushRenderer_GetVTable,
@@ -69,7 +69,7 @@ CallbackArray *igFlushRenderer_Register(void) {
     );
 }
 
-void thunk_igFlushRenderer_GetMetaObject(void) {
+void igFlushRenderer_GetMetaObjectFunction(void) {
     igFlushRenderer_GetMetaObject();
 }
 
@@ -84,7 +84,7 @@ static inline int countOf(const IntList *list) { return list->count; }
 
 
 
-void FUN_00233c10(const char *programName)
+void igCommandLine_PrintUsage(const char *programName)
 {
     /* matching construct: variant search — declaration order of the local arrays; b52 gives the first-declared array the highest stack slot */
     float defaultUpVector[3];
@@ -109,7 +109,7 @@ void FUN_00233c10(const char *programName)
             defaultNormalsColor[1] = 1.0f;
             defaultNormalsColor[2] = 0.0f;
             defaultNormalsColor[3] = 1.0f;
-            FUN_002343d0(optionName, "sets the normals color", defaultNormalsColor);
+            igCommandLine_PrintOptionVec4f(optionName, "sets the normals color", defaultNormalsColor);
         }
     }
     {
@@ -119,7 +119,7 @@ void FUN_00233c10(const char *programName)
             defaultInvalidNormalsColor[1] = 0.5f;
             defaultInvalidNormalsColor[2] = 0.0f;
             defaultInvalidNormalsColor[3] = 1.0f;
-            FUN_002343d0(optionName, "sets the non-normalized stored normals color", defaultInvalidNormalsColor);
+            igCommandLine_PrintOptionVec4f(optionName, "sets the non-normalized stored normals color", defaultInvalidNormalsColor);
         }
     }
     {
@@ -129,7 +129,7 @@ void FUN_00233c10(const char *programName)
             defaultScaledNormalsColor[1] = 0.0f;
             defaultScaledNormalsColor[2] = 0.0f;
             defaultScaledNormalsColor[3] = 1.0f;
-            FUN_002343d0(optionName, "sets the scaled normals color", defaultScaledNormalsColor);
+            igCommandLine_PrintOptionVec4f(optionName, "sets the scaled normals color", defaultScaledNormalsColor);
         }
     }
     OPTION_FLOAT("--invalid-normals-precision", "sets the precision on the normals norm", 0.00100000005f);
@@ -144,7 +144,7 @@ void FUN_00233c10(const char *programName)
             defaultUpVector[0] = g_vec3Zero.x;
             defaultUpVector[1] = g_vec3Zero.y;
             defaultUpVector[2] = g_vec3Zero.z;
-            FUN_00234350(optionName, "sets the default up vector (<0,0,0> means use scene up vector)", defaultUpVector);
+            igCommandLine_PrintOptionVec3f(optionName, "sets the default up vector (<0,0,0> means use scene up vector)", defaultUpVector);
         }
     }
     OPTION_BOOL("--auto-scene-lights", "sets automatic usage of scene lights", 1);
@@ -159,7 +159,7 @@ void FUN_00233c10(const char *programName)
             defaultHeadLightDiffuse[1] = 1.0f;
             defaultHeadLightDiffuse[2] = 1.0f;
             defaultHeadLightDiffuse[3] = 1.0f;
-            FUN_002343d0(optionName, "sets the diffuse color for the head light", defaultHeadLightDiffuse);
+            igCommandLine_PrintOptionVec4f(optionName, "sets the diffuse color for the head light", defaultHeadLightDiffuse);
         }
     }
     {
@@ -169,7 +169,7 @@ void FUN_00233c10(const char *programName)
             defaultHeadLightSpecular[1] = 1.0f;
             defaultHeadLightSpecular[2] = 1.0f;
             defaultHeadLightSpecular[3] = 1.0f;
-            FUN_002343d0(optionName, "sets the specular color for the head light", defaultHeadLightSpecular);
+            igCommandLine_PrintOptionVec4f(optionName, "sets the specular color for the head light", defaultHeadLightSpecular);
         }
     }
     {
@@ -179,7 +179,7 @@ void FUN_00233c10(const char *programName)
             defaultHeadLightAmbient[1] = g_vec4Zero.y;
             defaultHeadLightAmbient[2] = g_vec4Zero.z;
             defaultHeadLightAmbient[3] = g_vec4Zero.w;
-            FUN_002343d0(optionName, "sets the ambient color for the head light", defaultHeadLightAmbient);
+            igCommandLine_PrintOptionVec4f(optionName, "sets the ambient color for the head light", defaultHeadLightAmbient);
         }
     }
     {
@@ -189,7 +189,7 @@ void FUN_00233c10(const char *programName)
             defaultClearColor[1] = 0.200000003f;
             defaultClearColor[2] = 0.200000003f;
             defaultClearColor[3] = 1.0f;
-            FUN_002343d0(optionName, "sets the clear color", defaultClearColor);
+            igCommandLine_PrintOptionVec4f(optionName, "sets the clear color", defaultClearColor);
         }
     }
     OPTION_BOOL("--wireframe-mode", "sets wireframe mode", 0.0f);
@@ -221,91 +221,92 @@ void FUN_00233c10(const char *programName)
     OPTION_BOOL("--allocate-visual-context-in-scratchpad", "Allocate visual context from scratchpad (effect on PS2 only)", 0.0f);
 }
 
-void FUN_002342b0(const char *arg0, const char *arg1, int arg2) {
+void igCommandLine_PrintOptionBool(const char *command, const char *comment, int value) {
     const char *boolText;
 
-    if (arg2 != 0) {
+    if (value != 0) {
         boolText = "true";
     } else {
         boolText = "false";
     }
-    printf("%s on|off|true|false\n\t%s\n\tdefault: %s\n\n", arg0, arg1, boolText);
+    printf("%s on|off|true|false\n\t%s\n\tdefault: %s\n\n", command, comment, boolText);
 }
 
-void FUN_002342e0(const char *arg0, const char *arg1, int arg2) {
-    printf("%s int\n\t%s\n\tdefault: %d\n\n", arg0, arg1, arg2);
+void igCommandLine_PrintOptionInt(const char *command, const char *comment, int value) {
+    printf("%s int\n\t%s\n\tdefault: %d\n\n", command, comment, value);
 }
 
-void FUN_00234300(const char *arg0, const char *arg1, float arg2) {
-    printf("%s float\n\t%s\n\tdefault: %f\n\n", arg0, arg1, fptodp(arg2));
+void igCommandLine_PrintOptionFloat(const char *command, const char *comment, float value) {
+    printf("%s float\n\t%s\n\tdefault: %f\n\n", command, comment, fptodp(value));
 }
 
-void FUN_00234350(const char *arg0, const char *arg1, float *arg2) {
+void igCommandLine_PrintOptionVec3f(const char *command, const char *comment, float *value) {
     /* matching construct: variant search — declaration order of the locals; b52 gives the last-declared local s0 */
-    double temp_s1;
-    double temp_s0;
+    double x;
+    double y;
 
-    temp_s1 = fptodp(arg2[0]);
-    temp_s0 = fptodp(arg2[1]);
-    printf("%s <3-vector>\n\t%s\n\tdefault: <%f,%f,%f>\n\n", arg0, arg1, temp_s1, temp_s0, fptodp(arg2[2]));
+    x = fptodp(value[0]);
+    y = fptodp(value[1]);
+    printf("%s <3-vector>\n\t%s\n\tdefault: <%f,%f,%f>\n\n", command, comment, x, y, fptodp(value[2]));
 }
 
-void FUN_002343d0(const char *arg0, const char *arg1, float *arg2) {
+/* The fourth component is printed third and the third last. */
+void igCommandLine_PrintOptionVec4f(const char *command, const char *comment, float *value) {
     /* matching construct: variant search — declaration order of the locals; b52 gives the last-declared local s0 */
-    double temp_s2;
-    double temp_s1;
-    double temp_s0;
-    temp_s2 = fptodp(*(float *)((char *)(arg2) + 0));
-    temp_s1 = fptodp(*(float *)((char *)(arg2) + 4));
-    temp_s0 = fptodp(*(float *)((char *)(arg2) + 12));
-    printf("%s <4-vector>\n\t%s\n\tdefault: <%f,%f,%f,%f>\n\n", arg0, arg1, temp_s2, temp_s1, temp_s0, fptodp(*(float *)((char *)(arg2) + 8)));
+    double x;
+    double y;
+    double w;
+    x = fptodp(value[0]);
+    y = fptodp(value[1]);
+    w = fptodp(value[3]);
+    printf("%s <4-vector>\n\t%s\n\tdefault: <%f,%f,%f,%f>\n\n", command, comment, x, y, w, fptodp(value[2]));
 }
 
-int FUN_00234470(igStringRefList *arg0, int *arg1, const char *arg2) {
+int igCommandLine_GetOption(igStringRefList *args, int *index, const char *option) {
     int matched;
 
-    if (arg2 != 0) {
-        matched = strcmp(StringList_CopyRetained(arg0, *arg1).p, arg2) == 0;
+    if (option != 0) {
+        matched = strcmp(StringList_CopyRetained(args, *index).p, option) == 0;
         if (matched != 0) {
-            *arg1 += 1;
+            *index += 1;
             return 1;
         }
     }
     return 0;
 }
 
-int FUN_00234510(igStringRefList *a0, int *a1, const char *a2, int *arg3) {
-    void *sp2C;
+int igCommandLine_GetOptionInt(igStringRefList *args, int *index, const char *option, int *value) {
+    const char *param;
 
-    if (FUN_002345b0(a0, a1, a2, &sp2C) != 0) {
-        *arg3 = atoi((const char *)sp2C);
+    if (igCommandLine_GetOptionString(args, index, option, &param) != 0) {
+        *value = atoi(param);
         return 1;
     }
     return 0;
 }
 
-int FUN_00234560(igStringRefList *arg0, int *arg1, const char *arg2, double *arg3) {
-    void *sp2C;
+int igCommandLine_GetOptionFloat(igStringRefList *args, int *index, const char *option, double *value) {
+    const char *param;
 
-    if (FUN_002345b0(arg0, arg1, arg2, &sp2C) != 0) {
-        *arg3 = atof((const char *)sp2C);
+    if (igCommandLine_GetOptionString(args, index, option, &param) != 0) {
+        *value = atof(param);
         return 1;
     }
     return 0;
 }
 
-int FUN_002345b0(igStringRefList *arg0, int *arg1, const char *arg2, void **arg3) {
-    int eq;
-    int v1;
-    if (arg2 != 0) {
-        eq = strcmp(StringList_CopyRetained(arg0, *arg1).p, arg2) == 0;
-        if (eq != 0) {
-            v1 = *arg1 + 1;
-            if (v1 < arg0->_count) {
-                *arg1 = v1;
-                *arg3 = StringList_CopyRetained(arg0, *arg1).p;
-                v1 = *arg1;
-                *arg1 = v1 + 1;
+int igCommandLine_GetOptionString(igStringRefList *args, int *index, const char *option, const char **value) {
+    int matched;
+    int next;
+    if (option != 0) {
+        matched = strcmp(StringList_CopyRetained(args, *index).p, option) == 0;
+        if (matched != 0) {
+            next = *index + 1;
+            if (next < args->_count) {
+                *index = next;
+                *value = StringList_CopyRetained(args, *index).p;
+                next = *index;
+                *index = next + 1;
                 return 1;
             }
         }
@@ -313,83 +314,64 @@ int FUN_002345b0(igStringRefList *arg0, int *arg1, const char *arg2, void **arg3
     return 0;
 }
 
-int FUN_002346c0(igStringRefList *arg0, int *arg1, const char *arg2, void **arg3) {
-    void *sp3C;
-    int str;
-    int *temp_a1;
-    int temp_v0;
-    int var_v0;
-    void *temp_s1;
-    void *temp_v1;
+int igCommandLine_GetDefaultValueStringRef(igStringRefList *args, int *index, const char *option, char **value) {
+    const char *param;
+    const char *text;
+    char *interned;
 
-    sp3C = 0;
-    if (FUN_002345b0(arg0, arg1, arg2, &sp3C) != 0) {
-        str = (int)sp3C;
-        if (g_stringPool == 0) {
-            var_v0 = (int)(StringPool_Allocate(0x10));
-            if (var_v0 != 0) {
-                var_v0 = (int)(StringPool_Construct((StringPool *)var_v0));
-            }
-            g_stringPool = (StringPool *)var_v0;
-        }
-        temp_s1 = (void *)(StringPool_Intern(g_stringPool, (const char *)str));
-        temp_v1 = (void *)(*arg3);
-        if (temp_v1 != 0) {
-            temp_a1 = (int *)((char *)temp_v1 - 8);
-            temp_v0 = *(int *)((char *)(temp_v1) - 4) - 1;
-            *(int *)((char *)(temp_v1) - 4) = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (StringTokenHeader *)temp_a1);
-            }
-        }
-        *arg3 = temp_s1;
+    param = 0;
+    if (igCommandLine_GetOptionString(args, index, option, &param) != 0) {
+        text = param;
+        interned = (char *)StringPool_Intern(InternedStrings::get(), text);
+        releaseString(*value);
+        *value = interned;
         return 1;
     }
     return 0;
 }
 
-int FUN_00234770(igStringRefList *arg0, int *arg1, const char *arg2, unsigned char *arg3) {
-    void *sp2C;
-    if (FUN_002345b0(arg0, arg1, arg2, &sp2C) == 0) {
+int igCommandLine_GetDefaultValueBool(igStringRefList *args, int *index, const char *option, unsigned char *value) {
+    const char *param;
+    if (igCommandLine_GetOptionString(args, index, option, &param) == 0) {
         return 0;
     }
-    *arg3 = 0;
-    if (strcmp((const char *)sp2C, "on") == 0) {
-        *arg3 = 1;
-    } else if (strcmp((const char *)sp2C, "true") == 0) {
-        *arg3 = 1;
+    *value = 0;
+    if (strcmp(param, "on") == 0) {
+        *value = 1;
+    } else if (strcmp(param, "true") == 0) {
+        *value = 1;
     }
     return 1;
 }
 
-int thunk_FUN_00234510(igStringRefList *args, int *index, const char *name, int *value)
+int igCommandLine_GetDefaultValueInt(igStringRefList *args, int *index, const char *option, int *value)
 {
-    return FUN_00234510(args, index, name, value);
+    return igCommandLine_GetOptionInt(args, index, option, value);
 }
 
-int FUN_00234810(igStringRefList *arg0, int *arg1, const char *arg2, float *arg3) {
-    double sp28;
+int igCommandLine_GetDefaultValueFloat(igStringRefList *args, int *index, const char *option, float *value) {
+    double param;
 
-    if (FUN_00234560(arg0, arg1, arg2, &sp28) != 0) {
-        *arg3 = dptofp(sp28);
+    if (igCommandLine_GetOptionFloat(args, index, option, &param) != 0) {
+        *value = dptofp(param);
         return 1;
     }
     return 0;
 }
 
-int FUN_00234860(igStringRefList *arg0, int *arg1, const char *arg2, float *arg3) {
-    void *sp2C;
+int igCommandLine_GetDefaultValueVec3f(igStringRefList *args, int *index, const char *option, float *value) {
+    const char *param;
 
-    if (FUN_002345b0(arg0, arg1, arg2, &sp2C) != 0) {
-        return Vec3f_FromString((const char *)sp2C, (float *)arg3, " < %f , %f , %f > ");
+    if (igCommandLine_GetOptionString(args, index, option, &param) != 0) {
+        return igConvertString_Vec3f(param, value, " < %f , %f , %f > ");
     }
     return 0;
 }
 
-int FUN_002348b0(igStringRefList *arg0, int *arg1, const char *arg2, float *arg3) {
-    void *sp2C;
-    if (FUN_002345b0(arg0, arg1, arg2, &sp2C) != 0) {
-        return FUN_001e6d80(sp2C, arg3, " < %f , %f , %f , %f > ");
+int igCommandLine_GetDefaultValueVec4f(igStringRefList *args, int *index, const char *option, float *value) {
+    const char *param;
+    if (igCommandLine_GetOptionString(args, index, option, &param) != 0) {
+        return igConvertString_Vec4f(param, value, " < %f , %f , %f , %f > ");
     }
     return 0;
 }
@@ -401,7 +383,7 @@ static inline int renderAllocator(void) {
     return (int)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
 }
 
-struct FlushSettings *FUN_00234900(struct FlushSettings *s) {
+struct FlushSettings *igCommandLine_Construct(struct FlushSettings *s) {
     s->f0 = 0;
     s->b4 = 1;
     s->b5 = 0;
@@ -479,24 +461,24 @@ struct FlushSettings *FUN_00234900(struct FlushSettings *s) {
     if (g_sharedViewerOptions == 0) {
         SharedViewerOptions *shared = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
         if (shared) {
-            shared = ViewerOptions_Construct(shared);
+            shared = igViewerDefaults_Construct(shared);
         }
         g_sharedViewerOptions = shared;
     }
     g_sharedViewerOptions->useCount++;
     s->shared = g_sharedViewerOptions;
-    FUN_00234ee0(s, s->shared->extraCommandLine);
+    igCommandLine_ParseLine(s, s->shared->extraCommandLine);
     return s;
 }
 
-void *FUN_00234b90(struct App *arg0, short arg1) {
+void *igCommandLine_Destruct(struct App *arg0, short arg1) {
     igObject *p;
     void *q;
     int *h;
     int rc;
 
     if (arg0 != 0) {
-        ViewerOptions_ReleaseShared();
+        igViewerDefaults_ReleaseInstance();
         if (&arg0->f236) {
             p = arg0->f236;
             if (p != 0) {
@@ -575,11 +557,11 @@ static inline void releaseSharedOptions(void) {
     }
 }
 
-void ViewerOptions_ReleaseShared(void) {
+void igViewerDefaults_ReleaseInstance(void) {
     releaseSharedOptions();
 }
 
-void ViewerOptions_ParseCommandLine(App *self, int count, char **names) {
+void igCommandLine_ParseArgs(App *self, int count, char **names) {
     int allocator;
     int i;
     if (g_useOwnerAllocator != 0) {
@@ -593,7 +575,7 @@ void ViewerOptions_ParseCommandLine(App *self, int count, char **names) {
         StringRef name(text);
         StringList_AppendRetained((igStringRefList *)(list.get()), (char *const *)&name);
     }
-    FUN_00235370((ViewerOptions *)self, (igStringRefList *)list.get());
+    igCommandLine_Setup((ViewerOptions *)self, (igStringRefList *)list.get());
 }
 
 /* Command-line parser of an Alchemy model-viewer style application. Each recognised '--option
@@ -601,7 +583,7 @@ void ViewerOptions_ParseCommandLine(App *self, int count, char **names) {
  * prints the usage text and exits, '--' or '-n' ends the option scan, any other '-x' token is
  * reported as unrecognised. The second loop collects the remaining tokens as model files, each
  * with its '-n N' repeat count. */
-void FUN_00235370(ViewerOptions *opts, igStringRefList *args)
+void igCommandLine_Setup(ViewerOptions *opts, igStringRefList *args)
 {
     StringRef modelFile;
     int repeat;
@@ -616,17 +598,17 @@ void FUN_00235370(ViewerOptions *opts, igStringRefList *args)
     index = 1;
 
     while (index < argc) {
-        if (FUN_00234470(args, &index, "--help")) {
+        if (igCommandLine_GetOption(args, &index, "--help")) {
             {
                 igStringRef helpRef = StringList_CopyRetained(args, 0);
-                FUN_00233c10(helpRef.p);
+                igCommandLine_PrintUsage(helpRef.p);
             }
             ReleaseObject(opts->intList);
             opts->intList = 0;
             ReleaseObject(opts->stringList);
             opts->stringList = 0;
             exit(0);
-        } else if (FUN_002346c0(args, &index, 0, (void **)&opts->modelName)) {
+        } else if (igCommandLine_GetDefaultValueStringRef(args, &index, 0, &opts->modelName)) {
             char *name;
             name = opts->modelName;
             applied = opts->applied;
@@ -635,137 +617,137 @@ void FUN_00235370(ViewerOptions *opts, igStringRefList *args)
             }
             ReleaseString(applied->modelName);
             applied->modelName = opts->modelName;
-        } else if (FUN_00234770(args, &index, "--show-bbox", &opts->showBbox)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--show-bbox", &opts->showBbox)) {
             opts->applied->showBbox = opts->showBbox;
-        } else if (FUN_00234770(args, &index, "--show-normals", &opts->showNormals)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--show-normals", &opts->showNormals)) {
             opts->applied->showNormals = opts->showNormals;
-        } else if (FUN_002348b0(args, &index, "--normals-color", &opts->normalsColor[0])) {
+        } else if (igCommandLine_GetDefaultValueVec4f(args, &index, "--normals-color", &opts->normalsColor[0])) {
             applied = opts->applied;
             applied->normalsColor[0] = opts->normalsColor[0];
             applied->normalsColor[1] = opts->normalsColor[1];
             applied->normalsColor[2] = opts->normalsColor[2];
             applied->normalsColor[3] = opts->normalsColor[3];
-        } else if (FUN_002348b0(args, &index, "--invalid-stored-normals-color", &opts->invalidStoredNormalsColor[0])) {
+        } else if (igCommandLine_GetDefaultValueVec4f(args, &index, "--invalid-stored-normals-color", &opts->invalidStoredNormalsColor[0])) {
             applied = opts->applied;
             applied->invalidStoredNormalsColor[0] = opts->invalidStoredNormalsColor[0];
             applied->invalidStoredNormalsColor[1] = opts->invalidStoredNormalsColor[1];
             applied->invalidStoredNormalsColor[2] = opts->invalidStoredNormalsColor[2];
             applied->invalidStoredNormalsColor[3] = opts->invalidStoredNormalsColor[3];
-        } else if (FUN_002348b0(args, &index, "--scaled-normals-color", &opts->scaledNormalsColor[0])) {
+        } else if (igCommandLine_GetDefaultValueVec4f(args, &index, "--scaled-normals-color", &opts->scaledNormalsColor[0])) {
             applied = opts->applied;
             applied->scaledNormalsColor[0] = opts->scaledNormalsColor[0];
             applied->scaledNormalsColor[1] = opts->scaledNormalsColor[1];
             applied->scaledNormalsColor[2] = opts->scaledNormalsColor[2];
             applied->scaledNormalsColor[3] = opts->scaledNormalsColor[3];
-        } else if (FUN_00234810(args, &index, "--invalid-normals-precision", &opts->invalidNormalsPrecision)) {
+        } else if (igCommandLine_GetDefaultValueFloat(args, &index, "--invalid-normals-precision", &opts->invalidNormalsPrecision)) {
             opts->applied->invalidNormalsPrecision = opts->invalidNormalsPrecision;
-        } else if (FUN_00234770(args, &index, "--auto-select-camera", &opts->autoSelectCamera)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--auto-select-camera", &opts->autoSelectCamera)) {
             opts->applied->autoSelectCamera = opts->autoSelectCamera;
-        } else if (FUN_00234810(args, &index, "--hfov", &opts->hfov)) {
+        } else if (igCommandLine_GetDefaultValueFloat(args, &index, "--hfov", &opts->hfov)) {
             opts->applied->hfov = opts->hfov;
-        } else if (FUN_00234770(args, &index, "--auto-planes", &opts->autoPlanes)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--auto-planes", &opts->autoPlanes)) {
             opts->applied->autoPlanes = opts->autoPlanes;
-        } else if (FUN_00234810(args, &index, "--near-plane", &opts->nearPlane)) {
+        } else if (igCommandLine_GetDefaultValueFloat(args, &index, "--near-plane", &opts->nearPlane)) {
             opts->applied->nearPlane = opts->nearPlane;
-        } else if (FUN_00234810(args, &index, "--far-plane", &opts->farPlane)) {
+        } else if (igCommandLine_GetDefaultValueFloat(args, &index, "--far-plane", &opts->farPlane)) {
             opts->applied->farPlane = opts->farPlane;
-        } else if (FUN_00234860(args, &index, "--up-vector", &opts->upVector[0])) {
+        } else if (igCommandLine_GetDefaultValueVec3f(args, &index, "--up-vector", &opts->upVector[0])) {
             applied = opts->applied;
             applied->upVector[0] = opts->upVector[0];
             applied->upVector[1] = opts->upVector[1];
             applied->upVector[2] = opts->upVector[2];
-        } else if (FUN_00234770(args, &index, "--auto-scene-lights", &opts->autoSceneLights)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--auto-scene-lights", &opts->autoSceneLights)) {
             opts->applied->autoSceneLights = opts->autoSceneLights;
-        } else if (FUN_00234770(args, &index, "--auto-head-light", &opts->autoHeadLight)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--auto-head-light", &opts->autoHeadLight)) {
             opts->applied->autoHeadLight = opts->autoHeadLight;
-        } else if (FUN_00234770(args, &index, "--use-scene-lights", &opts->useSceneLights)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--use-scene-lights", &opts->useSceneLights)) {
             opts->applied->useSceneLights = opts->useSceneLights;
-        } else if (FUN_00234770(args, &index, "--use-head-light", &opts->useHeadLight)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--use-head-light", &opts->useHeadLight)) {
             opts->applied->useHeadLight = opts->useHeadLight;
-        } else if (FUN_00234770(args, &index, "--use-head-light-specular", &opts->useHeadLightSpecular)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--use-head-light-specular", &opts->useHeadLightSpecular)) {
             opts->applied->useHeadLightSpecular = opts->useHeadLightSpecular;
-        } else if (FUN_002348b0(args, &index, "--head-light-diffuse", &opts->headLightDiffuse[0])) {
+        } else if (igCommandLine_GetDefaultValueVec4f(args, &index, "--head-light-diffuse", &opts->headLightDiffuse[0])) {
             applied = opts->applied;
             applied->headLightDiffuse[0] = opts->headLightDiffuse[0];
             applied->headLightDiffuse[1] = opts->headLightDiffuse[1];
             applied->headLightDiffuse[2] = opts->headLightDiffuse[2];
             applied->headLightDiffuse[3] = opts->headLightDiffuse[3];
-        } else if (FUN_002348b0(args, &index, "--head-light-specular", &opts->headLightSpecular[0])) {
+        } else if (igCommandLine_GetDefaultValueVec4f(args, &index, "--head-light-specular", &opts->headLightSpecular[0])) {
             applied = opts->applied;
             applied->headLightSpecular[0] = opts->headLightSpecular[0];
             applied->headLightSpecular[1] = opts->headLightSpecular[1];
             applied->headLightSpecular[2] = opts->headLightSpecular[2];
             applied->headLightSpecular[3] = opts->headLightSpecular[3];
-        } else if (FUN_002348b0(args, &index, "--head-light-ambient", &opts->headLightAmbient[0])) {
+        } else if (igCommandLine_GetDefaultValueVec4f(args, &index, "--head-light-ambient", &opts->headLightAmbient[0])) {
             applied = opts->applied;
             applied->headLightAmbient[0] = opts->headLightAmbient[0];
             applied->headLightAmbient[1] = opts->headLightAmbient[1];
             applied->headLightAmbient[2] = opts->headLightAmbient[2];
             applied->headLightAmbient[3] = opts->headLightAmbient[3];
-        } else if (FUN_002348b0(args, &index, "--clear-color", &opts->clearColor[0])) {
+        } else if (igCommandLine_GetDefaultValueVec4f(args, &index, "--clear-color", &opts->clearColor[0])) {
             applied = opts->applied;
             applied->clearColor[0] = opts->clearColor[0];
             applied->clearColor[1] = opts->clearColor[1];
             applied->clearColor[2] = opts->clearColor[2];
             applied->clearColor[3] = opts->clearColor[3];
-        } else if (FUN_00234770(args, &index, "--wireframe-mode", &opts->wireframeMode)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--wireframe-mode", &opts->wireframeMode)) {
             opts->applied->wireframeMode = opts->wireframeMode;
-        } else if (FUN_00234770(args, &index, "--force-wireframe", &opts->forceWireframe)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--force-wireframe", &opts->forceWireframe)) {
             opts->applied->forceWireframe = opts->forceWireframe;
-        } else if (FUN_00234770(args, &index, "--backface-culling-mode", &opts->backfaceCullingMode)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--backface-culling-mode", &opts->backfaceCullingMode)) {
             opts->applied->backfaceCullingMode = opts->backfaceCullingMode;
-        } else if (FUN_00234770(args, &index, "--force-backface-culling", &opts->forceBackfaceCulling)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--force-backface-culling", &opts->forceBackfaceCulling)) {
             opts->applied->forceBackfaceCulling = opts->forceBackfaceCulling;
-        } else if (FUN_00234770(args, &index, "--alpha-test", &opts->alphaTest)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--alpha-test", &opts->alphaTest)) {
             opts->applied->alphaTest = opts->alphaTest;
-        } else if (FUN_00234770(args, &index, "--force-alpha-test", &opts->forceAlphaTest)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--force-alpha-test", &opts->forceAlphaTest)) {
             opts->applied->forceAlphaTest = opts->forceAlphaTest;
-        } else if (FUN_00234810(args, &index, "--alpha-test-reference", &opts->alphaTestReference)) {
+        } else if (igCommandLine_GetDefaultValueFloat(args, &index, "--alpha-test-reference", &opts->alphaTestReference)) {
             opts->applied->alphaTestReference = opts->alphaTestReference;
-        } else if (FUN_00234810(args, &index, "--maximum-frame-rate", &opts->maximumFrameRate)) {
+        } else if (igCommandLine_GetDefaultValueFloat(args, &index, "--maximum-frame-rate", &opts->maximumFrameRate)) {
             opts->applied->maximumFrameRate = opts->maximumFrameRate;
-        } else if (FUN_00234770(args, &index, "--optimize-textures", &opts->optimizeTextures)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--optimize-textures", &opts->optimizeTextures)) {
             opts->applied->optimizeTextures = opts->optimizeTextures;
-        } else if (FUN_00234770(args, &index, "--half-buffer", &opts->halfBuffer)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--half-buffer", &opts->halfBuffer)) {
             opts->applied->halfBuffer = opts->halfBuffer;
-        } else if (FUN_00234770(args, &index, "--pal-video-mode", &opts->palVideoMode)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--pal-video-mode", &opts->palVideoMode)) {
             opts->applied->palVideoMode = opts->palVideoMode;
-        } else if (thunk_FUN_00234510(args, &index, "--width", &opts->width)) {
+        } else if (igCommandLine_GetDefaultValueInt(args, &index, "--width", &opts->width)) {
             opts->applied->width = opts->width;
-        } else if (thunk_FUN_00234510(args, &index, "--height", &opts->height)) {
+        } else if (igCommandLine_GetDefaultValueInt(args, &index, "--height", &opts->height)) {
             opts->applied->height = opts->height;
-        } else if (thunk_FUN_00234510(args, &index, "--swap-interval", &opts->swapInterval)) {
+        } else if (igCommandLine_GetDefaultValueInt(args, &index, "--swap-interval", &opts->swapInterval)) {
             opts->applied->swapInterval = opts->swapInterval;
-        } else if (thunk_FUN_00234510(args, &index, "--color-bits", &opts->colorBits)) {
+        } else if (igCommandLine_GetDefaultValueInt(args, &index, "--color-bits", &opts->colorBits)) {
             opts->applied->colorBits = opts->colorBits;
-        } else if (thunk_FUN_00234510(args, &index, "--alpha-bits", &opts->alphaBits)) {
+        } else if (igCommandLine_GetDefaultValueInt(args, &index, "--alpha-bits", &opts->alphaBits)) {
             opts->applied->alphaBits = opts->alphaBits;
-        } else if (thunk_FUN_00234510(args, &index, "--depth-bits", &opts->depthBits)) {
+        } else if (igCommandLine_GetDefaultValueInt(args, &index, "--depth-bits", &opts->depthBits)) {
             opts->applied->depthBits = opts->depthBits;
-        } else if (thunk_FUN_00234510(args, &index, "--stencil-bits", &opts->stencilBits)) {
+        } else if (igCommandLine_GetDefaultValueInt(args, &index, "--stencil-bits", &opts->stencilBits)) {
             opts->applied->stencilBits = opts->stencilBits;
-        } else if (FUN_00234770(args, &index, "--report-video-format", &opts->reportVideoFormat)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--report-video-format", &opts->reportVideoFormat)) {
             opts->applied->reportVideoFormat = opts->reportVideoFormat;
-        } else if (FUN_00234770(args, &index, "--show-logo", &opts->showLogo)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--show-logo", &opts->showLogo)) {
             opts->applied->showLogo = opts->showLogo;
-        } else if (FUN_00234770(args, &index, "--show-ui", &opts->showUi)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--show-ui", &opts->showUi)) {
             opts->applied->showUi = opts->showUi;
-        } else if (FUN_00234770(args, &index, "--enable-maya-controls", &opts->enableMayaControls)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--enable-maya-controls", &opts->enableMayaControls)) {
             opts->applied->enableMayaControls = opts->enableMayaControls;
-        } else if (FUN_00234770(args, &index, "--benchmark", &opts->benchmark)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--benchmark", &opts->benchmark)) {
             opts->applied->benchmark = opts->benchmark;
-        } else if (thunk_FUN_00234510(args, &index, "--benchmark-skip-frames", &opts->benchmarkSkipFrames)) {
+        } else if (igCommandLine_GetDefaultValueInt(args, &index, "--benchmark-skip-frames", &opts->benchmarkSkipFrames)) {
             opts->applied->benchmarkSkipFrames = opts->benchmarkSkipFrames;
-        } else if (thunk_FUN_00234510(args, &index, "--benchmark-frames", &opts->benchmarkFrames)) {
+        } else if (igCommandLine_GetDefaultValueInt(args, &index, "--benchmark-frames", &opts->benchmarkFrames)) {
             opts->applied->benchmarkFrames = opts->benchmarkFrames;
-        } else if (FUN_00234770(args, &index, "--column-statistics", &opts->columnStatistics)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--column-statistics", &opts->columnStatistics)) {
             opts->applied->columnStatistics = opts->columnStatistics;
-        } else if (FUN_00234770(args, &index, "--allocate-visual-context-in-scratchpad", &opts->allocateVisualContextInScratchpad)) {
+        } else if (igCommandLine_GetDefaultValueBool(args, &index, "--allocate-visual-context-in-scratchpad", &opts->allocateVisualContextInScratchpad)) {
             opts->applied->allocateVisualContextInScratchpad = opts->allocateVisualContextInScratchpad;
-        } else if (FUN_00234470(args, &index, "-n")) {
+        } else if (igCommandLine_GetOption(args, &index, "-n")) {
             index = index - 1;
             break;
-        } else if (FUN_00234470(args, &index, "--")) {
+        } else if (igCommandLine_GetOption(args, &index, "--")) {
             break;
         } else {
             int isOption;
@@ -782,7 +764,7 @@ void FUN_00235370(ViewerOptions *opts, igStringRefList *args)
             }
             {
                 igStringRef helpRef2 = StringList_CopyRetained(args, 0);
-                FUN_00233c10(helpRef2.p);
+                igCommandLine_PrintUsage(helpRef2.p);
             }
             ReleaseObject(opts->intList);
             opts->intList = 0;
@@ -793,7 +775,7 @@ void FUN_00235370(ViewerOptions *opts, igStringRefList *args)
     }
 
     while (index < argc) {
-        if (!FUN_00234510(args, &index, "-n", &repeat)) {
+        if (!igCommandLine_GetOptionInt(args, &index, "-n", &repeat)) {
             {
                 igStringRef current = StringList_CopyRetained(args, index);
                 if (current.p != 0) {
@@ -820,7 +802,7 @@ void FUN_00235370(ViewerOptions *opts, igStringRefList *args)
     }
 }
 
-void Gap__Insight__igFlushRenderer__vfunc_26(igFlushRendererView *self)
+void igFlushRenderer_Render(igFlushRendererView *self)
 {
     self->_visualContext->vfunc_173();
 }
@@ -834,7 +816,7 @@ static inline int internedPool(void) {
     return (int)g_stringPool;
 }
 
-void FUN_00236140(void) {
+void igInsightCore_UserRegister(void) {
     igSmartPointer<NamedObject> r((NamedObject *)igFolder_Create((int)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
     NamedObject *s0 = r.get();
     int *s1 = (int *)StringPool_Intern((StringPool *)(internedPool()), "plugins");
@@ -866,7 +848,7 @@ static inline const char *textOf(const TextValue *value) {
     return s;
 }
 
-FrameBufferFormat ViewerOptions_GetRequestedFormat(ViewerOptions_2382e0 *options) {
+FrameBufferFormat igInsightCore_CreateRenderDestinationFormat(SharedViewerOptions *options) {
     igSmartPointer<TextValue> text((TextValue *)igStringObj_Create((int)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString))));
     FrameBufferFormat format;
     format.enabled = 1;
@@ -905,10 +887,10 @@ unsigned char g_displayErrorIgnored;
  * scratchpad allocator when the options ask for it) set to the NTSC or PAL video mode, with a
  * frame buffer of the requested format and the options' clear colour. A window that cannot be
  * created ends the program. */
-igSmartPointer<igWindow> Viewer_CreateDisplay(int allocator) {
+igSmartPointer<igWindow> igInsightCore_CreateWindow(int allocator) {
     int windowAllocator;
     int frameBuffer;
-    ViewerOptions_2382e0 *options;
+    SharedViewerOptions *options;
     int contextAllocator;
     const igVisualContextView *context;
     int colorBits;
@@ -918,11 +900,11 @@ igSmartPointer<igWindow> Viewer_CreateDisplay(int allocator) {
     windowAllocator = allocator;
     if (g_sharedViewerOptions == 0) {
         SharedViewerOptions *shared = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
-        if (shared != 0) shared = ViewerOptions_Construct(shared);
+        if (shared != 0) shared = igViewerDefaults_Construct(shared);
         g_sharedViewerOptions = shared;
     }
     g_sharedViewerOptions->useCount++;
-    options = (ViewerOptions_2382e0 *)g_sharedViewerOptions;
+    options = g_sharedViewerOptions;
     igSmartPointer<igWindow> window(igWindow_CreateInstance(windowAllocator));
     if (window.p == 0) {
         if (g_displayErrorIgnored == 0) {
@@ -960,7 +942,7 @@ igSmartPointer<igWindow> Viewer_CreateDisplay(int allocator) {
     }
     if (options->halfBuffer != 0) mode.fullHeight = 0;
     visualContext->setVideoMode(&mode);
-    FrameBufferFormat requested = ViewerOptions_GetRequestedFormat(options);
+    FrameBufferFormat requested = igInsightCore_CreateRenderDestinationFormat(options);
     frameBuffer = visualContext->addFrameBuffer(&requested);
     ((igWindowView *)window.p)->setVisualContext(visualContext);
     if (((igWindowView *)window.p)->open("", options->width, options->height) == 0) {
@@ -974,7 +956,7 @@ igSmartPointer<igWindow> Viewer_CreateDisplay(int allocator) {
         printf("Actual format: color=%d, alpha=%d, depth=%d, stencil=%d\n", colorBits, alphaBits, depthBits, context->getStencilBits(frameBuffer));
     }
     fflush(stdout);
-    visualContext->setClearColor(&options->clearColor);
+    visualContext->setClearColor(options->clearColor);
     visualContext->setCapability0(1);
     releaseSharedOptions();
     return window;

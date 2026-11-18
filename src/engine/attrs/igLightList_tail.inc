@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igLightList__vfunc_22(void) {
+igMetaObject *igLightList_GetMeta(void) {
     return g_igLightList_metaObject;
 }
 

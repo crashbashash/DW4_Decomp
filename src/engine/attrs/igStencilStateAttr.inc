@@ -1,7 +1,7 @@
 igMetaObject *g_igStencilStateAttr_metaObject;
 igMetaField *g_igStencilStateAttr_enabledMetaField;
 
-igMetaObject *FUN_00133430(void) {
+igMetaObject *igStencilStateAttr_GetOrCreateMetaObject(void) {
     if (g_igStencilStateAttr_metaObject == 0) {
         g_igStencilStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -12,7 +12,7 @@ igMetaObject *igStencilStateAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igStencilStateAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00133510();
+        igStencilStateAttr_EnsureRegistered();
     return g_igStencilStateAttr_metaObject;
 }
 
@@ -23,7 +23,7 @@ int igStencilStateAttr_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00133510(void)
+void igStencilStateAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igStencilStateAttr_Register);
 }
@@ -35,7 +35,7 @@ CallbackArray *igStencilStateAttr_Register(void) {
         &g_igStencilStateAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igStencilStateAttr_GetMetaObject,
+        igStencilStateAttr_GetMetaObjectFunction,
         "igStencilStateAttr",
         0x10, /* instance size */
         igStencilStateAttr_GetVTable,
@@ -45,7 +45,7 @@ CallbackArray *igStencilStateAttr_Register(void) {
     );
 }
 
-void thunk_igStencilStateAttr_GetMetaObject(void) {
+void igStencilStateAttr_GetMetaObjectFunction(void) {
     igStencilStateAttr_GetMetaObject();
 }
 
@@ -63,12 +63,12 @@ static int g_igStencilStateAttr_fieldOffsets[] = {
 };
 
 void igStencilStateAttr_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_igStencilStateAttr_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igStencilStateAttr_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_igStencilStateAttr_fieldTable, g_igStencilStateAttr_fieldHandles, g_igStencilStateAttr_fieldOffsets, temp_s1);
+    meta = g_igStencilStateAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igStencilStateAttr_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_igStencilStateAttr_fieldTable, g_igStencilStateAttr_fieldHandles, g_igStencilStateAttr_fieldOffsets, base);
 }
 

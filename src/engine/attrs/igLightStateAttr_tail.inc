@@ -1,13 +1,13 @@
-void Gap__Attrs__igLightStateAttr__vfunc_24(S_13ef30 *arg0, igPsx2VisualContext *arg1) {
+void igLightStateAttr_apply(S_13ef30 *arg0, igPsx2VisualContext *arg1) {
     if (arg0->f16 != 0) {
         if (arg0->f16->f16 == -1) {
             arg0->f16->vX();
         }
-        Gap__Gfx__igPsx2VisualContext__vfunc_79(arg1, arg0->f16->f16, arg0->f20);
+        igPsx2VisualContext_SetLightState(arg1, arg0->f16->f16, arg0->f20);
     }
 }
 
-void Gap__Attrs__igLightStateAttr__vfunc_26(igLightStateAttr *arg0, void **arg1) {
+void igLightStateAttr_SynchronizeDefault(igLightStateAttr *arg0, void **arg1) {
     void *temp_v1;
 
     temp_v1 = (void *)(arg0->_light);
@@ -17,11 +17,11 @@ void Gap__Attrs__igLightStateAttr__vfunc_26(igLightStateAttr *arg0, void **arg1)
 }
 
 /* Setter for the attribute's reflected _enabled flag. */
-void Gap__Attrs__igLightStateAttr__vfunc_32(igLightStateAttr *self, char enabled) {
+void igLightStateAttr_SetState(igLightStateAttr *self, char enabled) {
     self->_enabled = enabled;
 }
 
-void Gap__Attrs__igLightStateAttr__vfunc_29(igLightStateAttr *self) {
+void igLightStateAttr_Setup(igLightStateAttr *self) {
     void **light;
 
     light = (void **)(self->_light);

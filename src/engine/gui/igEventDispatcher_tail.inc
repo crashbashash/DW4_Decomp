@@ -1,4 +1,4 @@
-void Gap__Gui__igEventDispatcher__vfunc_26(Owner *o, int unused, Cur *c) {
+void igEventDispatcher_MouseMotion(Owner *o, int unused, Cur *c) {
     int n = o->m2->m->count;
     int i = 0;
     while (i < n) {
@@ -10,7 +10,7 @@ void Gap__Gui__igEventDispatcher__vfunc_26(Owner *o, int unused, Cur *c) {
     }
 }
 
-void Gap__Gui__igEventDispatcher__vfunc_27(S_4544d0 *arg0, int arg1, int arg2, int arg3) {
+void igEventDispatcher_MouseButtonDown(S_4544d0 *arg0, int arg1, int arg2, int arg3) {
     int n = arg0->m->list->cnt;
     int i;
     for (i = 0; i < n; i++) {
@@ -18,7 +18,7 @@ void Gap__Gui__igEventDispatcher__vfunc_27(S_4544d0 *arg0, int arg1, int arg2, i
     }
 }
 
-void Gap__Gui__igEventDispatcher__vfunc_28(S_454570 *arg0, int a1, int a2, int arg3) {
+void igEventDispatcher_MouseButtonUp(S_454570 *arg0, int a1, int a2, int arg3) {
     int n = arg0->m->list->count;
     int i;
     for (i = 0; i < n; i++) {
@@ -28,7 +28,7 @@ void Gap__Gui__igEventDispatcher__vfunc_28(S_454570 *arg0, int a1, int a2, int a
     }
 }
 
-void Gap__Gui__igEventDispatcher__vfunc_29(O_454610 *arg0, int arg1, int arg2, int arg3) {
+void igEventDispatcher_WindowMove(O_454610 *arg0, int arg1, int arg2, int arg3) {
     int n = arg0->m->list->count;
     int i;
     for (i = 0; i < n; i++) {
@@ -36,7 +36,7 @@ void Gap__Gui__igEventDispatcher__vfunc_29(O_454610 *arg0, int arg1, int arg2, i
     }
 }
 
-void Gap__Gui__igEventDispatcher__vfunc_30(T_4546c0 *arg0, int arg1, int arg2, int arg3) {
+void igEventDispatcher_WindowResize(T_4546c0 *arg0, int arg1, int arg2, int arg3) {
     int temp_s1;
     int var_s0;
 
@@ -48,7 +48,7 @@ void Gap__Gui__igEventDispatcher__vfunc_30(T_4546c0 *arg0, int arg1, int arg2, i
     }
 }
 
-void Gap__Gui__igEventDispatcher__vfunc_31(O_454770 *arg0, V104 *arg1) {
+void igEventDispatcher_WindowClose(O_454770 *arg0, V104 *arg1) {
     int n = arg0->m->list->count;
     int found = 0;
     int i = 0;
@@ -60,7 +60,7 @@ void Gap__Gui__igEventDispatcher__vfunc_31(O_454770 *arg0, V104 *arg1) {
 }
 
 /* matching construct: _receivers/_controllerManager/_objectList/_controllers/_data are 4-byte reference fields in the reflected structs; the casts give the typed views (no layout effect) */
-void Gap__Gui__igEventDispatcher__vfunc_32(igEventDispatcher *arg0, int arg1, int arg2, int arg3, float f0, float f1) {
+void igEventDispatcher_ControllerJoystickMotion(igEventDispatcher *arg0, int arg1, int arg2, int arg3, float f0, float f1) {
     igDataList *l1 = (igDataList *)((igControllerManager *)arg0->_controllerManager)->_controllers;
     K_454820 key(arg2);
     int idx = Finder::Find(l1, key);
@@ -72,7 +72,7 @@ void Gap__Gui__igEventDispatcher__vfunc_32(igEventDispatcher *arg0, int arg1, in
     }
 }
 
-void Gap__Gui__igEventDispatcher__vfunc_33(igEventDispatcher *arg0, int arg1, int arg2, int arg3) {
+void igEventDispatcher_ControllerButtonDown(igEventDispatcher *arg0, int arg1, int arg2, int arg3) {
     igDataList *l1 = (igDataList *)((igControllerManager *)arg0->_controllerManager)->_controllers;
     K_454930 key(arg2);
     int idx = Finder_454930::Find(l1, key);
@@ -84,7 +84,7 @@ void Gap__Gui__igEventDispatcher__vfunc_33(igEventDispatcher *arg0, int arg1, in
     }
 }
 
-void Gap__Gui__igEventDispatcher__vfunc_34(EventDispatcherView *self, int, DispatchKey *key, int arg3) {
+void igEventDispatcher_ControllerButtonUp(EventDispatcherView *self, int, DispatchKey *key, int arg3) {
     int idx;
     int cnt;
     int i;
@@ -97,7 +97,7 @@ void Gap__Gui__igEventDispatcher__vfunc_34(EventDispatcherView *self, int, Dispa
     }
 }
 
-void Gap__Gui__igEventDispatcher__vfunc_35(igEventDispatcher *arg0, int arg1, int arg2, int arg3, float f) {
+void igEventDispatcher_ControllerButtonPressure(igEventDispatcher *arg0, int arg1, int arg2, int arg3, float f) {
     IList *l1 = ((Hold *)arg0->_controllerManager)->l;
     K_454b30 key(arg2);
     int idx = Finder_454b30::Find(l1, key);
@@ -109,7 +109,7 @@ void Gap__Gui__igEventDispatcher__vfunc_35(igEventDispatcher *arg0, int arg1, in
     }
 }
 
-void Gap__Gui__igEventDispatcher__vfunc_39(igEventDispatcher *arg0, int arg1, int arg2, int arg3, float f) {
+void igEventDispatcher_ControllerPointOfView(igEventDispatcher *arg0, int arg1, int arg2, int arg3, float f) {
     igControllerList *l1 = (igControllerList *)((igControllerManager *)arg0->_controllerManager)->_controllers;
     K_454c30 key(arg2);
     int idx = Finder_454c30::Find(l1, key);
@@ -121,7 +121,7 @@ void Gap__Gui__igEventDispatcher__vfunc_39(igEventDispatcher *arg0, int arg1, in
     }
 }
 
-void Gap__Gui__igEventDispatcher__vfunc_38(EventDispatcherView *self, int, DispatchKey *key, int arg3, float f) {
+void igEventDispatcher_ControllerSlider(EventDispatcherView *self, int, DispatchKey *key, int arg3, float f) {
     igTDataList<DispatchKey *> *l = self->keys->list;
     int idx = l->find(key);
     int n = self->receivers->list->_count;
@@ -131,7 +131,7 @@ void Gap__Gui__igEventDispatcher__vfunc_38(EventDispatcherView *self, int, Dispa
     }
 }
 
-void Gap__Gui__igEventDispatcher__vfunc_36(igEventDispatcher *arg0, int arg1, int arg2) {
+void igEventDispatcher_ControllerConnection(igEventDispatcher *arg0, int arg1, int arg2) {
     igControllerList *l1 = (igControllerList *)((igControllerManager *)arg0->_controllerManager)->_controllers;
     K_454e30 key(arg2);
     int idx = Finder_454e30::Find(l1, key);
@@ -144,7 +144,7 @@ void Gap__Gui__igEventDispatcher__vfunc_36(igEventDispatcher *arg0, int arg1, in
     }
 }
 
-void Gap__Gui__igEventDispatcher__vfunc_37(EventDispatcherView *self, int, DispatchKey *key) {
+void igEventDispatcher_ControllerDisconnection(EventDispatcherView *self, int, DispatchKey *key) {
     igTDataList<DispatchKey *> *l = self->keys->list;
     int idx = l->find(key);
     int n = self->receivers->list->_count;
@@ -154,7 +154,7 @@ void Gap__Gui__igEventDispatcher__vfunc_37(EventDispatcherView *self, int, Dispa
     }
 }
 
-void Gap__Gui__igEventDispatcher__vfunc_40(O_455010 *arg0, int arg1, int arg2) {
+void igEventDispatcher_KeyDown(O_455010 *arg0, int arg1, int arg2) {
     int n;
     int i;
     E_455010 *e;
@@ -167,7 +167,7 @@ void Gap__Gui__igEventDispatcher__vfunc_40(O_455010 *arg0, int arg1, int arg2) {
     }
 }
 
-void Gap__Gui__igEventDispatcher__vfunc_41(int *arg0, int arg1, int arg2) {
+void igEventDispatcher_KeyUp(int *arg0, int arg1, int arg2) {
     int temp_s1;
     int var_s0;
     A_4550b0 *temp_a0;

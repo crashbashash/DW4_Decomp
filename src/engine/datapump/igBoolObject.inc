@@ -5,7 +5,7 @@ igMetaObject *igBoolObject_GetMetaObject(void)
 {
     igMetaObject *g = g_igBoolObject_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001e5ce0();
+        igBoolObject_EnsureRegistered();
     return g_igBoolObject_metaObject;
 }
 
@@ -16,7 +16,7 @@ int igBoolObject_GetVTable(void) {
     return *(int *)((char *)&o.vt + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_001e5ce0(void)
+void igBoolObject_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igBoolObject_Register);
 }
@@ -28,7 +28,7 @@ CallbackArray *igBoolObject_Register(void) {
         &g_igBoolObject_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igBoolObject_GetMetaObject,
+        igBoolObject_GetMetaObjectFunction,
         "igBoolObject",
         0xC, /* instance size */
         igBoolObject_GetVTable,
@@ -38,7 +38,7 @@ CallbackArray *igBoolObject_Register(void) {
     );
 }
 
-void thunk_igBoolObject_GetMetaObject(void) {
+void igBoolObject_GetMetaObjectFunction(void) {
     igBoolObject_GetMetaObject();
 }
 
@@ -66,7 +66,7 @@ void igBoolObject_InitFields(void) {
 }
 
 /* matching construct: declaration-order sweep — v, scale, count, i order */
-void FUN_001e5de0(Vec3fList *list, unsigned short *out, float base, float range) {
+void igCompressVec3fListRange(Vec3fList *list, unsigned short *out, float base, float range) {
     float *v;
     float scale;
     int count;
@@ -96,7 +96,7 @@ static inline void extend(float value, float *minimum, float *maximum) {
     }
 }
 
-void FUN_001e5f00(Vec3fList *list, unsigned short *quantized, float *minimum, float *range) {
+void igCompressVec3fList(Vec3fList *list, unsigned short *quantized, float *minimum, float *range) {
     int i;
     int count;
     float maximum;
@@ -117,10 +117,10 @@ void FUN_001e5f00(Vec3fList *list, unsigned short *quantized, float *minimum, fl
         extend(z, minimum, &maximum);
     }
     *range = maximum - *minimum;
-    FUN_001e5de0(list, quantized, *minimum, *range);
+    igCompressVec3fListRange(list, quantized, *minimum, *range);
 }
 
-void FUN_001e5fe0(igQuaternionfList *list, short *quantized, float minimum, float range) {
+void igCompressVec4fListRange(igQuaternionfList *list, short *quantized, float minimum, float range) {
     const float *q;
     float scale;
     int count;
@@ -145,7 +145,7 @@ void FUN_001e5fe0(igQuaternionfList *list, short *quantized, float minimum, floa
     }
 }
 
-void FUN_001e6130(igQuaternionfList *list, short *quantized, float *minimum, float *range) {
+void igCompressVec4fList(igQuaternionfList *list, short *quantized, float *minimum, float *range) {
     int i;
     int count;
     float maximum;
@@ -169,6 +169,6 @@ void FUN_001e6130(igQuaternionfList *list, short *quantized, float *minimum, flo
         extend(w, minimum, &maximum);
     }
     *range = maximum - *minimum;
-    FUN_001e5fe0(list, quantized, *minimum, *range);
+    igCompressVec4fListRange(list, quantized, *minimum, *range);
 }
 

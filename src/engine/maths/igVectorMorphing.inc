@@ -1,6 +1,6 @@
 igMetaObject *g_igVectorMorphing_metaObject;
 
-igMetaObject *FUN_00186db0(void)
+igMetaObject *igVectorMorphing_GetMetaObject(void)
 {
     igMetaObject *meta = g_igVectorMorphing_metaObject;
     bool ready;
@@ -10,7 +10,7 @@ igMetaObject *FUN_00186db0(void)
         if (ready != false)
             goto end;
     }
-    FUN_00186e40();
+    igVectorMorphing_EnsureRegistered();
 end:
     return g_igVectorMorphing_metaObject;
 }
@@ -22,7 +22,7 @@ int igVectorMorphing_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00186e40(void)
+void igVectorMorphing_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVectorMorphing_Register);
 }
@@ -44,8 +44,8 @@ CallbackArray *igVectorMorphing_Register(void) {
     );
 }
 
-void thunk_FUN_00186db0(void) {
-    FUN_00186db0();
+void igVectorMorphing_GetMetaObjectFunction(void) {
+    igVectorMorphing_GetMetaObject();
 }
 
 void FUN_00186ed0(void) {

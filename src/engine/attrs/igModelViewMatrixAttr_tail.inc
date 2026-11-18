@@ -1,5 +1,5 @@
-void Gap__Attrs__igModelViewMatrixAttr__vfunc_24(char * arg0, igPsx2VisualContext *arg1) {
-    Gap__Gfx__igPsx2VisualContext__vfunc_203(arg1, 1, (char *)(arg0 + 12));
+void igModelViewMatrixAttr_apply(char * arg0, igPsx2VisualContext *arg1) {
+    igPsx2VisualContext_SetMatrix(arg1, 1, (char *)(arg0 + 12));
 }
 
 void FUN_0013f670(void) {
@@ -16,18 +16,18 @@ igModelViewMatrixAttr *FUN_0013f680(void) {
     return g_igModelViewMatrixAttr_instance;
 }
 
-void FUN_0013f730(void) {
+void igModelViewMatrixAttr_UserUnregister(void) {
     g_igModelViewMatrixAttr_instance.clear();
 }
 
-void Gap__Attrs__igModelViewMatrixAttr__vfunc_26(void *arg0, void *arg1) {
+void igModelViewMatrixAttr_SynchronizeDefault(void *arg0, void *arg1) {
     float m[16];
     igMatrix44f_SetIdentity(m);
     ((VA *)arg1)->vX(1, m);
     ((VB_13f790 *)arg0)->vY(m);
 }
 
-void Gap__Attrs__igModelViewMatrixAttr__vfunc_32(igModelViewMatrixAttr *self, const float *matrix) {
+void igModelViewMatrixAttr_SetMatrix(igModelViewMatrixAttr *self, const float *matrix) {
     igMatrix44f_Copy(self->_m, matrix);
 }
 

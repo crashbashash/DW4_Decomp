@@ -1,6 +1,6 @@
 igMetaObject *g_igSkeletonBoneInfoList_metaObject;
 
-igMetaObject *FUN_001987f0(void) {
+igMetaObject *igSkeletonBoneInfoList_GetOrCreateMetaObject(void) {
     if (g_igSkeletonBoneInfoList_metaObject == 0) {
         g_igSkeletonBoneInfoList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -37,7 +37,7 @@ CallbackArray *igSkeletonBoneInfoList_Register(void) {
         &g_igSkeletonBoneInfoList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igSkeletonBoneInfoList_GetMetaObject,
+        igSkeletonBoneInfoList_GetMetaObjectFunction,
         "igSkeletonBoneInfoList",
         0x14, /* instance size */
         igSkeletonBoneInfoList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igSkeletonBoneInfoList_Register(void) {
     );
 }
 
-void thunk_igSkeletonBoneInfoList_GetMetaObject(void) {
+void igSkeletonBoneInfoList_GetMetaObjectFunction(void) {
     igSkeletonBoneInfoList_GetMetaObject();
 }
 

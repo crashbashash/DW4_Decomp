@@ -34,22 +34,22 @@ extern igPickMode *g_pickingMode[4];
 typedef struct ViewModelEvent { int type; void *sender; igMetaField *field; } ViewModelEvent;
 enum { VIEW_MODEL_FIELD_CHANGED = 2 };
 
-/* igViewMode's own virtual methods past igObject's; what slots 29 and 30 are for has not been named.
- * ABI view only: never instantiated. */
+/* igViewMode's own virtual methods past igObject's: slots 29 and 30 are the start and stop every mode
+ * overrides (igCameraMode_OnAttach, igCameraMode_OnDetach). ABI view only: never instantiated. */
 class igViewModeDispatchView : public igObjectDispatchView {
 public:
     virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28();
-    virtual void vfunc_31();                                                /* slot 29 */
-    virtual void vfunc_32();                                                /* slot 30 */
+    virtual void OnAttach();                                                /* slot 29 */
+    virtual void OnDetach();                                                /* slot 30 */
 };
-/* igIntersectTraversal's virtual slots 23 and 25, which have no recovered names.
+/* igIntersectTraversal's traversal entry (slot 23) and time setter (slot 25).
  * ABI view only: never instantiated. */
 class igIntersectTraversalDispatchView : public igObjectDispatchView {
 public:
     virtual void d21(); virtual void d22();
-    virtual void vfunc_25(int scene);                                       /* slot 23 */
+    virtual void Apply(int scene);                                          /* slot 23 */
     virtual void d24();
-    virtual void vfunc_27(long long time);                                  /* slot 25 */
+    virtual void SetTimeAsLong(long long time);                             /* slot 25 */
 };
 
 /* What an intersect traversal hands its hit callback. */
@@ -118,11 +118,11 @@ static inline void setHitPath(igPickMode *pickMode, const igSmartPointer<igGraph
 }
 static inline igGraphPath *createGraphPath() { AdoptReference tag = AdoptReference(); return igGraphPath_Create(0); }
 
-void Gap__Bec__beCameraMode__vfunc_21(igViewMode *self, igObject *model) {
+void igViewMode_IsCompatible(igViewMode *self, igObject *model) {
     igObject_IsKindOf(model, g_igViewModel_metaObject);
 }
 
-void Gap__Bec__beCameraMode__vfunc_22(igViewModeDispatchView *self, ViewModelEvent *event) {
+void igViewMode_OnModelChange(igViewModeDispatchView *self, ViewModelEvent *event) {
     igMetaField *field = event->field;
     int type;
     if (field == g_igViewModel_viewMatrixMetaField) {
@@ -139,9 +139,9 @@ void Gap__Bec__beCameraMode__vfunc_22(igViewModeDispatchView *self, ViewModelEve
     if (type == 0) {
         igViewMode_UpdateInverseMatrix((igViewMode *)self);
         igViewMode_UpdateModelVectors((igViewMode *)self);
-        self->vfunc_31();
+        self->OnAttach();
     } else if (type == 1) {
-        self->vfunc_32();
+        self->OnDetach();
     }
 }
 
@@ -582,7 +582,7 @@ void Gap__Viewer__igRotateMode__ApplyDrag(igRotateMode *state, const float *delt
     }
 }
 
-void FUN_004660f0(igRotateMode *state, const float *delta) {
+void igRotateMode_MouseMotionNormal(igRotateMode *state, const float *delta) {
     igViewModel *model = (igViewModel *)state->_model;
 
     if (state->_leftMouseActive) {
@@ -845,9 +845,9 @@ void igPickMode_Pick(igPickMode *self) {
     }
     self->_hitPath = 0;
     igIntersectTraversal_ResetStacks((igIntersectTraversal *)((igIntersectTraversalDispatchView *)self->_intersectTraversal));
-    ((igIntersectTraversalDispatchView *)self->_intersectTraversal)->vfunc_27(model->_drawTime);
+    ((igIntersectTraversalDispatchView *)self->_intersectTraversal)->SetTimeAsLong(model->_drawTime);
     g_pickingMode[0] = self;
-    ((igIntersectTraversalDispatchView *)self->_intersectTraversal)->vfunc_25(((igViewerParameters *)self->_parameters)->_scene);
+    ((igIntersectTraversalDispatchView *)self->_intersectTraversal)->Apply(((igViewerParameters *)self->_parameters)->_scene);
     g_pickingMode[0] = 0;
     selected = &((igViewerParameters *)self->_parameters)->_selectedObject;
     hitPath = (igObject *)self->_hitPath;

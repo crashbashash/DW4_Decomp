@@ -1,8 +1,8 @@
-igMetaObject *Gap__Attrs__igViewportAttr__vfunc_22(void) {
+igMetaObject *igViewportAttr_GetMeta(void) {
     return g_igViewportAttr_metaObject;
 }
 
-void Gap__Attrs__igViewportAttr__vfunc_32(igViewportAttr *arg0, int arg1, int arg2, int arg3, int arg4, float fparg0, float fparg1) {
+void igViewportAttr_SetRegion(igViewportAttr *arg0, int arg1, int arg2, int arg3, int arg4, float fparg0, float fparg1) {
     arg0->_x = arg1;
     arg0->_y = arg2;
     arg0->_w = arg3;
@@ -11,11 +11,11 @@ void Gap__Attrs__igViewportAttr__vfunc_32(igViewportAttr *arg0, int arg1, int ar
     arg0->_farZ = fparg1;
 }
 
-void FUN_001422a0(void) {
+void igAttr_ApplyToContext(void) {
 
 }
 
-void FUN_001422b0(void) {
+void igAttr_SynchronizeDefaultFromContext(void) {
 
 }
 

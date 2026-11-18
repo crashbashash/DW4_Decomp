@@ -8,6 +8,7 @@
 #include "dw4/p2/p2timer.h"
 #include "dw4/p2/dmaChannel.h"
 #include "dw4/sony/libkernl.h"
+#include "dw4/p2/p2textureCalls.h"
 extern long long DAT_00562cc0[4];
 extern int DAT_005690ac[4];
 extern int DAT_005690b0[4];
@@ -41,7 +42,6 @@ extern long long DAT_0056b5e0[4];
 extern long long DAT_0056b5e8[4];
 extern long long DAT_0056b5f0[4];
 extern long long DAT_0056bfa0[4];
-extern long long DAT_0056c068[4];
 extern long long DAT_0056c070[4];
 extern int DAT_0056c150[4];
 extern int DAT_0056c154[4];
@@ -50,8 +50,8 @@ extern int DAT_0056c168[4];
 extern unsigned int DAT_00490f50, DAT_00490f54, DAT_00490f58, DAT_00490f5c, DAT_00490f60, DAT_00490f68, DAT_00490f70;
 extern unsigned int DAT_00569328;
 extern const char DAT_004e5110[];
-extern long long DAT_0056ae38[4];
-void FUN_001f76f0(int count, int *regs);
+/* The newest VIF1 sequence the GS has finished drawing, as p2RecordFinishedSequence records it. */
+extern long long p2FinishedSequence[4];
 void FUN_001f7e90(int count, int *regs, int flush);
 int FUN_001f78d0();
 typedef union DmaTag {
@@ -152,7 +152,7 @@ enum GsPrivRegister {
 #define GS_SIGLBLID (*(long long *)0x12001080)
 extern int DAT_00491278[4];
 
-void FUN_001f6f50(void *arg0) {
+void p2GetStatistics(void *arg0) {
     int sp2C;
     int temp_a1;
 
@@ -160,7 +160,7 @@ void FUN_001f6f50(void *arg0) {
     *(long long *)((char *)arg0 + 8) = p2PrimitiveCount;
     *(long long *)((char *)arg0 + 384) = DAT_00569260[0];
     *(long long *)((char *)arg0 + 392) = DAT_00569268[0];
-    *(long long *)((char *)arg0 + 16) = DAT_0056c068[0];
+    *(long long *)((char *)arg0 + 16) = p2StatTextureBinds;
     *(long long *)((char *)arg0 + 24) = DAT_0056c070[0];
     p2GetTextureBase((int *)&sp2C);
     sp2C = (0x4000 - sp2C) << 8;
@@ -298,12 +298,12 @@ void FUN_001f7370(float value) {
     }
 }
 
-void FUN_001f7470(int arg0) {
+void p2SetPolygonMode(int arg0) {
     *(int *)0x490D38 = arg0;
     *(int *)0x491478 = (int) (*(int *)0x491478 | 0x19);
 }
 
-void FUN_001f7490(void) {
+void p2PrintGsRevision(void) {
     long long temp_v0;
     int a, b;
     temp_v0 = p2readGSPrivRegister(0x40);
@@ -312,21 +312,20 @@ void FUN_001f7490(void) {
     printf(DAT_004e5110, a, b);
 }
 
-int FUN_001f74e0(long long t)
+int p2SequenceFinishedPredicate(long long sequence)
 {
-    return DAT_0056ae38[0] >= t;
+    return p2FinishedSequence[0] >= sequence;
 }
 
-void FUN_001f7500(void *arg0) {
-    long long temp_a0;
+void p2RecordFinishedSequence(p2FinishFunc *finish, int arg) {
+    long long sequence;
 
-    temp_a0 = *(long long *)((char *)(arg0) + 8);
-    if (DAT_0056ae38[0] < temp_a0) {
-        DAT_0056ae38[0] = temp_a0;
+    sequence = finish->sequence;
+    if (p2FinishedSequence[0] < sequence) {
+        p2FinishedSequence[0] = sequence;
     }
 }
 
-void FUN_001f8190(int registerIndex);
 
 typedef struct {
     unsigned long long SIGNAL:1;
@@ -354,17 +353,17 @@ extern int DAT_0056ae90;
 extern int DAT_0056ae30;
 extern int DAT_0056ae28;
 
-int FUN_001f7530(int cause) {
+int p2GsInterruptHandler(int cause) {
     long long status;
 
     DAT_0056ade0 = -1;
-    FUN_001f8190(0x41);
+    p2writeGSPrivRegister(0x41);
     status = p2readGSPrivRegister(0x40);
     DAT_0056ae90++;
     DAT_0056ada0.FINISH = (status & 2) ? 1 : 0;
     DAT_0056ada0.VSINT = (status & 8) ? 1 : 0;
     DAT_0056ada0.SIGNAL = (status & 1) ? 1 : 0;
-    FUN_001f8190(0x40);
+    p2writeGSPrivRegister(0x40);
     if (p2DisplayClosing == 0) {
         if (status & 2) {
             p2FinishHandler();
@@ -379,7 +378,7 @@ int FUN_001f7530(int cause) {
         }
     }
     DAT_0056ade0 = -0xB01;
-    FUN_001f8190(0x41);
+    p2writeGSPrivRegister(0x41);
     __asm__ __volatile__("sync\nei\n");
     return 0;
 }
@@ -388,10 +387,10 @@ void p2SendGsRegister(int arg0) {
     int sp1C;
 
     sp1C = arg0;
-    FUN_001f76f0(1, &sp1C);
+    p2UploadGsRegisters(1, &sp1C);
 }
 
-void FUN_001f76f0(int count, int *regs) {
+void p2UploadGsRegisters(int count, int *regs) {
     int n;
 
     if (p2CurrentProgram == 0) {
@@ -605,7 +604,7 @@ long long p2readGSPrivRegister(int registerIndex) {
     }
 }
 
-void FUN_001f8190(int arg0) {
+void p2writeGSPrivRegister(int arg0) {
     switch (arg0) {
     case 0:
         *(long long *)0x12000000 = *(long long *)0x0056adf0;
@@ -661,20 +660,20 @@ void FUN_001f8320(void) {
 int AddIntcHandler(int cause, int (*handler)(int cause), int next);
 extern int p2FirstOpen;
 
-void FUN_001f8350(void) {
+void p2InitGsInterrupt(void) {
     VifCode unpack = { 0x8000, 0, 0x6c };
     VifCode nop = { 0 };
     VifCode mark = { 2, 0, 7 };
     VifCode mscal = { 0, 0, 0x14 };
     VifCode flusha = { 0, 0, 0x13 };
 
-    p2GsIntcHandlerId = AddIntcHandler(0, FUN_001f7530, 0);
+    p2GsIntcHandlerId = AddIntcHandler(0, p2GsInterruptHandler, 0);
     if (p2FirstOpen != 0) {
-        FUN_001f7490();
+        p2PrintGsRevision();
     }
     EnableIntc(0);
     *(int *)0x10003010 = 4;
-    DAT_0056ae38[0] = 0;
+    p2FinishedSequence[0] = 0;
     DAT_0056aea0.code[0].word = nop.word;
     DAT_0056aea0.code[1].word = nop.word;
     DAT_0056aea0.code[2].word = mark.word;
@@ -685,7 +684,7 @@ void FUN_001f8350(void) {
     DAT_0056aeb0.code[3].word = flusha.word;
 }
 
-void FUN_001f8490(void) {
+void p2InitGsRegisterAddresses(void) {
     *(char *)0x56AE50 = 0;
     *(char *)0x56AE51 = 1;
     *(char *)0x56AE52 = 2;
@@ -743,17 +742,17 @@ void FUN_001f8490(void) {
     *(char *)0x56AE88 = 0x7F;
 }
 
-int FUN_001f8730(void)
+int p2GetActiveLightCount(void)
 {
     return *(int *)0x0056aef0;
 }
 
-int FUN_001f8740(void)
+int p2GetActivePointLightCount(void)
 {
     return *(int *)0x0056aef8;
 }
 
-void FUN_001f8750(int arg0) {
+void p2SetMaterialSpecularState(int arg0) {
     DAT_00491278[0] = arg0;
     p2DirtyFlags |= 0x84;
     p2StatLightingModeSets += 1;

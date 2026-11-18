@@ -7,7 +7,7 @@ igMetaField *g_igPsx2VertexArray1_1_lSequenceMetaField;
 igMetaField *g_igPsx2VertexArray1_1_textureCoordCompiledMetaField;
 igMetaField *g_igPsx2VertexArray1_1_multipassCompiledMetaField;
 
-void thunk_igPsx2VertexArray1_1_GetMetaObject(void) {
+void igPsx2VertexArray1_1_GetMetaObjectFunction(void) {
     igPsx2VertexArray1_1_GetMetaObject();
 }
 

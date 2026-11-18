@@ -1,6 +1,6 @@
 igMetaObject *g_igPrimLengthArray1_1_metaObject;
 
-igMetaObject *FUN_0014bde0(void)
+igMetaObject *igPrimLengthArray1_1_GetMetaObject(void)
 {
     unsigned char ready;
     if (g_igPrimLengthArray1_1_metaObject != 0) {
@@ -32,7 +32,7 @@ CallbackArray *igPrimLengthArray1_1_Register(void) {
         &g_igPrimLengthArray1_1_metaObject,
         igPrimLengthArray_Register,
         igPrimLengthArray_GetPublishedMetaObject,
-        thunk_FUN_0014bde0,
+        igPrimLengthArray1_1_GetMetaObjectFunction,
         "igPrimLengthArray1_1",
         0x14, /* instance size */
         igPrimLengthArray1_1_GetVTable,
@@ -42,11 +42,11 @@ CallbackArray *igPrimLengthArray1_1_Register(void) {
     );
 }
 
-void thunk_FUN_0014bde0(void) {
-    FUN_0014bde0();
+void igPrimLengthArray1_1_GetMetaObjectFunction(void) {
+    igPrimLengthArray1_1_GetMetaObject();
 }
 
-igMetaObject *FUN_0014bf00(void) {
+igMetaObject *igPrimLengthArray_GetPublishedMetaObject(void) {
     return g_igPrimLengthArray_metaObject;
 }
 

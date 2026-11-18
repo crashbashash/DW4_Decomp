@@ -1,4 +1,4 @@
-igMetaObject *Gap__Gfx__igPsx2VertexStream__vfunc_22(void) {
+igMetaObject *igPsx2VertexStream_GetMeta(void) {
     return g_igPsx2VertexStream_metaObject;
 }
 

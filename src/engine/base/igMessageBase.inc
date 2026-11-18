@@ -28,7 +28,7 @@ CallbackArray *igMessageBase_Register(void) {
         &g_igMessageBase_metaObject,
         (igMetaObjectRegisterFunction)igBase_Register,
         (igMetaObjectGetFunction)igBase_GetPublishedMetaObject,
-        thunk_igMessageBase_GetMetaObject,
+        igMessageBase_GetMetaObjectFunction,
         "igMessageBase",
         0x20, /* instance size */
         igMessageBase_GetVTable,
@@ -38,11 +38,11 @@ CallbackArray *igMessageBase_Register(void) {
     );
 }
 
-void thunk_igMessageBase_GetMetaObject(void) {
+void igMessageBase_GetMetaObjectFunction(void) {
     igMessageBase_GetMetaObject();
 }
 
-igMetaObject *FUN_002265d0(void) {
+igMetaObject *igInterfaced_GetPublishedMetaObject(void) {
     return g_igInterfaced_metaObject;
 }
 

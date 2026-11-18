@@ -1,4 +1,4 @@
-int Gap__Gfx__igVertexArray2Helper__vfunc_22(void) {
+int igVertexArray2Helper_GetMeta(void) {
     return (int)g_igVertexArray2Helper_metaObject;
 }
 

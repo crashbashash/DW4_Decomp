@@ -1,7 +1,7 @@
 igMetaObject *g_igNormalizeNormalsStateAttr_metaObject;
 igMetaField *g_igNormalizeNormalsStateAttr_enabledMetaField;
 
-igMetaObject *FUN_00134fb0(void) {
+igMetaObject *igNormalizeNormalsStateAttr_GetOrCreateMetaObject(void) {
     if (g_igNormalizeNormalsStateAttr_metaObject == 0) {
         g_igNormalizeNormalsStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -35,7 +35,7 @@ CallbackArray *igNormalizeNormalsStateAttr_Register(void) {
         &g_igNormalizeNormalsStateAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igNormalizeNormalsStateAttr_GetMetaObject,
+        igNormalizeNormalsStateAttr_GetMetaObjectFunction,
         "igNormalizeNormalsStateAttr",
         0x10, /* instance size */
         igNormalizeNormalsStateAttr_GetVTable,
@@ -45,7 +45,7 @@ CallbackArray *igNormalizeNormalsStateAttr_Register(void) {
     );
 }
 
-void thunk_igNormalizeNormalsStateAttr_GetMetaObject(void) {
+void igNormalizeNormalsStateAttr_GetMetaObjectFunction(void) {
     igNormalizeNormalsStateAttr_GetMetaObject();
 }
 
@@ -63,12 +63,12 @@ static int g_igNormalizeNormalsStateAttr_fieldOffsets[] = {
 };
 
 void igNormalizeNormalsStateAttr_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_igNormalizeNormalsStateAttr_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igNormalizeNormalsStateAttr_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_igNormalizeNormalsStateAttr_fieldTable, g_igNormalizeNormalsStateAttr_fieldHandles, g_igNormalizeNormalsStateAttr_fieldOffsets, temp_s1);
+    meta = g_igNormalizeNormalsStateAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igNormalizeNormalsStateAttr_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_igNormalizeNormalsStateAttr_fieldTable, g_igNormalizeNormalsStateAttr_fieldHandles, g_igNormalizeNormalsStateAttr_fieldOffsets, base);
 }
 

@@ -6,7 +6,7 @@ igMetaField *g_igFont_baseLineMetaField;
 igMetaField *g_igFont_attrListMetaField;
 igMetaField *g_igFont_vertexFlagsMetaField;
 
-igMetaObject *FUN_004507f0(void) {
+igMetaObject *igFont_GetOrCreateMetaObject(void) {
     if (g_igFont_metaObject == 0) {
         g_igFont_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -35,7 +35,7 @@ CallbackArray *igFont_Register(void) {
         &g_igFont_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igFont_GetMetaObject,
+        igFont_GetMetaObjectFunction,
         "igFont",
         0x1C, /* instance size */
         0,
@@ -45,7 +45,7 @@ CallbackArray *igFont_Register(void) {
     );
 }
 
-void thunk_igFont_GetMetaObject(void) {
+void igFont_GetMetaObjectFunction(void) {
     igFont_GetMetaObject();
 }
 

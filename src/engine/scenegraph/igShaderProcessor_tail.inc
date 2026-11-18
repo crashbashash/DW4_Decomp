@@ -1,4 +1,4 @@
-igMetaObject *Gap__Sg__igShaderProcessor__vfunc_22(void) {
+igMetaObject *igShaderProcessor_GetMeta(void) {
     return g_igShaderProcessor_metaObject;
 }
 

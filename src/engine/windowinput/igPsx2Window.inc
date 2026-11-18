@@ -12,7 +12,7 @@ igMetaField *g_igPsx2Window_bppMetaField;
 igMetaField *g_igPsx2Window_alphaMetaField;
 igMetaField *g_igPsx2Window_bppDepthMetaField;
 
-igMetaObject *FUN_00146a60(void)
+igMetaObject *igPsx2Window_GetMetaObject(void)
 {
     igMetaObject *meta = g_igPsx2Window_metaObject;
     bool ready;
@@ -22,7 +22,7 @@ igMetaObject *FUN_00146a60(void)
         if (ready != false)
             goto end;
     }
-    FUN_00146b80();
+    igPsx2Window_EnsureRegistered();
 end:
     return g_igPsx2Window_metaObject;
 }
@@ -67,7 +67,7 @@ int igPsx2Window_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00146b80(void)
+void igPsx2Window_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2Window_Register);
 }
@@ -81,7 +81,7 @@ CallbackArray *igPsx2Window_Register(void) {
         &g_igPsx2Window_metaObject,
         igWindow_Register,
         igWindow_GetPublishedMetaObject,
-        thunk_FUN_00146a60,
+        igPsx2Window_GetMetaObjectFunction,
         "igPsx2Window",
         sizeof(igPsx2Window),                     /* Instance size. */
         igPsx2Window_GetVTable,
@@ -91,7 +91,7 @@ CallbackArray *igPsx2Window_Register(void) {
     );
 }
 
-igMetaObject *FUN_00146c10(void) {
+igMetaObject *igWindow_GetPublishedMetaObject(void) {
     return g_igWindow_metaObject;
 }
 
@@ -171,6 +171,6 @@ void igPsx2Window_InitFields(void) {
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 0xA), 8);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 0xB), 0x20);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igPsx2Window_fieldTable, g_igPsx2Window_fieldHandles, g_igPsx2Window_fieldOffsets, temp_s2);
-    *(int *)((char *)(g_igPsx2Window_metaObject) + 64) = (int)thunk_igWindow_GetMetaObject;
+    *(int *)((char *)(g_igPsx2Window_metaObject) + 64) = (int)igWindow_GetMetaObjectFunction;
 }
 

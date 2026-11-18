@@ -1,7 +1,7 @@
 igMetaObject *g_igSetRenderDestinationAttr_metaObject;
 igMetaField *g_igSetRenderDestinationAttr_pRDAttrMetaField;
 
-igMetaObject *FUN_00133b70(void) {
+igMetaObject *igSetRenderDestinationAttr_GetOrCreateMetaObject(void) {
     if (g_igSetRenderDestinationAttr_metaObject == 0) {
         g_igSetRenderDestinationAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -67,7 +67,7 @@ CallbackArray *igSetRenderDestinationAttr_Register(void) {
         &g_igSetRenderDestinationAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igSetRenderDestinationAttr_GetMetaObject,
+        igSetRenderDestinationAttr_GetMetaObjectFunction,
         "igSetRenderDestinationAttr",
         0x10, /* instance size */
         igSetRenderDestinationAttr_GetVTable,
@@ -77,7 +77,7 @@ CallbackArray *igSetRenderDestinationAttr_Register(void) {
     );
 }
 
-void thunk_igSetRenderDestinationAttr_GetMetaObject(void) {
+void igSetRenderDestinationAttr_GetMetaObjectFunction(void) {
     igSetRenderDestinationAttr_GetMetaObject();
 }
 
@@ -95,15 +95,15 @@ static int g_igSetRenderDestinationAttr_fieldOffsets[] = {
 };
 
 void igSetRenderDestinationAttr_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    igMetaObject *meta;
 
-    temp_s0 = g_igSetRenderDestinationAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igSetRenderDestinationAttr_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001341f0();
-    igMetaObject_NameFields(temp_s0, g_igSetRenderDestinationAttr_fieldTable, g_igSetRenderDestinationAttr_fieldHandles, g_igSetRenderDestinationAttr_fieldOffsets, temp_s2);
+    meta = g_igSetRenderDestinationAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igSetRenderDestinationAttr_ctorTable, 1);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igRenderDestinationAttr_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_igSetRenderDestinationAttr_fieldTable, g_igSetRenderDestinationAttr_fieldHandles, g_igSetRenderDestinationAttr_fieldOffsets, base);
 }
 

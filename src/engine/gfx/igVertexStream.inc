@@ -14,7 +14,7 @@ static int g_igVertexStream_vertexStreamCompileModeValues[] = {
 };
 igMetaEnum *g_igVertexStream_vertexStreamCompileModeMetaEnum;
 
-int FUN_0014ad00(void) {
+int IG_VERTEX_STREAM_COMPILE_MODE_GetMetaEnum(void) {
     if (g_igVertexStream_vertexStreamCompileModeMetaEnum == 0) {
         g_igVertexStream_vertexStreamCompileModeMetaEnum = igMetaEnum_Create("IG_VERTEX_STREAM_COMPILE_MODE", g_igVertexStream_vertexStreamCompileModeNames, g_igVertexStream_vertexStreamCompileModeValues, 3);
     }
@@ -29,19 +29,19 @@ static int g_igVertexStream_vertexAccessModeValues[] = {
 };
 igMetaEnum *g_igVertexStream_vertexAccessModeMetaEnum;
 
-int FUN_0014ad60(void) {
+int IG_VERTEX_ACCESS_MODE_GetMetaEnum(void) {
     if (g_igVertexStream_vertexAccessModeMetaEnum == 0) {
         g_igVertexStream_vertexAccessModeMetaEnum = igMetaEnum_Create("IG_VERTEX_ACCESS_MODE", g_igVertexStream_vertexAccessModeNames, g_igVertexStream_vertexAccessModeValues, 4);
     }
     return (int)g_igVertexStream_vertexAccessModeMetaEnum;
 }
 
-int FUN_0014adc0(int arg0) {
-    FUN_0014af80();
+int igVertexStream_Create(int arg0) {
+    igVertexStream_EnsureRegistered();
     return (int)igMetaObject_CreateInstance(g_igVertexStream_metaObject, (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *FUN_0014ae00(void) {
+igMetaObject *igVertexStream_GetOrCreateMetaObject(void) {
     if (g_igVertexStream_metaObject == 0) {
         g_igVertexStream_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -52,7 +52,7 @@ igMetaObject *igVertexStream_GetMetaObject(void)
 {
     igMetaObject *g = g_igVertexStream_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014af80();
+        igVertexStream_EnsureRegistered();
     return g_igVertexStream_metaObject;
 }
 
@@ -99,12 +99,12 @@ int igVertexStream_GetVTable(void) {
     return temp_s1;
 }
 
-void FUN_0014af80(void)
+void igVertexStream_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVertexStream_Register);
 }
 
-static igMetaObjectCallback g_igVertexStream_callbackList[] = { FUN_0014b2a0, 0 };
+static igMetaObjectCallback g_igVertexStream_callbackList[] = { igVertexDataList_EnsureRegistered, 0 };
 
 CallbackArray *igVertexStream_Register(void) {
     FUN_00149bc0();
@@ -113,7 +113,7 @@ CallbackArray *igVertexStream_Register(void) {
         &g_igVertexStream_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igVertexStream_GetMetaObject,
+        igVertexStream_GetMetaObjectFunction,
         "igVertexStream",
         0x24, /* instance size */
         igVertexStream_GetVTable,
@@ -123,7 +123,7 @@ CallbackArray *igVertexStream_Register(void) {
     );
 }
 
-void thunk_igVertexStream_GetMetaObject(void) {
+void igVertexStream_GetMetaObjectFunction(void) {
     igVertexStream_GetMetaObject();
 }
 
@@ -162,10 +162,10 @@ static int g_igVertexStream_fieldOffsets[] = {
 
 void igVertexStream_InitFields(void) {
     int fieldStart;
-    void *temp_s2;
-    void *temp_v0;
-    void *temp_v0_2;
-    void *temp_v0_3;
+    void *dataListField;
+    void *accessModeField;
+    void *primitiveTypeField;
+    void *compileModeField;
     igMetaObject *meta;
 
     meta = g_igVertexStream_metaObject;
@@ -173,18 +173,18 @@ void igVertexStream_InitFields(void) {
     igMetaObject_CreateFields(meta, g_igVertexStream_ctorTable, 6);
     ((igRawRefMetaField *)igMetaObject_GetFieldAt(meta, fieldStart))->_persistent = 0;
     ((igBoolMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 1))->_persistent = 0;
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0014b1c0();
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 3));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
-    ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_0014ad60);
-    temp_v0_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 4));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_2, 0);
-    ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(&FUN_00149aa0);
-    temp_v0_3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 5));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_3, 0);
-    ((igEnumMetaField *)temp_v0_3)->_getMetaEnumFunction = (int)(FUN_0014ad00);
+    dataListField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
+    ((igObjectRefMetaField *)dataListField)->_metaObject = (int)igVertexDataList_GetOrCreateMetaObject();
+    accessModeField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 3));
+    igEnumMetaField_SetDefaultValue((igMetaField *)accessModeField, 0);
+    ((igEnumMetaField *)accessModeField)->_getMetaEnumFunction = (int)(&IG_VERTEX_ACCESS_MODE_GetMetaEnum);
+    primitiveTypeField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 4));
+    igEnumMetaField_SetDefaultValue((igMetaField *)primitiveTypeField, 0);
+    ((igEnumMetaField *)primitiveTypeField)->_getMetaEnumFunction = (int)(&IG_GFX_DRAW_GetMetaEnum);
+    compileModeField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 5));
+    igEnumMetaField_SetDefaultValue((igMetaField *)compileModeField, 0);
+    ((igEnumMetaField *)compileModeField)->_getMetaEnumFunction = (int)(IG_VERTEX_STREAM_COMPILE_MODE_GetMetaEnum);
     igMetaObject_NameFields(meta, g_igVertexStream_fieldTable, g_igVertexStream_fieldHandles, g_igVertexStream_fieldOffsets, fieldStart);
-    ((igMetaObject *)g_igVertexStream_metaObject)->_abstractProxy = (int)thunk_igPsx2VertexStream_GetMetaObject;
+    ((igMetaObject *)g_igVertexStream_metaObject)->_abstractProxy = (int)igPsx2VertexStream_GetMetaObjectFunction;
 }
 

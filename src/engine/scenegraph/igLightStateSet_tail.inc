@@ -1,4 +1,4 @@
-void Gap__Sg__igLightStateSet__vfunc_31(igLightStateSetView *self) {
+void igLightStateSet_Reset(igLightStateSetView *self) {
     unsigned int n;
     unsigned int i;
 

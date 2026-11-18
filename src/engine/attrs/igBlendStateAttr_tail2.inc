@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igBlendStateAttr__vfunc_22(void) {
+igMetaObject *igBlendStateAttr_GetMeta(void) {
     return g_igBlendStateAttr_metaObject;
 }
 

@@ -1,6 +1,6 @@
 igMetaObject *g_igStatisticsItemList_metaObject;
 
-igMetaObject *FUN_00458ae0(void) {
+igMetaObject *igStatisticsItemList_GetOrCreateMetaObject(void) {
     if (g_igStatisticsItemList_metaObject == 0) {
         g_igStatisticsItemList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -10,7 +10,7 @@ igMetaObject *FUN_00458ae0(void) {
 void *igStatisticsItemList_GetMetaObject(void) {
     igMetaObject *g = g_igStatisticsItemList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00458bc0();
+        igStatisticsItemList_EnsureRegistered();
     }
     return g_igStatisticsItemList_metaObject;
 }
@@ -23,12 +23,12 @@ int igStatisticsItemList_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00458bc0(void)
+void igStatisticsItemList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igStatisticsItemList_Register);
 }
 
-static igMetaObjectCallback g_igStatisticsItemList_callbackList[] = { FUN_00458ec0, 0 };
+static igMetaObjectCallback g_igStatisticsItemList_callbackList[] = { igStatisticsItem_EnsureRegistered, 0 };
 
 CallbackArray *igStatisticsItemList_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ CallbackArray *igStatisticsItemList_Register(void) {
         &g_igStatisticsItemList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igStatisticsItemList_GetMetaObject,
+        igStatisticsItemList_GetMetaObjectFunction,
         "igStatisticsItemList",
         0x14, /* instance size */
         igStatisticsItemList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igStatisticsItemList_Register(void) {
     );
 }
 
-void thunk_igStatisticsItemList_GetMetaObject(void) {
+void igStatisticsItemList_GetMetaObjectFunction(void) {
     igStatisticsItemList_GetMetaObject();
 }
 

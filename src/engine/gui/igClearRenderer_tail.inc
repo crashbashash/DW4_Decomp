@@ -1,4 +1,4 @@
-void Gap__Gui__igClearRenderer__vfunc_23(O_457d60 *arg0) {
+void igClearRenderer_InitializeDrawing(O_457d60 *arg0) {
     E_457d60 *temp_a0;
     E_457d60 *temp_s0;
     temp_a0 = arg0->f8;
@@ -10,7 +10,7 @@ void Gap__Gui__igClearRenderer__vfunc_23(O_457d60 *arg0) {
     }
 }
 
-void Gap__Gui__igClearRenderer__vfunc_26(igClearRendererView *self)
+void igClearRenderer_Render(igClearRendererView *self)
 {
     self->_visualContext->vfunc_174(self->_buffersToClear);
 }

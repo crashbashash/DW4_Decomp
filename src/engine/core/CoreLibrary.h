@@ -1199,8 +1199,8 @@ extern "C" void igCompoundMetaField_CopyReference(void *arg0, int arg1, int arg2
 extern "C" int igCompoundMetaField_GetDescriptor(void);
 extern "C" void igCompoundMetaField_SwapValue(void *arg0, int arg1);
 extern "C" int igCompoundMetaField_ValueFromString(int *arg0, int arg1, int arg2, int arg3);
-extern "C" void FUN_002d6090(void);
-extern "C" int FUN_002d60a0(void);
+extern "C" void igContextExt_MakeCurrent(void);
+extern "C" int igContextExt_IsCurrent(void);
 extern "C" int igContext_GetMeta(void);
 extern "C" int igDataList_GetElementSize(void);
 extern "C" void igDependencyOrderedList_TopologicalSort(igDependencyOrderedList *self);

@@ -76,7 +76,7 @@ CallbackArray *igTrackedElementMetaField_Register(void) {
         &g_igTrackedElementMetaField_metaObject,
         igCompoundMetaField_Register,
         igCompoundMetaField_GetPublishedMetaObject,
-        thunk_igTrackedElementMetaField_GetMetaObject,
+        igTrackedElementMetaField_GetMetaObjectFunction,
         "igTrackedElementMetaField",
         0x38, /* instance size */
         igTrackedElementMetaField_GetVTable,
@@ -86,7 +86,7 @@ CallbackArray *igTrackedElementMetaField_Register(void) {
     );
 }
 
-void thunk_igTrackedElementMetaField_GetMetaObject(void) {
+void igTrackedElementMetaField_GetMetaObjectFunction(void) {
     igTrackedElementMetaField_GetMetaObject();
 }
 
@@ -120,7 +120,7 @@ int Gap__Gfx__igTrackedElementMetaField__vfunc_25(void) {
     return 0xC;
 }
 
-void Gap__Gfx__igTrackedElementMetaField__vfunc_11(void *arg0) {
+void igTrackedElementMetaField_InitDefaults(void *arg0) {
     FUN_0014e630(*(int *)((char *)arg0 + 52));
 }
 
@@ -168,7 +168,7 @@ void FUN_0014e630(int arg0) {
         }
     }
     *(int *)((char *)(temp_s0) + 8) = 0;
-    *(int *)((char *)(temp_s0) + 52) = (int)(&FUN_0014e2a0);
+    *(int *)((char *)(temp_s0) + 52) = (int)(&CONTEXT_TRACKABLE_GetMetaEnum);
     igMetaField_FinalizeDescriptor((igMetaField *)temp_s0);
     ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s0);
     *(int *)((char *)(temp_s0) + 4) = (int)((int) (*(int *)((char *)(temp_s0) + 4) - 1));

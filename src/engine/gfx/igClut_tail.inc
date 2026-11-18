@@ -135,7 +135,7 @@ unsigned char FUN_00154d90(igClut *clut)
     return scaled;
 }
 
-void Gap__Gfx__igClut__vfunc_12(S0 *arg0) {
+void igClut_ReleaseDefaults(S0 *arg0) {
     int temp_a1;
 
     temp_a1 = arg0->f14;

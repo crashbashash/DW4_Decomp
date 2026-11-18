@@ -1,6 +1,6 @@
 igMetaObject *g_igVertexBlendMatrixListAttrPool_metaObject;
 
-igMetaObject *FUN_00199e40(void) {
+igMetaObject *igVertexBlendMatrixListAttrPool_GetOrCreateMetaObject(void) {
     if (g_igVertexBlendMatrixListAttrPool_metaObject == 0) {
         g_igVertexBlendMatrixListAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igVertexBlendMatrixListAttrPool_GetMetaObject(void)
 {
     igMetaObject *g = g_igVertexBlendMatrixListAttrPool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00199f20();
+        igVertexBlendMatrixListAttrPool_EnsureRegistered();
     return g_igVertexBlendMatrixListAttrPool_metaObject;
 }
 
@@ -22,12 +22,12 @@ int igVertexBlendMatrixListAttrPool_GetVTable(void) {
     return *(int *)((char *)obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00199f20(void)
+void igVertexBlendMatrixListAttrPool_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVertexBlendMatrixListAttrPool_Register);
 }
 
-static igMetaObjectCallback g_igVertexBlendMatrixListAttrPool_callbackList[] = { FUN_00130a70, 0 };
+static igMetaObjectCallback g_igVertexBlendMatrixListAttrPool_callbackList[] = { igVertexBlendMatrixListAttr_EnsureRegistered, 0 };
 
 CallbackArray *igVertexBlendMatrixListAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -36,7 +36,7 @@ CallbackArray *igVertexBlendMatrixListAttrPool_Register(void) {
         &g_igVertexBlendMatrixListAttrPool_metaObject,
         igObjectPool_Register,
         igObjectPool_GetPublishedMetaObject,
-        thunk_igVertexBlendMatrixListAttrPool_GetMetaObject,
+        igVertexBlendMatrixListAttrPool_GetMetaObjectFunction,
         "igVertexBlendMatrixListAttrPool",
         0x20, /* instance size */
         igVertexBlendMatrixListAttrPool_GetVTable,
@@ -46,7 +46,7 @@ CallbackArray *igVertexBlendMatrixListAttrPool_Register(void) {
     );
 }
 
-void thunk_igVertexBlendMatrixListAttrPool_GetMetaObject(void) {
+void igVertexBlendMatrixListAttrPool_GetMetaObjectFunction(void) {
     igVertexBlendMatrixListAttrPool_GetMetaObject();
 }
 

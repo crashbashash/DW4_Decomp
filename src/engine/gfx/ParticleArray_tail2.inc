@@ -1,4 +1,4 @@
-void Gap__Bec__ParticleArray__vfunc_15(void *arg0) {
+void igParticleArray_UserPostLoad(void *arg0) {
     int temp_v0;
 
     temp_v0 = (int)igVisualContext_FindFirst();
@@ -46,12 +46,12 @@ void Gap__Bec__ParticleArray__vfunc_36(ParticleArray *arg0) {
     }
 }
 
-void FUN_0015cb50(int a0, int a1)
+void igPointSpriteExt_SetContext(int a0, int a1)
 {
     *(int *)((char *)a0 + 20) = a1;
 }
 
-int FUN_0015cb60(O_15cb50 *arg0, A1 *arg1, int *arg2, unsigned int arg3, int arg4) {
+int igPointSpriteExt_ConfigureVertexArray(O_15cb50 *arg0, A1 *arg1, int *arg2, unsigned int arg3, int arg4) {
     Rc_15cb50 *a0;
     V2 sp90;
     int sp9C;
@@ -134,7 +134,7 @@ int FUN_0015cb60(O_15cb50 *arg0, A1 *arg1, int *arg2, unsigned int arg3, int arg
     return arg4;
 }
 
-void FUN_0015ce90(OO *arg0) {
+void igPointSpriteExt_BeginSprites(OO *arg0) {
     RR *temp_v0;
     RR *old;
 
@@ -162,7 +162,7 @@ void FUN_0015ce90(OO *arg0) {
     igMatrix44f_Copy((float *)((int)arg0 + 0xE8), (float *)((int)arg0 + 0x28));
 }
 
-void FUN_0015cfb0(Y *arg0) {
+void igPointSpriteExt_EndSprites(Y *arg0) {
     R_15cb50 *temp_a0_3;
 
     arg0->b32 = 0;
@@ -240,7 +240,7 @@ void FUN_0015d4d0(S4d0 *s)
   igMatrix44f_Multiply((float *)((char*)s + 0xE8), (const float *)((char*)s + 0x28), (const float *)((char*)s + 0x128));
 }
 
-void FUN_0015d6c0(void *arg0, int arg1, void *arg2) {
+void igPointSpriteExt_SetPosition(void *arg0, int arg1, void *arg2) {
     int temp_a0;
     float *var_v1;
     float *src = (float *)arg2;
@@ -253,7 +253,7 @@ void FUN_0015d6c0(void *arg0, int arg1, void *arg2) {
 
 /* The pointer is reused across the stride multiply (p = idx*12; p = base + p) with the base as the
  * first addend. */
-void FUN_0015d700(igPsx2PointSpriteExt *arg0, int arg1, void *arg2) {
+void igPointSpriteExt_GetPosition(igPsx2PointSpriteExt *arg0, int arg1, void *arg2) {
     int temp_a0;
     char *var_v1;
     temp_a0 = *(int *)((char *)(((igVertexArray *)arg0->_vertexArray)->_vdata) + 64);
@@ -263,7 +263,7 @@ void FUN_0015d700(igPsx2PointSpriteExt *arg0, int arg1, void *arg2) {
     *(float *)((char *)(arg2) + 8) = (float) *(float *)((char *)(var_v1) + 8);
 }
 
-void FUN_0015d740(S740 *arg0, int arg1, int arg2) {
+void igPointSpriteExt_SetColorPacked(S740 *arg0, int arg1, int arg2) {
     int i;
 
     for (i = 0; i < 6; i++) {
@@ -271,7 +271,7 @@ void FUN_0015d740(S740 *arg0, int arg1, int arg2) {
     }
 }
 
-void FUN_0015d7c0(S7c0 *arg0, int arg1, int arg2) {
+void igPointSpriteExt_SetColor(S7c0 *arg0, int arg1, int arg2) {
     int i;
 
     for (i = 0; i < 6; i++) {
@@ -279,17 +279,17 @@ void FUN_0015d7c0(S7c0 *arg0, int arg1, int arg2) {
     }
 }
 
-void FUN_0015d840(igPointSpriteExtView *self, unsigned int index)
+void igPointSpriteExt_GetColorPacked(igPointSpriteExtView *self, unsigned int index)
 {
     self->_vertexArray->vfunc_41(index * 6);
 }
 
-void FUN_0015d860(igPointSpriteExtView *self, unsigned int index)
+void igPointSpriteExt_GetColor(igPointSpriteExtView *self, unsigned int index)
 {
     self->_vertexArray->vfunc_42(index * 6);
 }
 
-void FUN_0015d880(O880 *arg0, int arg1, int arg2, float *arg3) {
+void igPointSpriteExt_SetTextureCoord(O880 *arg0, int arg1, int arg2, float *arg3) {
     float v[2];
     int base;
     int i2, i1;
@@ -314,7 +314,7 @@ void FUN_0015d880(O880 *arg0, int arg1, int arg2, float *arg3) {
     arg0->p->m200(0, base + 5, v);
 }
 
-void FUN_0015da00(void *arg0, int arg1, int arg2) {
+void igPointSpriteExt_GetTextureCoord(void *arg0, int arg1, int arg2) {
     void **temp_a0;
     void **temp_a0_2;
 
@@ -327,7 +327,7 @@ void FUN_0015da00(void *arg0, int arg1, int arg2) {
     ((DW4VC_204_2 *)(temp_a0_2))->vX((int)(0), (int)((arg2 * 6) + 3));
 }
 
-void FUN_0015da70(void *arg0, int arg1, int arg2) {
+void igPointSpriteExt_GetTextureCoordPointer(void *arg0, int arg1, int arg2) {
     void **temp_a0;
     void **temp_a0_2;
 
@@ -340,7 +340,7 @@ void FUN_0015da70(void *arg0, int arg1, int arg2) {
     ((DW4VC_208_2 *)(temp_a0_2))->vX((int)(0), (int)((arg2 * 6) + 3));
 }
 
-void FUN_0015dae0(igPointSpriteExtView *self, unsigned int index, float value)
+void igPointSpriteExt_SetUniformSize(igPointSpriteExtView *self, unsigned int index, float value)
 {
     self->_vertexArray->vfunc_51(index, value);
 }
@@ -353,12 +353,12 @@ void igPointSpriteExt_SetSize(igPointSpriteExt *self, int index, igVec2f size) {
     ((Sdb00 *)self)->o->vX(index, &v);
 }
 
-void FUN_0015db40(igPointSpriteExtView *self)
+void igPointSpriteExt_SetRadian(igPointSpriteExtView *self)
 {
     self->_vertexArray->vfunc_55();
 }
 
-void FUN_0015db60(igPointSpriteExtView *self)
+void igPointSpriteExt_GetRadian(igPointSpriteExtView *self)
 {
     self->_vertexArray->vfunc_56();
 }

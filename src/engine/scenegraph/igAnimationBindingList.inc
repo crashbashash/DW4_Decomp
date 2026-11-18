@@ -1,6 +1,6 @@
 igMetaObject *g_igAnimationBindingList_metaObject;
 
-igMetaObject *FUN_001a8ac0(void) {
+igMetaObject *igAnimationBindingList_GetOrCreateMetaObject(void) {
     if (g_igAnimationBindingList_metaObject == 0) {
         g_igAnimationBindingList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -37,7 +37,7 @@ CallbackArray *igAnimationBindingList_Register(void) {
         &g_igAnimationBindingList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igAnimationBindingList_GetMetaObject,
+        igAnimationBindingList_GetMetaObjectFunction,
         "igAnimationBindingList",
         0x14, /* instance size */
         igAnimationBindingList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igAnimationBindingList_Register(void) {
     );
 }
 
-void thunk_igAnimationBindingList_GetMetaObject(void) {
+void igAnimationBindingList_GetMetaObjectFunction(void) {
     igAnimationBindingList_GetMetaObject();
 }
 

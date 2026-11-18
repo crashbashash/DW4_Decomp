@@ -1,7 +1,7 @@
 igMetaObject *g_igDisplayListAttr_metaObject;
 igMetaField *g_igDisplayListAttr_contentsMetaField;
 
-igMetaObject *FUN_00137fb0(void) {
+igMetaObject *igDisplayListAttr_GetOrCreateMetaObject(void) {
     if (g_igDisplayListAttr_metaObject == 0) {
         g_igDisplayListAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -12,7 +12,7 @@ igMetaObject *igDisplayListAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igDisplayListAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00138160();
+        igDisplayListAttr_EnsureRegistered();
     return g_igDisplayListAttr_metaObject;
 }
 
@@ -55,7 +55,7 @@ void **FUN_001380e0(void **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_00138160(void)
+void igDisplayListAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igDisplayListAttr_Register);
 }
@@ -69,7 +69,7 @@ CallbackArray *igDisplayListAttr_Register(void) {
         &g_igDisplayListAttr_metaObject,
         igAttr_Register,
         igAttr_GetPublishedMetaObject,
-        thunk_igDisplayListAttr_GetMetaObject,
+        igDisplayListAttr_GetMetaObjectFunction,
         "igDisplayListAttr",
         0x10, /* instance size */
         igDisplayListAttr_GetVTable,
@@ -79,7 +79,7 @@ CallbackArray *igDisplayListAttr_Register(void) {
     );
 }
 
-void thunk_igDisplayListAttr_GetMetaObject(void) {
+void igDisplayListAttr_GetMetaObjectFunction(void) {
     igDisplayListAttr_GetMetaObject();
 }
 
@@ -97,16 +97,16 @@ static int g_igDisplayListAttr_fieldOffsets[] = {
 };
 
 void igDisplayListAttr_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    igMetaObject *meta;
 
-    temp_s0 = g_igDisplayListAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igDisplayListAttr_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0013ad40();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_igDisplayListAttr_fieldTable, g_igDisplayListAttr_fieldHandles, g_igDisplayListAttr_fieldOffsets, temp_s2);
+    meta = g_igDisplayListAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igDisplayListAttr_ctorTable, 1);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igNonRefCountedAttrList_GetOrCreateMetaObject();
+    ((igRefMetaField *)field)->_construct = 1;
+    igMetaObject_NameFields(meta, g_igDisplayListAttr_fieldTable, g_igDisplayListAttr_fieldHandles, g_igDisplayListAttr_fieldOffsets, base);
 }
 

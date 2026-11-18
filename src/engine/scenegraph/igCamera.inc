@@ -54,7 +54,7 @@ CallbackArray *igCamera_Register(void) {
         &g_igCamera_metaObject,
         igNode_Register,
         igNode_GetPublishedMetaObject,
-        thunk_igCamera_GetMetaObject,
+        igCamera_GetMetaObjectFunction,
         "igCamera",
         0x38, /* instance size */
         igCamera_GetVTable,
@@ -64,7 +64,7 @@ CallbackArray *igCamera_Register(void) {
     );
 }
 
-void thunk_igCamera_GetMetaObject(void) {
+void igCamera_GetMetaObjectFunction(void) {
     igCamera_GetMetaObject();
 }
 

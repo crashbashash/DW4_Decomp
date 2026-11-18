@@ -53,7 +53,7 @@ void FUN_002295a0(void *arg0) {
 
 static inline Iterator *createFieldIterator() {
     Tag tag = Tag();
-    return (Iterator *)FUN_00227780(0);
+    return (Iterator *)igIterateField_Create(0);
 }
 
 class igMetaTyped {
@@ -135,7 +135,7 @@ void FUN_00229980(void) {
 
 }
 
-void Gap__igItemInterface__vfunc_13(igInterface *arg0, int flags) {
+void igItemInterface_resetFields(igInterface *arg0, int flags) {
     Gap__Core__igObject__resetFields((igObject *)arg0, flags);
     arg0->_itemInterface = (int)(arg0);
 }
@@ -514,7 +514,7 @@ void FUN_0022b0a0(int arg0, int *arg1) {
     igMatrix44f_Copy((float *)arg0, sp60);
 }
 
-void Gap__igListenerInterface__vfunc_13(igInterface *arg0, int flags) {
+void igListenerInterface_resetFields(igInterface *arg0, int flags) {
     Gap__Core__igObject__resetFields((igObject *)arg0, flags);
     arg0->_listenerInterface = (int)(arg0);
 }
@@ -564,7 +564,7 @@ int Gap__igLogInterface__vfunc_27(void *arg0, const char *format, va_list args) 
     return var_v0;
 }
 
-igMetaObject *Gap__Core__igInfo__vfunc_22(void) {
+igMetaObject *igInfo_GetMeta(void) {
     return g_igInfo_metaObject;
 }
 
@@ -572,7 +572,7 @@ igMetaObject *Gap__Core__igInfo__vfunc_22(void) {
  * return), then point _messageInterface at the object itself: the message interface is its own
  * message-interface member. */
 
-void Gap__igMessageInterface__vfunc_13(igMessageInterface *self, int flags) {
+void igMessageInterface_resetFields(igMessageInterface *self, int flags) {
     Gap__Core__igObject__resetFields((igObject *)self, flags);
     self->_messageInterface = (int)(self);
 }
@@ -583,7 +583,7 @@ void FUN_0022b470(int arg0, int arg1) {
 
 static inline Iterator *createGraphIterator() {
     Tag tag = Tag();
-    return (Iterator *)FUN_00227460(0);
+    return (Iterator *)igIterateGraph_Create(0);
 }
 
 /* Reject a graph the optimizer cannot handle: an igSegment or an IS_DYNAMIC (flag 0x40) object.
@@ -718,12 +718,12 @@ void thunk_igObject_InitDefaults__0022bbc0(igObject *self) {
     igObject_InitDefaults(self);
 }
 
-void Gap__igOptInterface__vfunc_13(void *arg0, int flags) {
+void igOptInterface_resetFields(void *arg0, int flags) {
     Gap__Core__igObject__resetFields((igObject *)arg0, flags);
     *(int *)((char *)(arg0) + 8) = (int)(arg0);
 }
 
-igMetaObject *Gap__Core__igMetaObject__vfunc_22(void) {
+igMetaObject *igMetaObject_GetMeta(void) {
     return g_igMetaObject_metaObject;
 }
 
@@ -916,7 +916,7 @@ extern "C" int FUN_0022c7f0(A_2 *arg0, int arg1, B_2 *arg2, int arg3) {
     return 1;
 }
 
-igMetaObject *Gap__igOptInterface__vfunc_22(void) {
+igMetaObject *igOptInterface_GetMeta(void) {
     return g_igOptInterface_metaObject;
 }
 
@@ -940,7 +940,7 @@ void Gap__igOptInterface__vfunc_32(int *arg0) {
     *arg0 = 0;
 }
 
-void Gap__igOptInterface__vfunc_12(igObject *self) {
+void igOptInterface_ReleaseDefaults(igObject *self) {
     igObject_ReleaseDefaults(self);
 }
 
@@ -948,31 +948,31 @@ igMetaObject *FUN_0022ca10(void) {
     return g_igOptBase_metaObject;
 }
 
-igMetaObject *Gap__igMessageInterface__vfunc_22(void) {
+igMetaObject *igMessageInterface_GetMeta(void) {
     return g_igMessageInterface_metaObject;
 }
 
-igMetaObject *Gap__igLogInterface__vfunc_22(void) {
+igMetaObject *igLogInterface_GetMeta(void) {
     return g_igLogInterface_metaObject;
 }
 
-igMetaObject *Gap__igLockInterface__vfunc_22(void) {
+igMetaObject *igLockInterface_GetMeta(void) {
     return g_igLockInterface_metaObject;
 }
 
-igMetaObject *Gap__igListenerInterface__vfunc_22(void) {
+igMetaObject *igListenerInterface_GetMeta(void) {
     return g_igListenerInterface_metaObject;
 }
 
-igMetaObject *Gap__igItemInterface__vfunc_22(void) {
+igMetaObject *igItemInterface_GetMeta(void) {
     return g_igItemInterface_metaObject;
 }
 
-igMetaObject *Gap__igFileInfo__vfunc_22(void) {
+igMetaObject *igFileInfo_GetMeta(void) {
     return g_igFileInfo_metaObject;
 }
 
-igMetaObject *Gap__igFileInfoList__vfunc_22(void) {
+igMetaObject *igFileInfoList_GetMeta(void) {
     return g_igFileInfoList_metaObject;
 }
 
@@ -980,59 +980,59 @@ void Gap__igListenerBase__vfunc_29(void) {
 
 }
 
-igMetaObject *Gap__igCompoundList__vfunc_22(void) {
+igMetaObject *igCompoundList_GetMeta(void) {
     return g_igCompoundList_metaObject;
 }
 
-igMetaObject *Gap__igItemDataBaseField__vfunc_22(void) {
+igMetaObject *igItemDataBaseField_GetMeta(void) {
     return g_igItemDataBaseField_metaObject;
 }
 
-int Gap__igItemDataBaseField__vfunc_23(void) {
+int igItemDataBaseField_GetDescriptor(void) {
     return g_igItemDataBaseField_defaultDescriptor;
 }
 
-igMetaObject *Gap__igItemDataBaseList__vfunc_22(void) {
+igMetaObject *igItemDataBaseList_GetMeta(void) {
     return g_igItemDataBaseList_metaObject;
 }
 
-igMetaObject *Gap__igIterateDerived__vfunc_22(void) {
+igMetaObject *igIterateDerived_GetMeta(void) {
     return g_igIterateDerived_metaObject;
 }
 
-igMetaObject *Gap__igIterateField__vfunc_22(void) {
+igMetaObject *igIterateField_GetMeta(void) {
     return g_igIterateField_metaObject;
 }
 
-igMetaObject *Gap__igIterateGraph__vfunc_22(void) {
+igMetaObject *igIterateGraph_GetMeta(void) {
     return g_igIterateGraph_metaObject;
 }
 
-igMetaObject *Gap__igListenerList__vfunc_22(void) {
+igMetaObject *igListenerList_GetMeta(void) {
     return g_igListenerList_metaObject;
 }
 
-igMetaObject *Gap__igListenerListList__vfunc_22(void) {
+igMetaObject *igListenerListList_GetMeta(void) {
     return g_igListenerListList_metaObject;
 }
 
-igMetaObject *Gap__igMessageList__vfunc_22(void) {
+igMetaObject *igMessageList_GetMeta(void) {
     return g_igMessageList_metaObject;
 }
 
-igMetaObject *Gap__igOptConfiguration__vfunc_22(void) {
+igMetaObject *igOptConfiguration_GetMeta(void) {
     return g_igOptConfiguration_metaObject;
 }
 
-igMetaObject *Gap__igInterface__vfunc_22(void) {
+igMetaObject *igInterface_GetMeta(void) {
     return g_igInterface_metaObject;
 }
 
-igMetaObject *Gap__igMessageBase__vfunc_22(void) {
+igMetaObject *igMessageBase_GetMeta(void) {
     return g_igMessageBase_metaObject;
 }
 
-igMetaObject *Gap__igListenerBase__vfunc_22(void) {
+igMetaObject *igListenerBase_GetMeta(void) {
     return g_igListenerBase_metaObject;
 }
 
@@ -1073,19 +1073,19 @@ extern "C" int FUN_0022cb80(List *arg0, int **arg1) {
     return lo;
 }
 
-igMetaObject *Gap__igMessageList__vfunc_24(void) {
+igMetaObject *igMessageList_GetElementMeta(void) {
     return g_igMessageBase_metaObject;
 }
 
-igMetaObject *Gap__igListenerListList__vfunc_24(void) {
+igMetaObject *igListenerListList_GetElementMeta(void) {
     return g_igListenerList_metaObject;
 }
 
-igMetaObject *Gap__igListenerList__vfunc_24(void) {
+igMetaObject *igListenerList_GetElementMeta(void) {
     return g_igListenerBase_metaObject;
 }
 
-igMetaObject *Gap__igFileInfoList__vfunc_24(void) {
+igMetaObject *igFileInfoList_GetElementMeta(void) {
     return g_igFileInfo_metaObject;
 }
 
@@ -1554,7 +1554,7 @@ int FUN_0022e160(struct M *arg0, int arg1, struct M *arg2, int arg3, int arg4) {
     return var_v0;
 }
 
-void Gap__igItemDataBaseList__vfunc_18(S_5 *arg0) {
+void igItemDataBaseList_TrimCapacity(S_5 *arg0) {
     int temp_s0;
 
     temp_s0 = arg0->f8;
@@ -1570,7 +1570,7 @@ void Gap__igItemDataBaseList__vfunc_18(S_5 *arg0) {
     }
 }
 
-void Gap__igItemDataBaseList__vfunc_04(S_6 *arg0) {
+void igItemDataBaseList_destructFields(S_6 *arg0) {
     int n;
     int q;
     int neg;

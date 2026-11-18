@@ -2,12 +2,12 @@ igMetaObject *g_igTexGenMatrixAttr_metaObject;
 igMetaField *g_igTexGenMatrixAttr_mMetaField;
 igMetaField *g_igTexGenMatrixAttr_unitIDMetaField;
 
-void FUN_00133160(int arg0) {
-    FUN_00133290();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55EE28, (igMemoryPoolView *)arg0);
+igTexGenMatrixAttr *igTexGenMatrixAttr_Create(igMemoryPoolView *pool) {
+    igTexGenMatrixAttr_EnsureRegistered();
+    return (igTexGenMatrixAttr *)igMetaObject_CreateInstance(g_igTexGenMatrixAttr_metaObject, pool);
 }
 
-igMetaObject *FUN_001331a0(void) {
+igMetaObject *igTexGenMatrixAttr_GetOrCreateMetaObject(void) {
     if (g_igTexGenMatrixAttr_metaObject == 0) {
         g_igTexGenMatrixAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -21,7 +21,7 @@ igMetaObject *igTexGenMatrixAttr_GetMetaObject(void)
         ready = (g_igTexGenMatrixAttr_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_00133290();
+    igTexGenMatrixAttr_EnsureRegistered();
 done:
     return g_igTexGenMatrixAttr_metaObject;
 }
@@ -34,7 +34,7 @@ int igTexGenMatrixAttr_GetVTable(void) {
     return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
-void FUN_00133290(void)
+void igTexGenMatrixAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTexGenMatrixAttr_Register);
 }
@@ -46,7 +46,7 @@ CallbackArray *igTexGenMatrixAttr_Register(void) {
         &g_igTexGenMatrixAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igTexGenMatrixAttr_GetMetaObject,
+        igTexGenMatrixAttr_GetMetaObjectFunction,
         "igTexGenMatrixAttr",
         0x50, /* instance size */
         igTexGenMatrixAttr_GetVTable,
@@ -56,7 +56,7 @@ CallbackArray *igTexGenMatrixAttr_Register(void) {
     );
 }
 
-void thunk_igTexGenMatrixAttr_GetMetaObject(void) {
+void igTexGenMatrixAttr_GetMetaObjectFunction(void) {
     igTexGenMatrixAttr_GetMetaObject();
 }
 
@@ -83,15 +83,15 @@ void igTexGenMatrixAttr_InitFields(void) {
     struct V o3;
     struct V o4;
     struct V o5;
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    igMetaObject *meta;
     struct Fld *fld;
 
-    temp_s0 = g_igTexGenMatrixAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igTexGenMatrixAttr_ctorTable, 2);
-    temp_s1 = igMetaObject_GetFieldAt(temp_s0, temp_s2);
+    meta = g_igTexGenMatrixAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igTexGenMatrixAttr_ctorTable, 2);
+    field = igMetaObject_GetFieldAt(meta, base);
     o5.x = 0;
     o5.y = 0;
     o5.z = 0;
@@ -109,9 +109,9 @@ void igTexGenMatrixAttr_InitFields(void) {
     o2.z = 0;
     o2.w = 0;
     igMatrix44f_FromRows((float *)&o1, (igVec4f *)&o2, (igVec4f *)&o3, (igVec4f *)&o4, (igVec4f *)&o5);
-    FUN_0018c640(temp_s1, &o1);
-    fld = (Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
-    fld->f48 = (int)FUN_001404f0;
-    igMetaObject_NameFields(temp_s0, g_igTexGenMatrixAttr_fieldTable, g_igTexGenMatrixAttr_fieldHandles, g_igTexGenMatrixAttr_fieldOffsets, temp_s2);
+    FUN_0018c640(field, &o1);
+    fld = (Fld *)igMetaObject_GetFieldAt(meta, base + 1);
+    ((igMetaField *)fld)->_invarianceFunction = (int)igTexGenMatrixAttr_SynchronizeCachedUnitID;
+    igMetaObject_NameFields(meta, g_igTexGenMatrixAttr_fieldTable, g_igTexGenMatrixAttr_fieldHandles, g_igTexGenMatrixAttr_fieldOffsets, base);
 }
 

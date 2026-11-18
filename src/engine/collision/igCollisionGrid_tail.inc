@@ -27,7 +27,7 @@ void FUN_0023b430(igCollisionGrid *grid) {
     for (int k = 0; k < grid->_sizeZ; k++) {
         for (int j = 0; j < grid->_sizeY; j++) {
             for (int i = 0; i < grid->_sizeX; i++) {
-                igSmartPointer<igCollisionCell> cell(FUN_0023a6e0(0), AdoptReference());
+                igSmartPointer<igCollisionCell> cell(igCollisionCell_Create(0), AdoptReference());
                 float maxX = x + grid->_deltas[0];
                 float maxY = y + grid->_deltas[1];
                 float maxZ = z + grid->_deltas[2];

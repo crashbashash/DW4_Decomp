@@ -1,7 +1,7 @@
 #ifndef DW4_VIEWEROPTIONS_H
 #define DW4_VIEWEROPTIONS_H
 
-/* The 240-byte viewer options object every viewer object shares (`g_sharedViewerOptions`): ViewerOptions_Construct
+/* The 240-byte viewer options object every viewer object shares (`g_sharedViewerOptions`): igViewerDefaults_Construct
  * fills it from the INSIGHT properties, and it is freed when its use count drops to zero. The members up to
  * `allocateVisualContextInScratchPad` are the properties' own, named after them. */
 struct SharedViewerOptions {
@@ -71,8 +71,8 @@ struct App;
 
 extern "C" {
 extern SharedViewerOptions *g_sharedViewerOptions;
-SharedViewerOptions *ViewerOptions_Construct(SharedViewerOptions *options);
-void ViewerOptions_ParseCommandLine(App *args, int argc, char **argv);
+SharedViewerOptions *igViewerDefaults_Construct(SharedViewerOptions *options);
+void igCommandLine_ParseArgs(App *args, int argc, char **argv);
 }
 
 #endif

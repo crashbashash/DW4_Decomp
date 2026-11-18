@@ -17,7 +17,7 @@ static int g_igGeometrySetAttr_attrFlagsValues[] = {
     2,
 };
 
-igMetaEnum *FUN_00136c80(void) {
+igMetaEnum *igGeometrySetAttr_GetAttrFlagsMetaEnum(void) {
     if (g_igGeometrySetAttr_attrFlagsMetaEnum == 0) {
         g_igGeometrySetAttr_attrFlagsMetaEnum = igMetaEnum_Create("ATTR_FLAGS", g_igGeometrySetAttr_attrFlagsNames, g_igGeometrySetAttr_attrFlagsValues, 3);
     }
@@ -99,7 +99,7 @@ CallbackArray *igGeometrySetAttr_Register(void) {
         &g_igGeometrySetAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igGeometrySetAttr_GetMetaObject,
+        igGeometrySetAttr_GetMetaObjectFunction,
         "igGeometrySetAttr",
         0x20, /* instance size */
         igGeometrySetAttr_GetVTable,
@@ -109,7 +109,7 @@ CallbackArray *igGeometrySetAttr_Register(void) {
     );
 }
 
-void thunk_igGeometrySetAttr_GetMetaObject(void) {
+void igGeometrySetAttr_GetMetaObjectFunction(void) {
     igGeometrySetAttr_GetMetaObject();
 }
 
@@ -143,35 +143,35 @@ static int g_igGeometrySetAttr_fieldOffsets[] = {
 };
 
 void igGeometrySetAttr_InitFields(void) {
-    int temp_s0;
-    struct F_136f30 *temp_s2;
-    struct F_136f30 *temp_s2_2;
-    struct F_136f30 *temp_v0;
-    struct F_136f30 *temp_v0_2;
-    igMetaObject *temp_s1;
+    int base;
+    struct F_136f30 *field;
+    struct F_136f30 *field2;
+    struct F_136f30 *field3;
+    struct F_136f30 *field4;
+    igMetaObject *meta;
 
-    temp_s1 = g_igGeometrySetAttr_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_igGeometrySetAttr_ctorTable, 5);
-    temp_s2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    temp_s2->f56 = (int)igVisualContext_GetOrCreateMetaObject();
-    temp_s2->f38 = 0;
-    temp_s2->f40 = 1;
-    temp_s2->f39 = 1;
-    temp_s2->f44 = 3;
-    temp_v0 = (struct F_136f30 *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    igIntMetaField_SetDefault((igMetaField *)temp_v0, -1);
-    temp_v0->f38 = 0;
-    temp_v0->f40 = 4;
-    temp_v0->f39 = 4;
-    temp_v0->f44 = 3;
-    temp_s2_2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    temp_s2_2->f56 = (int)igGeometryAttrList_GetOrCreateMetaObject();
-    temp_v0_2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_2, 0);
-    temp_v0_2->f38 = 0;
-    temp_v0_2->f52 = (int)(&FUN_00136c80);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4), 1);
-    igMetaObject_NameFields(temp_s1, g_igGeometrySetAttr_fieldTable, g_igGeometrySetAttr_fieldHandles, g_igGeometrySetAttr_fieldOffsets, temp_s0);
+    meta = g_igGeometrySetAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igGeometrySetAttr_ctorTable, 5);
+    field = (struct F_136f30 *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
+    ((igMetaField *)field)->_persistent = 0;
+    ((igMetaField *)field)->_deepCopyMethod = 1;
+    ((igMetaField *)field)->_shallowCopyMethod = 1;
+    ((igMetaField *)field)->_isAlikeShallowMethod = 3;
+    field3 = (struct F_136f30 *)(igMetaObject_GetFieldAt(meta, base + 1));
+    igIntMetaField_SetDefault((igMetaField *)field3, -1);
+    ((igMetaField *)field3)->_persistent = 0;
+    ((igMetaField *)field3)->_deepCopyMethod = 4;
+    ((igMetaField *)field3)->_shallowCopyMethod = 4;
+    ((igMetaField *)field3)->_isAlikeShallowMethod = 3;
+    field2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)igGeometryAttrList_GetOrCreateMetaObject();
+    field4 = (struct F_136f30 *)(igMetaObject_GetFieldAt(meta, base + 3));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field4, 0);
+    ((igMetaField *)field4)->_persistent = 0;
+    ((igEnumMetaField *)field4)->_getMetaEnumFunction = (int)&igGeometrySetAttr_GetAttrFlagsMetaEnum;
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 4), 1);
+    igMetaObject_NameFields(meta, g_igGeometrySetAttr_fieldTable, g_igGeometrySetAttr_fieldHandles, g_igGeometrySetAttr_fieldOffsets, base);
 }
 

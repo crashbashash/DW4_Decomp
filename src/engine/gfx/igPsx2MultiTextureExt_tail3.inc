@@ -1,4 +1,4 @@
-igMetaObject *Gap__Gfx__igPsx2MultiTextureExt__vfunc_22(void) {
+igMetaObject *igPsx2MultiTextureExt_GetMeta(void) {
     return g_igPsx2MultiTextureExt_metaObject;
 }
 

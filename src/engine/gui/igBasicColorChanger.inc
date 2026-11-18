@@ -2,11 +2,11 @@ igMetaObject *g_igBasicColorChanger_metaObject;
 igMetaField *g_igBasicColorChanger_colorsMetaField;
 igMetaField *g_igBasicColorChanger_disabledColorMetaField;
 
-igMetaObject *FUN_00451fb0(void) {
+igMetaObject *igBasicColorChanger_GetPublishedMetaObject(void) {
     return g_igBasicColorChanger_metaObject;
 }
 
-igMetaObject *FUN_00451fc0(void) {
+igMetaObject *igBasicColorChanger_GetOrCreateMetaObject(void) {
     if (g_igBasicColorChanger_metaObject == 0) {
         g_igBasicColorChanger_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -54,7 +54,7 @@ void thunk_igBasicColorChanger_GetMetaObject(void) {
     igBasicColorChanger_GetMetaObject();
 }
 
-igMetaObject *FUN_00452130(void) {
+igMetaObject *igColorChanger_GetPublishedMetaObject(void) {
     return g_igColorChanger_metaObject;
 }
 

@@ -1,4 +1,4 @@
-void Gap__Sg__igSkeleton__vfunc_23(SkeletonView *o, SkeletonSlots *clock, int unused, SkeletonMatrix *local, SkeletonMatrix *global, SkeletonMatrix *out, SkeletonOverrideListView *overrides) {
+void igSkeleton_Update(SkeletonView *o, SkeletonSlots *clock, int unused, SkeletonMatrix *local, SkeletonMatrix *global, SkeletonMatrix *out, SkeletonOverrideListView *overrides) {
     SkeletonMatrix *inv;
     int count;
     int n;
@@ -67,11 +67,11 @@ void Gap__Sg__igSkeleton__vfunc_23(SkeletonView *o, SkeletonSlots *clock, int un
     }
 }
 
-int Gap__Sg__igSkeleton__vfunc_24(void *arg0) {
+int igSkeleton_GetBoneCount(void *arg0) {
     return *(int *)((char *)(*(int *)((char *)(arg0) + 16)) + 8);
 }
 
-int Gap__Sg__igSkeleton__vfunc_27(S_1d9500 *arg0, int arg1) {
+int igSkeleton_FindBoneIndex(S_1d9500 *arg0, int arg1) {
     int i;
     int *p;
 
@@ -85,7 +85,7 @@ int Gap__Sg__igSkeleton__vfunc_27(S_1d9500 *arg0, int arg1) {
     return -1;
 }
 
-int Gap__Sg__igSkeleton__vfunc_29(O_1d95a0 *arg0, int arg1, int *arg2) {
+int igSkeleton_GetChild(O_1d95a0 *arg0, int arg1, int *arg2) {
     int i;
     while ((i = *arg2) < ((VC_1d95a0 *)arg0)->vX()) {
         E_1d95a0 *e = arg0->b->arr[i];
@@ -97,7 +97,7 @@ int Gap__Sg__igSkeleton__vfunc_29(O_1d95a0 *arg0, int arg1, int *arg2) {
     return -1;
 }
 
-int Gap__Sg__igSkeleton__vfunc_31(void **arg0, int arg1, int arg2) {
+int igSkeleton_GetSpecifiedChild(void **arg0, int arg1, int arg2) {
     int sp5C;
     int temp_v0;
     int var_s0;
@@ -116,7 +116,7 @@ loop_1:
     goto loop_1;
 }
 
-int Gap__Sg__igSkeleton__vfunc_30(VC_1d96d0 *arg0, int arg1) {
+int igSkeleton_GetChildCount(VC_1d96d0 *arg0, int arg1) {
     int sp4C;
     int temp_v0;
     int var_s0;
@@ -144,7 +144,7 @@ int FUN_001d9740(void *arg0, int arg1) {
     return var_v0;
 }
 
-void **FUN_001d9770(void **arg0, short arg1) {
+void **igSmartPointer_igModelViewMatrixBoneSelect_Destruct(void **arg0, short arg1) {
     S_temp_a0_1d9770 *temp_a0;
 
     if (arg0 != 0) {

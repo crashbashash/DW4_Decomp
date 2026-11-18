@@ -2,7 +2,7 @@ igMetaObject *g_igTextureList_metaObject;
 
 igTextureList *igTextureList_CreateInstance(int allocator) {
     igTextureList_EnsureRegistered();
-    return (igTextureList *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55F418, (igMemoryPoolView *)allocator);
+    return (igTextureList *)igMetaObject_CreateInstance(g_igTextureList_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igTextureList_GetOrCreateMetaObject(void) {
@@ -42,7 +42,7 @@ CallbackArray *igTextureList_Register(void) {
         &g_igTextureList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igTextureList_GetMetaObject,
+        igTextureList_GetMetaObjectFunction,
         "igTextureList",
         0x14, /* instance size */
         igTextureList_GetVTable,
@@ -52,7 +52,7 @@ CallbackArray *igTextureList_Register(void) {
     );
 }
 
-void thunk_igTextureList_GetMetaObject(void) {
+void igTextureList_GetMetaObjectFunction(void) {
     igTextureList_GetMetaObject();
 }
 

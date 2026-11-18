@@ -24,7 +24,7 @@ CallbackArray *igOptBase_Register(void) {
         &g_igOptBase_metaObject,
         (igMetaObjectRegisterFunction)igBase_Register,
         (igMetaObjectGetFunction)igBase_GetPublishedMetaObject,
-        thunk_igOptBase_GetMetaObject,
+        igOptBase_GetMetaObjectFunction,
         "igOptBase",
         0x28, /* instance size */
         0,
@@ -34,11 +34,11 @@ CallbackArray *igOptBase_Register(void) {
     );
 }
 
-void thunk_igOptBase_GetMetaObject(void) {
+void igOptBase_GetMetaObjectFunction(void) {
     igOptBase_GetMetaObject();
 }
 
-igMetaObject *FUN_00226010(void) {
+igMetaObject *igBase_GetPublishedMetaObject(void) {
     return g_igBase_metaObject;
 }
 
@@ -60,18 +60,18 @@ static int g_igOptBase_fieldOffsets[] = {
 };
 
 void igOptBase_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    void *field2;
+    igMetaObject *meta;
 
-    temp_s0 = g_igOptBase_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igOptBase_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igRegistry_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_00225dc0();
-    igMetaObject_NameFields(temp_s0, g_igOptBase_fieldTable, g_igOptBase_fieldHandles, g_igOptBase_fieldOffsets, temp_s2);
+    meta = g_igOptBase_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igOptBase_ctorTable, 2);
+    field2 = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)igRegistry_GetOrCreateMetaObject();
+    field = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igOptConfiguration_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_igOptBase_fieldTable, g_igOptBase_fieldHandles, g_igOptBase_fieldOffsets, base);
 }
 

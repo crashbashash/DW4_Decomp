@@ -42,7 +42,7 @@ CallbackArray *igNodeList_Register(void) {
         &g_igNodeList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igNodeList_GetMetaObject,
+        igNodeList_GetMetaObjectFunction,
         "igNodeList",
         0x14, /* instance size */
         igNodeList_GetVTable,
@@ -52,7 +52,7 @@ CallbackArray *igNodeList_Register(void) {
     );
 }
 
-void thunk_igNodeList_GetMetaObject(void) {
+void igNodeList_GetMetaObjectFunction(void) {
     igNodeList_GetMetaObject();
 }
 

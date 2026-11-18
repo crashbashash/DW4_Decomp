@@ -121,7 +121,7 @@ void p2SubmitDmaPacket(int channel) {
             ((unsigned int *)&p2CurrentGsRegisters->f432[1])[0] = (unsigned int)packet->sequence;
             ((unsigned int *)&p2CurrentGsRegisters->f432[1])[1] = 0xFFFF;
             FUN_001f7b00();
-        } else if (packet->b3) {
+        } else if (packet->restartProgram) {
             FUN_001f7c90();
             FUN_001f7c90();
         }
@@ -167,7 +167,7 @@ void p2CompleteDmaPacket(int channel, p2DmaPacket *packet) {
     p2DmaCompletion *node;
 
     packet->ready = 0;
-    packet->f8 = -1;
+    packet->waitSequence = -1;
     DAT_00568ef8 = 0;
     p2DmaChannelIdle[channel] = 1;
     p2DmaCompletedSequence[channel] = p2DmaStartedSequence[channel];
@@ -233,11 +233,11 @@ void p2InitDmaPacket(p2DmaPacket *packet, int size, int reserve, int f44) {
     packet->blockHead = 0;
     packet->storeImage = 0;
     packet->finishPredicate = 0;
-    packet->b3 = 0;
+    packet->restartProgram = 0;
     packet->signalWait = 0;
     packet->storeImageTarget.qwc = 0;
     packet->storeImageTarget.addr = 0;
-    packet->f8 = -1;
+    packet->waitSequence = -1;
     ((DmaTagHead *)packet->chain)->id = 7;
     ((DmaTagHead *)packet->chain)->qwc = 0;
 }
@@ -444,7 +444,7 @@ void p2StartDmaPacket(int channel) {
         p2PreviousFinishFuncDone = 0;
         packet->finishPredicate = 0;
     }
-    packet->b3 = 0;
+    packet->restartProgram = 0;
     packet->ready = 0;
     if (packet->storeImage) {
         p2StoreImagePending = 1;

@@ -2,7 +2,7 @@ igMetaObject *g_igSkin_metaObject;
 igMetaField *g_igSkin_skinnedGraphMetaField;
 igMetaField *g_igSkin_boundMetaField;
 
-igMetaObject *FUN_00197fd0(void) {
+igMetaObject *igSkin_GetOrCreateMetaObject(void) {
     if (g_igSkin_metaObject == 0) {
         g_igSkin_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -110,7 +110,7 @@ CallbackArray *igSkin_Register(void) {
         &g_igSkin_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igSkin_GetMetaObject,
+        igSkin_GetMetaObjectFunction,
         "igSkin",
         0x14, /* instance size */
         igSkin_GetVTable,
@@ -120,7 +120,7 @@ CallbackArray *igSkin_Register(void) {
     );
 }
 
-void thunk_igSkin_GetMetaObject(void) {
+void igSkin_GetMetaObjectFunction(void) {
     igSkin_GetMetaObject();
 }
 
@@ -142,18 +142,18 @@ static int g_igSkin_fieldOffsets[] = {
 };
 
 void igSkin_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *boundField;
+    void *skinnedGraphField;
+    void *meta;
 
-    temp_s0 = (void *)g_igSkin_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igSkin_ctorTable, 2);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igNode_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igAABox_GetOrCreateMetaObject();
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igSkin_fieldTable, g_igSkin_fieldHandles, g_igSkin_fieldOffsets, temp_s2);
+    meta = (void *)g_igSkin_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igSkin_ctorTable, 2);
+    skinnedGraphField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igObjectRefMetaField *)skinnedGraphField)->_metaObject = (int)igNode_GetOrCreateMetaObject();
+    boundField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    ((igObjectRefMetaField *)boundField)->_metaObject = (int)igAABox_GetOrCreateMetaObject();
+    igMetaObject_NameFields((igMetaObject *)meta, g_igSkin_fieldTable, g_igSkin_fieldHandles, g_igSkin_fieldOffsets, base);
 }
 

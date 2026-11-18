@@ -16,7 +16,6 @@
 0x001ae780	igAnimationCombiner_ResetToPose	engine
 0x001af510	igAnimationState_UpdateLocalTime	engine
 0x001dd4b0	UnsignedDivMod64_Cached	engine
-0x001e6d30	Vec3f_FromString	engine
 0x001e74b0	p2EnableCapability	engine
 0x001e7500	p2DisableCapability	engine
 0x001e7560	p2IsCapabilityEnabled	engine
@@ -922,14 +921,11 @@
 0x003c99a0	beNDMWShinkaObject_CreateInstance	game
 0x0018b630	igAABox_IntersectPoint	engine
 0x004477b0	beNDMWMdlPEBaseInfoWork::Destroy	game
-0x002364e0	Viewer_CreateDisplay	engine
 0x003810c0	beFileListInfoManager_LoadNextFile	game
 0x002e31c0	FilePath_IsAbsolute	engine
 0x002e3220	FilePath_HasDirectory	engine
 0x00145d00	igWindow_CreateInstance	engine
 0x0014a000	igVisualContext_CreateInstance	engine
-0x00234ca0	ViewerOptions_ReleaseShared	engine
-0x00236260	ViewerOptions_GetRequestedFormat	engine
 0x00340c60	beWaterPlain_GetMessageEnum	game
 0x0035eb30	beHitLandDelivInfo_GetMessageEnum	game
 0x003a0570	beWaterPlain_IsBoxVisible	game

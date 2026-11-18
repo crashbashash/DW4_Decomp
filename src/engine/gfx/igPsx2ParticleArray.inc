@@ -5,7 +5,7 @@ igMetaField *g_igPsx2ParticleArray_ps2ParticleFormatMetaField;
 igMetaField *g_igPsx2ParticleArray_bSynchronizeMetaField;
 igMetaField *g_igPsx2ParticleArray_lSequenceMetaField;
 
-void thunk_igPsx2ParticleArray_GetMetaObject(void) {
+void igPsx2ParticleArray_GetMetaObjectFunction(void) {
     igPsx2ParticleArray_GetMetaObject();
 }
 
@@ -17,7 +17,7 @@ static int g_igPsx2ParticleArray_particleCoordValues[] = {
 };
 igMetaEnum *g_igPsx2ParticleArray_particleCoordMetaEnum;
 
-int FUN_0014d010(void) {
+int IG_GFX_PARTICLE_COORD_GetMetaEnum(void) {
     if (g_igPsx2ParticleArray_particleCoordMetaEnum == 0) {
         g_igPsx2ParticleArray_particleCoordMetaEnum = igMetaEnum_Create("IG_GFX_PARTICLE_COORD", g_igPsx2ParticleArray_particleCoordNames, g_igPsx2ParticleArray_particleCoordValues, 4);
     }

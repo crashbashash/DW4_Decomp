@@ -1,6 +1,6 @@
 igMetaObject *g_igVisualAttribute_metaObject;
 
-igMetaObject *FUN_00130310(void) {
+igMetaObject *igVisualAttribute_GetOrCreateMetaObject(void) {
     if (g_igVisualAttribute_metaObject == 0) {
         g_igVisualAttribute_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,11 +11,11 @@ igMetaObject *igVisualAttribute_GetMetaObject(void)
 {
     igMetaObject *g = g_igVisualAttribute_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001303b0();
+        igVisualAttribute_EnsureRegistered();
     return g_igVisualAttribute_metaObject;
 }
 
-void FUN_001303b0(void)
+void igVisualAttribute_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVisualAttribute_Register);
 }
@@ -27,7 +27,7 @@ CallbackArray *igVisualAttribute_Register(void) {
         &g_igVisualAttribute_metaObject,
         igAttr_Register,
         igAttr_GetPublishedMetaObject,
-        thunk_igVisualAttribute_GetMetaObject,
+        igVisualAttribute_GetMetaObjectFunction,
         "igVisualAttribute",
         0xC, /* instance size */
         0,
@@ -37,11 +37,11 @@ CallbackArray *igVisualAttribute_Register(void) {
     );
 }
 
-void thunk_igVisualAttribute_GetMetaObject(void) {
+void igVisualAttribute_GetMetaObjectFunction(void) {
     igVisualAttribute_GetMetaObject();
 }
 
-igMetaObject *FUN_00130430(void) {
+igMetaObject *igAttr_GetPublishedMetaObject(void) {
     return g_igAttr_metaObject;
 }
 

@@ -2,8 +2,8 @@ igMetaObject *g_igCustomStateField_metaObject;
 igMetaField *g_igCustomStateField_stateCollectionHandleMetaField;
 igMetaField *g_igCustomStateField_stateFieldMetaField;
 
-igCustomStateFieldView *FUN_0014eae0(int arg0) {
-    FUN_0014ecd0();
+igCustomStateFieldView *igCustomStateField_Create(int arg0) {
+    igCustomStateField_EnsureRegistered();
     return (igCustomStateFieldView *)igMetaObject_CreateInstance(g_igCustomStateField_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -11,7 +11,7 @@ igMetaObject *igCustomStateField_GetMetaObject(void)
 {
     igMetaObject *g = g_igCustomStateField_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014ecd0();
+        igCustomStateField_EnsureRegistered();
     return g_igCustomStateField_metaObject;
 }
 
@@ -69,7 +69,7 @@ igSmartPointer<igObject> *igSmartPointer_igMetaField_Destruct(igSmartPointer<igO
     return self;
 }
 
-void FUN_0014ecd0(void)
+void igCustomStateField_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igCustomStateField_Register);
 }
@@ -83,7 +83,7 @@ CallbackArray *igCustomStateField_Register(void) {
         &g_igCustomStateField_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igCustomStateField_GetMetaObject,
+        igCustomStateField_GetMetaObjectFunction,
         "igCustomStateField",
         0x14, /* instance size */
         igCustomStateField_GetVTable,
@@ -93,7 +93,7 @@ CallbackArray *igCustomStateField_Register(void) {
     );
 }
 
-void thunk_igCustomStateField_GetMetaObject(void) {
+void igCustomStateField_GetMetaObjectFunction(void) {
     igCustomStateField_GetMetaObject();
 }
 

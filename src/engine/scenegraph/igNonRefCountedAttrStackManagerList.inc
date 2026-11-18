@@ -1,5 +1,5 @@
 int FUN_001a51d0(int arg0) {
-    FUN_001a52a0();
+    igNonRefCountedAttrStackManagerList_EnsureRegistered();
     return (int)igMetaObject_CreateInstance((igMetaObject *)g_igNonRefCountedAttrStackManagerList_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -9,7 +9,7 @@ igMetaObject *igNonRefCountedAttrStackManagerList_GetMetaObject(void)
 {
     igMetaObject *g = g_igNonRefCountedAttrStackManagerList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a52a0();
+        igNonRefCountedAttrStackManagerList_EnsureRegistered();
     return g_igNonRefCountedAttrStackManagerList_metaObject;
 }
 
@@ -21,12 +21,12 @@ int igNonRefCountedAttrStackManagerList_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_001a52a0(void)
+void igNonRefCountedAttrStackManagerList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igNonRefCountedAttrStackManagerList_Register);
 }
 
-static igMetaObjectCallback g_igNonRefCountedAttrStackManagerList_callbackList[] = { FUN_001a5640, 0 };
+static igMetaObjectCallback g_igNonRefCountedAttrStackManagerList_callbackList[] = { igAttrStackManager_EnsureRegistered, 0 };
 
 CallbackArray *igNonRefCountedAttrStackManagerList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -35,7 +35,7 @@ CallbackArray *igNonRefCountedAttrStackManagerList_Register(void) {
         &g_igNonRefCountedAttrStackManagerList_metaObject,
         igNonRefCountedObjectList_Register,
         igNonRefCountedObjectList_GetPublishedMetaObject,
-        thunk_igNonRefCountedAttrStackManagerList_GetMetaObject,
+        igNonRefCountedAttrStackManagerList_GetMetaObjectFunction,
         "igNonRefCountedAttrStackManagerList",
         0x14, /* instance size */
         igNonRefCountedAttrStackManagerList_GetVTable,
@@ -45,7 +45,7 @@ CallbackArray *igNonRefCountedAttrStackManagerList_Register(void) {
     );
 }
 
-void thunk_igNonRefCountedAttrStackManagerList_GetMetaObject(void) {
+void igNonRefCountedAttrStackManagerList_GetMetaObjectFunction(void) {
     igNonRefCountedAttrStackManagerList_GetMetaObject();
 }
 

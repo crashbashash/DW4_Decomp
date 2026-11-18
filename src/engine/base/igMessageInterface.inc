@@ -1,7 +1,7 @@
 igMetaObject *g_igMessageInterface_metaObject;
 igMetaField *g_igMessageInterface_messagesMetaField;
 
-igMetaObject *FUN_002260d0(void) {
+igMetaObject *igMessageInterface_GetOrCreateMetaObject(void) {
     if (g_igMessageInterface_metaObject == 0) {
         g_igMessageInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -43,7 +43,7 @@ CallbackArray *igMessageInterface_Register(void) {
         &g_igMessageInterface_metaObject,
         (igMetaObjectRegisterFunction)igInterface_Register,
         (igMetaObjectGetFunction)igInterface_GetPublishedMetaObject,
-        thunk_igMessageInterface_GetMetaObject,
+        igMessageInterface_GetMetaObjectFunction,
         "igMessageInterface",
         0x24, /* instance size */
         igMessageInterface_GetVTable,
@@ -53,7 +53,7 @@ CallbackArray *igMessageInterface_Register(void) {
     );
 }
 
-void thunk_igMessageInterface_GetMetaObject(void) {
+void igMessageInterface_GetMetaObjectFunction(void) {
     igMessageInterface_GetMetaObject();
 }
 
@@ -71,16 +71,16 @@ static int g_igMessageInterface_fieldOffsets[] = {
 };
 
 void igMessageInterface_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    igMetaObject *meta;
 
-    temp_s0 = g_igMessageInterface_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igMessageInterface_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00226340();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_igMessageInterface_fieldTable, g_igMessageInterface_fieldHandles, g_igMessageInterface_fieldOffsets, temp_s2);
+    meta = g_igMessageInterface_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igMessageInterface_ctorTable, 1);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igMessageList_GetOrCreateMetaObject();
+    ((igRefMetaField *)field)->_construct = 1;
+    igMetaObject_NameFields(meta, g_igMessageInterface_fieldTable, g_igMessageInterface_fieldHandles, g_igMessageInterface_fieldOffsets, base);
 }
 

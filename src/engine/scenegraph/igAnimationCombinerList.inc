@@ -1,6 +1,6 @@
 igMetaObject *g_igAnimationCombinerList_metaObject;
 
-igMetaObject *FUN_001a83b0(void) {
+igMetaObject *igAnimationCombinerList_GetOrCreateMetaObject(void) {
     if (g_igAnimationCombinerList_metaObject == 0) {
         g_igAnimationCombinerList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -37,7 +37,7 @@ CallbackArray *igAnimationCombinerList_Register(void) {
         &g_igAnimationCombinerList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igAnimationCombinerList_GetMetaObject,
+        igAnimationCombinerList_GetMetaObjectFunction,
         "igAnimationCombinerList",
         0x14, /* instance size */
         igAnimationCombinerList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igAnimationCombinerList_Register(void) {
     );
 }
 
-void thunk_igAnimationCombinerList_GetMetaObject(void) {
+void igAnimationCombinerList_GetMetaObjectFunction(void) {
     igAnimationCombinerList_GetMetaObject();
 }
 

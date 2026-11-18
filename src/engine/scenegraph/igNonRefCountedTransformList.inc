@@ -1,6 +1,6 @@
 igMetaObject *g_igNonRefCountedTransformList_metaObject;
 
-igMetaObject *FUN_00195d00(void) {
+igMetaObject *igNonRefCountedTransformList_GetOrCreateMetaObject(void) {
     if (g_igNonRefCountedTransformList_metaObject == 0) {
         g_igNonRefCountedTransformList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igNonRefCountedTransformList_GetMetaObject(void)
 {
     igMetaObject *g = g_igNonRefCountedTransformList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00195de0();
+        igNonRefCountedTransformList_EnsureRegistered();
     return g_igNonRefCountedTransformList_metaObject;
 }
 
@@ -22,7 +22,7 @@ int igNonRefCountedTransformList_GetVTable(void) {
     return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
-void FUN_00195de0(void)
+void igNonRefCountedTransformList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igNonRefCountedTransformList_Register);
 }
@@ -36,7 +36,7 @@ CallbackArray *igNonRefCountedTransformList_Register(void) {
         &g_igNonRefCountedTransformList_metaObject,
         igNonRefCountedObjectList_Register,
         igNonRefCountedObjectList_GetPublishedMetaObject,
-        thunk_igNonRefCountedTransformList_GetMetaObject,
+        igNonRefCountedTransformList_GetMetaObjectFunction,
         "igNonRefCountedTransformList",
         0x14, /* instance size */
         igNonRefCountedTransformList_GetVTable,
@@ -46,7 +46,7 @@ CallbackArray *igNonRefCountedTransformList_Register(void) {
     );
 }
 
-void thunk_igNonRefCountedTransformList_GetMetaObject(void) {
+void igNonRefCountedTransformList_GetMetaObjectFunction(void) {
     igNonRefCountedTransformList_GetMetaObject();
 }
 

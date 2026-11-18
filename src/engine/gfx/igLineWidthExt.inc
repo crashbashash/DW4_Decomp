@@ -1,7 +1,7 @@
 igMetaObject *g_igLineWidthExt_metaObject;
 igMetaField *g_igLineWidthExt_fWidthMetaField;
 
-igMetaObject *FUN_0014d680(void)
+igMetaObject *igLineWidthExt_GetMetaObject(void)
 {
     igMetaObject *meta = g_igLineWidthExt_metaObject;
     bool ready;
@@ -11,12 +11,12 @@ igMetaObject *FUN_0014d680(void)
         if (ready != false)
             goto end;
     }
-    FUN_0014d6d0();
+    igLineWidthExt_EnsureRegistered();
 end:
     return g_igLineWidthExt_metaObject;
 }
 
-void FUN_0014d6d0(void)
+void igLineWidthExt_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igLineWidthExt_Register);
 }
@@ -38,8 +38,8 @@ CallbackArray *igLineWidthExt_Register(void) {
     );
 }
 
-void thunk_FUN_0014d680(void) {
-    FUN_0014d680();
+void igLineWidthExt_GetMetaObjectFunction(void) {
+    igLineWidthExt_GetMetaObject();
 }
 
 static FieldFactory g_igLineWidthExt_ctorTable[] = {

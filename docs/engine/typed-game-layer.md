@@ -210,7 +210,7 @@ Evidence is the class's `_InitFields` metaobject getter (handle resolved through
 | `beTimer._system` | `beSystem` | handle 0x587d08 passed to igInsightCore_FindManager in beTimer vfunc_23 |
 | `beWeapon._messenger` | `beMessenger` | beMessenger_RegisterReceiverFromInfo argument in beWeapon_OnAddRam |
 | `igAttrSet._attributes` | `igAttrList` | igAttrSet_InitFields field 0 metaobject getter igAttrList_GetOrCreateMetaObject reads class handle 0x55f460 (igAttrList) |
-| `igBitmapFont._charMetricsList` | `igCharMetricsList` | (FUN_00452790); _textureBind -> igTextureBindAttr (FUN_00132850) |
+| `igBitmapFont._charMetricsList` | `igCharMetricsList` | (igCharMetricsList_GetOrCreateMetaObject); _textureBind -> igTextureBindAttr (igTextureBindAttr_GetOrCreateMetaObject) |
 | `igInfoManager._insight` | `igInsightCore` | metaObject igInsightCore_GetOrCreateMetaObject |
 
 ## Notes not resolved to a single field

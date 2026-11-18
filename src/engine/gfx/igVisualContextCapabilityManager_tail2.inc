@@ -1,4 +1,4 @@
-int Gap__Gfx__igVisualContextCapabilityManager__vfunc_22(void) {
+int igVisualContextCapabilityManager_GetMeta(void) {
     return (int)g_igVisualContextCapabilityManager_metaObject;
 }
 

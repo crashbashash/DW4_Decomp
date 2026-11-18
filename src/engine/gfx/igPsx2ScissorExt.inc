@@ -7,10 +7,10 @@ igMetaField *g_igPsx2ScissorExt_scissorWidthMetaField;
 igMetaField *g_igPsx2ScissorExt_scissorHeightMetaField;
 
 void FUN_0014bdb0(void) {
-    *(int *)((char *)(g_igScissorExt_metaObject) + 60) = (int)(&thunk_igPsx2ScissorExt_GetMetaObject);
+    *(int *)((char *)(g_igScissorExt_metaObject) + 60) = (int)(&igPsx2ScissorExt_GetMetaObjectFunction);
 }
 
-void thunk_igPsx2ScissorExt_GetMetaObject(void) {
+void igPsx2ScissorExt_GetMetaObjectFunction(void) {
     igPsx2ScissorExt_GetMetaObject();
 }
 

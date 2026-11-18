@@ -8,7 +8,7 @@ igMetaField *g_igBoundingBoxRenderer_borderMetaField;
 igMetaField *g_igBoundingBoxRenderer_pathMetaField;
 igMetaField *g_igBoundingBoxRenderer_drawMetaField;
 
-igMetaObject *FUN_0045de90(void) {
+igMetaObject *igBoundingBoxRenderer_GetOrCreateMetaObject(void) {
     if (g_igBoundingBoxRenderer_metaObject == 0) {
         g_igBoundingBoxRenderer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -20,7 +20,7 @@ igMetaObject *igBoundingBoxRenderer_GetMetaObject(void)
     igMetaObject *g = ((igMetaObject *)g_igBoundingBoxRenderer_metaObject);
     bool t;
     if (!g || (t = g->_validity & 4) == 0)
-        FUN_0045e050();
+        igBoundingBoxRenderer_EnsureRegistered();
     return ((igMetaObject *)g_igBoundingBoxRenderer_metaObject);
 }
 
@@ -39,23 +39,23 @@ int igBoundingBoxRenderer_GetVTable(void) {
     obj.w9 = 0;
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igBoundingBoxRenderer_vtable[0];
-    FUN_001d6560(&obj.w9, -1);
-    FUN_001353b0(&obj.w8, -1);
-    FUN_001353b0(&obj.w7, -1);
-    FUN_00142d10(&obj.w6, -1);
+    igSmartPointer_igGraphPath_Destruct(&obj.w9, -1);
+    igSmartPointer_igGeometryAttr_Destruct(&obj.w8, -1);
+    igSmartPointer_igGeometryAttr_Destruct(&obj.w7, -1);
+    igSmartPointer_igModelViewMatrixAttr_Destruct(&obj.w6, -1);
     igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
-    FUN_00197160(&obj.w4, -1);
+    igSmartPointer_igDisplayListAttr_Destruct((igSmartPointer<igObject> *)&obj.w4, -1);
     FUN_00459860((ObjectRefWord *)&obj.w3, -1);
     FUN_00230f70(&obj, 0);
     return t;
 }
 
-void FUN_0045e050(void)
+void igBoundingBoxRenderer_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igBoundingBoxRenderer_Register);
 }
 
-static igMetaObjectCallback g_igBoundingBoxRenderer_callbackList[] = { igViewerParameters_EnsureRegistered, FUN_00138160, igAttrList_EnsureRegistered, igModelViewMatrixAttr_EnsureRegistered, FUN_001378f0, igGraphPath_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igBoundingBoxRenderer_callbackList[] = { igViewerParameters_EnsureRegistered, igDisplayListAttr_EnsureRegistered, igAttrList_EnsureRegistered, igModelViewMatrixAttr_EnsureRegistered, igGeometryAttr_EnsureRegistered, igGraphPath_EnsureRegistered, 0 };
 
 CallbackArray *igBoundingBoxRenderer_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -64,7 +64,7 @@ CallbackArray *igBoundingBoxRenderer_Register(void) {
         &g_igBoundingBoxRenderer_metaObject,
         igRenderer_Register,
         igRenderer_GetPublishedMetaObject,
-        thunk_igBoundingBoxRenderer_GetMetaObject,
+        igBoundingBoxRenderer_GetMetaObjectFunction,
         "igBoundingBoxRenderer",
         0x2C, /* instance size */
         igBoundingBoxRenderer_GetVTable,
@@ -74,7 +74,7 @@ CallbackArray *igBoundingBoxRenderer_Register(void) {
     );
 }
 
-void thunk_igBoundingBoxRenderer_GetMetaObject(void) {
+void igBoundingBoxRenderer_GetMetaObjectFunction(void) {
     igBoundingBoxRenderer_GetMetaObject();
 }
 
@@ -136,18 +136,18 @@ void igBoundingBoxRenderer_InitFields(void) {
     temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igViewerParameters_GetOrCreateMetaObject();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_00137fb0();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igDisplayListAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)(igAttrList_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_001356f0();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igModelViewMatrixAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_00137850();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igGeometryAttr_GetOrCreateMetaObject();
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_00137850();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igGeometryAttr_GetOrCreateMetaObject();
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)(igGraphPath_GetOrCreateMetaObject());
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igBoundingBoxRenderer_fieldTable, g_igBoundingBoxRenderer_fieldHandles, g_igBoundingBoxRenderer_fieldOffsets, temp_s0);

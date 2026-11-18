@@ -22,12 +22,12 @@ void FUN_001479b0(igPsx2Controller *arg0) {
     arg0->_analogState = 1;
 }
 
-void Gap__igPsx2Controller__vfunc_11(igPsx2Controller *self) {
+void igPsx2Controller_InitDefaults(igPsx2Controller *self) {
     igObject_InitDefaults((igObject *)self);
     FUN_001479b0(self);
 }
 
-void Gap__igPsx2Controller__vfunc_12(void *arg0) {
+void igPsx2Controller_ReleaseDefaults(void *arg0) {
     int temp_a0;
 
     scePadPortClose(*(int *)((char *)arg0 + 64), *(int *)((char *)arg0 + 60));

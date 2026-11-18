@@ -1,4 +1,4 @@
-int Gap__Gfx__igPsx2IndexArray__vfunc_22(void) {
+int igPsx2IndexArray_GetMeta(void) {
     return (int)g_igPsx2IndexArray_metaObject;
 }
 

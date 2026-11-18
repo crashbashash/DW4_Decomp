@@ -4,7 +4,7 @@ void igBoundingBoxRenderer_Traverse(void) {
 
 }
 
-void Gap__Viewer__igBoundingBoxRenderer__vfunc_23(void) {
+void igBoundingBoxRenderer_InitializeDrawing(void) {
 
 }
 
@@ -12,10 +12,10 @@ void igBoundingBoxRenderer_ReleaseDrawing(void) {
 
 }
 
-void Gap__Viewer__igBoundingBoxRenderer__vfunc_26(void) {
+void igBoundingBoxRenderer_Render(void) {
 
 }
 
-struct igMetaObject *Gap__Viewer__igBoundingBoxRenderer__vfunc_22(void) {
+struct igMetaObject *igBoundingBoxRenderer_GetMeta(void) {
     return g_igBoundingBoxRenderer_metaObject;
 }

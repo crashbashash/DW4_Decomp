@@ -1,4 +1,4 @@
-int Gap__Attrs__igVisualContextAttrDefaultManager__vfunc_22(void) {
+int igVisualContextAttrDefaultManager_GetMeta(void) {
     return (int)g_igVisualContextAttrDefaultManager_metaObject;
 }
 

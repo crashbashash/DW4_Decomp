@@ -7,14 +7,13 @@
 #include "dw4/p2/renderState.h"
 #include "dw4/p2/p2multipass.h"
 #include "dw4/core/igMemory.h"
-int *FUN_00202f60(int *arg0, long long arg1);
+int *p2FindVariantTable(int *arg0, long long arg1);
 int FUN_00202fa0(long long arg0);
 extern int FUN_001f8b50();
 extern int FUN_001fffb0();
-extern int FUN_00200980();
-extern int FUN_00204ea0();
+extern int p2LookupStateCacheEntry();
 struct P { long long m0; long long m8; int p16; struct P *next; int sh; int count; int tab[1]; };
-void *FUN_00203000();
+void *p2CreateVariantTable();
 extern int DAT_0056ae40[4];
 
 /* One slot per bit of a VU program's feature mask. p2VariantsBitN lists the programs that have bit N, one
@@ -90,7 +89,7 @@ int p2VariantsBit3[1];
 int p2VariantsBit1[4];
 int p2VariantsBit0[1];
 
-void FUN_001ff3b0(int arg0) {
+void p2PrepareRenderState(int arg0) {
     int s;
     int f;
     int n, a;
@@ -105,7 +104,7 @@ void FUN_001ff3b0(int arg0) {
             s = p2DirtyFlags & arg0;
         }
         if (s & 0x193) {
-            p2StateCacheStatus = FUN_00204ea0();
+            p2StateCacheStatus = p2LookupStateCacheEntry();
             s = p2DirtyFlags & arg0;
             if (p2StateCacheStatus == 0 || (p2StateCacheStatus == 1 && (s & 0x100))) {
                 if (s & 0x10) {
@@ -114,7 +113,7 @@ void FUN_001ff3b0(int arg0) {
                     p2DirtyFlags |= 0x80;
                 }
                 if (s & 1) {
-                    FUN_00200980();
+                    p2BuildFunctionTables();
                     s = p2DirtyFlags & arg0;
                 }
                 if (s & 2) {
@@ -445,7 +444,7 @@ void p2SendGifTags(void) {
     }
 }
 
-int FUN_00200830(struct P *p, long long *out) {
+int p2SelectVariantTables(struct P *p, long long *out) {
     int res = 0;
     long long m;
     int i;
@@ -629,7 +628,7 @@ void p2SendVuBufferLayout(void) {
 
 int p2VariantsFirstSetup = 1;
 
-void FUN_00202300(void) {
+void p2SetupProgramVariants(void) {
     int *temp_v0;
     int *temp_v0_10;
     int *temp_v0_11;
@@ -947,9 +946,9 @@ void FUN_00202300(void) {
         while ((var_s3 = p2FindVuProgramByBitCount(var_s0 + 2, var_s3)) != 0) {
             temp_s4 = (char *)p2VuPrograms + (var_s3 << 6);
             temp_s5 = FUN_00202fa0(*(long long *)((char *)(temp_s4) + 0));
-            var_v0 = (void *)(FUN_00202f60(*temp_s1, *(long long *)((char *)(temp_s4) + 0)));
+            var_v0 = (void *)(p2FindVariantTable(*temp_s1, *(long long *)((char *)(temp_s4) + 0)));
             if (var_v0 == 0) {
-                var_v0 = (void *)(FUN_00203000(var_s3));
+                var_v0 = (void *)(p2CreateVariantTable(var_s3));
                 if (var_v0 != 0) {
                     *(long long *)((char *)(var_v0) + 8) = temp_s5;
                     if (var_s2 != 0) {
@@ -999,7 +998,7 @@ block_6:
     return var_v0;
 }
 
-int *FUN_00202f60(int *arg0, long long arg1) {
+int *p2FindVariantTable(int *arg0, long long arg1) {
     for (; arg0 != 0; arg0 = (int *)arg0[5]) {
         if (arg1 == *(long long *)((char *)p2VuPrograms + (arg0[4] << 6))) break;
     }
@@ -1033,7 +1032,7 @@ int FUN_00202fa0(long long arg0) {
     return ~m;
 }
 
-void *FUN_00203000(int index) {
+void *p2CreateVariantTable(int index) {
     struct P *p;
     int counts[32];
     int n;
@@ -1095,7 +1094,7 @@ void *FUN_00203000(int index) {
     return p;
 }
 
-void FUN_00203500(void) {
+void p2FreeVariantTables(void) {
     int i;
     void *p;
     void *next;

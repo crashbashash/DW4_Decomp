@@ -1,4 +1,4 @@
-void Gap__Attrs__igDisplayListAttr__vfunc_26(void) {
+void igDisplayListAttr_SynchronizeDefault(void) {
 
 }
 

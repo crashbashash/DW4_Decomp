@@ -1,6 +1,6 @@
 igMetaObject *g_igNonRefCountedNodeList_metaObject;
 
-igMetaObject *FUN_0019c8c0(void) {
+igMetaObject *igNonRefCountedNodeList_GetOrCreateMetaObject(void) {
     if (g_igNonRefCountedNodeList_metaObject == 0) {
         g_igNonRefCountedNodeList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -37,7 +37,7 @@ CallbackArray *igNonRefCountedNodeList_Register(void) {
         &g_igNonRefCountedNodeList_metaObject,
         igNonRefCountedObjectList_Register,
         igNonRefCountedObjectList_GetPublishedMetaObject,
-        thunk_igNonRefCountedNodeList_GetMetaObject,
+        igNonRefCountedNodeList_GetMetaObjectFunction,
         "igNonRefCountedNodeList",
         0x14, /* instance size */
         igNonRefCountedNodeList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igNonRefCountedNodeList_Register(void) {
     );
 }
 
-void thunk_igNonRefCountedNodeList_GetMetaObject(void) {
+void igNonRefCountedNodeList_GetMetaObjectFunction(void) {
     igNonRefCountedNodeList_GetMetaObject();
 }
 

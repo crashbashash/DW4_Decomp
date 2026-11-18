@@ -25,7 +25,7 @@ void igAnimationStatePool_RunStaticInit(void)
     igMetaObject_RunStaticInit(igAnimationStatePool_Register);
 }
 
-static igMetaObjectCallback g_igAnimationStatePool_callbackList[] = { FUN_001a6dc0, 0 };
+static igMetaObjectCallback g_igAnimationStatePool_callbackList[] = { igAnimationState_EnsureRegistered, 0 };
 
 CallbackArray *igAnimationStatePool_Register(void) {
     SceneGraphLibrary_MarkRegistered();

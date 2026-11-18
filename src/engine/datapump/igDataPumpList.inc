@@ -1,6 +1,6 @@
 igMetaObject *g_igDataPumpList_metaObject;
 
-igMetaObject *FUN_001e53c0(void) {
+igMetaObject *igDataPumpList_GetOrCreateMetaObject(void) {
     if (g_igDataPumpList_metaObject == 0) {
         g_igDataPumpList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igDataPumpList_GetMetaObject(void)
 {
     igMetaObject *g = g_igDataPumpList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001e54a0();
+        igDataPumpList_EnsureRegistered();
     return g_igDataPumpList_metaObject;
 }
 
@@ -23,12 +23,12 @@ int igDataPumpList_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_001e54a0(void)
+void igDataPumpList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igDataPumpList_Register);
 }
 
-static igMetaObjectCallback g_igDataPumpList_callbackList[] = { FUN_001e5ab0, 0 };
+static igMetaObjectCallback g_igDataPumpList_callbackList[] = { igDataPump_EnsureRegistered, 0 };
 
 CallbackArray *igDataPumpList_Register(void) {
     DataPumpLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ CallbackArray *igDataPumpList_Register(void) {
         &g_igDataPumpList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igDataPumpList_GetMetaObject,
+        igDataPumpList_GetMetaObjectFunction,
         "igDataPumpList",
         0x14, /* instance size */
         igDataPumpList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igDataPumpList_Register(void) {
     );
 }
 
-void thunk_igDataPumpList_GetMetaObject(void) {
+void igDataPumpList_GetMetaObjectFunction(void) {
     igDataPumpList_GetMetaObject();
 }
 

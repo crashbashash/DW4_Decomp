@@ -69,7 +69,7 @@ void FUN_001da790(SorterOpaqueView *o) {
     }
 }
 
-void Gap__Sg__igSorter__vfunc_09(SorterState *o, int arg1) {
+void igSorter_userConstruct(SorterState *o, int arg1) {
     int s3;
     SorterList *s2;
     SorterList *s0;

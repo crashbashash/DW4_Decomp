@@ -1,7 +1,7 @@
 void *igViewerStatisticsManager_GetMetaObject(void) {
     igMetaObject *g = g_igViewerStatisticsManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_004588e0();
+        igViewerStatisticsManager_EnsureRegistered();
     }
     return g_igViewerStatisticsManager_metaObject;
 }
@@ -26,7 +26,7 @@ int igViewerStatisticsManager_GetVTable(void) {
     igSmartPointer_igStringObj_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
     GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
     GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
-    FUN_004583f0(&obj.w4, -1);
+    igSmartPointer_igViewerGuiFactory_Destruct(&obj.w4, -1);
     igSmartPointer_igVisualContext_Destruct((igSmartPointer<igObject> *)&obj.w3, -1);
     FUN_00458860((ObjectRefWord *)&obj.w2, -1);
     return t;
@@ -46,12 +46,12 @@ ObjectRefWord *FUN_00458860(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void FUN_004588e0(void)
+void igViewerStatisticsManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igViewerStatisticsManager_Register);
 }
 
-static igMetaObjectCallback g_igViewerStatisticsManager_callbackList[] = { FUN_00458bc0, igVisualContext_EnsureRegistered, FUN_0045bc10, igBoxComponent_RunStaticInit, igStringObj_EnsureRegistered, igMetaObjectList_EnsureRegistered, igMetaFieldList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igViewerStatisticsManager_callbackList[] = { igStatisticsItemList_EnsureRegistered, igVisualContext_EnsureRegistered, igViewerGuiFactory_EnsureRegistered, igBoxComponent_RunStaticInit, igStringObj_EnsureRegistered, igMetaObjectList_EnsureRegistered, igMetaFieldList_EnsureRegistered, 0 };
 
 CallbackArray *igViewerStatisticsManager_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -60,7 +60,7 @@ CallbackArray *igViewerStatisticsManager_Register(void) {
         &g_igViewerStatisticsManager_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igViewerStatisticsManager_GetMetaObject,
+        igViewerStatisticsManager_GetMetaObjectFunction,
         "igViewerStatisticsManager",
         0x48, /* instance size */
         igViewerStatisticsManager_GetVTable,
@@ -70,7 +70,7 @@ CallbackArray *igViewerStatisticsManager_Register(void) {
     );
 }
 
-void thunk_igViewerStatisticsManager_GetMetaObject(void) {
+void igViewerStatisticsManager_GetMetaObjectFunction(void) {
     igViewerStatisticsManager_GetMetaObject();
 }
 
@@ -159,12 +159,12 @@ void igViewerStatisticsManager_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igViewerStatisticsManager_ctorTable, 0xF);
     temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00458ae0();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igStatisticsItemList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)(igVisualContext_GetOrCreateMetaObject());
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0045b8d0();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igViewerGuiFactory_GetOrCreateMetaObject();
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)(igBoxComponent_GetOrCreateMetaObject());
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4));

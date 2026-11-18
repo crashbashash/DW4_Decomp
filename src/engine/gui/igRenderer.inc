@@ -23,7 +23,7 @@ CallbackArray *igRenderer_Register(void) {
         &g_igRenderer_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igRenderer_GetMetaObject,
+        igRenderer_GetMetaObjectFunction,
         "igRenderer",
         0xC, /* instance size */
         0,
@@ -33,7 +33,7 @@ CallbackArray *igRenderer_Register(void) {
     );
 }
 
-void thunk_igRenderer_GetMetaObject(void) {
+void igRenderer_GetMetaObjectFunction(void) {
     igRenderer_GetMetaObject();
 }
 

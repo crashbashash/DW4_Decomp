@@ -10,12 +10,12 @@ igMetaField *g_igParticleFormat_spriteSpaceMetaField;
 igMetaField *g_igParticleFormat_rotationMetaField;
 igMetaField *g_igParticleFormat_lifetimeMetaField;
 
-int FUN_0014d070(int arg0) {
+int igParticleFormat_Create(int arg0) {
     igParticleFormat_EnsureRegistered();
     return (int)igMetaObject_CreateInstance(g_igParticleFormat_metaObject, (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *FUN_0014d0b0(void) {
+igMetaObject *igParticleFormat_GetOrCreateMetaObject(void) {
     if (g_igParticleFormat_metaObject == 0) {
         g_igParticleFormat_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -49,7 +49,7 @@ CallbackArray *igParticleFormat_Register(void) {
         &g_igParticleFormat_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igParticleFormat_GetMetaObject,
+        igParticleFormat_GetMetaObjectFunction,
         "igParticleFormat",
         0x30, /* instance size */
         igParticleFormat_GetVTable,
@@ -59,7 +59,7 @@ CallbackArray *igParticleFormat_Register(void) {
     );
 }
 
-void thunk_igParticleFormat_GetMetaObject(void) {
+void igParticleFormat_GetMetaObjectFunction(void) {
     igParticleFormat_GetMetaObject();
 }
 
@@ -148,13 +148,13 @@ void igParticleFormat_InitFields(void) {
     ((igEnumMetaField *)temp_v0_5)->_getMetaEnumFunction = (int)(&X4_0014d010[0]);
     temp_v0_6 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 5));
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_6, 0);
-    ((igEnumMetaField *)temp_v0_6)->_getMetaEnumFunction = (int)(&FUN_00149aa0);
+    ((igEnumMetaField *)temp_v0_6)->_getMetaEnumFunction = (int)(&IG_GFX_DRAW_GetMetaEnum);
     temp_v0_7 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 6));
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_7, g_igParticleFormat_spriteTypeDefault);
-    ((igEnumMetaField *)temp_v0_7)->_getMetaEnumFunction = (int)(&FUN_0014c230);
+    ((igEnumMetaField *)temp_v0_7)->_getMetaEnumFunction = (int)(&IG_GFX_SPRITE_TYPE_GetMetaEnum);
     temp_v0_8 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 7));
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_8, 0);
-    ((igEnumMetaField *)temp_v0_8)->_getMetaEnumFunction = (int)(&FUN_0014c290);
+    ((igEnumMetaField *)temp_v0_8)->_getMetaEnumFunction = (int)(&IG_GFX_SPRITE_SIZE_SPACE_GetMetaEnum);
     temp_v0_9 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 8));
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_9, 0);
     ((igEnumMetaField *)temp_v0_9)->_getMetaEnumFunction = (int)(&X5_0014d010[0]);
@@ -172,7 +172,7 @@ static int g_igParticleFormat_textureArgumentValues[] = {
 };
 igMetaEnum *g_igParticleFormat_textureArgumentMetaEnum;
 
-int FUN_0014d450(void) {
+int TEXTURE_ARGUMENT_GetMetaEnum(void) {
     if (g_igParticleFormat_textureArgumentMetaEnum == 0) {
         g_igParticleFormat_textureArgumentMetaEnum = igMetaEnum_Create("TEXTURE_ARGUMENT", g_igParticleFormat_textureArgumentNames, g_igParticleFormat_textureArgumentValues, 4);
     }
@@ -187,7 +187,7 @@ static int g_igParticleFormat_textureStageTypeValues[] = {
 };
 igMetaEnum *g_igParticleFormat_textureStageTypeMetaEnum;
 
-int FUN_0014d4b0(void) {
+int TEXTURE_STAGE_TYPE_GetMetaEnum(void) {
     if (g_igParticleFormat_textureStageTypeMetaEnum == 0) {
         g_igParticleFormat_textureStageTypeMetaEnum = igMetaEnum_Create("TEXTURE_STAGE_TYPE", g_igParticleFormat_textureStageTypeNames, g_igParticleFormat_textureStageTypeValues, 3);
     }
@@ -202,7 +202,7 @@ static int g_igParticleFormat_textureFunctionTypeValues[] = {
 };
 igMetaEnum *g_igParticleFormat_textureFunctionTypeMetaEnum;
 
-int FUN_0014d510(void) {
+int TEXTURE_FUNCTION_TYPE_GetMetaEnum(void) {
     if (g_igParticleFormat_textureFunctionTypeMetaEnum == 0) {
         g_igParticleFormat_textureFunctionTypeMetaEnum = igMetaEnum_Create("TEXTURE_FUNCTION_TYPE", g_igParticleFormat_textureFunctionTypeNames, g_igParticleFormat_textureFunctionTypeValues, 3);
     }

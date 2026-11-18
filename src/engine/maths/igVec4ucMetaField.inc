@@ -1,7 +1,7 @@
 igMetaObject *g_igVec4ucMetaField_metaObject;
 M *g_igVec4ucMetaField_descriptor;
 
-igMetaObject *FUN_00187010(void)
+igMetaObject *igVec4ucMetaField_GetMetaObject(void)
 {
     igMetaObject *meta = g_igVec4ucMetaField_metaObject;
     bool ready;
@@ -67,8 +67,8 @@ CallbackArray *igVec4ucMetaField_Register(void) {
     );
 }
 
-void thunk_FUN_00187010(void) {
-    FUN_00187010();
+void igVec4ucMetaField_GetMetaObjectFunction(void) {
+    igVec4ucMetaField_GetMetaObject();
 }
 
 int FUN_00187180(void) {

@@ -1,4 +1,4 @@
-igMetaObject *FUN_00152370(void) {
+igMetaObject *igPsx2VertexArray1_1_GetOrCreateMetaObject(void) {
     if (g_igPsx2VertexArray1_1_metaObject == 0) {
         g_igPsx2VertexArray1_1_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -9,7 +9,7 @@ igMetaObject *igPsx2VertexArray1_1_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2VertexArray1_1_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001525e0();
+        igPsx2VertexArray1_1_EnsureRegistered();
     return g_igPsx2VertexArray1_1_metaObject;
 }
 
@@ -73,12 +73,12 @@ void **FUN_00152560(void **arg0, short arg1) {
     return arg0;
 }
 
-void FUN_001525e0(void)
+void igPsx2VertexArray1_1_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2VertexArray1_1_Register);
 }
 
-static igMetaObjectCallback g_igPsx2VertexArray1_1_callbackList[] = { igPointerList_EnsureRegistered, FUN_001528e0, 0 };
+static igMetaObjectCallback g_igPsx2VertexArray1_1_callbackList[] = { igPointerList_EnsureRegistered, igPsx2LongList_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2VertexArray1_1_Register(void) {
     FUN_00149bc0();
@@ -87,7 +87,7 @@ CallbackArray *igPsx2VertexArray1_1_Register(void) {
         &g_igPsx2VertexArray1_1_metaObject,
         igVertexArray1_1_Register,
         igVertexArray1_1_GetPublishedMetaObject,
-        thunk_igPsx2VertexArray1_1_GetMetaObject,
+        igPsx2VertexArray1_1_GetMetaObjectFunction,
         "igPsx2VertexArray1_1",
         0x90, /* instance size */
         igPsx2VertexArray1_1_GetVTable,
@@ -97,7 +97,7 @@ CallbackArray *igPsx2VertexArray1_1_Register(void) {
     );
 }
 
-igMetaObject *FUN_00152670(void) {
+igMetaObject *igVertexArray1_1_GetPublishedMetaObject(void) {
     return g_igVertexArray1_1_metaObject;
 }
 
@@ -157,7 +157,7 @@ void igPsx2VertexArray1_1_InitFields(void) {
     ((igObjectRefMetaField *)f2)->_metaObject = (int)igPointerList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)f2)->_persistent = 0;
     f3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
-    ((igObjectRefMetaField *)f3)->_metaObject = FUN_00152800();
+    ((igObjectRefMetaField *)f3)->_metaObject = igPsx2LongList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)f3)->_persistent = 0;
     f4 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 3));
     igIntMetaField_SetDefault((igMetaField *)f4, -1);
@@ -168,15 +168,15 @@ void igPsx2VertexArray1_1_InitFields(void) {
     ((igIntArrayMetaField *)f5)->_persistent = 0;
     ((igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 6)))->_persistent = 0;
     igMetaObject_NameFields(meta, g_igPsx2VertexArray1_1_fieldTable, g_igPsx2VertexArray1_1_fieldHandles, g_igPsx2VertexArray1_1_fieldOffsets, fieldStart);
-    ((igMetaObject *)(g_igPsx2VertexArray1_1_metaObject))->_writeProxy = (int)(&thunk_igVertexArray1_1_GetMetaObject);
+    ((igMetaObject *)(g_igPsx2VertexArray1_1_metaObject))->_writeProxy = (int)(&igVertexArray1_1_GetMetaObjectFunction);
 }
 
-int FUN_001527c0(int arg0) {
-    FUN_001528e0();
+int igPsx2LongList_Create(int arg0) {
+    igPsx2LongList_EnsureRegistered();
     return (int)igMetaObject_CreateInstance(g_igPsx2LongList_metaObject, (igMemoryPoolView *)arg0);
 }
 
-int FUN_00152800(void) {
+int igPsx2LongList_GetOrCreateMetaObject(void) {
     if (g_igPsx2LongList_metaObject == 0) {
         g_igPsx2LongList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }

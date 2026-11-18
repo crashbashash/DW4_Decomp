@@ -77,7 +77,7 @@ void igNode_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igNode_Register);
 }
 
-static igMetaObjectCallback g_igNode_callbackList[] = { FUN_00186b20, igNonRefCountedNodeList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igNode_callbackList[] = { igVolume_EnsureRegistered, igNonRefCountedNodeList_EnsureRegistered, 0 };
 
 CallbackArray *igNode_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -86,7 +86,7 @@ CallbackArray *igNode_Register(void) {
         &g_igNode_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igNode_GetMetaObject,
+        igNode_GetMetaObjectFunction,
         "igNode",
         0x1C, /* instance size */
         igNode_GetVTable,
@@ -96,7 +96,7 @@ CallbackArray *igNode_Register(void) {
     );
 }
 
-void thunk_igNode_GetMetaObject(void) {
+void igNode_GetMetaObjectFunction(void) {
     igNode_GetMetaObject();
 }
 
@@ -136,9 +136,9 @@ void igNode_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igNode_ctorTable, 4);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_00186a80();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = igVolume_GetOrCreateMetaObject();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_0019c8c0();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igNonRefCountedNodeList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_2)->_resetMethod = 3;
     ((igObjectRefMetaField *)temp_s2_2)->_construct = 1;
     ((igObjectRefMetaField *)temp_s2_2)->_persistent = 0;
@@ -151,7 +151,7 @@ void igNode_InitFields(void) {
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igNode_fieldTable, g_igNode_fieldHandles, g_igNode_fieldOffsets, temp_s0);
 }
 
-void **FUN_0019d0a0(void **arg0, long long arg1) {
+void **igSmartPointer_igRenderListAttr_Destruct(void **arg0, long long arg1) {
     struct Rc *a;
     if (arg0 != 0) {
         a = (struct Rc *)*arg0;
@@ -195,11 +195,11 @@ igMetaObject *g_igGeometry_metaObject;
 igMetaField *g_igGeometry_triggerMetaField;
 igMetaField *g_igGeometry_renderListMetaField;
 
-igMetaObject *FUN_0019d1e0(void) {
+igMetaObject *igGeometry_GetPublishedMetaObject(void) {
     return g_igGeometry_metaObject;
 }
 
-int *FUN_0019d1f0(int *p)
+int *igSmartPointer_igFloatList_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
@@ -220,7 +220,7 @@ igSmartPointer<igObject> *igSmartPointer_igIntListList_Destruct(igSmartPointer<i
 
 igMetaObject *g_igModelViewMatrixBoneSelectListSg_metaObject;
 
-igMetaObject *FUN_0019d280(void) {
+igMetaObject *igModelViewMatrixBoneSelectListSg_GetOrCreateMetaObject(void) {
     if (g_igModelViewMatrixBoneSelectListSg_metaObject == 0) {
         g_igModelViewMatrixBoneSelectListSg_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }

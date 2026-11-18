@@ -64,7 +64,7 @@ struct igVec3f {
 
 extern "C" {
 /* Parses three floats from `text`, by `format` when given; nonzero on success. */
-int Vec3f_FromString(const char *text, float *vector, const char *format);
+int igConvertString_Vec3f(const char *text, float *vector, const char *format);
 void Vec3_Lerp(float *out, float t, const float *from, const float *to);
 /* vector = vector x other. */
 void Vec3f_CrossInPlace(float *vector, const float *other);

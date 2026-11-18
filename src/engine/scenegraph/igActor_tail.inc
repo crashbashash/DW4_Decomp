@@ -98,7 +98,7 @@ void FUN_001b8a20(Src *arg0, Dst *arg1) {
     l3->items[c3] = c;
 }
 
-int FUN_001b8ba0(void *arg0, int arg1) {
+int igCommonTraversal_TraverseJointTransform(void *arg0, int arg1) {
     int sp40[16];
     int *temp_s2;
     int temp_v0;
@@ -147,7 +147,7 @@ void FUN_001b8cf0(igCommonTraversal *arg0, char *arg1) {
     } else {
         igMatrix44f_SetIdentity((float *)dst);
     }
-    FUN_001b8ba0((void *)arg0, (int)arg1);
+    igCommonTraversal_TraverseJointTransform((void *)arg0, (int)arg1);
 }
 
 int FUN_001b8de0(Dst_1b8de0 *arg0, Src_1b8de0 *arg1) {
@@ -170,7 +170,7 @@ int FUN_001b8de0(Dst_1b8de0 *arg0, Src_1b8de0 *arg1) {
     return 0;
 }
 
-int FUN_001b8f20(C_1b8f20 *arg0, D *arg1) {
+int igCommonTraversal_TraverseBillboard(C_1b8f20 *arg0, D *arg1) {
     char sp80[64];
     char sp40[64];
     X_1b8f20 *x;
@@ -414,11 +414,11 @@ int FUN_001b99d0(DrawTraversalView *o, SwitchGroupView *g) {
     return 0;
 }
 
-void FUN_001b9d40(int arg0, int arg1) {
+void igCommonTraversal_TraverseTransform(int arg0, int arg1) {
     igTransform_TraverseChildrenAndPopMatrix(igTransform_PushMatrix((TransformView *)arg1, (CommonTraversalView *)arg0), (igTransform *)arg1, (igCommonTraversal *)arg0);
 }
 
-int FUN_001b9d90(LightTraversalView *o, LightSceneView *scene) {
+int igCommonTraversal_TraverseLightSet(LightTraversalView *o, LightSceneView *scene) {
     LightVec3 position;
     LightVec3 direction;
     float matrix[16];
@@ -462,7 +462,7 @@ int FUN_001b9f00(igCompileTraversal *arg0, igAttrSet *arg1) {
     return 0;
 }
 
-int FUN_001b9fc0(struct A_1b9fc0 *arg0, struct B_1b9fc0 *arg1) {
+int igCommonTraversal_TraverseLightStateSet(struct A_1b9fc0 *arg0, struct B_1b9fc0 *arg1) {
     int s1;
     int s0;
 
@@ -477,7 +477,7 @@ int FUN_001b9fc0(struct A_1b9fc0 *arg0, struct B_1b9fc0 *arg1) {
     return 0;
 }
 
-int FUN_001ba080(CullTraversalView *o, CullNodeView *node) {
+int igCommonTraversal_TraverseLod(CullTraversalView *o, CullNodeView *node) {
     CullVec3 out;
     CullVec3 center;
     CullAttrState *st;
@@ -614,7 +614,7 @@ int FUN_001ba260(igCommonTraversal *self, MultiPassShaderView *shader) {
     return 0;
 }
 
-int FUN_001ba650(int a0, int arg1) {
+int igCommonTraversal_TraversePlanarShadowShader(int a0, int arg1) {
     S_1ba650 *arg0 = (S_1ba650 *)a0;
     FUN_001b1030((igAttrStackManager *)arg0->f52, (igAttr *)arg0->f232);
     FUN_001d3e20((igPlanarShadowShader *)arg1, (igCommonTraversal *)arg0);
@@ -622,7 +622,7 @@ int FUN_001ba650(int a0, int arg1) {
     return 0;
 }
 
-int FUN_001ba6b0(char *arg0, struct S_1d6190 *arg1) {
+int igCommonTraversal_TraverseProjectiveShadowShaderNode(char *arg0, struct S_1d6190 *arg1) {
     FUN_001d6190(arg1, arg0);
     return 0;
 }
@@ -669,7 +669,7 @@ int FUN_001ba850(A1_1c03a0 *arg0, DepthOfFieldNode *arg1) {
     return 0;
 }
 
-int FUN_001ba880(igCommonTraversal *arg0, VC1 *arg1) {
+int igCommonTraversal_TraverseTransformRecorder(igCommonTraversal *arg0, VC1 *arg1) {
     int sp30[16];
     igAttrStack *l;
     int i, k, v;

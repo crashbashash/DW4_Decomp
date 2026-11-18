@@ -4,7 +4,7 @@ igMetaField *g_igViewManager_viewModelMetaField;
 igMetaField *g_igViewManager_synchronizersMetaField;
 igMetaField *g_igViewManager_homeMatrixMetaField;
 
-igMetaObject *FUN_0045d100(void) {
+igMetaObject *igViewManager_GetOrCreateMetaObject(void) {
     if (g_igViewManager_metaObject == 0) {
         g_igViewManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -14,7 +14,7 @@ igMetaObject *FUN_0045d100(void) {
 void *igViewManager_GetMetaObject(void) {
     igMetaObject *g = g_igViewManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0045d2f0();
+        igViewManager_EnsureRegistered();
     }
     return g_igViewManager_metaObject;
 }
@@ -68,12 +68,12 @@ int igViewManager_GetVTable(void) {
     return temp_s3;
 }
 
-void FUN_0045d2f0(void)
+void igViewManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igViewManager_Register);
 }
 
-static igMetaObjectCallback g_igViewManager_callbackList[] = { FUN_0045d000, FUN_0045d5c0, igObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igViewManager_callbackList[] = { igViewMode_EnsureRegistered, igViewModel_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
 
 CallbackArray *igViewManager_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -82,7 +82,7 @@ CallbackArray *igViewManager_Register(void) {
         &g_igViewManager_metaObject,
         igEventReceiver_Register,
         igEventReceiver_GetPublishedMetaObject,
-        thunk_igViewManager_GetMetaObject,
+        igViewManager_GetMetaObjectFunction,
         "igViewManager",
         0x54, /* instance size */
         igViewManager_GetVTable,
@@ -92,7 +92,7 @@ CallbackArray *igViewManager_Register(void) {
     );
 }
 
-void thunk_igViewManager_GetMetaObject(void) {
+void igViewManager_GetMetaObjectFunction(void) {
     igViewManager_GetMetaObject();
 }
 
@@ -132,10 +132,10 @@ void igViewManager_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewManager_ctorTable, 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0045cf10();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igViewMode_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0045d470();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igViewModel_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igObjectList_GetOrCreateMetaObject();

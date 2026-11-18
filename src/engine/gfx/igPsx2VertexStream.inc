@@ -10,7 +10,7 @@ igMetaField *g_igPsx2VertexStream_renderListHandleMetaField;
 igMetaField *g_igPsx2VertexStream_dmaBufferMetaField;
 igMetaField *g_igPsx2VertexStream_dmaBufferStructMetaField;
 
-void thunk_igPsx2VertexStream_GetMetaObject(void) {
+void igPsx2VertexStream_GetMetaObjectFunction(void) {
     igPsx2VertexStream_GetMetaObject();
 }
 

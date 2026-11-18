@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igModelViewMatrixAttrList__vfunc_22(void) {
+igMetaObject *igModelViewMatrixAttrList_GetMeta(void) {
     return g_igModelViewMatrixAttrList_metaObject;
 }
 

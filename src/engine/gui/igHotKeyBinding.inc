@@ -3,7 +3,7 @@ igMetaField *g_igHotKeyBinding_keyMetaField;
 igMetaField *g_igHotKeyBinding_buttonMetaField;
 igMetaField *g_igHotKeyBinding_actionMetaField;
 
-int FUN_0044dc20(int arg0) {
+int igHotKeyBinding_Create(int arg0) {
     igHotKeyBinding_RunStaticInit();
     return (int)(igMetaObject_CreateInstance(g_igHotKeyBinding_metaObject, (igMemoryPoolView *)arg0));
 }
@@ -103,7 +103,7 @@ void igHotKeyBinding_InitFields(void) {
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_2, 0x20);
     ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(FUN_00146850);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00453250();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igAction_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igHotKeyBinding_fieldTable, g_igHotKeyBinding_fieldHandles, g_igHotKeyBinding_fieldOffsets, temp_s2);
 }
 

@@ -1,5 +1,5 @@
 int FUN_00198b60(int arg0) {
-    FUN_00198c30();
+    igShaderProcessor_EnsureRegistered();
     return (int)igMetaObject_CreateInstance((igMetaObject *)g_igShaderProcessor_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -9,7 +9,7 @@ igMetaObject *igShaderProcessor_GetMetaObject(void)
 {
     igMetaObject *g = g_igShaderProcessor_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00198c30();
+        igShaderProcessor_EnsureRegistered();
     return g_igShaderProcessor_metaObject;
 }
 
@@ -20,7 +20,7 @@ int igShaderProcessor_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00198c30(void)
+void igShaderProcessor_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igShaderProcessor_Register);
 }
@@ -32,7 +32,7 @@ CallbackArray *igShaderProcessor_Register(void) {
         &g_igShaderProcessor_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igShaderProcessor_GetMetaObject,
+        igShaderProcessor_GetMetaObjectFunction,
         "igShaderProcessor",
         8, /* instance size */
         igShaderProcessor_GetVTable,
@@ -42,7 +42,7 @@ CallbackArray *igShaderProcessor_Register(void) {
     );
 }
 
-void thunk_igShaderProcessor_GetMetaObject(void) {
+void igShaderProcessor_GetMetaObjectFunction(void) {
     igShaderProcessor_GetMetaObject();
 }
 

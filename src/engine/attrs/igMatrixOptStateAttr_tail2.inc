@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igMatrixOptStateAttr__vfunc_22(void) {
+igMetaObject *igMatrixOptStateAttr_GetMeta(void) {
     return g_igMatrixOptStateAttr_metaObject;
 }
 

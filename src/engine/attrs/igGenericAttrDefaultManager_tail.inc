@@ -1,4 +1,4 @@
-igSmartPointer<igAttr> Gap__Attrs__igGenericAttrDefaultManager__vfunc_24(igObject *self, igMetaObject *meta) {
+igSmartPointer<igAttr> igGenericAttrDefaultManager_createDefault(igObject *self, igMetaObject *meta) {
     igMetaObject_IsOfType(meta, g_igAttr_metaObject);
     return igMetaObject_CreateInstanceDefaultRef(meta);
 }
@@ -16,7 +16,7 @@ void FUN_0013cf80(void **arg0, int a1, int a2, int a3, int a4) {
     ((DW4VC_144_4 *)(arg0))->vX(a1, a2, a3, (int)(&sp1C), (int)(&sp18), a4, 0);
 }
 
-void FUN_0013cfc0(void *arg0) {
+void igGeometryAttr1_5_Reset(void *arg0) {
     void **temp_a0;
     void **temp_a0_2;
 

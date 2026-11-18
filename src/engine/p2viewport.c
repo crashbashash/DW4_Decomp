@@ -25,18 +25,7 @@ typedef union p2VifCode {
     unsigned int word;
 } p2VifCode;
 
-/* A texture record of the p2 texture file: the size and GS format of a VRAM buffer. */
-typedef struct P2Texture {
-    char f0[60];
-    unsigned short width;
-    unsigned short height;
-    char f64[2];
-    unsigned short format;
-} P2Texture;
-
-int FUN_00208200(int texture);
-
-extern int DAT_00568e30;
+#include "dw4/p2/p2texture.h"
 
 extern p2ViewportRect p2Viewport;
 extern float p2ViewportScale;
@@ -126,8 +115,8 @@ void p2SetViewport(int x, int y, int width, int height, float nearZ, float farZ)
     if (p2Display.renderTarget < 0) {
         bufferHeight = antialias != 0 ? p2Display.antialiasHeight : p2Display.height;
     } else {
-        if (DAT_00568e30 > -1) {
-            switch (((P2Texture *)DAT_00568e30)->format) {
+        if (p2DepthTarget > -1) {
+            switch (((P2Texture *)p2DepthTarget)->format) {
             case 11:
             case 12:
                 depthRange = 0xFFFF;
@@ -139,7 +128,7 @@ void p2SetViewport(int x, int y, int width, int height, float nearZ, float farZ)
                 break;
             }
         }
-        bufferHeight = FUN_00208200(p2Display.renderTarget);
+        bufferHeight = p2GetTextureHeight((P2Texture *)p2Display.renderTarget);
     }
     p2Viewport.nearZ = nearZ;
     p2Viewport.farZ = farZ;

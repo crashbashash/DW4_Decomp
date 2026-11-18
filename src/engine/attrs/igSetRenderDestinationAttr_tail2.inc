@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igSetRenderDestinationAttr__vfunc_22(void) {
+igMetaObject *igSetRenderDestinationAttr_GetMeta(void) {
     return g_igSetRenderDestinationAttr_metaObject;
 }
 

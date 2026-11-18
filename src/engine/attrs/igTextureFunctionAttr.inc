@@ -7,12 +7,12 @@ igMetaField *g_igTextureFunctionAttr_typeMetaField;
 igMetaField *g_igTextureFunctionAttr_call_stateMetaField;
 igMetaField *g_igTextureFunctionAttr_functionTypeMetaField;
 
-void FUN_00131c60(int arg0) {
+igTextureFunctionAttr *igTextureFunctionAttr_Create(igMemoryPoolView *pool) {
     igTextureFunctionAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55ED00, (igMemoryPoolView *)arg0);
+    return (igTextureFunctionAttr *)igMetaObject_CreateInstance(g_igTextureFunctionAttr_metaObject, pool);
 }
 
-igMetaObject *FUN_00131ca0(void) {
+igMetaObject *igTextureFunctionAttr_GetOrCreateMetaObject(void) {
     if (g_igTextureFunctionAttr_metaObject == 0) {
         g_igTextureFunctionAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -46,7 +46,7 @@ CallbackArray *igTextureFunctionAttr_Register(void) {
         &g_igTextureFunctionAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igTextureFunctionAttr_GetMetaObject,
+        igTextureFunctionAttr_GetMetaObjectFunction,
         "igTextureFunctionAttr",
         sizeof(igTextureFunctionAttr),                     /* Instance size. */
         igTextureFunctionAttr_GetVTable,
@@ -56,7 +56,7 @@ CallbackArray *igTextureFunctionAttr_Register(void) {
     );
 }
 
-void thunk_igTextureFunctionAttr_GetMetaObject(void) {
+void igTextureFunctionAttr_GetMetaObjectFunction(void) {
     igTextureFunctionAttr_GetMetaObject();
 }
 
@@ -100,34 +100,34 @@ static int g_igTextureFunctionAttr_fieldOffsets[] = {
 int g_igTextureFunctionAttr_modeDefault = 1;
 
 void igTextureFunctionAttr_InitFields(void) {
-    igMetaObject *temp_s1;
-    int temp_s0;
-    struct TextureMetaFieldView *temp_v0;
-    struct TextureMetaFieldView *temp_v0_2;
-    struct TextureMetaFieldView *t1;
-    struct TextureMetaFieldView *t2;
-    struct TextureMetaFieldView *t3;
-    struct TextureMetaFieldView *t4;
+    igMetaObject *meta;
+    int base;
+    struct MetaFieldSetupView *field;
+    struct MetaFieldSetupView *field2;
+    struct MetaFieldSetupView *t1;
+    struct MetaFieldSetupView *t2;
+    struct MetaFieldSetupView *t3;
+    struct MetaFieldSetupView *t4;
 
-    temp_s1 = g_igTextureFunctionAttr_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_igTextureFunctionAttr_ctorTable, 7);
-    temp_v0 = (TextureMetaFieldView *)igMetaObject_GetFieldAt(temp_s1, temp_s0);
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, g_igTextureFunctionAttr_modeDefault);
-    temp_v0->f52 = (void (*)())igMetaEnum_GetEmpty;
-    t1 = (TextureMetaFieldView *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1);
-    t1->f48 = (void (*)())FUN_00141250;
-    t2 = (TextureMetaFieldView *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2);
-    t2->f52 = FUN_0014d450;
-    t3 = (TextureMetaFieldView *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3);
-    t3->f52 = FUN_0014d450;
-    t4 = (TextureMetaFieldView *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4);
-    t4->f52 = FUN_0014d4b0;
-    igUnsignedCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5), 2);
-    temp_v0_2 = (TextureMetaFieldView *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 6);
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_2, 0);
-    temp_v0_2->f52 = FUN_0014d510;
-    igMetaObject_NameFields(temp_s1, g_igTextureFunctionAttr_fieldTable, g_igTextureFunctionAttr_fieldHandles, g_igTextureFunctionAttr_fieldOffsets, temp_s0);
+    meta = g_igTextureFunctionAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igTextureFunctionAttr_ctorTable, 7);
+    field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base);
+    igEnumMetaField_SetDefaultValue((igMetaField *)field, g_igTextureFunctionAttr_modeDefault);
+    field->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
+    t1 = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 1);
+    t1->_invarianceFunction = (void (*)())igTextureFunctionAttr_SynchronizeCachedUnitID;
+    t2 = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 2);
+    t2->_getMetaEnumFunction = TEXTURE_ARGUMENT_GetMetaEnum;
+    t3 = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 3);
+    t3->_getMetaEnumFunction = TEXTURE_ARGUMENT_GetMetaEnum;
+    t4 = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 4);
+    t4->_getMetaEnumFunction = TEXTURE_STAGE_TYPE_GetMetaEnum;
+    igUnsignedCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 5), 2);
+    field2 = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 6);
+    igEnumMetaField_SetDefaultValue((igMetaField *)field2, 0);
+    field2->_getMetaEnumFunction = TEXTURE_FUNCTION_TYPE_GetMetaEnum;
+    igMetaObject_NameFields(meta, g_igTextureFunctionAttr_fieldTable, g_igTextureFunctionAttr_fieldHandles, g_igTextureFunctionAttr_fieldOffsets, base);
 }
 
 void FUN_00131f70(void) {

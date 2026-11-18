@@ -17,7 +17,7 @@ static inline void setEvent(MousePosObserverView *self, const igSmartPointer<Obs
     model->ref = retained;
 }
 
-void Gap__Gui__igMousePosObserver__vfunc_13(MousePosObserverView *self, int flags) {
+void igMousePosObserver_resetFields(MousePosObserverView *self, int flags) {
     ObserverEventView *created;
     ObserverIntListView *list;
     int top;
@@ -41,7 +41,7 @@ void Gap__Gui__igMousePosObserver__vfunc_13(MousePosObserverView *self, int flag
 
 struct Vec3f_455d80 { float x; float y; float z; Vec3f_455d80() {} Vec3f_455d80(float a, float b, float c) : x(a), y(b), z(c) {} };
 struct GuiMessage_455d80 { int handled; int f4; int type; };
-void Gap__Gui__igMousePosObserver__vfunc_24(igMousePosObserver *self, struct GuiMessage_455d80 *msg) {
+void igMousePosObserver_OnModelChange(igMousePosObserver *self, struct GuiMessage_455d80 *msg) {
     igGuiSystemModel *model;
     int type;
     model = (igGuiSystemModel *)self->_model;

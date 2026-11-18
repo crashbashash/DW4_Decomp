@@ -51,7 +51,7 @@ CallbackArray *igParticleAttr_Register(void) {
         &g_igParticleAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igParticleAttr_GetMetaObject,
+        igParticleAttr_GetMetaObjectFunction,
         "igParticleAttr",
         0x30, /* instance size */
         igParticleAttr_GetVTable,
@@ -61,7 +61,7 @@ CallbackArray *igParticleAttr_Register(void) {
     );
 }
 
-void thunk_igParticleAttr_GetMetaObject(void) {
+void igParticleAttr_GetMetaObjectFunction(void) {
     igParticleAttr_GetMetaObject();
 }
 
@@ -103,20 +103,20 @@ static int g_igParticleAttr_fieldOffsets[] = {
 };
 
 void igParticleAttr_InitFields(void) {
-    int temp_s2;
-    void *temp_v0;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    void *field2;
+    igMetaObject *meta;
 
-    temp_s0 = g_igParticleAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igParticleAttr_ctorTable, 7);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0014c980();
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
-    igLongMetaField_SetDefault((igMetaField *)temp_v0, -1);
-    ((igLongMetaField *)temp_v0)->_persistent = 0;
-    *(char *)((char *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5)) + 38) = 0;
-    igMetaObject_NameFields(temp_s0, g_igParticleAttr_fieldTable, g_igParticleAttr_fieldHandles, g_igParticleAttr_fieldOffsets, temp_s2);
+    meta = g_igParticleAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igParticleAttr_ctorTable, 7);
+    field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)field2)->_metaObject = igParticleArray_GetOrCreateMetaObject();
+    field = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    igLongMetaField_SetDefault((igMetaField *)field, -1);
+    ((igLongMetaField *)field)->_persistent = 0;
+    *(char *)((char *)(igMetaObject_GetFieldAt(meta, base + 5)) + 38) = 0;
+    igMetaObject_NameFields(meta, g_igParticleAttr_fieldTable, g_igParticleAttr_fieldHandles, g_igParticleAttr_fieldOffsets, base);
 }
 

@@ -1,20 +1,20 @@
-void Gap__Attrs__igTextureAttr__vfunc_32(igTextureAttr *arg0, int arg1) {
+void igTextureAttr_SetMagnificationFilter(igTextureAttr *arg0, int arg1) {
     arg0->_magFilter = arg1;
 }
 
-void Gap__Attrs__igTextureAttr__vfunc_33(igTextureAttr *arg0, int arg1) {
+void igTextureAttr_SetMinificationFilter(igTextureAttr *arg0, int arg1) {
     arg0->_minFilter = arg1;
 }
 
-void Gap__Attrs__igTextureAttr__vfunc_34(igTextureAttr *arg0, int arg1) {
+void igTextureAttr_SetWrapS(igTextureAttr *arg0, int arg1) {
     arg0->_wrapS = arg1;
 }
 
-void Gap__Attrs__igTextureAttr__vfunc_35(igTextureAttr *arg0, int arg1) {
+void igTextureAttr_SetWrapT(igTextureAttr *arg0, int arg1) {
     arg0->_wrapT = arg1;
 }
 
-void Gap__Attrs__igTextureAttr__vfunc_36(S0_142400 *arg0, S1_142400 *arg1) {
+void igTextureAttr_SetVisualContext(S0_142400 *arg0, S1_142400 *arg1) {
     S_temp_a0_142400 *temp_a0;
     if (arg1 != 0) {
         arg1->f4 = (int)((int) (arg1->f4 + 1));

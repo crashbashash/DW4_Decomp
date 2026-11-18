@@ -1117,7 +1117,7 @@ void Lua_sd_OptionalArg(const char *args) {
                         beMessenger_AppendLong(g_beMessenger, longValue);
                         break;
                     case 'V':
-                        Vec3f_FromString(part + 1, parsed, " < %f , %f , %f > ");
+                        igConvertString_Vec3f(part + 1, parsed, " < %f , %f , %f > ");
                         vector[0] = parsed[0];
                         vector[1] = parsed[1];
                         vector[2] = parsed[2];
@@ -1498,7 +1498,7 @@ void MDLsetWorldPosTarget_79(const char *text) {
     float *target;
 
     if (g_mdlWorldPosTarget != 0) {
-        Vec3f_FromString(text, parsed, "V<%f,%f,%f>");
+        igConvertString_Vec3f(text, parsed, "V<%f,%f,%f>");
         x = parsed[0]; z = parsed[2]; y = parsed[1];
         target = g_mdlWorldPosTarget;
         target[0] = x;

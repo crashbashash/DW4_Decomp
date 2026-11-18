@@ -1,4 +1,4 @@
-int Gap__Sg__igNode__vfunc_22(void) {
+int igNode_GetMeta(void) {
     return ((int)g_igNode_metaObject);
 }
 
@@ -6,7 +6,7 @@ void igGraphPath_GetTransform(igGraphPath *path, igMatrix44f *matrix, long long 
     FUN_001c59f0((OO *)path, FUN_001c59e0(path), (int)matrix, time);
 }
 
-void FUN_001c5b80(SgLinkNode *o) {
+void igGroup_UserPostLoad(SgLinkNode *o) {
     int n;
     int i;
     SgLinkNode *c;
@@ -73,7 +73,7 @@ int igGroup_AppendChild(igGroup *group, igNode *child) {
     return -1;
 }
 
-int FUN_001c5d70(T_1c5d70 *self, int a1, O_1c5d70 *a2) {
+int igGroup_InsertChild(T_1c5d70 *self, int a1, O_1c5d70 *a2) {
     if (a2 == 0) return 0;
     if (a2->vX(self) != 0) {
         R_1c5d70 r;
@@ -89,7 +89,7 @@ int FUN_001c5d70(T_1c5d70 *self, int a1, O_1c5d70 *a2) {
     }
 }
 
-void FUN_001c5e20(T_1c5e20 *arg0) {
+void igGroup_userDestruct(T_1c5e20 *arg0) {
     unsigned int var_s0;
     unsigned int var_s2;
     L_1c5e20 *temp_v0;
@@ -103,7 +103,7 @@ void FUN_001c5e20(T_1c5e20 *arg0) {
     for (var_s2 = 0; var_s2 < var_s0; var_s2++) {
         arg0->f28->f16[var_s2]->vX(arg0);
     }
-    Gap__Core__igObject__vfunc_08__001d3390((igObject *)arg0);
+    igNode_userDestruct((igObject *)arg0);
 }
 
 igSmartPointer<igNode> igGroup_RemoveChildAt(igGroup *group, int idx) {
@@ -179,7 +179,7 @@ void FUN_001c6110(O_1c6110 *arg0, int arg1) {
     }
 }
 
-void FUN_001c6230(struct S_1c6230 *arg0, int arg1, int arg2) {
+void igNode_EnableFlags(struct S_1c6230 *arg0, int arg1, int arg2) {
     if (arg2 != 0) {
         arg0->f = arg0->f | arg1;
     } else {

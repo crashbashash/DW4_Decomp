@@ -7,7 +7,7 @@ igMetaObject *igObjectPool_GetMetaObject(void)
 {
     igMetaObject *g = g_igObjectPool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001967c0();
+        igObjectPool_EnsureRegistered();
     return g_igObjectPool_metaObject;
 }
 
@@ -19,7 +19,7 @@ int igObjectPool_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_001967c0(void)
+void igObjectPool_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igObjectPool_Register);
 }
@@ -31,7 +31,7 @@ CallbackArray *igObjectPool_Register(void) {
         &g_igObjectPool_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igObjectPool_GetMetaObject,
+        igObjectPool_GetMetaObjectFunction,
         "igObjectPool",
         0x20, /* instance size */
         igObjectPool_GetVTable,
@@ -41,7 +41,7 @@ CallbackArray *igObjectPool_Register(void) {
     );
 }
 
-void thunk_igObjectPool_GetMetaObject(void) {
+void igObjectPool_GetMetaObjectFunction(void) {
     igObjectPool_GetMetaObject();
 }
 
@@ -67,14 +67,14 @@ static int g_igObjectPool_fieldOffsets[] = {
 };
 
 void igObjectPool_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_igObjectPool_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igObjectPool_ctorTable, 3);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1), 0x32);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2), 1);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igObjectPool_fieldTable, g_igObjectPool_fieldHandles, g_igObjectPool_fieldOffsets, temp_s1);
+    meta = (void *)g_igObjectPool_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igObjectPool_ctorTable, 3);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1), 0x32);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2), 1);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igObjectPool_fieldTable, g_igObjectPool_fieldHandles, g_igObjectPool_fieldOffsets, base);
 }
 

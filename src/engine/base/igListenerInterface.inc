@@ -4,7 +4,7 @@ igMetaField *g_igListenerInterface_instancesListenerMetaField;
 igMetaField *g_igListenerInterface_typesMetaField;
 igMetaField *g_igListenerInterface_typesListenerMetaField;
 
-igMetaObject *FUN_00226c60(void) {
+igMetaObject *igListenerInterface_GetOrCreateMetaObject(void) {
     if (g_igListenerInterface_metaObject == 0) {
         g_igListenerInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -68,7 +68,7 @@ CallbackArray *igListenerInterface_Register(void) {
         &g_igListenerInterface_metaObject,
         (igMetaObjectRegisterFunction)igInterface_Register,
         (igMetaObjectGetFunction)igInterface_GetPublishedMetaObject,
-        thunk_igListenerInterface_GetMetaObject,
+        igListenerInterface_GetMetaObjectFunction,
         "igListenerInterface",
         0x30, /* instance size */
         igListenerInterface_GetVTable,
@@ -78,7 +78,7 @@ CallbackArray *igListenerInterface_Register(void) {
     );
 }
 
-void thunk_igListenerInterface_GetMetaObject(void) {
+void igListenerInterface_GetMetaObjectFunction(void) {
     igListenerInterface_GetMetaObject();
 }
 
@@ -108,28 +108,28 @@ static int g_igListenerInterface_fieldOffsets[] = {
 };
 
 void igListenerInterface_InitFields(void) {
-    int temp_s0;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    igMetaObject *temp_s1;
+    int base;
+    void *field;
+    void *field2;
+    void *field3;
+    void *field4;
+    igMetaObject *meta;
 
-    temp_s1 = g_igListenerInterface_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_igListenerInterface_ctorTable, 4);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = igObjectList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_00226fd0();
-    ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igMetaObjectList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_00226fd0();
-    ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, g_igListenerInterface_fieldTable, g_igListenerInterface_fieldHandles, g_igListenerInterface_fieldOffsets, temp_s0);
+    meta = g_igListenerInterface_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igListenerInterface_ctorTable, 4);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)field)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igRefMetaField *)field)->_construct = 1;
+    field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)igListenerListList_GetOrCreateMetaObject();
+    ((igRefMetaField *)field2)->_construct = 1;
+    field3 = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)field3)->_metaObject = (int)igMetaObjectList_GetOrCreateMetaObject();
+    ((igRefMetaField *)field3)->_construct = 1;
+    field4 = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)field4)->_metaObject = (int)igListenerListList_GetOrCreateMetaObject();
+    ((igRefMetaField *)field4)->_construct = 1;
+    igMetaObject_NameFields(meta, g_igListenerInterface_fieldTable, g_igListenerInterface_fieldHandles, g_igListenerInterface_fieldOffsets, base);
 }
 

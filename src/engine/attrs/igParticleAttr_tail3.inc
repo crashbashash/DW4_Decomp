@@ -1,8 +1,8 @@
-igMetaObject *Gap__Attrs__igParticleAttr__vfunc_22(void) {
+igMetaObject *igParticleAttr_GetMeta(void) {
     return g_igParticleAttr_metaObject;
 }
 
-void Gap__Attrs__igParticleAttr__vfunc_28(void *arg0) {
+void igParticleAttr_Reset(void *arg0) {
     void **temp_a0;
 
     temp_a0 = (void **)(*(int *)((char *)(arg0) + 16));

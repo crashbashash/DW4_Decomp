@@ -33,7 +33,7 @@ CallbackArray *igExtendByFunctionList_Register(void) {
         &g_igExtendByFunctionList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
-        thunk_igExtendByFunctionList_GetMetaObject,
+        igExtendByFunctionList_GetMetaObjectFunction,
         "igExtendByFunctionList",
         0x14, /* instance size */
         igExtendByFunctionList_GetVTable,
@@ -43,7 +43,7 @@ CallbackArray *igExtendByFunctionList_Register(void) {
     );
 }
 
-void thunk_igExtendByFunctionList_GetMetaObject(void) {
+void igExtendByFunctionList_GetMetaObjectFunction(void) {
     igExtendByFunctionList_GetMetaObject();
 }
 

@@ -27,7 +27,7 @@ CallbackArray *igModelViewMatrixBoneSelectListSg_Register(void) {
         &g_igModelViewMatrixBoneSelectListSg_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igModelViewMatrixBoneSelectListSg_GetMetaObject,
+        igModelViewMatrixBoneSelectListSg_GetMetaObjectFunction,
         "igModelViewMatrixBoneSelectList",
         0x14, /* instance size */
         igModelViewMatrixBoneSelectListSg_GetVTable,
@@ -37,7 +37,7 @@ CallbackArray *igModelViewMatrixBoneSelectListSg_Register(void) {
     );
 }
 
-void thunk_igModelViewMatrixBoneSelectListSg_GetMetaObject(void) {
+void igModelViewMatrixBoneSelectListSg_GetMetaObjectFunction(void) {
     igModelViewMatrixBoneSelectListSg_GetMetaObject();
 }
 

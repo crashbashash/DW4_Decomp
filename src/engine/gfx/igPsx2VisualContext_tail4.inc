@@ -43,8 +43,8 @@ void FUN_001702c0(igPsx2VisualContext *vc) {
     void *lights;
     int i;
     sp5C = 0x20;
-    thunk_igRegistry_GetValueInt(*(igRegistry **)((char *)g_objectSystem + 56), 4, "IG_GFX_VC_LIGHT_ARRAY_SIZE", &sp5C, 0x20, 0);
-    Buf_17a070 *r = (Buf_17a070 *)Memory_AllocateBufferDirect(0x14, (igMemoryPoolView *)FUN_00165d10((int *)vc));
+    igGetRegistryValue_Int(*(igRegistry **)((char *)g_objectSystem + 56), 4, "IG_GFX_VC_LIGHT_ARRAY_SIZE", &sp5C, 0x20, 0);
+    Buf_17a070 *r = (Buf_17a070 *)Memory_AllocateBufferDirect(0x14, (igMemoryPoolView *)igVisualContext_GetListMemoryPool((int *)vc));
     if (r != 0) {
         bi = (int)r;
         b = (Buf_17a070 *)bi;
@@ -79,12 +79,12 @@ void FUN_001702c0(igPsx2VisualContext *vc) {
         r = (Buf_17a070 *)bi;
     }
     vc->_pLightList = (int)r;
-    lights = Memory_AllocateAlignedWithAllocator(0x70, 0x10, (igMemoryPoolView *)FUN_00165ce0((int *)vc));
+    lights = Memory_AllocateAlignedWithAllocator(0x70, 0x10, (igMemoryPoolView *)igVisualContext_GetInternalMemoryPool((int *)vc));
     if (lights != 0) FUN_001716c0(lights);
     vc->_currentMaterial = (int)lights;
     FUN_001716c0((void *)vc->_currentMaterial);
     DAT_00560850[0] = ((LightCapsDispatch *)vc)->getCapability(9);
-    DAT_00560858[0] = ((PoolAllocDispatch *)FUN_00165ce0((int *)vc))->allocate(DAT_00560850[0] * 4);
+    DAT_00560858[0] = ((PoolAllocDispatch *)igVisualContext_GetInternalMemoryPool((int *)vc))->allocate(DAT_00560850[0] * 4);
     for (i = 0; i < DAT_00560850[0]; i++) {
         ((int *)DAT_00560858[0])[i] = -1;
     }
@@ -124,7 +124,7 @@ void FUN_00170510(Obj_170510 *o, int arg1) {
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_75(igPsx2VisualContext *self, unsigned char arg1) {
+void igPsx2VisualContext_SetLightingState(igPsx2VisualContext *self, unsigned char arg1) {
     S0_1706d0 *arg0 = (S0_1706d0 *)self;
     if (arg0->f1340 == (arg1 & 0xFF)) {
         DAT_00560848[0] += 1;
@@ -140,11 +140,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_75(igPsx2VisualContext *self, unsigned
     p2DisableCapability(8);
 }
 
-unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_76(void *arg0) {
+unsigned char igPsx2VisualContext_GetLightingState(void *arg0) {
     return *(int *)((char *)(arg0) + 1340);
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_77(igPsx2VisualContext *self, int arg1) {
+int igPsx2VisualContext_CreateLight(igPsx2VisualContext *self, int arg1) {
     Pool *p;
     int i;
     int idx;
@@ -186,7 +186,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_77(igPsx2VisualContext *self, int arg1)
     return idx;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_78(Obj_1708e0 *arg0, int arg1) {
+void igPsx2VisualContext_DeleteLight(Obj_1708e0 *arg0, int arg1) {
     E_1708e0 *e = arg0->f1336->f16 + arg1;
     Lst *l;
     if (e != 0 && e != 0) {
@@ -206,7 +206,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_78(Obj_1708e0 *arg0, int arg1) {
     }
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_79(igPsx2VisualContext *self, int arg1, int arg2) {
+int igPsx2VisualContext_SetLightState(igPsx2VisualContext *self, int arg1, int arg2) {
     Obj_1709d0 *arg0 = (Obj_1709d0 *)self;
     Mgr *m = arg0->f1336;
     int i;
@@ -243,15 +243,15 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_79(igPsx2VisualContext *self, int arg1,
     return 1;
 }
 
-unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_80(void *arg0, int arg1) {
+unsigned char igPsx2VisualContext_GetLightState(void *arg0, int arg1) {
     return *(int *)((char *)((*(int *)((char *)(*(int *)((char *)(arg0) + 1336)) + 16) + (arg1 * 0xA0))) + 148);
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_81(void *arg0, int arg1) {
+int igPsx2VisualContext_GetLightType(void *arg0, int arg1) {
     return *(int *)((char *)((*(int *)((char *)(*(int *)((char *)(arg0) + 1336)) + 16) + (arg1 * 0xA0))) + 152);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_82(igPsx2VisualContext *self, int arg1, float *arg2) {
+void igPsx2VisualContext_SetLightDiffuse(igPsx2VisualContext *self, int arg1, float *arg2) {
     char *arg0 = (char *)self;
     char *a3;
     float *t;
@@ -276,7 +276,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_82(igPsx2VisualContext *self, int arg1
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_86(igPsx2VisualContext *self, int light, float *color) {
+void igPsx2VisualContext_SetLightSpecular(igPsx2VisualContext *self, int light, float *color) {
     Tab_170c30 *t;
     E_170c30 *e;
     int same;
@@ -320,7 +320,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_86(igPsx2VisualContext *self, int ligh
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_84(igPsx2VisualContext *self, int arg1, float *arg2) {
+void igPsx2VisualContext_SetLightAmbient(igPsx2VisualContext *self, int arg1, float *arg2) {
     O_170d80 *arg0 = (O_170d80 *)self;
     T_170d80 *t;
     E_170d80 *e;
@@ -363,7 +363,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_84(igPsx2VisualContext *self, int arg1
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_88(igPsx2VisualContext *self, int arg1, float *arg2) {
+void igPsx2VisualContext_SetLightPosition(igPsx2VisualContext *self, int arg1, float *arg2) {
     float sp40[16];
     L_171100 *l = *(L_171100 **)((char *)((C_171100 *)self) + 1336);
     Ent_171100 *e = (Ent_171100 *)(l->base + arg1 * 0xA0);
@@ -384,7 +384,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_88(igPsx2VisualContext *self, int arg1
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_92(igPsx2VisualContext *self, int arg1, float fparg0) {
+void igPsx2VisualContext_SetLightCutoffAngle(igPsx2VisualContext *self, int arg1, float fparg0) {
     struct Ctx_171220 *arg0 = (struct Ctx_171220 *)self;
     struct Item *it;
     unsigned int old;
@@ -408,7 +408,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_92(igPsx2VisualContext *self, int arg1
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_94(igPsx2VisualContext *self, int arg1, float fparg0) {
+void igPsx2VisualContext_SetLightFalloffRate(igPsx2VisualContext *self, int arg1, float fparg0) {
     S_1712e0 *arg0 = (S_1712e0 *)self;
     float temp_f1;
     E_1712e0 *temp_a1;
@@ -426,7 +426,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_94(igPsx2VisualContext *self, int arg1
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_83(igPsx2VisualContext *arg0, int arg1, void *arg2) {
+void igPsx2VisualContext_GetLightDiffuse(igPsx2VisualContext *arg0, int arg1, void *arg2) {
     void *temp_v1;
 
     temp_v1 = (void *)(((igLightList *)arg0->_pLightList)->_data + (arg1 * 0xA0));
@@ -436,7 +436,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_83(igPsx2VisualContext *arg0, int arg1
     *(float *)((char *)(arg2) + 12) = (float) *(float *)((char *)(temp_v1) + 44);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_85(igPsx2VisualContext *arg0, int arg1, void *arg2) {
+void igPsx2VisualContext_GetLightAmbient(igPsx2VisualContext *arg0, int arg1, void *arg2) {
     void *temp_v1;
 
     temp_v1 = (void *)(*(int *)((char *)(arg0->_pLightList) + 16) + (arg1 * 0xA0));
@@ -447,7 +447,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_85(igPsx2VisualContext *arg0, int arg1
 }
 
 /* The reflected metadata types _diffuse as int[4], but the code reads floats. */
-void Gap__Gfx__igPsx2VisualContext__vfunc_87(igPsx2VisualContext *arg0, int arg1, float *arg2) {
+void igPsx2VisualContext_GetLightSpecular(igPsx2VisualContext *arg0, int arg1, float *arg2) {
     igLightAttr *temp_v1;
 
     temp_v1 = (igLightAttr *)(((igLightList *)arg0->_pLightList)->_data + (arg1 * 0xA0));
@@ -457,7 +457,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_87(igPsx2VisualContext *arg0, int arg1
     arg2[3] = *(float *)&temp_v1->_diffuse[3];
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_89(igPsx2VisualContext *arg0, int arg1, float *arg2) {
+void igPsx2VisualContext_GetLightPosition(igPsx2VisualContext *arg0, int arg1, float *arg2) {
     float *temp_v1;
 
     temp_v1 = (float *)(((igLightList *)arg0->_pLightList)->_data + (arg1 * 0xA0));
@@ -466,7 +466,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_89(igPsx2VisualContext *arg0, int arg1
     arg2[2] = temp_v1[2];
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_91(igPsx2VisualContext *arg0, int arg1, float *arg2) {
+void igPsx2VisualContext_GetLightDirection(igPsx2VisualContext *arg0, int arg1, float *arg2) {
     igLightAttr *temp_v1;
 
     temp_v1 = (igLightAttr *)(((igLightList *)arg0->_pLightList)->_data + (arg1 * 0xA0));
@@ -475,11 +475,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_91(igPsx2VisualContext *arg0, int arg1
     arg2[2] = (float) *(float *)&temp_v1->_specular[2];
 }
 
-float Gap__Gfx__igPsx2VisualContext__vfunc_95(void) {
+float igPsx2VisualContext_GetLightFalloffRate(void) {
     return 0.0f;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_97(igPsx2VisualContext *arg0, int arg1, void *arg2) {
+void igPsx2VisualContext_GetLightAttenuation(igPsx2VisualContext *arg0, int arg1, void *arg2) {
     char *p = (char *)(*(int *)((char *)(arg0->_pLightList) + 16) + (arg1 * 0xA0));
     float x, y, z;
     z = *(float *)(p + 88);
@@ -490,7 +490,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_97(igPsx2VisualContext *arg0, int arg1
     *(float *)((char *)arg2 + 8) = z;
 }
 
-float Gap__Gfx__igPsx2VisualContext__vfunc_93(void *arg0, int arg1) {
+float igPsx2VisualContext_GetLightCutoffAngle(void *arg0, int arg1) {
     return *(float *)((char *)((*(int *)((char *)(*(int *)((char *)(arg0) + 1336)) + 16) + (arg1 * 0xA0))) + 92);
 }
 
@@ -527,7 +527,7 @@ static inline bool colorEqual(const float *a, const float *b) {
     return a[0] == b[0] && a[1] == b[1] && a[2] == b[2] && a[3] == b[3];
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_102(VisualContextColorView *arg0, float *arg1) {
+void igPsx2VisualContext_SetMaterialDiffuse(VisualContextColorView *arg0, float *arg1) {
     float *cur = arg0->f1344->v;
     VisualColorBlock *p;
     if (colorEqual(cur, arg1)) {
@@ -541,7 +541,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_102(VisualContextColorView *arg0, floa
     FUN_00172330(arg0, arg0->f1344);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_103(igPsx2VisualContext *arg0, void *arg1) {
+void igPsx2VisualContext_GetMaterialDiffuse(igPsx2VisualContext *arg0, void *arg1) {
     igMaterialAttr *temp_v1;
 
     temp_v1 = (igMaterialAttr *)arg0->_currentMaterial;
@@ -551,7 +551,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_103(igPsx2VisualContext *arg0, void *a
     *(float *)((char *)(arg1) + 12) = (float) *(float *)&temp_v1->_diffuse[3];
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_106(Obj_1718a0 *o, V4_1718a0 *n) {
+void igPsx2VisualContext_SetMaterialAmbient(Obj_1718a0 *o, V4_1718a0 *n) {
     Sub *s;
     unsigned old, *f;
     bool eq;
@@ -572,7 +572,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_106(Obj_1718a0 *o, V4_1718a0 *n) {
     FUN_00172330(o, o->s);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_107(igPsx2VisualContext *arg0, void *arg1) {
+void igPsx2VisualContext_GetMaterialAmbient(igPsx2VisualContext *arg0, void *arg1) {
     void *temp_v1;
 
     temp_v1 = (void *)arg0->_currentMaterial;
@@ -582,7 +582,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_107(igPsx2VisualContext *arg0, void *a
     *(float *)((char *)(arg1) + 12) = (float) *(float *)((char *)(temp_v1) + 12);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_104(struct S_171a10 *arg0, float *arg1) {
+void igPsx2VisualContext_SetMaterialEmissive(struct S_171a10 *arg0, float *arg1) {
     float *temp_a2;
     struct T_171a10 *temp_v1;
     int var_v0;
@@ -623,7 +623,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_104(struct S_171a10 *arg0, float *arg1
     FUN_00172330(arg0, arg0->f1344);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_105(igPsx2VisualContext *arg0, void *arg1) {
+void igPsx2VisualContext_GetMaterialEmissive(igPsx2VisualContext *arg0, void *arg1) {
     igMaterialAttr *temp_v1;
 
     temp_v1 = (igMaterialAttr *)arg0->_currentMaterial;
@@ -633,7 +633,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_105(igPsx2VisualContext *arg0, void *a
     *(float *)((char *)(arg1) + 12) = (float) *(float *)&temp_v1->_emission[3];
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_108(struct Psx2VisualContextView *arg0, struct VisualContextVec4 *arg1) {
+void igPsx2VisualContext_SetMaterialSpecular(struct Psx2VisualContextView *arg0, struct VisualContextVec4 *arg1) {
     struct VisualContextVec4 *p;
     struct VisualContextState *o;
     unsigned old;
@@ -667,7 +667,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_108(struct Psx2VisualContextView *arg0
     FUN_00172330(arg0, arg0->o);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_109(igPsx2VisualContext *arg0, void *arg1) {
+void igPsx2VisualContext_GetMaterialSpecular(igPsx2VisualContext *arg0, void *arg1) {
     igMaterialAttr *temp_v1;
 
     temp_v1 = (igMaterialAttr *)arg0->_currentMaterial;
@@ -677,7 +677,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_109(igPsx2VisualContext *arg0, void *a
     *(float *)((char *)(arg1) + 12) = (float) *(float *)&temp_v1->_ambient[3];
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_98(S0_171c80 *arg0, float fparg0) {
+void igPsx2VisualContext_SetMaterialShininess(S0_171c80 *arg0, float fparg0) {
     if (arg0->f1344->f64 == fparg0) {
         DAT_00560908[0] += 1;
     }
@@ -685,11 +685,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_98(S0_171c80 *arg0, float fparg0) {
     FUN_00172330(arg0, arg0->f1344);
 }
 
-float Gap__Gfx__igPsx2VisualContext__vfunc_99(void *arg0) {
+float igPsx2VisualContext_GetMaterialShininess(void *arg0) {
     return *(float *)((char *)(*(int *)((char *)(arg0) + 1344)) + 64);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_112(igPsx2VisualContext *self, float *ambient, float *diffuse, float *specular, float *emission, float shininess) {
+void igPsx2VisualContext_SetMaterial(igPsx2VisualContext *self, float *ambient, float *diffuse, float *specular, float *emission, float shininess) {
     O_171cd0 *arg0 = (O_171cd0 *)self;
     V4_171cd0 *arg1 = (V4_171cd0 *)ambient;
     V4_171cd0 *arg2 = (V4_171cd0 *)diffuse;
@@ -734,15 +734,15 @@ void FUN_001720d0(struct O_1720d0 *arg0, int arg1) {
     arg0->p->f = arg1;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_110(igPsx2VisualContext *self, int enable)
+void igPsx2VisualContext_SetMaterialSpecularState(igPsx2VisualContext *self, int enable)
 {
     if (self->_materialSpecularState == (enable & 0xFF))
         DAT_00560910 += 1;
     self->_materialSpecularState = enable;
-    FUN_001f8750(enable);
+    p2SetMaterialSpecularState(enable);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_100(igPsx2VisualContext *self, unsigned int mode) {
+void igPsx2VisualContext_SetMaterialColorMode(igPsx2VisualContext *self, unsigned int mode) {
     if (((MaterialState *)self->_currentMaterial)->blendMode == mode) {
         DAT_00560914[0] += 1;
     }
@@ -775,11 +775,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_100(igPsx2VisualContext *self, unsigne
     }
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_101(void *arg0) {
+int igPsx2VisualContext_GetMaterialColorMode(void *arg0) {
     return *(int *)((char *)(*(int *)((char *)(arg0) + 1344)) + 84);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_115(struct H_172230 *arg0, float *arg1) {
+void igPsx2VisualContext_SetSceneAmbient(struct H_172230 *arg0, float *arg1) {
     float *a2;
     struct O_172230 *o;
     int r;
@@ -801,7 +801,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_115(struct H_172230 *arg0, float *arg1
     p2SetLightingColor(arg1);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_116(igPsx2VisualContext *arg0, void *arg1) {
+void igPsx2VisualContext_GetSceneAmbient(igPsx2VisualContext *arg0, void *arg1) {
     void *temp_v1;
 
     temp_v1 = (void *)(arg0->_currentMaterial);
@@ -816,7 +816,7 @@ void FUN_00172330(void *arg0, void *arg1) {
     p2SetLightingColor((float *)(*(int *)((char *)arg0 + 1344) + 0x58));
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_199(Obj_172370 *o, int k, int n) {
+void igPsx2VisualContext_SetStackSize(Obj_172370 *o, int k, int n) {
     switch (k) {
     case 0:
         if (n >= o->s[0]->count) List_Reserve((igDataList *)o->s[0], n, 64);
@@ -846,7 +846,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_199(Obj_172370 *o, int k, int n) {
     }
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_200(struct S_172550 *arg0, int arg1) {
+int igPsx2VisualContext_GetStackSize(struct S_172550 *arg0, int arg1) {
     switch (arg1) {
     case 0: return arg0->f972->f12;
     case 1: return arg0->f976->f12;
@@ -861,7 +861,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_200(struct S_172550 *arg0, int arg1) {
 
 static inline int count_of_172600(const L_172600 *list) { return list->count; }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_201(S_172600 *arg0, int arg1) {
+void igPsx2VisualContext_PushMatrix(S_172600 *arg0, int arg1) {
     switch (arg1) {
     case 0:
         PUSH(l972);
@@ -887,7 +887,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_201(S_172600 *arg0, int arg1) {
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_202(Obj_172910 *o, int k) {
+void igPsx2VisualContext_PopMatrix(Obj_172910 *o, int k) {
     Mat_172910 m0, m1, m2, m3, m4;
     switch (k) {
     case 0:
@@ -913,7 +913,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_202(Obj_172910 *o, int k) {
 
 static inline int n_of(const St_172b00 *list) { return list->n; }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_203(igPsx2VisualContext *self, int arg1, char *arg2) {
+void igPsx2VisualContext_SetMatrix(igPsx2VisualContext *self, int arg1, char *arg2) {
     char sp110[64];
     char spD0[64];
     char sp90[64];
@@ -966,7 +966,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_203(igPsx2VisualContext *self, int arg
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_204(igPsx2VisualContext *self, int arg1, char *arg2) {
+void igPsx2VisualContext_PushPreMultiply(igPsx2VisualContext *self, int arg1, char *arg2) {
     char inverse0[64];
     char inverse1[64];
     char inverse2[64];
@@ -974,44 +974,44 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_204(igPsx2VisualContext *self, int arg
     St_172b00 *t;
     switch (arg1) {
     case 0:
-        FUN_001e68e0((St_172b00 *)self->_projMat, arg2);
+        igMatrixStack_PushPreMultiply((igMatrixStack *)self->_projMat, (const float *)arg2);
         t = (St_172b00 *)self->_projMat;
         FUN_001fbce0(3, t->data + ((t->n - 1) << 6));
         break;
     case 1:
-        FUN_001e68e0((St_172b00 *)self->_mvMat, arg2);
+        igMatrixStack_PushPreMultiply((igMatrixStack *)self->_mvMat, (const float *)arg2);
         t = (St_172b00 *)self->_mvMat;
         FUN_001fbce0(0, t->data + ((t->n - 1) << 6));
         break;
     case 2:
-        FUN_001e68e0((St_172b00 *)self->_texMat, arg2);
+        igMatrixStack_PushPreMultiply((igMatrixStack *)self->_texMat, (const float *)arg2);
         t = (St_172b00 *)self->_texMat;
         FUN_001fbce0(4, t->data + ((t->n - 1) << 6));
         break;
     case 10:
         igMatrix44f_SetIdentity((float *)inverse0);
-        FUN_001e68e0((St_172b00 *)self->_blendMat0, arg2);
+        igMatrixStack_PushPreMultiply((igMatrixStack *)self->_blendMat0, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse0, (const float *)arg2);
         FUN_001903d0(inverse0);
         SET((St_172b00 *)self->_invTransBlendMat0, inverse0)
         break;
     case 11:
         igMatrix44f_SetIdentity((float *)inverse1);
-        FUN_001e68e0((St_172b00 *)self->_blendMat1, arg2);
+        igMatrixStack_PushPreMultiply((igMatrixStack *)self->_blendMat1, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse1, (const float *)arg2);
         FUN_001903d0(inverse1);
         SET((St_172b00 *)self->_invTransBlendMat1, inverse1)
         break;
     case 12:
         igMatrix44f_SetIdentity((float *)inverse2);
-        FUN_001e68e0((St_172b00 *)self->_blendMat2, arg2);
+        igMatrixStack_PushPreMultiply((igMatrixStack *)self->_blendMat2, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse2, (const float *)arg2);
         FUN_001903d0(inverse2);
         SET((St_172b00 *)self->_invTransBlendMat2, inverse2)
         break;
     case 13:
         igMatrix44f_SetIdentity((float *)inverse3);
-        FUN_001e68e0((St_172b00 *)self->_blendMat3, arg2);
+        igMatrixStack_PushPreMultiply((igMatrixStack *)self->_blendMat3, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse3, (const float *)arg2);
         FUN_001903d0(inverse3);
         SET((St_172b00 *)self->_invTransBlendMat3, inverse3)
@@ -1019,7 +1019,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_204(igPsx2VisualContext *self, int arg
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_205(igPsx2VisualContext *self, int arg1, char *arg2) {
+void igPsx2VisualContext_PushPostMultiply(igPsx2VisualContext *self, int arg1, char *arg2) {
     char inverse0[64];
     char inverse1[64];
     char inverse2[64];
@@ -1027,44 +1027,44 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_205(igPsx2VisualContext *self, int arg
     St_172b00 *t;
     switch (arg1) {
     case 0:
-        FUN_001e69e0((St_172b00 *)self->_projMat, arg2);
+        igMatrixStack_PushPostMultiply((igMatrixStack *)self->_projMat, (const float *)arg2);
         t = (St_172b00 *)self->_projMat;
         FUN_001fbce0(3, t->data + ((t->n - 1) << 6));
         break;
     case 1:
-        FUN_001e69e0((St_172b00 *)self->_mvMat, arg2);
+        igMatrixStack_PushPostMultiply((igMatrixStack *)self->_mvMat, (const float *)arg2);
         t = (St_172b00 *)self->_mvMat;
         FUN_001fbce0(0, t->data + ((t->n - 1) << 6));
         break;
     case 2:
-        FUN_001e69e0((St_172b00 *)self->_texMat, arg2);
+        igMatrixStack_PushPostMultiply((igMatrixStack *)self->_texMat, (const float *)arg2);
         t = (St_172b00 *)self->_texMat;
         FUN_001fbce0(4, t->data + ((t->n - 1) << 6));
         break;
     case 10:
         igMatrix44f_SetIdentity((float *)inverse0);
-        FUN_001e69e0((St_172b00 *)self->_blendMat0, arg2);
+        igMatrixStack_PushPostMultiply((igMatrixStack *)self->_blendMat0, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse0, (const float *)arg2);
         FUN_001903d0(inverse0);
         SET((St_172b00 *)self->_invTransBlendMat0, inverse0)
         break;
     case 11:
         igMatrix44f_SetIdentity((float *)inverse1);
-        FUN_001e69e0((St_172b00 *)self->_blendMat1, arg2);
+        igMatrixStack_PushPostMultiply((igMatrixStack *)self->_blendMat1, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse1, (const float *)arg2);
         FUN_001903d0(inverse1);
         SET((St_172b00 *)self->_invTransBlendMat1, inverse1)
         break;
     case 12:
         igMatrix44f_SetIdentity((float *)inverse2);
-        FUN_001e69e0((St_172b00 *)self->_blendMat2, arg2);
+        igMatrixStack_PushPostMultiply((igMatrixStack *)self->_blendMat2, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse2, (const float *)arg2);
         FUN_001903d0(inverse2);
         SET((St_172b00 *)self->_invTransBlendMat2, inverse2)
         break;
     case 13:
         igMatrix44f_SetIdentity((float *)inverse3);
-        FUN_001e69e0((St_172b00 *)self->_blendMat3, arg2);
+        igMatrixStack_PushPostMultiply((igMatrixStack *)self->_blendMat3, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse3, (const float *)arg2);
         FUN_001903d0(inverse3);
         SET((St_172b00 *)self->_invTransBlendMat3, inverse3)
@@ -1072,80 +1072,80 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_205(igPsx2VisualContext *self, int arg
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_206(Obj_173900 *self, int kind, int arg) {
+void igPsx2VisualContext_PreMultiply(Obj_173900 *self, int kind, int arg) {
     switch (kind) {
     case 0:
-        FUN_001e6ae0(self->s[0], arg);
+        igMatrixStack_PreMultiply((igMatrixStack *)self->s[0], (const float *)arg);
         self->vf(kind, self->s[0]->data + ((self->s[0]->cnt - 1) << 6));
         break;
     case 1:
-        FUN_001e6ae0(self->s[1], arg);
+        igMatrixStack_PreMultiply((igMatrixStack *)self->s[1], (const float *)arg);
         self->vf(kind, self->s[1]->data + ((self->s[1]->cnt - 1) << 6));
         break;
     case 2:
-        FUN_001e6ae0(self->s[2], arg);
+        igMatrixStack_PreMultiply((igMatrixStack *)self->s[2], (const float *)arg);
         self->vf(kind, self->s[2]->data + ((self->s[2]->cnt - 1) << 6));
         break;
     case 10:
-        FUN_001e6ae0(self->s[4], arg);
+        igMatrixStack_PreMultiply((igMatrixStack *)self->s[4], (const float *)arg);
         self->vf(kind, self->s[4]->data + ((self->s[4]->cnt - 1) << 6));
         break;
     case 11:
-        FUN_001e6ae0(self->s[5], arg);
+        igMatrixStack_PreMultiply((igMatrixStack *)self->s[5], (const float *)arg);
         self->vf(kind, self->s[5]->data + ((self->s[5]->cnt - 1) << 6));
         break;
     case 12:
-        FUN_001e6ae0(self->s[6], arg);
+        igMatrixStack_PreMultiply((igMatrixStack *)self->s[6], (const float *)arg);
         self->vf(kind, self->s[6]->data + ((self->s[6]->cnt - 1) << 6));
         break;
     case 13:
-        FUN_001e6ae0(self->s[7], arg);
+        igMatrixStack_PreMultiply((igMatrixStack *)self->s[7], (const float *)arg);
         self->vf(kind, self->s[7]->data + ((self->s[7]->cnt - 1) << 6));
         break;
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_207(S_173b30 *self, int arg1, int arg2) {
+void igPsx2VisualContext_PostMultiply(S_173b30 *self, int arg1, int arg2) {
     L_173b30 *l;
     switch (arg1) {
     case 0:
-        FUN_001e6b00(self->f972, arg2);
+        igMatrixStack_PostMultiply((igMatrixStack *)self->f972, (const float *)arg2);
         l = self->f972;
         self->vX(arg1, (char *)l->data + ((l->cnt - 1) << 6));
         break;
     case 1:
-        FUN_001e6b00(self->f976, arg2);
+        igMatrixStack_PostMultiply((igMatrixStack *)self->f976, (const float *)arg2);
         l = self->f976;
         self->vX(arg1, (char *)l->data + ((l->cnt - 1) << 6));
         break;
     case 2:
-        FUN_001e6b00(self->f980, arg2);
+        igMatrixStack_PostMultiply((igMatrixStack *)self->f980, (const float *)arg2);
         l = self->f980;
         self->vX(arg1, (char *)l->data + ((l->cnt - 1) << 6));
         break;
     case 10:
-        FUN_001e6b00(self->f988, arg2);
+        igMatrixStack_PostMultiply((igMatrixStack *)self->f988, (const float *)arg2);
         l = self->f988;
         self->vX(arg1, (char *)l->data + ((l->cnt - 1) << 6));
         break;
     case 11:
-        FUN_001e6b00(self->f992, arg2);
+        igMatrixStack_PostMultiply((igMatrixStack *)self->f992, (const float *)arg2);
         l = self->f992;
         self->vX(arg1, (char *)l->data + ((l->cnt - 1) << 6));
         break;
     case 12:
-        FUN_001e6b00(self->f996, arg2);
+        igMatrixStack_PostMultiply((igMatrixStack *)self->f996, (const float *)arg2);
         l = self->f996;
         self->vX(arg1, (char *)l->data + ((l->cnt - 1) << 6));
         break;
     case 13:
-        FUN_001e6b00(self->f1000, arg2);
+        igMatrixStack_PostMultiply((igMatrixStack *)self->f1000, (const float *)arg2);
         l = self->f1000;
         self->vX(arg1, (char *)l->data + ((l->cnt - 1) << 6));
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_208(O_173d60 *o, int k, int dst) {
+void igPsx2VisualContext_GetMatrix(O_173d60 *o, int k, int dst) {
     St_173d60 *s;
     switch (k) {
     case 0:  s = o->s972; igMatrix44f_Copy((float *)dst, (float *)(s->data + ((s->n - 1) << 6))); break;
@@ -1194,7 +1194,7 @@ void FUN_00173fd0(int *arg0, int arg1, int arg2) {
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_209(igPsx2VisualContext *self, int unit, bool enabled) {
+void igPsx2VisualContext_SetTextureMatrixState(igPsx2VisualContext *self, int unit, bool enabled) {
     struct O_174030 *arg0 = (struct O_174030 *)self;
     if (arg0->f == enabled) {
         DAT_0056091c[0] += 1;
@@ -1216,11 +1216,11 @@ void FUN_00174090(void *arg0) {
     FUN_00174850((S174 *)arg0, 1);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_216(void *a0, int arg1) {
+void igPsx2VisualContext_ResetToDefault(void *a0, int arg1) {
     float m[16];
     struct V4 { float x, y, z; int w; } v;
     VC104 *o;
-    FUN_00166400((igVisualContext_166400 *)a0, arg1);
+    igVisualContext_ResetToDefault((igVisualContext_166400 *)a0, arg1);
     if (arg1 & 4) {
         FUN_0017c880((igPsx2VisualContext *)a0, ((VC596 *)a0)->vX(0), 1);
     }
@@ -1258,7 +1258,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_216(void *a0, int arg1) {
     ((VC696 *)a0)->vX();
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_113(igPsx2VisualContext *self, unsigned char arg1) {
+void igPsx2VisualContext_SetNormalizeNormalsState(igPsx2VisualContext *self, unsigned char arg1) {
     S0_174300 *arg0 = (S0_174300 *)self;
     int temp_v1;
 
@@ -1274,11 +1274,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_113(igPsx2VisualContext *self, unsigne
     p2DisableCapability(0x12);
 }
 
-unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_114(void *arg0) {
+unsigned char igPsx2VisualContext_GetNormalizeNormalsState(void *arg0) {
     return *(int *)((char *)(arg0) + 1372);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_211(igPsx2VisualContext *self, bool enabled) {
+void igPsx2VisualContext_SetVertexBlendingState(igPsx2VisualContext *self, bool enabled) {
     S_174370 *arg0 = (S_174370 *)self;
 
     if (g_igPsx2DisableExt_ext6Enabled != 0) {
@@ -1290,11 +1290,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_211(igPsx2VisualContext *self, bool en
     arg0->f = enabled;
 }
 
-unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_212(void *arg0) {
+unsigned char igPsx2VisualContext_GetVertexBlendingState(void *arg0) {
     return *(int *)((char *)(arg0) + 1020);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_152(igPsx2VisualContext *self, unsigned char arg1) {
+void igPsx2VisualContext_SetBlendingState(igPsx2VisualContext *self, unsigned char arg1) {
     struct S_1743c0 *arg0 = (struct S_1743c0 *)self;
     if (g_igPsx2DisableExt_ext2Enabled != 0) {
         arg1 = 0;
@@ -1310,11 +1310,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_152(igPsx2VisualContext *self, unsigne
     p2DisableCapability(2);
 }
 
-unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_153(void *arg0) {
+unsigned char igPsx2VisualContext_GetBlendingState(void *arg0) {
     return *(int *)((char *)(arg0) + 1032);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_154(int *arg0, int arg1) {
+void igPsx2VisualContext_SetBlendingSource(int *arg0, int arg1) {
     if (arg0[259] == arg1) {
         DAT_00560928[0] += 1;
     }
@@ -1322,7 +1322,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_154(int *arg0, int arg1) {
     FUN_00174640((int)arg0, 0);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_156(struct S174470 *arg0, int arg1) {
+void igPsx2VisualContext_SetBlendingDestination(struct S174470 *arg0, int arg1) {
     if (arg0->f == arg1) {
         DAT_00560968[0] += 1;
     }
@@ -1330,15 +1330,15 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_156(struct S174470 *arg0, int arg1) {
     FUN_00174640((int)arg0, 0);
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_155(void *arg0) {
+int igPsx2VisualContext_GetBlendingSource(void *arg0) {
     return *(int *)((char *)(arg0) + 1036);
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_157(void *arg0) {
+int igPsx2VisualContext_GetBlendingDestination(void *arg0) {
     return *(int *)((char *)(arg0) + 1100);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_158(S_1744c0 *arg0, int arg1, int arg2) {
+void igPsx2VisualContext_SetBlendingSourceDestination(S_1744c0 *arg0, int arg1, int arg2) {
     if (arg0->f1036 == arg1) {
         DAT_00560928[0] += 1;
     }
@@ -1418,7 +1418,7 @@ void FUN_00174640(int arg0, int arg1) {
     p2SetBlendEquation(var_a0, var_a1, var_a2, var_a3, var_a4);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_217(igPsx2VisualContext *self, unsigned char enable)
+void igPsx2VisualContext_SetAlphaTestState(igPsx2VisualContext *self, unsigned char enable)
 {
     if (g_igPsx2DisableExt_ext7Enabled != 0)
         enable = 0;
@@ -1433,11 +1433,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_217(igPsx2VisualContext *self, unsigne
     }
 }
 
-unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_218(void *arg0) {
+unsigned char igPsx2VisualContext_GetAlphaTestState(void *arg0) {
     return *(int *)((char *)(arg0) + 1022);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_219(igPsx2VisualContext *self, int arg1) {
+void igPsx2VisualContext_SetAlphaFunc(igPsx2VisualContext *self, int arg1) {
     int *arg0 = (int *)self;
     if (arg0[256] == arg1) {
         DAT_00560998[0] += 1;
@@ -1446,11 +1446,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_219(igPsx2VisualContext *self, int arg
     FUN_001747f0((S_1747f0 *)arg0);
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_220(void *arg0) {
+int igPsx2VisualContext_GetAlphaFunc(void *arg0) {
     return *(int *)((char *)(arg0) + 1024);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_221(igPsx2VisualContext *self, float fparg0) {
+void igPsx2VisualContext_SetAlphaRefValue(igPsx2VisualContext *self, float fparg0) {
     struct S_1747b0 *arg0 = (struct S_1747b0 *)self;
     if (arg0->f == fparg0) {
         DAT_0056099c[0] += 1;
@@ -1459,7 +1459,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_221(igPsx2VisualContext *self, float f
     FUN_001747f0((S_1747f0 *)arg0);
 }
 
-float Gap__Gfx__igPsx2VisualContext__vfunc_222(void *arg0) {
+float igPsx2VisualContext_GetAlphaRefValue(void *arg0) {
     return *(float *)((char *)arg0 + 1028);
 }
 
@@ -1487,7 +1487,7 @@ unsigned char FUN_001748c0(int *p)
     return *(unsigned char *)((char *)p + 1373);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_223(igPsx2VisualContext *self, unsigned char a) {
+void igPsx2VisualContext_SetViewportClippingState(igPsx2VisualContext *self, unsigned char a) {
     O_1748d0 *o = (O_1748d0 *)self;
     if (g_igPsx2DisableExt_ext8Enabled != 0) a = 0;
     if (o->v == a) DAT_005608b8[0] += 1;
@@ -1496,7 +1496,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_223(igPsx2VisualContext *self, unsigne
     else p2DisableCapability(6);
 }
 
-unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_224(void *arg0) {
+unsigned char igPsx2VisualContext_GetViewportClippingState(void *arg0) {
     return *(int *)((char *)(arg0) + 1228);
 }
 
@@ -1508,7 +1508,7 @@ void FUN_00174950(void *d0, int arg1) {
     p2DisableCapability(0x19);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_225(igPsx2VisualContext *self, unsigned char arg1, unsigned char arg2, unsigned char arg3, unsigned char arg4) {
+void igPsx2VisualContext_SetColorMask(igPsx2VisualContext *self, unsigned char arg1, unsigned char arg2, unsigned char arg3, unsigned char arg4) {
     *(char *)((char *)(self) + 1252) = arg1;
     *(char *)((char *)(self) + 1253) = arg2;
     *(char *)((char *)(self) + 1254) = arg3;
@@ -1516,14 +1516,14 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_225(igPsx2VisualContext *self, unsigne
     p2SetColourMask(arg1 & 0xFF, arg2 & 0xFF, arg3 & 0xFF, arg4 & 0xFF);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_226(void *arg0, unsigned char *arg1, unsigned char *arg2, unsigned char *arg3, unsigned char *arg4) {
+void igPsx2VisualContext_GetColorMask(void *arg0, unsigned char *arg1, unsigned char *arg2, unsigned char *arg3, unsigned char *arg4) {
     *arg1 = *(unsigned char *)((char *)(arg0) + 1252);
     *arg2 = *(unsigned char *)((char *)(arg0) + 1253);
     *arg3 = *(unsigned char *)((char *)(arg0) + 1254);
     *arg4 = *(unsigned char *)((char *)(arg0) + 1255);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_227(igPsx2VisualContext *self, int arg1) {
+void igPsx2VisualContext_SetShadingMode(igPsx2VisualContext *self, int arg1) {
     S_1749f0 *arg0 = (S_1749f0 *)self;
     if (arg0->f == arg1) {
         DAT_005608b0[0] += 1;
@@ -1536,11 +1536,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_227(igPsx2VisualContext *self, int arg
     p2EnableCapability(0x11);
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_228(void *arg0) {
+int igPsx2VisualContext_GetShadingMode(void *arg0) {
     return *(int *)((char *)(arg0) + 1256);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_229(igPsx2VisualContext *self, bool enabled) {
+void igPsx2VisualContext_SetCullFaceState(igPsx2VisualContext *self, bool enabled) {
     struct S_174a70 *arg0 = (struct S_174a70 *)self;
 
     if (g_igPsx2DisableExt_ext9Enabled != 0) {
@@ -1557,11 +1557,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_229(igPsx2VisualContext *self, bool en
     p2DisableCapability(DAT_0048a538[arg0->f1272]);
 }
 
-unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_230(void *arg0) {
+unsigned char igPsx2VisualContext_GetCullFaceState(void *arg0) {
     return *(int *)((char *)(arg0) + 1268);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_231(igPsx2VisualContext *self, int arg1) {
+void igPsx2VisualContext_SetCullFaceMode(igPsx2VisualContext *self, int arg1) {
     int temp_a0;
 
     temp_a0 = self->_cullFaceMode;
@@ -1575,11 +1575,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_231(igPsx2VisualContext *self, int arg
     self->_cullFaceMode = arg1;
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_232(void *arg0) {
+int igPsx2VisualContext_GetCullFaceMode(void *arg0) {
     return *(int *)((char *)(arg0) + 1272);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_233(igPsx2VisualContext *self, bool enabled) {
+void igPsx2VisualContext_SetDepthTestState(igPsx2VisualContext *self, bool enabled) {
     struct S_174bc0 *s = (struct S_174bc0 *)self;
     if (g_igPsx2DisableExt_ext5Enabled != 0) {
         enabled = false;
@@ -1598,11 +1598,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_233(igPsx2VisualContext *self, bool en
     }
 }
 
-unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_234(void *arg0) {
+unsigned char igPsx2VisualContext_GetDepthTestState(void *arg0) {
     return *(int *)((char *)(arg0) + 1277);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_235(S_174c50 *arg0, unsigned arg1) {
+void igPsx2VisualContext_SetDepthTestFunction(S_174c50 *arg0, unsigned arg1) {
     if (arg0->f1280 == arg1) {
         DAT_005609b0[0] += 1;
     }
@@ -1615,11 +1615,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_235(S_174c50 *arg0, unsigned arg1) {
     }
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_236(void *arg0) {
+int igPsx2VisualContext_GetDepthTestFunction(void *arg0) {
     return *(int *)((char *)(arg0) + 1280);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_237(igPsx2VisualContext *self, unsigned char arg1) {
+void igPsx2VisualContext_SetDepthWriteState(igPsx2VisualContext *self, unsigned char arg1) {
     struct S_174d70 *arg0 = (struct S_174d70 *)self;
     if (arg0->b == (arg1 & 0xFF)) {
         DAT_005609b4[0] += 1;
@@ -1628,7 +1628,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_237(igPsx2VisualContext *self, unsigne
     FUN_00174db0(arg0);
 }
 
-unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_238(void *arg0) {
+unsigned char igPsx2VisualContext_GetDepthWriteState(void *arg0) {
     return *(int *)((char *)(arg0) + 1276);
 }
 
@@ -1640,7 +1640,7 @@ void FUN_00174db0(void *arg0) {
     p2SetDepthFunction(DAT_0048a540[*(int *)((char *)(arg0) + 1280)], 1);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_159(igPsx2VisualContext *self, bool enabled) {
+void igPsx2VisualContext_SetStencilState(igPsx2VisualContext *self, bool enabled) {
     S_174e20 *arg0 = (S_174e20 *)self;
     if (arg0->f1260 == enabled) {
         DAT_005609b8[0] += 1;
@@ -1653,11 +1653,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_159(igPsx2VisualContext *self, bool en
     }
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_160(void *arg0) {
+int igPsx2VisualContext_GetStencilState(void *arg0) {
     return *(int *)((char *)(arg0) + 1260) != 0;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_161(igPsx2VisualContext *self, int arg1) {
+void igPsx2VisualContext_SetStencilRefVal(igPsx2VisualContext *self, int arg1) {
     int *arg0 = (int *)self;
     if (arg0[316] == arg1) {
         DAT_005609bc[0] += 1;
@@ -1666,11 +1666,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_161(igPsx2VisualContext *self, int arg
     p2SetDestinationAlphaMode(arg0[316] & 1);
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_162(void *arg0) {
+int igPsx2VisualContext_GetStencilRefVal(void *arg0) {
     return *(int *)((char *)(arg0) + 1264);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_163(igPsx2VisualContext *self, unsigned int arg1) {
+void igPsx2VisualContext_SetStencilFunc(igPsx2VisualContext *self, unsigned int arg1) {
     switch (arg1) {
     case 0:
     case 1:
@@ -1693,47 +1693,47 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_163(igPsx2VisualContext *self, unsigne
     self->_stencilFunc = arg1;
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_164(void *arg0) {
+int igPsx2VisualContext_GetStencilFunc(void *arg0) {
     return *(int *)((char *)(arg0) + 1288);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_165(igPsx2VisualContext *self, int failOp, int passZPassOp, int passZFailOp) {
+void igPsx2VisualContext_SetStencilOps(igPsx2VisualContext *self, int failOp, int passZPassOp, int passZFailOp) {
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_166(void) {
+void igPsx2VisualContext_GetStencilOps(void) {
 
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_167(igPsx2VisualContext *self, unsigned int readMask) {
+void igPsx2VisualContext_SetStencilReadMask(igPsx2VisualContext *self, unsigned int readMask) {
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_168(void) {
+int igPsx2VisualContext_GetStencilReadMask(void) {
     return -1;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_169(igPsx2VisualContext *self, unsigned int writeMask) {
+void igPsx2VisualContext_SetStencilWriteMask(igPsx2VisualContext *self, unsigned int writeMask) {
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_170(void) {
+int igPsx2VisualContext_GetStencilWriteMask(void) {
     return -1;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_239(igPsx2VisualContext *self, int arg1) {
+void igPsx2VisualContext_SetRenderMode(igPsx2VisualContext *self, int arg1) {
     S_175000 *arg0 = (S_175000 *)self;
     if (arg0->f1292 == arg1) {
         DAT_005609c4[0] += 1;
     }
     arg0->f1292 = arg1;
     if (arg1 == 0) {
-        FUN_001f7470(2);
+        p2SetPolygonMode(2);
     } else if (arg1 == 1) {
-        FUN_001f7470(1);
+        p2SetPolygonMode(1);
     } else if (arg1 == 2) {
-        FUN_001f7470(0);
+        p2SetPolygonMode(0);
     }
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_240(void *arg0) {
+int igPsx2VisualContext_GetRenderMode(void *arg0) {
     return *(int *)((char *)(arg0) + 1292);
 }
 
@@ -1744,7 +1744,7 @@ void FUN_00175090(S0_175090 *arg0, int arg1) {
     arg0->f510 = arg1;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_241(igPsx2VisualContext *self, bool enabled) {
+void igPsx2VisualContext_SetFogState(igPsx2VisualContext *self, bool enabled) {
     struct S_1750c0 *arg0 = (struct S_1750c0 *)self;
     if (g_igPsx2DisableExt_ext4Enabled != 0) {
         enabled = false;
@@ -1760,11 +1760,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_241(igPsx2VisualContext *self, bool en
     p2DisableCapability(7);
 }
 
-unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_242(void *arg0) {
+unsigned char igPsx2VisualContext_GetFogState(void *arg0) {
     return *(int *)((char *)(arg0) + 1300);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_243(igPsx2VisualContext *self, float fparg0) {
+void igPsx2VisualContext_SetFogDensity(igPsx2VisualContext *self, float fparg0) {
     struct S_175140 *arg0 = (struct S_175140 *)self;
     int i;
     if (arg0->f1304 == fparg0) {
@@ -1775,11 +1775,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_243(igPsx2VisualContext *self, float f
     p2SetFog(DAT_0048a560[i], i, arg0->f1328, arg0->f1332, arg0->f1304, 1.0f, 0.0f, 0.0f);
 }
 
-float Gap__Gfx__igPsx2VisualContext__vfunc_244(void *arg0) {
+float igPsx2VisualContext_GetFogDensity(void *arg0) {
     return *(float *)((char *)arg0 + 1304);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_245(igPsx2VisualContext *self, int arg1) {
+void igPsx2VisualContext_SetFogMode(igPsx2VisualContext *self, int arg1) {
     struct S1304 *arg0 = (struct S1304 *)self;
     if (arg0->f1308 == arg1) {
         DAT_005609d4[0] += 1;
@@ -1788,11 +1788,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_245(igPsx2VisualContext *self, int arg
     p2SetFog(DAT_0048a560[arg0->f1308], arg0->f1308, arg0->f1328, arg0->f1332, arg0->f1304, 1.0f, 0.0f, 0.0f);
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_246(void *arg0) {
+int igPsx2VisualContext_GetFogMode(void *arg0) {
     return *(int *)((char *)(arg0) + 1308);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_247(igPsx2VisualContext *self, float *color) {
+void igPsx2VisualContext_SetFogColor(igPsx2VisualContext *self, float *color) {
     int same;
     same = 1;
     if (self->_fogColor[0] != color[0]) {
@@ -1826,14 +1826,14 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_247(igPsx2VisualContext *self, float *
     p2SetFogColour(color[0], color[1], color[2]);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_248(void *arg0, void *arg1) {
+void igPsx2VisualContext_GetFogColor(void *arg0, void *arg1) {
     *(float *)((char *)(arg1) + 0) = (float) *(float *)((char *)(arg0) + 1312);
     *(float *)((char *)(arg1) + 4) = (float) *(float *)((char *)(arg0) + 1316);
     *(float *)((char *)(arg1) + 8) = (float) *(float *)((char *)(arg0) + 1320);
     *(float *)((char *)(arg1) + 12) = (float) *(float *)((char *)(arg0) + 1324);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_249(igPsx2VisualContext *self, float fparg0) {
+void igPsx2VisualContext_SetFogNear(igPsx2VisualContext *self, float fparg0) {
     struct S_175310 *arg0 = (struct S_175310 *)self;
     int temp_a1;
 
@@ -1845,11 +1845,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_249(igPsx2VisualContext *self, float f
     p2SetFog(*(int *)((char *)&DAT_0048a560[0] + (temp_a1 * 4)), temp_a1, arg0->f1328, arg0->f1332, arg0->f1304, 1.0f, 0.0f, 0.0f);
 }
 
-float Gap__Gfx__igPsx2VisualContext__vfunc_250(void *arg0) {
+float igPsx2VisualContext_GetFogNear(void *arg0) {
     return *(float *)((char *)arg0 + 1328);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_251(igPsx2VisualContext *arg0, float fparg0) {
+void igPsx2VisualContext_SetFogFar(igPsx2VisualContext *arg0, float fparg0) {
     int temp_a1;
 
     if (arg0->_fogFar == fparg0) {
@@ -1860,11 +1860,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_251(igPsx2VisualContext *arg0, float f
     p2SetFog(DAT_0048a560[temp_a1], temp_a1, arg0->_fogNear, arg0->_fogFar, arg0->_fogDensity, 1.0f, 0.0f, 0.0f);
 }
 
-float Gap__Gfx__igPsx2VisualContext__vfunc_252(void *arg0) {
+float igPsx2VisualContext_GetFogFar(void *arg0) {
     return *(float *)((char *)arg0 + 1332);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_253(igResult *arg0, struct S_1753f0 *arg1, struct E_1753f0 *arg2) {
+void igPsx2VisualContext_SetVideoMode(igResult *arg0, struct S_1753f0 *arg1, struct E_1753f0 *arg2) {
     if (arg1->b322 == 1) {
         *arg0 = g_resultFailure;
     } else if (arg2 == 0) {
@@ -1881,7 +1881,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_253(igResult *arg0, struct S_1753f0 *a
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_254(igPsx2VisualContext *arg0, void *arg1) {
+void igPsx2VisualContext_GetVideoMode(igPsx2VisualContext *arg0, void *arg1) {
     *(unsigned char *)((char *)(arg1) + 0) = (unsigned char) *(unsigned char *)&arg0->_videoMode[0];
     *(unsigned char *)((char *)(arg1) + 1) = (unsigned char) ((unsigned char *)&arg0->_videoMode[0])[1];
     *(int *)((char *)(arg1) + 4) = (int)((int) arg0->_videoMode[1]);
@@ -1943,7 +1943,7 @@ void FUN_00175670(struct O_175670 *arg0, int arg1) {
     p2SetFrameBufferAlpha(arg1);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_146(igPsx2VisualContext *context, int mode) {
+void igPsx2VisualContext_SetPixelPipelineMode(igPsx2VisualContext *context, int mode) {
     if (context->_pixelPipelineMode == mode) {
         DAT_005609f8++;
     }
@@ -1959,7 +1959,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_146(igPsx2VisualContext *context, int 
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_145(S_175730 *arg0, int arg1) {
+void igPsx2VisualContext_SetDitherState(S_175730 *arg0, int arg1) {
     if (arg0->f == (arg1 & 0xFF)) {
         DAT_005609fc[0] += 1;
     }

@@ -1,72 +1,72 @@
-igMetaObject *Gap__igMersenneTwisterRandomNumber__vfunc_22(void) {
+igMetaObject *igMersenneTwisterRandomNumber_GetMeta(void) {
     return g_igMersenneTwisterRandomNumber_metaObject;
 }
 
-unsigned int Gap__igMersenneTwisterRandomNumber__vfunc_24(igMersenneTwisterRandomNumber *self) {
-    return FUN_001e6bc0(self);
+unsigned int igMersenneTwisterRandomNumber_GetNumber(igMersenneTwisterRandomNumber *self) {
+    return igMersenneTwisterRandomNumber_GetNumberNonVirtual(self);
 }
 
-igMetaObject *Gap__igDataPump__vfunc_22(void) {
+igMetaObject *igDataPump_GetMeta(void) {
     return g_igDataPump_metaObject;
 }
 
-igMetaObject *Gap__igBoolObject__vfunc_22(void) {
+igMetaObject *igBoolObject_GetMeta(void) {
     return g_igBoolObject_metaObject;
 }
 
-igMetaObject *Gap__igDataPumpInfo__vfunc_22(void) {
+igMetaObject *igDataPumpInfo_GetMeta(void) {
     return g_igDataPumpInfo_metaObject;
 }
 
-igMetaObject *Gap__igDataPumpList__vfunc_22(void) {
+igMetaObject *igDataPumpList_GetMeta(void) {
     return g_igDataPumpList_metaObject;
 }
 
-igMetaObject *Gap__igDataPumpManager__vfunc_22(void) {
+igMetaObject *igDataPumpManager_GetMeta(void) {
     return g_igDataPumpManager_metaObject;
 }
 
-igMetaObject *Gap__igFloatObject__vfunc_22(void) {
+igMetaObject *igFloatObject_GetMeta(void) {
     return g_igFloatObject_metaObject;
 }
 
-igMetaObject *Gap__igIntObject__vfunc_22(void) {
+igMetaObject *igIntObject_GetMeta(void) {
     return g_igIntObject_metaObject;
 }
 
-igMetaObject *Gap__igMatrixObject__vfunc_22(void) {
+igMetaObject *igMatrixObject_GetMeta(void) {
     return g_igMatrixObject_metaObject;
 }
 
-igMetaObject *Gap__igMatrixObjectList__vfunc_22(void) {
+igMetaObject *igMatrixObjectList_GetMeta(void) {
     return g_igMatrixObjectList_metaObject;
 }
 
-igMetaObject *Gap__igNonRefCountedMatrixObjectList__vfunc_22(void) {
+igMetaObject *igNonRefCountedMatrixObjectList_GetMeta(void) {
     return g_igNonRefCountedMatrixObjectList_metaObject;
 }
 
-igMetaObject *Gap__igMatrixStack__vfunc_22(void) {
+igMetaObject *igMatrixStack_GetMeta(void) {
     return g_igMatrixStack_metaObject;
 }
 
-igMetaObject *Gap__igLongStack__vfunc_22(void) {
+igMetaObject *igLongStack_GetMeta(void) {
     return g_igLongStack_metaObject;
 }
 
-igMetaObject *Gap__igNonRefCountedMatrixObjectList__vfunc_24(void) {
+igMetaObject *igNonRefCountedMatrixObjectList_GetElementMeta(void) {
     return g_igMatrixObject_metaObject;
 }
 
-igMetaObject *Gap__igDataPumpList__vfunc_24(void) {
+igMetaObject *igDataPumpList_GetElementMeta(void) {
     return g_igDataPump_metaObject;
 }
 
-igMetaObject *Gap__igMatrixObjectList__vfunc_24(void) {
+igMetaObject *igMatrixObjectList_GetElementMeta(void) {
     return g_igMatrixObject_metaObject;
 }
 
-void Gap__igLongStack__vfunc_18(igDataList *arg0) {
+void igLongStack_TrimCapacity(igDataList *arg0) {
     int temp_a1;
 
     temp_a1 = arg0->_count;
@@ -75,7 +75,7 @@ void Gap__igLongStack__vfunc_18(igDataList *arg0) {
     }
 }
 
-void Gap__igMatrixStack__vfunc_18(igDataList *arg0) {
+void igMatrixStack_TrimCapacity(igDataList *arg0) {
     int temp_a1;
 
     temp_a1 = arg0->_count;

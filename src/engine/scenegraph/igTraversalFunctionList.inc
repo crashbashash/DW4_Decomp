@@ -1,11 +1,11 @@
-int FUN_0019a6e0(int arg0) {
+int igTraversalFunctionList_CreateInstance(int arg0) {
     igTraversalFunctionList_EnsureRegistered();
     return (int)igMetaObject_CreateInstance((igMetaObject *)g_igTraversalFunctionList_metaObject, (igMemoryPoolView *)arg0);
 }
 
 igMetaObject *g_igTraversalFunctionList_metaObject;
 
-igMetaObject *FUN_0019a720(void) {
+igMetaObject *igTraversalFunctionList_GetOrCreateMetaObject(void) {
     if (g_igTraversalFunctionList_metaObject == 0) {
         g_igTraversalFunctionList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -40,7 +40,7 @@ CallbackArray *igTraversalFunctionList_Register(void) {
         &g_igTraversalFunctionList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
-        thunk_igTraversalFunctionList_GetMetaObject,
+        igTraversalFunctionList_GetMetaObjectFunction,
         "igTraversalFunctionList",
         0x14, /* instance size */
         igTraversalFunctionList_GetVTable,
@@ -50,88 +50,73 @@ CallbackArray *igTraversalFunctionList_Register(void) {
     );
 }
 
-void thunk_igTraversalFunctionList_GetMetaObject(void) {
+void igTraversalFunctionList_GetMetaObjectFunction(void) {
     igTraversalFunctionList_GetMetaObject();
 }
 
-ObjectRefWord *FUN_0019a890(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
+igSmartPointer<igObject> *igSmartPointer_igProjectionMatrixAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if((short)delete_storage>0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
     return self;
 }
 
-void **FUN_0019a910(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igSetRenderDestinationAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if ((short)arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
-void **FUN_0019a990(void **arg0, short arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)*arg0;
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igCopyRenderDestinationAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
-void **FUN_0019aa10(struct Ref **self, short flag) {
-    struct Ref *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            p->u.w = p->u.w - 1;
-            if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p);
+igSmartPointer<igObject> *igSmartPointer_igTextureBindAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (flag > 0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
-    return (void **)self;
+    return self;
 }
 
-void **FUN_0019aa90(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igTexGenMatrixAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if ((short)arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 igSmartPointer<igObject> *igSmartPointer_igColorAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
@@ -147,94 +132,94 @@ igSmartPointer<igObject> *igSmartPointer_igColorAttr_Destruct(igSmartPointer<igO
     return self;
 }
 
-ObjectRefWord *FUN_0019ab90(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
+igSmartPointer<igObject> *igSmartPointer_igViewportAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if((short)delete_storage>0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
     return self;
 }
 
-int *FUN_0019ac10(int *p)
+int *igSmartPointer_igColorAttr_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019ac20(int *p)
+int *igSmartPointer_igTexGenMatrixAttr_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019ac30(int *p)
+int *igSmartPointer_igLightAttr_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019ac40(int *p)
+int *igSmartPointer_igViewportAttr_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019ac50(int *p)
+int *igSmartPointer_igCopyRenderDestinationAttr_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019ac60(int *p)
+int *igSmartPointer_igTextureBindAttr_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019ac70(int *p)
+int *igSmartPointer_igTextureAttr_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019ac80(int *p)
+int *igSmartPointer_igSetRenderDestinationAttr_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019ac90(int *p)
+int *igSmartPointer_igRenderDestinationAttr_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019aca0(int *p)
+int *igSmartPointer_igTextureMatrixAttr_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019acb0(int *p)
+int *igSmartPointer_igProjectionMatrixAttr_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019acc0(int *p)
+int *igSmartPointer_igModelViewMatrixAttr_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019acd0(int *p)
+int *igSmartPointer_igNodeList_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 

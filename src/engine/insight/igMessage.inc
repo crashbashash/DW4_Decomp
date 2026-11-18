@@ -4,7 +4,7 @@ igMetaObject *igMessage_GetMetaObject(void)
 {
     igMetaObject *g = g_igMessage_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00231700();
+        igMessage_EnsureRegistered();
     return g_igMessage_metaObject;
 }
 
@@ -14,7 +14,7 @@ int igMessage_GetVTable(void) {
     return *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00231700(void)
+void igMessage_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igMessage_Register);
 }
@@ -26,7 +26,7 @@ CallbackArray *igMessage_Register(void) {
         &g_igMessage_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igMessage_GetMetaObject,
+        igMessage_GetMetaObjectFunction,
         "igMessage",
         8, /* instance size */
         igMessage_GetVTable,
@@ -36,7 +36,7 @@ CallbackArray *igMessage_Register(void) {
     );
 }
 
-void thunk_igMessage_GetMetaObject(void) {
+void igMessage_GetMetaObjectFunction(void) {
     igMessage_GetMetaObject();
 }
 

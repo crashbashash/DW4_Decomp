@@ -1,4 +1,4 @@
-int Gap__Gfx__igExternalImageEntry__vfunc_44(A *arg0) {
+int igExternalImageEntry_LoadExternalFile(A *arg0) {
     igObject *temp_v0;
     temp_v0 = (igObject *)igImage_CreateInstance((int)igObject_GetAllocator((igObject *)arg0));
     if (FUN_001551f0((S_1551f0 *)arg0, (V_1551f0 *)temp_v0) == 0) {
@@ -42,7 +42,7 @@ int FUN_001551f0(S_1551f0 *arg0, V_1551f0 *arg1) {
     return 1;
 }
 
-void Gap__Gfx__igExternalImageEntry__vfunc_11(int arg0) {
+void igExternalImageEntry_InitDefaults(int arg0) {
     igExternalDirEntry_InitDefaults((igDirEntry *)arg0);
     igExternalDirEntry_SetDirectoryName((igExternalDirEntry *)arg0, (int)&text_igImageDirectory[0]);
 }

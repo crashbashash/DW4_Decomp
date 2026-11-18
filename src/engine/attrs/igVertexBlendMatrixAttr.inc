@@ -2,16 +2,16 @@ igMetaObject *g_igVertexBlendMatrixAttr_metaObject;
 igMetaField *g_igVertexBlendMatrixAttr_mMetaField;
 igMetaField *g_igVertexBlendMatrixAttr_blendMatIDMetaField;
 
-void FUN_00130c10(int arg0) {
-    FUN_00130cf0();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55EC68, (igMemoryPoolView *)arg0);
+igVertexBlendMatrixAttr *igVertexBlendMatrixAttr_Create(igMemoryPoolView *pool) {
+    igVertexBlendMatrixAttr_EnsureRegistered();
+    return (igVertexBlendMatrixAttr *)igMetaObject_CreateInstance(g_igVertexBlendMatrixAttr_metaObject, pool);
 }
 
 igMetaObject *igVertexBlendMatrixAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igVertexBlendMatrixAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00130cf0();
+        igVertexBlendMatrixAttr_EnsureRegistered();
     return g_igVertexBlendMatrixAttr_metaObject;
 }
 
@@ -23,7 +23,7 @@ int igVertexBlendMatrixAttr_GetVTable(void) {
     return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
-void FUN_00130cf0(void)
+void igVertexBlendMatrixAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVertexBlendMatrixAttr_Register);
 }
@@ -35,7 +35,7 @@ CallbackArray *igVertexBlendMatrixAttr_Register(void) {
         &g_igVertexBlendMatrixAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igVertexBlendMatrixAttr_GetMetaObject,
+        igVertexBlendMatrixAttr_GetMetaObjectFunction,
         "igVertexBlendMatrixAttr",
         0x50, /* instance size */
         igVertexBlendMatrixAttr_GetVTable,
@@ -45,7 +45,7 @@ CallbackArray *igVertexBlendMatrixAttr_Register(void) {
     );
 }
 
-void thunk_igVertexBlendMatrixAttr_GetMetaObject(void) {
+void igVertexBlendMatrixAttr_GetMetaObjectFunction(void) {
     igVertexBlendMatrixAttr_GetMetaObject();
 }
 
@@ -68,19 +68,19 @@ static int g_igVertexBlendMatrixAttr_fieldOffsets[] = {
 
 void igVertexBlendMatrixAttr_InitFields(void) {
     int tf;
-    int temp_s2;
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    int field;
+    igMetaObject *meta;
     struct M o1;
     struct V o2;
     struct V o3;
     struct V o4;
     struct V o5;
 
-    temp_s0 = g_igVertexBlendMatrixAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igVertexBlendMatrixAttr_ctorTable, 2);
-    temp_s1 = (int)igMetaObject_GetFieldAt(temp_s0, temp_s2);
+    meta = g_igVertexBlendMatrixAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igVertexBlendMatrixAttr_ctorTable, 2);
+    field = (int)igMetaObject_GetFieldAt(meta, base);
     o5.x = 0;
     o5.y = 0;
     o5.z = 0;
@@ -98,10 +98,10 @@ void igVertexBlendMatrixAttr_InitFields(void) {
     o2.z = 0;
     o2.w = 0;
     igMatrix44f_FromRows((float *)&o1, (igVec4f *)&o2, (igVec4f *)&o3, (igVec4f *)&o4, (igVec4f *)&o5);
-    FUN_0018c640(temp_s1, &o1);
-    tf = (int)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
-    *(int *)((char *)tf + 48) = (int)&FUN_00141900;
-    igMetaObject_NameFields(temp_s0, g_igVertexBlendMatrixAttr_fieldTable, g_igVertexBlendMatrixAttr_fieldHandles, g_igVertexBlendMatrixAttr_fieldOffsets, temp_s2);
+    FUN_0018c640(field, &o1);
+    tf = (int)igMetaObject_GetFieldAt(meta, base + 1);
+    ((igMetaField *)tf)->_invarianceFunction = (int)&igVertexBlendMatrixAttr_SynchronizeCachedUnitID;
+    igMetaObject_NameFields(meta, g_igVertexBlendMatrixAttr_fieldTable, g_igVertexBlendMatrixAttr_fieldHandles, g_igVertexBlendMatrixAttr_fieldOffsets, base);
 }
 
 void igMatrix44f_FromRows(float *matrix, const igVec4f *row0, const igVec4f *row1, const igVec4f *row2,

@@ -3,12 +3,12 @@ igMetaField *g_igLightStateAttr_lightMetaField;
 igMetaField *g_igLightStateAttr_enabledMetaField;
 igMetaField *g_igLightStateAttr_internalMetaField;
 
-void FUN_001361b0(int arg0) {
+igLightStateAttr *igLightStateAttr_Create(igMemoryPoolView *pool) {
     igLightStateAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F060, (igMemoryPoolView *)arg0);
+    return (igLightStateAttr *)igMetaObject_CreateInstance(g_igLightStateAttr_metaObject, pool);
 }
 
-igMetaObject *FUN_001361f0(void) {
+igMetaObject *igLightStateAttr_GetOrCreateMetaObject(void) {
     if (g_igLightStateAttr_metaObject == 0) {
         g_igLightStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -99,7 +99,7 @@ CallbackArray *igLightStateAttr_Register(void) {
         &g_igLightStateAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igLightStateAttr_GetMetaObject,
+        igLightStateAttr_GetMetaObjectFunction,
         "igLightStateAttr",
         0x18, /* instance size */
         igLightStateAttr_GetVTable,
@@ -109,7 +109,7 @@ CallbackArray *igLightStateAttr_Register(void) {
     );
 }
 
-void thunk_igLightStateAttr_GetMetaObject(void) {
+void igLightStateAttr_GetMetaObjectFunction(void) {
     igLightStateAttr_GetMetaObject();
 }
 
@@ -135,20 +135,20 @@ static int g_igLightStateAttr_fieldOffsets[] = {
 };
 
 void igLightStateAttr_InitFields(void) {
-    int temp_s2;
-    void *temp_v0;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    void *field2;
+    igMetaObject *meta;
 
-    temp_s0 = g_igLightStateAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igLightStateAttr_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00136750();
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1), 1);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_v0)->_metaObject = (int)g_igObject_metaObject;
-    ((igMetaField *)temp_v0)->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, g_igLightStateAttr_fieldTable, g_igLightStateAttr_fieldHandles, g_igLightStateAttr_fieldOffsets, temp_s2);
+    meta = g_igLightStateAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igLightStateAttr_ctorTable, 3);
+    field2 = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)igLightAttr_GetOrCreateMetaObject();
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 1), 1);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)g_igObject_metaObject;
+    ((igMetaField *)field)->_persistent = 0;
+    igMetaObject_NameFields(meta, g_igLightStateAttr_fieldTable, g_igLightStateAttr_fieldHandles, g_igLightStateAttr_fieldOffsets, base);
 }
 

@@ -5,10 +5,10 @@ void Gap__igPsx2AudioContext__vfunc_23(ContextView *arg0, int arg1) {
     arg0->f8 = (unsigned char) (arg1 == 1);
 }
 
-void Gap__igPsx2AudioContext__vfunc_11(igPsx2AudioContext *self) {
+void igPsx2AudioContext_InitDefaults(igPsx2AudioContext *self) {
     igMemoryPoolView *allocator = igObject_GetAllocator((igObject *)self);
     g_audioTableOwner.release();
-    g_audioTableOwner.p = (igPsx2AudioSourceList *)FUN_001435c0(allocator);
+    g_audioTableOwner.p = (igPsx2AudioSourceList *)igPsx2AudioSourceList_Create(allocator);
 }
 
 void FUN_00143800(AudioVoiceHandle *h)
@@ -55,7 +55,7 @@ void Gap__igPsx2AudioContext__vfunc_25(igPsx2AudioContext *context) {
     }
 }
 
-void Gap__igPsx2AudioContext__vfunc_12(void **arg0) {
+void igPsx2AudioContext_ReleaseDefaults(void **arg0) {
     ((DW4VC_100_0 *)(arg0))->vX();
     g_audioTableOwner.clear();
     igObject_ReleaseDefaults((igObject *)arg0);

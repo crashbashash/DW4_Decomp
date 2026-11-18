@@ -57,7 +57,7 @@ static inline void AcquireSharedOptions() {
     if (g_sharedViewerOptions == 0) {
         SharedViewerOptions *created = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
         if (created != 0) {
-            created = ViewerOptions_Construct(created);
+            created = igViewerDefaults_Construct(created);
         }
         g_sharedViewerOptions = created;
     }
@@ -385,7 +385,7 @@ extern "C" int main(int argc, char **argv) {
     GameMain_InitAtstream();
     GameMain_RegisterEngineClasses();
     App args;
-    ViewerOptions_ParseCommandLine(&args, argc, argv);
+    igCommandLine_ParseArgs(&args, argc, argv);
     allocator = PoolAllocator(((int)Memory_GetCurrentAllocator()));
     igVisualContext_SetImageMemoryPool(allocator);
     ReleaseObject((igObject **)&g_igEnbayaContextPool_instance.p);
@@ -568,7 +568,7 @@ static inline void setFolderName(igFolder *folder, const char *name) {
 }
 
 Blk::Blk()
-    : viewer(Viewer_CreateDisplay(0)), reservedA(0, kRetainReference), reservedB(0, kRetainReference), repeatCounts(0, kRetainReference),
+    : viewer(igInsightCore_CreateWindow(0)), reservedA(0, kRetainReference), reservedB(0, kRetainReference), repeatCounts(0, kRetainReference),
       modelNames(0, kRetainReference), isFinished(false), fileNames(0, kRetainReference), folder(igFolder_Create(0), AdoptReference()),
       loadingMessage(igViewerLoadingFileMessage_Create(0), AdoptReference()) {
     setFolderName(folder, "cdrom0:");

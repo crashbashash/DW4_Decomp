@@ -1,4 +1,4 @@
-void Gap__Gui__igDefaultAspect__vfunc_24(igDefaultAspect *arg0, int *arg1) {
+void igDefaultAspect_OnModelChange(igDefaultAspect *arg0, int *arg1) {
     int temp_a2;
 
     temp_a2 = *arg1;

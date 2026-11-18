@@ -1,20 +1,20 @@
-void Gap__Attrs__igTextureMatrixAttr__vfunc_24(S_1414d0 *p, int q) { FUN_0017c710(q, p->a, p->b); Gap__Gfx__igPsx2VisualContext__vfunc_203((igPsx2VisualContext *)q, p->a + 2, (char *)p + 12); }
+void igTextureMatrixAttr_apply(S_1414d0 *p, int q) { FUN_0017c710(q, p->a, p->b); igPsx2VisualContext_SetMatrix((igPsx2VisualContext *)q, p->a + 2, (char *)p + 12); }
 
-void FUN_00141520(void *arg0) {
-    *(short *)((char *)(arg0) + 10) = (short) *(int *)((char *)(arg0) + 76);
+void igTextureMatrixAttr_SynchronizeCachedUnitID(igTextureMatrixAttr *self) {
+    self->_cachedUnitID = self->_unitID;
 }
 
-void Gap__Attrs__igTextureMatrixAttr__vfunc_17(void *arg0) {
-    FUN_0013b820(arg0);
-    FUN_0013b810((int)arg0, (short)*(int *)((char *)arg0 + 76));
+void igTextureMatrixAttr_UserPostLoad(igTextureMatrixAttr *self) {
+    igAttr_UserPostLoad(self);
+    igAttr_SetUnitID((int)self, (short)self->_unitID);
 }
 
-void Gap__Attrs__igTextureMatrixAttr__vfunc_25(int arg0, int arg1) {
-    *(int *)((char *)(arg0) + 76) = (short)arg1;
-    FUN_0013b810(arg0, arg1);
+void igTextureMatrixAttr_SetUnitID(igTextureMatrixAttr *self, int unitID) {
+    self->_unitID = (short)unitID;
+    igAttr_SetUnitID((int)self, unitID);
 }
 
-void Gap__Attrs__igTextureMatrixAttr__vfunc_26(igTextureMatrixAttr *self, igObject *context)
+void igTextureMatrixAttr_SynchronizeDefault(igTextureMatrixAttr *self, igObject *context)
 {
     float m[16];
 
@@ -24,11 +24,11 @@ void Gap__Attrs__igTextureMatrixAttr__vfunc_26(igTextureMatrixAttr *self, igObje
     self->_isProjective = FUN_0017c790(context, self->_unitID);
 }
 
-void Gap__Attrs__igTextureMatrixAttr__vfunc_32(igTextureMatrixAttr *self, const float *matrix) {
+void igTextureMatrixAttr_SetMatrix(igTextureMatrixAttr *self, const float *matrix) {
     igMatrix44f_Copy(self->_m, matrix);
 }
 
-void Gap__Attrs__igTextureMatrixAttr__vfunc_31(igTextureMatrixAttrView *self, igVisualContextView *context)
+void igTextureMatrixAttr_GetUnitCount(igTextureMatrixAttrView *self, igVisualContextView *context)
 {
     context->vfunc_21(22);
 }

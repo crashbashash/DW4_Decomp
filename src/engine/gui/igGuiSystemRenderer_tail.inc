@@ -1,4 +1,4 @@
-void Gap__Gui__igGuiSystemRenderer__vfunc_23(int *arg0) {
+void igGuiSystemRenderer_InitializeDrawing(int *arg0) {
     int m[16];
     ((Obj_456610 *)arg0[5])->vX(arg0[2]);
     igMatrix44f_Copy((float *)m, (const float *)((char *)arg0[4] + 0x20));
@@ -28,7 +28,7 @@ void igGuiSystemRenderer_Traverse(int *arg0) {
     arg0[6] = (int)temp_v0;
 }
 
-void Gap__Gui__igGuiSystemRenderer__vfunc_26(char *arg0) {
+void igGuiSystemRenderer_Render(char *arg0) {
     ((CA *)(*(int *)(arg0 + 8)))->vX(0, *(int *)(arg0 + 16) + 0x60);
     ((CB *)(*(int *)(arg0 + 24)))->vX(*(int *)(arg0 + 8));
 }

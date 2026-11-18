@@ -3,12 +3,12 @@ igMetaField *g_igTextureCoordSourceAttr_modeMetaField;
 igMetaField *g_igTextureCoordSourceAttr_texCoordIndexMetaField;
 igMetaField *g_igTextureCoordSourceAttr_unitIDMetaField;
 
-void FUN_001325a0(int arg0) {
+igTextureCoordSourceAttr *igTextureCoordSourceAttr_Create(igMemoryPoolView *pool) {
     igTextureCoordSourceAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55ED68, (igMemoryPoolView *)arg0);
+    return (igTextureCoordSourceAttr *)igMetaObject_CreateInstance(g_igTextureCoordSourceAttr_metaObject, pool);
 }
 
-igMetaObject *FUN_001325e0(void) {
+igMetaObject *igTextureCoordSourceAttr_GetOrCreateMetaObject(void) {
     if (g_igTextureCoordSourceAttr_metaObject == 0) {
         g_igTextureCoordSourceAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -47,7 +47,7 @@ CallbackArray *igTextureCoordSourceAttr_Register(void) {
         &g_igTextureCoordSourceAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igTextureCoordSourceAttr_GetMetaObject,
+        igTextureCoordSourceAttr_GetMetaObjectFunction,
         "igTextureCoordSourceAttr",
         0x18, /* instance size */
         igTextureCoordSourceAttr_GetVTable,
@@ -57,7 +57,7 @@ CallbackArray *igTextureCoordSourceAttr_Register(void) {
     );
 }
 
-void thunk_igTextureCoordSourceAttr_GetMetaObject(void) {
+void igTextureCoordSourceAttr_GetMetaObjectFunction(void) {
     igTextureCoordSourceAttr_GetMetaObject();
 }
 
@@ -83,19 +83,19 @@ static int g_igTextureCoordSourceAttr_fieldOffsets[] = {
 };
 
 void igTextureCoordSourceAttr_InitFields(void) {
-    void *temp_v0_2;
-    igMetaObject *temp_s0;
-    int temp_s2;
-    void *temp_v0;
+    void *field;
+    igMetaObject *meta;
+    int base;
+    void *field2;
 
-    temp_s0 = g_igTextureCoordSourceAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igTextureCoordSourceAttr_ctorTable, 3);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
-    *(int *)((char *)(temp_v0) + 52) = (int)(&FUN_001497a0);
-    temp_v0_2 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2);
-    *(int *)((char *)(temp_v0_2) + 48) = (int)(FUN_00140fd0);
-    igMetaObject_NameFields(temp_s0, g_igTextureCoordSourceAttr_fieldTable, g_igTextureCoordSourceAttr_fieldHandles, g_igTextureCoordSourceAttr_fieldOffsets, temp_s2);
+    meta = g_igTextureCoordSourceAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igTextureCoordSourceAttr_ctorTable, 3);
+    field2 = (void *)(igMetaObject_GetFieldAt(meta, base));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field2, 0);
+    ((igEnumMetaField *)field2)->_getMetaEnumFunction = (int)&IG_GFX_TEXTURE_COORD_SOURCE_GetMetaEnum;
+    field = igMetaObject_GetFieldAt(meta, base + 2);
+    ((igMetaField *)field)->_invarianceFunction = (int)igTextureCoordSourceAttr_SynchronizeCachedUnitID;
+    igMetaObject_NameFields(meta, g_igTextureCoordSourceAttr_fieldTable, g_igTextureCoordSourceAttr_fieldHandles, g_igTextureCoordSourceAttr_fieldOffsets, base);
 }
 

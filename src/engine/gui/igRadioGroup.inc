@@ -6,7 +6,7 @@ igMetaField *g_igRadioGroup_alwaysSelectedMetaField;
 igMetaField *g_igRadioGroup_lastSelectedMetaField;
 igMetaField *g_igRadioGroup_defaultSelectedMetaField;
 
-igMetaObject *FUN_0044cdf0(void) {
+igMetaObject *igRadioGroup_GetOrCreateMetaObject(void) {
     if (g_igRadioGroup_metaObject == 0) {
         g_igRadioGroup_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -84,7 +84,7 @@ CallbackArray *igRadioGroup_Register(void) {
         &g_igRadioGroup_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igRadioGroup_GetMetaObject,
+        igRadioGroup_GetMetaObjectFunction,
         "igRadioGroup",
         0x20, /* instance size */
         igRadioGroup_GetVTable,
@@ -94,7 +94,7 @@ CallbackArray *igRadioGroup_Register(void) {
     );
 }
 
-void thunk_igRadioGroup_GetMetaObject(void) {
+void igRadioGroup_GetMetaObjectFunction(void) {
     igRadioGroup_GetMetaObject();
 }
 
@@ -142,13 +142,13 @@ void igRadioGroup_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igRadioGroup_ctorTable, 6);
     temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0044d170();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igRadioGroupModel_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_0044cbd0();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igRadioGroupSelectedObserver_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0044c880();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igOnOffValueObserverList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3), 1);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4), -1);

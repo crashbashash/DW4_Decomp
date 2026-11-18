@@ -1,8 +1,8 @@
-igMetaObject *Gap__Gfx__igVertexDataList__vfunc_24(void) {
+igMetaObject *igVertexDataList_GetElementMeta(void) {
     return g_igVertexData_metaObject;
 }
 
-void FUN_00181110(igDataList *arg0) {
+void igDataList_TrimCapacity(igDataList *arg0) {
     int temp_a1;
 
     temp_a1 = arg0->_count;
@@ -33,10 +33,10 @@ void FUN_001815b0(int n, unsigned i, int base, int stride, CountedVertexWriter *
         for (; i < end; i++) {
             
             p = base + i * stride;
-            x = FUN_001818b0(p);
-            FUN_00181860((float *)A, (float *)x, (float *)(FUN_001818a0(p)), f);
-            x = FUN_00181850(p);
-            FUN_00181810((float *)&B, (float *)x, (float *)(FUN_00181840(p)), f);
+            x = ParticleArray_GetPosition(p);
+            ParticleArray_EvaluateLinearVec3((float *)A, (float *)x, (float *)(ParticleArray_GetVelocity(p)), f);
+            x = ParticleArray_GetSize(p);
+            ParticleArray_EvaluateLinearVec2((float *)&B, (float *)x, (float *)(ParticleArray_GetSizeVelocity(p)), f);
             a5->v144(i, A);
             igPointSpriteExt_SetSize((igPointSpriteExt *)a5, i, B);
         }
@@ -54,16 +54,16 @@ void FUN_001815b0(int n, unsigned i, int base, int stride, CountedVertexWriter *
     for (; i < end; i++) {
         
         p2 = base + i * stride;
-        x2 = FUN_001818b0(p2);
-        FUN_00181860((float *)A, (float *)x2, (float *)(FUN_001818a0(p2)), f);
-        x2 = FUN_00181850(p2);
-        FUN_00181810((float *)&B, (float *)x2, (float *)(FUN_00181840(p2)), f);
+        x2 = ParticleArray_GetPosition(p2);
+        ParticleArray_EvaluateLinearVec3((float *)A, (float *)x2, (float *)(ParticleArray_GetVelocity(p2)), f);
+        x2 = ParticleArray_GetSize(p2);
+        ParticleArray_EvaluateLinearVec2((float *)&B, (float *)x2, (float *)(ParticleArray_GetSizeVelocity(p2)), f);
         a4->v116(i, A);
         a4->v220(i, B);
     }
 }
 
-void FUN_00181810(float *a, float *b, float *c, float s) {
+void ParticleArray_EvaluateLinearVec2(float *a, float *b, float *c, float s) {
     float t1;
     float u1;
     float t0;
@@ -80,15 +80,15 @@ void FUN_00181810(float *a, float *b, float *c, float s) {
     a[1] = u1;
 }
 
-int FUN_00181840(int arg0) {
+int ParticleArray_GetSizeVelocity(int arg0) {
     return arg0 + 0x5C;
 }
 
-int FUN_00181850(int arg0) {
+int ParticleArray_GetSize(int arg0) {
     return arg0 + 0x54;
 }
 
-void FUN_00181860(float *a, float *b, float *c, float s) {
+void ParticleArray_EvaluateLinearVec3(float *a, float *b, float *c, float s) {
     float t0 = c[0] * s;
     float t1 = c[1] * s;
     float t2 = c[2] * s;
@@ -100,11 +100,11 @@ void FUN_00181860(float *a, float *b, float *c, float s) {
     a[2] = u2;
 }
 
-int FUN_001818a0(int arg0) {
+int ParticleArray_GetVelocity(int arg0) {
     return arg0 + 0xC;
 }
 
-int FUN_001818b0(int a0)
+int ParticleArray_GetPosition(int a0)
 {
     return a0;
 }
@@ -142,13 +142,13 @@ void FUN_001818c0(int arg0, unsigned arg1, int arg2, int arg3, B_1818c0 *arg4, B
         end = arg1 + arg0;
         for (; arg1 < end; arg1++) {
             temp_s1 = arg2 + arg1 * arg3;
-            temp_s0 = FUN_001818b0(temp_s1);
-            FUN_00181860((float *)sp90, (float *)temp_s0, (float *)(FUN_001818a0(temp_s1)), fparg0);
-            temp_s0_2 = FUN_00181850(temp_s1);
-            temp_s1_2 = FUN_00181840(temp_s1);
-            FUN_00181b30(&sp9C, (float *)temp_s0_2, (float *)temp_s1_2, (float *)(FUN_00181b50(temp_s1)), fparg0, temp_f20);
+            temp_s0 = ParticleArray_GetPosition(temp_s1);
+            ParticleArray_EvaluateLinearVec3((float *)sp90, (float *)temp_s0, (float *)(ParticleArray_GetVelocity(temp_s1)), fparg0);
+            temp_s0_2 = ParticleArray_GetSize(temp_s1);
+            temp_s1_2 = ParticleArray_GetSizeVelocity(temp_s1);
+            ParticleArray_EvaluateQuadraticFloat(&sp9C, (float *)temp_s0_2, (float *)temp_s1_2, (float *)(ParticleArray_GetSizeAcceleration(temp_s1)), fparg0, temp_f20);
             arg5->v144(arg1, sp90);
-            FUN_0015dae0((igPointSpriteExtView *)arg5, arg1, sp9C);
+            igPointSpriteExt_SetUniformSize((igPointSpriteExtView *)arg5, arg1, sp9C);
         }
         t2 = arg5->f24;
         if (t2 != 0) {
@@ -162,22 +162,22 @@ void FUN_001818c0(int arg0, unsigned arg1, int arg2, int arg3, B_1818c0 *arg4, B
         end2 = arg1 + arg0;
         for (; arg1 < end2; arg1++) {
             temp_s6_2 = arg2 + arg1 * arg3;
-            temp_s1_3 = FUN_001818b0(temp_s6_2);
-            FUN_00181860((float *)sp90, (float *)temp_s1_3, (float *)(FUN_001818a0(temp_s6_2)), fparg0);
-            temp_s1_4 = FUN_00181850(temp_s6_2);
-            temp_s6_3 = FUN_00181840(temp_s6_2);
-            FUN_00181b30(&sp9C, (float *)temp_s1_4, (float *)temp_s6_3, (float *)(FUN_00181b50(temp_s6_2)), fparg0, temp_f20);
+            temp_s1_3 = ParticleArray_GetPosition(temp_s6_2);
+            ParticleArray_EvaluateLinearVec3((float *)sp90, (float *)temp_s1_3, (float *)(ParticleArray_GetVelocity(temp_s6_2)), fparg0);
+            temp_s1_4 = ParticleArray_GetSize(temp_s6_2);
+            temp_s6_3 = ParticleArray_GetSizeVelocity(temp_s6_2);
+            ParticleArray_EvaluateQuadraticFloat(&sp9C, (float *)temp_s1_4, (float *)temp_s6_3, (float *)(ParticleArray_GetSizeAcceleration(temp_s6_2)), fparg0, temp_f20);
             arg4->v116(arg1, sp90);
             arg4->v212(arg1, sp9C);
         }
     }
 }
 
-void FUN_00181b30(float *a, float *b, float *c, float *d, float x, float y) {
+void ParticleArray_EvaluateQuadraticFloat(float *a, float *b, float *c, float *d, float x, float y) {
     *a = *b + *c * x + *d * y;
 }
 
-int FUN_00181b50(int arg0) {
+int ParticleArray_GetSizeAcceleration(int arg0) {
     return arg0 + 0x64;
 }
 
@@ -214,11 +214,11 @@ void FUN_00181b60(int n, unsigned int i, int particles, int particleSize, Counte
         end = i + n;
         for (; i < end; i++) {
             particle = particles + i * particleSize;
-            pos = FUN_001818b0(particle);
-            FUN_00181860(position, (float *)pos, (float *)FUN_001818a0(particle), time);
-            sizePos = FUN_00181850(particle);
-            sizeVel = FUN_00181840(particle);
-            FUN_00181df0((float *)&size, (float *)sizePos, (float *)sizeVel, (float *)FUN_00181b50(particle), time, timeSquared);
+            pos = ParticleArray_GetPosition(particle);
+            ParticleArray_EvaluateLinearVec3(position, (float *)pos, (float *)ParticleArray_GetVelocity(particle), time);
+            sizePos = ParticleArray_GetSize(particle);
+            sizeVel = ParticleArray_GetSizeVelocity(particle);
+            ParticleArray_EvaluateQuadraticVec2((float *)&size, (float *)sizePos, (float *)sizeVel, (float *)ParticleArray_GetSizeAcceleration(particle), time, timeSquared);
             sprite->v144(i, position);
             igPointSpriteExt_SetSize((igPointSpriteExt *)sprite, i, size);
         }
@@ -234,11 +234,11 @@ void FUN_00181b60(int n, unsigned int i, int particles, int particleSize, Counte
         end2 = i + n;
         for (; i < end2; i++) {
             particle2 = particles + i * particleSize;
-            pos2 = FUN_001818b0(particle2);
-            FUN_00181860(position, (float *)pos2, (float *)FUN_001818a0(particle2), time);
-            sizePos2 = FUN_00181850(particle2);
-            sizeVel2 = FUN_00181840(particle2);
-            FUN_00181df0((float *)&size, (float *)sizePos2, (float *)sizeVel2, (float *)FUN_00181b50(particle2), time, timeSquared);
+            pos2 = ParticleArray_GetPosition(particle2);
+            ParticleArray_EvaluateLinearVec3(position, (float *)pos2, (float *)ParticleArray_GetVelocity(particle2), time);
+            sizePos2 = ParticleArray_GetSize(particle2);
+            sizeVel2 = ParticleArray_GetSizeVelocity(particle2);
+            ParticleArray_EvaluateQuadraticVec2((float *)&size, (float *)sizePos2, (float *)sizeVel2, (float *)ParticleArray_GetSizeAcceleration(particle2), time, timeSquared);
             array->v116(i, position);
             array->v220(i, size);
         }
@@ -247,7 +247,7 @@ void FUN_00181b60(int n, unsigned int i, int particles, int particleSize, Counte
 
 static inline void scale(float *r, const float *v, float s) { r[0] = v[0]*s; r[1] = v[1]*s; }
 
-void FUN_00181df0(float *o, float *a, float *b, float *c, float x, float y) {
+void ParticleArray_EvaluateQuadraticVec2(float *o, float *a, float *b, float *c, float x, float y) {
     /* matching construct: manual trial — b*x through an inline helper takes f5/f2, a[] f4/f1 */
     float u[2];
     float t0, t1;
@@ -277,8 +277,8 @@ void FUN_00181e30(int cnt, unsigned idx, int base, int stride, A_181e30 *arg4, H
         end = idx + cnt;
         while (idx < end) {
             p = base + idx * stride;
-            FUN_00181860((float *)bufA, (float *)(FUN_001818b0(p)), (float *)(FUN_001818a0(p)), f);
-            FUN_00182090((void *)bufB, (void *)(FUN_00182100(p)), (void *)(FUN_001820f0(p)), f);
+            ParticleArray_EvaluateLinearVec3((float *)bufA, (float *)(ParticleArray_GetPosition(p)), (float *)(ParticleArray_GetVelocity(p)), f);
+            ParticleArray_EvaluateLinearVec4((void *)bufB, (void *)(ParticleArray_GetColor(p)), (void *)(ParticleArray_GetColorVelocity(p)), f);
             arg5->s0(idx, bufA);
             arg5->s1(idx, (void*)igVec4f_PackColor((float *)bufB, 1));
             idx++;
@@ -299,8 +299,8 @@ void FUN_00181e30(int cnt, unsigned idx, int base, int stride, A_181e30 *arg4, H
         end = idx + cnt;
         while (idx < end) {
             p = base + idx * stride;
-            FUN_00181860((float *)bufA, (float *)(FUN_001818b0(p)), (float *)(FUN_001818a0(p)), f);
-            FUN_00182090((void *)bufB, (void *)(FUN_00182100(p)), (void *)(FUN_001820f0(p)), f);
+            ParticleArray_EvaluateLinearVec3((float *)bufA, (float *)(ParticleArray_GetPosition(p)), (float *)(ParticleArray_GetVelocity(p)), f);
+            ParticleArray_EvaluateLinearVec4((void *)bufB, (void *)(ParticleArray_GetColor(p)), (void *)(ParticleArray_GetColorVelocity(p)), f);
             arg4->s0(idx, bufA);
             arg4->s1(idx, (void*)igVec4f_PackColor((float *)bufB, 1));
             idx++;
@@ -308,7 +308,7 @@ void FUN_00181e30(int cnt, unsigned idx, int base, int stride, A_181e30 *arg4, H
     }
 }
 
-void FUN_00182090(void *arg0, void *arg1, void *arg2, float fparg0) {
+void ParticleArray_EvaluateLinearVec4(void *arg0, void *arg1, void *arg2, float fparg0) {
     float r0;
     float r1;
     float r2;
@@ -323,11 +323,11 @@ void FUN_00182090(void *arg0, void *arg1, void *arg2, float fparg0) {
     *(float *)((char *)(arg0) + 12) = r3;
 }
 
-int FUN_001820f0(int arg0) {
+int ParticleArray_GetColorVelocity(int arg0) {
     return arg0 + 0x34;
 }
 
-int FUN_00182100(int arg0) {
+int ParticleArray_GetColor(int arg0) {
     return arg0 + 0x24;
 }
 
@@ -367,16 +367,16 @@ void FUN_00182110(int arg0, unsigned arg1, int arg2, int arg3, B_182110 *arg4, B
         end = arg1 + arg0;
         for (; arg1 < end; arg1++) {
             temp_s1 = arg2 + arg1 * arg3;
-            temp_s0 = FUN_001818b0(temp_s1);
-            FUN_00181860((float *)spB0, (float *)temp_s0, (float *)(FUN_001818a0(temp_s1)), fparg0);
-            temp_s0_2 = FUN_00182100(temp_s1);
-            temp_s6 = FUN_001820f0(temp_s1);
-            FUN_00182440((igVec4f *)spA0, (igVec4f *)temp_s0_2, (igVec4f *)temp_s6, (igVec4f *)(FUN_001824c0(temp_s1)), fparg0, temp_f20);
-            temp_s0_3 = FUN_00181850(temp_s1);
-            FUN_00182420(&spBC, (float *)temp_s0_3, (float *)(FUN_00181840(temp_s1)), fparg0);
+            temp_s0 = ParticleArray_GetPosition(temp_s1);
+            ParticleArray_EvaluateLinearVec3((float *)spB0, (float *)temp_s0, (float *)(ParticleArray_GetVelocity(temp_s1)), fparg0);
+            temp_s0_2 = ParticleArray_GetColor(temp_s1);
+            temp_s6 = ParticleArray_GetColorVelocity(temp_s1);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)spA0, (igVec4f *)temp_s0_2, (igVec4f *)temp_s6, (igVec4f *)(ParticleArray_GetColorAcceleration(temp_s1)), fparg0, temp_f20);
+            temp_s0_3 = ParticleArray_GetSize(temp_s1);
+            ParticleArray_EvaluateLinearFloat(&spBC, (float *)temp_s0_3, (float *)(ParticleArray_GetSizeVelocity(temp_s1)), fparg0);
             arg5->v144(arg1, spB0);
             arg5->v152(arg1, igVec4f_PackColor(spA0, 1));
-            FUN_0015dae0((igPointSpriteExtView *)arg5, arg1, spBC);
+            igPointSpriteExt_SetUniformSize((igPointSpriteExtView *)arg5, arg1, spBC);
         }
         t2 = arg5->f24;
         if (t2 != 0) {
@@ -390,13 +390,13 @@ void FUN_00182110(int arg0, unsigned arg1, int arg2, int arg3, B_182110 *arg4, B
         end2 = arg1 + arg0;
         for (; arg1 < end2; arg1++) {
             temp_s2 = arg2 + arg1 * arg3;
-            temp_s1_2 = FUN_001818b0(temp_s2);
-            FUN_00181860((float *)spB0, (float *)temp_s1_2, (float *)(FUN_001818a0(temp_s2)), fparg0);
-            temp_s1_3 = FUN_00182100(temp_s2);
-            temp_s6_2 = FUN_001820f0(temp_s2);
-            FUN_00182440((igVec4f *)spA0, (igVec4f *)temp_s1_3, (igVec4f *)temp_s6_2, (igVec4f *)(FUN_001824c0(temp_s2)), fparg0, temp_f20);
-            temp_s1_4 = FUN_00181850(temp_s2);
-            FUN_00182420(&spBC, (float *)temp_s1_4, (float *)(FUN_00181840(temp_s2)), fparg0);
+            temp_s1_2 = ParticleArray_GetPosition(temp_s2);
+            ParticleArray_EvaluateLinearVec3((float *)spB0, (float *)temp_s1_2, (float *)(ParticleArray_GetVelocity(temp_s2)), fparg0);
+            temp_s1_3 = ParticleArray_GetColor(temp_s2);
+            temp_s6_2 = ParticleArray_GetColorVelocity(temp_s2);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)spA0, (igVec4f *)temp_s1_3, (igVec4f *)temp_s6_2, (igVec4f *)(ParticleArray_GetColorAcceleration(temp_s2)), fparg0, temp_f20);
+            temp_s1_4 = ParticleArray_GetSize(temp_s2);
+            ParticleArray_EvaluateLinearFloat(&spBC, (float *)temp_s1_4, (float *)(ParticleArray_GetSizeVelocity(temp_s2)), fparg0);
             arg4->v116(arg1, spB0);
             arg4->v164(arg1, igVec4f_PackColor(spA0, 1));
             arg4->v212(arg1, spBC);
@@ -404,15 +404,15 @@ void FUN_00182110(int arg0, unsigned arg1, int arg2, int arg3, B_182110 *arg4, B
     }
 }
 
-void FUN_00182420(float *arg0, float *arg1, float *arg2, float fparg0) {
+void ParticleArray_EvaluateLinearFloat(float *arg0, float *arg1, float *arg2, float fparg0) {
     *arg0 = *arg1 + (*arg2 * fparg0);
 }
 
-void FUN_00182440(igVec4f *out, const igVec4f *a, const igVec4f *b, const igVec4f *c, float s, float t) {
+void ParticleArray_EvaluateQuadraticVec4(igVec4f *out, const igVec4f *a, const igVec4f *b, const igVec4f *c, float s, float t) {
     *out = *a + *b * s + *c * t;
 }
 
-int FUN_001824c0(int arg0) {
+int ParticleArray_GetColorAcceleration(int arg0) {
     return arg0 + 0x44;
 }
 
@@ -448,15 +448,15 @@ void FUN_001824d0(int arg0, unsigned arg1, int arg2, int arg3, B_1824d0 *arg4, B
         end = arg1 + arg0;
         for (; arg1 < end; arg1++) {
             p = arg2 + arg1 * arg3;
-            a = FUN_001818b0(p);
-            b = FUN_001818a0(p);
-            FUN_00181860((float *)spD0, (float *)a, (float *)b, fparg0);
-            a = FUN_00182100(p);
-            b = FUN_001820f0(p);
-            FUN_00182440((igVec4f *)spA0, (igVec4f *)a, (igVec4f *)b, (igVec4f *)(FUN_001824c0(p)), fparg0, sq);
-            a = FUN_00181850(p);
-            b = FUN_00181840(p);
-            FUN_00181810((float *)&spC8, (float *)a, (float *)b, fparg0);
+            a = ParticleArray_GetPosition(p);
+            b = ParticleArray_GetVelocity(p);
+            ParticleArray_EvaluateLinearVec3((float *)spD0, (float *)a, (float *)b, fparg0);
+            a = ParticleArray_GetColor(p);
+            b = ParticleArray_GetColorVelocity(p);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)spA0, (igVec4f *)a, (igVec4f *)b, (igVec4f *)(ParticleArray_GetColorAcceleration(p)), fparg0, sq);
+            a = ParticleArray_GetSize(p);
+            b = ParticleArray_GetSizeVelocity(p);
+            ParticleArray_EvaluateLinearVec2((float *)&spC8, (float *)a, (float *)b, fparg0);
             arg5->v144(arg1, spD0);
             arg5->v152(arg1, igVec4f_PackColor((float *)spA0, 1));
             igPointSpriteExt_SetSize((igPointSpriteExt *)arg5, arg1, spC8);
@@ -473,15 +473,15 @@ void FUN_001824d0(int arg0, unsigned arg1, int arg2, int arg3, B_1824d0 *arg4, B
         end2 = arg1 + arg0;
         for (; arg1 < end2; arg1++) {
             p2 = arg2 + arg1 * arg3;
-            a2 = FUN_001818b0(p2);
-            b2 = FUN_001818a0(p2);
-            FUN_00181860((float *)spD0, (float *)a2, (float *)b2, fparg0);
-            a2 = FUN_00182100(p2);
-            b2 = FUN_001820f0(p2);
-            FUN_00182440((igVec4f *)spA0, (igVec4f *)a2, (igVec4f *)b2, (igVec4f *)(FUN_001824c0(p2)), fparg0, sq);
-            a2 = FUN_00181850(p2);
-            b2 = FUN_00181840(p2);
-            FUN_00181810((float *)&spC8, (float *)a2, (float *)b2, fparg0);
+            a2 = ParticleArray_GetPosition(p2);
+            b2 = ParticleArray_GetVelocity(p2);
+            ParticleArray_EvaluateLinearVec3((float *)spD0, (float *)a2, (float *)b2, fparg0);
+            a2 = ParticleArray_GetColor(p2);
+            b2 = ParticleArray_GetColorVelocity(p2);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)spA0, (igVec4f *)a2, (igVec4f *)b2, (igVec4f *)(ParticleArray_GetColorAcceleration(p2)), fparg0, sq);
+            a2 = ParticleArray_GetSize(p2);
+            b2 = ParticleArray_GetSizeVelocity(p2);
+            ParticleArray_EvaluateLinearVec2((float *)&spC8, (float *)a2, (float *)b2, fparg0);
             arg4->v116(arg1, spD0);
             arg4->v164(arg1, igVec4f_PackColor((float *)spA0, 1));
             arg4->v220(arg1, spC8);
@@ -524,16 +524,16 @@ void FUN_00182800(int arg0, unsigned arg1, int arg2, int arg3, Ref_182800 *arg4,
         end = arg1 + arg0;
         for (; arg1 < end; arg1++) {
             temp_s1 = arg2 + arg1 * arg3;
-            temp_s0 = FUN_001818b0(temp_s1);
-            FUN_00181860((float *)spA0, (float *)temp_s0, (float *)(FUN_001818a0(temp_s1)), fparg0);
-            temp_s0_2 = FUN_00182100(temp_s1);
-            FUN_00182090((void *)sp90, (void *)temp_s0_2, (void *)(FUN_001820f0(temp_s1)), fparg0);
-            temp_s0_3 = FUN_00181850(temp_s1);
-            temp_s2_2 = FUN_00181840(temp_s1);
-            FUN_00181b30(&spAC, (float *)temp_s0_3, (float *)temp_s2_2, (float *)(FUN_00181b50(temp_s1)), fparg0, temp_f20);
+            temp_s0 = ParticleArray_GetPosition(temp_s1);
+            ParticleArray_EvaluateLinearVec3((float *)spA0, (float *)temp_s0, (float *)(ParticleArray_GetVelocity(temp_s1)), fparg0);
+            temp_s0_2 = ParticleArray_GetColor(temp_s1);
+            ParticleArray_EvaluateLinearVec4((void *)sp90, (void *)temp_s0_2, (void *)(ParticleArray_GetColorVelocity(temp_s1)), fparg0);
+            temp_s0_3 = ParticleArray_GetSize(temp_s1);
+            temp_s2_2 = ParticleArray_GetSizeVelocity(temp_s1);
+            ParticleArray_EvaluateQuadraticFloat(&spAC, (float *)temp_s0_3, (float *)temp_s2_2, (float *)(ParticleArray_GetSizeAcceleration(temp_s1)), fparg0, temp_f20);
             arg5->v144(arg1, spA0);
             arg5->v152(arg1, igVec4f_PackColor((float *)sp90, 1));
-            FUN_0015dae0((igPointSpriteExtView *)arg5, arg1, spAC);
+            igPointSpriteExt_SetUniformSize((igPointSpriteExtView *)arg5, arg1, spAC);
         }
         t2 = arg5->f24;
         if (t2 != 0) {
@@ -547,13 +547,13 @@ void FUN_00182800(int arg0, unsigned arg1, int arg2, int arg3, Ref_182800 *arg4,
         end2 = arg1 + arg0;
         for (; arg1 < end2; arg1++) {
             temp_s6_2 = arg2 + arg1 * arg3;
-            temp_s1_3 = FUN_001818b0(temp_s6_2);
-            FUN_00181860((float *)spA0, (float *)temp_s1_3, (float *)(FUN_001818a0(temp_s6_2)), fparg0);
-            temp_s1_4 = FUN_00182100(temp_s6_2);
-            FUN_00182090((void *)sp90, (void *)temp_s1_4, (void *)(FUN_001820f0(temp_s6_2)), fparg0);
-            temp_s1_5 = FUN_00181850(temp_s6_2);
-            temp_s0_4 = FUN_00181840(temp_s6_2);
-            FUN_00181b30(&spAC, (float *)temp_s1_5, (float *)temp_s0_4, (float *)(FUN_00181b50(temp_s6_2)), fparg0, temp_f20);
+            temp_s1_3 = ParticleArray_GetPosition(temp_s6_2);
+            ParticleArray_EvaluateLinearVec3((float *)spA0, (float *)temp_s1_3, (float *)(ParticleArray_GetVelocity(temp_s6_2)), fparg0);
+            temp_s1_4 = ParticleArray_GetColor(temp_s6_2);
+            ParticleArray_EvaluateLinearVec4((void *)sp90, (void *)temp_s1_4, (void *)(ParticleArray_GetColorVelocity(temp_s6_2)), fparg0);
+            temp_s1_5 = ParticleArray_GetSize(temp_s6_2);
+            temp_s0_4 = ParticleArray_GetSizeVelocity(temp_s6_2);
+            ParticleArray_EvaluateQuadraticFloat(&spAC, (float *)temp_s1_5, (float *)temp_s0_4, (float *)(ParticleArray_GetSizeAcceleration(temp_s6_2)), fparg0, temp_f20);
             arg4->v116(arg1, spA0);
             arg4->v164(arg1, igVec4f_PackColor((float *)sp90, 1));
             arg4->v212(arg1, spAC);
@@ -597,13 +597,13 @@ void FUN_00182b00(int arg0, unsigned arg1, int arg2, int arg3, VertexArrayTarget
         end = arg1 + arg0;
         for (; arg1 < end; arg1++) {
             temp_s2 = arg2 + arg1 * arg3;
-            temp_s1 = FUN_001818b0(temp_s2);
-            FUN_00181860((float *)spC0, (float *)temp_s1, (float *)(FUN_001818a0(temp_s2)), fparg0);
-            temp_s1_2 = FUN_00182100(temp_s2);
-            FUN_00182090((void *)sp90, (void *)temp_s1_2, (void *)(FUN_001820f0(temp_s2)), fparg0);
-            temp_s1_3 = FUN_00181850(temp_s2);
-            temp_s2_2 = FUN_00181840(temp_s2);
-            FUN_00181df0((float *)&spB8, (float *)temp_s1_3, (float *)temp_s2_2, (float *)(FUN_00181b50(temp_s2)), fparg0, temp_f20);
+            temp_s1 = ParticleArray_GetPosition(temp_s2);
+            ParticleArray_EvaluateLinearVec3((float *)spC0, (float *)temp_s1, (float *)(ParticleArray_GetVelocity(temp_s2)), fparg0);
+            temp_s1_2 = ParticleArray_GetColor(temp_s2);
+            ParticleArray_EvaluateLinearVec4((void *)sp90, (void *)temp_s1_2, (void *)(ParticleArray_GetColorVelocity(temp_s2)), fparg0);
+            temp_s1_3 = ParticleArray_GetSize(temp_s2);
+            temp_s2_2 = ParticleArray_GetSizeVelocity(temp_s2);
+            ParticleArray_EvaluateQuadraticVec2((float *)&spB8, (float *)temp_s1_3, (float *)temp_s2_2, (float *)(ParticleArray_GetSizeAcceleration(temp_s2)), fparg0, temp_f20);
             arg5->v144(arg1, spC0);
             arg5->v152(arg1, igVec4f_PackColor((float *)sp90, 1));
             igPointSpriteExt_SetSize((igPointSpriteExt *)arg5, arg1, spB8);
@@ -620,13 +620,13 @@ void FUN_00182b00(int arg0, unsigned arg1, int arg2, int arg3, VertexArrayTarget
         end2 = arg1 + arg0;
         for (; arg1 < end2; arg1++) {
             temp_s1_4 = arg2 + arg1 * arg3;
-            temp_s0 = FUN_001818b0(temp_s1_4);
-            FUN_00181860((float *)spC0, (float *)temp_s0, (float *)(FUN_001818a0(temp_s1_4)), fparg0);
-            temp_s0_2 = FUN_00182100(temp_s1_4);
-            FUN_00182090((void *)sp90, (void *)temp_s0_2, (void *)(FUN_001820f0(temp_s1_4)), fparg0);
-            temp_s0_3 = FUN_00181850(temp_s1_4);
-            temp_s1_5 = FUN_00181840(temp_s1_4);
-            FUN_00181df0((float *)&spB8, (float *)temp_s0_3, (float *)temp_s1_5, (float *)(FUN_00181b50(temp_s1_4)), fparg0, temp_f20);
+            temp_s0 = ParticleArray_GetPosition(temp_s1_4);
+            ParticleArray_EvaluateLinearVec3((float *)spC0, (float *)temp_s0, (float *)(ParticleArray_GetVelocity(temp_s1_4)), fparg0);
+            temp_s0_2 = ParticleArray_GetColor(temp_s1_4);
+            ParticleArray_EvaluateLinearVec4((void *)sp90, (void *)temp_s0_2, (void *)(ParticleArray_GetColorVelocity(temp_s1_4)), fparg0);
+            temp_s0_3 = ParticleArray_GetSize(temp_s1_4);
+            temp_s1_5 = ParticleArray_GetSizeVelocity(temp_s1_4);
+            ParticleArray_EvaluateQuadraticVec2((float *)&spB8, (float *)temp_s0_3, (float *)temp_s1_5, (float *)(ParticleArray_GetSizeAcceleration(temp_s1_4)), fparg0, temp_f20);
             arg4->v116(arg1, spC0);
             arg4->v164(arg1, igVec4f_PackColor((float *)sp90, 1));
             arg4->v220(arg1, spB8);
@@ -667,11 +667,11 @@ void FUN_00182e20(int arg0, unsigned arg1, int arg2, int arg3, B_182e20 *arg4, B
         end = arg1 + arg0;
         for (; arg1 < end; arg1++) {
             temp_s1 = arg2 + arg1 * arg3;
-            temp_s0 = FUN_001818b0(temp_s1);
-            FUN_00181860((float *)spA0, (float *)temp_s0, (float *)(FUN_001818a0(temp_s1)), fparg0);
-            temp_s0_2 = FUN_00182100(temp_s1);
-            temp_s1_2 = FUN_001820f0(temp_s1);
-            FUN_00182440((igVec4f *)sp90, (igVec4f *)temp_s0_2, (igVec4f *)temp_s1_2, (igVec4f *)(FUN_001824c0(temp_s1)), fparg0, temp_f20);
+            temp_s0 = ParticleArray_GetPosition(temp_s1);
+            ParticleArray_EvaluateLinearVec3((float *)spA0, (float *)temp_s0, (float *)(ParticleArray_GetVelocity(temp_s1)), fparg0);
+            temp_s0_2 = ParticleArray_GetColor(temp_s1);
+            temp_s1_2 = ParticleArray_GetColorVelocity(temp_s1);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)sp90, (igVec4f *)temp_s0_2, (igVec4f *)temp_s1_2, (igVec4f *)(ParticleArray_GetColorAcceleration(temp_s1)), fparg0, temp_f20);
             arg5->v144(arg1, spA0);
             arg5->v152(arg1, igVec4f_PackColor(sp90, 1));
         }
@@ -687,11 +687,11 @@ void FUN_00182e20(int arg0, unsigned arg1, int arg2, int arg3, B_182e20 *arg4, B
         end2 = arg1 + arg0;
         for (; arg1 < end2; arg1++) {
             temp_s6_2 = arg2 + arg1 * arg3;
-            temp_s1_3 = FUN_001818b0(temp_s6_2);
-            FUN_00181860((float *)spA0, (float *)temp_s1_3, (float *)(FUN_001818a0(temp_s6_2)), fparg0);
-            temp_s1_4 = FUN_00182100(temp_s6_2);
-            temp_s6_3 = FUN_001820f0(temp_s6_2);
-            FUN_00182440((igVec4f *)sp90, (igVec4f *)temp_s1_4, (igVec4f *)temp_s6_3, (igVec4f *)(FUN_001824c0(temp_s6_2)), fparg0, temp_f20);
+            temp_s1_3 = ParticleArray_GetPosition(temp_s6_2);
+            ParticleArray_EvaluateLinearVec3((float *)spA0, (float *)temp_s1_3, (float *)(ParticleArray_GetVelocity(temp_s6_2)), fparg0);
+            temp_s1_4 = ParticleArray_GetColor(temp_s6_2);
+            temp_s6_3 = ParticleArray_GetColorVelocity(temp_s6_2);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)sp90, (igVec4f *)temp_s1_4, (igVec4f *)temp_s6_3, (igVec4f *)(ParticleArray_GetColorAcceleration(temp_s6_2)), fparg0, temp_f20);
             arg4->v116(arg1, spA0);
             arg4->v164(arg1, igVec4f_PackColor(sp90, 1));
         }
@@ -720,16 +720,16 @@ void FUN_001830b0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             int s8;
             int s0;
             e = arg2 + i * arg3;
-            s0 = FUN_001818b0(e);
-            FUN_00181860((float *)&spB0, (float *)s0, (float *)(FUN_001818a0(e)), fparg0);
-            s7 = FUN_00182100(e);
-            s6 = FUN_001820f0(e);
-            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
-            s8 = FUN_00181850(e);
-            FUN_00182420(&spBC, (float *)s8, (float *)(FUN_00181840(e)), fparg0);
+            s0 = ParticleArray_GetPosition(e);
+            ParticleArray_EvaluateLinearVec3((float *)&spB0, (float *)s0, (float *)(ParticleArray_GetVelocity(e)), fparg0);
+            s7 = ParticleArray_GetColor(e);
+            s6 = ParticleArray_GetColorVelocity(e);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(ParticleArray_GetColorAcceleration(e)), fparg0, f20);
+            s8 = ParticleArray_GetSize(e);
+            ParticleArray_EvaluateLinearFloat(&spBC, (float *)s8, (float *)(ParticleArray_GetSizeVelocity(e)), fparg0);
             arg5->v144(i, &spB0);
             arg5->v152(i, igVec4f_PackColor((float *)&spA0, 1));
-            FUN_0015dae0((igPointSpriteExtView *)arg5, i, spBC);
+            igPointSpriteExt_SetUniformSize((igPointSpriteExtView *)arg5, i, spBC);
             i++;
         }
         t = (igObject *)va->_memPool;
@@ -747,13 +747,13 @@ void FUN_001830b0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             int s8;
             int s6;
             e = arg2 + i * arg3;
-            s0 = FUN_001818b0(e);
-            FUN_00181860((float *)&spB0, (float *)s0, (float *)(FUN_001818a0(e)), fparg0);
-            s7 = FUN_00182100(e);
-            s6 = FUN_001820f0(e);
-            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
-            s8 = FUN_00181850(e);
-            FUN_00182420(&spBC, (float *)s8, (float *)(FUN_00181840(e)), fparg0);
+            s0 = ParticleArray_GetPosition(e);
+            ParticleArray_EvaluateLinearVec3((float *)&spB0, (float *)s0, (float *)(ParticleArray_GetVelocity(e)), fparg0);
+            s7 = ParticleArray_GetColor(e);
+            s6 = ParticleArray_GetColorVelocity(e);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(ParticleArray_GetColorAcceleration(e)), fparg0, f20);
+            s8 = ParticleArray_GetSize(e);
+            ParticleArray_EvaluateLinearFloat(&spBC, (float *)s8, (float *)(ParticleArray_GetSizeVelocity(e)), fparg0);
             b->v116(i, &spB0);
             b->v164(i, igVec4f_PackColor((float *)&spA0, 1));
             b->v212(i, spBC);
@@ -786,9 +786,9 @@ void FUN_001833c0(int n, unsigned int i, int particles, int particleSize, MeshTa
         end = i + n;
         for (; i < end; i++) {
             particle = particles + i * particleSize;
-            FUN_00181860((float *)&position, (float *)(FUN_001818b0(particle)), (float *)(FUN_001818a0(particle)), time);
-            FUN_00182440((igVec4f *)&color, (igVec4f *)(FUN_00182100(particle)), (igVec4f *)(FUN_001820f0(particle)), (igVec4f *)(FUN_001824c0(particle)), time, timeSquared);
-            FUN_00181810((float *)&size, (float *)(FUN_00181850(particle)), (float *)(FUN_00181840(particle)), time);
+            ParticleArray_EvaluateLinearVec3((float *)&position, (float *)(ParticleArray_GetPosition(particle)), (float *)(ParticleArray_GetVelocity(particle)), time);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)&color, (igVec4f *)(ParticleArray_GetColor(particle)), (igVec4f *)(ParticleArray_GetColorVelocity(particle)), (igVec4f *)(ParticleArray_GetColorAcceleration(particle)), time, timeSquared);
+            ParticleArray_EvaluateLinearVec2((float *)&size, (float *)(ParticleArray_GetSize(particle)), (float *)(ParticleArray_GetSizeVelocity(particle)), time);
             sprite->v144(i, &position);
             sprite->v152(i, igVec4f_PackColor((float *)&color, 1));
             igPointSpriteExt_SetSize((igPointSpriteExt *)sprite, i, size);
@@ -805,9 +805,9 @@ void FUN_001833c0(int n, unsigned int i, int particles, int particleSize, MeshTa
         end = i + n;
         for (; i < end; i++) {
             particle = particles + i * particleSize;
-            FUN_00181860((float *)&position, (float *)(FUN_001818b0(particle)), (float *)(FUN_001818a0(particle)), time);
-            FUN_00182440((igVec4f *)&color, (igVec4f *)(FUN_00182100(particle)), (igVec4f *)(FUN_001820f0(particle)), (igVec4f *)(FUN_001824c0(particle)), time, timeSquared);
-            FUN_00181810((float *)&size, (float *)(FUN_00181850(particle)), (float *)(FUN_00181840(particle)), time);
+            ParticleArray_EvaluateLinearVec3((float *)&position, (float *)(ParticleArray_GetPosition(particle)), (float *)(ParticleArray_GetVelocity(particle)), time);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)&color, (igVec4f *)(ParticleArray_GetColor(particle)), (igVec4f *)(ParticleArray_GetColorVelocity(particle)), (igVec4f *)(ParticleArray_GetColorAcceleration(particle)), time, timeSquared);
+            ParticleArray_EvaluateLinearVec2((float *)&size, (float *)(ParticleArray_GetSize(particle)), (float *)(ParticleArray_GetSizeVelocity(particle)), time);
             array->v116(i, &position);
             array->v164(i, igVec4f_PackColor((float *)&color, 1));
             array->v220(i, size);
@@ -836,16 +836,16 @@ void FUN_001836f0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             int s8;
             int s0;
             e = arg2 + i * arg3;
-            s0 = FUN_001818b0(e);
-            FUN_00181860((float *)&spB0, (float *)s0, (float *)(FUN_001818a0(e)), fparg0);
-            s7 = FUN_00182100(e);
-            s6 = FUN_001820f0(e);
-            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
-            s8 = FUN_00181850(e);
-            FUN_00181b30(&spBC, (float *)s8, (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, f20);
+            s0 = ParticleArray_GetPosition(e);
+            ParticleArray_EvaluateLinearVec3((float *)&spB0, (float *)s0, (float *)(ParticleArray_GetVelocity(e)), fparg0);
+            s7 = ParticleArray_GetColor(e);
+            s6 = ParticleArray_GetColorVelocity(e);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(ParticleArray_GetColorAcceleration(e)), fparg0, f20);
+            s8 = ParticleArray_GetSize(e);
+            ParticleArray_EvaluateQuadraticFloat(&spBC, (float *)s8, (float *)(ParticleArray_GetSizeVelocity(e)), (float *)(ParticleArray_GetSizeAcceleration(e)), fparg0, f20);
             arg5->v144(i, &spB0);
             arg5->v152(i, igVec4f_PackColor((float *)&spA0, 1));
-            FUN_0015dae0((igPointSpriteExtView *)arg5, i, spBC);
+            igPointSpriteExt_SetUniformSize((igPointSpriteExtView *)arg5, i, spBC);
             i++;
         }
         t = arg5->f24;
@@ -863,13 +863,13 @@ void FUN_001836f0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             int s8;
             int s6;
             e = arg2 + i * arg3;
-            s0 = FUN_001818b0(e);
-            FUN_00181860((float *)&spB0, (float *)s0, (float *)(FUN_001818a0(e)), fparg0);
-            s7 = FUN_00182100(e);
-            s6 = FUN_001820f0(e);
-            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
-            s8 = FUN_00181850(e);
-            FUN_00181b30(&spBC, (float *)s8, (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, f20);
+            s0 = ParticleArray_GetPosition(e);
+            ParticleArray_EvaluateLinearVec3((float *)&spB0, (float *)s0, (float *)(ParticleArray_GetVelocity(e)), fparg0);
+            s7 = ParticleArray_GetColor(e);
+            s6 = ParticleArray_GetColorVelocity(e);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(ParticleArray_GetColorAcceleration(e)), fparg0, f20);
+            s8 = ParticleArray_GetSize(e);
+            ParticleArray_EvaluateQuadraticFloat(&spBC, (float *)s8, (float *)(ParticleArray_GetSizeVelocity(e)), (float *)(ParticleArray_GetSizeAcceleration(e)), fparg0, f20);
             b->v116(i, &spB0);
             b->v164(i, igVec4f_PackColor((float *)&spA0, 1));
             b->v212(i, spBC);
@@ -903,9 +903,9 @@ void FUN_00183a20(int arg0, unsigned arg1, int arg2, int arg3, MeshTarget *arg4,
         end = arg1 + arg0;
         for (; arg1 < end; arg1++) {
             e = arg2 + arg1 * arg3;
-            FUN_00181860((float *)&spD0, (float *)(FUN_001818b0(e)), (float *)(FUN_001818a0(e)), fparg0);
-            FUN_00182440((igVec4f *)&spA0, (igVec4f *)(FUN_00182100(e)), (igVec4f *)(FUN_001820f0(e)), (igVec4f *)(FUN_001824c0(e)), fparg0, temp_f20);
-            FUN_00181df0((float *)&spC8, (float *)(FUN_00181850(e)), (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, temp_f20);
+            ParticleArray_EvaluateLinearVec3((float *)&spD0, (float *)(ParticleArray_GetPosition(e)), (float *)(ParticleArray_GetVelocity(e)), fparg0);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)&spA0, (igVec4f *)(ParticleArray_GetColor(e)), (igVec4f *)(ParticleArray_GetColorVelocity(e)), (igVec4f *)(ParticleArray_GetColorAcceleration(e)), fparg0, temp_f20);
+            ParticleArray_EvaluateQuadraticVec2((float *)&spC8, (float *)(ParticleArray_GetSize(e)), (float *)(ParticleArray_GetSizeVelocity(e)), (float *)(ParticleArray_GetSizeAcceleration(e)), fparg0, temp_f20);
             arg5->v144(arg1, &spD0);
             arg5->v152(arg1, igVec4f_PackColor((float *)&spA0, 1));
             igPointSpriteExt_SetSize((igPointSpriteExt *)arg5, arg1, spC8);
@@ -922,9 +922,9 @@ void FUN_00183a20(int arg0, unsigned arg1, int arg2, int arg3, MeshTarget *arg4,
         end = arg1 + arg0;
         for (; arg1 < end; arg1++) {
             e = arg2 + arg1 * arg3;
-            FUN_00181860((float *)&spD0, (float *)(FUN_001818b0(e)), (float *)(FUN_001818a0(e)), fparg0);
-            FUN_00182440((igVec4f *)&spA0, (igVec4f *)(FUN_00182100(e)), (igVec4f *)(FUN_001820f0(e)), (igVec4f *)(FUN_001824c0(e)), fparg0, temp_f20);
-            FUN_00181df0((float *)&spC8, (float *)(FUN_00181850(e)), (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, temp_f20);
+            ParticleArray_EvaluateLinearVec3((float *)&spD0, (float *)(ParticleArray_GetPosition(e)), (float *)(ParticleArray_GetVelocity(e)), fparg0);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)&spA0, (igVec4f *)(ParticleArray_GetColor(e)), (igVec4f *)(ParticleArray_GetColorVelocity(e)), (igVec4f *)(ParticleArray_GetColorAcceleration(e)), fparg0, temp_f20);
+            ParticleArray_EvaluateQuadraticVec2((float *)&spC8, (float *)(ParticleArray_GetSize(e)), (float *)(ParticleArray_GetSizeVelocity(e)), (float *)(ParticleArray_GetSizeAcceleration(e)), fparg0, temp_f20);
             arg4->v116(arg1, &spD0);
             arg4->v164(arg1, igVec4f_PackColor((float *)&spA0, 1));
             arg4->v220(arg1, spC8);
@@ -956,9 +956,9 @@ void FUN_00183d70(int n, unsigned i, int base, int stride, IndexedValueWriter *a
         end = i + n;
         for (; i < end; i++) {
             p = base + i * stride;
-            x = FUN_001818b0(p);
-            y = FUN_001818a0(p);
-            FUN_00183f60((igVec3f *)sp90, (igVec3f *)x, (igVec3f *)y, (igVec3f *)(FUN_00183fc0(p)), f, f2);
+            x = ParticleArray_GetPosition(p);
+            y = ParticleArray_GetVelocity(p);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)sp90, (igVec3f *)x, (igVec3f *)y, (igVec3f *)(ParticleArray_GetAcceleration(p)), f, f2);
             a5->v144(i, sp90);
         }
         {
@@ -974,18 +974,18 @@ void FUN_00183d70(int n, unsigned i, int base, int stride, IndexedValueWriter *a
     end2 = i + n;
     for (; i < end2; i++) {
         p2 = base + i * stride;
-        x2 = FUN_001818b0(p2);
-        y2 = FUN_001818a0(p2);
-        FUN_00183f60((igVec3f *)sp90, (igVec3f *)x2, (igVec3f *)y2, (igVec3f *)(FUN_00183fc0(p2)), f, f2);
+        x2 = ParticleArray_GetPosition(p2);
+        y2 = ParticleArray_GetVelocity(p2);
+        ParticleArray_EvaluateQuadraticVec3((igVec3f *)sp90, (igVec3f *)x2, (igVec3f *)y2, (igVec3f *)(ParticleArray_GetAcceleration(p2)), f, f2);
         a4->v116(i, sp90);
     }
 }
 
-void FUN_00183f60(igVec3f *out, const igVec3f *a, const igVec3f *b, const igVec3f *c, float s, float t) {
+void ParticleArray_EvaluateQuadraticVec3(igVec3f *out, const igVec3f *a, const igVec3f *b, const igVec3f *c, float s, float t) {
     *out = *a + *b * s + *c * t;
 }
 
-int FUN_00183fc0(int arg0) {
+int ParticleArray_GetAcceleration(int arg0) {
     return arg0 + 0x18;
 }
 
@@ -1006,13 +1006,13 @@ void FUN_00183fd0(int n, unsigned i, int base, int stride, Ref_183fd0 *a4, Ref_1
         end = i + n;
         for (; i < end; i++) {
             p = base + i * stride;
-            x = FUN_001818b0(p);
-            x2 = FUN_001818a0(p);
-            FUN_00183f60((igVec3f *)A, (igVec3f *)x, (igVec3f *)x2, (igVec3f *)(FUN_00183fc0(p)), f, ff);
-            x = FUN_00181850(p);
-            FUN_00182420(&B, (float *)x, (float *)(FUN_00181840(p)), f);
+            x = ParticleArray_GetPosition(p);
+            x2 = ParticleArray_GetVelocity(p);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)A, (igVec3f *)x, (igVec3f *)x2, (igVec3f *)(ParticleArray_GetAcceleration(p)), f, ff);
+            x = ParticleArray_GetSize(p);
+            ParticleArray_EvaluateLinearFloat(&B, (float *)x, (float *)(ParticleArray_GetSizeVelocity(p)), f);
             a5->v144(i, A);
-            FUN_0015dae0((igPointSpriteExtView *)a5, i, B);
+            igPointSpriteExt_SetUniformSize((igPointSpriteExtView *)a5, i, B);
         }
         {
             Ref_183fd0 *old = a5->f24;
@@ -1027,11 +1027,11 @@ void FUN_00183fd0(int n, unsigned i, int base, int stride, Ref_183fd0 *a4, Ref_1
     end = i + n;
     for (; i < end; i++) {
         p2 = base + i * stride;
-        x = FUN_001818b0(p2);
-        x2 = FUN_001818a0(p2);
-        FUN_00183f60((igVec3f *)A, (igVec3f *)x, (igVec3f *)x2, (igVec3f *)(FUN_00183fc0(p2)), f, ff);
-        x = FUN_00181850(p2);
-        FUN_00182420(&B, (float *)x, (float *)(FUN_00181840(p2)), f);
+        x = ParticleArray_GetPosition(p2);
+        x2 = ParticleArray_GetVelocity(p2);
+        ParticleArray_EvaluateQuadraticVec3((igVec3f *)A, (igVec3f *)x, (igVec3f *)x2, (igVec3f *)(ParticleArray_GetAcceleration(p2)), f, ff);
+        x = ParticleArray_GetSize(p2);
+        ParticleArray_EvaluateLinearFloat(&B, (float *)x, (float *)(ParticleArray_GetSizeVelocity(p2)), f);
         a4->v116(i, A);
         a4->v212(i, B);
     }
@@ -1062,11 +1062,11 @@ void FUN_00184240(int n, unsigned i, int base, int stride, CountedVertexWriter *
         for (; i < end; i++) {
             
             p = base + i * stride;
-            x = FUN_001818b0(p);
-            x2 = FUN_001818a0(p);
-            FUN_00183f60((igVec3f *)A, (igVec3f *)x, (igVec3f *)x2, (igVec3f *)(FUN_00183fc0(p)), f, ff);
-            x = FUN_00181850(p);
-            FUN_00181810((float *)&B, (float *)x, (float *)(FUN_00181840(p)), f);
+            x = ParticleArray_GetPosition(p);
+            x2 = ParticleArray_GetVelocity(p);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)A, (igVec3f *)x, (igVec3f *)x2, (igVec3f *)(ParticleArray_GetAcceleration(p)), f, ff);
+            x = ParticleArray_GetSize(p);
+            ParticleArray_EvaluateLinearVec2((float *)&B, (float *)x, (float *)(ParticleArray_GetSizeVelocity(p)), f);
             a5->v144(i, A);
             igPointSpriteExt_SetSize((igPointSpriteExt *)a5, i, B);
         }
@@ -1084,11 +1084,11 @@ void FUN_00184240(int n, unsigned i, int base, int stride, CountedVertexWriter *
     for (; i < end; i++) {
         
         p2 = base + i * stride;
-        x = FUN_001818b0(p2);
-        x2 = FUN_001818a0(p2);
-        FUN_00183f60((igVec3f *)A, (igVec3f *)x, (igVec3f *)x2, (igVec3f *)(FUN_00183fc0(p2)), f, ff);
-        x2 = FUN_00181850(p2);
-        FUN_00181810((float *)&B, (float *)x2, (float *)(FUN_00181840(p2)), f);
+        x = ParticleArray_GetPosition(p2);
+        x2 = ParticleArray_GetVelocity(p2);
+        ParticleArray_EvaluateQuadraticVec3((igVec3f *)A, (igVec3f *)x, (igVec3f *)x2, (igVec3f *)(ParticleArray_GetAcceleration(p2)), f, ff);
+        x2 = ParticleArray_GetSize(p2);
+        ParticleArray_EvaluateLinearVec2((float *)&B, (float *)x2, (float *)(ParticleArray_GetSizeVelocity(p2)), f);
         a4->v116(i, A);
         a4->v220(i, B);
     }
@@ -1117,14 +1117,14 @@ void FUN_001844d0(int arg0, unsigned int arg1, int arg2, int arg3, A4 *arg4, A5 
         for (; i < end; i++) {
             int p; int a; int b;
             p = arg2 + (i * arg3);
-            a = FUN_001818b0(p);
-            b = FUN_001818a0(p);
-            FUN_00183f60((igVec3f *)spA0, (igVec3f *)a, (igVec3f *)b, (igVec3f *)(FUN_00183fc0(p)), fparg0, temp_f20);
-            a = FUN_00181850(p);
-            b = FUN_00181840(p);
-            FUN_00181b30(&spAC, (float *)a, (float *)b, (float *)(FUN_00181b50(p)), fparg0, temp_f20);
+            a = ParticleArray_GetPosition(p);
+            b = ParticleArray_GetVelocity(p);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)spA0, (igVec3f *)a, (igVec3f *)b, (igVec3f *)(ParticleArray_GetAcceleration(p)), fparg0, temp_f20);
+            a = ParticleArray_GetSize(p);
+            b = ParticleArray_GetSizeVelocity(p);
+            ParticleArray_EvaluateQuadraticFloat(&spAC, (float *)a, (float *)b, (float *)(ParticleArray_GetSizeAcceleration(p)), fparg0, temp_f20);
             arg5->v34(i, spA0);
-            FUN_0015dae0((igPointSpriteExtView *)arg5, i, spAC);
+            igPointSpriteExt_SetUniformSize((igPointSpriteExtView *)arg5, i, spAC);
         }
         o = arg5->obj;
         if (o != 0) {
@@ -1141,12 +1141,12 @@ void FUN_001844d0(int arg0, unsigned int arg1, int arg2, int arg3, A4 *arg4, A5 
     end2 = i + arg0;
     for (; i < end2; i++) {
         p = arg2 + (i * arg3);
-        a = FUN_001818b0(p);
-        b = FUN_001818a0(p);
-        FUN_00183f60((igVec3f *)spA0, (igVec3f *)a, (igVec3f *)b, (igVec3f *)(FUN_00183fc0(p)), fparg0, temp_f20);
-        a = FUN_00181850(p);
-        b = FUN_00181840(p);
-        FUN_00181b30(&spAC, (float *)a, (float *)b, (float *)(FUN_00181b50(p)), fparg0, temp_f20);
+        a = ParticleArray_GetPosition(p);
+        b = ParticleArray_GetVelocity(p);
+        ParticleArray_EvaluateQuadraticVec3((igVec3f *)spA0, (igVec3f *)a, (igVec3f *)b, (igVec3f *)(ParticleArray_GetAcceleration(p)), fparg0, temp_f20);
+        a = ParticleArray_GetSize(p);
+        b = ParticleArray_GetSizeVelocity(p);
+        ParticleArray_EvaluateQuadraticFloat(&spAC, (float *)a, (float *)b, (float *)(ParticleArray_GetSizeAcceleration(p)), fparg0, temp_f20);
         arg4->v27(i, spA0);
         arg4->v51(i, spAC);
     }
@@ -1182,12 +1182,12 @@ void FUN_00184770(int arg0, unsigned arg1, int arg2, int arg3, B_184770 *arg4, B
         end = arg1 + arg0;
         for (; arg1 < end; arg1++) {
             p = arg2 + arg1 * arg3;
-            a = FUN_001818b0(p);
-            b = FUN_001818a0(p);
-            FUN_00183f60((igVec3f *)spC0, (igVec3f *)a, (igVec3f *)b, (igVec3f *)(FUN_00183fc0(p)), fparg0, sq);
-            a = FUN_00181850(p);
-            b = FUN_00181840(p);
-            FUN_00181df0((float *)&spB8, (float *)a, (float *)b, (float *)(FUN_00181b50(p)), fparg0, sq);
+            a = ParticleArray_GetPosition(p);
+            b = ParticleArray_GetVelocity(p);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)spC0, (igVec3f *)a, (igVec3f *)b, (igVec3f *)(ParticleArray_GetAcceleration(p)), fparg0, sq);
+            a = ParticleArray_GetSize(p);
+            b = ParticleArray_GetSizeVelocity(p);
+            ParticleArray_EvaluateQuadraticVec2((float *)&spB8, (float *)a, (float *)b, (float *)(ParticleArray_GetSizeAcceleration(p)), fparg0, sq);
             arg5->v144(arg1, spC0);
             igPointSpriteExt_SetSize((igPointSpriteExt *)arg5, arg1, spB8);
         }
@@ -1203,12 +1203,12 @@ void FUN_00184770(int arg0, unsigned arg1, int arg2, int arg3, B_184770 *arg4, B
         end2 = arg1 + arg0;
         for (; arg1 < end2; arg1++) {
             p2 = arg2 + arg1 * arg3;
-            a = FUN_001818b0(p2);
-            b = FUN_001818a0(p2);
-            FUN_00183f60((igVec3f *)spC0, (igVec3f *)a, (igVec3f *)b, (igVec3f *)(FUN_00183fc0(p2)), fparg0, sq);
-            a = FUN_00181850(p2);
-            b = FUN_00181840(p2);
-            FUN_00181df0((float *)&spB8, (float *)a, (float *)b, (float *)(FUN_00181b50(p2)), fparg0, sq);
+            a = ParticleArray_GetPosition(p2);
+            b = ParticleArray_GetVelocity(p2);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)spC0, (igVec3f *)a, (igVec3f *)b, (igVec3f *)(ParticleArray_GetAcceleration(p2)), fparg0, sq);
+            a = ParticleArray_GetSize(p2);
+            b = ParticleArray_GetSizeVelocity(p2);
+            ParticleArray_EvaluateQuadraticVec2((float *)&spB8, (float *)a, (float *)b, (float *)(ParticleArray_GetSizeAcceleration(p2)), fparg0, sq);
             arg4->v116(arg1, spC0);
             arg4->v220(arg1, spB8);
         }
@@ -1248,11 +1248,11 @@ void FUN_00184a30(int arg0, unsigned arg1, int arg2, int arg3, B_184a30 *arg4, B
         end = arg1 + arg0;
         for (; arg1 < end; arg1++) {
             temp_s1 = arg2 + arg1 * arg3;
-            temp_s6 = FUN_001818b0(temp_s1);
-            temp_s7 = FUN_001818a0(temp_s1);
-            FUN_00183f60((igVec3f *)spB0, (igVec3f *)temp_s6, (igVec3f *)temp_s7, (igVec3f *)(FUN_00183fc0(temp_s1)), fparg0, temp_f20);
-            temp_s1_2 = FUN_00182100(temp_s1);
-            FUN_00182090((void *)spA0, (void *)temp_s1_2, (void *)(FUN_001820f0(temp_s1)), fparg0);
+            temp_s6 = ParticleArray_GetPosition(temp_s1);
+            temp_s7 = ParticleArray_GetVelocity(temp_s1);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)spB0, (igVec3f *)temp_s6, (igVec3f *)temp_s7, (igVec3f *)(ParticleArray_GetAcceleration(temp_s1)), fparg0, temp_f20);
+            temp_s1_2 = ParticleArray_GetColor(temp_s1);
+            ParticleArray_EvaluateLinearVec4((void *)spA0, (void *)temp_s1_2, (void *)(ParticleArray_GetColorVelocity(temp_s1)), fparg0);
             arg5->v144(arg1, spB0);
             arg5->v152(arg1, igVec4f_PackColor((float *)spA0, 1));
         }
@@ -1268,11 +1268,11 @@ void FUN_00184a30(int arg0, unsigned arg1, int arg2, int arg3, B_184a30 *arg4, B
         end2 = arg1 + arg0;
         for (; arg1 < end2; arg1++) {
             temp_s1_3 = arg2 + arg1 * arg3;
-            temp_s6_2 = FUN_001818b0(temp_s1_3);
-            temp_s7_2 = FUN_001818a0(temp_s1_3);
-            FUN_00183f60((igVec3f *)spB0, (igVec3f *)temp_s6_2, (igVec3f *)temp_s7_2, (igVec3f *)(FUN_00183fc0(temp_s1_3)), fparg0, temp_f20);
-            temp_s1_4 = FUN_00182100(temp_s1_3);
-            FUN_00182090((void *)spA0, (void *)temp_s1_4, (void *)(FUN_001820f0(temp_s1_3)), fparg0);
+            temp_s6_2 = ParticleArray_GetPosition(temp_s1_3);
+            temp_s7_2 = ParticleArray_GetVelocity(temp_s1_3);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)spB0, (igVec3f *)temp_s6_2, (igVec3f *)temp_s7_2, (igVec3f *)(ParticleArray_GetAcceleration(temp_s1_3)), fparg0, temp_f20);
+            temp_s1_4 = ParticleArray_GetColor(temp_s1_3);
+            ParticleArray_EvaluateLinearVec4((void *)spA0, (void *)temp_s1_4, (void *)(ParticleArray_GetColorVelocity(temp_s1_3)), fparg0);
             arg4->v116(arg1, spB0);
             arg4->v164(arg1, igVec4f_PackColor((float *)spA0, 1));
         }
@@ -1300,16 +1300,16 @@ void FUN_00184cc0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             int s8;
             int s0;
             e = arg2 + i * arg3;
-            s0 = FUN_001818b0(e);
-            FUN_00183f60((igVec3f *)&spB0, (igVec3f *)s0, (igVec3f *)(FUN_001818a0(e)), (igVec3f *)(FUN_00183fc0(e)), fparg0, f20);
-            s7 = FUN_00182100(e);
-            s6 = FUN_001820f0(e);
-            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
-            s8 = FUN_00181850(e);
-            FUN_00182420(&spBC, (float *)s8, (float *)(FUN_00181840(e)), fparg0);
+            s0 = ParticleArray_GetPosition(e);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)&spB0, (igVec3f *)s0, (igVec3f *)(ParticleArray_GetVelocity(e)), (igVec3f *)(ParticleArray_GetAcceleration(e)), fparg0, f20);
+            s7 = ParticleArray_GetColor(e);
+            s6 = ParticleArray_GetColorVelocity(e);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(ParticleArray_GetColorAcceleration(e)), fparg0, f20);
+            s8 = ParticleArray_GetSize(e);
+            ParticleArray_EvaluateLinearFloat(&spBC, (float *)s8, (float *)(ParticleArray_GetSizeVelocity(e)), fparg0);
             arg5->v144(i, &spB0);
             arg5->v152(i, igVec4f_PackColor((float *)&spA0, 1));
-            FUN_0015dae0((igPointSpriteExtView *)arg5, i, spBC);
+            igPointSpriteExt_SetUniformSize((igPointSpriteExtView *)arg5, i, spBC);
             i++;
         }
         t = arg5->f24;
@@ -1327,13 +1327,13 @@ void FUN_00184cc0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             int s8;
             int s6;
             e = arg2 + i * arg3;
-            s0 = FUN_001818b0(e);
-            FUN_00183f60((igVec3f *)&spB0, (igVec3f *)s0, (igVec3f *)(FUN_001818a0(e)), (igVec3f *)(FUN_00183fc0(e)), fparg0, f20);
-            s7 = FUN_00182100(e);
-            s6 = FUN_001820f0(e);
-            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
-            s8 = FUN_00181850(e);
-            FUN_00182420(&spBC, (float *)s8, (float *)(FUN_00181840(e)), fparg0);
+            s0 = ParticleArray_GetPosition(e);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)&spB0, (igVec3f *)s0, (igVec3f *)(ParticleArray_GetVelocity(e)), (igVec3f *)(ParticleArray_GetAcceleration(e)), fparg0, f20);
+            s7 = ParticleArray_GetColor(e);
+            s6 = ParticleArray_GetColorVelocity(e);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(ParticleArray_GetColorAcceleration(e)), fparg0, f20);
+            s8 = ParticleArray_GetSize(e);
+            ParticleArray_EvaluateLinearFloat(&spBC, (float *)s8, (float *)(ParticleArray_GetSizeVelocity(e)), fparg0);
             b->v116(i, &spB0);
             b->v164(i, igVec4f_PackColor((float *)&spA0, 1));
             b->v212(i, spBC);
@@ -1366,9 +1366,9 @@ void FUN_00184ff0(int n, unsigned int i, int particles, int particleSize, MeshTa
         end = i + n;
         for (; i < end; i++) {
             particle = particles + i * particleSize;
-            FUN_00183f60((igVec3f *)&position, (igVec3f *)(FUN_001818b0(particle)), (igVec3f *)(FUN_001818a0(particle)), (igVec3f *)(FUN_00183fc0(particle)), time, timeSquared);
-            FUN_00182440((igVec4f *)&color, (igVec4f *)(FUN_00182100(particle)), (igVec4f *)(FUN_001820f0(particle)), (igVec4f *)(FUN_001824c0(particle)), time, timeSquared);
-            FUN_00181810((float *)&size, (float *)(FUN_00181850(particle)), (float *)(FUN_00181840(particle)), time);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)&position, (igVec3f *)(ParticleArray_GetPosition(particle)), (igVec3f *)(ParticleArray_GetVelocity(particle)), (igVec3f *)(ParticleArray_GetAcceleration(particle)), time, timeSquared);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)&color, (igVec4f *)(ParticleArray_GetColor(particle)), (igVec4f *)(ParticleArray_GetColorVelocity(particle)), (igVec4f *)(ParticleArray_GetColorAcceleration(particle)), time, timeSquared);
+            ParticleArray_EvaluateLinearVec2((float *)&size, (float *)(ParticleArray_GetSize(particle)), (float *)(ParticleArray_GetSizeVelocity(particle)), time);
             sprite->v144(i, &position);
             sprite->v152(i, igVec4f_PackColor((float *)&color, 1));
             igPointSpriteExt_SetSize((igPointSpriteExt *)sprite, i, size);
@@ -1385,9 +1385,9 @@ void FUN_00184ff0(int n, unsigned int i, int particles, int particleSize, MeshTa
         end = i + n;
         for (; i < end; i++) {
             particle = particles + i * particleSize;
-            FUN_00183f60((igVec3f *)&position, (igVec3f *)(FUN_001818b0(particle)), (igVec3f *)(FUN_001818a0(particle)), (igVec3f *)(FUN_00183fc0(particle)), time, timeSquared);
-            FUN_00182440((igVec4f *)&color, (igVec4f *)(FUN_00182100(particle)), (igVec4f *)(FUN_001820f0(particle)), (igVec4f *)(FUN_001824c0(particle)), time, timeSquared);
-            FUN_00181810((float *)&size, (float *)(FUN_00181850(particle)), (float *)(FUN_00181840(particle)), time);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)&position, (igVec3f *)(ParticleArray_GetPosition(particle)), (igVec3f *)(ParticleArray_GetVelocity(particle)), (igVec3f *)(ParticleArray_GetAcceleration(particle)), time, timeSquared);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)&color, (igVec4f *)(ParticleArray_GetColor(particle)), (igVec4f *)(ParticleArray_GetColorVelocity(particle)), (igVec4f *)(ParticleArray_GetColorAcceleration(particle)), time, timeSquared);
+            ParticleArray_EvaluateLinearVec2((float *)&size, (float *)(ParticleArray_GetSize(particle)), (float *)(ParticleArray_GetSizeVelocity(particle)), time);
             array->v116(i, &position);
             array->v164(i, igVec4f_PackColor((float *)&color, 1));
             array->v220(i, size);
@@ -1433,16 +1433,16 @@ void FUN_00185340(int arg0, unsigned arg1, int arg2, int arg3, B_185340 *arg4, B
         temp_s7 = arg1 + arg0;
         for (; arg1 < temp_s7; arg1++) {
             temp_s1 = arg2 + arg1 * arg3;
-            temp_s0 = FUN_001818b0(temp_s1);
-            temp_s6 = FUN_001818a0(temp_s1);
-            FUN_00183f60((igVec3f *)spB0, (igVec3f *)temp_s0, (igVec3f *)temp_s6, (igVec3f *)(FUN_00183fc0(temp_s1)), fparg0, temp_f20);
-            temp_s0_2 = FUN_00182100(temp_s1);
-            FUN_00182090((void *)spA0, (void *)temp_s0_2, (void *)(FUN_001820f0(temp_s1)), fparg0);
-            temp_s0_3 = FUN_00181850(temp_s1);
-            FUN_00181b30(&spBC, (float *)temp_s0_3, (float *)((FUN_00181840(temp_s1))), (float *)(FUN_00181b50(temp_s1)), fparg0, temp_f20);
+            temp_s0 = ParticleArray_GetPosition(temp_s1);
+            temp_s6 = ParticleArray_GetVelocity(temp_s1);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)spB0, (igVec3f *)temp_s0, (igVec3f *)temp_s6, (igVec3f *)(ParticleArray_GetAcceleration(temp_s1)), fparg0, temp_f20);
+            temp_s0_2 = ParticleArray_GetColor(temp_s1);
+            ParticleArray_EvaluateLinearVec4((void *)spA0, (void *)temp_s0_2, (void *)(ParticleArray_GetColorVelocity(temp_s1)), fparg0);
+            temp_s0_3 = ParticleArray_GetSize(temp_s1);
+            ParticleArray_EvaluateQuadraticFloat(&spBC, (float *)temp_s0_3, (float *)((ParticleArray_GetSizeVelocity(temp_s1))), (float *)(ParticleArray_GetSizeAcceleration(temp_s1)), fparg0, temp_f20);
             arg5->v144(arg1, spB0);
             arg5->v152(arg1, igVec4f_PackColor((float *)spA0, 1));
-            FUN_0015dae0((igPointSpriteExtView *)arg5, arg1, spBC);
+            igPointSpriteExt_SetUniformSize((igPointSpriteExtView *)arg5, arg1, spBC);
         }
         temp_a0_2 = arg5->f24;
         if (temp_a0_2) {
@@ -1456,11 +1456,11 @@ void FUN_00185340(int arg0, unsigned arg1, int arg2, int arg3, B_185340 *arg4, B
         temp_s7_2 = arg1 + arg0;
         for (; arg1 < temp_s7_2; arg1++) {
             temp_s2 = arg2 + arg1 * arg3;
-            FUN_00183f60((igVec3f *)spB0, (igVec3f *)(FUN_001818b0(temp_s2)), (igVec3f *)(FUN_001818a0(temp_s2)), (igVec3f *)(FUN_00183fc0(temp_s2)), fparg0, temp_f20);
-            temp_s1_4 = FUN_00182100(temp_s2);
-            FUN_00182090((void *)spA0, (void *)temp_s1_4, (void *)(FUN_001820f0(temp_s2)), fparg0);
-            temp_s1_5 = FUN_00181850(temp_s2);
-            FUN_00181b30(&spBC, (float *)temp_s1_5, (float *)((FUN_00181840(temp_s2))), (float *)(FUN_00181b50(temp_s2)), fparg0, temp_f20);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)spB0, (igVec3f *)(ParticleArray_GetPosition(temp_s2)), (igVec3f *)(ParticleArray_GetVelocity(temp_s2)), (igVec3f *)(ParticleArray_GetAcceleration(temp_s2)), fparg0, temp_f20);
+            temp_s1_4 = ParticleArray_GetColor(temp_s2);
+            ParticleArray_EvaluateLinearVec4((void *)spA0, (void *)temp_s1_4, (void *)(ParticleArray_GetColorVelocity(temp_s2)), fparg0);
+            temp_s1_5 = ParticleArray_GetSize(temp_s2);
+            ParticleArray_EvaluateQuadraticFloat(&spBC, (float *)temp_s1_5, (float *)((ParticleArray_GetSizeVelocity(temp_s2))), (float *)(ParticleArray_GetSizeAcceleration(temp_s2)), fparg0, temp_f20);
             arg4->v116(arg1, spB0);
             arg4->v164(arg1, igVec4f_PackColor((float *)spA0, 1));
             arg4->v212(arg1, spBC);
@@ -1493,9 +1493,9 @@ void FUN_00185670(int arg0, unsigned arg1, int arg2, int arg3, B_185670 *arg4, B
         end = arg1 + arg0;
         for (; arg1 < end; arg1++) {
             e = arg2 + arg1 * arg3;
-            FUN_00183f60((igVec3f *)&spD0, (igVec3f *)(FUN_001818b0(e)), (igVec3f *)(FUN_001818a0(e)), (igVec3f *)(FUN_00183fc0(e)), fparg0, temp_f20);
-            FUN_00182090((void *)&spA0, (void *)(FUN_00182100(e)), (void *)(FUN_001820f0(e)), fparg0);
-            FUN_00181df0((float *)&spC8, (float *)(FUN_00181850(e)), (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, temp_f20);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)&spD0, (igVec3f *)(ParticleArray_GetPosition(e)), (igVec3f *)(ParticleArray_GetVelocity(e)), (igVec3f *)(ParticleArray_GetAcceleration(e)), fparg0, temp_f20);
+            ParticleArray_EvaluateLinearVec4((void *)&spA0, (void *)(ParticleArray_GetColor(e)), (void *)(ParticleArray_GetColorVelocity(e)), fparg0);
+            ParticleArray_EvaluateQuadraticVec2((float *)&spC8, (float *)(ParticleArray_GetSize(e)), (float *)(ParticleArray_GetSizeVelocity(e)), (float *)(ParticleArray_GetSizeAcceleration(e)), fparg0, temp_f20);
             arg5->v144(arg1, &spD0);
             arg5->v152(arg1, igVec4f_PackColor((float *)&spA0, 1));
             igPointSpriteExt_SetSize((igPointSpriteExt *)arg5, arg1, spC8);
@@ -1512,9 +1512,9 @@ void FUN_00185670(int arg0, unsigned arg1, int arg2, int arg3, B_185670 *arg4, B
         end = arg1 + arg0;
         for (; arg1 < end; arg1++) {
             e = arg2 + arg1 * arg3;
-            FUN_00183f60((igVec3f *)&spD0, (igVec3f *)(FUN_001818b0(e)), (igVec3f *)(FUN_001818a0(e)), (igVec3f *)(FUN_00183fc0(e)), fparg0, temp_f20);
-            FUN_00182090((void *)&spA0, (void *)(FUN_00182100(e)), (void *)(FUN_001820f0(e)), fparg0);
-            FUN_00181df0((float *)&spC8, (float *)(FUN_00181850(e)), (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, temp_f20);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)&spD0, (igVec3f *)(ParticleArray_GetPosition(e)), (igVec3f *)(ParticleArray_GetVelocity(e)), (igVec3f *)(ParticleArray_GetAcceleration(e)), fparg0, temp_f20);
+            ParticleArray_EvaluateLinearVec4((void *)&spA0, (void *)(ParticleArray_GetColor(e)), (void *)(ParticleArray_GetColorVelocity(e)), fparg0);
+            ParticleArray_EvaluateQuadraticVec2((float *)&spC8, (float *)(ParticleArray_GetSize(e)), (float *)(ParticleArray_GetSizeVelocity(e)), (float *)(ParticleArray_GetSizeAcceleration(e)), fparg0, temp_f20);
             arg4->v116(arg1, &spD0);
             arg4->v164(arg1, igVec4f_PackColor((float *)&spA0, 1));
             arg4->v220(arg1, spC8);
@@ -1558,12 +1558,12 @@ void FUN_001859c0(int arg0, unsigned arg1, int arg2, int arg3, B_1859c0 *arg4, B
         temp_s7 = arg1 + arg0;
         for (; arg1 < temp_s7; arg1++) {
             temp_s1 = arg2 + arg1 * arg3;
-            temp_s0 = FUN_001818b0(temp_s1);
-            temp_s6 = FUN_001818a0(temp_s1);
-            FUN_00183f60((igVec3f *)spB0, (igVec3f *)temp_s0, (igVec3f *)temp_s6, (igVec3f *)(FUN_00183fc0(temp_s1)), fparg0, temp_f20);
-            temp_s0_2 = FUN_00182100(temp_s1);
-            temp_s1_2 = FUN_001820f0(temp_s1);
-            FUN_00182440((igVec4f *)spA0, (igVec4f *)temp_s0_2, (igVec4f *)temp_s1_2, (igVec4f *)(FUN_001824c0(temp_s1)), fparg0, temp_f20);
+            temp_s0 = ParticleArray_GetPosition(temp_s1);
+            temp_s6 = ParticleArray_GetVelocity(temp_s1);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)spB0, (igVec3f *)temp_s0, (igVec3f *)temp_s6, (igVec3f *)(ParticleArray_GetAcceleration(temp_s1)), fparg0, temp_f20);
+            temp_s0_2 = ParticleArray_GetColor(temp_s1);
+            temp_s1_2 = ParticleArray_GetColorVelocity(temp_s1);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)spA0, (igVec4f *)temp_s0_2, (igVec4f *)temp_s1_2, (igVec4f *)(ParticleArray_GetColorAcceleration(temp_s1)), fparg0, temp_f20);
             arg5->v144(arg1, spB0);
             arg5->v152(arg1, igVec4f_PackColor(spA0, 1));
         }
@@ -1579,12 +1579,12 @@ void FUN_001859c0(int arg0, unsigned arg1, int arg2, int arg3, B_1859c0 *arg4, B
         temp_s7_2 = arg1 + arg0;
         for (; arg1 < temp_s7_2; arg1++) {
             temp_s2 = arg2 + arg1 * arg3;
-            temp_s1_3 = FUN_001818b0(temp_s2);
-            temp_s6_2 = FUN_001818a0(temp_s2);
-            FUN_00183f60((igVec3f *)spB0, (igVec3f *)temp_s1_3, (igVec3f *)temp_s6_2, (igVec3f *)(FUN_00183fc0(temp_s2)), fparg0, temp_f20);
-            temp_s1_4 = FUN_00182100(temp_s2);
-            temp_s2_2 = FUN_001820f0(temp_s2);
-            FUN_00182440((igVec4f *)spA0, (igVec4f *)temp_s1_4, (igVec4f *)temp_s2_2, (igVec4f *)(FUN_001824c0(temp_s2)), fparg0, temp_f20);
+            temp_s1_3 = ParticleArray_GetPosition(temp_s2);
+            temp_s6_2 = ParticleArray_GetVelocity(temp_s2);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)spB0, (igVec3f *)temp_s1_3, (igVec3f *)temp_s6_2, (igVec3f *)(ParticleArray_GetAcceleration(temp_s2)), fparg0, temp_f20);
+            temp_s1_4 = ParticleArray_GetColor(temp_s2);
+            temp_s2_2 = ParticleArray_GetColorVelocity(temp_s2);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)spA0, (igVec4f *)temp_s1_4, (igVec4f *)temp_s2_2, (igVec4f *)(ParticleArray_GetColorAcceleration(temp_s2)), fparg0, temp_f20);
             arg4->v116(arg1, spB0);
             arg4->v164(arg1, igVec4f_PackColor(spA0, 1));
         }
@@ -1622,17 +1622,17 @@ int f2;
         end = i + arg0;
         while (i < end) {
             a1 = arg2 + i * arg3;
-            b1 = FUN_001818b0(a1);
-            c1 = FUN_001818a0(a1);
-            FUN_00183f60((igVec3f *)&spB0, (igVec3f *)b1, (igVec3f *)c1, (igVec3f *)(FUN_00183fc0(a1)), fparg0, f20);
-            d1 = FUN_00182100(a1);
-            e1 = FUN_001820f0(a1);
-            FUN_00182440((igVec4f *)&spA0, (igVec4f *)d1, (igVec4f *)e1, (igVec4f *)(FUN_001824c0(a1)), fparg0, f20);
-            f1 = FUN_00181850(a1);
-            FUN_00182420(&spBC, (float *)f1, (float *)(FUN_00181840(a1)), fparg0);
+            b1 = ParticleArray_GetPosition(a1);
+            c1 = ParticleArray_GetVelocity(a1);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)&spB0, (igVec3f *)b1, (igVec3f *)c1, (igVec3f *)(ParticleArray_GetAcceleration(a1)), fparg0, f20);
+            d1 = ParticleArray_GetColor(a1);
+            e1 = ParticleArray_GetColorVelocity(a1);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)&spA0, (igVec4f *)d1, (igVec4f *)e1, (igVec4f *)(ParticleArray_GetColorAcceleration(a1)), fparg0, f20);
+            f1 = ParticleArray_GetSize(a1);
+            ParticleArray_EvaluateLinearFloat(&spBC, (float *)f1, (float *)(ParticleArray_GetSizeVelocity(a1)), fparg0);
             arg5->v144(i, &spB0);
             arg5->v152(i, igVec4f_PackColor((float *)&spA0, 1));
-            FUN_0015dae0((igPointSpriteExtView *)arg5, i, spBC);
+            igPointSpriteExt_SetUniformSize((igPointSpriteExtView *)arg5, i, spBC);
             i++;
         }
         t2 = arg5->f24;
@@ -1644,14 +1644,14 @@ int f2;
     B_185c80 *b = (B_185c80 *)arg4;
     while (i < end2) {
         a2 = arg2 + i * arg3;
-        b2 = FUN_001818b0(a2);
-        c2 = FUN_001818a0(a2);
-        FUN_00183f60((igVec3f *)&spB0, (igVec3f *)b2, (igVec3f *)c2, (igVec3f *)(FUN_00183fc0(a2)), fparg0, f20);
-        d2 = FUN_00182100(a2);
-        e2 = FUN_001820f0(a2);
-        FUN_00182440((igVec4f *)&spA0, (igVec4f *)d2, (igVec4f *)e2, (igVec4f *)(FUN_001824c0(a2)), fparg0, f20);
-        f2 = FUN_00181850(a2);
-        FUN_00182420(&spBC, (float *)f2, (float *)(FUN_00181840(a2)), fparg0);
+        b2 = ParticleArray_GetPosition(a2);
+        c2 = ParticleArray_GetVelocity(a2);
+        ParticleArray_EvaluateQuadraticVec3((igVec3f *)&spB0, (igVec3f *)b2, (igVec3f *)c2, (igVec3f *)(ParticleArray_GetAcceleration(a2)), fparg0, f20);
+        d2 = ParticleArray_GetColor(a2);
+        e2 = ParticleArray_GetColorVelocity(a2);
+        ParticleArray_EvaluateQuadraticVec4((igVec4f *)&spA0, (igVec4f *)d2, (igVec4f *)e2, (igVec4f *)(ParticleArray_GetColorAcceleration(a2)), fparg0, f20);
+        f2 = ParticleArray_GetSize(a2);
+        ParticleArray_EvaluateLinearFloat(&spBC, (float *)f2, (float *)(ParticleArray_GetSizeVelocity(a2)), fparg0);
         b->v116(i, &spB0);
         b->v164(i, igVec4f_PackColor((float *)&spA0, 1));
         b->v212(i, spBC);
@@ -1697,14 +1697,14 @@ void FUN_00185fb0(int arg0, unsigned arg1, int arg2, int arg3, VertexSink *arg4,
         end = arg1 + arg0;
         for (; arg1 < end; arg1++) {
             i1 = arg2 + arg1 * arg3;
-            b1 = FUN_001818b0(i1);
-            c1 = FUN_001818a0(i1);
-            FUN_00183f60((igVec3f *)spD0, (igVec3f *)b1, (igVec3f *)c1, (igVec3f *)(FUN_00183fc0(i1)), fparg0, temp_f20);
-            d1 = FUN_00182100(i1);
-            e1 = FUN_001820f0(i1);
-            FUN_00182440((igVec4f *)spA0, (igVec4f *)d1, (igVec4f *)e1, (igVec4f *)(FUN_001824c0(i1)), fparg0, temp_f20);
-            f1 = FUN_00181850(i1);
-            FUN_00181810((float *)&spC8, (float *)f1, (float *)(FUN_00181840(i1)), fparg0);
+            b1 = ParticleArray_GetPosition(i1);
+            c1 = ParticleArray_GetVelocity(i1);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)spD0, (igVec3f *)b1, (igVec3f *)c1, (igVec3f *)(ParticleArray_GetAcceleration(i1)), fparg0, temp_f20);
+            d1 = ParticleArray_GetColor(i1);
+            e1 = ParticleArray_GetColorVelocity(i1);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)spA0, (igVec4f *)d1, (igVec4f *)e1, (igVec4f *)(ParticleArray_GetColorAcceleration(i1)), fparg0, temp_f20);
+            f1 = ParticleArray_GetSize(i1);
+            ParticleArray_EvaluateLinearVec2((float *)&spC8, (float *)f1, (float *)(ParticleArray_GetSizeVelocity(i1)), fparg0);
             arg5->v144(arg1, spD0);
             arg5->v152(arg1, igVec4f_PackColor(spA0, 1));
             igPointSpriteExt_SetSize((igPointSpriteExt *)arg5, arg1, spC8);
@@ -1721,14 +1721,14 @@ void FUN_00185fb0(int arg0, unsigned arg1, int arg2, int arg3, VertexSink *arg4,
         end2 = arg1 + arg0;
         for (; arg1 < end2; arg1++) {
             i2 = arg2 + arg1 * arg3;
-            b2 = FUN_001818b0(i2);
-            c2 = FUN_001818a0(i2);
-            FUN_00183f60((igVec3f *)spD0, (igVec3f *)b2, (igVec3f *)c2, (igVec3f *)(FUN_00183fc0(i2)), fparg0, temp_f20);
-            d2 = FUN_00182100(i2);
-            e2 = FUN_001820f0(i2);
-            FUN_00182440((igVec4f *)spA0, (igVec4f *)d2, (igVec4f *)e2, (igVec4f *)(FUN_001824c0(i2)), fparg0, temp_f20);
-            f2 = FUN_00181850(i2);
-            FUN_00181810((float *)&spC8, (float *)f2, (float *)(FUN_00181840(i2)), fparg0);
+            b2 = ParticleArray_GetPosition(i2);
+            c2 = ParticleArray_GetVelocity(i2);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)spD0, (igVec3f *)b2, (igVec3f *)c2, (igVec3f *)(ParticleArray_GetAcceleration(i2)), fparg0, temp_f20);
+            d2 = ParticleArray_GetColor(i2);
+            e2 = ParticleArray_GetColorVelocity(i2);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)spA0, (igVec4f *)d2, (igVec4f *)e2, (igVec4f *)(ParticleArray_GetColorAcceleration(i2)), fparg0, temp_f20);
+            f2 = ParticleArray_GetSize(i2);
+            ParticleArray_EvaluateLinearVec2((float *)&spC8, (float *)f2, (float *)(ParticleArray_GetSizeVelocity(i2)), fparg0);
             arg4->v116(arg1, spD0);
             arg4->v164(arg1, igVec4f_PackColor(spA0, 1));
             arg4->v220(arg1, spC8);
@@ -1757,16 +1757,16 @@ void FUN_00186300(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             int s8;
             int s0;
             e = arg2 + i * arg3;
-            s0 = FUN_001818b0(e);
-            FUN_00183f60((igVec3f *)&spB0, (igVec3f *)s0, (igVec3f *)(FUN_001818a0(e)), (igVec3f *)(FUN_00183fc0(e)), fparg0, f20);
-            s7 = FUN_00182100(e);
-            s6 = FUN_001820f0(e);
-            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
-            s8 = FUN_00181850(e);
-            FUN_00181b30(&spBC, (float *)s8, (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, f20);
+            s0 = ParticleArray_GetPosition(e);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)&spB0, (igVec3f *)s0, (igVec3f *)(ParticleArray_GetVelocity(e)), (igVec3f *)(ParticleArray_GetAcceleration(e)), fparg0, f20);
+            s7 = ParticleArray_GetColor(e);
+            s6 = ParticleArray_GetColorVelocity(e);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(ParticleArray_GetColorAcceleration(e)), fparg0, f20);
+            s8 = ParticleArray_GetSize(e);
+            ParticleArray_EvaluateQuadraticFloat(&spBC, (float *)s8, (float *)(ParticleArray_GetSizeVelocity(e)), (float *)(ParticleArray_GetSizeAcceleration(e)), fparg0, f20);
             arg5->v144(i, &spB0);
             arg5->v152(i, igVec4f_PackColor((float *)&spA0, 1));
-            FUN_0015dae0((igPointSpriteExtView *)arg5, i, spBC);
+            igPointSpriteExt_SetUniformSize((igPointSpriteExtView *)arg5, i, spBC);
             i++;
         }
         t = arg5->f24;
@@ -1784,13 +1784,13 @@ void FUN_00186300(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             int s8;
             int s6;
             e = arg2 + i * arg3;
-            s0 = FUN_001818b0(e);
-            FUN_00183f60((igVec3f *)&spB0, (igVec3f *)s0, (igVec3f *)(FUN_001818a0(e)), (igVec3f *)(FUN_00183fc0(e)), fparg0, f20);
-            s7 = FUN_00182100(e);
-            s6 = FUN_001820f0(e);
-            FUN_00182440((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(FUN_001824c0(e)), fparg0, f20);
-            s8 = FUN_00181850(e);
-            FUN_00181b30(&spBC, (float *)s8, (float *)(FUN_00181840(e)), (float *)(FUN_00181b50(e)), fparg0, f20);
+            s0 = ParticleArray_GetPosition(e);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)&spB0, (igVec3f *)s0, (igVec3f *)(ParticleArray_GetVelocity(e)), (igVec3f *)(ParticleArray_GetAcceleration(e)), fparg0, f20);
+            s7 = ParticleArray_GetColor(e);
+            s6 = ParticleArray_GetColorVelocity(e);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)&spA0, (igVec4f *)s7, (igVec4f *)s6, (igVec4f *)(ParticleArray_GetColorAcceleration(e)), fparg0, f20);
+            s8 = ParticleArray_GetSize(e);
+            ParticleArray_EvaluateQuadraticFloat(&spBC, (float *)s8, (float *)(ParticleArray_GetSizeVelocity(e)), (float *)(ParticleArray_GetSizeAcceleration(e)), fparg0, f20);
             b->v116(i, &spB0);
             b->v164(i, igVec4f_PackColor((float *)&spA0, 1));
             b->v212(i, spBC);
@@ -1821,9 +1821,9 @@ void FUN_00186660(int arg0, unsigned int arg1, int arg2, int arg3, PackedVertexW
         s7 = s5 + arg0;
         while (s5 < s7) {
             s1 = arg2 + s5 * arg3;
-            FUN_00183f60((igVec3f *)spD0, (igVec3f *)(FUN_001818b0(s1)), (igVec3f *)(FUN_001818a0(s1)), (igVec3f *)(FUN_00183fc0(s1)), fparg0, f20);
-            FUN_00182440((igVec4f *)spA0, (igVec4f *)(FUN_00182100(s1)), (igVec4f *)(FUN_001820f0(s1)), (igVec4f *)(FUN_001824c0(s1)), fparg0, f20);
-            FUN_00181df0((float *)&spC8, (float *)(FUN_00181850(s1)), (float *)(FUN_00181840(s1)), (float *)(FUN_00181b50(s1)), fparg0, f20);
+            ParticleArray_EvaluateQuadraticVec3((igVec3f *)spD0, (igVec3f *)(ParticleArray_GetPosition(s1)), (igVec3f *)(ParticleArray_GetVelocity(s1)), (igVec3f *)(ParticleArray_GetAcceleration(s1)), fparg0, f20);
+            ParticleArray_EvaluateQuadraticVec4((igVec4f *)spA0, (igVec4f *)(ParticleArray_GetColor(s1)), (igVec4f *)(ParticleArray_GetColorVelocity(s1)), (igVec4f *)(ParticleArray_GetColorAcceleration(s1)), fparg0, f20);
+            ParticleArray_EvaluateQuadraticVec2((float *)&spC8, (float *)(ParticleArray_GetSize(s1)), (float *)(ParticleArray_GetSizeVelocity(s1)), (float *)(ParticleArray_GetSizeAcceleration(s1)), fparg0, f20);
             arg5->v144(s5, spD0);
             arg5->v152(s5, igVec4f_PackColor((float *)spA0, 1));
             igPointSpriteExt_SetSize((igPointSpriteExt *)arg5, s5, spC8);
@@ -1840,9 +1840,9 @@ void FUN_00186660(int arg0, unsigned int arg1, int arg2, int arg3, PackedVertexW
     s7 = s5 + arg0;
     while (s5 < s7) {
         s1 = arg2 + s5 * arg3;
-        FUN_00183f60((igVec3f *)spD0, (igVec3f *)(FUN_001818b0(s1)), (igVec3f *)(FUN_001818a0(s1)), (igVec3f *)(FUN_00183fc0(s1)), fparg0, f20);
-        FUN_00182440((igVec4f *)spA0, (igVec4f *)(FUN_00182100(s1)), (igVec4f *)(FUN_001820f0(s1)), (igVec4f *)(FUN_001824c0(s1)), fparg0, f20);
-        FUN_00181df0((float *)&spC8, (float *)(FUN_00181850(s1)), (float *)(FUN_00181840(s1)), (float *)(FUN_00181b50(s1)), fparg0, f20);
+        ParticleArray_EvaluateQuadraticVec3((igVec3f *)spD0, (igVec3f *)(ParticleArray_GetPosition(s1)), (igVec3f *)(ParticleArray_GetVelocity(s1)), (igVec3f *)(ParticleArray_GetAcceleration(s1)), fparg0, f20);
+        ParticleArray_EvaluateQuadraticVec4((igVec4f *)spA0, (igVec4f *)(ParticleArray_GetColor(s1)), (igVec4f *)(ParticleArray_GetColorVelocity(s1)), (igVec4f *)(ParticleArray_GetColorAcceleration(s1)), fparg0, f20);
+        ParticleArray_EvaluateQuadraticVec2((float *)&spC8, (float *)(ParticleArray_GetSize(s1)), (float *)(ParticleArray_GetSizeVelocity(s1)), (float *)(ParticleArray_GetSizeAcceleration(s1)), fparg0, f20);
         arg4->v116(s5, spD0);
         arg4->v164(s5, igVec4f_PackColor((float *)spA0, 1));
         arg4->v220(s5, spC8);

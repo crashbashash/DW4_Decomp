@@ -13,14 +13,14 @@ igMetaField *g_igPickMode_inverseProjectionMatrixMetaField;
 igMetaField *g_igPickMode_joystickTMetaField;
 
 igPickMode *igPickMode_Create(int allocator) {
-    FUN_0045c330();
+    igPickMode_EnsureRegistered();
     return (igPickMode *)igMetaObject_CreateInstance(g_igPickMode_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *igPickMode_GetMetaObject(void) {
     igMetaObject *g = g_igPickMode_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0045c330();
+        igPickMode_EnsureRegistered();
     }
     return g_igPickMode_metaObject;
 }
@@ -43,8 +43,8 @@ int igPickMode_GetVTable(void) {
     igMatrix44f_SetIdentity((float *)&obj.w[28]);
     r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igPickMode_vtable[0];
-    FUN_001d6560(&obj.w[27], -1);
-    FUN_0019e3c0(&obj.w[24], -1);
+    igSmartPointer_igGraphPath_Destruct(&obj.w[27], -1);
+    igIntersectTraversal_igSmartPointer_igObject_Destruct(&obj.w[24], -1);
     FUN_0044ee80(&obj.w[23], -1);
     FUN_0044e1e0(&obj.w[21], -1);
     FUN_0044e1e0(&obj.w[20], -1);
@@ -53,7 +53,7 @@ int igPickMode_GetVTable(void) {
     return r;
 }
 
-void FUN_0045c330(void)
+void igPickMode_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPickMode_Register);
 }
@@ -67,7 +67,7 @@ CallbackArray *igPickMode_Register(void) {
         &g_igPickMode_metaObject,
         igViewMode_Register,
         igViewMode_GetPublishedMetaObject,
-        thunk_igPickMode_GetMetaObject,
+        igPickMode_GetMetaObjectFunction,
         "igPickMode",
         0xBC, /* instance size */
         igPickMode_GetVTable,
@@ -77,7 +77,7 @@ CallbackArray *igPickMode_Register(void) {
     );
 }
 
-void thunk_igPickMode_GetMetaObject(void) {
+void igPickMode_GetMetaObjectFunction(void) {
     igPickMode_GetMetaObject();
 }
 
@@ -157,16 +157,16 @@ void igPickMode_InitFields(void) {
     temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igViewerParameters_GetOrCreateMetaObject();
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0044ded0();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igGuiSystem_GetOrCreateMetaObject();
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0044e430();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igMouseCursor_GetOrCreateMetaObject();
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0044e430();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igMouseCursor_GetOrCreateMetaObject();
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_0019dfd0();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igIntersectTraversal_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_5)->_construct = 1;
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_00188260();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igRay_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_6)->_construct = 1;
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7), 0.0f);
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 9));

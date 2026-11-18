@@ -41,7 +41,7 @@ CallbackArray *igVec3fList_Register(void) {
         &g_igVec3fList_metaObject,
         igDataList_Register,                 /* base class registrar (igDataList) */
         igDataList_GetPublishedMetaObject,
-        thunk_igVec3fList_GetMetaObject,
+        igVec3fList_GetMetaObjectFunction,
         "igVec3fList",
         0x14, /* instance size */
         igVec3fList_GetVTable,
@@ -51,7 +51,7 @@ CallbackArray *igVec3fList_Register(void) {
     );
 }
 
-void thunk_igVec3fList_GetMetaObject(void) {
+void igVec3fList_GetMetaObjectFunction(void) {
     igVec3fList_GetMetaObject();
 }
 

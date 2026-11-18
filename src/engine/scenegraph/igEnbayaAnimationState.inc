@@ -72,7 +72,7 @@ CallbackArray *igEnbayaAnimationState_Register(void) {
         &g_igEnbayaAnimationState_metaObject,
         igAnimationState_Register,
         igAnimationState_GetPublishedMetaObject,
-        thunk_igEnbayaAnimationState_GetMetaObject,
+        igEnbayaAnimationState_GetMetaObjectFunction,
         "igEnbayaAnimationState",
         sizeof(igEnbayaAnimationState),                   /* Instance size. */
         igEnbayaAnimationState_GetVTable,
@@ -82,7 +82,7 @@ CallbackArray *igEnbayaAnimationState_Register(void) {
     );
 }
 
-void thunk_igEnbayaAnimationState_GetMetaObject(void) {
+void igEnbayaAnimationState_GetMetaObjectFunction(void) {
     igEnbayaAnimationState_GetMetaObject();
 }
 
@@ -114,7 +114,7 @@ igMetaField *g_igAnimationState_cycleMatchDurationRangeMetaField;
 igMetaField *g_igAnimationState_cycleMatchTargetDurationMetaField;
 igMetaField *g_igAnimationState_timeRequestedMetaField;
 
-igMetaObject *FUN_001a20d0(void) {
+igMetaObject *igAnimationState_GetPublishedMetaObject(void) {
     return g_igAnimationState_metaObject;
 }
 

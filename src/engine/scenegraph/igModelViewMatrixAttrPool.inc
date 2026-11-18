@@ -1,6 +1,6 @@
 igMetaObject *g_igModelViewMatrixAttrPool_metaObject;
 
-igMetaObject *FUN_0019a400(void) {
+igMetaObject *igModelViewMatrixAttrPool_GetOrCreateMetaObject(void) {
     if (g_igModelViewMatrixAttrPool_metaObject == 0) {
         g_igModelViewMatrixAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igModelViewMatrixAttrPool_GetMetaObject(void)
 {
     igMetaObject *g = g_igModelViewMatrixAttrPool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019a4e0();
+        igModelViewMatrixAttrPool_EnsureRegistered();
     return g_igModelViewMatrixAttrPool_metaObject;
 }
 
@@ -22,7 +22,7 @@ int igModelViewMatrixAttrPool_GetVTable(void) {
     return *(int *)((char *)obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_0019a4e0(void)
+void igModelViewMatrixAttrPool_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igModelViewMatrixAttrPool_Register);
 }
@@ -36,7 +36,7 @@ CallbackArray *igModelViewMatrixAttrPool_Register(void) {
         &g_igModelViewMatrixAttrPool_metaObject,
         igObjectPool_Register,
         igObjectPool_GetPublishedMetaObject,
-        thunk_igModelViewMatrixAttrPool_GetMetaObject,
+        igModelViewMatrixAttrPool_GetMetaObjectFunction,
         "igModelViewMatrixAttrPool",
         0x20, /* instance size */
         igModelViewMatrixAttrPool_GetVTable,
@@ -46,7 +46,7 @@ CallbackArray *igModelViewMatrixAttrPool_Register(void) {
     );
 }
 
-void thunk_igModelViewMatrixAttrPool_GetMetaObject(void) {
+void igModelViewMatrixAttrPool_GetMetaObjectFunction(void) {
     igModelViewMatrixAttrPool_GetMetaObject();
 }
 

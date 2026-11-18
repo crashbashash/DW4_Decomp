@@ -1,6 +1,6 @@
 #include "dw4/viewer/igNormalsRenderer.h"
 
-void Gap__Viewer__igNormalsRenderer__vfunc_23(void) {
+void igNormalsRenderer_InitializeDrawing(void) {
 
 }
 
@@ -8,11 +8,11 @@ void igNormalsRenderer_Traverse(void) {
 
 }
 
-void Gap__Viewer__igNormalsRenderer__vfunc_26(void) {
+void igNormalsRenderer_Render(void) {
 
 }
 
-struct igMetaObject *Gap__Viewer__igNormalsRenderer__vfunc_22(void) {
+struct igMetaObject *igNormalsRenderer_GetMeta(void) {
     return g_igNormalsRenderer_metaObject;
 }
 

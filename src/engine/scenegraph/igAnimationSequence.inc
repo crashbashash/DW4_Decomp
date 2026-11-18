@@ -2,11 +2,11 @@ igMetaObject *igAnimationSequence_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationSequence_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a7080();
+        igAnimationSequence_EnsureRegistered();
     return g_igAnimationSequence_metaObject;
 }
 
-void FUN_001a7080(void)
+void igAnimationSequence_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationSequence_Register);
 }
@@ -18,7 +18,7 @@ CallbackArray *igAnimationSequence_Register(void) {
         &g_igAnimationSequence_metaObject,
         igTransformSource_Register,
         igTransformSource_GetPublishedMetaObject,
-        thunk_igAnimationSequence_GetMetaObject,
+        igAnimationSequence_GetMetaObjectFunction,
         "igAnimationSequence",
         8, /* instance size */
         0,
@@ -28,7 +28,7 @@ CallbackArray *igAnimationSequence_Register(void) {
     );
 }
 
-void thunk_igAnimationSequence_GetMetaObject(void) {
+void igAnimationSequence_GetMetaObjectFunction(void) {
     igAnimationSequence_GetMetaObject();
 }
 

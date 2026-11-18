@@ -3,7 +3,7 @@ igMetaField *g_igMessageFilter_msgTypeMetaField;
 igMetaField *g_igMessageFilter_receiversMetaField;
 
 int FUN_00231b40(int arg0) {
-    FUN_00231cb0();
+    igMessageFilter_EnsureRegistered();
     return (int)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x56DAF8), (igMemoryPoolView *)arg0));
 }
 
@@ -11,7 +11,7 @@ igMetaObject *igMessageFilter_GetMetaObject(void)
 {
     igMetaObject *g = g_igMessageFilter_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00231cb0();
+        igMessageFilter_EnsureRegistered();
     return g_igMessageFilter_metaObject;
 }
 
@@ -53,12 +53,12 @@ int igMessageFilter_GetVTable(void) {
     return temp_s1;
 }
 
-void FUN_00231cb0(void)
+void igMessageFilter_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igMessageFilter_Register);
 }
 
-static igMetaObjectCallback g_igMessageFilter_callbackList[] = { igMetaObject_EnsureRegistered, FUN_00231870, 0 };
+static igMetaObjectCallback g_igMessageFilter_callbackList[] = { igMetaObject_EnsureRegistered, igMessageReceiverList_EnsureRegistered, 0 };
 
 CallbackArray *igMessageFilter_Register(void) {
     InsightLibrary_MarkRegistered();
@@ -67,7 +67,7 @@ CallbackArray *igMessageFilter_Register(void) {
         &g_igMessageFilter_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igMessageFilter_GetMetaObject,
+        igMessageFilter_GetMetaObjectFunction,
         "igMessageFilter",
         0x10, /* instance size */
         igMessageFilter_GetVTable,
@@ -77,7 +77,7 @@ CallbackArray *igMessageFilter_Register(void) {
     );
 }
 
-void thunk_igMessageFilter_GetMetaObject(void) {
+void igMessageFilter_GetMetaObjectFunction(void) {
     igMessageFilter_GetMetaObject();
 }
 
@@ -111,7 +111,7 @@ void igMessageFilter_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)(igMetaObject_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_00231790();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igMessageReceiverList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igMessageFilter_fieldTable, g_igMessageFilter_fieldHandles, g_igMessageFilter_fieldOffsets, temp_s2);
 }

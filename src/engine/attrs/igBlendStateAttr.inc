@@ -3,7 +3,7 @@ igMetaField *g_igBlendStateAttr_enabledMetaField;
 
 igBlendStateAttr *igBlendStateAttr_CreateInstance(int allocator) {
     igBlendStateAttr_EnsureRegistered();
-    return (igBlendStateAttr *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55F348, (igMemoryPoolView *)allocator);
+    return (igBlendStateAttr *)igMetaObject_CreateInstance(g_igBlendStateAttr_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igBlendStateAttr_GetOrCreateMetaObject(void) {
@@ -40,7 +40,7 @@ CallbackArray *igBlendStateAttr_Register(void) {
         &g_igBlendStateAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igBlendStateAttr_GetMetaObject,
+        igBlendStateAttr_GetMetaObjectFunction,
         "igBlendStateAttr",
         0x10, /* instance size */
         igBlendStateAttr_GetVTable,
@@ -50,7 +50,7 @@ CallbackArray *igBlendStateAttr_Register(void) {
     );
 }
 
-void thunk_igBlendStateAttr_GetMetaObject(void) {
+void igBlendStateAttr_GetMetaObjectFunction(void) {
     igBlendStateAttr_GetMetaObject();
 }
 
@@ -68,12 +68,12 @@ static int g_igBlendStateAttr_fieldOffsets[] = {
 };
 
 void igBlendStateAttr_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_igBlendStateAttr_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igBlendStateAttr_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_igBlendStateAttr_fieldTable, g_igBlendStateAttr_fieldHandles, g_igBlendStateAttr_fieldOffsets, temp_s1);
+    meta = g_igBlendStateAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igBlendStateAttr_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_igBlendStateAttr_fieldTable, g_igBlendStateAttr_fieldHandles, g_igBlendStateAttr_fieldOffsets, base);
 }
 

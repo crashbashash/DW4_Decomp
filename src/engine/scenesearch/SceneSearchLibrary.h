@@ -26,9 +26,9 @@ extern "C" int FUN_00238d70(void);
 extern "C" igMetaObject *igSearchSceneGraph_GetMetaObject(void);
 extern "C" int igSearchSceneGraph_GetVTable(void);
 extern "C" CallbackArray *igSearchSceneGraph_Register(void);
-extern "C" void thunk_igSearchSceneGraph_GetMetaObject(void);
+extern "C" void igSearchSceneGraph_GetMetaObjectFunction(void);
 extern "C" void igSearchSceneGraph_InitFields(void);
-extern "C" igMetaObject *Gap__igSearchSceneGraph__vfunc_22(void);
+extern "C" igMetaObject *igSearchSceneGraph_GetMeta(void);
 
 /* GetVTable's stack instance and its member destructors. */
 struct SearchSceneGraphFrame { int *vt; int f4; int f8; int fC; int f10; int f14; int f18; int f1C; };
@@ -39,7 +39,7 @@ struct SearchSceneGraphFrame { int *vt; int f4; int f8; int fC; int f10; int f14
 extern "C" int FUN_002293d0(...);
 extern "C" int g_igSearchSceneGraph_vtable[4];
 /* InitFields' field tables and field helpers. */
-extern "C" int FUN_002274a0(void);
+extern "C" int igIterateGraph_GetOrCreateMetaObject(void);
 extern "C" void FUN_00227620(void);
 
 struct RefCounted { int w0; int refs; };
@@ -57,6 +57,6 @@ public:
 #include "dw4/scenegraph/igActor.h"
 
 extern "C" void **FUN_00239280(void **ref, short flags);
-extern "C" void **FUN_00239300(void **ref, short flags);
+extern "C" void **igSmartPointer_igCamera_Destruct(void **ref, short flags);
 
 #endif

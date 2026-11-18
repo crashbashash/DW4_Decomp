@@ -1,4 +1,4 @@
-int Gap__Attrs__igImageMipMapList__vfunc_24(void) {
+int igImageMipMapList_GetElementMeta(void) {
     return (int)g_igImage_metaObject;
 }
 

@@ -328,7 +328,7 @@ void Gap__Viewer__igViewerSceneInfoManager__resetFields(igViewerSceneInfoManager
     if (g_sharedViewerOptions == 0) {
         SharedViewerOptions *v = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
         if (v != 0) {
-            v = ViewerOptions_Construct(v);
+            v = igViewerDefaults_Construct(v);
         }
         g_sharedViewerOptions = v;
     }
@@ -633,7 +633,7 @@ int igViewerSceneInfoManager_AddInfo(igViewerSceneInfoManager *self, igSceneInfo
         if (g_sharedViewerOptions == 0) {
             SharedViewerOptions *v = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
             if (v != 0) {
-                v = ViewerOptions_Construct(v);
+                v = igViewerDefaults_Construct(v);
             }
             g_sharedViewerOptions = v;
         }
@@ -808,7 +808,7 @@ void igViewerSceneInfoManager_ResetView(igViewerSceneInfoManager *self) {
     igModel_NotifyViews((igModel *)self->_parameters, (ModelChange *)&playbackChanged);
     if (g_sharedViewerOptions == 0) {
         f = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
-        if (f != 0) f = ViewerOptions_Construct(f);
+        if (f != 0) f = igViewerDefaults_Construct(f);
         g_sharedViewerOptions = f;
     }
     g_sharedViewerOptions->useCount = g_sharedViewerOptions->useCount + 1;
@@ -1039,63 +1039,63 @@ void Gap__Viewer__igViewerAction__Execute(ViewerActionBinding *action) {
     (action->target->*function)();
 }
 
-igMetaObject *Gap__Viewer__igViewerAction__vfunc_22(void) {
+igMetaObject *igViewerAction_GetMeta(void) {
     return g_igViewerAction_metaObject;
 }
 
-int Gap__Viewer__igViewerSceneInfoManager__vfunc_22(void) {
+int igViewerSceneInfoManager_GetMeta(void) {
     return (int)g_igViewerSceneInfoManager_metaObject;
 }
 
-igMetaObject *Gap__Viewer__igViewerSceneInfoManagerController__vfunc_22(void) {
+igMetaObject *igViewerSceneInfoManagerController_GetMeta(void) {
     return g_igViewerSceneInfoManagerController_metaObject;
 }
 
-void Gap__Viewer__igViewerSceneInfoManagerController__vfunc_23(igViewerSceneInfoManagerController *self, igObject *model) {
+void igViewerSceneInfoManagerController_IsCompatible(igViewerSceneInfoManagerController *self, igObject *model) {
     igObject_IsKindOf(model, g_igViewerParameters_metaObject);
 }
 
-void Gap__Viewer__igStatisticsItem__vfunc_24(void) {
+void igStatisticsItem_OnModelChange(void) {
 
 }
 
-void Gap__Viewer__igViewerStatisticsManager__vfunc_03(void) {
+void igViewerStatisticsManager_constructFields(void) {
 
 }
 
-void Gap__Viewer__igViewerStatisticsManager__vfunc_04(void) {
+void igViewerStatisticsManager_destructFields(void) {
 
 }
 
-float Gap__Viewer__igViewerStatisticsManager__vfunc_23(void) {
+float igViewerStatisticsManager_GetStatisticValue(void) {
     return 0.0f;
 }
 
-float Gap__Viewer__igViewerStatisticsManager__vfunc_25(void) {
+float igViewerStatisticsManager_GetStatisticMaximumValue(void) {
     return -1.0f;
 }
 
-void Gap__Viewer__igViewerStatisticsManager__vfunc_27(void) {
+void igViewerStatisticsManager_SetStatisticMaximumValue(void) {
 
 }
 
-float Gap__Viewer__igViewerStatisticsManager__vfunc_24(void) {
+float igViewerStatisticsManager_GetGroupStatisticValue(void) {
     return 0.0f;
 }
 
-float Gap__Viewer__igViewerStatisticsManager__vfunc_26(void) {
+float igViewerStatisticsManager_GetGroupStatisticMaximumValue(void) {
     return -1.0f;
 }
 
-igMetaObject *Gap__Viewer__igViewerStatisticsManager__vfunc_22(void) {
+igMetaObject *igViewerStatisticsManager_GetMeta(void) {
     return g_igViewerStatisticsManager_metaObject;
 }
 
-igMetaObject *Gap__Viewer__igStatisticsItem__vfunc_22(void) {
+igMetaObject *igStatisticsItem_GetMeta(void) {
     return g_igStatisticsItem_metaObject;
 }
 
-void Gap__Viewer__igStatisticsItem__vfunc_23(igStatisticsItem *self, igObject *model) {
+void igStatisticsItem_IsCompatible(igStatisticsItem *self, igObject *model) {
     igObject_IsKindOf(model, igOnOffModel_GetMetaObject());
 }
 

@@ -31,7 +31,7 @@ CallbackArray *igCompoundList_Register(void) {
         &g_igCompoundList_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igCompoundList_GetMetaObject,
+        igCompoundList_GetMetaObjectFunction,
         "igCompoundList",
         0x14, /* instance size */
         igCompoundList_GetVTable,
@@ -41,7 +41,7 @@ CallbackArray *igCompoundList_Register(void) {
     );
 }
 
-void thunk_igCompoundList_GetMetaObject(void) {
+void igCompoundList_GetMetaObjectFunction(void) {
     igCompoundList_GetMetaObject();
 }
 
@@ -67,19 +67,19 @@ static int g_igCompoundList_fieldOffsets[] = {
 };
 
 void igCompoundList_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    igMetaObject *meta;
 
-    temp_s0 = g_igCompoundList_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igCompoundList_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igMemoryRefMetaField *)temp_s1)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
-    ((igRefMetaField *)temp_s1)->_destruct = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;
-    igMetaObject_NameFields(temp_s0, g_igCompoundList_fieldTable, g_igCompoundList_fieldHandles, g_igCompoundList_fieldOffsets, temp_s2);
+    meta = g_igCompoundList_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igCompoundList_ctorTable, 3);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igMemoryRefMetaField *)field)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igRefMetaField *)field)->_destruct = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnReset = 1;
+    igMetaObject_NameFields(meta, g_igCompoundList_fieldTable, g_igCompoundList_fieldHandles, g_igCompoundList_fieldOffsets, base);
 }
 
 igMetaObject *FUN_00225a30(void) {

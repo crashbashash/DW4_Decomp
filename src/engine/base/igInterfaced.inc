@@ -28,7 +28,7 @@ CallbackArray *igInterfaced_Register(void) {
         &g_igInterfaced_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igInterfaced_GetMetaObject,
+        igInterfaced_GetMetaObjectFunction,
         "igInterfaced",
         0x20, /* instance size */
         0,
@@ -38,7 +38,7 @@ CallbackArray *igInterfaced_Register(void) {
     );
 }
 
-void thunk_igInterfaced_GetMetaObject(void) {
+void igInterfaced_GetMetaObjectFunction(void) {
     igInterfaced_GetMetaObject();
 }
 
@@ -76,36 +76,36 @@ static int g_igInterfaced_fieldOffsets[] = {
 };
 
 void igInterfaced_InitFields(void) {
-    int temp_s0;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s2_5;
-    void *temp_s2_6;
-    igMetaObject *temp_s1;
+    int base;
+    void *field;
+    void *field2;
+    void *field3;
+    void *field4;
+    void *field5;
+    void *field6;
+    igMetaObject *meta;
 
-    temp_s1 = g_igInterfaced_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_igInterfaced_ctorTable, 6);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00225a40();
-    ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_00227c20();
-    ((igObjectRefMetaField *)temp_s2_2)->_refCounted = 0;
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_00226c60();
-    ((igObjectRefMetaField *)temp_s2_3)->_refCounted = 0;
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_002260d0();
-    ((igObjectRefMetaField *)temp_s2_4)->_refCounted = 0;
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_002267c0();
-    ((igObjectRefMetaField *)temp_s2_5)->_refCounted = 0;
-    temp_s2_6 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)FUN_002265e0();
-    ((igObjectRefMetaField *)temp_s2_6)->_refCounted = 0;
-    igMetaObject_NameFields(temp_s1, g_igInterfaced_fieldTable, g_igInterfaced_fieldHandles, g_igInterfaced_fieldOffsets, temp_s0);
+    meta = g_igInterfaced_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igInterfaced_ctorTable, 6);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igOptInterface_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field)->_refCounted = 0;
+    field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)igItemInterface_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field2)->_refCounted = 0;
+    field3 = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)field3)->_metaObject = (int)igListenerInterface_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field3)->_refCounted = 0;
+    field4 = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)field4)->_metaObject = (int)igMessageInterface_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field4)->_refCounted = 0;
+    field5 = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    ((igObjectRefMetaField *)field5)->_metaObject = (int)igLockInterface_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field5)->_refCounted = 0;
+    field6 = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    ((igObjectRefMetaField *)field6)->_metaObject = (int)igLogInterface_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field6)->_refCounted = 0;
+    igMetaObject_NameFields(meta, g_igInterfaced_fieldTable, g_igInterfaced_fieldHandles, g_igInterfaced_fieldOffsets, base);
 }
 

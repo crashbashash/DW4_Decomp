@@ -1,6 +1,6 @@
 igMetaObject *g_igTimeAttrPool_metaObject;
 
-igMetaObject *FUN_0019a290(void) {
+igMetaObject *igTimeAttrPool_GetOrCreateMetaObject(void) {
     if (g_igTimeAttrPool_metaObject == 0) {
         g_igTimeAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igTimeAttrPool_GetMetaObject(void)
 {
     igMetaObject *g = g_igTimeAttrPool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019a370();
+        igTimeAttrPool_EnsureRegistered();
     return g_igTimeAttrPool_metaObject;
 }
 
@@ -22,12 +22,12 @@ int igTimeAttrPool_GetVTable(void) {
     return *(int *)((char *)obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_0019a370(void)
+void igTimeAttrPool_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTimeAttrPool_Register);
 }
 
-static igMetaObjectCallback g_igTimeAttrPool_callbackList[] = { FUN_00131040, 0 };
+static igMetaObjectCallback g_igTimeAttrPool_callbackList[] = { igTimeAttr_EnsureRegistered, 0 };
 
 CallbackArray *igTimeAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -36,7 +36,7 @@ CallbackArray *igTimeAttrPool_Register(void) {
         &g_igTimeAttrPool_metaObject,
         igObjectPool_Register,
         igObjectPool_GetPublishedMetaObject,
-        thunk_igTimeAttrPool_GetMetaObject,
+        igTimeAttrPool_GetMetaObjectFunction,
         "igTimeAttrPool",
         0x20, /* instance size */
         igTimeAttrPool_GetVTable,
@@ -46,7 +46,7 @@ CallbackArray *igTimeAttrPool_Register(void) {
     );
 }
 
-void thunk_igTimeAttrPool_GetMetaObject(void) {
+void igTimeAttrPool_GetMetaObjectFunction(void) {
     igTimeAttrPool_GetMetaObject();
 }
 

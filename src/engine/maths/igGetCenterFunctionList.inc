@@ -33,7 +33,7 @@ CallbackArray *igGetCenterFunctionList_Register(void) {
         &g_igGetCenterFunctionList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
-        thunk_igGetCenterFunctionList_GetMetaObject,
+        igGetCenterFunctionList_GetMetaObjectFunction,
         "igGetCenterFunctionList",
         0x14, /* instance size */
         igGetCenterFunctionList_GetVTable,
@@ -43,7 +43,7 @@ CallbackArray *igGetCenterFunctionList_Register(void) {
     );
 }
 
-void thunk_igGetCenterFunctionList_GetMetaObject(void) {
+void igGetCenterFunctionList_GetMetaObjectFunction(void) {
     igGetCenterFunctionList_GetMetaObject();
 }
 

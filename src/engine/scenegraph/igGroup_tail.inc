@@ -1,4 +1,4 @@
-int Gap__Sg__igGroup__vfunc_26(void *arg0) {
+int igGroup_IsTransformable(void *arg0) {
     Obj_1c6260 *self = (Obj_1c6260 *)arg0;
     unsigned int n;
     unsigned int i;

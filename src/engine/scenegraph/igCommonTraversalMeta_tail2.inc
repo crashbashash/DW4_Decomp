@@ -1,10 +1,10 @@
 void FUN_001a44d0(void) {
-    FUN_001b6be0();
-    igMetaObject_AddRegistrationCallback((int)FUN_001b68b0);
+    igCommonTraversal_UserRegister();
+    igMetaObject_AddRegistrationCallback((int)igCommonTraversal_RegisterClass);
 }
 
-void thunk_FUN_001b6c50(void) {
-    FUN_001b6c50();
+void thunk_igCommonTraversal_UserUnregister(void) {
+    igCommonTraversal_UserUnregister();
 }
 
 int *igSmartPointer_igMetaObjectList_Construct(int *p)

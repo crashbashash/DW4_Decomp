@@ -1,4 +1,4 @@
-int FUN_0013c1b0(int *p, void *meta)
+int igAttrPool_AddNonSharableType(int *p, void *meta)
 {
     return ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)(*(int *)((char *)p + 12)), (igObject *)meta);
 }
@@ -13,7 +13,7 @@ static inline void clearBytes(char *p, unsigned int n) {
     }
 }
 
-void Gap__Attrs__igAttrPool__vfunc_13(igAttrPool *self, int flags) {
+void igAttrPool_resetFields(igAttrPool *self, int flags) {
     void *metas[4];
     int i;
     Gap__Core__igObject__resetFields((igObject *)self, flags);
@@ -23,7 +23,7 @@ void Gap__Attrs__igAttrPool__vfunc_13(igAttrPool *self, int flags) {
     metas[2] = igLightAttr_GetMetaObject();
     metas[3] = igLightStateAttr_GetMetaObject();
     for (i = 0; i < 4; i++) {
-        FUN_0013c1b0((int *)self, metas[i]);
+        igAttrPool_AddNonSharableType((int *)self, metas[i]);
     }
 }
 

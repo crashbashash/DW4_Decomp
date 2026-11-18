@@ -71,7 +71,7 @@ CallbackArray *igShaderInfo_Register(void) {
         &g_igShaderInfo_metaObject,
         igInfo_Register,
         igInfo_GetPublishedMetaObject,
-        thunk_igShaderInfo_GetMetaObject,
+        igShaderInfo_GetMetaObjectFunction,
         "igShaderInfo",
         0x18, /* instance size */
         igShaderInfo_GetVTable,
@@ -81,7 +81,7 @@ CallbackArray *igShaderInfo_Register(void) {
     );
 }
 
-void thunk_igShaderInfo_GetMetaObject(void) {
+void igShaderInfo_GetMetaObjectFunction(void) {
     igShaderInfo_GetMetaObject();
 }
 
@@ -107,7 +107,7 @@ void igShaderInfo_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igShaderInfo_ctorTable, 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    *(int *)((char *)(temp_s1) + 56) = (int)FUN_00198fa0();
+    *(int *)((char *)(temp_s1) + 56) = (int)igShaderFactoryList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s1) + 52) = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igShaderInfo_fieldTable, g_igShaderInfo_fieldHandles, g_igShaderInfo_fieldOffsets, temp_s2);
     igMetaObject_AddExitCallback((int)thunk_FUN_001d8b90);

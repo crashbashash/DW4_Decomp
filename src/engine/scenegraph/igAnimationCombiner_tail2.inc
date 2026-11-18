@@ -1,4 +1,4 @@
-void Gap__Sg__igAnimationCombiner__vfunc_17(CombinerView *c) {
+void igAnimationCombiner_UserPostLoad(CombinerView *c) {
     int result1;
     int result2;
     int bones;
@@ -210,7 +210,7 @@ int FUN_001ad990(CombinerBlendView *c, CombinerAnimation *anim, int combineMode,
             track = anim->_trackList->_data[t];
         }
         if (track != 0) {
-            b = (CombinerBoneInfo *)poolTake(((CombinerPool *)g_igAnimationCombinerBoneInfoPool_instance.p), (void *)FUN_001a80b0);
+            b = (CombinerBoneInfo *)poolTake(((CombinerPool *)g_igAnimationCombinerBoneInfoPool_instance.p), (void *)igAnimationCombinerBoneInfo_Create);
             source = track->_source;
             if (source != 0) {
                 int useT = useTranslation(anim, binding->_boneMap[i]);
@@ -490,14 +490,14 @@ int igAnimationCombiner_AddAnimationBlend(igAnimationCombiner *combiner, igAnima
     return r;
 }
 
-void Gap__Sg__igAnimationCombiner__vfunc_10(void **arg0) {
+void igAnimationCombiner_userDestruct(void **arg0) {
     if (((DW4VC_92_0 *)(arg0))->vX() != 0) {
         igAnimationCombiner_RemoveAllStates((igAnimationCombiner *)arg0);
         Gap__Core__igObject__userDestruct((igObject *)arg0);
     }
 }
 
-int Gap__Sg__igAnimationCombiner__vfunc_23(void *arg0) {
+int igAnimationCombiner_Configured(void *arg0) {
     return *(int *)((char *)(arg0) + 64) != 0;
 }
 
@@ -545,7 +545,7 @@ int igAnimationCombiner_ResetToPose(igAnimationCombiner *combiner, igAnimationCo
     state->_blendStartTime = 0;
     ObjectList_AppendRetained((igObjectList *)c->_animationStateList, (igObject *)state);
     for (i = 0; i < bones; i++) {
-        CombinerBoneInfo *info = (CombinerBoneInfo *)poolTake(((CombinerPool *)g_igAnimationCombinerBoneInfoPool_instance.p), (void *)FUN_001a80b0);
+        CombinerBoneInfo *info = (CombinerBoneInfo *)poolTake(((CombinerPool *)g_igAnimationCombinerBoneInfoPool_instance.p), (void *)igAnimationCombinerBoneInfo_Create);
         float *m;
         float tx, ty, tz;
         CombinerQuat q;

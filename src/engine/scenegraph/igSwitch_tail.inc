@@ -1,10 +1,10 @@
-int Gap__Sg__igSwitch__vfunc_35(S_1dc940 *arg0, int arg1, void *arg2) {
+int igSwitch_InsertChild(S_1dc940 *arg0, int arg1, void *arg2) {
     int temp_s0;
     int var_a1;
     P_1dc940 *temp_v0;
     int a0v;
 
-    temp_s0 = FUN_001c5d70((T_1c5d70 *)arg0, arg1, (O_1c5d70 *)arg2) & 0xFF;
+    temp_s0 = igGroup_InsertChild((T_1c5d70 *)arg0, arg1, (O_1c5d70 *)arg2) & 0xFF;
     temp_v0 = arg0->f28;
     a0v = arg0->f32;
     if (temp_v0 != 0) {

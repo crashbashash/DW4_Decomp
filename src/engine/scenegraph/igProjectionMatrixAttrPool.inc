@@ -1,6 +1,6 @@
 igMetaObject *g_igProjectionMatrixAttrPool_metaObject;
 
-igMetaObject *FUN_0019a120(void) {
+igMetaObject *igProjectionMatrixAttrPool_GetOrCreateMetaObject(void) {
     if (g_igProjectionMatrixAttrPool_metaObject == 0) {
         g_igProjectionMatrixAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igProjectionMatrixAttrPool_GetMetaObject(void)
 {
     igMetaObject *g = g_igProjectionMatrixAttrPool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019a200();
+        igProjectionMatrixAttrPool_EnsureRegistered();
     return g_igProjectionMatrixAttrPool_metaObject;
 }
 
@@ -23,7 +23,7 @@ int igProjectionMatrixAttrPool_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_0019a200(void)
+void igProjectionMatrixAttrPool_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igProjectionMatrixAttrPool_Register);
 }
@@ -37,7 +37,7 @@ CallbackArray *igProjectionMatrixAttrPool_Register(void) {
         &g_igProjectionMatrixAttrPool_metaObject,
         igObjectPool_Register,
         igObjectPool_GetPublishedMetaObject,
-        thunk_igProjectionMatrixAttrPool_GetMetaObject,
+        igProjectionMatrixAttrPool_GetMetaObjectFunction,
         "igProjectionMatrixAttrPool",
         0x20, /* instance size */
         igProjectionMatrixAttrPool_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igProjectionMatrixAttrPool_Register(void) {
     );
 }
 
-void thunk_igProjectionMatrixAttrPool_GetMetaObject(void) {
+void igProjectionMatrixAttrPool_GetMetaObjectFunction(void) {
     igProjectionMatrixAttrPool_GetMetaObject();
 }
 

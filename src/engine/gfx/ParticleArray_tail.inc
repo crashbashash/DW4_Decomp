@@ -27,7 +27,7 @@ int Gap__Bec__ParticleArray__vfunc_29(ParticleArray *p)
 
 static inline igObject *f24_of(const PointSpriteInterfaceView *view) { return view->f24; }
 
-void Gap__Bec__ParticleArray__vfunc_10(ParticleArray *arg0) {
+void igParticleArray_ReleaseDefaults(ParticleArray *arg0) {
     void *temp_a0;
     igObject *temp_a0_2;
     PointSpriteInterfaceView *temp_s0;

@@ -1,11 +1,11 @@
 igMetaObject *g_igCustomStateCollectionList_metaObject;
 
-int FUN_0014ee00(int arg0) {
-    FUN_0014ef20();
+int igCustomStateCollectionList_Create(int arg0) {
+    igCustomStateCollectionList_EnsureRegistered();
     return (int)igMetaObject_CreateInstance(g_igCustomStateCollectionList_metaObject, (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *FUN_0014ee40(void) {
+igMetaObject *igCustomStateCollectionList_GetOrCreateMetaObject(void) {
     if (g_igCustomStateCollectionList_metaObject == 0) {
         g_igCustomStateCollectionList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -16,7 +16,7 @@ igMetaObject *igCustomStateCollectionList_GetMetaObject(void)
 {
     igMetaObject *g = g_igCustomStateCollectionList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014ef20();
+        igCustomStateCollectionList_EnsureRegistered();
     return g_igCustomStateCollectionList_metaObject;
 }
 
@@ -28,12 +28,12 @@ int igCustomStateCollectionList_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_0014ef20(void)
+void igCustomStateCollectionList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igCustomStateCollectionList_Register);
 }
 
-static igMetaObjectCallback g_igCustomStateCollectionList_callbackList[] = { FUN_0014f0c0, 0 };
+static igMetaObjectCallback g_igCustomStateCollectionList_callbackList[] = { igCustomStateCollection_EnsureRegistered, 0 };
 
 CallbackArray *igCustomStateCollectionList_Register(void) {
     FUN_00149bc0();
@@ -42,7 +42,7 @@ CallbackArray *igCustomStateCollectionList_Register(void) {
         &g_igCustomStateCollectionList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igCustomStateCollectionList_GetMetaObject,
+        igCustomStateCollectionList_GetMetaObjectFunction,
         "igCustomStateCollectionList",
         0x14, /* instance size */
         igCustomStateCollectionList_GetVTable,
@@ -52,7 +52,7 @@ CallbackArray *igCustomStateCollectionList_Register(void) {
     );
 }
 
-void thunk_igCustomStateCollectionList_GetMetaObject(void) {
+void igCustomStateCollectionList_GetMetaObjectFunction(void) {
     igCustomStateCollectionList_GetMetaObject();
 }
 

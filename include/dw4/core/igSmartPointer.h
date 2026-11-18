@@ -199,11 +199,24 @@ igSmartPointer<igObject> *igSmartPointer_igTransform_Destruct(igSmartPointer<igO
 igSmartPointer<igObject> *igSmartPointer_igVec3fList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igVertexArray_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igVisualContext_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igBitMask_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igCullFaceAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igDataPumpInterface_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igDisplayListAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igGraphPathList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igLightList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igLightStateAttrList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igTextureBindAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igViewportAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igStringRef *igStringRef_Destruct(igStringRef *self, short deleteFlag);
 igSmartPointer<igObject> igObject_Clone(igObjectDispatchView *source, int copyMode);
 int *igSmartPointer_igIntList_Construct(int *p);
 int *igSmartPointer_igMetaObjectList_Construct(int *p);
 int *igSmartPointer_igObjectList_Construct(int *p);
+int *igSmartPointer_igCullFaceAttr_Construct(int *p);
+int *igSmartPointer_igDisplayListAttr_Construct(int *p);
+int *igSmartPointer_igLightAttr_Construct(int *p);
+int *igSmartPointer_igLightList_Construct(int *p);
 }
 
 #endif

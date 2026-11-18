@@ -31,7 +31,7 @@ CallbackArray *igBlendMatrixSelect_Register(void) {
         &g_igBlendMatrixSelect_metaObject,
         igAttrSet_Register,
         igAttrSet_GetPublishedMetaObject,
-        thunk_igBlendMatrixSelect_GetMetaObject,
+        igBlendMatrixSelect_GetMetaObjectFunction,
         "igBlendMatrixSelect",
         0xAC, /* instance size */
         igBlendMatrixSelect_GetVTable,
@@ -41,7 +41,7 @@ CallbackArray *igBlendMatrixSelect_Register(void) {
     );
 }
 
-void thunk_igBlendMatrixSelect_GetMetaObject(void) {
+void igBlendMatrixSelect_GetMetaObjectFunction(void) {
     igBlendMatrixSelect_GetMetaObject();
 }
 
@@ -67,16 +67,16 @@ static int g_igBlendMatrixSelect_fieldOffsets[] = {
 };
 
 void igBlendMatrixSelect_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *blendMatrixIndicesField;
+    void *meta;
 
-    temp_s0 = (void *)g_igBlendMatrixSelect_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igBlendMatrixSelect_ctorTable, 3);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igBlendMatrixSelect_fieldTable, g_igBlendMatrixSelect_fieldHandles, g_igBlendMatrixSelect_fieldOffsets, temp_s2);
+    meta = (void *)g_igBlendMatrixSelect_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igBlendMatrixSelect_ctorTable, 3);
+    blendMatrixIndicesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igObjectRefMetaField *)blendMatrixIndicesField)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)blendMatrixIndicesField)->_construct = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, g_igBlendMatrixSelect_fieldTable, g_igBlendMatrixSelect_fieldHandles, g_igBlendMatrixSelect_fieldOffsets, base);
 }
 

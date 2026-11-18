@@ -7,7 +7,7 @@ igMetaObject *igPsx2EnvironmentMapShader_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2EnvironmentMapShader_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001ab540();
+        igPsx2EnvironmentMapShader_EnsureRegistered();
     return g_igPsx2EnvironmentMapShader_metaObject;
 }
 
@@ -20,15 +20,15 @@ int igPsx2EnvironmentMapShader_GetVTable(void) {
     FUN_001ab4a0((igEnvironmentMapShader2 *)u.b);
     u.vt = &g_igPsx2EnvironmentMapShader_vtable[0];
     p0 = &u.b[112];
-    FUN_001ab490((int *)p0);
+    igSmartPointer_igBlendFunctionAttr_Construct((int *)p0);
     p1 = &u.b[116];
-    FUN_0019ac20((int *)p1);
+    igSmartPointer_igTexGenMatrixAttr_Construct((int *)p1);
     p2 = &u.b[120];
-    FUN_001ab480((int *)p2);
+    igSmartPointer_igMultiPassStateAttr_Construct((int *)p2);
     temp_s2 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = &g_igPsx2EnvironmentMapShader_vtable[0];
-    FUN_001ab400((ObjectRefWord *)p2, -1);
-    FUN_0019aa90((void * *)p1, -1);
+    igSmartPointer_igMultiPassStateAttr_Destruct((ObjectRefWord *)p2, -1);
+    igSmartPointer_igTexGenMatrixAttr_Destruct((igSmartPointer<igObject> *)p1, -1);
     igSmartPointer_igBlendFunctionAttr_Destruct((igSmartPointer<igObject> *)p0, -1);
     FUN_001aaf80((Obj_1aaf80 *)u.b, 0);
     return temp_s2;
@@ -76,7 +76,7 @@ Obj_1aaf80 *FUN_001aaf80(Obj_1aaf80 *arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_001ab400(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igMultiPassStateAttr_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {
@@ -89,15 +89,15 @@ ObjectRefWord *FUN_001ab400(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-int *FUN_001ab480(int *p)
+int *igSmartPointer_igMultiPassStateAttr_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_001ab490(int *p)
+int *igSmartPointer_igBlendFunctionAttr_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
@@ -128,12 +128,12 @@ void *FUN_001ab4a0(igEnvironmentMapShader2 *arg0) {
     return arg0;
 }
 
-void FUN_001ab540(void)
+void igPsx2EnvironmentMapShader_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2EnvironmentMapShader_Register);
 }
 
-static igMetaObjectCallback g_igPsx2EnvironmentMapShader_callbackList[] = { igBlendFunctionAttr_EnsureRegistered, FUN_00133290, FUN_001352b0, 0 };
+static igMetaObjectCallback g_igPsx2EnvironmentMapShader_callbackList[] = { igBlendFunctionAttr_EnsureRegistered, igTexGenMatrixAttr_EnsureRegistered, igMultiPassStateAttr_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2EnvironmentMapShader_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -142,7 +142,7 @@ CallbackArray *igPsx2EnvironmentMapShader_Register(void) {
         &g_igPsx2EnvironmentMapShader_metaObject,
         igEnvironmentMapShader2_Register,
         igEnvironmentMapShader2_GetPublishedMetaObject,
-        thunk_igPsx2EnvironmentMapShader_GetMetaObject,
+        igPsx2EnvironmentMapShader_GetMetaObjectFunction,
         "igPsx2EnvironmentMapShader",
         0x7C, /* instance size */
         igPsx2EnvironmentMapShader_GetVTable,
@@ -152,7 +152,7 @@ CallbackArray *igPsx2EnvironmentMapShader_Register(void) {
     );
 }
 
-igMetaObject *FUN_001ab5d0(void) {
+igMetaObject *igEnvironmentMapShader2_GetPublishedMetaObject(void) {
     return g_igEnvironmentMapShader2_metaObject;
 }
 
@@ -191,13 +191,13 @@ void igPsx2EnvironmentMapShader_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igBlendFunctionAttr_GetOrCreateMetaObject();
     ((igMetaField *)temp_s1)->_persistent = 0;
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, 1 + temp_s2)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_001331a0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igTexGenMatrixAttr_GetOrCreateMetaObject();
     ((igMetaField *)temp_s1_2)->_persistent = 0;
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, 2 + temp_s2)));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_001351d0();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igMultiPassStateAttr_GetOrCreateMetaObject();
     ((igMetaField *)temp_s1_3)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igPsx2EnvironmentMapShader_fieldTable, g_igPsx2EnvironmentMapShader_fieldHandles, g_igPsx2EnvironmentMapShader_fieldOffsets, temp_s2);
-    ((igMetaObject *)(g_igPsx2EnvironmentMapShader_metaObject))->_writeProxy = (int)thunk_igEnvironmentMapShader2_GetMetaObject;
+    ((igMetaObject *)(g_igPsx2EnvironmentMapShader_metaObject))->_writeProxy = (int)igEnvironmentMapShader2_GetMetaObjectFunction;
 }
 
 int FUN_001ab6c0(S_1ab6c0 *arg0, int arg1) {

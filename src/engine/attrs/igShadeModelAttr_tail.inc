@@ -1,14 +1,14 @@
-void Gap__Attrs__igShadeModelAttr__vfunc_24(int arg0, igPsx2VisualContext *arg1) {
-    Gap__Gfx__igPsx2VisualContext__vfunc_227(arg1, (unsigned int)*(int *)((char *)(arg0) + 12));
+void igShadeModelAttr_apply(int arg0, igPsx2VisualContext *arg1) {
+    igPsx2VisualContext_SetShadingMode(arg1, (unsigned int)*(int *)((char *)(arg0) + 12));
 }
 
-void Gap__Attrs__igShadeModelAttr__vfunc_26(void **arg0, void **arg1) {
+void igShadeModelAttr_SynchronizeDefault(void **arg0, void **arg1) {
     ((DW4VC_128_1 *)(arg0))->vX((int)(((DW4VC_912_0 *)(arg1))->vX()));
 }
 
 /* Setter for the reflected _mode field (the shading mode enum). */
 
-void Gap__Attrs__igShadeModelAttr__vfunc_32(igShadeModelAttr *self, int mode) {
+void igShadeModelAttr_SetMode(igShadeModelAttr *self, int mode) {
     self->_mode = mode;
 }
 

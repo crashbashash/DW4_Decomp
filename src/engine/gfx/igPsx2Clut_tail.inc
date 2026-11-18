@@ -2,7 +2,7 @@ igMetaObject *igPsx2Clut_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2Clut_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00154490();
+        igPsx2Clut_EnsureRegistered();
     return g_igPsx2Clut_metaObject;
 }
 
@@ -14,7 +14,7 @@ int igPsx2Clut_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00154490(void)
+void igPsx2Clut_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2Clut_Register);
 }
@@ -26,7 +26,7 @@ CallbackArray *igPsx2Clut_Register(void) {
         &g_igPsx2Clut_metaObject,
         igClut_Register,
         igClut_GetPublishedMetaObject,
-        thunk_igPsx2Clut_GetMetaObject,
+        igPsx2Clut_GetMetaObjectFunction,
         "igPsx2Clut",
         0x28, /* instance size */
         igPsx2Clut_GetVTable,
@@ -36,7 +36,7 @@ CallbackArray *igPsx2Clut_Register(void) {
     );
 }
 
-igMetaObject *FUN_00154510(void) {
+igMetaObject *igClut_GetPublishedMetaObject(void) {
     return g_igClut_metaObject;
 }
 
@@ -69,6 +69,6 @@ void igPsx2Clut_InitFields(void) {
     *(char *)((char *)(temp_v0) + 38) = 0;
     *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart + 1)) + 38) = 0;
     igMetaObject_NameFields(meta, g_igPsx2Clut_fieldTable, g_igPsx2Clut_fieldHandles, g_igPsx2Clut_fieldOffsets, fieldStart);
-    *(int *)((char *)(g_igPsx2Clut_metaObject) + 64) = (int)thunk_igClut_GetMetaObject;
+    *(int *)((char *)(g_igPsx2Clut_metaObject) + 64) = (int)igClut_GetMetaObjectFunction;
 }
 

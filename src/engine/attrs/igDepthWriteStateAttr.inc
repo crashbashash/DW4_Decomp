@@ -1,7 +1,7 @@
 igMetaObject *g_igDepthWriteStateAttr_metaObject;
 igMetaField *g_igDepthWriteStateAttr_enabledMetaField;
 
-igMetaObject *FUN_001382a0(void) {
+igMetaObject *igDepthWriteStateAttr_GetOrCreateMetaObject(void) {
     if (g_igDepthWriteStateAttr_metaObject == 0) {
         g_igDepthWriteStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -35,7 +35,7 @@ CallbackArray *igDepthWriteStateAttr_Register(void) {
         &g_igDepthWriteStateAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igDepthWriteStateAttr_GetMetaObject,
+        igDepthWriteStateAttr_GetMetaObjectFunction,
         "igDepthWriteStateAttr",
         0x10, /* instance size */
         igDepthWriteStateAttr_GetVTable,
@@ -45,7 +45,7 @@ CallbackArray *igDepthWriteStateAttr_Register(void) {
     );
 }
 
-void thunk_igDepthWriteStateAttr_GetMetaObject(void) {
+void igDepthWriteStateAttr_GetMetaObjectFunction(void) {
     igDepthWriteStateAttr_GetMetaObject();
 }
 
@@ -63,13 +63,13 @@ static int g_igDepthWriteStateAttr_fieldOffsets[] = {
 };
 
 void igDepthWriteStateAttr_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_igDepthWriteStateAttr_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igDepthWriteStateAttr_ctorTable, 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1);
-    igMetaObject_NameFields(temp_s0, g_igDepthWriteStateAttr_fieldTable, g_igDepthWriteStateAttr_fieldHandles, g_igDepthWriteStateAttr_fieldOffsets, temp_s1);
+    meta = g_igDepthWriteStateAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igDepthWriteStateAttr_ctorTable, 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base), 1);
+    igMetaObject_NameFields(meta, g_igDepthWriteStateAttr_fieldTable, g_igDepthWriteStateAttr_fieldHandles, g_igDepthWriteStateAttr_fieldOffsets, base);
 }
 

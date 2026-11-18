@@ -1,4 +1,4 @@
-void Gap__Core__igObject__vfunc_08(igObject *self)
+void igCommonTraversal_userDestruct(igObject *self)
 {
     Gap__Core__igObject__userDestruct(self);
 }

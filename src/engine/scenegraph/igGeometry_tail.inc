@@ -138,11 +138,11 @@ void FUN_001cf950(int **arg0, int *arg1) {
     }
 }
 
-int FUN_001cf980(void) {
+int igIntersectTraversal_TraverseNode(void) {
     return 0;
 }
 
-int FUN_001cf990(A_1cf990 *arg0, B_1cf990 *arg1) {
+int igIntersectTraversal_TraverseGroup(A_1cf990 *arg0, B_1cf990 *arg1) {
     Ls_1cf990 *l;
     int n;
     int r;
@@ -176,7 +176,7 @@ int FUN_001cf990(A_1cf990 *arg0, B_1cf990 *arg1) {
     return 0;
 }
 
-int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
+int igIntersectTraversal_TraverseTransform(ModelTraversal *self, TraversalNode *node) {
     int result;
     if (self->enabled != 0) {
         int r = self->callback(self, node);
@@ -195,7 +195,7 @@ int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
     ObjectList_AppendRetained((igObjectList *)self->nodes, (igObject *)node);
     result = FUN_001ceab0((HitTraversal *)self, (HitNode *)node);
     if (result == 0) {
-        FUN_001e68e0(self->matrices, node->transform);
+        igMatrixStack_PushPreMultiply(self->matrices, node->transform);
         result = igTraversal_TraverseChildren((igTraversal *)(self), (igNode *)node);
         {
             MatrixStack *s = self->matrices;
@@ -222,11 +222,11 @@ int FUN_001cfaa0(ModelTraversal *self, TraversalNode *node) {
     return passStop(result);
 }
 
-igMetaObject *FUN_001cfc60(void) {
+igMetaObject *igTransform_GetMeta(void) {
     return g_igTransform_metaObject;
 }
 
-int Gap__Sg__igGeometry__vfunc_22(void) {
+int igGeometry_GetMeta(void) {
     return ((int)g_igGeometry_metaObject);
 }
 

@@ -33,7 +33,7 @@ CallbackArray *igExtendByRayFunctionList_Register(void) {
         &g_igExtendByRayFunctionList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
-        thunk_igExtendByRayFunctionList_GetMetaObject,
+        igExtendByRayFunctionList_GetMetaObjectFunction,
         "igExtendByRayFunctionList",
         0x14, /* instance size */
         igExtendByRayFunctionList_GetVTable,
@@ -43,7 +43,7 @@ CallbackArray *igExtendByRayFunctionList_Register(void) {
     );
 }
 
-void thunk_igExtendByRayFunctionList_GetMetaObject(void) {
+void igExtendByRayFunctionList_GetMetaObjectFunction(void) {
     igExtendByRayFunctionList_GetMetaObject();
 }
 

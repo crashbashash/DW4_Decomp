@@ -19,11 +19,11 @@ bool igRegistry_GetValueFloat(struct igRegistry *registry, int section, const ch
 int igRegistry_GetValueString(struct igRegistry *registry, int section, const char *key, char **out, char *def, int create);
 int igRegistry_GetValueStringObj(struct igRegistry *registry, int section, const char *key, struct igStringObj **out, const char *defaultValue, int create);
 /* Tail-jump copies of the readers in the data-pump library, with the readers' own signatures. */
-bool thunk_igRegistry_GetValueInt(struct igRegistry *registry, int section, const char *key, int *out, int defaultValue, int create);
-bool thunk_igRegistry_GetValueFloat(struct igRegistry *registry, int section, const char *key, float *out, int create, float defaultValue);
-int thunk_igRegistry_GetValueStringObj(struct igRegistry *registry, int section, const char *key, struct igStringObj **out, const char *defaultValue, int create);
-int thunk_igRegistry_GetValueString(struct igRegistry *registry, int section, const char *key, char **out, char *def, int create);
-unsigned char thunk_igRegistry_GetValueBool(struct igRegistry *registry, int section, const char *name, unsigned char *value, int defaultValue, int create);
+bool igGetRegistryValue_Int(struct igRegistry *registry, int section, const char *key, int *out, int defaultValue, int create);
+bool igGetRegistryValue_Float(struct igRegistry *registry, int section, const char *key, float *out, int create, float defaultValue);
+int igGetRegistryValue_StringObj(struct igRegistry *registry, int section, const char *key, struct igStringObj **out, const char *defaultValue, int create);
+int igGetRegistryValue_String(struct igRegistry *registry, int section, const char *key, char **out, char *def, int create);
+unsigned char igGetRegistryValue_Bool(struct igRegistry *registry, int section, const char *name, unsigned char *value, int defaultValue, int create);
 struct igMetaObject *igRegistry_GetOrCreateMetaObject(void);
 void igRegistry_EnsureRegistered(void);
 int igRegistry_GetNumValuesInSection(int registry, int section);

@@ -30,7 +30,7 @@ CallbackArray *igOnOffValueObserver_Register(void) {
         &g_igOnOffValueObserver_metaObject,
         igView_Register,
         igView_GetPublishedMetaObject,
-        thunk_igOnOffValueObserver_GetMetaObject,
+        igOnOffValueObserver_GetMetaObjectFunction,
         "igOnOffValueObserver",
         0x10, /* instance size */
         igOnOffValueObserver_GetVTable,
@@ -40,11 +40,11 @@ CallbackArray *igOnOffValueObserver_Register(void) {
     );
 }
 
-void thunk_igOnOffValueObserver_GetMetaObject(void) {
+void igOnOffValueObserver_GetMetaObjectFunction(void) {
     igOnOffValueObserver_GetMetaObject();
 }
 
-igMetaObject *FUN_0044cb20(void) {
+igMetaObject *igView_GetPublishedMetaObject(void) {
     return g_igView_metaObject;
 }
 
@@ -70,7 +70,7 @@ void igOnOffValueObserver_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igOnOffValueObserver_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0044cdf0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igRadioGroup_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igOnOffValueObserver_fieldTable, g_igOnOffValueObserver_fieldHandles, g_igOnOffValueObserver_fieldOffsets, temp_s2);
 }

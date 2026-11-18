@@ -9,7 +9,7 @@ void FUN_0017f5a0(void) {
     igMemoryRefMetaField_SetAlignmentType((igMemoryRefMetaField *)var_s0, "DMABuffer_PS2");
 }
 
-void Gap__Gfx__igPsx2VertexStream__vfunc_15(S0_17f630 *arg0) {
+void igPsx2VertexStream_UserWriteFilePreProcess(S0_17f630 *arg0) {
     int temp_a0;
     int temp_a1;
 
@@ -23,7 +23,7 @@ void Gap__Gfx__igPsx2VertexStream__vfunc_15(S0_17f630 *arg0) {
     }
 }
 
-void Gap__Gfx__igPsx2VertexStream__vfunc_17(S0_17f6c0 *arg0) {
+void igPsx2VertexStream_UserPostLoad(S0_17f6c0 *arg0) {
     igObject_UserPostLoad();
     if ((arg0->f84 != 0) && (arg0->f88 != 0)) {
         arg0->f10 = 1;

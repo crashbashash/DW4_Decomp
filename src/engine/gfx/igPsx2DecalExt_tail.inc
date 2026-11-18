@@ -2,7 +2,7 @@ igMetaObject *igPsx2DecalExt_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2DecalExt_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001542b0();
+        igPsx2DecalExt_EnsureRegistered();
     return g_igPsx2DecalExt_metaObject;
 }
 
@@ -43,12 +43,12 @@ int igPsx2DecalExt_GetVTable(void) {
     return temp_s1;
 }
 
-void FUN_001542b0(void)
+void igPsx2DecalExt_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2DecalExt_Register);
 }
 
-static igMetaObjectCallback g_igPsx2DecalExt_callbackList[] = { FUN_001511a0, 0 };
+static igMetaObjectCallback g_igPsx2DecalExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2DecalExt_Register(void) {
     FUN_00149bc0();
@@ -57,7 +57,7 @@ CallbackArray *igPsx2DecalExt_Register(void) {
         &g_igPsx2DecalExt_metaObject,
         igDecalExt_Register,
         igDecalExt_GetPublishedMetaObject,
-        thunk_igPsx2DecalExt_GetMetaObject,
+        igPsx2DecalExt_GetMetaObjectFunction,
         "igPsx2DecalExt",
         0x20, /* instance size */
         igPsx2DecalExt_GetVTable,
@@ -97,7 +97,7 @@ void igPsx2DecalExt_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igPsx2DecalExt_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00150770();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igPsx2VisualContext_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 1), 1);
     igMetaObject_NameFields(meta, g_igPsx2DecalExt_fieldTable, g_igPsx2DecalExt_fieldHandles, g_igPsx2DecalExt_fieldOffsets, fieldStart);

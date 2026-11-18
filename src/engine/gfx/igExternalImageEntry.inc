@@ -1,6 +1,6 @@
 igMetaObject *g_igExternalImageEntry_metaObject;
 
-igMetaObject *FUN_0014f420(void)
+igMetaObject *igExternalImageEntry_GetMetaObject(void)
 {
     unsigned char ready;
     if (g_igExternalImageEntry_metaObject != 0) {
@@ -98,15 +98,15 @@ CallbackArray *igExternalImageEntry_Register(void) {
     );
 }
 
-void thunk_FUN_0014f420(void) {
-    FUN_0014f420();
+void igExternalImageEntry_GetMetaObjectFunction(void) {
+    igExternalImageEntry_GetMetaObject();
 }
 
 int FUN_0014f760(void) {
     return (int)g_igExternalDirEntry_metaObject;
 }
 
-igMetaObject *FUN_0014f770(void) {
+igMetaObject *igDisableExt_GetOrCreateMetaObject(void) {
     if (g_igDisableExt_metaObject == 0) {
         g_igDisableExt_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }

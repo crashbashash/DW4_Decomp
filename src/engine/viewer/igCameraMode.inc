@@ -3,7 +3,7 @@ igMetaField *g_igCameraMode_cameraPathMetaField;
 igMetaField *g_igCameraMode_cameraMetaField;
 
 igCameraMode *igCameraMode_Create(int allocator) {
-    FUN_0045cdc0();
+    igCameraMode_EnsureRegistered();
     return (igCameraMode *)igMetaObject_CreateInstance(g_igCameraMode_metaObject, (igMemoryPoolView *)allocator);
 }
 
@@ -11,7 +11,7 @@ igMetaObject *igCameraMode_GetMetaObject(void) {
     igMetaObject *g = g_igCameraMode_metaObject;
     int t;
     if (!g || !(t = (g->_validity & 4) != 0))
-        FUN_0045cdc0();
+        igCameraMode_EnsureRegistered();
     return g_igCameraMode_metaObject;
 }
 
@@ -53,7 +53,7 @@ int igCameraMode_GetVTable(void) {
     return temp_s1;
 }
 
-void FUN_0045cdc0(void)
+void igCameraMode_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igCameraMode_Register);
 }
@@ -67,7 +67,7 @@ CallbackArray *igCameraMode_Register(void) {
         &g_igCameraMode_metaObject,
         igViewMode_Register,
         igViewMode_GetPublishedMetaObject,
-        thunk_igCameraMode_GetMetaObject,
+        igCameraMode_GetMetaObjectFunction,
         "igCameraMode",
         0x54, /* instance size */
         igCameraMode_GetVTable,
@@ -77,7 +77,7 @@ CallbackArray *igCameraMode_Register(void) {
     );
 }
 
-void thunk_igCameraMode_GetMetaObject(void) {
+void igCameraMode_GetMetaObjectFunction(void) {
     igCameraMode_GetMetaObject();
 }
 

@@ -2,9 +2,9 @@ igMetaObject *g_igAlphaFunctionAttr_metaObject;
 igMetaField *g_igAlphaFunctionAttr_funcMetaField;
 igMetaField *g_igAlphaFunctionAttr_refValueMetaField;
 
-void FUN_0013b490(int arg0) {
+igAlphaFunctionAttr *igAlphaFunctionAttr_Create(igMemoryPoolView *pool) {
     igAlphaFunctionAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F490, (igMemoryPoolView *)arg0);
+    return (igAlphaFunctionAttr *)igMetaObject_CreateInstance(g_igAlphaFunctionAttr_metaObject, pool);
 }
 
 igMetaObject *igAlphaFunctionAttr_GetMetaObject(void)
@@ -35,7 +35,7 @@ CallbackArray *igAlphaFunctionAttr_Register(void) {
         &g_igAlphaFunctionAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igAlphaFunctionAttr_GetMetaObject,
+        igAlphaFunctionAttr_GetMetaObjectFunction,
         "igAlphaFunctionAttr",
         0x14, /* instance size */
         igAlphaFunctionAttr_GetVTable,
@@ -45,7 +45,7 @@ CallbackArray *igAlphaFunctionAttr_Register(void) {
     );
 }
 
-void thunk_igAlphaFunctionAttr_GetMetaObject(void) {
+void igAlphaFunctionAttr_GetMetaObjectFunction(void) {
     igAlphaFunctionAttr_GetMetaObject();
 }
 
@@ -69,36 +69,36 @@ static int g_igAlphaFunctionAttr_fieldOffsets[] = {
 int g_igAlphaFunctionAttr_funcDefault = 6;
 
 void igAlphaFunctionAttr_InitFields(void) {
-    int temp_s2;
-    void *temp_v0;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    igMetaObject *meta;
 
-    temp_s0 = g_igAlphaFunctionAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igAlphaFunctionAttr_ctorTable, 2);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, g_igAlphaFunctionAttr_funcDefault);
-    ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_001496e0);
-    igMetaObject_NameFields(temp_s0, g_igAlphaFunctionAttr_fieldTable, g_igAlphaFunctionAttr_fieldHandles, g_igAlphaFunctionAttr_fieldOffsets, temp_s2);
+    meta = g_igAlphaFunctionAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igAlphaFunctionAttr_ctorTable, 2);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field, g_igAlphaFunctionAttr_funcDefault);
+    ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)(&IG_GFX_ALPHA_FUNCTION_GetMetaEnum);
+    igMetaObject_NameFields(meta, g_igAlphaFunctionAttr_fieldTable, g_igAlphaFunctionAttr_fieldHandles, g_igAlphaFunctionAttr_fieldOffsets, base);
 }
 
-void Gap__Attrs__igAlphaFunctionAttr__vfunc_24(S2* p, igPsx2VisualContext *q) { Gap__Gfx__igPsx2VisualContext__vfunc_219(q, p->a); Gap__Gfx__igPsx2VisualContext__vfunc_221(q, p->b); }
+void igAlphaFunctionAttr_apply(S2* p, igPsx2VisualContext *q) { igPsx2VisualContext_SetAlphaFunc(q, p->a); igPsx2VisualContext_SetAlphaRefValue(q, p->b); }
 
-void Gap__Attrs__igAlphaFunctionAttr__vfunc_26(void **arg0, void **arg1) {
+void igAlphaFunctionAttr_SynchronizeDefault(void **arg0, void **arg1) {
     ((DW4VC_128_1 *)(arg0))->vX((int)(((DW4VC_880_0 *)(arg1))->vX()));
     ((DW4VC_132_1 *)(arg0))->vX((float)(((DW4VC_888_0 *)(arg1))->vX()));
 }
 
 /* Setter: stores the alpha-test reference value (`_refValue`, an igFloatMetaField of the reflected
  * igAlphaFunctionAttr). */
-void Gap__Attrs__igAlphaFunctionAttr__vfunc_33(igAlphaFunctionAttr *self, float refValue) {
+void igAlphaFunctionAttr_SetRefValue(igAlphaFunctionAttr *self, float refValue) {
     self->_refValue = refValue;
 }
 
 /* Setter for the alpha-test comparison function (`_func`, +12); `_refValue` at +16 is the
  * reference it compares to. */
 
-void Gap__Attrs__igAlphaFunctionAttr__vfunc_32(igAlphaFunctionAttr *self, int func) {
+void igAlphaFunctionAttr_SetAlphaFunc(igAlphaFunctionAttr *self, int func) {
     self->_func = func;
 }
 

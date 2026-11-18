@@ -1,7 +1,7 @@
 igMetaObject *g_igShadeModelAttr_metaObject;
 igMetaField *g_igShadeModelAttr_modeMetaField;
 
-igMetaObject *FUN_00133950(void) {
+igMetaObject *igShadeModelAttr_GetOrCreateMetaObject(void) {
     if (g_igShadeModelAttr_metaObject == 0) {
         g_igShadeModelAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -36,7 +36,7 @@ CallbackArray *igShadeModelAttr_Register(void) {
         &g_igShadeModelAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igShadeModelAttr_GetMetaObject,
+        igShadeModelAttr_GetMetaObjectFunction,
         "igShadeModelAttr",
         0x10, /* instance size */
         igShadeModelAttr_GetVTable,
@@ -46,7 +46,7 @@ CallbackArray *igShadeModelAttr_Register(void) {
     );
 }
 
-void thunk_igShadeModelAttr_GetMetaObject(void) {
+void igShadeModelAttr_GetMetaObjectFunction(void) {
     igShadeModelAttr_GetMetaObject();
 }
 
@@ -66,16 +66,16 @@ static int g_igShadeModelAttr_fieldOffsets[] = {
 int g_igShadeModelAttr_modeDefault = 1;
 
 void igShadeModelAttr_InitFields(void) {
-    int temp_s2;
-    void *temp_v0;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    igMetaObject *meta;
 
-    temp_s0 = g_igShadeModelAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igShadeModelAttr_ctorTable, 1);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, g_igShadeModelAttr_modeDefault);
-    ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_00149680);
-    igMetaObject_NameFields(temp_s0, g_igShadeModelAttr_fieldTable, g_igShadeModelAttr_fieldHandles, g_igShadeModelAttr_fieldOffsets, temp_s2);
+    meta = g_igShadeModelAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igShadeModelAttr_ctorTable, 1);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field, g_igShadeModelAttr_modeDefault);
+    ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)(&IG_GFX_SHADING_MODE_GetMetaEnum);
+    igMetaObject_NameFields(meta, g_igShadeModelAttr_fieldTable, g_igShadeModelAttr_fieldHandles, g_igShadeModelAttr_fieldOffsets, base);
 }
 

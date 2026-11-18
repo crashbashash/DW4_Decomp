@@ -1,4 +1,4 @@
-int Gap__Gfx__igPsx2ScissorExt__vfunc_22(void) {
+int igPsx2ScissorExt_GetMeta(void) {
     return (int)g_igPsx2ScissorExt_metaObject;
 }
 

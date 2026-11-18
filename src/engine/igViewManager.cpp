@@ -23,16 +23,16 @@
 #include <math.h>
 extern "C" {
 
-int FUN_002377c0(...);
-int FUN_002370c0(...);
+int igInsightCore_DrawFrame(...);
+int igInsightCore_RemoveAllInfos(...);
 
-int FUN_00236ca0(int);
-int FUN_002371f0(int);
-int FUN_00237530(int);
+int igInsightCore_RegisterAllPlugins(int);
+int igInsightCore_Begin(int);
+int igInsightCore_InitializeDrawing(int);
 
-int FUN_00236e80(int);
-int FUN_00237280(int);
-int FUN_002376b0(int);
+int igInsightCore_UnregisterAllPlugins(int);
+int igInsightCore_End(int);
+int igInsightCore_TerminateDrawing(int);
 
 /* The views ViewerSetup_Update reads members of the setup through: the window's slot 41, the scene-info
  * manager's quit flag (+44, +12, +180) and the logo renderer's display time (+16). */
@@ -48,7 +48,7 @@ struct L4 { char pad[180]; unsigned char b180; };
 struct L2 { char pad[12]; L4 *p12; };
 struct L1 { char pad[44]; L2 *p44; };
 struct B { char pad[16]; long long ll16; };
-extern "C" void FUN_00237730(igInsightCore *);
+extern "C" void igInsightCore_HandleEvents(igInsightCore *);
 
 typedef struct S2 { char pad[8]; igObject *obj; int f12; } S2;
 
@@ -71,16 +71,16 @@ static inline void dropCreatedReference(igAABox *box) {
     box->_refCount = box->_refCount - 1;
     if ((box->_refCount & 0x7FFFFF) == 0) igObject_Destroy(box);
 }
-void FUN_00464170(igNode *scene, float *center, float *size, bool wholeAnimation, long long time);
+void igViewManager_GetObjectProps(igNode *scene, float *center, float *size, bool wholeAnimation, long long time);
 
 typedef struct Obj { char p[80]; float f80; float f84; float f88; } Obj;
 typedef struct Arg { char p[12]; Obj *o; } Arg;
 typedef struct Rec { int t; int z; int v; } Rec;
 
-int Gap__Viewer__igViewManager__vfunc_24(void *arg0);
+int igViewManager_MouseMotionEvent(void *arg0);
 class DW4VC_104_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vX(); };
 
-int Gap__Viewer__igViewManager__vfunc_25(void *arg0);
+int igViewManager_MouseButtonEvent(void *arg0);
 class DW4VC_108_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int vX(); };
 
 typedef struct ViewModelEvent {
@@ -95,10 +95,10 @@ class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtu
 struct O2 { char p[8]; V *o; };
 class DW4VC_116_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual int vX(); };
 
-igObject *FUN_00459340(int);
-igObject *FUN_0045e230(int);
-igObject *FUN_0045be30(int);
-igObject *FUN_0045dbe0(int);
+igObject *igViewerSceneInfoManager_Create(int);
+igObject *igActorManager_Create(int);
+igObject *igViewerDataPumpManager_Create(int);
+igObject *igLogoRenderer_Create(int);
 
 static inline void releaseString(void *p) {
     if (p != 0) {
@@ -125,16 +125,16 @@ struct StringRef {
 };
 
 ViewerSetup::ViewerSetup(igObject *w)
-    : core((InsightCore *)igInsightCore_CreateInstance(0), AdoptReference()), sceneInfo(FUN_00459340(0), AdoptReference()),
-      actors(FUN_0045e230(0), AdoptReference()), dataPump(FUN_0045be30(0), AdoptReference()), showLogo(1),
-      logo(FUN_0045dbe0(0), AdoptReference()), window(w, kRetainReference) {
+    : core((InsightCore *)igInsightCore_CreateInstance(0), AdoptReference()), sceneInfo(igViewerSceneInfoManager_Create(0), AdoptReference()),
+      actors(igActorManager_Create(0), AdoptReference()), dataPump(igViewerDataPumpManager_Create(0), AdoptReference()), showLogo(1),
+      logo(igLogoRenderer_Create(0), AdoptReference()), window(w, kRetainReference) {
     igObject *next = window.p;
     if (next != 0) {
         InsightCore *c = core.p;
         c->window = next;
         if (g_sharedViewerOptions == 0) {
             SharedViewerOptions *f = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
-            if (f != 0) f = ViewerOptions_Construct(f);
+            if (f != 0) f = igViewerDefaults_Construct(f);
             g_sharedViewerOptions = f;
         }
         g_sharedViewerOptions->useCount = g_sharedViewerOptions->useCount + 1;
@@ -181,24 +181,24 @@ ViewerSetup::~ViewerSetup() {
 }
 
 void ViewerSetup_Open(ViewerSetup *setup) {
-    FUN_00237530((int)setup->core.p);
-    FUN_00236ca0((int)setup->core.p);
-    FUN_002371f0((int)setup->core.p);
+    igInsightCore_InitializeDrawing((int)setup->core.p);
+    igInsightCore_RegisterAllPlugins((int)setup->core.p);
+    igInsightCore_Begin((int)setup->core.p);
 }
 
 void ViewerSetup_Close(ViewerSetup *setup) {
-    FUN_00237280((int)setup->core.p);
-    FUN_00236e80((int)setup->core.p);
-    FUN_002376b0((int)setup->core.p);
+    igInsightCore_End((int)setup->core.p);
+    igInsightCore_UnregisterAllPlugins((int)setup->core.p);
+    igInsightCore_TerminateDrawing((int)setup->core.p);
 }
 
 int ViewerSetup_RunFrame(ViewerSetup *setup)
 {
-    return FUN_002377c0((int)setup->core.p);
+    return igInsightCore_DrawFrame((int)setup->core.p);
 }
 
 int ViewerSetup_Update(ViewerSetup *setup) {
-    FUN_00237730((igInsightCore *)setup->core.p);
+    igInsightCore_HandleEvents((igInsightCore *)setup->core.p);
     if (setup->showLogo) {
         igInsightCore *t = (igInsightCore *)setup->core.p;
         long long v = t->_currentTime;
@@ -223,15 +223,15 @@ void ViewerSetup_ResetView(ViewerSetup *setup)
 
 int ViewerSetup_ClearInfos(ViewerSetup *setup)
 {
-    return FUN_002370c0((int)setup->core.p);
+    return igInsightCore_RemoveAllInfos((int)setup->core.p);
 }
 
-igFieldSynchronizer *FUN_004509c0(int pool);
+igFieldSynchronizer *igFieldSynchronizer_Create(int pool);
 void FUN_004551f0(igFieldSynchronizer *synchronizer, igObject *model, igMetaField *field);
 
 static inline void createSynchronizer(igSmartPointer<igFieldSynchronizer> &synchronizer, AdoptReference) {
     igRelease(synchronizer.p);
-    synchronizer.p = FUN_004509c0(0);
+    synchronizer.p = igFieldSynchronizer_Create(0);
 }
 
 /* Keeps each view-model field and the parameters' field of the same name equal. */
@@ -324,7 +324,7 @@ static inline void setMakerTime(igBoundingBoxesMaker *maker, long long time) {
 }
 
 /* The centre of `scene`'s bounding box and the length of its diagonal, over the whole animation or at `time`. */
-void FUN_00464170(igNode *scene, float *center, float *size, bool wholeAnimation, long long time) {
+void igViewManager_GetObjectProps(igNode *scene, float *center, float *size, bool wholeAnimation, long long time) {
     igSmartPointer<igBoundingBoxesMaker> maker(FUN_001a4830(0), AdoptReference());
     if (wholeAnimation) {
         maker->_useWholeAnimation = 1;
@@ -371,7 +371,7 @@ void igViewManager_FrameObject(igViewManager *manager, igNode *object) {
 
     center.set(0.0f, 0.0f, 0.0f);
     size = 0.0f;
-    FUN_00464170(object, &center.x, &size, true, -1);
+    igViewManager_GetObjectProps(object, &center.x, &size, true, -1);
     if (size == 0.0f) {
         size = 1.0f;
     }
@@ -408,10 +408,10 @@ void igViewManager_ApplyOptions(igViewManager *manager, igObject *scene) {
     void *p;
     int *h;
     int rc;
-    FUN_00464170((igNode *)scene, (float *)sp60, &sp6C, 1, -1);
+    igViewManager_GetObjectProps((igNode *)scene, (float *)sp60, &sp6C, 1, -1);
     if (g_sharedViewerOptions == 0) {
         f = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
-        if (f != 0) f = ViewerOptions_Construct(f);
+        if (f != 0) f = igViewerDefaults_Construct(f);
         g_sharedViewerOptions = f;
     }
     g_sharedViewerOptions->useCount = g_sharedViewerOptions->useCount + 1;
@@ -526,7 +526,7 @@ void igViewManager_FitSelection(igViewManager *manager) {
     igModel_NotifyViews((igModel *)manager->_viewModel, (ModelChange *)&event);
 }
 
-int Gap__Viewer__igViewManager__vfunc_24(void *arg0) {
+int igViewManager_MouseMotionEvent(void *arg0) {
     void **temp_a0;
 
     temp_a0 = (void **)(*(int *)((char *)(arg0) + 8));
@@ -534,7 +534,7 @@ int Gap__Viewer__igViewManager__vfunc_24(void *arg0) {
     return 1;
 }
 
-int Gap__Viewer__igViewManager__vfunc_25(void *arg0) {
+int igViewManager_MouseButtonEvent(void *arg0) {
     void **temp_a0;
 
     temp_a0 = (void **)(*(int *)((char *)(arg0) + 8));
@@ -542,7 +542,7 @@ int Gap__Viewer__igViewManager__vfunc_25(void *arg0) {
     return 1;
 }
 
-static void FUN_00464af0(float *arg0, float *arg1, float fparg0) {
+static void igViewManager_ApplyDeadZone(float *arg0, float *arg1, float fparg0) {
     float temp_f1;
     float temp_f1_2;
 
@@ -566,17 +566,17 @@ static void FUN_00464af0(float *arg0, float *arg1, float fparg0) {
     *arg1 = 0.0f;
 }
 
-int Gap__Viewer__igViewManager__vfunc_26(O2 *self, int x, int y, float f0, float f1) {
+int igViewManager_ControllerMotionEvent(O2 *self, int x, int y, float f0, float f1) {
     float sp1C;
     float sp18;
     sp18 = f0;
     sp1C = f1;
-    FUN_00464af0(&sp18, &sp1C, 0.3f);
+    igViewManager_ApplyDeadZone(&sp18, &sp1C, 0.3f);
     self->o->vX(x, y, sp18, sp1C);
     return 1;
 }
 
-int Gap__Viewer__igViewManager__vfunc_27(void *arg0) {
+int igViewManager_ControllerButtonEvent(void *arg0) {
     void **temp_a0;
 
     temp_a0 = (void **)(*(int *)((char *)(arg0) + 8));
@@ -584,7 +584,7 @@ int Gap__Viewer__igViewManager__vfunc_27(void *arg0) {
     return 1;
 }
 
-int Gap__Viewer__igViewManager__vfunc_32(igViewManager *self, int width, int height)
+int igViewManager_WindowResizeEvent(igViewManager *self, int width, int height)
 {
     ViewModelEvent event;
 
@@ -619,9 +619,9 @@ void igViewManager_PrintViewMatrix(igViewManager *self) {
     }
 }
 
-void Gap__Viewer__igViewManager__vfunc_13(int *a) { igView_SetModel((igView *)a[2], (igModel *)a[3]); }
+void igViewManager_resetFields(int *a) { igView_SetModel((igView *)a[2], (igModel *)a[3]); }
 
-int Gap__Viewer__igViewManager__vfunc_22(void) {
+int igViewManager_GetMeta(void) {
     return (int)g_igViewManager_metaObject;
 }
 

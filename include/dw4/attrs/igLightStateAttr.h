@@ -2,6 +2,8 @@
 #define DW4_IGLIGHTSTATEATTR_H
 
 struct igMetaObject;
+struct igLightStateAttr;
+struct igMemoryPoolView;
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,6 +11,7 @@ extern "C" {
 
 extern struct igMetaObject *g_igLightStateAttr_metaObject;
 struct igMetaObject *igLightStateAttr_GetMetaObject(void);
+struct igLightStateAttr *igLightStateAttr_Create(struct igMemoryPoolView *pool);
 
 #ifdef __cplusplus
 }

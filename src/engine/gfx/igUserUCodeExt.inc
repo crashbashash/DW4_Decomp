@@ -4,11 +4,11 @@ igMetaObject *igUserUCodeExt_GetMetaObject(void)
 {
     igMetaObject *g = g_igUserUCodeExt_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014bbb0();
+        igUserUCodeExt_EnsureRegistered();
     return g_igUserUCodeExt_metaObject;
 }
 
-void FUN_0014bbb0(void)
+void igUserUCodeExt_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igUserUCodeExt_Register);
 }
@@ -20,7 +20,7 @@ CallbackArray *igUserUCodeExt_Register(void) {
         &g_igUserUCodeExt_metaObject,
         igContextExt_Register,
         igContextExt_GetPublishedMetaObject,
-        thunk_igUserUCodeExt_GetMetaObject,
+        igUserUCodeExt_GetMetaObjectFunction,
         "igUserUCodeExt",
         0x14, /* instance size */
         0,
@@ -30,7 +30,7 @@ CallbackArray *igUserUCodeExt_Register(void) {
     );
 }
 
-void thunk_igUserUCodeExt_GetMetaObject(void) {
+void igUserUCodeExt_GetMetaObjectFunction(void) {
     igUserUCodeExt_GetMetaObject();
 }
 
@@ -39,6 +39,6 @@ int FUN_0014bc40(void) {
 }
 
 void FUN_0014bc50(void) {
-    *(int *)((char *)(g_igUserUCodeExt_metaObject) + 60) = (int)(&thunk_igPsx2UserUCodeExt_GetMetaObject);
+    *(int *)((char *)(g_igUserUCodeExt_metaObject) + 60) = (int)(&igPsx2UserUCodeExt_GetMetaObjectFunction);
 }
 

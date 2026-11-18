@@ -1,5 +1,5 @@
 /* Setter for the material's reflected _shininess field. */
-void Gap__Attrs__igMaterialAttr__vfunc_32(igMaterialAttr *self, float shininess) {
+void igMaterialAttr_SetShininess(igMaterialAttr *self, float shininess) {
     self->_shininess = shininess;
 }
 
@@ -14,12 +14,12 @@ static inline void clampColor(float *c, const float *lo, const float *hi) {
     if (!(c[3] <= hi[3])) c[3] = hi[3];
 }
 
-void Gap__Attrs__igMaterialAttr__vfunc_33(A_13f0b0 *a, B_13f0b0 *b) {
+void igMaterialAttr_SetDiffuse(A_13f0b0 *a, B_13f0b0 *b) {
     a->c[0] = b->c[0]; a->c[1] = b->c[1]; a->c[2] = b->c[2]; a->c[3] = b->c[3];
     clampColor(a->c, &g_vec4Zero.x, DAT_004e1180);
 }
 
-void Gap__Attrs__igMaterialAttr__vfunc_36(S_13f1c0 *self, float *src) {
+void igMaterialAttr_SetSpecular(S_13f1c0 *self, float *src) {
     self->r = src[0];
     self->g = src[1];
     self->b = src[2];
@@ -34,7 +34,7 @@ void Gap__Attrs__igMaterialAttr__vfunc_36(S_13f1c0 *self, float *src) {
     if (self->a > D_004e118c[0]) self->a = D_004e118c[0];
 }
 
-void Gap__Attrs__igMaterialAttr__vfunc_35(igMaterialAttr *material, const float *color) {
+void igMaterialAttr_SetAmbient(igMaterialAttr *material, const float *color) {
     material->_ambient[0] = color[0];
     material->_ambient[1] = color[1];
     material->_ambient[2] = color[2];
@@ -42,7 +42,7 @@ void Gap__Attrs__igMaterialAttr__vfunc_35(igMaterialAttr *material, const float 
     clampColor(material->_ambient, &g_vec4Zero.x, DAT_004e1180);
 }
 
-void Gap__Attrs__igMaterialAttr__vfunc_34(A_13f3e0 *a, float *b) {
+void igMaterialAttr_SetEmission(A_13f3e0 *a, float *b) {
     a->v[0] = b[0]; a->v[1] = b[1]; a->v[2] = b[2]; a->v[3] = b[3];
     { float lo = g_004e1170[0];
     if (a->v[0] < g_vec4Zero.x) a->v[0] = lo; }
@@ -56,11 +56,11 @@ void Gap__Attrs__igMaterialAttr__vfunc_34(A_13f3e0 *a, float *b) {
     if (!(a->v[3] <= DAT_004e118c[0])) a->v[3] = DAT_004e118c[0];
 }
 
-void Gap__Attrs__igMaterialAttr__vfunc_24(igMaterialAttr *self, igObject *context) {
-    Gap__Gfx__igPsx2VisualContext__vfunc_112((igPsx2VisualContext *)context, self->_ambient, self->_diffuse, self->_specular, self->_emission, self->_shininess);
+void igMaterialAttr_apply(igMaterialAttr *self, igObject *context) {
+    igPsx2VisualContext_SetMaterial((igPsx2VisualContext *)context, self->_ambient, self->_diffuse, self->_specular, self->_emission, self->_shininess);
 }
 
-void Gap__Attrs__igMaterialAttr__vfunc_26(MaterialAttrView *material, MaterialContextView *context) {
+void igMaterialAttr_SynchronizeDefault(MaterialAttrView *material, MaterialContextView *context) {
     igVec4f color;
 
     context->getMaterialDiffuse(&color);

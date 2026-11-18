@@ -1,13 +1,13 @@
 igMetaObject *g_igVectorBlending_metaObject;
 
-igMetaObject *FUN_00186ee0(void)
+igMetaObject *igVectorBlending_GetMetaObject(void)
 {
     unsigned char ready;
     if (g_igVectorBlending_metaObject != 0) {
         ready = (g_igVectorBlending_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_00186f70();
+    igVectorBlending_EnsureRegistered();
 done:
     return g_igVectorBlending_metaObject;
 }
@@ -20,7 +20,7 @@ int igVectorBlending_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00186f70(void)
+void igVectorBlending_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVectorBlending_Register);
 }
@@ -42,8 +42,8 @@ CallbackArray *igVectorBlending_Register(void) {
     );
 }
 
-void thunk_FUN_00186ee0(void) {
-    FUN_00186ee0();
+void igVectorBlending_GetMetaObjectFunction(void) {
+    igVectorBlending_GetMetaObject();
 }
 
 void FUN_00187000(void) {

@@ -260,30 +260,30 @@ class igMemoryPoolView;
 #include "dw4/core/igSemaphore.h"
 #include "dw4/sony/sifdev.h"
 #include "dw4/core/igPsx2IopRpcConnection.h"
-void FUN_00145de0(void);
+void igWindow_EnsureRegistered(void);
 igMetaObject *igAudioContext_GetPublishedMetaObject(void);
 extern int g_igPsx2AudioContext_vtable[4];
 extern int g_igPsx2AudioSourceList_vtable[4];
 
-int FUN_00145d40(...);
+int igWindow_GetOrCreateMetaObject(...);
 int FUN_00301000(InitContext *);
-void *FUN_001435c0(igMemoryPoolView *pool);
+void *igPsx2AudioSourceList_Create(igMemoryPoolView *pool);
 unsigned FUN_00145960(void *context, void *voice);
 int FUN_00145a10(void *arg0, void *voice);
 
 CallbackArray *igAudioContext_Register(void);
-void thunk_igAudioContext_GetMetaObject(void);
+void igAudioContext_GetMetaObjectFunction(void);
 void igAudioContext_InitFields(void);
-void thunk_FUN_00143150(void);
-igMetaObject *FUN_00143150(void);
+void igPsx2AudioContext_GetMetaObjectFunction(void);
+igMetaObject *igPsx2AudioContext_GetMetaObject(void);
 void **FUN_00143250(void **arg0, short arg1);
-void **FUN_00143350(void **arg0, long long arg1);
-void FUN_001433d0(void);
+void **igSmartPointer_igWindow_Destruct(void **arg0, long long arg1);
+void igPsx2AudioContext_EnsureRegistered(void);
 CallbackArray *igPsx2AudioContext_Register(void);
 void igPsx2AudioContext_InitFields(void);
-void FUN_00143690(void);
+void igPsx2AudioSourceList_EnsureRegistered(void);
 CallbackArray *igPsx2AudioSourceList_Register(void);
-void thunk_igPsx2AudioSourceList_GetMetaObject(void);
+void igPsx2AudioSourceList_GetMetaObjectFunction(void);
 void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, int arg5, unsigned char arg6, int arg7, unsigned char arg8);
 
 #endif

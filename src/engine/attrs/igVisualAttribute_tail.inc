@@ -1,12 +1,12 @@
-void Gap__Attrs__igVisualAttribute__vfunc_28(void) {
+void igVisualAttribute_Reset(void) {
 
 }
 
-void FUN_001422d0(void) {
+void igAttr_SetupForContext(void) {
 
 }
 
-int FUN_001422e0(void) {
+int igAttr_GetUnitCount(void) {
     return 1;
 }
 

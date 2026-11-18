@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igGeometryAttrList__vfunc_24(void) {
+igMetaObject *igGeometryAttrList_GetElementMeta(void) {
     return g_igGeometryAttr_metaObject;
 }
 

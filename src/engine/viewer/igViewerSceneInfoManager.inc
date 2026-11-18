@@ -58,7 +58,7 @@ igMetaEnum *FUN_004592e0(void) {
     return g_igViewerSceneInfoManager_GUI_VISIBILITYMetaEnum;
 }
 
-void FUN_00459340(int arg0) {
+void igViewerSceneInfoManager_Create(int arg0) {
     igViewerSceneInfoManager_EnsureRegistered();
     igMetaObject_CreateInstance(g_igViewerSceneInfoManager_metaObject, (igMemoryPoolView *)arg0);
 }
@@ -93,7 +93,7 @@ int igViewerSceneInfoManager_GetVTable(void) {
     char *p304;
     char *p300;
     char *p296;
-    FUN_00458630(u.b);
+    igInfoManager_Construct(u.b);
     u.vt = (int)&g_igViewerSceneInfoManager_vtable[0];
     FUN_00459e30((int *)&u.b[16]);
     FUN_00459e20((int *)&u.b[20]);
@@ -102,27 +102,27 @@ int igViewerSceneInfoManager_GetVTable(void) {
     FUN_00459df0((int *)&u.b[32]);
     FUN_00459de0((int *)&u.b[36]);
     FUN_00459dd0((int *)&u.b[44]);
-    FUN_00458620(&u.b[48]);
-    FUN_00458610(&u.b[52]);
-    FUN_00458600(&u.b[56]);
-    FUN_00458600(&u.b[60]);
-    FUN_00458610(&u.b[64]);
-    FUN_00458600(&u.b[68]);
-    FUN_00458610(&u.b[72]);
-    FUN_00458610(&u.b[76]);
-    FUN_00458610(&u.b[80]);
-    FUN_00458610(&u.b[84]);
-    FUN_00458610(&u.b[88]);
-    FUN_00458600(&u.b[92]);
-    FUN_00458610(&u.b[96]);
-    FUN_00458610(&u.b[100]);
-    FUN_00458610(&u.b[104]);
-    FUN_00458610(&u.b[108]);
-    FUN_00458610(&u.b[112]);
-    FUN_004585f0(&u.b[116]);
-    FUN_004585f0(&u.b[120]);
-    FUN_004585f0(&u.b[124]);
-    FUN_004585f0(&u.b[128]);
+    igSmartPointer_igViewerGuiFactory_Construct(&u.b[48]);
+    igSmartPointer_igBoxComponent_Construct(&u.b[52]);
+    igSmartPointer_igGuiComponent_Construct(&u.b[56]);
+    igSmartPointer_igGuiComponent_Construct(&u.b[60]);
+    igSmartPointer_igBoxComponent_Construct(&u.b[64]);
+    igSmartPointer_igGuiComponent_Construct(&u.b[68]);
+    igSmartPointer_igBoxComponent_Construct(&u.b[72]);
+    igSmartPointer_igBoxComponent_Construct(&u.b[76]);
+    igSmartPointer_igBoxComponent_Construct(&u.b[80]);
+    igSmartPointer_igBoxComponent_Construct(&u.b[84]);
+    igSmartPointer_igBoxComponent_Construct(&u.b[88]);
+    igSmartPointer_igGuiComponent_Construct(&u.b[92]);
+    igSmartPointer_igBoxComponent_Construct(&u.b[96]);
+    igSmartPointer_igBoxComponent_Construct(&u.b[100]);
+    igSmartPointer_igBoxComponent_Construct(&u.b[104]);
+    igSmartPointer_igBoxComponent_Construct(&u.b[108]);
+    igSmartPointer_igBoxComponent_Construct(&u.b[112]);
+    igSmartPointer_igStatisticsItem_Construct(&u.b[116]);
+    igSmartPointer_igStatisticsItem_Construct(&u.b[120]);
+    igSmartPointer_igStatisticsItem_Construct(&u.b[124]);
+    igSmartPointer_igStatisticsItem_Construct(&u.b[128]);
     FUN_00459dc0((int *)&u.b[132]);
     p296 = &u.b[136];
     FUN_00459db0((int *)p296);
@@ -141,23 +141,23 @@ int igViewerSceneInfoManager_GetVTable(void) {
     p344 = &u.b[184];
     FUN_00459d60((int *)p344);
     p352 = &u.b[192];
-    FUN_00458600(p352);
+    igSmartPointer_igGuiComponent_Construct(p352);
     r = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     *(int **)u.b = &g_igViewerSceneInfoManager_vtable[0];
     igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)p352, -1);
     FUN_00459ce0((void **)p344, -1);
     igSmartPointer_igTextureList_Destruct((igSmartPointer<igObject> *)p340, -1);
     igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)p316, -1);
-    FUN_00458470(p312, -1);
+    igSmartPointer_igRadioGroup_Destruct(p312, -1);
     igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)p308, -1);
     FUN_0044c1c0(p304, -1);
     FUN_00459c60((ObjectRefWord *)p300, -1);
     FUN_00459be0((void **)p296, -1);
     FUN_00459b60((ObjectRefWord *)&u.b[132], -1);
-    FUN_00458570(&u.b[128], -1);
-    FUN_00458570(&u.b[124], -1);
-    FUN_00458570(&u.b[120], -1);
-    FUN_00458570(&u.b[116], -1);
+    igSmartPointer_igStatisticsItem_Destruct(&u.b[128], -1);
+    igSmartPointer_igStatisticsItem_Destruct(&u.b[124], -1);
+    igSmartPointer_igStatisticsItem_Destruct(&u.b[120], -1);
+    igSmartPointer_igStatisticsItem_Destruct(&u.b[116], -1);
     GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[112], -1);
     GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[108], -1);
     GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[104], -1);
@@ -174,7 +174,7 @@ int igViewerSceneInfoManager_GetVTable(void) {
     igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&u.b[60], -1);
     igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&u.b[56], -1);
     GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&u.b[52], -1);
-    FUN_004583f0(&u.b[48], -1);
+    igSmartPointer_igViewerGuiFactory_Destruct(&u.b[48], -1);
     FUN_00459ae0((O *)&u.b[44], -1);
     FUN_00459a60((void **)&u.b[36], -1);
     FUN_004599e0((struct Ref **)&u.b[32], -1);
@@ -443,7 +443,7 @@ void igViewerSceneInfoManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igViewerSceneInfoManager_Register);
 }
 
-static igMetaObjectCallback g_igViewerSceneInfoManager_callbackList[] = { FUN_0045a9a0, igViewerParameters_EnsureRegistered, FUN_0045b0d0, FUN_0045e050, FUN_0045d9f0, FUN_00233b80, igGuiSystem_RunStaticInit, FUN_0045bc10, igBoxComponent_RunStaticInit, igGuiComponent_EnsureRegistered, FUN_00458ec0, igHotKeyEventReceiver_RunStaticInit, FUN_0045d2f0, FUN_004588e0, igGuiComponentList_EnsureRegistered, igObjectList_EnsureRegistered, igRadioGroup_EnsureRegistered, igTextureList_EnsureRegistered, FUN_0045a580, 0 };
+static igMetaObjectCallback g_igViewerSceneInfoManager_callbackList[] = { igViewerSceneInfoManagerController_EnsureRegistered, igViewerParameters_EnsureRegistered, igViewerRenderer_EnsureRegistered, igBoundingBoxRenderer_EnsureRegistered, igNormalsRenderer_EnsureRegistered, igFlushRenderer_EnsureRegistered, igGuiSystem_RunStaticInit, igViewerGuiFactory_EnsureRegistered, igBoxComponent_RunStaticInit, igGuiComponent_EnsureRegistered, igStatisticsItem_EnsureRegistered, igHotKeyEventReceiver_RunStaticInit, igViewManager_EnsureRegistered, igViewerStatisticsManager_EnsureRegistered, igGuiComponentList_EnsureRegistered, igObjectList_EnsureRegistered, igRadioGroup_EnsureRegistered, igTextureList_EnsureRegistered, igViewerModeChangeMessage_EnsureRegistered, 0 };
 
 CallbackArray *igViewerSceneInfoManager_Register(void) {
     ViewerLibrary_MarkRegistered();  /* one-shot static-init latch (sets a gp-relative byte flag once) */
@@ -452,7 +452,7 @@ CallbackArray *igViewerSceneInfoManager_Register(void) {
         &g_igViewerSceneInfoManager_metaObject,
         igInfoManager_Register,
         igInfoManager_GetPublishedMetaObject,
-        thunk_igViewerSceneInfoManager_GetMetaObject,
+        igViewerSceneInfoManager_GetMetaObjectFunction,
         "igViewerSceneInfoManager",
         0xC8, /* instance size */
         igViewerSceneInfoManager_GetVTable,
@@ -462,7 +462,7 @@ CallbackArray *igViewerSceneInfoManager_Register(void) {
     );
 }
 
-void thunk_igViewerSceneInfoManager_GetMetaObject(void) {
+void igViewerSceneInfoManager_GetMetaObjectFunction(void) {
     igViewerSceneInfoManager_GetMetaObject();
 }
 
@@ -707,29 +707,29 @@ void FUN_00459ee0(void) {
         igObject_Destroy((igObject *)temp_v0_2);
     }
     temp_s0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2));
-    *(int *)((char *)(temp_s0) + 56) = (int)FUN_0045a8c0();
+    *(int *)((char *)(temp_s0) + 56) = (int)igViewerSceneInfoManagerController_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0) + 52) = 1;
     temp_s0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 1));
     *(int *)((char *)(temp_s0_2) + 56) = (int)igViewerParameters_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_2) + 52) = 1;
     temp_s0_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 2));
-    *(int *)((char *)(temp_s0_3) + 56) = (int)FUN_0045aaf0();
+    *(int *)((char *)(temp_s0_3) + 56) = (int)igViewerRenderer_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_3) + 52) = 1;
     temp_s0_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 3));
-    *(int *)((char *)(temp_s0_4) + 56) = (int)FUN_0045de90();
+    *(int *)((char *)(temp_s0_4) + 56) = (int)igBoundingBoxRenderer_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_4) + 52) = 1;
     temp_s0_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 4));
-    *(int *)((char *)(temp_s0_5) + 56) = (int)FUN_0045d830();
+    *(int *)((char *)(temp_s0_5) + 56) = (int)igNormalsRenderer_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_5) + 52) = 1;
     temp_s0_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 5));
-    *(int *)((char *)(temp_s0_6) + 56) = FUN_00233a40();
+    *(int *)((char *)(temp_s0_6) + 56) = igFlushRenderer_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_6) + 52) = 1;
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 6), -1);
     temp_s0_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 7));
-    *(int *)((char *)(temp_s0_7) + 56) = FUN_0044ded0();
+    *(int *)((char *)(temp_s0_7) + 56) = igGuiSystem_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_7) + 52) = 1;
     temp_s0_8 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 8));
-    *(int *)((char *)(temp_s0_8) + 56) = (int)FUN_0045b8d0();
+    *(int *)((char *)(temp_s0_8) + 56) = (int)igViewerGuiFactory_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_8) + 52) = 1;
     temp_s0_9 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 9));
     *(int *)((char *)(temp_s0_9) + 56) = (int)igBoxComponent_GetOrCreateMetaObject();
@@ -764,30 +764,30 @@ void FUN_00459ee0(void) {
     temp_s0_24 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x18));
     *(int *)((char *)(temp_s0_24) + 56) = (int)igBoxComponent_GetOrCreateMetaObject();
     temp_s0_25 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x19));
-    *(int *)((char *)(temp_s0_25) + 56) = (int)FUN_00458c50();
+    *(int *)((char *)(temp_s0_25) + 56) = (int)igStatisticsItem_GetOrCreateMetaObject();
     temp_s0_26 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x1A));
-    *(int *)((char *)(temp_s0_26) + 56) = (int)FUN_00458c50();
+    *(int *)((char *)(temp_s0_26) + 56) = (int)igStatisticsItem_GetOrCreateMetaObject();
     temp_s0_27 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x1B));
-    *(int *)((char *)(temp_s0_27) + 56) = (int)FUN_00458c50();
+    *(int *)((char *)(temp_s0_27) + 56) = (int)igStatisticsItem_GetOrCreateMetaObject();
     temp_s0_28 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x1C));
-    *(int *)((char *)(temp_s0_28) + 56) = (int)FUN_00458c50();
+    *(int *)((char *)(temp_s0_28) + 56) = (int)igStatisticsItem_GetOrCreateMetaObject();
     temp_s0_29 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x1D));
-    *(int *)((char *)(temp_s0_29) + 56) = FUN_0044d840();
+    *(int *)((char *)(temp_s0_29) + 56) = igHotKeyEventReceiver_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_29) + 52) = 1;
     temp_s0_30 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x1E));
-    *(int *)((char *)(temp_s0_30) + 56) = (int)FUN_0045d100();
+    *(int *)((char *)(temp_s0_30) + 56) = (int)igViewManager_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_30) + 52) = 1;
     temp_s0_31 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x1F));
-    *(int *)((char *)(temp_s0_31) + 56) = (int)FUN_004586a0();
+    *(int *)((char *)(temp_s0_31) + 56) = (int)igViewerStatisticsManager_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_31) + 52) = 1;
     temp_s0_32 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x20));
-    *(int *)((char *)(temp_s0_32) + 56) = FUN_0044fdd0();
+    *(int *)((char *)(temp_s0_32) + 56) = igGuiComponentList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_32) + 52) = 1;
     temp_s0_33 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x21));
     *(int *)((char *)(temp_s0_33) + 56) = (int)igObjectList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_33) + 52) = 1;
     temp_s0_34 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x22));
-    *(int *)((char *)(temp_s0_34) + 56) = FUN_0044cdf0();
+    *(int *)((char *)(temp_s0_34) + 56) = igRadioGroup_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_34) + 52) = 1;
     temp_s0_35 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x23));
     *(int *)((char *)(temp_s0_35) + 56) = (int)igObjectList_GetOrCreateMetaObject();
@@ -799,7 +799,7 @@ void FUN_00459ee0(void) {
     *(int *)((char *)(temp_s0_36) + 56) = (int)igTextureList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_36) + 52) = 1;
     temp_s0_37 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x28));
-    *(int *)((char *)(temp_s0_37) + 56) = (int)FUN_0045a450();
+    *(int *)((char *)(temp_s0_37) + 56) = (int)igViewerModeChangeMessage_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_37) + 52) = 1;
     temp_s0_38 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 0x2A));
     *(int *)((char *)(temp_s0_38) + 56) = (int)igGuiComponent_GetOrCreateMetaObject();

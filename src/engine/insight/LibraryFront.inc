@@ -33,7 +33,7 @@ igMetaObject *FUN_00231010(void) {
     return g_igRenderer_metaObject;
 }
 
-igMetaObject *FUN_00231020(void) {
+igMetaObject *igMessage_GetPublishedMetaObject(void) {
     return g_igMessage_metaObject;
 }
 
@@ -65,7 +65,7 @@ void *igInfoManager_Destroy(igInfoManager *manager, short flags) {
     return manager;
 }
 
-igMetaObject *FUN_002310d0(void) {
+igMetaObject *igInfoManager_GetPublishedMetaObject(void) {
     return g_igInfoManager_metaObject;
 }
 

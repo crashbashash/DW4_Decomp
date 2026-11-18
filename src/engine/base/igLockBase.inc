@@ -20,7 +20,7 @@ CallbackArray *igLockBase_Register(void) {
         &g_igLockBase_metaObject,
         (igMetaObjectRegisterFunction)igInterfaced_Register,
         (igMetaObjectGetFunction)igInterfaced_GetPublishedMetaObject,
-        thunk_igLockBase_GetMetaObject,
+        igLockBase_GetMetaObjectFunction,
         "igLockBase",
         0x20, /* instance size */
         0,
@@ -30,7 +30,7 @@ CallbackArray *igLockBase_Register(void) {
     );
 }
 
-void thunk_igLockBase_GetMetaObject(void) {
+void igLockBase_GetMetaObjectFunction(void) {
     igLockBase_GetMetaObject();
 }
 

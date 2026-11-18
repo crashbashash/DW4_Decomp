@@ -3,14 +3,14 @@ igMetaField *g_igViewerAction_refMetaField;
 igMetaField *g_igViewerAction_functionMetaField;
 
 igViewerAction *igViewerAction_Create(int allocator) {
-    FUN_00459190();
+    igViewerAction_EnsureRegistered();
     return (igViewerAction *)igMetaObject_CreateInstance(g_igViewerAction_metaObject, (igMemoryPoolView *)allocator);
 }
 
 void *igViewerAction_GetMetaObject(void) {
     igMetaObject *g = g_igViewerAction_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_00459190();
+        igViewerAction_EnsureRegistered();
     }
     return g_igViewerAction_metaObject;
 }
@@ -24,7 +24,7 @@ int igViewerAction_GetVTable(void) {
     return *(int *)((char *)tmp + off);
 }
 
-void FUN_00459190(void)
+void igViewerAction_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igViewerAction_Register);
 }
@@ -38,7 +38,7 @@ CallbackArray *igViewerAction_Register(void) {
         &g_igViewerAction_metaObject,
         igAction_Register,
         igAction_GetPublishedMetaObject,
-        thunk_igViewerAction_GetMetaObject,
+        igViewerAction_GetMetaObjectFunction,
         "igViewerAction",
         0x18, /* instance size */
         igViewerAction_GetVTable,
@@ -48,7 +48,7 @@ CallbackArray *igViewerAction_Register(void) {
     );
 }
 
-void thunk_igViewerAction_GetMetaObject(void) {
+void igViewerAction_GetMetaObjectFunction(void) {
     igViewerAction_GetMetaObject();
 }
 

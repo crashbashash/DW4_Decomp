@@ -1,4 +1,4 @@
-int Gap__Gfx__igParticleFormat__vfunc_22(void) {
+int igParticleFormat_GetMeta(void) {
     return (int)g_igParticleFormat_metaObject;
 }
 

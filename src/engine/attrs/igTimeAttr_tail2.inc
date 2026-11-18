@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igTimeAttr__vfunc_22(void) {
+igMetaObject *igTimeAttr_GetMeta(void) {
     return g_igTimeAttr_metaObject;
 }
 

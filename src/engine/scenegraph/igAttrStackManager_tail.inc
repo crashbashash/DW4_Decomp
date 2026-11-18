@@ -21,7 +21,7 @@ void Gap__Sg__igAttrStackManager__vfunc_23(struct O_1af890 *arg0) {
     }
 }
 
-void Gap__Sg__igAttrStackManager__vfunc_09(unsigned char *arg0, int arg1) {
+void igAttrStackManager_userConstruct(unsigned char *arg0, int arg1) {
     unsigned char sp4F;
     int al; int idx; int z; struct L_1af920 *l;
     Gap__Core__igObject__userConstruct((igObject *)arg0);
@@ -42,7 +42,7 @@ void Gap__Sg__igAttrStackManager__vfunc_09(unsigned char *arg0, int arg1) {
     }
 }
 
-void Gap__Sg__igAttrStackManager__vfunc_10(int arg0) {
+void igAttrStackManager_userDestruct(int arg0) {
     int i;
     AttrStackList *p;
     K key((void *)arg0);
@@ -339,7 +339,7 @@ void igAttrStackManager_PopLightStateAttr(igAttrStackManager *self, igLightState
         return;
     }
     if (self->_simpleLightMgr == 1) {
-        LightStateAttrView *undo = (LightStateAttrView *)takePooled((igObjectPool *)self->_lightDisableAttrPool, (void *)FUN_001361b0);
+        LightStateAttrView *undo = (LightStateAttrView *)takePooled((igObjectPool *)self->_lightDisableAttrPool, (void *)igLightStateAttr_Create);
         int n;
         igTDataList<LightStateAttrView *> *updates;
         light = attr->_light;

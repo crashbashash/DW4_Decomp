@@ -12,7 +12,7 @@ igMetaField *g_igStatisticsItem_managerMetaField;
 igMetaField *g_igStatisticsItem_statIdMetaField;
 igMetaField *g_igStatisticsItem_otherIdMetaField;
 
-igMetaObject *FUN_00458c50(void) {
+igMetaObject *igStatisticsItem_GetOrCreateMetaObject(void) {
     if (g_igStatisticsItem_metaObject == 0) {
         g_igStatisticsItem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -25,7 +25,7 @@ void *igStatisticsItem_GetMetaObject(void) {
         b = (*(int *)((char *)(((void *)g_igStatisticsItem_metaObject)) + 36) & 4) != 0;
         if (b != 0) goto done;
     }
-    FUN_00458ec0();
+    igStatisticsItem_EnsureRegistered();
 done:
     return ((void *)g_igStatisticsItem_metaObject);
 }
@@ -80,12 +80,12 @@ ObjectRefWord *FUN_00458e40(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void FUN_00458ec0(void)
+void igStatisticsItem_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igStatisticsItem_Register);
 }
 
-static igMetaObjectCallback g_igStatisticsItem_callbackList[] = { igGuiComponent_EnsureRegistered, igDefaultAspect_EnsureRegistered, igTextElement_EnsureRegistered, FUN_004588e0, 0 };
+static igMetaObjectCallback g_igStatisticsItem_callbackList[] = { igGuiComponent_EnsureRegistered, igDefaultAspect_EnsureRegistered, igTextElement_EnsureRegistered, igViewerStatisticsManager_EnsureRegistered, 0 };
 
 CallbackArray *igStatisticsItem_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -94,7 +94,7 @@ CallbackArray *igStatisticsItem_Register(void) {
         &g_igStatisticsItem_metaObject,
         igView_Register,
         igView_GetPublishedMetaObject,
-        thunk_igStatisticsItem_GetMetaObject,
+        igStatisticsItem_GetMetaObjectFunction,
         "igStatisticsItem",
         0x3C, /* instance size */
         igStatisticsItem_GetVTable,
@@ -104,7 +104,7 @@ CallbackArray *igStatisticsItem_Register(void) {
     );
 }
 
-void thunk_igStatisticsItem_GetMetaObject(void) {
+void igStatisticsItem_GetMetaObjectFunction(void) {
     igStatisticsItem_GetMetaObject();
 }
 
@@ -183,16 +183,16 @@ void igStatisticsItem_InitFields(void) {
     temp_s2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6));
     temp_s2->_metaObject = (int)(igGuiComponent_GetOrCreateMetaObject());
     temp_s2_2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7));
-    temp_s2_2->_metaObject = FUN_004516e0();
+    temp_s2_2->_metaObject = igDefaultAspect_GetOrCreateMetaObject();
     temp_s2_3 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 8));
-    temp_s2_3->_metaObject = FUN_0044bce0();
+    temp_s2_3->_metaObject = igTextElement_GetOrCreateMetaObject();
     temp_s2_3->_construct = 1;
     temp_s2_4 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 9));
-    temp_s2_4->_metaObject = (int)FUN_004586a0();
+    temp_s2_4->_metaObject = (int)igViewerStatisticsManager_GetOrCreateMetaObject();
     temp_s2_4->_refCounted = 0;
     temp_v0 = (igEnumMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xA));
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, -1);
-    temp_v0->_getMetaEnumFunction = (int)(&FUN_00149b60);
+    temp_v0->_getMetaEnumFunction = (int)(&IG_GFX_STATISTIC_GetMetaEnum);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xB), -1);
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igStatisticsItem_fieldTable, g_igStatisticsItem_fieldHandles, g_igStatisticsItem_fieldOffsets, temp_s0);
 }

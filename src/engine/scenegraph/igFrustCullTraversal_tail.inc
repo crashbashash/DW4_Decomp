@@ -1,9 +1,9 @@
 void FUN_001c4590(int arg0) {
-    FUN_001c4700(((int)DAT_00562760[0]), arg0);
+    igFrustCullTraversal_RegisterClassFunction(((int)DAT_00562760[0]), arg0);
 }
 
 void FUN_001c45a0(void) {
-    *(int *)0x562760 = FUN_0019a6e0((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
+    *(int *)0x562760 = igTraversalFunctionList_CreateInstance((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
 }
 
 void FUN_001c45d0(void) {
@@ -24,10 +24,10 @@ void Gap__Sg__igFrustCullTraversal__vfunc_31(igFrustCullTraversal *self) {
     self->_curProjectionMat = 0;
 }
 
-void Gap__Sg__igFrustCullTraversal__vfunc_09(O_1c4650 *arg0, int arg1) {
+void igFrustCullTraversal_userConstruct(O_1c4650 *arg0, int arg1) {
     R_1c4650 *s0;
     R_1c4650 *a0;
-    Gap__Sg__igCommonTraversal__vfunc_09((igCommonTraversal *)arg0, arg1);
+    igCommonTraversal_userConstruct((igCommonTraversal *)arg0, arg1);
     if (arg1 == 0) {
         s0 = DAT_00562760[0];
         if (s0 != 0) {
@@ -46,13 +46,13 @@ void Gap__Sg__igFrustCullTraversal__vfunc_09(O_1c4650 *arg0, int arg1) {
     }
 }
 
-void FUN_001c4700(int arg0, int arg1) {
-    FUN_001b68c0((void *)arg0, (void *)arg1);
+void igFrustCullTraversal_RegisterClassFunction(int arg0, int arg1) {
+    igCommonTraversal_RegisterClassFunction((void *)arg0, (void *)arg1);
     if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igNode_GetMetaObject()))) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&FUN_001c5030);
+        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&igFrustCullTraversal_TraverseNode);
     }
     if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igPlanarShadowShader_GetMetaObject()))) != 0) {
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&FUN_001c5130);
+        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&igFrustCullTraversal_TraversePlanarShadowShader);
     }
 }
 
@@ -324,7 +324,7 @@ int FUN_001c4c20(igFrustCullTraversal *self, igNode *node, int result) {
     return 0;
 }
 
-void FUN_001c5030(igFrustCullTraversal *arg0, igNode *arg1) {
+void igFrustCullTraversal_TraverseNode(igFrustCullTraversal *arg0, igNode *arg1) {
     if (arg0->_modeMask & 0x200) {
         BoundVolume *o = (BoundVolume *)arg1->_bound;
         void *var = o;
@@ -349,7 +349,7 @@ void FUN_001c5030(igFrustCullTraversal *arg0, igNode *arg1) {
     g_igCommonTraversal_travProcs->_data[sel]((igTraversal *)arg0, arg1);
 }
 
-int FUN_001c5130(void *arg0, TraversalNodeView *arg1) {
+int igFrustCullTraversal_TraversePlanarShadowShader(void *arg0, TraversalNodeView *arg1) {
     return g_igCommonTraversal_travProcs->_data[arg1->_id]((igTraversal *)arg0, (igObject *)arg1);
 }
 

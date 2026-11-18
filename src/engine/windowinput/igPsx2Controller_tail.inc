@@ -40,8 +40,8 @@ igMetaField *g_igPsx2Controller_resetingMetaField;
 igMetaField *g_igPsx2Controller_userResetMetaField;
 igMetaField *g_igPsx2Controller_userResetAnalogOnlyMetaField;
 
-int FUN_00147090(int arg0) {
-    FUN_001471b0();
+int igPsx2Controller_Create(int arg0) {
+    igPsx2Controller_EnsureRegistered();
     return (int)(igMetaObject_CreateInstance(g_igPsx2Controller_metaObject, (igMemoryPoolView *)arg0));
 }
 
@@ -49,7 +49,7 @@ igMetaObject *igPsx2Controller_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2Controller_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001471b0();
+        igPsx2Controller_EnsureRegistered();
     return g_igPsx2Controller_metaObject;
 }
 
@@ -77,12 +77,12 @@ int igPsx2Controller_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_001471b0(void)
+void igPsx2Controller_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2Controller_Register);
 }
 
-static igMetaObjectCallback g_igPsx2Controller_callbackList[] = { FUN_00145de0, 0 };
+static igMetaObjectCallback g_igPsx2Controller_callbackList[] = { igWindow_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2Controller_Register(void) {
     WindowInputLibrary_MarkRegistered();
@@ -91,7 +91,7 @@ CallbackArray *igPsx2Controller_Register(void) {
         &g_igPsx2Controller_metaObject,
         igController_Register,
         igController_GetPublishedMetaObject,
-        thunk_igPsx2Controller_GetMetaObject,
+        igPsx2Controller_GetMetaObjectFunction,
         "igPsx2Controller",
         0x70, /* instance size */
         igPsx2Controller_GetVTable,
@@ -101,7 +101,7 @@ CallbackArray *igPsx2Controller_Register(void) {
     );
 }
 
-igMetaObject *FUN_00147240(void) {
+igMetaObject *igController_GetPublishedMetaObject(void) {
     return g_igController_metaObject;
 }
 
@@ -223,7 +223,7 @@ void igPsx2Controller_InitFields(void) {
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3), 0x10);
     igUnsignedShortMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4), 2);
     temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5));
-    *(int *)((char *)(temp_s2) + 56) = (int)FUN_00145d40();
+    *(int *)((char *)(temp_s2) + 56) = (int)igWindow_GetOrCreateMetaObject();
     { struct Fld *q = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6); q->f52 = 2; }
     { struct Fld *q = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7); q->f52 = 2; }
     temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9));

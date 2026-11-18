@@ -1,4 +1,4 @@
-void Gap__Gfx__igPsx2VisualContext__vfunc_65(VisualContextView *arg0, void *color) {
+void igPsx2VisualContext_SetColor(VisualContextView *arg0, void *color) {
     unsigned int value = igVec4f_PackColor((float *)color, 1);
     unsigned int hi;
     unsigned int lo;
@@ -13,7 +13,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_65(VisualContextView *arg0, void *colo
     p2SetColour(arg0->f3bc);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_66(igPsx2VisualContext *self, unsigned int arg1) {
+void igPsx2VisualContext_SetColorPacked(igPsx2VisualContext *self, unsigned int arg1) {
     VisualContextView *arg0 = (VisualContextView *)self;
     unsigned int hi;
     unsigned int lo;
@@ -28,7 +28,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_66(igPsx2VisualContext *self, unsigned
     p2SetColour(arg0->f3bc);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_67(S_16d010 *arg0, float *arg1) {
+void igPsx2VisualContext_GetColor(S_16d010 *arg0, float *arg1) {
     unsigned int t;
     float f;
     t = (arg0->f956 >> 24) & 0xFF;
@@ -49,17 +49,17 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_67(S_16d010 *arg0, float *arg1) {
     arg1[3] = 0.00392156886f * f;
 }
 
-unsigned int Gap__Gfx__igPsx2VisualContext__vfunc_68(void *arg0) {
+unsigned int igPsx2VisualContext_GetColorPacked(void *arg0) {
     unsigned int t = *(unsigned int *)((char *)arg0 + 956);
     unsigned int a = (t & 0x80000000) >> 7;
     return (t & 0xFFFFFF) | (a + (((t & 0xFF000000) - a) * 2));
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_69(igPsx2VisualContext *self, int *arg1) {
+void igPsx2VisualContext_SetVertexMask(igPsx2VisualContext *self, int *arg1) {
     *(int *)((char *)self + 952) = (int) *arg1;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_70(int *arg0, void *arg1)
+void igPsx2VisualContext_GetVertexMask(int *arg0, void *arg1)
 {
   int new_var;
   new_var = *((int *) (((char *) arg1) + 952));
@@ -67,7 +67,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_70(int *arg0, void *arg1)
   *arg0 = new_var;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_59(igPsx2VisualContext *self, igVertexArray *vertexArray) {
+void igPsx2VisualContext_SetVertexArray(igPsx2VisualContext *self, igVertexArray *vertexArray) {
     igVertexArray *old;
     if ((igVertexArray *)self->_pVertexArray == vertexArray) {
         DAT_005608c0[0] += 1;
@@ -91,11 +91,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_59(igPsx2VisualContext *self, igVertex
 /* IgPsx2VisualContext vtable slot 61, a plain getter that returns the reflected field
  * _pVertexArray (the vertex-array object reference, +940). */
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_61(igPsx2VisualContext *self) {
+int igPsx2VisualContext_GetVertexArray(igPsx2VisualContext *self) {
     return self->_pVertexArray;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_63(igPsx2VisualContext *self, igPrimLengthArray *stripLengths) {
+void igPsx2VisualContext_SetPrimLengthArray(igPsx2VisualContext *self, igPrimLengthArray *stripLengths) {
     igPrimLengthArray *old;
     if ((igPrimLengthArray *)self->_pStripLengthArray == stripLengths) {
         DAT_005608c4[0] += 1;
@@ -113,11 +113,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_63(igPsx2VisualContext *self, igPrimLe
     self->_pStripLengthArray = (int)stripLengths;
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_64(void *arg0) {
+int igPsx2VisualContext_GetPrimLengthArray(void *arg0) {
     return *(int *)((char *)(arg0) + 948);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_60(igPsx2VisualContext *self, igIndexArray *indexArray) {
+void igPsx2VisualContext_SetIndexArray(igPsx2VisualContext *self, igIndexArray *indexArray) {
     igIndexArray *old;
     if ((igIndexArray *)self->_pIndexArray == indexArray) {
         DAT_005608c8[0] += 1;
@@ -135,7 +135,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_60(igPsx2VisualContext *self, igIndexA
     self->_pIndexArray = (int)indexArray;
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_62(void *arg0) {
+int igPsx2VisualContext_GetIndexArray(void *arg0) {
     return *(int *)((char *)(arg0) + 944);
 }
 
@@ -145,7 +145,7 @@ static inline int SpriteTexCoordArray(igPsx2VisualContext *vc, int *components, 
     return components[12] != 0 ? components[12] + start * 8 : 0;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_71(igPsx2VisualContext *vc, int primitive, unsigned int count, int first) {
+void igPsx2VisualContext_Draw(igPsx2VisualContext *vc, int primitive, unsigned int count, int first) {
     int positions;
     int normals;
     int blendState;
@@ -200,7 +200,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_71(igPsx2VisualContext *vc, int primit
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_74(igPsx2VisualContext *self, int arg1, int arg2, int arg3, int arg4) {
+void igPsx2VisualContext_DrawMultiple(igPsx2VisualContext *self, int arg1, int arg2, int arg3, int arg4) {
     int sp8C;
     int sp88;
     int *p;
@@ -315,7 +315,7 @@ void FUN_0016d910(igPsx2VisualContext *vc, unsigned int count, int first, const 
     draw(count);
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_173(A_16dbe0 *arg0) {
+int igPsx2VisualContext_BeginDraw(A_16dbe0 *arg0) {
     N *var_s0;
 
     if (arg0->f60 != 0) {
@@ -326,7 +326,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_173(A_16dbe0 *arg0) {
         while (var_s0 != 0) {
             if (var_s0->f16 != 0) {
                 if (var_s0->f8 == 0) {
-                    FUN_001f6f50(&var_s0->f24[0]);
+                    p2GetStatistics(&var_s0->f24[0]);
                     var_s0->f936 = arg0->f56->vX();
                 }
                 var_s0->f8 = var_s0->f8 - 1;
@@ -337,7 +337,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_173(A_16dbe0 *arg0) {
     return 1;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_174(A_16dca0 *arg0) {
+void igPsx2VisualContext_EndDraw(A_16dca0 *arg0) {
     float f20 = 0.0f;
     N_16dca0 *n;
     if (arg0->b60 != 0) {
@@ -355,7 +355,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_174(A_16dca0 *arg0) {
     if (n != 0) {
       while (n != 0) {
         if (n->b16 != 0 && n->f8 == -n->f4) {
-            FUN_001f6f50(n->f480);
+            p2GetStatistics(n->f480);
             n->f936 = arg0->f56->v104();
             FUN_00178970(arg0, n);
             n->b16 = 0;
@@ -365,7 +365,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_174(A_16dca0 *arg0) {
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_175(void) {
+void igPsx2VisualContext_FlushDraw(void) {
     p2WaitFinishSequence(p2NewFinishSequence(1));
     p2SetSingleFrameLatency();
 }

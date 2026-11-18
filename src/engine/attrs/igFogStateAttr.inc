@@ -28,7 +28,7 @@ CallbackArray *igFogStateAttr_Register(void) {
         &g_igFogStateAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igFogStateAttr_GetMetaObject,
+        igFogStateAttr_GetMetaObjectFunction,
         "igFogStateAttr",
         0x10, /* instance size */
         igFogStateAttr_GetVTable,
@@ -38,7 +38,7 @@ CallbackArray *igFogStateAttr_Register(void) {
     );
 }
 
-void thunk_igFogStateAttr_GetMetaObject(void) {
+void igFogStateAttr_GetMetaObjectFunction(void) {
     igFogStateAttr_GetMetaObject();
 }
 
@@ -56,12 +56,12 @@ static int g_igFogStateAttr_fieldOffsets[] = {
 };
 
 void igFogStateAttr_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_igFogStateAttr_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igFogStateAttr_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_igFogStateAttr_fieldTable, g_igFogStateAttr_fieldHandles, g_igFogStateAttr_fieldOffsets, temp_s1);
+    meta = g_igFogStateAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igFogStateAttr_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_igFogStateAttr_fieldTable, g_igFogStateAttr_fieldHandles, g_igFogStateAttr_fieldOffsets, base);
 }
 

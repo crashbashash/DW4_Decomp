@@ -1,7 +1,7 @@
 /* IgPrimLengthArray1_1 slot 20, an empty override (`jr ra; nop`). The slot does nothing for this
  * class. */
 
-void Gap__Gfx__igPrimLengthArray1_1__vfunc_20(igPrimLengthArray1_1 *self) {
+void igPrimLengthArray1_1_UserMakeConcrete(igPrimLengthArray1_1 *self) {
 }
 
 igVertexArrayLock *igVertexArrayLock_Init(igVertexArrayLock *lock) {
@@ -15,7 +15,7 @@ igVertexArrayLock *igVertexArrayLock_Init(igVertexArrayLock *lock) {
     return lock;
 }
 
-void FUN_0015df80(S0_15df80 *arg0, int flags) {
+void igPsx2VertexArray1_1_resetFields(S0_15df80 *arg0, int flags) {
     S_temp_a0 *temp_a0;
     S_temp_v0 *temp_v0;
     Gap__Core__igObject__resetFields((igObject *)arg0, flags);
@@ -119,7 +119,7 @@ void FUN_0015e160(unsigned int *arg0, unsigned int arg1) {
     *arg0 = v;
 }
 
-void FUN_0015e240(void **arg0, int arg1, int arg2, int arg3, int arg4) {
+void igVertexArray1_1_ConfigureFromFlags(void **arg0, int arg1, int arg2, int arg3, int arg4) {
     int sp5C;
     FUN_0015e160((unsigned int *)&sp5C, arg1);
     ((DW4VC_96_4 *)arg0)->vX(&sp5C, arg2, arg3, arg4);
@@ -193,7 +193,7 @@ void FUN_0015e2b0(igVertexArray1_1 *arg0, int arg1) {
 }
 
 /* igPsx2VertexArray1_1 vtable slot 61. Empty virtual slot: returns immediately. */
-void FUN_0015e4d0(void) {
+void igVertexArray1_1_Cache(void) {
 
 }
 
@@ -273,7 +273,7 @@ int FUN_0015e4e0(VA_15e4e0 *arg0) {
     return s2;
 }
 
-int FUN_0015e7a0(int arg0) {
+int igVertexArray1_1_GetVertexFormat(int arg0) {
     return arg0 + 0x1C;
 }
 
@@ -306,17 +306,17 @@ test:
     o->f61();
 }
 
-void FUN_0015e940(S_15e940 *arg0, int arg1, int arg2, float fparg0) {
+void igVertexArray1_1_SetWeight(S_15e940 *arg0, int arg1, int arg2, float fparg0) {
     float *temp_s0 = arg0->f32;
     temp_s0[arg1 + arg2 * ((((*arg0->vX()) & 0xF0) >> 4) & 0xFF)] = fparg0;
 }
 
-float FUN_0015e9c0(S_15e9c0 *arg0, int arg1, int arg2) {
+float igVertexArray1_1_GetWeight(S_15e9c0 *arg0, int arg1, int arg2) {
     float *temp_s0 = arg0->f32;
     return temp_s0[arg1 + arg2 * ((((*arg0->vX()) & 0xF0) >> 4) & 0xFF)];
 }
 
-void FUN_0015ea30(int *arg0) {
+void igVertexArray1_1_ValidateBlendWeights(int *arg0) {
     unsigned int n;
     int base;
     unsigned int i;
@@ -343,25 +343,25 @@ void FUN_0015ea30(int *arg0) {
     }
 }
 
-void FUN_0015eaf0(int *arg0, int arg1, int arg2, char arg3) {
+void igVertexArray1_1_SetBlendMatrixIndex(int *arg0, int arg1, int arg2, char arg3) {
     int s1 = arg0[9];
     int *p = ((VC_15eaf0 *)arg0)->vX();
     unsigned int m = (unsigned int)(*p & 0xF0) >> 4;
     *(char *)(s1 + arg1 + arg2 * (m & 0xFF)) = arg3;
 }
 
-unsigned char FUN_0015eb60(int *arg0, int arg1, int arg2) {
+unsigned char igVertexArray1_1_GetBlendMatrixIndex(int *arg0, int arg1, int arg2) {
     int s0 = arg0[9];
     int *p = ((VC_15eb60 *)arg0)->vX();
     unsigned int m = (unsigned int)(*p & 0xF0) >> 4;
     return *(unsigned char *)(s0 + arg1 + arg2 * (m & 0xFF));
 }
 
-void FUN_0015ebd0(igPsx2VertexArray1_1 *arg0, int arg1, float fparg0) {
+void igVertexArray1_1_SetPointSpriteSize(igPsx2VertexArray1_1 *arg0, int arg1, float fparg0) {
     *(float *)(*(int *)((char *)(arg0->_vdata) + 60) + (arg1 * 4)) = 0.5f * fparg0;
 }
 
-float FUN_0015ec00(igPsx2VertexArray1_1 *arg0, int arg1) {
+float igVertexArray1_1_GetPointSpriteSize(igPsx2VertexArray1_1 *arg0, int arg1) {
     int a, idx, c;
     a = arg0->_vdata;
     idx = arg1 * 4;
@@ -369,7 +369,7 @@ float FUN_0015ec00(igPsx2VertexArray1_1 *arg0, int arg1) {
     return 2.0f * *(float *)(c + idx);
 }
 
-void FUN_0015ec30(A_15ec30 *arg0, int arg1, float *arg2) {
+void igVertexArray1_1_SetPointSpriteSize2(A_15ec30 *arg0, int arg1, float *arg2) {
     float x = arg2[0];
     float y = arg2[1];
     float *dst;
@@ -380,7 +380,7 @@ void FUN_0015ec30(A_15ec30 *arg0, int arg1, float *arg2) {
     dst[1] = y;
 }
 
-void FUN_0015ec70(igPsx2VertexArray1_1 *arg0, int arg1, float *arg2) {
+void igVertexArray1_1_GetPointSpriteSize2(igPsx2VertexArray1_1 *arg0, int arg1, float *arg2) {
     float *p;
     float k = 2.0f;
     p = (float *)(*(int *)((char *)(arg0->_vdata) + 60) + (arg1 * 8));
@@ -402,8 +402,8 @@ float FUN_0015ece0(void *arg0, int arg1) {
     return *(float *)(c + idx);
 }
 
-int FUN_0015ed00(V_15ed00 *arg0, int arg1, unsigned int arg2, int arg3, int arg4) {
-    igSmartPointer<V_15ed00> resized((V_15ed00 *)FUN_0014b680((int)igObject_GetAllocator((igObject *)arg0)));
+int igVertexArray1_1_Reconfigure(V_15ed00 *arg0, int arg1, unsigned int arg2, int arg3, int arg4) {
+    igSmartPointer<V_15ed00> resized((V_15ed00 *)igVertexArray1_1_Create((int)igObject_GetAllocator((igObject *)arg0)));
     unsigned int n;
     int sp88;
     int r;
@@ -439,14 +439,14 @@ int FUN_0015ed00(V_15ed00 *arg0, int arg1, unsigned int arg2, int arg3, int arg4
     return r;
 }
 
-/* Write the position of vertex `index` from `in` (3 floats). Counterpart of FUN_0015f010: does nothing
+/* Write the position of vertex `index` from `in` (3 floats). Counterpart of igVertexArray1_1_GetBinormal: does nothing
  * unless the vertex format has the position bit set, and stores into the position stream at _vdata
  * + 68, 12 bytes per vertex. */
 
 
 
 
-void FUN_0015efc0(igPsx2VertexArray1_1 *self, int index, float *in) {
+void igVertexArray1_1_SetBinormal(igPsx2VertexArray1_1 *self, int index, float *in) {
     float *position;
 
     if (self->_vertexFormat & VERTEX_FORMAT_POSITIONS) {
@@ -464,7 +464,7 @@ void FUN_0015efc0(igPsx2VertexArray1_1 *self, int index, float *in) {
 
 
 
-void FUN_0015f010(igPsx2VertexArray1_1 *self, int index, float *out) {
+void igVertexArray1_1_GetBinormal(igPsx2VertexArray1_1 *self, int index, float *out) {
     float *position;
 
     if (self->_vertexFormat & VERTEX_FORMAT_POSITIONS) {
@@ -475,7 +475,7 @@ void FUN_0015f010(igPsx2VertexArray1_1 *self, int index, float *out) {
     }
 }
 
-int FUN_0015f060(igPsx2VertexArray1_1 *arg0, int arg1) {
+int igVertexArray1_1_GetBinormalPointer(igPsx2VertexArray1_1 *arg0, int arg1) {
     if (arg0->_vertexFormat & 0x400000) {
         return *(int *)((char *)(arg0->_vdata) + 68) + (arg1 * 0xC);
     }
@@ -489,7 +489,7 @@ int FUN_0015f060(igPsx2VertexArray1_1 *arg0, int arg1) {
 
 
 
-void FUN_0015f0a0(igPsx2VertexArray1_1 *self, int index, float *in) {
+void igVertexArray1_1_SetTangent(igPsx2VertexArray1_1 *self, int index, float *in) {
     float *normal;
 
     if (self->_vertexFormat & VERTEX_FORMAT_NORMALS) {
@@ -500,14 +500,14 @@ void FUN_0015f0a0(igPsx2VertexArray1_1 *self, int index, float *in) {
     }
 }
 
-/* Read the normal of vertex `index` into `out` (3 floats). Counterpart of FUN_0015f0a0: does nothing
+/* Read the normal of vertex `index` into `out` (3 floats). Counterpart of igVertexArray1_1_SetTangent: does nothing
  * unless the vertex format has the normal bit set. The normal stream is at _vdata + 72, 12 bytes
  * per vertex. */
 
 
 
 
-void FUN_0015f0f0(igPsx2VertexArray1_1 *self, int index, float *out) {
+void igVertexArray1_1_GetTangent(igPsx2VertexArray1_1 *self, int index, float *out) {
     float *normal;
 
     if (self->_vertexFormat & VERTEX_FORMAT_NORMALS) {
@@ -518,14 +518,14 @@ void FUN_0015f0f0(igPsx2VertexArray1_1 *self, int index, float *out) {
     }
 }
 
-int FUN_0015f140(igPsx2VertexArray1_1 *arg0, int arg1) {
+int igVertexArray1_1_GetTangentPointer(igPsx2VertexArray1_1 *arg0, int arg1) {
     if (arg0->_vertexFormat & 0x800000) {
         return *(int *)((char *)(arg0->_vdata) + 72) + (arg1 * 0xC);
     }
     return 0;
 }
 
-void FUN_0015f180(void *arg0) {
+void igVertexArray1_1_FreePointSpriteMemory(void *arg0) {
     int temp_a0;
     int temp_a0_2;
     int temp_a0_3;
@@ -547,7 +547,7 @@ void FUN_0015f180(void *arg0) {
     }
 }
 
-int FUN_0015f200(A_15f200 *arg0) {
+int igVertexArray1_1_AllocatePointSpriteMemory(A_15f200 *arg0) {
     int size;
     unsigned flags;
     int n;
@@ -574,7 +574,7 @@ int FUN_0015f200(A_15f200 *arg0) {
     return size;
 }
 
-void FUN_0015f2f0(void *arg0) {
+void igVertexArray1_1_FreeAbstractBiNormalsAndTangentsMemory(void *arg0) {
     int temp_a0;
     int temp_a0_2;
 
@@ -590,7 +590,7 @@ void FUN_0015f2f0(void *arg0) {
     }
 }
 
-int FUN_0015f350(ArraySizeOwner *arg0) {
+int igVertexArray1_1_AllocateAbstractBiNormalsAndTangentsMemory(ArraySizeOwner *arg0) {
     int total;
     int *dst;
     unsigned int flags;

@@ -2,11 +2,11 @@ igMetaObject *FUN_00149320(void) {
     return g_igInterfaceManager_metaObject;
 }
 
-void FUN_00149330(void *a0, igObject *object) {
+void igInterfaceManager_AddEventProducer(void *a0, igObject *object) {
     ObjectList_AppendRetained(*(igObjectList **)((char *)a0 + 8), object);
 }
 
-int Gap__igDefaultInterfaceManager__vfunc_22(void) {
+int igDefaultInterfaceManager_GetMeta(void) {
     return (int)g_igDefaultInterfaceManager_metaObject;
 }
 
@@ -14,27 +14,27 @@ igMetaObject *FUN_00149350(void) {
     return g_igControllerManager_metaObject;
 }
 
-int Gap__igControllerList__vfunc_22(void) {
+int igControllerList_GetMeta(void) {
     return (int)g_igControllerList_metaObject;
 }
 
-igMetaObject *Gap__igNonRefCountedObjectStack__vfunc_22(void) {
+igMetaObject *igNonRefCountedObjectStack_GetMeta(void) {
     return g_igNonRefCountedObjectStack_metaObject;
 }
 
-igMetaObject *Gap__igEventProducerList__vfunc_22(void) {
+igMetaObject *igEventProducerList_GetMeta(void) {
     return g_igEventProducerList_metaObject;
 }
 
-int Gap__igControllerList__vfunc_24(void) {
+int igControllerList_GetElementMeta(void) {
     return (int)g_igController_metaObject;
 }
 
-igMetaObject *Gap__igEventProducerList__vfunc_24(void) {
+igMetaObject *igEventProducerList_GetElementMeta(void) {
     return g_igEventProducer_metaObject;
 }
 
-void Gap__igNonRefCountedObjectStack__vfunc_18(igDataList *arg0) {
+void igNonRefCountedObjectStack_TrimCapacity(igDataList *arg0) {
     int temp_a1;
 
     temp_a1 = arg0->_count;

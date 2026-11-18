@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igPixelPipelineModeAttr__vfunc_22(void) {
+igMetaObject *igPixelPipelineModeAttr_GetMeta(void) {
     return g_igPixelPipelineModeAttr_metaObject;
 }
 

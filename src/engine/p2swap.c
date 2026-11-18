@@ -60,9 +60,7 @@ typedef union p2GsDispfb {
     } field;
 } p2GsDispfb;
 
-void FUN_001f8190(int reg);
 int swapbuffersPredicate(long long frame);
-void p2AddFinishFunc(void (*func)(p2FinishFunc *finish, int arg), int arg);
 
 extern p2GsDispfb p2GsDispfb1;
 extern p2GsDispfb p2GsDispfb2;
@@ -250,8 +248,8 @@ void p2SwapBuffers(void) {
                 page = 0;
             }
             p2GsDispfb1.field.fbp = page;
-            FUN_001f8190(9);
-            FUN_001f8190(7);
+            p2writeGSPrivRegister(9);
+            p2writeGSPrivRegister(7);
         }
     }
     if (p2Display.singleBuffered == 0) {
@@ -364,8 +362,8 @@ void p2VsyncHandler(void) {
         if (status.currentCount != status.maxCount) {
             iSignalSema(p2SwapSema);
         }
-        FUN_001f8190(9);
-        FUN_001f8190(7);
+        p2writeGSPrivRegister(9);
+        p2writeGSPrivRegister(7);
         p2TryStartDmaPacket(P2_DMA_VIF1);
     }
 }

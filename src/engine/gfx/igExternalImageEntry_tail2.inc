@@ -1,4 +1,4 @@
-igMetaObject *Gap__Gfx__igExternalImageEntry__vfunc_22(void) {
+igMetaObject *igExternalImageEntry_GetMeta(void) {
     return g_igExternalImageEntry_metaObject;
 }
 

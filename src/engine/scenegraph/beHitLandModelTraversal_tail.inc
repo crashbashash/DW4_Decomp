@@ -1,12 +1,12 @@
 void FUN_001ce660(int arg0) {
-    FUN_001ce790(((int)DAT_00562790[0]), arg0);
+    igIntersectTraversal_RegisterClassFunction(((int)DAT_00562790[0]), arg0);
 }
 
-void Gap__Bec__beHitLandModelTraversal__vfunc_07(beHitLandModelTraversal *arg0, int arg1) {
+void igIntersectTraversal_userConstruct(beHitLandModelTraversal *arg0, int arg1) {
     igObject *temp_a0;
     igObject *temp_s0;
 
-    Gap__Sg__igTraversal__vfunc_09((A_1e0380 *)arg0, arg1);
+    igTraversal_userConstruct((A_1e0380 *)arg0, arg1);
     if (arg1 == 0) {
         temp_s0 = DAT_00562790[0];
         if (temp_s0 != 0) {

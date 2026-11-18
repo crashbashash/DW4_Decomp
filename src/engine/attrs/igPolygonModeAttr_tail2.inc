@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igPolygonModeAttr__vfunc_22(void) {
+igMetaObject *igPolygonModeAttr_GetMeta(void) {
     return g_igPolygonModeAttr_metaObject;
 }
 

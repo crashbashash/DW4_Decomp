@@ -56,7 +56,7 @@ int FUN_001bab30(int a0, void **arg1) {
     return temp_s0;
 }
 
-int FUN_001bac30(int arg0, void **arg1) {
+int igCommonTraversal_TraverseEnvironmentMapShader2(int arg0, void **arg1) {
     ((DW4VC_184_1 *)(arg1))->vX((int)(0));
     ((DW4VC_176_1 *)(arg1))->vX((int)(arg0));
     return 0;
@@ -68,7 +68,7 @@ int FUN_001bac90(int arg0, void **arg1) {
     return 0;
 }
 
-int FUN_001bacf0(DrawItemSource *arg0, DrawItemIndex *arg1) {
+int igCommonTraversal_TraverseModelViewMatrixBoneSelect(DrawItemSource *arg0, DrawItemIndex *arg1) {
     char buf[64];
     DrawItemPool *pool = arg0->f72;
     int x = arg0->f52;
@@ -110,7 +110,7 @@ int FUN_001bacf0(DrawItemSource *arg0, DrawItemIndex *arg1) {
     return 0;
 }
 
-int FUN_001bae20(CompileTraversalHead *o, BlendNodeView *node) {
+int igCommonTraversal_TraverseBlendMatrixSelect(CompileTraversalHead *o, BlendNodeView *node) {
     char *out;
     char *palette;
     int slot;
@@ -124,7 +124,7 @@ int FUN_001bae20(CompileTraversalHead *o, BlendNodeView *node) {
     pool = o->_frames;
     state = o->_state;
     if (!(pool->_used < pool->_capacity)) {
-        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))FUN_00139c10);
+        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))igBlendMatricesAttr_Create);
     }
     slot = pool->_used;
     pool->_used = slot + 1;
@@ -156,7 +156,7 @@ int FUN_001bae20(CompileTraversalHead *o, BlendNodeView *node) {
     return 0;
 }
 
-int FUN_001bafb0(int arg0, struct S_1bafb0 *arg1) {
+int igCommonTraversal_TraverseSegment(int arg0, struct S_1bafb0 *arg1) {
     int *var_a1;
     int *var_a1_2;
     int *var_a1_3;

@@ -77,7 +77,7 @@ CallbackArray *igSearchSceneGraph_Register(void) {
         &g_igSearchSceneGraph_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igSearchSceneGraph_GetMetaObject,
+        igSearchSceneGraph_GetMetaObjectFunction,
         "igSearchSceneGraph",
         0x1C, /* instance size */
         igSearchSceneGraph_GetVTable,
@@ -87,7 +87,7 @@ CallbackArray *igSearchSceneGraph_Register(void) {
     );
 }
 
-void thunk_igSearchSceneGraph_GetMetaObject(void) {
+void igSearchSceneGraph_GetMetaObjectFunction(void) {
     igSearchSceneGraph_GetMetaObject();
 }
 
@@ -128,7 +128,7 @@ void igSearchSceneGraph_InitFields(void) {
     first = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igSearchSceneGraph_ctorTable, 4);
     firstRef = igMetaObject_GetFieldAt(meta, first);
-    *(int *)((char *)firstRef + 56) = FUN_002274a0();
+    *(int *)((char *)firstRef + 56) = igIterateGraph_GetOrCreateMetaObject();
     *(unsigned char *)((char *)firstRef + 52) = 1;
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, first + 1), "");
     secondRef = igMetaObject_GetFieldAt(meta, first + 2);
@@ -223,7 +223,7 @@ void **FUN_00239280(void **ref, short flags) {
     return ref;
 }
 
-void **FUN_00239300(void **ref, short flags) {
+void **igSmartPointer_igCamera_Destruct(void **ref, short flags) {
     RefCounted *held;
 
     if (ref != 0) {
@@ -241,7 +241,7 @@ void **FUN_00239300(void **ref, short flags) {
     return ref;
 }
 
-igMetaObject *Gap__igSearchSceneGraph__vfunc_22(void) {
+igMetaObject *igSearchSceneGraph_GetMeta(void) {
     return g_igSearchSceneGraph_metaObject;
 }
 

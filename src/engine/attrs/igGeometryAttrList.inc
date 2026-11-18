@@ -27,7 +27,7 @@ void igGeometryAttrList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igGeometryAttrList_Register);
 }
 
-static igMetaObjectCallback g_igGeometryAttrList_callbackList[] = { FUN_001378f0, 0 };
+static igMetaObjectCallback g_igGeometryAttrList_callbackList[] = { igGeometryAttr_EnsureRegistered, 0 };
 
 CallbackArray *igGeometryAttrList_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -36,7 +36,7 @@ CallbackArray *igGeometryAttrList_Register(void) {
         &g_igGeometryAttrList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igGeometryAttrList_GetMetaObject,
+        igGeometryAttrList_GetMetaObjectFunction,
         "igGeometryAttrList",
         0x14, /* instance size */
         igGeometryAttrList_GetVTable,
@@ -46,7 +46,7 @@ CallbackArray *igGeometryAttrList_Register(void) {
     );
 }
 
-void thunk_igGeometryAttrList_GetMetaObject(void) {
+void igGeometryAttrList_GetMetaObjectFunction(void) {
     igGeometryAttrList_GetMetaObject();
 }
 

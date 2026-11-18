@@ -41,7 +41,7 @@ typedef struct p2StoreImageTarget {
 
 typedef struct p2DmaPacket {
     long long sequence;
-    long long f8;
+    long long waitSequence;           /* a GIF packet: the VIF1 packet the GS must have drawn first, -1 none */
     p2DmaPredicate *predicates;
     p2DmaPredicate *lastPredicate;
     p2DmaCompletion *completions;
@@ -56,7 +56,7 @@ typedef struct p2DmaPacket {
     unsigned char ready : 1;          /* submitted; may start */
     unsigned char finishPredicate : 1; /* waits for the previous GS FINISH functions */
     unsigned char signalWait : 1;     /* a thread waits on this packet's sequence */
-    unsigned char b3 : 1;
+    unsigned char restartProgram : 1; /* restart the VU1 program before the packet's data */
     unsigned char blockHead : 1;      /* first packet of an allocation block */
     unsigned char storeImage : 1;     /* storeImageTarget is to be read back */
     unsigned char b6 : 2;

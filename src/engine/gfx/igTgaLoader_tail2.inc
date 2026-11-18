@@ -1,4 +1,4 @@
-int Gap__Gfx__igTgaLoader__vfunc_22(void) {
+int igTgaLoader_GetMeta(void) {
     return (int)g_igTgaLoader_metaObject;
 }
 

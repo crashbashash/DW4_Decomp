@@ -1,6 +1,6 @@
 igMetaObject *g_igAnimationTransitionPointList_metaObject;
 
-igMetaObject *FUN_001a9830(void) {
+igMetaObject *igAnimationTransitionPointList_GetOrCreateMetaObject(void) {
     if (g_igAnimationTransitionPointList_metaObject == 0) {
         g_igAnimationTransitionPointList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igAnimationTransitionPointList_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationTransitionPointList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a9910();
+        igAnimationTransitionPointList_EnsureRegistered();
     return g_igAnimationTransitionPointList_metaObject;
 }
 
@@ -23,12 +23,12 @@ int igAnimationTransitionPointList_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_001a9910(void)
+void igAnimationTransitionPointList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationTransitionPointList_Register);
 }
 
-static igMetaObjectCallback g_igAnimationTransitionPointList_callbackList[] = { FUN_001a9a80, 0 };
+static igMetaObjectCallback g_igAnimationTransitionPointList_callbackList[] = { igAnimationTransitionPoint_EnsureRegistered, 0 };
 
 CallbackArray *igAnimationTransitionPointList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ CallbackArray *igAnimationTransitionPointList_Register(void) {
         &g_igAnimationTransitionPointList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igAnimationTransitionPointList_GetMetaObject,
+        igAnimationTransitionPointList_GetMetaObjectFunction,
         "igAnimationTransitionPointList",
         0x14, /* instance size */
         igAnimationTransitionPointList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igAnimationTransitionPointList_Register(void) {
     );
 }
 
-void thunk_igAnimationTransitionPointList_GetMetaObject(void) {
+void igAnimationTransitionPointList_GetMetaObjectFunction(void) {
     igAnimationTransitionPointList_GetMetaObject();
 }
 

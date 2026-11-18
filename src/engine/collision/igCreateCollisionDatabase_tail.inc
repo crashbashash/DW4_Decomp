@@ -1,7 +1,7 @@
 #include "dw4/maths/igAABox.h"
 #include "dw4/core/igMetaObject.h"
 #include "dw4/maths/igVolume.h"
-extern "C" igObject *FUN_00227460(igMemoryPoolView *allocator);
+extern "C" igObject *igIterateGraph_Create(igMemoryPoolView *allocator);
 extern "C" void FUN_0022ab90(igObject *iterator, igNode *root, igMetaObject *metaObject);
 extern "C" igNode *FUN_0022ac00(igObject *iterator);
 extern "C" void FUN_0022ac70(igObject *iterator, igMetaObject *metaObject);
@@ -23,12 +23,12 @@ static inline void createGrid(int &slot) {
     /* matching construct: a tag made inside the inline takes the frame slot below the caller's temporaries */
     AdoptReference tag = AdoptReference();
     igRelease((igObject *)slot);
-    slot = (int)FUN_0023a040(0);
+    slot = (int)igCollisionGrid_Create(0);
 }
 static inline igObject *newSphereMaker() {
     /* matching construct: as in createGrid */
     AdoptReference tag = AdoptReference();
-    return FUN_0023a9d0(0);
+    return igBoundingSphereMaker_Create(0);
 }
 
 static inline void setBound(igCollisionGroup *group, igObject *bound) {
@@ -65,7 +65,7 @@ int Gap__igCreateCollisionDatabase__vfunc_28(igCreateCollisionDatabase *self, ig
     igVolume_ExtendBy((void **)grid->box, (void **)bound);
     FUN_0023b430((igCollisionGrid *)self->_grid);
     igMetaObject *geometryMeta = g_igGeometry_metaObject;
-    igSmartPointer<igObject> iterator(FUN_00227460(igObject_GetAllocator(self)));
+    igSmartPointer<igObject> iterator(igIterateGraph_Create(igObject_GetAllocator(self)));
     for (FUN_0022ab90(iterator.get(), *root, geometryMeta); FUN_0022ac00(iterator.get()) != 0; FUN_0022ac70(iterator.get(), geometryMeta)) {
         igNode *geometry = FUN_0022ac00(iterator.get());
         if ((geometry->_flags & 0x10) == 0) continue;
@@ -102,7 +102,7 @@ int Gap__igCreateCollisionDatabase__vfunc_33(void) {
 
 void FUN_0023c250(int *arg0) {    igSmartPointer<Rc> a((Rc *)igIGBFile_Create(0), AdoptReference());
     igDirectory_SetName((igDirectoryView *)(a.get()), arg0[13]);
-    igSmartPointer<Rc> b(FUN_002397a0(0), AdoptReference());
+    igSmartPointer<Rc> b(igCollisionInfo_Create(0), AdoptReference());
     {
     Rc *s1 = (Rc *)arg0[14];
     Inst *s0 = (Inst *)b.get();

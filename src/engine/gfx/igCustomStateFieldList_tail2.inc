@@ -1,4 +1,4 @@
-igMetaObject *Gap__Gfx__igCustomStateFieldList__vfunc_24(void) {
+igMetaObject *igCustomStateFieldList_GetElementMeta(void) {
     return g_igCustomStateField_metaObject;
 }
 

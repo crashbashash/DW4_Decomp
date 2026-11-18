@@ -1,7 +1,7 @@
 igMetaObject *g_igBitMask_metaObject;
 igMetaField *g_igBitMask_bitCountMetaField;
 
-igMetaObject *FUN_001a4d90(void) {
+igMetaObject *igBitMask_GetOrCreateMetaObject(void) {
     if (g_igBitMask_metaObject == 0) {
         g_igBitMask_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -36,7 +36,7 @@ CallbackArray *igBitMask_Register(void) {
         &g_igBitMask_metaObject,
         igUnsignedIntList_Register,
         igUnsignedIntList_GetPublishedMetaObject,
-        thunk_igBitMask_GetMetaObject,
+        igBitMask_GetMetaObjectFunction,
         "igBitMask",
         0x18, /* instance size */
         igBitMask_GetVTable,
@@ -46,7 +46,7 @@ CallbackArray *igBitMask_Register(void) {
     );
 }
 
-void thunk_igBitMask_GetMetaObject(void) {
+void igBitMask_GetMetaObjectFunction(void) {
     igBitMask_GetMetaObject();
 }
 
@@ -68,12 +68,12 @@ static int g_igBitMask_fieldOffsets[] = {
 };
 
 void igBitMask_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_igBitMask_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igBitMask_ctorTable, 1);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igBitMask_fieldTable, g_igBitMask_fieldHandles, g_igBitMask_fieldOffsets, temp_s1);
+    meta = (void *)g_igBitMask_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igBitMask_ctorTable, 1);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igBitMask_fieldTable, g_igBitMask_fieldHandles, g_igBitMask_fieldOffsets, base);
 }
 

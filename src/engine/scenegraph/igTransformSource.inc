@@ -1,6 +1,6 @@
 igMetaObject *g_igTransformSource_metaObject;
 
-igMetaObject *FUN_00194dd0(void) {
+igMetaObject *igTransformSource_GetOrCreateMetaObject(void) {
     if (g_igTransformSource_metaObject == 0) {
         g_igTransformSource_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,11 +11,11 @@ igMetaObject *igTransformSource_GetMetaObject(void)
 {
     igMetaObject *g = g_igTransformSource_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00194e70();
+        igTransformSource_EnsureRegistered();
     return g_igTransformSource_metaObject;
 }
 
-void FUN_00194e70(void)
+void igTransformSource_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTransformSource_Register);
 }
@@ -27,7 +27,7 @@ CallbackArray *igTransformSource_Register(void) {
         &g_igTransformSource_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igTransformSource_GetMetaObject,
+        igTransformSource_GetMetaObjectFunction,
         "igTransformSource",
         8, /* instance size */
         0,
@@ -37,7 +37,7 @@ CallbackArray *igTransformSource_Register(void) {
     );
 }
 
-void thunk_igTransformSource_GetMetaObject(void) {
+void igTransformSource_GetMetaObjectFunction(void) {
     igTransformSource_GetMetaObject();
 }
 

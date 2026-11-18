@@ -1,4 +1,4 @@
-char *FUN_001405a0(char *arg0) {
+char *igTextureAttr_GetFileName(char *arg0) {
     char *p;
     char c;
 
@@ -34,7 +34,7 @@ int Gap__Attrs__igTextureAttr__vfunc_37(TextureAttr *attr, int unused, Allocator
     const char *name = "NO_IMAGE";
     if (image.p != 0) {
         if (image.p->name != 0) {
-            name = FUN_001405a0((char *)image.p->name);
+            name = igTextureAttr_GetFileName((char *)image.p->name);
         }
     }
     sprintf(text, "%s %d %d %d %d %d %d %d %d", name, attr->bColor, magFilter(attr), minFilter(attr), wrapS(attr), wrapT(attr), (long long)attr->mipmapMode, (long long)attr->source, (long long)attr->paging);
@@ -63,7 +63,7 @@ int Gap__Attrs__igTextureAttr__vfunc_38(Arg *arg0, int arg1) {
     var_a1 = "NO_IMAGE";
     if (igTextureAttr_GetImage((igTextureAttr *)arg0, 0) != 0) {
         if (((T_140740 *)igTextureAttr_GetImage((igTextureAttr *)arg0, 0))->f88 != 0) {
-            var_s1 = (FUN_001405a0((char *)((T_140740 *)igTextureAttr_GetImage((igTextureAttr *)arg0, 0))->f88));
+            var_s1 = (igTextureAttr_GetFileName((char *)((T_140740 *)igTextureAttr_GetImage((igTextureAttr *)arg0, 0))->f88));
         }
         var_a1 = var_s1;
     }
@@ -77,18 +77,18 @@ int Gap__Attrs__igTextureAttr__vfunc_38(Arg *arg0, int arg1) {
     return 0;
 }
 
-void Gap__Attrs__igTextureAttr__vfunc_26(void) {
+void igTextureAttr_SynchronizeDefault(void) {
 
 }
 
-void Gap__Attrs__igTextureAttr__vfunc_17(S0 *arg0) {
+void igTextureAttr_UserPostLoad(S0 *arg0) {
     if (arg0->f3C == 0) {
         arg0->f3C = 1;
     }
-    FUN_0013b820(arg0);
+    igAttr_UserPostLoad(arg0);
 }
 
-void Gap__Attrs__igTextureAttr__vfunc_24(igTextureAttr *self, igObject *context) {
+void igTextureAttr_apply(igTextureAttr *self, igObject *context) {
     if (self->_texId < 0) {
         igImage *image;
         switch (self->_source) {
@@ -108,7 +108,7 @@ void Gap__Attrs__igTextureAttr__vfunc_24(igTextureAttr *self, igObject *context)
                 } else {
                     levelImage = ((igImage **)((igObjectList *)self->_imageMipMaps)->_data)[level - 1];
                 }
-                Gap__Gfx__igPsx2VisualContext__vfunc_133(context, self->_texId, levelImage, level);
+                igPsx2VisualContext_SetTextureSourceLevel(context, self->_texId, levelImage, level);
             }
             break;
         }
@@ -135,11 +135,11 @@ void Gap__Attrs__igTextureAttr__vfunc_24(igTextureAttr *self, igObject *context)
         self->_vc = (int)context;
     }
     if (self->_source == 2) {
-        Gap__Gfx__igPsx2VisualContext__vfunc_260((igPsx2VisualContext *)context, self->_texId, self->_videoBuffer);
+        igPsx2VisualContext_SetTextureSourceFromBuffer((igPsx2VisualContext *)context, self->_texId, self->_videoBuffer);
     }
-    Gap__Gfx__igPsx2VisualContext__vfunc_136((igPsx2VisualContext *)context, self->_texId, (IG_GFX_TEXTURE_WRAP)self->_wrapS, (IG_GFX_TEXTURE_WRAP)self->_wrapT);
-    Gap__Gfx__igPsx2VisualContext__vfunc_138((igPsx2VisualContext *)context, self->_texId, (IG_GFX_TEXTURE_FILTER)self->_minFilter);
-    Gap__Gfx__igPsx2VisualContext__vfunc_140((igPsx2VisualContext *)context, self->_texId, (IG_GFX_TEXTURE_FILTER)self->_magFilter);
+    igPsx2VisualContext_SetTextureAddressingMode((igPsx2VisualContext *)context, self->_texId, (IG_GFX_TEXTURE_WRAP)self->_wrapS, (IG_GFX_TEXTURE_WRAP)self->_wrapT);
+    igPsx2VisualContext_SetTextureMinificationFilter((igPsx2VisualContext *)context, self->_texId, (IG_GFX_TEXTURE_FILTER)self->_minFilter);
+    igPsx2VisualContext_SetTextureMagnificationFilter((igPsx2VisualContext *)context, self->_texId, (IG_GFX_TEXTURE_FILTER)self->_magFilter);
 }
 
 void igTextureAttr_SetImage(igTextureAttr *self, igImage *image, int level) {
@@ -193,12 +193,12 @@ igImage *igTextureAttr_GetImage(igTextureAttr *self, int level) {
     return ((igImage **)((igImageMipMapList *)self->_imageMipMaps)->_data)[level - 1];
 }
 
-void Gap__Attrs__igTextureAttr__vfunc_12(void **arg0) {
+void igTextureAttr_ReleaseDefaults(void **arg0) {
     ((DW4VC_112_0 *)(arg0))->vX();
     igObject_ReleaseDefaults((igObject *)arg0);
 }
 
-void Gap__Attrs__igTextureAttr__vfunc_28(S_140c70 *arg0) {
+void igTextureAttr_Reset(S_140c70 *arg0) {
     int temp_a1;
     R_140c70 *t;
 

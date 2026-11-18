@@ -1,11 +1,11 @@
 igMetaObject *g_igWindow_metaObject;
 
 igWindow *igWindow_CreateInstance(int allocator) {
-    FUN_00145de0();
+    igWindow_EnsureRegistered();
     return (igWindow *)igMetaObject_CreateInstance(g_igWindow_metaObject, (igMemoryPoolView *)allocator);
 }
 
-igMetaObject *FUN_00145d40(void) {
+igMetaObject *igWindow_GetOrCreateMetaObject(void) {
     if (g_igWindow_metaObject == 0) {
         g_igWindow_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -16,11 +16,11 @@ igMetaObject *igWindow_GetMetaObject(void)
 {
     igMetaObject *g = g_igWindow_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00145de0();
+        igWindow_EnsureRegistered();
     return g_igWindow_metaObject;
 }
 
-void FUN_00145de0(void)
+void igWindow_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igWindow_Register);
 }
@@ -32,7 +32,7 @@ CallbackArray *igWindow_Register(void) {
         &g_igWindow_metaObject,
         igEventProducer_Register,
         igEventProducer_GetPublishedMetaObject,
-        thunk_igWindow_GetMetaObject,
+        igWindow_GetMetaObjectFunction,
         "igWindow",
         8, /* instance size */
         0,
@@ -42,20 +42,20 @@ CallbackArray *igWindow_Register(void) {
     );
 }
 
-void thunk_igWindow_GetMetaObject(void) {
+void igWindow_GetMetaObjectFunction(void) {
     igWindow_GetMetaObject();
 }
 
-igMetaObject *FUN_00145e70(void) {
+igMetaObject *igEventProducer_GetPublishedMetaObject(void) {
     return g_igEventProducer_metaObject;
 }
 
 void FUN_00145e80(void) {
-    *(int *)((char *)(g_igWindow_metaObject) + 60) = (int)(&thunk_FUN_00146a60);
+    *(int *)((char *)(g_igWindow_metaObject) + 60) = (int)(&igPsx2Window_GetMetaObjectFunction);
 }
 
-void thunk_FUN_00146a60(void) {
-    FUN_00146a60();
+void igPsx2Window_GetMetaObjectFunction(void) {
+    igPsx2Window_GetMetaObject();
 }
 
 static const char *g_igInterfaceManager_keyValuesNames[] = {

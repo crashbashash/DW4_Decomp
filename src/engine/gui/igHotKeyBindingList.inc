@@ -1,6 +1,6 @@
 igMetaObject *g_igHotKeyBindingList_metaObject;
 
-igMetaObject *FUN_0044dab0(void) {
+igMetaObject *igHotKeyBindingList_GetOrCreateMetaObject(void) {
     if (g_igHotKeyBindingList_metaObject == 0) {
         g_igHotKeyBindingList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }

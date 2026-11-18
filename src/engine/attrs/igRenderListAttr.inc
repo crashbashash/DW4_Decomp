@@ -2,7 +2,7 @@ igMetaObject *g_igRenderListAttr_metaObject;
 igMetaField *g_igRenderListAttr_handleMetaField;
 igMetaField *g_igRenderListAttr_vcMetaField;
 
-igMetaObject *FUN_00133e50(void) {
+igMetaObject *igRenderListAttr_GetOrCreateMetaObject(void) {
     if (g_igRenderListAttr_metaObject == 0) {
         g_igRenderListAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -13,7 +13,7 @@ igMetaObject *igRenderListAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igRenderListAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00133f80();
+        igRenderListAttr_EnsureRegistered();
     return g_igRenderListAttr_metaObject;
 }
 
@@ -40,7 +40,7 @@ int igRenderListAttr_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00133f80(void)
+void igRenderListAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igRenderListAttr_Register);
 }
@@ -54,7 +54,7 @@ CallbackArray *igRenderListAttr_Register(void) {
         &g_igRenderListAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igRenderListAttr_GetMetaObject,
+        igRenderListAttr_GetMetaObjectFunction,
         "igRenderListAttr",
         0x14, /* instance size */
         igRenderListAttr_GetVTable,
@@ -64,7 +64,7 @@ CallbackArray *igRenderListAttr_Register(void) {
     );
 }
 
-void thunk_igRenderListAttr_GetMetaObject(void) {
+void igRenderListAttr_GetMetaObjectFunction(void) {
     igRenderListAttr_GetMetaObject();
 }
 
@@ -86,23 +86,23 @@ static int g_igRenderListAttr_fieldOffsets[] = {
 };
 
 void igRenderListAttr_InitFields(void) {
-    int temp_s2;
-    struct F_134020 *temp_v0;
-    struct F_134020 *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    struct F_134020 *field;
+    struct F_134020 *field2;
+    igMetaObject *meta;
 
-    temp_s0 = g_igRenderListAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igRenderListAttr_ctorTable, 2);
-    temp_v0 = (struct F_134020 *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    igIntMetaField_SetDefault((igMetaField *)temp_v0, -1);
-    temp_v0->b38 = 0;
-    temp_s1 = (struct F_134020 *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    temp_s1->f56 = (int)igVisualContext_GetOrCreateMetaObject();
-    temp_s1->b38 = 0;
-    temp_s1->b40 = 1;
-    temp_s1->b39 = 1;
-    temp_s1->b44 = 3;
-    igMetaObject_NameFields(temp_s0, g_igRenderListAttr_fieldTable, g_igRenderListAttr_fieldHandles, g_igRenderListAttr_fieldOffsets, temp_s2);
+    meta = g_igRenderListAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igRenderListAttr_ctorTable, 2);
+    field = (struct F_134020 *)(igMetaObject_GetFieldAt(meta, base));
+    igIntMetaField_SetDefault((igMetaField *)field, -1);
+    field->b38 = 0;
+    field2 = (struct F_134020 *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
+    field2->b38 = 0;
+    field2->b40 = 1;
+    field2->b39 = 1;
+    field2->b44 = 3;
+    igMetaObject_NameFields(meta, g_igRenderListAttr_fieldTable, g_igRenderListAttr_fieldHandles, g_igRenderListAttr_fieldOffsets, base);
 }
 

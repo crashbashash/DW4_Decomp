@@ -4,7 +4,7 @@ igMetaField *g_igGeometryElement_defaultSizeMetaField;
 igMetaField *g_igGeometryElement_colorMetaField;
 igMetaField *g_igGeometryElement_sharableAttrsMetaField;
 
-igMetaObject *FUN_004505b0(void) {
+igMetaObject *igGeometryElement_GetOrCreateMetaObject(void) {
     if (g_igGeometryElement_metaObject == 0) {
         g_igGeometryElement_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -33,7 +33,7 @@ CallbackArray *igGeometryElement_Register(void) {
         &g_igGeometryElement_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igGeometryElement_GetMetaObject,
+        igGeometryElement_GetMetaObjectFunction,
         "igGeometryElement",
         0x2C, /* instance size */
         0,
@@ -43,7 +43,7 @@ CallbackArray *igGeometryElement_Register(void) {
     );
 }
 
-void thunk_igGeometryElement_GetMetaObject(void) {
+void igGeometryElement_GetMetaObjectFunction(void) {
     igGeometryElement_GetMetaObject();
 }
 

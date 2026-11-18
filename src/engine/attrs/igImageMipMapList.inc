@@ -1,6 +1,6 @@
 igMetaObject *g_igImageMipMapList_metaObject;
 
-igMetaObject *FUN_00132ff0(void) {
+igMetaObject *igImageMipMapList_GetOrCreateMetaObject(void) {
     if (g_igImageMipMapList_metaObject == 0) {
         g_igImageMipMapList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -37,7 +37,7 @@ CallbackArray *igImageMipMapList_Register(void) {
         &g_igImageMipMapList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igImageMipMapList_GetMetaObject,
+        igImageMipMapList_GetMetaObjectFunction,
         "igImageMipMapList",
         0x14, /* instance size */
         igImageMipMapList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igImageMipMapList_Register(void) {
     );
 }
 
-void thunk_igImageMipMapList_GetMetaObject(void) {
+void igImageMipMapList_GetMetaObjectFunction(void) {
     igImageMipMapList_GetMetaObject();
 }
 

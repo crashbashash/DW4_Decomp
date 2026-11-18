@@ -1,6 +1,6 @@
 igMetaObject *g_igAttrDefaultManager_metaObject;
 
-igMetaObject *FUN_0013aab0(void) {
+igMetaObject *igAttrDefaultManager_GetOrCreateMetaObject(void) {
     if (g_igAttrDefaultManager_metaObject == 0) {
         g_igAttrDefaultManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,11 +11,11 @@ igMetaObject *igAttrDefaultManager_GetMetaObject(void)
 {
     igMetaObject *g = g_igAttrDefaultManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0013ab50();
+        igAttrDefaultManager_EnsureRegistered();
     return g_igAttrDefaultManager_metaObject;
 }
 
-void FUN_0013ab50(void)
+void igAttrDefaultManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAttrDefaultManager_Register);
 }
@@ -27,7 +27,7 @@ CallbackArray *igAttrDefaultManager_Register(void) {
         &g_igAttrDefaultManager_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igAttrDefaultManager_GetMetaObject,
+        igAttrDefaultManager_GetMetaObjectFunction,
         "igAttrDefaultManager",
         8, /* instance size */
         0,
@@ -37,7 +37,7 @@ CallbackArray *igAttrDefaultManager_Register(void) {
     );
 }
 
-void thunk_igAttrDefaultManager_GetMetaObject(void) {
+void igAttrDefaultManager_GetMetaObjectFunction(void) {
     igAttrDefaultManager_GetMetaObject();
 }
 

@@ -1,16 +1,16 @@
-void Gap__Attrs__igClearAttr__vfunc_24(void *arg0, igPsx2VisualContext *arg1) {
+void igClearAttr_apply(void *arg0, igPsx2VisualContext *arg1) {
     int temp_a1;
 
-    Gap__Gfx__igPsx2VisualContext__vfunc_181(arg1, *(float *)((char *)(arg0) + 64));
-    Gap__Gfx__igPsx2VisualContext__vfunc_178(arg1, *(int *)((char *)(arg0) + 60));
-    Gap__Gfx__igPsx2VisualContext__vfunc_183(arg1, *(int *)((char *)(arg0) + 56));
+    igPsx2VisualContext_SetClearDepth(arg1, *(float *)((char *)(arg0) + 64));
+    igPsx2VisualContext_SetClearColorPacked(arg1, *(int *)((char *)(arg0) + 60));
+    igPsx2VisualContext_SetClearStencil(arg1, *(int *)((char *)(arg0) + 56));
     temp_a1 = *(int *)((char *)(arg0) + 12);
     if (temp_a1 != 0) {
-        Gap__Gfx__igPsx2VisualContext__vfunc_176(arg1, temp_a1);
+        igPsx2VisualContext_ClearRenderDestination(arg1, temp_a1);
     }
 }
 
-void Gap__Attrs__igClearAttr__vfunc_26(void *arg0, void **arg1) {
+void igClearAttr_SynchronizeDefault(void *arg0, void **arg1) {
     float temp_f0;
 
     *(int *)((char *)(arg0) + 56) = ((DW4VC_736_0 *)(arg1))->vX();
@@ -20,14 +20,14 @@ void Gap__Attrs__igClearAttr__vfunc_26(void *arg0, void **arg1) {
     *(int *)((char *)(arg0) + 60) = ((DW4VC_720_0 *)(arg1))->vX();
 }
 
-void Gap__Attrs__igClearAttr__vfunc_11(void *arg0) {
+void igClearAttr_InitDefaults(void *arg0) {
     igObject_InitDefaults((igObject *)arg0);
     *(int *)((char *)(arg0) + 60) = igVec4f_PackColor((const float *)((char *)arg0 + 0x10), 1);
     *(float *)((char *)(arg0) + 64) = dptofp(*(double *)((char *)(arg0) + 48));
 }
 
-void Gap__Attrs__igClearAttr__vfunc_17(void *arg0) {
-    FUN_0013b820(arg0);
+void igClearAttr_UserPostLoad(void *arg0) {
+    igAttr_UserPostLoad(arg0);
     *(int *)((char *)(arg0) + 60) = igVec4f_PackColor((const float *)((char *)arg0 + 0x10), 1);
     *(float *)((char *)(arg0) + 64) = dptofp(*(double *)((char *)(arg0) + 48));
 }

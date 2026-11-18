@@ -2,7 +2,7 @@ igMetaObject *g_igIterateField_metaObject;
 igMetaField *g_igIterateField_iteratedMetaField;
 igMetaField *g_igIterateField_currentMetaField;
 
-void *FUN_00227780(int arg0) {
+void *igIterateField_Create(int arg0) {
     FUN_002278a0();
     return igMetaObject_CreateInstance(g_igIterateField_metaObject, (igMemoryPoolView *)arg0);
 }
@@ -55,7 +55,7 @@ CallbackArray *igIterateField_Register(void) {
         &g_igIterateField_metaObject,
         (igMetaObjectRegisterFunction)igIterator_Register,
         (igMetaObjectGetFunction)igIterator_GetPublishedMetaObject,
-        thunk_igIterateField_GetMetaObject,
+        igIterateField_GetMetaObjectFunction,
         "igIterateField",
         0x10, /* instance size */
         igIterateField_GetVTable,
@@ -65,7 +65,7 @@ CallbackArray *igIterateField_Register(void) {
     );
 }
 
-void thunk_igIterateField_GetMetaObject(void) {
+void igIterateField_GetMetaObjectFunction(void) {
     igIterateField_GetMetaObject();
 }
 
@@ -87,15 +87,15 @@ static int g_igIterateField_fieldOffsets[] = {
 };
 
 void igIterateField_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    igMetaObject *meta;
 
-    temp_s0 = g_igIterateField_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igIterateField_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_igIterateField_fieldTable, g_igIterateField_fieldHandles, g_igIterateField_fieldOffsets, temp_s2);
+    meta = g_igIterateField_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igIterateField_ctorTable, 2);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_igIterateField_fieldTable, g_igIterateField_fieldHandles, g_igIterateField_fieldOffsets, base);
 }
 

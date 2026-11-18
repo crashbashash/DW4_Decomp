@@ -5,9 +5,9 @@ igMetaField *g_igColorMaskAttr_blueMetaField;
 igMetaField *g_igColorMaskAttr_alphaMetaField;
 igMetaField *g_igColorMaskAttr_unusedMetaField;
 
-void FUN_00138cb0(int arg0) {
+igColorMaskAttr *igColorMaskAttr_Create(igMemoryPoolView *pool) {
     igColorMaskAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F2B0, (igMemoryPoolView *)arg0);
+    return (igColorMaskAttr *)igMetaObject_CreateInstance(g_igColorMaskAttr_metaObject, pool);
 }
 
 igMetaObject *igColorMaskAttr_GetMetaObject(void)
@@ -38,7 +38,7 @@ CallbackArray *igColorMaskAttr_Register(void) {
         &g_igColorMaskAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igColorMaskAttr_GetMetaObject,
+        igColorMaskAttr_GetMetaObjectFunction,
         "igColorMaskAttr",
         0x14, /* instance size */
         igColorMaskAttr_GetVTable,
@@ -48,7 +48,7 @@ CallbackArray *igColorMaskAttr_Register(void) {
     );
 }
 
-void thunk_igColorMaskAttr_GetMetaObject(void) {
+void igColorMaskAttr_GetMetaObjectFunction(void) {
     igColorMaskAttr_GetMetaObject();
 }
 
@@ -82,16 +82,16 @@ static int g_igColorMaskAttr_fieldOffsets[] = {
 };
 
 void igColorMaskAttr_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_igColorMaskAttr_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igColorMaskAttr_ctorTable, 5);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3), 1);
-    igMetaObject_NameFields(temp_s0, g_igColorMaskAttr_fieldTable, g_igColorMaskAttr_fieldHandles, g_igColorMaskAttr_fieldOffsets, temp_s1);
+    meta = g_igColorMaskAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igColorMaskAttr_ctorTable, 5);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 1), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 2), 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 3), 1);
+    igMetaObject_NameFields(meta, g_igColorMaskAttr_fieldTable, g_igColorMaskAttr_fieldHandles, g_igColorMaskAttr_fieldOffsets, base);
 }
 

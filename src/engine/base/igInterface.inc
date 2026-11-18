@@ -28,7 +28,7 @@ CallbackArray *igInterface_Register(void) {
         &g_igInterface_metaObject,
         (igMetaObjectRegisterFunction)igInterfaced_Register,
         (igMetaObjectGetFunction)igInterfaced_GetPublishedMetaObject,
-        thunk_igInterface_GetMetaObject,
+        igInterface_GetMetaObjectFunction,
         "igInterface",
         0x20, /* instance size */
         igInterface_GetVTable,
@@ -38,7 +38,7 @@ CallbackArray *igInterface_Register(void) {
     );
 }
 
-void thunk_igInterface_GetMetaObject(void) {
+void igInterface_GetMetaObjectFunction(void) {
     igInterface_GetMetaObject();
 }
 

@@ -1,13 +1,13 @@
 void CollisionLibrary_RegisterClasses(void) {
-    FUN_002395b0();
-    FUN_00239910();
-    FUN_00239c80();
-    FUN_00239b20();
-    FUN_00239ee0();
-    FUN_0023a340();
-    FUN_0023a850();
-    FUN_0023a650();
-    FUN_0023aaf0();
+    igCreateCollisionDatabase_EnsureRegistered();
+    igCollisionInfo_EnsureRegistered();
+    igCollisionGroup_EnsureRegistered();
+    igCollisionGroupList_EnsureRegistered();
+    igCollisionGridHelper_EnsureRegistered();
+    igCollisionGrid_EnsureRegistered();
+    igCollisionCell_EnsureRegistered();
+    igCollisionCellList_EnsureRegistered();
+    igBoundingSphereMaker_EnsureRegistered();
 }
 
 unsigned char g_CollisionLibrary_registered;

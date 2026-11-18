@@ -1,6 +1,6 @@
 igMetaObject *g_igOnOffValueObserverList_metaObject;
 
-igMetaObject *FUN_0044c880(void) {
+igMetaObject *igOnOffValueObserverList_GetOrCreateMetaObject(void) {
     if (g_igOnOffValueObserverList_metaObject == 0) {
         g_igOnOffValueObserverList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -37,7 +37,7 @@ CallbackArray *igOnOffValueObserverList_Register(void) {
         &g_igOnOffValueObserverList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igOnOffValueObserverList_GetMetaObject,
+        igOnOffValueObserverList_GetMetaObjectFunction,
         "igOnOffValueObserverList",
         0x14, /* instance size */
         igOnOffValueObserverList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igOnOffValueObserverList_Register(void) {
     );
 }
 
-void thunk_igOnOffValueObserverList_GetMetaObject(void) {
+void igOnOffValueObserverList_GetMetaObjectFunction(void) {
     igOnOffValueObserverList_GetMetaObject();
 }
 

@@ -72,7 +72,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
                 if (scePadPortOpen(s3, s1, (void *)mem) != 1) {
                     Memory_FreeBuffer((void *)mem);
                 } else {
-                    igSmartPointer<igPsx2Controller> controller((igPsx2Controller *)FUN_00147090((int)igObject_GetAllocator(arg0)));
+                    igSmartPointer<igPsx2Controller> controller((igPsx2Controller *)igPsx2Controller_Create((int)igObject_GetAllocator(arg0)));
                     controller.get()->_port = s3;
                     controller.get()->_slot = s1;
                     ((Pd *)controller.get())->vX((s3 | (s1 * 2)) & 0xFFFF);

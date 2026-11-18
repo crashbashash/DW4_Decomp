@@ -1,7 +1,7 @@
 igMetaObject *g_igPolygonModeAttr_metaObject;
 igMetaField *g_igPolygonModeAttr_modeMetaField;
 
-igMetaObject *FUN_00134940(void) {
+igMetaObject *igPolygonModeAttr_GetOrCreateMetaObject(void) {
     if (g_igPolygonModeAttr_metaObject == 0) {
         g_igPolygonModeAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -12,7 +12,7 @@ igMetaObject *igPolygonModeAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igPolygonModeAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00134a20();
+        igPolygonModeAttr_EnsureRegistered();
     return g_igPolygonModeAttr_metaObject;
 }
 
@@ -23,7 +23,7 @@ int igPolygonModeAttr_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00134a20(void)
+void igPolygonModeAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPolygonModeAttr_Register);
 }
@@ -35,7 +35,7 @@ CallbackArray *igPolygonModeAttr_Register(void) {
         &g_igPolygonModeAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igPolygonModeAttr_GetMetaObject,
+        igPolygonModeAttr_GetMetaObjectFunction,
         "igPolygonModeAttr",
         0x10, /* instance size */
         igPolygonModeAttr_GetVTable,
@@ -45,7 +45,7 @@ CallbackArray *igPolygonModeAttr_Register(void) {
     );
 }
 
-void thunk_igPolygonModeAttr_GetMetaObject(void) {
+void igPolygonModeAttr_GetMetaObjectFunction(void) {
     igPolygonModeAttr_GetMetaObject();
 }
 
@@ -63,16 +63,16 @@ static int g_igPolygonModeAttr_fieldOffsets[] = {
 };
 
 void igPolygonModeAttr_InitFields(void) {
-    int temp_s2;
-    void *temp_v0;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    igMetaObject *meta;
 
-    temp_s0 = g_igPolygonModeAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igPolygonModeAttr_ctorTable, 1);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
-    ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_001495c0);
-    igMetaObject_NameFields(temp_s0, g_igPolygonModeAttr_fieldTable, g_igPolygonModeAttr_fieldHandles, g_igPolygonModeAttr_fieldOffsets, temp_s2);
+    meta = g_igPolygonModeAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igPolygonModeAttr_ctorTable, 1);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field, 0);
+    ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)(&IG_GFX_RENDER_MODE_GetMetaEnum);
+    igMetaObject_NameFields(meta, g_igPolygonModeAttr_fieldTable, g_igPolygonModeAttr_fieldHandles, g_igPolygonModeAttr_fieldOffsets, base);
 }
 

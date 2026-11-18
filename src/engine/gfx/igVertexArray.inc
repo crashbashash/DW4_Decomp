@@ -36,7 +36,7 @@ CallbackArray *igVertexArray_Register(void) {
         &g_igVertexArray_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igVertexArray_GetMetaObject,
+        igVertexArray_GetMetaObjectFunction,
         "igVertexArray",
         0x18, /* instance size */
         0,
@@ -46,7 +46,7 @@ CallbackArray *igVertexArray_Register(void) {
     );
 }
 
-void thunk_igVertexArray_GetMetaObject(void) {
+void igVertexArray_GetMetaObjectFunction(void) {
     igVertexArray_GetMetaObject();
 }
 
@@ -87,6 +87,6 @@ void igVertexArray_InitFields(void) {
     *(int *)((char *)(temp_s1) + 60) = igMemoryRefMetaField_GetDefaultDescriptor();
     *(char *)((char *)(temp_s1) + 40) = 0;
     igMetaObject_NameFields(meta, g_igVertexArray_fieldTable, g_igVertexArray_fieldHandles, g_igVertexArray_fieldOffsets, fieldStart);
-    *(int *)((char *)(g_igVertexArray_metaObject) + 60) = (int)(&thunk_igPsx2VertexArray1_1_GetMetaObject);
+    *(int *)((char *)(g_igVertexArray_metaObject) + 60) = (int)(&igPsx2VertexArray1_1_GetMetaObjectFunction);
 }
 

@@ -1,12 +1,12 @@
 igMetaObject *g_igProjectionMatrixAttr_metaObject;
 igMetaField *g_igProjectionMatrixAttr_mMetaField;
 
-void FUN_00134690(int arg0) {
+igProjectionMatrixAttr *igProjectionMatrixAttr_Create(igMemoryPoolView *pool) {
     igProjectionMatrixAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55EF50, (igMemoryPoolView *)arg0);
+    return (igProjectionMatrixAttr *)igMetaObject_CreateInstance(g_igProjectionMatrixAttr_metaObject, pool);
 }
 
-igMetaObject *FUN_001346d0(void) {
+igMetaObject *igProjectionMatrixAttr_GetOrCreateMetaObject(void) {
     if (g_igProjectionMatrixAttr_metaObject == 0) {
         g_igProjectionMatrixAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -41,7 +41,7 @@ CallbackArray *igProjectionMatrixAttr_Register(void) {
         &g_igProjectionMatrixAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igProjectionMatrixAttr_GetMetaObject,
+        igProjectionMatrixAttr_GetMetaObjectFunction,
         "igProjectionMatrixAttr",
         0x4C, /* instance size */
         igProjectionMatrixAttr_GetVTable,
@@ -51,7 +51,7 @@ CallbackArray *igProjectionMatrixAttr_Register(void) {
     );
 }
 
-void thunk_igProjectionMatrixAttr_GetMetaObject(void) {
+void igProjectionMatrixAttr_GetMetaObjectFunction(void) {
     igProjectionMatrixAttr_GetMetaObject();
 }
 
@@ -69,19 +69,19 @@ static int g_igProjectionMatrixAttr_fieldOffsets[] = {
 };
 
 void igProjectionMatrixAttr_InitFields(void) {
-    int temp_s2;
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    int field;
+    igMetaObject *meta;
     struct M o1;
     struct V o2;
     struct V o3;
     struct V o4;
     struct V o5;
 
-    temp_s0 = g_igProjectionMatrixAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igProjectionMatrixAttr_ctorTable, 1);
-    temp_s1 = (int)igMetaObject_GetFieldAt(temp_s0, temp_s2);
+    meta = g_igProjectionMatrixAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igProjectionMatrixAttr_ctorTable, 1);
+    field = (int)igMetaObject_GetFieldAt(meta, base);
     o5.x = 0;
     o5.y = 0;
     o5.z = 0;
@@ -99,7 +99,7 @@ void igProjectionMatrixAttr_InitFields(void) {
     o2.z = 0;
     o2.w = 0;
     igMatrix44f_FromRows((float *)&o1, (igVec4f *)&o2, (igVec4f *)&o3, (igVec4f *)&o4, (igVec4f *)&o5);
-    FUN_0018c640(temp_s1, &o1);
-    igMetaObject_NameFields(temp_s0, g_igProjectionMatrixAttr_fieldTable, g_igProjectionMatrixAttr_fieldHandles, g_igProjectionMatrixAttr_fieldOffsets, temp_s2);
+    FUN_0018c640(field, &o1);
+    igMetaObject_NameFields(meta, g_igProjectionMatrixAttr_fieldTable, g_igProjectionMatrixAttr_fieldHandles, g_igProjectionMatrixAttr_fieldOffsets, base);
 }
 

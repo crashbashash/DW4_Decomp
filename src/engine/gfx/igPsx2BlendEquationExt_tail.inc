@@ -2,7 +2,7 @@ igMetaObject *igPsx2BlendEquationExt_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2BlendEquationExt_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00154710();
+        igPsx2BlendEquationExt_EnsureRegistered();
     return g_igPsx2BlendEquationExt_metaObject;
 }
 
@@ -43,12 +43,12 @@ int igPsx2BlendEquationExt_GetVTable(void) {
     return temp_s1;
 }
 
-void FUN_00154710(void)
+void igPsx2BlendEquationExt_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2BlendEquationExt_Register);
 }
 
-static igMetaObjectCallback g_igPsx2BlendEquationExt_callbackList[] = { FUN_001511a0, 0 };
+static igMetaObjectCallback g_igPsx2BlendEquationExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2BlendEquationExt_Register(void) {
     FUN_00149bc0();
@@ -57,7 +57,7 @@ CallbackArray *igPsx2BlendEquationExt_Register(void) {
         &g_igPsx2BlendEquationExt_metaObject,
         igBlendEquationExt_Register,
         igBlendEquationExt_GetPublishedMetaObject,
-        thunk_igPsx2BlendEquationExt_GetMetaObject,
+        igPsx2BlendEquationExt_GetMetaObjectFunction,
         "igPsx2BlendEquationExt",
         0x30, /* instance size */
         igPsx2BlendEquationExt_GetVTable,
@@ -67,7 +67,7 @@ CallbackArray *igPsx2BlendEquationExt_Register(void) {
     );
 }
 
-igMetaObject *FUN_001547a0(void) {
+igMetaObject *igBlendEquationExt_GetPublishedMetaObject(void) {
     return g_igBlendEquationExt_metaObject;
 }
 
@@ -113,7 +113,7 @@ void igPsx2BlendEquationExt_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igPsx2BlendEquationExt_ctorTable, 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00150770();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igPsx2VisualContext_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 5), -0x80);
     igMetaObject_NameFields(meta, g_igPsx2BlendEquationExt_fieldTable, g_igPsx2BlendEquationExt_fieldHandles, g_igPsx2BlendEquationExt_fieldOffsets, fieldStart);

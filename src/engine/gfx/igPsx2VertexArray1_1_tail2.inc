@@ -1,4 +1,4 @@
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_12(igPsx2VertexArray1_1 *self) {
+void igPsx2VertexArray1_1_ReleaseDefaults(igPsx2VertexArray1_1 *self) {
     if (self->_usageFlags & 4) {
         p2WaitDmaSequence(1, self->_lSequence);
     }
@@ -12,10 +12,10 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_12(igPsx2VertexArray1_1 *self) {
     igObject_ReleaseDefaults(self);
 }
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_59(void) {
+void igPsx2VertexArray1_1_Reset(void) {
 }
 
-int Gap__Gfx__igPsx2VertexArray1_1__vfunc_24(S_17d0c0 *arg0, int *arg1, int arg2, int arg3) {
+int igPsx2VertexArray1_1_Configure(S_17d0c0 *arg0, int *arg1, int arg2, int arg3) {
     int total;
     VC_17d0c0 *a;
 
@@ -50,7 +50,7 @@ void FUN_0017d170(V_17d170 *arg0) {
                 igObject_Destroy((igObject *)o);
             }
         }
-        arg0->f56 = (Obj_17d170 *)FUN_001527c0(a);
+        arg0->f56 = (Obj_17d170 *)igPsx2LongList_Create(a);
         a = (int)igObject_GetAllocator((igObject *)arg0);
         o = arg0->f48;
         if (o != 0) {
@@ -118,25 +118,25 @@ void FUN_0017d2b0(struct O_17d2b0 *arg0) {
     arg0->f52 = 0;
 }
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_29(int *arg0, int arg1, float *arg2) {
+void igPsx2VertexArray1_1_SetPosition(int *arg0, int arg1, float *arg2) {
     float *p = (float *)(**(int **)(arg0 + 2) + arg1 * 12);
     p[0] = arg2[0];
     p[1] = arg2[1];
     p[2] = arg2[2];
 }
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_30(igPsx2VertexArray1_1 *arg0, int arg1, float *arg2) {
+void igPsx2VertexArray1_1_GetPosition(igPsx2VertexArray1_1 *arg0, int arg1, float *arg2) {
     float *p = (float *)(*(int *)arg0->_vdata + arg1 * 12);
     arg2[0] = p[0];
     arg2[1] = p[1];
     arg2[2] = p[2];
 }
 
-int Gap__Gfx__igPsx2VertexArray1_1__vfunc_31(int *arg0, int arg1) {
+int igPsx2VertexArray1_1_GetPositionPointer(int *arg0, int arg1) {
     return **(int **)(arg0 + 2) + arg1 * 12;
 }
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_32(igPsx2VertexArray1_1 *arg0, int arg1, void *arg2) {
+void igPsx2VertexArray1_1_SetNormal(igPsx2VertexArray1_1 *arg0, int arg1, void *arg2) {
     void *temp_v1;
 
     temp_v1 = (void *)(*(int *)((char *)(arg0->_vdata) + 4) + (arg1 * 0xC));
@@ -145,7 +145,7 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_32(igPsx2VertexArray1_1 *arg0, int ar
     *(float *)((char *)(temp_v1) + 8) = (float) *(float *)((char *)(arg2) + 8);
 }
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_33(igVertexArray *arg0, int arg1, void *arg2) {
+void igPsx2VertexArray1_1_GetNormal(igVertexArray *arg0, int arg1, void *arg2) {
     void *temp_v1;
 
     temp_v1 = (void *)(*(int *)((char *)(arg0->_vdata) + 4) + (arg1 * 0xC));
@@ -158,15 +158,15 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_33(igVertexArray *arg0, int arg1, voi
  * second word (+4) is the base of the 12-byte (three-float) entries. */
 
 
-int Gap__Gfx__igPsx2VertexArray1_1__vfunc_34(igPsx2VertexArray1_1 *self, int vertexIndex) {
+int igPsx2VertexArray1_1_GetNormalPointer(igPsx2VertexArray1_1 *self, int vertexIndex) {
     return *(int *)((char *)(self->_vdata) + 4) + (vertexIndex * VERTEX_ENTRY_SIZE);
 }
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_41(igPsx2VertexArray1_1 *arg0, int arg1, unsigned int arg2) {
+void igPsx2VertexArray1_1_SetColorPacked(igPsx2VertexArray1_1 *arg0, int arg1, unsigned int arg2) {
     *(int *)(*(int *)((char *)(arg0->_vdata) + 8) + (arg1 * 4)) = (arg2 & 0xFFFFFF) | (((arg2 >> 1) & 0x7F000000) + (arg2 & 0x01000000));
 }
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_42(ColorArrayView *arg0, int arg1, float *c) {
+void igPsx2VertexArray1_1_SetColor(ColorArrayView *arg0, int arg1, float *c) {
     float s;
     float a;
     float b;
@@ -192,7 +192,7 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_42(ColorArrayView *arg0, int arg1, fl
     arg0->f8->f8[arg1] = ((ta | tb) | tg) | tr;
 }
 
-int Gap__Gfx__igPsx2VertexArray1_1__vfunc_43(igPsx2VertexArray1_1 *arg0, int arg1) {
+int igPsx2VertexArray1_1_GetColorPacked(igPsx2VertexArray1_1 *arg0, int arg1) {
     int temp_a1;
     unsigned int temp_a0;
     temp_a1 = *(int *)(*(int *)((char *)(arg0->_vdata) + 8) + (arg1 * 4));
@@ -200,7 +200,7 @@ int Gap__Gfx__igPsx2VertexArray1_1__vfunc_43(igPsx2VertexArray1_1 *arg0, int arg
     return (temp_a1 & 0xFFFFFF) | (temp_a0 + (((temp_a1 & 0xFF000000) - temp_a0) * 2));
 }
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_44(VertexArrayView *arg0, int arg1, float *arg2) {
+void igPsx2VertexArray1_1_GetColor(VertexArrayView *arg0, int arg1, float *arg2) {
     unsigned int c = arg0->b->data[arg1];
     unsigned int t;
     float f, s;
@@ -222,7 +222,7 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_44(VertexArrayView *arg0, int arg1, f
 /* Write the {u, v} float pair *uv to vertex `vertexIndex` of texture-coordinate stream
  * `texCoordSet` (_vdata[11 + set], 8 bytes per entry). vfunc_51 is the getter. */
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_50(igPsx2VertexArray1_1 *self, int texCoordSet, int vertexIndex, void *uv) {
+void igPsx2VertexArray1_1_SetTextureCoord(igPsx2VertexArray1_1 *self, int texCoordSet, int vertexIndex, void *uv) {
     void *entry;
 
     entry = (void *)(*(int *)(self->_vdata + ((texCoordSet + 0xB) * 4)) + (vertexIndex * 8));
@@ -234,7 +234,7 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_50(igPsx2VertexArray1_1 *self, int te
  * into *uv. The streams are _vdata[11 + set]; each entry is an 8-byte pair. vfunc_50 is the
  * setter, vfunc_52 returns the entry's address. */
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_51(igPsx2VertexArray1_1 *self, int texCoordSet, int vertexIndex, void *uv) {
+void igPsx2VertexArray1_1_GetTextureCoord(igPsx2VertexArray1_1 *self, int texCoordSet, int vertexIndex, void *uv) {
     void *entry;
 
     entry = (void *)(*(int *)(self->_vdata + ((texCoordSet + 0xB) * 4)) + (vertexIndex * 8));
@@ -246,11 +246,11 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_51(igPsx2VertexArray1_1 *self, int te
  * a table of base pointers whose first entry for sub-array 0 sits at word 11 (0xB), so the base is
  * read from word `index + 11` and offset by `element * 8`. */
 
-int Gap__Gfx__igPsx2VertexArray1_1__vfunc_52(igPsx2VertexArray1_1 *self, int index, int element) {
+int igPsx2VertexArray1_1_GetTextureCoordPointer(igPsx2VertexArray1_1 *self, int index, int element) {
     return *(int *)(self->_vdata + ((index + 0xB) * 4)) + (element * 8);
 }
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_57(VertexArrayView_17d910 *arg0, int arg1, float x) {
+void igPsx2VertexArray1_1_SetPointSpriteRadian(VertexArrayView_17d910 *arg0, int arg1, float x) {
     float t = fmodf(x, 6.2831855f);
     if (_dpflt(fptodp(t), 0.0) != 0) {
         t += 6.2831855f;
@@ -264,7 +264,7 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_57(VertexArrayView_17d910 *arg0, int 
     }
 }
 
-float Gap__Gfx__igPsx2VertexArray1_1__vfunc_58(igPsx2VertexArray1_1 *arg0, int arg1) {
+float igPsx2VertexArray1_1_GetPointSpriteRadian(igPsx2VertexArray1_1 *arg0, int arg1) {
     float var_f0;
 
     var_f0 = *(float *)(*(int *)((char *)(arg0->_vdata) + 76) + (arg1 * 4));
@@ -277,7 +277,7 @@ float Gap__Gfx__igPsx2VertexArray1_1__vfunc_58(igPsx2VertexArray1_1 *arg0, int a
     return var_f0;
 }
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_27(VA_17da90 *arg0, St_17da90 *arg1) {
+void igPsx2VertexArray1_1_GetEditableComponent(VA_17da90 *arg0, St_17da90 *arg1) {
     int m;
     int t;
     int s1;
@@ -342,11 +342,11 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_27(VA_17da90 *arg0, St_17da90 *arg1) 
     }
 }
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_28(void) {
+void igPsx2VertexArray1_1_CommitComponentEdits(void) {
 
 }
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_19(struct VertexArrayColorView *s) {
+void igPsx2VertexArray1_1_UserApplyWriteProxy(struct VertexArrayColorView *s) {
     unsigned int i;
     unsigned int *p;
     unsigned int x;
@@ -366,7 +366,7 @@ void Gap__Gfx__igPsx2VertexArray1_1__vfunc_19(struct VertexArrayColorView *s) {
     }
 }
 
-void Gap__Gfx__igPsx2VertexArray1_1__vfunc_20(void *arg0, int arg1) {
+void igPsx2VertexArray1_1_UserMakeConcrete(void *arg0, int arg1) {
     unsigned int var_a6;
     unsigned int *var_a5;
     unsigned int temp_a4;

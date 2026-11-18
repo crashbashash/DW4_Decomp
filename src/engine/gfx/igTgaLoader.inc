@@ -10,8 +10,8 @@ igMetaField *g_igTgaLoader_nextCharMetaField;
 igMetaField *g_igTgaLoader_limitCharMetaField;
 igMetaField *g_igTgaLoader_sbprMetaField;
 
-int FUN_00150060(int arg0) {
-    FUN_00150200();
+int igTgaLoader_Create(int arg0) {
+    igTgaLoader_EnsureRegistered();
     return (int)igMetaObject_CreateInstance(g_igTgaLoader_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -19,7 +19,7 @@ igMetaObject *igTgaLoader_GetMetaObject(void)
 {
     igMetaObject *g = g_igTgaLoader_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00150200();
+        igTgaLoader_EnsureRegistered();
     return g_igTgaLoader_metaObject;
 }
 
@@ -60,7 +60,7 @@ igSmartPointer<igObject> *igSmartPointer_igFile_Destruct(igSmartPointer<igObject
     return self;
 }
 
-void FUN_00150200(void)
+void igTgaLoader_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTgaLoader_Register);
 }
@@ -74,7 +74,7 @@ CallbackArray *igTgaLoader_Register(void) {
         &g_igTgaLoader_metaObject,
         igImageLoader_Register,
         igImageLoader_GetPublishedMetaObject,
-        thunk_igTgaLoader_GetMetaObject,
+        igTgaLoader_GetMetaObjectFunction,
         "igTgaLoader",
         0x30, /* instance size */
         igTgaLoader_GetVTable,
@@ -84,11 +84,11 @@ CallbackArray *igTgaLoader_Register(void) {
     );
 }
 
-void thunk_igTgaLoader_GetMetaObject(void) {
+void igTgaLoader_GetMetaObjectFunction(void) {
     igTgaLoader_GetMetaObject();
 }
 
-igMetaObject *FUN_001502a0(void) {
+igMetaObject *igImageLoader_GetPublishedMetaObject(void) {
     return g_igImageLoader_metaObject;
 }
 
@@ -143,23 +143,23 @@ static int g_igTgaLoader_fieldOffsets[] = {
 
 void igTgaLoader_InitFields(void) {
     int fieldStart;
-    void *temp_s1_4;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
+    void *tempRowField;
+    void *tempMapField;
+    void *paletteField;
+    void *fileField;
     igMetaObject *meta;
 
     meta = g_igTgaLoader_metaObject;
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igTgaLoader_ctorTable, 0xA);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igFile_GetOrCreateMetaObject();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
-    ((igMemoryRefMetaField *)temp_s1_2)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
-    ((igMemoryRefMetaField *)temp_s1_3)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
-    temp_s1_4 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 3));
-    ((igMemoryRefMetaField *)temp_s1_4)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    fileField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
+    ((igObjectRefMetaField *)fileField)->_metaObject = (int)igFile_GetOrCreateMetaObject();
+    paletteField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
+    ((igMemoryRefMetaField *)paletteField)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    tempMapField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
+    ((igMemoryRefMetaField *)tempMapField)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    tempRowField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 3));
+    ((igMemoryRefMetaField *)tempRowField)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
     igMetaObject_NameFields(meta, g_igTgaLoader_fieldTable, g_igTgaLoader_fieldHandles, g_igTgaLoader_fieldOffsets, fieldStart);
 }
 

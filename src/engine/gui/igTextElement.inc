@@ -3,7 +3,7 @@ igMetaField *g_igTextElement_fontMetaField;
 igMetaField *g_igTextElement_geometryAttrMetaField;
 igMetaField *g_igTextElement_textMetaField;
 
-igMetaObject *FUN_0044bce0(void) {
+igMetaObject *igTextElement_GetOrCreateMetaObject(void) {
     if (g_igTextElement_metaObject == 0) {
         g_igTextElement_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -33,7 +33,7 @@ int igTextElement_GetVTable(void) {
     temp_s2 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igTextElement_vtable[0]);
     igStringRef_Destruct((igStringRef *)&u.w[13], -1);
-    FUN_001353b0(&u.w[12], -1);
+    igSmartPointer_igGeometryAttr_Destruct(&u.w[12], -1);
     FUN_0044bf10((void **)&u.w[11], -1);
     FUN_0044be30((igGeometryElement *)u.b, 0);
     return temp_s2;
@@ -94,7 +94,7 @@ void igTextElement_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTextElement_Register);
 }
 
-static igMetaObjectCallback g_igTextElement_callbackList[] = { igFont_EnsureRegistered, FUN_001378f0, 0 };
+static igMetaObjectCallback g_igTextElement_callbackList[] = { igFont_EnsureRegistered, igGeometryAttr_EnsureRegistered, 0 };
 
 CallbackArray *igTextElement_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -103,7 +103,7 @@ CallbackArray *igTextElement_Register(void) {
         &g_igTextElement_metaObject,
         igGeometryElement_Register,
         igGeometryElement_GetPublishedMetaObject,
-        thunk_igTextElement_GetMetaObject,
+        igTextElement_GetMetaObjectFunction,
         "igTextElement",
         0x38, /* instance size */
         igTextElement_GetVTable,
@@ -113,11 +113,11 @@ CallbackArray *igTextElement_Register(void) {
     );
 }
 
-void thunk_igTextElement_GetMetaObject(void) {
+void igTextElement_GetMetaObjectFunction(void) {
     igTextElement_GetMetaObject();
 }
 
-igMetaObject *FUN_0044c030(void) {
+igMetaObject *igGeometryElement_GetPublishedMetaObject(void) {
     return g_igGeometryElement_metaObject;
 }
 
@@ -152,9 +152,9 @@ void igTextElement_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igTextElement_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_004507f0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igFont_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_00137850();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igGeometryAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2), "");
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igTextElement_fieldTable, g_igTextElement_fieldHandles, g_igTextElement_fieldOffsets, temp_s2);
@@ -183,7 +183,7 @@ void *FUN_0044c110(struct S *arg0, short arg1) {
     return arg0;
 }
 
-igMetaObject *FUN_0044c1b0(void) {
+igMetaObject *igGuiComponentModel_GetPublishedMetaObject(void) {
     return g_igGuiComponentModel_metaObject;
 }
 
@@ -205,7 +205,7 @@ void **FUN_0044c1c0(void **arg0, int arg1) {
     return arg0;
 }
 
-igMetaObject *FUN_0044c240(void) {
+igMetaObject *igGuiComponentAspect_GetPublishedMetaObject(void) {
     return g_igGuiComponentAspect_metaObject;
 }
 

@@ -5,7 +5,7 @@ igMetaObject *igFloatObject_GetMetaObject(void)
 {
     igMetaObject *g = g_igFloatObject_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001e5050();
+        igFloatObject_EnsureRegistered();
     return g_igFloatObject_metaObject;
 }
 
@@ -16,7 +16,7 @@ int igFloatObject_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_001e5050(void)
+void igFloatObject_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igFloatObject_Register);
 }
@@ -28,7 +28,7 @@ CallbackArray *igFloatObject_Register(void) {
         &g_igFloatObject_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igFloatObject_GetMetaObject,
+        igFloatObject_GetMetaObjectFunction,
         "igFloatObject",
         0xC, /* instance size */
         igFloatObject_GetVTable,
@@ -38,7 +38,7 @@ CallbackArray *igFloatObject_Register(void) {
     );
 }
 
-void thunk_igFloatObject_GetMetaObject(void) {
+void igFloatObject_GetMetaObjectFunction(void) {
     igFloatObject_GetMetaObject();
 }
 

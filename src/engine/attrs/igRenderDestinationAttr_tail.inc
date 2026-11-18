@@ -49,16 +49,16 @@ extern "C" void Gap__Attrs__igRenderDestinationAttr__apply(RenderDestinationAttr
     if (!self->_bEnabled) {
         return;
     }
-    self->_iPrevRDHandle = Gap__Gfx__igPsx2VisualContext__vfunc_50((igPsx2VisualContext *)context);
+    self->_iPrevRDHandle = igPsx2VisualContext_GetCurrentRenderDestination((igPsx2VisualContext *)context);
     if (self->_iRDHandle < 0) {
         if (self->_iCreateMode != 1) {
-            Gap__Gfx__igPsx2VisualContext__vfunc_53((igPsx2VisualContext *)context, self->_iPrevRDHandle, &sizeX, &sizeY);
+            igPsx2VisualContext_GetRenderDestinationSize((igPsx2VisualContext *)context, self->_iPrevRDHandle, &sizeX, &sizeY);
             self->_iSizeX = sizeX;
             self->_iSizeY = sizeY;
-            self->_iColorBitCount = Gap__Gfx__igPsx2VisualContext__vfunc_54((igPsx2VisualContext *)context, self->_iPrevRDHandle);
-            self->_iAlphaBitCount = Gap__Gfx__igPsx2VisualContext__vfunc_55((igPsx2VisualContext *)context, self->_iPrevRDHandle);
-            self->_iDepthBitCount = Gap__Gfx__igPsx2VisualContext__vfunc_56((igPsx2VisualContext *)context, self->_iPrevRDHandle);
-            self->_iStencilBitCount = Gap__Gfx__igPsx2VisualContext__vfunc_57((igPsx2VisualContext *)context, self->_iPrevRDHandle);
+            self->_iColorBitCount = igPsx2VisualContext_GetColorBitsPerPixel((igPsx2VisualContext *)context, self->_iPrevRDHandle);
+            self->_iAlphaBitCount = igPsx2VisualContext_GetAlphaBitsPerPixel((igPsx2VisualContext *)context, self->_iPrevRDHandle);
+            self->_iDepthBitCount = igPsx2VisualContext_GetDepthBitsPerPixel((igPsx2VisualContext *)context, self->_iPrevRDHandle);
+            self->_iStencilBitCount = igPsx2VisualContext_GetStencilBitsPerPixel((igPsx2VisualContext *)context, self->_iPrevRDHandle);
         }
         if (self->_iCreateMode == 2) {
             self->_iRDHandle = self->_iPrevRDHandle;
@@ -70,13 +70,13 @@ extern "C" void Gap__Attrs__igRenderDestinationAttr__apply(RenderDestinationAttr
             desc.depthBitCount = self->_iDepthBitCount;
             desc.stencilBitCount = self->_iStencilBitCount;
             desc.type = self->_iType;
-            self->_iRDHandle = Gap__Gfx__igPsx2VisualContext__vfunc_46((igPsx2VisualContext *)context, &desc);
+            self->_iRDHandle = igPsx2VisualContext_CreateRenderDestination((igPsx2VisualContext *)context, &desc);
         }
     }
     self->_vc = context;
 }
 
-void Gap__Attrs__igRenderDestinationAttr__vfunc_26(OO *arg0, void **arg1) {
+void igRenderDestinationAttr_SynchronizeDefault(OO *arg0, void **arg1) {
     int sp4C;
     int sp48;
     int temp_s0;
@@ -96,12 +96,12 @@ void Gap__Attrs__igRenderDestinationAttr__vfunc_26(OO *arg0, void **arg1) {
     arg0->f44 = t;
 }
 
-void Gap__Attrs__igRenderDestinationAttr__vfunc_12(void **arg0) {
+void igRenderDestinationAttr_ReleaseDefaults(void **arg0) {
     ((DW4VC_112_0 *)(arg0))->vX();
     igObject_ReleaseDefaults((igObject *)arg0);
 }
 
-void Gap__Attrs__igRenderDestinationAttr__vfunc_28(X_13fea0 *arg0) {
+void igRenderDestinationAttr_Reset(X_13fea0 *arg0) {
     int temp_a1;
     R_13fea0 *temp_a0;
     R_13fea0 *temp_a0_2;

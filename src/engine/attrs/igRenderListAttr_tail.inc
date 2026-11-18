@@ -1,22 +1,22 @@
-void Gap__Attrs__igRenderListAttr__vfunc_24(void *arg0, igPsx2VisualContext *arg1) {
+void igRenderListAttr_apply(void *arg0, igPsx2VisualContext *arg1) {
     int temp_v1;
 
     temp_v1 = *(int *)((char *)(arg0) + 12);
     if (temp_v1 >= 0) {
-        Gap__Gfx__igPsx2VisualContext__vfunc_196(arg1, temp_v1);
+        igPsx2VisualContext_ExecuteRenderList(arg1, temp_v1);
     }
 }
 
-void Gap__Attrs__igRenderListAttr__vfunc_26(void) {
+void igRenderListAttr_SynchronizeDefault(void) {
 
 }
 
-void Gap__Attrs__igRenderListAttr__vfunc_12(void **arg0) {
+void igRenderListAttr_ReleaseDefaults(void **arg0) {
     ((DW4VC_112_0 *)(arg0))->vX();
     igObject_ReleaseDefaults((igObject *)arg0);
 }
 
-void Gap__Attrs__igRenderListAttr__vfunc_28(O_13ffd0 *arg0) {
+void igRenderListAttr_Reset(O_13ffd0 *arg0) {
     V772 *o;
     if (arg0->f12 != -1) {
         arg0->obj->vX(arg0->f12);

@@ -1,6 +1,6 @@
 igObjectPointer Gap__Attrs__igAttrDefaultManager__vfunc_23(DefaultSource *source) {
     igObjectPointer created = source->create();
-    igObjectPointer wrapped = FUN_0013ba30(FUN_0013c060(), igObjectPointer(created.get(), kRetainReference));
+    igObjectPointer wrapped = igAttrPool_GetSharedAttr(igAttrPool_GetStaticAttrPool(), igObjectPointer(created.get(), kRetainReference));
     return wrapped;
 }
 
@@ -23,7 +23,7 @@ template <class T> static inline int insertObjectSorted(void *list, T *object) {
  * list). The non-sharable test compares the search result with 0, not -1, so attr comes back
  * unshared unless its type is the first entry of the non-sharable list.
  * matching construct: each list pointer is a named local read after its GetMeta call. */
-igObjectPointer FUN_0013ba30(igAttrPool *pool, igObjectPointer attr) {
+igObjectPointer igAttrPool_GetSharedAttr(igAttrPool *pool, igObjectPointer attr) {
     if (attr == 0) {
         return igObjectPointer(0, kRetainReference);
     }
@@ -37,9 +37,9 @@ igObjectPointer FUN_0013ba30(igAttrPool *pool, igObjectPointer attr) {
     int index = metaList->sortedIndex(meta);
     igSmartPointer<igAttrList> list((igAttrList *)0, kRetainReference);
     if (index == -1) {
-        int allocator = (int)igObject_GetAllocator(pool);
+        igMemoryPoolView *allocator = igObject_GetAllocator(pool);
         list.release();
-        list.p = FUN_0013aec0(allocator);
+        list.p = igAttrList_Create(allocator);
         int at = insertObjectSorted((void *)pool->_metaList, meta);
         insertHeld((void *)pool->_attributeList, at, HeldWord(list));
     } else {
@@ -71,17 +71,17 @@ igSmartPointer<igObject> *igSmartPointer_igAttrList_Destruct(igSmartPointer<igOb
     return self;
 }
 
-igAttrPool *FUN_0013c060(void) {
+igAttrPool *igAttrPool_GetStaticAttrPool(void) {
     int allocator;
     if (g_igAttrPool_instance == 0) {
         if (g_useOwnerAllocator != 0) { int owner = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent); allocator = owner; } else { int fallback = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleAttribute); allocator = fallback; }
         g_igAttrPool_instance.release();
-        g_igAttrPool_instance.p = (igAttrPool *)FUN_0013a640(allocator);
+        g_igAttrPool_instance.p = igAttrPool_Create((igMemoryPoolView *)allocator);
     }
     return g_igAttrPool_instance;
 }
 
-void FUN_0013c110(void) {
+void igAttrPool_UserUnregister(void) {
     g_igAttrPool_instance.clear();
 }
 

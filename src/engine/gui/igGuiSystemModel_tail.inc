@@ -1,4 +1,4 @@
-void Gap__Gui__igGuiSystemModel__vfunc_13(int arg0, int arg1) {
+void igGuiSystemModel_resetFields(int arg0, int arg1) {
     int args[4];
     float vec[3];
 

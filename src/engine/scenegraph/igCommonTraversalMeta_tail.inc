@@ -34,79 +34,79 @@ int *FUN_001a3cb0(void *p)
     return (int *)p;
 }
 
-int *FUN_001a3cc0(void *p)
+int *igSmartPointer_igProjectionMatrixAttrPool_Construct(void *p)
 {
     *(int *)((char *)p + 0) = 0;
     return (int *)p;
 }
 
-int *FUN_001a3cd0(void *p)
+int *igSmartPointer_igMatrixObjectPool_Construct(void *p)
 {
     *(int *)((char *)p + 0) = 0;
     return (int *)p;
 }
 
-int *FUN_001a3ce0(void *p)
+int *igSmartPointer_igVertexBlendMatrixListAttrPool_Construct(void *p)
 {
     *(int *)((char *)p + 0) = 0;
     return (int *)p;
 }
 
-int *FUN_001a3cf0(void *p)
+int *igSmartPointer_igTextureMatrixAttrPool_Construct(void *p)
 {
     *(int *)((char *)p + 0) = 0;
     return (int *)p;
 }
 
-int *FUN_001a3d00(void *p)
+int *igSmartPointer_igVertexBlendMatrixAttrPool_Construct(void *p)
 {
     *(int *)((char *)p + 0) = 0;
     return (int *)p;
 }
 
-int *FUN_001a3d10(void *p)
+int *igSmartPointer_igTimeAttrPool_Construct(void *p)
 {
     *(int *)((char *)p + 0) = 0;
     return (int *)p;
 }
 
-int *FUN_001a3d20(void *p)
+int *igSmartPointer_igModelViewMatrixAttrPool_Construct(void *p)
 {
     *(int *)((char *)p + 0) = 0;
     return (int *)p;
 }
 
-int *FUN_001a3d30(void *p)
+int *igSmartPointer_igSorter_Construct(void *p)
 {
     *(int *)((char *)p + 0) = 0;
     return (int *)p;
 }
 
-int *FUN_001a3d40(void *p)
+int *igSmartPointer_igVisualContext_Construct(void *p)
 {
     *(int *)((char *)p + 0) = 0;
     return (int *)p;
 }
 
-int *FUN_001a3d50(void *p)
+int *igSmartPointer_igTransformStack_Construct(void *p)
 {
     *(int *)((char *)p + 0) = 0;
     return (int *)p;
 }
 
-int *FUN_001a3d60(void *p)
+int *igSmartPointer_igAttrStackManager_Construct(void *p)
 {
     *(int *)((char *)p + 0) = 0;
     return (int *)p;
 }
 
-int *FUN_001a3d70(void *p)
+int *igSmartPointer_igAttrDefaultManager_Construct(void *p)
 {
     *(int *)((char *)p + 0) = 0;
     return (int *)p;
 }
 
-int *FUN_001a3d80(void *p)
+int *igSmartPointer_igCapabilityManager_Construct(void *p)
 {
     *(int *)((char *)p + 0) = 0;
     return (int *)p;

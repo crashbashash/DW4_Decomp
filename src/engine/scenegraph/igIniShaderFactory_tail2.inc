@@ -1,6 +1,6 @@
 #define REL(p) { IniHeldObject *o = (p); if(o){ --(o)->refs; if((((unsigned long long)(long long)(o)->refs)&0x7fffffULL)==0) igObject_Destroy((igObject *)o);}}
 #define ADD(o) if(o){ ++(o)->refs; }
-bool Gap__Sg__igIniShaderFactory__vfunc_23(IniFactoryBinding *self, int a1, IniHeldObject *a2, int a3) {
+bool igIniShaderFactory_ConfigureShader(IniFactoryBinding *self, int a1, IniHeldObject *a2, int a3) {
     unsigned char ok = 1;
     if (FUN_001c6520((O_1c6520 *)self, 1) != 0) {
         IniHeldObject *n;
@@ -13,7 +13,7 @@ bool Gap__Sg__igIniShaderFactory__vfunc_23(IniFactoryBinding *self, int a1, IniH
         self->r44 = n;
         ok = !FUN_001cb340((ShaderProcessorView *)self, (ShaderTarget *)a1, a3);
     }
-    if (ok) Gap__Sg__igShaderFactory__vfunc_23(self, (VA_1d8980 *)a1, a2, a3);
+    if (ok) igShaderFactory_ConfigureShader(self, (VA_1d8980 *)a1, a2, a3);
     REL(self->r48);
     self->r48 = 0;
     REL(self->r44);
@@ -23,7 +23,7 @@ bool Gap__Sg__igIniShaderFactory__vfunc_23(IniFactoryBinding *self, int a1, IniH
 #undef REL
 #undef ADD
 
-void Gap__Sg__igIniShaderFactory__vfunc_26(int a0) {
+void igIniShaderFactory_ResetFileCache(int a0) {
     igObjectStringMap_Clear((igObjectStringMap *)(*(int *)((char *)a0 + 56)));
 }
 
@@ -54,7 +54,7 @@ void FUN_001ccd10(IniShaderFactoryView *self, IniNodeList *list) {
     }
 }
 
-void Gap__Sg__igIniShaderFactory__vfunc_27(IniShaderFactoryFields *self) {
+void igIniShaderFactory_PreloadFileCache(IniShaderFactoryFields *self) {
     if (self->f20 != 0) {
         FUN_001c6520((O_1c6520 *)self, 0);
         FUN_001c66c0((Node *)self, 0);
@@ -79,14 +79,14 @@ void Gap__Sg__igIniShaderFactory__vfunc_27(IniShaderFactoryFields *self) {
     }
 }
 
-void Gap__Sg__igIniShaderFactory__vfunc_17(void *arg0) {
+void igIniShaderFactory_UserPostLoad(void *arg0) {
     igObject_UserPostLoad();
     if (*(int *)((char *)(arg0) + 20) != 2) {
         ((DW4VC_104_0 *)(((char *)(arg0) + 0)))->vX();
     }
 }
 
-void Gap__Sg__igIniShaderFactory__vfunc_18(void *arg0) {
+void igIniShaderFactory_TrimCapacity(void *arg0) {
     int temp_a1;
 
     temp_a1 = *(int *)((char *)(arg0) + 20);

@@ -1,7 +1,7 @@
 igMetaObject *g_igClippingStateAttr_metaObject;
 igMetaField *g_igClippingStateAttr_enabledMetaField;
 
-igMetaObject *FUN_00139170(void) {
+igMetaObject *igClippingStateAttr_GetOrCreateMetaObject(void) {
     if (g_igClippingStateAttr_metaObject == 0) {
         g_igClippingStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -12,7 +12,7 @@ igMetaObject *igClippingStateAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igClippingStateAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00139250();
+        igClippingStateAttr_EnsureRegistered();
     return g_igClippingStateAttr_metaObject;
 }
 
@@ -24,7 +24,7 @@ int igClippingStateAttr_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00139250(void)
+void igClippingStateAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igClippingStateAttr_Register);
 }
@@ -36,7 +36,7 @@ CallbackArray *igClippingStateAttr_Register(void) {
         &g_igClippingStateAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igClippingStateAttr_GetMetaObject,
+        igClippingStateAttr_GetMetaObjectFunction,
         "igClippingStateAttr",
         0x10, /* instance size */
         igClippingStateAttr_GetVTable,
@@ -46,7 +46,7 @@ CallbackArray *igClippingStateAttr_Register(void) {
     );
 }
 
-void thunk_igClippingStateAttr_GetMetaObject(void) {
+void igClippingStateAttr_GetMetaObjectFunction(void) {
     igClippingStateAttr_GetMetaObject();
 }
 
@@ -64,13 +64,13 @@ static int g_igClippingStateAttr_fieldOffsets[] = {
 };
 
 void igClippingStateAttr_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_igClippingStateAttr_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igClippingStateAttr_ctorTable, 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1);
-    igMetaObject_NameFields(temp_s0, g_igClippingStateAttr_fieldTable, g_igClippingStateAttr_fieldHandles, g_igClippingStateAttr_fieldOffsets, temp_s1);
+    meta = g_igClippingStateAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igClippingStateAttr_ctorTable, 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base), 1);
+    igMetaObject_NameFields(meta, g_igClippingStateAttr_fieldTable, g_igClippingStateAttr_fieldHandles, g_igClippingStateAttr_fieldOffsets, base);
 }
 

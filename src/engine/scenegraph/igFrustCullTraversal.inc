@@ -1,5 +1,5 @@
 void FUN_0019fde0(int arg0) {
-    FUN_001a1170();
+    igFrustCullTraversal_EnsureRegistered();
     igMetaObject_CreateInstance((igMetaObject *)g_igFrustCullTraversal_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -16,7 +16,7 @@ igMetaObject *igFrustCullTraversal_GetMetaObject(void)
 {
     igMetaObject *g = g_igFrustCullTraversal_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a1170();
+        igFrustCullTraversal_EnsureRegistered();
     return g_igFrustCullTraversal_metaObject;
 }
 
@@ -25,18 +25,18 @@ int igFrustCullTraversal_GetVTable(void) {
     int r;
     p = (char *)&s; FUN_001a10a0((igCommonTraversal *)p);
     s.vt = &g_igFrustCullTraversal_vtable[0];
-    FUN_001a1090(&s.a);
+    igSmartPointer_igAABox_Construct(&s.a);
     FUN_001510a0(s.b);
     FUN_001a1080((int *)(p + 548));
     r = *(int *)((char *)&s + g_objectSystem->vtableProbeOffset);
     s.vt = &g_igFrustCullTraversal_vtable[0];
-    FUN_001a1000((void **)&s.c, -1);
+    igSmartPointer_igClippingStateAttr_Destruct((void **)&s.c, -1);
     igSmartPointer_igAABox_Destruct((igSmartPointer<igObject> *)&s.a, -1);
     FUN_001a0910((Obj_19fde0 *)&s, 0);
     return r;
 }
 
-struct R **FUN_0019ff10(struct R **arg0, short arg1) {
+struct R **igSmartPointer_igCapabilityManager_Destruct(struct R **arg0, short arg1) {
     struct R *temp_a0;
 
     if (arg0 != 0) {
@@ -54,7 +54,7 @@ struct R **FUN_0019ff10(struct R **arg0, short arg1) {
     return arg0;
 }
 
-struct T_19fde0 **FUN_0019ff90(struct T_19fde0 **arg0, short arg1) {
+struct T_19fde0 **igSmartPointer_igAttrDefaultManager_Destruct(struct T_19fde0 **arg0, short arg1) {
     struct T_19fde0 *o;
     if (arg0 != 0) {
         o = *arg0;
@@ -71,7 +71,7 @@ struct T_19fde0 **FUN_0019ff90(struct T_19fde0 **arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_001a0010(void **arg0, int arg1) {
+void **igSmartPointer_igAttrStackManager_Destruct(void **arg0, int arg1) {
     int *o;
 
     if (arg0 != 0) {
@@ -89,7 +89,7 @@ void **FUN_001a0010(void **arg0, int arg1) {
     return arg0;
 }
 
-void **FUN_001a0090(void **arg0, short arg1) {
+void **igSmartPointer_igTransformStack_Destruct(void **arg0, short arg1) {
     int *o;
 
     if (arg0 != 0) {
@@ -107,7 +107,7 @@ void **FUN_001a0090(void **arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_001a0110(struct Ref **self, short flag) {
+void **igSmartPointer_igSorter_Destruct(struct Ref **self, short flag) {
     struct Ref *p;
     if (self != 0) {
         p = *self;
@@ -120,7 +120,7 @@ void **FUN_001a0110(struct Ref **self, short flag) {
     return (void **)self;
 }
 
-void **FUN_001a0190(void **arg0, long long arg1) {
+void **igSmartPointer_igModelViewMatrixAttrPool_Destruct(void **arg0, long long arg1) {
     char *o;
 
     if (arg0 != 0) {
@@ -138,7 +138,7 @@ void **FUN_001a0190(void **arg0, long long arg1) {
     return arg0;
 }
 
-O *FUN_001a0210(O *arg0, short arg1) {
+O *igSmartPointer_igTimeAttrPool_Destruct(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
         if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
@@ -147,7 +147,7 @@ O *FUN_001a0210(O *arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_001a0290(void **arg0, short arg1) {
+void **igSmartPointer_igVertexBlendMatrixAttrPool_Destruct(void **arg0, short arg1) {
     S_temp_a0 *temp_a0;
 
     if (arg0 != 0) {
@@ -165,7 +165,7 @@ void **FUN_001a0290(void **arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_001a0310(void **arg0, short arg1) {
+void **igSmartPointer_igTextureMatrixAttrPool_Destruct(void **arg0, short arg1) {
     S_temp_a0 *temp_a0;
 
     if (arg0 != 0) {
@@ -183,7 +183,7 @@ void **FUN_001a0310(void **arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_001a0390(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igVertexBlendMatrixListAttrPool_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {
@@ -196,7 +196,7 @@ ObjectRefWord *FUN_001a0390(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void **FUN_001a0410(void **arg0, short arg1) {
+void **igSmartPointer_igMatrixObjectPool_Destruct(void **arg0, short arg1) {
     int *r;
     if (arg0 != 0) {
         r = (int *)*arg0;
@@ -213,7 +213,7 @@ void **FUN_001a0410(void **arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_001a0490(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igProjectionMatrixAttrPool_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {
@@ -226,7 +226,7 @@ ObjectRefWord *FUN_001a0490(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-ObjectRefWord *FUN_001a0590(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igNormalizeNormalsStateAttr_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {
@@ -239,7 +239,7 @@ ObjectRefWord *FUN_001a0590(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-void **FUN_001a0610(void **arg0, int arg1) {
+void **igSmartPointer_igLongStack_Destruct(void **arg0, int arg1) {
     int *o;
 
     if (arg0 != 0) {
@@ -257,7 +257,7 @@ void **FUN_001a0610(void **arg0, int arg1) {
     return arg0;
 }
 
-void **FUN_001a0690(void **arg0, short arg1) {
+void **igSmartPointer_igNonRefCountedMatrixObjectList_Destruct(void **arg0, short arg1) {
     int *o;
 
     if (arg0 != 0) {
@@ -275,7 +275,7 @@ void **FUN_001a0690(void **arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_001a0710(struct Ref **self, short flag) {
+void **igSmartPointer_igNonRefCountedTransformList_Destruct(struct Ref **self, short flag) {
     struct Ref *p;
     if (self != 0) {
         p = *self;
@@ -301,7 +301,7 @@ igSmartPointer<igObject> *igSmartPointer_igStringObjList_Destruct(igSmartPointer
     return self;
 }
 
-O *FUN_001a0810(O *arg0, short arg1) {
+O *igSmartPointer_igBlendMatricesAttrPool_Destruct(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
         if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
@@ -310,7 +310,7 @@ O *FUN_001a0810(O *arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_001a0890(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igTimeAttr_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {
@@ -362,7 +362,7 @@ Obj_19fde0 *FUN_001a0910(Obj_19fde0 *arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_001a1000(void **arg0, short arg1) {
+void **igSmartPointer_igClippingStateAttr_Destruct(void **arg0, short arg1) {
     S_temp_a0 *temp_a0;
 
     if (arg0 != 0) {
@@ -386,7 +386,7 @@ int *FUN_001a1080(int *p)
     return p;
 }
 
-int *FUN_001a1090(int *p)
+int *igSmartPointer_igAABox_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
@@ -430,12 +430,12 @@ void *FUN_001a10a0(igCommonTraversal *arg0) {
     return arg0;
 }
 
-void FUN_001a1170(void)
+void igFrustCullTraversal_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igFrustCullTraversal_Register);
 }
 
-static igMetaObjectCallback g_igFrustCullTraversal_callbackList[] = { FUN_00139250, igAABox_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igFrustCullTraversal_callbackList[] = { igClippingStateAttr_EnsureRegistered, igAABox_EnsureRegistered, 0 };
 
 CallbackArray *igFrustCullTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -443,8 +443,8 @@ CallbackArray *igFrustCullTraversal_Register(void) {
         0, /* abstract */
         &g_igFrustCullTraversal_metaObject,
         igCommonTraversal_Register,
-        FUN_001a1210,
-        thunk_igFrustCullTraversal_GetMetaObject,
+        igCommonTraversal_GetPublishedMetaObject,
+        igFrustCullTraversal_GetMetaObjectFunction,
         "igFrustCullTraversal",
         0x230, /* instance size */
         igFrustCullTraversal_GetVTable,
@@ -454,7 +454,7 @@ CallbackArray *igFrustCullTraversal_Register(void) {
     );
 }
 
-void thunk_igFrustCullTraversal_GetMetaObject(void) {
+void igFrustCullTraversal_GetMetaObjectFunction(void) {
     igFrustCullTraversal_GetMetaObject();
 }
 
@@ -495,7 +495,7 @@ igMetaField *g_igCommonTraversal_jointMvmBaseMetaField;
 igMetaField *g_igCommonTraversal_jointMvmInverseBaseMetaField;
 igMetaField *g_igCommonTraversal_jointGraphRootTraversedMetaField;
 
-igMetaObject *FUN_001a1210(void) {
+igMetaObject *igCommonTraversal_GetPublishedMetaObject(void) {
     return g_igCommonTraversal_metaObject;
 }
 
@@ -571,7 +571,7 @@ void igFrustCullTraversal_InitFields(void) {
     igMatrix44f_FromRows((float *)&o1, (igVec4f *)&o2, (igVec4f *)&o3, (igVec4f *)&o4, (igVec4f *)&o5);
     FUN_0018c640(temp_s2, &o1);
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_00139170();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igClippingStateAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4), 1.0f);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5), 2.0f);

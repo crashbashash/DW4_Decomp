@@ -9,7 +9,7 @@ igMetaObject *igMersenneTwisterRandomNumber_GetMetaObject(void)
         ready = (g_igMersenneTwisterRandomNumber_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_001e4620();
+    igMersenneTwisterRandomNumber_EnsureRegistered();
 done:
     return g_igMersenneTwisterRandomNumber_metaObject;
 }
@@ -21,7 +21,7 @@ int igMersenneTwisterRandomNumber_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_001e4620(void)
+void igMersenneTwisterRandomNumber_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igMersenneTwisterRandomNumber_Register);
 }
@@ -33,7 +33,7 @@ CallbackArray *igMersenneTwisterRandomNumber_Register(void) {
         &g_igMersenneTwisterRandomNumber_metaObject,
         igRandomNumber_Register,
         igRandomNumber_GetPublishedMetaObject,
-        thunk_igMersenneTwisterRandomNumber_GetMetaObject,
+        igMersenneTwisterRandomNumber_GetMetaObjectFunction,
         "igMersenneTwisterRandomNumber",
         0x9CC, /* instance size */
         igMersenneTwisterRandomNumber_GetVTable,
@@ -43,7 +43,7 @@ CallbackArray *igMersenneTwisterRandomNumber_Register(void) {
     );
 }
 
-igMetaObject *FUN_001e46a0(void) {
+igMetaObject *igRandomNumber_GetPublishedMetaObject(void) {
     return g_igRandomNumber_metaObject;
 }
 

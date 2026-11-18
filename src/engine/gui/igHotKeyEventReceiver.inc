@@ -1,7 +1,7 @@
 igMetaObject *g_igHotKeyEventReceiver_metaObject;
 igMetaField *g_igHotKeyEventReceiver_hotKeyListMetaField;
 
-igMetaObject *FUN_0044d840(void) {
+igMetaObject *igHotKeyEventReceiver_GetOrCreateMetaObject(void) {
     if (g_igHotKeyEventReceiver_metaObject == 0) {
         g_igHotKeyEventReceiver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -89,7 +89,7 @@ void igHotKeyEventReceiver_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igHotKeyEventReceiver_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0044dab0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igHotKeyBindingList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igHotKeyEventReceiver_fieldTable, g_igHotKeyEventReceiver_fieldHandles, g_igHotKeyEventReceiver_fieldOffsets, temp_s2);
 }

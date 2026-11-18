@@ -6,7 +6,7 @@ igMetaObject *igAnimationTransitionPoint_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationTransitionPoint_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a9a80();
+        igAnimationTransitionPoint_EnsureRegistered();
     return g_igAnimationTransitionPoint_metaObject;
 }
 
@@ -32,12 +32,12 @@ int igAnimationTransitionPoint_GetVTable(void) {
      return r;
  }
 
-void FUN_001a9a80(void)
+void igAnimationTransitionPoint_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationTransitionPoint_Register);
 }
 
-static igMetaObjectCallback g_igAnimationTransitionPoint_callbackList[] = { FUN_001a9c90, 0 };
+static igMetaObjectCallback g_igAnimationTransitionPoint_callbackList[] = { igAnimationTransitionParams_EnsureRegistered, 0 };
 
 CallbackArray *igAnimationTransitionPoint_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -46,7 +46,7 @@ CallbackArray *igAnimationTransitionPoint_Register(void) {
         &g_igAnimationTransitionPoint_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igAnimationTransitionPoint_GetMetaObject,
+        igAnimationTransitionPoint_GetMetaObjectFunction,
         "igAnimationTransitionPoint",
         0x18, /* instance size */
         igAnimationTransitionPoint_GetVTable,
@@ -56,7 +56,7 @@ CallbackArray *igAnimationTransitionPoint_Register(void) {
     );
 }
 
-void thunk_igAnimationTransitionPoint_GetMetaObject(void) {
+void igAnimationTransitionPoint_GetMetaObjectFunction(void) {
     igAnimationTransitionPoint_GetMetaObject();
 }
 
@@ -78,15 +78,15 @@ static int g_igAnimationTransitionPoint_fieldOffsets[] = {
 };
 
 void igAnimationTransitionPoint_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *transitionParamsField;
+    void *meta;
 
-    temp_s0 = (void *)g_igAnimationTransitionPoint_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationTransitionPoint_ctorTable, 2);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a9bb0();
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationTransitionPoint_fieldTable, g_igAnimationTransitionPoint_fieldHandles, g_igAnimationTransitionPoint_fieldOffsets, temp_s2);
+    meta = (void *)g_igAnimationTransitionPoint_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igAnimationTransitionPoint_ctorTable, 2);
+    transitionParamsField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    ((igObjectRefMetaField *)transitionParamsField)->_metaObject = (int)igAnimationTransitionParams_GetOrCreateMetaObject();
+    igMetaObject_NameFields((igMetaObject *)meta, g_igAnimationTransitionPoint_fieldTable, g_igAnimationTransitionPoint_fieldHandles, g_igAnimationTransitionPoint_fieldOffsets, base);
 }
 

@@ -1,36 +1,36 @@
-void FUN_001e6230(igDataPump *arg0, Src **arg1, int arg2) {
-    igObject *s0;
+void igDataPump_SetDestByFieldName(igDataPump *self, igObjectDispatchView **destObj, const char *destName) {
+    igObject *object;
     igObject *old;
     igMetaField *fld;
     int name;
     int v;
     int newv;
     int oldv;
-    s0 = (igObject *)*arg1;
-    if (s0 != 0) {
-        s0->_refCount = s0->_refCount + 1;
+    object = (igObject *)*destObj;
+    if (object != 0) {
+        object->_refCount = object->_refCount + 1;
     }
-    old = (igObject *)arg0->_destObj;
+    old = (igObject *)self->_destObj;
     if (old != 0) {
         --old->_refCount;
         if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) {
             igObject_Destroy(old);
         }
     }
-    arg0->_destObj = (int)s0;
-    fld = (igMetaField *)igMetaObject_FindFieldByName((igMetaObject *)((*arg1)->vX()), (const char *)arg2);
+    self->_destObj = (int)object;
+    fld = (igMetaField *)igMetaObject_FindFieldByName((*destObj)->GetMeta(), destName);
     if (fld != 0) {
         fld->_refCount = fld->_refCount + 1;
     }
-    old = (igObject *)arg0->_destMeta;
+    old = (igObject *)self->_destMeta;
     if (old != 0) {
         --old->_refCount;
         if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) {
             igObject_Destroy(old);
         }
     }
-    arg0->_destMeta = (int)fld;
-    name = ((igMetaObject *)((igMetaField *)arg0->_destMeta)->_parentMetaObject)->_name;
+    self->_destMeta = (int)fld;
+    name = ((igMetaObject *)((igMetaField *)self->_destMeta)->_parentMetaObject)->_name;
     if (g_stringPool == 0) {
         v = (int)(StringPool_Allocate(16));
         if (v != 0) {
@@ -39,7 +39,7 @@ void FUN_001e6230(igDataPump *arg0, Src **arg1, int arg2) {
         g_stringPool = (StringPool *)v;
     }
     newv = (int)(StringPool_Intern(g_stringPool, (const char *)name));
-    oldv = arg0->_destMetaClassName;
+    oldv = self->_destMetaClassName;
     if (oldv != 0) {
         int *a1 = (int *)oldv - 2;
         int v0 = ((int *)oldv)[-1] - 1;
@@ -48,8 +48,8 @@ void FUN_001e6230(igDataPump *arg0, Src **arg1, int arg2) {
             StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
         }
     }
-    arg0->_destMetaClassName = newv;
-    name = ((igMetaField *)arg0->_destMeta)->_fieldName;
+    self->_destMetaClassName = newv;
+    name = ((igMetaField *)self->_destMeta)->_fieldName;
     if (g_stringPool == 0) {
         v = (int)(StringPool_Allocate(16));
         if (v != 0) {
@@ -58,7 +58,7 @@ void FUN_001e6230(igDataPump *arg0, Src **arg1, int arg2) {
         g_stringPool = (StringPool *)v;
     }
     newv = (int)(StringPool_Intern(g_stringPool, (const char *)name));
-    oldv = arg0->_destMetaFieldName;
+    oldv = self->_destMetaFieldName;
     if (oldv != 0) {
         int *a1 = (int *)oldv - 2;
         int v0 = ((int *)oldv)[-1] - 1;
@@ -67,33 +67,33 @@ void FUN_001e6230(igDataPump *arg0, Src **arg1, int arg2) {
             StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
         }
     }
-    arg0->_destMetaFieldName = newv;
+    self->_destMetaFieldName = newv;
 }
 
-void FUN_001e6410(S0 *arg0, void **arg1) {
-    S_temp_a0 *temp_a0;
-    S_temp_s0 *temp_s0;
-    temp_s0 = (S_temp_s0 *)(*arg1);
-    if (temp_s0 != 0) {
-        temp_s0->f4 = (int)((int) (temp_s0->f4 + 1));
+void igDataPump_SetDataPumpInterface(igDataPump *self, igObject **dpi) {
+    igObject *old;
+    igObject *interface;
+    interface = *dpi;
+    if (interface != 0) {
+        interface->_refCount = (int)((int) (interface->_refCount + 1));
     }
-    temp_a0 = (S_temp_a0 *)(arg0->f18);
-    if (temp_a0 != 0) {
-        temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-        if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
+    old = (igObject *)self->_dpi;
+    if (old != 0) {
+        old->_refCount = (int)((int) (old->_refCount - 1));
+        if (((unsigned long long) ((long long) (int) old->_refCount << 0x29) >> 0x29) == 0) {
+            igObject_Destroy(old);
         }
     }
-    arg0->f18 = (int)(temp_s0);
+    self->_dpi = (int)interface;
 }
 
-int FUN_001e6490(ValueBinding *binding, int selection) {
+int igDataPump_Update(ValueBinding *binding, long long time) {
     igSmartPointer<Value> value(binding->source->value(), kRetainReference);
     int sinkType = binding->sink->type();
     if (((igMetaObject_IsOfType((igMetaObject *)(value->type()), (igMetaObject *)sinkType) != 0) ^ 1) != 0) {
         return 0;
     }
-    binding->source->select(selection);
+    binding->source->select(time);
     binding->sink->write(binding->key, (int)binding->source + value->offset);
     static FieldDesc *invarianceFunctionField;
     if (invarianceFunctionField == 0) {
@@ -106,7 +106,7 @@ int FUN_001e6490(ValueBinding *binding, int selection) {
     return 1;
 }
 
-void Gap__igDataPump__vfunc_17(igDataPump *pump) {
+void igDataPump_UserPostLoad(igDataPump *pump) {
     igSmartPointer<igObject> meta;
     meta = (igObject *)igObjectSystem_FindMetaByNameDefault((const char *)pump->_destMetaClassName);
     if (meta.get() != 0) {
@@ -126,122 +126,122 @@ void Gap__igDataPump__vfunc_17(igDataPump *pump) {
     }
 }
 
-void Gap__igDataPump__vfunc_14(void) {
+void igDataPump_UserPreWrite(void) {
 
 }
 
-int FUN_001e6770(int *p)
+igDataPumpList *igDataPumpInfo_GetList(igDataPumpInfo *self)
 {
-    return *(int *)((char *)p + 20);
+    return (igDataPumpList *)self->_dataPumpList;
 }
 
-int FUN_001e6780(void *arg0, igObject *object) {
-    ObjectList_AppendRetained(*(igObjectList **)((char *)arg0 + 20), object);
+int igDataPumpInfo_Append(igDataPumpInfo *self, igObject *pump) {
+    ObjectList_AppendRetained((igObjectList *)self->_dataPumpList, pump);
     return 1;
 }
 
-int FUN_001e67a0(S *arg0, int arg1) {
+int igDataPumpManager_Update(igDataPumpManager *self, long long time) {
     int i;
     int n;
 
-    n = arg0->list->count;
+    n = ((igDataPumpList *)self->_dataPumpList)->_count;
     for (i = 0; i < n; i++) {
-        FUN_001e6490((ValueBinding *)arg0->list->data[i], arg1);
+        igDataPump_Update(((ValueBinding **)((igDataPumpList *)self->_dataPumpList)->_data)[i], time);
     }
     return 1;
 }
 
-int FUN_001e6820(struct D *arg0, struct L_1e6820 *arg1) {
+int igDataPumpManager_AppendList(igDataPumpManager *self, igDataPumpList *list) {
     int i;
     int n;
 
-    n = arg1->count;
+    n = list->_count;
     for (i = 0; i < n; i++) {
-        ObjectList_AppendRetained((igObjectList *)arg0->f8, (igObject *)arg1->items[i]);
+        ObjectList_AppendRetained((igObjectList *)self->_dataPumpList, ((igObject **)list->_data)[i]);
     }
     return 1;
 }
 
-int FUN_001e68a0(int arg0, int arg1) {
-    FUN_001e6820((struct D *)arg0, (struct L_1e6820 *)FUN_001e6770((int *)arg1));
+int igDataPumpManager_AppendInfo(igDataPumpManager *self, igDataPumpInfo *info) {
+    igDataPumpManager_AppendList(self, igDataPumpInfo_GetList(info));
     return 1;
 }
 
-static inline int count_of(const Lst *list) { return list->count; }
+typedef float igMatrixStackEntry[16];
 
-int FUN_001e68e0(Lst *arg0, int arg1) {
-    int var_s0;
-    int temp_v1;
-    Mat *d;
+static inline int matrixCount(const igMatrixStack *stack) { return stack->_count; }
 
-    var_s0 = arg0->count;
-    if (var_s0 == 0) {
-        if (var_s0 < arg0->cap) {
-            arg0->count = count_of(arg0) + 1;
+int igMatrixStack_PushPreMultiply(igMatrixStack *self, const float *matrix) {
+    int index;
+    int count;
+    igMatrixStackEntry *matrices;
+
+    index = self->_count;
+    if (index == 0) {
+        if (index < self->_capacity) {
+            self->_count = matrixCount(self) + 1;
         } else {
-            List_Resize(arg0, var_s0 + 1, 0x40);
+            List_Resize(self, index + 1, 0x40);
         }
-        igMatrix44f_Copy((float *)(arg0->data + var_s0), (const float *)arg1);
+        igMatrix44f_Copy(((igMatrixStackEntry *)self->_data)[index], matrix);
     } else {
-        temp_v1 = count_of(arg0);
-        if (temp_v1 == 0) {
-            var_s0 = 0;
+        count = matrixCount(self);
+        if (count == 0) {
+            index = 0;
         } else {
-            if (var_s0 < arg0->cap) {
-                arg0->count = temp_v1 + 1;
+            if (index < self->_capacity) {
+                self->_count = count + 1;
             } else {
-                List_Resize(arg0, var_s0 + 1, 0x40);
+                List_Resize(self, index + 1, 0x40);
             }
-            d = arg0->data;
-            igMatrix44f_Copy((float *)(d + var_s0), (const float *)(d + (var_s0 - 1)));
+            matrices = (igMatrixStackEntry *)self->_data;
+            igMatrix44f_Copy(matrices[index], matrices[index - 1]);
         }
-        igMatrix44f_PreMultiply((float *)(arg0->data + (arg0->count - 1)), (const float *)arg1);
+        igMatrix44f_PreMultiply(((igMatrixStackEntry *)self->_data)[self->_count - 1], matrix);
     }
-    return var_s0;
+    return index;
 }
 
-static inline int f8_of(const struct S_1e69e0 *list) { return list->f8; }
+int igMatrixStack_PushPostMultiply(igMatrixStack *self, const float *matrix) {
+    float *top;
+    igMatrixStackEntry *matrices;
+    int count;
+    int index;
 
-int FUN_001e69e0(struct S_1e69e0 *arg0, int arg1) {
-    char *temp_a0;
-    char *temp_a1;
-    int temp_v1;
-    int var_s0;
-
-    var_s0 = f8_of(arg0);
-    if (var_s0 == 0) {
-        if (var_s0 < arg0->f12) {
-            arg0->f8 = arg0->f8 + 1;
+    index = matrixCount(self);
+    if (index == 0) {
+        if (index < self->_capacity) {
+            self->_count = self->_count + 1;
         } else {
-            List_Resize(arg0, var_s0 + 1, 0x40);
+            List_Resize(self, index + 1, 0x40);
         }
-        igMatrix44f_Copy((float *)(arg0->f16 + (var_s0 << 6)), (const float *)arg1);
+        igMatrix44f_Copy(((igMatrixStackEntry *)self->_data)[index], matrix);
     } else {
-        temp_v1 = arg0->f8;
-        if (temp_v1 == 0) {
-            var_s0 = 0;
+        count = self->_count;
+        if (count == 0) {
+            index = 0;
         } else {
-            if (var_s0 < arg0->f12) {
-                arg0->f8 = temp_v1 + 1;
+            if (index < self->_capacity) {
+                self->_count = count + 1;
             } else {
-                List_Resize(arg0, var_s0 + 1, 0x40);
+                List_Resize(self, index + 1, 0x40);
             }
-            temp_a1 = arg0->f16;
-            igMatrix44f_Copy((float *)(temp_a1 + (var_s0 << 6)), (const float *)(temp_a1 + ((var_s0 - 1) << 6)));
+            matrices = (igMatrixStackEntry *)self->_data;
+            igMatrix44f_Copy(matrices[index], matrices[index - 1]);
         }
-        temp_a0 = arg0->f16 + ((arg0->f8 - 1) << 6);
-        igMatrix44f_Multiply((float *)temp_a0, (const float *)temp_a0, (const float *)arg1);
+        top = ((igMatrixStackEntry *)self->_data)[self->_count - 1];
+        igMatrix44f_Multiply(top, top, matrix);
     }
-    return var_s0;
+    return index;
 }
 
-void FUN_001e6ae0(struct S1e *arg0, const float *matrix) {
-    igMatrix44f_PreMultiply((float *)(arg0->base + (arg0->cnt - 1) * 64), matrix);
+void igMatrixStack_PreMultiply(igMatrixStack *self, const float *matrix) {
+    igMatrix44f_PreMultiply(((igMatrixStackEntry *)self->_data)[self->_count - 1], matrix);
 }
 
-void FUN_001e6b00(void *arg0, int arg1) {
-    int p;
-    p = *(int *)((char *)(arg0) + 16) + ((*(int *)((char *)(arg0) + 8) - 1) << 6);
-    igMatrix44f_Multiply((float *)p, (const float *)p, (const float *)arg1);
+void igMatrixStack_PostMultiply(igMatrixStack *self, const float *matrix) {
+    float *top;
+    top = ((igMatrixStackEntry *)self->_data)[self->_count - 1];
+    igMatrix44f_Multiply(top, top, matrix);
 }
 

@@ -7,7 +7,7 @@ igMetaField *g_igGuiSystem_mouseCursorMetaField;
 igMetaField *g_igGuiSystem_mouseCursorTransformMetaField;
 igMetaField *g_igGuiSystem_mouseCursorVisibleMetaField;
 
-igMetaObject *FUN_0044ded0(void) {
+igMetaObject *igGuiSystem_GetOrCreateMetaObject(void) {
     if (g_igGuiSystem_metaObject == 0) {
         g_igGuiSystem_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -181,19 +181,19 @@ void igGuiSystem_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igGuiSystem_ctorTable, 7);
     temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0044e6b0();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igGuiSystemRenderer_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_0044f210();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igGuiSystemModel_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0044b9f0();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igViewList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)(igAttrSet_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)FUN_0044e430();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igMouseCursor_GetOrCreateMetaObject();
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)(igTransform_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s2_6)->_construct = 1;

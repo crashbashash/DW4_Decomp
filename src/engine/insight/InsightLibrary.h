@@ -15,9 +15,9 @@
 #include "dw4/insight/igMessenger.h"
 #include "dw4/insight/igViewportResizedMessage.h"
 #define ReleaseObject(obj) do { igObject *held = (obj); IG_OBJECT_RELEASE(held); } while (0)
-#define OPTION_BOOL(name, help, value)  { const char *optionName = name; if (optionName) FUN_002342b0(optionName, help, value); }
-#define OPTION_INT(name, help, value)   { const char *optionName = name; if (optionName) FUN_002342e0(optionName, help, value); }
-#define OPTION_FLOAT(name, help, value) { const char *optionName = name; if (optionName) FUN_00234300(optionName, help, value); }
+#define OPTION_BOOL(name, help, value)  { const char *optionName = name; if (optionName) igCommandLine_PrintOptionBool(optionName, help, value); }
+#define OPTION_INT(name, help, value)   { const char *optionName = name; if (optionName) igCommandLine_PrintOptionInt(optionName, help, value); }
+#define OPTION_FLOAT(name, help, value) { const char *optionName = name; if (optionName) igCommandLine_PrintOptionFloat(optionName, help, value); }
 
 class igMemoryPoolView;
 #include "dw4/core/igIntMetaField.h"
@@ -34,7 +34,7 @@ class igMemoryPoolView;
 #include "dw4/core/igTimer.h"
 #include "dw4/core/igReport.h"
 #include "dw4/core/igPluginHelper.h"
-extern "C" void FUN_00145de0(void);
+extern "C" void igWindow_EnsureRegistered(void);
 #include "dw4/gfx/igVisualContext.h"
 extern "C" void InsightLibrary_MarkRegistered(void);
 struct S {
@@ -46,11 +46,11 @@ extern "C" void *FUN_00230f70(struct S *arg0, short arg1);
 #include "dw4/gui/igRenderer.h"
 extern "C" igMetaObject *FUN_00231010(void);
 extern "C" igMetaObject *g_igMessage_metaObject;
-extern "C" igMetaObject *FUN_00231020(void);
+extern "C" igMetaObject *igMessage_GetPublishedMetaObject(void);
 #include "dw4/core/StringPool.h"
 #include "dw4/core/igNamedObject.h"
 extern "C" igMetaObject *g_igInfoManager_metaObject;
-extern "C" igMetaObject *FUN_002310d0(void);
+extern "C" igMetaObject *igInfoManager_GetPublishedMetaObject(void);
 extern "C" igMetaObject *g_igSerialScheduler_metaObject;
 extern "C" igMetaObject *igSerialScheduler_GetMetaObject(void);
 struct T { int word0; int references; };
@@ -82,56 +82,56 @@ struct Obj {
     }
 };
 extern "C" int igSerialScheduler_GetVTable(void);
-extern "C" void **FUN_00231210(void **arg0, long long arg1);
-extern "C" void FUN_00231290(void);
+extern "C" void **igSmartPointer_igInfoManagerOrderedList_Destruct(void **arg0, long long arg1);
+extern "C" void igSerialScheduler_EnsureRegistered(void);
 extern "C" igMetaObject *igInsightScheduler_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igSerialScheduler_Register(void);
-extern "C" void thunk_igSerialScheduler_GetMetaObject(void);
+extern "C" void igSerialScheduler_GetMetaObjectFunction(void);
 extern "C" igMetaObject *g_igInsightScheduler_metaObject;
-extern "C" igMetaObject *FUN_00231330(void);
+extern "C" igMetaObject *igInsightScheduler_GetPublishedMetaObject(void);
 extern "C" void igSerialScheduler_InitFields(void);
 #include "dw4/core/igMemoryPoolContext.h"
 extern "C" igMetaObject *g_igMessenger_metaObject;
-extern "C" igMetaObject *FUN_00231400(void);
+extern "C" igMetaObject *igMessenger_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igMessenger_GetMetaObject(void);
 struct Ref { int pad; union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
 struct W { int *vt; int f4; struct Ref *ref; int fc; };
 extern "C" int g_igMessenger_vtable[4];
 extern "C" int igMessenger_GetVTable(void);
-extern "C" void FUN_00231530(void);
+extern "C" void igMessenger_EnsureRegistered(void);
 extern "C" CallbackArray *igMessenger_Register(void);
-extern "C" void thunk_igMessenger_GetMetaObject(void);
+extern "C" void igMessenger_GetMetaObjectFunction(void);
 extern "C" void igMessenger_InitFields(void);
 extern "C" igMetaObject *igMessage_GetMetaObject(void);
 extern "C" int g_igMessage_vtable[4];
 struct Obj_2316c0 { int *vt; int b; };
 extern "C" int igMessage_GetVTable(void);
-extern "C" void FUN_00231700(void);
-extern "C" void thunk_igMessage_GetMetaObject(void);
+extern "C" void igMessage_EnsureRegistered(void);
+extern "C" void igMessage_GetMetaObjectFunction(void);
 extern "C" igMetaObject *g_igMessageReceiverList_metaObject;
-extern "C" igMetaObject *FUN_00231790(void);
+extern "C" igMetaObject *igMessageReceiverList_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igMessageReceiverList_GetMetaObject(void);
 struct Obj_231830 { int *vt; char pad[28]; };
 extern "C" int g_igMessageReceiverList_vtable[4];
 extern "C" int igMessageReceiverList_GetVTable(void);
-extern "C" void FUN_00231870(void);
+extern "C" void igMessageReceiverList_EnsureRegistered(void);
 #include "dw4/core/igObjectList.h"
 extern "C" CallbackArray *igMessageReceiverList_Register(void);
-extern "C" void thunk_igMessageReceiverList_GetMetaObject(void);
+extern "C" void igMessageReceiverList_GetMetaObjectFunction(void);
 extern "C" igMetaObject *g_igMessageReceiver_metaObject;
 extern "C" igMetaObject *igMessageReceiver_GetMetaObject(void);
-extern "C" void FUN_00231950(void);
+extern "C" void igMessageReceiver_EnsureRegistered(void);
 extern "C" CallbackArray *igMessageReceiver_Register(void);
-extern "C" void thunk_igMessageReceiver_GetMetaObject(void);
+extern "C" void igMessageReceiver_GetMetaObjectFunction(void);
 extern "C" igMetaObject *g_igMessageFilterList_metaObject;
-extern "C" igMetaObject *FUN_002319d0(void);
+extern "C" igMetaObject *igMessageFilterList_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igMessageFilterList_GetMetaObject(void);
 struct Obj_231a70 { int *vt; char pad[28]; };
 extern "C" int g_igMessageFilterList_vtable[4];
 extern "C" int igMessageFilterList_GetVTable(void);
-extern "C" void FUN_00231ab0(void);
+extern "C" void igMessageFilterList_EnsureRegistered(void);
 extern "C" CallbackArray *igMessageFilterList_Register(void);
-extern "C" void thunk_igMessageFilterList_GetMetaObject(void);
+extern "C" void igMessageFilterList_GetMetaObjectFunction(void);
 extern "C" int FUN_00231b40(int arg0);
 extern "C" igMetaObject *g_igMessageFilter_metaObject;
 extern "C" igMetaObject *igMessageFilter_GetMetaObject(void);
@@ -139,108 +139,108 @@ typedef struct S_ref { char pad4[4]; int f4; } S_ref;
 union U { int vt; int w[4]; void *p[4]; char b[16]; };
 extern "C" int g_igMessageFilter_vtable[4];
 extern "C" int igMessageFilter_GetVTable(void);
-extern "C" void FUN_00231cb0(void);
+extern "C" void igMessageFilter_EnsureRegistered(void);
 extern "C" CallbackArray *igMessageFilter_Register(void);
-extern "C" void thunk_igMessageFilter_GetMetaObject(void);
+extern "C" void igMessageFilter_GetMetaObjectFunction(void);
 extern "C" void igMessageFilter_InitFields(void);
 extern "C" igMetaObject *g_igFilterMessageDispatcher_metaObject;
 extern "C" igMetaObject *igFilterMessageDispatcher_GetMetaObject(void);
 extern "C" int g_igFilterMessageDispatcher_vtable[4];
 extern "C" int igFilterMessageDispatcher_GetVTable(void);
-extern "C" void FUN_00231f40(void);
+extern "C" void igFilterMessageDispatcher_EnsureRegistered(void);
 extern "C" igMetaObject *igMessageDispatcher_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igFilterMessageDispatcher_Register(void);
-extern "C" void thunk_igFilterMessageDispatcher_GetMetaObject(void);
+extern "C" void igFilterMessageDispatcher_GetMetaObjectFunction(void);
 extern "C" igMetaObject *g_igMessageDispatcher_metaObject;
-extern "C" igMetaObject *FUN_00231fe0(void);
+extern "C" igMetaObject *igMessageDispatcher_GetPublishedMetaObject(void);
 extern "C" void igFilterMessageDispatcher_InitFields(void);
-extern "C" igMetaObject *FUN_002320b0(void);
+extern "C" igMetaObject *igMessageDispatcher_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igMessageDispatcher_GetMetaObject(void);
-extern "C" void FUN_00232150(void);
+extern "C" void igMessageDispatcher_EnsureRegistered(void);
 extern "C" void igMessageDispatcher_SetAbstractProxy_002321e0(void);
 extern "C" CallbackArray *igMessageDispatcher_Register(void);
-extern "C" void thunk_igMessageDispatcher_GetMetaObject(void);
-extern "C" void FUN_002321e0(void);
+extern "C" void igMessageDispatcher_GetMetaObjectFunction(void);
+extern "C" void igMessageDispatcher_SetAbstractProxy(void);
 extern "C" igMetaObject *g_igMessageDefaultReceiver_metaObject;
 extern "C" igMetaObject *igMessageDefaultReceiver_GetMetaObject(void);
 extern "C" int g_igMessageDefaultReceiver_vtable[4];
 union U_232290 { int vt; char b[32]; };
 extern "C" int igMessageDefaultReceiver_GetVTable(void);
-extern "C" void FUN_00232320(void);
+extern "C" void igMessageDefaultReceiver_EnsureRegistered(void);
 extern "C" igMetaObject *igMessageReceiver_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igMessageDefaultReceiver_Register(void);
-extern "C" void thunk_igMessageDefaultReceiver_GetMetaObject(void);
-extern "C" igMetaObject *FUN_002323c0(void);
+extern "C" void igMessageDefaultReceiver_GetMetaObjectFunction(void);
+extern "C" igMetaObject *igMessageReceiver_GetPublishedMetaObject(void);
 extern "C" void igMessageDefaultReceiver_InitFields(void);
-extern "C" igMetaObject *FUN_00232470(void);
+extern "C" igMetaObject *igInsightScheduler_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igInsightScheduler_GetMetaObject(void);
-extern "C" void FUN_00232510(void);
+extern "C" void igInsightScheduler_EnsureRegistered(void);
 extern "C" void igInsightScheduler_SetAbstractProxy_002325a0(void);
 extern "C" CallbackArray *igInsightScheduler_Register(void);
-extern "C" void thunk_igInsightScheduler_GetMetaObject(void);
-extern "C" void FUN_002325a0(void);
+extern "C" void igInsightScheduler_GetMetaObjectFunction(void);
+extern "C" void igInsightScheduler_SetAbstractProxy(void);
 extern "C" igMetaObject *g_igInsightPluginList_metaObject;
-extern "C" igMetaObject *FUN_002325c0(void);
+extern "C" igMetaObject *igInsightPluginList_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igInsightPluginList_GetMetaObject(void);
 struct Obj_232660 { int *vt; char pad[28]; };
 extern "C" int g_igInsightPluginList_vtable[4];
 extern "C" int igInsightPluginList_GetVTable(void);
-extern "C" void FUN_002326a0(void);
+extern "C" void igInsightPluginList_EnsureRegistered(void);
 extern "C" CallbackArray *igInsightPluginList_Register(void);
-extern "C" void thunk_igInsightPluginList_GetMetaObject(void);
+extern "C" void igInsightPluginList_GetMetaObjectFunction(void);
 extern "C" igMetaObject *igInsightPlugin_GetMetaObject(void);
-extern "C" void FUN_00232780(void);
-extern "C" void thunk_igInsightPlugin_GetMetaObject(void);
+extern "C" void igInsightPlugin_EnsureRegistered(void);
+extern "C" void igInsightPlugin_GetMetaObjectFunction(void);
 extern "C" igMetaObject *g_igInsightCore_metaObject;
 extern "C" igMetaObject *igInsightCore_GetMetaObject(void);
 struct Obj_2328e0 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; int w12; int w13; int w14; int w15; int w16; int w17; int w18; int w19; int w20; int w21; int w22; int w23; int w24; int w25; int w26; int w27; };
-extern "C" int FUN_00143350(...);
-extern "C" int FUN_00150a70(...);
+extern "C" int igSmartPointer_igWindow_Destruct(...);
+extern "C" int igSmartPointer_igTimer_Destruct(...);
 extern "C" int g_igInsightCore_vtable[4];
 extern "C" int igInsightCore_GetVTable(void);
 struct S_temp_a0 { char pad4[4]; int f4; };
 struct O { S_temp_a0 *m; };
-extern "C" O *FUN_00232a60(O *arg0, short arg1);
+extern "C" O *igSmartPointer_igInsightScheduler_Destruct(O *arg0, short arg1);
 /* Deleting destructor; the deletion flag is a signed short. */
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
 typedef struct S_temp_a0_232b60 { char pad4[4]; int f4; } S_temp_a0_232b60;
-extern "C" void **FUN_00232b60(void **arg0, short arg1);
-extern "C" ObjectRefWord *FUN_00232be0(ObjectRefWord *self,int delete_storage);
-extern "C" void **FUN_00232c60(void **arg0, short arg1);
-extern "C" ObjectRefWord *FUN_00232ce0(ObjectRefWord *self,int delete_storage);
+extern "C" void **igSmartPointer_igEventDispatcher_Destruct(void **arg0, short arg1);
+extern "C" ObjectRefWord *igSmartPointer_igWindowResizeEventReceiver_Destruct(ObjectRefWord *self,int delete_storage);
+extern "C" void **igSmartPointer_igMessenger_Destruct(void **arg0, short arg1);
+extern "C" ObjectRefWord *igSmartPointer_igClearRenderer_Destruct(ObjectRefWord *self,int delete_storage);
 struct R { int vt; unsigned int rc; };
-extern "C" struct R **FUN_00232d60(struct R **arg0, short arg1);
+extern "C" struct R **igSmartPointer_igInsightPluginList_Destruct(struct R **arg0, short arg1);
 extern "C" CallbackArray *igInsightCore_Register(void);
-extern "C" void thunk_igInsightCore_GetMetaObject(void);
-extern "C" int FUN_00145d40(...);
-extern "C" int FUN_0044c250(...);
-extern "C" int FUN_004513b0(...);
+extern "C" void igInsightCore_GetMetaObjectFunction(void);
+extern "C" int igWindow_GetOrCreateMetaObject(...);
+extern "C" int igClearRenderer_GetOrCreateMetaObject(...);
+extern "C" int igEventDispatcher_GetOrCreateMetaObject(...);
 extern "C" void igInsightCore_InitFields(void);
-extern "C" void thunk_FUN_00236140(void);
+extern "C" void igInsightCore_UserRegisterFunction(void);
 extern "C" igMetaObject *g_igWindowResizeEventReceiver_metaObject;
-extern "C" igMetaObject *FUN_00233080(void);
+extern "C" igMetaObject *igWindowResizeEventReceiver_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igWindowResizeEventReceiver_GetMetaObject(void);
 extern "C" int g_igWindowResizeEventReceiver_vtable[4];
 struct Obj_233120 { int *vt; char pad[12]; };
 extern "C" int igWindowResizeEventReceiver_GetVTable(void);
-extern "C" void FUN_00233160(void);
+extern "C" void igWindowResizeEventReceiver_EnsureRegistered(void);
 #include "dw4/gui/igEventReceiver.h"
 extern "C" CallbackArray *igWindowResizeEventReceiver_Register(void);
-extern "C" void thunk_igWindowResizeEventReceiver_GetMetaObject(void);
-extern "C" igMetaObject *FUN_00233200(void);
+extern "C" void igWindowResizeEventReceiver_GetMetaObjectFunction(void);
+extern "C" igMetaObject *igEventReceiver_GetPublishedMetaObject(void);
 extern "C" void igWindowResizeEventReceiver_InitFields(void);
 extern "C" int FUN_002332b0(int arg0);
 extern "C" igMetaObject *g_igViewportResizedMessage_metaObject;
 struct Obj_233340 { int *vt; char pad[28]; };
 extern "C" int g_igViewportResizedMessage_vtable[4];
 extern "C" int igViewportResizedMessage_GetVTable(void);
-extern "C" void FUN_00233380(void);
+extern "C" void igViewportResizedMessage_EnsureRegistered(void);
 extern "C" CallbackArray *igViewportResizedMessage_Register(void);
-extern "C" void thunk_igViewportResizedMessage_GetMetaObject(void);
+extern "C" void igViewportResizedMessage_GetMetaObjectFunction(void);
 extern "C" void igViewportResizedMessage_InitFields(void);
 extern "C" igMetaObject *g_igInfoManagerOrderedList_metaObject;
-extern "C" igMetaObject *FUN_00233480(void);
+extern "C" igMetaObject *igInfoManagerOrderedList_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igInfoManagerOrderedList_GetMetaObject(void);
 typedef struct { int *vt; int w[5]; } Obj_233520;
 extern "C" int g_igInfoManagerOrderedList_vtable[4];
@@ -250,32 +250,32 @@ extern "C" int DAT_0052cbc0[4];
 #include "dw4/support/list-services.h"
 #include "dw4/core/igStringRef.h"
 extern "C" int **FUN_00233610(int **arg0, long long arg1);
-extern "C" void FUN_002336b0(void);
+extern "C" void igInfoManagerOrderedList_EnsureRegistered(void);
 extern "C" CallbackArray *igInfoManagerOrderedList_Register(void);
-extern "C" void thunk_igInfoManagerOrderedList_GetMetaObject(void);
+extern "C" void igInfoManagerOrderedList_GetMetaObjectFunction(void);
 extern "C" int FUN_00233740(void);
 extern "C" igMetaObject *g_igInfoManagerList_metaObject;
-extern "C" igMetaObject *FUN_00233750(void);
+extern "C" igMetaObject *igInfoManagerList_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igInfoManagerList_GetMetaObject(void);
 struct Obj_2337f0 { int *vt; char pad[28]; };
 extern "C" int g_igInfoManagerList_vtable[4];
 extern "C" int igInfoManagerList_GetVTable(void);
-extern "C" void FUN_00233830(void);
+extern "C" void igInfoManagerList_EnsureRegistered(void);
 extern "C" CallbackArray *igInfoManagerList_Register(void);
-extern "C" void thunk_igInfoManagerList_GetMetaObject(void);
+extern "C" void igInfoManagerList_GetMetaObjectFunction(void);
 extern "C" igMetaObject *igInfoManager_GetMetaObject(void);
-extern "C" void FUN_00233910(void);
-extern "C" void thunk_igInfoManager_GetMetaObject(void);
+extern "C" void igInfoManager_EnsureRegistered(void);
+extern "C" void igInfoManager_GetMetaObjectFunction(void);
 extern "C" void igInfoManager_InitFields(void);
 extern "C" igMetaObject *g_igFlushRenderer_metaObject;
-extern "C" igMetaObject *FUN_00233a40(void);
+extern "C" igMetaObject *igFlushRenderer_GetOrCreateMetaObject(void);
 union U_233a90 { int vt; int w[3]; char b[12]; };
 extern "C" int g_igFlushRenderer_vtable[4];
 extern "C" igMetaObject *igFlushRenderer_GetMetaObject(void);
 extern "C" int igFlushRenderer_GetVTable(void);
-extern "C" void FUN_00233b80(void);
+extern "C" void igFlushRenderer_EnsureRegistered(void);
 extern "C" CallbackArray *igFlushRenderer_Register(void);
-extern "C" void thunk_igFlushRenderer_GetMetaObject(void);
+extern "C" void igFlushRenderer_GetMetaObjectFunction(void);
 typedef struct IntList {
     int _unk00[2];
     int count;
@@ -425,12 +425,12 @@ struct App {
     igObject *f232;
     igObject *f236;
 };
-extern "C" void FUN_00234ee0(struct FlushSettings *settings, const char *text);
+extern "C" void igCommandLine_ParseLine(struct FlushSettings *settings, const char *text);
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include "dw4/support/softfloat.h"
-extern "C" int FUN_001e6d80(...);
+#include "dw4/datapump/igRegistryValue.h"
 #include "dw4/core/igDataLists.h"
 #include "dw4/maths/igMathConstants.h"
 /* The object smart-pointer destructor: the held pointer is copied once (its slot is a plain field,
@@ -471,86 +471,26 @@ struct StringRef {
         }
     }
 };
-extern "C" void FUN_00233c10(const char *programName);
-extern "C" void FUN_002342b0(const char *arg0, const char *arg1, int arg2);
-extern "C" void FUN_002342e0(const char *arg0, const char *arg1, int arg2);
-extern "C" void FUN_00234300(const char *arg0, const char *arg1, float arg2);
-extern "C" void FUN_00234350(const char *arg0, const char *arg1, float *arg2);
-extern "C" void FUN_002343d0(const char *arg0, const char *arg1, float *arg2);
-extern "C" int FUN_00234470(igStringRefList *arg0, int *arg1, const char *arg2);
-extern "C" int FUN_00234510(igStringRefList *a0, int *a1, const char *a2, int *arg3);
-extern "C" int FUN_00234560(igStringRefList *arg0, int *arg1, const char *arg2, double *arg3);
-extern "C" int FUN_002345b0(igStringRefList *arg0, int *arg1, const char *arg2, void **arg3);
-extern "C" int FUN_002346c0(igStringRefList *arg0, int *arg1, const char *arg2, void **arg3);
-extern "C" int FUN_00234770(igStringRefList *arg0, int *arg1, const char *arg2, unsigned char *arg3);
-extern "C" int thunk_FUN_00234510(igStringRefList *args, int *index, const char *name, int *value);
-extern "C" int FUN_00234810(igStringRefList *arg0, int *arg1, const char *arg2, float *arg3);
-extern "C" int FUN_00234860(igStringRefList *arg0, int *arg1, const char *arg2, float *arg3);
-extern "C" int FUN_002348b0(igStringRefList *arg0, int *arg1, const char *arg2, float *arg3);
-extern "C" struct FlushSettings *FUN_00234900(struct FlushSettings *s);
-extern "C" void *FUN_00234b90(struct App *arg0, short arg1);
-extern "C" void ViewerOptions_ReleaseShared(void);
-extern "C" void FUN_00235370(ViewerOptions *opts, igStringRefList *args);
-typedef struct Vec3 { float x, y, z; } Vec3;
-typedef struct Vec4 { float x, y, z, w; } Vec4;
-typedef struct ViewerOptions_2382e0 {
-  char * extraCommandLine;
-  unsigned char showBBox;
-  unsigned char showNormals;
-  char pad6[2];
-  Vec4 normalsColor;
-  Vec4 invalidStoredNormalsColor;
-  Vec4 scaledNormalsColor;
-  float invalidNormalsPrecision;
-  unsigned char autoSelectCamera;
-  char pad61[3];
-  float horizontalFieldOfView;
-  unsigned char autoPlanes;
-  char pad69[3];
-  float defaultNearPlane;
-  float defaultFarPlane;
-  Vec3 upVector;
-  unsigned char autoSceneLights;
-  unsigned char autoHeadLight;
-  unsigned char useSceneLights;
-  unsigned char useHeadLight;
-  unsigned char useHeadLightSpecular;
-  char pad97[3];
-  Vec4 headLightDiffuse;
-  Vec4 headLightSpecular;
-  Vec4 headLightAmbient;
-  Vec4 clearColor;
-  unsigned char wireframeMode;
-  unsigned char forceWireframe;
-  unsigned char backFaceCullingMode;
-  unsigned char forceBackFaceCulling;
-  unsigned char alphaTest;
-  unsigned char forceAlphaTest;
-  char pad170[2];
-  float alphaTestReference;
-  float maxFrameRate;
-  unsigned char optimizeTextures;
-  unsigned char halfBuffer;
-  unsigned char palVideoMode;
-  char pad183[1];
-  int width;
-  int height;
-  int swapInterval;
-  int colorBits;
-  int alphaBits;
-  int depthBits;
-  int stencilBits;
-  unsigned char reportVideoFormat;
-  unsigned char showLogo;
-  unsigned char showUI;
-  unsigned char enableMayaControls;
-  unsigned char benchmark;
-  char pad217[3];
-  int benchmarkSkipFrames;
-  int benchmarkFrames;
-  unsigned char columnStatistics;
-  unsigned char allocateVisualContextInScratchPad;
-} ViewerOptions_2382e0;
+extern "C" void igCommandLine_PrintUsage(const char *programName);
+extern "C" void igCommandLine_PrintOptionBool(const char *command, const char *comment, int value);
+extern "C" void igCommandLine_PrintOptionInt(const char *command, const char *comment, int value);
+extern "C" void igCommandLine_PrintOptionFloat(const char *command, const char *comment, float value);
+extern "C" void igCommandLine_PrintOptionVec3f(const char *command, const char *comment, float *value);
+extern "C" void igCommandLine_PrintOptionVec4f(const char *command, const char *comment, float *value);
+extern "C" int igCommandLine_GetOption(igStringRefList *args, int *index, const char *option);
+extern "C" int igCommandLine_GetOptionInt(igStringRefList *args, int *index, const char *option, int *value);
+extern "C" int igCommandLine_GetOptionFloat(igStringRefList *args, int *index, const char *option, double *value);
+extern "C" int igCommandLine_GetOptionString(igStringRefList *args, int *index, const char *option, const char **value);
+extern "C" int igCommandLine_GetDefaultValueStringRef(igStringRefList *args, int *index, const char *option, char **value);
+extern "C" int igCommandLine_GetDefaultValueBool(igStringRefList *args, int *index, const char *option, unsigned char *value);
+extern "C" int igCommandLine_GetDefaultValueInt(igStringRefList *args, int *index, const char *option, int *value);
+extern "C" int igCommandLine_GetDefaultValueFloat(igStringRefList *args, int *index, const char *option, float *value);
+extern "C" int igCommandLine_GetDefaultValueVec3f(igStringRefList *args, int *index, const char *option, float *value);
+extern "C" int igCommandLine_GetDefaultValueVec4f(igStringRefList *args, int *index, const char *option, float *value);
+extern "C" struct FlushSettings *igCommandLine_Construct(struct FlushSettings *s);
+extern "C" void *igCommandLine_Destruct(struct App *arg0, short arg1);
+extern "C" void igViewerDefaults_ReleaseInstance(void);
+extern "C" void igCommandLine_Setup(ViewerOptions *opts, igStringRefList *args);
 /* The frame-buffer format the viewer options request, and the one the visual context reports. */
 struct FrameBufferFormat { int enabled; int width; int height; int colorBits; int alphaBits; int depthBits; int stencilBits; float scale; };
 /* The video mode a visual context is set to: the NTSC or PAL refresh rate, the swap interval and
@@ -598,7 +538,7 @@ public:
     virtual void d168(); virtual void d169(); virtual void d170(); virtual void d171(); virtual void d172();
     virtual void vfunc_173();
     virtual void vfunc_174(unsigned int buffers);
-    virtual void setClearColor(const Vec4 *color);
+    virtual void setClearColor(const float *rgba);
     virtual void d176(); virtual void d177(); virtual void d178(); virtual void d179(); virtual void d180(); virtual void d181(); virtual void d182(); virtual void d183();
     virtual void d184(); virtual void d185(); virtual void d186(); virtual void d187(); virtual void d188(); virtual void d189(); virtual void d190(); virtual void d191();
     virtual void d192(); virtual void d193(); virtual void d194(); virtual void d195(); virtual void d196(); virtual void d197(); virtual void d198(); virtual void d199();
@@ -631,35 +571,42 @@ public:
     unsigned int _refCount;
     igVisualContextView *_visualContext;
 };
-extern "C" void Gap__Insight__igFlushRenderer__vfunc_26(igFlushRendererView *self);
+extern "C" void igFlushRenderer_Render(igFlushRendererView *self);
 struct NamedObject : public igObject { int name; };
 #include "dw4/core/igFolder.h"
 struct G { char p[76]; int f76; };
-extern "C" void FUN_00236140(void);
+extern "C" void igInsightCore_UserRegister(void);
 struct TextValue : public igObject { char *text; };
 #include "dw4/core/igStringObj.h"
-extern "C" FrameBufferFormat ViewerOptions_GetRequestedFormat(ViewerOptions_2382e0 *options);
+extern "C" FrameBufferFormat igInsightCore_CreateRenderDestinationFormat(SharedViewerOptions *options);
 #include "dw4/viewer/ViewerSetup.h"
 struct ResizeEvent : public igObject { float origin[2]; float size[2]; };
 extern "C" float DAT_004e0fa0[4];
 extern "C" float DAT_004e0fa4[4];
 struct WindowInfo { char p[40]; int f40; };
 struct Receiver { char p[8]; WindowInfo *f8; };
-extern "C" int Gap__Insight__igWindowResizeEventReceiver__vfunc_32(Receiver *self, int width, int height);
-extern "C" int FUN_00236b70(igInsightCore *core, igObject *manager);
+extern "C" int igWindowResizeEventReceiver_WindowResizeEvent(Receiver *self, int width, int height);
+extern "C" int igInsightCore_IsRegistered(igInsightCore *core, igObject *manager);
 class DW4VC_92_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(); };
 class DW4VC_96_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(); };
 class DW4VC_96_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(int); };
 class DW4VC_104_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual int vX(); };
 class DW4VC_100_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int); };
 struct Instance : public igObject { };
-extern "C" void FUN_00236ca0(int self);
 class DW4VC_92_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(int); };
-extern "C" void FUN_00236dd0(void *arg0, void **arg1);
-extern "C" void FUN_00236e20(void *arg0, void **arg1);
+extern "C" void igInsightCore_RegisterAllPlugins(igInsightCore *core);
+extern "C" void igInsightCore_UnregisterAllPlugins(igInsightCore *core);
+extern "C" void igInsightCore_RemoveAllInfos(igInsightCore *core);
+extern "C" void igInsightCore_Begin(igInsightCore *core);
+extern "C" void igInsightCore_End(igInsightCore *core);
+extern "C" void igInsightCore_InitializeDrawing(igInsightCore *core);
+extern "C" void igInsightCore_TerminateDrawing(igInsightCore *core);
+extern "C" void igInsightCore_HandleEvents(igInsightCore *core);
+extern "C" void igInsightCore_DrawFrame(igInsightCore *core);
+extern "C" void igInsightCore_RegisterPlugin(void *arg0, void **arg1);
+extern "C" void igInsightCore_UnregisterPlugin(void *arg0, void **arg1);
 typedef struct L { char pad8[8]; int cnt; char pad12[4]; int *arr; } L;
 typedef struct A { char pad104[104]; L *f68; } A;
-extern "C" void FUN_00236e80(A *arg0);
 extern "C" int FUN_00457ca0(...);
 #include "dw4/core/igResult.h"
 /* An info manager: its virtual slot 20 returns its meta object. */
@@ -670,17 +617,14 @@ extern "C" int FUN_00237010(void);
 class DW4VC { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int vX(int); };
 /* matching construct: dummy virtual slots so the vX() call dispatches through the retail vtable offset 112 */
 class VC112 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual int vX(); };
-extern "C" void FUN_002370c0(igInsightCore *arg0);
 class V100 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void vX(); };
 class V108 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void vY(); };
 struct L_2371f0 { char pad8[8]; unsigned int cnt; char pad12[4]; V100 **arr; };
 struct M { char pad8[8]; L_2371f0 *l; };
 struct S_2371f0 { char pad8[8]; M *m; char pad12[36]; V108 *f48; char pad52[4]; long long f56; long long f64; };
-extern "C" void FUN_002371f0(S_2371f0 *arg0);
 class A_237280 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void vX(); };
 class B { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void vX(); };
 struct Q { int p0; int p1; int count; int p3; B **data; };
-extern "C" void FUN_00237280(int *arg0);
 struct A_237300 { char pad[28]; int f28; int f32; int f36; char pad40[4]; int f44; char pad48[24]; int f72; };
 struct StringRef_237300 {
     int *p;
@@ -708,7 +652,7 @@ struct StringRef_237300 {
         }
     }
 };
-extern "C" void Gap__Insight__igInsightCore__vfunc_13(struct A_237300 *arg0, int flags);
+extern "C" void igInsightCore_resetFields(struct A_237300 *arg0, int flags);
 extern "C" int FUN_004541f0(...);
 struct OO;
 struct R_237530;
@@ -717,29 +661,25 @@ struct R_237530 { int w0; int rc; };
 struct Lst { char pad[8]; int n; int w12; int *items; };
 struct Wr { char pad[8]; Lst *f8; };
 struct OO { char pad[20]; DW4VC_152 *f20; R_237530 *f24; Wr *f28; int f32; };
-extern "C" void FUN_00237530(OO *arg0);
 struct L_2376b0 { char pad[8]; int count; int pad2; int *items; };
 struct M_2376b0 { char pad[8]; struct L_2376b0 *list; };
 struct H { char pad[28]; struct M_2376b0 *m; };
-extern "C" int FUN_0013c110(...);
-extern "C" void FUN_002376b0(struct H *arg0);
+extern "C" int igAttrPool_UserUnregister(...);
 class A21 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void vX(); };
 class A24 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual long long vX(); };
 struct S_237730 { char pad12[12]; A21 *f12; char pad16[16]; A21 *f32; char pad36[12]; A24 *f48; char pad52[4]; long long f56; long long f64; int f72; char pad76[4]; long long f80; };
-extern "C" void FUN_00237730(S_237730 *arg0);
 class ProfiledObject { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int v23(); virtual long long v24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual int v34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97(); virtual void d98(); virtual void d99(); virtual void d100(); virtual void d101(); virtual void d102(); virtual void d103(); virtual void d104(); virtual void d105(); virtual void d106(); virtual void d107(); virtual void d108(); virtual void d109(); virtual void d110(); virtual void d111(); virtual void d112(); virtual void d113(); virtual void d114(); virtual void d115(); virtual void d116(); virtual void d117(); virtual void d118(); virtual void d119(); virtual void d120(); virtual void d121(); virtual void d122(); virtual void d123(); virtual void d124(); virtual void d125(); virtual void d126(); virtual void d127(); virtual void d128(); virtual void d129(); virtual void d130(); virtual void d131(); virtual void d132(); virtual void d133(); virtual void d134(); virtual void d135(); virtual void d136(); virtual void d137(); virtual void d138(); virtual void d139(); virtual void d140(); virtual void d141(); virtual void d142(); virtual void d143(); virtual void d144(); virtual void d145(); virtual void d146(); virtual void d147(); virtual void d148(); virtual void d149(); virtual void d150(); virtual void d151(); virtual void d152(); virtual void d153(); virtual void d154(); virtual void d155(); virtual void d156(); virtual void d157(); virtual void d158(); virtual void d159(); virtual void d160(); virtual void d161(); virtual void d162(); virtual void d163(); virtual void d164(); virtual void d165(); virtual void d166(); virtual void d167(); virtual void d168(); virtual void d169(); virtual void d170(); virtual int v171(); virtual int v172(); };
 struct ProfiledObjectList { char pad[8]; int cnt; char pad2[4]; ProfiledObject **arr; };
 struct ProfiledObjectHolder { char pad[8]; ProfiledObjectList *l; };
 struct ProfilerState { char p0[24]; ProfiledObject *a; ProfiledObjectHolder *m; char p1[16]; ProfiledObject *b; int cnt; char p2[32]; long long d1; long long d2; };
-extern "C" void FUN_002377c0(ProfilerState *t);
 struct T_237940 { void m(); };
 typedef void (T_237940::*PM)();
 struct S_237940 { char pad[8]; T_237940 *obj; PM pm; };
-extern "C" void Gap__Insight__igMessageDefaultReceiver__vfunc_23(S_237940 *s);
+extern "C" void igMessageDefaultReceiver_MessageHandler(S_237940 *s);
 typedef struct E { int pad[2]; int f8; } E;
 typedef struct L_237990 { int pad[2]; int f8; int pad2; E **f16; } L_237990;
 typedef struct A_237990 { int pad[2]; L_237990 *f8; } A_237990;
-extern "C" E *FUN_00237990(const A_237990 *arg0, int arg1);
+extern "C" E *igFilterMessageDispatcher_GetFilter(const A_237990 *arg0, int arg1);
 struct MessageFilter : igObject {
     igSmartPointer<igObject> _target;
 };
@@ -751,12 +691,12 @@ struct FilterList : igObject {
 struct FilterDispatcher : igObject {
     FilterList *_filters;
 };
-extern "C" igSmartPointer<MessageFilter> FUN_002379e0(FilterDispatcher *self, igObject *target);
+extern "C" igSmartPointer<MessageFilter> igFilterMessageDispatcher_GetFilterOrCreate(FilterDispatcher *self, igObject *target);
 class N;
 struct L_237b50 { char pad[8]; int cnt; int cap; N **data; };
 class N { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(int); char pad[8]; L_237b50 *f12; };
-extern "C" void Gap__Insight__igFilterMessageDispatcher__vfunc_28(N *arg0, int arg1);
-extern "C" void Gap__Insight__igMessageFilter__vfunc_23(int arg0, int arg1);
+extern "C" void igFilterMessageDispatcher_PostMessage(N *arg0, int arg1);
+extern "C" void igMessageFilter_AcceptMessage(int arg0, int arg1);
 class FilterDispatcherSlots {
 public:
     virtual void vfunc_2(); virtual void vfunc_3(); virtual void vfunc_4(); virtual void vfunc_5(); virtual void vfunc_6(); virtual void vfunc_7();
@@ -765,17 +705,17 @@ public:
     virtual void vfunc_20(); virtual void vfunc_21(); virtual void vfunc_22(); virtual void vfunc_23();
     virtual void dispatch(int message, igObject *filter);
 };
-extern "C" void Gap__Insight__igFilterMessageDispatcher__vfunc_23(FilterDispatcherSlots *self, int message, igObject *target);
-extern "C" void Gap__Insight__igFilterMessageDispatcher__vfunc_24(void *arg0, void *arg1, void *arg2);
+extern "C" void igFilterMessageDispatcher_AddFilteringForType(FilterDispatcherSlots *self, int message, igObject *target);
+extern "C" void igFilterMessageDispatcher_AddFiltering(void *arg0, void *arg1, void *arg2);
 class DW4VC_108_2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int vX(int, int); };
-extern "C" void Gap__Insight__igFilterMessageDispatcher__vfunc_26(void **arg0, int arg1, int arg2);
+extern "C" void igFilterMessageDispatcher_RemoveFilteringForType(void **arg0, int arg1, int arg2);
 struct L_237d80 { int p0; int p1; int n; int p3; int *arr; };
 class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void vX(int, int);
   char pad[8]; L_237d80 *list; };
-extern "C" void Gap__Insight__igFilterMessageDispatcher__vfunc_25(V *arg0, int arg1);
+extern "C" void igFilterMessageDispatcher_RemoveFilteringForReceiver(V *arg0, int arg1);
 typedef struct S_arg0 { char pad0[8]; int f8; int f12; } S_arg0;
 typedef struct S_arg2 { char pad0[12]; int f12; } S_arg2;
-extern "C" void Gap__Insight__igFilterMessageDispatcher__vfunc_27(S_arg0 *arg0, void *arg1, S_arg2 *arg2);
+extern "C" void igFilterMessageDispatcher_RemoveFiltering(S_arg0 *arg0, void *arg1, S_arg2 *arg2);
 class igFilterMessageDispatcherView {
 public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
@@ -789,7 +729,7 @@ struct igMessageDispatcherOwnerView {
     char _pad0[8];
     igFilterMessageDispatcherView *f8;
 };
-extern "C" void FUN_00237ea0(igMessageDispatcherOwnerView *self, void *message);
+extern "C" void igMessenger_PostMessage(igMessageDispatcherOwnerView *self, void *message);
 class SchedulerManager {
 public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
@@ -806,68 +746,60 @@ struct ManagerArray {
 struct ManagerListView : igObject {
     ManagerArray *_list;
 };
-extern "C" void Gap__Insight__igSerialScheduler__vfunc_23(igSerialScheduler *scheduler);
-extern "C" void Gap__Insight__igSerialScheduler__vfunc_24(void *arg0, int arg1);
+extern "C" void igSerialScheduler_Update(igSerialScheduler *scheduler);
+extern "C" void igSerialScheduler_Schedule(void *arg0, int arg1);
 typedef struct Obj_238020 { char pad[8]; int f8; } Obj_238020;
-extern "C" void Gap__Insight__igSerialScheduler__vfunc_25(Obj_238020 *arg0, int arg1);
-extern "C" int Gap__Insight__igSerialScheduler__vfunc_26(igSerialScheduler *scheduler, igObject *manager);
+extern "C" void igSerialScheduler_Unschedule(Obj_238020 *arg0, int arg1);
+extern "C" int igSerialScheduler_IsScheduled(igSerialScheduler *scheduler, igObject *manager);
 typedef struct S0 { char pad8[8]; int f8; } S0;
-extern "C" void Gap__Insight__igSerialScheduler__vfunc_27(S0 *arg0, void *arg1, void *arg2);
-extern "C" void Gap__Insight__igSerialScheduler__vfunc_28(S0 *arg0, void *arg1, void *arg2);
-extern "C" void Gap__Insight__igSerialScheduler__vfunc_29(S0 *arg0, void *arg1);
-extern "C" float DAT_004e105c[4];
-extern "C" float DAT_004e1060[4];
-extern "C" float DAT_004e1174[4];
-extern "C" float DAT_004e1178[4];
-extern "C" float DAT_004e117c[4];
+extern "C" void igSerialScheduler_AppendDependency(S0 *arg0, void *arg1, void *arg2);
+extern "C" void igSerialScheduler_RemoveDependency(S0 *arg0, void *arg1, void *arg2);
+extern "C" void igSerialScheduler_RemoveAllDependencies(S0 *arg0, void *arg1);
 /* Saves the Alchemy viewer (INSIGHT) options into the property tree: the INSIGHT group is looked
  * up in the property set held by the global (+56), falling back to 'Viewer', and each option is
  * written under its string name. Every write is guarded by its name pointer (the original option
  * table can drop a name); the guards are kept because the compiler does not fold them. Callee
- * names come from their roles: StoreString (thunk_igRegistry_GetValueString), StoreByte (thunk_igRegistry_GetValueBool),
- * StoreFloat (thunk_igRegistry_GetValueFloat), StoreInt (thunk_igRegistry_GetValueInt), StoreVec4 (FUN_001e71f0),
- * StoreVec3 (FUN_001e70a0). */
-typedef struct PropertySet { char pad[56]; int props; } PropertySet;
+ * names come from their roles: StoreString (igGetRegistryValue_String), StoreByte (igGetRegistryValue_Bool),
+ * StoreFloat (igGetRegistryValue_Float), StoreInt (igGetRegistryValue_Int), StoreVec4 (igGetRegistryValue_Vec4f),
+ * StoreVec3 (igGetRegistryValue_Vec3f). */
 #include "dw4/core/igRegistry.h"
-extern "C" int FUN_001e71f0(int, int, const char *, Vec4 *, Vec4 *, int);
-extern "C" int FUN_001e70a0(int, int, const char *, Vec3 *, Vec3 *, int);
-extern "C" void FUN_002382e0(ViewerOptions_2382e0 *opt, int, int, int, int, int, int, int);
-extern "C" igMetaObject *Gap__Insight__igSerialScheduler__vfunc_22(void);
-extern "C" igMetaObject *Gap__Insight__igFilterMessageDispatcher__vfunc_22(void);
-extern "C" igMetaObject *Gap__Insight__igMessageDefaultReceiver__vfunc_22(void);
-extern "C" igMetaObject *Gap__Insight__igInsightCore__vfunc_22(void);
-extern "C" igMetaObject *Gap__Insight__igWindowResizeEventReceiver__vfunc_22(void);
+extern "C" void igViewerDefaults_LoadFromRegistry(SharedViewerOptions *self);
+extern "C" igMetaObject *igSerialScheduler_GetMeta(void);
+extern "C" igMetaObject *igFilterMessageDispatcher_GetMeta(void);
+extern "C" igMetaObject *igMessageDefaultReceiver_GetMeta(void);
+extern "C" igMetaObject *igInsightCore_GetMeta(void);
+extern "C" igMetaObject *igWindowResizeEventReceiver_GetMeta(void);
 extern "C" int igEventReceiver_OnKeyEvent(void);
-extern "C" int Gap__Bec__beKeyboardReceiver__vfunc_22(void);
-extern "C" int Gap__Bec__beKeyboardReceiver__vfunc_23(void);
-extern "C" int Gap__Bec__beKeyboardReceiver__vfunc_24(void);
-extern "C" int Gap__Bec__beKeyboardReceiver__vfunc_25(void);
-extern "C" int Gap__Bec__beKeyboardReceiver__vfunc_26(void);
-extern "C" int Gap__Bec__beKeyboardReceiver__vfunc_27(void);
-extern "C" int Gap__Bec__beKeyboardReceiver__vfunc_28(void);
-extern "C" int Gap__Bec__beKeyboardReceiver__vfunc_29(void);
-extern "C" int Gap__Bec__beKeyboardReceiver__vfunc_31(void);
-extern "C" int Gap__Bec__beKeyboardReceiver__vfunc_32(void);
-extern "C" int Gap__Bec__beKeyboardReceiver__vfunc_30(void);
-extern "C" igMetaObject *Gap__Insight__igFlushRenderer__vfunc_22(void);
+extern "C" int igEventReceiver_MouseMotionEvent(void);
+extern "C" int igEventReceiver_MouseButtonEvent(void);
+extern "C" int igEventReceiver_ControllerMotionEvent(void);
+extern "C" int igEventReceiver_ControllerButtonEvent(void);
+extern "C" int igEventReceiver_ControllerButtonPressureEvent(void);
+extern "C" int igEventReceiver_ControllerSlider(void);
+extern "C" int igEventReceiver_ControllerPointOfView(void);
+extern "C" int igEventReceiver_ControllerConnectionEvent(void);
+extern "C" int igEventReceiver_WindowMoveEvent(void);
+extern "C" int igEventReceiver_WindowCloseEvent(void);
+extern "C" int igEventReceiver_WindowResizeEvent(void);
+extern "C" igMetaObject *igFlushRenderer_GetMeta(void);
 extern "C" void igFlushRenderer_Traverse(void);
-extern "C" void Gap__Insight__igFlushRenderer__vfunc_23(void);
+extern "C" void igFlushRenderer_InitializeDrawing(void);
 extern "C" void igFlushRenderer_ReleaseDrawing(void);
-extern "C" igMetaObject *Gap__Insight__igInfoManagerList__vfunc_22(void);
-extern "C" igMetaObject *Gap__Insight__igInfoManagerOrderedList__vfunc_22(void);
-extern "C" int Gap__Core__igDependencyOrderedList__vfunc_22(void);
-extern "C" igMetaObject *Gap__Insight__igViewportResizedMessage__vfunc_22(void);
-extern "C" igMetaObject *Gap__Gui__igEventReceiver__vfunc_22(void);
-extern "C" igMetaObject *Gap__Insight__igInsightPluginList__vfunc_22(void);
-extern "C" igMetaObject *Gap__Insight__igMessageFilter__vfunc_22(void);
-extern "C" igMetaObject *Gap__Insight__igMessageFilterList__vfunc_22(void);
-extern "C" igMetaObject *Gap__Insight__igMessageReceiverList__vfunc_22(void);
-extern "C" igMetaObject *Gap__Insight__igMessenger__vfunc_22(void);
-extern "C" int Gap__Insight__igMessage__vfunc_22(void);
+extern "C" igMetaObject *igInfoManagerList_GetMeta(void);
+extern "C" igMetaObject *igInfoManagerOrderedList_GetMeta(void);
+extern "C" int igDependencyOrderedList_GetMeta(void);
+extern "C" igMetaObject *igViewportResizedMessage_GetMeta(void);
+extern "C" igMetaObject *igEventReceiver_GetMeta(void);
+extern "C" igMetaObject *igInsightPluginList_GetMeta(void);
+extern "C" igMetaObject *igMessageFilter_GetMeta(void);
+extern "C" igMetaObject *igMessageFilterList_GetMeta(void);
+extern "C" igMetaObject *igMessageReceiverList_GetMeta(void);
+extern "C" igMetaObject *igMessenger_GetMeta(void);
+extern "C" int igMessage_GetMeta(void);
 extern "C" igMetaObject *FUN_00238cf0(void);
-extern "C" igMetaObject *Gap__Insight__igInsightPluginList__vfunc_24(void);
-extern "C" igMetaObject *Gap__Insight__igMessageFilterList__vfunc_24(void);
-extern "C" igMetaObject *Gap__Insight__igInfoManagerList__vfunc_24(void);
-extern "C" igMetaObject *Gap__Insight__igMessageReceiverList__vfunc_24(void);
+extern "C" igMetaObject *igInsightPluginList_GetElementMeta(void);
+extern "C" igMetaObject *igMessageFilterList_GetElementMeta(void);
+extern "C" igMetaObject *igInfoManagerList_GetElementMeta(void);
+extern "C" igMetaObject *igMessageReceiverList_GetElementMeta(void);
 
 #endif

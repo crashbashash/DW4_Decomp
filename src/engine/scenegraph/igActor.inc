@@ -13,7 +13,7 @@ igMetaField *g_igActor_inverseViewWhenTraversedMetaField;
 igMetaField *g_igActor_updateMetaField;
 igMetaField *g_igActor_renderMetaField;
 
-igMetaObject *FUN_001aa730(void) {
+igMetaObject *igActor_GetOrCreateMetaObject(void) {
     if (g_igActor_metaObject == 0) {
         g_igActor_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -33,7 +33,7 @@ int igActor_GetVTable(void) {
     return *(int *)((char *)&actor + g_objectSystem->vtableProbeOffset);
 }
 
-void **FUN_001aa8d0(struct Ref **self, short flag) {
+void **igSmartPointer_igAnimationSystem_Destruct(struct Ref **self, short flag) {
     struct Ref *p;
     if (self != 0) {
         p = *self;
@@ -46,7 +46,7 @@ void **FUN_001aa8d0(struct Ref **self, short flag) {
     return (void **)self;
 }
 
-void **FUN_001aa950(void **arg0, long long arg1) {
+void **igSmartPointer_igAppearance_Destruct(void **arg0, long long arg1) {
     char *o;
 
     if (arg0 != 0) {
@@ -64,7 +64,7 @@ void **FUN_001aa950(void **arg0, long long arg1) {
     return arg0;
 }
 
-O *FUN_001aa9d0(O *arg0, short arg1) {
+O *igSmartPointer_igAnimationModifierList_Destruct(O *arg0, short arg1) {
     if (arg0) {
         S_temp_a0 *t = arg0->m;
         if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
@@ -78,7 +78,7 @@ void igActor_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igActor_Register);
 }
 
-static igMetaObjectCallback g_igActor_callbackList[] = { FUN_001a66a0, igAppearance_EnsureRegistered, igAnimationDatabase_EnsureRegistered, igAnimationModifierList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igActor_callbackList[] = { igAnimationSystem_EnsureRegistered, igAppearance_EnsureRegistered, igAnimationDatabase_EnsureRegistered, igAnimationModifierList_EnsureRegistered, 0 };
 
 CallbackArray *igActor_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -87,7 +87,7 @@ CallbackArray *igActor_Register(void) {
         &g_igActor_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
-        thunk_igActor_GetMetaObject,
+        igActor_GetMetaObjectFunction,
         "igActor",
         0x100, /* instance size */
         igActor_GetVTable,
@@ -97,7 +97,7 @@ CallbackArray *igActor_Register(void) {
     );
 }
 
-void thunk_igActor_GetMetaObject(void) {
+void igActor_GetMetaObjectFunction(void) {
     igActor_GetMetaObject();
 }
 
@@ -187,7 +187,7 @@ void igActor_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igActor_ctorTable, 0xD);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001a6600();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igAnimationSystem_GetOrCreateMetaObject();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)));
     ((igMemoryRefMetaField *)temp_s2_2)->_memType = FUN_001888e0();
     ((igRefMetaField *)temp_s2_2)->_destruct = 1;
@@ -199,11 +199,11 @@ void igActor_InitFields(void) {
     ((igMemoryRefMetaField *)temp_s2_3)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s2_3)->_releaseOnReset = 1;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_001a6150();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igAppearance_GetOrCreateMetaObject();
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4)));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igAnimationDatabase_GetOrCreateMetaObject();
     temp_s2_6 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5)));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)FUN_001a72d0();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)igAnimationModifierList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)));
     a5.x = 0; a5.y = 0; a5.z = 0; a5.w = 0x3F800000;

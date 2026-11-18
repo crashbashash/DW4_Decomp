@@ -1,12 +1,12 @@
 igMetaObject *g_igMatrixOptStateAttr_metaObject;
 igMetaField *g_igMatrixOptStateAttr_enabledMetaField;
 
-void FUN_001359a0(int arg0) {
-    FUN_00135ac0();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F000, (igMemoryPoolView *)arg0);
+igMatrixOptStateAttr *igMatrixOptStateAttr_Create(igMemoryPoolView *pool) {
+    igMatrixOptStateAttr_EnsureRegistered();
+    return (igMatrixOptStateAttr *)igMetaObject_CreateInstance(g_igMatrixOptStateAttr_metaObject, pool);
 }
 
-igMetaObject *FUN_001359e0(void) {
+igMetaObject *igMatrixOptStateAttr_GetOrCreateMetaObject(void) {
     if (g_igMatrixOptStateAttr_metaObject == 0) {
         g_igMatrixOptStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -17,7 +17,7 @@ igMetaObject *igMatrixOptStateAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igMatrixOptStateAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00135ac0();
+        igMatrixOptStateAttr_EnsureRegistered();
     return g_igMatrixOptStateAttr_metaObject;
 }
 
@@ -28,7 +28,7 @@ int igMatrixOptStateAttr_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00135ac0(void)
+void igMatrixOptStateAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igMatrixOptStateAttr_Register);
 }
@@ -40,7 +40,7 @@ CallbackArray *igMatrixOptStateAttr_Register(void) {
         &g_igMatrixOptStateAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igMatrixOptStateAttr_GetMetaObject,
+        igMatrixOptStateAttr_GetMetaObjectFunction,
         "igMatrixOptStateAttr",
         0x10, /* instance size */
         igMatrixOptStateAttr_GetVTable,
@@ -50,7 +50,7 @@ CallbackArray *igMatrixOptStateAttr_Register(void) {
     );
 }
 
-void thunk_igMatrixOptStateAttr_GetMetaObject(void) {
+void igMatrixOptStateAttr_GetMetaObjectFunction(void) {
     igMatrixOptStateAttr_GetMetaObject();
 }
 
@@ -68,13 +68,13 @@ static int g_igMatrixOptStateAttr_fieldOffsets[] = {
 };
 
 void igMatrixOptStateAttr_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_igMatrixOptStateAttr_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igMatrixOptStateAttr_ctorTable, 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1);
-    igMetaObject_NameFields(temp_s0, g_igMatrixOptStateAttr_fieldTable, g_igMatrixOptStateAttr_fieldHandles, g_igMatrixOptStateAttr_fieldOffsets, temp_s1);
+    meta = g_igMatrixOptStateAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igMatrixOptStateAttr_ctorTable, 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base), 1);
+    igMetaObject_NameFields(meta, g_igMatrixOptStateAttr_fieldTable, g_igMatrixOptStateAttr_fieldHandles, g_igMatrixOptStateAttr_fieldOffsets, base);
 }
 

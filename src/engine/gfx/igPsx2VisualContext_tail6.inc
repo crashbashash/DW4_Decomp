@@ -1,4 +1,4 @@
-igMetaObject *Gap__Gfx__igPsx2VisualContext__vfunc_22(void) {
+igMetaObject *igPsx2VisualContext_GetMeta(void) {
     return g_igPsx2VisualContext_metaObject;
 }
 

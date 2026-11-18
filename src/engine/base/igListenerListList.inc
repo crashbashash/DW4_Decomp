@@ -1,6 +1,6 @@
 igMetaObject *g_igListenerListList_metaObject;
 
-igMetaObject *FUN_00226fd0(void) {
+igMetaObject *igListenerListList_GetOrCreateMetaObject(void) {
     if (g_igListenerListList_metaObject == 0) {
         g_igListenerListList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -37,7 +37,7 @@ CallbackArray *igListenerListList_Register(void) {
         &g_igListenerListList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igListenerListList_GetMetaObject,
+        igListenerListList_GetMetaObjectFunction,
         "igListenerListList",
         0x14, /* instance size */
         igListenerListList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igListenerListList_Register(void) {
     );
 }
 
-void thunk_igListenerListList_GetMetaObject(void) {
+void igListenerListList_GetMetaObjectFunction(void) {
     igListenerListList_GetMetaObject();
 }
 

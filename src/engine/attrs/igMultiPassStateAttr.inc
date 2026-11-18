@@ -1,12 +1,12 @@
 igMetaObject *g_igMultiPassStateAttr_metaObject;
 igMetaField *g_igMultiPassStateAttr_numPassesMetaField;
 
-void FUN_00135190(int arg0) {
-    FUN_001352b0();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55EFD0, (igMemoryPoolView *)arg0);
+igMultiPassStateAttr *igMultiPassStateAttr_Create(igMemoryPoolView *pool) {
+    igMultiPassStateAttr_EnsureRegistered();
+    return (igMultiPassStateAttr *)igMetaObject_CreateInstance(g_igMultiPassStateAttr_metaObject, pool);
 }
 
-igMetaObject *FUN_001351d0(void) {
+igMetaObject *igMultiPassStateAttr_GetOrCreateMetaObject(void) {
     if (g_igMultiPassStateAttr_metaObject == 0) {
         g_igMultiPassStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -17,7 +17,7 @@ igMetaObject *igMultiPassStateAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igMultiPassStateAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001352b0();
+        igMultiPassStateAttr_EnsureRegistered();
     return g_igMultiPassStateAttr_metaObject;
 }
 
@@ -28,7 +28,7 @@ int igMultiPassStateAttr_GetVTable(void) {
     return *(int *)((char *)&o.vt + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_001352b0(void)
+void igMultiPassStateAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igMultiPassStateAttr_Register);
 }
@@ -40,7 +40,7 @@ CallbackArray *igMultiPassStateAttr_Register(void) {
         &g_igMultiPassStateAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igMultiPassStateAttr_GetMetaObject,
+        igMultiPassStateAttr_GetMetaObjectFunction,
         "igMultiPassStateAttr",
         0x10, /* instance size */
         igMultiPassStateAttr_GetVTable,
@@ -50,7 +50,7 @@ CallbackArray *igMultiPassStateAttr_Register(void) {
     );
 }
 
-void thunk_igMultiPassStateAttr_GetMetaObject(void) {
+void igMultiPassStateAttr_GetMetaObjectFunction(void) {
     igMultiPassStateAttr_GetMetaObject();
 }
 
@@ -68,12 +68,12 @@ static int g_igMultiPassStateAttr_fieldOffsets[] = {
 };
 
 void igMultiPassStateAttr_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_igMultiPassStateAttr_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igMultiPassStateAttr_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_igMultiPassStateAttr_fieldTable, g_igMultiPassStateAttr_fieldHandles, g_igMultiPassStateAttr_fieldOffsets, temp_s1);
+    meta = g_igMultiPassStateAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igMultiPassStateAttr_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_igMultiPassStateAttr_fieldTable, g_igMultiPassStateAttr_fieldHandles, g_igMultiPassStateAttr_fieldOffsets, base);
 }
 

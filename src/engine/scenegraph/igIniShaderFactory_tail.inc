@@ -203,7 +203,7 @@ IniStrRef FUN_001c6fa0(IniSectionNode *node) {
     return text;
 }
 
-igSmartPointer<ShaderObject> Gap__Sg__igIniShaderFactory__vfunc_24(Factory *self, const char *name) {
+igSmartPointer<ShaderObject> igIniShaderFactory_GetInterfaceParameterString(Factory *self, const char *name) {
     igSmartPointer<ShaderObject> shader(0, kRetainReference);
     if (FUN_001c66c0((Node *)self, 0) == 0) {
         return igSmartPointer<ShaderObject>(0, kRetainReference);
@@ -214,15 +214,15 @@ igSmartPointer<ShaderObject> Gap__Sg__igIniShaderFactory__vfunc_24(Factory *self
     return shader;
 }
 
-ObjectRefWord *FUN_001c7600(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
+igSmartPointer<igObject> *igSmartPointer_igDataPumpInterface_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if((short)delete_storage>0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
     return self;
 }

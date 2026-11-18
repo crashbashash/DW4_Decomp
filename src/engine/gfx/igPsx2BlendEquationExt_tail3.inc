@@ -1,4 +1,4 @@
-igMetaObject *Gap__Gfx__igPsx2BlendEquationExt__vfunc_22(void) {
+igMetaObject *igPsx2BlendEquationExt_GetMeta(void) {
     return g_igPsx2BlendEquationExt_metaObject;
 }
 

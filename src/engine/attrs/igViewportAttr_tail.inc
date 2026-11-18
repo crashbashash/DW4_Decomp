@@ -1,8 +1,8 @@
-void Gap__Attrs__igViewportAttr__vfunc_24(int *arg0, igPsx2VisualContext *arg1) {
-    Gap__Gfx__igPsx2VisualContext__vfunc_185(arg1, arg0[3], arg0[4], arg0[5], arg0[6], *(float *)&arg0[8], *(float *)&arg0[9]);
+void igViewportAttr_apply(int *arg0, igPsx2VisualContext *arg1) {
+    igPsx2VisualContext_SetViewport(arg1, arg0[3], arg0[4], arg0[5], arg0[6], *(float *)&arg0[8], *(float *)&arg0[9]);
 }
 
-void Gap__Attrs__igViewportAttr__vfunc_26(igViewportAttr *arg0, void **arg1) {
+void igViewportAttr_SynchronizeDefault(igViewportAttr *arg0, void **arg1) {
     int sp3C;
     int sp38;
     int sp34;

@@ -1,15 +1,15 @@
-int Gap__Sg__igLightSet__vfunc_30(void) {
+int igLightSet_GetInherantFlags(void) {
     return 1;
 }
 
-void Gap__Sg__igLightSet__vfunc_09(void **arg0, int arg1) {
-    Gap__Sg__igNode__vfunc_09(arg0, arg1);
+void igLightSet_userConstruct(void **arg0, int arg1) {
+    igNode_userConstruct(arg0, arg1);
     if (arg1 == 0) {
         ((DW4VC_112_2 *)(arg0))->vX((int)(1), (int)(1));
     }
 }
 
-void Gap__Sg__igLightSet__vfunc_31(O_1d0330 *arg0) {
+void igLightSet_Reset(O_1d0330 *arg0) {
     unsigned int n;
     unsigned int i;
     n = arg0->l->n;
@@ -18,7 +18,7 @@ void Gap__Sg__igLightSet__vfunc_31(O_1d0330 *arg0) {
     }
 }
 
-void Gap__Sg__igLightSet__vfunc_27(S_1d03b0 *arg0, int arg1) {
+void igLightSet_Transform(S_1d03b0 *arg0, int arg1) {
     int sp70[4];
     int sp60[4];
     unsigned int n;
@@ -35,7 +35,7 @@ void Gap__Sg__igLightSet__vfunc_27(S_1d03b0 *arg0, int arg1) {
     }
 }
 
-void thunk_Gap__Sg__igNode__vfunc_09(void **self, int flag) {
-    Gap__Sg__igNode__vfunc_09((void * *)self, flag);
+void igLightStateSet_userConstruct(void **self, int flag) {
+    igNode_userConstruct((void * *)self, flag);
 }
 

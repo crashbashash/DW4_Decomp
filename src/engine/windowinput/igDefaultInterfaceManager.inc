@@ -16,14 +16,14 @@ igMetaField *g_igDefaultInterfaceManager_controllerPointOfViewFunctionMetaField;
 igMetaField *g_igDefaultInterfaceManager_keyDownFunctionMetaField;
 igMetaField *g_igDefaultInterfaceManager_keyUpFunctionMetaField;
 
-igMetaObject *FUN_00146470(void)
+igMetaObject *igDefaultInterfaceManager_GetMetaObject(void)
 {
     unsigned char ready;
     if (g_igDefaultInterfaceManager_metaObject != 0) {
         ready = (g_igDefaultInterfaceManager_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_00146560();
+    igDefaultInterfaceManager_EnsureRegistered();
 done:
     return g_igDefaultInterfaceManager_metaObject;
 }
@@ -52,7 +52,7 @@ int igDefaultInterfaceManager_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00146560(void)
+void igDefaultInterfaceManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igDefaultInterfaceManager_Register);
 }
@@ -64,7 +64,7 @@ CallbackArray *igDefaultInterfaceManager_Register(void) {
         &g_igDefaultInterfaceManager_metaObject,
         igInterfaceManager_Register,
         igInterfaceManager_GetPublishedMetaObject,
-        thunk_FUN_00146470,
+        igDefaultInterfaceManager_GetMetaObjectFunction,
         "igDefaultInterfaceManager",
         0x4C, /* instance size */
         igDefaultInterfaceManager_GetVTable,

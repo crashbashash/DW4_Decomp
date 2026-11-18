@@ -37,7 +37,7 @@ CallbackArray *igActorList_Register(void) {
         &g_igActorList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igActorList_GetMetaObject,
+        igActorList_GetMetaObjectFunction,
         "igActorList",
         0x14, /* instance size */
         igActorList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igActorList_Register(void) {
     );
 }
 
-void thunk_igActorList_GetMetaObject(void) {
+void igActorList_GetMetaObjectFunction(void) {
     igActorList_GetMetaObject();
 }
 

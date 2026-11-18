@@ -55,7 +55,7 @@ CallbackArray *igMatrix44fMetaField_Register(void) {
         &g_igMatrix44fMetaField_metaObject,
         igMetaField_Register,
         igMetaField_GetPublishedMetaObject,
-        thunk_igMatrix44fMetaField_GetMetaObject,
+        igMatrix44fMetaField_GetMetaObjectFunction,
         "igMatrix44fMetaField",
         0x34, /* instance size */
         igMatrix44fMetaField_GetVTable,
@@ -65,7 +65,7 @@ CallbackArray *igMatrix44fMetaField_Register(void) {
     );
 }
 
-void thunk_igMatrix44fMetaField_GetMetaObject(void) {
+void igMatrix44fMetaField_GetMetaObjectFunction(void) {
     igMatrix44fMetaField_GetMetaObject();
 }
 

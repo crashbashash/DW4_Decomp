@@ -1,4 +1,4 @@
-void Gap__igVec3fList__vfunc_18(igDataList *arg0) {
+void igVec3fList_TrimCapacity(igDataList *arg0) {
     int temp_a1;
 
     temp_a1 = arg0->_count;

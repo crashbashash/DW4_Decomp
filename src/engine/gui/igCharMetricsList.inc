@@ -1,7 +1,7 @@
 igMetaObject *g_igCharMetricsList_metaObject;
 int g_igCharMetricsList_externalStorage;
 
-igMetaObject *FUN_00452790(void) {
+igMetaObject *igCharMetricsList_GetOrCreateMetaObject(void) {
     if (g_igCharMetricsList_metaObject == 0) {
         g_igCharMetricsList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }

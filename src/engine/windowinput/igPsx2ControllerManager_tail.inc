@@ -22,7 +22,7 @@ igMetaObject *igPsx2ControllerManager_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2ControllerManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00146ee0();
+        igPsx2ControllerManager_EnsureRegistered();
     return g_igPsx2ControllerManager_metaObject;
 }
 
@@ -51,7 +51,7 @@ int igPsx2ControllerManager_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00146ee0(void)
+void igPsx2ControllerManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2ControllerManager_Register);
 }
@@ -63,7 +63,7 @@ CallbackArray *igPsx2ControllerManager_Register(void) {
         &g_igPsx2ControllerManager_metaObject,
         igControllerManager_Register,
         igControllerManager_GetPublishedMetaObject,
-        thunk_igPsx2ControllerManager_GetMetaObject,
+        igPsx2ControllerManager_GetMetaObjectFunction,
         "igPsx2ControllerManager",
         0x14, /* instance size */
         igPsx2ControllerManager_GetVTable,

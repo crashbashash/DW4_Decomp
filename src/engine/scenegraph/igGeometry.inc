@@ -31,7 +31,7 @@ int igGeometry_GetVTable(void) {
     obj.w10 = 0;
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igGeometry_vtable[0];
-    FUN_0019d0a0((void * *)&obj.w10, -1);
+    igSmartPointer_igRenderListAttr_Destruct((void * *)&obj.w10, -1);
     FUN_0019c0e0((struct S_19c0e0 *)&obj, 0);
     return t;
 }
@@ -41,7 +41,7 @@ void igGeometry_EnsureRegistered(void)
     igMetaObject_RunStaticInit((CallbackArray * (*)())igGeometry_Register);
 }
 
-static igMetaObjectCallback g_igGeometry_callbackList[] = { FUN_00133f80, 0 };
+static igMetaObjectCallback g_igGeometry_callbackList[] = { igRenderListAttr_EnsureRegistered, 0 };
 
 CallbackArray *igGeometry_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -50,7 +50,7 @@ CallbackArray *igGeometry_Register(void) {
         &g_igGeometry_metaObject,
         igAttrSet_Register,
         igAttrSet_GetPublishedMetaObject,
-        thunk_igGeometry_GetMetaObject,
+        igGeometry_GetMetaObjectFunction,
         "igGeometry",
         0x2C, /* instance size */
         igGeometry_GetVTable,
@@ -60,7 +60,7 @@ CallbackArray *igGeometry_Register(void) {
     );
 }
 
-void thunk_igGeometry_GetMetaObject(void) {
+void igGeometry_GetMetaObjectFunction(void) {
     igGeometry_GetMetaObject();
 }
 
@@ -99,7 +99,7 @@ void FUN_0019fca0(void) {
         igObject_Destroy((igObject *)temp_v0_2);
     }
     temp_s0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2)));
-    *(int *)((char *)(temp_s0) + 56) = FUN_00133e50();
+    *(int *)((char *)(temp_s0) + 56) = igRenderListAttr_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0) + 38) = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igGeometry_fieldTable, g_igGeometry_fieldHandles, g_igGeometry_fieldOffsets, temp_s2);
 }

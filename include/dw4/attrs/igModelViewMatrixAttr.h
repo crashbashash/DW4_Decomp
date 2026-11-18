@@ -10,6 +10,7 @@ extern "C" {
 
 extern struct igMetaObject *g_igModelViewMatrixAttr_metaObject;
 struct igModelViewMatrixAttr *igModelViewMatrixAttr_CreateInstance(int allocator);
+void igModelViewMatrixAttr_UserUnregister(void);
 
 #ifdef __cplusplus
 }

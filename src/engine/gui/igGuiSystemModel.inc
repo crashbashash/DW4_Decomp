@@ -11,7 +11,7 @@ igMetaField *g_igGuiSystemModel_componentUnderMouseMetaField;
 igMetaField *g_igGuiSystemModel_pushedComponentMetaField;
 igMetaField *g_igGuiSystemModel_windowCloseRequestedMetaField;
 
-igMetaObject *FUN_0044f210(void) {
+igMetaObject *igGuiSystemModel_GetOrCreateMetaObject(void) {
     if (g_igGuiSystemModel_metaObject == 0) {
         g_igGuiSystemModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }

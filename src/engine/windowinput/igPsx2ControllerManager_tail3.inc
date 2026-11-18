@@ -8,7 +8,7 @@ int Gap__igPsx2ControllerManager__vfunc_25(igPsx2ControllerManager *arg0) {
     return r;
 }
 
-void Gap__igPsx2ControllerManager__vfunc_10(void *arg0) {
+void igPsx2ControllerManager_userDestruct(void *arg0) {
     if (*(unsigned char *)((char *)(arg0) + 16) != 0) {
         g_igPsx2ControllerManager_initialized = 0;
     }

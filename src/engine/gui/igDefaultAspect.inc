@@ -1,7 +1,7 @@
 igMetaObject *g_igDefaultAspect_metaObject;
 igMetaField *g_igDefaultAspect_elementListMetaField;
 
-igMetaObject *FUN_004516e0(void) {
+igMetaObject *igDefaultAspect_GetOrCreateMetaObject(void) {
     if (g_igDefaultAspect_metaObject == 0) {
         g_igDefaultAspect_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -43,7 +43,7 @@ CallbackArray *igDefaultAspect_Register(void) {
         &g_igDefaultAspect_metaObject,
         igGuiComponentAspect_Register,
         igGuiComponentAspect_GetPublishedMetaObject,
-        thunk_igDefaultAspect_GetMetaObject,
+        igDefaultAspect_GetMetaObjectFunction,
         "igDefaultAspect",
         0x2C, /* instance size */
         igDefaultAspect_GetVTable,
@@ -53,7 +53,7 @@ CallbackArray *igDefaultAspect_Register(void) {
     );
 }
 
-void thunk_igDefaultAspect_GetMetaObject(void) {
+void igDefaultAspect_GetMetaObjectFunction(void) {
     igDefaultAspect_GetMetaObject();
 }
 
@@ -79,7 +79,7 @@ void igDefaultAspect_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igDefaultAspect_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00451950();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igDefaultAspectElementList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igDefaultAspect_fieldTable, g_igDefaultAspect_fieldHandles, g_igDefaultAspect_fieldOffsets, temp_s2);
 }

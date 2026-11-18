@@ -1,24 +1,24 @@
-igMetaObject *Gap__Viewer__igViewModel__vfunc_22(void) {
+igMetaObject *igViewModel_GetMeta(void) {
     return g_igViewModel_metaObject;
 }
 
-igMetaObject *Gap__Viewer__igViewerParameters__vfunc_22(void) {
+igMetaObject *igViewerParameters_GetMeta(void) {
     return g_igViewerParameters_metaObject;
 }
 
-igMetaObject *Gap__Viewer__igViewerLoadingFileMessage__vfunc_22(void) {
+igMetaObject *igViewerLoadingFileMessage_GetMeta(void) {
     return g_igViewerLoadingFileMessage_metaObject;
 }
 
-igMetaObject *Gap__Viewer__igViewerModeChangeMessage__vfunc_22(void) {
+igMetaObject *igViewerModeChangeMessage_GetMeta(void) {
     return g_igViewerModeChangeMessage_metaObject;
 }
 
-igMetaObject *Gap__Viewer__igStatisticsItemList__vfunc_22(void) {
+igMetaObject *igStatisticsItemList_GetMeta(void) {
     return g_igStatisticsItemList_metaObject;
 }
 
-igMetaObject *Gap__Viewer__igStatisticsItemList__vfunc_24(void) {
+igMetaObject *igStatisticsItemList_GetElementMeta(void) {
     return g_igStatisticsItem_metaObject;
 }
 

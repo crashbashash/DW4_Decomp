@@ -1,11 +1,11 @@
-void Gap__Gfx__igPsx2Image__vfunc_19(void *arg0) {
+void igPsx2Image_UserApplyWriteProxy(void *arg0) {
     FUN_0015a380((S_15a380 *)arg0);
     if (*(int *)((char *)(arg0) + 24) == 0x66) {
         ((DW4VC_136_0 *)(((char *)(arg0) + 0)))->vX();
     }
 }
 
-void Gap__Gfx__igPsx2Image__vfunc_20(void *arg0) {
+void igPsx2Image_UserMakeConcrete(void *arg0) {
     C_16e320 *c = (C_16e320 *)arg0;
     int temp_v1 = c->st;
     if ((temp_v1 == 0x64) || (temp_v1 == 0)) {
@@ -15,7 +15,7 @@ void Gap__Gfx__igPsx2Image__vfunc_20(void *arg0) {
     FUN_0015a600((T_15a600 *)arg0);
 }
 
-void Gap__Gfx__igPsx2Image__vfunc_11(igObject *self) {
+void igPsx2Image_InitDefaults(igObject *self) {
     igObject_InitDefaults(self);
 }
 
@@ -139,7 +139,7 @@ block_4:
     {
       igSmartPointer<O0> name((O0 *)igStringObj_Create((int)igObject_GetAllocator((igObject *)arg0)));
       igStringObj_Set((igStringObj *)((int)name.p), (char *)arg1);
-      LoaderRef loader((O1 *)FUN_00150060((int)igObject_GetAllocator((igObject *)arg0)));
+      LoaderRef loader((O1 *)igTgaLoader_Create((int)igObject_GetAllocator((igObject *)arg0)));
       var_s0 = loader.p->v21(name.p, arg0) & 0xFF;
       FUN_00156340((S0_156340 *)arg0, (void **)&PathText(arg1).text);
     }
@@ -151,7 +151,7 @@ block_22:
       if (strcmp((char *)s, ".PNG") == 0) goto block_26;
     } else {
 block_26:
-      ReaderRef reader((O2 *)FUN_00150390((int)igObject_GetAllocator((igObject *)arg0)));
+      ReaderRef reader((O2 *)igFileImagePng_Create((int)igObject_GetAllocator((igObject *)arg0)));
       var_s0 = reader.p->v31(arg1) & 0xFF;
       if (var_s0 != 0) {
         arg0->v21(reader.p, 1);

@@ -1,4 +1,4 @@
-void Gap__Gui__igGuiComponent__vfunc_13(void *arg0, int flags) {
+void igGuiComponent_resetFields(void *arg0, int flags) {
     Gap__Core__igObject__resetFields((igObject *)arg0, flags);
     *(int *)((char *)(*(int *)((char *)(arg0) + 28)) + 32) = (int)(arg0);
 }
@@ -18,7 +18,7 @@ void FUN_00455470(A_455470 *arg0) {
     }
 }
 
-void Gap__Gui__igGuiComponent__vfunc_10(void *arg0) {
+void igGuiComponent_userDestruct(void *arg0) {
     Gap__Core__igObject__userDestruct((igObject *)arg0);
     if (*(unsigned char *)((char *)(arg0) + 32) != 0) {
         FUN_00455470((A_455470 *)arg0);

@@ -1,5 +1,5 @@
 void FUN_00197ab0(int arg0) {
-    FUN_00197cc0();
+    igRenderPackage_EnsureRegistered();
     igMetaObject_CreateInstance((igMetaObject *)g_igRenderPackage_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -11,7 +11,7 @@ igMetaField *g_igRenderPackage_sortingCacheMetaField;
 igMetaField *g_igRenderPackage_distanceMetaField;
 igMetaField *g_igRenderPackage_theMassMetaField;
 
-igMetaObject *FUN_00197af0(void) {
+igMetaObject *igRenderPackage_GetOrCreateMetaObject(void) {
     if (g_igRenderPackage_metaObject == 0) {
         g_igRenderPackage_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -22,7 +22,7 @@ igMetaObject *igRenderPackage_GetMetaObject(void)
 {
     igMetaObject *g = g_igRenderPackage_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00197cc0();
+        igRenderPackage_EnsureRegistered();
     return g_igRenderPackage_metaObject;
 }
 
@@ -73,12 +73,12 @@ int igRenderPackage_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00197cc0(void)
+void igRenderPackage_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igRenderPackage_Register);
 }
 
-static igMetaObjectCallback g_igRenderPackage_callbackList[] = { igNonRefCountedAttrList_EnsureRegistered, FUN_001978a0, 0 };
+static igMetaObjectCallback g_igRenderPackage_callbackList[] = { igNonRefCountedAttrList_EnsureRegistered, igRenderPackageList_EnsureRegistered, 0 };
 
 CallbackArray *igRenderPackage_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -87,7 +87,7 @@ CallbackArray *igRenderPackage_Register(void) {
         &g_igRenderPackage_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igRenderPackage_GetMetaObject,
+        igRenderPackage_GetMetaObjectFunction,
         "igRenderPackage",
         0x20, /* instance size */
         igRenderPackage_GetVTable,
@@ -97,7 +97,7 @@ CallbackArray *igRenderPackage_Register(void) {
     );
 }
 
-void thunk_igRenderPackage_GetMetaObject(void) {
+void igRenderPackage_GetMetaObjectFunction(void) {
     igRenderPackage_GetMetaObject();
 }
 
@@ -146,16 +146,16 @@ void igRenderPackage_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igRenderPackage_ctorTable, 6);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0013ad40();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = igNonRefCountedAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0013ad40();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igNonRefCountedAttrList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_2)->_refCounted = 0;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_0013ad40();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igNonRefCountedAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_001977c0();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igRenderPackageList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igRenderPackage_fieldTable, g_igRenderPackage_fieldHandles, g_igRenderPackage_fieldOffsets, temp_s0);
 }

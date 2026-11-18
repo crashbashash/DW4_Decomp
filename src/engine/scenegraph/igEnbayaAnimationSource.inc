@@ -22,7 +22,7 @@ igMetaField *g_igEnbayaAnimationSource_playModeMetaField;
 igMetaField *g_igEnbayaAnimationSource_lastUpdateTimefMetaField;
 igMetaField *g_igEnbayaAnimationSource_lastUpdateTimeMetaField;
 
-igMetaObject *FUN_001a2210(void) {
+igMetaObject *igEnbayaAnimationSource_GetOrCreateMetaObject(void) {
     if (g_igEnbayaAnimationSource_metaObject == 0) {
         g_igEnbayaAnimationSource_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -57,7 +57,7 @@ CallbackArray *igEnbayaAnimationSource_Register(void) {
         &g_igEnbayaAnimationSource_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igEnbayaAnimationSource_GetMetaObject,
+        igEnbayaAnimationSource_GetMetaObjectFunction,
         "igEnbayaAnimationSource",
         sizeof(igEnbayaAnimationSource),               /* Instance size. */
         igEnbayaAnimationSource_GetVTable,
@@ -67,7 +67,7 @@ CallbackArray *igEnbayaAnimationSource_Register(void) {
     );
 }
 
-void thunk_igEnbayaAnimationSource_GetMetaObject(void) {
+void igEnbayaAnimationSource_GetMetaObjectFunction(void) {
     igEnbayaAnimationSource_GetMetaObject();
 }
 

@@ -2,7 +2,7 @@ igMetaObject *g_igVec4ucList_metaObject;
 int g_igVec4ucList_externalStorage;
 
 void FUN_00189e40(int arg0) {
-    FUN_00189f10();
+    igVec4ucList_EnsureRegistered();
     igMetaObject_CreateInstance((igMetaObject *)g_igVec4ucList_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -10,7 +10,7 @@ igMetaObject *igVec4ucList_GetMetaObject(void)
 {
     igMetaObject *g = g_igVec4ucList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00189f10();
+        igVec4ucList_EnsureRegistered();
     return g_igVec4ucList_metaObject;
 }
 
@@ -22,7 +22,7 @@ int igVec4ucList_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00189f10(void)
+void igVec4ucList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVec4ucList_Register);
 }
@@ -34,7 +34,7 @@ CallbackArray *igVec4ucList_Register(void) {
         &g_igVec4ucList_metaObject,
         igDataList_Register,                  /* base class registrar (igDataList) */
         igDataList_GetPublishedMetaObject,
-        thunk_igVec4ucList_GetMetaObject,
+        igVec4ucList_GetMetaObjectFunction,
         "igVec4ucList",
         0x14, /* instance size */
         igVec4ucList_GetVTable,
@@ -44,7 +44,7 @@ CallbackArray *igVec4ucList_Register(void) {
     );
 }
 
-void thunk_igVec4ucList_GetMetaObject(void) {
+void igVec4ucList_GetMetaObjectFunction(void) {
     igVec4ucList_GetMetaObject();
 }
 

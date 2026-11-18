@@ -2,11 +2,11 @@ igMetaObject *g_igTimeAttr_metaObject;
 igMetaField *g_igTimeAttr_timeMetaField;
 
 igTimeAttr *igTimeAttr_CreateInstance(int allocator) {
-    FUN_00131040();
-    return (igTimeAttr *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55EC80, (igMemoryPoolView *)allocator);
+    igTimeAttr_EnsureRegistered();
+    return (igTimeAttr *)igMetaObject_CreateInstance(g_igTimeAttr_metaObject, (igMemoryPoolView *)allocator);
 }
 
-igMetaObject *FUN_00130f60(void) {
+igMetaObject *igTimeAttr_GetOrCreateMetaObject(void) {
     if (g_igTimeAttr_metaObject == 0) {
         g_igTimeAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -17,7 +17,7 @@ igMetaObject *igTimeAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igTimeAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00131040();
+        igTimeAttr_EnsureRegistered();
     return g_igTimeAttr_metaObject;
 }
 
@@ -28,7 +28,7 @@ int igTimeAttr_GetVTable(void) {
     return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
-void FUN_00131040(void)
+void igTimeAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTimeAttr_Register);
 }
@@ -40,7 +40,7 @@ CallbackArray *igTimeAttr_Register(void) {
         &g_igTimeAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igTimeAttr_GetMetaObject,
+        igTimeAttr_GetMetaObjectFunction,
         "igTimeAttr",
         0x18, /* instance size */
         igTimeAttr_GetVTable,
@@ -50,7 +50,7 @@ CallbackArray *igTimeAttr_Register(void) {
     );
 }
 
-void thunk_igTimeAttr_GetMetaObject(void) {
+void igTimeAttr_GetMetaObjectFunction(void) {
     igTimeAttr_GetMetaObject();
 }
 
@@ -68,13 +68,13 @@ static int g_igTimeAttr_fieldOffsets[] = {
 };
 
 void igTimeAttr_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_igTimeAttr_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igTimeAttr_ctorTable, 1);
-    igLongMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1), 0);
-    igMetaObject_NameFields(temp_s0, g_igTimeAttr_fieldTable, g_igTimeAttr_fieldHandles, g_igTimeAttr_fieldOffsets, temp_s1);
+    meta = g_igTimeAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igTimeAttr_ctorTable, 1);
+    igLongMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base), 0);
+    igMetaObject_NameFields(meta, g_igTimeAttr_fieldTable, g_igTimeAttr_fieldHandles, g_igTimeAttr_fieldOffsets, base);
 }
 

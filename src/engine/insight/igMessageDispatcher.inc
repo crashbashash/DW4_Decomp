@@ -1,6 +1,6 @@
 igMetaObject *g_igMessageDispatcher_metaObject;
 
-igMetaObject *FUN_002320b0(void) {
+igMetaObject *igMessageDispatcher_GetOrCreateMetaObject(void) {
     if (g_igMessageDispatcher_metaObject == 0) {
         g_igMessageDispatcher_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,11 +11,11 @@ igMetaObject *igMessageDispatcher_GetMetaObject(void)
 {
     igMetaObject *g = g_igMessageDispatcher_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00232150();
+        igMessageDispatcher_EnsureRegistered();
     return g_igMessageDispatcher_metaObject;
 }
 
-void FUN_00232150(void)
+void igMessageDispatcher_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igMessageDispatcher_Register);
 }
@@ -27,7 +27,7 @@ CallbackArray *igMessageDispatcher_Register(void) {
         &g_igMessageDispatcher_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igMessageDispatcher_GetMetaObject,
+        igMessageDispatcher_GetMetaObjectFunction,
         "igMessageDispatcher",
         8, /* instance size */
         0,
@@ -37,11 +37,11 @@ CallbackArray *igMessageDispatcher_Register(void) {
     );
 }
 
-void thunk_igMessageDispatcher_GetMetaObject(void) {
+void igMessageDispatcher_GetMetaObjectFunction(void) {
     igMessageDispatcher_GetMetaObject();
 }
 
-void FUN_002321e0(void) {
-    *(int *)((char *)(g_igMessageDispatcher_metaObject) + 60) = (int)(&thunk_igFilterMessageDispatcher_GetMetaObject);
+void igMessageDispatcher_SetAbstractProxy(void) {
+    *(int *)((char *)(g_igMessageDispatcher_metaObject) + 60) = (int)(&igFilterMessageDispatcher_GetMetaObjectFunction);
 }
 

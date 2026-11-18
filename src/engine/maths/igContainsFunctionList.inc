@@ -32,7 +32,7 @@ CallbackArray *igContainsFunctionList_Register(void) {
         &g_igContainsFunctionList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
-        thunk_igContainsFunctionList_GetMetaObject,
+        igContainsFunctionList_GetMetaObjectFunction,
         "igContainsFunctionList",
         0x14, /* instance size */
         igContainsFunctionList_GetVTable,
@@ -42,7 +42,7 @@ CallbackArray *igContainsFunctionList_Register(void) {
     );
 }
 
-void thunk_igContainsFunctionList_GetMetaObject(void) {
+void igContainsFunctionList_GetMetaObjectFunction(void) {
     igContainsFunctionList_GetMetaObject();
 }
 

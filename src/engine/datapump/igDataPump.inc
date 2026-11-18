@@ -5,8 +5,8 @@ igMetaField *g_igDataPump_destMetaClassNameMetaField;
 igMetaField *g_igDataPump_destMetaFieldNameMetaField;
 igMetaField *g_igDataPump_dpiMetaField;
 
-void FUN_001e5950(int arg0) {
-    FUN_001e5ab0();
+void igDataPump_Create(int arg0) {
+    igDataPump_EnsureRegistered();
     igMetaObject_CreateInstance(g_igDataPump_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -14,7 +14,7 @@ igMetaObject *igDataPump_GetMetaObject(void)
 {
     igMetaObject *g = g_igDataPump_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001e5ab0();
+        igDataPump_EnsureRegistered();
     return g_igDataPump_metaObject;
 }
 
@@ -30,7 +30,7 @@ int igDataPump_GetVTable(void) {
     obj.w6 = 0;
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igDataPump_vtable[0];
-    FUN_001c7600(&obj.w6, -1);
+    igSmartPointer_igDataPumpInterface_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
     igStringRef_Destruct((igStringRef *)&obj.w5, -1);
     igStringRef_Destruct((igStringRef *)&obj.w4, -1);
     igSmartPointer_igMetaField_Destruct((igSmartPointer<igObject> *)&obj.w3, -1);
@@ -38,12 +38,12 @@ int igDataPump_GetVTable(void) {
     return t;
 }
 
-void FUN_001e5ab0(void)
+void igDataPump_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igDataPump_Register);
 }
 
-static igMetaObjectCallback g_igDataPump_callbackList[] = { igObject_EnsureRegistered, igMetaField_EnsureRegistered, FUN_001e55d0, 0 };
+static igMetaObjectCallback g_igDataPump_callbackList[] = { igObject_EnsureRegistered, igMetaField_EnsureRegistered, igDataPumpInterface_EnsureRegistered, 0 };
 
 CallbackArray *igDataPump_Register(void) {
     DataPumpLibrary_MarkRegistered();
@@ -52,7 +52,7 @@ CallbackArray *igDataPump_Register(void) {
         &g_igDataPump_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igDataPump_GetMetaObject,
+        igDataPump_GetMetaObjectFunction,
         "igDataPump",
         0x1C, /* instance size */
         igDataPump_GetVTable,
@@ -62,7 +62,7 @@ CallbackArray *igDataPump_Register(void) {
     );
 }
 
-void thunk_igDataPump_GetMetaObject(void) {
+void igDataPump_GetMetaObjectFunction(void) {
     igDataPump_GetMetaObject();
 }
 
@@ -114,7 +114,7 @@ void igDataPump_InitFields(void) {
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 2), 0);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 3), 0);
     dpiField = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 4));
-    *(int *)((char *)(dpiField) + 56) = (int)FUN_001e5530();
+    *(int *)((char *)(dpiField) + 56) = (int)igDataPumpInterface_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)meta, g_igDataPump_fieldTable, g_igDataPump_fieldHandles, g_igDataPump_fieldOffsets, firstField);
 }
 

@@ -34,7 +34,7 @@ CallbackArray *igEmptyFunctionList_Register(void) {
         &g_igEmptyFunctionList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
-        thunk_igEmptyFunctionList_GetMetaObject,
+        igEmptyFunctionList_GetMetaObjectFunction,
         "igEmptyFunctionList",
         0x14, /* instance size */
         igEmptyFunctionList_GetVTable,
@@ -44,7 +44,7 @@ CallbackArray *igEmptyFunctionList_Register(void) {
     );
 }
 
-void thunk_igEmptyFunctionList_GetMetaObject(void) {
+void igEmptyFunctionList_GetMetaObjectFunction(void) {
     igEmptyFunctionList_GetMetaObject();
 }
 

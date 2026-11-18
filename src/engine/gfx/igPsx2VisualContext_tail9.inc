@@ -1,4 +1,4 @@
-void Gap__Gfx__igPsx2VisualContext__vfunc_197(igPsx2VisualContext *self, int arg1, int arg2) {
+void igPsx2VisualContext_SetBlendingMatrices(igPsx2VisualContext *self, int arg1, int arg2) {
     struct S_180030 *arg0 = (struct S_180030 *)self;
     arg0->f72 = arg1;
     arg0->f84 = arg2;
@@ -17,10 +17,10 @@ void FUN_00180060(O_180060 *arg0) {
         if (arg0->f1420 < (int)arg0->f72) {
             s0 = arg0->f80;
             if (s0 != 0) {
-                ((V1 *)FUN_00165cc0((int *)arg0))->v264(s0);
+                ((V1 *)igVisualContext_GetDriverDataMemoryPool((int *)arg0))->v264(s0);
                 arg0->f80 = 0;
             }
-            arg0->f80 = (char *)((V2_180060 *)FUN_00165cc0((int *)arg0))->v220(arg0->f72 << 6, 0x10);
+            arg0->f80 = (char *)((V2_180060 *)igVisualContext_GetDriverDataMemoryPool((int *)arg0))->v220(arg0->f72 << 6, 0x10);
             arg0->f1420 = arg0->f72;
         }
         for (i = 0; i < arg0->f72; i++) {
@@ -39,7 +39,7 @@ void FUN_00180060(O_180060 *arg0) {
 
 static inline void createOwned(igSmartPointer<BuildResource> &holder, AdoptReference) {
     RELEASE(holder.p);
-    holder.p = (BuildResource *)FUN_0014b390(0);
+    holder.p = (BuildResource *)igVertexData_Create(0);
 }
 
 static inline void setMember(const igSmartPointer<BuildResource> &owner, const igSmartPointer<BuildResource> &value) {

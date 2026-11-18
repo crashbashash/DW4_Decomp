@@ -3,12 +3,12 @@ igMetaField *g_igIterateGraph_currentPathMetaField;
 igMetaField *g_igIterateGraph_currentIndicesMetaField;
 igMetaField *g_igIterateGraph_actorSkinIterationStateMetaField;
 
-void *FUN_00227460(int arg0) {
+void *igIterateGraph_Create(int arg0) {
     FUN_00227620();
     return igMetaObject_CreateInstance(g_igIterateGraph_metaObject, (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *FUN_002274a0(void) {
+igMetaObject *igIterateGraph_GetOrCreateMetaObject(void) {
     if (g_igIterateGraph_metaObject == 0) {
         g_igIterateGraph_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -52,7 +52,7 @@ CallbackArray *igIterateGraph_Register(void) {
         &g_igIterateGraph_metaObject,
         (igMetaObjectRegisterFunction)igIterator_Register,
         (igMetaObjectGetFunction)igIterator_GetPublishedMetaObject,
-        thunk_igIterateGraph_GetMetaObject,
+        igIterateGraph_GetMetaObjectFunction,
         "igIterateGraph",
         0x14, /* instance size */
         igIterateGraph_GetVTable,
@@ -62,7 +62,7 @@ CallbackArray *igIterateGraph_Register(void) {
     );
 }
 
-void thunk_igIterateGraph_GetMetaObject(void) {
+void igIterateGraph_GetMetaObjectFunction(void) {
     igIterateGraph_GetMetaObject();
 }
 
@@ -88,20 +88,20 @@ static int g_igIterateGraph_fieldOffsets[] = {
 };
 
 void igIterateGraph_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    void *field2;
+    igMetaObject *meta;
 
-    temp_s0 = g_igIterateGraph_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igIterateGraph_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0019c8c0();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igIntList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igMetaObject_NameFields(temp_s0, g_igIterateGraph_fieldTable, g_igIterateGraph_fieldHandles, g_igIterateGraph_fieldOffsets, temp_s2);
+    meta = g_igIterateGraph_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igIterateGraph_ctorTable, 3);
+    field2 = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)field2)->_metaObject = igNonRefCountedNodeList_GetOrCreateMetaObject();
+    ((igRefMetaField *)field2)->_construct = 1;
+    field = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)field)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igRefMetaField *)field)->_construct = 1;
+    igMetaObject_NameFields(meta, g_igIterateGraph_fieldTable, g_igIterateGraph_fieldHandles, g_igIterateGraph_fieldOffsets, base);
 }
 

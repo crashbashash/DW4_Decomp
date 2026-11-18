@@ -1,6 +1,6 @@
 igMetaObject *g_igAnimationCombinerBoneInfoListList_metaObject;
 
-igMetaObject *FUN_001a7e20(void) {
+igMetaObject *igAnimationCombinerBoneInfoListList_GetOrCreateMetaObject(void) {
     if (g_igAnimationCombinerBoneInfoListList_metaObject == 0) {
         g_igAnimationCombinerBoneInfoListList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -37,7 +37,7 @@ CallbackArray *igAnimationCombinerBoneInfoListList_Register(void) {
         &g_igAnimationCombinerBoneInfoListList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igAnimationCombinerBoneInfoListList_GetMetaObject,
+        igAnimationCombinerBoneInfoListList_GetMetaObjectFunction,
         "igAnimationCombinerBoneInfoListList",
         0x14, /* instance size */
         igAnimationCombinerBoneInfoListList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igAnimationCombinerBoneInfoListList_Register(void) {
     );
 }
 
-void thunk_igAnimationCombinerBoneInfoListList_GetMetaObject(void) {
+void igAnimationCombinerBoneInfoListList_GetMetaObjectFunction(void) {
     igAnimationCombinerBoneInfoListList_GetMetaObject();
 }
 

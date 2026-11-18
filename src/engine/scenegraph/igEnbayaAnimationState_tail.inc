@@ -11,7 +11,7 @@ void FUN_001c0f00(int mode) {
         if (mode != 0) {
             DAT_00562728[0] = ((Meta *)((void *)igAnimationState_GetMetaObject()))->f60;
             Meta *m2 = (Meta *)igAnimationState_GetMetaObject();
-            m2->f60 = (void *)FUN_001c10e0;
+            m2->f60 = (void *)igEnbayaAnimationState_GetPublishedMetaObject;
             int a = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
             g_igEnbayaContextPool_instance.release();
             g_igEnbayaContextPool_instance.p = (igEnbayaContextPool *)igEnbayaContextPool_Create(a);
@@ -24,7 +24,7 @@ void FUN_001c0f00(int mode) {
     }
 }
 
-igMetaObject *FUN_001c10e0(void) {
+igMetaObject *igEnbayaAnimationState_GetPublishedMetaObject(void) {
     return g_igEnbayaAnimationState_metaObject;
 }
 
@@ -36,7 +36,7 @@ void FUN_001c1100(void) {
     FUN_001c0f00(0);
 }
 
-void Gap__Sg__igEnbayaAnimationState__vfunc_17(void **arg0) {
+void igEnbayaAnimationState_UserPostLoad(void **arg0) {
     if (g_enbayaEnabled != 0) {
         ((DW4VC_92_0 *)(arg0))->vX();
     }

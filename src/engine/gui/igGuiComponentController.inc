@@ -1,6 +1,6 @@
 igMetaObject *g_igGuiComponentController_metaObject;
 
-igMetaObject *FUN_0044fa40(void) {
+igMetaObject *igGuiComponentController_GetOrCreateMetaObject(void) {
     if (g_igGuiComponentController_metaObject == 0) {
         g_igGuiComponentController_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -34,7 +34,7 @@ CallbackArray *igGuiComponentController_Register(void) {
         &g_igGuiComponentController_metaObject,
         igView_Register,
         igView_GetPublishedMetaObject,
-        thunk_igGuiComponentController_GetMetaObject,
+        igGuiComponentController_GetMetaObjectFunction,
         "igGuiComponentController",
         0xC, /* instance size */
         igGuiComponentController_GetVTable,
@@ -44,7 +44,7 @@ CallbackArray *igGuiComponentController_Register(void) {
     );
 }
 
-void thunk_igGuiComponentController_GetMetaObject(void) {
+void igGuiComponentController_GetMetaObjectFunction(void) {
     igGuiComponentController_GetMetaObject();
 }
 

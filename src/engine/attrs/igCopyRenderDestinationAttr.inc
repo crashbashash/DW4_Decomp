@@ -26,14 +26,14 @@ static int g_igCopyRenderDestinationAttr_copyTypeValues[] = {
     4,
 };
 
-igMetaEnum *FUN_001388f0(void) {
+igMetaEnum *igCopyRenderDestinationAttr_GetCopyTypeMetaEnum(void) {
     if (g_igCopyRenderDestinationAttr_copyTypeMetaEnum == 0) {
         g_igCopyRenderDestinationAttr_copyTypeMetaEnum = igMetaEnum_Create("CopyType", g_igCopyRenderDestinationAttr_copyTypeNames, g_igCopyRenderDestinationAttr_copyTypeValues, 5);
     }
     return g_igCopyRenderDestinationAttr_copyTypeMetaEnum;
 }
 
-igMetaObject *FUN_00138950(void) {
+igMetaObject *igCopyRenderDestinationAttr_GetOrCreateMetaObject(void) {
     if (g_igCopyRenderDestinationAttr_metaObject == 0) {
         g_igCopyRenderDestinationAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -109,7 +109,7 @@ CallbackArray *igCopyRenderDestinationAttr_Register(void) {
         &g_igCopyRenderDestinationAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igCopyRenderDestinationAttr_GetMetaObject,
+        igCopyRenderDestinationAttr_GetMetaObjectFunction,
         "igCopyRenderDestinationAttr",
         0x34, /* instance size */
         igCopyRenderDestinationAttr_GetVTable,
@@ -119,7 +119,7 @@ CallbackArray *igCopyRenderDestinationAttr_Register(void) {
     );
 }
 
-void thunk_igCopyRenderDestinationAttr_GetMetaObject(void) {
+void igCopyRenderDestinationAttr_GetMetaObjectFunction(void) {
     igCopyRenderDestinationAttr_GetMetaObject();
 }
 
@@ -173,25 +173,25 @@ static int g_igCopyRenderDestinationAttr_fieldOffsets[] = {
 };
 
 void igCopyRenderDestinationAttr_InitFields(void) {
-    int temp_s2;
-    void *temp_v0;
-    void *temp_s1_3;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    void *field2;
+    void *field3;
+    void *field4;
+    igMetaObject *meta;
 
-    temp_s0 = g_igCopyRenderDestinationAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igCopyRenderDestinationAttr_ctorTable, 0xA);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
-    ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_001388f0);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001341f0();
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igImage_GetOrCreateMetaObject();
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)igTextureAttr_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_igCopyRenderDestinationAttr_fieldTable, g_igCopyRenderDestinationAttr_fieldHandles, g_igCopyRenderDestinationAttr_fieldOffsets, temp_s2);
+    meta = g_igCopyRenderDestinationAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igCopyRenderDestinationAttr_ctorTable, 0xA);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field, 0);
+    ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)(&igCopyRenderDestinationAttr_GetCopyTypeMetaEnum);
+    field4 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)field4)->_metaObject = (int)igRenderDestinationAttr_GetOrCreateMetaObject();
+    field3 = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)field3)->_metaObject = (int)igImage_GetOrCreateMetaObject();
+    field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)igTextureAttr_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_igCopyRenderDestinationAttr_fieldTable, g_igCopyRenderDestinationAttr_fieldHandles, g_igCopyRenderDestinationAttr_fieldOffsets, base);
 }
 

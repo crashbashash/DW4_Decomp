@@ -1,5 +1,5 @@
 int FUN_001a5a70(int arg0) {
-    FUN_001a5b90();
+    igAttrStack_EnsureRegistered();
     return (int)igMetaObject_CreateInstance((igMetaObject *)g_igAttrStack_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -17,7 +17,7 @@ igMetaObject *igAttrStack_GetMetaObject(void)
 {
     igMetaObject *g = g_igAttrStack_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a5b90();
+        igAttrStack_EnsureRegistered();
     return g_igAttrStack_metaObject;
 }
 
@@ -45,12 +45,12 @@ int igAttrStack_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_001a5b90(void)
+void igAttrStack_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAttrStack_Register);
 }
 
-static igMetaObjectCallback g_igAttrStack_callbackList[] = { FUN_0013b110, FUN_0013b110, FUN_00197cc0, 0 };
+static igMetaObjectCallback g_igAttrStack_callbackList[] = { igAttr_EnsureRegistered, igAttr_EnsureRegistered, igRenderPackage_EnsureRegistered, 0 };
 
 CallbackArray *igAttrStack_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -59,7 +59,7 @@ CallbackArray *igAttrStack_Register(void) {
         &g_igAttrStack_metaObject,
         igNonRefCountedObjectStack_Register,
         igNonRefCountedObjectStack_GetPublishedMetaObject,
-        thunk_igAttrStack_GetMetaObject,
+        igAttrStack_GetMetaObjectFunction,
         "igAttrStack",
         0x34, /* instance size */
         igAttrStack_GetVTable,
@@ -69,7 +69,7 @@ CallbackArray *igAttrStack_Register(void) {
     );
 }
 
-void thunk_igAttrStack_GetMetaObject(void) {
+void igAttrStack_GetMetaObjectFunction(void) {
     igAttrStack_GetMetaObject();
 }
 
@@ -126,16 +126,16 @@ void igAttrStack_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAttrStack_ctorTable, 8);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0013b070();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igAttr_GetOrCreateMetaObject();
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1), -1);
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 4)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = FUN_0013b070();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igAttr_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6)));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_0013b070();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igAttr_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_3)->_refCounted = 0;
     temp_s1_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 7)));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)FUN_00197af0();
+    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)igRenderPackage_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_4)->_refCounted = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAttrStack_fieldTable, g_igAttrStack_fieldHandles, g_igAttrStack_fieldOffsets, temp_s2);
 }

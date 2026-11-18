@@ -1,6 +1,6 @@
 igMetaObject *g_igEnvironmentMapShader2List_metaObject;
 
-igMetaObject *FUN_001a13e0(void) {
+igMetaObject *igEnvironmentMapShader2List_GetOrCreateMetaObject(void) {
     if (g_igEnvironmentMapShader2List_metaObject == 0) {
         g_igEnvironmentMapShader2List_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igEnvironmentMapShader2List_GetMetaObject(void)
 {
     igMetaObject *g = g_igEnvironmentMapShader2List_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a14c0();
+        igEnvironmentMapShader2List_EnsureRegistered();
     return g_igEnvironmentMapShader2List_metaObject;
 }
 
@@ -23,12 +23,12 @@ int igEnvironmentMapShader2List_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_001a14c0(void)
+void igEnvironmentMapShader2List_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igEnvironmentMapShader2List_Register);
 }
 
-static igMetaObjectCallback g_igEnvironmentMapShader2List_callbackList[] = { FUN_001a15a0, 0 };
+static igMetaObjectCallback g_igEnvironmentMapShader2List_callbackList[] = { igEnvironmentMapShader2_EnsureRegistered, 0 };
 
 CallbackArray *igEnvironmentMapShader2List_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ CallbackArray *igEnvironmentMapShader2List_Register(void) {
         &g_igEnvironmentMapShader2List_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igEnvironmentMapShader2List_GetMetaObject,
+        igEnvironmentMapShader2List_GetMetaObjectFunction,
         "igEnvironmentMapShader2List",
         0x14, /* instance size */
         igEnvironmentMapShader2List_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igEnvironmentMapShader2List_Register(void) {
     );
 }
 
-void thunk_igEnvironmentMapShader2List_GetMetaObject(void) {
+void igEnvironmentMapShader2List_GetMetaObjectFunction(void) {
     igEnvironmentMapShader2List_GetMetaObject();
 }
 

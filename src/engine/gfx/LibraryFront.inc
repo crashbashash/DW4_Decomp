@@ -6,7 +6,7 @@ static int g_gfxIndexDataSizeValues[] = {
 };
 igMetaEnum *g_gfxIndexDataSizeMetaEnum;
 
-int FUN_001493e0(void) {
+int IG_GFX_INDEX_DATA_SIZE_GetMetaEnum(void) {
     if (g_gfxIndexDataSizeMetaEnum == 0) {
         g_gfxIndexDataSizeMetaEnum = igMetaEnum_Create("IG_GFX_INDEX_DATA_SIZE", g_gfxIndexDataSizeNames, g_gfxIndexDataSizeValues, 2);
     }
@@ -21,7 +21,7 @@ static int g_gfxScissorTypeValues[] = {
 };
 igMetaEnum *g_gfxScissorTypeMetaEnum;
 
-int FUN_00149440(void) {
+int IG_GFX_SCISSOR_TYPE_GetMetaEnum(void) {
     if (g_gfxScissorTypeMetaEnum == 0) {
         g_gfxScissorTypeMetaEnum = igMetaEnum_Create("IG_GFX_SCISSOR_TYPE", g_gfxScissorTypeNames, g_gfxScissorTypeValues, 2);
     }
@@ -37,7 +37,7 @@ static int g_gfxStencilOperationValues[] = {
 };
 igMetaEnum *g_gfxStencilOperationMetaEnum;
 
-int FUN_001494a0(void) {
+int IG_GFX_STENCIL_OPERATION_GetMetaEnum(void) {
     if (g_gfxStencilOperationMetaEnum == 0) {
         g_gfxStencilOperationMetaEnum = igMetaEnum_Create("IG_GFX_STENCIL_OPERATION", g_gfxStencilOperationNames, g_gfxStencilOperationValues, 8);
     }
@@ -53,7 +53,7 @@ static int g_gfxStencilFunctionValues[] = {
 };
 igMetaEnum *g_gfxStencilFunctionMetaEnum;
 
-int FUN_00149500(void) {
+int IG_GFX_STENCIL_FUNCTION_GetMetaEnum(void) {
     if (g_gfxStencilFunctionMetaEnum == 0) {
         g_gfxStencilFunctionMetaEnum = igMetaEnum_Create("IG_GFX_STENCIL_FUNCTION", g_gfxStencilFunctionNames, g_gfxStencilFunctionValues, 8);
     }
@@ -68,7 +68,7 @@ static int g_gfxFogModeValues[] = {
 };
 igMetaEnum *g_gfxFogModeMetaEnum;
 
-int FUN_00149560(void) {
+int IG_GFX_FOG_MODE_GetMetaEnum(void) {
     if (g_gfxFogModeMetaEnum == 0) {
         g_gfxFogModeMetaEnum = igMetaEnum_Create("IG_GFX_FOG_MODE", g_gfxFogModeNames, g_gfxFogModeValues, 3);
     }
@@ -83,7 +83,7 @@ static int g_gfxRenderModeValues[] = {
 };
 igMetaEnum *g_gfxRenderModeMetaEnum;
 
-int FUN_001495c0(void) {
+int IG_GFX_RENDER_MODE_GetMetaEnum(void) {
     if (g_gfxRenderModeMetaEnum == 0) {
         g_gfxRenderModeMetaEnum = igMetaEnum_Create("IG_GFX_RENDER_MODE", g_gfxRenderModeNames, g_gfxRenderModeValues, 3);
     }
@@ -98,7 +98,7 @@ static int g_gfxCullFaceModeValues[] = {
 };
 igMetaEnum *g_gfxCullFaceModeMetaEnum;
 
-int FUN_00149620(void) {
+int IG_GFX_CULL_FACE_MODE_GetMetaEnum(void) {
     if (g_gfxCullFaceModeMetaEnum == 0) {
         g_gfxCullFaceModeMetaEnum = igMetaEnum_Create("IG_GFX_CULL_FACE_MODE", g_gfxCullFaceModeNames, g_gfxCullFaceModeValues, 2);
     }
@@ -113,7 +113,7 @@ static int g_gfxShadingModeValues[] = {
 };
 igMetaEnum *g_gfxShadingModeMetaEnum;
 
-int FUN_00149680(void) {
+int IG_GFX_SHADING_MODE_GetMetaEnum(void) {
     if (g_gfxShadingModeMetaEnum == 0) {
         g_gfxShadingModeMetaEnum = igMetaEnum_Create("IG_GFX_SHADING_MODE", g_gfxShadingModeNames, g_gfxShadingModeValues, 2);
     }
@@ -129,7 +129,7 @@ static int g_gfxAlphaFunctionValues[] = {
 };
 igMetaEnum *g_gfxAlphaFunctionMetaEnum;
 
-int FUN_001496e0(void) {
+int IG_GFX_ALPHA_FUNCTION_GetMetaEnum(void) {
     if (g_gfxAlphaFunctionMetaEnum == 0) {
         g_gfxAlphaFunctionMetaEnum = igMetaEnum_Create("IG_GFX_ALPHA_FUNCTION", g_gfxAlphaFunctionNames, g_gfxAlphaFunctionValues, 8);
     }
@@ -147,7 +147,7 @@ static int g_gfxBlendingFunctionValues[] = {
 };
 igMetaEnum *g_gfxBlendingFunctionMetaEnum;
 
-int FUN_00149740(void) {
+int IG_GFX_BLENDING_FUNCTION_GetMetaEnum(void) {
     if (g_gfxBlendingFunctionMetaEnum == 0) {
         g_gfxBlendingFunctionMetaEnum = igMetaEnum_Create("IG_GFX_BLENDING_FUNCTION", g_gfxBlendingFunctionNames, g_gfxBlendingFunctionValues, 11);
     }
@@ -163,7 +163,7 @@ static int g_gfxTextureCoordSourceValues[] = {
 };
 igMetaEnum *g_gfxTextureCoordSourceMetaEnum;
 
-int FUN_001497a0(void) {
+int IG_GFX_TEXTURE_COORD_SOURCE_GetMetaEnum(void) {
     if (g_gfxTextureCoordSourceMetaEnum == 0) {
         g_gfxTextureCoordSourceMetaEnum = igMetaEnum_Create("IG_GFX_TEXTURE_COORD_SOURCE", g_gfxTextureCoordSourceNames, g_gfxTextureCoordSourceValues, 6);
     }
@@ -179,7 +179,7 @@ static int g_gfxPixelPipelineModeValues[] = {
 };
 igMetaEnum *g_gfxPixelPipelineModeMetaEnum;
 
-int FUN_00149800(void) {
+int IG_GFX_PIXEL_PIPELINE_MODE_GetMetaEnum(void) {
     if (g_gfxPixelPipelineModeMetaEnum == 0) {
         g_gfxPixelPipelineModeMetaEnum = igMetaEnum_Create("IG_GFX_PIXEL_PIPELINE_MODE", g_gfxPixelPipelineModeNames, g_gfxPixelPipelineModeValues, 5);
     }
@@ -194,7 +194,7 @@ static int g_gfxTextureModeValues[] = {
 };
 igMetaEnum *g_gfxTextureModeMetaEnum;
 
-int FUN_00149860(void) {
+int IG_GFX_TEXTURE_MODE_GetMetaEnum(void) {
     if (g_gfxTextureModeMetaEnum == 0) {
         g_gfxTextureModeMetaEnum = igMetaEnum_Create("IG_GFX_TEXTURE_MODE", g_gfxTextureModeNames, g_gfxTextureModeValues, 4);
     }
@@ -210,7 +210,7 @@ static int g_gfxTextureSourceValues[] = {
 };
 igMetaEnum *g_gfxTextureSourceMetaEnum;
 
-int FUN_001498c0(void) {
+int IG_GFX_TEXTURE_SOURCE_GetMetaEnum(void) {
     if (g_gfxTextureSourceMetaEnum == 0) {
         g_gfxTextureSourceMetaEnum = igMetaEnum_Create("IG_GFX_TEXTURE_SOURCE", g_gfxTextureSourceNames, g_gfxTextureSourceValues, 5);
     }
@@ -225,7 +225,7 @@ static int g_gfxTextureWrapValues[] = {
 };
 igMetaEnum *g_gfxTextureWrapMetaEnum;
 
-int FUN_00149920(void) {
+int IG_GFX_TEXTURE_WRAP_GetMetaEnum(void) {
     if (g_gfxTextureWrapMetaEnum == 0) {
         g_gfxTextureWrapMetaEnum = igMetaEnum_Create("IG_GFX_TEXTURE_WRAP", g_gfxTextureWrapNames, g_gfxTextureWrapValues, 4);
     }
@@ -292,7 +292,7 @@ static int g_gfxLightTypeValues[] = {
 };
 igMetaEnum *g_gfxLightTypeMetaEnum;
 
-int FUN_00149a40(void) {
+int IG_GFX_LIGHT_TYPE_GetMetaEnum(void) {
     if (g_gfxLightTypeMetaEnum == 0) {
         g_gfxLightTypeMetaEnum = igMetaEnum_Create("IG_GFX_LIGHT_TYPE", g_gfxLightTypeNames, g_gfxLightTypeValues, 3);
     }
@@ -308,7 +308,7 @@ static int g_gfxDrawValues[] = {
 };
 igMetaEnum *g_gfxDrawMetaEnum;
 
-int FUN_00149aa0(void) {
+int IG_GFX_DRAW_GetMetaEnum(void) {
     if (g_gfxDrawMetaEnum == 0) {
         g_gfxDrawMetaEnum = igMetaEnum_Create("IG_GFX_DRAW", g_gfxDrawNames, g_gfxDrawValues, 6);
     }
@@ -323,7 +323,7 @@ static int g_gfxRenderdestinationTypeValues[] = {
 };
 igMetaEnum *g_gfxRenderdestinationTypeMetaEnum;
 
-int FUN_00149b00(void) {
+int IG_GFX_RENDERDESTINATION_TYPE_GetMetaEnum(void) {
     if (g_gfxRenderdestinationTypeMetaEnum == 0) {
         g_gfxRenderdestinationTypeMetaEnum = igMetaEnum_Create("IG_GFX_RENDERDESTINATION_TYPE", g_gfxRenderdestinationTypeNames, g_gfxRenderdestinationTypeValues, 3);
     }
@@ -410,7 +410,7 @@ static int g_gfxStatisticValues[] = {
 };
 igMetaEnum *g_gfxStatisticMetaEnum;
 
-int FUN_00149b60(void) {
+int IG_GFX_STATISTIC_GetMetaEnum(void) {
     if (g_gfxStatisticMetaEnum == 0) {
         g_gfxStatisticMetaEnum = igMetaEnum_Create("IG_GFX_STATISTIC", g_gfxStatisticNames, g_gfxStatisticValues, 195);
     }

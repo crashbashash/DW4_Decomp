@@ -1,4 +1,4 @@
-int Gap__Attrs__igGenericAttrDefaultManager__vfunc_22(void) {
+int igGenericAttrDefaultManager_GetMeta(void) {
     return (int)g_igGenericAttrDefaultManager_metaObject;
 }
 

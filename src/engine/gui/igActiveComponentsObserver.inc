@@ -3,7 +3,7 @@ igMetaField *g_igActiveComponentsObserver_oldComponentUnderMouseMetaField;
 igMetaField *g_igActiveComponentsObserver_oldFocusedComponentMetaField;
 igMetaField *g_igActiveComponentsObserver_oldPushedComponentMetaField;
 
-int FUN_0044e990(int arg0) {
+int igActiveComponentsObserver_Create(int arg0) {
     igActiveComponentsObserver_RunStaticInit();
     return (int)(igMetaObject_CreateInstance(g_igActiveComponentsObserver_metaObject, (igMemoryPoolView *)arg0));
 }

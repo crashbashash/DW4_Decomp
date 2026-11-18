@@ -10,15 +10,15 @@ igMetaField *g_igActorManager_skelViewportMetaField;
 igMetaField *g_igActorManager_vsimMetaField;
 igMetaField *g_igActorManager_referencesMetaField;
 
-void FUN_0045e230(int arg0) {
-    FUN_0045e4a0();
+void igActorManager_Create(int arg0) {
+    igActorManager_EnsureRegistered();
     igMetaObject_CreateInstance(g_igActorManager_metaObject, (igMemoryPoolView *)arg0);
 }
 
 void *igActorManager_GetMetaObject(void) {
     igMetaObject *g = g_igActorManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0045e4a0();
+        igActorManager_EnsureRegistered();
     }
     return g_igActorManager_metaObject;
 }
@@ -42,9 +42,9 @@ int igActorManager_GetVTable(void) {
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igActorManager_vtable[0];
     igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj.w13, -1);
-    FUN_004584f0(&obj.w12, -1);
-    FUN_0019ab90(&obj.w11, -1);
-    FUN_0019ab90(&obj.w10, -1);
+    igSmartPointer_igViewerSceneInfoManager_Destruct(&obj.w12, -1);
+    igSmartPointer_igViewportAttr_Destruct((igSmartPointer<igObject> *)&obj.w11, -1);
+    igSmartPointer_igViewportAttr_Destruct((igSmartPointer<igObject> *)&obj.w10, -1);
     igSmartPointer_igMetaObjectList_Destruct((igSmartPointer<igObject> *)&obj.w9, -1);
     igSmartPointer_igPointerList_Destruct((igSmartPointer<igObject> *)&obj.w8, -1);
     FUN_0045e420((O *)&obj.w7, -1);
@@ -64,12 +64,12 @@ O *FUN_0045e420(O *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_0045e4a0(void)
+void igActorManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igActorManager_Register);
 }
 
-static igMetaObjectCallback g_igActorManager_callbackList[] = { igAppearanceList_EnsureRegistered, igNodeList_EnsureRegistered, igActorList_EnsureRegistered, FUN_0045e830, igPointerList_EnsureRegistered, igMetaObjectList_EnsureRegistered, igViewportAttr_EnsureRegistered, igViewerSceneInfoManager_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igActorManager_callbackList[] = { igAppearanceList_EnsureRegistered, igNodeList_EnsureRegistered, igActorList_EnsureRegistered, igActorManagerParams_EnsureRegistered, igPointerList_EnsureRegistered, igMetaObjectList_EnsureRegistered, igViewportAttr_EnsureRegistered, igViewerSceneInfoManager_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
 
 CallbackArray *igActorManager_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -78,7 +78,7 @@ CallbackArray *igActorManager_Register(void) {
         &g_igActorManager_metaObject,
         igInfoManager_Register,
         igInfoManager_GetPublishedMetaObject,
-        thunk_igActorManager_GetMetaObject,
+        igActorManager_GetMetaObjectFunction,
         "igActorManager",
         0x38, /* instance size */
         igActorManager_GetVTable,
@@ -88,7 +88,7 @@ CallbackArray *igActorManager_Register(void) {
     );
 }
 
-void thunk_igActorManager_GetMetaObject(void) {
+void igActorManager_GetMetaObjectFunction(void) {
     igActorManager_GetMetaObject();
 }
 
@@ -168,7 +168,7 @@ void igActorManager_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)(igActorList_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_0045e6f0();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igActorManagerParams_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igPointerList_GetOrCreateMetaObject();
@@ -177,10 +177,10 @@ void igActorManager_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)(igMetaObjectList_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_00130440();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = igViewportAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_7)->_construct = 1;
     temp_s2_8 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = FUN_00130440();
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = igViewportAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     temp_s2_9 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8));
     ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();

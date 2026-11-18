@@ -1,44 +1,44 @@
-igMetaObject *Gap__igCreateCollisionDatabase__vfunc_22(void) {
+igMetaObject *igCreateCollisionDatabase_GetMeta(void) {
     return g_igCreateCollisionDatabase_metaObject;
 }
 
-igMetaObject *Gap__igCollisionGrid__vfunc_22(void) {
+igMetaObject *igCollisionGrid_GetMeta(void) {
     return g_igCollisionGrid_metaObject;
 }
 
-igMetaObject *Gap__igBoundingSphereMaker__vfunc_22(void) {
+igMetaObject *igBoundingSphereMaker_GetMeta(void) {
     return g_igBoundingSphereMaker_metaObject;
 }
 
-igMetaObject *Gap__igCollisionCell__vfunc_22(void) {
+igMetaObject *igCollisionCell_GetMeta(void) {
     return g_igCollisionCell_metaObject;
 }
 
-igMetaObject *Gap__igCollisionCellList__vfunc_22(void) {
+igMetaObject *igCollisionCellList_GetMeta(void) {
     return g_igCollisionCellList_metaObject;
 }
 
-igMetaObject *Gap__igCollisionGridHelper__vfunc_22(void) {
+igMetaObject *igCollisionGridHelper_GetMeta(void) {
     return g_igCollisionGridHelper_metaObject;
 }
 
-igMetaObject *Gap__igCollisionGroup__vfunc_22(void) {
+igMetaObject *igCollisionGroup_GetMeta(void) {
     return g_igCollisionGroup_metaObject;
 }
 
-igMetaObject *Gap__igCollisionGroupList__vfunc_22(void) {
+igMetaObject *igCollisionGroupList_GetMeta(void) {
     return g_igCollisionGroupList_metaObject;
 }
 
-igMetaObject *Gap__igCollisionInfo__vfunc_22(void) {
+igMetaObject *igCollisionInfo_GetMeta(void) {
     return g_igCollisionInfo_metaObject;
 }
 
-igMetaObject *Gap__igCollisionCellList__vfunc_24(void) {
+igMetaObject *igCollisionCellList_GetElementMeta(void) {
     return g_igCollisionCell_metaObject;
 }
 
-igMetaObject *Gap__igCollisionGroupList__vfunc_24(void) {
+igMetaObject *igCollisionGroupList_GetElementMeta(void) {
     return g_igCollisionGroup_metaObject;
 }
 

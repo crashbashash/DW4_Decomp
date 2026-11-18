@@ -4,11 +4,11 @@ igMetaObject *igMultiTextureExt_GetMetaObject(void)
 {
     igMetaObject *g = g_igMultiTextureExt_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014d5c0();
+        igMultiTextureExt_EnsureRegistered();
     return g_igMultiTextureExt_metaObject;
 }
 
-void FUN_0014d5c0(void)
+void igMultiTextureExt_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igMultiTextureExt_Register);
 }
@@ -20,7 +20,7 @@ CallbackArray *igMultiTextureExt_Register(void) {
         &g_igMultiTextureExt_metaObject,
         igContextExt_Register,
         igContextExt_GetPublishedMetaObject,
-        thunk_igMultiTextureExt_GetMetaObject,
+        igMultiTextureExt_GetMetaObjectFunction,
         "igMultiTextureExt",
         0x14, /* instance size */
         0,
@@ -30,7 +30,7 @@ CallbackArray *igMultiTextureExt_Register(void) {
     );
 }
 
-void thunk_igMultiTextureExt_GetMetaObject(void) {
+void igMultiTextureExt_GetMetaObjectFunction(void) {
     igMultiTextureExt_GetMetaObject();
 }
 

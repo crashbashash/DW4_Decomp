@@ -2,7 +2,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
     RP array;
     RP record;
     if (arg0->_vertexArray != 0) { return 0; }
-    array.p = (RC *)FUN_0014a780((int)igObject_GetAllocator(arg0));
+    array.p = (RC *)igVertexArray2_Create((int)igObject_GetAllocator(arg0));
     {
         RC *a_ = array.p;
         if (a_ != 0) a_->rc = a_->rc + 1;
@@ -17,7 +17,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
         SIZE_LIST((DataList *)list.p, arg2, 12)
         alloc = (int)igObject_GetAllocator(arg0);
         REL_15ff10(record.p)
-        record.p = (RC *)FUN_0014b390(alloc);
+        record.p = (RC *)igVertexData_Create(alloc);
         ATTACH((StreamRec *)record.p, list.p)
         ((StreamRec *)record.p)->kind = 1;
         ObjectList_AppendRetained((igObjectList *)(((int *)array.p)[4]), (igObject *)record.p);
@@ -30,7 +30,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
         SIZE_LIST((DataList *)list.p, arg2, 12)
         alloc = (int)igObject_GetAllocator(arg0);
         REL_15ff10(record.p)
-        record.p = (RC *)FUN_0014b390(alloc);
+        record.p = (RC *)igVertexData_Create(alloc);
         ATTACH((StreamRec *)record.p, list.p)
         ((StreamRec *)record.p)->kind = 3;
         ObjectList_AppendRetained((igObjectList *)(((int *)array.p)[4]), (igObject *)record.p);
@@ -43,7 +43,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
         SIZE_LIST((DataList *)list.p, arg2, 4)
         alloc = (int)igObject_GetAllocator(arg0);
         REL_15ff10(record.p)
-        record.p = (RC *)FUN_0014b390(alloc);
+        record.p = (RC *)igVertexData_Create(alloc);
         ATTACH((StreamRec *)record.p, list.p)
         ((StreamRec *)record.p)->kind = 2;
         ObjectList_AppendRetained((igObjectList *)(((int *)array.p)[4]), (igObject *)record.p);
@@ -58,7 +58,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
             SIZE_LIST((DataList *)list.p, arg2, 8)
             alloc = (int)igObject_GetAllocator(arg0);
             REL_15ff10(record.p)
-            record.p = (RC *)FUN_0014b390(alloc);
+            record.p = (RC *)igVertexData_Create(alloc);
             ATTACH((StreamRec *)record.p, list.p)
             ((StreamRec *)record.p)->kind = 4;
             ((StreamRec *)record.p)->index = index;
@@ -75,7 +75,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
         SIZE_LIST((DataList *)list.p, total, 4)
         alloc = (int)igObject_GetAllocator(arg0);
         REL_15ff10(record.p)
-        record.p = (RC *)FUN_0014b390(alloc);
+        record.p = (RC *)igVertexData_Create(alloc);
         ATTACH((StreamRec *)record.p, list.p)
         ((StreamRec *)record.p)->kind = 5;
         ((StreamRec *)record.p)->count = (*arg1 & 0xF0) >> 4 & 0xFF;
@@ -91,7 +91,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
         SIZE_LIST((DataList *)list.p, total, 1)
         alloc = (int)igObject_GetAllocator(arg0);
         REL_15ff10(record.p)
-        record.p = (RC *)FUN_0014b390(alloc);
+        record.p = (RC *)igVertexData_Create(alloc);
         ATTACH((StreamRec *)record.p, list.p)
         ((StreamRec *)record.p)->kind = 6;
         ((StreamRec *)record.p)->count = (*arg1 & 0xF00) >> 8 & 0xFF;
@@ -105,7 +105,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
             int modeInt = field & 0xFF;
             int alloc = (int)igObject_GetAllocator(arg0);
             REL_15ff10(record.p)
-            record.p = (RC *)FUN_0014b390(alloc);
+            record.p = (RC *)igVertexData_Create(alloc);
             ((StreamRec *)record.p)->kind = 9;
             if (modeInt == 1) {
                 RP list;
@@ -130,7 +130,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
         SIZE_LIST((DataList *)list.p, arg2, 12)
         alloc = (int)igObject_GetAllocator(arg0);
         REL_15ff10(record.p)
-        record.p = (RC *)FUN_0014b390(alloc);
+        record.p = (RC *)igVertexData_Create(alloc);
         ATTACH((StreamRec *)record.p, list.p)
         ((StreamRec *)record.p)->kind = 7;
         ObjectList_AppendRetained((igObjectList *)(((int *)array.p)[4]), (igObject *)record.p);
@@ -143,7 +143,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
         SIZE_LIST((DataList *)list.p, arg2, 12)
         alloc = (int)igObject_GetAllocator(arg0);
         REL_15ff10(record.p)
-        record.p = (RC *)FUN_0014b390(alloc);
+        record.p = (RC *)igVertexData_Create(alloc);
         ATTACH((StreamRec *)record.p, list.p)
         ((StreamRec *)record.p)->kind = 8;
         ObjectList_AppendRetained((igObjectList *)(((int *)array.p)[4]), (igObject *)record.p);
@@ -170,7 +170,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_26(igVertexArray2Helper *helper, unsi
         return;
     }
     {
-        igSmartPointer<VertexArrayFormat> format((VertexArrayFormat *)FUN_0014adc0((int)igObject_GetAllocator(helper)));
+        igSmartPointer<VertexArrayFormat> format((VertexArrayFormat *)igVertexStream_Create((int)igObject_GetAllocator(helper)));
         if (format != 0) {
             format->primitiveMode = mode;
             array = (VertexFormatOwner *)helper->_vertexArray;

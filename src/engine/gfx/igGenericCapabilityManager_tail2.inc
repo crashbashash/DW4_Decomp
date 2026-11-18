@@ -1,4 +1,4 @@
-int Gap__Gfx__igGenericCapabilityManager__vfunc_22(void) {
+int igGenericCapabilityManager_GetMeta(void) {
     return (int)g_igGenericCapabilityManager_metaObject;
 }
 

@@ -1,6 +1,6 @@
 igMetaObject *g_igAction_metaObject;
 
-igMetaObject *FUN_00453250(void) {
+igMetaObject *igAction_GetOrCreateMetaObject(void) {
     if (g_igAction_metaObject == 0) {
         g_igAction_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }

@@ -1,6 +1,6 @@
 #include "dw4/viewer/igLogoRenderer.h"
 
-void Gap__Viewer__igLogoRenderer__vfunc_23(void) {
+void igLogoRenderer_InitializeDrawing(void) {
 
 }
 
@@ -8,11 +8,11 @@ void igLogoRenderer_Traverse(void) {
 
 }
 
-void Gap__Viewer__igLogoRenderer__vfunc_26(void) {
+void igLogoRenderer_Render(void) {
 
 }
 
-struct igMetaObject *Gap__Viewer__igLogoRenderer__vfunc_22(void) {
+struct igMetaObject *igLogoRenderer_GetMeta(void) {
     return g_igLogoRenderer_metaObject;
 }
 

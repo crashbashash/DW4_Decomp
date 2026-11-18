@@ -32,7 +32,7 @@ CallbackArray *igIsEmptyFunctionList_Register(void) {
         &g_igIsEmptyFunctionList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
-        thunk_igIsEmptyFunctionList_GetMetaObject,
+        igIsEmptyFunctionList_GetMetaObjectFunction,
         "igIsEmptyFunctionList",
         0x14, /* instance size */
         igIsEmptyFunctionList_GetVTable,
@@ -42,7 +42,7 @@ CallbackArray *igIsEmptyFunctionList_Register(void) {
     );
 }
 
-void thunk_igIsEmptyFunctionList_GetMetaObject(void) {
+void igIsEmptyFunctionList_GetMetaObjectFunction(void) {
     igIsEmptyFunctionList_GetMetaObject();
 }
 

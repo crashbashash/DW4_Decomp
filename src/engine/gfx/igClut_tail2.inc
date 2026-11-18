@@ -1,4 +1,4 @@
-int Gap__Gfx__igClut__vfunc_22(void) {
+int igClut_GetMeta(void) {
     return (int)g_igClut_metaObject;
 }
 

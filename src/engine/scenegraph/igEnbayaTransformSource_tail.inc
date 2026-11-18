@@ -13,7 +13,7 @@ int Gap__Sg__igEnbayaTransformSource__vfunc_25(EnbayaTransformSourceView *o, int
     return o->_enbayaAnimationSource->f(a, b, o->_trackId);
 }
 
-int Gap__Sg__igEnbayaTransformSource__vfunc_26(EnbayaTransformSourceView_1c1bd0 *o, int a, int b, int c, int d) {
+int igEnbayaTransformSource_evaluateRotation(EnbayaTransformSourceView_1c1bd0 *o, int a, int b, int c, int d) {
     return o->_enbayaAnimationSource->f(a, b, c, d, o->_trackId);
 }
 
@@ -21,7 +21,7 @@ int Gap__Sg__igEnbayaTransformSource__vfunc_27(EnbayaTransformSourceView_1c1bf0 
     return o->_enbayaAnimationSource->f(a, b, c, o->_trackId);
 }
 
-int Gap__Sg__igEnbayaTransformSource__vfunc_28(EnbayaTransformSourceView_1c1c10 *o, int a, int b, int c, int d, int e) {
+int igEnbayaTransformSource_evaluateRotationAndTranslation(EnbayaTransformSourceView_1c1c10 *o, int a, int b, int c, int d, int e) {
     return o->_enbayaAnimationSource->f(a, b, c, d, e, o->_trackId);
 }
 
@@ -34,7 +34,7 @@ void Gap__Sg__igEnbayaTransformSource__vfunc_32(int a0) {
 }
 
 void FUN_001c1c50(void **self, int flag) {
-    Gap__Sg__igNode__vfunc_09((void * *)self, flag);
+    igNode_userConstruct((void * *)self, flag);
 }
 
 void FUN_001c1c60(T_1c1c60 *arg0) {
@@ -77,7 +77,7 @@ void FUN_001c1c60(T_1c1c60 *arg0) {
     if (igMetaObject_CountInstances((igMetaObject *)(arg0->vA()), 1) == 0) {
         arg0->vB();
     }
-    FUN_001c5e20((T_1c5e20 *)arg0);
+    igGroup_userDestruct((T_1c5e20 *)arg0);
 }
 
 int FUN_001c1e00(void) {
@@ -103,7 +103,7 @@ void FUN_001c1e10(void) {
     if (g_igAlphaStateAttr_instance.p == 0) {
         temp_s0 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_igAlphaStateAttr_instance.release();
-        g_igAlphaStateAttr_instance.p = (igAlphaStateAttr *)FUN_0013b270(temp_s0);
+        g_igAlphaStateAttr_instance.p = (igAlphaStateAttr *)igAlphaStateAttr_Create((igMemoryPoolView *)temp_s0);
         ((DW4VC_128_1 *)g_igAlphaStateAttr_instance.p)->vX(0);
     }
 }
@@ -136,24 +136,24 @@ void FUN_001c20b0(Controller *self) {
   Obj_1c20b0 *s1;
   int props = ((PropertySet *)g_objectSystem)->props;
   flag = 1;
-  thunk_igRegistry_GetValueBool((igRegistry *)props, 7, "envMapDiscardUnusedImages", &flag, 1, 1);
+  igGetRegistryValue_Bool((igRegistry *)props, 7, "envMapDiscardUnusedImages", &flag, 1, 1);
   self->enabled = flag;
   assign(self->f76, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureBindAttr_CreateInstance((int)igObject_GetAllocator((igObject *)self)))));
   self->f76->setValue(self->a32);
   self->f76->configure(0);
-  assign(self->f80, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_001325a0(igObject_GetAllocator((igObject *)self)))));
+  assign(self->f80, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureCoordSourceAttr_Create(igObject_GetAllocator((igObject *)self)))));
   self->f80->setKind(2);
   self->f80->configure(0);
-  assign(self->f84, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_00131c60((int)igObject_GetAllocator((igObject *)self)))));
+  assign(self->f84, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureFunctionAttr_Create(igObject_GetAllocator((igObject *)self)))));
   self->f84->field12 = 2;
   self->f84->configure(0);
   if (self->p36 != 0) {
     self->p36->configure(0);
-    assign(self->f88, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_001325a0(igObject_GetAllocator((igObject *)self)))));
+    assign(self->f88, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureCoordSourceAttr_Create(igObject_GetAllocator((igObject *)self)))));
     self->f88->setKind(0);
     self->f88->configure(0);
     self->f88->setValue(self->a40);
-    assign(self->f92, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_00131c60((int)igObject_GetAllocator((igObject *)self)))));
+    assign(self->f92, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureFunctionAttr_Create(igObject_GetAllocator((igObject *)self)))));
     self->f92->field12 = 1;
     self->f92->configure(0);
     if (self->flag48) {
@@ -172,12 +172,12 @@ void FUN_001c20b0(Controller *self) {
     if (s1 != 0 && self->a56 == self->a40) {
       assign(self->f104, s1);
     } else {
-      assign(self->f104, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_001325a0(igObject_GetAllocator((igObject *)self)))));
+      assign(self->f104, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureCoordSourceAttr_Create(igObject_GetAllocator((igObject *)self)))));
       self->f104->setKind(0);
       self->f104->configure(0);
       self->f104->setValue(self->a56);
     }
-    assign(self->f108, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)FUN_00131c60((int)igObject_GetAllocator((igObject *)self)))));
+    assign(self->f108, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureFunctionAttr_Create(igObject_GetAllocator((igObject *)self)))));
     self->f108->field12 = 0;
     self->f108->configure(0);
   }
@@ -302,7 +302,7 @@ void FUN_001c2be0(EnvPassShaderView *self, EnvTraversalView *t) {
     if (self->_useContext) FUN_001dc610(t->_context);
 }
 
-void FUN_001c2eb0(S0_1c2eb0 *arg0, Rc *arg1) {
+void igPsx2EnvironmentMapShader_SetEnvironmentMapTexture(S0_1c2eb0 *arg0, Rc *arg1) {
     Rc *temp_a0;
 
     if (arg1 != 0) {
@@ -324,7 +324,7 @@ void FUN_001c2eb0(S0_1c2eb0 *arg0, Rc *arg1) {
     arg0->f60 = 0;
 }
 
-void FUN_001c2f50(igPsx2EnvironmentMapShader *self, igObject *value) {
+void igPsx2EnvironmentMapShader_SetDiffuseTexture(igPsx2EnvironmentMapShader *self, igObject *value) {
     igObject *previous;
     if (value != 0) {
         value->_refCount = value->_refCount + 1;
@@ -344,12 +344,12 @@ void FUN_001c2f50(igPsx2EnvironmentMapShader *self, igObject *value) {
  * `_configured`, so the shader's render state is rebuilt on its next use (`_configured` is the
  * shader's built-once flag). */
 
-void FUN_001c2fd0(igPsx2EnvironmentMapShader *self, int coordIndex) {
+void igPsx2EnvironmentMapShader_SetDiffuseTextureCoordIndex(igPsx2EnvironmentMapShader *self, int coordIndex) {
     self->_diffuseTextureCoordIndex = coordIndex;
     self->_configured = 0;
 }
 
-void FUN_001c2fe0(igPsx2EnvironmentMapShader *self, igObject *value) {
+void igPsx2EnvironmentMapShader_SetGlossMapTexture(igPsx2EnvironmentMapShader *self, igObject *value) {
     igObject *previous;
     if (value != 0) {
         value->_refCount = value->_refCount + 1;
@@ -369,7 +369,7 @@ void FUN_001c2fe0(igPsx2EnvironmentMapShader *self, igObject *value) {
  * `_configured`, so the shader's render state is rebuilt on its next use (`_configured` is the
  * shader's built-once flag). */
 
-void FUN_001c3060(igPsx2EnvironmentMapShader *self, int coordIndex) {
+void igPsx2EnvironmentMapShader_SetGlossTextureCoordIndex(igPsx2EnvironmentMapShader *self, int coordIndex) {
     self->_glossTextureCoordIndex = coordIndex;
     self->_configured = 0;
 }
@@ -377,7 +377,7 @@ void FUN_001c3060(igPsx2EnvironmentMapShader *self, int coordIndex) {
 /* IgPsx2EnvironmentMapShader slot 42: store the reflection amount and clear _configured so the
  * shader is set up again before its next use. */
 
-void FUN_001c3070(igPsx2EnvironmentMapShader *self, float reflectionAmount) {
+void igPsx2EnvironmentMapShader_SetReflectionAmount(igPsx2EnvironmentMapShader *self, float reflectionAmount) {
     self->_reflectionAmount = reflectionAmount;
     self->_configured = 0;
 }
@@ -385,7 +385,7 @@ void FUN_001c3070(igPsx2EnvironmentMapShader *self, float reflectionAmount) {
 /* Setter for `_isTransparent` (transparency flag). It also clears `_configured`, so the shader's
  * render state is rebuilt on its next use (`_configured` is the shader's built-once flag). */
 
-void FUN_001c3080(igPsx2EnvironmentMapShader *self, char isTransparent) {
+void igPsx2EnvironmentMapShader_SetTransparencyState(igPsx2EnvironmentMapShader *self, char isTransparent) {
     self->_isTransparent = isTransparent;
     self->_configured = 0;
 }
@@ -397,7 +397,7 @@ void FUN_001c3090(V_1c3090 *arg0, int arg1) {
     arg0->b(arg1);
     arg0->f60 = 1;
     if (arg0->f32 != 0) {
-        o = ((Obj_1c3090 *)FUN_0013aec0(igObject_GetAllocator((igObject *)arg0)));
+        o = ((Obj_1c3090 *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
         ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)o);
         ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)o);
         o->refs = o->refs - 1;

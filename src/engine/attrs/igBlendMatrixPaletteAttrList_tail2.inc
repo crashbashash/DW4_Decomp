@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igBlendMatrixPaletteAttrList__vfunc_24(void) {
+igMetaObject *igBlendMatrixPaletteAttrList_GetElementMeta(void) {
     return g_igBlendMatrixPaletteAttr_metaObject;
 }
 

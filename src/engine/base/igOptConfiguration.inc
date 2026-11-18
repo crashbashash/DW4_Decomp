@@ -1,6 +1,6 @@
 igMetaObject *g_igOptConfiguration_metaObject;
 
-igMetaObject *FUN_00225dc0(void) {
+igMetaObject *igOptConfiguration_GetOrCreateMetaObject(void) {
     if (g_igOptConfiguration_metaObject == 0) {
         g_igOptConfiguration_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -34,7 +34,7 @@ CallbackArray *igOptConfiguration_Register(void) {
         &g_igOptConfiguration_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igOptConfiguration_GetMetaObject,
+        igOptConfiguration_GetMetaObjectFunction,
         "igOptConfiguration",
         8, /* instance size */
         igOptConfiguration_GetVTable,
@@ -44,7 +44,7 @@ CallbackArray *igOptConfiguration_Register(void) {
     );
 }
 
-void thunk_igOptConfiguration_GetMetaObject(void) {
+void igOptConfiguration_GetMetaObjectFunction(void) {
     igOptConfiguration_GetMetaObject();
 }
 

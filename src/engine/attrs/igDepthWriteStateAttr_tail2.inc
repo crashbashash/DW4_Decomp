@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igDepthWriteStateAttr__vfunc_22(void) {
+igMetaObject *igDepthWriteStateAttr_GetMeta(void) {
     return g_igDepthWriteStateAttr_metaObject;
 }
 

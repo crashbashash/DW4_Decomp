@@ -1,4 +1,4 @@
-igMetaObject *Gap__Gfx__igPsx2VertexArray1_1__vfunc_22(void) {
+igMetaObject *igPsx2VertexArray1_1_GetMeta(void) {
     return g_igPsx2VertexArray1_1_metaObject;
 }
 

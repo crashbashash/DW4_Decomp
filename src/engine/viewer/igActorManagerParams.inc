@@ -2,7 +2,7 @@ igMetaObject *g_igActorManagerParams_metaObject;
 igMetaField *g_igActorManagerParams_skelOnlyMetaField;
 igMetaField *g_igActorManagerParams_skelAndSkinMetaField;
 
-igMetaObject *FUN_0045e6f0(void) {
+igMetaObject *igActorManagerParams_GetOrCreateMetaObject(void) {
     if (g_igActorManagerParams_metaObject == 0) {
         g_igActorManagerParams_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -12,7 +12,7 @@ igMetaObject *FUN_0045e6f0(void) {
 void *igActorManagerParams_GetMetaObject(void) {
     igMetaObject *g = g_igActorManagerParams_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0045e830();
+        igActorManagerParams_EnsureRegistered();
     }
     return g_igActorManagerParams_metaObject;
 }
@@ -43,7 +43,7 @@ int igActorManagerParams_GetVTable(void) {
     return s0;
 }
 
-void FUN_0045e830(void)
+void igActorManagerParams_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igActorManagerParams_Register);
 }
@@ -55,7 +55,7 @@ CallbackArray *igActorManagerParams_Register(void) {
         &g_igActorManagerParams_metaObject,
         igModel_Register,
         igModel_GetPublishedMetaObject,
-        thunk_igActorManagerParams_GetMetaObject,
+        igActorManagerParams_GetMetaObjectFunction,
         "igActorManagerParams",
         0x10, /* instance size */
         igActorManagerParams_GetVTable,
@@ -65,7 +65,7 @@ CallbackArray *igActorManagerParams_Register(void) {
     );
 }
 
-void thunk_igActorManagerParams_GetMetaObject(void) {
+void igActorManagerParams_GetMetaObjectFunction(void) {
     igActorManagerParams_GetMetaObject();
 }
 
@@ -96,7 +96,7 @@ void igActorManagerParams_InitFields(void) {
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igActorManagerParams_fieldTable, g_igActorManagerParams_fieldHandles, g_igActorManagerParams_fieldOffsets, temp_s1);
 }
 
-igMetaObject *Gap__Viewer__igActorManagerParams__vfunc_22(void) {
+igMetaObject *igActorManagerParams_GetMeta(void) {
     return g_igActorManagerParams_metaObject;
 }
 

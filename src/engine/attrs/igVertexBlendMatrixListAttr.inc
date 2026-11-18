@@ -7,16 +7,16 @@ igMetaField *g_igVertexBlendMatrixListAttr_isSkeletonTransformIdentityMetaField;
 igMetaField *g_igVertexBlendMatrixListAttr_isSkeletonTransformSetMetaField;
 igMetaField *g_igVertexBlendMatrixListAttr_currentMatrixCountMetaField;
 
-void FUN_00130930(int arg0) {
-    FUN_00130a70();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55EC28, (igMemoryPoolView *)arg0);
+igVertexBlendMatrixListAttr *igVertexBlendMatrixListAttr_Create(igMemoryPoolView *pool) {
+    igVertexBlendMatrixListAttr_EnsureRegistered();
+    return (igVertexBlendMatrixListAttr *)igMetaObject_CreateInstance(g_igVertexBlendMatrixListAttr_metaObject, pool);
 }
 
 igMetaObject *igVertexBlendMatrixListAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igVertexBlendMatrixListAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00130a70();
+        igVertexBlendMatrixListAttr_EnsureRegistered();
     return g_igVertexBlendMatrixListAttr_metaObject;
 }
 
@@ -45,12 +45,12 @@ int igVertexBlendMatrixListAttr_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00130a70(void)
+void igVertexBlendMatrixListAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVertexBlendMatrixListAttr_Register);
 }
 
-static igMetaObjectCallback g_igVertexBlendMatrixListAttr_callbackList[] = { FUN_001e4bc0, 0 };
+static igMetaObjectCallback g_igVertexBlendMatrixListAttr_callbackList[] = { igMatrixObjectList_EnsureRegistered, 0 };
 
 CallbackArray *igVertexBlendMatrixListAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -59,7 +59,7 @@ CallbackArray *igVertexBlendMatrixListAttr_Register(void) {
         &g_igVertexBlendMatrixListAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igVertexBlendMatrixListAttr_GetMetaObject,
+        igVertexBlendMatrixListAttr_GetMetaObjectFunction,
         "igVertexBlendMatrixListAttr",
         0x9C, /* instance size */
         igVertexBlendMatrixListAttr_GetVTable,
@@ -69,7 +69,7 @@ CallbackArray *igVertexBlendMatrixListAttr_Register(void) {
     );
 }
 
-void thunk_igVertexBlendMatrixListAttr_GetMetaObject(void) {
+void igVertexBlendMatrixListAttr_GetMetaObjectFunction(void) {
     igVertexBlendMatrixListAttr_GetMetaObject();
 }
 
@@ -111,26 +111,26 @@ static int g_igVertexBlendMatrixListAttr_fieldOffsets[] = {
 };
 
 void igVertexBlendMatrixListAttr_InitFields(void) {
-    int temp_s2;
-    void *temp_v0_2;
-    void *temp_v0;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    void *field2;
+    void *field3;
+    igMetaObject *meta;
 
-    temp_s0 = g_igVertexBlendMatrixListAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igVertexBlendMatrixListAttr_ctorTable, 7);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_001e4ae0();
-    ((igObjectRefMetaField *)temp_s1)->_construct = 1;
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 3));
-    ((igMetaField *)temp_v0)->_persistent = 0;
-    ((igMetaField *)temp_v0)->_isAlikeShallowMethod = 3;
-    ((igMetaField *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4)))->_persistent = 0;
-    ((igMetaField *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 5)))->_persistent = 0;
-    temp_v0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 6));
-    igIntMetaField_SetDefault((igMetaField *)temp_v0_2, -1);
-    ((igMetaField *)temp_v0_2)->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, g_igVertexBlendMatrixListAttr_fieldTable, g_igVertexBlendMatrixListAttr_fieldHandles, g_igVertexBlendMatrixListAttr_fieldOffsets, temp_s2);
+    meta = g_igVertexBlendMatrixListAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igVertexBlendMatrixListAttr_ctorTable, 7);
+    field3 = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)field3)->_metaObject = igMatrixObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field3)->_construct = 1;
+    field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igMetaField *)field2)->_persistent = 0;
+    ((igMetaField *)field2)->_isAlikeShallowMethod = 3;
+    ((igMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->_persistent = 0;
+    ((igMetaField *)(igMetaObject_GetFieldAt(meta, base + 5)))->_persistent = 0;
+    field = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
+    igIntMetaField_SetDefault((igMetaField *)field, -1);
+    ((igMetaField *)field)->_persistent = 0;
+    igMetaObject_NameFields(meta, g_igVertexBlendMatrixListAttr_fieldTable, g_igVertexBlendMatrixListAttr_fieldHandles, g_igVertexBlendMatrixListAttr_fieldOffsets, base);
 }
 

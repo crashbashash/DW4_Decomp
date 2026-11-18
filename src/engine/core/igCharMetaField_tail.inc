@@ -383,11 +383,11 @@ int igCompoundMetaField_ValueToString(igStringRef *out, igMetaFieldView *ctx, in
     return 0;
 }
 
-void FUN_002d6090(void) {
+void igContextExt_MakeCurrent(void) {
 
 }
 
-int FUN_002d60a0(void) {
+int igContextExt_IsCurrent(void) {
     return 1;
 }
 

@@ -6,7 +6,7 @@ void FUN_00189bd0(int arg0) {
     igMetaObject_CreateInstance((igMetaObject *)g_igQuaternionfList_metaObject, (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *FUN_00189c10(void) {
+igMetaObject *igQuaternionfList_GetOrCreateMetaObject(void) {
     if (g_igQuaternionfList_metaObject == 0) {
         g_igQuaternionfList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -42,7 +42,7 @@ CallbackArray *igQuaternionfList_Register(void) {
         &g_igQuaternionfList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
-        thunk_igQuaternionfList_GetMetaObject,
+        igQuaternionfList_GetMetaObjectFunction,
         "igQuaternionfList",
         0x14, /* instance size */
         igQuaternionfList_GetVTable,
@@ -52,7 +52,7 @@ CallbackArray *igQuaternionfList_Register(void) {
     );
 }
 
-void thunk_igQuaternionfList_GetMetaObject(void) {
+void igQuaternionfList_GetMetaObjectFunction(void) {
     igQuaternionfList_GetMetaObject();
 }
 

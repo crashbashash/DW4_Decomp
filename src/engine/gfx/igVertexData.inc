@@ -17,15 +17,15 @@ static int g_igVertexData_vertexComponentTypeValues[] = {
 };
 igMetaEnum *g_igVertexData_vertexComponentTypeMetaEnum;
 
-int FUN_0014b330(void) {
+int IG_VERTEX_COMPONENT_TYPE_GetMetaEnum(void) {
     if (g_igVertexData_vertexComponentTypeMetaEnum == 0) {
         g_igVertexData_vertexComponentTypeMetaEnum = igMetaEnum_Create("IG_VERTEX_COMPONENT_TYPE", g_igVertexData_vertexComponentTypeNames, g_igVertexData_vertexComponentTypeValues, 11);
     }
     return (int)g_igVertexData_vertexComponentTypeMetaEnum;
 }
 
-int FUN_0014b390(int arg0) {
-    FUN_0014b500();
+int igVertexData_Create(int arg0) {
+    igVertexData_EnsureRegistered();
     return (int)igMetaObject_CreateInstance(g_igVertexData_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -33,7 +33,7 @@ igMetaObject *igVertexData_GetMetaObject(void)
 {
     igMetaObject *g = g_igVertexData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014b500();
+        igVertexData_EnsureRegistered();
     return g_igVertexData_metaObject;
 }
 
@@ -78,7 +78,7 @@ int igVertexData_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_0014b500(void)
+void igVertexData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVertexData_Register);
 }
@@ -92,7 +92,7 @@ CallbackArray *igVertexData_Register(void) {
         &g_igVertexData_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igVertexData_GetMetaObject,
+        igVertexData_GetMetaObjectFunction,
         "igVertexData",
         0x24, /* instance size */
         igVertexData_GetVTable,
@@ -102,7 +102,7 @@ CallbackArray *igVertexData_Register(void) {
     );
 }
 
-void thunk_igVertexData_GetMetaObject(void) {
+void igVertexData_GetMetaObjectFunction(void) {
     igVertexData_GetMetaObject();
 }
 
@@ -141,18 +141,18 @@ static int g_igVertexData_fieldOffsets[] = {
 
 void igVertexData_InitFields(void) {
     int fieldStart;
-    void *temp_v0;
-    void *temp_s1;
+    void *componentTypeField;
+    void *dataField;
     igMetaObject *meta;
 
     meta = g_igVertexData_metaObject;
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igVertexData_ctorTable, 6);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igDataList_GetOrCreateMetaObject();
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
-    ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(FUN_0014b330);
+    dataField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
+    ((igObjectRefMetaField *)dataField)->_metaObject = (int)igDataList_GetOrCreateMetaObject();
+    componentTypeField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
+    igEnumMetaField_SetDefaultValue((igMetaField *)componentTypeField, 0);
+    ((igEnumMetaField *)componentTypeField)->_getMetaEnumFunction = (int)(IG_VERTEX_COMPONENT_TYPE_GetMetaEnum);
     igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 3), 1);
     igMetaObject_NameFields(meta, g_igVertexData_fieldTable, g_igVertexData_fieldHandles, g_igVertexData_fieldOffsets, fieldStart);
 }

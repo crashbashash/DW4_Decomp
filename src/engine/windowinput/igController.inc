@@ -6,11 +6,11 @@ igMetaObject *igController_GetMetaObject(void)
 {
     igMetaObject *g = g_igController_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00146900();
+        igController_EnsureRegistered();
     return g_igController_metaObject;
 }
 
-void FUN_00146900(void)
+void igController_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igController_Register);
 }
@@ -22,7 +22,7 @@ CallbackArray *igController_Register(void) {
         &g_igController_metaObject,
         igEventProducer_Register,
         igEventProducer_GetPublishedMetaObject,
-        thunk_igController_GetMetaObject,
+        igController_GetMetaObjectFunction,
         "igController",
         0x10, /* instance size */
         0,
@@ -32,7 +32,7 @@ CallbackArray *igController_Register(void) {
     );
 }
 
-void thunk_igController_GetMetaObject(void) {
+void igController_GetMetaObjectFunction(void) {
     igController_GetMetaObject();
 }
 
@@ -67,6 +67,6 @@ void igController_InitFields(void) {
     *(char *)((char *)(temp_s1) + 64) = 1;
     *(char *)((char *)(temp_s1) + 65) = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igController_fieldTable, g_igController_fieldHandles, g_igController_fieldOffsets, temp_s2);
-    *(int *)((char *)(g_igController_metaObject) + 60) = (int)thunk_igPsx2Controller_GetMetaObject;
+    *(int *)((char *)(g_igController_metaObject) + 60) = (int)igPsx2Controller_GetMetaObjectFunction;
 }
 

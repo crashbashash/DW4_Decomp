@@ -4,7 +4,7 @@ igMetaField *g_igColorAttr_colorPackedMetaField;
 
 igColorAttr *igColorAttr_CreateInstance(int allocator) {
     igColorAttr_EnsureRegistered();
-    return (igColorAttr *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55F2E0, (igMemoryPoolView *)allocator);
+    return (igColorAttr *)igMetaObject_CreateInstance(g_igColorAttr_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igColorAttr_GetOrCreateMetaObject(void) {
@@ -42,7 +42,7 @@ CallbackArray *igColorAttr_Register(void) {
         &g_igColorAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igColorAttr_GetMetaObject,
+        igColorAttr_GetMetaObjectFunction,
         "igColorAttr",
         0x20, /* instance size */
         igColorAttr_GetVTable,
@@ -52,7 +52,7 @@ CallbackArray *igColorAttr_Register(void) {
     );
 }
 
-void thunk_igColorAttr_GetMetaObject(void) {
+void igColorAttr_GetMetaObjectFunction(void) {
     igColorAttr_GetMetaObject();
 }
 
@@ -74,27 +74,27 @@ static int g_igColorAttr_fieldOffsets[] = {
 };
 
 void igColorAttr_InitFields(void) {
-    void *temp_a0;
-    void *temp_v0;
-    int sp40[4];
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    void *field;
+    void *field2;
+    int value[4];
+    int base;
+    void *field3;
+    igMetaObject *meta;
 
-    temp_s0 = g_igColorAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igColorAttr_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    temp_a0 = (void *)(temp_s1);
-    sp40[0] = 0x3F800000;
-    sp40[1] = 0x3F800000;
-    sp40[2] = 0x3F800000;
-    sp40[3] = 0x3F800000;
-    igVec4fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)sp40);
-    *(int *)((char *)(temp_s1) + 48) = (int)(&FUN_0013c870);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    igUnsignedIntMetaField_SetDefaultValue((igMetaField *)temp_v0, -1);
-    *(char *)((char *)(temp_v0) + 38) = 0;
-    igMetaObject_NameFields(temp_s0, g_igColorAttr_fieldTable, g_igColorAttr_fieldHandles, g_igColorAttr_fieldOffsets, temp_s2);
+    meta = g_igColorAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igColorAttr_ctorTable, 2);
+    field3 = (void *)(igMetaObject_GetFieldAt(meta, base));
+    field = (void *)(field3);
+    value[0] = 0x3F800000;
+    value[1] = 0x3F800000;
+    value[2] = 0x3F800000;
+    value[3] = 0x3F800000;
+    igVec4fMetaField_SetDefault((igMetaField *)field, (const float *)value);
+    ((igMetaField *)field3)->_invarianceFunction = (int)&igColorAttr_SynchronizeColorPacked;
+    field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    igUnsignedIntMetaField_SetDefaultValue((igMetaField *)field2, -1);
+    ((igMetaField *)field2)->_persistent = 0;
+    igMetaObject_NameFields(meta, g_igColorAttr_fieldTable, g_igColorAttr_fieldHandles, g_igColorAttr_fieldOffsets, base);
 }
 

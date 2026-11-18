@@ -33,7 +33,7 @@ CallbackArray *igRayIntersectionFunctionList_Register(void) {
         &g_igRayIntersectionFunctionList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
-        thunk_igRayIntersectionFunctionList_GetMetaObject,
+        igRayIntersectionFunctionList_GetMetaObjectFunction,
         "igRayIntersectionFunctionList",
         0x14, /* instance size */
         igRayIntersectionFunctionList_GetVTable,
@@ -43,7 +43,7 @@ CallbackArray *igRayIntersectionFunctionList_Register(void) {
     );
 }
 
-void thunk_igRayIntersectionFunctionList_GetMetaObject(void) {
+void igRayIntersectionFunctionList_GetMetaObjectFunction(void) {
     igRayIntersectionFunctionList_GetMetaObject();
 }
 

@@ -1,9 +1,9 @@
-int Gap__Sg__igTransform__vfunc_28(void)
+int igTransform_GetInherantFlags(void)
 {
     return 2;
 }
 
-void Gap__Sg__igTransform__vfunc_29(igTransform *self) {
+void igTransform_Reset(igTransform *self) {
     void **transformInput;
 
     transformInput = (void **)(self->_transformInput);

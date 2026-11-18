@@ -1,11 +1,11 @@
 igMetaObject *g_igVertexDataList_metaObject;
 
-int FUN_0014b180(int arg0) {
-    FUN_0014b2a0();
+int igVertexDataList_Create(int arg0) {
+    igVertexDataList_EnsureRegistered();
     return (int)igMetaObject_CreateInstance(g_igVertexDataList_metaObject, (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *FUN_0014b1c0(void) {
+igMetaObject *igVertexDataList_GetOrCreateMetaObject(void) {
     if (g_igVertexDataList_metaObject == 0) {
         g_igVertexDataList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -16,7 +16,7 @@ igMetaObject *igVertexDataList_GetMetaObject(void)
 {
     igMetaObject *g = g_igVertexDataList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014b2a0();
+        igVertexDataList_EnsureRegistered();
     return g_igVertexDataList_metaObject;
 }
 
@@ -27,12 +27,12 @@ int igVertexDataList_GetVTable(void) {
     return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
-void FUN_0014b2a0(void)
+void igVertexDataList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVertexDataList_Register);
 }
 
-static igMetaObjectCallback g_igVertexDataList_callbackList[] = { FUN_0014b500, 0 };
+static igMetaObjectCallback g_igVertexDataList_callbackList[] = { igVertexData_EnsureRegistered, 0 };
 
 CallbackArray *igVertexDataList_Register(void) {
     FUN_00149bc0();
@@ -41,7 +41,7 @@ CallbackArray *igVertexDataList_Register(void) {
         &g_igVertexDataList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igVertexDataList_GetMetaObject,
+        igVertexDataList_GetMetaObjectFunction,
         "igVertexDataList",
         0x14, /* instance size */
         igVertexDataList_GetVTable,
@@ -51,7 +51,7 @@ CallbackArray *igVertexDataList_Register(void) {
     );
 }
 
-void thunk_igVertexDataList_GetMetaObject(void) {
+void igVertexDataList_GetMetaObjectFunction(void) {
     igVertexDataList_GetMetaObject();
 }
 

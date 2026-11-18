@@ -12,7 +12,7 @@ igMetaField *g_igFlyMode_lastAimMetaField;
 igMetaField *g_igFlyMode_lastAimValidMetaField;
 
 igFlyMode *igFlyMode_Create(int allocator) {
-    FUN_0045ca20();
+    igFlyMode_EnsureRegistered();
     return (igFlyMode *)igMetaObject_CreateInstance(g_igFlyMode_metaObject, (igMemoryPoolView *)allocator);
 }
 
@@ -22,7 +22,7 @@ igMetaObject *igFlyMode_GetMetaObject(void) {
         int b = !!(g->_validity & 4);
         if (b) goto done;
     }
-    FUN_0045ca20();
+    igFlyMode_EnsureRegistered();
 done:
     return g_igFlyMode_metaObject;
 }
@@ -50,12 +50,12 @@ int igFlyMode_GetVTable(void) {
     return r;
 }
 
-void FUN_0045ca20(void)
+void igFlyMode_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igFlyMode_Register);
 }
 
-static igMetaObjectCallback g_igFlyMode_callbackList[] = { FUN_00145de0, 0 };
+static igMetaObjectCallback g_igFlyMode_callbackList[] = { igWindow_EnsureRegistered, 0 };
 
 CallbackArray *igFlyMode_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -64,7 +64,7 @@ CallbackArray *igFlyMode_Register(void) {
         &g_igFlyMode_metaObject,
         igViewMode_Register,
         igViewMode_GetPublishedMetaObject,
-        thunk_igFlyMode_GetMetaObject,
+        igFlyMode_GetMetaObjectFunction,
         "igFlyMode",
         0xA0, /* instance size */
         igFlyMode_GetVTable,
@@ -74,7 +74,7 @@ CallbackArray *igFlyMode_Register(void) {
     );
 }
 
-void thunk_igFlyMode_GetMetaObject(void) {
+void igFlyMode_GetMetaObjectFunction(void) {
     igFlyMode_GetMetaObject();
 }
 
@@ -177,7 +177,7 @@ void igFlyMode_InitFields(void) {
     e.y = 0;
     igVec2fMetaField_SetDefault((igMetaField *)temp_a0_5, (const float *)&e);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 7));
-    *(int *)((char *)(temp_s1) + 56) = FUN_00145d40();
+    *(int *)((char *)(temp_s1) + 56) = igWindow_GetOrCreateMetaObject();
     temp_a0_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 8));
     f.x = 0;
     f.y = 0;

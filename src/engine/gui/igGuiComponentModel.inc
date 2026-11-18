@@ -7,7 +7,7 @@ igMetaField *g_igGuiComponentModel_pushedMetaField;
 igMetaField *g_igGuiComponentModel_sizeMetaField;
 igMetaField *g_igGuiComponentModel_childHasFocusMetaField;
 
-igMetaObject *FUN_0044f790(void) {
+igMetaObject *igGuiComponentModel_GetOrCreateMetaObject(void) {
     if (g_igGuiComponentModel_metaObject == 0) {
         g_igGuiComponentModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }

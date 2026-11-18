@@ -1,4 +1,4 @@
-igMetaObject *Gap__Gfx__igPsx2DisableExt__vfunc_22(void) {
+igMetaObject *igPsx2DisableExt_GetMeta(void) {
     return g_igPsx2DisableExt_metaObject;
 }
 

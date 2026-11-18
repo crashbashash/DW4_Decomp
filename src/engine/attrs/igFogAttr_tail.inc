@@ -1,12 +1,12 @@
-void Gap__Attrs__igFogAttr__vfunc_24(igFogAttr *arg0, int arg1) {
-    Gap__Gfx__igPsx2VisualContext__vfunc_245((igPsx2VisualContext *)arg1, (unsigned int)arg0->_mode);
-    Gap__Gfx__igPsx2VisualContext__vfunc_243((igPsx2VisualContext *)arg1, arg0->_density);
-    Gap__Gfx__igPsx2VisualContext__vfunc_247((igPsx2VisualContext *)arg1, arg0->_color);
-    Gap__Gfx__igPsx2VisualContext__vfunc_249((igPsx2VisualContext *)arg1, arg0->_nearVal);
-    Gap__Gfx__igPsx2VisualContext__vfunc_251((igPsx2VisualContext *)arg1, arg0->_farVal);
+void igFogAttr_apply(igFogAttr *arg0, int arg1) {
+    igPsx2VisualContext_SetFogMode((igPsx2VisualContext *)arg1, (unsigned int)arg0->_mode);
+    igPsx2VisualContext_SetFogDensity((igPsx2VisualContext *)arg1, arg0->_density);
+    igPsx2VisualContext_SetFogColor((igPsx2VisualContext *)arg1, arg0->_color);
+    igPsx2VisualContext_SetFogNear((igPsx2VisualContext *)arg1, arg0->_nearVal);
+    igPsx2VisualContext_SetFogFar((igPsx2VisualContext *)arg1, arg0->_farVal);
 }
 
-void Gap__Attrs__igFogAttr__vfunc_26(F_13cd90 *arg0, C *arg1) {
+void igFogAttr_SynchronizeDefault(F_13cd90 *arg0, C *arg1) {
     float v[4];
     float t;
 

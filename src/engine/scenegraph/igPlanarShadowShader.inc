@@ -17,7 +17,7 @@ igMetaObject *igPlanarShadowShader_GetMetaObject(void)
 {
     igMetaObject *g = g_igPlanarShadowShader_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019c3f0();
+        igPlanarShadowShader_EnsureRegistered();
     return g_igPlanarShadowShader_metaObject;
 }
 
@@ -29,28 +29,28 @@ int igPlanarShadowShader_GetVTable(void) {
 
     FUN_0019c380((void *)u.b);
     u.vt = (int)&g_igPlanarShadowShader_vtable[0];
-    FUN_0019c370((int *)&u.b[40]);
-    FUN_0019c360((int *)&u.b[44]);
+    igSmartPointer_igLightList_Construct((int *)&u.b[40]);
+    igSmartPointer_igModelViewMatrixAttrList_Construct((int *)&u.b[44]);
     FUN_00151090(&u.b[48]);
     FUN_00151090(&u.b[64]);
-    FUN_0019c360((int *)&u.b[80]);
-    FUN_0019c350((int *)&u.b[84]);
-    FUN_0019c340((int *)&u.b[88]);
-    FUN_0019c330((int *)&u.b[92]);
-    FUN_0019c330((int *)&u.b[96]);
-    FUN_0019ac10((int *)&u.b[100]);
-    FUN_0019c320((int *)&u.b[104]);
+    igSmartPointer_igModelViewMatrixAttrList_Construct((int *)&u.b[80]);
+    igSmartPointer_igGeometryList_Construct((int *)&u.b[84]);
+    igSmartPointer_igAttrList_Construct((int *)&u.b[88]);
+    igSmartPointer_igVolume_Construct((int *)&u.b[92]);
+    igSmartPointer_igVolume_Construct((int *)&u.b[96]);
+    igSmartPointer_igColorAttr_Construct((int *)&u.b[100]);
+    igSmartPointer_igStencilStateAttr_Construct((int *)&u.b[104]);
     temp_s5 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&D_005289f0[0];
-    FUN_0019c2a0((ObjectRefWord *)&u.b[104], -1);
+    igSmartPointer_igStencilStateAttr_Destruct((ObjectRefWord *)&u.b[104], -1);
     igSmartPointer_igColorAttr_Destruct((igSmartPointer<igObject> *)&u.b[100], -1);
     FUN_0018f980(&u.b[96], -1);
     FUN_0018f980(&u.b[92], -1);
     igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&u.b[88], -1);
     igSmartPointer_igGeometryList_Destruct((igSmartPointer<igObject> *)&u.b[84], -1);
-    FUN_00199970((struct R * *)&u.b[80], -1);
-    FUN_00199970((struct R * *)&u.b[44], -1);
-    FUN_0019c1a0((ObjectRefWord *)&u.b[40], -1);
+    igSmartPointer_igModelViewMatrixAttrList_Destruct((struct R * *)&u.b[80], -1);
+    igSmartPointer_igModelViewMatrixAttrList_Destruct((struct R * *)&u.b[44], -1);
+    igSmartPointer_igLightList_Destruct((igSmartPointer<igObject> *)&u.b[40], -1);
     FUN_0019c0e0((struct S_19c0e0 *)u.b, 0);
     return temp_s5;
 }
@@ -83,15 +83,15 @@ void *FUN_0019c0e0(struct S_19c0e0 *arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_0019c1a0(ObjectRefWord *self,int delete_storage) {
-    if(self) {
-        ObjectRefTarget *object=self->value;
-        if(object) {
-            --object->references;
-            if(((unsigned long long)(long long)object->references & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
+igSmartPointer<igObject> *igSmartPointer_igLightList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if((short)delete_storage>0) operator delete(self);
+        if (deleteFlag > 0) operator delete(self);
     }
     return self;
 }
@@ -109,7 +109,7 @@ igSmartPointer<igObject> *igSmartPointer_igGeometryList_Destruct(igSmartPointer<
     return self;
 }
 
-ObjectRefWord *FUN_0019c2a0(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igStencilStateAttr_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {
@@ -122,39 +122,39 @@ ObjectRefWord *FUN_0019c2a0(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-int *FUN_0019c320(int *p)
+int *igSmartPointer_igStencilStateAttr_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019c330(int *p)
+int *igSmartPointer_igVolume_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019c340(int *p)
+int *igSmartPointer_igAttrList_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019c350(int *p)
+int *igSmartPointer_igGeometryList_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019c360(int *p)
+int *igSmartPointer_igModelViewMatrixAttrList_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
-int *FUN_0019c370(int *p)
+int *igSmartPointer_igLightList_Construct(int *p)
 {
-    *(int *)((char *)p + 0) = 0;
+    *p = 0;
     return p;
 }
 
@@ -173,12 +173,12 @@ void *FUN_0019c380(void *arg0) {
     return arg0;
 }
 
-void FUN_0019c3f0(void)
+void igPlanarShadowShader_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPlanarShadowShader_Register);
 }
 
-static igMetaObjectCallback g_igPlanarShadowShader_callbackList[] = { igLightList_EnsureRegistered, FUN_00135620, igGeometryList_EnsureRegistered, igAttrList_EnsureRegistered, FUN_00186b20, igColorAttr_EnsureRegistered, FUN_00133510, 0 };
+static igMetaObjectCallback g_igPlanarShadowShader_callbackList[] = { igLightList_EnsureRegistered, igModelViewMatrixAttrList_EnsureRegistered, igGeometryList_EnsureRegistered, igAttrList_EnsureRegistered, igVolume_EnsureRegistered, igColorAttr_EnsureRegistered, igStencilStateAttr_EnsureRegistered, 0 };
 
 CallbackArray *igPlanarShadowShader_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -187,7 +187,7 @@ CallbackArray *igPlanarShadowShader_Register(void) {
         &g_igPlanarShadowShader_metaObject,
         igAttrSet_Register,
         igAttrSet_GetPublishedMetaObject,
-        thunk_igPlanarShadowShader_GetMetaObject,
+        igPlanarShadowShader_GetMetaObjectFunction,
         "igPlanarShadowShader",
         0x70, /* instance size */
         igPlanarShadowShader_GetVTable,
@@ -197,7 +197,7 @@ CallbackArray *igPlanarShadowShader_Register(void) {
     );
 }
 
-void thunk_igPlanarShadowShader_GetMetaObject(void) {
+void igPlanarShadowShader_GetMetaObjectFunction(void) {
     igPlanarShadowShader_GetMetaObject();
 }
 
@@ -205,7 +205,7 @@ igMetaObject *g_igAttrSet_metaObject;
 igMetaField *g_igAttrSet_attributesMetaField;
 igMetaField *g_igAttrSet_triggerMetaField;
 
-igMetaObject *FUN_0019c490(void) {
+igMetaObject *igAttrSet_GetPublishedMetaObject(void) {
     return g_igAttrSet_metaObject;
 }
 
@@ -291,10 +291,10 @@ void igPlanarShadowShader_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igPlanarShadowShader_ctorTable, 0xD);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_001365e0();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = igLightList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_00135540();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igModelViewMatrixAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_a0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)));
     spA.x = 0; spA.y = 1.0f; spA.z = 0; spA.w = 0;
@@ -303,7 +303,7 @@ void igPlanarShadowShader_InitFields(void) {
     spB.x = 0; spB.w = 1.0f; spB.y = 0; spB.z = 0;
     igVec4fMetaField_SetDefault((igMetaField *)temp_a0_2, (const float *)&spB);
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_00135540();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igModelViewMatrixAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     ((igMetaField *)temp_s2_3)->_persistent = 0;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7)));
@@ -315,17 +315,17 @@ void igPlanarShadowShader_InitFields(void) {
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     ((igMetaField *)temp_s2_5)->_persistent = 0;
     temp_s2_6 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9)));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_00186a80();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igVolume_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_6)->_persistent = 0;
     temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA)));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = FUN_00186a80();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = igVolume_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_7)->_persistent = 0;
     temp_s2_8 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB)));
     ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)igColorAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     ((igMetaField *)temp_s2_8)->_persistent = 0;
     temp_s2_9 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC)));
-    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = FUN_00133430();
+    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = igStencilStateAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_9)->_construct = 1;
     ((igMetaField *)temp_s2_9)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igPlanarShadowShader_fieldTable, g_igPlanarShadowShader_fieldHandles, g_igPlanarShadowShader_fieldOffsets, temp_s1);

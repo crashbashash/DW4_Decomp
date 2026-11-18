@@ -171,11 +171,11 @@ void FUN_001acb50(igAnimationCombiner *c) {
     }
 }
 
-void Gap__Sg__igAnimationCombiner__vfunc_26(void *arg0, char arg1) {
+void igAnimationCombiner_SetHierarchyUpdated(void *arg0, char arg1) {
     *(char *)((char *)arg0 + 81) = arg1;
 }
 
-int FUN_001ad310(void **arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
+int igCompressedAnimationSequenceQS_evaluateRotationAndTranslation(void **arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
     int sp40[16];
     int temp_s0;
 

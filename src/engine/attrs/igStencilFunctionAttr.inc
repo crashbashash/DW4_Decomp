@@ -7,16 +7,16 @@ igMetaField *g_igStencilFunctionAttr_stenFailOpMetaField;
 igMetaField *g_igStencilFunctionAttr_stenPassZPassOpMetaField;
 igMetaField *g_igStencilFunctionAttr_stenPassZFailOpMetaField;
 
-void FUN_00133610(int arg0) {
-    FUN_001336e0();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55EE50, (igMemoryPoolView *)arg0);
+igStencilFunctionAttr *igStencilFunctionAttr_Create(igMemoryPoolView *pool) {
+    igStencilFunctionAttr_EnsureRegistered();
+    return (igStencilFunctionAttr *)igMetaObject_CreateInstance(g_igStencilFunctionAttr_metaObject, pool);
 }
 
 igMetaObject *igStencilFunctionAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igStencilFunctionAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001336e0();
+        igStencilFunctionAttr_EnsureRegistered();
     return g_igStencilFunctionAttr_metaObject;
 }
 
@@ -27,7 +27,7 @@ int igStencilFunctionAttr_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_001336e0(void)
+void igStencilFunctionAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igStencilFunctionAttr_Register);
 }
@@ -39,7 +39,7 @@ CallbackArray *igStencilFunctionAttr_Register(void) {
         &g_igStencilFunctionAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igStencilFunctionAttr_GetMetaObject,
+        igStencilFunctionAttr_GetMetaObjectFunction,
         "igStencilFunctionAttr",
         0x28, /* instance size */
         igStencilFunctionAttr_GetVTable,
@@ -49,7 +49,7 @@ CallbackArray *igStencilFunctionAttr_Register(void) {
     );
 }
 
-void thunk_igStencilFunctionAttr_GetMetaObject(void) {
+void igStencilFunctionAttr_GetMetaObjectFunction(void) {
     igStencilFunctionAttr_GetMetaObject();
 }
 
@@ -93,28 +93,28 @@ static int g_igStencilFunctionAttr_fieldOffsets[] = {
 int g_igStencilFunctionAttr_funcDefault = 7;
 
 void igStencilFunctionAttr_InitFields(void) {
-    void *temp_s1;
-    int temp_s0;
-    void *temp_v0;
+    void *meta;
+    int base;
+    void *field;
 
-    temp_s1 = (void *)g_igStencilFunctionAttr_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igStencilFunctionAttr_ctorTable, 7);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, g_igStencilFunctionAttr_funcDefault);
-    *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_00149500;
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2), -1);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3), -1);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
-    *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_001494a0;
-    temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
-    *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_001494a0;
-    temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
-    *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)FUN_001494a0;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igStencilFunctionAttr_fieldTable, g_igStencilFunctionAttr_fieldHandles, g_igStencilFunctionAttr_fieldOffsets, temp_s0);
+    meta = (void *)g_igStencilFunctionAttr_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igStencilFunctionAttr_ctorTable, 7);
+    field = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field, g_igStencilFunctionAttr_funcDefault);
+    *(void **)&((igEnumMetaField *)field)->_getMetaEnumFunction = (void *)IG_GFX_STENCIL_FUNCTION_GetMetaEnum;
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2), -1);
+    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3), -1);
+    field = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field, 0);
+    *(void **)&((igEnumMetaField *)field)->_getMetaEnumFunction = (void *)IG_GFX_STENCIL_OPERATION_GetMetaEnum;
+    field = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field, 0);
+    *(void **)&((igEnumMetaField *)field)->_getMetaEnumFunction = (void *)IG_GFX_STENCIL_OPERATION_GetMetaEnum;
+    field = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field, 0);
+    *(void **)&((igEnumMetaField *)field)->_getMetaEnumFunction = (void *)IG_GFX_STENCIL_OPERATION_GetMetaEnum;
+    igMetaObject_NameFields((igMetaObject *)meta, g_igStencilFunctionAttr_fieldTable, g_igStencilFunctionAttr_fieldHandles, g_igStencilFunctionAttr_fieldOffsets, base);
 }
 
 igSmartPointer<igObject> *igSmartPointer_igVertexArray_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {

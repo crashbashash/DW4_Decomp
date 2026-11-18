@@ -1,7 +1,7 @@
 igMetaObject *g_igRadioGroupModel_metaObject;
 igMetaField *g_igRadioGroupModel_selectedMetaField;
 
-igMetaObject *FUN_0044d170(void) {
+igMetaObject *igRadioGroupModel_GetOrCreateMetaObject(void) {
     if (g_igRadioGroupModel_metaObject == 0) {
         g_igRadioGroupModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -66,7 +66,7 @@ void thunk_igRadioGroupModel_GetMetaObject(void) {
     igRadioGroupModel_GetMetaObject();
 }
 
-igMetaObject *FUN_0044d340(void) {
+igMetaObject *igModel_GetPublishedMetaObject(void) {
     return g_igModel_metaObject;
 }
 

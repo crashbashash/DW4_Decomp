@@ -1,4 +1,4 @@
-E *FUN_00237990(const A_237990 *arg0, int arg1) {
+E *igFilterMessageDispatcher_GetFilter(const A_237990 *arg0, int arg1) {
     int i;
     int n;
     E *e;
@@ -13,9 +13,9 @@ E *FUN_00237990(const A_237990 *arg0, int arg1) {
     return 0;
 }
 
-igSmartPointer<MessageFilter> FUN_002379e0(FilterDispatcher *self, igObject *target)
+igSmartPointer<MessageFilter> igFilterMessageDispatcher_GetFilterOrCreate(FilterDispatcher *self, igObject *target)
 {
-    igSmartPointer<MessageFilter> filter((MessageFilter *)FUN_00237990((const A_237990 *)self, (int)target), kRetainReference);
+    igSmartPointer<MessageFilter> filter((MessageFilter *)igFilterMessageDispatcher_GetFilter((const A_237990 *)self, (int)target), kRetainReference);
     if (filter == 0) {
         void *allocator = (void *)igObject_GetAllocator(self);
         filter.release();
@@ -26,7 +26,7 @@ igSmartPointer<MessageFilter> FUN_002379e0(FilterDispatcher *self, igObject *tar
     return filter;
 }
 
-void Gap__Insight__igFilterMessageDispatcher__vfunc_28(N *arg0, int arg1) {
+void igFilterMessageDispatcher_PostMessage(N *arg0, int arg1) {
     int n;
     int i;
     N *t;

@@ -1,4 +1,4 @@
-int FUN_0013d030(void *arg0, int arg1) {
+int igGeometryAttr_GetPrimLength(void *arg0, int arg1) {
     void *temp_v0;
 
     temp_v0 = (void *)(*(int *)((char *)(arg0) + 32));
@@ -8,7 +8,7 @@ int FUN_0013d030(void *arg0, int arg1) {
     return 0;
 }
 
-void thunk_FUN_0013cf70(void) {
+void igGeometryAttr1_5_SynchronizeDefault(void) {
     FUN_0013cf70();
 }
 
@@ -33,7 +33,7 @@ extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_32(igGeometryAttr1_5 *self,
     ((VertexArrayConfigureView *)self->_vertexArray)->configure(a, b, c, d);
 }
 
-void Gap__Attrs__igGeometryAttr1_5__vfunc_20(S_13d180 *arg0, int arg1) {
+void igGeometryAttr1_5_UserMakeConcrete(S_13d180 *arg0, int arg1) {
     Rc *sp3C;
     Rc *s0;
     Rc *old;
@@ -44,7 +44,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_20(S_13d180 *arg0, int arg1) {
             old->refs = old->refs - 1;
             if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
         }
-        sp3C = (Rc *)FUN_0014bff0(igObject_GetAllocator((igObject *)arg0));
+        sp3C = (Rc *)igPrimLengthArray_Create(igObject_GetAllocator((igObject *)arg0));
         s0 = *(Rc **)&sp3C;
         if (s0 != 0) s0->refs = s0->refs + 1;
         old = arg0->f48;
@@ -57,12 +57,12 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_20(S_13d180 *arg0, int arg1) {
         X_13d180 *x = (X_13d180 *)arg0->f48;
         x->grow(arg0->f32->n, 32, 0);
         for (i = 0; i < arg0->f32->n; i++) {
-            Gap__Attrs__igGeometryAttr1_5__vfunc_40((S_13de80 *)arg0, i, FUN_0013d030(arg0, i));
+            Gap__Attrs__igGeometryAttr1_5__vfunc_40((S_13de80 *)arg0, i, igGeometryAttr_GetPrimLength(arg0, i));
         }
     }
 }
 
-void Gap__Attrs__igGeometryAttr1_5__vfunc_24(igGeometryAttr1_5 *self, void *context)
+void igGeometryAttr1_5_apply(igGeometryAttr1_5 *self, void *context)
 {
     /* matching construct: declaration and load order permutation sweep (5040 + 120 variants) */
     int primType;
@@ -73,13 +73,13 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_24(igGeometryAttr1_5 *self, void *cont
     int overlap;
     StripLengths *lengths;
 
-    Gap__Gfx__igPsx2VisualContext__vfunc_59((igPsx2VisualContext *)context, (igVertexArray *)self->_vertexArray);
+    igPsx2VisualContext_SetVertexArray((igPsx2VisualContext *)context, (igVertexArray *)self->_vertexArray);
     offset = self->_offset;
     numPrims = self->_numPrims;
     primType = self->_primType;
     lengths = (StripLengths *)self->_stripLengths;
     indexArray = self->_indexArray;
-    if (indexArray != 0) Gap__Gfx__igPsx2VisualContext__vfunc_60((igPsx2VisualContext *)context, (igIndexArray *)indexArray);
+    if (indexArray != 0) igPsx2VisualContext_SetIndexArray((igPsx2VisualContext *)context, (igIndexArray *)indexArray);
     if (lengths != 0) {
         if (primType == 2) {
             stripType = 0;
@@ -96,17 +96,17 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_24(igGeometryAttr1_5 *self, void *cont
         case 0:
             break;
         case 1:
-            Gap__Gfx__igPsx2VisualContext__vfunc_71((igPsx2VisualContext *)context, primType, lengths->get(0) - overlap, offset);
+            igPsx2VisualContext_Draw((igPsx2VisualContext *)context, primType, lengths->get(0) - overlap, offset);
             break;
         default:
-            Gap__Gfx__igPsx2VisualContext__vfunc_63((igPsx2VisualContext *)context, (igPrimLengthArray *)lengths);
-            Gap__Gfx__igPsx2VisualContext__vfunc_74((igPsx2VisualContext *)context, stripType, numPrims, offset, 0);
+            igPsx2VisualContext_SetPrimLengthArray((igPsx2VisualContext *)context, (igPrimLengthArray *)lengths);
+            igPsx2VisualContext_DrawMultiple((igPsx2VisualContext *)context, stripType, numPrims, offset, 0);
         }
-        if (lengths != 0) Gap__Gfx__igPsx2VisualContext__vfunc_63((igPsx2VisualContext *)context, 0);
+        if (lengths != 0) igPsx2VisualContext_SetPrimLengthArray((igPsx2VisualContext *)context, 0);
     } else {
-        Gap__Gfx__igPsx2VisualContext__vfunc_71((igPsx2VisualContext *)context, primType, numPrims, offset);
+        igPsx2VisualContext_Draw((igPsx2VisualContext *)context, primType, numPrims, offset);
     }
-    if (indexArray != 0) Gap__Gfx__igPsx2VisualContext__vfunc_60((igPsx2VisualContext *)context, 0);
+    if (indexArray != 0) igPsx2VisualContext_SetIndexArray((igPsx2VisualContext *)context, 0);
 }
 
 inline void T_13d460::setBuffer(const igSmartPointer<R_13d460> &buffer) {
@@ -131,7 +131,7 @@ int Gap__Attrs__igGeometryAttr1_5__vfunc_39(T_13d460 *arg0, int arg1, unsigned a
     int t = arg0->f20;
     if ((unsigned)(t - 4) <= 1U || t == 2) {
         if (arg0->f48 == 0) {
-            arg0->setBuffer(igSmartPointer<R_13d460>((R_13d460 *)FUN_0014bff0(igObject_GetAllocator((igObject *)arg0))));
+            arg0->setBuffer(igSmartPointer<R_13d460>((R_13d460 *)igPrimLengthArray_Create(igObject_GetAllocator((igObject *)arg0))));
         }
         if (((R_13d460 *)arg0->f48)->cap < arg2) {
             arg0->f48->v92(arg2, 0x20, 0);
@@ -304,7 +304,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_40(S_13de80 *arg0, int arg1, int arg2)
     Rc *s0;
     Rc *old;
     if (arg0->f48 == 0) {
-        sp5C = (Rc *)FUN_0014bff0(igObject_GetAllocator((igObject *)arg0));
+        sp5C = (Rc *)igPrimLengthArray_Create(igObject_GetAllocator((igObject *)arg0));
         s0 = *(Rc **)&sp5C;
         if (s0 != 0) s0->refs = s0->refs + 1;
         old = arg0->f48;
@@ -396,11 +396,11 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_34(GeometryAttrView *arg0, float *arg1
     arg0->f12->v112(&acc, 0);
 }
 
-void Gap__Attrs__igGeometryAttr1_5__vfunc_17(O_13e230 *arg0) {
+void igGeometryAttr1_5_UserPostLoad(O_13e230 *arg0) {
     int sp4C;
     unsigned s0, s1;
     Ar *a0;
-    FUN_0013b820(arg0);
+    igAttr_UserPostLoad(arg0);
     if (arg0->f40 != 0 || arg0->f44 != 0) {
         sp4C = *arg0->f12->v100();
         if (arg0->f44 != 0) {

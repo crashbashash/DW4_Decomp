@@ -36,8 +36,8 @@ on the Insight window, 3 `igRotateMode` with `_maya` set, and from `_firstCamera
 the scene's camera of that index.
 
 `g_sharedViewerOptions` (`0x56dc50`) is the 240-byte viewer options object every viewer object shares, created by
-`ViewerOptions_Construct` on first use and freed when its count at `+232` drops to zero. Its members up to `+229` are
-the `INSIGHT` properties `ViewerOptions_Construct` reads (`extraCommandLine`, `showBBox`, `autoSelectCamera`,
+`igViewerDefaults_Construct` on first use and freed when its count at `+232` drops to zero. Its members up to `+229` are
+the `INSIGHT` properties `igViewerDefaults_Construct` reads (`extraCommandLine`, `showBBox`, `autoSelectCamera`,
 `upVector`, `showUI`, ...).
 
 ## Open questions

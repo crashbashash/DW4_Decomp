@@ -1,7 +1,7 @@
-void Gap__Attrs__igLightAttr__vfunc_24(igLightAttr *self, igObject *context) {
+void igLightAttr_apply(igLightAttr *self, igObject *context) {
     if (self->_lightId == -1) {
         igObject *old;
-        self->_lightId = Gap__Gfx__igPsx2VisualContext__vfunc_77((igPsx2VisualContext *)context, self->_lightType);
+        self->_lightId = igPsx2VisualContext_CreateLight((igPsx2VisualContext *)context, self->_lightType);
         if (context) {
             context->_refCount++;
         }
@@ -16,36 +16,36 @@ void Gap__Attrs__igLightAttr__vfunc_24(igLightAttr *self, igObject *context) {
         self->_changed = 1;
     }
     if (!self->_cacheable || self->_changed) {
-        Gap__Gfx__igPsx2VisualContext__vfunc_84((igPsx2VisualContext *)context, self->_lightId, self->_ambient);
-        Gap__Gfx__igPsx2VisualContext__vfunc_82((igPsx2VisualContext *)context, self->_lightId, self->_diffuse);
-        Gap__Gfx__igPsx2VisualContext__vfunc_86((igPsx2VisualContext *)context, self->_lightId, self->_specular);
+        igPsx2VisualContext_SetLightAmbient((igPsx2VisualContext *)context, self->_lightId, self->_ambient);
+        igPsx2VisualContext_SetLightDiffuse((igPsx2VisualContext *)context, self->_lightId, self->_diffuse);
+        igPsx2VisualContext_SetLightSpecular((igPsx2VisualContext *)context, self->_lightId, self->_specular);
         switch (self->_lightType) {
         case 1:
-            Gap__Gfx__igPsx2VisualContext__vfunc_96(context, self->_lightId, self->_attenuation);
+            igPsx2VisualContext_SetLightAttenuation(context, self->_lightId, self->_attenuation);
             break;
         case 2:
-            Gap__Gfx__igPsx2VisualContext__vfunc_92((igPsx2VisualContext *)context, self->_lightId, self->_cutoff);
-            Gap__Gfx__igPsx2VisualContext__vfunc_94((igPsx2VisualContext *)context, self->_lightId, self->_falloff);
-            Gap__Gfx__igPsx2VisualContext__vfunc_96(context, self->_lightId, self->_attenuation);
+            igPsx2VisualContext_SetLightCutoffAngle((igPsx2VisualContext *)context, self->_lightId, self->_cutoff);
+            igPsx2VisualContext_SetLightFalloffRate((igPsx2VisualContext *)context, self->_lightId, self->_falloff);
+            igPsx2VisualContext_SetLightAttenuation(context, self->_lightId, self->_attenuation);
             break;
         }
         self->_changed = 0;
     }
     switch (self->_lightType) {
     case 0:
-        Gap__Gfx__igPsx2VisualContext__vfunc_90(context, self->_lightId, self->_direction);
+        igPsx2VisualContext_SetLightDirection(context, self->_lightId, self->_direction);
         break;
     case 1:
-        Gap__Gfx__igPsx2VisualContext__vfunc_88((igPsx2VisualContext *)context, self->_lightId, self->_position);
+        igPsx2VisualContext_SetLightPosition((igPsx2VisualContext *)context, self->_lightId, self->_position);
         break;
     case 2:
-        Gap__Gfx__igPsx2VisualContext__vfunc_90(context, self->_lightId, self->_direction);
-        Gap__Gfx__igPsx2VisualContext__vfunc_88((igPsx2VisualContext *)context, self->_lightId, self->_position);
+        igPsx2VisualContext_SetLightDirection(context, self->_lightId, self->_direction);
+        igPsx2VisualContext_SetLightPosition((igPsx2VisualContext *)context, self->_lightId, self->_position);
         break;
     }
 }
 
-void Gap__Attrs__igLightAttr__vfunc_28(A_13ece0 *arg0) {
+void igLightAttr_Reset(A_13ece0 *arg0) {
     int temp_a1;
     L_13ece0 *temp_a0;
 
@@ -69,7 +69,7 @@ void Gap__Attrs__igLightAttr__vfunc_28(A_13ece0 *arg0) {
     arg0->f145 = 1;
 }
 
-void Gap__Attrs__igLightAttr__vfunc_12(void **arg0) {
+void igLightAttr_ReleaseDefaults(void **arg0) {
     ((DW4VC_112_0 *)(arg0))->vX();
     igObject_ReleaseDefaults((igObject *)arg0);
 }
@@ -77,7 +77,7 @@ void Gap__Attrs__igLightAttr__vfunc_12(void **arg0) {
 /* Reset a light attribute to its unassigned state: no hardware light id (-1), flagged changed and
  * cacheable so the next apply re-uploads it. */
 
-void Gap__Attrs__igLightAttr__vfunc_26(igLightAttr *self) {
+void igLightAttr_SynchronizeDefault(igLightAttr *self) {
     self->_lightId = -1;
     self->_changed = 1;
     self->_cacheable = 1;
@@ -86,7 +86,7 @@ void Gap__Attrs__igLightAttr__vfunc_26(igLightAttr *self) {
 /* Copy a four-float colour into the light's diffuse colour and mark the attribute changed so the
  * renderer re-applies it. _diffuse is reflected as int[4] (igVec4fMetaField) but holds floats. */
 
-void Gap__Attrs__igLightAttr__vfunc_32(igLightAttr *self, float *color) {
+void igLightAttr_SetDiffuse(igLightAttr *self, float *color) {
     *(float *)&self->_diffuse[0] = color[0];
     *(float *)&self->_diffuse[1] = color[1];
     *(float *)&self->_diffuse[2] = color[2];
@@ -98,7 +98,7 @@ void Gap__Attrs__igLightAttr__vfunc_32(igLightAttr *self, float *color) {
  * of vfunc_32 for _diffuse and vfunc_34 for _specular). _ambient is reflected as int[4]
  * (igVec4fMetaField) but holds floats. */
 
-void Gap__Attrs__igLightAttr__vfunc_33(igLightAttr *self, float *color) {
+void igLightAttr_SetAmbient(igLightAttr *self, float *color) {
     *(float *)&self->_ambient[0] = color[0];
     *(float *)&self->_ambient[1] = color[1];
     *(float *)&self->_ambient[2] = color[2];
@@ -110,7 +110,7 @@ void Gap__Attrs__igLightAttr__vfunc_33(igLightAttr *self, float *color) {
  * (sibling of vfunc_32 for _diffuse and vfunc_33 for _ambient). _specular is reflected as int[4]
  * (igVec4fMetaField) but holds floats. */
 
-void Gap__Attrs__igLightAttr__vfunc_34(igLightAttr *self, float *color) {
+void igLightAttr_SetSpecular(igLightAttr *self, float *color) {
     *(float *)&self->_specular[0] = color[0];
     *(float *)&self->_specular[1] = color[1];
     *(float *)&self->_specular[2] = color[2];
@@ -122,7 +122,7 @@ void Gap__Attrs__igLightAttr__vfunc_34(igLightAttr *self, float *color) {
  * and raises `_changed` (the flag the light-attribute users check before re-uploading the light;
  * the matching direction setter is vfunc_36). */
 
-void Gap__Attrs__igLightAttr__vfunc_35(igLightAttr *self, float *position) {
+void igLightAttr_SetPosition(igLightAttr *self, float *position) {
     /* _position is reflected as int[3] (igVec3fMetaField); the code moves floats */
     *(float *)&self->_position[0] = (float) position[0];
     *(float *)&self->_position[1] = (float) position[1];
@@ -133,7 +133,7 @@ void Gap__Attrs__igLightAttr__vfunc_35(igLightAttr *self, float *position) {
 /* IgLightAttr setter for the light's direction. Copies the caller's three floats into `_direction`
  * and raises `_changed` (the matching position setter is vfunc_35). */
 
-void Gap__Attrs__igLightAttr__vfunc_36(igLightAttr *self, float *direction) {
+void igLightAttr_SetDirection(igLightAttr *self, float *direction) {
     /* _direction is reflected as int[3] (igVec3fMetaField); the code moves floats */
     *(float *)&self->_direction[0] = (float) direction[0];
     *(float *)&self->_direction[1] = (float) direction[1];
@@ -144,7 +144,7 @@ void Gap__Attrs__igLightAttr__vfunc_36(igLightAttr *self, float *direction) {
 /* Setter for the spot-light _cutoff (+96); raises _changed (+144) so the cached light state is
  * rebuilt before the next draw. */
 
-void Gap__Attrs__igLightAttr__vfunc_37(igLightAttr *self, float cutoff) {
+void igLightAttr_SetCutoffAngle(igLightAttr *self, float cutoff) {
     self->_cutoff = cutoff;
     self->_changed = 1;
 }
@@ -152,19 +152,19 @@ void Gap__Attrs__igLightAttr__vfunc_37(igLightAttr *self, float cutoff) {
 /* Setter for the spot-light _falloff (+92); raises _changed (+144) so the cached light state is
  * rebuilt before the next draw. */
 
-void Gap__Attrs__igLightAttr__vfunc_38(igLightAttr *self, float falloff) {
+void igLightAttr_SetFalloffRate(igLightAttr *self, float falloff) {
     self->_falloff = falloff;
     self->_changed = 1;
 }
 
-void Gap__Attrs__igLightAttr__vfunc_39(void *arg0, void *arg1) {
+void igLightAttr_SetAttenuation(void *arg0, void *arg1) {
     *(float *)((char *)(arg0) + 100) = (float) *(float *)((char *)(arg1) + 0);
     *(float *)((char *)(arg0) + 104) = (float) *(float *)((char *)(arg1) + 4);
     *(float *)((char *)(arg0) + 108) = (float) *(float *)((char *)(arg1) + 8);
     *(char *)((char *)(arg0) + 144) = 1;
 }
 
-void FUN_0013ef20(void *arg0) {
+void igLightAttr_MarkChanged(void *arg0) {
     *(char *)((char *)(arg0) + 144) = 1;
 }
 

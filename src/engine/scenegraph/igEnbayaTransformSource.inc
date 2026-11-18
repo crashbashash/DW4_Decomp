@@ -2,7 +2,7 @@ igMetaObject *g_igEnbayaTransformSource_metaObject;
 igMetaField *g_igEnbayaTransformSource_trackIdMetaField;
 igMetaField *g_igEnbayaTransformSource_enbayaAnimationSourceMetaField;
 
-igMetaObject *FUN_001a18b0(void)
+igMetaObject *igEnbayaTransformSource_GetMetaObject(void)
 {
     igMetaObject *g = g_igEnbayaTransformSource_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
@@ -48,7 +48,7 @@ CallbackArray *igEnbayaTransformSource_Register(void) {
         &g_igEnbayaTransformSource_metaObject,
         igTransformSource_Register,
         igTransformSource_GetPublishedMetaObject,
-        thunk_FUN_001a18b0,
+        igEnbayaTransformSource_GetMetaObjectFunction,
         "igEnbayaTransformSource",
         sizeof(igEnbayaTransformSource),                   /* Instance size. */
         igEnbayaTransformSource_GetVTable,
@@ -58,8 +58,8 @@ CallbackArray *igEnbayaTransformSource_Register(void) {
     );
 }
 
-void thunk_FUN_001a18b0(void) {
-    FUN_001a18b0();
+void igEnbayaTransformSource_GetMetaObjectFunction(void) {
+    igEnbayaTransformSource_GetMetaObject();
 }
 
 static FieldFactory g_igEnbayaTransformSource_ctorTable[] = {
@@ -80,16 +80,16 @@ static int g_igEnbayaTransformSource_fieldOffsets[] = {
 };
 
 void igEnbayaTransformSource_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *enbayaAnimationSourceField;
+    void *meta;
 
-    temp_s0 = (void *)g_igEnbayaTransformSource_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igEnbayaTransformSource_ctorTable, 2);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2), -1);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001a2210();
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igEnbayaTransformSource_fieldTable, g_igEnbayaTransformSource_fieldHandles, g_igEnbayaTransformSource_fieldOffsets, temp_s2);
+    meta = (void *)g_igEnbayaTransformSource_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igEnbayaTransformSource_ctorTable, 2);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base), -1);
+    enbayaAnimationSourceField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    ((igObjectRefMetaField *)enbayaAnimationSourceField)->_metaObject = (int)igEnbayaAnimationSource_GetOrCreateMetaObject();
+    igMetaObject_NameFields((igMetaObject *)meta, g_igEnbayaTransformSource_fieldTable, g_igEnbayaTransformSource_fieldHandles, g_igEnbayaTransformSource_fieldOffsets, base);
 }
 

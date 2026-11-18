@@ -4,11 +4,11 @@ igMetaObject *igEventProducer_GetMetaObject(void)
 {
     igMetaObject *g = g_igEventProducer_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00146270();
+        igEventProducer_EnsureRegistered();
     return g_igEventProducer_metaObject;
 }
 
-void FUN_00146270(void)
+void igEventProducer_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igEventProducer_Register);
 }
@@ -20,7 +20,7 @@ CallbackArray *igEventProducer_Register(void) {
         &g_igEventProducer_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igEventProducer_GetMetaObject,
+        igEventProducer_GetMetaObjectFunction,
         "igEventProducer",
         8, /* instance size */
         0,
@@ -30,11 +30,11 @@ CallbackArray *igEventProducer_Register(void) {
     );
 }
 
-void thunk_igEventProducer_GetMetaObject(void) {
+void igEventProducer_GetMetaObjectFunction(void) {
     igEventProducer_GetMetaObject();
 }
 
-igMetaObject *FUN_001462f0(void) {
+igMetaObject *igNonRefCountedObjectStack_GetPublishedMetaObject(void) {
     return g_igNonRefCountedObjectStack_metaObject;
 }
 

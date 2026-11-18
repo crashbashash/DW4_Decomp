@@ -11,7 +11,7 @@ igMetaObject *igTransientShaderData_GetMetaObject(void)
         ready = (g_igTransientShaderData_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_00194a90();
+    igTransientShaderData_EnsureRegistered();
 done:
     return g_igTransientShaderData_metaObject;
 }
@@ -37,8 +37,8 @@ int **FUN_00194790(int **arg0, long long arg1) {
         *arg0 = &g_igTransientShaderData_vtable[0];
         if (arg0 != 0) {
             *arg0 = &g_igShaderData_vtable[0];
-            FUN_00194830((struct Ref * *)((char *)arg0 + 20), -1);
-            FUN_001948b0((void * *)((char *)arg0 + 16), -1);
+            igSmartPointer_igNodeListList_Destruct((struct Ref * *)((char *)arg0 + 20), -1);
+            igSmartPointer_igDataPumpInfo_Destruct((void * *)((char *)arg0 + 16), -1);
             FUN_0013a800((char *)arg0 + 12, -1);
             FUN_0013a800((char *)arg0 + 8, -1);
         }
@@ -49,7 +49,7 @@ int **FUN_00194790(int **arg0, long long arg1) {
     return arg0;
 }
 
-void **FUN_00194830(struct Ref **self, short flag) {
+void **igSmartPointer_igNodeListList_Destruct(struct Ref **self, short flag) {
     struct Ref *p;
     if (self != 0) {
         p = *self;
@@ -62,7 +62,7 @@ void **FUN_00194830(struct Ref **self, short flag) {
     return (void **)self;
 }
 
-void **FUN_001948b0(void **arg0, long long arg1) {
+void **igSmartPointer_igDataPumpInfo_Destruct(void **arg0, long long arg1) {
     char *o;
 
     if (arg0 != 0) {
@@ -94,12 +94,12 @@ Obj_194930 *FUN_00194930(Obj_194930 *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_00194a90(void)
+void igTransientShaderData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTransientShaderData_Register);
 }
 
-static igMetaObjectCallback g_igTransientShaderData_callbackList[] = { igAttrListList_EnsureRegistered, FUN_001e5810, FUN_0019cb10, 0 };
+static igMetaObjectCallback g_igTransientShaderData_callbackList[] = { igAttrListList_EnsureRegistered, igDataPumpInfo_EnsureRegistered, igNodeListList_EnsureRegistered, 0 };
 
 CallbackArray *igTransientShaderData_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -108,7 +108,7 @@ CallbackArray *igTransientShaderData_Register(void) {
         &g_igTransientShaderData_metaObject,
         igShaderData_Register,
         igShaderData_GetPublishedMetaObject,
-        thunk_igTransientShaderData_GetMetaObject,
+        igTransientShaderData_GetMetaObjectFunction,
         "igTransientShaderData",
         0x18, /* instance size */
         igTransientShaderData_GetVTable,
@@ -118,7 +118,7 @@ CallbackArray *igTransientShaderData_Register(void) {
     );
 }
 
-void thunk_igTransientShaderData_GetMetaObject(void) {
+void igTransientShaderData_GetMetaObjectFunction(void) {
     igTransientShaderData_GetMetaObject();
 }
 
@@ -128,7 +128,7 @@ igMetaField *g_igShaderData_attrPopListsMetaField;
 igMetaField *g_igShaderData_dataPumpsMetaField;
 igMetaField *g_igShaderData_childListsMetaField;
 
-igMetaObject *FUN_00194b30(void) {
+igMetaObject *igShaderData_GetPublishedMetaObject(void) {
     return g_igShaderData_metaObject;
 }
 
@@ -142,7 +142,7 @@ void igTransientShaderData_InitFields(void) {
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_attrPushLists")));
     temp_s2 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)temp_s1->f40, (int)temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    temp_s0->f56 = FUN_0013abd0();
+    temp_s0->f56 = igAttrListList_GetOrCreateMetaObject();
     temp_s0->f52 = 1;
     temp_s0->f38 = 0;
     temp_s0->f28 = (int)(&g_igTransientShaderData_attrPushListsMetaField);
@@ -154,7 +154,7 @@ void igTransientShaderData_InitFields(void) {
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_attrPopLists")));
     temp_s2 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)temp_s1->f40, (int)temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    temp_s0->f56 = FUN_0013abd0();
+    temp_s0->f56 = igAttrListList_GetOrCreateMetaObject();
     temp_s0->f52 = 1;
     temp_s0->f38 = 0;
     temp_s0->f28 = (int)(&g_igTransientShaderData_attrPopListsMetaField);
@@ -166,7 +166,7 @@ void igTransientShaderData_InitFields(void) {
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_dataPumps")));
     temp_s2 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)temp_s1->f40, (int)temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    temp_s0->f56 = FUN_001e5690();
+    temp_s0->f56 = igDataPumpInfo_GetOrCreateMetaObject();
     igObjectRefMetaField_SetDefault((igObjectRefMetaField *)temp_s0, (igObject *)0);
     temp_s0->f38 = 0;
     temp_s0->f28 = (int)(&g_igTransientShaderData_dataPumpsMetaField);
@@ -178,7 +178,7 @@ void igTransientShaderData_InitFields(void) {
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_childLists")));
     temp_s2 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)temp_s1->f40, (int)temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    temp_s0->f56 = (int)FUN_0019ca30();
+    temp_s0->f56 = (int)igNodeListList_GetOrCreateMetaObject();
     temp_s0->f52 = 1;
     temp_s0->f38 = 0;
     temp_s0->f28 = (int)(&g_igTransientShaderData_childListsMetaField);

@@ -6,7 +6,7 @@ static int g_igPsx2VisualContext_clearrenderdestinationTypePsx2Values[] = {
 };
 igMetaEnum *g_igPsx2VisualContext_clearrenderdestinationTypePsx2MetaEnum;
 
-int FUN_001506b0(void) {
+int IG_GFX_CLEARRENDERDESTINATION_TYPE_PSX2_GetMetaEnum(void) {
     if (g_igPsx2VisualContext_clearrenderdestinationTypePsx2MetaEnum == 0) {
         g_igPsx2VisualContext_clearrenderdestinationTypePsx2MetaEnum = igMetaEnum_Create("IG_GFX_CLEARRENDERDESTINATION_TYPE_PSX2", g_igPsx2VisualContext_clearrenderdestinationTypePsx2Names, g_igPsx2VisualContext_clearrenderdestinationTypePsx2Values, 2);
     }
@@ -21,14 +21,14 @@ static int g_igPsx2VisualContext_clippingTypePsx2Values[] = {
 };
 igMetaEnum *g_igPsx2VisualContext_clippingTypePsx2MetaEnum;
 
-int FUN_00150710(void) {
+int IG_GFX_CLIPPING_TYPE_PSX2_GetMetaEnum(void) {
     if (g_igPsx2VisualContext_clippingTypePsx2MetaEnum == 0) {
         g_igPsx2VisualContext_clippingTypePsx2MetaEnum = igMetaEnum_Create("IG_GFX_CLIPPING_TYPE_PSX2", g_igPsx2VisualContext_clippingTypePsx2Names, g_igPsx2VisualContext_clippingTypePsx2Values, 2);
     }
     return (int)g_igPsx2VisualContext_clippingTypePsx2MetaEnum;
 }
 
-igMetaObject *FUN_00150770(void) {
+igMetaObject *igPsx2VisualContext_GetOrCreateMetaObject(void) {
     if (g_igPsx2VisualContext_metaObject == 0) {
         g_igPsx2VisualContext_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -39,7 +39,7 @@ igMetaObject *igPsx2VisualContext_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2VisualContext_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001511a0();
+        igPsx2VisualContext_EnsureRegistered();
     return g_igPsx2VisualContext_metaObject;
 }
 
@@ -108,7 +108,7 @@ igSmartPointer<igObject> *igSmartPointer_igMemoryPool_Destruct(igSmartPointer<ig
     return self;
 }
 
-void **FUN_00150a70(void **arg0, long long arg1) {
+void **igSmartPointer_igTimer_Destruct(void **arg0, long long arg1) {
     char *o;
 
     if (arg0 != 0) {
@@ -263,12 +263,12 @@ int *FUN_00151190(int *arg0) {
     return arg0;
 }
 
-void FUN_001511a0(void)
+void igPsx2VisualContext_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2VisualContext_Register);
 }
 
-static igMetaObjectCallback g_igPsx2VisualContext_callbackList[] = { igIntList_EnsureRegistered, FUN_001525e0, igIndexArray_EnsureRegistered, FUN_0014c0d0, FUN_001e4820, FUN_00153000, 0 };
+static igMetaObjectCallback g_igPsx2VisualContext_callbackList[] = { igIntList_EnsureRegistered, igPsx2VertexArray1_1_EnsureRegistered, igIndexArray_EnsureRegistered, igPrimLengthArray_EnsureRegistered, igMatrixStack_EnsureRegistered, igPsx2ScissorExt_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2VisualContext_Register(void) {
     FUN_00149bc0();
@@ -276,8 +276,8 @@ CallbackArray *igPsx2VisualContext_Register(void) {
         0, /* abstract */
         &g_igPsx2VisualContext_metaObject,
         igVisualContext_Register,
-        FUN_00151230,
-        thunk_igPsx2VisualContext_GetMetaObject,
+        igVisualContext_GetPublishedMetaObject,
+        igPsx2VisualContext_GetMetaObjectFunction,
         "igPsx2VisualContext",
         0x618, /* instance size */
         igPsx2VisualContext_GetVTable,
@@ -287,7 +287,7 @@ CallbackArray *igPsx2VisualContext_Register(void) {
     );
 }
 
-igMetaObject *FUN_00151230(void) {
+igMetaObject *igVisualContext_GetPublishedMetaObject(void) {
     return g_igVisualContext_metaObject;
 }
 
@@ -1014,47 +1014,47 @@ void igPsx2VisualContext_InitFields(void) {
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x28), 0.0f);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x29), 1.0f);
     temp_s2_6 = igMetaObject_GetFieldAt(meta, fieldStart + 0x2A);
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)FUN_00152370();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)igPsx2VertexArray1_1_GetOrCreateMetaObject();
     temp_s2_7 = igMetaObject_GetFieldAt(meta, fieldStart + 0x2B);
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)FUN_0014d7f0();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)igIndexArray_GetOrCreateMetaObject();
     temp_s2_8 = igMetaObject_GetFieldAt(meta, fieldStart + 0x2C);
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)FUN_0014c030();
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)igPrimLengthArray_GetOrCreateMetaObject();
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x30), -1);
     temp_s2_9 = igMetaObject_GetFieldAt(meta, fieldStart + 0x32);
-    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = FUN_001e4740();
+    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_9)->_construct = 1;
     temp_s2_10 = igMetaObject_GetFieldAt(meta, fieldStart + 0x33);
-    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = FUN_001e4740();
+    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_10)->_construct = 1;
     temp_s2_11 = igMetaObject_GetFieldAt(meta, fieldStart + 0x34);
-    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = FUN_001e4740();
+    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_11)->_construct = 1;
     temp_s2_12 = igMetaObject_GetFieldAt(meta, fieldStart + 0x35);
-    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = FUN_001e4740();
+    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_12)->_construct = 1;
     temp_s2_13 = igMetaObject_GetFieldAt(meta, fieldStart + 0x36);
-    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = FUN_001e4740();
+    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_13)->_construct = 1;
     temp_s2_14 = igMetaObject_GetFieldAt(meta, fieldStart + 0x37);
-    ((igObjectRefMetaField *)temp_s2_14)->_metaObject = FUN_001e4740();
+    ((igObjectRefMetaField *)temp_s2_14)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_14)->_construct = 1;
     temp_s2_15 = igMetaObject_GetFieldAt(meta, fieldStart + 0x38);
-    ((igObjectRefMetaField *)temp_s2_15)->_metaObject = FUN_001e4740();
+    ((igObjectRefMetaField *)temp_s2_15)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_15)->_construct = 1;
     temp_s2_16 = igMetaObject_GetFieldAt(meta, fieldStart + 0x39);
-    ((igObjectRefMetaField *)temp_s2_16)->_metaObject = FUN_001e4740();
+    ((igObjectRefMetaField *)temp_s2_16)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_16)->_construct = 1;
     temp_s2_17 = igMetaObject_GetFieldAt(meta, fieldStart + 0x3A);
-    ((igObjectRefMetaField *)temp_s2_17)->_metaObject = FUN_001e4740();
+    ((igObjectRefMetaField *)temp_s2_17)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_17)->_construct = 1;
     temp_s2_18 = igMetaObject_GetFieldAt(meta, fieldStart + 0x3B);
-    ((igObjectRefMetaField *)temp_s2_18)->_metaObject = FUN_001e4740();
+    ((igObjectRefMetaField *)temp_s2_18)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_18)->_construct = 1;
     temp_s2_19 = igMetaObject_GetFieldAt(meta, fieldStart + 0x3C);
-    ((igObjectRefMetaField *)temp_s2_19)->_metaObject = FUN_001e4740();
+    ((igObjectRefMetaField *)temp_s2_19)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_19)->_construct = 1;
     temp_s2_20 = igMetaObject_GetFieldAt(meta, fieldStart + 0x3D);
-    ((igObjectRefMetaField *)temp_s2_20)->_metaObject = FUN_001e4740();
+    ((igObjectRefMetaField *)temp_s2_20)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_20)->_construct = 1;
     temp_v0_7 = igMetaObject_GetFieldAt(meta, fieldStart + 0x41);
     igEnumMetaField_SetDefaultValue(temp_v0_7, g_igPsx2VisualContext_alphaFuncDefault);
@@ -1069,7 +1069,7 @@ void igPsx2VisualContext_InitFields(void) {
     *(int (**)())&((igEnumArrayMetaField *)temp_v0_9)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
     { igMetaField *q = igMetaObject_GetFieldAt(meta, fieldStart + 0x46); ((igIntArrayMetaField *)q)->_num = 0x10; }
     temp_s2_21 = igMetaObject_GetFieldAt(meta, fieldStart + 0x48);
-    ((igObjectRefMetaField *)temp_s2_21)->_metaObject = (int)FUN_00152e80();
+    ((igObjectRefMetaField *)temp_s2_21)->_metaObject = (int)igPsx2ScissorExt_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_21)->_refCounted = 0;
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x4B), 0x280);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x4C), 0x1C0);
@@ -1092,7 +1092,7 @@ void igPsx2VisualContext_InitFields(void) {
     *(int (**)())&((igEnumMetaField *)temp_v0_13)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
     temp_v0_14 = igMetaObject_GetFieldAt(meta, fieldStart + 0x5A);
     igEnumMetaField_SetDefaultValue(temp_v0_14, g_igPsx2VisualContext_stencilFuncDefault);
-    *(int (**)())&((igEnumMetaField *)temp_v0_14)->_getMetaEnumFunction = FUN_00149500;
+    *(int (**)())&((igEnumMetaField *)temp_v0_14)->_getMetaEnumFunction = IG_GFX_STENCIL_FUNCTION_GetMetaEnum;
     temp_v0_15 = igMetaObject_GetFieldAt(meta, fieldStart + 0x5B);
     igEnumMetaField_SetDefaultValue(temp_v0_15, 0);
     *(int (**)())&((igEnumMetaField *)temp_v0_15)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
@@ -1167,7 +1167,7 @@ void igPsx2VisualContext_InitFields(void) {
     temp_v0_30 = igMetaObject_GetFieldAt(meta, fieldStart + 0x87);
     igEnumMetaField_SetDefaultValue(temp_v0_30, 0);
     ((igMetaField *)temp_v0_30)->_persistent = 0;
-    *(int (**)())&((igEnumMetaField *)temp_v0_30)->_getMetaEnumFunction = FUN_00149920;
+    *(int (**)())&((igEnumMetaField *)temp_v0_30)->_getMetaEnumFunction = IG_GFX_TEXTURE_WRAP_GetMetaEnum;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x88))->_persistent = 0;
     temp_v0_31 = igMetaObject_GetFieldAt(meta, fieldStart + 0x89);
     igEnumMetaField_SetDefaultValue(temp_v0_31, 0);
@@ -1180,15 +1180,15 @@ void igPsx2VisualContext_InitFields(void) {
     temp_v0_33 = igMetaObject_GetFieldAt(meta, fieldStart + 0x8B);
     igEnumMetaField_SetDefaultValue(temp_v0_33, 0);
     ((igMetaField *)temp_v0_33)->_persistent = 0;
-    *(int (**)())&((igEnumMetaField *)temp_v0_33)->_getMetaEnumFunction = FUN_00149800;
+    *(int (**)())&((igEnumMetaField *)temp_v0_33)->_getMetaEnumFunction = IG_GFX_PIXEL_PIPELINE_MODE_GetMetaEnum;
     temp_v0_34 = igMetaObject_GetFieldAt(meta, fieldStart + 0x8C);
     igEnumMetaField_SetDefaultValue(temp_v0_34, 0);
     ((igMetaField *)temp_v0_34)->_persistent = 0;
-    *(int (**)())&((igEnumMetaField *)temp_v0_34)->_getMetaEnumFunction = FUN_00150710;
+    *(int (**)())&((igEnumMetaField *)temp_v0_34)->_getMetaEnumFunction = IG_GFX_CLIPPING_TYPE_PSX2_GetMetaEnum;
     temp_v0_35 = igMetaObject_GetFieldAt(meta, fieldStart + 0x8D);
     igEnumMetaField_SetDefaultValue(temp_v0_35, g_igPsx2VisualContext_clearTypeDefault);
     ((igMetaField *)temp_v0_35)->_persistent = 0;
-    *(int (**)())&((igEnumMetaField *)temp_v0_35)->_getMetaEnumFunction = FUN_001506b0;
+    *(int (**)())&((igEnumMetaField *)temp_v0_35)->_getMetaEnumFunction = IG_GFX_CLEARRENDERDESTINATION_TYPE_PSX2_GetMetaEnum;
     temp_v0_36 = igMetaObject_GetFieldAt(meta, fieldStart + 0x8E);
     ((igUnsignedIntArrayMetaField *)temp_v0_36)->_num = 3;
     ((igMetaField *)temp_v0_36)->_persistent = 0;
@@ -1196,6 +1196,6 @@ void igPsx2VisualContext_InitFields(void) {
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x90))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x91))->_persistent = 0;
     igMetaObject_NameFields(meta, g_igPsx2VisualContext_fieldTable, g_igPsx2VisualContext_fieldHandles, g_igPsx2VisualContext_fieldOffsets, fieldStart);
-    *(int *)((char *)(g_igPsx2VisualContext_metaObject) + 64) = (int)(&thunk_igVisualContext_GetMetaObject);
+    *(int *)((char *)(g_igPsx2VisualContext_metaObject) + 64) = (int)(&igVisualContext_GetMetaObjectFunction);
 }
 

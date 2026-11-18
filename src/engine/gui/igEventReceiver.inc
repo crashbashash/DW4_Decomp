@@ -28,7 +28,7 @@ CallbackArray *igEventReceiver_Register(void) {
         &g_igEventReceiver_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igEventReceiver_GetMetaObject,
+        igEventReceiver_GetMetaObjectFunction,
         "igEventReceiver",
         8, /* instance size */
         igEventReceiver_GetVTable,
@@ -38,7 +38,7 @@ CallbackArray *igEventReceiver_Register(void) {
     );
 }
 
-void thunk_igEventReceiver_GetMetaObject(void) {
+void igEventReceiver_GetMetaObjectFunction(void) {
     igEventReceiver_GetMetaObject();
 }
 

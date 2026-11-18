@@ -1,4 +1,4 @@
-void Gap__Attrs__igParticleAttr__vfunc_24(igParticleAttr *arg0, char *arg1) {
+void igParticleAttr_apply(igParticleAttr *arg0, char *arg1) {
     int sp4C;
     float temp_f20;
     float t2;
@@ -18,7 +18,7 @@ void Gap__Attrs__igParticleAttr__vfunc_24(igParticleAttr *arg0, char *arg1) {
     }
 }
 
-void Gap__Attrs__igParticleAttr__vfunc_32(igParticleAttr *self, igObject *particleArray, int particleNum, int particleOffset) {
+void igParticleAttr_SetParticleArray(igParticleAttr *self, igObject *particleArray, int particleNum, int particleOffset) {
     igObject *previous;
     if (particleArray != 0) {
         particleArray->_refCount = particleArray->_refCount + 1;

@@ -18,7 +18,7 @@ igMetaField *g_igShaderFactory_attrNamesMetaField;
 igMetaField *g_igShaderFactory_attrTypesMetaField;
 igMetaField *g_igShaderFactory_fileCachingModeMetaField;
 
-igMetaObject *FUN_00199170(void) {
+igMetaObject *igShaderFactory_GetOrCreateMetaObject(void) {
     if (g_igShaderFactory_metaObject == 0) {
         g_igShaderFactory_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -29,7 +29,7 @@ igMetaObject *igShaderFactory_GetMetaObject(void)
 {
     igMetaObject *g = g_igShaderFactory_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001994d0();
+        igShaderFactory_EnsureRegistered();
     return g_igShaderFactory_metaObject;
 }
 
@@ -144,7 +144,7 @@ igSmartPointer<igObject> *igSmartPointer_igNamedObjectList_Destruct(igSmartPoint
     return self;
 }
 
-void FUN_001994d0(void)
+void igShaderFactory_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igShaderFactory_Register);
 }
@@ -158,7 +158,7 @@ CallbackArray *igShaderFactory_Register(void) {
         &g_igShaderFactory_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igShaderFactory_GetMetaObject,
+        igShaderFactory_GetMetaObjectFunction,
         "igShaderFactory",
         0x18, /* instance size */
         igShaderFactory_GetVTable,
@@ -168,7 +168,7 @@ CallbackArray *igShaderFactory_Register(void) {
     );
 }
 
-void thunk_igShaderFactory_GetMetaObject(void) {
+void igShaderFactory_GetMetaObjectFunction(void) {
     igShaderFactory_GetMetaObject();
 }
 

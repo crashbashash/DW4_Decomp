@@ -1,12 +1,12 @@
 int g_igBlendFunctionAttr_blendEquationExt;
-void Gap__Attrs__igBlendFunctionAttr__vfunc_12(void **arg0) {
+void igBlendFunctionAttr_ReleaseDefaults(void **arg0) {
     if (igMetaObject_CountInstances((igMetaObject *)(((DW4VC_88_0 *)(arg0))->vX()), 1) == 0) {
         g_igBlendFunctionAttr_blendEquationExt = 0;
     }
     igObject_ReleaseDefaults((igObject *)arg0);
 }
 
-igMetaObject *Gap__Attrs__igBlendFunctionAttr__vfunc_22(void) {
+igMetaObject *igBlendFunctionAttr_GetMeta(void) {
     return g_igBlendFunctionAttr_metaObject;
 }
 
@@ -36,7 +36,7 @@ extern "C" void Gap__Attrs__igBlendFunctionAttr__apply(igBlendFunctionAttr *self
     }
 }
 
-void Gap__Attrs__igBlendFunctionAttr__vfunc_26(void **arg0, void **arg1) {
+void igBlendFunctionAttr_SynchronizeDefault(void **arg0, void **arg1) {
     ((DW4VC_128_1 *)(arg0))->vX((int)(((DW4VC_620_0 *)(arg1))->vX()));
     ((DW4VC_132_1_13c350 *)(arg0))->vX((int)(((DW4VC_628_0 *)(arg1))->vX()));
     if (g_igBlendFunctionAttr_blendEquationExt == 0) {
@@ -46,34 +46,34 @@ void Gap__Attrs__igBlendFunctionAttr__vfunc_26(void **arg0, void **arg1) {
 
 /* Setter for the destination blend factor (`_dst`, +16); `_src` at +12 is the source factor. */
 
-void Gap__Attrs__igBlendFunctionAttr__vfunc_33(igBlendFunctionAttr *self, int dstFactor) {
+void igBlendFunctionAttr_SetDestination(igBlendFunctionAttr *self, int dstFactor) {
     self->_dst = dstFactor;
 }
 
-void Gap__Attrs__igBlendFunctionAttr__vfunc_32(void *arg0, int arg1) {
+void igBlendFunctionAttr_SetSource(void *arg0, int arg1) {
     *(int *)((char *)(arg0) + 12) = arg1;
 }
 
-void FUN_0013c420(void *arg0) {
-    *(short *)((char *)(arg0) + 10) = (short) *(short *)((char *)(arg0) + 30);
+void igBlendFunctionAttr_SynchronizeCachedUnitID(igBlendFunctionAttr *self) {
+    self->_cachedUnitID = self->_blendStage;
 }
 
-void Gap__Attrs__igBlendFunctionAttr__vfunc_25(int a0, int a1) {
-    *(short *)((char *)a0 + 30) = (short)a1;
-    FUN_0013b810(a0, a1);
+void igBlendFunctionAttr_SetUnitID(igBlendFunctionAttr *self, int unitID) {
+    self->_blendStage = (short)unitID;
+    igAttr_SetUnitID((int)self, unitID);
 }
 
-void Gap__Attrs__igBlendFunctionAttr__vfunc_17(void *arg0) {
-    FUN_0013b820(arg0);
-    FUN_0013b810((int)arg0, *(short *)((char *)(arg0) + 30));
+void igBlendFunctionAttr_UserPostLoad(igBlendFunctionAttr *self) {
+    igAttr_UserPostLoad(self);
+    igAttr_SetUnitID((int)self, (short)self->_blendStage);
 }
 
-void FUN_0013c470(igBlendFunctionAttr *attr)
+void igBlendFunctionAttr_SynchronizeBlendConstant(igBlendFunctionAttr *attr)
 {
     attr->_blendConstant = (unsigned int)(128.0f * attr->_blendConstantFloat);
 }
 
-void Gap__Attrs__igBlendFunctionAttr__vfunc_31(igBlendFunctionAttrView *self, igVisualContextView *context)
+void igBlendFunctionAttr_GetUnitCount(igBlendFunctionAttrView *self, igVisualContextView *context)
 {
     context->vfunc_21(22);
 }

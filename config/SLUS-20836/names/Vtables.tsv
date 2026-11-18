@@ -10,8 +10,3 @@
 # template base with no MetaObject stay anonymous --.
 #
 # <va>	<name>	<module>
-0x001dcf40	Gap::Sg::igTransform::vfunc_7	engine
-0x001dcf90	Gap::Sg::igTransform::vfunc_24	engine
-0x001dd010	Gap::Sg::igTransform::vfunc_25	engine
-0x001dd070	Gap::Sg::igTransform::vfunc_28	engine
-0x001dd080	Gap::Sg::igTransform::vfunc_29	engine

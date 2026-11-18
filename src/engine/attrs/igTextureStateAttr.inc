@@ -4,7 +4,7 @@ igMetaField *g_igTextureStateAttr_unitIDMetaField;
 
 igTextureStateAttr *igTextureStateAttr_CreateInstance(int allocator) {
     igTextureStateAttr_EnsureRegistered();
-    return (igTextureStateAttr *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55ECA8, (igMemoryPoolView *)allocator);
+    return (igTextureStateAttr *)igMetaObject_CreateInstance(g_igTextureStateAttr_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igTextureStateAttr_GetOrCreateMetaObject(void) {
@@ -46,7 +46,7 @@ CallbackArray *igTextureStateAttr_Register(void) {
         &g_igTextureStateAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igTextureStateAttr_GetMetaObject,
+        igTextureStateAttr_GetMetaObjectFunction,
         "igTextureStateAttr",
         0x14, /* instance size */
         igTextureStateAttr_GetVTable,
@@ -56,7 +56,7 @@ CallbackArray *igTextureStateAttr_Register(void) {
     );
 }
 
-void thunk_igTextureStateAttr_GetMetaObject(void) {
+void igTextureStateAttr_GetMetaObjectFunction(void) {
     igTextureStateAttr_GetMetaObject();
 }
 
@@ -78,14 +78,14 @@ static int g_igTextureStateAttr_fieldOffsets[] = {
 };
 
 void igTextureStateAttr_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
-    temp_s0 = g_igTextureStateAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igTextureStateAttr_ctorTable, 2);
-    temp_s1 = igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
-    *(int *)((char *)temp_s1 + 48) = (int)FUN_00141710;
-    igMetaObject_NameFields(temp_s0, g_igTextureStateAttr_fieldTable, g_igTextureStateAttr_fieldHandles, g_igTextureStateAttr_fieldOffsets, temp_s2);
+    int base;
+    void *field;
+    igMetaObject *meta;
+    meta = g_igTextureStateAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igTextureStateAttr_ctorTable, 2);
+    field = igMetaObject_GetFieldAt(meta, base + 1);
+    ((igMetaField *)field)->_invarianceFunction = (int)igTextureStateAttr_SynchronizeCachedUnitID;
+    igMetaObject_NameFields(meta, g_igTextureStateAttr_fieldTable, g_igTextureStateAttr_fieldHandles, g_igTextureStateAttr_fieldOffsets, base);
 }
 

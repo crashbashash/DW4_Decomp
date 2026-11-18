@@ -26,7 +26,7 @@ void igAnimationCombinerBoneInfoPool_RunStaticInit(void)
     igMetaObject_RunStaticInit(igAnimationCombinerBoneInfoPool_Register);
 }
 
-static igMetaObjectCallback g_igAnimationCombinerBoneInfoPool_callbackList[] = { FUN_001a8220, 0 };
+static igMetaObjectCallback g_igAnimationCombinerBoneInfoPool_callbackList[] = { igAnimationCombinerBoneInfo_EnsureRegistered, 0 };
 
 CallbackArray *igAnimationCombinerBoneInfoPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();

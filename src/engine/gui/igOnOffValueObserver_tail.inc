@@ -1,4 +1,4 @@
-void Gap__Gui__igOnOffValueObserver__vfunc_24(void *arg0, void *arg1) {
+void igOnOffValueObserver_OnModelChange(void *arg0, void *arg1) {
     if ((*(int *)((char *)arg1 + 8) == (int)g_igOnOffModel_valueMetaField) || (*(int *)((char *)arg1 + 0) == 0)) {
         FUN_00457ab0((igRadioGroup *)(*(int *)((char *)arg0 + 12)), (igRadioGroupSelectedObserver *)arg0, (int)arg0);
     }

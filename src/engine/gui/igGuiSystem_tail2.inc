@@ -58,7 +58,7 @@ void FUN_004570a0(void *arg0) {
     }
 }
 
-int Gap__Gui__igGuiSystem__vfunc_24(A_457100 *arg0, float fparg0, float fparg1) {
+int igGuiSystem_MouseMotionEvent(A_457100 *arg0, float fparg0, float fparg1) {
     struct { int a; int b; int c; } s;
     B_457100 *temp_v1;
 
@@ -75,7 +75,7 @@ int Gap__Gui__igGuiSystem__vfunc_24(A_457100 *arg0, float fparg0, float fparg1) 
     return arg0->fc->fb0 != 0;
 }
 
-int Gap__Gui__igGuiSystem__vfunc_32(int *self, int x, int y) {
+int igGuiSystem_WindowResizeEvent(int *self, int x, int y) {
     struct P_457170 p;
     float *f = (float *)self[3];
     f[3] = (float)x;
@@ -87,7 +87,7 @@ int Gap__Gui__igGuiSystem__vfunc_32(int *self, int x, int y) {
     return 0;
 }
 
-int Gap__Gui__igGuiSystem__vfunc_34(igGuiSystem *arg0) {
+int igGuiSystem_WindowCloseEvent(igGuiSystem *arg0) {
     int buf[3];
 
     *(char *)((char *)(arg0->_model) + 180) = 1;
@@ -98,7 +98,7 @@ int Gap__Gui__igGuiSystem__vfunc_34(igGuiSystem *arg0) {
     return 1;
 }
 
-int Gap__Gui__igGuiSystem__vfunc_25(struct P_457220 *arg0, int arg1, char arg2) {
+int igGuiSystem_MouseButtonEvent(struct P_457220 *arg0, int arg1, char arg2) {
     int sp[3];
     struct O_457220 *o;
 
@@ -117,7 +117,7 @@ int Gap__Gui__igGuiSystem__vfunc_25(struct P_457220 *arg0, int arg1, char arg2) 
     return arg0->o->fac != 0;
 }
 
-bool Gap__Gui__igGuiSystem__vfunc_27(igGuiSystem *system, int device, int key, int pressed) {
+bool igGuiSystem_ControllerButtonEvent(igGuiSystem *system, int device, int key, int pressed) {
     bool handled;
 
     if (!((GuiModelView *)system->_model)->enabled) {
@@ -171,7 +171,7 @@ bool Gap__Gui__igGuiSystem__vfunc_27(igGuiSystem *system, int device, int key, i
     return handled;
 }
 
-int Gap__Gui__igGuiSystem__vfunc_26(void) {
+int igGuiSystem_ControllerMotionEvent(void) {
     return 0;
 }
 
@@ -199,7 +199,7 @@ static inline void assign(igObject **slot, igObject *value) {
 }
 
 void igHotKeyEventReceiver_AddBinding(igHotKeyEventReceiver *receiver, int key, int button, igObject *action) {
-    igSmartPointer<Entry> entry((Entry *)FUN_0044dc20((int)(igObject_GetAllocator(receiver))));
+    igSmartPointer<Entry> entry((Entry *)igHotKeyBinding_Create((int)(igObject_GetAllocator(receiver))));
     entry->a = key;
     entry->b = button;
     assign(&entry->value, action);

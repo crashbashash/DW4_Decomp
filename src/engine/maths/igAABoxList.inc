@@ -37,7 +37,7 @@ CallbackArray *igAABoxList_Register(void) {
         &g_igAABoxList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igAABoxList_GetMetaObject,
+        igAABoxList_GetMetaObjectFunction,
         "igAABoxList",
         0x14, /* instance size */
         igAABoxList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igAABoxList_Register(void) {
     );
 }
 
-void thunk_igAABoxList_GetMetaObject(void) {
+void igAABoxList_GetMetaObjectFunction(void) {
     igAABoxList_GetMetaObject();
 }
 

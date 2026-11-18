@@ -40,7 +40,7 @@ int igSceneInfo_GetVTable(void) {
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igSceneInfo_vtable[0];
     igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)&obj.w15, -1);
-    FUN_0019b1f0((void * *)&obj.w7, -1);
+    igSmartPointer_igGraphPathList_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
     igSmartPointer_igTextureList_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
     igSmartPointer_igNode_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
     igInfo_Destroy((igInfo *)&obj, 0);
@@ -118,22 +118,17 @@ void *igSceneInfo_Destroy(igSceneInfo *arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_0019b1f0(void **arg0, short arg1) {
-    S_temp_a0_19b1f0 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0_19b1f0 *)(*arg0);
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
+igSmartPointer<igObject> *igSmartPointer_igGraphPathList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 void igSceneInfo_EnsureRegistered(void)
@@ -150,7 +145,7 @@ CallbackArray *igSceneInfo_Register(void) {
         &g_igSceneInfo_metaObject,
         igInfo_Register,
         igInfo_GetPublishedMetaObject,
-        thunk_igSceneInfo_GetMetaObject,
+        igSceneInfo_GetMetaObjectFunction,
         "igSceneInfo",
         0x40, /* instance size */
         igSceneInfo_GetVTable,
@@ -160,7 +155,7 @@ CallbackArray *igSceneInfo_Register(void) {
     );
 }
 
-void thunk_igSceneInfo_GetMetaObject(void) {
+void igSceneInfo_GetMetaObjectFunction(void) {
     igSceneInfo_GetMetaObject();
 }
 
@@ -222,7 +217,7 @@ void igSceneInfo_InitFields(void) {
     ((igMetaField *)temp_s2_2)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s2_2)->_shallowCopyMethod = 2;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0019f4c0();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igGraphPathList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     ((igMetaField *)temp_s2_3)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s2_3)->_shallowCopyMethod = 2;

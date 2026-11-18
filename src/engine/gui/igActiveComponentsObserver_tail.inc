@@ -5,7 +5,7 @@ static inline void setComponent_4561e0(int *slot, igObject *next) {
     igRelease((igObject *)*slot);
     *slot = (int)next;
 }
-void Gap__Gui__igActiveComponentsObserver__vfunc_24(igActiveComponentsObserver *self, struct GuiMessage_455d80 *msg) {
+void igActiveComponentsObserver_OnModelChange(igActiveComponentsObserver *self, struct GuiMessage_455d80 *msg) {
     igGuiSystemModel *model;
     int type;
     type = msg->type;

@@ -3,7 +3,7 @@ igMetaField *g_igMessageDefaultReceiver_msgHandlerMetaField;
 igMetaField *g_igMessageDefaultReceiver_msgHandlerFuncMetaField;
 
 igMessageDefaultReceiver *igMessageDefaultReceiver_CreateInstance(int allocator) {
-    FUN_00232320();
+    igMessageDefaultReceiver_EnsureRegistered();
     return (igMessageDefaultReceiver *)igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x56DB30), (igMemoryPoolView *)allocator);
 }
 
@@ -14,7 +14,7 @@ igMetaObject *igMessageDefaultReceiver_GetMetaObject(void)
         ready = (g_igMessageDefaultReceiver_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_00232320();
+    igMessageDefaultReceiver_EnsureRegistered();
 done:
     return g_igMessageDefaultReceiver_metaObject;
 }
@@ -44,7 +44,7 @@ int igMessageDefaultReceiver_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00232320(void)
+void igMessageDefaultReceiver_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igMessageDefaultReceiver_Register);
 }
@@ -58,7 +58,7 @@ CallbackArray *igMessageDefaultReceiver_Register(void) {
         &g_igMessageDefaultReceiver_metaObject,
         igMessageReceiver_Register,
         igMessageReceiver_GetPublishedMetaObject,
-        thunk_igMessageDefaultReceiver_GetMetaObject,
+        igMessageDefaultReceiver_GetMetaObjectFunction,
         "igMessageDefaultReceiver",
         0x18, /* instance size */
         igMessageDefaultReceiver_GetVTable,
@@ -68,11 +68,11 @@ CallbackArray *igMessageDefaultReceiver_Register(void) {
     );
 }
 
-void thunk_igMessageDefaultReceiver_GetMetaObject(void) {
+void igMessageDefaultReceiver_GetMetaObjectFunction(void) {
     igMessageDefaultReceiver_GetMetaObject();
 }
 
-igMetaObject *FUN_002323c0(void) {
+igMetaObject *igMessageReceiver_GetPublishedMetaObject(void) {
     return g_igMessageReceiver_metaObject;
 }
 

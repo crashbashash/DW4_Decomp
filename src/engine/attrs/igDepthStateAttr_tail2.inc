@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igDepthStateAttr__vfunc_22(void) {
+igMetaObject *igDepthStateAttr_GetMeta(void) {
     return g_igDepthStateAttr_metaObject;
 }
 

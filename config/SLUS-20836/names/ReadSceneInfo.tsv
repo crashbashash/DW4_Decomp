@@ -3,7 +3,6 @@
 0x001d65e0	igSceneInfo_CollectCameras	engine
 0x001d6700	igSceneInfo_ComputeAnimationRange	engine
 0x00236f30	igInsightCore_RemoveRenderer	engine
-0x00238110	ViewerOptions_Construct	engine
 0x00453a20	igGuiComponent_AppendChild	engine
 0x004542a0	igEventDispatcher_RemoveReceiver	engine
 0x004573c0	igHotKeyEventReceiver_AddKey	engine

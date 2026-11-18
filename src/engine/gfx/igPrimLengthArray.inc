@@ -3,12 +3,12 @@ igMetaField *g_igPrimLengthArray_lengthDataMetaField;
 igMetaField *g_igPrimLengthArray_numStripsMetaField;
 igMetaField *g_igPrimLengthArray_dataSizeMetaField;
 
-void FUN_0014bff0(int arg0) {
-    FUN_0014c0d0();
+void igPrimLengthArray_Create(int arg0) {
+    igPrimLengthArray_EnsureRegistered();
     igMetaObject_CreateInstance(g_igPrimLengthArray_metaObject, (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *FUN_0014c030(void) {
+igMetaObject *igPrimLengthArray_GetOrCreateMetaObject(void) {
     if (g_igPrimLengthArray_metaObject == 0) {
         g_igPrimLengthArray_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -19,11 +19,11 @@ igMetaObject *igPrimLengthArray_GetMetaObject(void)
 {
     igMetaObject *g = g_igPrimLengthArray_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014c0d0();
+        igPrimLengthArray_EnsureRegistered();
     return g_igPrimLengthArray_metaObject;
 }
 
-void FUN_0014c0d0(void)
+void igPrimLengthArray_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPrimLengthArray_Register);
 }
@@ -35,7 +35,7 @@ CallbackArray *igPrimLengthArray_Register(void) {
         &g_igPrimLengthArray_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igPrimLengthArray_GetMetaObject,
+        igPrimLengthArray_GetMetaObjectFunction,
         "igPrimLengthArray",
         0x14, /* instance size */
         0,
@@ -45,7 +45,7 @@ CallbackArray *igPrimLengthArray_Register(void) {
     );
 }
 
-void thunk_igPrimLengthArray_GetMetaObject(void) {
+void igPrimLengthArray_GetMetaObjectFunction(void) {
     igPrimLengthArray_GetMetaObject();
 }
 
@@ -85,7 +85,7 @@ void igPrimLengthArray_InitFields(void) {
     ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;
     igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 2), 0x20);
     igMetaObject_NameFields(meta, g_igPrimLengthArray_fieldTable, g_igPrimLengthArray_fieldHandles, g_igPrimLengthArray_fieldOffsets, fieldStart);
-    *(int *)((char *)(g_igPrimLengthArray_metaObject) + 60) = (int)(thunk_FUN_0014bde0);
+    *(int *)((char *)(g_igPrimLengthArray_metaObject) + 60) = (int)(igPrimLengthArray1_1_GetMetaObjectFunction);
 }
 
 static const char *g_igPrimLengthArray_spriteTypeNames[] = {
@@ -96,7 +96,7 @@ static int g_igPrimLengthArray_spriteTypeValues[] = {
 };
 igMetaEnum *g_igPrimLengthArray_spriteTypeMetaEnum;
 
-int FUN_0014c230(void) {
+int IG_GFX_SPRITE_TYPE_GetMetaEnum(void) {
     if (g_igPrimLengthArray_spriteTypeMetaEnum == 0) {
         g_igPrimLengthArray_spriteTypeMetaEnum = igMetaEnum_Create("IG_GFX_SPRITE_TYPE", g_igPrimLengthArray_spriteTypeNames, g_igPrimLengthArray_spriteTypeValues, 2);
     }

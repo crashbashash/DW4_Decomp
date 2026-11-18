@@ -1,4 +1,4 @@
-int Gap__igVec3fList__vfunc_23(void) {
+int igVec3fList_GetElementSize(void) {
     return 0xC;
 }
 

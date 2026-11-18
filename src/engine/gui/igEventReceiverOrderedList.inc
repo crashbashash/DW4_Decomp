@@ -1,6 +1,6 @@
 igMetaObject *g_igEventReceiverOrderedList_metaObject;
 
-igMetaObject *FUN_00451050(void) {
+igMetaObject *igEventReceiverOrderedList_GetOrCreateMetaObject(void) {
     if (g_igEventReceiverOrderedList_metaObject == 0) {
         g_igEventReceiverOrderedList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -61,7 +61,7 @@ CallbackArray *igEventReceiverOrderedList_Register(void) {
         &g_igEventReceiverOrderedList_metaObject,
         igDependencyOrderedList_Register,
         igDependencyOrderedList_GetPublishedMetaObject,
-        thunk_igEventReceiverOrderedList_GetMetaObject,
+        igEventReceiverOrderedList_GetMetaObjectFunction,
         "igEventReceiverOrderedList",
         0x1C, /* instance size */
         igEventReceiverOrderedList_GetVTable,
@@ -71,7 +71,7 @@ CallbackArray *igEventReceiverOrderedList_Register(void) {
     );
 }
 
-void thunk_igEventReceiverOrderedList_GetMetaObject(void) {
+void igEventReceiverOrderedList_GetMetaObjectFunction(void) {
     igEventReceiverOrderedList_GetMetaObject();
 }
 

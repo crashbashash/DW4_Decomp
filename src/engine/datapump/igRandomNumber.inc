@@ -27,21 +27,21 @@ CallbackArray *igRandomNumber_Register(void) {
         &g_igRandomNumber_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igRandomNumber_GetMetaObject,
+        igRandomNumber_GetMetaObjectFunction,
         "igRandomNumber",
         8, /* instance size */
         0,
-        igRandomNumber_InitFields_001e4370,
+        igRandomNumber_SetAbstractProxy,
         0, /* extra callback item */
         0 /* callback list */
     );
 }
 
-void thunk_igRandomNumber_GetMetaObject(void) {
+void igRandomNumber_GetMetaObjectFunction(void) {
     igRandomNumber_GetMetaObject();
 }
 
-void FUN_001e4370(void) {
-    *(int *)((char *)(g_igRandomNumber_metaObject) + 60) = (int)(&thunk_igMersenneTwisterRandomNumber_GetMetaObject);
+void igRandomNumber_SetAbstractProxy(void) {
+    g_igRandomNumber_metaObject->_abstractProxy = (int)&igMersenneTwisterRandomNumber_GetMetaObjectFunction;
 }
 

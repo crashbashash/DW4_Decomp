@@ -17,7 +17,7 @@ igMetaField *g_igTextureAttr_videoBufferMetaField;
 
 igTextureAttr *igTextureAttr_CreateInstance(int allocator) {
     igTextureAttr_EnsureRegistered();
-    return (igTextureAttr *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55EDA0, (igMemoryPoolView *)allocator);
+    return (igTextureAttr *)igMetaObject_CreateInstance(g_igTextureAttr_metaObject, (igMemoryPoolView *)allocator);
 }
 
 igMetaObject *igTextureAttr_GetOrCreateMetaObject(void) {
@@ -77,7 +77,7 @@ CallbackArray *igTextureAttr_Register(void) {
         &g_igTextureAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igTextureAttr_GetMetaObject,
+        igTextureAttr_GetMetaObjectFunction,
         "igTextureAttr",
         0x48, /* instance size */
         igTextureAttr_GetVTable,
@@ -87,7 +87,7 @@ CallbackArray *igTextureAttr_Register(void) {
     );
 }
 
-void thunk_igTextureAttr_GetMetaObject(void) {
+void igTextureAttr_GetMetaObjectFunction(void) {
     igTextureAttr_GetMetaObject();
 }
 
@@ -164,62 +164,62 @@ int g_igTextureAttr_wrapSDefault = 1;
 int g_igTextureAttr_wrapTDefault = 1;
 
 void igTextureAttr_InitFields(void) {
-    igMetaObject *temp_s0;
-    int temp_s1;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_v0;
-    void *temp_v0_2;
-    void *temp_v0_3;
-    void *temp_v0_4;
-    void *temp_v0_5;
-    void *temp_v0_6;
-    void *temp_v0_7;
+    igMetaObject *meta;
+    int base;
+    void *field;
+    void *field2;
+    void *field3;
+    void *field4;
+    void *field5;
+    void *field6;
+    void *field7;
+    void *field8;
+    void *field9;
+    void *field10;
+    void *field11;
 
-    temp_s0 = g_igTextureAttr_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igTextureAttr_ctorTable, 0xF);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 1));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
-    *(void **)&((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (void *)IG_GFX_TEXTURE_FILTER_GetMetaEnum;
-    temp_v0_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_2, 0);
-    *(void **)&((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (void *)IG_GFX_TEXTURE_FILTER_GetMetaEnum;
-    temp_v0_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 3));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_3, g_igTextureAttr_wrapSDefault);
-    *(void **)&((igEnumMetaField *)temp_v0_3)->_getMetaEnumFunction = (void *)FUN_00149920;
-    temp_v0_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 4));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_4, g_igTextureAttr_wrapTDefault);
-    *(void **)&((igEnumMetaField *)temp_v0_4)->_getMetaEnumFunction = (void *)FUN_00149920;
-    temp_v0_5 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 5));
-    igIntMetaField_SetDefault((igMetaField *)temp_v0_5, -1);
-    ((igIntMetaField *)temp_v0_5)->_persistent = 0;
-    ((igIntMetaField *)temp_v0_5)->_deepCopyMethod = 4;
-    ((igIntMetaField *)temp_v0_5)->_shallowCopyMethod = 4;
-    ((igIntMetaField *)temp_v0_5)->_isAlikeShallowMethod = 3;
-    temp_v0_6 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 6));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_6, 0);
-    *(void **)&((igEnumMetaField *)temp_v0_6)->_getMetaEnumFunction = (void *)FUN_00149860;
-    temp_v0_7 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 7));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_7, 0);
-    *(void **)&((igEnumMetaField *)temp_v0_7)->_getMetaEnumFunction = (void *)FUN_001498c0;
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 8));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igImage_GetOrCreateMetaObject();
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xA));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_00131160();
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xB), 1);
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xC));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_00132ff0();
-    ((igObjectRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xD));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)temp_s2_4)->_persistent = 0;
-    ((igObjectRefMetaField *)temp_s2_4)->_deepCopyMethod = 1;
-    ((igObjectRefMetaField *)temp_s2_4)->_shallowCopyMethod = 1;
-    ((igObjectRefMetaField *)temp_s2_4)->_isAlikeShallowMethod = 3;
-    ((igRawRefMetaField *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 0xE))->_persistent = 0;
-    igMetaObject_NameFields(temp_s0, g_igTextureAttr_fieldTable, g_igTextureAttr_fieldHandles, g_igTextureAttr_fieldOffsets, temp_s1);
+    meta = g_igTextureAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igTextureAttr_ctorTable, 0xF);
+    field5 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field5, 0);
+    *(void **)&((igEnumMetaField *)field5)->_getMetaEnumFunction = (void *)IG_GFX_TEXTURE_FILTER_GetMetaEnum;
+    field6 = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field6, 0);
+    *(void **)&((igEnumMetaField *)field6)->_getMetaEnumFunction = (void *)IG_GFX_TEXTURE_FILTER_GetMetaEnum;
+    field7 = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field7, g_igTextureAttr_wrapSDefault);
+    *(void **)&((igEnumMetaField *)field7)->_getMetaEnumFunction = (void *)IG_GFX_TEXTURE_WRAP_GetMetaEnum;
+    field8 = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field8, g_igTextureAttr_wrapTDefault);
+    *(void **)&((igEnumMetaField *)field8)->_getMetaEnumFunction = (void *)IG_GFX_TEXTURE_WRAP_GetMetaEnum;
+    field9 = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    igIntMetaField_SetDefault((igMetaField *)field9, -1);
+    ((igIntMetaField *)field9)->_persistent = 0;
+    ((igIntMetaField *)field9)->_deepCopyMethod = 4;
+    ((igIntMetaField *)field9)->_shallowCopyMethod = 4;
+    ((igIntMetaField *)field9)->_isAlikeShallowMethod = 3;
+    field10 = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field10, 0);
+    *(void **)&((igEnumMetaField *)field10)->_getMetaEnumFunction = (void *)IG_GFX_TEXTURE_MODE_GetMetaEnum;
+    field11 = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field11, 0);
+    *(void **)&((igEnumMetaField *)field11)->_getMetaEnumFunction = (void *)IG_GFX_TEXTURE_SOURCE_GetMetaEnum;
+    field = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igImage_GetOrCreateMetaObject();
+    field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 0xA));
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)igTextureUnloadAttr_GetOrCreateMetaObject();
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 0xB), 1);
+    field3 = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
+    ((igObjectRefMetaField *)field3)->_metaObject = (int)igImageMipMapList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field3)->_construct = 1;
+    field4 = (void *)(igMetaObject_GetFieldAt(meta, base + 0xD));
+    ((igObjectRefMetaField *)field4)->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field4)->_persistent = 0;
+    ((igObjectRefMetaField *)field4)->_deepCopyMethod = 1;
+    ((igObjectRefMetaField *)field4)->_shallowCopyMethod = 1;
+    ((igObjectRefMetaField *)field4)->_isAlikeShallowMethod = 3;
+    ((igRawRefMetaField *)igMetaObject_GetFieldAt(meta, base + 0xE))->_persistent = 0;
+    igMetaObject_NameFields(meta, g_igTextureAttr_fieldTable, g_igTextureAttr_fieldHandles, g_igTextureAttr_fieldOffsets, base);
 }
 

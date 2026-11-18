@@ -5,16 +5,16 @@ igMetaObject *igInterfaceManager_GetMetaObject(void)
 {
     igMetaObject *g = g_igInterfaceManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00145f60();
+        igInterfaceManager_EnsureRegistered();
     return g_igInterfaceManager_metaObject;
 }
 
-void FUN_00145f60(void)
+void igInterfaceManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igInterfaceManager_Register);
 }
 
-static igMetaObjectCallback g_igInterfaceManager_callbackList[] = { FUN_00146190, 0 };
+static igMetaObjectCallback g_igInterfaceManager_callbackList[] = { igEventProducerList_EnsureRegistered, 0 };
 
 CallbackArray *igInterfaceManager_Register(void) {
     WindowInputLibrary_MarkRegistered();
@@ -23,7 +23,7 @@ CallbackArray *igInterfaceManager_Register(void) {
         &g_igInterfaceManager_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igInterfaceManager_GetMetaObject,
+        igInterfaceManager_GetMetaObjectFunction,
         "igInterfaceManager",
         0xC, /* instance size */
         0,
@@ -33,7 +33,7 @@ CallbackArray *igInterfaceManager_Register(void) {
     );
 }
 
-void thunk_igInterfaceManager_GetMetaObject(void) {
+void igInterfaceManager_GetMetaObjectFunction(void) {
     igInterfaceManager_GetMetaObject();
 }
 
@@ -59,13 +59,13 @@ void igInterfaceManager_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igInterfaceManager_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_001460b0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igEventProducerList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igInterfaceManager_fieldTable, g_igInterfaceManager_fieldHandles, g_igInterfaceManager_fieldOffsets, temp_s2);
-    *(int *)((char *)(g_igInterfaceManager_metaObject) + 60) = (int)(thunk_FUN_00146470);
+    *(int *)((char *)(g_igInterfaceManager_metaObject) + 60) = (int)(igDefaultInterfaceManager_GetMetaObjectFunction);
 }
 
-void thunk_FUN_00146470(void) {
-    FUN_00146470();
+void igDefaultInterfaceManager_GetMetaObjectFunction(void) {
+    igDefaultInterfaceManager_GetMetaObject();
 }
 

@@ -1,4 +1,4 @@
-igMetaObject *FUN_001a7100(void) {
+igMetaObject *igAnimationHierarchy_GetOrCreateMetaObject(void) {
     if (g_igAnimationHierarchy_metaObject == 0) {
         g_igAnimationHierarchy_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -9,11 +9,11 @@ igMetaObject *igAnimationHierarchy_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationHierarchy_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a71a0();
+        igAnimationHierarchy_EnsureRegistered();
     return g_igAnimationHierarchy_metaObject;
 }
 
-void FUN_001a71a0(void)
+void igAnimationHierarchy_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationHierarchy_Register);
 }
@@ -25,7 +25,7 @@ CallbackArray *igAnimationHierarchy_Register(void) {
         &g_igAnimationHierarchy_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igAnimationHierarchy_GetMetaObject,
+        igAnimationHierarchy_GetMetaObjectFunction,
         "igAnimationHierarchy",
         0x10, /* instance size */
         0,
@@ -35,7 +35,7 @@ CallbackArray *igAnimationHierarchy_Register(void) {
     );
 }
 
-void thunk_igAnimationHierarchy_GetMetaObject(void) {
+void igAnimationHierarchy_GetMetaObjectFunction(void) {
     igAnimationHierarchy_GetMetaObject();
 }
 

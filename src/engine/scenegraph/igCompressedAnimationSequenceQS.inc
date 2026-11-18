@@ -85,7 +85,7 @@ CallbackArray *igCompressedAnimationSequenceQS_Register(void) {
         &g_igCompressedAnimationSequenceQS_metaObject,
         igAnimationSequence_Register,
         igAnimationSequence_GetPublishedMetaObject,
-        thunk_igCompressedAnimationSequenceQS_GetMetaObject,
+        igCompressedAnimationSequenceQS_GetMetaObjectFunction,
         "igCompressedAnimationSequenceQS",
         0x40, /* instance size */
         igCompressedAnimationSequenceQS_GetVTable,
@@ -95,7 +95,7 @@ CallbackArray *igCompressedAnimationSequenceQS_Register(void) {
     );
 }
 
-void thunk_igCompressedAnimationSequenceQS_GetMetaObject(void) {
+void igCompressedAnimationSequenceQS_GetMetaObjectFunction(void) {
     igCompressedAnimationSequenceQS_GetMetaObject();
 }
 
@@ -188,7 +188,7 @@ void igCompressedAnimationSequenceQS_InitFields(void) {
     igMetaObject_NameFields(temp_s1, g_igCompressedAnimationSequenceQS_fieldTable, g_igCompressedAnimationSequenceQS_fieldHandles, g_igCompressedAnimationSequenceQS_fieldOffsets, temp_s0);
 }
 
-void **FUN_001a2b40(void **arg0, short arg1) {
+void **igSmartPointer_igCompiledTransformList_Destruct(void **arg0, short arg1) {
     int *r;
     if (arg0 != 0) {
         r = (int *)*arg0;
@@ -205,7 +205,7 @@ void **FUN_001a2b40(void **arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_001a2bc0(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igEnvironmentMapShader2List_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {
@@ -218,7 +218,7 @@ ObjectRefWord *FUN_001a2bc0(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-int *FUN_001a2c40(int *p)
+int *igSmartPointer_igEnvironmentMapShader2List_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;
@@ -230,7 +230,7 @@ int *FUN_001a2c50(int *p)
     return p;
 }
 
-int *FUN_001a2c60(int *p)
+int *igSmartPointer_igCompiledTransformList_Construct(int *p)
 {
     *(int *)((char *)p + 0) = 0;
     return p;

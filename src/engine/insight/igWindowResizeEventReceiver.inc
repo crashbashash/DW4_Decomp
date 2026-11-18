@@ -1,7 +1,7 @@
 igMetaObject *g_igWindowResizeEventReceiver_metaObject;
 igMetaField *g_igWindowResizeEventReceiver_insightCoreMetaField;
 
-igMetaObject *FUN_00233080(void) {
+igMetaObject *igWindowResizeEventReceiver_GetOrCreateMetaObject(void) {
     if (g_igWindowResizeEventReceiver_metaObject == 0) {
         g_igWindowResizeEventReceiver_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -12,7 +12,7 @@ igMetaObject *igWindowResizeEventReceiver_GetMetaObject(void)
 {
     igMetaObject *g = g_igWindowResizeEventReceiver_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00233160();
+        igWindowResizeEventReceiver_EnsureRegistered();
     return g_igWindowResizeEventReceiver_metaObject;
 }
 
@@ -23,7 +23,7 @@ int igWindowResizeEventReceiver_GetVTable(void) {
     return *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00233160(void)
+void igWindowResizeEventReceiver_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igWindowResizeEventReceiver_Register);
 }
@@ -37,7 +37,7 @@ CallbackArray *igWindowResizeEventReceiver_Register(void) {
         &g_igWindowResizeEventReceiver_metaObject,
         igEventReceiver_Register,
         igEventReceiver_GetPublishedMetaObject,
-        thunk_igWindowResizeEventReceiver_GetMetaObject,
+        igWindowResizeEventReceiver_GetMetaObjectFunction,
         "igWindowResizeEventReceiver",
         0xC, /* instance size */
         igWindowResizeEventReceiver_GetVTable,
@@ -47,11 +47,11 @@ CallbackArray *igWindowResizeEventReceiver_Register(void) {
     );
 }
 
-void thunk_igWindowResizeEventReceiver_GetMetaObject(void) {
+void igWindowResizeEventReceiver_GetMetaObjectFunction(void) {
     igWindowResizeEventReceiver_GetMetaObject();
 }
 
-igMetaObject *FUN_00233200(void) {
+igMetaObject *igEventReceiver_GetPublishedMetaObject(void) {
     return g_igEventReceiver_metaObject;
 }
 

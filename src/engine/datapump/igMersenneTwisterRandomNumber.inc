@@ -1,4 +1,4 @@
-void thunk_igMersenneTwisterRandomNumber_GetMetaObject(void) {
+void igMersenneTwisterRandomNumber_GetMetaObjectFunction(void) {
     igMersenneTwisterRandomNumber_GetMetaObject();
 }
 

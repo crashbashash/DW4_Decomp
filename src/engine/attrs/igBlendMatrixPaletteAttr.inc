@@ -4,12 +4,12 @@ igMetaField *g_igBlendMatrixPaletteAttr_matrixIndicesMetaField;
 igMetaField *g_igBlendMatrixPaletteAttr_currentMatrixCountMetaField;
 igMetaField *g_igBlendMatrixPaletteAttr_capacityMetaField;
 
-void FUN_00139990(int arg0) {
-    FUN_00139ab0();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F360, (igMemoryPoolView *)arg0);
+igBlendMatrixPaletteAttr *igBlendMatrixPaletteAttr_Create(igMemoryPoolView *pool) {
+    igBlendMatrixPaletteAttr_EnsureRegistered();
+    return (igBlendMatrixPaletteAttr *)igMetaObject_CreateInstance(g_igBlendMatrixPaletteAttr_metaObject, pool);
 }
 
-igMetaObject *FUN_001399d0(void) {
+igMetaObject *igBlendMatrixPaletteAttr_GetOrCreateMetaObject(void) {
     if (g_igBlendMatrixPaletteAttr_metaObject == 0) {
         g_igBlendMatrixPaletteAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -20,7 +20,7 @@ igMetaObject *igBlendMatrixPaletteAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igBlendMatrixPaletteAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00139ab0();
+        igBlendMatrixPaletteAttr_EnsureRegistered();
     return g_igBlendMatrixPaletteAttr_metaObject;
 }
 
@@ -31,7 +31,7 @@ int igBlendMatrixPaletteAttr_GetVTable(void) {
     return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
-void FUN_00139ab0(void)
+void igBlendMatrixPaletteAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igBlendMatrixPaletteAttr_Register);
 }
@@ -43,7 +43,7 @@ CallbackArray *igBlendMatrixPaletteAttr_Register(void) {
         &g_igBlendMatrixPaletteAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igBlendMatrixPaletteAttr_GetMetaObject,
+        igBlendMatrixPaletteAttr_GetMetaObjectFunction,
         "igBlendMatrixPaletteAttr",
         0x1C, /* instance size */
         igBlendMatrixPaletteAttr_GetVTable,
@@ -53,7 +53,7 @@ CallbackArray *igBlendMatrixPaletteAttr_Register(void) {
     );
 }
 
-void thunk_igBlendMatrixPaletteAttr_GetMetaObject(void) {
+void igBlendMatrixPaletteAttr_GetMetaObjectFunction(void) {
     igBlendMatrixPaletteAttr_GetMetaObject();
 }
 
@@ -83,24 +83,24 @@ static int g_igBlendMatrixPaletteAttr_fieldOffsets[] = {
 };
 
 void igBlendMatrixPaletteAttr_InitFields(void) {
-    int temp_s2;
-    void *temp_s1_2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    void *field2;
+    igMetaObject *meta;
 
-    temp_s0 = g_igBlendMatrixPaletteAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igBlendMatrixPaletteAttr_ctorTable, 4);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igMemoryRefMetaField *)temp_s1)->_memType = FUN_001888e0();
-    ((igRefMetaField *)temp_s1)->_destruct = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    ((igMemoryRefMetaField *)temp_s1_2)->_memType = igUnsignedIntMetaField_GetDefaultDescriptor();
-    ((igRefMetaField *)temp_s1_2)->_destruct = 1;
-    ((igMemoryRefMetaField *)temp_s1_2)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)temp_s1_2)->_releaseOnReset = 1;
-    igMetaObject_NameFields(temp_s0, g_igBlendMatrixPaletteAttr_fieldTable, g_igBlendMatrixPaletteAttr_fieldHandles, g_igBlendMatrixPaletteAttr_fieldOffsets, temp_s2);
+    meta = g_igBlendMatrixPaletteAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igBlendMatrixPaletteAttr_ctorTable, 4);
+    field2 = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igMemoryRefMetaField *)field2)->_memType = FUN_001888e0();
+    ((igRefMetaField *)field2)->_destruct = 1;
+    ((igMemoryRefMetaField *)field2)->_releaseOnCopy = 1;
+    ((igMemoryRefMetaField *)field2)->_releaseOnReset = 1;
+    field = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igMemoryRefMetaField *)field)->_memType = igUnsignedIntMetaField_GetDefaultDescriptor();
+    ((igRefMetaField *)field)->_destruct = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnReset = 1;
+    igMetaObject_NameFields(meta, g_igBlendMatrixPaletteAttr_fieldTable, g_igBlendMatrixPaletteAttr_fieldHandles, g_igBlendMatrixPaletteAttr_fieldOffsets, base);
 }
 

@@ -1,7 +1,7 @@
 igMetaObject *g_igPsx2AudioSourceList_metaObject;
 
-void *FUN_001435c0(igMemoryPoolView *pool) {
-    FUN_00143690();
+void *igPsx2AudioSourceList_Create(igMemoryPoolView *pool) {
+    igPsx2AudioSourceList_EnsureRegistered();
     return (void *)igMetaObject_CreateInstance(g_igPsx2AudioSourceList_metaObject, (igMemoryPoolView *)pool);
 }
 
@@ -9,7 +9,7 @@ igMetaObject *igPsx2AudioSourceList_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2AudioSourceList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00143690();
+        igPsx2AudioSourceList_EnsureRegistered();
     return g_igPsx2AudioSourceList_metaObject;
 }
 
@@ -21,7 +21,7 @@ int igPsx2AudioSourceList_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00143690(void)
+void igPsx2AudioSourceList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2AudioSourceList_Register);
 }
@@ -33,7 +33,7 @@ CallbackArray *igPsx2AudioSourceList_Register(void) {
         &g_igPsx2AudioSourceList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
-        thunk_igPsx2AudioSourceList_GetMetaObject,
+        igPsx2AudioSourceList_GetMetaObjectFunction,
         "igPsx2AudioSourceList",
         0x14, /* instance size */
         igPsx2AudioSourceList_GetVTable,
@@ -43,7 +43,7 @@ CallbackArray *igPsx2AudioSourceList_Register(void) {
     );
 }
 
-void thunk_igPsx2AudioSourceList_GetMetaObject(void) {
+void igPsx2AudioSourceList_GetMetaObjectFunction(void) {
     igPsx2AudioSourceList_GetMetaObject();
 }
 

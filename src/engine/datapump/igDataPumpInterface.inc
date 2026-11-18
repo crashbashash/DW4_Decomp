@@ -1,6 +1,6 @@
 igMetaObject *g_igDataPumpInterface_metaObject;
 
-igMetaObject *FUN_001e5530(void) {
+igMetaObject *igDataPumpInterface_GetOrCreateMetaObject(void) {
     if (g_igDataPumpInterface_metaObject == 0) {
         g_igDataPumpInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,11 +11,11 @@ igMetaObject *igDataPumpInterface_GetMetaObject(void)
 {
     igMetaObject *g = g_igDataPumpInterface_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001e55d0();
+        igDataPumpInterface_EnsureRegistered();
     return g_igDataPumpInterface_metaObject;
 }
 
-void FUN_001e55d0(void)
+void igDataPumpInterface_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igDataPumpInterface_Register);
 }
@@ -27,7 +27,7 @@ CallbackArray *igDataPumpInterface_Register(void) {
         &g_igDataPumpInterface_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igDataPumpInterface_GetMetaObject,
+        igDataPumpInterface_GetMetaObjectFunction,
         "igDataPumpInterface",
         8, /* instance size */
         0,
@@ -37,7 +37,7 @@ CallbackArray *igDataPumpInterface_Register(void) {
     );
 }
 
-void thunk_igDataPumpInterface_GetMetaObject(void) {
+void igDataPumpInterface_GetMetaObjectFunction(void) {
     igDataPumpInterface_GetMetaObject();
 }
 

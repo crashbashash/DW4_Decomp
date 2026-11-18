@@ -57,7 +57,7 @@ void FUN_00457ab0(igRadioGroup *arg0, igRadioGroupSelectedObserver *arg1, int ar
     }
 }
 
-void Gap__Gui__igRadioGroupSelectedObserver__vfunc_24(void *arg0, void *arg1) {
+void igRadioGroupSelectedObserver_OnModelChange(void *arg0, void *arg1) {
     int temp_a1;
 
     temp_a1 = *(int *)((char *)arg1 + 8);

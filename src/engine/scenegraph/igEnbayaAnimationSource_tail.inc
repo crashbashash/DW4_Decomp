@@ -6,7 +6,7 @@ void FUN_001c07e0(void) {
 
 }
 
-void Gap__Sg__igEnbayaAnimationSource__vfunc_13(void *arg0) {
+void igEnbayaAnimationSource_resetFields(void *arg0) {
     *(char *)((char *)(arg0) + 8) = 1;
     *(char *)((char *)(arg0) + 9) = 3;
     *(char *)((char *)(arg0) + 10) = 1;
@@ -154,7 +154,7 @@ int Gap__Sg__igEnbayaAnimationSource__vfunc_28(EnbayaSourceSlots28 *o, int a, in
     return o->f(a, b, c, g);
 }
 
-void Gap__Sg__igEnbayaAnimationSource__vfunc_17(Obj_1c0e70 *arg0) {
+void igEnbayaAnimationSource_UserPostLoad(Obj_1c0e70 *arg0) {
     arg0->f32 = FUN_002808f0(arg0->f32);
 }
 

@@ -88,8 +88,6 @@ enum {
 typedef void (*p2VertexSubmit)(unsigned int count, int first);
 
 int FUN_001fffb0(void);
-int FUN_00200980(void);
-void FUN_001ff3b0(int mask);
 
 void p2SubmitVertices(unsigned int count, int first, unsigned short *indices);
 /* Declared without a prototype: the recording submit passes it no index list. */
@@ -300,7 +298,7 @@ static inline void p2BeginDraw(int primitive, int sprites) {
             p2VertexFormat |= P2_FORMAT_NORMALS;
         }
         FUN_001fffb0();
-        FUN_00200980();
+        p2BuildFunctionTables();
         p2LayoutVuBuffers();
         p2VertexSubmitter = p2SubmitRecordedVertices;
     } else {
@@ -328,7 +326,7 @@ static inline void p2BeginDraw(int primitive, int sprites) {
         p2DrawPipeline = P2_PIPELINE_VERTEX_ARRAYS;
         p2VertexSubmitter = (p2VertexSubmit)p2SubmitVertices;
         if (p2RenderStateDirty != 0) {
-            FUN_001ff3b0(P2_RENDER_STATE_ALL);
+            p2PrepareRenderState(P2_RENDER_STATE_ALL);
             p2SendRenderState(P2_RENDER_STATE_ALL);
         }
     }

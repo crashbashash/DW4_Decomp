@@ -117,7 +117,7 @@ int FUN_00453830(beFontImage *arg0, int arg1) {
     return List_BinarySearch(arg0->_charMetricsList, &k, FUN_00453370, 0x28);
 }
 
-void Gap__Bec__beFontImage__vfunc_11(FontImage *self, int enable) {
+void igBitmapFont_resetFields(FontImage *self, int enable) {
     Gap__Core__igObject__resetFields((igObject *)self, enable);
     if (enable != 0) {
         ObjectList_AppendRetained((igObjectList *)((unsigned)self->layers), (igObject *)((void *)self->base));

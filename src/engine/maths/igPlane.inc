@@ -10,7 +10,7 @@ igMetaObject *igPlane_GetMetaObject(void)
         ready = (g_igPlane_metaObject->_validity & 4) != 0;
         if (ready != 0) goto done;
     }
-    FUN_00188520();
+    igPlane_EnsureRegistered();
 done:
     return g_igPlane_metaObject;
 }
@@ -23,7 +23,7 @@ int igPlane_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00188520(void)
+void igPlane_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPlane_Register);
 }
@@ -35,7 +35,7 @@ CallbackArray *igPlane_Register(void) {
         &g_igPlane_metaObject,
         igVolume_Register,
         (igMetaObjectGetFunction)igVolume_GetPublishedMetaObject,
-        thunk_igPlane_GetMetaObject,
+        igPlane_GetMetaObjectFunction,
         "igPlane",
         0x1C, /* instance size */
         igPlane_GetVTable,
@@ -45,7 +45,7 @@ CallbackArray *igPlane_Register(void) {
     );
 }
 
-void thunk_igPlane_GetMetaObject(void) {
+void igPlane_GetMetaObjectFunction(void) {
     igPlane_GetMetaObject();
 }
 
@@ -74,16 +74,16 @@ static int g_igPlane_fieldOffsets[] = {
 };
 
 void igPlane_InitFields(void) {
-    igMetaObject *temp_s0;
-    int temp_s1;
+    igMetaObject *meta;
+    int base;
     void *f;
 
-    temp_s0 = g_igPlane_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igPlane_ctorTable, 3);
-    f = (void *)igMetaObject_GetFieldAt(temp_s0, temp_s1 + 2);
-    *(int *)((char *)f + 52) = (int)(&FUN_001869e0);
-    igMetaObject_NameFields(temp_s0, g_igPlane_fieldTable, g_igPlane_fieldHandles, g_igPlane_fieldOffsets, temp_s1);
+    meta = g_igPlane_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igPlane_ctorTable, 3);
+    f = (void *)igMetaObject_GetFieldAt(meta, base + 2);
+    ((igEnumMetaField *)f)->_getMetaEnumFunction = (int)&FUN_001869e0;
+    igMetaObject_NameFields(meta, g_igPlane_fieldTable, g_igPlane_fieldHandles, g_igPlane_fieldOffsets, base);
 }
 
 void thunk_FUN_0018c660(void) {

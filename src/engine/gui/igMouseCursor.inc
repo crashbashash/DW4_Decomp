@@ -2,7 +2,7 @@ igMetaObject *g_igMouseCursor_metaObject;
 igMetaField *g_igMouseCursor_geometryElementMetaField;
 igMetaField *g_igMouseCursor_offsetMetaField;
 
-igMetaObject *FUN_0044e430(void) {
+igMetaObject *igMouseCursor_GetOrCreateMetaObject(void) {
     if (g_igMouseCursor_metaObject == 0) {
         g_igMouseCursor_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -94,7 +94,7 @@ void igMouseCursor_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igMouseCursor_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 56) = (int)FUN_004505b0();
+    *(int *)((char *)(temp_s1) + 56) = (int)igGeometryElement_GetOrCreateMetaObject();
     temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     buf[0] = 0;
     buf[1] = 0;

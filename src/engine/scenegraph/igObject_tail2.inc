@@ -290,7 +290,7 @@ int FUN_001d2230(int a0, S_1d2230 *src, S_1d2230 *dst, O_1d2230 *obj, int flag) 
     return r;
 }
 
-int FUN_001d3190(void *arg0) {
+int igNode_GetParentCount(void *arg0) {
     void *temp_v0;
 
     temp_v0 = (void *)(*(int *)((char *)(arg0) + 16));
@@ -300,11 +300,11 @@ int FUN_001d3190(void *arg0) {
     return 0;
 }
 
-int FUN_001d31b0(void *arg0, int arg1) {
+int igNode_GetParent(void *arg0, int arg1) {
     return *(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 16)) + 16) + (arg1 * 4));
 }
 
-int FUN_001d31d0(void *arg0, int arg1) {
+int igNode_AddParent(void *arg0, int arg1) {
         int temp_s2;
     struct L1d *temp_s1;
     temp_s1 = (struct L1d *)(*(int *)((char *)(arg0) + 16));
@@ -320,7 +320,7 @@ int FUN_001d31d0(void *arg0, int arg1) {
     return 1;
 }
 
-int Gap__Core__igObject__vfunc_32(ObjectListOwner *self, igObject *object) {
+int igNode_RemoveParent(ObjectListOwner *self, igObject *object) {
     if (self->_list != 0) {
         igTDataList<igObject *> *list;
         int index = (list = self->_list)->find(object);

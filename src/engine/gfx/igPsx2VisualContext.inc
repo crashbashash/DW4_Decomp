@@ -146,7 +146,7 @@ igMetaField *g_igPsx2VisualContext_alphaBlendingControlMetaField;
 igMetaField *g_igPsx2VisualContext_alphaBlendingCorrectionMetaField;
 igMetaField *g_igPsx2VisualContext_ditherMatrixMetaField;
 
-void thunk_igPsx2VisualContext_GetMetaObject(void) {
+void igPsx2VisualContext_GetMetaObjectFunction(void) {
     igPsx2VisualContext_GetMetaObject();
 }
 

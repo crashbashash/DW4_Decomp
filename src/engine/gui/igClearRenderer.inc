@@ -1,7 +1,7 @@
 igMetaObject *g_igClearRenderer_metaObject;
 igMetaField *g_igClearRenderer_buffersToClearMetaField;
 
-igMetaObject *FUN_0044c250(void) {
+igMetaObject *igClearRenderer_GetOrCreateMetaObject(void) {
     if (g_igClearRenderer_metaObject == 0) {
         g_igClearRenderer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -52,7 +52,7 @@ CallbackArray *igClearRenderer_Register(void) {
         &g_igClearRenderer_metaObject,
         igRenderer_Register,
         igRenderer_GetPublishedMetaObject,
-        thunk_igClearRenderer_GetMetaObject,
+        igClearRenderer_GetMetaObjectFunction,
         "igClearRenderer",
         0x10, /* instance size */
         igClearRenderer_GetVTable,
@@ -62,7 +62,7 @@ CallbackArray *igClearRenderer_Register(void) {
     );
 }
 
-void thunk_igClearRenderer_GetMetaObject(void) {
+void igClearRenderer_GetMetaObjectFunction(void) {
     igClearRenderer_GetMetaObject();
 }
 

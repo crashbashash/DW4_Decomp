@@ -6,7 +6,7 @@ igMetaField *g_igPsx2BlendEquationExt_blendCMetaField;
 igMetaField *g_igPsx2BlendEquationExt_blendDMetaField;
 igMetaField *g_igPsx2BlendEquationExt_blendConstantMetaField;
 
-void thunk_igPsx2BlendEquationExt_GetMetaObject(void) {
+void igPsx2BlendEquationExt_GetMetaObjectFunction(void) {
     igPsx2BlendEquationExt_GetMetaObject();
 }
 

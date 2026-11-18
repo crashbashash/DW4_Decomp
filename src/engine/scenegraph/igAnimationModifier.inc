@@ -22,7 +22,7 @@ igMetaObject *igAnimationModifier_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationModifier_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a7600();
+        igAnimationModifier_EnsureRegistered();
     return g_igAnimationModifier_metaObject;
 }
 
@@ -60,7 +60,7 @@ igSmartPointer<igObject> *igSmartPointer_igTransform_Destruct(igSmartPointer<igO
     return self;
 }
 
-void FUN_001a7600(void)
+void igAnimationModifier_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationModifier_Register);
 }
@@ -74,7 +74,7 @@ CallbackArray *igAnimationModifier_Register(void) {
         &g_igAnimationModifier_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igAnimationModifier_GetMetaObject,
+        igAnimationModifier_GetMetaObjectFunction,
         "igAnimationModifier",
         0x14, /* instance size */
         igAnimationModifier_GetVTable,
@@ -84,7 +84,7 @@ CallbackArray *igAnimationModifier_Register(void) {
     );
 }
 
-void thunk_igAnimationModifier_GetMetaObject(void) {
+void igAnimationModifier_GetMetaObjectFunction(void) {
     igAnimationModifier_GetMetaObject();
 }
 

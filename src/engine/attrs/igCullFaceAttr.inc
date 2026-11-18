@@ -2,12 +2,12 @@ igMetaObject *g_igCullFaceAttr_metaObject;
 igMetaField *g_igCullFaceAttr_enabledMetaField;
 igMetaField *g_igCullFaceAttr_modeMetaField;
 
-void FUN_00138690(int arg0) {
+igCullFaceAttr *igCullFaceAttr_Create(igMemoryPoolView *pool) {
     igCullFaceAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F238, (igMemoryPoolView *)arg0);
+    return (igCullFaceAttr *)igMetaObject_CreateInstance(g_igCullFaceAttr_metaObject, pool);
 }
 
-igMetaObject *FUN_001386d0(void) {
+igMetaObject *igCullFaceAttr_GetOrCreateMetaObject(void) {
     if (g_igCullFaceAttr_metaObject == 0) {
         g_igCullFaceAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -42,7 +42,7 @@ CallbackArray *igCullFaceAttr_Register(void) {
         &g_igCullFaceAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igCullFaceAttr_GetMetaObject,
+        igCullFaceAttr_GetMetaObjectFunction,
         "igCullFaceAttr",
         0x14, /* instance size */
         igCullFaceAttr_GetVTable,
@@ -52,7 +52,7 @@ CallbackArray *igCullFaceAttr_Register(void) {
     );
 }
 
-void thunk_igCullFaceAttr_GetMetaObject(void) {
+void igCullFaceAttr_GetMetaObjectFunction(void) {
     igCullFaceAttr_GetMetaObject();
 }
 
@@ -74,16 +74,16 @@ static int g_igCullFaceAttr_fieldOffsets[] = {
 };
 
 void igCullFaceAttr_InitFields(void) {
-    int temp_s2;
-    void *temp_v0;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    igMetaObject *meta;
 
-    temp_s0 = g_igCullFaceAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igCullFaceAttr_ctorTable, 2);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
-    ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_00149620);
-    igMetaObject_NameFields(temp_s0, g_igCullFaceAttr_fieldTable, g_igCullFaceAttr_fieldHandles, g_igCullFaceAttr_fieldOffsets, temp_s2);
+    meta = g_igCullFaceAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igCullFaceAttr_ctorTable, 2);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field, 0);
+    ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)(&IG_GFX_CULL_FACE_MODE_GetMetaEnum);
+    igMetaObject_NameFields(meta, g_igCullFaceAttr_fieldTable, g_igCullFaceAttr_fieldHandles, g_igCullFaceAttr_fieldOffsets, base);
 }
 

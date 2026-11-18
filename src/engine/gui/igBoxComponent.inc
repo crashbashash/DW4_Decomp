@@ -57,7 +57,7 @@ void thunk_igBoxComponent_GetMetaObject(void) {
     igBoxComponent_GetMetaObject();
 }
 
-igMetaObject *FUN_004524e0(void) {
+igMetaObject *igGuiComponent_GetPublishedMetaObject(void) {
     return g_igGuiComponent_metaObject;
 }
 

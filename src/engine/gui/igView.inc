@@ -23,7 +23,7 @@ CallbackArray *igView_Register(void) {
         &g_igView_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igView_GetMetaObject,
+        igView_GetMetaObjectFunction,
         "igView",
         0xC, /* instance size */
         0,
@@ -33,7 +33,7 @@ CallbackArray *igView_Register(void) {
     );
 }
 
-void thunk_igView_GetMetaObject(void) {
+void igView_GetMetaObjectFunction(void) {
     igView_GetMetaObject();
 }
 
@@ -59,7 +59,7 @@ void igView_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igView_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0044d5d0();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igModel_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igView_fieldTable, g_igView_fieldHandles, g_igView_fieldOffsets, temp_s2);
 }

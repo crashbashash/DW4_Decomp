@@ -1,6 +1,6 @@
 igMetaObject *g_igItemDataBaseList_metaObject;
 
-igMetaObject *FUN_002280b0(void) {
+igMetaObject *igItemDataBaseList_GetOrCreateMetaObject(void) {
     if (g_igItemDataBaseList_metaObject == 0) {
         g_igItemDataBaseList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -35,7 +35,7 @@ CallbackArray *igItemDataBaseList_Register(void) {
         &g_igItemDataBaseList_metaObject,
         (igMetaObjectRegisterFunction)igCompoundList_Register,
         (igMetaObjectGetFunction)igCompoundList_GetPublishedMetaObject,
-        thunk_igItemDataBaseList_GetMetaObject,
+        igItemDataBaseList_GetMetaObjectFunction,
         "igItemDataBaseList",
         0x14, /* instance size */
         igItemDataBaseList_GetVTable,
@@ -45,32 +45,32 @@ CallbackArray *igItemDataBaseList_Register(void) {
     );
 }
 
-void thunk_igItemDataBaseList_GetMetaObject(void) {
+void igItemDataBaseList_GetMetaObjectFunction(void) {
     igItemDataBaseList_GetMetaObject();
 }
 
-igMetaObject *FUN_00228220(void) {
+igMetaObject *igCompoundList_GetPublishedMetaObject(void) {
     return g_igCompoundList_metaObject;
 }
 
 void igItemDataBaseList_InitFields(void) {
     static int externalEnumStorage;
-    int temp_s2;
-    igMetaObject *temp_s1;
-    void **temp_v0;
-    S_obj *temp_s0;
+    int field;
+    igMetaObject *meta;
+    void **field2;
+    S_obj *field3;
 
-    temp_s1 = g_igItemDataBaseList_metaObject;
-    temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_data"));
-    temp_s2 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(*(int *)((char *)(temp_s1) + 40)), (int)temp_v0);
-    temp_s0 = (S_obj *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    temp_s0->f60 = FUN_00228570();
-    temp_s0->f56 = 0;
-    temp_s0->f28 = (int)(&externalEnumStorage);
-    igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s2, (igMetaField *)temp_s0);
-    temp_s0->f4 = temp_s0->f4 - 1;
-    if (((unsigned long long) ((long long) temp_s0->f4 << 0x29) >> 0x29) == 0) {
-        igObject_Destroy((igObject *)temp_s0);
+    meta = g_igItemDataBaseList_metaObject;
+    field2 = (void **)(igMetaObject_FindFieldByName(meta, "_data"));
+    field = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(*(int *)((char *)(meta) + 40)), (int)field2);
+    field3 = (S_obj *)(((DW4VC_84_1 *)(field2))->vX((int)(1)));
+    field3->f60 = FUN_00228570();
+    field3->f56 = 0;
+    field3->f28 = (int)(&externalEnumStorage);
+    igMetaObject_FinalizeAndReplaceField(meta, field, (igMetaField *)field3);
+    field3->f4 = field3->f4 - 1;
+    if (((unsigned long long) ((long long) field3->f4 << 0x29) >> 0x29) == 0) {
+        igObject_Destroy((igObject *)field3);
     }
 }
 

@@ -1,4 +1,4 @@
-int Gap__Gfx__igPsx2ParticleArray__vfunc_28(igPsx2ParticleArray *self, float time, unsigned int num, unsigned int offset, int *status) {
+int igPsx2ParticleArray_Update(igPsx2ParticleArray *self, float time, unsigned int num, unsigned int offset, int *status) {
     void *context;
 
     if (!self->_hardwareSupport) {
@@ -46,7 +46,7 @@ void Gap__Gfx__igPsx2ParticleArray__vfunc_29(PA_175ba0 *arg0) {
         if (p2IsCapabilityEnabled(0x17) != 0) {
             p2DisableCapability(0x17);
         }
-        FUN_001fe390(arg0->f100, arg0->f56, arg0->f52, arg0->f28);
+        p2DrawParticles(arg0->f100, arg0->f56, arg0->f52, arg0->f28);
         if (arg0->f104 != 0) {
             arg0->f112 = p2GetVif1WaitSequence();
         }
@@ -141,7 +141,7 @@ void Gap__Gfx__igPsx2ParticleArray__vfunc_39(igPsx2ParticleArray *arg0, int arg1
     ((DW4VC_140_1 *)(((char *)(arg0) + 0)))->vX((float)(arg0->_particleLifeEnd));
 }
 
-void Gap__Gfx__igPsx2ParticleArray__vfunc_19(PA_1765f0 *arg0) {
+void igPsx2ParticleArray_UserApplyWriteProxy(PA_1765f0 *arg0) {
     char *e;
     char *buf;
     unsigned i;
@@ -172,7 +172,7 @@ void Gap__Gfx__igPsx2ParticleArray__vfunc_19(PA_1765f0 *arg0) {
     }
 }
 
-void Gap__Gfx__igPsx2ParticleArray__vfunc_12(igPsx2ParticleArray *self) {
+void igPsx2ParticleArray_ReleaseDefaults(igPsx2ParticleArray *self) {
     long long sequence;
 
     if (self->_ps2ParticleFormat != 0) {
@@ -184,22 +184,22 @@ void Gap__Gfx__igPsx2ParticleArray__vfunc_12(igPsx2ParticleArray *self) {
         }
         Memory_FreeBuffer((void *)self->_ps2ParticleFormat);
     }
-    Gap__Bec__ParticleArray__vfunc_10((ParticleArray *)self);
+    igParticleArray_ReleaseDefaults((ParticleArray *)self);
 }
 
 /* Run the shared slot-57 step, then store the value into the +392 word of the object (past the
  * reflected igPsx2UserUCodeExt fields). */
-void FUN_001767c0(void *self, int value) {
-    FUN_0015cb50((int)self, value);
+void igPsx2PointSpriteExt_SetContext(void *self, int value) {
+    igPointSpriteExt_SetContext((int)self, value);
     *(int *)((char *)self + 392) = value;
 }
 
-void FUN_00176800(int *arg0, int arg1, int arg2) {
+void igPsx2PointSpriteExt_Draw(int *arg0, int arg1, int arg2) {
     int *p;
     int *q;
     int s3, a1, a0_3, s3_2;
     if (!(((int *)arg0[6])[5] & 0x10)) {
-        FUN_0015d0d0((PointSpriteDraw *)arg0, arg1, arg2);
+        igPointSpriteExt_Draw((PointSpriteDraw *)arg0, arg1, arg2);
         return;
     }
     p = ((VA_1767c0 *)arg0[6])->vX();
@@ -214,12 +214,12 @@ void FUN_00176800(int *arg0, int arg1, int arg2) {
     ((VB *)arg0[98])->vX(0x1000, arg1, arg2);
 }
 
-void FUN_00176900(int arg0, float farg0) {
+void igPsx2PointSpriteExt_SetSpriteSize(int arg0, float farg0) {
     *(float *)((char *)(arg0) + 28) = farg0;
     FUN_001f7370((0.5f * farg0));
 }
 
-void FUN_00176920(UCodeState *state) {
+void igPsx2PointSpriteExt_BeginSprites(UCodeState *state) {
     UCodeAttr *attr = state->source->currentAttr();
     UCodeAttr *previous;
 
@@ -235,30 +235,30 @@ void FUN_00176920(UCodeState *state) {
     }
     state->attr = attr;
     if (!(state->attr->flags & 0x10)) {
-        FUN_0015ce90((OO *)state);
+        igPointSpriteExt_BeginSprites((OO *)state);
         return;
     }
     if (state->mode == 1) {
-        FUN_0015ce90((OO *)state);
+        igPointSpriteExt_BeginSprites((OO *)state);
     }
     state->loaded = 1;
 }
 
-void FUN_001769f0(void *arg0) {
+void igPsx2PointSpriteExt_EndSprites(void *arg0) {
     int temp_a1;
 
     if (!(*(int *)((char *)(*(int *)((char *)(arg0) + 24)) + 20) & 0x10)) {
-        FUN_0015cfb0((Y *)arg0);
+        igPointSpriteExt_EndSprites((Y *)arg0);
         return;
     }
     temp_a1 = *(int *)((char *)(arg0) + 36);
     if (temp_a1 == 1) {
-        FUN_0015cfb0((Y *)arg0);
+        igPointSpriteExt_EndSprites((Y *)arg0);
     }
     *(char *)((char *)(arg0) + 32) = 0;
 }
 
-void FUN_00176a50(O176a50 *arg0, V96 *arg1, int *arg2, int arg3, int arg4) {
+void igPsx2PointSpriteExt_ConfigureVertexArray(O176a50 *arg0, V96 *arg1, int *arg2, int arg3, int arg4) {
     int sp6C;
     int temp_v1;
     R_1767c0 *a0;
@@ -275,7 +275,7 @@ void FUN_00176a50(O176a50 *arg0, V96 *arg1, int *arg2, int arg3, int arg4) {
     }
     arg0->f24 = arg1;
     if (((V188 *)arg0)->v188(arg2) == 0) {
-        FUN_0015cb60((O_15cb50 *)arg0, (A1 *)arg1, arg2, arg3, (arg4 & ~0x10) | 4);
+        igPointSpriteExt_ConfigureVertexArray((O_15cb50 *)arg0, (A1 *)arg1, arg2, arg3, (arg4 & ~0x10) | 4);
         return;
     }
     sp6C = *arg2;
@@ -291,7 +291,7 @@ int FUN_00176ba0(void *arg0) {
     return *(int *)((char *)(arg0) + 36) != 1;
 }
 
-void FUN_00176bb0(void *arg0, int arg1, void *arg2) {
+void igPsx2PointSpriteExt_SetPosition(void *arg0, int arg1, void *arg2) {
     void *temp_v1;
 
     temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
@@ -299,10 +299,10 @@ void FUN_00176bb0(void *arg0, int arg1, void *arg2) {
         ((DW4VC_116_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    FUN_0015d6c0(arg0, arg1, arg2);
+    igPointSpriteExt_SetPosition(arg0, arg1, arg2);
 }
 
-void FUN_00176c00(void *arg0, int arg1, void *arg2) {
+void igPsx2PointSpriteExt_GetPosition(void *arg0, int arg1, void *arg2) {
     void *temp_v1;
 
     temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
@@ -310,10 +310,10 @@ void FUN_00176c00(void *arg0, int arg1, void *arg2) {
         ((DW4VC_120_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    FUN_0015d700((igPsx2PointSpriteExt *)arg0, arg1, arg2);
+    igPointSpriteExt_GetPosition((igPsx2PointSpriteExt *)arg0, arg1, arg2);
 }
 
-void FUN_00176c50(void *arg0, int arg1, int arg2) {
+void igPsx2PointSpriteExt_SetColorPacked(void *arg0, int arg1, int arg2) {
     void *temp_v1;
 
     temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
@@ -321,10 +321,10 @@ void FUN_00176c50(void *arg0, int arg1, int arg2) {
         ((DW4VC_164_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    FUN_0015d740((S740 *)arg0, arg1, arg2);
+    igPointSpriteExt_SetColorPacked((S740 *)arg0, arg1, arg2);
 }
 
-void FUN_00176ca0(void *arg0, int arg1, int arg2) {
+void igPsx2PointSpriteExt_SetColor(void *arg0, int arg1, int arg2) {
     void *temp_v1;
 
     temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
@@ -332,10 +332,10 @@ void FUN_00176ca0(void *arg0, int arg1, int arg2) {
         ((DW4VC_168_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    FUN_0015d7c0((S7c0 *)arg0, arg1, arg2);
+    igPointSpriteExt_SetColor((S7c0 *)arg0, arg1, arg2);
 }
 
-void FUN_00176cf0(void *arg0, unsigned int arg1) {
+void igPsx2PointSpriteExt_GetColorPacked(void *arg0, unsigned int arg1) {
     void *temp_v1;
 
     temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
@@ -343,10 +343,10 @@ void FUN_00176cf0(void *arg0, unsigned int arg1) {
         ((DW4VC_172_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    FUN_0015d840((igPointSpriteExtView *)arg0, arg1);
+    igPointSpriteExt_GetColorPacked((igPointSpriteExtView *)arg0, arg1);
 }
 
-void FUN_00176d40(void *arg0, unsigned int arg1) {
+void igPsx2PointSpriteExt_GetColor(void *arg0, unsigned int arg1) {
     void *temp_v1;
 
     temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
@@ -354,10 +354,10 @@ void FUN_00176d40(void *arg0, unsigned int arg1) {
         ((DW4VC_176_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    FUN_0015d860((igPointSpriteExtView *)arg0, arg1);
+    igPointSpriteExt_GetColor((igPointSpriteExtView *)arg0, arg1);
 }
 
-void FUN_00176d90(W_1767c0 *arg0, int arg1, int arg2, float *arg3) {
+void igPsx2PointSpriteExt_SetTextureCoord(W_1767c0 *arg0, int arg1, int arg2, float *arg3) {
     /* matching construct: variant search — locals declared in reverse order, which sets their stack slots and registers */
     V2_1767c0 a;
     V2_1767c0 b;
@@ -377,10 +377,10 @@ void FUN_00176d90(W_1767c0 *arg0, int arg1, int arg2, float *arg3) {
         arg0->o->set(1, arg2, &b.x);
         return;
     }
-    FUN_0015d880((O880 *)arg0, arg1, arg2, arg3);
+    igPointSpriteExt_SetTextureCoord((O880 *)arg0, arg1, arg2, arg3);
 }
 
-void FUN_00176ed0(void *arg0, int arg1, int arg2) {
+void igPsx2PointSpriteExt_GetTextureCoord(void *arg0, int arg1, int arg2) {
     void *temp_v1;
 
     temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
@@ -388,10 +388,10 @@ void FUN_00176ed0(void *arg0, int arg1, int arg2) {
         ((DW4VC_204_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    FUN_0015da00(arg0, arg1, arg2);
+    igPointSpriteExt_GetTextureCoord(arg0, arg1, arg2);
 }
 
-void FUN_00176f20(void *arg0, int arg1, int arg2) {
+void igPsx2PointSpriteExt_GetTextureCoordPointer(void *arg0, int arg1, int arg2) {
     void *temp_v1;
 
     temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
@@ -399,10 +399,10 @@ void FUN_00176f20(void *arg0, int arg1, int arg2) {
         ((DW4VC_208_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    FUN_0015da70(arg0, arg1, arg2);
+    igPointSpriteExt_GetTextureCoordPointer(arg0, arg1, arg2);
 }
 
-void FUN_00176f70(void *arg0) {
+void igPsx2PointSpriteExt_SetRadian(void *arg0) {
     void *temp_v1;
 
     temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
@@ -410,10 +410,10 @@ void FUN_00176f70(void *arg0) {
         ((DW4VC_228_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    FUN_0015db40((igPointSpriteExtView *)arg0);
+    igPointSpriteExt_SetRadian((igPointSpriteExtView *)arg0);
 }
 
-void FUN_00176fc0(void *arg0) {
+void igPsx2PointSpriteExt_GetRadian(void *arg0) {
     void *temp_v1;
 
     temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
@@ -421,6 +421,6 @@ void FUN_00176fc0(void *arg0) {
         ((DW4VC_232_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    FUN_0015db60((igPointSpriteExtView *)arg0);
+    igPointSpriteExt_GetRadian((igPointSpriteExtView *)arg0);
 }
 

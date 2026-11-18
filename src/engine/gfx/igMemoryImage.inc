@@ -4,11 +4,11 @@ igMetaObject *igMemoryImage_GetMetaObject(void)
 {
     igMetaObject *g = g_igMemoryImage_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014de10();
+        igMemoryImage_EnsureRegistered();
     return g_igMemoryImage_metaObject;
 }
 
-void FUN_0014de10(void)
+void igMemoryImage_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igMemoryImage_Register);
 }
@@ -20,7 +20,7 @@ CallbackArray *igMemoryImage_Register(void) {
         &g_igMemoryImage_metaObject,
         igImage_Register,
         igImage_GetPublishedMetaObject,
-        thunk_igMemoryImage_GetMetaObject,
+        igMemoryImage_GetMetaObjectFunction,
         "igMemoryImage",
         0x5C, /* instance size */
         0,
@@ -30,7 +30,7 @@ CallbackArray *igMemoryImage_Register(void) {
     );
 }
 
-void thunk_igMemoryImage_GetMetaObject(void) {
+void igMemoryImage_GetMetaObjectFunction(void) {
     igMemoryImage_GetMetaObject();
 }
 

@@ -4,7 +4,7 @@ igMetaObject *igPsx2LongList_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2LongList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001528e0();
+        igPsx2LongList_EnsureRegistered();
     return g_igPsx2LongList_metaObject;
 }
 
@@ -16,7 +16,7 @@ int igPsx2LongList_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_001528e0(void)
+void igPsx2LongList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2LongList_Register);
 }
@@ -28,7 +28,7 @@ CallbackArray *igPsx2LongList_Register(void) {
         &g_igPsx2LongList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
-        thunk_igPsx2LongList_GetMetaObject,
+        igPsx2LongList_GetMetaObjectFunction,
         "igPsx2LongList",
         0x14, /* instance size */
         igPsx2LongList_GetVTable,
@@ -38,7 +38,7 @@ CallbackArray *igPsx2LongList_Register(void) {
     );
 }
 
-void thunk_igPsx2LongList_GetMetaObject(void) {
+void igPsx2LongList_GetMetaObjectFunction(void) {
     igPsx2LongList_GetMetaObject();
 }
 

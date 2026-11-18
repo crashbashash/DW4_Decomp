@@ -710,6 +710,11 @@ def main(argv=None):
         seen.add(d)
 
     renamed = {va: (old, new) for va, old, new, _ in renames}
+    # the derived thunks too, so their unit-objects.json keys follow the sources
+    for old, new in list(sub.items()):
+        va = cur_by_name.get(old)
+        if old.startswith("thunk_") and va is not None and va not in renamed:
+            renamed[va] = (old, new)
     unit_objects = a.unit_objects or os.path.join(os.path.dirname(os.path.abspath(a.symbols)),
                                                   "unit-objects.json")
     uo_data, uo_count = None, 0

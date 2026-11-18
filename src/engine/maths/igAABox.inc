@@ -43,7 +43,7 @@ CallbackArray *igAABox_Register(void) {
         &g_igAABox_metaObject,
         igVolume_Register,
         (igMetaObjectGetFunction)igVolume_GetPublishedMetaObject,
-        thunk_igAABox_GetMetaObject,
+        igAABox_GetMetaObjectFunction,
         "igAABox",
         0x20, /* instance size */
         igAABox_GetVTable,
@@ -53,7 +53,7 @@ CallbackArray *igAABox_Register(void) {
     );
 }
 
-void thunk_igAABox_GetMetaObject(void) {
+void igAABox_GetMetaObjectFunction(void) {
     igAABox_GetMetaObject();
 }
 
@@ -80,25 +80,25 @@ static int g_igAABox_fieldOffsets[] = {
 void igAABox_InitFields(void) {
     float va[4];
     float vb[4];
-    int temp_a0;
-    int temp_a0_2;
-    int temp_s1;
-    void *temp_s0;
+    int field;
+    int field2;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_igAABox_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (FieldFactory *)g_igAABox_ctorTable, 2);
-    temp_a0 = (int)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1);
+    meta = (void *)g_igAABox_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (FieldFactory *)g_igAABox_ctorTable, 2);
+    field = (int)igMetaObject_GetFieldAt((igMetaObject *)meta, base);
     va[0] = 3.402823466e+38f;
     va[1] = 3.402823466e+38f;
     va[2] = 3.402823466e+38f;
-    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, va);
-    temp_a0_2 = (int)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1);
+    igVec3fMetaField_SetDefault((igMetaField *)field, va);
+    field2 = (int)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1);
     vb[0] = -3.402823466e+38f;
     vb[1] = -3.402823466e+38f;
     vb[2] = -3.402823466e+38f;
-    igVec3fMetaField_SetDefault((igMetaField *)temp_a0_2, vb);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)g_igAABox_fieldTable, (igMetaField ***)g_igAABox_fieldHandles, (int *)g_igAABox_fieldOffsets, temp_s1);
+    igVec3fMetaField_SetDefault((igMetaField *)field2, vb);
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)g_igAABox_fieldTable, (igMetaField ***)g_igAABox_fieldHandles, (int *)g_igAABox_fieldOffsets, base);
 }
 
 void thunk_FUN_0018a8f0(void) {

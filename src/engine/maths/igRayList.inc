@@ -37,7 +37,7 @@ CallbackArray *igRayList_Register(void) {
         &g_igRayList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igRayList_GetMetaObject,
+        igRayList_GetMetaObjectFunction,
         "igRayList",
         0x14, /* instance size */
         igRayList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igRayList_Register(void) {
     );
 }
 
-void thunk_igRayList_GetMetaObject(void) {
+void igRayList_GetMetaObjectFunction(void) {
     igRayList_GetMetaObject();
 }
 

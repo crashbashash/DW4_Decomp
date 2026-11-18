@@ -28,7 +28,7 @@ CallbackArray *igVertexBlendStateAttr_Register(void) {
         &g_igVertexBlendStateAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igVertexBlendStateAttr_GetMetaObject,
+        igVertexBlendStateAttr_GetMetaObjectFunction,
         "igVertexBlendStateAttr",
         0x10, /* instance size */
         igVertexBlendStateAttr_GetVTable,
@@ -38,7 +38,7 @@ CallbackArray *igVertexBlendStateAttr_Register(void) {
     );
 }
 
-void thunk_igVertexBlendStateAttr_GetMetaObject(void) {
+void igVertexBlendStateAttr_GetMetaObjectFunction(void) {
     igVertexBlendStateAttr_GetMetaObject();
 }
 
@@ -56,12 +56,12 @@ static int g_igVertexBlendStateAttr_fieldOffsets[] = {
 };
 
 void igVertexBlendStateAttr_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_igVertexBlendStateAttr_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igVertexBlendStateAttr_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_igVertexBlendStateAttr_fieldTable, g_igVertexBlendStateAttr_fieldHandles, g_igVertexBlendStateAttr_fieldOffsets, temp_s1);
+    meta = g_igVertexBlendStateAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igVertexBlendStateAttr_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_igVertexBlendStateAttr_fieldTable, g_igVertexBlendStateAttr_fieldHandles, g_igVertexBlendStateAttr_fieldOffsets, base);
 }
 

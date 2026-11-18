@@ -1,8 +1,8 @@
 void FUN_001ce710(void) {
-    *(int *)0x562790 = FUN_0019a6e0((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
+    *(int *)0x562790 = igTraversalFunctionList_CreateInstance((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
 }
 
-void FUN_001ce740(void) {
+void igIntersectTraversal_UserUnregister(void) {
     void *temp_a0;
 
     temp_a0 = *(void **)0x562790;
@@ -14,26 +14,26 @@ void FUN_001ce740(void) {
     }
 }
 
-void FUN_001ce790(int arg0, int arg1) {
-    FUN_001e02f0(arg0, arg1);
+void igIntersectTraversal_RegisterClassFunction(int arg0, int arg1) {
+    igTraversal_RegisterClassFunction(arg0, arg1);
     if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igNode_GetMetaObject()))) != 0) {
         if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igGeometry_GetMetaObject()))) != 0) {
-            igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&FUN_001cfc70);
+            igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&igIntersectTraversal_TraverseGeometry);
             return;
         }
         if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igTransform_GetMetaObject()))) != 0) {
-            igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&FUN_001cfaa0);
+            igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&igIntersectTraversal_TraverseTransform);
             return;
         }
         if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)(((int)igGroup_GetMetaObject()))) != 0) {
-            igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&FUN_001cf990);
+            igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)&igIntersectTraversal_TraverseGroup);
             return;
         }
-        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)((int *)FUN_001cf980));
+        igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)((int *)igIntersectTraversal_TraverseNode));
     }
 }
 
-void Gap__Bec__beHitLandModelTraversal__vfunc_11(beHitLandModelTraversal *arg0, int flags) {
+void igIntersectTraversal_resetFields(beHitLandModelTraversal *arg0, int flags) {
     igObject *sp3C;
     igObject *s0;
     igObject *old;

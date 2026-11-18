@@ -2,7 +2,7 @@ igMetaObject *g_igIterateDerived_metaObject;
 igMetaField *g_igIterateDerived_iteratedMetaField;
 igMetaField *g_igIterateDerived_currentMetaField;
 
-void *FUN_002279d0(int arg0) {
+void *igIterateDerived_Create(int arg0) {
     FUN_00227af0();
     return igMetaObject_CreateInstance(g_igIterateDerived_metaObject, (igMemoryPoolView *)arg0);
 }
@@ -53,7 +53,7 @@ CallbackArray *igIterateDerived_Register(void) {
         &g_igIterateDerived_metaObject,
         (igMetaObjectRegisterFunction)igIterator_Register,
         (igMetaObjectGetFunction)igIterator_GetPublishedMetaObject,
-        thunk_igIterateDerived_GetMetaObject,
+        igIterateDerived_GetMetaObjectFunction,
         "igIterateDerived",
         0x10, /* instance size */
         igIterateDerived_GetVTable,
@@ -63,7 +63,7 @@ CallbackArray *igIterateDerived_Register(void) {
     );
 }
 
-void thunk_igIterateDerived_GetMetaObject(void) {
+void igIterateDerived_GetMetaObjectFunction(void) {
     igIterateDerived_GetMetaObject();
 }
 
@@ -85,15 +85,15 @@ static int g_igIterateDerived_fieldOffsets[] = {
 };
 
 void igIterateDerived_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    igMetaObject *meta;
 
-    temp_s0 = g_igIterateDerived_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igIterateDerived_ctorTable, 2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s0, g_igIterateDerived_fieldTable, g_igIterateDerived_fieldHandles, g_igIterateDerived_fieldOffsets, temp_s2);
+    meta = g_igIterateDerived_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igIterateDerived_ctorTable, 2);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_igIterateDerived_fieldTable, g_igIterateDerived_fieldHandles, g_igIterateDerived_fieldOffsets, base);
 }
 

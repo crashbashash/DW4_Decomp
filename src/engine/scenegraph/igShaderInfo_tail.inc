@@ -11,7 +11,7 @@ void FUN_001d8b90(void) {
     igDirectory_RemoveInfoByName(list.p, (int)("shaderInfo"));
 }
 
-int Gap__Sg__igShaderInfo__vfunc_23(ShaderFieldTable *self, int arg1, ShaderFieldRecord *key) {
+int igShaderInfo_FindObjectReference(ShaderFieldTable *self, int arg1, ShaderFieldRecord *key) {
     igTDataList<ShaderFieldRecord *> *list = self->list;
     int idx = list->find(key);
     ShaderFieldRecord *e;

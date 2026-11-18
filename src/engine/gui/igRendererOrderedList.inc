@@ -67,7 +67,7 @@ CallbackArray *igRendererOrderedList_Register(void) {
         &g_igRendererOrderedList_metaObject,
         igDependencyOrderedList_Register,
         igDependencyOrderedList_GetPublishedMetaObject,
-        thunk_igRendererOrderedList_GetMetaObject,
+        igRendererOrderedList_GetMetaObjectFunction,
         "igRendererOrderedList",
         0x1C, /* instance size */
         igRendererOrderedList_GetVTable,
@@ -77,7 +77,7 @@ CallbackArray *igRendererOrderedList_Register(void) {
     );
 }
 
-void thunk_igRendererOrderedList_GetMetaObject(void) {
+void igRendererOrderedList_GetMetaObjectFunction(void) {
     igRendererOrderedList_GetMetaObject();
 }
 

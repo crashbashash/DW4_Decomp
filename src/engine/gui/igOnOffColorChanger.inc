@@ -1,6 +1,6 @@
 igMetaObject *g_igOnOffColorChanger_metaObject;
 
-igMetaObject *FUN_00451e40(void) {
+igMetaObject *igOnOffColorChanger_GetOrCreateMetaObject(void) {
     if (g_igOnOffColorChanger_metaObject == 0) {
         g_igOnOffColorChanger_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }

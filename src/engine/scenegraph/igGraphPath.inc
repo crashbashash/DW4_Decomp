@@ -61,7 +61,7 @@ CallbackArray *igGraphPath_Register(void) {
         &g_igGraphPath_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igGraphPath_GetMetaObject,
+        igGraphPath_GetMetaObjectFunction,
         "igGraphPath",
         0x1C, /* instance size */
         igGraphPath_GetVTable,
@@ -71,7 +71,7 @@ CallbackArray *igGraphPath_Register(void) {
     );
 }
 
-void thunk_igGraphPath_GetMetaObject(void) {
+void igGraphPath_GetMetaObjectFunction(void) {
     igGraphPath_GetMetaObject();
 }
 
@@ -97,25 +97,25 @@ static int g_igGraphPath_fieldOffsets[] = {
 };
 
 void igGraphPath_InitFields(void) {
-    int temp_s2;
-    void *temp_a0;
-    void *temp_s1;
-    void *temp_s0;
-    struct { int a; int b; int c; } z;
+    int base;
+    void *centerField;
+    void *pathField;
+    void *meta;
+    struct { int x; int y; int z; } defaultCenter;
 
-    temp_s0 = (void *)g_igGraphPath_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igGraphPath_ctorTable, 3);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    *(int *)((char *)(temp_s1) + 56) = (int)igNodeList_GetOrCreateMetaObject();
-    *(char *)((char *)(temp_s1) + 36) = 3;
-    *(char *)((char *)(temp_s1) + 52) = 1;
-    temp_a0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    z.a = 0;
-    z.b = 0;
-    z.c = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)&z);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2), 1.0f);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igGraphPath_fieldTable, g_igGraphPath_fieldHandles, g_igGraphPath_fieldOffsets, temp_s2);
+    meta = (void *)g_igGraphPath_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igGraphPath_ctorTable, 3);
+    pathField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igObjectRefMetaField *)pathField)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
+    ((igMetaField *)pathField)->_resetMethod = 3;
+    ((igRefMetaField *)pathField)->_construct = 1;
+    centerField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    defaultCenter.x = 0;
+    defaultCenter.y = 0;
+    defaultCenter.z = 0;
+    igVec3fMetaField_SetDefault((igMetaField *)centerField, (const float *)&defaultCenter);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2), 1.0f);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igGraphPath_fieldTable, g_igGraphPath_fieldHandles, g_igGraphPath_fieldOffsets, base);
 }
 

@@ -16,7 +16,7 @@ int igHotKeyEventReceiver_OnKeyEvent(B_4575d0 *arg0, int arg1, int arg2) {
     return 0;
 }
 
-int Gap__Gui__igHotKeyEventReceiver__vfunc_27(B_457650 *arg0, int arg1, int arg2, int arg3) {
+int igHotKeyEventReceiver_ControllerButtonEvent(B_457650 *arg0, int arg1, int arg2, int arg3) {
     int i;
     int n;
     if (arg3 == 0) {

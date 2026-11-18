@@ -1,6 +1,6 @@
 igMetaObject *g_igNonRefCountedViewList_metaObject;
 
-igMetaObject *FUN_0044b880(void) {
+igMetaObject *igNonRefCountedViewList_GetOrCreateMetaObject(void) {
     if (g_igNonRefCountedViewList_metaObject == 0) {
         g_igNonRefCountedViewList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -37,7 +37,7 @@ CallbackArray *igNonRefCountedViewList_Register(void) {
         &g_igNonRefCountedViewList_metaObject,
         igNonRefCountedObjectList_Register,
         igNonRefCountedObjectList_GetPublishedMetaObject,
-        thunk_igNonRefCountedViewList_GetMetaObject,
+        igNonRefCountedViewList_GetMetaObjectFunction,
         "igNonRefCountedViewList",
         0x14, /* instance size */
         igNonRefCountedViewList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igNonRefCountedViewList_Register(void) {
     );
 }
 
-void thunk_igNonRefCountedViewList_GetMetaObject(void) {
+void igNonRefCountedViewList_GetMetaObjectFunction(void) {
     igNonRefCountedViewList_GetMetaObject();
 }
 

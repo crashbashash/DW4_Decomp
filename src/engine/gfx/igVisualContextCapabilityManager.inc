@@ -6,19 +6,19 @@ unsigned char g_GfxLibrary_registered;
 void FUN_00149bc0(void) {
     if (g_GfxLibrary_registered == 0) {
         g_GfxLibrary_registered = 1;
-        FUN_0014bbb0();
-        FUN_0014bd20();
-        FUN_0014c670();
-        FUN_0014d5c0();
-        FUN_0014d6d0();
-        FUN_0014f810();
-        FUN_0014f920();
-        FUN_0014ff00();
+        igUserUCodeExt_EnsureRegistered();
+        igScissorExt_EnsureRegistered();
+        igPointSpriteExt_EnsureRegistered();
+        igMultiTextureExt_EnsureRegistered();
+        igLineWidthExt_EnsureRegistered();
+        igDisableExt_EnsureRegistered();
+        igDecalExt_EnsureRegistered();
+        igBlendEquationExt_EnsureRegistered();
     }
 }
 
-void FUN_00149c30(int arg0) {
-    FUN_00149d50();
+void igVisualContextCapabilityManager_Create(int arg0) {
+    igVisualContextCapabilityManager_EnsureRegistered();
     igMetaObject_CreateInstance(g_igVisualContextCapabilityManager_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -26,7 +26,7 @@ igMetaObject *igVisualContextCapabilityManager_GetMetaObject(void)
 {
     igMetaObject *g = g_igVisualContextCapabilityManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00149d50();
+        igVisualContextCapabilityManager_EnsureRegistered();
     return g_igVisualContextCapabilityManager_metaObject;
 }
 
@@ -43,7 +43,7 @@ int igVisualContextCapabilityManager_GetVTable(void) {
     return r;
 }
 
-void FUN_00149d50(void)
+void igVisualContextCapabilityManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVisualContextCapabilityManager_Register);
 }
@@ -57,7 +57,7 @@ CallbackArray *igVisualContextCapabilityManager_Register(void) {
         &g_igVisualContextCapabilityManager_metaObject,
         igCapabilityManager_Register,
         igCapabilityManager_GetPublishedMetaObject,
-        thunk_igVisualContextCapabilityManager_GetMetaObject,
+        igVisualContextCapabilityManager_GetMetaObjectFunction,
         "igVisualContextCapabilityManager",
         0xC, /* instance size */
         igVisualContextCapabilityManager_GetVTable,
@@ -67,11 +67,11 @@ CallbackArray *igVisualContextCapabilityManager_Register(void) {
     );
 }
 
-void thunk_igVisualContextCapabilityManager_GetMetaObject(void) {
+void igVisualContextCapabilityManager_GetMetaObjectFunction(void) {
     igVisualContextCapabilityManager_GetMetaObject();
 }
 
-igMetaObject *FUN_00149df0(void) {
+igMetaObject *igCapabilityManager_GetPublishedMetaObject(void) {
     return g_igCapabilityManager_metaObject;
 }
 

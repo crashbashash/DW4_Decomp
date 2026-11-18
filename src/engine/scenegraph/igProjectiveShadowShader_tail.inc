@@ -3,35 +3,35 @@ void FUN_001d4180(void) {
     DAT_005627e8[0] = (int)igTextureStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_005627f0[0] = (int)igTextureStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_005627f8[0] = (int)igTextureStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562800[0] = FUN_00139ed0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562808[0] = FUN_00139ed0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562800[0] = (int)igBlendFunctionAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562808[0] = (int)igBlendFunctionAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562810[0] = (int)igBlendStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562818[0] = (int)igBlendStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562820[0] = (int)igLightingStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562838[0] = FUN_00139370((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562840[0] = FUN_00139370((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562848[0] = FUN_00139370((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562850[0] = FUN_001384a0((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562858[0] = FUN_001325a0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562860[0] = FUN_001325a0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    g_shadowTextureFunctionAttr0[0] = (igTextureFunctionAttr *)FUN_00131c60((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562870[0] = FUN_00131c60((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562878[0] = FUN_001315d0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562880[0] = FUN_001315d0(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562828[0] = FUN_0013b490((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562830[0] = FUN_0013b270(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_005628d0[0] = FUN_0013b270(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_005627e0[0] = FUN_001341b0((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562838[0] = (int)igClearAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562840[0] = (int)igClearAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562848[0] = (int)igClearAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562850[0] = (int)igDepthStateAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562858[0] = (int)igTextureCoordSourceAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562860[0] = (int)igTextureCoordSourceAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    g_shadowTextureFunctionAttr0[0] = (igTextureFunctionAttr *)igTextureFunctionAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562870[0] = (int)igTextureFunctionAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562878[0] = (int)igTextureMatrixStateAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562880[0] = (int)igTextureMatrixStateAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562828[0] = (int)igAlphaFunctionAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562830[0] = (int)igAlphaStateAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_005628d0[0] = (int)igAlphaStateAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_005627e0[0] = (int)igRenderDestinationAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
 }
 
-void Gap__Sg__igProjectiveShadowShader__vfunc_09(void **arg0, int arg1) {
-    Gap__Sg__igNode__vfunc_09((void * *)arg0, arg1);
+void igProjectiveShadowShader_userConstruct(void **arg0, int arg1) {
+    igNode_userConstruct((void * *)arg0, arg1);
     if (igMetaObject_CountInstances((igMetaObject *)(((DW4VC_88_0 *)(arg0))->vX()), 1) == 0) {
         FUN_001d4180();
     }
 }
 
-igMetaObject *Gap__Sg__igProjectiveShadowShader__vfunc_22(void) {
+igMetaObject *igProjectiveShadowShader_GetMeta(void) {
     return g_igProjectiveShadowShader_metaObject;
 }
 
@@ -240,11 +240,11 @@ void FUN_001d5430(void) {
     }
 }
 
-void Gap__Sg__igProjectiveShadowShader__vfunc_10(void **arg0) {
+void igProjectiveShadowShader_userDestruct(void **arg0) {
     if (igMetaObject_CountInstances((igMetaObject *)(((DW4VC_88_0 *)(arg0))->vX()), 1) == 0) {
         FUN_001d5430();
     }
-    FUN_001c5e20((T_1c5e20 *)arg0);
+    igGroup_userDestruct((T_1c5e20 *)arg0);
 }
 
 int FUN_001d5a70(P *arg0, Q_1d5a70 *arg1) {
@@ -418,13 +418,13 @@ void FUN_001d6190(struct S_1d6190 *arg0, char *arg1) {
     FUN_001d5c40((A0_1d5c40 *)arg0, (A1_1d5c40 *)arg1);
 }
 
-void Gap__Sg__igProjectiveShadowShader__vfunc_17(struct S_1d6240 *arg0) {
+void igProjectiveShadowShader_UserPostLoad(struct S_1d6240 *arg0) {
     int temp_s1;
     int var_s0;
     struct R_1d6240 *temp_a0;
     struct L_1d6240 *temp_v1;
 
-    FUN_001c5b80((SgLinkNode *)arg0);
+    igGroup_UserPostLoad((SgLinkNode *)arg0);
     temp_v1 = arg0->f64;
     if (temp_v1 != 0) {
         temp_s1 = temp_v1->cnt;
@@ -442,7 +442,7 @@ void Gap__Sg__igProjectiveShadowShader__vfunc_17(struct S_1d6240 *arg0) {
     }
 }
 
-void Gap__Sg__igProjectiveShadowShader__vfunc_31(void *arg0) {
+void igProjectiveShadowShader_Reset(void *arg0) {
     void **temp_a0;
     void **temp_a0_2;
 

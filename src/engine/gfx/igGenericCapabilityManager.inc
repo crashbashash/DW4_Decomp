@@ -1,7 +1,7 @@
 igMetaObject *g_igGenericCapabilityManager_metaObject;
 
-void FUN_0014f2c0(int arg0) {
-    FUN_0014f390();
+void igGenericCapabilityManager_Create(int arg0) {
+    igGenericCapabilityManager_EnsureRegistered();
     igMetaObject_CreateInstance(g_igGenericCapabilityManager_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -9,7 +9,7 @@ igMetaObject *igGenericCapabilityManager_GetMetaObject(void)
 {
     igMetaObject *g = g_igGenericCapabilityManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014f390();
+        igGenericCapabilityManager_EnsureRegistered();
     return g_igGenericCapabilityManager_metaObject;
 }
 
@@ -20,7 +20,7 @@ int igGenericCapabilityManager_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_0014f390(void)
+void igGenericCapabilityManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igGenericCapabilityManager_Register);
 }
@@ -32,7 +32,7 @@ CallbackArray *igGenericCapabilityManager_Register(void) {
         &g_igGenericCapabilityManager_metaObject,
         igCapabilityManager_Register,
         igCapabilityManager_GetPublishedMetaObject,
-        thunk_igGenericCapabilityManager_GetMetaObject,
+        igGenericCapabilityManager_GetMetaObjectFunction,
         "igGenericCapabilityManager",
         8, /* instance size */
         igGenericCapabilityManager_GetVTable,
@@ -42,7 +42,7 @@ CallbackArray *igGenericCapabilityManager_Register(void) {
     );
 }
 
-void thunk_igGenericCapabilityManager_GetMetaObject(void) {
+void igGenericCapabilityManager_GetMetaObjectFunction(void) {
     igGenericCapabilityManager_GetMetaObject();
 }
 

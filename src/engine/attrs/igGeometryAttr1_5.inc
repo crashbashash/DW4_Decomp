@@ -122,7 +122,7 @@ void igGeometryAttr1_5_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igGeometryAttr1_5_Register);
 }
 
-static igMetaObjectCallback g_igGeometryAttr1_5_callbackList[] = { FUN_0014c0d0, 0 };
+static igMetaObjectCallback g_igGeometryAttr1_5_callbackList[] = { igPrimLengthArray_EnsureRegistered, 0 };
 
 CallbackArray *igGeometryAttr1_5_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -131,7 +131,7 @@ CallbackArray *igGeometryAttr1_5_Register(void) {
         &g_igGeometryAttr1_5_metaObject,
         igGeometryAttr_Register,
         igGeometryAttr_GetPublishedMetaObject,
-        thunk_igGeometryAttr1_5_GetMetaObject,
+        igGeometryAttr1_5_GetMetaObjectFunction,
         "igGeometryAttr1_5",
         0x34, /* instance size */
         igGeometryAttr1_5_GetVTable,
@@ -141,7 +141,7 @@ CallbackArray *igGeometryAttr1_5_Register(void) {
     );
 }
 
-void thunk_igGeometryAttr1_5_GetMetaObject(void) {
+void igGeometryAttr1_5_GetMetaObjectFunction(void) {
     igGeometryAttr1_5_GetMetaObject();
 }
 
@@ -163,15 +163,15 @@ static int g_igGeometryAttr1_5_fieldOffsets[] = {
 };
 
 void igGeometryAttr1_5_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    igMetaObject *meta;
 
-    temp_s0 = g_igGeometryAttr1_5_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igGeometryAttr1_5_ctorTable, 1);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_0014c030();
-    igMetaObject_NameFields(temp_s0, g_igGeometryAttr1_5_fieldTable, g_igGeometryAttr1_5_fieldHandles, g_igGeometryAttr1_5_fieldOffsets, temp_s2);
+    meta = g_igGeometryAttr1_5_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igGeometryAttr1_5_ctorTable, 1);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)field)->_metaObject = igPrimLengthArray_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_igGeometryAttr1_5_fieldTable, g_igGeometryAttr1_5_fieldHandles, g_igGeometryAttr1_5_fieldOffsets, base);
 }
 

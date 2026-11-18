@@ -72,7 +72,7 @@ int FUN_001aedd0(void *self, igTDataList<AnimDbRecord *> *list, int file, AnimDb
 }
 
 #define CAST_INLINE(NAME, META) static inline AnimDbObject *NAME(AnimDbObject *o) { if (o != 0 && igObject_IsKindOf(o, META) != 0) { return o; } return 0; }
-bool Gap__Sg__igAnimationDatabase__vfunc_23(AnimDbRec *db, int file, AnimDbObject *obj) {
+bool igAnimationDatabase_FindObjectReference(AnimDbRec *db, int file, AnimDbObject *obj) {
     char name[4096];
     if ((void *)obj == (void *)db) {
         return igDirectory_AddExternalInfoRef((igDirectoryView *)file, (igInfoView *)db, (char *)nameOf(db->_name), (igObject *)obj);

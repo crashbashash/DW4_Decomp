@@ -55,7 +55,7 @@ CallbackArray *igImage_Register(void) {
         &g_igImage_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igImage_GetMetaObject,
+        igImage_GetMetaObjectFunction,
         "igImage",
         0x5C, /* instance size */
         0,
@@ -65,7 +65,7 @@ CallbackArray *igImage_Register(void) {
     );
 }
 
-void thunk_igImage_GetMetaObject(void) {
+void igImage_GetMetaObjectFunction(void) {
     igImage_GetMetaObject();
 }
 
@@ -188,9 +188,9 @@ void igImage_InitFields(void) {
     *(int *)((char *)(temp_s1_2) + 60) = igCharMetaField_GetDefaultDescriptor();
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 0xD), 1);
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xF));
-    *(int *)((char *)(temp_s1_3) + 56) = (int)FUN_0014fa90();
+    *(int *)((char *)(temp_s1_3) + 56) = (int)igClut_GetOrCreateMetaObject();
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x11), -1);
     igMetaObject_NameFields(meta, g_igImage_fieldTable, g_igImage_fieldHandles, g_igImage_fieldOffsets, fieldStart);
-    *(int *)((char *)(g_igImage_metaObject) + 60) = (int)thunk_igPsx2Image_GetMetaObject;
+    *(int *)((char *)(g_igImage_metaObject) + 60) = (int)igPsx2Image_GetMetaObjectFunction;
 }
 

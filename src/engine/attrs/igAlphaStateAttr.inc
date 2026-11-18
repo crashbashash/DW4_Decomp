@@ -1,12 +1,12 @@
 igMetaObject *g_igAlphaStateAttr_metaObject;
 igMetaField *g_igAlphaStateAttr_enabledMetaField;
 
-void FUN_0013b270(int arg0) {
+igAlphaStateAttr *igAlphaStateAttr_Create(igMemoryPoolView *pool) {
     igAlphaStateAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F480, (igMemoryPoolView *)arg0);
+    return (igAlphaStateAttr *)igMetaObject_CreateInstance(g_igAlphaStateAttr_metaObject, pool);
 }
 
-igMetaObject *FUN_0013b2b0(void) {
+igMetaObject *igAlphaStateAttr_GetOrCreateMetaObject(void) {
     if (g_igAlphaStateAttr_metaObject == 0) {
         g_igAlphaStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -40,7 +40,7 @@ CallbackArray *igAlphaStateAttr_Register(void) {
         &g_igAlphaStateAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igAlphaStateAttr_GetMetaObject,
+        igAlphaStateAttr_GetMetaObjectFunction,
         "igAlphaStateAttr",
         0x10, /* instance size */
         igAlphaStateAttr_GetVTable,
@@ -50,7 +50,7 @@ CallbackArray *igAlphaStateAttr_Register(void) {
     );
 }
 
-void thunk_igAlphaStateAttr_GetMetaObject(void) {
+void igAlphaStateAttr_GetMetaObjectFunction(void) {
     igAlphaStateAttr_GetMetaObject();
 }
 
@@ -68,12 +68,12 @@ static int g_igAlphaStateAttr_fieldOffsets[] = {
 };
 
 void igAlphaStateAttr_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_igAlphaStateAttr_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igAlphaStateAttr_ctorTable, 1);
-    igMetaObject_NameFields(temp_s0, g_igAlphaStateAttr_fieldTable, g_igAlphaStateAttr_fieldHandles, g_igAlphaStateAttr_fieldOffsets, temp_s1);
+    meta = g_igAlphaStateAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igAlphaStateAttr_ctorTable, 1);
+    igMetaObject_NameFields(meta, g_igAlphaStateAttr_fieldTable, g_igAlphaStateAttr_fieldHandles, g_igAlphaStateAttr_fieldOffsets, base);
 }
 

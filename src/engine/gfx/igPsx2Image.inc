@@ -1,6 +1,6 @@
 igMetaObject *g_igPsx2Image_metaObject;
 
-void thunk_igPsx2Image_GetMetaObject(void) {
+void igPsx2Image_GetMetaObjectFunction(void) {
     igPsx2Image_GetMetaObject();
 }
 
@@ -23,7 +23,7 @@ static int g_igPsx2Image_contextTrackableValues[] = {
 };
 igMetaEnum *g_igPsx2Image_contextTrackableMetaEnum;
 
-int FUN_0014e2a0(void) {
+int CONTEXT_TRACKABLE_GetMetaEnum(void) {
     if (g_igPsx2Image_contextTrackableMetaEnum == 0) {
         g_igPsx2Image_contextTrackableMetaEnum = igMetaEnum_Create("CONTEXT_TRACKABLE", g_igPsx2Image_contextTrackableNames, g_igPsx2Image_contextTrackableValues, 22);
     }

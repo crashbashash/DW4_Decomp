@@ -4,7 +4,7 @@ igMetaField *g_igOptInterface_filePathMetaField;
 igMetaField *g_igOptInterface_fileMetaField;
 igMetaField *g_igOptInterface_disabledInfosMetaField;
 
-igMetaObject *FUN_00225a40(void) {
+igMetaObject *igOptInterface_GetOrCreateMetaObject(void) {
     if (g_igOptInterface_metaObject == 0) {
         g_igOptInterface_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -69,7 +69,7 @@ CallbackArray *igOptInterface_Register(void) {
         &g_igOptInterface_metaObject,
         (igMetaObjectRegisterFunction)igInterface_Register,
         (igMetaObjectGetFunction)igInterface_GetPublishedMetaObject,
-        thunk_igOptInterface_GetMetaObject,
+        igOptInterface_GetMetaObjectFunction,
         "igOptInterface",
         0x30, /* instance size */
         igOptInterface_GetVTable,
@@ -79,11 +79,11 @@ CallbackArray *igOptInterface_Register(void) {
     );
 }
 
-void thunk_igOptInterface_GetMetaObject(void) {
+void igOptInterface_GetMetaObjectFunction(void) {
     igOptInterface_GetMetaObject();
 }
 
-igMetaObject *FUN_00225cb0(void) {
+igMetaObject *igInterface_GetPublishedMetaObject(void) {
     return g_igInterface_metaObject;
 }
 
@@ -113,28 +113,28 @@ static int g_igOptInterface_fieldOffsets[] = {
 };
 
 void igOptInterface_InitFields(void) {
-    int temp_s0;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_v0;
-    igMetaObject *temp_s1;
+    int base;
+    void *field;
+    void *field2;
+    void *field3;
+    void *field4;
+    igMetaObject *meta;
 
-    temp_s1 = g_igOptInterface_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_igOptInterface_ctorTable, 4);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igMetaObjectList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2)->_construct = 1;
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    igStringMetaField_SetDefaultText((igMetaField *)temp_v0, "");
-    ((igStringMetaField *)temp_v0)->_destruct = 1;
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_00228e60();
-    ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    igMetaObject_NameFields(temp_s1, g_igOptInterface_fieldTable, g_igOptInterface_fieldHandles, g_igOptInterface_fieldOffsets, temp_s0);
+    meta = g_igOptInterface_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igOptInterface_ctorTable, 4);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igMetaObjectList_GetOrCreateMetaObject();
+    ((igRefMetaField *)field)->_construct = 1;
+    field4 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    igStringMetaField_SetDefaultText((igMetaField *)field4, "");
+    ((igStringMetaField *)field4)->_destruct = 1;
+    field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)igFileInfo_GetOrCreateMetaObject();
+    ((igRefMetaField *)field2)->_construct = 1;
+    field3 = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
+    ((igObjectRefMetaField *)field3)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
+    ((igRefMetaField *)field3)->_construct = 1;
+    igMetaObject_NameFields(meta, g_igOptInterface_fieldTable, g_igOptInterface_fieldHandles, g_igOptInterface_fieldOffsets, base);
 }
 

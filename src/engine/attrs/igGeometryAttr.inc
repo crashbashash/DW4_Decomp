@@ -10,11 +10,11 @@ igMetaField *g_igGeometryAttr_dPdsMetaField;
 igMetaField *g_igGeometryAttr_dPdtMetaField;
 
 igGeometryAttr *igGeometryAttr_Create(int allocator) {
-    FUN_001378f0();
-    return (igGeometryAttr *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55F170, (igMemoryPoolView *)allocator);
+    igGeometryAttr_EnsureRegistered();
+    return (igGeometryAttr *)igMetaObject_CreateInstance(g_igGeometryAttr_metaObject, (igMemoryPoolView *)allocator);
 }
 
-igMetaObject *FUN_00137850(void) {
+igMetaObject *igGeometryAttr_GetOrCreateMetaObject(void) {
     if (g_igGeometryAttr_metaObject == 0) {
         g_igGeometryAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -25,11 +25,11 @@ igMetaObject *igGeometryAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igGeometryAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001378f0();
+        igGeometryAttr_EnsureRegistered();
     return g_igGeometryAttr_metaObject;
 }
 
-void FUN_001378f0(void)
+void igGeometryAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igGeometryAttr_Register);
 }
@@ -43,7 +43,7 @@ CallbackArray *igGeometryAttr_Register(void) {
         &g_igGeometryAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igGeometryAttr_GetMetaObject,
+        igGeometryAttr_GetMetaObjectFunction,
         "igGeometryAttr",
         0x30, /* instance size */
         0,
@@ -53,7 +53,7 @@ CallbackArray *igGeometryAttr_Register(void) {
     );
 }
 
-void thunk_igGeometryAttr_GetMetaObject(void) {
+void igGeometryAttr_GetMetaObjectFunction(void) {
     igGeometryAttr_GetMetaObject();
 }
 
@@ -103,32 +103,32 @@ static int g_igGeometryAttr_fieldOffsets[] = {
 };
 
 void igGeometryAttr_InitFields(void) {
-    int temp_s0;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s2_5;
-    void *temp_v0;
-    igMetaObject *temp_s1;
+    int base;
+    void *field;
+    void *field2;
+    void *field3;
+    void *field4;
+    void *field5;
+    void *field6;
+    igMetaObject *meta;
 
-    temp_s1 = g_igGeometryAttr_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount(temp_s1);
-    igMetaObject_CreateFields(temp_s1, g_igGeometryAttr_ctorTable, 9);
-    temp_s2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igVertexArray_GetOrCreateMetaObject();
-    temp_s2_2 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0014d7f0();
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
-    ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_00149aa0);
-    temp_s2_3 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igUnsignedIntList_GetOrCreateMetaObject();
-    temp_s2_4 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
-    temp_s2_5 = (void *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
-    igMetaObject_NameFields(temp_s1, g_igGeometryAttr_fieldTable, g_igGeometryAttr_fieldHandles, g_igGeometryAttr_fieldOffsets, temp_s0);
-    *(int *)((char *)(g_igGeometryAttr_metaObject) + 60) = (int)thunk_igGeometryAttr1_5_GetMetaObject;
+    meta = g_igGeometryAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igGeometryAttr_ctorTable, 9);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igVertexArray_GetOrCreateMetaObject();
+    field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
+    ((igObjectRefMetaField *)field2)->_metaObject = igIndexArray_GetOrCreateMetaObject();
+    field6 = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field6, 0);
+    ((igEnumMetaField *)field6)->_getMetaEnumFunction = (int)(&IG_GFX_DRAW_GetMetaEnum);
+    field3 = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
+    ((igObjectRefMetaField *)field3)->_metaObject = (int)igUnsignedIntList_GetOrCreateMetaObject();
+    field4 = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
+    ((igObjectRefMetaField *)field4)->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
+    field5 = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
+    ((igObjectRefMetaField *)field5)->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
+    igMetaObject_NameFields(meta, g_igGeometryAttr_fieldTable, g_igGeometryAttr_fieldHandles, g_igGeometryAttr_fieldOffsets, base);
+    *(int *)((char *)(g_igGeometryAttr_metaObject) + 60) = (int)igGeometryAttr1_5_GetMetaObjectFunction;
 }
 

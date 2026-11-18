@@ -3,7 +3,7 @@ igMetaField *g_igViewportResizedMessage_originMetaField;
 igMetaField *g_igViewportResizedMessage_sizeMetaField;
 
 int FUN_002332b0(int arg0) {
-    FUN_00233380();
+    igViewportResizedMessage_EnsureRegistered();
     return (int)(igMetaObject_CreateInstance((igMetaObject *)(*(int *)0x56DC10), (igMemoryPoolView *)arg0));
 }
 
@@ -11,7 +11,7 @@ igMetaObject *igViewportResizedMessage_GetMetaObject(void)
 {
     igMetaObject *g = g_igViewportResizedMessage_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00233380();
+        igViewportResizedMessage_EnsureRegistered();
     return g_igViewportResizedMessage_metaObject;
 }
 
@@ -23,7 +23,7 @@ int igViewportResizedMessage_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00233380(void)
+void igViewportResizedMessage_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igViewportResizedMessage_Register);
 }
@@ -35,7 +35,7 @@ CallbackArray *igViewportResizedMessage_Register(void) {
         &g_igViewportResizedMessage_metaObject,
         igMessage_Register,
         igMessage_GetPublishedMetaObject,
-        thunk_igViewportResizedMessage_GetMetaObject,
+        igViewportResizedMessage_GetMetaObjectFunction,
         "igViewportResizedMessage",
         0x18, /* instance size */
         igViewportResizedMessage_GetVTable,
@@ -45,7 +45,7 @@ CallbackArray *igViewportResizedMessage_Register(void) {
     );
 }
 
-void thunk_igViewportResizedMessage_GetMetaObject(void) {
+void igViewportResizedMessage_GetMetaObjectFunction(void) {
     igViewportResizedMessage_GetMetaObject();
 }
 

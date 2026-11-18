@@ -1,4 +1,4 @@
-igMetaObject *FUN_00152e80(void) {
+igMetaObject *igPsx2ScissorExt_GetOrCreateMetaObject(void) {
     if (g_igPsx2ScissorExt_metaObject == 0) {
         g_igPsx2ScissorExt_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -9,7 +9,7 @@ igMetaObject *igPsx2ScissorExt_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2ScissorExt_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00153000();
+        igPsx2ScissorExt_EnsureRegistered();
     return g_igPsx2ScissorExt_metaObject;
 }
 
@@ -50,12 +50,12 @@ int igPsx2ScissorExt_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00153000(void)
+void igPsx2ScissorExt_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2ScissorExt_Register);
 }
 
-static igMetaObjectCallback g_igPsx2ScissorExt_callbackList[] = { FUN_001511a0, 0 };
+static igMetaObjectCallback g_igPsx2ScissorExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2ScissorExt_Register(void) {
     FUN_00149bc0();
@@ -64,7 +64,7 @@ CallbackArray *igPsx2ScissorExt_Register(void) {
         &g_igPsx2ScissorExt_metaObject,
         igScissorExt_Register,
         igScissorExt_GetPublishedMetaObject,
-        thunk_igPsx2ScissorExt_GetMetaObject,
+        igPsx2ScissorExt_GetMetaObjectFunction,
         "igPsx2ScissorExt",
         0x2C, /* instance size */
         igPsx2ScissorExt_GetVTable,
@@ -74,7 +74,7 @@ CallbackArray *igPsx2ScissorExt_Register(void) {
     );
 }
 
-igMetaObject *FUN_00153090(void) {
+igMetaObject *igScissorExt_GetPublishedMetaObject(void) {
     return g_igScissorExt_metaObject;
 }
 
@@ -120,7 +120,7 @@ void igPsx2ScissorExt_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igPsx2ScissorExt_ctorTable, 6);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00150770();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igPsx2VisualContext_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 4), 0x280);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 5), 0x1C0);

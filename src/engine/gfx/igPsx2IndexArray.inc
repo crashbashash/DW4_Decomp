@@ -1,6 +1,6 @@
 igMetaObject *g_igPsx2IndexArray_metaObject;
 
-void thunk_igPsx2IndexArray_GetMetaObject(void) {
+void igPsx2IndexArray_GetMetaObjectFunction(void) {
     igPsx2IndexArray_GetMetaObject();
 }
 

@@ -1,4 +1,4 @@
-igMetaObject *Gap__igPsx2Controller__vfunc_22(void) {
+igMetaObject *igPsx2Controller_GetMeta(void) {
     return g_igPsx2Controller_metaObject;
 }
 

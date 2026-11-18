@@ -159,10 +159,10 @@
    "handle": 0,
    "jtbl": 380,
    "literal": 244,
-   "named": 111095,
+   "named": 111475,
    "pad": 211423,
    "ptr": 3040,
-   "ref": 70972,
+   "ref": 70592,
    "region": 109384,
    "source": 496497,
    "str": 71570,
@@ -236,19 +236,19 @@
    },
    "decl.header_conflicts": {
     "reason": null,
-    "value": 215
+    "value": 195
    },
    "decl.local_externs": {
-    "reason": null,
-    "value": 0
+    "reason": "engine readability round 1: naming engine FUN_/vfunc_ placeholders turns their existing copies in other libraries' headers into counted local externs (placeholders were exempt); moved to home headers in the following declaration cleanup",
+    "value": 237
    },
    "decl.type_conflicts": {
     "reason": null,
-    "value": 306
+    "value": 257
    },
    "decl.varargs": {
     "reason": null,
-    "value": 249
+    "value": 219
    },
    "foreign_profile.bytes": {
     "reason": null,
@@ -260,7 +260,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 616
+    "value": 386
    },
    "inline_asm.other": {
     "reason": null,
@@ -280,7 +280,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 18
+    "value": 12
    },
    "mismatch.bytes": {
     "reason": null,
@@ -316,11 +316,11 @@
    },
    "raw_casts.reflected": {
     "reason": null,
-    "value": 258
+    "value": 288
    },
    "struct.a": {
     "reason": null,
-    "value": 2
+    "value": 1
    },
    "struct.b": {
     "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
@@ -328,7 +328,7 @@
    },
    "struct.c": {
     "reason": null,
-    "value": 9
+    "value": 6
    },
    "unapproved.bytes": {
     "reason": null,
@@ -362,18 +362,18 @@
    "code_only.other.functions": 0,
    "compile.bytes": 0,
    "compile.functions": 0,
-   "decl.header_conflicts": 215,
-   "decl.local_externs": 0,
-   "decl.type_conflicts": 306,
-   "decl.varargs": 249,
+   "decl.header_conflicts": 195,
+   "decl.local_externs": 237,
+   "decl.type_conflicts": 257,
+   "decl.varargs": 219,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "fun_dat_refs": 616,
+   "fun_dat_refs": 386,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
-   "m2c_idiom.units": 18,
+   "m2c_idiom.units": 12,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
@@ -382,10 +382,10 @@
    "orphan.bytes": 0,
    "profile_split.bytes": 19492,
    "profile_split.units": 3,
-   "raw_casts.reflected": 258,
-   "struct.a": 2,
+   "raw_casts.reflected": 288,
+   "struct.a": 1,
    "struct.b": 1,
-   "struct.c": 9,
+   "struct.c": 6,
    "unapproved.bytes": 0,
    "unapproved.functions": 0,
    "unmatched.bytes": 187100,
@@ -396,9 +396,9 @@
   "fully_matched": 20445,
   "fully_verified": 20280,
   "matched": 20280,
-  "named": 17705,
-  "named_semantic": 12224,
-  "named_semantic_matched": 12032,
+  "named": 19248,
+  "named_semantic": 15010,
+  "named_semantic_matched": 14805,
   "total": 20576
  },
  "kernel_patches": {
@@ -492,46 +492,46 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2535428,
+  "bytes": 2663188,
   "failing": {
    "addresses": {
-    "bytes": 657284,
-    "functions": 3712
+    "bytes": 498368,
+    "functions": 2228
    },
    "declarations": {
-    "bytes": 142212,
-    "functions": 283
+    "bytes": 129108,
+    "functions": 272
    },
    "fields": {
-    "bytes": 278292,
-    "functions": 1376
+    "bytes": 258588,
+    "functions": 1258
    },
    "idioms": {
-    "bytes": 377036,
-    "functions": 2041
+    "bytes": 336920,
+    "functions": 1801
    },
    "name": {
-    "bytes": 536608,
-    "functions": 4452
+    "bytes": 327760,
+    "functions": 1660
    },
    "placed": {
-    "bytes": 628,
-    "functions": 9
+    "bytes": 0,
+    "functions": 0
    },
    "references": {
-    "bytes": 451564,
-    "functions": 1651
+    "bytes": 308572,
+    "functions": 997
    },
    "types": {
-    "bytes": 313996,
-    "functions": 1161
+    "bytes": 295864,
+    "functions": 1115
    },
    "virtuals": {
-    "bytes": 146400,
-    "functions": 557
+    "bytes": 136800,
+    "functions": 498
    }
   },
-  "functions": 14802,
+  "functions": 17030,
   "matched_functions": 20445
  },
  "regions": [
@@ -666,12 +666,12 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 3812,
-  "pct": 44.99,
-  "recovered": 32793,
-  "synthetic": 6076,
-  "total": 72882,
-  "typeable": 258,
-  "typeable_pct": 0.35
+  "offset_casts": 3576,
+  "pct": 45.29,
+  "recovered": 32990,
+  "synthetic": 5999,
+  "total": 72839,
+  "typeable": 288,
+  "typeable_pct": 0.4
  }
 }

@@ -9,10 +9,10 @@ igMetaField *g_igPsx2MultiTextureExt_blendDMetaField;
 igMetaField *g_igPsx2MultiTextureExt_blendFIXMetaField;
 
 void FUN_0014d650(void) {
-    *(int *)((char *)(g_igMultiTextureExt_metaObject) + 60) = (int)(&thunk_igPsx2MultiTextureExt_GetMetaObject);
+    *(int *)((char *)(g_igMultiTextureExt_metaObject) + 60) = (int)(&igPsx2MultiTextureExt_GetMetaObjectFunction);
 }
 
-void thunk_igPsx2MultiTextureExt_GetMetaObject(void) {
+void igPsx2MultiTextureExt_GetMetaObjectFunction(void) {
     igPsx2MultiTextureExt_GetMetaObject();
 }
 

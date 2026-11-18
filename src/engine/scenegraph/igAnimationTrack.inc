@@ -57,7 +57,7 @@ void igAnimationTrack_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAnimationTrack_Register);
 }
 
-static igMetaObjectCallback g_igAnimationTrack_callbackList[] = { FUN_00194e70, 0 };
+static igMetaObjectCallback g_igAnimationTrack_callbackList[] = { igTransformSource_EnsureRegistered, 0 };
 
 CallbackArray *igAnimationTrack_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -66,7 +66,7 @@ CallbackArray *igAnimationTrack_Register(void) {
         &g_igAnimationTrack_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igAnimationTrack_GetMetaObject,
+        igAnimationTrack_GetMetaObjectFunction,
         "igAnimationTrack",
         0x2C, /* instance size */
         igAnimationTrack_GetVTable,
@@ -76,7 +76,7 @@ CallbackArray *igAnimationTrack_Register(void) {
     );
 }
 
-void thunk_igAnimationTrack_GetMetaObject(void) {
+void igAnimationTrack_GetMetaObjectFunction(void) {
     igAnimationTrack_GetMetaObject();
 }
 
@@ -102,15 +102,15 @@ static int g_igAnimationTrack_fieldOffsets[] = {
 };
 
 void igAnimationTrack_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *sourceField;
+    void *meta;
 
-    temp_s0 = (void *)g_igAnimationTrack_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationTrack_ctorTable, 3);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00194dd0();
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationTrack_fieldTable, g_igAnimationTrack_fieldHandles, g_igAnimationTrack_fieldOffsets, temp_s2);
+    meta = (void *)g_igAnimationTrack_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igAnimationTrack_ctorTable, 3);
+    sourceField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igObjectRefMetaField *)sourceField)->_metaObject = (int)igTransformSource_GetOrCreateMetaObject();
+    igMetaObject_NameFields((igMetaObject *)meta, g_igAnimationTrack_fieldTable, g_igAnimationTrack_fieldHandles, g_igAnimationTrack_fieldOffsets, base);
 }
 

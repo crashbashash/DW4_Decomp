@@ -1,7 +1,7 @@
 igMetaObject *g_igDecalExt_metaObject;
 igMetaField *g_igDecalExt_decalOffsetMetaField;
 
-igMetaObject *FUN_0014f8d0(void)
+igMetaObject *igDecalExt_GetMetaObject(void)
 {
     igMetaObject *meta = g_igDecalExt_metaObject;
     bool ready;
@@ -11,12 +11,12 @@ igMetaObject *FUN_0014f8d0(void)
         if (ready != false)
             goto end;
     }
-    FUN_0014f920();
+    igDecalExt_EnsureRegistered();
 end:
     return g_igDecalExt_metaObject;
 }
 
-void FUN_0014f920(void)
+void igDecalExt_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igDecalExt_Register);
 }
@@ -28,7 +28,7 @@ CallbackArray *igDecalExt_Register(void) {
         &g_igDecalExt_metaObject,
         igContextExt_Register,
         igContextExt_GetPublishedMetaObject,
-        thunk_FUN_0014f8d0,
+        igDecalExt_GetMetaObjectFunction,
         "igDecalExt",
         0x18, /* instance size */
         0,
@@ -38,8 +38,8 @@ CallbackArray *igDecalExt_Register(void) {
     );
 }
 
-void thunk_FUN_0014f8d0(void) {
-    FUN_0014f8d0();
+void igDecalExt_GetMetaObjectFunction(void) {
+    igDecalExt_GetMetaObject();
 }
 
 static FieldFactory g_igDecalExt_ctorTable[] = {
@@ -63,6 +63,6 @@ void igDecalExt_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igDecalExt_ctorTable, 1);
     igMetaObject_NameFields(meta, g_igDecalExt_fieldTable, g_igDecalExt_fieldHandles, g_igDecalExt_fieldOffsets, fieldStart);
-    *(int *)((char *)(g_igDecalExt_metaObject) + 60) = (int)(&thunk_igPsx2DecalExt_GetMetaObject);
+    *(int *)((char *)(g_igDecalExt_metaObject) + 60) = (int)(&igPsx2DecalExt_GetMetaObjectFunction);
 }
 

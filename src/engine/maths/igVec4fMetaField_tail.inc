@@ -5,11 +5,11 @@ void igVec4fMetaField_SwapBytes(igVec4fMetaField *arg0, int arg1, int arg2) {
     ((DW4VC_208_2 *)(temp_v0))->vX((int)(arg1), (int)(arg2 * ((unsigned int)(arg0->_size) >> 2)));
 }
 
-void Gap__igVec4fMetaField__vfunc_56(int arg0, int arg1, int arg2) {
+void igVec4fMetaField_ValueFromString(int arg0, int arg1, int arg2) {
     FUN_0018be80(arg2, arg1, 4, 4, 1);
 }
 
-void Gap__igVec4fMetaField__vfunc_57(int *out, void *field, const float *value) {
+void igVec4fMetaField_ValueToString(int *out, void *field, const float *value) {
     char text[1024];
     sprintf(text, "%f,%f,%f,%f", value[0], value[1], value[2], value[3]);
     *out = internString(text);
@@ -26,7 +26,7 @@ void igVec4fMetaField_SetDefault(igMetaField *self, const float *value)
     ((igVec4fMetaFieldView *)self)->SetDefault(value);
 }
 
-int Gap__igVec4fMetaField__vfunc_27(void) {
+int igVec4fMetaField_GetAlignment(void) {
     return 0x10;
 }
 

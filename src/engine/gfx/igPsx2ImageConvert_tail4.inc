@@ -1,4 +1,4 @@
-int Gap__Gfx__igPsx2ImageConvert__vfunc_22(void) {
+int igPsx2ImageConvert_GetMeta(void) {
     return (int)g_igPsx2ImageConvert_metaObject;
 }
 

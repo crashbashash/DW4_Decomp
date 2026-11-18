@@ -1,6 +1,6 @@
 igMetaObject *g_igCollisionCellList_metaObject;
 
-igMetaObject *FUN_0023a570(void) {
+igMetaObject *igCollisionCellList_GetOrCreateMetaObject(void) {
     if (g_igCollisionCellList_metaObject == 0) {
         g_igCollisionCellList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igCollisionCellList_GetMetaObject(void)
 {
     igMetaObject *g = g_igCollisionCellList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0023a650();
+        igCollisionCellList_EnsureRegistered();
     return g_igCollisionCellList_metaObject;
 }
 
@@ -23,12 +23,12 @@ int igCollisionCellList_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_0023a650(void)
+void igCollisionCellList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igCollisionCellList_Register);
 }
 
-static igMetaObjectCallback g_igCollisionCellList_callbackList[] = { FUN_0023a850, 0 };
+static igMetaObjectCallback g_igCollisionCellList_callbackList[] = { igCollisionCell_EnsureRegistered, 0 };
 
 CallbackArray *igCollisionCellList_Register(void) {
     CollisionLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ CallbackArray *igCollisionCellList_Register(void) {
         &g_igCollisionCellList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igCollisionCellList_GetMetaObject,
+        igCollisionCellList_GetMetaObjectFunction,
         "igCollisionCellList",
         0x14, /* instance size */
         igCollisionCellList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igCollisionCellList_Register(void) {
     );
 }
 
-void thunk_igCollisionCellList_GetMetaObject(void) {
+void igCollisionCellList_GetMetaObjectFunction(void) {
     igCollisionCellList_GetMetaObject();
 }
 

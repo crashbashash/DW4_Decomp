@@ -1,6 +1,6 @@
 igMetaObject *g_igVertexBlendMatrixAttrPool_metaObject;
 
-igMetaObject *FUN_00199fb0(void) {
+igMetaObject *igVertexBlendMatrixAttrPool_GetOrCreateMetaObject(void) {
     if (g_igVertexBlendMatrixAttrPool_metaObject == 0) {
         g_igVertexBlendMatrixAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igVertexBlendMatrixAttrPool_GetMetaObject(void)
 {
     igMetaObject *g = g_igVertexBlendMatrixAttrPool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019a090();
+        igVertexBlendMatrixAttrPool_EnsureRegistered();
     return g_igVertexBlendMatrixAttrPool_metaObject;
 }
 
@@ -23,12 +23,12 @@ int igVertexBlendMatrixAttrPool_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_0019a090(void)
+void igVertexBlendMatrixAttrPool_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVertexBlendMatrixAttrPool_Register);
 }
 
-static igMetaObjectCallback g_igVertexBlendMatrixAttrPool_callbackList[] = { FUN_00130cf0, 0 };
+static igMetaObjectCallback g_igVertexBlendMatrixAttrPool_callbackList[] = { igVertexBlendMatrixAttr_EnsureRegistered, 0 };
 
 CallbackArray *igVertexBlendMatrixAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ CallbackArray *igVertexBlendMatrixAttrPool_Register(void) {
         &g_igVertexBlendMatrixAttrPool_metaObject,
         igObjectPool_Register,
         igObjectPool_GetPublishedMetaObject,
-        thunk_igVertexBlendMatrixAttrPool_GetMetaObject,
+        igVertexBlendMatrixAttrPool_GetMetaObjectFunction,
         "igVertexBlendMatrixAttrPool",
         0x20, /* instance size */
         igVertexBlendMatrixAttrPool_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igVertexBlendMatrixAttrPool_Register(void) {
     );
 }
 
-void thunk_igVertexBlendMatrixAttrPool_GetMetaObject(void) {
+void igVertexBlendMatrixAttrPool_GetMetaObjectFunction(void) {
     igVertexBlendMatrixAttrPool_GetMetaObject();
 }
 

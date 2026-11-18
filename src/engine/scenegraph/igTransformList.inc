@@ -38,7 +38,7 @@ CallbackArray *igTransformList_Register(void) {
         &g_igTransformList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igTransformList_GetMetaObject,
+        igTransformList_GetMetaObjectFunction,
         "igTransformList",
         0x14, /* instance size */
         igTransformList_GetVTable,
@@ -48,7 +48,7 @@ CallbackArray *igTransformList_Register(void) {
     );
 }
 
-void thunk_igTransformList_GetMetaObject(void) {
+void igTransformList_GetMetaObjectFunction(void) {
     igTransformList_GetMetaObject();
 }
 

@@ -1,4 +1,4 @@
-void Gap__Attrs__igTextureCubeAttr__vfunc_24(int *arg0, int *arg1) {
+void igTextureCubeAttr_apply(int *arg0, int *arg1) {
     int a4 = arg0[9];
     if (a4 < 0) {
         switch (arg0[24]) {
@@ -17,7 +17,7 @@ void Gap__Attrs__igTextureCubeAttr__vfunc_24(int *arg0, int *arg1) {
             }
             break;
         case 2:
-            Gap__Attrs__igTextureAttr__vfunc_24((igTextureAttr *)arg0, (igObject *)arg1);
+            igTextureAttr_apply((igTextureAttr *)arg0, (igObject *)arg1);
             break;
         }
         if (arg0[9] >= 0) {
@@ -25,12 +25,12 @@ void Gap__Attrs__igTextureCubeAttr__vfunc_24(int *arg0, int *arg1) {
         }
     } else {
 b14:
-        Gap__Attrs__igTextureAttr__vfunc_24((igTextureAttr *)arg0, (igObject *)arg1);
+        igTextureAttr_apply((igTextureAttr *)arg0, (igObject *)arg1);
     }
 }
 
-void Gap__Attrs__igTextureCubeAttr__vfunc_12(void **arg0) {
-    Gap__Attrs__igTextureAttr__vfunc_12(arg0);
+void igTextureCubeAttr_ReleaseDefaults(void **arg0) {
+    igTextureAttr_ReleaseDefaults(arg0);
 }
 
 void FUN_00141190(int *arg0, int arg1) {

@@ -1,8 +1,8 @@
-int Gap__Sg__igNode__vfunc_26(void **arg0) {
+int igNode_IsTransformable(void **arg0) {
     return ((DW4VC_92_0 *)(arg0))->vX() < 2;
 }
 
-void FUN_001c6340(int *arg0, int arg1) {
+void igGroup_Transform(int *arg0, int arg1) {
     unsigned int n;
     unsigned int i;
 
@@ -16,7 +16,7 @@ void FUN_001c6340(int *arg0, int arg1) {
     }
 }
 
-void Gap__Sg__igNode__vfunc_27(void) {
+void igNode_Transform(void) {
 
 }
 

@@ -1,4 +1,4 @@
-int Gap__igPsx2ControllerManager__vfunc_22(void)
+int igPsx2ControllerManager_GetMeta(void)
 {
     return (int)g_igPsx2ControllerManager_metaObject;
 }

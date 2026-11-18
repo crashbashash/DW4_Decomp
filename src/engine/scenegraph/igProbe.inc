@@ -75,7 +75,7 @@ void igProbe_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igProbe_Register);
 }
 
-static igMetaObjectCallback g_igProbe_callbackList[] = { FUN_00186b20, igRayList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igProbe_callbackList[] = { igVolume_EnsureRegistered, igRayList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
 
 CallbackArray *igProbe_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -84,7 +84,7 @@ CallbackArray *igProbe_Register(void) {
         &g_igProbe_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igProbe_GetMetaObject,
+        igProbe_GetMetaObjectFunction,
         "igProbe",
         0x14, /* instance size */
         igProbe_GetVTable,
@@ -94,7 +94,7 @@ CallbackArray *igProbe_Register(void) {
     );
 }
 
-void thunk_igProbe_GetMetaObject(void) {
+void igProbe_GetMetaObjectFunction(void) {
     igProbe_GetMetaObject();
 }
 
@@ -130,7 +130,7 @@ void igProbe_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igProbe_ctorTable, 3);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = FUN_00186a80();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = igVolume_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igRayList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;

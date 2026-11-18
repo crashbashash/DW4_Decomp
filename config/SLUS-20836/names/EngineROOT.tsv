@@ -1,0 +1,93 @@
+# Engine functions defined directly in src/engine/ (the p2 PS2 renderer back end, render state, textures, the
+# viewer files and the Viewer library's head copies), named from their bodies, callers and strings; viewer names
+# cite the Alchemy 5.0 kit (archive.org item alchemy-kit_202309, sources/lib/viewer) where the kit function
+# corresponds body for body.
+# Columns: <va>	<name>	<module>	<confidence>	<evidence>. tools/split.py reads the first three.
+0x004583f0	igSmartPointer_igViewerGuiFactory_Destruct	engine	medium	out-of-line smart-pointer destructor (release, delete when the flag is positive) the Viewer calls on igViewerSceneInfoManager._guiFactory (+48) and igViewerStatisticsManager._guiFactory (+16); both fields are igViewerGuiFactory in the kit's igViewerSceneInfoManager.igo/igViewerStatistics.igo (alchemy-kit_202309). Alternative: a shared igObject instance
+0x00458470	igSmartPointer_igRadioGroup_Destruct	engine	medium	smart-pointer destructor the Viewer calls on igViewerSceneInfoManager._operationModeGroup (+152), igRadioGroup in the kit's igViewerSceneInfoManager.igo. Alternative: a shared igObject instance
+0x004584f0	igSmartPointer_igViewerSceneInfoManager_Destruct	engine	medium	smart-pointer destructor igActorManager's constructor image calls on _vsim (+48), an igViewerSceneInfoManager in the kit (plugins ssActorMenu igVisualSkeletonManager._vsim). Alternative: a shared igObject instance
+0x00458570	igSmartPointer_igStatisticsItem_Destruct	engine	medium	smart-pointer destructor called on igViewerSceneInfoManager._timeStatistic.._farPlaneStatistic (+116..+128), igStatisticsItem fields in the kit's igViewerSceneInfoManager.igo
+0x004585f0	igSmartPointer_igStatisticsItem_Construct	engine	medium	*p = 0 constructor called on exactly the four igStatisticsItem fields +116..+128 of igViewerSceneInfoManager
+0x00458600	igSmartPointer_igGuiComponent_Construct	engine	medium	*p = 0 constructor called on _menuHolder, _operationBoxHolder, _timeBoxHolder, _cameraMenuActiver (all igGuiComponent in the kit) and +192 of igViewerSceneInfoManager; its +56/+60 destructor is igSmartPointer_igGuiComponent_Destruct
+0x00458610	igSmartPointer_igBoxComponent_Construct	engine	medium	*p = 0 constructor called on _rootComponent, _operationBox, _timeBox and the menu fields +76..+112, all igBoxComponent in the kit's igViewerSceneInfoManager.igo
+0x00458620	igSmartPointer_igViewerGuiFactory_Construct	engine	medium	*p = 0 constructor called on igViewerSceneInfoManager._guiFactory (+48), whose destructor is igSmartPointer_igViewerGuiFactory_Destruct
+0x00458630	igInfoManager_Construct	engine	high	constructor shape: igObject_InitHeader, igNamedObject vtable, _name (+8) = 0, then g_igInfoManager_vtable last; called first by igViewerSceneInfoManager's constructor image as its base
+0x00204ea0	p2LookupStateCacheEntry	engine	medium	owner-reviewed p2 back-end name (extras p2-backend-names): hashes the render state to a bucket and 64-bit key pair, walks p2StateCache; returns miss/stale/sent into p2StateCacheStatus
+0x00200980	p2BuildFunctionTables	engine	medium	owner-reviewed: fills p2VariantSlots per set bit of p2VertexArrayMask and writes p2FunctionTables/p2FunctionTableSizes under P2_DIRTY_FUNCTION_TABLES
+0x001fe390	p2DrawParticles	engine	medium	owner-reviewed: (format,count,first,size) sets primitive, colour and vertex format, sends the render state and emits the particle VIF UNPACK + MSCAL batches; only caller igPsx2ParticleArray's draw
+0x001f8730	p2GetActiveLightCount	engine	high	owner-reviewed: returns p2ActiveLightCount
+0x001f8740	p2GetActivePointLightCount	engine	high	owner-reviewed: returns p2ActivePointLightCount
+0x00209cc0	p2Log2	engine	medium	owner-reviewed: floor(log2(a)) by shifting; p2LoadTexture fills TEX0 TW/TH with it. Alternative p2TextureSizeLog2
+0x001f8190	p2writeGSPrivRegister	engine	medium	the write counterpart of the string-named p2readGSPrivRegister: the same register-number switch (PMODE..SIGLBLID), storing the shadow copy to the memory-mapped GS register; the GS interrupt handler writes IMR through it
+0x001f6f50	p2GetStatistics	engine	medium	copies every renderer counter (vertices, primitives, texture loads, DMA, lighting and frame-time statistics) into the caller's block and resets the frame-time min/max; called from igPsx2VisualContext's statistics slot. Alternative p2ReadStatistics
+0x001f7470	p2SetPolygonMode	engine	medium	stores the mode p2SendGifTags turns into points (0), lines (1) or filled primitives; igPsx2VisualContext slot 239 maps its argument 0/1/2 to 2/1/0
+0x001f7530	p2GsInterruptHandler	engine	high	registered by AddIntcHandler(0, ...) (INTC_GS); reads CSR, dispatches finish, vsync and signal to p2FinishHandler/p2VsyncHandler/p2GsSignalHandler, masks and unmasks IMR, ends with sync/ei
+0x001f8350	p2InitGsInterrupt	engine	high	registers p2GsInterruptHandler with AddIntcHandler and EnableIntc(INTC_GS) and builds the GS-register VIF templates
+0x001f8490	p2InitGsRegisterAddresses	engine	medium	fills the table p2UploadGsRegisters reads per register index (DAT 0x56ae50) with the GS register addresses 0x00..0x7f
+0x001f76f0	p2UploadGsRegisters	engine	medium	sends `count` register images of the current set as GIF A+D writes through the GS-register VU program (or the direct path for other programs); p2SendGsRegister sends one
+0x001f7490	p2PrintGsRevision	engine	medium	reads CSR and printf's its ID and REV bytes; called once from p2InitGsInterrupt on the first open
+0x001f8750	p2SetMaterialSpecularState	engine	medium	stores the flag and marks the lights and VU buffers dirty; igPsx2VisualContext's slot setting _materialSpecularState calls it with the same value
+0x001ff3b0	p2PrepareRenderState	engine	medium	called with the same mask just before p2SendRenderState: counts lights, looks up the state cache, rebuilds the vertex format, function tables and lighting functions the send then uploads. Alternative p2UpdateRenderState
+0x00202300	p2SetupProgramVariants	engine	medium	only caller p2InitVuPrograms: clears every p2VariantsBitN table, points p2VariantSlots at them, fills them with p2FindVuProgramVariants per feature bit, then groups multi-feature programs into variant tables by bit count
+0x00202f60	p2FindVariantTable	engine	medium	walks a variant-table list for the table whose feature mask equals the program's
+0x00203000	p2CreateVariantTable	engine	medium	allocates a variant table for a program: one entry per combination of its feature bits' settings, all -1
+0x00203500	p2FreeVariantTables	engine	high	frees every variant table of the six lists and clears them; called from p2CloseDisplay
+0x00200830	p2SelectVariantTables	engine	medium	for each variant table whose features the vertex array mask holds, combines its features' slot indexes, and when the table has that program points the low feature's slot at it and clears the other features from the mask
+0x00208170	p2SetTextureCombineMode	engine	medium	stores the mode in p2TextureCombineMode[program] and its nibble of the packed per-program word, marking the vertex format and function tables dirty
+0x00208200	p2GetTextureHeight	engine	high	returns the u16 at +62 of a texture record, which p2LoadTexture fills from its height argument; p2Clear/p2SetScissor/p2SetViewport use it for the render target's height
+0x00208210	p2AllocTextureRecord	engine	high	pops a record from p2FreeTextures (growing the pool) and clears it; p2LoadTexture's first call
+0x002082b0	p2FreeTextureRecord	engine	high	clears a record and pushes it back on p2FreeTextures
+0x002082f0	p2InitTextures	engine	medium	resets the texture free list and slots, creates the VRAM block list head from the texture base, registers the textureLoaded/textureDeferred predicate names and sets the default TEXA
+0x00208430	p2TextureUploadDone	engine	medium	DMA completion: a record waiting on the upload (state 4) whose VIF1 sequence has completed becomes state 5
+0x002084a0	p2TextureLoadDone	engine	medium	DMA completion p2UploadTextures attaches to each GIF upload: state 2 becomes 3 (resident)
+0x002084e0	p2SetTexture	engine	medium	binds a texture: its palette through p2SetClut, else its TEX0 (address from the display buffer for buffer textures) into the current context's TEX0 and marks it dirty
+0x00208f20	p2SetProgramTextureFunction	engine	medium	stores the 2-bit texture function of the current program in the packed per-program word
+0x00208f70	p2SetTextureFunction	engine	medium	sets TEX0.TFX of the current context and p2TextureFunction[program]
+0x00209090	p2SetTextureFunctionAndAlpha	engine	medium	as p2SetTextureFunction, also setting TEX0.TCC (texture alpha) from its second argument
+0x00209210	p2SetTextureClamp	engine	medium	writes CLAMP_1/CLAMP_2 (WMS, WMT, MINU, MAXU, MINV, MAXV) of the current context and marks TEX0/CLAMP dirty
+0x002094c0	p2SetTextureFilter	engine	medium	writes TEX1 MMAG/MMIN of the current context, clearing MXL for the non-mipmapped filters
+0x00209650	p2SetTextureLod	engine	medium	writes TEX1 LCM, L and K of the current context
+0x00209780	p2SetTextureAlpha	engine	medium	writes TEXA TA0, TA1 and AEM; p2InitTextures sets (0, 0x80, 0)
+0x002097f0	p2UploadTextures	engine	medium	GIF image transfers (BITBLTBUF/TRXPOS/TRXREG/TRXDIR then IMAGE packets) of each texture record in a list, attaching p2TextureLoadDone to each
+0x0020a990	p2CopyTexture	engine	medium	local-to-local GS transfer of a rectangle between two texture records, allocating both first
+0x0020ad60	p2SetRenderTarget	engine	medium	points FRAME/ZBUF/XYOFFSET at a colour (and optional depth) texture, saving the display's registers the first time
+0x0020b110	p2RestoreRenderTarget	engine	medium	restores the FRAME/ZBUF/XYOFFSET p2SetRenderTarget saved and clears the targets
+0x0020b280	p2PlaceTextureBlock	engine	medium	splits and merges the VRAM block list so the record occupies the found address range, freeing the records it covers
+0x0020b650	p2FindTextureSpace	engine	medium	walks the VRAM block list for free or done blocks that fit the record's size and alignment, returning the block and address
+0x0020b7f0	p2AllocTextureMemory	engine	medium	finds VRAM space for a record (waiting on in-flight uploads if needed), places it and marks it state 2; returns whether it got space
+0x0020b9d0	p2FenceTexture	engine	medium	marks a record, its palette and its chained records as in use until the current VIF1 packet completes (state 4 with p2TextureUploadDone)
+0x0020c7b0	p2ChainTexture	engine	medium	appends a record to another's chain (+32) and counts it
+0x0020c7f0	p2SetTexturePalette	engine	medium	stores the palette record (+36) p2FenceTexture fences with the texture
+0x0020c800	p2InvalidateTexture	engine	medium	marks a loaded record (state != 1) for reload (state 6)
+0x0020c840	p2SetTextureImage	engine	medium	stores a new image pointer and marks the record for reload like p2InvalidateTexture
+0x0020c9f0	p2FreeTexture	engine	medium	releases a record's VRAM block, waits for its upload, merges it with free neighbours and frees the record
+0x0045f200	igViewerRenderer_ObjectsTraverseNodeSelect	engine	medium	kit igViewerRenderer.cpp ObjectsTraverseNodeSelectFunction: ignores hidden transforms and light sets, traverses the rest (alchemy-kit_202309)
+0x0045f2b0	igViewerRenderer_PushLightStates	engine	medium	kit igViewerRenderer::pushLightStates: pushes the headlight state on the attr stack manager, then each light state unless simple light management or scene lights
+0x0045f370	igViewerRenderer_PopLightStates	engine	medium	kit igViewerRenderer::popLightStates, the same walk popping
+0x004601c0	igViewerRenderer_ViewportResized	engine	medium	kit igViewerRenderer::viewportResized: sets up the scene traversal's attr stack for igViewportAttr with its default and capability managers
+0x00460790	igViewerRenderer_FindLights	engine	medium	kit igViewerRenderer::findLights: recurses through visible groups appending each light set's lights to _lightList
+0x00460be0	igViewerRenderer_FindAttrFromType	engine	medium	kit static findAttrFromType: finds in the set's attr list the attr of the given attr's meta
+0x00460c80	igViewerRenderer_UpdateSharedAttr	engine	medium	kit static updateSharedAttr: replaces a found attr with the attr pool's shared copy
+0x00460d90	igViewerRenderer_TransferAttrFromType	engine	medium	kit static transferAttrFromType: moves the attr of that type from one set to the other
+0x00460e00	igViewerRenderer_UpdateAttr	engine	medium	kit igViewerRenderer::updateAttr: updates the override set, else the attr set, else appends the shared attr
+0x00460f20	igViewerRenderer_SetOverride	engine	medium	kit igViewerRenderer::setOverride: transfers the attr between the attr set and the override set
+0x00463560	ViewerSetup_Construct	engine	high	unit-objects compiler name __ct__11ViewerSetupFP8igObject
+0x00463910	ViewerSetup_Destruct	engine	high	unit-objects compiler name __dt__11ViewerSetupFv
+0x00464170	igViewManager_GetObjectProps	engine	medium	kit igViewManager::getObjectProps: an igBoundingBoxesMaker (whole animation when asked) bounds the node and gives its centre and size
+0x00464af0	igViewManager_ApplyDeadZone	engine	medium	moves both stick axes toward zero by the dead-zone width, clamping inside it; used by the controller motion handler
+0x004660f0	igRotateMode_MouseMotionNormal	engine	medium	kit igRotateMode::mouseMotionNormal(delta): zooms, rotates head/pitch or translates by the normalised mouse delta per button state
+0x00467030	igActorManager_AddUniqueActor	engine	medium	appends the actor to _actors (+24) unless the list already holds it
+0x00280b50	EnbayaDefaultAllocator_Allocate	engine	medium	slot 3 of the default allocator vtable Enbaya_InitMemoryManagement installs: malloc(size)
+0x00280b60	EnbayaDefaultAllocator_Free	engine	medium	slot 4 of the same vtable: free(p)
+0x00280b70	EnbayaDefaultAllocator_Reallocate	engine	medium	slot 5: realloc(p, size)
+0x00280b80	EnbayaDefaultAllocator_AllocateCleared	engine	medium	slot 6: calloc(count, size)
+0x00280a70	Enbaya_CreateDefaultAllocator	engine	medium	Enbaya_InitMemoryManagement's helper: stores the caller's allocator or a malloc'd object with the default allocator vtable
+0x00280ad0	EnbayaAllocator_Destruct	engine	medium	deleting destructor in slot 2 of the allocator base vtable
+0x00280b20	EnbayaDefaultAllocator_Destruct	engine	medium	destructor in slot 2 of the default allocator vtable, resetting to the base vtable
+0x001f74e0	p2SequenceFinishedPredicate	engine	medium	DMA predicate p2AllocTextureMemory adds to the GIF channel: true once the recorded finished VIF1 sequence reaches its argument
+0x001f7500	p2RecordFinishedSequence	engine	medium	finish function p2AllocTextureMemory queues with p2AddFinishFunc: keeps the newest finished VIF1 sequence (p2FinishFunc.sequence) that p2SequenceFinishedPredicate tests
+0x0020a590	p2CopyFramebufferToTexture	engine	medium	local-to-local GS transfer from the draw buffer (or the Z buffer when the last argument is set) into a texture record, the source row flipped by the buffer height. Alternative p2CopyScreenToTexture
+0x0020b270	p2GetTextureUploadSequence	engine	medium	returns the record's first doubleword, the GIF sequence p2UploadTextures stores; igPsx2VisualContext waits on it with p2WaitDmaSequence(2, ...)
+0x0020c880	p2MarkTextureStage	engine	medium	sets the stage's bit in the stage mask p2FenceUsedTexture walks
+0x0020c8b0	p2FenceUsedTexture	engine	medium	when a resident record was drawn with, clears the flag and fences it and every texture of the marked stages (p2FenceTexture)
+0x0020c9e0	p2SetTextureWaitMode	engine	medium	stores the mode p2AllocTextureMemory tests to wait for VRAM through the GS finish (1) or the DMA predicate

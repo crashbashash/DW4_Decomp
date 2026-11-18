@@ -13,7 +13,7 @@ igMetaField *g_igViewModel_drawTimeMetaField;
 igMetaField *g_igViewModel_selectedCenterMetaField;
 igMetaField *g_igViewModel_selectedLengthMetaField;
 
-igMetaObject *FUN_0045d470(void) {
+igMetaObject *igViewModel_GetOrCreateMetaObject(void) {
     if (g_igViewModel_metaObject == 0) {
         g_igViewModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -23,7 +23,7 @@ igMetaObject *FUN_0045d470(void) {
 void *igViewModel_GetMetaObject(void) {
     igMetaObject *g = g_igViewModel_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0045d5c0();
+        igViewModel_EnsureRegistered();
     }
     return g_igViewModel_metaObject;
 }
@@ -54,7 +54,7 @@ int igViewModel_GetVTable(void) {
     return r;
 }
 
-void FUN_0045d5c0(void)
+void igViewModel_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igViewModel_Register);
 }
@@ -66,7 +66,7 @@ CallbackArray *igViewModel_Register(void) {
         &g_igViewModel_metaObject,
         igModel_Register,
         igModel_GetPublishedMetaObject,
-        thunk_igViewModel_GetMetaObject,
+        igViewModel_GetMetaObjectFunction,
         "igViewModel",
         0xB0, /* instance size */
         igViewModel_GetVTable,
@@ -76,7 +76,7 @@ CallbackArray *igViewModel_Register(void) {
     );
 }
 
-void thunk_igViewModel_GetMetaObject(void) {
+void igViewModel_GetMetaObjectFunction(void) {
     igViewModel_GetMetaObject();
 }
 

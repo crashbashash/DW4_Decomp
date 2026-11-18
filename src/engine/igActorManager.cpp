@@ -13,7 +13,7 @@ void igActorManager_Start(igActorManager *arg0);
 typedef struct L { char pad[8]; int n; int p; int *arr; } L;
 typedef struct A { char pad[24]; L *f24; } A;
 struct ActorListOwner;
-void FUN_00467030(struct ActorListOwner *arg0, int arg1);
+void igActorManager_AddUniqueActor(struct ActorListOwner *arg0, int arg1);
 #include "dw4/scenegraph/igActorInfo.h"
 #define F24 (*(L **)&arg1->f24)
 
@@ -103,7 +103,7 @@ int igActorManager_AddInfo(int arg0, A *arg1) {
         if (0 < arg1->f24->n) {
             off = 0;
             do {
-                FUN_00467030((ActorListOwner *)arg0, *(int *)((char *)F24->arr + off));
+                igActorManager_AddUniqueActor((ActorListOwner *)arg0, *(int *)((char *)F24->arr + off));
                 i++;
                 off += 4;
             } while (i < F24->n);
@@ -113,7 +113,7 @@ int igActorManager_AddInfo(int arg0, A *arg1) {
     return 0;
 }
 
-void FUN_00467030(struct ActorListOwner *arg0, int arg1) {
+void igActorManager_AddUniqueActor(struct ActorListOwner *arg0, int arg1) {
     struct ActorList *list = arg0->f24;
     /* matching construct: retail keeps the value in a stack slot */
     int value = arg1;
@@ -126,7 +126,7 @@ void igActorManager_Update(void) {
 
 }
 
-igMetaObject *Gap__Viewer__igActorManager__vfunc_22(void) {
+igMetaObject *igActorManager_GetMeta(void) {
     return g_igActorManager_metaObject;
 }
 

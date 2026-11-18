@@ -24,7 +24,7 @@ void FUN_001419f0(struct TransformPairView *arg0, float *m, void *arg2) {
     arg0->f13 = 1;
 }
 
-void Gap__Attrs__igVertexBlendMatrixListAttr__vfunc_24(struct S_141e10 *arg0, igPsx2VisualContext *arg1) {
+void igVertexBlendMatrixListAttr_apply(struct S_141e10 *arg0, igPsx2VisualContext *arg1) {
     int i;
     int n;
     n = arg0->f24->n;
@@ -46,14 +46,14 @@ void Gap__Attrs__igVertexBlendMatrixListAttr__vfunc_24(struct S_141e10 *arg0, ig
             igMatrix44f_Copy((float *)(arg0->f16 + (i << 6)), (const float *)(o + DAT_00562bc8[0]->f8));
         }
     }
-    Gap__Gfx__igPsx2VisualContext__vfunc_197(arg1, n, arg0->f16);
+    igPsx2VisualContext_SetBlendingMatrices(arg1, n, arg0->f16);
 }
 
 /* Empty default virtual (slot 26): does nothing and leaves the receiver untouched. */
-void Gap__Attrs__igVertexBlendMatrixListAttr__vfunc_26(void) {
+void igVertexBlendMatrixListAttr_SynchronizeDefault(void) {
 }
 
-void Gap__Attrs__igVertexBlendMatrixListAttr__vfunc_12(void *arg0) {
+void igVertexBlendMatrixListAttr_ReleaseDefaults(void *arg0) {
     igObject_FreeMemory((igObject *)arg0, (void *)(*(int *)((char *)arg0 + 16)));
     igObject_ReleaseDefaults((igObject *)arg0);
 }

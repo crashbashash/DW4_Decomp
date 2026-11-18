@@ -6,7 +6,7 @@ igMetaField *g_igVertexArray1_1_blendIndexMetaField;
 igMetaField *g_igVertexArray1_1_pointSpriteSizeMetaField;
 igMetaField *g_igVertexArray1_1_memPoolMetaField;
 
-int FUN_0014b680(int arg0) {
+int igVertexArray1_1_Create(int arg0) {
     igVertexArray1_1_EnsureRegistered();
     return (int)igMetaObject_CreateInstance(g_igVertexArray1_1_metaObject, (igMemoryPoolView *)arg0);
 }
@@ -33,7 +33,7 @@ CallbackArray *igVertexArray1_1_Register(void) {
         &g_igVertexArray1_1_metaObject,
         igVertexArray_Register,
         igVertexArray_GetPublishedMetaObject,
-        thunk_igVertexArray1_1_GetMetaObject,
+        igVertexArray1_1_GetMetaObjectFunction,
         "igVertexArray1_1",
         0x30, /* instance size */
         0,
@@ -43,11 +43,11 @@ CallbackArray *igVertexArray1_1_Register(void) {
     );
 }
 
-void thunk_igVertexArray1_1_GetMetaObject(void) {
+void igVertexArray1_1_GetMetaObjectFunction(void) {
     igVertexArray1_1_GetMetaObject();
 }
 
-igMetaObject *FUN_0014b7b0(void) {
+igMetaObject *igVertexArray_GetPublishedMetaObject(void) {
     return g_igVertexArray_metaObject;
 }
 
@@ -120,6 +120,6 @@ void igVertexArray1_1_InitFields(void) {
     temp_s2_4->f40 = 1;
     temp_s2_4->f39 = 1;
     igMetaObject_NameFields((igMetaObject *)meta, g_igVertexArray1_1_fieldTable, g_igVertexArray1_1_fieldHandles, g_igVertexArray1_1_fieldOffsets, fieldStart);
-    *(int *)((char *)(g_igVertexArray1_1_metaObject) + 60) = (int)(&thunk_igPsx2VertexArray1_1_GetMetaObject);
+    *(int *)((char *)(g_igVertexArray1_1_metaObject) + 60) = (int)(&igPsx2VertexArray1_1_GetMetaObjectFunction);
 }
 

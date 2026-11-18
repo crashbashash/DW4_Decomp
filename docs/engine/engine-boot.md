@@ -103,7 +103,7 @@ pipeline split rather than as a variant selector.
   runs the per-frame field setup: byte `+0xb4 = 0`,
   byte `+0xd5 = 0`, byte `+5 = 0`, float `+0x94`/`+0x98`/`+0x9c = 0.1f`, float `+0xa0 = 1.0f`,
   byte `+0x5c = 0`, byte `+0x5e = 1`, byte `+0xa8 = 1`, then decrements `+0xe8` in the release block
-  (`ViewerOptions_ReleaseShared` is that release extracted).  It then runs the per-frame work:
+  (`igViewerDefaults_ReleaseInstance` is that release extracted).  It then runs the per-frame work:
   `0x239390`, `0x238d40`, `0x3343a0`, `0x33bf50`, `0x3719c0`, `0x3b04e0`, `0x463b30(app)`,
   `0x259f80(app)`, `0x463c70(app)`; builds a list from `0x236f80(app->+0, *(0x587d08))` and, when
   `*(0x586f20)` is NULL, creates it via `0x2eb010(0x10)`/`0x2eadf0`, then releases the old list at

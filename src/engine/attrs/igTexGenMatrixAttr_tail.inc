@@ -1,22 +1,22 @@
-void FUN_001404f0(void *arg0) {
-    *(short *)((char *)(arg0) + 10) = (short) *(int *)((char *)(arg0) + 76);
+void igTexGenMatrixAttr_SynchronizeCachedUnitID(igTexGenMatrixAttr *self) {
+    self->_cachedUnitID = self->_unitID;
 }
 
-void Gap__Attrs__igTexGenMatrixAttr__vfunc_25(int arg0, int arg1) {
-    *(int *)((char *)(arg0) + 76) = (short)arg1;
-    FUN_0013b810(arg0, arg1);
+void igTexGenMatrixAttr_SetUnitID(igTexGenMatrixAttr *self, int unitID) {
+    self->_unitID = (short)unitID;
+    igAttr_SetUnitID((int)self, unitID);
 }
 
-void Gap__Attrs__igTexGenMatrixAttr__vfunc_17(void *arg0) {
-    FUN_0013b820(arg0);
-    FUN_0013b810((int)arg0, *(short *)((char *)(arg0) + 76));
+void igTexGenMatrixAttr_UserPostLoad(igTexGenMatrixAttr *self) {
+    igAttr_UserPostLoad(self);
+    igAttr_SetUnitID((int)self, (short)self->_unitID);
 }
 
-void Gap__Attrs__igTexGenMatrixAttr__vfunc_24(char * arg0, int arg1) {
+void igTexGenMatrixAttr_apply(char * arg0, int arg1) {
     FUN_00173ed0(arg1, 14, (arg0 + 12));
 }
 
-void Gap__Attrs__igTexGenMatrixAttr__vfunc_26(igTexGenMatrixAttr *self, void *context)
+void igTexGenMatrixAttr_SynchronizeDefault(igTexGenMatrixAttr *self, void *context)
 {
     float m[16];
 

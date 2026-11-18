@@ -5,7 +5,7 @@ int FUN_0019f480(int arg0) {
 
 igMetaObject *g_igGraphPathList_metaObject;
 
-igMetaObject *FUN_0019f4c0(void) {
+igMetaObject *igGraphPathList_GetOrCreateMetaObject(void) {
     if (g_igGraphPathList_metaObject == 0) {
         g_igGraphPathList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -43,7 +43,7 @@ CallbackArray *igGraphPathList_Register(void) {
         &g_igGraphPathList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igGraphPathList_GetMetaObject,
+        igGraphPathList_GetMetaObjectFunction,
         "igGraphPathList",
         0x14, /* instance size */
         igGraphPathList_GetVTable,
@@ -53,7 +53,7 @@ CallbackArray *igGraphPathList_Register(void) {
     );
 }
 
-void thunk_igGraphPathList_GetMetaObject(void) {
+void igGraphPathList_GetMetaObjectFunction(void) {
     igGraphPathList_GetMetaObject();
 }
 

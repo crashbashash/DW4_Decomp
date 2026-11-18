@@ -9,7 +9,7 @@ igMetaField *g_igNormalsRenderer_invalidStoredNormalsMetaField;
 igMetaField *g_igNormalsRenderer_pathMetaField;
 igMetaField *g_igNormalsRenderer_drawMetaField;
 
-igMetaObject *FUN_0045d830(void) {
+igMetaObject *igNormalsRenderer_GetOrCreateMetaObject(void) {
     if (g_igNormalsRenderer_metaObject == 0) {
         g_igNormalsRenderer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -19,7 +19,7 @@ igMetaObject *FUN_0045d830(void) {
 void *igNormalsRenderer_GetMetaObject(void) {
     igMetaObject *g = g_igNormalsRenderer_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0045d9f0();
+        igNormalsRenderer_EnsureRegistered();
     }
     return g_igNormalsRenderer_metaObject;
 }
@@ -39,10 +39,10 @@ int igNormalsRenderer_GetVTable(void) {
     obj.w10 = 0;
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igNormalsRenderer_vtable[0];
-    FUN_001d6560(&obj.w10, -1);
+    igSmartPointer_igGraphPath_Destruct(&obj.w10, -1);
     FUN_00136e10(&obj.w8, -1);
     igSmartPointer_igColorAttr_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
-    FUN_00142d10(&obj.w6, -1);
+    igSmartPointer_igModelViewMatrixAttr_Destruct(&obj.w6, -1);
     igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
     igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&obj.w4, -1);
     FUN_00459860((ObjectRefWord *)&obj.w3, -1);
@@ -50,7 +50,7 @@ int igNormalsRenderer_GetVTable(void) {
     return t;
 }
 
-void FUN_0045d9f0(void)
+void igNormalsRenderer_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igNormalsRenderer_Register);
 }
@@ -64,7 +64,7 @@ CallbackArray *igNormalsRenderer_Register(void) {
         &g_igNormalsRenderer_metaObject,
         igRenderer_Register,
         igRenderer_GetPublishedMetaObject,
-        thunk_igNormalsRenderer_GetMetaObject,
+        igNormalsRenderer_GetMetaObjectFunction,
         "igNormalsRenderer",
         0x30, /* instance size */
         igNormalsRenderer_GetVTable,
@@ -74,7 +74,7 @@ CallbackArray *igNormalsRenderer_Register(void) {
     );
 }
 
-void thunk_igNormalsRenderer_GetMetaObject(void) {
+void igNormalsRenderer_GetMetaObjectFunction(void) {
     igNormalsRenderer_GetMetaObject();
 }
 
@@ -146,7 +146,7 @@ void igNormalsRenderer_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)(igAttrList_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_001356f0();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igModelViewMatrixAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)(igColorAttr_GetOrCreateMetaObject());

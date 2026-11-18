@@ -2,7 +2,7 @@ igMetaObject *g_igViewerSceneInfoManagerController_metaObject;
 igMetaField *g_igViewerSceneInfoManagerController_applicationMetaField;
 igMetaField *g_igViewerSceneInfoManagerController_viewerRendererMetaField;
 
-igMetaObject *FUN_0045a8c0(void) {
+igMetaObject *igViewerSceneInfoManagerController_GetOrCreateMetaObject(void) {
     if (g_igViewerSceneInfoManagerController_metaObject == 0) {
         g_igViewerSceneInfoManagerController_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -12,7 +12,7 @@ igMetaObject *FUN_0045a8c0(void) {
 void *igViewerSceneInfoManagerController_GetMetaObject(void) {
     igMetaObject *g = g_igViewerSceneInfoManagerController_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false) {
-        FUN_0045a9a0();
+        igViewerSceneInfoManagerController_EnsureRegistered();
     }
     return g_igViewerSceneInfoManagerController_metaObject;
 }
@@ -25,12 +25,12 @@ int igViewerSceneInfoManagerController_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_0045a9a0(void)
+void igViewerSceneInfoManagerController_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igViewerSceneInfoManagerController_Register);
 }
 
-static igMetaObjectCallback g_igViewerSceneInfoManagerController_callbackList[] = { igViewerSceneInfoManager_EnsureRegistered, FUN_0045b0d0, 0 };
+static igMetaObjectCallback g_igViewerSceneInfoManagerController_callbackList[] = { igViewerSceneInfoManager_EnsureRegistered, igViewerRenderer_EnsureRegistered, 0 };
 
 CallbackArray *igViewerSceneInfoManagerController_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -39,7 +39,7 @@ CallbackArray *igViewerSceneInfoManagerController_Register(void) {
         &g_igViewerSceneInfoManagerController_metaObject,
         igView_Register,
         igView_GetPublishedMetaObject,
-        thunk_igViewerSceneInfoManagerController_GetMetaObject,
+        igViewerSceneInfoManagerController_GetMetaObjectFunction,
         "igViewerSceneInfoManagerController",
         0x14, /* instance size */
         igViewerSceneInfoManagerController_GetVTable,
@@ -49,7 +49,7 @@ CallbackArray *igViewerSceneInfoManagerController_Register(void) {
     );
 }
 
-void thunk_igViewerSceneInfoManagerController_GetMetaObject(void) {
+void igViewerSceneInfoManagerController_GetMetaObjectFunction(void) {
     igViewerSceneInfoManagerController_GetMetaObject();
 }
 
@@ -83,7 +83,7 @@ void igViewerSceneInfoManagerController_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)FUN_0045aaf0();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igViewerRenderer_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igViewerSceneInfoManagerController_fieldTable, g_igViewerSceneInfoManagerController_fieldHandles, g_igViewerSceneInfoManagerController_fieldOffsets, temp_s2);
 }

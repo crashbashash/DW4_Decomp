@@ -1,4 +1,4 @@
-int Gap__igVec3fList__vfunc_22(void) {
+int igVec3fList_GetMeta(void) {
     return (int)g_igVec3fList_metaObject;
 }
 

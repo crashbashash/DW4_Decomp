@@ -1,7 +1,7 @@
 igMetaObject *g_igDataPumpManager_metaObject;
 igMetaField *g_igDataPumpManager_dataPumpListMetaField;
 
-igMetaObject *FUN_001e5150(void) {
+igMetaObject *igDataPumpManager_GetOrCreateMetaObject(void) {
     if (g_igDataPumpManager_metaObject == 0) {
         g_igDataPumpManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -12,7 +12,7 @@ igMetaObject *igDataPumpManager_GetMetaObject(void)
 {
     igMetaObject *g = g_igDataPumpManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001e5280();
+        igDataPumpManager_EnsureRegistered();
     return g_igDataPumpManager_metaObject;
 }
 
@@ -29,12 +29,12 @@ int igDataPumpManager_GetVTable(void) {
     return r;
 }
 
-void FUN_001e5280(void)
+void igDataPumpManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igDataPumpManager_Register);
 }
 
-static igMetaObjectCallback g_igDataPumpManager_callbackList[] = { FUN_001e54a0, 0 };
+static igMetaObjectCallback g_igDataPumpManager_callbackList[] = { igDataPumpList_EnsureRegistered, 0 };
 
 CallbackArray *igDataPumpManager_Register(void) {
     DataPumpLibrary_MarkRegistered();
@@ -43,7 +43,7 @@ CallbackArray *igDataPumpManager_Register(void) {
         &g_igDataPumpManager_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igDataPumpManager_GetMetaObject,
+        igDataPumpManager_GetMetaObjectFunction,
         "igDataPumpManager",
         0xC, /* instance size */
         igDataPumpManager_GetVTable,
@@ -53,7 +53,7 @@ CallbackArray *igDataPumpManager_Register(void) {
     );
 }
 
-void thunk_igDataPumpManager_GetMetaObject(void) {
+void igDataPumpManager_GetMetaObjectFunction(void) {
     igDataPumpManager_GetMetaObject();
 }
 
@@ -79,7 +79,7 @@ void igDataPumpManager_InitFields(void) {
     firstField = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igDataPumpManager_ctorTable, 1);
     field = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)FUN_001e53c0();
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igDataPumpList_GetOrCreateMetaObject();
     ((igRefMetaField *)field)->_construct = 1;
     ((igMetaField *)field)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)meta, g_igDataPumpManager_fieldTable, g_igDataPumpManager_fieldHandles, g_igDataPumpManager_fieldOffsets, firstField);

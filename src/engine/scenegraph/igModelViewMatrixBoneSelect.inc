@@ -42,7 +42,7 @@ CallbackArray *igModelViewMatrixBoneSelect_Register(void) {
         &g_igModelViewMatrixBoneSelect_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
-        thunk_igModelViewMatrixBoneSelect_GetMetaObject,
+        igModelViewMatrixBoneSelect_GetMetaObjectFunction,
         "igModelViewMatrixBoneSelect",
         0x24, /* instance size */
         igModelViewMatrixBoneSelect_GetVTable,
@@ -52,7 +52,7 @@ CallbackArray *igModelViewMatrixBoneSelect_Register(void) {
     );
 }
 
-void thunk_igModelViewMatrixBoneSelect_GetMetaObject(void) {
+void igModelViewMatrixBoneSelect_GetMetaObjectFunction(void) {
     igModelViewMatrixBoneSelect_GetMetaObject();
 }
 
@@ -70,13 +70,13 @@ static int g_igModelViewMatrixBoneSelect_fieldOffsets[] = {
 };
 
 void igModelViewMatrixBoneSelect_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_igModelViewMatrixBoneSelect_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igModelViewMatrixBoneSelect_ctorTable, 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1), -1);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igModelViewMatrixBoneSelect_fieldTable, g_igModelViewMatrixBoneSelect_fieldHandles, g_igModelViewMatrixBoneSelect_fieldOffsets, temp_s1);
+    meta = (void *)g_igModelViewMatrixBoneSelect_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igModelViewMatrixBoneSelect_ctorTable, 1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base), -1);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igModelViewMatrixBoneSelect_fieldTable, g_igModelViewMatrixBoneSelect_fieldHandles, g_igModelViewMatrixBoneSelect_fieldOffsets, base);
 }
 

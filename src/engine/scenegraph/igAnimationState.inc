@@ -45,11 +45,11 @@ igMetaEnum *FUN_001a6b50(void) {
 }
 
 void FUN_001a6bb0(int arg0) {
-    FUN_001a6dc0();
+    igAnimationState_EnsureRegistered();
     igMetaObject_CreateInstance((igMetaObject *)g_igAnimationState_metaObject, (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *FUN_001a6bf0(void) {
+igMetaObject *igAnimationState_GetOrCreateMetaObject(void) {
     if (g_igAnimationState_metaObject == 0) {
         g_igAnimationState_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -60,7 +60,7 @@ igMetaObject *igAnimationState_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationState_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a6dc0();
+        igAnimationState_EnsureRegistered();
     return g_igAnimationState_metaObject;
 }
 
@@ -112,7 +112,7 @@ int igAnimationState_GetVTable(void) {
     return temp_s2;
 }
 
-void FUN_001a6dc0(void)
+void igAnimationState_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationState_Register);
 }
@@ -126,7 +126,7 @@ CallbackArray *igAnimationState_Register(void) {
         &g_igAnimationState_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igAnimationState_GetMetaObject,
+        igAnimationState_GetMetaObjectFunction,
         "igAnimationState",
         0xA0, /* instance size */
         igAnimationState_GetVTable,
@@ -136,7 +136,7 @@ CallbackArray *igAnimationState_Register(void) {
     );
 }
 
-void thunk_igAnimationState_GetMetaObject(void) {
+void igAnimationState_GetMetaObjectFunction(void) {
     igAnimationState_GetMetaObject();
 }
 
@@ -267,7 +267,7 @@ void igAnimationState_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationState_ctorTable, 0x1A);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001a9130();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igAnimation_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2)->_resetMethod = 2;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)));
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
@@ -279,14 +279,14 @@ void igAnimationState_InitFields(void) {
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_3, 0);
     ((igEnumMetaField *)temp_v0_3)->_getMetaEnumFunction = (int)(FUN_001a6a90);
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_001a6bf0();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igAnimationState_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_2)->_resetMethod = 2;
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5), 1);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9), 1.0f);
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x10)))->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x11)))->_persistent = 0;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x12)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_001a6bf0();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igAnimationState_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_3)->_resetMethod = 2;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x19)))->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAnimationState_fieldTable, g_igAnimationState_fieldHandles, g_igAnimationState_fieldOffsets, temp_s1);

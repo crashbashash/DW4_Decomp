@@ -1,6 +1,6 @@
 igMetaObject *g_igWindowSizeObserver_metaObject;
 
-int FUN_0044f0b0(int arg0) {
+int igWindowSizeObserver_Create(int arg0) {
     igWindowSizeObserver_RunStaticInit();
     return (int)(igMetaObject_CreateInstance(g_igWindowSizeObserver_metaObject, (igMemoryPoolView *)arg0));
 }

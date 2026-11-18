@@ -5,7 +5,7 @@ igMetaField *g_igAppearance_attachedGraphsMetaField;
 igMetaField *g_igAppearance_segmentOverrideNameListMetaField;
 igMetaField *g_igAppearance_segmentOverrideGraphListMetaField;
 
-igMetaObject *FUN_001a6150(void) {
+igMetaObject *igAppearance_GetOrCreateMetaObject(void) {
     if (g_igAppearance_metaObject == 0) {
         g_igAppearance_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -35,14 +35,14 @@ int igAppearance_GetVTable(void) {
     obj.vt = &g_igAppearance_vtable[0];
     igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
     igSmartPointer_igStringObjList_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
-    FUN_001a63d0((void * *)&obj.w5, -1);
-    FUN_001a6350((struct Ref * *)&obj.w4, -1);
-    FUN_001a62d0((void * *)&obj.w3, -1);
+    igSmartPointer_igModelViewMatrixBoneSelectList_Destruct((void * *)&obj.w5, -1);
+    igSmartPointer_igSkinList_Destruct((struct Ref * *)&obj.w4, -1);
+    igSmartPointer_igSkin_Destruct((void * *)&obj.w3, -1);
     igNamedObject_Destroy((igNamedObject *)&obj, 0);
     return t;
 }
 
-void **FUN_001a62d0(void **arg0, short arg1) {
+void **igSmartPointer_igSkin_Destruct(void **arg0, short arg1) {
     int *o;
 
     if (arg0 != 0) {
@@ -60,7 +60,7 @@ void **FUN_001a62d0(void **arg0, short arg1) {
     return arg0;
 }
 
-void **FUN_001a6350(struct Ref **self, short flag) {
+void **igSmartPointer_igSkinList_Destruct(struct Ref **self, short flag) {
     struct Ref *p;
     if (self != 0) {
         p = *self;
@@ -73,7 +73,7 @@ void **FUN_001a6350(struct Ref **self, short flag) {
     return (void **)self;
 }
 
-void **FUN_001a63d0(void **arg0, long long arg1) {
+void **igSmartPointer_igModelViewMatrixBoneSelectList_Destruct(void **arg0, long long arg1) {
     char *o;
 
     if (arg0 != 0) {
@@ -105,7 +105,7 @@ CallbackArray *igAppearance_Register(void) {
         &g_igAppearance_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igAppearance_GetMetaObject,
+        igAppearance_GetMetaObjectFunction,
         "igAppearance",
         0x20, /* instance size */
         igAppearance_GetVTable,
@@ -115,7 +115,7 @@ CallbackArray *igAppearance_Register(void) {
     );
 }
 
-void thunk_igAppearance_GetMetaObject(void) {
+void igAppearance_GetMetaObjectFunction(void) {
     igAppearance_GetMetaObject();
 }
 
@@ -149,31 +149,31 @@ static int g_igAppearance_fieldOffsets[] = {
 };
 
 void igAppearance_InitFields(void) {
-    int temp_s0;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s2_5;
-    void *temp_s1;
+    int base;
+    void *skinField;
+    void *attachedSkinsField;
+    void *attachedGraphsField;
+    void *segmentOverrideNameListField;
+    void *segmentOverrideGraphListField;
+    void *meta;
 
-    temp_s1 = (void *)g_igAppearance_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igAppearance_ctorTable, 5);
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_00197fd0();
-    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_00197e60();
-    ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_0019d280();
-    ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igStringObjList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_4)->_construct = 1;
-    temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4)));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s2_5)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igAppearance_fieldTable, g_igAppearance_fieldHandles, g_igAppearance_fieldOffsets, temp_s0);
+    meta = (void *)g_igAppearance_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igAppearance_ctorTable, 5);
+    skinField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igObjectRefMetaField *)skinField)->_metaObject = (int)igSkin_GetOrCreateMetaObject();
+    attachedSkinsField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    ((igObjectRefMetaField *)attachedSkinsField)->_metaObject = (int)igSkinList_GetOrCreateMetaObject();
+    ((igRefMetaField *)attachedSkinsField)->_construct = 1;
+    attachedGraphsField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
+    ((igObjectRefMetaField *)attachedGraphsField)->_metaObject = (int)igModelViewMatrixBoneSelectListSg_GetOrCreateMetaObject();
+    ((igRefMetaField *)attachedGraphsField)->_construct = 1;
+    segmentOverrideNameListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
+    ((igObjectRefMetaField *)segmentOverrideNameListField)->_metaObject = (int)igStringObjList_GetOrCreateMetaObject();
+    ((igRefMetaField *)segmentOverrideNameListField)->_construct = 1;
+    segmentOverrideGraphListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)));
+    ((igObjectRefMetaField *)segmentOverrideGraphListField)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
+    ((igRefMetaField *)segmentOverrideGraphListField)->_construct = 1;
+    igMetaObject_NameFields((igMetaObject *)meta, g_igAppearance_fieldTable, g_igAppearance_fieldHandles, g_igAppearance_fieldOffsets, base);
 }
 

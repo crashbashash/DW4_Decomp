@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igStencilStateAttr__vfunc_22(void) {
+igMetaObject *igStencilStateAttr_GetMeta(void) {
     return g_igStencilStateAttr_metaObject;
 }
 

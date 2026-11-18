@@ -93,14 +93,14 @@ void Gap__Sg__igCommonTraversal__vfunc_28(O_1b7010 *arg0, R_1b7010 *arg1) {
     if (arg1 == 0) {
         a = ((void *)igObject_GetAllocator((igObject *)arg0));
         release(arg0->f36);
-        arg0->f36 = FUN_00137ab0(a);
+        arg0->f36 = (R_1b7010 *)igGenericAttrDefaultManager_Create((igMemoryPoolView *)a);
         a = ((void *)igObject_GetAllocator((igObject *)arg0));
         release(arg0->f32);
-        arg0->f32 = FUN_0014f2c0(a);
+        arg0->f32 = igGenericCapabilityManager_Create(a);
         var_s1 = 1;
     } else {
         if (arg0->f36 == 0) {
-            igSmartPointer<R_1b7010> created(FUN_00130020(((void *)igObject_GetAllocator((igObject *)arg0))));
+            igSmartPointer<R_1b7010> created((R_1b7010 *)igVisualContextAttrDefaultManager_Create(igObject_GetAllocator((igObject *)arg0)));
             t = created.get();
             retain_1b7010(arg1);
             release(t->f8);
@@ -112,7 +112,7 @@ void Gap__Sg__igCommonTraversal__vfunc_28(O_1b7010 *arg0, R_1b7010 *arg1) {
             var_s1 = 1;
         }
         if (arg0->f32 == 0) {
-            igSmartPointer<R_1b7010> created(FUN_00149c30(((void *)igObject_GetAllocator((igObject *)arg0))));
+            igSmartPointer<R_1b7010> created(igVisualContextCapabilityManager_Create(((void *)igObject_GetAllocator((igObject *)arg0))));
             t = created.get();
             retain_1b7010(arg1);
             release(t->f8);
@@ -317,7 +317,7 @@ int FUN_001b7af0(void *arg0, int arg1) {
     return *(int *)(*(int *)((char *)(temp_v0) + 16) + ((*(int *)((char *)(temp_v0) + 8) - 1) * 4));
 }
 
-int FUN_001b7b90(void *t, void *arg) {
+int igCommonTraversal_TraverseSwitch(void *t, void *arg) {
     int r;
     int i;
     igGroupMaskView *n;
@@ -481,7 +481,7 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
         if (top != 0) {
             parent = top->_m;
         }
-        attr = (MatrixAttrView *)takePooled(traversal->_texMatPool, (void *)FUN_001317c0);
+        attr = (MatrixAttrView *)takePooled(traversal->_texMatPool, (void *)igTextureMatrixAttr_Create);
         ((TextureMatrixAttrView *)attr)->_outputElementCount = -1;
         ((TextureMatrixAttrView *)attr)->_isProjective = 0;
         attr->setUnitID((short)unit);
@@ -499,7 +499,7 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
         if (top != 0) {
             parent = (float *)((char *)top + g_igVertexBlendMatrixAttr_mField[0]->_offset);
         }
-        attr = (MatrixAttrView *)takePooled(traversal->_blendMatrixPool, (void *)FUN_00130c10);
+        attr = (MatrixAttrView *)takePooled(traversal->_blendMatrixPool, (void *)igVertexBlendMatrixAttr_Create);
         attr->setUnitID((short)blendIndex);
         if (parent != 0) {
             igMatrix44f_Multiply((float *)((char *)attr + g_igVertexBlendMatrixAttr_mField[0]->_offset), self->_m, (const float *)parent);
@@ -558,7 +558,7 @@ int igTransform_TraverseChildrenAndPopMatrix(float *matrix, igTransform *self, i
     return 0;
 }
 
-int FUN_001b8720(void *arg0, ForwardTarget *arg1) {
+int igCommonTraversal_TraverseActor(void *arg0, ForwardTarget *arg1) {
     return arg1->vX(arg0);
 }
 

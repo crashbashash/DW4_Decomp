@@ -1,4 +1,4 @@
-void Gap__Gui__igWindowSizeObserver__vfunc_24(void *arg0, int *arg1) {
+void igWindowSizeObserver_OnModelChange(void *arg0, int *arg1) {
     int sp30[3];
     struct T_455b90 *temp_s0;
     if ((arg1[2] == (int)g_igGuiSystemModel_windowSizeMetaField) || (arg1[0] == 0)) {

@@ -1,4 +1,4 @@
-void Gap__Sg__igAttrSet__vfunc_31(S_1af7e0 *arg0) {
+void igAttrSet_Reset(S_1af7e0 *arg0) {
     unsigned int n;
     unsigned int i;
 

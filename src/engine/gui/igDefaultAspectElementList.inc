@@ -1,6 +1,6 @@
 igMetaObject *g_igDefaultAspectElementList_metaObject;
 
-igMetaObject *FUN_00451950(void) {
+igMetaObject *igDefaultAspectElementList_GetOrCreateMetaObject(void) {
     if (g_igDefaultAspectElementList_metaObject == 0) {
         g_igDefaultAspectElementList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -37,7 +37,7 @@ CallbackArray *igDefaultAspectElementList_Register(void) {
         &g_igDefaultAspectElementList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igDefaultAspectElementList_GetMetaObject,
+        igDefaultAspectElementList_GetMetaObjectFunction,
         "igDefaultAspectElementList",
         0x14, /* instance size */
         igDefaultAspectElementList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igDefaultAspectElementList_Register(void) {
     );
 }
 
-void thunk_igDefaultAspectElementList_GetMetaObject(void) {
+void igDefaultAspectElementList_GetMetaObjectFunction(void) {
     igDefaultAspectElementList_GetMetaObject();
 }
 

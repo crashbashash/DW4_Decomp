@@ -1,33 +1,33 @@
-void FUN_00141710(void *arg0) {
-    *(short *)((char *)(arg0) + 10) = (short) *(int *)((char *)(arg0) + 16);
+void igTextureStateAttr_SynchronizeCachedUnitID(igTextureStateAttr *self) {
+    self->_cachedUnitID = self->_unitID;
 }
 
-void Gap__Attrs__igTextureStateAttr__vfunc_24(igTextureStateAttr *self, igPsx2VisualContext *context) {
+void igTextureStateAttr_apply(igTextureStateAttr *self, igPsx2VisualContext *context) {
     /* reflected.h spells the igBool _enabled as unsigned char; the setter takes the kit's igBool (bool). */
-    Gap__Gfx__igPsx2VisualContext__vfunc_117(context, self->_unitID, *(bool *)&self->_enabled);
+    igPsx2VisualContext_SetTextureStageState(context, self->_unitID, *(bool *)&self->_enabled);
 }
 
-void Gap__Attrs__igTextureStateAttr__vfunc_17(void *arg0) {
-    FUN_0013b820(arg0);
-    FUN_0013b810((int)arg0, *(short *)((char *)(arg0) + 16));
+void igTextureStateAttr_UserPostLoad(igTextureStateAttr *self) {
+    igAttr_UserPostLoad(self);
+    igAttr_SetUnitID((int)self, (short)self->_unitID);
 }
 
-void Gap__Attrs__igTextureStateAttr__vfunc_25(int arg0, int arg1) {
-    *(int *)((char *)(arg0) + 16) = (short)arg1;
-    FUN_0013b810(arg0, arg1);
+void igTextureStateAttr_SetUnitID(igTextureStateAttr *self, int unitID) {
+    self->_unitID = (short)unitID;
+    igAttr_SetUnitID((int)self, unitID);
 }
 
-void Gap__Attrs__igTextureStateAttr__vfunc_26(void *arg0, void **arg1) {
+void igTextureStateAttr_SynchronizeDefault(void *arg0, void **arg1) {
     ((DW4VC_128_1 *)(((char *)(arg0) + 0)))->vX((int)(((DW4VC_472_1 *)(arg1))->vX((int)(*(int *)((char *)(arg0) + 16)))));
 }
 
 /* Setter for the reflected bool field _enabled. */
 
-void Gap__Attrs__igTextureStateAttr__vfunc_32(igTextureStateAttr *self, char enabled) {
+void igTextureStateAttr_SetState(igTextureStateAttr *self, char enabled) {
     self->_enabled = enabled;
 }
 
-void Gap__Attrs__igTextureStateAttr__vfunc_31(igTextureStateAttrView *self, igVisualContextView *context)
+void igTextureStateAttr_GetUnitCount(igTextureStateAttrView *self, igVisualContextView *context)
 {
     context->vfunc_21(22);
 }

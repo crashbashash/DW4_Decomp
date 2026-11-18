@@ -1,8 +1,8 @@
 igMetaObject *g_igFileImagePng_metaObject;
 igMetaField *g_igFileImagePng_fileMetaField;
 
-int FUN_00150390(int arg0) {
-    FUN_00150570();
+int igFileImagePng_Create(int arg0) {
+    igFileImagePng_EnsureRegistered();
     return (int)igMetaObject_CreateInstance(g_igFileImagePng_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -10,7 +10,7 @@ igMetaObject *igFileImagePng_GetMetaObject(void)
 {
     igMetaObject *g = g_igFileImagePng_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00150570();
+        igFileImagePng_EnsureRegistered();
     return g_igFileImagePng_metaObject;
 }
 
@@ -71,7 +71,7 @@ void *FUN_00150490(struct S_150490 *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_00150570(void)
+void igFileImagePng_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igFileImagePng_Register);
 }
@@ -85,7 +85,7 @@ CallbackArray *igFileImagePng_Register(void) {
         &g_igFileImagePng_metaObject,
         igFileImage_Register,
         igFileImage_GetPublishedMetaObject,
-        thunk_igFileImagePng_GetMetaObject,
+        igFileImagePng_GetMetaObjectFunction,
         "igFileImagePng",
         0x60, /* instance size */
         igFileImagePng_GetVTable,
@@ -95,11 +95,11 @@ CallbackArray *igFileImagePng_Register(void) {
     );
 }
 
-void thunk_igFileImagePng_GetMetaObject(void) {
+void igFileImagePng_GetMetaObjectFunction(void) {
     igFileImagePng_GetMetaObject();
 }
 
-igMetaObject *FUN_00150610(void) {
+igMetaObject *igFileImage_GetPublishedMetaObject(void) {
     return g_igFileImage_metaObject;
 }
 

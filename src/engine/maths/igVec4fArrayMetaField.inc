@@ -56,7 +56,7 @@ CallbackArray *igVec4fArrayMetaField_Register(void) {
         &g_igVec4fArrayMetaField_metaObject,
         igVec4fMetaField_Register,
         (igMetaObjectGetFunction)igVec4fMetaField_GetPublishedMetaObject,
-        thunk_igVec4fArrayMetaField_GetMetaObject,
+        igVec4fArrayMetaField_GetMetaObjectFunction,
         "igVec4fArrayMetaField",
         0x38, /* instance size */
         igVec4fArrayMetaField_GetVTable,
@@ -66,11 +66,11 @@ CallbackArray *igVec4fArrayMetaField_Register(void) {
     );
 }
 
-void thunk_igVec4fArrayMetaField_GetMetaObject(void) {
+void igVec4fArrayMetaField_GetMetaObjectFunction(void) {
     igVec4fArrayMetaField_GetMetaObject();
 }
 
-igMetaObject *FUN_00187720(void) {
+igMetaObject *igVec4fMetaField_GetPublishedMetaObject(void) {
     return g_igVec4fMetaField_metaObject;
 }
 
@@ -91,14 +91,14 @@ static int g_igVec4fArrayMetaField_fieldOffsets[] = {
 };
 
 void igVec4fArrayMetaField_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_igVec4fArrayMetaField_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (FieldFactory *)g_igVec4fArrayMetaField_ctorTable, 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1), 1);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)g_igVec4fArrayMetaField_fieldTable, (igMetaField ***)g_igVec4fArrayMetaField_fieldHandles, (int *)g_igVec4fArrayMetaField_fieldOffsets, temp_s1);
+    meta = (void *)g_igVec4fArrayMetaField_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (FieldFactory *)g_igVec4fArrayMetaField_ctorTable, 1);
+    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base), 1);
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)g_igVec4fArrayMetaField_fieldTable, (igMetaField ***)g_igVec4fArrayMetaField_fieldHandles, (int *)g_igVec4fArrayMetaField_fieldOffsets, base);
 }
 
 void FUN_001877c0(void) {

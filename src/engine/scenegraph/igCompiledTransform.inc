@@ -1,5 +1,5 @@
 int FUN_001a3590(int arg0) {
-    FUN_001a3700();
+    igCompiledTransform_EnsureRegistered();
     return (int)igMetaObject_CreateInstance((igMetaObject *)g_igCompiledTransform_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -17,7 +17,7 @@ igMetaObject *igCompiledTransform_GetMetaObject(void)
 {
     igMetaObject *g = g_igCompiledTransform_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a3700();
+        igCompiledTransform_EnsureRegistered();
     return g_igCompiledTransform_metaObject;
 }
 
@@ -58,12 +58,12 @@ int igCompiledTransform_GetVTable(void) {
     return temp_s1;
 }
 
-void FUN_001a3700(void)
+void igCompiledTransform_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igCompiledTransform_Register);
 }
 
-static igMetaObjectCallback g_igCompiledTransform_callbackList[] = { FUN_00194e70, igStringObj_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igCompiledTransform_callbackList[] = { igTransformSource_EnsureRegistered, igStringObj_EnsureRegistered, 0 };
 
 CallbackArray *igCompiledTransform_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -72,7 +72,7 @@ CallbackArray *igCompiledTransform_Register(void) {
         &g_igCompiledTransform_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igCompiledTransform_GetMetaObject,
+        igCompiledTransform_GetMetaObjectFunction,
         "igCompiledTransform",
         0x24, /* instance size */
         igCompiledTransform_GetVTable,
@@ -82,7 +82,7 @@ CallbackArray *igCompiledTransform_Register(void) {
     );
 }
 
-void thunk_igCompiledTransform_GetMetaObject(void) {
+void igCompiledTransform_GetMetaObjectFunction(void) {
     igCompiledTransform_GetMetaObject();
 }
 
@@ -140,7 +140,7 @@ void igCompiledTransform_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCompiledTransform_ctorTable, 8);
     ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2))->f38 = 0;
     temp_s1 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    temp_s1->f56 = (int)FUN_00194dd0();
+    temp_s1->f56 = (int)igTransformSource_GetOrCreateMetaObject();
     temp_s1->f38 = 0;
     temp_v0 = ((struct Fld_1a37a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
     igIntMetaField_SetDefault((igMetaField *)temp_v0, -1);

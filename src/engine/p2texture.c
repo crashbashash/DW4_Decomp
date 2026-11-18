@@ -7,131 +7,116 @@
 #include "dw4/p2/p2texture.h"
 #include "dw4/p2/p2multipass.h"
 #include "dw4/p2/dmaChannel.h"
+#include "dw4/p2/p2gs.h"
+#include "dw4/p2/p2swap.h"
+#include "dw4/p2/p2textureCalls.h"
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) < (b) ? (b) : (a))
-void FUN_001f76f0(int count, int *regs);
-int FUN_001f74e0(long long t);
-void FUN_001f7500(void *finish);
 
-struct N_208210 *FUN_00208210(void);
-void FUN_00208f20(int arg0);
-void FUN_00209780(char arg0, unsigned char arg1, int arg2);
-int FUN_0020b7f0(struct N_20b7f0 *arg0);
+P2Texture *p2AllocTextureRecord(void);
+void p2SetProgramTextureFunction(int function);
+void p2SetTextureAlpha(char alpha0, unsigned char alpha1, int expandAlpha);
+int p2AllocTextureMemory(P2Texture *texture);
 
-extern void *DAT_0056c0d0;
-extern void *DAT_0056c0d8;
-extern void *DAT_0056c0e0[17];
-extern unsigned int DAT_0056c128;
+/* The VRAM block list, in address order, and where the next search for space starts. */
+extern P2Texture *p2TextureBlocks;
+extern P2Texture *p2TextureSearchStart;
+/* The texture bound to each stage this frame, and the stages p2MarkTextureStage has marked. */
+extern P2Texture *p2TextureStages[17];
+extern unsigned int p2TextureStageMask;
 
-extern long long DAT_0056b020[4];
-extern long long DAT_0056c068;
-extern short DAT_00568e08[8];
-extern short DAT_00568e0a[8];
-extern short DAT_00568e12[8];
-extern short DAT_00568e1c[4];
-extern short DAT_00568e22[8];
-extern short DAT_00568e24[8];
+/* Each program's combine mode and palette flag, four bits per program. */
+extern long long p2TextureCombineBits[4];
 extern const char text_textureLoadedPredicate[];
 extern const char text_textureDeferredPredicate[];
-extern int DAT_0056c060[4];
-extern int DAT_0056c078[4];
-extern int DAT_004917b0[4];
-extern int DAT_00491860[4];
-extern int DAT_004918a0[4];
-extern int DAT_004918b0[4];
-extern int DAT_00568e28[4];
-extern int DAT_00568e30[4];
-extern int DAT_0056c138[4];
-extern int DAT_0056c140[4];
-extern long long DAT_0056c148[4];
-extern int DAT_0056c130[4];
+/* The VRAM block range textures are placed in. */
+extern int p2TextureMemoryEnd[4];
+extern int p2TextureMemoryBase[4];
+/* The GS pixel storage mode of each texture format. */
+extern int p2TextureFormatPsm[4];
+/* The register lists p2UploadGsRegisters sends for a screen copy, a texture copy, a render target
+ * (context 1 then context 2) and its restore. */
+extern int p2ScreenCopyRegisters[4];
+extern int p2RestoreTargetRegisters[4];
+extern int p2RestoreTargetContext2Registers[4];
+/* FRAME, ZBUF and XYOFFSET of the display, saved by the first p2SetRenderTarget. */
+extern int p2SavedFrame[4];
+extern int p2SavedZbuf[4];
+extern long long p2SavedScanmsk[4];
+/* 1: a texture that has to wait for VRAM waits for the GS to finish drawing, else for the DMA. */
+extern int p2TextureWaitMode[4];
 
-void FUN_00208170(int arg0) {
+void p2SetTextureCombineMode(int mode) {
     int idx;
-    long long v;
+    long long bitsCleared;
     int bits;
-    long long b64;
+    long long bitsWide;
 
     idx = p2CurrentProgram * 4;
-    *(int *)((char *)p2TextureCombineMode + idx) = arg0;
-    v = DAT_0056b020[0] & ~((long long)0xF << idx);
-    DAT_0056b020[0] = v;
-    bits = ((arg0 * 2) | ((*(unsigned int *)((char *)p2ProgramFlags + idx) >> 0xA) & 1)) & 0xF;
+    *(int *)((char *)p2TextureCombineMode + idx) = mode;
+    bitsCleared = p2TextureCombineBits[0] & ~((long long)0xF << idx);
+    p2TextureCombineBits[0] = bitsCleared;
+    bits = ((mode * 2) | ((*(unsigned int *)((char *)p2ProgramFlags + idx) >> 0xA) & 1)) & 0xF;
     p2DirtyFlags |= 0x111;
-    b64 = bits;
-    DAT_0056b020[0] = v | (b64 << idx);
+    bitsWide = bits;
+    p2TextureCombineBits[0] = bitsCleared | (bitsWide << idx);
 }
 
-unsigned short FUN_00208200(int *p)
+int p2GetTextureHeight(P2Texture *texture)
 {
-    return *(unsigned short *)((char *)p + 62);
+    return texture->height;
 }
 
-struct N_208210 {
-    long long q0; long long q8; char pad16[8]; struct N_208210 *next; char pad28[4]; int f32; int f36; char pad40[4]; int f44; char pad48[22];
-    char lo:7; char flag:1; char f71; char f72;
-};
-struct N_208210 *FUN_00208210(void) {
-    struct N_208210 *o;
+P2Texture *p2AllocTextureRecord(void) {
+    P2Texture *texture;
     if (p2FreeTextures == 0) {
         p2GrowPool(0xA, &p2FreeTextures);
     }
-    o = (struct N_208210 *)p2FreeTextures;
-    p2FreeTextures = (struct p2TextureRecord *)o->next;
-    o->lo = 0;
-    o->q8 = 0;
-    o->q0 = 0;
-    o->flag = 0;
-    o->f36 = 0;
-    o->f32 = 0;
-    o->f44 = 0;
-    o->f72 = 0;
-    o->f71 = 0;
-    return o;
+    texture = (P2Texture *)p2FreeTextures;
+    p2FreeTextures = (struct p2TextureRecord *)texture->next;
+    texture->state = P2_TEXTURE_FREE;
+    texture->drawSequence = 0;
+    texture->uploadSequence = 0;
+    texture->detached = 0;
+    texture->palette = 0;
+    texture->chain = 0;
+    texture->clut = 0;
+    texture->used = 0;
+    texture->chainCount = 0;
+    return texture;
 }
 
-typedef struct O {
-    long long f0;
-    long long f8;
-    int pad[2];
-    void *f24;
-    int f28;
-    char pad2[38];
-    signed char lo : 7;
-    unsigned char hi : 1;
-} O;
-static void FUN_002082b0(O *arg0) {
-    arg0->lo = 0;
-    arg0->f8 = 0;
-    arg0->f0 = 0;
-    arg0->f24 = p2FreeTextures;
-    arg0->f28 = 0;
-    p2FreeTextures = (struct p2TextureRecord *)arg0;
+static void p2FreeTextureRecord(P2Texture *texture) {
+    texture->state = P2_TEXTURE_FREE;
+    texture->drawSequence = 0;
+    texture->uploadSequence = 0;
+    texture->next = (P2Texture *)p2FreeTextures;
+    texture->prev = 0;
+    p2FreeTextures = (struct p2TextureRecord *)texture;
 }
 
-struct B_2082f0 { char pad[24]; int f24; int f28; char pad2[24]; int f56; short s60; short s62; short f64; };
-void FUN_002082f0(void) {
+void p2InitTextures(void) {
     unsigned int i;
     unsigned int j;
-    struct B_2082f0 *temp_v0_2;
+    P2Texture *head;
 
     i = 0;
     p2FreeTextures = 0;
-    DAT_0056c060[0] = 0x4000;
+    p2TextureMemoryEnd[0] = 0x4000;
     do {
-        DAT_0056c0e0[i] = 0;
+        p2TextureStages[i] = 0;
         i += 1;
     } while (i < 0x11U);
-    DAT_0056c128 = 0;
+    p2TextureStageMask = 0;
     p2GrowPool(0xA, &p2FreeTextures);
-    temp_v0_2 = (struct B_2082f0 *)FUN_00208210();
-    DAT_0056c0d0 = temp_v0_2;
-    temp_v0_2->f24 = 0;
-    ((struct B_2082f0 *)DAT_0056c0d0)->f28 = 0;
-    p2GetTextureBase(&temp_v0_2->f56);
-    temp_v0_2->f64 = DAT_0056c060[0] - temp_v0_2->f56;
-    DAT_0056c0d8 = DAT_0056c0d0;
-    DAT_0056c078[0] = temp_v0_2->f56;
+    head = p2AllocTextureRecord();
+    p2TextureBlocks = head;
+    head->next = 0;
+    p2TextureBlocks->prev = 0;
+    p2GetTextureBase(&head->address);
+    head->blocks = p2TextureMemoryEnd[0] - head->address;
+    p2TextureSearchStart = p2TextureBlocks;
+    p2TextureMemoryBase[0] = head->address;
     if (p2FirstOpen != 0) {
         p2RegisterPredicateName(textureLoadedPredicate, text_textureLoadedPredicate);
         p2RegisterPredicateName(textureDeferredPredicate, text_textureDeferredPredicate);
@@ -141,132 +126,97 @@ void FUN_002082f0(void) {
         p2TextureFunction[j] = 0;
         j += 1;
     } while (j < 0x10U);
-    FUN_00209780(0, 0x80, 0);
+    p2SetTextureAlpha(0, 0x80, 0);
 }
 
-typedef struct { char p0[8]; long long f8; char p1[54]; signed char f : 7; } S_208430;
-
-void FUN_00208430(void *arg) {
-    S_208430 *arg0 = arg;
-    if (arg0->f == 4 && p2DmaSequenceLastCompleted(1, arg0->f8) != 0) {
-        arg0->f = 5;
+void p2TextureUploadDone(void *arg) {
+    P2Texture *texture = arg;
+    if (texture->state == P2_TEXTURE_FENCED && p2DmaSequenceLastCompleted(1, texture->drawSequence) != 0) {
+        texture->state = P2_TEXTURE_DRAWN;
     }
 }
 
-typedef struct P2ModeState {
-    char pad0[70];
-    signed char mode : 7;
-    unsigned char top : 1;
-} P2ModeState;
-
-void FUN_002084a0(void *arg)
+void p2TextureLoadDone(void *arg)
 {
-    P2ModeState *s = arg;
-    const P2ModeState *view = s;
+    P2Texture *texture = arg;
+    const P2Texture *view = texture;
 
-    if (view->mode == 2)
-        s->mode = 3;
+    if (view->state == P2_TEXTURE_LOADING)
+        texture->state = P2_TEXTURE_RESIDENT;
 }
 
-typedef struct GsTex0 {
-    unsigned long long tbp0 : 14;
-    unsigned long long tbw : 6;
-    unsigned long long psm : 6;
-    unsigned long long tw : 4;
-    unsigned long long th : 4;
-    unsigned long long tcc : 1;
-    unsigned long long tfx : 2;
-    unsigned long long cbp : 14;
-    unsigned long long cpsm : 4;
-    unsigned long long csm : 1;
-    unsigned long long csa : 5;
-    unsigned long long cld : 3;
-} GsTex0;
-typedef struct GsSyncState {
-    char pad0[48];
-    GsTex0 tex0_1;
-    GsTex0 tex0_2;
-    char pad64[152];
-    signed char textureFunction;
-} GsSyncState;
-typedef struct Texture {
-    char pad0[16];
-    GsTex0 tex0;
-    char pad24[20];
-    void *clut;
-    char pad48[4];
-    int bufferMode;
-    int address;
-    char pad60[13];
-    signed char function;
-} Texture;
-
-void FUN_002084e0(Texture *texture) {
+void p2SetTexture(P2Texture *texture) {
     if (texture == 0) return;
     if (texture->clut != 0) {
         p2SetClut(texture->clut);
         return;
     }
-    DAT_0056c068++;
-    ((GsSyncState *)p2CurrentGsRegisters)->textureFunction = texture->function;
-    if (texture->bufferMode != 0) {
-        if (texture->bufferMode == 1) {
-            texture->address = DAT_00568e12[0] ? 0 : DAT_00568e1c[0];
+    p2StatTextureBinds++;
+    *(signed char *)&p2CurrentGsRegisters->texa = texture->texAlpha;
+    if (texture->source != P2_TEXTURE_SOURCE_IMAGE) {
+        if (texture->source == P2_TEXTURE_SOURCE_FRONT) {
+            texture->address = p2Display.drawBuffer ? 0 : p2Display.secondBufferPage;
         }
-        if (texture->bufferMode == 2) {
-            texture->address = DAT_00568e12[0] ? DAT_00568e1c[0] : 0;
+        if (texture->source == P2_TEXTURE_SOURCE_BACK) {
+            texture->address = p2Display.drawBuffer ? p2Display.secondBufferPage : 0;
         }
-        if (texture->bufferMode == 3) {
-            texture->address = DAT_00568e1c[0] * 2;
+        if (texture->source == P2_TEXTURE_SOURCE_DEPTH) {
+            texture->address = p2Display.secondBufferPage * 2;
         }
         texture->address = texture->address << 5;
     }
     if (p2CurrentProgram == 0) {
-        ((GsSyncState *)p2CurrentGsRegisters)->tex0_1.tbp0 = texture->address;
-        ((GsSyncState *)p2CurrentGsRegisters)->tex0_1.tbw = texture->tex0.tbw;
-        ((GsSyncState *)p2CurrentGsRegisters)->tex0_1.psm = texture->tex0.psm;
-        ((GsSyncState *)p2CurrentGsRegisters)->tex0_1.tw = texture->tex0.tw;
-        ((GsSyncState *)p2CurrentGsRegisters)->tex0_1.th = texture->tex0.th;
+        p2CurrentGsRegisters->tex0[0].field.tbp0 = texture->address;
+        p2CurrentGsRegisters->tex0[0].field.tbw = texture->tex0.field.tbw;
+        p2CurrentGsRegisters->tex0[0].field.psm = texture->tex0.field.psm;
+        p2CurrentGsRegisters->tex0[0].field.tw = texture->tex0.field.tw;
+        p2CurrentGsRegisters->tex0[0].field.th = texture->tex0.field.th;
         p2DirtyFlags |= 0x40;
         p2GsDirtyRegisters |= 0x48000040LL;
     } else {
-        ((GsSyncState *)p2CurrentGsRegisters)->tex0_2.tbp0 = texture->address;
-        ((GsSyncState *)p2CurrentGsRegisters)->tex0_2.tbw = texture->tex0.tbw;
-        ((GsSyncState *)p2CurrentGsRegisters)->tex0_2.psm = texture->tex0.psm;
-        ((GsSyncState *)p2CurrentGsRegisters)->tex0_2.tw = texture->tex0.tw;
-        ((GsSyncState *)p2CurrentGsRegisters)->tex0_2.th = texture->tex0.th;
+        p2CurrentGsRegisters->tex0[1].field.tbp0 = texture->address;
+        p2CurrentGsRegisters->tex0[1].field.tbw = texture->tex0.field.tbw;
+        p2CurrentGsRegisters->tex0[1].field.psm = texture->tex0.field.psm;
+        p2CurrentGsRegisters->tex0[1].field.tw = texture->tex0.field.tw;
+        p2CurrentGsRegisters->tex0[1].field.th = texture->tex0.field.th;
         p2DirtyFlags |= 0x40;
         p2GsDirtyRegisters |= 0x48000080LL;
-        if (p2CurrentProgram == 1 && texture->bufferMode == 0) p2UploadTex0Context2();
+        if (p2CurrentProgram == 1 && texture->source == P2_TEXTURE_SOURCE_IMAGE) p2UploadTex0Context2();
     }
 }
 
-void FUN_00208f20(int arg0) {
-    int temp_a3;
+void p2SetProgramTextureFunction(int function) {
+    int shift;
 
-    temp_a3 = *(int *)0x569330 * 2;
-    *(int *)0x56B028 = (int) (*(int *)0x56B028 & ~(3 << temp_a3));
-    *(int *)0x56B028 = (int) (*(int *)0x56B028 | ((arg0 & 3) << temp_a3));
+    shift = *(int *)0x569330 * 2;
+    *(int *)0x56B028 = (int) (*(int *)0x56B028 & ~(3 << shift));
+    *(int *)0x56B028 = (int) (*(int *)0x56B028 | ((function & 3) << shift));
 }
 
-typedef struct P_208f70 { char pad[52]; unsigned char b0:3; unsigned char mode:2; unsigned char b5:3; char pad2[7]; unsigned char c0:3; unsigned char cmode:2; unsigned char c5:3; } P_208f70;
-void FUN_00208f70(int arg0) {
-    int temp_a2;
-    long long temp_a1;
+/* TEX0.TFX of both contexts, reached a byte at a time. */
+typedef struct p2TextureFunctionBytes {
+    char registersBelow[52];
+    unsigned char tex0Bits32 : 3; unsigned char tfx : 2; unsigned char tex0Bits37 : 3;
+    char tex0Context2[7];
+    unsigned char tex0Context2Bits32 : 3; unsigned char tfxContext2 : 2; unsigned char tex0Context2Bits37 : 3;
+} p2TextureFunctionBytes;
+void p2SetTextureFunction(int function) {
+    int dirty;
+    long long dirtyRegisters;
 
-    FUN_00208f20(arg0);
+    p2SetProgramTextureFunction(function);
     if (p2CurrentProgram == 0) {
-        p2TextureFunction[p2CurrentProgram] = arg0;
-        ((P_208f70 *)p2CurrentGsRegisters)->mode = arg0;
+        p2TextureFunction[p2CurrentProgram] = function;
+        ((p2TextureFunctionBytes *)p2CurrentGsRegisters)->tfx = function;
         p2DirtyFlags |= 0x40;
         p2GsDirtyRegisters |= 0x40;
     } else {
-        p2TextureFunction[p2CurrentProgram] = arg0;
-        ((P_208f70 *)p2CurrentGsRegisters)->cmode = arg0;
-        temp_a2 = p2DirtyFlags | 0x40;
-        temp_a1 = p2GsDirtyRegisters | 0x80;
-        p2DirtyFlags = temp_a2;
-        p2GsDirtyRegisters = temp_a1;
+        p2TextureFunction[p2CurrentProgram] = function;
+        ((p2TextureFunctionBytes *)p2CurrentGsRegisters)->tfxContext2 = function;
+        dirty = p2DirtyFlags | 0x40;
+        dirtyRegisters = p2GsDirtyRegisters | 0x80;
+        p2DirtyFlags = dirty;
+        p2GsDirtyRegisters = dirtyRegisters;
         if (p2CurrentProgram == 1) {
             p2UploadTex0Context2();
         }
@@ -274,19 +224,26 @@ void FUN_00208f70(int arg0) {
     p2DirtyFlags |= 0x11;
 }
 
-typedef struct Obj_209090 { char pad[52]; unsigned char a52 : 2; unsigned char b52 : 1; unsigned char c52 : 2; unsigned char r52 : 3; char pad2[7]; unsigned char a60 : 2; unsigned char b60 : 1; unsigned char c60 : 2; unsigned char r60 : 3; } Obj_209090;
-void FUN_00209090(int arg0, int arg1) {
-    FUN_00208f20(arg0);
+/* TEX0.TCC and TEX0.TFX of both contexts, reached a byte at a time. */
+typedef struct p2TextureFunctionAlphaBytes {
+    char registersBelow[52];
+    unsigned char tex0Bits32 : 2; unsigned char tcc : 1; unsigned char tfx : 2; unsigned char tex0Bits37 : 3;
+    char tex0Context2[7];
+    unsigned char tex0Context2Bits32 : 2; unsigned char tccContext2 : 1; unsigned char tfxContext2 : 2;
+    unsigned char tex0Context2Bits37 : 3;
+} p2TextureFunctionAlphaBytes;
+void p2SetTextureFunctionAndAlpha(int function, int alpha) {
+    p2SetProgramTextureFunction(function);
     if (p2CurrentProgram == 0) {
-        *(int *)((char *)p2TextureFunction + p2CurrentProgram * 4) = arg0;
-        ((Obj_209090 *)p2CurrentGsRegisters)->c52 = arg0;
-        ((Obj_209090 *)p2CurrentGsRegisters)->b52 = arg1;
+        *(int *)((char *)p2TextureFunction + p2CurrentProgram * 4) = function;
+        ((p2TextureFunctionAlphaBytes *)p2CurrentGsRegisters)->tfx = function;
+        ((p2TextureFunctionAlphaBytes *)p2CurrentGsRegisters)->tcc = alpha;
         p2DirtyFlags |= 0x40;
         p2GsDirtyRegisters |= 0x40;
     } else {
-        *(int *)((char *)p2TextureFunction + p2CurrentProgram * 4) = arg0;
-        ((Obj_209090 *)p2CurrentGsRegisters)->c60 = arg0;
-        ((Obj_209090 *)p2CurrentGsRegisters)->b60 = arg1;
+        *(int *)((char *)p2TextureFunction + p2CurrentProgram * 4) = function;
+        ((p2TextureFunctionAlphaBytes *)p2CurrentGsRegisters)->tfxContext2 = function;
+        ((p2TextureFunctionAlphaBytes *)p2CurrentGsRegisters)->tccContext2 = alpha;
         p2DirtyFlags |= 0x40;
         p2GsDirtyRegisters |= 0x80;
         if (p2CurrentProgram == 1) {
@@ -296,162 +253,174 @@ void FUN_00209090(int arg0, int arg1) {
     p2DirtyFlags |= 0x11;
 }
 
-typedef struct R { unsigned char a : 2; unsigned char b : 2; unsigned short c : 10; unsigned long long d : 10; unsigned long long e : 10; unsigned short f : 10; } R;
-typedef struct P_209210 { char pad[52]; unsigned char x0 : 2; unsigned char fl : 1; unsigned char r : 5; char pad2[7]; unsigned char y0 : 2; unsigned char fl2 : 1; unsigned char r2 : 5; char pad3[3]; R r64; R r72; } P_209210;
-void FUN_00209210(int arg0, int arg1, int arg2, long long arg3, long long arg4, int arg5, int arg6) {
-    int temp_a2;
-    R *q;
-    long long temp_a1;
+/* CLAMP: the wrap modes and the clamp window. */
+typedef struct p2GsClampBits {
+    unsigned char wms : 2; unsigned char wmt : 2; unsigned short minu : 10; unsigned long long maxu : 10;
+    unsigned long long minv : 10; unsigned short maxv : 10;
+} p2GsClampBits;
+/* TEX0.TCC and CLAMP of both contexts. */
+typedef struct p2TextureClampBytes {
+    char registersBelow[52];
+    unsigned char tex0Bits32 : 2; unsigned char tcc : 1; unsigned char tex0Bits35 : 5;
+    char tex0Context2[7];
+    unsigned char tex0Context2Bits32 : 2; unsigned char tccContext2 : 1; unsigned char tex0Context2Bits35 : 5;
+    char tex0Context2High[3];
+    p2GsClampBits clamp1;
+    p2GsClampBits clamp2;
+} p2TextureClampBytes;
+void p2SetTextureClamp(int wms, int wmt, int minu, long long maxu, long long minv, int maxv, int alpha) {
+    int dirty;
+    p2GsClampBits *clamp;
+    long long dirtyRegisters;
     if (p2CurrentProgram == 0) {
-        ((P_209210 *)p2CurrentGsRegisters)->fl = arg6;
-        ((P_209210 *)p2CurrentGsRegisters)->r64.a = arg0;
-        ((P_209210 *)p2CurrentGsRegisters)->r64.b = arg1;
-        ((P_209210 *)p2CurrentGsRegisters)->r64.c = arg2;
-        q = &((P_209210 *)p2CurrentGsRegisters)->r64;
-        q->d = (int)arg3;
-        q->e = (int)arg4;
-        q->f = arg5;
+        ((p2TextureClampBytes *)p2CurrentGsRegisters)->tcc = alpha;
+        ((p2TextureClampBytes *)p2CurrentGsRegisters)->clamp1.wms = wms;
+        ((p2TextureClampBytes *)p2CurrentGsRegisters)->clamp1.wmt = wmt;
+        ((p2TextureClampBytes *)p2CurrentGsRegisters)->clamp1.minu = minu;
+        clamp = &((p2TextureClampBytes *)p2CurrentGsRegisters)->clamp1;
+        clamp->maxu = (int)maxu;
+        clamp->minv = (int)minv;
+        clamp->maxv = maxv;
         p2DirtyFlags |= 0x40;
         p2GsDirtyRegisters |= 0x140;
     } else {
-        ((P_209210 *)p2CurrentGsRegisters)->fl2 = arg6;
-        ((P_209210 *)p2CurrentGsRegisters)->r72.a = arg0;
-        ((P_209210 *)p2CurrentGsRegisters)->r72.b = arg1;
-        ((P_209210 *)p2CurrentGsRegisters)->r72.c = arg2;
-        q = &((P_209210 *)p2CurrentGsRegisters)->r72;
-        q->d = (int)arg3;
-        q->e = (int)arg4;
-        q->f = arg5;
-        temp_a2 = p2DirtyFlags | 0x40;
-        temp_a1 = p2GsDirtyRegisters | 0x280;
-        p2DirtyFlags = temp_a2;
-        p2GsDirtyRegisters = temp_a1;
+        ((p2TextureClampBytes *)p2CurrentGsRegisters)->tccContext2 = alpha;
+        ((p2TextureClampBytes *)p2CurrentGsRegisters)->clamp2.wms = wms;
+        ((p2TextureClampBytes *)p2CurrentGsRegisters)->clamp2.wmt = wmt;
+        ((p2TextureClampBytes *)p2CurrentGsRegisters)->clamp2.minu = minu;
+        clamp = &((p2TextureClampBytes *)p2CurrentGsRegisters)->clamp2;
+        clamp->maxu = (int)maxu;
+        clamp->minv = (int)minv;
+        clamp->maxv = maxv;
+        dirty = p2DirtyFlags | 0x40;
+        dirtyRegisters = p2GsDirtyRegisters | 0x280;
+        p2DirtyFlags = dirty;
+        p2GsDirtyRegisters = dirtyRegisters;
         if (p2CurrentProgram == 1) {
             p2UploadTex0Context2();
         }
     }
 }
 
-typedef struct B_2094c0 {
-    unsigned short r0 : 2;
-    unsigned short m : 3;
-    unsigned short f : 1;
-    unsigned short c : 3;
-    unsigned short r1 : 7;
-} B_2094c0;
-typedef struct P_2094c0 { char pad[104]; B_2094c0 b104; char pad2[6]; B_2094c0 b112; } P_2094c0;
-void FUN_002094c0(int arg0, int arg1) {
+/* The low half of TEX1: LCM, MXL, MMAG, MMIN. */
+typedef struct p2GsTex1Filter {
+    unsigned short lcm : 2;
+    unsigned short mxl : 3;
+    unsigned short mmag : 1;
+    unsigned short mmin : 3;
+    unsigned short tex1Bits9 : 7;
+} p2GsTex1Filter;
+typedef struct p2TextureFilterBytes {
+    char registersBelow[104];
+    p2GsTex1Filter tex1;
+    char tex1High[6];
+    p2GsTex1Filter tex1Context2;
+} p2TextureFilterBytes;
+void p2SetTextureFilter(int magnify, int minify) {
     if (p2CurrentProgram == 0) {
-        ((P_2094c0 *)p2CurrentGsRegisters)->b104.f = arg0;
-        ((P_2094c0 *)p2CurrentGsRegisters)->b104.c = arg1;
-        if (((P_2094c0 *)p2CurrentGsRegisters)->b104.c == 1 || ((P_2094c0 *)p2CurrentGsRegisters)->b104.c == 0) {
-            ((P_2094c0 *)p2CurrentGsRegisters)->b104.m = 0;
+        ((p2TextureFilterBytes *)p2CurrentGsRegisters)->tex1.mmag = magnify;
+        ((p2TextureFilterBytes *)p2CurrentGsRegisters)->tex1.mmin = minify;
+        if (((p2TextureFilterBytes *)p2CurrentGsRegisters)->tex1.mmin == 1 || ((p2TextureFilterBytes *)p2CurrentGsRegisters)->tex1.mmin == 0) {
+            ((p2TextureFilterBytes *)p2CurrentGsRegisters)->tex1.mxl = 0;
         }
         p2DirtyFlags |= 0x40;
         p2GsDirtyRegisters |= 0x2000;
     } else {
-        ((P_2094c0 *)p2CurrentGsRegisters)->b112.f = arg0;
-        ((P_2094c0 *)p2CurrentGsRegisters)->b112.c = arg1;
-        if (((P_2094c0 *)p2CurrentGsRegisters)->b112.c == 1 || ((P_2094c0 *)p2CurrentGsRegisters)->b112.c == 0) {
-            ((P_2094c0 *)p2CurrentGsRegisters)->b112.m = 0;
+        ((p2TextureFilterBytes *)p2CurrentGsRegisters)->tex1Context2.mmag = magnify;
+        ((p2TextureFilterBytes *)p2CurrentGsRegisters)->tex1Context2.mmin = minify;
+        if (((p2TextureFilterBytes *)p2CurrentGsRegisters)->tex1Context2.mmin == 1 || ((p2TextureFilterBytes *)p2CurrentGsRegisters)->tex1Context2.mmin == 0) {
+            ((p2TextureFilterBytes *)p2CurrentGsRegisters)->tex1Context2.mxl = 0;
         }
         p2DirtyFlags |= 0x40;
         p2GsDirtyRegisters |= 0x4000;
     }
 }
 
-typedef struct Obj_209650 {
-    char pad[104];
-    unsigned char a104 : 1; unsigned char r104 : 7;
-    char pad105;
-    unsigned char x106 : 3; unsigned char c106 : 2; unsigned char r106 : 3;
-    char pad107;
-    unsigned short d108 : 12; unsigned short r108 : 4;
-    char pad110[2];
-    unsigned char a112 : 1; unsigned char r112 : 7;
-    char pad113;
-    unsigned char x114 : 3; unsigned char c114 : 2; unsigned char r114 : 3;
-    char pad115;
-    unsigned short d116 : 12; unsigned short r116 : 4;
-} Obj_209650;
-void FUN_00209650(int arg0, int arg1, int arg2) {
+/* TEX1's LCM, L and K of both contexts, reached a byte or a halfword at a time. */
+typedef struct p2TextureLodBytes {
+    char registersBelow[104];
+    unsigned char lcm : 1; unsigned char tex1Bits1 : 7;
+    char tex1Byte1;
+    unsigned char tex1Bits16 : 3; unsigned char l : 2; unsigned char tex1Bits21 : 3;
+    char tex1Byte3;
+    unsigned short k : 12; unsigned short tex1Bits44 : 4;
+    char tex1High[2];
+    unsigned char lcmContext2 : 1; unsigned char tex1Context2Bits1 : 7;
+    char tex1Context2Byte1;
+    unsigned char tex1Context2Bits16 : 3; unsigned char lContext2 : 2; unsigned char tex1Context2Bits21 : 3;
+    char tex1Context2Byte3;
+    unsigned short kContext2 : 12; unsigned short tex1Context2Bits44 : 4;
+} p2TextureLodBytes;
+void p2SetTextureLod(int lcm, int l, int k) {
     if (p2CurrentProgram == 0) {
-        ((Obj_209650 *)p2CurrentGsRegisters)->a104 = arg0;
-        ((Obj_209650 *)p2CurrentGsRegisters)->c106 = arg1;
-        ((Obj_209650 *)p2CurrentGsRegisters)->d108 = arg2;
+        ((p2TextureLodBytes *)p2CurrentGsRegisters)->lcm = lcm;
+        ((p2TextureLodBytes *)p2CurrentGsRegisters)->l = l;
+        ((p2TextureLodBytes *)p2CurrentGsRegisters)->k = k;
         p2DirtyFlags |= 0x40;
         p2GsDirtyRegisters |= 0x2000;
     } else {
-        ((Obj_209650 *)p2CurrentGsRegisters)->a112 = arg0;
-        ((Obj_209650 *)p2CurrentGsRegisters)->c114 = arg1;
-        ((Obj_209650 *)p2CurrentGsRegisters)->d116 = arg2;
+        ((p2TextureLodBytes *)p2CurrentGsRegisters)->lcmContext2 = lcm;
+        ((p2TextureLodBytes *)p2CurrentGsRegisters)->lContext2 = l;
+        ((p2TextureLodBytes *)p2CurrentGsRegisters)->kContext2 = k;
         p2DirtyFlags |= 0x40;
         p2GsDirtyRegisters |= 0x4000;
     }
 }
 
-struct S_209780 {
-    char p[216];
-    char f216;
-    unsigned char b0 : 1;
-    unsigned char b1 : 1;
-    unsigned char b2 : 1;
-    unsigned char b3 : 1;
-    unsigned char b4 : 1;
-    unsigned char b5 : 1;
-    unsigned char b6 : 1;
-    unsigned char b7 : 1;
-    char p2[2];
-    char f220;
+/* TEXA: TA0, AEM and TA1. */
+struct p2TexaBytes {
+    char registersBelow[216];
+    char ta0;
+    unsigned char texaBit8 : 1;
+    unsigned char texaBit9 : 1;
+    unsigned char texaBit10 : 1;
+    unsigned char texaBit11 : 1;
+    unsigned char texaBit12 : 1;
+    unsigned char texaBit13 : 1;
+    unsigned char texaBit14 : 1;
+    unsigned char aem : 1;
+    char texaBytes2[2];
+    char ta1;
 };
-void FUN_00209780(char arg0, unsigned char arg1, int arg2) {
-    ((struct S_209780 *)p2CurrentGsRegisters)->f216 = arg0;
-    ((struct S_209780 *)p2CurrentGsRegisters)->f220 = arg1;
-    ((struct S_209780 *)p2CurrentGsRegisters)->b7 = arg2;
+void p2SetTextureAlpha(char alpha0, unsigned char alpha1, int expandAlpha) {
+    ((struct p2TexaBytes *)p2CurrentGsRegisters)->ta0 = alpha0;
+    ((struct p2TexaBytes *)p2CurrentGsRegisters)->ta1 = alpha1;
+    ((struct p2TexaBytes *)p2CurrentGsRegisters)->aem = expandAlpha;
     p2DirtyFlags |= 0x40;
     p2GsDirtyRegisters |= 0x08000000;
 }
 
-struct G_20a590 {
-    char p0[355]; unsigned char x355:6; char p1[12];
-    unsigned short x368:9; char p2[14];
-    unsigned short x384:14; unsigned char x386:6; unsigned char x387:6;
-    unsigned short x388:14; unsigned char x390:6; unsigned char x391:6;
-    unsigned short x392:11; unsigned short x394:11; unsigned short x396:11; unsigned short x398:11; unsigned char x399:2;
-    unsigned short x400:12; char p4[2];
-    unsigned short x404:12; char p5[2]; unsigned char x408:2;
+/* The FRAME and ZBUF pages and the local-to-local transfer registers (BITBLTBUF, TRXPOS, TRXREG,
+ * TRXDIR) of the register set, at the widths the transfers write them. */
+struct p2TransferRegisters {
+    char registersBelow[355]; unsigned char framePsm:6; char frameContext2[12];
+    unsigned short zbp:9; char zbufHigh[14];
+    unsigned short sbp:14; unsigned char sbw:6; unsigned char spsm:6;
+    unsigned short dbp:14; unsigned char dbw:6; unsigned char dpsm:6;
+    unsigned short ssax:11; unsigned short ssay:11; unsigned short dsax:11; unsigned short dsay:11; unsigned char dir:2;
+    unsigned short rrw:12; char trxregHigh[2];
+    unsigned short rrh:12; char trxdirLow[2]; unsigned char xdir:2;
 };
-typedef union { int w[4]; long long d[2]; } QW_2097f0;
-typedef union { struct { unsigned short nloop : 15; unsigned short eop : 1; } b; long long d[2]; } GifTag_2097f0;
-typedef union { struct { unsigned short qwc; short p2; unsigned int addr : 31; unsigned int last : 1; } b; int w[4]; } Img_2097f0;
-struct Node_2097f0 { char p0[12]; struct Node_2097f0 *next; };
-struct Ch_2097f0 {
-    long long tag;
-    long long seq;
-    struct Node_2097f0 *head;
-    struct Node_2097f0 *tail;
-    char p24[16];
-    unsigned int end;
-    char p44[4];
-    unsigned int cur;
-    char p52[12];
-    unsigned char busy : 1;
-};
-struct Tex_2097f0 { long long tag; char p8[40]; int addr; char p52[4]; int tbp; unsigned short width; unsigned short height; char p64[2]; unsigned short format; };
-void FUN_002097f0(struct Tex_2097f0 **list, int count) {
+/* A quadword as words or doublewords. */
+typedef union p2Quadword { int w[4]; long long d[2]; } p2Quadword;
+/* The GIF tag of an IMAGE transfer: NLOOP is the quadword count. */
+typedef union p2ImageGifTag { struct { unsigned short nloop : 15; unsigned short eop : 1; } bits; long long d[2]; } p2ImageGifTag;
+/* A DMA ref tag over the image data. */
+typedef union p2ImageRefTag { struct { unsigned short qwc; short id; unsigned int addr : 31; unsigned int spr : 1; } bits; int w[4]; } p2ImageRefTag;
+void p2UploadTextures(P2Texture **list, int count) {
     int p2DmaPacketQueued();
     int FUN_001f7e90();
     extern int DAT_00569128[4];
     extern long long DAT_00569168[4];
-    extern unsigned int DAT_00491730[];
-    extern unsigned int DAT_00491770[];
-    extern int DAT_00491820[];
-    extern QW_2097f0 DAT_004917f0;
-    extern Img_2097f0 DAT_00491800;
-    extern GifTag_2097f0 DAT_00491810;
-    struct Tex_2097f0 *t;
+    extern unsigned int p2TextureFormatBits[];
+    extern unsigned int p2TextureFormatHalfBytes[];
+    extern int p2UploadRegisters[];
+    extern p2Quadword p2UploadDmaTag;
+    extern p2ImageRefTag p2UploadImageRef;
+    extern p2ImageGifTag p2UploadGifTag;
+    P2Texture *t;
     p2DmaPredicate *n;
-    QW_2097f0 *q;
+    p2Quadword *q;
     int fmt;
     int w;
     long long seq;
@@ -464,11 +433,11 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
 
     DIntr();
     if (p2DmaPacketQueued(2, p2DmaLastPacket[P2_DMA_GIF]) != 0) {
-        seq = p2DmaCurrentPacket[P2_DMA_GIF]->f8;
-        if (seq >= 0 && p2DmaLastPacket[P2_DMA_GIF]->f8 >= seq && p2DmaLastPacket[P2_DMA_GIF]->cursor < p2DmaLastPacket[P2_DMA_GIF]->limit) {
+        seq = p2DmaCurrentPacket[P2_DMA_GIF]->waitSequence;
+        if (seq >= 0 && p2DmaLastPacket[P2_DMA_GIF]->waitSequence >= seq && p2DmaLastPacket[P2_DMA_GIF]->cursor < p2DmaLastPacket[P2_DMA_GIF]->limit) {
             n = p2DmaCurrentPacket[P2_DMA_GIF]->predicates;
             p2DmaLastPacket[P2_DMA_GIF]->ready = 0;
-            p2DmaCurrentPacket[P2_DMA_GIF]->f8 = -1;
+            p2DmaCurrentPacket[P2_DMA_GIF]->waitSequence = -1;
             if (n != 0) {
                 p2DmaCurrentPacket[P2_DMA_GIF]->predicates = 0;
                 p2DmaCurrentPacket[P2_DMA_GIF]->lastPredicate = 0;
@@ -485,54 +454,54 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
     }
     EIntr();
     do {
-        ((struct G_20a590 *)p2CurrentGsRegisters)->x391 = DAT_004917b0[(*list)->format];
-        ((struct G_20a590 *)p2CurrentGsRegisters)->x390 = ((*list)->width + 63) / 64;
-        ((struct G_20a590 *)p2CurrentGsRegisters)->x400 = (*list)->width;
-        ((struct G_20a590 *)p2CurrentGsRegisters)->x408 = 0;
+        ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dpsm = p2TextureFormatPsm[(*list)->format];
+        ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dbw = ((*list)->width + 63) / 64;
+        ((struct p2TransferRegisters *)p2CurrentGsRegisters)->rrw = (*list)->width;
+        ((struct p2TransferRegisters *)p2CurrentGsRegisters)->xdir = 0;
         t = *list;
         fmt = t->format;
         w = t->width;
-        addr = t->addr;
+        addr = (int)t->image;
         rows = t->height;
-        max = 0xfffe0 / (w * DAT_00491730[fmt]);
+        max = 0xfffe0 / (w * p2TextureFormatBits[fmt]);
         y = 0;
         while (rows > 0) {
             h = rows < max ? rows : max;
             /* matching construct: permuter — qwc computed before the transfer-register stores */
-            qwc = (DAT_00491730[fmt] * (w * h) + 31) >> 5;
-            ((struct G_20a590 *)p2CurrentGsRegisters)->x388 = t->tbp;
-            ((struct G_20a590 *)p2CurrentGsRegisters)->x396 = 0;
-            ((struct G_20a590 *)p2CurrentGsRegisters)->x398 = y;
-            ((struct G_20a590 *)p2CurrentGsRegisters)->x404 = h;
-            FUN_001f7e90(4, DAT_00491820, 0);
+            qwc = (p2TextureFormatBits[fmt] * (w * h) + 31) >> 5;
+            ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dbp = t->address;
+            ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dsax = 0;
+            ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dsay = y;
+            ((struct p2TransferRegisters *)p2CurrentGsRegisters)->rrh = h;
+            FUN_001f7e90(4, p2UploadRegisters, 0);
             /* matching construct: statement-order search — y += h placed before the GIF tag NLOOP store */
             y += h;
-            DAT_00491810.b.nloop = qwc;
+            p2UploadGifTag.bits.nloop = qwc;
             rows -= h;
-            DAT_00491800.b.qwc = DAT_00491810.b.nloop;
-            q = (QW_2097f0 *)p2DmaCurrentPacket[P2_DMA_GIF]->cursor;
-            DAT_00491800.b.addr = addr;
-            q->w[0] = DAT_004917f0.w[0];
-            q->w[1] = DAT_004917f0.w[1];
-            q->w[2] = DAT_004917f0.w[2];
-            q->w[3] = DAT_004917f0.w[3];
+            p2UploadImageRef.bits.qwc = p2UploadGifTag.bits.nloop;
+            q = (p2Quadword *)p2DmaCurrentPacket[P2_DMA_GIF]->cursor;
+            p2UploadImageRef.bits.addr = addr;
+            q->w[0] = p2UploadDmaTag.w[0];
+            q->w[1] = p2UploadDmaTag.w[1];
+            q->w[2] = p2UploadDmaTag.w[2];
+            q->w[3] = p2UploadDmaTag.w[3];
             q++;
-            q->d[0] = DAT_00491810.d[0];
-            q->d[1] = DAT_00491810.d[1];
+            q->d[0] = p2UploadGifTag.d[0];
+            q->d[1] = p2UploadGifTag.d[1];
             q++;
-            q->w[0] = DAT_00491800.w[0];
-            q->w[1] = DAT_00491800.w[1];
-            q->w[2] = DAT_00491800.w[2];
-            q->w[3] = DAT_00491800.w[3];
+            q->w[0] = p2UploadImageRef.w[0];
+            q->w[1] = p2UploadImageRef.w[1];
+            q->w[2] = p2UploadImageRef.w[2];
+            q->w[3] = p2UploadImageRef.w[3];
             q++;
             p2DmaCurrentPacket[P2_DMA_GIF]->cursor = (unsigned int)q;
             t = *list;
             fmt = t->format;
             w = t->width;
-            addr += (DAT_00491770[fmt] * (w * h)) >> 1;
+            addr += (p2TextureFormatHalfBytes[fmt] * (w * h)) >> 1;
         }
-        t->tag = p2DmaCurrentPacket[P2_DMA_GIF]->sequence;
-        p2AddDmaCompletion(2, FUN_002084a0, *list);
+        t->uploadSequence = p2DmaCurrentPacket[P2_DMA_GIF]->sequence;
+        p2AddDmaCompletion(2, p2TextureLoadDone, *list);
         count--;
         list++;
         if (count != 0 && p2DmaCurrentPacket[P2_DMA_GIF]->cursor > p2DmaCurrentPacket[P2_DMA_GIF]->limit) {
@@ -542,611 +511,541 @@ void FUN_002097f0(struct Tex_2097f0 **list, int count) {
     p2SubmitDmaPacket(2);
 }
 
-int FUN_00209cc0(int a) {
+int p2Log2(int value) {
     int n;
-    for (n = 0; (a >>= 1) != 0; n++) {}
+    for (n = 0; (value >>= 1) != 0; n++) {}
     return n;
 }
 
-struct A0_20a590 { char p0[56]; int f56; unsigned short f60; char p1[4]; unsigned short f66; char p2[2]; signed char f70:7; char p3; char f72; };
-void FUN_0020a590(struct A0_20a590 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7) {
-    int sp0;
-    int s0;
-    int v;
-    int w;
-    short u;
-    short m;
-    int pr;
-    int t;
-    sp0 = ((struct G_20a590 *)p2CurrentGsRegisters)->x355;
-    s0 = (p2GetDisplayFlags() & 2) != 0;
-    arg0->f72 = 1;
-    switch (arg0->f70) {
-    case 1:
-        if (FUN_0020b7f0((struct N_20b7f0 *)arg0) == 0) return;
-        arg0->f70 = 3;
+void p2CopyFramebufferToTexture(P2Texture *texture, int sourceX, int sourceY, int destinationX, int destinationY,
+                                int width, int height, int fromDepth) {
+    int framePsm;
+    int antialiased;
+    short bufferWidth;
+    short bufferHeight;
+    framePsm = ((struct p2TransferRegisters *)p2CurrentGsRegisters)->framePsm;
+    antialiased = (p2GetDisplayFlags() & 2) != 0;
+    texture->used = 1;
+    switch (texture->state) {
+    case P2_TEXTURE_UNPLACED:
+        if (p2AllocTextureMemory(texture) == 0) return;
+        texture->state = P2_TEXTURE_RESIDENT;
         break;
-    case 4:
-    case 3:
-    case 5:
-        arg0->f70 = 3;
+    case P2_TEXTURE_FENCED:
+    case P2_TEXTURE_RESIDENT:
+    case P2_TEXTURE_DRAWN:
+        texture->state = P2_TEXTURE_RESIDENT;
         break;
     }
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x391 = DAT_004917b0[arg0->f66];
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x388 = arg0->f56;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x390 = (arg0->f60 + 63) / 64;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x387 = sp0;
-    if (arg7 != 0) {
-        ((struct G_20a590 *)p2CurrentGsRegisters)->x384 = ((struct G_20a590 *)p2CurrentGsRegisters)->x368 << 5;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dpsm = p2TextureFormatPsm[texture->format];
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dbp = texture->address;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dbw = (texture->width + 63) / 64;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->spsm = framePsm;
+    if (fromDepth != 0) {
+        ((struct p2TransferRegisters *)p2CurrentGsRegisters)->sbp = ((struct p2TransferRegisters *)p2CurrentGsRegisters)->zbp << 5;
     } else {
-        ((struct G_20a590 *)p2CurrentGsRegisters)->x384 = (DAT_00568e12[0] != 0 && !s0) ? (DAT_00568e08[0] * DAT_00568e0a[0]) / 64 : 0;
+        ((struct p2TransferRegisters *)p2CurrentGsRegisters)->sbp = (p2Display.drawBuffer != 0 && !antialiased) ? (p2Display.width * p2Display.height) / 64 : 0;
     }
-    if (s0 != 0) u = DAT_00568e22[0]; else u = DAT_00568e08[0];
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x386 = u / 64;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x396 = arg3;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x398 = arg4;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x392 = arg1;
-    if (s0 != 0) m = DAT_00568e24[0]; else m = DAT_00568e0a[0];
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x394 = m - (arg6 + arg2);
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x399 = 0;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x400 = arg5;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x404 = arg6;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x408 = 2;
-    FUN_001f76f0(4, &DAT_00491860[0]);
+    if (antialiased != 0) bufferWidth = p2Display.antialiasWidth; else bufferWidth = p2Display.width;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->sbw = bufferWidth / 64;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dsax = destinationX;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dsay = destinationY;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->ssax = sourceX;
+    if (antialiased != 0) bufferHeight = p2Display.antialiasHeight; else bufferHeight = p2Display.height;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->ssay = bufferHeight - (height + sourceY);
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dir = 0;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->rrw = width;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->rrh = height;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->xdir = 2;
+    p2UploadGsRegisters(4, &p2ScreenCopyRegisters[0]);
 }
 
-void FUN_0020a990(void *srcTexture, int srcX, int srcY, void *dstTexture, int dstX, int dstY, int width, int height) {
-    extern int DAT_00491870[4];
+/* matching construct: hand-tried — the records arrive as void * and are copied to typed locals, which keeps retail's register assignment */
+void p2CopyTexture(void *source, int sourceX, int sourceY, void *destination, int destinationX,
+                   int destinationY, int width, int height) {
+    extern int p2TextureCopyRegisters[4];
     int xdir;
     int ydir;
-    struct A0_20a590 *dst;
-    struct A0_20a590 *src;
-    xdir = srcX < dstX;
-    ydir = srcY < dstY;
-    dst = dstTexture;
-    src = srcTexture;
-    dst->f72 = 1;
-    switch (dst->f70) {
-    case 1:
-        if (FUN_0020b7f0((struct N_20b7f0 *)dst) == 0) return;
-        dst->f70 = 3;
+    P2Texture *dst;
+    P2Texture *src;
+    xdir = sourceX < destinationX;
+    ydir = sourceY < destinationY;
+    dst = destination;
+    src = source;
+    dst->used = 1;
+    switch (dst->state) {
+    case P2_TEXTURE_UNPLACED:
+        if (p2AllocTextureMemory(dst) == 0) return;
+        dst->state = P2_TEXTURE_RESIDENT;
         break;
-    case 4:
-    case 3:
-    case 5:
-        dst->f70 = 3;
-        break;
-    }
-    src->f72 = 1;
-    switch (src->f70) {
-    case 1:
-        if (FUN_0020b7f0((struct N_20b7f0 *)src) == 0) return;
-        src->f70 = 3;
-        break;
-    case 4:
-    case 3:
-    case 5:
-        src->f70 = 3;
+    case P2_TEXTURE_FENCED:
+    case P2_TEXTURE_RESIDENT:
+    case P2_TEXTURE_DRAWN:
+        dst->state = P2_TEXTURE_RESIDENT;
         break;
     }
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x387 = DAT_004917b0[src->f66];
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x384 = src->f56;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x386 = (src->f60 + 63) / 64;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x391 = DAT_004917b0[dst->f66];
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x388 = dst->f56;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x390 = (dst->f60 + 63) / 64;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x396 = dstX;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x398 = dstY;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x392 = srcX;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x394 = srcY;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x399 = (xdir << 1) + ydir;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x400 = width;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x404 = height;
-    ((struct G_20a590 *)p2CurrentGsRegisters)->x408 = 2;
-    FUN_001f76f0(4, &DAT_00491870[0]);
+    src->used = 1;
+    switch (src->state) {
+    case P2_TEXTURE_UNPLACED:
+        if (p2AllocTextureMemory(src) == 0) return;
+        src->state = P2_TEXTURE_RESIDENT;
+        break;
+    case P2_TEXTURE_FENCED:
+    case P2_TEXTURE_RESIDENT:
+    case P2_TEXTURE_DRAWN:
+        src->state = P2_TEXTURE_RESIDENT;
+        break;
+    }
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->spsm = p2TextureFormatPsm[src->format];
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->sbp = src->address;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->sbw = (src->width + 63) / 64;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dpsm = p2TextureFormatPsm[dst->format];
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dbp = dst->address;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dbw = (dst->width + 63) / 64;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dsax = destinationX;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dsay = destinationY;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->ssax = sourceX;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->ssay = sourceY;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dir = (xdir << 1) + ydir;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->rrw = width;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->rrh = height;
+    ((struct p2TransferRegisters *)p2CurrentGsRegisters)->xdir = 2;
+    p2UploadGsRegisters(4, &p2TextureCopyRegisters[0]);
 }
 
-typedef struct T_20ad60 {
-    char p0[18];
-    unsigned short r18 : 4;
-    unsigned short psm18 : 6;
-    unsigned short t18 : 6;
-    char p20[36];
-    int f56;
-    unsigned short f60;
-    unsigned short f62;
-    char p64[2];
-    unsigned short f66;
-    char p68[2];
-    signed char f70 : 7;
-    char p71;
-    char f72;
-} T_20ad60;
-typedef struct RT_20ad60 {
-    char p0[136];
-    union { struct { short a; short pad; short b; short c; } h; long long q; } u136;
-    long long q144;
-    char p152[24];
-    union { long long q; struct { unsigned char x : 2; } b; } u176;
-    char p184[168];
-    union { long long q; int i; struct { unsigned short fbp : 9; unsigned short r : 7; unsigned char fbw : 6; unsigned char r2 : 2; unsigned char psm : 6; } f; } u352;
-    long long q360;
-    union { long long q; int i; struct { unsigned short zbp : 9; unsigned short r : 7; char pad; unsigned char zpsm : 4; } z; } u368;
-    long long q376;
-} RT_20ad60;
-int FUN_0020ad60(T_20ad60 *color, T_20ad60 *depth) {
-    extern int DAT_00491880[4];
-    extern int DAT_00491890[4];
-    int s0;
-    RT_20ad60 *p;
+/* XYOFFSET, FRAME and ZBUF of the register set, with their context-2 copies. */
+typedef struct p2RenderTargetRegisters {
+    char registersBelow[136];
+    union { struct { short ofx; short pad; short ofy; short high; } offset; long long word; } xyoffset;
+    long long xyoffsetContext2;
+    char registersBetween[24];
+    union { long long word; struct { unsigned char msk : 2; } bits; } scanmsk;
+    char registersBelowFrame[168];
+    union { long long word; int low; struct { unsigned short fbp : 9; unsigned short frameBits9 : 7; unsigned char fbw : 6; unsigned char frameBits22 : 2; unsigned char psm : 6; } bits; } frame;
+    long long frameContext2;
+    union { long long word; int low; struct { unsigned short zbp : 9; unsigned short zbufBits9 : 7; char zbufByte2; unsigned char psm : 4; } bits; } zbuf;
+    long long zbufContext2;
+} p2RenderTargetRegisters;
+/* The texture's PSM, a halfword at a time. */
+typedef struct p2TextureTex0Halfword {
+    char recordBelow[18];
+    unsigned short tex0Bits16 : 4;
+    unsigned short psm : 6;
+    unsigned short tex0Bits26 : 6;
+} p2TextureTex0Halfword;
+int p2SetRenderTarget(P2Texture *colour, P2Texture *depth) {
+    extern int p2RenderTargetRegisterList[4];
+    extern int p2RenderTargetContext2RegisterList[4];
+    int multipass;
+    p2RenderTargetRegisters *registers;
 
-    s0 = ((unsigned int) p2ProgramFlags[p2CurrentProgram] >> 0x17) & 1;
-    color->f72 = 1;
-    switch (color->f70) {
-    case 1:
-        if (FUN_0020b7f0((struct N_20b7f0 *)color) == 0) return 0;
-        color->f70 = 3;
+    multipass = ((unsigned int) p2ProgramFlags[p2CurrentProgram] >> 0x17) & 1;
+    colour->used = 1;
+    switch (colour->state) {
+    case P2_TEXTURE_UNPLACED:
+        if (p2AllocTextureMemory(colour) == 0) return 0;
+        colour->state = P2_TEXTURE_RESIDENT;
         if (depth != 0) {
-            depth->f72 = 1;
-            if (FUN_0020b7f0((struct N_20b7f0 *)depth) == 0) return 0;
-            depth->f70 = 3;
+            depth->used = 1;
+            if (p2AllocTextureMemory(depth) == 0) return 0;
+            depth->state = P2_TEXTURE_RESIDENT;
         }
         break;
-    case 4:
-    case 3:
-    case 5:
-        color->f70 = 3;
+    case P2_TEXTURE_FENCED:
+    case P2_TEXTURE_RESIDENT:
+    case P2_TEXTURE_DRAWN:
+        colour->state = P2_TEXTURE_RESIDENT;
         break;
     default:
         return 0;
     }
-    ((RT_20ad60 *)p2CurrentGsRegisters)->u136.h.a = (0x800 - (color->f60 >> 1)) * 0x10;
-    ((RT_20ad60 *)p2CurrentGsRegisters)->u136.h.b = (0x800 - (color->f62 >> 1)) * 0x10;
-    if (DAT_00568e28[0] == -1) {
-        DAT_00568e28[0] = (int)color;
-        DAT_0056c138[0] = ((RT_20ad60 *)p2CurrentGsRegisters)->u352.i;
-        DAT_0056c140[0] = ((RT_20ad60 *)p2CurrentGsRegisters)->u368.i;
-        DAT_0056c148[0] = ((RT_20ad60 *)p2CurrentGsRegisters)->u176.q;
+    ((p2RenderTargetRegisters *)p2CurrentGsRegisters)->xyoffset.offset.ofx = (0x800 - (colour->width >> 1)) * 0x10;
+    ((p2RenderTargetRegisters *)p2CurrentGsRegisters)->xyoffset.offset.ofy = (0x800 - (colour->height >> 1)) * 0x10;
+    if (p2Display.renderTarget == -1) {
+        p2Display.renderTarget = (int)colour;
+        p2SavedFrame[0] = ((p2RenderTargetRegisters *)p2CurrentGsRegisters)->frame.low;
+        p2SavedZbuf[0] = ((p2RenderTargetRegisters *)p2CurrentGsRegisters)->zbuf.low;
+        p2SavedScanmsk[0] = ((p2RenderTargetRegisters *)p2CurrentGsRegisters)->scanmsk.word;
     }
     if (depth != 0) {
-        DAT_00568e30[0] = (int)depth;
-        ((RT_20ad60 *)p2CurrentGsRegisters)->u368.z.zbp = ((depth->f56 << 9) / 8) / 2048;
-        if (depth->f66 == 12 && color->f66 == 3) {
-            depth->f66 = 11;
-            color->f66 = 2;
-            color->psm18 = DAT_004917b0[2];
+        p2DepthTarget = (int)depth;
+        ((p2RenderTargetRegisters *)p2CurrentGsRegisters)->zbuf.bits.zbp = ((depth->address << 9) / 8) / 2048;
+        if (depth->format == 12 && colour->format == 3) {
+            depth->format = 11;
+            colour->format = 2;
+            ((p2TextureTex0Halfword *)colour)->psm = p2TextureFormatPsm[2];
         }
-        ((RT_20ad60 *)p2CurrentGsRegisters)->u368.z.zpsm = DAT_004917b0[depth->f66] & 0xF;
+        ((p2RenderTargetRegisters *)p2CurrentGsRegisters)->zbuf.bits.psm = p2TextureFormatPsm[depth->format] & 0xF;
     } else {
-        DAT_00568e30[0] = -1;
+        p2DepthTarget = -1;
     }
-    ((RT_20ad60 *)p2CurrentGsRegisters)->u352.f.fbp = ((color->f56 << 9) / 8) / 2048;
-    ((RT_20ad60 *)p2CurrentGsRegisters)->u352.f.fbw = (unsigned int)color->f60 >> 6;
-    ((RT_20ad60 *)p2CurrentGsRegisters)->u352.f.psm = DAT_004917b0[color->f66];
-    ((RT_20ad60 *)p2CurrentGsRegisters)->u176.b.x = 0;
-    if (s0 != 0) {
-        p = (RT_20ad60 *)p2CurrentGsRegisters;
-        p->q360 = p->u352.q;
-        p->q144 = p->u136.q;
-        p->q376 = p->u368.q;
-        FUN_001f76f0(3, &DAT_00491890[0]);
+    ((p2RenderTargetRegisters *)p2CurrentGsRegisters)->frame.bits.fbp = ((colour->address << 9) / 8) / 2048;
+    ((p2RenderTargetRegisters *)p2CurrentGsRegisters)->frame.bits.fbw = (unsigned int)colour->width >> 6;
+    ((p2RenderTargetRegisters *)p2CurrentGsRegisters)->frame.bits.psm = p2TextureFormatPsm[colour->format];
+    ((p2RenderTargetRegisters *)p2CurrentGsRegisters)->scanmsk.bits.msk = 0;
+    if (multipass != 0) {
+        registers = (p2RenderTargetRegisters *)p2CurrentGsRegisters;
+        registers->frameContext2 = registers->frame.word;
+        registers->xyoffsetContext2 = registers->xyoffset.word;
+        registers->zbufContext2 = registers->zbuf.word;
+        p2UploadGsRegisters(3, &p2RenderTargetContext2RegisterList[0]);
     }
-    FUN_001f76f0(4, &DAT_00491880[0]);
+    p2UploadGsRegisters(4, &p2RenderTargetRegisterList[0]);
     return 1;
 }
 
-typedef struct S_20b110 {
-    char p0[136]; union { struct { short a; short pad; short b; short c; } h; long long q; } u136; long long q144;
-    char p152[24]; long long q176; char p184[168]; union { long long q; int i; } u352; long long q360; union { long long q; int i; } u368; long long q376;
-} S_20b110;
-void FUN_0020b110(void) {
-    short v;
-    int a1;
-    int s0;
-    S_20b110 *p;
+void p2RestoreRenderTarget(void) {
+    short size;
+    int antialiased;
+    int multipass;
+    p2RenderTargetRegisters *registers;
 
-    s0 = ((unsigned int) p2ProgramFlags[p2CurrentProgram] >> 0x17) & 1;
-    a1 = (p2GetDisplayFlags() & 2) != 0;
-    if (DAT_00568e28[0] != -1) {
-        ((S_20b110 *)p2CurrentGsRegisters)->u352.i = DAT_0056c138[0];
-        ((S_20b110 *)p2CurrentGsRegisters)->u368.i = DAT_0056c140[0];
-        p = (S_20b110 *)p2CurrentGsRegisters;
-        p->q176 = DAT_0056c148[0];
-        if (a1 != 0) v = DAT_00568e22[0]; else v = DAT_00568e08[0];
-        p->u136.h.a = (0x800 - (v >> 1)) * 0x10;
-        if (a1 != 0) v = DAT_00568e24[0]; else v = DAT_00568e0a[0];
-        ((S_20b110 *)p2CurrentGsRegisters)->u136.h.b = (0x800 - (v >> 1)) * 0x10;
-        if (s0 != 0) {
-            p = (S_20b110 *)p2CurrentGsRegisters;
-            p->q360 = p->u352.q;
-            p->q144 = p->u136.q;
-            p->q376 = p->u368.q;
-            FUN_001f76f0(3, &DAT_004918b0[0]);
+    multipass = ((unsigned int) p2ProgramFlags[p2CurrentProgram] >> 0x17) & 1;
+    antialiased = (p2GetDisplayFlags() & 2) != 0;
+    if (p2Display.renderTarget != -1) {
+        ((p2RenderTargetRegisters *)p2CurrentGsRegisters)->frame.low = p2SavedFrame[0];
+        ((p2RenderTargetRegisters *)p2CurrentGsRegisters)->zbuf.low = p2SavedZbuf[0];
+        registers = (p2RenderTargetRegisters *)p2CurrentGsRegisters;
+        registers->scanmsk.word = p2SavedScanmsk[0];
+        if (antialiased != 0) size = p2Display.antialiasWidth; else size = p2Display.width;
+        registers->xyoffset.offset.ofx = (0x800 - (size >> 1)) * 0x10;
+        if (antialiased != 0) size = p2Display.antialiasHeight; else size = p2Display.height;
+        ((p2RenderTargetRegisters *)p2CurrentGsRegisters)->xyoffset.offset.ofy = (0x800 - (size >> 1)) * 0x10;
+        if (multipass != 0) {
+            registers = (p2RenderTargetRegisters *)p2CurrentGsRegisters;
+            registers->frameContext2 = registers->frame.word;
+            registers->xyoffsetContext2 = registers->xyoffset.word;
+            registers->zbufContext2 = registers->zbuf.word;
+            p2UploadGsRegisters(3, &p2RestoreTargetContext2Registers[0]);
         }
-        FUN_001f76f0(4, &DAT_004918a0[0]);
-        DAT_00568e28[0] = -1;
-        DAT_00568e30[0] = -1;
+        p2UploadGsRegisters(4, &p2RestoreTargetRegisters[0]);
+        p2Display.renderTarget = -1;
+        p2DepthTarget = -1;
     }
 }
 
-long long FUN_0020b270(long long *arg0) {
-    return *arg0;
+long long p2GetTextureUploadSequence(P2Texture *texture) {
+    return texture->uploadSequence;
 }
 
-typedef struct N_20b280 {
-    long long f0;
-    long long f8;
-    char p16[8];
-    struct N_20b280 *f24;
-    struct N_20b280 *f28;
-    char p32[24];
-    int f56;
-    char p60[4];
-    unsigned short f64;
-    char p66[4];
-    char m : 7;
-    char hi : 1;
-} N_20b280;
-
-void FUN_0020b280(N_20b280 *arg0, N_20b280 *arg1, int arg2) {
-    long long var_s5;
-    unsigned short a0;
-    int x;
-    N_20b280 *s4;
-    int s3;
-    N_20b280 *v0;
-    int var_s4;
-    N_20b280 *s3n;
-    long long old;
-    int a0b;
-    var_s5 = arg1->m;
-    while (arg2 != arg1->f56) {
-        a0 = arg1->f64;
-        s4 = arg1->f28;
-        s3 = arg2 >= arg1->f56 + a0;
-        if (s4 != 0 && s4->m == 0) {
-            if (s3 != 0) {
-                s4->f64 += a0;
+void p2PlaceTextureBlock(P2Texture *texture, P2Texture *block, int address) {
+    long long blockState;
+    unsigned short blocks;
+    int end;
+    P2Texture *below;
+    int covered;
+    P2Texture *split;
+    int span;
+    P2Texture *above;
+    long long state;
+    int blockEnd;
+    blockState = block->state;
+    while (address != block->address) {
+        blocks = block->blocks;
+        below = block->prev;
+        covered = address >= block->address + blocks;
+        if (below != 0 && below->state == P2_TEXTURE_FREE) {
+            if (covered != 0) {
+                below->blocks += blocks;
             } else {
-                s4->f64 += ((arg2 - arg1->f56) & 0xFFFF);
+                below->blocks += ((address - block->address) & 0xFFFF);
             }
         } else {
-            v0 = (N_20b280 *)FUN_00208210();
-            v0->f56 = arg1->f56;
-            v0->f24 = arg1;
-            v0->f28 = arg1->f28;
-            arg1->f28 = v0;
-            if (s4 != 0) {
-                s4->f24 = v0;
+            split = p2AllocTextureRecord();
+            split->address = block->address;
+            split->next = block;
+            split->prev = block->prev;
+            block->prev = split;
+            if (below != 0) {
+                below->next = split;
             } else {
-                DAT_0056c0d0 = v0;
+                p2TextureBlocks = split;
             }
-            if (s3 != 0) {
-                v0->f64 = arg1->f64;
+            if (covered != 0) {
+                split->blocks = block->blocks;
             } else {
-                { int d = arg2 - arg1->f56; v0->f64 = d; }
+                { int length = address - block->address; split->blocks = length; }
             }
         }
-        if (s3 != 0) {
-            N_20b280 *t1 = arg1->f28;
-            N_20b280 *a3 = arg1->f24;
-            if (t1 != 0) {
-                t1->f24 = a3;
+        if (covered != 0) {
+            P2Texture *prev = block->prev;
+            P2Texture *next = block->next;
+            if (prev != 0) {
+                prev->next = next;
             }
-            if (a3 != 0) {
-                a3->f28 = arg1->f28;
+            if (next != 0) {
+                next->prev = block->prev;
             }
-            arg1->f24 = 0;
-            arg1->f28 = 0;
-            old = arg1->m;
-            arg1->m = 1;
-            arg1->f56 = -1;
-            if (var_s5 == 0) {
-                FUN_002082b0((O *)arg1);
+            block->next = 0;
+            block->prev = 0;
+            state = block->state;
+            block->state = P2_TEXTURE_UNPLACED;
+            block->address = -1;
+            if (blockState == 0) {
+                p2FreeTextureRecord(block);
             } else {
-                arg1->hi = 1;
+                block->detached = 1;
             }
-            arg1 = a3;
-            var_s5 = a3->m;
+            block = next;
+            blockState = next->state;
         } else {
-            arg1->f64 -= ((arg2 - arg1->f56) & 0xFFFF);
-            arg1->f56 = arg2;
+            block->blocks -= ((address - block->address) & 0xFFFF);
+            block->address = address;
         }
     }
-    var_s4 = arg1->f64;
+    span = block->blocks;
     goto reload;
-    while (((s3n != 0) ^ 1) == 0 && (arg2 + arg0->f64) > (arg1->f56 + var_s4)) {
-        unsigned short t;
-        old = s3n->m;
-        t = s3n->f64;
-        arg1->f24 = s3n->f24;
-        var_s4 += t;
-        if (s3n->f24 != 0) {
-            s3n->f24->f28 = arg1;
+    while (((above != 0) ^ 1) == 0 && (address + texture->blocks) > (block->address + span)) {
+        unsigned short aboveBlocks;
+        state = above->state;
+        aboveBlocks = above->blocks;
+        block->next = above->next;
+        span += aboveBlocks;
+        if (above->next != 0) {
+            above->next->prev = block;
         }
-        s3n->f24 = 0;
-        s3n->f28 = 0;
-        s3n->m = 1;
-        s3n->f56 = -1;
-        if (old == 0) {
-            FUN_002082b0((O *)s3n);
+        above->next = 0;
+        above->prev = 0;
+        above->state = P2_TEXTURE_UNPLACED;
+        above->address = -1;
+        if (state == 0) {
+            p2FreeTextureRecord(above);
         } else {
-            s3n->hi = 1;
+            above->detached = 1;
         }
     reload:
-        s3n = arg1->f24;
+        above = block->next;
     }
-    a0b = arg1->f56 + var_s4;
-    x = arg2 + arg0->f64;
-    if (x < a0b) {
-        if (s3n != 0 && s3n->m == 0) {
-            s3n->f64 += ((a0b - x) & 0xFFFF);
-            s3n->f56 = arg2 + arg0->f64;
+    blockEnd = block->address + span;
+    end = address + texture->blocks;
+    if (end < blockEnd) {
+        if (above != 0 && above->state == P2_TEXTURE_FREE) {
+            above->blocks += ((blockEnd - end) & 0xFFFF);
+            above->address = address + texture->blocks;
         } else {
-            v0 = (N_20b280 *)FUN_00208210();
-            v0->f56 = arg2 + arg0->f64;
-            { int d = var_s4 - arg0->f64; v0->f64 = d; }
-            v0->f24 = s3n;
-            v0->f28 = arg1;
-            arg1->f24 = v0;
-            if (s3n != 0) {
-                s3n->f28 = v0;
+            split = p2AllocTextureRecord();
+            split->address = address + texture->blocks;
+            { int length = span - texture->blocks; split->blocks = length; }
+            split->next = above;
+            split->prev = block;
+            block->next = split;
+            if (above != 0) {
+                above->prev = split;
             }
         }
     }
-    arg0->f56 = arg2;
-    arg0->f24 = arg1->f24;
-    arg0->f28 = arg1->f28;
-    if (arg1->f28 != 0) {
-        arg1->f28->f24 = arg0;
+    texture->address = address;
+    texture->next = block->next;
+    texture->prev = block->prev;
+    if (block->prev != 0) {
+        block->prev->next = texture;
     }
-    if (arg1->f24 != 0) {
-        arg1->f24->f28 = arg0;
+    if (block->next != 0) {
+        block->next->prev = texture;
     }
-    if (DAT_0056c0d0 == arg1) {
-        DAT_0056c0d0 = arg0;
+    if (p2TextureBlocks == block) {
+        p2TextureBlocks = texture;
     }
-    old = arg1->m;
-    arg1->f24 = 0;
-    arg1->f28 = 0;
-    arg1->m = 1;
-    arg1->f56 = -1;
-    if (old == 0) {
-        FUN_002082b0((O *)arg1);
+    state = block->state;
+    block->next = 0;
+    block->prev = 0;
+    block->state = P2_TEXTURE_UNPLACED;
+    block->address = -1;
+    if (state == 0) {
+        p2FreeTextureRecord(block);
         return;
     }
-    arg1->hi = 1;
+    block->detached = 1;
 }
 
-typedef struct N_20b650 {
-    long long f0;
-    long long f8;
-    char p16[8];
-    struct N_20b650 *f24;
-    char p28[28];
-    int f56;
-    char p60[4];
-    unsigned short f64;
-    char p66[4];
-    volatile char m : 7;
-    char hi : 1;
-    char p71;
-    char f72;
-} N_20b650;
-typedef struct A_20b650 {
-    char p0[64];
-    unsigned short f64;
-    char p66[2];
-    unsigned short f68;
-} A_20b650;
+/* A block list record as the search for space reads it: its state may change under the DMA
+ * completion handlers. */
+typedef struct P2TextureBlockState {
+    long long uploadSequence;
+    long long drawSequence;
+    char tex0[8];
+    struct P2TextureBlockState *next;
+    char links[28];
+    int address;
+    char size[4];
+    unsigned short blocks;
+    char format[4];
+    volatile char state : 7;
+    char detached : 1;
+    char chainCount;
+    char used;
+} P2TextureBlockState;
 
-N_20b650 *FUN_0020b650(A_20b650 *arg0, int *arg1, int arg2, long long *arg3) {
-    N_20b650 *sent;
-    N_20b650 *v;
+P2TextureBlockState *p2FindTextureSpace(P2Texture *texture, int *address, int fenced, long long *drawSequence) {
+    P2TextureBlockState *stop;
+    P2TextureBlockState *block;
     int pass;
-    long long best;
-    N_20b650 *n;
-    int lim;
-    int a5;
-    int mask;
-    int base;
+    long long latest;
+    P2TextureBlockState *next;
+    int end;
+    int spanEnd;
+    int alignMask;
+    int start;
 
-    sent = 0;
-    v = DAT_0056c0d8;
-    best = 0;
+    stop = 0;
+    block = (P2TextureBlockState *)p2TextureSearchStart;
+    latest = 0;
     pass = 0;
     while (pass < 2) {
-        while (v != sent) {
-            if (v->f72 == 0 && (v->m == 5 || v->m == 0 || (arg2 == 0 && v->m == 4))) {
-                base = v->f56;
-                a5 = base + v->f64;
-                mask = arg0->f68;
-                lim = (base + mask) & ~mask;
-                n = v->f24;
-                best = v->f8;
-                while (((n != 0) ^ 1) == 0 && n->f72 == 0 && (n->m == 5 || n->m == 0 || (arg2 == 0 && n->m == 4)) && a5 < lim + arg0->f64) {
-                    if (best < n->f8) {
-                        best = n->f8;
+        while (block != stop) {
+            if (block->used == 0 && (block->state == P2_TEXTURE_DRAWN || block->state == P2_TEXTURE_FREE || (fenced == 0 && block->state == P2_TEXTURE_FENCED))) {
+                start = block->address;
+                spanEnd = start + block->blocks;
+                alignMask = texture->alignMask;
+                end = (start + alignMask) & ~alignMask;
+                next = block->next;
+                latest = block->drawSequence;
+                while (((next != 0) ^ 1) == 0 && next->used == 0 && (next->state == P2_TEXTURE_DRAWN || next->state == P2_TEXTURE_FREE || (fenced == 0 && next->state == P2_TEXTURE_FENCED)) && spanEnd < end + texture->blocks) {
+                    if (latest < next->drawSequence) {
+                        latest = next->drawSequence;
                     }
-                    a5 += n->f64;
-                    n = n->f24;
+                    spanEnd += next->blocks;
+                    next = next->next;
                 }
-                if (a5 >= lim + arg0->f64) {
-                    *arg1 = lim;
+                if (spanEnd >= end + texture->blocks) {
+                    *address = end;
                     break;
                 }
             }
-            v = v->f24;
+            block = block->next;
         }
-        if (*arg1 != -1) {
+        if (*address != -1) {
             break;
         }
         pass++;
-        v = DAT_0056c0d0;
-        sent = DAT_0056c0d8;
+        block = (P2TextureBlockState *)p2TextureBlocks;
+        stop = (P2TextureBlockState *)p2TextureSearchStart;
     }
-    if (arg3 != 0) {
-        *arg3 = best;
+    if (drawSequence != 0) {
+        *drawSequence = latest;
     }
-    return v;
+    return block;
 }
 
-struct W_20b7f0 { long long f0; char p8[24]; int f32; char p36[12]; int f48; char p52[12]; unsigned char b0:3; unsigned char b3:1; unsigned char b4:4; };
-struct V_20b7f0 { long long f0; long long f8; };
-struct N_20b7f0 { long long f0; long long f8; char p16[8]; int f24; char p28[42]; char m:7; char hi:1; };
-int FUN_0020b7f0(struct N_20b7f0 *arg0) {
-    int p2AddFinishFunc();
-    int r;
-    long long t;
-    int s0;
-    p2DmaPacket *p;
-    long long *lp;
-    r = -1;
-    s0 = (int)FUN_0020b650((struct A_20b650 *)arg0, &r, 1, 0);
-    if (r >= 0) {
-        FUN_0020b280((N_20b280 *)arg0, (N_20b280 *)s0, r);
+int p2AllocTextureMemory(P2Texture *texture) {
+    int address;
+    long long drawn;
+    int block;
+    p2DmaPacket *packet;
+    long long *wait;
+    address = -1;
+    block = (int)p2FindTextureSpace(texture, &address, 1, 0);
+    if (address >= 0) {
+        p2PlaceTextureBlock(texture, (P2Texture *)block, address);
     } else {
-        s0 = (int)FUN_0020b650((struct A_20b650 *)arg0, &r, 0, &t);
-        if (r >= 0) {
-            if (DAT_0056c130[0] == 1) {
-                p2AddFinishFunc(FUN_001f7500, 0);
-                t = p2DmaCurrentPacket[P2_DMA_VIF1]->sequence;
+        block = (int)p2FindTextureSpace(texture, &address, 0, &drawn);
+        if (address >= 0) {
+            if (p2TextureWaitMode[0] == 1) {
+                p2AddFinishFunc(p2RecordFinishedSequence, 0);
+                drawn = p2DmaCurrentPacket[P2_DMA_VIF1]->sequence;
                 p2SubmitDmaPacket(1);
-                FUN_0020b280((N_20b280 *)arg0, (N_20b280 *)s0, r);
-                p2AddDmaPredicate(2, FUN_001f74e0, t);
+                p2PlaceTextureBlock(texture, (P2Texture *)block, address);
+                p2AddDmaPredicate(2, p2SequenceFinishedPredicate, drawn);
             } else {
-                p = p2DmaCurrentPacket[P2_DMA_VIF1];
-                if (p->sequence == t || p->chain == p->cursor) {
-                    p->b3 = 1;
+                packet = p2DmaCurrentPacket[P2_DMA_VIF1];
+                if (packet->sequence == drawn || packet->chain == packet->cursor) {
+                    packet->restartProgram = 1;
                 }
                 p2SubmitDmaPacket(1);
-                FUN_0020b280((N_20b280 *)arg0, (N_20b280 *)s0, r);
-                p2AddDmaPredicate(2, textureDeferredPredicate, t);
+                p2PlaceTextureBlock(texture, (P2Texture *)block, address);
+                p2AddDmaPredicate(2, textureDeferredPredicate, drawn);
             }
-            lp = &p2DmaCurrentPacket[P2_DMA_GIF]->f8;
-            if (*lp < t) {
-                *lp = t;
+            wait = &p2DmaCurrentPacket[P2_DMA_GIF]->waitSequence;
+            if (*wait < drawn) {
+                *wait = drawn;
             }
         }
     }
-    if (r >= 0) {
-        arg0->m = 2;
-        arg0->f0 = 0;
-        arg0->f8 = 0;
-        DAT_0056c0d8 = (void *)arg0->f24;
-        if (DAT_0056c0d8 == 0) {
-            DAT_0056c0d8 = DAT_0056c0d0;
+    if (address >= 0) {
+        texture->state = P2_TEXTURE_LOADING;
+        texture->uploadSequence = 0;
+        texture->drawSequence = 0;
+        p2TextureSearchStart = texture->next;
+        if (p2TextureSearchStart == 0) {
+            p2TextureSearchStart = p2TextureBlocks;
         }
     }
-    return (unsigned char)((~r == 0) ^ 1);
+    return (unsigned char)((~address == 0) ^ 1);
 }
 
-typedef struct N_20b9d0 {
-    char pad0[8];
-    long long f8;
-    char pad1[16];
-    struct N_20b9d0 *f32;
-    struct N_20b9d0 *f36;
-    char pad2[30];
-    char m : 7;
-    char hi : 1;
-    char f71;
-    char f72;
-} N_20b9d0;
-
-static inline int N_20b9d0_GetM(const N_20b9d0 *n) {
-    return n->m;
+static inline int p2TextureState(const P2Texture *texture) {
+    return texture->state;
 }
 
-static inline void N_20b9d0_Set(N_20b9d0 *n) {
-    n->m = 4;
-    n->f8 = p2DmaCurrentPacket[P2_DMA_VIF1]->sequence;
-    p2AddDmaCompletion(1, &FUN_00208430, n);
+static inline void p2FenceTextureRecord(P2Texture *texture) {
+    texture->state = P2_TEXTURE_FENCED;
+    texture->drawSequence = p2DmaCurrentPacket[P2_DMA_VIF1]->sequence;
+    p2AddDmaCompletion(1, &p2TextureUploadDone, texture);
 }
 
-void FUN_0020b9d0(void *arg0) {
-    N_20b9d0 *n = (N_20b9d0 *)arg0;
-    N_20b9d0 *var_s0;
-    N_20b9d0 *c;
-    int a1;
-    int t;
-    a1 = (n->f36 != 0) + 1;
-    var_s0 = n->f32;
-    t = n->f71 + a1;
-    if (n->f72 == 0) {
-        p2ReserveDmaCompletions(t);
+void p2FenceTexture(P2Texture *texture) {
+    P2Texture *level;
+    P2Texture *palette;
+    int records;
+    int completions;
+    records = (texture->palette != 0) + 1;
+    level = texture->chain;
+    completions = texture->chainCount + records;
+    if (texture->used == 0) {
+        p2ReserveDmaCompletions(completions);
         DIntr();
-        N_20b9d0_Set(n);
-        c = n->f36;
-        if (c != 0) {
-            c->m = 4;
-            n->f36->f8 = p2DmaCurrentPacket[P2_DMA_VIF1]->sequence;
-            p2AddDmaCompletion(1, &FUN_00208430, n->f36);
+        p2FenceTextureRecord(texture);
+        palette = texture->palette;
+        if (palette != 0) {
+            palette->state = P2_TEXTURE_FENCED;
+            texture->palette->drawSequence = p2DmaCurrentPacket[P2_DMA_VIF1]->sequence;
+            p2AddDmaCompletion(1, &p2TextureUploadDone, texture->palette);
         }
-        while (var_s0 != 0) {
-            if (N_20b9d0_GetM(var_s0) != 1) {
-                N_20b9d0_Set(var_s0);
+        while (level != 0) {
+            if (p2TextureState(level) != P2_TEXTURE_UNPLACED) {
+                p2FenceTextureRecord(level);
             }
-            var_s0 = var_s0->f32;
+            level = level->chain;
         }
         EIntr();
     }
 }
 
-typedef struct P2Texture {
-    long long f0;
-    char p8[8];
-    GsTex0 tex0;
-    int f24;
-    char p28[20];
-    void *image;
-    int deferred;
-    int f56;
-    unsigned short width;
-    unsigned short height;
-    unsigned short f64;
-    unsigned short format;
-    unsigned short f68;
-    signed char state : 7;
-    signed char hi : 1;
-    char p71[2];
-    unsigned char f73;
-} P2Texture;
 P2Texture *p2LoadTexture(void *image, int width, int height, int format, int deferred) {
-    extern int DAT_0056c0c0[4];
-    extern unsigned int DAT_00491730[];
+    extern int p2TextureLoadFailures[4];
+    extern unsigned int p2TextureFormatBits[];
     P2Texture *t;
     int w;
     int h;
 
-    t = (P2Texture *)FUN_00208210();
+    t = p2AllocTextureRecord();
     if (t == 0) {
-        DAT_0056c0c0[0]++;
+        p2TextureLoadFailures[0]++;
         return 0;
     }
-    t->deferred = deferred;
-    t->hi = 0;
-    t->f56 = -1;
+    t->source = deferred;
+    t->detached = 0;
+    t->address = -1;
     t->image = image;
     t->width = width;
     t->height = height;
     t->format = format;
-    t->f24 = 0;
-    t->f73 = (format == 1) ? 0x80 : 0;
-    t->tex0.tbw = (t->width + 63) / 64;
-    t->tex0.psm = DAT_004917b0[t->format];
+    t->next = 0;
+    t->texAlpha = (format == 1) ? 0x80 : 0;
+    t->tex0.field.tbw = (t->width + 63) / 64;
+    t->tex0.field.psm = p2TextureFormatPsm[t->format];
     if (deferred == 0) {
-        t->tex0.tw = FUN_00209cc0(t->width);
-        t->tex0.th = FUN_00209cc0(t->height);
-        t->state = 1;
+        t->tex0.field.tw = p2Log2(t->width);
+        t->tex0.field.th = p2Log2(t->height);
+        t->state = P2_TEXTURE_UNPLACED;
     } else {
         h = w = 1;
         while (w < width) w <<= 1;
         while (h < height) h <<= 1;
-        t->tex0.tw = FUN_00209cc0(w);
-        t->tex0.th = FUN_00209cc0(h);
-        t->state = 3;
-        t->f0 = 0;
+        t->tex0.field.tw = p2Log2(w);
+        t->tex0.field.th = p2Log2(h);
+        t->state = P2_TEXTURE_RESIDENT;
+        t->uploadSequence = 0;
     }
     if (deferred == 0) {
         switch (format) {
@@ -1190,165 +1089,142 @@ P2Texture *p2LoadTexture(void *image, int width, int height, int format, int def
             printf("Unsupported texture format in p2LoadTexture: %d\n", format);
             return (P2Texture *)-1;
         }
-        t->f64 = (DAT_00491730[format] * (w * h)) >> 9;
-        t->f64 = (t->f64 == 0) ? 1 : t->f64;
-        t->f68 = t->f64 - 1;
-        if (t->f68 >= 32 || image == 0) t->f68 = 31;
+        t->blocks = (p2TextureFormatBits[format] * (w * h)) >> 9;
+        t->blocks = (t->blocks == 0) ? 1 : t->blocks;
+        t->alignMask = t->blocks - 1;
+        if (t->alignMask >= 32 || image == 0) t->alignMask = 31;
     }
     return t;
 }
 
-void FUN_0020c7b0(char *arg0, char *arg1) {
-    char *p = arg0;
-    while (*(char **)(p + 32) != 0) p = *(char **)(p + 32);
-    *(char **)(p + 32) = arg1;
-    *(int *)(arg1 + 32) = 0;
-    arg0[71] = arg0[71] + 1;
+void p2ChainTexture(P2Texture *texture, P2Texture *level) {
+    P2Texture *last = texture;
+    while (last->chain != 0) last = last->chain;
+    last->chain = level;
+    level->chain = 0;
+    texture->chainCount = texture->chainCount + 1;
 }
 
-void FUN_0020c7f0(int a0, int a1)
+void p2SetTexturePalette(P2Texture *texture, P2Texture *palette)
 {
-    *(int *)((char *)a0 + 36) = a1;
+    texture->palette = palette;
 }
 
-typedef struct StreamSlotState {
-    char pad0[48];
-    int value;
-    char pad1[18];
-    signed char state : 7;
-    unsigned char flag : 1;
-} StreamSlotState;
-
-static inline int StreamSlotState_GetState(const StreamSlotState *s) {
-    return s->state;
-}
-
-void FUN_0020c800(StreamSlotState *s) {
-    if (StreamSlotState_GetState(s) != 1) {
-        s->state = 6;
+void p2InvalidateTexture(P2Texture *texture) {
+    if (p2TextureState(texture) != P2_TEXTURE_UNPLACED) {
+        texture->state = P2_TEXTURE_STALE;
     }
 }
 
-void FUN_0020c840(StreamSlotState *s, int value) {
-    if (StreamSlotState_GetState(s) != 1) {
-        s->state = 6;
+void p2SetTextureImage(P2Texture *texture, void *image) {
+    if (p2TextureState(texture) != P2_TEXTURE_UNPLACED) {
+        texture->state = P2_TEXTURE_STALE;
     }
-    s->value = value;
+    texture->image = image;
 }
 
-void FUN_0020c880(int arg0) {
-    if (arg0 > 0) {
-        *(int *)0x56C128 = (int) (*(int *)0x56C128 | (1 << arg0));
+void p2MarkTextureStage(int stage) {
+    if (stage > 0) {
+        *(int *)0x56C128 = (int) (*(int *)0x56C128 | (1 << stage));
     }
 }
 
-struct B_20c8b0 { volatile signed char m : 7; unsigned char x : 1; };
-struct S_20c8b0 { char pad0[70]; volatile signed char f70 : 7; unsigned char x : 1; char f71; char f72; };
-void FUN_0020c8b0(struct S_20c8b0 *arg0) {
-    int s1;
-    unsigned int s0;
-    struct S_20c8b0 *o;
-    if (arg0->f70 == 4 || arg0->f70 == 5 || arg0->f70 == 1) return;
-    if (arg0->f72 != 0) {
-        arg0->f72 = 0;
-        FUN_0020b9d0(arg0);
-        DAT_0056c128 &= ~1;
-        s0 = DAT_0056c128;
-        s1 = 0;
-        while (s0 != 0) {
-            s0 = s0 >> 1;
-            s1 += 1;
-            if (s0 & 1) {
-                o = DAT_0056c0e0[s1];
-                if (o != 0 && (((struct B_20c8b0 *)((char *)o + 70))->m == 3 || ((struct B_20c8b0 *)((char *)o + 70))->m == 2)) {
-                    FUN_0020b9d0(o);
+/* A record's state as p2FenceUsedTexture reads it: the DMA completion handlers change it. */
+typedef struct P2TextureVolatileState {
+    char recordBelow[70];
+    volatile signed char state : 7;
+    unsigned char detached : 1;
+    char chainCount;
+    char used;
+} P2TextureVolatileState;
+/* The state byte of a staged record, read the same way. */
+typedef struct P2TextureStageState { char recordBelow[70]; volatile signed char state : 7; unsigned char detached : 1; } P2TextureStageState;
+void p2FenceUsedTexture(P2Texture *texture) {
+    int stage;
+    unsigned int stages;
+    P2Texture *staged;
+    P2TextureVolatileState *record = (P2TextureVolatileState *)texture;
+    if (record->state == P2_TEXTURE_FENCED || record->state == P2_TEXTURE_DRAWN || record->state == P2_TEXTURE_UNPLACED) return;
+    if (record->used != 0) {
+        record->used = 0;
+        p2FenceTexture((P2Texture *)record);
+        p2TextureStageMask &= ~1;
+        stages = p2TextureStageMask;
+        stage = 0;
+        while (stages != 0) {
+            stages = stages >> 1;
+            stage += 1;
+            if (stages & 1) {
+                staged = p2TextureStages[stage];
+                if (staged != 0 && (((P2TextureStageState *)staged)->state == P2_TEXTURE_RESIDENT || ((P2TextureStageState *)staged)->state == P2_TEXTURE_LOADING)) {
+                    p2FenceTexture(staged);
                 }
             }
         }
-        DAT_0056c128 = 0;
+        p2TextureStageMask = 0;
     }
 }
 
-void FUN_0020c9e0(int arg0) {
-    *(int *)0x56C130 = arg0;
+void p2SetTextureWaitMode(int mode) {
+    *(int *)0x56C130 = mode;
 }
 
-typedef struct N_20c9f0 {
-    long long f0;
-    long long f8;
-    char p16[8];
-    struct N_20c9f0 *f24;
-    struct N_20c9f0 *f28;
-    int f32;
-    int f36;
-    char p40[8];
-    int f48;
-    int f52;
-    int f56;
-    char p60[4];
-    unsigned short f64;
-    char p66[4];
-    signed char m : 7;
-    unsigned char hi : 1;
-    char p71;
-    char f72;
-} N_20c9f0;
-void FUN_0020c9f0(N_20c9f0 *arg0) {
-    N_20c9f0 *s0;
-    N_20c9f0 *a1;
-    N_20c9f0 *p;
+void p2FreeTexture(P2Texture *texture) {
+    P2Texture *merged;
+    P2Texture *neighbour;
+    P2Texture *stage;
 
-    arg0->f72 = 0;
-    arg0->f36 = 0;
-    arg0->f32 = 0;
-    p = DAT_0056c0e0[0];
-    s0 = arg0;
-    if (p == arg0) {
-        while (p != 0) p = 0;
-        DAT_0056c0e0[0] = p;
+    texture->used = 0;
+    texture->palette = 0;
+    texture->chain = 0;
+    stage = p2TextureStages[0];
+    merged = texture;
+    if (stage == texture) {
+        while (stage != 0) stage = 0;
+        p2TextureStages[0] = stage;
     }
-    if (arg0->f48 == 0 && arg0->f52 == 0) {
-        p2WaitDmaSequence(1, arg0->f8);
+    if (texture->image == 0 && texture->source == P2_TEXTURE_SOURCE_IMAGE) {
+        p2WaitDmaSequence(1, texture->drawSequence);
     }
     DIntr();
-    arg0->m = 0;
+    texture->state = P2_TEXTURE_FREE;
     EIntr();
-    a1 = arg0->f28;
-    if (a1 != 0 && a1->m == 0) {
-        a1->f64 += arg0->f64;
-        s0 = arg0->f28;
-        s0->f24 = arg0->f24;
-        if (arg0->f24 != 0) {
-            arg0->f24->f28 = s0;
+    neighbour = texture->prev;
+    if (neighbour != 0 && neighbour->state == P2_TEXTURE_FREE) {
+        neighbour->blocks += texture->blocks;
+        merged = texture->prev;
+        merged->next = texture->next;
+        if (texture->next != 0) {
+            texture->next->prev = merged;
         }
-        if (DAT_0056c0d8 != 0 && DAT_0056c0d8 == arg0) {
-            DAT_0056c0d8 = ((N_20c9f0 *)DAT_0056c0d8)->f24;
+        if (p2TextureSearchStart != 0 && p2TextureSearchStart == texture) {
+            p2TextureSearchStart = p2TextureSearchStart->next;
         }
-        FUN_002082b0((O *)arg0);
+        p2FreeTextureRecord(texture);
     }
-    a1 = s0->f24;
-    if (a1 != 0 && a1->m == 0) {
-        a1->f64 += s0->f64;
-        s0->f24->f56 = s0->f56;
-        s0->f24->f28 = s0->f28;
-        if (s0->f28 != 0) {
-            s0->f28->f24 = s0->f24;
+    neighbour = merged->next;
+    if (neighbour != 0 && neighbour->state == P2_TEXTURE_FREE) {
+        neighbour->blocks += merged->blocks;
+        merged->next->address = merged->address;
+        merged->next->prev = merged->prev;
+        if (merged->prev != 0) {
+            merged->prev->next = merged->next;
         }
-        if (s0 == DAT_0056c0d0) {
-            DAT_0056c0d0 = s0->f24;
+        if (merged == p2TextureBlocks) {
+            p2TextureBlocks = merged->next;
         }
-        if (DAT_0056c0d8 != 0 && DAT_0056c0d8 == s0) {
-            DAT_0056c0d8 = ((N_20c9f0 *)DAT_0056c0d8)->f24;
+        if (p2TextureSearchStart != 0 && p2TextureSearchStart == merged) {
+            p2TextureSearchStart = p2TextureSearchStart->next;
         }
-        FUN_002082b0((O *)s0);
-        s0 = 0;
+        p2FreeTextureRecord(merged);
+        merged = 0;
     }
-    if (s0 == arg0) {
-        if (arg0->f56 > -1) {
-            arg0->m = 0;
+    if (merged == texture) {
+        if (texture->address > -1) {
+            texture->state = P2_TEXTURE_FREE;
             return;
         }
-        FUN_002082b0((O *)arg0);
+        p2FreeTextureRecord(texture);
     }
 }
 #pragma pop

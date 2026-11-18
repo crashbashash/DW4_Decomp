@@ -50,7 +50,7 @@ CallbackArray *igAttrSet_Register(void) {
         &g_igAttrSet_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
-        thunk_igAttrSet_GetMetaObject,
+        igAttrSet_GetMetaObjectFunction,
         "igAttrSet",
         0x28, /* instance size */
         igAttrSet_GetVTable,
@@ -60,7 +60,7 @@ CallbackArray *igAttrSet_Register(void) {
     );
 }
 
-void thunk_igAttrSet_GetMetaObject(void) {
+void igAttrSet_GetMetaObjectFunction(void) {
     igAttrSet_GetMetaObject();
 }
 
@@ -82,18 +82,18 @@ static int g_igAttrSet_fieldOffsets[] = {
 };
 
 void igAttrSet_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    void *temp_s0;
+    int base;
+    void *attributesField;
+    void *meta;
 
-    temp_s0 = (void *)g_igAttrSet_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAttrSet_ctorTable, 2);
-    temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igAttrList_GetOrCreateMetaObject();
-    ((igRefMetaField *)temp_s1)->_construct = 1;
-    ((igMetaField *)temp_s1)->_deepCopyMethod = 0;
-    ((igMetaField *)temp_s1)->_shallowCopyMethod = 2;
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAttrSet_fieldTable, g_igAttrSet_fieldHandles, g_igAttrSet_fieldOffsets, temp_s2);
+    meta = (void *)g_igAttrSet_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igAttrSet_ctorTable, 2);
+    attributesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
+    ((igObjectRefMetaField *)attributesField)->_metaObject = (int)igAttrList_GetOrCreateMetaObject();
+    ((igRefMetaField *)attributesField)->_construct = 1;
+    ((igMetaField *)attributesField)->_deepCopyMethod = 0;
+    ((igMetaField *)attributesField)->_shallowCopyMethod = 2;
+    igMetaObject_NameFields((igMetaObject *)meta, g_igAttrSet_fieldTable, g_igAttrSet_fieldHandles, g_igAttrSet_fieldOffsets, base);
 }
 

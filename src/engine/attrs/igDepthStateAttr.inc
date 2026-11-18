@@ -1,9 +1,9 @@
 igMetaObject *g_igDepthStateAttr_metaObject;
 igMetaField *g_igDepthStateAttr_enabledMetaField;
 
-void FUN_001384a0(int arg0) {
+igDepthStateAttr *igDepthStateAttr_Create(igMemoryPoolView *pool) {
     igDepthStateAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F228, (igMemoryPoolView *)arg0);
+    return (igDepthStateAttr *)igMetaObject_CreateInstance(g_igDepthStateAttr_metaObject, pool);
 }
 
 igMetaObject *igDepthStateAttr_GetMetaObject(void)
@@ -33,7 +33,7 @@ CallbackArray *igDepthStateAttr_Register(void) {
         &g_igDepthStateAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igDepthStateAttr_GetMetaObject,
+        igDepthStateAttr_GetMetaObjectFunction,
         "igDepthStateAttr",
         0x10, /* instance size */
         igDepthStateAttr_GetVTable,
@@ -43,7 +43,7 @@ CallbackArray *igDepthStateAttr_Register(void) {
     );
 }
 
-void thunk_igDepthStateAttr_GetMetaObject(void) {
+void igDepthStateAttr_GetMetaObjectFunction(void) {
     igDepthStateAttr_GetMetaObject();
 }
 
@@ -61,13 +61,13 @@ static int g_igDepthStateAttr_fieldOffsets[] = {
 };
 
 void igDepthStateAttr_InitFields(void) {
-    int temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    igMetaObject *meta;
 
-    temp_s0 = g_igDepthStateAttr_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igDepthStateAttr_ctorTable, 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s0, temp_s1), 1);
-    igMetaObject_NameFields(temp_s0, g_igDepthStateAttr_fieldTable, g_igDepthStateAttr_fieldHandles, g_igDepthStateAttr_fieldOffsets, temp_s1);
+    meta = g_igDepthStateAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igDepthStateAttr_ctorTable, 1);
+    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base), 1);
+    igMetaObject_NameFields(meta, g_igDepthStateAttr_fieldTable, g_igDepthStateAttr_fieldHandles, g_igDepthStateAttr_fieldOffsets, base);
 }
 

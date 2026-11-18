@@ -1,6 +1,6 @@
 igMetaObject *g_igSkinList_metaObject;
 
-igMetaObject *FUN_00197e60(void) {
+igMetaObject *igSkinList_GetOrCreateMetaObject(void) {
     if (g_igSkinList_metaObject == 0) {
         g_igSkinList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -36,7 +36,7 @@ CallbackArray *igSkinList_Register(void) {
         &g_igSkinList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igSkinList_GetMetaObject,
+        igSkinList_GetMetaObjectFunction,
         "igSkinList",
         0x14, /* instance size */
         igSkinList_GetVTable,
@@ -46,7 +46,7 @@ CallbackArray *igSkinList_Register(void) {
     );
 }
 
-void thunk_igSkinList_GetMetaObject(void) {
+void igSkinList_GetMetaObjectFunction(void) {
     igSkinList_GetMetaObject();
 }
 

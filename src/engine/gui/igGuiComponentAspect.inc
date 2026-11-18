@@ -3,7 +3,7 @@ igMetaField *g_igGuiComponentAspect_nodeMetaField;
 igMetaField *g_igGuiComponentAspect_minSizeMetaField;
 igMetaField *g_igGuiComponentAspect_maxSizeMetaField;
 
-igMetaObject *FUN_0044fbb0(void) {
+igMetaObject *igGuiComponentAspect_GetOrCreateMetaObject(void) {
     if (g_igGuiComponentAspect_metaObject == 0) {
         g_igGuiComponentAspect_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -32,7 +32,7 @@ CallbackArray *igGuiComponentAspect_Register(void) {
         &g_igGuiComponentAspect_metaObject,
         igView_Register,
         igView_GetPublishedMetaObject,
-        thunk_igGuiComponentAspect_GetMetaObject,
+        igGuiComponentAspect_GetMetaObjectFunction,
         "igGuiComponentAspect",
         0x28, /* instance size */
         0,
@@ -42,7 +42,7 @@ CallbackArray *igGuiComponentAspect_Register(void) {
     );
 }
 
-void thunk_igGuiComponentAspect_GetMetaObject(void) {
+void igGuiComponentAspect_GetMetaObjectFunction(void) {
     igGuiComponentAspect_GetMetaObject();
 }
 
@@ -80,7 +80,7 @@ void igGuiComponentAspect_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igGuiComponentAspect_ctorTable, 3);
     temp_s1 = (struct GuiAspectMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    temp_s1->f56 = (int)FUN_0044f540();
+    temp_s1->f56 = (int)igGuiComponentNode_GetOrCreateMetaObject();
     temp_s1->b60 = 0;
     temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     v1[0] = 0.0f;

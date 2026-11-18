@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igFogAttr__vfunc_22(void) {
+igMetaObject *igFogAttr_GetMeta(void) {
     return g_igFogAttr_metaObject;
 }
 

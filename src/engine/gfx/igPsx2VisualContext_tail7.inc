@@ -1,4 +1,4 @@
-void Gap__Gfx__igPsx2VisualContext__vfunc_261(int *arg0, int *arg1, int arg2) {
+void igPsx2VisualContext_SetVertexArray2(int *arg0, int *arg1, int arg2) {
     int *old;
     int *slot;
     int idx;

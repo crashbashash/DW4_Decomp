@@ -1,7 +1,7 @@
 igMetaObject *g_igVisualContextList_metaObject;
 
-int FUN_00149ea0(int arg0) {
-    FUN_00149f70();
+int igVisualContextList_Create(int arg0) {
+    igVisualContextList_EnsureRegistered();
     return (int)igMetaObject_CreateInstance(g_igVisualContextList_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -9,7 +9,7 @@ igMetaObject *igVisualContextList_GetMetaObject(void)
 {
     igMetaObject *g = g_igVisualContextList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00149f70();
+        igVisualContextList_EnsureRegistered();
     return g_igVisualContextList_metaObject;
 }
 
@@ -21,7 +21,7 @@ int igVisualContextList_GetVTable(void) {
     return *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00149f70(void)
+void igVisualContextList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVisualContextList_Register);
 }
@@ -35,7 +35,7 @@ CallbackArray *igVisualContextList_Register(void) {
         &g_igVisualContextList_metaObject,
         igNonRefCountedObjectList_Register,
         igNonRefCountedObjectList_GetPublishedMetaObject,
-        thunk_igVisualContextList_GetMetaObject,
+        igVisualContextList_GetMetaObjectFunction,
         "igVisualContextList",
         0x14, /* instance size */
         igVisualContextList_GetVTable,
@@ -45,7 +45,7 @@ CallbackArray *igVisualContextList_Register(void) {
     );
 }
 
-void thunk_igVisualContextList_GetMetaObject(void) {
+void igVisualContextList_GetMetaObjectFunction(void) {
     igVisualContextList_GetMetaObject();
 }
 

@@ -3,11 +3,11 @@ igMetaField *g_igSphere_centerMetaField;
 igMetaField *g_igSphere_radiusMetaField;
 
 void FUN_00187e10(int arg0) {
-    FUN_00187f30();
+    igSphere_EnsureRegistered();
     igMetaObject_CreateInstance((igMetaObject *)g_igSphere_metaObject, (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *FUN_00187e50(void) {
+igMetaObject *igSphere_GetOrCreateMetaObject(void) {
     if (g_igSphere_metaObject == 0) {
         g_igSphere_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -18,7 +18,7 @@ igMetaObject *igSphere_GetMetaObject(void)
 {
     igMetaObject *g = g_igSphere_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00187f30();
+        igSphere_EnsureRegistered();
     return g_igSphere_metaObject;
 }
 
@@ -29,7 +29,7 @@ int igSphere_GetVTable(void) {
     return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
-void FUN_00187f30(void)
+void igSphere_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igSphere_Register);
 }
@@ -41,7 +41,7 @@ CallbackArray *igSphere_Register(void) {
         &g_igSphere_metaObject,
         igVolume_Register,
         (igMetaObjectGetFunction)igVolume_GetPublishedMetaObject,
-        thunk_igSphere_GetMetaObject,
+        igSphere_GetMetaObjectFunction,
         "igSphere",
         0x18, /* instance size */
         igSphere_GetVTable,
@@ -51,11 +51,11 @@ CallbackArray *igSphere_Register(void) {
     );
 }
 
-void thunk_igSphere_GetMetaObject(void) {
+void igSphere_GetMetaObjectFunction(void) {
     igSphere_GetMetaObject();
 }
 
-igMetaObject *FUN_00187fd0(void) {
+igMetaObject *igVolume_GetPublishedMetaObject(void) {
     return g_igVolume_metaObject;
 }
 
@@ -80,21 +80,21 @@ static int g_igSphere_fieldOffsets[] = {
 };
 
 void igSphere_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
     int v[3];
-    int temp_a0;
+    int field;
 
-    temp_s0 = (void *)g_igSphere_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, (FieldFactory *)g_igSphere_ctorTable, 2);
-    temp_a0 = (int)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1);
+    meta = (void *)g_igSphere_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, (FieldFactory *)g_igSphere_ctorTable, 2);
+    field = (int)igMetaObject_GetFieldAt((igMetaObject *)meta, base);
     v[0] = 0;
     v[1] = 0;
     v[2] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)v);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1), -1.0f);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, (const char **)g_igSphere_fieldTable, (igMetaField ***)g_igSphere_fieldHandles, (int *)g_igSphere_fieldOffsets, temp_s1);
+    igVec3fMetaField_SetDefault((igMetaField *)field, (const float *)v);
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1), -1.0f);
+    igMetaObject_NameFields((igMetaObject *)meta, (const char **)g_igSphere_fieldTable, (igMetaField ***)g_igSphere_fieldHandles, (int *)g_igSphere_fieldOffsets, base);
 }
 
 void thunk_FUN_0018d480(void) {

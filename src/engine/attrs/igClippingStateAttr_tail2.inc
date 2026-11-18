@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igClippingStateAttr__vfunc_22(void) {
+igMetaObject *igClippingStateAttr_GetMeta(void) {
     return g_igClippingStateAttr_metaObject;
 }
 

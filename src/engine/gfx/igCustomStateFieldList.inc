@@ -1,11 +1,11 @@
 igMetaObject *g_igCustomStateFieldList_metaObject;
 
-int FUN_0014e930(int arg0) {
-    FUN_0014ea50();
+int igCustomStateFieldList_Create(int arg0) {
+    igCustomStateFieldList_EnsureRegistered();
     return (int)igMetaObject_CreateInstance(g_igCustomStateFieldList_metaObject, (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *FUN_0014e970(void) {
+igMetaObject *igCustomStateFieldList_GetOrCreateMetaObject(void) {
     if (g_igCustomStateFieldList_metaObject == 0) {
         g_igCustomStateFieldList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -16,7 +16,7 @@ igMetaObject *igCustomStateFieldList_GetMetaObject(void)
 {
     igMetaObject *g = g_igCustomStateFieldList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014ea50();
+        igCustomStateFieldList_EnsureRegistered();
     return g_igCustomStateFieldList_metaObject;
 }
 
@@ -28,12 +28,12 @@ int igCustomStateFieldList_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_0014ea50(void)
+void igCustomStateFieldList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igCustomStateFieldList_Register);
 }
 
-static igMetaObjectCallback g_igCustomStateFieldList_callbackList[] = { FUN_0014ecd0, 0 };
+static igMetaObjectCallback g_igCustomStateFieldList_callbackList[] = { igCustomStateField_EnsureRegistered, 0 };
 
 CallbackArray *igCustomStateFieldList_Register(void) {
     FUN_00149bc0();
@@ -42,7 +42,7 @@ CallbackArray *igCustomStateFieldList_Register(void) {
         &g_igCustomStateFieldList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igCustomStateFieldList_GetMetaObject,
+        igCustomStateFieldList_GetMetaObjectFunction,
         "igCustomStateFieldList",
         0x14, /* instance size */
         igCustomStateFieldList_GetVTable,
@@ -52,7 +52,7 @@ CallbackArray *igCustomStateFieldList_Register(void) {
     );
 }
 
-void thunk_igCustomStateFieldList_GetMetaObject(void) {
+void igCustomStateFieldList_GetMetaObjectFunction(void) {
     igCustomStateFieldList_GetMetaObject();
 }
 

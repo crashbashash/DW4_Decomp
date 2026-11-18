@@ -1,8 +1,8 @@
-igMetaObject *Gap__Gfx__igVisualContextList__vfunc_22(void) {
+igMetaObject *igVisualContextList_GetMeta(void) {
     return g_igVisualContextList_metaObject;
 }
 
-igMetaObject *Gap__Gfx__igVisualContextList__vfunc_24(void) {
+igMetaObject *igVisualContextList_GetElementMeta(void) {
     return g_igVisualContext_metaObject;
 }
 

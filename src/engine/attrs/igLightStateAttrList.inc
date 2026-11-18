@@ -1,6 +1,6 @@
 igMetaObject *g_igLightStateAttrList_metaObject;
 
-igMetaObject *FUN_00136040(void) {
+igMetaObject *igLightStateAttrList_GetOrCreateMetaObject(void) {
     if (g_igLightStateAttrList_metaObject == 0) {
         g_igLightStateAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -37,7 +37,7 @@ CallbackArray *igLightStateAttrList_Register(void) {
         &g_igLightStateAttrList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igLightStateAttrList_GetMetaObject,
+        igLightStateAttrList_GetMetaObjectFunction,
         "igLightStateAttrList",
         0x14, /* instance size */
         igLightStateAttrList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igLightStateAttrList_Register(void) {
     );
 }
 
-void thunk_igLightStateAttrList_GetMetaObject(void) {
+void igLightStateAttrList_GetMetaObjectFunction(void) {
     igLightStateAttrList_GetMetaObject();
 }
 

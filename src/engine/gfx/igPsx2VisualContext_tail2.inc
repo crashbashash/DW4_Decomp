@@ -50,7 +50,7 @@ void FUN_00169260(igPsx2VisualContext *arg0, int arg1) {
     arg0->_currentBuf = -1;
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_46(igPsx2VisualContext *self, RenderDestinationDesc *desc) {
+int igPsx2VisualContext_CreateRenderDestination(igPsx2VisualContext *self, RenderDestinationDesc *desc) {
     Pool46 *p;
     Ent46 *e;
     int s0;
@@ -90,7 +90,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_46(igPsx2VisualContext *self, RenderDes
     return s0;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_47(igPsx2VisualContext *arg0, int arg1) {
+void igPsx2VisualContext_DeleteRenderDestination(igPsx2VisualContext *arg0, int arg1) {
     int temp_a1;
     Ar *temp_s0;
     Ar *temp_a2;
@@ -113,7 +113,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_47(igPsx2VisualContext *arg0, int arg1
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_48(igPsx2VisualContext *self, int arg1) {
+void igPsx2VisualContext_SetRenderDestination(igPsx2VisualContext *self, int arg1) {
     I *base;
     I *s0;
     I *cur;
@@ -123,10 +123,10 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_48(igPsx2VisualContext *self, int arg1
     cur = base + self->_currentBuf;
     t = s0->f28;
     if (t != 2 && cur->f28 == 2) {
-        FUN_0020b110(t, arg1 * 0x30, (int)base);
+        p2RestoreRenderTarget(t, arg1 * 0x30, (int)base);
         p2SetViewport(self->_iViewportX, self->_iViewportY, self->_iViewportW, self->_iViewportH, 1.0f - self->_viewportNear, 1.0f - self->_viewportFar);
     } else if (t == 2) {
-        FUN_0020ad60(s0->f40, s0->f44, (int)base);
+        p2SetRenderTarget(s0->f40, s0->f44, (int)base);
         p2SetViewport(0, 0, s0->w, s0->h, 1.0f - self->_viewportNear, 1.0f - self->_viewportFar);
     }
     self->_currentBuf = arg1;
@@ -138,7 +138,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_48(igPsx2VisualContext *self, int arg1
     ((V_1690d0 *)self)->vX(1);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_49(igPsx2VisualContext *context, int bufferIndex, int *textureIndex) {
+void igPsx2VisualContext_SetRenderDestinationWithTexture(igPsx2VisualContext *context, int bufferIndex, int *textureIndex) {
     int index;
     int format;
     bool create;
@@ -215,7 +215,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_49(igPsx2VisualContext *context, int b
             return;
         }
     }
-    FUN_0020ad60(buf->colorTex, buf->depthTex);
+    p2SetRenderTarget(buf->colorTex, buf->depthTex);
     ((VC49 *)context)->currentBuf = bufferIndex;
     p2SetViewport(0, 0, buf->width, buf->height, 1.0f - ((VC49 *)context)->near, 1.0f - ((VC49 *)context)->far);
     FUN_0016a520((O520 *)((VC49 *)context));
@@ -228,7 +228,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_49(igPsx2VisualContext *context, int b
 
 /* Read the first two fields of VRAM buffer record `bufferIndex` (0x30-byte records at _pBufList +
  * 0x10) into *word0 and *word1; vfunc_52 is the matching setter. */
-void Gap__Gfx__igPsx2VisualContext__vfunc_53(igPsx2VisualContext *self, int bufferIndex, int *word0, int *word1) {
+void igPsx2VisualContext_GetRenderDestinationSize(igPsx2VisualContext *self, int bufferIndex, int *word0, int *word1) {
     int recordOffset;
 
     recordOffset = bufferIndex * 0x30;
@@ -238,7 +238,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_53(igPsx2VisualContext *self, int buff
 
 /* Store two words into the first two fields of VRAM buffer record `bufferIndex`. _pBufList
  * (+0x364) holds the 0x30-byte VRAM buffer records at +0x10; vfunc_53 is the matching getter. */
-int Gap__Gfx__igPsx2VisualContext__vfunc_52(igPsx2VisualContext *self, int bufferIndex, int word0, int word1) {
+int igPsx2VisualContext_SetRenderDestinationSize(igPsx2VisualContext *self, int bufferIndex, int word0, int word1) {
     int recordOffset;
 
     recordOffset = bufferIndex * 0x30;
@@ -247,7 +247,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_52(igPsx2VisualContext *self, int buffe
     return 1;
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_50(igPsx2VisualContext *self) {
+int igPsx2VisualContext_GetCurrentRenderDestination(igPsx2VisualContext *self) {
     int *p = (int *)self;
     return *(int *)((char *)p + 872);
 }
@@ -255,7 +255,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_50(igPsx2VisualContext *self) {
 /* Getter for the record field at +0x1c of buffer `bufferIndex`. `_pBufList` (+0x364) is an
  * igDataList whose data pointer (+0x10) addresses 0x30-byte VRAM buffer records. */
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_51(igPsx2VisualContext *self, int bufferIndex) {
+int igPsx2VisualContext_GetRenderDestinationType(igPsx2VisualContext *self, int bufferIndex) {
     igDataList *bufList = (igDataList *)self->_pBufList;
     return *(int *)(bufList->_data + bufferIndex * BUFFER_RECORD_SIZE + 28);
 }
@@ -268,7 +268,7 @@ void FUN_00169be0(void *d0, int arg1) {
     p2SetClearWidth(0);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_176(igPsx2VisualContext *self, int arg1) {
+void igPsx2VisualContext_ClearRenderDestination(igPsx2VisualContext *self, int arg1) {
     int var_a0;
 
     var_a0 = 0;
@@ -281,7 +281,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_176(igPsx2VisualContext *self, int arg
     p2Clear(var_a0, *(int *)((char *)(self) + 896), *(int *)((char *)(self) + 900));
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_171(igPsx2VisualContext *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8) {
+int igPsx2VisualContext_CopyRenderDestinationToTexture(igPsx2VisualContext *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8) {
     int temp_a1;
     int temp_a2;
     int temp_v1;
@@ -302,20 +302,20 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_171(igPsx2VisualContext *arg0, int arg1
             temp_v1 = (arg0->_textureMagFilter << 0x10) | arg0->_textureMinFilter;
             if (arg0->_currentTextureFilter[0] != temp_v1) {
                 arg0->_currentTextureFilter[0] = temp_v1;
-                FUN_002094c0(DAT_0048acd0[arg0->_textureMagFilter], DAT_0048acd0[arg0->_textureMinFilter]);
+                p2SetTextureFilter(DAT_0048acd0[arg0->_textureMagFilter], DAT_0048acd0[arg0->_textureMinFilter]);
             }
         }
         FUN_00209cf0(*(int *)(temp_s7 + 40), **(int **)(temp_s0 + 72), arg3, arg4, arg5, arg6, 0);
     } else if (*(int *)(temp_s7 + 28) == 2) {
-        FUN_0020a990(*(int *)(temp_s7 + 40), arg3, arg4, **(int **)(temp_s0 + 72), arg7, arg8, arg5, arg6);
+        p2CopyTexture(*(int *)(temp_s7 + 40), arg3, arg4, **(int **)(temp_s0 + 72), arg7, arg8, arg5, arg6);
     } else {
-        FUN_0020a590(**(int **)(temp_s0 + 72), arg3, arg4, arg7, arg8, arg5, arg6, 0);
+        p2CopyFramebufferToTexture(**(int **)(temp_s0 + 72), arg3, arg4, arg7, arg8, arg5, arg6, 0);
     }
     *(int *)(temp_s0 + 132) = 3;
     return 1;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_172(igPsx2VisualContext *self, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
+void igPsx2VisualContext_CopyRenderDestinationToMemory(igPsx2VisualContext *self, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
     FUN_00169e40((VisualContextTextures *)self, arg1, (TextureImage *)arg2, (void *)arg3, arg4, arg5, arg6, 0);
 }
 
@@ -328,7 +328,7 @@ int FUN_00169e40(VisualContextTextures *self, int index, TextureImage *image, vo
     bool allocated = false;
     int format;
     if (pixels == 0 || image->imageSize < 0 || ((int)pixels & 15) != 0) {
-        pixels = ((BufferAllocator *)FUN_00165cf0((int *)self))->allocate(width * height * 4, 16);
+        pixels = ((BufferAllocator *)igVisualContext_GetImageMemoryPool((int *)self))->allocate(width * height * 4, 16);
         allocated = true;
     }
     if (entry->kind == 2) {
@@ -359,7 +359,7 @@ int FUN_00169e40(VisualContextTextures *self, int index, TextureImage *image, vo
     return 1;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_185(igPsx2VisualContext *self, int arg1, int arg2, int arg3, int arg4, float fparg0, float fparg1) {
+void igPsx2VisualContext_SetViewport(igPsx2VisualContext *self, int arg1, int arg2, int arg3, int arg4, float fparg0, float fparg1) {
     self->_iViewportX = arg1;
     self->_iViewportY = arg2;
     self->_iViewportW = arg3;
@@ -372,14 +372,14 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_185(igPsx2VisualContext *self, int arg
     p2SetViewport(arg1, arg2, arg3, arg4, 1.0f - self->_viewportNear, 1.0f - self->_viewportFar);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_186(void *arg0, int *arg1, int *arg2, int *arg3, int *arg4) {
+void igPsx2VisualContext_GetViewport(void *arg0, int *arg1, int *arg2, int *arg3, int *arg4) {
     *arg1 = *(int *)((char *)(arg0) + 916);
     *arg2 = *(int *)((char *)(arg0) + 920);
     *arg3 = *(int *)((char *)(arg0) + 924);
     *arg4 = *(int *)((char *)(arg0) + 928);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_187(igPsx2VisualContext *arg0, int *arg1, int *arg2, int *arg3, int *arg4, float *arg5, float *arg6) {
+void igPsx2VisualContext_GetViewportWithDepth(igPsx2VisualContext *arg0, int *arg1, int *arg2, int *arg3, int *arg4, float *arg5, float *arg6) {
     *arg1 = arg0->_iViewportX;
     *arg2 = arg0->_iViewportY;
     *arg3 = arg0->_iViewportW;
@@ -388,7 +388,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_187(igPsx2VisualContext *arg0, int *ar
     *arg6 = arg0->_viewportFar;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_177(igPsx2VisualContext *self, float *color) {
+void igPsx2VisualContext_SetClearColor(igPsx2VisualContext *self, float *color) {
     self->_clearColor[0] = color[0];
     self->_clearColor[1] = color[1];
     self->_clearColor[2] = color[2];
@@ -398,12 +398,12 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_177(igPsx2VisualContext *self, float *
         + (((unsigned int)(255.0f * self->_clearColor[2]) << 16) + ((unsigned int)(255.0f * self->_clearColor[0]) + green));
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_178(igPsx2VisualContext *self, unsigned int x) {
+void igPsx2VisualContext_SetClearColorPacked(igPsx2VisualContext *self, unsigned int x) {
     int *a = (int *)self;
     a[224] = (x & 0xffffff) | (((x >> 1) & 0x7f000000) + (x & 0x01000000));
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_180(void *arg0) {
+int igPsx2VisualContext_GetClearColorPacked(void *arg0) {
     int temp_a1;
     unsigned int temp_a0;
 
@@ -412,11 +412,11 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_180(void *arg0) {
     return (temp_a1 & 0xFFFFFF) | (temp_a0 + (((temp_a1 & 0xFF000000) - temp_a0) * 2));
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_179(Obj179 *arg0, void *arg1) {
+void igPsx2VisualContext_GetClearColor(Obj179 *arg0, void *arg1) {
     Color4f_Unpack((Color4f *)arg1, 1, arg0->f896);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_181(igPsx2VisualContext *self, float fparg0) {
+void igPsx2VisualContext_SetClearDepth(igPsx2VisualContext *self, float fparg0) {
     S181 *arg0 = (S181 *)self;
     arg0->f892 = fparg0;
     if (arg0->f1280 & 4) {
@@ -426,29 +426,29 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_181(igPsx2VisualContext *self, float f
     arg0->f900 = (unsigned)(2.1474836e9f * (1.0f - arg0->f892));
 }
 
-float Gap__Gfx__igPsx2VisualContext__vfunc_182(void *arg0) {
+float igPsx2VisualContext_GetClearDepth(void *arg0) {
     return *(float *)((char *)arg0 + 892);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_183(igPsx2VisualContext *self, int a1) {
+void igPsx2VisualContext_SetClearStencil(igPsx2VisualContext *self, int a1) {
     *(int *)((char *)self + 904) = a1;
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_184(void *arg0) {
+int igPsx2VisualContext_GetClearStencil(void *arg0) {
     return *(int *)((char *)(arg0) + 904);
 }
 
 /* Getter for the record field at +0x8 of buffer `bufferIndex`: the buffer format
  * (8/7/0x18/0xf/0x10). `_pBufList` (+0x364) is an igDataList whose data pointer
  * (+0x10) addresses 0x30-byte VRAM buffer records. */
-int Gap__Gfx__igPsx2VisualContext__vfunc_54(igPsx2VisualContext *self, int bufferIndex) {
+int igPsx2VisualContext_GetColorBitsPerPixel(igPsx2VisualContext *self, int bufferIndex) {
     igDataList *bufList = (igDataList *)self->_pBufList;
     return *(int *)(bufList->_data + bufferIndex * BUFFER_RECORD_SIZE + 8);
 }
 
 /* Getter for the record field at +0x10 of buffer `bufferIndex`. `_pBufList` (+0x364) is an
  * igDataList whose data pointer (+0x10) addresses 0x30-byte VRAM buffer records. */
-int Gap__Gfx__igPsx2VisualContext__vfunc_55(igPsx2VisualContext *self, int bufferIndex) {
+int igPsx2VisualContext_GetAlphaBitsPerPixel(igPsx2VisualContext *self, int bufferIndex) {
     igDataList *bufList = (igDataList *)self->_pBufList;
     return *(int *)(bufList->_data + bufferIndex * BUFFER_RECORD_SIZE + 16);
 }
@@ -456,7 +456,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_55(igPsx2VisualContext *self, int buffe
 /* Getter for the record field at +0xc of buffer `bufferIndex`: the secondary format (0x20/0x18 in
  *. `_pBufList` (+0x364) is an igDataList whose data pointer (+0x10) addresses
  * 0x30-byte VRAM buffer records. */
-int Gap__Gfx__igPsx2VisualContext__vfunc_56(igPsx2VisualContext *self, int bufferIndex) {
+int igPsx2VisualContext_GetDepthBitsPerPixel(igPsx2VisualContext *self, int bufferIndex) {
     igDataList *bufList = (igDataList *)self->_pBufList;
     return *(int *)(bufList->_data + bufferIndex * BUFFER_RECORD_SIZE + 12);
 }
@@ -465,14 +465,14 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_56(igPsx2VisualContext *self, int buffe
  * is the context's table of 0x30-byte buffer records whose element array is at +16 (texture
  * capture). */
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_57(igPsx2VisualContext *self, int buffer_index) {
+int igPsx2VisualContext_GetStencilBitsPerPixel(igPsx2VisualContext *self, int buffer_index) {
     return *(int *)((char *)((*(int *)((char *)(self->_pBufList) + 16) + (buffer_index * VRAM_BUFFER_RECORD_SIZE))) + 20);
 }
 
 /* igPsx2VisualContext vtable slot 58: reads the float at +24 of one VRAM buffer record (companion
  * of slot 57, which reads the word at +20). _pBufList is the context's table of 0x30-byte buffer
  * records whose element array is at +16 (texture capture). */
-float Gap__Gfx__igPsx2VisualContext__vfunc_58(igPsx2VisualContext *self, int buffer_index) {
+float igPsx2VisualContext_GetPixelAspectRatio(igPsx2VisualContext *self, int buffer_index) {
     return *(float *)((char *)((*(int *)((char *)(self->_pBufList) + 16) + (buffer_index * VRAM_BUFFER_RECORD_SIZE))) + 24);
 }
 
@@ -499,7 +499,7 @@ void FUN_0016a520(O520 *o) {
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_188(igPsx2VisualContext *arg0, int arg1, int arg2, int arg3, int arg4) {
+void igPsx2VisualContext_SetScissor(igPsx2VisualContext *arg0, int arg1, int arg2, int arg3, int arg4) {
     int temp_a1;
 
     arg0->_scissorX = arg1;
@@ -512,14 +512,14 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_188(igPsx2VisualContext *arg0, int arg
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_189(void *arg0, int *arg1, int *arg2, int *arg3, int *arg4) {
+void igPsx2VisualContext_GetScissor(void *arg0, int *arg1, int *arg2, int *arg3, int *arg4) {
     *arg1 = *(int *)((char *)(arg0) + 1236);
     *arg2 = *(int *)((char *)(arg0) + 1240);
     *arg3 = *(int *)((char *)(arg0) + 1244);
     *arg4 = *(int *)((char *)(arg0) + 1248);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_190(int a0, int a1) {
+void igPsx2VisualContext_SetScissorType(int a0, int a1) {
     *(int *)((char *)a0 + 104) = (int)a1;
     FUN_0016a520((O520 *)a0);
 }
@@ -548,8 +548,8 @@ void FUN_0016a860(Arg *arg0) {
     int *s3;
     Buf860 *b;
     sp5C = 64;
-    thunk_igRegistry_GetValueInt((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 4, "IG_GFX_VC_CLUT_ARRAY_SIZE", &sp5C, 64, 0);
-    p = (P_1690d0 *)Memory_AllocateBufferDirect(20, (igMemoryPoolView *)FUN_00165d10((int *)arg0));
+    igGetRegistryValue_Int((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 4, "IG_GFX_VC_CLUT_ARRAY_SIZE", &sp5C, 64, 0);
+    p = (P_1690d0 *)Memory_AllocateBufferDirect(20, (igMemoryPoolView *)igVisualContext_GetListMemoryPool((int *)arg0));
     if (p != 0) {
         n = sp5C;
         p->f8 = 0;
@@ -763,9 +763,9 @@ void FUN_0016af30(A_1690d0 *arg0, int arg1, RAf30 *arg2) {
         n = 16;
     }
     if (e->f10 != 0 && e->f8 != 0) {
-        p2WaitDmaSequence(2, FUN_0020b270((long long *)p2GetImageTexture((p2Image *)e->f8)));
+        p2WaitDmaSequence(2, p2GetTextureUploadSequence((long long *)p2GetImageTexture((p2Image *)e->f8)));
     } else if (e->f10 == 0) {
-        o = (void **)FUN_00165cf0((int *)arg0);
+        o = (void **)igVisualContext_GetImageMemoryPool((int *)arg0);
         e->f10 = ((VC_220 *)o)->vX(n * 4, 128);
     }
     if (e->f10 != 0) {
@@ -786,8 +786,8 @@ bool FUN_0016b090(Ob *arg0, int arg1) {
     if (s->f8 == 0 || s->f4->f28 != 0) {
         if (s->f8 != 0) {
             h = (int)p2GetImageTexture((p2Image *)s->f8);
-            FUN_0020c800(h);
-            p2WaitDmaSequence(2, FUN_0020b270((long long *)h));
+            p2InvalidateTexture(h);
+            p2WaitDmaSequence(2, p2GetTextureUploadSequence((long long *)h));
             q = s->f4;
             q->f28 = 1;
             FUN_0016aea0((int)arg0, s->f12, (int *)s->f16, (int *)q->f20);
@@ -813,8 +813,8 @@ void FUN_0016b1d0(OB1d0 *arg0, int arg1) {
         e = t->f16 + arg1;
         if (e->w8 != 0) {
             h = (int)p2GetImageTexture((p2Image *)e->w8);
-            p2WaitDmaSequence(2, FUN_0020b270((long long *)h));
-            FUN_0020c9f0(h);
+            p2WaitDmaSequence(2, p2GetTextureUploadSequence((long long *)h));
+            p2FreeTexture(h);
             p2FreeImage((p2Image *)e->w8);
         }
         e->w8 = 0;
@@ -822,14 +822,14 @@ void FUN_0016b1d0(OB1d0 *arg0, int arg1) {
     }
 }
 
-/* J-thunk for igVisualContextCapabilityManager virtual slot 31, forwarding to the slot body. The
- * callee takes the caller's registers untouched, so the thunk has no arguments of its own. */
+/* The override is a jump to igVisualContext's constructFields: the callee takes the caller's
+ * registers untouched. */
 
-void thunk_FUN_00164f50(igVisualContextCapabilityManager_164f50 *self, int flags) {
-    FUN_00164f50(self, flags);
+void igPsx2VisualContext_constructFields(igVisualContextFieldsView *self, int flags) {
+    igVisualContext_constructFields(self, flags);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_10(S10 *arg0) {
+void igPsx2VisualContext_userDestruct(S10 *arg0) {
     int temp_a0;
 
     temp_a0 = arg0->f50;
@@ -914,16 +914,16 @@ struct ContextText : public igObject {
 #include "dw4/p2/p2core.h"
 #include "dw4/p2/p2swap.h"
 extern "C" int p2OpenDisplay(int mode, int colorBits, int depthBits, const char *config, const char *symbols, int width, int height);
-extern "C" void FUN_0020c9e0(int mode);
+extern "C" void p2SetTextureWaitMode(int mode);
 class OpenResult {
 public:
     int v;
     OpenResult(int x) : v(x) {}
     OpenResult(const OpenResult &o) : v(o.v) {}
 };
-extern "C" OpenResult Gap__Gfx__igPsx2VisualContext__vfunc_32(OpenContext *self);
+extern "C" OpenResult igPsx2VisualContext_Open(OpenContext *self);
 
-OpenResult Gap__Gfx__igPsx2VisualContext__vfunc_32(OpenContext *self) {
+OpenResult igPsx2VisualContext_Open(OpenContext *self) {
     BufferRecord *record;
     igRegistry *registry;
     int colorBits;
@@ -934,8 +934,8 @@ OpenResult Gap__Gfx__igPsx2VisualContext__vfunc_32(OpenContext *self) {
     int height;
 
     self->openBase();
-    igSmartPointer<ContextText> ucodeConfig((ContextText *)igStringObj_Create(FUN_00165ce0((int *)self)));
-    igSmartPointer<ContextText> ucodeSym((ContextText *)igStringObj_Create(FUN_00165ce0((int *)self)));
+    igSmartPointer<ContextText> ucodeConfig((ContextText *)igStringObj_Create(igVisualContext_GetInternalMemoryPool((int *)self)));
+    igSmartPointer<ContextText> ucodeSym((ContextText *)igStringObj_Create(igVisualContext_GetInternalMemoryPool((int *)self)));
     int size;
     int syncMode;
     record = self->bufferRecord(self->_currentBuf);
@@ -998,42 +998,42 @@ OpenResult Gap__Gfx__igPsx2VisualContext__vfunc_32(OpenContext *self) {
     record->depthBits = depthBits;
     record->f20 = 0;
     registry = (igRegistry *)((G_1778e0 *)g_objectSystem)->f56;
-    thunk_igRegistry_GetValueStringObj(registry, 4, "ucodeConfig", (igStringObj **)&ucodeConfig, "", 0);
-    thunk_igRegistry_GetValueStringObj(registry, 4, "ucodeSym", (igStringObj **)&ucodeSym, "", 0);
-    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_CLUT_PSX2", &size, -1, 0);
+    igGetRegistryValue_StringObj(registry, 4, "ucodeConfig", (igStringObj **)&ucodeConfig, "", 0);
+    igGetRegistryValue_StringObj(registry, 4, "ucodeSym", (igStringObj **)&ucodeSym, "", 0);
+    igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_CLUT_PSX2", &size, -1, 0);
     if (size > 0) p2SetPoolSize(3, size);
-    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMAPREDICATE_PSX2", &size, -1, 0);
+    igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMAPREDICATE_PSX2", &size, -1, 0);
     if (size > 0) p2SetPoolSize(7, size);
-    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMACOMPLETION_PSX2", &size, -1, 0);
+    igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMACOMPLETION_PSX2", &size, -1, 0);
     if (size > 0) p2SetPoolSize(8, size);
-    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_FINISH_PSX2", &size, -1, 0);
+    igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_FINISH_PSX2", &size, -1, 0);
     if (size > 0) p2SetPoolSize(9, size);
-    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_TEXTURE_PSX2", &size, -1, 0);
+    igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_TEXTURE_PSX2", &size, -1, 0);
     if (size > 0) p2SetPoolSize(10, size);
-    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF0_SIZE_PSX2", &size, -1, 0);
+    igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF0_SIZE_PSX2", &size, -1, 0);
     if (size >= 0) p2SetPoolSize(4, size);
-    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF1_SIZE_PSX2", &size, -1, 0);
+    igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF1_SIZE_PSX2", &size, -1, 0);
     if (size > 0) p2SetPoolSize(5, size);
-    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_GIF_SIZE_PSX2", &size, -1, 0);
+    igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_GIF_SIZE_PSX2", &size, -1, 0);
     if (size > 0) p2SetPoolSize(6, size);
-    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF0_PSX2", &size, -1, 0);
+    igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF0_PSX2", &size, -1, 0);
     if (size >= 0) p2SetPoolSize(0, size);
-    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF1_PSX2", &size, -1, 0);
+    igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF1_PSX2", &size, -1, 0);
     if (size > 0) p2SetPoolSize(1, size);
-    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_GIF_PSX2", &size, -1, 0);
+    igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_DMABUFFER_GIF_PSX2", &size, -1, 0);
     if (size > 0) p2SetPoolSize(2, size);
-    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_STATE_CACHE_PSX2", &size, -1, 0);
+    igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_STATE_CACHE_PSX2", &size, -1, 0);
     if (size > 0) p2SetPoolSize(11, size);
-    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_MULTIPASS_PSX2", &size, -1, 0);
+    igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_MULTIPASS_PSX2", &size, -1, 0);
     if (size > 0) p2SetPoolSize(12, size);
-    thunk_igRegistry_GetValueInt(registry, 4, "IG_GFX_INTERNAL_STRUCT_RENDERLIST_PSX2", &size, -1, 0);
+    igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_RENDERLIST_PSX2", &size, -1, 0);
     if (size > 0) p2SetPoolSize(13, size);
     igRegistry_GetValueInt(registry, 4, "IG_GFX_CAPABILITY_MAX_TEXTURE_STAGES", &self->_maxStageNum, 1, 0);
     self->_maxStageNum = self->_maxStageNum < 16 ? self->_maxStageNum : 16;
     self->_maxStageNum = self->_maxStageNum > 1 ? self->_maxStageNum : 1;
     syncMode = 0;
     igRegistry_GetValueInt(registry, 4, "IG_GFX_TEXTURE_SYNC_MODE_PSX2", &syncMode, 1, 0);
-    FUN_0020c9e0(syncMode);
+    p2SetTextureWaitMode(syncMode);
     useWatchdog = true;
     igRegistry_GetValueBool(registry, 4, "useWatchdog", (unsigned char *)&useWatchdog, 1, 0);
     p2EnableWatchdog(useWatchdog);
@@ -1083,7 +1083,7 @@ OpenResult Gap__Gfx__igPsx2VisualContext__vfunc_32(OpenContext *self) {
     self->_iDisplayHeight = height;
     {
         bool slowSpotLight;
-        if (thunk_igRegistry_GetValueBool(registry, 4, "useSlowSpotLight", (unsigned char *)&slowSpotLight, 0, 0) != 0 && slowSpotLight) {
+        if (igGetRegistryValue_Bool(registry, 4, "useSlowSpotLight", (unsigned char *)&slowSpotLight, 0, 0) != 0 && slowSpotLight) {
             p2DisableCapability(24);
         } else {
             p2EnableCapability(24);
@@ -1091,24 +1091,24 @@ OpenResult Gap__Gfx__igPsx2VisualContext__vfunc_32(OpenContext *self) {
     }
     {
         bool eyeLocalLight;
-        thunk_igRegistry_GetValueBool(registry, 4, "useEyeLocalLight", (unsigned char *)&eyeLocalLight, 0, 0);
+        igGetRegistryValue_Bool(registry, 4, "useEyeLocalLight", (unsigned char *)&eyeLocalLight, 0, 0);
         if (eyeLocalLight) p2EnableCapability(20); else p2DisableCapability(20);
     }
     {
         bool cpuLightLoading;
-        thunk_igRegistry_GetValueBool(registry, 4, "useCpuLightLoading", (unsigned char *)&cpuLightLoading, 0, 0);
+        igGetRegistryValue_Bool(registry, 4, "useCpuLightLoading", (unsigned char *)&cpuLightLoading, 0, 0);
         if (cpuLightLoading) p2EnableCapability(21); else p2DisableCapability(21);
     }
     {
         bool lock;
-        thunk_igRegistry_GetValueBool(registry, 4, "lockDMAVif1", (unsigned char *)&lock, 0, 0);
+        igGetRegistryValue_Bool(registry, 4, "lockDMAVif1", (unsigned char *)&lock, 0, 0);
         if (lock) p2FixDmaPacketPool(1);
-        thunk_igRegistry_GetValueBool(registry, 4, "lockDMAGif", (unsigned char *)&lock, 0, 0);
+        igGetRegistryValue_Bool(registry, 4, "lockDMAGif", (unsigned char *)&lock, 0, 0);
         if (lock) p2FixDmaPacketPool(2);
     }
     {
         bool showGuardBand;
-        thunk_igRegistry_GetValueBool(registry, 4, "showGuardBand", (unsigned char *)&showGuardBand, 0, 0);
+        igGetRegistryValue_Bool(registry, 4, "showGuardBand", (unsigned char *)&showGuardBand, 0, 0);
         if (showGuardBand) p2SetClearPasses(1);
     }
     FUN_00174090(self);
@@ -1117,14 +1117,14 @@ OpenResult Gap__Gfx__igPsx2VisualContext__vfunc_32(OpenContext *self) {
     return OpenResult(g_resultSuccess.v);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_35(Obj35 *arg0) {
-    FUN_00165cb0(arg0);
+void igPsx2VisualContext_Reset(Obj35 *arg0) {
+    igVisualContext_Reset(arg0);
     arg0->rel(arg0->m940);
     arg0->rel(arg0->m944);
     arg0->rel(arg0->m948);
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_37(igPsx2VisualContext *context, unsigned int query) {
+int igPsx2VisualContext_GetCapability(igPsx2VisualContext *context, unsigned int query) {
     switch (query) {
     case 0:
         return 640;
@@ -1223,7 +1223,7 @@ void FUN_0016c650(igPsx2VisualContext *arg0, int arg1) {
     }
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_192(igPsx2VisualContext *self) {
+int igPsx2VisualContext_CreateRenderList(igPsx2VisualContext *self) {
     O192 *arg0 = (O192 *)self;
     int a1;
     T192 *s1 = arg0->f960;
@@ -1247,8 +1247,8 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_192(igPsx2VisualContext *self) {
     s0 = s1->f12[s1->f4 - 1];
     s1->f4 = s1->f4 - 1;
     {
-        Nd192 *n = new (FUN_00165cc0((int *)arg0)) Nd192;
-        int v = (int)(igIntList_Create(FUN_00165cc0((int *)arg0)));
+        Nd192 *n = new (igVisualContext_GetDriverDataMemoryPool((int *)arg0)) Nd192;
+        int v = (int)(igIntList_Create(igVisualContext_GetDriverDataMemoryPool((int *)arg0)));
         arg0->f960->f16[s0] = (Ent192 *)n;
         n->a = v;
     }
@@ -1256,7 +1256,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_192(igPsx2VisualContext *self) {
     return s0;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_193(igPsx2VisualContext *self, int arg1) {
+void igPsx2VisualContext_DeleteRenderList(igPsx2VisualContext *self, int arg1) {
     T193 *a3;
     int s0;
     Rc193 *s2;
@@ -1295,14 +1295,14 @@ done:
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_194(igPsx2VisualContext *self, int arg1) {
+void igPsx2VisualContext_BeginRenderListDraw(igPsx2VisualContext *self, int arg1) {
     *(int *)((char *)(self) + 964) = arg1;
     if (*(int *)((char *)(self) + 72) < 0x10) {
         p2SetBlendMatrices(0, 0x10);
     }
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_195(igPsx2VisualContext *self) {
+int igPsx2VisualContext_EndRenderListDraw(igPsx2VisualContext *self) {
     int temp_a1;
     temp_a1 = *(int *)((char *)(self) + 72);
     if (temp_a1 > 0) {
@@ -1312,7 +1312,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_195(igPsx2VisualContext *self) {
     return *(unsigned char *)((char *)(self) + 968) == 0;
 }
 
-bool Gap__Gfx__igPsx2VisualContext__vfunc_196(igPsx2VisualContext *arg0, int arg1) {
+bool igPsx2VisualContext_ExecuteRenderList(igPsx2VisualContext *arg0, int arg1) {
     struct L196 *temp_s4;
     int temp_v0;
     int var_s2;
@@ -1372,7 +1372,7 @@ void FUN_0016cd10(void *arg0) {
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_27(int dummy0, int arg1) {
+void igPsx2VisualContext_DetectDriverDatabaseProperties(int dummy0, int arg1) {
     igDriverDatabase_SetCurrentProperty((void *)arg1, 1, "psx2");
     igDriverDatabase_SetCurrentProperty((void *)arg1, 2, "1.0");
     igDriverDatabase_SetCurrentProperty((void *)arg1, 3, "sony");

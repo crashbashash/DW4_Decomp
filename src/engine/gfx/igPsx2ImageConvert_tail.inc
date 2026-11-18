@@ -2,7 +2,7 @@ igMetaObject *igPsx2ImageConvert_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2ImageConvert_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00153c80();
+        igPsx2ImageConvert_EnsureRegistered();
     return g_igPsx2ImageConvert_metaObject;
 }
 
@@ -13,7 +13,7 @@ int igPsx2ImageConvert_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00153c80(void)
+void igPsx2ImageConvert_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2ImageConvert_Register);
 }
@@ -25,7 +25,7 @@ CallbackArray *igPsx2ImageConvert_Register(void) {
         &g_igPsx2ImageConvert_metaObject,
         igImageConvert_Register,
         igImageConvert_GetPublishedMetaObject,
-        thunk_igPsx2ImageConvert_GetMetaObject,
+        igPsx2ImageConvert_GetMetaObjectFunction,
         "igPsx2ImageConvert",
         8, /* instance size */
         igPsx2ImageConvert_GetVTable,
@@ -40,6 +40,6 @@ int FUN_00153d00(void) {
 }
 
 void FUN_00153d10(void) {
-    *(int *)((char *)(g_igPsx2ImageConvert_metaObject) + 64) = (int)(&thunk_igImageConvert_GetMetaObject);
+    *(int *)((char *)(g_igPsx2ImageConvert_metaObject) + 64) = (int)(&igImageConvert_GetMetaObjectFunction);
 }
 

@@ -1,6 +1,6 @@
 igMetaObject *g_igCompiledTransformList_metaObject;
 
-igMetaObject *FUN_001a3420(void) {
+igMetaObject *igCompiledTransformList_GetOrCreateMetaObject(void) {
     if (g_igCompiledTransformList_metaObject == 0) {
         g_igCompiledTransformList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igCompiledTransformList_GetMetaObject(void)
 {
     igMetaObject *g = g_igCompiledTransformList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a3500();
+        igCompiledTransformList_EnsureRegistered();
     return g_igCompiledTransformList_metaObject;
 }
 
@@ -23,12 +23,12 @@ int igCompiledTransformList_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_001a3500(void)
+void igCompiledTransformList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igCompiledTransformList_Register);
 }
 
-static igMetaObjectCallback g_igCompiledTransformList_callbackList[] = { FUN_001a3700, 0 };
+static igMetaObjectCallback g_igCompiledTransformList_callbackList[] = { igCompiledTransform_EnsureRegistered, 0 };
 
 CallbackArray *igCompiledTransformList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ CallbackArray *igCompiledTransformList_Register(void) {
         &g_igCompiledTransformList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igCompiledTransformList_GetMetaObject,
+        igCompiledTransformList_GetMetaObjectFunction,
         "igCompiledTransformList",
         0x14, /* instance size */
         igCompiledTransformList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igCompiledTransformList_Register(void) {
     );
 }
 
-void thunk_igCompiledTransformList_GetMetaObject(void) {
+void igCompiledTransformList_GetMetaObjectFunction(void) {
     igCompiledTransformList_GetMetaObject();
 }
 

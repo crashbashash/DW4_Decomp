@@ -1,8 +1,8 @@
 igMetaObject *g_igMatrixObject_metaObject;
 igMetaField *g_igMatrixObject_mMetaField;
 
-void FUN_001e4c50(int arg0) {
-    FUN_001e4d30();
+void igMatrixObject_Create(int arg0) {
+    igMatrixObject_EnsureRegistered();
     igMetaObject_CreateInstance(g_igMatrixObject_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -10,7 +10,7 @@ igMetaObject *igMatrixObject_GetMetaObject(void)
 {
     igMetaObject *g = g_igMatrixObject_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001e4d30();
+        igMatrixObject_EnsureRegistered();
     return g_igMatrixObject_metaObject;
 }
 
@@ -22,7 +22,7 @@ int igMatrixObject_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_001e4d30(void)
+void igMatrixObject_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igMatrixObject_Register);
 }
@@ -34,7 +34,7 @@ CallbackArray *igMatrixObject_Register(void) {
         &g_igMatrixObject_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igMatrixObject_GetMetaObject,
+        igMatrixObject_GetMetaObjectFunction,
         "igMatrixObject",
         0x48, /* instance size */
         igMatrixObject_GetVTable,
@@ -44,7 +44,7 @@ CallbackArray *igMatrixObject_Register(void) {
     );
 }
 
-void thunk_igMatrixObject_GetMetaObject(void) {
+void igMatrixObject_GetMetaObjectFunction(void) {
     igMatrixObject_GetMetaObject();
 }
 

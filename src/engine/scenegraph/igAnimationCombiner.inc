@@ -14,7 +14,7 @@ igMetaField *g_igAnimationCombiner_lastCleanStatesTimeMetaField;
 igMetaField *g_igAnimationCombiner_cleanStatesTimeThresholdMetaField;
 igMetaField *g_igAnimationCombiner_cleanStatesTransitionMarginMetaField;
 
-igMetaObject *FUN_001a8520(void)
+igMetaObject *igAnimationCombiner_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationCombiner_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
@@ -34,9 +34,9 @@ int igAnimationCombiner_GetVTable(void) {
     obj.w14 = 0;
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igAnimationCombiner_vtable[0];
-    FUN_001a8780((struct R * *)&obj.w14, -1);
+    igSmartPointer_igAnimationStateList_Destruct((struct R * *)&obj.w14, -1);
     igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj.w13, -1);
-    FUN_001a8700((ObjectRefWord *)&obj.w12, -1);
+    igSmartPointer_igAnimationCombinerBoneInfoListList_Destruct((ObjectRefWord *)&obj.w12, -1);
     FUN_001a8620((struct S_1a8620 *)&obj, 0);
     return t;
 }
@@ -80,7 +80,7 @@ void *FUN_001a8620(struct S_1a8620 *arg0, short arg1) {
     return arg0;
 }
 
-ObjectRefWord *FUN_001a8700(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igAnimationCombinerBoneInfoListList_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {
@@ -93,7 +93,7 @@ ObjectRefWord *FUN_001a8700(ObjectRefWord *self,int delete_storage) {
     return self;
 }
 
-struct R **FUN_001a8780(struct R **arg0, short arg1) {
+struct R **igSmartPointer_igAnimationStateList_Destruct(struct R **arg0, short arg1) {
     struct R *temp_a0;
 
     if (arg0 != 0) {
@@ -125,7 +125,7 @@ CallbackArray *igAnimationCombiner_Register(void) {
         &g_igAnimationCombiner_metaObject,
         igAnimationSystem_Register,
         igAnimationSystem_GetPublishedMetaObject,
-        thunk_FUN_001a8520,
+        igAnimationCombiner_GetMetaObjectFunction,
         "igAnimationCombiner",
         0x60, /* instance size */
         igAnimationCombiner_GetVTable,
@@ -135,11 +135,11 @@ CallbackArray *igAnimationCombiner_Register(void) {
     );
 }
 
-void thunk_FUN_001a8520(void) {
-    FUN_001a8520();
+void igAnimationCombiner_GetMetaObjectFunction(void) {
+    igAnimationCombiner_GetMetaObject();
 }
 
-igMetaObject *FUN_001a88a0(void) {
+igMetaObject *igAnimationSystem_GetPublishedMetaObject(void) {
     return g_igAnimationSystem_metaObject;
 }
 
@@ -223,13 +223,13 @@ void igAnimationCombiner_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationCombiner_ctorTable, 0xE);
     temp_s2 = ((struct Fld_1a88b0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1));
-    temp_s2->f56 = (int)FUN_001a7e20();
+    temp_s2->f56 = (int)igAnimationCombinerBoneInfoListList_GetOrCreateMetaObject();
     temp_s2->f52 = 1;
     temp_s2_2 = ((struct Fld_1a88b0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1));
     temp_s2_2->f56 = igIntList_GetOrCreateMetaObject();
     temp_s2_2->f52 = 1;
     temp_s2_3 = ((struct Fld_1a88b0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2));
-    temp_s2_3->f56 = (int)FUN_001a6920();
+    temp_s2_3->f56 = (int)igAnimationStateList_GetOrCreateMetaObject();
     temp_s2_3->f52 = 1;
     temp_s2_4 = ((struct Fld_1a88b0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3));
     temp_s2_4->f60 = FUN_00187520();

@@ -26,14 +26,14 @@ static int g_igPointSpriteExt_spriteSizeSpaceValues[] = {
 };
 igMetaEnum *g_igPointSpriteExt_spriteSizeSpaceMetaEnum;
 
-int FUN_0014c290(void) {
+int IG_GFX_SPRITE_SIZE_SPACE_GetMetaEnum(void) {
     if (g_igPointSpriteExt_spriteSizeSpaceMetaEnum == 0) {
         g_igPointSpriteExt_spriteSizeSpaceMetaEnum = igMetaEnum_Create("IG_GFX_SPRITE_SIZE_SPACE", g_igPointSpriteExt_spriteSizeSpaceNames, g_igPointSpriteExt_spriteSizeSpaceValues, 2);
     }
     return (int)g_igPointSpriteExt_spriteSizeSpaceMetaEnum;
 }
 
-igMetaObject *FUN_0014c2f0(void) {
+igMetaObject *igPointSpriteExt_GetOrCreateMetaObject(void) {
     if (g_igPointSpriteExt_metaObject == 0) {
         g_igPointSpriteExt_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -44,7 +44,7 @@ igMetaObject *igPointSpriteExt_GetMetaObject(void)
 {
     igMetaObject *g = g_igPointSpriteExt_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014c670();
+        igPointSpriteExt_EnsureRegistered();
     return g_igPointSpriteExt_metaObject;
 }
 
@@ -114,7 +114,7 @@ O_14c580 *FUN_0014c580(O_14c580 *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_0014c670(void)
+void igPointSpriteExt_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPointSpriteExt_Register);
 }
@@ -128,7 +128,7 @@ CallbackArray *igPointSpriteExt_Register(void) {
         &g_igPointSpriteExt_metaObject,
         igContextExt_Register,
         igContextExt_GetPublishedMetaObject,
-        thunk_igPointSpriteExt_GetMetaObject,
+        igPointSpriteExt_GetMetaObjectFunction,
         "igPointSpriteExt",
         0x188, /* instance size */
         igPointSpriteExt_GetVTable,
@@ -138,7 +138,7 @@ CallbackArray *igPointSpriteExt_Register(void) {
     );
 }
 
-void thunk_igPointSpriteExt_GetMetaObject(void) {
+void igPointSpriteExt_GetMetaObjectFunction(void) {
     igPointSpriteExt_GetMetaObject();
 }
 
@@ -248,7 +248,7 @@ void igPointSpriteExt_InitFields(void) {
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 4));
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_2, 0);
     ((igMetaField *)temp_v0_2)->_persistent = 0;
-    ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(&FUN_0014c290);
+    ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(&IG_GFX_SPRITE_SIZE_SPACE_GetMetaEnum);
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 5))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 6))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 7))->_persistent = 0;
@@ -263,6 +263,6 @@ void igPointSpriteExt_InitFields(void) {
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x10))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0x11))->_persistent = 0;
     igMetaObject_NameFields(meta, g_igPointSpriteExt_fieldTable, g_igPointSpriteExt_fieldHandles, g_igPointSpriteExt_fieldOffsets, fieldStart);
-    *(int *)((char *)(g_igPointSpriteExt_metaObject) + 60) = (int)(&thunk_igPsx2PointSpriteExt_GetMetaObject);
+    *(int *)((char *)(g_igPointSpriteExt_metaObject) + 60) = (int)(&igPsx2PointSpriteExt_GetMetaObjectFunction);
 }
 

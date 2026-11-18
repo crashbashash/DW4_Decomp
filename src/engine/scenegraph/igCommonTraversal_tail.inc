@@ -1,4 +1,4 @@
-static igMetaObjectCallback g_igCommonTraversal_callbackList[] = { FUN_001a5640, FUN_001960c0, igVisualContext_EnsureRegistered, FUN_0014fde0, FUN_0013ab50, igNonRefCountedAttrList_EnsureRegistered, FUN_00197360, FUN_0019a4e0, FUN_0019a370, FUN_0019a090, FUN_00199c40, FUN_00199f20, FUN_00199db0, FUN_0019a200, FUN_00135ac0, igNormalizeNormalsStateAttr_EnsureRegistered, FUN_001e40f0, FUN_001e4a50, FUN_00195de0, igIntList_EnsureRegistered, igStringObjList_EnsureRegistered, FUN_0019cb10, FUN_00199ad0, FUN_00131040, 0 };
+static igMetaObjectCallback g_igCommonTraversal_callbackList[] = { igAttrStackManager_EnsureRegistered, igTransformStack_EnsureRegistered, igVisualContext_EnsureRegistered, igCapabilityManager_EnsureRegistered, igAttrDefaultManager_EnsureRegistered, igNonRefCountedAttrList_EnsureRegistered, igSorter_EnsureRegistered, igModelViewMatrixAttrPool_EnsureRegistered, igTimeAttrPool_EnsureRegistered, igVertexBlendMatrixAttrPool_EnsureRegistered, igTextureMatrixAttrPool_EnsureRegistered, igVertexBlendMatrixListAttrPool_EnsureRegistered, igMatrixObjectPool_EnsureRegistered, igProjectionMatrixAttrPool_EnsureRegistered, igMatrixOptStateAttr_EnsureRegistered, igNormalizeNormalsStateAttr_EnsureRegistered, igLongStack_EnsureRegistered, igNonRefCountedMatrixObjectList_EnsureRegistered, igNonRefCountedTransformList_EnsureRegistered, igIntList_EnsureRegistered, igStringObjList_EnsureRegistered, igNodeListList_EnsureRegistered, igBlendMatricesAttrPool_EnsureRegistered, igTimeAttr_EnsureRegistered, 0 };
 
 CallbackArray *igCommonTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -7,7 +7,7 @@ CallbackArray *igCommonTraversal_Register(void) {
         &g_igCommonTraversal_metaObject,
         igTraversal_Register,
         igTraversal_GetPublishedMetaObject,
-        &thunk_igCommonTraversal_GetMetaObject,
+        &igCommonTraversal_GetMetaObjectFunction,
         "igCommonTraversal",
         0x1D8, /* instance size */
         &igCommonTraversal_GetVTable,
@@ -17,7 +17,7 @@ CallbackArray *igCommonTraversal_Register(void) {
     );
 }
 
-void thunk_igCommonTraversal_GetMetaObject(void) {
+void igCommonTraversal_GetMetaObjectFunction(void) {
     igCommonTraversal_GetMetaObject();
 }
 
@@ -234,43 +234,43 @@ void igCommonTraversal_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCommonTraversal_ctorTable, 0x23);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001a5330();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igAttrStackManager_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_00195fe0();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igTransformStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = FUN_0014fd40();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igCapabilityManager_GetOrCreateMetaObject();
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4)));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = FUN_0013aab0();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = igAttrDefaultManager_GetOrCreateMetaObject();
     temp_s2_6 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5)));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = FUN_0013ad40();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = igNonRefCountedAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = ((int)FUN_00196c10());
     ((igRefMetaField *)temp_s2_7)->_construct = 1;
     temp_s2_8 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7)));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)FUN_0019a400();
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)igModelViewMatrixAttrPool_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     temp_s2_9 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8)));
-    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)FUN_0019a290();
+    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)igTimeAttrPool_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_9)->_construct = 1;
     temp_s2_10 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9)));
-    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)FUN_00199fb0();
+    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)igVertexBlendMatrixAttrPool_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_10)->_construct = 1;
     temp_s2_11 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA)));
-    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)FUN_00199b60();
+    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)igTextureMatrixAttrPool_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_11)->_construct = 1;
     temp_s2_12 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB)));
-    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)FUN_00199e40();
+    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)igVertexBlendMatrixListAttrPool_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_12)->_construct = 1;
     temp_s2_13 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC)));
-    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = (int)FUN_00199cd0();
+    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = (int)igMatrixObjectPool_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_13)->_construct = 1;
     temp_s2_14 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xD)));
-    ((igObjectRefMetaField *)temp_s2_14)->_metaObject = (int)FUN_0019a120();
+    ((igObjectRefMetaField *)temp_s2_14)->_metaObject = (int)igProjectionMatrixAttrPool_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_14)->_construct = 1;
     temp_s2_15 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xE)));
     b1d.x = 0;b1d.y = 0;b1d.z = 0;b1d.w = 0x3F800000;
@@ -287,16 +287,16 @@ void igCommonTraversal_InitFields(void) {
     igMatrix44f_FromRows((float *)&b2o, (igVec4f *)&b2a, (igVec4f *)&b2b, (igVec4f *)&b2c, (igVec4f *)&b2d);
     FUN_0018c640(temp_s2_16, &b2o);
     temp_s2_17 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x11)));
-    ((igObjectRefMetaField *)temp_s2_17)->_metaObject = FUN_001359e0();
+    ((igObjectRefMetaField *)temp_s2_17)->_metaObject = igMatrixOptStateAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_17)->_construct = 1;
     temp_s2_18 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x12)));
-    ((igObjectRefMetaField *)temp_s2_18)->_metaObject = FUN_00134fb0();
+    ((igObjectRefMetaField *)temp_s2_18)->_metaObject = igNormalizeNormalsStateAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_18)->_construct = 1;
     temp_s2_19 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x13)));
-    ((igObjectRefMetaField *)temp_s2_19)->_metaObject = FUN_001e4010();
+    ((igObjectRefMetaField *)temp_s2_19)->_metaObject = igLongStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_19)->_construct = 1;
     temp_s2_20 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x14)));
-    ((igObjectRefMetaField *)temp_s2_20)->_metaObject = FUN_001e4970();
+    ((igObjectRefMetaField *)temp_s2_20)->_metaObject = igNonRefCountedMatrixObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_20)->_construct = 1;
     ((igMetaField *)temp_s2_20)->_persistent = 0;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x15)));
@@ -304,11 +304,11 @@ void igCommonTraversal_InitFields(void) {
     ((igMetaField *)temp_v0)->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x16)))->_persistent = 0;
     temp_s2_21 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x17)));
-    ((igObjectRefMetaField *)temp_s2_21)->_metaObject = (int)FUN_00195d00();
+    ((igObjectRefMetaField *)temp_s2_21)->_metaObject = (int)igNonRefCountedTransformList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_21)->_construct = 1;
     ((igMetaField *)temp_s2_21)->_persistent = 0;
     temp_s2_22 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x18)));
-    ((igObjectRefMetaField *)temp_s2_22)->_metaObject = (int)FUN_00195d00();
+    ((igObjectRefMetaField *)temp_s2_22)->_metaObject = (int)igNonRefCountedTransformList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_22)->_construct = 1;
     ((igMetaField *)temp_s2_22)->_persistent = 0;
     temp_s2_23 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x19)));
@@ -320,11 +320,11 @@ void igCommonTraversal_InitFields(void) {
     ((igRefMetaField *)temp_s2_24)->_construct = 1;
     ((igMetaField *)temp_s2_24)->_persistent = 0;
     temp_s2_25 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1B)));
-    ((igObjectRefMetaField *)temp_s2_25)->_metaObject = (int)FUN_0019ca30();
+    ((igObjectRefMetaField *)temp_s2_25)->_metaObject = (int)igNodeListList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_25)->_construct = 1;
     ((igMetaField *)temp_s2_25)->_persistent = 0;
     temp_s2_26 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1C)));
-    ((igObjectRefMetaField *)temp_s2_26)->_metaObject = (int)FUN_001999f0();
+    ((igObjectRefMetaField *)temp_s2_26)->_metaObject = (int)igBlendMatricesAttrPool_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_26)->_construct = 1;
     ((igMetaField *)temp_s2_26)->_persistent = 0;
     temp_s2_27 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1D)));
@@ -335,7 +335,7 @@ void igCommonTraversal_InitFields(void) {
     igMatrix44f_FromRows((float *)&b3o, (igVec4f *)&b3a, (igVec4f *)&b3b, (igVec4f *)&b3c, (igVec4f *)&b3d);
     FUN_0018c640(temp_s2_27, &b3o);
     temp_s2_28 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1E)));
-    ((igObjectRefMetaField *)temp_s2_28)->_metaObject = FUN_00130f60();
+    ((igObjectRefMetaField *)temp_s2_28)->_metaObject = igTimeAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_28)->_construct = 1;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1F)))->_persistent = 0;
     temp_s2_29 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x20)));
@@ -356,6 +356,6 @@ void igCommonTraversal_InitFields(void) {
     ((igMetaField *)temp_s2_30)->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x22)))->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCommonTraversal_fieldTable, g_igCommonTraversal_fieldHandles, g_igCommonTraversal_fieldOffsets, temp_s1);
-    igMetaObject_AddExitCallback((int)&thunk_FUN_001b6c50);
+    igMetaObject_AddExitCallback((int)&thunk_igCommonTraversal_UserUnregister);
 }
 

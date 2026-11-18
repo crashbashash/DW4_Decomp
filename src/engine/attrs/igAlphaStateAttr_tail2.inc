@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igAlphaStateAttr__vfunc_22(void) {
+igMetaObject *igAlphaStateAttr_GetMeta(void) {
     return g_igAlphaStateAttr_metaObject;
 }
 

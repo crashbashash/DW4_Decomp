@@ -2,7 +2,7 @@ igMetaObject *igShaderData_GetMetaObject(void)
 {
     igMetaObject *g = g_igShaderData_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00199760();
+        igShaderData_EnsureRegistered();
     return g_igShaderData_metaObject;
 }
 
@@ -17,19 +17,19 @@ int igShaderData_GetVTable(void) {
     obj.w5 = 0;
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igShaderData_vtable[0];
-    FUN_00194830((struct Ref * *)&obj.w5, -1);
-    FUN_001948b0((void * *)&obj.w4, -1);
+    igSmartPointer_igNodeListList_Destruct((struct Ref * *)&obj.w5, -1);
+    igSmartPointer_igDataPumpInfo_Destruct((void * *)&obj.w4, -1);
     FUN_0013a800(&obj.w3, -1);
     FUN_0013a800(&obj.w2, -1);
     return t;
 }
 
-void FUN_00199760(void)
+void igShaderData_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igShaderData_Register);
 }
 
-static igMetaObjectCallback g_igShaderData_callbackList[] = { igAttrListList_EnsureRegistered, FUN_001e5810, FUN_0019cb10, 0 };
+static igMetaObjectCallback g_igShaderData_callbackList[] = { igAttrListList_EnsureRegistered, igDataPumpInfo_EnsureRegistered, igNodeListList_EnsureRegistered, 0 };
 
 CallbackArray *igShaderData_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -38,7 +38,7 @@ CallbackArray *igShaderData_Register(void) {
         &g_igShaderData_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igShaderData_GetMetaObject,
+        igShaderData_GetMetaObjectFunction,
         "igShaderData",
         0x18, /* instance size */
         igShaderData_GetVTable,
@@ -48,7 +48,7 @@ CallbackArray *igShaderData_Register(void) {
     );
 }
 
-void thunk_igShaderData_GetMetaObject(void) {
+void igShaderData_GetMetaObjectFunction(void) {
     igShaderData_GetMetaObject();
 }
 
@@ -89,15 +89,15 @@ void igShaderData_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igShaderData_ctorTable, 4);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = FUN_0013abd0();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = igAttrListList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0013abd0();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igAttrListList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_001e5690();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igDataPumpInfo_GetOrCreateMetaObject();
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_0019ca30();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igNodeListList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igShaderData_fieldTable, g_igShaderData_fieldHandles, g_igShaderData_fieldOffsets, temp_s0);
 }
@@ -115,7 +115,7 @@ igSmartPointer<igObject> *igSmartPointer_igMatrix44fList_Destruct(igSmartPointer
     return self;
 }
 
-struct R **FUN_00199970(struct R **arg0, short arg1) {
+struct R **igSmartPointer_igModelViewMatrixAttrList_Destruct(struct R **arg0, short arg1) {
     struct R *temp_a0;
 
     if (arg0 != 0) {

@@ -2,7 +2,7 @@ igMetaObject *igPsx2PointSpriteExt_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2PointSpriteExt_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00153260();
+        igPsx2PointSpriteExt_EnsureRegistered();
     return g_igPsx2PointSpriteExt_metaObject;
 }
 
@@ -28,12 +28,12 @@ int igPsx2PointSpriteExt_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00153260(void)
+void igPsx2PointSpriteExt_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2PointSpriteExt_Register);
 }
 
-static igMetaObjectCallback g_igPsx2PointSpriteExt_callbackList[] = { FUN_001511a0, 0 };
+static igMetaObjectCallback g_igPsx2PointSpriteExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2PointSpriteExt_Register(void) {
     FUN_00149bc0();
@@ -42,7 +42,7 @@ CallbackArray *igPsx2PointSpriteExt_Register(void) {
         &g_igPsx2PointSpriteExt_metaObject,
         igPointSpriteExt_Register,
         igPointSpriteExt_GetPublishedMetaObject,
-        thunk_igPsx2PointSpriteExt_GetMetaObject,
+        igPsx2PointSpriteExt_GetMetaObjectFunction,
         "igPsx2PointSpriteExt",
         0x18C, /* instance size */
         igPsx2PointSpriteExt_GetVTable,
@@ -52,7 +52,7 @@ CallbackArray *igPsx2PointSpriteExt_Register(void) {
     );
 }
 
-igMetaObject *FUN_001532f0(void) {
+igMetaObject *igPointSpriteExt_GetPublishedMetaObject(void) {
     return g_igPointSpriteExt_metaObject;
 }
 
@@ -78,7 +78,7 @@ void igPsx2PointSpriteExt_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igPsx2PointSpriteExt_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00150770();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igPsx2VisualContext_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     igMetaObject_NameFields(meta, g_igPsx2PointSpriteExt_fieldTable, g_igPsx2PointSpriteExt_fieldHandles, g_igPsx2PointSpriteExt_fieldOffsets, fieldStart);
 }

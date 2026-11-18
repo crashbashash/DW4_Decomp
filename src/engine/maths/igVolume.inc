@@ -3,13 +3,13 @@ igMetaObject *g_igVolume_metaObject;
 void FUN_00186a40(void) {
     if (g_MathsLibrary_registered == 0) {
         g_MathsLibrary_registered = 1;
-        FUN_00186e40();
-        FUN_00186f70();
+        igVectorMorphing_EnsureRegistered();
+        igVectorBlending_EnsureRegistered();
         FUN_00190370();
     }
 }
 
-igMetaObject *FUN_00186a80(void) {
+igMetaObject *igVolume_GetOrCreateMetaObject(void) {
     if (g_igVolume_metaObject == 0) {
         g_igVolume_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -20,11 +20,11 @@ igMetaObject *igVolume_GetMetaObject(void)
 {
     igMetaObject *g = g_igVolume_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00186b20();
+        igVolume_EnsureRegistered();
     return g_igVolume_metaObject;
 }
 
-void FUN_00186b20(void)
+void igVolume_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igVolume_Register);
 }
@@ -40,7 +40,7 @@ CallbackArray *igVolume_Register(void) {
         &g_igVolume_metaObject,
         igObject_Register,                     /* base class registrar (igObject) */
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igVolume_GetMetaObject,
+        igVolume_GetMetaObjectFunction,
         "igVolume",
         8, /* instance size */
         0,
@@ -50,7 +50,7 @@ CallbackArray *igVolume_Register(void) {
     );
 }
 
-void thunk_igVolume_GetMetaObject(void) {
+void igVolume_GetMetaObjectFunction(void) {
     igVolume_GetMetaObject();
 }
 

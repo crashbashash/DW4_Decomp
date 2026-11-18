@@ -33,7 +33,7 @@ CallbackArray *igAudioContext_Register(void) {
         &g_igAudioContext_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igAudioContext_GetMetaObject,
+        igAudioContext_GetMetaObjectFunction,
         "igAudioContext",
         0xC, /* instance size */
         0,
@@ -43,7 +43,7 @@ CallbackArray *igAudioContext_Register(void) {
     );
 }
 
-void thunk_igAudioContext_GetMetaObject(void) {
+void igAudioContext_GetMetaObjectFunction(void) {
     igAudioContext_GetMetaObject();
 }
 
@@ -69,10 +69,10 @@ void igAudioContext_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAudioContext_ctorTable, 1);
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1), 1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAudioContext_fieldTable, g_igAudioContext_fieldHandles, g_igAudioContext_fieldOffsets, temp_s1);
-    *(int *)((char *)(g_igAudioContext_metaObject) + 60) = (int)(thunk_FUN_00143150);
+    *(int *)((char *)(g_igAudioContext_metaObject) + 60) = (int)(igPsx2AudioContext_GetMetaObjectFunction);
 }
 
-void thunk_FUN_00143150(void) {
-    FUN_00143150();
+void igPsx2AudioContext_GetMetaObjectFunction(void) {
+    igPsx2AudioContext_GetMetaObject();
 }
 

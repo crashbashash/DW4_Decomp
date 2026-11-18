@@ -4,11 +4,11 @@ igMetaObject *igScissorExt_GetMetaObject(void)
 {
     igMetaObject *g = g_igScissorExt_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014bd20();
+        igScissorExt_EnsureRegistered();
     return g_igScissorExt_metaObject;
 }
 
-void FUN_0014bd20(void)
+void igScissorExt_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igScissorExt_Register);
 }
@@ -20,7 +20,7 @@ CallbackArray *igScissorExt_Register(void) {
         &g_igScissorExt_metaObject,
         igContextExt_Register,
         igContextExt_GetPublishedMetaObject,
-        thunk_igScissorExt_GetMetaObject,
+        igScissorExt_GetMetaObjectFunction,
         "igScissorExt",
         0x14, /* instance size */
         0,
@@ -30,7 +30,7 @@ CallbackArray *igScissorExt_Register(void) {
     );
 }
 
-void thunk_igScissorExt_GetMetaObject(void) {
+void igScissorExt_GetMetaObjectFunction(void) {
     igScissorExt_GetMetaObject();
 }
 

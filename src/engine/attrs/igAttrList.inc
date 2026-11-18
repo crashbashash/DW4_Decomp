@@ -1,8 +1,8 @@
 igMetaObject *g_igAttrList_metaObject;
 
-igAttrList *FUN_0013aec0(int allocator) {
+igAttrList *igAttrList_Create(igMemoryPoolView *pool) {
     igAttrList_EnsureRegistered();
-    return (igAttrList *)igMetaObject_CreateInstance(*(igMetaObject * *)0x55F460, (igMemoryPoolView *)allocator);
+    return (igAttrList *)igMetaObject_CreateInstance(g_igAttrList_metaObject, pool);
 }
 
 igMetaObject *igAttrList_GetOrCreateMetaObject(void) {
@@ -33,7 +33,7 @@ void igAttrList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAttrList_Register);
 }
 
-static igMetaObjectCallback g_igAttrList_callbackList[] = { FUN_0013b110, 0 };
+static igMetaObjectCallback g_igAttrList_callbackList[] = { igAttr_EnsureRegistered, 0 };
 
 CallbackArray *igAttrList_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -42,7 +42,7 @@ CallbackArray *igAttrList_Register(void) {
         &g_igAttrList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igAttrList_GetMetaObject,
+        igAttrList_GetMetaObjectFunction,
         "igAttrList",
         0x14, /* instance size */
         igAttrList_GetVTable,
@@ -52,7 +52,7 @@ CallbackArray *igAttrList_Register(void) {
     );
 }
 
-void thunk_igAttrList_GetMetaObject(void) {
+void igAttrList_GetMetaObjectFunction(void) {
     igAttrList_GetMetaObject();
 }
 

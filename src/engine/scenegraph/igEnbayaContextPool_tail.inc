@@ -1,4 +1,4 @@
-void Gap__Sg__igEnbayaContextPool__vfunc_13(int arg0, int flags) {
+void igEnbayaContextPool_resetFields(int arg0, int flags) {
     void *sp5C;
     int var_a0;
     int temp_s2;
@@ -41,7 +41,7 @@ void Gap__Sg__igEnbayaContextPool__vfunc_13(int arg0, int flags) {
     }
 }
 
-void Gap__Sg__igEnbayaContextPool__vfunc_04(Obj_1c1450 *arg0) {
+void igEnbayaContextPool_destructFields(Obj_1c1450 *arg0) {
     int i;
     int n;
     L_1c1450 *inner;

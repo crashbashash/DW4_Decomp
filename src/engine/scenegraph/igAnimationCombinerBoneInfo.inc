@@ -8,8 +8,8 @@ igMetaField *g_igAnimationCombinerBoneInfo_useAnimationTranslationMetaField;
 igMetaField *g_igAnimationCombinerBoneInfo_lastKeyframeMetaField;
 igMetaField *g_igAnimationCombinerBoneInfo_reflectMetaField;
 
-void FUN_001a80b0(int arg0) {
-    FUN_001a8220();
+void igAnimationCombinerBoneInfo_Create(int arg0) {
+    igAnimationCombinerBoneInfo_EnsureRegistered();
     igMetaObject_CreateInstance(g_igAnimationCombinerBoneInfo_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -17,7 +17,7 @@ igMetaObject *igAnimationCombinerBoneInfo_GetMetaObject(void)
 {
     igMetaObject *g = g_igAnimationCombinerBoneInfo_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001a8220();
+        igAnimationCombinerBoneInfo_EnsureRegistered();
     return g_igAnimationCombinerBoneInfo_metaObject;
 }
 
@@ -54,12 +54,12 @@ int igAnimationCombinerBoneInfo_GetVTable(void) {
     return r;
 }
 
-void FUN_001a8220(void)
+void igAnimationCombinerBoneInfo_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igAnimationCombinerBoneInfo_Register);
 }
 
-static igMetaObjectCallback g_igAnimationCombinerBoneInfo_callbackList[] = { FUN_001a6dc0, FUN_00194e70, 0 };
+static igMetaObjectCallback g_igAnimationCombinerBoneInfo_callbackList[] = { igAnimationState_EnsureRegistered, igTransformSource_EnsureRegistered, 0 };
 
 CallbackArray *igAnimationCombinerBoneInfo_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -68,7 +68,7 @@ CallbackArray *igAnimationCombinerBoneInfo_Register(void) {
         &g_igAnimationCombinerBoneInfo_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igAnimationCombinerBoneInfo_GetMetaObject,
+        igAnimationCombinerBoneInfo_GetMetaObjectFunction,
         "igAnimationCombinerBoneInfo",
         0x3C, /* instance size */
         igAnimationCombinerBoneInfo_GetVTable,
@@ -78,7 +78,7 @@ CallbackArray *igAnimationCombinerBoneInfo_Register(void) {
     );
 }
 
-void thunk_igAnimationCombinerBoneInfo_GetMetaObject(void) {
+void igAnimationCombinerBoneInfo_GetMetaObjectFunction(void) {
     igAnimationCombinerBoneInfo_GetMetaObject();
 }
 
@@ -134,10 +134,10 @@ void igAnimationCombinerBoneInfo_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationCombinerBoneInfo_ctorTable, 8);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    *(int *)((char *)(temp_s1) + 56) = (int)FUN_001a6bf0();
+    *(int *)((char *)(temp_s1) + 56) = (int)igAnimationState_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s1) + 36) = 2;
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    *(int *)((char *)(temp_s1_2) + 56) = (int)FUN_00194dd0();
+    *(int *)((char *)(temp_s1_2) + 56) = (int)igTransformSource_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s1_2) + 36) = 2;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6)));
     igIntMetaField_SetDefault((igMetaField *)temp_v0, 1);

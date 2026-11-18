@@ -4,7 +4,7 @@ igMetaObject *igSegment_GetMetaObject(void)
 {
     igMetaObject *g = g_igSegment_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0019ae10();
+        igSegment_EnsureRegistered();
     return g_igSegment_metaObject;
 }
 
@@ -23,7 +23,7 @@ int igSegment_GetVTable(void) {
     return t;
 }
 
-void FUN_0019ae10(void)
+void igSegment_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igSegment_Register);
 }
@@ -35,7 +35,7 @@ CallbackArray *igSegment_Register(void) {
         &g_igSegment_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
-        thunk_igSegment_GetMetaObject,
+        igSegment_GetMetaObjectFunction,
         "igSegment",
         0x20, /* instance size */
         igSegment_GetVTable,
@@ -45,7 +45,7 @@ CallbackArray *igSegment_Register(void) {
     );
 }
 
-void thunk_igSegment_GetMetaObject(void) {
+void igSegment_GetMetaObjectFunction(void) {
     igSegment_GetMetaObject();
 }
 

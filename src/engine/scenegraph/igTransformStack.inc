@@ -1,6 +1,6 @@
 igMetaObject *g_igTransformStack_metaObject;
 
-igMetaObject *FUN_00195fe0(void) {
+igMetaObject *igTransformStack_GetOrCreateMetaObject(void) {
     if (g_igTransformStack_metaObject == 0) {
         g_igTransformStack_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igTransformStack_GetMetaObject(void)
 {
     igMetaObject *g = g_igTransformStack_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_001960c0();
+        igTransformStack_EnsureRegistered();
     return g_igTransformStack_metaObject;
 }
 
@@ -23,7 +23,7 @@ int igTransformStack_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_001960c0(void)
+void igTransformStack_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTransformStack_Register);
 }
@@ -37,7 +37,7 @@ CallbackArray *igTransformStack_Register(void) {
         &g_igTransformStack_metaObject,
         igNonRefCountedObjectStack_Register,
         igNonRefCountedObjectStack_GetPublishedMetaObject,
-        thunk_igTransformStack_GetMetaObject,
+        igTransformStack_GetMetaObjectFunction,
         "igTransformStack",
         0x14, /* instance size */
         igTransformStack_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igTransformStack_Register(void) {
     );
 }
 
-void thunk_igTransformStack_GetMetaObject(void) {
+void igTransformStack_GetMetaObjectFunction(void) {
     igTransformStack_GetMetaObject();
 }
 

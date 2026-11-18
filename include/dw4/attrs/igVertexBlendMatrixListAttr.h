@@ -3,6 +3,8 @@
 
 struct igMetaField;
 struct igMetaObject;
+struct igVertexBlendMatrixListAttr;
+struct igMemoryPoolView;
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,6 +13,7 @@ extern "C" {
 extern struct igMetaObject *g_igVertexBlendMatrixListAttr_metaObject;
 extern struct igMetaField *g_igVertexBlendMatrixListAttr_skeletonTransformMetaField;
 extern struct igMetaField *g_igVertexBlendMatrixListAttr_skeletonInverseTransformMetaField;
+struct igVertexBlendMatrixListAttr *igVertexBlendMatrixListAttr_Create(struct igMemoryPoolView *pool);
 
 #ifdef __cplusplus
 }

@@ -31,7 +31,7 @@ igMetaEnum *FUN_0045c540(void) {
 }
 
 igRotateMode *igRotateMode_Create(int allocator) {
-    FUN_0045c680();
+    igRotateMode_EnsureRegistered();
     return (igRotateMode *)igMetaObject_CreateInstance(g_igRotateMode_metaObject, (igMemoryPoolView *)allocator);
 }
 
@@ -41,7 +41,7 @@ void *igRotateMode_GetMetaObject(void) {
     ok = !!(((S_45c5e0 *)g_igRotateMode_metaObject)->f & 4);
     if (ok != false) goto done;
 make:
-    FUN_0045c680();
+    igRotateMode_EnsureRegistered();
 done:;
     return ((S_45c5e0 *)g_igRotateMode_metaObject);
 }
@@ -55,7 +55,7 @@ int igRotateMode_GetVTable(void) {
     return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
-void FUN_0045c680(void)
+void igRotateMode_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igRotateMode_Register);
 }
@@ -67,7 +67,7 @@ CallbackArray *igRotateMode_Register(void) {
         &g_igRotateMode_metaObject,
         igViewMode_Register,
         igViewMode_GetPublishedMetaObject,
-        thunk_igRotateMode_GetMetaObject,
+        igRotateMode_GetMetaObjectFunction,
         "igRotateMode",
         0x94, /* instance size */
         igRotateMode_GetVTable,
@@ -77,7 +77,7 @@ CallbackArray *igRotateMode_Register(void) {
     );
 }
 
-void thunk_igRotateMode_GetMetaObject(void) {
+void igRotateMode_GetMetaObjectFunction(void) {
     igRotateMode_GetMetaObject();
 }
 

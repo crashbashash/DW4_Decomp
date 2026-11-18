@@ -7,12 +7,12 @@ igMetaField *g_igClut_clutSizeMetaField;
 igMetaField *g_igClut_clutDirtyMetaField;
 igMetaField *g_igClut_isAlphaScaledMetaField;
 
-int FUN_0014fa50(int arg0) {
+int igClut_Create(int arg0) {
     igClut_EnsureRegistered();
     return (int)igMetaObject_CreateInstance(g_igClut_metaObject, (igMemoryPoolView *)arg0);
 }
 
-igMetaObject *FUN_0014fa90(void) {
+igMetaObject *igClut_GetOrCreateMetaObject(void) {
     if (g_igClut_metaObject == 0) {
         g_igClut_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -47,7 +47,7 @@ CallbackArray *igClut_Register(void) {
         &g_igClut_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igClut_GetMetaObject,
+        igClut_GetMetaObjectFunction,
         "igClut",
         0x20, /* instance size */
         igClut_GetVTable,
@@ -57,7 +57,7 @@ CallbackArray *igClut_Register(void) {
     );
 }
 
-void thunk_igClut_GetMetaObject(void) {
+void igClut_GetMetaObjectFunction(void) {
     igClut_GetMetaObject();
 }
 
@@ -122,6 +122,6 @@ void igClut_InitFields(void) {
     *(char *)((char *)(temp_v0_2) + 38) = 0;
     *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart + 6)) + 38) = 0;
     igMetaObject_NameFields(meta, g_igClut_fieldTable, g_igClut_fieldHandles, g_igClut_fieldOffsets, fieldStart);
-    *(int *)((char *)(g_igClut_metaObject) + 60) = (int)(&thunk_igPsx2Clut_GetMetaObject);
+    *(int *)((char *)(g_igClut_metaObject) + 60) = (int)(&igPsx2Clut_GetMetaObjectFunction);
 }
 

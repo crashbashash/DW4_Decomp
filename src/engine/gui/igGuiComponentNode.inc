@@ -1,7 +1,7 @@
 igMetaObject *g_igGuiComponentNode_metaObject;
 igMetaField *g_igGuiComponentNode_componentMetaField;
 
-igMetaObject *FUN_0044f540(void) {
+igMetaObject *igGuiComponentNode_GetOrCreateMetaObject(void) {
     if (g_igGuiComponentNode_metaObject == 0) {
         g_igGuiComponentNode_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }

@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igTextureMatrixStateAttr__vfunc_22(void) {
+igMetaObject *igTextureMatrixStateAttr_GetMeta(void) {
     return g_igTextureMatrixStateAttr_metaObject;
 }
 

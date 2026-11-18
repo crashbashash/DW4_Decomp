@@ -1,16 +1,16 @@
-int Gap__Gfx__igPsx2UserUCodeExt__vfunc_22(void) {
+int igPsx2UserUCodeExt_GetMeta(void) {
     return (int)g_igPsx2UserUCodeExt_metaObject;
 }
 
-int FUN_00180c00(void) {
+int igContextExt_UpdateFrameRateDisplay(void) {
     return 1;
 }
 
-void FUN_00180c10(void) {
+void igContext_DetectDriverDatabaseProperties(void) {
 
 }
 
-int FUN_00180c20(void) {
+int igPsx2PointSpriteExt_GetMeta(void) {
     return (int)g_igPsx2PointSpriteExt_metaObject;
 }
 

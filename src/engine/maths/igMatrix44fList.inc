@@ -36,7 +36,7 @@ CallbackArray *igMatrix44fList_Register(void) {
         &g_igMatrix44fList_metaObject,
         igDataList_Register,
         igDataList_GetPublishedMetaObject,
-        thunk_igMatrix44fList_GetMetaObject,
+        igMatrix44fList_GetMetaObjectFunction,
         "igMatrix44fList",
         0x14, /* instance size */
         igMatrix44fList_GetVTable,
@@ -46,7 +46,7 @@ CallbackArray *igMatrix44fList_Register(void) {
     );
 }
 
-void thunk_igMatrix44fList_GetMetaObject(void) {
+void igMatrix44fList_GetMetaObjectFunction(void) {
     igMatrix44fList_GetMetaObject();
 }
 

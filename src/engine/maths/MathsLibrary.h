@@ -62,20 +62,20 @@ void FUN_00187d00(void);
 void FUN_00188810(void);
 
 
-void FUN_00186e40(void);
-void FUN_00186f70(void);
+void igVectorMorphing_EnsureRegistered(void);
+void igVectorBlending_EnsureRegistered(void);
 void FUN_00190370(void);
 
 
 
 
 
-void FUN_00186b20(void);
+void igVolume_EnsureRegistered(void);
 igMetaObject *igVolume_GetMetaObject(void);
 CallbackArray *igVolume_Register(void);
 
 
-void thunk_igVolume_GetMetaObject(void);
+void igVolume_GetMetaObjectFunction(void);
 void FUN_00186bc0(void);
 
 
@@ -86,7 +86,7 @@ void thunk_FUN_0018f4a0(void);
 void FUN_0018ec40(void);
 void FUN_0018edb0(int meta);
 void FUN_0018f4a0(void);
-void FUN_00186d20(void);
+void igVolumeList_EnsureRegistered(void);
 
 
 igMetaObject *igVolumeList_GetMetaObject(void);
@@ -99,10 +99,10 @@ extern int g_igVolumeList_vtable[4];
 CallbackArray *igVolumeList_Register(void);
 
 
-void thunk_igVolumeList_GetMetaObject(void);
+void igVolumeList_GetMetaObjectFunction(void);
 
 
-igMetaObject *FUN_00186db0(void);
+igMetaObject *igVectorMorphing_GetMetaObject(void);
 
 struct Obj2 { int *vt; int pad; };
 extern int g_igVectorMorphing_vtable[4];
@@ -115,7 +115,7 @@ void FUN_00186ed0(void);
 
 
 void FUN_0018ec10(void);
-igMetaObject *FUN_00186ee0(void);
+igMetaObject *igVectorBlending_GetMetaObject(void);
 
 struct Obj3 { int *vt; char pad[4]; };
 extern int g_igVectorBlending_vtable[4];
@@ -128,7 +128,7 @@ void FUN_00187000(void);
 
 
 void FUN_0018e9b0(void);
-igMetaObject *FUN_00187010(void);
+igMetaObject *igVec4ucMetaField_GetMetaObject(void);
 
 extern int g_igVec4ucMetaField_vtable[4];
 union U { int vt; char b[64]; };
@@ -148,7 +148,7 @@ int FUN_002fbfe0(struct F *);
 extern int g_igVec4fMetaField_vtable[4];
 
 CallbackArray *igVec4fMetaField_Register(void);
-void thunk_igVec4fMetaField_GetMetaObject(void);
+void igVec4fMetaField_GetMetaObjectFunction(void);
 
 
 
@@ -157,10 +157,9 @@ igMetaObject *igVec4fArrayMetaField_GetMetaObject(void);
 extern int g_igVec4fArrayMetaField_vtable[4];
 
 CallbackArray *igVec4fArrayMetaField_Register(void);
-void thunk_igVec4fArrayMetaField_GetMetaObject(void);
+void igVec4fArrayMetaField_GetMetaObjectFunction(void);
 
-extern char igVec4fMetaField_GetPublishedMetaObject[];
-
+igMetaObject *igVec4fMetaField_GetPublishedMetaObject(void);
 void igVec4fArrayMetaField_InitFields(void);
 
 
@@ -171,7 +170,7 @@ struct Obj5 { int *vt; char pad[8]; char *m; char pad2[48]; };
 extern int g_igVec3fMetaField_vtable[4];
 
 CallbackArray *igVec3fMetaField_Register(void);
-void thunk_igVec3fMetaField_GetMetaObject(void);
+void igVec3fMetaField_GetMetaObjectFunction(void);
 
 
 
@@ -181,11 +180,11 @@ typedef struct { int *vt; int p1; int p2; void *str; int pad[12]; } Obj6;
 extern int g_igVec2fMetaField_vtable[4];
 
 CallbackArray *igVec2fMetaField_Register(void);
-void thunk_igVec2fMetaField_GetMetaObject(void);
+void igVec2fMetaField_GetMetaObjectFunction(void);
 
 
 
-void FUN_00187f30(void);
+void igSphere_EnsureRegistered(void);
 
 
 igMetaObject *igSphere_GetMetaObject(void);
@@ -194,10 +193,9 @@ extern int g_igSphere_vtable[4];
 union U2 { int vt; char b[32]; };
 
 CallbackArray *igSphere_Register(void);
-void thunk_igSphere_GetMetaObject(void);
+void igSphere_GetMetaObjectFunction(void);
 
-extern char igVolume_GetPublishedMetaObject[];
-
+igMetaObject *igVolume_GetPublishedMetaObject(void);
 void thunk_FUN_0018d480(void);
 
 
@@ -212,7 +210,7 @@ igMetaObject *igRayList_GetMetaObject(void);
 extern int g_igRayList_vtable[4];
 
 CallbackArray *igRayList_Register(void);
-void thunk_igRayList_GetMetaObject(void);
+void igRayList_GetMetaObjectFunction(void);
 
 
 
@@ -223,19 +221,19 @@ struct Obj7 { int *vt; char pad[44]; };
 extern int g_igRay_vtable[4];
 
 CallbackArray *igRay_Register(void);
-void thunk_igRay_GetMetaObject(void);
+void igRay_GetMetaObjectFunction(void);
 
 
 void igRay_InitFields(void);
 
 
-void FUN_00188520(void);
+void igPlane_EnsureRegistered(void);
 igMetaObject *igPlane_GetMetaObject(void);
 
 extern int g_igPlane_vtable[4];
 
 CallbackArray *igPlane_Register(void);
-void thunk_igPlane_GetMetaObject(void);
+void igPlane_GetMetaObjectFunction(void);
 void thunk_FUN_0018c660(void);
 
 
@@ -250,7 +248,7 @@ igMetaObject *igMatrix44fMetaField_GetMetaObject(void);
 extern int g_igMatrix44fMetaField_vtable[4];
 
 CallbackArray *igMatrix44fMetaField_Register(void);
-void thunk_igMatrix44fMetaField_GetMetaObject(void);
+void igMatrix44fMetaField_GetMetaObjectFunction(void);
 
 
 igMetaObject *igGetCenterFunctionList_GetMetaObject(void);
@@ -260,7 +258,7 @@ extern int g_igGetCenterFunctionList_vtable[4];
 CallbackArray *igGetCenterFunctionList_Register(void);
 
 
-void thunk_igGetCenterFunctionList_GetMetaObject(void);
+void igGetCenterFunctionList_GetMetaObjectFunction(void);
 
 
 igMetaObject *igIsEmptyFunctionList_GetMetaObject(void);
@@ -269,7 +267,7 @@ extern int g_igIsEmptyFunctionList_vtable[4];
 union U3 { int vt; char b[32]; };
 
 CallbackArray *igIsEmptyFunctionList_Register(void);
-void thunk_igIsEmptyFunctionList_GetMetaObject(void);
+void igIsEmptyFunctionList_GetMetaObjectFunction(void);
 
 
 igMetaObject *igEmptyFunctionList_GetMetaObject(void);
@@ -277,7 +275,7 @@ igMetaObject *igEmptyFunctionList_GetMetaObject(void);
 extern int g_igEmptyFunctionList_vtable[4];
 
 CallbackArray *igEmptyFunctionList_Register(void);
-void thunk_igEmptyFunctionList_GetMetaObject(void);
+void igEmptyFunctionList_GetMetaObjectFunction(void);
 
 
 igMetaObject *igTransformFunctionList_GetMetaObject(void);
@@ -285,7 +283,7 @@ igMetaObject *igTransformFunctionList_GetMetaObject(void);
 extern int g_igTransformFunctionList_vtable[4];
 
 CallbackArray *igTransformFunctionList_Register(void);
-void thunk_igTransformFunctionList_GetMetaObject(void);
+void igTransformFunctionList_GetMetaObjectFunction(void);
 
 
 igMetaObject *igContainsVecFunctionList_GetMetaObject(void);
@@ -293,7 +291,7 @@ igMetaObject *igContainsVecFunctionList_GetMetaObject(void);
 extern int g_igContainsVecFunctionList_vtable[4];
 
 CallbackArray *igContainsVecFunctionList_Register(void);
-void thunk_igContainsVecFunctionList_GetMetaObject(void);
+void igContainsVecFunctionList_GetMetaObjectFunction(void);
 
 
 igMetaObject *igExtendByVecFunctionList_GetMetaObject(void);
@@ -301,7 +299,7 @@ igMetaObject *igExtendByVecFunctionList_GetMetaObject(void);
 extern int g_igExtendByVecFunctionList_vtable[4];
 
 CallbackArray *igExtendByVecFunctionList_Register(void);
-void thunk_igExtendByVecFunctionList_GetMetaObject(void);
+void igExtendByVecFunctionList_GetMetaObjectFunction(void);
 
 
 igMetaObject *igContainsRayFunctionList_GetMetaObject(void);
@@ -310,7 +308,7 @@ extern int g_igContainsRayFunctionList_vtable[4];
 union U4 { int vt; char b[32]; };
 
 CallbackArray *igContainsRayFunctionList_Register(void);
-void thunk_igContainsRayFunctionList_GetMetaObject(void);
+void igContainsRayFunctionList_GetMetaObjectFunction(void);
 
 
 igMetaObject *igExtendByRayFunctionList_GetMetaObject(void);
@@ -318,7 +316,7 @@ igMetaObject *igExtendByRayFunctionList_GetMetaObject(void);
 extern int g_igExtendByRayFunctionList_vtable[4];
 
 CallbackArray *igExtendByRayFunctionList_Register(void);
-void thunk_igExtendByRayFunctionList_GetMetaObject(void);
+void igExtendByRayFunctionList_GetMetaObjectFunction(void);
 
 
 igMetaObject *igRayIntersectionFunctionList_GetMetaObject(void);
@@ -326,7 +324,7 @@ igMetaObject *igRayIntersectionFunctionList_GetMetaObject(void);
 extern int g_igRayIntersectionFunctionList_vtable[4];
 
 CallbackArray *igRayIntersectionFunctionList_Register(void);
-void thunk_igRayIntersectionFunctionList_GetMetaObject(void);
+void igRayIntersectionFunctionList_GetMetaObjectFunction(void);
 
 
 igMetaObject *igContainsFunctionList_GetMetaObject(void);
@@ -334,7 +332,7 @@ igMetaObject *igContainsFunctionList_GetMetaObject(void);
 extern int g_igContainsFunctionList_vtable[4];
 
 CallbackArray *igContainsFunctionList_Register(void);
-void thunk_igContainsFunctionList_GetMetaObject(void);
+void igContainsFunctionList_GetMetaObjectFunction(void);
 
 
 igMetaObject *igExtendByFunctionList_GetMetaObject(void);
@@ -343,7 +341,7 @@ typedef struct { int *vt; int pad[7]; } Obj8;
 extern int g_igExtendByFunctionList_vtable[4];
 
 CallbackArray *igExtendByFunctionList_Register(void);
-void thunk_igExtendByFunctionList_GetMetaObject(void);
+void igExtendByFunctionList_GetMetaObjectFunction(void);
 
 
 igMetaObject *igIntersectionFunctionList_GetMetaObject(void);
@@ -351,7 +349,7 @@ igMetaObject *igIntersectionFunctionList_GetMetaObject(void);
 extern int g_igIntersectionFunctionList_vtable[4];
 
 CallbackArray *igIntersectionFunctionList_Register(void);
-void thunk_igIntersectionFunctionList_GetMetaObject(void);
+void igIntersectionFunctionList_GetMetaObjectFunction(void);
 
 
 igMetaObject *igMatrix44fList_GetMetaObject(void);
@@ -359,7 +357,7 @@ igMetaObject *igMatrix44fList_GetMetaObject(void);
 extern int g_igMatrix44fList_vtable[4];
 
 CallbackArray *igMatrix44fList_Register(void);
-void thunk_igMatrix44fList_GetMetaObject(void);
+void igMatrix44fList_GetMetaObjectFunction(void);
 
 extern int igMatrix44fList_InitFields_00189b10[4];
 
@@ -373,19 +371,19 @@ igMetaObject *igQuaternionfList_GetMetaObject(void);
 extern int g_igQuaternionfList_vtable[4];
 
 CallbackArray *igQuaternionfList_Register(void);
-void thunk_igQuaternionfList_GetMetaObject(void);
+void igQuaternionfList_GetMetaObjectFunction(void);
 
 extern int igQuaternionfList_InitFields_00189d80[4];
 
 
 void FUN_00189d80(void);
-void FUN_00189f10(void);
+void igVec4ucList_EnsureRegistered(void);
 igMetaObject *igVec4ucList_GetMetaObject(void);
 
 extern int g_igVec4ucList_vtable[4];
 
 CallbackArray *igVec4ucList_Register(void);
-void thunk_igVec4ucList_GetMetaObject(void);
+void igVec4ucList_GetMetaObjectFunction(void);
 
 extern int igVec4ucList_InitFields_00189fa0[4];
 
@@ -397,19 +395,19 @@ igMetaObject *igVec3fList_GetMetaObject(void);
 extern int g_igVec3fList_vtable[4];
 
 CallbackArray *igVec3fList_Register(void);
-void thunk_igVec3fList_GetMetaObject(void);
+void igVec3fList_GetMetaObjectFunction(void);
 
 extern int igVec3fList_InitFields_0018a210[4];
 
 
 void FUN_0018a210(void);
-void FUN_0018a3a0(void);
+void igVec2fList_EnsureRegistered(void);
 igMetaObject *igVec2fList_GetMetaObject(void);
 
 extern int g_igVec2fList_vtable[4];
 
 CallbackArray *igVec2fList_Register(void);
-void thunk_igVec2fList_GetMetaObject(void);
+void igVec2fList_GetMetaObjectFunction(void);
 
 extern int igVec2fList_InitFields_0018a430[4];
 
@@ -423,7 +421,7 @@ igMetaObject *igAABoxList_GetMetaObject(void);
 extern int g_igAABoxList_vtable[4];
 
 CallbackArray *igAABoxList_Register(void);
-void thunk_igAABoxList_GetMetaObject(void);
+void igAABoxList_GetMetaObjectFunction(void);
 
 
 
@@ -433,7 +431,7 @@ igMetaObject *igAABox_GetMetaObject(void);
 extern int g_igAABox_vtable[4];
 
 CallbackArray *igAABox_Register(void);
-void thunk_igAABox_GetMetaObject(void);
+void igAABox_GetMetaObjectFunction(void);
 void thunk_FUN_0018a8f0(void);
 
 

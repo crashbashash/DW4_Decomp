@@ -20,7 +20,7 @@ recovered. The packs carry serialised `igLightAttr` records, but those are proto
 | `FUN_001fbaf0` | 484 | the tail `p2lighting` calls when the `0x56AFAE` mode is on; appends a 48-byte block and an optional 16-byte record |
 | `p2UpdateLights` | 6684 | the per-frame light updater (calls `FUN_001fb0e0`); also the ambient accumulation in `0x1f9f20` |
 | `FUN_001f8b50` | 2260 | the light-state refresh: fills the index tables `0x56AF30`/`0x56AF38`, the count `0x56AF94` and the enable flags from the pointer table `0x56AF40` |
-| `FUN_001f8490` | 660 | initialises the light-type → program-index table at `0x56AE50` (`0,1,…,10,12,13,20,…,127`) |
+| `p2InitGsRegisterAddresses` | 660 | initialises the light-type → program-index table at `0x56AE50` (`0,1,…,10,12,13,20,…,127`) |
 | `p2SetLight` / `p2SetMaterial` | 108 / 108 | store a light into `p2Lights` (`0x56AF40`) or the material into `p2Materials` (`0x56AF60`) at a caller-supplied slot |
 | `p2SetLightingColor` | 60 | copies a 16-byte colour (the visual context passes its material's `+0x58` vector) into `0x56AEE0`, the block `p2lighting` emits as record 3 |
 | `p2EnableLight` / `p2DisableLight` | 156 / 156 | switch a slot's light on or off, keeping the active-light counts; disabling also empties the slot |
@@ -53,7 +53,7 @@ order:
 
 `state` is `p2Materials[0]` (`*(void **)0x56AF60`), the visual context's current material: ambient
 at `+0`, diffuse `+16`, specular `+32`, emission `+48`, shininess `+64`, flags `+68`, its slot at `+80`
-(the layout `Gap__Gfx__igPsx2VisualContext__vfunc_112` fills from an `igMaterialAttr`). So record 0
+(the layout `igPsx2VisualContext_SetMaterial` fills from an `igMaterialAttr`). So record 0
 carries the emission, records 1 and 2 the ambient and diffuse colours, and record A's `w` the
 shininess. `L` is the light descriptor for this iteration:
 `idx = ((uint8_t *)0x56AF38)[i]`, `L = ((void **)0x56AF40)[idx]`; a NULL `L` is skipped. The loop
@@ -95,7 +95,7 @@ record D on `+0x20` (`_ambient`), record B on `+0x70` (`_shininess` + `_cachedPo
 as a **direction**.
 
 That last point is the honest limit of the mapping: **the runtime descriptor is not the serialised
-`igLightAttr`.** Its array stride is **160 bytes** (`0x00a0`, `Gap__Gfx__igPsx2VisualContext__vfunc_79`), it has no `igObject`
+`igLightAttr`.** Its array stride is **160 bytes** (`0x00a0`, `igPsx2VisualContext_SetLightState`), it has no `igObject`
 vtable at `+0` and no reflection record, and its fields carry measured roles rather than declared
 names:
 
@@ -103,9 +103,9 @@ names:
 | --- | --- |
 | `+0x10` | 4 words, accumulated by the ambient pass and emitted as record C |
 | `+0x20` | 4 words, emitted as record D; `+0x2c` is the "no-flag" `w` |
-| `+0x40..0x48` | vec3 copied from the scene source (`Gap__Gfx__igPsx2VisualContext__vfunc_90`) |
+| `+0x40..0x48` | vec3 copied from the scene source (`igPsx2VisualContext_SetLightDirection`) |
 | `+0x50` | an index (used by `FUN_001f72330`) and `+0x54` a `w` for record D |
-| `+0x60..0x68` | a **normalised direction** (`Gap__Gfx__igPsx2VisualContext__vfunc_90` negates the source, transforms and normalises) |
+| `+0x60..0x68` | a **normalised direction** (`igPsx2VisualContext_SetLightDirection` negates the source, transforms and normalises) |
 | `+0x6c` | capability/flag word (`& 8` clears a bit and marks the state dirty) |
 | `+0x70` | 4 words: the light position for the matrix path / record B |
 | `+0x84`, `+0x90`, `+0x94`, `+0x98` | `w`, registration index, enabled bool, direction mode (0 or 2) |
@@ -144,7 +144,7 @@ so the records are prototypes, not the running values.
 | `0x56AFD0` | `p2LightMatrix` | mat4 | the **light matrix** (identity in every state observed) |
 | `0x56AEE0` | `p2LightingColor` | 16 B | the colour emitted as record 3 (`p2SetLightingColor`) |
 | `0x56AED0` | `p2LightingMode` | int | lighting mode 1/5 (`p2SetLightingMode`) |
-| `0x56AE50` | | u8[?] | light-type → program-index table (`FUN_001f8490`) |
+| `0x56AE50` | | u8[?] | light-type → program-index table (`p2InitGsRegisterAddresses`) |
 | `0x554BC0` | `p2LightingEnabled` | bool | lighting on (`p2EnableLighting`) |
 | `0x554BC4` | `p2LightsNeedTransform` | bool | set by `p2UpdateLights`; the unlit path then rotates the lights (object-space programs) or raises `p2LightCalcPending` |
 | `0x491270` | `p2LightsChanged` | int | any light, material or mode changed; the refresh rebuilds the tables |
@@ -160,7 +160,7 @@ A lit draw's colour depends on **how many hardware matrix uploads came since the
 light and the normal. Recovered from the asm, a retail savestate (stag0001 practice stage) and a retail GS dump (confirmed for the
 stag0001 values; the generalisation and the event model are unconfirmed):
 
-1. **Eye-space light, once per light apply.** `igLightAttr::apply` (`0x0013eb10`) calls `Gap__Gfx__igPsx2VisualContext__vfunc_90`, which stores descriptor `+0x60 =
+1. **Eye-space light, once per light apply.** `igLightAttr::apply` (`0x0013eb10`) calls `igPsx2VisualContext_SetLightDirection`, which stores descriptor `+0x60 =
    normalise(-src_dir x getMatrix(1))`, the source direction times the model-view top. The `igLightAttr` itself keeps its authored
    `_direction`; nothing on the EE accumulates. In the practice stage the descriptor reads `(0, 0.98499, 0.17261)` while the attribute
    still holds `(0.3214, -0.866, 0.383)`.
@@ -169,7 +169,7 @@ stag0001 values; the generalisation and the event model are unconfirmed):
 3. **Pending flag.** `FUN_001fbce0` is the single hardware matrix upload (type 0 model-view, 3 projection, 4 texture, 5, 2); every
    type leaves through `0x1fc010..0x1fc018` with `p2LightCalcPending` (`0x56B5F8`) `= 1`. Only the model-view type also calls `FUN_001fb0e0(-1)`, which
    re-emits a **fresh** light block (returning early when `p2DirtyFlags & 4`, the lighting-dirty bit, is set).
-4. **Draw submit.** `p2CallDisplayList` (clones `p2SubmitVertices`, `p2SubmitIndexedVertices`, `FUN_001fe390`) tests `p2LightCalcPending == 1`; if set it appends
+4. **Draw submit.** `p2CallDisplayList` (clones `p2SubmitVertices`, `p2SubmitIndexedVertices`, `p2DrawParticles`) tests `p2LightCalcPending == 1`; if set it appends
    a 32-byte record (VIF `6001002b`, one word `DAT_0056b604` = `0x3a` to VU1 `mem[43]`), clears `DAT_0056afc8` and the flag. The flag
    is a boolean consumed by the next draw: two uploads before one draw count once.
 5. **VU1.** `EXECUTE_RENDERLIST` reads `mem[43]`, zeroes it and jumps to `0x3a` (the `EXECUTE_PRE_PATH` chain that runs the `CALC_*`

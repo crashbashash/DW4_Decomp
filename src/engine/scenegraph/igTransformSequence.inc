@@ -99,7 +99,7 @@ void igTransformSequence1_5_InitFields(void) {
     t5->_num = 3;
     igLongMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 7), -1);
     temp_s0_5 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 8));
-    temp_s0_5->_metaObject = (int)FUN_001a24f0();
+    temp_s0_5->_metaObject = (int)igCompressedTransformSequence1_5Data_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s1, g_igTransformSequence1_5_fieldTable, g_igTransformSequence1_5_fieldHandles, g_igTransformSequence1_5_fieldOffsets, temp_s2);
 }
 
@@ -111,11 +111,11 @@ igMetaObject *igTransformSequence_GetMetaObject(void)
 {
     igMetaObject *g = g_igTransformSequence_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00195580();
+        igTransformSequence_EnsureRegistered();
     return g_igTransformSequence_metaObject;
 }
 
-void FUN_00195580(void)
+void igTransformSequence_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTransformSequence_Register);
 }
@@ -129,7 +129,7 @@ CallbackArray *igTransformSequence_Register(void) {
         &g_igTransformSequence_metaObject,
         igTransformSource_Register,
         igTransformSource_GetPublishedMetaObject,
-        thunk_igTransformSequence_GetMetaObject,
+        igTransformSequence_GetMetaObjectFunction,
         "igTransformSequence",
         0x38, /* instance size */
         0,
@@ -139,11 +139,11 @@ CallbackArray *igTransformSequence_Register(void) {
     );
 }
 
-void thunk_igTransformSequence_GetMetaObject(void) {
+void igTransformSequence_GetMetaObjectFunction(void) {
     igTransformSequence_GetMetaObject();
 }
 
-igMetaObject *FUN_00195610(void) {
+igMetaObject *igTransformSource_GetPublishedMetaObject(void) {
     return g_igTransformSource_metaObject;
 }
 
@@ -211,7 +211,7 @@ void igTransformSequence_InitFields(void) {
     temp_s2->f56 = (int)igVec3fList_GetOrCreateMetaObject();
     temp_s2->f52 = 1;
     temp_s2_2 = ((struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1));
-    temp_s2_2->f56 = FUN_00189c10();
+    temp_s2_2->f56 = igQuaternionfList_GetOrCreateMetaObject();
     temp_s2_2->f52 = 1;
     temp_s2_3 = ((struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2));
     temp_s2_3->f56 = (int)igVec3fList_GetOrCreateMetaObject();
@@ -232,6 +232,6 @@ void igTransformSequence_InitFields(void) {
     sp40[2] = 0;
     igVec3fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)sp40);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igTransformSequence_fieldTable, g_igTransformSequence_fieldHandles, g_igTransformSequence_fieldOffsets, temp_s1);
-    *(int *)((char *)(g_igTransformSequence_metaObject) + 60) = (int)(thunk_FUN_00194ef0);
+    *(int *)((char *)(g_igTransformSequence_metaObject) + 60) = (int)(igTransformSequence1_5_GetMetaObjectFunction);
 }
 

@@ -23,7 +23,7 @@ igMetaField *g_igViewerStatisticsManager_geometryAttrCountMetaField;
 igMetaField *g_igViewerStatisticsManager_geometrySetAttrCountMetaField;
 igMetaField *g_igViewerStatisticsManager_mvmAttrCountMetaField;
 
-igMetaObject *FUN_004586a0(void) {
+igMetaObject *igViewerStatisticsManager_GetOrCreateMetaObject(void) {
     if (g_igViewerStatisticsManager_metaObject == 0) {
         g_igViewerStatisticsManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }

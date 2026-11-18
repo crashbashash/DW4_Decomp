@@ -20,7 +20,7 @@ CallbackArray *igBase_Register(void) {
         &g_igBase_metaObject,
         (igMetaObjectRegisterFunction)igInterfaced_Register,
         (igMetaObjectGetFunction)igInterfaced_GetPublishedMetaObject,
-        thunk_igBase_GetMetaObject,
+        igBase_GetMetaObjectFunction,
         "igBase",
         0x20, /* instance size */
         0,
@@ -30,7 +30,7 @@ CallbackArray *igBase_Register(void) {
     );
 }
 
-void thunk_igBase_GetMetaObject(void) {
+void igBase_GetMetaObjectFunction(void) {
     igBase_GetMetaObject();
 }
 

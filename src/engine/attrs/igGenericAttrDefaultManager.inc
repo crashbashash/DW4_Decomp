@@ -1,15 +1,15 @@
 igMetaObject *g_igGenericAttrDefaultManager_metaObject;
 
-void FUN_00137ab0(int arg0) {
-    FUN_00137b80();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F1C0, (igMemoryPoolView *)arg0);
+igGenericAttrDefaultManager *igGenericAttrDefaultManager_Create(igMemoryPoolView *pool) {
+    igGenericAttrDefaultManager_EnsureRegistered();
+    return (igGenericAttrDefaultManager *)igMetaObject_CreateInstance(g_igGenericAttrDefaultManager_metaObject, pool);
 }
 
 igMetaObject *igGenericAttrDefaultManager_GetMetaObject(void)
 {
     igMetaObject *g = g_igGenericAttrDefaultManager_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00137b80();
+        igGenericAttrDefaultManager_EnsureRegistered();
     return g_igGenericAttrDefaultManager_metaObject;
 }
 
@@ -21,7 +21,7 @@ int igGenericAttrDefaultManager_GetVTable(void) {
     return *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00137b80(void)
+void igGenericAttrDefaultManager_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igGenericAttrDefaultManager_Register);
 }
@@ -33,7 +33,7 @@ CallbackArray *igGenericAttrDefaultManager_Register(void) {
         &g_igGenericAttrDefaultManager_metaObject,
         igAttrDefaultManager_Register,
         igAttrDefaultManager_GetPublishedMetaObject,
-        thunk_igGenericAttrDefaultManager_GetMetaObject,
+        igGenericAttrDefaultManager_GetMetaObjectFunction,
         "igGenericAttrDefaultManager",
         8, /* instance size */
         igGenericAttrDefaultManager_GetVTable,
@@ -43,7 +43,7 @@ CallbackArray *igGenericAttrDefaultManager_Register(void) {
     );
 }
 
-void thunk_igGenericAttrDefaultManager_GetMetaObject(void) {
+void igGenericAttrDefaultManager_GetMetaObjectFunction(void) {
     igGenericAttrDefaultManager_GetMetaObject();
 }
 

@@ -13,7 +13,7 @@ igMetaField *g_igAnimation_startTimeMetaField;
 igMetaField *g_igAnimation_durationMetaField;
 igMetaField *g_igAnimation_useAnimationTransBoolArrayMetaField;
 
-igMetaObject *FUN_001a9130(void) {
+igMetaObject *igAnimation_GetOrCreateMetaObject(void) {
     if (g_igAnimation_metaObject == 0) {
         g_igAnimation_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -46,10 +46,10 @@ int igAnimation_GetVTable(void) {
     *(int *)&u.b[56] = 0;
     temp_s = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igAnimation_vtable[0];
-    FUN_00196a50((struct R * *)&u.b[56], -1);
-    FUN_0019de50((struct Ref * *)p104, -1);
-    FUN_0019ded0((void * *)p100, -1);
-    FUN_0019df50((O *)p96, -1);
+    igSmartPointer_igBitMask_Destruct((igSmartPointer<igObject> *)&u.b[56], -1);
+    igSmartPointer_igAnimationTransitionDefinitionList_Destruct((igSmartPointer<igObject> *)p104, -1);
+    igSmartPointer_igAnimationTrackList_Destruct((igSmartPointer<igObject> *)p100, -1);
+    igSmartPointer_igAnimationBindingList_Destruct((igSmartPointer<igObject> *)p96, -1);
     igNamedObject_Destroy((igNamedObject *)u.b, 0);
     return temp_s;
 }
@@ -68,7 +68,7 @@ CallbackArray *igAnimation_Register(void) {
         &g_igAnimation_metaObject,
         igNamedObject_Register,
         igNamedObject_GetPublishedMetaObject,
-        thunk_igAnimation_GetMetaObject,
+        igAnimation_GetMetaObjectFunction,
         "igAnimation",
         0x40, /* instance size */
         igAnimation_GetVTable,
@@ -78,7 +78,7 @@ CallbackArray *igAnimation_Register(void) {
     );
 }
 
-void thunk_igAnimation_GetMetaObject(void) {
+void igAnimation_GetMetaObjectFunction(void) {
     igAnimation_GetMetaObject();
 }
 
@@ -124,27 +124,27 @@ static int g_igAnimation_fieldOffsets[] = {
 };
 
 void igAnimation_InitFields(void) {
-    int temp_s0;
-    void *temp_s2;
-    void *temp_s2_2;
-    void *temp_s2_3;
-    void *temp_s2_4;
-    void *temp_s1;
+    int base;
+    void *bindingListField;
+    void *trackListField;
+    void *transitionListField;
+    void *useAnimationTransBoolArrayField;
+    void *meta;
 
-    temp_s1 = (void *)g_igAnimation_metaObject;
-    temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
-    igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igAnimation_ctorTable, 8);
-    temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_001a8ac0();
-    ((igRefMetaField *)temp_s2)->_construct = 1;
-    temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)FUN_001a9d90();
-    ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)FUN_001a9420();
-    ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)FUN_001a4d90();
-    igMetaObject_NameFields((igMetaObject *)temp_s1, g_igAnimation_fieldTable, g_igAnimation_fieldHandles, g_igAnimation_fieldOffsets, temp_s0);
+    meta = (void *)g_igAnimation_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igAnimation_ctorTable, 8);
+    bindingListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
+    ((igObjectRefMetaField *)bindingListField)->_metaObject = (int)igAnimationBindingList_GetOrCreateMetaObject();
+    ((igRefMetaField *)bindingListField)->_construct = 1;
+    trackListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
+    ((igObjectRefMetaField *)trackListField)->_metaObject = (int)igAnimationTrackList_GetOrCreateMetaObject();
+    ((igRefMetaField *)trackListField)->_construct = 1;
+    transitionListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
+    ((igObjectRefMetaField *)transitionListField)->_metaObject = (int)igAnimationTransitionDefinitionList_GetOrCreateMetaObject();
+    ((igRefMetaField *)transitionListField)->_construct = 1;
+    useAnimationTransBoolArrayField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7)));
+    ((igObjectRefMetaField *)useAnimationTransBoolArrayField)->_metaObject = (int)igBitMask_GetOrCreateMetaObject();
+    igMetaObject_NameFields((igMetaObject *)meta, g_igAnimation_fieldTable, g_igAnimation_fieldHandles, g_igAnimation_fieldOffsets, base);
 }
 

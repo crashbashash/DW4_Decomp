@@ -64,7 +64,7 @@ CallbackArray *igItemDataBaseField_Register(void) {
         &g_igItemDataBaseField_metaObject,
         (igMetaObjectRegisterFunction)igCompoundMetaField_Register,
         (igMetaObjectGetFunction)igCompoundMetaField_GetPublishedMetaObject,
-        thunk_igItemDataBaseField_GetMetaObject,
+        igItemDataBaseField_GetMetaObjectFunction,
         "igItemDataBaseField",
         0x38, /* instance size */
         igItemDataBaseField_GetVTable,
@@ -74,7 +74,7 @@ CallbackArray *igItemDataBaseField_Register(void) {
     );
 }
 
-void thunk_igItemDataBaseField_GetMetaObject(void) {
+void igItemDataBaseField_GetMetaObjectFunction(void) {
     igItemDataBaseField_GetMetaObject();
 }
 
@@ -110,7 +110,7 @@ int Gap__igItemDataBaseField__vfunc_25(void) {
     return 0xC;
 }
 
-void Gap__igItemDataBaseField__vfunc_11(void *arg0) {
+void igItemDataBaseField_InitDefaults(void *arg0) {
     FUN_002285d0(*(int *)((char *)arg0 + 52));
 }
 

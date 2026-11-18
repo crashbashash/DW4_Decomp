@@ -2,7 +2,7 @@ igMetaObject *igPsx2DisableExt_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2DisableExt_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00154040();
+        igPsx2DisableExt_EnsureRegistered();
     return g_igPsx2DisableExt_metaObject;
 }
 
@@ -44,12 +44,12 @@ int igPsx2DisableExt_GetVTable(void) {
     return r;
 }
 
-void FUN_00154040(void)
+void igPsx2DisableExt_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2DisableExt_Register);
 }
 
-static igMetaObjectCallback g_igPsx2DisableExt_callbackList[] = { FUN_001511a0, 0 };
+static igMetaObjectCallback g_igPsx2DisableExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2DisableExt_Register(void) {
     FUN_00149bc0();
@@ -58,7 +58,7 @@ CallbackArray *igPsx2DisableExt_Register(void) {
         &g_igPsx2DisableExt_metaObject,
         igDisableExt_Register,
         igDisableExt_GetPublishedMetaObject,
-        thunk_igPsx2DisableExt_GetMetaObject,
+        igPsx2DisableExt_GetMetaObjectFunction,
         "igPsx2DisableExt",
         0x18, /* instance size */
         igPsx2DisableExt_GetVTable,
@@ -68,7 +68,7 @@ CallbackArray *igPsx2DisableExt_Register(void) {
     );
 }
 
-igMetaObject *FUN_001540d0(void) {
+igMetaObject *igDisableExt_GetPublishedMetaObject(void) {
     return g_igDisableExt_metaObject;
 }
 
@@ -94,7 +94,7 @@ void igPsx2DisableExt_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igPsx2DisableExt_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_00150770();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igPsx2VisualContext_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     igMetaObject_NameFields(meta, g_igPsx2DisableExt_fieldTable, g_igPsx2DisableExt_fieldHandles, g_igPsx2DisableExt_fieldOffsets, fieldStart);
 }

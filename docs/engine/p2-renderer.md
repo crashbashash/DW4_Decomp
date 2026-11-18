@@ -13,10 +13,10 @@ memory-mapped register:
 | --- | --- | --- |
 | `p2StoreImage` | 924 | `dma_spr`, `dmac`, `dmac_ctrl`, `vif1`, `vu1_regs` |
 | `p2StartDmaPacket` | 560 | `dmac` |
-| `FUN_001f8190` | 400 | `gs` |
+| `p2writeGSPrivRegister` | 400 | `gs` |
 | `p2readGSPrivRegister` | 320 | `gs` |
 | `p2StartTimers` | 656 | `timer` |
-| `FUN_001f8350` | 308 | `dma_spr` |
+| `p2InitGsInterrupt` | 308 | `dma_spr` |
 
 So the whole backend is register-free except for the DMA kicks, one GS-to-memory transfer and two GS
 accessors; the rest of the layer is ordinary code building data for those. The tool's `vu1_regs` block
@@ -60,7 +60,7 @@ registered per channel (`p2Vif0DmaHandler`, `p2Vif1DmaHandler`, `p2GifDmaHandler
 
 ### Reading a GS buffer back
 
-`Gap__Gfx__igPsx2VisualContext__vfunc_172` copies a VRAM buffer into an image through `FUN_00203c50` (a
+`igPsx2VisualContext_CopyRenderDestinationToMemory` copies a VRAM buffer into an image through `FUN_00203c50` (a
 palettised buffer) or `FUN_00203580`. Both write a GS local-to-host transfer into the current VIF1
 packet (`BITBLTBUF`, `TRXPOS`, `TRXREG`, then `TRXDIR = 1`), store the destination and its size in
 quadwords in the packet's `storeImageTarget` and set its `storeImage` flag. Without a
@@ -136,7 +136,7 @@ what they are.
 
 `igPsx2VisualContext_CreateTexture` pops a free index from the `_pTexList` pool (`+0x144`) and fills a 0x88-byte record: the
 primary descriptor goes to `+0x48`, the secondary to `+0x4c`, and `+0x84` = 2. `p2LoadTexture`
-(`0x20c270`) allocates from the `FUN_00208210` pool (global `0x56c0c8`) and writes image argument
+(`0x20c270`) allocates from the `p2AllocTextureRecord` pool (global `0x56c0c8`) and writes image argument
 `+0x30`, px `+0x3c`, py `+0x3e`, format `+0x42`, TBW (`(px+0x3f)>>6`) in word 2 bits 14-19, a size at
 `+0x40` and size-1 clamped to 0x1f at `+0x44`. On this path its image argument is 0, because the pixels
 are already in VRAM.

@@ -2,7 +2,7 @@ igMetaObject *igPsx2VertexStream_GetMetaObject(void)
 {
     igMetaObject *g = g_igPsx2VertexStream_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00152050();
+        igPsx2VertexStream_EnsureRegistered();
     return g_igPsx2VertexStream_metaObject;
 }
 
@@ -48,7 +48,7 @@ int igPsx2VertexStream_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00152050(void)
+void igPsx2VertexStream_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igPsx2VertexStream_Register);
 }
@@ -60,7 +60,7 @@ CallbackArray *igPsx2VertexStream_Register(void) {
         &g_igPsx2VertexStream_metaObject,
         igVertexStream_Register,
         igVertexStream_GetPublishedMetaObject,
-        thunk_igPsx2VertexStream_GetMetaObject,
+        igPsx2VertexStream_GetMetaObjectFunction,
         "igPsx2VertexStream",
         0x90, /* instance size */
         igPsx2VertexStream_GetVTable,
@@ -70,7 +70,7 @@ CallbackArray *igPsx2VertexStream_Register(void) {
     );
 }
 
-igMetaObject *FUN_001520e0(void) {
+igMetaObject *igVertexStream_GetPublishedMetaObject(void) {
     return g_igVertexStream_metaObject;
 }
 

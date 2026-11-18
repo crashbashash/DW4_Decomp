@@ -20,7 +20,7 @@ CallbackArray *igIterator_Register(void) {
         &g_igIterator_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igIterator_GetMetaObject,
+        igIterator_GetMetaObjectFunction,
         "igIterator",
         8, /* instance size */
         0,
@@ -30,11 +30,11 @@ CallbackArray *igIterator_Register(void) {
     );
 }
 
-void thunk_igIterator_GetMetaObject(void) {
+void igIterator_GetMetaObjectFunction(void) {
     igIterator_GetMetaObject();
 }
 
-igMetaObject *FUN_00227450(void) {
+igMetaObject *igIterator_GetPublishedMetaObject(void) {
     return g_igIterator_metaObject;
 }
 

@@ -1,4 +1,4 @@
-void Gap__Gui__igFieldChangeView__vfunc_24(void *arg0, void *arg1) {
+void igFieldChangeView_OnModelChange(void *arg0, void *arg1) {
     int temp_a0;
 
     if ((*(int *)((char *)arg1 + 0) == 0) || (*(int *)((char *)arg0 + 16) == *(int *)((char *)arg1 + 8))) {
@@ -24,7 +24,7 @@ void FUN_004551f0(void *arg0v, int arg1, void *arg2v) {
     A_4551f0 *arg0 = (A_4551f0 *)arg0v;
     Rc_4551f0 *arg2 = (Rc_4551f0 *)arg2v;
     Ref_4551f0 sp4C;
-    sp4C.p = (Rc_4551f0 *)FUN_00450de0((int)(igObject_GetAllocator((igObject *)arg0v)));
+    sp4C.p = (Rc_4551f0 *)igFieldChangeView_Create((int)(igObject_GetAllocator((igObject *)arg0v)));
     ObjectList_AppendRetained((igObjectList *)arg0->f8, (igObject *)sp4C.p);
     sp4C.p->f12 = (int)arg0;
     Rc_4551f0 *t = sp4C.p;

@@ -1,4 +1,4 @@
-int Gap__Gfx__igVertexData__vfunc_22(void) {
+int igVertexData_GetMeta(void) {
     return (int)g_igVertexData_metaObject;
 }
 

@@ -1,4 +1,4 @@
-int Gap__Gfx__igPsx2DecalExt__vfunc_22(void)
+int igPsx2DecalExt_GetMeta(void)
 {
     return (int)g_igPsx2DecalExt_metaObject;
 }

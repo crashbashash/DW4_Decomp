@@ -179,10 +179,7 @@ typedef struct p2BlendEquation {
 int DeleteThread();
 int RemoveDmacHandler();
 int TerminateThread();
-void FUN_001f76f0(int count, int *regs);
-int FUN_00202300();
-int FUN_00203500();
-int FUN_00208200();
+#include "dw4/p2/renderState.h"
 
 void p2SetCapability(int capability, int on);
 void p2UploadFog(void);
@@ -740,7 +737,7 @@ void p2SetScissor(int x, int y, int width, int height) {
     if (p2Display.renderTarget < 0) {
         bufferHeight = antialias != 0 ? p2Display.antialiasHeight : p2Display.height;
     } else {
-        bufferHeight = FUN_00208200(p2Display.renderTarget);
+        bufferHeight = p2GetTextureHeight((P2Texture *)p2Display.renderTarget);
     }
     bottom = bufferHeight - y - 1;
     right = x + width - 1;
@@ -1173,7 +1170,7 @@ void p2Clear(int mask, unsigned int colour, int depth) {
         if (p2Display.renderTarget < 0) {
             height = antialias != 0 ? p2Display.antialiasHeight : p2Display.height;
         } else {
-            height = FUN_00208200(p2Display.renderTarget);
+            height = p2GetTextureHeight((P2Texture *)p2Display.renderTarget);
         }
         prmode = p2CurrentGsRegisters->prmode.word;
         test = p2CurrentGsRegisters->test[0].word;
@@ -1207,7 +1204,7 @@ void p2Clear(int mask, unsigned int colour, int depth) {
             p2CurrentGsRegisters->rgbaq.field.g = (colour >> 8) & 0xff;
             p2CurrentGsRegisters->rgbaq.field.b = (colour >> 16) & 0xff;
             p2CurrentGsRegisters->rgbaq.field.a = (colour >> 24) & 0xff;
-            FUN_001f76f0(8, p2ClearRegisters);
+            p2UploadGsRegisters(8, p2ClearRegisters);
             if (p2ClearWidth != 0) {
                 p2DrawClearSprites(p2ClearWidth, height, depth);
             } else {
@@ -1339,7 +1336,7 @@ void p2InitVuPrograms(const char *programList, const char *symbolTable) {
     if (programList != 0 && p2OpenVu1Symbols(symbolTable, (int)&p2VuMicrocode) != 0) {
         p2ParseVuProgramList(programList);
         p2CloseVu1Symbols();
-        FUN_00202300();
+        p2SetupProgramVariants();
     }
 }
 
@@ -1840,7 +1837,7 @@ void p2CloseDisplay(void) {
         TerminateThread(p2WatchdogThread);
         DeleteThread(p2WatchdogThread);
         p2FreeVuProgramNames();
-        FUN_00203500();
+        p2FreeVariantTables();
         p2ShutdownDmaChannels();
         p2FreePool(P2_POOL_IMAGE, 0);
         p2FreePool(P2_POOL_FINISH, 0);

@@ -10,7 +10,7 @@ igMetaField *g_igTransformSequence1_5_keyframeTimeOffsetMetaField;
 igMetaField *g_igTransformSequence1_5_animationDurationMetaField;
 igMetaField *g_igTransformSequence1_5_compressedDataObjectMetaField;
 
-igMetaObject *FUN_00194ef0(void)
+igMetaObject *igTransformSequence1_5_GetMetaObject(void)
 {
     igMetaObject *g = g_igTransformSequence1_5_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
@@ -34,7 +34,7 @@ int igTransformSequence1_5_GetVTable(void) {
     obj.w[23] = 0;
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igTransformSequence1_5_vtable[0];
-    FUN_00195210((ObjectRefWord *)&obj.w[23], -1);
+    igSmartPointer_igCompressedTransformSequence1_5Data_Destruct((ObjectRefWord *)&obj.w[23], -1);
     igSmartPointer_igVec3fList_Destruct((igSmartPointer<igObject> *)&obj.w[16], -1);
     igSmartPointer_igVec3fList_Destruct((igSmartPointer<igObject> *)&obj.w[15], -1);
     igSmartPointer_igVec3fList_Destruct((igSmartPointer<igObject> *)&obj.w[14], -1);
@@ -70,7 +70,7 @@ igSmartPointer<igObject> *igSmartPointer_igLongList_Destruct(igSmartPointer<igOb
     return self;
 }
 
-ObjectRefWord *FUN_00195210(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igCompressedTransformSequence1_5Data_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {
@@ -88,7 +88,7 @@ void igTransformSequence1_5_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTransformSequence1_5_Register);
 }
 
-static igMetaObjectCallback g_igTransformSequence1_5_callbackList[] = { igLongList_EnsureRegistered, igVec3fList_EnsureRegistered, FUN_001a2640, 0 };
+static igMetaObjectCallback g_igTransformSequence1_5_callbackList[] = { igLongList_EnsureRegistered, igVec3fList_EnsureRegistered, igCompressedTransformSequence1_5Data_EnsureRegistered, 0 };
 
 CallbackArray *igTransformSequence1_5_Register(void) {
     SceneGraphLibrary_MarkRegistered();  /* Shared set-once latch run before every registration of this family. */
@@ -97,7 +97,7 @@ CallbackArray *igTransformSequence1_5_Register(void) {
         &g_igTransformSequence1_5_metaObject,
         igTransformSequence_Register,
         igTransformSequence_GetPublishedMetaObject,
-        thunk_FUN_00194ef0,
+        igTransformSequence1_5_GetMetaObjectFunction,
         "igTransformSequence1_5",
         sizeof(igTransformSequence1_5),                      /* Instance size. */
         igTransformSequence1_5_GetVTable,
@@ -107,7 +107,7 @@ CallbackArray *igTransformSequence1_5_Register(void) {
     );
 }
 
-void thunk_FUN_00194ef0(void) {
-    FUN_00194ef0();
+void igTransformSequence1_5_GetMetaObjectFunction(void) {
+    igTransformSequence1_5_GetMetaObject();
 }
 

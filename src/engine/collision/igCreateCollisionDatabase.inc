@@ -11,7 +11,7 @@ igMetaObject *igCreateCollisionDatabase_GetMetaObject(void)
 {
     igMetaObject *g = g_igCreateCollisionDatabase_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_002395b0();
+        igCreateCollisionDatabase_EnsureRegistered();
     return g_igCreateCollisionDatabase_metaObject;
 }
 
@@ -51,12 +51,12 @@ O *FUN_00239530(O *arg0, short arg1) {
     return arg0;
 }
 
-void FUN_002395b0(void)
+void igCreateCollisionDatabase_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igCreateCollisionDatabase_Register);
 }
 
-static igMetaObjectCallback g_igCreateCollisionDatabase_callbackList[] = { igMetaObject_EnsureRegistered, FUN_0023a340, 0 };
+static igMetaObjectCallback g_igCreateCollisionDatabase_callbackList[] = { igMetaObject_EnsureRegistered, igCollisionGrid_EnsureRegistered, 0 };
 
 CallbackArray *igCreateCollisionDatabase_Register(void) {
     CollisionLibrary_MarkRegistered();
@@ -65,7 +65,7 @@ CallbackArray *igCreateCollisionDatabase_Register(void) {
         &g_igCreateCollisionDatabase_metaObject,
         igOptBase_Register,
         igOptBase_GetPublishedMetaObject,
-        thunk_igCreateCollisionDatabase_GetMetaObject,
+        igCreateCollisionDatabase_GetMetaObjectFunction,
         "igCreateCollisionDatabase",
         0x44, /* instance size */
         igCreateCollisionDatabase_GetVTable,
@@ -75,7 +75,7 @@ CallbackArray *igCreateCollisionDatabase_Register(void) {
     );
 }
 
-void thunk_igCreateCollisionDatabase_GetMetaObject(void) {
+void igCreateCollisionDatabase_GetMetaObjectFunction(void) {
     igCreateCollisionDatabase_GetMetaObject();
 }
 
@@ -137,7 +137,7 @@ void igCreateCollisionDatabase_InitFields(void) {
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 4), 1);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 5), 0);
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_0023a080();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)igCollisionGrid_GetOrCreateMetaObject();
     ((igMetaField *)temp_s1_3)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCreateCollisionDatabase_fieldTable, g_igCreateCollisionDatabase_fieldHandles, g_igCreateCollisionDatabase_fieldOffsets, temp_s2);
 }

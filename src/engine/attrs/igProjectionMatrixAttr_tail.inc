@@ -1,8 +1,8 @@
-void Gap__Attrs__igProjectionMatrixAttr__vfunc_24(char * arg0, igPsx2VisualContext *arg1) {
-    Gap__Gfx__igPsx2VisualContext__vfunc_203(arg1, 0, (char *)(arg0 + 12));
+void igProjectionMatrixAttr_apply(char * arg0, igPsx2VisualContext *arg1) {
+    igPsx2VisualContext_SetMatrix(arg1, 0, (char *)(arg0 + 12));
 }
 
-void Gap__Attrs__igProjectionMatrixAttr__vfunc_26(igProjectionMatrixAttr *self, igObject *context)
+void igProjectionMatrixAttr_SynchronizeDefault(igProjectionMatrixAttr *self, igObject *context)
 {
     float m[16];
 
@@ -11,7 +11,7 @@ void Gap__Attrs__igProjectionMatrixAttr__vfunc_26(igProjectionMatrixAttr *self, 
     ((MatrixAttrSlots *)self)->setMatrix(m);
 }
 
-void Gap__Attrs__igProjectionMatrixAttr__vfunc_32(igProjectionMatrixAttr *self, const float *matrix) {
+void igProjectionMatrixAttr_SetMatrix(igProjectionMatrixAttr *self, const float *matrix) {
     igMatrix44f_Copy(self->_m, matrix);
 }
 

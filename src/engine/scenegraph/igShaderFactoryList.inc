@@ -1,6 +1,6 @@
 igMetaObject *g_igShaderFactoryList_metaObject;
 
-igMetaObject *FUN_00198fa0(void) {
+igMetaObject *igShaderFactoryList_GetOrCreateMetaObject(void) {
     if (g_igShaderFactoryList_metaObject == 0) {
         g_igShaderFactoryList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -28,7 +28,7 @@ void igShaderFactoryList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igShaderFactoryList_Register);
 }
 
-static igMetaObjectCallback g_igShaderFactoryList_callbackList[] = { FUN_001994d0, 0 };
+static igMetaObjectCallback g_igShaderFactoryList_callbackList[] = { igShaderFactory_EnsureRegistered, 0 };
 
 CallbackArray *igShaderFactoryList_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ CallbackArray *igShaderFactoryList_Register(void) {
         &g_igShaderFactoryList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igShaderFactoryList_GetMetaObject,
+        igShaderFactoryList_GetMetaObjectFunction,
         "igShaderFactoryList",
         0x14, /* instance size */
         igShaderFactoryList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igShaderFactoryList_Register(void) {
     );
 }
 
-void thunk_igShaderFactoryList_GetMetaObject(void) {
+void igShaderFactoryList_GetMetaObjectFunction(void) {
     igShaderFactoryList_GetMetaObject();
 }
 

@@ -12,7 +12,7 @@ void igInsightCore_AddInfo(igInsightCore *self, igObject *info) {
     ObjectList_AppendRetained((igObjectList *)self->_infoList, info);
 }
 
-void FUN_002370c0(igInsightCore *arg0) {
+void igInsightCore_RemoveAllInfos(igInsightCore *arg0) {
     igObjectList *l;
     int n2;
     int j;
@@ -47,7 +47,8 @@ void FUN_002370c0(igInsightCore *arg0) {
     }
 }
 
-void FUN_002371f0(S_2371f0 *arg0) {
+void igInsightCore_Begin(igInsightCore *core) {
+    S_2371f0 *arg0 = (S_2371f0 *)core;
     unsigned int i;
 
     arg0->f64 = 0;
@@ -58,7 +59,8 @@ void FUN_002371f0(S_2371f0 *arg0) {
     arg0->f48->vY();
 }
 
-void FUN_00237280(int *arg0) {
+void igInsightCore_End(igInsightCore *core) {
+    int *arg0 = (int *)core;
     unsigned int i;
     struct Q *q;
 
@@ -68,7 +70,7 @@ void FUN_00237280(int *arg0) {
     }
 }
 
-void Gap__Insight__igInsightCore__vfunc_13(struct A_237300 *arg0, int flags) {
+void igInsightCore_resetFields(struct A_237300 *arg0, int flags) {
     Gap__Core__igObject__resetFields((igObject *)arg0, flags);
     StringRef_237300 first("Clear done");
     StringRef_237300 second("Scenes done");
@@ -85,14 +87,15 @@ void Gap__Insight__igInsightCore__vfunc_13(struct A_237300 *arg0, int flags) {
     igEventDispatcher_AddReceiver((igEventDispatcher *)arg0->f32, (igObject *)arg0->f36);
 }
 
-void FUN_00237530(OO *arg0) {
+void igInsightCore_InitializeDrawing(igInsightCore *core) {
+    OO *arg0 = (OO *)core;
     int temp_s1;
     int var_s0;
     R_237530 *t;
     R_237530 *s0;
 
     if (arg0->f20 == 0) {
-        igSmartPointer<igWindow> display = Viewer_CreateDisplay(0);
+        igSmartPointer<igWindow> display = igInsightCore_CreateWindow(0);
         s0 = (R_237530 *)display.p;
         if (s0 != 0) {
             s0->rc = s0->rc + 1;
@@ -127,7 +130,8 @@ void FUN_00237530(OO *arg0) {
     }
 }
 
-void FUN_002376b0(struct H *arg0) {
+void igInsightCore_TerminateDrawing(igInsightCore *core) {
+    struct H *arg0 = (struct H *)core;
     int n;
     int i;
 
@@ -135,10 +139,11 @@ void FUN_002376b0(struct H *arg0) {
     for (i = 0; i < n; i++) {
         FUN_00457ca0(arg0->m->list->items[i], 0);
     }
-    FUN_0013c110();
+    igAttrPool_UserUnregister();
 }
 
-void FUN_00237730(S_237730 *arg0) {
+void igInsightCore_HandleEvents(igInsightCore *core) {
+    S_237730 *arg0 = (S_237730 *)core;
     long long t = arg0->f48->vX();
     arg0->f64 = t - arg0->f56;
     arg0->f56 = t;
@@ -147,7 +152,8 @@ void FUN_00237730(S_237730 *arg0) {
     arg0->f12->vX();
 }
 
-void FUN_002377c0(ProfilerState *t) {
+void igInsightCore_DrawFrame(igInsightCore *core) {
+    ProfilerState *t = (ProfilerState *)core;
     int n;
     int i;
     long long s2;

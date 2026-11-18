@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igTextureAttr__vfunc_22(void) {
+igMetaObject *igTextureAttr_GetMeta(void) {
     return g_igTextureAttr_metaObject;
 }
 

@@ -1,6 +1,6 @@
 igMetaObject *g_igAnimationTrackList_metaObject;
 
-igMetaObject *FUN_001a9d90(void) {
+igMetaObject *igAnimationTrackList_GetOrCreateMetaObject(void) {
     if (g_igAnimationTrackList_metaObject == 0) {
         g_igAnimationTrackList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -37,7 +37,7 @@ CallbackArray *igAnimationTrackList_Register(void) {
         &g_igAnimationTrackList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igAnimationTrackList_GetMetaObject,
+        igAnimationTrackList_GetMetaObjectFunction,
         "igAnimationTrackList",
         0x14, /* instance size */
         igAnimationTrackList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igAnimationTrackList_Register(void) {
     );
 }
 
-void thunk_igAnimationTrackList_GetMetaObject(void) {
+void igAnimationTrackList_GetMetaObjectFunction(void) {
     igAnimationTrackList_GetMetaObject();
 }
 

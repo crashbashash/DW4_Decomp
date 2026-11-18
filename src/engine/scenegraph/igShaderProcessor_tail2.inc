@@ -1,8 +1,8 @@
-int Gap__Sg__igShaderProcessor__vfunc_24(void *arg0, void *arg1) {
+int igShaderProcessor_Configure(void *arg0, void *arg1) {
     return *(int *)((char *)(*(int *)((char *)(*(int *)((char *)(arg1) + 36)) + 8)) + 8) > 0;
 }
 
-void Gap__Sg__igShaderProcessor__vfunc_25(void) {
+void igShaderProcessor_Update(void) {
 
 }
 

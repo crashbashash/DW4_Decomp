@@ -28,7 +28,7 @@ CallbackArray *igListenerBase_Register(void) {
         &g_igListenerBase_metaObject,
         (igMetaObjectRegisterFunction)igBase_Register,
         (igMetaObjectGetFunction)igBase_GetPublishedMetaObject,
-        thunk_igListenerBase_GetMetaObject,
+        igListenerBase_GetMetaObjectFunction,
         "igListenerBase",
         0x20, /* instance size */
         igListenerBase_GetVTable,
@@ -38,7 +38,7 @@ CallbackArray *igListenerBase_Register(void) {
     );
 }
 
-void thunk_igListenerBase_GetMetaObject(void) {
+void igListenerBase_GetMetaObjectFunction(void) {
     igListenerBase_GetMetaObject();
 }
 

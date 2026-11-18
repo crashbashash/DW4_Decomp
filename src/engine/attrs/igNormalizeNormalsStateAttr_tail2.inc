@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igNormalizeNormalsStateAttr__vfunc_22(void) {
+igMetaObject *igNormalizeNormalsStateAttr_GetMeta(void) {
     return g_igNormalizeNormalsStateAttr_metaObject;
 }
 

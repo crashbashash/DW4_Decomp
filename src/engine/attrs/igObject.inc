@@ -1,4 +1,4 @@
-void **FUN_001353b0(void **arg0, short arg1) {
+void **igSmartPointer_igGeometryAttr_Destruct(void **arg0, short arg1) {
     int *r;
     if (arg0 != 0) {
         r = (int *)*arg0;

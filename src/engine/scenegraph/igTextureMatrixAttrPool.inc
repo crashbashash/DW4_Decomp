@@ -1,6 +1,6 @@
 igMetaObject *g_igTextureMatrixAttrPool_metaObject;
 
-igMetaObject *FUN_00199b60(void) {
+igMetaObject *igTextureMatrixAttrPool_GetOrCreateMetaObject(void) {
     if (g_igTextureMatrixAttrPool_metaObject == 0) {
         g_igTextureMatrixAttrPool_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igTextureMatrixAttrPool_GetMetaObject(void)
 {
     igMetaObject *g = g_igTextureMatrixAttrPool_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00199c40();
+        igTextureMatrixAttrPool_EnsureRegistered();
     return g_igTextureMatrixAttrPool_metaObject;
 }
 
@@ -23,7 +23,7 @@ int igTextureMatrixAttrPool_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00199c40(void)
+void igTextureMatrixAttrPool_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igTextureMatrixAttrPool_Register);
 }
@@ -37,7 +37,7 @@ CallbackArray *igTextureMatrixAttrPool_Register(void) {
         &g_igTextureMatrixAttrPool_metaObject,
         igObjectPool_Register,
         igObjectPool_GetPublishedMetaObject,
-        thunk_igTextureMatrixAttrPool_GetMetaObject,
+        igTextureMatrixAttrPool_GetMetaObjectFunction,
         "igTextureMatrixAttrPool",
         0x20, /* instance size */
         igTextureMatrixAttrPool_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igTextureMatrixAttrPool_Register(void) {
     );
 }
 
-void thunk_igTextureMatrixAttrPool_GetMetaObject(void) {
+void igTextureMatrixAttrPool_GetMetaObjectFunction(void) {
     igTextureMatrixAttrPool_GetMetaObject();
 }
 

@@ -57,7 +57,7 @@ inferred from the value, not shown.
 EE Timer 1 count (0x10000800)  ─ p2ReadNanoseconds ─▶ 100 ns ticks (u64) ×100
    ─ igPsx2LongTimer::vfunc_37 (0x0032dab0) ─▶ raw time
    ─ igPsx2LongTimer::vfunc_26 (0x00330af0) ─▶ timer time  (paused flag at +0x20; base at +8; frozen value at +0x10)
-   ─ FUN_00237730 (clock update) ─▶ sys+0x38 sample, +0x40 delta, +0x50 clock
+   ─ igInsightCore_HandleEvents (clock update) ─▶ sys+0x38 sample, +0x40 delta, +0x50 clock
    ─ read by Action2 as (beAction2+0xc → sys)+0x50
 ```
 
@@ -66,13 +66,13 @@ EE Timer 1 count (0x10000800)  ─ p2ReadNanoseconds ─▶ 100 ns ticks (u64) �
 | Hardware read | `0x0020d290` (`p2ReadNanoseconds`) | **[static]** `lw 0x1000_0800` (T1_COUNT); `cvt` to float; `× f32 @ gp−32696`; truncate to u32; `+ u64 @ 0x0056c190`; then `×25×4` = **×100** into the out-parameter |
 | Raw source | `0x0032dab0` `igPsx2LongTimer::vfunc_37` | **[static]** calls `0x0020d290` and returns the u64 |
 | Timer time | `0x00330af0` `igPsx2LongTimer::vfunc_26` | **[static]** if byte `+0x20` ≠ 0 return `+0x10`, else `+0x10 + vfunc_37() − +8` |
-| Clock update | `0x00237730` `FUN_00237730` | **[static]** see below; the writer found for `sys+0x50` |
+| Clock update | `0x00237730` `igInsightCore_HandleEvents` | **[static]** see below; the writer found for `sys+0x50` |
 | Caller | `0x00463bc0` `ViewerSetup_Update` | **[static]** `jal 0x237730` with `a0 = *(this+0)` |
 
 `gp` is `0x0055c870` (entry code `0x001001bc`), so the float is at `0x005548b8` and the
 accumulator at `0x0056c190`.
 
-`FUN_00237730` (`this` is the clock object at `0x006e98d8`):
+`igInsightCore_HandleEvents` (`this` is the clock object at `0x006e98d8`):
 
 ```
 now      = this->timer(+0x30)->vfunc_26()          # virtual slot +104

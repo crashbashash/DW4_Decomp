@@ -29,11 +29,11 @@ void FUN_001c51d0(void) {
     }
 }
 
-void Gap__Bec__ParticleTimer__vfunc_15(ParticleTimer *arg0) {
+void igGeometry_UserPostLoad(ParticleTimer *arg0) {
     void *temp_a0;
     int temp_a1;
 
-    FUN_001c5b80((SgLinkNode *)arg0);
+    igGroup_UserPostLoad((SgLinkNode *)arg0);
     temp_a0 = (void *)(*(int *)((char *)arg0 + *(int *)((char *)(DAT_00562768[0]) + 8)));
     temp_a1 = arg0->_flags;
     if (temp_a1 & 8) {
@@ -47,7 +47,7 @@ void Gap__Bec__ParticleTimer__vfunc_15(ParticleTimer *arg0) {
     *(int *)((char *)(temp_a0) + 24) = 0;
 }
 
-void Gap__Bec__ParticleTimer__vfunc_27(ParticleTimer *arg0, int arg1) {
+void igGeometry_SetFlags(ParticleTimer *arg0, int arg1) {
     void *temp_a0;
 
     arg0->_flags = arg1;
@@ -63,7 +63,7 @@ void Gap__Bec__ParticleTimer__vfunc_27(ParticleTimer *arg0, int arg1) {
     *(int *)((char *)(temp_a0) + 24) = 0;
 }
 
-void Gap__Bec__ParticleTimer__vfunc_26(ParticleTimer *arg0, int arg1, int arg2) {
+void igGeometry_EnableFlags(ParticleTimer *arg0, int arg1, int arg2) {
     int temp_a2;
     int *temp_a0;
 
@@ -85,7 +85,7 @@ void Gap__Bec__ParticleTimer__vfunc_26(ParticleTimer *arg0, int arg1, int arg2) 
     temp_a0[6] = 0;
 }
 
-void Gap__Bec__ParticleTimer__vfunc_25(ParticleTimer *arg0, int arg1) {
+void igGeometry_Transform(ParticleTimer *arg0, int arg1) {
     igObjectList *temp_s3 = (igObjectList *)arg0->_attributes;
     unsigned int temp_s2 = temp_s3->_count;
     unsigned int var_s1;
@@ -117,7 +117,7 @@ unsigned int Gap__Bec__ParticleTimer__getTriangleCount(ParticleTimer *self)
     triangles = 0;
     count = attrs->_count;
     i = 0;
-    /* matching construct: retail enters the loop through a zero-trip guard placed after the return (as FUN_001c5b80) */
+    /* matching construct: retail enters the loop through a zero-trip guard placed after the return (as igGroup_UserPostLoad) */
     goto guard;
 next:
     geom = ((igGeometryAttr **)attrs->_data)[i];
@@ -136,7 +136,7 @@ guard:
     goto done;
 }
 
-void Gap__Bec__ParticleTimer__vfunc_29(ParticleAttributeObj *arg0) {
+void igGeometry_Reset(ParticleAttributeObj *arg0) {
     /* matching construct: a typed view of the receiver declared first; a cast at each use changes how the compiler hoists the field address */
     ParticleTimer *self = (ParticleTimer *)arg0;
     unsigned temp_s1;

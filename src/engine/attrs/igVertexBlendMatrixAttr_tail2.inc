@@ -1,4 +1,4 @@
-igMetaObject *Gap__Attrs__igVertexBlendMatrixAttr__vfunc_22(void) {
+igMetaObject *igVertexBlendMatrixAttr_GetMeta(void) {
     return g_igVertexBlendMatrixAttr_metaObject;
 }
 

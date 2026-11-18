@@ -150,7 +150,7 @@ CallbackArray *igTransformRecorder_Register(void) {
         &g_igTransformRecorder_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
-        thunk_igTransformRecorder_GetMetaObject,
+        igTransformRecorder_GetMetaObjectFunction,
         "igTransformRecorder",
         0xA0, /* instance size */
         igTransformRecorder_GetVTable,
@@ -160,7 +160,7 @@ CallbackArray *igTransformRecorder_Register(void) {
     );
 }
 
-void thunk_igTransformRecorder_GetMetaObject(void) {
+void igTransformRecorder_GetMetaObjectFunction(void) {
     igTransformRecorder_GetMetaObject();
 }
 
@@ -182,12 +182,12 @@ static int g_igTransformRecorder_fieldOffsets[] = {
 };
 
 void igTransformRecorder_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
+    int base;
+    void *meta;
 
-    temp_s0 = (void *)g_igTransformRecorder_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igTransformRecorder_ctorTable, 2);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igTransformRecorder_fieldTable, g_igTransformRecorder_fieldHandles, g_igTransformRecorder_fieldOffsets, temp_s1);
+    meta = (void *)g_igTransformRecorder_metaObject;
+    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
+    igMetaObject_CreateFields((igMetaObject *)meta, g_igTransformRecorder_ctorTable, 2);
+    igMetaObject_NameFields((igMetaObject *)meta, g_igTransformRecorder_fieldTable, g_igTransformRecorder_fieldHandles, g_igTransformRecorder_fieldOffsets, base);
 }
 

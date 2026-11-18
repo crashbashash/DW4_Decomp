@@ -4,12 +4,12 @@ igMetaField *g_igTextureMatrixAttr_unitIDMetaField;
 igMetaField *g_igTextureMatrixAttr_outputElementCountMetaField;
 igMetaField *g_igTextureMatrixAttr_isProjectiveMetaField;
 
-void FUN_001317c0(int arg0) {
+igTextureMatrixAttr *igTextureMatrixAttr_Create(igMemoryPoolView *pool) {
     igTextureMatrixAttr_EnsureRegistered();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55ECD8, (igMemoryPoolView *)arg0);
+    return (igTextureMatrixAttr *)igMetaObject_CreateInstance(g_igTextureMatrixAttr_metaObject, pool);
 }
 
-igMetaObject *FUN_00131800(void) {
+igMetaObject *igTextureMatrixAttr_GetOrCreateMetaObject(void) {
     if (g_igTextureMatrixAttr_metaObject == 0) {
         g_igTextureMatrixAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -45,7 +45,7 @@ CallbackArray *igTextureMatrixAttr_Register(void) {
         &g_igTextureMatrixAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igTextureMatrixAttr_GetMetaObject,
+        igTextureMatrixAttr_GetMetaObjectFunction,
         "igTextureMatrixAttr",
         0x54, /* instance size */
         igTextureMatrixAttr_GetVTable,
@@ -55,7 +55,7 @@ CallbackArray *igTextureMatrixAttr_Register(void) {
     );
 }
 
-void thunk_igTextureMatrixAttr_GetMetaObject(void) {
+void igTextureMatrixAttr_GetMetaObjectFunction(void) {
     igTextureMatrixAttr_GetMetaObject();
 }
 
@@ -86,19 +86,19 @@ static int g_igTextureMatrixAttr_fieldOffsets[] = {
 
 void igTextureMatrixAttr_InitFields(void) {
     struct M o1;
-    int temp_s2;
+    int base;
     struct V o2;
     struct V o3;
     struct Fld *fld;
-    void *temp_s1;
+    void *field;
     struct V o4;
     struct V o5;
-    igMetaObject *temp_s0;
+    igMetaObject *meta;
 
-    temp_s0 = g_igTextureMatrixAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igTextureMatrixAttr_ctorTable, 4);
-    temp_s1 = igMetaObject_GetFieldAt(temp_s0, temp_s2);
+    meta = g_igTextureMatrixAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igTextureMatrixAttr_ctorTable, 4);
+    field = igMetaObject_GetFieldAt(meta, base);
     o5.x = 0;
     o5.y = 0;
     o5.z = 0;
@@ -116,11 +116,11 @@ void igTextureMatrixAttr_InitFields(void) {
     o2.z = 0;
     o2.w = 0;
     igMatrix44f_FromRows((float *)&o1, (igVec4f *)&o2, (igVec4f *)&o3, (igVec4f *)&o4, (igVec4f *)&o5);
-    FUN_0018c640(temp_s1, &o1);
-    fld = (Fld *)igMetaObject_GetFieldAt(temp_s0, temp_s2 + 1);
-    fld->f48 = (int)FUN_00141520;
-    igShortMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), -1);
-    igMetaObject_NameFields(temp_s0, g_igTextureMatrixAttr_fieldTable, g_igTextureMatrixAttr_fieldHandles, g_igTextureMatrixAttr_fieldOffsets, temp_s2);
+    FUN_0018c640(field, &o1);
+    fld = (Fld *)igMetaObject_GetFieldAt(meta, base + 1);
+    ((igMetaField *)fld)->_invarianceFunction = (int)igTextureMatrixAttr_SynchronizeCachedUnitID;
+    igShortMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 2), -1);
+    igMetaObject_NameFields(meta, g_igTextureMatrixAttr_fieldTable, g_igTextureMatrixAttr_fieldHandles, g_igTextureMatrixAttr_fieldOffsets, base);
 }
 
 igSmartPointer<igObject> *igSmartPointer_igTextureList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {

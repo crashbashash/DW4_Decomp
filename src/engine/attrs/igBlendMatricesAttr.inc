@@ -3,16 +3,16 @@ igMetaField *g_igBlendMatricesAttr_matrixCacheMetaField;
 igMetaField *g_igBlendMatricesAttr_currentMatrixCountMetaField;
 igMetaField *g_igBlendMatricesAttr_matrixCacheCapacityMetaField;
 
-void FUN_00139c10(int arg0) {
-    FUN_00139ce0();
-    igMetaObject_CreateInstance(*(igMetaObject * *)0x55F388, (igMemoryPoolView *)arg0);
+igBlendMatricesAttr *igBlendMatricesAttr_Create(igMemoryPoolView *pool) {
+    igBlendMatricesAttr_EnsureRegistered();
+    return (igBlendMatricesAttr *)igMetaObject_CreateInstance(g_igBlendMatricesAttr_metaObject, pool);
 }
 
 igMetaObject *igBlendMatricesAttr_GetMetaObject(void)
 {
     igMetaObject *g = g_igBlendMatricesAttr_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00139ce0();
+        igBlendMatricesAttr_EnsureRegistered();
     return g_igBlendMatricesAttr_metaObject;
 }
 
@@ -24,7 +24,7 @@ int igBlendMatricesAttr_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00139ce0(void)
+void igBlendMatricesAttr_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igBlendMatricesAttr_Register);
 }
@@ -36,7 +36,7 @@ CallbackArray *igBlendMatricesAttr_Register(void) {
         &g_igBlendMatricesAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igBlendMatricesAttr_GetMetaObject,
+        igBlendMatricesAttr_GetMetaObjectFunction,
         "igBlendMatricesAttr",
         0x18, /* instance size */
         igBlendMatricesAttr_GetVTable,
@@ -46,7 +46,7 @@ CallbackArray *igBlendMatricesAttr_Register(void) {
     );
 }
 
-void thunk_igBlendMatricesAttr_GetMetaObject(void) {
+void igBlendMatricesAttr_GetMetaObjectFunction(void) {
     igBlendMatricesAttr_GetMetaObject();
 }
 
@@ -72,18 +72,18 @@ static int g_igBlendMatricesAttr_fieldOffsets[] = {
 };
 
 void igBlendMatricesAttr_InitFields(void) {
-    int temp_s2;
-    void *temp_s1;
-    igMetaObject *temp_s0;
+    int base;
+    void *field;
+    igMetaObject *meta;
 
-    temp_s0 = g_igBlendMatricesAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igBlendMatricesAttr_ctorTable, 3);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    ((igMemoryRefMetaField *)temp_s1)->_memType = FUN_001888e0();
-    ((igRefMetaField *)temp_s1)->_destruct = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;
-    igMetaObject_NameFields(temp_s0, g_igBlendMatricesAttr_fieldTable, g_igBlendMatricesAttr_fieldHandles, g_igBlendMatricesAttr_fieldOffsets, temp_s2);
+    meta = g_igBlendMatricesAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igBlendMatricesAttr_ctorTable, 3);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    ((igMemoryRefMetaField *)field)->_memType = FUN_001888e0();
+    ((igRefMetaField *)field)->_destruct = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
+    ((igMemoryRefMetaField *)field)->_releaseOnReset = 1;
+    igMetaObject_NameFields(meta, g_igBlendMatricesAttr_fieldTable, g_igBlendMatricesAttr_fieldHandles, g_igBlendMatricesAttr_fieldOffsets, base);
 }
 

@@ -36,7 +36,7 @@ CallbackArray *igGeometryList_Register(void) {
         &g_igGeometryList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igGeometryList_GetMetaObject,
+        igGeometryList_GetMetaObjectFunction,
         "igGeometryList",
         0x14, /* instance size */
         igGeometryList_GetVTable,
@@ -46,7 +46,7 @@ CallbackArray *igGeometryList_Register(void) {
     );
 }
 
-void thunk_igGeometryList_GetMetaObject(void) {
+void igGeometryList_GetMetaObjectFunction(void) {
     igGeometryList_GetMetaObject();
 }
 

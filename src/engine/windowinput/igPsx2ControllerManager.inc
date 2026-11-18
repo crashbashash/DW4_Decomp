@@ -1,4 +1,4 @@
-void thunk_igPsx2ControllerManager_GetMetaObject(void) {
+void igPsx2ControllerManager_GetMetaObjectFunction(void) {
     igPsx2ControllerManager_GetMetaObject();
 }
 

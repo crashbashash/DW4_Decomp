@@ -1,6 +1,6 @@
 igMetaObject *g_igInfoManagerList_metaObject;
 
-igMetaObject *FUN_00233750(void) {
+igMetaObject *igInfoManagerList_GetOrCreateMetaObject(void) {
     if (g_igInfoManagerList_metaObject == 0) {
         g_igInfoManagerList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -11,7 +11,7 @@ igMetaObject *igInfoManagerList_GetMetaObject(void)
 {
     igMetaObject *g = g_igInfoManagerList_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00233830();
+        igInfoManagerList_EnsureRegistered();
     return g_igInfoManagerList_metaObject;
 }
 
@@ -23,12 +23,12 @@ int igInfoManagerList_GetVTable(void) {
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
-void FUN_00233830(void)
+void igInfoManagerList_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igInfoManagerList_Register);
 }
 
-static igMetaObjectCallback g_igInfoManagerList_callbackList[] = { FUN_00233910, 0 };
+static igMetaObjectCallback g_igInfoManagerList_callbackList[] = { igInfoManager_EnsureRegistered, 0 };
 
 CallbackArray *igInfoManagerList_Register(void) {
     InsightLibrary_MarkRegistered();
@@ -37,7 +37,7 @@ CallbackArray *igInfoManagerList_Register(void) {
         &g_igInfoManagerList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igInfoManagerList_GetMetaObject,
+        igInfoManagerList_GetMetaObjectFunction,
         "igInfoManagerList",
         0x14, /* instance size */
         igInfoManagerList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igInfoManagerList_Register(void) {
     );
 }
 
-void thunk_igInfoManagerList_GetMetaObject(void) {
+void igInfoManagerList_GetMetaObjectFunction(void) {
     igInfoManagerList_GetMetaObject();
 }
 

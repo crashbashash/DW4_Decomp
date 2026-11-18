@@ -5,7 +5,7 @@ igMetaField *g_igIndexArray_dataSizeMetaField;
 igMetaField *g_igIndexArray_usageFlagsMetaField;
 igMetaField *g_igIndexArray_memPoolMetaField;
 
-igMetaObject *FUN_0014d7f0(void) {
+igMetaObject *igIndexArray_GetOrCreateMetaObject(void) {
     if (g_igIndexArray_metaObject == 0) {
         g_igIndexArray_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -34,7 +34,7 @@ CallbackArray *igIndexArray_Register(void) {
         &g_igIndexArray_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igIndexArray_GetMetaObject,
+        igIndexArray_GetMetaObjectFunction,
         "igIndexArray",
         0x1C, /* instance size */
         0,
@@ -44,7 +44,7 @@ CallbackArray *igIndexArray_Register(void) {
     );
 }
 
-void thunk_igIndexArray_GetMetaObject(void) {
+void igIndexArray_GetMetaObjectFunction(void) {
     igIndexArray_GetMetaObject();
 }
 
@@ -78,30 +78,30 @@ static int g_igIndexArray_fieldOffsets[] = {
 };
 
 void igIndexArray_InitFields(void) {
-    void *temp_s1;
-    void *temp_s1_2;
+    void *dataField;
+    void *memoryPoolField;
     int fieldStart;
-    void *temp_v0;
+    void *dataSizeField;
     igMetaObject *meta;
 
     meta = g_igIndexArray_metaObject;
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igIndexArray_ctorTable, 5);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igMemoryRefMetaField *)temp_s1)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
-    ((igMemoryRefMetaField *)temp_s1)->_destruct = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
-    ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_001493e0);
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 4));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
-    ((igMetaField *)temp_s1_2)->_resetMethod = 3;
-    ((igMetaField *)temp_s1_2)->_persistent = 0;
-    ((igMetaField *)temp_s1_2)->_deepCopyMethod = 1;
-    ((igMetaField *)temp_s1_2)->_shallowCopyMethod = 1;
+    dataField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
+    ((igMemoryRefMetaField *)dataField)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)dataField)->_destruct = 1;
+    ((igMemoryRefMetaField *)dataField)->_releaseOnCopy = 1;
+    ((igMemoryRefMetaField *)dataField)->_releaseOnReset = 1;
+    dataSizeField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
+    igEnumMetaField_SetDefaultValue((igMetaField *)dataSizeField, 0);
+    ((igEnumMetaField *)dataSizeField)->_getMetaEnumFunction = (int)(&IG_GFX_INDEX_DATA_SIZE_GetMetaEnum);
+    memoryPoolField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 4));
+    ((igObjectRefMetaField *)memoryPoolField)->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
+    ((igMetaField *)memoryPoolField)->_resetMethod = 3;
+    ((igMetaField *)memoryPoolField)->_persistent = 0;
+    ((igMetaField *)memoryPoolField)->_deepCopyMethod = 1;
+    ((igMetaField *)memoryPoolField)->_shallowCopyMethod = 1;
     igMetaObject_NameFields(meta, g_igIndexArray_fieldTable, g_igIndexArray_fieldHandles, g_igIndexArray_fieldOffsets, fieldStart);
-    ((igMetaObject *)g_igIndexArray_metaObject)->_abstractProxy = (int)(&thunk_igPsx2IndexArray_GetMetaObject);
+    ((igMetaObject *)g_igIndexArray_metaObject)->_abstractProxy = (int)(&igPsx2IndexArray_GetMetaObjectFunction);
 }
 

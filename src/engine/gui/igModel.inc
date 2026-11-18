@@ -1,7 +1,7 @@
 igMetaObject *g_igModel_metaObject;
 igMetaField *g_igModel_viewsMetaField;
 
-igMetaObject *FUN_0044d5d0(void) {
+igMetaObject *igModel_GetOrCreateMetaObject(void) {
     if (g_igModel_metaObject == 0) {
         g_igModel_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -87,7 +87,7 @@ void igModel_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igModel_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)FUN_0044b880();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igNonRefCountedViewList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igModel_fieldTable, g_igModel_fieldHandles, g_igModel_fieldOffsets, temp_s2);
 }

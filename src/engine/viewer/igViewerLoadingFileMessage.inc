@@ -52,7 +52,7 @@ CallbackArray *igViewerLoadingFileMessage_Register(void) {
         &g_igViewerLoadingFileMessage_metaObject,
         igMessage_Register,
         igMessage_GetPublishedMetaObject,
-        thunk_igViewerLoadingFileMessage_GetMetaObject,
+        igViewerLoadingFileMessage_GetMetaObjectFunction,
         "igViewerLoadingFileMessage",
         0x10, /* instance size */
         igViewerLoadingFileMessage_GetVTable,
@@ -62,7 +62,7 @@ CallbackArray *igViewerLoadingFileMessage_Register(void) {
     );
 }
 
-void thunk_igViewerLoadingFileMessage_GetMetaObject(void) {
+void igViewerLoadingFileMessage_GetMetaObjectFunction(void) {
     igViewerLoadingFileMessage_GetMetaObject();
 }
 

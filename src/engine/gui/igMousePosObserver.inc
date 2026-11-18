@@ -7,7 +7,7 @@ igMetaField *g_igMousePosObserver_hitMetaField;
 igMetaField *g_igMousePosObserver_hitPathMetaField;
 igMetaField *g_igMousePosObserver_inverseProjectionMatrixMetaField;
 
-int FUN_0044ecb0(int arg0) {
+int igMousePosObserver_Create(int arg0) {
     igMousePosObserver_RunStaticInit();
     return (int)(igMetaObject_CreateInstance(g_igMousePosObserver_metaObject, (igMemoryPoolView *)arg0));
 }
@@ -149,13 +149,13 @@ void igMousePosObserver_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igMousePosObserver_ctorTable, 7);
     temp_s2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)FUN_0044ded0();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igGuiSystem_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2)->_refCounted = 0;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = FUN_0019dfd0();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igIntersectTraversal_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = FUN_00188260();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = igRay_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_3)->_construct = 1;
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3), 0.0f);
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5));

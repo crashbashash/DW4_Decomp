@@ -4,11 +4,11 @@ igMetaObject *igFileImage_GetMetaObject(void)
 {
     igMetaObject *g = g_igFileImage_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014def0();
+        igFileImage_EnsureRegistered();
     return g_igFileImage_metaObject;
 }
 
-void FUN_0014def0(void)
+void igFileImage_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igFileImage_Register);
 }
@@ -20,7 +20,7 @@ CallbackArray *igFileImage_Register(void) {
         &g_igFileImage_metaObject,
         igImage_Register,
         igImage_GetPublishedMetaObject,
-        thunk_igFileImage_GetMetaObject,
+        igFileImage_GetMetaObjectFunction,
         "igFileImage",
         0x5C, /* instance size */
         0,
@@ -30,7 +30,7 @@ CallbackArray *igFileImage_Register(void) {
     );
 }
 
-void thunk_igFileImage_GetMetaObject(void) {
+void igFileImage_GetMetaObjectFunction(void) {
     igFileImage_GetMetaObject();
 }
 

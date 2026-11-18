@@ -12,7 +12,7 @@ igMetaObject *igCollisionGroup_GetMetaObject(void)
 {
     igMetaObject *g = g_igCollisionGroup_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00239c80();
+        igCollisionGroup_EnsureRegistered();
     return g_igCollisionGroup_metaObject;
 }
 
@@ -36,7 +36,7 @@ int igCollisionGroup_GetVTable(void) {
     return temp_s0;
 }
 
-void FUN_00239c80(void)
+void igCollisionGroup_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igCollisionGroup_Register);
 }
@@ -50,7 +50,7 @@ CallbackArray *igCollisionGroup_Register(void) {
         &g_igCollisionGroup_metaObject,
         igGroup_Register,
         igGroup_GetPublishedMetaObject,
-        thunk_igCollisionGroup_GetMetaObject,
+        igCollisionGroup_GetMetaObjectFunction,
         "igCollisionGroup",
         0x60, /* instance size */
         igCollisionGroup_GetVTable,
@@ -60,7 +60,7 @@ CallbackArray *igCollisionGroup_Register(void) {
     );
 }
 
-void thunk_igCollisionGroup_GetMetaObject(void) {
+void igCollisionGroup_GetMetaObjectFunction(void) {
     igCollisionGroup_GetMetaObject();
 }
 

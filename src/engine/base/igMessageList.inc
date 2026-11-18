@@ -1,6 +1,6 @@
 igMetaObject *g_igMessageList_metaObject;
 
-igMetaObject *FUN_00226340(void) {
+igMetaObject *igMessageList_GetOrCreateMetaObject(void) {
     if (g_igMessageList_metaObject == 0) {
         g_igMessageList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
@@ -37,7 +37,7 @@ CallbackArray *igMessageList_Register(void) {
         &g_igMessageList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igMessageList_GetMetaObject,
+        igMessageList_GetMetaObjectFunction,
         "igMessageList",
         0x14, /* instance size */
         igMessageList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igMessageList_Register(void) {
     );
 }
 
-void thunk_igMessageList_GetMetaObject(void) {
+void igMessageList_GetMetaObjectFunction(void) {
     igMessageList_GetMetaObject();
 }
 

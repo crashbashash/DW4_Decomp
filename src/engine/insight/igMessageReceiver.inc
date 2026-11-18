@@ -4,11 +4,11 @@ igMetaObject *igMessageReceiver_GetMetaObject(void)
 {
     igMetaObject *g = g_igMessageReceiver_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00231950();
+        igMessageReceiver_EnsureRegistered();
     return g_igMessageReceiver_metaObject;
 }
 
-void FUN_00231950(void)
+void igMessageReceiver_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igMessageReceiver_Register);
 }
@@ -20,7 +20,7 @@ CallbackArray *igMessageReceiver_Register(void) {
         &g_igMessageReceiver_metaObject,
         igObject_Register,
         igObject_GetMetaObject_ParentAccessor,
-        thunk_igMessageReceiver_GetMetaObject,
+        igMessageReceiver_GetMetaObjectFunction,
         "igMessageReceiver",
         8, /* instance size */
         0,
@@ -30,7 +30,7 @@ CallbackArray *igMessageReceiver_Register(void) {
     );
 }
 
-void thunk_igMessageReceiver_GetMetaObject(void) {
+void igMessageReceiver_GetMetaObjectFunction(void) {
     igMessageReceiver_GetMetaObject();
 }
 

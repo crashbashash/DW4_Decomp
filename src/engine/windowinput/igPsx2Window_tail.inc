@@ -180,7 +180,7 @@ void Gap__igPsx2Window__vfunc_35(void *arg0, char *arg1, int *arg2, int *arg3, i
     }
 }
 
-igMetaObject *Gap__igPsx2Window__vfunc_22(void) {
+igMetaObject *igPsx2Window_GetMeta(void) {
     return g_igPsx2Window_metaObject;
 }
 

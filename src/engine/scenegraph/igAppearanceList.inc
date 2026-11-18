@@ -37,7 +37,7 @@ CallbackArray *igAppearanceList_Register(void) {
         &g_igAppearanceList_metaObject,
         igObjectList_Register,
         igObjectList_GetPublishedMetaObject,
-        thunk_igAppearanceList_GetMetaObject,
+        igAppearanceList_GetMetaObjectFunction,
         "igAppearanceList",
         0x14, /* instance size */
         igAppearanceList_GetVTable,
@@ -47,7 +47,7 @@ CallbackArray *igAppearanceList_Register(void) {
     );
 }
 
-void thunk_igAppearanceList_GetMetaObject(void) {
+void igAppearanceList_GetMetaObjectFunction(void) {
     igAppearanceList_GetMetaObject();
 }
 

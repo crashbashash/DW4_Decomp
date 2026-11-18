@@ -35,7 +35,7 @@ void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
     }
 }
 
-ObjectRefWord *FUN_001d6560(ObjectRefWord *self,int delete_storage) {
+ObjectRefWord *igSmartPointer_igGraphPath_Destruct(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
         if(object) {

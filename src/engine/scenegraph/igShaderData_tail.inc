@@ -34,13 +34,13 @@ guard:
     goto done;
 }
 
-void Gap__Sg__igShaderData__vfunc_24(void *arg0, int item, int arg2, int arg3) {
+void igShaderData_AppendPass(void *arg0, int item, int arg2, int arg3) {
     ObjectList_AppendRetained(*(igObjectList **)((char *)(arg0) + 8), (igObject *)item);
     ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)(arg0) + 12)), (igObject *)arg2);
     ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)(arg0) + 20)), (igObject *)arg3);
 }
 
-void Gap__Sg__igShaderData__vfunc_25(struct ShaderDataView *arg0) {
+void igShaderData_RemoveAll(struct ShaderDataView *arg0) {
     ShaderDataList *l;
     int n;
     int i;
@@ -181,7 +181,7 @@ void FUN_001d8870(struct A_1d8870 *arg0, int arg1, igObject *arg2) {
     }
 }
 
-void Gap__Sg__igShaderData__vfunc_17(S0_1d8930 *arg0) {
+void igShaderData_UserPostLoad(S0_1d8930 *arg0) {
     int temp_a1;
     void *temp_a0;
 

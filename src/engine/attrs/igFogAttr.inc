@@ -32,7 +32,7 @@ CallbackArray *igFogAttr_Register(void) {
         &g_igFogAttr_metaObject,
         igVisualAttribute_Register,
         igVisualAttribute_GetPublishedMetaObject,
-        thunk_igFogAttr_GetMetaObject,
+        igFogAttr_GetMetaObjectFunction,
         "igFogAttr",
         0x2C, /* instance size */
         igFogAttr_GetVTable,
@@ -42,7 +42,7 @@ CallbackArray *igFogAttr_Register(void) {
     );
 }
 
-void thunk_igFogAttr_GetMetaObject(void) {
+void igFogAttr_GetMetaObjectFunction(void) {
     igFogAttr_GetMetaObject();
 }
 
@@ -78,25 +78,25 @@ static int g_igFogAttr_fieldOffsets[] = {
 int g_igFogAttr_modeDefault = 2;
 
 void igFogAttr_InitFields(void) {
-    int temp_s2;
+    int base;
     float sp[4];
-    void *temp_v0;
-    void *temp_a0;
-    igMetaObject *temp_s0;
+    void *field;
+    void *field2;
+    igMetaObject *meta;
 
-    temp_s0 = g_igFogAttr_metaObject;
-    temp_s2 = igMetaObject_GetFieldCount(temp_s0);
-    igMetaObject_CreateFields(temp_s0, g_igFogAttr_ctorTable, 5);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, g_igFogAttr_modeDefault);
-    *(int *)((char *)(temp_v0) + 52) = (int)(&FUN_00149560);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 2), 1000.0f);
-    temp_a0 = (void *)(igMetaObject_GetFieldAt(temp_s0, temp_s2 + 4));
+    meta = g_igFogAttr_metaObject;
+    base = igMetaObject_GetFieldCount(meta);
+    igMetaObject_CreateFields(meta, g_igFogAttr_ctorTable, 5);
+    field = (void *)(igMetaObject_GetFieldAt(meta, base));
+    igEnumMetaField_SetDefaultValue((igMetaField *)field, g_igFogAttr_modeDefault);
+    ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)&IG_GFX_FOG_MODE_GetMetaEnum;
+    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 2), 1000.0f);
+    field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
     sp[0] = 0.0f;
     sp[3] = 1.0f;
     sp[1] = 0.0f;
     sp[2] = 0.0f;
-    igVec4fMetaField_SetDefault((igMetaField *)temp_a0, sp);
-    igMetaObject_NameFields(temp_s0, g_igFogAttr_fieldTable, g_igFogAttr_fieldHandles, g_igFogAttr_fieldOffsets, temp_s2);
+    igVec4fMetaField_SetDefault((igMetaField *)field2, sp);
+    igMetaObject_NameFields(meta, g_igFogAttr_fieldTable, g_igFogAttr_fieldHandles, g_igFogAttr_fieldOffsets, base);
 }
 

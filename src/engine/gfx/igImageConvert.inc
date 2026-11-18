@@ -1,7 +1,7 @@
 igMetaObject *g_igImageConvert_metaObject;
 
-int FUN_0014db20(int arg0) {
-    FUN_0014dbb0();
+int igImageConvert_Create(int arg0) {
+    igImageConvert_EnsureRegistered();
     return (int)igMetaObject_CreateInstance(g_igImageConvert_metaObject, (igMemoryPoolView *)arg0);
 }
 
@@ -9,11 +9,11 @@ igMetaObject *igImageConvert_GetMetaObject(void)
 {
     igMetaObject *g = g_igImageConvert_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_0014dbb0();
+        igImageConvert_EnsureRegistered();
     return g_igImageConvert_metaObject;
 }
 
-void FUN_0014dbb0(void)
+void igImageConvert_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igImageConvert_Register);
 }
@@ -25,7 +25,7 @@ CallbackArray *igImageConvert_Register(void) {
         &g_igImageConvert_metaObject,
         igImageUtils_Register,
         igImageUtils_GetPublishedMetaObject,
-        thunk_igImageConvert_GetMetaObject,
+        igImageConvert_GetMetaObjectFunction,
         "igImageConvert",
         8, /* instance size */
         0,
@@ -35,7 +35,7 @@ CallbackArray *igImageConvert_Register(void) {
     );
 }
 
-void thunk_igImageConvert_GetMetaObject(void) {
+void igImageConvert_GetMetaObjectFunction(void) {
     igImageConvert_GetMetaObject();
 }
 
