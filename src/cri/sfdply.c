@@ -428,7 +428,7 @@ int sfply_IsStartSync(SfdPly *h) {
     SfdTim *d = &h->tim;
     if (c[14] == 0) return 1;
     if (c[SFD_COND_VIDEO] == 0) return 1;
-    if (d->f688 != 0) return 1;
+    if (d->disp_sync_cnt != 0) return 1;
     if (d->count >= c[45]) return 1;
     return sfply_IsEtrg(h) != 0;
 }
@@ -463,14 +463,14 @@ int sfply_IsBpaOn(SfdPly *h) {
     if (h->pause != 0) return 0;
     if (h->stat != 4) return 0;
     if (sfply_IsAnyoneTerm(h) != 0) return 0;
-    if (SFSET_GetCond(h, 5) == 1 && t->f36 == 0) return 0;
+    if (SFSET_GetCond(h, 5) == 1 && t->vidShort == 0) return 0;
     if (SFSET_GetCond(h, 6) == 1 && SFBUF_RingGetDataSiz(h, 2) > 0) return 0;
     if (SFTRN_IsSetup(h, 1) != 0 && SFBUF_RingGetDataSiz(h, 0) > 0) return 0;
     if (SFSET_GetCond(h, 5) == 1 && sfply_EnoughViData(h) != 0) return 0;
     SFTIM_GetTime(h, &v[0], &v[1]);
     d = &h->tim;
-    a = d->f648;
-    b = d->f644;
+    a = d->dec_unit;
+    b = d->dec_time;
     b -= UTY_MulDiv(SFSET_GetCond(h, 68), a, 1000000);
     if (v[0] <= 0 || b <= 0) return 0;
     return SFD_CmpTime(v[0], v[1], b, a) == 0;
@@ -485,8 +485,8 @@ int sfply_IsBpaOff(SfdPly *h) {
     if (SFSET_GetCond(h, 6) == 1 && sfply_EnoughAiData(h) != 0) return 1;
     SFTIM_GetTime(h, &v[0], &v[1]);
     d = &h->tim;
-    a = d->f648;
-    b = d->f644;
+    a = d->dec_unit;
+    b = d->dec_time;
     return SFD_CmpTime(v[0], v[1], b - UTY_MulDiv(SFSET_GetCond(h, 69), a, 1000000), a) != 0;
 }
 
@@ -745,12 +745,12 @@ void sfply_InitPlyInf(SfdPlyInf *inf) {
     inf->f8 = 0;
     inf->f12 = 0;
     inf->numSkipEmptyB = 0;
-    inf->f24 = 0;
+    inf->frmOut = 0;
     inf->bpaActive = 0;
     inf->noSupply = 0;
-    inf->f36 = 0;
-    inf->f40 = 0;
-    inf->f44 = 0;
+    inf->vidShort = 0;
+    inf->noFreeFrm = 0;
+    inf->lockCnt = 0;
     FUN_002abbc0(&inf->sysFlow);
     FUN_002abbc0(&inf->vidFlow);
     FUN_002abbc0(&inf->audInWr);
@@ -1065,7 +1065,7 @@ int SFD_GetFrm(void *sfd, int *out) {
     result = SFTRN_CallTrtTrif(h, 6, 11, (int)out, 0);
     value = *out;
     if (value != 0) {
-        h->plyInf.f24 = 1;
+        h->plyInf.frmOut = 1;
     }
     if (sfply_vbin_nest != 0) {
         sfply_vbin_nest(h, value);
@@ -1078,7 +1078,7 @@ int SFD_RelFrm(void *sfd, int value) {
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000137);
     }
-    h->plyInf.f24 = 0;
+    h->plyInf.frmOut = 0;
     return SFTRN_CallTrtTrif(h, 6, 12, value, 0);
 }
 

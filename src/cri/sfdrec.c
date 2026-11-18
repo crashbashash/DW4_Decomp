@@ -25,8 +25,8 @@ void SFSEE_InitHn(SfdRecSlot *slot)
 {
     SfdRecSub *sub = &slot->sub;
     sub->f0 = 0;
-    sub->f4 = -3;
-    sub->f8 = 1;
+    sub->time = -3;
+    sub->unit = 1;
     slot->rec = 0;
 }
 
@@ -74,7 +74,7 @@ void sfsee_InitHeadInf(SfdRec *rec) {
     b->valid = 0;
     b->time = 0;
     b->unit = 0;
-    SFTIM_InitTtu(&rec->startTime, 0x7FFFFFFF);
+    SFTIM_InitTtu(&rec->video.stamp, 0x7FFFFFFF);
     c->valid = 0;
     c->time = 0;
     c->nch = 0;
@@ -436,7 +436,7 @@ void sfsee_ExecFinAnaly(SfdPly *hn)
     changed = 0;
     if (s->default_value <= 0) {
         base = 0;
-        if (settings->f4 != -3) base = s->seekpos;
+        if (settings->time != -3) base = s->seekpos;
         if (base >= 0) {
             t = sfsee_GetInSjReadTot((char *)hn);
             if (t != -1) {

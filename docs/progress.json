@@ -327,8 +327,8 @@
     "value": 1
    },
    "struct.c": {
-    "reason": null,
-    "value": 9
+    "reason": "struct.c +2: CRI's own STABS member names d0/d1 of _iir_filt and predict_filt (2002 SDK libadxe.a adx_sje.o) read as offset names",
+    "value": 11
    },
    "unapproved.bytes": {
     "reason": null,
@@ -385,7 +385,7 @@
    "raw_casts.reflected": 258,
    "struct.a": 3,
    "struct.b": 1,
-   "struct.c": 9,
+   "struct.c": 11,
    "unapproved.bytes": 0,
    "unapproved.functions": 0,
    "unmatched.bytes": 193824,
@@ -492,7 +492,7 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2282812,
+  "bytes": 2308584,
   "failing": {
    "addresses": {
     "bytes": 672460,
@@ -503,8 +503,8 @@
     "functions": 452
    },
    "fields": {
-    "bytes": 436328,
-    "functions": 2348
+    "bytes": 408900,
+    "functions": 2222
    },
    "idioms": {
     "bytes": 377268,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 13880,
+  "functions": 13998,
   "matched_functions": 20431
  },
  "regions": [
@@ -667,10 +667,10 @@
  "typed": {
   "error": null,
   "offset_casts": 3947,
-  "pct": 45.53,
+  "pct": 45.54,
   "recovered": 32781,
   "synthetic": 6095,
-  "total": 71992,
+  "total": 71988,
   "typeable": 258,
   "typeable_pct": 0.36
  }

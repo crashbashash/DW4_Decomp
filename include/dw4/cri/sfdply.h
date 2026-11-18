@@ -10,10 +10,11 @@ typedef struct SfdPly SfdPly;
 
 typedef struct SfdRec SfdRec;
 
+/* A seek request (SFD_Seek): the time to seek to, -3 for none, and its unit. */
 typedef struct SfdRecSub {
     int f0;
-    int f4;
-    int f8;
+    int time;
+    int unit;
 } SfdRecSub;
 
 /* The seek record of a handle (SFD_EntrySeek) and the request kept with it. */
@@ -44,13 +45,6 @@ typedef struct SfdRecSys {
     SfdSysHd syshd;       /* 48 */
 } SfdRecSys;
 
-/* The video stream's analysis: whether it is done and the time it gives. */
-typedef struct SfdRecVideo {
-    int valid;
-    int time;
-    int unit;
-} SfdRecVideo;
-
 /* The audio stream's analysis. */
 typedef struct SfdRecAudio {
     int valid;
@@ -71,8 +65,6 @@ struct SfdRec {
     SfdRecSys sys;                /* 2208 */
     char pad2616[152];
     SfdRecVideo video;            /* 2768 */
-    SfdTimeRec startTime;         /* 2780 */
-    char pad2824[516];
     SfdRecAudio audio;            /* 3340 */
     char pad3364[132];
     int derived;                  /* 3496 */

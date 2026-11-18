@@ -9,22 +9,23 @@
 extern "C" {
 #endif
 
-/* The input chunk and the PCM ring buffer the decoder writes into. */
-typedef struct AdxbBuf {
+/* The decode request: the input blocks and the PCM ring buffer the decoder writes into (CRI's _adx_dec_para). */
+typedef struct AdxDecPara {
     char *ibuf;             /* 0x00 */
-    int len;                /* 0x04 */
+    int niblk;              /* 0x04: input blocks */
     int nch;                /* 0x08 */
-    int blklen;             /* 0x0c */
-    int blksmpl;            /* 0x10 */
+    int blksize;            /* 0x0c */
+    int blknsmpl;           /* 0x10 */
     short *pcmbuf;          /* 0x14 */
     int pcmbsize;           /* 0x18 */
     int pcmbdist;           /* 0x1c */
-    int pos;                /* 0x20 */
-    int lim;                /* 0x24 */
-    int end;                /* 0x28 */
-} AdxbBuf;
+    int wpos;               /* 0x20 */
+    int nroom;              /* 0x24 */
+    int lp_nsmpl;           /* 0x28: samples left before the loop end */
+    int ndecsmpl;           /* 0x2c */
+} AdxDecPara;
 
-/* AdxbObj.format */
+/* AdxbObj.fmttype */
 enum {
     ADXB_FORMAT_ADX = 0,
     ADXB_FORMAT_WAV = 1,
@@ -41,71 +42,71 @@ typedef struct AdxbObj AdxbObj;
 
 typedef short *(*AdxbGetWrFunc)(void *obj, int *wpos, int *room, int *rest);
 typedef void (*AdxbAddWrFunc)(void *obj, int nbyte, int nsmpl);
+/* CRI's _adx_intbuf, grown in this build from 176 to 260 bytes (AC-3, AINF and Pro Logic II members). */
 struct AdxbObj {
     short used;             /* 0x00 */
-    short hdr_set;          /* 0x02: a header has been decoded */
+    short hdcdflag;         /* 0x02: a header has been decoded */
     int stat;               /* 0x04 */
-    AdxPdObj *adxpd;        /* 0x08 */
-    signed char hdrtype;    /* 0x0c */
-    signed char fmtbps;     /* 0x0d */
+    AdxPdObj *xpd;          /* 0x08 */
+    signed char code;       /* 0x0c */
+    signed char bps;        /* 0x0d */
     signed char nch;        /* 0x0e */
     signed char blklen;     /* 0x0f */
-    int blksmpl;            /* 0x10 */
+    int blknsmpl;           /* 0x10 */
     int sfreq;              /* 0x14 */
     int total_nsmpl;        /* 0x18 */
     short cof;              /* 0x1c */
-    short f30;
-    int lpins_nsmpl;        /* 0x20 */
+    short rsv1;             /* 0x1e */
+    int lp_ins_nsmpl;       /* 0x20 */
     short nloop;            /* 0x24 */
-    short lptype;           /* 0x26 */
-    int lp_start_pos;       /* 0x28 */
-    int lp_start_ofst;      /* 0x2c */
-    int lp_end_pos;         /* 0x30 */
-    int lp_end_ofst;        /* 0x34 */
-    int f56;
+    short lp_type;          /* 0x26 */
+    int lp_spos;            /* 0x28 */
+    int lp_sofst;           /* 0x2c */
+    int lp_epos;            /* 0x30 */
+    int lp_eofst;           /* 0x34 */
+    int maxnch;             /* 0x38 */
     short *pcmbuf;          /* 0x3c */
     int pcmbsize;           /* 0x40 */
     int pcmbdist;           /* 0x44 */
-    AdxbBuf buf;            /* 0x48 */
-    int f116;
-    AdxbGetWrFunc cb120;    /* where the decoder writes next: the handle itself, or the ADXSJD over it */
-    void *obj124;
-    AdxbAddWrFunc cb128;
-    void *obj132;
-    int dec_nsmpl;          /* 0x88: samples decoded */
-    int wpos;               /* 0x8c */
-    int f144;
-    int f148;
-    short format;           /* 0x98: ADXB_FORMAT_* */
-    unsigned short def_format;
-    short pcmfmt;           /* 0x9c: the WAV/AIFF/AU readers' sample format */
+    AdxDecPara dp;          /* 0x48 */
+    AdxbGetWrFunc getwrfunc; /* 0x78: where the decoder writes next: the handle itself, or the ADXSJD over it */
+    void *getwrobj;         /* 0x7c */
+    AdxbAddWrFunc addwrfunc; /* 0x80 */
+    void *addwrobj;         /* 0x84 */
+    int total_ndecsmpl;     /* 0x88 */
+    int curwpos;            /* 0x8c */
+    int ndecsmpl;           /* 0x90 */
+    int ndeclen;            /* 0x94 */
+    short fmttype;          /* 0x98: ADXB_FORMAT_* */
+    unsigned short def_fmttype; /* 0x9a: the format ADXB_SetDefPrm assumes for headerless data */
+    short cdctype;          /* 0x9c: the WAV/AIFF/AU readers' sample format */
     short f158;
-    short f160;
-    short f162;
-    short f164;
-    unsigned short f166;
-    unsigned short f168;
-    unsigned short f170;
-    unsigned short dly1[2];
-    unsigned short dly2[2];
+    short k0;               /* 0xa0: decryption keys */
+    short km;               /* 0xa2 */
+    short ka;               /* 0xa4 */
+    unsigned short xp_key;  /* 0xa6: the decoder's key state saved by ADXB_TakeSnapshot */
+    unsigned short xp_km;   /* 0xa8 */
+    unsigned short xp_ka;   /* 0xaa */
+    unsigned short dly1[2]; /* 0xac */
+    unsigned short dly2[2]; /* 0xb0 */
     void *ahx;              /* 0xb4: AHX decoder handle */
     int ahx_dec_nsmpl;      /* 0xb8 */
     int ahx_dec_nfrm;       /* 0xbc: ahx_dec_nsmpl / 96 */
     void *ac3;              /* 0xc0: AC-3 decoder handle */
     int ac3_dec_nsmpl;      /* 0xc4 */
     int ac3_dec_nfrm;       /* 0xc8: ac3_dec_nsmpl / 1536 */
-    int f204;
-    char f208[16];
-    short f224;
-    short f226[2];
+    int ainf_len;           /* 0xcc */
+    char dataid[16];        /* 0xd0 */
+    short def_outvol;       /* 0xe0 */
+    short def_pan[2];       /* 0xe2 */
     char pad230[2];
     struct Pl2Enc *pl2;     /* 0xe8: the attached Pro Logic II encoder, which turns mono into surround stereo */
     int pl2_x;              /* 0xec: its position, -127 (left) to 127 (right) */
     int pl2_y;              /* 0xf0: -127 (front) to 127 (back) */
-    int f244;
+    int cb_ndeclen;         /* 0xf4: ndeclen at the last decfunc call */
     int f248;
-    void (*f252)(void *context, int count, int bytes);
-    void *f256;
+    void (*decfunc)(void *context, int count, int bytes); /* 0xfc */
+    void *decobj;           /* 0x100 */
 };
 
 extern void (*adxb_pl2_exec_func)(AdxbObj *obj, int v, short *src, short *dst);

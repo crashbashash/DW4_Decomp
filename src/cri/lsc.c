@@ -177,7 +177,7 @@ void LSC_Stop(LscObj *lsc)
         }
         lsc->stm_size = 0;
         LSC_ResetEntry(lsc);
-        lsc->pad52 = 0;
+        lsc->errcnt = 0;
     }
 }
 

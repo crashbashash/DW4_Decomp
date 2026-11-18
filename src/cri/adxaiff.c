@@ -3,7 +3,7 @@
 #include "dw4/cri/adxb.h"
 #include <string.h>
 
-/* AdxbObj.pcmfmt for an AIFF stream */
+/* AdxbObj.cdctype for an AIFF stream */
 enum AdxbAiffFmt {
     ADXB_AIFF_PCM_16 = 0,
     ADXB_AIFF_PCM_8 = 1
@@ -162,32 +162,32 @@ int ADXB_DecodeHeaderAiff(AdxbObj *adxb, unsigned char *hdr, int size)
 {
     short hdrlen;
 
-    adxb->hdr_set = 1;
-    if (ADX_DecodeInfoAiff(hdr, size, &hdrlen, &adxb->hdrtype, &adxb->fmtbps, &adxb->blklen, &adxb->nch,
-                           &adxb->sfreq, &adxb->total_nsmpl, &adxb->blksmpl) < 0) {
+    adxb->hdcdflag = 1;
+    if (ADX_DecodeInfoAiff(hdr, size, &hdrlen, &adxb->code, &adxb->bps, &adxb->blklen, &adxb->nch,
+                           &adxb->sfreq, &adxb->total_nsmpl, &adxb->blknsmpl) < 0) {
         return 0;
     }
-    adxb->lp_end_ofst = 0;
-    adxb->lp_end_pos = 0;
-    adxb->lp_start_ofst = 0;
-    adxb->lp_start_pos = 0;
-    adxb->lpins_nsmpl = 0;
+    adxb->lp_eofst = 0;
+    adxb->lp_epos = 0;
+    adxb->lp_sofst = 0;
+    adxb->lp_spos = 0;
+    adxb->lp_ins_nsmpl = 0;
     adxb->cof = 0;
-    adxb->lptype = 0;
+    adxb->lp_type = 0;
     adxb->nloop = 0;
-    adxb->buf.nch = adxb->nch;
-    adxb->buf.blklen = adxb->blklen;
-    adxb->buf.pcmbuf = adxb->pcmbuf;
-    adxb->format = ADXB_FORMAT_AIFF;
-    adxb->buf.blksmpl = adxb->blksmpl;
-    adxb->wpos = 0;
-    adxb->buf.pcmbsize = adxb->pcmbsize;
-    adxb->dec_nsmpl = 0;
-    adxb->buf.pcmbdist = adxb->pcmbdist;
-    if (adxb->fmtbps == 8) {
-        adxb->pcmfmt = ADXB_AIFF_PCM_8;
+    adxb->dp.nch = adxb->nch;
+    adxb->dp.blksize = adxb->blklen;
+    adxb->dp.pcmbuf = adxb->pcmbuf;
+    adxb->fmttype = ADXB_FORMAT_AIFF;
+    adxb->dp.blknsmpl = adxb->blknsmpl;
+    adxb->curwpos = 0;
+    adxb->dp.pcmbsize = adxb->pcmbsize;
+    adxb->total_ndecsmpl = 0;
+    adxb->dp.pcmbdist = adxb->pcmbdist;
+    if (adxb->bps == 8) {
+        adxb->cdctype = ADXB_AIFF_PCM_8;
     } else {
-        adxb->pcmfmt = ADXB_AIFF_PCM_16;
+        adxb->cdctype = ADXB_AIFF_PCM_16;
     }
     return hdrlen;
 }
@@ -195,7 +195,7 @@ int ADXB_DecodeHeaderAiff(AdxbObj *adxb, unsigned char *hdr, int size)
 /* 16-bit samples, byte-swapped from big-endian. */
 void ADXB_ExecOneAiff16(AdxbObj *adxb)
 {
-    AdxbBuf *buf;
+    AdxDecPara *buf;
     unsigned short *src;
     short *dst;
     short *dst2;
@@ -203,21 +203,21 @@ void ADXB_ExecOneAiff16(AdxbObj *adxb)
     int n;
     int i;
 
-    buf = &adxb->buf;
+    buf = &adxb->dp;
     src = (unsigned short *)buf->ibuf;
     if (adxb->stat == 1) {
-        if (ADXPD_GetStat(adxb->adxpd) == 0) {
-            adxb->cb120(adxb->obj124, &buf->pos, &buf->lim, &buf->end);
-            n = buf->pcmbsize - buf->pos;
-            if (buf->lim < n) {
-                n = buf->lim;
+        if (ADXPD_GetStat(adxb->xpd) == 0) {
+            adxb->getwrfunc(adxb->getwrobj, &buf->wpos, &buf->nroom, &buf->lp_nsmpl);
+            n = buf->pcmbsize - buf->wpos;
+            if (buf->nroom < n) {
+                n = buf->nroom;
             }
-            if (buf->len < n) {
-                n = buf->len;
+            if (buf->niblk < n) {
+                n = buf->niblk;
             }
-            dst = buf->pcmbuf + buf->pos;
+            dst = buf->pcmbuf + buf->wpos;
             if (adxb->nch == 2) {
-                dst2 = buf->pcmbuf + (buf->pcmbdist + buf->pos);
+                dst2 = buf->pcmbuf + (buf->pcmbdist + buf->wpos);
                 for (i = 0; i < n; i++) {
                     sample = src[i * 2];
                     dst[i] = (sample >> 8) | (sample << 8);
@@ -231,40 +231,40 @@ void ADXB_ExecOneAiff16(AdxbObj *adxb)
                 }
             }
             adxb->stat = 2;
-            adxb->f144 = n;
-            adxb->f148 = n * adxb->nch * 2;
+            adxb->ndecsmpl = n;
+            adxb->ndeclen = n * adxb->nch * 2;
         }
     }
     if (adxb->stat == 2) {
-        adxb->cb128(adxb->obj132, adxb->f148, adxb->f144);
+        adxb->addwrfunc(adxb->addwrobj, adxb->ndeclen, adxb->ndecsmpl);
         adxb->stat = 3;
     }
 }
 
 void ADXB_ExecOneAiff8(AdxbObj *adxb)
 {
-    AdxbBuf *buf;
+    AdxDecPara *buf;
     unsigned char *src;
     short *dst;
     short *dst2;
     int n;
     int i;
 
-    buf = &adxb->buf;
+    buf = &adxb->dp;
     src = (unsigned char *)buf->ibuf;
     if (adxb->stat == 1) {
-        if (ADXPD_GetStat(adxb->adxpd) == 0) {
-            adxb->cb120(adxb->obj124, &buf->pos, &buf->lim, &buf->end);
-            n = buf->pcmbsize - buf->pos;
-            if (buf->lim < n) {
-                n = buf->lim;
+        if (ADXPD_GetStat(adxb->xpd) == 0) {
+            adxb->getwrfunc(adxb->getwrobj, &buf->wpos, &buf->nroom, &buf->lp_nsmpl);
+            n = buf->pcmbsize - buf->wpos;
+            if (buf->nroom < n) {
+                n = buf->nroom;
             }
-            if (buf->len < n) {
-                n = buf->len;
+            if (buf->niblk < n) {
+                n = buf->niblk;
             }
-            dst = buf->pcmbuf + buf->pos;
+            dst = buf->pcmbuf + buf->wpos;
             if (adxb->nch == 2) {
-                dst2 = buf->pcmbuf + (buf->pcmbdist + buf->pos);
+                dst2 = buf->pcmbuf + (buf->pcmbdist + buf->wpos);
                 for (i = 0; i < n; i++) {
                     dst[i] = src[i * 2] << 8;
                     dst2[i] = src[i * 2 + 1] << 8;
@@ -275,19 +275,19 @@ void ADXB_ExecOneAiff8(AdxbObj *adxb)
                 }
             }
             adxb->stat = 2;
-            adxb->f144 = n;
-            adxb->f148 = n * adxb->nch;
+            adxb->ndecsmpl = n;
+            adxb->ndeclen = n * adxb->nch;
         }
     }
     if (adxb->stat == 2) {
-        adxb->cb128(adxb->obj132, adxb->f148, adxb->f144);
+        adxb->addwrfunc(adxb->addwrobj, adxb->ndeclen, adxb->ndecsmpl);
         adxb->stat = 3;
     }
 }
 
 void ADXB_ExecOneAiff(AdxbObj *adxb)
 {
-    if (adxb->pcmfmt == ADXB_AIFF_PCM_8) {
+    if (adxb->cdctype == ADXB_AIFF_PCM_8) {
         ADXB_ExecOneAiff8(adxb);
         return;
     }

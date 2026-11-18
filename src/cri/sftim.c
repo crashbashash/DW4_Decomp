@@ -73,7 +73,7 @@ void SFTIM_InitHn(void *sfd, SfdTim *tim)
     tim->astart_sfreq = 0;
     tim->baseTime = -1;
     tim->ofsTime = -1;
-    tim->f352 = 0;
+    tim->concat_frmcnt = 0;
     tim->tally.total = 0;
     tim->tally.count = 0;
     for (i = 0; i < 32; i++) {
@@ -88,20 +88,20 @@ void SFTIM_InitHn(void *sfd, SfdTim *tim)
     }
     tim->base = -5;
     tim->base_frames = 1;
-    tim->f644 = -5;
-    tim->f648 = 1;
+    tim->dec_time = -5;
+    tim->dec_unit = 1;
     tim->cached_pos = -1;
     tim->cached_rate = 1;
     tim->last = -5;
     tim->estimate = 0x7FFFFFFF;
     tim->largest = 0;
     tim->smallest = 0x7FFFFFFF;
-    tim->f676 = 0;
+    tim->usr_frm_sync = 0;
     tim->stream_pos = 0;
     tim->speed = 1000;
-    tim->f688 = 0;
-    tim->f692 = 0;
-    tim->f696 = 1;
+    tim->disp_sync_cnt = 0;
+    tim->disp_sync_time = 0;
+    tim->disp_sync_unit = 1;
     tim->sync_count = 100;
     tim->sync_pending = -1.0f;
     tim->sync_last = 0;
@@ -493,7 +493,7 @@ int SFD_OutUsrFrmSync(SfdPly *hn)
         return sfd_ReportError(0, 0xFF000122);
     }
     tim = &hn->tim;
-    tim->f676++;
+    tim->usr_frm_sync++;
     hn->pending = 1;
     return r;
 }
@@ -787,9 +787,9 @@ int SFD_OutDispSync(SfdPly *hn, int a, int b)
         return sfd_ReportError(0, 0xFF000125);
     }
     tim = &hn->tim;
-    tim->f696 = b;
-    tim->f692 = a;
-    tim->f688++;
+    tim->disp_sync_unit = b;
+    tim->disp_sync_time = a;
+    tim->disp_sync_cnt++;
     hn->pending = 1;
     return r;
 }

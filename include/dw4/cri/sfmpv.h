@@ -13,22 +13,6 @@ typedef struct SfdPlanes {
     short lumaStride;
 } SfdPlanes;
 
-typedef struct SfdChunk {
-    char *addr;
-    int size;
-} SfdChunk;
-
-typedef struct SfdRingInfo {
-    char *addr0;
-    int len0;
-    char *addr1;
-    int len1;
-    int f16;
-    int f20;
-    int f24;
-    int f28;
-} SfdRingInfo;
-
 /* what one picture decode writes and predicts from (SDK SFMPV_MPVFRM) */
 typedef struct SfdFrmPara {
     SfdPlanes ref[2];
@@ -38,35 +22,41 @@ typedef struct SfdFrmPara {
     int nbyte;
 } SfdFrmPara;
 
+/* The user data of a sequence header. */
 typedef struct SfdUserData {
     char data[512];
     int size;
 } SfdUserData;
 
-typedef struct SfdPicture {
+/* The video stream's analysis in the seek record: whether it is done, the time of its first picture, the
+ * time state then and the first sequence header's user data (sfmpv_SetMpvHd), replayed after a seek. */
+typedef struct SfdRecVideo {
     int valid;
-    int pts;
-    int hasPts;
+    int time;
+    int unit;
     SfdTimeRec stamp;
     SfdUserData user;
-} SfdPicture;
+} SfdRecVideo;
 
+/* A decoded frame of the video driver (RE4's SFMPV_FRM): its state, its locks, its buffer, its display
+ * time and the counts handed out with it (MwsfdFrmObj's errcnt, rcvcnt, concat_cnt, time_per_file and
+ * time), its picture user data and attributes, and its PTS. */
 typedef struct SfdSlot {
     int state;
     int refs;
     void *buf;               /* the frame's picture buffer */
     SfdTimeRec stamp;
-    int f56;
-    int f60;
-    int f64;
-    int f68;
-    int f72;
-    int f76;
-    int f80;
-    SfdChunk *blob;
+    int ftime;               /* 56: the display time the frame is synchronised on */
+    int tunit;               /* 60 */
+    int errcnt;              /* 64 */
+    int rcvcnt;              /* 68 */
+    int concat_cnt;          /* 72 */
+    int time_per_file;       /* 76 */
+    int cat_time;            /* 80: the time with the files played before it */
+    SfdSjChunk *blob;
     M2vPicAtr info;
-    long long f216;
-    int f224;
+    long long pts;           /* 216 */
+    int frmcnt;              /* 224: SFMPVP_GetFrameCount when it was decoded */
     int pad228;
 } SfdSlot;
 
@@ -74,27 +64,22 @@ typedef struct SfdBufPool {
     char *base;
     int count;
     int size;
-    SfdChunk slot[18];
+    SfdSjChunk slot[18];
 } SfdBufPool;
 
-typedef struct SfdPlaneSet {
-    SfdPlanes planes[2];
-    int id;
-    M2vPicAtr *pic;
-    int f40;
-    int f44;
-} SfdPlaneSet;
-
+/* The video decoder's parameters (SFD_SetMpvPara, SFD_SetMpvParaTbl; RE4's SFMPV_PARA): the reference
+ * frame size and area, the largest picture, the frame buffer size, count and area. The areas are aligned to
+ * 64 bytes when set. */
 typedef struct SfdMpvCond {
-    int f0;
-    int f4;
-    int f8;
-    int f12;
-    int f16;
-    int f20;
-    int f24;
+    int rfb_width;
+    int rfb_height;
+    int max_width;
+    int max_height;
+    int rfb_adr;
+    int frm_width;
+    int frm_height;
     int count;
-    int f32;
+    int ta_adr;
 } SfdMpvCond;
 
 typedef struct SfdMpvWorkBufs {
@@ -118,11 +103,13 @@ typedef struct SfdDmaTag {
     long long pad;
 } SfdDmaTag;
 
+/* The IPU input ring (Sony's vibuf.c, kept in sfmpvps2.c): the sector buffer and its DMA tags, the sectors
+ * queued from headSct on, the bytes put and not yet queued, the saved DMA registers and the time stamps. */
 typedef struct SfdIpuStream {
     void *base;
     SfdDmaTag *uncached;
     int sectors;
-    int f12;
+    int headSct;
     int queuedSct;
     int restBytes;
     int bytes;
@@ -136,28 +123,23 @@ typedef struct SfdIpuStream {
     unsigned int r56;
     unsigned int r60;
     int sema;
-    int f68;
-    long long f72;
+    int active;          /* 68: the DMA may be restarted */
+    long long totalBytes; /* 72 */
     SfdIpuEntry *entries;
     int entryCount;
     int f88;
     int f92;
 } SfdIpuStream;
 
-typedef struct SfdIpuEvent {
-    int f0;
-    int f4;
-} SfdIpuEvent;
-
 /* The sceMpeg/IPU decoder's work (SDK sfd_mpvp.c), inside the video work. */
 typedef struct SfdIpuCtl {
     int enabled;
-    int f4;
-    int f8;
-    int f12;
-    char f16;
-    char f17;
-    char f18;
+    int pscNext;         /* 4: picture start codes found by the put before the last */
+    int pscFound;        /* 8: found by the last put */
+    int pscCount;        /* 12: picture start codes waiting in the ring */
+    char tail0;          /* 16: the last three bytes put, for a start code across two puts */
+    char tail1;
+    char tail2;
     char f19;
     int endRequest; /* 20 */
     int endSent;    /* 24 */
@@ -166,217 +148,56 @@ typedef struct SfdIpuCtl {
     int pad36;
     sceMpeg mpeg;        /* 40 */
     SfdIpuStream stream; /* 112 */
-    SfdIpuEvent event;   /* 208 */
+    sceMpegCbDataError error; /* 208: the last error the decoder reported */
 } SfdIpuCtl;
 
 
-typedef struct SfdPicTrack {
-    int number;
-    int base;
-    int count;
+/* The PTS complement state (RE4's pts_tmpref, pts_ofst, pts_max and ptsent): the temporal reference of
+ * the picture that carried the last PTS, the frames of the GOPs since, the furthest picture seen in this
+ * GOP, and that PTS queue entry. */
+typedef struct SfdPtsComp {
+    int tmpref;
+    int ofst;
+    int max;
     int pad12;
-    long long pos;
-    long long timeSum;
-} SfdPicTrack;
+    SfdItem ptsent;
+} SfdPtsComp;
 
+/* The video driver's work (trn[2].hn, handle +9120; RE4's SFMPV_WORK). */
 typedef struct SfdMpv {
     void *handle;
     SfdMpvCond cond;
     SfdMpvWorkBufs work;
     SfdMpvFrameBufs bufs;
     SfdSlot *current;
-    unsigned int f116;
-    int state;
-    int f124;
-    int f128;
-    int f132;
-    int f136;
+    unsigned int picstat;    /* 116: the decode state (2, 3, 5) */
+    int dlmmask;             /* 120: the start codes the decoder accepts */
+    int termflg;             /* 124 */
+    int gopstat;             /* 128: SFMPVF_SetGopStat */
+    int nskip;               /* 132: frames skipped in a row */
+    int nconcat;             /* 136: files concatenated */
     M2vPicAtr pic;
-    int f268;
-    int f272;
+    int last_ngop;           /* 268: the GOP count of the last picture */
+    int newgop;              /* 272: the picture starts a new GOP */
     int limit;
-    SfdPicTrack track;
-    int f312;
-    int f316;
+    SfdPtsComp ptscomp;      /* 280 */
+    int refidx_fwd;          /* 312: the forward and backward reference planes */
+    int refidx_bwd;          /* 316 */
     SfdPlanes planes[2];
     SfdSlot *first;
     SfdSlot *second;
-    SfdSlot *f360;
-    int f364;
-    int f368;
-    int f372;
+    SfdSlot *pendfrm;        /* 360: a B picture decoded into a standby frame */
+    int skipret;             /* 364 */
+    int dlmwait;             /* 368 */
+    int tmpref_adj;          /* 372: a picture arrived out of temporal order */
     int slotCount;
     int pad380;
     SfdSlot slots[16];
     SfdBufPool pool;
     int pad4252;
-    long long f4256;
+    long long pts;           /* 4256: the PTS of the picture being decoded */
     SfdIpuCtl ipu;
 } SfdMpv;
-
-typedef struct SfdPicWait {
-    int busy;
-    char pad4[120];
-    int f124;
-} SfdPicWait;
-
-typedef struct SfdPicGeom {
-    int width;
-    int height;
-    int f8;
-    int f12;
-    int f16;
-    int f20;
-    int pad24[2];
-    int f32;
-} SfdPicGeom;
-
-typedef struct SfdDecodeFlags {
-    int f0;
-    int f4;
-    int f8;
-    int f12;
-    int f16;
-    int f20;
-    int f24;
-    char pad28[8];
-    int f36;
-    int f40;
-    int f44;
-} SfdDecodeFlags;
-
-typedef struct SfdPending {
-    char pad0[8];
-    int f8;
-    int f12;
-    int f16;
-    char pad20[72];
-    int f92;
-    char pad96[56];
-    int f152;
-    char pad156[12];
-    int f168;
-    int f172;
-} SfdPending;
-
-typedef struct SfdPicRecord {
-    int f0;
-    int f4;
-    char body[128];
-} SfdPicRecord;
-
-/* An SFBUF ring id; SFD_BUF_NONE marks a transfer slot with no ring connected. */
-typedef enum SfdBufId {
-    SFD_BUF_NONE = 8
-} SfdBufId;
-
-/* The video driver's transfer slot: its work, a union of the drivers' work types, and the ring it reads. */
-typedef struct SfdStreams {
-    int f0;
-    int f4;
-    union {
-        void *obj;
-        SfdMpv *mpv;
-    } hn;
-    int f12;
-    SfdBufId f16;
-    int f20;
-    int pad24[2];
-    int f32;
-} SfdStreams;
-
-typedef struct SfdLink {
-    int f0;
-    int id;
-    int arg;
-} SfdLink;
-
-typedef struct SfdAudioMod {
-    char pad0[12];
-    void *handler;
-} SfdAudioMod;
-
-typedef struct SfdDecStat {
-    int f0;
-    int f4;
-    int f8;
-    int f12;
-    int f16;
-} SfdDecStat;
-
-typedef struct SfdTblEnt {
-    char pad0[32];
-} SfdTblEnt;
-
-/* The frame buffer format the player was created with (MWSFD converts it with
- * mwl_convBufFmtFromSFD); an enum in CRI's header. */
-typedef enum SfdBufFmt {
-    SFD_BUFFMT_0 = 0
-} SfdBufFmt;
-
-typedef struct SfdPlayer {
-    SfdAudioMod *audio;
-    char pad4[36];
-    int f40;
-    int f44;
-    char pad48[8];
-    SfdBufFmt bufFmt;
-    char pad60[12];
-    int f72;
-    char pad76[44];
-    SfdPicWait picWait;
-    char pad248[2068];
-    SfdPicGeom geom;
-    char pad2352[32];
-    SfdDecodeFlags decode;
-    char pad2432[24];
-    long long f2456;
-    long long f2464;
-    long long f2472;
-    char pad2480[64];
-    SfdDecStat stat;
-    SfdPending pending;
-    char pad2740[628];
-    SfdTim tim;
-    char pad4872[928];
-    SfdPicRecord records[16];
-    char pad7976[136];
-    SfdStreams streams;
-    char pad8148[972];
-    SfdMpv mpvBody;
-    char pad13600[264];
-    char *userWork;
-    SfdLink link;
-    SfdTblEnt tbl[5];
-    char trailer[64];
-} SfdPlayer;
-
-typedef struct SfdStream SfdStream;
-
-typedef struct SfdStreamOps {
-    char pad0[24];
-    void (*read)(SfdStream *, int, int, int *);
-    void (*end)(SfdStream *, int, int *);
-    void (*skip)(SfdStream *, int, int *);
-} SfdStreamOps;
-
-struct SfdStream {
-    SfdStreamOps *ops;
-};
-
-typedef struct SfdRecordTail {
-    long long f0;
-    int f8;
-    int f12;
-} SfdRecordTail;
-
-typedef struct SfdRecord {
-    int f0;
-    int f4;
-    int f8;
-    int f12;
-    SfdRecordTail tail;
-} SfdRecord;
 
 /* The MPEG picture type of a frame handed out (MWSFD converts it with mwl_convPtypeFromSFD). */
 typedef enum SfdPicType {
@@ -394,50 +215,51 @@ typedef enum SfdFrmInfF60 {
 typedef struct SfdFrameDetail {
     int f72;
     char pad76[4];
-    long long f80;
-    int f88;
-    int f92;
-    int f96;
-    int f100;
-    unsigned short f104;
-    unsigned short f106;
-    unsigned char f108;
-    unsigned char f109;
-    unsigned char f110;
-    unsigned char f111;
-    unsigned char f112;
-    unsigned char f113;
-    unsigned char f114;
-    unsigned char f115;
-    unsigned char f116;
-    unsigned char f117;
-    unsigned char f118;
-    unsigned char f119;
-    unsigned char f120;
-    unsigned char f121;
-    unsigned char f122;
+    long long pts;                      /* 80 */
+    int picture_structure;              /* 88 */
+    int chroma_format;                  /* 92 */
+    int bit_rate;                       /* 96 */
+    int vbv_buffer_size;                /* 100 */
+    unsigned short display_horizontal_size; /* 104 */
+    unsigned short display_vertical_size;   /* 106 */
+    unsigned char progressive_frame;    /* 108 */
+    unsigned char top_field_first;      /* 109 */
+    unsigned char repeat_first_field;   /* 110 */
+    unsigned char aspect_ratio_information; /* 111 */
+    unsigned char constrained_parameters_flag; /* 112 */
+    unsigned char frame_rate_extension_n; /* 113 */
+    unsigned char frame_rate_extension_d; /* 114 */
+    unsigned char profile_and_level_indication; /* 115 */
+    unsigned char progressive_sequence; /* 116 */
+    unsigned char low_delay;            /* 117 */
+    unsigned char video_format;         /* 118 */
+    unsigned char colour_description;   /* 119 */
+    unsigned char colour_primaries;     /* 120 */
+    unsigned char transfer_characteristics; /* 121 */
+    unsigned char matrix_coefficients;  /* 122 */
     char pad123[5];
 } SfdFrameDetail;
 
 /* The frame information handed to the application. Its fields are enums, pointers and a union as
  * in CRI's header: the details from 72 on are also the seven words MWSFD hands on unchanged, and
- * a store through the union conflicts with every load. */
+ * a store through the union conflicts with every load. The counts at 36..52 become MwsfdFrmObj's
+ * errcnt, rcvcnt, concat_cnt, time_per_file and time. */
 typedef struct SfdFrameInfo {
-    int f0;
-    int f4;
-    int f8;
-    int f12;
+    int width;               /* 0 */
+    int height;              /* 4 */
+    int x_mb;                /* 8 */
+    int y_mb;                /* 12 */
     SfdPicType picType;      /* 16 */
     int time;                /* 20: the frame's time */
     int unit;                /* 24 */
     SfdBufFmt bufFmt;        /* 28 */
     void *buf;               /* 32 */
-    int f36;
-    int f40;
-    int f44;
-    int f48;
-    int f52;
-    SfdChunk *picUsr;        /* 56 */
+    int errcnt;              /* 36 */
+    int rcvcnt;              /* 40 */
+    int concat_cnt;          /* 44 */
+    int time_per_file;       /* 48 */
+    int cat_time;            /* 52 */
+    SfdSjChunk *picUsr;        /* 56 */
     SfdFrmInfF60 f60;
     int f64;
     char pad68[4];

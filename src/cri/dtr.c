@@ -10,15 +10,15 @@ struct DtrObj {
     signed char used;       /* 0x00 */
     signed char stat;       /* 0x01 */
     signed char transfer;   /* 0x02 */
-    char pad3;
+    char rsv;               /* 0x03 */
     SfdSj *sjs;             /* 0x04 */
     SfdSj *sjd;             /* 0x08 */
     SfdSjChunk cks;            /* 0x0c */
     SfdSjChunk ckd;            /* 0x14 */
     sceSifDmaData dma;      /* 0x1c */
     unsigned int dmaid;     /* 0x2c */
-    int f48;                /* 0x30 */
-    int f52;                /* 0x34 */
+    int srclin;              /* 0x30 */
+    int dstlin;              /* 0x34 */
     int unit;               /* 0x38 */
     int total;              /* 0x3c */
 };
@@ -161,9 +161,9 @@ DtrObj *DTR_Create(SfdSj *sjs, SfdSj *sjd)
         dtr->sjs = sjs;
         dtr->sjd = sjd;
         dtr->transfer = 0;
-        dtr->f48 = 1;
+        dtr->srclin = 1;
         dtr->used = 1;
-        dtr->f52 = 0;
+        dtr->dstlin = 0;
     }
     SJCRS_Unlock();
     return dtr;

@@ -38,9 +38,10 @@ typedef struct LscObj {
     signed char reading;
     signed char loop;
     signed char pause;
-    char pad5[3];
+    char rsv1;
+    short rsv2;
     SfdSj *sj;
-    char pad12[8];
+    SfdSjChunk ck;
     int flow_min;
     int flow_max;
     int wpos;
@@ -48,8 +49,8 @@ typedef struct LscObj {
     int nstm;
     void *stm;
     int stm_size;
-    int pad48;
-    int pad52;
+    int reqsct;
+    int errcnt;
     LscStm stms[LSC_MAX_STM];
 } LscObj;
 

@@ -43,18 +43,18 @@ void ADXSJD_Finish(void)
 
 void adxsjd_clear(AdxSjdObj *sjd)
 {
-    sjd->trap_nsmpl = -1;
-    sjd->max_dec_nsmpl = 0x7FFFFFFF;
+    sjd->dtrpsmpl = -1;
+    sjd->maxdecsmpl = 0x7FFFFFFF;
     sjd->skip = 0;
-    sjd->hdr_len = 0;
-    sjd->dec_nsmpl = 0;
-    sjd->dec_dtlen = 0;
-    sjd->dec_pos = 0;
-    sjd->trap_cnt = 0;
-    sjd->trap_dtlen = 0;
+    sjd->hdrlen = 0;
+    sjd->total_decsmpl = 0;
+    sjd->total_decdtlen = 0;
+    sjd->decpos = 0;
+    sjd->dtrpcnt = 0;
+    sjd->dtrpdtlen = 0;
     /* matching construct: permuter — the do/while(0) keeps ee-gcc from scheduling the fill store above this byte store */
     do {
-        sjd->end_on_empty = 0;
+        sjd->empty_end = 0;
     } while (0);
     sjd->fill = 0;
 }
@@ -88,16 +88,16 @@ AdxSjdObj *ADXSJD_Create(SfdSj *sji, int nch, SfdSj **sjo)
     }
     ADXB_EntryGetWrFunc(sjd->adxb, adxsjd_get_wr, sjd);
     sjd->sji = sji;
-    sjd->nch = nch;
+    sjd->maxnch = nch;
     for (ch = 0; ch < nch; ch++) {
         sjd->sjo[ch] = sjo[ch];
     }
     sjd->stat = ADXSJD_STAT_STOP;
     adxsjd_clear(sjd);
-    sjd->trap_func = 0;
-    sjd->trap_obj = 0;
-    sjd->flt_func = 0;
-    sjd->flt_obj = 0;
+    sjd->dtrpfunc = 0;
+    sjd->dtrpobj = 0;
+    sjd->dfltfunc = 0;
+    sjd->dfltobj = 0;
     sjd->used = 1;
     return sjd;
 }
@@ -137,7 +137,7 @@ void ADXSJD_SetOutSj(AdxSjdObj *sjd, int ch, SfdSj *sjo)
 
 void ADXSJD_SetMaxDecSmpl(AdxSjdObj *sjd, int value)
 {
-    sjd->max_dec_nsmpl = value;
+    sjd->maxdecsmpl = value;
     ADXB_SetAhxDecSmpl(sjd->adxb, value);
     ADXB_SetAc3DecSmpl(sjd->adxb, value);
 }
@@ -190,7 +190,7 @@ void adxsjd_decode_prep(AdxSjdObj *sjd)
         return;
     }
     if (hdrlen < 0) {
-        if ((short)adxb->def_format != 0) {
+        if ((short)adxb->def_fmttype != 0) {
             ADXB_SetDefPrm(adxb);
             hdrlen = 0;
         } else {
@@ -200,9 +200,9 @@ void adxsjd_decode_prep(AdxSjdObj *sjd)
             return;
         }
     }
-    sjd->hdr_len = hdrlen;
+    sjd->hdrlen = hdrlen;
     if (ADXB_GetFormat(adxb) == 4) {
-        sjd->end_on_empty = 1;
+        sjd->empty_end = 1;
     }
     if (ADXB_GetFormat(adxb) == 2) {
         memcpy(sjd->hdr, ck.data, ck.len > 64 ? 64 : ck.len);
@@ -229,13 +229,13 @@ short *adxsjd_get_wr(void *obj, int *offset, int *room, int *until_trap)
     int n;
 
     for (ch = 0; ch < ADXB_GetNumChan(sjd->adxb); ch++) {
-        sjd->sjo[ch]->vtbl->getChunk(sjd->sjo[ch], 0, 0x4000, &sjd->ck[ch]);
+        sjd->sjo[ch]->vtbl->getChunk(sjd->sjo[ch], 0, 0x4000, &sjd->cko[ch]);
     }
-    *offset = (sjd->ck[0].data - (char *)SJRBF_GetBufPtr(sjo)) / 2;
-    n = sjd->ck[0].len / 2;
-    *room = n < sjd->max_dec_nsmpl ? n : sjd->max_dec_nsmpl;
-    if (sjd->trap_nsmpl >= 0) {
-        *until_trap = sjd->trap_nsmpl - sjd->trap_cnt;
+    *offset = (sjd->cko[0].data - (char *)SJRBF_GetBufPtr(sjo)) / 2;
+    n = sjd->cko[0].len / 2;
+    *room = n < sjd->maxdecsmpl ? n : sjd->maxdecsmpl;
+    if (sjd->dtrpsmpl >= 0) {
+        *until_trap = sjd->dtrpsmpl - sjd->dtrpcnt;
     } else {
         *until_trap = 0x1fffffff;
     }
@@ -254,10 +254,10 @@ void adxsjd_decexec_start(AdxSjdObj *sjd)
 
     adxb = sjd->adxb;
     sji = sjd->sji;
-    if (sjd->trap_nsmpl >= 0 && sjd->trap_cnt >= sjd->trap_nsmpl && sjd->trap_func != 0) {
-        sjd->trap_func(sjd->trap_obj);
+    if (sjd->dtrpsmpl >= 0 && sjd->dtrpcnt >= sjd->dtrpsmpl && sjd->dtrpfunc != 0) {
+        sjd->dtrpfunc(sjd->dtrpobj);
     }
-    if (sjd->end_on_empty == 1 && sji->vtbl->getNumData(sji, 1) == 0) {
+    if (sjd->empty_end == 1 && sji->vtbl->getNumData(sji, 1) == 0) {
         sjd->stat = ADXSJD_STAT_DECEND;
         return;
     }
@@ -297,7 +297,7 @@ void adxsjd_decexec_start(AdxSjdObj *sjd)
         }
         return;
     }
-    if (sjd->dec_pos >= ADXSJD_GetTotalNumSmpl(sjd)) {
+    if (sjd->decpos >= ADXSJD_GetTotalNumSmpl(sjd)) {
         sjd->stat = ADXSJD_STAT_DECEND;
         sji->vtbl->ungetChunk(sji, 1, &sjd->cki);
         return;
@@ -332,7 +332,7 @@ void adxsjd_decexec_end(AdxSjdObj *sjd)
     total = ADXB_GetTotalNumSmpl(adxb);
     bytes = ADXB_GetDecDtLen(adxb);
     n = ADXB_GetDecNumSmpl(adxb);
-    total -= sjd->dec_pos;
+    total -= sjd->decpos;
     if (n >= total) {
         n = total;
     }
@@ -340,18 +340,18 @@ void adxsjd_decexec_end(AdxSjdObj *sjd)
     sji->vtbl->putChunk(sji, 0, &ck);
     sji->vtbl->ungetChunk(sji, 1, &rest);
     for (ch = 0; ch < ADXB_GetNumChan(sjd->adxb); ch++) {
-        SJ_SplitChunk(&sjd->ck[ch], n * 2, &ck, &rest);
-        if (sjd->flt_func != 0) {
-            sjd->flt_func(sjd->flt_obj, ch, ck.data, ck.len);
+        SJ_SplitChunk(&sjd->cko[ch], n * 2, &ck, &rest);
+        if (sjd->dfltfunc != 0) {
+            sjd->dfltfunc(sjd->dfltobj, ch, ck.data, ck.len);
         }
         sjd->sjo[ch]->vtbl->putChunk(sjd->sjo[ch], 1, &ck);
         sjd->sjo[ch]->vtbl->ungetChunk(sjd->sjo[ch], 0, &rest);
     }
-    sjd->dec_nsmpl += n;
-    sjd->dec_dtlen += bytes;
-    sjd->dec_pos += n;
-    sjd->trap_cnt += n;
-    sjd->trap_dtlen += bytes;
+    sjd->total_decsmpl += n;
+    sjd->total_decdtlen += bytes;
+    sjd->decpos += n;
+    sjd->dtrpcnt += n;
+    sjd->dtrpdtlen += bytes;
     ADXB_Reset(adxb);
 }
 
@@ -361,15 +361,15 @@ void adxsjd_decexec_extra(AdxSjdObj *sjd)
     int total = ADXB_GetTotalNumSmpl(adxb);
     int added = ADXB_GetDecDtLen(adxb);
     int step = ADXB_GetDecNumSmpl(adxb);
-    int remaining = total - sjd->dec_pos;
+    int remaining = total - sjd->decpos;
 
     if (step < remaining) {
         remaining = step;
     }
-    /* matching construct: permuter — the three updates moved from f52, f44, f48 order to this one */
-    sjd->dec_nsmpl += remaining;
-    sjd->dec_dtlen += added;
-    sjd->dec_pos += remaining;
+    /* matching construct: permuter — the three updates moved from decpos, total_decsmpl, total_decdtlen order to this one */
+    sjd->total_decsmpl += remaining;
+    sjd->total_decdtlen += added;
+    sjd->decpos += remaining;
 }
 
 void adxsjd_decode_exec(AdxSjdObj *sjd)
@@ -385,7 +385,7 @@ void adxsjd_decode_exec(AdxSjdObj *sjd)
     if (ADXB_GetStat(adxb) == 3) {
         adxsjd_decexec_end(sjd);
     }
-    type = adxb->format;
+    type = adxb->fmttype;
     if (type == 10 || type == 20 || type == 11 || type == 12 || type == 15) {
         adxsjd_decexec_extra(sjd);
     }
@@ -421,7 +421,7 @@ void adxsjd_insert_proc(AdxSjdObj *sjd)
     int half;
 
     n = sjd->fill * 2;
-    for (i = 0; i < sjd->nch; i++) {
+    for (i = 0; i < sjd->maxnch; i++) {
         sjd->sjo[i]->vtbl->getChunk(sjd->sjo[i], 0, 0x7fffffff, &ck);
         if (ck.len <= n) {
             n = ck.len;
@@ -433,7 +433,7 @@ void adxsjd_insert_proc(AdxSjdObj *sjd)
     if (n <= 0) {
         return;
     }
-    for (i = 0; i < sjd->nch; i++) {
+    for (i = 0; i < sjd->maxnch; i++) {
         sjd->sjo[i]->vtbl->getChunk(sjd->sjo[i], 0, n, &ck);
         memset(ck.data, 0, n);
         sjd->sjo[i]->vtbl->putChunk(sjd->sjo[i], 1, &ck);
@@ -449,7 +449,7 @@ void adxsjd_discard_proc(AdxSjdObj *sjd)
     int half;
 
     n = sjd->skip * 2;
-    for (i = 0; i < sjd->nch; i++) {
+    for (i = 0; i < sjd->maxnch; i++) {
         sjd->sjo[i]->vtbl->getChunk(sjd->sjo[i], 1, 0x7fffffff, &ck);
         if (ck.len <= n) {
             n = ck.len;
@@ -461,7 +461,7 @@ void adxsjd_discard_proc(AdxSjdObj *sjd)
     if (n <= 0) {
         return;
     }
-    for (i = 0; i < sjd->nch; i++) {
+    for (i = 0; i < sjd->maxnch; i++) {
         sjd->sjo[i]->vtbl->getChunk(sjd->sjo[i], 1, n, &ck);
         sjd->sjo[i]->vtbl->putChunk(sjd->sjo[i], 0, &ck);
     }
@@ -482,12 +482,12 @@ void ADXSJD_ExecServer(void)
 
 int ADXSJD_GetDecDtLen(AdxSjdObj *sjd)
 {
-    return sjd->dec_dtlen;
+    return sjd->total_decdtlen;
 }
 
 int ADXSJD_GetDecNumSmpl(AdxSjdObj *sjd)
 {
-    return sjd->dec_nsmpl;
+    return sjd->total_decsmpl;
 }
 
 void ADXSJD_EntryDecFunc(AdxSjdObj *sjd, void (*func)(void *context, int count, int bytes), void *context)
@@ -497,12 +497,12 @@ void ADXSJD_EntryDecFunc(AdxSjdObj *sjd, void (*func)(void *context, int count, 
 
 void ADXSJD_SetDecPos(AdxSjdObj *sjd, int value)
 {
-    sjd->dec_pos = value;
+    sjd->decpos = value;
 }
 
 int ADXSJD_GetDecPos(AdxSjdObj *sjd)
 {
-    return sjd->dec_pos;
+    return sjd->decpos;
 }
 
 void ADXSJD_SetLnkSw(AdxSjdObj *sjd, int value)
@@ -544,44 +544,44 @@ int ADXSJD_AdjustSmpl(AdxSjdObj *sjd, int amount)
 
 void ADXSJD_EntryFltFunc(AdxSjdObj *sjd, void (*func)(void *context, int ch, char *data, int len), void *context)
 {
-    sjd->flt_func = func;
-    sjd->flt_obj = context;
+    sjd->dfltfunc = func;
+    sjd->dfltobj = context;
 }
 
 void ADXSJD_EntryTrapFunc(AdxSjdObj *sjd, void (*func)(void *context), void *context)
 {
-    sjd->trap_func = func;
-    sjd->trap_obj = context;
+    sjd->dtrpfunc = func;
+    sjd->dtrpobj = context;
 }
 
 void ADXSJD_SetTrapNumSmpl(AdxSjdObj *sjd, int value)
 {
-    sjd->trap_nsmpl = value;
+    sjd->dtrpsmpl = value;
 }
 
 int ADXSJD_GetTrapNumSmpl(AdxSjdObj *sjd)
 {
-    return sjd->trap_nsmpl;
+    return sjd->dtrpsmpl;
 }
 
 void ADXSJD_SetTrapCnt(AdxSjdObj *sjd, int value)
 {
-    sjd->trap_cnt = value;
+    sjd->dtrpcnt = value;
 }
 
 int ADXSJD_GetTrapCnt(AdxSjdObj *sjd)
 {
-    return sjd->trap_cnt;
+    return sjd->dtrpcnt;
 }
 
 void ADXSJD_SetTrapDtLen(AdxSjdObj *sjd, int value)
 {
-    sjd->trap_dtlen = value;
+    sjd->dtrpdtlen = value;
 }
 
 int ADXSJD_GetTrapDtLen(AdxSjdObj *sjd)
 {
-    return sjd->trap_dtlen;
+    return sjd->dtrpdtlen;
 }
 
 int ADXSJD_GetFormat(AdxSjdObj *sjd)
@@ -690,7 +690,7 @@ char *ADXSJD_GetDataId(AdxSjdObj *sjd)
 
 int ADXSJD_GetHdrLen(AdxSjdObj *sjd)
 {
-    return sjd->hdr_len;
+    return sjd->hdrlen;
 }
 
 int ADXSJD_GetFmtBps(AdxSjdObj *sjd)

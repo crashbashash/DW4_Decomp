@@ -8,7 +8,8 @@
 typedef struct MfCiFile {
     signed char used;       /* 0x00 */
     signed char stat;       /* 0x01 */
-    char pad2[2];
+    char rsv;               /* 0x02 */
+    char rsv2;              /* 0x03 */
     int sctsize;            /* 0x04 */
     int size;               /* 0x08 */
     int nsct;               /* 0x0c */

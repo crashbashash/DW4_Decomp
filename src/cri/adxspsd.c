@@ -65,56 +65,56 @@ int ADXB_DecodeHeaderSpsd(AdxbObj *adxb, unsigned char *hdr, int size)
 {
     short hdrlen;
 
-    adxb->hdr_set = 1;
+    adxb->hdcdflag = 1;
     /* the header is read through its layout */
-    if (ADX_DecodeInfoSpsd((AdxbSpsdHeader *)hdr, size, &hdrlen, &adxb->hdrtype, &adxb->fmtbps, &adxb->blklen,
-                           &adxb->nch, &adxb->sfreq, &adxb->total_nsmpl, &adxb->blksmpl, &adxb->pcmfmt) < 0) {
+    if (ADX_DecodeInfoSpsd((AdxbSpsdHeader *)hdr, size, &hdrlen, &adxb->code, &adxb->bps, &adxb->blklen,
+                           &adxb->nch, &adxb->sfreq, &adxb->total_nsmpl, &adxb->blknsmpl, &adxb->cdctype) < 0) {
         return 0;
     }
     adxb->cof = 0;
-    adxb->lptype = 0;
-    adxb->lp_end_ofst = 0;
-    adxb->lp_end_pos = 0;
-    adxb->lp_start_ofst = 0;
-    adxb->lp_start_pos = 0;
+    adxb->lp_type = 0;
+    adxb->lp_eofst = 0;
+    adxb->lp_epos = 0;
+    adxb->lp_sofst = 0;
+    adxb->lp_spos = 0;
     adxb->nloop = 0;
-    adxb->lpins_nsmpl = 0;
-    adxb->buf.nch = adxb->nch;
-    adxb->buf.blklen = adxb->blklen;
-    adxb->buf.blksmpl = adxb->blksmpl;
-    adxb->format = ADXB_FORMAT_SPSD;
-    adxb->buf.pcmbuf = adxb->pcmbuf;
-    adxb->buf.pcmbsize = adxb->pcmbsize;
-    adxb->dec_nsmpl = 0;
-    adxb->buf.pcmbdist = adxb->pcmbdist;
-    adxb->wpos = 0;
+    adxb->lp_ins_nsmpl = 0;
+    adxb->dp.nch = adxb->nch;
+    adxb->dp.blksize = adxb->blklen;
+    adxb->dp.blknsmpl = adxb->blknsmpl;
+    adxb->fmttype = ADXB_FORMAT_SPSD;
+    adxb->dp.pcmbuf = adxb->pcmbuf;
+    adxb->dp.pcmbsize = adxb->pcmbsize;
+    adxb->total_ndecsmpl = 0;
+    adxb->dp.pcmbdist = adxb->pcmbdist;
+    adxb->curwpos = 0;
     return hdrlen;
 }
 
 void ADXB_ExecOneSpsd(AdxbObj *obj)
 {
-    AdxbBuf *buf;
+    AdxDecPara *buf;
     short *src;
     short *dst;
     short *dst2;
     int n;
     int i;
 
-    buf = &obj->buf;
+    buf = &obj->dp;
     src = (short *)buf->ibuf;
     if (obj->stat == 1) {
-        if (ADXPD_GetStat(obj->adxpd) == 0) {
-            obj->cb120(obj->obj124, &buf->pos, &buf->lim, &buf->end);
-            n = buf->pcmbsize - buf->pos;
-            if (buf->lim < n) {
-                n = buf->lim;
+        if (ADXPD_GetStat(obj->xpd) == 0) {
+            obj->getwrfunc(obj->getwrobj, &buf->wpos, &buf->nroom, &buf->lp_nsmpl);
+            n = buf->pcmbsize - buf->wpos;
+            if (buf->nroom < n) {
+                n = buf->nroom;
             }
-            if (buf->len < n) {
-                n = buf->len;
+            if (buf->niblk < n) {
+                n = buf->niblk;
             }
-            dst = buf->pcmbuf + buf->pos;
+            dst = buf->pcmbuf + buf->wpos;
             if (obj->nch == 2) {
-                dst2 = buf->pcmbuf + (buf->pcmbdist + buf->pos);
+                dst2 = buf->pcmbuf + (buf->pcmbdist + buf->wpos);
                 for (i = 0; i < n; i++) {
                     dst[i] = src[i * 2];
                     dst2[i] = src[i * 2 + 1];
@@ -125,12 +125,12 @@ void ADXB_ExecOneSpsd(AdxbObj *obj)
                 }
             }
             obj->stat = 2;
-            obj->f144 = n;
-            obj->f148 = n * obj->nch * 2;
+            obj->ndecsmpl = n;
+            obj->ndeclen = n * obj->nch * 2;
         }
     }
     if (obj->stat == 2) {
-        obj->cb128(obj->obj132, obj->f148, obj->f144);
+        obj->addwrfunc(obj->addwrobj, obj->ndeclen, obj->ndecsmpl);
         obj->stat = 3;
     }
 }

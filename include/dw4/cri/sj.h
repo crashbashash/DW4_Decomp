@@ -16,9 +16,9 @@ typedef struct SfdSjChunk {
 } SfdSjChunk;
 
 typedef struct SfdSjVtbl {
-    void *f0;
-    void *f4;
-    void *f8;
+    void *queryInterface;                                          /* 0 */
+    void *addRef;                                                  /* 4 */
+    void *release;                                                 /* 8 */
     void (*destroy)(SfdSj *sj);                                    /* 12 */
     int (*getUuid)(SfdSj *sj);                                     /* 16 */
     void (*reset)(SfdSj *sj);                                      /* 20 */

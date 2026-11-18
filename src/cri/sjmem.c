@@ -22,9 +22,9 @@ typedef struct SjMem {
 
 /* The stream joint's function table: the common slots, then the two this joint adds. */
 typedef struct SjMemVtbl {
-    void *f0;
-    void *f4;
-    void *f8;
+    void *queryInterface;
+    void *addRef;
+    void *release;
     void (*destroy)(SjMem *sj);
     const void *(*getUuid)(SjMem *sj);
     void (*reset)(SjMem *sj);

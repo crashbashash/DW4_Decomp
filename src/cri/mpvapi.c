@@ -69,14 +69,14 @@ int mpv_CallErrFn(MpvErrObj *err, int code) {
 
 
 /* Decodes a picture from memory through a temporary memory stream joint; *used gets the bytes taken. */
-int MPV_DecodeFrm(MpvHn *mpv, SfdSjChunk *buf, int *used, int arg) {
+int MPV_DecodeFrm(MpvHn *mpv, SfdSjChunk *buf, int *used, struct SfdFrmPara *para) {
     SfdSj *sj = SJMEM_Create(buf->data, buf->len);
     int result;
 
     if (sj == 0) {
         return -1;
     }
-    result = MPV_DecPicSj(mpv, sj, arg);
+    result = MPV_DecPicSj(mpv, sj, para);
     *used = buf->len - sj->vtbl->getNumData(sj, 1);
     sj->vtbl->destroy(sj);
     return result;
@@ -109,7 +109,7 @@ int MPV_SkipFrm(MpvHn *mpv, SfdSjChunk *buf, int *ofst) {
 void MPVFRM_Init(void) {
 }
 
-int MPV_DecPicSj(MpvHn *mpv, SfdSj *sj, int arg) {
+int MPV_DecPicSj(MpvHn *mpv, SfdSj *sj, struct SfdFrmPara *para) {
     return -1;
 }
 

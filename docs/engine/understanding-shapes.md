@@ -1365,7 +1365,7 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     where retail reloads `*out` before every store of a block, the destination fields sit in a union (the
     Sofdec frame information keeps its details from offset 72 in a union with the seven words the MWSFD
     player copies on unchanged), and the block's other loads stay behind each store. The fields before it
-    are enums and pointers (`SfdPicType`, `SfdBufFmt`, `void *buf`, `SfdChunk *picUsr`), copied from the
+    are enums and pointers (`SfdPicType`, `SfdBufFmt`, `void *buf`, `SfdSjChunk *picUsr`), copied from the
     MPEG-2 picture attributes whose coded-picture fields are enums too (`M2vPicAtr`, one definition shared
     with the M2V decoder): a source field read once for a store and a test needs its enum type to differ
     from the destination's.

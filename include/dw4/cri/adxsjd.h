@@ -20,29 +20,30 @@ enum AdxSjdStat {
     ADXSJD_STAT_ERROR = 4
 };
 
+/* CRI's ADX_SJDEC, with the 2004 link, fill and skip members after hdrlen. */
 typedef struct AdxSjdObj {
     signed char used;
     signed char stat;
-    signed char nch;
-    signed char end_on_empty;
+    signed char maxnch;
+    signed char empty_end;
     AdxbObj *adxb;
     SfdSj *sji;
     SfdSj *sjo[2];
     SfdSjChunk cki;
-    SfdSjChunk ck[2];
-    int dec_nsmpl;
-    int dec_dtlen;
-    int dec_pos;
-    int max_dec_nsmpl;
-    int trap_nsmpl;
-    int trap_cnt;
-    int trap_dtlen;
-    void (*trap_func)(void *context);
-    void *trap_obj;
-    void (*flt_func)(void *context, int ch, char *data, int len);
-    void *flt_obj;
+    SfdSjChunk cko[2];
+    int total_decsmpl;
+    int total_decdtlen;
+    int decpos;
+    int maxdecsmpl;
+    int dtrpsmpl;
+    int dtrpcnt;
+    int dtrpdtlen;
+    void (*dtrpfunc)(void *context);
+    void *dtrpobj;
+    void (*dfltfunc)(void *context, int ch, char *data, int len);
+    void *dfltobj;
     char hdr[64];
-    int hdr_len;
+    int hdrlen;
     int lnksw;
     int fill;
     int skip;

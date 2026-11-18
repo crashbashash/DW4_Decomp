@@ -22,8 +22,8 @@ its public API, begin it.
 
 ## Types
 
-- `SfdPly` is the one definition of the 14072-byte handle, and every SFD file reads it (`sfmpv.c` and `sfmpvps2.c`
-  still read it through `SfdPlayer`, as [CRI SFD files](cri-sfd-files.md#open-questions) notes). Its parts follow the
+- `SfdPly` is the one definition of the 14072-byte handle, and every SFD file reads it, `sfmpv.c` and `sfmpvps2.c`
+  included. Its parts follow the
   RE4 SFD object's: the creation parameters (`SfdCrePrm`, whose first word is the stream-module table
   SFTRN_InitHn reads), the conditions (`int cond[100]`, indexed by the `SFD_COND_*` enum), the buffers
   (`SfdBufEnt[8]`, +4872: a union of the ring, audio ring, frame and user-output modes), the frames
@@ -60,6 +60,26 @@ its public API, begin it.
   callback and its object: `SFSET_GetCond` returns them as `int` and the files cast them back.
 - The demultiplexer's system-header bounds (`MpsSysHd.audioBound`, `.videoBound`) decide when an output's play
   condition is cleared and whether a split video packet is passed on.
+- The video driver's work `SfdMpv` (handle +9120) and its frames `SfdSlot` take the RE4 library's `SFMPV_WORK` and
+  `SFMPV_FRM` member names where the code agrees (medium): `picstat`, `dlmmask`, `termflg`, `gopstat`
+  (`SFMPVF_SetGopStat`), `nskip`, `nconcat`, `last_ngop`, `newgop`, the PTS complement state `SfdPtsComp`
+  (`tmpref`, `ofst`, `max`, `ptsent`), `pendfrm`, `skipret`, `dlmwait`, `tmpref_adj`, `pts`. A frame's counts at
+  +64..+80 are what `mwply_SetFrmInf` hands out as the public `MwsfdFrmObj`'s `errcnt`, `rcvcnt`, `concat_cnt`,
+  `time_per_file` and `time` (2002 SDK `crimwsfd.h`), so they take those names (`cat_time` for the last) rather than
+  RE4's `ndct`/`nbyte`/`gopno`; `SfdFrameInfo` carries the same words, and its detail block the `M2vPicAtr` names it
+  copies. The decoder parameters `SfdMpvCond` (RE4's `SFMPV_PARA`) are named from use: reference frame size and area,
+  largest picture, frame buffer size, count and area (medium; RE4 calls +0/+4 `cwidth`/`cheight`).
+- The IPU input ring `SfdIpuStream` is CRI's copy of Sony's `vibuf.c`; `headSct`, `active` and `totalBytes` are
+  named from use (medium), the saved DMA registers keep `r28`..`r60`. `SfdIpuCtl` counts picture start codes
+  (`pscNext`, `pscFound`, `pscCount`) and keeps the last three bytes put (`tail0`..`tail2`); its error record is
+  libmpeg's `sceMpegCbDataError`.
+- The seek record's video analysis `SfdRecVideo` is the one `sfmpv_SetMpvHd` fills: the first picture's time and
+  unit, the time state then and the sequence header's user data. A seek request `SfdRecSub` holds a time (-3 for
+  none) and its unit (medium; RE4 calls the time `pos`).
+- `SfdPlyInf` +20/+24/+36/+40/+44 are named from use (medium): `numSkipEmptyP`, `frmOut` (set by `SFD_GetFrm`,
+  cleared by `SFD_RelFrm`), `vidShort`, `noFreeFrm`, `lockCnt`. `SfdTim` +352, +644/+648 and +676..+696 likewise:
+  `concat_frmcnt`, `dec_time`/`dec_unit`, `usr_frm_sync`, `disp_sync_cnt`/`_time`/`_unit`.
+- The ring delimiter has its own type `SfdBufDlm`: its second word is the end address of the data searched.
 
 ## Open questions
 
@@ -77,3 +97,8 @@ its public API, begin it.
 - What the MPS parameter block's words at +36 up to +48 and +344, and the video settings' word at +28, hold.
 - Whether the supply handler shares `sfdlib.c`'s file: nothing in the code tells; its own error code and its own
   table put it in a file of its own here.
+- Still named by offset, with no reader beyond a clear or a copy: `SfdPlyInf` +8, +12, +136, +144; `SfdTim`
+  `pad332`, `f4` of the sync queue, the PTS manager entry; `SfdIpuStream` +88/+92 and its time-stamp entries;
+  `SfdCrePrm` +44..+52; `SfdFrameDetail` +72 (2 or 1 by `M2vPicAtr.f64`, whose meaning is unknown);
+  `SfdRecSub` +0; the SFX handle and work (`sfx.h`), `mwsffrm.c`'s own frame views and the M2V picture attributes'
+  +64/+68.

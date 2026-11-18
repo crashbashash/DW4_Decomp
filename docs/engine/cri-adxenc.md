@@ -22,8 +22,8 @@ compiled earlier in the same file, because the calls are then known not to throw
 
 An encoder (`AdxEnc`, 0x2f8 bytes) starts with four status bytes (in use, state, channel count, ended), then
 its input streams, its output stream, the counts and positions of the encode, two filter pointers at +0x80,
-the previous samples of each channel and the key. A predictor (`AdxEncPredictor`) is 12 bytes, a filter
-(`AdxEncFilter`) 0x90 bytes.
+the previous samples of each channel and the key. A predictor (`IirFilt`, CRI's `_iir_filt`) is 12 bytes, a filter
+(`PredictFilt`, CRI's `predict_filt`) 0x90 bytes; the handle `AdxEnc` is `ADX_SJENC`, all three named from the 2002 SDK STABS ([CRI ADXB](cri-adxb.md#layout)).
 
 Destroying an encoder clears the four status bytes with one word store, which the source writes as a 4-byte
 `memset` (inline under GCC). Creating one sets the in-use byte alone, and the server tests it alone.

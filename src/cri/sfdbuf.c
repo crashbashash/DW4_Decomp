@@ -31,7 +31,7 @@ void sfbuf_InitUoSj(void *body);
 int sfbuf_ChkSupSj(SfdBufInf *inf);
 int sfbuf_SetSupplySjSub(SfdPly *h, SfdBufInf *inf, int index);
 void sfbuf_SetSupSj(SfdBufRing *body, void *src, SfdBufEnt *ent, int flag);
-void sfbuf_InitConti(SfdBufCur *cur);
+void sfbuf_InitConti(SfdBufDlm *cur);
 int sfbuf_GetStat(SfdPly *h, int index, SfdBufStat *stat, int id);
 int sfbuf_RingAddSub(SfdPly *h, int index, int len, int id);
 void sfbuf_ResetConti(SfdBufRing *body);
@@ -293,10 +293,10 @@ void sfbuf_SetSupSj(SfdBufRing *body, void *src, SfdBufEnt *ent, int flag) {
     sfd_Unlock(&lock);
 }
 
-void sfbuf_InitConti(SfdBufCur *cur) {
+void sfbuf_InitConti(SfdBufDlm *cur) {
     /* matching construct: variant search — stmt order [1, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     cur->pos = 0;
-    cur->len = 0;
+    cur->end = 0;
 }
 
 void SFBUF_SetUoch(void *sfd, int index, int slot, void *uoch) {
@@ -403,7 +403,7 @@ int sfbuf_RingAddSub(SfdPly *h, int index, int len, int id) {
 }
 
 void sfbuf_ResetConti(SfdBufRing *body) {
-    SfdBufCur *cur = &body->dlm;
+    SfdBufDlm *cur = &body->dlm;
     SfdSjChunk first;
     SfdSjChunk second;
     char *pos;
@@ -412,7 +412,7 @@ void sfbuf_ResetConti(SfdBufRing *body) {
     if (pos < first.data || pos >= first.data + first.len) {
         if (pos < second.data || pos >= second.data + second.len) {
             cur->pos = 0;
-            cur->len = 0;
+            cur->end = 0;
         }
     }
 }
@@ -439,23 +439,23 @@ int sfbuf_MoveChunk(SfdSj *sj, int id, int len) {
     return ck.len;
 }
 
-void SFBUF_RingGetDlm(void *sfd, int index, int *pos, int *len) {
+void SFBUF_RingGetDlm(void *sfd, int index, char **pos, char **end) {
     SfdPly *h = sfd;
     int lock;
-    SfdBufCur *cur = &h->buf[index].u.ring.dlm;
+    SfdBufDlm *cur = &h->buf[index].u.ring.dlm;
     sfd_Lock(&lock);
-    *pos = (int)cur->pos;
-    *len = cur->len;
+    *pos = cur->pos;
+    *end = cur->end;
     sfd_Unlock(&lock);
 }
 
-void SFBUF_RingSetDlm(void *sfd, int index, int pos, int len) {
+void SFBUF_RingSetDlm(void *sfd, int index, char *pos, char *end) {
     SfdPly *h = sfd;
     int lock;
-    SfdBufCur *cur = &h->buf[index].u.ring.dlm;
+    SfdBufDlm *cur = &h->buf[index].u.ring.dlm;
     sfd_Lock(&lock);
-    cur->pos = (char *)pos;
-    cur->len = len;
+    cur->pos = pos;
+    cur->end = end;
     sfd_Unlock(&lock);
 }
 

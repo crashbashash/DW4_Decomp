@@ -22,8 +22,26 @@ likely form.
 ## Layout
 
 A handle (`AdxbObj`, 260 bytes, declared in `include/dw4/cri/adxb.h` for ADXB and the SPSD and WAV
-readers) holds its in-use word, the ADXPD handle at +8, a 44-byte buffer block (`AdxbBuf`) at +72, a
-callback at +120, and the three decryption key values at +160, +162 and +164 as 16-bit words.
+readers) is CRI's `_adx_intbuf`, grown from the 2002 SDK's 176 bytes. Its members up to +154 and the decode
+request `AdxDecPara` (`_adx_dec_para`) at +72 take the member names of the STABS in the 2002 SDK's `libadxe.a`
+(members `adx_bsc.o`, `adx_bahx.o`; high): `hdcdflag`, `xpd`, `code`, `bps`, `blknsmpl`, `lp_ins_nsmpl`,
+`lp_spos`…`lp_eofst`, `maxnch`, `getwrfunc`/`getwrobj`, `addwrfunc`/`addwrobj`, `total_ndecsmpl`, `curwpos`,
+`ndecsmpl`, `ndeclen`, `fmttype`, and the keys `k0`/`km`/`ka`. The 2002 `ADXB_GetOutBps` reads the sample format at
++154, this build at +156: `cdctype` moved by the new `def_fmttype` at +154. The members after the 2002 layout take
+their names from the functions that read them (`ADXB_GetAinfLen`, `ADXB_GetDataId`, `ADXB_GetDefOutVol`,
+`ADXB_GetDefPan`, `ADXB_EntryDecFunc`; medium, matching the RE4 library's `ainf_len`, `def_outvol`, `def_pan`,
+`cb_func`/`cb_obj`): `ainf_len`, `dataid`, `def_outvol`, `def_pan`, `decfunc`/`decobj`, `cb_ndeclen` (the
+length at the last `decfunc` call; alternative RE4's `cb_nbyte`), and `xp_key`/`xp_km`/`xp_ka` for the snapshot of
+the decoder's keys (alternative RE4's `extprm[3]`).
+
+The same STABS name the other ADX objects: the encoder `AdxEnc` (`ADX_SJENC`, with `predict_filt` as
+`PredictFilt` and `_iir_filt` as `IirFilt`, `adx_sje.o`), the header records in `adxhdr.c` (`ADXHDR`,
+`ADXLOOPPRM`, `ADXPLYPRM`, and `ADXHINFO` for `AdxtHdrInfo`, `adx_hdr.o`; CRI's own `ADXT_GetHdrInfo` stores the
+loop count in `lptype`), `adxwav.c`'s `tWAVEFORMATEX` (`adx_bwav.o`), `AdxSjdObj` (`ADX_SJDEC`), the partition
+info's `type`/`rev`, the DTR line counts `srclin`/`dstlin`, LSC's `ck`, `reqsct` and `errcnt`, HTCI's `end_fg`, and
+the SJ function table's first three slots (`_sj_vtbl`). The encoder's 2004 members after `ka` are named from
+`ADXSJE_SetAinf*` (`ainf_flg`, `dataid`, `outvol`, `outpan`; medium).
+
 
 ## Open questions
 
@@ -36,7 +54,10 @@ callback at +120, and the three decryption key values at +160, +162 and +164 as 
   `ADXB_GetDefOutVol`, `ADXB_GetDataId`, `ADXB_RestoreSnapshot`, `ADXB_SetExtString`, `ADXB_SetDefExtString`,
   `ADXB_ExecHndl`, `adxb_dec_cb_proc`. Medium from behaviour: `ADXB_ResetDefFmt` (alternative `ADXB_ClearDefFmt`)
   and `ADXB_EntryDecFunc`, named like `ADXSJD_EntryDecFunc` above it (alternative `ADXB_SetCbDec`, a name found
-  only in a list ported from Persona 3 FES). The fields beyond the 2002 layout stay named by offset.
+  only in a list ported from Persona 3 FES).
+- `AdxbObj` +158 and +248 have no reader: +158 is a gap before the keys, +248 is only cleared with
+  `cb_ndeclen`. `AdxSjdObj` keeps `hdr` for the 64-byte header copy that the 2002 STABS call `spsdinfo`, as this
+  build copies every format's header there.
 - `SKG_GetNextKey` (`0x25d2e0`), between the SKG and ADXB pools, is unreferenced; 3rd Strike's order puts it
   last in SKG.
 - The buffer-position function at `0x25e018` has no source and links from the retail image (24 words off:

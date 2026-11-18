@@ -194,13 +194,13 @@ typedef struct SfdPlyInf {
     int f8;
     int f12;
     int numSkipEmptyB;   /* 16 */
-    int f20;
-    int f24;
+    int numSkipEmptyP;   /* 20: empty P pictures skipped */
+    int frmOut;          /* 24: a frame is handed out (SFD_GetFrm until SFD_RelFrm) */
     int bpaActive;       /* 28: playback paused for want of data */
     int noSupply;        /* 32: times playback paused for want of data (MwsfdPlyInf no_supply_cnt) */
-    int f36;
-    int f40;
-    int f44;
+    int vidShort;        /* 36: the video input holds no whole picture */
+    int noFreeFrm;       /* 40: the decoder found no free frame */
+    int lockCnt;         /* 44: frames locked by SFD_LockFrm */
     long long sysFlow;   /* 48: the system stream ring's flow count */
     long long sysByte;   /* 56: system stream bytes demultiplexed */
     long long sysSkip;   /* 64 */
@@ -270,25 +270,25 @@ typedef struct SfdTim {
     int pad332;
     long long baseTime;        /* 336 */
     long long ofsTime;         /* 344 */
-    int f352;
+    int concat_frmcnt;         /* 352: the IPU frame count when the last file was joined */
     SfdSyncTally tally;        /* 356 */
     SfdSyncQueue queue;        /* 492 */
     int base;                  /* 636 */
     int base_frames;           /* 640 */
-    int f644;
-    int f648;
+    int dec_time;              /* 644: the time of the furthest frame decoded */
+    int dec_unit;              /* 648 */
     int cached_pos;            /* 652 */
     int cached_rate;           /* 656 */
     int last;                  /* 660 */
     int estimate;              /* 664 */
     int largest;               /* 668 */
     int smallest;              /* 672 */
-    int f676;
+    int usr_frm_sync;          /* 676: SFD_OutUsrFrmSync calls */
     int stream_pos;            /* 680 */
     int speed;                 /* 684: 1000 = normal */
-    int f688;
-    int f692;
-    int f696;
+    int disp_sync_cnt;         /* 688: SFD_OutDispSync calls */
+    int disp_sync_time;        /* 692 */
+    int disp_sync_unit;        /* 696 */
     int sync_count;            /* 700 */
     float sync_pending;        /* 704 */
     int sync_last;             /* 708 */
@@ -327,6 +327,17 @@ enum {
     SFD_COND_NUM = 100
 };
 
+/* The frame buffer format the handle was created with (MWSFD converts it with
+ * mwl_convBufFmtFromSFD); an enum in CRI's header. */
+typedef enum SfdBufFmt {
+    SFD_BUFFMT_0 = 0
+} SfdBufFmt;
+
+/* An SFBUF ring id; SFD_BUF_NONE marks a transfer slot with no ring connected. */
+typedef enum SfdBufId {
+    SFD_BUF_NONE = 8
+} SfdBufId;
+
 /* The creation parameters (SFD_Create); the handle starts with a copy of them. The buffer work is cut
  * into the eight buffers by their sizes. */
 typedef struct SfdCrePrm {
@@ -337,7 +348,7 @@ typedef struct SfdCrePrm {
     int f44;                  /* 44: the video ring's reserve */
     int f48;
     int f52;
-    int bufFmt;               /* 56: the frame buffer format */
+    SfdBufFmt bufFmt;         /* 56: the frame buffer format */
     char *work;               /* 60: the handle work */
     unsigned int workSize;    /* 64 */
 } SfdCrePrm;
@@ -368,16 +379,22 @@ typedef struct SfdBufInf {
     char *p0;                 /* 20 */
 } SfdBufInf;
 
-/* The delimiter a ring's reader has reached (SFBUF_RingGetDlm). */
+/* An audio ring's second channel: where it starts and the ring's length in samples. */
 typedef struct SfdBufCur {
     char *pos;
     int len;
 } SfdBufCur;
 
+/* The delimiter a ring's reader has reached and the end of the data searched for it (SFBUF_RingGetDlm). */
+typedef struct SfdBufDlm {
+    char *pos;
+    char *end;
+} SfdBufDlm;
+
 /* A ring buffer: its supply, the delimiter, the totals written and read and the time-stamp queue. */
 typedef struct SfdBufRing {
     SfdBufInf sup;            /* 0 */
-    SfdBufCur dlm;            /* 24 */
+    SfdBufDlm dlm;            /* 24 */
     int wtot;                 /* 32 */
     int rtot;                 /* 36 */
     SfdRing ptsque;           /* 40 */
@@ -535,7 +552,7 @@ typedef struct SfdTrnSlot {
         SfainfList *uo;
     } hn;                     /* 8 */
     SfdTrnFn *fns;            /* 12 */
-    int bufIn;                /* 16 */
+    SfdBufId bufIn;           /* 16 */
     int bufOut[3];            /* 20: video, audio and user data for the system module */
     int readTot;              /* 32: the bytes the module has read from its input; -1 when unknown */
     char pad36[32];
@@ -607,8 +624,8 @@ int SFBUF_RingGetWrite(void *sfd, int index, struct SfdBufStat *stat);
 int SFBUF_RingGetRead(void *sfd, int index, struct SfdBufStat *stat);
 int SFBUF_RingAddWrite(void *sfd, int index, int len, int tail);
 int SFBUF_RingAddRead(void *sfd, int index, int len);
-void SFBUF_RingGetDlm(void *sfd, int index, int *pos, int *len);
-void SFBUF_RingSetDlm(void *sfd, int index, int pos, int len);
+void SFBUF_RingGetDlm(void *sfd, int index, char **pos, char **end);
+void SFBUF_RingSetDlm(void *sfd, int index, char *pos, char *end);
 int SFBUF_GetRingBufSiz(void *sfd, int index);
 int SFBUF_GetRTot(void *sfd, int index);
 int SFBUF_GetWTot(void *sfd, int index);
@@ -772,7 +789,7 @@ int SFD_IsNextFrmReady(void *sfd);
 void SFD_SetSceMpeg(int enable);
 int SFMPVP_IsSceMpegUsed(void *sfd);
 void SFMPVP_Init(void);
-int SFD_GetSceErrMessage(void *sfd);
+char *SFD_GetSceErrMessage(void *sfd);
 int SFMPVP_Put(void *sfd, char *src, int pos);
 int SFMPVP_Unput(void *sfd, int count);
 void sfmpvps2_StopIpu(void *sfd, int value);

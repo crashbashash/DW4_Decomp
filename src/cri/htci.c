@@ -9,10 +9,10 @@ typedef struct HtCiFile {
     signed char used;       /* 0x00 */
     signed char cached;     /* 0x01 */
     signed char state;      /* 0x02 */
-    char pad3[5];
+    signed char rsv;        /* 0x03 */
     long long size;         /* 0x08 */
     int nsct;               /* 0x10 */
-    int f20;                /* 0x14 */
+    int end_fg;             /* 0x14 */
     int fd;                 /* 0x18 */
     int pos;                /* 0x1c */
     char *buf;              /* 0x20 */
@@ -137,11 +137,11 @@ int htci_is_exec_hn_one(HtCiFile *h)
     int result;
     int ret;
     SRD_SetHistory(0x4000);
-    result = SRD_SceIoctl(h->fd, 1, &h->f20);
+    result = SRD_SceIoctl(h->fd, 1, &h->end_fg);
     SRD_SetHistory(0x4001);
     ret = 0;
     if (result >= 0) {
-        ret = h->f20 != 1;
+        ret = h->end_fg != 1;
     }
     return ret;
 }
@@ -368,7 +368,7 @@ HtCiFile *htCiOpen(const char *fname, void *atr, int rw)
     h->buf = 0;
     h->req = 0;
     h->nsct = (h->size + 2047) >> 11;
-    h->f20 = 0;
+    h->end_fg = 0;
     h->state = 0;
     h->used = 1;
     return h;
@@ -480,7 +480,7 @@ int htCiReqRd(HtCiFile *h, int nsct, char *buf)
         h->state = 2;
         h->done = 0;
     }
-    h->f20 = 0;
+    h->end_fg = 0;
     return h->req;
 }
 

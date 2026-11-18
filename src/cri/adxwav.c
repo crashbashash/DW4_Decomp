@@ -15,15 +15,16 @@ extern char WAVE[];
 static char *wav_fmt_chunk = "fmt ";
 static char *wav_data_chunk = "data";
 
-/* The "fmt " chunk body */
-typedef struct WavFmt {
-    short format;
-    short nch;
-    int sfreq;
-    int byte_rate;
-    short blkalign;
-    short bps;
-} WavFmt;
+/* The "fmt " chunk body (CRI's tWAVEFORMATEX) */
+typedef struct tWAVEFORMATEX {
+    short wFormatTag;
+    short nChannels;
+    int nSamplesPerSec;
+    int nAvgBytesPerSec;
+    short nBlockAlign;
+    short wBitsPerSample;
+    short cbSize;
+} WAVEFORMATEX;
 
 /* Finds the "fmt " and "data" chunks, reads the format fields into ADX_DecodeInfo's form, and turns 8-bit and
  * 4-bit declarations into the sample formats the decode steps take. */
@@ -31,7 +32,7 @@ int ADX_DecodeInfoWav(unsigned char *buf, int len, short *hdrlen, signed char *h
                     signed char *blklen, signed char *nch, int *sfreq, int *nsmpl, int *blksmpl, short *pcmfmt)
 {
     int i;
-    WavFmt *fmt;
+    WAVEFORMATEX *fmt;
     int size;
 
     for (i = 0; i < len; i++) {
@@ -45,8 +46,8 @@ int ADX_DecodeInfoWav(unsigned char *buf, int len, short *hdrlen, signed char *h
     if (i & 3) {
         return -1;
     }
-    fmt = (WavFmt *)(buf + i + 8);
-    if (fmt->format >= 2) {
+    fmt = (WAVEFORMATEX *)(buf + i + 8);
+    if (fmt->wFormatTag >= 2) {
         return -1;
     }
     for (i = 0; i < len; i++) {
@@ -60,10 +61,10 @@ int ADX_DecodeInfoWav(unsigned char *buf, int len, short *hdrlen, signed char *h
     *hdrlen = i + 8;
     size = *(int *)(buf + i + 4);
     *hdrtype = -1;
-    *sfreq = fmt->sfreq;
-    *nch = fmt->nch;
-    *fmtbps = fmt->bps;
-    *blklen = fmt->blkalign;
+    *sfreq = fmt->nSamplesPerSec;
+    *nch = fmt->nChannels;
+    *fmtbps = fmt->wBitsPerSample;
+    *blklen = fmt->nBlockAlign;
     *nsmpl = size / *blklen;
     *blksmpl = 1;
     if (*fmtbps == 16) {
@@ -96,55 +97,55 @@ int ADXB_DecodeHeaderWav(AdxbObj *adxb, unsigned char *hdr, int size)
 {
     short hdrlen;
 
-    adxb->hdr_set = 1;
-    if (ADX_DecodeInfoWav(hdr, size, &hdrlen, &adxb->hdrtype, &adxb->fmtbps, &adxb->blklen, &adxb->nch,
-                        &adxb->sfreq, &adxb->total_nsmpl, &adxb->blksmpl, &adxb->pcmfmt) < 0) {
+    adxb->hdcdflag = 1;
+    if (ADX_DecodeInfoWav(hdr, size, &hdrlen, &adxb->code, &adxb->bps, &adxb->blklen, &adxb->nch,
+                        &adxb->sfreq, &adxb->total_nsmpl, &adxb->blknsmpl, &adxb->cdctype) < 0) {
         return 0;
     }
-    adxb->lp_end_ofst = 0;
-    adxb->lp_end_pos = 0;
-    adxb->lp_start_ofst = 0;
-    adxb->lp_start_pos = 0;
+    adxb->lp_eofst = 0;
+    adxb->lp_epos = 0;
+    adxb->lp_sofst = 0;
+    adxb->lp_spos = 0;
     adxb->cof = 0;
-    adxb->lpins_nsmpl = 0;
-    adxb->lptype = 0;
+    adxb->lp_ins_nsmpl = 0;
+    adxb->lp_type = 0;
     adxb->nloop = 0;
-    adxb->buf.nch = adxb->nch;
-    adxb->buf.blklen = adxb->blklen;
-    adxb->buf.blksmpl = adxb->blksmpl;
-    adxb->wpos = 0;
-    adxb->buf.pcmbuf = adxb->pcmbuf;
-    adxb->dec_nsmpl = 0;
-    adxb->buf.pcmbsize = adxb->pcmbsize;
-    adxb->buf.pcmbdist = adxb->pcmbdist;
-    adxb->format = ADXB_FORMAT_WAV;
+    adxb->dp.nch = adxb->nch;
+    adxb->dp.blksize = adxb->blklen;
+    adxb->dp.blknsmpl = adxb->blknsmpl;
+    adxb->curwpos = 0;
+    adxb->dp.pcmbuf = adxb->pcmbuf;
+    adxb->total_ndecsmpl = 0;
+    adxb->dp.pcmbsize = adxb->pcmbsize;
+    adxb->dp.pcmbdist = adxb->pcmbdist;
+    adxb->fmttype = ADXB_FORMAT_WAV;
     return hdrlen;
 }
 
 void ADXB_ExecOneWav16(AdxbObj *obj)
 {
-    AdxbBuf *buf;
+    AdxDecPara *buf;
     short *src;
     short *dst;
     short *dst2;
     int n;
     int i;
 
-    buf = &obj->buf;
+    buf = &obj->dp;
     src = (short *)buf->ibuf;
     if (obj->stat == 1) {
-        if (ADXPD_GetStat(obj->adxpd) == 0) {
-            obj->cb120(obj->obj124, &buf->pos, &buf->lim, &buf->end);
-            n = buf->pcmbsize - buf->pos;
-            if (buf->lim < n) {
-                n = buf->lim;
+        if (ADXPD_GetStat(obj->xpd) == 0) {
+            obj->getwrfunc(obj->getwrobj, &buf->wpos, &buf->nroom, &buf->lp_nsmpl);
+            n = buf->pcmbsize - buf->wpos;
+            if (buf->nroom < n) {
+                n = buf->nroom;
             }
-            if (buf->len < n) {
-                n = buf->len;
+            if (buf->niblk < n) {
+                n = buf->niblk;
             }
-            dst = buf->pcmbuf + buf->pos;
+            dst = buf->pcmbuf + buf->wpos;
             if (obj->nch == 2) {
-                dst2 = buf->pcmbuf + (buf->pcmbdist + buf->pos);
+                dst2 = buf->pcmbuf + (buf->pcmbdist + buf->wpos);
                 for (i = 0; i < n; i++) {
                     dst[i] = src[i * 2];
                     dst2[i] = src[i * 2 + 1];
@@ -155,40 +156,40 @@ void ADXB_ExecOneWav16(AdxbObj *obj)
                 }
             }
             obj->stat = 2;
-            obj->f144 = n;
-            obj->f148 = n * obj->nch * 2;
+            obj->ndecsmpl = n;
+            obj->ndeclen = n * obj->nch * 2;
         }
     }
     if (obj->stat == 2) {
-        obj->cb128(obj->obj132, obj->f148, obj->f144);
+        obj->addwrfunc(obj->addwrobj, obj->ndeclen, obj->ndecsmpl);
         obj->stat = 3;
     }
 }
 
 void ADXB_ExecOneWav8(AdxbObj *obj)
 {
-    AdxbBuf *buf;
+    AdxDecPara *buf;
     unsigned char *src;
     short *dst;
     short *dst2;
     int n;
     int i;
 
-    buf = &obj->buf;
+    buf = &obj->dp;
     src = (unsigned char *)buf->ibuf;
     if (obj->stat == 1) {
-        if (ADXPD_GetStat(obj->adxpd) == 0) {
-            obj->cb120(obj->obj124, &buf->pos, &buf->lim, &buf->end);
-            n = buf->pcmbsize - buf->pos;
-            if (buf->lim < n) {
-                n = buf->lim;
+        if (ADXPD_GetStat(obj->xpd) == 0) {
+            obj->getwrfunc(obj->getwrobj, &buf->wpos, &buf->nroom, &buf->lp_nsmpl);
+            n = buf->pcmbsize - buf->wpos;
+            if (buf->nroom < n) {
+                n = buf->nroom;
             }
-            if (buf->len < n) {
-                n = buf->len;
+            if (buf->niblk < n) {
+                n = buf->niblk;
             }
-            dst = buf->pcmbuf + buf->pos;
+            dst = buf->pcmbuf + buf->wpos;
             if (obj->nch == 2) {
-                dst2 = buf->pcmbuf + (buf->pcmbdist + buf->pos);
+                dst2 = buf->pcmbuf + (buf->pcmbdist + buf->wpos);
                 for (i = 0; i < n; i++) {
                     dst[i] = (src[i * 2] - 128) << 8;
                     dst2[i] = (src[i * 2 + 1] - 128) << 8;
@@ -199,12 +200,12 @@ void ADXB_ExecOneWav8(AdxbObj *obj)
                 }
             }
             obj->stat = 2;
-            obj->f144 = n;
-            obj->f148 = n * obj->nch;
+            obj->ndecsmpl = n;
+            obj->ndeclen = n * obj->nch;
         }
     }
     if (obj->stat == 2) {
-        obj->cb128(obj->obj132, obj->f148, obj->f144);
+        obj->addwrfunc(obj->addwrobj, obj->ndeclen, obj->ndecsmpl);
         obj->stat = 3;
     }
 }
@@ -212,28 +213,28 @@ void ADXB_ExecOneWav8(AdxbObj *obj)
 /* 16-bit samples assembled from little-endian byte pairs. */
 void ADXB_ExecOneWav4(AdxbObj *obj)
 {
-    AdxbBuf *buf;
+    AdxDecPara *buf;
     unsigned char *src;
     short *dst;
     short *dst2;
     int n;
     int i;
 
-    buf = &obj->buf;
+    buf = &obj->dp;
     src = (unsigned char *)buf->ibuf;
     if (obj->stat == 1) {
-        if (ADXPD_GetStat(obj->adxpd) == 0) {
-            obj->cb120(obj->obj124, &buf->pos, &buf->lim, &buf->end);
-            n = buf->pcmbsize - buf->pos;
-            if (buf->lim < n) {
-                n = buf->lim;
+        if (ADXPD_GetStat(obj->xpd) == 0) {
+            obj->getwrfunc(obj->getwrobj, &buf->wpos, &buf->nroom, &buf->lp_nsmpl);
+            n = buf->pcmbsize - buf->wpos;
+            if (buf->nroom < n) {
+                n = buf->nroom;
             }
-            if (buf->len < n) {
-                n = buf->len;
+            if (buf->niblk < n) {
+                n = buf->niblk;
             }
-            dst = buf->pcmbuf + buf->pos;
+            dst = buf->pcmbuf + buf->wpos;
             if (obj->nch == 2) {
-                dst2 = buf->pcmbuf + (buf->pcmbdist + buf->pos);
+                dst2 = buf->pcmbuf + (buf->pcmbdist + buf->wpos);
                 for (i = 0; i < n; i++) {
                     dst[i] = src[i * 4] | (src[i * 4 + 2] << 8);
                     dst2[i] = src[i * 4 + 1] | (src[i * 4 + 3] << 8);
@@ -244,12 +245,12 @@ void ADXB_ExecOneWav4(AdxbObj *obj)
                 }
             }
             obj->stat = 2;
-            obj->f144 = n;
-            obj->f148 = n * obj->nch * 2;
+            obj->ndecsmpl = n;
+            obj->ndeclen = n * obj->nch * 2;
         }
     }
     if (obj->stat == 2) {
-        obj->cb128(obj->obj132, obj->f148, obj->f144);
+        obj->addwrfunc(obj->addwrobj, obj->ndeclen, obj->ndecsmpl);
         obj->stat = 3;
     }
 }
@@ -264,11 +265,11 @@ int ADXB_CheckWav(unsigned char *hdr)
 
 void ADXB_ExecOneWav(AdxbObj *obj)
 {
-    if (obj->pcmfmt == ADXB_PCM_4) {
+    if (obj->cdctype == ADXB_PCM_4) {
         ADXB_ExecOneWav4(obj);
-    } else if (obj->pcmfmt == ADXB_PCM_8) {
+    } else if (obj->cdctype == ADXB_PCM_8) {
         ADXB_ExecOneWav8(obj);
-    } else if (obj->pcmfmt == ADXB_PCM_16) {
+    } else if (obj->cdctype == ADXB_PCM_16) {
         ADXB_ExecOneWav16(obj);
     }
 }

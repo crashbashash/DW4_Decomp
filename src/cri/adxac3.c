@@ -43,30 +43,30 @@ int ADXB_DecodeHeaderAc3(AdxbObj *adxb, unsigned char *hdr, int size)
     if (adxb->ac3 == 0) {
         return 0;
     }
-    adxb->hdr_set = 1;
+    adxb->hdcdflag = 1;
     adxb->sfreq = 48000;
     adxb->nch = 1;
-    adxb->fmtbps = 16;
+    adxb->bps = 16;
     adxb->total_nsmpl = 0x7FFFFFFF;
     adxb->blklen = 127;
-    adxb->blksmpl = ADXB_AC3_FRMSMPL;
-    adxb->format = ADXB_FORMAT_AC3;
-    adxb->buf.nch = 1;
-    adxb->buf.blklen = 127;
-    adxb->buf.blksmpl = ADXB_AC3_FRMSMPL;
-    adxb->buf.pcmbuf = adxb->pcmbuf;
-    adxb->buf.pcmbsize = adxb->pcmbsize;
-    adxb->buf.pcmbdist = adxb->pcmbdist;
-    adxb->wpos = 0;
+    adxb->blknsmpl = ADXB_AC3_FRMSMPL;
+    adxb->fmttype = ADXB_FORMAT_AC3;
+    adxb->dp.nch = 1;
+    adxb->dp.blksize = 127;
+    adxb->dp.blknsmpl = ADXB_AC3_FRMSMPL;
+    adxb->dp.pcmbuf = adxb->pcmbuf;
+    adxb->dp.pcmbsize = adxb->pcmbsize;
+    adxb->dp.pcmbdist = adxb->pcmbdist;
+    adxb->curwpos = 0;
     adxb->cof = 0;
     adxb->nloop = 0;
-    adxb->lptype = 0;
-    adxb->lpins_nsmpl = 0;
-    adxb->lp_start_pos = 0;
-    adxb->lp_start_ofst = 0;
-    adxb->lp_end_pos = 0;
-    adxb->lp_end_ofst = 0;
-    adxb->dec_nsmpl = 0;
+    adxb->lp_type = 0;
+    adxb->lp_ins_nsmpl = 0;
+    adxb->lp_spos = 0;
+    adxb->lp_sofst = 0;
+    adxb->lp_epos = 0;
+    adxb->lp_eofst = 0;
+    adxb->total_ndecsmpl = 0;
     return 1;
 }
 

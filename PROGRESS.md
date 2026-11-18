@@ -34,7 +34,7 @@ The function count is flattered by small functions: the ones done have a median 
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**13,880** of the 20,431 matched functions are readable: **2,282,812** code bytes, **65.7 %** of the code.
+**13,998** of the 20,431 matched functions are readable: **2,308,584** code bytes, **66.5 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
@@ -44,7 +44,7 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | it sits in its class or module file, not `src/unmatched/` | 9 | 628 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 1,715 | 460,888 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 2,043 | 377,268 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,348 | 436,328 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,222 | 408,900 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 557 | 146,400 |
 | what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol, no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 452 | 260,048 |
 
@@ -79,7 +79,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `unmatched.bytes` | 193,824 | 193,824 | 0 | bytes of those |
 | `struct.a` | 3 | 3 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
 | `struct.b` | 1 | 1 | 0 | struct-report groups: receiver view disagrees with the reflected class; increase recorded: engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes |
-| `struct.c` | 9 | 9 | 0 | struct-report groups: offset-named member whose number is not its offset |
+| `struct.c` | 11 | 11 | 0 | struct-report groups: offset-named member whose number is not its offset; increase recorded: struct.c +2: CRI's own STABS member names d0/d1 of _iir_filt and predict_filt (2002 SDK libadxe.a adx_sje.o) read as offset names |
 | `m2c_idiom.units` | 18 | 18 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 258 | 258 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
 | `fun_dat_refs` | 759 | 759 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
@@ -193,7 +193,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 32,781 of 71,992 (45.53 %) |
+| field accesses using a **recovered** type (not an offset cast) | 32,781 of 71,988 (45.54 %) |
 | functions in the retail split (`asm/`, generated) | 20,576 |
 
 ## How these numbers are produced

@@ -19,7 +19,7 @@ typedef struct AdxAmpObj {
     signed char used;               /* 0x00 */
     signed char stat;               /* 0x01: ADXAMP_STAT_* */
     signed char maxnch;             /* 0x02 */
-    char pad3;
+    char rsrv;                      /* 0x03 */
     SfdSj *sji[ADXAMP_MAX_CH];      /* 0x04: decoded samples in */
     SfdSj *sjo[ADXAMP_MAX_CH];      /* 0x0c: amplitude records out */
     int nsmpl[ADXAMP_MAX_CH];       /* 0x14: samples measured, per channel */

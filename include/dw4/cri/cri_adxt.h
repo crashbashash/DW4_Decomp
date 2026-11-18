@@ -17,16 +17,17 @@ extern "C" {
 #define ADXT_MAX_OBJ 16
 #define ADXT_SCT_LEN 2048
 
-/* what ADXT_GetHdrInfo reports about an ADX header; fmt 1 is ADX and 2 is AHX */
+/* CRI's ADXHINFO: what ADXT_GetHdrInfo reports about an ADX header; fmt 1 is ADX and 2 is AHX. CRI's own code
+ * stores the header's loop count in lptype. */
 typedef struct AdxtHdrInfo {
     int fmt;
     int sfreq;
     int nch;
     int bps;
     int nsmpl;
-    int lpcnt;
-    int lpStart;
-    int lpEnd;
+    int lptype;
+    int lpstart;
+    int lpend;
 } AdxtHdrInfo;
 
 enum AdxtStat {

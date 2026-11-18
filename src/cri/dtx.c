@@ -17,7 +17,7 @@ struct DtxObj {
     signed char used;       /* 0x00 */
     signed char state;      /* 0x01 */
     signed char flag;       /* 0x02 */
-    char pad3;
+    char rsv;               /* 0x03 */
     int server;             /* 0x04 */
     int count;              /* 0x08 */
     char *eewk;             /* 0x0c */

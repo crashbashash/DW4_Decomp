@@ -12,7 +12,7 @@ typedef struct DvCiFile {
     signed char used;       /* 0x00 */
     signed char cached;     /* 0x01 */
     signed char state;      /* 0x02 */
-    char pad3;
+    signed char instat;     /* 0x03 */
     unsigned int size;      /* 0x04 */
     int nsct;               /* 0x08 */
     int pos;                /* 0x0c */
