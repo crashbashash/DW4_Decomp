@@ -4,8 +4,10 @@ Four whole files between the SFD time-stamp file (`src/cri/sfdtst.c`) and the SF
 with Sony EE GCC 2.96 at `-O2 -G0` (their rows in `units.tsv` and `unit-objects.json`;
 [whole-file units](emitted-functions.md#whole-file-units)). The file names and the function names outside SFH and the
 SFX alpha code are best guesses from behaviour. SFH's version string names its library, and the SFH and
-SFX alpha functions carry CRI's own names, taken from the GameCube builds of the same library versions
-(Resident Evil 4, Shadow the Hedgehog) and the Persona 3 FES PlayStation 2 symbol list.
+SFX alpha functions carry CRI's own names, taken from the CRI PS2 SDK archive `libmwsfde.a` (members `sfh_main.o` and
+`sfx_alp.o`; [recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)) and from Resident Evil 4's
+GameCube symbol table ([adonis-singh/re4](https://github.com/adonis-singh/re4), `config/G4BE08/sym_map.tsv`) and CRI
+library (`src/cri/re4/` in [Raikaru/Persona4-Decompilation](https://github.com/Raikaru/Persona4-Decompilation)).
 
 | file | unit | range | what it is | evidence |
 | --- | --- | --- | --- | --- |
@@ -35,18 +37,21 @@ address sits in `v1` and the loop comes out with the move in the slot and a pad 
   the module lists in MWSFD's data.
 - What the stream graph slots 6 and 8 carry: the file names `sfdout` and `sfdainf` rest on behaviour and on the
   MWSFD caller that sets the additional-information stream join through `SFD_SetUsrSj`.
-- `SFX_SetClipping`, `SFX_SetBottomUpDstBuf` and `SFX_SetBottomUpPlnBuf` are called from nowhere in the image.
-- Medium confidence: the SFH getters of the file, element and header fields outside the `SFH_AnlyNumElem*` and `SFH_AnlyFtr*`
-  names (the other `SFH_Anly*` getters, `SFH_IsSfdHeader`, `SFH_IsExistStmId`, `SFH_IsEffFtrInf`, `SFH_AnlyMaxPicSiz` and
-  `SFH_AnlyAvrPicSiz` with the two version-2.25 header words), the SFH static helpers (`clearObjInf`, `initObjInf`,
-  `initSfhObj`, `setHnCreate`, `initLibWork`, `isFreeObj`, `isEffectiveVer`, `isEffectiveObj`, `searchStmId`, `getToolVer`,
-  `convAsciiToDigit`, `getElemInfPtr`, `isEnableAudFtr`, `isEnableVidFtr`, `chkStmId`) and the SFX alpha names `SFXA_SetLumiPrm`,
-  `SFXA_GetLumiPrm`, `SFXA_SetAlp3Prm`, `SFXA_GetAlp3Prm`, `sfxalp_SearchFreeHn`, `sfxalp_InitHn`, `SFX_SetClipping`,
-  `SFX_SetBottomUpDstBuf` and `SFX_SetBottomUpPlnBuf` (`SFXA_Create`, `SFXA_Destroy`, `SFXA_MakeAlpLumiTbl`,
-  `SFXA_MakeAlp3110Tbl`, `SFXA_MakeAlp3Tbl` and `SFXA_IsNeedUpdateLumiTbl` come from the GameCube library's own symbols and are
-  high). Source: the Persona 3 FES PlayStation 2 symbol list (its provenance is not stated), whose order and
-  sizes match this library one for one, with Persona 4's proven names where it has them and the Shadow the Hedgehog `sfh_main.c`
-  for the offsets and tests. The two bottom-up helpers have identical bodies, so the Dst/Pln split rests on that list's order
-  alone; the GameCube library keeps them in `sfx_cnv.c`, not in the SFX alpha file.
-- `SFH_GetSbverStr` and `SFH_CheckStructSiz` keep their names: the Persona 3 list has `SFH_CheckStructSiz` and an unnamed
-  function in those slots (low confidence).
+- `SFX_SetClipping`, `SFX_SetBottomUpBuf` and `SFX_SetBottomUpPlnBuf` are called from nowhere in the image.
+- Every SFH function but two holds the slot of the same name in the SDK `sfh_main.o`, in the same order, with the same
+  body or a near one; the public getters are also in the RE4 GameCube `lib/sfh_main.c`. High, except the near SDK bodies
+  the RE4 table lacks (`SFH_AnlySfdTimStmp`, `SFH_AnlyHdrToolInf`, `SFH_AnalyHdrComment`, `getToolVer`,
+  `SFH_AnlyElemFname`, `SFH_AnlyElemTimStmp`) and `getPicRate`, which are medium. `SFH_AnlyHdrToolVer` grew since 2002 and
+  keeps the SDK and RE4 slot (high). The two getters of the mux block's version-2.25 words, which nothing calls, are named
+  from what they return, `SFH_AnlyExtFirst` and `SFH_AnlyExtSecond` (medium): no approved source says what the words hold.
+- SFX alpha: `SFXA_Init`, `SFXA_Finish`, `SFXA_Create`, `SFXA_MakeAlpLumiTbl`, `SFXA_IsNeedUpdateLumiTbl`, `SFXA_SetLumiPrm`
+  and `SFXA_GetLumiPrm` have the SDK `sfx_alp.o` bodies and `SFXA_Destroy` a near one (high); `sfxalp_InitLibWork`,
+  `sfxalp_SearchFreeHn`, `sfxalp_InitHn` and `SFXA_MakeAlp3Tbl` hold the SDK order (medium). `SFXA_MakeAlp3110Tbl` is the RE4
+  function after `SFXA_MakeAlpLumiTbl` (medium); the RE4 library follows it with `SFXA_MakeAlp3211Tbl` where DW4 has the
+  SDK's `SFXA_MakeAlp3Tbl`. Named from what they do (medium): `SFXA_SetAlp3Prm` and `SFXA_GetAlp3Prm` (the three alpha
+  levels the three-level tables are built from, which `SFX_SetAlp3Prm`/`SFX_GetAlp3Prm` forward, as `SFX_SetALumiPrm`
+  forwards to `SFXA_SetLumiPrm`) and `SFX_SetClipping` (sets a frame to a clipping rectangle).
+- `SFX_SetBottomUpBuf` and `SFX_SetBottomUpPlnBuf` have identical bodies (a line walk turned upside down). The RE4 library
+  has one, `SFX_SetBottomUpPlnBuf`, at the end of its `sfx_cnv.c`; the second copy here takes that name (medium; the
+  alternative is the first) and the first a name from what it does. The RE4 library keeps the function in `sfx_cnv.c`, not
+  in the SFX alpha file.

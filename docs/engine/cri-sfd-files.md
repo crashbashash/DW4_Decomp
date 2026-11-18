@@ -59,12 +59,13 @@ the 2002 one. Names from what a function does are in the medium list below.
   functions read as `volatile` accesses are written as `volatile` casts at the access, approved under
   [sfd-time-counts](source-approvals.md#sfd-time-counts); a `volatile` on the whole block breaks other functions,
   so which fields the original declared `volatile` stays open.
-- Medium confidence: `SFTIM_Init`, `SFTIM_Finish`, `SFTIM_InitHn`, `SFTIM_InitTtu` and `SFTIM_InitTcode` (`0x2ae010`, `0x2ae020`,
-  `0x2ae028`, `0x2ae248`, `0x2ae290`) come from the order of the Persona 3 FES PlayStation 2 symbol list (provenance not stated) and the
-  GameCube library's map (`sfd_tim.c`), which has the same five in the same sequence; the bodies of `SFTIM_Init` agree with the
-  GameCube source. `SFD_SetUsrTimeFn`, `SFD_SetExtClockFn` and `SFD_UpdateTime` (`0x2aed78`, `0x2aee00`, `0x2aeef0`) come from the same
-  list: eight consecutive function sizes from `0x2aed60` match. In DW4 `SFD_UpdateTime` loops over every handle when given
-  none; the 2002 `SFD_UpdateTime` body is its one-handle helper `sftim_UpdateTimeHn`.
+- `SFTIM_Init`, `SFTIM_Finish`, `SFTIM_InitHn`, `SFTIM_InitTtu` and `SFTIM_InitTcode` (`0x2ae010` up to `0x2ae290`) are the
+  first five members of the SDK `sfd_tim.o`, in the same order, with the same or near bodies; the RE4 GameCube `lib/sfd_tim.c`
+  also has `SFTIM_Init`, `SFTIM_InitHn` and `SFTIM_InitTtu` (high; `SFTIM_InitTcode`, an SDK body alone, medium).
+  `SFD_SetUsrTimeFn` and `SFD_SetExtClockFn` (`0x2aed78`, `0x2aee00`) hold the SDK order after `SFD_CmpTime` and are in the RE4
+  GameCube `lib/sfd_tim.c` (high). `SFD_UpdateTime` (`0x2aeef0`, medium) holds the SDK slot after `SFD_SetExtClockFn`, and
+  `mwply_ExecTime` calls it with a player's handle as the 2002 function takes one; in DW4 it loops over every handle when
+  given none, and the 2002 body is its one-handle helper `sftim_UpdateTimeHn`.
 - `SFADXT_Create`, `sfmpv_BsearchDelim` and `sfmpv_IsLate` follow the CRI PS2 SDK archive `libmwsfde.a` (recvx-decomp-cri,
   github.com/SkeletonPicture/recvx-decomp-cri; members `sfd_adxt.o`, `sfd_mpv.o`) and the Resident Evil 4 CRI sources `sfd_adxt.c`
   and `sfd_mpv.c` kept in the Persona 4 decompilation (github.com/Raikaru/Persona4-Decompilation, `src/cri/re4/`). `SFADXT_Create` matches only when the ADXT handle, the ring, handle slot 7's work and

@@ -4,7 +4,7 @@
 #include "dw4/cri/mpvhook.h"
 void mpv_InstallHooks(void) {
     mpvhook_fn_GetVersionStr = M2V_GetVersionStr;
-    mpvhook_fn_IsConformable = M2V_IsConformable;
+    mpvhook_fn_IsDecodable = M2V_IsDecodable;
     mpvhook_fn_Init = M2V_Init;
     mpvhook_fn_Finish = M2V_Finish;
     mpvhook_fn_Create = M2V_Create;

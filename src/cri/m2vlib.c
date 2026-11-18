@@ -30,7 +30,7 @@ char *M2V_GetVersionStr(void)
     return M2VLIB_version_str;
 }
 
-int M2V_IsConformable(char *buf, int size)
+int M2V_IsDecodable(char *buf, int size)
 {
     char *p;
 

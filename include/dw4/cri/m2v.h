@@ -279,7 +279,7 @@ typedef struct M2vLibWork {
 void M2V_Init(int nobj, char *work, unsigned int size);
 void M2V_Finish(void);
 char *M2V_GetVersionStr(void);
-int M2V_IsConformable(char *buf, int size);
+int M2V_IsDecodable(char *buf, int size);
 M2vObj *M2V_Create(void);
 void M2V_Destroy(M2vObj *hn);
 void M2V_MbCbFn(void);

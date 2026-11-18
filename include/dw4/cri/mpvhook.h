@@ -8,7 +8,7 @@
 
 extern int mpvhook_installed;
 extern char *(*mpvhook_fn_GetVersionStr)(void);
-extern int (*mpvhook_fn_IsConformable)(char *buf, int size);
+extern int (*mpvhook_fn_IsDecodable)(char *buf, int size);
 extern void (*mpvhook_fn_Init)(int nobj, char *work, unsigned int size);
 extern void (*mpvhook_fn_Finish)(void);
 extern M2vObj *(*mpvhook_fn_Create)(void);

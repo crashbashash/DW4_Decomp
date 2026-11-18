@@ -47,7 +47,7 @@
 0x0025dcc8	adxb_get_key	cri	high	recvx-decomp-cri libadxe.a adx_bsc.o C + 3s-decomp adx_bsc B agree [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri; 3s-decomp github.com/crowded-street/3s-decomp]
 0x0025ddc8	ADXB_GetStat	cri	high	recvx-decomp-cri libadxe.a adx_bsc.o A [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
 0x0025de68	ADXB_Stop	cri	high	recvx-decomp-cri libadxe.a adx_bsc.o C + 3s-decomp adx_bsc B agree [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri; 3s-decomp github.com/crowded-street/3s-decomp]
-0x0025df00	ADXB_EntryDecFunc	cri	medium	behaviour: stores the decode callback and its object that ADXB_ExecHndl calls through adxb_dec_cb_proc; ADXSJD_EntryDecFunc passes its arguments straight down; alternative ADXB_SetCbDec (only in a list ported from Persona 3 FES)
+0x0025df00	ADXB_EntryDecFunc	cri	medium	behaviour: stores the decode callback and its object that ADXB_ExecHndl calls through adxb_dec_cb_proc; ADXSJD_EntryDecFunc passes its arguments straight down; alternative none
 0x0025df10	ADXB_GetAdxpd	cri	high	recvx-decomp-cri libadxe.a adx_bsc.o A [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri]
 0x0025e120	memcpy2	cri	high	recvx-decomp-cri libadxe.a adx_bsc.o A + 3s-decomp adx_bsc A agree [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri; 3s-decomp github.com/crowded-street/3s-decomp]
 0x0025e150	ADXB_CopyExtraBufSte	cri	high	recvx-decomp-cri libadxe.a adx_bsc.o A + 3s-decomp adx_bsc A agree [recvx-decomp-cri github.com/SkeletonPicture/recvx-decomp-cri; 3s-decomp github.com/crowded-street/3s-decomp]

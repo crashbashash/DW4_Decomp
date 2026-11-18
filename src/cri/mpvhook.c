@@ -15,9 +15,9 @@ char *mpvhook_GetVersionStr(void) {
     return 0;
 }
 
-int mpvhook_IsConformable(char *buf, int size) {
-    if (mpvhook_fn_IsConformable != 0) {
-        return mpvhook_fn_IsConformable(buf, size);
+int mpvhook_IsDecodable(char *buf, int size) {
+    if (mpvhook_fn_IsDecodable != 0) {
+        return mpvhook_fn_IsDecodable(buf, size);
     }
     return 0;
 }

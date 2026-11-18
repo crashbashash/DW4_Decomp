@@ -47,9 +47,9 @@ char *MPV_GetVersionStr(void) {
     return cri_mpv_version;
 }
 
-/* whether a stream is decodable here: the picture start code (0x00000140 group) is found and, unless the
- * lower layer is up, the following start code does not carry flag 0x10 */
-int MPV_IsConformable(unsigned char *data, int size) {
+/* whether MPV can play a stream: the sequence header (MPV_CheckDelim kind 64) is found and, unless the M2V
+ * lower layer is installed, the start code after it is not an extension (kind 16), so the stream is MPEG-1 */
+int MPV_IsDecodable(unsigned char *data, int size) {
     unsigned char *p = MPV_SearchDelim(data, size, 64);
 
     if (p == 0) {

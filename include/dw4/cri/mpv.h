@@ -172,7 +172,7 @@ void mpvhook_GetBitRate(M2vObj *lower, int *bit_rate);
 void mpvhook_GetVbvBufSiz(M2vObj *lower, int *vbv_size, int *vbv_delay, int *reserved);
 void mpvhook_GetLinkFlg(M2vObj *lower, int *closed_gop, int *broken_link);
 char *mpvhook_GetVersionStr(void);
-int mpvhook_IsConformable(char *buf, int size);
+int mpvhook_IsDecodable(char *buf, int size);
 void mpvhook_MbCbFn(void);
 void mpvhook_SetErrFunc(M2vObj *lower, int (*func)(void *obj), void *obj);
 void mpvhook_GetErrInf(M2vObj *lower, M2vErrInf *inf);

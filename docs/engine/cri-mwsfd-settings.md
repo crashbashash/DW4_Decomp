@@ -6,7 +6,7 @@ their rows in `unit-objects.json`).
 
 | file | code | evidence for the extent |
 |---|---|---|
-| `src/cri/mwsfdrsc.c` | `0x295e58` up to `0x296328` | no strings; every function serves the settings words (`mwsfd_enable`, `mwsfd_create_cb`, `mwsfd_spr_swapped`, `mwsfd_spr_cpu_copy`) or the scratchpad swap. `MWSFD_InitRsc`/`MWSFD_FinishRsc` open it by calling `mwsfrsc_InitVal`; the previous file (FSof3's mwPly wrappers on `ply->sfd`) ends at `0x295e54`. It ends before the first `E…` handle-check string user |
+| `src/cri/mwsfdrsc.c` | `0x295e58` up to `0x296328` | no strings; every function serves the settings words (`mwsfd_enable`, `mwsfd_spr_cb`, `mwsfd_spr_swapped`, `mwsfd_spr_cpu_copy`) or the scratchpad swap. `MWSFD_InitRsc`/`MWSFD_FinishRsc` open it by calling `mwrsc_InitVal`; the previous file (FSof3's mwPly wrappers on `ply->sfd`) ends at `0x295e54`. It ends before the first `E…` handle-check string user |
 | `src/cri/mwplyprm.c` | `0x296328` up to `0x297780` | its strings are one `.rodata` run, `0x4f39b8` (`E1122617 mwPlySetAudioSw`) to `0x4f4027` (`E309101 : Timer channel…`), right after the previous file's `mwPlyStartFnameRange` strings and right before `mwsfsfx.c`'s first string (`E201184`) at `0x4f4028`; `mwsfsfx.c` starts at `0x297780` |
 
 ## mwsfdrsc.c
@@ -15,9 +15,9 @@ While the Sofdec server runs (`mwPlySaveRsc` / `mwPlyRestoreRsc`), `MWRSC_SaveRs
 16 KiB scratchpad in `mwsfd_spr_save_buf` and loads Sofdec's own image from `mwsfd_spr_work_buf`;
 `MWRSC_RestoreRsc` reverses it. The copies go through DMA channels 8 (from SPR) and 9 (to SPR), or
 through `memcpy` when `MWSFD_SetSprCpMode` is set. `MWSFD_SetUseSPR` turns the swap off;
-`MWSFD_ExecSetSprCbFn` passes each new player and the enable flag to the callback set by
-`MWSFD_SetSetSprCbFn`. `MWSFSEE_StartFnameSub1`, `MWSFSEE_StartFnameSub2` and `MWSFSEE_ChkSupply` are empty
-hooks the player calls.
+`MWSFD_ExecSprCbFn` passes a player handle and the enable flag to the callback set by `MWSFD_SetSprCbFn`;
+nothing in the image calls either. `MWSFSEE_StartFnameSub1`, `MWSFSEE_StartFnameSub2` and `MWSFSEE_ChkSupply` are
+empty hooks the player calls.
 
 ## mwplyprm.c
 
@@ -30,9 +30,10 @@ from `include/dw4/cri/mwply.h`.
 
 ## Open questions
 
-- The file name `mwsfdrsc.c` is CRI's (`MWRSC_SaveRsc` and `MWRSC_RestoreRsc` are its entries). The three hooks at its end
-  (`MWSFSEE_StartFnameSub1`, `MWSFSEE_StartFnameSub2`, `MWSFSEE_ChkSupply`) are CRI's `mwsfdsee.c`, a separate object in the
-  GameCube library, so the unit's end at `0x296328` may be two files; the evidence for the cut is not collected.
+- The file name `mwsfdrsc.c` is CRI's (`MWRSC_SaveRsc` and `MWRSC_RestoreRsc` are the entries of the SDK's `mwsfdrsc.o`). The
+  three hooks at its end (`MWSFSEE_StartFnameSub1`, `MWSFSEE_StartFnameSub2`, `MWSFSEE_ChkSupply`) are CRI's `mwsfdsee.c`, a
+  separate object in the SDK archive and in the RE4 GameCube library, so the unit's end at `0x296328` may be two files; the
+  evidence for the cut is not collected.
 - SFD condition words are named by what the reader does where it was traced; each condition has a reader in this
   image. Medium confidence, from the GameCube build's readers of the same conditions (the setters themselves are in no symbol list):
   `MWSFD_AdjustGetFrmTiming` (44: the lead added to the clock in the time verdict of `sftim.c`, seeded at creation from
@@ -52,14 +53,20 @@ from `include/dw4/cri/mwply.h`.
   and `mwPlySetAdjustY16` set MPV conditions 4 and 5 through the same function: 4 selects the intra output table in the
   MPV decoder, and 5 is the motion-compensation chroma flag, which `SFD_SetMpvCond` forces to 0, so its setter can only
   clear it. The M2V readers of conditions 3, 4 and 5 were not traced.
-- Medium confidence, from the Persona 3 FES PlayStation 2 symbol list placing the names by slot and size (provenance not stated),
-  with Persona 4's names proved against other CRI builds where it has them (`MWRSC_SaveRsc`, `MWRSC_RestoreRsc`, `MWSFD_SetUseSPR`,
-  `MWSFD_ExecSetSprCbFn`, `MWSPR_SaveSprByCpu`, `MWSPR_SaveSprByDma`, `MWSPR_RestoreSprByCpu`, `MWSPR_RestoreSprByDma`, `MWDMA_WaitEnd`,
-  `MWDMA_GetStat`): the names of `mwsfdrsc.c`: `MWRSC_SaveRsc`, `MWRSC_RestoreRsc`, `MWSFD_SetUseSPR`,
-  `MWSFD_GetUseSPR`, `MWSFD_SetSetSprCbFn`, `MWSFD_ExecSetSprCbFn`, `mwsfrsc_InitVal`, `mwrsc_WaitSprDmaEnd`, `MWSPR_SaveSprMem`,
-  `MWSPR_SaveSprByCpu`, `MWSPR_SaveSprByDma`, `MWSPR_RestoreSprMem`, `MWSPR_RestoreSprByCpu`, `MWSPR_RestoreSprByDma`,
-  `MWSFD_SetSprCpMode`, `MWSFD_GetSprCpMode`, `MWDMA_WaitEnd`, `MWDMA_GetStat`, `MWSFD_InitRsc` and `MWSFD_FinishRsc`; and in
-  `mwplyprm.c` the getters `MWSFD_GetCond`, `MWSFD_GetStmHn`, `MWSFD_GetInputSjBufSize`, `MWSFD_GetLscHn`, `MWSFD_GetAdxtHn` and
-  `MWSFD_GetSfxHn`. `MWSFD_ExecVsyncFrame` (`0x2962c8`) keeps its name: the Persona 3 list calls it `mwPlySwitchToIdle`, which is low
-  confidence.
+- The names of `mwsfdrsc.c` follow the `mwsfdrsc.o` and `mwsfdsee.o` members of the CRI PS2 SDK archive `libmwsfde.a`
+  ([recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)) where it has them: `mwrsc_WaitSprDmaEnd`,
+  `MWDMA_WaitEnd` and `MWDMA_GetStat` have its bodies (high), `MWRSC_SaveRsc` and `MWRSC_RestoreRsc` near ones (medium).
+  `MWSPR_SaveSprMem` and `MWSPR_RestoreSprMem` hold its slots after `mwrsc_WaitSprDmaEnd` and are called from the
+  `MWRSC_` pair as there (medium); their 2002 DMA bodies are now `MWSPR_SaveSprByDma` and `MWSPR_RestoreSprByDma`, behind
+  a choice of CPU or DMA copy. `mwPlySwitchToIdle` (`0x2962c8`, medium; alternative the earlier guess
+  `MWSFD_ExecVsyncFrame`) is the SDK member between `MWDMA_GetStat` and `mwPlySaveRsc`, declared in the SDK's
+  `crimwsfd.h`: the 2002 body waits a v-sync between saving and restoring the scratchpad, DW4's runs one
+  `ADXM_ExecVsyncFrame`. The three `MWSFSEE_` hooks are the SDK names, empty here as in the RE4 GameCube
+  `lib/mwsfdsee.c` ([adonis-singh/re4](https://github.com/adonis-singh/re4), `config/G4BE08/sym_map.tsv`; high). Named
+  from what they do (medium): `MWSFD_InitRsc`/`MWSFD_FinishRsc`, `MWSFD_SetUseSPR`/`MWSFD_GetUseSPR`,
+  `MWSFD_SetSprCbFn`/`MWSFD_ExecSprCbFn`, `mwrsc_InitVal` (with the SDK file's `mwrsc_` prefix),
+  `MWSPR_SaveSprByCpu`/`MWSPR_SaveSprByDma`, `MWSPR_RestoreSprByCpu`/`MWSPR_RestoreSprByDma` and
+  `MWSFD_SetSprCpMode`/`MWSFD_GetSprCpMode`.
+- The getters `MWSFD_GetCond`, `MWSFD_GetStmHn`, `MWSFD_GetLscHn` and `MWSFD_GetAdxtHn` of `mwplyprm.c` have the bodies of
+  the SDK's `mwsfdset.o` (high); `MWSFD_GetInputSjBufSize` and `MWSFD_GetSfxHn` near ones in the same order (medium).
 - `SfdPlyInf` fields other than the ones the getters read are unknown.

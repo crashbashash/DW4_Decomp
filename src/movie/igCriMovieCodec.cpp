@@ -677,8 +677,8 @@ int igCriMovieCodec_Update(igCriMovieCodecView *self, igMovieInfo *movie) {
     if (data != 0) {
         self->syncPauseState(movie);
         if (movie->_state != kMovieStatePaused) {
-            MWSFD_ExecVsyncFrame();
-            MWSFD_ExecVsyncFrame();
+            mwPlySwitchToIdle();
+            mwPlySwitchToIdle();
             ADXM_ExecMain();
             mwPlyGetCurFrm(Player(data), (struct MwsfdFrm *)&frame); /* MwsfdFrmObj: this unit's view of the frame (only bufadr read) */
             if (frame.bufadr != 0) {

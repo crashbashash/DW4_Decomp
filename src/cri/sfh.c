@@ -597,7 +597,7 @@ int SFH_AnlyMaxFrmNum(SfhHn *hn, int *value) {
     return 1;
 }
 
-int SFH_AnlyMaxPicSiz(SfhHn *hn, int *value) {
+int SFH_AnlyExtFirst(SfhHn *hn, int *value) {
     SfhMuxInf *mux;
 
     *value = 0;
@@ -609,7 +609,7 @@ int SFH_AnlyMaxPicSiz(SfhHn *hn, int *value) {
     return 1;
 }
 
-int SFH_AnlyAvrPicSiz(SfhHn *hn, int *value) {
+int SFH_AnlyExtSecond(SfhHn *hn, int *value) {
     SfhMuxInf *mux;
 
     *value = 0;

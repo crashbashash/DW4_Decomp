@@ -46,7 +46,7 @@
 0x25dcc8	adxb_get_key	high	sdk:libadxe.a/adx_bsc.o C + 3s:adx_bsc B agree
 0x25ddc8	ADXB_GetStat	high	sdk:libadxe.a/adx_bsc.o A (3s - -)
 0x25de68	ADXB_Stop	high	sdk:libadxe.a/adx_bsc.o C + 3s:adx_bsc B agree
-0x25df00	ADXB_EntryDecFunc	medium	behaviour: stores the decode callback and its object that ADXB_ExecHndl calls through adxb_dec_cb_proc; ADXSJD_EntryDecFunc passes its arguments straight down; alternative ADXB_SetCbDec (only in a list ported from Persona 3 FES)
+0x25df00	ADXB_EntryDecFunc	medium	behaviour: stores the decode callback and its object that ADXB_ExecHndl calls through adxb_dec_cb_proc; ADXSJD_EntryDecFunc passes its arguments straight down; alternative none
 0x25df10	ADXB_GetAdxpd	high	sdk:libadxe.a/adx_bsc.o A (3s - -)
 0x25e120	memcpy2	high	sdk:libadxe.a/adx_bsc.o A + 3s:adx_bsc A agree
 0x25e150	ADXB_CopyExtraBufSte	high	sdk:libadxe.a/adx_bsc.o A + 3s:adx_bsc A agree
@@ -544,7 +544,7 @@
 0x284dc8	CFT_MakeArgb8888ColAdjTbl	medium	sdk:libmwsfde.a/cftfx.o B same order and size (180); RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/cftfx.c CFT_MakeArgb8888ColAdjTbl) by order; sfxcnv_MakeColAdjTbl calls it as in the SDK [re4 github.com/adonis-singh/re4]
 0x285118	UTY_CmpTime	medium	sdk:libmwsfde.a/cmptime.o B
 0x285170	mpvhook_GetVersionStr	medium	behaviour: calls the hook slot mpv_InstallHooks fills with M2V_GetVersionStr; alternative MPVM2V_GetVersionStr
-0x2851a0	mpvhook_IsConformable	medium	behaviour: calls the hook slot mpv_InstallHooks fills with M2V_IsConformable (the slot after GetVersionStr, as MPV_IsConformable follows MPV_GetVersionStr); alternative none
+0x2851a0	mpvhook_IsDecodable	medium	behaviour: calls the hook slot mpv_InstallHooks fills with M2V_IsDecodable (the slot after GetVersionStr, as MPV_IsDecodable follows MPV_GetVersionStr); alternative none
 0x285278	mpvhook_MbCbFn	medium	behaviour: calls the hook slot mpv_InstallHooks fills with M2V_MbCbFn; alternative MPVM2V_MbCbFn
 0x2852c8	mpvhook_SetErrFunc	medium	behaviour: calls the hook slot mpv_InstallHooks fills with M2V_SetErrFunc; alternative MPVM2V_SetErrFunc
 0x2852f0	mpvhook_GetErrInf	medium	behaviour: calls the hook slot mpv_InstallHooks fills with M2V_GetErrInf; alternative MPVM2V_GetErrInf
@@ -592,7 +592,7 @@
 0x289d08	parseGsc	medium	sdk:libmwsfde.a/m2v_hdec.o B
 0x28a260	parsePsc	medium	sdk:libmwsfde.a/m2v_hdec.o B
 0x28ab00	M2V_GetVersionStr	high	sdk:libmwsfde.a/m2v_lib.o A (3s - -)
-0x28ab10	M2V_IsConformable	medium	behaviour: the M2V twin of MPV_IsConformable (Persona 4 decompilation proven name, Raikaru/Persona4-Decompilation docs/cri/proven_names.json) in the same slot between GetVersionStr and Init, with the same MPV_SearchDelim/MPV_CheckDelim walk; it accepts a stream whose sequence header is followed by a sequence extension (MPEG-2), where MPV_IsConformable refuses one; alternative M2V_IsMpeg2 [p4 github.com/Raikaru/Persona4-Decompilation]
+0x28ab10	M2V_IsDecodable	medium	behaviour: the M2V stream check between M2V_GetVersionStr and M2V_Init: finds the sequence header and accepts the stream only when a sequence extension follows it (MPEG-2); the twin of MPV_IsDecodable with the same MPV_SearchDelim/MPV_CheckDelim walk; replaces M2V_IsConformable, named after a name no approved source has; alternative M2V_IsMpeg2
 0x28abc0	M2V_Init	medium	sdk:libmwsfde.a/m2v_lib.o C by order and size
 0x28ac50	m2vlib_InitObjTbl	medium	sdk:libmwsfde.a/m2v_lib.o B
 0x28ac98	m2vlib_InitWork	medium	sdk:libmwsfde.a/m2v_lib.o B
@@ -653,6 +653,9 @@
 0x290898	MPV_GoNextDelimSj	medium	sdk:libmwsfde.a/mpv_hdec.o B
 0x2909f0	mpvhdec_RecoverSj	medium	sdk:libmwsfde.a/mpv_hdec.o B
 0x290ac0	MPV_MoveChunk	high	sdk:libmwsfde.a/mpv_hdec.o A (3s - -)
+0x290b18	mpvhdec_ReturnZero1	medium	behaviour: returns 0 and nothing calls it; the first of two identical stubs after MPV_MoveChunk at the end of the header decoder; replaces MPV_GetIqmAdr, which no approved source has; alternative none
+0x290b20	mpvhdec_ReturnZero2	medium	behaviour: returns 0 and nothing calls it; the second of the two identical stubs after MPV_MoveChunk; replaces MPV_GetNqmAdr, which no approved source has; alternative none
+0x290b38	MPV_IsDecodable	medium	behaviour: finds the sequence header with MPV_SearchDelim and accepts the stream when the M2V lower layer is installed, otherwise only when no sequence extension follows it (MPEG-1); the MPV twin of M2V_IsDecodable, after MPV_GetVersionStr; nothing calls it; replaces MPV_IsConformable, which no approved source has; alternative MPV_IsMpeg1
 0x290ca8	mpvlib_ChkFatal	medium	sdk:libmwsfde.a/mpv_lib.o C by order and size
 0x290d20	mpvlib_ChkCacheMode	high	sdk:libmwsfde.a/mpv_lib.o A (3s - -)
 0x290d28	MPVLIB_ConvIix	high	sdk:libmwsfde.a/mpv_lib.o A (3s - -)
@@ -665,6 +668,7 @@
 0x291238	mpvlib_AllocLc	high	sdk:libmwsfde.a/mpv_lib.o A (3s - -)
 0x291240	mpvlib_FreeLc	high	sdk:libmwsfde.a/mpv_lib.o A (3s - -)
 0x291248	MPV_MbCbFn	high	sdk:libmwsfde.a/mpv_lib.o A (3s - -)
+0x291318	mpvlib_SetCondAll	medium	sdk:libmwsfde.a/mpv_lib.o C by order after MPV_SetCond; applies a condition to every live handle
 0x2913f8	MPVLIB_CheckHn	medium	sdk:libmwsfde.a/mpv_lib.o B
 0x291480	mpvcmc_OneMakeMbTa	medium	sdk:libmwsfde.a/mpv_cmc.o C by order and size
 0x291498	mpvcmc_BiMakeMbTa	medium	sdk:libmwsfde.a/mpv_cmc.o C by order and size
@@ -676,6 +680,7 @@
 0x291c28	mwPlyCalcWorkCompo	medium	sdk:libmwsfde.a/mwsfdcre.o C by order and size
 0x291e00	mwsfcre_MallocRfb	medium	sdk:libmwsfde.a/mwsfdcre.o C by order and size
 0x291f10	mwsfcre_MallocTab	medium	sdk:libmwsfde.a/mwsfdcre.o C by order and size
+0x2929a0	MWSFCRE_SetCondSfd	medium	sdk:libmwsfde.a/mwsfdcre.o C by order between MWSFCRE_DestroySfd and MWSFCRE_ResetSfdHn
 0x292b80	mwsfcre_CreateSj	medium	sdk:libmwsfde.a/mwsfdcre.o B
 0x292f40	mwsfcre_IsOkUsrMalloc	high	sdk:libmwsfde.a/mwsfdcre.o A (3s - -)
 0x292f90	mwsfcre_InitMemMng	medium	sdk:libmwsfde.a/mwsfdcre.o B
@@ -704,12 +709,42 @@
 0x294360	mwsffrm_AnalyTotalFrm	high	sdk:libmwsfde.a/mwsfdfrm.o A (3s - -)
 0x294a30	MWSFLIB_GetLibWorkPtr	medium	RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/mwsfdlib.c MWSFLIB_GetLibWorkPtr) by order (first of mwsfdlib); the body returns the library work area mwsfd_work, not a string (the 2002 mwsflib_GetVersionStr has the same masked shape); replaces mwsflib_GetVersionStr [re4 github.com/adonis-singh/re4]
 0x295278	MWSFD_GetErrMwplyHn	high	sdk:libmwsfde.a/mwsfdlib.o A (3s - -)
+0x295e58	MWSFD_InitRsc	medium	behaviour: mwPlyInitSfdFx (the MWSFD init) calls it to reset the scratchpad-swap settings (mwrsc_InitVal); Rsc as in the file's MWRSC_SaveRsc/MWRSC_RestoreRsc (sdk:libmwsfde.a/mwsfdrsc.o); alternative none
+0x295e70	MWSFD_FinishRsc	medium	behaviour: mwPlyFinishSfdFx (the MWSFD finish) calls it to reset the scratchpad-swap settings (mwrsc_InitVal), the twin of MWSFD_InitRsc; alternative none
+0x295e88	MWRSC_SaveRsc	medium	sdk:libmwsfde.a/mwsfdrsc.o C
+0x295f18	MWRSC_RestoreRsc	medium	sdk:libmwsfde.a/mwsfdrsc.o B
+0x295fa0	MWSFD_SetUseSPR	medium	behaviour: sets the scratchpad-swap enable that MWRSC_SaveRsc and MWRSC_RestoreRsc test (SPR as in the MWSPR_ functions of sdk:libmwsfde.a/mwsfdrsc.o); alternative none
+0x295fc8	MWSFD_GetUseSPR	medium	behaviour: returns the scratchpad-swap enable MWSFD_SetUseSPR sets; MWRSC_SaveRsc and MWRSC_RestoreRsc call it; alternative none
+0x295fd8	MWSFD_SetSprCbFn	medium	behaviour: stores the callback MWSFD_ExecSprCbFn calls with a player handle and the scratchpad-swap enable; replaces MWSFD_SetSetSprCbFn, which no approved source has; alternative none
+0x295fe8	MWSFD_ExecSprCbFn	medium	behaviour: calls the callback MWSFD_SetSprCbFn stores with the player handle it is given and MWSFD_GetUseSPR; replaces MWSFD_ExecSetSprCbFn, which no approved source has; alternative none
+0x296028	mwrsc_InitVal	medium	behaviour: resets the four settings words to their defaults for MWSFD_InitRsc and MWSFD_FinishRsc; the file prefix of the statics of sdk:libmwsfde.a/mwsfdrsc.o (mwrsc_WaitSprDmaEnd, mwrsc_owner); replaces mwsfrsc_InitVal; alternative none
+0x296050	mwrsc_WaitSprDmaEnd	high	sdk:libmwsfde.a/mwsfdrsc.o A
+0x296070	MWSPR_SaveSprMem	medium	sdk:libmwsfde.a/mwsfdrsc.o by order after mwrsc_WaitSprDmaEnd, and MWRSC_SaveRsc calls it as the 2002 one does; the 2002 DMA body moved into MWSPR_SaveSprByDma behind a CPU or DMA choice; alternative none
+0x2960b0	MWSPR_SaveSprByCpu	medium	behaviour: the memcpy path MWSPR_SaveSprMem takes in CPU-copy mode (MWSFD_SetSprCpMode); alternative none
+0x2960e8	MWSPR_SaveSprByDma	medium	behaviour: the DMA path (channel 8) of MWSPR_SaveSprMem; its body is the 2002 MWSPR_SaveSprMem (sdk:libmwsfde.a/mwsfdrsc.o A); alternative none
+0x296150	MWSPR_RestoreSprMem	medium	sdk:libmwsfde.a/mwsfdrsc.o by order after MWSPR_SaveSprMem, and MWRSC_SaveRsc calls it as the 2002 one does; the 2002 DMA body moved into MWSPR_RestoreSprByDma behind a CPU or DMA choice; alternative none
+0x296190	MWSPR_RestoreSprByCpu	medium	behaviour: the memcpy path MWSPR_RestoreSprMem takes in CPU-copy mode (MWSFD_SetSprCpMode); alternative none
+0x2961c0	MWSPR_RestoreSprByDma	medium	behaviour: the DMA path (channel 9) of MWSPR_RestoreSprMem; its body is the 2002 MWSPR_RestoreSprMem (sdk:libmwsfde.a/mwsfdrsc.o A); alternative none
+0x296228	MWSFD_SetSprCpMode	medium	behaviour: sets the CPU-copy mode (memcpy instead of DMA channels 8 and 9) that MWSPR_SaveSprMem and MWSPR_RestoreSprMem test; alternative none
+0x296238	MWSFD_GetSprCpMode	medium	behaviour: returns the CPU-copy mode MWSFD_SetSprCpMode sets; alternative none
+0x296248	MWDMA_WaitEnd	high	sdk:libmwsfde.a/mwsfdrsc.o A
+0x296290	MWDMA_GetStat	high	sdk:libmwsfde.a/mwsfdrsc.o A
+0x2962c8	mwPlySwitchToIdle	medium	sdk:libmwsfde.a/mwsfdrsc.o C by order between MWDMA_GetStat and mwPlySaveRsc, declared in the SDK crimwsfd.h; the 2002 body waits a v-sync between mwPlySaveRsc and mwPlyRestoreRsc, DW4's runs one ADXM_ExecVsyncFrame; replaces the guess MWSFD_ExecVsyncFrame; alternative MWSFD_ExecVsyncFrame
+0x296310	MWSFSEE_StartFnameSub1	high	sdk:libmwsfde.a/mwsfdsee.o by order; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/mwsfdsee.c MWSFSEE_StartFnameSub1), an empty function as here [re4 github.com/adonis-singh/re4]
+0x296318	MWSFSEE_StartFnameSub2	high	sdk:libmwsfde.a/mwsfdsee.o by order; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/mwsfdsee.c MWSFSEE_StartFnameSub2), an empty function as here [re4 github.com/adonis-singh/re4]
+0x296320	MWSFSEE_ChkSupply	high	sdk:libmwsfde.a/mwsfdsee.o by order; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/mwsfdsee.c MWSFSEE_ChkSupply), an empty function as here [re4 github.com/adonis-singh/re4]
 0x296788	MWSFD_GetPlyInf	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
 0x2967a0	MWSFD_GetMvInf	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
+0x2967e0	MWSFD_GetCond	high	sdk:libmwsfde.a/mwsfdset.o A
+0x296808	MWSFD_GetStmHn	high	sdk:libmwsfde.a/mwsfdset.o A
+0x296810	MWSFD_GetInputSjBufSize	medium	sdk:libmwsfde.a/mwsfdset.o C by order
 0x296858	MWSFD_GetFlowLimit	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
 0x296870	MWSFD_SetRdSct	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
 0x296888	MWSFD_SetTrSct	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
 0x2968a0	MWSFD_AdjustGetFrmTiming	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
+0x2968d8	MWSFD_GetLscHn	high	sdk:libmwsfde.a/mwsfdset.o A
+0x2968e0	MWSFD_GetAdxtHn	high	sdk:libmwsfde.a/mwsfdset.o A
+0x2968e8	MWSFD_GetSfxHn	medium	sdk:libmwsfde.a/mwsfdset.o C by order
 0x2969e8	mwPlySetAsync	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
 0x296cf8	mwPlyGetNumIbufRoom	high	sdk:libmwsfde.a/mwsfdset.o A (3s - -)
 0x296e00	mwPlySetAdjustY16	medium	sdk:libmwsfde.a/mwsfdset.o C by order and size
@@ -834,6 +869,15 @@
 0x29afd0	MWSFD_GetReqSvrBdrLib	high	sdk:libmwsfde.a/mwsfdsvr.o A (3s - -)
 0x29aff0	mwPlyIsSvrBdr	high	sdk:libmwsfde.a/mwsfdsvr.o A (3s - -)
 0x29b078	MWSTM_Finish	high	sdk:libmwsfde.a/mwstm.o A (3s - -)
+0x29b088	MWSTM_SetRdSct	high	sdk:libmwsfde.a/mwstm.o A
+0x29b0b0	MWSTM_SetTrSct	high	sdk:libmwsfde.a/mwstm.o A
+0x29b0b8	MWSTM_SeekSct	high	sdk:libmwsfde.a/mwstm.o A
+0x29b158	MWSTM_Start	high	sdk:libmwsfde.a/mwstm.o A by order after MWSTM_SeekSct; calls ADXSTM_Start as the 2002 MWSTM_Start does
+0x29b1a0	MWSTM_ExecServer	high	sdk:libmwsfde.a/mwstm.o A
+0x29b1d0	MWSTM_GetFlowLimit	high	sdk:libmwsfde.a/mwstm.o A
+0x29b1e8	MWSTM_GetFsizeByte	high	sdk:libmwsfde.a/mwstm.o A
+0x29b258	MWSTM_SetFname	medium	behaviour: binds a whole file by name (releases the file, binds it from sector 0 with no directory and no sector limit, sets the end of stream), the whole-file twin of MWSTM_SetFileRange (RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/mwstm.c MWSTM_SetFileRange)); Fname as in sdk:libmwsfde.a/mwstm.o MWSTM_OpenFname; alternative MWSTM_SetFile [re4 github.com/adonis-singh/re4]
+0x29b368	MWSTM_Stop	medium	sdk:libmwsfde.a/mwstm.o MWSTM_Stop, the ADXSTM_Stop wrapper; DW4's also releases the file, and moved after MWSTM_ReqStop; alternative none
 0x29b3a8	SFADXT_IsHeader	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
 0x29b408	SFADXT_IsEndcode	high	sdk:libmwsfde.a/sfd_adxt.o A (3s - -)
 0x29b448	SFADXT_SetOutPan	medium	sdk:libmwsfde.a/sfd_adxt.o B
@@ -1326,6 +1370,11 @@
 0x2adec8	SFD_GetTrHn	medium	sdk:libmwsfde.a/sfd_set.o B
 0x2adf48	SFSET_GetTrHn	medium	sdk:libmwsfde.a/sfd_set.o D by order after SFD_GetTrHn, which calls it; same read with a null check added
 0x2adf78	SFD_GetSofdecHeader	medium	sdk:libmwsfde.a/sfd_set.o B
+0x2ae010	SFTIM_Init	high	sdk:libmwsfde.a/sfd_tim.o A; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfd_tim.c SFTIM_Init) [re4 github.com/adonis-singh/re4]
+0x2ae020	SFTIM_Finish	high	sdk:libmwsfde.a/sfd_tim.o A
+0x2ae028	SFTIM_InitHn	high	sdk:libmwsfde.a/sfd_tim.o C by order; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfd_tim.c SFTIM_InitHn) [re4 github.com/adonis-singh/re4]
+0x2ae248	SFTIM_InitTtu	high	sdk:libmwsfde.a/sfd_tim.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfd_tim.c SFTIM_InitTtu) [re4 github.com/adonis-singh/re4]
+0x2ae290	SFTIM_InitTcode	medium	sdk:libmwsfde.a/sfd_tim.o C by order and size
 0x2ae2b8	SFTIM_UpdateItime	medium	sdk:libmwsfde.a/sfd_tim.o B
 0x2ae358	SFTIM_GetNextItime	medium	sdk:libmwsfde.a/sfd_tim.o B
 0x2ae398	SFTIM_VbIn	medium	sdk:libmwsfde.a/sfd_tim.o D by order before sftim_HnVbIn, which it calls for every handle; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfd_tim.c SFTIM_VbIn) by order [re4 github.com/adonis-singh/re4]
@@ -1354,6 +1403,9 @@
 0x2aeca8	SFD_OutUsrFrmSync	medium	sdk:libmwsfde.a/sfd_tim.o B
 0x2aed08	SFD_SetUsrIsSkipFn	medium	sdk:libmwsfde.a/sfd_tim.o B
 0x2aed60	SFD_CmpTime	high	sdk:libmwsfde.a/sfd_tim.o A (3s - -)
+0x2aed78	SFD_SetUsrTimeFn	high	sdk:libmwsfde.a/sfd_tim.o by order after SFD_CmpTime; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfd_tim.c SFD_SetUsrTimeFn) beside SFD_SetExtClockFn [re4 github.com/adonis-singh/re4]
+0x2aee00	SFD_SetExtClockFn	high	sdk:libmwsfde.a/sfd_tim.o by order after SFD_SetUsrTimeFn; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfd_tim.c SFD_SetExtClockFn) [re4 github.com/adonis-singh/re4]
+0x2aeef0	SFD_UpdateTime	medium	sdk:libmwsfde.a/sfd_tim.o by order after SFD_SetExtClockFn; mwply_ExecTime calls it with a player's SFD handle as the 2002 API takes one, and with none to update every handle; the 2002 one-handle body is sftim_UpdateTimeHn; alternative none
 0x2aef78	sftim_UpdateTimeHn	medium	behaviour: the one-handle body of SFD_UpdateTime (the 2002 SFD_UpdateTime, sdk:libmwsfde.a/sfd_tim.o B), which now loops over every handle; alternative sftim_UpdateTimeOne
 0x2aefe0	sftim_UpdateTime	medium	sdk:libmwsfde.a/sfd_tim.o B
 0x2af060	SFTIM_SetTimeFn	medium	sdk:libmwsfde.a/sfd_tim.o B
@@ -1469,11 +1521,84 @@
 0x2b16d8	SFVOM_Seek	high	sdk:libmwsfde.a/sfd_vom.o A (3s - -)
 0x2b16e0	SFH_GetSbverStr	high	sdk:libmwsfde.a/sfh_main.o A (3s - -)
 0x2b16f0	SFH_CheckStructSiz	high	sdk:libmwsfde.a/sfh_main.o A (3s - -)
+0x2b1700	SFH_Init	high	sdk:libmwsfde.a/sfh_main.o A; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_Init) [re4 github.com/adonis-singh/re4]
+0x2b1790	SFH_Finish	high	sdk:libmwsfde.a/sfh_main.o A
+0x2b17d8	SFH_Create	high	sdk:libmwsfde.a/sfh_main.o A; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_Create) [re4 github.com/adonis-singh/re4]
+0x2b18a0	SFH_Destroy	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_Destroy) [re4 github.com/adonis-singh/re4]
+0x2b18d0	clearObjInf	high	sdk:libmwsfde.a/sfh_main.o A
+0x2b18e0	initObjInf	high	sdk:libmwsfde.a/sfh_main.o A
+0x2b18f0	initSfhObj	high	sdk:libmwsfde.a/sfh_main.o A
+0x2b1908	setHnCreate	high	sdk:libmwsfde.a/sfh_main.o A
+0x2b1920	initLibWork	high	sdk:libmwsfde.a/sfh_main.o A
+0x2b1970	isFreeObj	high	sdk:libmwsfde.a/sfh_main.o A
+0x2b1980	isEffectiveVer	high	sdk:libmwsfde.a/sfh_main.o A
+0x2b19c8	isEffectiveObj	high	sdk:libmwsfde.a/sfh_main.o A
+0x2b19f0	SFH_IsSfdHeader	high	sdk:libmwsfde.a/sfh_main.o A; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_IsSfdHeader) [re4 github.com/adonis-singh/re4]
+0x2b1ae0	SFH_IsExistStmId	high	sdk:libmwsfde.a/sfh_main.o A; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_IsExistStmId) [re4 github.com/adonis-singh/re4]
+0x2b1b50	SFH_IsEffFtrInf	high	sdk:libmwsfde.a/sfh_main.o A; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_IsEffFtrInf) [re4 github.com/adonis-singh/re4]
+0x2b1c20	searchStmId	high	sdk:libmwsfde.a/sfh_main.o A
+0x2b1c68	SFH_AnlySfdFname	high	sdk:libmwsfde.a/sfh_main.o A
+0x2b1cd8	SFH_AnlySfdTimStmp	medium	sdk:libmwsfde.a/sfh_main.o B
+0x2b1d48	SFH_AnlyHdrToolInf	medium	sdk:libmwsfde.a/sfh_main.o B
+0x2b1de0	SFH_AnlyHdrToolVer	high	sdk:libmwsfde.a/sfh_main.o by order between SFH_AnlyHdrToolInf and SFH_AnalyHdrComment (the 2004 body grew); RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyHdrToolVer) and the same function in RE4 CRI library kept in the Persona 4 decompilation (Raikaru/Persona4-Decompilation src/cri/re4/sfh_main.c) [re4 github.com/adonis-singh/re4] [re4 github.com/Raikaru/Persona4-Decompilation]
+0x2b1eb0	SFH_AnalyHdrComment	medium	sdk:libmwsfde.a/sfh_main.o B
+0x2b1f88	SFH_AnlyHdrSiz	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyHdrSiz) [re4 github.com/adonis-singh/re4]
+0x2b1fd8	SFH_AnlyPackType	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyPackType) [re4 github.com/adonis-singh/re4]
+0x2b2028	SFH_AnlyPketSizLen	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyPketSizLen) [re4 github.com/adonis-singh/re4]
+0x2b2078	SFH_AnlyPackSiz	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyPackSiz) [re4 github.com/adonis-singh/re4]
+0x2b20c8	getToolVer	medium	sdk:libmwsfde.a/sfh_main.o B
+0x2b2128	convAsciiToDigit	high	sdk:libmwsfde.a/sfh_main.o A
+0x2b21b0	SFH_AnlyNumElemTot	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyNumElemTot) [re4 github.com/adonis-singh/re4]
+0x2b2200	SFH_AnlyNumElemAud	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyNumElemAud) [re4 github.com/adonis-singh/re4]
+0x2b2250	SFH_AnlyNumElemVid	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyNumElemVid) [re4 github.com/adonis-singh/re4]
+0x2b22a0	SFH_AnlyNumElemPrv	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyNumElemPrv) [re4 github.com/adonis-singh/re4]
+0x2b22f0	SFH_AnlyByteRate	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyByteRate) [re4 github.com/adonis-singh/re4]
+0x2b2358	SFH_AnlyMaxPlyLenAud	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyMaxPlyLenAud) [re4 github.com/adonis-singh/re4]
+0x2b23a8	SFH_AnlyMaxPlyLenVid	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyMaxPlyLenVid) [re4 github.com/adonis-singh/re4]
+0x2b23f8	SFH_AnlyMaxFrmNum	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyMaxFrmNum) [re4 github.com/adonis-singh/re4]
+0x2b2448	SFH_AnlyExtFirst	medium	behaviour: returns the first of the two mux-block words a version 2.25 header adds (0 before it); nothing calls it; replaces SFH_AnlyMaxPicSiz, which no approved source has; alternative none
+0x2b2480	SFH_AnlyExtSecond	medium	behaviour: returns the second of the two mux-block words a version 2.25 header adds (0 before it); nothing calls it; replaces SFH_AnlyAvrPicSiz, which no approved source has; alternative none
+0x2b24b8	SFH_AnlyElemFname	medium	sdk:libmwsfde.a/sfh_main.o C
+0x2b2530	SFH_AnlyElemTimStmp	medium	sdk:libmwsfde.a/sfh_main.o C
+0x2b25a8	getElemInfPtr	high	sdk:libmwsfde.a/sfh_main.o A
+0x2b2600	SFH_AnlyElemCodecAud	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyElemCodecAud) [re4 github.com/adonis-singh/re4]
+0x2b2670	SFH_AnlyElemLayer	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyElemLayer) [re4 github.com/adonis-singh/re4]
+0x2b26f0	SFH_AnlyElemChNum	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyElemChNum) [re4 github.com/adonis-singh/re4]
+0x2b2760	SFH_AnlyElemSmpHz	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyElemSmpHz) [re4 github.com/adonis-singh/re4]
+0x2b27d0	SFH_AnlyElemCodecVid	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyElemCodecVid) [re4 github.com/adonis-singh/re4]
+0x2b2840	SFH_AnlyElemBitRate	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyElemBitRate) [re4 github.com/adonis-singh/re4]
+0x2b28b8	SFH_AnlyElemPicSz	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyElemPicSz) [re4 github.com/adonis-singh/re4]
+0x2b2968	SFH_AnlyElemPicRate	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyElemPicRate) [re4 github.com/adonis-singh/re4]
+0x2b29d8	SFH_AnlyFtrColType	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyFtrColType) [re4 github.com/adonis-singh/re4]
+0x2b2a48	SFH_AnlyFtrPicType	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyFtrPicType) [re4 github.com/adonis-singh/re4]
+0x2b2ab8	SFH_AnlyFtrFixFlg	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyFtrFixFlg) [re4 github.com/adonis-singh/re4]
+0x2b2b28	SFH_AnlyFtrShcFixFlg	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyFtrShcFixFlg) [re4 github.com/adonis-singh/re4]
+0x2b2ba0	SFH_AnlyFtrExpand	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyFtrExpand) [re4 github.com/adonis-singh/re4]
+0x2b2c10	SFH_AnlyFtrGopN	high	sdk:libmwsfde.a/sfh_main.o C; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyFtrGopN) [re4 github.com/adonis-singh/re4]
+0x2b2c98	SFH_AnlyFtrGopM	high	sdk:libmwsfde.a/sfh_main.o C; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyFtrGopM) [re4 github.com/adonis-singh/re4]
+0x2b2d20	SFH_AnlyFtrFxType	high	sdk:libmwsfde.a/sfh_main.o B; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfh_main.c SFH_AnlyFtrFxType) [re4 github.com/adonis-singh/re4]
 0x2b2db0	getPicRate	medium	sdk:libmwsfde.a/sfh_main.o B
+0x2b2e20	isEnableAudFtr	high	sdk:libmwsfde.a/sfh_main.o A
+0x2b2e60	isEnableVidFtr	high	sdk:libmwsfde.a/sfh_main.o A
+0x2b2ea0	chkStmId	high	sdk:libmwsfde.a/sfh_main.o A
 0x2b2ee8	SFXA_Init	high	sdk:libmwsfde.a/sfx_alp.o A (3s - -)
 0x2b2f00	sfxalp_InitLibWork	medium	sdk:libmwsfde.a/sfx_alp.o B
 0x2b2f40	SFXA_Finish	high	sdk:libmwsfde.a/sfx_alp.o A (3s - -)
+0x2b2f48	SFXA_Create	high	sdk:libmwsfde.a/sfx_alp.o A; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfx_alp.c SFXA_Create) [re4 github.com/adonis-singh/re4]
+0x2b2fa0	sfxalp_SearchFreeHn	medium	sdk:libmwsfde.a/sfx_alp.o B
+0x2b2ff0	sfxalp_InitHn	medium	sdk:libmwsfde.a/sfx_alp.o by order between sfxalp_SearchFreeHn and SFXA_Destroy; SFXA_Create calls it on the handle it takes
+0x2b3030	SFXA_Destroy	high	sdk:libmwsfde.a/sfx_alp.o C; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfx_alp.c SFXA_Destroy) [re4 github.com/adonis-singh/re4]
+0x2b3058	SFXA_MakeAlpLumiTbl	high	sdk:libmwsfde.a/sfx_alp.o A; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfx_alp.c SFXA_MakeAlpLumiTbl) [re4 github.com/adonis-singh/re4]
+0x2b3098	SFXA_MakeAlp3110Tbl	medium	RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfx_alp.c SFXA_MakeAlp3110Tbl) after SFXA_MakeAlpLumiTbl, as here, and the same function in RE4 CRI library kept in the Persona 4 decompilation (Raikaru/Persona4-Decompilation src/cri/re4/sfx_alp.c), which builds the 3110 three-level alpha table from the three alpha values [re4 github.com/adonis-singh/re4] [re4 github.com/Raikaru/Persona4-Decompilation]
 0x2b30c0	SFXA_MakeAlp3Tbl	medium	sdk:libmwsfde.a/sfx_alp.o C by order and size
+0x2b30e8	SFXA_IsNeedUpdateLumiTbl	high	sdk:libmwsfde.a/sfx_alp.o A; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfx_alp.c SFXA_IsNeedUpdateLumiTbl) [re4 github.com/adonis-singh/re4]
+0x2b30f0	SFXA_SetLumiPrm	high	sdk:libmwsfde.a/sfx_alp.o A
+0x2b3110	SFXA_GetLumiPrm	high	sdk:libmwsfde.a/sfx_alp.o A
+0x2b3130	SFXA_SetAlp3Prm	medium	behaviour: stores the three alpha levels the three-level alpha tables are built from (SFXA_MakeAlp3Tbl, sdk:libmwsfde.a/sfx_alp.o); SFX_SetAlp3Prm forwards to it as SFX_SetALumiPrm forwards to SFXA_SetLumiPrm; alternative none
+0x2b3148	SFXA_GetAlp3Prm	medium	behaviour: returns the three alpha levels SFXA_SetAlp3Prm stores; SFX_GetAlp3Prm forwards to it; alternative none
+0x2b3168	SFX_SetClipping	medium	behaviour: sets a frame to a clipping rectangle (right and bottom as its size, then sfx_ClipFrame with left and top); nothing calls it; alternative none
+0x2b3188	SFX_SetBottomUpBuf	medium	behaviour: turns a line walk upside down (negates the pitch and starts at the last line); nothing calls it; the same body as SFX_SetBottomUpPlnBuf after it, and no approved source names a second copy; replaces SFX_SetBottomUpDstBuf; alternative none
+0x2b31b0	SFX_SetBottomUpPlnBuf	medium	RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfx_cnv.c SFX_SetBottomUpPlnBuf) with the same body in RE4 CRI library kept in the Persona 4 decompilation (Raikaru/Persona4-Decompilation src/cri/re4/sfx_cnv.c) (negate the pitch, start at the last line); of the two identical copies here it is the second, as the RE4 one ends its file; alternative: the first copy [re4 github.com/adonis-singh/re4] [re4 github.com/Raikaru/Persona4-Decompilation]
 0x2b31d8	sfxcnv_IsCnvUpHalf	medium	own error string only
 0x2b32b0	SFX_DecideTableAlph3	medium	RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfx_cnv.c SFX_DecideTableAlph3) by body: the 3110/3211 alpha-table choice from the compo [re4 github.com/adonis-singh/re4]
 0x2b3300	SFX_MakeTable	medium	RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfx_cnv.c SFX_MakeTable) by order after SFX_DecideTableAlph3; forwards to sfxcnv_MakeTable [re4 github.com/adonis-singh/re4]

@@ -2639,7 +2639,7 @@
 0x004bb3f0	cft_ver_str	recovered-global
 0x004bcbf8	mpvhook_installed	recovered-global
 0x004bcbfc	mpvhook_fn_GetVersionStr	recovered-global
-0x004bcc00	mpvhook_fn_IsConformable	recovered-global
+0x004bcc00	mpvhook_fn_IsDecodable	recovered-global
 0x004bcc04	mpvhook_fn_Init	recovered-global
 0x004bcc08	mpvhook_fn_Finish	recovered-global
 0x004bcc0c	mpvhook_fn_Create	recovered-global

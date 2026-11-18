@@ -57,11 +57,14 @@ callback table (`MwsfdInputCbTbl`) is local to the SST file.
   runs the stream start, binds the file range and hands the SJ to the creation code, as the GameCube library's
   static server helper does. The real `MWSTM_ReqStart` is the ADXSTM start wrapper at `0x29b328`. The name
   `mwsfsvr_StartStm` is from what the function does.
-- Medium confidence, from the Persona 3 FES PlayStation 2 symbol list (provenance not stated there) placed by
-  slot and size, with the names proved against other CRI builds where Persona 4's list has them: `MWSTM_SetRdSct`,
-  `MWSTM_SeekSct`, `MWSTM_GetFsizeByte`, `MWSTM_SetFname`; by slot only: `MWSTM_SetTrSct`, `MWSTM_Start`,
-  `MWSTM_ExecServer`, `MWSTM_GetFlowLimit`, `MWSTM_Stop`. Persona 3's `MWSTM_GetReadFlg` for `0x29b210`
-  (`MWSTM_GetStatRead` here) is low confidence and not applied.
+- The MWSTM names follow the `mwstm.o` member of the CRI PS2 SDK archive `libmwsfde.a`
+  ([recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)): `MWSTM_SetRdSct`, `MWSTM_SetTrSct`,
+  `MWSTM_SeekSct`, `MWSTM_Start`, `MWSTM_ExecServer`, `MWSTM_GetFlowLimit` and `MWSTM_GetFsizeByte` have its bodies (high).
+  `MWSTM_Stop` (`0x29b368`) is its `ADXSTM_Stop` wrapper, which here also releases the file and sits after
+  `MWSTM_ReqStop` (medium). Named from what they do (medium): `MWSTM_SetFname` (`0x29b258`, alternative
+  `MWSTM_SetFile`) binds a whole file by name, the whole-file twin of `MWSTM_SetFileRange` in the RE4 GameCube symbol
+  table ([adonis-singh/re4](https://github.com/adonis-singh/re4), `config/G4BE08/sym_map.tsv`); `MWSTM_GetStatRead`
+  (`0x29b210`) returns `ADXSTM_GetReadFlg`.
 - Four names keep their DW4 spelling against the 2002 SDK's: `mwPlyStartFname` (SDK `mwSfdStartFname`),
   `mwPlySetLpFlg` (`mwPlySetSeamlessLp`), `mwPlyExecSvrHndl` (`mwSfdExecSvrHndl`) and `MWSFCRE_SetSupplySj`
   (`mwsfcre_SetSupplySj`). Each function's own 2004 message names it as DW4 does, and the RE4 GameCube symbol

@@ -143,7 +143,7 @@ void SFX_SetClipping(SfxFrame *frm, int left, int top, int right, int bottom) {
 }
 
 /* Turns a line walk upside down: start at the last line and step backwards. */
-void SFX_SetBottomUpDstBuf(SfxaLineWalk *walk) {
+void SFX_SetBottomUpBuf(SfxaLineWalk *walk) {
     int pitch = walk->pitch;
 
     walk->pitch = -pitch;

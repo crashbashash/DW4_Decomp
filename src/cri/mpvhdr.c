@@ -517,10 +517,10 @@ int MPV_MoveChunk(SfdSj *sj, int id, int n) {
     return ck.len;
 }
 
-int MPV_GetIqmAdr(void) {
+int mpvhdec_ReturnZero1(void) {
     return 0;
 }
 
-int MPV_GetNqmAdr(void) {
+int mpvhdec_ReturnZero2(void) {
     return 0;
 }

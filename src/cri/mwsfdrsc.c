@@ -10,17 +10,17 @@
 #define DMA_CH_FROM_SPR 8
 #define DMA_CH_TO_SPR 9
 
-/* Called with each new player handle and the scratchpad-swap enable. */
-typedef void (*MwsfdCreateCb)(void *ply, int sprEnable);
+/* Called with a player handle and the scratchpad-swap enable. */
+typedef void (*MwsfdSprCbFn)(void *ply, int sprEnable);
 
 static int mwsfd_enable = 1;
-static MwsfdCreateCb mwsfd_create_cb = 0;
+static MwsfdSprCbFn mwsfd_spr_cb = 0;
 static int mwsfd_spr_swapped = 0;
 static int mwsfd_spr_cpu_copy = 0;
 static char mwsfd_spr_save_buf[MWSFD_SPR_SIZE];
 static char mwsfd_spr_work_buf[MWSFD_SPR_SIZE];
 
-void mwsfrsc_InitVal(void);
+void mwrsc_InitVal(void);
 int MWSFD_GetUseSPR(void);
 void mwrsc_WaitSprDmaEnd(void);
 int MWSPR_SaveSprMem(int sprOfs, int size, void *dst);
@@ -28,11 +28,11 @@ int MWSPR_RestoreSprMem(void *src, int size, int sprOfs);
 void MWDMA_WaitEnd(int id);
 
 void MWSFD_InitRsc(void) {
-    mwsfrsc_InitVal();
+    mwrsc_InitVal();
 }
 
 void MWSFD_FinishRsc(void) {
-    mwsfrsc_InitVal();
+    mwrsc_InitVal();
 }
 
 void MWRSC_SaveRsc(void) {
@@ -70,20 +70,20 @@ int MWSFD_GetUseSPR(void) {
     return mwsfd_enable;
 }
 
-void MWSFD_SetSetSprCbFn(MwsfdCreateCb fn) {
-    mwsfd_create_cb = fn;
+void MWSFD_SetSprCbFn(MwsfdSprCbFn fn) {
+    mwsfd_spr_cb = fn;
 }
 
-void MWSFD_ExecSetSprCbFn(void *ply) {
+void MWSFD_ExecSprCbFn(void *ply) {
     int enable = MWSFD_GetUseSPR();
-    if (mwsfd_create_cb != 0) {
-        mwsfd_create_cb(ply, enable);
+    if (mwsfd_spr_cb != 0) {
+        mwsfd_spr_cb(ply, enable);
     }
 }
 
-void mwsfrsc_InitVal(void) {
+void mwrsc_InitVal(void) {
     mwsfd_enable = 1;
-    mwsfd_create_cb = 0;
+    mwsfd_spr_cb = 0;
     mwsfd_spr_swapped = 0;
     mwsfd_spr_cpu_copy = 0;
 }
@@ -161,7 +161,7 @@ void MWDMA_GetStat(int id, int *stat) {
     *stat = sceDmaSync(sceDmaGetChan(id), 1, 30);
 }
 
-void MWSFD_ExecVsyncFrame(void) {
+void mwPlySwitchToIdle(void) {
     ADXM_ExecVsyncFrame();
 }
 

@@ -95,8 +95,8 @@ extern int mwsfd_init_flag;
 /* resources and the scratchpad */
 void MWSFD_InitRsc(void);
 void MWSFD_FinishRsc(void);
-void MWSFD_ExecSetSprCbFn(void *ply);
-void MWSFD_ExecVsyncFrame(void);
+void MWSFD_ExecSprCbFn(void *ply);
+void mwPlySwitchToIdle(void);
 void mwPlySaveRsc(void);
 void mwPlyRestoreRsc(void);
 void MWSFSEE_StartFnameSub1(void *ply, int ofst, int nsct);

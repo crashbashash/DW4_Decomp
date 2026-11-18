@@ -65,10 +65,14 @@ MWSFD player creation: work-area sizes, frame buffers, picture user buffers, the
 - The outputs of `mwsfcre_CalcWorkStmBuf` are placeholders; their meaning
   needs the lower layer and the SFD work-size users.
 - `mpv_GetFixedWorkSizes` and `MPV_SetFrameBuffers` keep `mpv` names though they sit in the MWSFD file.
-- Medium confidence, from the Persona 3 FES PlayStation 2 symbol list (provenance not stated) placing the names by slot and size, with
-  Persona 4's names proved against other CRI builds: `MPV_GetIqmAdr`/`MPV_GetNqmAdr` (`0x290b18`/`0x290b20`, two identical
-  `return 0` stubs: only the list's order separates them), `MPV_IsConformable` (`0x290b38`, same slot and size), `mpvlib_SetCondAll`
-  (`0x291318`) and `MWSFCRE_SetCondSfd` (`0x2929a0`, whose body is the GameCube library's condition setup).
+- `mpvlib_SetCondAll` (`0x291318`, after `MPV_SetCond`) and `MWSFCRE_SetCondSfd` (`0x2929a0`, between `MWSFCRE_DestroySfd`
+  and `MWSFCRE_ResetSfdHn`, whose body is the GameCube library's condition setup) hold the slots of the same names in the
+  CRI PS2 SDK archive `libmwsfde.a` (members `mpv_lib.o` and `mwsfdcre.o`;
+  [recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)) with near bodies (medium).
+- Named from what they do, as no approved source names them (medium): `mpvhdec_ReturnZero1` and `mpvhdec_ReturnZero2`
+  (`0x290b18`/`0x290b20`), two identical `return 0` stubs after `MPV_MoveChunk` that nothing calls, and `MPV_IsDecodable`
+  (`0x290b38`, alternative `MPV_IsMpeg1`), which finds the sequence header and accepts the stream when the M2V lower layer
+  is installed, otherwise only when no sequence extension follows it. Nothing calls `MPV_IsDecodable` either.
 - Each `mpvhook_*` wrapper calls one slot of the hook table and is named after the M2V function `mpv_InstallHooks`
   stores in that slot (`mpvhook_DecodePicAtr` calls the slot holding `M2V_DecodePicAtr`, and so on). Medium
   confidence; the earlier guesses `mpvhook_SetBufEnt`, `mpvhook_SetSize`, `mpvhook_SetFlagPtr`, `mpvhook_Start`,
@@ -82,9 +86,9 @@ MWSFD player creation: work-area sizes, frame buffers, picture user buffers, the
   M2V copies take the M2V prefix the file's other entry points use. `parseSec` and `parseUdsc` hold the SDK
   `m2v_hdec.o` slots after `parseShc` (medium); `m2vhdec_PutUsrDat` and `m2vhdec_AppendPicUsr`, which hand user
   data to the user SJ and the picture user buffer, are named from what they do (medium).
-- `M2V_IsConformable` (medium; alternative `M2V_IsMpeg2`) is the M2V library's stream check between
-  `M2V_GetVersionStr` and `M2V_Init`, the slot `MPV_IsConformable` holds in the MPV library (a name the Persona 4
-  decompilation proves for the MPV one). It walks the start codes with the same `MPV_SearchDelim`/`MPV_CheckDelim`
-  calls and accepts the sequence extension (MPEG-2) that `MPV_IsConformable` refuses. Its hook wrapper is
-  `mpvhook_IsConformable` and the slot `mpvhook_fn_IsConformable`; nothing calls the wrapper.
+- `M2V_IsDecodable` (medium; alternative `M2V_IsMpeg2`) is the M2V library's stream check between
+  `M2V_GetVersionStr` and `M2V_Init`, the slot `MPV_IsDecodable` holds in the MPV library. It walks the start codes
+  with the same `MPV_SearchDelim`/`MPV_CheckDelim` calls and accepts a stream only when a sequence extension (MPEG-2)
+  follows the sequence header. Its hook wrapper is `mpvhook_IsDecodable` and the slot `mpvhook_fn_IsDecodable`; nothing
+  calls the wrapper.
 - The hook table's words are `mpvhook_installed` and `mpvhook_fn_<entry>`, after the M2V function each holds.
