@@ -33,9 +33,8 @@
 #include "dw4/core/igRegistry.h"
 #include "dw4/core/igStringObj.h"
 #include "dw4/scenegraph/igTraversal.h"
+#include "dw4/scenegraph/igCommonTraversal.h"
 #include <string.h>
-/* kept local: its home, dw4/scenegraph/igCommonTraversal.h, is included by SceneGraph, whose load-bearing TravFunctionTable view of this symbol would conflict with a home declaration. */
-extern "C" int g_igCommonTraversal_travProcs[4];
 #include "dw4/core/igFile.h"
 #include "dw4/core/igResource.h"
 #pragma push
@@ -184,7 +183,7 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
 }
 
 void beCopyModelCtrl2_RegisterTraversal(void) {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs[0], beCopyModelCtrl2_GetMetaObject(), (void *)beCopyModelCtrl2_TraverseCallback);
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, beCopyModelCtrl2_GetMetaObject(), (void *)beCopyModelCtrl2_TraverseCallback);
 }
 
 int beCopyTransform_TraverseCallback(igCommonTraversal *traversal, beCopyTransform *node)
@@ -241,7 +240,7 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
 }
 
 void beCopyTransform_RegisterTraversal(void) {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs[0], beCopyTransform_GetMetaObject(), (void *)beCopyTransform_TraverseCallback);
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, beCopyTransform_GetMetaObject(), (void *)beCopyTransform_TraverseCallback);
 }
 
 /* Attach: registers with the insight, reads the IOP module path from the BECRUNTIME ini section (else

@@ -1,5 +1,6 @@
 #include "dw4/support/reflected.h"
 #include <stdlib.h>
+#include "dw4/enbaya/Enbaya.h"
 
 class DW4VC_12_1 { public: virtual void d0(); virtual int vX(int); };
 
@@ -11,7 +12,7 @@ extern int g_derivedVtable_0052d6d0[4];
 extern int g_baseVtable_0052d6f0[4];
 extern int g_derivedVtable_0052d710[4];
 extern int g_baseVtable_0052d730[4];
-/* The 4-byte allocator object FUN_00280a00 creates on first use. */
+/* The 4-byte allocator object Enbaya_InitMemoryManagement creates on first use. */
 int g_luaAllocator;
 
 void FUN_002809e0(igObject *self);
@@ -97,7 +98,7 @@ int FUN_002809f0(int a0, int a1)
     return a1;
 }
 
-void FUN_00280a00(void **arg0) {
+void Enbaya_InitMemoryManagement(void **arg0) {
     if (g_luaAllocator == 0) {
         if (arg0 == 0) {
             g_luaAllocator = (int)malloc(4);

@@ -824,7 +824,9 @@ twice back to back where a plain read loads it once.
 Each file declares each of these words once, `volatile`, at file scope, so every function naming one counts it:
 `p2InitSwap` (the two ids it creates and the frame count it zeroes), `swapbuffersPredicate` (the frame count),
 `p2GsSignalHandler` (the finish semaphore id) and `p2PrintWatchdogReport` (the flag words). Their keywords do no
-work there; the files match with every declaration `volatile`.
+work there; the files match with every declaration `volatile`. The flag words' declaration is their home,
+`dw4/p2/p2watchdog.h`, which `p2watchdog.c` includes beside its definition, so the watchdog's functions count the
+keyword of both.
 
 * The handler is registered with `AddDmacHandler` and ends with `sync` and `ei`. It clears a bit in both flag
   words, while thread code sets and clears another bit in them between disabling and enabling interrupts.

@@ -3232,8 +3232,8 @@
 0017a8f0 0000d8 Gap__Gfx__igPsx2VisualContext__vfunc_117 Gap::Gfx::igPsx2VisualContext::vfunc_117
 0017a9d0 000024 Gap__Gfx__igPsx2VisualContext__vfunc_118 Gap::Gfx::igPsx2VisualContext::vfunc_118
 0017aa00 000008 Gap__Gfx__igPsx2VisualContext__vfunc_120 Gap::Gfx::igPsx2VisualContext::vfunc_120
-0017aa10 000008 thunk_FUN_0017aa20
-0017aa20 000514 FUN_0017aa20
+0017aa10 000008 Gap__Gfx__igPsx2VisualContext__createTexture Gap::Gfx::igPsx2VisualContext::createTexture
+0017aa20 000514 igPsx2VisualContext_CreateTexture
 0017af40 000008 Gap__Gfx__igPsx2VisualContext__vfunc_124 Gap::Gfx::igPsx2VisualContext::vfunc_124
 0017af50 000224 Gap__Gfx__igPsx2VisualContext__vfunc_123 Gap::Gfx::igPsx2VisualContext::vfunc_123
 0017b180 000008 Gap__Gfx__igPsx2VisualContext__vfunc_126 Gap::Gfx::igPsx2VisualContext::vfunc_126
@@ -9006,7 +9006,7 @@
 002800d0 000008 FUN_002800d0
 002800e0 000160 FUN_002800e0
 00280240 000008 FUN_00280240
-00280250 000008 thunk_FUN_00280a00
+00280250 000008 thunk_Enbaya_InitMemoryManagement
 00280260 0000d0 FUN_00280260
 00280330 000270 FUN_00280330
 002805a0 000270 FUN_002805a0
@@ -9021,7 +9021,7 @@
 002809d0 000008 FUN_002809d0
 002809e0 000008 FUN_002809e0
 002809f0 000008 FUN_002809f0
-00280a00 000070 FUN_00280a00
+00280a00 000070 Enbaya_InitMemoryManagement
 00280a70 000054 FUN_00280a70
 00280ad0 00004c FUN_00280ad0
 00280b20 000030 FUN_00280b20

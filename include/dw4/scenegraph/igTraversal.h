@@ -4,7 +4,12 @@
 struct igMetaObject;
 struct igNode;
 struct igTraversal;
+struct igObject;
 struct igTraversalFunctionList;
+
+/* What a traversal calls for an object of one class: an igTraversalFunctionList holds one per class. */
+typedef int igTraversalFunction(struct igTraversal *traversal, struct igObject *object);
+typedef igTraversalFunction *igTraversalFunctionPtr;
 
 #ifdef __cplusplus
 extern "C" {

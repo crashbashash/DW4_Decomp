@@ -966,12 +966,12 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_117(igPsx2VisualContext *self, int arg
 unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_118(int arg0, int arg1) { int i = (arg1 < 15 ? arg1 : 15); return *(unsigned char *)(i + arg0 + 564); }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_120(TexContext *a0, int a1, int a2, int a3, int a4, int a5, int a6) {
-    FUN_0017aa20(a0, a1, a2, a3, a4, a5, 1);
+    igPsx2VisualContext_CreateTexture(a0, a1, a2, a3, a4, a5, 1);
 }
 
-int thunk_FUN_0017aa20(TexContext *context, int width, int height, int format, int kind, unsigned int flags, unsigned int levels)
+int Gap__Gfx__igPsx2VisualContext__createTexture(igPsx2VisualContext *self, int width, int height, int format, int source, unsigned int textureMode, unsigned int imageCount)
 {
-    return FUN_0017aa20(context, width, height, format, kind, flags, levels);
+    return igPsx2VisualContext_CreateTexture((TexContext *)self, width, height, format, source, textureMode, imageCount);
 }
 
 inline void adoptNewImage(MipImage *&image, AdoptReference)
@@ -980,7 +980,7 @@ inline void adoptNewImage(MipImage *&image, AdoptReference)
     image = (MipImage *)igImage_CreateInstance(0);
 }
 
-int FUN_0017aa20(TexContext *context, int width, int height, int format, int kind, unsigned int flags,
+int igPsx2VisualContext_CreateTexture(TexContext *context, int width, int height, int format, int kind, unsigned int flags,
                                        unsigned int levels)
 {
     TexList *list = context->texList;

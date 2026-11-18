@@ -385,8 +385,8 @@ void FUN_001d7910(void) {
     int n;
     int j;
     void **m;
-    igObject_Copy((igObject *)DAT_005628e0[0], (igObject *)g_igCommonTraversal_travProcs[0], 1);
-    igObject_Copy((igObject *)DAT_005628e8[0], (igObject *)g_igCommonTraversal_travProcs[0], 1);
+    igObject_Copy(DAT_005628e0[0], g_igCommonTraversal_travProcs, 1);
+    igObject_Copy(DAT_005628e8[0], g_igCommonTraversal_travProcs, 1);
     clearBytes((char *)metas, 28);
     metas[0] = ((void *)g_igLightStateSet_metaObject);
     metas[1] = ((void *)g_igEnvironmentMapShader2_metaObject);
@@ -399,7 +399,7 @@ void FUN_001d7910(void) {
         m = &metas[i];
         count = igMetaObject_CountTree((igMetaObject *)*m);
         for (child = 0; child < count; child++) {
-            igTraversal_RegisterFunction((igTraversalFunctionList *)((void *)DAT_005628e0[0]), (igMetaObject *)(igMetaObject_GetTreeNode((igMetaObject *)*m, child)), (void *)igTraversal_TraverseChildren);
+            igTraversal_RegisterFunction((igTraversalFunctionList *)DAT_005628e0[0], (igMetaObject *)(igMetaObject_GetTreeNode((igMetaObject *)*m, child)), (void *)igTraversal_TraverseChildren);
         }
     }
     pairs = DAT_0048dac0;
@@ -411,7 +411,7 @@ void FUN_001d7910(void) {
         p = &pairs._pairs[i];
         n = igMetaObject_CountTree((igMetaObject *)p->_meta);
         for (j = 0; j < n; j++) {
-            igTraversal_RegisterFunction((igTraversalFunctionList *)((void *)DAT_005628e8[0]), (igMetaObject *)(igMetaObject_GetTreeNode((igMetaObject *)p->_meta, j)), p->_function);
+            igTraversal_RegisterFunction((igTraversalFunctionList *)DAT_005628e8[0], (igMetaObject *)(igMetaObject_GetTreeNode((igMetaObject *)p->_meta, j)), p->_function);
         }
     }
 }
@@ -440,11 +440,11 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
     L_1d7b70 *temp_v0_2;
     int var_s2;
     int temp_s2;
-    TravFunctionTable *temp_s4;
+    igTDataList<igTraversalFunctionPtr> *temp_s4;
     int temp_s3;
     int temp_s2_2;
     int temp_s5_2;
-    TravFunctionTable *temp_s2_3;
+    igTDataList<igTraversalFunctionPtr> *temp_s2_3;
     L_1d7b70 *temp_v0;
 
     if (arg0->b32 == 0) {
@@ -454,8 +454,8 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
         arg0->b32 = 1;
     }
     FUN_001d7630((void *)arg0, (float *)((char *)arg1 + 164));
-    temp_s4 = g_igCommonTraversal_travProcs[0];
-    g_igCommonTraversal_travProcs[0] = DAT_005628e0[0];
+    temp_s4 = g_igCommonTraversal_travProcs;
+    g_igCommonTraversal_travProcs = DAT_005628e0[0];
     if (arg0->b140 != 0) {
         temp_s2 = arg1->f52;
         FUN_001dc500((A_1dc500 *)arg1->f68, 0, 1);
@@ -488,7 +488,7 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
         igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s2, (igAttr *)arg0->f148);
         FUN_001dc610(arg1->f68);
     }
-    g_igCommonTraversal_travProcs[0] = DAT_005628e8[0];
+    g_igCommonTraversal_travProcs = DAT_005628e8[0];
     temp_s3 = arg1->f52;
     FUN_001dc500((A_1dc500 *)arg1->f68, 0, 0);
     temp_v0 = arg0->f28;
@@ -515,8 +515,8 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s2_2, (igAttr *)((int *)DAT_005629b0)[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s2_2, (igAttr *)((int *)DAT_005629a8)[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_005629c8)[0]);
-    temp_s2_3 = g_igCommonTraversal_travProcs[0];
-    g_igCommonTraversal_travProcs[0] = DAT_005628e0[0];
+    temp_s2_3 = g_igCommonTraversal_travProcs;
+    g_igCommonTraversal_travProcs = DAT_005628e0[0];
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_00562908)[0]);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_00562938)[0]);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)arg0->f156);
@@ -565,9 +565,9 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_005628f8)[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_00562998)[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_005629c0)[0]);
-    g_igCommonTraversal_travProcs[0] = temp_s2_3;
+    g_igCommonTraversal_travProcs = temp_s2_3;
     FUN_001dc610(arg1->f68);
-    g_igCommonTraversal_travProcs[0] = temp_s4;
+    g_igCommonTraversal_travProcs = temp_s4;
 }
 
 char g_disableBumpDotProduct;

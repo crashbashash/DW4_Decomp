@@ -298,8 +298,8 @@ int FUN_001c4c20(igFrustCullTraversal *self, igNode *node, int result) {
     case 1: {
         pushCullAttr(self, (igAttr *)self->_cd);
         igObject *saved = (igObject *)self->_travProcs;
-        ((igSmartPointer<igObject> &)self->_travProcs) = (igObject *)g_igCommonTraversal_travProcs[0];
-        status = ((CullTravProc)g_igCommonTraversal_travProcs[0]->_data[(unsigned)node->_handle])(self, node);
+        ((igSmartPointer<igObject> &)self->_travProcs) = (igObject *)g_igCommonTraversal_travProcs;
+        status = g_igCommonTraversal_travProcs->_data[(unsigned)node->_handle]((igTraversal *)self, node);
         ((igSmartPointer<igObject> &)self->_travProcs) = saved;
         popCullAttr((igAttrStackManager *)self->_attrStack, (igAttr *)self->_cd);
         if (status == 2) {
@@ -308,13 +308,13 @@ int FUN_001c4c20(igFrustCullTraversal *self, igNode *node, int result) {
         return 0;
     }
     case 3:
-        if (((CullTravProc)g_igCommonTraversal_travProcs[0]->_data[(unsigned)node->_handle])(self, node) == 2) {
+        if (g_igCommonTraversal_travProcs->_data[(unsigned)node->_handle]((igTraversal *)self, node) == 2) {
             return 2;
         }
         return 0;
     case 4:
         pushCullAttr(self, (igAttr *)self->_cd);
-        status = ((CullTravProc)g_igCommonTraversal_travProcs[0]->_data[(unsigned)node->_handle])(self, node);
+        status = g_igCommonTraversal_travProcs->_data[(unsigned)node->_handle]((igTraversal *)self, node);
         popCullAttr((igAttrStackManager *)self->_attrStack, (igAttr *)self->_cd);
         if (status == 2) {
             return 2;
@@ -346,11 +346,11 @@ void FUN_001c5030(igFrustCullTraversal *arg0, igNode *arg1) {
         }
     }
     unsigned sel = arg1->_handle;
-    ((void (*)(igFrustCullTraversal *, igNode *))g_igCommonTraversal_travProcs[0]->_data[sel])(arg0, arg1);
+    g_igCommonTraversal_travProcs->_data[sel]((igTraversal *)arg0, arg1);
 }
 
 int FUN_001c5130(void *arg0, TraversalNodeView *arg1) {
-    return ((int (*)(void *, TraversalNodeView *))((TravFunctionTable *)g_igCommonTraversal_travProcs[0])->_data[arg1->_id])(arg0, arg1);
+    return g_igCommonTraversal_travProcs->_data[arg1->_id]((igTraversal *)arg0, (igObject *)arg1);
 }
 
 int FUN_001c5160(S0_1c5160 *arg0, float fparg0) {

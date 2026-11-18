@@ -14,9 +14,8 @@
 #include "dw4/scenegraph/igObjectPool.h"
 #include "dw4/attrs/igTimeAttr.h"
 #include "dw4/scenegraph/igTraversal.h"
+#include "dw4/scenegraph/igCommonTraversal.h"
 #include <string.h>
-/* kept local: its home, dw4/scenegraph/igCommonTraversal.h, is included by SceneGraph, whose load-bearing TravFunctionTable view of this symbol would conflict with a home declaration. */
-extern "C" int g_igCommonTraversal_travProcs[4];
 #include "dw4/support/emptyString.h"
 
 extern "C" int beResetNode_TraverseCallback(void *node, void *traversal);
@@ -129,7 +128,7 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
 }
 
 void beResetNode_RegisterTraversal(void) {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs[0], beResetNode_GetMetaObject(), (void *)beResetNode_TraverseCallback);
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, beResetNode_GetMetaObject(), (void *)beResetNode_TraverseCallback);
 }
 
 void beSeCtl_Prepare(beSeCtl *self) {

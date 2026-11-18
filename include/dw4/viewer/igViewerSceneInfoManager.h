@@ -18,6 +18,9 @@ void igViewerSceneInfoManager_DebugZoomOut(struct igViewerSceneInfoManager *self
 
 #ifdef __cplusplus
 }
+
+/* A manager member function a viewer action calls (hot keys, menu items). */
+typedef void (igViewerSceneInfoManager::*igViewerFunction)();
 #endif
 
 #endif

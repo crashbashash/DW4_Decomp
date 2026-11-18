@@ -15,10 +15,9 @@
 #include "dw4/attrs/igModelViewMatrixAttr.h"
 #include "dw4/core/igObject.h"
 #include "dw4/scenegraph/igTraversal.h"
+#include "dw4/scenegraph/igCommonTraversal.h"
 #include <stdio.h>
 #include <string.h>
-/* kept local: its home, dw4/scenegraph/igCommonTraversal.h, is included by SceneGraph, whose load-bearing TravFunctionTable view of this symbol would conflict with a home declaration. */
-extern "C" int g_igCommonTraversal_travProcs[4];
 #include "dw4/support/emptyString.h"
 
 extern "C" int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal);
@@ -193,7 +192,7 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
 }
 
 void beLOA_RegisterTraversalFunction(void) {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs[0], (igMetaObject *)beLOA_GetMetaObject(), (void *)beLOA_TraversalFunction);
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, (igMetaObject *)beLOA_GetMetaObject(), (void *)beLOA_TraversalFunction);
 }
 
 int beLua__RunNamedChunk(beLua *self, const char *name, const char *given)

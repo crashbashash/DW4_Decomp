@@ -4,6 +4,7 @@
 #include "dw4/p2/p2pool.h"
 #include "dw4/p2/p2swap.h"
 #include "dw4/p2/p2timer.h"
+#include "dw4/p2/p2watchdog.h"
 #include "dw4/support/eekernel.h"
 #include "dw4/sony/libkernl.h"
 #include "dw4/core/igMemory.h"
@@ -47,7 +48,6 @@ extern int p2DmaFreePackets[P2_DMA_CHANNEL_COUNT];
 extern p2PredicateName p2PredicateNames[10];
 extern char p2StoreImagePending;
 extern int p2DmaWaitSema;
-extern volatile p2DmaWatch p2DmaWatchFlags;
 extern struct SemaParam p2DmaWaitSemaParam;
 extern struct SemaParam DAT_00490d20;
 extern int DAT_00490c74;

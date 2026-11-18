@@ -1,13 +1,12 @@
 #include "dw4/support/reflected.h"
 #include "dw4/scenegraph/igTraversal.h"
+#include "dw4/scenegraph/igCommonTraversal.h"
 #include "dw4/game/beLoadingNode.h"
 #include "dw4/game/beNodeAnim.h"
 #include "dw4/game/bePadData.h"
 #include "dw4/core/igObject.h"
 #include "dw4/support/softfloat.h"
 #include <math.h>
-/* kept local: its home, dw4/scenegraph/igCommonTraversal.h, is included by SceneGraph, whose load-bearing TravFunctionTable view of this symbol would conflict with a home declaration. */
-extern "C" int g_igCommonTraversal_travProcs[4];
 
 typedef void (*TraversalFunction)(void);
 
@@ -78,7 +77,7 @@ extern "C" long long beNodeAnim_UpdateTime(beNodeAnim *node, long long now)
 
 extern "C" void beNodeAnim_RegisterTraversalFunction(void)
 {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs[0], (igMetaObject *)beNodeAnim_ResolveMetaObject(),
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, (igMetaObject *)beNodeAnim_ResolveMetaObject(),
                                  (void *)beNodeAnim_TraversalFunction);
 }
 
@@ -99,7 +98,7 @@ extern "C" unsigned char beLoadingNode_IsPastPlayLimit(beLoadingNode *node)
 
 extern "C" void beLoadingNode_RegisterTraversalFunction(void)
 {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs[0], (igMetaObject *)beLoadingNode_ResolveMetaObject(),
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, (igMetaObject *)beLoadingNode_ResolveMetaObject(),
                                  (void *)beLoadingNode_TraversalFunction);
 }
 

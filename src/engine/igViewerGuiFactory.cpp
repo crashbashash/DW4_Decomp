@@ -1,13 +1,11 @@
 /* igViewerGuiFactory: builds the viewer's menu actions and gives its colour changers their default colours. */
 #include "dw4/core/igSmartPointer.h"
-
-class igViewerSceneInfoManager;
-typedef void (igViewerSceneInfoManager::*ViewerActionFunction)();
+#include "dw4/viewer/igViewerSceneInfoManager.h"
 
 /* The igViewerAction instance (reflected as igViewerAction in dw4/support/reflected.h, which types _function as a word): the object the action calls and the member function it calls on it. */
 struct ViewerAction : public igObject {
     igObject *_ref;
-    ViewerActionFunction _function;
+    igViewerFunction _function;
 };
 
 /* igViewerGuiFactory with its object references typed (dw4/support/reflected.h types them as words). */
@@ -183,17 +181,17 @@ ViewerGuiStyle g_viewerGuiStyle;
 #include "dw4/gui/igOnOffColorChanger.h"
 #include "dw4/viewer/igViewerGuiFactory.h"
 
-static inline void createAction(igSmartPointer<ViewerAction> &holder, AdoptReference) {
+static inline void createAction(igSmartPointer<igViewerAction> &holder, AdoptReference) {
     igRelease(holder.p);
-    holder.p = (ViewerAction *)igViewerAction_Create(0);
+    holder.p = igViewerAction_Create(0);
 }
 
-/* A new action bound to `ref` and `function`. */
-extern "C" igSmartPointer<ViewerAction> igViewerGuiFactory_CreateAction(void *factory, igObject *ref, ViewerActionFunction function) {
-    igSmartPointer<ViewerAction> action;
+extern "C" igSmartPointer<igViewerAction> igViewerGuiFactory_CreateAction(igViewerGuiFactory *factory, igViewerSceneInfoManager *app, igViewerFunction function) {
+    igSmartPointer<igViewerAction> action;
     createAction(action, AdoptReference());
-    action->_ref = ref;
-    action->_function = function;
+    /* reflected igViewerAction types _ref and _function as words */
+    ((ViewerAction *)action.p)->_ref = (igObject *)app;
+    ((ViewerAction *)action.p)->_function = function;
     return action;
 }
 

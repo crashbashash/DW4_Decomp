@@ -58,6 +58,7 @@
 #include "dw4/core/igObject.h"
 #include "dw4/scenegraph/igTransformRecorder.h"
 #include "dw4/scenegraph/igTraversal.h"
+#include "dw4/scenegraph/igCommonTraversal.h"
 #include "dw4/support/softfloat.h"
 #include <math.h>
 #include <stdio.h>
@@ -65,8 +66,6 @@
 #include "dw4/support/emptyString.h"
 #include "dw4/support/list-services.h"
 #include "dw4/maths/igAABox.h"
-/* kept local: its home, dw4/scenegraph/igCommonTraversal.h, is included by SceneGraph, whose load-bearing TravFunctionTable view of this symbol would conflict with a home declaration. */
-extern "C" int g_igCommonTraversal_travProcs[4];
 #define SELECT_ALLOCATOR(var, arg) { int base_ = (int)igObject_GetAllocator(arg); if (g_useOwnerAllocator != 0) var = base_; else var = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
 #define RELEASE(q) { igObject *o_ = (igObject *)(q); if (o_) { o_->_refCount = o_->_refCount - 1; if ((o_->_refCount & 0x7fffff) == 0) igObject_Destroy(o_); } }
 #define RETAIN(q) { igObject *o_ = (igObject *)(q); if (o_) o_->_refCount = o_->_refCount + 1; }
@@ -456,7 +455,7 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
 }
 
 void beMeterCtrlNode_RegisterTraversalFunction(void) {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs[0], beMeterCtrlNode_ResolveMetaObject(), (void *)beMeterCtrlNode_TraversalFunction);
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, beMeterCtrlNode_ResolveMetaObject(), (void *)beMeterCtrlNode_TraversalFunction);
 }
 
 void beModelCtrl_DrawDebugHitBox(beModelCtrl *self, igNode *node, igAABox *box, float *color)

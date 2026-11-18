@@ -181,7 +181,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_49(igPsx2VisualContext *context, int b
             break;
         }
         if (index == -1) {
-            *textureIndex = FUN_0017aa20((TexContext *)((VC49 *)context), buf->width, buf->height, format, 3, 0, 1);
+            *textureIndex = igPsx2VisualContext_CreateTexture((TexContext *)((VC49 *)context), buf->width, buf->height, format, 3, 0, 1);
             buf->texIndex = *textureIndex;
             tex = &((VC49 *)context)->texList->records[*textureIndex];
         }

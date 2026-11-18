@@ -34,6 +34,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_63(struct igPsx2VisualContext *self, s
 void Gap__Gfx__igPsx2VisualContext__vfunc_71(struct igPsx2VisualContext *vc, int primitive, unsigned int count, int first);
 void Gap__Gfx__igPsx2VisualContext__vfunc_86(struct igPsx2VisualContext *self, int light, float *color);
 void Gap__Gfx__igPsx2VisualContext__vfunc_112(struct igPsx2VisualContext *self, float *ambient, float *diffuse, float *specular, float *emission, float shininess);
+int Gap__Gfx__igPsx2VisualContext__createTexture(struct igPsx2VisualContext *self, int width, int height, int format, int source, unsigned int textureMode, unsigned int imageCount);
 void Gap__Gfx__igPsx2VisualContext__vfunc_136(struct igPsx2VisualContext *self, int texture, IG_GFX_TEXTURE_WRAP wrapS, IG_GFX_TEXTURE_WRAP wrapT);
 void Gap__Gfx__igPsx2VisualContext__vfunc_138(struct igPsx2VisualContext *self, int texture, IG_GFX_TEXTURE_FILTER minFilter);
 void Gap__Gfx__igPsx2VisualContext__vfunc_140(struct igPsx2VisualContext *self, int texture, IG_GFX_TEXTURE_FILTER magFilter);

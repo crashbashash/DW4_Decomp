@@ -22,6 +22,7 @@
 #include "dw4/p2/p2swap.h"
 #include "dw4/p2/p2timer.h"
 #include "dw4/p2/p2viewport.h"
+#include "dw4/p2/p2watchdog.h"
 
 /* The GS privileged CSR register and its FIELD bit: set while the odd field is shown. */
 enum {
@@ -96,7 +97,6 @@ extern volatile long long p2FramesShown;
 /* Set by the vertical-blank and FINISH handlers and cleared by thread code. */
 extern volatile int p2VsyncSwapPending;
 extern volatile int p2FrameDrawn;
-extern volatile p2DmaWatch p2DmaWatchFlags;
 
 /* Queued at the end of a frame: the GS has drawn it. */
 void p2RecordFrameTime(p2FinishFunc *finish, int arg) {

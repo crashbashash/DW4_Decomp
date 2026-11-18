@@ -226,13 +226,13 @@ void FUN_001b4220(struct A4220 *arg0, struct B4220 *arg1) {
 
 void FUN_001b42c0(TravFlattenView *self, int root) {
     int saved[32];
-    TravFunctionTable *table = ((TravFunctionTable *)g_igCommonTraversal_travProcs[0]);
+    igTDataList<igTraversalFunctionPtr> *table = g_igCommonTraversal_travProcs;
     int meta = (int)g_igGeometry_metaObject;
     int n = igMetaObject_CountTree((igMetaObject *)meta);
     int i;
     for (i = 0; i < n; i++) {
         TravObject *m = ((TravObject *)igMetaObject_GetTreeNode((igMetaObject *)meta, i));
-        saved[i] = table->_data[m->_id];
+        saved[i] = (int)table->_data[m->_id];
         igTraversal_RegisterFunction((igTraversalFunctionList *)table, (igMetaObject *)m, (void *)((void *)FUN_001b3ad0));
     }
     DAT_005625f0 = self;
@@ -352,7 +352,7 @@ void FUN_001b4c40(TexGenShaderView_1b4c40 *self, igCommonTraversal *traversal) {
     /* matching construct: declaration order (count s6, procs s5, meta s4, manager s3), from a 120-order search */
     int i;
     int count;
-    TravFunctionTable *procs;
+    igTDataList<igTraversalFunctionPtr> *procs;
     igMetaObject *meta;
     igAttrStackManager *manager;
     ImageView_1b4c40 *image;
@@ -376,12 +376,12 @@ void FUN_001b4c40(TexGenShaderView_1b4c40 *self, igCommonTraversal *traversal) {
     self->_eyeTexGen->set31(self->_lightTextureUnit);
     self->_lightTexGen->set31(self->_eyeTextureUnit);
     manager = (igAttrStackManager *)traversal->_attrStack;
-    procs = g_igCommonTraversal_travProcs[0];
+    procs = g_igCommonTraversal_travProcs;
     meta = g_igGeometry_metaObject;
     count = igMetaObject_CountTree(meta);
     for (i = 0; i < count; i++) {
         igMetaObject *node = (igMetaObject *)igMetaObject_GetTreeNode(meta, i);
-        saved[i] = procs->_data[node->_id];
+        saved[i] = (int)procs->_data[node->_id];
         igTraversal_RegisterFunction((igTraversalFunctionList *)procs, node, (void *)FUN_001b4bb0);
     }
     DAT_00562638[0] = (VC_1b2fa0 *)self;
@@ -450,7 +450,7 @@ void FUN_001b4c40(TexGenShaderView_1b4c40 *self, igCommonTraversal *traversal) {
 }
 
 void FUN_001b68b0(int arg0) {
-    FUN_001b68c0(((TravFunctionTable *)g_igCommonTraversal_travProcs[0]), (void *)arg0);
+    FUN_001b68c0(g_igCommonTraversal_travProcs, (void *)arg0);
 }
 
 void FUN_001b68c0(void *self, void *meta) {
@@ -508,7 +508,7 @@ void Gap__Sg__igCommonTraversal__vfunc_09(igCommonTraversal *arg0, int arg1) {
 
     Gap__Sg__igTraversal__vfunc_09((A_1e0380 *)arg0, arg1);
     if (arg1 == 0) {
-        s0 = (igObject *)((TravFunctionTable *)g_igCommonTraversal_travProcs[0]);
+        s0 = g_igCommonTraversal_travProcs;
         if (s0 != 0) {
             s0->_refCount = s0->_refCount + 1;
         }
@@ -526,7 +526,7 @@ void Gap__Sg__igCommonTraversal__vfunc_09(igCommonTraversal *arg0, int arg1) {
 }
 
 void FUN_001b6be0(void) {
-    *(int *)0x562640 = FUN_0019a6e0((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
+    g_igCommonTraversal_travProcs = (igTDataList<igTraversalFunctionPtr> *)FUN_0019a6e0((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
     FUN_0013b110();
     igTextureBindAttr_EnsureRegistered();
     igModelViewMatrixAttr_EnsureRegistered();
@@ -537,14 +537,7 @@ void FUN_001b6be0(void) {
 }
 
 void FUN_001b6c50(void) {
-    void *temp_a0;
-
-    temp_a0 = *(void **)0x562640;
-    if (temp_a0 != 0) {
-        *(int *)((char *)temp_a0 + 4) = (int) (*(int *)((char *)temp_a0 + 4) - 1);
-        if (((unsigned long long) ((long long) *(int *)((char *)temp_a0 + 4) << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
-        }
-    }
+    igTDataList<igTraversalFunctionPtr> *procs = g_igCommonTraversal_travProcs;
+    IG_OBJECT_RELEASE(procs);
 }
 

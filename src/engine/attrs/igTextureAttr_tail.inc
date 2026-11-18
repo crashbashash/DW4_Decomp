@@ -100,7 +100,7 @@ void Gap__Attrs__igTextureAttr__vfunc_24(igTextureAttr *self, igObject *context)
             if (image == 0) {
                 return;
             }
-            self->_texId = thunk_FUN_0017aa20(context, image->_px, image->_py, image->_pfmt, 0, self->_mipmapMode, self->_imageCount);
+            self->_texId = Gap__Gfx__igPsx2VisualContext__createTexture((igPsx2VisualContext *)context, image->_px, image->_py, image->_pfmt, 0, self->_mipmapMode, self->_imageCount);
             for (level = 0; level < self->_imageCount; level++) {
                 igImage *levelImage;
                 if (level == 0) {
@@ -117,7 +117,7 @@ void Gap__Attrs__igTextureAttr__vfunc_24(igTextureAttr *self, igObject *context)
             if (image == 0) {
                 return;
             }
-            self->_texId = thunk_FUN_0017aa20(context, image->_px, image->_py, image->_pfmt, 2, 0, 1);
+            self->_texId = Gap__Gfx__igPsx2VisualContext__createTexture((igPsx2VisualContext *)context, image->_px, image->_py, image->_pfmt, 2, 0, 1);
             break;
         case 3:
         case 4:
@@ -125,7 +125,7 @@ void Gap__Attrs__igTextureAttr__vfunc_24(igTextureAttr *self, igObject *context)
             if (image == 0) {
                 return;
             }
-            self->_texId = thunk_FUN_0017aa20(context, image->_px, image->_py, image->_pfmt, 3, 0, 1);
+            self->_texId = Gap__Gfx__igPsx2VisualContext__createTexture((igPsx2VisualContext *)context, image->_px, image->_py, image->_pfmt, 3, 0, 1);
             break;
         }
         if (context != 0) {

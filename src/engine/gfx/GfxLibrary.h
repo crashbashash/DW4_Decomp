@@ -4894,7 +4894,6 @@ extern "C" void FUN_00209210(int wrapU, int wrapV, int lod0, long long lod1, lon
 extern "C" void FUN_0020c7f0(int texture, int image);
 extern "C" bool FUN_0017b400(TexContext *context, TexEntry *entry, int stage, ClutEntry *clut, int clutIndex);
 extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_120(TexContext *a0, int a1, int a2, int a3, int a4, int a5, int a6);
-extern "C" int thunk_FUN_0017aa20(TexContext *context, int width, int height, int format, int kind, unsigned int flags, unsigned int levels);
 class TexMemoryPool {
 public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51();
@@ -4903,7 +4902,7 @@ public:
     virtual igSmartPointer<MipImage> *allocateArray(int elementSize, int count);
 };
 struct ClutContextCB80;
-extern "C" int FUN_0017aa20(TexContext *context, int width, int height, int format, int kind, unsigned int flags, unsigned int levels);
+extern "C" int igPsx2VisualContext_CreateTexture(TexContext *context, int width, int height, int format, int kind, unsigned int flags, unsigned int levels);
 extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_124(void);
 extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_126(void);
 extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_125(igPsx2VisualContext *arg0, int arg1, int *arg2, int *arg3, int *arg4, int *arg5, char *arg6);

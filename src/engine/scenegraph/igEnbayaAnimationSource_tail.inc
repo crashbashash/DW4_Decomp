@@ -1,5 +1,5 @@
 void FUN_001c07d0(void) {
-    thunk_FUN_00280a00(0);
+    thunk_Enbaya_InitMemoryManagement(0);
 }
 
 void FUN_001c07e0(void) {

@@ -18,10 +18,9 @@
 #include "dw4/core/igNamedObject.h"
 #include "dw4/core/igObject.h"
 #include "dw4/scenegraph/igTraversal.h"
+#include "dw4/scenegraph/igCommonTraversal.h"
 #include "dw4/support/softfloat.h"
 #include "dw4/maths/igAABox.h"
-/* kept local: its home, dw4/scenegraph/igCommonTraversal.h, is included by SceneGraph, whose load-bearing TravFunctionTable view of this symbol would conflict with a home declaration. */
-extern "C" int g_igCommonTraversal_travProcs[4];
 #pragma push
 #pragma readonly_strings on
 
@@ -174,7 +173,7 @@ int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav) {
 }
 
 void beModelCtrlNode2_RegisterTraversalFunction(void) {
-    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs[0], beModelCtrlNode2_ResolveMetaObject(), (void *)beModelCtrlNode2_TraversalFunction);
+    igTraversal_RegisterFunction((igTraversalFunctionList *)g_igCommonTraversal_travProcs, beModelCtrlNode2_ResolveMetaObject(), (void *)beModelCtrlNode2_TraversalFunction);
 }
 
 /* Start: builds the hit box around the owner's node (offset, sized by _boxSize, moved into the node's

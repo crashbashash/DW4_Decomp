@@ -1,3 +1,5 @@
+#include "dw4/enbaya/Enbaya.h"
+
 extern "C" {
 
 struct TripleVectorState;
@@ -11,7 +13,6 @@ int FUN_0027f2d0(int *sizes);
 int FUN_0027f310(void *arg0);
 struct S;
 void FUN_002800e0(struct S *s);
-int FUN_00280a00();
 struct S;
 void FUN_0027f5c0(struct S *s, float t);
 void FUN_0027f410(struct S *s, int count, float scale, int forward, float time);
@@ -719,8 +720,8 @@ void *FUN_00280240(unsigned int sz, void *p)
     return p;
 }
 
-void thunk_FUN_00280a00(void) {
-    FUN_00280a00();
+void thunk_Enbaya_InitMemoryManagement(void **memory) {
+    Enbaya_InitMemoryManagement(memory);
 }
 
 void FUN_00280260(EnbayaMaskRun *run, EnbayaMaskReader *reader) {

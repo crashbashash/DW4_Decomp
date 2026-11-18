@@ -11,6 +11,7 @@
 #include "dw4/support/ClassRegistration.h"
 #include "dw4/scenegraph/AnimationPools.h"
 #include "dw4/scenegraph/igActor.h"
+#include "dw4/enbaya/Enbaya.h"
 #include "dw4/scenegraph/igActorInfo.h"
 #include "dw4/scenegraph/igActorList.h"
 #include "dw4/scenegraph/igAnimationDatabase.h"
@@ -1230,11 +1231,6 @@ struct O_1b2750 { int f0, f4; long long f8; unsigned char b16, b17; short pad; s
 extern "C" unsigned char igNode_ComputeBound(igAABox *, igAABox *, int, int, unsigned char, unsigned char, long long);
 struct TravObject { int _vtable; unsigned int _refCount; int _id; };
 struct TravObjectList { char pad[8]; int _count; int _capacity; TravObject **_data; };
-struct TravFunctionTable { char pad[16]; int *_data; };
-/* kept local: igCommonTraversal::_travProcs, no C definition. Read as this view (a pointer-typed _data), the cull
- * traversal's loads keep retail's order; reflected.h's igTraversalFunctionList has an int _data, and every cast of it
- * tried (to this view, to int *, as an lvalue) moves the load (FUN_001c4c20, FUN_001c5030). */
-extern "C" TravFunctionTable *g_igCommonTraversal_travProcs[4];
 struct TravFlattenView { char pad[40]; TravObjectList *_a; TravObjectList *_b; };
 struct NodeProcEntry { int meta; int proc; };
 struct NodeProcTable { NodeProcEntry e[34]; } __attribute__((aligned(16)));
@@ -1784,7 +1780,6 @@ extern "C" void *DAT_005626d8[4];
 extern "C" int DAT_00562678[4];
 extern "C" unsigned char GPR_00554984;
 extern "C" unsigned char GPR_00554b8c;
-extern "C" int thunk_FUN_00280a00(...);
 class DW4VC_108_4 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int vX(int, int, int, int); };
 class EnbayaSourceSlots24 {
 public:
@@ -3071,8 +3066,8 @@ struct T_1d7630 {
 typedef struct ShaderTraversalPair { void *_meta; void *_function; } ShaderTraversalPair;
 typedef struct ShaderTraversalPairs { ShaderTraversalPair _pairs[4]; } ShaderTraversalPairs;
 extern "C" ShaderTraversalPairs DAT_0048dac0;
-extern "C" TravFunctionTable *DAT_005628e0[4];
-extern "C" TravFunctionTable *DAT_005628e8[4];
+extern "C" igTDataList<igTraversalFunctionPtr> *DAT_005628e0[4];
+extern "C" igTDataList<igTraversalFunctionPtr> *DAT_005628e8[4];
 class DW4VCSR_128_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual int vX(float *); };
 typedef struct L_1d7b70 { char p[8]; int n; char q[4]; int *arr; } L_1d7b70;
 typedef struct S0_1d7b70 {

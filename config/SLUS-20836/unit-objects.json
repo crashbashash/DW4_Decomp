@@ -4858,8 +4858,8 @@
       "Gap__Gfx__igPsx2VisualContext__vfunc_117": "0x0017a8f0",
       "Gap__Gfx__igPsx2VisualContext__vfunc_118": "0x0017a9d0",
       "Gap__Gfx__igPsx2VisualContext__vfunc_120": "0x0017aa00",
-      "thunk_FUN_0017aa20": "0x0017aa10",
-      "FUN_0017aa20": "0x0017aa20",
+      "Gap__Gfx__igPsx2VisualContext__createTexture": "0x0017aa10",
+      "igPsx2VisualContext_CreateTexture": "0x0017aa20",
       "Gap__Gfx__igPsx2VisualContext__vfunc_124": "0x0017af40",
       "Gap__Gfx__igPsx2VisualContext__vfunc_123": "0x0017af50",
       "Gap__Gfx__igPsx2VisualContext__vfunc_126": "0x0017b180",
@@ -19853,7 +19853,7 @@
       "FUN_002800d0": "0x002800d0",
       "FUN_002800e0": "0x002800e0",
       "FUN_00280240": "0x00280240",
-      "thunk_FUN_00280a00": "0x00280250",
+      "thunk_Enbaya_InitMemoryManagement": "0x00280250",
       "FUN_00280260": "0x00280260",
       "FUN_00280330": "0x00280330",
       "FUN_002805a0": "0x002805a0"
@@ -19884,7 +19884,7 @@
       "FUN_002809d0": "0x002809d0",
       "FUN_002809e0": "0x002809e0",
       "FUN_002809f0": "0x002809f0",
-      "FUN_00280a00": "0x00280a00",
+      "Enbaya_InitMemoryManagement": "0x00280a00",
       "FUN_00280a70": "0x00280a70",
       "FUN_00280ad0": "0x00280ad0",
       "FUN_00280b20": "0x00280b20",
@@ -47724,7 +47724,7 @@
       "g_viewerGuiStyle": "0x0058ced0"
     },
     "stripped": [
-      "__dt__30igSmartPointer<12ViewerAction>Fv"
+      "__dt__32igSmartPointer<14igViewerAction>Fv"
     ],
     "duplicates": {
       "__ct__7igVec3fFv": "0x0019ace0",
@@ -47950,6 +47950,7 @@
       "__dt__28igSmartPointer<10igPickMode>Fv",
       "__dt__30igSmartPointer<12igCameraMode>Fv",
       "__dt__30igSmartPointer<12igRotateMode>Fv",
+      "__dt__32igSmartPointer<14igViewerAction>Fv",
       "__dt__33igSmartPointer<15MessageReceiver>Fv",
       "__dt__9StringRefFv"
     ],
