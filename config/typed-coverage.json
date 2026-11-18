@@ -381,7 +381,7 @@
   "igAABox": 185,
   "igAABoxList": 4,
   "igActiveComponentsObserver": 21,
-  "igActor": 6,
+  "igActor": 18,
   "igActorManager": 8,
   "igAdxAfsFile": 24,
   "igAdxAfsFileList": 10,
@@ -391,7 +391,7 @@
   "igAlphaFunctionAttr": 2,
   "igAnimation": 7,
   "igAnimationBindingList": 1,
-  "igAnimationCombiner": 32,
+  "igAnimationCombiner": 39,
   "igAnimationCombinerBoneInfo": 5,
   "igAnimationCombinerBoneInfoList": 6,
   "igAnimationCombinerBoneInfoListList": 4,
@@ -516,7 +516,7 @@
   "igIniShaderFactory": 5,
   "igInsightCore": 79,
   "igIntArrayMetaField": 24,
-  "igIntList": 318,
+  "igIntList": 321,
   "igIntMetaField": 58,
   "igInterface": 2,
   "igIntersectTraversal": 21,
@@ -739,11 +739,11 @@
   "engine": {
    "files": 49,
    "offset_casts": 3214,
-   "other_members": 12253,
-   "recovered": 12580,
-   "recovered_pct": 37.92,
-   "synthetic": 5124,
-   "total": 33171
+   "other_members": 12252,
+   "recovered": 12602,
+   "recovered_pct": 37.98,
+   "synthetic": 5116,
+   "total": 33184
   },
   "game": {
    "files": 85,
@@ -829,8 +829,8 @@
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
  "offset_casts": 3934,
- "recovered": 32771,
- "synthetic": 6093,
- "total": 71965,
+ "recovered": 32793,
+ "synthetic": 6085,
+ "total": 71978,
  "typeable": 258
 }

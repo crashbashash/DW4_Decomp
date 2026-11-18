@@ -31,14 +31,14 @@ typedef void (*igMetaObjectCallback)(void);
 #include "dw4/core/igMetaObject.h"
 #include "dw4/support/list-services.h"
 #include "dw4/core/igMemoryPool.h"
+#include "dw4/core/igMemoryPoolContext.h"
 #include "dw4/core/igSemaphore.h"
-
-extern "C" void StringChunk_ReleaseHeader(void *owner, void *header);
-extern "C" int Memory_GetAllocatorBySelector(int key);
+#include "dw4/core/igThread.h"
+#include "dw4/core/igDataLists.h"
+#include "dw4/core/StringPool.h"
 
 /* The object system's byte offset of the vtable word inside an object. */
 struct ObjectSystemView { char pad[916]; int vtableProbeOffset; };
-extern "C" int kIGMemoryPoolHandleMetaData[4];
 
 
 extern "C" int g_igLuaState_vtable[4];
@@ -56,22 +56,17 @@ static inline void releaseString(char *text) {
         int count = header[1] - 1;
         header[1] = count;
         if (count == 0) {
-            StringChunk_ReleaseHeader((void *)header[0], header);
+            StringChunk_ReleaseHeader((StringChunk *)header[0], (StringTokenHeader *)header);
         }
     }
 }
 
 /* The shared pool of reference-counted strings, created on first use. */
-struct StringPool;
-extern "C" StringPool *g_stringPool;
-extern "C" void *StringPool_Allocate(unsigned int size);
-extern "C" StringPool *StringPool_Construct(void *memory);
-extern "C" char *StringPool_Intern(StringPool *pool, const char *text);
 static inline StringPool *stringPool() {
     if (g_stringPool == 0) {
         void *memory = StringPool_Allocate(16);
         if (memory != 0) {
-            memory = StringPool_Construct(memory);
+            memory = StringPool_Construct((StringPool *)memory);
         }
         g_stringPool = (StringPool *)memory;
     }
@@ -652,12 +647,11 @@ struct LuaTagList {
     }
     void insertSorted(int *tag);
 };
-extern "C" int FUN_001e3ab0(LuaTagList *list, int *value);
-extern "C" void List_InsertWords(LuaTagList *list, int index, int count, int *values);
+extern "C" int FUN_001e3ab0(igIntList *list, int *value);
+/* LuaTagList is this library's view of the igIntList, so both list services take it converted. */
 inline void LuaTagList::insertSorted(int *tag) {
-    List_InsertWords(this, FUN_001e3ab0(this, tag), 1, tag);
+    List_InsertWords((igDataList *)this, FUN_001e3ab0((igIntList *)this, tag), 1, tag);
 }
-extern "C" LuaTagList *igIntList_Create(igObject *pool);
 
 /* The current memory context; slot 21 hands out a pool. */
 class LuaMemoryContext {
@@ -669,7 +663,6 @@ public:
     virtual void s20();
     virtual igObject *getPool(int size);                        /* slot 21 */
 };
-extern "C" LuaMemoryContext *Memory_GetCurrentContextAlias(void);
 
 inline void *operator new(unsigned int, void *memory) {
     return memory;
@@ -767,20 +760,5 @@ static inline void LuaSemaphore_ReleaseReference(LuaSemaphoreView *semaphore) {
         igObject_Destroy((igObject *)semaphore);
     }
 }
-
-/* The thread manager; slot 21 is the calling thread. */
-class LuaThreadManagerView {
-public:
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
-    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
-    virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14();
-    virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
-    virtual void s20();
-    virtual void *getCurrentThread();                           /* slot 21 */
-};
-extern "C" LuaThreadManagerView *g_threadManager;
-
-extern "C" unsigned char g_useOwnerAllocator;
-extern "C" int kIGMemoryPoolHandleLevel;
 
 #endif

@@ -45,22 +45,19 @@ struct ObjectSystemView { char pad[916]; int vtableProbeOffset; };
 extern "C" int FUN_002274a0(void);
 extern "C" void FUN_00227620(void);
 
-/* The searched scene and the two matrix arrays sized from it (igActor_SetAnimationSystem). */
-extern "C" int DAT_00562498[4];
-extern "C" int DAT_005624a0[4];
-
-struct RefCounted { int w0; int refs; int w8; class SceneSource *source; };
-class SceneSource {
+struct RefCounted { int w0; int refs; };
+/* An animation combiner's hierarchy: slots 22 and 23 count its bones and its blend matrices. */
+class AnimHierarchyCounts {
 public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4();
     virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9();
     virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
     virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();
     virtual void d20(); virtual void d21();
-    virtual int firstMatrixCount();
-    virtual int secondMatrixCount();
+    virtual int getBoneCount();
+    virtual int getBlendMatrixCount();
 };
-extern "C" void igActor_SetAnimationSystem(int *self, RefCounted *scene);
+#include "dw4/scenegraph/igActor.h"
 
 extern "C" void **FUN_00239280(void **ref, short flags);
 extern "C" void **FUN_00239300(void **ref, short flags);

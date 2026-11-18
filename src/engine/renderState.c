@@ -491,8 +491,7 @@ int FUN_00200830(struct P *p, long long *out) {
     return res;
 }
 
-/* Declared without a prototype: p2SendPassSetup passes the combine mode too, which it ignores. */
-int p2GetPassProgramAddress();
+int p2GetPassProgramAddress(int pass, int combineMode);
 
 /* STMASK patterns: write only the last three words of each vector, or only the second. */
 #define P2_PASS_MASK 0x03030303
@@ -969,25 +968,26 @@ void FUN_00202300(void) {
     } while (var_s0 < 6);
 }
 
-int p2GetPassProgramAddress(int arg0) {
+/* The VU program of a pass; p2SendPassSetup also passes the combine mode, which the choice ignores. */
+int p2GetPassProgramAddress(int pass, int combineMode) {
     int temp_a1;
     int temp_a2;
     int var_v0;
 
     var_v0 = 0;
-    if (p2ExtraPassCount < arg0) {
+    if (p2ExtraPassCount < pass) {
         return 0;
     }
     temp_a2 = ((unsigned int) p2ProgramFlags[0] >> 6) & 1;
     temp_a1 = ((unsigned int) p2ProgramFlags[0] >> 0xF) & 3;
-    if (arg0 == 1) {
+    if (pass == 1) {
         if (p2VertexArrayMask & 0x400) {
             return p2GetVuProgramAddress(p2VariantsBit11[p2VariantSlots[11].index]);
         }
         goto block_6;
     }
 block_6:
-    if ((arg0 == 1) && (p2VertexArrayMask & 0x10000)) {
+    if ((pass == 1) && (p2VertexArrayMask & 0x10000)) {
         return p2GetVuProgramAddress(p2VariantsBit18[p2VariantSlots[18].index]);
     }
     if ((temp_a2 != 0) || (temp_a1 != 0)) {

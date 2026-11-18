@@ -870,32 +870,32 @@ int Gap__Core__igUnsignedIntList__vfunc_23(void) {
     return 4;
 }
 
-int FUN_001e3ab0(struct L_1e3500 *arg0, int *arg1) {
+int FUN_001e3ab0(igIntList *list, int *value) {
     int lo;
     int hi;
     int mid;
-    int b;
-    int cnt;
-    int a;
-    cnt = arg0->cnt;
-    hi = cnt - 1;
+    int key;
+    int count;
+    int entry;
+    count = list->_count;
+    hi = count - 1;
     lo = 0;
     while (lo < hi) {
-        b = *arg1;
+        key = *value;
         mid = (lo + hi) >> 1;
-        a = arg0->items[mid];
-        if (a < b) {
+        entry = ((int *)list->_data)[mid];
+        if (entry < key) {
             lo = mid + 1;
-        } else if (b < a) {
+        } else if (key < entry) {
             hi = mid - 1;
         } else {
             return mid;
         }
     }
-    if (!cnt) {
+    if (!count) {
         return 0;
     }
-    return arg0->items[lo] < *arg1 ? 1 + lo : lo;
+    return ((int *)list->_data)[lo] < *value ? 1 + lo : lo;
 }
 
 /* Returns the metaobject slot of the element class igActor, not of the list. */

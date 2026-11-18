@@ -139,54 +139,54 @@ void igSearchSceneGraph_InitFields(void) {
     igMetaObject_NameFields(meta, g_igSearchSceneGraph_fieldTable, g_igSearchSceneGraph_fieldHandles, g_igSearchSceneGraph_fieldOffsets, first);
 }
 
-/* Sets the searched scene (self[8], ref-counted) and reallocates both identity-filled matrix arrays
-   (self[9], self[10]) to the counts the scene reports. */
-void igActor_SetAnimationSystem(int *self, RefCounted *scene) {
-    int firstArray;
-    int secondArray;
-    int firstCount;
-    int secondCount;
-    int secondMatrix;
+/* Sets the actor's animation combiner (reference-counted) and reallocates both identity-filled matrix
+   caches to the bone and blend-matrix counts of the combiner's hierarchy. */
+void igActor_SetAnimationSystem(igActor *self, igAnimationCombiner *combiner) {
+    int boneStatus;
+    int blendStatus;
+    int boneCount;
+    int blendCount;
+    int blendMatrix;
     int j;
     int i;
-    int firstMatrix;
-    RefCounted *old;
+    int boneMatrix;
+    igAnimationCombiner *old;
 
-    if (scene != 0) {
-        scene->refs = scene->refs + 1;
+    if (combiner != 0) {
+        combiner->_refCount = combiner->_refCount + 1;
     }
-    old = (RefCounted *)self[8];
+    old = (igAnimationCombiner *)self->_animationSystem;
     if (old != 0) {
-        old->refs = old->refs - 1;
-        if ((old->refs & 0x7FFFFF) == 0) {
-            igObject_Destroy((igObject *)old);
+        old->_refCount = old->_refCount - 1;
+        if ((old->_refCount & 0x7FFFFF) == 0) {
+            igObject_Destroy(old);
         }
     }
-    self[8] = (int)scene;
-    firstCount = ((RefCounted *)self[8])->source->firstMatrixCount();
-    secondCount = ((RefCounted *)self[8])->source->secondMatrixCount();
-    if (self[9] != 0) {
-        Memory_FreeBuffer((void *)self[9]);
-        self[9] = 0;
+    self->_animationSystem = (int)combiner;
+    boneCount = ((AnimHierarchyCounts *)((igAnimationCombiner *)self->_animationSystem)->_animHierarchy)->getBoneCount();
+    blendCount = ((AnimHierarchyCounts *)((igAnimationCombiner *)self->_animationSystem)->_animHierarchy)->getBlendMatrixCount();
+    if (self->_boneMatrixCacheArray != 0) {
+        Memory_FreeBuffer((void *)self->_boneMatrixCacheArray);
+        self->_boneMatrixCacheArray = 0;
     }
-    if (self[10] != 0) {
-        Memory_FreeBuffer((void *)self[10]);
-        self[10] = 0;
+    if (self->_blendMatrixCacheArray != 0) {
+        Memory_FreeBuffer((void *)self->_blendMatrixCacheArray);
+        self->_blendMatrixCacheArray = 0;
     }
-    igMetaField_AllocateArray(&firstArray, (igMemoryRefMetaField *)DAT_00562498[0], self, firstCount, igObject_GetAllocator((igObject *)self));
-    igMetaField_AllocateArray(&secondArray, (igMemoryRefMetaField *)DAT_005624a0[0], self, secondCount, igObject_GetAllocator((igObject *)self));
-    firstMatrix = self[9];
+    igMetaField_AllocateArray(&boneStatus, (igMemoryRefMetaField *)g_igActor_boneMatrixCacheArrayMetaField, self, boneCount, igObject_GetAllocator(self));
+    igMetaField_AllocateArray(&blendStatus, (igMemoryRefMetaField *)g_igActor_blendMatrixCacheArrayMetaField, self, blendCount, igObject_GetAllocator(self));
+    boneMatrix = self->_boneMatrixCacheArray;
     i = 0;
-    while (i < firstCount) {
-        igMatrix44f_SetIdentity((float *)firstMatrix);
-        firstMatrix += 0x40;
+    while (i < boneCount) {
+        igMatrix44f_SetIdentity((float *)boneMatrix);
+        boneMatrix += 0x40;
         i += 1;
     }
-    secondMatrix = self[10];
+    blendMatrix = self->_blendMatrixCacheArray;
     j = 0;
-    while (j < secondCount) {
-        igMatrix44f_SetIdentity((float *)secondMatrix);
-        secondMatrix += 0x40;
+    while (j < blendCount) {
+        igMatrix44f_SetIdentity((float *)blendMatrix);
+        blendMatrix += 0x40;
         j += 1;
     }
 }

@@ -449,7 +449,7 @@ void ADXB_EntryData(AdxbObj *block, char *buffer, int bytes)
     }
     block->ndecsmpl = 0;
     block->ndeclen = 0;
-    block->f248 = 0;
+    block->rsv = 0;
     block->cb_ndeclen = 0;
 }
 

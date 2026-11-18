@@ -9,9 +9,9 @@
 #include "dw4/core/igObject.h"
 
 extern "C" void igLuaState_RunString(void);
-extern "C" int igLuaState_RunBuffer(...);
+extern "C" int igLuaState_RunBuffer(igLuaState *state, const char *buffer, unsigned int size, const char *name);
 extern "C" void beLuaState_RunString(void);
-extern "C" void beLuaState_RunBuffer(void);
+extern "C" int beLuaState_RunBuffer(beLuaState *self, const char *buffer, unsigned int size, const char *name);
 extern "C" igMetaObject *beLuaState_GetMeta(void);
 extern "C" int igLuaState_Close(beLuaState *);
 extern "C" void beLuaState_userDestruct(beLuaState *self);
@@ -98,13 +98,14 @@ int beLuaState_RunFile(beLuaState *self, const char *fileName) {
     if (!found) {
         return -1;
     }
-    fileSize = igLuaState_RunBuffer(self, buffer, length, fileName);
+    /* beLuaState extends igLuaState; the reflected layout flattens both onto igObject */
+    fileSize = igLuaState_RunBuffer((igLuaState *)self, buffer, length, fileName);
     return fileSize;
 }
 
-void beLuaState_RunBuffer(void)
+int beLuaState_RunBuffer(beLuaState *self, const char *buffer, unsigned int size, const char *name)
 {
-    igLuaState_RunBuffer();
+    return igLuaState_RunBuffer((igLuaState *)self, buffer, size, name);
 }
 
 igMetaObject *beLuaState_GetMeta(void)

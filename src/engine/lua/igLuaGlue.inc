@@ -2,7 +2,7 @@ igMetaObject *g_igLuaGlue_metaObject;
 
 igMetaObject *igLuaGlue_GetOrCreateMetaObject(void) {
     if (g_igLuaGlue_metaObject == 0) {
-        g_igLuaGlue_metaObject = (igMetaObject *)igMetaObject_Create((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData[0]));
+        g_igLuaGlue_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_igLuaGlue_metaObject;
 }

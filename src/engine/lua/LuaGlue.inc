@@ -13,7 +13,8 @@ void LuaGlue_Initialize(void) {
     LuaStartupHook *hook;
 
     if (g_luaGluePool == 0) {
-        g_luaGluePool = Memory_GetCurrentContextAlias()->getPool(16);
+        /* the alias hands the current context back as a word */
+        g_luaGluePool = ((LuaMemoryContext *)Memory_GetCurrentContextAlias())->getPool(16);
         g_luaGluePool->_refCount = g_luaGluePool->_refCount + 1;
         g_luaArrayClasses[LUA_KIND_CHAR] = new (g_luaGluePool) LuaArrayClass<LUA_KIND_CHAR>(
             "igCharArray", LuaCharArray_Delete, LuaCharArray_Get, LuaCharArray_Set, LuaCharArray_New);
@@ -44,7 +45,8 @@ void LuaGlue_Initialize(void) {
             LuaDoubleArray_New);
         g_luaArrayClasses[LUA_KIND_ENUM] = g_luaArrayClasses[LUA_KIND_INT];
         if (g_luaObjectTags == 0) {
-            g_luaObjectTags = igIntList_Create(g_luaGluePool);
+            /* the creator takes its pool as a word; LuaTagList is this library's view of the igIntList */
+            g_luaObjectTags = (LuaTagList *)igIntList_Create((int)g_luaGluePool);
         }
         for (hook = g_luaStartupHooks; hook != 0; hook = hook->next) {
             if (hook->phase == 0) hook->luaClass = hook->create();

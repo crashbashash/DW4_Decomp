@@ -35,11 +35,12 @@ struct AdxfPtInfo {
     AdxfPtInfo *next;
     int size;
     int nfile;
-    unsigned short nfile16;
-    signed char f14;
+    unsigned short nentry;
     signed char type;
+    /* a reserved byte, here the file table's width: 1 for 32-bit sector counts, 0 for 16-bit */
+    signed char rev;
     char fname[256];
-    void *dir;
+    void *curdir;
     int base;
     unsigned int top;
 };
@@ -202,7 +203,7 @@ int ADXF_LoadPartitionFromAfsFmgLongNw(int ptid, int afsid, int flid, AdxfPtInfo
 }
 
 int adxf_LoadPtBothNw(int ptid, int afsid, int flid, const char *fname, void *dir, AdxfPtInfo *ptinfo,
-                 void *tmpbuf, int tbsize, int type);
+                 void *tmpbuf, int tbsize, int fmglong);
 
 int ADXF_LoadPtNwEx(int ptid, const char *fname, void *dir, AdxfPtInfo *ptinfo, void *tmpbuf, int tbsize) {
     return adxf_LoadPtBothNw(ptid, 0, 0, fname, dir, ptinfo, tmpbuf, tbsize, 0);
@@ -222,7 +223,7 @@ int ADXF_LoadPtFromAfsFmgLongNwEx(int ptid, int afsid, int flid, AdxfPtInfo *pti
 
 
 int adxf_LoadPtBothNw(int ptid, int afsid, int flid, const char *fname, void *dir, AdxfPtInfo *ptinfo,
-                 void *tmpbuf, int tbsize, int type)
+                 void *tmpbuf, int tbsize, int fmglong)
 {
     int ret;
     int ofst;
@@ -287,10 +288,10 @@ int adxf_LoadPtBothNw(int ptid, int afsid, int flid, const char *fname, void *di
         }
         strncpy(ptinfo->fname, fname, 256);
     }
-    ptinfo->type = type;
-    ptinfo->f14 = 0;
+    ptinfo->rev = fmglong;
+    ptinfo->type = 0;
     nsct = tbsize / 2048;
-    ptinfo->dir = dir;
+    ptinfo->curdir = dir;
     adxf_ldptnw_buf = tmpbuf;
     adxf_ldptnw_nsct = nsct;
     ret = ADXF_ReadNw(adxf_ldptnw_hn, nsct, tmpbuf);
@@ -354,7 +355,7 @@ int ADXF_GetPtStat(int ptid)
         return stat;
     }
     ptinfo = adxf_ptinfo[ptid];
-    if (ptinfo->type == 1) {
+    if (ptinfo->rev == 1) {
         top32 = &ptinfo->top;
         nsct32 = top32 + 1;
     } else {
@@ -376,14 +377,14 @@ int ADXF_GetPtStat(int ptid)
             adxf_CloseLdptnwHn();
             return adxf_ldptnw_stat;
         }
-        nfile = ptinfo->nfile16 = adxf_ldptnw_buf[i * 4] | adxf_ldptnw_buf[i * 4 + 1] << 8;
+        nfile = ptinfo->nentry = adxf_ldptnw_buf[i * 4] | adxf_ldptnw_buf[i * 4 + 1] << 8;
         ptinfo->nfile = nfile;
-        if (ptinfo->type == 1) {
+        if (ptinfo->rev == 1) {
             ptinfo->size = sizeof(AdxfPtInfo) + (nfile + 1) * 4;
         } else {
             ptinfo->size = (nfile * 2 + sizeof(AdxfPtInfo)) >> 2 << 2;
         }
-        if (ptinfo->type == 1) {
+        if (ptinfo->rev == 1) {
             *top32 = ADXF_LE32(adxf_ldptnw_buf + 8) / 2048;
         } else {
             *top16 = ADXF_LE32(adxf_ldptnw_buf + 8) / 2048;
@@ -395,7 +396,7 @@ int ADXF_GetPtStat(int ptid)
     /* the table holds an offset and a size word per file: walk the size words */
     nword = adxf_ldptnw_nsct * 512;
     for (; i < nword; i += 2) {
-        if (ptinfo->type == 1) {
+        if (ptinfo->rev == 1) {
             nsct32[adxf_ldptnw_nfile++] = ADXF_CALC_BYTE2SCT(ADXF_LE32(adxf_ldptnw_buf + i * 4));
         } else {
             nsct = ADXF_CALC_BYTE2SCT(ADXF_LE32(adxf_ldptnw_buf + i * 4));
@@ -952,7 +953,7 @@ int ADXF_GetFnameRangeEx(int ptid, int flid, char *fname, void **dir, int *ofst,
         return ret;
     }
     ptinfo = adxf_ptinfo[ptid];
-    if (ptinfo->type == 1) {
+    if (ptinfo->rev == 1) {
         unsigned int *tbl = &ptinfo->top;
 
         off = *tbl++;
@@ -970,7 +971,7 @@ int ADXF_GetFnameRangeEx(int ptid, int flid, char *fname, void **dir, int *ofst,
         *nsct = tbl[flid];
     }
     strncpy(fname, ptinfo->fname, 256);
-    *dir = ptinfo->dir;
+    *dir = ptinfo->curdir;
     *ofst = ptinfo->base + off;
     return ret;
 }

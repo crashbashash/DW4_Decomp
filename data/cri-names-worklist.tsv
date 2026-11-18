@@ -505,6 +505,7 @@
 0x279730	ps2rna_rcvcbf	high	sdk:libadxe.a/ps2_rna.o A + 3s:ps2_rna A agree
 0x279790	ps2rna_sndcbf	medium	3s:ps2_rna C by order and size
 0x27b0f0	PS2RNA_Flush	high	sdk:libadxe.a/ps2_rna.o A + 3s:ps2_rna A agree
+0x27b2a0	SJCRS_ClearWord	medium	behaviour: stores 0 to the SJCRS word after sjcrs_svr_cnt (sjcrs_word, its only access) and returns the word's address; nothing calls it, and neither the 2002 SDK sj_crs.o nor the 3rd Strike or RE4 SJCRS has it; alternative SJCRS_Reset
 0x27bc38	SJRBF_Error	high	3s:sj_rbf A (sdk mpvvlc_InitCbp C)
 0x27c778	SJUNI_Error	high	3s:sj_uni A (sdk mpvvlc_InitCbp C)
 0x27d4d0	sj_val_to_hexstr	high	sdk:libadxe.a/sj_utl.o A + 3s:sj_utl D agree

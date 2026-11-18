@@ -55,7 +55,9 @@ the SJ function table's first three slots (`_sj_vtbl`). The encoder's 2004 membe
   `ADXB_ExecHndl`, `adxb_dec_cb_proc`. Medium from behaviour: `ADXB_ResetDefFmt` (alternative `ADXB_ClearDefFmt`)
   and `ADXB_EntryDecFunc`, named like `ADXSJD_EntryDecFunc` above it (alternative `ADXB_SetCbDec`).
 - `AdxbObj` +158 and +248 have no reader: +158 is a gap before the keys, +248 is only cleared with
-  `cb_ndeclen`. `AdxSjdObj` keeps `hdr` for the 64-byte header copy that the 2002 STABS call `spsdinfo`, as this
+  `ndecsmpl`, `ndeclen` and `cb_ndeclen` in `ADXB_EntryData`. No source names +248 (the 2002 SDK's 176-byte
+  `_adx_intbuf` predates the layout), so it carries the neutral reserved name `rsv`, which claims only that.
+  `AdxSjdObj` keeps `hdr` for the 64-byte header copy that the 2002 STABS call `spsdinfo`, as this
   build copies every format's header there.
 - `SKG_GetNextKey` (`0x25d2e0`), between the SKG and ADXB pools, is unreferenced; 3rd Strike's order puts it
   last in SKG.

@@ -104,7 +104,7 @@ struct AdxbObj {
     int pl2_x;              /* 0xec: its position, -127 (left) to 127 (right) */
     int pl2_y;              /* 0xf0: -127 (front) to 127 (back) */
     int cb_ndeclen;         /* 0xf4: ndeclen at the last decfunc call */
-    int f248;
+    int rsv;                /* 0xf8: cleared with ndecsmpl, ndeclen and cb_ndeclen when data is entered; never read */
     void (*decfunc)(void *context, int count, int bytes); /* 0xfc */
     void *decobj;           /* 0x100 */
 };

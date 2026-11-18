@@ -22,7 +22,7 @@ ThreadLocalEntry::~ThreadLocalEntry() {
 
 /* Sets the calling thread's value of a slot. */
 void ThreadLocal_Set(int slot, void *value) {
-    ThreadLocal_SetForThread(g_threadManager->getCurrentThread(), slot, value);
+    ThreadLocal_SetForThread(g_threadManager->GetCurrentThread(), slot, value);
 }
 
 /* Sets a thread's value of a slot, when the thread has taken it. */
@@ -48,7 +48,7 @@ int ThreadLocal_NewSlot(void *value) {
         g_threadLocalSemaphore->_refCount = g_threadLocalSemaphore->_refCount + 1;
     }
     LuaSemaphoreLock lock(g_threadLocalSemaphore);
-    new ThreadLocalEntry(g_threadManager->getCurrentThread(), g_threadLocalNextSlot++, value);
+    new ThreadLocalEntry(g_threadManager->GetCurrentThread(), g_threadLocalNextSlot++, value);
     return g_threadLocalNextSlot - 1;
 }
 

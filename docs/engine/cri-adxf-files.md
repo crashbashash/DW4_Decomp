@@ -33,3 +33,11 @@ Three CRI ADX files after the SPSD and WAV readers, each compiled as one whole f
   ([source approvals](source-approvals.md#build-string-reads)). Its six stores follow retail's order, which is
   also the GameCube build's. The three ADPCM block decoders (`0x25fdf0`, `0x25ffd0`, `0x260398`) have drafts
   whose control flow is right but whose register allocation is not.
+- The partition information's fields take the 2002 SDK's `ADXF_PTINFO` names (`cri_adxf.h` and the STABS of
+  `adx_fini.o` in `libadxe.a`, [recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)):
+  `nentry` at 12, `type` at 14 (original or appended partition), `rev` at 15 (reserved), `curdir` at 272. The
+  SDK's `ADXF_LoadPtNwEx` stores only `type`, as 0, before its read, and the partition loader here stores 0 at
+  14 the same way. This version adds `base` (the AFS offset) at 276, moving `top` to 280, and keeps the file
+  table's width in `rev`: the long-format loaders (`ADXF_LoadPtFmgLongNwEx`, `ADXF_LoadPtFromAfsFmgLongNwEx`)
+  set it to 1 for a table of 32-bit sector counts, the others to 0 for 16-bit ones. Whether the 2004 header
+  renamed `rev` is not known.

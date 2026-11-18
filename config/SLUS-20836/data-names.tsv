@@ -2628,6 +2628,7 @@
 0x004b4864	ps2rna_dtx_bsize	recovered-global
 0x004b4868	ps2rna_dtx_eebuf	recovered-global
 0x004b5138	sjcrs_svr_cnt	recovered-global
+0x004b5140	sjcrs_word	recovered-global
 0x004baff0	svm_build	recovered-global
 0x004baff4	svm_init_cnt	recovered-global
 0x004baff8	svm_lock_level	recovered-global

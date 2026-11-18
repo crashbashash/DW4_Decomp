@@ -21,7 +21,7 @@ int sftim_IsVbinStIncre(SfdPly *hn, SfdTim *tim);
 void sftim_ResetVtimeTmr(SfdPly *hn, SfdTim *tim);
 void sftim_GetVtimeTmr(SfdPly *hn, SfdTim *tim, int *pos, int *rate);
 int sftim_IsAudioStagnant(SfdPly *hn);
-int sfdtim_GetTimeAfterSeek();
+int sfdtim_GetTimeAfterSeek(SfdPly *hn, int *time, int *unit);
 int SFTIM_GetNowTime(SfdPly *hn, int *time, int *unit);
 int sftim_GetTimeNone(void *sfd, int *time, int *unit);
 int sftim_GetTimeVsync(void *sfd, int *time, int *unit);

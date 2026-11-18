@@ -15483,8 +15483,8 @@
       "g_colorPalette": "0x004e9db0",
       "DAT_0052d0d0": "0x0052d0d0",
       "g_SceneSearchLibrary_registered": "0x00554bd4",
-      "DAT_00562498": "0x00562498",
-      "DAT_005624a0": "0x005624a0",
+      "g_igActor_boneMatrixCacheArrayMetaField": "0x00562498",
+      "g_igActor_blendMatrixCacheArrayMetaField": "0x005624a0",
       "g_igSearchSceneGraph_applicationFindTypeMetaEnum": "0x0056dc58",
       "g_igSearchSceneGraph_metaObject": "0x0056dc60",
       "g_igSearchSceneGraph_iterateGraphMetaField": "0x0056dc68",
@@ -19572,12 +19572,13 @@
       "SJCRS_Finish": "0x0027b260",
       "SJCRS_BeginSvr": "0x0027b270",
       "SJCRS_EndSvr": "0x0027b288",
-      "FUN_0027b2a0": "0x0027b2a0",
+      "SJCRS_ClearWord": "0x0027b2a0",
       "SJCRS_Lock": "0x0027b2b0",
       "SJCRS_Unlock": "0x0027b2c8"
     },
     "data": {
-      "sjcrs_svr_cnt": "0x004b5138"
+      "sjcrs_svr_cnt": "0x004b5138",
+      "sjcrs_word": "0x004b5140"
     }
   },
   "0x0027b2e0": {

@@ -3669,7 +3669,6 @@ typedef struct S_temp_a0_1e31f0 { char pad4[4]; int f4; } S_temp_a0_1e31f0;
 typedef struct { char p[8]; int n; char q[4]; char *arr; } T_1e3270;
 struct S_1e3300 { char pad0[8]; struct R *p8; char pad1[44]; unsigned char f56; };
 
-struct L_1e3500 { char pad[8]; int cnt; int pad2; int *items; };
 extern "C" void SceneGraphLibrary_MarkRegistered(void);
 extern "C" igMetaObject *FUN_001943a0(void);
 extern "C" igMetaObject *igTraversal_GetMetaObject(void);
@@ -5322,7 +5321,7 @@ extern "C" igMetaObject *Gap__Sg__igNonRefCountedNodeList__vfunc_24(void);
 extern "C" int Gap__Sg__igTraversalFunctionList__vfunc_23(igTraversalFunctionList *self);
 extern "C" int Gap__Core__igDoubleList__vfunc_23(void);
 extern "C" int Gap__Core__igUnsignedIntList__vfunc_23(void);
-extern "C" int FUN_001e3ab0(struct L_1e3500 *arg0, int *arg1);
+extern "C" int FUN_001e3ab0(igIntList *list, int *value);
 extern "C" int Gap__Sg__igActorList__vfunc_24(void);
 extern "C" igMetaObject *Gap__Sg__igAnimationCombinerList__vfunc_24(void);
 extern "C" igMetaObject *Gap__Sg__igAppearanceList__vfunc_24(void);

@@ -49,12 +49,14 @@ handle's error callback with -3.
 
 ## Open questions
 
-- The function at `0x27b2a0` in SJCRS clears the word at `0x4b5140`, its only access, and nothing calls it.
+- `SJCRS_ClearWord` (`0x27b2a0`) clears `sjcrs_word` (`0x4b5140`), its only access, and nothing calls it.
   Retail keeps the word's address in `v0` and stores through it (`lui`, `addiu`, `sw zero, 0(v0)`), which is
   what a function returning that address compiles to; written as `void`, the store folds to `sw zero, %lo` and
   is four bytes short. The source returns the address. What the word is, and whether the original returned it,
-  is not known: neither the 2002 SDK nor the Street Fighter III 3rd Strike libadxe has a function or word after
-  `sjcrs_svr_cnt`, so both keep placeholder names.
+  is not known: neither the 2002 SDK's `sj_crs.o`, the Street Fighter III 3rd Strike libadxe nor the Resident
+  Evil 4 symbol table ([adonis-singh/re4](https://github.com/adonis-singh/re4)) has a function or word after
+  `sjcrs_svr_cnt`. Both names are behaviour names, medium: the function stores 0 and returns the word's
+  address (alternative `SJCRS_Reset`), and the word says only that it is SJCRS's.
 - The PS2RNA names not taken from strings are guesses from behaviour: the global output mode
   (`ps2rna_outmode`, IOP command 11), the aux pair (`PS2RNA_StartAux`/`StopAux`, commands 14 and 15, and
   the per-handle `auxsw`, command 10), the two output ports (`PS2RNA_OpenPort`/`ClosePort`, commands 16 and

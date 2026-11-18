@@ -65,6 +65,7 @@ extern int g_stringPoolPreSize;
 extern unsigned char g_useOwnerAllocator;
 
 igMemoryPoolView *Memory_GetAllocatorBySelector(int selector);
+int Memory_GetCurrentContextAlias(void);
 igMemoryPoolView *Memory_GetCurrentAllocator(void);
 void *Memory_SystemAllocate(unsigned int size);
 }

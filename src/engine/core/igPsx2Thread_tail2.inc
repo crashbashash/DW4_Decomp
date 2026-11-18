@@ -213,7 +213,7 @@ void igPsx2Thread_Start(int *out, igPsx2ThreadView *thread) {
     thread->_isDeferred = 1;
     thread->_stopRequested = 0;
     memset(&param, 0, 0x30);
-    param.entry = (void (*)(void *))&igPsx2Thread_ThreadEntry;
+    param.entry = igPsx2Thread_ThreadEntry;
     param.stack = (void *)thread->_stack;
     param.stackSize = thread->_stackSize;
     param.initPriority = thread->_priority / 2;
