@@ -24,7 +24,7 @@ int SFADXT_GetOutVol(SfdPly *h);
 void SFADXT_SetSpeed(SfdPly *h, int volume);
 void sfadxt_HeadDecCallBack(SfdPly *h);
 int sfadxt_ExecServerSub(SfdPly *h);
-void FUN_0029b788(SfdPly *h);
+void sfadxt_PrepSupply(SfdPly *h);
 int sfadxt_SupplyData(SfdPly *h, int *out);
 void sfadxt_GetFreeChunk(SfdSj *sj, int n, SfdSjChunk *ck);
 void sfadxt_PutDataChunk(SfdSj *sj, int len, SfdSjChunk *ck);
@@ -60,7 +60,7 @@ int sfadxt_SaveAdxtHn(AdxtObj *adxt);
 int SFADXT_Stop(SfdPly *h);
 void sfadxt_WaitStart(SfdPly *h, int value);
 void sfadxt_DoPause(SfdPly *h, int value);
-void sfadxt_WtPause();
+void sfadxt_WtPause(AdxtObj *adxt, SfdTst *blk, int value);
 void sfadxt_GetTimeOneFrmAudio(void *blk, int *result, int target);
 SfdRecAudio *sfadxt_GetHd(SfdPly *h);
 
@@ -131,7 +131,7 @@ void SFD_SetAdxtPara(SfdAdxCfg *cfg) {
     sfadxt_para.xsize = cfg->xsize;
     sfadxt_para.maxnch = cfg->maxnch;
     sfadxt_para.work = (char *)(((int)cfg->work + 31) & ~31);
-    sfadxt_para.f16 = cfg->f16;
+    sfadxt_para.rsv = cfg->rsv;
     sfadxt_para.worksize = cfg->worksize;
 }
 
@@ -176,7 +176,7 @@ int sfadxt_ExecServerSub(SfdPly *h) {
     if (sfadxt_GetTermDst(h) == 1) {
         return 0;
     }
-    FUN_0029b788(h);
+    sfadxt_PrepSupply(h);
     r = sfadxt_SupplyData(h, &out);
     sfadxt_ChkPrepFlg(h);
     sfadxt_ChkTermFlg(h, out);
@@ -186,7 +186,7 @@ int sfadxt_ExecServerSub(SfdPly *h) {
     return r;
 }
 
-void FUN_0029b788(SfdPly *h) {
+void sfadxt_PrepSupply(SfdPly *h) {
 }
 
 /* matching construct: permuter, reduced by hand: the field read as an int and cast to the handler */
@@ -595,15 +595,15 @@ int sfadxt_InitInf(SfdPly *h, SfdAdxCtx *ctx) {
     ctx->sj = 0;
     ctx->time = -1;
     ctx->unit = 1;
-    ctx->f44 = 0;
+    ctx->pause = 0;
     ctx->carry = 0;
     ctx->started = 0;
     ctx->pos = 0;
     ctx->step = sfadxt_CopyData;
-    ctx->f64 = 0;
+    ctx->noHdr = 0;
     ctx->opt27 = -1;
     ctx->total = 0;
-    ctx->f76 = 0;
+    ctx->rsv = 0;
     pair[0].num = SFSET_GetCond(h, 63);
     pair[0].den = 1000000;
     pair[1].num = SFSET_GetCond(h, 64);
@@ -770,10 +770,10 @@ void sfadxt_WaitStart(SfdPly *h, int value) {
     SfdAdxCtx *ctx = h->trn[3].hn.adxt;
     SfdTst *blk = &h->tim.tst;
     AdxtObj *adxt;
-    ctx->f44 = value;
+    ctx->pause = value;
     adxt = ctx->adxt;
     if (value != 0 || h->pause != 1) {
-        sfadxt_WtPause(adxt, blk, value, adxt);
+        sfadxt_WtPause(adxt, blk, value);
     }
 }
 
@@ -781,12 +781,12 @@ void sfadxt_DoPause(SfdPly *h, int value) {
     SfdAdxCtx *ctx = h->trn[3].hn.adxt;
     SfdTst *blk = &h->tim.tst;
     AdxtObj *adxt = ctx->adxt;
-    if (value != 0 || ctx->f44 != 1) {
+    if (value != 0 || ctx->pause != 1) {
         sfadxt_WtPause(adxt, blk, value);
     }
 }
 
-void sfadxt_WtPause(void *adxt, void *blk, int value) {
+void sfadxt_WtPause(AdxtObj *adxt, SfdTst *blk, int value) {
     ADXT_Pause(adxt, value);
     SFTST_Pause(blk, value);
 }
@@ -840,7 +840,7 @@ SfdRecAudio *sfadxt_GetHd(SfdPly *h) {
     if (work == 0) {
         return 0;
     }
-    if (ctx->f64 > 0) {
+    if (ctx->noHdr > 0) {
         return 0;
     }
     return &work->audio;

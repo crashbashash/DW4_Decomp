@@ -111,8 +111,8 @@ void m2vlib_InitPicAtr(M2vPicAtr *picatr)
     picatr->shc_count = 0;
     picatr->picture_structure = 3;
     picatr->chroma_format = 1;
-    picatr->f64 = 0;
-    picatr->f68 = 1;
+    picatr->chroma_pos_h = M2V_CHROMAPOS_COSITED;
+    picatr->chroma_pos_v = M2V_CHROMAPOS_CENTRE;
     picatr->bit_rate = 0;
     picatr->vbv_buffer_size = 0;
     picatr->display_horizontal_size = -1;
@@ -121,7 +121,7 @@ void m2vlib_InitPicAtr(M2vPicAtr *picatr)
     picatr->progressive_frame = 1;
     picatr->top_field_first = 0;
     picatr->repeat_first_field = 0;
-    picatr->field_964 = 0;
+    picatr->second_field = 0;
     picatr->aspect_ratio_information = 1;
     picatr->constrained_parameters_flag = 0;
     picatr->frame_rate_extension_n = 0;

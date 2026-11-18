@@ -18,7 +18,7 @@ typedef struct SfxPlane {
     int addr;
     int pitch;
     int height;
-    int f12;
+    int pad12;
 } SfxPlane;
 
 typedef enum SfxChromaFmt {
@@ -32,9 +32,9 @@ typedef enum SfxChromaFmt {
 typedef struct SfxPicFmt {
     int pictureStructure;      /* 0 */
     SfxChromaFmt chromaFormat; /* 4 */
-    int f8;
-    int f12;
-    int f16;
+    int progressiveFrame;      /* 8 */
+    int topFieldFirst;         /* 12 */
+    int repeatFirstField;      /* 16 */
     int chromaPosH;            /* 20 */
     int chromaPosV;            /* 24 */
 } SfxPicFmt;
@@ -44,16 +44,15 @@ typedef struct SfxPicFmt {
 typedef struct SfxFrame {
     unsigned int frmfmt; /* 0 */
     SfxPlane plane[3];   /* 4 */
-    int f52[4];
+    int pad52[4];
     int width;           /* 68 */
     int height;          /* 72 */
     int fno;             /* 76 */
-    int f80;             /* 80 */
-    int f84;             /* 84 */
-    int f88;             /* 88 */
-    int f92;             /* 92 */
+    char *tagData;       /* 80: the stream's SFXINFS tag block (SFX_GetTagInf) */
+    int tagSize;         /* 84 */
+    int rsv[2];          /* 88: cleared */
     SfxPicFmt fmt;       /* 96 */
-    int f120[5];
+    int pad120[5];
 } SfxFrame;
 
 typedef void (*SfxZCbFn)(unsigned int *, unsigned int *, float, float);
@@ -87,30 +86,33 @@ typedef struct SfxaHn {
     unsigned char alpha[3];
 } SfxaHn;
 
+/* An SFX handle: the stream's component mode, the output layout and size, the tag block, the Z and
+ * alpha handles, the conversion tables carved from the work, the picture user data and the field and
+ * bottom-up switches. */
 typedef struct SfxHn {
     int used;
-    int compo;
-    int f8;
-    int width;
-    int height;
-    int f20;
-    SfxChunk zinf;
+    int compo;          /* 4: the component mode of the stream */
+    int fxtype;         /* 8: the output layout (17: YCC 4:2:0 planar) */
+    int width;          /* 12: the output buffer size */
+    int height;         /* 16 */
+    int unitWidth;      /* 20: 1, the width is in pixels; 0, a byte pitch */
+    SfxChunk zinf;      /* 24: the tag block */
     int pad36;
-    SfxZHn *zhn;
-    int f44;
-    int f48;
-    void *ahn;
-    int f56;
-    int f60;
-    int tbl[4];
+    SfxZHn *zhn;        /* 40 */
+    int zscale;         /* 44 */
+    int zoffset;        /* 48 */
+    void *ahn;          /* 52 */
+    int colAdj;         /* 56 */
+    int tblPtn;         /* 60: the kind of table in tbl[0] (100: given by SFX_SetCnvTable) */
+    int tbl[4];         /* 64: four 1 KB buffers carved from the work */
     int pad80[2];
-    int work;
-    int wksize;
-    int sud[2];
-    int f104;
-    int f108;
+    int work;           /* 88 */
+    int wksize;         /* 92 */
+    int sud[2];         /* 96: the picture user data and its size */
+    int splitField;     /* 104 */
+    int progOut;        /* 108 */
     int pad112;
-    int f116;
+    int cnvBottomUp;    /* 116 */
 } SfxHn;
 
 /* The conversion-table builders' view of an SFX handle. */
@@ -164,6 +166,16 @@ void SFX_SetPicUsrDat(SfxHn *hn, char *ud, int size);
 int SFX_GetSudVersion(SfxHn *hn);
 int SFX_GetTypeDivField(SfxHn *hn);
 int SFX_GetTypeCcs(SfxHn *hn);
+int SFX_GetTypeIntl(SfxHn *hn);
+int SFX_GetExtScan(SfxHn *hn);
+int SFX_GetExtFlag(SfxHn *hn);
+int SFX_GetExtVal0(SfxHn *hn);
+int SFX_GetExtVal1(SfxHn *hn);
+int SFX_GetExtVal2(SfxHn *hn);
+int SFX_GetExtVal3(SfxHn *hn);
+void SFX_SetZTblCbFn(SfxHn *hn, SfxZCbFn fn);
+void SFX_SetZTblCbArg(SfxHn *hn, int arg);
+void SFX_SetOptimizeSpeed(int sw);
 void SFX_CnvFrmZ16(SfxHn *hn, SfxFrame *frm, int arg);
 void SFX_CnvFrmZ32(SfxHn *hn, SfxFrame *frm, int arg);
 

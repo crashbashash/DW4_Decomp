@@ -1434,7 +1434,7 @@ int sfmpv_IsSkip(SfdPly *player, SfdSjChunk *chunk) {
         return 1;
     if (SFSET_GetCond(player, 39) == 1)
         return 0;
-    if (pic->field_964 != 0)
+    if (pic->second_field != 0)
         return mpv->skipret;
     type = pic->picture_coding_type;
     busy = sfmpv_IsSeekSkip(player);
@@ -1620,7 +1620,7 @@ int sfmpv_SkipFrm(SfdPly *player, SfdSj *sj)
     sfmpv_AddRtotSj(player, used);
     if (ret != 0)
         return ret;
-    if (pic->field_964 == 0)
+    if (pic->second_field == 0)
         mpv->skipret = 1;
     SFPLY_AddSkipPic(player, 1, pic->picture_coding_type);
     return 0;
@@ -2111,9 +2111,9 @@ void sfmpv_SetFrmInf(SfdPly *player, SfdSlot *slot, SfdFrameInfo **out) {
     (*out)->time_per_file = slot->time_per_file;
     (*out)->cat_time = slot->cat_time;
     (*out)->picUsr = slot->blob;
-    (*out)->f60 = pic->f64;
-    (*out)->f64 = pic->f68;
-    if (pic->f64 == 0) {
+    (*out)->chromaPosH = pic->chroma_pos_h;
+    (*out)->chromaPosV = pic->chroma_pos_v;
+    if (pic->chroma_pos_h == 0) {
         (*out)->tail.detail.f72 = 2;
     } else {
         (*out)->tail.detail.f72 = 1;

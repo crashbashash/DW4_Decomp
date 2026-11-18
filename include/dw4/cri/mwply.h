@@ -48,10 +48,10 @@ typedef struct MwsfdHdrInf {
     int width;
     int height;
     int rate;
-    int f20;
-    int f24;
-    int f28;
-    int f32;
+    int frmnum;      /* 20: total video frames (mwsffrm_AnalyTotalFrm), -1 when no header parses */
+    int compoMode;   /* 24: mwply_GetPicCompoMode */
+    int muxKind2;    /* 28: mwply_GetMuxKind2 */
+    int muxKind1;    /* 32: mwply_GetMuxKind1 */
     int audioFreq;
     int f40;
 } MwsfdHdrInf;
@@ -76,15 +76,49 @@ typedef enum MwsfdLumiKey {
     MWSFD_LUMIKEY_END
 } MwsfdLumiKey;
 
+/* The picture details of the frame handed out: the last seven words of the SFD frame (SfdFrameInfo's
+ * tail), copied unchanged. */
+typedef struct MwsfdFrmTail {
+    long long w[7];
+} MwsfdFrmTail;
+
+/* The frame mwPlyGetCurFrm hands out. Its first 64 bytes are the public MwsfdFrmObj of CRI's
+ * crimwsfd.h, member for member; the picture user data, the frame type and the picture details
+ * follow. */
+typedef struct MwsfdFrm {
+    unsigned char *bufadr;    /* 0: the decoder's output buffer */
+    int buffmt;               /* 4: its format (MwsfdBufFmt) */
+    int width;                /* 8 */
+    int height;               /* 12 */
+    int x_mb;                 /* 16 */
+    int y_mb;                 /* 20 */
+    int ptype;                /* 24: the picture type (MwsfdPtype) */
+    int fps;                  /* 28: frames per second times 1000 */
+    int fno;                  /* 32 */
+    int time;                 /* 36 */
+    int tunit;                /* 40 */
+    int concat_cnt;           /* 44 */
+    int fno_per_file;         /* 48 */
+    int time_per_file;        /* 52 */
+    int errcnt;               /* 56 */
+    int rcvcnt;               /* 60 */
+    char *usrdat;             /* 64: the picture user data without its 4-byte header */
+    int usrdatlen;            /* 68 */
+    int frmType;              /* 72: mwsffrm_DecideFrmType */
+    char pad76[4];
+    MwsfdFrmTail tail;        /* 80 */
+} MwsfdFrm;
+
+/* The picture information of the frame handed out, as SFX takes it (mwsfsfx_SetPicFmtToSfx). */
 typedef struct MwsfdPicInf {
     unsigned int pictureStructure; /* 0 */
     unsigned int chromaFormat;     /* 4 */
-    int f8;
-    int f12;
-    int f16;
+    int progressiveFrame;          /* 8 */
+    int topFieldFirst;             /* 12 */
+    int repeatFirstField;          /* 16 */
     MwsfdChromaPos chromaPosH;     /* 20 */
     MwsfdChromaPos chromaPosV;     /* 24 */
-    int f28;                       /* 28: cleared when the information is taken */
+    int rsv;                       /* 28: cleared when the information is taken, read nowhere */
 } MwsfdPicInf;
 
 /* one entry of the per-picture log ring (8 entries, slot = position % 8) */
@@ -106,7 +140,7 @@ typedef struct MwsfdPicUsrBuf {
 typedef struct MwsfdUsrBuf {
     char *buf; /* 0 */
     int size;  /* 4 */
-    int f8;    /* 8 */
+    int concatCnt; /* 8: the concatenation count of the last frame taken (-1 after a reset) */
 } MwsfdUsrBuf;
 
 typedef struct MwsfdAddInf {

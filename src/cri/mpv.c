@@ -39,7 +39,7 @@ int MPVLIB_ConvOix(int flags);
 void mpvlib_ChkCacheMode(void);
 void mpv_InitClampTable(unsigned char *copy);
 void mpvlib_InitObjTbl(void);
-void mpv_InitHw(MpvLib *pool);
+void mpv_InitHw(MpvPool *pool);
 void mpvlib_InitWork(int nhn, char *work);
 int mpvlib_ChkFatal(void);
 
@@ -75,7 +75,7 @@ int MPV_IsDecodable(unsigned char *data, int size) {
 
 int MPV_Init(int count, void *work) {
     int result;
-    char *pool;
+    MpvPool *pool;
 
     mpv_version_ptr = cri_mpv_version;
     result = mpvlib_ChkFatal();
@@ -91,9 +91,9 @@ int MPV_Init(int count, void *work) {
     pool = mpv_lib.pool;
     mpv_InitLibErr();
     mpvapi_Init();
-    mpv_InitClampTable((unsigned char *)pool + 6112);
+    mpv_InitClampTable(pool->clamp);
     mpvlib_InitObjTbl();
-    mpv_InitHw((MpvLib *)pool);
+    mpv_InitHw(pool);
     mpv_InitLower();
     return 0;
 }
@@ -164,16 +164,16 @@ void mpvlib_InitObjTbl(void) {
 }
 
 void mpv_BindHnBuffers(MpvHn *hn) {
-    char *pool = mpv_lib.pool;
+    MpvPool *pool = mpv_lib.pool;
 
-    hn->mbBuf = pool + 4384;
-    hn->blkBuf = pool + 4352;
-    hn->dctBuf = pool + 4448;
+    hn->mbBuf = pool->mb;
+    hn->blkBuf = pool->blk;
+    hn->dctBuf = pool->dct;
     hn->clampY = mpv_clamp;
     hn->clampC = mpv_clamp;
 }
 
-void mpv_InitHw(MpvLib *pool) {
+void mpv_InitHw(MpvPool *pool) {
 }
 
 /* matching construct: 72-variant sweep — store order and declarations */
@@ -189,7 +189,7 @@ void mpvlib_InitWork(int nhn, char *work) {
     mpvlib_AllocLc(pool, MPV_POOL_SIZE);
     UTY_MemcpyDword(&mpv_lib, mpv_default_cond, MPV_COND_MAX);
     mpv_lib.tables = tables;
-    mpv_lib.pool = pool;
+    mpv_lib.pool = (MpvPool *)pool;
     mpv_lib.nhn = nhn;
     mpv_lib.hn = (MpvHn *)base;
 }
@@ -211,8 +211,8 @@ void mpv_ResetPicInf(M2vPicAtr *inf) {
     inf->shc_count = 0;
     inf->picture_structure = 3;
     inf->chroma_format = 1;
-    inf->f64 = 1;
-    inf->f68 = 1;
+    inf->chroma_pos_h = M2V_CHROMAPOS_CENTRE;
+    inf->chroma_pos_v = M2V_CHROMAPOS_CENTRE;
     inf->bit_rate = 0;
     inf->vbv_buffer_size = 0;
     inf->display_horizontal_size = -1;
@@ -221,7 +221,7 @@ void mpv_ResetPicInf(M2vPicAtr *inf) {
     inf->progressive_frame = -1;
     inf->top_field_first = -1;
     inf->repeat_first_field = -1;
-    inf->field_964 = 0;
+    inf->second_field = 0;
     inf->aspect_ratio_information = 1;
     inf->constrained_parameters_flag = 0;
     inf->frame_rate_extension_n = 0;
@@ -271,7 +271,7 @@ MpvHn *mpvlib_InitHn(MpvHn *hn) {
     int i;
 
     mpv_BindHnBuffers(hn);
-    hn->f396 = 0;
+    hn->rsv = 0;
     UTY_MemcpyDword(hn->cond, mpv_lib.cond, MPV_COND_MAX);
     mpv_ResetErr(&hn->err);
     mpv_ResetPicInf(&hn->picInf);
@@ -279,9 +279,9 @@ MpvHn *mpvlib_InitHn(MpvHn *hn) {
     hn->skipCnt = 0;
     hn->maxCount = hn->cond[7];
     hn->strmType = 0;
-    hn->f860 = 0;
-    hn->f864 = 0;
-    hn->f868 = 0;
+    hn->stc[0] = 0;
+    hn->stc[1] = 0;
+    hn->stc[2] = 0;
     hn->idcPrec = 0;
     for (i = 0; i < 4; i++) {
         MPV_SetUsrSj(hn, i, 0, 0, 0);

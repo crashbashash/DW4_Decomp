@@ -2637,7 +2637,11 @@
 0x004bb020	svm_svr_busy	recovered-global
 0x004bb040	svm_errmsg	recovered-global
 0x004bb114	sndf_ctx	recovered-global
-0x004bb3f0	cft_ver_str	recovered-global
+0x004bb118	sndf_pan_remap	recovered-global
+0x004bb3e8	cftcom_function_name	recovered-global
+0x004bb3ec	cftcom_optimize_speed	recovered-global
+0x004bb3f0	cft_max_alpha	recovered-global
+0x004bb3f8	cftcoladjtbl	recovered-global
 0x004bcbf8	mpvhook_installed	recovered-global
 0x004bcbfc	mpvhook_fn_GetVersionStr	recovered-global
 0x004bcc00	mpvhook_fn_IsDecodable	recovered-global
@@ -3761,7 +3765,8 @@
 0x004f4e30	sfmpv_conv_29_97	recovered-global
 0x004f4e50	sfmpv_conv_59_94	recovered-global
 0x004f4e88	sfmpv_seqend_codes	recovered-global
-0x004f4ea0	sfd_cond_defaults	recovered-global
+0x004f4ea0	SFPLY_cond_dfl	recovered-global
+0x004f5020	SFPLY_cond_dfl_guard	recovered-global
 0x004f5060	SFTIM_prate	recovered-global
 0x004f5088	sftim_tc2time	recovered-global
 0x004f5330	sfh_ver_str	overlay
@@ -7934,6 +7939,7 @@
 0x00570bc0	svm_cbvsync_begin	recovered-global
 0x00570bc8	svm_cbvsync_end	recovered-global
 0x005717c0	sndf_status	recovered-global
+0x00573ea8	cft_version_ptr	recovered-global
 0x00573eb8	m2vlib_libwork	recovered-global
 0x00573f00	m2vlib_m2vobj	recovered-global
 0x00573f08	mps_version_ptr	recovered-global
@@ -7967,6 +7973,10 @@
 0x00585630	sfmpvp_bkup_buf	recovered-global
 0x005856a0	sfx_version_ptr	recovered-global
 0x005856a8	sud_version_ptr	recovered-global
+0x005856b0	utytmr_main	recovered-global
+0x005856c0	utytmr_sub	recovered-global
+0x005856d0	utytmr_ptr	recovered-global
+0x005856d4	utytmr_lock	recovered-global
 0x00586dd0	g_globalContext	recovered-global
 0x00586f20	g_stringPool	recovered-global
 0x00586fd8	g_bootstrapPoolPreSize	recovered-global

@@ -52,12 +52,33 @@ are `SFX_SetCnvBottomUp`/`SFX_GetCnvBottomUp` (the SFX side of `mwPlySetCnvBotto
   from the RE4 `uty_tmr.c` with the same use: `utytmr_init_cnt` and `utytmr_ch`. From use: `utytmr_save_mode` (the
   timer mode word `UTY_InitTmr` saves and `UTY_FinishTmr` restores), `sfx_version_ptr` and `sud_version_ptr` (the
   build-string pointers, as `mpv_version_ptr`).
-- Still unnamed: the Z handle's callback and callback-argument setters, the line-and-pixel plane shift after
-  `sfx_ClipFrame`, the forward to the CFT word at `0x4bb3ec`, the seven SFX forwards after `SFX_GetTypeCcs` and the SUD
-  analysers they call (the 2004 user-data fields from offset 20 on), the Z-table forward after `sfxzmv_GetZfrmInf`, the
-  three `float` timer conversions after `UTY_TmrToSec`, the one-word timer-unit store before `UTY_InitTsum` (whether it
-  or the wrapper before `UTY_GetTmrUnit` is the SDK's `UTY_SetTmrUnit`; the order picks the wrapper), and the PS2 timer
-  accumulation words `UTY_InitTmr` sets up after `utytmr_save_mode`, which have no RE4 counterpart.
+- The SDK `uty_tmr.o` names the PS2 timer words by order and size: `utytmr_main` and `utytmr_sub` (the 16-byte clock
+  and its saved copy), `utytmr_ptr` and `utytmr_lock`, and the register tables `utytmr_t_mode`/`utytmr_t_count`
+  (high). The SDK and RE4 call the build-string pointers `sfx_dummy`/`sud_dummy`; the `*_version_ptr` names stay
+  for now, as for MPV and MPS.
+- Behaviour names, medium (alternative in brackets): `SFX_SetZTblCbFn`/`SFX_SetZTblCbArg` (`SFX_SetZCbFn`), the Z
+  handle's table callback that `sfxzmv_MakeCnvZTbl` calls in place of its Z16/Z32 makers; `sfx_ClipBufInf`
+  (`sfxset_ClipBufInf`), the per-plane step of `sfx_ClipFrame` as `sfxset_ShiftBufInfByLine` is of
+  `SFX_ShiftYccPtrByLine`; `SFX_SetOptimizeSpeed`, the forward to `CFT_SetOptimizeSpeed`; `UTY_TmrToUsecF`,
+  `UTY_TmrToMsecF`, `UTY_TmrToSecF` (`...Float`), the `float` forms of the SDK conversions; `utytmr_SetUnit`, the
+  one-word store both `UTY_InitTmr` and `UTY_SetTmrUnit` call (alternative: it is the SDK's `UTY_SetTmrUnit`).
+- The 2004 SUD record: `SUD_SetFmtTypeToBuf` writes the letters at bytes 18-20 from its A/D, N/C and P/I tables, so
+  `SUD_AnalyTypeIntl` (`SUD_AnalyTypeScan`) reads the third ('I'). The version-2 fields after it have no source and
+  are named by what is read, not what they mean: `SUD_AnalyExtScan` (byte 21, 'P' 1, 'I' 2),
+  `SUD_AnalyExtFlag` (byte 22 is not 'A') and `SUD_AnalyExtVal0`..`3` (three hexadecimal digits each at 23, 26, 29
+  and 32, ending the 0x23-byte record), through `sud_AnalyHex3`, `sud_StrToUl` (a `strtoul` wrapper) and, for the
+  record size, `sud_GetSudDatSize` (the RE4 CRI library's `SUD_SearchSudDat` stores the same 0x23). The SFX forwards
+  take the matching `SFX_GetTypeIntl`/`SFX_GetExt*` names. What the four values and the two letters stand for is open.
+- The handle's fields follow its setters and the RE4 CRI library's `SFX_OBJ` (in its 9.31 order, with the word at 36):
+  `fxtype`, `unitWidth`, `zscale` (default 1), `zoffset`, `colAdj`, `tblPtn`, `splitField` (default -1), `progOut`,
+  `cnvBottomUp`; the library work's word at 20 is `ccirFx` (RE4 `ccir_fx`). A frame's tag block is `tagData`/`tagSize`
+  (RE4 `tag_a`/`tag_b`), and its picture format carries `progressiveFrame`, `topFieldFirst` and `repeatFirstField`
+  from the MWSFD picture information.
+  The RE4 CRI library cited here is the RE4 decompilation in the
+  [Persona 4 decompilation](https://github.com/Raikaru/Persona4-Decompilation) (`src/cri/re4/sfx.h`, `sfx_lib.c`,
+  `sfx_sud.c`, `sud_lib.c`); the SDK objects are `libmwsfde.a` of
+  [recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri).
+- Still unnamed: the Z-table forward after `sfxzmv_GetZfrmInf` (in `sfxz.c`).
 - Without source: `sfxzmv_GetZfrmInf` (`0x2b45b0`, 4 words off: retail fills the first branch's delay slot from the
   branch target and schedules the copy of the size parameter before the return-address save) and
   `sfxcnv_CnvFrmArgb8888mbToZ` (`0x2b4f58`, 18 words off: the height load and a constant store into the source block

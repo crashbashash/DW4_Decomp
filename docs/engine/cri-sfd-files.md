@@ -147,12 +147,22 @@ the 2002 one. Names from what a function does are in the medium list below.
   `sftrn_SetFlagA`/`GetFlagA`/`SetFlagB`/`GetFlagB` are `SFTRN_SetPrepFlg`/`GetPrepFlg`/`SetTermFlg`/`GetTermFlg` (the
   first and second words of a transfer entry, as in `sfd_trn.o`); `SFD_GetCondDef` is `SFD_GetCond` and
   `SFD_GetHnHdrInf` is `SFD_GetMvInf`.
-- Still unnamed, for want of a source or a single reading: the empty function after `sfadxt_ExecServerSub`, the
-  three-word reset between `sfply_InitPlyInf` and `sfply_InitTmrInf`, the frame-time projection between
+- Behaviour names, medium: `sfadxt_PrepSupply` is the empty function `sfadxt_ExecServerSub` calls before
+  `sfadxt_SupplyData` (absent from the 2002 SDK `sfd_adxt.o`; alternative a check compiled out of the release), and
+  `sfply_InitFlowCnt` (`sfply_ClearFlowCnt`) clears one three-count flow group for `sfply_InitPlyInf`.
+- Still unnamed, for want of a source or a single reading: the frame-time projection between
   `sfmpv_CalcRepeatField` and `sfmpv_ReformTc`, the reference-error sum after `sfmpv_SetFrmPara`, the standby-slot
   timestamp copy before `sfmpv_SetFrmTime`, the three picture user-data helpers before `sfmpv_GoDdelim`, the
   record-header offset after `sfmpv_AddReadSub`, the ready-frame count before `SFD_IsNextFrmReady`, the user-header
   decode after `sfmpv_SetCondY16`, and the `sceMpeg` handle getter after `SFMPVP_IsPscEnough`.
+- Fields: the stabiliser (`SfdTst`) follows the RE4 `sfd_tst.c` `SFTST_WORK` (`tstflg`, the master and output units,
+  the tolerance, excess-error, adjust-start and adjust-pause-off times with their units, `base_hlp`/`base_out`). The
+  ADX handler's work has `pause` (RE4) at 44; the RE4 sources leave the words at 64 and 76 unnamed, so they are named
+  from use, medium: `noHdr` (positive, `sfadxt_GetHd` reports no header) and `rsv`, like the parameter word at 16
+  (copied, never read). `SfdPlyInf`'s words at 8 and 12 are `rsv` (cleared, read nowhere). The default condition table
+  is the SDK `sfd_ply.o` `SFPLY_cond_dfl`; `sfply_ChkCondDfl` reads its 0x5A5A5A5A guard word (index 96, as in the
+  RE4 `sfd_ply.c`) through `SFPLY_cond_dfl_guard`, a symbol of its own because the word is listed in the play unit's
+  data while the table is the library unit's. The PTS manager's words (`SfdPtsm`) are named with `sftim.c`.
 - Data, medium: `sfmpv_fps_round`, `sfmpv_conv_29_97` and `sfmpv_conv_59_94` (the rounded frame rates and the two
   drop-frame divisor tables `sfmpv_Pts2Tc` reads) and the PTS-manager reset callback `SFPLY_ResetPtsm` take the
   names of the same tables and pointer in the RE4 `sfd_mpv.c` and `sfd_ply.c` of the Persona 4 decompilation. So do

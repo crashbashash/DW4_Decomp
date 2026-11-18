@@ -18,7 +18,7 @@ int sndf_SendMessage(unsigned int message)
     return result;
 }
 
-int FUN_00282490(unsigned int channel, unsigned int message)
+int SNDF_SendChMessage(unsigned int channel, unsigned int message)
 {
     SndfContext *ctx = sndf_ctx;
     int result;
@@ -39,7 +39,7 @@ int FUN_00282490(unsigned int channel, unsigned int message)
     return result;
 }
 
-int FUN_00282538(unsigned int channel, unsigned int kind, unsigned int data1, unsigned int data2)
+int SNDF_SendVoiceMessage(unsigned int channel, unsigned int kind, unsigned int data1, unsigned int data2)
 {
     SndfContext *ctx = sndf_ctx;
     int result;
@@ -109,7 +109,7 @@ int SNDF_SendControl(unsigned int channel, unsigned int cmd, int value)
     return sndf_PushCommand(1, channel, 0, 0, message, 0);
 }
 
-int FUN_002827a0(int channel, int port, unsigned int cmd, int value)
+int SNDF_SendCtrlChange(int channel, int port, unsigned int cmd, int value)
 {
     unsigned int base = ((port - 1) & 0xF) << 24;
     unsigned int message = base + cmd;
@@ -170,7 +170,7 @@ int SNDF_SetMasterParam(unsigned int base, unsigned int value)
     return sndf_SendMessage(SWAP32_C(message));
 }
 
-int FUN_00282ab8(unsigned int channel, unsigned int base, unsigned int value)
+int SNDF_SetChannelParam(unsigned int channel, unsigned int base, unsigned int value)
 {
     unsigned int chan = (channel & 0xF) << 16;
     unsigned int message;
@@ -203,7 +203,7 @@ int FUN_00282ab8(unsigned int channel, unsigned int base, unsigned int value)
     return sndf_SendMessage(SWAP32_C(message));
 }
 
-int FUN_00282c20(unsigned int message, int arg)
+int SNDF_StartSound(unsigned int message, int arg)
 {
     SndfContext *ctx = sndf_ctx;
     int id = -1;
@@ -237,7 +237,7 @@ int FUN_00282c20(unsigned int message, int arg)
     return result;
 }
 
-int FUN_00282d10(int id)
+int SNDF_StopSound(int id)
 {
     SndfContext *ctx = sndf_ctx;
     int result;
@@ -255,7 +255,7 @@ int FUN_00282d10(int id)
     return result;
 }
 
-int FUN_00282d88(int id)
+int SNDF_ReleaseSound(int id)
 {
     SndfContext *ctx = sndf_ctx;
     int result;
@@ -273,7 +273,7 @@ int FUN_00282d88(int id)
     return result;
 }
 
-int FUN_00282e00(int id, unsigned short angle, unsigned short vol)
+int SNDF_SetSoundPanVol(int id, unsigned short angle, unsigned short vol)
 {
     SndfContext *ctx = sndf_ctx;
     int result;
@@ -291,7 +291,7 @@ int FUN_00282e00(int id, unsigned short angle, unsigned short vol)
         p = pan - 135;
     }
     if (sndf_ctx->mode == 2) {
-        p = DAT_004bb118[p];
+        p = sndf_pan_remap[p];
     }
     v = vol < 256 ? vol : 255;
     if ((unsigned int)(id - 1) < 24) {
@@ -303,7 +303,7 @@ int FUN_00282e00(int id, unsigned short angle, unsigned short vol)
     return result;
 }
 
-int FUN_00282ed0(unsigned int channel, unsigned int kind, unsigned int value)
+int SNDF_StartChannelSound(unsigned int channel, unsigned int kind, unsigned int value)
 {
     unsigned int message = (channel & 0x3F) + kind;
 
@@ -317,10 +317,10 @@ int FUN_00282ed0(unsigned int channel, unsigned int kind, unsigned int value)
     default:
         return -1;
     }
-    return FUN_00282c20(SWAP32_A(message), 0);
+    return SNDF_StartSound(SWAP32_A(message), 0);
 }
 
-int FUN_00282f70(int id, int value)
+int SNDF_SetSoundPitch(int id, int value)
 {
     SndfContext *ctx = sndf_ctx;
     int result;

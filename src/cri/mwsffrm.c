@@ -10,115 +10,6 @@
 #include "dw4/cri/cri_mwsfd.h"
 #include "dw4/cri/sfd.h"
 
-/* a picture's user data chunk as the SFD frame points at it; its first 4 bytes are a header */
-typedef struct MwsfdUsrChunk {
-    char *addr;
-    int size;
-} MwsfdUsrChunk;
-
-/* the seven words of the SFD frame that are handed out unchanged */
-typedef struct MwsfdFrmTail {
-    long w[7];
-} MwsfdFrmTail;
-
-/* the SFD frame as the player reads it */
-typedef struct MwsfdSfdFrm {
-    int f0;
-    int f4;
-    int f8;
-    int f12;
-    int pstruct;              /* 16 */
-    int f20;
-    int den;                  /* 24: the time base the two times below are over */
-    unsigned int ptype;       /* 28 */
-    int f32;
-    int f36;
-    int f40;
-    int usrLen;               /* 44 */
-    int cntB;                 /* 48 */
-    int cntA;                 /* 52 */
-    MwsfdUsrChunk *usr;       /* 56 */
-    char pad60[12];
-    MwsfdFrmTail tail;        /* 72 */
-} MwsfdSfdFrm;
-
-/* the frame the player hands out */
-typedef struct MwsfdFrm {
-    int f0;
-    int ptype;                /* 4 */
-    int f8;
-    int f12;
-    int f16;
-    int f20;
-    int pstruct;              /* 24 */
-    int rate;                 /* 28 */
-    int msA;                  /* 32: cntA scaled to milliseconds */
-    int cntA;                 /* 36 */
-    int den;                  /* 40 */
-    int usrLen;               /* 44 */
-    int msB;                  /* 48: cntB scaled to milliseconds */
-    int cntB;                 /* 52 */
-    int f56;
-    int f60;
-    char *usrData;            /* 64 */
-    int usrSize;              /* 68 */
-    int frmType;              /* 72: mwsffrm_DecideFrmType */
-    char pad76[4];
-    MwsfdFrmTail tail;        /* 80 */
-} MwsfdFrm;
-
-/* the picture header the SFD decoder reports */
-typedef struct MwsfdSfdPicHdr {
-    char pad0[60];
-    int f60;                  /* 60 */
-    int f64;                  /* 64 */
-    char pad68[20];
-    unsigned int pictureStructure; /* 88 */
-    unsigned int chromaFormat;     /* 92 */
-    char pad96[12];
-    signed char f108;         /* 108 */
-    signed char f109;         /* 109 */
-    signed char f110;         /* 110 */
-} MwsfdSfdPicHdr;
-
-/* the frame information SFD returns, and the MWSFD form it is converted to */
-typedef struct SfdFrmInf {
-    int f0;
-    unsigned int ptype;       /* 4 */
-    int f8;
-    int f12;
-    int f16;
-    int f20;
-    unsigned int pstruct;     /* 24 */
-    int f28;
-    int f32;
-    int f36;
-    int f40;
-    int f44;
-    int f48;
-    int f52;
-    int f56;
-    int f60;
-} SfdFrmInf;
-
-typedef struct MwsfdFrmInf {
-    void *f0;
-    void *f4;
-    void *f8;
-    void *f12;
-    void *pstruct;            /* 16 */
-    void *f20;
-    void *f24;
-    void *ptype;              /* 28 */
-    void *f32;
-    void *f36;
-    void *f40;
-    void *f44;
-} MwsfdFrmInf;
-
-/* the plane layout in the order the SFX conversion takes it */
-/* the SFD header handle a picture's header is parsed into */
-
 #define SFD_STM_VIDEO 224
 #define SFD_CB_PICUSR 0x4B    /* the picture user data callback */
 #define SFD_CB_PICUSR_OBJ 0x4C
@@ -137,9 +28,9 @@ extern char E202231_mwPlyGetNumSkipDisp_inv_hn[]; /* "E202231: mwPlyGetNumSkipDi
 extern char E409171_mwPlyGetNumRemainFrm_inv_hn[]; /* "E409171: mwPlyGetNumRemainFrm: handle is invalid." */
 
 void mwply_UpdateUsrLen(MwsfdPly *ply, MwsfdFrm *frm);
-void mwply_SetFrmInf(MwsfdPly *ply, MwsfdSfdFrm *frm, MwsfdFrm *out);
-void mwply_GetFrmUsrData(MwsfdPly *ply, MwsfdSfdFrm *frm, MwsfdFrm *out);
-int mwply_MulDivMs(int a, int b, int sec);
+void mwply_SetFrmInf(MwsfdPly *ply, SfdFrameInfo *frm, MwsfdFrm *out);
+void mwply_GetFrmUsrData(MwsfdPly *ply, SfdFrameInfo *frm, MwsfdFrm *out);
+int mwply_MulDivMs(int time, int fps, int tunit);
 
 int MWSFD_GetFrmSync(MwsfdPly *ply);
 int MWSFD_IsEnablePicUsr(MwsfdPly *ply);
@@ -157,15 +48,14 @@ int mwply_GetLogItemTypeThree(MwsfdPly *ply, int slot);
 int mwply_GetLogHdrInfo(MwsfdPly *ply, int slot);
 int mwply_GetLogCompoMode(MwsfdPly *ply, int slot);
 int mwply_GetCurPicCompoMode(MwsfdPly *ply);
-void mwply_SetPicInf(MwsfdPly *ply, MwsfdSfdPicHdr *hdr);
-void mwply_UpdatePicUsrData(MwsfdPly *ply, MwsfdSfdFrm *frm);
+void mwply_SetPicInf(MwsfdPly *ply, SfdFrameInfo *frm);
+void mwply_UpdatePicUsrData(MwsfdPly *ply, SfdFrameInfo *frm);
 void mwply_ApplyItemType3(MwsfdPly *ply);
 int mwply_IsCurPicItemTypeThree(MwsfdPly *ply);
 int mwPlyIsNextFrmReady(MwsfdPly *ply);
 int mwl_convBufFmtFromSFD(unsigned int ptype);
 int mwl_convPtypeFromSFD(unsigned int ptype);
-struct MwsfdPicStat;
-int mwsffrm_DecideFrmType(MwsfdPly *ply, struct MwsfdPicStat *pic);
+int mwsffrm_DecideFrmType(MwsfdPly *ply, SfdFrameInfo *frm);
 
 void mwPlySetFrmSync(MwsfdPly *ply, int frmSync)
 {
@@ -201,7 +91,7 @@ void mwPlyGetCurFrm(MwsfdPly *ply, MwsfdFrm *out)
 
     if (MWSFD_IsEnableHndl(ply) == 0) {
         MWSFSVM_Error(E1122614_mwPlyGetCurFrm_inv_hn);
-        out->f0 = 0;
+        out->bufadr = 0;
         return;
     }
     sfd = mwPlyGetSfdHn(ply);
@@ -230,21 +120,21 @@ void mwPlyGetCurFrm(MwsfdPly *ply, MwsfdFrm *out)
             mwply_UpdateUsrLen(ply, out);
             mwply_ApplyItemType3(ply);
             out->frmType = mwsffrm_DecideFrmType(ply, frm);
-            ply->logPos = out->usrLen;
+            ply->logPos = out->concat_cnt;
             MWSFSFX_SetFxType(ply, mwply_GetCurPicCompoMode(ply));
             return;
         }
     }
-    out->f0 = 0;
+    out->bufadr = 0;
 }
 
-/* takes the frame's user data length, letting mwsfsfx_UpdateAddInf act first when it grows */
+/* takes the frame's concatenation count, letting mwsfsfx_UpdateAddInf act first when it grows */
 void mwply_UpdateUsrLen(MwsfdPly *ply, MwsfdFrm *frm)
 {
-    if (ply->usrBuf.f8 < frm->usrLen) {
+    if (ply->usrBuf.concatCnt < frm->concat_cnt) {
         mwsfsfx_UpdateAddInf(ply);
     }
-    ply->usrBuf.f8 = frm->usrLen;
+    ply->usrBuf.concatCnt = frm->concat_cnt;
 }
 
 void mwply_ApplyItemType3(MwsfdPly *ply)
@@ -261,78 +151,79 @@ void mwply_ApplyItemType3(MwsfdPly *ply)
     MWSFD_SetColAdj(ply, flag);
 }
 
-/* converts the SFD frame into the frame handed out: types and times in MWSFD's form, the user data
- * and the rest of the frame's words */
-void mwply_SetFrmInf(MwsfdPly *ply, MwsfdSfdFrm *frm, MwsfdFrm *out)
+/* converts the SFD frame into the frame handed out: types in MWSFD's form, the frame numbers from the
+ * times and the frame rate, the user data and the picture details */
+void mwply_SetFrmInf(MwsfdPly *ply, SfdFrameInfo *frm, MwsfdFrm *out)
 {
     void *sfd = ply->sfd;
-    int f32 = frm->f32;
-    int ptype = mwl_convBufFmtFromSFD(frm->ptype);
-    int f0 = frm->f0;
-    int f4 = frm->f4;
-    int f8 = frm->f8;
-    int f12 = frm->f12;
-    int pstruct = mwl_convPtypeFromSFD(frm->pstruct);
-    int den = frm->den;
-    int cntA = frm->cntA;
-    int cntB = frm->cntB;
-    int usrLen = frm->usrLen;
-    int f36 = frm->f36;
-    int f40 = frm->f40;
-    int rate;
-    int msA;
-    int msB;
+    unsigned char *bufadr = frm->buf;
+    int buffmt = mwl_convBufFmtFromSFD(frm->bufFmt);
+    int width = frm->width;
+    int height = frm->height;
+    int x_mb = frm->x_mb;
+    int y_mb = frm->y_mb;
+    int ptype = mwl_convPtypeFromSFD(frm->picType);
+    int tunit = frm->unit;
+    int time = frm->cat_time;
+    int time_per_file = frm->time_per_file;
+    int concat_cnt = frm->concat_cnt;
+    int errcnt = frm->errcnt;
+    int rcvcnt = frm->rcvcnt;
+    int fps;
+    int fno;
+    int fno_per_file;
 
-    if (SFD_GetFps(sfd, &rate) != 0) {
+    if (SFD_GetFps(sfd, &fps) != 0) {
         MWSFSVM_Error(E201301_mwply_SetFrmInf_GetFps_failed);
     }
-    msA = mwply_MulDivMs(cntA, rate, den);
-    msB = mwply_MulDivMs(cntB, rate, den);
-    out->f0 = f32;
+    fno = mwply_MulDivMs(time, fps, tunit);
+    fno_per_file = mwply_MulDivMs(time_per_file, fps, tunit);
+    out->bufadr = bufadr;
+    out->buffmt = buffmt;
+    out->width = width;
+    out->height = height;
+    out->x_mb = x_mb;
+    out->y_mb = y_mb;
     out->ptype = ptype;
-    out->f8 = f0;
-    out->f12 = f4;
-    out->f16 = f8;
-    out->f20 = f12;
-    out->pstruct = pstruct;
-    out->rate = rate;
-    out->msA = msA;
-    out->cntA = cntA;
-    out->den = den;
-    out->usrLen = usrLen;
-    out->cntB = cntB;
-    out->msB = msB;
-    out->f56 = f36;
-    out->f60 = f40;
+    out->fps = fps;
+    out->fno = fno;
+    out->time = time;
+    out->tunit = tunit;
+    out->concat_cnt = concat_cnt;
+    out->time_per_file = time_per_file;
+    out->fno_per_file = fno_per_file;
+    out->errcnt = errcnt;
+    out->rcvcnt = rcvcnt;
     mwply_GetFrmUsrData(ply, frm, out);
-    out->tail = frm->tail;
+    out->tail = *(MwsfdFrmTail *)frm->tail.words;
 }
 
 /* the frame's user data without its 4-byte header; none while picture user data is off or the
  * player still uses its system buffer */
-void mwply_GetFrmUsrData(MwsfdPly *ply, MwsfdSfdFrm *frm, MwsfdFrm *out)
+void mwply_GetFrmUsrData(MwsfdPly *ply, SfdFrameInfo *frm, MwsfdFrm *out)
 {
     MwsfdPicUsrBuf *sys = &ply->sysPicUsrBuf;
     MwsfdPicUsrBuf *cur = ply->picUsrBuf;
-    char *data = frm->usr->addr;
-    int size = frm->usr->size;
+    char *data = frm->picUsr->data;
+    int size = frm->picUsr->len;
 
     if (MWSFD_GetUsePicUsr() != 1 || cur == sys) {
-        out->usrData = 0;
-        out->usrSize = 0;
+        out->usrdat = 0;
+        out->usrdatlen = 0;
         return;
     }
     if (data != 0 && size >= 5) {
         data += 4;
         size -= 4;
     }
-    out->usrData = data;
-    out->usrSize = size;
+    out->usrdat = data;
+    out->usrdatlen = size;
 }
 
-int mwply_MulDivMs(int a, int b, int sec)
+/* the frame number at `time` (in `tunit` per second) for `fps`, the frame rate times 1000 */
+int mwply_MulDivMs(int time, int fps, int tunit)
 {
-    return UTY_MulDiv(a, b, sec * 1000);
+    return UTY_MulDiv(time, fps, tunit * 1000);
 }
 
 int mwl_convBufFmtFromSFD(unsigned int ptype)
@@ -381,24 +272,17 @@ int mwl_convPtypeFromSFD(unsigned int ptype)
     return result;
 }
 
-typedef struct MwsfdPicStat {
-    char pad0[88];
-    unsigned int pstruct;     /* 88 */
-    char pad92[16];
-    signed char topFirst;     /* 108 */
-} MwsfdPicStat;
-
-int mwsffrm_DecideFrmType(MwsfdPly *ply, MwsfdPicStat *pic)
+int mwsffrm_DecideFrmType(MwsfdPly *ply, SfdFrameInfo *frm)
 {
     int ret = 0;
 
-    switch (pic->pstruct) {
+    switch ((unsigned int)frm->tail.detail.picture_structure) {
     case 1:
     case 2:
         ret = 2;
         break;
     case 3:
-        if (pic->topFirst == 0)
+        if (frm->tail.detail.progressive_frame == 0)
             ret = 2;
         break;
     case 0:
@@ -411,27 +295,27 @@ int mwsffrm_DecideFrmType(MwsfdPly *ply, MwsfdPicStat *pic)
     return ret;
 }
 
-void mwply_SetPicInf(MwsfdPly *ply, MwsfdSfdPicHdr *hdr)
+void mwply_SetPicInf(MwsfdPly *ply, SfdFrameInfo *frm)
 {
     MwsfdPicInf *pic = &ply->pic;
-    int f60 = hdr->f60; /* read first: retail schedules this load ahead of the stores */
+    int chromaPosH = frm->chromaPosH; /* read first: retail schedules this load ahead of the stores */
 
-    pic->pictureStructure = hdr->pictureStructure;
-    pic->chromaFormat = hdr->chromaFormat;
-    pic->f8 = hdr->f108;
-    pic->f12 = hdr->f109;
-    pic->f16 = hdr->f110;
-    pic->chromaPosH = f60;
-    pic->chromaPosV = hdr->f64;
-    pic->f28 = 0;
+    pic->pictureStructure = frm->tail.detail.picture_structure;
+    pic->chromaFormat = frm->tail.detail.chroma_format;
+    pic->progressiveFrame = frm->tail.detail.progressive_frame;
+    pic->topFieldFirst = frm->tail.detail.top_field_first;
+    pic->repeatFirstField = frm->tail.detail.repeat_first_field;
+    pic->chromaPosH = chromaPosH;
+    pic->chromaPosV = frm->chromaPosV;
+    pic->rsv = 0;
 }
 
 /* copies the frame's user data into the player's buffer and passes it on to MWSFSFX_SetPicUsrDat */
-void mwply_UpdatePicUsrData(MwsfdPly *ply, MwsfdSfdFrm *frm)
+void mwply_UpdatePicUsrData(MwsfdPly *ply, SfdFrameInfo *frm)
 {
-    MwsfdUsrChunk *usr = frm->usr;
-    char *addr = usr->addr;
-    int size = usr->size;
+    SfdSjChunk *usr = frm->picUsr;
+    char *addr = usr->data;
+    int size = usr->len;
     char *data;
     int len;
 
@@ -481,29 +365,36 @@ void mwPlyCalcYccPlane(int a, int b, int c, MwsfdPlanes *out)
     mwl_convYccPlaneFromSFD(&planes, out);
 }
 
-void mwl_convFrmInfToSFD(SfdFrmInf *src, MwsfdFrmInf *dst)
-{
-    int f0, ptype, f8, f12, f16, f20, pstruct;
+/* SFD's frame information as this conversion writes it: every word stored as a pointer (in the
+ * order of SfdFrameInfo) */
+typedef struct SfdFrmInfWords {
+    void *width, *height, *x_mb, *y_mb, *picType, *time, *unit, *bufFmt, *buf, *errcnt, *rcvcnt, *concat_cnt;
+} SfdFrmInfWords;
 
-    f0 = src->f0;
-    ptype = mwl_convBufFmtToSFD(src->ptype);
-    f8 = src->f8;
-    f12 = src->f12;
-    f16 = src->f16;
-    f20 = src->f20;
-    pstruct = mwl_convPtypeToSFD(src->pstruct);
-    dst->f32 = (void *)f0;
-    dst->ptype = (void *)ptype;
-    dst->f0 = (void *)f8;
-    dst->f4 = (void *)f12;
-    dst->f8 = (void *)f16;
-    dst->f12 = (void *)f20;
-    dst->pstruct = (void *)pstruct;
-    dst->f20 = (void *)src->f36;
-    dst->f24 = (void *)src->f40;
-    dst->f36 = (void *)src->f56;
-    dst->f40 = (void *)src->f60;
-    dst->f44 = (void *)src->f44;
+/* the reverse of mwply_SetFrmInf: an MWSFD frame as SFD's frame information */
+void mwl_convFrmInfToSFD(MwsfdFrm *src, SfdFrmInfWords *dst)
+{
+    int bufadr, buffmt, width, height, x_mb, y_mb, ptype;
+
+    bufadr = (int)src->bufadr;
+    buffmt = mwl_convBufFmtToSFD(src->buffmt);
+    width = src->width;
+    height = src->height;
+    x_mb = src->x_mb;
+    y_mb = src->y_mb;
+    ptype = mwl_convPtypeToSFD(src->ptype);
+    dst->buf = (void *)bufadr;
+    dst->bufFmt = (void *)buffmt;
+    dst->width = (void *)width;
+    dst->height = (void *)height;
+    dst->x_mb = (void *)x_mb;
+    dst->y_mb = (void *)y_mb;
+    dst->picType = (void *)ptype;
+    dst->time = (void *)src->time;
+    dst->unit = (void *)src->tunit;
+    dst->errcnt = (void *)src->errcnt;
+    dst->rcvcnt = (void *)src->rcvcnt;
+    dst->concat_cnt = (void *)src->concat_cnt;
 }
 
 int mwl_convBufFmtToSFD(unsigned int ptype)
@@ -664,7 +555,7 @@ void mwply_GetPicInf(char *buf, unsigned int size, MwsfdHdrInf *hdr)
     int off;
     int sector;
 
-    hdr->f20 = -1;
+    hdr->frmnum = -1;
     if (size < 2048 || buf == 0)
         return;
     for (sector = 2; sector < 4; sector++) {
@@ -672,14 +563,14 @@ void mwply_GetPicInf(char *buf, unsigned int size, MwsfdHdrInf *hdr)
         sfh = SFH_Create(buf + off, size - off);
         if (sfh != 0) {
             if (SFH_IsSfdHeader(sfh, v) == 0 || v[0] == 0) {
-                hdr->f20 = -1;
-                hdr->f24 = -1;
+                hdr->frmnum = -1;
+                hdr->compoMode = -1;
                 SFH_Destroy(sfh);
             } else {
-                hdr->f20 = mwsffrm_AnalyTotalFrm(sfh);
-                hdr->f24 = mwply_GetPicCompoMode(sfh);
-                hdr->f28 = mwply_GetMuxKind2(sfh);
-                hdr->f32 = mwply_GetMuxKind1(sfh);
+                hdr->frmnum = mwsffrm_AnalyTotalFrm(sfh);
+                hdr->compoMode = mwply_GetPicCompoMode(sfh);
+                hdr->muxKind2 = mwply_GetMuxKind2(sfh);
+                hdr->muxKind1 = mwply_GetMuxKind1(sfh);
                 SFH_Destroy(sfh);
                 return;
             }

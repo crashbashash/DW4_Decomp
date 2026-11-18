@@ -38,13 +38,13 @@ extern int utytmr_save_mode;
 
 /* matching construct: manual — a volatile store target gives retail's la + sw 0(reg) and keeps the counter load ahead of it */
 extern char *volatile sud_version_ptr;
-extern volatile SudClock DAT_005856b0;
-extern volatile SudClock DAT_005856c0;
-extern volatile SudClock *volatile DAT_005856d0;
-extern volatile int DAT_005856d4;
+extern volatile SudClock utytmr_main;
+extern volatile SudClock utytmr_sub;
+extern volatile SudClock *volatile utytmr_ptr;
+extern volatile int utytmr_lock;
 
 char *sud_GetVersionStr(void);
-void FUN_002b5ce0(long long rate);
+void utytmr_SetUnit(long long rate);
 
 void SUD_Init(void) {
     if (sud_init_cnt <= 0) {
@@ -86,46 +86,46 @@ void SUD_SetFmtTypeToBuf(char *dst, int *flags) {
     strncpy(dst + 4, c.s[flags[2]], 1);
 }
 
-unsigned int SUD_AnalyVersion(char *header, int index) {
+unsigned int SUD_AnalyVersion(char *header, int size) {
     SudChars2 digits;
-    if (header == 0 || index < 0) {
+    if (header == 0 || size < 0) {
         return 0;
     }
     digits = *(SudChars2 *)(header + 16);
     return atoi(digits.c);
 }
 
-int SUD_AnalyTypeDivField(char *header, int index) {
-    if (header == 0 || index < 0) {
+int SUD_AnalyTypeDivField(char *header, int size) {
+    if (header == 0 || size < 0) {
         return 0;
     }
     return strncmp(header + 18, "D", 1) == 0;
 }
 
-int SUD_AnalyTypeCcs(char *header, int index) {
-    if (header == 0 || index < 0) {
+int SUD_AnalyTypeCcs(char *header, int size) {
+    if (header == 0 || size < 0) {
         return 0;
     }
     return strncmp(header + 19, "C", 1) == 0;
 }
 
-int FUN_002b53a0(char *header, int index) {
-    if (header == 0 || index < 0) {
+int SUD_AnalyTypeIntl(char *header, int size) {
+    if (header == 0 || size < 0) {
         return 0;
     }
-    if (SUD_AnalyVersion(header, index) == 0) {
+    if (SUD_AnalyVersion(header, size) == 0) {
         return 0;
     }
     return strncmp(header + 20, "I", 1) == 0;
 }
 
-int FUN_002b5400(char *header, int index) {
+int SUD_AnalyExtScan(char *header, int size) {
     char *field;
     int kind;
-    if (header == 0 || index < 0) {
+    if (header == 0 || size < 0) {
         return 0;
     }
-    if (SUD_AnalyVersion(header, index) < 2) {
+    if (SUD_AnalyVersion(header, size) < 2) {
         return 0;
     }
     field = header + 21;
@@ -137,75 +137,75 @@ int FUN_002b5400(char *header, int index) {
     return kind;
 }
 
-int FUN_002b5490(char *header, int index) {
-    if (header == 0 || index < 0) {
+int SUD_AnalyExtFlag(char *header, int size) {
+    if (header == 0 || size < 0) {
         return 0;
     }
-    if (SUD_AnalyVersion(header, index) < 2) {
+    if (SUD_AnalyVersion(header, size) < 2) {
         return 0;
     }
     return strncmp(header + 22, "A", 1) != 0;
 }
 
-int FUN_002b56f8(char *base, int index, int offset);
+int sud_AnalyHex3(char *header, int size, int offset);
 
-int FUN_002b54f8(char *header, int index) {
-    if (header == 0 || index < 0) {
+int SUD_AnalyExtVal0(char *header, int size) {
+    if (header == 0 || size < 0) {
         return 0;
     }
-    if (SUD_AnalyVersion(header, index) >= 2) {
-        return FUN_002b56f8(header, index, 0x17);
+    if (SUD_AnalyVersion(header, size) >= 2) {
+        return sud_AnalyHex3(header, size, 0x17);
     }
     return 0;
 }
 
-int FUN_002b5578(char *header, int index) {
-    if (header == 0 || index < 0) {
+int SUD_AnalyExtVal1(char *header, int size) {
+    if (header == 0 || size < 0) {
         return 0;
     }
-    if (SUD_AnalyVersion(header, index) >= 2) {
-        return FUN_002b56f8(header, index, 0x1A);
+    if (SUD_AnalyVersion(header, size) >= 2) {
+        return sud_AnalyHex3(header, size, 0x1A);
     }
     return 0;
 }
 
-int FUN_002b55f8(char *header, int index) {
-    if (header == 0 || index < 0) {
+int SUD_AnalyExtVal2(char *header, int size) {
+    if (header == 0 || size < 0) {
         return 0;
     }
-    if (SUD_AnalyVersion(header, index) >= 2) {
-        return FUN_002b56f8(header, index, 0x1D);
+    if (SUD_AnalyVersion(header, size) >= 2) {
+        return sud_AnalyHex3(header, size, 0x1D);
     }
     return 0;
 }
 
-int FUN_002b5678(char *header, int index) {
-    if (header == 0 || index < 0) {
+int SUD_AnalyExtVal3(char *header, int size) {
+    if (header == 0 || size < 0) {
         return 0;
     }
-    if (SUD_AnalyVersion(header, index) >= 2) {
-        return FUN_002b56f8(header, index, 0x20);
+    if (SUD_AnalyVersion(header, size) >= 2) {
+        return sud_AnalyHex3(header, size, 0x20);
     }
     return 0;
 }
 
-unsigned long FUN_002b5758(char *text, char **end, int radix);
+unsigned long sud_StrToUl(char *text, char **end, int radix);
 
-int FUN_002b56f8(char *base, int index, int offset) {
+int sud_AnalyHex3(char *header, int size, int offset) {
     SudChars3 digits;
     char *end;
-    if (base == 0 || index < 0) {
+    if (header == 0 || size < 0) {
         return 0;
     }
-    digits = *(SudChars3 *)(base + offset);
-    return FUN_002b5758(digits.c, &end, 16);
+    digits = *(SudChars3 *)(header + offset);
+    return sud_StrToUl(digits.c, &end, 16);
 }
 
-unsigned long FUN_002b5758(char *text, char **end, int radix) {
+unsigned long sud_StrToUl(char *text, char **end, int radix) {
     return strtoul(text, end, radix);
 }
 
-int FUN_002b5838(char *header);
+int sud_GetSudDatSize(char *header);
 
 void SUD_SearchSudDat(char *text, int length, char **found, int *value) {
     int i;
@@ -217,21 +217,21 @@ void SUD_SearchSudDat(char *text, int length, char **found, int *value) {
     for (i = 0; i < length; i++, text++) {
         if (memcmp(text, "<", 1) == 0 && memcmp(text, "<SUDPS_>", 8) == 0) {
             *found = text;
-            *value = FUN_002b5838(text);
+            *value = sud_GetSudDatSize(text);
         }
     }
 }
 
-int FUN_002b5838(char *header) {
+int sud_GetSudDatSize(char *header) {
     return header ? 0x23 : 0;
 }
 
 /* The hardware timers' mode and count registers, indexed by timer channel. */
-static volatile unsigned int *const sud_tmr_mode[] = {
+static volatile unsigned int *const utytmr_t_mode[] = {
     (unsigned int *)0x10000010, (unsigned int *)0x10000810,
     (unsigned int *)0x10001010, (unsigned int *)0x10001810,
 };
-static volatile unsigned int *const sud_tmr_count[] = {
+static volatile unsigned int *const utytmr_t_count[] = {
     (unsigned int *)0x10000000, (unsigned int *)0x10000800,
     (unsigned int *)0x10001000, (unsigned int *)0x10001800,
 };
@@ -247,26 +247,26 @@ void UTY_InitTmr(int channel) {
     }
     utytmr_ch = channel;
     if (channel == -1) {
-        FUN_002b5ce0(1);
+        utytmr_SetUnit(1);
         return;
     }
-    FUN_002b5ce0(CRICFG_Read("TMR_CLK", &value) == 0 ? (unsigned int)value : 0x8CA00);
-    utytmr_save_mode = *sud_tmr_mode[channel];
+    utytmr_SetUnit(CRICFG_Read("TMR_CLK", &value) == 0 ? (unsigned int)value : 0x8CA00);
+    utytmr_save_mode = *utytmr_t_mode[channel];
     if ((utytmr_save_mode & 0xC7) != 0x82) {
-        *sud_tmr_count[channel] = 0;
-        *sud_tmr_mode[channel] = 0x82;
+        *utytmr_t_count[channel] = 0;
+        *utytmr_t_mode[channel] = 0x82;
     }
-    DAT_005856b0.last = *sud_tmr_count[channel];
-    DAT_005856b0.base = 0;
-    DAT_005856c0 = DAT_005856b0;
-    DAT_005856d0 = &DAT_005856b0;
-    DAT_005856d4 = 0;
+    utytmr_main.last = *utytmr_t_count[channel];
+    utytmr_main.base = 0;
+    utytmr_sub = utytmr_main;
+    utytmr_ptr = &utytmr_main;
+    utytmr_lock = 0;
 }
 
 void UTY_FinishTmr(void) {
     utytmr_init_cnt--;
     if (utytmr_init_cnt == 0 && utytmr_ch != -1 && (utytmr_save_mode & 0xC7) != 0x82) {
-        *sud_tmr_mode[utytmr_ch] = utytmr_save_mode ^ 0xC00;
+        *utytmr_t_mode[utytmr_ch] = utytmr_save_mode ^ 0xC00;
     }
     if (utytmr_init_cnt < 0) {
         utytmr_init_cnt = 0;
@@ -279,25 +279,25 @@ long long UTY_GetTmr(void) {
     if (utytmr_init_cnt <= 0 || utytmr_ch == -1) {
         return 0;
     }
-    DAT_005856d4++;
-    if (DAT_005856d4 == 1) {
-        DAT_005856c0 = DAT_005856b0;
-        DAT_005856d0 = &DAT_005856c0;
-        count = *sud_tmr_count[utytmr_ch] & 0xFFFF;
-        if (count < DAT_005856b0.last) {
-            DAT_005856b0.base += 0x10000;
+    utytmr_lock++;
+    if (utytmr_lock == 1) {
+        utytmr_sub = utytmr_main;
+        utytmr_ptr = &utytmr_sub;
+        count = *utytmr_t_count[utytmr_ch] & 0xFFFF;
+        if (count < utytmr_main.last) {
+            utytmr_main.base += 0x10000;
         }
-        DAT_005856b0.last = count;
-        now = count + DAT_005856b0.base;
-        DAT_005856d0 = &DAT_005856b0;
+        utytmr_main.last = count;
+        now = count + utytmr_main.base;
+        utytmr_ptr = &utytmr_main;
     } else {
-        count = *sud_tmr_count[utytmr_ch] & 0xFFFF;
-        now = count + DAT_005856d0->base;
-        if (count < DAT_005856d0->last) {
+        count = *utytmr_t_count[utytmr_ch] & 0xFFFF;
+        now = count + utytmr_ptr->base;
+        if (count < utytmr_ptr->last) {
             now += 0x10000;
         }
     }
-    DAT_005856d4--;
+    utytmr_lock--;
     return now;
 }
 
@@ -307,7 +307,7 @@ int UTY_IsTmrVoid(void) {
 }
 
 void UTY_SetTmrUnit(long long rate) {
-    FUN_002b5ce0(rate);
+    utytmr_SetUnit(rate);
 }
 
 long long UTY_GetTmrUnit(void) {
@@ -326,19 +326,19 @@ long long UTY_TmrToSec(long long ticks) {
     return ticks / utytmr_unit;
 }
 
-float FUN_002b5c30(long long ticks) {
+float UTY_TmrToUsecF(long long ticks) {
     return (float)(int)ticks * 1000000.0f / (float)(int)utytmr_unit;
 }
 
-float FUN_002b5c70(long long ticks) {
+float UTY_TmrToMsecF(long long ticks) {
     return (float)(int)ticks * 1000.0f / (float)(int)utytmr_unit;
 }
 
-float FUN_002b5cb0(long long ticks) {
+float UTY_TmrToSecF(long long ticks) {
     return (float)(int)ticks / (float)(int)utytmr_unit;
 }
 
-void FUN_002b5ce0(long long rate) {
+void utytmr_SetUnit(long long rate) {
     utytmr_unit = rate;
 }
 

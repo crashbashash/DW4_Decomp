@@ -8,7 +8,7 @@
 typedef void (*SfdCntFn)(SfdPly *h, int arg, int *counter);
 typedef void (*SfdTmrFn)(SfdPly *h, int arg, SfdPlyInf *tmr);
 
-extern int DAT_004f5020[];
+extern int SFPLY_cond_dfl_guard[];
 extern void (*sfply_vbin_nest)(SfdPly *h, int value);
 extern SfdPly *sfply_handles[8];
 extern int sfply_sys_stat;
@@ -54,7 +54,7 @@ int sfply_SearchFreeHn(void);
 SfdPly *sfply_InitHn(SfdCrePrm *prm, int arg);
 void sfply_InitMvInf(SfdMvInf *rec);
 void sfply_InitPlyInf(SfdPlyInf *tmr);
-void FUN_002abbc0(long long *cnt);
+void sfply_InitFlowCnt(long long *cnt);
 void sfply_InitTmrInf(SfdTmrInf *tmr);
 int sfply_TrCreate(SfdPly *h);
 int sfply_TrDestroy(SfdPly *h);
@@ -177,7 +177,7 @@ void sfmpvps2_Init(void) {
 }
 
 void sfply_ChkCondDfl(void) {
-    if (DAT_004f5020[0] != 0x5A5A5A5A) {
+    if (SFPLY_cond_dfl_guard[0] != 0x5A5A5A5A) {
         sfd_ReportError(0, 0xFF000201);
     }
 }
@@ -742,8 +742,8 @@ void sfply_InitPlyInf(SfdPlyInf *inf) {
     UTY_MemsetDword(inf, 0, 40);
     inf->numTotalDec = 0;
     inf->numSkip = 0;
-    inf->f8 = 0;
-    inf->f12 = 0;
+    inf->rsv[0] = 0;
+    inf->rsv[1] = 0;
     inf->numSkipEmptyB = 0;
     inf->frmOut = 0;
     inf->bpaActive = 0;
@@ -751,13 +751,13 @@ void sfply_InitPlyInf(SfdPlyInf *inf) {
     inf->vidShort = 0;
     inf->noFreeFrm = 0;
     inf->lockCnt = 0;
-    FUN_002abbc0(&inf->sysFlow);
-    FUN_002abbc0(&inf->vidFlow);
-    FUN_002abbc0(&inf->audInWr);
-    FUN_002abbc0(&inf->audSjWr);
+    sfply_InitFlowCnt(&inf->sysFlow);
+    sfply_InitFlowCnt(&inf->vidFlow);
+    sfply_InitFlowCnt(&inf->audInWr);
+    sfply_InitFlowCnt(&inf->audSjWr);
 }
 
-void FUN_002abbc0(long long *cnt) {
+void sfply_InitFlowCnt(long long *cnt) {
     /* matching construct: variant search — stmt order [1, 2, 0]; the unit compiler (Sony EE GCC 2.96 -O2 -G0) keeps independent stores in source order, so the statements follow the retail store order */
     cnt[0] = 0;
     cnt[1] = 0;

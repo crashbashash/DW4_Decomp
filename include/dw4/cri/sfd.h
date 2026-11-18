@@ -46,7 +46,7 @@ typedef struct SfdRatio {
 /* The time stabiliser of a handle (sfdtst.c): the master and helper clocks, the moving averages of their
  * difference and the adjustment limits. */
 typedef struct SfdTst {
-    int f0;
+    int tstflg;                /* 0: the stabiliser is on */
     unsigned int pastat;
     unsigned int adjmode;
     int paused;
@@ -54,21 +54,21 @@ typedef struct SfdTst {
     int pos;
     int values[60];
     long long master_time;
-    long long f272;
+    long long master_unit;     /* 272 */
     long long help_time;
     long long help_unit;
     long long out_time;
-    long long f304;
-    long long f312;
-    long long f320;
-    long long f328;
-    long long f336;
-    long long f344;
-    long long f352;
-    long long f360;
-    long long f368;
-    long long f376;
-    long long f384;
+    long long out_unit;        /* 304 */
+    long long tolerance;       /* 312: SFTST_SetTolerance, over tolerance_unit */
+    long long tolerance_unit;  /* 320 */
+    long long excess;          /* 328: SFTST_SetExcessErr, over excess_unit */
+    long long excess_unit;     /* 336 */
+    long long adj_start;       /* 344: SFTST_SetAdjStart, over adj_start_unit */
+    long long adj_start_unit;  /* 352 */
+    long long adj_poff;        /* 360: SFTST_SetAdjPoff, over adj_poff_unit */
+    long long adj_poff_unit;   /* 368 */
+    long long base_hlp;        /* 376: the helper time at the last base, -1 with none */
+    long long base_out;        /* 384: the output time at that base */
     long long mt_max;
     int adj_limit;
     int adj_front;
@@ -191,8 +191,7 @@ typedef struct SfdMvInf {
 typedef struct SfdPlyInf {
     int numTotalDec;     /* 0 */
     int numSkip;         /* 4: skipped decodes, empty B pictures included */
-    int f8;
-    int f12;
+    int rsv[2];          /* 8: cleared by sfply_InitPlyInf, read nowhere */
     int numSkipEmptyB;   /* 16 */
     int numSkipEmptyP;   /* 20: empty P pictures skipped */
     int frmOut;          /* 24: a frame is handed out (SFD_GetFrm until SFD_RelFrm) */
@@ -488,7 +487,7 @@ typedef struct SfdAdxCfg {
     int xsize;         /* 4: its extra size */
     char *buf;         /* 8: the ring buffer */
     int maxnch;        /* 12 */
-    int f16;
+    int rsv;           /* 16: copied by SFD_SetAdxtPara, read nowhere */
     int worksize;      /* 20 */
     char *work;        /* 24: the ADXT work */
 } SfdAdxCfg;
@@ -502,15 +501,15 @@ typedef struct SfdAdxCtx {
     SfdAdxCfg cfg;     /* 8 */
     int time;          /* 36 */
     int unit;          /* 40 */
-    int f44;
+    int pause;         /* 44: the pause sfadxt_WaitStart asked for */
     int carry;         /* 48 */
     int started;       /* 52 */
     int pos;           /* 56 */
     SfdAdxStep step;   /* 60 */
-    int f64;
+    int noHdr;         /* 64: positive, sfadxt_GetHd reports no audio header */
     int opt27;         /* 68 */
     int total;         /* 72 */
-    int f76;
+    int rsv;           /* 76: cleared by sfadxt_InitInf, read nowhere */
 } SfdAdxCtx;
 
 /* The audio output of a handle (slot 7, SFAOAP): the renderer and the pan, volume and speed functions

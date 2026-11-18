@@ -224,9 +224,9 @@ the lock switches (`0x4a92c8`, `0x4a92cc`, `0x4a92d0`), the error-check switch (
 
 ### sud-timer
 
-CRI SUD's EE-timer words: the tick count (`0x4bf290`), the clock and its saved copy (`0x5856b0`, `0x5856c0`), the
-clock pointer (`0x5856d0`), the nesting count (`0x5856d4`), and the two tables of timer-register addresses
-(`sud_tmr_mode`, `sud_tmr_count`, retail `0x4f5a70` and `0x4f5a80`) whose targets are declared `volatile`.
+CRI SUD's EE-timer words: the tick count (`0x4bf290`), the clock and its saved copy (`utytmr_main`, `utytmr_sub`), the
+clock pointer (`utytmr_ptr`), the nesting count (`utytmr_lock`), and the two tables of timer-register addresses
+(`utytmr_t_mode`, `utytmr_t_count`, retail `0x4f5a70` and `0x4f5a80`) whose targets are declared `volatile`.
 
 * The tables hold the EE timers' MODE and COUNT registers (`0x10000010`, `0x10000000` and the other channels).
   Retail reads the count register full-width and masks it, where a plain spelling narrows the load.

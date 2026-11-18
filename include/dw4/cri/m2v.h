@@ -145,13 +145,13 @@ typedef struct Mpeg2Ext {
     int padded_height;  /* +952 */
     int half_width;  /* +956 */
     int half_height;  /* +960 */
-    int field_964;  /* +964 */
-    int field_968;  /* +968 */
+    int second_field;  /* +964: 1 while decoding the second field of a field-coded frame */
+    int field_parity;  /* +968: fields decoded since the last frame picture */
     char pad8[164];  /* +972 */
-    int f1136[5];  /* +1136 */
+    int rsv1[5];  /* +1136: cleared by M2VHDEC_InitHn, read nowhere */
     int header_level;  /* +1156 */
     int f1160;  /* +1160 */
-    int f1164;  /* +1164 */
+    int rsv2;  /* +1164: cleared by M2VHDEC_InitHn, read nowhere */
     int shc_count;  /* +1168 */
     int sec_count;  /* +1172 */
     int udsc_count;  /* +1176 */
@@ -163,13 +163,13 @@ typedef struct Mpeg2Ext {
     int error_count;  /* +1272 */
     int warning_count;  /* +1276 */
     char pad1280[12];  /* +1280 */
-    int field_1292;  /* +1292 */
+    int rsv3;  /* +1292: cleared by M2VHDEC_InitHn, read nowhere */
     char pad1296[8];  /* +1296 */
 } Mpeg2Ext;
 /* The coded-picture fields of M2vPicAtr are enums in CRI's header, not int: their stores get an
  * alias set of their own, which lets m2vhdec_SetPicAtr's scheduler move the next int load from the
- * header state above them (its paired loads and early f64 store depend on it). The enumerator
- * names follow ISO/IEC 13818-2; M2vPicAtrF64 is a placeholder for an unknown enum. */
+ * header state above them (its paired loads and early chroma_pos_h store depend on it). The
+ * enumerator names follow ISO/IEC 13818-2. */
 typedef enum M2vFrameRate {
     M2V_FRAME_RATE_FORBIDDEN = 0
 } M2vFrameRate;
@@ -184,9 +184,11 @@ typedef enum M2vPicStruct {
     M2V_PICSTRUCT_BOTTOM_FIELD = 2,
     M2V_PICSTRUCT_FRAME = 3
 } M2vPicStruct;
-typedef enum M2vPicAtrF64 {
-    M2V_PICATR_F64_0 = 0
-} M2vPicAtrF64;
+/* The siting of the chroma samples (SfdChromaPos): M2V reports 0 horizontally and 1 vertically. */
+typedef enum M2vChromaPos {
+    M2V_CHROMAPOS_COSITED = 0,
+    M2V_CHROMAPOS_CENTRE = 1
+} M2vChromaPos;
 typedef struct M2vPicAtr {
     int horizontal_size;  /* +0 */
     int vertical_size;  /* +4 */
@@ -204,8 +206,8 @@ typedef struct M2vPicAtr {
     int shc_count;  /* +52 */
     M2vPicStruct picture_structure;  /* +56 */
     int chroma_format;  /* +60 */
-    M2vPicAtrF64 f64;  /* +64 */
-    int f68;  /* +68 */
+    M2vChromaPos chroma_pos_h;  /* +64 */
+    int chroma_pos_v;  /* +68 */
     int bit_rate;  /* +72 */
     int vbv_buffer_size;  /* +76 */
     unsigned short display_horizontal_size;  /* +80 */
@@ -214,7 +216,7 @@ typedef struct M2vPicAtr {
     unsigned char progressive_frame;  /* +85 */
     unsigned char top_field_first;  /* +86 */
     signed char repeat_first_field;  /* +87 */
-    signed char field_964;  /* +88 */
+    signed char second_field;  /* +88: the picture is the second field of a frame */
     unsigned char aspect_ratio_information;  /* +89 */
     unsigned char constrained_parameters_flag;  /* +90 */
     unsigned char frame_rate_extension_n;  /* +91 */

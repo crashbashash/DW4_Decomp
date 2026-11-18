@@ -68,13 +68,22 @@ which; it is placed at `0x295358`.
 The player handle (`MwsfdPly`, 696 bytes) is in `include/dw4/cri/mwply.h`, its creation parameters
 (`MwsfdCreInf`, the 48-byte `cprm`), the picture log entry (`MwsfdPicLog`), the SST input (`MwsfdSst`)
 and the allocation pool with it. The work area (`MwsfdWork`: the init parameters, the malloc hooks, the
-settings, the server hooks and the 8 players) is in `include/dw4/cri/cri_mwsfd.h`.
+settings, the server hooks and the 8 players) is in `include/dw4/cri/cri_mwsfd.h`. The frame `mwPlyGetCurFrm` hands
+out (`MwsfdFrm`, `mwply.h`) is, for its first 64 bytes, the public `MwsfdFrmObj` of the 2002 SDK's `crimwsfd.h`
+member for member (high: `bufadr`, `buffmt`, `width`, `height`, `x_mb`, `y_mb`, `ptype`, `fps`, `fno`, `time`,
+`tunit`, `concat_cnt`, `fno_per_file`, `time_per_file`, `errcnt`, `rcvcnt`; `mwply_SetFrmInf` derives the two frame
+numbers from the times and the frame rate); the picture user data, the frame type and the seven words of picture
+details follow. The SFD side is `SfdFrameInfo` (`sfmpv.h`); the player's picture information (`MwsfdPicInf`) takes
+its picture structure, chroma format, `progressive_frame`, `top_field_first`, `repeat_first_field` and chroma siting.
+The header information (`MwsfdHdrInf`) is not the 2002 layout: its words 20 to 32 are `frmnum`, `compoMode`,
+`muxKind2`, `muxKind1` (from `mwply_GetPicInf`, medium).
 
 Two spellings are what the retail code needs, not style:
 
 - `MwsfdInitPrm.decSvr` is a pointer: as an `int`, `mwsflib_InitLibWork`'s loads and stores reorder.
-- `mwl_convFrmInfToSFD` writes the MWSFD frame information through pointer-typed words (`MwsfdFrmInf`): the
-  SFD side is `int`, and only with the two types apart does GCC load every source word before the stores.
+- `mwl_convFrmInfToSFD` writes the SFD frame information through pointer-typed words (`SfdFrmInfWords`, in
+  `SfdFrameInfo`'s order): with `SfdFrameInfo`'s own enum and pointer members GCC loads the source words in another
+  order. `mwsffrm_DecideFrmType` switches on the picture structure as `unsigned`, as the 2002 header's enum is.
 
 ## Open questions
 

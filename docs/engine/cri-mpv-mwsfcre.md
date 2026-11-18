@@ -28,6 +28,19 @@ bridge to the lower-layer hooks and the 64-bit multiply-divide helpers.
   hands it the four buffer entries and the size, then `mpv_GetLowerInf` copies its picture information back.
 - `UTY_MulDiv`, `UTY_MulDivRound` and `UTY_MulDivRound64` close the file; nothing places them in a file of their
   own.
+- Fields from the RE4 `mpv.h` in the RE4 decompilation of the
+  [Persona 4 decompilation](https://github.com/Raikaru/Persona4-Decompilation) (medium): the motion-compensation table
+  `mcFunc[4]` at 724 (`mpv_DecPicHdr` copies the forward entry into the current one, as RE4's `mpv_hdec.c` does) and
+  `stc[3]` at 860 (the "STCCODE" user-data values). The word at 396 is `rsv` (cleared by `mpvlib_InitHn`, read
+  nowhere; RE4 leaves it unnamed). The scratchpad pool is `MpvPool`: block, macroblock and DCT work at 4352, 4384
+  and 4448 and the clamp-table copy at 6112, ending at `MPV_POOL_SIZE`.
+- Chroma siting: the picture attributes' words at 64 and 68 (`M2vPicAtr.chroma_pos_h`/`chroma_pos_v`, enum
+  `M2vChromaPos`) are set to 0 and 1 by the M2V decoder and to 1 and 1 by the MPEG-1 reset, which is MPEG's siting
+  (MPEG-2 4:2:0 chroma co-sited horizontally and between the lines vertically, MPEG-1 centred both ways).
+  `sfmpv_SetFrmInf` copies them into `SfdFrameInfo.chromaPosH`/`chromaPosV`, and MWSFD passes them on as
+  `MwsfdPicInf.chromaPosH`/`chromaPosV` to SFX's picture format (`mwsfsfx_CnvChromaPosToSfx` accepts exactly 0 and 1).
+  The M2V header's `second_field` (1 while the second field of a field-coded frame is decoded) and its counter
+  `field_parity` follow `calcPictureCodingExt`; the three header words `M2VHDEC_InitHn` only clears are `rsv1`..`3`.
 
 ## src/cri/mwsfcre.c (`0x2918c0` up to `0x293730`)
 

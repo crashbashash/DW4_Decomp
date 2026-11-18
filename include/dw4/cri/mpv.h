@@ -57,7 +57,7 @@ typedef struct MpvHn {
     unsigned char *clampC;    /* 272 */
     char pad276[116];
     int stat;                 /* 392: MPV_HN_FREE or MPV_HN_USED */
-    int f396;
+    int rsv;                  /* 396: cleared by mpvlib_InitHn, read nowhere */
     int cond[MPV_COND_MAX];   /* 400: conditions, copied from the library defaults */
     M2vPicAtr picInf;         /* 464 */
     MpvErrObj err;            /* 592: reset by FUN_0028ea30 */
@@ -70,10 +70,8 @@ typedef struct MpvHn {
     int brokenLink;           /* 696 */
     int vbvDelay;             /* 700 */
     char pad704[20];
-    int f724;
-    char pad728[4];
-    int f732;
-    char pad736[12];
+    void (*mcFunc[4])(struct MpvHn *mpv); /* 724: motion compensation: [0] the current, [1] backward, [2] forward, [3] both */
+    char pad740[8];
     MpvMotionRange fwd;       /* 748: forward_f_code and full_pel_forward_vector */
     char pad764[20];
     MpvMotionRange bwd;       /* 784 */
@@ -81,7 +79,7 @@ typedef struct MpvHn {
     int lastMbAddr;           /* 832: macroblocks in a picture, less one */
     char pad836[20];
     int strmType;             /* 856: 0 unknown, 1 MPEG-1, 2 MPEG-2 */
-    int f860, f864, f868;
+    int stc[3];               /* 860: the three values of the "STCCODE" user data */
     char pad872[24];
     int skipReq;              /* 896 */
     int skipCnt;              /* 900 */
@@ -99,6 +97,16 @@ typedef struct MpvHn {
     char pad1016[1024 - MPV_HN_SIZE];
 } MpvHn;
 
+/* the scratchpad pool (MPV_POOL_SIZE bytes) the handles share: the block, macroblock and DCT work and
+ * the copy of the clamp table */
+typedef struct MpvPool {
+    char pad0[4352];
+    char blk[32];             /* 4352 */
+    char mb[64];              /* 4384 */
+    char dct[1664];           /* 4448 */
+    unsigned char clamp[1024]; /* 6112: mpv_clamp_table, copied by mpv_InitClampTable */
+} MpvPool;
+
 /* the library work area */
 typedef struct MpvLib {
     int cond[MPV_COND_MAX];   /* 0: default conditions for new handles */
@@ -106,7 +114,7 @@ typedef struct MpvLib {
     int initFlag;             /* 68 */
     char pad72[4];
     char *tables;             /* 76 */
-    char *pool;               /* 80: MPV_POOL_SIZE bytes shared by the handles */
+    MpvPool *pool;            /* 80: shared by the handles */
     int nhn;                  /* 84 */
     MpvHn *hn;                /* 88 */
 } MpvLib;

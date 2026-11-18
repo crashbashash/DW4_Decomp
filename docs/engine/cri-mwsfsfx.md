@@ -49,5 +49,9 @@ and stores in source order. Their constants are placeholders until the values' m
   `mwsfsfx_CnvChromaFmtToSfx` and `mwsfsfx_CnvChromaPosToSfx`, named from the fields their messages give.
 - `MWSFD_SetCcirFx` and `MWSFD_GetCcirFx` (medium; alternative an `mwPlyFx` prefix) forward to `SFX_SetCcirFx` and
   `SFX_GetCcirFx`, between `MWSFD_GetProgOut` and `MWSFD_SetMaxAlpha` in the run of `MWSFD_` forwards.
-- Still unnamed: the seven forwards to the SFX user-data analysers after `MWSFD_IsFrmCcs`, the Z-callback forward and
-  the last forward before `mwPlyEntryFname`.
+- The forwards after `MWSFD_IsFrmCcs` take the names of the SFX calls they make (medium, behaviour, see the SUD notes
+  in [CRI SFX and SUD](cri-sfx-sud.md)): `MWSFD_IsFrmIntl`, `MWSFD_GetFrmExtScan`, `MWSFD_GetFrmExtFlag`,
+  `MWSFD_GetFrmExtVal0`..`3`; the Z-callback forward is `MWSFD_SetZTblCbFn` and the last forward before
+  `mwPlyEntryFname` is `MWSFD_SetOptimizeSpeed` (to `SFX_SetOptimizeSpeed` and `CFT_SetOptimizeSpeed`). None is called.
+- The converted frame is the shared `MwsfdFrm` (`include/dw4/cri/mwply.h`); `mwsfsfx_SetNfrm` takes its
+  `fno_per_file`, and the player's `usrBuf.concatCnt` (reset to -1 here) is the concatenation count of the last frame.

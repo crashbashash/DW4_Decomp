@@ -159,10 +159,10 @@
    "handle": 0,
    "jtbl": 380,
    "literal": 244,
-   "named": 103695,
+   "named": 109927,
    "pad": 211423,
    "ptr": 3040,
-   "ref": 78372,
+   "ref": 72140,
    "region": 109384,
    "source": 496497,
    "str": 71570,
@@ -244,11 +244,11 @@
    },
    "decl.type_conflicts": {
     "reason": null,
-    "value": 318
+    "value": 310
    },
    "decl.varargs": {
     "reason": null,
-    "value": 263
+    "value": 254
    },
    "foreign_profile.bytes": {
     "reason": null,
@@ -260,7 +260,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 755
+    "value": 682
    },
    "inline_asm.other": {
     "reason": null,
@@ -320,7 +320,7 @@
    },
    "struct.a": {
     "reason": null,
-    "value": 3
+    "value": 2
    },
    "struct.b": {
     "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
@@ -364,11 +364,11 @@
    "compile.functions": 0,
    "decl.header_conflicts": 225,
    "decl.local_externs": 0,
-   "decl.type_conflicts": 318,
-   "decl.varargs": 263,
+   "decl.type_conflicts": 310,
+   "decl.varargs": 254,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "fun_dat_refs": 755,
+   "fun_dat_refs": 682,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
@@ -383,7 +383,7 @@
    "profile_split.bytes": 19492,
    "profile_split.units": 3,
    "raw_casts.reflected": 258,
-   "struct.a": 3,
+   "struct.a": 2,
    "struct.b": 1,
    "struct.c": 11,
    "unapproved.bytes": 0,
@@ -396,9 +396,9 @@
   "fully_matched": 20431,
   "fully_verified": 20267,
   "matched": 20267,
-  "named": 17619,
-  "named_semantic": 12138,
-  "named_semantic_matched": 11934,
+  "named": 17672,
+  "named_semantic": 12191,
+  "named_semantic_matched": 11987,
   "total": 20576
  },
  "kernel_patches": {
@@ -492,35 +492,35 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2416504,
+  "bytes": 2443160,
   "failing": {
    "addresses": {
-    "bytes": 671524,
-    "functions": 3820
+    "bytes": 665280,
+    "functions": 3757
    },
    "declarations": {
-    "bytes": 145724,
-    "functions": 306
+    "bytes": 145116,
+    "functions": 288
    },
    "fields": {
-    "bytes": 408048,
-    "functions": 2219
+    "bytes": 387520,
+    "functions": 2162
    },
    "idioms": {
     "bytes": 377036,
     "functions": 2041
    },
    "name": {
-    "bytes": 545144,
-    "functions": 4537
+    "bytes": 540456,
+    "functions": 4484
    },
    "placed": {
     "bytes": 628,
     "functions": 9
    },
    "references": {
-    "bytes": 460472,
-    "functions": 1711
+    "bytes": 457444,
+    "functions": 1673
    },
    "types": {
     "bytes": 313996,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 14114,
+  "functions": 14233,
   "matched_functions": 20431
  },
  "regions": [
@@ -670,7 +670,7 @@
   "pct": 45.56,
   "recovered": 32793,
   "synthetic": 6085,
-  "total": 71978,
+  "total": 71982,
   "typeable": 258,
   "typeable_pct": 0.36
  }

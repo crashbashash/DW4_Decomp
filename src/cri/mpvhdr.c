@@ -281,7 +281,7 @@ int mpv_DecPicHdr(MpvHn *mpv, SfdSj *sj) {
         range->shift = 27 - rSize;
         range->f = 1 << rSize;
     }
-    mpv->f724 = mpv->f732;
+    mpv->mcFunc[0] = mpv->mcFunc[2];
     for (;;) {
         val = cur >> 31;
         if (val == 0) {
@@ -414,9 +414,9 @@ int mpv_ScanUsrTags(MpvHn *mpv, char *buf, int size) {
         if (strncmp(p, mpv_tag_idcprec, 7) == 0)
             mpv->idcPrec = atoi(p + 16) != 0 ? 3 : 0;
         if (strncmp(p, mpv_tag_stccode, 7) == 0) {
-            mpv->f860 = atoi(p + 16);
-            mpv->f864 = atoi(p + 24);
-            mpv->f868 = atoi(p + 32);
+            mpv->stc[0] = atoi(p + 16);
+            mpv->stc[1] = atoi(p + 24);
+            mpv->stc[2] = atoi(p + 32);
         }
         if (MPV_CheckDelim((unsigned char *)p) != 0)
             break;

@@ -28,6 +28,10 @@ typedef struct CftYccPln {
     void *f24;
 } CftYccPln;
 
+void CFT_SetFunctionName(char *name);
+char *CFT_GetFunctionName(void);
+void CFT_SetOptimizeSpeed(int sw);
+int CFT_GetOptimizeSpeed(void);
 void CFT_Init(void);
 void CFT_Finish(void);
 void CFT_SetMaxAlpha(int max);

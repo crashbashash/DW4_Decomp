@@ -146,7 +146,7 @@ extern int DAT_004bb104;
 extern int DAT_004bb108;
 extern int DAT_004bb110;
 extern SndfContext *sndf_ctx;
-extern int DAT_004bb118[];
+extern int sndf_pan_remap[180];  /* pan position remap of output mode 2 (the 0xA0002900 message) */
 extern int DAT_00570c00[];
 extern SndfOutbox DAT_00570d00;
 extern SndfMessage DAT_00571740;

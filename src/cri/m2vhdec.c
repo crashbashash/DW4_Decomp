@@ -89,16 +89,16 @@ void M2VHDEC_InitHn(M2vObj *hn)
     h->transfer_characteristics = 0xFF;
     h->matrix_coefficients = 0xFF;
     h->broken_link = 1;
-    h->f1136[0] = 0;
-    h->f1136[1] = 0;
-    h->f1136[2] = 0;
-    h->f1136[3] = 0;
-    h->f1136[4] = 0;
+    h->rsv1[0] = 0;
+    h->rsv1[1] = 0;
+    h->rsv1[2] = 0;
+    h->rsv1[3] = 0;
+    h->rsv1[4] = 0;
     h->header_level = 0;
-    h->f1164 = 0;
-    h->field_968 = 0;
+    h->rsv2 = 0;
+    h->field_parity = 0;
     h->closed_gop = 0;
-    h->field_1292 = 0;
+    h->rsv3 = 0;
 }
 
 void M2V_SetUsrSj(M2vObj *hn, int no, SfdSj *sj, M2vUsrDatFn fn, void *obj)
@@ -169,8 +169,8 @@ void m2vhdec_SetPicAtr(M2vObj *hn)
     a->shc_count = h->shc_count;
     a->picture_structure = h->picture_structure;
     a->chroma_format = h->chroma_format;
-    a->f64 = 0;
-    a->f68 = 1;
+    a->chroma_pos_h = M2V_CHROMAPOS_COSITED;
+    a->chroma_pos_v = M2V_CHROMAPOS_CENTRE;
     a->bit_rate = h->bit_rate;
     a->vbv_buffer_size = h->vbv_buffer_size;
     a->display_horizontal_size = h->display_horizontal_size;
@@ -179,7 +179,7 @@ void m2vhdec_SetPicAtr(M2vObj *hn)
     a->progressive_frame = h->progressive_frame;
     a->top_field_first = h->top_field_first;
     a->repeat_first_field = h->repeat_first_field;
-    a->field_964 = h->field_964;
+    a->second_field = h->second_field;
     a->aspect_ratio_information = h->aspect_ratio_information;
     a->constrained_parameters_flag = h->constrained_parameters_flag;
     a->frame_rate_extension_n = h->frame_rate_extension_n;
@@ -293,11 +293,11 @@ void calcNumberOfFrameCentreOffsets(Mpeg2Ext *h)
 void calcPictureCodingExt(Mpeg2Ext *h)
 {
     if (h->picture_structure == 3) {
-        h->field_968 = 0;
-        h->field_964 = 0;
+        h->field_parity = 0;
+        h->second_field = 0;
     } else {
-        h->field_964 = h->field_968 % 2;
-        h->field_968++;
+        h->second_field = h->field_parity % 2;
+        h->field_parity++;
     }
     h->dc_dct_pred_reset = tbl_dc_dct_pred_reset[h->intra_dc_precision];
     h->intra_dc_mult = tbl_intra_dc_mult[h->intra_dc_precision];
@@ -479,7 +479,7 @@ void m2vhdec_PutUsrDat(M2vObj *ctx, char *src, int n)
         }
     }
     if (idx == 3 && ctx->picusr.buf != 0) {
-        if (ctx->ext.field_964 != 0) {
+        if (ctx->ext.second_field != 0) {
             m2vhdec_AppendPicUsr(ctx, m2vhdec_usrdat_2nd_mark, 8);
         }
         m2vhdec_AppendPicUsr(ctx, src, n);
@@ -658,7 +658,7 @@ char *parseEsc(M2vObj *ctx, char *buf)
         }
         calcHvSize(h);
         calcPictureCodingExt(h);
-        if (h->field_964 == 0)
+        if (h->second_field == 0)
             ctx->picusr.len = 0;
         break;
     case 9:

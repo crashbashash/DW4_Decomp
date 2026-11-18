@@ -13,7 +13,7 @@ typedef struct SfxLib {
     int nhn;
     int maxhn;
     SfxCbSlot err;
-    int f20;
+    int ccirFx;
     SfxHn hn[8];
     int pad984[4];
 } SfxLib;
@@ -24,14 +24,6 @@ extern SfxLib sfx_libwork;
 extern char *volatile sfx_version_ptr; /* matching construct: volatile — stored through a materialised address */
 
 
-void FUN_00283038();
-int FUN_002b53a0();
-int FUN_002b5400();
-int FUN_002b5490();
-int FUN_002b54f8();
-int FUN_002b5578();
-int FUN_002b55f8();
-int FUN_002b5678();
 
 /* kept here unprototyped: their definitions take volatile pointers, which sfx.h would show to every unit */
 int SFXA_Destroy();
@@ -44,7 +36,7 @@ void sfx_InitHn(SfxHn *hn, int work, int wksize);
 int sfx_IsEnoughHnWorkSize(int wksize, int a, int b);
 void SFXSET_SetTblPtn(SfxHn *hn, int value);
 void sfxset_ShiftBufInfByLine(SfxPlane *plane, int lines);
-void FUN_002b3fd0(SfxPlane *plane, int first, int second);
+void sfx_ClipBufInf(SfxPlane *plane, int first, int second);
 void SFXSUD_Init(void);
 void SFXSUD_Finish(void);
 
@@ -141,19 +133,19 @@ void sfx_InitHn(SfxHn *hn, int work, int wksize) {
     base = (work + 31) & ~31;
     hn->width = 0;
     hn->height = 0;
-    hn->f44 = 1;
+    hn->zscale = 1;
     hn->used = 1;
-    hn->f8 = 17;
-    hn->f48 = 0;
-    hn->f60 = 0;
+    hn->fxtype = 17;
+    hn->zoffset = 0;
+    hn->tblPtn = 0;
     hn->tbl[0] = base;
     hn->tbl[1] = base + 0x400;
     hn->tbl[2] = base + 0x800;
     hn->tbl[3] = base + 0xC00;
     hn->work = work;
     hn->wksize = wksize;
-    hn->f104 = -1;
-    hn->f116 = 0;
+    hn->splitField = -1;
+    hn->cnvBottomUp = 0;
     hn->compo = 0;
 }
 
@@ -184,11 +176,11 @@ void SFXLIB_Error(void *obj, void *info, char *msg) {
 }
 
 void SFX_SetCcirFx(int value) {
-    sfx_libwork.f20 = value;
+    sfx_libwork.ccirFx = value;
 }
 
 int SFX_GetCcirFx(void) {
-    return sfx_libwork.f20;
+    return sfx_libwork.ccirFx;
 }
 
 void SFX_SetForceSplit(int value) {
@@ -199,11 +191,11 @@ int SFX_GetForceSplit(void) {
     return sfxcnv_forcesplit;
 }
 
-void FUN_002b3bb8(SfxHn *hn, SfxZCbFn fn) {
+void SFX_SetZTblCbFn(SfxHn *hn, SfxZCbFn fn) {
     hn->zhn->cbfn = fn;
 }
 
-void FUN_002b3bc8(SfxHn *hn, int arg) {
+void SFX_SetZTblCbArg(SfxHn *hn, int arg) {
     hn->zhn->cbarg = arg;
 }
 
@@ -216,11 +208,11 @@ int SFX_GetCompoMode(SfxHn *hn) {
 }
 
 void SFX_SetFxType(SfxHn *hn, int value) {
-    hn->f8 = value;
+    hn->fxtype = value;
 }
 
 int SFX_GetFxType(SfxHn *hn) {
-    return hn->f8;
+    return hn->fxtype;
 }
 
 void SFX_SetOutBufSize(SfxHn *hn, int width, int height) {
@@ -237,7 +229,7 @@ int SFX_GetOutBufSize(SfxHn *hn, int *width, int *height) {
 }
 
 void SFX_SetUnitWidth(SfxHn *hn, int value) {
-    hn->f20 = value;
+    hn->unitWidth = value;
 }
 
 void SFX_SetCnvTable(SfxHn *hn, int index, int value) {
@@ -250,11 +242,11 @@ int SFX_GetCnvTable(SfxHn *hn, int index) {
 }
 
 void SFXSET_SetTblPtn(SfxHn *hn, int value) {
-    hn->f60 = value;
+    hn->tblPtn = value;
 }
 
 int SFXSET_GetTblPtn(SfxHn *hn) {
-    return hn->f60;
+    return hn->tblPtn;
 }
 
 void SFX_SetTagInf(SfxHn *hn, char *data, int size) {
@@ -291,19 +283,19 @@ void SFX_GetTagInf(SfxHn *hn, char **data, int *size) {
 }
 
 void SFX_SetOutZscale(SfxHn *hn, int value) {
-    hn->f44 = value;
+    hn->zscale = value;
 }
 
 int SFX_GetOutZscale(SfxHn *hn) {
-    return hn->f44;
+    return hn->zscale;
 }
 
 void SFX_SetOutZoffset(SfxHn *hn, int value) {
-    hn->f48 = value;
+    hn->zoffset = value;
 }
 
 int SFX_GetOutZoffset(SfxHn *hn) {
-    return hn->f48;
+    return hn->zoffset;
 }
 
 void SFX_SetZclip(SfxHn *hn, float zmin, float zmax) {
@@ -336,35 +328,35 @@ void SFX_GetAlp3Prm(SfxHn *hn, unsigned char *alpha0, unsigned char *alpha1, uns
 }
 
 void SFX_SetColAdj(SfxHn *hn, int value) {
-    hn->f56 = value;
+    hn->colAdj = value;
 }
 
 int SFX_GetColAdj(SfxHn *hn) {
-    return hn->f56;
+    return hn->colAdj;
 }
 
 void SFX_SetSplitField(SfxHn *hn, int value) {
-    hn->f104 = value;
+    hn->splitField = value;
 }
 
 int SFX_GetSplitField(SfxHn *hn) {
-    return hn->f104;
+    return hn->splitField;
 }
 
 void SFX_SetProgOut(SfxHn *hn, int value) {
-    hn->f108 = value;
+    hn->progOut = value;
 }
 
 int SFX_GetProgOut(SfxHn *hn) {
-    return hn->f108;
+    return hn->progOut;
 }
 
 void SFX_SetCnvBottomUp(SfxHn *hn, int value) {
-    hn->f116 = value;
+    hn->cnvBottomUp = value;
 }
 
 int SFX_GetCnvBottomUp(SfxHn *hn) {
-    return hn->f116;
+    return hn->cnvBottomUp;
 }
 
 void SFX_ShiftYccPtrByLine(SfxFrame *frm, int lines) {
@@ -391,12 +383,12 @@ void SFX_SetMaxRowToYccPln(SfxFrame *frm, int height) {
 void sfx_ClipFrame(SfxFrame *frm, int second, int first) {
     first = first / 2 * 2;
     second = second / 2 * 2;
-    FUN_002b3fd0(&frm->plane[0], first, second);
-    FUN_002b3fd0(&frm->plane[1], first >> 1, second >> 1);
-    FUN_002b3fd0(&frm->plane[2], first >> 1, second >> 1);
+    sfx_ClipBufInf(&frm->plane[0], first, second);
+    sfx_ClipBufInf(&frm->plane[1], first >> 1, second >> 1);
+    sfx_ClipBufInf(&frm->plane[2], first >> 1, second >> 1);
 }
 
-void FUN_002b3fd0(SfxPlane *plane, int first, int second) {
+void sfx_ClipBufInf(SfxPlane *plane, int first, int second) {
     plane->height = plane->height - first;
     plane->addr = plane->addr + first * plane->pitch + second;
 }
@@ -413,8 +405,8 @@ int SFX_GetMaxAlpha(SfxHn *hn) {
     return CFT_GetMaxAlpha();
 }
 
-void FUN_002b4068(void) {
-    FUN_00283038();
+void SFX_SetOptimizeSpeed(int sw) {
+    CFT_SetOptimizeSpeed(sw);
 }
 
 void SFXSUD_Init(void) {
@@ -455,44 +447,44 @@ int SFX_GetTypeCcs(SfxHn *hn) {
     return SUD_AnalyTypeCcs((char *)sud[0], sud[1]);
 }
 
-void FUN_002b4130(SfxHn *hn) {
+int SFX_GetTypeIntl(SfxHn *hn) {
     /* matching construct: manual — the pair pointer is kept, so retail addresses both words from obj+96 */
     int *sud = hn->sud;
-    FUN_002b53a0(sud[0], sud[1]);
+    return SUD_AnalyTypeIntl((char *)sud[0], sud[1]);
 }
 
-void FUN_002b4150(SfxHn *hn) {
+int SFX_GetExtScan(SfxHn *hn) {
     /* matching construct: manual — the pair pointer is kept, so retail addresses both words from obj+96 */
     int *sud = hn->sud;
-    FUN_002b5400(sud[0], sud[1]);
+    return SUD_AnalyExtScan((char *)sud[0], sud[1]);
 }
 
-void FUN_002b4170(SfxHn *hn) {
+int SFX_GetExtFlag(SfxHn *hn) {
     /* matching construct: manual — the pair pointer is kept, so retail addresses both words from obj+96 */
     int *sud = hn->sud;
-    FUN_002b5490(sud[0], sud[1]);
+    return SUD_AnalyExtFlag((char *)sud[0], sud[1]);
 }
 
-void FUN_002b4190(SfxHn *hn) {
+int SFX_GetExtVal0(SfxHn *hn) {
     /* matching construct: manual — the pair pointer is kept, so retail addresses both words from obj+96 */
     int *sud = hn->sud;
-    FUN_002b54f8(sud[0], sud[1]);
+    return SUD_AnalyExtVal0((char *)sud[0], sud[1]);
 }
 
-void FUN_002b41b0(SfxHn *hn) {
+int SFX_GetExtVal1(SfxHn *hn) {
     /* matching construct: manual — the pair pointer is kept, so retail addresses both words from obj+96 */
     int *sud = hn->sud;
-    FUN_002b5578(sud[0], sud[1]);
+    return SUD_AnalyExtVal1((char *)sud[0], sud[1]);
 }
 
-void FUN_002b41d0(SfxHn *hn) {
+int SFX_GetExtVal2(SfxHn *hn) {
     /* matching construct: manual — the pair pointer is kept, so retail addresses both words from obj+96 */
     int *sud = hn->sud;
-    FUN_002b55f8(sud[0], sud[1]);
+    return SUD_AnalyExtVal2((char *)sud[0], sud[1]);
 }
 
-void FUN_002b41f0(SfxHn *hn) {
+int SFX_GetExtVal3(SfxHn *hn) {
     /* matching construct: manual — the pair pointer is kept, so retail addresses both words from obj+96 */
     int *sud = hn->sud;
-    FUN_002b5678(sud[0], sud[1]);
+    return SUD_AnalyExtVal3((char *)sud[0], sud[1]);
 }

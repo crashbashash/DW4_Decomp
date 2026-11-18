@@ -154,6 +154,15 @@ void mwsfsfx_UpdateAddInf(MwsfdPly *ply);
 void MWSFSFX_SetPicUsrDat(MwsfdPly *ply, char *ud, int size);
 int MWSFSFX_IsFrmCcs(MwsfdPly *ply);
 int MWSFD_IsFrmDivField(MwsfdPly *ply);
+int MWSFD_IsFrmIntl(MwsfdPly *ply);
+int MWSFD_GetFrmExtScan(MwsfdPly *ply);
+int MWSFD_GetFrmExtFlag(MwsfdPly *ply);
+int MWSFD_GetFrmExtVal0(MwsfdPly *ply);
+int MWSFD_GetFrmExtVal1(MwsfdPly *ply);
+int MWSFD_GetFrmExtVal2(MwsfdPly *ply);
+int MWSFD_GetFrmExtVal3(MwsfdPly *ply);
+void MWSFD_SetZTblCbFn(MwsfdPly *ply, void (*fn)(unsigned int *tbl, unsigned int *buf, float zmin, float zmax));
+void MWSFD_SetOptimizeSpeed(int sw);
 void mwsfsfx_SetCompoMode(MwsfdPly *ply);
 
 /* the stream starter */

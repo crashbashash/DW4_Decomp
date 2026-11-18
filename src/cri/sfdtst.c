@@ -23,28 +23,28 @@ void sftst_DebInit(void);
 void SFTST_Create(SfdTst *p)
 {
     memset(p, 0, 0x1C0);
-    p->f0 = 1;
+    p->tstflg = 1;
     p->pastat = 0;
     p->adjmode = 0;
     p->paused = 1;
     p->count = 10;
     sftst_ResetHist(p);
     p->master_time = 0;
-    p->f272 = 1;
+    p->master_unit = 1;
     p->help_time = 0;
     p->help_unit = 1;
     p->out_time = 0;
-    p->f304 = 1;
-    p->f312 = 0x412B;
-    p->f320 = 1000000;
-    p->f328 = 200000;
-    p->f336 = 1000000;
-    p->f344 = 0;
-    p->f352 = 1000000;
-    p->f360 = 0;
-    p->f368 = 1000000;
-    p->f376 = -1;
-    p->f384 = 0;
+    p->out_unit = 1;
+    p->tolerance = 0x412B;
+    p->tolerance_unit = 1000000;
+    p->excess = 200000;
+    p->excess_unit = 1000000;
+    p->adj_start = 0;
+    p->adj_start_unit = 1000000;
+    p->adj_poff = 0;
+    p->adj_poff_unit = 1000000;
+    p->base_hlp = -1;
+    p->base_out = 0;
     p->mt_max = 0;
     p->adj_limit = 0;
     p->adj_front = 0;
@@ -69,28 +69,28 @@ void sftst_ResetHist(SfdTst *tst)
 
 void SFTST_SetTstFlg(SfdTst *tst, int value)
 {
-    tst->f0 = value;
+    tst->tstflg = value;
 }
 
 /* Returns the first copied value so it holds v0 and the second takes v1. */
 long SFTST_SetTolerance(SfdTst *tst, SfdRatio *ratio)
 {
     long r = ratio->num;
-    tst->f312 = r;
-    tst->f320 = ratio->den;
+    tst->tolerance = r;
+    tst->tolerance_unit = ratio->den;
     return r;
 }
 
 void SFTST_SetExcessErr(SfdTst *tst, SfdRatio *ratio)
 {
-    tst->f328 = ratio->num;
-    tst->f336 = ratio->den;
+    tst->excess = ratio->num;
+    tst->excess_unit = ratio->den;
 }
 
 void SFTST_SetAdjStart(SfdTst *tst, SfdRatio *ratio)
 {
-    tst->f344 = ratio->num;
-    tst->f352 = ratio->den;
+    tst->adj_start = ratio->num;
+    tst->adj_start_unit = ratio->den;
 }
 
 long SFTST_SetAdjPoff(SfdTst *tst, SfdRatio *ratio)
@@ -98,9 +98,9 @@ long SFTST_SetAdjPoff(SfdTst *tst, SfdRatio *ratio)
     long a;
     long b;
     a = ratio->num;
-    tst->f360 = a;
+    tst->adj_poff = a;
     b = ratio->den;
-    tst->f368 = b;
+    tst->adj_poff_unit = b;
     return a;
 }
 
@@ -124,7 +124,7 @@ void SFTST_SetAdjFlg(SfdTst *tst, int paused)
 void SFTST_GoNextFrame(SfdTst *tst, SfdRatio *ratio)
 {
     if (tst->paused == 0) {
-        tst->out_time += tst->f304 * ratio->num / ratio->den;
+        tst->out_time += tst->out_unit * ratio->num / ratio->den;
     }
 }
 
@@ -142,7 +142,7 @@ void SFTST_Calc(SfdTst *tst, SfdRatio *mt, SfdRatio *hlp, SfdRatio *out)
     long t;
     int d;
 
-    if (hlp->den == 1 || tst->f0 == 0) {
+    if (hlp->den == 1 || tst->tstflg == 0) {
         *out = *mt;
         return;
     }
@@ -152,45 +152,45 @@ void SFTST_Calc(SfdTst *tst, SfdRatio *mt, SfdRatio *hlp, SfdRatio *out)
     } else if (tst->adjmode == 0) {
         if (mt->num > tst->mt_max) {
             tst->adjmode = 1;
-            if (tst->f376 == -1) {
-                adj = mt->den * tst->f344 / tst->f352;
+            if (tst->base_hlp == -1) {
+                adj = mt->den * tst->adj_start / tst->adj_start_unit;
             } else {
-                adj = mt->den * tst->f360 / tst->f368;
+                adj = mt->den * tst->adj_poff / tst->adj_poff_unit;
             }
-            tst->f376 = hlp->num;
-            tst->f384 = mt->num + adj;
+            tst->base_hlp = hlp->num;
+            tst->base_out = mt->num + adj;
             sftst_ResetHist(tst);
         } else if (tst->paused == 0) {
             tst->adjmode = 1;
         }
     }
     tst->mt_max = (tst->mt_max > mt->num) ? tst->mt_max : mt->num;
-    if (tst->f376 != -1) {
-        est = tst->f384 + mt->den * (hlp->num - tst->f376) / hlp->den;
+    if (tst->base_hlp != -1) {
+        est = tst->base_out + mt->den * (hlp->num - tst->base_hlp) / hlp->den;
     } else {
         est = 0;
     }
     if (tst->adjmode == 0) {
         if (tst->mt_max < est) {
             if (tst->paused != 0) {
-                tst->f376 = hlp->num;
-                tst->f384 = tst->mt_max;
+                tst->base_hlp = hlp->num;
+                tst->base_out = tst->mt_max;
             } else {
-                tst->f376 = hlp->num;
-                tst->f384 = tst->out_time;
+                tst->base_hlp = hlp->num;
+                tst->base_out = tst->out_time;
             }
             tst->adj_limit++;
         }
     } else if (tst->paused == 1) {
-        excess = mt->den * tst->f328 / tst->f336;
+        excess = mt->den * tst->excess / tst->excess_unit;
         if (excess < ((mt->num - est < 0) ? -(mt->num - est) : mt->num - est)) {
-            tst->f376 = hlp->num;
-            tst->f384 = mt->num;
+            tst->base_hlp = hlp->num;
+            tst->base_out = mt->num;
             sftst_ResetHist(tst);
             tst->excesserr++;
         } else {
             ave = sftst_UpdateMovAve(tst, (int)(mt->num - est));
-            tol = mt->den * tst->f312 / tst->f320;
+            tol = mt->den * tst->tolerance / tst->tolerance_unit;
             if (tol < ((ave < 0) ? -ave : ave)) {
                 if (tol < ave) {
                     q = ave * 2 / tol - 1;
@@ -200,14 +200,14 @@ void SFTST_Calc(SfdTst *tst, SfdRatio *mt, SfdRatio *hlp, SfdRatio *out)
                     tst->adj_rear -= (int)q;
                 }
                 step = q * tol / 2;
-                tst->f376 = hlp->num;
-                tst->f384 = est + step;
+                tst->base_hlp = hlp->num;
+                tst->base_out = est + step;
                 sftst_ModifyHist(tst, (int)step);
             }
         }
     }
-    if (tst->f376 != -1) {
-        t = tst->f384 + mt->den * (hlp->num - tst->f376) / hlp->den;
+    if (tst->base_hlp != -1) {
+        t = tst->base_out + mt->den * (hlp->num - tst->base_hlp) / hlp->den;
     } else {
         t = 0;
     }
@@ -215,14 +215,14 @@ void SFTST_Calc(SfdTst *tst, SfdRatio *mt, SfdRatio *hlp, SfdRatio *out)
     out->den = mt->den;
     if (out->num < tst->out_time) {
         out->num = tst->out_time;
-        out->den = tst->f304;
+        out->den = tst->out_unit;
     }
     tst->master_time = mt->num;
-    tst->f272 = mt->den;
+    tst->master_unit = mt->den;
     tst->help_time = hlp->num;
     tst->help_unit = hlp->den;
     tst->out_time = out->num;
-    tst->f304 = out->den;
+    tst->out_unit = out->den;
     d = (int)(mt->num - out->num);
     if (tst->adjmode == 0) {
         tst->diff_l_max = (tst->diff_l_max > d) ? tst->diff_l_max : d;

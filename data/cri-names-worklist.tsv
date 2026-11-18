@@ -1727,3 +1727,56 @@
 0x2b5c08	UTY_TmrToSec	high	sdk:libmwsfde.a/uty_tmr.o A (3s - -)
 0x2b5cf0	UTY_InitTsum	high	sdk:libmwsfde.a/uty_tmr.o A (3s - -)
 0x2b5d10	UTY_AddTsum	high	sdk:libmwsfde.a/uty_tmr.o A (3s - -)
+0x282490	SNDF_SendChMessage	medium	behaviour: sndf_SendMessage with a channel (below 32) in place of the broadcast 0xFFFF; a status byte (bit 7) is required; alternative SNDF_SendPortMessage
+0x282538	SNDF_SendVoiceMessage	medium	behaviour: builds a MIDI channel-voice message from kind 8..13 (note off to channel pressure) and two 7-bit data bytes for a channel; alternative SNDF_SendMidiMessage
+0x2827a0	SNDF_SendCtrlChange	medium	behaviour: MIDI control changes (0xB0 messages) on a port's channel, the 14-bit ones sent as an MSB/LSB pair; alternative SNDF_SendPortControl
+0x282ab8	SNDF_SetChannelParam	medium	behaviour: the per-channel 0xA5-0xA7 parameter messages, as SNDF_SetMasterParam sends 0xA4 for the master; alternative SNDF_SendChannelControl
+0x282c20	SNDF_StartSound	medium	behaviour: takes a free sound slot (1..24) for a message from 0xAE on and queues command 0xF00 for it, returning the slot; alternative SNDF_PlaySe
+0x282d10	SNDF_StopSound	medium	behaviour: queues command 0x1000 for a sound slot started by SNDF_StartSound; alternative SNDF_KeyOffSound
+0x282d88	SNDF_ReleaseSound	medium	behaviour: queues command 0x1100 for a sound slot, the command after SNDF_StopSound's; alternative SNDF_PauseSound
+0x282e00	SNDF_SetSoundPanVol	medium	behaviour: converts an angle to a pan position (through sndf_pan_remap in output mode 2) and a volume clamped to 255, and queues command 0x1200 for a sound slot
+0x282ed0	SNDF_StartChannelSound	medium	behaviour: builds a 0xA0 message for a channel and starts it through SNDF_StartSound; alternative SNDF_PlayChannelSe
+0x282f70	SNDF_SetSoundPitch	medium	behaviour: queues command 0x1800 for a sound slot with the value split into semitones and cents, as SNDF_SeqCommand's pitch command 8; alternative SNDF_SetSoundTranspose
+0x283018	CFT_SetFunctionName	medium	behaviour: the setter of cftcom_function_name, whose getter the RE4 CRI library (Raikaru/Persona4-Decompilation src/cri/re4/cft_common.c) calls CFT_GetFunctionName; alternative cft_SetFunctionName [re4 github.com/Raikaru/Persona4-Decompilation]
+0x283028	CFT_GetFunctionName	medium	RE4 CRI library (Raikaru/Persona4-Decompilation src/cri/re4/cft_common.c): returns cftcom_function_name ("This CFT function doesn't support ...", the same initial string) [re4 github.com/Raikaru/Persona4-Decompilation]
+0x283038	CFT_SetOptimizeSpeed	medium	RE4 CRI library (Raikaru/Persona4-Decompilation src/cri/re4/cft_common.c): the first of cft_common's two switch setters, a one-word store after cftcom_function_name; alternative CFT_SetOptimizeSize [re4 github.com/Raikaru/Persona4-Decompilation]
+0x283048	CFT_GetOptimizeSpeed	medium	behaviour: the getter of the word CFT_SetOptimizeSpeed stores
+0x284e80	cft_MergeArgb8888mbAlpha	medium	behaviour: per macroblock row, sets the alpha byte of each ARGB8888 pixel of the first half from the red byte of the second half (halved, plus 1: PS2 alpha 0..128); alternative cft_SetAlphaFromSecondHalf
+0x284f30	cft_CopyMbAlphaToArgb8888	medium	behaviour: copies the alpha plane of each macroblock (the second 384 bytes of a 768-byte block) through a table into byte 3 of a line-ordered ARGB8888 image; alternative cft_Ycc420mbAlpToArgb8888
+0x285040	cft_CopyMbAlphaToArgb8888mb	medium	behaviour: the same copy into a macroblock-ordered ARGB8888 buffer (1024 bytes a macroblock)
+0x298b48	MWSFD_IsFrmIntl	medium	behaviour: forwards to SFX_GetTypeIntl for the player's SFX handle, as MWSFD_IsFrmDivField and MWSFD_IsFrmCcs forward theirs
+0x298b60	MWSFD_GetFrmExtScan	medium	behaviour: forwards to SFX_GetExtScan for the player's SFX handle
+0x298b78	MWSFD_GetFrmExtFlag	medium	behaviour: forwards to SFX_GetExtFlag for the player's SFX handle
+0x298b90	MWSFD_GetFrmExtVal0	medium	behaviour: forwards to SFX_GetExtVal0 for the player's SFX handle
+0x298ba8	MWSFD_GetFrmExtVal1	medium	behaviour: forwards to SFX_GetExtVal1 for the player's SFX handle
+0x298bc0	MWSFD_GetFrmExtVal2	medium	behaviour: forwards to SFX_GetExtVal2 for the player's SFX handle
+0x298bd8	MWSFD_GetFrmExtVal3	medium	behaviour: forwards to SFX_GetExtVal3 for the player's SFX handle
+0x298d48	MWSFD_SetZTblCbFn	medium	behaviour: forwards to SFX_SetZTblCbFn for the player's SFX handle
+0x298ea8	MWSFD_SetOptimizeSpeed	medium	behaviour: forwards to SFX_SetOptimizeSpeed, which forwards to CFT_SetOptimizeSpeed
+0x29b788	sfadxt_PrepSupply	medium	behaviour: an empty function sfadxt_ExecServerSub calls before sfadxt_SupplyData (absent from the 2002 SDK sfd_adxt.o); alternative a check compiled out of the release build
+0x2abbc0	sfply_InitFlowCnt	medium	behaviour: clears one three-count group of the flow information (sfply_InitPlyInf calls it for the system, video and two audio groups; absent from the 2002 SDK sfd_ply.o); alternative sfply_ClearFlowCnt
+0x2b3bb8	SFX_SetZTblCbFn	medium	behaviour: stores the Z handle's table callback, which sfxzmv_MakeCnvZTbl calls in place of the built-in Z16/Z32 makers; alternative SFX_SetZCbFn
+0x2b3bc8	SFX_SetZTblCbArg	medium	behaviour: stores the word kept with that callback
+0x2b3fd0	sfx_ClipBufInf	medium	behaviour: drops lines from the top of one plane and moves its address by lines and pixels, for sfx_ClipFrame (as sfxset_ShiftBufInfByLine for SFX_ShiftYccPtrByLine); alternative sfxset_ClipBufInf
+0x2b4068	SFX_SetOptimizeSpeed	medium	behaviour: forwards its argument to CFT_SetOptimizeSpeed
+0x2b4130	SFX_GetTypeIntl	medium	behaviour: SUD_AnalyTypeIntl on the handle's picture user data, after SFX_GetTypeCcs as the SDK sfx_sud.o forwards
+0x2b4150	SFX_GetExtScan	medium	behaviour: SUD_AnalyExtScan on the handle's picture user data
+0x2b4170	SFX_GetExtFlag	medium	behaviour: SUD_AnalyExtFlag on the handle's picture user data
+0x2b4190	SFX_GetExtVal0	medium	behaviour: SUD_AnalyExtVal0 on the handle's picture user data
+0x2b41b0	SFX_GetExtVal1	medium	behaviour: SUD_AnalyExtVal1 on the handle's picture user data
+0x2b41d0	SFX_GetExtVal2	medium	behaviour: SUD_AnalyExtVal2 on the handle's picture user data
+0x2b41f0	SFX_GetExtVal3	medium	behaviour: SUD_AnalyExtVal3 on the handle's picture user data
+0x2b53a0	SUD_AnalyTypeIntl	medium	behaviour: the scan letter SUD_SetFmtTypeToBuf writes from its P/I table (record byte 20) is 'I'; alternative SUD_AnalyTypeScan
+0x2b5400	SUD_AnalyExtScan	medium	behaviour: a version-2 letter at byte 21, 'P' 1, 'I' 2, otherwise 0; alternative SUD_AnalyTypeSrcScan
+0x2b5490	SUD_AnalyExtFlag	medium	behaviour: a version-2 letter at byte 22 is not 'A'
+0x2b54f8	SUD_AnalyExtVal0	medium	behaviour: the first of four version-2 three-digit hexadecimal values (byte 23)
+0x2b5578	SUD_AnalyExtVal1	medium	behaviour: the second three-digit hexadecimal value (byte 26)
+0x2b55f8	SUD_AnalyExtVal2	medium	behaviour: the third three-digit hexadecimal value (byte 29)
+0x2b5678	SUD_AnalyExtVal3	medium	behaviour: the fourth three-digit hexadecimal value (byte 32), which ends the 0x23-byte record
+0x2b56f8	sud_AnalyHex3	medium	behaviour: reads the three hexadecimal digits at an offset of the record; alternative sud_GetHexVal
+0x2b5758	sud_StrToUl	medium	behaviour: a one-call wrapper of strtoul
+0x2b5838	sud_GetSudDatSize	medium	behaviour: the record size, 0x23, of a found record, as the RE4 CRI library's SUD_SearchSudDat stores it (Raikaru/Persona4-Decompilation src/cri/re4/sud_lib.c) [re4 github.com/Raikaru/Persona4-Decompilation]
+0x2b5c30	UTY_TmrToUsecF	medium	behaviour: the float form of UTY_TmrToUsec; alternative UTY_TmrToUsecFloat
+0x2b5c70	UTY_TmrToMsecF	medium	behaviour: the float form of UTY_TmrToMsec
+0x2b5cb0	UTY_TmrToSecF	medium	behaviour: the float form of UTY_TmrToSec
+0x2b5ce0	utytmr_SetUnit	medium	behaviour: stores utytmr_unit for UTY_InitTmr and UTY_SetTmrUnit; alternative that it is the SDK's UTY_SetTmrUnit and the wrapper before UTY_GetTmrUnit has another name

@@ -206,11 +206,13 @@ typedef enum SfdPicType {
     SFD_PICTYPE_B = 3
 } SfdPicType;
 
-/* SfdFrameInfo.f60, a copy of the picture attributes' f64; SfdFrmInfF60 is a placeholder for an
- * unknown enum of its own. */
-typedef enum SfdFrmInfF60 {
-    SFD_FRMINF_F60_0 = 0
-} SfdFrmInfF60;
+/* The siting of the chroma samples against the luma, horizontally and vertically: the M2V decoder
+ * reports 0 horizontally and 1 vertically (MPEG-2 4:2:0), the MPEG-1 decoder 1 and 1. An enum of
+ * its own in CRI's header. */
+typedef enum SfdChromaPos {
+    SFD_CHROMAPOS_COSITED = 0,
+    SFD_CHROMAPOS_CENTRE = 1
+} SfdChromaPos;
 
 typedef struct SfdFrameDetail {
     int f72;
@@ -222,9 +224,9 @@ typedef struct SfdFrameDetail {
     int vbv_buffer_size;                /* 100 */
     unsigned short display_horizontal_size; /* 104 */
     unsigned short display_vertical_size;   /* 106 */
-    unsigned char progressive_frame;    /* 108 */
-    unsigned char top_field_first;      /* 109 */
-    unsigned char repeat_first_field;   /* 110 */
+    signed char progressive_frame;      /* 108 */
+    signed char top_field_first;        /* 109 */
+    signed char repeat_first_field;     /* 110 */
     unsigned char aspect_ratio_information; /* 111 */
     unsigned char constrained_parameters_flag; /* 112 */
     unsigned char frame_rate_extension_n; /* 113 */
@@ -260,8 +262,8 @@ typedef struct SfdFrameInfo {
     int time_per_file;       /* 48 */
     int cat_time;            /* 52 */
     SfdSjChunk *picUsr;        /* 56 */
-    SfdFrmInfF60 f60;
-    int f64;
+    SfdChromaPos chromaPosH; /* 60 */
+    int chromaPosV;          /* 64 */
     char pad68[4];
     union {
         SfdFrameDetail detail;

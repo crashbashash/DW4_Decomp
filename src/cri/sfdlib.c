@@ -8,7 +8,7 @@
 #define SFD_HN_SIZE 14072
 
 extern char cri_sfd_version[];
-extern int sfd_cond_defaults[100];
+extern int SFPLY_cond_dfl[100];
 extern SfdPly *sfd_cur_hn;
 
 
@@ -59,7 +59,7 @@ long sfd_InitLib(SfdInitPrm *prm) {
     int i;
 
     UTY_MemsetDword(lib, 0, sizeof(SfdLibInf) / 4);
-    MEM_Copy((char *)lib->cond, (char *)sfd_cond_defaults, sizeof(lib->cond));
+    MEM_Copy((char *)lib->cond, (char *)SFPLY_cond_dfl, sizeof(lib->cond));
     lib->prm = *prm;
     lib->sysStat = 0;
     sfd_InitErr(&lib->err);

@@ -18,38 +18,38 @@ typedef struct CftGifPacket {
     int w[0x600];
 } CftGifPacket;
 
-extern char *DAT_004bb3e8;
-extern int DAT_004bb3ec;
-extern int cft_ver_str;
-extern CftGifPacket DAT_004bb3f8;
-extern char *volatile DAT_00573ea8;
+extern char *cftcom_function_name;
+extern int cftcom_optimize_speed;
+extern int cft_max_alpha;
+extern CftGifPacket cftcoladjtbl;
+extern char *volatile cft_version_ptr;
 
 int *CFT_GetVersionStr(void);
 void CFT_SetMaxAlpha(int max);
 
-void FUN_00283018(char *name)
+void CFT_SetFunctionName(char *name)
 {
-    DAT_004bb3e8 = name;
+    cftcom_function_name = name;
 }
 
-char *FUN_00283028(void)
+char *CFT_GetFunctionName(void)
 {
-    return DAT_004bb3e8;
+    return cftcom_function_name;
 }
 
-void FUN_00283038(int value)
+void CFT_SetOptimizeSpeed(int value)
 {
-    DAT_004bb3ec = value;
+    cftcom_optimize_speed = value;
 }
 
-int FUN_00283048(void)
+int CFT_GetOptimizeSpeed(void)
 {
-    return DAT_004bb3ec;
+    return cftcom_optimize_speed;
 }
 
 void CFT_Init(void)
 {
-    DAT_00573ea8 = "\nCRI CFT/PS2EE Ver.1.57 Build:Oct  6 2004 11:36:30\n";
+    cft_version_ptr = "\nCRI CFT/PS2EE Ver.1.57 Build:Oct  6 2004 11:36:30\n";
     *CFT_GetVersionStr() = 0;
     CFT_SetMaxAlpha(128);
 }
@@ -60,7 +60,7 @@ void CFT_Finish(void)
 
 int *CFT_GetVersionStr(void)
 {
-    return &cft_ver_str;
+    return &cft_max_alpha;
 }
 
 void CFT_SetMaxAlpha(int max)
@@ -331,10 +331,10 @@ void CFT_MakeYcc422ColAdjTbl(void *dst)
 void CFT_MakeArgb8888ColAdjTbl(void *dstp)
 {
     CftGifPacket *dst = dstp;
-    *dst = DAT_004bb3f8;
+    *dst = cftcoladjtbl;
 }
 
-void FUN_00284e80(CftPlane *plane)
+void cft_MergeArgb8888mbAlpha(CftPlane *plane)
 {
     int rows = plane->height / 16;
     int cols = plane->width / 32;
@@ -362,7 +362,7 @@ void FUN_00284e80(CftPlane *plane)
  * through table into byte 3 of every ARGB8888 pixel of a dest line image. s is set for the first
  * row before the loop as well: retail's gcse then keeps plane->base and cols * 2 out of the row
  * loop (the row loop's mult survives because that loop is no longer seen by loop.c). */
-void FUN_00284f30(CftPlane *plane, CftArgbBuf *dest, unsigned char *table)
+void cft_CopyMbAlphaToArgb8888(CftPlane *plane, CftArgbBuf *dest, unsigned char *table)
 {
     int rows = plane->height / 16;
     int cols = plane->width / 32;
@@ -389,7 +389,7 @@ void FUN_00284f30(CftPlane *plane, CftArgbBuf *dest, unsigned char *table)
 }
 
 /* The same alpha copy into a macroblock-ordered ARGB8888 buffer (1024 bytes per macroblock). */
-void FUN_00285040(CftPlane *plane, CftArgbBuf *dest, unsigned char *table)
+void cft_CopyMbAlphaToArgb8888mb(CftPlane *plane, CftArgbBuf *dest, unsigned char *table)
 {
     int rows = plane->height / 16;
     int cols = plane->width / 32;
