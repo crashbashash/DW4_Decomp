@@ -142,9 +142,9 @@ CATEGORY_EXPLAIN = {
                   "(config/source-approvals.tsv; docs/engine/source-approvals.md)",
     "asm-body": "the retail instructions in an `asm` function: links identically, recovers nothing, counted in no "
                 "figure above (docs/engine/asm-body-matches.md)",
-    "assembly": "owner-approved assembly, byte-identical: a hand-written `.S` source (config/assembly-sources.tsv) or an "
-                "MWCC `asm` function with an `asm-function` row (config/source-approvals.tsv); the original was "
-                "written in assembly, so it is matched, though not C (docs/engine/assembly-sources.md)",
+    "assembly": "owner-approved assembly, byte-identical: a hand-written `.S` source (config/assembly-sources.tsv), or an "
+                "MWCC `asm` function or EE GCC file-scope `__asm__` function with an `asm-function` row "
+                "(config/source-approvals.tsv); matched, though not C (docs/engine/assembly-sources.md)",
     "mismatch": "code bytes, size, tables or object shape differ",
     "compile": "does not compile",
 }
@@ -247,12 +247,14 @@ def collect():
     # once per file: a library unit's thousands of members share one answer, and each call stats its fragments
     asm_names = {path: asm_body_names(path) for path in set(paths.values())}
     asm_body_all = [s for s in syms if s[2] in paths and s[2] in asm_names[paths[s[2]]]]
-    asm_functions = {s[2] for s in asm_body_all
-                     if sourceapprovals.approved_asm_function(paths[s[2]], s[2], approvals)}
+    asm_functions = {s[2] for s in syms
+                     if s[2] in paths and ("asm-function", s[2]) in approvals
+                     and sourceapprovals.approved_asm_function(paths[s[2]], s[2], approvals)}
     asm_body = [s for s in asm_body_all if s[2] not in asm_functions]
     asm_body_names_set = {s[2] for s in asm_body}
-    # an owner-approved assembly source (tools/asmsources.py), or an MWCC `asm` function with an
-    # `asm-function` row, is matched, but it is not C: it stays out of `matched` and the C/C++ figures
+    # an owner-approved assembly source (tools/asmsources.py), or an MWCC `asm` function or an EE GCC
+    # unit's file-scope `__asm__` function with an `asm-function` row, is matched, but it is not C: it
+    # stays out of `matched` and the C/C++ figures
     assembly = [s for s in syms if s[2] in paths and (asmsources.is_assembly(paths[s[2]])
                                                        or s[2] in asm_functions)]
     have = set(paths) - asm_body_names_set - {s[2] for s in assembly}
@@ -1225,8 +1227,8 @@ def render_md(d):
                               pct(b["asm_body"], b["total"])))
     if b.get("functions_assembly"):
         A("assembly   : %s assembly sources, %s code bytes (%.1f %%), in the matched figures above: "
-          "owner-approved `.S` routines (config/assembly-sources.tsv) and MWCC `asm` functions "
-          "(`asm-function` rows, config/source-approvals.tsv) whose original was assembly"
+          "owner-approved `.S` routines (config/assembly-sources.tsv) and MWCC `asm` or EE GCC file-scope `__asm__` "
+          "functions (`asm-function` rows, config/source-approvals.tsv)"
           % (format(b["functions_assembly"], ","), format(b["assembly"], ","), pct(b["assembly"], b["total"])))
     A("```")
     A("")

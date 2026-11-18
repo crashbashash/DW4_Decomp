@@ -94,7 +94,10 @@ Two spellings are what the retail code needs, not style:
 - Without source, linking from retail: the SFD error callback `MWSFLIB_SfdErrFunc` (`0x295010`, the `SFD ERROR(%08X)`
   messages). The best C, which is the SDK `mwsfdlib.o` body plus the DW4 cases (read buffer, frame pool, ADXT count),
   differs only in register allocation: retail keeps the player in `s0`, the code in `s1` and the high half of the
-  text address in `s4`, and so does the SDK object, but a compile of the SDK-exact C does not.
+  text address in `s4`, and so does the SDK object, but a compile of the SDK-exact C does not (it gives the code
+  `s0` and the player `s1`). The 2002 object and retail agree through the history store, so this is not the later
+  tool chain of [sofdec-build-tool-asm-functions](source-approvals.md#sofdec-build-tool-asm-functions): CRI's C
+  allocated that way under their compiler, and the function stays with matching.
 - Whether `mwply_SetTimeFn` and `mwply_ExecTime` end `mwsfd.c` or open `mwsfply.c`; CRI's names for
   them would settle it by their prefix.
 - `mwply_SetTimeFn` and `mwply_ExecTime` wrap `SFD_SetExtClockFn` and `SFD_UpdateTime` (the names a later build of

@@ -134,7 +134,7 @@ byte-identical to retail.
 
 ### Owner-approved exceptions
 
-`config/source-approvals.tsv` holds the owner's rows; CRI has no `asm` row and no `asm-function` row. What it does
+`config/source-approvals.tsv` holds the owner's rows; CRI has no `asm` row and one `asm-function` row. What it does
 hold, for the CRI units (the rows are listed by anchor in [source approvals](source-approvals.md)):
 
 | category | rows | anchors |
@@ -142,8 +142,9 @@ hold, for the CRI units (the rows are listed by anchor in [source approvals](sou
 | `volatile` on words shared between threads, V-sync and callback chains | 77 | [adxm-thread-ids](source-approvals.md#adxm-thread-ids), [adxm-thread-flags](source-approvals.md#adxm-thread-flags), [adx-server-guards](source-approvals.md#adx-server-guards), [adxt-ready-count](source-approvals.md#adxt-ready-count), [srd-module-words](source-approvals.md#srd-module-words), [srd-server-words](source-approvals.md#srd-server-words), [srd-spin-counter](source-approvals.md#srd-spin-counter), [svm-lock-counts](source-approvals.md#svm-lock-counts), [dtx-server-flag](source-approvals.md#dtx-server-flag), [mwsfd-handle-used](source-approvals.md#mwsfd-handle-used), [mwsfsvr-vsync-count](source-approvals.md#mwsfsvr-vsync-count), [sfd-play-pending](source-approvals.md#sfd-play-pending), [sfd-time-counts](source-approvals.md#sfd-time-counts), [sfx-handle-used-flag](source-approvals.md#sfx-handle-used-flag), [sud-timer](source-approvals.md#sud-timer) |
 | `volatile` on the build-string pointer words each module reads or stores and never uses | 24 | [build-string-reads](source-approvals.md#build-string-reads), [build-string-stores](source-approvals.md#build-string-stores) |
 | `volatile` on hardware registers (the MPV PS2 file's DMA channel registers) | 7 | [sony-hardware-registers](source-approvals.md#sony-hardware-registers) |
+| `asm-function`: a function retail took from a later tool chain than ee-gcc 2.96, proven against the 2002 SDK object | 1 | [sofdec-build-tool-asm-functions](source-approvals.md#sofdec-build-tool-asm-functions) |
 
-Those 108 rows count 210 `volatile` statements. The `sync` and `ei` pair in one SNDF function needs no row: C cannot
+The 108 `volatile` rows count 210 `volatile` statements. The `sync` and `ei` pair in one SNDF function needs no row: C cannot
 spell them ([source approvals](source-approvals.md#the-approval-rule)). The owner also approved integer-typed fields
 that are cast at each use, on the condition that the typing describes the types rather than one call site (one
 declaration, every function that touches it matching, none needing the pointer form): the HTCI and DVCI file-list

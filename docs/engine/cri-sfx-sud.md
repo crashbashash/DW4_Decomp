@@ -14,7 +14,11 @@ SUD's timer words and the timer-register tables are declared `volatile`, and the
 approved ([source approvals](source-approvals.md#sud-timer)). SFX's and SUD's inits store their version strings in
 `volatile` words ([build-string stores](source-approvals.md#build-string-stores)), and the SFX handles' in-use word is
 read and cleared through a `volatile` pointer ([sfx-handle-used-flag](source-approvals.md#sfx-handle-used-flag)); all
-are approved. The SFX files share `include/dw4/cri/sfx.h`. A plane's address (`SfxPlane.addr`) is declared `int` and
+are approved. `sfxzmv_GetZfrmInf` is an approved assembly function in `sfxz.c`, a file-scope `__asm__` block with
+its plain C in the comment beside it ([sofdec-build-tool-asm-functions](source-approvals.md#sofdec-build-tool-asm-functions)):
+that C compiles to the 2002 SDK's `sfx_zmv.o` word for word, while retail, a later build, keeps the size copy
+before the return-address save, fills the first branch's slot from its target and pads the next label, which
+ee-gcc 2.96 gives from no C. The SFX files share `include/dw4/cri/sfx.h`. A plane's address (`SfxPlane.addr`) is declared `int` and
 cast at use; the owner approved that on the condition that the typing describes the types rather than one call site
 ([the same condition as HTCI](cri-htci.md#integer-typed-list-pointer)).
 `SFX_DecideTableAlph3` (the conversion file's alpha-3 table choice) is named from the RE4 GameCube symbol table
@@ -82,9 +86,4 @@ are `SFX_SetCnvBottomUp`/`SFX_GetCnvBottomUp` (the SFX side of `mwPlySetCnvBotto
   `sfxzmv_MakeCnvZTbl` reaches `sfxzmv_MakeOrgZ32Tbl`; the RE4 GameCube `sfx_zmv.c` splits that builder into
   `sfxzmv_MakeOrgZ32TblByCCIR` and `sfxzmv_MakeOrgZ32TblByDirect`, so the forward stands where the choice between them
   is made (alternative `sfxzmv_MakeOrgZ32TblByCCIR`).
-- Without source: `sfxzmv_GetZfrmInf` (`0x2b45b0`, 4 words off in plain C: the copy of the size parameter goes into the
-  first branch's delay slot, where retail leaves it before the return-address save and fills the slot from the branch
-  target). The compiler's delay-slot filler takes it from above the branch unless an access it scans past is
-  `volatile`; the function matches with the chunk's valid-flag read `volatile` (or `SfxChunk.valid` declared so, which
-  changes no other SFX function), the same later-build difference as the handles' in-use word. It waits for an owner
-  ruling. `sfxcnv_CnvFrmArgb8888mbToZ` matches with the destination's format word as the CFT Z-format enum.
+- `sfxcnv_CnvFrmArgb8888mbToZ` matches with the destination's format word as the CFT Z-format enum.

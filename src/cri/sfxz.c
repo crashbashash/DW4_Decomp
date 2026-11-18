@@ -140,6 +140,78 @@ void SFXZ_GetTagInf(SfxZHn *zhn, char **data, int *size) {
     *data = value4;
 }
 
+/* sfxzmv_GetZfrmInf: the Z-frame chunk's `tag` .. `endtag` entry, or 0 and 0 when there is no chunk.
+ * Its plain C, which the 2002 SDK's sfx_zmv.o is compiled from word for word:
+ *
+ *     void sfxzmv_GetZfrmInf(SfxZHn *zhn, char *tag, char *endtag, char **data, int *size) {
+ *         SfxChunk *vfrm = &zhn->vfrm;
+ *         SfdSjChunk in;
+ *         SfdSjChunk out;
+ *         if (vfrm->valid != 1 || vfrm->data == 0) {
+ *             *data = 0;
+ *             *size = 0;
+ *             return;
+ *         }
+ *         in.data = vfrm->data;
+ *         in.len = vfrm->size;
+ *         SJ_SearchTag(&in, tag, endtag, &out);
+ *         *data = out.data;
+ *         *size = out.len;
+ *     }
+ *
+ * Under this unit's ee-gcc 2.96 it is the SDK object's code: the copy of `size` fills the first
+ * test's branch delay slot (`bne; move s1,t0`). This build was made by a later tool chain: the copy
+ * stays before `sd ra`, the slot takes the target's first store (`bnel; sw zero,0(s0)`), the branch
+ * skips that store, and the label after the failure path's `b` is padded to 8 bytes with a `nop`
+ * nothing reaches. No C spelling gives that under 2.96, so the function is written as assembly. */
+__asm__(
+    "\t.section .text.sfxzmv_GetZfrmInf,\"ax\",@progbits\n"
+    "\t.align 3\n"
+    "\t.globl sfxzmv_GetZfrmInf\n"
+    "\t.ent sfxzmv_GetZfrmInf\n"
+    "sfxzmv_GetZfrmInf:\n"
+    "\t.frame $sp, 64, $31\n"
+    "\t.mask 0x80030000, -16\n"
+    "\t.set noreorder\n"
+    "\taddiu $sp, $sp, -64\n"
+    "\taddiu $4, $4, 40\n"             /* a0: vfrm = &zhn->vfrm */
+    "\tsd $16, 32($sp)\n"
+    "\tmove $16, $7\n"                 /* s0: data */
+    "\tsd $17, 40($sp)\n"
+    "\tmove $17, $8\n"                 /* s1: size */
+    "\tsd $31, 48($sp)\n"
+    "\tli $3, 1\n"
+    "\tlw $2, 0($4)\n"                 /* vfrm->valid */
+    "\tbnel $2, $3, .Lno_chunk\n"
+    "\tsw $0, 0($16)\n"                /* *data = 0 */
+    "\tlw $3, 4($4)\n"                 /* vfrm->data */
+    "\tbnel $3, $0, .Lsearch\n"
+    "\tlw $2, 8($4)\n"                 /* vfrm->size */
+    "\tsw $0, 0($16)\n"                /* *data = 0 */
+    ".Lno_chunk:\n"
+    "\tb .Ldone\n"
+    "\tsw $0, 0($17)\n"                /* *size = 0 */
+    "\tnop\n"
+    ".Lsearch:\n"
+    "\tmove $4, $sp\n"                 /* &in */
+    "\taddiu $7, $sp, 16\n"            /* &out */
+    "\tsw $3, 0($sp)\n"                /* in.data */
+    "\tjal SJ_SearchTag\n"
+    "\tsw $2, 4($sp)\n"                /* in.len */
+    "\tlw $3, 16($sp)\n"
+    "\tlw $2, 20($sp)\n"
+    "\tsw $3, 0($16)\n"                /* *data = out.data */
+    "\tsw $2, 0($17)\n"                /* *size = out.len */
+    ".Ldone:\n"
+    "\tld $16, 32($sp)\n"
+    "\tld $17, 40($sp)\n"
+    "\tld $31, 48($sp)\n"
+    "\tjr $31\n"
+    "\taddiu $sp, $sp, 64\n"
+    "\t.set reorder\n"
+    "\t.end sfxzmv_GetZfrmInf\n"
+    "\t.previous\n");
+
 void SFXZ_GetZfrmRange(SfxZHn *zhn, int frame, int *first, int *second) {
     char *p;
     int len;

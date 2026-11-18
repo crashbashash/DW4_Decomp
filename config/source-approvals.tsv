@@ -378,6 +378,7 @@ volatile	sfxalp_SearchFreeHn	1	#sfx-handle-used-flag
 volatile	sfxzmv_SearchFreeHn	1	#sfx-handle-used-flag
 volatile	SFXA_Destroy	1	#sfx-handle-used-flag
 volatile	SFXZ_Destroy	1	#sfx-handle-used-flag
+asm-function	sfxzmv_GetZfrmInf	1	#sofdec-build-tool-asm-functions
 volatile	sfply_ExecOne	1	#sfd-play-pending
 volatile	SFTIM_InitHn	6	#sfd-time-counts
 volatile	sftim_CntupHnVbIn	1	#sfd-time-counts

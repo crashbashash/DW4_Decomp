@@ -409,10 +409,12 @@ def main(argv=None):
     asm_names = {path: unitprofiles.asm_body_names(path) for path in {path for _, _, _, path in cands}}
     asm_bodies = {nm for _, _, nm, path in cands if nm in asm_names[path]}
     approvals = sourceapprovals.load()
-    # an MWCC `asm` function the owner approved (an `asm-function` row) was written in assembly in the
-    # original source: it is counted with the hand-written assembly sources, not as an asm body
+    # an MWCC `asm` function, or an EE GCC unit's file-scope `__asm__` function, the owner approved (an
+    # `asm-function` row) was written in assembly in the original source: it is counted with the
+    # hand-written assembly sources, not as an asm body (an unapproved `__asm__` function is `unapproved`)
     asm_functions = {nm for _, _, nm, path in cands
-                     if nm in asm_bodies and sourceapprovals.approved_asm_function(path, nm, approvals)}
+                     if ("asm-function", nm) in approvals
+                     and sourceapprovals.approved_asm_function(path, nm, approvals)}
     asm_bodies -= asm_functions
     assembly = asmsources.approved_names({nm: path for _, _, nm, path in cands}) | asm_functions
     decompiled = [nm for _, _, nm, _ in cands if nm not in asm_bodies and nm not in assembly]

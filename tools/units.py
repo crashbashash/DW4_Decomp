@@ -282,8 +282,9 @@ def scan(src_dir="src", symbols="config/SLUS-20836/symbols.txt", unit_objects=No
                 found = [(name, 0, 0) for name in asmsources.approved_definitions(path)]
             else:
                 # a unity-built library unit is only includes of its fragments: read what the
-                # compiler sees
-                found = definitions(srctext.read(path))
+                # compiler sees; an EE GCC unit's assembly function is a file-scope `__asm__` block
+                text = srctext.read(path)
+                found = definitions(text) + (list(asmsources.gcc_functions(text)) if "__asm__" in text else [])
             for name, _s, _e in found:
                 # A stock file can hold a definition its build compiles out (pngrutil.c's WinCE
                 # strtod). Its unit row names what it really defines, so such a name stays with

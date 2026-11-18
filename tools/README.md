@@ -21,7 +21,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 | [`changedunits.py`](changedunits.py) | the files changed since a git revision (committed, staged or not, new) and the translation units whose source or transitive `#include`s they touch, for `check.py --changed-since` |
 | [`units.py`](units.py) | resolve a symbol to its definition in a multi-function source file |
 | [`srctext.py`](srctext.py) | read a source as the compiler sees it, with a unity-built unit's `#include "src/..."` fragments expanded |
-| [`asmsources.py`](asmsources.py) | the owner-approved hand-written `.S` sources in `src/` (`config/assembly-sources.tsv`); refuses any other |
+| [`asmsources.py`](asmsources.py) | the owner-approved hand-written `.S` sources in `src/` (`config/assembly-sources.tsv`); refuses any other; and an EE GCC unit's assembly functions, file-scope `__asm__` blocks of one function each (approved by `asm-function` rows) |
 | [`srctree.py`](srctree.py) | resolve a filename to its path when `src/` is not flat |
 | [`jumptables.py`](jumptables.py) | find the switches' jump tables and record them in a config file |
 | [`syscalls.py`](syscalls.py) | recover the EE kernel syscall stubs → `config/SLUS-20836/syscalls.txt` |
@@ -103,7 +103,7 @@ Run everything from the repository root. The Makefile calls the build tools; the
 
 ## Tests
 
-`test_regions.py`, `test_debt_readability.py`, `test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_perm_refine.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_asmsources.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_data_only_units.py`, `test_srctext.py`, `test_verify_cache.py`, `test_elf_tables.py`, `test_cxx_sweep.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`, `test_listing.py`, `test_kpatch.py`
+`test_regions.py`, `test_debt_readability.py`, `test_function_extents.py`, `test_multiple_jump_tables.py`, `test_permuter_paths.py`, `test_perm_refine.py`, `test_build_options.py`, `test_definitions.py`, `test_asm_body_counting.py`, `test_asmsources.py`, `test_gcc_asm_functions.py`, `test_target_asm.py`, `test_whole_file_units.py`, `test_data_only_units.py`, `test_srctext.py`, `test_verify_cache.py`, `test_elf_tables.py`, `test_cxx_sweep.py`, `test_unitcompilers.py`, `test_unitobject_metadata.py`, `test_unitobjects.py`, `test_verify_relocations.py`, `test_listing.py`, `test_kpatch.py`
 
 ## Subfolders
 

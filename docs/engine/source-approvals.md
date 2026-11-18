@@ -11,7 +11,18 @@ Each approved use has a row in `config/source-approvals.tsv`: `kind` (`asm`, `vo
 `local-decl`),
 `symbol`, `count` and the anchor of its evidence below. An `asm-function` row approves a whole MWCC `asm`
 function, one written in assembly in the original source; its count is 1. Without it, such a function is
-an asm body ([asm-body matches](asm-body-matches.md)), which counts in no matched figure. Only the owner approves a row. An agent may write one only
+an asm body ([asm-body matches](asm-body-matches.md)), which counts in no matched figure.
+
+In a Sony EE GCC whole-file unit the same row approves a function written as a file-scope `__asm__("...");`
+block: the block starts a line, sits in the unit's file in address order among its C functions, and defines
+exactly one function (the `.globl` name its text also labels; a block defining none or several stops every tool
+that reads `src/`). The unit keeps its compiler and flags. With the row the function counts like an approved MWCC
+`asm` function, as `assembly` (matched, not C, readable once named); without it the function is `unapproved`
+and its block counts in `inline_asm.other`. The owner approves these only for a function whose retail code
+comes from a later build tool than the project's ee-gcc 2.96, proven against CRI's 2002 SDK object: the SDK object
+is what the function's plain C compiles to under the unit's profile, and retail differs from it only in what the
+tool chain does (delay-slot filling, alignment padding). The plain C stays beside the block in a comment, with the
+measured difference ([sofdec-build-tool-asm-functions](#sofdec-build-tool-asm-functions)). Only the owner approves a row. An agent may write one only
 when the owner has explicitly told it to add that function, after reviewing its evidence. It never adds
 one on its own initiative or as part of a broader request. The table is one of the oracle's own files
 (`.githooks/oracle-files.txt`).
@@ -1093,6 +1104,46 @@ evidence:
 * The Persona 4 decompilation ([Raikaru/Persona4-Decompilation](https://github.com/Raikaru/Persona4-Decompilation)),
   built with the same ee-gcc 2.96 at `-O2 -G0` from SFX 2.08-generation sources, needs a non-C construct for the
   same empty slot in its alpha free (`src/cri/re4/sfx_alp.c`, lines 57-68: an empty `asm` memory barrier).
+
+### sofdec-build-tool-asm-functions
+
+`sfxzmv_GetZfrmInf` (`0x2b45b0`, 128 bytes), a file-scope `__asm__` function in `src/cri/sfxz.c` (owner's ruling
+of 2026-11-18 on build-tool differences: an `asm-function` row once the function is proven against its 2002 SDK
+object). It returns the Z-frame chunk's entry between two tags, or 0 and 0 when the chunk is missing.
+
+* Its plain C, kept in the comment above the block, compiles under the unit's profile (ee-gcc 2.96, `-O2 -G0
+  -ffunction-sections`) to the code of `sfxzmv_GetZfrmInf` in the 2002 SDK's `sfx_zmv.o` (`libmwsfde.a`,
+  [SkeletonPicture/recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)): all 30 words equal,
+  relocated fields unrelocated in both.
+* Retail is the same function built by a later tool chain. The differing region, from the prologue to the
+  failure path's branch (SDK = our C, then retail):
+
+  | SDK `sfx_zmv.o` and our C | retail |
+  |---|---|
+  | `sd s1,40(sp)` | `sd s1,40(sp)` |
+  | `sd ra,48(sp)` | `move s1,t0` |
+  | `li v1,1` | `sd ra,48(sp)` |
+  | `lw v0,0(a0)` | `li v1,1` |
+  | `bne v0,v1,fail` | `lw v0,0(a0)` |
+  | `move s1,t0` (slot) | `bnel v0,v1,fail+4` |
+  | `lw v1,4(a0)` | `sw zero,0(s0)` (slot, the target's first store) |
+  | `bnel v1,zero,search` | `lw v1,4(a0)` |
+  | `lw v0,8(a0)` | `bnel v1,zero,search` |
+  | `fail: sw zero,0(s0)` | `lw v0,8(a0)` |
+  | `b done` | `fail: sw zero,0(s0)` |
+  | `sw zero,0(s1)` | `b done` |
+  | `search:` | `sw zero,0(s1)` |
+  | | `nop` (alignment of `search`, never executed) |
+  | | `search:` |
+
+  Retail keeps the copy of `size` ahead of `sd ra`, fills the first branch's slot from its target and moves the
+  branch past the copied store, and pads the next label to 8 bytes. ee-gcc 2.96's delay-slot pass takes the copy
+  into the slot whatever the C says: it scans back from the branch over `lw`, `li` and `sd ra`, none of which
+  conflicts with it. Only a `volatile` access stops that scan, and the owner did not approve one here.
+* `MWSFLIB_SfdErrFunc` and `mwPlyCreateSofdec`, the other candidates of the ruling, are not approved: the 2002
+  `mwsfdlib.o` allocates the error callback's registers as retail does, so its difference is C to be found, and the
+  2002 `mwsfdcre.o` builds the player search from other source (432-byte handles, another loop), so it shows
+  nothing about the slot.
 
 ### local-decl-vsync-counts
 

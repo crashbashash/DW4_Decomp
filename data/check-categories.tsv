@@ -10564,6 +10564,7 @@
 002b4380	sfxzmv_SetTagGrp	match	-
 002b4468	SFXZ_GetTagInf	match	-
 002b4498	SFXZ_GetZfrmRange	match	-
+002b45b0	sfxzmv_GetZfrmInf	assembly	-
 002b4630	sfxzmv_MakeOrgZTbl	match	-
 002b4648	sfxzmv_MakeOrgZ32Tbl	match	-
 002b4788	SFXZ_MakeCnvZTbl	match	-

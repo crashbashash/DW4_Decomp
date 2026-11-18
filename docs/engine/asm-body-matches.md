@@ -27,7 +27,9 @@ Where the original source itself is an MWCC `asm` function, as some of the compi
 function is written that way and approved with an `asm-function` row in `config/source-approvals.tsv`
 ([source approvals](source-approvals.md)). The evidence has to show the original was written in
 assembly, as for a [hand-written assembly source](assembly-sources.md). An approved one counts with the
-hand-written assembly sources; one without a row is an asm body, as below.
+hand-written assembly sources; one without a row is an asm body, as below. A Sony EE GCC whole-file unit holds
+its approved assembly function as a file-scope `__asm__` block instead, under the same row
+([the approval rule](source-approvals.md#the-approval-rule)); without the row that function is `unapproved`.
 
 ## If an asm body appears in `src/`
 

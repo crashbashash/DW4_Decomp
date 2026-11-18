@@ -22098,6 +22098,7 @@
       "sfxzmv_SetTagGrp": "0x002b4380",
       "SFXZ_GetTagInf": "0x002b4468",
       "SFXZ_GetZfrmRange": "0x002b4498",
+      "sfxzmv_GetZfrmInf": "0x002b45b0",
       "sfxzmv_MakeOrgZTbl": "0x002b4630",
       "sfxzmv_MakeOrgZ32Tbl": "0x002b4648",
       "SFXZ_MakeCnvZTbl": "0x002b4788",
