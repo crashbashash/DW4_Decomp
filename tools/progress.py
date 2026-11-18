@@ -515,7 +515,7 @@ DEBT_COUNTERS = [
     ("profile_split.units", "units whose compiler, optimisation level, -sdatathreshold or -inline setting differs from their library's main profile (config/SLUS-20836/units.tsv; a library was one build)"),
     ("profile_split.bytes", "bytes of those"),
     ("opt_pragma.statements", "optimiser, inlining, code-generation and data pragmas in src/ (`peephole`, `optimize_for_size`, `schedule`, `pool_strings`, ...; docs/engine/mwcc-pragmas.md): a flag change written in the source"),
-    ("decl.local_externs", "declarations, in a unit's own text (its file, its `.inc` fragments, a header only it includes), of a symbol another unit defines; FUN_/DAT_ placeholders and assembly symbols one unit uses are exempt (tools/declarations.py)"),
+    ("decl.local_externs", "declarations, in a unit's own text (its file, its `.inc` fragments, a header only it includes), of a symbol another unit defines; FUN_/DAT_ placeholders, assembly symbols one unit uses, and copies the owner approved (`local-decl` rows, config/source-approvals.tsv) are exempt (tools/declarations.py)"),
     ("decl.varargs", "prototypes that leave out a symbol's parameters: `(...)` unless the C definition is variadic (counted with no C definition too), or a C `()` for a definition that takes parameters"),
     ("decl.type_conflicts", "declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters"),
     ("decl.header_conflicts", "symbols declared in two or more headers that disagree on the type"),
@@ -889,7 +889,7 @@ READABLE_CHECKS = [
     ("idioms", "no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C`"),
     ("fields", "fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset"),
     ("virtuals", "virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer"),
-    ("declarations", "what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol, no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition"),
+    ("declarations", "what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol (a copy with an owner `local-decl` row aside), no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition"),
 ]
 _READABLE = {}
 

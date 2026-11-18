@@ -16,7 +16,12 @@ local extern   a declaration, in a unit's own text, of a symbol another unit def
                prototype of the unit's own symbol (a C++ unit's `extern "C"` linkage line, a library
                header's own prototypes) is not one. Neither is a declaration of an unnamed placeholder
                (`FUN_<va>`, `DAT_<va>`) or of a symbol with no C definition that only one unit declares:
-               until it is named or decompiled, the unit that uses it is its home.
+               until it is named or decompiled, the unit that uses it is its home. A copy the owner
+               approved (a `local-decl` row of config/source-approvals.tsv, docs/engine/source-approvals.md:
+               the symbol and how many copies of it the tree keeps) is not counted and does not fail a
+               function, while the tree holds exactly that many; any other count, or none, voids the row. An approved copy
+               is no `varargs` or type-conflict debt either: what it states differently from the
+               definition is the reason it is kept.
 varargs        a prototype that does not state the parameters of a symbol that has them: a whole list of
                `(...)`, unless a C definition of the symbol is itself variadic (a symbol with no C
                definition counts: `(...)` states no type, and no definition says the list is variable),
@@ -39,6 +44,8 @@ fail a function, but its definitions are the reference for the code that calls i
 
     python3 tools/declarations.py                          # the four counts
     python3 tools/declarations.py --list varargs [PATH]    # local | varargs | conflicts | headers
+
+`--list local` also prints the approved copies, marked `[approved #anchor]`, so they stay visible.
 """
 import argparse
 import bisect
@@ -48,6 +55,7 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import sourceapprovals  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UNIT_EXT = (".c", ".cpp")
@@ -526,8 +534,14 @@ class Index:
     """Every declaration and definition under `root`/src and `root`/include, the translation units they
     belong to, and the debt each declaration carries."""
 
-    def __init__(self, root=ROOT):
+    def __init__(self, root=ROOT, approvals=None):
+        """`approvals` is {symbol: (count, evidence)} of the `local-decl` rows; None reads them from the
+        tree's config/source-approvals.tsv."""
         self.root = root
+        if approvals is None:
+            table = sourceapprovals.load(os.path.join(root, "config", "source-approvals.tsv"))
+            approvals = {symbol: row for (kind, symbol), row in table.items() if kind == sourceapprovals.LOCAL_DECL}
+        self.approvals = approvals
         self.types = Types()
         self.texts, self.includes = {}, {}
         for top in ("src", "include"):
@@ -673,13 +687,28 @@ class Index:
                 if self.conflicts_with_definition(d):
                     self.conflicts.append(d)
                     self.bad.add(id(d))
-        for d in candidates:
-            # an unnamed placeholder, or a symbol still in assembly that one unit uses, has its
-            # declaration where it is used until it is named or decompiled
-            if PLACEHOLDER.fullmatch(d.name) or (d.name not in defined and len(consumers[d.name]) == 1):
+        # an unnamed placeholder, or a symbol still in assembly that one unit uses, has its
+        # declaration where it is used until it is named or decompiled
+        counted = [d for d in candidates
+                   if not (PLACEHOLDER.fullmatch(d.name) or (d.name not in defined and len(consumers[d.name]) == 1))]
+        self.local_declared = collections.Counter(d.name for d in counted)
+        self.local_listing = []                        # (declaration, evidence anchor of its approval or None)
+        approved = set()
+        for d in counted:
+            row = self.approvals.get(d.name)
+            if row is not None and row[0] == self.local_declared[d.name]:
+                self.local_listing.append((d, row[1]))
+                approved.add(id(d))
                 continue
+            self.local_listing.append((d, None))
             self.local.append(d)
             self.bad.add(id(d))
+        # an approved copy is kept as written, and what it states differently from the definition (a
+        # `volatile`, `long` for `int`, no parameters) is why it is kept: it is no other debt either
+        if approved:
+            self.varargs = [d for d in self.varargs if id(d) not in approved]
+            self.conflicts = [d for d in self.conflicts if id(d) not in approved]
+            self.bad -= approved
         by_name = collections.defaultdict(lambda: collections.defaultdict(set))
         for rel, decls in self.decls.items():
             if not rel.endswith(HEADER_EXT) or self.stock(rel):
@@ -797,15 +826,20 @@ def main(argv=None):
         for n in idx.header_conflicts:
             print(n)
         return 0
-    rows = {"local": idx.local, "varargs": idx.varargs, "conflicts": idx.conflicts}[a.list]
+    rows = {"local": idx.local_listing, "varargs": idx.varargs, "conflicts": idx.conflicts}[a.list]
     want = a.path and os.path.relpath(os.path.abspath(a.path), ROOT).replace(os.sep, "/")
     for d in rows:
+        approved = None
+        if a.list == "local":
+            d, approved = d
         if want and not (d.path == want or d.path.startswith(want.rstrip("/") + "/")):
             continue
         extra = ""
         if a.list == "conflicts":
             t = idx.definition[d.name]
             extra = "   defined %s:%d as %s" % (t.path, t.line, t.signature())
+        if approved:
+            extra = "   [approved %s]" % approved
         print("%s:%d: %s%s" % (d.path, d.line, d.signature(), extra))
     return 0
 

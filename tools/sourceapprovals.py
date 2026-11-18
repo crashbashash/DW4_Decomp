@@ -7,13 +7,19 @@ counts as matched only once the project owner has reviewed the evidence and adde
 config/source-approvals.tsv. Until then `make check` files it as `unapproved`: its source stays and
 links byte-identically, but it counts in no matched figure (docs/engine/source-approvals.md).
 
-A row is `kind <TAB> symbol <TAB> count <TAB> evidence`: `asm`, `volatile` or `asm-function`, the function,
-how many uses reach it, and the anchor of the evidence in docs/engine/source-approvals.md. `asm-function`
+A row is `kind <TAB> symbol <TAB> count <TAB> evidence`: `asm`, `volatile`, `asm-function` or `local-decl`,
+the function, how many uses reach it, and the anchor of the evidence in docs/engine/source-approvals.md. `asm-function`
 approves a whole MWCC `asm` function, written in assembly in the original source (its count is 1); without
 the row such a function is an asm body, which counts in no matched figure. The count voids the
 approval when another use appears. A call of an MWCC `__I_<mnemonic>` instruction builtin emits the
 instruction it names, so it counts as an `asm` use. `sync` and `ei` need no row, since C cannot spell
 them, and stock source under src/third_party/ is out of scope, as it is for tools/inline_asm.py.
+
+A `local-decl` row is the odd one out: its symbol is the declared symbol, not a function, and its count is the
+number of local declarations of it outside its home that the owner approved, in the whole tree (the copy a
+unit keeps because the header form changes its bytes, tools/declarations.py). Those copies leave
+`decl.local_externs` and the readable `declarations` check. Another copy, or none left, voids the row:
+`--stale` reports it and the copies count as debt again.
 
 The kernel patches' functions (tools/kpatch.py) are no image functions, but their `asm` and `volatile`
 need rows all the same, keyed by the patch function's name (`<name>_<patch>` when several patches define
@@ -42,7 +48,9 @@ import unitobjects  # noqa: E402
 
 TABLE = os.path.join(ROOT, "config", "source-approvals.tsv")
 INCLUDE = os.path.join(ROOT, "include")
-KINDS = ("asm", "volatile", "asm-function")
+FUNCTION_KINDS = ("asm", "volatile", "asm-function")   # rows keyed by the function that uses the construct
+LOCAL_DECL = "local-decl"                              # rows keyed by the symbol declared outside its home
+KINDS = FUNCTION_KINDS + (LOCAL_DECL,)
 _STRING = re.compile(r'"(?:\\.|[^"\\\n])*"')
 _VOLATILE = re.compile(r"\b(?:__volatile__|volatile)\b")
 _INCLUDE = re.compile(r'^\s*#\s*include\s*"([^"]+)"', re.M)
@@ -67,7 +75,7 @@ def load(path=TABLE):
             continue
         cols = [c.strip() for c in line.rstrip("\n").split("\t")]
         if len(cols) != 4 or not all(cols) or cols[0] not in KINDS or not cols[2].isdigit() or int(cols[2]) < 1:
-            raise ValueError("%s:%d: expected `asm|volatile<TAB>symbol<TAB>count<TAB>evidence`" % (path, n))
+            raise ValueError("%s:%d: expected `%s<TAB>symbol<TAB>count<TAB>evidence`" % (path, n, "|".join(KINDS)))
         key = (cols[0], cols[1])
         if key in rows:
             raise ValueError("%s:%d: %s %s is listed twice" % (path, n, cols[0], cols[1]))
@@ -437,7 +445,7 @@ def problem(path, name, rows=None, row=None):
     rows = load() if rows is None else rows
     found = uses(path, name)
     missing = []
-    for kind in KINDS:
+    for kind in FUNCTION_KINDS:
         count = found[kind]
         if not count:
             continue
@@ -462,7 +470,9 @@ def _aliases(rows):
     by its key (`kGetEntryAddress_osdsrc`)."""
     index, out = None, {}
     patch_functions = kpatch.functions()
-    for _kind, symbol in rows:
+    for kind, symbol in rows:
+        if kind not in FUNCTION_KINDS:
+            continue
         if symbol in patch_functions:
             path, name = patch_functions[symbol]
             if name != symbol:
@@ -532,13 +542,25 @@ def _index():
     return units.scan(os.path.relpath(os.path.join(ROOT, "src"), os.getcwd()))
 
 
-def stale(rows=None, index=None):
-    """["kind symbol: reason"] for rows that no longer describe their function."""
+def stale(rows=None, index=None, declared=None):
+    """["kind symbol: reason"] for rows that no longer describe their function, or, for a `local-decl` row,
+    their symbol. `declared` is {symbol: local declarations outside its home}
+    (tools/declarations.py `Index.local_declared`), read from the tree when it is None."""
     rows = load() if rows is None else rows
     index = _index() if index is None else index
     patch_functions = kpatch.functions()
     out = []
     for (kind, symbol), (count, _evidence) in sorted(rows.items()):
+        if kind == LOCAL_DECL:
+            if declared is None:
+                import declarations                  # imports this module: not at the top
+                declared = declarations.index(ROOT).local_declared
+            found = declared.get(symbol, 0)
+            if not found:
+                out.append("%s %s: no local declaration left" % (kind, symbol))
+            elif found != count:
+                out.append("%s %s: the row covers %d, the source has %d" % (kind, symbol, count, found))
+            continue
         if symbol in patch_functions and symbol not in index:
             path, name = patch_functions[symbol]
             found = uses(path, name)[kind]

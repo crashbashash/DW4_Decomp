@@ -54,6 +54,7 @@ typedef union p2TimerCount {
     unsigned short value;
 } p2TimerCount;
 
+/* kept local: libc's stdio.h redefines FILE and _reent, which clash with newlib_reent.h's, the ones `_impure_ptr` needs here */
 int fprintf(struct __sFILE *stream, const char *format, ...);
 void p2StartTimers(void);
 int p2Timer1Handler(int cause);

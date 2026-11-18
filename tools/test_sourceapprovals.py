@@ -223,6 +223,32 @@ class SourceApprovals(unittest.TestCase):
             with self.assertRaises(ValueError):
                 sa.load(self.write("t.tsv", bad))
 
+    def test_a_local_decl_row_is_keyed_by_the_declared_symbol(self):
+        path = self.write("t.tsv", "local-decl\t_ctype_\t2\t#x\n")
+        self.assertEqual(sa.load(path), {("local-decl", "_ctype_"): (2, "#x")})
+        with self.assertRaises(ValueError):
+            sa.load(self.write("t.tsv", "local-decl\t_ctype_\t0\t#x\n"))
+
+    def test_a_local_decl_row_is_stale_unless_its_count_holds(self):
+        rows = {("local-decl", "a"): (2, "#x"), ("local-decl", "b"): (1, "#x"), ("local-decl", "c"): (1, "#x")}
+        out = sa.stale(rows, {}, {"a": 2, "b": 3})
+        self.assertEqual(out, ["local-decl b: the row covers 1, the source has 3",
+                               "local-decl c: no local declaration left"])
+
+    def test_a_local_decl_row_is_no_function_row(self):
+        # not read as a function: no definition lookup, no alias, no approval of a function's asm
+        path = self.write("a.c", 'void f(void) { asm("nop"); }\n')
+        rows = {("local-decl", "f"): (1, "#x")}
+        self.assertIn("1 asm", sa.problem(path, "f", rows))
+        self.assertEqual(sa.approved_statements([path], rows), set())
+        self.assertEqual(sa._aliases(rows), {})
+
+    def test_the_shipped_local_decl_rows_hold(self):
+        import declarations
+        rows = {s: c for (k, s), (c, _e) in sa.load().items() if k == "local-decl"}
+        declared = declarations.index(sa.ROOT).local_declared
+        self.assertEqual({s: declared.get(s, 0) for s in rows}, rows)
+
     def test_the_shipped_table_has_no_stale_row(self):
         self.assertEqual(sa.stale(), [])
 

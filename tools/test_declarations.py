@@ -141,5 +141,79 @@ class Declarations(unittest.TestCase):
             self.assertNotIn("declarations", progress.readable_failures("Main_Idle", main, cache))
 
 
+class ApprovedLocalDeclarations(unittest.TestCase):
+    """A `local-decl` row exempts the copies of its symbol, while the tree holds exactly its count."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.folder = tempfile.TemporaryDirectory()
+        for rel, text in TREE.items():
+            path = os.path.join(cls.folder.name, rel)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w") as fh:
+                fh.write(text)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.folder.cleanup()
+
+    def index(self, **rows):
+        return declarations.Index(self.folder.name, {name: (count, "#why") for name, count in rows.items()})
+
+    def local(self, idx):
+        return sorted((d.path, d.name) for d in idx.local)
+
+    def test_an_approved_copy_is_not_counted_or_bad(self):
+        idx = self.index(g_count=1)
+        self.assertNotIn(("src/game/user.c", "g_count"), self.local(idx))
+        self.assertEqual(idx.counts()["decl.local_externs"], 6)
+        user = os.path.join(self.folder.name, "src/game/user.c")
+        self.assertEqual(idx.bad_names(user), {"Foo_Get", "g_asmShared"})
+
+    def test_an_approved_copy_is_no_type_or_varargs_debt(self):
+        # narrow.c's int copy of __muldi3 is a type conflict; user.c's `()` Foo_Get is varargs debt
+        plain = declarations.Index(self.folder.name, {})
+        approved = self.index(__muldi3=1, Foo_Get=1)
+        self.assertEqual(plain.counts()["decl.type_conflicts"] - approved.counts()["decl.type_conflicts"], 1)
+        self.assertEqual(plain.counts()["decl.varargs"] - approved.counts()["decl.varargs"], 1)
+        narrow = os.path.join(self.folder.name, "src/game/narrow.c")
+        self.assertIn("__muldi3", plain.bad_names(narrow))
+        self.assertNotIn("__muldi3", approved.bad_names(narrow))
+
+    def test_an_approved_copy_stays_listed(self):
+        idx = self.index(g_count=1)
+        listed = {(d.path, d.name): why for d, why in idx.local_listing}
+        self.assertEqual(listed[("src/game/user.c", "g_count")], "#why")
+        self.assertIsNone(listed[("src/game/user.c", "Foo_Get")])
+        self.assertEqual(len(idx.local_listing), 7)
+
+    def test_a_row_covers_every_copy_of_its_symbol(self):
+        # g_asmShared is declared in two units
+        idx = self.index(g_asmShared=2)
+        self.assertEqual({n for _p, n in self.local(idx)} & {"g_asmShared"}, set())
+        self.assertEqual(idx.counts()["decl.local_externs"], 5)
+
+    def test_an_excess_copy_voids_the_approval(self):
+        idx = self.index(g_asmShared=1)
+        self.assertEqual([n for _p, n in self.local(idx)].count("g_asmShared"), 2)
+        self.assertEqual(idx.counts()["decl.local_externs"], 7)
+
+    def test_a_copy_gone_voids_the_approval(self):
+        idx = self.index(g_count=2)
+        self.assertIn(("src/game/user.c", "g_count"), self.local(idx))
+        self.assertEqual(idx.local_declared["g_count"], 1)
+
+    def test_a_row_does_not_approve_another_symbol(self):
+        self.assertEqual(self.local(self.index(g_nothing=1)), self.local(declarations.Index(self.folder.name, {})))
+
+    def test_readable_passes_only_with_the_row(self):
+        user = os.path.join(self.folder.name, "src/game/user.c")
+        for rows, expect in (({}, True), ({"g_count": 1}, False), ({"g_count": 2}, True)):
+            idx = self.index(**rows)
+            with mock.patch.object(progress.declarations, "index", lambda _root, idx=idx: idx):
+                failed = progress.readable_failures("User_Read", user, {})
+            self.assertEqual("declarations" in failed, expect, rows)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -74,6 +74,10 @@ definitions are the reference for the code that calls into it.
   unnamed placeholder (`FUN_<va>`, `DAT_<va>`), and a symbol with no C definition that only one unit
   declares; until it is named or decompiled, the unit that uses it is its home. A symbol with no C
   definition that two or more units declare counts in each.
+  A copy the owner approved (a `local-decl` row in `config/source-approvals.tsv`, anchored to its measured reason in
+  [source approvals](source-approvals.md#kept-local-declarations)) is not counted while the tree holds exactly the row's count of
+  copies of the symbol, and its `(...)`, `()` or differing type is no `decl.varargs` or `decl.type_conflicts` debt either; `--list local`
+  still prints it, marked `[approved #anchor]`.
 - **`decl.varargs`**: a prototype whose whole parameter list is `(...)`, unless a C definition of the
   symbol is itself variadic. A symbol with no C definition counts: `(...)` states no type, and no
   definition says the list is variable. A C `()` list (no parameters stated) counts when the C definition
@@ -95,7 +99,7 @@ definitions are the reference for the code that calls into it.
 The README's Readable column applies the same rules per function (the `declarations` check): a function
 fails when a symbol its body uses (a call or a read, not a member after `.`, `->` or `::`) is declared,
 in the text the compiler sees for its unit (the unit's files and every header they include), by a
-counted local extern, a counted `(...)`/`()` prototype, or with a conflicting type.
+counted local extern (an approved copy is not one), a counted `(...)`/`()` prototype, or with a conflicting type.
 
 ## Re-recording the baseline
 

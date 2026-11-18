@@ -2,6 +2,8 @@
 # project owner approves a row, after reviewing the evidence. An agent writes one only on the owner's
 # explicit instruction for that function. A function using either without a row is `unapproved`: its
 # source stays and links, but it counts in no matched figure.
+# `local-decl` approves local declarations of a symbol outside its home, its count the copies in the whole tree
+# (the symbol is the declared one, not a function); approved copies are not declaration debt.
 # kind	symbol	count	evidence (docs/engine/source-approvals.md)
 asm	__divdi3	1	#umul_ppmm
 asm	__moddi3	1	#umul_ppmm
@@ -384,3 +386,12 @@ volatile	sftim_ResetVtimeTmr	2	#sfd-time-counts
 volatile	sftim_GetVtimeTmr	2	#sfd-time-counts
 volatile	sftim_GetTimeExtClock	4	#sfd-time-counts
 volatile	sftim_IsTakeOffExecTime	1	#sfd-time-counts
+local-decl	adxt_vsync_cnt	3	#local-decl-vsync-counts
+local-decl	mwsfsvr_vsync_cnt2	2	#local-decl-vsync-counts
+local-decl	sfadxt_stat	2	#local-decl-sfd-header-codegen
+local-decl	MEM_Copy	1	#local-decl-sfd-header-codegen
+local-decl	SFXA_Destroy	1	#local-decl-sfx-unprototyped
+local-decl	SFXZ_Destroy	1	#local-decl-sfx-unprototyped
+local-decl	_ctype_	2	#local-decl-libc-types
+local-decl	_lseek_r	1	#local-decl-libc-types
+local-decl	fprintf	1	#local-decl-libc-types

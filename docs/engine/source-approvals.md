@@ -7,7 +7,8 @@ counts as matched only once the project owner has approved that use. This is the
 
 ## The approval rule
 
-Each approved use has a row in `config/source-approvals.tsv`: `kind` (`asm`, `volatile` or `asm-function`),
+Each approved use has a row in `config/source-approvals.tsv`: `kind` (`asm`, `volatile`, `asm-function` or
+`local-decl`),
 `symbol`, `count` and the anchor of its evidence below. An `asm-function` row approves a whole MWCC `asm`
 function, one written in assembly in the original source; its count is 1. Without it, such a function is
 an asm body ([asm-body matches](asm-body-matches.md)), which counts in no matched figure. Only the owner approves a row. An agent may write one only
@@ -15,13 +16,29 @@ when the owner has explicitly told it to add that function, after reviewing its 
 one on its own initiative or as part of a broader request. The table is one of the oracle's own files
 (`.githooks/oracle-files.txt`).
 
+### Kept local declarations
+
+A symbol is declared once, in a header, and the header's form is what every includer sees
+([declarations](debt-ratchet.md#declarations)). A few declarations stay in the unit that uses the symbol because
+the header's form changes the unit's bytes. A `local-decl` row
+approves them. Its `symbol` is the declared symbol, not a function, and its `count` is the number of local
+declarations of that symbol outside its home that the owner approved, over the whole tree (a symbol kept in three
+files has count 3). The approval holds only while the tree has exactly that many: another copy, or an approved
+one removed, voids the row. `--stale` then reports it (`the row covers N, the source has M`, or `no local
+declaration left`), and the copies count as declaration debt again. While it holds, the approved copies are not
+`decl.local_externs`, are no `decl.varargs` or `decl.type_conflicts` debt (what the copy states differently from the
+definition is the reason it is kept), and do not fail the readable `declarations` check of the functions that use the symbol;
+`python3 tools/declarations.py --list local` still prints them, marked `[approved #anchor]`. Each row's anchor
+below states the measured reason the header form is not an option. A row needs the owner's approval, like the
+other kinds.
+
 A function using either without a row is filed by `make check` as **`unapproved`**. Its source stays and
 links byte-identically, and its code bytes count in the code-bytes-identical figure, but it is not
 `match`, so it is in no matched figure and not in the readable count. A byte match is not approval.
 
 ```sh
 python3 tools/sourceapprovals.py --list    # the functions awaiting approval, with what each one uses
-python3 tools/sourceapprovals.py --stale   # rows that no longer describe their function
+python3 tools/sourceapprovals.py --stale   # rows that no longer describe their function or symbol
 ```
 
 ## What reaches a function
@@ -1070,6 +1087,47 @@ evidence:
 * The Persona 4 decompilation ([Raikaru/Persona4-Decompilation](https://github.com/Raikaru/Persona4-Decompilation)),
   built with the same ee-gcc 2.96 at `-O2 -G0` from SFX 2.08-generation sources, needs a non-C construct for the
   same empty slot in its alpha free (`src/cri/re4/sfx_alp.c`, lines 57-68: an empty `asm` memory barrier).
+
+### local-decl-vsync-counts
+
+ADXT's tick count `adxt_vsync_cnt` (3 copies: `adxps2.c`, `adxt.c`, `adxtsvr.c`) and MWSFD's second V-sync count
+`mwsfsvr_vsync_cnt2` (2 copies: `mwsfd.c`, `mwsfsvr.c`). Each is defined once and declared with different
+qualifiers in different files, which one header declaration cannot give.
+
+* `adxt_vsync_cnt` is defined in `adxtinit.c`. `adxps2.c` and `adxtsvr.c` declare it `volatile` where they read it
+  (the V-sync interrupt path and the server), and `adxt.c` declares it plain. Each keyword decides the address
+  form of the files' statements and nothing else ([adxt-ready-count](#adxt-ready-count)), so a header
+  declaration, volatile or plain, gives one of the forms to all of them.
+* `mwsfsvr_vsync_cnt2` is `volatile` in `mwsfd.c` and `mwsfsvr.c`, the files with the approved rows
+  ([mwsfsvr-vsync-count](#mwsfsvr-vsync-count)). Declared in a header, the keyword would apply to every unit that
+  includes it.
+
+### local-decl-sfd-header-codegen
+
+`sfadxt_stat` (2 copies: `sfadx.c`, `sfdtst.c`) and `MEM_Copy` (`sfmpv.c`). The header declaration changes the
+code of `sfmpv.c`.
+
+* `sfadxt_stat`: with the declaration in `sfd.h`, which `sfmpv.c` includes, `sfmpv_SetDecTtu` is scheduled
+  differently from retail. The two units that use the word declare it themselves.
+* `MEM_Copy`: `mcp.h` declares it returning `void`. `sfmpv.c` declares it returning `int`; with the `void`
+  prototype `sfmpv_SetMpvHd` allocates its registers differently from retail.
+
+### local-decl-sfx-unprototyped
+
+`SFXA_Destroy` and `SFXZ_Destroy` (`sfx.c`). Their definitions take `volatile` pointers
+([sfx-handle-used-flag](#sfx-handle-used-flag)), which a prototype in `sfx.h` would show to every unit that
+includes it, so `sfx.c` declares both unprototyped and `SFX_Destroy` calls them that way.
+
+### local-decl-libc-types
+
+Three symbols whose libc header form differs from what the code was compiled against.
+
+* `_ctype_` (2 copies: `strtol.c`, `strtoul.c`): `const unsigned char _ctype_[]`, not the libc header's `char`; the
+  character-class lookups stay unsigned (bytes).
+* `_lseek_r` (`stdio.c`): its definition takes and returns `int`, but `__swrite` and `__sseek` are compiled against
+  the `long` form; an `int` prototype adds the 64-bit conversions to them.
+* `fprintf` (`p2timer.c`): the unit uses newlib's `struct __sFILE` and `_reent` through `_impure_ptr`, and libc's
+  `stdio.h` redefines `FILE` and `_reent`, so the unit declares the one prototype itself.
 
 ## Open questions
 
