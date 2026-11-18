@@ -3759,7 +3759,7 @@
 0x004f4d00	cri_sfd_version	recovered-global
 0x004f4d50	sfsup_handler	recovered-global
 0x004f4d88	sfmps_handler	recovered-global
-0x004f4dc0	sfmps_pes_funcs	recovered-global
+0x004f4dc0	sfmps_CopyPketFn	recovered-global
 0x004f4dd0	sfmpv_handler	recovered-global
 0x004f4e08	sfmpv_fps_round	recovered-global
 0x004f4e30	sfmpv_conv_29_97	recovered-global

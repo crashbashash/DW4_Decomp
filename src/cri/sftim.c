@@ -80,7 +80,7 @@ void SFTIM_InitHn(void *sfd, SfdTim *tim)
         tim->tally.history[i] = 0;
     }
     tim->queue.last = 1;
-    tim->queue.f4 = 0;
+    tim->queue.samples = 0;
     tim->queue.wr = 0;
     tim->queue.rd = 0;
     for (i = 0; i < 32; i++) {

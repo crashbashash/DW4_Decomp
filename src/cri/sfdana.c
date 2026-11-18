@@ -20,7 +20,6 @@ typedef struct SfdMpaHdr {
     unsigned char emphasis;
 } SfdMpaHdr;
 
-extern char sfadx_handler[];
 extern char sfmps_handler[];
 extern char sfmpv_handler[];
 extern int sfana_frame_rates[];

@@ -868,6 +868,28 @@ int sfmpv_CalcVideoTotTime(SfdPly *player) {
     return position - state->time;
 }
 
+int sfmpv_CalcAudioTotTime(SfdPly *player) {
+    SfdTim *timer = &player->tim;
+    int samples;
+    int rate;
+    int unit;
+    int t;
+
+    if (player->cre.trnConfig->fns[3] != sfadx_handler) {
+        samples = 0;
+        rate = 44100;
+    } else if (SFCON_ReadTotSmplQue(player, &samples, &rate) == 0) {
+        return -1;
+    }
+    unit = player->tim.state.unit;
+    timer->queue.samples += samples;
+    t = UTY_MulDiv(timer->queue.samples, unit, rate) - timer->tally.total;
+    if (t < 0) {
+        t = 0;
+    }
+    return t;
+}
+
 void sfmpv_DiscardSec(SfdPly *player, SfdSj *stream) {
     SfdSjChunk ck;
     for (;;) {
@@ -1011,6 +1033,26 @@ int sfmpv_DecodePicAtr(SfdPly *player, SfdSjChunk *chunk, SfdSj *sj, int code, i
     sfmpv_SetHeadTtu(player, pic);
     sfmpv_SetDecTtu(player, pic);
     return sfmpv_FirstPicAtr(player, handle, pic, chunk);
+}
+
+void sfmpv_ReadPtsQue(SfdPly *player, M2vPicAtr *pic, char *pos, long long *time, long long *pts, int newGop) {
+    SfdTrnSlot *slot = &player->trn[2];
+    SfdMpv *mpv;
+    int index;
+    SfdItem entry;
+
+    mpv = slot->hn.mpv;
+    index = slot->bufIn;
+    *time = -1;
+    *pts = -1;
+    if (pos == 0) {
+        return;
+    }
+    SFPTS_ReadPtsQue(player, index, (unsigned int)pos, &entry);
+    if (entry.pos < 0) {
+        return;
+    }
+    *time = sfmpv_ComplementPts(&player->tim, &mpv->ptscomp, pic, &entry, newGop, pts);
 }
 
 void sfmpv_InitComplementPts(SfdPtsComp *comp) {

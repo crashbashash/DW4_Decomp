@@ -1383,7 +1383,8 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   - *Reading it:* draft the unit in address order, add each function in its place and re-run the whole unit after
     each; when a function differs only in such loads, the missing piece is an earlier function, not its own source.
     A function that matches in a small file can lose it in the full unit, and the reverse.
-  - *Unit:* `src/cri/sfmpv.c` (0x2a49b8 not matched; 0x2a6f28 flips with the functions before it; in 0x2a4468
+  - *Unit:* `src/cri/sfmpv.c` (0x2a49b8 matched once the unit's later declarations and functions were in place, with
+    its own C unchanged; 0x2a6f28 flips with the functions before it; in 0x2a4468
     a picture-attribute result is copied to a local, since read from the address-taken slot it reloads after
     the stores to the handle).
 - **In a run of independent stores, the one that ends a register's life is issued first.** Before register

@@ -80,13 +80,18 @@ its public API, begin it.
   cleared by `SFD_RelFrm`), `vidShort`, `noFreeFrm`, `lockCnt`. `SfdTim` +352, +644/+648 and +676..+696 likewise:
   `concat_frmcnt`, `dec_time`/`dec_unit`, `usr_frm_sync`, `disp_sync_cnt`/`_time`/`_unit`.
 - The ring delimiter has its own type `SfdBufDlm`: its second word is the end address of the data searched.
+- The PES packet table at `0x4f4dc0` is `sfmps_CopyPketFn`, the copy function of each stream kind (audio, video,
+  private, padding), after the read-only table of that name the `sfd_mps.o` member of the CRI PS2 SDK archive
+  `libmwsfde.a` (recvx-decomp-cri, github.com/SkeletonPicture/recvx-decomp-cri) indexes by the packet's kind in
+  `sfmps_CopyPketData` (high). DW4's `sfmps_PutPes` is that function grown by the stream objects of
+  `SFD_SetStmObject` and the size checks; it keeps its behaviour name (whether DW4's build still calls it
+  `sfmps_CopyPketData` is open).
+- The sync queue's word at +4 is `samples`, the audio samples of the files joined so far: `sfmpv_CalcAudioTotTime`
+  adds each joined file's count read from the queue and turns the sum into time with the queue's rate (medium;
+  RE4's `SFCON` leaves it unnamed).
 
 ## Open questions
 
-- Without source, linking from retail: `sfmps_PutPes` (`0x2a17f8`), which exists only in DW4 (neither the SDK's
-  `sfd_mps.o` nor the RE4 sources have it). The best C is 24 words off, all of them the swap of two callee-saved
-  registers (retail keeps the handle in `s2` and the parameter block in `s1`); it also needs the PES fields read into
-  locals right after `MPS_GetPesInf` and the copy table `sfmps_pes_funcs` (`0x4f4dc0`).
 - `SFH_IsExistStmId` returns nothing in `sfh.c`, yet `sfhds_AnlyUsedStmid` tests its result; this file declares it `int`.
 - The supply and MPS handlers' entries 5 to 8 are named after the ADX handler's (prepare, start, stop, pause) and
   entry 13 (`*_LoadRec`) after what the MPS handler does there; the other handlers have not been checked against
@@ -97,7 +102,7 @@ its public API, begin it.
 - Whether the supply handler shares `sfdlib.c`'s file: nothing in the code tells; its own error code and its own
   table put it in a file of its own here.
 - Still named by offset, with no reader beyond a clear or a copy: `SfdPlyInf` +8, +12, +136, +144; `SfdTim`
-  `pad332`, `f4` of the sync queue, the PTS manager entry; `SfdIpuStream` +88/+92 and its time-stamp entries;
+  `pad332`, the PTS manager entry; `SfdIpuStream` +88/+92 and its time-stamp entries;
   `SfdCrePrm` +44..+52; `SfdFrameDetail` +72 (2 or 1 by `M2vPicAtr.f64`, whose meaning is unknown);
   `SfdRecSub` +0; the SFX handle and work (`sfx.h`), `mwsffrm.c`'s own frame views and the M2V picture attributes'
   +64/+68.

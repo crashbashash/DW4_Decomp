@@ -94,7 +94,7 @@ typedef struct SfdSyncTally {
 /* The 32-entry queue of time stamps the audio handler hands to the video handler. */
 typedef struct SfdSyncQueue {
     int last;            /* 0 */
-    int f4;
+    int samples;         /* 4: the audio samples of the files joined so far */
     int wr;              /* 8 */
     int rd;              /* 12 */
     int items[32];       /* 16 */
@@ -451,6 +451,9 @@ typedef struct SfdTrnConfig {
     SfdTrnFn *fns[9];
 } SfdTrnConfig;
 
+/* The ADX audio stream module's entries (sfadx.c); a handle whose audio slot holds it plays ADX. */
+extern SfdTrnFn sfadx_handler[];
+
 /* What SFD_Init is given: the stream modules and the V-sync rate. */
 typedef struct SfdInitPrm {
     SfdTrnModules *modules;   /* 0 */
@@ -712,6 +715,7 @@ void SFD_SetSeekPos(void *sfd, int offset);
 
 /* the time-stamp rings */
 int SFPTS_WritePtsQue(void *sfd, int index, struct SfdItem *item, int *full);
+int SFPTS_ReadPtsQue(struct SfdPly *h, int index, unsigned int pos, struct SfdItem *out);
 int SFPTS_IsPtsQueFull(void *sfd, int index);
 
 /* SFCON: concatenated playback */
@@ -721,6 +725,7 @@ int SFCON_IsSystemEndcodeSkip(void *sfd);
 int SFCON_IsVideoEndcodeSkip(void *sfd);
 int SFCON_UpdateConcatTime(void *sfd, int amount);
 int SFCON_WriteTotSmplQue(void *sfd, int pts, int last);
+int SFCON_ReadTotSmplQue(struct SfdPly *hn, int *pts, int *last);
 
 /* SFTRN: the stream modules */
 int SFTRN_Init(struct SfdTrnModules *dst, struct SfdTrnModules *src);

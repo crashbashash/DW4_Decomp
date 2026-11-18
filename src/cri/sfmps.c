@@ -67,6 +67,11 @@ void sfmps_SkipNext(SfdPly *hn, unsigned char *buf, int size, int *skip);
 int sfmps_PutPes(SfdPly *hn, unsigned char *data, int len, int *used, int *result);
 void sfmps_Concat(SfdPly *hn);
 void sfmps_SetMpsRaw(SfdPly *hn, MpsHn *mps, unsigned char *data, int len);
+int sfmps_PutAndNotify(SfdSj *sj, int (*cb)(void *obj, int arg), void *obj, int arg, unsigned char *data, int len);
+
+/* The copy function of each PES stream kind (MPS_PES_*): audio, video, private, padding. */
+typedef int (*SfmpsCopyFn)(SfdPly *hn, int stm, unsigned char *data, int len, long pts);
+extern const SfmpsCopyFn sfmps_CopyPketFn[4];
 
 /* Attaches an object to stream id 0xBC..0xFF in the handle's stream table, with the callback run
  * on its data. */
@@ -329,6 +334,58 @@ int sfmps_IsEndOfRingBuf(SfdPly *hn, unsigned char *pos) {
 
 SfdBufInf *sfmps_GetSupSj(SfdPly *hn) {
     return &hn->buf[hn->trn[1].bufIn].u.ring.sup;
+}
+
+/* A PES packet: the stream's attached object takes it when there is one, otherwise the copy function
+ * of its kind. *used is how much went in; *result is the copy's result. */
+int sfmps_PutPes(SfdPly *hn, unsigned char *data, int len, int *used, int *result) {
+    SfdMpsPrm *prm;
+    MpsPesInf pes;
+    int id;
+    int kind;
+    int no;
+    long pts;
+    int size;
+    int ret = 0;
+    SfdSj *obj;
+
+    *used = 0;
+    *result = 0;
+    prm = hn->trn[1].hn.mps;
+    if (MPS_GetPesInf(prm->mps, &pes) != 0) {
+        ret = sfd_ReportError(hn, 0xFF000D06);
+    }
+    size = pes.dataSize;
+    id = pes.streamId;
+    kind = pes.streamKind;
+    no = pes.streamNo;
+    pts = pes.pts;
+    if (size < 0) {
+        return sfd_ReportError(hn, 0xFF000D0E);
+    }
+    if (size == 0) {
+        *used = 0;
+        *result = 1;
+        return 0;
+    }
+    if (len < size) {
+        sfmps_ChkInEnd(hn, 0);
+        return 0;
+    }
+    obj = prm->object[id - 0xBC];
+    if (obj != 0) {
+        *result = sfmps_PutAndNotify(obj, prm->stmCb, prm->stmCbObj, id, data, size);
+    } else {
+        *result = sfmps_CopyPketFn[kind](hn, no, data, size, pts);
+    }
+    if (*result != 0) {
+        if (*result == 1) {
+            *used = size;
+        } else {
+            ret = *result;
+        }
+    }
+    return ret;
 }
 
 /* Puts data into a ring and, when it went in, runs the callback. */

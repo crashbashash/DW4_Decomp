@@ -103,7 +103,7 @@ the 2002 one. Names from what a function does are in the medium list below.
   load of its address-taken byte count above the frame-counter stores and keeps the frame count's load below them:
   forcing only the byte count's alias-set high word non-zero under gdb reproduces retail, so it is the
   [address-taken local](understanding-shapes.md#scheduling-ee-gcc) case and waits on the text compiled before it
-  (`sfmpv_CalcAudioTotTime`, which differs by the same mechanism, among it).
+  (`sfmpv_CalcAudioTotTime`, the same mechanism, matches with the current file).
 - `sfply_ResetHn` is the RE4 `sfd_ply.c` `sfply_ResetHn` ([Resident Evil 4 decompilation](https://github.com/adonis-singh/re4)):
   it keeps the error callback, the timer's clock callbacks, speed and PTS-manager entry, and the seek work across
   a re-create. It matches with those `SfdTim` fields and the error block typed as the callbacks and pointers
@@ -111,15 +111,14 @@ the 2002 one. Names from what a function does are in the medium list below.
 - `mwPlyCreateSofdec` differs only in the delay slot of the first free-handle test, which retail fills from the
   branch target; `mwsfcre_CreateSfd` in the registers holding two of the buffer-size globals. Both need names for
   the size globals and the three SFD create-parameter templates, and the player status as an enum.
-- The rest without source, each a scheduling or register difference in the best C: `sfmpv_ReadPtsQue` (`0x2a4fb8`,
-  about 10 words: the player and PTS pointers swap `s0`/`s1`, and the `-1` constant and the stream base swap
-  `v0`/`v1`); `sfmpv_NextTc` (`0x2a5a50`, the RE4 time-code advance: the instructions and their order are retail's, the
-  temporaries sit one register off); `SFMPVP_Create` (`0x2a97a0`, 24 differing lines: the tail constants and the last store
-  differ, and neither pointer-typed work-buffer words nor locals for them fix it; the type of the MPV work-buffer
-  words or a macro form of the 64-byte alignment is the suspect); `sftim_Tc2Time59D` (`0x2af380`, 33 of 42 words: the
+- The rest without source, each a scheduling or register difference in the best C: `sfmpv_NextTc` (`0x2a5a50`, the
+  RE4 time-code advance: the instructions and their order are retail's, the temporaries sit one register off: retail
+  sums the repeat and field counts into a fresh register); `SFMPVP_Create` (`0x2a97a0`, one word: the work-buffer
+  branch that sets both areas computes the second area in the register the other branch uses, so retail shares the
+  final store between them; its reset of the IPU state matches in field order with the start-code bytes after
+  `enabled` and `value` last); `sftim_Tc2Time59D` (`0x2af380`, 33 of 42 words: the
   same instructions with a different load and arithmetic schedule: retail loads seconds then hours and adds before the
-  frames; none of 576 expression and statement orders reproduces it); and `sfmpv_CalcAudioTotTime` and
-  `sfmpv_DecodeFrm` above.
+  frames; none of 576 expression and statement orders reproduces it); and `sfmpv_DecodeFrm` above.
 - Medium confidence, from the RE4 GameCube order alone: `SFMPV_SaveCond` and `SFMPV_RestoreCond` (after `SFD_SetMpvCond`),
   `SFMPVF_SearchFrmObj` and `SFMPVF_SearchVfrmData` (the first two of `sfd_mpvf.c`), `sfmpvf_ReferNextFrmReady` and
   `sfmpvf_SearchStbyFrm` (after `SFD_IsNextFrmReady`), `SFPTS_IsPtsQueFull` (last of `sfd_pts.c`) and `SFTST_SetTstFlg`

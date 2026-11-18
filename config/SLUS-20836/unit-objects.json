@@ -21254,6 +21254,7 @@
       "sfmps_IsZero": "0x002a1730",
       "sfmps_IsEndOfRingBuf": "0x002a1770",
       "sfmps_GetSupSj": "0x002a17d0",
+      "sfmps_PutPes": "0x002a17f8",
       "sfmps_PutAndNotify": "0x002a1970",
       "sfmps_CopyAudio": "0x002a19e0",
       "sfmps_CopyVideo": "0x002a1b50",
@@ -21302,6 +21303,7 @@
       "SFMPS_GetConcatCnt": "0x002a2f20"
     },
     "data": {
+      "sfmps_CopyPketFn": "0x004f4dc0",
       "sfmps_audio_fn": "0x004beb1c",
       "sfmps_mps_work": "0x00580d60",
       "sfmps_short_writes": "0x004beb00"
@@ -21348,12 +21350,14 @@
       "sfmpv_Concat": "0x002a4838",
       "sfmpv_ConcatSub": "0x002a4888",
       "sfmpv_CalcVideoTotTime": "0x002a4958",
+      "sfmpv_CalcAudioTotTime": "0x002a49b8",
       "sfmpv_DiscardSec": "0x002a4a60",
       "sfmpv_AddRtotSj": "0x002a4b20",
       "sfmpv_IsTerm": "0x002a4b68",
       "sfmpv_GetTermSrc": "0x002a4bb0",
       "sfmpv_ChkMpvErr": "0x002a4bc8",
       "sfmpv_DecodePicAtr": "0x002a4c60",
+      "sfmpv_ReadPtsQue": "0x002a4fb8",
       "sfmpv_InitComplementPts": "0x002a5060",
       "sfmpv_ComplementPts": "0x002a5088",
       "sfmpv_Nfrm2Pts": "0x002a5208",
@@ -21448,6 +21452,7 @@
       "sfmpv_picusr_pbuf": "0x00585620",
       "sfmpv_picusr_bufnum": "0x00585624",
       "sfmpv_picusr_buf1siz": "0x00585628",
+      "sfadx_handler": "0x004f4b18",
       "DAT_004beb0c": "0x004beb0c",
       "DAT_004f4e70": "0x004f4e70",
       "sfmpv_fps_round": "0x004f4e08",
