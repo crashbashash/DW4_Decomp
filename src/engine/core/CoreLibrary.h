@@ -1199,8 +1199,6 @@ extern "C" void igCompoundMetaField_CopyReference(void *arg0, int arg1, int arg2
 extern "C" int igCompoundMetaField_GetDescriptor(void);
 extern "C" void igCompoundMetaField_SwapValue(void *arg0, int arg1);
 extern "C" int igCompoundMetaField_ValueFromString(int *arg0, int arg1, int arg2, int arg3);
-extern "C" void igContextExt_MakeCurrent(void);
-extern "C" int igContextExt_IsCurrent(void);
 extern "C" int igContext_GetMeta(void);
 extern "C" int igDataList_GetElementSize(void);
 extern "C" void igDependencyOrderedList_TopologicalSort(igDependencyOrderedList *self);
@@ -2762,7 +2760,6 @@ extern "C" void *igContext_GetExtension(igVisualContext *arg0, int extra1);
 extern "C" int igContext_FindExtensionInstance(igContext *arg0, int arg1);
 extern "C" igMetaField *g_igDataList_dataField;
 extern "C" void List_AppendBytes(igDataList *l, int cnt, int src, int sz);
-extern "C" int List_BinarySearch(igDataList *arg0, int arg1, int (*arg2)(int, int), int arg3);
 extern "C" int List_AppendWord(igDataList *list, int value);
 typedef int (*Cmp)(int *, void *);
 struct DependencyPair { void *a; void *b; };
@@ -3908,7 +3905,6 @@ extern "C" bool igStringObj_ParseBool(igStringObj *o, char *out);
 extern "C" void igStringObj_RemovePathFilename(igStringObj *p);
 extern "C" void igStringObj_Split(igStringObj *src, long long delim, igTDataList<char *> *list);
 extern "C" void igStringObj_Trim(igStringObj *self);
-extern "C" int igStringObjList_BinarySearch(igStringObjList *self, int key, int (*cmp)(char *, int));
 /* The intern pool's sorted string table (24 bytes): `entries` holds the token headers in strcmp
  * order of their text, and the lookup halves `step` (a power of two not above `count`). */
 struct StringTable {

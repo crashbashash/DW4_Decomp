@@ -10,6 +10,8 @@ extern "C" {
 
 struct igBlendMatricesAttr *igBlendMatricesAttr_Create(struct igMemoryPoolView *pool);
 
+void igBlendMatricesAttr_EnsureRegistered(void);
+
 #ifdef __cplusplus
 }
 #endif

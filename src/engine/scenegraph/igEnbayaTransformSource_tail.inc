@@ -408,7 +408,7 @@ void FUN_001c3090(V_1c3090 *arg0, int arg1) {
         if ((igTextureAttr_GetImage((igTextureAttr *)arg0->f32, 0) != 0) == 0) {
             FUN_001c31e0(arg0->f32);
             if (arg0->f73 != 0) {
-                FUN_00141190(arg0->f32, 1);
+                FUN_00141190((int *)arg0->f32, 1);
             }
         }
         ObjectList_AppendRetained((igObjectList *)o, (igObject *)arg0->f80);

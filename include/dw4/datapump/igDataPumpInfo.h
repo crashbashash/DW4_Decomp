@@ -9,6 +9,9 @@ extern "C" {
 
 extern struct igMetaObject *g_igDataPumpInfo_metaObject;
 
+void igDataPumpInfo_EnsureRegistered(void);
+struct igMetaObject *igDataPumpInfo_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

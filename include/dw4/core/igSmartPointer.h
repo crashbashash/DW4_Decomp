@@ -144,6 +144,13 @@ igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoRideOn_Destruct(igSmartP
 igSmartPointer<igObject> *igSmartPointer_beModelCtrlMoveObjectList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_beModelCtrlNode2_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_beModelCtrlSubCom_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igGeometryAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igTextureAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igWindow_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igTimer_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igGraphPath_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igIntersectTraversal_igSmartPointer_igObject_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igModelViewMatrixAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *GameMain_igSmartPointer_igObject_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igAABox_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igActorList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);

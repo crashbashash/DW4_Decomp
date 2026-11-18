@@ -15,6 +15,8 @@ struct igMetaObject *igTransform_GetOrCreateMetaObject(void);
 struct CallbackArray *igTransform_Register(void);
 extern int g_igTransform_vtable[4];
 
+struct igMetaObject *igTransform_GetPublishedMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

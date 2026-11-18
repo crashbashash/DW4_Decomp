@@ -64,7 +64,7 @@ int igParticleArray_GetVTable(void) {
     obj.w17 = 0;
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igParticleArray_vtable[0];
-    FUN_00137260(&obj.w17, -1);
+    FUN_00137260((void **)&obj.w17, (short)-1);
     FUN_0014cd10((ObjectRefWord *)&obj.w12, -1);
     igSmartPointer_igVisualContext_Destruct((igSmartPointer<igObject> *)&obj.w11, -1);
     igSmartPointer_igVertexArray_Destruct((igSmartPointer<igObject> *)&obj.w10, -1);

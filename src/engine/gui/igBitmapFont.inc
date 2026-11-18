@@ -96,7 +96,7 @@ void igBitmapFont_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igCharMetricsList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igTextureBindAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igTextureBindAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igBitmapFont_fieldTable, g_igBitmapFont_fieldHandles, g_igBitmapFont_fieldOffsets, temp_s2);
 }

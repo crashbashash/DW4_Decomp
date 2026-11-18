@@ -35,8 +35,8 @@ int igIniShaderFactory_GetVTable(void) {
     obj.w14 = 0;
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igIniShaderFactory_vtable[0];
-    FUN_0014dd40(&obj.w14, -1);
-    FUN_0014dd40(&obj.w13, -1);
+    FUN_0014dd40((R **)&obj.w14, (short)-1);
+    FUN_0014dd40((R **)&obj.w13, (short)-1);
     igSmartPointer_igInterpretedShaderData_Destruct((ObjectRefWord *)&obj.w12, -1);
     igSmartPointer_igMemoryPool_Destruct((igSmartPointer<igObject> *)&obj.w11, -1);
     igStringRef_Destruct((igStringRef *)&obj.w9, -1);

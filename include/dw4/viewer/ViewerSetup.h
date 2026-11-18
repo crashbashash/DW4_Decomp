@@ -27,11 +27,11 @@ struct ViewerSetup {
 extern "C" {
 void ViewerSetup_Open(ViewerSetup *setup);
 void ViewerSetup_Close(ViewerSetup *setup);
-int ViewerSetup_RunFrame(ViewerSetup *setup);
+void ViewerSetup_RunFrame(ViewerSetup *setup);
 /* Nonzero while the viewer keeps running. */
 int ViewerSetup_Update(ViewerSetup *setup);
 void ViewerSetup_ResetView(ViewerSetup *setup);
-int ViewerSetup_ClearInfos(ViewerSetup *setup);
+void ViewerSetup_ClearInfos(ViewerSetup *setup);
 /* Creates the display: the window, its visual context and frame buffer, from the shared viewer options. */
 igSmartPointer<igWindow> igInsightCore_CreateWindow(int allocator);
 }

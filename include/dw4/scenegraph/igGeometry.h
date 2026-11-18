@@ -14,6 +14,8 @@ struct igGeometry *igGeometry_Destroy(struct igGeometry *self, short deleteFlag)
 struct igMetaObject *igGeometry_GetOrCreateMetaObject(void);
 struct CallbackArray *igGeometry_Register(void);
 
+struct igMetaObject *igGeometry_GetPublishedMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

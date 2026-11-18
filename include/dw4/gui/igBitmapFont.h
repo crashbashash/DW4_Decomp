@@ -12,6 +12,8 @@ extern struct igMetaObject *g_igBitmapFont_metaObject;
 void igBitmapFont_RunStaticInit(void);
 struct CallbackArray *igBitmapFont_Register(void);
 
+struct igMetaObject *igBitmapFont_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

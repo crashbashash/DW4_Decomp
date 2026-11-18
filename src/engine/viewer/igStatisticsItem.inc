@@ -183,9 +183,9 @@ void igStatisticsItem_InitFields(void) {
     temp_s2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6));
     temp_s2->_metaObject = (int)(igGuiComponent_GetOrCreateMetaObject());
     temp_s2_2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7));
-    temp_s2_2->_metaObject = igDefaultAspect_GetOrCreateMetaObject();
+    temp_s2_2->_metaObject = (int)igDefaultAspect_GetOrCreateMetaObject();
     temp_s2_3 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 8));
-    temp_s2_3->_metaObject = igTextElement_GetOrCreateMetaObject();
+    temp_s2_3->_metaObject = (int)igTextElement_GetOrCreateMetaObject();
     temp_s2_3->_construct = 1;
     temp_s2_4 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 9));
     temp_s2_4->_metaObject = (int)igViewerStatisticsManager_GetOrCreateMetaObject();

@@ -59,7 +59,7 @@ int igSearchSceneGraph_GetVTable(void) {
     obj.vt = &g_igSearchSceneGraph_vtable[0];
     igSmartPointer_igMetaObject_Destruct((igSmartPointer<igObject> *)&obj.f14, -1);
     igStringRef_Destruct((igStringRef *)&obj.f10, -1);
-    FUN_002293d0(&obj.fC, -1);
+    FUN_002293d0((void **)&obj.fC, -1);
     igNamedObject_Destroy((igNamedObject *)&obj, 0);
     return vtable;
 }
@@ -128,7 +128,7 @@ void igSearchSceneGraph_InitFields(void) {
     first = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igSearchSceneGraph_ctorTable, 4);
     firstRef = igMetaObject_GetFieldAt(meta, first);
-    *(int *)((char *)firstRef + 56) = igIterateGraph_GetOrCreateMetaObject();
+    *(int *)((char *)firstRef + 56) = (int)igIterateGraph_GetOrCreateMetaObject();
     *(unsigned char *)((char *)firstRef + 52) = 1;
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, first + 1), "");
     secondRef = igMetaObject_GetFieldAt(meta, first + 2);

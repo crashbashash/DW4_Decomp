@@ -7,6 +7,8 @@ extern "C" {
 
 void igTextElement_EnsureRegistered(void);
 
+struct igMetaObject *igTextElement_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

@@ -15,6 +15,8 @@ void igEventDispatcher_RemoveReceiver(struct igEventDispatcher *dispatcher, stru
 void igEventDispatcher_AddReceiverOrder(struct igEventDispatcher *dispatcher, struct igObject *first, struct igObject *second);
 void igEventDispatcher_RemoveReceiverOrder(struct igEventDispatcher *dispatcher, struct igObject *first, struct igObject *second);
 
+struct igMetaObject *igEventDispatcher_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

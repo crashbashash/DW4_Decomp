@@ -96,7 +96,8 @@ static inline void extend(float value, float *minimum, float *maximum) {
     }
 }
 
-void igCompressVec3fList(Vec3fList *list, unsigned short *quantized, float *minimum, float *range) {
+void igCompressVec3fList(igVec3fList *vecList, unsigned short *quantized, float *minimum, float *range) {
+    Vec3fList *list = (Vec3fList *)vecList;
     int i;
     int count;
     float maximum;

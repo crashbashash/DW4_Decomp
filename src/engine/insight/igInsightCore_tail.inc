@@ -121,7 +121,7 @@ void igInsightCore_InitializeDrawing(igInsightCore *core) {
         }
     }
     arg0->f24 = s0;
-    FUN_004541f0(arg0->f32, arg0->f20);
+    FUN_004541f0((int *)arg0->f32, (int *)arg0->f20);
     temp_s1 = arg0->f28->f8->n;
     var_s0 = 0;
     while (var_s0 < temp_s1) {

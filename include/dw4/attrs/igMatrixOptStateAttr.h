@@ -12,6 +12,9 @@ extern "C" {
 extern struct igMetaObject *g_igMatrixOptStateAttr_metaObject;
 struct igMatrixOptStateAttr *igMatrixOptStateAttr_Create(struct igMemoryPoolView *pool);
 
+void igMatrixOptStateAttr_EnsureRegistered(void);
+struct igMetaObject *igMatrixOptStateAttr_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

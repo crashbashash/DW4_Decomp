@@ -8,6 +8,9 @@ struct igMetaObject;
 extern "C" {
 #endif
 extern struct igMetaObject *g_igSphere_metaObject;
+void igSphere_EnsureRegistered(void);
+struct igMetaObject *igSphere_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

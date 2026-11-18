@@ -198,15 +198,15 @@ void igBlendFunctionAttr_InitFields(void) {
     igMetaObject_CreateFields(meta, g_igBlendFunctionAttr_ctorTable, 0xB);
     field2 = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base);
     igEnumMetaField_SetDefaultValue((igMetaField *)field2, g_igBlendFunctionAttr_srcDefault);
-    field2->_getMetaEnumFunction = IG_GFX_BLENDING_FUNCTION_GetMetaEnum;
+    field2->_getMetaEnumFunction = (void (*)())IG_GFX_BLENDING_FUNCTION_GetMetaEnum;
     field3 = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 1);
     igEnumMetaField_SetDefaultValue((igMetaField *)field3, g_igBlendFunctionAttr_dstDefault);
-    field3->_getMetaEnumFunction = IG_GFX_BLENDING_FUNCTION_GetMetaEnum;
+    field3->_getMetaEnumFunction = (void (*)())IG_GFX_BLENDING_FUNCTION_GetMetaEnum;
     field4 = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 2);
     igEnumMetaField_SetDefaultValue((igMetaField *)field4, 0);
     field4->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 3);
-    field->_metaObject = igBlendEquationExt_GetOrCreateMetaObject();
+    field->_metaObject = (int)igBlendEquationExt_GetOrCreateMetaObject();
     field->_deepCopyMethod = 1;
     field->_shallowCopyMethod = 1;
     field->_isAlikeShallowMethod = 3;

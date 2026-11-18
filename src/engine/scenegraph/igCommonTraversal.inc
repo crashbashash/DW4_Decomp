@@ -33,8 +33,8 @@ int igCommonTraversal_GetVTable(void) {
     igSmartPointer_igMatrixObjectPool_Construct(q3);
     q4 = (int*)((char*)&o + 96);
     igSmartPointer_igProjectionMatrixAttrPool_Construct(q4);
-    FUN_001510a0((char*)&o + 100);
-    FUN_001510a0(p + 41);
+    FUN_001510a0((int)((char*)&o + 100));
+    FUN_001510a0((int)(p + 41));
     FUN_001a2c50((int *)(p + 58));
     FUN_001a3cb0(p + 59);
     FUN_001a3ca0(p + 60);
@@ -45,10 +45,10 @@ int igCommonTraversal_GetVTable(void) {
     FUN_001a3c90(p + 65);
     FUN_001a3c80(p + 66);
     FUN_001a3c70(p + 67);
-    FUN_001510a0(p + 68);
+    FUN_001510a0((int)(p + 68));
     FUN_001a3c60(p + 84);
-    FUN_001510a0(p + 86);
-    FUN_001510a0(p + 102);
+    FUN_001510a0((int)(p + 86));
+    FUN_001510a0((int)(p + 102));
     t = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = (int)&D_005293c0[0];
     igSmartPointer_igTimeAttr_Destruct((ObjectRefWord *)((char*)&o + 336), -1);
@@ -70,7 +70,7 @@ int igCommonTraversal_GetVTable(void) {
     igSmartPointer_igTimeAttrPool_Destruct((O *)q6, -1);
     igSmartPointer_igModelViewMatrixAttrPool_Destruct((void * *)q7, -1);
     igSmartPointer_igSorter_Destruct((struct Ref * *)q8, -1);
-    FUN_001380e0((char*)&o + 64, -1);
+    FUN_001380e0((void **)((char*)&o + 64), (short)-1);
     igSmartPointer_igVisualContext_Destruct((igSmartPointer<igObject> *)((char*)&o + 60), -1);
     igSmartPointer_igTransformStack_Destruct((void * *)((char*)&o + 56), -1);
     igSmartPointer_igAttrStackManager_Destruct((void * *)((char*)&o + 52), -1);

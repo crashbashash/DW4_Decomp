@@ -10,6 +10,8 @@ extern "C" {
 
 struct igAlphaStateAttr *igAlphaStateAttr_Create(struct igMemoryPoolView *pool);
 
+struct igMetaObject *igAlphaStateAttr_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

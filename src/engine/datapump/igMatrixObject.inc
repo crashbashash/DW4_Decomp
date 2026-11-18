@@ -1,9 +1,9 @@
 igMetaObject *g_igMatrixObject_metaObject;
 igMetaField *g_igMatrixObject_mMetaField;
 
-void igMatrixObject_Create(int arg0) {
+igObject *igMatrixObject_Create(igMemoryPoolView *pool) {
     igMatrixObject_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igMatrixObject_metaObject, (igMemoryPoolView *)arg0);
+    return igMetaObject_CreateInstance(g_igMatrixObject_metaObject, pool);
 }
 
 igMetaObject *igMatrixObject_GetMetaObject(void)

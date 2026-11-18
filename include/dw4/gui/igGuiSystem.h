@@ -14,6 +14,8 @@ void igGuiSystem_SetMouseCursorVisible(struct igGuiSystem *gui, bool visible);
 void igGuiSystem_SetMouseCursor(struct igGuiSystem *gui, struct igMouseCursor *cursor);
 void igGuiSystem_SetRootComponent(struct igGuiSystem *gui, struct igGuiComponent *root);
 
+struct igMetaObject *igGuiSystem_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

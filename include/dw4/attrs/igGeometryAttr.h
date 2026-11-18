@@ -11,6 +11,9 @@ extern "C" {
 extern struct igMetaObject *g_igGeometryAttr_metaObject;
 struct igGeometryAttr *igGeometryAttr_Create(int allocator);
 
+void igGeometryAttr_EnsureRegistered(void);
+struct igMetaObject *igGeometryAttr_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

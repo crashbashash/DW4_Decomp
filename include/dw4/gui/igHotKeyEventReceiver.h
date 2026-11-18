@@ -15,6 +15,8 @@ void igHotKeyEventReceiver_AddKey(struct igHotKeyEventReceiver *receiver, int ke
 void igHotKeyEventReceiver_AddButton(struct igHotKeyEventReceiver *receiver, int button, struct igObject *action);
 void igHotKeyEventReceiver_RemoveBinding(struct igHotKeyEventReceiver *receiver, int button);
 
+struct igMetaObject *igHotKeyEventReceiver_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

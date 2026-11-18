@@ -171,7 +171,7 @@ void igGeometryAttr1_5_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igGeometryAttr1_5_ctorTable, 1);
     field = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)field)->_metaObject = igPrimLengthArray_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field)->_metaObject = (int)igPrimLengthArray_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_igGeometryAttr1_5_fieldTable, g_igGeometryAttr1_5_fieldHandles, g_igGeometryAttr1_5_fieldOffsets, base);
 }
 

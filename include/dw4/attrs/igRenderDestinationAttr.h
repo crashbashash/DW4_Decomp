@@ -10,6 +10,8 @@ extern "C" {
 
 struct igRenderDestinationAttr *igRenderDestinationAttr_Create(struct igMemoryPoolView *pool);
 
+struct igMetaObject *igRenderDestinationAttr_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

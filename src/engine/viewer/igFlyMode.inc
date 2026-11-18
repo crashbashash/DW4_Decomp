@@ -177,7 +177,7 @@ void igFlyMode_InitFields(void) {
     e.y = 0;
     igVec2fMetaField_SetDefault((igMetaField *)temp_a0_5, (const float *)&e);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 7));
-    *(int *)((char *)(temp_s1) + 56) = igWindow_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s1) + 56) = (int)igWindow_GetOrCreateMetaObject();
     temp_a0_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 8));
     f.x = 0;
     f.y = 0;

@@ -87,13 +87,13 @@ void igBoundingSphereMaker_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igBoundingSphereMaker_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igSphere_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igSphere_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igBoundingSphereMaker_fieldTable, g_igBoundingSphereMaker_fieldHandles, g_igBoundingSphereMaker_fieldOffsets, temp_s2);
 }
 
 void FUN_0023b110(void *arg0, void *arg1) {
     if (*(int *)((char *)(arg1) + 96) == 0) {
-        FUN_0018d630(*(int *)((char *)(arg0) + 8), (char *)arg1 + 0x20);
+        FUN_0018d630((igSphere *)(*(int *)((char *)(arg0) + 8)), (const float *)((char *)arg1 + 0x20));
     }
 }
 

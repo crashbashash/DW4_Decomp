@@ -39,8 +39,8 @@ int **FUN_00194790(int **arg0, long long arg1) {
             *arg0 = &g_igShaderData_vtable[0];
             igSmartPointer_igNodeListList_Destruct((struct Ref * *)((char *)arg0 + 20), -1);
             igSmartPointer_igDataPumpInfo_Destruct((void * *)((char *)arg0 + 16), -1);
-            FUN_0013a800((char *)arg0 + 12, -1);
-            FUN_0013a800((char *)arg0 + 8, -1);
+            FUN_0013a800((void **)((char *)arg0 + 12), (short)-1);
+            FUN_0013a800((void **)((char *)arg0 + 8), (short)-1);
         }
         if (((long long) (arg1 << 0x30) >> 0x30) > 0) {
             Memory_FreeBufferAliasC(arg0);
@@ -142,7 +142,7 @@ void igTransientShaderData_InitFields(void) {
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_attrPushLists")));
     temp_s2 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)temp_s1->f40, (int)temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    temp_s0->f56 = igAttrListList_GetOrCreateMetaObject();
+    temp_s0->f56 = (int)igAttrListList_GetOrCreateMetaObject();
     temp_s0->f52 = 1;
     temp_s0->f38 = 0;
     temp_s0->f28 = (int)(&g_igTransientShaderData_attrPushListsMetaField);
@@ -154,7 +154,7 @@ void igTransientShaderData_InitFields(void) {
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_attrPopLists")));
     temp_s2 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)temp_s1->f40, (int)temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    temp_s0->f56 = igAttrListList_GetOrCreateMetaObject();
+    temp_s0->f56 = (int)igAttrListList_GetOrCreateMetaObject();
     temp_s0->f52 = 1;
     temp_s0->f38 = 0;
     temp_s0->f28 = (int)(&g_igTransientShaderData_attrPopListsMetaField);
@@ -166,7 +166,7 @@ void igTransientShaderData_InitFields(void) {
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_dataPumps")));
     temp_s2 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)temp_s1->f40, (int)temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
-    temp_s0->f56 = igDataPumpInfo_GetOrCreateMetaObject();
+    temp_s0->f56 = (int)igDataPumpInfo_GetOrCreateMetaObject();
     igObjectRefMetaField_SetDefault((igObjectRefMetaField *)temp_s0, (igObject *)0);
     temp_s0->f38 = 0;
     temp_s0->f28 = (int)(&g_igTransientShaderData_dataPumpsMetaField);

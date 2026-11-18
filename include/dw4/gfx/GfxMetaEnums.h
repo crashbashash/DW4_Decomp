@@ -19,6 +19,28 @@ extern "C" {
 struct igMetaEnum *IG_GFX_TEXTURE_FILTER_GetMetaEnum(void);
 struct igMetaEnum *IG_GFX_TEXTURE_FORMAT_GetMetaEnum(void);
 
+int TEXTURE_ARGUMENT_GetMetaEnum(void);
+int TEXTURE_STAGE_TYPE_GetMetaEnum(void);
+int TEXTURE_FUNCTION_TYPE_GetMetaEnum(void);
+int IG_GFX_TEXTURE_COORD_SOURCE_GetMetaEnum(void);
+int IG_GFX_TEXTURE_MODE_GetMetaEnum(void);
+int IG_GFX_TEXTURE_SOURCE_GetMetaEnum(void);
+int IG_GFX_TEXTURE_WRAP_GetMetaEnum(void);
+int IG_GFX_STENCIL_OPERATION_GetMetaEnum(void);
+int IG_GFX_STENCIL_FUNCTION_GetMetaEnum(void);
+int IG_GFX_SHADING_MODE_GetMetaEnum(void);
+int IG_GFX_RENDERDESTINATION_TYPE_GetMetaEnum(void);
+int IG_GFX_RENDER_MODE_GetMetaEnum(void);
+int IG_GFX_PIXEL_PIPELINE_MODE_GetMetaEnum(void);
+int IG_GFX_LIGHT_TYPE_GetMetaEnum(void);
+int IG_GFX_DRAW_GetMetaEnum(void);
+int IG_GFX_FOG_MODE_GetMetaEnum(void);
+int IG_GFX_CULL_FACE_MODE_GetMetaEnum(void);
+int IG_GFX_BLENDING_FUNCTION_GetMetaEnum(void);
+int IG_GFX_ALPHA_FUNCTION_GetMetaEnum(void);
+int TEXTURE_FUNCTION_PSX2_GetMetaEnum(void);
+int IG_GFX_STATISTIC_GetMetaEnum(void);
+
 #ifdef __cplusplus
 }
 #endif

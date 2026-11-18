@@ -25,7 +25,7 @@ int igBillboard_GetVTable(void) {
     u.w[15] = 0;
     temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igBillboard_vtable[0]);
-    igSmartPointer_igModelViewMatrixAttr_Destruct(&u.w[15], -1);
+    igSmartPointer_igModelViewMatrixAttr_Destruct((igSmartPointer<igObject> *)&u.w[15], -1);
     igGroup_Destroy((igGroup *)&u.w[0], 0);
     return temp_s0;
 }
@@ -106,7 +106,7 @@ void igBillboard_InitFields(void) {
     spB[2] = 0;
     igVec3fMetaField_SetDefault((igMetaField *)temp_a0_2, spB);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3)));
-    *(int *)((char *)(temp_s1) + 56) = igModelViewMatrixAttr_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s1) + 56) = (int)igModelViewMatrixAttr_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s1) + 38) = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igBillboard_fieldTable, g_igBillboard_fieldHandles, g_igBillboard_fieldOffsets, temp_s2);
 }

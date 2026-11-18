@@ -24,6 +24,15 @@ void igInsightCore_RemoveRenderer(struct igInsightCore *core, struct igObject *r
 /* Makes `second` draw after `first`. */
 void igInsightCore_AddRendererOrder(struct igInsightCore *core, struct igObject *first, struct igObject *second);
 void igInsightCore_AddInfo(struct igInsightCore *core, struct igObject *info);
+void igInsightCore_RemoveAllInfos(struct igInsightCore *core);
+void igInsightCore_InitializeDrawing(struct igInsightCore *core);
+void igInsightCore_TerminateDrawing(struct igInsightCore *core);
+void igInsightCore_RegisterAllPlugins(struct igInsightCore *core);
+void igInsightCore_UnregisterAllPlugins(struct igInsightCore *core);
+void igInsightCore_Begin(struct igInsightCore *core);
+void igInsightCore_End(struct igInsightCore *core);
+void igInsightCore_HandleEvents(struct igInsightCore *core);
+void igInsightCore_DrawFrame(struct igInsightCore *core);
 
 #ifdef __cplusplus
 }

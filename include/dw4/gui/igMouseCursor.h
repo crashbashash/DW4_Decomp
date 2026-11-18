@@ -7,6 +7,8 @@ extern "C" {
 
 void igMouseCursor_RunStaticInit(void);
 
+struct igMetaObject *igMouseCursor_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

@@ -211,7 +211,7 @@ void igTransformSequence_InitFields(void) {
     temp_s2->f56 = (int)igVec3fList_GetOrCreateMetaObject();
     temp_s2->f52 = 1;
     temp_s2_2 = ((struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1));
-    temp_s2_2->f56 = igQuaternionfList_GetOrCreateMetaObject();
+    temp_s2_2->f56 = (int)igQuaternionfList_GetOrCreateMetaObject();
     temp_s2_2->f52 = 1;
     temp_s2_3 = ((struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2));
     temp_s2_3->f56 = (int)igVec3fList_GetOrCreateMetaObject();

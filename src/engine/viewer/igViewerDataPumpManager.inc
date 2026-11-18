@@ -2,9 +2,9 @@ igMetaObject *g_igViewerDataPumpManager_metaObject;
 igMetaField *g_igViewerDataPumpManager_nameMetaField;
 igMetaField *g_igViewerDataPumpManager_dataPumpManagerMetaField;
 
-void igViewerDataPumpManager_Create(int arg0) {
+igObject *igViewerDataPumpManager_Create(igMemoryPoolView *pool) {
     igViewerDataPumpManager_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igViewerDataPumpManager_metaObject, (igMemoryPoolView *)arg0);
+    return igMetaObject_CreateInstance(g_igViewerDataPumpManager_metaObject, pool);
 }
 
 void *igViewerDataPumpManager_GetMetaObject(void) {
@@ -121,7 +121,7 @@ void FUN_0045c040(void) {
         igObject_Destroy((igObject *)temp_v0_2);
     }
     temp_s0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2));
-    *(int *)((char *)(temp_s0) + 56) = igDataPumpManager_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s0) + 56) = (int)igDataPumpManager_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0) + 52) = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igViewerDataPumpManager_fieldTable, g_igViewerDataPumpManager_fieldHandles, g_igViewerDataPumpManager_fieldOffsets, temp_s2);
 }

@@ -739,7 +739,7 @@ void igPsx2VisualContext_SetMaterialSpecularState(igPsx2VisualContext *self, int
     if (self->_materialSpecularState == (enable & 0xFF))
         DAT_00560910 += 1;
     self->_materialSpecularState = enable;
-    p2SetMaterialSpecularState(enable);
+    p2SetMaterialSpecularState((unsigned char)enable);
 }
 
 void igPsx2VisualContext_SetMaterialColorMode(igPsx2VisualContext *self, unsigned int mode) {

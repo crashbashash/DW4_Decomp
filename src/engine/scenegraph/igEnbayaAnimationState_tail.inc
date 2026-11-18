@@ -89,7 +89,7 @@ void Gap__Sg__igEnbayaAnimationState__vfunc_26(void *arg0) {
     DAT_00562720[0] = 0;
     temp_a0 = (void *)(*(int *)((char *)(arg0) + 160));
     if ((temp_a0 != 0) && (*(unsigned char *)((char *)(temp_a0) + 171) != 0)) {
-        FUN_002800d0(temp_a0);
+        FUN_002800d0((S *)temp_a0);
     }
 }
 

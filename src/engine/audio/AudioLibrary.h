@@ -260,12 +260,11 @@ class igMemoryPoolView;
 #include "dw4/core/igSemaphore.h"
 #include "dw4/sony/sifdev.h"
 #include "dw4/core/igPsx2IopRpcConnection.h"
-void igWindow_EnsureRegistered(void);
+#include "dw4/windowinput/igWindow.h"
 igMetaObject *igAudioContext_GetPublishedMetaObject(void);
 extern int g_igPsx2AudioContext_vtable[4];
 extern int g_igPsx2AudioSourceList_vtable[4];
 
-int igWindow_GetOrCreateMetaObject(...);
 int FUN_00301000(InitContext *);
 void *igPsx2AudioSourceList_Create(igMemoryPoolView *pool);
 unsigned FUN_00145960(void *context, void *voice);
@@ -277,7 +276,6 @@ void igAudioContext_InitFields(void);
 void igPsx2AudioContext_GetMetaObjectFunction(void);
 igMetaObject *igPsx2AudioContext_GetMetaObject(void);
 void **FUN_00143250(void **arg0, short arg1);
-void **igSmartPointer_igWindow_Destruct(void **arg0, long long arg1);
 void igPsx2AudioContext_EnsureRegistered(void);
 CallbackArray *igPsx2AudioContext_Register(void);
 void igPsx2AudioContext_InitFields(void);

@@ -7,6 +7,8 @@ extern "C" {
 
 void igDefaultAspect_EnsureRegistered(void);
 
+struct igMetaObject *igDefaultAspect_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

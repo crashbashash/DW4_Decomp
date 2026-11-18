@@ -16,8 +16,8 @@ typedef float DFtype __attribute__((mode(DF)));
 #define SF_SIZE 24
 #define REP_BIT ((UDItype)1 << (DI_SIZE - DF_SIZE))
 
-DItype __fixunsdfdi(DFtype a);
-DItype __fixunssfdi(SFtype original_a);
+UDItype __fixunsdfdi(DFtype a);
+UDItype __fixunssfdi(SFtype original_a);
 
 DItype __muldi3(DItype u, DItype v) {
     DWunion w;
@@ -64,7 +64,7 @@ SFtype __floatdisf(DItype u) {
     return (SFtype)f;
 }
 
-DItype __fixunsdfdi(DFtype a) {
+UDItype __fixunsdfdi(DFtype a) {
     DFtype b;
     UDItype v;
 
@@ -91,7 +91,7 @@ DItype __fixdfdi(DFtype a) {
     return __fixunsdfdi(a);
 }
 
-DItype __fixunssfdi(SFtype original_a) {
+UDItype __fixunssfdi(SFtype original_a) {
     DFtype a = original_a;
     DFtype b;
     UDItype v;

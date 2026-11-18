@@ -85,7 +85,6 @@ extern "C" void igMatrixObjectList_EnsureRegistered(void);
 #include "dw4/core/igObjectList.h"
 extern "C" CallbackArray *igMatrixObjectList_Register(void);
 extern "C" void igMatrixObjectList_GetMetaObjectFunction(void);
-extern "C" void igMatrixObject_Create(int arg0);
 extern "C" igMetaObject *igMatrixObject_GetMetaObject(void);
 struct Obj_1e4ce0 { int *vt; char pad[76]; };
 #include "dw4/maths/igMatrix44f.h"
@@ -204,7 +203,7 @@ extern "C" void igBoolObject_GetMetaObjectFunction(void);
 extern "C" void igBoolObject_InitFields(void);
 typedef struct Vec3fList { int _vtable; unsigned int _refCount; int _count; int _capacity; float (*_data)[3]; } Vec3fList;
 extern "C" void igCompressVec3fListRange(Vec3fList *list, unsigned short *out, float base, float range);
-extern "C" void igCompressVec4fList(igQuaternionfList *list, short *quantized, float *minimum, float *range);
+
 extern "C" void igDataPump_SetDestByFieldName(igDataPump *self, igObjectDispatchView **destObj, const char *destName);
 extern "C" void igDataPump_SetDataPumpInterface(igDataPump *self, igObject **dpi);
 struct Value : public igVirtualObject { virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int type(); int offset; };
@@ -227,6 +226,8 @@ extern "C" int FUN_0018be80(...);
 #include "dw4/core/igStringRef.h"
 #include "dw4/core/igStringObj.h"
 #include "dw4/support/softfloat.h"
+#include "dw4/datapump/igMatrixObject.h"
+#include "dw4/datapump/igCompressVec.h"
 
 struct Tag { };
 /* igStringObj as the two vector formatters hold it: each smart-pointer instance emits its own destructor. */
@@ -252,7 +253,7 @@ extern "C" igMetaObject *igMatrixObjectList_GetElementMeta(void);
 extern "C" void igLongStack_TrimCapacity(igDataList *arg0);
 extern "C" void igMatrixStack_TrimCapacity(igDataList *arg0);
 extern "C" unsigned int igMersenneTwisterRandomNumber_GetNumberNonVirtual(igMersenneTwisterRandomNumber *self);
-extern "C" void igCompressVec3fList(Vec3fList *list, unsigned short *quantized, float *minimum, float *range);
+
 extern "C" void igCompressVec4fListRange(igQuaternionfList *list, short *quantized, float minimum, float range);
 
 #endif

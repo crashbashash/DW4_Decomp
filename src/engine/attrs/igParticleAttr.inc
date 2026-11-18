@@ -112,7 +112,7 @@ void igParticleAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igParticleAttr_ctorTable, 7);
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)field2)->_metaObject = igParticleArray_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)igParticleArray_GetOrCreateMetaObject();
     field = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
     igLongMetaField_SetDefault((igMetaField *)field, -1);
     ((igLongMetaField *)field)->_persistent = 0;

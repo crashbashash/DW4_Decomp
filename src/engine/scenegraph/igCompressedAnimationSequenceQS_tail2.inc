@@ -37,7 +37,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QS
         l = arg0->_compressedTranslationList;
         c = l->_count;
         if (c < l->_capacity) List_Reserve((igDataList *)l, c, 2);
-        igCompressVec3fList(arg1->v172(), arg0->_compressedTranslationList->_data, &sp7C, &sp78);
+        igCompressVec3fList((igVec3fList *)arg1->v172(), (unsigned short *)arg0->_compressedTranslationList->_data, &sp7C, &sp78);
         arg0->_translationBase = sp7C;
         arg0->_translationRangeOverMaxUShort = 1.52590219e-05f * sp78;
     }
@@ -60,7 +60,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QS
         l = arg0->_compressedQuaternionList;
         c = l->_count;
         if (c < l->_capacity) List_Reserve((igDataList *)l, c, 2);
-        igCompressVec4fList(arg1->v184(), arg0->_compressedQuaternionList->_data, &sp7C, &sp78);
+        igCompressVec4fList((igQuaternionfList *)arg1->v184(), (short *)arg0->_compressedQuaternionList->_data, &sp7C, &sp78);
         arg0->_quaternionBase = sp7C;
         arg0->_quaternionRangeOverMaxUShort = 1.52590219e-05f * sp78;
     }

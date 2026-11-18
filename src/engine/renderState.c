@@ -13,7 +13,7 @@ extern int FUN_001f8b50();
 extern int FUN_001fffb0();
 extern int p2LookupStateCacheEntry();
 struct P { long long m0; long long m8; int p16; struct P *next; int sh; int count; int tab[1]; };
-void *p2CreateVariantTable();
+void *p2CreateVariantTable(int index);
 extern int DAT_0056ae40[4];
 
 /* One slot per bit of a VU program's feature mask. p2VariantsBitN lists the programs that have bit N, one

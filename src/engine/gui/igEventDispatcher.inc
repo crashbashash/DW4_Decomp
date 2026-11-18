@@ -124,7 +124,7 @@ void igEventDispatcher_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igEventReceiverOrderedList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igControllerManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igControllerManager_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igEventDispatcher_fieldTable, g_igEventDispatcher_fieldHandles, g_igEventDispatcher_fieldOffsets, temp_s2);
 }

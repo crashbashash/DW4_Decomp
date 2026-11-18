@@ -16,7 +16,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
         FUN_001901b0(bound, topMatrix(self));
     }
     if (self->flags & 1) {
-        if (FUN_0018ffa0(self->query->volume, bound) != 0) {
+        if (FUN_0018ffa0((void **)self->query->volume, (void **)bound) != 0) {
             int r;
             HitMatrix *m;
             volumeReport.type = 1;
@@ -44,7 +44,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
             count = segments->count;
             for (i = 0; i < count; i++) {
                 HitSegment *segment = segments->data[i];
-                if (FUN_00190010(bound, segment) != 0) {
+                if (FUN_00190010((void **)bound, (int)segment) != 0) {
                     int r;
                     HitMatrix *m;
                     segmentReport.type = 2;
@@ -195,7 +195,7 @@ int igIntersectTraversal_TraverseTransform(ModelTraversal *self, TraversalNode *
     ObjectList_AppendRetained((igObjectList *)self->nodes, (igObject *)node);
     result = FUN_001ceab0((HitTraversal *)self, (HitNode *)node);
     if (result == 0) {
-        igMatrixStack_PushPreMultiply(self->matrices, node->transform);
+        igMatrixStack_PushPreMultiply((igMatrixStack *)self->matrices, node->transform);
         result = igTraversal_TraverseChildren((igTraversal *)(self), (igNode *)node);
         {
             MatrixStack *s = self->matrices;

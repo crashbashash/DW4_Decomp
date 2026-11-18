@@ -4,9 +4,9 @@ igMetaField *g_igLogoRenderer_geometryAttrMetaField;
 igMetaField *g_igLogoRenderer_colorAttrMetaField;
 igMetaField *g_igLogoRenderer_attrListMetaField;
 
-void igLogoRenderer_Create(int arg0) {
+igObject *igLogoRenderer_Create(igMemoryPoolView *pool) {
     igLogoRenderer_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igLogoRenderer_metaObject, (igMemoryPoolView *)arg0);
+    return igMetaObject_CreateInstance(g_igLogoRenderer_metaObject, pool);
 }
 
 SigLogoRenderer_GetMetaObject *igLogoRenderer_GetMetaObject(void) {
@@ -27,7 +27,7 @@ int igLogoRenderer_GetVTable(void) {
     obj.vt = &g_igLogoRenderer_vtable[0];
     igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&obj.w8, -1);
     igSmartPointer_igColorAttr_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
-    igSmartPointer_igGeometryAttr_Destruct(&obj.w6, -1);
+    igSmartPointer_igGeometryAttr_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
     FUN_00230f70(&obj, 0);
     return t;
 }
@@ -96,7 +96,7 @@ void igLogoRenderer_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igLogoRenderer_ctorTable, 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igGeometryAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igGeometryAttr_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)(igColorAttr_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s1_2)->_construct = 1;

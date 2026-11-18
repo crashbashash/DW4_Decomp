@@ -12,6 +12,8 @@ extern "C" {
 extern struct igMetaObject *g_igTextureMatrixAttr_metaObject;
 struct igTextureMatrixAttr *igTextureMatrixAttr_Create(struct igMemoryPoolView *pool);
 
+struct igMetaObject *igTextureMatrixAttr_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

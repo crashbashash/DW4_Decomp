@@ -16,6 +16,9 @@ int igDataPumpInfo_Append(struct igDataPumpInfo *self, struct igObject *pump);
 int igDataPumpManager_Update(struct igDataPumpManager *self, long long time);
 int igDataPumpManager_AppendList(struct igDataPumpManager *self, struct igDataPumpList *list);
 int igDataPumpManager_AppendInfo(struct igDataPumpManager *self, struct igDataPumpInfo *info);
+void igDataPumpManager_EnsureRegistered(void);
+struct igMetaObject *igDataPumpManager_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

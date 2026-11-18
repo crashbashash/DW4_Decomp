@@ -10,6 +10,8 @@ extern "C" {
 
 struct igTextureCoordSourceAttr *igTextureCoordSourceAttr_Create(struct igMemoryPoolView *pool);
 
+struct igMetaObject *igTextureCoordSourceAttr_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

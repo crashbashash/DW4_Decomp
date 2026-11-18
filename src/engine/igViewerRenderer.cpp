@@ -109,14 +109,14 @@ static inline void *createThird() {
 #include "dw4/maths/igMatrix44f.h"
 int FUN_001b0000(int, int, int, int);
 
-int FUN_001b6ce0(void *, float, float, float, float, float);
+void FUN_001b6ce0(void*, float, float, float, float, float);
 
 
 extern int DAT_0058ca20[4];
 
 class E { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual int vX(int); };
 struct CameraLink { char pad[12]; int f12; char pad1[36]; E *f52; char pad2[16]; int f72; int f76; int f80; };
-int FUN_001b6ee0(int, int *);
+void FUN_001b6ee0(int, int*);
 
 struct FogAttr { char pad[12]; int f12; char pad2[60]; int f76; };
 struct FogHolder { char pad[68]; struct FogAttr *f68; };
@@ -177,6 +177,7 @@ struct PropertyList { char pad[32]; int f32; };
 #include "dw4/core/igMetaObject.h"
 extern int text_meta[4];
 #include "dw4/attrs/igAttr.h"
+#include "dw4/attrs/igAttrPool.h"
 int igViewerRenderer_FindAttrFromType(PropertyHolder *arg0, PropertyList *arg1);
 static inline int castToProperty(int object) {
     if (object != 0 && igObject_IsKindOf((igObject *)object, g_igObjectRefMetaField_metaObject) != 0) {
@@ -187,8 +188,6 @@ static inline int castToProperty(int object) {
 
 struct ListOwner { char pad[32]; int list; };
 
-igSmartPointer<igObject> igAttrPool_GetSharedAttr(int, igSmartPointer<igObject>);
-int igAttrPool_GetStaticAttrPool(...);
 
 static inline void removeFromList(int list, int object) {
     ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)object, 0);

@@ -32,10 +32,10 @@ int igGuiSystemRenderer_GetVTable(void) {
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igGuiSystemRenderer_vtable[0];
     igSmartPointer_igDisplayListAttr_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
-    FUN_001d9870(&obj.w5, -1);
+    FUN_001d9870((void **)&obj.w5, (short)-1);
     FUN_0044e0e0((Ref **)&obj.w4, -1);
     igSmartPointer_igNode_Destruct((igSmartPointer<igObject> *)&obj.w3, -1);
-    FUN_00230f70(&obj, 0);
+    FUN_00230f70((S *)&obj, (short)0);
     return t;
 }
 
@@ -108,10 +108,10 @@ void igGuiSystemRenderer_InitFields(void) {
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igGuiSystemModel_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = FUN_001a38e0();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_001a38e0();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = igDisplayListAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)igDisplayListAttr_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igGuiSystemRenderer_fieldTable, g_igGuiSystemRenderer_fieldHandles, g_igGuiSystemRenderer_fieldOffsets, temp_s2);
 }
 

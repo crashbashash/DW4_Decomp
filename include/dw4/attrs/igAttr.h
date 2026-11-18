@@ -10,6 +10,9 @@ extern "C" {
 extern struct igMetaObject *g_igAttr_metaObject;
 struct igMetaObject *igAttr_GetMetaObject(void);
 
+struct igMetaObject *igAttr_GetOrCreateMetaObject(void);
+void igAttr_EnsureRegistered(void);
+
 #ifdef __cplusplus
 }
 #endif

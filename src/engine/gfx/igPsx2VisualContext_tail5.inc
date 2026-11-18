@@ -502,7 +502,7 @@ void igPsx2VisualContext_GetStatistics(void) {
     DAT_00560d00[0] = DAT_00560ed0[0];
     DAT_00560d08[0] = DAT_00560ed8[0];
     DAT_00560d10[0] = DAT_00560ee0[0];
-    p2GetStatistics(&g_gsStatCurrent, DAT_00560ed0[0], DAT_00560ec8[0], DAT_00560ea0[0]);
+    p2GetStatistics(&g_gsStatCurrent);
 }
 
 float igPsx2VisualContext_GetStatisticValue(void *unused, int id) {
@@ -912,17 +912,17 @@ void FUN_0017a870(S0_17a070 *arg0, int arg1) {
     if (arg1 == 0) {
         temp_a0 = arg0->f5F4;
         if (temp_a0 != 0) {
-            p2FreeTexture(temp_a0);
+            p2FreeTexture((P2Texture *)temp_a0);
             arg0->f5F4 = 0;
         }
         temp_a0_2 = arg0->f5F8;
         if (temp_a0_2 != 0) {
-            p2FreeTexture(temp_a0_2);
+            p2FreeTexture((P2Texture *)temp_a0_2);
             arg0->f5F8 = 0;
         }
         temp_a0_3 = arg0->f5FC;
         if (temp_a0_3 != 0) {
-            p2FreeTexture(temp_a0_3);
+            p2FreeTexture((P2Texture *)temp_a0_3);
             arg0->f5FC = 0;
         }
     }
@@ -1225,7 +1225,7 @@ unsigned char igPsx2VisualContext_SetTexture(igPsx2VisualContext *self, int inde
     if (self->_currentTex != index || entry->stage != stage || clutDirty || reload) {
         if (reload) {
             entry->reload = false;
-            p2SetTextureImage(entry->buffers[0], entry->image->pixels);
+            p2SetTextureImage((P2Texture *)entry->buffers[0], (void *)entry->image->pixels);
         }
         FUN_0017b400((TexContext *)self, entry, stage, clut, clutIndex);
         entry->stage = stage;
@@ -1268,7 +1268,7 @@ void FUN_0017b5f0(TexContext *context, TexEntry *entry)
                     mipFormat = DAT_0048ac40[entry->format];
                 }
                 entry->buffers[level] = (int)p2LoadTexture((void *)mip->pixels, mip->width, mip->height, mipFormat, 0);
-                p2ChainTexture(entry->buffers[0], entry->buffers[level]);
+                p2ChainTexture((P2Texture *)entry->buffers[0], (P2Texture *)entry->buffers[level]);
                 level++;
                 width >>= 1;
                 height >>= 1;
@@ -1295,7 +1295,7 @@ void FUN_0017b5f0(TexContext *context, TexEntry *entry)
                 }
                 mip = entry->mipImages[i];
                 entry->buffers[level] = (int)p2LoadTexture((void *)mip->pixels, mip->width, mip->height, mipFormat, 0);
-                p2ChainTexture(entry->buffers[0], entry->buffers[level]);
+                p2ChainTexture((P2Texture *)entry->buffers[0], (P2Texture *)entry->buffers[level]);
                 level++;
             }
         }
@@ -1326,16 +1326,16 @@ void igPsx2VisualContext_UnloadTexture(igPsx2VisualContext *self, int index) {
     }
     if (slot->kind == 3) {
         if (slot->buffers[0] != 0) {
-            p2FenceUsedTexture(slot->buffers[0]);
+            p2FenceUsedTexture((P2Texture *)slot->buffers[0]);
             if (slot->buffer != 0) {
-                p2FenceUsedTexture(slot->buffer);
+                p2FenceUsedTexture((P2Texture *)slot->buffer);
             }
         }
     } else if (slot->buffers != 0) {
         for (i = 0; i < 8; i++) {
             if (slot->buffers[i] != 0) {
-                p2WaitDmaSequence(2, p2GetTextureUploadSequence((long long *)slot->buffers[i]));
-                p2FreeTexture(slot->buffers[i]);
+                p2WaitDmaSequence(2, p2GetTextureUploadSequence((P2Texture *)slot->buffers[i]));
+                p2FreeTexture((P2Texture *)slot->buffers[i]);
                 slot->buffers[i] = 0;
             }
         }
@@ -1356,9 +1356,9 @@ void igPsx2VisualContext_DeleteTexture(TexContext *context, int index)
         }
     }
     if (entry->kind == 3 && entry->buffers[0] != 0) {
-        p2FreeTexture(entry->buffers[0]);
+        p2FreeTexture((P2Texture *)entry->buffers[0]);
         if (entry->buffer != 0) {
-            p2FreeTexture(entry->buffer);
+            p2FreeTexture((P2Texture *)entry->buffer);
         }
     }
     if (entry->format < 0x10000) {

@@ -34,7 +34,6 @@ class igMemoryPoolView;
 #include "dw4/core/igTimer.h"
 #include "dw4/core/igReport.h"
 #include "dw4/core/igPluginHelper.h"
-extern "C" void igWindow_EnsureRegistered(void);
 #include "dw4/gfx/igVisualContext.h"
 extern "C" void InsightLibrary_MarkRegistered(void);
 struct S {
@@ -194,8 +193,6 @@ extern "C" void igInsightPlugin_GetMetaObjectFunction(void);
 extern "C" igMetaObject *g_igInsightCore_metaObject;
 extern "C" igMetaObject *igInsightCore_GetMetaObject(void);
 struct Obj_2328e0 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; int w12; int w13; int w14; int w15; int w16; int w17; int w18; int w19; int w20; int w21; int w22; int w23; int w24; int w25; int w26; int w27; };
-extern "C" int igSmartPointer_igWindow_Destruct(...);
-extern "C" int igSmartPointer_igTimer_Destruct(...);
 extern "C" int g_igInsightCore_vtable[4];
 extern "C" int igInsightCore_GetVTable(void);
 struct S_temp_a0 { char pad4[4]; int f4; };
@@ -213,9 +210,6 @@ struct R { int vt; unsigned int rc; };
 extern "C" struct R **igSmartPointer_igInsightPluginList_Destruct(struct R **arg0, short arg1);
 extern "C" CallbackArray *igInsightCore_Register(void);
 extern "C" void igInsightCore_GetMetaObjectFunction(void);
-extern "C" int igWindow_GetOrCreateMetaObject(...);
-extern "C" int igClearRenderer_GetOrCreateMetaObject(...);
-extern "C" int igEventDispatcher_GetOrCreateMetaObject(...);
 extern "C" void igInsightCore_InitFields(void);
 extern "C" void igInsightCore_UserRegisterFunction(void);
 extern "C" igMetaObject *g_igWindowResizeEventReceiver_metaObject;
@@ -594,15 +588,6 @@ class DW4VC_104_0 { public: virtual void d0(); virtual void d1(); virtual void d
 class DW4VC_100_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int); };
 struct Instance : public igObject { };
 class DW4VC_92_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(int); };
-extern "C" void igInsightCore_RegisterAllPlugins(igInsightCore *core);
-extern "C" void igInsightCore_UnregisterAllPlugins(igInsightCore *core);
-extern "C" void igInsightCore_RemoveAllInfos(igInsightCore *core);
-extern "C" void igInsightCore_Begin(igInsightCore *core);
-extern "C" void igInsightCore_End(igInsightCore *core);
-extern "C" void igInsightCore_InitializeDrawing(igInsightCore *core);
-extern "C" void igInsightCore_TerminateDrawing(igInsightCore *core);
-extern "C" void igInsightCore_HandleEvents(igInsightCore *core);
-extern "C" void igInsightCore_DrawFrame(igInsightCore *core);
 extern "C" void igInsightCore_RegisterPlugin(void *arg0, void **arg1);
 extern "C" void igInsightCore_UnregisterPlugin(void *arg0, void **arg1);
 typedef struct L { char pad8[8]; int cnt; char pad12[4]; int *arr; } L;
@@ -653,7 +638,7 @@ struct StringRef_237300 {
     }
 };
 extern "C" void igInsightCore_resetFields(struct A_237300 *arg0, int flags);
-extern "C" int FUN_004541f0(...);
+extern "C" void FUN_004541f0(int*, int*);
 struct OO;
 struct R_237530;
 class DW4VC_152 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual R_237530 *vX(); };
@@ -664,7 +649,6 @@ struct OO { char pad[20]; DW4VC_152 *f20; R_237530 *f24; Wr *f28; int f32; };
 struct L_2376b0 { char pad[8]; int count; int pad2; int *items; };
 struct M_2376b0 { char pad[8]; struct L_2376b0 *list; };
 struct H { char pad[28]; struct M_2376b0 *m; };
-extern "C" int igAttrPool_UserUnregister(...);
 class A21 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void vX(); };
 class A24 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual long long vX(); };
 struct S_237730 { char pad12[12]; A21 *f12; char pad16[16]; A21 *f32; char pad36[12]; A24 *f48; char pad52[4]; long long f56; long long f64; int f72; char pad76[4]; long long f80; };
@@ -763,6 +747,7 @@ extern "C" void igSerialScheduler_RemoveAllDependencies(S0 *arg0, void *arg1);
  * StoreFloat (igGetRegistryValue_Float), StoreInt (igGetRegistryValue_Int), StoreVec4 (igGetRegistryValue_Vec4f),
  * StoreVec3 (igGetRegistryValue_Vec3f). */
 #include "dw4/core/igRegistry.h"
+#include "dw4/attrs/igAttrPool.h"
 extern "C" void igViewerDefaults_LoadFromRegistry(SharedViewerOptions *self);
 extern "C" igMetaObject *igSerialScheduler_GetMeta(void);
 extern "C" igMetaObject *igFilterMessageDispatcher_GetMeta(void);

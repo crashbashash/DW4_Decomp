@@ -96,7 +96,7 @@ void Gap__Sg__igCommonTraversal__vfunc_28(O_1b7010 *arg0, R_1b7010 *arg1) {
         arg0->f36 = (R_1b7010 *)igGenericAttrDefaultManager_Create((igMemoryPoolView *)a);
         a = ((void *)igObject_GetAllocator((igObject *)arg0));
         release(arg0->f32);
-        arg0->f32 = igGenericCapabilityManager_Create(a);
+        arg0->f32 = (R_1b7010 *)igGenericCapabilityManager_Create((igMemoryPoolView *)a);
         var_s1 = 1;
     } else {
         if (arg0->f36 == 0) {
@@ -112,7 +112,7 @@ void Gap__Sg__igCommonTraversal__vfunc_28(O_1b7010 *arg0, R_1b7010 *arg1) {
             var_s1 = 1;
         }
         if (arg0->f32 == 0) {
-            igSmartPointer<R_1b7010> created(igVisualContextCapabilityManager_Create(((void *)igObject_GetAllocator((igObject *)arg0))));
+            igSmartPointer<R_1b7010> created((R_1b7010 *)igVisualContextCapabilityManager_Create(igObject_GetAllocator((igObject *)arg0)));
             t = created.get();
             retain_1b7010(arg1);
             release(t->f8);
@@ -284,7 +284,7 @@ igObject *FUN_001b7920(igCommonTraversal *self, int name) {
     int last;
     SegmentStackList *stack;
     igObject *top;
-    index = igStringObjList_BinarySearch((SegmentStackList *)self->_segmentOverrideNames, name, strcasecmp);
+    index = igStringObjList_BinarySearch((igStringObjList *)self->_segmentOverrideNames, name, (int (*)(char *, int))strcasecmp);
     if (index < 0) {
         return 0;
     }
@@ -309,7 +309,7 @@ int FUN_001b7af0(void *arg0, int arg1) {
     if ((arg1 == 0) || (strlen((char *)arg1) == 0)) {
         return 0;
     }
-    temp_v0_2 = igStringObjList_BinarySearch(*(int *)((char *)(arg0) + 260), arg1, &strcasecmp);
+    temp_v0_2 = igStringObjList_BinarySearch((igStringObjList *)*(int *)((char *)(arg0) + 260), arg1, (int (*)(char *, int))&strcasecmp);
     if (temp_v0_2 < 0) {
         return 0;
     }

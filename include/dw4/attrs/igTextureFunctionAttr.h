@@ -10,6 +10,8 @@ extern "C" {
 
 struct igTextureFunctionAttr *igTextureFunctionAttr_Create(struct igMemoryPoolView *pool);
 
+struct igMetaObject *igTextureFunctionAttr_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

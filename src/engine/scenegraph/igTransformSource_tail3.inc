@@ -18,7 +18,7 @@ void FUN_001dd0e0(TransformSampleView *o, int index, float (*m)[4]) {
         s[i] = sqrtf(r[0] * r[0] + r[1] * r[1] + r[2] * r[2]);
     }
     igMatrix44f_Copy(rot[0], m[0]);
-    if (FUN_00192290(m) < 0.0f) {
+    if (FUN_00192290((const float *)m) < 0.0f) {
         s[0] = -s[0];
         s[1] = -s[1];
         s[2] = -s[2];

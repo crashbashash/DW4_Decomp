@@ -1,8 +1,8 @@
 igMetaObject *g_igGenericCapabilityManager_metaObject;
 
-void igGenericCapabilityManager_Create(int arg0) {
+igObject *igGenericCapabilityManager_Create(igMemoryPoolView *pool) {
     igGenericCapabilityManager_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igGenericCapabilityManager_metaObject, (igMemoryPoolView *)arg0);
+    return igMetaObject_CreateInstance(g_igGenericCapabilityManager_metaObject, pool);
 }
 
 igMetaObject *igGenericCapabilityManager_GetMetaObject(void)

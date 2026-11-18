@@ -63,6 +63,8 @@
 #include "dw4/core/internalNonRefCountedObjectList.h"
 #include "dw4/support/list-services.h"
 #include "dw4/base/igOptBase.h"
+#include "dw4/scenegraph/igNonRefCountedNodeList.h"
+#include "dw4/base/igIterateGraph.h"
 
 typedef void (*igMetaObjectCallback)();
 
@@ -122,9 +124,8 @@ extern int DAT_00560f98[4];
 extern int DAT_00561010[4];
 
 extern "C" {
-int igNonRefCountedNodeList_GetOrCreateMetaObject(...);
 
-int FUN_002fdef0(void *meta, void *field);
+int FUN_002fdef0(int, int);
 int FUN_00142bb0(void *list, void *key);
 struct GraphIterator;
 int FUN_0022ad00(struct GraphIterator *it);
@@ -472,7 +473,6 @@ void FUN_002273d0(void);
 CallbackArray *igIterator_Register(void);
 void igIterator_GetMetaObjectFunction(void);
 igMetaObject *igIterator_GetPublishedMetaObject(void);
-void *igIterateGraph_Create(int arg0);
 igMetaObject *igIterateGraph_GetOrCreateMetaObject(void);
 igMetaObject *igIterateGraph_GetMetaObject(void);
 int igIterateGraph_GetVTable(void);

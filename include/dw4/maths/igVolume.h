@@ -6,6 +6,9 @@
 extern "C" {
 #endif
 void igVolume_ExtendBy(void **volume, void **other);
+void igVolume_EnsureRegistered(void);
+struct igMetaObject *igVolume_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

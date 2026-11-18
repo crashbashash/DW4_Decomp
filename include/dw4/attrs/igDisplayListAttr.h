@@ -9,6 +9,9 @@ extern "C" {
 
 extern struct igMetaObject *g_igDisplayListAttr_metaObject;
 
+void igDisplayListAttr_EnsureRegistered(void);
+struct igMetaObject *igDisplayListAttr_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

@@ -121,7 +121,7 @@ void igVertexBlendMatrixListAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igVertexBlendMatrixListAttr_ctorTable, 7);
     field3 = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)field3)->_metaObject = igMatrixObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field3)->_metaObject = (int)igMatrixObjectList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)field3)->_construct = 1;
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
     ((igMetaField *)field2)->_persistent = 0;

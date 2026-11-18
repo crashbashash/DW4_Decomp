@@ -114,7 +114,7 @@ void FUN_004535d0(beFontImage *arg0, DW4VC_116_2 *arg1, int arg2, P *arg3, R_453
 int FUN_00453830(beFontImage *arg0, int arg1) {
     struct K k;
     k.key = arg1;
-    return List_BinarySearch(arg0->_charMetricsList, &k, FUN_00453370, 0x28);
+    return List_BinarySearch((igDataList *)arg0->_charMetricsList, (int)&k, (int (*)(int, int))FUN_00453370, 0x28);
 }
 
 void igBitmapFont_resetFields(FontImage *self, int enable) {

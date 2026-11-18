@@ -17,9 +17,9 @@ void FUN_00149bc0(void) {
     }
 }
 
-void igVisualContextCapabilityManager_Create(int arg0) {
+igObject *igVisualContextCapabilityManager_Create(igMemoryPoolView *pool) {
     igVisualContextCapabilityManager_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igVisualContextCapabilityManager_metaObject, (igMemoryPoolView *)arg0);
+    return igMetaObject_CreateInstance(g_igVisualContextCapabilityManager_metaObject, pool);
 }
 
 igMetaObject *igVisualContextCapabilityManager_GetMetaObject(void)

@@ -15,6 +15,9 @@ extern "C" {
 
 struct igWindow *igWindow_CreateInstance(int allocator);
 
+void igWindow_EnsureRegistered(void);
+struct igMetaObject *igWindow_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

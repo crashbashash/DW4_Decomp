@@ -14,13 +14,10 @@
   "code_only.other.functions": 0,
   "compile.bytes": 0,
   "compile.functions": 0,
-  "decl.header_conflicts": 195,
-  "decl.local_externs": {
-   "reason": "engine readability round 1: naming engine FUN_/vfunc_ placeholders turns their existing copies in other libraries' headers into counted local externs (placeholders were exempt); moved to home headers in the following declaration cleanup",
-   "value": 237
-  },
-  "decl.type_conflicts": 257,
-  "decl.varargs": 219,
+  "decl.header_conflicts": 29,
+  "decl.local_externs": 0,
+  "decl.type_conflicts": 65,
+  "decl.varargs": 70,
   "foreign_profile.bytes": 0,
   "foreign_profile.functions": 0,
   "fun_dat_refs": 386,

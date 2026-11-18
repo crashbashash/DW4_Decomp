@@ -21,18 +21,12 @@
 #include "dw4/core/igResult.h"
 #include "dw4/core/igNamedObject.h"
 #include <math.h>
+#include "dw4/viewer/igActorManager.h"
+#include "dw4/viewer/igLogoRenderer.h"
+#include "dw4/viewer/igViewerDataPumpManager.h"
+#include "dw4/gui/igFieldSynchronizer.h"
 extern "C" {
 
-int igInsightCore_DrawFrame(...);
-int igInsightCore_RemoveAllInfos(...);
-
-int igInsightCore_RegisterAllPlugins(int);
-int igInsightCore_Begin(int);
-int igInsightCore_InitializeDrawing(int);
-
-int igInsightCore_UnregisterAllPlugins(int);
-int igInsightCore_End(int);
-int igInsightCore_TerminateDrawing(int);
 
 /* The views ViewerSetup_Update reads members of the setup through: the window's slot 41, the scene-info
  * manager's quit flag (+44, +12, +180) and the logo renderer's display time (+16). */
@@ -48,7 +42,6 @@ struct L4 { char pad[180]; unsigned char b180; };
 struct L2 { char pad[12]; L4 *p12; };
 struct L1 { char pad[44]; L2 *p44; };
 struct B { char pad[16]; long long ll16; };
-extern "C" void igInsightCore_HandleEvents(igInsightCore *);
 
 typedef struct S2 { char pad[8]; igObject *obj; int f12; } S2;
 
@@ -95,10 +88,6 @@ class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtu
 struct O2 { char p[8]; V *o; };
 class DW4VC_116_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual int vX(); };
 
-igObject *igViewerSceneInfoManager_Create(int);
-igObject *igActorManager_Create(int);
-igObject *igViewerDataPumpManager_Create(int);
-igObject *igLogoRenderer_Create(int);
 
 static inline void releaseString(void *p) {
     if (p != 0) {
@@ -181,20 +170,20 @@ ViewerSetup::~ViewerSetup() {
 }
 
 void ViewerSetup_Open(ViewerSetup *setup) {
-    igInsightCore_InitializeDrawing((int)setup->core.p);
-    igInsightCore_RegisterAllPlugins((int)setup->core.p);
-    igInsightCore_Begin((int)setup->core.p);
+    igInsightCore_InitializeDrawing((igInsightCore *)setup->core.p);
+    igInsightCore_RegisterAllPlugins((igInsightCore *)setup->core.p);
+    igInsightCore_Begin((igInsightCore *)setup->core.p);
 }
 
 void ViewerSetup_Close(ViewerSetup *setup) {
-    igInsightCore_End((int)setup->core.p);
-    igInsightCore_UnregisterAllPlugins((int)setup->core.p);
-    igInsightCore_TerminateDrawing((int)setup->core.p);
+    igInsightCore_End((igInsightCore *)setup->core.p);
+    igInsightCore_UnregisterAllPlugins((igInsightCore *)setup->core.p);
+    igInsightCore_TerminateDrawing((igInsightCore *)setup->core.p);
 }
 
-int ViewerSetup_RunFrame(ViewerSetup *setup)
+void ViewerSetup_RunFrame(ViewerSetup *setup)
 {
-    return igInsightCore_DrawFrame((int)setup->core.p);
+    igInsightCore_DrawFrame((igInsightCore *)setup->core.p);
 }
 
 int ViewerSetup_Update(ViewerSetup *setup) {
@@ -221,12 +210,11 @@ void ViewerSetup_ResetView(ViewerSetup *setup)
     igViewerSceneInfoManager_ResetView((igViewerSceneInfoManager *)setup->sceneInfo.p);
 }
 
-int ViewerSetup_ClearInfos(ViewerSetup *setup)
+void ViewerSetup_ClearInfos(ViewerSetup *setup)
 {
-    return igInsightCore_RemoveAllInfos((int)setup->core.p);
+    igInsightCore_RemoveAllInfos((igInsightCore *)setup->core.p);
 }
 
-igFieldSynchronizer *igFieldSynchronizer_Create(int pool);
 void FUN_004551f0(igFieldSynchronizer *synchronizer, igObject *model, igMetaField *field);
 
 static inline void createSynchronizer(igSmartPointer<igFieldSynchronizer> &synchronizer, AdoptReference) {

@@ -3,9 +3,9 @@ igMetaField *g_igPrimLengthArray_lengthDataMetaField;
 igMetaField *g_igPrimLengthArray_numStripsMetaField;
 igMetaField *g_igPrimLengthArray_dataSizeMetaField;
 
-void igPrimLengthArray_Create(int arg0) {
+igObject *igPrimLengthArray_Create(igMemoryPoolView *pool) {
     igPrimLengthArray_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igPrimLengthArray_metaObject, (igMemoryPoolView *)arg0);
+    return igMetaObject_CreateInstance(g_igPrimLengthArray_metaObject, pool);
 }
 
 igMetaObject *igPrimLengthArray_GetOrCreateMetaObject(void) {

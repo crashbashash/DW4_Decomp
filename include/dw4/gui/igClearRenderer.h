@@ -7,6 +7,8 @@ extern "C" {
 
 void igClearRenderer_EnsureRegistered(void);
 
+struct igMetaObject *igClearRenderer_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

@@ -13,7 +13,6 @@ class igMemoryPoolView;
 #include "dw4/core/igObjectRefMetaField.h"
 #include "dw4/core/igStringMetaField.h"
 #include "dw4/maths/igVec3fMetaField.h"
-extern "C" void igSphere_EnsureRegistered(void);
 struct Rc;
 extern "C" unsigned char g_CollisionLibrary_registered;
 extern "C" void CollisionLibrary_MarkRegistered(void);
@@ -147,9 +146,8 @@ extern "C" int igBoundingSphereMaker_GetVTable(void);
 extern "C" void igBoundingSphereMaker_EnsureRegistered(void);
 extern "C" CallbackArray *igBoundingSphereMaker_Register(void);
 extern "C" void igBoundingSphereMaker_GetMetaObjectFunction(void);
-extern "C" int igSphere_GetOrCreateMetaObject(...);
 extern "C" void igBoundingSphereMaker_InitFields(void);
-extern "C" int FUN_0018d630(...);
+extern "C" void FUN_0018d630(igSphere*, float const*);
 extern "C" void FUN_0023b110(void *arg0, void *arg1);
 extern "C" int FUN_0018de10(...);
 extern "C" int FUN_0023ac20(...);
@@ -216,7 +214,7 @@ extern "C" void FUN_0023b430(igCollisionGrid *grid);
 typedef struct B { int pad[2]; float v[3]; } B;
 typedef struct G { char pad[16]; int nx, ny, nz; char pad2[28]; B *box; float sx, sy, sz; } G;
 extern "C" void FUN_0023b720(G *g, float *p, int *ox, int *oy, int *oz);
-extern "C" int FUN_0018ffa0(...);
+extern "C" int FUN_0018ffa0(void**, void**);
 class Sph { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19();  virtual int vX();
     char pad[4]; float f8; float f12; float f16; float f20; };
 struct Tab { char pad[16]; int *f16; };

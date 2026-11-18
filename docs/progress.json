@@ -236,19 +236,19 @@
    },
    "decl.header_conflicts": {
     "reason": null,
-    "value": 195
+    "value": 29
    },
    "decl.local_externs": {
-    "reason": "engine readability round 1: naming engine FUN_/vfunc_ placeholders turns their existing copies in other libraries' headers into counted local externs (placeholders were exempt); moved to home headers in the following declaration cleanup",
-    "value": 237
+    "reason": null,
+    "value": 0
    },
    "decl.type_conflicts": {
     "reason": null,
-    "value": 257
+    "value": 65
    },
    "decl.varargs": {
     "reason": null,
-    "value": 219
+    "value": 70
    },
    "foreign_profile.bytes": {
     "reason": null,
@@ -362,10 +362,10 @@
    "code_only.other.functions": 0,
    "compile.bytes": 0,
    "compile.functions": 0,
-   "decl.header_conflicts": 195,
-   "decl.local_externs": 237,
-   "decl.type_conflicts": 257,
-   "decl.varargs": 219,
+   "decl.header_conflicts": 29,
+   "decl.local_externs": 0,
+   "decl.type_conflicts": 65,
+   "decl.varargs": 70,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
    "fun_dat_refs": 386,
@@ -492,23 +492,23 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2663188,
+  "bytes": 2671088,
   "failing": {
    "addresses": {
-    "bytes": 498368,
-    "functions": 2228
+    "bytes": 498240,
+    "functions": 2227
    },
    "declarations": {
-    "bytes": 129108,
-    "functions": 272
+    "bytes": 71084,
+    "functions": 128
    },
    "fields": {
-    "bytes": 258588,
-    "functions": 1258
+    "bytes": 258204,
+    "functions": 1255
    },
    "idioms": {
-    "bytes": 336920,
-    "functions": 1801
+    "bytes": 335888,
+    "functions": 1787
    },
    "name": {
     "bytes": 327760,
@@ -523,15 +523,15 @@
     "functions": 997
    },
    "types": {
-    "bytes": 295864,
-    "functions": 1115
+    "bytes": 296248,
+    "functions": 1118
    },
    "virtuals": {
     "bytes": 136800,
     "functions": 498
    }
   },
-  "functions": 17030,
+  "functions": 17076,
   "matched_functions": 20445
  },
  "regions": [
@@ -666,11 +666,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 3576,
-  "pct": 45.29,
-  "recovered": 32990,
+  "offset_casts": 3570,
+  "pct": 45.31,
+  "recovered": 33002,
   "synthetic": 5999,
-  "total": 72839,
+  "total": 72842,
   "typeable": 288,
   "typeable_pct": 0.4
  }

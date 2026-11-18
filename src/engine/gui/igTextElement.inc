@@ -33,7 +33,7 @@ int igTextElement_GetVTable(void) {
     temp_s2 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igTextElement_vtable[0]);
     igStringRef_Destruct((igStringRef *)&u.w[13], -1);
-    igSmartPointer_igGeometryAttr_Destruct(&u.w[12], -1);
+    igSmartPointer_igGeometryAttr_Destruct((igSmartPointer<igObject> *)&u.w[12], -1);
     FUN_0044bf10((void **)&u.w[11], -1);
     FUN_0044be30((igGeometryElement *)u.b, 0);
     return temp_s2;
@@ -154,7 +154,7 @@ void igTextElement_InitFields(void) {
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igFont_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igGeometryAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igGeometryAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2), "");
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igTextElement_fieldTable, g_igTextElement_fieldHandles, g_igTextElement_fieldOffsets, temp_s2);

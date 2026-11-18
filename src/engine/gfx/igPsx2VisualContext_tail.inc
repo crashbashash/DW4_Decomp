@@ -87,8 +87,8 @@ int igPsx2VisualContext_GetVTable(void) {
     FUN_00150fb0((ObjectRefWord *)((char *)&s + 980), -1);
     FUN_00150fb0((ObjectRefWord *)((char *)&s + 976), -1);
     FUN_00150fb0((ObjectRefWord *)((char *)&s + 972), -1);
-    FUN_00137260((char *)&s + 948, -1);
-    FUN_001372e0((char *)&s + 944, -1);
+    FUN_00137260((void **)((char *)&s + 948), (short)-1);
+    FUN_001372e0((igObject **)((char *)&s + 944), (short)-1);
     FUN_00150f30((O_1506b0 *)((char *)&s + 940), -1);
     igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)q, -1);
     FUN_00150af0((Obj_1506b0 *)&s, 0);
@@ -108,22 +108,17 @@ igSmartPointer<igObject> *igSmartPointer_igMemoryPool_Destruct(igSmartPointer<ig
     return self;
 }
 
-void **igSmartPointer_igTimer_Destruct(void **arg0, long long arg1) {
-    char *o;
-
-    if (arg0 != 0) {
-        o = (char *)*arg0;
-        if (o != 0) {
-            *(int *)(o + 4) = *(int *)(o + 4) - 1;
-            if ((*(int *)(o + 4) & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igTimer_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if ((short)arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 Obj_1506b0 *FUN_00150af0(Obj_1506b0 *arg0, short arg1) {
@@ -1021,40 +1016,40 @@ void igPsx2VisualContext_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)igPrimLengthArray_GetOrCreateMetaObject();
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x30), -1);
     temp_s2_9 = igMetaObject_GetFieldAt(meta, fieldStart + 0x32);
-    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_9)->_construct = 1;
     temp_s2_10 = igMetaObject_GetFieldAt(meta, fieldStart + 0x33);
-    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_10)->_construct = 1;
     temp_s2_11 = igMetaObject_GetFieldAt(meta, fieldStart + 0x34);
-    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_11)->_construct = 1;
     temp_s2_12 = igMetaObject_GetFieldAt(meta, fieldStart + 0x35);
-    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_12)->_construct = 1;
     temp_s2_13 = igMetaObject_GetFieldAt(meta, fieldStart + 0x36);
-    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_13)->_construct = 1;
     temp_s2_14 = igMetaObject_GetFieldAt(meta, fieldStart + 0x37);
-    ((igObjectRefMetaField *)temp_s2_14)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_14)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_14)->_construct = 1;
     temp_s2_15 = igMetaObject_GetFieldAt(meta, fieldStart + 0x38);
-    ((igObjectRefMetaField *)temp_s2_15)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_15)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_15)->_construct = 1;
     temp_s2_16 = igMetaObject_GetFieldAt(meta, fieldStart + 0x39);
-    ((igObjectRefMetaField *)temp_s2_16)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_16)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_16)->_construct = 1;
     temp_s2_17 = igMetaObject_GetFieldAt(meta, fieldStart + 0x3A);
-    ((igObjectRefMetaField *)temp_s2_17)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_17)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_17)->_construct = 1;
     temp_s2_18 = igMetaObject_GetFieldAt(meta, fieldStart + 0x3B);
-    ((igObjectRefMetaField *)temp_s2_18)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_18)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_18)->_construct = 1;
     temp_s2_19 = igMetaObject_GetFieldAt(meta, fieldStart + 0x3C);
-    ((igObjectRefMetaField *)temp_s2_19)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_19)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_19)->_construct = 1;
     temp_s2_20 = igMetaObject_GetFieldAt(meta, fieldStart + 0x3D);
-    ((igObjectRefMetaField *)temp_s2_20)->_metaObject = igMatrixStack_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_20)->_metaObject = (int)igMatrixStack_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_20)->_construct = 1;
     temp_v0_7 = igMetaObject_GetFieldAt(meta, fieldStart + 0x41);
     igEnumMetaField_SetDefaultValue(temp_v0_7, g_igPsx2VisualContext_alphaFuncDefault);

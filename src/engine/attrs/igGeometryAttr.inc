@@ -118,7 +118,7 @@ void igGeometryAttr_InitFields(void) {
     field = (void *)(igMetaObject_GetFieldAt(meta, base));
     ((igObjectRefMetaField *)field)->_metaObject = (int)igVertexArray_GetOrCreateMetaObject();
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)field2)->_metaObject = igIndexArray_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)igIndexArray_GetOrCreateMetaObject();
     field6 = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     igEnumMetaField_SetDefaultValue((igMetaField *)field6, 0);
     ((igEnumMetaField *)field6)->_getMetaEnumFunction = (int)(&IG_GFX_DRAW_GetMetaEnum);

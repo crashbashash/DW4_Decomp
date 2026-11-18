@@ -14,6 +14,8 @@ struct igIntersectTraversal *igIntersectTraversal_Destroy(struct igIntersectTrav
 struct CallbackArray *igIntersectTraversal_Register(void);
 void igIntersectTraversal_ResetStacks(struct igIntersectTraversal *traversal);
 
+struct igMetaObject *igIntersectTraversal_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

@@ -3,9 +3,13 @@
 
 struct igMetaObject;
 
+struct igObject;
+struct igMemoryPoolView;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct igObject *igViewerDataPumpManager_Create(struct igMemoryPoolView *pool);
 
 extern struct igMetaObject *g_igViewerDataPumpManager_metaObject;
 

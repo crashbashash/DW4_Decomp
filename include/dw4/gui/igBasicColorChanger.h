@@ -11,6 +11,8 @@ extern "C" {
 void igBasicColorChanger_RunStaticInit(void);
 void igBasicColorChanger_SetColor(struct igBasicColorChanger *changer, int highlighted, int on, int disabled, const struct igVec4f *color);
 
+struct igMetaObject *igBasicColorChanger_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

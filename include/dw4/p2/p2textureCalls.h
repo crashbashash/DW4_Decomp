@@ -26,6 +26,12 @@ void p2FreeTexture(P2Texture *texture);
 void p2GetStatistics(void *statistics);
 void p2SetPolygonMode(int mode);
 void p2SetMaterialSpecularState(int enable);
+void p2CopyFramebufferToTexture(P2Texture *texture, int sourceX, int sourceY, int destinationX, int destinationY,
+                                int width, int height, int fromDepth);
+long long p2GetTextureUploadSequence(P2Texture *texture);
+void p2MarkTextureStage(int stage);
+void p2FenceUsedTexture(P2Texture *texture);
+void p2SetTextureWaitMode(int mode);
 
 #ifdef __cplusplus
 }

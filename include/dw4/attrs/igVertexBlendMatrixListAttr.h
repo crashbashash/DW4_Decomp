@@ -15,6 +15,8 @@ extern struct igMetaField *g_igVertexBlendMatrixListAttr_skeletonTransformMetaFi
 extern struct igMetaField *g_igVertexBlendMatrixListAttr_skeletonInverseTransformMetaField;
 struct igVertexBlendMatrixListAttr *igVertexBlendMatrixListAttr_Create(struct igMemoryPoolView *pool);
 
+void igVertexBlendMatrixListAttr_EnsureRegistered(void);
+
 #ifdef __cplusplus
 }
 #endif

@@ -1,9 +1,9 @@
 igMetaObject *g_igFieldSynchronizer_metaObject;
 igMetaField *g_igFieldSynchronizer_viewsMetaField;
 
-void igFieldSynchronizer_Create(int arg0) {
+igFieldSynchronizer *igFieldSynchronizer_Create(igMemoryPoolView *pool) {
     igFieldSynchronizer_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igFieldSynchronizer_metaObject, (igMemoryPoolView *)arg0);
+    return (igFieldSynchronizer *)igMetaObject_CreateInstance(g_igFieldSynchronizer_metaObject, pool);
 }
 
 igMetaObject *igFieldSynchronizer_GetOrCreateMetaObject(void) {

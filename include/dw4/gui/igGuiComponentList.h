@@ -7,6 +7,8 @@ extern "C" {
 
 void igGuiComponentList_EnsureRegistered(void);
 
+struct igMetaObject *igGuiComponentList_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

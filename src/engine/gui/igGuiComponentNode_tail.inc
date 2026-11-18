@@ -5,7 +5,7 @@ void igGuiComponentNode_resetFields(Node *self, int flags) {
     origin.x = 0;
     origin.y = 0;
     origin.z = 0;
-    FUN_001900d0(transform.get(), &origin);
+    FUN_001900d0((void **)(transform.get()), (int)&origin);
     igObject *retained = transform.get();
     if (retained != 0) {
         retained->_refCount = retained->_refCount + 1;

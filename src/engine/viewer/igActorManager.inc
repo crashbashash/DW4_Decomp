@@ -10,9 +10,9 @@ igMetaField *g_igActorManager_skelViewportMetaField;
 igMetaField *g_igActorManager_vsimMetaField;
 igMetaField *g_igActorManager_referencesMetaField;
 
-void igActorManager_Create(int arg0) {
+igObject *igActorManager_Create(igMemoryPoolView *pool) {
     igActorManager_EnsureRegistered();
-    igMetaObject_CreateInstance(g_igActorManager_metaObject, (igMemoryPoolView *)arg0);
+    return igMetaObject_CreateInstance(g_igActorManager_metaObject, pool);
 }
 
 void *igActorManager_GetMetaObject(void) {
@@ -42,7 +42,7 @@ int igActorManager_GetVTable(void) {
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igActorManager_vtable[0];
     igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj.w13, -1);
-    igSmartPointer_igViewerSceneInfoManager_Destruct(&obj.w12, -1);
+    igSmartPointer_igViewerSceneInfoManager_Destruct((igSmartPointer<igObject> *)&obj.w12, -1);
     igSmartPointer_igViewportAttr_Destruct((igSmartPointer<igObject> *)&obj.w11, -1);
     igSmartPointer_igViewportAttr_Destruct((igSmartPointer<igObject> *)&obj.w10, -1);
     igSmartPointer_igMetaObjectList_Destruct((igSmartPointer<igObject> *)&obj.w9, -1);
@@ -177,10 +177,10 @@ void igActorManager_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)(igMetaObjectList_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = igViewportAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)igViewportAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_7)->_construct = 1;
     temp_s2_8 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = igViewportAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)igViewportAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
     temp_s2_9 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8));
     ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();

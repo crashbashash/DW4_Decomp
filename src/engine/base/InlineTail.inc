@@ -76,7 +76,7 @@ extern "C" void igInterface_BindInterfaceFields(igMetaTyped *self, igMetaTyped *
         if (field == 0) continue;
         void *type = *(void **)((char *)field + 56);
         if (type != 0 && igMetaObject_IsOfType((igMetaObject *)type, g_igInterface_metaObject) != 0
-            && FUN_002fdef0(other->getMetaObject(), field) != 0) {
+            && FUN_002fdef0((int)(other->getMetaObject()), (int)field) != 0) {
             int result;
             FUN_0022bc10(&result, (int)field, (int)self, (int)field, (int)other);
         }

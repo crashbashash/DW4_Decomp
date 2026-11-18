@@ -126,7 +126,7 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_51(S_1e1210 *self) {
         a = ((A_1e1210 *)igTextureAttr_GetImage((igTextureAttr *)self->f52, 0));
         a->v28(1);
     }
-    if (self->f73 != 0) FUN_00141190(self->f32, 1);
+    if (self->f73 != 0) FUN_00141190((int *)self->f32, 1);
     self->f80->v30(2);
     alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
     t = self->f116;

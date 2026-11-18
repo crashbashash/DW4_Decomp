@@ -15,6 +15,8 @@ struct CallbackArray *igParticleArray_Register(void);
 int igParticleArray_Update(struct igParticleArray *self, unsigned int num, unsigned int offset, int *status, float time);
 struct igMetaObject *igParticleArray_GetPublishedMetaObject(void);
 
+struct igMetaObject *igParticleArray_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

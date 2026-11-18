@@ -12,6 +12,9 @@ int igMatrixStack_PushPreMultiply(struct igMatrixStack *self, const float *matri
 int igMatrixStack_PushPostMultiply(struct igMatrixStack *self, const float *matrix);
 void igMatrixStack_PreMultiply(struct igMatrixStack *self, const float *matrix);
 void igMatrixStack_PostMultiply(struct igMatrixStack *self, const float *matrix);
+void igMatrixStack_EnsureRegistered(void);
+struct igMetaObject *igMatrixStack_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

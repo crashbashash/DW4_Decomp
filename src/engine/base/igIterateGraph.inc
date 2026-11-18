@@ -3,9 +3,9 @@ igMetaField *g_igIterateGraph_currentPathMetaField;
 igMetaField *g_igIterateGraph_currentIndicesMetaField;
 igMetaField *g_igIterateGraph_actorSkinIterationStateMetaField;
 
-void *igIterateGraph_Create(int arg0) {
+igObject *igIterateGraph_Create(igMemoryPoolView *pool) {
     FUN_00227620();
-    return igMetaObject_CreateInstance(g_igIterateGraph_metaObject, (igMemoryPoolView *)arg0);
+    return igMetaObject_CreateInstance(g_igIterateGraph_metaObject, pool);
 }
 
 igMetaObject *igIterateGraph_GetOrCreateMetaObject(void) {
@@ -97,7 +97,7 @@ void igIterateGraph_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igIterateGraph_ctorTable, 3);
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)field2)->_metaObject = igNonRefCountedNodeList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)igNonRefCountedNodeList_GetOrCreateMetaObject();
     ((igRefMetaField *)field2)->_construct = 1;
     field = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)field)->_metaObject = igIntList_GetOrCreateMetaObject();

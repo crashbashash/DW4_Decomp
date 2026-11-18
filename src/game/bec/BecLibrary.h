@@ -2639,7 +2639,6 @@ struct TransformSyncView : igTransformView, TransformSyncVtable {
     ~TransformSyncView() { vtable = g_beTransformSync_vtable; }
 };
 extern "C" igSmartPointer<igObject> *igSmartPointer_igTransformList_Destruct(igSmartPointer<igObject> *self, short delete_storage);
-extern "C" igMetaObject *igTransform_GetPublishedMetaObject(void);
 extern "C" int g_beTimer_vtable[4];
 extern "C" igMetaObject *g_beTimerDataList_metaObject;
 extern "C" int g_beTimerDataList_vtable[4];
@@ -3485,7 +3484,6 @@ extern "C" int g_beAction2_vtable[4];
 extern "C" int g_be_vtable[4];
 extern "C" int g_ParticleArray_vtable[4];
 extern "C" int g_ParticleTimer_vtable[4];
-extern "C" igMetaObject *igGeometry_GetPublishedMetaObject(void);
 extern "C" igMetaObject *ParticleInfo_GetMetaObject(void);
 extern "C" int g_ParticleInfo_vtable[4];
 extern "C" void beBinDataObject_userDestruct(beBinDataObject *self);

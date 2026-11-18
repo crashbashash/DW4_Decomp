@@ -11,6 +11,8 @@ extern "C" {
 void igOnOffColorChanger_RunStaticInit(void);
 void igOnOffColorChanger_SetColor(struct igBasicColorChanger *changer, int highlighted, int on, int disabled, const struct igVec4f *color);
 
+struct igMetaObject *igOnOffColorChanger_GetOrCreateMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

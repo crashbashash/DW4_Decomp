@@ -10,6 +10,8 @@ extern "C" {
 extern struct igMetaObject *g_igNonRefCountedObjectStack_metaObject;
 struct CallbackArray *igNonRefCountedObjectStack_Register(void);
 
+struct igMetaObject *igNonRefCountedObjectStack_GetPublishedMetaObject(void);
+
 #ifdef __cplusplus
 }
 #endif

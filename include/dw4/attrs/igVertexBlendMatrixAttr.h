@@ -12,6 +12,8 @@ extern "C" {
 extern struct igMetaObject *g_igVertexBlendMatrixAttr_metaObject;
 struct igVertexBlendMatrixAttr *igVertexBlendMatrixAttr_Create(struct igMemoryPoolView *pool);
 
+void igVertexBlendMatrixAttr_EnsureRegistered(void);
+
 #ifdef __cplusplus
 }
 #endif

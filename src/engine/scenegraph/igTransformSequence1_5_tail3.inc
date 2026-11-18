@@ -56,7 +56,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_34(KeySequenceView *o, int index, Ke
             s[i] = sqrtf(r[0] * r[0] + r[1] * r[1] + r[2] * r[2]);
         }
         igMatrix44f_Copy(rot, (const float *)m);
-        if (FUN_00192290(m) < 0.0f) {
+        if (FUN_00192290((const float *)m) < 0.0f) {
             s[0] = -s[0];
             s[1] = -s[1];
             s[2] = -s[2];

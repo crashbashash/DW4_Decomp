@@ -4,9 +4,13 @@
 struct igMetaObject;
 struct igViewerSceneInfoManager;
 
+struct igObject;
+struct igMemoryPoolView;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+struct igObject *igViewerSceneInfoManager_Create(struct igMemoryPoolView *pool);
 
 extern struct igMetaObject *g_igViewerSceneInfoManager_metaObject;
 void igViewerSceneInfoManager_EnsureRegistered(void);

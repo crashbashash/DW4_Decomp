@@ -123,10 +123,10 @@ void igPsx2VisualContext_SetRenderDestination(igPsx2VisualContext *self, int arg
     cur = base + self->_currentBuf;
     t = s0->f28;
     if (t != 2 && cur->f28 == 2) {
-        p2RestoreRenderTarget(t, arg1 * 0x30, (int)base);
+        p2RestoreRenderTarget();
         p2SetViewport(self->_iViewportX, self->_iViewportY, self->_iViewportW, self->_iViewportH, 1.0f - self->_viewportNear, 1.0f - self->_viewportFar);
     } else if (t == 2) {
-        p2SetRenderTarget(s0->f40, s0->f44, (int)base);
+        p2SetRenderTarget((P2Texture *)s0->f40, (P2Texture *)s0->f44);
         p2SetViewport(0, 0, s0->w, s0->h, 1.0f - self->_viewportNear, 1.0f - self->_viewportFar);
     }
     self->_currentBuf = arg1;
@@ -215,7 +215,7 @@ void igPsx2VisualContext_SetRenderDestinationWithTexture(igPsx2VisualContext *co
             return;
         }
     }
-    p2SetRenderTarget(buf->colorTex, buf->depthTex);
+    p2SetRenderTarget((P2Texture *)buf->colorTex, (P2Texture *)buf->depthTex);
     ((VC49 *)context)->currentBuf = bufferIndex;
     p2SetViewport(0, 0, buf->width, buf->height, 1.0f - ((VC49 *)context)->near, 1.0f - ((VC49 *)context)->far);
     FUN_0016a520((O520 *)((VC49 *)context));
@@ -307,9 +307,9 @@ int igPsx2VisualContext_CopyRenderDestinationToTexture(igPsx2VisualContext *arg0
         }
         FUN_00209cf0(*(int *)(temp_s7 + 40), **(int **)(temp_s0 + 72), arg3, arg4, arg5, arg6, 0);
     } else if (*(int *)(temp_s7 + 28) == 2) {
-        p2CopyTexture(*(int *)(temp_s7 + 40), arg3, arg4, **(int **)(temp_s0 + 72), arg7, arg8, arg5, arg6);
+        p2CopyTexture((void *)*(int *)(temp_s7 + 40), arg3, arg4, (void *)**(int **)(temp_s0 + 72), arg7, arg8, arg5, arg6);
     } else {
-        p2CopyFramebufferToTexture(**(int **)(temp_s0 + 72), arg3, arg4, arg7, arg8, arg5, arg6, 0);
+        p2CopyFramebufferToTexture((P2Texture *)**(int **)(temp_s0 + 72), arg3, arg4, arg7, arg8, arg5, arg6, 0);
     }
     *(int *)(temp_s0 + 132) = 3;
     return 1;
@@ -763,7 +763,7 @@ void FUN_0016af30(A_1690d0 *arg0, int arg1, RAf30 *arg2) {
         n = 16;
     }
     if (e->f10 != 0 && e->f8 != 0) {
-        p2WaitDmaSequence(2, p2GetTextureUploadSequence((long long *)p2GetImageTexture((p2Image *)e->f8)));
+        p2WaitDmaSequence(2, p2GetTextureUploadSequence((P2Texture *)p2GetImageTexture((p2Image *)e->f8)));
     } else if (e->f10 == 0) {
         o = (void **)igVisualContext_GetImageMemoryPool((int *)arg0);
         e->f10 = ((VC_220 *)o)->vX(n * 4, 128);
@@ -786,8 +786,8 @@ bool FUN_0016b090(Ob *arg0, int arg1) {
     if (s->f8 == 0 || s->f4->f28 != 0) {
         if (s->f8 != 0) {
             h = (int)p2GetImageTexture((p2Image *)s->f8);
-            p2InvalidateTexture(h);
-            p2WaitDmaSequence(2, p2GetTextureUploadSequence((long long *)h));
+            p2InvalidateTexture((P2Texture *)h);
+            p2WaitDmaSequence(2, p2GetTextureUploadSequence((P2Texture *)h));
             q = s->f4;
             q->f28 = 1;
             FUN_0016aea0((int)arg0, s->f12, (int *)s->f16, (int *)q->f20);
@@ -813,8 +813,8 @@ void FUN_0016b1d0(OB1d0 *arg0, int arg1) {
         e = t->f16 + arg1;
         if (e->w8 != 0) {
             h = (int)p2GetImageTexture((p2Image *)e->w8);
-            p2WaitDmaSequence(2, p2GetTextureUploadSequence((long long *)h));
-            p2FreeTexture(h);
+            p2WaitDmaSequence(2, p2GetTextureUploadSequence((P2Texture *)h));
+            p2FreeTexture((P2Texture *)h);
             p2FreeImage((p2Image *)e->w8);
         }
         e->w8 = 0;
@@ -914,7 +914,6 @@ struct ContextText : public igObject {
 #include "dw4/p2/p2core.h"
 #include "dw4/p2/p2swap.h"
 extern "C" int p2OpenDisplay(int mode, int colorBits, int depthBits, const char *config, const char *symbols, int width, int height);
-extern "C" void p2SetTextureWaitMode(int mode);
 class OpenResult {
 public:
     int v;
@@ -1334,7 +1333,7 @@ bool igPsx2VisualContext_ExecuteRenderList(igPsx2VisualContext *arg0, int arg1) 
             if ((temp_v0 == 2) && (var_s2 != temp_v0_2)) {
                 p2SetBlendWeightCount(temp_v0_2, temp_v0_2);
             }
-            p2CallDisplayList(temp_s4->a[var_s1]);
+            p2CallDisplayList((p2DisplayList *)temp_s4->a[var_s1]);
         }
     }
     return true;
@@ -1381,7 +1380,7 @@ void igPsx2VisualContext_DetectDriverDatabaseProperties(int dummy0, int arg1) {
 }
 
 void igPsx2VisualContext_CallDmaChain(igPsx2VisualContext *self, void *packet, int size, int flush) {
-    FUN_001f7db0(packet, size, flush);
+    FUN_001f7db0((unsigned int)packet, size, flush);
 }
 
 int igPsx2VisualContext_IsDisplayingFirstBuffer(igPsx2VisualContext *self) {

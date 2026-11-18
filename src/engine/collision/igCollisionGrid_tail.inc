@@ -99,7 +99,7 @@ void FUN_0023b820(Grid *arg0, Arg1 *arg1) {
             base2 = arg0->f16 * (y + base1);
             for (x = mnx; x <= mxx; x++) {
                 e = (Ent *)arg0->f8->f16[x + base2];
-                if (FUN_0018ffa0(e->f16, arg1->f12) != 0) {
+                if (FUN_0018ffa0((void **)e->f16, (void **)arg1->f12) != 0) {
                     FUN_0023b3b0((RetainedList *)e, (RefCounted *)arg1);
                 }
             }

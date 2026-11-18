@@ -1,13 +1,13 @@
 #include "dw4/maths/igAABox.h"
 #include "dw4/core/igMetaObject.h"
 #include "dw4/maths/igVolume.h"
-extern "C" igObject *igIterateGraph_Create(igMemoryPoolView *allocator);
 extern "C" void FUN_0022ab90(igObject *iterator, igNode *root, igMetaObject *metaObject);
 extern "C" igNode *FUN_0022ac00(igObject *iterator);
 extern "C" void FUN_0022ac70(igObject *iterator, igMetaObject *metaObject);
 extern "C" void FUN_0022b0a0(float *matrix, igObject *iterator);
 
 #include "dw4/support/emptyString.h"
+#include "dw4/base/igIterateGraph.h"
 static inline igAABox *asAABox(igObject *o) {
     if (o != 0 && igObject_IsKindOf(o, g_igAABox_metaObject) != 0) return (igAABox *)o;
     return 0;
@@ -77,7 +77,7 @@ int Gap__igCreateCollisionDatabase__vfunc_28(igCreateCollisionDatabase *self, ig
         if (sphere.get() != 0) {
             float world[16];
             FUN_0022b0a0(world, iterator.get());
-            FUN_0018d630(sphere.get(), world);
+            FUN_0018d630((igSphere *)(sphere.get()), (const float *)world);
             igSmartPointer<igCollisionGroup> group = igMetaObject_CreateInstanceDefaultRef((igMetaObject *)self->_staticGroupType);
             const char *name = (const char *)geometry->_name;
             igNamedObject_SetName((igNamedObject *)group.get(), name != 0 ? name : emptyString);

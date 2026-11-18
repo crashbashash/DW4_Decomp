@@ -26,7 +26,7 @@ int igFrustCullTraversal_GetVTable(void) {
     p = (char *)&s; FUN_001a10a0((igCommonTraversal *)p);
     s.vt = &g_igFrustCullTraversal_vtable[0];
     igSmartPointer_igAABox_Construct(&s.a);
-    FUN_001510a0(s.b);
+    FUN_001510a0((int)s.b);
     FUN_001a1080((int *)(p + 548));
     r = *(int *)((char *)&s + g_objectSystem->vtableProbeOffset);
     s.vt = &g_igFrustCullTraversal_vtable[0];
@@ -571,7 +571,7 @@ void igFrustCullTraversal_InitFields(void) {
     igMatrix44f_FromRows((float *)&o1, (igVec4f *)&o2, (igVec4f *)&o3, (igVec4f *)&o4, (igVec4f *)&o5);
     FUN_0018c640(temp_s2, &o1);
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = igClippingStateAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igClippingStateAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4), 1.0f);
     igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5), 2.0f);

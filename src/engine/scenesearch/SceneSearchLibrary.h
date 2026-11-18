@@ -36,10 +36,9 @@ struct SearchSceneGraphFrame { int *vt; int f4; int f8; int fC; int f10; int f14
 #include "dw4/core/igSmartPointer.h"
 #include "dw4/maths/igMatrix44f.h"
 #include "dw4/core/igMetaField.h"
-extern "C" int FUN_002293d0(...);
+extern "C" void** FUN_002293d0(void**, int);
 extern "C" int g_igSearchSceneGraph_vtable[4];
 /* InitFields' field tables and field helpers. */
-extern "C" int igIterateGraph_GetOrCreateMetaObject(void);
 extern "C" void FUN_00227620(void);
 
 struct RefCounted { int w0; int refs; };
@@ -55,6 +54,7 @@ public:
     virtual int getBlendMatrixCount();
 };
 #include "dw4/scenegraph/igActor.h"
+#include "dw4/base/igIterateGraph.h"
 
 extern "C" void **FUN_00239280(void **ref, short flags);
 extern "C" void **igSmartPointer_igCamera_Destruct(void **ref, short flags);

@@ -39,10 +39,10 @@ int igNormalsRenderer_GetVTable(void) {
     obj.w10 = 0;
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igNormalsRenderer_vtable[0];
-    igSmartPointer_igGraphPath_Destruct(&obj.w10, -1);
-    FUN_00136e10(&obj.w8, -1);
+    igSmartPointer_igGraphPath_Destruct((igSmartPointer<igObject> *)&obj.w10, -1);
+    FUN_00136e10((void **)&obj.w8, -1);
     igSmartPointer_igColorAttr_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
-    igSmartPointer_igModelViewMatrixAttr_Destruct(&obj.w6, -1);
+    igSmartPointer_igModelViewMatrixAttr_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
     igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
     igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&obj.w4, -1);
     FUN_00459860((ObjectRefWord *)&obj.w3, -1);
@@ -146,7 +146,7 @@ void igNormalsRenderer_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)(igAttrList_GetOrCreateMetaObject());
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = igModelViewMatrixAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igModelViewMatrixAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4));
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)(igColorAttr_GetOrCreateMetaObject());

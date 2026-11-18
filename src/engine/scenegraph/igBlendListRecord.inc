@@ -94,10 +94,10 @@ void igBlendListRecord_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igBlendListRecord_ctorTable, 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igBlendMatrixPaletteAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igBlendMatrixPaletteAttr_GetOrCreateMetaObject();
     ((igMetaField *)temp_s1)->_persistent = 0;
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = igAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igAttr_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1_2)->_refCounted = 0;
     ((igMetaField *)temp_s1_2)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igBlendListRecord_fieldTable, g_igBlendListRecord_fieldHandles, g_igBlendListRecord_fieldOffsets, temp_s2);

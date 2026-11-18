@@ -84,11 +84,7 @@ typedef void (*igMetaObjectCallback)();
 #include "dw4/core/igUnsignedIntList.h"
 #include "dw4/runtime/New.h"
 
-extern "C" void igScissorExt_EnsureRegistered(void);
-extern "C" void igPrimLengthArray_EnsureRegistered(void);
 extern "C" void FUN_0014cd90(void);
-extern "C" void igBlendEquationExt_EnsureRegistered(void);
-extern "C" void igMatrixObjectList_EnsureRegistered(void);
 
 
 extern "C" void AttrsLibrary_MarkRegistered(void);
@@ -129,7 +125,6 @@ extern "C" igMetaObject *igVisualAttribute_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igViewportAttr_Register(void);
 extern "C" void igViewportAttr_GetMetaObjectFunction(void);
 extern "C" igMetaObject *igVisualAttribute_GetPublishedMetaObject(void);
-extern "C" int igScissorExt_GetOrCreateMetaObject(...);
 extern "C" void igViewportAttr_InitFields(void);
 extern "C" igMetaObject *igVertexBlendStateAttr_GetMetaObject(void);
 struct Obj { int *vt; char pad[12]; };
@@ -147,7 +142,6 @@ extern "C" int igVertexBlendMatrixListAttr_GetVTable(void);
 extern "C" void igVertexBlendMatrixListAttr_EnsureRegistered(void);
 extern "C" CallbackArray *igVertexBlendMatrixListAttr_Register(void);
 extern "C" void igVertexBlendMatrixListAttr_GetMetaObjectFunction(void);
-extern "C" int igMatrixObjectList_GetOrCreateMetaObject(...);
 extern "C" void igVertexBlendMatrixListAttr_InitFields(void);
 
 extern "C" igMetaObject *igVertexBlendMatrixAttr_GetMetaObject(void);
@@ -220,9 +214,6 @@ extern "C" void igTextureFunctionAttr_GetMetaObjectFunction(void);
 /* The igMetaField members InitFields writes, through one view: the reflected igMetaField, igEnumMetaField and
  * igObjectRefMetaField are unrelated structs to the compiler, and stores through three types schedule differently. */
 struct MetaFieldSetupView { char p0[38]; char _persistent; char _shallowCopyMethod; char _deepCopyMethod; char p41[3]; char _isAlikeShallowMethod; char p45[3]; void (*_invarianceFunction)(void); void (*_getMetaEnumFunction)(void); int _metaObject; };
-extern "C" void TEXTURE_ARGUMENT_GetMetaEnum(void);
-extern "C" void TEXTURE_STAGE_TYPE_GetMetaEnum(void);
-extern "C" void TEXTURE_FUNCTION_TYPE_GetMetaEnum(void);
 extern "C" void igTextureFunctionAttr_InitFields(void);
 extern "C" void FUN_00131f70(void);
 extern "C" igMetaEnum *igTextureCubeAttr_GetApplyTypeMetaEnum(void);
@@ -266,7 +257,6 @@ extern "C" int g_igTextureCoordSourceAttr_vtable[4];
 extern "C" int igTextureCoordSourceAttr_GetVTable(void);
 extern "C" CallbackArray *igTextureCoordSourceAttr_Register(void);
 extern "C" void igTextureCoordSourceAttr_GetMetaObjectFunction(void);
-extern "C" int IG_GFX_TEXTURE_COORD_SOURCE_GetMetaEnum(...);
 extern "C" void igTextureCoordSourceAttr_InitFields(void);
 extern "C" igMetaObject *igTextureBindAttr_GetOrCreateMetaObject(void);
 struct Obj_1328f0 { int *vt; char pad[8]; char *m; char pad2[16]; };
@@ -275,7 +265,6 @@ extern "C" int igTextureBindAttr_GetVTable(void);
 /* Deleting destructor; the deletion flag is a signed short. */
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
-extern "C" ObjectRefWord *igSmartPointer_igTextureAttr_Destruct(ObjectRefWord *self,int delete_storage);
 extern "C" CallbackArray *igTextureBindAttr_Register(void);
 extern "C" void igTextureBindAttr_GetMetaObjectFunction(void);
 extern "C" void igTextureBindAttr_InitFields(void);
@@ -285,9 +274,6 @@ union U_132c40 { int vt; char b[80]; };
 extern "C" int igTextureAttr_GetVTable(void);
 extern "C" CallbackArray *igTextureAttr_Register(void);
 extern "C" void igTextureAttr_GetMetaObjectFunction(void);
-extern "C" int IG_GFX_TEXTURE_MODE_GetMetaEnum(...);
-extern "C" int IG_GFX_TEXTURE_SOURCE_GetMetaEnum(...);
-extern "C" int IG_GFX_TEXTURE_WRAP_GetMetaEnum(...);
 
 extern "C" void igTextureAttr_InitFields(void);
 extern "C" igMetaObject *g_igImageMipMapList_metaObject;
@@ -327,8 +313,6 @@ extern "C" int igStencilFunctionAttr_GetVTable(void);
 extern "C" void igStencilFunctionAttr_EnsureRegistered(void);
 extern "C" CallbackArray *igStencilFunctionAttr_Register(void);
 extern "C" void igStencilFunctionAttr_GetMetaObjectFunction(void);
-extern "C" int IG_GFX_STENCIL_OPERATION_GetMetaEnum(...);
-extern "C" int IG_GFX_STENCIL_FUNCTION_GetMetaEnum(...);
 extern "C" void igStencilFunctionAttr_InitFields(void);
 typedef struct S_temp_a0_1338d0 { char pad4[4]; int f4; } S_temp_a0_1338d0;
 extern "C" igMetaObject *g_igShadeModelAttr_metaObject;
@@ -338,7 +322,6 @@ extern "C" int g_igShadeModelAttr_vtable[4];
 extern "C" int igShadeModelAttr_GetVTable(void);
 extern "C" CallbackArray *igShadeModelAttr_Register(void);
 extern "C" void igShadeModelAttr_GetMetaObjectFunction(void);
-extern "C" int IG_GFX_SHADING_MODE_GetMetaEnum(...);
 extern "C" void igShadeModelAttr_InitFields(void);
 extern "C" igMetaObject *g_igSetRenderDestinationAttr_metaObject;
 extern "C" igMetaObject *igSetRenderDestinationAttr_GetOrCreateMetaObject(void);
@@ -371,7 +354,6 @@ union U_134290 { int vt; char b[80]; };
 extern "C" int igRenderDestinationAttr_GetVTable(void);
 extern "C" CallbackArray *igRenderDestinationAttr_Register(void);
 extern "C" void igRenderDestinationAttr_GetMetaObjectFunction(void);
-extern "C" int IG_GFX_RENDERDESTINATION_TYPE_GetMetaEnum(...);
 extern "C" void igRenderDestinationAttr_InitFields(void);
 extern "C" igMetaObject *igProjectionMatrixAttr_GetOrCreateMetaObject(void);
 extern "C" int g_igProjectionMatrixAttr_vtable[4];
@@ -388,7 +370,6 @@ extern "C" int igPolygonModeAttr_GetVTable(void);
 extern "C" void igPolygonModeAttr_EnsureRegistered(void);
 extern "C" CallbackArray *igPolygonModeAttr_Register(void);
 extern "C" void igPolygonModeAttr_GetMetaObjectFunction(void);
-extern "C" int IG_GFX_RENDER_MODE_GetMetaEnum(...);
 extern "C" void igPolygonModeAttr_InitFields(void);
 extern "C" igMetaObject *g_igPixelPipelineModeAttr_metaObject;
 extern "C" igMetaObject *igPixelPipelineModeAttr_GetMetaObject(void);
@@ -398,7 +379,6 @@ extern "C" int igPixelPipelineModeAttr_GetVTable(void);
 extern "C" void igPixelPipelineModeAttr_EnsureRegistered(void);
 extern "C" CallbackArray *igPixelPipelineModeAttr_Register(void);
 extern "C" void igPixelPipelineModeAttr_GetMetaObjectFunction(void);
-extern "C" int IG_GFX_PIXEL_PIPELINE_MODE_GetMetaEnum(...);
 extern "C" void igPixelPipelineModeAttr_InitFields(void);
 extern "C" igMetaObject *igParticleAttr_GetMetaObject(void);
 typedef struct Q { char pad4[4]; int f4; } Q;
@@ -407,7 +387,6 @@ extern "C" int g_igParticleAttr_vtable[4];
 extern "C" int igParticleAttr_GetVTable(void);
 extern "C" CallbackArray *igParticleAttr_Register(void);
 extern "C" void igParticleAttr_GetMetaObjectFunction(void);
-extern "C" int igParticleArray_GetOrCreateMetaObject(...);
 extern "C" void igParticleAttr_InitFields(void);
 extern "C" igMetaObject *g_igNormalizeNormalsStateAttr_metaObject;
 extern "C" igMetaObject *igNormalizeNormalsStateAttr_GetOrCreateMetaObject(void);
@@ -427,7 +406,6 @@ extern "C" void igMultiPassStateAttr_EnsureRegistered(void);
 extern "C" CallbackArray *igMultiPassStateAttr_Register(void);
 extern "C" void igMultiPassStateAttr_GetMetaObjectFunction(void);
 extern "C" void igMultiPassStateAttr_InitFields(void);
-extern "C" void **igSmartPointer_igGeometryAttr_Destruct(void **arg0, short arg1);
 extern "C" igMetaObject *g_igModelViewMatrixAttrList_metaObject;
 extern "C" igMetaObject *igModelViewMatrixAttrList_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igModelViewMatrixAttrList_GetMetaObject(void);
@@ -503,7 +481,6 @@ union U_1367f0 { int vt; char b[160]; };
 extern "C" int igLightAttr_GetVTable(void);
 extern "C" CallbackArray *igLightAttr_Register(void);
 extern "C" void igLightAttr_GetMetaObjectFunction(void);
-extern "C" int IG_GFX_LIGHT_TYPE_GetMetaEnum(...);
 extern "C" void igLightAttr_InitFields(void);
 extern "C" igMetaEnum *igGeometrySetAttr_GetAttrFlagsMetaEnum(void);
 extern "C" igMetaObject *g_igGeometrySetAttr_metaObject;
@@ -539,7 +516,6 @@ extern "C" igMetaObject *igGeometryAttr_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igGeometryAttr1_5_Register(void);
 extern "C" void igGeometryAttr1_5_GetMetaObjectFunction(void);
 extern "C" igMetaObject *FUN_00137770(void);
-extern "C" int igPrimLengthArray_GetOrCreateMetaObject(...);
 extern "C" void igGeometryAttr1_5_InitFields(void);
 extern "C" igMetaObject *igGeometryAttr_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igGeometryAttr_GetMetaObject(void);
@@ -547,8 +523,6 @@ extern "C" void igGeometryAttr_EnsureRegistered(void);
 extern "C" CallbackArray *igGeometryAttr_Register(void);
 extern "C" void igGeometryAttr_GetMetaObjectFunction(void);
 
-extern "C" int igIndexArray_GetOrCreateMetaObject(...);
-extern "C" int IG_GFX_DRAW_GetMetaEnum(...);
 extern "C" void igGeometryAttr_InitFields(void);
 extern "C" igMetaObject *g_igGenericAttrDefaultManager_metaObject;
 extern "C" igMetaObject *igGenericAttrDefaultManager_GetMetaObject(void);
@@ -572,7 +546,6 @@ extern "C" int g_igFogAttr_vtable[4];
 extern "C" int igFogAttr_GetVTable(void);
 extern "C" CallbackArray *igFogAttr_Register(void);
 extern "C" void igFogAttr_GetMetaObjectFunction(void);
-extern "C" int IG_GFX_FOG_MODE_GetMetaEnum(void);
 extern "C" void igFogAttr_InitFields(void);
 extern "C" igMetaObject *igDisplayListAttr_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igDisplayListAttr_GetMetaObject(void);
@@ -609,7 +582,6 @@ extern "C" int g_igCullFaceAttr_vtable[4];
 extern "C" int igCullFaceAttr_GetVTable(void);
 extern "C" CallbackArray *igCullFaceAttr_Register(void);
 extern "C" void igCullFaceAttr_GetMetaObjectFunction(void);
-extern "C" int IG_GFX_CULL_FACE_MODE_GetMetaEnum(...);
 extern "C" void igCullFaceAttr_InitFields(void);
 extern "C" igMetaEnum *igCopyRenderDestinationAttr_GetCopyTypeMetaEnum(void);
 extern "C" igMetaObject *g_igCopyRenderDestinationAttr_metaObject;
@@ -694,8 +666,6 @@ union U_139fb0 { int vt; char b[64]; };
 extern "C" int igBlendFunctionAttr_GetVTable(void);
 extern "C" CallbackArray *igBlendFunctionAttr_Register(void);
 extern "C" void igBlendFunctionAttr_GetMetaObjectFunction(void);
-extern "C" int igBlendEquationExt_GetOrCreateMetaObject(...);
-extern "C" void IG_GFX_BLENDING_FUNCTION_GetMetaEnum(void);
 extern "C" void igBlendFunctionAttr_InitFields(void);
 extern "C" igMetaObject *g_igTextureList_metaObject;
 extern "C" igMetaObject *igTextureList_GetMetaObject(void);
@@ -775,7 +745,6 @@ extern "C" int g_igAlphaFunctionAttr_vtable[4];
 extern "C" int igAlphaFunctionAttr_GetVTable(void);
 extern "C" CallbackArray *igAlphaFunctionAttr_Register(void);
 extern "C" void igAlphaFunctionAttr_GetMetaObjectFunction(void);
-extern "C" int IG_GFX_ALPHA_FUNCTION_GetMetaEnum(...);
 extern "C" void igAlphaFunctionAttr_InitFields(void);
 typedef struct { int pad[3]; unsigned int a; float b; } S2;
 
@@ -1030,7 +999,6 @@ extern "C" void FUN_0013d020(void);
 extern "C" int igGeometryAttr_GetPrimLength(void *arg0, int arg1);
 extern "C" void igGeometryAttr1_5_SynchronizeDefault(void);
 struct Rc { int w0; int refs; };
-extern "C" void *igPrimLengthArray_Create(...);
 #include "dw4/gfx/igVertexArrayLock.h"
 #include "dw4/attrs/igVertexBlendStateAttr.h"
 #include "dw4/attrs/igVisualContextAttrDefaultManager.h"
@@ -1051,6 +1019,12 @@ extern "C" void *igPrimLengthArray_Create(...);
 #include "dw4/attrs/igAttrPool.h"
 #include "dw4/attrs/igAlphaStateAttr.h"
 #include "dw4/attrs/igAlphaFunctionAttr.h"
+#include "dw4/datapump/igMatrixObjectList.h"
+#include "dw4/gfx/igBlendEquationExt.h"
+#include "dw4/gfx/igIndexArray.h"
+#include "dw4/gfx/igParticleArray.h"
+#include "dw4/gfx/igPrimLengthArray.h"
+#include "dw4/gfx/igScissorExt.h"
 extern "C" void FUN_00192360(const float *matrix, float *out, float *in, int count);
 extern "C" void FUN_0013dbb0(int component, igVertexArrayView *vertexArray, const float *matrix);
 extern "C" void FUN_00192430(const float *matrix, float *out, float *in, unsigned int count);
@@ -1279,7 +1253,7 @@ class VB_13f790 { public: virtual void d0(); virtual void d1(); virtual void d2(
 extern "C" void igModelViewMatrixAttr_SynchronizeDefault(void *arg0, void *arg1);
 extern "C" void igModelViewMatrixAttr_SetMatrix(igModelViewMatrixAttr *self, const float *matrix);
 extern "C" void FUN_0013f800(void *arg0, int arg1);
-extern "C" void FUN_001757c0(int, int);
+extern "C" void FUN_001757c0(igPsx2VisualContext*, int);
 extern "C" void igMultiPassStateAttr_apply(int arg0, int arg1);
 class igMultiPassStateAttrView {
 public:
@@ -1517,7 +1491,6 @@ extern "C" void igTextureFunctionAttr_SynchronizeCachedUnitID(igTextureFunctionA
 extern "C" void igTextureFunctionAttr_SetUnitID(igTextureFunctionAttr *self, int unitID);
 extern "C" void igTextureFunctionAttr_UserPostLoad(igTextureFunctionAttr *self);
 extern "C" void * DAT_0055ed08[4];
-extern "C" int TEXTURE_FUNCTION_PSX2_GetMetaEnum(...);
 extern "C" void FUN_001412a0(void);
 extern "C" void igTextureFunctionAttr_InitDefaults(void *arg0);
 extern "C" void igTextureFunctionAttr_ReleaseDefaults(void **arg0);
