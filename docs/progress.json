@@ -492,7 +492,7 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2534512,
+  "bytes": 2535428,
   "failing": {
    "addresses": {
     "bytes": 657284,
@@ -503,8 +503,8 @@
     "functions": 283
    },
    "fields": {
-    "bytes": 279208,
-    "functions": 1377
+    "bytes": 278292,
+    "functions": 1376
    },
    "idioms": {
     "bytes": 377036,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 14801,
+  "functions": 14802,
   "matched_functions": 20445
  },
  "regions": [

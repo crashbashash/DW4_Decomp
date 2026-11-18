@@ -172,7 +172,7 @@ struct MwsfdPly {
     int used;                       /* 4 */
     MwsfdStat stat;                 /* 8 */
     MwsfdCreInf cre;                /* 12 */
-    int f60;                        /* 60: set to 1 when the player is made */
+    int rsvMade;                    /* 60: set to 1 when the player is made; nothing reads it (RE4 leaves it unnamed, x3c) */
     void *sfd;                      /* 64: the SFD player handle */
     void *stm;                      /* 68: the MWSTM (ADXSTM) file stream */
     void *adxt;                     /* 72: the ADXT handle, mwPlyGetAdxtHn */
@@ -180,12 +180,12 @@ struct MwsfdPly {
     int compoSet;                   /* 80 */
     int compoMode;                  /* 84 */
     int frmSync;                    /* 88: mwPlySetFrmSync */
-    int f92;                        /* 92: the input buffer size mwsfcre_CalcMpvWorkSizes gives */
+    int sjbSize;                    /* 92: the input buffer size mwsfcre_CalcMpvWorkSizes gives (RE4 x5c; medium, from the value stored) */
     int waitingSvr;                 /* 96: set while a caller waits for the server */
     int svrBusy;                    /* 100: set by the server around a pass */
     int inSfdExec;                  /* 104: set by the server around its SFD execution */
     int execFlg;                    /* 108: the server pass's used-state */
-    int f112;                       /* 112: set to 1 when the player is made */
+    int rsvMade2;                   /* 112: set to 1 when the player is made; nothing reads it (RE4 x70) */
     signed char linkReq;            /* 116: mwPlyLinkStm's switch */
     signed char linkPrev;           /* 117: set on a 1 -> 0 link switch: a term is pending */
     signed char pause;              /* 118: the pause switch, re-applied on start */

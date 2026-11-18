@@ -451,7 +451,7 @@ int mwsfsvr_ExecVsync(void *obj)
 }
 
 /* counts the frame and runs the SFD vsync server unless another one holds the execution lock;
- * matching construct: volatile (unapproved, as before the fold) on the second counter */
+ * matching construct: volatile on the second counter (approved, #mwsfsvr-vsync-count) */
 void mwsfsvr_VsyncProc(void)
 {
     int init;
@@ -555,8 +555,8 @@ int mwsfsvr_ExecServer(void *obj)
     return result;
 }
 
-/* matching construct: volatile (unapproved, as before the fold): retail reads used after the NULL
- * test, not in its delay slot */
+/* matching construct: volatile on the in-use word (approved, #mwsfd-handle-used): retail reads used
+ * after the NULL test, not in its delay slot */
 int mwPlyExecSvrHndl(MwsfdPly *ply)
 {
     int used;

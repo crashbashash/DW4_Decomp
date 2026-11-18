@@ -742,9 +742,9 @@ MwsfdPly *mwPlyCreateSofdec(MwsfdCreInf *cprm) {
         mwSfdDestroy(ply);
         return 0;
     }
-    ply->f92 = sjb;
+    ply->sjbSize = sjb;
     ply->vtbl = &mwply_vtbl;
-    ply->f60 = 1;
+    ply->rsvMade = 1;
     ply->execFlg = 0;
     ply->stat = MWSFD_STAT_STOP;
     ply->compoSet = cprm->addInfMode;
@@ -752,7 +752,7 @@ MwsfdPly *mwPlyCreateSofdec(MwsfdCreInf *cprm) {
     if (SFD_GetTrHn(sfd, 3, (int *)&ply->adxt) != 0) {
         ply->adxt = 0;
     }
-    ply->f112 = 1;
+    ply->rsvMade2 = 1;
     ply->linkReq = 0;
     ply->linkPrev = 0;
     ply->pause = 0;
