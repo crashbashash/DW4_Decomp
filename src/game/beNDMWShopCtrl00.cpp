@@ -13,6 +13,7 @@
 extern "C" void beNDMWShopCtrl50_MoveRowCursor(beNDMWWindow *window, int row);
 #include "dw4/game/ndmw/beNDMWWindowSelect.h"
 #include "dw4/core/StringPool.h"
+#include "dw4/core/igStringRef.h"
 #include "dw4/game/beDBManager.h"
 #include "dw4/game/beDataBase.h"
 #include "dw4/game/beLua.h"
@@ -98,22 +99,6 @@ extern "C" char SQ_STOPEN_3[];
 extern "C" char ISSEQNAME_6[];
 extern "C" char i_bgclear_2[];
 extern "C" char OFFREEZE_3[];
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
- * p[-2]); releases the token on scope exit. */
-class StringRef {
-public:
-    char *p;
-    char *const *ref() const { return &p; }
-    StringRef() : p(0) {}
-    StringRef(int s) : p((char *)s) {}
-    StringRef(const char *s) : p((char *)s) {}
-    StringRef(void *s) : p((char *)s) {}
-    ~StringRef() { release(); }
-    void release() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
-    void Set(const char *n) { release(); p = (char *)n; }
-};
-/* kept local: this unit emits its own retained-string holder destructor, the one duplicate unit-objects allows at 0x130720; the shared igStringRef holder would break that row. */
-extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);
 extern "C" void beNDMWShopCtrl00_Update(beNDMWShopCtrl00 *);
 
 extern "C" char font011_3[];
@@ -234,19 +219,6 @@ extern "C" char SQALBUM[];
 extern "C" char j_shcard00[];
 extern "C" void beNDMWShopCtrlA1_ShowFirstAlbumPage(beNDMWShopCtrlA1 *);
 extern "C" char blank[];
-/* Stores a retained card name into slot `index` of the card-info list. */
-static inline void StoreCardName(beNDMWShopCtrlA1 *self, int index, int token) {
-    StringRef name(token);
-    igDataList *list = (igDataList *)self->_cardInfoList;
-    int count = list->_count;
-    if (count != 0 && index >= 0 && index < count) {
-        int *slot = &((int *)list->_data)[index];
-        int text = (int)name.p;
-        if (text) *(int *)(text - 4) = *(int *)(text - 4) + 1;
-        RELS((char *)*slot);
-        *slot = (int)name.p;
-    }
-}
 extern "C" void beNDMWShopCtrlA1_ShowAlbumPage(beNDMWShopCtrlA1 *);
 extern "C" void beNDMWShopCtrlA1_CloseAlbumPage(beNDMWShopCtrlA1 *);
 /* One text (font or model sequence name) per card of a booster pack. */
@@ -479,19 +451,7 @@ static inline igObjectList *PlayerFolder(int player, const char *record)
     return (igObjectList *)igProperty_GetRecordFolder((igObject *)player, record)->_data;
 }
 
-/* The pooled copy of `text` (null for null), creating the string pool on first use. */
-static inline const char *InternString(const char *text)
-{
-    if (text == 0) return 0;
-    if (g_stringPool == 0) {
-        int pool = (int)StringPool_Allocate(0x10);
-        if (pool != 0) pool = (int)StringPool_Construct((StringPool *)pool);
-        g_stringPool = (StringPool *)pool;
-    }
-    return StringPool_Intern(g_stringPool, text);
-}
-
-/* InternString for a text that is never null. */
+/* The pooled copy of `text`, creating the string pool on first use. */
 static inline const char *InternLiteral(const char *text)
 {
     if (g_stringPool == 0) {
@@ -514,7 +474,7 @@ static inline void ReleaseString(const char *text)
 }
 
 /* Appends the pooled copy of `text` to a string list. */
-#define APPEND_INTERNED(list, text) { StringList_AppendRetained((igStringRefList *)(list), StringRef(InternString((const char *)(text))).ref()); }
+#define APPEND_INTERNED(list, text) { StringList_AppendRetained((igStringRefList *)(list), igStringRef((const char *)(text)).ref()); }
 
 /* The paging virtuals (slots 22..24) a list window shares with beNDMWListCtrl. */
 struct PagedWindow {
@@ -940,15 +900,15 @@ void beNDMWShopCtrl10_Update(beNDMWShopCtrl10 *self)
                             sprintf(remainingText, percent_d, xdata - cost);
                             beNDMWWindow_QueueText((beNDMWWindow *)quote.p, STWINFONT41, font012, remainingText, RIGHT_3);
                             for (j = 0; j < QUOTE_PROMPT_ROWS; j++) {
-                                StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, StringRef(InternString(STWINFONT41)).ref());
-                                StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, StringRef(InternString(statFonts.font[j])).ref());
+                                StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, igStringRef(STWINFONT41).ref());
+                                StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, igStringRef(statFonts.font[j]).ref());
                             }
-                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, StringRef(InternString(STWINFONT41)).ref());
-                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, StringRef(InternString(font011_3)).ref());
-                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, StringRef(InternString(STWINFONT41)).ref());
-                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, StringRef(InternString(font012)).ref());
-                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)).ref());
-                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, StringRef(InternString(statFonts.font[2])).ref());
+                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, igStringRef(STWINFONT41).ref());
+                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, igStringRef(font011_3).ref());
+                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, igStringRef(STWINFONT41).ref());
+                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, igStringRef(font012).ref());
+                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseTypeList, igStringRef(STWINFONT29).ref());
+                            StringList_AppendRetained((igStringRefList *)quote.p->_textCloseNameList, igStringRef(statFonts.font[2]).ref());
                             quotePrompts = g_xdataStatPromptIds;
                             quote.p->_entCode = quotePrompts.prompt[self->_retCode];
                             self->_st3 = 1;
@@ -1478,13 +1438,6 @@ enum DeviceKind { DEVICE_WEAPON, DEVICE_BLUE_ARMOR, DEVICE_YELLOW_ARMOR };
 #define CNOS_PRICE 300
 #define RATE_TOTAL 10000U
 
-/* Makes `name` hold `token`, already retained by the caller. */
-static inline void AssignString(StringRef &name, const char *token)
-{
-    ReleaseString(name.p);
-    name.p = (char *)token;
-}
-
 void beNDMWShopCtrl40_Update(beNDMWShopCtrl40 *self) {
     void *allocator;
     beNDMWStatusCtrlD0 *decidedList;
@@ -1584,13 +1537,13 @@ void beNDMWShopCtrl40_Update(beNDMWShopCtrl40 *self) {
                     else if (level <= 300) band = 4;
                     else if (level <= 400) band = 5;
                     else band = 6;
-                    StringRef tableName(0);
+                    igStringRef tableName;
                     if (device->_kindNo == DEVICE_WEAPON) {
-                        AssignString(tableName, InternLiteral(coweapon));
+                        tableName = coweapon;
                     } else if (device->_kindNo == DEVICE_BLUE_ARMOR) {
-                        AssignString(tableName, InternLiteral(coarmor1));
+                        tableName = coarmor1;
                     } else if (device->_kindNo == DEVICE_YELLOW_ARMOR) {
-                        AssignString(tableName, InternLiteral(coarmor2));
+                        tableName = coarmor2;
                     }
                     beMessenger_SendNamed((beMessenger *)self->_messenger, DATABASE_11, tableName.p, 0, GETDATABASE_10);
                     table = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
@@ -1811,8 +1764,8 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                 beNDMWWindow_PresentModel((beNDMWWindow *)self, i_stcursorright_2, 0, SQ_HIDE_2, SQ_CLOSE_10, rightArrowPos);
                 beMessenger_SendNamed((beMessenger *)self->_messenger, DATABASE_11, conItem_2, 0, GETDATABASE_10);
                 conItems = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
-                StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT13_2)).ref());
-                StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_fontNames[0])).ref());
+                StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, igStringRef(STWINFONT13_2).ref());
+                StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, igStringRef(g_fontNames[0]).ref());
                 beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_2, 0x5DD);
                 row = 0;
                 font = g_fontNames;
@@ -1839,8 +1792,8 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                     selectWindow->_offsetPos[2] = 0.0f;
                     select.p->_startPoint = self->_cursor;
                     select.p->_selectMax = DISK_ROWS;
-                    StringList_AppendRetained((igStringRefList *)select.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)).ref());
-                    StringList_AppendRetained((igStringRefList *)select.p->_textCloseNameList, StringRef(InternString(font100_3)).ref());
+                    StringList_AppendRetained((igStringRefList *)select.p->_textCloseTypeList, igStringRef(STWINFONT29).ref());
+                    StringList_AppendRetained((igStringRefList *)select.p->_textCloseNameList, igStringRef(font100_3).ref());
                     beNDMWWindow_RunMessageScript((beNDMWWindow *)select.p, txt_shop_lua_2, 0x611);
                 }
                 self->_nowProcKazu = ObjectList_Count(self->_subWindow);
@@ -1919,8 +1872,8 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                     quantityWindow->_offsetPos[0] = 52.0f;
                     quantityWindow->_offsetPos[1] = -69.0f;
                     quantityWindow->_offsetPos[2] = 0.0f;
-                    StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)).ref());
-                    StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseNameList, StringRef(InternString(font100_3)).ref());
+                    StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseTypeList, igStringRef(STWINFONT29).ref());
+                    StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseNameList, igStringRef(font100_3).ref());
                     beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_2, 0x624);
                     beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_2, 0x5DE);
                     self->_retCode = (DISK_STACK_MAX - 1) - self->_diskCnt;
@@ -2784,7 +2737,7 @@ static inline void RetainString(const char *text)
 }
 
 /* Stores a retained `name` into slot `index` of the igStringRefList held in `listField`. */
-static inline void StringList_SetRetained(int listField, int index, const StringRef &name)
+static inline void StringList_SetRetained(int listField, int index, const igStringRef &name)
 {
     igStringRefList *list = (igStringRefList *)listField;
     int count = list->_count;
@@ -2828,17 +2781,13 @@ void beNDMWShopCtrlA1_ShowFirstAlbumPage(beNDMWShopCtrlA1 *self) {
         beDataBase_GetRecordString((beDataBase *)database, slot, CARDINFO);
         beDataBase_GetRecordString((beDataBase *)database, slot, SQALBUM);
         if (*(unsigned char *)(owned->_data + slot) != 0) {
-            StringRef name(InternString(beDataBase_GetRecordString((beDataBase *)database, slot, CARDINFO)));
+            igStringRef name(beDataBase_GetRecordString((beDataBase *)database, slot, CARDINFO));
             beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, name.p, 0, beDataBase_GetRecordString((beDataBase *)database, slot, SQALBUM), 0);
-            {
-                StringRef copy(name.p);
-                RetainString(copy.p);
-                StringList_AppendRetained((igStringRefList *)self->_cardInfoList, &copy.p);
-            }
+            StringList_AppendRetained((igStringRefList *)self->_cardInfoList, igStringRef(name).ref());
             IntList_Append(self->_cardRamNoList, 0);
         } else {
             beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, j_shcard00, slot, beDataBase_GetRecordString((beDataBase *)database, slot, SQALBUM), 0);
-            StringList_AppendRetained((igStringRefList *)self->_cardInfoList, StringRef(InternString(j_shcard00)).ref());
+            StringList_AppendRetained((igStringRefList *)self->_cardInfoList, igStringRef(j_shcard00).ref());
             IntList_Append(self->_cardRamNoList, slot);
         }
     }
@@ -2871,16 +2820,16 @@ void beNDMWShopCtrlA1_ShowAlbumPage(beNDMWShopCtrlA1 *self) {
     switch (page) {
     case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8:
         for (slot = 0; slot < CARDS_PER_PAGE; slot++) {
-            StringRef shown = StringList_CopyRetained(((igStringRefList *)self->_cardInfoList), slot);
+            igStringRef shown = StringList_CopyRetained(((igStringRefList *)self->_cardInfoList), slot);
             int cardNo = page * CARDS_PER_PAGE + slot;
             int ramNo = IntList_Get(self->_cardRamNoList, slot);
             if (cardNo > LAST_CARD_NO) {
                 beNDMWWindow_SendModelSequence((beNDMWWindow *)self, shown.p, ramNo, SQ_CLOSE_10);
-                StringList_SetRetained(self->_cardInfoList, slot, StringRef(InternString(blank)));
+                StringList_SetRetained(self->_cardInfoList, slot, igStringRef(blank));
                 IntList_SetAt(self->_cardRamNoList, slot, NO_MODEL);
             } else if (*(unsigned char *)(owned->_data + cardNo) != 0) {
                 if (ramNo != NO_MODEL) beNDMWWindow_SendModelSequence((beNDMWWindow *)self, shown.p, ramNo, SQ_CLOSE_10);
-                StringRef name(InternString(beDataBase_GetRecordString((beDataBase *)database, cardNo, CARDINFO)));
+                igStringRef name(beDataBase_GetRecordString((beDataBase *)database, cardNo, CARDINFO));
                 beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, name.p, 0, beDataBase_GetRecordString((beDataBase *)database, cardNo, SQALBUM), 0);
                 StringList_SetRetained(self->_cardInfoList, slot, name);
                 IntList_SetAt(self->_cardRamNoList, slot, 0);
@@ -2891,7 +2840,7 @@ void beNDMWShopCtrlA1_ShowAlbumPage(beNDMWShopCtrlA1 *self) {
                     beNDMWWindow_SendModelSequence((beNDMWWindow *)self, shown.p, ramNo, SQ_CLOSE_10);
                 }
                 beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, j_shcard00, slot, beDataBase_GetRecordString((beDataBase *)database, slot, SQALBUM), 0);
-                StringList_SetRetained(self->_cardInfoList, slot, StringRef(InternString(j_shcard00)));
+                StringList_SetRetained(self->_cardInfoList, slot, igStringRef(j_shcard00));
                 IntList_SetAt(self->_cardRamNoList, slot, slot);
             }
         }
@@ -2909,7 +2858,7 @@ void beNDMWShopCtrlA1_CloseAlbumPage(beNDMWShopCtrlA1 *self) {
     names = (igStringRefList *)self->_cardInfoList;
     for (slot = 0; slot < names->_count; slot++) {
         {
-            StringRef name = StringList_CopyRetained(names, slot);
+            igStringRef name = StringList_CopyRetained(names, slot);
             int ramNo = IntList_Get(self->_cardRamNoList, slot);
             if (ramNo != NO_MODEL) {
                 beNDMWWindow_SendModelSequence((beNDMWWindow *)self, name.p, ramNo, SQ_CLOSE_10);
@@ -3712,8 +3661,8 @@ static inline void IntList_Set(igIntList *list, int index, const int &value)
 
 /* Queues a text that the window switches off when it closes. */
 #define QUEUE_TEXT_CLOSE(window, type, name) \
-    StringList_AppendRetained((igStringRefList *)((window)->_textCloseTypeList), StringRef(InternString((const char *)(type))).ref()); \
-    StringList_AppendRetained((igStringRefList *)((window)->_textCloseNameList), StringRef(InternString((const char *)(name))).ref());
+    StringList_AppendRetained((igStringRefList *)((window)->_textCloseTypeList), igStringRef((const char *)(type)).ref()); \
+    StringList_AppendRetained((igStringRefList *)((window)->_textCloseNameList), igStringRef((const char *)(name)).ref());
 
 enum EditBitMode { EDITBIT_DEPOSIT, EDITBIT_WITHDRAW, EDITBIT_JUNK };
 enum EditBitPhase {
@@ -5033,10 +4982,10 @@ void beNDMWShopCtrlDiskSell_Update(beNDMWShopCtrlDiskSell *self) {
         rightCursorPos[1] = 25.0f;
         rightCursorPos[2] = 0.0f;
         beNDMWWindow_PresentModel((beNDMWWindow *)self, i_stcursorright_2, 0, SQ_HIDE_2, SQ_CLOSE_10, rightCursorPos);
-        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT29)).ref());
-        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(font100_3)).ref());
-        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT13_2)).ref());
-        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_fontNames[0])).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, igStringRef(STWINFONT29).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, igStringRef(font100_3).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, igStringRef(STWINFONT13_2).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, igStringRef(g_fontNames[0]).ref());
         beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_2, 1001);
         disks = PlayerFolder(GetPlayer(self), DISKFOLDER_5);
         for (i = 0; i < disks->_count; i++) {
@@ -5139,8 +5088,8 @@ void beNDMWShopCtrlDiskSell_Update(beNDMWShopCtrlDiskSell *self) {
                     window->_offsetPos[1] = -104.0f;
                     window->_offsetPos[2] = 0.0f;
                 }
-                StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseTypeList, StringRef(InternString(STWINFONT29)).ref());
-                StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseNameList, StringRef(InternString(font100_3)).ref());
+                StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseTypeList, igStringRef(STWINFONT29).ref());
+                StringList_AppendRetained((igStringRefList *)quantity.p->_textCloseNameList, igStringRef(font100_3).ref());
                 beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_2, 1572);
                 beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_2, 1505);
                 self->_retCode = self->_maxSell - 1;
@@ -5642,7 +5591,7 @@ void beNDMWShopCtrlSales_RefreshText(beNDMWShopCtrlSales *self, int refreshRows,
     if (refreshRows != 0) {
         row = 0;
         do {
-            StringRef display;
+            igStringRef display;
             item = 0;
             int index = row + self->_nowPage * SALES_PAGE_ROWS;
             if (index < SALES_ITEMS(self)->_count) item = ((beNDMWItemRevisionPocketBase **)SALES_ITEMS(self)->_data)[index];
@@ -5664,9 +5613,9 @@ void beNDMWShopCtrlSales_RefreshText(beNDMWShopCtrlSales *self, int refreshRows,
                     sprintf(price.text, percent_d, beNDMWItemRevisionPocketBase_GetPrice(item, status, HANBAI_2));
                 }
                 SET_TEXT(self, STWINFONT17, g_fontNames[row], (char *)&price)
-                display.Set(InternLiteral(DISPON));
+                display = DISPON;
             } else {
-                display.Set(InternLiteral(DISPOFF));
+                display = DISPOFF;
             }
             SWITCH_TEXT(self, STWINFONT14, g_fontNames[row], display.p)
             SWITCH_TEXT(self, STWINFONT17, g_fontNames[row], display.p)

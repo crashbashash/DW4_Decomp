@@ -45,6 +45,7 @@
 #include "dw4/core/igobject_release.h"
 #include "dw4/game/ndmw/beNDMWWindowDispatchView.h"
 #include "dw4/core/StringPool.h"
+#include "dw4/core/igStringRef.h"
 #include "dw4/game/beDBManager.h"
 #include "dw4/game/beDataBase.h"
 #include "dw4/game/beMessenger.h"
@@ -222,50 +223,7 @@ extern "C" char POWERSOCKETNAME_3[];
 extern "C" char PLAYERARMS_2[];
 extern "C" char GENERATE_7[];
 extern "C" char ONPREVIEW[];
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
- * p[-2]); releases the token on scope exit. */
-class StringRef {
-public:
-    char *p;
-    char *const *ref() const { return &p; }
-    StringRef() : p(0) {}
-    StringRef(int s) : p((char *)s) {}
-    StringRef(const char *s) : p((char *)s) {}
-    StringRef(void *s) : p((char *)s) {}
-    StringRef(const StringRef &o) : p(o.p) {}
-    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
-    StringRef &operator=(const char *text) {
-        if (g_stringPool == 0) {
-            void *pool = StringPool_Allocate(16);
-            if (pool != 0) pool = StringPool_Construct((StringPool *)pool);
-            g_stringPool = (StringPool *)pool;
-        }
-        const char *token = StringPool_Intern(g_stringPool, text);
-        const char *old = p;
-        if (old) { int *h = (int *)old - 2; int r = ((int *)old)[-1] - 1; ((int *)old)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); }
-        p = (char *)token;
-        return *this;
-    }
-};
-/* kept local: this unit emits its own retained-string holder destructor, the one duplicate unit-objects allows at 0x130720; the shared igStringRef holder would break that row. */
-extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);
 
-/* Interns a string in the shared string pool; a null text interns as null. */
-static inline const char *InternString(const char *text)
-{
-    const char *token;
-    if (text == 0) {
-        token = 0;
-    } else {
-        if (g_stringPool == 0) {
-            void *pool = StringPool_Allocate(0x10);
-            if (pool != 0) pool = StringPool_Construct((StringPool *)pool);
-            g_stringPool = (StringPool *)pool;
-        }
-        token = StringPool_Intern(g_stringPool, text);
-    }
-    return token;
-}
 extern "C" void beNDMWStatusCtrlBaseEquip_Update(beNDMWStatusCtrlBaseEquip *p);
 extern "C" char i_stcursor04[];
 extern "C" char font002_2[];
@@ -809,7 +767,7 @@ static inline void ObjectList_Set(igObjectList *list, int index, igObject *objec
 /* Generates the PLAYERARMS_2 model for the name of the power chip in socket 0. */
 static inline void SendPowerSocketName(beNDMWStatusCtrlBaseEquip *self)
 {
-    StringRef name(StringList_CopyRetained((igStringRefList *)igProperty_GetRecordStringList((igObject *)self->_playerList, POWERSOCKETNAME_3)->_data, 0));
+    igStringRef name = StringList_CopyRetained((igStringRefList *)igProperty_GetRecordStringList((igObject *)self->_playerList, POWERSOCKETNAME_3)->_data, 0);
     beMessenger_SendNamed((beMessenger *)self->_messenger, PLAYERARMS_2, name.p, self->_playerNo, GENERATE_7);
 }
 
@@ -1685,18 +1643,18 @@ void beNDMWStatus_AssignEquipment(StatusPanel *self, ItemList *slotList, int slo
                 alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                 {
                 igSmartPointer<igObject> names((igObject *)igStringRefList_Create((int)alloc));
-                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(TSUYOSA_2)).ref());
-                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(KASHIKOSA_2)).ref());
-                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(SEISHIN_2)).ref());
-                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(SUBAYASA_2)).ref());
-                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(RES_FIRE_2)).ref());
-                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(RES_ICE_2)).ref());
-                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(RES_THUNDER_2)).ref());
-                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(RES_DARK_2)).ref());
-                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(CHIMEIRITSU_2)).ref());
-                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(HPDRAIN_2)).ref());
-                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(MPDRAIN_2)).ref());
-                StringList_AppendRetained((igStringRefList *)(int)names.p, StringRef(InternString(CHOHATURITSU_2)).ref());
+                StringList_AppendRetained((igStringRefList *)(int)names.p, igStringRef(TSUYOSA_2).ref());
+                StringList_AppendRetained((igStringRefList *)(int)names.p, igStringRef(KASHIKOSA_2).ref());
+                StringList_AppendRetained((igStringRefList *)(int)names.p, igStringRef(SEISHIN_2).ref());
+                StringList_AppendRetained((igStringRefList *)(int)names.p, igStringRef(SUBAYASA_2).ref());
+                StringList_AppendRetained((igStringRefList *)(int)names.p, igStringRef(RES_FIRE_2).ref());
+                StringList_AppendRetained((igStringRefList *)(int)names.p, igStringRef(RES_ICE_2).ref());
+                StringList_AppendRetained((igStringRefList *)(int)names.p, igStringRef(RES_THUNDER_2).ref());
+                StringList_AppendRetained((igStringRefList *)(int)names.p, igStringRef(RES_DARK_2).ref());
+                StringList_AppendRetained((igStringRefList *)(int)names.p, igStringRef(CHIMEIRITSU_2).ref());
+                StringList_AppendRetained((igStringRefList *)(int)names.p, igStringRef(HPDRAIN_2).ref());
+                StringList_AppendRetained((igStringRefList *)(int)names.p, igStringRef(MPDRAIN_2).ref());
+                StringList_AppendRetained((igStringRefList *)(int)names.p, igStringRef(CHOHATURITSU_2).ref());
                 rec = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject);
                 alloc = igObject_GetAllocator(self);
                 alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
@@ -1705,7 +1663,7 @@ void beNDMWStatus_AssignEquipment(StatusPanel *self, ItemList *slotList, int slo
                 i = 0;
                 if (0 < ((StrList *)names.p)->_count) {
                     do {
-                        hit = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)newItem, (beNDMWStatus *)rec, (const char *)(int)(StringList_CopyRetained((igStringRefList *)names.p, i)).p) > 0;
+                        hit = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)newItem, (beNDMWStatus *)rec, StringList_CopyRetained((igStringRefList *)names.p, i).p) > 0;
                         if (hit != 0) { cat = i; break; }
                         i += 1;
                     } while (i < ((StrList *)names.p)->_count);
@@ -1717,7 +1675,7 @@ void beNDMWStatus_AssignEquipment(StatusPanel *self, ItemList *slotList, int slo
                     do {
                         it = *(EquipItem **)((char *)slotList->_data + off);
                         if (it != 0) {
-                            hit = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)it, (beNDMWStatus *)rec, (const char *)(int)(StringList_CopyRetained((igStringRefList *)names.p, cat)).p) > 0;
+                            hit = beNDMWItemBase_GetRecordInt((beNDMWItemBase *)it, (beNDMWStatus *)rec, StringList_CopyRetained((igStringRefList *)names.p, cat).p) > 0;
                             if (hit != 0) {
                                 it->_equipped = 0;
                                 REL(*(EquipItem **)((char *)slotList->_data + off))
@@ -1848,7 +1806,7 @@ void beNDMWStatusPowerSocket_PresentPanel(beNDMWStatusPowerSocket *self, int ope
             if (kind != 0 && kind->_pocket > -1) lines = kind->_pocket;
         }
         {
-            StringRef sequence;
+            igStringRef sequence;
             switch (lines) {
             case 0:
             default: sequence = SQ_0LINEOPEN; break;
@@ -2040,7 +1998,7 @@ void beNDMWStatusPowerSocket_RefreshPocket(beNDMWStatusPowerSocket *self) {
         if (kind != 0 && kind->_pocket > -1) lines = kind->_pocket;
     }
     {
-        StringRef sequence;
+        igStringRef sequence;
         switch (lines) {
         case 0:
         default: sequence = SQ_0LINEOPEN; break;
@@ -2227,8 +2185,8 @@ void beNDMWStatusPowerSocket_OpenDeviceFolder(beNDMWStatusPowerSocket *self) {
     igSmartPointer<beNDMWStatusCtrlD0> win(beNDMWStatusCtrlD0_Create(a));
     beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
     ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)win.p);
-    StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)).ref());
-    StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, StringRef(InternString(font100_2)).ref());
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, igStringRef(STWINFONT29_3).ref());
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, igStringRef(font100_2).ref());
     beNDMWWindow_RunMessageScript((beNDMWWindow *)win.p, txt_status_lua_2, 0x8B);
     s0 = (igIntList *)win.p->_kindList;
     s1 = s0->_count;
@@ -2302,8 +2260,8 @@ void beNDMWStatusPowerSocket_OpenPocketList(beNDMWStatusPowerSocket *self) {
     igSmartPointer<beNDMWStatusSelectE1> win((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)alloc));
     beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
     ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)win.p);
-    StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)).ref());
-    StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, StringRef(InternString(font100_2)).ref());
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, igStringRef(STWINFONT29_3).ref());
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, igStringRef(font100_2).ref());
     beNDMWWindow_RunMessageScript((beNDMWWindow *)win.p, txt_status_lua_2, 0x8A);
     pocketCount = 1;
     if (((igObjectList *)self->_powerSocket)->_count > 0) {
@@ -2463,7 +2421,7 @@ void beNDMWStatusMainSlot_PresentPanel(beNDMWStatusMainSlot *self, int open) {
             if (kind != 0 && kind->_pocket > -1) lines = kind->_pocket;
         }
         {
-            StringRef sequence;
+            igStringRef sequence;
             switch (lines) {
             case 0:
             default: sequence = SQ_0LINEOPEN; break;
@@ -2634,7 +2592,7 @@ void beNDMWStatusMainSlot_RefreshPocket(beNDMWStatusMainSlot *self) {
         if (kind != 0 && kind->_pocket > -1) lines = kind->_pocket;
     }
     {
-        StringRef sequence;
+        igStringRef sequence;
         switch (lines) {
         case 0:
         default: sequence = SQ_0LINEOPEN; break;
@@ -2795,8 +2753,8 @@ void beNDMWStatusMainSlot_OpenDeviceFolder(beNDMWStatusMainSlot *self) {
     igSmartPointer<beNDMWStatusCtrlD0> win(beNDMWStatusCtrlD0_Create(al));
     beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
     ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)win.p);
-    StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)).ref());
-    StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, StringRef(InternString(font100_2)).ref());
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, igStringRef(STWINFONT29_3).ref());
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, igStringRef(font100_2).ref());
     beNDMWWindow_RunMessageScript((beNDMWWindow *)win.p, txt_status_lua_2, 139);
     l = (igDataList *)win.p->_kindList;
     c = l->_count;
@@ -2868,8 +2826,8 @@ void beNDMWStatusMainSlot_OpenPocketList(beNDMWStatusMainSlot *self) {
     igSmartPointer<beNDMWStatusSelectE1> win(((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)alloc)));
     beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
     { beNDMWStatusSelectE1 *window = win.p; ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)window); }
-    StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)).ref());
-    StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, StringRef(InternString(font100_2)).ref());
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, igStringRef(STWINFONT29_3).ref());
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, igStringRef(font100_2).ref());
     beNDMWWindow_RunMessageScript((beNDMWWindow *)win.p, txt_status_lua_2, 0x8A);
     pocketCount = 1;
     igObjectList *kinds = (igObjectList *)self->_mainSlot;
@@ -3293,8 +3251,8 @@ void beNDMWStatusSubSlot_OpenDeviceFolder(beNDMWStatusSubSlot *self) {
     igSmartPointer<beNDMWStatusCtrlD0> win((beNDMWStatusCtrlD0 *)beNDMWStatusCtrlD0_Create(a));
     beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
     ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)win.p);
-    StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)).ref());
-    StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, StringRef(InternString(font100_2)).ref());
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, igStringRef(STWINFONT29_3).ref());
+    StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, igStringRef(font100_2).ref());
     beNDMWWindow_RunMessageScript((beNDMWWindow *)win.p, txt_status_lua_2, 139);
     s0 = (igDataList *)win.p->_kindList;
     s1 = s0->_count;
@@ -3382,8 +3340,8 @@ void beNDMWStatusCtrlD0_Update(beNDMWStatusCtrlD0 *self)
 
     switch (self->_st0) {
     case 0:
-        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT13)).ref());
-        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, igStringRef(STWINFONT13).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, igStringRef(g_statusFontNames[0]).ref());
         if (self->_isBankFolder != 0) {
             beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua, 0x517);
         } else {
@@ -4106,9 +4064,9 @@ void beNDMWStatusCtrlFlag_Update(beNDMWStatusCtrlFlag *self) {
                 s2 += 1;
             } while (s2 < lst->cnt);
         }
-        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT13)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, igStringRef(STWINFONT13).ref());
         src = g_statusFontNames[0];
-        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(src)).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, igStringRef(src).ref());
         beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x47);
         k = 0;
         p = &g_statusFontNames[0];
@@ -4142,8 +4100,8 @@ void beNDMWStatusCtrlFlag_Update(beNDMWStatusCtrlFlag *self) {
             t->_offsetPos[2] = 0.0f;
         }
         win.p->_startPoint = 0;
-        StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)).ref());
-        StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, StringRef(InternString(font100_2)).ref());
+        StringList_AppendRetained((igStringRefList *)win.p->_textCloseTypeList, igStringRef(STWINFONT29_3).ref());
+        StringList_AppendRetained((igStringRefList *)win.p->_textCloseNameList, igStringRef(font100_2).ref());
         beNDMWWindow_RunMessageScript((beNDMWWindow *)win.p, txt_status_lua_2, 0x87);
         }
         self->_nowProcKazu = ((beNDMWWindowList *)(self->_subWindow))->_count;
@@ -4264,8 +4222,8 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
         MSG_SELECT_INT(self->_playerNo)
         igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DISKFOLDER_3);
         beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stfolder, 0, SQ_AWINOFFOPEN, SQ_CLOSE_3);
-        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT13)).ref());
-        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, igStringRef(STWINFONT13).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, igStringRef(g_statusFontNames[0]).ref());
         beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x48);
         for (i = 0; i < 12; i++)
             beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT14_2, g_statusFontNames[i], space, LEFT_3);
@@ -4288,8 +4246,8 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
             WSETI84(diskWin.p, 10)
             WSETPOS(diskWin.p, -121.0f, 128.0f, 0.0f)
             WSETI100(diskWin.p, self->_cursor)
-            StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)diskWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)).ref());
-            StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)diskWin.p)->_textCloseNameList, StringRef(InternString(font100_2)).ref());
+            StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)diskWin.p)->_textCloseTypeList, igStringRef(STWINFONT29_3).ref());
+            StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)diskWin.p)->_textCloseNameList, igStringRef(font100_2).ref());
             beNDMWWindow_RunMessageScript((beNDMWWindow *)diskWin.p, txt_status_lua_2, 0x2B);
             }
             cnt = ((igObjectList *)self->_subWindow)->_count;
@@ -4424,8 +4382,8 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
                     beNDMWWindow_BindContext((beNDMWWindow *)emptyWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
                     ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)emptyWin.p);
                     NEXT_ST2()
-                    StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)emptyWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)).ref());
-                    StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)emptyWin.p)->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])).ref());
+                    StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)emptyWin.p)->_textCloseTypeList, igStringRef(STWINFONT29_3).ref());
+                    StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)emptyWin.p)->_textCloseNameList, igStringRef(g_statusFontNames[0]).ref());
                     beNDMWWindow_RunMessageScript((beNDMWWindow *)emptyWin.p, txt_status_lua_2, 0x8D);
                     }
                 } else {
@@ -4460,8 +4418,8 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
                         beNDMWWindow_BindContext((beNDMWWindow *)noPlayerWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
                         ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)noPlayerWin.p);
                         NEXT_ST2()
-                        StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)noPlayerWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)).ref());
-                        StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)noPlayerWin.p)->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])).ref());
+                        StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)noPlayerWin.p)->_textCloseTypeList, igStringRef(STWINFONT29_3).ref());
+                        StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)noPlayerWin.p)->_textCloseNameList, igStringRef(g_statusFontNames[0]).ref());
                         beNDMWWindow_RunMessageScript((beNDMWWindow *)noPlayerWin.p, txt_status_lua_2, 0x8E);
                         }
                     } else {
@@ -4510,10 +4468,10 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
                     beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stmenu02, 0, SQ_3ITEMOPEN, SQ_CLOSE_3);
                     break;
                 }
-                StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT39)).ref());
-                StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(font000_2)).ref());
-                StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT39)).ref());
-                StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(font001_2)).ref());
+                StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, igStringRef(STWINFONT39).ref());
+                StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, igStringRef(font000_2).ref());
+                StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, igStringRef(STWINFONT39).ref());
+                StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, igStringRef(font001_2).ref());
                 beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x4A);
                 MSG_SELECT_INT(self->_playerNo)
                 lsx = (igObjectList *)igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DISKFOLDER_3)->_data;
@@ -4659,8 +4617,8 @@ void beNDMWStatusCtrlDisk_Update(beNDMWStatusCtrlDisk *self)
                 { igSmartPointer<beNDMWShopSelect00> fullWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)al));
                 beNDMWWindow_BindContext((beNDMWWindow *)fullWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
                 ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)fullWin.p);
-                StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)fullWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)).ref());
-                StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)fullWin.p)->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])).ref());
+                StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)fullWin.p)->_textCloseTypeList, igStringRef(STWINFONT29_3).ref());
+                StringList_AppendRetained((igStringRefList *)((beNDMWWindowSelect *)fullWin.p)->_textCloseNameList, igStringRef(g_statusFontNames[0]).ref());
                 beNDMWWindow_RunMessageScript((beNDMWWindow *)fullWin.p, txt_status_lua_2, 0x8F);
                 }
                 SYNC_COUNT()
@@ -4890,9 +4848,9 @@ void beNDMWStatusCtrlBit_Update(beNDMWStatusCtrlBit *self) {
                     igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)al));
                     beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
                     ObjectList_AppendRetained((igObjectList *)(unsigned)self->_subWindow, (igObject *)win.p);
-                    StringList_AppendRetained((igStringRefList *)((beNDMWWindow *)win.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)).ref());
+                    StringList_AppendRetained((igStringRefList *)((beNDMWWindow *)win.p)->_textCloseTypeList, igStringRef(STWINFONT29_3).ref());
                     s2 = (int)g_statusFontNames[0];
-                    StringList_AppendRetained((igStringRefList *)((beNDMWWindow *)win.p)->_textCloseNameList, StringRef(InternString((const char *)s2)).ref());
+                    StringList_AppendRetained((igStringRefList *)((beNDMWWindow *)win.p)->_textCloseNameList, igStringRef((const char *)s2).ref());
                     beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x58);
                 }
                 self->_nowProcKazu = ((beNDMWWindowList *)(self->_subWindow))->_count;
@@ -4982,10 +4940,10 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
     case 0:
         t = ((igIntList *)p->_playerNoList)->_count;
         switch (t) { case 1: default: beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)p, i_stmenu02, 0, SQ_1BITOPEN, SQ_CLOSE_3); break; case 2: beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)p, i_stmenu02, 0, SQ_2BITOPEN, SQ_CLOSE_3); break; case 3: beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)p, i_stmenu02, 0, SQ_3BITOPEN, SQ_CLOSE_3); break; }
-        StringList_AppendRetained((igStringRefList *)p->_textCloseTypeList, StringRef(InternString(STWINFONT39)).ref());
-        StringList_AppendRetained((igStringRefList *)p->_textCloseNameList, StringRef(InternString(font000_2)).ref());
-        StringList_AppendRetained((igStringRefList *)p->_textCloseTypeList, StringRef(InternString(STWINFONT39)).ref());
-        StringList_AppendRetained((igStringRefList *)p->_textCloseNameList, StringRef(InternString(font001_2)).ref());
+        StringList_AppendRetained((igStringRefList *)p->_textCloseTypeList, igStringRef(STWINFONT39).ref());
+        StringList_AppendRetained((igStringRefList *)p->_textCloseNameList, igStringRef(font000_2).ref());
+        StringList_AppendRetained((igStringRefList *)p->_textCloseTypeList, igStringRef(STWINFONT39).ref());
+        StringList_AppendRetained((igStringRefList *)p->_textCloseNameList, igStringRef(font001_2).ref());
         beNDMWWindow_RunMessageScript((beNDMWWindow *)p, txt_status_lua_2, 0x4C);
         beNDMWWindow_QueueText((beNDMWWindow *)p, STWINFONT28, font000_2, space, CENTER_2);
         beNDMWWindow_QueueText((beNDMWWindow *)p, STWINFONT27, font000_2, space, RIGHT_2);
@@ -5333,8 +5291,8 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
                 t->_offsetPos[1] = 128.0f;
                 t->_offsetPos[2] = 0.0f; }
                 wr.p->_startPoint = 0;
-                StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT13)).ref());
-                StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])).ref());
+                StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, igStringRef(STWINFONT13).ref());
+                StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, igStringRef(g_statusFontNames[0]).ref());
                 beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, self->_skillMenu + 95);
                 switch (self->_skillMenu) {
                 case 0: {
@@ -5372,8 +5330,8 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
                     level = igProperty_GetRecord((igObject *)obj, LEVEL_3)->_data;
                     limit = SkillLimitForLevel(level);
                     for (i = 0; i < recs->_count; i++) {
-                        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT14_2)).ref());
-                        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_statusFontNames[i])).ref());
+                        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, igStringRef(STWINFONT14_2).ref());
+                        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, igStringRef(g_statusFontNames[i]).ref());
                         sprintf(buf, percent_d_3, ((int *)recs->_data)[i]);
                         beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT18, g_statusFontNames[i], buf, RIGHT_2);
                         beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
@@ -5671,12 +5629,12 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
         v0[0] = -121.0f; v0[1] = 128.0f; v0[2] = 0.0f;
         beNDMWWindow_PresentModel((beNDMWWindow *)self, i_stcursor04, 0, tq.v[self->_entCode % 12], SQ_CLOSE_3, (float *)v0);
         beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stmenu02, 0, SQ_3LINEOPEN, SQ_CLOSE_3);
-        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT26)).ref());
-        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])).ref());
-        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT26)).ref());
-        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_statusFontNames[1])).ref());
-        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT26)).ref());
-        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(g_statusFontNames[2])).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, igStringRef(STWINFONT26).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, igStringRef(g_statusFontNames[0]).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, igStringRef(STWINFONT26).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, igStringRef(g_statusFontNames[1]).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, igStringRef(STWINFONT26).ref());
+        StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, igStringRef(g_statusFontNames[2]).ref());
         beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x43);
         GET_ALLOC(al)
         { igSmartPointer<beNDMWStatusSelectE1> menuWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)al));
@@ -5713,8 +5671,8 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
                 { igSmartPointer<beNDMWShopSelect00> messageWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)al));
                 beNDMWWindow_BindContext((beNDMWWindow *)messageWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
                 ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)messageWin.p);
-                StringList_AppendRetained((igStringRefList *)((beNDMWShopSelect00 *)messageWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)).ref());
-                StringList_AppendRetained((igStringRefList *)((beNDMWShopSelect00 *)messageWin.p)->_textCloseNameList, StringRef(InternString(font000_2)).ref());
+                StringList_AppendRetained((igStringRefList *)((beNDMWShopSelect00 *)messageWin.p)->_textCloseTypeList, igStringRef(STWINFONT29_3).ref());
+                StringList_AppendRetained((igStringRefList *)((beNDMWShopSelect00 *)messageWin.p)->_textCloseNameList, igStringRef(font000_2).ref());
                 MSG_SELECT_INT(self->_playerNo)
                 rec = igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DEVICEFOLDER_3);
                 item = (beNDMWItemBase *)((int *)((igObjectList *)rec->_data)->_data)[self->_selectDevice];
@@ -5903,8 +5861,8 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
                         beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)self, i_stmenu02, 0, SQ_3CHIPOPEN, SQ_CLOSE_3);
                         break;
                     }
-                    StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, StringRef(InternString(STWINFONT39)).ref());
-                    StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, StringRef(InternString(font000_2)).ref());
+                    StringList_AppendRetained((igStringRefList *)self->_textCloseTypeList, igStringRef(STWINFONT39).ref());
+                    StringList_AppendRetained((igStringRefList *)self->_textCloseNameList, igStringRef(font000_2).ref());
                     beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_status_lua_2, 0x49);
                     MSG_SELECT_INT(self->_playerNo)
                     rec = igProperty_GetRecordFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DEVICEFOLDER_3);
@@ -5973,8 +5931,8 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
                     SYNC_COUNT()
                     NEXT_ST2()
                     self->_st3 = -1;
-                    StringList_AppendRetained((igStringRefList *)((beNDMWShopSelect00 *)resultWin.p)->_textCloseTypeList, StringRef(InternString(STWINFONT29_3)).ref());
-                    StringList_AppendRetained((igStringRefList *)((beNDMWShopSelect00 *)resultWin.p)->_textCloseNameList, StringRef(InternString(g_statusFontNames[0])).ref());
+                    StringList_AppendRetained((igStringRefList *)((beNDMWShopSelect00 *)resultWin.p)->_textCloseTypeList, igStringRef(STWINFONT29_3).ref());
+                    StringList_AppendRetained((igStringRefList *)((beNDMWShopSelect00 *)resultWin.p)->_textCloseNameList, igStringRef(g_statusFontNames[0]).ref());
                     self->_receipt = self->_retCode;
                     if (((int *)((igObjectList *)self->_playerDeviceCnt)->_data)[self->_receipt] >= 0x24) {
                         beNDMWWindow_RunMessageScript((beNDMWWindow *)resultWin.p, txt_status_lua_2, 0x95);

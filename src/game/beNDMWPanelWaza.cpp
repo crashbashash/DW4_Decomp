@@ -2,6 +2,7 @@
 #include "dw4/core/igSmartPointer.h"
 #include "dw4/game/ndmw/beNDMWItemBaseDispatchView.h"
 #include "dw4/core/StringPool.h"
+#include "dw4/core/igStringRef.h"
 #include "dw4/game/beBaseInfoRam.h"
 #include "dw4/game/beDataBase.h"
 #include "dw4/game/beMessenger.h"
@@ -56,10 +57,7 @@ extern "C" {
 char g_textColorRgbReady;
 float g_textColorRgb[12];
 }
-struct RecoveryString { void *p; RecoveryString() {} RecoveryString(void *q) { p = q; } ~RecoveryString() { if (p != 0) { int *t = (int *)((char *)p - 8); int v = *(int *)((char *)p - 4) - 1; *(int *)((char *)p - 4) = v; if (v == 0) StringChunk_ReleaseHeader((StringChunk *)*t, (StringTokenHeader *)t); } } };
-/* kept local: this unit emits its own retained-string holder destructor, the one duplicate unit-objects allows at 0x130720; the shared igStringRef holder would break that row. */
-extern "C" RecoveryString StringList_CopyRetained(void *, int);
-struct SetOp { static inline void go(igStringRefList *L, int idx, const RecoveryString &r) { int cnt; int *slot; int *t; int *a1; int c; cnt = L->_count; if (cnt != 0 && idx >= 0 && idx < cnt) { slot = (int *)L->_data + idx; t = (int *)r.p; if (t != 0) t[-1] = t[-1] + 1; t = (int *)(*slot); if (t != 0) { a1 = t - 2; c = t[-1] - 1; t[-1] = c; if (c == 0) StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1); } *slot = (int)r.p; } } };
+struct SetOp { static inline void go(igStringRefList *L, int idx, const igStringRef &r) { int cnt; int *slot; int *t; int *a1; int c; cnt = L->_count; if (cnt != 0 && idx >= 0 && idx < cnt) { slot = (int *)L->_data + idx; t = (int *)r.p; if (t != 0) t[-1] = t[-1] + 1; t = (int *)(*slot); if (t != 0) { a1 = t - 2; c = t[-1] - 1; t[-1] = c; if (c == 0) StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1); } *slot = (int)r.p; } } };
 extern "C" void beNDMWPanelObject_SetCellText(beNDMWPanelObject *self, int g, int s, int *name, int val);
 struct PanelPosition { float x; float y; float z; };
 extern "C" void beNDMWPanelObject_GetBasePosition(beNDMWPanelObject *panel, struct PanelPosition *position);
@@ -78,6 +76,8 @@ extern "C" void beNDMWPanelObjectWaza_Refresh(beNDMWPanelObjectWaza *self);
 extern "C" void beNDMWPanelObjectWaza_Fire(beNDMWPanelObjectWaza *self, int *label, long long *wait);
 extern "C" void beNDMWPanelWaza_Prepare(beNDMWPanelWaza *self);
 extern "C" void beNDMWPanelWaza_OnAddRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram);
+/* An interned-string holder whose constructor and destructor this unit calls out of line (the copies kept with
+ * beNDMWPanelWazaInfoWork and at 0x130720) instead of inlining igStringRef's. */
 class StringRef {
 public:
     char *p;
@@ -131,8 +131,6 @@ static inline int listCount(const igIntList *list) { return list->_count; }
 void beNDMWPanelObject_SetCellText(beNDMWPanelObject *self, int g, int s, int *name, int val) {
     float v[3];
     int idx;
-    int pool;
-    int ref;
     int cnt;
     bool x;
     float *p;
@@ -158,17 +156,7 @@ void beNDMWPanelObject_SetCellText(beNDMWPanelObject *self, int g, int s, int *n
     if (name != 0) {
         if ((t = (int *)StringList_CopyRetained(((igStringRefList *)self->_textSetList), idx).p, x = true, t != 0) && (strcmp((const char *)(int *)StringList_CopyRetained(((igStringRefList *)self->_textSetList), idx).p, (const char *)name) == 0 ? (x = false, 1) : 0)) {}
         if (x) {
-            if (name == 0) {
-                ref = 0;
-            } else {
-                if (g_stringPool == 0) {
-                    pool = (int)StringPool_Allocate(16);
-                    if (pool != 0) pool = (int)StringPool_Construct((StringPool *)pool);
-                    g_stringPool = (StringPool *)pool;
-                }
-                ref = (int)StringPool_Intern(g_stringPool, (const char *)name);
-            }
-            SetOp::go(((igStringRefList *)self->_textSetList), idx, RecoveryString((void *)ref));
+            SetOp::go(((igStringRefList *)self->_textSetList), idx, igStringRef((const char *)name));
             beMessenger_SelectGroup((beMessenger *)self->_messenger, "TEXTCTL");
             beMessenger_AppendString((beMessenger *)self->_messenger, g_panelFontGroups[g]);
             beMessenger_AppendString((beMessenger *)self->_messenger, g_panelFontNames[s]);
@@ -202,7 +190,7 @@ void beNDMWPanelObject_SetCellText(beNDMWPanelObject *self, int g, int s, int *n
             beMessenger_DispatchSelected((beMessenger *)self->_messenger, "COLOR");
         }
     } else {
-        SetOp::go(((igStringRefList *)self->_textSetList), idx, RecoveryString((void *)0));
+        SetOp::go(((igStringRefList *)self->_textSetList), idx, igStringRef());
         cnt = ((igIntList *)self->_textColorList)->_count;
         if (cnt != 0 && idx >= 0 && idx < cnt) {
             *((int *)((igIntList *)self->_textColorList)->_data + idx) = g_textColorNone;
@@ -698,21 +686,8 @@ void beNDMWPanelObjectStat_Refresh(beNDMWPanelObjectStat *self) {
                     c = colors->_count;
                     if (c < colors->_capacity) colors->_count = listCount(colors) + 1; else List_Resize(colors, c + 1, 4);
                     ((int *)colors->_data)[c] = color;
-                    int text = (int)beDataBase_GetRecordString(db, i, "NAME");
-                    int ref;
-                    if (text == 0) {
-                        ref = 0;
-                    } else {
-                        int pool;
-                        if (g_stringPool == 0) {
-                            pool = (int)StringPool_Allocate(16);
-                            if (pool != 0) pool = (int)StringPool_Construct((StringPool *)pool);
-                            g_stringPool = (StringPool *)pool;
-                        }
-                        ref = (int)StringPool_Intern(g_stringPool, (const char *)text);
-                    }
-                    RecoveryString name((void *)ref);
-                    StringList_AppendRetained((igStringRefList *)self->_listFolder, (char *const *)&name.p);
+                    igStringRef name(beDataBase_GetRecordString(db, i, "NAME"));
+                    StringList_AppendRetained((igStringRefList *)self->_listFolder, name.ref());
                 }
             }
         }
@@ -731,7 +706,7 @@ void beNDMWPanelObjectStat_Refresh(beNDMWPanelObjectStat *self) {
         int row = (i + self->_offset) - a;
         if (a <= i) {
             if (row < ((igStringRefList *)self->_listFolder)->_count) {
-                int *name = (int *)StringList_CopyRetained((void *)self->_listFolder, row).p;
+                int *name = (int *)StringList_CopyRetained((igStringRefList *)self->_listFolder, row).p;
                 beNDMWPanelObject_SetCellText((beNDMWPanelObject *)self, 0, slot, name, ((int *)((igIntList *)self->_listColor)->_data)[row]);
             } else {
                 beNDMWPanelObject_SetCellText((beNDMWPanelObject *)self, 0, slot, (int *)0, 0);

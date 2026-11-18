@@ -11,6 +11,7 @@
 #include "dw4/support/ClassRegistration.h"
 #include "dw4/game/be.h"
 #include "dw4/core/StringPool.h"
+#include "dw4/core/igStringRef.h"
 #include "dw4/game/beBaseInfoDataList.h"
 #include "dw4/game/beDBManager.h"
 #include "dw4/game/beMatCtrl.h"
@@ -83,15 +84,6 @@ struct FloatingNumberStyleData {
     const char *modelInfoName;
     const char *numberInfoName;
     const char *digitSequences[5];
-};
-
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
- * p[-2]); releases the token on scope exit. */
-class StringRef {
-public:
-    char *p;
-    StringRef(char *s) : p(s) {}
-    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
 };
 
 namespace Gap {
@@ -250,11 +242,6 @@ int BLPgetAttackDownTime(const char *effectKey);
 int BLPgetPowerDownTime(const char *effectKey);
 int BLPcalcKoukaMagic(void);
 void LISsetDifficultMax(int maxDifficulty);
-
-/* kept local: this unit emits its own retained-string holder destructor, the one duplicate unit-objects allows at
- * 0x130720; the shared igStringRef holder would break that row. */
-StringRef StringList_CopyRetained(igStringRefList *list, int index);
-
 
 /* The managers be_Start finds, and the be itself. */
 extern beSystem *g_beSystem;
@@ -793,8 +780,8 @@ const char *SYSgetWeaponName(int playerIndex, int slot) {
         return 0;
     }
     {
-        StringRef copy = StringList_CopyRetained(list, slot);
-        name = (const char *)copy.p;
+        igStringRef copy = StringList_CopyRetained(list, slot);
+        name = copy.p;
     }
     return name;
 }
@@ -1017,7 +1004,6 @@ void CFLclear(void) {
 
 /* Adds a name to the read-file list unless it is already there. */
 void CFLsetName(const char *name) {
-    const char *pooled;
     igStringRefList *list;
     int count;
     bool found;
@@ -1030,8 +1016,8 @@ void CFLsetName(const char *name) {
     if (0 < count) {
     do {
         {
-            StringRef entry = StringList_CopyRetained(list, i);
-            if (strcmp((const char *)entry.p, name) == 0) {
+            igStringRef entry = StringList_CopyRetained(list, i);
+            if (strcmp(entry.p, name) == 0) {
                 found = true;
                 break;
             }
@@ -1040,15 +1026,8 @@ void CFLsetName(const char *name) {
     } while (i < count);
     }
     if (!((int)found & 0xff)) {
-        if (name == 0) {
-            pooled = 0;
-        } else {
-            pooled = (const char *)StringPool_Intern(stringPool(), name);
-        }
-        {
-            StringRef entry((char *)pooled);
-            StringList_AppendRetained(list, &entry.p);
-        }
+        igStringRef entry((char *)name);
+        StringList_AppendRetained(list, &entry.p);
     }
 }
 

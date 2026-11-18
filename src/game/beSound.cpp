@@ -6,6 +6,7 @@
 #include "dw4/support/reflected.h"
 #include "dw4/core/igSmartPointer.h"
 #include "dw4/core/StringPool.h"
+#include "dw4/core/igStringRef.h"
 #include "dw4/game/beCri.h"
 #include "dw4/game/beMessenger.h"
 #include "dw4/game/bePlaySE.h"
@@ -127,17 +128,6 @@ struct GlobalStrRef {
     GlobalStrRef(igStringObj *o) : p(o) { if (p != 0) p->_refCount = p->_refCount + 1; }
     ~GlobalStrRef() { igRelease(p); }
 };
-/* A pooled string with a share taken on it; the reference count is the word before the text. */
-struct StringRef {
-    char *p;
-    char *const *ref() const { return &p; }
-    StringRef() {}
-    StringRef(char *s) : p(s) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
-    ~StringRef() { ReleaseString(p); }
-};
-/* Kept here: measured with the home igStringRef declaration, this unit no longer matches; its StringRef is the
- * holder whose destructor copy it emits (the duplicate unit-objects allows at 0x130720). */
-extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);
 
 /* Drops the list's share of every object it holds and empties it. */
 static inline void ReleaseAll(igObjectList *list) {
@@ -258,7 +248,6 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
     igObjectList *fileNames;
     char *direction;
     char *name;
-    char *text;
     float from, to, frames, span;
     int index;
     beCri *cri;
@@ -271,7 +260,6 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
     bool known;
     int knownIndex;
     int objectIndex;
-    char *pooled;
     beSoundData *data;
     void *allocator;
     igObjectList *dataList;
@@ -433,14 +421,7 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
                     igStringObj_StripDirectory(scratch.p);
                     igStringObj_ToLower(scratch.p);
                     known = false;
-                    text = TextOf(scratch.p);
-                    if (text == 0) {
-                        pooled = 0;
-                    } else {
-                        pooled = InternString(text);
-                    }
-                    StringRef bank;
-                    bank.p = pooled;
+                    igStringRef bank(TextOf(scratch.p));
                     for (knownIndex = 0; knownIndex < banks.p->_count; knownIndex++) {
                         if (strcmp(bank.p, StringList_CopyRetained(banks.p, knownIndex).p) == 0) {
                             known = true;
@@ -448,7 +429,7 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
                         }
                     }
                     if (known == false) {
-                        StringList_AppendRetained(banks.p, StringRef(bank.p).ref());
+                        StringList_AppendRetained(banks.p, igStringRef(bank).ref());
                     }
                 }
             }

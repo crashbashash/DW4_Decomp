@@ -3,6 +3,7 @@
 #include "dw4/game/beBaseInfoManagerDispatchView.h"
 #include "dw4/game/ndmw/listSet.h"
 #include "dw4/core/StringPool.h"
+#include "dw4/core/igStringRef.h"
 #include "dw4/game/beBaseInfoDataList.h"
 #include "dw4/game/beBaseInfoManager.h"
 #include "dw4/game/beLua.h"
@@ -33,23 +34,6 @@ extern "C" char GAMERAM_15[];
 extern "C" char GETCOMMON_7[];
 extern "C" char BKCHIPSTAGE[];
 extern "C" char BKCHIPPOS[];
-struct Str { static inline int *intern(int s) {
-    int *ref;
-    if (s == 0) {
-        ref = 0;
-    } else {
-        if (g_stringPool == 0) {
-            int pool = (int)StringPool_Allocate(16);
-            if (pool != 0) pool = (int)StringPool_Construct((StringPool *)pool);
-            g_stringPool = (StringPool *)pool;
-        }
-        ref = (int *)StringPool_Intern(g_stringPool, (const char *)s);
-    }
-    return ref;
-}
-static inline void release(int *q) {
-    if (q) { int *hd = q - 2; int c = q[-1] - 1; q[-1] = c; if (c == 0) StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd); }
-} };
 struct Vec3Float { float x, y, z; };
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
@@ -60,14 +44,6 @@ public:
     igObject *p;
     ValueRef(igObject *o) : p(o) {}
     ~ValueRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-};
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
- * p[-2]); releases the token on scope exit. */
-class StringRef {
-public:
-    int *p;
-    StringRef(int *s) : p(s) {}
-    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
 };
 /* Inlined helper shared by the model-controller "apply ram" methods: a ram without a data list gets a
  * fresh beBaseInfoDataList (allocator chosen by the global selector flag).  Being an inlined callee, its
@@ -127,7 +103,7 @@ void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) {
     beDataObjStringList *s4;
     beDataObjFloatList *s3;
     int s2;
-    int *e;
+    igStringRef *e;
     int s1;
     RamDataList::Ensure(ram);
     r = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_13);
@@ -153,16 +129,12 @@ void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) {
     s2 = cfg->_stageName;
     s1 = ram->_ramNo;
     {
-        int *tok = Str::intern(s2);
-        StringRef name(tok);
-        igIntList *l = (igIntList *)s4->_data;
+        igStringRef name((char *)s2);
+        igStringRefList *l = (igStringRefList *)s4->_data;
         int n = l->_count;
         if (n != 0 && s1 >= 0 && s1 < n) {
-            e = &((int *)l->_data)[s1];
-            int *nv = name.p;
-            if (nv) nv[-1] = nv[-1] + 1;
-            Str::release((int *)*e);
-            *e = (int)name.p;
+            e = &((igStringRef *)l->_data)[s1];
+            *e = name;
         }
     }
     igMatrix44f_GetTranslation((const float *)((char *)r->_node + 32), (float *)&t);
@@ -241,9 +213,6 @@ void beNDMWMdlPlayer2_UpdateControl(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) 
     }
 }
 
-
-/* kept local: this unit emits its own retained-string holder destructor, the one duplicate unit-objects allows at 0x130720; the shared igStringRef holder would break that row. */
-extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);
 extern "C" char GENERATE_15[];
 extern "C" char REMOVE_6[];
 extern "C" char GENESTAGE[];
@@ -272,13 +241,12 @@ static inline int getRamNo(beBaseInfoRam *ram) { return ram->_ramNo; }
 
 /* Stores a retained copy of value at list[index] when the index is in range, releasing the token it
  * replaces. */
-static inline void setStringAt(igStringRefList *list, int index, const StringRef &value) {
+static inline void setStringAt(igStringRefList *list, int index, const igStringRef &value) {
     if (list->_count != 0 && index >= 0 && index < list->_count) {
-        int *slot = (int *)list->_data + index;
-        int *v = value.p;
-        if (v) v[-1] = v[-1] + 1;
-        Str::release((int *)*slot);
-        *slot = (int)value.p;
+        char **slot = (char **)list->_data + index;
+        retainString(value.p);
+        releaseString(*slot);
+        *slot = value.p;
     }
 }
 
@@ -368,7 +336,7 @@ int beNDMWMdlPlayer2_OnPreMessage(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram, co
         beMessenger_SendDelayedNamed((beMessenger *)self->_messenger, PLAYER2_2, 0, getRamNo(ram), SQ_EXIT_3, 0);
         beMessenger_SendGroup((beMessenger *)self->_messenger, GAMERAM_15, GETCOMMON_7);
         common = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
-        setStringAt(getData(igProperty_GetRecordStringList((igObject *)common, BKCHIPSTAGE)), getRamNo(ram), StringRef(0));
+        setStringAt(getData(igProperty_GetRecordStringList((igObject *)common, BKCHIPSTAGE)), getRamNo(ram), igStringRef());
         return 1;
     }
     return 0;

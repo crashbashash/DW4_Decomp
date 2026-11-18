@@ -3,6 +3,7 @@
 #include "dw4/game/ndmw/beNDMWWindow.h"
 #include "dw4/game/ndmw/beNDMWWindowDispatchView.h"
 #include "dw4/core/StringPool.h"
+#include "dw4/core/igStringRef.h"
 #include "dw4/game/be.h"
 #include "dw4/game/beLua.h"
 #include "dw4/game/beMessenger.h"
@@ -15,34 +16,9 @@
 #include "dw4/maths/igMathConstants.h"
 #include "dw4/support/list-services.h"
 #define INTERN_APPEND(field, text) { \
-    const char *tok; \
-    if ((text) == 0) { \
-        tok = 0; \
-    } else { \
-        if (g_stringPool == 0) { \
-            StringPool *pool = (StringPool *)StringPool_Allocate(0x10); \
-            if (pool != 0) pool = StringPool_Construct(pool); \
-            g_stringPool = pool; \
-        } \
-        tok = StringPool_Intern(g_stringPool, (const char *)(text)); \
-    } \
-    StringRef held(tok); \
+    igStringRef held((char *)(text)); \
     StringList_AppendRetained((igStringRefList *)(field), held.ref()); }
-#define STR_RELEASE(s) if (s) { int *h_ = (int *)((s) - 8); if (--h_[1] == 0) StringChunk_ReleaseHeader((StringChunk *)h_[0], (StringTokenHeader *)h_); }
 
-/* kept local: this unit emits its own retained-string holder destructor, the one duplicate unit-objects allows at
- * 0x130720; the shared igStringRef holder would break that row. Retail passes the result slot as the hidden first
- * argument. */
-extern "C" void StringList_CopyRetained(void *result, igStringRefList *list, int index);
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
- * p[-2]); releases the token on scope exit. */
-class StringRef {
-public:
-    const char *p;
-    char *const *ref() const { return (char *const *)&p; }
-    StringRef(const char *s) : p(s) {}
-    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
-};
 extern "C" void beNDMWWindow_ClearTextElement(beNDMWWindow *self, int *textType, int *textName);
 struct Clr { static inline void ClearList(igStringRefList *l) {
     int n = l->_count;
@@ -134,22 +110,14 @@ void beNDMWWindow_ClearTextElement(beNDMWWindow *self, int *textType, int *textN
 }
 
 void beNDMWWindow_ClearQueuedText(beNDMWWindow *self) {
-    int *typeCopy;
-    int *name;
-    int *nameCopy;
     int n;
-    int *header;
     int i;
     int *type;
-    int refs;
+    int *name;
     n = ((igStringRefList *)self->_textCloseTypeList)->_count;
     for (i = 0; i < n; i++) {
-        StringList_CopyRetained(&typeCopy, (igStringRefList *)self->_textCloseTypeList, i);
-        type = typeCopy;
-        if (type) { header = type - 2; refs = type[-1] - 1; type[-1] = refs; if (refs == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header); }
-        StringList_CopyRetained(&nameCopy, (igStringRefList *)self->_textCloseNameList, i);
-        name = nameCopy;
-        if (name) { header = name - 2; refs = name[-1] - 1; name[-1] = refs; if (refs == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header); }
+        type = (int *)StringList_CopyRetained((igStringRefList *)self->_textCloseTypeList, i).p;
+        name = (int *)StringList_CopyRetained((igStringRefList *)self->_textCloseNameList, i).p;
         beNDMWWindow_ClearTextElement(self, type, name);
     }
     Clr::ClearList((igStringRefList *)self->_textCloseTypeList);
@@ -206,15 +174,9 @@ void beNDMWWindow_PlayQueuedModelClose(beNDMWWindow *w) {
     if (0 < n) {
         off = 0;
         do {
-            char *a;
-            char *b;
-            StringList_CopyRetained(&a, (igStringRefList *)w->_modelCloseInfoNameList, i);
-            s = (int)a;
-            STR_RELEASE(s);
+            s = (int)StringList_CopyRetained((igStringRefList *)w->_modelCloseInfoNameList, i).p;
             m = *(int *)((char *)((igIntList *)w->_modelCloseRamNoList)->_data + off);
-            StringList_CopyRetained(&b, (igStringRefList *)w->_modelCloseSeqNameList, i);
-            t = (int)b;
-            STR_RELEASE(t);
+            t = (int)StringList_CopyRetained((igStringRefList *)w->_modelCloseSeqNameList, i).p;
             beNDMWWindow_SendModelSequence(w, (const char *)s, m, (const char *)t);
             i++;
             off += 4;
@@ -223,10 +185,6 @@ void beNDMWWindow_PlayQueuedModelClose(beNDMWWindow *w) {
 }
 
 int beNDMWWindow_PollCloseComplete(beNDMWWindow *self) {
-    int *modelCopy;
-    int *sequenceCopy;
-    int *header;
-    int refs;
     int i;
     int id;
     int n;
@@ -234,14 +192,9 @@ int beNDMWWindow_PollCloseComplete(beNDMWWindow *self) {
     int *sequence;
     n = ((igStringRefList *)self->_modelCloseInfoNameList)->_count;
     for (i = 0; i < n; i++) {
-        StringList_CopyRetained(&modelCopy, (igStringRefList *)self->_modelCloseInfoNameList, i);
-        /* matching construct: cxx_sweep — the token copy moved into the release test; as a statement of its own, like
-         * the sequence copy below, the loop index moves from s1 to s2 */
-        if ((model = modelCopy)) { header = model - 2; refs = model[-1] - 1; model[-1] = refs; if (refs == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header); }
+        model = (int *)StringList_CopyRetained((igStringRefList *)self->_modelCloseInfoNameList, i).p;
         id = ((int *)((igStringRefList *)self->_modelCloseRamNoList)->_data)[i];
-        StringList_CopyRetained(&sequenceCopy, (igStringRefList *)self->_modelCloseSeqNameList, i);
-        sequence = sequenceCopy;
-        if (sequence) { header = sequence - 2; refs = sequence[-1] - 1; sequence[-1] = refs; if (refs == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header); }
+        sequence = (int *)StringList_CopyRetained((igStringRefList *)self->_modelCloseSeqNameList, i).p;
         beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", (const char *)model, id, "ISRUN");
         if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) > 0 && beMessenger_GetBool((beMessenger *)self->_messenger, 0)) return 0;
     }

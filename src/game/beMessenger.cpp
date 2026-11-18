@@ -3,6 +3,7 @@
 #include "dw4/game/ndmw/listSet.h"
 #include "dw4/game/beMessenger.h"
 #include "dw4/core/StringPool.h"
+#include "dw4/core/igStringRef.h"
 #include "dw4/game/beMessengerArgData.h"
 #include "dw4/game/beMessengerDelay.h"
 #include "dw4/game/beMessengerGroup.h"
@@ -16,8 +17,6 @@
 #include <string.h>
 #include "dw4/maths/igMatrix44f.h"
 
-class StringRef;
-
 #include "dw4/support/emptyString.h"
 #include "dw4/support/list-services.h"
 #include "dw4/core/igMetaEnum.h"
@@ -26,10 +25,6 @@ void beMessenger_InitializeMemory(beMessenger *);
 void beMessenger_ResetMemory(beMessenger *);
 void beMessengerArgData_Clear(beMessengerArgData *);
 void beMessengerDelay_Clear(beMessengerDelay *);
-/* Kept here: measured with the home igStringRef declaration (results taken by value), this unit no longer matches;
- * it passes the result slot as the hidden first argument and emits its own StringRef destructor copy (the duplicate
- * unit-objects allows at 0x130720). */
-void StringList_CopyRetained(void *, void *, int);
 
 
 extern int g_resolveEnumLastMetaEnum[4];
@@ -50,17 +45,6 @@ igMetaObject *beMessenger_GetMeta(void);
 
 static inline int countOf(const igIntList *l) { return l->_count; }
 static inline int countOf(const igFloatList *l) { return l->_count; }
-
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
- * p[-2]); releases the token on scope exit. */
-class StringRef {
-public:
-    int p;
-    char *const *ref() const { return (char *const *)&p; }
-    StringRef(int s) : p(s) {}
-    StringRef(const char *s) : p((int)s) {}
-    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
-};
 
 /* matching construct: the list/group fields are 4-byte arena handles in the reflected structs; the (void *) / (T *) casts give the typed views (no layout effect) */
 #define RETAIN_REF(q) { igObject *rr = (q); if (rr) ++rr->_refCount; }
@@ -524,21 +508,6 @@ unsigned int beMessenger_ResolveEnumValue(beMessenger *self, igMetaEnum *metaEnu
     return -1;
 }
 
-struct Str { static inline const char *intern(const char *text) {
-    const char *token;
-    if (text == 0) {
-        token = 0;
-    } else {
-        if (g_stringPool == 0) {
-            StringPool *pool = (StringPool *)StringPool_Allocate(0x10);
-            if (pool != 0) pool = StringPool_Construct(pool);
-            g_stringPool = pool;
-        }
-        token = StringPool_Intern(g_stringPool, text);
-    }
-    return token;
-} };
-
 void beMessenger_RegisterReceiver(beMessenger *self, beBaseInfoRam *recv, const char *name, const char *text, int value)
 {
     int allocator;
@@ -557,8 +526,8 @@ void beMessenger_RegisterReceiver(beMessenger *self, beBaseInfoRam *recv, const 
     }
     ObjectList_AppendRetained((igObjectList *)grp.p->_ramList, (igObject *)recv);
     {
-        const char *token = Str::intern(text);
-        StringList_AppendRetained((igStringRefList *)grp.p->_infoNameList, StringRef(token).ref());
+        igStringRef token((char *)text);
+        StringList_AppendRetained((igStringRefList *)grp.p->_infoNameList, &token.p);
     }
     l = (igIntList *)grp.p->_ramNoList;
     n = l->_count;
@@ -695,11 +664,8 @@ void beMessenger_SelectReceivers(beMessenger *self, const char *category, const 
         if (g) {
             m = ((List *)g->_ramList)->_count;
             for (k = 0; k < m; k++) {
-                char *tmp;
                 char *s;
-                StringList_CopyRetained(&tmp, (void *)g->_infoNameList, k);
-                s = tmp;
-                STR_RELEASE(s);
+                s = StringList_CopyRetained((igStringRefList *)g->_infoNameList, k).p;
                 if (!(work->_infoName && s) || !strcmp((char *)work->_infoName, s)) {
                     src = &LDATA((List *)g->_ramNoList)[k];
                     l = (List *)work->_findRamNoList;
@@ -1309,54 +1275,17 @@ int beMessenger_GetStringCount(beMessenger *self) {
     return list->_count;
 }
 
-/* Intern the text in the shared string pool, append the token to the string list (which takes its
- * own reference) and drop the temporary one when the StringRef bound to the call goes out of
- * scope. */
+/* Interns the text and appends it to the string list, which takes its own reference. */
 void beMessenger_AppendString(beMessenger *self, const char *text)
 {
-    int token;
-    void *pool;
-
-    if (text == 0) {
-        token = 0;
-    } else {
-        if (g_stringPool == 0) {
-            pool = StringPool_Allocate(16);
-            if (pool)
-                pool = StringPool_Construct((StringPool *)pool);
-            g_stringPool = (StringPool *)pool;
-        }
-        token = (int)StringPool_Intern(g_stringPool, text);
-    }
-    StringList_AppendRetained((igStringRefList *)((void *)((beMessengerArgData *)self->_argData)->_stringList), StringRef(token).ref());
+    igStringRef token((char *)text);
+    StringList_AppendRetained((igStringRefList *)((beMessengerArgData *)self->_argData)->_stringList, &token.p);
 }
 
-/* Header in front of every interned string token: the owning chunk, then the token's reference
- * count. A token points just past this header. */
-typedef struct StringTokenHeader {
-    int owner;
-    int refCount;
-} StringTokenHeader;
-
-/* Return the string token at index. The list copy is retained and released again here, so the
- * result is borrowed from the list. */
+/* The string at index, borrowed from the list (the copy's reference is dropped again). */
 const char *beMessenger_GetString(beMessenger *self, int index)
 {
-    int slot;
-    int token;
-    StringTokenHeader *header;
-    int refCount;
-
-    StringList_CopyRetained(&slot, (void *)((beMessengerArgData *)self->_argData)->_stringList, index);
-    token = slot;
-    if (token) {
-        header = (StringTokenHeader *)(token - 8);
-        refCount = header->refCount - 1;
-        header->refCount = refCount;
-        if (!refCount)
-            StringChunk_ReleaseHeader((StringChunk *)header->owner, header);
-    }
-    return (const char *)token;
+    return StringList_CopyRetained((igStringRefList *)((beMessengerArgData *)self->_argData)->_stringList, index).p;
 }
 
 igMetaObject *beMessenger_GetMeta(void)

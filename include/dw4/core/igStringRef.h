@@ -41,7 +41,7 @@ struct InternedStrings {
 struct igStringRef {
     char *p;
     igStringRef() : p(0) {}
-    igStringRef(char *chars) {
+    igStringRef(const char *chars) {
         char *interned;
         if (chars == 0) {
             interned = 0;
@@ -58,12 +58,14 @@ struct igStringRef {
         p = other.p;
         return *this;
     }
-    igStringRef &operator=(char *chars) {
+    igStringRef &operator=(const char *chars) {
         char *interned = (char *)StringPool_Intern(InternedStrings::get(), chars);
         releaseString(p);
         p = interned;
         return *this;
     }
+    /* The holder as the list services take it: a pointer to the string word. */
+    char *const *ref() const { return &p; }
 };
 
 /* The out-of-line igStringRef constructor (empty) and assignment other units call by name, and the

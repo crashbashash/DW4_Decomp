@@ -565,11 +565,11 @@ class LiteralAtTwoEntries(unittest.TestCase):
 
 class ProfileTwin(unittest.TestCase):
     """A duplicate the retail linker kept from a unit of another profile: in the messenger file (-O3,p,
-    exceptions on), beMessenger_RegisterReceiver reaches the StringRef destructor at 0x130720, an -O4,s
+    exceptions on), beMessenger_RegisterReceiver reaches the igStringRef destructor at 0x130720, an -O4,s
     copy from the Attrs library. As tools/verify.py checks it, the same source compiled under that unit's
     profile must reproduce it there; the file's own copy cannot. Placed alone, the member also reaches
     the group holder's destructor, a copy the file places at 0x38d7a0 under its own profile."""
-    OWNER, NAME, COPY, DESTRUCTOR = 0x38d560, "beMessenger_RegisterReceiver", 0x130720, "__dt__9StringRefFv"
+    OWNER, NAME, COPY, DESTRUCTOR = 0x38d560, "beMessenger_RegisterReceiver", 0x130720, "__dt__11igStringRefFv"
     HOLDER = "__dt__34igSmartPointer<16beMessengerGroup>Fv"
     SOURCE = Path(verify.ROOT) / "src/game/beMessenger.cpp"
     CONFIG = Path(verify.ROOT) / "config/SLUS-20836"
@@ -625,7 +625,7 @@ class ProfileTwin(unittest.TestCase):
             self.duplicates(self.config(self.profile.flags, self.profile.exceptions))
 
     def test_a_twin_that_differs_stops_the_run(self):
-        with self.assertRaisesRegex(SystemExit, "is 148 bytes and retail's copy at 0x130720 is 116"):
+        with self.assertRaisesRegex(SystemExit, "is 136 bytes and retail's copy at 0x130720 is 116"):
             self.duplicates(self.config("-O1 -sdatathreshold 2 -Iinclude -I. -I- -Isrc/third_party/libc", "off"))
 
     def test_a_call_only_the_duplicates_make_is_an_external(self):

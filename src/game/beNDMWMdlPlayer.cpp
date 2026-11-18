@@ -3,6 +3,7 @@
 #include "dw4/game/beBaseInfoManagerDispatchView.h"
 #include "dw4/game/ndmw/listSet.h"
 #include "dw4/core/StringPool.h"
+#include "dw4/core/igStringRef.h"
 #include "dw4/game/beBaseInfoDataList.h"
 #include "dw4/game/beBaseInfoManager.h"
 #include "dw4/game/beBaseInfoRam.h"
@@ -133,16 +134,6 @@ public:
     IntListRef(igIntList *l) : p(l) {}
     ~IntListRef() { igIntList *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
 };
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
- * p[-2]). */
-class StringRef {
-public:
-    int *p;
-    StringRef(int *s) : p(s) {}
-    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
-};
-/* kept local: this unit emits its own retained-string holder destructor, the one duplicate unit-objects allows at 0x130720; the shared igStringRef holder would break that row. */
-extern "C" StringRef StringList_CopyRetained(igStringObjList *, int);
 
 /* matching construct: slot order. The data list's holder is a local of this static inline member, allocated below
  * the caller's locals, so `list` (244) sits under the discarded igResult of igMatrix44f_Invert (248) and the caller's
@@ -612,9 +603,9 @@ void beNDMWMdlPlayer_OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
             flags[i] = g_baseIsUseInitial;
         }
     }
-    if (((igStringObjList *)igProperty_GetRecordStringList((igObject *)player, "POWERSOCKETNAME")->_data)->_count != 0) {
-        StringRef socket = StringList_CopyRetained(((igStringObjList *)igProperty_GetRecordStringList((igObject *)player, "POWERSOCKETNAME")->_data), 0);
-        beMessenger_SendDelayedNamed((beMessenger *)self->_messenger, "PLAYERARMS", (const char *)socket.p, ram->_ramNo, "GENERATE", 1);
+    if (((igStringRefList *)igProperty_GetRecordStringList((igObject *)player, "POWERSOCKETNAME")->_data)->_count != 0) {
+        igStringRef socket = StringList_CopyRetained((igStringRefList *)igProperty_GetRecordStringList((igObject *)player, "POWERSOCKETNAME")->_data, 0);
+        beMessenger_SendDelayedNamed((beMessenger *)self->_messenger, "PLAYERARMS", socket.p, ram->_ramNo, "GENERATE", 1);
     }
     beMessenger_SelectGroup((beMessenger *)self->_messenger, "GAMERAM");
     beMessenger_AppendInt((beMessenger *)self->_messenger, ram->_ramNo);

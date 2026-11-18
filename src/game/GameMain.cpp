@@ -19,6 +19,7 @@
 #include "dw4/core/igDataLists.h"
 #include "dw4/core/igStringObj.h"
 #include "dw4/core/StringPool.h"
+#include "dw4/core/igStringRef.h"
 #include "dw4/scenegraph/AnimationPools.h"
 #include "dw4/gfx/igVisualContext.h"
 #include "dw4/insight/igInsightCore.h"
@@ -148,19 +149,6 @@ struct Blk {
 };
 typedef igTDataList<int> NameList;
 extern "C" { int g_defaultNameValue = 1; }
-struct StringRef {
-    int *p;
-    char *const *ref() const { return (char *const *)&p; }
-    StringRef() {}
-    StringRef(int s) : p((int *)s) {}
-    static inline void Release(int *x) {
-        if (x != 0) { int *hd = x - 2; int c = x[-1] - 1; x[-1] = c; if (c == 0) StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd); }
-    }
-    ~StringRef() { Release(p); }
-};
-/* Kept here: the string holder is this file's StringRef, whose destructor copy this file emits; the definitions
- * take and return their own holder classes. */
-extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);
 extern "C" { Blk *g_activeApp; }
 /* igFolder's virtual functions: slot 24 lists the folder's entries (igFolder_ListEntries).
  * ABI view only: never instantiated. */
@@ -530,27 +518,13 @@ static inline void resetNames(Blk *app, AdoptReference) { releaseRef(app->modelN
 static inline void resetCounts(Blk *app, AdoptReference) { releaseRef(app->repeatCounts.p); app->repeatCounts.p = igIntList_Create(0); }
 
 void GameMain_ReplaceSceneFile(Blk *app, int text, int fullReload) {
-    int interned;
-    StringPool *pool;
     int index;
     NameList *counts;
     int defaultCount;
     resetNames(app, AdoptReference());
-    if (text == 0) {
-        interned = 0;
-    } else {
-        if (g_stringPool == 0) {
-            pool = (StringPool *)StringPool_Allocate(0x10);
-            if (pool != 0) {
-                pool = StringPool_Construct(pool);
-            }
-            g_stringPool = pool;
-        }
-        interned = (int)StringPool_Intern(g_stringPool, (const char *)text);
-    }
     {
-        StringRef name(interned);
-        StringList_AppendRetained(app->modelNames.p, name.ref());
+        igStringRef name((char *)text);
+        StringList_AppendRetained(app->modelNames.p, &name.p);
     }
     resetCounts(app, AdoptReference());
     counts = (NameList *)app->repeatCounts.p;
@@ -589,7 +563,7 @@ static inline int *internString(const char *s) {
 
 static inline void setFolderName(igFolder *folder, const char *name) {
     int *s = internString(name);
-    StringRef::Release((int *)folder->_folderName);
+    releaseString((const char *)folder->_folderName);
     folder->_folderName = (int)s;
 }
 
@@ -752,44 +726,29 @@ void GameMain_ListIgbFiles(Blk *app) {
     igStringRefList *secondPass;
     int removeIndex;
     int index;
-    int *interned;
     igStringRefList *firstPass;
     igStringRefList *renameList;
     igStringRefList *removeList;
     int count;
-    int *slot;
-    int slotOffset;
 
     Assign::Take(app->fileNames.p, ((igFolderDispatchView *)app->folder.p)->ListEntries());
     firstPass = app->fileNames.p;
     if (firstPass != 0) {
         index = firstPass->_count - 1;
-        slotOffset = index * 4;
         if (index >= 0) {
             do {
                 {
-                StringRef name = StringList_CopyRetained(app->fileNames.p, index);
-                strcpy(buf, (const char *)name.p);
+                igStringRef name = StringList_CopyRetained(app->fileNames.p, index);
+                strcpy(buf, name.p);
                 buf[strlen(buf) - 2] = 0;
-                if (g_stringPool == 0) {
-                    StringPool *pool = (StringPool *)StringPool_Allocate(0x10);
-                    if (pool != 0) pool = StringPool_Construct(pool);
-                    g_stringPool = pool;
-                }
-                interned = (int *)StringPool_Intern((StringPool *)g_stringPool, buf);
-                StringRef::Release(name.p);
-                name.p = interned;
+                name = buf;
                 renameList = app->fileNames.p;
                 count = renameList->_count;
                 if (count != 0 && index >= 0 && index < count) {
-                    slot = (int *)(renameList->_data + slotOffset);
-                    if (name.p != 0) name.p[-1] = name.p[-1] + 1;
-                    StringRef::Release((int *)*slot);
-                    *slot = (int)name.p;
+                    ((igStringRef *)renameList->_data)[index] = name;
                 }
                 }
                 index -= 1;
-                slotOffset -= 4;
             } while (index >= 0);
         }
         secondPass = app->fileNames.p;
@@ -798,10 +757,10 @@ void GameMain_ListIgbFiles(Blk *app) {
             if (removeIndex >= 0) {
                 do {
                     {
-                    StringRef name = StringList_CopyRetained(app->fileNames.p, removeIndex);
-                    if (igStringObj_HasFileExtensionText((char *)name.p, "igb") == 0) {
+                    igStringRef name = StringList_CopyRetained(app->fileNames.p, removeIndex);
+                    if (igStringObj_HasFileExtensionText(name.p, "igb") == 0) {
                         removeList = app->fileNames.p;
-                        StringRef::Release(StringList_CopyRetained(removeList, removeIndex).p);
+                        releaseString(StringList_CopyRetained(removeList, removeIndex).p);
                         List_RemoveWordAt((igDataList *)removeList, removeIndex);
                         ((int *)removeList->_data)[removeList->_count] = 0;
                     }

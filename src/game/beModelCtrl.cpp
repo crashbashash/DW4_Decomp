@@ -13,6 +13,7 @@
 #include "dw4/game/beModelCtrl.h"
 #include "dw4/game/beModelCtrlInfoWork.h"
 #include "dw4/core/StringPool.h"
+#include "dw4/core/igStringRef.h"
 #include "dw4/game/be.h"
 #include "dw4/game/beBaseInfoDataList.h"
 #include "dw4/game/beBaseInfoManager.h"
@@ -156,14 +157,6 @@ extern "C" char WPOS[];
 extern "C" char PLAYER_3[];
 extern "C" char SQ_WALK[];
 
-/* Owning stack reference to a pooled string token (count at p[-1], chunk header at p[-2]). */
-class StringRef {
-public:
-    char *p;
-    StringRef(char *s) : p(s) {}
-    StringRef() {}
-    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
-};
 struct DataListInstall { static inline void go(beBaseInfoRam *ram, const igSmartPointer<igObject> &fresh) {
     igObject *o = fresh.p;
     igObject *old;
@@ -296,9 +289,6 @@ extern "C" char SQ_ERAS_2[];
 extern "C" char REMOVE_2[];
 extern "C" char GETBONEMATRIX[];
 extern "C" void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram);
-/* Kept here: measured with the home igStringRef declaration, this unit no longer matches; its StringRef is the
- * holder whose destructor copy it emits (the duplicate unit-objects allows at 0x130720). */
-extern "C" StringRef StringList_CopyRetained(int list, int index);
 extern "C" int beModelCtrlInfoWork_FindSeqLabel(beModelCtrl *self, beModelCtrlInfoWork *work);
 extern "C" void beModelCtrl_UpdateBound(beModelCtrl *self, beModelCtrlNode2 *node, igAABox *box);
 /* The work's sub-command list (effects, sounds, hit boxes started by commands). */
@@ -614,7 +604,7 @@ void beModelCtrl_UpdateMapAI(beModelCtrl *self, void *info, beBaseInfoRam *ram, 
     }
     ramData = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_3));
     ai = (beModelCtrlInfoAI *)work->_aI;
-    StringRef seqName(0);
+    igStringRef seqName;
     if (beBaseInfoRam_IsTimerExpired(ram, AITIMER)) {
         map = ((beModelCtrlAIMap **)((beModelCtrlAIMapList *)aim->_aIMapList)->_data)[ai->_mapNo];
         if ((char *)map->_targetType == 0) {
@@ -679,45 +669,11 @@ void beModelCtrl_UpdateMapAI(beModelCtrl *self, void *info, beBaseInfoRam *ram, 
         } else {
             text = (char *)emptyString;
         }
-        if (g_stringPool == 0) {
-            pool = (int)StringPool_Allocate(16);
-            if (pool != 0) {
-                pool = (int)StringPool_Construct((StringPool *)pool);
-            }
-            g_stringPool = (StringPool *)pool;
-        }
-        token = StringPool_Intern(g_stringPool, text);
-        old = seqName.p;
-        if (old != 0) {
-            int *header = (int *)old - 2;
-            int refs = ((int *)old)[-1] - 1;
-            ((int *)old)[-1] = refs;
-            if (refs == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
-            }
-        }
-        seqName.p = token;
+        seqName = text;
         beBaseInfoRam_StartTimer(ram, AITIMER, FramesToTime(zone->_time));
     } else {
         text = (char *)ai->_seqName;
-        if (g_stringPool == 0) {
-            pool = (int)StringPool_Allocate(16);
-            if (pool != 0) {
-                pool = (int)StringPool_Construct((StringPool *)pool);
-            }
-            g_stringPool = (StringPool *)pool;
-        }
-        token = StringPool_Intern(g_stringPool, text);
-        old = seqName.p;
-        if (old != 0) {
-            int *header = (int *)old - 2;
-            int refs = ((int *)old)[-1] - 1;
-            ((int *)old)[-1] = refs;
-            if (refs == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
-            }
-        }
-        seqName.p = token;
+        seqName = text;
     }
     work->_keyInput = strcmp(seqName.p, SQ_WALK) == 0;
     text = seqName.p;
@@ -1663,10 +1619,8 @@ struct LabelListRef { igObject *p; LabelListRef() { p = 0; } ~LabelListRef() { i
 void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfoWork *work, const char *seqName, const char *labelName) {
     igStringRefList *seqList, *labelList;
     igIntList *offsetList;
-    int base, allocator, token, idx, word, count, k;
+    int base, allocator, idx, count, k;
     igObject *released, *created;
-    int *header, *slot;
-    int tokenWord, oldWord;
 
     seqList = (igStringRefList *)work->_labelSeqList;
     labelList = (igStringRefList *)work->_labelNameList;
@@ -1740,73 +1694,23 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
         work->_labelOffsetList = (int)created;
         offsetList = (igIntList *)intListRef.p;
     }
-    if (seqName == 0) {
-        token = 0;
-    } else {
-        if (g_stringPool == 0) {
-            word = (int)StringPool_Allocate(16);
-            if (word != 0) word = (int)StringPool_Construct((StringPool *)word);
-            g_stringPool = (StringPool *)word;
-        }
-        token = (int)StringPool_Intern(g_stringPool, seqName);
-    }
     {
-        StringRef key((char *)token);
-        idx = igStringRefList_IndexOf((igStringRefList *)seqList, (char *const *)&key, 0);
+        igStringRef key((char *)seqName);
+        idx = igStringRefList_IndexOf(seqList, &key.p, 0);
     }
     if (idx != -1) {
-        if (seqName == 0) {
-            token = 0;
-        } else {
-            if (g_stringPool == 0) {
-                word = (int)StringPool_Allocate(16);
-                if (word != 0) word = (int)StringPool_Construct((StringPool *)word);
-                g_stringPool = (StringPool *)word;
-            }
-            token = (int)StringPool_Intern(g_stringPool, seqName);
-        }
         {
-        StringRef seqToken((char *)token);
+        igStringRef seqToken((char *)seqName);
         count = seqList->_count;
         if (count != 0 && idx >= 0 && idx < count) {
-            slot = &((int *)seqList->_data)[idx];
-            tokenWord = (int)seqToken.p;
-            if (tokenWord != 0) *(int *)(tokenWord - 4) = *(int *)(tokenWord - 4) + 1;
-            oldWord = *slot;
-            if (oldWord != 0) {
-                header = (int *)(oldWord - 8);
-                word = *(int *)(oldWord - 4) - 1;
-                *(int *)(oldWord - 4) = word;
-                if (word == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
-            }
-            *slot = (int)seqToken.p;
+            ((igStringRef *)seqList->_data)[idx] = seqToken;
         }
-        }
-        if (labelName == 0) {
-            token = 0;
-        } else {
-            if (g_stringPool == 0) {
-                word = (int)StringPool_Allocate(16);
-                if (word != 0) word = (int)StringPool_Construct((StringPool *)word);
-                g_stringPool = (StringPool *)word;
-            }
-            token = (int)StringPool_Intern(g_stringPool, labelName);
         }
         {
-        StringRef labelToken((char *)token);
+        igStringRef labelToken((char *)labelName);
         count = labelList->_count;
         if (count != 0 && idx >= 0 && idx < count) {
-            slot = &((int *)labelList->_data)[idx];
-            tokenWord = (int)labelToken.p;
-            if (tokenWord != 0) *(int *)(tokenWord - 4) = *(int *)(tokenWord - 4) + 1;
-            oldWord = *slot;
-            if (oldWord != 0) {
-                header = (int *)(oldWord - 8);
-                word = *(int *)(oldWord - 4) - 1;
-                *(int *)(oldWord - 4) = word;
-                if (word == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
-            }
-            *slot = (int)labelToken.p;
+            ((igStringRef *)labelList->_data)[idx] = labelToken;
         }
         }
         count = offsetList->_count;
@@ -1814,32 +1718,12 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
             ListStoreAt((int *)offsetList->_data, idx, -1);
         }
     } else {
-        if (seqName == 0) {
-            token = 0;
-        } else {
-            if (g_stringPool == 0) {
-                word = (int)StringPool_Allocate(16);
-                if (word != 0) word = (int)StringPool_Construct((StringPool *)word);
-                g_stringPool = (StringPool *)word;
-            }
-            token = (int)StringPool_Intern(g_stringPool, seqName);
-        }
         {
-            StringRef newSeq((char *)token);
+            igStringRef newSeq((char *)seqName);
             StringList_AppendRetained(seqList, &newSeq.p);
         }
-        if (labelName == 0) {
-            token = 0;
-        } else {
-            if (g_stringPool == 0) {
-                word = (int)StringPool_Allocate(16);
-                if (word != 0) word = (int)StringPool_Construct((StringPool *)word);
-                g_stringPool = (StringPool *)word;
-            }
-            token = (int)StringPool_Intern(g_stringPool, labelName);
-        }
         {
-            StringRef newLabel((char *)token);
+            igStringRef newLabel((char *)labelName);
             StringList_AppendRetained(labelList, &newLabel.p);
         }
         k = intListCount(offsetList);
@@ -2421,22 +2305,10 @@ void beModelCtrl_OnUpdateRam(void)
 int beModelCtrlInfoWork_FindSeqLabel(beModelCtrl *self, beModelCtrlInfoWork *work) {
     int index = 0;
     if (work->_labelSeqList != 0) {
-        int seqName = work->_seqCodeName;
-        int token;
         int slot;
-        if (seqName == 0) {
-            token = 0;
-        } else {
-            if (g_stringPool == 0) {
-                StringPool *pool = (StringPool *)StringPool_Allocate(16);
-                if (pool != 0) pool = StringPool_Construct(pool);
-                g_stringPool = pool;
-            }
-            token = ((int)StringPool_Intern(g_stringPool, (const char *)seqName));
-        }
         {
-            StringRef key((char *)token);
-            slot = igStringRefList_IndexOf((igStringRefList *)work->_labelSeqList, (char *const *)&key, 0);
+            igStringRef key((char *)work->_seqCodeName);
+            slot = igStringRefList_IndexOf((igStringRefList *)work->_labelSeqList, &key.p, 0);
         }
         if (slot != -1) {
             index = ((int *)((igIntList *)work->_labelOffsetList)->_data)[slot];
@@ -2445,7 +2317,7 @@ int beModelCtrlInfoWork_FindSeqLabel(beModelCtrl *self, beModelCtrlInfoWork *wor
                 beModelCtrlData *commands;
                 int count, i;
                 /* the copied token is a temporary: only the pointer outlives it (the list keeps its share) */
-                labelName = (int)StringList_CopyRetained(work->_labelNameList, slot).p;
+                labelName = (int)StringList_CopyRetained((igStringRefList *)work->_labelNameList, slot).p;
                 commands = (beModelCtrlData *)work->_comData;
                 count = ((igObjectList *)commands->_comList)->_count;
                 for (i = 0; i < count; i++) {
@@ -2659,24 +2531,13 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
     unsigned sel = beMessenger_ResolveEnumValue((beMessenger *)MESSENGER, beModelCtrl_GetMessageEnum(), message);
     switch (sel) {
     case MSG_GENERATE: {
-        StringRef sequence;
-        sequence.p = 0;
+        igStringRef sequence;
         ram->_isRun = 1;
         ram->_st0 = 0; ram->_st3 = 0; ram->_st2 = 0; ram->_st1 = 0;
         if (beMessenger_GetStringCount((beMessenger *)MESSENGER) == 1) {
-            const char *t = beMessenger_GetString((beMessenger *)MESSENGER, 0);
-            POOL()
-            const char *tk = ((const char *)StringPool_Intern(g_stringPool, t));
-            const char *o = sequence.p;
-            RELEASE_STRING(o)
-            sequence.p = (char *)tk;
+            sequence = (char *)beMessenger_GetString((beMessenger *)MESSENGER, 0);
         } else if (beMessenger_GetStringCount((beMessenger *)MESSENGER) >= 2) {
-            const char *t = beMessenger_GetString((beMessenger *)MESSENGER, 1);
-            POOL()
-            const char *tk = ((const char *)StringPool_Intern(g_stringPool, t));
-            const char *o = sequence.p;
-            RELEASE_STRING(o)
-            sequence.p = (char *)tk;
+            sequence = (char *)beMessenger_GetString((beMessenger *)MESSENGER, 1);
         }
         ((beModelCtrlDispatchView *)self)->OnGenerate(ram);
         beModelCtrlInfoWork *started = (beModelCtrlInfoWork *)ramData->_work;

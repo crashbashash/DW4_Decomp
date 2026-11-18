@@ -3,6 +3,7 @@
 #include "dw4/game/beFileChkObj.h"
 #include "dw4/game/beFileListInfoManager.h"
 #include "dw4/core/StringPool.h"
+#include "dw4/core/igStringRef.h"
 #include "dw4/game/beFileListInfo.h"
 #include "dw4/game/beFont.h"
 #include "dw4/game/beLuaInfo.h"
@@ -46,25 +47,6 @@ extern "C" int beFileListInfoManager_AddInfo(beFileListInfoManager *self, igObje
 extern "C" void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *self);
 
 extern "C" char ROOTATTR_2[];
-
-/* A pooled string held by reference: the count sits at p[-1], the chunk header at p[-2]. */
-struct StringRef {
-    int *p;
-    StringRef() {}
-    StringRef(const StringRef &other) : p(other.p) {}
-    ~StringRef() {
-        int *s = p;
-        if (s != 0) {
-            int *header = s - 2;
-            int count = s[-1] - 1;
-            s[-1] = count;
-            if (count == 0) StringChunk_ReleaseHeader((StringChunk *)*header, (StringTokenHeader *)header);
-        }
-    }
-};
-/* Kept here: measured with the home igStringRef declaration, this unit no longer matches; its StringRef is the
- * holder whose destructor copy it emits (the duplicate unit-objects allows at 0x130720). */
-extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);
 
 /* The one-word list entry List_InsertWords copies from. */
 struct InfoWord {
@@ -248,7 +230,6 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
     int j;
     igObjectDispatchView *info;
     igMetaObject *meta;
-    int *rootName;
     igDirectoryList *dirs;
     int fileCount = fileNames->_count;
     if (self->_loaded >= fileCount) return 1;
@@ -256,18 +237,7 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
     if (dirs->_count != 0) {
         dir = ((igDirectory **)dirs->_data)[0];
         if (igResource_IsDirectoryLoaded((igResource *)g_globalContext, dir)) {
-            if (ROOTATTR_2 == 0) {
-                rootName = 0;
-            } else {
-                if (g_stringPool == 0) {
-                    StringPool *pool = (StringPool *)StringPool_Allocate(0x10);
-                    if (pool != 0) { pool = StringPool_Construct(pool); }
-                    g_stringPool = pool;
-                }
-                rootName = (int *)StringPool_Intern(g_stringPool, (const char *)ROOTATTR_2);
-            }
-            StringRef rootAttr;
-            rootAttr.p = rootName;
+            igStringRef rootAttr(ROOTATTR_2);
             infos = (igInfoList *)dir->_infoList;
             i = 0;
             if (i < infos->_count) {
@@ -289,8 +259,8 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
                             if (scene->_cameras != 0 && ((igObjectList *)scene->_cameras)->_count > 0) {
                                 ObjectList_AppendRetained((igObjectList *)self->_importantInfoList, (igObject *)info);
                             } else {
-                                int *name = (int *)((igInfo *)scene->_sceneGraph)->_name;
-                                int *rootText = name ? name : (int *)emptyString;
+                                char *name = (char *)((igInfo *)scene->_sceneGraph)->_name;
+                                char *rootText = name ? name : emptyString;
                                 if (rootText == rootAttr.p) {
                                     ObjectList_AppendRetained((igObjectList *)self->_importantInfoList, (igObject *)info);
                                 } else {
@@ -338,8 +308,8 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
             }
             self->_onetimeCount = self->_onetimeCount - 1;
         }
-        StringRef fileName(StringList_CopyRetained(fileNames, self->_loaded));
-        ObjectList_AppendRetained((igObjectList *)self->_dirList, igResource_LoadDirectory((igResource *)g_globalContext, (const char *)fileName.p));
+        igStringRef fileName = StringList_CopyRetained(fileNames, self->_loaded);
+        ObjectList_AppendRetained((igObjectList *)self->_dirList, igResource_LoadDirectory((igResource *)g_globalContext, fileName.p));
     }
     return 0;
 }

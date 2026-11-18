@@ -36,6 +36,7 @@ extern "C" int igAdx_SetupIop(void);
 extern "C" int igAdx_SetupOptional(void);
 #include "dw4/core/igDataLists.h"
 #include "dw4/core/StringPool.h"
+#include "dw4/core/igStringRef.h"
 extern "C" unsigned char igAdxAudio_CreateHandleAndStartFile(igAdxAudio *audio, const char *name, int maxChannels, int type,
                                                    int maxStreams, int maxFrequency);
 /* The CRI file-system parameters igAdx_SetupIop hands ADXPS2: the host root and the two file-info caches. */
@@ -53,18 +54,6 @@ char g_adxUnusedFlag;
 }
 extern "C" int SNDF_Init(int *config);
 #include "dw4/core/igPsx2File.h"
-/* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at
- * p[-2]); releases the token on scope exit. */
-class StringRef {
-public:
-    char *p;
-    StringRef(char *s) : p(s) {}
-    ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
-    operator char *() const { return p; }
-};
-/* Kept here: measured with the home igStringRef declaration, this unit no longer matches; its StringRef is the
- * holder whose destructor copy it emits (the duplicate unit-objects allows at 0x130720). */
-extern "C" StringRef StringList_CopyRetained(int list, int index);
 struct WaitResult { int code; };
 class AdxThread {
 public:
@@ -518,21 +507,8 @@ void igAdx_AddPartitionName(int partition, const char *name) {
     int pool;
     int empty;
     if (name != 0) {
-        char *interned;
-        if (name == 0) {
-            interned = 0;
-        } else {
-            if (g_stringPool == 0) {
-                pool = (int)StringPool_Allocate(16);
-                if (pool != 0) pool = (int)StringPool_Construct((StringPool *)pool);
-                g_stringPool = (StringPool *)pool;
-            }
-            interned = StringPool_Intern(g_stringPool, name);
-        }
-        {
-            StringRef token(interned);
-            StringList_AppendRetained(g_adxPartitionNames.p, &token.p);
-        }
+        igStringRef token((char *)name);
+        StringList_AppendRetained(g_adxPartitionNames.p, &token.p);
     } else {
         igStringRefList *names;
         int n;
@@ -617,7 +593,7 @@ int igAdx_LoadPartition(int stream, const char *path, int mode, int length)
         g_adxPartitionBuffers[stream] = ((void *)Memory_AllocateAlignedWithAllocator(size, 16, Memory_GetAllocatorByName("User0")));
     }
     igAdx_AddPartitionName(stream, (char *)path);
-    name = StringList_CopyRetained((int)g_adxPartitionNames.p, stream).p;
+    name = StringList_CopyRetained(g_adxPartitionNames.p, stream).p;
     ADXF_LoadPartitionNw(stream, name, (void *)mode, (AdxfPtInfo *)g_adxPartitionBuffers[stream]);
     waiting = true;
     do {
