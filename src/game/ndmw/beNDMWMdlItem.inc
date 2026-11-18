@@ -31,7 +31,7 @@ int beNDMWMdlItem_GetVTable(void) {
     obj._infoList = 0;
     *(int **)&obj._vtable = &g_beNDMWMdlItem_vtable[0];
     obj._lockRamList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWMdlItem_vtable[0];
     igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj._lockRamList, -1);
     beModelCtrl_Destroy((beModelCtrl *)&obj, 0);

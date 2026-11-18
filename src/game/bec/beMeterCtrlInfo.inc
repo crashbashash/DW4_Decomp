@@ -22,7 +22,7 @@ int beMeterCtrlInfo_GetVTable(void) {
     obj._ramList = 0;
     obj._vtable = (int)&g_beMeterCtrlInfo_vtable[0];
     obj._oneDataList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beMeterCtrlInfo_vtable[0];
     igSmartPointer_igNamedObjectList_Destruct((igSmartPointer<igObject> *)&obj._oneDataList, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);

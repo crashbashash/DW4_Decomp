@@ -25,7 +25,7 @@ int beNDMWMdlEnemy_GetVTable(void) {
     obj._name = 0;
     obj._infoList = 0;
     *(int **)&obj._vtable = &g_beNDMWMdlEnemy_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWMdlEnemy_vtable[0];
     beNDMWMdlPEBase_Destroy((beNDMWMdlPEBase *)&obj, 0);
     return vtable;

@@ -24,7 +24,7 @@ int beCameraBoxData_GetVTable(void) {
     obj._transformList = 0;
     obj._eyePosList = 0;
     obj._intPosList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beCameraBoxData_vtable[0];
     igSmartPointer_igTransformList_Destruct((igSmartPointer<igObject> *)(&obj._intPosList), (short)(-1));
     igSmartPointer_igTransformList_Destruct((igSmartPointer<igObject> *)(&obj._eyePosList), (short)(-1));

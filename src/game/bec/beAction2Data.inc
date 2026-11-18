@@ -28,7 +28,7 @@ int beAction2Data_GetVTable(void) {
     obj._vtable = (int)&g_beAction2Data_vtable[0];
     comListSlot = (igObject **)&obj._comList;
     *comListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beAction2Data_vtable[0];
     igObjectRef_Release(comListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];

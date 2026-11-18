@@ -24,7 +24,7 @@ int beMatCtrlInfoRam_GetVTable(void) {
     obj._vtable = (int)&g_beMatCtrlInfoRam_vtable[0];
     workSlot = (igObject **)&obj._work;
     *workSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beMatCtrlInfoRam_vtable[0];
     igObjectRef_Release(workSlot);
     obj._vtable = (int)&g_beBaseInfoRam_vtable[0];

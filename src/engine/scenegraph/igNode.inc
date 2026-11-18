@@ -37,7 +37,7 @@ int igNode_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = (S_ref *)&u.b[16];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igNode_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;

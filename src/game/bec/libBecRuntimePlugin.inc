@@ -48,7 +48,7 @@ void *libBecRuntimePlugin_GetMetaObject(void) {
 
 int libBecRuntimePlugin_GetVTable(void) {
     BecRuntimePluginView plugin;
-    return *(int *)((char *)&plugin + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&plugin + g_objectSystem->vtableProbeOffset);
 }
 
 igSmartPointer<igObject> *igSmartPointer_beParticleCtrl2_Destruct(igSmartPointer<igObject> *self, int delete_storage) {

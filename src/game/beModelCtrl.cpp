@@ -2245,7 +2245,7 @@ void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
                 igMatrix44f_TranslateLocal(lockMatrix, *(const igVec3f *)work->_posLockOffset);
                 ((igTransformDispatchView *)ramData->_node)->SetMatrix(lockMatrix);
             } else if (work->_posLockTrc != 0) {
-                ((igTransformDispatchView *)ramData->_node)->SetMatrix((float *)(*(int *)(work->_posLockTrc + 16) + *(int *)((char *)g_igTransformRecorder_mMetaField + 8)));
+                ((igTransformDispatchView *)ramData->_node)->SetMatrix((float *)(*(int *)(work->_posLockTrc + 16) + g_igTransformRecorder_mMetaField->_offset));
             } else if (work->_posLockModelName != 0) {
                 beMessenger_SelectReceivers((beMessenger *)self->_messenger, ACTION_2, (const char *)work->_posLockModelName, ram->_ramNo);
                 beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)work->_posLockBoneName);

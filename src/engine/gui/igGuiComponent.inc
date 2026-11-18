@@ -31,7 +31,7 @@ int igGuiComponent_GetVTable(void) {
     obj.w4 = 0;
     obj.w5 = 0;
     obj.w7 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igGuiComponent_vtable[0];
     FUN_00450370((ObjectRefWord *)&obj.w7, -1);
     FUN_004502f0((void **)&obj.w5, -1);

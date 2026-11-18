@@ -14,7 +14,7 @@ int igPsx2IndexArray_GetVTable(void) {
     obj.ref = 0;
     obj.vt = &DAT_00526760[0];
     obj.vt = &g_igPsx2IndexArray_vtable[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &DAT_00526760[0];
     obj.releaseRef();
     return r;

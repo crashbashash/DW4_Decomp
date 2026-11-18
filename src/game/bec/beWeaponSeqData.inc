@@ -21,7 +21,7 @@ int beWeaponSeqData_GetVTable(void) {
     obj._vtable = (int)&g_beWeaponSeqData_vtable[0];
     labelSlot = (char **)&obj._label;
     *labelSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beWeaponSeqData_vtable[0];
     igStringRef_Release(labelSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];

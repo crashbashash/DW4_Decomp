@@ -80,7 +80,7 @@ int igAnimationState_GetVTable(void) {
     *(int *)q2 = 0;
     q3 = (S_ref *)&u.b[120];
     *(int *)q3 = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s2 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igAnimationState_vtable[0]);
     if (q3 != 0) {
         q3 = *(S_ref **)q3;

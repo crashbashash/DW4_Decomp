@@ -27,7 +27,7 @@ int beModelCtrlSCSound_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlSCSound_vtable[0];
     sndNameSlot = (char **)&obj._sndName;
     *sndNameSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beModelCtrlSCSound_vtable[0];
     igStringRef_Release(sndNameSlot);
     return vtable;

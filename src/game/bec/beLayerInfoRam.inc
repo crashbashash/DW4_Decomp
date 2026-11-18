@@ -18,7 +18,7 @@ int beLayerInfoRam_GetVTable(void) {
     dataListSlot = (igObject **)&obj._dataList;
     *dataListSlot = 0;
     obj._vtable = (int)&g_beLayerInfoRam_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beBaseInfoRam_vtable[0];
     igObjectRef_Release(dataListSlot);
     return vtable;

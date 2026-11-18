@@ -36,7 +36,7 @@ int igFlyMode_GetVTable(void) {
     igMatrix44f_SetIdentity((float *)o.sub);
     o.vt = &g_igFlyMode_vtable[0];
     o.ref = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(((void *)g_objectSystem)) + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = &g_igFlyMode_vtable[0];
     if (&o.ref != 0) {
         t = o.ref;

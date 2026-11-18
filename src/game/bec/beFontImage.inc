@@ -15,7 +15,7 @@ int beFontImage_GetVTable(void) {
     obj._charMetricsList = 0;
     obj._textureBind = 0;
     obj._vtable = (int)&g_beFontImage_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beFontImage_vtable[0];
     igBitmapFont_Destroy((igBitmapFont *)&obj, (short)0);
     return vtable;

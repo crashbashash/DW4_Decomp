@@ -34,7 +34,7 @@ int beFontGeomAttrPair_GetVTable(void) {
     *panelSlot = 0;
     geomAttrsSlot = (igObject **)&obj._geomAttrs;
     *geomAttrsSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beFontGeomAttrPair_vtable[0];
     igObjectRef_Release(geomAttrsSlot);
     igStringRef_Release(panelSlot);

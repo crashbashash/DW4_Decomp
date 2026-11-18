@@ -25,7 +25,7 @@ int beActionStarterData_GetVTable(void) {
     obj._vtable = (int)&g_beActionStarterData_vtable[0];
     messageSlot = (char **)&obj._message;
     *messageSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beActionStarterData_vtable[0];
     igStringRef_Release(messageSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];

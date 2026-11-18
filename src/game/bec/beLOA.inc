@@ -39,7 +39,7 @@ int beLOA_GetVTable(void) {
     blendFunctionAttrSlot = &obj._blendFunctionAttr;
     *blendFunctionAttrSlot = 0;
     obj._colorAttr = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beLOA_vtable[0];
     igSmartPointer_igColorAttr_Destruct((igSmartPointer<igObject> *)&obj._colorAttr, -1);
     igSmartPointer_igBlendFunctionAttr_Destruct((igSmartPointer<igObject> *)blendFunctionAttrSlot, -1);

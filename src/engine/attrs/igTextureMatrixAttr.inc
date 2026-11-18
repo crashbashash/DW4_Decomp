@@ -30,7 +30,7 @@ int igTextureMatrixAttr_GetVTable(void) {
     igObject_InitHeader((igObject *)&f);
     f.vt = &g_igTextureMatrixAttr_vtable[0];
     igMatrix44f_SetIdentity((float *)&f.w[2]);
-    return *(int *)((char *)&f + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&f + g_objectSystem->vtableProbeOffset);
 }
 
 void igTextureMatrixAttr_EnsureRegistered(void)

@@ -40,7 +40,7 @@ int beMessenger_GetVTable(void) {
     obj._workStack = 0;
     obj._delayStack = 0;
     obj._pushPopStack = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beMessenger_vtable[0];
     igSmartPointer_beMessengerArgDataList_Destruct((igSmartPointer<igObject> *)(&obj._pushPopStack), (long long)(-1));
     igSmartPointer_beMessengerDelayList_Destruct((igSmartPointer<igObject> *)(&obj._delayStack), (short)(-1));

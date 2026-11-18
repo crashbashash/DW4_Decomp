@@ -40,7 +40,7 @@ int beCriHandle_GetVTable(void) {
     *audioSlot = 0;
     volumeSlot = (igObject **)&obj._volume;
     *volumeSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beCriHandle_vtable[0];
     igObjectRef_Release(volumeSlot);
     igObjectRef_Release(audioSlot);

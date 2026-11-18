@@ -21,7 +21,7 @@ int igClippingStateAttr_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igClippingStateAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_00139250(void)

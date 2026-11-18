@@ -23,7 +23,7 @@ int igCharMetricsMetaField_GetVTable(void) {
     q0 = (S_ref *)&u.b[52];
     *(int *)q0 = 0;
     u.vt = (int)&g_igCharMetricsMetaField_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igCompoundMetaField_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;

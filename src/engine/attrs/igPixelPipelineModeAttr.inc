@@ -19,7 +19,7 @@ int igPixelPipelineModeAttr_GetVTable(void) {
 
     igObject_InitHeader((igObject *)u.b);
     u.w[0] = (int)(&g_igPixelPipelineModeAttr_vtable[0]);
-    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
 void FUN_00134c30(void)

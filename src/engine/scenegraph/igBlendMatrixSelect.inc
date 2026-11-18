@@ -14,7 +14,7 @@ igMetaObject *igBlendMatrixSelect_GetMetaObject(void)
 int igBlendMatrixSelect_GetVTable(void) { struct Obj_1a4ba0 o; int *p = (int *)&o; int *q; int t;
  igObject_InitHeader((igObject *)(struct Obj_1a4ba0 *)p); o.vt = &g_igBlendMatrixSelect_vtable[0]; o.f8 = 0; o.f12 = 0; o.f16 = 0; o.f28 = 0; o.f32 = 0; q = &o.f40; *q = 0;
  igMatrix44f_SetIdentity((float *)o.sub1); igMatrix44f_SetIdentity((float *)(p + 27));
- t = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+ t = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
  o.vt = &g_igBlendMatrixSelect_vtable[0]; igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)q, -1); p = (int*)&o; FUN_0019c0e0((struct S_19c0e0 *)((struct Obj_1a4ba0 *)p), 0); return t; }
 
 void igBlendMatrixSelect_EnsureRegistered(void)

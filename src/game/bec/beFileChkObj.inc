@@ -23,7 +23,7 @@ int beFileChkObj_GetVTable(void) {
     obj._vtable = (int)&g_beFileChkObj_vtable[0];
     fdSlot = (igObject **)&obj._fd;
     *fdSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beFileChkObj_vtable[0];
     igObjectRef_Release(fdSlot);
     return vtable;

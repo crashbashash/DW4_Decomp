@@ -16,7 +16,7 @@ int beAction2InfoList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beAction2InfoList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void beAction2InfoList_EnsureRegistered(void)

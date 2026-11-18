@@ -48,7 +48,7 @@ int beNDMWPanelWazaInfoWork_GetVTable(void) {
     obj._playerWork = 0;
     obj._textSetList = 0;
     obj._textColorList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWPanelWazaInfoWork_vtable[0];
     igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._textColorList, -1);
     igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)&obj._textSetList, -1);

@@ -33,7 +33,7 @@ int igSwitch_GetVTable(void) {
     u.vt = (int)&g_igSwitch_vtable[0];
     ps = &u.b[32];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igSwitch_vtable[0];
     FUN_00196a50((struct R * *)ps, -1);
     igGroup_Destroy((igGroup *)u.b, 0);

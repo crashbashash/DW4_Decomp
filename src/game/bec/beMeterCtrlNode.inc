@@ -29,7 +29,7 @@ int beMeterCtrlNode_GetVTable(void) {
     obj._childList = 0;
     obj._vtable = (int)&g_beMeterCtrlNode_vtable[0];
     obj._timeList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beMeterCtrlNode_vtable[0];
     igSmartPointer_igLongList_Destruct((igSmartPointer<igObject> *)&obj._timeList, -1);
     igGroup_Destroy((igGroup *)&obj, 0);

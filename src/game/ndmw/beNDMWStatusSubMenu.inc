@@ -34,7 +34,7 @@ int beNDMWStatusSubMenu_GetVTable(void) {
     obj._deviceFolderList = 0;
     obj._playerNoList = 0;
     obj._playerDeviceCnt = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWStatusSubMenu_vtable[0];
     igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._playerDeviceCnt, -1);
     igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._playerNoList, -1);

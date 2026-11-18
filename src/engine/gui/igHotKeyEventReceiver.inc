@@ -25,7 +25,7 @@ int igHotKeyEventReceiver_GetVTable(void) {
     u.vt = (int)&g_igHotKeyEventReceiver_vtable[0];
     ps = &u.b[8];
     *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igHotKeyEventReceiver_vtable[0];
     if (ps != 0) {
         temp_a0 = *(int **)ps;

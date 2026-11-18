@@ -25,7 +25,7 @@ int igTimeAttr_GetVTable(void) {
     union U_131000 u;
     igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igTimeAttr_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
 void FUN_00131040(void)

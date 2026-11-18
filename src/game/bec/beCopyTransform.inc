@@ -11,7 +11,7 @@ igMetaObject *beCopyTransform_GetMetaObject(void) {
 
 int beCopyTransform_GetVTable(void) {
     CopyTransformView transform;
-    return *(int *)((char *)&transform + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&transform + g_objectSystem->vtableProbeOffset);
 }
 
 void beCopyTransform_EnsureRegistered(void)

@@ -19,7 +19,7 @@ int igTimeAttrPool_GetVTable(void) {
     int obj[8];
     igObject_InitHeader((igObject *)obj);
     obj[0] = (int)&g_igTimeAttrPool_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)obj + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_0019a370(void)

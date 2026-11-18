@@ -29,7 +29,7 @@ int beSvWriteMediaApi_GetVTable(void) {
     obj._vtable = (int)&g_beSvWriteMediaApi_vtable[0];
     obj._nowGamedata = 0;
     obj._saveWork = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beSvWriteMediaApi_vtable[0];
     igSmartPointer_beSaveMemoryObj_Destruct((igSmartPointer<igObject> *)&obj._saveWork, (short)(-1));
     igSmartPointer_beSvPlatBaseData_Destruct((igSmartPointer<igObject> *)&obj._nowGamedata, (long long)(-1));

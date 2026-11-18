@@ -42,7 +42,7 @@ int beMessengerArgData_GetVTable(void) {
     obj._matrix44fList = 0;
     obj._objectList = 0;
     obj._stringList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beMessengerArgData_vtable[0];
     igSmartPointer_igStringRefList_Destruct((igSmartPointer<igObject> *)&obj._stringList, -1);
     igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj._objectList, -1);

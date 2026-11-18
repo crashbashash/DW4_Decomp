@@ -20,7 +20,7 @@ int beDBManagerInfo_GetVTable(void) {
     obj._ramList = 0;
     obj._vtable = (int)&g_beDBManagerInfo_vtable[0];
     obj._dataBase = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beDBManagerInfo_vtable[0];
     igSmartPointer_beDataBase_Destruct((igSmartPointer<igObject> *)&obj._dataBase, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);

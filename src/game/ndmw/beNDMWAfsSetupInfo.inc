@@ -19,7 +19,7 @@ int beNDMWAfsSetupInfo_GetVTable(void) {
     obj._name = 0;
     obj._insideFiles = 0;
     obj._dataList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWAfsSetupInfo_vtable[0];
     igSmartPointer_beNDMWAfsSetupDataList_Destruct((igSmartPointer<igObject> *)&obj._dataList, -1);
     igSmartPointer_igAdxAfsFileList_Destruct(&obj._insideFiles, -1);

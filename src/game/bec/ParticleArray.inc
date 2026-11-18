@@ -32,7 +32,7 @@ int ParticleArray_GetVTable(void) {
     obj._vtable = (int)&g_ParticleArray_vtable[0];
     obj._vertexArray1 = 0;
     obj._vertexArray2 = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_ParticleArray_vtable[0];
     igSmartPointer_igVertexArray_Destruct((igSmartPointer<igObject> *)&obj._vertexArray2, -1);
     igSmartPointer_igVertexArray_Destruct((igSmartPointer<igObject> *)&obj._vertexArray1, -1);

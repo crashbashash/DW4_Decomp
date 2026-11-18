@@ -26,7 +26,7 @@ void *beModelCtrlInfoRideOn_GetMetaObject(void) {
 
 int beModelCtrlInfoRideOn_GetVTable(void) {
     RideOnView info;
-    return *(int *)((char *)&info + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&info + g_objectSystem->vtableProbeOffset);
 }
 
 void beModelCtrlInfoRideOn_EnsureRegistered(void)

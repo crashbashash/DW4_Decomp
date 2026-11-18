@@ -23,7 +23,7 @@ int beAction2JOINTSET_GetVTable(void) {
     obj._vtable = (int)&g_beAction2JOINTSET_vtable[0];
     loopModeSlot = (char **)&obj._loopMode;
     *loopModeSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beAction2JOINTSET_vtable[0];
     igStringRef_Release(loopModeSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];

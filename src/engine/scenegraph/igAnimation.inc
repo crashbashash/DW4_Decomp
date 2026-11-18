@@ -44,7 +44,7 @@ int igAnimation_GetVTable(void) {
     p104 = &u.b[24];
     *(int *)p104 = 0;
     *(int *)&u.b[56] = 0;
-    temp_s = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igAnimation_vtable[0];
     FUN_00196a50((struct R * *)&u.b[56], -1);
     FUN_0019de50((struct Ref * *)p104, -1);

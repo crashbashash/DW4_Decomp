@@ -32,7 +32,7 @@ int igGuiComponentModel_GetVTable(void) {
     *(int *)q0 = 0;
     u.vt = (int)&g_igModel_vtable[0];
     u.vt = (int)&g_igGuiComponentModel_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igModel_vtable[0];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;

@@ -64,7 +64,7 @@ int beSystem_GetVTable(void) {
     obj._globalStrObj = 0;
     obj._discErrInfos = 0;
     obj._viewerScene = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beSystem_vtable[0];
     igSmartPointer_igGroup_Destruct((igSmartPointer<igObject> *)&obj._viewerScene, -1);
     igSmartPointer_igInfoList_Destruct((igSmartPointer<igObject> *)&obj._discErrInfos, -1);

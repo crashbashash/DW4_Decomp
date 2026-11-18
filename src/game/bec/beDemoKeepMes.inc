@@ -30,7 +30,7 @@ int beDemoKeepMes_GetVTable(void) {
     obj._infoName = 0;
     obj._message = 0;
     obj._mesParam = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beDemoKeepMes_vtable[0];
     igStringRef_Destruct((igStringRef *)&obj._mesParam, -1);
     igStringRef_Destruct((igStringRef *)&obj._message, -1);

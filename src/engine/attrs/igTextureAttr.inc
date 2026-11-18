@@ -54,7 +54,7 @@ int igTextureAttr_GetVTable(void) {
     p136 = &u.b[56];
     *(int *)p136 = 0;
     *(int *)&u.b[64] = 0;
-    temp_s = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igTextureAttr_vtable[0];
     FUN_00132130((Ref **)&u.b[64], -1);
     FUN_001321b0((void **)p136, -1);

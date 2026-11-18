@@ -29,7 +29,7 @@ done:;
 
 int beModelCtrlNode2_GetVTable(void) {
     ModelCtrlNode2View node;
-    return *(int *)((char *)&node + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&node + g_objectSystem->vtableProbeOffset);
 }
 
 void beModelCtrlNode2_EnsureRegistered(void)

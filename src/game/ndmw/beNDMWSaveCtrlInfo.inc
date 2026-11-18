@@ -20,7 +20,7 @@ int beNDMWSaveCtrlInfo_GetVTable(void) {
     obj._dataList = 0;
     obj._ramList = 0;
     *(int **)&obj._vtable = &g_beNDMWSaveCtrlInfo_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWSaveCtrlInfo_vtable[0];
     beBaseInfo_Destroy((beBaseInfo *)&obj, 0);
     return vtable;

@@ -24,7 +24,7 @@ int beNDMWPanelWazaInfoRam_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWPanelWazaInfoRam_vtable[0];
     workRef = &obj._work;
     *workRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWPanelWazaInfoRam_vtable[0];
     if (workRef != 0) {
         igRelease((igObject *)*workRef);

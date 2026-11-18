@@ -34,7 +34,7 @@ int igCompressedTransformSequence1_5Data_GetVTable(void) {
     obj.w3 = 0;
     obj.w4 = 0;
     obj.w5 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igCompressedTransformSequence1_5Data_vtable[0];
     FUN_00164870(&obj.w5, -1);
     FUN_00164870(&obj.w4, -1);

@@ -17,7 +17,7 @@ int igContainsRayFunctionList_GetVTable(void) {
     union U4 u;
     igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igContainsRayFunctionList_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
 void igContainsRayFunctionList_EnsureRegistered(void)

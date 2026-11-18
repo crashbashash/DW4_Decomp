@@ -19,7 +19,7 @@ int beNDMWStatusPowerSocket_GetVTable(void) {
 
     beNDMWStatusCtrlBaseEquip_Construct((beNDMWStatusCtrlBaseEquip *)&obj);
     *(int **)&obj._vtable = &g_beNDMWStatusPowerSocket_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWStatusPowerSocket_vtable[0];
     beNDMWStatusCtrlBaseEquip_Destroy((beNDMWStatusCtrlBaseEquip *)&obj, 0);
     return vtable;

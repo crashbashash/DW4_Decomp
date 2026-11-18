@@ -30,7 +30,7 @@ int beMessengerWork_GetVTable(void) {
     obj._message = 0;
     obj._findRamNoList = 0;
     obj._findRamList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beMessengerWork_vtable[0];
     igSmartPointer_beBaseInfoRamList_Destruct((igSmartPointer<igObject> *)&obj._findRamList, (short)(-1));
     igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._findRamNoList, -1);

@@ -40,7 +40,7 @@ int igGuiSystemModel_GetVTable(void) {
     ((struct igGuiSystemModel *)p)->_focusedComponent = 0;
     ((struct igGuiSystemModel *)p)->_componentUnderMouse = 0;
     ((struct igGuiSystemModel *)p)->_pushedComponent = 0;
-    r = *(int *)((char *)&s + *(int *)((char *)(g_objectSystem) + 916));
+    r = *(int *)((char *)&s + g_objectSystem->vtableProbeOffset);
     *(int **)&s._vtable = &g_igGuiSystemModel_vtable[0];
     igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&s._pushedComponent, -1);
     igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&s._componentUnderMouse, -1);

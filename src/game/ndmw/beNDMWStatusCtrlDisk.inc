@@ -36,7 +36,7 @@ int beNDMWStatusCtrlDisk_GetVTable(void) {
     obj._playerNoList = 0;
     obj._diskList = 0;
     obj._sendDisk = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWStatusCtrlDisk_vtable[0];
     igSmartPointer_beNDMWItemDisk_Destruct((igSmartPointer<igObject> *)&obj._sendDisk, -1);
     igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._diskList, -1);

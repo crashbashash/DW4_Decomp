@@ -21,7 +21,7 @@ int igExternalImageEntry_GetVTable(void) {
     o.f[7] = 0;
     o.f[9] = 0;
     o.vt = g_igExternalImageEntry_vtable;
-    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = g_igExternalImageEntry_vtable;
     FUN_0014f580((W_14f580 *)&o, 0);
     return r;

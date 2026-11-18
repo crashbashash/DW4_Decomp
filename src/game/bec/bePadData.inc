@@ -40,7 +40,7 @@ int bePadData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_bePadData_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void bePadData_EnsureRegistered(void)

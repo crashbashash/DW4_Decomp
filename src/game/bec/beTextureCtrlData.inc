@@ -21,7 +21,7 @@ int beTextureCtrlData_GetVTable(void) {
     obj._vtable = (int)&g_beTextureCtrlData_vtable[0];
     texSlot = (igObject **)&obj._tex;
     *texSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beTextureCtrlData_vtable[0];
     igObjectRef_Release(texSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];

@@ -31,7 +31,7 @@ int beNDMWLoadSlotPlayer_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWLoadSlotPlayer_vtable[0];
     obj._saveDataList = 0;
     obj._accessPlList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWLoadSlotPlayer_vtable[0];
     if (&obj._accessPlList != 0) {
         igRelease((igObject *)obj._accessPlList);

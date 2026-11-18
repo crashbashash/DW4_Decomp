@@ -19,7 +19,7 @@ int igAnimationStateList_GetVTable(void) {
     int obj[8];
     igObject_InitHeader((igObject *)obj);
     obj[0] = (int)&g_igAnimationStateList_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igAnimationStateList_EnsureRegistered(void)

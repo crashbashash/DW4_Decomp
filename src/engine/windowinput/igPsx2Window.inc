@@ -42,7 +42,7 @@ int igPsx2Window_GetVTable(void) {
     *(int *)q1 = 0;
     q0 = &u.b[32];
     *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igPsx2Window_vtable[0];
     if (q0 != 0) {
         temp_v1 = *(int **)q0;

@@ -31,7 +31,7 @@ int igAnimationCombinerBoneInfo_GetVTable(void) {
     o.vt = &g_igAnimationCombinerBoneInfo_vtable[0];
     o.m12 = 0;
     o.m16 = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = &g_igAnimationCombinerBoneInfo_vtable[0];
     if (&o.m16 != 0) {
         t = o.m16;

@@ -40,7 +40,7 @@ int igStatisticsItem_GetVTable(void) {
     obj.w9 = 0;
     obj.w10 = 0;
     obj.w11 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem)) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igStatisticsItem_vtable[0];
     FUN_00458e40((ObjectRefWord *)&obj.w11, -1);
     FUN_00458dc0((void **)&obj.w10, -1);

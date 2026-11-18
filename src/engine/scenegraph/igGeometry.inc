@@ -29,7 +29,7 @@ int igGeometry_GetVTable(void) {
     obj.w8 = 0;
     obj.vt = &g_igGeometry_vtable[0];
     obj.w10 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igGeometry_vtable[0];
     FUN_0019d0a0((void * *)&obj.w10, -1);
     FUN_0019c0e0((struct S_19c0e0 *)&obj, 0);

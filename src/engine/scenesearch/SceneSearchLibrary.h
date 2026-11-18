@@ -38,9 +38,6 @@ struct SearchSceneGraphFrame { int *vt; int f4; int f8; int fC; int f10; int f14
 #include "dw4/core/igMetaField.h"
 extern "C" int FUN_002293d0(...);
 extern "C" int g_igSearchSceneGraph_vtable[4];
-/* The object system's byte offset of the vtable word inside an object. */
-struct ObjectSystemView { char pad[916]; int vtableProbeOffset; };
-
 /* InitFields' field tables and field helpers. */
 extern "C" int FUN_002274a0(void);
 extern "C" void FUN_00227620(void);

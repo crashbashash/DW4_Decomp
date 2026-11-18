@@ -20,7 +20,7 @@ int igOnOffModel_GetVTable(void) {
     q1 = &u.b[8];
     *(int *)q1 = 0;
     u.vt = (int)&g_igOnOffModel_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igModel_vtable[0];
     if (q1 != 0) {
         temp_a0 = *(void **)q1;

@@ -44,7 +44,7 @@ int beNDMWDegiData_GetVTable(void) {
     *dmkindRef = 0;
     dmNameRef = &obj._dmName;
     *dmNameRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWDegiData_vtable[0];
     if (dmNameRef != 0) {
         releaseString((const char *)*dmNameRef);

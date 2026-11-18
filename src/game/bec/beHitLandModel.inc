@@ -27,7 +27,7 @@ void *beHitLandModel_GetMetaObject(void) {
 
 int beHitLandModel_GetVTable(void) {
     HitLandModelView model;
-    return *(int *)((char *)&model + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&model + g_objectSystem->vtableProbeOffset);
 }
 
 igSmartPointer<igObject> *igSmartPointer_beHitLandModelOrder_Destruct(igSmartPointer<igObject> *self, int delete_storage) {

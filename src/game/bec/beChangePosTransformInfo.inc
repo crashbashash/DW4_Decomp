@@ -20,7 +20,7 @@ int beChangePosTransformInfo_GetVTable(void) {
     obj._dataList = 0;
     obj._ramList = 0;
     obj._vtable = (int)&g_beChangePosTransformInfo_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beChangePosTransformInfo_vtable[0];
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);
     return vtable;

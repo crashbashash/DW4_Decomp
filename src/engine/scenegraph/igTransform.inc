@@ -37,7 +37,7 @@ int igTransform_GetVTable(void) {
     igMatrix44f_SetIdentity((float *)((char *)&o + 32));
     pa[25] = 0;
     pa[26] = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = &g_igTransform_vtable[0];
     FUN_00196450((void * *)&o.f[25], -1);
     FUN_001963d0((ObjectRefWord *)&o.f[24], -1);

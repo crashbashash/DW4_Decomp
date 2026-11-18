@@ -26,7 +26,7 @@ int igIterateField_GetVTable(void) {
     u.vt = (int)&g_igIterateField_vtable[0];
     ps = &u.b[8];
     *(int *)ps = 0;
-    t = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    t = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igIterateField_vtable[0];
     if (ps != 0) {
         p = *(int **)ps;

@@ -66,7 +66,7 @@ int igViewerParameters_GetVTable(void) {
     *(int *)(pi + 204) = 0;
     *(int *)(pi + 220) = 0;
     *(int *)(pi + 240) = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem)) + 916)];
+    temp_s1 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&DAT_00542090[4];
     FUN_001d6560(&u.b[240], -1);
     FUN_0019b1f0(&u.b[220], -1);

@@ -47,7 +47,7 @@ int beHitLandModelOrder_GetVTable(void) {
     *rayListSlot = 0;
     hitdataListSlot = (igObject **)&obj._hitdataList;
     *hitdataListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beHitLandModelOrder_vtable[0];
     igObjectRef_Release(hitdataListSlot);
     igObjectRef_Release(rayListSlot);

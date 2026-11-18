@@ -42,7 +42,7 @@ int beCameraMode_GetVTable(void) {
     *cameraPathSlot = 0;
     cameraSlot = (igObject **)&obj._camera;
     *cameraSlot = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beCameraMode_vtable[0];
     igObjectRef_Release(cameraSlot);
     igObjectRef_Release(cameraPathSlot);

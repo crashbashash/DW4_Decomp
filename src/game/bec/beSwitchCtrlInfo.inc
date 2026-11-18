@@ -19,7 +19,7 @@ int beSwitchCtrlInfo_GetVTable(void) {
     obj._ramList = 0;
     obj._vtable = (int)&g_beSwitchCtrlInfo_vtable[0];
     obj._switchNode = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beSwitchCtrlInfo_vtable[0];
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)(&obj._switchNode), -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);

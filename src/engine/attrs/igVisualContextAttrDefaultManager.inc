@@ -23,7 +23,7 @@ int igVisualContextAttrDefaultManager_GetVTable(void) {
     p = (S_ref *)&u.b[8];
     u.vt = (int)&g_igVisualContextAttrDefaultManager_vtable[0];
     *(int *)p = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igVisualContextAttrDefaultManager_vtable[0];
     if (p != 0) {
         p = *(S_ref **)p;

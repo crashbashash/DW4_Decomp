@@ -30,7 +30,7 @@ int igMessageFilter_GetVTable(void) {
     u.w[0] = (int)(&g_igMessageFilter_vtable[0]);
     *(int *)q2 = 0;
     *(int *)q3 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
+    temp_s1 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igMessageFilter_vtable[0]);
     if (q3 != 0) {
         q3 = *(S_ref **)q3;

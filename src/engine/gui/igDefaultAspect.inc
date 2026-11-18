@@ -23,7 +23,7 @@ int igDefaultAspect_GetVTable(void) {
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igDefaultAspect_vtable[0];
     obj.ref = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igDefaultAspect_vtable[0];
     obj.release();
     return r;

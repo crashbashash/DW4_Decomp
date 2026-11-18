@@ -25,7 +25,7 @@ int beModelCtrlInfoDataHit_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlInfoDataHit_vtable[0];
     hitBulletAABoxListSlot = (igObject **)&obj._hitBulletAABoxList;
     *hitBulletAABoxListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beModelCtrlInfoDataHit_vtable[0];
     igObjectRef_Release(hitBulletAABoxListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];

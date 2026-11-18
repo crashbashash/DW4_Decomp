@@ -19,7 +19,7 @@ int beActionStarterInfo_GetVTable(void) {
     obj._ramList = 0;
     obj._vtable = (int)&g_beActionStarterInfo_vtable[0];
     obj._modelList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beActionStarterInfo_vtable[0];
     igSmartPointer_beAsTargetModelDataList_Destruct((igSmartPointer<igObject> *)&obj._modelList, (short)(-1));
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);

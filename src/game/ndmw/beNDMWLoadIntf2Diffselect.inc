@@ -39,7 +39,7 @@ int beNDMWLoadIntf2Diffselect_GetVTable(void) {
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     obj._name = 0;
     *(int **)&obj._vtable = &g_beNDMWLoadIntf2Diffselect_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     if (&obj._name != 0) {
         releaseString((const char *)obj._name);

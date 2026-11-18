@@ -34,7 +34,7 @@ int beParticleCtrl2InfoWork_GetVTable(void) {
     obj._vtable = (int)&g_beParticleCtrl2InfoWork_vtable[0];
     positionLockNodeSlot = (igObject **)&obj._positionLockNode;
     *positionLockNodeSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beParticleCtrl2InfoWork_vtable[0];
     igObjectRef_Release(positionLockNodeSlot);
     return vtable;

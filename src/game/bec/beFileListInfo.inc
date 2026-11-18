@@ -26,7 +26,7 @@ int beFileListInfo_GetVTable(void) {
     *(int *)sectionSlot = 0;
     fnamesSlot = (char *)&obj._fnames;
     *(int *)fnamesSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beFileListInfo_vtable[0];
     igSmartPointer_igNamedObjectList_Destruct((igSmartPointer<igObject> *)fnamesSlot, -1);
     igStringRef_Destruct((igStringRef *)sectionSlot, -1);

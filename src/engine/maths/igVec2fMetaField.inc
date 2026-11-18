@@ -23,7 +23,7 @@ int igVec2fMetaField_GetVTable(void) {
 
     igMetaField_Init((igMetaField *)&o);
     o.vt = &g_igVec2fMetaField_vtable[0];
-    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = &g_igMetaField_vtable[0];
     if (&o.str != 0) {
         temp_v1 = o.str;

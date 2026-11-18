@@ -19,7 +19,7 @@ int igVectorMorphing_GetVTable(void) {
     struct Obj2 obj;
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igVectorMorphing_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_00186e40(void)

@@ -19,7 +19,7 @@ int beSaveUtilInfoRam_GetVTable(void) {
     obj._vtable = (int)&g_beSaveUtilInfoRam_vtable[0];
     deliverSlot = (igObject **)&obj._deliver;
     *deliverSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beSaveUtilInfoRam_vtable[0];
     igObjectRef_Release(deliverSlot);
     obj._vtable = (int)&g_beBaseInfoRam_vtable[0];

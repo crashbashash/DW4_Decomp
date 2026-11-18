@@ -18,7 +18,7 @@ int beSeData_GetVTable(void) {
     obj._name = 0;
     obj._vtable = (int)&g_beSeData_vtable[0];
     obj._sound = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beSeData_vtable[0];
     obj.relSound();
     obj._vtable = (int)&g_igNamedObject_vtable[0];

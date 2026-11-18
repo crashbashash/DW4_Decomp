@@ -42,7 +42,7 @@ int beNDMWStatusInfoWork_GetVTable(void) {
     obj._armorSalesList = 0;
     obj._chipSalesList = 0;
     obj._junkSalesList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWStatusInfoWork_vtable[0];
     igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._junkSalesList, -1);
     igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._chipSalesList, -1);

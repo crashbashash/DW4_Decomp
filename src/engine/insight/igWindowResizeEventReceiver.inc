@@ -20,7 +20,7 @@ int igWindowResizeEventReceiver_GetVTable(void) {
     struct Obj_233120 o;
     igObject_InitHeader((igObject *)&o);
     o.vt = &g_igWindowResizeEventReceiver_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem) + 916));
+    return *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_00233160(void)

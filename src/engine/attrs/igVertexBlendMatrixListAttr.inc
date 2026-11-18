@@ -31,7 +31,7 @@ int igVertexBlendMatrixListAttr_GetVTable(void) {
     *(int *)q0 = 0;
     igMatrix44f_SetIdentity((float *)&u.b[28]);
     igMatrix44f_SetIdentity((float *)(pi + 92));
-    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&DAT_00522630[4];
     if (q0 != 0) {
         q0 = *(S_ref **)q0;

@@ -27,7 +27,7 @@ int beNDMWMdlPlayer2InfoWork_GetVTable(void) {
 
     beModelCtrlInfoWork_Construct((beModelCtrlInfoWork *)&obj);
     *(int **)&obj._vtable = &g_beNDMWMdlPlayer2InfoWork_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWMdlPlayer2InfoWork_vtable[0];
     beModelCtrlInfoWork_Destroy((beModelCtrlInfoWork *)&obj, 0);
     return vtable;

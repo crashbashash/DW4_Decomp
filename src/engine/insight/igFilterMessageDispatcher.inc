@@ -18,7 +18,7 @@ int igFilterMessageDispatcher_GetVTable(void) {
     *(int **)&obj._vtable = &g_igFilterMessageDispatcher_vtable[0];
     obj._defaultFilters = 0;
     obj._filters = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igFilterMessageDispatcher_vtable[0];
     if (&obj._filters != 0) {
         o = (igObject *)obj._filters;

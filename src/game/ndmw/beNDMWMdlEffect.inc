@@ -28,7 +28,7 @@ int beNDMWMdlEffect_GetVTable(void) {
     obj._name = 0;
     obj._infoList = 0;
     *(int **)&obj._vtable = &g_beNDMWMdlEffect_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWMdlEffect_vtable[0];
     beModelCtrl_Destroy((beModelCtrl *)&obj, 0);
     return vtable;

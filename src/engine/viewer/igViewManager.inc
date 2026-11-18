@@ -36,7 +36,7 @@ int igViewManager_GetVTable(void) {
     q3 = (S_ref *)&u.b[16];
     *(int *)q3 = 0;
     igMatrix44f_SetIdentity((float *)&u.w[5]);
-    temp_s3 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem)) + 916)];
+    temp_s3 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&DAT_00542680[4]);
     if (q3 != 0) {
         q3 = *(S_ref **)q3;

@@ -26,7 +26,7 @@ int igProjectionMatrixAttr_GetVTable(void) {
     igObject_InitHeader((igObject *)&o);
     o.vt = &g_igProjectionMatrixAttr_vtable[0];
     igMatrix44f_SetIdentity((float *)&o.pad[8]);
-    return *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
 }
 
 void igProjectionMatrixAttr_EnsureRegistered(void)

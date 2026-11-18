@@ -20,7 +20,7 @@ int igStencilStateAttr_GetVTable(void) {
     struct Obj_1334d0 obj;
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igStencilStateAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_00133510(void)

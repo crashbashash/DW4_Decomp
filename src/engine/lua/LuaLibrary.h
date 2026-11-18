@@ -37,9 +37,6 @@ typedef void (*igMetaObjectCallback)(void);
 #include "dw4/core/igDataLists.h"
 #include "dw4/core/StringPool.h"
 
-/* The object system's byte offset of the vtable word inside an object. */
-struct ObjectSystemView { char pad[916]; int vtableProbeOffset; };
-
 
 extern "C" int g_igLuaState_vtable[4];
 

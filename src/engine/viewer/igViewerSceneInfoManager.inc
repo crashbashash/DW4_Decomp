@@ -142,7 +142,7 @@ int igViewerSceneInfoManager_GetVTable(void) {
     FUN_00459d60((int *)p344);
     p352 = &u.b[192];
     FUN_00458600(p352);
-    r = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem)) + 916)];
+    r = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     *(int **)u.b = &g_igViewerSceneInfoManager_vtable[0];
     igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)p352, -1);
     FUN_00459ce0((void **)p344, -1);

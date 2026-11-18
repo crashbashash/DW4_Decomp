@@ -30,7 +30,7 @@ int igTextElement_GetVTable(void) {
     u.w[11] = 0;
     u.w[12] = 0;
     u.w[13] = 0;
-    temp_s2 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
+    temp_s2 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igTextElement_vtable[0]);
     igStringRef_Destruct((igStringRef *)&u.w[13], -1);
     FUN_001353b0(&u.w[12], -1);

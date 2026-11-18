@@ -23,7 +23,7 @@ int igBillboard_GetVTable(void) {
     u.w[7] = 0;
     u.w[0] = (int)(&g_igBillboard_vtable[0]);
     u.w[15] = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igBillboard_vtable[0]);
     FUN_00142d10(&u.w[15], -1);
     igGroup_Destroy((igGroup *)&u.w[0], 0);

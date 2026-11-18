@@ -26,7 +26,7 @@ int beDataObjIntList_GetVTable(void) {
     obj._vtable = (int)&g_beDataObjIntList_vtable[0];
     dataSlot = (igObject **)&obj._data;
     *dataSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beDataObjIntList_vtable[0];
     igObjectRef_Release(dataSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];

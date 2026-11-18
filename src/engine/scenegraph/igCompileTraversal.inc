@@ -38,7 +38,7 @@ int igCompileTraversal_GetVTable(void) {
     p4 = &u.b[492]; FUN_001a3150((int *)p4);
     p5 = &u.b[500]; FUN_001a2c40((int *)p5);
     p6 = &u.b[504]; FUN_001a3140((int *)p6);
-    temp_s5 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s5 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&DAT_00529320[4];
     FUN_001a30c0((struct R * *)p6, -1);
     FUN_001a2bc0((ObjectRefWord *)p5, -1);

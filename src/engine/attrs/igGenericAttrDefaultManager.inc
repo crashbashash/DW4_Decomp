@@ -18,7 +18,7 @@ int igGenericAttrDefaultManager_GetVTable(void) {
     int pad[2];
     igObject_InitHeader((igObject *)&o);
     o.vt = g_igGenericAttrDefaultManager_vtable;
-    return *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_00137b80(void)

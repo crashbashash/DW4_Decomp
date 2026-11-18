@@ -21,7 +21,7 @@ int bePoint01Info_GetVTable(void) {
     obj._vtable = (int)&g_bePoint01Info_vtable[0];
     obj._switch = 0;
     obj._dataList_ = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_bePoint01Info_vtable[0];
     igSmartPointer_beGroupKeepList_Destruct((igSmartPointer<igObject> *)&obj._dataList_, -1);
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._switch, -1);

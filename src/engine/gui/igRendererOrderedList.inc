@@ -30,7 +30,7 @@ int igRendererOrderedList_GetVTable(void) {
     obj.w[3] = 0;
     obj.w[4] = 0;
     obj.vt = &g_igRendererOrderedList_vtable[0];
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igRendererOrderedList_vtable[0];
     FUN_0044c5e0((int **)&obj, 0);
     return r;

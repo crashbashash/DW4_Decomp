@@ -23,7 +23,7 @@ int beNumVerInsideData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beNumVerInsideData_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void beNumVerInsideData_EnsureRegistered(void)

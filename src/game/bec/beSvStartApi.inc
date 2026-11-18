@@ -31,7 +31,7 @@ int beSvStartApi_GetVTable(void) {
     iconWorkSlot = (igObject **)&obj._iconWork;
     *iconWorkSlot = 0;
     obj._vtable = (int)&g_beSvStartApi_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beSaveApi_vtable[0];
     igObjectRef_Release(iconWorkSlot);
     igObjectRef_Release(mountWorkSlot);

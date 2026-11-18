@@ -37,7 +37,7 @@ int igViewerGuiFactory_GetVTable(void) {
     obj.w7 = 0;
     obj.w8 = 0;
     obj.w9 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem)) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igViewerGuiFactory_vtable[0];
     FUN_0045bb90((void **)&obj.w9, -1);
     FUN_0045bb10((Ref **)&obj.w8, -1);

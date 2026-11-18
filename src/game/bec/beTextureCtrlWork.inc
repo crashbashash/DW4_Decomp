@@ -37,7 +37,7 @@ int beTextureCtrlWork_GetVTable(void) {
     *textureListSlot = 0;
     attributeListSlot = (igObject **)&obj._attributeList;
     *attributeListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beTextureCtrlWork_vtable[0];
     igObjectRef_Release(attributeListSlot);
     igObjectRef_Release(textureListSlot);

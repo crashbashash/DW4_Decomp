@@ -32,7 +32,7 @@ int igViewerDataPumpManager_GetVTable(void) {
     u.w[0] = (int)(&g_igViewerDataPumpManager_vtable[0]);
     q4 = (S_ref *)&u.p[4];
     *(int *)q4 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem)) + 916)];
+    temp_s1 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igViewerDataPumpManager_vtable[0]);
     if (q4 != 0) {
         q4 = *(S_ref **)q4;

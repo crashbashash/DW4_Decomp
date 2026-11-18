@@ -31,7 +31,7 @@ int igTextureFunctionAttr_GetVTable(void) {
     struct Obj_131d40 obj;
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igTextureFunctionAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igTextureFunctionAttr_EnsureRegistered(void)

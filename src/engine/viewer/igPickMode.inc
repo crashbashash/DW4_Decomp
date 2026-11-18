@@ -41,7 +41,7 @@ int igPickMode_GetVTable(void) {
     obj.w[24] = 0;
     obj.w[27] = 0;
     igMatrix44f_SetIdentity((float *)&obj.w[28]);
-    r = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem)) + 916));
+    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igPickMode_vtable[0];
     FUN_001d6560(&obj.w[27], -1);
     FUN_0019e3c0(&obj.w[24], -1);

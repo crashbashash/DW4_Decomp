@@ -32,7 +32,7 @@ int igCreateCollisionDatabase_GetVTable(void) {
     p18 = &o.f[14];
     *p18 = 0;
     o.f[15] = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem) + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = &g_igCreateCollisionDatabase_vtable[0];
     igSmartPointer_igMetaObject_Destruct((igSmartPointer<igObject> *)&o.f[15], -1);
     igSmartPointer_igMetaObject_Destruct((igSmartPointer<igObject> *)p18, -1);

@@ -21,7 +21,7 @@ int igPsx2DisableExt_GetVTable(void) {
     p40 = &u.b[16];
     *(int *)p40 = 0;
     u.vt = (int)&g_igPsx2DisableExt_vtable[0];
-    r = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    r = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&DAT_00530a10[0];
     if (p40 != 0) {
         v1 = *(int **)p40;

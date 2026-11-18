@@ -40,7 +40,7 @@ int igViewModel_GetVTable(void) {
     *(int *)p38 = 0;
     u.vt = (int)&g_igViewModel_vtable[0];
     igMatrix44f_SetIdentity((float *)&u.b[12]);
-    r = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem)) + 916)];
+    r = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igModel_vtable[0];
     if (p38 != 0) {
         v1 = *(int **)p38;

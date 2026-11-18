@@ -23,7 +23,7 @@ int beMatCtrlInfo_GetVTable(void) {
     obj._switchgraph = 0;
     obj._dataList_ = 0;
     obj._search = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beMatCtrlInfo_vtable[0];
     igSmartPointer_beMatCtrlSearchList_Destruct((igSmartPointer<igObject> *)(&obj._search), (short)(-1));
     igSmartPointer_beMatCtrlDataList_Destruct((igSmartPointer<igObject> *)(&obj._dataList_), (long long)(-1));

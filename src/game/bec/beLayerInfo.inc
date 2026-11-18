@@ -21,7 +21,7 @@ int beLayerInfo_GetVTable(void) {
     obj._vtable = (int)&g_beLayerInfo_vtable[0];
     groupsSlot = (char *)&obj._groups;
     *(int *)groupsSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beLayerInfo_vtable[0];
     igSmartPointer_beLayerGroupList_Destruct((igSmartPointer<igObject> *)groupsSlot, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);

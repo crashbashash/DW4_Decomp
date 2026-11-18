@@ -34,7 +34,7 @@ int igParticleFormat_GetVTable(void) {
     struct Obj_14d150 obj;
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igParticleFormat_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igParticleFormat_EnsureRegistered(void)

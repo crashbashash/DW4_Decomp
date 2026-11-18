@@ -33,7 +33,7 @@ int beMovie_GetVTable(void) {
     obj._vtable = (int)&g_beMovie_vtable[0];
     obj._movie = 0;
     obj._playingName = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beMovie_vtable[0];
     igStringRef_Destruct((igStringRef *)&obj._playingName, -1);
     igSmartPointer_igMovieManager_Destruct((igSmartPointer<igObject> *)&obj._movie, -1);

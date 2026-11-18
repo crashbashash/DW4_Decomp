@@ -34,7 +34,7 @@ done:
 
 int libNdmwRuntimePlugin_GetVTable(void) {
     NdmwRuntimePluginView plugin;
-    return *(int *)((char *)&plugin + *(int *)((char *)(char *)g_objectSystem + 916));
+    return *(int *)((char *)&plugin + g_objectSystem->vtableProbeOffset);
 }
 
 igSmartPointer<igObject> *igSmartPointer_beNDMWAfsSetup_Destruct(igSmartPointer<igObject> *self,int delete_storage) {

@@ -18,7 +18,7 @@ int igExtendByFunctionList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&o);
     o.vt = &g_igExtendByFunctionList_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
 }
 
 void igExtendByFunctionList_EnsureRegistered(void)

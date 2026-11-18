@@ -39,7 +39,7 @@ int beMatCtrl_GetVTable(void) {
     obj._vtable = (int)&g_beMatCtrl_vtable[0];
     obj._wkMatOnList = 0;
     obj._wkMatOldOnList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beMatCtrl_vtable[0];
     igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._wkMatOldOnList, -1);
     igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._wkMatOnList, -1);

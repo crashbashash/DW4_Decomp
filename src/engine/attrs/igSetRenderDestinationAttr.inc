@@ -26,7 +26,7 @@ int igSetRenderDestinationAttr_GetVTable(void) {
     q3 = &u.p[3];
     u.w[0] = (int)(&g_igSetRenderDestinationAttr_vtable[0]);
     *q3 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igSetRenderDestinationAttr_vtable[0]);
     if (q3 != 0) {
         temp_a0 = *q3;

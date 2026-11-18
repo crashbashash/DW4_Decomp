@@ -28,7 +28,7 @@ int igInterpretedShaderData_GetVTable(void) {
     obj.vt = &g_igInterpretedShaderData_vtable[0];
     obj.w6 = 0;
     obj.w7 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igInterpretedShaderData_vtable[0];
     FUN_0014dd40(&obj.w7, -1);
     FUN_0019eb40((ObjectRefWord *)&obj.w6, -1);

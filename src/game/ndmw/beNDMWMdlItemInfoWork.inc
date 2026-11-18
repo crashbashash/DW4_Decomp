@@ -26,7 +26,7 @@ done:
 
 int beNDMWMdlItemInfoWork_GetVTable(void) {
     ItemInfoWork work;
-    return *(int *)((char *)&work + *(int *)((char *)(char *)g_objectSystem + 916));
+    return *(int *)((char *)&work + g_objectSystem->vtableProbeOffset);
 }
 
 igSmartPointer<igObject> *igSmartPointer_beNDMWItemBase_Destruct(igSmartPointer<igObject> *self,int delete_storage) {

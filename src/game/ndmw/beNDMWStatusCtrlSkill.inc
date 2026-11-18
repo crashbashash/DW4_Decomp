@@ -33,7 +33,7 @@ int beNDMWStatusCtrlSkill_GetVTable(void) {
     shinkaCtrlRef = &obj._shinkaCtrl;
     *shinkaCtrlRef = 0;
     obj._skillList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWStatusCtrlSkill_vtable[0];
     igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._skillList, -1);
     igSmartPointer_beNDMWShinkaCtrl_Destruct((igSmartPointer<igObject> *)shinkaCtrlRef, -1);

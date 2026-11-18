@@ -31,7 +31,7 @@ int igBoundingBoxesMaker_GetVTable(void) {
     obj.w[5] = 0;
     obj.w[7] = 0;
     obj.w[8] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igBoundingBoxesMaker_vtable[0];
     igSmartPointer_igMetaObjectList_Destruct((igSmartPointer<igObject> *)&obj.w[8], -1);
     igSmartPointer_igStringObj_Destruct((igSmartPointer<igObject> *)&obj.w[7], -1);

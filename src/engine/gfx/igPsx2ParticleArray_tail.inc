@@ -16,7 +16,7 @@ int igPsx2ParticleArray_GetVTable(void) {
     *(int *)&u.b[48] = 0;
     *(int *)&u.b[68] = 0;
     u.vt = (int)&g_igPsx2ParticleArray_vtable[0];
-    t = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    t = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igPsx2ParticleArray_vtable[0];
     igParticleArray_Destroy((igParticleArray *)u.b, 0);
     return t;

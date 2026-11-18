@@ -23,7 +23,7 @@ int beParticleCtrl2Info_GetVTable(void) {
     obj._vtable = (int)&g_beParticleCtrl2Info_vtable[0];
     obj._mainSwitch = 0;
     obj._subSwitch = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beParticleCtrl2Info_vtable[0];
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._subSwitch, -1);
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._mainSwitch, -1);

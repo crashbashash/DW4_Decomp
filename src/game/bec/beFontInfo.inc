@@ -21,7 +21,7 @@ int beFontInfo_GetVTable(void) {
     obj._vtable = (int)&g_beFontInfo_vtable[0];
     unicodeListSlot = (char *)&obj._unicodeList;
     *(int *)unicodeListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beFontInfo_vtable[0];
     igSmartPointer_beUnicodeObjList_Destruct((igSmartPointer<igObject> *)unicodeListSlot, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);

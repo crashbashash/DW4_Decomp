@@ -25,7 +25,7 @@ int igBoxComponent_GetVTable(void) {
     f.w[4] = 0;
     f.w[6] = 0;
     f.vt = &g_igBoxComponent_vtable[0];
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)(g_objectSystem) + 916));
+    temp_s0 = *(int *)((char *)&f + g_objectSystem->vtableProbeOffset);
     f.vt = &g_igBoxComponent_vtable[0];
     FUN_00450090((O_450090 *)&f, 0);
     return temp_s0;

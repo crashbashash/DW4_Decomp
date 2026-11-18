@@ -44,7 +44,7 @@ int beSvPlatDataPS2_GetVTable(void) {
     obj._fnameIcon1 = 0;
     obj._fnameIcon2 = 0;
     obj._image = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beSvPlatDataPS2_vtable[0];
     igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj._image, -1);
     igStringRef_Destruct((igStringRef *)&obj._fnameIcon2, -1);

@@ -27,7 +27,7 @@ int beNDMWStatusCtrl00_GetVTable(void) {
     obj._modelCloseRamNoList = 0;
     obj._modelCloseSeqNameList = 0;
     obj._vtable = (int)(&g_beNDMWStatusCtrl00_vtable[0]);
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)(&g_beNDMWStatusCtrl00_vtable[0]);
     beNDMWWindowCtrl_Destroy((beNDMWWindowCtrl *)&obj, (long long)0);
     return vtable;

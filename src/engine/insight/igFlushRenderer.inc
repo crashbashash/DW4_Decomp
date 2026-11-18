@@ -33,7 +33,7 @@ int igFlushRenderer_GetVTable(void) {
     q1 = (S_ref *)&u.b[8];
     *(int *)q1 = 0;
     u.w[0] = (int)(&g_igFlushRenderer_vtable[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igRenderer_vtable[0]);
     if (q1 != 0) {
         q1 = *(S_ref **)q1;

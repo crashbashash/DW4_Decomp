@@ -32,7 +32,7 @@ int beModelCtrlSCEffect_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlSCEffect_vtable[0];
     *modelNameSlot = 0;
     *seqNameSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beModelCtrlSCEffect_vtable[0];
     igStringRef_Release(seqNameSlot);
     igStringRef_Release(modelNameSlot);

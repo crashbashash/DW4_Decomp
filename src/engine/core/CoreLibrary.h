@@ -2611,7 +2611,6 @@ extern "C" void *igAliasMemoryPool_Construct(igAliasMemoryPool *self, int extra1
 extern "C" void *igAliasMemoryPool_CopyConstruct(igAliasMemoryPool *self, int extra1);
 extern "C" void igAliasMemoryPool_Destruct(igAliasMemoryPool *self);
 extern "C" int DAT_00530d80[4];
-struct ObjectSystemView;
 class igEventTrackerView;
 extern "C" void igObjectSystem_Startup(ObjectSystemView *self);
 #include "dw4/core/igStringRef.h"
@@ -2628,71 +2627,6 @@ extern "C" void igObjectSystem_AppendMetaObject(void *system,igMetaObject *meta)
  * pointer list at +24) is searched on the `_name` field of igMetaObject; an inactive object system
  * (flag byte at +0 clear) finds nothing. */
 
-/* The object system behind &g_objectSystem: the activity flags, the metadata registry and the
- * counts it held at boot, the callbacks run for every registered meta object, the configuration
- * registry and the event formats are used here. */
-typedef struct ObjectSystemView {
-    unsigned char active;
-    char unknown1[3];
-    int bootMetaObjectCount;      /* metaRegistry count when the boot registration finished */
-    int bootMetaFieldCount;       /* meta-field registry count at the same point */
-    int metaObjectCount;          /* metaRegistry count when igObjectSystem_Initialize finished */
-    int metaFieldCount;           /* meta-field registry count at the same point */
-    unsigned char started;        /* set first at start-up, cleared last at shut-down */
-    unsigned char preExitDone;    /* the "exitPre" marker has been sent */
-    unsigned char exitDone;       /* set once igObjectSystem_Exit has run, before the exit callbacks */
-    char unknown23[1];
-    void *metaRegistry;
-    char unknown28[4];
-    int f32;
-    void *metaEnumList;           /* igMetaEnum objects registered through igObjectSystem_AppendMetaEnum */
-    void *exitCallbacks;          /* igObjectSystem_AddExitCallback appends here */
-    void *registrationCallbacks;
-    igMemoryPoolView *bootstrapPool; /* the allocator of record 0 (Bootstrap) */
-    igMemoryPoolView *systemPool;    /* the allocator of record 4 (System) */
-    igRegistry *configRegistry;
-    igDriverDatabase *driverDatabase;
-    igResource *resource;         /* the resource manager: named directories and objects */
-    igMemoryPoolView *resourceTempPool;   /* the resource manager's temporary pool over a raw buffer */
-    unsigned int resourceTempPoolSize;    /* "resourceTempMemoryPoolSize": no temporary pool when zero */
-    igPluginHelper *pluginHelper;
-    igSymbolTable *symbolTable;   /* loaded from symbolsFileName at memory set-up */
-    igEventTrackerView *globalEventTracker; /* useGlobalEventTracker's tracker; receives the "exitPre" and "exitIn" markers */
-    igMemoryPoolView *driverDataPool; /* the allocator of record 20 (DriverData) when it is its own pool */
-    unsigned char f92;
-    char unknown93[3];
-    igMemoryPoolView *fastPool;       /* the allocator of record 7 (Fast) when it is its own pool */
-    int copyVTables;              /* copy the vtables of the classes listed in CLASSES_TO_VTABLE_CACHE into fastPool */
-    igStringTableView *vtableClassNames; /* the class names of that section */
-    int f108;
-    igObject *retainedObject;     /* released at shut-down */
-    unsigned char useGlobalEventTracker;
-    unsigned char saveEventTrackerOnExit;     /* MemoryContext::vfunc_56 runs at exit */
-    unsigned char showLeaksOnExit;
-    unsigned char showMemoryStatisticsOnExit;
-    unsigned char showObjectStatisticsOnExit;
-    unsigned char reportHeaderVersionMismatch; /* igObjectSystem_CheckHeaderVersion reports a mismatch only when 1 */
-    unsigned char warnOnDllDateMismatch;
-    char unknown123[1];
-    void *eventTrackerInitialCapacity;
-    int eventTrackerEventTypeFilter;
-    int eventTrackerMarkerTypeFilter;
-    int eventTrackerNotificationTypeFilter;
-    int eventTrackerNotificationCodeFilter;
-    char memoryEventFormat[128];
-    char markerEventFormat[128];
-    char notificationEventFormat[128];
-    char eventTrackerFileName[128];
-    char systemPoolEventTrackerFileName[128];
-    char symbolsFileName[128];
-    int stringPoolStatisticsLevel;
-    int vtableProbeOffset;        /* zero: the EnsureRegistered probes read the vtable word through it */
-    igStringRef rootPath;         /*"IG_ROOT" from the environment */
-    igStringRef basePath;
-    /* igMemoryPoolContextInfo_ConfigureEventTracking reads these two through calls: as plain member reads their locals take other saved registers. */
-    igMemoryPoolView *getSystemPool() { return systemPool; }
-    int getConfigRegistry() { return (int)configRegistry; }
-} ObjectSystemView;
 extern "C" igMetaField *g_igMetaObjectNameField;
 extern "C" int igObjectSystem_FindMetaByName(ObjectSystemView *objectSystem, const char *className);
 extern "C" void igObjectSystem_AddRegistrationCallback(ObjectSystemView *arg0, int (*arg1)(int));

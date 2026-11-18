@@ -24,7 +24,7 @@ int beAction2Info_GetVTable(void) {
     animationDatabaseSlot = &obj._animationDatabase;
     *animationDatabaseSlot = 0;
     obj._dataList_ = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beAction2Info_vtable[0];
     igSmartPointer_beAction2DataList_Destruct((igSmartPointer<igObject> *)(&obj._dataList_), -1);
     igSmartPointer_igAnimationDatabase_Destruct((igSmartPointer<igObject> *)animationDatabaseSlot, -1);

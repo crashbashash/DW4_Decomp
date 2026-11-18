@@ -24,7 +24,7 @@ int beFontInfoData_GetVTable(void) {
     obj._vtable = (int)&g_beFontInfoData_vtable[0];
     obj._attrSet = 0;
     obj._kind = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beFontInfoData_vtable[0];
     igStringRef_Destruct((igStringRef *)&obj._kind, -1);
     igSmartPointer_igAttrSet_Destruct((igSmartPointer<igObject> *)&obj._attrSet, -1);

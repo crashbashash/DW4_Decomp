@@ -27,7 +27,7 @@ int igMousePosObserver_GetVTable(void) {
     p0 = &o->_intersectTraversal; p1 = &o->_ray; p2 = &o->_hitPath;
     *p0 = 0; *p1 = 0; *p2 = 0;
     igMatrix44f_SetIdentity(o->_inverseProjectionMatrix);
-    t = *(int *)((char *)o + *(int *)((char *)(g_objectSystem) + 916));
+    t = *(int *)((char *)o + g_objectSystem->vtableProbeOffset);
     o->_vtable = (int)&D_00541090[0];
     if (p2 != 0) {
         a = *(igObject **)p2;

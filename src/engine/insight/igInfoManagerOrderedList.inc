@@ -25,7 +25,7 @@ int igInfoManagerOrderedList_GetVTable(void) {
     o.w[3] = 0;
     o.w[4] = 0;
     o.vt = &g_igInfoManagerOrderedList_vtable[0];
-    r = *(int *)((char *)&o + *(int *)((char *)(g_objectSystem) + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = &g_igInfoManagerOrderedList_vtable[0];
     FUN_00233610((int **)&o, 0);
     return r;

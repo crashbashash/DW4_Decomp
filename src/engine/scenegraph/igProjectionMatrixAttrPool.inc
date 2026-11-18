@@ -20,7 +20,7 @@ int igProjectionMatrixAttrPool_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igProjectionMatrixAttrPool_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_0019a200(void)

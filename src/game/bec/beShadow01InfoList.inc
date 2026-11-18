@@ -20,7 +20,7 @@ int beShadow01InfoList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beShadow01InfoList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void beShadow01InfoList_EnsureRegistered(void)

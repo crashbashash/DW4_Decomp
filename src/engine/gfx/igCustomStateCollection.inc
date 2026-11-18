@@ -22,7 +22,7 @@ int igCustomStateCollection_GetVTable(void) {
     igObject_InitHeader((igObject *)&o);
     o.vt = g_igCustomStateCollection_vtable;
     *(int *)((char *)&o + 20) = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = g_igCustomStateCollection_vtable;
     if (&*(int *)((char *)&o + 20) != 0) { p = *(int **)((char *)&o + 20); if (p != 0) { a1 = p - 2; t = p[-1] - 1; p[-1] = t; if (t == 0) StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1); } }
     return r;

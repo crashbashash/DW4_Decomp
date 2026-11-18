@@ -19,7 +19,7 @@ int igViewerStatisticsManager_GetVTable(void) {
     obj.w7 = 0;
     obj.w9 = 0;
     obj.w10 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem)) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igViewerStatisticsManager_vtable[0];
     igSmartPointer_igMetaFieldList_Destruct((igSmartPointer<igObject> *)&obj.w10, -1);
     igSmartPointer_igMetaObjectList_Destruct((igSmartPointer<igObject> *)&obj.w9, -1);

@@ -20,7 +20,7 @@ int igEnbayaTransformSource_GetVTable(void) {
     ps = &o.ref;
     o.vt = &g_igEnbayaTransformSource_vtable[0];
     *ps = 0;
-    temp_s0 = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    temp_s0 = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = &g_igEnbayaTransformSource_vtable[0];
     if (ps != 0) {
         temp_a0 = *ps;

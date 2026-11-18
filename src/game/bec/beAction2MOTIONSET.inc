@@ -29,7 +29,7 @@ int beAction2MOTIONSET_GetVTable(void) {
     *hokanModeSlot = 0;
     loopModeSlot = (char **)&obj._loopMode;
     *loopModeSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beAction2MOTIONSET_vtable[0];
     igStringRef_Release(loopModeSlot);
     igStringRef_Release(hokanModeSlot);

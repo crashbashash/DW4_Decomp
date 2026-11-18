@@ -19,7 +19,7 @@ int igVec2fList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igVec2fList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_0018a3a0(void)

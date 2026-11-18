@@ -31,7 +31,7 @@ int ParticleTimer_GetVTable(void) {
     obj._attributes = 0;
     obj._renderList = 0;
     obj._vtable = (int)&g_ParticleTimer_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_ParticleTimer_vtable[0];
     igGeometry_Destroy((igGeometry *)&obj, 0);
     return vtable;

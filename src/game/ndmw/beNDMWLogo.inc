@@ -40,7 +40,7 @@ int beNDMWLogo_GetVTable(void) {
     obj._infoList = 0;
     *(int **)&obj._vtable = &g_beNDMWLogo_vtable[0];
     obj._mcUtilCtrl = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWLogo_vtable[0];
     igSmartPointer_beNDMWMcUtilCtrl_Destruct((igSmartPointer<igObject> *)&obj._mcUtilCtrl, -1);
     beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, 0);

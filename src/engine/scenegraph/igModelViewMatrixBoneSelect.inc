@@ -24,7 +24,7 @@ int igModelViewMatrixBoneSelect_GetVTable(void) {
     u.w[4] = 0;
     u.w[7] = 0;
     u.w[0] = (int)(&g_igModelViewMatrixBoneSelect_vtable[0]);
-    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igModelViewMatrixBoneSelect_vtable[0]);
     igGroup_Destroy((igGroup *)&u.w[0], 0);
     return temp_s0;

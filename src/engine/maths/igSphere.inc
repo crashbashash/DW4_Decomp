@@ -26,7 +26,7 @@ int igSphere_GetVTable(void) {
     union U2 u;
     igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igSphere_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
 void FUN_00187f30(void)

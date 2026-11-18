@@ -25,7 +25,7 @@ int beTimerData_GetVTable(void) {
     obj._vtable = (int)&g_beTimerData_vtable[0];
     *resetConditionSlot = 0;
     *callLuaFileSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beTimerData_vtable[0];
     igStringRef_Release(callLuaFileSlot);
     igStringRef_Release(resetConditionSlot);

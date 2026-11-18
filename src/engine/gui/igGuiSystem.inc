@@ -33,7 +33,7 @@ int igGuiSystem_GetVTable(void) {
     obj.w5 = 0;
     obj.w6 = 0;
     obj.w7 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igGuiSystem_vtable[0];
     igSmartPointer_igTransform_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
     FUN_0044e1e0((O_44e1e0 *)&obj.w6, -1);

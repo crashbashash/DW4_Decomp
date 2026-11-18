@@ -12,7 +12,7 @@ igMetaObject *beCopyModelCtrl2_GetMetaObject(void)
 
 int beCopyModelCtrl2_GetVTable(void) {
     CopyModelCtrl2View copy;
-    return *(int *)((char *)&copy + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&copy + g_objectSystem->vtableProbeOffset);
 }
 
 void beCopyModelCtrl2_EnsureRegistered(void)

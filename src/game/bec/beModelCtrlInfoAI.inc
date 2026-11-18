@@ -34,7 +34,7 @@ int beModelCtrlInfoAI_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlInfoAI_vtable[0];
     seqNameSlot = (char **)&obj._seqName;
     *seqNameSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beModelCtrlInfoAI_vtable[0];
     igStringRef_Release(seqNameSlot);
     return vtable;

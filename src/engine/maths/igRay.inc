@@ -27,7 +27,7 @@ int igRay_GetVTable(void) {
     struct Obj7 obj;
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igRay_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igRay_EnsureRegistered(void)

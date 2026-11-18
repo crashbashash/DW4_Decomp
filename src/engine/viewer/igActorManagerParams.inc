@@ -29,7 +29,7 @@ int igActorManagerParams_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&g_igModel_vtable[0];
     u.vt = (int)&g_igActorManagerParams_vtable[0];
-    s0 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem)) + 916)];
+    s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igModel_vtable[0];
     if (ps != 0) {
         v1 = *(int **)ps;

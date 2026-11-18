@@ -22,7 +22,7 @@ int igViewerSceneInfoManagerController_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igViewerSceneInfoManagerController_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem)) + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_0045a9a0(void)

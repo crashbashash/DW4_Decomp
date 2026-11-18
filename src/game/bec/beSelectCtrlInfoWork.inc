@@ -37,7 +37,7 @@ int beSelectCtrlInfoWork_GetVTable(void) {
     obj._vtable = (int)&g_beSelectCtrlInfoWork_vtable[0];
     *svSeqNameSlot = 0;
     *decideListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beSelectCtrlInfoWork_vtable[0];
     igObjectRef_Release(decideListSlot);
     igStringRef_Release(svSeqNameSlot);

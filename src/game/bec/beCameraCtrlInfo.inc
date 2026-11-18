@@ -19,7 +19,7 @@ int beCameraCtrlInfo_GetVTable(void) {
     obj._ramList = 0;
     obj._vtable = (int)&g_beCameraCtrlInfo_vtable[0];
     obj._data = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beCameraCtrlInfo_vtable[0];
     igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj._data, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);

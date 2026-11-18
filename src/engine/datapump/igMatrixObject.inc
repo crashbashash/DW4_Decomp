@@ -19,7 +19,7 @@ int igMatrixObject_GetVTable(void) {
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igMatrixObject_vtable[0];
     igMatrix44f_SetIdentity((float *)(obj.pad + 4));
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_001e4d30(void)

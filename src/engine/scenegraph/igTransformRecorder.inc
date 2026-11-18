@@ -20,7 +20,7 @@ igMetaObject *igTransformRecorder_GetMetaObject(void)
 int igTransformRecorder_GetVTable(void) { struct Obj_195860 o; int *p = (int *)&o; int t;
  igObject_InitHeader((igObject *)(struct Obj_195860 *)p); o.vt = &g_igTransformRecorder_vtable[0]; o.f8 = 0; o.f12 = 0; o.f16 = 0; o.f28 = 0;
  igMatrix44f_SetIdentity((float *)o.sub1); igMatrix44f_SetIdentity((float *)(p + 24));
- t = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+ t = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
  o.vt = &g_igTransformRecorder_vtable[0]; igGroup_Destroy((igGroup *)((struct Obj_195860 *)p), 0); return t; }
 
 igSmartPointer<igObject> *igSmartPointer_igNodeList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {

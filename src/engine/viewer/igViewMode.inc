@@ -21,7 +21,7 @@ int igViewMode_GetVTable(void) {
     igObject_InitHeader((igObject *)&o);
     o.vt = g_igViewMode_vtable;
     igMatrix44f_SetIdentity((float *)&o.f[2]);
-    return *(int *)((char *)&o + *(int *)(((char *)g_objectSystem) + 916));
+    return *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_0045d000(void)

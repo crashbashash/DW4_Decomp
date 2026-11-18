@@ -13,7 +13,7 @@ int beDataBaseList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beDataBaseList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void beDataBaseList_EnsureRegistered(void)

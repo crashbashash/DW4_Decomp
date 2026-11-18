@@ -18,7 +18,7 @@ int igVisualContextList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&o);
     o.vt = &g_igVisualContextList_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_00149f70(void)

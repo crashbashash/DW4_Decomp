@@ -28,7 +28,7 @@ int igEnbayaAnimationState_GetVTable(void) {
     pB8 = &u.b[120];
     *(int *)pB8 = 0;
     u.vt = (int)&g_igEnbayaAnimationState_vtable[0];
-    r = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    r = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igAnimationState_vtable[0];
     if (pB8 != 0) {
         v1 = *(int **)pB8;

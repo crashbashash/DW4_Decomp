@@ -28,7 +28,7 @@ int igBlendMatrixPaletteAttr_GetVTable(void) {
     union U_139a70 u;
     igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igBlendMatrixPaletteAttr_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
 void FUN_00139ab0(void)

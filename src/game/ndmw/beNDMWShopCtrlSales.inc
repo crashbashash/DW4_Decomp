@@ -30,7 +30,7 @@ int beNDMWShopCtrlSales_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWShopCtrlSales_vtable[0];
     obj._salesItemList = 0;
     obj._decideList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWShopCtrlSales_vtable[0];
     igSmartPointer_igBoolList_Destruct((igSmartPointer<igObject> *)&obj._decideList, -1);
     igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._salesItemList, -1);

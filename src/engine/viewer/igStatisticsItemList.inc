@@ -20,7 +20,7 @@ int igStatisticsItemList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igStatisticsItemList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem)) + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_00458bc0(void)

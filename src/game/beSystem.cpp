@@ -9,13 +9,6 @@
 #include <string.h>
 #include "dw4/core/igResource.h"
 
-/* Header in front of every interned string token: owning chunk, then a full 32-bit reference
- * count. */
-typedef struct StringTokenHeader {
-    int owner;
-    int refCount;
-} StringTokenHeader;
-
 extern "C" {
 
 extern int ndmw_igb[4];

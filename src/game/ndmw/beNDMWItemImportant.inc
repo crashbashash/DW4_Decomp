@@ -21,7 +21,7 @@ int beNDMWItemImportant_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_beNDMWItemImportant_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void beNDMWItemImportant_EnsureRegistered(void)

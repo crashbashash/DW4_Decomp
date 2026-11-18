@@ -25,7 +25,7 @@ int igVec4fArrayMetaField_GetVTable(void) {
 
     igMetaField_Init((igMetaField *)u.b);
     u.vt = (int)&g_igVec4fArrayMetaField_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igMetaField_vtable[0];
     ps = &u.b[12];
     if (ps != 0) {

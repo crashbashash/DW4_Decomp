@@ -23,7 +23,7 @@ int igPsx2VertexArray1_1_GetVTable(void) {
     obj.w[11] = 0;
     obj.w[12] = 0;
     obj.w[13] = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igPsx2VertexArray1_1_vtable[0];
     FUN_00152560((void **)&obj.w[13], -1);
     igSmartPointer_igPointerList_Destruct((igSmartPointer<igObject> *)&obj.w[12], -1);

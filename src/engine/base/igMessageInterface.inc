@@ -23,7 +23,7 @@ int igMessageInterface_GetVTable(void) {
     igObject_InitHeader((igObject *)&o);
     o.vt = g_igMessageInterface_vtable;
     *(int *)((char *)&o + 32) = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = g_igMessageInterface_vtable;
     if (&*(int *)((char *)&o + 32) != 0) { p = *(struct Ref **)((char *)&o + 32); if (p != 0) { p->u.w = p->u.w - 1; if (p->u.b.cnt == 0) igObject_Destroy((igObject *)p); } }
     return r;

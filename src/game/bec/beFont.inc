@@ -46,7 +46,7 @@ int beFont_GetVTable(void) {
     obj._convertData = 0;
     obj._condition00 = 0;
     obj._condition01 = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beFont_vtable[0];
     igStringRef_Destruct((igStringRef *)&obj._condition01, -1);
     igStringRef_Destruct((igStringRef *)&obj._condition00, -1);

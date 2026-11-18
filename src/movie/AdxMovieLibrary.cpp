@@ -55,18 +55,6 @@ extern "C" CallbackArray *igAdxAfsFileList_Register(void);
 extern "C" void igAdxAfsFileList_GetMetaObjectFunction(void);
 extern "C" void *igAdxAfsFile_GetMetaObject(void);
 #include "dw4/core/StringPool.h"
-/* Header stored in front of every interned string token. */
-struct StringTokenHeader { int owner; int refCount; };
-static inline void releaseString(const char *string) {
-    if (string != 0) {
-        StringTokenHeader *header = (StringTokenHeader *)string - 1;
-        int count = header->refCount - 1;
-        header->refCount = count;
-        if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)header->owner, (StringTokenHeader *)header);
-        }
-    }
-}
 extern "C" int igAdxAfsFile_GetVTable(void);
 extern "C" void igAdxAfsFile_EnsureRegistered(void);
 extern "C" CallbackArray *igAdxAfsFile_Register(void);
@@ -265,7 +253,7 @@ int igAdx_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_igAdx_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igAdx_EnsureRegistered(void)
@@ -335,7 +323,7 @@ int igAdxAfsFileList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_igAdxAfsFileList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igAdxAfsFileList_EnsureRegistered(void)
@@ -392,7 +380,7 @@ int igAdxAfsFile_GetVTable(void) {
     pathListRef = &obj._pathList;
     *pathListRef = 0;
     *(int **)&obj._vtable = &g_igAdxAfsFile_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igFileName_vtable[0];
     if (pathListRef != 0) {
         igRelease((igObject *)*pathListRef);
@@ -480,7 +468,7 @@ int igFileNameList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_igFileNameList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igFileNameList_EnsureRegistered(void)
@@ -535,7 +523,7 @@ int igFileName_GetVTable(void) {
     *(int **)&obj._vtable = &g_igFileName_vtable[0];
     pathListRef = &obj._pathList;
     *pathListRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igFileName_vtable[0];
     if (pathListRef != 0) {
         igRelease((igObject *)*pathListRef);
@@ -640,7 +628,7 @@ int igAdxFile_GetVTable(void) {
     obj._fileName = 0;
     obj._completeFilename = 0;
     *(int **)&obj._vtable = &g_igAdxFile_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igAdxFile_vtable[0];
     igFile_Destroy((igFile *)&obj, 0);
     return vtable;
@@ -804,7 +792,7 @@ int igAdxAudio_GetVTable(void) {
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_igAdxAudio_vtable[0];
     obj._filename = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igAdxAudio_vtable[0];
     if (&obj._filename != 0) {
         releaseString((const char *)obj._filename);
@@ -927,7 +915,7 @@ int igMovieCodecList_GetVTable(void) {
 
     igObject_InitHeader((igObject *)tmp);
     tmp[0] = (int)&g_igMovieCodecList_vtable[0];
-    off = *(int *)((char *)g_objectSystem + 916);
+    off = g_objectSystem->vtableProbeOffset;
     return *(int *)((char *)tmp + off);
 }
 
@@ -987,7 +975,7 @@ int igMovieCodec_GetVTable(void) {
     *nameRef = 0;
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     *(int **)&obj._vtable = &g_igMovieCodec_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     if (nameRef != 0) {
         releaseString((const char *)*nameRef);
@@ -1061,7 +1049,7 @@ int igCriMovieCodec_GetVTable(void) {
     *(int **)&obj._vtable = &g_igCriMovieCodec_vtable[0];
     obj._visualContext = 0;
     obj._audioContext = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igCriMovieCodec_vtable[0];
     igSmartPointer_igAudioContext_Destruct((igSmartPointer<igObject> *)&obj._audioContext, (short)(-1));
     igSmartPointer_igVisualContext_Destruct((igSmartPointer<igObject> *)&obj._visualContext, -1);
@@ -1182,7 +1170,7 @@ int igCriMovieData_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_igCriMovieData_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igCriMovieData_EnsureRegistered(void)
@@ -1295,7 +1283,7 @@ int igMovieInfoList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_igMovieInfoList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igMovieInfoList_EnsureRegistered(void)
@@ -1351,7 +1339,7 @@ int igTextureBindAttrList_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_igTextureBindAttrList_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igTextureBindAttrList_EnsureRegistered(void)
@@ -1474,7 +1462,7 @@ int igMovieInfo_GetVTable(void) {
     obj._runtimeImage = 0;
     obj._runtimeTextures = 0;
     obj._userdata = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igMovieInfo_vtable[0];
     igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj._userdata, -1);
     igSmartPointer_igTextureList_Destruct((igSmartPointer<igObject> *)&obj._runtimeTextures, -1);
@@ -1726,7 +1714,7 @@ int igMovieRenderer_GetVTable(void) {
     obj._visualContext = 0;
     *(int **)&obj._vtable = &g_igMovieRenderer_vtable[0];
     obj._movieManager = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igMovieRenderer_vtable[0];
     if (&obj._movieManager != 0) {
         igRelease((igObject *)obj._movieManager);
@@ -1850,7 +1838,7 @@ int igMovieManager_GetVTable(void) {
     obj._codecList = 0;
     obj._movieRenderer = 0;
     obj._rendererList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igMovieManager_vtable[0];
     igSmartPointer_igRendererOrderedList_Destruct((igSmartPointer<igObject> *)&obj._rendererList, -1);
     igSmartPointer_igMovieRenderer_Destruct((igSmartPointer<igObject> *)&obj._movieRenderer, (short)(-1));
@@ -2010,7 +1998,7 @@ int igMoviePlugin_GetVTable(void) {
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_igMoviePlugin_vtable[0];
     obj._movieManager = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igMoviePlugin_vtable[0];
     if (&obj._movieManager != 0) {
         igRelease((igObject *)obj._movieManager);

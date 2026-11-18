@@ -22,7 +22,7 @@ int igFieldChangeView_GetVTable(void) {
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igFieldChangeView_vtable[0];
     obj.m = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igFieldChangeView_vtable[0];
     if (&obj.m != 0) {
         o = obj.m;

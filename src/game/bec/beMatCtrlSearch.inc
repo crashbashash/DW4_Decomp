@@ -29,7 +29,7 @@ int beMatCtrlSearch_GetVTable(void) {
     obj._vtable = (int)&g_beMatCtrlSearch_vtable[0];
     memberListSlot = (igObject **)&obj._memberList;
     *memberListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beMatCtrlSearch_vtable[0];
     igObjectRef_Release(memberListSlot);
     return vtable;

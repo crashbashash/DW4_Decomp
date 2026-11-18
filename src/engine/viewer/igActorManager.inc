@@ -39,7 +39,7 @@ int igActorManager_GetVTable(void) {
     obj.w11 = 0;
     obj.w12 = 0;
     obj.w13 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem)) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igActorManager_vtable[0];
     igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj.w13, -1);
     FUN_004584f0(&obj.w12, -1);

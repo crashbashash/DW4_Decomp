@@ -23,7 +23,7 @@ int beNDMWAfsStageLoad_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWAfsStageLoad_vtable[0];
     stageRef = &obj._stage;
     *stageRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWAfsStageLoad_vtable[0];
     if (stageRef != 0) {
         igRelease((igObject *)*stageRef);

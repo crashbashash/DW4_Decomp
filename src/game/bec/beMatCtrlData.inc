@@ -21,7 +21,7 @@ int beMatCtrlData_GetVTable(void) {
     obj._vtable = (int)&g_beMatCtrlData_vtable[0];
     chkBoxSlot = (igObject **)&obj._chkBox;
     *chkBoxSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beMatCtrlData_vtable[0];
     igObjectRef_Release(chkBoxSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];

@@ -22,7 +22,7 @@ int beOptInfo_GetVTable(void) {
     obj._vtable = (int)&g_beOptInfo_vtable[0];
     obj._libOpt = 0;
     obj._libAsm = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beOptInfo_vtable[0];
     igStringRef_Destruct((igStringRef *)&obj._libAsm, -1);
     igStringRef_Destruct((igStringRef *)&obj._libOpt, -1);

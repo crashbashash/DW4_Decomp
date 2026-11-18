@@ -31,7 +31,7 @@ extern "C" int igIterateGraph_GetVTable(void) {
     obj.vt = &g_igIterateGraph_vtable[0];
     obj.m12 = 0;
     obj.m16 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igIterateGraph_vtable[0];
     obj.rel16();
     obj.rel12();

@@ -10,7 +10,7 @@ int igModelViewMatrixBoneSelectListSg_GetVTable(void) {
     union U u;
     igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&DAT_0052aab0[0];
-    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
 void igModelViewMatrixBoneSelectListSg_EnsureRegistered(void)

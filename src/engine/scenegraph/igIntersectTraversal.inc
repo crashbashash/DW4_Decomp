@@ -33,7 +33,7 @@ int igIntersectTraversal_GetVTable(void) {
     obj.w[9] = 0;
     obj.w[12] = 0;
     obj.w[13] = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igIntersectTraversal_vtable[0];
     FUN_0019e3c0((void * *)&obj.w[13], -1);
     FUN_0018fa00(&obj.w[12], -1);

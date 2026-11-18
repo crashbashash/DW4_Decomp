@@ -13,7 +13,7 @@ int igFloatObject_GetVTable(void) {
     struct Obj_1e5010 obj;
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igFloatObject_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_001e5050(void)

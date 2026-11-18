@@ -32,7 +32,7 @@ int igTransformSequence1_5_GetVTable(void) {
     obj.w[15] = 0;
     obj.w[16] = 0;
     obj.w[23] = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igTransformSequence1_5_vtable[0];
     FUN_00195210((ObjectRefWord *)&obj.w[23], -1);
     igSmartPointer_igVec3fList_Destruct((igSmartPointer<igObject> *)&obj.w[16], -1);

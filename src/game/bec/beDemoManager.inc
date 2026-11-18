@@ -36,7 +36,7 @@ int beDemoManager_GetVTable(void) {
     obj._name = 0;
     obj._buildData = 0;
     obj._activeDataList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beDemoManager_vtable[0];
     igSmartPointer_beDemoManagerWorkList_Destruct((igSmartPointer<igObject> *)&obj._activeDataList, (short)(-1));
     igSmartPointer_beDemoManagerWork_Destruct((igSmartPointer<igObject> *)&obj._buildData, -1);

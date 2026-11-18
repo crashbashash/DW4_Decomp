@@ -42,7 +42,7 @@ int beModelCtrlInfoHitBody_GetVTable(void) {
     *AABoxMaxListSlot = 0;
     AABoxListSlot = (igObject **)&obj._AABoxList;
     *AABoxListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beModelCtrlInfoHitBody_vtable[0];
     igObjectRef_Release(AABoxListSlot);
     igObjectRef_Release(AABoxMaxListSlot);

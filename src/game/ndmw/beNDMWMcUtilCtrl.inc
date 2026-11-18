@@ -46,7 +46,7 @@ int beNDMWMcUtilCtrl_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWMcUtilCtrl_vtable[0];
     obj._svData = 0;
     obj._slot = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWMcUtilCtrl_vtable[0];
     if (&obj._slot != 0) {
         o = (igObject *)obj._slot;

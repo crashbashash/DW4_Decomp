@@ -28,7 +28,7 @@ int beSvPlatBaseData_GetVTable(void) {
     obj._vtable = (int)&g_beSvPlatBaseData_vtable[0];
     slotListSlot = (igObject **)&obj._slotList;
     *slotListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beSvPlatBaseData_vtable[0];
     igObjectRef_Release(slotListSlot);
     return vtable;

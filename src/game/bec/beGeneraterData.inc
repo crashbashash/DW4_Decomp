@@ -34,7 +34,7 @@ int beGeneraterData_GetVTable(void) {
     obj._fillModeStr = 0;
     obj._callLua = 0;
     obj._playerDataList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beGeneraterData_vtable[0];
     igSmartPointer_beGeneraterPlayerDataList_Destruct((igSmartPointer<igObject> *)&obj._playerDataList, (short)(-1));
     igStringRef_Destruct((igStringRef *)&obj._callLua, -1);

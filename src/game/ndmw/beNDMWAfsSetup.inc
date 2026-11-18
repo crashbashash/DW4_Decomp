@@ -35,7 +35,7 @@ int beNDMWAfsSetup_GetVTable(void) {
     obj._customMenu = 0;
     obj._subMenu = 0;
     obj._subMenuHolder = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWAfsSetup_vtable[0];
     igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&obj._subMenuHolder, -1);
     GameMain_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj._subMenu, -1);

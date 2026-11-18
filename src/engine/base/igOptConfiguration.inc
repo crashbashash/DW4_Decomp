@@ -19,7 +19,7 @@ int igOptConfiguration_GetVTable(void) {
     struct Obj_3 obj;
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igOptConfiguration_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_00225ea0(void)

@@ -17,7 +17,7 @@ int igSegment_GetVTable(void) {
     obj.w4 = 0;
     obj.w7 = 0;
     obj.vt = &g_igSegment_vtable[0];
-    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igSegment_vtable[0];
     igGroup_Destroy((igGroup *)&obj, 0);
     return t;

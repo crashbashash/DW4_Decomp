@@ -29,7 +29,7 @@ int beNDMWPanelObjectItem_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWPanelObjectItem_vtable[0];
     obj._listFolder = 0;
     obj._listColor = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWPanelObjectItem_vtable[0];
     igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._listColor, -1);
     igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj._listFolder, -1);

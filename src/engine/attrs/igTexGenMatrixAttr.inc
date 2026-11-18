@@ -31,7 +31,7 @@ int igTexGenMatrixAttr_GetVTable(void) {
     igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igTexGenMatrixAttr_vtable[0];
     igMatrix44f_SetIdentity((float *)&u.b[12]);
-    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
 void FUN_00133290(void)

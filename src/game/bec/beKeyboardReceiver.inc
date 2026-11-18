@@ -25,7 +25,7 @@ int beKeyboardReceiver_GetVTable(void) {
     obj._vtable = (int)&g_beKeyboardReceiver_vtable[0];
     keyboardSlot = (igObject **)&obj._keyboard;
     *keyboardSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beKeyboardReceiver_vtable[0];
     igObjectRef_Release(keyboardSlot);
     return vtable;

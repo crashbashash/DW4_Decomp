@@ -28,7 +28,7 @@ int beLoadIntf2ComMdlData_GetVTable(void) {
     *openSQRef = 0;
     infoNameRef = &obj._infoName;
     *infoNameRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beLoadIntf2ComMdlData_vtable[0];
     if (infoNameRef != 0) {
         releaseString((const char *)*infoNameRef);

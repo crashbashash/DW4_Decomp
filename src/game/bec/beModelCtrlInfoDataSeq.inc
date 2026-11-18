@@ -25,7 +25,7 @@ int beModelCtrlInfoDataSeq_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlInfoDataSeq_vtable[0];
     dataListSlot = (igObject **)&obj._dataList;
     *dataListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beModelCtrlInfoDataSeq_vtable[0];
     igObjectRef_Release(dataListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];

@@ -125,7 +125,7 @@ int igProjectiveShadowShader_GetVTable(void) {
     FUN_0019b7e0((int *)p388);
     p392 = (char *)&s + 232;
     FUN_0019b7e0((int *)p392);
-    r = *(int *)((char *)&s + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&s + g_objectSystem->vtableProbeOffset);
     s.vt = &g_igProjectiveShadowShader_vtable[0];
     FUN_001321b0(p392, -1);
     FUN_001321b0(p388, -1);

@@ -31,7 +31,7 @@ int beDemoManagerWork_GetVTable(void) {
     obj._vtable = (int)&g_beDemoManagerWork_vtable[0];
     keepMesListSlot = (igObject **)&obj._keepMesList;
     *keepMesListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beDemoManagerWork_vtable[0];
     igObjectRef_Release(keepMesListSlot);
     return vtable;

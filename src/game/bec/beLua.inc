@@ -34,7 +34,7 @@ int beLua_GetVTable(void) {
     obj._infoList = 0;
     obj._luaState = 0;
     obj._luaGlue = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beLua_vtable[0];
     igSmartPointer_igLuaGlue_Destruct((igSmartPointer<igObject> *)(&obj._luaGlue), -1);
     igSmartPointer_beLuaState_Destruct((igSmartPointer<igObject> *)(&obj._luaState), (short)(-1));

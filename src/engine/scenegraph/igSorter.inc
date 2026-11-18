@@ -91,7 +91,7 @@ int igSorter_GetVTable(void) {
     igSmartPointer_igIntList_Construct((int *)p268);
     p276 = &u.b[116];
     FUN_001972f0((int *)p276);
-    temp_s5 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s5 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&DAT_00528620[4];
     FUN_00197260((void **)p276, -1);
     igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)p268, -1);

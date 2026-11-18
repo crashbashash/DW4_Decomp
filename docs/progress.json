@@ -492,7 +492,7 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2463708,
+  "bytes": 2534512,
   "failing": {
    "addresses": {
     "bytes": 657284,
@@ -503,8 +503,8 @@
     "functions": 283
    },
    "fields": {
-    "bytes": 378340,
-    "functions": 2130
+    "bytes": 278292,
+    "functions": 1376
    },
    "idioms": {
     "bytes": 377036,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 14316,
+  "functions": 14801,
   "matched_functions": 20444
  },
  "regions": [
@@ -666,12 +666,12 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 3934,
-  "pct": 45.47,
+  "offset_casts": 3812,
+  "pct": 45.02,
   "recovered": 32793,
-  "synthetic": 6085,
-  "total": 72120,
+  "synthetic": 6076,
+  "total": 72836,
   "typeable": 258,
-  "typeable_pct": 0.36
+  "typeable_pct": 0.35
  }
 }

@@ -32,7 +32,7 @@ int beMeterCtrlOneData_GetVTable(void) {
     obj._node = 0;
     obj._hp = 0;
     obj._mHp = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beMeterCtrlOneData_vtable[0];
     igSmartPointer_beDataObjInt_Destruct((igSmartPointer<igObject> *)&obj._mHp, (short)(-1));
     igSmartPointer_beDataObjInt_Destruct((igSmartPointer<igObject> *)&obj._hp, (short)(-1));

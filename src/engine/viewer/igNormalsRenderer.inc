@@ -37,7 +37,7 @@ int igNormalsRenderer_GetVTable(void) {
     obj.w7 = 0;
     obj.w8 = 0;
     obj.w10 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem)) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igNormalsRenderer_vtable[0];
     FUN_001d6560(&obj.w10, -1);
     FUN_00136e10(&obj.w8, -1);

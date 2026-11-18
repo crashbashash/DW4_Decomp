@@ -31,7 +31,7 @@ int beNumberCtrlInfoRam_GetVTable(void) {
     numListSlot = &obj._numList;
     *numListSlot = 0;
     obj._work = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beNumberCtrlInfoRam_vtable[0];
     igSmartPointer_beNumberCtrlInfoWork_Destruct((igSmartPointer<igObject> *)(&obj._work), -1);
     igSmartPointer_beNumVerDataList_Destruct((igSmartPointer<igObject> *)numListSlot, (long long)(-1));

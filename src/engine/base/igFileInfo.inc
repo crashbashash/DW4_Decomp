@@ -30,7 +30,7 @@ int igFileInfo_GetVTable(void) {
     obj.w[3] = 0;
     obj.w[4] = 0;
     obj.w[5] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igFileInfo_vtable[0];
     FUN_00229040((R **)&obj.w[5], -1);
     FUN_00228fc0((ObjectRefWord *)&obj.w[4], -1);

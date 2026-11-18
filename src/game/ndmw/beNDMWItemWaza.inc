@@ -19,7 +19,7 @@ int beNDMWItemWaza_GetVTable(void) {
 
     igObject_InitHeader((igObject *)obj);
     obj[0] = (int)&g_beNDMWItemWaza_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)(char *)g_objectSystem + 916));
+    return *(int *)((char *)obj + g_objectSystem->vtableProbeOffset);
 }
 
 void beNDMWItemWaza_EnsureRegistered(void)

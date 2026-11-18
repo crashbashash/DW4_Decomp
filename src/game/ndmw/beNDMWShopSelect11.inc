@@ -31,7 +31,7 @@ int beNDMWShopSelect11_GetVTable(void) {
     obj._infoName = 0;
     obj._decideList = 0;
     *(int **)&obj._vtable = &g_beNDMWShopSelect11_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWShopSelect11_vtable[0];
     beNDMWWindowSelect_Destroy((beNDMWWindowSelect *)&obj, 0);
     return vtable;

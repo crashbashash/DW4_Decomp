@@ -26,7 +26,7 @@ int beShadow01Info_GetVTable(void) {
     obj._receiverNode = 0;
     obj._casterNode = 0;
     obj._projShadowShader = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beShadow01Info_vtable[0];
     igSmartPointer_igProjectiveShadowShader_Destruct((igSmartPointer<igObject> *)(&obj._projShadowShader), -1);
     igSmartPointer_igNode_Destruct((igSmartPointer<igObject> *)&obj._casterNode, -1);

@@ -47,7 +47,7 @@ int beWaterPlainInfoRam_GetVTable(void) {
     obj._dplist2VertexNO = 0;
     obj._gridLists = 0;
     obj._waterMove = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beWaterPlainInfoRam_vtable[0];
     igSmartPointer_beWaterMove_Destruct((igSmartPointer<igObject> *)&obj._waterMove, (long long)(-1));
     igSmartPointer_igFloatListList_Destruct((igSmartPointer<igObject> *)&obj._gridLists, (short)(-1));

@@ -24,7 +24,7 @@ int igActorInfo_GetVTable(void) {
     obj.w7 = 0;
     obj.w8 = 0;
     obj.w9 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igActorInfo_vtable[0];
     igSmartPointer_igAppearanceList_Destruct((igSmartPointer<igObject> *)&obj.w9, -1);
     FUN_001a7a80((void * *)&obj.w8, -1);

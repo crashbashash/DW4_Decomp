@@ -45,7 +45,7 @@ int beDataBase_GetVTable(void) {
     obj._boolData = 0;
     obj._stringOffsetList = 0;
     obj._stringData = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beDataBase_vtable[0];
     igSmartPointer_igNamedObjectList_Destruct((igSmartPointer<igObject> *)&obj._stringData, -1);
     igSmartPointer_igNamedObjectList_Destruct((igSmartPointer<igObject> *)&obj._stringOffsetList, -1);

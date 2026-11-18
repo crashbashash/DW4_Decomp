@@ -20,7 +20,7 @@ int beResetNode_GetVTable(void) {
     obj._parentList = 0;
     obj._childList = 0;
     obj._vtable = (int)&g_beResetNode_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beResetNode_vtable[0];
     igGroup_Destroy((igGroup *)&obj, 0);
     return vtable;

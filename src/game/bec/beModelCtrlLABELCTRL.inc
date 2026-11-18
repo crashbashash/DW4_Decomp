@@ -21,7 +21,7 @@ int beModelCtrlLABELCTRL_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlLABELCTRL_vtable[0];
     seqNameSlot = (char **)&obj._seqName;
     *seqNameSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beModelCtrlLABELCTRL_vtable[0];
     igStringRef_Release(seqNameSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];

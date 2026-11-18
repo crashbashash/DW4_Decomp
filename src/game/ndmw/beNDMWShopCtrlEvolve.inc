@@ -33,7 +33,7 @@ int beNDMWShopCtrlEvolve_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWShopCtrlEvolve_vtable[0];
     shinkaCtrlRef = &obj._shinkaCtrl;
     *shinkaCtrlRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWShopCtrlEvolve_vtable[0];
     igSmartPointer_beNDMWShinkaCtrl_Destruct((igSmartPointer<igObject> *)shinkaCtrlRef, -1);
     beNDMWListCtrl_Destroy((beNDMWListCtrl *)&obj, 0);

@@ -11,7 +11,7 @@ void *beTransformSync_GetMetaObject(void) {
 
 int beTransformSync_GetVTable(void) {
     TransformSyncView transform;
-    return *(int *)((char *)&transform + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&transform + g_objectSystem->vtableProbeOffset);
 }
 
 igSmartPointer<igObject> *igSmartPointer_igTransformList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {

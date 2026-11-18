@@ -28,7 +28,7 @@ int igDataPump_GetVTable(void) {
     obj.w4 = 0;
     obj.w5 = 0;
     obj.w6 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igDataPump_vtable[0];
     FUN_001c7600(&obj.w6, -1);
     igStringRef_Destruct((igStringRef *)&obj.w5, -1);

@@ -17,7 +17,7 @@ int igIsEmptyFunctionList_GetVTable(void) {
     union U3 u;
     igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igIsEmptyFunctionList_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
 void igIsEmptyFunctionList_EnsureRegistered(void)

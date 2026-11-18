@@ -25,7 +25,7 @@ int igAnimationTransitionDefinition_GetVTable(void) {
     u.vt = (int)&g_igAnimationTransitionDefinition_vtable[0];
     *(int *)p2 = 0;
     *(int *)p1 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igAnimationTransitionDefinition_vtable[0];
     if (p1 != 0) {
         t1 = *(S_ref **)p1;

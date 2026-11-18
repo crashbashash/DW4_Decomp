@@ -56,7 +56,7 @@ int igInsightCore_GetVTable(void) {
     obj.w11 = 0;
     obj.w12 = 0;
     obj.w26 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igInsightCore_vtable[0];
     FUN_00232d60((struct R **)&obj.w26, -1);
     FUN_00150a70(&obj.w12, -1);

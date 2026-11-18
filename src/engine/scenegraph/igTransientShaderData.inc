@@ -26,7 +26,7 @@ int igTransientShaderData_GetVTable(void) {
     obj.f10 = 0;
     obj.f14 = 0;
     obj.vt = (&g_igTransientShaderData_vtable[0]);
-    temp_s0 = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    temp_s0 = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = (&g_igTransientShaderData_vtable[0]);
     FUN_00194930((Obj_194930 *)&obj, 0);
     return temp_s0;

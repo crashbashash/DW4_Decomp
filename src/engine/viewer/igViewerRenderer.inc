@@ -63,7 +63,7 @@ int igViewerRenderer_GetVTable(void) {
     FUN_0045afe0((int *)&u.b[80]);
     FUN_00197350(&u.b[84]);
     FUN_0045afd0((int *)&u.b[88]);
-    r = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem)) + 916)];
+    r = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.pv = &g_igViewerRenderer_vtable[0];
     FUN_0045af50((void **)&u.b[88], -1);
     FUN_00197160(&u.b[84], -1);

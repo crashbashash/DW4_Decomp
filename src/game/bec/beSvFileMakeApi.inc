@@ -26,7 +26,7 @@ int beSvFileMakeApi_GetVTable(void) {
     obj._vtable = (int)&g_beSvFileMakeApi_vtable[0];
     obj._earlyGamedata = 0;
     obj._saveWork = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beSvFileMakeApi_vtable[0];
     igSmartPointer_beSaveMemoryObj_Destruct((igSmartPointer<igObject> *)(&obj._saveWork), (short)(-1));
     igSmartPointer_beSvPlatBaseData_Destruct((igSmartPointer<igObject> *)(&obj._earlyGamedata), (long long)(-1));

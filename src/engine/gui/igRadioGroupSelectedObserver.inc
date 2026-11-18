@@ -20,7 +20,7 @@ int igRadioGroupSelectedObserver_GetVTable(void) {
     struct O o;
     igObject_InitHeader((igObject *)&o.vt);
     o.vt = g_igRadioGroupSelectedObserver_vtable;
-    return *(int *)((char *)&o.vt + *(int *)((char *)(g_objectSystem) + 916));
+    return *(int *)((char *)&o.vt + g_objectSystem->vtableProbeOffset);
 }
 
 void igRadioGroupSelectedObserver_EnsureRegistered(void)

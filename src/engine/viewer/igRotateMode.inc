@@ -52,7 +52,7 @@ int igRotateMode_GetVTable(void) {
     u.vt = (int)&g_igViewMode_vtable[0];
     igMatrix44f_SetIdentity((float *)&u.b[12]);
     u.vt = (int)&g_igRotateMode_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)((void *)g_objectSystem) + 916)];
+    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
 void FUN_0045c680(void)

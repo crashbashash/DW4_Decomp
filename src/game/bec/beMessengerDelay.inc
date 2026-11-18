@@ -30,7 +30,7 @@ int beMessengerDelay_GetVTable(void) {
     obj._infoName = 0;
     obj._message = 0;
     obj._argData = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beMessengerDelay_vtable[0];
     igSmartPointer_beMessengerArgData_Destruct((igSmartPointer<igObject> *)&obj._argData, -1);
     igStringRef_Destruct((igStringRef *)&obj._message, -1);

@@ -28,7 +28,7 @@ int igFrustCullTraversal_GetVTable(void) {
     FUN_001a1090(&s.a);
     FUN_001510a0(s.b);
     FUN_001a1080((int *)(p + 548));
-    r = *(int *)((char *)&s + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&s + g_objectSystem->vtableProbeOffset);
     s.vt = &g_igFrustCullTraversal_vtable[0];
     FUN_001a1000((void **)&s.c, -1);
     igSmartPointer_igAABox_Destruct((igSmartPointer<igObject> *)&s.a, -1);

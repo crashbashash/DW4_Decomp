@@ -42,7 +42,7 @@ int beSvDeliver_GetVTable(void) {
     obj._formatList = 0;
     obj._totalSizeList = 0;
     obj._platformData = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beSvDeliver_vtable[0];
     igSmartPointer_beSvPlatBaseData_Destruct((igSmartPointer<igObject> *)(&obj._platformData), (long long)(-1));
     igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._totalSizeList, -1);

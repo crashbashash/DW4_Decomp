@@ -19,7 +19,7 @@ int igColorChanger_GetVTable(void) {
     struct Obj_452270 obj;
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igColorChanger_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igColorChanger_RunStaticInit(void)

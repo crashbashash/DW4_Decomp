@@ -19,7 +19,7 @@ int igGeometryList_GetVTable(void) {
     union U u;
     igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igGeometryList_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
 void igGeometryList_EnsureRegistered(void)

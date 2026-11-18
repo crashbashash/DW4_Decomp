@@ -23,7 +23,7 @@ int igMessenger_GetVTable(void) {
     igObject_InitHeader((igObject *)&o);
     o.vt = g_igMessenger_vtable;
     o.ref = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = g_igMessenger_vtable;
     if (&o.ref != 0) {
         p = o.ref;

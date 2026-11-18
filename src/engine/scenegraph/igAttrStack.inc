@@ -31,7 +31,7 @@ int igAttrStack_GetVTable(void) {
     q5 = &u.p[5];
     u.w[0] = (int)(&g_igAttrStack_vtable[0]);
     *q5 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igAttrStack_vtable[0]);
     if (q5 != 0) {
         temp_a0 = *q5;

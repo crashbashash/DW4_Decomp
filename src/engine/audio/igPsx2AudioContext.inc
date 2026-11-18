@@ -38,7 +38,7 @@ int igPsx2AudioContext_GetVTable(void) {
     *(int *)&u.b[16] = 0;
     *(int *)&u.b[20] = 0;
     *(int *)&u.b[48] = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
+    t = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igPsx2AudioContext_vtable[0];
     FUN_00143350((void **)&u.b[48], -1);
     FUN_00143350((void **)&u.b[20], -1);

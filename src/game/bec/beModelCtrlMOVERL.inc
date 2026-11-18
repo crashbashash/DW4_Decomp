@@ -25,7 +25,7 @@ int beModelCtrlMOVERL_GetVTable(void) {
     *modelNameSlot = 0;
     boneNameSlot = (char **)&obj._boneName;
     *boneNameSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beModelCtrlMOVERL_vtable[0];
     igStringRef_Release(boneNameSlot);
     igStringRef_Release(modelNameSlot);

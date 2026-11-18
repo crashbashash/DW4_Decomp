@@ -42,7 +42,7 @@ int beGeneraterInfoWork_GetVTable(void) {
     obj._vtable = (int)&g_beGeneraterInfoWork_vtable[0];
     *enemyRamListSlot = 0;
     *geneEnemyNameSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beGeneraterInfoWork_vtable[0];
     igStringRef_Release(geneEnemyNameSlot);
     igObjectRef_Release(enemyRamListSlot);

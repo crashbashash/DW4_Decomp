@@ -29,7 +29,7 @@ int igDataPumpInfo_GetVTable(void) {
     obj.r1 = 0;
     obj.vt = &g_igDataPumpInfo_vtable[0];
     obj.r4 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igDataPumpInfo_vtable[0];
     obj.rel4();
     obj.vt = &g_igNamedObject_vtable[0];

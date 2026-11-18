@@ -17,7 +17,7 @@ int igFogAttr_GetVTable(void) {
     struct Obj_137df0 obj;
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igFogAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igFogAttr_EnsureRegistered(void)

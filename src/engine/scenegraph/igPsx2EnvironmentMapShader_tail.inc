@@ -25,7 +25,7 @@ int igPsx2EnvironmentMapShader_GetVTable(void) {
     FUN_0019ac20((int *)p1);
     p2 = &u.b[120];
     FUN_001ab480((int *)p2);
-    temp_s2 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s2 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = &g_igPsx2EnvironmentMapShader_vtable[0];
     FUN_001ab400((ObjectRefWord *)p2, -1);
     FUN_0019aa90((void * *)p1, -1);

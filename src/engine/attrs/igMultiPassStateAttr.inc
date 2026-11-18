@@ -25,7 +25,7 @@ int igMultiPassStateAttr_GetVTable(void) {
     struct O_135270 o;
     igObject_InitHeader((igObject *)&o.vt);
     o.vt = g_igMultiPassStateAttr_vtable;
-    return *(int *)((char *)&o.vt + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&o.vt + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_001352b0(void)

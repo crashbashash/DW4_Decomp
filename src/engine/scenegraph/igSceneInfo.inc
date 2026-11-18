@@ -37,7 +37,7 @@ int igSceneInfo_GetVTable(void) {
     obj.w6 = 0;
     obj.w7 = 0;
     obj.w15 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igSceneInfo_vtable[0];
     igSmartPointer_igNodeList_Destruct((igSmartPointer<igObject> *)&obj.w15, -1);
     FUN_0019b1f0((void * *)&obj.w7, -1);

@@ -20,7 +20,7 @@ int beLuaInfo_GetVTable(void) {
     obj._ramList = 0;
     obj._vtable = (int)&g_beLuaInfo_vtable[0];
     obj._dataList_ = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beLuaInfo_vtable[0];
     igSmartPointer_beLuaDataList_Destruct((igSmartPointer<igObject> *)&obj._dataList_, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, (short)0);

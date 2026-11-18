@@ -26,7 +26,7 @@ int igQuaternionfList_GetVTable(void) {
     int off;
     igObject_InitHeader((igObject *)&tmp[0]);
     tmp[0] = (int)&g_igQuaternionfList_vtable[0];
-    off = *(int *)((char *)g_objectSystem + 916);
+    off = g_objectSystem->vtableProbeOffset;
     return *(int *)((char *)tmp + off);
 }
 

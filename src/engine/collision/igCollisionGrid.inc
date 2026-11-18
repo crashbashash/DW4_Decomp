@@ -51,7 +51,7 @@ int igCollisionGrid_GetVTable(void) {
     *(int *)&u.b[48] = 0;
     *(int *)&u.b[52] = 0;
     *(int *)&u.b[56] = 0;
-    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
+    r = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igCollisionGrid_vtable[0];
     igSmartPointer_igAABox_Destruct((igSmartPointer<igObject> *)&u.b[56], -1);
     FUN_0023a2c0((void **)&u.b[52], -1);

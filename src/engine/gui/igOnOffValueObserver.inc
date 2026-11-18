@@ -13,7 +13,7 @@ int igOnOffValueObserver_GetVTable(void) {
     struct Obj_44ca40 obj;
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igOnOffValueObserver_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igOnOffValueObserver_EnsureRegistered(void)

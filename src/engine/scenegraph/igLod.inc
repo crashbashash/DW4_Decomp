@@ -31,7 +31,7 @@ int igLod_GetVTable(void) {
     p17 = &o.f[8];
     *p17 = 0;
     o.f[15] = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = &g_igLod_vtable[0];
     igSmartPointer_igFloatList_Destruct((igSmartPointer<igObject> *)&o.f[15], -1);
     igSmartPointer_igNode_Destruct((igSmartPointer<igObject> *)p17, -1);

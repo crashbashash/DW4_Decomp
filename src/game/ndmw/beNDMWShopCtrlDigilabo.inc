@@ -36,7 +36,7 @@ int beNDMWShopCtrlDigilabo_GetVTable(void) {
     obj._playerNoList = 0;
     obj._digimonNoList = 0;
     obj._wpuNoListList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWShopCtrlDigilabo_vtable[0];
     igSmartPointer_igIntListList_Destruct((igSmartPointer<igObject> *)&obj._wpuNoListList, -1);
     igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj._digimonNoList, -1);

@@ -33,7 +33,7 @@ int igVertexArray2_GetVTable(void) {
     obj.w[2] = 0;
     obj.w[3] = 0;
     obj.w[4] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igVertexArray2_vtable[0];
     FUN_0014aaf0((ObjectRefWord *)&obj.w[4], -1);
     igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj.w[3], -1);

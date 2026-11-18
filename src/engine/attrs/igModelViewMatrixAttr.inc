@@ -26,7 +26,7 @@ int igModelViewMatrixAttr_GetVTable(void) {
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igModelViewMatrixAttr_vtable[0];
     igMatrix44f_SetIdentity((float *)&obj.pad[8]);
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igModelViewMatrixAttr_EnsureRegistered(void)

@@ -5,8 +5,6 @@
 /* igStringRef: a counted reference to a string interned in the shared pool, with the token header
  * the pool keeps in front of each string. */
 
-/* Header stored in front of every interned string token. */
-struct StringTokenHeader { int owner; int refCount; };
 static inline void retainString(const char *string) {
     if (string != 0) {
         StringTokenHeader *header = (StringTokenHeader *)string - 1;

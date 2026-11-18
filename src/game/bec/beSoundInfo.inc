@@ -26,7 +26,7 @@ int beSoundInfo_GetVTable(void) {
     fnameListSlot = (char *)&obj._fnameList;
     *(int *)fnameListSlot = 0;
     obj._dataType = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beSoundInfo_vtable[0];
     igStringRef_Destruct((igStringRef *)&obj._dataType, -1);
     igSmartPointer_igNamedObjectList_Destruct((igSmartPointer<igObject> *)fnameListSlot, -1);

@@ -29,7 +29,7 @@ int beCriSndf_GetVTable(void) {
 
     igObject_InitHeader(&obj);
     obj._vtable = (int)&g_beCriSndf_vtable[0];
-    off = *(int *)((char *)g_objectSystem + 916);
+    off = g_objectSystem->vtableProbeOffset;
     return *(int *)((char *)&obj + off);
 }
 

@@ -24,7 +24,7 @@ done:
 
 int beModelCtrlInfoRideOn4_GetVTable(void) {
     RideOn4View info;
-    return *(int *)((char *)&info + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&info + g_objectSystem->vtableProbeOffset);
 }
 
 void beModelCtrlInfoRideOn4_EnsureRegistered(void)

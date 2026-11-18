@@ -49,7 +49,7 @@ int igTextureCubeAttr_GetVTable(void) {
     o.f[15] = 0;
     /* the element constructor and destructor in the runtime's ConstructorDestructor form */
     __construct_array(&o.f[17], (ConstructorDestructor)&FUN_00132410, (ConstructorDestructor)&igSmartPointer_igImage_Destruct, 4, 6);
-    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = &g_igTextureCubeAttr_vtable[0];
     __destroy_arr(&o.f[17], (ConstructorDestructor)&igSmartPointer_igImage_Destruct, 4, 6);
     FUN_00132230((S_132230 *)&o, 0);

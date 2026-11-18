@@ -20,7 +20,7 @@ int igVertexBlendMatrixAttr_GetVTable(void) {
     igObject_InitHeader((igObject *)u.b);
     u.w[0] = (int)(&g_igVertexBlendMatrixAttr_vtable[0]);
     igMatrix44f_SetIdentity((float *)&u.w[3]);
-    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
 void FUN_00130cf0(void)

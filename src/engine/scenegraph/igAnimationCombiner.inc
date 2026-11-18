@@ -32,7 +32,7 @@ int igAnimationCombiner_GetVTable(void) {
     obj.w12 = 0;
     obj.w13 = 0;
     obj.w14 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igAnimationCombiner_vtable[0];
     FUN_001a8780((struct R * *)&obj.w14, -1);
     igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)&obj.w13, -1);

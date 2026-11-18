@@ -36,7 +36,7 @@ int beNDMWShinkaCtrl_GetVTable(void) {
     *dBShinkaRef = 0;
     listRef = &obj._list;
     *listRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWShinkaCtrl_vtable[0];
     if (listRef != 0) {
         igRelease((igObject *)*listRef);

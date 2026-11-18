@@ -31,7 +31,7 @@ int beTextureCtrl_GetVTable(void) {
     obj._infoList = 0;
     obj._vtable = (int)&g_beTextureCtrl_vtable[0];
     obj._work = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beTextureCtrl_vtable[0];
     igSmartPointer_beTextureCtrlWork_Destruct((igSmartPointer<igObject> *)&obj._work, (short)(-1));
     beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, (short)0);

@@ -30,7 +30,7 @@ igMetaObject *igActor_GetMetaObject(void)
 
 int igActor_GetVTable(void) {
     igActorView actor;
-    return *(int *)((char *)&actor + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&actor + g_objectSystem->vtableProbeOffset);
 }
 
 void **FUN_001aa8d0(struct Ref **self, short flag) {

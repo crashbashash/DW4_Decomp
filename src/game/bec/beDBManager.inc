@@ -33,7 +33,7 @@ int beDBManager_GetVTable(void) {
     infoListSlot = (igObject **)&obj._infoList;
     *infoListSlot = 0;
     obj._vtable = (int)&g_beDBManager_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beBaseInfoManager_vtable[0];
     igObjectRef_Release(infoListSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];

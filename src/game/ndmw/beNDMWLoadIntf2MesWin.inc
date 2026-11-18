@@ -52,7 +52,7 @@ int beNDMWLoadIntf2MesWin_GetVTable(void) {
     *nameRef = 0;
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     *(int **)&obj._vtable = &g_beNDMWLoadIntf2MesWin_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     if (nameRef != 0) {
         releaseString((const char *)*nameRef);

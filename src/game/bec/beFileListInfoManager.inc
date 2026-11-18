@@ -44,7 +44,7 @@ int beFileListInfoManager_GetVTable(void) {
     obj._dirList = 0;
     obj._readInfoList = 0;
     obj._importantInfoList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beFileListInfoManager_vtable[0];
     igSmartPointer_igInfoList_Destruct((igSmartPointer<igObject> *)&obj._importantInfoList, -1);
     igSmartPointer_igInfoList_Destruct((igSmartPointer<igObject> *)&obj._readInfoList, -1);

@@ -37,7 +37,7 @@ int beNDMWLoadIntf2DegiStateCtrl_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWLoadIntf2DegiStateCtrl_vtable[0];
     statDataListRef = &obj._statDataList;
     *statDataListRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWLoadIntf2DegiStateCtrl_vtable[0];
     if (statDataListRef != 0) {
         igRelease((igObject *)*statDataListRef);

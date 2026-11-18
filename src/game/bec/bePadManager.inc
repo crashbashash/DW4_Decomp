@@ -35,7 +35,7 @@ int bePadManager_GetVTable(void) {
     obj._system = 0;
     obj._padList = 0;
     obj._kbReceiver = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_bePadManager_vtable[0];
     igSmartPointer_beKeyboardReceiver_Destruct((igSmartPointer<igObject> *)&obj._kbReceiver, (short)(-1));
     igSmartPointer_bePadDataList_Destruct((igSmartPointer<igObject> *)&obj._padList, -1);

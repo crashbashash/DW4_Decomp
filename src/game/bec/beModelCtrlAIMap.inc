@@ -31,7 +31,7 @@ int beModelCtrlAIMap_GetVTable(void) {
     obj._zoneD = 0;
     obj._targetType = 0;
     obj._targetMode = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beModelCtrlAIMap_vtable[0];
     igStringRef_Destruct((igStringRef *)&obj._targetMode, -1);
     igStringRef_Destruct((igStringRef *)&obj._targetType, -1);

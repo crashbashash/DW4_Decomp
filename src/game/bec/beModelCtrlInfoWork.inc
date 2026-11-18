@@ -72,7 +72,7 @@ void *beModelCtrlInfoWork_GetMetaObject(void) {
 
 int beModelCtrlInfoWork_GetVTable(void) {
     ModelCtrlInfoWorkView work;
-    return *(int *)((char *)&work + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&work + g_objectSystem->vtableProbeOffset);
 }
 
 void *beModelCtrlInfoWork_Destroy(beModelCtrlInfoWork *self, long long delete_storage) {

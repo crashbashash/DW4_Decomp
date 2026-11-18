@@ -46,7 +46,7 @@ int igDefaultAspectElement_GetVTable(void) {
     *q48 = 0;
     *q4c = 0;
     *q50 = 0;
-    t = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
+    t = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igDefaultAspectElement_vtable[0]);
     if (q50 != 0) {
         a = (struct Rc *)*q50;

@@ -35,7 +35,7 @@ void *beCameraCtrl_GetMetaObject(void) {
 
 int beCameraCtrl_GetVTable(void) {
     CameraCtrlView camera;
-    return *(int *)((char *)&camera + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&camera + g_objectSystem->vtableProbeOffset);
 }
 
 igSmartPointer<igObject> *igSmartPointer_beCameraMode_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {

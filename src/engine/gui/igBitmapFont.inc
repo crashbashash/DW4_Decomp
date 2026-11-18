@@ -26,7 +26,7 @@ int igBitmapFont_GetVTable(void) {
     obj.vt = &g_igBitmapFont_vtable[0];
     obj.w7 = 0;
     obj.w8 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igBitmapFont_vtable[0];
     FUN_0019aa10(&obj.w8, -1);
     igSmartPointer_igCharMetricsList_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);

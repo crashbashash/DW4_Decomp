@@ -18,7 +18,7 @@ int igAnimationTransitionPoint_GetVTable(void) {
      igObject_InitHeader((igObject *)&o);
      o.vt = &g_igAnimationTransitionPoint_vtable[0];
      o.s = 0;
-     r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+     r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
      o.vt = &g_igAnimationTransitionPoint_vtable[0];
      if (&o.s != 0) {
          q = o.s;

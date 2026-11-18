@@ -21,7 +21,7 @@ int beHitLandModelInfo_GetVTable(void) {
     obj._nameList = 0;
     obj._switchgraph = 0;
     obj._checkSwitch = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beHitLandModelInfo_vtable[0];
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._checkSwitch, -1);
     igSmartPointer_igSwitch_Destruct((igSmartPointer<igObject> *)&obj._switchgraph, -1);

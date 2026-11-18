@@ -73,7 +73,7 @@ int igPsx2VisualContext_GetVTable(void) {
     FUN_00151090((int)(p + 1312));
     FUN_00151030(p + 1348);
     FUN_00151090((int)(p + 1432));
-    r = *(int *)((char *)&s + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&s + g_objectSystem->vtableProbeOffset);
     s.vt = &g_igPsx2VisualContext_vtable[0];
     FUN_00150fb0((ObjectRefWord *)((char *)&s + 1016), -1);
     FUN_00150fb0((ObjectRefWord *)((char *)&s + 1012), -1);

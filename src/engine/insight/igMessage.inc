@@ -11,7 +11,7 @@ igMetaObject *igMessage_GetMetaObject(void)
 int igMessage_GetVTable(void) {
     struct Obj_2316c0 o; igObject_InitHeader((igObject *)&o);
     o.vt = &g_igMessage_vtable[0];
-    return *(int *)((char *)&o + *(int *)((char *)(g_objectSystem) + 916));
+    return *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
 }
 
 void FUN_00231700(void)

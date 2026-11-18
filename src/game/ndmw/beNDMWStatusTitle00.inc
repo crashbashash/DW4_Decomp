@@ -29,7 +29,7 @@ int beNDMWStatusTitle00_GetVTable(void) {
     obj._modelCloseRamNoList = 0;
     obj._modelCloseSeqNameList = 0;
     *(int **)&obj._vtable = &g_beNDMWStatusTitle00_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWStatusTitle00_vtable[0];
     beNDMWWindowTitle_Destroy((beNDMWWindowTitle *)&obj, 0);
     return vtable;

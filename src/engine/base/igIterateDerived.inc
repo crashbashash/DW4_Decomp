@@ -25,7 +25,7 @@ int igIterateDerived_GetVTable(void) {
     f.vt = &g_igIterateDerived_vtable[0];
     pr = &f.ref;
     *pr = 0;
-    temp_s0 = *(int *)((char *)&f + *(int *)((char *)g_objectSystem + 916));
+    temp_s0 = *(int *)((char *)&f + g_objectSystem->vtableProbeOffset);
     f.vt = &g_igIterateDerived_vtable[0];
     if (pr != 0) {
         if (*pr != 0) {

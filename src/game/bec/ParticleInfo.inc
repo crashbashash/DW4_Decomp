@@ -100,7 +100,7 @@ int ParticleInfo_GetVTable(void) {
     obj._vtable = (int)&g_ParticleInfo_vtable[0];
     obj._texture = 0;
     obj._geometry = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_ParticleInfo_vtable[0];
     igSmartPointer_igGeometry_Destruct((igSmartPointer<igObject> *)&obj._geometry, -1);
     igSmartPointer_igImage_Destruct((igSmartPointer<igObject> *)&obj._texture, -1);

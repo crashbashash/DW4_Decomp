@@ -166,7 +166,7 @@ int beNDMWGameRam_GetVTable(void) {
     obj._dBEneatk = 0;
     obj._commonDataList = 0;
     obj._playerDataListList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWGameRam_vtable[0];
     igSmartPointer_beDataObjListList_Destruct((igSmartPointer<igObject> *)&obj._playerDataListList, -1);
     beNDMWStatusSubSlot_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj._commonDataList, -1);

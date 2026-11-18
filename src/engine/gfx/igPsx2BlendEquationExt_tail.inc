@@ -20,7 +20,7 @@ int igPsx2BlendEquationExt_GetVTable(void) {
     q2 = (S_ref *)&u.b[16];
     *(int *)q2 = 0;
     u.w[0] = (int)(&g_igPsx2BlendEquationExt_vtable[0]);
-    temp_s1 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s1 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&DAT_00530a10[0]);
     if (q2 != 0) {
         q2 = *(S_ref **)q2;

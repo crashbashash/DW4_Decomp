@@ -29,7 +29,7 @@ int igItemInterface_GetVTable(void) {
     obj.w9 = 0;
     obj.w10 = 0;
     obj.w11 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igItemInterface_vtable[0];
     igSmartPointer_igStringRefListList_Destruct((igSmartPointer<igObject> *)&obj.w11, -1);
     FUN_00227df0((ObjectRefWord *)&obj.w10, -1);

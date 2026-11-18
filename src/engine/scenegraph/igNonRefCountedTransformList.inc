@@ -19,7 +19,7 @@ int igNonRefCountedTransformList_GetVTable(void) {
     union U u;
     igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igNonRefCountedTransformList_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
 void FUN_00195de0(void)

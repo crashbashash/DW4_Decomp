@@ -15,7 +15,7 @@ int igPsx2UserUCodeExt_GetVTable(void) {
     obj.vt = &g_igPsx2UserUCodeExt_vtable[0];
     obj.w6 = 0;
     obj.w7 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igPsx2UserUCodeExt_vtable[0];
     FUN_00152c90((void **)&obj.w7, -1);
     FUN_00152c10((ObjectRefWord *)&obj.w6, -1);

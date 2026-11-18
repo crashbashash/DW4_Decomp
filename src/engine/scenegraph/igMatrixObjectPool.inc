@@ -19,7 +19,7 @@ int igMatrixObjectPool_GetVTable(void) {
     union U u;
     igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igMatrixObjectPool_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
 void FUN_00199db0(void)

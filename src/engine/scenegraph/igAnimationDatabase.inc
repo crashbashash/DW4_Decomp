@@ -39,7 +39,7 @@ int igAnimationDatabase_GetVTable(void) {
     p19 = &o.f[7];
     *p19 = 0;
     o.f[8] = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = &g_igAnimationDatabase_vtable[0];
     FUN_001a7a80((void * *)&o.f[8], -1);
     igSmartPointer_igAppearanceList_Destruct((igSmartPointer<igObject> *)p19, -1);

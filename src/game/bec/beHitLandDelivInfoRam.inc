@@ -29,7 +29,7 @@ int beHitLandDelivInfoRam_GetVTable(void) {
     obj._vtable = (int)&g_beHitLandDelivInfoRam_vtable[0];
     transformSlot = (igObject **)&obj._transform;
     *transformSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beHitLandDelivInfoRam_vtable[0];
     igObjectRef_Release(transformSlot);
     obj._vtable = (int)&g_beBaseInfoRam_vtable[0];

@@ -19,7 +19,7 @@ int beNDMWSaveIntfComMdlCtrl_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWSaveIntfComMdlCtrl_vtable[0];
     obj._openDataList = 0;
     obj._closeDataList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWSaveIntfComMdlCtrl_vtable[0];
     igSmartPointer_beSaveIntfComMdlDataList_Destruct((igSmartPointer<igObject> *)&obj._closeDataList, -1);
     igSmartPointer_beSaveIntfComMdlDataList_Destruct((igSmartPointer<igObject> *)&obj._openDataList, -1);

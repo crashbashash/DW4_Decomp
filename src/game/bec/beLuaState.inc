@@ -34,7 +34,7 @@ int beLuaState_GetVTable(void) {
     memPoolSlot = (igObject **)&obj._memPool;
     *memPoolSlot = 0;
     obj._vtable = (int)&g_beLuaState_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_igLuaState_vtable[0];
     igObjectRef_Release(memPoolSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];

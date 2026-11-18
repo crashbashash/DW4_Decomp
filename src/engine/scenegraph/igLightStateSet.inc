@@ -20,7 +20,7 @@ int igLightStateSet_GetVTable(void) {
     obj.w[6] = 0;
     obj.vt = &g_igLightStateSet_vtable[0];
     obj.w[7] = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igLightStateSet_vtable[0];
     FUN_0019d9e0((void * *)&obj.w[7], -1);
     igGroup_Destroy((igGroup *)&obj, 0);

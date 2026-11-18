@@ -27,7 +27,7 @@ int beSvReadMediaApi_GetVTable(void) {
     obj._outputGamedata = 0;
     obj._lodeData = 0;
     obj._loadWorkList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beSvReadMediaApi_vtable[0];
     igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)&obj._loadWorkList, -1);
     igSmartPointer_beSaveDataDeliver_Destruct((igSmartPointer<igObject> *)&obj._lodeData, (short)(-1));

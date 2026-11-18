@@ -69,7 +69,7 @@ int igGeometryAttr1_5_GetVTable(void) {
     o.f[10] = 0;
     o.vt = g_igGeometryAttr1_5_vtable;
     o.f[11] = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = g_igGeometryAttr1_5_vtable;
     FUN_00137260((void **)&o.f[11], -1);
     FUN_00137530((O_137530 *)&o, 0);

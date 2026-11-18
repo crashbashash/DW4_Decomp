@@ -28,7 +28,7 @@ int beNDMWShopCtrlXdataChip_GetVTable(void) {
     obj._modelCloseSeqNameList = 0;
     *(int **)&obj._vtable = &g_beNDMWShopCtrlXdataChip_vtable[0];
     obj._itemBaseList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWShopCtrlXdataChip_vtable[0];
     igSmartPointer_beNDMWItemBaseList_Destruct((igSmartPointer<igObject> *)&obj._itemBaseList, -1);
     beNDMWListCtrl_Destroy((beNDMWListCtrl *)&obj, 0);

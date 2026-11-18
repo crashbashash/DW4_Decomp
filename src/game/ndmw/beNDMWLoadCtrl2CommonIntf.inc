@@ -50,7 +50,7 @@ int beNDMWLoadCtrl2CommonIntf_GetVTable(void) {
     obj._gameUseData = 0;
     obj._flagWork = 0;
     obj._mcUtilCtrl = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWLoadCtrl2CommonIntf_vtable[0];
     igSmartPointer_beNDMWMcUtilCtrl_Destruct((igSmartPointer<igObject> *)&obj._mcUtilCtrl, -1);
     igSmartPointer_beNDMWLoadSavePlWorkList_Destruct((igSmartPointer<igObject> *)&obj._flagWork, -1);

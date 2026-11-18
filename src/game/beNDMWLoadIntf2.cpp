@@ -135,11 +135,6 @@ float g_interfaceKindPositions[4][3] = {
 const char *g_starterSelectModelNames[4] = { "h_agumon", "h_vmon", "h_girumon", "h_dorumon" };
 const char *g_starterPlayerModelNames[4] = { "p_agumon", "p_vmon", "p_girumon", "p_dorumon" };
 }
-/* Header in front of the text of an interned string: the owning chunk and the reference count. */
-struct StringTokenHeader {
-    int owner;
-    int refCount;
-};
 extern "C" unsigned char beNDMWLoadIntf2ComMdlCtrl__IsSequence(beNDMWSaveIntfComMdlCtrl *self, int ramNo, const char *infoName, const char *sqName);
 extern "C" void beNDMWLoadIntf2_Prepare(beNDMWLoadIntf2 *self);
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;

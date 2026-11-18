@@ -20,7 +20,7 @@ int beModelCtrlInfoRamData_GetVTable(void) {
     obj._vtable = (int)&g_beModelCtrlInfoRamData_vtable[0];
     obj._node = 0;
     obj._work = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beModelCtrlInfoRamData_vtable[0];
     igSmartPointer_beModelCtrlInfoWork_Destruct((igSmartPointer<igObject> *)&obj._work, -1);
     igSmartPointer_beModelCtrlNode2_Destruct((igSmartPointer<igObject> *)&obj._node, -1);

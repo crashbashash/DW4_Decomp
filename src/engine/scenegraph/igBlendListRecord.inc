@@ -25,7 +25,7 @@ int igBlendListRecord_GetVTable(void) {
     q2 = &u.p[2];
     u.w[0] = (int)(&g_igBlendListRecord_vtable[0]);
     *q2 = 0;
-    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igBlendListRecord_vtable[0]);
     if (q2 != 0) {
         temp_a0 = *q2;

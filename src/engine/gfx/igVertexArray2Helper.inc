@@ -22,7 +22,7 @@ int igVertexArray2Helper_GetVTable(void) {
     obj.m8 = 0;
     obj.vt = &g_igVertexArray2Helper_vtable[0];
     obj.m12 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igVertexArray2Helper_vtable[0];
     obj.rel12();
     obj.vt = &g_igNamedObject_vtable[0];

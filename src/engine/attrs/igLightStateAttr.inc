@@ -36,7 +36,7 @@ int igLightStateAttr_GetVTable(void) {
     u.vt = (int)&g_igLightStateAttr_vtable[0];
     *(int *)p0 = 0;
     *(int *)p1 = 0;
-    t = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    t = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igLightStateAttr_vtable[0];
     if (p1 != 0) {
         p1 = *(S_ref **)p1;

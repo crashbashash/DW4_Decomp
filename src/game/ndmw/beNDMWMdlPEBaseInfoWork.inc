@@ -20,7 +20,7 @@ void *beNDMWMdlPEBaseInfoWork_ResolveMetaObject(void) {
 
 int beNDMWMdlPEBaseInfoWork_GetVTable(void) {
     PEBaseInfoWorkObj work;
-    return *(int *)((char *)&work + *(int *)((char *)(char *)g_objectSystem + 916));
+    return *(int *)((char *)&work + g_objectSystem->vtableProbeOffset);
 }
 
 igSmartPointer<igObject> *igSmartPointer_igBoolList_Construct(igSmartPointer<igObject> *self)

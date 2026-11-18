@@ -61,7 +61,7 @@ int beAction2InfoWork_GetVTable(void) {
     textureStateAttrSlot = (char *)&obj._textureStateAttr;
     *(int *)textureStateAttrSlot = 0;
     obj._lightingStateAttr = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beAction2InfoWork_vtable[0];
     igSmartPointer_igLightingStateAttr_Destruct((igSmartPointer<igObject> *)&obj._lightingStateAttr, -1);
     igSmartPointer_igTextureStateAttr_Destruct(textureStateAttrSlot, -1);

@@ -29,7 +29,7 @@ int igGuiSystemRenderer_GetVTable(void) {
     obj.w4 = 0;
     obj.w5 = 0;
     obj.w6 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igGuiSystemRenderer_vtable[0];
     FUN_00197160(&obj.w6, -1);
     FUN_001d9870(&obj.w5, -1);

@@ -32,7 +32,7 @@ int beSaveUtil_GetVTable(void) {
     obj._vtable = (int)&g_beSaveUtil_vtable[0];
     obj._api = 0;
     obj._connectCheck = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beSaveUtil_vtable[0];
     igSmartPointer_beSvConnectCheck_Destruct((igSmartPointer<igObject> *)&obj._connectCheck, (short)(-1));
     igSmartPointer_beSaveApi_Destruct((igSmartPointer<igObject> *)&obj._api, -1);

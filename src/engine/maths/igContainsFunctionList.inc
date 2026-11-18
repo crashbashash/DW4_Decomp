@@ -17,7 +17,7 @@ int igContainsFunctionList_GetVTable(void) {
     int obj[8];
     igObject_InitHeader((igObject *)obj);
     obj[0] = (int)&g_igContainsFunctionList_vtable[0];
-    return *(int *)((char *)obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igContainsFunctionList_EnsureRegistered(void)

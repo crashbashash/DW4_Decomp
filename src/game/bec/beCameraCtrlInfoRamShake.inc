@@ -37,7 +37,7 @@ int beCameraCtrlInfoRamShake_GetVTable(void) {
     obj._vtable = (int)&g_beCameraCtrlInfoRamShake_vtable[0];
     moveCodeSlot = (char **)&obj._moveCode;
     *moveCodeSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beCameraCtrlInfoRamShake_vtable[0];
     igStringRef_Release(moveCodeSlot);
     obj._vtable = (int)&g_igNamedObject_vtable[0];

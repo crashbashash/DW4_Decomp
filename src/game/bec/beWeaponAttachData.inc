@@ -27,7 +27,7 @@ int beWeaponAttachData_GetVTable(void) {
     *boneSelectListSlot = 0;
     appearanceListListSlot = (igObject **)&obj._appearanceListList;
     *appearanceListListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beWeaponAttachData_vtable[0];
     igObjectRef_Release(appearanceListListSlot);
     igObjectRef_Release(boneSelectListSlot);

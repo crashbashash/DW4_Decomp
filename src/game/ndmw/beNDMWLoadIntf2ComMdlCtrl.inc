@@ -40,7 +40,7 @@ int beNDMWLoadIntf2ComMdlCtrl_GetVTable(void) {
     obj._name = 0;
     obj._openDataList = 0;
     obj._closeDataList = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWLoadIntf2ComMdlCtrl_vtable[0];
     igSmartPointer_beLoadIntf2ComMdlDataList_Destruct((igSmartPointer<igObject> *)&obj._closeDataList, -1);
     igSmartPointer_beLoadIntf2ComMdlDataList_Destruct((igSmartPointer<igObject> *)&obj._openDataList, -1);

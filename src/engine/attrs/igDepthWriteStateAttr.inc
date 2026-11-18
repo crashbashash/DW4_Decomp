@@ -20,7 +20,7 @@ int igDepthWriteStateAttr_GetVTable(void) {
     struct Obj_138340 obj;
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igDepthWriteStateAttr_vtable[0];
-    return *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
 }
 
 void igDepthWriteStateAttr_EnsureRegistered(void)

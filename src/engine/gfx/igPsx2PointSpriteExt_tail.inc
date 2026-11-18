@@ -22,7 +22,7 @@ int igPsx2PointSpriteExt_GetVTable(void) {
     igMatrix44f_SetIdentity((float *)(pa + 232));
     igMatrix44f_SetIdentity((float *)(pa + 296));
     o.vt = (int)&g_igPsx2PointSpriteExt_vtable[0];
-    temp_s0 = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    temp_s0 = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = (int)&g_igPsx2PointSpriteExt_vtable[0];
     FUN_0014c440((O *)&o, 0);
     return temp_s0;

@@ -37,7 +37,7 @@ done:
 
 int beNDMWMdlPlayerInfoWork_GetVTable(void) {
     PlayerInfoWorkView work;
-    return *(int *)((char *)&work + *(int *)((char *)(char *)g_objectSystem + 916));
+    return *(int *)((char *)&work + g_objectSystem->vtableProbeOffset);
 }
 
 beNDMWMdlPEBaseInfoWork *beNDMWMdlPEBaseInfoWork_Destroy(beNDMWMdlPEBaseInfoWork *self, short flags) {

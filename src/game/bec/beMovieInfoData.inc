@@ -21,7 +21,7 @@ int beMovieInfoData_GetVTable(void) {
     obj._parentLayer = 0;
     obj._callLuaName = 0;
     obj._sceneInfo = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beMovieInfoData_vtable[0];
     igSmartPointer_igSceneInfo_Destruct((igSmartPointer<igObject> *)&obj._sceneInfo, -1);
     igStringRef_Destruct((igStringRef *)&obj._callLuaName, -1);

@@ -49,9 +49,6 @@ SndfTables g_sfpPortSizes;
 int g_sfpTransferState[32];
 }
 
-/* The registry the object system reads its ini settings into. */
-struct ObjectSystemView { char pad[56]; igRegistry *configRegistry; };
-
 extern "C" {
 int beCopyModelCtrl2_TraverseCallback(igCommonTraversal *traversal, beCopyModelCtrl2 *node);
 int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *traversal);

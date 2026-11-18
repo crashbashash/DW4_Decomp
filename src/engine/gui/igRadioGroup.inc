@@ -38,7 +38,7 @@ int igRadioGroup_GetVTable(void) {
     *(int *)p4C = 0;
     p50 = &u.b[16];
     *(int *)p50 = 0;
-    r = *(int *)&u.b[*(int *)((char *)(g_objectSystem) + 916)];
+    r = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igRadioGroup_vtable[0];
     if (p50 != 0) {
         v1 = *(int **)p50;

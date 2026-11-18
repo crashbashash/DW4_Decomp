@@ -182,18 +182,6 @@
 #include "dw4/core/igObjectSystem.h"
 #include "dw4/core/igStringRefList.h"
 #include "dw4/viewer/igViewerSceneInfoManager.h"
-/* Header stored in front of every interned string token. */
-struct StringTokenHeader { int owner; int refCount; };
-static inline void releaseString(const char *string) {
-    if (string != 0) {
-        StringTokenHeader *header = (StringTokenHeader *)string - 1;
-        int count = header->refCount - 1;
-        header->refCount = count;
-        if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)header->owner, header);
-        }
-    }
-}
 #include "dw4/core/igObjectDispatchView.h"
 #include "dw4/core/igTDataList.h"
 /* kept local: the metafield types' Create functions have no include/dw4 home; typed as FieldFactory. */

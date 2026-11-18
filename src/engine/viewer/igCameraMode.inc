@@ -30,7 +30,7 @@ int igCameraMode_GetVTable(void) {
     *(int *)q1 = 0;
     q2 = (S_ref *)&u.b[80];
     *(int *)q2 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)(((void *)g_objectSystem)) + 916)];
+    temp_s1 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igCameraMode_vtable[0]);
     if (q2 != 0) {
         q2 = *(S_ref **)q2;

@@ -37,7 +37,7 @@ int igBoundingBoxRenderer_GetVTable(void) {
     obj.w7 = 0;
     obj.w8 = 0;
     obj.w9 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)(((void *)g_objectSystem)) + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igBoundingBoxRenderer_vtable[0];
     FUN_001d6560(&obj.w9, -1);
     FUN_001353b0(&obj.w8, -1);

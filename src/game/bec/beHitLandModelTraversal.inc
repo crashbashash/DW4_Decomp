@@ -36,7 +36,7 @@ int beHitLandModelTraversal_GetVTable(void) {
     obj._vtable = (int)&g_beHitLandModelTraversal_vtable[0];
     orderSlot = (char *)&obj._order;
     *(int *)orderSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beHitLandModelTraversal_vtable[0];
     igSmartPointer_beHitLandModelOrder_Destruct((igSmartPointer<igObject> *)orderSlot, -1);
     igIntersectTraversal_Destroy((igIntersectTraversal *)&obj, 0);

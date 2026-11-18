@@ -34,7 +34,7 @@ int beNDMWStatus_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWStatus_vtable[0];
     windowProRef = &obj._windowPro;
     *windowProRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWStatus_vtable[0];
     beNDMWWindow_igSmartPointer_beNDMWWindow_Destruct((igSmartPointer<igObject> *)windowProRef, -1);
     beBaseInfoManager_Destroy((beBaseInfoManager *)&obj, 0);

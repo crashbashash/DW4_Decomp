@@ -25,7 +25,7 @@ int beNDMWLoadCtrl2Info_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWLoadCtrl2Info_vtable[0];
     nameSelListRef = &obj._nameSelList;
     *nameSelListRef = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWLoadCtrl2Info_vtable[0];
     igSmartPointer_igObjectList_Destruct((igSmartPointer<igObject> *)nameSelListRef, -1);
     beBaseInfo_Destroy((beBaseInfo *)&obj, 0);

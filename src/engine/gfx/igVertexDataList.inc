@@ -24,7 +24,7 @@ int igVertexDataList_GetVTable(void) {
     union U_14b260 u;
     igObject_InitHeader((igObject *)u.b);
     u.vt = (int)&g_igVertexDataList_vtable[0];
-    return *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
 }
 
 void FUN_0014b2a0(void)

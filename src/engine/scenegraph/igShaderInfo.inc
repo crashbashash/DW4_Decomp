@@ -31,7 +31,7 @@ int igShaderInfo_GetVTable(void) {
     u.w[0] = (int)(&g_igShaderInfo_vtable[0]);
     q5 = (S_ref *)&u.p[5];
     *(int *)q5 = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s1 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.w[0] = (int)(&g_igShaderInfo_vtable[0]);
     if (q5 != 0) {
         q5 = *(S_ref **)q5;

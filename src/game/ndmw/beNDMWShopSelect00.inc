@@ -30,7 +30,7 @@ int beNDMWShopSelect00_GetVTable(void) {
     obj._decideList = 0;
     *(int **)&obj._vtable = &g_beNDMWShopSelect00_vtable[0];
     obj._panelName = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWShopSelect00_vtable[0];
     igStringRef_Destruct((igStringRef *)&obj._panelName, -1);
     beNDMWWindowSelect_Destroy((beNDMWWindowSelect *)&obj, 0);

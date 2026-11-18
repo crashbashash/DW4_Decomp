@@ -18,7 +18,7 @@ int beModelCtrlCTRL_GetVTable(void) {
     *nameSlot = 0;
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     obj._vtable = (int)&g_beModelCtrlCTRL_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_igNamedObject_vtable[0];
     igStringRef_Release(nameSlot);
     return vtable;

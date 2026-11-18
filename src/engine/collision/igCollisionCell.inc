@@ -27,7 +27,7 @@ int igCollisionCell_GetVTable(void) {
     obj.vt = &g_igCollisionCell_vtable[0];
     obj.r1 = 0;
     obj.r3 = 0;
-    r = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igCollisionCell_vtable[0];
     obj.rel3();
     obj.rel1();

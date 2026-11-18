@@ -29,7 +29,7 @@ int igAttrSet_GetVTable(void) {
     o.w[6] = 0;
     o.vt = &g_igAttrSet_vtable[0];
     o.s = 0;
-    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = &g_igAttrSet_vtable[0];
     igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&o.s, -1);
     igGroup_Destroy((igGroup *)&o, 0);

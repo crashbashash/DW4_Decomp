@@ -5,7 +5,8 @@
  * then the reference count; the last release hands the header back to its chunk. */
 struct StringPool;
 struct StringChunk;
-struct StringTokenHeader;
+/* Header stored in front of every interned string token. */
+struct StringTokenHeader { int owner; int refCount; };
 
 #ifdef __cplusplus
 extern "C" {

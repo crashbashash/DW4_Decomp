@@ -20,7 +20,7 @@ int beWaterMoveData_GetVTable(void) {
     obj._vtable = (int)&g_beWaterMoveData_vtable[0];
     posListSlot = (igObject **)&obj._posList;
     *posListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beWaterMoveData_vtable[0];
     igObjectRef_Release(posListSlot);
     return vtable;

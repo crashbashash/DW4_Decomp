@@ -36,7 +36,7 @@ int igCamera_GetVTable(void) {
     o.w[2] = 0;
     o.w[3] = 0;
     o.vt = &g_igCamera_vtable[0];
-    r = *(int *)((char *)&o + *(int *)((char *)g_objectSystem + 916));
+    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
     o.vt = &g_igCamera_vtable[0];
     igNode_Destroy((igNode *)&o, 0);
     return r;

@@ -27,7 +27,7 @@ int beGeneraterPlayerData_GetVTable(void) {
     *itemDataListSlot = 0;
     itemLastDataListSlot = (igObject **)&obj._itemLastDataList;
     *itemLastDataListSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beGeneraterPlayerData_vtable[0];
     igObjectRef_Release(itemLastDataListSlot);
     igObjectRef_Release(itemDataListSlot);

@@ -40,7 +40,7 @@ int igPlanarShadowShader_GetVTable(void) {
     FUN_0019c330((int *)&u.b[96]);
     FUN_0019ac10((int *)&u.b[100]);
     FUN_0019c320((int *)&u.b[104]);
-    temp_s5 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s5 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&D_005289f0[0];
     FUN_0019c2a0((ObjectRefWord *)&u.b[104], -1);
     igSmartPointer_igColorAttr_Destruct((igSmartPointer<igObject> *)&u.b[100], -1);

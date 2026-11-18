@@ -34,7 +34,7 @@ int beMatCtrlInfoWork_GetVTable(void) {
     *runFlagListSlot = 0;
     matOnPlListsSlot = (igObject **)&obj._matOnPlLists;
     *matOnPlListsSlot = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj._vtable = (int)&g_beMatCtrlInfoWork_vtable[0];
     igObjectRef_Release(matOnPlListsSlot);
     igObjectRef_Release(runFlagListSlot);

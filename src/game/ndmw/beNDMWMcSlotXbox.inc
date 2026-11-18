@@ -22,7 +22,7 @@ int beNDMWMcSlotXbox_GetVTable(void) {
     igObject_InitHeader(&obj);
     *(int **)&obj._vtable = &g_beNDMWMcSlotXbox_vtable[0];
     obj._mName = 0;
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWMcSlotXbox_vtable[0];
     if (&obj._mName != 0) {
         releaseString((const char *)obj._mName);

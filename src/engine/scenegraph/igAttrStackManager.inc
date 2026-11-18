@@ -48,7 +48,7 @@ int igAttrStackManager_GetVTable(void) {
     obj.w13 = 0;
     obj.w14 = 0;
     obj.w16 = 0;
-    t = *(int *)((char *)&obj + *(int *)((char *)g_objectSystem + 916));
+    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igAttrStackManager_vtable[0];
     FUN_001a55c0((void * *)&obj.w16, -1);
     FUN_0019ff90((struct T_19fde0 * *)&obj.w14, -1);

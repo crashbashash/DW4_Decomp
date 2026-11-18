@@ -27,7 +27,7 @@ int igSkeleton_GetVTable(void) {
     u.vt = (int)&g_igSkeleton_vtable[0];
     pr = (int *)&u.b[16];
     *pr = 0;
-    temp_s1 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s1 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igSkeleton_vtable[0];
     if (pr != 0) {
         o = (char *)*pr;

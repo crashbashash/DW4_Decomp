@@ -23,7 +23,7 @@ int igSkeletonBoneInfo_GetVTable(void) {
     *(int *)ps = 0;
     u.vt = (int)&g_igNamedObject_vtable[0];
     u.vt = (int)&g_igSkeletonBoneInfo_vtable[0];
-    temp_s0 = *(int *)&u.b[*(int *)((char *)g_objectSystem + 916)];
+    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
     u.vt = (int)&g_igNamedObject_vtable[0];
     if (ps != 0) {
         temp_v1 = *(int **)ps;

@@ -19,7 +19,7 @@ int beNDMWMdlEnemyInfoWork_GetVTable(void) {
 
     beNDMWMdlPEBaseInfoWork_Construct((beNDMWMdlPEBaseInfoWork *)&obj);
     *(int **)&obj._vtable = &g_beNDMWMdlEnemyInfoWork_vtable[0];
-    vtable = *(int *)((char *)&obj + *(int *)((char *)(g_objectSystem) + 916));
+    vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWMdlEnemyInfoWork_vtable[0];
     beNDMWMdlPEBaseInfoWork_Destroy((beNDMWMdlPEBaseInfoWork *)&obj, 0);
     return vtable;
