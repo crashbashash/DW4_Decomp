@@ -26,6 +26,9 @@ void beMessenger_InitializeMemory(beMessenger *);
 void beMessenger_ResetMemory(beMessenger *);
 void beMessengerArgData_Clear(beMessengerArgData *);
 void beMessengerDelay_Clear(beMessengerDelay *);
+/* Kept here: measured with the home igStringRef declaration (results taken by value), this unit no longer matches;
+ * it passes the result slot as the hidden first argument and emits its own StringRef destructor copy (the duplicate
+ * unit-objects allows at 0x130720). */
 void StringList_CopyRetained(void *, void *, int);
 
 

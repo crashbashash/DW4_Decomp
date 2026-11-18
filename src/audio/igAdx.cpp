@@ -62,6 +62,8 @@ public:
     ~StringRef() { if (p) { int *h = (int *)p - 2; int r = ((int *)p)[-1] - 1; ((int *)p)[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }
     operator char *() const { return p; }
 };
+/* Kept here: measured with the home igStringRef declaration, this unit no longer matches; its StringRef is the
+ * holder whose destructor copy it emits (the duplicate unit-objects allows at 0x130720). */
 extern "C" StringRef StringList_CopyRetained(int list, int index);
 struct WaitResult { int code; };
 class AdxThread {

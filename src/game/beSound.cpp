@@ -135,6 +135,8 @@ struct StringRef {
     StringRef(char *s) : p(s) { if (p != 0) ((int *)p)[-1] = ((int *)p)[-1] + 1; }
     ~StringRef() { ReleaseString(p); }
 };
+/* Kept here: measured with the home igStringRef declaration, this unit no longer matches; its StringRef is the
+ * holder whose destructor copy it emits (the duplicate unit-objects allows at 0x130720). */
 extern "C" StringRef StringList_CopyRetained(igStringRefList *list, int index);
 
 /* Drops the list's share of every object it holds and empties it. */

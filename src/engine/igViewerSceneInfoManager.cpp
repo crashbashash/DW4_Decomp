@@ -60,6 +60,8 @@ typedef struct ViewerMessage { int type; void *source; igMetaField *field; } Vie
 /* The scene-info manager's hot-key handlers, as the member-function pointers igViewerAction calls:
  * this adjustment, virtual slot (-1 for a plain function), function. */
 struct MemberFunctionPointer { int adjust; int virtualSlot; void *function; };
+/* Kept here: the definer matches only with a real C++ member-function pointer parameter, and the handlers below are
+ * C-named, so this unit cannot form that type and passes the 12-byte pointer by value as a struct. */
 igSmartPointer<igObject> igViewerGuiFactory_CreateAction(igViewerGuiFactory *factory, igObject *target, MemberFunctionPointer function);
 void igViewerSceneInfoManager_FitSelection(igViewerSceneInfoManager *self);
 void igViewerSceneInfoManager_PrintViewMatrix(igViewerSceneInfoManager *self);
