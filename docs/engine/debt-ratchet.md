@@ -91,7 +91,14 @@ definitions are the reference for the code that calls into it.
   return types. Functions are compared when both sides have C linkage (a C++ declaration with other
   parameters names another overload); data is always compared. A `(...)` or C `()` list compares the
   return type only. A symbol with no C definition, or whose C definitions disagree with each other, has
-  nothing to compare against and is not counted here.
+  nothing to compare against and is not counted here. A difference found that way is checked again as the
+  compiler reads both sides, in each unit that defines the symbol (the declaration in those of them that
+  include it, else in the units that do): the object-like macros defined before each line expanded (a
+  newlib `RARG` parameter macro), and a typedef the tree gives two meanings (libgcc's `FLO_type`, double in
+  one unit and float in another) read as that unit defines it. It counts only when the two still differ. A
+  function-like macro, one that is `#undef`-ed, and one defined under a condition the tool cannot decide
+  (anything but an include guard, `#if 0`/`#if 1` or `__cplusplus`) are not expanded. The C `()` check of
+  `decl.varargs` reads the definition the same way.
 - **`decl.header_conflicts`**: a symbol (data, or a function with C linkage) declared in two or more
   headers whose declarations disagree with each other. It needs no definition, so a symbol still in
   assembly counts.

@@ -244,11 +244,11 @@
    },
    "decl.type_conflicts": {
     "reason": null,
-    "value": 341
+    "value": 328
    },
    "decl.varargs": {
     "reason": null,
-    "value": 268
+    "value": 267
    },
    "foreign_profile.bytes": {
     "reason": null,
@@ -364,8 +364,8 @@
    "compile.functions": 0,
    "decl.header_conflicts": 237,
    "decl.local_externs": 0,
-   "decl.type_conflicts": 341,
-   "decl.varargs": 268,
+   "decl.type_conflicts": 328,
+   "decl.varargs": 267,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
    "fun_dat_refs": 757,
@@ -492,15 +492,15 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2398224,
+  "bytes": 2408020,
   "failing": {
    "addresses": {
     "bytes": 671932,
     "functions": 3822
    },
    "declarations": {
-    "bytes": 165312,
-    "functions": 352
+    "bytes": 153172,
+    "functions": 322
    },
    "fields": {
     "bytes": 408824,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 14077,
+  "functions": 14098,
   "matched_functions": 20431
  },
  "regions": [

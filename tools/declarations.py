@@ -35,7 +35,14 @@ type conflict  a declaration whose type differs from the symbol's C definition, 
                parameters is another overload); data is always compared. A `(...)` list and a C `()`
                list compare the return type only (the first is the varargs debt; the second states no
                parameters). A symbol with no C definition, or whose C definitions disagree with each
-               other, has nothing to compare against and never counts here.
+               other, has nothing to compare against and never counts here. A difference found that way
+               is checked again as the compiler reads both sides: the definition in each unit that
+               compiles it, the declaration in those of them that include it (else in each unit that does),
+               with the object-like macros defined before each expanded (not function-like ones, nor one
+               `#undef`-ed or defined under a condition other than an include guard, `#if 0`/`#if 1` or
+               `__cplusplus`) and the typedefs that unit sees, so a typedef the tree spells two ways reads
+               as each unit defines it. It counts only when they still differ. The C `()` check of
+               varargs reads the definition the same way.
 header conflict a symbol declared in two or more headers whose declarations disagree with each other
                (functions with C linkage and data; definitions not needed, so assembly symbols count).
 
@@ -188,6 +195,43 @@ def _top_equals(s):
     return -1
 
 
+def directive_lines(text):
+    """[(directive, rest) or None] for each line of `text`: the preprocessor line starting there (comments
+    blanked, continuation lines joined onto it), None for any other line or a continuation."""
+    text = _COMMENT_OR_STRING.sub(
+        lambda m: m.group(0) if m.group(0)[0] in "\"'" else "".join("\n" if c == "\n" else " " for c in m.group(0)),
+        text)
+    lines = text.split("\n")
+    out, i = [None] * len(lines), 0
+    while i < len(lines):
+        m = _DIRECTIVE.match(lines[i])
+        if m:
+            start, full = i, lines[i]
+            while full.rstrip().endswith("\\") and i + 1 < len(lines):
+                i += 1
+                full = full.rstrip()[:-1] + " " + lines[i]
+            m = _DIRECTIVE.match(full)
+            out[start] = (m.group(1), m.group(2))
+        i += 1
+    return out
+
+
+_WORD = re.compile(r"[A-Za-z_]\w*")
+
+
+def expand(text, macros):
+    """`text` with the object-like `macros` ({name: body}) replaced until none is left, or None when the
+    replacement does not settle (macros that name each other)."""
+    if not macros:
+        return text
+    for _ in range(16):
+        new = _WORD.sub(lambda m: " %s " % macros[m.group(0)] if m.group(0) in macros else m.group(0), text)
+        if new == text:
+            return text
+        text = new
+    return None
+
+
 # ---- types -------------------------------------------------------------------------------------------
 def _canon_int(words):
     unsigned = "unsigned" in words
@@ -203,11 +247,16 @@ def _canon_int(words):
 
 class Types:
     """Type normalisation with the tree's typedefs: a typedef name stands for its target when every
-    typedef of that name in the tree agrees."""
+    typedef of that name in the tree agrees. A translation unit's view (`parent` the tree's) takes the
+    typedefs that unit sees first and falls back to the tree's for names it has none of."""
 
-    def __init__(self):
+    def __init__(self, parent=None):
         self.raw = collections.defaultdict(set)
         self._resolved = {}
+        self.parent = parent
+
+    def known(self, name):
+        return name in self.raw or (self.parent is not None and self.parent.known(name))
 
     _MODE = re.compile(r"__attribute__\s*\(\(\s*(?:__)?mode(?:__)?\s*\(\s*(?:__)?(QI|HI|SI|DI|SF|DF)(?:__)?\s*\)\s*\)\)")
     _MODE_TYPE = {"QI": "char", "HI": "short", "SI": "int", "DI": "long long", "SF": "float", "DF": "double"}
@@ -250,6 +299,8 @@ class Types:
     def resolve(self, name, depth=0):
         if name in self._resolved:
             return self._resolved[name]
+        if name not in self.raw and self.parent is not None:
+            return self.parent.resolve(name, depth)
         targets = self.raw.get(name)
         out = None
         if targets and None not in targets and depth < 8:
@@ -272,7 +323,7 @@ class Types:
                 out.append(_canon_int(run))
                 run = []
             if tk not in ("const", "volatile") and (tk[0].isalpha() or tk[0] == "_"):
-                resolved = self.resolve(tk, depth) if tk in self.raw else None
+                resolved = self.resolve(tk, depth) if self.known(tk) else None
                 if resolved and resolved != tk:
                     out.append(resolved)
                     continue
@@ -327,7 +378,7 @@ class Types:
 # ---- declarations ------------------------------------------------------------------------------------
 class Decl:
     __slots__ = ("name", "kind", "ret", "params", "type", "dims", "path", "line", "is_def", "static",
-                 "explicit_c", "lang", "block", "file_c")
+                 "explicit_c", "lang", "block", "file_c", "text")
 
     def __init__(self, **kw):
         for k in self.__slots__:
@@ -498,11 +549,14 @@ def scan(text):
     return code, langs, statements(code)
 
 
-def collect_typedefs(scanned, types):
+def typedef_statements(scanned):
+    """The `typedef` statements of one scanned file (`scan`)."""
+    out = []
     for text_, _offset, is_def, _c, _ns, _body, _at in scanned[2]:
         stripped = text_.strip()
         if not is_def and re.match(r"(?:__extern_C\s+)?typedef\b", stripped):
-            types.add_typedef(re.sub(r"^__extern_C\s+", "", stripped))
+            out.append(re.sub(r"^__extern_C\s+", "", stripped))
+    return out
 
 
 def parse_file(scanned, rel, types, file_is_c):
@@ -516,7 +570,7 @@ def parse_file(scanned, rel, types, file_is_c):
         line = bisect.bisect_right(newlines, offset + lead) + 1
         lang = langs[line - 1] if langs is not None else _LANG_ANY
         for f in _parse(stmt, types, is_def, unspecified_empty=file_is_c(lang)):
-            out.append(Decl(path=rel, line=line, lang=lang, block=block,
+            out.append(Decl(path=rel, line=line, lang=lang, block=block, text=stmt,
                             **dict(f, explicit_c=f["explicit_c"] or c_block)))
 
     for text_, offset, is_def, c_block, in_ns, body, body_offset in stmts:
@@ -583,8 +637,11 @@ class Index:
                 for f in files:
                     self.unit_of[f].append(rel)
         scanned = {rel: scan(text) for rel, text in self.texts.items()}
-        for s in scanned.values():
-            collect_typedefs(s, self.types)
+        self.typedefs = {rel: typedef_statements(s) for rel, s in scanned.items()}
+        for stmts in self.typedefs.values():
+            for stmt in stmts:
+                self.types.add_typedef(stmt)
+        self._scopes, self._unit_files, self._directives = {}, {}, {}
         self.decls = {rel: parse_file(s, rel, self.types, self._file_is_c(rel)) for rel, s in scanned.items()}
         self._judge()
 
@@ -663,6 +720,7 @@ class Index:
         for u, info in self.units.items():
             for h in info["headers"]:
                 header_units[h].add(u)
+        self.header_units = header_units
         candidates, consumers = [], collections.defaultdict(set)
         for rel, decls in self.decls.items():
             if self.stock(rel):
@@ -732,19 +790,27 @@ class Index:
     def unprototyped(self, d):
         """Whether declaration `d` leaves its parameters unstated where the symbol has fixed ones: `(...)`
         unless a C definition is variadic (counted with no C definition too), or a C `()` for a function
-        whose C definition takes parameters."""
+        whose C definition takes parameters (as the units that define it read it)."""
         if d.kind != "func" or d.is_def:
             return False
         if d.bare_varargs:
             return d.name not in self.variadic
         target = self.definition.get(d.name)
-        return d.params is None and target is not None and target.kind == "func" and bool(target.params)
+        if not (d.params is None and target is not None and target.kind == "func" and bool(target.params)):
+            return False
+        return not self._agrees_as_compiled(d, target, lambda _decl, defn: defn.kind == "func" and not defn.params)
 
     def conflicts_with_definition(self, d):
-        """Whether declaration `d` states a type its symbol's C definition does not have."""
+        """Whether declaration `d` states a type its symbol's C definition does not have: read with the
+        tree's typedefs, and again, when that finds a difference, as the units that define the symbol read
+        both (their object-like macros expanded, their own meaning of a typedef the tree spells two ways)."""
         target = self.definition.get(d.name)
-        if target is None or target is d:
+        if target is None or target is d or not self._differs(d, target):
             return False
+        return not self._agrees_as_compiled(d, target, lambda decl, defn: not self._differs(decl, defn))
+
+    def _differs(self, d, target):
+        """Whether declaration `d` and definition `target`, as parsed, state different types."""
         if d.kind == "func" and target.kind == "func":
             if not self._decl_c(d):
                 return False
@@ -762,6 +828,126 @@ class Index:
         return any(a and b and a != b and re.fullmatch(r"0x[0-9a-fA-F]+|\d+", a) and
                    re.fullmatch(r"0x[0-9a-fA-F]+|\d+", b) and int(a, 0) != int(b, 0)
                    for a, b in zip(d.dims, target.dims))
+
+    # ---- a translation unit's view ----
+    def _seen_by(self, rel):
+        """The units whose compiler reads file `rel`."""
+        return sorted(self.header_units.get(rel, ()) if rel.endswith(HEADER_EXT) else self.unit_of.get(rel, ()))
+
+    def _reads(self, u, rel):
+        if u not in self._unit_files:
+            self._unit_files[u] = set(self.units[u]["files"]) | set(self.units[u]["headers"])
+        return rel in self._unit_files[u]
+
+    def _scope(self, u):
+        """Unit `u` as its compiler sees it: `types`, a view over the typedefs of every file it includes;
+        `order`, for each file it reaches, the preprocessing position of each line; `defines`, its
+        object-like macros as [(position, name, body)]; `unsure`, the names it cannot expand (function-like,
+        `#undef`, or defined under a condition this cannot decide: only include guards, `#if 0`/`#if 1` and
+        `__cplusplus` are decided)."""
+        if u in self._scopes:
+            return self._scopes[u]
+        info = self.units[u]
+        types = Types(self.types)
+        for f in info["files"] + info["headers"]:
+            for stmt in self.typedefs.get(f, ()):
+                types.add_typedef(stmt)
+        scope = dict(types=types, order={}, defines=[], unsure=set())
+        is_cxx, position = info["lang"] == _LANG_CXX, [0]
+        decided = {"zero": "dead", "one": "live", "cxx": "live" if is_cxx else "dead",
+                   "nocxx": "dead" if is_cxx else "live"}
+
+        def walk(rel, uncertain):
+            if rel in scope["order"]:
+                return
+            if rel not in self._directives:
+                self._directives[rel] = directive_lines(self.texts[rel])
+            lines = self._directives[rel]
+            order = scope["order"][rel] = []
+
+            def advance(upto):                         # number the lines up to `upto` in reading order
+                while len(order) <= upto:
+                    position[0] += 1
+                    order.append(position[0])
+
+            at = [i for i, d in enumerate(lines) if d]
+            stack = []
+            for k, i in enumerate(at):
+                advance(i)
+                word, rest = lines[i]
+                dead = "dead" in stack
+                if word in ("if", "ifdef", "ifndef"):
+                    state = "dead" if dead else decided.get(_cpp_kind(word, rest), "unknown")
+                    nxt = lines[at[k + 1]] if k + 1 < len(at) else None
+                    if (not dead and word == "ifndef" and nxt and nxt[0] == "define"
+                            and nxt[1].split()[:1] == rest.split()[:1]):
+                        state = "live"                 # an include guard
+                    stack.append(state)
+                elif word == "elif" and stack:
+                    stack[-1] = "dead" if stack[-1] == "live" else "unknown"
+                elif word == "else" and stack:
+                    stack[-1] = {"live": "dead", "dead": "live"}.get(stack[-1], "unknown")
+                elif word == "endif" and stack:
+                    stack.pop()
+                elif dead:
+                    continue
+                elif word in ("define", "undef"):
+                    m = re.match(r"\s*([A-Za-z_]\w*)(\()?(.*)", rest, re.S)
+                    if not m:
+                        continue
+                    name, body = m.group(1), m.group(3).strip()
+                    if (word == "undef" or m.group(2) or uncertain or "unknown" in stack or "#" in body
+                            or name in _WORD.findall(body)):
+                        scope["unsure"].add(name)
+                    else:
+                        scope["defines"].append((order[i], name, body))
+                elif word == "include":
+                    m = re.match(r'\s*"([^"]+)"', rest)
+                    target = m and self._resolve(rel, m.group(1))
+                    if target:
+                        walk(target, uncertain or "unknown" in stack)
+            advance(len(lines) - 1)
+
+        walk(u, False)
+        self._scopes[u] = scope
+        return scope
+
+    def _as_seen(self, d, u):
+        """Declaration or definition `d` as unit `u`'s compiler reads it: the object-like macros defined
+        before it expanded, and the unit's typedefs; None when that cannot be told."""
+        scope = self._scope(u)
+        order = scope["order"].get(d.path)
+        if order is None or d.line > len(order) or d.text is None:
+            return None
+        at = order[d.line - 1]
+        bodies = collections.defaultdict(set)
+        for position, name, body in scope["defines"]:
+            if position < at:
+                bodies[name].add(body)
+        macros = {n: b.pop() for n, b in bodies.items() if len(b) == 1 and n not in scope["unsure"]}
+        text = expand(d.text, macros)
+        if text is None:
+            return None
+        is_c = d.lang == _LANG_C or (d.lang == _LANG_ANY and self.units[u]["lang"] == _LANG_C)
+        for f in _parse(text, scope["types"], d.is_def, unspecified_empty=is_c):
+            if f["name"] == d.name and f["kind"] == d.kind:
+                return Decl(path=d.path, line=d.line, lang=d.lang, block=d.block, text=text,
+                            **dict(f, explicit_c=f["explicit_c"] or d.explicit_c))
+        return None
+
+    def _agrees_as_compiled(self, d, target, same):
+        """Whether `same(declaration, definition)` holds with both read as their compilers read them: the
+        definition in each unit that compiles it, the declaration in those of them that include it (in
+        each unit that reads it when none does). False when any of them cannot be read."""
+        def_units = self._seen_by(target.path)
+        decl_units = [u for u in def_units if self._reads(u, d.path)] or self._seen_by(d.path)
+        if not def_units or not decl_units:
+            return False
+        defs = [self._as_seen(target, u) for u in def_units]
+        decls = [self._as_seen(d, u) for u in decl_units]
+        if None in defs or None in decls:
+            return False
+        return all(same(a, b) for a in decls for b in defs)
 
     def counts(self):
         return {"decl.local_externs": len(self.local), "decl.varargs": len(self.varargs),

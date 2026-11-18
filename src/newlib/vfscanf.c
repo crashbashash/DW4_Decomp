@@ -6,7 +6,7 @@
 extern const short basefix[17];
 extern const char exponent_format[];
 typedef int wchar_t;
-char *__sccl ();
+char *__sccl(char *tab, char *fmt);
 
 int __svfscanf(register FILE *fp, char const *fmt0, va_list ap)
 {

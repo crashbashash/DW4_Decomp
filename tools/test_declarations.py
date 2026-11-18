@@ -215,5 +215,92 @@ class ApprovedLocalDeclarations(unittest.TestCase):
             self.assertEqual("declarations" in failed, expect, rows)
 
 
+UNIT_VIEW_TREE = {
+    # object-like macros the defining file states its parameters with (newlib's RARG)
+    "include/dw4/m.h": "struct _reent;\n"
+                       "void *M_Alloc(struct _reent *, unsigned);\n"
+                       "int M_Info(struct _reent *);\n"
+                       "int M_Short(int);\n"
+                       "int M_Cond(int);\n"
+                       "int M_Late(int);\n",
+    "src/newlib/m.c": "#include \"dw4/m.h\"\n"
+                      "#define RARG struct _reent *reent_ptr,\n"
+                      "#define RONEARG struct _reent *reent_ptr\n"
+                      "#define SHORTARG short n\n"
+                      "#ifdef M_WIDE\n#define CONDARG int n\n#endif\n"
+                      "void *M_Alloc(RARG unsigned n) { return 0; }\n"
+                      "int M_Info(RONEARG) { return 0; }\n"
+                      "int M_Short(SHORTARG) { return n; }\n"
+                      "int M_Cond(CONDARG) { return 0; }\n"
+                      "int M_Late(LATEARG) { return 0; }\n"
+                      "#define LATEARG int n\n",
+    # a macro standing for the whole list: a `()` copy states nothing of it, or nothing of nothing
+    "src/newlib/n.c": "#define VOIDARG void\n#define TWOARGS int a, int b\n"
+                      "int N_None(VOIDARG) { return 0; }\nint N_Two(TWOARGS) { return a + b; }\n",
+    "src/newlib/user.c": "int N_None();\nint N_Two();\nint User_Go(void) { return N_None() + N_Two(1, 2); }\n",
+    # a typedef name the tree gives two meanings (libgcc's FLO_type), each unit seeing one of them
+    "include/dw4/dp.h": "typedef double FLO;\n",
+    "include/dw4/sp.h": "typedef float FLO;\n",
+    "include/dw4/soft.h": "double Dp_Add(double, double);\nfloat Sp_Add(float, float);\n"
+                          "float Dp_Mul(float, float);\ndouble Dp_Sub(double, double);\nfloat Dp_Div(float, float);\n",
+    "src/libgcc/dp.c": "#include \"dw4/dp.h\"\n#include \"dw4/soft.h\"\n"
+                       "FLO Dp_Add(FLO a, FLO b) { return a + b; }\nFLO Dp_Mul(FLO a, FLO b) { return a * b; }\n",
+    "src/libgcc/sp.c": "#include \"dw4/sp.h\"\n#include \"dw4/soft.h\"\n"
+                       "FLO Sp_Add(FLO a, FLO b) { return a + b; }\n",
+    # a definer that does not include the header: each side as the units reading it see it
+    "src/libgcc/sub.c": "#include \"dw4/dp.h\"\n"
+                        "FLO Dp_Sub(FLO a, FLO b) { return a - b; }\nFLO Dp_Div(FLO a, FLO b) { return a / b; }\n",
+}
+
+
+class UnitView(unittest.TestCase):
+    """A declaration is compared with its definition as the defining unit reads both: its object-like
+    macros expanded and its own typedefs, where the tree's reading finds a difference."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.folder = tempfile.TemporaryDirectory()
+        for rel, text in UNIT_VIEW_TREE.items():
+            path = os.path.join(cls.folder.name, rel)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w") as fh:
+                fh.write(text)
+        cls.idx = declarations.Index(cls.folder.name, {})
+        cls.conflicts = {d.name for d in cls.idx.conflicts}
+        cls.varargs = {d.name for d in cls.idx.varargs}
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.folder.cleanup()
+
+    def test_a_macro_spelling_the_same_parameters_agrees(self):
+        self.assertNotIn("M_Alloc", self.conflicts)
+        self.assertNotIn("M_Info", self.conflicts)
+
+    def test_a_macro_spelling_another_type_conflicts(self):
+        self.assertIn("M_Short", self.conflicts)
+
+    def test_a_macro_defined_under_an_undecided_condition_or_later_is_not_expanded(self):
+        self.assertIn("M_Cond", self.conflicts)
+        self.assertIn("M_Late", self.conflicts)
+
+    def test_a_macro_list_against_an_unstated_one(self):
+        self.assertNotIn("N_None", self.varargs)
+        self.assertIn("N_Two", self.varargs)
+
+    def test_a_typedef_reads_as_its_unit_defines_it(self):
+        self.assertNotIn("Dp_Add", self.conflicts)
+        self.assertNotIn("Sp_Add", self.conflicts)
+        self.assertNotIn("Dp_Sub", self.conflicts)
+
+    def test_a_typedef_with_another_meaning_in_its_unit_conflicts(self):
+        self.assertIn("Dp_Mul", self.conflicts)
+        self.assertIn("Dp_Div", self.conflicts)
+
+    def test_the_counts(self):
+        self.assertEqual(sorted(self.conflicts), ["Dp_Div", "Dp_Mul", "M_Cond", "M_Late", "M_Short"])
+        self.assertEqual(sorted(self.varargs), ["N_Two"])
+
+
 if __name__ == "__main__":
     unittest.main()
