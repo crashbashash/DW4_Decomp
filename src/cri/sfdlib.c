@@ -1,43 +1,15 @@
-#include "dw4/cri/sfdhn.h"
 #include "dw4/cri/mcp.h"
 #include "dw4/cri/mps.h"
 #include "dw4/cri/sfd.h"
+#include "dw4/cri/sfdply.h"
 #include "dw4/cri/sj.h"
 #include "dw4/cri/svm.h"
 
 #define SFD_HN_SIZE 14072
 
-/* What SFD_Init is given: the module table the stream graph is built from and the time block's setting. */
-typedef struct SfdInitPrm {
-    void *modules;
-    int timPrm;
-} SfdInitPrm;
-
-/* The server counters sfdply.c keeps. */
-typedef struct SfdSvrCnt {
-    int cnt;
-    int busy;
-} SfdSvrCnt;
-
-/* The library's global state: the default conditions of a new handle, the library-wide error
- * block, the other files' library blocks and the handle table. */
-typedef struct SfdLibInf {
-    int cond[100];          /* 0 */
-    SfdInitPrm prm;         /* 400 */
-    int sysStat;            /* 408 */
-    SfdErrInf err;          /* 412 */
-    char tim[12];           /* 432: sftim.c's */
-    char buf[4];            /* 444: sfdbuf.c's */
-    void *trn[15];          /* 448: sfdtrn.c's module table */
-    SfdSvrCnt svr;          /* 508 */
-    SfdHandle *hn[8];       /* 516 */
-} SfdLibInf;
-
 extern char cri_sfd_version[];
-/* kept here: this unit, sfdcond.c and sfdply.c each read the library block through their own view, and the types disagree */
-extern SfdLibInf sfd_lib;
 extern int sfd_cond_defaults[100];
-extern SfdHandle *sfd_cur_hn;
+extern SfdPly *sfd_cur_hn;
 
 
 long sfd_InitLib(SfdInitPrm *prm);
@@ -91,13 +63,13 @@ long sfd_InitLib(SfdInitPrm *prm) {
     lib->prm = *prm;
     lib->sysStat = 0;
     sfd_InitErr(&lib->err);
-    SFTIM_Init(lib->tim, prm->timPrm);
-    sfbuf_Init(lib->buf);
+    SFTIM_Init(&lib->tim, prm->vrate);
+    sfbuf_Init(&lib->buf);
     sfd_ClearSvrCnt(lib);
     for (i = 7; i >= 0; i--) {
         lib->hn[i] = 0;
     }
-    return SFTRN_Init(sfd_lib.trn, prm->modules);
+    return SFTRN_Init(&sfd_lib.trn, prm->modules);
 }
 
 void sfd_ClearSvrCnt(SfdLibInf *lib) {
@@ -111,7 +83,7 @@ void sfd_ClearSvrCnt(SfdLibInf *lib) {
  * else the last destroy's result. */
 int SFD_Finish(void) {
     int i;
-    SfdHandle **hn = sfd_lib.hn;
+    SfdPly **hn = sfd_lib.hn;
     int ret = 0;
     int err;
 
@@ -121,9 +93,9 @@ int SFD_Finish(void) {
         }
         hn++;
     }
-    SFTIM_Finish(sfd_lib.tim);
-    SFBUF_Finish(sfd_lib.buf);
-    err = SFTRN_Finish(sfd_lib.trn);
+    SFTIM_Finish(&sfd_lib.tim);
+    SFBUF_Finish(&sfd_lib.buf);
+    err = SFTRN_Finish(&sfd_lib.trn);
     sfd_FinishOther();
     sfd_FinishModules();
     sfd_FinishSj();
@@ -149,7 +121,7 @@ void sfd_ClearErr(SfdErrInf *err) {
 /* Records an error code on the handle (and makes its state non-positive) or, without a handle, on
  * the library; returns the code. */
 int sfd_ReportError(void *sfd, int code) {
-    SfdHandle *hn = sfd;
+    SfdPly *hn = sfd;
     int ret = 0;
 
     if (code != 0) {
@@ -176,7 +148,7 @@ void sfd_RecordError(SfdErrInf *err, int code) {
 }
 
 int SFD_SetErrFn(void *sfd, SfdErrFn func, void *obj) {
-    SfdHandle *hn = sfd;
+    SfdPly *hn = sfd;
 
     if (hn == 0) {
         sfd_SetErrFn(&sfd_lib.err, func, obj);
@@ -195,7 +167,7 @@ void sfd_SetErrFn(SfdErrInf *err, SfdErrFn func, void *obj) {
     err->obj = obj;
 }
 
-int SFD_GetErrInf(SfdHandle *hn, SfdErrInf *out) {
+int SFD_GetErrInf(SfdPly *hn, SfdErrInf *out) {
     if (hn == 0) {
         *out = sfd_lib.err;
     } else {
@@ -209,7 +181,7 @@ int SFD_GetErrInf(SfdHandle *hn, SfdErrInf *out) {
 
 /* Remembers the handle as the current one; 0 when it is live, else -1. */
 int SFLIB_CheckHn(void *sfd) {
-    SfdHandle *hn = sfd;
+    SfdPly *hn = sfd;
     sfd_cur_hn = hn;
     if (hn == 0) {
         return -1;

@@ -1,4 +1,4 @@
-#include "dw4/cri/sfdhn.h"
+#include "dw4/cri/sfdply.h"
 #include "dw4/cri/sfh.h"
 #include "dw4/cri/mcp.h"
 #include "dw4/cri/sfd.h"
@@ -14,11 +14,11 @@ static SfhHn sfhdr_sfh_work[SFH_MAX_HN];
 
 
 int sfhds_IsPrvate2PketStart(unsigned char *p);
-int sfhdr_SetHdr(SfdHandle *hn, unsigned char *data, int size);
+int sfhdr_SetHdr(SfdPly *hn, unsigned char *data, int size);
 int sfhds_ReadLong(unsigned char *p);
-void sfhds_SetHdrSeek(SfdHandle *hn);
+void sfhds_SetHdrSeek(SfdPly *hn);
 void sfhds_CopyFhd(SfdHdrInf *dst, SfdHdrInf *src);
-SfdHdrInf *sfhds_GetHd(SfdHandle *hn);
+SfdHdrInf *sfhds_GetHd(SfdPly *hn);
 void sfhds_DoProcessHdr(SfhHn *sfh, SfdHdrInf *hdr);
 void sfhds_AnlyHead(SfhHn *sfh, SfdHdrInf *hdr);
 void sfhds_AnlySys(SfhHn *sfh, SfdHdrMux *mux);
@@ -27,7 +27,7 @@ void sfhds_AnlyAudio(SfhHn *sfh, int id, SfdHdrAudio *audio);
 void sfhds_AnlyVideo(SfhHn *sfh, int id, SfdHdrVideo *video);
 int sfhds_CallN(SfhHn *sfh, SfhGetFn get);
 int sfhds_CallS(SfhHn *sfh, int id, SfhGetStmFn get);
-void sfhds_SetMvInf(SfdHandle *hn);
+void sfhds_SetMvInf(SfdPly *hn);
 
 void SFHDS_Init(void) {
     SFH_Init(SFH_MAX_HN, sfhdr_sfh_work);
@@ -53,7 +53,7 @@ void SFHDS_FinishFhd(SfdHdrInf *hdr) {
     hdr->size = 0;
 }
 
-int SFHDS_SetHdr(SfdHandle *hn, int type, unsigned char *p, int size, int *set) {
+int SFHDS_SetHdr(SfdPly *hn, int type, unsigned char *p, int size, int *set) {
     *set = 0;
     if (type != 2) {
         return 0;
@@ -99,7 +99,7 @@ int SFHDS_IsSfdHeader(unsigned char *p, int size) {
     return ok;
 }
 
-int sfhdr_SetHdr(SfdHandle *hn, unsigned char *data, int size) {
+int sfhdr_SetHdr(SfdPly *hn, unsigned char *data, int size) {
     void (*callback)(int obj, unsigned char *data, int size);
     int obj;
     int len;
@@ -123,7 +123,7 @@ int sfhdr_SetHdr(SfdHandle *hn, unsigned char *data, int size) {
     return 1;
 }
 
-void sfhds_SetHdrSeek(SfdHandle *hn) {
+void sfhds_SetHdrSeek(SfdPly *hn) {
     SfdHdrInf *rec = sfhds_GetHd(hn);
 
     if (rec != 0) {
@@ -135,7 +135,7 @@ void sfhds_CopyFhd(SfdHdrInf *dst, SfdHdrInf *src) {
     *dst = *src;
 }
 
-void SFHDS_ReprocessHdr(SfdHandle *hn) {
+void SFHDS_ReprocessHdr(SfdPly *hn) {
     SfdHdrInf *hdr = &hn->hdr;
     SfdHdrInf *rec = sfhds_GetHd(hn);
 
@@ -147,14 +147,14 @@ void SFHDS_ReprocessHdr(SfdHandle *hn) {
 }
 
 /* The header copy in the work record, until the stream has delivered its first picture. */
-SfdHdrInf *sfhds_GetHd(SfdHandle *hn) {
-    if (hn->work == 0) {
+SfdHdrInf *sfhds_GetHd(SfdPly *hn) {
+    if (hn->see.rec == 0) {
         return 0;
     }
     if (SFMPS_GetConcatCnt(hn) > 0) {
         return 0;
     }
-    return &hn->work->hdr;
+    return &hn->see.rec->hdrInf;
 }
 
 void SFHDS_ProcessHdr(SfdHdrInf *hdr) {
@@ -292,7 +292,7 @@ int sfhds_CallS(SfhHn *sfh, int id, SfhGetStmFn get) {
     return value;
 }
 
-void sfhds_SetMvInf(SfdHandle *hn) {
+void sfhds_SetMvInf(SfdPly *hn) {
     SfdHdrMux *mux = &hn->hdr.mux;
     SfdMvInf *video = &hn->mvInf;
 
@@ -307,7 +307,7 @@ int SFHDS_GetPketLenField(void) {
 
 /* The header's version times 100, or 0 before a header has been read. */
 int SFHDS_GetMuxVerNum(void *sfd) {
-    SfdHandle *hn = sfd;
+    SfdPly *hn = sfd;
     SfdHdrInf *hdr = &hn->hdr;
 
     if (hdr->valid == 0) {
@@ -317,7 +317,7 @@ int SFHDS_GetMuxVerNum(void *sfd) {
 }
 
 int SFHDS_GetColType(void *sfd) {
-    SfdHandle *hn = sfd;
+    SfdPly *hn = sfd;
     SfdHdrVideo *video = &hn->hdr.video;
 
     if (hn->hdr.valid == 0) {

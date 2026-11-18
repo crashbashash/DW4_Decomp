@@ -1,4 +1,4 @@
-#include "dw4/cri/sfdhn.h"
+#include "dw4/cri/sfdply.h"
 #include "dw4/cri/sfd.h"
 
 
@@ -13,8 +13,8 @@ int sfsup_Finish(void) {
     return 0;
 }
 
-int sfsup_ExecServer(SfdHandle *hn) {
-    SFBUF_SetPrepFlg(hn, hn->sup.outputs[0], 1);
+int sfsup_ExecServer(SfdPly *hn) {
+    SFBUF_SetPrepFlg(hn, hn->trn[0].bufOut[0], 1);
     return 0;
 }
 
@@ -42,19 +42,19 @@ int sfsup_Pause(void) {
     return 0;
 }
 
-void sfsup_GetWrite(SfdHandle *hn, SfdBufStat *stat) {
-    SFBUF_RingGetWrite(hn, hn->sup.outputs[0], stat);
+void sfsup_GetWrite(SfdPly *hn, SfdBufStat *stat) {
+    SFBUF_RingGetWrite(hn, hn->trn[0].bufOut[0], stat);
 }
 
-void sfsup_AddWrite(SfdHandle *hn, int len, int tail) {
-    SFBUF_RingAddWrite(hn, hn->sup.outputs[0], len, tail);
+void sfsup_AddWrite(SfdPly *hn, int len, int tail) {
+    SFBUF_RingAddWrite(hn, hn->trn[0].bufOut[0], len, tail);
 }
 
-void sfsup_GetRead(SfdHandle *hn) {
+void sfsup_GetRead(SfdPly *hn) {
     sfd_ReportError(hn, 0xFF000501);
 }
 
-void sfsup_AddRead(SfdHandle *hn) {
+void sfsup_AddRead(SfdPly *hn) {
     sfd_ReportError(hn, 0xFF000501);
 }
 

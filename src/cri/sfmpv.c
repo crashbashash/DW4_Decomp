@@ -2071,8 +2071,8 @@ int SFMPV_GetRead(SfdPlayer *player, SfdFrameInfo **out) {
         return 0;
     }
     sfmpv_SetFrmInf(player, slot, out);
-    timer->base = (*out)->f20;
-    timer->base_frames = (*out)->f24;
+    timer->base = (*out)->time;
+    timer->base_frames = (*out)->unit;
     return 0;
 }
 
@@ -2096,8 +2096,8 @@ void sfmpv_SetFrmInf(SfdPlayer *player, SfdSlot *slot, SfdFrameInfo **out) {
     (*out)->f8 = pic->mb_width;
     (*out)->f12 = pic->mb_height;
     (*out)->picType = pic->picture_coding_type;
-    (*out)->f20 = slot->f56;
-    (*out)->f24 = slot->f60;
+    (*out)->time = slot->f56;
+    (*out)->unit = slot->f60;
     (*out)->bufFmt = player->bufFmt;
     (*out)->buf = slot->buf;
     (*out)->f36 = slot->f64;

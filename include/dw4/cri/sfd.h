@@ -1,26 +1,16 @@
-/* CRI SFD: the Sofdec playback library. The SFD handle is passed as `void *sfd`; each SFD file reads
- * it through its own view of the handle object. */
+/* CRI SFD: the Sofdec playback library. The SFD handle is passed as `void *sfd`; every SFD file reads
+ * it as the one handle object, SfdPly (sfdply.h). This header holds the handle's parts. */
 #ifndef DW4_CRI_SFD_H
 #define DW4_CRI_SFD_H
 
-struct SfdAdxCfg;
-struct SfdBufEnt;
-struct SfdBufCrePrm;
-struct SfdBufInf;
-struct SfdBufStat;
 struct SfdSj;
-struct SfdInitPrm;
+struct SfdBufStat;
 struct SfdRecSlot;
 struct SfdRec;
-struct SfdItem;
-struct SfdTrnModules;
-struct SfdTrnSlot;
-struct SfdTrnConfig;
 struct SfdMpvCond;
 struct SfdPlanes;
-struct SfdLib;
-struct SfdTimeSpan;
-struct SfdCrePrm;
+struct SfdFrameInfo;
+struct SfdPly;
 
 /* A clock source: the time of the handle as a count of units. */
 typedef int (*SfdTimeFn)(void *sfd, int *time, int *unit);
@@ -178,17 +168,17 @@ typedef struct SfdHdrInf {
 } SfdHdrInf;
 
 /* The stream information of a handle (handle +2316), cleared by sfply_InitMvInf and filled from the
- * stream header and the system header (SFD_GetMvInf). */
+ * stream header, the first picture's attributes and the system header (SFD_GetMvInf). */
 typedef struct SfdMvInf {
-    int f0;
-    int f4;
-    int f8;
-    int f12;
-    int f16;
-    int f20;
+    int width;           /* 0: the picture size */
+    int height;          /* 4 */
+    int mbWidth;         /* 8: the size in macroblocks */
+    int mbHeight;        /* 12 */
+    int bitRate;         /* 16: the sequence header's bit rate; 0 until a picture is read */
+    int frameRate;       /* 20: the frame-rate index into SFTIM_prate */
     int muxRate;         /* 24: the pack header's mux rate */
     int fixedFlag;       /* 28: the system header's fixed flag; 1 until one is read */
-    int f32;
+    int vbvSize;         /* 32: the sequence header's VBV buffer size */
     int audioBound;      /* 36: audio streams; -1 until known */
     int videoBound;      /* 40: video streams */
     int privateBound;    /* 44: private streams */
@@ -318,6 +308,282 @@ typedef struct SfdTim {
     char pad1468[36];
 } SfdTim;
 
+/* The SFD conditions (SFD_SetCond, SFSET_GetCond): a handle's settings, read by index. */
+enum {
+    SFD_COND_VIDEO = 5,             /* the movie has video to play */
+    SFD_COND_AUDIO = 6,             /* the movie has audio to play */
+    SFD_COND_KEEPSUP = 8,           /* a reset keeps the supply pointer */
+    SFD_COND_SYNCMODE = 15,         /* 1: audio master, 2: video master */
+    SFD_COND_ETIME = 20,            /* the end time, -4 for none */
+    SFD_COND_ETUNIT = 21,           /* its unit */
+    SFD_COND_LNKSTM = 49,
+    SFD_COND_SUPPLY_END = 56,
+    SFD_COND_DECODE_END = 57,
+    SFD_COND_DEMUX_SPLIT = 59,
+    SFD_COND_VIDEO_AUTO_OFF = 79,
+    SFD_COND_AUDIO_AUTO_OFF = 80,
+    SFD_COND_SYSHD_FN = 85,
+    SFD_COND_SYSHD_FN_OBJ = 86,
+    SFD_COND_NUM = 100
+};
+
+/* The creation parameters (SFD_Create); the handle starts with a copy of them. The buffer work is cut
+ * into the eight buffers by their sizes. */
+typedef struct SfdCrePrm {
+    struct SfdTrnConfig *trnConfig;   /* 0: the stream modules by slot (SFTRN_InitHn) */
+    char *bufWork;            /* 4 */
+    int bufSize[8];           /* 8: the sizes of buffers 0..7 */
+    int unit;                 /* 40: the input's sector size, the zero padding of a short read */
+    int f44;                  /* 44: the video ring's reserve */
+    int f48;
+    int f52;
+    int bufFmt;               /* 56: the frame buffer format */
+    char *work;               /* 60: the handle work */
+    unsigned int workSize;    /* 64 */
+} SfdCrePrm;
+
+/* A time stamp queued with the data it belongs to. */
+typedef struct SfdItem {
+    long long pos;            /* 0; negative = none */
+    unsigned int addr;        /* 8 */
+    unsigned int size;        /* 12 */
+} SfdItem;
+
+/* The time-stamp queue of a ring buffer (SFPTS). */
+typedef struct SfdRing {
+    SfdItem *items;           /* 0 */
+    int size;                 /* 4 */
+    int count;                /* 8 */
+    int wr;                   /* 12 */
+    int rd;                   /* 16 */
+} SfdRing;
+
+/* A buffer's supply: the memory area or the stream joint it is fed from (SFD_SetSupplySj). */
+typedef struct SfdBufInf {
+    char *data;               /* 0 */
+    struct SfdSj *sj;         /* 4 */
+    char *buf;                /* 8 */
+    int size;                 /* 12 */
+    int xsize;                /* 16 */
+    char *p0;                 /* 20 */
+} SfdBufInf;
+
+/* The delimiter a ring's reader has reached (SFBUF_RingGetDlm). */
+typedef struct SfdBufCur {
+    char *pos;
+    int len;
+} SfdBufCur;
+
+/* A ring buffer: its supply, the delimiter, the totals written and read and the time-stamp queue. */
+typedef struct SfdBufRing {
+    SfdBufInf sup;            /* 0 */
+    SfdBufCur dlm;            /* 24 */
+    int wtot;                 /* 32 */
+    int rtot;                 /* 36 */
+    SfdRing ptsque;           /* 40 */
+} SfdBufRing;
+
+/* An audio ring: the area, the sample format and the two channels, the write and read positions in
+ * samples and the totals. */
+typedef struct SfdBufAring {
+    SfdBufInf sup;            /* 0: data is the area and sj its size until SFBUF_FixAringBuf */
+    SfdBufCur ch1;            /* 24: the second channel and the ring's length in samples */
+    int wpos;                 /* 32 */
+    int rpos;                 /* 36 */
+    int wtot;                 /* 40 */
+    int rtot;                 /* 44 */
+} SfdBufAring;
+
+/* A user-data output of a buffer: the joint it goes into and the callbacks run around each put. */
+typedef struct SfdUoch {
+    struct SfdSj *sj;
+    void (*begin)(void *hn, int id);
+    void (*end)(void *arg, int id);
+    void *arg;
+} SfdUoch;
+
+/* A buffer of the handle (SFBUF; mode 1 frames, 2 audio ring, 3 user outputs, 4 none, 5 ring): the
+ * stream modules writing and reading it, 9 for none. */
+typedef struct SfdBufEnt {
+    int mode;                 /* 0 */
+    int used;                 /* 4 */
+    int prepFlg;              /* 8 */
+    int termFlg;              /* 12 */
+    union {
+        SfdBufRing ring;
+        SfdBufAring aring;
+        SfdBufInf vfrm;       /* frames: data is the area, sj its size and xsize the frame table */
+        SfdUoch uoch[3];
+    } u;                      /* 16 */
+    int inTr;                 /* 76 */
+    int outTr;                /* 80 */
+    char pad84[32];
+} SfdBufEnt;
+
+/* A stream module's entry: init, finish, server, create, destroy, ... (SFTRN), called with the
+ * arguments each one takes. */
+typedef int (*SfdTrnFn)();
+
+/* The stream modules the library is initialised with. */
+typedef struct SfdTrnModules {
+    SfdTrnFn *fns[15];
+} SfdTrnModules;
+
+/* The stream modules of a handle by slot: 0 input, 1 system, 2 video, 3 audio, 4 video out, 5 audio
+ * out, 6 and 7 output, 8 user data. */
+typedef struct SfdTrnConfig {
+    SfdTrnFn *fns[9];
+} SfdTrnConfig;
+
+/* What SFD_Init is given: the stream modules and the V-sync rate. */
+typedef struct SfdInitPrm {
+    SfdTrnModules *modules;   /* 0 */
+    int vrate;                /* 4 */
+} SfdInitPrm;
+
+/* The system stream handler's work (sfmps.c): the demultiplexer, an output per stream id 0xBC..0xFF
+ * and the callback run on its data. */
+typedef struct SfdMpsPrm {
+    void *mps;                              /* 0: the MPS demultiplexer */
+    int videoBound;                         /* 4: the most video streams a system header announced */
+    int audioBound;                         /* 8: the most audio streams a system header announced */
+    int pad12;
+    long long startPts;                     /* 16 */
+    long long firstPts;                     /* 24; LONG_MAX when unset */
+    int nPics;                              /* 32 */
+    int f36;
+    int f40;
+    int f44;
+    int f48;
+    int videoCh;                            /* 52 */
+    int audioCh;                            /* 56 */
+    int f60;
+    struct SfdSj *object[68];               /* 64: indexed by stream id - 0xBC */
+    int (*stmCb)(void *obj, int arg);       /* 336 */
+    void *stmCbObj;                         /* 340 */
+    int f344;
+} SfdMpsPrm;
+
+/* The ADX audio parameters (SFD_SetAdxtPara): the ring buffer and the ADXT work, both aligned to 32
+ * bytes when set. */
+typedef struct SfdAdxCfg {
+    int bsize;         /* 0: ring buffer size */
+    int xsize;         /* 4: its extra size */
+    char *buf;         /* 8: the ring buffer */
+    int maxnch;        /* 12 */
+    int f16;
+    int worksize;      /* 20 */
+    char *work;        /* 24: the ADXT work */
+} SfdAdxCfg;
+
+typedef void (*SfdAdxStep)(struct SfdPly *h, char *buf, int size, int *used);
+
+/* The ADX audio handler's work (sfadx.c). */
+typedef struct SfdAdxCtx {
+    void *adxt;        /* 0 */
+    void *sj;          /* 4 */
+    SfdAdxCfg cfg;     /* 8 */
+    int time;          /* 36 */
+    int unit;          /* 40 */
+    int f44;
+    int carry;         /* 48 */
+    int started;       /* 52 */
+    int pos;           /* 56 */
+    SfdAdxStep step;   /* 60 */
+    int f64;
+    int opt27;         /* 68 */
+    int total;         /* 72 */
+    int f76;
+} SfdAdxCtx;
+
+/* The audio output of a handle (slot 7, SFAOAP): the renderer and the pan, volume and speed functions
+ * of the audio handler. */
+typedef struct SfdAoap {
+    int rna;                                                   /* 0 */
+    void (*setOutPan)(struct SfdPly *h, int ch, int pan);      /* 4 */
+    int (*getOutPan)(struct SfdPly *h, int ch);                /* 8 */
+    void (*setOutVol)(struct SfdPly *h, int vol);              /* 12 */
+    int (*getOutVol)(struct SfdPly *h);                        /* 16 */
+    void (*setSpeed)(struct SfdPly *h, int speed);             /* 20 */
+} SfdAoap;
+
+/* A user output of the additional-information channel (slot 8): a memory block or a stream joint. */
+typedef struct SfainfOut {
+    int kind;
+    void *sj;
+    void *buf;
+    int size;
+} SfainfOut;
+
+/* The user outputs of the additional-information channel. */
+typedef struct SfainfList {
+    int nout;
+    SfainfOut out[3];
+} SfainfList;
+
+/* A stream module's place in the handle's stream graph: its flags, its work (a union of the modules'
+ * work types), its entries and the buffers it reads and writes, 8 for none. */
+typedef struct SfdTrnSlot {
+    int prepFlg;              /* 0 */
+    int termFlg;              /* 4 */
+    union {
+        void *obj;
+        SfdMpsPrm *mps;
+        struct SfdMpv *mpv;
+        SfdAdxCtx *adxt;
+        SfdAoap *aoap;
+        SfainfList *uo;
+    } hn;                     /* 8 */
+    SfdTrnFn *fns;            /* 12 */
+    int bufIn;                /* 16 */
+    int bufOut[3];            /* 20: video, audio and user data for the system module */
+    int readTot;              /* 32: the bytes the module has read from its input; -1 when unknown */
+    char pad36[32];
+} SfdTrnSlot;
+
+/* The run-time statistics of a server step (SFTMR): the total, shortest and longest times and the count. */
+typedef struct SfdTsum {
+    long long sum;
+    long long min;
+    long long max;
+    int count;
+    int pad28;
+} SfdTsum;
+
+/* The server statistics of a handle (SFD_GetTmrInf); [5] times the whole server step. */
+typedef struct SfdTmrInf {
+    SfdTsum tsum[6];
+} SfdTmrInf;
+
+/* The library's V-sync count (sftim.c). */
+typedef struct SfdTimLib {
+    int vcount;               /* 0 */
+    int f4;
+    int vrate;                /* 8: V-syncs per 1000 seconds */
+} SfdTimLib;
+
+/* The server counters sfdply.c keeps. */
+typedef struct SfdSvrCnt {
+    int cnt;
+    int busy;
+} SfdSvrCnt;
+
+/* The library's global state: the default conditions of a new handle, the library-wide error
+ * block, the other files' library blocks and the handle table. */
+typedef struct SfdLibInf {
+    int cond[SFD_COND_NUM];   /* 0 */
+    SfdInitPrm prm;           /* 400 */
+    int sysStat;              /* 408 */
+    SfdErrInf err;            /* 412 */
+    SfdTimLib tim;            /* 432 */
+    int buf;                  /* 444: sfdbuf.c's */
+    SfdTrnModules trn;        /* 448 */
+    SfdSvrCnt svr;            /* 508 */
+    struct SfdPly *hn[8];     /* 516 */
+} SfdLibInf;
+
+extern SfdLibInf sfd_lib;
+
 /* SFADXT: the ADX audio stream */
 int SFADXT_IsHeader(unsigned char *header, int length, int *headerSize);
 void SFD_SetAdxtPara(struct SfdAdxCfg *cfg);
@@ -332,7 +598,7 @@ void SFD_AnalyCreInf(unsigned char *buf, int size, SfdAnaInf *inf);
 /* SFBUF: the stream buffers */
 void sfbuf_Init(void *work);
 void SFBUF_Finish(void *work);
-int SFBUF_InitHn(void *sfd, struct SfdBufEnt *ents, struct SfdBufCrePrm *prm);
+int SFBUF_InitHn(void *sfd, SfdBufEnt *ents, SfdCrePrm *prm);
 void SFBUF_DestroySj(void *sfd);
 int SFBUF_SetSupplySj(void *sfd, struct SfdBufInf *inf);
 void SFBUF_SetUoch(void *sfd, int index, int slot, void *uoch);
@@ -348,8 +614,8 @@ int SFBUF_GetRTot(void *sfd, int index);
 int SFBUF_GetWTot(void *sfd, int index);
 int SFBUF_RingGetSj(void *sfd, int index, struct SfdSj **out);
 void SFBUF_AddRtotSj(void *sfd, int index, int len);
-int SFBUF_VfrmGetRead(void *sfd, int index, int value);
-int SFBUF_VfrmAddRead(void *sfd, int index, int value);
+int SFBUF_VfrmGetRead(void *sfd, int index, struct SfdFrameInfo **frm);
+int SFBUF_VfrmAddRead(void *sfd, int index, struct SfdFrameInfo *frm);
 int SFBUF_SetPrepFlg(void *sfd, int index, int value);
 int SFBUF_GetPrepFlg(void *sfd, int index);
 void SFBUF_SetTermFlg(void *sfd, int index, int value);
@@ -374,6 +640,12 @@ void SFHDS_InitFhd(SfdHdrInf *hdr);
 void SFHDS_FinishFhd(SfdHdrInf *hdr);
 int SFHDS_GetMuxVerNum(void *sfd);
 int SFHDS_GetColType(void *sfd);
+void SFHDS_Init(void);
+void SFHDS_Finish(void);
+int SFHDS_SetHdr(struct SfdPly *hn, int type, unsigned char *p, int size, int *set);
+int SFHDS_IsSfdHeader(unsigned char *p, int size);
+void SFHDS_ReprocessHdr(struct SfdPly *hn);
+void SFHDS_ProcessHdr(SfdHdrInf *hdr);
 
 /* the library, errors and locks */
 int SFD_IsHnSize(void *work, int size);
@@ -437,7 +709,7 @@ int SFCON_WriteTotSmplQue(void *sfd, int pts, int last);
 /* SFTRN: the stream modules */
 int SFTRN_Init(struct SfdTrnModules *dst, struct SfdTrnModules *src);
 int SFTRN_Finish(struct SfdTrnModules *modules);
-void SFTRN_InitHn(void *sfd, struct SfdTrnSlot *s, struct SfdTrnConfig **pconfig, int arg);
+void SFTRN_InitHn(void *sfd, SfdTrnSlot *s, SfdCrePrm *prm, int arg);
 int SFTRN_CallTrSetup(void *sfd, int k);
 void SFTRN_SetPrepFlg(void *sfd, int index, int value);
 int SFTRN_GetPrepFlg(void *sfd, int index);
@@ -449,8 +721,8 @@ int SFTRN_IsSetup(void *sfd, int index);
 /* the pass-through wrappers between the SFD files */
 void SFPTS_InitPtsQue(void *ring);
 int SFD_SetVideoPts(void *sfd, void *data, int size);
-void SFTMR_InitTsum(void *stat);
-void SFTMR_AddTsum(void *stat, long time);
+void SFTMR_InitTsum(SfdTsum *tsum);
+void SFTMR_AddTsum(SfdTsum *tsum, long time);
 int SFMPV_SaveCond(void *sfd, int *values, unsigned int size);
 void SFMPV_RestoreCond(void *sfd, int *values, int count);
 int SFPL2_Standby(void *sfd);
@@ -509,8 +781,8 @@ int SFMPVP_IsPscEnough(void *sfd);
 void SFMPVP_Create(void *sfd);
 
 /* SFTIM: playback time */
-void SFTIM_Init(struct SfdLib *lib, int rate);
-void SFTIM_Finish(struct SfdLib *lib);
+void SFTIM_Init(SfdTimLib *lib, int vrate);
+void SFTIM_Finish(SfdTimLib *lib);
 void SFTIM_InitHn(void *sfd, SfdTim *tim);
 void SFTIM_InitTtu(SfdTimeRec *rec, int time);
 void SFTIM_UpdateItime(SfdTim *tim, int now);
@@ -532,7 +804,7 @@ void SFTIM_SetTimeFn(void *sfd, SfdTimeFn fn, int index);
 void SFTIM_Tc2Time(SfdTimeCode *tc, int *time, int *unit);
 void SFTIM_GetTimeOneFrmVideo(void *sfd, int *scale, int *rate);
 int SFD_GetFps(void *sfd, int *rate);
-int SFTIM_IsGetFrmTime(void *sfd, struct SfdTimeSpan *span);
+int SFTIM_IsGetFrmTime(void *sfd, struct SfdFrameInfo *frm);
 int SFTIM_IsGetFrmTimeTunit(void *sfd, int time, int unit);
 int SFTIM_IsVideoTerm(void *sfd);
 void SFTIM_SetSpeed(void *sfd, int value);

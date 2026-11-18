@@ -26,7 +26,7 @@ int SFD_SetVideoPts(void *sfd, void *data, int size) {
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000165);
     }
-    sfpts_SetupPtsQue(&h->ent[1].ring, data, size);
+    sfpts_SetupPtsQue(&h->buf[1].u.ring.ptsque, data, size);
     return 0;
 }
 
@@ -48,7 +48,7 @@ int SFPTS_WritePtsQue(void *sfd, int index, SfdItem *item, int *full) {
     if (item->pos < 0) {
         return 0;
     }
-    ring = &h->ent[index].ring;
+    ring = &h->buf[index].u.ring.ptsque;
     if (ring->items == 0) {
         return 0;
     }
@@ -78,18 +78,18 @@ int sfpts_WritePtsQueSub(SfdRing *ring, SfdItem *item, int *full) {
 
 int SFPTS_ReadPtsQue(SfdPly *h, int index, unsigned int pos, SfdItem *out) {
     /* matching construct: table base taken into a local before indexing */
-    SfdStmEnt *entries = h->ent;
-    SfdStmEnt *entry;
+    SfdBufEnt *entries = h->buf;
+    SfdBufEnt *entry;
     SfdRing *ring;
-    SfdStmInf *info;
+    SfdBufInf *info;
     unsigned int span;
     unsigned int base;
     out->pos = -1;
     entry = &entries[index];
-    ring = &entry->ring;
-    info = &entry->info;
+    ring = &entry->u.ring.ptsque;
+    info = &entry->u.ring.sup;
     span = info->size;
-    base = info->base;
+    base = (unsigned int)info->buf;
     if (ring->items == 0) {
         return 0;
     }
@@ -142,7 +142,7 @@ int sfpts_SearchPtsQue(SfdRing *ring, unsigned int pos, unsigned int base, unsig
 
 int SFPTS_IsPtsQueFull(void *sfd, int index) {
     SfdPly *h = sfd;
-    SfdRing *ring = &h->ent[index].ring;
+    SfdRing *ring = &h->buf[index].u.ring.ptsque;
     if (ring->items == 0) {
         return 0;
     }

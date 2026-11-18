@@ -428,8 +428,8 @@ typedef struct SfdFrameInfo {
     int f8;
     int f12;
     SfdPicType picType;      /* 16 */
-    int f20;
-    int f24;
+    int time;                /* 20: the frame's time */
+    int unit;                /* 24 */
     SfdBufFmt bufFmt;        /* 28 */
     void *buf;               /* 32 */
     int f36;
@@ -446,5 +446,12 @@ typedef struct SfdFrameInfo {
         long long words[7];
     } tail;                  /* 72 */
 } SfdFrameInfo;
+
+/* A frame of the handle's frame buffer: whether it is handed out, and the information handed out with it. */
+typedef struct SfdVfrm {
+    int used;                /* 0 */
+    int f4;
+    SfdFrameInfo inf;        /* 8 */
+} SfdVfrm;
 
 #endif

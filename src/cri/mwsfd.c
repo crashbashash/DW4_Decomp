@@ -8,12 +8,6 @@
 #include "dw4/cri/lsc.h"
 #include "dw4/cri/sj.h"
 
-/* the parameter block of the SFD library init */
-typedef struct SfdInitPrm {
-    int f0;
-    int arg;    /* 4 */
-} SfdInitPrm;
-
 #define SFD_VERSION_WORK 14072
 
 extern char mwsfd_version[];        /* "\nMWSFD/PS2EE Ver.3.33s281 Build:..." */
@@ -237,7 +231,7 @@ int mwPlySfdInit(int arg)
     SfdInitPrm prm = mwsfd_sfd_iprm;
     int result;
 
-    prm.arg = arg;
+    prm.vrate = arg;
     if (SFD_IsHnSize(mwsfd_sfd_version, SFD_VERSION_WORK) != 1) {
         MWSFSVM_Error(E011081_mwPlySfdInit_Not_compatible_SFD_Version);
         return -1;

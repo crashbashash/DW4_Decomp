@@ -1,44 +1,25 @@
 #include "dw4/cri/sfd.h"
-
-typedef struct SfdUsrHn SfdUsrHn;
-
-typedef struct SfdUsrIf {
-    void (*init)(void);                              /* 0 */
-    void (*f4)(SfdUsrHn *h, int a, int b);           /* 4 */
-    int (*f8)(SfdUsrHn *h, int a);                   /* 8 */
-    void (*f12)(SfdUsrHn *h, int a);                 /* 12 */
-    int (*f16)(SfdUsrHn *h);                         /* 16 */
-    void (*f20)(SfdUsrHn *h, int a);                 /* 20 */
-} SfdUsrIf;
-
-struct SfdUsrHn {
-    char pad0[8460];
-    SfdUsrIf *iface;          /* 8460 */
-    char pad8464[4];
-    int stream;               /* 8468 */
-    char pad8472[5308];
-    SfdUsrIf ifaceStorage;    /* 13780 */
-};
+#include "dw4/cri/sfdply.h"
 
 
-int sfaoap_OutputServer(SfdUsrHn *h);
-void sfaoap_ChkPrepFlg(SfdUsrHn *h);
-void sfaoap_ChkTermFlg(SfdUsrHn *h);
-void sfaoap_InitInf(SfdUsrIf *iface);
+int sfaoap_OutputServer(SfdPly *h);
+void sfaoap_ChkPrepFlg(SfdPly *h);
+void sfaoap_ChkTermFlg(SfdPly *h);
+void sfaoap_InitInf(SfdAoap *iface);
 
 void SFD_SetOutPan(void *sfd, int a, int b) {
-    SfdUsrHn *h = sfd;
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF0001A1);
         return;
     }
     if (SFSET_GetCond(h, 6) != 0) {
-        h->iface->f4(h, a, b);
+        h->trn[7].hn.aoap->setOutPan(h, a, b);
     }
 }
 
 int SFD_GetOutPan(void *sfd, int a) {
-    SfdUsrHn *h = sfd;
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF0001A2);
         return 0;
@@ -46,22 +27,22 @@ int SFD_GetOutPan(void *sfd, int a) {
     if (SFSET_GetCond(h, 6) == 0) {
         return 0;
     }
-    return h->iface->f8(h, a);
+    return h->trn[7].hn.aoap->getOutPan(h, a);
 }
 
 void SFD_SetOutVol(void *sfd, int a) {
-    SfdUsrHn *h = sfd;
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF0001A3);
         return;
     }
     if (SFSET_GetCond(h, 6) != 0) {
-        h->iface->f12(h, a);
+        h->trn[7].hn.aoap->setOutVol(h, a);
     }
 }
 
 int SFD_GetOutVol(void *sfd) {
-    SfdUsrHn *h = sfd;
+    SfdPly *h = sfd;
     if (SFLIB_CheckHn(h) != 0) {
         sfd_ReportError(0, 0xFF0001A4);
         return 0;
@@ -69,14 +50,14 @@ int SFD_GetOutVol(void *sfd) {
     if (SFSET_GetCond(h, 6) == 0) {
         return 0;
     }
-    return h->iface->f16(h);
+    return h->trn[7].hn.aoap->getOutVol(h);
 }
 
 void SFAOAP_SetSpeed(void *sfd, int a) {
-    SfdUsrHn *h = sfd;
-    void (*fn)(SfdUsrHn *, int);
+    SfdPly *h = sfd;
+    void (*fn)(SfdPly *, int);
     if (SFSET_GetCond(h, 6) != 0) {
-        fn = h->iface->f20;
+        fn = h->trn[7].hn.aoap->setSpeed;
         if (fn != 0) {
             fn(h, a);
         }
@@ -91,86 +72,86 @@ int SFAOAP_Finish(void) {
     return 0;
 }
 
-void SFAOAP_ExecServer(SfdUsrHn *h) {
+void SFAOAP_ExecServer(SfdPly *h) {
     if (SFSET_GetCond(h, 6) != 0) {
         sfaoap_OutputServer(h);
     }
 }
 
-int sfaoap_OutputServer(SfdUsrHn *h) {
+int sfaoap_OutputServer(SfdPly *h) {
     sfaoap_ChkPrepFlg(h);
     sfaoap_ChkTermFlg(h);
     return 0;
 }
 
-void sfaoap_ChkPrepFlg(SfdUsrHn *h) {
-    if (SFTRN_GetPrepFlg(h, 7) != 1 && SFBUF_GetPrepFlg(h, h->stream) == 1) {
+void sfaoap_ChkPrepFlg(SfdPly *h) {
+    if (SFTRN_GetPrepFlg(h, 7) != 1 && SFBUF_GetPrepFlg(h, h->trn[7].bufIn) == 1) {
         SFTRN_SetPrepFlg(h, 7, 1);
     }
 }
 
-void sfaoap_ChkTermFlg(SfdUsrHn *h) {
-    if (SFTRN_GetTermFlg(h, 7) != 1 && SFBUF_GetTermFlg(h, h->stream) == 1) {
+void sfaoap_ChkTermFlg(SfdPly *h) {
+    if (SFTRN_GetTermFlg(h, 7) != 1 && SFBUF_GetTermFlg(h, h->trn[7].bufIn) == 1) {
         SFTRN_SetTermFlg(h, 7, 1);
     }
 }
 
-int SFAOAP_Create(SfdUsrHn *h) {
+int SFAOAP_Create(SfdPly *h) {
     int result = SFSET_GetCond(h, 6);
-    SfdUsrIf *iface = &h->ifaceStorage;
+    SfdAoap *iface = &h->aoap;
     if (result != 0) {
-        h->iface = iface;
+        h->trn[7].hn.aoap = iface;
         sfaoap_InitInf(iface);
         result = 0;
     }
     return result;
 }
 
-void sfaoap_InitInf(SfdUsrIf *iface) {
+void sfaoap_InitInf(SfdAoap *iface) {
 }
 
 int SFAOAP_Destroy(void) {
     return 0;
 }
 
-int SFAOAP_Standby(SfdUsrHn *h) {
+int SFAOAP_Standby(SfdPly *h) {
     if (SFSET_GetCond(h, 6) != 0) {
         SFTRN_CallTrtTrif(h, 3, 5, 0, 0);
     }
 }
 
-int SFAOAP_Start(SfdUsrHn *h) {
+int SFAOAP_Start(SfdPly *h) {
     if (SFSET_GetCond(h, 6) != 0) {
         SFTRN_CallTrtTrif(h, 3, 6, 0, 0);
     }
 }
 
-int SFAOAP_Stop(SfdUsrHn *h) {
+int SFAOAP_Stop(SfdPly *h) {
     if (SFSET_GetCond(h, 6) != 0) {
         SFTRN_CallTrtTrif(h, 3, 7, 0, 0);
     }
 }
 
 /* matching construct: manual — declared int with no return statement (implicit-int style), which keeps the final call a jal */
-int SFAOAP_Pause(SfdUsrHn *h, int value) {
+int SFAOAP_Pause(SfdPly *h, int value) {
     if (SFSET_GetCond(h, 6) != 0) {
         SFTRN_CallTrtTrif(h, 3, 8, value, 0);
     }
 }
 
-void SFAOAP_GetWrite(SfdUsrHn *h) {
+void SFAOAP_GetWrite(SfdPly *h) {
     sfd_ReportError(h, 0xFF000A01);
 }
 
-void SFAOAP_AddWrite(SfdUsrHn *h) {
+void SFAOAP_AddWrite(SfdPly *h) {
     sfd_ReportError(h, 0xFF000A01);
 }
 
-void SFAOAP_GetRead(SfdUsrHn *h) {
+void SFAOAP_GetRead(SfdPly *h) {
     sfd_ReportError(h, 0xFF000A01);
 }
 
-void SFAOAP_AddRead(SfdUsrHn *h) {
+void SFAOAP_AddRead(SfdPly *h) {
     sfd_ReportError(h, 0xFF000A01);
 }
 

@@ -1,17 +1,7 @@
-#include "dw4/cri/sfdhn.h"
+#include "dw4/cri/sfdply.h"
 #include "dw4/cri/mps.h"
 #include "dw4/cri/mcp.h"
 #include "dw4/cri/sfd.h"
-
-enum {
-    SFD_COND_DEMUX_SPLIT = 59,
-    SFD_COND_SYSHD_FN = 85,
-    SFD_COND_SYSHD_FN_OBJ = 86,
-    SFD_COND_VIDEO = 5,
-    SFD_COND_AUDIO = 6,
-    SFD_COND_VIDEO_AUTO_OFF = 79,
-    SFD_COND_AUDIO_AUTO_OFF = 80
-};
 
 enum {
     SFD_STAT_PLAYING = 2
@@ -25,13 +15,6 @@ enum {
     SFMPS_NO_CH = 8
 };
 
-/* A time stamp queued with the video data it belongs to. */
-typedef struct SfmpsPts {
-    long pts;
-    unsigned char *addr;
-    int len;
-} SfmpsPts;
-
 /* What the application's audio-data callback is told about a write. */
 typedef struct SfmpsWrInf {
     long pts;
@@ -44,57 +27,57 @@ extern int (*sfmps_audio_fn)(void *obj, SfmpsWrInf *inf);
 
 
 int sfmps_ChkFatal(void);
-int sfmps_ExecServerSub(SfdHandle *hn);
-void sfmps_SetSysHdFn(SfdHandle *hn);
-int sfmps_Demux(SfdHandle *hn);
-int sfmps_RingGetRead(SfdHandle *hn, unsigned char **addr, int *len, int limit, int *total);
-int sfmps_RingAddRead(SfdHandle *hn, int len);
-int sfmps_DemuxChunk(SfdHandle *hn, unsigned char *addr, int len, int *used, int *skip, int total);
+int sfmps_ExecServerSub(SfdPly *hn);
+void sfmps_SetSysHdFn(SfdPly *hn);
+int sfmps_Demux(SfdPly *hn);
+int sfmps_RingGetRead(SfdPly *hn, unsigned char **addr, int *len, int limit, int *total);
+int sfmps_RingAddRead(SfdPly *hn, int len);
+int sfmps_DemuxChunk(SfdPly *hn, unsigned char *addr, int len, int *used, int *skip, int total);
 int sfmps_IsZero(unsigned char *p, int n);
-int sfmps_IsEndOfRingBuf(SfdHandle *hn, unsigned char *pos);
-SfdChanInf *sfmps_GetSupSj(SfdHandle *hn);
+int sfmps_IsEndOfRingBuf(SfdPly *hn, unsigned char *pos);
+SfdBufInf *sfmps_GetSupSj(SfdPly *hn);
 int sfmps_CopySj(SfdSj *sj, unsigned char *data, int len);
-int sfmps_AutoVchPlay(SfdHandle *hn, int dflt);
-int sfmps_PutUoch(SfdHandle *hn, int id, unsigned char *data, int len);
+int sfmps_AutoVchPlay(SfdPly *hn, int dflt);
+int sfmps_PutUoch(SfdPly *hn, int id, unsigned char *data, int len);
 int sfmps_ExecCopySj(SfdSj *sj, unsigned char *data, int len);
-void sfmps_SetOutEnd(SfdHandle *hn, int value);
-int sfmps_GetTermDst(SfdHandle *hn);
-void sfmps_ProcPrep(SfdHandle *hn);
-void sfmps_ChkPrepFlg(SfdHandle *hn);
-int sfmps_GetPrepDst(SfdHandle *hn);
-void sfmps_SetPrepDst(SfdHandle *hn, int value);
-int sfmps_IsPrepEnd(SfdHandle *hn, int ch);
-void sfmps_AdjustAvPlay(SfdHandle *hn);
-void sfmps_GetStmNum(SfdHandle *hn, int *audio, int *video);
-void sfmps_SetMvInf(SfdHandle *hn);
-void sfmps_SetPicRec(SfdHandle *hn);
-void sfmps_UpdateOther(SfdHandle *hn);
-void sfmps_AddTotals(SfdHandle *hn, int bytes, int packs);
+void sfmps_SetOutEnd(SfdPly *hn, int value);
+int sfmps_GetTermDst(SfdPly *hn);
+void sfmps_ProcPrep(SfdPly *hn);
+void sfmps_ChkPrepFlg(SfdPly *hn);
+int sfmps_GetPrepDst(SfdPly *hn);
+void sfmps_SetPrepDst(SfdPly *hn, int value);
+int sfmps_IsPrepEnd(SfdPly *hn, int ch);
+void sfmps_AdjustAvPlay(SfdPly *hn);
+void sfmps_GetStmNum(SfdPly *hn, int *audio, int *video);
+void sfmps_SetMvInf(SfdPly *hn);
+void sfmps_SetPicRec(SfdPly *hn);
+void sfmps_UpdateOther(SfdPly *hn);
+void sfmps_AddTotals(SfdPly *hn, int bytes, int packs);
 void sfmps_ResetPrm(SfdMpsPrm *prm);
 void sfmps_ErrFn(void *hn, int code);
 int sfmps_DestroySub(MpsHn *mps);
-void sfmps_SetCustomPketLen(SfdHandle *hn);
-int sfmps_ReprocessHdr(SfdHandle *hn, SfdMpsPrm *prm, SfdPicRec *rec);
-SfdPicRec *sfmps_GetHd(SfdHandle *hn);
-int sfmps_IsEffectiveEndcode(SfdHandle *hn, int kind);
-void sfmps_ChkInEnd(SfdHandle *hn, int *done);
-int sfmps_PutEs(SfdHandle *hn, int ch, unsigned char *data, int len, long pts);
-int sfmps_ChkEnd(SfdHandle *hn, unsigned char *addr, int len, int total);
-void sfmps_SkipNext(SfdHandle *hn, unsigned char *buf, int size, int *skip);
-int sfmps_PutPes(SfdHandle *hn, unsigned char *data, int len, int *used, int *result);
-void sfmps_Concat(SfdHandle *hn);
-void sfmps_SetMpsRaw(SfdHandle *hn, MpsHn *mps, unsigned char *data, int len);
+void sfmps_SetCustomPketLen(SfdPly *hn);
+int sfmps_ReprocessHdr(SfdPly *hn, SfdMpsPrm *prm, SfdRecSys *rec);
+SfdRecSys *sfmps_GetHd(SfdPly *hn);
+int sfmps_IsEffectiveEndcode(SfdPly *hn, int kind);
+void sfmps_ChkInEnd(SfdPly *hn, int *done);
+int sfmps_PutEs(SfdPly *hn, int ch, unsigned char *data, int len, long pts);
+int sfmps_ChkEnd(SfdPly *hn, unsigned char *addr, int len, int total);
+void sfmps_SkipNext(SfdPly *hn, unsigned char *buf, int size, int *skip);
+int sfmps_PutPes(SfdPly *hn, unsigned char *data, int len, int *used, int *result);
+void sfmps_Concat(SfdPly *hn);
+void sfmps_SetMpsRaw(SfdPly *hn, MpsHn *mps, unsigned char *data, int len);
 
 /* Attaches an object to stream id 0xBC..0xFF in the handle's stream table, with the callback run
  * on its data. */
-int SFD_SetStmObject(SfdHandle *hn, int id, void *object, int (*cb)(void *obj, int arg), void *cbObj) {
+int SFD_SetStmObject(SfdPly *hn, int id, void *object, int (*cb)(void *obj, int arg), void *cbObj) {
     SfdMpsPrm *prm;
 
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000171);
     }
     if ((unsigned int)(id - 0xBC) < 68) {
-        prm = hn->mps.hn.prm;
+        prm = hn->trn[1].hn.mps;
         prm->object[id - 0xBC] = object;
         prm->stmCbObj = cbObj;
         prm->stmCb = cb;
@@ -103,19 +86,19 @@ int SFD_SetStmObject(SfdHandle *hn, int id, void *object, int (*cb)(void *obj, i
 }
 
 int SFD_GetVideoCh(void *sfd) {
-    SfdHandle *hn = sfd;
+    SfdPly *hn = sfd;
     if (hn == 0) {
         return -1;
     }
-    return hn->mps.hn.prm->videoCh;
+    return hn->trn[1].hn.mps->videoCh;
 }
 
 int SFD_GetAudioCh(void *sfd) {
-    SfdHandle *hn = sfd;
+    SfdPly *hn = sfd;
     if (hn == 0) {
         return -1;
     }
-    return hn->mps.hn.prm->audioCh;
+    return hn->trn[1].hn.mps->audioCh;
 }
 
 int SFMPS_Init(void) {
@@ -143,11 +126,11 @@ int SFMPS_Finish(void) {
     return 0;
 }
 
-int SFMPS_ExecServer(SfdHandle *hn) {
+int SFMPS_ExecServer(SfdPly *hn) {
     return sfmps_ExecServerSub(hn);
 }
 
-int sfmps_ExecServerSub(SfdHandle *hn) {
+int sfmps_ExecServerSub(SfdPly *hn) {
     int ret;
 
     if (sfmps_GetTermDst(hn) == 1) {
@@ -161,19 +144,19 @@ int sfmps_ExecServerSub(SfdHandle *hn) {
     return ret;
 }
 
-void sfmps_SetSysHdFn(SfdHandle *hn) {
-    MpsHn *mps = hn->mps.hn.prm->mps;
+void sfmps_SetSysHdFn(SfdPly *hn) {
+    MpsHn *mps = hn->trn[1].hn.mps->mps;
     MpsSysHdFn fn = (MpsSysHdFn)SFSET_GetCond(hn, SFD_COND_SYSHD_FN);
 
     MPS_SetSysHdFn(mps, fn, (void *)SFSET_GetCond(hn, SFD_COND_SYSHD_FN_OBJ));
 }
 
 /* Demultiplexes what the input channel holds, chunk by chunk. */
-int sfmps_Demux(SfdHandle *hn) {
+int sfmps_Demux(SfdPly *hn) {
     int ret = 0;
     int total = 0;
     int packs = 0;
-    int limit = hn->zeroPad;
+    int limit = hn->cre.unit;
     unsigned char *addr;
     int len;
     int avail;
@@ -200,11 +183,11 @@ int sfmps_Demux(SfdHandle *hn) {
     return ret;
 }
 
-int sfmps_RingGetRead(SfdHandle *hn, unsigned char **addr, int *len, int limit, int *total) {
+int sfmps_RingGetRead(SfdPly *hn, unsigned char **addr, int *len, int limit, int *total) {
     SfdBufStat stat;
     int ret;
 
-    ret = SFBUF_RingGetRead(hn, hn->mps.from, &stat);
+    ret = SFBUF_RingGetRead(hn, hn->trn[1].bufIn, &stat);
     if (ret == 0) {
         *len = stat.ck0.len;
         *addr = (unsigned char *)stat.ck0.data;
@@ -215,15 +198,15 @@ int sfmps_RingGetRead(SfdHandle *hn, unsigned char **addr, int *len, int limit, 
 
 /* matching construct: hand search — declared int with no return statement, and the call wrapped in a
  * do-while(0) block, which keeps it from being a tail call */
-int sfmps_RingAddRead(SfdHandle *hn, int len) {
+int sfmps_RingAddRead(SfdPly *hn, int len) {
     do {
-        SFBUF_RingAddRead(hn, hn->mps.from, len);
+        SFBUF_RingAddRead(hn, hn->trn[1].bufIn, len);
     } while (0);
 }
 
 /* Demultiplexes the pack, system header or packet at addr: *used bytes are consumed, *skip of them
  * skipped as padding. */
-int sfmps_DemuxChunk(SfdHandle *hn, unsigned char *addr, int len, int *used, int *skip, int total) {
+int sfmps_DemuxChunk(SfdPly *hn, unsigned char *addr, int len, int *used, int *skip, int total) {
     SfdMpsPrm *prm;
     MpsHn *mps;
     int ret;
@@ -236,7 +219,7 @@ int sfmps_DemuxChunk(SfdHandle *hn, unsigned char *addr, int len, int *used, int
 
     *used = 0;
     *skip = 0;
-    prm = hn->mps.hn.prm;
+    prm = hn->trn[1].hn.mps;
     mps = prm->mps;
     ret = 0;
     if (sfmps_ChkEnd(hn, addr, len, total) == 0) {
@@ -266,11 +249,11 @@ int sfmps_DemuxChunk(SfdHandle *hn, unsigned char *addr, int len, int *used, int
         sfmps_SkipNext(hn, addr, len, skip);
         *used = *skip;
         if (*skip > 0 && prm->f344 >= 0) {
-            if (prm->f344 >= hn->zeroPad) {
+            if (prm->f344 >= hn->cre.unit) {
                 prm->f344 += *skip;
-            } else if (prm->f344 + *skip > hn->zeroPad) {
-                *skip = *skip - (hn->zeroPad - prm->f344);
-                prm->f344 = hn->zeroPad + *skip;
+            } else if (prm->f344 + *skip > hn->cre.unit) {
+                *skip = *skip - (hn->cre.unit - prm->f344);
+                prm->f344 = hn->cre.unit + *skip;
             } else {
                 prm->f344 += *skip;
                 *skip = 0;
@@ -278,7 +261,7 @@ int sfmps_DemuxChunk(SfdHandle *hn, unsigned char *addr, int len, int *used, int
         }
     } else if (!(flags & MPS_SC_PES)) {
         sfmps_ChkInEnd(hn, &term);
-        if (term == 0 && len > hn->zeroPad) {
+        if (term == 0 && len > hn->cre.unit) {
             if (hdrLen > 0) {
                 *used = hdrLen;
                 *skip = hdrLen;
@@ -298,12 +281,12 @@ int sfmps_DemuxChunk(SfdHandle *hn, unsigned char *addr, int len, int *used, int
 }
 
 /* How many bytes to skip before the next start code: the zero padding, or up to the first start code. */
-void sfmps_SkipNext(SfdHandle *hn, unsigned char *buf, int size, int *skip) {
+void sfmps_SkipNext(SfdPly *hn, unsigned char *buf, int size, int *skip) {
     int n;
     int count;
 
     *skip = 0;
-    n = hn->zeroPad;
+    n = hn->cre.unit;
     if (size >= n + 3 && sfmps_IsZero(buf, n) != 0) {
         *skip = n;
         return;
@@ -335,17 +318,17 @@ int sfmps_IsZero(unsigned char *p, int n) {
 }
 
 /* Whether pos is the end of the input channel's buffer, once the channel has stopped filling. */
-int sfmps_IsEndOfRingBuf(SfdHandle *hn, unsigned char *pos) {
-    SfdChanInf *in = sfmps_GetSupSj(hn);
+int sfmps_IsEndOfRingBuf(SfdPly *hn, unsigned char *pos) {
+    SfdBufInf *in = sfmps_GetSupSj(hn);
 
-    if (in->data == 0 && (in->xsize != 0 || in->f20 != 0)) {
+    if (in->data == 0 && (in->xsize != 0 || in->p0 != 0)) {
         return 0;
     }
-    return pos == in->buf + in->size;
+    return pos == (unsigned char *)in->buf + in->size;
 }
 
-SfdChanInf *sfmps_GetSupSj(SfdHandle *hn) {
-    return &hn->chan[hn->mps.from].inf;
+SfdBufInf *sfmps_GetSupSj(SfdPly *hn) {
+    return &hn->buf[hn->trn[1].bufIn].u.ring.sup;
 }
 
 /* Puts data into a ring and, when it went in, runs the callback. */
@@ -359,16 +342,16 @@ int sfmps_PutAndNotify(SfdSj *sj, int (*cb)(void *obj, int arg), void *obj, int 
 }
 
 /* An audio packet: remembers which audio stream is played and the earliest time stamp, then writes it. */
-int sfmps_CopyAudio(SfdHandle *hn, int stm, unsigned char *data, int len, long pts) {
-    SfdMpsSlot *mps;
+int sfmps_CopyAudio(SfdPly *hn, int stm, unsigned char *data, int len, long pts) {
+    SfdTrnSlot *mps;
     SfdMpsPrm *prm;
     int sel;
 
     if (SFSET_GetCond(hn, SFD_COND_AUDIO) == 0) {
         return 1;
     }
-    mps = &hn->mps;
-    prm = mps->hn.prm;
+    mps = &hn->trn[1];
+    prm = mps->hn.mps;
     if (prm->audioCh == -1) {
         prm->audioCh = stm;
     }
@@ -389,13 +372,13 @@ int sfmps_CopyAudio(SfdHandle *hn, int stm, unsigned char *data, int len, long p
         prm->startPts = pts < prm->startPts ? pts : prm->startPts;
         prm->firstPts = pts < prm->firstPts ? pts : prm->firstPts;
     }
-    return sfmps_PutEs(hn, mps->outputs[SFMPS_OUT_AUDIO], data, len, pts);
+    return sfmps_PutEs(hn, mps->bufOut[SFMPS_OUT_AUDIO], data, len, pts);
 }
 
 /* A video packet: remembers which video stream is played (switching only at a sequence or group header),
  * then writes what the picture layer keeps of it. */
-int sfmps_CopyVideo(SfdHandle *hn, int stm, unsigned char *data, int len, long pts) {
-    SfdMpsSlot *mps;
+int sfmps_CopyVideo(SfdPly *hn, int stm, unsigned char *data, int len, long pts) {
+    SfdTrnSlot *mps;
     SfdMpsPrm *prm;
     int sel;
     int ret;
@@ -404,8 +387,8 @@ int sfmps_CopyVideo(SfdHandle *hn, int stm, unsigned char *data, int len, long p
     if (SFSET_GetCond(hn, SFD_COND_VIDEO) == 0) {
         return 1;
     }
-    mps = &hn->mps;
-    prm = mps->hn.prm;
+    mps = &hn->trn[1];
+    prm = mps->hn.mps;
     if (prm->videoCh == -1) {
         prm->videoCh = sfmps_AutoVchPlay(hn, stm);
     }
@@ -429,7 +412,7 @@ int sfmps_CopyVideo(SfdHandle *hn, int stm, unsigned char *data, int len, long p
     if (len <= 0) {
         return 0;
     }
-    ret = sfmps_PutEs(hn, mps->outputs[SFMPS_OUT_VIDEO], data, len, pts);
+    ret = sfmps_PutEs(hn, mps->bufOut[SFMPS_OUT_VIDEO], data, len, pts);
     if (ret != 1) {
         SFMPVP_Unput(hn, len);
     } else {
@@ -439,7 +422,7 @@ int sfmps_CopyVideo(SfdHandle *hn, int stm, unsigned char *data, int len, long p
 }
 
 /* Whether a packet split across a pack may be passed on as it is. */
-int sfmps_AutoVchPlay(SfdHandle *hn, int dflt) {
+int sfmps_AutoVchPlay(SfdPly *hn, int dflt) {
     int mode = SFSET_GetCond(hn, SFD_COND_DEMUX_SPLIT);
     int audio;
     int video;
@@ -458,7 +441,7 @@ int sfmps_AutoVchPlay(SfdHandle *hn, int dflt) {
 }
 
 /* The packet handler for private stream 2: a CRI header is taken in, the rest is user data. */
-int sfmps_CopyPrvate(SfdHandle *hn, int id, unsigned char *data, int len) {
+int sfmps_CopyPrvate(SfdPly *hn, int id, unsigned char *data, int len) {
     int found;
 
     if (SFHDS_SetHdr(hn, id, data, len, &found) != 0) {
@@ -471,17 +454,17 @@ int sfmps_CopyPrvate(SfdHandle *hn, int id, unsigned char *data, int len) {
     return sfmps_PutUoch(hn, id, data, len);
 }
 
-int sfmps_PutUoch(SfdHandle *hn, int id, unsigned char *data, int len) {
+int sfmps_PutUoch(SfdPly *hn, int id, unsigned char *data, int len) {
     SfdUoch uoch;
     int ret;
     void (*begin)(void *hn, int id);
     void (*end)(void *arg, int id);
     void *arg;
 
-    if (hn->mps.outputs[SFMPS_OUT_USER] == SFMPS_NO_CH) {
+    if (hn->trn[1].bufOut[SFMPS_OUT_USER] == SFMPS_NO_CH) {
         return 1;
     }
-    SFBUF_GetUoch(hn, hn->mps.outputs[SFMPS_OUT_USER], id, &uoch);
+    SFBUF_GetUoch(hn, hn->trn[1].bufOut[SFMPS_OUT_USER], id, &uoch);
     begin = uoch.begin;
     end = uoch.end;
     arg = uoch.arg;
@@ -534,9 +517,9 @@ int sfmps_CopyPadding(void) {
 
 /* Writes an elementary-stream packet into an output channel: a video packet's time stamp is
  * queued first, and an audio packet is offered to the application's callback. */
-int sfmps_PutEs(SfdHandle *hn, int ch, unsigned char *data, int len, long pts) {
+int sfmps_PutEs(SfdPly *hn, int ch, unsigned char *data, int len, long pts) {
     SfdBufStat area;
-    SfmpsPts e;
+    SfdItem e;
     SfmpsWrInf inf;
     int full;
     int ret;
@@ -561,9 +544,9 @@ int sfmps_PutEs(SfdHandle *hn, int ch, unsigned char *data, int len, long pts) {
             if (SFPTS_IsPtsQueFull(hn, 1) != 0) {
                 return 0;
             }
-            e.pts = pts;
-            e.addr = (unsigned char *)addr0;
-            e.len = len;
+            e.pos = pts;
+            e.addr = (unsigned int)addr0;
+            e.size = len;
             ret = SFPTS_WritePtsQue(hn, 1, &e, &full);
             if (ret != 0) {
                 return ret;
@@ -591,45 +574,45 @@ int sfmps_PutEs(SfdHandle *hn, int ch, unsigned char *data, int len, long pts) {
     return ret;
 }
 
-void sfmps_SetOutEnd(SfdHandle *hn, int value) {
-    SfdMpsSlot *mps = &hn->mps;
+void sfmps_SetOutEnd(SfdPly *hn, int value) {
+    SfdTrnSlot *mps = &hn->trn[1];
 
-    SFBUF_SetTermFlg(hn, mps->outputs[1], 1);
-    SFBUF_SetTermFlg(hn, mps->outputs[0], 1);
-    SFBUF_SetTermFlg(hn, mps->outputs[2], 1);
+    SFBUF_SetTermFlg(hn, mps->bufOut[1], 1);
+    SFBUF_SetTermFlg(hn, mps->bufOut[0], 1);
+    SFBUF_SetTermFlg(hn, mps->bufOut[2], 1);
     sfmpvps2_StopIpu(hn, value);
 }
 
-int sfmps_GetTermDst(SfdHandle *hn) {
-    SfdMpsSlot *mps = &hn->mps;
+int sfmps_GetTermDst(SfdPly *hn) {
+    SfdTrnSlot *mps = &hn->trn[1];
     int a;
     int b;
     int c;
 
-    a = SFBUF_GetTermFlg(hn, mps->outputs[1]);
-    b = SFBUF_GetTermFlg(hn, mps->outputs[0]);
-    c = SFBUF_GetTermFlg(hn, mps->outputs[2]);
+    a = SFBUF_GetTermFlg(hn, mps->bufOut[1]);
+    b = SFBUF_GetTermFlg(hn, mps->bufOut[0]);
+    c = SFBUF_GetTermFlg(hn, mps->bufOut[2]);
     return a & b & c;
 }
 
-void sfmps_Concat(SfdHandle *hn) {
-    SfdMpsPrm *prm = hn->mps.hn.prm;
+void sfmps_Concat(SfdPly *hn) {
+    SfdMpsPrm *prm = hn->trn[1].hn.mps;
 
     prm->nPics++;
 }
 
-int sfmps_ChkEnd(SfdHandle *hn, unsigned char *addr, int len, int total) {
-    SfdMpsSlot *mps = &hn->mps;
-    SfdMpsPrm *prm = mps->hn.prm;
-    int from = mps->from;
+int sfmps_ChkEnd(SfdPly *hn, unsigned char *addr, int len, int total) {
+    SfdTrnSlot *mps = &hn->trn[1];
+    SfdMpsPrm *prm = mps->hn.mps;
+    int from = mps->bufIn;
     int kind;
     int done;
 
     if (len >= 4) {
         kind = MPS_GetStartCodeKind(addr);
         if (kind == MPS_SC_END) {
-            if (mps->f32 < 0) {
-                mps->f32 = SFBUF_GetRTot(hn, from) + 4;
+            if (mps->readTot < 0) {
+                mps->readTot = SFBUF_GetRTot(hn, from) + 4;
             }
             prm->f60 = 1;
         } else if (kind != 0) {
@@ -659,7 +642,7 @@ int sfmps_ChkEnd(SfdHandle *hn, unsigned char *addr, int len, int total) {
 }
 
 /* An end code ends the stream unless the next stream is linked or the supply is still open. */
-int sfmps_IsEffectiveEndcode(SfdHandle *hn, int kind) {
+int sfmps_IsEffectiveEndcode(SfdPly *hn, int kind) {
     if (kind != MPS_SC_END) {
         return 0;
     }
@@ -669,12 +652,12 @@ int sfmps_IsEffectiveEndcode(SfdHandle *hn, int kind) {
     return 1;
 }
 
-void sfmps_ChkInEnd(SfdHandle *hn, int *done) {
-    SfdMpsSlot *mps = &hn->mps;
-    SfdMpsPrm *prm = mps->hn.prm;
+void sfmps_ChkInEnd(SfdPly *hn, int *done) {
+    SfdTrnSlot *mps = &hn->trn[1];
+    SfdMpsPrm *prm = mps->hn.mps;
     int end;
 
-    if (SFBUF_GetTermFlg(hn, mps->from) == 1) {
+    if (SFBUF_GetTermFlg(hn, mps->bufIn) == 1) {
         sfmps_SetOutEnd(hn, prm->f60);
         end = 1;
     } else {
@@ -685,7 +668,7 @@ void sfmps_ChkInEnd(SfdHandle *hn, int *done) {
     }
 }
 
-void sfmps_ProcPrep(SfdHandle *hn) {
+void sfmps_ProcPrep(SfdPly *hn) {
     int audio;
     int video;
 
@@ -697,40 +680,40 @@ void sfmps_ProcPrep(SfdHandle *hn) {
     sfmps_UpdateOther(hn);
 }
 
-void sfmps_ChkPrepFlg(SfdHandle *hn) {
+void sfmps_ChkPrepFlg(SfdPly *hn) {
     int in;
 
     if (sfmps_GetPrepDst(hn) != 1) {
-        in = hn->mps.from;
+        in = hn->trn[1].bufIn;
         if (SFBUF_GetPrepFlg(hn, in) == 1 && sfmps_IsPrepEnd(hn, in) != 0) {
             sfmps_SetPrepDst(hn, 1);
         }
     }
 }
 
-int sfmps_GetPrepDst(SfdHandle *hn) {
-    SfdMpsSlot *mps = &hn->mps;
+int sfmps_GetPrepDst(SfdPly *hn) {
+    SfdTrnSlot *mps = &hn->trn[1];
     int a;
     int b;
     int c;
 
-    a = SFBUF_GetPrepFlg(hn, mps->outputs[1]);
-    b = SFBUF_GetPrepFlg(hn, mps->outputs[0]);
-    c = SFBUF_GetPrepFlg(hn, mps->outputs[2]);
+    a = SFBUF_GetPrepFlg(hn, mps->bufOut[1]);
+    b = SFBUF_GetPrepFlg(hn, mps->bufOut[0]);
+    c = SFBUF_GetPrepFlg(hn, mps->bufOut[2]);
     return a | b | c;
 }
 
-void sfmps_SetPrepDst(SfdHandle *hn, int value) {
-    SfdMpsSlot *mps = &hn->mps;
+void sfmps_SetPrepDst(SfdPly *hn, int value) {
+    SfdTrnSlot *mps = &hn->trn[1];
 
-    SFBUF_SetPrepFlg(hn, mps->outputs[1], value);
-    SFBUF_SetPrepFlg(hn, mps->outputs[0], value);
-    SFBUF_SetPrepFlg(hn, mps->outputs[2], value);
+    SFBUF_SetPrepFlg(hn, mps->bufOut[1], value);
+    SFBUF_SetPrepFlg(hn, mps->bufOut[0], value);
+    SFBUF_SetPrepFlg(hn, mps->bufOut[2], value);
 }
 
 /* Once a stream's output is drained and the transport says so, its play condition is cleared. */
-void sfmps_AdjustAvPlay(SfdHandle *hn) {
-    SfdMpsPrm *prm = hn->mps.hn.prm;
+void sfmps_AdjustAvPlay(SfdPly *hn) {
+    SfdMpsPrm *prm = hn->trn[1].hn.mps;
 
     if (SFSET_GetCond(hn, SFD_COND_AUDIO) != 0 && SFSET_GetCond(hn, SFD_COND_AUDIO_AUTO_OFF) != 0) {
         if (SFBUF_GetWTot(hn, 2) == 0 && prm->audioBound == 0) {
@@ -746,12 +729,12 @@ void sfmps_AdjustAvPlay(SfdHandle *hn) {
 }
 
 /* The largest audio and video bounds over the three kinds of system header seen so far. */
-void sfmps_GetStmNum(SfdHandle *hn, int *audio, int *video) {
+void sfmps_GetStmNum(SfdPly *hn, int *audio, int *video) {
     MpsSysHd hd;
     int i = 0;
     int maxAudio = 0;
     int maxVideo = 0;
-    SfdMpsPrm *prm = hn->mps.hn.prm;
+    SfdMpsPrm *prm = hn->trn[1].hn.mps;
     MpsHn *mps = prm->mps;
 
     do {
@@ -769,9 +752,9 @@ void sfmps_GetStmNum(SfdHandle *hn, int *audio, int *video) {
     *video = prm->videoBound;
 }
 
-void sfmps_SetMvInf(SfdHandle *hn) {
+void sfmps_SetMvInf(SfdPly *hn) {
     SfdMvInf *video = &hn->mvInf;
-    SfdMpsPrm *prm = hn->mps.hn.prm;
+    SfdMpsPrm *prm = hn->trn[1].hn.mps;
     MpsHn *mps = prm->mps;
     MpsPackHd pack;
     MpsSysHd sys;
@@ -793,40 +776,40 @@ void sfmps_SetMvInf(SfdHandle *hn) {
 }
 
 /* Keeps the time offset of the first picture and, in a fresh record, the stream's parameters. */
-void sfmps_SetPicRec(SfdHandle *hn) {
-    SfdPicRec *rec = sfmps_GetHd(hn);
+void sfmps_SetPicRec(SfdPly *hn) {
+    SfdRecSys *rec = sfmps_GetHd(hn);
     SfdTim *tim = &hn->tim;
     SfdMpsPrm *prm;
     SfdMvInf *video;
     long first;
 
     if (rec != 0) {
-        prm = hn->mps.hn.prm;
+        prm = hn->trn[1].hn.mps;
         first = prm->firstPts;
         if (first != 0x7FFFFFFFFFFFFFFF) {
             video = &hn->mvInf;
-            tim->ofsTime = first - rec->startPts;
+            tim->ofsTime = first - rec->ptsMin;
             if (rec->valid == 0) {
-                rec->baseTime = tim->baseTime;
-                rec->bps = video->muxRate * 50;
-                rec->startPts = prm->startPts;
-                rec->f8 = video->fixedFlag;
-                rec->videoBound = prm->videoBound;
-                rec->audioBound = prm->audioBound;
-                rec->f40 = prm->f44;
-                rec->f44 = prm->f48;
+                rec->scrBase = tim->baseTime;
+                rec->time = video->muxRate * 50;
+                rec->ptsMin = prm->startPts;
+                rec->unit = video->fixedFlag;
+                rec->nvid = prm->videoBound;
+                rec->naud = prm->audioBound;
+                rec->stmidVid = prm->f44;
+                rec->stmidAud = prm->f48;
             }
         }
     }
 }
 
-void sfmps_UpdateOther(SfdHandle *hn) {
+void sfmps_UpdateOther(SfdPly *hn) {
 }
 
 /* Keeps a picture's user text (the first or the second of the system header's two) in the record. */
-void sfmps_SetMpsRaw(SfdHandle *hn, MpsHn *mps, unsigned char *data, int len) {
-    SfdPicRec *rec;
-    SfdPicTxt *txt;
+void sfmps_SetMpsRaw(SfdPly *hn, MpsHn *mps, unsigned char *data, int len) {
+    SfdRecSys *rec;
+    SfdSysHd *txt;
     char *dst;
     MpsSysHd sys;
     int n;
@@ -837,21 +820,21 @@ void sfmps_SetMpsRaw(SfdHandle *hn, MpsHn *mps, unsigned char *data, int len) {
     }
     MPS_GetSysHd(mps, &sys);
     n = len > 176 ? 176 : len;
-    txt = &rec->txt;
+    txt = &rec->syshd;
     if (sys.videoBound > 0) {
         txt->len[0] = n;
-        dst = txt->text[0];
+        dst = txt->data[0];
     } else if (sys.audioBound > 0) {
         txt->len[1] = n;
-        dst = txt->text[1];
+        dst = txt->data[1];
     } else {
         return;
     }
     MEM_Copy(dst, (char *)data, n);
 }
 
-void sfmps_AddTotals(SfdHandle *hn, int bytes, int packs) {
-    SfdSj *sj = hn->chan[0].inf.sj;
+void sfmps_AddTotals(SfdPly *hn, int bytes, int packs) {
+    SfdSj *sj = hn->buf[0].u.ring.sup.sj;
     int total;
     int rest;
 
@@ -863,11 +846,11 @@ void sfmps_AddTotals(SfdHandle *hn, int bytes, int packs) {
     }
 }
 
-void SFMPS_Create(SfdHandle *hn) {
-    SfdMpsPrm *prm = &hn->mpsPrm;
+void SFMPS_Create(SfdPly *hn) {
+    SfdMpsPrm *prm = &hn->mps;
     MpsHn *mps;
 
-    hn->mps.hn.prm = prm;
+    hn->trn[1].hn.mps = prm;
     sfmps_ResetPrm(prm);
     mps = MPS_Create();
     if (mps == 0) {
@@ -908,8 +891,8 @@ void sfmps_ErrFn(void *hn, int code) {
     sfd_ReportError(hn, code);
 }
 
-void SFMPS_Destroy(SfdHandle *hn) {
-    if (sfmps_DestroySub(hn->mps.hn.prm->mps) != 0) {
+void SFMPS_Destroy(SfdPly *hn) {
+    if (sfmps_DestroySub(hn->trn[1].hn.mps->mps) != 0) {
         sfd_ReportError(hn, 0xFF000D0A);
     }
 }
@@ -934,25 +917,25 @@ int SFMPS_Pause(void) {
     return 0;
 }
 
-void SFMPS_GetWrite(SfdHandle *hn) {
+void SFMPS_GetWrite(SfdPly *hn) {
     sfd_ReportError(hn, 0xFF000D0B);
 }
 
-void SFMPS_AddWrite(SfdHandle *hn) {
+void SFMPS_AddWrite(SfdPly *hn) {
     sfd_ReportError(hn, 0xFF000D0B);
 }
 
-void SFMPS_GetRead(SfdHandle *hn) {
+void SFMPS_GetRead(SfdPly *hn) {
     sfd_ReportError(hn, 0xFF000D0B);
 }
 
-void SFMPS_AddRead(SfdHandle *hn) {
+void SFMPS_AddRead(SfdPly *hn) {
     sfd_ReportError(hn, 0xFF000D0B);
 }
 
 /* Restores the header and the first picture's texts and times from the work record. */
-int SFMPS_Seek(SfdHandle *hn) {
-    SfdPicRec *rec = sfmps_GetHd(hn);
+int SFMPS_Seek(SfdPly *hn) {
+    SfdRecSys *rec = sfmps_GetHd(hn);
     SfdMpsPrm *prm;
     SfdTim *tim;
     int ret;
@@ -963,31 +946,31 @@ int SFMPS_Seek(SfdHandle *hn) {
     if (rec->valid == 0) {
         return 0;
     }
-    prm = hn->mps.hn.prm;
+    prm = hn->trn[1].hn.mps;
     SFHDS_ReprocessHdr(hn);
     sfmps_SetCustomPketLen(hn);
     tim = &hn->tim;
     ret = sfmps_ReprocessHdr(hn, prm, rec);
     if (ret == 0) {
-        prm->f44 = rec->f40;
-        tim->baseTime = rec->baseTime;
-        prm->f48 = rec->f44;
-        prm->startPts = rec->startPts;
+        prm->f44 = rec->stmidVid;
+        tim->baseTime = rec->scrBase;
+        prm->f48 = rec->stmidAud;
+        prm->startPts = rec->ptsMin;
     }
     return ret;
 }
 
-void sfmps_SetCustomPketLen(SfdHandle *hn) {
+void sfmps_SetCustomPketLen(SfdPly *hn) {
 }
 
 /* Decodes the two user texts of a picture record with the handle's demultiplexer. */
-int sfmps_ReprocessHdr(SfdHandle *hn, SfdMpsPrm *prm, SfdPicRec *rec) {
+int sfmps_ReprocessHdr(SfdPly *hn, SfdMpsPrm *prm, SfdRecSys *rec) {
     int consumed;
     int flags;
-    SfdPicTxt *txt = &rec->txt;
+    SfdSysHd *txt = &rec->syshd;
     MpsHn *mps = prm->mps;
-    int r0 = MPS_DecodeChunk(mps, (unsigned char *)txt->text[0], txt->len[0], &consumed, &flags);
-    int r1 = MPS_DecodeChunk(mps, (unsigned char *)txt->text[1], txt->len[1], &consumed, &flags);
+    int r0 = MPS_DecodeChunk(mps, (unsigned char *)txt->data[0], txt->len[0], &consumed, &flags);
+    int r1 = MPS_DecodeChunk(mps, (unsigned char *)txt->data[1], txt->len[1], &consumed, &flags);
 
     if (r0 != 0 || r1 != 0) {
         return sfd_ReportError(hn, 0xFF000D0D);
@@ -996,24 +979,24 @@ int sfmps_ReprocessHdr(SfdHandle *hn, SfdMpsPrm *prm, SfdPicRec *rec) {
 }
 
 /* The picture record in the work record, until the stream has delivered its first picture. */
-SfdPicRec *sfmps_GetHd(SfdHandle *hn) {
-    if (hn->work == 0) {
+SfdRecSys *sfmps_GetHd(SfdPly *hn) {
+    if (hn->see.rec == 0) {
         return 0;
     }
     if (SFMPS_GetConcatCnt(hn) > 0) {
         return 0;
     }
-    return &hn->work->pic;
+    return &hn->see.rec->sys;
 }
 
 int SFMPS_GetConcatCnt(void *sfd) {
-    SfdHandle *hn = sfd;
-    return hn->mps.hn.prm->nPics;
+    SfdPly *hn = sfd;
+    return hn->trn[1].hn.mps->nPics;
 }
-int sfmps_IsPrepEnd(SfdHandle *hn, int ch) {
+int sfmps_IsPrepEnd(SfdPly *hn, int ch) {
     int *cond = hn->cond;
-    SfdChanInf *in = sfmps_GetSupSj(hn);
-    int size = hn->f8;
+    SfdBufInf *in = sfmps_GetSupSj(hn);
+    int size = hn->cre.bufSize[0];
     int need = cond[22];
     int prep;
     if (size <= 0) size = in->size;

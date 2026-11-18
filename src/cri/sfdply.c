@@ -13,8 +13,8 @@ extern void (*sfply_vbin_nest)(SfdPly *h, int value);
 extern SfdPly *sfply_handles[8];
 extern int sfply_sys_stat;
 extern unsigned int sfply_last_hnctrl_wksiz;
-/* kept here: this unit, sfdcond.c and sfdlib.c each read the library block through their own view, and the types disagree */
-extern SfdCond sfd_lib;
+
+
 extern int sfply_reset_flg;
 extern void (*SFPLY_ResetPtsm)(SfdPtsm *ptsm);
 
@@ -55,7 +55,7 @@ SfdPly *sfply_InitHn(SfdCrePrm *prm, int arg);
 void sfply_InitMvInf(SfdMvInf *rec);
 void sfply_InitPlyInf(SfdPlyInf *tmr);
 void FUN_002abbc0(long long *cnt);
-void sfply_InitTmrInf(SfdTable *tbl);
+void sfply_InitTmrInf(SfdTmrInf *tmr);
 int sfply_TrCreate(SfdPly *h);
 int sfply_TrDestroy(SfdPly *h);
 int sfply_Start(SfdPly *h);
@@ -259,7 +259,7 @@ void sfply_ExecOne(SfdPly *h) {
         break;
     }
     h->stat = st;
-    SFTMR_AddTsum(h->tbl.trailer, UTY_GetTmr() - start);
+    SFTMR_AddTsum(&h->tmr.tsum[5], UTY_GetTmr() - start);
 }
 
 void sfply_ExecOneSub(SfdPly *h) {
@@ -332,34 +332,34 @@ void sfply_AdjustPrepEnd(SfdPly *h) {
 }
 
 void sfply_FixAvPlay(SfdPly *h) {
-    SfdCond *c = &h->cond;
-    if (c->req1 == 1 && SFBUF_GetWTot(h, 1) == 0 && SFBUF_GetRTot(h, 1) == 0) {
-        c->req1 = 0;
+    int *c = h->cond;
+    if (c[SFD_COND_VIDEO] == 1 && SFBUF_GetWTot(h, 1) == 0 && SFBUF_GetRTot(h, 1) == 0) {
+        c[SFD_COND_VIDEO] = 0;
     }
-    if (c->req2 == 1 && SFBUF_GetWTot(h, 2) == 0 && SFBUF_GetRTot(h, 2) == 0) {
-        c->req2 = 0;
+    if (c[SFD_COND_AUDIO] == 1 && SFBUF_GetWTot(h, 2) == 0 && SFBUF_GetRTot(h, 2) == 0) {
+        c[SFD_COND_AUDIO] = 0;
     }
-    SFSEE_FixAvPlay(h, c->req1, c->req2);
+    SFSEE_FixAvPlay(h, c[SFD_COND_VIDEO], c[SFD_COND_AUDIO]);
 }
 
 void sfply_AdjustSyncMode(SfdPly *h) {
-    SfdCond *c = &h->cond;
-    if (c->req2 == 0 && c->mode == 2) {
-        SFSET_SetCond(h, 15, 1);
+    int *c = h->cond;
+    if (c[SFD_COND_AUDIO] == 0 && c[SFD_COND_SYNCMODE] == 2) {
+        SFSET_SetCond(h, SFD_COND_SYNCMODE, 1);
     }
-    if (c->req1 == 0 && c->mode == 1) {
-        SFSET_SetCond(h, 15, 2);
+    if (c[SFD_COND_VIDEO] == 0 && c[SFD_COND_SYNCMODE] == 1) {
+        SFSET_SetCond(h, SFD_COND_SYNCMODE, 2);
     }
 }
 
 void sfply_AdjustEtrg(SfdPly *h) {
-    SfdCond *c = &h->cond;
+    int *c = h->cond;
     unsigned int mask;
     int value;
     mask = 0;
-    if (c->req2 == 1)
+    if (c[SFD_COND_AUDIO] == 1)
         mask = 1;
-    if (c->req1 == 1)
+    if (c[SFD_COND_VIDEO] == 1)
         mask |= 2;
     switch (mask) {
     case 1:
@@ -424,12 +424,12 @@ int sfply_StatFin(SfdPly *h) {
 }
 
 int sfply_IsStartSync(SfdPly *h) {
-    SfdCond *c = &h->cond;
+    int *c = h->cond;
     SfdTim *d = &h->tim;
-    if (c->f56 == 0) return 1;
-    if (c->req1 == 0) return 1;
+    if (c[14] == 0) return 1;
+    if (c[SFD_COND_VIDEO] == 0) return 1;
     if (d->f688 != 0) return 1;
-    if (d->count >= c->f180) return 1;
+    if (d->count >= c[45]) return 1;
     return sfply_IsEtrg(h) != 0;
 }
 
@@ -509,7 +509,7 @@ int sfply_IsAnyoneTerm(SfdPly *h) {
 }
 
 int sfply_EnoughViData(SfdPly *h) {
-    SfdStmInf *e = &h->ent[h->f28.f152].info;
+    SfdBufInf *e = &h->buf[h->trn[2].bufIn].u.ring.sup;
     SfdSj *sj = e->sj;
     int v = sj->vtbl->getNumData(sj, 1);
     if (v < e->size * 80 / 100 && v < SFSET_GetCond(h, 70)) {
@@ -519,7 +519,7 @@ int sfply_EnoughViData(SfdPly *h) {
 }
 
 int sfply_EnoughAiData(SfdPly *h) {
-    SfdStmInf *e = &h->ent[h->f28.f220].info;
+    SfdBufInf *e = &h->buf[h->trn[3].bufIn].u.ring.sup;
     SfdSj *sj = e->sj;
     if (sj->vtbl->getNumData(sj, 1) < e->size * 80 / 100) {
         return 0;
@@ -535,13 +535,13 @@ int sfply_ChkFin(SfdPly *h) {
 }
 
 int sfply_IsEtime(SfdPly *h) {
-    SfdCond *c = &h->cond;
+    int *c = h->cond;
     int first;
     int second;
     int request;
     int value;
-    request = c->request;
-    value = c->value;
+    request = c[SFD_COND_ETIME];
+    value = c[SFD_COND_ETUNIT];
     if (request == -4) {
         return 0;
     }
@@ -553,12 +553,12 @@ int sfply_IsEtime(SfdPly *h) {
 }
 
 int sfply_IsEtrg(SfdPly *h) {
-    SfdCond *c = &h->cond;
+    int *c = h->cond;
     int check6;
     int check7;
     unsigned int mode;
     int result;
-    if (c->req2 == 0 && c->req1 == 0) {
+    if (c[SFD_COND_AUDIO] == 0 && c[SFD_COND_VIDEO] == 0) {
         return 1;
     }
     check6 = SFTRN_GetTermFlg(h, 6);
@@ -660,7 +660,7 @@ void *SFD_Create(SfdCrePrm *prm, int arg) {
 }
 
 int sfply_ChkCrePara(SfdCrePrm *prm) {
-    if (prm->f4 == 0) {
+    if (prm->bufWork == 0) {
         return sfd_ReportError(0, 0xFF000204);
     }
     if (prm->workSize < 0x3718U) {
@@ -698,7 +698,7 @@ SfdPly *sfply_InitHn(SfdCrePrm *prm, int arg) {
     UTY_MemsetDword(work, 0, ndw);
     h = (SfdPly *)(((unsigned int)work + 31) & ~31);
     h->stat = h->reqStat = 0;
-    prm->f4 = (char *)(((unsigned int)prm->f4 + 31) & ~31);
+    prm->bufWork = (char *)(((unsigned int)prm->bufWork + 31) & ~31);
     h->cre = *prm;
     h->pause = 0;
     h->pending = 1;
@@ -706,15 +706,15 @@ SfdPly *sfply_InitHn(SfdCrePrm *prm, int arg) {
     SFHDS_InitFhd(&h->hdr);
     sfply_InitMvInf(&h->mvInf);
     sfply_InitPlyInf(&h->plyInf);
-    sfply_InitTmrInf(&h->tbl);
+    sfply_InitTmrInf(&h->tmr);
     sfd_ClearErr(&h->err);
-    MEM_Copy(&h->cond, &sfd_lib, sizeof(h->cond));
-    MEM_Copy(&h->cond2, &sfd_lib, sizeof(h->cond2));
+    MEM_Copy(h->cond, sfd_lib.cond, sizeof(h->cond));
+    MEM_Copy(h->cond2, sfd_lib.cond, sizeof(h->cond2));
     SFTIM_InitHn(h, &h->tim);
-    if (SFBUF_InitHn(h, h->ent, prm) != 0)
+    if (SFBUF_InitHn(h, h->buf, prm) != 0)
         return 0;
-    SFTRN_InitHn(h, &h->f28, prm, arg);
-    SFSEE_InitHn(&h->recSlot);
+    SFTRN_InitHn(h, h->trn, prm, arg);
+    SFSEE_InitHn(&h->see);
     if (sfply_TrCreate(h) != 0)
         return 0;
     h->reqStat = 1;
@@ -724,14 +724,14 @@ SfdPly *sfply_InitHn(SfdCrePrm *prm, int arg) {
 
 void sfply_InitMvInf(SfdMvInf *rec) {
     UTY_MemsetDword(rec, 0, 16);
-    rec->f0 = 0;
-    rec->f4 = 0;
-    rec->f8 = 0;
-    rec->f12 = 0;
-    rec->f16 = 0;
-    rec->f20 = 0;
+    rec->width = 0;
+    rec->height = 0;
+    rec->mbWidth = 0;
+    rec->mbHeight = 0;
+    rec->bitRate = 0;
+    rec->frameRate = 0;
     rec->muxRate = 0;
-    rec->f32 = 0;
+    rec->vbvSize = 0;
     rec->fixedFlag = 1;
     rec->audioBound = -1;
     rec->videoBound = -1;
@@ -764,15 +764,15 @@ void FUN_002abbc0(long long *cnt) {
     cnt[2] = 0;
 }
 
-void sfply_InitTmrInf(SfdTable *tbl) {
-    SfdTblEnt *e;
+void sfply_InitTmrInf(SfdTmrInf *tmr) {
+    SfdTsum *e;
     int i;
-    UTY_MemsetDword(tbl, 0, 48);
-    e = tbl->ent;
+    UTY_MemsetDword(tmr, 0, 48);
+    e = tmr->tsum;
     for (i = 4; i >= 0; i--) {
         SFTMR_InitTsum(e++);
     }
-    SFTMR_InitTsum(tbl->trailer);
+    SFTMR_InitTsum(&tmr->tsum[5]);
 }
 
 void SFPLY_AddDecPic(SfdPly *h, int delta, int arg) {
@@ -903,8 +903,8 @@ int sfply_ResetHn(SfdPly *h) {
     int nmpv;
     SfdCrePrm prm;
     SfdBufStat inf;
-    SfdCond cond;
-    char mpvcond[64];
+    int cond[SFD_COND_NUM];
+    int mpvcond[16];
     SfdPtsm ptsm;
     int keepsup;
     int supadr = 0;
@@ -928,7 +928,7 @@ int sfply_ResetHn(SfdPly *h) {
     int ret;
 
     prm = h->cre;
-    keepsup = h->cond.f32;
+    keepsup = h->cond[SFD_COND_KEEPSUP];
     if (keepsup) {
         SFD_GetWritePtr(h, &inf);
         supadr = inf.tailLen;
@@ -944,7 +944,7 @@ int sfply_ResetHn(SfdPly *h) {
     extobj = h->tim.clock_ctx;
     isskipfn = h->tim.isSkipFn;
     speed = h->tim.speed;
-    see = h->recSlot.rec;
+    see = h->see.rec;
     if (see != 0) {
         byterate = see->byterate;
         fsize = see->fsize;
@@ -958,7 +958,7 @@ int sfply_ResetHn(SfdPly *h) {
         fsize = 0;
         byterate = 0;
     }
-    ptsque = &h->ent[1].ring;
+    ptsque = &h->buf[1].u.ring.ptsque;
     ptssiz = ptsque->size * sizeof(SfdItem);
     ptsent = ptsque->items;
     nmpv = SFMPV_SaveCond(h, mpvcond, sizeof(mpvcond));
@@ -966,13 +966,13 @@ int sfply_ResetHn(SfdPly *h) {
     if (ret != 0) {
         return ret;
     }
-    MEM_Copy(&cond, &h->cond2, sizeof(cond));
+    MEM_Copy(cond, h->cond2, sizeof(cond));
     h = sfply_InitHn(&prm, 0);
     if (h == 0) {
         return sfd_ReportError(0, 0xFF000202);
     }
-    MEM_Copy(&h->cond, &cond, sizeof(cond));
-    MEM_Copy(&h->cond2, &cond, sizeof(cond));
+    MEM_Copy(h->cond, cond, sizeof(cond));
+    MEM_Copy(h->cond2, cond, sizeof(cond));
     SFMPV_RestoreCond(h, mpvcond, nmpv);
     if (keepsup) {
         ret = SFD_GetWritePtr(h, &inf);
@@ -1024,7 +1024,7 @@ int SFD_GetWritePtr(void *sfd, SfdBufStat *inf) {
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000134);
     }
-    return SFTRN_CallTrtTrif(h, 0, 9, inf, 0);
+    return SFTRN_CallTrtTrif(h, 0, 9, (int)inf, 0);
 }
 
 int SFD_AddWritePtr(void *sfd, int a, int b) {
@@ -1041,7 +1041,7 @@ int SFD_TermSupply(void *sfd) {
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000135);
     }
-    id = h->f28.f20;
+    id = h->trn[0].bufOut[0];
     if (SFBUF_GetTermFlg(h, id) == 1) {
         return 0;
     }
@@ -1051,7 +1051,7 @@ int SFD_TermSupply(void *sfd) {
 }
 
 int SFPLY_IsTermSupply(SfdPly *h) {
-    return SFBUF_GetTermFlg(h, h->f28.f20) != 0;
+    return SFBUF_GetTermFlg(h, h->trn[0].bufOut[0]) != 0;
 }
 
 int SFD_GetFrm(void *sfd, int *out) {
@@ -1062,7 +1062,7 @@ int SFD_GetFrm(void *sfd, int *out) {
     if (SFLIB_CheckHn(h) != 0) {
         return sfd_ReportError(0, 0xFF000136);
     }
-    result = SFTRN_CallTrtTrif(h, 6, 11, out, 0);
+    result = SFTRN_CallTrtTrif(h, 6, 11, (int)out, 0);
     value = *out;
     if (value != 0) {
         h->plyInf.f24 = 1;

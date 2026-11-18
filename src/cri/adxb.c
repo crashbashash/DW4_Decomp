@@ -337,12 +337,12 @@ int ADXB_GetLpStartPos(AdxbObj *obj)
 
 int ADXB_GetLpStartOfst(AdxbObj *obj)
 {
-    int var_v0;
-    var_v0 = 0;
+    int ofst;
+    ofst = 0;
     if (obj != 0) {
-        var_v0 = obj->lp_start_ofst;
+        ofst = obj->lp_start_ofst;
     }
-    return var_v0;
+    return ofst;
 }
 
 int ADXB_GetLpEndPos(AdxbObj *obj)

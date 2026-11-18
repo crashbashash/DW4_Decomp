@@ -2,51 +2,23 @@
  * user outputs (a memory block or a stream join each) the data of the buffer channel the slot reads;
  * its errors are 0xFF0006xx. */
 #include "dw4/cri/sfd.h"
+#include "dw4/cri/sfdply.h"
 
 
 #define SFAINF_SLOT 8
 #define SFAINF_NOUT 3
 
-typedef struct SfainfOut {
-    int kind;
-    void *sj;
-    void *buf;
-    int size;
-} SfainfOut;
-
-typedef struct SfainfList {
-    int nout;
-    SfainfOut out[SFAINF_NOUT];
-} SfainfList;
-
-/* One 0x44-byte entry of the stream graph at handle +7976. */
-typedef struct SfainfTrn {
-    int f0;
-    int f4;
-    SfainfList *list;
-    int f12;
-    int from;         /* the buffer channel the slot reads; 8 while no channel is linked */
-    char pad20[0x44 - 20];
-} SfainfTrn;
-
-typedef struct SfainfHn {
-    char pad0[7976];
-    SfainfTrn trn[9];
-    char pad8588[13808 - 8588];
-    SfainfList list;
-} SfainfHn;
-
 void sfuo_SetUoch(SfainfOut *out, int kind, void *sj, void *buf, int size);
-void sfuo_InitInf(SfainfHn *hn, SfainfList *list, int from);
+void sfuo_InitInf(SfdPly *hn, SfainfList *list, int from);
 void sfuo_InitUoch(SfainfOut *out);
-int sfuo_IsTerm(SfainfHn *hn);
-int sfuo_IsPrepEnd(SfainfHn *hn);
-int sfuo_OutputServer(SfainfHn *hn);
-void sfuo_ChkTermFlg(SfainfHn *hn);
-void sfuo_ChkPrepFlg(SfainfHn *hn);
+int sfuo_IsTerm(SfdPly *hn);
+int sfuo_IsPrepEnd(SfdPly *hn);
+int sfuo_OutputServer(SfdPly *hn);
+void sfuo_ChkTermFlg(SfdPly *hn);
+void sfuo_ChkPrepFlg(SfdPly *hn);
 
-int SFD_SetSystemUsrSj(SfainfHn *hn, int index, int kind, void *buf, int size) {
-    SfainfTrn *trn = &hn->trn[SFAINF_SLOT];
+int SFD_SetSystemUsrSj(SfdPly *hn, int index, int kind, void *buf, int size) {
+    SfdTrnSlot *trn = &hn->trn[SFAINF_SLOT];
     int from;
     SfainfOut *out;
     SfainfList *list;
@@ -58,8 +30,8 @@ int SFD_SetSystemUsrSj(SfainfHn *hn, int index, int kind, void *buf, int size) {
         return sfd_ReportError(0, 0xFF000192);
     }
     /* The list pointer is read before the channel test, as retail does. */
-    from = trn->from;
-    list = trn->list;
+    from = trn->bufIn;
+    list = trn->hn.uo;
     if (from == SFAINF_SLOT) {
         return sfd_ReportError(hn, 0xFF000602);
     }
@@ -70,8 +42,8 @@ int SFD_SetSystemUsrSj(SfainfHn *hn, int index, int kind, void *buf, int size) {
 }
 
 int SFD_SetUsrSj(void *sfd, int index, int kind, void *sj) {
-    SfainfHn *hn = sfd;
-    SfainfTrn *trn = &hn->trn[SFAINF_SLOT];
+    SfdPly *hn = sfd;
+    SfdTrnSlot *trn = &hn->trn[SFAINF_SLOT];
     int from;
     SfainfOut *out;
     SfainfList *list;
@@ -80,8 +52,8 @@ int SFD_SetUsrSj(void *sfd, int index, int kind, void *sj) {
         return sfd_ReportError(0, 0xFF000191);
     }
     /* The list pointer is read before the channel test, as retail does. */
-    from = trn->from;
-    list = trn->list;
+    from = trn->bufIn;
+    list = trn->hn.uo;
     if (from == SFAINF_SLOT) {
         return sfd_ReportError(hn, 0xFF000602);
     }
@@ -99,7 +71,7 @@ int SFUO_Finish(void) {
     return 0;
 }
 
-int SFUO_ExecServer(SfainfHn *hn) {
+int SFUO_ExecServer(SfdPly *hn) {
     int result;
 
     sfuo_ChkTermFlg(hn);
@@ -108,44 +80,44 @@ int SFUO_ExecServer(SfainfHn *hn) {
     return result;
 }
 
-void sfuo_ChkTermFlg(SfainfHn *hn) {
-    if (SFTRN_GetTermFlg(hn, SFAINF_SLOT) != 1 && SFBUF_GetTermFlg(hn, hn->trn[SFAINF_SLOT].from) == 1
+void sfuo_ChkTermFlg(SfdPly *hn) {
+    if (SFTRN_GetTermFlg(hn, SFAINF_SLOT) != 1 && SFBUF_GetTermFlg(hn, hn->trn[SFAINF_SLOT].bufIn) == 1
         && sfuo_IsTerm(hn) != 0) {
         SFTRN_SetTermFlg(hn, SFAINF_SLOT, 1);
     }
 }
 
-int sfuo_IsTerm(SfainfHn *hn) {
+int sfuo_IsTerm(SfdPly *hn) {
     return 1;
 }
 
-void sfuo_ChkPrepFlg(SfainfHn *hn) {
-    if (SFTRN_GetPrepFlg(hn, SFAINF_SLOT) != 1 && SFBUF_GetPrepFlg(hn, hn->trn[SFAINF_SLOT].from) == 1
+void sfuo_ChkPrepFlg(SfdPly *hn) {
+    if (SFTRN_GetPrepFlg(hn, SFAINF_SLOT) != 1 && SFBUF_GetPrepFlg(hn, hn->trn[SFAINF_SLOT].bufIn) == 1
         && sfuo_IsPrepEnd(hn) != 0) {
         SFTRN_SetPrepFlg(hn, SFAINF_SLOT, 1);
     }
 }
 
-int sfuo_IsPrepEnd(SfainfHn *hn) {
+int sfuo_IsPrepEnd(SfdPly *hn) {
     return 1;
 }
 
-int sfuo_OutputServer(SfainfHn *hn) {
+int sfuo_OutputServer(SfdPly *hn) {
     return 0;
 }
 
-int SFUO_Create(SfainfHn *hn) {
+int SFUO_Create(SfdPly *hn) {
     /* matching construct: permuter — taking the slot before the list gives retail's v0 copy of hn */
-    SfainfTrn *trn = &hn->trn[SFAINF_SLOT];
-    SfainfList *list = &hn->list;
+    SfdTrnSlot *trn = &hn->trn[SFAINF_SLOT];
+    SfainfList *list = &hn->uo;
 
-    trn->list = list;
-    sfuo_InitInf(hn, list, trn->from);
+    trn->hn.uo = list;
+    sfuo_InitInf(hn, list, trn->bufIn);
     return 0;
 }
 
 /* matching construct: permuter — SFBUF_SetUoch declared void (its result is unused) leaves v0 free for the loop test, as in retail */
-void sfuo_InitInf(SfainfHn *hn, SfainfList *list, int from) {
+void sfuo_InitInf(SfdPly *hn, SfainfList *list, int from) {
     int i;
 
     list->nout = 0;
@@ -186,19 +158,19 @@ int SFUO_Pause(void) {
     return 0;
 }
 
-void SFUO_GetWrite(SfainfHn *hn) {
+void SFUO_GetWrite(SfdPly *hn) {
     sfd_ReportError(hn, 0xFF000601);
 }
 
-void SFUO_AddWrite(SfainfHn *hn) {
+void SFUO_AddWrite(SfdPly *hn) {
     sfd_ReportError(hn, 0xFF000601);
 }
 
-void SFUO_GetRead(SfainfHn *hn) {
+void SFUO_GetRead(SfdPly *hn) {
     sfd_ReportError(hn, 0xFF000601);
 }
 
-void SFUO_AddRead(SfainfHn *hn) {
+void SFUO_AddRead(SfdPly *hn) {
     sfd_ReportError(hn, 0xFF000601);
 }
 

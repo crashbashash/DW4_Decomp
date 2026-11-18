@@ -1,80 +1,12 @@
-/* The SFD handle as the player files (sfdply.c, sfdring.c, sfdrec.c) see it. */
+/* The SFD handle (SFD_Create): the one object every SFD file reads, with the seek record it is given. */
 #ifndef DW4_CRI_SFDPLY_H
 #define DW4_CRI_SFDPLY_H
 
 #include "dw4/cri/sj.h"
 #include "dw4/cri/sfd.h"
-
-typedef struct SfdCrePrm {
-    int f0;
-    char *f4;
-    char pad8[52];
-    char *work;            /* 60 */
-    unsigned int workSize; /* 64 */
-} SfdCrePrm;
-
-typedef struct SfdCond {
-    int f0;
-    int f4;
-    int f8;
-    int f12;
-    int f16;
-    int req1;    /* 20 */
-    int req2;    /* 24 */
-    int f28;
-    int f32;
-    char pad36[20];
-    int f56;
-    int mode;    /* 60 */
-    char pad64[16];
-    int request; /* 80; -4 = none */
-    int value;   /* 84 */
-    char pad88[92];
-    int f180;
-    char pad184[216];
-} SfdCond;
+#include "dw4/cri/sfmpv.h"
 
 typedef struct SfdPly SfdPly;
-
-
-typedef struct SfdItem {
-    long long pos;          /* 0; negative = none */
-    unsigned int addr; /* 8 */
-    unsigned int size; /* 12 */
-} SfdItem;
-
-typedef struct SfdRing {
-    SfdItem *items; /* 0 */
-    int size;       /* 4 */
-    int count;      /* 8 */
-    int wr;         /* 12 */
-    int rd;         /* 16 */
-} SfdRing;
-
-typedef struct SfdStmInf {
-    int f0;
-    SfdSj *sj;         /* 4 */
-    int base;          /* 8 */
-    int size;          /* 12 */
-} SfdStmInf;
-
-typedef struct SfdStmEnt {
-    char pad0[16];
-    SfdStmInf info; /* 16 */
-    char pad32[24];
-    SfdRing ring;   /* 56 */
-    char pad76[40];
-} SfdStmEnt;
-
-typedef struct SfdF28 {
-    char pad0[20];
-    int f20;
-    char pad24[128];
-    int f152;
-    char pad156[64];
-    int f220;
-    char pad224[5664];
-} SfdF28;
 
 typedef struct SfdRec SfdRec;
 
@@ -84,39 +16,50 @@ typedef struct SfdRecSub {
     int f8;
 } SfdRecSub;
 
+/* The seek record of a handle (SFD_EntrySeek) and the request kept with it. */
 typedef struct SfdRecSlot {
     SfdRec *rec;   /* 0 */
     SfdRecSub sub; /* 4 */
 } SfdRecSlot;
 
-/* The system stream analysis kept in the seek record (sfd_mps.c in RE4's library). */
-typedef struct SfdRecSysTime {
-    int set;              /* 0: analysed */
-    int time;             /* 4 */
+/* The pack and system headers of the video and the audio stream, kept for seeking. */
+typedef struct SfdSysHd {
+    char data[2][176];   /* 0 */
+    int len[2];          /* 352 */
+} SfdSysHd;
+
+/* The system stream analysis kept in the seek record (sfmps.c, sfd_mps.c in RE4's library): the byte
+ * rate, the streams of the system header, the first time stamps and stream ids, and the headers. */
+typedef struct SfdRecSys {
+    int valid;            /* 0: analysed */
+    int time;             /* 4: bytes per unit */
     int unit;             /* 8 */
     int nvid;             /* 12: video streams of the system header */
     int naud;             /* 16: audio streams */
     int f20;
-    long long scr_base;   /* 24 */
-    long long pts_min;    /* 32 */
-    int stmid_vid;        /* 40: the first video stream id */
-    int stmid_aud;        /* 44: the first audio stream id */
-} SfdRecSysTime;
+    long long scrBase;    /* 24 */
+    long long ptsMin;     /* 32 */
+    int stmidVid;         /* 40: the first video stream id */
+    int stmidAud;         /* 44: the first audio stream id */
+    SfdSysHd syshd;       /* 48 */
+} SfdRecSys;
 
-typedef struct SfdRecAudioTime {
-    int set;
+/* The video stream's analysis: whether it is done and the time it gives. */
+typedef struct SfdRecVideo {
+    int valid;
     int time;
     int unit;
-} SfdRecAudioTime;
+} SfdRecVideo;
 
-typedef struct SfdRecVideoTime {
-    int set;
+/* The audio stream's analysis. */
+typedef struct SfdRecAudio {
+    int valid;
     int time;
     int unit;
-    int f12;
-    int f16;
-    int f20;
-} SfdRecVideoTime;
+    int nch;
+    int sfreq;
+    int nsmpl;
+} SfdRecAudio;
 
 /* The seek record SFD_EntrySeek hands a handle (sfdrec.c): the header and stream analysis of the movie,
  * then the totals the application sets. */
@@ -125,12 +68,12 @@ struct SfdRec {
     int time;                     /* 4 */
     int unit;                     /* 8 */
     SfdHdrInf hdrInf;             /* 12 */
-    SfdRecSysTime sysTime;        /* 2208 */
-    char pad2256[512];
-    SfdRecAudioTime audioTime;    /* 2768 */
+    SfdRecSys sys;                /* 2208 */
+    char pad2616[152];
+    SfdRecVideo video;            /* 2768 */
     SfdTimeRec startTime;         /* 2780 */
     char pad2824[516];
-    SfdRecVideoTime videoTime;    /* 3340 */
+    SfdRecAudio audio;            /* 3340 */
     char pad3364[132];
     int derived;                  /* 3496 */
     int default_value;            /* 3500 */
@@ -146,37 +89,41 @@ struct SfdRec {
     int seekpos;                  /* 3540: SFD_SetSeekPos */
 };
 
-typedef struct SfdTblEnt {
-    char pad0[32];
-} SfdTblEnt;
-
-typedef struct SfdTable {
-    SfdTblEnt ent[5];  /* 0 */
-    char trailer[64];  /* 160 */
-} SfdTable;
-
+/* The SFD handle: the creation parameters, the play state, the movie's header and information, the
+ * conditions, the time work, the buffers and frames, the stream graph with the system, video, audio and
+ * output modules' work, the seek record and the server statistics. */
 struct SfdPly {
-    SfdCrePrm cre;        /* 0 */
-    int pending;          /* 68 */
-    int stat;             /* 72 */
-    int reqStat;          /* 76 */
-    int pause;            /* 80 */
-    int pauseCnt;         /* 84 */
+    SfdCrePrm cre;               /* 0 */
+    int pending;                 /* 68: set by a change the server has to see */
+    int stat;                    /* 72 */
+    int reqStat;                 /* 76 */
+    int pause;                   /* 80 */
+    int pauseCnt;                /* 84 */
     char pad88[32];
-    SfdHdrInf hdr;        /* 120 */
-    SfdMvInf mvInf;       /* 2316 */
+    SfdHdrInf hdr;               /* 120 */
+    SfdMvInf mvInf;              /* 2316 */
     char pad2380[4];
-    SfdPlyInf plyInf;     /* 2384 */
-    SfdErrInf err;        /* 2544 */
-    SfdCond cond;         /* 2564 */
-    SfdCond cond2;        /* 2964 */
+    SfdPlyInf plyInf;            /* 2384 */
+    SfdErrInf err;               /* 2544 */
+    int cond[SFD_COND_NUM];      /* 2564 */
+    int cond2[SFD_COND_NUM];     /* 2964: the conditions a reset restores */
     char pad3364[4];
-    SfdTim tim;           /* 3368 */
-    SfdStmEnt ent[8];     /* 4872 */
-    char pad5800[2176];
-    SfdF28 f28;           /* 7976 */
-    SfdRecSlot recSlot;   /* 13864 */
-    SfdTable tbl;         /* 13880 */
+    SfdTim tim;                  /* 3368 */
+    SfdBufEnt buf[8];            /* 4872 */
+    SfdVfrm vfrm[16];            /* 5800 */
+    SfdTrnSlot trn[9];           /* 7976 */
+    char pad8588[4];
+    SfdMpsPrm mps;               /* 8592 */
+    char pad8944[176];
+    SfdMpv mpv;                  /* 9120 */
+    SfdAdxCtx adxt;              /* 13600 */
+    char pad13680[100];
+    SfdAoap aoap;                /* 13780 */
+    char pad13804[4];
+    SfainfList uo;               /* 13808 */
+    char pad13860[4];
+    SfdRecSlot see;              /* 13864 */
+    SfdTmrInf tmr;               /* 13880 */
 };
 
 #endif

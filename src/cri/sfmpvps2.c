@@ -42,7 +42,7 @@ extern char sfmpv_seqend_codes[16];
 
 int viBufCreate(SfdIpuStream *stream, void *base, void *address, int sectors, SfdIpuEntry *entries, int entryCount);
 int viBufReset(SfdIpuStream *stream);
-void scTag2(long long *arg0, long long arg1, long long arg2, long long arg3);
+void scTag2(long long *tag, long long addr, long long id, long long qwc);
 void viBufBeginPut(SfdIpuStream *stream, char **first, int *firstSize, char **second, int *secondSize);
 int viBufAddDMA(SfdIpuStream *stream);
 void viBufEndPut(SfdIpuStream *stream, int bytes);
@@ -78,8 +78,8 @@ void setD4_CHCR(unsigned int chcr) {
     EIntr();
 }
 
-void scTag2(long long *arg0, long long arg1, long long arg2, long long arg3) {
-    *arg0 = (arg1 << 0x20) | ((unsigned long long) (arg2 << 0x20) >> 4) | ((unsigned long long) (arg3 << 0x20) >> 0x20);
+void scTag2(long long *tag, long long addr, long long id, long long qwc) {
+    *tag = (addr << 0x20) | ((unsigned long long) (id << 0x20) >> 4) | ((unsigned long long) (qwc << 0x20) >> 0x20);
 }
 
 void viBufEndPut(SfdIpuStream *stream, int bytes) {

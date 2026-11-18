@@ -17,14 +17,28 @@ its public API, begin it.
 | `src/cri/sfmps.c` | `0x2a0f98` up to `0x2a2f30` | the MPS (system stream) handler: the stream-object API, demultiplexing the input channel into the video, audio and user-data channels, the picture record, and the 14 handler entries | its handler table at `0x4f4d88` and the PES packet table at `0x4f4dc0` (the next table, `0x4f4dd0`, is `sfmpv.c`'s); codes `0x171` and `0xD01` up to `0xD0E`; its parameter block at handle +8592, reached through the MPS slot of the stream graph (+8052) |
 
 `src/cri/sfdana.c` and `src/cri/sfdhdr.c` share the header record (`SfdHdrInf`), and `src/cri/sfdhdr.c` and
-`src/cri/sfmps.c` share the work record (`SfdWork`): those types, the error block, the stream-graph slots and the
-handle as these six files see it are in `include/dw4/cri/sfdhn.h`. The MPS types come from `include/dw4/cri/mps.h`.
+`src/cri/sfmps.c` share the seek record's system analysis (`SfdRecSys`). The handle is `SfdPly` in
+`include/dw4/cri/sfdply.h`; its parts are in `include/dw4/cri/sfd.h`. The MPS types come from `include/dw4/cri/mps.h`.
 
 ## Types
 
-- `SfdHandle` declares only the fields these files use; the other files of the library declare their own views
-  of the same handle (`SfdPly`, `SfdHn`, `SfdBufHn`, `SfdPlayer`), as [CRI SFD files](cri-sfd-files.md#open-questions)
-  notes.
+- `SfdPly` is the one definition of the 14072-byte handle, and every SFD file reads it (`sfmpv.c` and `sfmpvps2.c`
+  still read it through `SfdPlayer`, as [CRI SFD files](cri-sfd-files.md#open-questions) notes). Its parts follow the
+  RE4 SFD object's: the creation parameters (`SfdCrePrm`, whose first word is the stream-module table
+  SFTRN_InitHn reads), the conditions (`int cond[100]`, indexed by the `SFD_COND_*` enum), the buffers
+  (`SfdBufEnt[8]`, +4872: a union of the ring, audio ring, frame and user-output modes), the frames
+  (`SfdVfrm[16]`, +5800), the stream graph (`SfdTrnSlot[9]`, +7976, its work word a union of the modules' work
+  types), the system module's work (`SfdMpsPrm`, +8592), the video work (`SfdMpv`, +9120), the ADX work
+  (`SfdAdxCtx`, +13600), the audio output (`SfdAoap`, +13780), the user outputs (`SfainfList`, +13808), the seek
+  record (`SfdRecSlot`, +13864) and the server statistics (`SfdTmrInf`, +13880). The library state is `SfdLibInf`
+  (`sfd_lib`), with the V-sync count `SfdTimLib` at +432.
+- Access through a union member is type-punned by ee-gcc 2.96 (every load and store conflicts), so the files reach
+  a buffer's mode through a pointer to the mode struct where retail schedules a load across stores.
+- Medium names from use: `SfdTrnSlot.readTot` (`sfsee_GetInSjReadTot`), `SfdVfrm.used`, `SfdCrePrm.unit` (the
+  input's sector size; alternative: the zero padding of a short read). The seek record's analyses at +2768 and
+  +3340 are the video's and the audio's (`SfdRecVideo`, `SfdRecAudio`; RE4 leaves them unassigned): the
+  sfsee checks gate +2768 on condition 5 and slot 2 and +3340 on condition 6 and slot 3, and the ADX handler fills
+  +3340's channel count, frequency and samples.
 - The sub-objects of the handle have one definition each in `include/dw4/cri/sfd.h`, embedded in every handle
   view: the header record (`SfdHdrInf`, +120), the stream information (`SfdMvInf`, +2316), the playback information
   (`SfdPlyInf`, +2384), the error block (`SfdErrInf`, +2544) and the time work (`SfdTim`, +3368, with the time

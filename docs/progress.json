@@ -240,7 +240,7 @@
    },
    "decl.local_externs": {
     "reason": null,
-    "value": 64
+    "value": 61
    },
    "decl.type_conflicts": {
     "reason": null,
@@ -260,7 +260,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 772
+    "value": 759
    },
    "inline_asm.other": {
     "reason": null,
@@ -280,7 +280,7 @@
    },
    "m2c_idiom.units": {
     "reason": null,
-    "value": 22
+    "value": 18
    },
    "mismatch.bytes": {
     "reason": null,
@@ -320,7 +320,7 @@
    },
    "struct.a": {
     "reason": null,
-    "value": 5
+    "value": 3
    },
    "struct.b": {
     "reason": "engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes",
@@ -363,17 +363,17 @@
    "compile.bytes": 0,
    "compile.functions": 0,
    "decl.header_conflicts": 246,
-   "decl.local_externs": 64,
+   "decl.local_externs": 61,
    "decl.type_conflicts": 378,
    "decl.varargs": 271,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "fun_dat_refs": 772,
+   "fun_dat_refs": 759,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
-   "m2c_idiom.units": 22,
+   "m2c_idiom.units": 18,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
@@ -383,7 +383,7 @@
    "profile_split.bytes": 19492,
    "profile_split.units": 3,
    "raw_casts.reflected": 258,
-   "struct.a": 5,
+   "struct.a": 3,
    "struct.b": 1,
    "struct.c": 9,
    "unapproved.bytes": 0,
@@ -492,23 +492,23 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2273596,
+  "bytes": 2282812,
   "failing": {
    "addresses": {
-    "bytes": 673740,
-    "functions": 3834
+    "bytes": 672460,
+    "functions": 3826
    },
    "declarations": {
-    "bytes": 261748,
-    "functions": 460
+    "bytes": 260048,
+    "functions": 452
    },
    "fields": {
-    "bytes": 443032,
-    "functions": 2401
+    "bytes": 436328,
+    "functions": 2348
    },
    "idioms": {
-    "bytes": 377456,
-    "functions": 2047
+    "bytes": 377268,
+    "functions": 2043
    },
    "name": {
     "bytes": 546580,
@@ -519,8 +519,8 @@
     "functions": 9
    },
    "references": {
-    "bytes": 462168,
-    "functions": 1723
+    "bytes": 460888,
+    "functions": 1715
    },
    "types": {
     "bytes": 314280,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 13809,
+  "functions": 13880,
   "matched_functions": 20431
  },
  "regions": [
@@ -666,11 +666,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 3949,
+  "offset_casts": 3947,
   "pct": 45.53,
   "recovered": 32781,
-  "synthetic": 6167,
-  "total": 71999,
+  "synthetic": 6095,
+  "total": 71992,
   "typeable": 258,
   "typeable_pct": 0.36
  }

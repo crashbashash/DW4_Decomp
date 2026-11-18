@@ -254,15 +254,15 @@ void SFXZ_SetZclip(SfxZHn *zhn, float zmin, float zmax) {
 }
 
 int sfxzmv_IsOkZclip(float zmin, float zmax) {
-    int var_v0;
-    var_v0 = 1;
+    int ok;
+    ok = 1;
     if (zmax <= zmin) {
-        var_v0 = 0;
+        ok = 0;
     }
     if ((zmax - zmin) < -14.0f) {
-        var_v0 = 0;
+        ok = 0;
     }
-    return var_v0;
+    return ok;
 }
 
 void SFXZ_GetZclip(SfxZHn *zhn, float *zmin, float *zmax) {

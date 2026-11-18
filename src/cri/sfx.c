@@ -402,11 +402,11 @@ void FUN_002b3fd0(SfxPlane *plane, int first, int second) {
 }
 
 void SFX_SetMaxAlpha(SfxHn *hn, int value) {
-    unsigned int temp_s0;
-    temp_s0 = value & 0xFF;
+    unsigned int alpha;
+    alpha = value & 0xFF;
     CFT_SetMaxAlpha(value);
     SFXSET_SetTblPtn(hn, 0);
-    SFX_SetAlp3Prm(hn, 0, temp_s0 >> 1, temp_s0);
+    SFX_SetAlp3Prm(hn, 0, alpha >> 1, alpha);
 }
 
 int SFX_GetMaxAlpha(SfxHn *hn) {

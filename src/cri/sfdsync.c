@@ -1,16 +1,10 @@
-#include "dw4/cri/sfdhn.h"
+#include "dw4/cri/sfdply.h"
 #include "dw4/cri/uty.h"
 #include "dw4/cri/sfd.h"
 
-enum {
-    SFD_COND_LNKSTM = 49,
-    SFD_COND_SUPPLY_END = 56,
-    SFD_COND_DECODE_END = 57
-};
-
 
 int SFD_SetConcatPlay(void *sfd) {
-    SfdHandle *hn = sfd;
+    SfdPly *hn = sfd;
     if (SFLIB_CheckHn(hn) != 0) {
         return sfd_ReportError(0, 0xFF000161);
     }
@@ -19,12 +13,12 @@ int SFD_SetConcatPlay(void *sfd) {
 }
 
 int SFCON_IsEndcodeSkip(void *sfd) {
-    SfdHandle *hn = sfd;
+    SfdPly *hn = sfd;
     return SFSET_GetCond(hn, SFD_COND_LNKSTM) != 0;
 }
 
 int SFCON_IsSystemEndcodeSkip(void *sfd) {
-    SfdHandle *hn = sfd;
+    SfdPly *hn = sfd;
     if (SFSET_GetCond(hn, SFD_COND_LNKSTM) != 0 || SFSET_GetCond(hn, SFD_COND_SUPPLY_END) != 0) {
         return 1;
     }
@@ -32,7 +26,7 @@ int SFCON_IsSystemEndcodeSkip(void *sfd) {
 }
 
 int SFCON_IsVideoEndcodeSkip(void *sfd) {
-    SfdHandle *hn = sfd;
+    SfdPly *hn = sfd;
     if (SFSET_GetCond(hn, SFD_COND_LNKSTM) != 0 || SFSET_GetCond(hn, SFD_COND_DECODE_END) != 0) {
         return 1;
     }
@@ -41,7 +35,7 @@ int SFCON_IsVideoEndcodeSkip(void *sfd) {
 
 /* matching construct: manual — declared int with no return statement (implicit-int style), which keeps the final call a jal */
 int SFCON_UpdateConcatTime(void *sfd, int amount) {
-    SfdHandle *hn = sfd;
+    SfdPly *hn = sfd;
     char guard[16];
     SfdTim *tim = &hn->tim;
     int total;
@@ -58,7 +52,7 @@ int SFCON_UpdateConcatTime(void *sfd, int amount) {
 }
 
 int SFCON_WriteTotSmplQue(void *sfd, int pts, int last) {
-    SfdHandle *hn = sfd;
+    SfdPly *hn = sfd;
     SfdTim *tim = &hn->tim;
     char guard[16];
     int ok = 0;
@@ -74,7 +68,7 @@ int SFCON_WriteTotSmplQue(void *sfd, int pts, int last) {
     return ok;
 }
 
-int SFCON_ReadTotSmplQue(SfdHandle *hn, int *pts, int *last) {
+int SFCON_ReadTotSmplQue(SfdPly *hn, int *pts, int *last) {
     SfdTim *tim = &hn->tim;
     char guard[16];
     int ok;
@@ -94,7 +88,7 @@ int SFCON_ReadTotSmplQue(SfdHandle *hn, int *pts, int *last) {
 }
 
 
-int SFD_GetTimePerFile(SfdHandle *hn, int *time, int *unit, int *pos) {
+int SFD_GetTimePerFile(SfdPly *hn, int *time, int *unit, int *pos) {
     char guard[16];
     int rate;
     int ret;

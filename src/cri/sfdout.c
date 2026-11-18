@@ -2,29 +2,16 @@
  * linked to through its GetRead and AddRead entries, gated by the time block; writing is not
  * supported (0xFF000701). */
 #include "dw4/cri/sfd.h"
+#include "dw4/cri/sfdply.h"
 
 
 #define SFOUT_SLOT 6
 
-/* One 0x44-byte entry of the stream graph at handle +7976. */
-typedef struct SfoutTrn {
-    char pad0[16];
-    int from;         /* the buffer channel the slot reads */
-    char pad20[0x44 - 20];
-} SfoutTrn;
-
-typedef struct SfoutHn {
-    char pad0[72];
-    int stat;         /* 3 and 4: playing */
-    char pad76[7976 - 76];
-    SfoutTrn trn[9];
-} SfoutHn;
-
-int sfvom_IsTerm(SfoutHn *hn);
-int sfvom_IsPrepEnd(SfoutHn *hn);
-int sfvom_OutputServer(SfoutHn *hn);
-void sfvom_ChkTermFlg(SfoutHn *hn);
-void sfvom_ChkPrepFlg(SfoutHn *hn);
+int sfvom_IsTerm(SfdPly *hn);
+int sfvom_IsPrepEnd(SfdPly *hn);
+int sfvom_OutputServer(SfdPly *hn);
+void sfvom_ChkTermFlg(SfdPly *hn);
+void sfvom_ChkPrepFlg(SfdPly *hn);
 
 int SFVOM_Init(void) {
     return 0;
@@ -34,7 +21,7 @@ int SFVOM_Finish(void) {
     return 0;
 }
 
-int SFVOM_ExecServer(SfoutHn *hn) {
+int SFVOM_ExecServer(SfdPly *hn) {
     int result;
 
     if (SFSET_GetCond(hn, 5) == 0) {
@@ -46,32 +33,32 @@ int SFVOM_ExecServer(SfoutHn *hn) {
     return result;
 }
 
-void sfvom_ChkTermFlg(SfoutHn *hn) {
-    if (SFTRN_GetTermFlg(hn, SFOUT_SLOT) != 1 && SFBUF_GetTermFlg(hn, hn->trn[SFOUT_SLOT].from) == 1
+void sfvom_ChkTermFlg(SfdPly *hn) {
+    if (SFTRN_GetTermFlg(hn, SFOUT_SLOT) != 1 && SFBUF_GetTermFlg(hn, hn->trn[SFOUT_SLOT].bufIn) == 1
         && sfvom_IsTerm(hn) != 0) {
         SFTRN_SetTermFlg(hn, SFOUT_SLOT, 1);
     }
 }
 
-int sfvom_IsTerm(SfoutHn *hn) {
+int sfvom_IsTerm(SfdPly *hn) {
     if (SFSET_GetCond(hn, 15) == 0) {
         return 1;
     }
     return SFTIM_IsVideoTerm(hn) != 0;
 }
 
-void sfvom_ChkPrepFlg(SfoutHn *hn) {
-    if (SFTRN_GetPrepFlg(hn, SFOUT_SLOT) != 1 && SFBUF_GetPrepFlg(hn, hn->trn[SFOUT_SLOT].from) == 1
+void sfvom_ChkPrepFlg(SfdPly *hn) {
+    if (SFTRN_GetPrepFlg(hn, SFOUT_SLOT) != 1 && SFBUF_GetPrepFlg(hn, hn->trn[SFOUT_SLOT].bufIn) == 1
         && sfvom_IsPrepEnd(hn) != 0) {
         SFTRN_SetPrepFlg(hn, SFOUT_SLOT, 1);
     }
 }
 
-int sfvom_IsPrepEnd(SfoutHn *hn) {
+int sfvom_IsPrepEnd(SfdPly *hn) {
     return 1;
 }
 
-int sfvom_OutputServer(SfoutHn *hn) {
+int sfvom_OutputServer(SfdPly *hn) {
     return 0;
 }
 
@@ -99,23 +86,23 @@ int SFVOM_Pause(void) {
     return 0;
 }
 
-void SFVOM_GetWrite(SfoutHn *hn) {
+void SFVOM_GetWrite(SfdPly *hn) {
     sfd_ReportError(hn, 0xFF000701);
 }
 
-void SFVOM_AddWrite(SfoutHn *hn) {
+void SFVOM_AddWrite(SfdPly *hn) {
     sfd_ReportError(hn, 0xFF000701);
 }
 
 /* Only while playing, and only data whose time has come. */
-int SFVOM_GetRead(SfoutHn *hn, int *data) {
+int SFVOM_GetRead(SfdPly *hn, SfdFrameInfo **data) {
     int result;
 
     if ((unsigned int)(hn->stat - 3) >= 2) {
         *data = 0;
         return 0;
     }
-    result = SFBUF_VfrmGetRead(hn, hn->trn[SFOUT_SLOT].from, data);
+    result = SFBUF_VfrmGetRead(hn, hn->trn[SFOUT_SLOT].bufIn, data);
     if (result != 0) {
         return result;
     }
@@ -127,8 +114,8 @@ int SFVOM_GetRead(SfoutHn *hn, int *data) {
     return 0;
 }
 
-void SFVOM_AddRead(SfoutHn *hn, int size) {
-    SFBUF_VfrmAddRead(hn, hn->trn[SFOUT_SLOT].from, size);
+void SFVOM_AddRead(SfdPly *hn, SfdFrameInfo *frm) {
+    SFBUF_VfrmAddRead(hn, hn->trn[SFOUT_SLOT].bufIn, frm);
 }
 
 int SFVOM_Seek(void) {
