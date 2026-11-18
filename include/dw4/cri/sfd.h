@@ -11,6 +11,8 @@ struct SfdMpvCond;
 struct SfdPlanes;
 struct SfdFrameInfo;
 struct SfdPly;
+struct SfdFrmPara;
+struct MpvHn;
 
 /* A clock source: the time of the handle as a count of units. */
 typedef int (*SfdTimeFn)(void *sfd, int *time, int *unit);
@@ -190,7 +192,7 @@ typedef struct SfdMvInf {
 typedef struct SfdPlyInf {
     int numTotalDec;     /* 0 */
     int numSkip;         /* 4: skipped decodes, empty B pictures included */
-    int rsv[2];          /* 8: cleared by sfply_InitPlyInf, read nowhere */
+    int rsv[2];          /* 8: MPV_GetDctCnt's two counts after each picture decoded; read nowhere */
     int numSkipEmptyB;   /* 16 */
     int numSkipEmptyP;   /* 20: empty P pictures skipped */
     int frmOut;          /* 24: a frame is handed out (SFD_GetFrm until SFD_RelFrm) */
@@ -690,6 +692,7 @@ int SFD_IsSvrDone(void);
 int SFD_ExecOne(void *sfd);
 int SFPLY_DecideSvrStat(void);
 void SFPLY_AddSkipPic(void *sfd, int delta, int arg);
+void SFPLY_AddDecPic(struct SfdPly *h, int delta, int arg);
 int SFD_Destroy(void *sfd);
 int SFD_Start(void *sfd);
 int SFD_Stop(void *sfd);
@@ -799,6 +802,7 @@ void sfmpvps2_StopIpu(void *sfd, int value);
 int SFMPVP_GetFrameCount(void *sfd);
 int SFMPVP_IsPscEnough(void *sfd);
 void SFMPVP_Create(void *sfd);
+int SFMPVP_DecodeFrmSj(struct MpvHn *hn, struct SfdSj *sj, struct SfdFrmPara *para, struct SfdPly *player);
 
 /* SFTIM: playback time */
 void SFTIM_Init(SfdTimLib *lib, int vrate);

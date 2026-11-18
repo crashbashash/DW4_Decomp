@@ -101,10 +101,10 @@ the 2002 one. Names from what a function does are in the medium list below.
 - The transfer slot's ring id is the enum `SfdBufId` and its work handle a union of the drivers' work types
   ([a read through a union member](understanding-shapes.md#scheduling-ee-gcc)): with those types `sfmpv_GetActiveSize`,
   `sfmpv_DecodeOneUnit` and `sfmpvf_SearchStbyFrm` (with `SfdSlot **` out-parameters) match. `sfmpv_DecodeFrm` hoists the stack
-  load of its address-taken byte count above the frame-counter stores and keeps the frame count's load below them:
-  forcing only the byte count's alias-set high word non-zero under gdb reproduces retail, so it is the
-  [address-taken local](understanding-shapes.md#scheduling-ee-gcc) case and waits on the text compiled before it
-  (`sfmpv_CalcAudioTotTime`, the same mechanism, matches with the current file).
+  loads of its address-taken frame pointer and recovered-error count above the frame-counter stores and keeps the
+  data-error count's load below them, the [address-taken local](understanding-shapes.md#scheduling-ee-gcc) case: it
+  matches with those three locals declared right after the initialised pointers, frame pointer first and the
+  recovered count before the error count.
 - `sfply_ResetHn` is the RE4 `sfd_ply.c` `sfply_ResetHn` ([Resident Evil 4 decompilation](https://github.com/adonis-singh/re4)):
   it keeps the error callback, the timer's clock callbacks, speed and PTS-manager entry, and the seek work across
   a re-create. It matches with those `SfdTim` fields and the error block typed as the callbacks and pointers
@@ -112,12 +112,11 @@ the 2002 one. Names from what a function does are in the medium list below.
 - `mwPlyCreateSofdec` differs only in the delay slot of the first free-handle test, which retail fills from the
   branch target; `mwsfcre_CreateSfd` in the registers holding two of the buffer-size globals. Both need names for
   the size globals and the three SFD create-parameter templates, and the player status as an enum.
-- The rest without source, each a scheduling or register difference in the best C: `sfmpv_NextTc` (`0x2a5a50`, the
-  RE4 time-code advance: the instructions and their order are retail's, the temporaries sit one register off: retail
-  sums the repeat and field counts into a fresh register); `SFMPVP_Create` (`0x2a97a0`, one word: the work-buffer
-  branch that sets both areas computes the second area in the register the other branch uses, so retail shares the
-  final store between them; its reset of the IPU state matches in field order with the start-code bytes after
-  `enabled` and `value` last); and `sfmpv_DecodeFrm` above.
+- `sfmpv_NextTc` (`0x2a5a50`, the RE4 time-code advance) keeps the repeat-plus-field sum in one variable through
+  `fields %= 2` to the field store, and `SFMPVP_Create` (`0x2a97a0`) sets the second work area through a local in each
+  branch, stored in each branch, so both branches end in the one shared store
+  ([a value set in two blocks](understanding-shapes.md#registers-ee-gcc)); its reset of the IPU state matches in field
+  order with the start-code bytes after `enabled` and `value` last.
 - `sftim_Tc2Time59D` matches with the frame sum (`frame + add`) as its first statement and the minute, second, hour and
   field read into locals before the sums, the shape its 23.976 and 29.97 siblings leave out.
 - Medium confidence, from the RE4 GameCube order alone: `SFMPV_SaveCond` and `SFMPV_RestoreCond` (after `SFD_SetMpvCond`),

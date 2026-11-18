@@ -127,6 +127,14 @@ void sfmpv_CalcRepeatField(SfdPly *player, M2vPicAtr *pic, int newGop);
 void sfmpv_ReformTc(SfdPly *player, M2vPicAtr *pic, long long a, int b);
 void sfmpv_SetHeadTtu(SfdPly *player, M2vPicAtr *pic);
 void sfmpv_SetDecTtu(SfdPly *player, M2vPicAtr *pic);
+int sfmpv_SetFrmPara(SfdPly *player, M2vPicAtr *pic, SfdFrmPara *para, SfdSlot **out);
+void sfmpv_GetRefErrCnt(SfdPly *player, SfdMpv *mpv, int *errcnt, int *rcvcnt);
+void sfmpv_SetStartTtu(SfdPly *player);
+void sfmpv_SetFrmTtu(SfdPly *player, SfdSlot *slot);
+void sfmpv_SetFrmPicUsr(SfdPly *player, SfdSlot *slot, void *source);
+void SFMPVF_FreeFrm(SfdSlot *slot);
+void SFMPVF_StbyFrm(SfdSlot *slot);
+void SFMPVF_RefStbyFrm(SfdSlot *slot);
 
 void SFD_SetMpvPara(SfdMpvCond *cond) {
     sfmpv_para = *cond;
@@ -1315,6 +1323,42 @@ void sfmpv_Pts2Tc(long long pts, int prate, int drop, int tmpref, SfdTimeCode *t
     tc->frame = frm;
 }
 
+void sfmpv_NextTc(SfdTimeCode *src, SfdTimeCode *dst) {
+    int rate;
+    int round;
+    int fields;
+    int frame;
+    int hour;
+    int minute;
+    int second;
+
+    rate = src->rate;
+    round = sfmpv_fps_round[rate];
+    fields = src->repeat + src->field;
+    frame = src->frame + src->add + 1;
+    frame += fields / 2;
+    fields %= 2;
+    hour = src->hour;
+    minute = src->minute;
+    second = src->second;
+    second += frame / round;
+    frame %= round;
+    minute += second / 60;
+    second %= 60;
+    hour += minute / 60;
+    minute %= 60;
+    if (src->drop != 0 && second == 0 && minute % 10 != 0 && (frame == 0 || frame == 1)) {
+        frame = 2;
+    }
+    dst->rate = rate;
+    dst->drop = src->drop;
+    dst->hour = hour;
+    dst->minute = minute;
+    dst->second = second;
+    dst->frame = frame;
+    dst->field = fields;
+}
+
 void sfmpv_SetHeadTtu(SfdPly *player, M2vPicAtr *pic)
 {
     SfdTimeRec *state = &player->tim.state;
@@ -1676,6 +1720,73 @@ void sfmpv_SetSkipTtu(SfdPly *player) {
     if (current->time < player->tim.vofst.time) {
         *latest = *current;
     }
+}
+
+int sfmpv_DecodeFrm(SfdPly *player, SfdSj *sj) {
+    SfdMpv *mpv = player->trn[2].hn.mpv;
+    SfdPlyInf *decode = &player->plyInf;
+    MpvHn *handle = mpv->handle;
+    M2vPicAtr *pic = &mpv->pic;
+    SfdErrInf *err = &player->err;
+    /* matching construct: declaration-order search — the order of frm, refRcvcnt and refErrcnt decides the
+     * alias set of their address-taken slots, and so whether their loads are issued above the frame stores */
+    SfdSlot *frm;
+    int refRcvcnt;
+    int refErrcnt;
+    SfdFrmPara para;
+    long long start;
+    int before;
+    int status;
+    int used;
+    int ret;
+
+    if (sfmpv_SetFrmPara(player, pic, &para, &frm) != 0) {
+        return 0;
+    }
+    sfmpv_GetRefErrCnt(player, mpv, &refErrcnt, &refRcvcnt);
+    sfmpv_CopyPicUsr(frm->blob, &mpv->pool.slot[0]);
+    sfmpv_SetStartTtu(player);
+    start = UTY_GetTmr();
+    before = SJRBF_GetFlowCnt(sj, 0, 1);
+    status = SFMPVP_DecodeFrmSj(handle, sj, &para, player);
+    used = SJRBF_GetFlowCnt(sj, 0, 1) - before;
+    SFTMR_AddTsum(&player->tmr.tsum[pic->picture_coding_type], UTY_GetTmr() - start);
+    err->errcnt += para.errcnt;
+    err->rcvcnt += para.rcvcnt;
+    ret = sfmpv_ChkMpvErr(player, status, used, 0xFF000F06);
+    sfmpv_AddRtotSj(player, used);
+    if (ret != 0) {
+        SFMPVF_FreeFrm(frm);
+        return ret;
+    }
+    if (used > 0) {
+        SFMPVF_SetGopStat(player, 0);
+        sfmpv_SetFrmTtu(player, frm);
+        sfmpv_SetFrmPicUsr(player, frm, sj);
+        frm->concat_cnt = mpv->nconcat;
+        frm->errcnt = para.errcnt + refErrcnt + mpv->tmpref_adj;
+        frm->rcvcnt = para.rcvcnt + refRcvcnt;
+        if (pic->picture_structure != 3 && mpv->pendfrm == 0) {
+            mpv->pendfrm = frm;
+        } else {
+            mpv->pendfrm = 0;
+        }
+        mpv->skipret = 0;
+        mpv->dlmwait = 0;
+        if (mpv->pendfrm == 0) {
+            if (player->cre.bufFmt == 3 && (pic->picture_coding_type == 1 || pic->picture_coding_type == 2)) {
+                SFMPVF_RefStbyFrm(frm);
+            } else {
+                SFMPVF_StbyFrm(frm);
+            }
+            MPV_GetDctCnt(handle, &decode->rsv[0], &decode->rsv[1]);
+            mpv->nskip = 0;
+        }
+        SFPLY_AddDecPic(player, 1, pic->picture_coding_type);
+    } else if (mpv->pendfrm == 0) {
+        SFMPVF_FreeFrm(frm);
+    }
+    return 0;
 }
 
 /* takes the frame the picture is decoded into and the reference planes it predicts from */

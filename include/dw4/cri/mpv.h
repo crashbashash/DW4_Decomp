@@ -150,6 +150,7 @@ int MPV_DecPicSj(MpvHn *mpv, SfdSj *sj, struct SfdFrmPara *para);
 int MPV_SkipFrmSj(MpvHn *mpv, SfdSj *sj);
 int MPV_GetPicInf(MpvHn *mpv, M2vPicAtr *out);
 int MPV_GetBitRate(MpvHn *mpv, int *bitRate);
+void MPV_GetDctCnt(MpvHn *hn, int *width, int *height);
 int MPV_GetVbvBufSiz(MpvHn *mpv, int *size, int *delay, int *bytes);
 int MPV_GetLinkFlg(MpvHn *mpv, int *inf3, int *inf4);
 

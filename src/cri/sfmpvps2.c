@@ -25,7 +25,6 @@ extern char sfmpvp_mpeg_errdata[8];
 
 extern int DeleteSema(int sema);
 void sfmpvp_ConsumePsc(SfdPly *player);
-int SFMPVP_DecodeFrmSj(MpvHn *hn, SfdSj *sj, SfdFrmPara *para, SfdPly *player);
 
 int mpegError(sceMpeg *mp, sceMpegCbDataError *cbdata, SfdPly *player);
 int sfmpvps2_ExecIpu(sceMpeg *mp, sceMpegCbData *cbdata, SfdPly *player);
@@ -47,6 +46,7 @@ int viBufDelete(SfdIpuStream *stream);
 void viBufFlush(SfdIpuStream *stream);
 int sfmpvp_PutVibuf(SfdIpuStream *stream, char *src, int pos);
 void sfmpvp_SaveMpvp(SfdPly *player);
+void sfmpvp_RestoreMpvp(SfdPly *player);
 int copy2area(char *buf, int size, char *dst, int cap, char *src, int pos, char *data, int len);
 
 int getFIFOindex(SfdIpuStream *stream, int position) {
@@ -154,6 +154,65 @@ void SFMPVP_GetViBufInf(SfdPly *player, int *bytes, int *position, int *start, i
     *start = stream->headSct << 11;
     *position = (((stream->headSct + stream->queuedSct) << 11) + stream->restBytes) % stream->bytes;
     *end = (stream->queuedSct << 11) + stream->restBytes;
+}
+
+void SFMPVP_Create(void *sfd) {
+    SfdPly *player = sfd;
+    SfdMpv *mpv = player->trn[2].hn.mpv;
+    SfdMpvCond *cond = &mpv->cond;
+    SfdIpuCtl *ctl = &mpv->ipu;
+    sceMpeg *mpeg = &ctl->mpeg;
+    sceMpegCbDataError *error = &ctl->error;
+    int size;
+    int work;
+    int vibuf;
+    int ring;
+    int tags;
+    int vibufArea;
+
+    if (sfmpvp_scempeg_useflag == 0) {
+        ctl->enabled = 0;
+        return;
+    }
+    size = cond->max_width * cond->max_height * 9 / 2 + 10240;
+    if (mpv->work.w[0] == 0) {
+        mpv->work.w[0] = ((int)cond->rfb_adr + 63) & ~63;
+        vibufArea = (mpv->work.w[0] + size + 63) & ~63;
+        mpv->work.w[1] = vibufArea;
+    } else {
+        mpv->work.w[0] = (mpv->work.w[0] + 63) & ~63;
+        vibufArea = (mpv->work.w[1] + 63) & ~63;
+        mpv->work.w[1] = vibufArea;
+    }
+    vibuf = mpv->work.w[1];
+    work = mpv->work.w[0];
+    ring = (vibuf + 0x80000 + 63) & ~63;
+    tags = (ring + 0x1010 + 63) & ~63;
+    if (SFPLY_GetResetFlg() != 1) {
+        sceMpegCreate(mpeg, (unsigned char *)work, size);
+        sceMpegAddCallback(mpeg, sceMpegCbError, (sceMpegCallback)mpegError, player);
+        sceMpegAddCallback(mpeg, sceMpegCbNodata, (sceMpegCallback)sfmpvps2_ExecIpu, player);
+        sceMpegAddCallback(mpeg, sceMpegCbStopDMA, (sceMpegCallback)mpegStopDMA, player);
+        sceMpegAddCallback(mpeg, sceMpegCbRestartDMA, (sceMpegCallback)mpegRestartDMA, player);
+    } else {
+        sfmpvp_RestoreMpvp(player);
+    }
+    viBufCreate(&ctl->stream, (void *)vibuf, (void *)ring, 256, (SfdIpuEntry *)tags, 512);
+    viBufAddDMA(&ctl->stream);
+    viBufStopDMA(&ctl->stream);
+    ctl->enabled = 1;
+    ctl->tail0 = 0;
+    ctl->tail1 = 0;
+    ctl->tail2 = 0;
+    error->type = (sceMpegCbType)-1;
+    error->errMessage = 0;
+    ctl->pscNext = 0;
+    ctl->pscFound = 0;
+    ctl->pscCount = 0;
+    ctl->endRequest = 0;
+    ctl->endSent = 0;
+    ctl->stopped = 0;
+    ctl->value = 0;
 }
 
 char *SFD_GetSceErrMessage(void *sfd) {

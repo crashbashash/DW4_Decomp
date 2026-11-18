@@ -1383,12 +1383,22 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   - *Reading it:* draft the unit in address order, add each function in its place and re-run the whole unit after
     each; when a function differs only in such loads, the missing piece is an earlier function, not its own source.
     A function that matches in a small file can lose it in the full unit, and the reverse.
+  - *Where the word comes from:* the register rtx is a 32-byte object of the collected heap, and the word is the
+    stale +16 word of that slot's previous occupant. The heap is swept only a few times per unit (twice in
+    `src/cri/sfmpv.c`), and after a sweep a function's declarations are expanded in order into the freed slots: a
+    register and two or three list nodes for a plain local, a dozen or more objects for one with an initialiser. So
+    the declaration order of the function itself moves each address-taken local onto a zero or a non-zero slot, and
+    the main file's path string is part of the history: the same unit compiled as an absolute scratch path and as
+    `src/cri/<file>.c` (what the checker and the link pass) can differ. Search with the file in place, compiled from
+    the repository root; tracing `ggc_alloc` and `gen_mem_addressof` in cc1 under gdb gives each slot's stale word,
+    from which a declaration order can be computed instead of searched.
   - *Unit:* `src/cri/sfmpv.c` (0x2a49b8 matched once the unit's later declarations and functions were in place, with
     its own C unchanged; 0x2a6f28 flips with the functions before it; 0x2a5c28 flips with the length of an
     identifier declared earlier in the file, so even a rename can move it: a helper's name of 15 characters or more
     there reorders its loads, one of 14 or fewer does not; in 0x2a4468
     a picture-attribute result is copied to a local, since read from the address-taken slot it reloads after
-    the stores to the handle).
+    the stores to the handle; 0x2a68e8 matched by declaring its frame pointer and the two error-count locals,
+    in that order, right after the initialised pointers).
 - **In a run of independent stores, the one that ends a register's life is issued first.** Before register
   allocation the scheduler breaks a tie between equally ready instructions in favour of the one that frees
   registers. Stores of one value through one pointer all become ready together, so the last statement, which holds
@@ -1483,6 +1493,21 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     `mult` stays.
   - *Spelling:* `s = plane->base + cols * 384;` both before a plain `for` row loop and at the top of its body.
   - *Unit:* `src/cri/cft.c` (0x284f30, 0x285040).
+
+### Registers (EE GCC)
+
+- **A value set in two blocks is coloured by global allocation, never tied to its input.**
+  - *Symptom:* registers only: retail puts an `and`/`addu` result in a fresh register (or one shared with another
+    branch), where the plain spelling reuses the register of the operand that dies there; or two branches end in
+    the same store and retail shares it (one `sw` reached by `b`) where ours repeats it.
+  - *Cause:* local-alloc ties the output of an instruction to a dying input only when the output is a pseudo set
+    and used in one block. A named local assigned in both arms of an `if`, or reused for a later step of the
+    computation up to a store after a branch, is a global pseudo: global-alloc colours it, and when both arms then
+    end in the same register, jump2 cross-jumps their identical stores.
+  - *Spelling:* a local set in each arm and stored in each arm (`area = ALIGN(...); w[1] = area;`, the later reads
+    still from memory: a single store after the join lets cse reuse the value), or one variable carried through
+    (`fields %= 2; dst->field = fields;` in place of a second `field` local).
+  - *Unit:* `src/cri/sfmpvps2.c` (0x2a97a0), `src/cri/sfmpv.c` (0x2a5a50).
 
 ### Delay slots (b52)
 
