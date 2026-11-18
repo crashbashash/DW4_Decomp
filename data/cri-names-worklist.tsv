@@ -523,7 +523,29 @@
 0x27eac8	SVM_ExecSvrVsync1	medium	sdk:libadxe.a/svm.o B; alt SVM_ExecSvrUhigh
 0x27eb40	SVM_GetExecCount	high	sdk:libadxe.a/svm.o B + 3s:svm O agree
 0x27eb68	svm_reset_variable	high	sdk:libadxe.a/svm.o C + 3s:svm B agree
+0x280e38	sndf_InitContext	medium	behaviour: SNDF_Start's reset of the context (empty command queue, every port closed and idle, output mode 1, no callbacks); alternative sndf_ResetContext
+0x280f10	SNDF_Stop	medium	behaviour: undoes SNDF_Start: sends command 0x200 (SNDF_Start sends 0x100) and clears the started flag SNDF_Start sets; alternative SNDF_End
+0x281018	SNDF_LoadBank	medium	behaviour: SNDF_StartTransfer, then runs the port's transfer step until SNDF_GetTransferStatus leaves 1 (transferring), returning 0 on completion; alternative SNDF_TransferSync
+0x281300	SNDF_LoadIopBank	medium	behaviour: command 0x800 for a port with an IOP address; the IOP side (SNDFI.IRX 2.09c) checks the bank header there against the port sizes, sends its waveform to SPU memory and opens the port as command 0xA00 does; alternative SNDF_OpenIopPort
+0x281368	SNDF_OpenPort	medium	behaviour: command 0xA00 marks a port open (SNDF_FreePort's 0x700 closes it); sent once a bank's upload has finished; alternative SNDF_SetupPort
+0x281420	sndf_GetPortArea	medium	behaviour: a closed port's IOP table address (the IOP base plus the table sizes of the ports before it) and SPU address (the PCM sizes before it past 0x20000), from the sizes SNDF_SetPortSizes recorded; alternative sndf_CalcPortAddr
+0x281568	SNDF_GetControl	medium	behaviour: reads back the per-channel values SNDF_SendControl sets (the same 0xA004/0xA009/0xA00A/0xA010 kinds) from the status block, and kind 0x100 the channel's voice count; alternative SNDF_GetVoiceStatus
+0x281660	SNDF_GetCtrlChange	medium	behaviour: reads back the 0xB027 and 0xB02A control changes SNDF_SendCtrlChange sends (the second less its +64 offset, as there) for a channel's part; alternative SNDF_GetProgramParam
+0x2816f8	SNDF_GetPlayStatus	medium	behaviour: 0x100 when one of the status block's 16 play entries is active on the port, 0x101 when that entry also has bit 0 set, else 0; alternative SNDF_IsPortPlaying
+0x281770	SNDF_GetEvent	medium	behaviour: command 0xE00; the IOP side returns and clears the event byte an 0xA024 message stores, the one the server reply hands to the SNDF_SetCallback function; alternative SNDF_ClearEvent
+0x281798	SNDF_GetErrorMessage	medium	behaviour: command 0xFB00; the IOP side returns the message word it last refused for a pitch outside the SPU range; alternative SNDF_GetLastError
+0x2817c0	SNDF_GetProcTime	medium	behaviour: the status word the IOP server fills with its last pass's duration in microseconds (SysClock2USec of two GetSystemTime readings); alternative SNDF_GetLoad
+0x2817d0	SNDF_GetPortSizes	medium	behaviour: command 0xFE00 returns the 32 table and 32 PCM sizes SNDF_SetPortSizes (command 0x300) registered
+0x281840	SNDF_GetEffect	medium	behaviour: command 0xFC00 returns the two bytes the IOP side keeps for the current effect (reverb): the bank whose preset is in use and the preset number (127 off); alternative SNDF_GetReverb
+0x281898	SNDF_GetVoiceCount	medium	behaviour: command 0xFD00 returns the counts of the IOP side's four voice lists (its 48 SPU2 voices); alternative SNDF_GetVoiceListCount
+0x281918	SNDF_GetQueueCount	medium	behaviour: the status block's two queue counts: messages from the EE still waiting on the IOP, and the IOP's own queued messages; alternative SNDF_GetMessageCount
+0x281938	SNDF_ClearQueue	medium	behaviour: command 0xF900; the IOP side empties both message queues (counts, indices and entries); alternative SNDF_ResetQueue
+0x281960	SNDF_SetCallback	medium	behaviour: stores the function sndf_SvrCallback calls with the reply's event and sends command 0x1700, which turns on the event in the server reply; alternative SNDF_EntryEventFunc
+0x281990	SNDF_GetOutputMode	medium	behaviour: the status byte the IOP side (SNDFI.IRX 2.09c) sets from the 0xA00009/0xA00008/0xA00029 messages to 0, 1 and 2, the output modes SNDF_SendControl records for the same messages; alternative SNDF_GetSpeakerMode
+0x2819a0	SNDF_GetSoundStatus	medium	behaviour: a sound slot's state (1..24, as SNDF_StartSound hands out): 1 playing, 0 stopped, -1 slot not in use, -2 out of range; alternative SNDF_IsSoundPlaying
 0x281a00	sndf_CallRpc	medium	behaviour: copies the arguments into the shared buffer and sends one command over sceSifCallRpc under a busy flag, returning the first word back; alternative sndf_SendCommand
+0x281d80	sndf_SvrCallback	medium	behaviour: the end function of SNDF_ExecServer's SIF call to the server: passes the reply's event to the SNDF_SetCallback function and clears the busy word; alternative sndf_SvrEndFunc
+0x281df0	sndf_ExecTransfer	medium	behaviour: one step of a port's bank upload: when the SPU voice transfer is idle it moves the next block through the IOP buffer to SPU memory, and once all is sent frees the buffer and opens the port; alternative sndf_TransferBlock
 0x283058	CFT_Init	medium	sdk:libmwsfde.a/cft_lib.o D by order before CFT_Finish; stores the CFT build string
 0x283090	CFT_Finish	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)
 0x283098	CFT_GetVersionStr	high	sdk:libmwsfde.a/cft_lib.o A (3s - -)

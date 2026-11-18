@@ -3,6 +3,8 @@
 
 #include "dw4/cri/cri_sndf.h"
 
+struct _sif_client_data;
+
 typedef struct SndfQueueEntry {
     unsigned short kind;
     unsigned short arg;
@@ -39,36 +41,31 @@ typedef struct SndfBank {
     int waveOffset;
 } SndfBank;
 
-typedef struct SifDmaData {
-    unsigned int data;
-    unsigned int addr;
-    unsigned int size;
-    unsigned int mode;
-} SifDmaData;
-
+/* The EE side of SNDF: the command queue the server call sends each frame, the sound slots, and the
+ * per-port state of the bank uploads. */
 typedef struct SndfContext {
     char pad0[128];
-    unsigned char channelOn[32];
-    int base;
+    unsigned char portOpen[32];
+    int iopBase;  /* IOP address of the first port's table area, from command 0x100 */
     SndfQueueEntry ring[128];
     unsigned char count;
     unsigned char writeIndex;
     unsigned char readIndex;
     signed char sending;
-    unsigned char busy;
+    unsigned char sizesSet;
     char pad2729[3];
     int mode;
-    int f2736;
-    int open;
-    int handle;
+    int reserved;
+    int transIdle;  /* the SPU voice transfer status: 1 when the last block has arrived */
+    int statusResult;
     SndfSlot slots[24];
-    int state[32];
-    int f2972[32];
-    int error[32];
-    int f3228[32];
+    int transferState[32];
+    int transferMode[32];
+    int transferResult[32];
+    int transferPort[32];
     SndfTransfer transfers[32];
-    int (*f5020)(int channel);
-    void (*notify)(int a, int b);
+    int (*transferFunc)(int channel);
+    void (*eventFunc)(int arg, int event);
     SndfTables tables;
 } SndfContext;
 
@@ -81,11 +78,6 @@ typedef struct SndfOutbox {
     unsigned int count;
     char pad2564[60];
 } SndfOutbox;
-
-typedef struct SifClientData {
-    char pad0[36];
-    void *serve;
-} SifClientData;
 
 typedef struct SndfVoice {
     char pad0[9];
@@ -121,13 +113,14 @@ typedef struct SndfPort {
     unsigned char f3;
 } SndfPort;
 
+/* The status block the IOP side writes into EE memory each pass. */
 typedef struct SndfStatus {
-    unsigned char f0;
-    unsigned char f1;
+    unsigned char msgQueued;  /* messages from the EE still waiting on the IOP */
+    unsigned char slotsRead;
     unsigned short mask;
-    int f4;
-    unsigned char f8;
-    unsigned char f9;
+    int procTime;  /* microseconds the IOP server's last pass took */
+    unsigned char outputMode;
+    unsigned char iopMsgQueued;  /* messages the IOP side queued itself */
     char pad10[2];
     SndfVoice voices[32];
     SndfProgram programs[32][16];
@@ -136,45 +129,35 @@ typedef struct SndfStatus {
     char pad3456[12];
     SndfSlot slots[24];
     SndfPort ports[256];
-    unsigned char f4588[32];
+    unsigned char voiceCount[32];
+    char pad4620[52];
 } SndfStatus;
 
-extern int DAT_005717a0;
+extern int sndf_rpc_init_flag;
 extern char *sndf_version;
-extern int DAT_004bb100;
-extern int DAT_004bb104;
-extern int DAT_004bb108;
-extern int DAT_004bb110;
+extern int sndf_rpc_busy;
+extern int sndf_initialized;
+extern int sndf_started;
+extern int sndf_dma_channel;
 extern SndfContext *sndf_ctx;
 extern int sndf_pan_remap[180];  /* pan position remap of output mode 2 (the 0xA0002900 message) */
-extern int DAT_00570c00[];
-extern SndfOutbox DAT_00570d00;
-extern SndfMessage DAT_00571740;
-extern int DAT_00571700;
-extern SifClientData DAT_00571750;
-extern SifClientData DAT_00571778;
+extern int sndf_rpc_buf[64];
+extern SndfOutbox sndf_svr_sendbuf;
+extern int sndf_svr_busy;
+extern SndfMessage sndf_svr_recvbuf;
+extern struct _sif_client_data sndf_cmd_client;  /* the IOP's SNDF command server */
+extern struct _sif_client_data sndf_svr_client;  /* the IOP's SFSV server */
 extern SndfStatus sndf_status;
-extern SndfContext DAT_00572a00;
+extern SndfContext sndf_context;
 
-int sceSifCallRpc();
-int sceSifCheckStatRpc();
-int sceSifInitRpc();
-int sceSifBindRpc();
-void InvalidDCache(char *start, char *end);
-void memset();
-int sndf_CallRpc(int cmd, int *args, int n, int size);
-void FUN_00280e38(void);
-void SyncDCache(char *start, char *end);
-int sceSifDmaStat(unsigned int id);
-unsigned int sceSifSetDma(SifDmaData *sdd, int len);
 unsigned int sceSifQueryMaxFreeMemSize(void);
-int sceSdRemote(int arg, int command, ...);
-int FUN_00281420(unsigned int channel, int *start, int *size);
+int sndf_CallRpc(int cmd, int *args, int n, int size);
+void sndf_InitContext(void);
+int sndf_GetPortArea(unsigned int channel, int *tblAddr, int *spuAddr);
 int sndf_PushCommand(unsigned short kind, unsigned short arg, int a, int b, int c, int d);
-void FUN_00281df0(unsigned int channel);
+void sndf_ExecTransfer(unsigned int channel);
 int sndf_SendMessage(unsigned int message);
-void *memcpy();
-void FUN_00281d80(SndfMessage *message);
+void sndf_SvrCallback(void *reply);
 
 #define SWAP32_A(x) (((x) << 24) | (((x) & 0xFF00) << 8) | (((x) >> 8) & 0xFF00) | ((x) >> 24))
 #define SWAP32_C(x) ((((x) & 0xFF) << 24) | (((x) & 0xFF00) << 8) | (((x) & 0xFF0000) >> 8) | (((x) & 0xFF000000) >> 24))

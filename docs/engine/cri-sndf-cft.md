@@ -20,16 +20,47 @@ The first two files of the Sofdec block, each compiled as one whole file with So
   inline bind helper, the real `sceSifInitRpc` prototype and a permuter run left the prologue unchanged.
 - CFT's init stores its version string in a `volatile` word, approved under
   [build-string stores](source-approvals.md#build-string-stores).
-- The function at `0x281568`, whose shared tail serves the `0xA009` and `0xA00A` commands, has no source: the best
+- `SNDF_GetControl` (`0x281568`), whose shared tail serves the `0xA009` and `0xA00A` kinds, has no source: the best
   C is 3 words off, the voice address built in another operand order (retail loads the status-block address first,
   then shifts the channel and adds).
 - The SNDF entry points the game calls for its sound banks (port sizes, transfer start and status, freeing a
   port, the control and master-parameter messages) are named from what they do and how the game uses them;
   no string or other build carries the library's own names for them.
 - `sndf_CallRpc` (medium; alternative `sndf_SendCommand`) is named from what it does: it copies the arguments into the
-  shared buffer and sends one command under a busy flag. The rest of SNDF's internal functions (the one-command
-  wrappers, the status-block getters, the port and channel helpers) stay unnamed: the command codes they send
-  (`0x200`, `0x800`, `0xE00`, `0xF900`, `0xFB00` and others) are not named by any string or other build.
+  shared buffer `sndf_rpc_buf` and sends one command to `sndf_cmd_client` under `sndf_rpc_busy`.
+- The rest of `sndf.c` takes behaviour names, medium, with the alternative in brackets. No other build has SNDF;
+  the evidence is the command each one sends, what the game's IOP module (`SNDFI.IRX`, `SNDF Driver Ver 2.09c`, the
+  RPC servers `SNDF` and `SFSV` that `SNDF_Init` binds) does for that command, and the sibling calls in
+  `sndfcmd.c`. The 32 channels are the bank ports. Start and stop: `SNDF_Stop` (`SNDF_End`) sends `0x200` and clears
+  `sndf_started`, undoing `SNDF_Start`'s `0x100`; `sndf_InitContext` (`sndf_ResetContext`) is `SNDF_Start`'s reset of
+  `sndf_context`. Banks: `SNDF_LoadBank` (`SNDF_TransferSync`) runs `SNDF_StartTransfer` to completion;
+  `sndf_ExecTransfer` (`sndf_TransferBlock`) moves one block of an upload through the IOP buffer to SPU memory with
+  sdrdrv's voice transfer, while `sndf_dma_channel` (the fourth `SNDF_Init` parameter) is idle; `SNDF_OpenPort`
+  (`SNDF_SetupPort`, `0xA00`) opens a port once its bank is in place, as `SNDF_FreePort`'s `0x700` closes it;
+  `SNDF_LoadIopBank` (`SNDF_OpenIopPort`, `0x800`) has the IOP check a bank already in IOP memory, send its waveform
+  and open the port; `sndf_GetPortArea` (`sndf_CalcPortAddr`) gives a closed port's IOP table and SPU addresses from
+  the sizes `SNDF_SetPortSizes` recorded, and `SNDF_GetPortSizes` reads them back (`0xFE00`). Read-backs:
+  `SNDF_GetControl` (`SNDF_GetVoiceStatus`) and `SNDF_GetCtrlChange` (`SNDF_GetProgramParam`) return what
+  `SNDF_SendControl` and `SNDF_SendCtrlChange` set, with the same kind codes; `SNDF_GetOutputMode`
+  (`SNDF_GetSpeakerMode`) the mode the IOP sets from the `0xA00009`/`0xA00008`/`0xA00029` messages;
+  `SNDF_GetSoundStatus` (`SNDF_IsSoundPlaying`) a sound slot's state; `SNDF_GetPlayStatus` (`SNDF_IsPortPlaying`)
+  whether one of the status block's 16 play entries is on the port. IOP state: `SNDF_GetProcTime` (`SNDF_GetLoad`)
+  the microseconds the IOP server's last pass took; `SNDF_GetQueueCount` (`SNDF_GetMessageCount`) the EE messages
+  still queued on the IOP and the IOP's own; `SNDF_ClearQueue` (`SNDF_ResetQueue`, `0xF900`) empties both;
+  `SNDF_GetVoiceCount` (`SNDF_GetVoiceListCount`, `0xFD00`) the counts of the IOP's four lists of its 48 voices;
+  `SNDF_GetEffect` (`SNDF_GetReverb`, `0xFC00`) the bank and preset of the current effect (preset 127 is off);
+  `SNDF_GetErrorMessage` (`SNDF_GetLastError`, `0xFB00`) the message word the IOP last refused for a pitch outside
+  the SPU range. Events: an `0xA024` message leaves an event byte on the IOP; `SNDF_SetCallback`
+  (`SNDF_EntryEventFunc`, `0x1700`) stores the function `sndf_SvrCallback` (`sndf_SvrEndFunc`, the end function of
+  `SNDF_ExecServer`'s call to `sndf_svr_client`) hands that event to, and turns on its delivery in the server reply
+  `sndf_svr_recvbuf`; `SNDF_GetEvent` (`SNDF_ClearEvent`, `0xE00`) reads and clears it. Which voice states the four
+  `SNDF_GetVoiceCount` lists hold, and what the 16 play entries are (sequences or streams), is open.
+- The data words take the same kind of names: `sndf_initialized` (set by `SNDF_Init`'s `0x1300`), `sndf_started`,
+  `sndf_svr_sendbuf` (the command block `SNDF_ExecServer` sends), `sndf_svr_busy` (only cleared, by
+  `sndf_SvrCallback`; alternative `sndf_svr_pending`) and `sndf_rpc_init_flag` (set first in `SNDF_Init`, read by
+  nothing). The context fields follow the IOP side: `sizesSet` is what `SNDF_StartTransfer` requires of
+  `SNDF_SetPortSizes`, `transIdle` the last voice-transfer status, and the status block's `outputMode`, `procTime`,
+  `msgQueued`, `iopMsgQueued` and `voiceCount` are the IOP words it copies there.
 - The SNDF message calls in the file after `sndf.c` (none of which the game calls) take behaviour names, medium, with
   the alternative in brackets. The messages are MIDI-shaped (a status byte with bit 7 set, byte-swapped into the
   queue): `SNDF_SendChMessage` (`SNDF_SendPortMessage`) sends one to a channel below 32; `SNDF_SendVoiceMessage`

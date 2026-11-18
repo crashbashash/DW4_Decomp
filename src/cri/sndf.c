@@ -1,14 +1,22 @@
 #include "dw4/cri/sndf.h"
+#include <string.h>
+#include "dw4/sony/sif.h"
 #include "dw4/sony/sifdev.h"
+#include "dw4/sony/libkernl.h"
+#include "dw4/sony/libsdr.h"
 #include "dw4/cri/cri_sndf.h"
+
+/* sdrdrv's remote calls (Sony sdrcmd.h) */
+#define rSdVoiceTrans 0x80D0
+#define rSdVoiceTransStatus 0x80F0
 
 int SNDF_Finish(void)
 {
     int result;
 
     result = -1;
-    if (DAT_004bb104 != 0) {
-        DAT_004bb104 = 0;
+    if (sndf_initialized != 0) {
+        sndf_initialized = 0;
         result = 0;
     }
     return result;
@@ -19,26 +27,26 @@ int SNDF_Start(void)
     int result = -1;
     int req[1];
 
-    if (DAT_004bb104 != 0) {
-        sndf_ctx = &DAT_00572a00;
+    if (sndf_initialized != 0) {
+        sndf_ctx = &sndf_context;
         sndf_CallRpc(0x100, 0, 0, 8);
-        result = DAT_00570c00[0];
-        sndf_ctx->base = DAT_00570c00[1];
-        memset(&sndf_status, 0, 0x1240);
-        memset(&DAT_00570d00, 0, 0xA40);
+        result = sndf_rpc_buf[0];
+        sndf_ctx->iopBase = sndf_rpc_buf[1];
+        memset(&sndf_status, 0, sizeof(sndf_status));
+        memset(&sndf_svr_sendbuf, 0, sizeof(sndf_svr_sendbuf));
         if (result == 0) {
             req[0] = (int)&sndf_status;
-            sndf_ctx->handle = sndf_CallRpc(0x1600, req, 1, 4);
+            sndf_ctx->statusResult = sndf_CallRpc(0x1600, req, 1, 4);
         }
-        FUN_00280e38();
+        sndf_InitContext();
         if (result == 0) {
-            DAT_004bb108 = 1;
+            sndf_started = 1;
         }
     }
     return result;
 }
 
-void FUN_00280e38(void)
+void sndf_InitContext(void)
 {
     unsigned int i;
 
@@ -46,33 +54,33 @@ void FUN_00280e38(void)
     sndf_ctx->writeIndex = 0;
     sndf_ctx->readIndex = 0;
     sndf_ctx->sending = 0;
-    sndf_ctx->busy = 0;
+    sndf_ctx->sizesSet = 0;
     sndf_ctx->mode = 1;
-    sndf_ctx->f2736 = 0;
-    sndf_ctx->f5020 = 0;
-    sndf_ctx->notify = 0;
-    sndf_ctx->open = 1;
+    sndf_ctx->reserved = 0;
+    sndf_ctx->transferFunc = 0;
+    sndf_ctx->eventFunc = 0;
+    sndf_ctx->transIdle = 1;
     for (i = 0; i < 32; i++) {
-        sndf_ctx->channelOn[i] = 0;
-        sndf_ctx->state[i] = 0;
-        sndf_ctx->f2972[i] = 0;
-        sndf_ctx->error[i] = 0;
-        sndf_ctx->f3228[i] = 0xFF;
+        sndf_ctx->portOpen[i] = 0;
+        sndf_ctx->transferState[i] = 0;
+        sndf_ctx->transferMode[i] = 0;
+        sndf_ctx->transferResult[i] = 0;
+        sndf_ctx->transferPort[i] = 0xFF;
     }
     for (i = 0; i < 128; i++) {
         sndf_ctx->ring[i].kind = 0;
     }
 }
 
-int FUN_00280f10(void)
+int SNDF_Stop(void)
 {
     int reply;
     int result;
 
     result = -1;
-    if (DAT_004bb108 != 0) {
+    if (sndf_started != 0) {
         reply = sndf_CallRpc(0x200, 0, 0, 4);
-        DAT_004bb108 = 0;
+        sndf_started = 0;
         result = reply;
     }
     return result;
@@ -84,7 +92,7 @@ int SNDF_SetPortSizes(SndfTables *tables)
     int result;
     int i;
 
-    sndf_ctx->busy = 1;
+    sndf_ctx->sizesSet = 1;
     for (i = 0; i < 32; i++) {
         request.tblSize[i] = tables->tblSize[i];
         request.pcmSize[i] = tables->pcmSize[i];
@@ -99,17 +107,17 @@ int SNDF_SetPortSizes(SndfTables *tables)
     return result;
 }
 
-int FUN_00281018(int arg, int extra)
+int SNDF_LoadBank(unsigned int channel, SndfBank *bank)
 {
     int status;
 
-    if (sndf_ctx->open == 0) {
+    if (sndf_ctx->transIdle == 0) {
         return -30;
     }
-    SNDF_StartTransfer(arg, extra);
+    SNDF_StartTransfer(channel, bank);
     do {
-        FUN_00281df0(arg);
-        status = SNDF_GetTransferStatus(arg);
+        sndf_ExecTransfer(channel);
+        status = SNDF_GetTransferStatus(channel);
     } while (status == 1);
     if (status == 2) {
         status = 0;
@@ -119,8 +127,8 @@ int FUN_00281018(int arg, int extra)
 
 int SNDF_StartTransfer(unsigned int channel, SndfBank *bank)
 {
-    SifDmaData dma;
-    int start;
+    sceSifDmaData dma;
+    int tblAddr;
     int result;
     unsigned int id;
     unsigned int largest;
@@ -129,17 +137,17 @@ int SNDF_StartTransfer(unsigned int channel, SndfBank *bank)
     if (bank == 0) {
         return -128;
     }
-    if (sndf_ctx->f3228[channel] != 255) {
+    if (sndf_ctx->transferPort[channel] != 255) {
         return -20;
     }
-    SyncDCache((char *)bank, (char *)bank + bank->size - 1);
+    SyncDCache(bank, (char *)bank + bank->size - 1);
     if (channel >= 32) {
         return -1;
     }
-    if (sndf_ctx->busy == 0) {
+    if (sndf_ctx->sizesSet == 0) {
         return -4;
     }
-    result = FUN_00281420(channel, &start, &sndf_ctx->transfers[channel].spuAddr);
+    result = sndf_GetPortArea(channel, &tblAddr, &sndf_ctx->transfers[channel].spuAddr);
     if (result < 0) {
         return result;
     }
@@ -150,7 +158,7 @@ int SNDF_StartTransfer(unsigned int channel, SndfBank *bank)
         return -6;
     }
     dma.data = (unsigned int)bank;
-    dma.addr = start;
+    dma.addr = tblAddr;
     dma.size = bank->headerSize;
     dma.mode = 0;
     id = sceSifSetDma(&dma, 1);
@@ -170,9 +178,9 @@ int SNDF_StartTransfer(unsigned int channel, SndfBank *bank)
     if (sndf_ctx->transfers[channel].iopBuffer == 0) {
         return -10;
     }
-    sndf_ctx->state[channel] = 1;
-    sndf_ctx->f2972[channel] = 0;
-    sndf_ctx->f3228[channel] = channel & 0xFF;
+    sndf_ctx->transferState[channel] = 1;
+    sndf_ctx->transferMode[channel] = 0;
+    sndf_ctx->transferPort[channel] = channel & 0xFF;
     waveSize = bank->waveSize;
     sndf_ctx->transfers[channel].data = (char *)bank + bank->waveOffset;
     sndf_ctx->transfers[channel].remaining = waveSize;
@@ -183,7 +191,7 @@ int SNDF_StartTransfer(unsigned int channel, SndfBank *bank)
     return result;
 }
 
-int FUN_00281300(unsigned int channel, int value)
+int SNDF_LoadIopBank(unsigned int channel, int iopAddr)
 {
     int request[1];
     int result;
@@ -191,15 +199,15 @@ int FUN_00281300(unsigned int channel, int value)
     if (channel >= 32) {
         return -1;
     }
-    request[0] = value;
+    request[0] = iopAddr;
     result = sndf_CallRpc(channel | 0x800, request, 1, 4);
     if (result == 0) {
-        sndf_ctx->channelOn[channel] = 1;
+        sndf_ctx->portOpen[channel] = 1;
     }
     return result;
 }
 
-int FUN_00281368(unsigned int channel)
+int SNDF_OpenPort(unsigned int channel)
 {
     int result;
 
@@ -208,7 +216,7 @@ int FUN_00281368(unsigned int channel)
     }
     result = sndf_CallRpc(channel | 0xA00, 0, 0, 4);
     if (result == 0) {
-        sndf_ctx->channelOn[channel] = 1;
+        sndf_ctx->portOpen[channel] = 1;
     }
     return result;
 }
@@ -222,12 +230,12 @@ int SNDF_FreePort(unsigned int channel)
     }
     result = sndf_CallRpc(channel | 0x700, 0, 0, 4);
     if (result == 0) {
-        sndf_ctx->channelOn[channel] = 0;
+        sndf_ctx->portOpen[channel] = 0;
     }
     return result;
 }
 
-int FUN_00281420(unsigned int channel, int *start, int *size)
+int sndf_GetPortArea(unsigned int channel, int *tblAddr, int *spuAddr)
 {
     int result = 0;
     int tblOffset = 0;
@@ -238,13 +246,13 @@ int FUN_00281420(unsigned int channel, int *start, int *size)
         return -1;
     }
     if (sndf_ctx->tables.tblSize[channel] != 0 && sndf_ctx->tables.pcmSize[channel] != 0) {
-        if (sndf_ctx->channelOn[channel] == 0) {
+        if (sndf_ctx->portOpen[channel] == 0) {
             for (i = 0; i < channel; i++) {
                 tblOffset += sndf_ctx->tables.tblSize[i];
                 pcmOffset += sndf_ctx->tables.pcmSize[i];
             }
-            *start = sndf_ctx->base + tblOffset;
-            *size = pcmOffset + 0x20000;
+            *tblAddr = sndf_ctx->iopBase + tblOffset;
+            *spuAddr = pcmOffset + 0x20000;
         } else {
             result = -3;
         }
@@ -268,21 +276,21 @@ int SNDF_SendSysMessage(unsigned int message)
     return sndf_SendMessage(SWAP32_A(message));
 }
 
-int FUN_00281660(unsigned int channel, int index, int kind)
+int SNDF_GetCtrlChange(unsigned int channel, int part, int kind)
 {
     if (channel >= 32) {
         return -128;
     }
     switch (kind) {
     case 0xB0270000:
-        return sndf_status.params[sndf_status.programs[channel][index].index].a;
+        return sndf_status.params[sndf_status.programs[channel][part].index].a;
     case 0xB02A0000:
-        return sndf_status.params[sndf_status.programs[channel][index].index].b - 64;
+        return sndf_status.params[sndf_status.programs[channel][part].index].b - 64;
     }
     return -128;
 }
 
-int FUN_002816f8(unsigned int channel)
+int SNDF_GetPlayStatus(unsigned int channel)
 {
     int result = 0;
     int i;
@@ -306,71 +314,71 @@ int FUN_002816f8(unsigned int channel)
     return result;
 }
 
-void FUN_00281770(void)
+int SNDF_GetEvent(void)
 {
-    sndf_CallRpc(0xE00, 0, 0, 4);
+    return sndf_CallRpc(0xE00, 0, 0, 4);
 }
 
-void FUN_00281798(void)
+int SNDF_GetErrorMessage(void)
 {
-    sndf_CallRpc(0xFB00, 0, 0, 4);
+    return sndf_CallRpc(0xFB00, 0, 0, 4);
 }
 
-int FUN_002817c0(void)
+int SNDF_GetProcTime(void)
 {
-    return sndf_status.f4;
+    return sndf_status.procTime;
 }
 
-void FUN_002817d0(int *first, int *second)
+void SNDF_GetPortSizes(int *tblSize, int *pcmSize)
 {
     int i;
 
     sndf_CallRpc(0xFE00, 0, 0, 0x80);
     for (i = 0; i < 32; i++) {
-        *first++ = DAT_00570c00[i];
-        *second++ = DAT_00570c00[i + 32];
+        *tblSize++ = sndf_rpc_buf[i];
+        *pcmSize++ = sndf_rpc_buf[i + 32];
     }
 }
 
-void FUN_00281840(unsigned char *first, unsigned char *second)
+void SNDF_GetEffect(unsigned char *bank, unsigned char *preset)
 {
     sndf_CallRpc(0xFC00, 0, 0, 8);
-    *first = DAT_00570c00[0];
-    *second = DAT_00570c00[1];
+    *bank = sndf_rpc_buf[0];
+    *preset = sndf_rpc_buf[1];
 }
 
-void FUN_00281898(int *first, int *second, int *third, int *fourth)
+void SNDF_GetVoiceCount(int *first, int *second, int *third, int *fourth)
 {
     sndf_CallRpc(0xFD00, 0, 0, 0x10);
-    *first = DAT_00570c00[0];
-    *second = DAT_00570c00[1];
-    *third = DAT_00570c00[2];
-    *fourth = DAT_00570c00[3];
+    *first = sndf_rpc_buf[0];
+    *second = sndf_rpc_buf[1];
+    *third = sndf_rpc_buf[2];
+    *fourth = sndf_rpc_buf[3];
 }
 
-void FUN_00281918(int *first, int *second)
+void SNDF_GetQueueCount(int *eeQueued, int *iopQueued)
 {
-    *first = sndf_status.f0;
-    *second = sndf_status.f9;
+    *eeQueued = sndf_status.msgQueued;
+    *iopQueued = sndf_status.iopMsgQueued;
 }
 
-void FUN_00281938(void)
+void SNDF_ClearQueue(void)
 {
     sndf_CallRpc(0xF900, 0, 0, 4);
 }
 
-void FUN_00281960(void (*notify)(int a, int b))
+void SNDF_SetCallback(void (*func)(int arg, int event))
 {
-    sndf_ctx->notify = notify;
+    sndf_ctx->eventFunc = func;
     sndf_CallRpc(0x1700, 0, 0, 4);
 }
 
-int FUN_00281990(void)
+int SNDF_GetOutputMode(void)
 {
-    return sndf_status.f8;
+    return sndf_status.outputMode;
 }
 
-int FUN_002819a0(int id)
+int SNDF_GetSoundStatus(int id)
 {
     int result = 0;
     int i = id - 1;
@@ -393,14 +401,14 @@ int sndf_CallRpc(int cmd, int *args, int n, int size)
 {
     int i;
 
-    if (DAT_004bb100 == 0) {
-        DAT_004bb100 = 1;
+    if (sndf_rpc_busy == 0) {
+        sndf_rpc_busy = 1;
         for (i = 0; i < n; i++) {
-            DAT_00570c00[i] = *args++;
+            sndf_rpc_buf[i] = *args++;
         }
-        sceSifCallRpc(&DAT_00571750, cmd, 0, DAT_00570c00, n * 4, DAT_00570c00, size, 0, 0);
-        DAT_004bb100 = 0;
-        return DAT_00570c00[0];
+        sceSifCallRpc(&sndf_cmd_client, cmd, 0, sndf_rpc_buf, n * 4, sndf_rpc_buf, size, 0, 0);
+        sndf_rpc_busy = 0;
+        return sndf_rpc_buf[0];
     }
     return -0x100;
 }
@@ -469,46 +477,46 @@ int SNDF_GetTransferStatus(unsigned int channel)
     if (channel >= 32) {
         return -1;
     }
-    error = sndf_ctx->error[channel];
+    error = sndf_ctx->transferResult[channel];
     if (error != 0) {
-        sndf_ctx->error[channel] = 0;
+        sndf_ctx->transferResult[channel] = 0;
         result = (error != -256) ? error : 3;
-    } else if (sndf_ctx->state[channel] == 1) {
+    } else if (sndf_ctx->transferState[channel] == 1) {
         result = 1;
-    } else if (sndf_ctx->state[channel] == 2) {
-        sndf_ctx->state[channel] = 0;
+    } else if (sndf_ctx->transferState[channel] == 2) {
+        sndf_ctx->transferState[channel] = 0;
         result = 2;
     }
     return result;
 }
 
-void FUN_00281d80(SndfMessage *message)
+void sndf_SvrCallback(void *reply)
 {
     SndfMessage copy;
-    int *src = message->word;
+    int *src = ((SndfMessage *)reply)->word;
     int *dst = copy.word;
     int i;
 
     for (i = 0; i < 4; i++) {
         *dst++ = *src++;
     }
-    if (sndf_ctx->notify != 0 && copy.word[2] != 0) {
-        sndf_ctx->notify(copy.word[1], copy.word[2]);
+    if (sndf_ctx->eventFunc != 0 && copy.word[2] != 0) {
+        sndf_ctx->eventFunc(copy.word[1], copy.word[2]);
     }
-    DAT_00571700 = 0;
+    sndf_svr_busy = 0;
     __asm__ ("sync");
     __asm__ ("ei");
 }
 
 /* Moves the next block of a channel's pending upload to its IOP buffer and on to SPU memory,
  * then frees the buffer once the whole bank has gone. */
-void FUN_00281df0(unsigned int channel)
+void sndf_ExecTransfer(unsigned int channel)
 {
-    SifDmaData dma;
+    sceSifDmaData dma;
     unsigned int id;
 
-    if (sndf_ctx->state[channel] == 1 && sndf_ctx->f2972[channel] == 0
-        && (sndf_ctx->open = sceSdRemote(1, 0x80F0, DAT_004bb110, 0)) == 1) {
+    if (sndf_ctx->transferState[channel] == 1 && sndf_ctx->transferMode[channel] == 0
+        && (sndf_ctx->transIdle = sceSdRemote(1, rSdVoiceTransStatus, sndf_dma_channel, 0)) == 1) {
         if (sndf_ctx->transfers[channel].state == 1) {
             if (sndf_ctx->transfers[channel].remaining < sndf_ctx->transfers[channel].bufferSize) {
                 sndf_ctx->transfers[channel].bufferSize = sndf_ctx->transfers[channel].remaining;
@@ -520,7 +528,7 @@ void FUN_00281df0(unsigned int channel)
             id = sceSifSetDma(&dma, 1);
             while (sceSifDmaStat(id) >= 0) {
             }
-            sceSdRemote(1, 0x80D0, DAT_004bb110, 0, sndf_ctx->transfers[channel].iopBuffer,
+            sceSdRemote(1, rSdVoiceTrans, sndf_dma_channel, 0, sndf_ctx->transfers[channel].iopBuffer,
                         sndf_ctx->transfers[channel].spuAddr, sndf_ctx->transfers[channel].bufferSize);
             sndf_ctx->transfers[channel].spuAddr += sndf_ctx->transfers[channel].bufferSize;
             sndf_ctx->transfers[channel].data += sndf_ctx->transfers[channel].bufferSize;
@@ -530,9 +538,9 @@ void FUN_00281df0(unsigned int channel)
             }
         } else if (sndf_ctx->transfers[channel].state == 2) {
             sceSifFreeIopHeap(sndf_ctx->transfers[channel].iopBuffer);
-            sndf_ctx->error[channel] = FUN_00281368(channel);
-            sndf_ctx->state[channel] = 2;
-            sndf_ctx->f3228[channel] = 0xFF;
+            sndf_ctx->transferResult[channel] = SNDF_OpenPort(channel);
+            sndf_ctx->transferState[channel] = 2;
+            sndf_ctx->transferPort[channel] = 0xFF;
         }
     }
 }
@@ -542,21 +550,21 @@ void SNDF_ExecServer(void)
     unsigned int i;
     SndfContext *ctx;
 
-    InvalidDCache((char *)&sndf_status, (char *)&sndf_status + 4671);
-    if (sndf_status.f1 == 0) {
+    InvalidDCache(&sndf_status, (char *)&sndf_status + sizeof(sndf_status) - 1);
+    if (sndf_status.slotsRead == 0) {
         memcpy(sndf_ctx->slots, sndf_status.slots, sizeof(sndf_status.slots));
-        sndf_status.f1 = 1;
+        sndf_status.slotsRead = 1;
     }
-    if (sndf_ctx->count != 0 && DAT_00570d00.count == 0) {
+    if (sndf_ctx->count != 0 && sndf_svr_sendbuf.count == 0) {
         do {
             ctx = sndf_ctx;
-            DAT_00570d00.ring[DAT_00570d00.count].kind = ctx->ring[ctx->readIndex].kind;
-            DAT_00570d00.ring[DAT_00570d00.count].arg = ctx->ring[ctx->readIndex].arg;
-            DAT_00570d00.ring[DAT_00570d00.count].a = ctx->ring[ctx->readIndex].a;
-            DAT_00570d00.ring[DAT_00570d00.count].b = ctx->ring[ctx->readIndex].b;
-            DAT_00570d00.ring[DAT_00570d00.count].c = ctx->ring[ctx->readIndex].c;
-            DAT_00570d00.ring[DAT_00570d00.count].d = ctx->ring[ctx->readIndex].d;
-            if (++DAT_00570d00.count >= 128) {
+            sndf_svr_sendbuf.ring[sndf_svr_sendbuf.count].kind = ctx->ring[ctx->readIndex].kind;
+            sndf_svr_sendbuf.ring[sndf_svr_sendbuf.count].arg = ctx->ring[ctx->readIndex].arg;
+            sndf_svr_sendbuf.ring[sndf_svr_sendbuf.count].a = ctx->ring[ctx->readIndex].a;
+            sndf_svr_sendbuf.ring[sndf_svr_sendbuf.count].b = ctx->ring[ctx->readIndex].b;
+            sndf_svr_sendbuf.ring[sndf_svr_sendbuf.count].c = ctx->ring[ctx->readIndex].c;
+            sndf_svr_sendbuf.ring[sndf_svr_sendbuf.count].d = ctx->ring[ctx->readIndex].d;
+            if (++sndf_svr_sendbuf.count >= 128) {
                 break;
             }
             ctx->ring[ctx->readIndex].kind = 0;
@@ -565,22 +573,21 @@ void SNDF_ExecServer(void)
             sndf_ctx->count--;
         } while (sndf_ctx->count != 0);
     }
-    if (sceSifCheckStatRpc(&DAT_00571778) == 0) {
-        SyncDCache((char *)&DAT_00570d00, (char *)&DAT_00570d00 + 2623);
-        sceSifCallRpc(&DAT_00571778, 0x8000, 1, &DAT_00570d00, 2624, &DAT_00571740, 16, FUN_00281d80,
-                      &DAT_00571740);
+    if (sceSifCheckStatRpc(&sndf_svr_client.rpcd) == 0) {
+        SyncDCache(&sndf_svr_sendbuf, (char *)&sndf_svr_sendbuf + sizeof(sndf_svr_sendbuf) - 1);
+        sceSifCallRpc(&sndf_svr_client, 0x8000, SIF_RPCM_NOWAIT, &sndf_svr_sendbuf, sizeof(sndf_svr_sendbuf),
+                      &sndf_svr_recvbuf, sizeof(sndf_svr_recvbuf), sndf_SvrCallback, &sndf_svr_recvbuf);
     }
     i = 0;
-    if (sndf_ctx->f5020 != 0) {
+    if (sndf_ctx->transferFunc != 0) {
         for (i = 0; i < 32; i++) {
-            if ((sndf_ctx->f2972[i] & 3) == 1 && sndf_ctx->state[i] == 1) {
-                sndf_ctx->error[i] = sndf_ctx->f5020(i);
+            if ((sndf_ctx->transferMode[i] & 3) == 1 && sndf_ctx->transferState[i] == 1) {
+                sndf_ctx->transferResult[i] = sndf_ctx->transferFunc(i);
             }
         }
         i = 0;
     }
     do {
-        FUN_00281df0(i++);
+        sndf_ExecTransfer(i++);
     } while (i < 32);
 }
-

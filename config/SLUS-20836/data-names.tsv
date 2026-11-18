@@ -2636,6 +2636,10 @@
 0x004bb000	svm_exec_cnt	recovered-global
 0x004bb020	svm_svr_busy	recovered-global
 0x004bb040	svm_errmsg	recovered-global
+0x004bb100	sndf_rpc_busy	recovered-global
+0x004bb104	sndf_initialized	recovered-global
+0x004bb108	sndf_started	recovered-global
+0x004bb110	sndf_dma_channel	recovered-global
 0x004bb114	sndf_ctx	recovered-global
 0x004bb118	sndf_pan_remap	recovered-global
 0x004bb3e8	cftcom_function_name	recovered-global
@@ -7938,7 +7942,15 @@
 0x00570bb8	svm_tas_func	recovered-global
 0x00570bc0	svm_cbvsync_begin	recovered-global
 0x00570bc8	svm_cbvsync_end	recovered-global
+0x00570c00	sndf_rpc_buf	recovered-global
+0x00570d00	sndf_svr_sendbuf	recovered-global
+0x00571700	sndf_svr_busy	recovered-global
+0x00571740	sndf_svr_recvbuf	recovered-global
+0x00571750	sndf_cmd_client	recovered-global
+0x00571778	sndf_svr_client	recovered-global
+0x005717a0	sndf_rpc_init_flag	recovered-global
 0x005717c0	sndf_status	recovered-global
+0x00572a00	sndf_context	recovered-global
 0x00573ea8	cft_version_ptr	recovered-global
 0x00573eb8	m2vlib_libwork	recovered-global
 0x00573f00	m2vlib_m2vobj	recovered-global
