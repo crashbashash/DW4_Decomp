@@ -206,7 +206,7 @@ void mwSfdStopDec(MwsfdPly *ply)
         MWSFSVM_Error("E2003 mwSfdStop:can't stop SFD");
     }
     mwsst_Stop(&ply->sst);
-    ply->f692 = 0;
+    ply->rsv = 0;
     if (ply->stm != 0) {
         MWSTM_ReqStop(ply->stm);
     }

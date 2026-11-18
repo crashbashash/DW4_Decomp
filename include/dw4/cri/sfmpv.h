@@ -18,8 +18,8 @@ typedef struct SfdFrmPara {
     SfdPlanes ref[2];
     char *dst;
     M2vPicAtr *pic;
-    int nfrm;
-    int nbyte;
+    int errcnt;              /* data errors in the picture (the frame's errcnt) */
+    int rcvcnt;              /* errors recovered from */
 } SfdFrmPara;
 
 /* The user data of a sequence header. */
@@ -90,11 +90,12 @@ typedef struct SfdMpvFrameBufs {
     int w[16];
 } SfdMpvFrameBufs;
 
+/* One time stamp of the IPU input ring (Sony's TimeStamp): cleared by viBufReset, read nowhere in SFD. */
 typedef struct SfdIpuEntry {
-    long long f0;
-    long long f8;
-    int f16;
-    int f20;
+    long long pts;       /* 0: TS_NONE (-1) when empty */
+    long long dts;       /* 8 */
+    int pos;             /* 16 */
+    int len;             /* 20 */
 } SfdIpuEntry;
 
 /* One DMA tag quadword of the IPU input chain. */
@@ -127,8 +128,8 @@ typedef struct SfdIpuStream {
     long long totalBytes; /* 72 */
     SfdIpuEntry *entries;
     int entryCount;
-    int f88;
-    int f92;
+    int tsCount;         /* 88: time stamps held (Sony's count_ts) */
+    int tsWrite;         /* 92: the next time stamp written (wt_ts) */
 } SfdIpuStream;
 
 /* The sceMpeg/IPU decoder's work (SDK sfd_mpvp.c), inside the video work. */
@@ -215,7 +216,7 @@ typedef enum SfdChromaPos {
 } SfdChromaPos;
 
 typedef struct SfdFrameDetail {
-    int f72;
+    int strmType;                       /* 72: 1 MPEG-1, 2 MPEG-2 (from the chroma siting) */
     char pad76[4];
     long long pts;                      /* 80 */
     int picture_structure;              /* 88 */

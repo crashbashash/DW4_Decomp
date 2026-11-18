@@ -17,7 +17,11 @@ onwards, from `0x290b28`) is described with the rest of the MPV library.
 | `src/cri/mpvhdr.c` | `0x28f098` up to `0x290b28` | header decoding through a stream joint: sequence, group and picture headers, user data with the CRI `IDCPREC`/`STCCODE` tags, start-code skipping | its `.rodata` tags `0x4f29f0`/`0x4f29f8` come before the MPV version string, so the file ends before the version file; ends with the two `return 0` stubs, as `mpsdmx.c` ends with its hooks |
 
 `mpsutl.c`, `mpsdmx.c` and `mps.c` share `include/dw4/cri/mps.h` (the 256-byte `MpsHn`, the `MpsWork` area
-`MPS_Init` is given, and the header records). The MPV files use `include/dw4/cri/mpv.h`.
+`MPS_Init` is given, and the header records). The MPV files use `include/dw4/cri/mpv.h`. The handle words at
+offsets 20, 208, 216, 220 and 224 are `rsv0` to `rsv4`: `mpslib_InitHn` clears them and no MPS function reads them
+(the RE4 CRI library's `MPS_OBJ` in the Persona 4 decompilation, github.com/Raikaru/Persona4-Decompilation
+`src/cri/re4/mps.h`, leaves them unnamed as `x14`, `xd0`, `xd8`..`xe0`, and no function of the 2002 SDK's `mps_*.o`
+members touches those offsets).
 
 ## Open questions
 

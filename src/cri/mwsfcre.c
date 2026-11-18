@@ -58,7 +58,7 @@ typedef struct SfdSupplyPrm {
     unsigned int buf;
     int size;
     int xsize;
-    int f20;
+    int rsv;                      /* 0 here; a positive value makes SFD refuse a ring supply */
 } SfdSupplyPrm;
 
 /* the buffer sizes mwsfcre_CreateSfd works out for the player being made */
@@ -283,21 +283,21 @@ void MWSFCRE_SetSupplySj(MwsfdPly *ply) {
         prm.buf = (unsigned int)ply->memBuf;
         prm.size = ply->memSize;
         prm.xsize = 0;
-        prm.f20 = 0;
+        prm.rsv = 0;
     } else if (sj == ply->defSj) {
         prm.kind = SFD_SUPPLY_INPUT_RING;
         prm.sj = sj;
         prm.buf = (unsigned int)ply->inputBuf;
         prm.size = ply->inputBufSize;
         prm.xsize = ply->inputXSize;
-        prm.f20 = 0;
+        prm.rsv = 0;
     } else {
         prm.kind = ply->srcType;
         prm.sj = sj;
         prm.buf = ply->srcBuf;
         prm.size = ply->srcSize;
         prm.xsize = ply->srcXSize;
-        prm.f20 = 0;
+        prm.rsv = 0;
     }
     if (SFD_SetSupplySj(sfd, &prm) != 0) {
         MWSFLIB_SetErrCode(-312);
@@ -804,7 +804,7 @@ void mwPlyGetHdrInf(char *buf, int size, MwsfdHdrInf *out) {
     hdr.height = inf.height;
     hdr.rate = inf.frameRate;
     hdr.audioFreq = inf.sfreq;
-    hdr.f40 = inf.nch;
+    hdr.audioNch = inf.nch;
     mwply_GetPicInf(buf, size, &hdr);
     hdr.valid = mwsfdcre_IsPlayableByHdrInf(&hdr);
     *out = hdr;

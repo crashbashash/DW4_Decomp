@@ -70,15 +70,32 @@ its public API, begin it.
   copies. The decoder parameters `SfdMpvCond` (RE4's `SFMPV_PARA`) are named from use: reference frame size and area,
   largest picture, frame buffer size, count and area (medium; RE4 calls +0/+4 `cwidth`/`cheight`).
 - The IPU input ring `SfdIpuStream` is CRI's copy of Sony's `vibuf.c`; `headSct`, `active` and `totalBytes` are
-  named from use (medium), the saved DMA registers keep `r28`..`r60`. `SfdIpuCtl` counts picture start codes
+  named from use (medium), the saved DMA registers keep `r28`..`r60`. Its time-stamp ring follows the `ViBuf` and
+  `TimeStamp` of the Sony EE sample `mpeg/mpegstr/vibuf.h`, member for member: an entry (`SfdIpuEntry`) is `pts`,
+  `dts`, `pos`, `len`, and the ring's last two words `tsCount` and `tsWrite` are the sample's `count_ts` and `wt_ts`
+  (high; `viBufReset` clears them in the sample's order). `SfdIpuCtl` counts picture start codes
   (`pscNext`, `pscFound`, `pscCount`) and keeps the last three bytes put (`tail0`..`tail2`); its error record is
-  libmpeg's `sceMpegCbDataError`.
+  libmpeg's `sceMpegCbDataError`, and `mpegError` also keeps a flag and a copy of the last one in
+  `sfmpvp_mpeg_errflg` and `sfmpvp_mpeg_errdata` (medium; nothing reads them).
+- The system stream work `SfdMpsPrm` takes the RE4 library's `SFMPS_WORK` names where the code agrees (medium):
+  `lastVid`/`lastAud` (the stream id of the last packet, reset to `INT_MAX`), `firstVid`/`firstAud` (the first id seen,
+  -1 when reset, recorded in and restored from the seek record), `endcode` (the last start code was an end code)
+  and `skip` (the bytes passed since an end code, -1 after a packet).
+- The error block `SfdErrInf` +12/+16 are `errcnt`/`rcvcnt`: `sfmpv_DecodeFrm` adds each picture's data-error and
+  recovery counts there, the same counts a frame hands out as the public `MwsfdFrmObj` `errcnt`/`rcvcnt`, so the
+  decode parameters' counts (`SfdFrmPara`) take those names too (medium; RE4 adds the same words as `err.x0c`/`.x10`
+  and calls the decode counts `nfrm`/`nbyte`). The frame detail word at +72 is `strmType`, 2 for MPEG-2 and 1 for
+  MPEG-1 as the decoder's chroma siting tells them apart (`MpvHn.strmType` counts the same way; medium, RE4's
+  `pstruct` disagrees with the use).
 - The seek record's video analysis `SfdRecVideo` is the one `sfmpv_SetMpvHd` fills: the first picture's time and
   unit, the time state then and the sequence header's user data. A seek request `SfdRecSub` holds a time (-3 for
-  none) and its unit (medium; RE4 calls the time `pos`).
+  none) and its unit (medium; RE4 calls the time `pos`) after a first word `rsv`, which `SFSEE_InitHn` clears and
+  `SFD_Seek` copies with the request but nothing reads.
 - `SfdPlyInf` +20/+24/+36/+40/+44 are named from use (medium): `numSkipEmptyP`, `frmOut` (set by `SFD_GetFrm`,
   cleared by `SFD_RelFrm`), `vidShort`, `noFreeFrm`, `lockCnt`. `SfdTim` +352, +644/+648 and +676..+696 likewise:
-  `concat_frmcnt`, `dec_time`/`dec_unit`, `usr_frm_sync`, `disp_sync_cnt`/`_time`/`_unit`.
+  `concat_frmcnt`, `dec_time`/`dec_unit`, `usr_frm_sync`, `disp_sync_cnt`/`_time`/`_unit`. `SfdPlyInf` +136 is
+  `audSjRsv`, the third count of the decoder joint's flow group: `sfply_InitFlowCnt` clears it with the group and
+  `mwPlyGetFlowInf` hands it out as the twelfth flow word, but nothing writes it.
 - The ring delimiter has its own type `SfdBufDlm`: its second word is the end address of the data searched.
 - The PES packet table at `0x4f4dc0` is `sfmps_CopyPketFn`, the copy function of each stream kind (audio, video,
   private, padding), after the read-only table of that name the `sfd_mps.o` member of the CRI PS2 SDK archive

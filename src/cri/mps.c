@@ -231,11 +231,11 @@ MpsHn *mpslib_InitHn(MpsHn *mps) {
     mpslib_InitSys(&mps->sysHdKind[1]);
     mpslib_InitSys(&mps->sysHdKind[2]);
     mps_ResetPesInf(&mps->pes);
-    mps->f208 = 0;
-    mps->f216 = 0;
-    mps->f220 = 0;
+    mps->rsv1 = 0;
+    mps->rsv2 = 0;
+    mps->rsv3 = 0;
     mps->decode = mpsdmx_Decode;
-    mps->f224 = 0;
+    mps->rsv4 = 0;
     mps->sysHdFn = 0;
     mps->sysHdObj = 0;
     return mps;

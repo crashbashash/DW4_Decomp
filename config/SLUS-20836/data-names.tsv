@@ -2696,6 +2696,7 @@
 0x004beafc	sfd_hn_size	recovered-global
 0x004beb00	sfmps_short_writes	recovered-global
 0x004beb08	sfmpv_discard_wsiz	recovered-global
+0x004beb0c	sfmpv_picusr_errcnt	recovered-global
 0x004beb10	sfmpvp_scempeg_useflag	recovered-global
 0x004beb18	SFPLY_ResetPtsm	recovered-global
 0x004beb1c	sfmps_audio_fn	recovered-global
@@ -3768,6 +3769,7 @@
 0x004f4e08	sfmpv_fps_round	recovered-global
 0x004f4e30	sfmpv_conv_29_97	recovered-global
 0x004f4e50	sfmpv_conv_59_94	recovered-global
+0x004f4e70	sfmpv_ptype_tbl	recovered-global
 0x004f4e88	sfmpv_seqend_codes	recovered-global
 0x004f4ea0	SFPLY_cond_dfl	recovered-global
 0x004f5020	SFPLY_cond_dfl_guard	recovered-global
@@ -7983,6 +7985,8 @@
 0x00585624	sfmpv_picusr_bufnum	recovered-global
 0x00585628	sfmpv_picusr_buf1siz	recovered-global
 0x00585630	sfmpvp_bkup_buf	recovered-global
+0x00585678	sfmpvp_mpeg_errflg	recovered-global
+0x00585680	sfmpvp_mpeg_errdata	recovered-global
 0x005856a0	sfx_version_ptr	recovered-global
 0x005856a8	sud_version_ptr	recovered-global
 0x005856b0	utytmr_main	recovered-global

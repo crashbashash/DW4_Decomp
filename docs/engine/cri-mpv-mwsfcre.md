@@ -56,6 +56,9 @@ MWSFD player creation: work-area sizes, frame buffers, picture user buffers, the
 - Types: `MwsfdPly`, `MwsfdCreInf` (the 48-byte creation parameters, copied into the handle), `MwsfdHdrInf` and
   `MwsfdMemPool` from `dw4/cri/mwply.h`, `MwsfdWork` from `dw4/cri/cri_mwsfd.h` and `SfdHdrInf` from `dw4/cri/sfd.h`;
   file-local `MwsfdFrmBufs`, `MwsfdSfdPrm`, `MwsfdMpvCond`, `MwsfdAdxCfg`, `SfdSupplyKind` and `SfdSupplyPrm`.
+  `SfdSupplyPrm`'s last word is `rsv`: `MWSFCRE_SetSupplySj` always stores 0 there and `sfbuf_ChkSupSj` refuses a
+  ring supply with a positive value (the RE4 CRI library's `SFBUF_SUP` in the Persona 4 decompilation,
+  github.com/Raikaru/Persona4-Decompilation `src/cri/re4/sfd.h`, leaves it unnamed; medium).
 - Allocation: `MWSFD_Malloc` takes from the creation parameters' work area (`mwsfcre_OrgMalloc`) when one was given,
   else from the functions installed with `mwPlySetMallocFn`; it records up to 32 blocks, which
   `mwsfcre_AllFree` releases through `MWSFD_Free`. `mwsfcre_IsOkUsrMalloc` refuses a creation without a work area

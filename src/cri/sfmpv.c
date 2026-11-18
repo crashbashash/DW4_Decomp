@@ -21,8 +21,8 @@ extern SfdMpvWorkBufs sfmpv_rfb_adr_tbl;
 extern SfdMpvFrameBufs sfmpv_ta_adr_tbl;
 extern char *sfmpv_picusr_pbuf;
 extern int sfmpv_picusr_bufnum;
-extern int DAT_004beb0c;
-extern int DAT_004f4e70[];
+extern int sfmpv_picusr_errcnt;
+extern int sfmpv_ptype_tbl[];
 extern int sfmpv_picusr_buf1siz;
 extern int sfmpv_discard_wsiz;
 extern int sfmpv_fps_round[];
@@ -37,7 +37,7 @@ int MEM_Copy(void *dst, void *src, int n);
 int MPV_EntryErrFunc(void *handle, void (*callback)(SfdPly *, int), SfdPly *player);
 char *sfmpv_SearchDelim(SfdBufStat *ring, int mask, SfdDelim *code);
 char *sfmpv_BsearchDelim(SfdBufStat *ring, int mask, SfdDelim *code);
-void FUN_002a7278(SfdSj *source, int *kind, char **data, int *size);
+void sfmpv_PeekPicUsr(SfdSj *source, int *kind, char **data, int *size);
 void sfmpv_InitPicUsr(SfdBufPool *pool);
 void sfmpv_SetFrmInf(SfdPly *player, SfdSlot *slot, SfdFrameInfo **out);
 
@@ -45,7 +45,7 @@ int sfmpv_SetPicUsrBuf(SfdPly *player, char *base, int count, int size);
 int sfmpv_ChkFatal(void);
 int sfmpv_ExecServerSub(SfdPly *player);
 void sfmpv_SetCondY16(SfdPly *player);
-void FUN_002a3850(SfdPly *player);
+void sfmpv_DecUsrHdr(SfdPly *player);
 int sfmpv_GetTermDst(SfdPly *player);
 void sfmpv_ChkPrepFlg(SfdPly *player);
 int sfmpv_IsPrepEnd(SfdPly *player);
@@ -67,7 +67,7 @@ int sfmpv_ChkMpvErr(SfdPly *player, int status, int n, int code);
 void sfmpv_ReadPtsQue(SfdPly *player, M2vPicAtr *pic, char *pos, long long *time, long long *pts, int newGop);
 long long sfmpv_ComplementPts(SfdTim *timer, SfdPtsComp *comp, M2vPicAtr *pic, SfdItem *entry, int newGop, long long *pts);
 long long sfmpv_Nfrm2Pts(int count, int rate);
-void FUN_002a54d0(SfdPly *player, SfdSlot *slot);
+void sfmpv_SetTcTtu(SfdPly *player, SfdSlot *slot);
 void sfmpv_ReadTcode(M2vPicAtr *pic, SfdTimeCode *out);
 int sfmpv_DetectTcErr(SfdPly *player, M2vPicAtr *pic);
 void sfmpv_DoReformTc(SfdPly *player, M2vPicAtr *pic, long long id, int flag);
@@ -85,7 +85,7 @@ int sfmpv_IsLate(SfdPly *player, unsigned int type);
 void sfmpv_GetDtime(SfdPly *player, int unused, int *first, int *second);
 void sfmpv_UpdateDefect(SfdPly *player, M2vPicAtr *pic, int kind);
 void sfmpv_SetFrmTime(SfdPly *player, SfdSlot *slot);
-void FUN_002a73f0(SfdSjChunk *dst, SfdSjChunk *src);
+void sfmpv_CopyPicUsr(SfdSjChunk *dst, SfdSjChunk *src);
 void sfmpv_RingAddRead(SfdPly *player, int n);
 int sfmpv_InitInf(SfdPly *player, SfdMpv *mpv);
 int sfmpv_CheckMpvPara(void);
@@ -94,7 +94,7 @@ void sfmpv_InitPicAtr(M2vPicAtr *info);
 void sfmpv_ErrFn(SfdPly *player, int code);
 int sfmpv_DestroySub(void *handle);
 int sfmpv_AddReadSub(SfdPly *player, char *body);
-SfdVfrm *FUN_002a8158(SfdPly *player, char *body);
+SfdVfrm *sfmpv_Inf2Vfrm(SfdPly *player, char *body);
 int sfmpv_ReprocessShc(SfdPly *player, SfdMpv *mpv, int *ok);
 SfdRecVideo *sfmpv_GetHd(SfdPly *player);
 SfdSlot *SFMPVF_SearchFrmObj(SfdPly *player, char *body);
@@ -104,7 +104,7 @@ void SFMPVF_EndDrawFrm(SfdSlot *slot);
 SfdSlot *SFMPVF_HoldFrm(SfdPly *player, int *out);
 SfdSlot *SFMPVF_AllocFrm(SfdPly *player);
 void SFMPVF_EndRefFrm(SfdSlot *slot);
-int FUN_002a8878(SfdPly *player);
+int sfmpvf_GetNumReadyFrm(SfdPly *player);
 SfdSlot *sfmpvf_ReferNextFrmReady(SfdPly *player);
 void sfmpvf_SearchStbyFrm(SfdPly *player, SfdSlot **best, SfdSlot **second);
 int sfmpvf_IsChkFirst(SfdSlot *a, SfdSlot *b);
@@ -338,7 +338,7 @@ int sfmpv_ExecServerSub(SfdPly *player) {
         }
         sfmpv_SetCondY16(player);
         if (player->stat == 2) {
-            FUN_002a3850(player);
+            sfmpv_DecUsrHdr(player);
         }
         status = sfmpv_DecodeSomePic(player);
         sfmpv_ChkPrepFlg(player);
@@ -368,7 +368,7 @@ void sfmpv_SetCondY16(SfdPly *player) {
     SFD_SetMpvCond(player, 5, mode);
 }
 
-void FUN_002a3850(SfdPly *player) {
+void sfmpv_DecUsrHdr(SfdPly *player) {
     SfdMpv *mpv = player->trn[2].hn.mpv;
     void *handle = mpv->handle;
     SfdSjChunk seqhd;
@@ -1165,12 +1165,14 @@ void sfmpv_CalcRepeatField(SfdPly *player, M2vPicAtr *pic, int newGop) {
         j = mpv->second->info.temporal_reference % 64;
         fields[j].total = fields[idx].repeat + fields[idx].total;
         mpv->second->stamp.tc.field = fields[j].total;
-        FUN_002a54d0(player, mpv->second);
+        sfmpv_SetTcTtu(player, mpv->second);
         sfmpv_SetFrmTime(player, mpv->second);
     }
 }
 
-void FUN_002a54d0(SfdPly *player, SfdSlot *slot) {
+/* matching construct: manual — a name of 15 characters or more here reorders the loads of sfmpv_SetDecTtu's
+ * address-taken time code (its alias set comes from the compiler heap the earlier text leaves) */
+void sfmpv_SetTcTtu(SfdPly *player, SfdSlot *slot) {
     int t[2];
     SfdTim *timer;
     int d;
@@ -1733,29 +1735,30 @@ int sfmpv_SetFrmPara(SfdPly *player, M2vPicAtr *pic, SfdFrmPara *para, SfdSlot *
     }
     para->dst = (*out)->buf;
     para->pic = &(*out)->info;
-    para->nfrm = 0;
-    para->nbyte = 0;
+    para->errcnt = 0;
+    para->rcvcnt = 0;
     decode->noFreeFrm = 0;
     return 0;
 }
 
-void FUN_002a6ea0(SfdPly *player, SfdMpv *mpv, int *out64, int *out68) {
+/* the error and recovery counts the picture inherits from the frames it predicts from */
+void sfmpv_GetRefErrCnt(SfdPly *player, SfdMpv *mpv, int *errcnt, int *rcvcnt) {
     if (player->cre.bufFmt == 3) {
         switch (mpv->pic.picture_coding_type) {
         case 1: /* matching construct: manual — explicit single-layer case shapes the compare tree */
             break;
         case 2:
-            *out64 = mpv->first->errcnt;
-            *out68 = mpv->first->rcvcnt;
+            *errcnt = mpv->first->errcnt;
+            *rcvcnt = mpv->first->rcvcnt;
             return;
         case 3:
-            *out64 = mpv->first->errcnt + mpv->second->errcnt;
-            *out68 = mpv->first->rcvcnt + mpv->second->rcvcnt;
+            *errcnt = mpv->first->errcnt + mpv->second->errcnt;
+            *rcvcnt = mpv->first->rcvcnt + mpv->second->rcvcnt;
             return;
         }
     }
-    *out64 = 0;
-    *out68 = 0;
+    *errcnt = 0;
+    *rcvcnt = 0;
 }
 
 void sfmpv_SetStartTtu(SfdPly *player)
@@ -1776,7 +1779,7 @@ void sfmpv_SetStartTtu(SfdPly *player)
     state2->valid = 1;
 }
 
-void FUN_002a7040(SfdPly *player, SfdSlot *slot) {
+void sfmpv_SetFrmTtu(SfdPly *player, SfdSlot *slot) {
     slot->stamp = player->tim.cur;
     if (SFMPVP_IsSceMpegUsed(player) != 0) {
         slot->frmcnt = SFMPVP_GetFrameCount(player);
@@ -1803,24 +1806,24 @@ void sfmpv_SetFrmTime(SfdPly *player, SfdSlot *slot) {
     }
 }
 
-void FUN_002a71d0(SfdPly *player, SfdSlot *slot, void *source) {
+void sfmpv_SetFrmPicUsr(SfdPly *player, SfdSlot *slot, void *source) {
     SfdMpv *mpv = player->trn[2].hn.mpv;
     int kind;
     char *data;
     int size;
     if ((unsigned int)(slot->info.picture_coding_type - 1) < 2) {
-        FUN_002a73f0(&mpv->pool.slot[1], slot->blob);
+        sfmpv_CopyPicUsr(&mpv->pool.slot[1], slot->blob);
     }
-    FUN_002a7278(source, &kind, &data, &size);
+    sfmpv_PeekPicUsr(source, &kind, &data, &size);
     if (kind == 3) {
         memcpy(slot->blob->data, data, size);
         slot->blob->len = size;
     } else {
-        FUN_002a73f0(slot->blob, &mpv->pool.slot[1]);
+        sfmpv_CopyPicUsr(slot->blob, &mpv->pool.slot[1]);
     }
 }
 
-void FUN_002a7278(SfdSj *source, int *kind, char **data, int *size) {
+void sfmpv_PeekPicUsr(SfdSj *source, int *kind, char **data, int *size) {
     SfdSjChunk chunk;
     char *seq;
     char *pic;
@@ -1833,20 +1836,20 @@ void FUN_002a7278(SfdSj *source, int *kind, char **data, int *size) {
     source->vtbl->getChunk(source, 1, 0x7FFFFFFF, &chunk);
     seq = MPV_SearchDelim(chunk.data, chunk.len, 204);
     if (seq == 0) {
-        DAT_004beb0c++;
+        sfmpv_picusr_errcnt++;
     } else {
         if ((MPV_CheckDelim(seq) & 4) != 0) {
             if (chunk.len < seq - chunk.data + 6) {
-                DAT_004beb0c++;
+                sfmpv_picusr_errcnt++;
             } else {
-                *kind = DAT_004f4e70[(seq[5] >> 3) & 7];
+                *kind = sfmpv_ptype_tbl[(seq[5] >> 3) & 7];
                 if (*kind == 3) {
                     rest = chunk.data - seq + chunk.len;
                     pic = MPV_SearchDelim(seq, rest, 34);
                     if (pic != 0 && (MPV_CheckDelim(pic) & 0x20) != 0) {
                         ext = MPV_SearchDelim(seq, rest, 2);
                         if (ext == 0) {
-                            DAT_004beb0c++;
+                            sfmpv_picusr_errcnt++;
                         } else {
                             *data = pic;
                             *size = ext - pic;
@@ -1859,7 +1862,7 @@ void FUN_002a7278(SfdSj *source, int *kind, char **data, int *size) {
     source->vtbl->ungetChunk(source, 1, &chunk);
 }
 
-void FUN_002a73f0(SfdSjChunk *dst, SfdSjChunk *src) {
+void sfmpv_CopyPicUsr(SfdSjChunk *dst, SfdSjChunk *src) {
     memcpy(dst->data, src->data, src->len);
     dst->len = src->len;
 }
@@ -2156,9 +2159,9 @@ void sfmpv_SetFrmInf(SfdPly *player, SfdSlot *slot, SfdFrameInfo **out) {
     (*out)->chromaPosH = pic->chroma_pos_h;
     (*out)->chromaPosV = pic->chroma_pos_v;
     if (pic->chroma_pos_h == 0) {
-        (*out)->tail.detail.f72 = 2;
+        (*out)->tail.detail.strmType = 2;
     } else {
-        (*out)->tail.detail.f72 = 1;
+        (*out)->tail.detail.strmType = 1;
     }
     (*out)->tail.detail.pts = slot->pts;
     (*out)->tail.detail.picture_structure = pic->picture_structure;
@@ -2195,7 +2198,7 @@ int SFMPV_AddRead(SfdPly *player, char *body) {
 
 int sfmpv_AddReadSub(SfdPly *player, char *body) {
     SfdMpv *mpv = player->trn[2].hn.mpv;
-    SfdVfrm *record = FUN_002a8158(player, body);
+    SfdVfrm *record = sfmpv_Inf2Vfrm(player, body);
     SfdSlot *found;
     SfdSlot *current;
     if (record->used != 1) {
@@ -2211,7 +2214,7 @@ int sfmpv_AddReadSub(SfdPly *player, char *body) {
     return 0;
 }
 
-SfdVfrm *FUN_002a8158(SfdPly *player, char *body) {
+SfdVfrm *sfmpv_Inf2Vfrm(SfdPly *player, char *body) {
     return (SfdVfrm *)(body - offsetof(SfdVfrm, inf));
 }
 
@@ -2491,14 +2494,14 @@ int SFD_GetNumRemainFrm(void *sfd) {
         sfd_ReportError(0, 0xFF000187);
         return 0;
     }
-    count = FUN_002a8878(player);
+    count = sfmpvf_GetNumReadyFrm(player);
     if (player->plyInf.frmOut == 1 && count > 0) {
         count--;
     }
     return count;
 }
 
-int FUN_002a8878(SfdPly *player) {
+int sfmpvf_GetNumReadyFrm(SfdPly *player) {
     int c;
     SfdSlot *p, *q;
     int k, r;

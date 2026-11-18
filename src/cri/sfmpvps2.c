@@ -20,14 +20,12 @@
 
 extern int sfmpvp_scempeg_useflag;
 extern sceMpeg sfmpvp_bkup_buf;
-extern int DAT_00585678;
-extern char DAT_00585680[8];
+extern int sfmpvp_mpeg_errflg;
+extern char sfmpvp_mpeg_errdata[8];
 
 extern int DeleteSema(int sema);
 void sfmpvp_ConsumePsc(SfdPly *player);
 int SFMPVP_DecodeFrmSj(MpvHn *hn, SfdSj *sj, SfdFrmPara *para, SfdPly *player);
-int FUN_0029ed48(SfdPly *player);
-int FUN_0029edb0(SfdPly *player);
 
 int mpegError(sceMpeg *mp, sceMpegCbDataError *cbdata, SfdPly *player);
 int sfmpvps2_ExecIpu(sceMpeg *mp, sceMpegCbData *cbdata, SfdPly *player);
@@ -166,8 +164,8 @@ char *SFD_GetSceErrMessage(void *sfd) {
 
 int mpegError(sceMpeg *mp, sceMpegCbDataError *cbdata, SfdPly *player) {
     SfdMpv *mpv;
-    DAT_00585678 = 1;
-    __builtin_memcpy(DAT_00585680, cbdata, 8);
+    sfmpvp_mpeg_errflg = 1;
+    __builtin_memcpy(sfmpvp_mpeg_errdata, cbdata, 8);
     mpv = player->trn[2].hn.mpv;
     __builtin_memcpy(&mpv->ipu.error, cbdata, 8);
     sfd_ReportError(player, 0xFF000F40);
@@ -391,7 +389,7 @@ void SFMPVP_SearchPsc(void *sfd, unsigned char *data, int size) {
         data = hit;
         size -= skip;
     }
-    if (found == 1 && FUN_0029ed48(player) == 0 && FUN_0029edb0(player) == 0) {
+    if (found == 1 && SFCON_IsEndcodeSkip(player) == 0 && SFCON_IsVideoEndcodeSkip(player) == 0) {
         sfmpvps2_StopIpu(player, 1);
     }
 }
@@ -418,7 +416,7 @@ int SFMPVP_IsPscEnough(void *sfd) {
     return 1;
 }
 
-sceMpeg *FUN_002aa2d8(SfdPly *player) {
+sceMpeg *SFMPVP_GetSceMpegHn(SfdPly *player) {
     SfdMpv *mpv = player->trn[2].hn.mpv;
     return &mpv->ipu.mpeg;
 }
@@ -449,13 +447,13 @@ int viBufReset(SfdIpuStream *stream) {
     stream->queuedSct = 0;
     stream->restBytes = 0;
     stream->active = 1;
-    stream->f88 = 0;
-    stream->f92 = 0;
+    stream->tsCount = 0;
+    stream->tsWrite = 0;
     for (i = 0; i < stream->entryCount; i++) {
-        stream->entries[i].f0 = -1;
-        stream->entries[i].f8 = -1;
-        stream->entries[i].f16 = 0;
-        stream->entries[i].f20 = 0;
+        stream->entries[i].pts = -1;
+        stream->entries[i].dts = -1;
+        stream->entries[i].pos = 0;
+        stream->entries[i].len = 0;
     }
     for (i = 0; i < stream->sectors; i++) {
         scTag2((long long *)(stream->uncached + i), PHYSICAL(i * 2048 + (unsigned int)stream->base), 3, 128);

@@ -93,16 +93,16 @@ struct MpsHn {
     int stat;                 /* 0: MPS_HN_FREE or MPS_HN_USED */
     MpsErr err;               /* 4 */
     int pesSw;                /* 16: handed to the PES parser */
-    int f20;
+    int rsv0;                 /* 20: the reserved words are cleared by mpslib_InitHn and read nowhere */
     MpsPackHd pack;           /* 24 */
     MpsSysHd sysHd;           /* 40: the last system header */
     MpsSysHd sysHdKind[3];    /* 72: the last system header of each kind */
     MpsPesInf pes;            /* 168 */
-    int f208;
+    int rsv1;                 /* 208 */
     MpsDecodeFn decode;       /* 212 */
-    int f216;
-    int f220;
-    int f224;
+    int rsv2;                 /* 216 */
+    int rsv3;                 /* 220 */
+    int rsv4;                 /* 224 */
     MpsSysHdFn sysHdFn;       /* 228 */
     void *sysHdObj;           /* 232 */
     MpsCbFn auxFn;            /* 236: installed by MPS_SetAuxFn; no MPS code calls it */

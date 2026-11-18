@@ -210,7 +210,7 @@ typedef struct SfdPlyInf {
     long long audByte;   /* 112: audio bytes handed to the decoder */
     long long audSjWr;   /* 120: the decoder's stream joint: written */
     long long audSjRd;   /* 128: read */
-    long long f136;
+    long long audSjRsv;  /* 136: the third count of the joint's group, cleared with it and written nowhere */
     int f144[4];
 } SfdPlyInf;
 
@@ -242,8 +242,8 @@ typedef struct SfdErrInf {
     SfdErrFn func;                      /* 0 */
     void *obj;                          /* 4 */
     int code;                           /* 8 */
-    int f12;
-    int f16;
+    int errcnt;                         /* 12: data errors of the pictures decoded */
+    int rcvcnt;                         /* 16: errors recovered from */
 } SfdErrInf;
 
 /* The external clock SFD_SetExtClockFn installs. */
@@ -469,17 +469,17 @@ typedef struct SfdMpsPrm {
     long long startPts;                     /* 16 */
     long long firstPts;                     /* 24; LONG_MAX when unset */
     int nPics;                              /* 32 */
-    int f36;
-    int f40;
-    int f44;
-    int f48;
+    int lastVid;                            /* 36: the last video stream id seen; INT_MAX when reset */
+    int lastAud;                            /* 40: the last audio stream id seen */
+    int firstVid;                           /* 44: the first video stream id seen; -1 when reset */
+    int firstAud;                           /* 48: the first audio stream id seen */
     int videoCh;                            /* 52 */
     int audioCh;                            /* 56 */
-    int f60;
+    int endcode;                            /* 60: the last start code seen was an end code */
     struct SfdSj *object[68];               /* 64: indexed by stream id - 0xBC */
     int (*stmCb)(void *obj, int arg);       /* 336 */
     void *stmCbObj;                         /* 340 */
-    int f344;
+    int skip;                               /* 344: bytes passed since an end code; -1 after a packet */
 } SfdMpsPrm;
 
 /* The ADX audio parameters (SFD_SetAdxtPara): the ring buffer and the ADXT work, both aligned to 32

@@ -1144,6 +1144,7 @@
 0x2a3730	SFMPV_ExecServer	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
 0x2a3748	sfmpv_ExecServerSub	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a37e0	sfmpv_SetCondY16	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
+0x2a3850	sfmpv_DecUsrHdr	medium	RE4 CRI library kept in the Persona 4 decompilation (Raikaru/Persona4-Decompilation src/cri/re4/sfd_mpv.c and sfd_mpv_1a810.c: sfmpv_DecUsrHdr decodes the sequence header given in conditions 0x5D/0x5E when the delimiter mask is END|SEQ, then sets picstat 2 and mask END|SEQ|GOP, called from sfmpv_ExecServerSub when the handle state is 2: the same body and call site); absent from the 2002 sfd_mpv.o; alternative sfmpv_DecodeUsrSeqHd [re4 github.com/Raikaru/Persona4-Decompilation]
 0x2a38f0	sfmpv_GetTermDst	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a3908	sfmpv_ChkPrepFlg	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a39b8	sfmpv_IsPrepEnd	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
@@ -1177,6 +1178,7 @@
 0x2a5088	sfmpv_ComplementPts	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
 0x2a5208	sfmpv_Nfrm2Pts	medium	sdk:libmwsfde.a/sfd_mpv.o D by order after sfmpv_ComplementPts; frames to 90 kHz PTS
 0x2a5248	sfmpv_CalcRepeatField	high	RE4 CRI library kept in the Persona 4 decompilation (Raikaru/Persona4-Decompilation src/cri/re4/sfd_mpv.c: sfmpv_CalcRepeatField has the same body and position in sfd_mpv.o) [re4 github.com/Raikaru/Persona4-Decompilation]
+0x2a54d0	sfmpv_SetTcTtu	medium	behaviour: sets a frame's time-and-unit record from its time code (SFTIM_Tc2Time less the timer's start record), marks it valid and raises the timer's latest time; the RE4 sfd_mpv.c sfmpv_CalcRepeatField writes the same statements inline for the backward reference (Raikaru/Persona4-Decompilation src/cri/re4/sfd_mpv.c), and Ttu is the SDK's word for a time-and-unit record (sfmpv_SetStartTtu, sfmpv_SetSkipTtu); alternatives sfmpv_SetFrmTtuByTc and sfmpv_RetimeRefFrm, which change the bytes of sfmpv_SetDecTtu through the address-taken-local alias set (understanding-shapes.md) [re4 github.com/Raikaru/Persona4-Decompilation]
 0x2a55a0	sfmpv_ReformTc	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
 0x2a5680	sfmpv_DetectTcErr	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
 0x2a5740	sfmpv_DoReformTc	medium	sdk:libmwsfde.a/sfd_mpv.o D by order between sfmpv_DetectTcErr and sfmpv_Pts2Tc; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfd_mpv.c sfmpv_DoReformTc) before sfmpv_Pts2Tc [re4 github.com/adonis-singh/re4]
@@ -1202,8 +1204,13 @@
 0x2a6870	sfmpv_SetSkipTtu	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a68e8	sfmpv_DecodeFrm	high	sdk:libmwsfde.a/sfd_mpv.o member body and position
 0x2a6b98	sfmpv_SetFrmPara	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a6ea0	sfmpv_GetRefErrCnt	medium	behaviour: the data-error and recovery counts a picture inherits from its reference frames (none for I, the forward reference for P, both for B; zero unless the frame buffer format is 3), which sfmpv_DecodeFrm adds to the decoder's counts for the frame's errcnt/rcvcnt (the public crimwsfd.h MwsfdFrmObj names); the RE4 sfd_mpv.c sfmpv_DecodeFrm writes the same switch inline (Raikaru/Persona4-Decompilation src/cri/re4/sfd_mpv.c); alternative sfmpv_SumRefErrCnt [re4 github.com/Raikaru/Persona4-Decompilation]
 0x2a6f28	sfmpv_SetStartTtu	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
+0x2a7040	sfmpv_SetFrmTtu	medium	RE4 CRI library kept in the Persona 4 decompilation (Raikaru/Persona4-Decompilation src/cri/re4/sfd_mpv.c: sfmpv_SetFrmTtu copies the timer's current time record into the decoded frame and calls sfmpv_SetFrmTime, from sfmpv_DecodeFrm after a successful decode, as DW4's 0x2a7040 does); DW4 also stores the sceMpeg frame count when sceMpeg is used; alternative sfmpv_SetDecFrmTtu [re4 github.com/Raikaru/Persona4-Decompilation]
 0x2a70e8	sfmpv_SetFrmTime	medium	sdk:libmwsfde.a/sfd_mpv.o D by order after sfmpv_SetStartTtu; sets a frame's display times
+0x2a71d0	sfmpv_SetFrmPicUsr	medium	behaviour: sets a decoded frame's picture user data: an I or P frame's own data is kept aside, and the frame takes the next picture's user data when that picture is a B picture (sfmpv_PeekPicUsr), else the kept data; called from sfmpv_DecodeFrm after sfmpv_SetFrmTtu; alternative sfmpv_ReorderPicUsr
+0x2a7278	sfmpv_PeekPicUsr	medium	behaviour: looks at the next picture in the video SJ without consuming it (getChunk/ungetChunk), returns its picture type and, for a B picture, its user data (from the user-data start code up to the first slice); alternative sfmpv_SearchPicUsr
+0x2a73f0	sfmpv_CopyPicUsr	medium	behaviour: copies one picture user-data chunk (bytes and length) into another, as the RE4 sfd_mpv.c sfmpv_DecodeFrm does inline with memcpy(slot->buf, mpv->picusr_dat, mpv->picusr_len) (Raikaru/Persona4-Decompilation src/cri/re4/sfd_mpv.c); alternative sfmpv_CopyPicUsrChunk [re4 github.com/Raikaru/Persona4-Decompilation]
 0x2a7438	sfmpv_GoDdelim	high	sdk:libmwsfde.a/sfd_mpv.o member body and position
 0x2a7598	sfmpv_RingAddRead	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a75b8	sfmpv_UpdateFlowCnt	medium	behaviour: the video twin of sfadxt_UpdateFlowCnt (adds the input SJ flow count to the 64-bit total), in the vocabulary of SFBUF_UpdateFlowCnt; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfd_buf.c SFBUF_UpdateFlowCnt) for the word [re4 github.com/adonis-singh/re4]
@@ -1226,6 +1233,7 @@
 0x2a7e30	sfmpv_SetFrmInf	high	sdk:libmwsfde.a/sfd_mpv.o member body and position
 0x2a8038	SFMPV_AddRead	high	sdk:libmwsfde.a/sfd_mpv.o A (3s - -)
 0x2a8088	sfmpv_AddReadSub	medium	sdk:libmwsfde.a/sfd_mpv.o D by order after SFMPV_AddRead, which calls it
+0x2a8158	sfmpv_Inf2Vfrm	medium	behaviour: the frame record holding a frame information block the application hands back (the block's address minus its offset in the record); the RE4 sfd_mpv.c SFMPV_AddRead computes the same inline as (SFMPV_VFRM *)((Uint8 *)inf - 8) (Raikaru/Persona4-Decompilation src/cri/re4/sfd_mpv.c); the 2 spelling follows sfmpv_Pts2Tc and sfmpv_Nfrm2Pts; alternative sfmpv_GetVfrm [re4 github.com/Raikaru/Persona4-Decompilation]
 0x2a8160	SFMPV_Seek	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a81d0	sfmpv_ReprocessShc	medium	sdk:libmwsfde.a/sfd_mpv.o B
 0x2a82c8	sfmpv_GetHd	medium	sdk:libmwsfde.a/sfd_mpv.o C by order and size
@@ -1244,6 +1252,7 @@
 0x2a8668	SFMPVF_EndDrawFrm	high	sdk:libmwsfde.a/sfd_mpvf.o A (3s - -)
 0x2a8690	SFMPVF_EndRefFrm	high	sdk:libmwsfde.a/sfd_mpvf.o A (3s - -)
 0x2a86b8	SFMPVF_HoldFrm	medium	sdk:libmwsfde.a/sfd_mpvf.o B
+0x2a8878	sfmpvf_GetNumReadyFrm	medium	behaviour: under the lock, counts the standby frames (0, 1 or 2) whose display time has come when condition 15 asks for it, the second only while playing; SFD_GetNumRemainFrm returns it less the frame handed out; GetNum after SFMPVF_GetNumFrm and the sfmpvf_ prefix of sfmpvf_SearchStbyFrm, which it calls; alternative sfmpv_GetNumRemainFrmSub
 0x2a8998	sfmpvf_ReferNextFrmReady	medium	RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfd_mpvf.c sfmpvf_ReferNextFrmReady) by order after SFD_IsNextFrmReady [re4 github.com/adonis-singh/re4]
 0x2a8a30	sfmpvf_SearchStbyFrm	medium	RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfd_mpvf.c sfmpvf_SearchStbyFrm) by order after sfmpvf_ReferNextFrmReady; picks the two earliest standby frames [re4 github.com/adonis-singh/re4]
 0x2a8b30	sfmpvf_IsChkFirst	medium	sdk:libmwsfde.a/sfd_mpvf.o B
@@ -1282,6 +1291,7 @@
 0x2aa050	SFMPVP_SearchPsc	medium	sdk:libmwsfde.a/sfd_mpvp.o D by order after SFMPVP_GetFrameCount
 0x2aa268	sfmpvp_ConsumePsc	medium	sdk:libmwsfde.a/sfd_mpvp.o C by order and size
 0x2aa280	SFMPVP_IsPscEnough	medium	sdk:libmwsfde.a/sfd_mpvp.o C by order and size
+0x2aa2d8	SFMPVP_GetSceMpegHn	medium	behaviour: returns the address of the handle's sceMpeg object in the video work, between SFMPVP_IsPscEnough and SFMPVP_GetSizeSceMpegHn (sdk:libmwsfde.a/sfd_mpvp.o, whose 2002 member has neither the getter nor a caller of it); the getter twin of SFMPVP_GetSizeSceMpegHn; alternative SFD_GetSceMpeg
 0x2aa2e8	SFMPVP_GetSizeSceMpegHn	high	sdk:libmwsfde.a/sfd_mpvp.o A (3s - -)
 0x2aa3d0	SFPL2_Pause	medium	sdk:libmwsfde.a/sfd_pl2.o B same order and size; RE4 GameCube symbol table (adonis-singh/re4 config/G4BE08/sym_map.tsv: lib/sfd_pl2.c SFPL2_Pause) by order [re4 github.com/adonis-singh/re4]
 0x2aa460	sfpl2_PauseExec	medium	sdk:libmwsfde.a/sfd_pl2.o B same order and size; alternative none (static, absent from the stripped RE4 table)

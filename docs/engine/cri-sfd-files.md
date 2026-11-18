@@ -150,11 +150,28 @@ the 2002 one. Names from what a function does are in the medium list below.
 - Behaviour names, medium: `sfadxt_PrepSupply` is the empty function `sfadxt_ExecServerSub` calls before
   `sfadxt_SupplyData` (absent from the 2002 SDK `sfd_adxt.o`; alternative a check compiled out of the release), and
   `sfply_InitFlowCnt` (`sfply_ClearFlowCnt`) clears one three-count flow group for `sfply_InitPlyInf`.
-- Still unnamed, for want of a source or a single reading: the frame-time projection between
-  `sfmpv_CalcRepeatField` and `sfmpv_ReformTc`, the reference-error sum after `sfmpv_SetFrmPara`, the standby-slot
-  timestamp copy before `sfmpv_SetFrmTime`, the three picture user-data helpers before `sfmpv_GoDdelim`, the
-  record-header offset after `sfmpv_AddReadSub`, the ready-frame count before `SFD_IsNextFrmReady`, the user-header
-  decode after `sfmpv_SetCondY16`, and the `sceMpeg` handle getter after `SFMPVP_IsPscEnough`.
+- Named from the RE4 CRI library in the Persona 4 decompilation (`src/cri/re4/sfd_mpv.c`), medium, where the RE4
+  source defines a function of that name with the same body: `sfmpv_DecUsrHdr` (`0x2a3850`, the user sequence-header
+  decode `sfmpv_ExecServerSub` runs in the standby state; alternative `sfmpv_DecodeUsrSeqHd`) and `sfmpv_SetFrmTtu`
+  (`0x2a7040`, the current time copied into a decoded frame before `sfmpv_SetFrmTime`; DW4 adds the `sceMpeg` frame
+  count; alternative `sfmpv_SetDecFrmTtu`).
+- Behaviour names, medium, for helpers the 2002 `sfd_mpv.o` and `sfd_mpvp.o` do not have and the RE4 source writes
+  inline: `sfmpv_SetTcTtu` (`0x2a54d0`, a frame's time from its time code, the backward-reference retime of
+  `sfmpv_CalcRepeatField`; alternatives `sfmpv_SetFrmTtuByTc` and `sfmpv_RetimeRefFrm`), `sfmpv_GetRefErrCnt`
+  (`0x2a6ea0`, the error and recovery counts a picture inherits from its reference frames; alternative
+  `sfmpv_SumRefErrCnt`), `sfmpv_SetFrmPicUsr`, `sfmpv_PeekPicUsr` and `sfmpv_CopyPicUsr` (`0x2a71d0`..`0x2a73f0`: a
+  decoded frame's picture user data, kept aside for an I or P frame and taken from the next picture when that is a B
+  picture, found by looking ahead in the video SJ without consuming it; alternatives `sfmpv_ReorderPicUsr`,
+  `sfmpv_SearchPicUsr`, `sfmpv_CopyPicUsrChunk`), `sfmpv_Inf2Vfrm` (`0x2a8158`, the frame record of a frame
+  information block handed back; alternative `sfmpv_GetVfrm`), `sfmpvf_GetNumReadyFrm` (`0x2a8878`, the standby
+  frames due for display that `SFD_GetNumRemainFrm` counts; alternative `sfmpv_GetNumRemainFrmSub`) and
+  `SFMPVP_GetSceMpegHn` (`0x2aa2d8`, the address of the handle's `sceMpeg`, beside `SFMPVP_GetSizeSceMpegHn`;
+  alternative `SFD_GetSceMpeg`). The `sfmpv_SetTcTtu` spelling is held by the bytes as well as the reading: a name
+  of 15 characters or more there changes `sfmpv_SetDecTtu`, whose address-taken time code takes its alias set from
+  what the file compiled before it ([understanding a resisting shape](understanding-shapes.md#scheduling-ee-gcc)).
+- Data, medium: `sfmpv_picusr_errcnt` counts the look-aheads `sfmpv_PeekPicUsr` gives up on (no picture start code,
+  a short chunk, no slice after the user data), and `sfmpv_ptype_tbl` maps the picture header's coding type to
+  the picture type it returns.
 - Fields: the stabiliser (`SfdTst`) follows the RE4 `sfd_tst.c` `SFTST_WORK` (`tstflg`, the master and output units,
   the tolerance, excess-error, adjust-start and adjust-pause-off times with their units, `base_hlp`/`base_out`). The
   ADX handler's work has `pause` (RE4) at 44; the RE4 sources leave the words at 64 and 76 unnamed, so they are named

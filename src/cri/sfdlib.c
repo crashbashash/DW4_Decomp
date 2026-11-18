@@ -114,8 +114,8 @@ void sfd_ClearErr(SfdErrInf *err) {
     err->func = 0;
     err->obj = 0;
     err->code = 0;
-    err->f12 = 0;
-    err->f16 = 0;
+    err->errcnt = 0;
+    err->rcvcnt = 0;
 }
 
 /* Records an error code on the handle (and makes its state non-positive) or, without a handle, on

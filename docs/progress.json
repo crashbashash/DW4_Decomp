@@ -159,10 +159,10 @@
    "handle": 0,
    "jtbl": 380,
    "literal": 244,
-   "named": 111075,
+   "named": 111095,
    "pad": 211423,
    "ptr": 3040,
-   "ref": 70992,
+   "ref": 70972,
    "region": 109384,
    "source": 496497,
    "str": 71570,
@@ -260,7 +260,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 630
+    "value": 616
    },
    "inline_asm.other": {
     "reason": null,
@@ -327,8 +327,8 @@
     "value": 1
    },
    "struct.c": {
-    "reason": "struct.c +2: CRI's own STABS member names d0/d1 of _iir_filt and predict_filt (2002 SDK libadxe.a adx_sje.o) read as offset names",
-    "value": 11
+    "reason": null,
+    "value": 9
    },
    "unapproved.bytes": {
     "reason": null,
@@ -368,7 +368,7 @@
    "decl.varargs": 249,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "fun_dat_refs": 630,
+   "fun_dat_refs": 616,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
@@ -385,7 +385,7 @@
    "raw_casts.reflected": 258,
    "struct.a": 2,
    "struct.b": 1,
-   "struct.c": 11,
+   "struct.c": 9,
    "unapproved.bytes": 0,
    "unapproved.functions": 0,
    "unmatched.bytes": 190864,
@@ -396,9 +396,9 @@
   "fully_matched": 20437,
   "fully_verified": 20273,
   "matched": 20273,
-  "named": 17695,
-  "named_semantic": 12214,
-  "named_semantic_matched": 12015,
+  "named": 17705,
+  "named_semantic": 12224,
+  "named_semantic_matched": 12025,
   "total": 20576
  },
  "kernel_patches": {
@@ -492,35 +492,35 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2453108,
+  "bytes": 2460860,
   "failing": {
    "addresses": {
-    "bytes": 660516,
-    "functions": 3728
+    "bytes": 657284,
+    "functions": 3712
    },
    "declarations": {
     "bytes": 142212,
     "functions": 283
    },
    "fields": {
-    "bytes": 382860,
-    "functions": 2147
+    "bytes": 378340,
+    "functions": 2130
    },
    "idioms": {
     "bytes": 377036,
     "functions": 2041
    },
    "name": {
-    "bytes": 538092,
-    "functions": 4462
+    "bytes": 536608,
+    "functions": 4452
    },
    "placed": {
     "bytes": 628,
     "functions": 9
    },
    "references": {
-    "bytes": 453852,
-    "functions": 1659
+    "bytes": 451564,
+    "functions": 1651
    },
    "types": {
     "bytes": 313996,
@@ -531,7 +531,7 @@
     "functions": 557
    }
   },
-  "functions": 14276,
+  "functions": 14309,
   "matched_functions": 20437
  },
  "regions": [

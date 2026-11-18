@@ -76,7 +76,11 @@ numbers from the times and the frame rate); the picture user data, the frame typ
 details follow. The SFD side is `SfdFrameInfo` (`sfmpv.h`); the player's picture information (`MwsfdPicInf`) takes
 its picture structure, chroma format, `progressive_frame`, `top_field_first`, `repeat_first_field` and chroma siting.
 The header information (`MwsfdHdrInf`) is not the 2002 layout: its words 20 to 32 are `frmnum`, `compoMode`,
-`muxKind2`, `muxKind1` (from `mwply_GetPicInf`, medium).
+`muxKind2`, `muxKind1` (from `mwply_GetPicInf`, medium), and word 40 is the audio channel count `audioNch` (the
+2002 `a_nch`; the RE4 CRI library's `MWSFD_HDRINF` in the Persona 4 decompilation,
+github.com/Raikaru/Persona4-Decompilation `src/cri/re4/mwsfd.h`, has it as `ach` at the same offset; medium). The
+creation parameters' last two words are the public `MwsfdCrePrm`'s `rsv[2]` (high), and the player's word at +692,
+cleared by `mwSfdStopDec` and read by no function, is `rsv` (the RE4 `MWPLY_OBJ` leaves it unnamed).
 
 Two spellings are what the retail code needs, not style:
 
@@ -96,7 +100,7 @@ Two spellings are what the retail code needs, not style:
 - `mwply_SetTimeFn` and `mwply_ExecTime` wrap `SFD_SetExtClockFn` and `SFD_UpdateTime` (the names a later build of
   the library carries; medium confidence, from the position and size of eight consecutive functions): the external
   clock of the sync mode and the time update of one handle or all.
-- The meaning of `MwsfdPly.f692`, `src488`..`src496`, `MwsfdWork.workFlag`, and the SFD condition ids
+- The meaning of `src488`..`src496`, `MwsfdWork.workFlag`, and the SFD condition ids
   passed by `mwsflib_SetDefCond` (27, 7).
 - Medium confidence, from the PlayStation 2 build of the library with symbols whose function sizes match this run (no GameCube map
   entry): `mwsflib_InitLibWork`, `MWSFD_SetUsePicUsr`, `MWSFD_SetPauseBdr`, `mwsflib_SetDefCond`, `mwPlyResetSfdFx`, `MWSFD_GetErrCode`,

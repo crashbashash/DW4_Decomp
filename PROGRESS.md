@@ -34,17 +34,17 @@ The function count is flattered by small functions: the ones done have a median 
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**14,276** of the 20,437 matched functions are readable: **2,453,108** code bytes, **70.6 %** of the code.
+**14,309** of the 20,437 matched functions are readable: **2,460,860** code bytes, **70.9 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
-| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 4,462 | 538,092 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 3,728 | 660,516 |
+| the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 4,452 | 536,608 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 3,712 | 657,284 |
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,161 | 313,996 |
 | it sits in its class or module file, not `src/unmatched/` | 9 | 628 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 1,659 | 453,852 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 1,651 | 451,564 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 2,041 | 377,036 |
-| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,147 | 382,860 |
+| fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 2,130 | 378,340 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 557 | 146,400 |
 | what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol (a copy with an owner `local-decl` row aside), no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 283 | 142,212 |
 
@@ -79,10 +79,10 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `unmatched.bytes` | 190,864 | 190,864 | 0 | bytes of those |
 | `struct.a` | 2 | 2 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
 | `struct.b` | 1 | 1 | 0 | struct-report groups: receiver view disagrees with the reflected class; increase recorded: engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes |
-| `struct.c` | 11 | 11 | 0 | struct-report groups: offset-named member whose number is not its offset; increase recorded: struct.c +2: CRI's own STABS member names d0/d1 of _iir_filt and predict_filt (2002 SDK libadxe.a adx_sje.o) read as offset names |
+| `struct.c` | 9 | 9 | 0 | struct-report groups: offset-named member whose number is not its offset |
 | `m2c_idiom.units` | 18 | 18 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 258 | 258 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 630 | 630 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 616 | 616 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 0 | 0 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 0 | 0 | 0 | bytes of those |
 | `unapproved.functions` | 0 | 0 | 0 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |
@@ -126,8 +126,8 @@ A datum compiled into another section kind than the one retail's region holds (a
 | `table` | 22,212 | 1.7 |
 | `region` | 109,384 | 8.4 |
 | `pad` | 211,423 | 16.3 |
-| `named` | 111,075 | 8.5 |
-| `ref` | 70,992 | 5.5 |
+| `named` | 111,095 | 8.5 |
+| `ref` | 70,972 | 5.5 |
 | `ptr` | 3,040 | 0.2 |
 | `?` | 4,911 | 0.4 |
 
@@ -186,8 +186,8 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 
 | | |
 | --- | --- |
-| functions with a recovered name (any: role names included) | 17,695 of 20,576 |
-| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 12,214 of 20,576 (12,015 of them matched) |
+| functions with a recovered name (any: role names included) | 17,705 of 20,576 |
+| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 12,224 of 20,576 (12,025 of them matched) |
 | RTTI records / vtables / vfunc names | 579 / 478 / 1,286 |
 | reflection MetaObjects (with fields) | 1,075 (659) |
 | reflection fields with offset and type | 3,680 |

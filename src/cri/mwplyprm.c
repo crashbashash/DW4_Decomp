@@ -558,7 +558,7 @@ void mwPlyGetFlowInf(MwsfdPly *ply, MwsfdFlowInf *out) {
     out->flow[8] = inf.audByte;
     out->flow[9] = inf.audSjWr;
     out->flow[10] = inf.audSjRd;
-    out->flow[11] = inf.f136;
+    out->flow[11] = inf.audSjRsv;
 }
 
 /* The stream's byte rate (maxBps / 8, rounded down to whole 2 KiB sectors) times `ratio`, capped

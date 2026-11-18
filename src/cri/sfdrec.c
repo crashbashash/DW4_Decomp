@@ -24,7 +24,7 @@ int sfsee_UpdateEByteRate(SfdPly *hn);
 void SFSEE_InitHn(SfdRecSlot *slot)
 {
     SfdRecSub *sub = &slot->sub;
-    sub->f0 = 0;
+    sub->rsv = 0;
     sub->time = -3;
     sub->unit = 1;
     slot->rec = 0;

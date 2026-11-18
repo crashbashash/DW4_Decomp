@@ -12,7 +12,7 @@ typedef struct SfdRec SfdRec;
 
 /* A seek request (SFD_Seek): the time to seek to, -3 for none, and its unit. */
 typedef struct SfdRecSub {
-    int f0;
+    int rsv;       /* 0: cleared by SFSEE_InitHn, copied with the request, read nowhere */
     int time;
     int unit;
 } SfdRecSub;

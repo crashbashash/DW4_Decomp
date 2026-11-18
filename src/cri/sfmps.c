@@ -246,21 +246,21 @@ int sfmps_DemuxChunk(SfdPly *hn, unsigned char *addr, int len, int *used, int *s
     if (flags == MPS_SC_END && SFCON_IsEndcodeSkip(hn) != 0) {
         sfmps_Concat(hn);
         *used = 4;
-        prm->f344 = 4;
+        prm->skip = 4;
     } else if (flags == MPS_SC_END && SFCON_IsSystemEndcodeSkip(hn) != 0) {
         *used = 4;
-        prm->f344 = 4;
+        prm->skip = 4;
     } else if (kind == 0) {
         sfmps_SkipNext(hn, addr, len, skip);
         *used = *skip;
-        if (*skip > 0 && prm->f344 >= 0) {
-            if (prm->f344 >= hn->cre.unit) {
-                prm->f344 += *skip;
-            } else if (prm->f344 + *skip > hn->cre.unit) {
-                *skip = *skip - (hn->cre.unit - prm->f344);
-                prm->f344 = hn->cre.unit + *skip;
+        if (*skip > 0 && prm->skip >= 0) {
+            if (prm->skip >= hn->cre.unit) {
+                prm->skip += *skip;
+            } else if (prm->skip + *skip > hn->cre.unit) {
+                *skip = *skip - (hn->cre.unit - prm->skip);
+                prm->skip = hn->cre.unit + *skip;
             } else {
-                prm->f344 += *skip;
+                prm->skip += *skip;
                 *skip = 0;
             }
         }
@@ -280,7 +280,7 @@ int sfmps_DemuxChunk(SfdPly *hn, unsigned char *addr, int len, int *used, int *s
         if (result == 1) {
             *used = hdrLen + copied;
         }
-        prm->f344 = -1;
+        prm->skip = -1;
     }
     return ret;
 }
@@ -412,16 +412,16 @@ int sfmps_CopyAudio(SfdPly *hn, int stm, unsigned char *data, int len, long pts)
     if (prm->audioCh == -1) {
         prm->audioCh = stm;
     }
-    if (prm->f48 == -1) {
-        prm->f48 = stm;
+    if (prm->firstAud == -1) {
+        prm->firstAud = stm;
     }
     sel = SFSET_GetCond(hn, 30);
     if (sel != -1) {
-        if (SFSET_GetCond(hn, 55) != 0 ? stm < prm->f40 : stm == prm->f48) {
+        if (SFSET_GetCond(hn, 55) != 0 ? stm < prm->lastAud : stm == prm->firstAud) {
             prm->audioCh = sel;
         }
     }
-    prm->f40 = stm;
+    prm->lastAud = stm;
     if (prm->audioCh != stm) {
         return 1;
     }
@@ -449,19 +449,19 @@ int sfmps_CopyVideo(SfdPly *hn, int stm, unsigned char *data, int len, long pts)
     if (prm->videoCh == -1) {
         prm->videoCh = sfmps_AutoVchPlay(hn, stm);
     }
-    if (prm->f44 == -1) {
-        prm->f44 = stm;
+    if (prm->firstVid == -1) {
+        prm->firstVid = stm;
     }
     sel = SFSET_GetCond(hn, 29);
     if (sel != -1) {
-        if (SFSET_GetCond(hn, 55) != 0 ? stm < prm->f36 : stm == prm->f44) {
+        if (SFSET_GetCond(hn, 55) != 0 ? stm < prm->lastVid : stm == prm->firstVid) {
             if (prm->videoCh != sel && len >= 4 && head[0] == 0 && head[1] == 0
                 && (unsigned char)head[2] == 1 && ((unsigned char)head[3] == 0xB3 || (unsigned char)head[3] == 0xB8)) {
                 prm->videoCh = sel;
             }
         }
     }
-    prm->f36 = stm;
+    prm->lastVid = stm;
     if (prm->videoCh != stm) {
         return 1;
     }
@@ -671,9 +671,9 @@ int sfmps_ChkEnd(SfdPly *hn, unsigned char *addr, int len, int total) {
             if (mps->readTot < 0) {
                 mps->readTot = SFBUF_GetRTot(hn, from) + 4;
             }
-            prm->f60 = 1;
+            prm->endcode = 1;
         } else if (kind != 0) {
-            prm->f60 = 0;
+            prm->endcode = 0;
         }
     } else {
         kind = 0;
@@ -715,7 +715,7 @@ void sfmps_ChkInEnd(SfdPly *hn, int *done) {
     int end;
 
     if (SFBUF_GetTermFlg(hn, mps->bufIn) == 1) {
-        sfmps_SetOutEnd(hn, prm->f60);
+        sfmps_SetOutEnd(hn, prm->endcode);
         end = 1;
     } else {
         end = 0;
@@ -853,8 +853,8 @@ void sfmps_SetPicRec(SfdPly *hn) {
                 rec->unit = video->fixedFlag;
                 rec->nvid = prm->videoBound;
                 rec->naud = prm->audioBound;
-                rec->stmidVid = prm->f44;
-                rec->stmidAud = prm->f48;
+                rec->stmidVid = prm->firstVid;
+                rec->stmidAud = prm->firstAud;
             }
         }
     }
@@ -929,19 +929,19 @@ void sfmps_ResetPrm(SfdMpsPrm *prm) {
     prm->startPts = 0x7FFFFFFFFFFFFFFF;
     prm->firstPts = 0x7FFFFFFFFFFFFFFF;
     prm->nPics = 0;
-    prm->f36 = 0x7FFFFFFF;
-    prm->f40 = 0x7FFFFFFF;
-    prm->f44 = -1;
-    prm->f48 = -1;
+    prm->lastVid = 0x7FFFFFFF;
+    prm->lastAud = 0x7FFFFFFF;
+    prm->firstVid = -1;
+    prm->firstAud = -1;
     prm->videoCh = -1;
     prm->audioCh = -1;
-    prm->f60 = 0;
+    prm->endcode = 0;
     for (i = 67; i >= 0; i--) {
         prm->object[i] = 0;
     }
     prm->stmCb = 0;
     prm->stmCbObj = 0;
-    prm->f344 = -1;
+    prm->skip = -1;
 }
 
 void sfmps_ErrFn(void *hn, int code) {
@@ -1009,9 +1009,9 @@ int SFMPS_Seek(SfdPly *hn) {
     tim = &hn->tim;
     ret = sfmps_ReprocessHdr(hn, prm, rec);
     if (ret == 0) {
-        prm->f44 = rec->stmidVid;
+        prm->firstVid = rec->stmidVid;
         tim->baseTime = rec->scrBase;
-        prm->f48 = rec->stmidAud;
+        prm->firstAud = rec->stmidAud;
         prm->startPts = rec->ptsMin;
     }
     return ret;

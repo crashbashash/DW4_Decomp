@@ -37,8 +37,7 @@ typedef struct MwsfdCreInf {
     int workSize;    /* 28 */
     int addInfMode;  /* 32: 0 or 0x101 enables the additional-information stream */
     int bufFmt;      /* 36: below 3 */
-    int f40;         /* 40 */
-    int f44;         /* 44 */
+    int rsv[2];      /* 40: reserved, 0 (crimwsfd.h MwsfdCrePrm) */
 } MwsfdCreInf;
 
 /* what mwPlyGetHdrInf reports about a stream header; valid is 0 for anything but a Sofdec stream */
@@ -52,8 +51,8 @@ typedef struct MwsfdHdrInf {
     int compoMode;   /* 24: mwply_GetPicCompoMode */
     int muxKind2;    /* 28: mwply_GetMuxKind2 */
     int muxKind1;    /* 32: mwply_GetMuxKind1 */
-    int audioFreq;
-    int f40;
+    int audioFreq;   /* 36 */
+    int audioNch;    /* 40: audio channels */
 } MwsfdHdrInf;
 
 /* the player's own allocation pool */
@@ -231,7 +230,7 @@ struct MwsfdPly {
     void *mallocBlk[32];            /* 532: MWSFD_Malloc's blocks, freed together */
     MwsfdSst sst;                   /* 660: the SST input */
     char pad684[8];
-    int f692;                       /* 692: cleared by the SFD stop */
+    int rsv;                        /* 692: cleared by mwSfdStopDec, read nowhere */
 };
 
 #endif
