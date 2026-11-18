@@ -4,12 +4,12 @@ A snapshot of how much of `game.elf` has been rebuilt as matching source. Regene
 
 ```
 fully matched (C/C++ and approved assembly)
-  functions  ████████████████████████  99.3 %   20,437 / 20,576
-  code bytes ███████████████████████░  94.5 %   3,281,836 / 3,472,700   (make check `match` and `assembly`: code bytes, exception metadata and symbol rules)
+  functions  ████████████████████████  99.3 %   20,439 / 20,576
+  code bytes ███████████████████████░  94.5 %   3,282,476 / 3,472,700   (make check `match` and `assembly`: code bytes, exception metadata and symbol rules)
 code bytes identical (verification debt included; see below)
-  functions  ████████████████████████  99.3 %   20,437 / 20,576
-  code bytes ███████████████████████░  94.5 %   3,281,836 / 3,472,700
-fully linked ███████████████████░░░░░  80.6 %   3,660,520 / 4,541,184 bytes of the section linked from C/C++
+  functions  ████████████████████████  99.3 %   20,439 / 20,576
+  code bytes ███████████████████████░  94.5 %   3,282,476 / 3,472,700
+fully linked ███████████████████░░░░░  80.6 %   3,661,160 / 4,541,184 bytes of the section linked from C/C++
 data bytes █████████░░░░░░░░░░░░░░░  38.2 %   496,497 / 1,299,780   (data the source defines, compared with retail by make check)
 data identified ████████████████████████  99.6 %   1,294,869 / 1,299,780   (matched, or classified; 14.2 % of the data only by where a datum starts)
 kernel patches built from source: 4/4   (their bytes match retail in their owner files' .data; 0 of them await owner approval of an asm, volatile or assembly source)
@@ -25,16 +25,16 @@ The function count is flattered by small functions: the ones done have a median 
 
 | category | functions | code bytes | % of code bytes | meaning |
 | --- | ---: | ---: | ---: | --- |
-| **`match`** | 20,273 | 3,273,676 | 94.3 | code bytes, exception metadata and symbol rules all pass; fully verified |
+| **`match`** | 20,275 | 3,274,316 | 94.3 | code bytes, exception metadata and symbol rules all pass; fully verified |
 | `assembly` | 164 | 8,160 | 0.2 | owner-approved assembly, byte-identical: a hand-written `.S` source (config/assembly-sources.tsv) or an MWCC `asm` function with an `asm-function` row (config/source-approvals.tsv); the original was written in assembly, so it is matched, though not C (docs/engine/assembly-sources.md) |
 
-**Fully linked** is the sibling number a WIP decomp is read on, and the bar above measures bytes built from recovered C/C++ over the **4,541,184-byte section** that `make link` emits and `tools/linkcheck.py` compares (`0x100000..0x554b00`, code + data). The loader also maps a zero-initialised `.bss` tail to `0x58d280`, but the link never emits it, so it is not in the denominator. The **asm bodies** are not counted: they link from `src/`, but an `asm` body is the retail instructions wrapped in a function (docs/engine/asm-body-matches.md), not recovered C, so counting it would overstate the decompilation. Elsewhere the two headlines differ (Twilight Princess: 12.07 % decompiled, 8.12 % fully linked) since a translation-unit build can only drop a unit's asm stub once the *whole* unit is decompiled. Counting **code alone**, this repo's two numbers are identical, **94.3 %** C/C++, because of how the pipeline works: `tools/layout.py` tiles the section per function, so `tools/linkgen.py` replaces retail one function at a time and a match is linked from source immediately. The data a unit verifies is placed from its object at the same time (`tools/verify.py` `isolate_unit_data`). The bar counts **20,273 units / 3,660,520 bytes from C/C++**, of them **386,844 bytes of data** (the units' verified data sections and the compiler-generated jump tables), beside **0 units / 0 bytes of asm bodies** and **190,864 code bytes from `asm/`**; `make link` prints the same accounting from the link itself, and the section then compares byte-identical, so nothing decompiled is waiting to be linked.
+**Fully linked** is the sibling number a WIP decomp is read on, and the bar above measures bytes built from recovered C/C++ over the **4,541,184-byte section** that `make link` emits and `tools/linkcheck.py` compares (`0x100000..0x554b00`, code + data). The loader also maps a zero-initialised `.bss` tail to `0x58d280`, but the link never emits it, so it is not in the denominator. The **asm bodies** are not counted: they link from `src/`, but an `asm` body is the retail instructions wrapped in a function (docs/engine/asm-body-matches.md), not recovered C, so counting it would overstate the decompilation. Elsewhere the two headlines differ (Twilight Princess: 12.07 % decompiled, 8.12 % fully linked) since a translation-unit build can only drop a unit's asm stub once the *whole* unit is decompiled. Counting **code alone**, this repo's two numbers are identical, **94.3 %** C/C++, because of how the pipeline works: `tools/layout.py` tiles the section per function, so `tools/linkgen.py` replaces retail one function at a time and a match is linked from source immediately. The data a unit verifies is placed from its object at the same time (`tools/verify.py` `isolate_unit_data`). The bar counts **20,275 units / 3,661,160 bytes from C/C++**, of them **386,844 bytes of data** (the units' verified data sections and the compiler-generated jump tables), beside **0 units / 0 bytes of asm bodies** and **190,224 code bytes from `asm/`**; `make link` prints the same accounting from the link itself, and the section then compares byte-identical, so nothing decompiled is waiting to be linked.
 
 ## Readable
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**14,309** of the 20,437 matched functions are readable: **2,460,860** code bytes, **70.9 %** of the code.
+**14,311** of the 20,439 matched functions are readable: **2,461,500** code bytes, **70.9 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
@@ -75,8 +75,8 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `asm_body.functions` | 0 | 0 | 0 | functions kept as an `asm` body (content classification) |
 | `asm_body.bytes` | 0 | 0 | 0 | bytes of those |
 | `inline_asm.other` | 0 | 0 | 0 | `asm` statements other than `sync` and `ei` without an owner's approval row for each function they reach (tools/inline_asm.py) |
-| `unmatched.functions` | 139 | 139 | 0 | functions in the layout with no definition in src/ |
-| `unmatched.bytes` | 190,864 | 190,864 | 0 | bytes of those |
+| `unmatched.functions` | 137 | 137 | 0 | functions in the layout with no definition in src/ |
+| `unmatched.bytes` | 190,224 | 190,224 | 0 | bytes of those |
 | `struct.a` | 2 | 2 | 0 | struct-report groups: same view name, clashing layouts across units (scripts/check_struct_conflicts.py) |
 | `struct.b` | 1 | 1 | 0 | struct-report groups: receiver view disagrees with the reflected class; increase recorded: engine landing (M1-M8, VU0 slices): matched functions keep their slice-local declarations and synthetic layouts; DeclLeftovers moves them to homes |
 | `struct.c` | 9 | 9 | 0 | struct-report groups: offset-named member whose number is not its offset |
@@ -138,8 +138,8 @@ A datum compiled into another section kind than the one retail's region holds (a
 | 1–32 | 6,922 | 6,922 | 107,856 | 107,856 | 100.0 |
 | 33–64 | 2,365 | 2,365 | 121,400 | 121,400 | 100.0 |
 | 65–128 | 5,732 | 5,729 | 546,128 | 545,824 | 99.9 |
-| 129–256 | 2,928 | 2,916 | 530,340 | 527,704 | 99.6 |
-| 257–512 | 1,487 | 1,467 | 526,792 | 519,104 | 98.7 |
+| 129–256 | 2,928 | 2,917 | 530,340 | 527,952 | 99.6 |
+| 257–512 | 1,487 | 1,468 | 526,792 | 519,496 | 98.7 |
 | 513–1,024 | 676 | 636 | 482,360 | 452,768 | 94.1 |
 | 1,025–4,096 | 407 | 351 | 731,244 | 625,660 | 86.2 |
 | 4,097–∞ | 59 | 51 | 426,580 | 381,520 | 86.4 |
@@ -155,7 +155,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | `0x18a960`–`0x1cfe10` | `████████████████████░░░░` | 83.1 |
 | `0x1cfe10`–`0x2152c0` | `████████████████░░░░░░░░` | 67.8 |
 | `0x2152c0`–`0x25a770` | `████████████████████████` | 98.8 |
-| `0x25a770`–`0x29fc20` | `████████████████████████` | 99.2 |
+| `0x25a770`–`0x29fc20` | `████████████████████████` | 99.5 |
 | `0x29fc20`–`0x2e50d0` | `████████████████████████` | 98.5 |
 | `0x2e50d0`–`0x32a580` | `████████████████████████` | 100.0 |
 | `0x32a580`–`0x36fa30` | `████████████████████████` | 100.0 |
@@ -187,13 +187,13 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | | |
 | --- | --- |
 | functions with a recovered name (any: role names included) | 17,705 of 20,576 |
-| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 12,224 of 20,576 (12,025 of them matched) |
+| functions with a **semantic** name (not `FUN_`/`thunk_`, not `::vfunc_NN`, not `*_GetMetaObject`/`_GetVTable`/`_Register`/`_InitFields`) | 12,224 of 20,576 (12,027 of them matched) |
 | RTTI records / vtables / vfunc names | 579 / 478 / 1,286 |
 | reflection MetaObjects (with fields) | 1,075 (659) |
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 32,793 of 72,032 (45.53 %) |
+| field accesses using a **recovered** type (not an offset cast) | 32,793 of 72,037 (45.52 %) |
 | functions in the retail split (`asm/`, generated) | 20,576 |
 
 ## How these numbers are produced

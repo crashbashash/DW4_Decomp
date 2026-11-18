@@ -52,7 +52,6 @@ char g_adxUseFileInfoCache;
 unsigned char g_adxIopReady;
 char g_adxUnusedFlag;
 }
-extern "C" int SNDF_Init(int *config);
 #include "dw4/core/igPsx2File.h"
 struct WaitResult { int code; };
 class AdxThread {
@@ -342,7 +341,7 @@ void igAdx_SetHostRootPath(const char *path) {
 
 int igAdx_SetupIop(void) {
     char path[512];
-    int sndfConfig[4];
+    SndfInitParam sndfParam;
     igMemoryPoolView *allocator;
 
     if (g_adxIopReady != 0) {
@@ -381,12 +380,12 @@ int igAdx_SetupIop(void) {
         sprintf(path, "/cri/ps2/iop/modules/sndfi.irx");
     }
     igPsx2_LoadIopModule(path, 0, 0, 0);
-    memset(sndfConfig, 0, 0x10);
-    sndfConfig[0] = 0x30000;
-    sndfConfig[1] = 0;
-    sndfConfig[2] = 0;
-    sndfConfig[3] = 0;
-    SNDF_Init(sndfConfig);
+    memset(&sndfParam, 0, sizeof(sndfParam));
+    sndfParam.iopWorkSize = 0x30000;
+    sndfParam.iopWork = 0;
+    sndfParam.initSound = 0;
+    sndfParam.dmaChannel = 0;
+    SNDF_Init(&sndfParam);
     ADXPS2_SetupMemFs(0);
     if (g_adxHostRootPath[0] != 0) {
         memset(&g_adxHostFsParams, 0, 0x10);

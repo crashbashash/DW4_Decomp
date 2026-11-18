@@ -103,6 +103,7 @@ volatile	mfCiGetInterface	1	#build-string-reads
 volatile	PS2RNA_Init	1	#build-string-reads
 volatile	ADXM_SetupThrd	3	#build-string-reads
 volatile	ADXM_SetupThrdEx	2	#build-string-reads
+volatile	SNDF_Init	1	#build-string-reads
 volatile	SRD_WaitForExecServer	1	#srd-spin-counter
 asm	DelayThread	1	#sony-libkernl-cop0-and-syscall
 volatile	DelayThread	1	#sony-libkernl-cop0-and-syscall

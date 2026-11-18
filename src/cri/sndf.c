@@ -10,6 +10,58 @@
 #define rSdVoiceTrans 0x80D0
 #define rSdVoiceTransStatus 0x80F0
 
+/* The RPC server ids of SNDFI.IRX: 'SNDF' takes the commands, 'SFSV' the per-frame server call. */
+#define SNDF_RPC_CMD_ID 0x534E4446
+#define SNDF_RPC_SVR_ID 0x53465356
+
+/* The word holding the "SNDF Ver.2.09c" string's address; only SNDF_Init reads it (build-string-reads). It
+ * stays out of sndf.h: the engine's unity headers include that, and the approval count reads every `volatile`
+ * a unit's text reaches. */
+extern char *const volatile sndf_version;
+
+int SNDF_Init(SndfInitParam *prm)
+{
+    int wait;
+    int result;
+    int arg[4];
+
+    sndf_rpc_init_flag = 1;
+    sndf_version;  /* the build string is referenced, never used */
+    sceSifInitRpc(0);
+    while (1) {
+        if (sceSifBindRpc(&sndf_cmd_client, SNDF_RPC_CMD_ID, 0) < 0) {
+            while (1) {
+            }
+        }
+        wait = 10000;
+        while (wait--) {
+        }
+        if (sndf_cmd_client.serve != 0)
+            break;
+    }
+    while (1) {
+        if (sceSifBindRpc(&sndf_svr_client, SNDF_RPC_SVR_ID, 0) < 0) {
+            while (1) {
+            }
+        }
+        wait = 10000;
+        while (wait--) {
+        }
+        if (sndf_svr_client.serve != 0)
+            break;  /* braces here add a word of loop padding */
+    }
+    arg[0] = prm->iopWorkSize;
+    arg[1] = (int)prm->iopWork;
+    arg[2] = prm->initSound;
+    arg[3] = prm->dmaChannel;
+    sndf_dma_channel = prm->dmaChannel;
+    result = sndf_CallRpc(0x1300, arg, 4, 4);
+    if (result == 0) {
+        sndf_initialized = 1;
+    }
+    return result;
+}
+
 int SNDF_Finish(void)
 {
     int result;
@@ -274,6 +326,28 @@ int SNDF_SendSysMessage(unsigned int message)
         return -2;
     }
     return sndf_SendMessage(SWAP32_A(message));
+}
+
+int SNDF_GetControl(unsigned int channel, int kind)
+{
+    if (channel >= 32) {
+        return -128;
+    }
+    switch (kind) {
+    case 0xA0040000:
+        return sndf_status.controls[channel * SNDF_CONTROL_SIZE + 10];
+    case 0xA0100000:
+        return sndf_status.controls[channel * SNDF_CONTROL_SIZE + 11];
+    case 0xA0090000:
+        if ((sndf_status.mask >> channel) & 1) {
+            return 0;
+        }
+    case 0xA00A0000:
+        return sndf_status.controls[channel * SNDF_CONTROL_SIZE + 9];
+    case 0x100:
+        return sndf_status.voiceCount[channel];
+    }
+    return -128;
 }
 
 int SNDF_GetCtrlChange(unsigned int channel, int part, int kind)

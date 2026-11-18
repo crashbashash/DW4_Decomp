@@ -13,9 +13,17 @@ typedef struct SndfTables {
     int pcmSize[32];
 } SndfTables;
 
+/* SNDF_Init's parameters, as the IOP side's init command (0x1300) uses them. */
+typedef struct SndfInitParam {
+    int iopWorkSize;  /* bytes of IOP memory the IOP side allocates when iopWork is 0 */
+    void *iopWork;    /* an IOP work area the caller provides, or 0 */
+    int initSound;    /* nonzero: the IOP side initialises libsd and sets the master volumes */
+    int dmaChannel;   /* the SPU2 DMA channel of the voice transfers */
+} SndfInitParam;
+
 struct SndfBank;
 
-int SNDF_Init(int *prm);
+int SNDF_Init(SndfInitParam *prm);
 int SNDF_Finish(void);
 int SNDF_Start(void);
 int SNDF_Stop(void);

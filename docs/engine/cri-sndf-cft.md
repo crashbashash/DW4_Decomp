@@ -10,19 +10,23 @@ The first two files of the Sofdec block, each compiled as one whole file with So
 
 ## Open questions
 
-- SNDF's init (`0x280b98`) reads the build-string pointer once and discards it, in the delay slot of the call to
-  `sceSifInitRpc`; the owner approved that read as a `char *volatile` word under
-  [build-string reads](source-approvals.md#build-string-reads), to land once the function matches. Its two
-  bind-wait loops, zero words included, come from plain C (the compiler's loop alignment). The best C still
-  differs in twelve words: retail computes the first RPC client's address into a saved register before the flag
-  store and fills the call's delay slot with the read, where the C computes the address last; and two loads of
-  the parameter copy at the end are swapped. Statement orders, a local client pointer, `do`/`for` loop shapes, an
-  inline bind helper, the real `sceSifInitRpc` prototype and a permuter run left the prologue unchanged.
+- `SNDF_Init` (`0x280b98`) reads the build-string pointer once and discards it, in the delay slot of the call to
+  `sceSifInitRpc`; the owner approved that read under [build-string reads](source-approvals.md#build-string-reads),
+  declared `char *const volatile` (with `char *volatile` the read lands before the call). Its two bind-wait loops,
+  zero words included, come from plain C (the compiler's loop alignment); a braced `break` in the second loop adds a
+  word of padding. Its parameter is `SndfInitParam`, read from what the IOP's init command (`0x1300`) does with the
+  four words: the first is the size of the IOP work area it allocates when the second, an IOP address, is 0; a
+  nonzero third initialises libsd and sets the master volumes; the fourth is the voice-transfer DMA channel
+  (`sndf_dma_channel`). The pointer member is load-bearing: under type-based aliasing its load does not depend on
+  the `sndf_dma_channel` store, and the copy's loads then come in retail's order (fourth, first, third, second);
+  with four `int`s the second and third swap.
 - CFT's init stores its version string in a `volatile` word, approved under
   [build-string stores](source-approvals.md#build-string-stores).
-- `SNDF_GetControl` (`0x281568`), whose shared tail serves the `0xA009` and `0xA00A` kinds, has no source: the best
-  C is 3 words off, the voice address built in another operand order (retail loads the status-block address first,
-  then shifts the channel and adds).
+- `SNDF_GetControl` (`0x281568`) reads three bytes of the status block's per-channel control values. They are a flat
+  byte array indexed `channel * SNDF_CONTROL_SIZE + n`, which is load-bearing: with a struct per channel (constant
+  field offset) the compiler builds the shared `0xA009`/`0xA00A` tail's address as base plus index and ties the sum
+  to the base register, where retail (and the flat index, whose constant rides with the index) ties it to the
+  index. What each of the three bytes holds is open.
 - The SNDF entry points the game calls for its sound banks (port sizes, transfer start and status, freeing a
   port, the control and master-parameter messages) are named from what they do and how the game uses them;
   no string or other build carries the library's own names for them.

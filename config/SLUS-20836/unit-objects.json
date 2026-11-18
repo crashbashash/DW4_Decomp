@@ -19904,9 +19904,10 @@
     },
     "anon": []
   },
-  "0x00280d20": {
+  "0x00280b98": {
     "whole_file": true,
     "emitted": {
+      "SNDF_Finish": "0x00280d20",
       "SNDF_Start": "0x00280d48",
       "sndf_InitContext": "0x00280e38",
       "SNDF_Stop": "0x00280f10",
@@ -19918,6 +19919,7 @@
       "SNDF_FreePort": "0x002813c8",
       "sndf_GetPortArea": "0x00281420",
       "SNDF_SendSysMessage": "0x002814d0",
+      "SNDF_GetControl": "0x00281568",
       "SNDF_GetCtrlChange": "0x00281660",
       "SNDF_GetPlayStatus": "0x002816f8",
       "SNDF_GetEvent": "0x00281770",
@@ -19940,19 +19942,21 @@
       "SNDF_ExecServer": "0x00282038"
     },
     "data": {
-      "sndf_rpc_busy": "0x004bb100",
-      "sndf_initialized": "0x004bb104",
-      "sndf_started": "0x004bb108",
-      "sndf_dma_channel": "0x004bb110",
-      "sndf_rpc_buf": "0x00570c00",
-      "sndf_svr_sendbuf": "0x00570d00",
-      "sndf_svr_busy": "0x00571700",
-      "sndf_svr_recvbuf": "0x00571740",
       "sndf_cmd_client": "0x00571750",
-      "sndf_svr_client": "0x00571778",
       "sndf_context": "0x00572a00",
       "sndf_ctx": "0x004bb114",
-      "sndf_status": "0x005717c0"
+      "sndf_dma_channel": "0x004bb110",
+      "sndf_initialized": "0x004bb104",
+      "sndf_rpc_buf": "0x00570c00",
+      "sndf_rpc_busy": "0x004bb100",
+      "sndf_rpc_init_flag": "0x005717a0",
+      "sndf_started": "0x004bb108",
+      "sndf_status": "0x005717c0",
+      "sndf_svr_busy": "0x00571700",
+      "sndf_svr_client": "0x00571778",
+      "sndf_svr_recvbuf": "0x00571740",
+      "sndf_svr_sendbuf": "0x00570d00",
+      "sndf_version": "0x004bb10c"
     }
   },
   "0x002823f0": {

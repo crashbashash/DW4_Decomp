@@ -430,6 +430,12 @@ the value.
 * `ADXM_SetupThrdEx` reads the same build word (`adxps2_build`) and sets `adxm_main_thid`, so its count of two is the
   build word and that declaration, approved under [adxm-thread-ids](#adxm-thread-ids). Its set-up count and
   thread parameters are plain.
+* `SNDF_Init` reads `sndf_version`, the word holding `"SNDF Ver.2.09c"`'s address (its only reference), and never
+  uses the value. Stripped, the read goes and the function is 376 bytes against 392. No other build has SNDF (not
+  in the 2002 SDK archives or the Persona 4 tree), so the owner approved the row on the mechanism alone. Here the
+  word is declared `char *const volatile`, the ADXF spelling: with `char *volatile` the read is kept but scheduled
+  before `sceSifInitRpc`'s call instead of in its delay slot, and the first RPC client's address is formed late
+  (nine words off).
 
 ### metrowerks-runtime-asm-functions
 

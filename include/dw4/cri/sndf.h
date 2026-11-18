@@ -5,6 +5,9 @@
 
 struct _sif_client_data;
 
+/* Bytes of control values the IOP keeps per channel in the status block. */
+#define SNDF_CONTROL_SIZE 16
+
 typedef struct SndfQueueEntry {
     unsigned short kind;
     unsigned short arg;
@@ -79,14 +82,6 @@ typedef struct SndfOutbox {
     char pad2564[60];
 } SndfOutbox;
 
-typedef struct SndfVoice {
-    char pad0[9];
-    unsigned char f9;
-    unsigned char f10;
-    unsigned char f11;
-    char pad12[4];
-} SndfVoice;
-
 typedef struct SndfProgram {
     unsigned char index;
     char pad1[3];
@@ -122,7 +117,7 @@ typedef struct SndfStatus {
     unsigned char outputMode;
     unsigned char iopMsgQueued;  /* messages the IOP side queued itself */
     char pad10[2];
-    SndfVoice voices[32];
+    unsigned char controls[32 * SNDF_CONTROL_SIZE];  /* per channel, the 0xA0 control values (SNDF_GetControl) */
     SndfProgram programs[32][16];
     SndfParam params[61];
     SndfStream streams[16];
@@ -134,7 +129,6 @@ typedef struct SndfStatus {
 } SndfStatus;
 
 extern int sndf_rpc_init_flag;
-extern char *sndf_version;
 extern int sndf_rpc_busy;
 extern int sndf_initialized;
 extern int sndf_started;
