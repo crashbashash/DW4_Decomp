@@ -7,15 +7,32 @@ typedef struct CftEntry {
     short v[4];
 } CftEntry;
 
+/* The Z buffer formats of the Z conversions. */
+typedef enum CftZFmt {
+    CFT_ZFMT_NONE = 0,
+    CFT_ZFMT_Z16 = 1,
+    CFT_ZFMT_Z24 = 2,
+    CFT_ZFMT_Z32 = 3
+} CftZFmt;
+
 /* The destination image of a conversion: its format, buffer, stride and size. */
 typedef struct CftImage {
-    int f0;
+    CftZFmt zfmt;
     int *base;
     int stride;
-    int f12;
+    int lines;          /* the output's line count: the handle's height, or half the frame's */
     int height;
     int width;
 } CftImage;
+
+/* An ARGB8888 macroblock source of the Z conversion: the frame's first plane and the bytes of one macroblock line. */
+typedef struct CftArgb8888mb {
+    int addr;
+    int pitch;
+    int height;
+    int mbPitch;
+    int pad16[4];
+} CftArgb8888mb;
 
 /* A planar YCC 4:2:0 source of the conversions: the three plane addresses and their pitches. */
 typedef struct CftYccPln {
@@ -25,7 +42,7 @@ typedef struct CftYccPln {
     int ypitch;
     int upitch;
     int vpitch;
-    void *f24;
+    void *rsv;          /* cleared by the caller */
 } CftYccPln;
 
 void CFT_SetFunctionName(char *name);
@@ -39,6 +56,7 @@ int CFT_GetMaxAlpha(void);
 void CFT_Ycc420rgbToArgb8888(void);
 void CFT_Ycc420plnToZ16(CftYccPln *src, CftImage *img, int *table);
 void CFT_Ycc420plnToZ32(CftYccPln *src, CftImage *img, int *table);
+void CFT_Argb8888mbToZ32(unsigned char **src, CftImage *img, int *table);
 void CFT_MakeArgb8888ColAdjTbl(void *dst);
 void CFT_MakeYcc422ColAdjTbl(void *dst);
 void cft_MakeYccTbl(int mode, int lo, int hi, CftEntry *t);

@@ -73,8 +73,9 @@ the 2002 one. Names from what a function does are in the medium list below.
   (the SDK's `ADXRNA` is `void *`), so `sfadx.c` keeps them untyped; typed pointers reorder the stores.
 - `sfxcnv_CnvFrmYcc420plnToZ` and `sfxcnv_CnvFrmArgb8888mbToZ` of the SDK's `sfx_cnv.o` are `0x2b4dc8` and `0x2b4f58` with
   only the handle offsets changed. `0x2b4dc8` matches once the planar source block's seventh word is a pointer: the
-  zero stored there then shares no alias set with the plane loads and is scheduled first. `0x2b4f58` still differs in
-  where a constant store into the source block is scheduled.
+  zero stored there then shares no alias set with the plane loads and is scheduled first. `0x2b4f58` matches once the
+  destination's format word is the CFT Z-format enum (as an `int` its store holds the plane reloads after the call
+  behind it) and the handle's width and height are read into locals before the source block is filled.
 - More bodies follow the SDK archive `libmwsfde.a` with only the offsets changed: `SFBUF_AringGetRead` (`sfd_buf.o`),
   `sfmpv_ChkBufSiz` and `sfmpv_NeedSafeDlmRefresh` (`0x2a3ef8`) of `sfd_mpv.o`, `sftst_DebWrite` (`0x2b0cf8`) of
   `sfd_tst.o`, which in DW4 also prints the handle and the 64-bit fields as `%ld`, and `sfply_InitHn` (`0x2ab8b8`) of
@@ -116,9 +117,9 @@ the 2002 one. Names from what a function does are in the medium list below.
   sums the repeat and field counts into a fresh register); `SFMPVP_Create` (`0x2a97a0`, one word: the work-buffer
   branch that sets both areas computes the second area in the register the other branch uses, so retail shares the
   final store between them; its reset of the IPU state matches in field order with the start-code bytes after
-  `enabled` and `value` last); `sftim_Tc2Time59D` (`0x2af380`, 33 of 42 words: the
-  same instructions with a different load and arithmetic schedule: retail loads seconds then hours and adds before the
-  frames; none of 576 expression and statement orders reproduces it); and `sfmpv_DecodeFrm` above.
+  `enabled` and `value` last); and `sfmpv_DecodeFrm` above.
+- `sftim_Tc2Time59D` matches with the frame sum (`frame + add`) as its first statement and the minute, second, hour and
+  field read into locals before the sums, the shape its 23.976 and 29.97 siblings leave out.
 - Medium confidence, from the RE4 GameCube order alone: `SFMPV_SaveCond` and `SFMPV_RestoreCond` (after `SFD_SetMpvCond`),
   `SFMPVF_SearchFrmObj` and `SFMPVF_SearchVfrmData` (the first two of `sfd_mpvf.c`), `sfmpvf_ReferNextFrmReady` and
   `sfmpvf_SearchStbyFrm` (after `SFD_IsNextFrmReady`), `SFPTS_IsPtsQueFull` (last of `sfd_pts.c`) and `SFTST_SetTstFlg`

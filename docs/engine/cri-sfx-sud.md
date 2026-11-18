@@ -78,8 +78,13 @@ are `SFX_SetCnvBottomUp`/`SFX_GetCnvBottomUp` (the SFX side of `mwPlySetCnvBotto
   [Persona 4 decompilation](https://github.com/Raikaru/Persona4-Decompilation) (`src/cri/re4/sfx.h`, `sfx_lib.c`,
   `sfx_sud.c`, `sud_lib.c`); the SDK objects are `libmwsfde.a` of
   [recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri).
-- Still unnamed: the Z-table forward after `sfxzmv_GetZfrmInf` (in `sfxz.c`).
-- Without source: `sfxzmv_GetZfrmInf` (`0x2b45b0`, 4 words off: retail fills the first branch's delay slot from the
-  branch target and schedules the copy of the size parameter before the return-address save) and
-  `sfxcnv_CnvFrmArgb8888mbToZ` (`0x2b4f58`, 18 words off: the height load and a constant store into the source block
-  are scheduled later than in the SDK body it follows; the other conversion, `sfxcnv_CnvFrmYcc420plnToZ`, matches).
+- `sfxzmv_MakeOrgZTbl` (`0x2b4630`, medium, behaviour): the Z-table forward after `sfxzmv_GetZfrmInf`, through which
+  `sfxzmv_MakeCnvZTbl` reaches `sfxzmv_MakeOrgZ32Tbl`; the RE4 GameCube `sfx_zmv.c` splits that builder into
+  `sfxzmv_MakeOrgZ32TblByCCIR` and `sfxzmv_MakeOrgZ32TblByDirect`, so the forward stands where the choice between them
+  is made (alternative `sfxzmv_MakeOrgZ32TblByCCIR`).
+- Without source: `sfxzmv_GetZfrmInf` (`0x2b45b0`, 4 words off in plain C: the copy of the size parameter goes into the
+  first branch's delay slot, where retail leaves it before the return-address save and fills the slot from the branch
+  target). The compiler's delay-slot filler takes it from above the branch unless an access it scans past is
+  `volatile`; the function matches with the chunk's valid-flag read `volatile` (or `SfxChunk.valid` declared so, which
+  changes no other SFX function), the same later-build difference as the handles' in-use word. It waits for an owner
+  ruling. `sfxcnv_CnvFrmArgb8888mbToZ` matches with the destination's format word as the CFT Z-format enum.

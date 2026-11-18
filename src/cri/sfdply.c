@@ -1000,7 +1000,7 @@ int sfply_ResetHn(SfdPly *h) {
     if (speed != 1000) {
         SFD_SetSpeed(h, speed);
     }
-    if (ptsm.f0 != 0) {
+    if (ptsm.mgr != 0) {
         h->tim.ptsm = ptsm;
         if (SFPLY_ResetPtsm != 0) {
             SFPLY_ResetPtsm(&ptsm);

@@ -6,7 +6,7 @@
 
 typedef struct SfxZLib {
     int nhn;
-    int f4;
+    int zbufType;   /* SFXZ_SetZbufType: 1 builds the tables straight from the 32-bit Z */
     int maxhn;
     SfxZHn hn[8];
 } SfxZLib;
@@ -30,7 +30,7 @@ int SFXZ_GetZbufType(void);
 void sfxcnv_CnvFrmZcmn(SfxHn *hn, SfxFrame *frm, int zbit, int arg);
 void sfxcnv_CnvFrmYcc420plnToZ(SfxHn *hn, SfxFrame *frm, int zbit, int arg);
 void sfxcnv_CnvFrmArgb8888mbToZ(SfxHn *hn, SfxFrame *frm, int zbit, int arg);
-int sfxcnv_CnvZbitToCft(int zbit);
+CftZFmt sfxcnv_CnvZbitToCft(int zbit);
 
 void SFXZ_Init(void) {
     sfxzmv_InitLibWork();
@@ -164,7 +164,7 @@ void SFXZ_GetZfrmRange(SfxZHn *zhn, int frame, int *first, int *second) {
     *second = z;
 }
 
-void FUN_002b4630(SfxZHn *zhn, int lo, int hi, unsigned int *tbl) {
+void sfxzmv_MakeOrgZTbl(SfxZHn *zhn, int lo, int hi, unsigned int *tbl) {
     sfxzmv_MakeOrgZ32Tbl(zhn, lo, hi, tbl);
 }
 
@@ -203,7 +203,7 @@ void sfxzmv_MakeCnvZTbl(SfxZHn *zhn, int lo, int hi, unsigned int *buf) {
     unsigned int *tbl = buf + 0x100;
     SfxZCbFn cbfn;
     memset(buf, 0, 0x400);
-    FUN_002b4630(zhn, lo, hi, tbl);
+    sfxzmv_MakeOrgZTbl(zhn, lo, hi, tbl);
     cbfn = zhn->cbfn;
     if (cbfn == 0) {
         if (zhn->zbit == 16) {
@@ -281,11 +281,11 @@ int SFXZ_IsSetZclip(SfxZHn *zhn) {
 }
 
 void SFXZ_SetZbufType(int value) {
-    sfxz_work.f4 = value;
+    sfxz_work.zbufType = value;
 }
 
 int SFXZ_GetZbufType(void) {
-    return sfxz_work.f4;
+    return sfxz_work.zbufType;
 }
 
 void SFX_CnvFrmZ16(SfxHn *hn, SfxFrame *frm, int arg) {
@@ -335,7 +335,7 @@ void sfxcnv_CnvFrmYcc420plnToZ(SfxHn *hn, SfxFrame *frm, int zbit, int arg) {
     int height;
     int ofs;
 
-    src.f24 = 0;
+    src.rsv = 0;
     ofs = py->pitch * py->height / 2;
     src.y = (char *)py->addr + ofs;
     src.u = (char *)pu->addr + ofs / 2;
@@ -351,10 +351,10 @@ void sfxcnv_CnvFrmYcc420plnToZ(SfxHn *hn, SfxFrame *frm, int zbit, int arg) {
         height = py->height / 2;
     else
         height = hn->height;
-    dst.f0 = sfxcnv_CnvZbitToCft(zbit);
+    dst.zfmt = sfxcnv_CnvZbitToCft(zbit);
     dst.base = (int *)arg;
     dst.stride = pitch;
-    dst.f12 = height;
+    dst.lines = height;
     dst.height = py->pitch;
     dst.width = py->height / 2;
     switch (zbit) {
@@ -369,16 +369,53 @@ void sfxcnv_CnvFrmYcc420plnToZ(SfxHn *hn, SfxFrame *frm, int zbit, int arg) {
     }
 }
 
-int sfxcnv_CnvZbitToCft(int zbit) {
-    int r;
+void sfxcnv_CnvFrmArgb8888mbToZ(SfxHn *hn, SfxFrame *frm, int zbit, int arg) {
+    SfxPlane *pln = &frm->plane[0];
+    int width = hn->width;
+    int height = hn->height;
+    CftArgb8888mb src;
+    CftImage dst;
+    int pitch;
+    int lines;
+
+    src.addr = pln->addr;
+    src.pitch = pln->pitch;
+    src.height = pln->height;
+    src.mbPitch = 64;
+    if (width == 0)
+        pitch = pln->pitch;
+    else
+        pitch = width;
+    if (height == 0)
+        lines = pln->height / 2;
+    else
+        lines = height;
+    dst.zfmt = sfxcnv_CnvZbitToCft(zbit);
+    dst.base = (int *)arg;
+    dst.stride = pitch;
+    dst.lines = lines;
+    dst.height = pln->pitch;
+    dst.width = pln->height / 2;
+    switch (zbit) {
+    case 16:
+        break;
+    case 32:
+        SFX_MakeTable(hn, frm, 13);
+        CFT_Argb8888mbToZ32((unsigned char **)&src, &dst, (int *)hn->tbl[0]);
+        break;
+    }
+}
+
+CftZFmt sfxcnv_CnvZbitToCft(int zbit) {
+    CftZFmt r;
     switch ((unsigned int)zbit) {
-    case 16: r = 1; break;
-    case 24: r = 2; break;
-    case 32: r = 3; break;
+    case 16: r = CFT_ZFMT_Z16; break;
+    case 24: r = CFT_ZFMT_Z24; break;
+    case 32: r = CFT_ZFMT_Z32; break;
     case 8:
     default:
         SFXLIB_Error(0, 0, "E201313: sfxcnv_CnvZbitToCft : zbit is invalid.");
-        r = 0;
+        r = CFT_ZFMT_NONE;
         break;
     }
     return r;

@@ -108,9 +108,8 @@ typedef struct SfdFieldEntry {
 
 /* The video PTS manager entry kept across a player reset. */
 typedef struct SfdPtsm {
-    int f0;
-    int f4;
-    int f8;
+    int mgr;             /* 0: the manager; a reset re-attaches a non-zero one */
+    int rsv[2];          /* 4: copied with it; never read */
 } SfdPtsm;
 
 /* A stream header's audio stream. */
@@ -577,7 +576,7 @@ typedef struct SfdTmrInf {
 /* The library's V-sync count (sftim.c). */
 typedef struct SfdTimLib {
     int vcount;               /* 0 */
-    int f4;
+    int rsv;                  /* 4: cleared by SFTIM_Init; never read */
     int vrate;                /* 8: V-syncs per 1000 seconds */
 } SfdTimLib;
 

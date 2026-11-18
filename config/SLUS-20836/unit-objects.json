@@ -21717,6 +21717,7 @@
       "sftim_Tc2Time59N": "0x002af210",
       "sftim_Tc2Time23D": "0x002af248",
       "sftim_Tc2Time29D": "0x002af2e8",
+      "sftim_Tc2Time59D": "0x002af380",
       "SFTIM_Pause": "0x002af428",
       "sftim_AddHnVbIn": "0x002af488",
       "sftim_AddExtClock": "0x002af4f0",
@@ -21737,17 +21738,13 @@
       "SFTMR_AddTsum": "0x002afbc8"
     },
     "data": {
-      "DAT_004bea88": "0x004bea88",
-      "DAT_004bea90": "0x004bea90",
-      "sftim_as_pts": "0x004beb28",
-      "sftim_a_sample": "0x004beb30",
-      "sftim_v_time": "0x004beb34",
-      "sftim_v_sample": "0x004beb38",
       "SFTIM_prate": "0x004f5060",
-      "sftim_tc2time": "0x004f5088"
-    },
-    "externals": {
-      "FUN_002916f8": "0x002916f8"
+      "sfd_lib": "0x004be8d8",
+      "sftim_a_sample": "0x004beb30",
+      "sftim_as_pts": "0x004beb28",
+      "sftim_tc2time": "0x004f5088",
+      "sftim_v_sample": "0x004beb38",
+      "sftim_v_time": "0x004beb34"
     }
   },
   "0x002afc08": {
@@ -22075,7 +22072,7 @@
       "sfxzmv_SetTagGrp": "0x002b4380",
       "SFXZ_GetTagInf": "0x002b4468",
       "SFXZ_GetZfrmRange": "0x002b4498",
-      "FUN_002b4630": "0x002b4630",
+      "sfxzmv_MakeOrgZTbl": "0x002b4630",
       "sfxzmv_MakeOrgZ32Tbl": "0x002b4648",
       "SFXZ_MakeCnvZTbl": "0x002b4788",
       "sfxzmv_MakeCnvZTbl": "0x002b47d8",
@@ -22092,13 +22089,14 @@
       "SFX_CnvFrmZ32": "0x002b4c48",
       "sfxcnv_CnvFrmZcmn": "0x002b4c98",
       "sfxcnv_CnvFrmYcc420plnToZ": "0x002b4dc8",
+      "sfxcnv_CnvFrmArgb8888mbToZ": "0x002b4f58",
       "sfxcnv_CnvZbitToCft": "0x002b5068",
       "SFX_SetZbit": "0x002b50c8",
       "SFX_GetZbit": "0x002b50d8"
     },
     "data": {
-      "sfxz_work": "0x004bf010",
-      "@rodata": "0x004f5870"
+      "@rodata": "0x004f5870",
+      "sfxz_work": "0x004bf010"
     }
   },
   "0x002b50e8": {

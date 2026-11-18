@@ -11,8 +11,6 @@ extern int sftim_a_sample;
 extern int sftim_v_time;
 extern int sftim_v_sample;
 
-int FUN_002916f8(int value);
-
 void SFTIM_InitTcode(SfdTimeCode *tc);
 void sftim_HnVbIn(SfdPly *hn);
 void sftim_CntupHnVbIn(SfdPly *hn);
@@ -26,7 +24,7 @@ int SFTIM_GetNowTime(SfdPly *hn, int *time, int *unit);
 int sftim_GetTimeNone(void *sfd, int *time, int *unit);
 int sftim_GetTimeVsync(void *sfd, int *time, int *unit);
 int sftim_GetTimeExtClock(void *sfd, int *time, int *unit);
-int sftim_GetTimeUfrm();
+int sftim_GetTimeUfrm(void *sfd, int *time, int *unit);
 int sftim_UpdateTimeHn(SfdPly *hn);
 void sftim_UpdateTime(SfdPly *hn);
 void sftim_Tc2TimeN(unsigned int rate, SfdTimeCode *tc, int *ticks, int *out_rate);
@@ -42,7 +40,7 @@ void SFTIM_Init(SfdTimLib *lib, int vrate)
 {
     EMPTY_MACRO();
     lib->vcount = 0;
-    lib->f4 = 0;
+    lib->rsv = 0;
     lib->vrate = vrate;
 }
 
@@ -114,9 +112,9 @@ void SFTIM_InitHn(void *sfd, SfdTim *tim)
     *(volatile int *)&tim->rate = 1;
     *(volatile int *)&tim->clock_wrap = -1;
     tim->clock_ctx = 0;
-    tim->ptsm.f0 = 0;
-    tim->ptsm.f4 = 0;
-    tim->ptsm.f8 = 0;
+    tim->ptsm.mgr = 0;
+    tim->ptsm.rsv[0] = 0;
+    tim->ptsm.rsv[1] = 0;
 }
 
 void SFTIM_InitTtu(SfdTimeRec *rec, int time)
@@ -435,9 +433,9 @@ int sftim_GetTimeVsync(void *sfd, int *time, int *unit)
     return 0;
 }
 
-int sftim_GetTimeUfrm(SfdPly *hn, int *time, int *unit)
+int sftim_GetTimeUfrm(void *sfd, int *time, int *unit)
 {
-    SFTIM_ChkRegularTime(hn, time, unit);
+    SFTIM_ChkRegularTime(sfd, time, unit);
     return 0;
 }
 
@@ -651,23 +649,36 @@ void sftim_Tc2Time59N(int rate, SfdTimeCode *tc, int *ticks, int *out_rate)
 
 void sftim_Tc2Time23D(int rate, SfdTimeCode *tc, int *ticks, int *out_rate)
 {
-    int m, days, secs, rest;
-    m = tc->minute;
-    secs = tc->hour * 86292 + m * 1438;
-    rest = tc->frame + tc->add;
-    days = (tc->second * 12 + m / 10) * 2;
-    *ticks = (days + secs + rest) * 1000 + tc->field * 500;
+    int minute, fromSeconds, fromHoursMinutes, frames;
+    minute = tc->minute;
+    fromHoursMinutes = tc->hour * 86292 + minute * 1438;
+    frames = tc->frame + tc->add;
+    fromSeconds = (tc->second * 12 + minute / 10) * 2;
+    *ticks = (fromSeconds + fromHoursMinutes + frames) * 1000 + tc->field * 500;
     *out_rate = rate;
 }
 
 void sftim_Tc2Time29D(int rate, SfdTimeCode *tc, int *ticks, int *out_rate)
 {
-    int m, days, secs, rest;
-    m = tc->minute;
-    secs = tc->hour * 107892 + m * 1798;
-    rest = tc->frame + tc->add;
-    days = (tc->second * 15 + m / 10) * 2;
-    *ticks = (days + secs + rest) * 1000 + tc->field * 500;
+    int minute, fromSeconds, fromHoursMinutes, frames;
+    minute = tc->minute;
+    fromHoursMinutes = tc->hour * 107892 + minute * 1798;
+    frames = tc->frame + tc->add;
+    fromSeconds = (tc->second * 15 + minute / 10) * 2;
+    *ticks = (fromSeconds + fromHoursMinutes + frames) * 1000 + tc->field * 500;
+    *out_rate = rate;
+}
+
+void sftim_Tc2Time59D(int rate, SfdTimeCode *tc, int *ticks, int *out_rate)
+{
+    int frames = tc->frame + tc->add;
+    int minute = tc->minute;
+    int second = tc->second;
+    int hour = tc->hour;
+    int field = tc->field;
+    int fromSeconds = (second * 30 + minute / 10) * 2;
+    int fromHoursMinutes = hour * 215892 + minute * 3598;
+    *ticks = (fromSeconds + fromHoursMinutes + frames) * 1000 + field * 500;
     *out_rate = rate;
 }
 
@@ -693,7 +704,7 @@ void sftim_AddHnVbIn(SfdPly *hn, int pos, int rate)
     SfdTim *tim = &hn->tim;
     char guard[16];
     int delta;
-    delta = FUN_002916f8(sfd_lib.tim.vrate);
+    delta = UTY_MulDiv(sfd_lib.tim.vrate, pos, rate);
     sfd_Lock(guard);
     *(volatile int *)&tim->stream_pos += delta;
     *(volatile int *)&tim->count += delta;
