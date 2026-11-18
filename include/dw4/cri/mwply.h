@@ -158,10 +158,19 @@ typedef struct MwsfdSst {
     int extHn;              /* 20: handle from the callback table's create */
 } MwsfdSst;
 
+/* the player's state (crimwsfd.h MwsfdStat, mwPlyGetStat) */
+typedef enum MwsfdStat {
+    MWSFD_STAT_STOP = 0,
+    MWSFD_STAT_PREP = 1,
+    MWSFD_STAT_PLAYING = 2,
+    MWSFD_STAT_PLAYEND = 3,
+    MWSFD_STAT_ERROR = 4
+} MwsfdStat;
+
 struct MwsfdPly {
     MwsfdPlyVtbl *vtbl;             /* 0 */
     int used;                       /* 4 */
-    int stat;                       /* 8: 2 while playing */
+    MwsfdStat stat;                 /* 8 */
     MwsfdCreInf cre;                /* 12 */
     int f60;                        /* 60: set to 1 when the player is made */
     void *sfd;                      /* 64: the SFD player handle */

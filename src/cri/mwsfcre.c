@@ -43,6 +43,14 @@ extern char E2053002_not_enough_work[];
 extern char E4041301_not_enough_work[];
 extern char E20010703C_mwPlyCreateSofdec_create_error[];
 extern char E20010703D_mwPlyCreateSofdec_set_errcb[];
+extern char E1122612_mwPlyCreateSofdec_cprm_is_NULL[];
+extern char E4061801_mwPlyCreateSofdec_Number_of_MWPLY_handles[];
+extern char E2053006_mwPlyCreateSofdec_Didnt_set_malloc_free[];
+extern char E2012_mwPlyCreate_cant_create_SFD[];
+extern char E2013_mwPlyCreate_cant_create_SJ[];
+extern char E2020_mwPlyCreate_cant_create_SJ[];
+extern char E201185_cant_create_SfxHn[];
+extern char E201212_mwPlyCreate_cant_set_AddInfSJ[];
 
 /* what an SFD's input SJ is laid over */
 typedef enum SfdSupplyKind {
@@ -665,7 +673,129 @@ SfdSj *mwsfcre_CreateSj(MwsfdPly *ply) {
 
 /* Creates a player and wires every part of it: the SFD handle, the input SJs, the MWSTM stream, the link
  * controller, the sfx and the additional-information SJ. Any failure reports it and destroys the half-made
- * player. */
+ * player. The search for a free entry reads each in-use word as the server pass does, through a volatile
+ * cast: the server reads that word from its own context, and the last statement here publishes the player
+ * to it. */
+MwsfdPly *mwPlyCreateSofdec(MwsfdCreInf *cprm) {
+    MwsfdWork *work;
+    MwsfdInitPrm *prm;
+    MwsfdPly *ply;
+    void *sfd;
+    int sjb;
+    int sib;
+    int vib;
+    int aib;
+    int adxibuf;
+    int adxwk;
+    int i;
+    struct SfxHn *sfx;
+
+    if (cprm == 0) {
+        MWSFSVM_Error(E1122612_mwPlyCreateSofdec_cprm_is_NULL);
+        return 0;
+    }
+    if (mwsfcre_CheckCprm(cprm) != 1) {
+        return 0;
+    }
+    work = MWSFLIB_GetLibWorkPtr();
+    prm = &work->prm;
+    for (i = 0; i < MWSFD_NPLY; i++) {
+        ply = &work->ply[i];
+        if (*(volatile int *)&ply->used == 0) {
+            break;
+        }
+    }
+    if (i == MWSFD_NPLY) {
+        MWSFLIB_SetErrCode(-11);
+        MWSFSVM_Error(E4061801_mwPlyCreateSofdec_Number_of_MWPLY_handles);
+        return 0;
+    }
+    if (mwsfcre_IsOkUsrMalloc(cprm) == -1) {
+        MWSFSVM_Error(E2053006_mwPlyCreateSofdec_Didnt_set_malloc_free);
+        return 0;
+    }
+    if (ply != 0) {
+        memset(ply, 0, sizeof(MwsfdPly));
+    }
+    mwsfcre_InitMemMng(ply, cprm);
+    ply->cre = *cprm;
+    sfd = mwsfcre_CreateSfd(ply, cprm);
+    ply->sfd = sfd;
+    if (sfd == 0) {
+        MWSFSVM_Error(E2012_mwPlyCreate_cant_create_SFD);
+        mwSfdDestroy(ply);
+        return 0;
+    }
+    MWSFD_ExecSprCbFn(ply);
+    mwsfcre_AttachPicUsrBuf(ply);
+    mwsfcre_CalcWorkStmBuf(cprm, &sjb, &sib, &vib, &aib, &adxibuf, &adxwk);
+    MWSFCRE_SetCondSfd(ply, cprm, prm->dispCycle, prm->dispLatency);
+    ply->defSj = mwsfcre_CreateSj(ply);
+    if (ply->defSj == 0) {
+        MWSFSVM_Error(E2013_mwPlyCreate_cant_create_SJ);
+        mwSfdDestroy(ply);
+        return 0;
+    }
+    ply->memSj = SJMEM_Create(0, 0);
+    if (ply->memSj == 0) {
+        MWSFSVM_Error(E2020_mwPlyCreate_cant_create_SJ);
+        mwSfdDestroy(ply);
+        return 0;
+    }
+    ply->f92 = sjb;
+    ply->vtbl = &mwply_vtbl;
+    ply->f60 = 1;
+    ply->execFlg = 0;
+    ply->stat = MWSFD_STAT_STOP;
+    ply->compoSet = cprm->addInfMode;
+    ply->compoMode = cprm->addInfMode;
+    if (SFD_GetTrHn(sfd, 3, (int *)&ply->adxt) != 0) {
+        ply->adxt = 0;
+    }
+    ply->f112 = 1;
+    ply->linkReq = 0;
+    ply->linkPrev = 0;
+    ply->pause = 0;
+    ply->pad119 = 0;
+    ply->waitingSvr = 0;
+    MWSFSVR_SetHnMwplySvrFlg(ply, 0);
+    MWSFSVR_SetHnSfdSvrFlg(ply, 0);
+    ply->frmSync = 1;
+    ply->numSkipDisp = 0;
+    ply->stm = MWSTM_Create(ply->defSj);
+    if (ply->stm == 0) {
+        mwSfdDestroy(ply);
+        return 0;
+    }
+    MWSFPLY_SetFlowLimit(ply);
+    ply->lsc = LSC_Create(ply->defSj);
+    ply->nEntry = 0;
+    LSC_SetStmHndl(ply->lsc, ply->stm);
+    if (mwsfcre_MallocCompoWork(ply) == -1) {
+        mwSfdDestroy(ply);
+        return 0;
+    }
+    sfx = MWSFSFX_Create((int)ply->sfxWork, ply->sfxWorkSize, cprm->maxWidth, cprm->maxHeight);
+    if (sfx == 0) {
+        MWSFSVM_Error(E201185_cant_create_SfxHn);
+        mwSfdDestroy(ply);
+        return 0;
+    }
+    ply->sfx = sfx;
+    MWSFSFX_SetCompoMode(ply, ply->cre.addInfMode);
+    ply->addInfSj = MWSFTAG_CreateAinfSj(ply);
+    if (MWSFTAG_SetAinfSj(ply) != 0) {
+        MWSFSVM_Error(E201212_mwPlyCreate_cant_set_AddInfSJ);
+        mwSfdDestroy(ply);
+        return 0;
+    }
+    mwsfsfx_ResetAddInf(ply);
+    mwply_ResetPicLog(ply);
+    mwply_SetPicUsrCb(ply);
+    ply->used = 1;
+    return ply;
+}
+
 /* -1 when no work area is given and the malloc/free functions are not both set */
 int mwsfcre_IsOkUsrMalloc(MwsfdCreInf *cprm) {
     MwsfdWork *work = MWSFLIB_GetLibWorkPtr();

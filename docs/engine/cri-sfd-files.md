@@ -109,9 +109,8 @@ the 2002 one. Names from what a function does are in the medium list below.
   it keeps the error callback, the timer's clock callbacks, speed and PTS-manager entry, and the seek work across
   a re-create. It matches with those `SfdTim` fields and the error block typed as the callbacks and pointers
   they are.
-- `mwPlyCreateSofdec` differs only in the delay slot of the first free-handle test, which retail fills from the
-  branch target; `mwsfcre_CreateSfd` in the registers holding two of the buffer-size globals. Both need names for
-  the size globals and the three SFD create-parameter templates, and the player status as an enum.
+- `mwsfcre_CreateSfd` differs in the registers holding two of the buffer-size globals. It needs names for the size
+  globals and the three SFD create-parameter templates.
 - `sfmpv_NextTc` (`0x2a5a50`, the RE4 time-code advance) keeps the repeat-plus-field sum in one variable through
   `fields %= 2` to the field store, and `SFMPVP_Create` (`0x2a97a0`) sets the second work area through a local in each
   branch, stored in each branch, so both branches end in the one shared store

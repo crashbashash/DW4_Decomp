@@ -72,16 +72,15 @@ MWSFD player creation: work-area sizes, frame buffers, picture user buffers, the
 
 - `MPV_Init` stores the version pointer through a `char *volatile` word, approved under
   [build-string stores](source-approvals.md#build-string-stores).
-- Without source: `mwsfcre_CreateSfd` (`0x292078`) and `mwPlyCreateSofdec` (`0x292ba8`). The best C for
-  `mwsfcre_CreateSfd` differs in about 12 words: the addresses of buffer-size globals (`0x5777b8` up to `0x5777d8`
-  and `0x4bd128` up to `0x4bd228`) swap callee-saved registers and the MPV condition store order differs; those
-  globals and the three SFD create-parameter templates have no names yet. `mwPlyCreateSofdec` differs in the delay
-  slot of the first free-handle test: retail fills it from the branch target (`li v0,8`), moves the branch past that
-  word and pads the search loop's head with a `nop`; the best C fills it from the fall-through (`move v1,s0`). That is
-  the shape of the later tool chain in [sofdec-build-tool-asm-functions](source-approvals.md#sofdec-build-tool-asm-functions),
-  but it is unproven: the 2002 SDK's `mwsfdcre.o` builds the search from other source (432-byte handles, a copy of the
-  work pointer, another loop) and fills that slot from above the branch, so its code cannot be set against ours. The
-  function stays with matching. Its player status would be an enum.
+- Without source: `mwsfcre_CreateSfd` (`0x292078`). Its best C differs in about 12 words: the addresses of
+  buffer-size globals (`0x5777b8` up to `0x5777d8` and `0x4bd128` up to `0x4bd228`) swap callee-saved registers and
+  the MPV condition store order differs; those globals and the three SFD create-parameter templates have no names
+  yet.
+- `mwPlyCreateSofdec` (`0x292ba8`) searches the eight players by index (`ply = &work->ply[i]`), as the 2002 SDK
+  object and the RE4 source do, and reads each in-use word through a `volatile` cast
+  ([mwsfd-handle-used](source-approvals.md#mwsfd-handle-used)). The second pointer in its loop is the compiler's
+  strength-reduced copy, not a variable. The player status is CRI's `MwsfdStat` enum: as an `int` its store is
+  ordered against the reads of the creation parameters.
 - The outputs of `mwsfcre_CalcWorkStmBuf` are placeholders; their meaning
   needs the lower layer and the SFD work-size users.
 - `mpv_GetFixedWorkSizes` and `MPV_SetFrameBuffers` keep `mpv` names though they sit in the MWSFD file.

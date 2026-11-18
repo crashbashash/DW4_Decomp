@@ -9201,6 +9201,7 @@
 002929a0	MWSFCRE_SetCondSfd	match	-
 00292af0	MWSFCRE_ResetSfdHn	match	-
 00292b80	mwsfcre_CreateSj	match	-
+00292ba8	mwPlyCreateSofdec	match	-
 00292f40	mwsfcre_IsOkUsrMalloc	match	-
 00292f90	mwsfcre_InitMemMng	match	-
 00292fe8	mwsfcre_CheckCprm	match	-

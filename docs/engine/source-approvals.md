@@ -265,6 +265,25 @@ Written as a `volatile` cast at the read, as the DMA channels' shared words are 
 keyword keeps no extra load (stripped, the read moves into a branch delay slot), so the row rests on the shared
 state alone.
 
+`mwPlyCreateSofdec` (`0x292ba8`) is the application side of the same word, approved by the owner on the evidence
+below. Its search for a free entry reads each player's in-use word through the same cast, and its last statement
+sets the word, which is what hands the player to the server: `mwsfsvr_ExecServer`, the SVM server callback, calls
+`mwPlyExecSvrHndl` for all eight entries on every pass, and that function and `mwsfd_ExecSvrHndl` act on the word.
+The writers are this function and `mwSfdDestroy`. Here the keyword changes more than a slot, and one keyword gives
+all of it:
+
+* Without it the search, `for (i = 0; i < 8; i++) { ply = &work->ply[i]; if (ply->used == 0) break; }`, compiles
+  to the loop of the 2002 SDK's `mwsfdcre.o` (`libmwsfde.a`,
+  [SkeletonPicture/recvx-decomp-cri](https://github.com/SkeletonPicture/recvx-decomp-cri)), constants apart: the
+  work pointer copied to `v1`, a second strength-reduced pointer for `&ply->used` (`lw v0,0(a0)`), and the copy to
+  the handle register in the loop branch's delay slot.
+* With it the loop pass cannot rewrite the address inside the `volatile` load, so only the handle pointer is
+  strength-reduced and the load stays `lw v0,4(s0)`; the work pointer is not needed past the first block; and the
+  delay-slot pass takes nothing from above the first test across the `volatile` load, so the slot gets the copy of
+  the branch target's `li v0,8` and the loop head its pad. Those are retail's 229 words.
+* Plain C reaches the loop body (two handle variables, the first used again at the end of the function) but not
+  the slot: the delay-slot pass then takes the count's `move a0,zero` from above the first test.
+
 ### mwsfsvr-vsync-count
 
 MWSFD's second V-sync count (`0x4be8ac`), cleared by the player init and incremented by the V-sync server, which
@@ -1140,10 +1159,10 @@ object). It returns the Z-frame chunk's entry between two tags, or 0 and 0 when 
   branch past the copied store, and pads the next label to 8 bytes. ee-gcc 2.96's delay-slot pass takes the copy
   into the slot whatever the C says: it scans back from the branch over `lw`, `li` and `sd ra`, none of which
   conflicts with it. Only a `volatile` access stops that scan, and the owner did not approve one here.
-* `MWSFLIB_SfdErrFunc` and `mwPlyCreateSofdec`, the other candidates of the ruling, are not approved: the 2002
-  `mwsfdlib.o` allocates the error callback's registers as retail does, and the C that does so was found (it
-  matches); the 2002 `mwsfdcre.o` builds the player search from other source (432-byte handles, another loop), so
-  it shows nothing about the slot.
+* `MWSFLIB_SfdErrFunc` and `mwPlyCreateSofdec`, the other candidates of the ruling, are no tool-chain cases: the
+  2002 `mwsfdlib.o` allocates the error callback's registers as retail does, and the C that does so was found (it
+  matches); `mwPlyCreateSofdec` matches with its free-entry search reading the in-use word `volatile`
+  ([mwsfd-handle-used](#mwsfd-handle-used)).
 
 ### local-decl-vsync-counts
 

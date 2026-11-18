@@ -1493,6 +1493,24 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     `mult` stays.
   - *Spelling:* `s = plane->base + cols * 384;` both before a plain `for` row loop and at the top of its body.
   - *Unit:* `src/cri/cft.c` (0x284f30, 0x285040).
+- **A second pointer stepping beside the indexed element pointer is the strength-reduced copy, not a variable.**
+  - *Symptom:* a table search `for (i = 0; i < n; i++) { p = &table[i]; if (p->field == 0) break; }` whose first
+    test is made on `p` straight from the table address, then `move v1,s0` after that branch, `addiu v1,v1,size`
+    in the loop and `move s0,v1` before each later test, with the count kept. A source pointer stepped by hand
+    (`q++`, `p = q`) gives the same loop body with the copy before the first branch, in its delay slot.
+  - *Cause:* jump copies the loop's test in front of it, with `i` folded to 0. `loop.c` reduces
+    `p = &table[i]` to a new register and sets it in the pre-header, behind the copied test; the second cse pass
+    turns that into a copy of `p`. A variable initialised before the loop is set ahead of the copied test.
+  - *The load's address:* `loop.c` also reduces the address `&p->field` to a register of its own (`lw v0,0(a0)`,
+    the table base kept in a register to initialise it) when `p` has exactly one use in the loop: a giv used once
+    takes no other giv in, and the address giv inherits its benefit. With no use of `p` in the loop
+    (`table[i].field`, but the copied test then reads through the table base) or two (a copy to a second
+    variable that the first cse pass keeps), `p`'s giv takes the address in and the load is `lw v0,4(s0)`. A
+    `volatile` load keeps its address whatever the count: the pass runs with `volatile` operands unrecognised, so
+    the rewritten load is rejected.
+  - *Reading it:* `-dL` lists each giv with its benefit and prints `giv at N combined with giv at M`; the
+    `Sorted combine statistics` line gives a giv that may not combine a 0.
+  - *Unit:* `src/cri/mwsfcre.c` (0x292ba8).
 
 ### Registers (EE GCC)
 

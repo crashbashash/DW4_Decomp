@@ -336,6 +336,7 @@ volatile	_sceTimerAlarmInit	1	#sony-alarm-id
 asm	DIntr	2	#sony-libkernl-cop0-and-syscall
 volatile	DIntr	1	#sony-libkernl-cop0-and-syscall
 volatile	mwPlyExecSvrHndl	1	#mwsfd-handle-used
+volatile	mwPlyCreateSofdec	1	#mwsfd-handle-used
 volatile	mwsfsvr_VsyncProc	1	#mwsfsvr-vsync-count
 volatile	UTY_InitTmr	8	#sud-timer
 volatile	UTY_GetTmr	7	#sud-timer

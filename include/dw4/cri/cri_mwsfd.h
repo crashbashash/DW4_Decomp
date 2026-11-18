@@ -54,6 +54,7 @@ typedef struct MwsfdPlanes {
 
 struct AdxStmObj;
 struct LscObj;
+struct SfxHn;
 
 #ifdef __cplusplus
 extern "C" {
@@ -140,12 +141,14 @@ int MWSFRNA_GetOutPan(MwsfdPly *ply, int ch);
 void MWSFSFX_Init(void);
 void MWSFSFX_Finish(void);
 int MWSFSFX_CalcHnWorkSiz(int width, int height);
+struct SfxHn *MWSFSFX_Create(int work, int wksize, int a2, int a3);
 void MWSFSFX_Destroy(void *sfx);
 void MWSFSFX_SetCompoMode(MwsfdPly *ply, int mode);
 void MWSFSFX_SetFxType(MwsfdPly *ply, int value);
 void MWSFSFX_SetColAdj(MwsfdPly *ply, int value);
 void MWSFD_SetColAdj(MwsfdPly *ply, int value);
 int MWSFTAG_IsUseAinfSj(MwsfdCreInf *cre);
+SfdSj *MWSFTAG_CreateAinfSj(MwsfdPly *ply);
 void MWSFTAG_DestroyAinfSj(MwsfdPly *ply);
 int MWSFTAG_SetAinfSj(MwsfdPly *ply);
 void mwsfsfx_ResetAddInf(MwsfdPly *ply);
