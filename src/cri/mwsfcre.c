@@ -5,6 +5,7 @@
 #include <string.h>
 #include "dw4/cri/sfd.h"
 #include "dw4/cri/lsc.h"
+#include "dw4/cri/sfmpv.h"
 
 #define MWSFD_MALLOC_MAX 32
 #define MWSFD_ADDINF_BUF_SIZE 0x20000
@@ -38,51 +39,10 @@ extern char E2053005_forgot_free[];
 extern char E204161_mwPlyGetHdrInf_NULL_pointer[];
 extern char E204162_mwPlyGetHdrInf_bufsize_error[];
 extern char E2053001_MWSFD_Malloc_cnt_over[];
-
-/* what SFD_Create takes (68 bytes): a name, the decoder work and the sizes of the buffers handed over */
-typedef struct MwsfdSfdPrm {
-    const char *name;  /* 0 */
-    void *mpvWork;     /* 4 */
-    int f1Size;        /* 8 */
-    int xBufSize;      /* 12 */
-    int mpv0Size;      /* 16 */
-    int f20;
-    int f24;
-    int f28;
-    int f32;
-    int f36;
-    int align;         /* 40: mwsfd_option */
-    int nfrm;          /* 44 */
-    int width;         /* 48 */
-    int height;        /* 52 */
-    int bufFmt;        /* 56 */
-    void *fixedWork;   /* 60 */
-    int fixedSize;     /* 64 */
-} MwsfdSfdPrm;
-
-/* the MPV picture conditions: the chroma plane's size, the picture size and the frame count */
-typedef struct MwsfdMpvCond {
-    int chromaWidth;
-    int chromaHeight;
-    int width;
-    int height;
-    int f16;
-    int dispWidth;
-    int dispHeight;
-    int nfrm;
-    int f32;
-} MwsfdMpvCond;
-
-/* the ADX configuration SFD_Create is given for a video-and-audio stream */
-typedef struct MwsfdAdxCfg {
-    int f0;
-    int f4;
-    void *f8;
-    int f12;
-    int f16;
-    int f20;
-    void *f24;
-} MwsfdAdxCfg;
+extern char E2053002_not_enough_work[];
+extern char E4041301_not_enough_work[];
+extern char E20010703C_mwPlyCreateSofdec_create_error[];
+extern char E20010703D_mwPlyCreateSofdec_set_errcb[];
 
 /* what an SFD's input SJ is laid over */
 typedef enum SfdSupplyKind {
@@ -101,24 +61,26 @@ typedef struct SfdSupplyPrm {
     int f20;
 } SfdSupplyPrm;
 
-extern int mwsfcre_inBufBase;
-extern int mwsfcre_inBufSize;
-extern int mwsfcre_f1Size;
-extern int mwsfcre_xBufSize;
-extern int mwsfcre_mpv0Size;
-extern int mwsfcre_mpv1Size;
-extern int mwsfcre_mpv2Size;
-extern int mwsfcre_frmSize;
-extern int mwsfcre_picBufSize;
-extern MwsfdSfdPrm mwsfcre_sfdPrmType1;
-extern MwsfdSfdPrm mwsfcre_sfdPrmType2;
-extern MwsfdSfdPrm mwsfcre_sfdPrmType3;
-extern MwsfdMpvCond mwsfcre_mpvCond;
-extern MwsfdAdxCfg mwsfcre_adxCfg;
+/* the buffer sizes mwsfcre_CreateSfd works out for the player being made */
+extern unsigned int mwsfd_sisjadr; /* the input ring's start, aligned to 64 bytes */
+extern int sjb;                    /* the input ring (the file SJ) */
+extern int sib;                    /* the system stream input */
+extern int vib;                    /* the video stream input */
+extern int aib;                    /* the audio stream input */
+extern int rfb;                    /* the reference frames */
+extern int tab;                    /* the decoded frames */
+extern int adxwk;                  /* the ADXT work */
+extern int adxibuf;                /* the ADXT input ring */
+/* the creation parameters of each file type: video and audio, video only (MPEG), video only (SFD) */
+extern SfdCrePrm mwsfd_sfdmps_crepara;
+extern SfdCrePrm mwsfd_sfdmpv_crepara;
+extern SfdCrePrm mwsfd_vonlysfd_crepara;
+extern SfdMpvCond mwsfd_mpvpara;
+extern SfdAdxCfg mwsfd_adxtpara;
 
-void *mwsfsfx_Create(char *work, int size, int width, int height);
-SfdSj *mwsfd_CreateAddInfSj(MwsfdPly *ply);
-MwsfdPly *mwsfcre_CreateSfd(MwsfdPly *ply, MwsfdCreInf *cprm);
+void *mwsfcre_CreateSfd(MwsfdPly *ply, MwsfdCreInf *cprm);
+int mwsfcre_IsOutFmtDirect(unsigned int format);
+void mwPlySetSysPicUsrBuf(MwsfdPly *ply, char *buf, int bufsize, int offset);
 int mwsfcre_CheckCprm(MwsfdCreInf *cprm);
 int mwsfcre_IsOkUsrMalloc(MwsfdCreInf *cprm);
 void mwsfcre_InitMemMng(MwsfdPly *ply, MwsfdCreInf *cprm);
@@ -415,6 +377,143 @@ int mwsfcre_MallocTab(MwsfdPly *ply, MwsfdCreInf *cprm, void **frm) {
 }
 
 /* whether an output format is used as decoded (2 and 3 are converted) */
+/* Creates the player's SFD handle: works out the buffer sizes, takes every buffer from the player's
+ * work, fills the creation parameters of its file type and installs the error callback. */
+void *mwsfcre_CreateSfd(MwsfdPly *ply, MwsfdCreInf *cprm) {
+    void *cwk1;
+    void *picusr_p;
+    int mode = cprm->type;
+    void *adxibuf_p;
+    void *adxwk_p;
+    int nfrm = cprm->nfrmPoolWk;
+    int width = cprm->maxWidth;
+    int height = cprm->maxHeight;
+    SfdCrePrm crepara;
+    MwsfdFrmBufs rfbbuf;
+    void *frmtbl[16];
+    int hnwksiz;
+    int buf700siz;
+    int rfbWidth;
+    int rfbHeight;
+    int cwidth;
+    int cheight;
+    void *cwk2;
+    int rfbret;
+    int frmret;
+    void *hnwork_p;
+    void *buf700_p;
+    int fnamesiz;
+    void *fname_p;
+    int fmt;
+    void *sfd;
+
+    mwsfcre_CalcWorkStmBuf(cprm, &sjb, &sib, &vib, &aib, &adxibuf, &adxwk);
+    mwsfcre_CalcWorkFrmBuf(cprm, &rfb, &tab);
+    mpv_GetFixedWorkSizes(cprm, &hnwksiz, &buf700siz);
+    fnamesiz = mwsfcre_GetAlignMargin();
+    /* matching construct: expression search — the grouping orders the size globals' address registers */
+    cwk1 = MWSFD_Malloc(ply, sib + (vib + aib + 64));
+    cwk2 = MWSFD_Malloc(ply, sjb + 64);
+    rfbret = mwsfcre_MallocRfb(ply, cprm, &rfbbuf);
+    frmret = mwsfcre_MallocTab(ply, cprm, frmtbl);
+    if (mwsfcre_IsOutFmtDirect(mode) == 1) {
+        adxibuf_p = MWSFD_Malloc(ply, adxibuf);
+        adxwk_p = MWSFD_Malloc(ply, adxwk);
+    } else {
+        adxibuf_p = 0;
+        adxwk_p = 0;
+    }
+    picusr_p = MWSFD_Malloc(ply, 2048);
+    hnwork_p = MWSFD_Malloc(ply, hnwksiz);
+    buf700_p = MWSFD_Malloc(ply, buf700siz);
+    fname_p = MWSFD_Malloc(ply, fnamesiz);
+    if (cwk1 == 0 || cwk2 == 0 || rfbret != 0 || frmret != 0 || picusr_p == 0 || hnwork_p == 0 || fname_p == 0 ||
+        buf700_p == 0) {
+        MWSFSVM_Error(E2053002_not_enough_work);
+        mwsfcre_AllFree(ply);
+        return 0;
+    }
+    if (mwsfcre_IsOutFmtDirect(mode) == 1) {
+        if (adxibuf_p == 0 || adxwk_p == 0) {
+            MWSFSVM_Error(E4041301_not_enough_work);
+            mwsfcre_AllFree(ply);
+            return 0;
+        }
+    }
+    mwsfd_sisjadr = ((unsigned int)cwk2 + 63) & ~63;
+    mwsfcre_CalcFrmRes(cprm, &rfbWidth, &rfbHeight, &cwidth, &cheight);
+    mwsfd_mpvpara.rfb_width = cwidth;
+    mwsfd_mpvpara.rfb_height = cheight;
+    mwsfd_mpvpara.max_width = rfbWidth;
+    mwsfd_mpvpara.max_height = rfbHeight;
+    mwsfd_mpvpara.rfb_adr = 0;
+    mwsfd_mpvpara.frm_width = rfbWidth;
+    mwsfd_mpvpara.frm_height = rfbHeight;
+    mwsfd_mpvpara.count = nfrm;
+    mwsfd_mpvpara.ta_adr = 0;
+    mwsfd_adxtpara.buf = (char *)adxibuf_p;
+    mwsfd_adxtpara.work = (char *)adxwk_p;
+    switch (mode) {
+    case 1:
+        crepara = mwsfd_sfdmps_crepara;
+        ply->inputBuf = (char *)mwsfd_sisjadr;
+        ply->inputBufSize = sjb - mwsfd_option;
+        ply->inputXSize = mwsfd_option;
+        break;
+    case 2:
+        crepara = mwsfd_sfdmpv_crepara;
+        ply->inputBuf = (char *)mwsfd_sisjadr;
+        ply->inputBufSize = sjb - 2048;
+        ply->inputXSize = 2048;
+        break;
+    case 3:
+        crepara = mwsfd_vonlysfd_crepara;
+        ply->inputBuf = (char *)mwsfd_sisjadr;
+        ply->inputBufSize = sjb - mwsfd_option;
+        ply->inputXSize = mwsfd_option;
+        break;
+    default:
+        break;
+    }
+    crepara.unit = mwsfd_option;
+    if (sib != 0) {
+        sib = sib - sib % mwsfd_option;
+    }
+    fmt = mwsfcre_ConvBufFmtFromMwsfd(cprm->bufFmt);
+    crepara.bufWork = (char *)cwk1;
+    crepara.bufSize[0] = sib;
+    crepara.bufSize[1] = vib;
+    crepara.bufSize[2] = aib;
+    crepara.nfrm = nfrm;
+    crepara.width = width;
+    crepara.height = height;
+    crepara.bufFmt = (SfdBufFmt)fmt;
+    crepara.work = (char *)hnwork_p;
+    crepara.workSize = hnwksiz;
+    SFD_SetMpvParaTbl(&mwsfd_mpvpara, (int *)&rfbbuf, (int *)frmtbl);
+    switch (mode) {
+    case 1:
+        SFD_SetAdxtPara(&mwsfd_adxtpara);
+        break;
+    }
+    SFD_SetSceMpeg(1);
+    sfd = SFD_Create(&crepara, 0);
+    if (sfd == 0) {
+        MWSFLIB_SetErrCode(-305);
+        MWSFSVM_Error(E20010703C_mwPlyCreateSofdec_create_error);
+        return 0;
+    }
+    if (SFD_SetErrFn(sfd, MWSFLIB_SfdErrFunc, ply) != 0) {
+        MWSFLIB_SetErrCode(-303);
+        MWSFSVM_Error(E20010703D_mwPlyCreateSofdec_set_errcb);
+        return 0;
+    }
+    ply->fname = fname_p;
+    ply->fnameMax = fnamesiz;
+    mwPlySetSysPicUsrBuf(ply, picusr_p, 2048, 64);
+    return sfd;
+}
+
 int mwsfcre_IsOutFmtDirect(unsigned int format) {
     switch (format) {
     case 2:
@@ -567,7 +666,6 @@ SfdSj *mwsfcre_CreateSj(MwsfdPly *ply) {
 /* Creates a player and wires every part of it: the SFD handle, the input SJs, the MWSTM stream, the link
  * controller, the sfx and the additional-information SJ. Any failure reports it and destroys the half-made
  * player. */
-
 /* -1 when no work area is given and the malloc/free functions are not both set */
 int mwsfcre_IsOkUsrMalloc(MwsfdCreInf *cprm) {
     MwsfdWork *work = MWSFLIB_GetLibWorkPtr();

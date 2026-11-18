@@ -9190,6 +9190,7 @@
 00291d30	MWSFCRE_SetSupplySj	match	-
 00291e00	mwsfcre_MallocRfb	match	-
 00291f10	mwsfcre_MallocTab	match	-
+00292078	mwsfcre_CreateSfd	match	-
 00292790	mwsfcre_IsOutFmtDirect	match	-
 002927c8	mwPlySetSysPicUsrBuf	match	-
 002927f8	mwsfcre_AttachPicUsrBuf	match	-

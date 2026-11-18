@@ -343,9 +343,9 @@ typedef struct SfdCrePrm {
     char *bufWork;            /* 4 */
     int bufSize[8];           /* 8: the sizes of buffers 0..7 */
     int unit;                 /* 40: the input's sector size, the zero padding of a short read */
-    int f44;                  /* 44: the video ring's reserve */
-    int f48;
-    int f52;
+    int nfrm;                 /* 44: the decoder's frame buffers */
+    int width;                /* 48: the largest picture */
+    int height;               /* 52 */
     SfdBufFmt bufFmt;         /* 56: the frame buffer format */
     char *work;               /* 60: the handle work */
     unsigned int workSize;    /* 64 */

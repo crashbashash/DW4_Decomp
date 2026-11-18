@@ -75,11 +75,11 @@ typedef struct SfdMpvCond {
     int rfb_height;
     int max_width;
     int max_height;
-    int rfb_adr;
+    char *rfb_adr;
     int frm_width;
     int frm_height;
     int count;
-    int ta_adr;
+    char *ta_adr;
 } SfdMpvCond;
 
 typedef struct SfdMpvWorkBufs {

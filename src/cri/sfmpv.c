@@ -130,8 +130,8 @@ void sfmpv_SetDecTtu(SfdPly *player, M2vPicAtr *pic);
 
 void SFD_SetMpvPara(SfdMpvCond *cond) {
     sfmpv_para = *cond;
-    sfmpv_para.rfb_adr = (sfmpv_para.rfb_adr + 0x3F) & ~0x3F;
-    sfmpv_para.ta_adr = (sfmpv_para.ta_adr + 0x3F) & ~0x3F;
+    sfmpv_para.rfb_adr = (char *)(((unsigned int)sfmpv_para.rfb_adr + 0x3F) & ~0x3F);
+    sfmpv_para.ta_adr = (char *)(((unsigned int)sfmpv_para.ta_adr + 0x3F) & ~0x3F);
     memset(&sfmpv_rfb_adr_tbl, 0, 8);
     memset(&sfmpv_ta_adr_tbl, 0, 0x40);
 }
@@ -162,7 +162,7 @@ void SFD_MakeRfbInfo(SfdMpvCond *cond, SfdPlanes *planes) {
     char *base;
     rows = (cond->rfb_height + 15) / 16;
     chromaBlocks = (columns * 8 + 63) / 64;
-    base = (char *)cond->ta_adr;
+    base = cond->ta_adr;
     planes->lumaStride = lumaBlocks << 6;
     planes->chromaStride = chromaBlocks << 6;
     planes->base = base;
@@ -275,7 +275,7 @@ int sfmpv_SetPicUsrBuf(SfdPly *player, char *base, int count, int size)
         sfmpv_InitPicUsr(pool);
         return 0;
     }
-    if (count < player->cre.f44 + 4)
+    if (count < player->cre.nfrm + 4)
         return sfd_ReportError(player, 0xFF000F1D);
     pool->base = base;
     i = 0;
@@ -406,7 +406,7 @@ int sfmpv_IsPrepEnd(SfdPly *player) {
 
 int sfmpv_IsPrepFrmEnough(SfdPly *player) {
     int limit = player->cond[23];
-    int size = player->cre.f44;
+    int size = player->cre.nfrm;
     if (limit == -1) {
         limit = size;
     }
