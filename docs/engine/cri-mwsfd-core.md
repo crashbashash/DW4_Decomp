@@ -88,16 +88,14 @@ Two spellings are what the retail code needs, not style:
 - `mwl_convFrmInfToSFD` writes the SFD frame information through pointer-typed words (`SfdFrmInfWords`, in
   `SfdFrameInfo`'s order): with `SfdFrameInfo`'s own enum and pointer members GCC loads the source words in another
   order. `mwsffrm_DecideFrmType` switches on the picture structure as `unsigned`, as the 2002 header's enum is.
+- `MWSFLIB_SfdErrFunc` tests `obj` and sets the player local in each arm (`ply = obj` with the handle, `ply = 0`
+  without). The set in the other arm keeps cse from folding the copy into `obj`; it is dead and goes, and the copy,
+  now used only in the handle arm, gets `s0` from local-alloc across the `mwPlyGetSfdHn` call, so global allocation
+  puts the code, live in that block, in `s1`. With one `ply` set from the parameter the player and the code are both
+  global pseudos, and the code, with 19 references, is coloured first and takes `s0`.
 
 ## Open questions
 
-- Without source, linking from retail: the SFD error callback `MWSFLIB_SfdErrFunc` (`0x295010`, the `SFD ERROR(%08X)`
-  messages). The best C, which is the SDK `mwsfdlib.o` body plus the DW4 cases (read buffer, frame pool, ADXT count),
-  differs only in register allocation: retail keeps the player in `s0`, the code in `s1` and the high half of the
-  text address in `s4`, and so does the SDK object, but a compile of the SDK-exact C does not (it gives the code
-  `s0` and the player `s1`). The 2002 object and retail agree through the history store, so this is not the later
-  tool chain of [sofdec-build-tool-asm-functions](source-approvals.md#sofdec-build-tool-asm-functions): CRI's C
-  allocated that way under their compiler, and the function stays with matching.
 - Whether `mwply_SetTimeFn` and `mwply_ExecTime` end `mwsfd.c` or open `mwsfply.c`; CRI's names for
   them would settle it by their prefix.
 - `mwply_SetTimeFn` and `mwply_ExecTime` wrap `SFD_SetExtClockFn` and `SFD_UpdateTime` (the names a later build of

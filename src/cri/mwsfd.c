@@ -253,7 +253,66 @@ int mwPlySfdFinish(void)
 }
 
 /* the SFD error callback: keeps the player and SFD handles it was raised for and the code in the history,
- * then reports the code with the text for it */
+ * then reports the code with the text for it. `ply` is set in each arm, as in the original: the copy in the
+ * player arm stays a pseudo of its own, which local-alloc places in s0 across the call, so `code` takes s1 */
+void MWSFLIB_SfdErrFunc(void *obj, int code)
+{
+    MwsfdPly *ply;
+    void *sfd;
+    char *msg = 0;
+
+    if (obj != 0) {
+        ply = obj;
+        sfd = mwPlyGetSfdHn(ply);
+        mwsfd_err_mwsfdhn = (int)ply;
+        mwsfd_err_sfdhn = (int)sfd;
+    } else {
+        ply = 0;
+        sfd = 0;
+        mwsfd_err_mwsfdhn = (int)ply;
+        mwsfd_err_sfdhn = (int)sfd;
+    }
+    if (code != 0) {
+        mwsfd_err_hist[mwsfd_err_hist_cnt] = code;
+        if (mwsfd_err_hist_cnt < 15) {
+            mwsfd_err_hist_cnt++;
+        }
+    }
+    switch (code) {
+    case -3:
+    case -2:
+        sprintf(mwsfd_err_text, mwsfd_errfmt_data, code);
+        break;
+    case 0xff000f40:
+        sprintf(mwsfd_err_text, mwsfd_errfmt_dec, 0xff000f40);
+        if (sfd != 0) {
+            msg = SFD_GetSceErrMessage(sfd);
+        }
+        if (msg != 0) {
+            strncat(mwsfd_err_text, msg, 233);
+        }
+        break;
+    case 0xff000f17:
+    case 0xff000f18:
+        sprintf(mwsfd_err_text, mwsfd_errfmt_max_size, code);
+        break;
+    case 0xff000408:
+    case 0xff00040c:
+    case 0xff000f1c:
+        sprintf(mwsfd_err_text, mwsfd_errfmt_read_buf, code);
+        break;
+    case 0xff000f15:
+        sprintf(mwsfd_err_text, mwsfd_errfmt_frm_pool, 0xff000f15);
+        break;
+    case 0xff000c04:
+        sprintf(mwsfd_err_text, mwsfd_errfmt_adxt_num, 0xff000c04);
+        break;
+    default:
+        sprintf(mwsfd_err_text, mwsfd_errfmt_other, code);
+        break;
+    }
+    MWSFSVM_Error(mwsfd_err_text);
+}
 
 int MWSFD_GetErrMwplyHn(void)
 {

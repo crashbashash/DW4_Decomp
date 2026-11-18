@@ -9283,6 +9283,7 @@
 00294f28	MWSFD_GetErrCode	match	-
 00294f48	mwPlySfdInit	match	-
 00294ff0	mwPlySfdFinish	match	-
+00295010	MWSFLIB_SfdErrFunc	match	-
 00295278	MWSFD_GetErrMwplyHn	match	-
 00295288	MWSFLIB_SetSeekFlg	match	-
 002952b0	MWSFLIB_GetSeekFlg	match	-

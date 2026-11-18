@@ -1141,9 +1141,9 @@ object). It returns the Z-frame chunk's entry between two tags, or 0 and 0 when 
   into the slot whatever the C says: it scans back from the branch over `lw`, `li` and `sd ra`, none of which
   conflicts with it. Only a `volatile` access stops that scan, and the owner did not approve one here.
 * `MWSFLIB_SfdErrFunc` and `mwPlyCreateSofdec`, the other candidates of the ruling, are not approved: the 2002
-  `mwsfdlib.o` allocates the error callback's registers as retail does, so its difference is C to be found, and the
-  2002 `mwsfdcre.o` builds the player search from other source (432-byte handles, another loop), so it shows
-  nothing about the slot.
+  `mwsfdlib.o` allocates the error callback's registers as retail does, and the C that does so was found (it
+  matches); the 2002 `mwsfdcre.o` builds the player search from other source (432-byte handles, another loop), so
+  it shows nothing about the slot.
 
 ### local-decl-vsync-counts
 

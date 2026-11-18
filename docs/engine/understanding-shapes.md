@@ -1509,6 +1509,21 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     (`fields %= 2; dst->field = fields;` in place of a second `field` local).
   - *Unit:* `src/cri/sfmpvps2.c` (0x2a97a0), `src/cri/sfmpv.c` (0x2a5a50).
 
+- **A one-block copy across a call takes the first saved register before global allocation runs.**
+  - *Symptom:* registers only: two values that live across a call sit in `s0`/`s1` the other way round (retail
+    keeps the pointer parameter in `s0` and a much-used second parameter in `s1`), and an object built from SDK-exact
+    C allocates like ours while the SDK object allocates like retail.
+  - *Cause:* global-alloc colours by `floor_log2(refs) * refs / live length`, so the parameter with the most uses
+    (a `switch` index) takes `s0` first. A pseudo used in one block is coloured earlier, by local-alloc, which gives
+    a call-crossing one `s0`; the global pseudos live in that block then conflict with `s0`, and the parameter
+    copied into it from `a0` gets `s0` by copy preference. A local copied from the parameter inside one arm stays a
+    pseudo of its own only when cse cannot fold it into the parameter: a set of the same local in the other arm
+    (dead later, and deleted) makes it the longer-lived register of the pair.
+  - *Spelling:* `if (obj != 0) { ply = obj; ... use ply ... } else { ply = 0; ... }` in place of
+    `ply = obj; if (ply != 0) ...`. Read the allocation order from `-dg` (`;; N regs to allocate:`) and the
+    priorities from `-dl` (`Register N used R times across L insns`).
+  - *Unit:* `src/cri/mwsfd.c` (0x295010).
+
 ### Delay slots (b52)
 
 - **A deleted jump to the next block stops fall-through filling for the whole function.**
