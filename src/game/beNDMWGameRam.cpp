@@ -9,6 +9,7 @@
 #include "dw4/game/beBaseInfoManager.h"
 #include "dw4/game/beDBManager.h"
 #include "dw4/game/beDataBase.h"
+#include "dw4/game/beFont.h"
 #include "dw4/game/beDataObjBool.h"
 #include "dw4/game/beDataObjBoolList.h"
 #include "dw4/game/beDataObjFloatList.h"
@@ -354,10 +355,6 @@ extern "C" void beNDMWGameRam_GiveInitialWeapons(beNDMWGameRam *self, int index)
 extern "C" void beNDMWGameRam_EquipWeapon(beNDMWGameRam *self, int index, int apply);
 extern "C" unsigned char beNDMWGameRam_HasUsableWeapon(beNDMWGameRam *self, int index, int species);
 extern "C" void beNDMWGameRam_JoinPlayer(beNDMWGameRam *self, int index, const char *modelName);
-/* kept local: beFont.h returns beFont_ConvertToUnicode's igSmartPointer by value; this caller hands it the result
- * slot itself (load-bearing, as in LoadCtrl2), so beFont.h and its g_beFont_metaObject stay out. */
-extern "C" void beFont_ConvertToUnicode(void *result, int font, const void *text);
-extern "C" igMetaObject *g_beFont_metaObject;
 extern "C" void beNDMWGameRam_JoinPlayerWithName(beNDMWGameRam *self, int index, void *modelName, StringRef name);
 extern "C" void beNDMWGameRam_JoinPlayerWithUnicodeName(beNDMWGameRam *self, int index, void *modelName, RecoveryRef<0> name);
 extern "C" void beNDMWGameRam_LeavePlayer(beNDMWGameRam *self, int index);
@@ -1292,12 +1289,9 @@ void beNDMWGameRam_JoinPlayerWithName(beNDMWGameRam *self, int index, void *mode
     igSmartPointer<beUnicodeObj> unicodeName(beUnicodeObj_Create(allocator));
     beUnicodeObj_AllocateBuffer(unicodeName.p, 8);
     {
-        /* The looked-up name is an out-parameter the lookup retains; it is released by hand rather
-         * than by a destructor. */
-        beUnicodeObj *converted;
-        int text = (int)name.p;
-        int font = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, &g_beFont_metaObject[0]);
-        beFont_ConvertToUnicode(&converted, font, (const void *)text);
+        const char *text = (const char *)name.p;
+        beFont *font = (beFont *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beFont_metaObject);
+        igSmartPointer<beUnicodeObj> converted(beFont_ConvertToUnicode(font, text));
         k = 0;
         src = (unsigned short *)converted->_buffer;
         base = (unsigned short *)unicodeName.p->_buffer;
@@ -1309,13 +1303,6 @@ void beNDMWGameRam_JoinPlayerWithName(beNDMWGameRam *self, int index, void *mode
             if (k >= 8) break;
         }
         for (; k < 8; k++) base[k] = 0;
-        {
-            beUnicodeObj *convertedRef;
-            if ((convertedRef = converted) != 0) {
-                --convertedRef->_refCount;
-                if ((convertedRef->_refCount & 0x7fffff) == 0) igObject_Destroy(convertedRef);
-            }
-        }
     }
     names = ((ObjectListProperty *)igProperty_GetRecordFolder((igObject *)player, "PLAYERNAME"))->list;
     if (countOf(names) != 0) {

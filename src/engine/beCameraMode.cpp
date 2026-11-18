@@ -12,12 +12,7 @@
 #include "dw4/core/igResult.h"
 #include "dw4/scenegraph/igProbe.h"
 #include "dw4/scenegraph/igIntersectTraversal.h"
-/* Kept here, not dw4/gui/igGuiSystem.h: retail's caller passes the byte unconverted, which an `int` parameter reorders,
- * while the definition's unmasked test needs `int`. */
-struct igGuiSystem;
-struct igMouseCursor;
-extern "C" void igGuiSystem_SetMouseCursor(igGuiSystem *gui, igMouseCursor *cursor);
-extern "C" void igGuiSystem_SetMouseCursorVisible(igGuiSystem *gui, unsigned char visible);
+#include "dw4/gui/igGuiSystem.h"
 #include "dw4/core/igDataLists.h"
 #include "dw4/viewer/igViewModel.h"
 #include "dw4/scenegraph/igCamera.h"
@@ -803,14 +798,15 @@ void igPickMode_OnAttach(igPickMode *pickMode) {
         pickMode->_savedCursor = (int)cursor;
         pickMode->_savedCursorState = ((igGuiSystem *)pickMode->_guiSystem)->_mouseCursorVisible;
         igGuiSystem_SetMouseCursor((igGuiSystem *)pickMode->_guiSystem, (igMouseCursor *)pickMode->_cursor);
-        igGuiSystem_SetMouseCursorVisible((igGuiSystem *)pickMode->_guiSystem, 1);
+        igGuiSystem_SetMouseCursorVisible((igGuiSystem *)pickMode->_guiSystem, true);
     }
 }
 
 void igPickMode_OnDetach(igPickMode *self) {
     if (self->_guiSystem != 0) {
         igGuiSystem_SetMouseCursor((igGuiSystem *)self->_guiSystem, (igMouseCursor *)self->_savedCursor);
-        igGuiSystem_SetMouseCursorVisible((igGuiSystem *)self->_guiSystem, self->_savedCursorState);
+        /* reflected.h spells the igBool _savedCursorState as unsigned char; showCursor takes the kit's igBool (bool). */
+        igGuiSystem_SetMouseCursorVisible((igGuiSystem *)self->_guiSystem, *(bool *)&self->_savedCursorState);
     }
 }
 

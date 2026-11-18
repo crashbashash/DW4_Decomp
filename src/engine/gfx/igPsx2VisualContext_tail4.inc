@@ -1194,13 +1194,13 @@ void FUN_00173fd0(int *arg0, int arg1, int arg2) {
     }
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_209(igPsx2VisualContext *self, int arg1, int arg2) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_209(igPsx2VisualContext *self, int unit, bool enabled) {
     struct O_174030 *arg0 = (struct O_174030 *)self;
-    if (arg0->f == (arg2 & 0xFF)) {
+    if (arg0->f == enabled) {
         DAT_0056091c[0] += 1;
     }
-    arg0->f = arg2;
-    if (arg2 != 0) {
+    arg0->f = enabled;
+    if (enabled) {
         p2EnableCapability(0xD);
         return;
     }
@@ -1278,18 +1278,16 @@ unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_114(void *arg0) {
     return *(int *)((char *)(arg0) + 1372);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_211(igPsx2VisualContext *self, int arg1) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_211(igPsx2VisualContext *self, bool enabled) {
     S_174370 *arg0 = (S_174370 *)self;
-    int var_a1;
 
-    var_a1 = arg1;
     if (g_igPsx2DisableExt_ext6Enabled != 0) {
-        var_a1 = 0;
+        enabled = false;
     }
-    if (arg0->f == (var_a1 & 0xFF)) {
+    if (arg0->f == enabled) {
         DAT_005608a8[0] += 1;
     }
-    arg0->f = var_a1;
+    arg0->f = enabled;
 }
 
 unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_212(void *arg0) {
@@ -1542,17 +1540,17 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_228(void *arg0) {
     return *(int *)((char *)(arg0) + 1256);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_229(igPsx2VisualContext *self, int arg1) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_229(igPsx2VisualContext *self, bool enabled) {
     struct S_174a70 *arg0 = (struct S_174a70 *)self;
 
     if (g_igPsx2DisableExt_ext9Enabled != 0) {
-        arg1 = 0;
+        enabled = false;
     }
-    if (arg0->f1268 == (arg1 & 0xFF)) {
+    if (arg0->f1268 == enabled) {
         DAT_005609a4[0] += 1;
     }
-    arg0->f1268 = arg1;
-    if (arg1 != 0) {
+    arg0->f1268 = enabled;
+    if (enabled) {
         p2EnableCapability(DAT_0048a538[arg0->f1272]);
         return;
     }
@@ -1581,19 +1579,17 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_232(void *arg0) {
     return *(int *)((char *)(arg0) + 1272);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_233(igPsx2VisualContext *self, int v) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_233(igPsx2VisualContext *self, bool enabled) {
     struct S_174bc0 *s = (struct S_174bc0 *)self;
-    int m;
     if (g_igPsx2DisableExt_ext5Enabled != 0) {
-        v = 0;
+        enabled = false;
     }
-    m = v & 0xFF;
-    if (s->f == m) {
+    if (s->f == enabled) {
         DAT_005609ac[0] += 1;
     }
-    if (s->f != m) {
-        s->f = v;
-        if (v != 0) {
+    if (s->f != enabled) {
+        s->f = enabled;
+        if (enabled) {
             p2EnableCapability(0);
             FUN_00174db0(s);
             return;
@@ -1644,13 +1640,13 @@ void FUN_00174db0(void *arg0) {
     p2SetDepthFunction(DAT_0048a540[*(int *)((char *)(arg0) + 1280)], 1);
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_159(igPsx2VisualContext *self, int arg1) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_159(igPsx2VisualContext *self, bool enabled) {
     S_174e20 *arg0 = (S_174e20 *)self;
-    if (arg0->f1260 == ((unsigned char)arg1)) {
+    if (arg0->f1260 == enabled) {
         DAT_005609b8[0] += 1;
     }
-    arg0->f1260 = ((unsigned char)arg1);
-    if ((arg1 != 0) && (arg0->f1288 != 7)) {
+    arg0->f1260 = enabled;
+    if (enabled && (arg0->f1288 != 7)) {
         p2EnableCapability(4);
     } else {
         p2DisableCapability(4);
@@ -1748,16 +1744,16 @@ void FUN_00175090(S0_175090 *arg0, int arg1) {
     arg0->f510 = arg1;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_241(igPsx2VisualContext *self, int arg1) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_241(igPsx2VisualContext *self, bool enabled) {
     struct S_1750c0 *arg0 = (struct S_1750c0 *)self;
     if (g_igPsx2DisableExt_ext4Enabled != 0) {
-        arg1 = 0;
+        enabled = false;
     }
-    if (arg0->mode == (arg1 & 0xFF)) {
+    if (arg0->mode == enabled) {
         DAT_005609cc[0] += 1;
     }
-    arg0->mode = arg1;
-    if (arg1 != 0) {
+    arg0->mode = enabled;
+    if (enabled) {
         p2EnableCapability(7);
         return;
     }

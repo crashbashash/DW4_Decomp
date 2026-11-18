@@ -96,6 +96,14 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_84(struct igPsx2VisualContext *self, i
 void Gap__Gfx__igPsx2VisualContext__vfunc_88(struct igPsx2VisualContext *self, int arg1, float *arg2);
 void Gap__Gfx__igPsx2VisualContext__vfunc_92(struct igPsx2VisualContext *self, int arg1, float fparg0);
 void Gap__Gfx__igPsx2VisualContext__vfunc_94(struct igPsx2VisualContext *self, int arg1, float fparg0);
+void Gap__Gfx__igPsx2VisualContext__vfunc_117(struct igPsx2VisualContext *self, int unit, bool enabled);
+void Gap__Gfx__igPsx2VisualContext__vfunc_159(struct igPsx2VisualContext *self, bool enabled);
+bool Gap__Gfx__igPsx2VisualContext__vfunc_196(struct igPsx2VisualContext *self, int index);
+void Gap__Gfx__igPsx2VisualContext__vfunc_209(struct igPsx2VisualContext *self, int unit, bool enabled);
+void Gap__Gfx__igPsx2VisualContext__vfunc_211(struct igPsx2VisualContext *self, bool enabled);
+void Gap__Gfx__igPsx2VisualContext__vfunc_229(struct igPsx2VisualContext *self, bool enabled);
+void Gap__Gfx__igPsx2VisualContext__vfunc_233(struct igPsx2VisualContext *self, bool enabled);
+void Gap__Gfx__igPsx2VisualContext__vfunc_241(struct igPsx2VisualContext *self, bool enabled);
 void igPsx2VisualContext_CallDmaChain(struct igPsx2VisualContext *self, void *packet, int size, int flush);
 int igPsx2VisualContext_IsDisplayingFirstBuffer(struct igPsx2VisualContext *self);
 

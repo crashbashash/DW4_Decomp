@@ -42,16 +42,6 @@
 #include "dw4/core/igRegistry.h"
 #include "dw4/gfx/igPsx2VisualContext.h"
 #include <math.h>
-/* Kept local: retail's Attrs callers pass and read these flags as bytes, while the Gfx definitions take
- * and return ints (each side matches only with its own type). */
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_117(igPsx2VisualContext *self, int unit, unsigned char enabled);
-extern "C" unsigned char Gap__Gfx__igPsx2VisualContext__vfunc_196(igPsx2VisualContext *self, int index);
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_159(igPsx2VisualContext *self, unsigned char enabled);
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_209(igPsx2VisualContext *self, int unit, unsigned char enabled);
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_211(igPsx2VisualContext *self, unsigned char enabled);
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_229(igPsx2VisualContext *self, unsigned char enabled);
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_233(igPsx2VisualContext *self, unsigned char enabled);
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_241(igPsx2VisualContext *self, unsigned char enabled);
 #include "dw4/core/igObjectSystem.h"
 #include "dw4/core/igObjectList.h"
 #include "dw4/core/igObject.h"
@@ -1569,7 +1559,7 @@ extern "C" void Gap__Attrs__igTextureMatrixAttr__vfunc_32(igTextureMatrixAttr *s
 class igTextureMatrixAttrView;
 extern "C" void Gap__Attrs__igTextureMatrixAttr__vfunc_31(igTextureMatrixAttrView *self, igVisualContextView *context);
 extern "C" void FUN_00141620(void *arg0);
-typedef struct S_141630 { char p0[12]; unsigned char b; char pad[3]; int f16; } S_141630;
+typedef struct S_141630 { char p0[12]; bool b; char pad[3]; int f16; } S_141630;
 
 extern "C" void Gap__Attrs__igTextureMatrixStateAttr__vfunc_24(S_141630 *arg0, igPsx2VisualContext *arg1);
 extern "C" void Gap__Attrs__igTextureMatrixStateAttr__vfunc_17(void *arg0);

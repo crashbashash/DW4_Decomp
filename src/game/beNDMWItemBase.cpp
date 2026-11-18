@@ -146,18 +146,20 @@ char *beNDMWItemBase_GetRecordString(beNDMWItemBase *self, beNDMWStatus *status,
 /* Text colour of an item name: grey for chips, disks, consumables and key items and for the three
  * blank equipment records, otherwise by revision from cyan (1-30) through green, yellow and orange
  * to magenta (1000 and above). */
-igVec3f beNDMWItemBase_GetRevisionColor(beNDMWItemBase *item) {
+void beNDMWItemBase_GetRevisionColor(igVec3f *out, beNDMWItemBase *item) {
     igVec3f color(0.9f, 0.9f, 0.9f);
     int kind = item->_kindNo;
 
     if (kind == ITEM_KIND_ABILITY_CHIP || kind == ITEM_KIND_DISK || kind == ITEM_KIND_INSTANT ||
         kind == ITEM_KIND_IMPORTANT) {
-        return color;
+        *out = color;
+        return;
     }
     if ((kind == ITEM_KIND_WEAPON && item->_recNo == 276) ||
         (kind == ITEM_KIND_BLUE_ARMOR && item->_recNo == 31) ||
         (kind == ITEM_KIND_YELLOW_ARMOR && item->_recNo == 44)) {
-        return color;
+        *out = color;
+        return;
     }
     {
         int revision = ((beNDMWItemRevisionBase *)item)->_revision;
@@ -173,7 +175,7 @@ igVec3f beNDMWItemBase_GetRevisionColor(beNDMWItemBase *item) {
             color = igVec3f(0.1f, 0.9f, 1.0f);
         }
     }
-    return color;
+    *out = color;
 }
 
 /* Shop price of a revised item: the record's HANBAI (sale) or KAITORI (buy-back) value, plus 100

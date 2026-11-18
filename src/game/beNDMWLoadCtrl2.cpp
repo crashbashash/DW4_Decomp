@@ -10,6 +10,7 @@
 #include "dw4/game/beBaseInfoDataList.h"
 #include "dw4/game/beBaseInfoRam.h"
 #include "dw4/game/beDBManager.h"
+#include "dw4/game/beFont.h"
 #include "dw4/game/beLua.h"
 #include "dw4/game/beMessenger.h"
 #include "dw4/game/ndmw/beNDMWItemAbilityChip.h"
@@ -56,9 +57,6 @@
 #define INTS(DST, FN, REC) { igIntList *l = (igIntList *)FN((igObject *)props, REC)->_data; int i = 0; if (0 < l->_count) { do { DST[i] = ((int *)l->_data)[i]; i++; } while (i < l->_count); } }
 #define OWNER_ALLOCATOR(dst, obj) { int alloc = (int)igObject_GetAllocator(obj); if (g_useOwnerAllocator != 0) { dst = alloc; } else { dst = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); } }
 
-/* kept local: beFont.h returns beFont_ConvertToUnicode's igSmartPointer by value; these callers hand it the
- * result slot themselves, which places it in retail's stack slot, so beFont.h (and its g_beFont_metaObject) stays out. */
-extern "C" void beFont_ConvertToUnicode(void *result, int font, const void *text);
 extern "C" void beNDMWDegiData__CopyFrom(beNDMWDegiData *dst, beNDMWDegiData *src);
 /* kept local: ObjectList_ResizeRetained has no include/dw4 home (only CoreLibrary.h declares it). */
 extern "C" int beNDMWLoadCtrl2__GetInfoMeta(void);
@@ -505,8 +503,6 @@ const char *g_loadFontNames[4][20] = {
 };
 }
 extern "C" unsigned char beNDMWLoadIntf2MesWin__IsSequencePlaying(beNDMWLoadIntf2MesWin *win, int player, const char *target, const char *sequence);
-/* kept local: beFont.h stays out (see beFont_ConvertToUnicode above). */
-extern "C" igMetaObject *g_beFont_metaObject;
 
 /* Owning stack reference to the new slot player: constructed from the creating call and released
  * on scope exit (reference count in the low 23 bits of _refCount). Its destructor is emitted out
@@ -1384,13 +1380,10 @@ int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *intf, in
                     DegiDataRef degi((igObject *)((beNDMWDegiData **)((igObjectList *)SLOT_PLAYER(slotPlayer.p)->_saveDataList)->_data)[j]);
                     if (degi.p != 0) REFS(degi.p) = REFS(degi.p) + 1;
                     if (DEGI(degi.p)->_isUse == 1 && DNAME(DEGI(degi.p))[0] != 0xFFFF) {
-                        igObject *str; /* the unicode text beFont_ConvertToUnicode hands back (declared here: its slot sits below the record reference) */
                         digimonName = (unsigned short *)DEGI(degi.p)->_dmName;
-                        {
-                            int insightEntry = (int)igInsightCore_FindManager((igInsightCore *)intf->_insight, g_beFont_metaObject);
-                            beFont_ConvertToUnicode(&str, insightEntry, digimonName);
-                        }
-                        unicodeText = (unsigned short *)((beUnicodeObj *)str)->_buffer;
+                        beFont *font = (beFont *)igInsightCore_FindManager((igInsightCore *)intf->_insight, g_beFont_metaObject);
+                        igSmartPointer<beUnicodeObj> str(beFont_ConvertToUnicode(font, (const char *)digimonName));
+                        unicodeText = (unsigned short *)str->_buffer;
                         for (charIndex = 0; ; ) {
                             ((unsigned short *)DEGI(degi.p) + 5)[charIndex] /* matching construct: object-based index keeps the addu operand order */ = unicodeText[charIndex];
                             if (unicodeText[charIndex] == 0) break;
@@ -1401,7 +1394,6 @@ int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *intf, in
                             ((unsigned short *)DEGI(degi.p) + 5)[charIndex] = 0;
                         }
                         DNAME(DEGI(degi.p))[0] = 0xFFFF;
-                        REL(str);
                     }
                 }
                 PLW(intf, player)->_haveSaveData = (int)slotPlayer.p;
@@ -1863,13 +1855,12 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
         a = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
     {
     ChunkRef nameText((RefCounted *)beUnicodeObj_Create(a));
-    RefCounted * converted;
     beUnicodeObj_AllocateBuffer((beUnicodeObj *)nameText.p, 8);
     unsigned short *dst = (unsigned short *)((beUnicodeObj *)nameText.p)->_buffer;
     unsigned short *q = record->playerName;
     if (q[0] != 0xffff) {
-        beFont_ConvertToUnicode((void *)&converted, font, (const void *)degi->_dmName);
-        unsigned short *src = (unsigned short *)((beUnicodeObj *)converted)->_buffer;
+        igSmartPointer<beUnicodeObj> converted(beFont_ConvertToUnicode((beFont *)font, (const char *)degi->_dmName));
+        unsigned short *src = (unsigned short *)converted->_buffer;
         int i = 0;
         for (; i < 8; i++) {
             dst[i] = src[i];
@@ -1878,7 +1869,6 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
         }
         for (; i < 8; i++)
             dst[i] = 0;
-        { RefCounted *r = converted; RefCountedOps::Release(r); }
     } else {
         int i = 0;
         for (; i < 8; i++) {

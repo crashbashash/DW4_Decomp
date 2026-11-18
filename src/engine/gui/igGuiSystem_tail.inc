@@ -38,10 +38,10 @@ void Gap__Gui__igGuiSystem__vfunc_13(A_456780 *self, int flags) {
     set(x->f16, value);
 }
 
-void igGuiSystem_SetMouseCursorVisible(igGuiSystem *gui, int visible) {
+void igGuiSystem_SetMouseCursorVisible(igGuiSystem *gui, bool visible) {
     T_4569c0 *temp_a0;
     gui->_mouseCursorVisible = visible;
-    if (visible != 0) {
+    if (visible) {
         temp_a0 = ((M_4569c0 *)gui->_mouseCursor)->t;
         temp_a0->f24 = 1.0f;
         temp_a0->f28 = 1.0f;

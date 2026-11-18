@@ -1,5 +1,5 @@
 void Gap__Attrs__igStencilStateAttr__vfunc_24(int arg0, igPsx2VisualContext *arg1) {
-    Gap__Gfx__igPsx2VisualContext__vfunc_159(arg1, *(unsigned char *)((char *)(arg0) + 12));
+    Gap__Gfx__igPsx2VisualContext__vfunc_159(arg1, *(bool *)((char *)(arg0) + 12));
 }
 
 void Gap__Attrs__igStencilStateAttr__vfunc_26(void **arg0, void **arg1) {

@@ -15,6 +15,7 @@
 #include "dw4/game/ndmw/beNDMWItemDisk.h"
 #include "dw4/game/ndmw/beNDMWItemImportant.h"
 #include "dw4/game/ndmw/beNDMWItemInstant.h"
+#include "dw4/game/ndmw/beNDMWItemBase.h"
 #include "dw4/game/ndmw/beNDMWItemWeapon.h"
 #include "dw4/game/ndmw/beNDMWItemYellowArmor.h"
 #include "dw4/game/ndmw/beNDMWMdlItem.h"
@@ -40,8 +41,6 @@
 
 extern "C" unsigned char beNDMWMdlItem_IsKind(int unused, int kind);
 extern "C" int beNDMWMdlItem_GetMeta(void);
-/* kept local: beNDMWItemBase.h is not included: its by-value GetRevisionColor moves the colour off retail's frame slot (load-bearing). */
-extern "C" int beNDMWItemBase_IndexOfRecNo(igObjectList *items, int recNo);
 /* Per instant item (recNo 1..25): the pickup panel model and the sequence it plays. */
 struct ItemPickupSeq { const char *panel; const char *sequence; };
 extern "C" ItemPickupSeq g_itemPickupSeqs[25];
@@ -73,9 +72,6 @@ extern "C" void beNDMWMdlItem_OnSequenceChange(beNDMWMdlItem *self, beBaseInfoRa
 extern "C" { unsigned char g_flagFolderSetValue = 1; }
 extern "C" void beNDMWMdlItem_OnAction1(beNDMWMdlItem *self, beNDMWGameRamInfoRam *ram);
 extern "C" void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram);
-/* kept local: beNDMWItemBase.h is not included: its by-value GetRevisionColor moves the colour off retail's frame slot (load-bearing). */
-extern "C" char *beNDMWItemBase_GetRecordString(int item, beNDMWMdlItem *ctrl, const char *field);
-extern "C" void beNDMWItemBase_GetRevisionColor(float *color, int item);
 extern "C" { beBaseInfoRam *g_mdlEntity; }
 extern "C" { float *g_mdlMatrix; }
 #pragma push
@@ -281,7 +277,7 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
     bool isNear;
     int ramNo;
     int x, y, w, h;
-    float color[3];
+    igVec3f color;
     float itemPos[3];
     float playerPos[3];
     float pos[3];
@@ -367,7 +363,9 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
             beMessenger_AppendString((beMessenger *)self->_messenger, font);
             beMessenger_AppendString((beMessenger *)self->_messenger, "CENTER");
             beMessenger_DispatchSelected((beMessenger *)self->_messenger, "ALIGN");
-            name = beNDMWItemBase_GetRecordString(work->_itemObject, self, "NAME");
+            /* The record getters only read the manager's _messenger: their real parameter is the shared base
+             * beBaseInfoManager, which reflected.h's flattened structs cannot express. */
+            name = beNDMWItemBase_GetRecordString((beNDMWItemBase *)work->_itemObject, (beNDMWStatus *)self, "NAME");
             beMessenger_SelectGroup((beMessenger *)self->_messenger, "TEXTCTL");
             beMessenger_AppendString((beMessenger *)self->_messenger, "ITNAMEFONT");
             beMessenger_AppendString((beMessenger *)self->_messenger, font);
@@ -415,7 +413,7 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
         if (ram->_st0 == 0) break;
     case 1:
         if (beBaseInfoRam_IsTimerExpired(ram, "COLOR")) {
-            beNDMWItemBase_GetRevisionColor(color, work->_itemObject);
+            beNDMWItemBase_GetRevisionColor(&color, (beNDMWItemBase *)work->_itemObject);
             if (work->_isColorLight != 0) {
                 work->_isColorLight = 0;
                 color[0] /= 3.0f;

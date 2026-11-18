@@ -1312,7 +1312,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_195(igPsx2VisualContext *self) {
     return *(unsigned char *)((char *)(self) + 968) == 0;
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_196(igPsx2VisualContext *arg0, int arg1) {
+bool Gap__Gfx__igPsx2VisualContext__vfunc_196(igPsx2VisualContext *arg0, int arg1) {
     struct L196 *temp_s4;
     int temp_v0;
     int var_s2;
@@ -1323,7 +1323,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_196(igPsx2VisualContext *arg0, int arg1
     if (temp_s4->n > 0) {
         temp_v0 = FUN_00177010(arg0, 0, 0, temp_s4->a[0], arg1);
         if ((temp_v0 == 1) || (temp_v0 == 3)) {
-            return 0;
+            return false;
         }
         var_s2 = 0;
         if (temp_v0 == 2) {
@@ -1337,7 +1337,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_196(igPsx2VisualContext *arg0, int arg1
             p2CallDisplayList(temp_s4->a[var_s1]);
         }
     }
-    return 1;
+    return true;
 }
 
 void FUN_0016cc50(int a0, int a1)

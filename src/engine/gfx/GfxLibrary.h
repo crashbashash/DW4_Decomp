@@ -15,15 +15,6 @@
 #include "dw4/gfx/igImage.h"
 #include "dw4/gfx/igParticleArray.h"
 #include "dw4/gfx/igPsx2VisualContext.h"
-/* Attrs declares these with byte-typed flags (its callers need them); the definitions take ints. */
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_117(igPsx2VisualContext *self, int unit, int enabled);
-extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_196(igPsx2VisualContext *self, int index);
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_159(igPsx2VisualContext *self, int enabled);
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_209(igPsx2VisualContext *self, int unit, int enabled);
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_211(igPsx2VisualContext *self, int enabled);
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_229(igPsx2VisualContext *self, int enabled);
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_233(igPsx2VisualContext *self, int enabled);
-extern "C" void Gap__Gfx__igPsx2VisualContext__vfunc_241(igPsx2VisualContext *self, int enabled);
 #include "dw4/gfx/igVertexArray.h"
 #include "dw4/gfx/igVertexArray2.h"
 #include "dw4/gfx/GfxMetaEnums.h"

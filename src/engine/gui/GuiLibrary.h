@@ -952,7 +952,7 @@ extern "C" float DAT_004e117c[4];
 typedef struct Rc_456a60 { int vt; int rc; int p8; } Rc_456a60;
 typedef struct Q { char pad8[8]; int f8; } Q;
 typedef struct P_456a60 { char pad28[28]; Q *f28; } P_456a60;
-typedef struct A_456a60 { char pad12[12]; int f12; char pad16[8]; Rc_456a60 *f24; P_456a60 *f28; unsigned char f32; } A_456a60;
+typedef struct A_456a60 { char pad12[12]; int f12; char pad16[8]; Rc_456a60 *f24; P_456a60 *f28; bool f32; } A_456a60;
 typedef struct R_456a60 { char pad8[8]; Q *f8; } R_456a60;
 typedef struct V3 { int a; int b; int c; int pad[4]; } V3;
 #include "dw4/gui/igGuiSystemModel.h"

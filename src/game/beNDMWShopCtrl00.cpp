@@ -4832,7 +4832,8 @@ void beNDMWShopCtrlDeviceSell_RefreshText(beNDMWShopCtrlDeviceSell *self, int dr
                 beMessenger_AppendString((beMessenger *)self->_messenger, g_fontNames[row]);
                 beMessenger_AppendString((beMessenger *)self->_messenger, priceText);
                 beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET);
-                igVec3f revisionColor = beNDMWItemBase_GetRevisionColor(device);
+                igVec3f revisionColor;
+                beNDMWItemBase_GetRevisionColor(&revisionColor, device);
                 beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_3);
                 beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14);
                 beMessenger_AppendString((beMessenger *)self->_messenger, g_fontNames[row]);
@@ -5649,7 +5650,8 @@ void beNDMWShopCtrlSales_RefreshText(beNDMWShopCtrlSales *self, int refreshRows,
                 ChipPriceText price;
                 text = beNDMWItemBase_GetRecordString((beNDMWItemBase *)item, status, NAME_2);
                 SET_TEXT(self, STWINFONT14, g_fontNames[row], text)
-                igVec3f color = beNDMWItemBase_GetRevisionColor((beNDMWItemBase *)item);
+                igVec3f color;
+                beNDMWItemBase_GetRevisionColor(&color, (beNDMWItemBase *)item);
                 beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_3);
                 beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14);
                 beMessenger_AppendString((beMessenger *)self->_messenger, g_fontNames[row]);

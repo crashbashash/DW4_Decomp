@@ -63,7 +63,7 @@ the fields from the system's Mersenne Twister before calling `_Set`:
 | Sale | 0 | 500 | 1500 | 6000 | 12000 | 24000 |
 | Buy-back | 0 | 250 | 750 | 3000 | 6000 | 12000 |
 
-`beNDMWItemBase_GetRevisionColor` returns the RGB colour the list and shop controllers draw an item
+`beNDMWItemBase_GetRevisionColor` stores the RGB colour the list and shop controllers draw an item
 name in. Ability chips, disks, consumables and key items are grey (0.9, 0.9, 0.9), and so are weapon
 276, blue armour 31 and yellow armour 44. Other weapons and armour are coloured by revision:
 
@@ -76,8 +76,10 @@ name in. Ability chips, disks, consumables and key items are grey (0.9, 0.9, 0.9
 | 1-30 | (0.1, 0.9, 1.0) |
 | 0 | grey |
 
-The colour is an `igVec3f` returned by value. Its copy constructor runs on `return`, and that is what
-gives this frameless leaf its exception record ([exception unwind](exception-unwind.md)).
+The colour is an `igVec3f` the caller passes by address: every caller hands over a vector it declared
+with its other address-taken locals (the slot order shows it). The store through it uses the class's own
+`operator=` (the kit's `igVec3f` declares one), and that inlined assignment is what gives this frameless
+leaf its exception record ([exception unwind](exception-unwind.md)).
 
 `beNDMWItemBase_IndexOfRecNo` returns the index of the first item in an `igObjectList` with a given
 record number, or -1.
@@ -124,14 +126,16 @@ column count is zero.
 
 ## Open questions
 
-- The colour type is spelled `igVec3f` with an explicit copy constructor
+- The colour type is spelled `igVec3f` with an explicit copy constructor and assignment
   ([igVec3f.h](../../include/dw4/maths/igVec3f.h)); the record proves a class with a non-trivial copy,
   not its name. `src/engine/maths/MathsLibrary.h` and `src/game/beWaterPlain.cpp` still declare
   their own `igVec3f`.
 - Weapon 276, blue armour 31 and yellow armour 44 are drawn grey whatever their revision; what those
   records are is not established.
 - `vfunc_22` passes its second argument both as the `GAMERAM` object (insight, system and messenger)
-  and as the status the record getters take; which class callers pass is not established.
+  and as the status the record getters take, and the model item passes itself: the getters read only
+  the `_messenger` of `beBaseInfoManager`, the base of all three, but reflected.h's flattened structs
+  cannot spell that base, so the prototype keeps `beNDMWStatus *`.
 - The callees `igInsightCore_FindManager` (find an object by metaobject in an insight), `beNDMWMdlPEBaseInfoWork_IsPoisoned` and `beNDMWMdlPEBaseInfoWork_CurePoison`
   (test and clear the model work's first timer) belong to other units and keep their placeholders;
   `beNDMWGameRam_ChangeHp`, `beNDMWGameRam_ChangeMp` (add HP and MP) and `igProperty_GetRecordIntList`

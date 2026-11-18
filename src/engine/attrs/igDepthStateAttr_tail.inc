@@ -8,6 +8,6 @@ void Gap__Attrs__igDepthStateAttr__vfunc_32(igDepthStateAttr *self, char enabled
 }
 
 void Gap__Attrs__igDepthStateAttr__vfunc_24(int arg0, igPsx2VisualContext *arg1) {
-    Gap__Gfx__igPsx2VisualContext__vfunc_233(arg1, *(unsigned char *)((char *)(arg0) + 12));
+    Gap__Gfx__igPsx2VisualContext__vfunc_233(arg1, *(bool *)((char *)(arg0) + 12));
 }
 

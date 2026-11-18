@@ -3,7 +3,8 @@ void FUN_00141710(void *arg0) {
 }
 
 void Gap__Attrs__igTextureStateAttr__vfunc_24(igTextureStateAttr *self, igPsx2VisualContext *context) {
-    Gap__Gfx__igPsx2VisualContext__vfunc_117(context, self->_unitID, self->_enabled);
+    /* reflected.h spells the igBool _enabled as unsigned char; the setter takes the kit's igBool (bool). */
+    Gap__Gfx__igPsx2VisualContext__vfunc_117(context, self->_unitID, *(bool *)&self->_enabled);
 }
 
 void Gap__Attrs__igTextureStateAttr__vfunc_17(void *arg0) {

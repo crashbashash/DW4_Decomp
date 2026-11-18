@@ -932,7 +932,7 @@ int Gap__Gfx__igPsx2VisualContext__vfunc_142(void) {
     return 0;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_117(igPsx2VisualContext *self, int arg1, int arg2) {
+void Gap__Gfx__igPsx2VisualContext__vfunc_117(igPsx2VisualContext *self, int arg1, bool enabled) {
     struct TextureStateView117 *arg0 = (struct TextureStateView117 *)self;
     int n;
     int j;
@@ -942,11 +942,11 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_117(igPsx2VisualContext *self, int arg
         n = 15;
     }
     if (n < 8) {
-        if (arg0->a[n] == (arg2 & 0xFF)) {
+        if (arg0->a[n] == enabled) {
             DAT_00560a08[n] += 1;
         }
     }
-    arg0->a[n] = arg2;
+    arg0->a[n] = enabled;
     if (n > 1) {
         j = n - 1;
     } else {
@@ -954,7 +954,7 @@ void Gap__Gfx__igPsx2VisualContext__vfunc_117(igPsx2VisualContext *self, int arg
     }
     p2CurrentProgram = n;
     p2CurrentGsRegisters = &p2GsRegisterSets[j];
-    if (arg2 != 0) {
+    if (enabled) {
         p2EnableCapability(1);
     } else {
         p2DisableCapability(1);

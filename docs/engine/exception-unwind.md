@@ -168,9 +168,10 @@ even when the final code has no frame and no call. A function that only stores
 constants, or copies plain structs, gets none; nor does the same `operator+=`
 spelled `x = x + other.x`, taking its argument by value, or an inlined free
 function doing `*d += s`.
-`beNDMWItemBase_GetRevisionColor` keeps its record because it returns an `igVec3f`
-whose copy constructor runs on `return`; the same body returning a plain struct
-compiles to the same instructions without the record. `beFont_AlignLines` keeps
+`beNDMWItemBase_GetRevisionColor` keeps its record because it stores the colour
+through its `igVec3f *` with the class's own inlined `operator=`; the same stores
+through the implicit assignment compile to the same instructions without the
+record. `beFont_AlignLines` keeps
 its record because it moves every vertex with `*vertex += shift`, an `igVec3f`
 whose `operator+=` is inlined; adding the three floats directly gives the same
 instructions without it.

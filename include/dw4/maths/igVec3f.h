@@ -19,6 +19,12 @@ struct igVec3f {
         y = other.y;
         z = other.z;
     }
+    igVec3f &operator=(const igVec3f &other) {
+        x = other.x;
+        y = other.y;
+        z = other.z;
+        return *this;
+    }
 
     float operator[](int i) const { return (&x)[i]; }
     float &operator[](int i) { return (&x)[i]; }

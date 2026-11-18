@@ -50,6 +50,7 @@
 #include "dw4/game/beMessenger.h"
 #include "dw4/game/ndmw/beNDMWGameRam.h"
 #include "dw4/game/ndmw/beNDMWItemBaseList.h"
+#include "dw4/game/ndmw/beNDMWItemBase.h"
 #include "dw4/game/ndmw/beNDMWListCtrl.h"
 #include "dw4/game/ndmw/beNDMWLoadIntf2.h"
 #include "dw4/game/ndmw/beNDMWShinkaCtrl.h"
@@ -139,11 +140,6 @@ extern "C" int beNDMWListCtrl_GetMeta(void);
 extern "C" void beNDMWStatusCtrlBaseEquip_PreviewSocketSwap(beNDMWStatusCtrlBaseEquip *p);
 extern "C" void beNDMWStatusCtrlBaseEquip_ShowKindCursor(beNDMWStatusCtrlBaseEquip *self, int kind);
 extern "C" void beNDMWStatusCtrlBaseEquip_QueuePanelText(beNDMWStatusCtrlBaseEquip *self);
-/* kept local: beNDMWItemBase.h is not included: its by-value GetRevisionColor moves the colour off retail's frame slot (load-bearing). */
-extern "C" int beNDMWItemBase_GetRecordInt(beNDMWItemBase *self, beNDMWStatus *status, const char *key);
-extern "C" char *beNDMWItemBase_GetRecordString(beNDMWItemBase *self, beNDMWStatus *status, const char *key);
-extern "C" unsigned long long beNDMWItemBase_GetRecordBool(beNDMWItemBase *self, beNDMWStatus *status, const char *key);
-extern "C" void beNDMWItemBase_GetRevisionColor(float *color, beNDMWItemBase *item);
 /* kept local: no include/dw4 home (only CoreLibrary.h declares these). */
 extern "C" int beNDMWStatusMainSlot_GetMeta(void);
 extern "C" void beNDMWStatusSubSlot_PreviewPocketDevice(void);
@@ -1946,7 +1942,7 @@ void beNDMWStatusPowerSocket_RefreshSlotList(beNDMWStatusPowerSocket *self) {
                 beMessenger_AppendString((beMessenger *)self->_messenger, *row);
                 beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)itemName);
                 beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
-                beNDMWItemBase_GetRevisionColor((float *)&b, (beNDMWItemBase *)item);
+                beNDMWItemBase_GetRevisionColor(&b, (beNDMWItemBase *)item);
                 beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
                 beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
                 beMessenger_AppendString((beMessenger *)self->_messenger, *row);
@@ -2560,7 +2556,7 @@ void beNDMWStatusMainSlot_RefreshSlotList(beNDMWStatusMainSlot *self) {
                 beMessenger_AppendString((beMessenger *)self->_messenger, *row);
                 beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)rs);
                 beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
-                beNDMWItemBase_GetRevisionColor((float *)&b, (beNDMWItemBase *)item);
+                beNDMWItemBase_GetRevisionColor(&b, (beNDMWItemBase *)item);
                 beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
                 beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
                 beMessenger_AppendString((beMessenger *)self->_messenger, *row);
@@ -3103,7 +3099,7 @@ void beNDMWStatusSubSlot_RefreshSlotList(beNDMWStatusSubSlot *self) {
                 beMessenger_AppendString((beMessenger *)self->_messenger, *row);
                 beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)itemName);
                 beMessenger_DispatchSelected((beMessenger *)self->_messenger, TEXTSET_3);
-                beNDMWItemBase_GetRevisionColor((float *)&b, (beNDMWItemBase *)item);
+                beNDMWItemBase_GetRevisionColor(&b, (beNDMWItemBase *)item);
                 beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
                 beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT11);
                 beMessenger_AppendString((beMessenger *)self->_messenger, *row);
@@ -3623,7 +3619,7 @@ void beNDMWStatusCtrlD0_RefreshText(beNDMWStatusCtrlD0 *self, int refreshRows, i
     char buf1[2];
     char buf2[2];
     char buf3[2];
-    int vec[4];
+    igVec3f vec;
     if (sp.p != 0) {
         sp.p->_refCount = sp.p->_refCount + 1;
     }
@@ -3653,8 +3649,8 @@ void beNDMWStatusCtrlD0_RefreshText(beNDMWStatusCtrlD0 *self, int refreshRows, i
                 beMessenger_AppendString((beMessenger *)self->_messenger, g_statusFontNames[i]);
                 if (*(unsigned char *)(((igBoolList *)self->_decideList)->_data + i) != 0) {
                     m = self->_messenger;
-                    beNDMWItemBase_GetRevisionColor((float *)vec, item);
-                    beMessenger_AppendVec3((beMessenger *)m, (float *)vec);
+                    beNDMWItemBase_GetRevisionColor(&vec, item);
+                    beMessenger_AppendVec3((beMessenger *)m, &vec.x);
                     beMessenger_DispatchSelected((beMessenger *)self->_messenger, COLOR);
                 } else {
                     beMessenger_DispatchSelected((beMessenger *)self->_messenger, CANCELCOLOR_2);
@@ -5659,7 +5655,7 @@ void beNDMWStatusCtrlSkill_RefreshText(beNDMWStatusCtrlSkill *self, int refreshR
 void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
 {
     ModelNameTable tq;
-    float vec[3];
+    igVec3f vec;
     CellNameRow names;
     float v0[3];
     float vecb[3];
@@ -5918,7 +5914,7 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
                         item = (beNDMWItemBase *)((int *)dl->_data)[self->_selectDevice];
                         beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT14_2, font000_2, (const char *)beNDMWItemBase_GetRecordString(item, (beNDMWStatus *)cx, NAME_3), LEFT_3);
                     }
-                    beNDMWItemBase_GetRevisionColor(vec, item);
+                    beNDMWItemBase_GetRevisionColor(&vec, item);
                     beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5);
                     beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT14_2);
                     beMessenger_AppendString((beMessenger *)self->_messenger, font000_2);
