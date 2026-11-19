@@ -11,6 +11,8 @@ extern int p2DrawPipeline;
 extern int p2ConstantColour;
 /* How sprites take their size; p2SetSpriteSizeMode sets it. */
 extern int p2SpriteSizeMode;
+/* The byte-per-vertex array only sprites unpack (p2SetSpriteByteArray). */
+extern const unsigned char *p2SpriteBytes;
 /* Statistics: vertices and primitives drawn, and vertices blended with four weights. */
 extern unsigned long long p2VertexCount;
 extern unsigned long long p2PrimitiveCount;

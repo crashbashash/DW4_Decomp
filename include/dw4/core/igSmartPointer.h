@@ -177,6 +177,7 @@ igSmartPointer<igObject> *igSmartPointer_igImage_Destruct(igSmartPointer<igObjec
 igSmartPointer<igObject> *igSmartPointer_igInfoList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igIntListList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igIntList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
+igSmartPointer<igObject> *igSmartPointer_igIterateGraph_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igLightingStateAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igLongList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 igSmartPointer<igObject> *igSmartPointer_igMatrix44fList_Destruct(igSmartPointer<igObject> *self, short deleteFlag);

@@ -7,8 +7,7 @@
 #include "dw4/p2/renderState.h"
 #include "dw4/p2/p2multipass.h"
 #include "dw4/core/igMemory.h"
-extern int FUN_001f8b50();
-extern int FUN_001fffb0();
+#include "dw4/p2/p2lighting.h"
 extern int p2LookupStateCacheEntry();
 
 /* The programs that share a feature mask, one per combination of the settings of its features: the
@@ -28,7 +27,6 @@ typedef struct p2VariantTable {
 p2VariantTable *p2FindVariantTable(p2VariantTable *table, long long key);
 int p2MaskGaps(long long mask);
 p2VariantTable *p2CreateVariantTable(int program);
-extern int DAT_0056ae40[4];
 
 /* One slot per bit of a VU program's feature mask. p2VariantsBitN lists the programs that have bit N, one
  * entry per combination of that feature's settings (-1: none); the slot's programs points at it and
@@ -114,7 +112,7 @@ void p2PrepareRenderState(int mask) {
     if (p2DisplayListMode == 0) {
         if (s & 4) {
             p2StatLightsSent += 1;
-            FUN_001f8b50();
+            p2RefreshLightState();
             s = p2DirtyFlags & mask;
         }
         if (s & 0x193) {
@@ -122,7 +120,7 @@ void p2PrepareRenderState(int mask) {
             s = p2DirtyFlags & mask;
             if (p2StateCacheStatus == 0 || (p2StateCacheStatus == 1 && (s & 0x100))) {
                 if (s & 0x10) {
-                    FUN_001fffb0(p2StateCacheStatus);
+                    p2BuildVertexFormat();
                     s |= 0x80;
                     p2DirtyFlags |= 0x80;
                 }
@@ -190,8 +188,6 @@ typedef struct GifTag {
     unsigned long long NREG:4;
     unsigned long long REGS;
 } GifTag;
-extern int DAT_00490d38;
-extern int DAT_00569308;
 
 static inline int remap(int prim) {
     if (prim == 9) {
@@ -402,17 +398,17 @@ void p2SendGifTags(void) {
     } else if (prim == 1 || prim == 2) {
         texPrim = 1;
     } else if (prim == 6) {
-        if (DAT_00569308 != 0) {
+        if (p2SpriteBytes != 0) {
             prim = 3;
             texPrim = 5;
         } else {
             texPrim = 6;
             prim = 6;
         }
-    } else if (DAT_00490d38 == 0) {
+    } else if (p2PolygonMode == 0) {
         texPrim = 0;
         prim = 0;
-    } else if (DAT_00490d38 == 1) {
+    } else if (p2PolygonMode == 1) {
         texPrim = 2;
         prim = 2;
     } else {
@@ -804,7 +800,7 @@ void p2SetupProgramVariants(void) {
     p2FindVuProgramVariants(0x10000, p2VariantsBit16, 8);
     p2FindVuProgramVariants(0x200000, p2VariantsBit21, 4);
     p2FindVuProgramVariants(0x80000000LL, p2VariantsBit31, 3);
-    DAT_0056ae40[0] = p2VariantsBit30[0];
+    p2GsRegisterProgram = p2VariantsBit30[0];
     p2VariantsBit22[8] = p2VariantsBit22[0];
     p2VariantsBit22[9] = p2VariantsBit22[1];
     p2VariantsBit22[10] = p2VariantsBit22[2];

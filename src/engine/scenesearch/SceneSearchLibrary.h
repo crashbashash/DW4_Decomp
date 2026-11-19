@@ -36,10 +36,7 @@ struct SearchSceneGraphFrame { int *vt; int f4; int f8; int fC; int f10; int f14
 #include "dw4/core/igSmartPointer.h"
 #include "dw4/maths/igMatrix44f.h"
 #include "dw4/core/igMetaField.h"
-extern "C" void** FUN_002293d0(void**, int);
 extern "C" int g_igSearchSceneGraph_vtable[4];
-/* InitFields' field tables and field helpers. */
-extern "C" void FUN_00227620(void);
 
 struct RefCounted { int w0; int refs; };
 /* An animation combiner's hierarchy: slots 22 and 23 count its bones and its blend matrices. */

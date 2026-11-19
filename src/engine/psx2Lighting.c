@@ -33,7 +33,7 @@ enum {
     P2_NORMAL_ARRAYS = 0xE180
 };
 
-void p2WriteLights(unsigned int *cursor, int sameCount);
+void p2WriteLights(unsigned int *cursor, int linearAttenuation);
 
 extern char p2LightingEnabled;
 extern char p2LightsNeedTransform;
@@ -53,11 +53,15 @@ extern p2VifCode p2LightingFlush;
 extern p2VifCode p2LightingUnpack;
 extern p2VifCode p2LightingMark;
 extern p2VifCode p2LightingNop;
-extern int DAT_0056af90;
-extern int DAT_0056af94;
-extern int DAT_0056afa4;
-extern int DAT_0056afa8;
-extern char DAT_0056afac[5];
+/* p2RefreshLightState's light classification: whether the four-infinite-light program lights the
+ * draw, how many local (point and spot) lights there are, whether one of them has an ambient colour,
+ * how many of them attenuate linearly only, and which local-light programs are selected (1 local,
+ * 2 local with infinite lights, 3 spot, 4 spot with infinite lights). */
+extern int p2UseInfiniteLightProgram;
+extern int p2LocalLightCount;
+extern int p2LocalLightAmbient;
+extern int p2LinearAttenuationLightCount;
+extern char p2UseLocalLightProgram[5];
 
 void p2InitLighting(void) {
     int i;
@@ -168,14 +172,16 @@ static inline int p2IsMode51(void) {
     return r;
 }
 
-static inline int p2NoSpot(void) {
-    return !DAT_0056afa4;
+static inline int p2NoLocalAmbient(void) {
+    return !p2LocalLightAmbient;
 }
 
-static inline int p2SameCount(void) {
+/* Every local light attenuates linearly only and none has an ambient colour: the LINEAR_ATT programs
+ * take two records per light instead of four. */
+static inline int p2AllLinearAttenuation(void) {
     unsigned char r = 0;
 
-    if (DAT_0056afa8 == DAT_0056af94 && p2NoSpot()) {
+    if (p2LinearAttenuationLightCount == p2LocalLightCount && p2NoLocalAmbient()) {
         r = 1;
     }
     return r;
@@ -194,7 +200,7 @@ unsigned int *p2AppendLightingPacket(unsigned int *cursor) {
     unsigned int *tag;
     int texgen;
     int mode51;
-    int sameCount;
+    int linearAttenuation;
     int words;
     unsigned int *p;
 
@@ -204,9 +210,9 @@ unsigned int *p2AppendLightingPacket(unsigned int *cursor) {
         tag = 0;
         texgen = (p2ProgramFlags[p2CurrentProgram] >> 12) & 1;
         mode51 = p2IsMode51();
-        sameCount = p2SameCount();
+        linearAttenuation = p2AllLinearAttenuation();
         if ((refresh && (p2DirtyFlags & P2_DIRTY_LIGHTING)) ||
-            (DAT_0056af90 == 0 && DAT_0056afac[1] == 0)) {
+            (p2UseInfiniteLightProgram == 0 && p2UseLocalLightProgram[1] == 0)) {
             return 0;
         }
         if (newPacket) {
@@ -214,11 +220,11 @@ unsigned int *p2AppendLightingPacket(unsigned int *cursor) {
             tag = cursor;
             cursor += 4;
         }
-        if (DAT_0056afac[1] != 0) {
-            p2LightingTag.qwc = DAT_0056af94 * (sameCount ? 2 : 4) + 5;
-            p2LightingUnpack.field.num = DAT_0056af94 * (sameCount ? 2 : 4) + 4;
+        if (p2UseLocalLightProgram[1] != 0) {
+            p2LightingTag.qwc = p2LocalLightCount * (linearAttenuation ? 2 : 4) + 5;
+            p2LightingUnpack.field.num = p2LocalLightCount * (linearAttenuation ? 2 : 4) + 4;
             words = p2LightingUnpack.field.num * 4;
-            if (DAT_0056afac[2] != 0) {
+            if (p2UseLocalLightProgram[2] != 0) {
                 p2LightingTag.qwc += 7;
                 p2LightingUnpack.field.num += 7;
                 words += 28;
@@ -238,7 +244,7 @@ unsigned int *p2AppendLightingPacket(unsigned int *cursor) {
             *p = p2LightingNop.word;
             p = cursor++;
             *p = p2LightingUnpack.word;
-            p2WriteLights(cursor, sameCount);
+            p2WriteLights(cursor, linearAttenuation);
             cursor += words;
         } else {
             if (p2LightSpecular != 0) {

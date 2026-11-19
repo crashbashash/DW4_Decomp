@@ -3,15 +3,8 @@ igMetaObject *g_igVectorMorphing_metaObject;
 igMetaObject *igVectorMorphing_GetMetaObject(void)
 {
     igMetaObject *meta = g_igVectorMorphing_metaObject;
-    bool ready;
-
-    if (meta) {
-        ready = meta->_validity & 4;
-        if (ready != false)
-            goto end;
-    }
-    igVectorMorphing_EnsureRegistered();
-end:
+    if (!meta || ((meta->_validity & 4) != 0) == false)
+        igVectorMorphing_EnsureRegistered();
     return g_igVectorMorphing_metaObject;
 }
 
@@ -39,8 +32,8 @@ CallbackArray *igVectorMorphing_Register(void) {
         8, /* instance size */
         igVectorMorphing_GetVTable,
         0,
-        FUN_00186ed0,                                  /* static-initializer callback item (appended on fresh configuration) */
-        0                                              /* 0-terminated dependency-callback list */
+        igVectorMorphing_StaticInitCallback, /* static-initializer callback item (appended on fresh configuration) */
+        0                                    /* 0-terminated dependency-callback list */
     );
 }
 
@@ -48,7 +41,7 @@ void igVectorMorphing_GetMetaObjectFunction(void) {
     igVectorMorphing_GetMetaObject();
 }
 
-void FUN_00186ed0(void) {
-    FUN_0018ec10();
+void igVectorMorphing_StaticInitCallback(void) {
+    igVectorMorphing_InstallFunctions();
 }
 

@@ -1,0 +1,7 @@
+# Struct members whose name an outside source gives and which only look offset-named (`d0`, `b6`, `f12`):
+# scripts/check_struct_conflicts.py report (c) does not read their digits as an offset. A row needs its source.
+# struct	member	source
+IirFilt	d0	CRI 2002 SDK STABS (adx_sje.o, _iir_filt): the predictor's previous sample
+IirFilt	d1	CRI 2002 SDK STABS (adx_sje.o, _iir_filt): the sample before it
+PredictFilt	d0	CRI 2002 SDK STABS (adx_sje.o, predict_filt): the predictor's previous sample
+PredictFilt	d1	CRI 2002 SDK STABS (adx_sje.o, predict_filt): the sample before it

@@ -501,7 +501,7 @@ void igViewerRenderer_ViewportResized(igViewerRenderer *self) {
     igFrustCullTraversal *traversal;
 
     traversal = (igFrustCullTraversal *)self->_sceneTraversal;
-    FUN_001b0000((igAttrStackManager *)traversal->_attrStack, g_igViewportAttr_metaObject,
+    igAttrStackManager_Configure((igAttrStackManager *)traversal->_attrStack, g_igViewportAttr_metaObject,
                  (igAttrDefaultManager *)traversal->_defaultManager, (igVisualContextCapabilityManager *)traversal->_capabilityManager);
 }
 

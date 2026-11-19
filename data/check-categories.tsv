@@ -3428,13 +3428,13 @@
 00186e40	igVectorMorphing_EnsureRegistered	match	-
 00186e50	igVectorMorphing_Register	match	-
 00186ec0	igVectorMorphing_GetMetaObjectFunction	match	-
-00186ed0	FUN_00186ed0	match	-
+00186ed0	igVectorMorphing_StaticInitCallback	match	-
 00186ee0	igVectorBlending_GetMetaObject	match	-
 00186f30	igVectorBlending_GetVTable	match	-
 00186f70	igVectorBlending_EnsureRegistered	match	-
 00186f80	igVectorBlending_Register	match	-
 00186ff0	igVectorBlending_GetMetaObjectFunction	match	-
-00187000	FUN_00187000	match	-
+00187000	igVectorBlending_StaticInitCallback	match	-
 00187010	igVec4ucMetaField_GetMetaObject	match	-
 00187060	igVec4ucMetaField_GetVTable	match	-
 001870f0	igVec4ucMetaField_EnsureRegistered	match	-
@@ -3730,10 +3730,11 @@
 0018e7b0	Gap__igVec4ucMetaField__vfunc_25	match	-
 0018e7c0	igVec4ucMetaField_GetAlignment	match	-
 0018e7d0	igVectorBlending_BlendWeighted	match	-
-0018e8f0	FUN_0018e8f0	match	-
-0018e9b0	FUN_0018e9b0	match	-
-0018e9e0	FUN_0018e9e0	match	-
-0018ec10	FUN_0018ec10	match	-
+0018e8f0	igVectorBlending_BlendOneWeight	match	-
+0018e9b0	igVectorBlending_InstallFunctions	match	-
+0018e9e0	igVectorMorphing_Morph	match	-
+0018ea90	igVectorMorphing_MorphVu0	match	-
+0018ec10	igVectorMorphing_InstallFunctions	match	-
 0018ec40	FUN_0018ec40	match	-
 0018edb0	FUN_0018edb0	match	-
 0018f3e0	FUN_0018f3e0	match	-
@@ -4923,7 +4924,7 @@
 001afb00	FUN_001afb00	match	-
 001afb60	FUN_001afb60	match	-
 001afc90	FUN_001afc90	match	-
-001b0000	FUN_001b0000	match	-
+001b0000	igAttrStackManager_Configure	match	-
 001b0250	FUN_001b0250	match	-
 001b0440	FUN_001b0440	match	-
 001b0450	FUN_001b0450	match	-
@@ -4964,7 +4965,7 @@
 001b42c0	FUN_001b42c0	match	-
 001b4500	FUN_001b4500	match	-
 001b4bb0	FUN_001b4bb0	match	-
-001b4c40	FUN_001b4c40	match	-
+001b4c40	igCommonTraversal_DrawCartoonShader	match	-
 001b68b0	igCommonTraversal_RegisterClass	match	-
 001b68c0	igCommonTraversal_RegisterClassFunction	match	-
 001b6b30	igCommonTraversal_userConstruct	match	-
@@ -5013,8 +5014,8 @@
 001b9f00	FUN_001b9f00	match	-
 001b9fc0	igCommonTraversal_TraverseLightStateSet	match	-
 001ba080	igCommonTraversal_TraverseLod	match	-
-001ba1a0	FUN_001ba1a0	match	-
-001ba200	FUN_001ba200	match	-
+001ba1a0	igCommonTraversal_TraverseBumpMapShader	match	-
+001ba200	igCommonTraversal_TraverseCartoonShader	match	-
 001ba260	FUN_001ba260	match	-
 001ba650	igCommonTraversal_TraversePlanarShadowShader	match	-
 001ba6b0	igCommonTraversal_TraverseProjectiveShadowShaderNode	match	-
@@ -6355,7 +6356,7 @@
 002274a0	igIterateGraph_GetOrCreateMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 002274f0	igIterateGraph_GetMetaObject	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 00227540	igIterateGraph_GetVTable	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
-00227620	FUN_00227620	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+00227620	igIterateGraph_EnsureRegistered	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 00227630	igIterateGraph_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 002276b0	igIterateGraph_GetMetaObjectFunction	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 002276c0	igIterateGraph_InitFields	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
@@ -6438,7 +6439,7 @@
 002292e0	igBase_Register	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 00229340	igBase_GetMetaObjectFunction	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 00229350	igSmartPointer_igGroup_Destruct	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
-002293d0	FUN_002293d0	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
+002293d0	igSmartPointer_igIterateGraph_Destruct	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 00229450	Gap__igOptInterface__vfunc_29	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 00229460	FUN_00229460	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 002294e0	Gap__igOptConfiguration__vfunc_23	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)

@@ -11,8 +11,8 @@ typedef struct p2Statistics {
     long long vertices;
     long long primitives;
     long long textureBinds;
-    long long f24;
-    long long f32;
+    long long textureMemoryUsed;
+    long long textureMemoryFree;
     long long framesTimed;
     long long vsyncs;
     long long stateSends;
@@ -33,15 +33,15 @@ typedef struct p2Statistics {
     long long colourModeChanges;
     long long primitiveChanges;
     long long capabilityChanges;
-    long long f200;
-    long long f208;
+    long long vif1InterruptCount;
+    long long gifInterruptCount;
     long long vif1DmaCount;
     long long vif1PartialPackets;
-    long long f232;
+    long long vif1DmaQuadwords;
     long long vif1DmaTime;
     long long gifDmaCount;
     long long gifPartialPackets;
-    long long f264;
+    long long gifDmaQuadwords;
     long long gifDmaTime;
     long long dmaOverlapTime;
     long long frameTimeTotal;
@@ -66,6 +66,11 @@ typedef struct p2Statistics {
     long long vu1MultiPassVertices;
     long long indexedVertices;
 } p2Statistics;
+
+/* The VU1 program that GS register uploads, the finish marker and program restarts run. */
+extern int p2GsRegisterProgram;
+/* How polygons are drawn: 0 as points, 1 as line strips, otherwise filled. */
+extern int p2PolygonMode;
 
 void p2FlushGsRegisters(void);
 void p2SendGsRegister(int registerIndex);

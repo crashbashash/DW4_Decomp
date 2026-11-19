@@ -497,7 +497,7 @@ int igCommonTraversal_TraverseLod(CullTraversalView *o, CullNodeView *node) {
     return 0;
 }
 
-int FUN_001ba1a0(int a0, int arg1) {
+int igCommonTraversal_TraverseBumpMapShader(int a0, int arg1) {
     S_1ba1a0 *arg0 = (S_1ba1a0 *)a0;
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)arg0->f52, (igAttr *)arg0->f232);
     FUN_001b3ff0((void *)arg1, (int)arg0);
@@ -505,10 +505,10 @@ int FUN_001ba1a0(int a0, int arg1) {
     return 0;
 }
 
-int FUN_001ba200(int arg0_, int arg1) {
+int igCommonTraversal_TraverseCartoonShader(int arg0_, int arg1) {
     T_1ba200 *arg0 = (T_1ba200 *)arg0_;
     FUN_001b1030((igAttrStackManager *)arg0->f34, (igAttr *)arg0->fe8);
-    FUN_001b4c40((TexGenShaderView_1b4c40 *)arg1, (igCommonTraversal *)arg0);
+    igCommonTraversal_DrawCartoonShader((igCartoonShader *)arg1, (igCommonTraversal *)arg0);
     FUN_001b1100((struct A_1b1100 *)arg0->f34, (struct B_1b1100 *)arg0->fe8);
     return 0;
 }

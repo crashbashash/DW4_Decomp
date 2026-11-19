@@ -163,11 +163,9 @@ differs, and they link from the retail image.
 `mwsffrm.c` 7, `mwsfd.c` 4, `sjx.c` 3, `mwsfsfx.c` 2, `mwsfsvr.c` 2, `sfxz.c` 2, `sndf.c` 2, and one each in
 `m2vhdec.c`, `mfci.c`, `mwsfcre.c`, `mwsflsc.c` and `sndfcmd.c`.
 
-**Struct reports** ([debt ratchet](debt-ratchet.md)). One of the three `struct.a` groups (a struct name defined with
-clashing layouts in two files) is CRI's `MwsfdFrm` in `mwsffrm.c` and `mwsfsfx.c`, which see different parts of one
-frame record. The `struct.c` groups (offset-named members whose number is not their offset) include four CRI ones:
-`MwsfdPly.f692`, `SfdFrameDetail.f72`, and the SDK's own `d0`/`d1` members of `IirFilt` and `PredictFilt` in the
-encoder, which the 2002 STABS name that way.
+**Struct reports** ([debt ratchet](debt-ratchet.md)). No CRI struct is in a struct report. The encoder's `IirFilt` and
+`PredictFilt` keep the SDK's own `d0`/`d1` members, which the 2002 STABS name that way; they look offset-named, so
+`config/sourced-member-names.tsv` lists them with that source and report (c) does not count them.
 
 **Fields still named by offset.** About 190 declarations in the CRI headers and sources carry `fNN` or `bNN` names:
 most in the SFD handle parts (`sfd.h`) and the SFX frame (`sfx.h`), then the MWSFD player (`mwply.h`), the SNDF

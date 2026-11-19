@@ -6,6 +6,7 @@
 #include "dw4/p2/dmaChannel.h"
 #include "dw4/p2/p2draw.h"
 #include "dw4/p2/p2multipass.h"
+#include "dw4/p2/renderState.h"
 
 /* GS TEX0.TFX, p2TextureFunction */
 enum {
@@ -501,11 +502,6 @@ int p2LayoutParticleFormat(p2ParticleFormat *format) {
     return format->size;
 }
 
-
-extern int DAT_0056b458;
-
-
-
 void p2WriteParticleBlockCodes(p2ParticleFormat *format) {
     unsigned char *rows;
     int row;
@@ -526,7 +522,7 @@ void p2WriteParticleBlockCodes(p2ParticleFormat *format) {
     *word++ = 0x0C0C0C0C;
     remaining = format->count;
     rows = (unsigned char *)word;
-    p2ParticleMscal.field.immediate = p2GetVuProgramAddress(DAT_0056b458);
+    p2ParticleMscal.field.immediate = p2GetVuProgramAddress(p2VariantsBit30[6]);
     widthField = (unsigned char)(width - 2) << 16;
     for (row = 0; row < format->rowCount; ) {
         if (format->positionCount) {

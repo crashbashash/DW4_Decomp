@@ -70,6 +70,9 @@ void p2EnableLight(int slot);
 void p2DisableLight(int slot);
 void p2EnableLighting(void);
 void p2DisableLighting(void);
+/* Classifies the active lights and selects the lighting program when a light, the material or the
+ * mode changed. */
+void p2RefreshLightState(void);
 void p2SetLight(int slot, p2Light *light);
 void p2SetLightingColor(const float *color);
 void p2SetMaterial(int slot, p2Material *material);

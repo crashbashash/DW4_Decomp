@@ -285,7 +285,7 @@ typedef struct p2GsRegisterSet {
     unsigned long long miptbp2[2];
     unsigned long long texa;
     p2GsFogCol fogcol;
-    unsigned long long f232[3];
+    unsigned long long f264[3];
     p2GsScissor scissor[2];
     p2GsAlpha alpha[2];
     unsigned long long dimx;
@@ -296,9 +296,14 @@ typedef struct p2GsRegisterSet {
     p2GsBit fba[2];
     p2GsFrame frame[2];
     p2GsZbuf zbuf[2];
-    unsigned long long f384[5];
+    unsigned long long bitbltbuf;
+    unsigned long long trxpos;
+    unsigned long long trxreg;
+    unsigned long long trxdir;
+    unsigned long long hwreg;
     unsigned long long signal;          /* the SIGNAL id in the low word, its mask in the high */
-    unsigned long long f432[2];
+    unsigned long long finish;
+    unsigned long long label;           /* the LABEL id in the low word, its mask in the high */
 } p2GsRegisterSet;
 
 /* Where the VU1 programs keep their buffers in VU1 data memory. The vertex batches are double

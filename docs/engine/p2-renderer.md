@@ -208,11 +208,38 @@ The file's data (the `UNPACK`/tag templates from `0x490d40` to `0x490f28`, the n
 dmaChannel's and p2gs's. Within it, the templates of the three unpack writers lie between templates
 that the submit functions use, which is what puts those writers in this file.
 
+**The vertex format.** `p2PrepareRenderState` calls `p2BuildVertexFormat` for dirty bit `0x10` (counted in
+`p2StatVertexFormatsSent`), and the display-list path calls it after filling the format bits itself. It sets
+`p2VertexFormat` from the current program's flags, the bound arrays and the primitive (sprites add their size
+kind and, with `p2SpriteBytes` bound, `0x100`), and `p2VertexArrayMask`, the capability bits the VU1 program
+variant search matches (the normal-array bits `0xE180` come from `p2RefreshLightState`). No other build has a
+counterpart: the VU1 program families are the PS2 back end's.
+
+### What the statistics are
+
+`p2GetStatistics` fills `p2Statistics`, and `igPsx2VisualContext_GetStatisticValue` turns it into the values
+of the platform-independent `IG_GFX_STATISTIC` enumeration, whose names and values (0 vertex count, 1 triangle
+count, ..., 30-35 the VU1 and GIF DMA time, size and count, 36 `GIF_INT_COUNT`, 37 `VIF1_INT_COUNT`, 38
+`WAIT_TIME`, 39 `REMAIN_TIME`, 42 `TEXMEM_SIZE`, 43 `TEXMEMFREE_SIZE`, 44-56 the pool sizes) are the same
+reflected enumeration in the GameCube and Xbox builds. The getter's id-to-word map names the counters the PS2
+build declares but never writes:
+
+| global | statistic |
+| --- | --- |
+| `p2StatVif1InterruptCount` (`0x5690ac`), `p2StatGifInterruptCount` (`0x5690b0`) | `VIF1_INT_COUNT`, `GIF_INT_COUNT` |
+| `p2StatVif1DmaQuadwords` (`0x569158`), `p2StatGifDmaQuadwords` (`0x569178`) | `DMA_VU1_SIZE`, `DMA_GIF_SIZE` (reported times 16, in bytes) |
+| `p2StatTextureMemoryUsed` (`0x56c070`) | `TEXMEM_SIZE`; `TEXMEMFREE_SIZE` is the space above the texture base less it |
+
+`WAIT_TIME` sums `p2DmaWaitTime`, `p2FinishWaitTime`, `p2SleepTime` and four more never-written timer words
+(`0x56c150`, `0x56c154`, `0x56c158`, `0x56c168`); `REMAIN_TIME` is `p2SwapWaitTime`. The enumeration names
+only the sum, and the GameCube getter answers none of these ids (it answers 0-8, 58-59 and 187-192), so
+those four words stay unnamed. The capture report (`0x178970`) prints none of the never-written counters.
+
 Open questions:
 
 * `p2SpriteBytes` (`0x569308`) is a byte-per-vertex array that only sprites unpack. While it is
-  bound, the render state draws sprites as triangles. Its meaning is not known; it might be a
-  rotation.
+  bound, `p2BuildVertexFormat` and `p2SendGifTags` draw sprites as triangles. Its meaning is not
+  known; it might be a rotation.
 * The meanings of the sprite-size kinds that `p2SpriteSizeMode` (`0x569220`) selects are not known.
   Nor is the rule by which display-list playback sets `p2StatMask` (`0x56bad8`).
 * `p2SubmitRecordedVertices` passes no index list to `p2SubmitIndexedVertices` when the display-list

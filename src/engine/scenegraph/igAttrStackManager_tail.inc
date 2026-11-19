@@ -146,8 +146,10 @@ void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
     }
 }
 
-void FUN_001b0000(igAttrStackManager *manager, igMetaObject *arg1, igAttrDefaultManager *defaultManager,
-                  igVisualContextCapabilityManager *capabilityManager)
+/* Binds the default and capability managers and rebuilds one stack for every registered attribute
+ * type; the type argument is unused. */
+void igAttrStackManager_Configure(igAttrStackManager *manager, igMetaObject *meta, igAttrDefaultManager *defaultManager,
+                                  igVisualContextCapabilityManager *capabilityManager)
 {
     AttrStackManagerView *arg0 = (AttrStackManagerView *)manager;
     AttrStackRefView *arg2 = (AttrStackRefView *)defaultManager;

@@ -30,9 +30,30 @@ class Receivers(unittest.TestCase):
         path = self.write("beThing_Update.c", "struct T;\nint other(struct T *t);\nint beThing_Update(void) { return 0; }\n")
         self.assertEqual(csc.receivers(path), set())
 
+    def test_a_later_parameter_of_the_units_class_is_the_receiver(self):
+        path = self.write("igThing_tail.inc",
+                          "struct Shader { int a; };\nstruct igThing;\n"
+                          "void igThing_DrawShader(Shader *self, igThing *thing) { }\n"
+                          "void igThing_Update(Other *o) { }\n")
+        self.assertEqual(csc.receivers(path), {"Other"})
+
     def test_a_vtable_builder_holds_the_class_itself(self):
         self.assertTrue(csc._builds_instance("src/x/beThing_GetVTable.cpp"))
         self.assertFalse(csc._builds_instance("src/x/beThing_InitFields.cpp"))
+
+
+class SourcedNames(unittest.TestCase):
+    def test_a_member_a_source_names_is_not_offset_named(self):
+        path = os.path.join(tempfile.mkdtemp(), "filt.c")
+        open(path, "w").write("struct Filt { short k0; short k1; short d0; short d1; short f6; };\n")
+        views = csc.collect([path], {})
+        flagged = []
+        csc.report_c(views, flagged, sourced=set())
+        self.assertTrue(any(" d0 " in line for line in flagged))
+        kept = []
+        self.assertEqual(csc.report_c(views, kept, sourced={("Filt", "d0"), ("Filt", "d1")}), 1)
+        self.assertFalse(any(" d0 " in line or " d1 " in line for line in kept))
+        self.assertTrue(any(" f6 " in line for line in kept))
 
 
 if __name__ == "__main__":

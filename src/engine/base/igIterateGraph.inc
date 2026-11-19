@@ -4,7 +4,7 @@ igMetaField *g_igIterateGraph_currentIndicesMetaField;
 igMetaField *g_igIterateGraph_actorSkinIterationStateMetaField;
 
 igObject *igIterateGraph_Create(igMemoryPoolView *pool) {
-    FUN_00227620();
+    igIterateGraph_EnsureRegistered();
     return igMetaObject_CreateInstance(g_igIterateGraph_metaObject, pool);
 }
 
@@ -19,7 +19,7 @@ igMetaObject *igIterateGraph_GetMetaObject(void)
 {
     igMetaObject *g = g_igIterateGraph_metaObject;
     if (!g || ((g->_validity & 4) != 0) == false)
-        FUN_00227620();
+        igIterateGraph_EnsureRegistered();
     return g_igIterateGraph_metaObject;
 }
 
@@ -38,7 +38,7 @@ extern "C" int igIterateGraph_GetVTable(void) {
     return r;
 }
 
-void FUN_00227620(void)
+void igIterateGraph_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igIterateGraph_Register);
 }

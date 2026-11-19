@@ -2,19 +2,14 @@ igMetaObject *g_igVectorBlending_metaObject;
 
 igMetaObject *igVectorBlending_GetMetaObject(void)
 {
-    unsigned char ready;
-    if (g_igVectorBlending_metaObject != 0) {
-        ready = (g_igVectorBlending_metaObject->_validity & 4) != 0;
-        if (ready != 0) goto done;
-    }
-    igVectorBlending_EnsureRegistered();
-done:
+    igMetaObject *meta = g_igVectorBlending_metaObject;
+    if (!meta || ((meta->_validity & 4) != 0) == false)
+        igVectorBlending_EnsureRegistered();
     return g_igVectorBlending_metaObject;
 }
 
 int igVectorBlending_GetVTable(void) {
     struct Obj3 obj;
-
     igObject_InitHeader((igObject *)&obj);
     obj.vt = &g_igVectorBlending_vtable[0];
     return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
@@ -37,8 +32,8 @@ CallbackArray *igVectorBlending_Register(void) {
         8, /* instance size */
         igVectorBlending_GetVTable,
         0,
-        FUN_00187000,                                  /* static-initializer callback item (appended on fresh configuration) */
-        0                                              /* 0-terminated dependency-callback list */
+        igVectorBlending_StaticInitCallback, /* static-initializer callback item (appended on fresh configuration) */
+        0                                    /* 0-terminated dependency-callback list */
     );
 }
 
@@ -46,7 +41,7 @@ void igVectorBlending_GetMetaObjectFunction(void) {
     igVectorBlending_GetMetaObject();
 }
 
-void FUN_00187000(void) {
-    FUN_0018e9b0();
+void igVectorBlending_StaticInitCallback(void) {
+    igVectorBlending_InstallFunctions();
 }
 

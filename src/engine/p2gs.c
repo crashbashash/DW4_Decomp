@@ -10,14 +10,9 @@
 #include "dw4/p2/renderState.h"
 #include "dw4/sony/libkernl.h"
 #include "dw4/p2/p2textureCalls.h"
-extern int DAT_005690ac[4];
-extern int DAT_005690b0[4];
-extern long long DAT_00569158[4];
-extern long long DAT_00569178[4];
 /* The vertices and primitives drawn from display lists. */
 extern long long p2StatDisplayListVertices;
 extern long long p2StatDisplayListPrimitives;
-extern long long DAT_0056c070[4];
 extern int DAT_0056c150[4];
 extern int DAT_0056c154[4];
 extern int DAT_0056c158[4];
@@ -81,7 +76,6 @@ typedef union GifQuad {
     unsigned __int128 q;
 } GifQuad;
 
-extern int DAT_0056ae40;
 extern VifCode p2GsRegisterPacketMscal;
 extern DmaTag p2GsRegisterDmaTag;
 extern GifQuad p2GsRegisterGifTag;
@@ -132,12 +126,12 @@ void p2GetStatistics(void *statistics) {
     stats->displayListVertices = p2StatDisplayListVertices;
     stats->displayListPrimitives = p2StatDisplayListPrimitives;
     stats->textureBinds = p2StatTextureBinds;
-    stats->f24 = DAT_0056c070[0];
+    stats->textureMemoryUsed = p2StatTextureMemoryUsed;
     p2GetTextureBase(&textureSpace);
     textureSpace = (0x4000 - textureSpace) << 8;
-    stats->f200 = DAT_005690ac[0];
-    stats->f208 = DAT_005690b0[0];
-    stats->f32 = (textureSpace - DAT_0056c070[0]);
+    stats->vif1InterruptCount = p2StatVif1InterruptCount;
+    stats->gifInterruptCount = p2StatGifInterruptCount;
+    stats->textureMemoryFree = (textureSpace - p2StatTextureMemoryUsed);
     stats->framesTimed = p2FramesTimed;
     stats->vsyncs = p2Vsyncs;
     stats->stateSends = p2StatStateSends;
@@ -160,11 +154,11 @@ void p2GetStatistics(void *statistics) {
     stats->capabilityChanges = p2StatCapabilityChanges;
     stats->vif1DmaCount = p2StatVif1DmaCount;
     stats->vif1PartialPackets = p2StatVif1PartialPackets;
-    stats->f232 = DAT_00569158[0];
+    stats->vif1DmaQuadwords = p2StatVif1DmaQuadwords;
     stats->vif1DmaTime = p2StatVif1DmaTime;
     stats->gifDmaCount = p2StatGifDmaCount;
     stats->gifPartialPackets = p2StatGifPartialPackets;
-    stats->f264 = DAT_00569178[0];
+    stats->gifDmaQuadwords = p2StatGifDmaQuadwords;
     stats->gifDmaTime = p2StatGifDmaTime;
     stats->dmaOverlapTime = p2StatDmaOverlapTime;
     stats->frameTimeTotal = p2FrameTimeTotal;
@@ -285,7 +279,7 @@ void p2SetSpriteHalfSize(float halfSize) {
 }
 
 void p2SetPolygonMode(int mode) {
-    *(int *)0x490D38 = mode;
+    p2PolygonMode = mode;
     p2DirtyFlags |= 0x19;
 }
 
@@ -380,7 +374,7 @@ void p2UploadGsRegisters(int count, int *regs) {
     int n;
 
     if (p2CurrentProgram == 0) {
-        p2GsRegisterPacketMscal.field.immediate = p2GetVuProgramAddress(DAT_0056ae40);
+        p2GsRegisterPacketMscal.field.immediate = p2GetVuProgramAddress(p2GsRegisterProgram);
         for (; count > 0; count -= n, regs += n) {
             int i;
             unsigned __int128 *p;
@@ -475,7 +469,7 @@ void p2AppendGsFinish(void) {
 
     p.w = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
     tag = p2FinishPacketGifTag;
-    p2FinishPacketMscal.field.immediate = p2GetVuProgramAddress(DAT_0056ae40);
+    p2FinishPacketMscal.field.immediate = p2GetVuProgramAddress(p2GsRegisterProgram);
     tag.f.nreg = 2;
     p2FinishPacketTag.f.qwc = 5;
     p.w[0] = p2FinishPacketTag.w[0];
@@ -511,7 +505,7 @@ void p2AppendProgramRestart(void) {
     p2PacketPointer p;
 
     p.w = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
-    p2RestartPacketMscal.field.immediate = p2GetVuProgramAddress(DAT_0056ae40);
+    p2RestartPacketMscal.field.immediate = p2GetVuProgramAddress(p2GsRegisterProgram);
     p.w[0] = p2RestartPacketTag.w[0];
     p.w[1] = p2RestartPacketTag.w[1];
     p.w[2] = p2RestartPacketTag.w[2];

@@ -1,3 +1,5 @@
+/* Each vertex is the sum of its weightCount bone transforms scaled by their weights; a weight at or below 0.0001
+   is skipped. */
 void igVectorBlending_BlendWeighted(const float *in, unsigned int count, const float *weights, const unsigned char *bones,
                   unsigned int weightCount, const float (*matrices)[16], float *out, int outStride) {
     unsigned int i;
@@ -6,6 +8,7 @@ void igVectorBlending_BlendWeighted(const float *in, unsigned int count, const f
     float x, y, z, rx, ry, rz;
     const float *m;
     unsigned char bone;
+
     for (i = 0; i < count; i++) {
         out[0] = 0.0f;
         out[1] = 0.0f;
@@ -34,11 +37,12 @@ void igVectorBlending_BlendWeighted(const float *in, unsigned int count, const f
     }
 }
 
-int *g_igVectorBlending_blendWeighted;
-int *g_igVectorBlending_blendRigid;
+igVectorBlendFunction g_igVectorBlending_blendWeighted;
+igVectorBlendFunction g_igVectorBlending_blendOneWeight;
 
-void FUN_0018e8f0(const float *in, unsigned int count, const float *weights, const unsigned char *bone,
-                  int boneStride, const float (*matrices)[16], float *out, int outStride) {
+/* One bone per vertex at full weight: the first of its weightCount bone indices (weights is not read). */
+void igVectorBlending_BlendOneWeight(const float *in, unsigned int count, const float *weights, const unsigned char *bones,
+                  unsigned int weightCount, const float (*matrices)[16], float *out, int outStride) {
     unsigned int i;
     const float *m;
     float x;
@@ -49,11 +53,11 @@ void FUN_0018e8f0(const float *in, unsigned int count, const float *weights, con
     float rz;
 
     for (i = 0; i < count; i++) {
-        m = matrices[*bone];
+        m = matrices[*bones];
         x = in[0];
         y = in[1];
         z = in[2];
-        bone += boneStride;
+        bones += weightCount;
         rx = m[12] + (x * m[0] + y * m[4] + z * m[8]);
         ry = m[13] + (x * m[1] + y * m[5] + z * m[9]);
         rz = m[14] + (x * m[2] + y * m[6] + z * m[10]);
@@ -65,8 +69,8 @@ void FUN_0018e8f0(const float *in, unsigned int count, const float *weights, con
     }
 }
 
-void FUN_0018e9b0(void) {
-    g_igVectorBlending_blendWeighted = (int *)(&igVectorBlending_BlendWeighted);
-    g_igVectorBlending_blendRigid = (int *)(&FUN_0018e8f0);
+void igVectorBlending_InstallFunctions(void) {
+    g_igVectorBlending_blendWeighted = igVectorBlending_BlendWeighted;
+    g_igVectorBlending_blendOneWeight = igVectorBlending_BlendOneWeight;
 }
 

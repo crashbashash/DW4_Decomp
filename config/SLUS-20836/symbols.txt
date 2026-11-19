@@ -3470,13 +3470,13 @@
 00186e40 00000c igVectorMorphing_EnsureRegistered
 00186e50 00006c igVectorMorphing_Register
 00186ec0 000008 igVectorMorphing_GetMetaObjectFunction
-00186ed0 000008 FUN_00186ed0
+00186ed0 000008 igVectorMorphing_StaticInitCallback
 00186ee0 000048 igVectorBlending_GetMetaObject
 00186f30 00003c igVectorBlending_GetVTable
 00186f70 00000c igVectorBlending_EnsureRegistered
 00186f80 00006c igVectorBlending_Register
 00186ff0 000008 igVectorBlending_GetMetaObjectFunction
-00187000 000008 FUN_00187000
+00187000 000008 igVectorBlending_StaticInitCallback
 00187010 000048 igVec4ucMetaField_GetMetaObject
 00187060 000084 igVec4ucMetaField_GetVTable
 001870f0 00000c igVec4ucMetaField_EnsureRegistered
@@ -3777,11 +3777,11 @@
 0018e7b0 000008 Gap__igVec4ucMetaField__vfunc_25 Gap::igVec4ucMetaField::vfunc_25
 0018e7c0 000008 igVec4ucMetaField_GetAlignment
 0018e7d0 00011c igVectorBlending_BlendWeighted
-0018e8f0 0000bc FUN_0018e8f0
-0018e9b0 000024 FUN_0018e9b0
-0018e9e0 0000b0 FUN_0018e9e0
-0018ea90 000174 FUN_0018ea90
-0018ec10 000024 FUN_0018ec10
+0018e8f0 0000bc igVectorBlending_BlendOneWeight
+0018e9b0 000024 igVectorBlending_InstallFunctions
+0018e9e0 0000b0 igVectorMorphing_Morph
+0018ea90 000174 igVectorMorphing_MorphVu0
+0018ec10 000024 igVectorMorphing_InstallFunctions
 0018ec40 000164 FUN_0018ec40
 0018edb0 000628 FUN_0018edb0
 0018f3e0 000008 FUN_0018f3e0
@@ -4981,7 +4981,7 @@
 001afb00 000054 FUN_001afb00
 001afb60 000124 FUN_001afb60
 001afc90 000370 FUN_001afc90
-001b0000 000244 FUN_001b0000
+001b0000 000244 igAttrStackManager_Configure
 001b0250 0001e4 FUN_001b0250
 001b0440 000008 FUN_001b0440
 001b0450 000298 FUN_001b0450
@@ -5027,7 +5027,7 @@
 001b4500 000064 FUN_001b4500
 001b4570 000640 FUN_001b4570
 001b4bb0 000088 FUN_001b4bb0
-001b4c40 001c6c FUN_001b4c40
+001b4c40 001c6c igCommonTraversal_DrawCartoonShader
 001b68b0 000010 igCommonTraversal_RegisterClass
 001b68c0 000270 igCommonTraversal_RegisterClassFunction
 001b6b30 0000a8 igCommonTraversal_userConstruct
@@ -5077,8 +5077,8 @@
 001b9f00 0000b4 FUN_001b9f00
 001b9fc0 0000bc igCommonTraversal_TraverseLightStateSet
 001ba080 000120 igCommonTraversal_TraverseLod
-001ba1a0 000054 FUN_001ba1a0
-001ba200 000054 FUN_001ba200
+001ba1a0 000054 igCommonTraversal_TraverseBumpMapShader
+001ba200 000054 igCommonTraversal_TraverseCartoonShader
 001ba260 0003ec FUN_001ba260
 001ba650 000054 igCommonTraversal_TraversePlanarShadowShader
 001ba6b0 000028 igCommonTraversal_TraverseProjectiveShadowShaderNode
@@ -6073,7 +6073,7 @@
 001f8a30 00006c p2SetLight
 001f8aa0 00003c p2SetLightingColor
 001f8ae0 00006c p2SetMaterial
-001f8b50 0008d4 FUN_001f8b50
+001f8b50 0008d4 p2RefreshLightState
 001f9430 001a4c p2UpdateLights
 001fae80 000218 FUN_001fae80
 001fb0a0 000040 p2SetLightingMode
@@ -6111,7 +6111,7 @@
 001ff3b0 000370 p2PrepareRenderState
 001ff720 0005c8 p2SendRenderState
 001ffcf0 0002b8 p2SendGifTags
-001fffb0 000880 FUN_001fffb0
+001fffb0 000880 p2BuildVertexFormat
 00200830 00014c p2SelectVariantTables
 00200980 000e88 p2BuildFunctionTables
 00201810 000274 p2SendPassSetup
@@ -6479,7 +6479,7 @@
 002274a0 000048 igIterateGraph_GetOrCreateMetaObject
 002274f0 000048 igIterateGraph_GetMetaObject
 00227540 0000d8 igIterateGraph_GetVTable
-00227620 00000c FUN_00227620
+00227620 00000c igIterateGraph_EnsureRegistered
 00227630 000074 igIterateGraph_Register
 002276b0 000008 igIterateGraph_GetMetaObjectFunction
 002276c0 0000b8 igIterateGraph_InitFields
@@ -6562,7 +6562,7 @@
 002292e0 000060 igBase_Register
 00229340 000008 igBase_GetMetaObjectFunction
 00229350 000080 igSmartPointer_igGroup_Destruct
-002293d0 000080 FUN_002293d0
+002293d0 000080 igSmartPointer_igIterateGraph_Destruct
 00229450 000008 Gap__igOptInterface__vfunc_29 Gap::igOptInterface::vfunc_29
 00229460 000080 FUN_00229460
 002294e0 000008 Gap__igOptConfiguration__vfunc_23 Gap::igOptConfiguration::vfunc_23

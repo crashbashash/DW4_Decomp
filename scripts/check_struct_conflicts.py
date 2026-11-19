@@ -13,10 +13,12 @@ each member's offset and size, and reports:
   (b) the receiver view of a unit named for a reflected class (`<Class>_<Method>`, `Gap__*__<Class>__vfunc_N`)
       whose member at an offset disagrees in size with the reflected field there, or lies beyond
       the registered instance size. The receiver is the view named for the class or taken as a function's
-      first parameter, or any view of a `_GetVTable` or `_Construct` unit; other local views describe
-      other objects;
+      first parameter (unless a later parameter is the class itself, as in a traversal's handler for a shader
+      passed first), or any view of a `_GetVTable` or `_Construct` unit; other local views describe other objects;
   (c) an offset-named member (`fNN`, `wNN`, `pNN`, `_NN`, ...) whose NN is not the member's
-      decimal offset (hex spellings `f0x1c` / `f_1c` are accepted when they match).
+      decimal offset (hex spellings `f0x1c` / `f_1c` are accepted when they match). A member whose name
+      comes from an outside source (an SDK's debug information) is not offset-named: config/sourced-member-names.tsv
+      lists each as `struct<TAB>member<TAB>source`.
 
 The output is grouped by struct name with file:line pairs.  It is a report, not a gate
 (`make struct-report`): the lead schedules the fixes.  The parser is approximate (no
@@ -301,17 +303,23 @@ def report_a(views, out):
 
 
 # The first parameter of a function definition, when it is a pointer or reference to a named type: the
-# receiver of a unit named `<Class>_<Method>` or `Gap__*__<Class>__vfunc_N`.
+# receiver of a unit named `<Class>_<Method>` or `Gap__*__<Class>__vfunc_N`. The rest of the list is kept so that a
+# function taking the unit's class itself in a later parameter (a traversal's handler for another object, passed
+# first) is not read as taking the other object as the receiver.
 RECEIVER_RE = re.compile(r"\b\w+\s*\(\s*(?:const\s+)?(?:struct\s+|class\s+)?(\w+)\s*(?:const\s*)?[*&]"
-                         r"[^;{}()]*(?:\([^;{}()]*\)[^;{}()]*)*\)\s*(?:const\s*)?\{")
+                         r"([^;{}()]*(?:\([^;{}()]*\)[^;{}()]*)*)\)\s*(?:const\s*)?\{")
 _receivers = {}
 
 
 def receivers(path):
-    """The type names a file's function definitions take as their first, receiving parameter."""
+    """The type names a file's function definitions take as their first, receiving parameter, except where a
+    later parameter is a pointer or reference to the class the file is named for."""
     if path not in _receivers:
         text = strip_comments(open(path, errors="replace").read())
-        _receivers[path] = set(RECEIVER_RE.findall(text))
+        cls = class_of_unit(path)
+        own = cls and re.compile(r"\b%s\s*(?:const\s*)?[*&]" % re.escape(cls))
+        _receivers[path] = {first for first, rest in RECEIVER_RE.findall(text)
+                            if first == cls or not (own and own.search(rest))}
     return _receivers[path]
 
 
@@ -365,8 +373,24 @@ def report_b(views, reflected, out):
     return groups
 
 
-def report_c(views, out):
-    """Offset-named members whose number is not the member's offset."""
+SOURCED_NAMES = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "config",
+                             "sourced-member-names.tsv")
+
+
+def sourced_names(path=SOURCED_NAMES):
+    """{(struct, member)} named by a source, from config/sourced-member-names.tsv (empty when it is absent)."""
+    names = set()
+    if os.path.exists(path):
+        for line in open(path):
+            cols = line.rstrip("\n").split("\t")
+            if line.strip() and not line.startswith("#") and len(cols) >= 3 and cols[2].strip():
+                names.add((cols[0], cols[1]))
+    return names
+
+
+def report_c(views, out, sourced=None):
+    """Offset-named members whose number is not the member's offset, except members a source names."""
+    sourced = sourced_names() if sourced is None else sourced
     groups = 0
     for v in views:
         if v.kind == "union":
@@ -374,7 +398,7 @@ def report_c(views, out):
         lines = []
         for m in v.members:
             om = OFFSET_NAME_RE.match(m.name)
-            if not om or PAD_RE.match(m.name):
+            if not om or PAD_RE.match(m.name) or (v.name, m.name) in sourced:
                 continue
             digits = om.group(1)
             if digits.startswith("0x") or re.search(r"[a-fA-F]", digits):

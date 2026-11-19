@@ -268,7 +268,7 @@ int FUN_001b4bb0(igCommonTraversal *traversal, int node) {
     return 0;
 }
 
-/* The attribute objects FUN_001b4c40 drives through their virtual slots. */
+/* The attribute objects igCommonTraversal_DrawCartoonShader drives through their virtual slots. */
 class ShaderAttrView_1b4c40 : public igVirtualObject {
 public:
     virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5();
@@ -288,17 +288,17 @@ public:
     short _cachedUnitID;
     ShaderAttrView_1b4c40 *_texture;
 };
-struct TexGenShaderView_1b4c40 {
+struct igCartoonShader {
     char _pad0[32];
-    ShaderAttrView_1b4c40 *_eyeTexture;
-    ShaderAttrView_1b4c40 *_lightTexture;
-    int _matrices;
-    int _geometries;
-    int _eyeTextureUnit;
-    int _lightTextureUnit;
+    ShaderAttrView_1b4c40 *_oTex;
+    ShaderAttrView_1b4c40 *_sTex;
+    int _mats;
+    int _geoms;
+    int _oTexCoordIndex;
+    int _sTexCoordIndex;
     char _pad56[92];
-    ShaderAttrView_1b4c40 *_eyeTexGen;
-    ShaderAttrView_1b4c40 *_lightTexGen;
+    ShaderAttrView_1b4c40 *_tcs0;
+    ShaderAttrView_1b4c40 *_tcs1;
 };
 struct ImageView_1b4c40 { char _pad0[16]; int _format; char _pad20[24]; int _levels; };
 extern "C" ShaderAttrView_1b4c40 *DAT_005625f8;
@@ -347,7 +347,7 @@ static inline void popAttr_1b4c40(igAttrStackManager *manager, ShaderAttrView_1b
     igAttrStackManager_MarkStackChanged(manager, (igAttrStack *)stack, slot);
 }
 
-void FUN_001b4c40(TexGenShaderView_1b4c40 *self, igCommonTraversal *traversal) {
+void igCommonTraversal_DrawCartoonShader(igCartoonShader *self, igCommonTraversal *traversal) {
     int saved[32];
     /* matching construct: declaration order (count s6, procs s5, meta s4, manager s3), from a 120-order search */
     int i;
@@ -356,25 +356,25 @@ void FUN_001b4c40(TexGenShaderView_1b4c40 *self, igCommonTraversal *traversal) {
     igMetaObject *meta;
     igAttrStackManager *manager;
     ImageView_1b4c40 *image;
-    if (self->_eyeTexture == 0 || self->_lightTexture == 0) {
+    if (self->_oTex == 0 || self->_sTex == 0) {
         return;
     }
-    self->_eyeTexture->setEnabled(0);
-    if (((ImageView_1b4c40 *)igTextureAttr_GetImage((igTextureAttr *)self->_eyeTexture->_texture, 0))->_format != 1) {
+    self->_oTex->setEnabled(0);
+    if (((ImageView_1b4c40 *)igTextureAttr_GetImage((igTextureAttr *)self->_oTex->_texture, 0))->_format != 1) {
         return;
     }
-    image = (ImageView_1b4c40 *)igTextureAttr_GetImage((igTextureAttr *)self->_eyeTexture->_texture, 0);
+    image = (ImageView_1b4c40 *)igTextureAttr_GetImage((igTextureAttr *)self->_oTex->_texture, 0);
     if (image->_levels != 1) {
         FUN_00157200((igImage *)image, 1, (igImage *)image);
     }
-    self->_eyeTexture->_texture->set32(0);
-    self->_eyeTexture->_texture->set33(0);
-    self->_lightTexture->_texture->set32(0);
-    self->_lightTexture->_texture->set33(0);
-    self->_lightTexture->_texture->set30(0);
-    self->_eyeTexture->_texture->set31(0);
-    self->_eyeTexGen->set31(self->_lightTextureUnit);
-    self->_lightTexGen->set31(self->_eyeTextureUnit);
+    self->_oTex->_texture->set32(0);
+    self->_oTex->_texture->set33(0);
+    self->_sTex->_texture->set32(0);
+    self->_sTex->_texture->set33(0);
+    self->_sTex->_texture->set30(0);
+    self->_oTex->_texture->set31(0);
+    self->_tcs0->set31(self->_sTexCoordIndex);
+    self->_tcs1->set31(self->_oTexCoordIndex);
     manager = (igAttrStackManager *)traversal->_attrStack;
     procs = g_igCommonTraversal_travProcs;
     meta = g_igGeometry_metaObject;
@@ -385,8 +385,8 @@ void FUN_001b4c40(TexGenShaderView_1b4c40 *self, igCommonTraversal *traversal) {
         igTraversal_RegisterFunction((igTraversalFunctionList *)procs, node, (void *)FUN_001b4bb0);
     }
     DAT_00562638[0] = (VC_1b2fa0 *)self;
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_matrices, 0);
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_geometries, 0);
+    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_mats, 0);
+    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_geoms, 0);
     igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)self);
     for (i = 0; i < count; i++) {
         igTraversal_RegisterFunction((igTraversalFunctionList *)procs, (igMetaObject *)igMetaObject_GetTreeNode(meta, i), (void *)saved[i]);
@@ -399,26 +399,26 @@ void FUN_001b4c40(TexGenShaderView_1b4c40 *self, igCommonTraversal *traversal) {
             DAT_00562620->set30(1);
             DAT_00562620->setEnabled(1);
         }
-        self->_eyeTexture->setEnabled(1);
-        self->_lightTexGen->setEnabled(1);
+        self->_oTex->setEnabled(1);
+        self->_tcs1->setEnabled(1);
         pushAttr_1b4c40(manager, DAT_00562630);
         pushAttr_1b4c40(manager, DAT_00562628);
         pushAttr_1b4c40(manager, DAT_00562600);
-        pushAttr_1b4c40(manager, self->_lightTexture);
+        pushAttr_1b4c40(manager, self->_sTex);
         pushAttr_1b4c40(manager, DAT_00562610);
-        pushAttr_1b4c40(manager, self->_eyeTexGen);
+        pushAttr_1b4c40(manager, self->_tcs0);
         pushAttr_1b4c40(manager, DAT_00562620);
-        pushAttr_1b4c40(manager, self->_eyeTexture);
+        pushAttr_1b4c40(manager, self->_oTex);
         pushAttr_1b4c40(manager, DAT_00562618);
-        pushAttr_1b4c40(manager, self->_lightTexGen);
+        pushAttr_1b4c40(manager, self->_tcs1);
         igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)self);
-        popAttr_1b4c40(manager, self->_lightTexGen);
+        popAttr_1b4c40(manager, self->_tcs1);
         popAttr_1b4c40(manager, DAT_00562618);
-        popAttr_1b4c40(manager, self->_eyeTexture);
+        popAttr_1b4c40(manager, self->_oTex);
         popAttr_1b4c40(manager, DAT_00562620);
-        popAttr_1b4c40(manager, self->_eyeTexGen);
+        popAttr_1b4c40(manager, self->_tcs0);
         popAttr_1b4c40(manager, DAT_00562610);
-        popAttr_1b4c40(manager, self->_lightTexture);
+        popAttr_1b4c40(manager, self->_sTex);
         popAttr_1b4c40(manager, DAT_00562600);
         popAttr_1b4c40(manager, DAT_00562628);
         popAttr_1b4c40(manager, DAT_00562630);
@@ -427,20 +427,20 @@ void FUN_001b4c40(TexGenShaderView_1b4c40 *self, igCommonTraversal *traversal) {
         pushAttr_1b4c40(manager, DAT_00562628);
         pushAttr_1b4c40(manager, DAT_00562600);
         pushAttr_1b4c40(manager, DAT_00562610);
-        pushAttr_1b4c40(manager, self->_lightTexture);
-        pushAttr_1b4c40(manager, self->_eyeTexGen);
+        pushAttr_1b4c40(manager, self->_sTex);
+        pushAttr_1b4c40(manager, self->_tcs0);
         igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)self);
-        popAttr_1b4c40(manager, self->_eyeTexGen);
-        popAttr_1b4c40(manager, self->_lightTexture);
-        pushAttr_1b4c40(manager, self->_eyeTexture);
-        pushAttr_1b4c40(manager, self->_lightTexGen);
+        popAttr_1b4c40(manager, self->_tcs0);
+        popAttr_1b4c40(manager, self->_sTex);
+        pushAttr_1b4c40(manager, self->_oTex);
+        pushAttr_1b4c40(manager, self->_tcs1);
         pushAttr_1b4c40(manager, DAT_00562608);
         pushAttr_1b4c40(manager, DAT_005625f8);
         igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)self);
         popAttr_1b4c40(manager, DAT_005625f8);
         popAttr_1b4c40(manager, DAT_00562608);
-        popAttr_1b4c40(manager, self->_lightTexGen);
-        popAttr_1b4c40(manager, self->_eyeTexture);
+        popAttr_1b4c40(manager, self->_tcs1);
+        popAttr_1b4c40(manager, self->_oTex);
         popAttr_1b4c40(manager, DAT_00562610);
         popAttr_1b4c40(manager, DAT_00562600);
         popAttr_1b4c40(manager, DAT_00562628);

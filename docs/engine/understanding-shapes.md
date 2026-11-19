@@ -337,6 +337,14 @@ exceptions). A source that reproduces the other two builds' loops as well as the
 the original shape, and tells two spellings apart that are byte-identical on PS2. The other builds also settle
 signatures: the Xbox `ret N` and the GameCube argument registers count a function's real parameters.
 
+To find a class in the GameCube build, follow its name string to the registration call: that call also passes
+the instance size and the vtable getter, whose last vtable store is the class vtable. GameCube vtables have the
+PS2 build's two-word header and the same slot order, so a PS2 slot index finds the GameCube method directly;
+Xbox vtables have no header. Reflected enumerations (the names and value arrays) and the per-class field-name
+tables are platform-independent and name what the PS2 build's code reads by number, including fields and
+classes the PS2 build dropped: a meta-object slot no code writes belongs to a class missing from the build, and
+the PS2 `.bss` meta slots run in reverse alphabetical class order, which places it between its neighbours.
+
 ### SDK and library archives
 
 **When:** a library function may be hand-written assembly, or a Sony routine may exist in the SDK. Extract the

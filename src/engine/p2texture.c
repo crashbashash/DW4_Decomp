@@ -409,7 +409,6 @@ typedef union p2ImageGifTag { struct { unsigned short nloop : 15; unsigned short
 typedef union p2ImageRefTag { struct { unsigned short qwc; short id; unsigned int addr : 31; unsigned int spr : 1; } bits; int w[4]; } p2ImageRefTag;
 void p2UploadTextures(P2Texture **list, int count) {
     int p2DmaPacketQueued();
-    extern int DAT_00569128[4];
     extern unsigned int p2TextureFormatBits[];
     extern unsigned int p2TextureFormatHalfBytes[];
     extern int p2UploadRegisters[];
@@ -445,7 +444,7 @@ void p2UploadTextures(P2Texture **list, int count) {
                 }
                 p2DmaLastPacket[P2_DMA_GIF]->predicates = n;
             }
-            DAT_00569128[0]++;
+            p2DmaFreePackets[P2_DMA_GIF]++;
             p2DmaCurrentPacket[P2_DMA_GIF] = p2DmaLastPacket[P2_DMA_GIF];
             p2StatGifDmaCount--;
         }

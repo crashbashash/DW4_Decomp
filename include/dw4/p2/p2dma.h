@@ -59,7 +59,7 @@ typedef struct p2DmaPacket {
     unsigned char restartProgram : 1; /* restart the VU1 program before the packet's data */
     unsigned char blockHead : 1;      /* first packet of an allocation block */
     unsigned char storeImage : 1;     /* storeImageTarget is to be read back */
-    unsigned char b6 : 2;
+    unsigned char : 2;
 } p2DmaPacket;
 
 /* Words a watchdog thread checks: code that waits on the DMA sets a bit in busy and the DMAC

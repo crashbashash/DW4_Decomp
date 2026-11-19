@@ -18,7 +18,7 @@ void igAttrStackManager_PopLightStateAttr(struct igAttrStackManager *manager, st
 void igAttrStackManager_PopOverrideAttr(struct igAttrStackManager *manager, struct igAttr *attr);
 void igAttrStackManager_PushOverrideAttr(struct igAttrStackManager *manager, struct igAttr *attr);
 void igAttrStackManager_PushLightStateAttr(struct igAttrStackManager *manager, struct igLightStateAttr *attr, int isOverride);
-void FUN_001b0000(struct igAttrStackManager *manager, struct igMetaObject *meta,
+void igAttrStackManager_Configure(struct igAttrStackManager *manager, struct igMetaObject *meta,
                   struct igAttrDefaultManager *defaultManager, struct igVisualContextCapabilityManager *capabilityManager);
 
 #ifdef __cplusplus

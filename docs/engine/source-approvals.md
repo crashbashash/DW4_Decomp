@@ -1081,6 +1081,34 @@ scale choice are C. Three `asm` uses and three `volatile` keywords, one row each
   inline-asm idiom's uniform form rather than a one-block hack, and the source writes every block that way
   (owner's conditional standing rule, 2026-11-17).
 
+The VU0 vertex morph (0x18ea90, `igVectorMorphing_MorphVu0`, Maths whole file,
+`src/engine/maths/igVectorMorphing_tail.inc`), installed beside the scalar `igVectorMorphing_Morph` by
+`igVectorMorphing_InstallFunctions`, is C around three `asm volatile { }` blocks: `lqc2` of four packed base vertices
+(three quadwords), per target `qmtc2` of the weight's bits, `lqc2` of the target's three quadwords, three `vmulx.xyzw`
+by the weight and three `vadd.xyzw` into the sum, and `sqc2` of the sum. The group count, the loops, the target address
+(`targets[t]` plus a running 48-byte offset), the weight read (`lw`), the pointer steps and the scalar tail for the last
+`count & 3` vertices are C. Three `asm` uses and three `volatile` keywords, one row each.
+
+* No C spells `lqc2`, `qmtc2`, `vmulx` (vector by broadcast field), `vadd` or `sqc2`. The function written as plain C
+  (the three-quadword sum as float loops) is 364 bytes of FPU code against retail's 372, with no COP2 instruction; 74
+  of 93 words differ.
+* The `volatile` is what gives retail's scalar tail, not a scheduling pin. Retail keeps the tail's weighted triple in a
+  stack slot (`swc1` to `0..8(sp)` after each `mul.s`, `lwc1` back for each `add.s`, a 16-byte frame). With every block
+  written plain `asm { }` MWCC keeps the triple in registers and the function is 344 bytes; with any one, two or all
+  three blocks written `asm volatile` the triple stays in memory and the function matches. No plain spelling of
+  the tail gives the folded slot offsets: a `float[3]`, an `igVec3f` (fields, `operator[]`, `add`, `scale`,
+  `operator*`), pointer-taking and returning inline helpers, an array-member class, a function-scope array, a pointer
+  or index variable into the array and loops over the components all scalarize, hoist `sp + 4`/`sp + 8` into registers,
+  or add a block copy (the tries are in the function's attempt file).
+* With all three blocks `asm volatile` the function matches, so the source writes every block that way (owner's
+  conditional standing rule, 2026-11-17).
+* The GameCube build (USA `main.dol`) installs the same pair at 0x80127270: the scalar morph (0x80127078) and a
+  paired-single form (0x80127128) with this function's structure: a group loop to `(count >> 1) * 3` stepped by 3
+  (`psq_l` and paired multiply-adds, left as raw words by the disassembly dump), then the same scalar tail for the
+  remainder, there with the products in registers. The Xbox morph pair was not found; the Xbox blending selector
+  (0xb28f0) reads `useSimdBlending` and `forceOneWeightSimd` and installs a weighted and a one-weight blend, the PS2
+  file's `igVectorBlending_BlendWeighted` and `igVectorBlending_BlendOneWeight`.
+
 ### scratchpad-traversal-stack
 
 The hit-land model traversal's traverse hook (SceneGraph whole file, `src/engine/scenegraph/igTraversal_tail.inc`)

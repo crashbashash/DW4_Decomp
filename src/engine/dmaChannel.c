@@ -43,7 +43,6 @@ extern long long p2DmaStartedSequence[P2_DMA_CHANNEL_COUNT];
 extern long long p2DmaCompletedSequence[P2_DMA_CHANNEL_COUNT];
 extern long long p2DmaWaitSequence[P2_DMA_CHANNEL_COUNT];
 extern char p2DmaChannelIdle[P2_DMA_CHANNEL_COUNT];
-extern int p2DmaFreePackets[P2_DMA_CHANNEL_COUNT];
 extern p2PredicateName p2PredicateNames[10];
 extern char p2StoreImagePending;
 extern int p2DmaWaitSema;
@@ -112,8 +111,8 @@ void p2SubmitDmaPacket(int channel) {
     p2WatchdogTicks = 0;
     if (channel == P2_DMA_VIF1) {
         if (p2HasFinishPredicate(packet)) {
-            ((unsigned int *)&p2CurrentGsRegisters->f432[1])[0] = (unsigned int)packet->sequence;
-            ((unsigned int *)&p2CurrentGsRegisters->f432[1])[1] = 0xFFFF;
+            ((unsigned int *)&p2CurrentGsRegisters->label)[0] = (unsigned int)packet->sequence;
+            ((unsigned int *)&p2CurrentGsRegisters->label)[1] = 0xFFFF;
             p2AppendGsFinish();
         } else if (packet->restartProgram) {
             p2AppendProgramRestart();

@@ -2461,6 +2461,7 @@
 0x00490cf0	p2DmaEndTag	recovered-global
 0x00490d00	p2DmaWaitSemaParam	recovered-global
 0x00490d20	p2DmaFreePacketSemaParam	recovered-global
+0x00490d38	p2PolygonMode	recovered-global
 0x00490f30	p2ColourPacketTemplate	recovered-global
 0x00490f50	p2SpriteSizePacket	recovered-global
 0x00490f80	p2GsRegisterGifTag	recovered-global
@@ -7845,14 +7846,18 @@
 0x00569040	p2DmaWaitSequence	recovered-global
 0x00569090	p2DmaFreePacketSema	recovered-global
 0x005690a0	p2DmaWaitingForPacket	recovered-global
+0x005690ac	p2StatVif1InterruptCount	recovered-global
+0x005690b0	p2StatGifInterruptCount	recovered-global
 0x005690b8	p2DmaChannelIdle	recovered-global
 0x005690d0	p2DmaCompletionCallbacks	recovered-global
 0x00569120	p2DmaFreePackets	recovered-global
 0x00569148	p2StatVif1DmaCount	recovered-global
 0x00569150	p2StatVif1PartialPackets	recovered-global
+0x00569158	p2StatVif1DmaQuadwords	recovered-global
 0x00569160	p2StatVif1DmaTime	recovered-global
 0x00569168	p2StatGifDmaCount	recovered-global
 0x00569170	p2StatGifPartialPackets	recovered-global
+0x00569178	p2StatGifDmaQuadwords	recovered-global
 0x00569180	p2StatGifDmaTime	recovered-global
 0x00569188	p2StatDmaOverlapTime	recovered-global
 0x00569190	p2DmaHandlerIds	recovered-global
@@ -7866,6 +7871,7 @@
 0x00569258	p2PrimitiveCount	recovered-global
 0x00569260	p2StatDisplayListVertices	recovered-global
 0x00569268	p2StatDisplayListPrimitives	recovered-global
+0x00569308	p2SpriteBytes	recovered-global
 0x00569320	p2ColourNop	recovered-global
 0x00569328	p2SpriteSizeNop	recovered-global
 0x00569330	p2CurrentProgram	recovered-global
@@ -7877,6 +7883,7 @@
 0x0056ade0	p2GsImr	recovered-global
 0x0056ae28	p2GsSignalInterrupts	recovered-global
 0x0056ae30	p2GsVsyncInterrupts	recovered-global
+0x0056ae40	p2GsRegisterProgram	recovered-global
 0x0056ae48	p2GsDirtyRegisters	recovered-global
 0x0056ae50	p2GsRegisterAddresses	recovered-global
 0x0056ae90	p2GsInterrupts	recovered-global
@@ -7900,7 +7907,12 @@
 0x0056af60	p2Materials	recovered-global
 0x0056af68	p2NormalArraySource	recovered-global
 0x0056af70	p2NormalArrayMask	recovered-global
+0x0056af90	p2UseInfiniteLightProgram	recovered-global
+0x0056af94	p2LocalLightCount	recovered-global
 0x0056af9c	p2LightSpecular	recovered-global
+0x0056afa4	p2LocalLightAmbient	recovered-global
+0x0056afa8	p2LinearAttenuationLightCount	recovered-global
+0x0056afac	p2UseLocalLightProgram	recovered-global
 0x0056afd0	p2LightMatrix	recovered-global
 0x0056b050	p2PalettedStages	recovered-global
 0x0056b058	p2ExtraPassCount	recovered-global
@@ -7962,6 +7974,7 @@
 0x0056c148	p2SavedScanmsk	recovered-global
 0x0056c060	p2TextureMemoryEnd	recovered-global
 0x0056c068	p2StatTextureBinds	recovered-global
+0x0056c070	p2StatTextureMemoryUsed	recovered-global
 0x0056c078	p2TextureMemoryBase	recovered-global
 0x0056c0c0	p2TextureLoadFailures	recovered-global
 0x0056b020	p2TextureCombineBits	recovered-global

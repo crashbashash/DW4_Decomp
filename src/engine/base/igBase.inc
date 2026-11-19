@@ -47,21 +47,16 @@ igSmartPointer<igObject> *igSmartPointer_igGroup_Destruct(igSmartPointer<igObjec
     return self;
 }
 
-void **FUN_002293d0(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
+igSmartPointer<igObject> *igSmartPointer_igIterateGraph_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if ((short)arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 

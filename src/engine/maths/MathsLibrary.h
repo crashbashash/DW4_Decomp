@@ -111,10 +111,10 @@ CallbackArray *igVectorMorphing_Register(void);
 
 extern char thunk_igVectorMorphing_GetMetaObject_00186ec0[];
 
-void FUN_00186ed0(void);
+void igVectorMorphing_StaticInitCallback(void);
 
 
-void FUN_0018ec10(void);
+void igVectorMorphing_InstallFunctions(void);
 igMetaObject *igVectorBlending_GetMetaObject(void);
 
 struct Obj3 { int *vt; char pad[4]; };
@@ -124,10 +124,10 @@ CallbackArray *igVectorBlending_Register(void);
 
 extern char thunk_igVectorBlending_GetMetaObject_00186ff0[];
 
-void FUN_00187000(void);
+void igVectorBlending_StaticInitCallback(void);
 
 
-void FUN_0018e9b0(void);
+void igVectorBlending_InstallFunctions(void);
 igMetaObject *igVec4ucMetaField_GetMetaObject(void);
 
 extern int g_igVec4ucMetaField_vtable[4];
@@ -675,8 +675,14 @@ void igVec4ucMetaField_SwapBytes(igVec4ucMetaField *arg0, int arg1, int arg2);
 
 
 
-void igVectorBlending_BlendWeighted(const float *in, unsigned int count, const float *weights, const unsigned char *bones,
-                  unsigned int weightCount, const float (*matrices)[16], float *out, int outStride);
+/* Skins count vertices (in: four floats each) through the bone matrices; weightCount bone indices and weights per
+   vertex; out advances by outStride bytes. */
+typedef void (*igVectorBlendFunction)(const float *in, unsigned int count, const float *weights,
+                                      const unsigned char *bones, unsigned int weightCount,
+                                      const float (*matrices)[16], float *out, int outStride);
+/* Morphs count vec3 vertices of base by targetCount weighted targets; out advances by stride bytes. */
+typedef void (*igVectorMorphFunction)(const float *base, const float **targets, const float *weights,
+                                      unsigned int count, unsigned int targetCount, float *out, int stride);
 
 static inline void addScaled(float *out, float weight, const float *v) {
     float x = weight * v[0];
@@ -686,10 +692,6 @@ static inline void addScaled(float *out, float weight, const float *v) {
     out[1] += y;
     out[2] += z;
 }
-
-
-void FUN_0018ea90(const float *base, const float **targets, const float *weights, unsigned int count,
-                  unsigned int targetCount, float *out, int stride);
 
 typedef int (*UnaryOp)(void **, int);
 typedef int (*BinaryOp)(void **, void **);

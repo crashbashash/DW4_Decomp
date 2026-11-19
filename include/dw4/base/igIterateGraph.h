@@ -14,6 +14,7 @@ extern "C" {
 struct igObject *igIterateGraph_Create(struct igMemoryPoolView *pool);
 
 struct igMetaObject *igIterateGraph_GetOrCreateMetaObject(void);
+void igIterateGraph_EnsureRegistered(void);
 
 /* Starts a walk of the graph under `root`; returns the first node of class `kind` (or a subclass), null when none. */
 struct igNode *FUN_0022ab90(struct igIterateGraph *self, struct igNode *root, struct igMetaObject *kind);

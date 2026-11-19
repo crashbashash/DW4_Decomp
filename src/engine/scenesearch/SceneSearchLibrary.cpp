@@ -59,7 +59,7 @@ int igSearchSceneGraph_GetVTable(void) {
     obj.vt = &g_igSearchSceneGraph_vtable[0];
     igSmartPointer_igMetaObject_Destruct((igSmartPointer<igObject> *)&obj.f14, -1);
     igStringRef_Destruct((igStringRef *)&obj.f10, -1);
-    FUN_002293d0((void **)&obj.fC, -1);
+    igSmartPointer_igIterateGraph_Destruct((igSmartPointer<igObject> *)&obj.fC, -1);
     igNamedObject_Destroy((igNamedObject *)&obj, 0);
     return vtable;
 }
@@ -68,7 +68,7 @@ void igSearchSceneGraph_EnsureRegistered(void) {
     igMetaObject_RunStaticInit(igSearchSceneGraph_Register);
 }
 
-static igMetaObjectCallback g_igSearchSceneGraph_callbackList[] = { FUN_00227620, igMetaObject_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igSearchSceneGraph_callbackList[] = { igIterateGraph_EnsureRegistered, igMetaObject_EnsureRegistered, 0 };
 
 CallbackArray *igSearchSceneGraph_Register(void) {
     SceneSearchLibrary_MarkRegistered();

@@ -59,6 +59,9 @@ extern struct p2TextureRecord *p2FreeTextures;
 extern int p2DepthTarget;
 /* Textures bound since the statistics were last read. */
 extern long long p2StatTextureBinds;
+/* GS texture memory in use, which the statistics report with the space left beside it. No code in
+ * this build writes it. */
+extern long long p2StatTextureMemoryUsed;
 
 void p2SetTexture(P2Texture *texture);
 

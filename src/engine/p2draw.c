@@ -87,8 +87,6 @@ enum {
 
 typedef void (*p2VertexSubmit)(unsigned int count, int first);
 
-int FUN_001fffb0(void);
-
 void p2SubmitVertices(unsigned int count, int first, unsigned short *indices);
 /* Declared without a prototype: the recording submit passes it no index list. */
 void p2SubmitIndexedVertices();
@@ -122,7 +120,6 @@ extern const float *p2PositionArray;
 extern const float *p2NormalArray;
 extern const float *p2TexCoordArrays[16];
 extern const unsigned int *p2ColourArray;
-extern const unsigned char *p2SpriteBytes;
 
 /* The three unpack writers append a DMA tag and a VIF UNPACK of count byte vectors read from
  * element first of data, padded to a quadword; the tag is written last, once the length is known. */
@@ -288,7 +285,7 @@ static inline void p2BeginDraw(int primitive, int sprites) {
         } else if (p2NormalArray != 0) {
             p2VertexFormat |= P2_FORMAT_NORMALS;
         }
-        FUN_001fffb0();
+        p2BuildVertexFormat();
         p2BuildFunctionTables();
         p2LayoutVuBuffers();
         p2VertexSubmitter = p2SubmitRecordedVertices;

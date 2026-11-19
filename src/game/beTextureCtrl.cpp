@@ -18,8 +18,6 @@ extern "C" igMetaObject *beTextureCtrl_GetMeta(void);
 /* kept local: the hidden igResult return slot is passed first; Core's copy is the only declaration */
 extern "C" void beTextureCtrl_Prepare(beTextureCtrl *self);
 extern "C" void beTextureCtrl_OnAddRam(beTextureCtrl *self, beBaseInfoRam *ram);
-/* A property record: the name it is found by and its value. */
-struct PropertyRecord { int _vtable; unsigned int _refCount; int _name; igObject *_value; };
 extern "C" void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram);
 
 void beTextureCtrl_Prepare(beTextureCtrl *self) {
@@ -99,7 +97,7 @@ void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
     igAttrSet *attrSet;
     int allocator;
     beTextureCtrlWork *work;
-    PropertyRecord *property;
+    beTextureCtrlData *property;
     igObjectDispatchView *existing;
     int boundCount;
     igMetaObject *bindMeta;
@@ -120,12 +118,12 @@ void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
                     } else {
                         name = (int *)emptyString;
                     }
-                    property = (PropertyRecord *)igProperty_FindByName((igObjectList *)work->_textureList, g_propertyNameField, (const char *)name);
+                    property = (beTextureCtrlData *)igProperty_FindByName((igObjectList *)work->_textureList, g_propertyNameField, (const char *)name);
                     if (property != 0) {
                         allocator = (int)igObject_GetAllocator(self);
                         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                         igSmartPointer<igTextureBindAttrDispatchView> attr((igTextureBindAttrDispatchView *)igTextureBindAttr_CreateInstance(allocator));
-                        attr.p->setTexture(property->_value);
+                        attr.p->setTexture((igObject *)property->_tex);
                         attrSet = (igAttrSet *)entry->_attrSet;
                         boundCount = ((igAttrList *)attrSet->_attributes)->_count;
                         boundIndex = 0;
