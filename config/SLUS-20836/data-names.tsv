@@ -8017,9 +8017,13 @@
 0x00491890	p2RenderTargetContext2RegisterList	recovered-global
 0x004918a0	p2RestoreTargetRegisters	recovered-global
 0x004918b0	p2RestoreTargetContext2Registers	recovered-global
+0x0056c150	p2UnusedWaitTime0	recovered-global
+0x0056c154	p2UnusedWaitTime1	recovered-global
+0x0056c158	p2UnusedWaitTime2	recovered-global
 0x0056c15c	p2DmaWaitTime	recovered-global
 0x0056c160	p2SwapWaitTime	recovered-global
 0x0056c164	p2FinishWaitTime	recovered-global
+0x0056c168	p2UnusedWaitTime3	recovered-global
 0x0056c16c	p2SleepTime	recovered-global
 0x0056c174	p2Vu0LockWaitTime	recovered-global
 0x0056c2c0	p2Viewport	recovered-global

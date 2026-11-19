@@ -47,13 +47,13 @@ typedef struct p2Statistics {
     long long frameTimeTotal;
     long long frameTimeMin;
     long long frameTimeMax;
-    long long f312;
-    long long f320;
-    long long f328;
+    long long unusedWaitTime0;          /* the unused slots count in IG_GFX_STATISTIC_WAIT_TIME; nothing writes them */
+    long long unusedWaitTime1;
+    long long unusedWaitTime2;
     long long dmaWaitTime;
     long long swapWaitTime;
     long long finishWaitTime;
-    long long f360;
+    long long unusedWaitTime3;
     long long sleepTime;
     long long f376;
     long long displayListVertices;

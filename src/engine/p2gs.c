@@ -13,10 +13,10 @@
 /* The vertices and primitives drawn from display lists. */
 extern long long p2StatDisplayListVertices;
 extern long long p2StatDisplayListPrimitives;
-extern int DAT_0056c150[4];
-extern int DAT_0056c154[4];
-extern int DAT_0056c158[4];
-extern int DAT_0056c168[4];
+extern int p2UnusedWaitTime0[4];
+extern int p2UnusedWaitTime1[4];
+extern int p2UnusedWaitTime2[4];
+extern int p2UnusedWaitTime3[4];
 extern const char text_GS_csr_id_d_csr_rev_d[];
 /* The newest VIF1 sequence the GS has finished drawing, as p2RecordFinishedSequence records it. */
 extern long long p2FinishedSequence[4];
@@ -164,13 +164,13 @@ void p2GetStatistics(void *statistics) {
     stats->frameTimeTotal = p2FrameTimeTotal;
     stats->frameTimeMin = p2FrameTimeMin;
     stats->frameTimeMax = p2FrameTimeMax;
-    stats->f312 = DAT_0056c150[0];
-    stats->f320 = DAT_0056c154[0];
-    stats->f328 = DAT_0056c158[0];
+    stats->unusedWaitTime0 = p2UnusedWaitTime0[0];
+    stats->unusedWaitTime1 = p2UnusedWaitTime1[0];
+    stats->unusedWaitTime2 = p2UnusedWaitTime2[0];
     stats->dmaWaitTime = p2DmaWaitTime;
     stats->swapWaitTime = p2SwapWaitTime;
     stats->finishWaitTime = p2FinishWaitTime;
-    stats->f360 = DAT_0056c168[0];
+    stats->unusedWaitTime3 = p2UnusedWaitTime3[0];
     stats->sleepTime = p2SleepTime;
     stats->fastPathVertices = p2StatVertexCount1;
     stats->fastLitPathVertices = p2StatVertexCount4;

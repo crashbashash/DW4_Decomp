@@ -159,10 +159,10 @@
    "handle": 0,
    "jtbl": 380,
    "literal": 244,
-   "named": 112520,
+   "named": 112536,
    "pad": 211423,
    "ptr": 3040,
-   "ref": 69547,
+   "ref": 69531,
    "region": 109384,
    "source": 496497,
    "str": 71570,
@@ -264,7 +264,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 8
+    "value": 0
    },
    "inline_asm.other": {
     "reason": null,
@@ -373,7 +373,7 @@
    "decl.varargs": 0,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "fun_dat_refs": 8,
+   "fun_dat_refs": 0,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
@@ -497,19 +497,19 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2704336,
+  "bytes": 2705104,
   "failing": {
    "addresses": {
-    "bytes": 476932,
-    "functions": 2141
+    "bytes": 476164,
+    "functions": 2140
    },
    "declarations": {
     "bytes": 0,
     "functions": 0
    },
    "fields": {
-    "bytes": 238484,
-    "functions": 1065
+    "bytes": 237716,
+    "functions": 1064
    },
    "idioms": {
     "bytes": 311644,
@@ -524,8 +524,8 @@
     "functions": 0
    },
    "references": {
-    "bytes": 278008,
-    "functions": 917
+    "bytes": 277240,
+    "functions": 916
    },
    "types": {
     "bytes": 285180,
@@ -536,7 +536,7 @@
     "functions": 481
    }
   },
-  "functions": 17244,
+  "functions": 17245,
   "matched_functions": 20451
  },
  "regions": [
