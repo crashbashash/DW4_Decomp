@@ -353,8 +353,8 @@ int igFrustCullTraversal_TraversePlanarShadowShader(void *arg0, TraversalNodeVie
     return g_igCommonTraversal_travProcs->_data[arg1->_id]((igTraversal *)arg0, (igObject *)arg1);
 }
 
-int FUN_001c5160(S0_1c5160 *arg0, float fparg0) {
-    if (fparg0 < arg0->f556 && !(fparg0 < 1.0f)) { arg0->f552 = fparg0; DAT_0048da28[0] = 1.0f / fparg0; return 1; } return 0;
+int FUN_001c5160(igFrustCullTraversal *self, float scale) {
+    if (scale < self->_outerScissorWindowScale && !(scale < 1.0f)) { self->_outerFrustCullScale = scale; DAT_0048da28[0] = 1.0f / scale; return 1; } return 0;
 }
 
 int igFrustCullTraversal_ClassifyBox(const float *boxMin, const float *boxMax, const float *matrix) {

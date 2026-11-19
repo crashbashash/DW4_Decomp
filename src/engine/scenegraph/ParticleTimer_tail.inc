@@ -46,7 +46,7 @@ void FUN_001d9ac0(struct A_1d9ac0 *arg0, int arg1, int arg2) {
     int j;
 
     ObjectList_AppendRetained((igObjectList *)arg0->b->list, (igObject *)arg1);
-    FUN_001db720(arg0, arg0->b, arg2);
+    FUN_001db720((igSorter *)arg0, (igGeometry *)arg0->b, (igAttrStackManager *)arg2);
     l = arg0->b->list;
     n1 = l->cnt;
     for (i = 0; i < n1; i++) {

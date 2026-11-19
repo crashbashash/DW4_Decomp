@@ -38,11 +38,11 @@ void FUN_001902a0(void *arg0, void *arg1) {
     *(long long *)((char *)(arg0) + 120) = (long long) *(long long *)((char *)(arg1) + 120);
 }
 
-int FUN_00190330(int arg0, int arg1) {
-    if (arg1 != arg0) {
-        FUN_001902a0((void *)arg0, (void *)arg1);
+igMatrix44d *FUN_00190330(igMatrix44d *destination, const igMatrix44d *source) {
+    if (source != destination) {
+        FUN_001902a0(destination, (void *)source);
     }
-    return arg0;
+    return destination;
 }
 
 void FUN_00190370(void)

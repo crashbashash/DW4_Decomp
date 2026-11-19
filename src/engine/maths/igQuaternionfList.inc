@@ -1,9 +1,9 @@
 igMetaObject *g_igQuaternionfList_metaObject;
 int g_igQuaternionfList_externalStorage;
 
-void FUN_00189bd0(int arg0) {
+igQuaternionfList *igQuaternionfList_Create(igMemoryPoolView *pool) {
     igQuaternionfList_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)g_igQuaternionfList_metaObject, (igMemoryPoolView *)arg0);
+    return (igQuaternionfList *)igMetaObject_CreateInstance(g_igQuaternionfList_metaObject, pool);
 }
 
 igMetaObject *igQuaternionfList_GetOrCreateMetaObject(void) {

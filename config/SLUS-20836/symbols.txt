@@ -2980,7 +2980,7 @@
 0016e140 000040 FUN_0016e140
 0016e180 000020 Gap__Gfx__igPsx2BlendEquationExt__vfunc_29 Gap::Gfx::igPsx2BlendEquationExt::vfunc_29
 0016e1a0 0000e8 Gap__Gfx__igPsx2BlendEquationExt__vfunc_30 Gap::Gfx::igPsx2BlendEquationExt::vfunc_30
-0016e290 000018 FUN_0016e290
+0016e290 000018 igPsx2BlendEquationExt_SetBlendFactors
 0016e2b0 000008 Gap__Gfx__igPsx2DecalExt__vfunc_29 Gap::Gfx::igPsx2DecalExt::vfunc_29
 0016e2c0 000010 Gap__Gfx__igPsx2DecalExt__vfunc_30 Gap::Gfx::igPsx2DecalExt::vfunc_30
 0016e2d0 000044 igPsx2Image_UserApplyWriteProxy
@@ -3093,8 +3093,8 @@
 00173900 000230 igPsx2VisualContext_PreMultiply
 00173b30 000230 igPsx2VisualContext_PostMultiply
 00173d60 000170 igPsx2VisualContext_GetMatrix
-00173ed0 0000f4 FUN_00173ed0
-00173fd0 000058 FUN_00173fd0
+00173ed0 0000f4 igPsx2VisualContext_SetMatrixPsx2
+00173fd0 000058 igPsx2VisualContext_GetMatrixPsx2
 00174030 000054 igPsx2VisualContext_SetTextureMatrixState
 00174090 0000b0 FUN_00174090
 00174140 0001c0 igPsx2VisualContext_ResetToDefault
@@ -3118,8 +3118,8 @@
 001747b0 000028 igPsx2VisualContext_SetAlphaRefValue
 001747e0 000008 igPsx2VisualContext_GetAlphaRefValue
 001747f0 00005c FUN_001747f0
-00174850 00006c FUN_00174850
-001748c0 000008 FUN_001748c0
+00174850 00006c igPsx2VisualContext_SetMatrixOptimizationState
+001748c0 000008 igPsx2VisualContext_GetMatrixOptimizationState
 001748d0 00006c igPsx2VisualContext_SetViewportClippingState
 00174940 000008 igPsx2VisualContext_GetViewportClippingState
 00174950 000034 FUN_00174950
@@ -3257,8 +3257,8 @@
 0017c600 000094 igPsx2VisualContext_SetTextureAddressingMode
 0017c6a0 000038 igPsx2VisualContext_GetTextureAddressingMode
 0017c6e0 00002c FUN_0017c6e0
-0017c710 000078 FUN_0017c710
-0017c790 00000c FUN_0017c790
+0017c710 000078 igPsx2VisualContext_SetTextureMatrixProjectiveState
+0017c790 00000c igPsx2VisualContext_GetTextureMatrixProjectiveState
 0017c7a0 0000d4 igPsx2VisualContext_SetTextureStageFunc
 0017c880 000014 FUN_0017c880
 0017c8a0 0000dc FUN_0017c8a0
@@ -3636,7 +3636,7 @@
 00189a90 00006c igMatrix44fList_Register
 00189b00 000008 igMatrix44fList_GetMetaObjectFunction
 00189b10 0000c0 FUN_00189b10
-00189bd0 000034 FUN_00189bd0
+00189bd0 000034 igQuaternionfList_Create
 00189c10 000048 igQuaternionfList_GetOrCreateMetaObject
 00189c60 000048 igQuaternionfList_GetMetaObject
 00189cb0 00003c igQuaternionfList_GetVTable
@@ -3644,14 +3644,14 @@
 00189d00 00006c igQuaternionfList_Register
 00189d70 000008 igQuaternionfList_GetMetaObjectFunction
 00189d80 0000c0 FUN_00189d80
-00189e40 000034 FUN_00189e40
+00189e40 000034 igVec4ucList_Create
 00189e80 000048 igVec4ucList_GetMetaObject
 00189ed0 00003c igVec4ucList_GetVTable
 00189f10 00000c igVec4ucList_EnsureRegistered
 00189f20 00006c igVec4ucList_Register
 00189f90 000008 igVec4ucList_GetMetaObjectFunction
 00189fa0 0000c0 FUN_00189fa0
-0018a060 000034 FUN_0018a060
+0018a060 000034 igVec3fList_Create
 0018a0a0 000048 igVec3fList_GetOrCreateMetaObject
 0018a0f0 000048 igVec3fList_GetMetaObject
 0018a140 00003c igVec3fList_GetVTable
@@ -3659,7 +3659,7 @@
 0018a190 00006c igVec3fList_Register
 0018a200 000008 igVec3fList_GetMetaObjectFunction
 0018a210 0000c0 FUN_0018a210
-0018a2d0 000034 FUN_0018a2d0
+0018a2d0 000034 igVec2fList_Create
 0018a310 000048 igVec2fList_GetMetaObject
 0018a360 00003c igVec2fList_GetVTable
 0018a3a0 00000c igVec2fList_EnsureRegistered
@@ -3776,7 +3776,7 @@
 0018e710 00009c igVec4ucMetaField_ValueToString
 0018e7b0 000008 Gap__igVec4ucMetaField__vfunc_25 Gap::igVec4ucMetaField::vfunc_25
 0018e7c0 000008 igVec4ucMetaField_GetAlignment
-0018e7d0 00011c FUN_0018e7d0
+0018e7d0 00011c igVectorBlending_BlendWeighted
 0018e8f0 0000bc FUN_0018e8f0
 0018e9b0 000024 FUN_0018e9b0
 0018e9e0 0000b0 FUN_0018e9e0
@@ -5239,7 +5239,7 @@
 001c58c0 0000c4 FUN_001c58c0
 001c5990 000020 igGraphPath_GetTail
 001c59b0 000024 FUN_001c59b0
-001c59e0 00000c FUN_001c59e0
+001c59e0 00000c igGraphPath_GetCount
 001c59f0 000124 FUN_001c59f0
 001c5b20 00000c igNode_GetMeta
 001c5b30 000050 igGraphPath_GetTransform
@@ -5374,7 +5374,7 @@
 001d6190 0000ac FUN_001d6190
 001d6240 0000b0 igProjectiveShadowShader_UserPostLoad
 001d62f0 000048 igProjectiveShadowShader_Reset
-001d6340 000074 FUN_001d6340
+001d6340 000074 igSceneInfo_SetSceneGraph
 001d63c0 000050 Gap__Bec__ParticleInfo__vfunc_22 Gap::Bec::ParticleInfo::vfunc_22
 001d6410 000144 FUN_001d6410
 001d6560 000080 igSmartPointer_igGraphPath_Destruct
@@ -6720,7 +6720,7 @@
 00230e50 000054 dptofp
 00230ea8 0000a0 dptoul
 00230f50 000018 InsightLibrary_MarkRegistered
-00230f70 000094 FUN_00230f70
+00230f70 000094 igRenderer_Destroy
 00231010 00000c FUN_00231010
 00231020 00000c igMessage_GetPublishedMetaObject
 00231030 000098 igInfoManager_Destroy
@@ -19625,7 +19625,7 @@
 0044c020 000008 igTextElement_GetMetaObjectFunction
 0044c030 00000c igGeometryElement_GetPublishedMetaObject
 0044c040 0000cc igTextElement_InitFields
-0044c110 000094 FUN_0044c110
+0044c110 000094 igModel_Destroy
 0044c1b0 00000c igGuiComponentModel_GetPublishedMetaObject
 0044c1c0 000080 FUN_0044c1c0
 0044c240 00000c igGuiComponentAspect_GetPublishedMetaObject
@@ -19723,7 +19723,7 @@
 0044e060 000080 FUN_0044e060
 0044e0e0 000080 FUN_0044e0e0
 0044e160 000080 FUN_0044e160
-0044e1e0 000080 FUN_0044e1e0
+0044e1e0 000080 igSmartPointer_igMouseCursor_Destruct
 0044e260 00000c igGuiSystem_RunStaticInit
 0044e270 000074 igGuiSystem_Register
 0044e2f0 000008 thunk_igGuiSystem_GetMetaObject
@@ -20069,7 +20069,7 @@
 00457bc0 000030 igRadioGroupSelectedObserver_OnModelChange
 00457bf0 000044 igOnOffValueObserver_OnModelChange
 00457c40 00005c FUN_00457c40
-00457ca0 0000b4 FUN_00457ca0
+00457ca0 0000b4 igRenderer_SetVisualContext
 00457d60 000080 igClearRenderer_InitializeDrawing
 00457de0 000018 igClearRenderer_Render
 00457e00 000008 Gap__Gui__igTextElement__vfunc_23 Gap::Gui::igTextElement::vfunc_23

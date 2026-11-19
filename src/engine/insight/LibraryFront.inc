@@ -6,27 +6,27 @@ void InsightLibrary_MarkRegistered(void) {
     }
 }
 
-void *FUN_00230f70(struct S *arg0, short arg1) {
-    void *p;
+igRenderer *igRenderer_Destroy(igRenderer *self, short deleteFlag) {
+    igObject *context;
     int rc;
 
-    if (arg0 != 0) {
-        arg0->f0 = &g_igRenderer_vtable[0];
-        if (&arg0->f8) {
-            p = arg0->f8;
-            if (p != 0) {
-                rc = *(int *)((char *)(p) + 4) - 1;
-                *(int *)((char *)(p) + 4) = rc;
-                if (((unsigned long long) ((long long) *(int *)((char *)(p) + 4) << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((igObject *)p);
+    if (self != 0) {
+        self->_vtable = (int)&g_igRenderer_vtable[0];
+        if (&self->_visualContext) {
+            context = (igObject *)self->_visualContext;
+            if (context != 0) {
+                rc = context->_refCount - 1;
+                context->_refCount = rc;
+                if (((unsigned long long) ((long long) (int)context->_refCount << 0x29) >> 0x29) == 0) {
+                    igObject_Destroy(context);
                 }
             }
         }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (deleteFlag > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 igMetaObject *FUN_00231010(void) {

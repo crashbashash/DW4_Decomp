@@ -20,7 +20,7 @@ int igVec4fMetaField_GetVTable(void) {
     int *temp_a1;
     int temp_v0;
 
-    FUN_002fbfe0(&f);
+    igMetaField_Init((igMetaField *)&f);
     f.obj.vt = &g_igVec4fMetaField_vtable[0];
     temp_s0 = *(int *)((char *)&f + g_objectSystem->vtableProbeOffset);
     f.obj.vt = &g_igMetaField_vtable[0];

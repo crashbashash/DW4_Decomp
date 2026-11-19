@@ -80,7 +80,7 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
             return;
         }
     }
-    s0 = FUN_00301000(arg1);
+    s0 = (int)igObject_GetAllocator((igObject *)arg1);
     o = arg1->conn;
     if (o != 0) {
         o->rc = o->rc - 1;

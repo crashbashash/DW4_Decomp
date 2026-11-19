@@ -13,7 +13,7 @@ void igTexGenMatrixAttr_UserPostLoad(igTexGenMatrixAttr *self) {
 }
 
 void igTexGenMatrixAttr_apply(char * arg0, int arg1) {
-    FUN_00173ed0(arg1, 14, (arg0 + 12));
+    igPsx2VisualContext_SetMatrixPsx2((igPsx2VisualContext *)arg1, 14, (const float *)(arg0 + 12));
 }
 
 void igTexGenMatrixAttr_SynchronizeDefault(igTexGenMatrixAttr *self, void *context)
@@ -21,7 +21,7 @@ void igTexGenMatrixAttr_SynchronizeDefault(igTexGenMatrixAttr *self, void *conte
     float m[16];
 
     igMatrix44f_SetIdentity(m);
-    FUN_00173fd0(context, 14, m);
+    igPsx2VisualContext_GetMatrixPsx2((igPsx2VisualContext *)context, 14, m);
     igMatrix44f_Copy(self->m, m);
 }
 

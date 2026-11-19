@@ -6,7 +6,7 @@ void igVec4fMetaField_SwapBytes(igVec4fMetaField *arg0, int arg1, int arg2) {
 }
 
 void igVec4fMetaField_ValueFromString(int arg0, int arg1, int arg2) {
-    FUN_0018be80(arg2, arg1, 4, 4, 1);
+    FUN_0018be80((const char *)arg2, (void *)arg1, 4, 4, 1);
 }
 
 void igVec4fMetaField_ValueToString(int *out, void *field, const float *value) {

@@ -46,7 +46,7 @@ int igGuiSystemModel_GetVTable(void) {
     igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&s._componentUnderMouse, -1);
     igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&s._focusedComponent, -1);
     igSmartPointer_igGuiComponent_Destruct((igSmartPointer<igObject> *)&s._rootComponent, -1);
-    FUN_0044c110((S *)&s, 0);
+    igModel_Destroy((igModel *)&s, 0);
     return r;
 }
 

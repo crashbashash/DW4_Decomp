@@ -352,27 +352,27 @@ void FUN_001d7630(void *arg0, float *arg1) {
     t->f92->vX(m1);
     t->f96->vX(m2);
     s2 = (float *)(t->f100 + g_igTextureMatrixAttr_mField[0]->_offset);
-    FUN_001908f0(s2, arg1);
+    igMatrix44f_Copy(s2, arg1);
     igMatrix44f_Multiply(s2, s2, m1);
     igMatrix44f_Multiply(s2, s2, m2);
     igMatrix44f_SetIdentity(m3);
     v2[0] = 0.5f; v2[2] = 0.0f; v2[1] = -0.5f;
     FUN_00190c60(m3, v2);
     v3[0] = 0.5f; v3[1] = 0.5f; v3[2] = 0.0f;
-    FUN_00190a10(m3, v3);
+    igMatrix44f_SetTranslation(m3, v3);
     igMatrix44f_Multiply(s2, s2, m3);
     s0 = (float *)(t->f196 + DAT_0055ee30[0]->f8);
     s4 = (float *)(t->f200 + DAT_0055ee30[0]->f8);
-    FUN_001908f0(s4, arg1);
+    igMatrix44f_Copy(s4, arg1);
     igMatrix44f_Multiply(s4, s4, m1);
     f20 = t->f68 - t->f64;
-    FUN_001908f0(m4, DAT_004e0f30);
+    igMatrix44f_Copy(m4, DAT_004e0f30);
     m4[11] = 128.0f / f20;
     m4[15] = 128.0f + (128.0f * (t->f108 + t->f64)) / f20;
     igMatrix44f_Multiply(s4, s4, m4);
     m4[11] = -128.0f / f20;
     m4[15] = (128.0f * -t->f64) / f20;
-    FUN_001908f0(s0, m4);
+    igMatrix44f_Copy(s0, m4);
 }
 
 void FUN_001d7910(void) {
@@ -486,7 +486,7 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
         igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s2, (igAttr *)((int *)DAT_005628f8)[0]);
         igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s2, (igAttr *)((int *)DAT_005629d0)[0]);
         igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s2, (igAttr *)arg0->f148);
-        FUN_001dc610(arg1->f68);
+        FUN_001dc610((igSorter *)arg1->f68);
     }
     g_igCommonTraversal_travProcs = DAT_005628e8[0];
     temp_s3 = arg1->f52;
@@ -509,7 +509,7 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s2_2, (igAttr *)((int *)DAT_005629b0)[0]);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s2_2, (igAttr *)((int *)DAT_005629b8)[0]);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s2_2, (igAttr *)((int *)DAT_00562910)[0]);
-    FUN_001db720(arg1->f68, ((int *)DAT_005629a0)[0], temp_s2_2);
+    FUN_001db720((igSorter *)arg1->f68, ((igGeometry **)DAT_005629a0)[0], (igAttrStackManager *)temp_s2_2);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s2_2, (igAttr *)((int *)DAT_00562910)[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s2_2, (igAttr *)((int *)DAT_005629b8)[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s2_2, (igAttr *)((int *)DAT_005629b0)[0]);
@@ -551,7 +551,7 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s5_2, (igAttr *)((int *)DAT_005629b0)[0]);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s5_2, (igAttr *)((int *)DAT_005629b8)[0]);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s5_2, (igAttr *)((int *)DAT_00562910)[0]);
-    FUN_001db720(arg1->f68, ((int *)DAT_005629a0)[0], temp_s5_2);
+    FUN_001db720((igSorter *)arg1->f68, ((igGeometry **)DAT_005629a0)[0], (igAttrStackManager *)temp_s5_2);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s5_2, (igAttr *)((int *)DAT_00562910)[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s5_2, (igAttr *)((int *)DAT_005629b8)[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s5_2, (igAttr *)((int *)DAT_005629b0)[0]);
@@ -566,7 +566,7 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_00562998)[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s3, (igAttr *)((int *)DAT_005629c0)[0]);
     g_igCommonTraversal_travProcs = temp_s2_3;
-    FUN_001dc610(arg1->f68);
+    FUN_001dc610((igSorter *)arg1->f68);
     g_igCommonTraversal_travProcs = temp_s4;
 }
 

@@ -121,7 +121,7 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_51(S_1e1210 *self) {
     A_1e1210 *a;
     FUN_001c20b0((Controller *)self);
     *(int *)((char *)self->f32 + 96) = 2;
-    if ((((A_1e1210 *)igTextureAttr_GetImage((igTextureAttr *)self->f32, 0)) != 0) == 0) FUN_001c31e0(self->f32);
+    if ((((A_1e1210 *)igTextureAttr_GetImage((igTextureAttr *)self->f32, 0)) != 0) == 0) FUN_001c31e0((igTextureAttr *)self->f32);
     if (self->f52 != 0 && ((A_1e1210 *)igTextureAttr_GetImage((igTextureAttr *)self->f52, 0)) != 0 && *(int *)((char *)((A_1e1210 *)igTextureAttr_GetImage((igTextureAttr *)self->f52, 0)) + 44) == 0) {
         a = ((A_1e1210 *)igTextureAttr_GetImage((igTextureAttr *)self->f52, 0));
         a->v28(1);

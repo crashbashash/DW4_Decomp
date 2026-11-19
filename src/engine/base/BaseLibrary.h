@@ -52,6 +52,7 @@
 #include "dw4/maths/igVec4fMetaField.h"
 #include "dw4/maths/igVec4ucMetaField.h"
 #include "dw4/maths/igMatrix44f.h"
+#include "dw4/maths/igMatrix44d.h"
 #include "dw4/scenegraph/igTransform.h"
 #include "dw4/scenegraph/igSceneInfo.h"
 #include "dw4/scenegraph/igAnimationDatabase.h"
@@ -126,20 +127,12 @@ extern int DAT_00561010[4];
 extern "C" {
 
 int FUN_002fdef0(int, int);
-int FUN_00142bb0(void *list, void *key);
 struct GraphIterator;
 int FUN_0022ad00(struct GraphIterator *it);
-int FUN_001d6340(...);
-
-int FUN_00190330(...);
 }
 
-struct S {
-    void *f0;
-    char pad[28];
-    void *f20;
-    void *f24;
-};
+#include "dw4/base/igOptBase.h"
+#include "dw4/attrs/igObjectList.h"
 struct Obj { int *vt; char pad[28]; };
 struct Obj_2 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; int w8; int w9; int w10; int w11; };
 struct Obj_3 { int *vt; char pad[4]; };
@@ -379,7 +372,6 @@ typedef struct S_6 { char pad8[8]; int f8; int fC; unsigned int f10; } S_6;
 
 extern "C" {
 void BaseLibrary_MarkRegistered(void);
-void *FUN_00225790(struct S *arg0, short arg1);
 igMetaObject *igCompoundList_GetMetaObject(void);
 int igCompoundList_GetVTable(void);
 void FUN_00225900(void);
@@ -585,12 +577,8 @@ void FUN_0022a9e0(S0 *arg0, S1 *arg1);
 int FUN_0022aa60(struct B *arg0);
 void FUN_0022aab0(struct S_4 *arg0);
 int FUN_0022aac0(T_4 *arg0, int arg1);
-int FUN_0022ab90(int arg0, int arg1, int arg2);
-int FUN_0022ac00(void *arg0);
 int FUN_0022ac40(void *it);
 int FUN_0022ac60(void *arg0);
-int FUN_0022ac70(int arg0, int arg1);
-void FUN_0022b0a0(int arg0, int *arg1);
 void igListenerInterface_resetFields(igInterface *arg0, int flags);
 int Gap__igListenerBase__vfunc_28(void);
 int Gap__igListenerBase__vfunc_27(void);

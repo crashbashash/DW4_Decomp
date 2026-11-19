@@ -20,11 +20,11 @@ void FUN_004551a0(struct S_4551a0 *arg0, int arg1, int arg2) {
     igModel_NotifyViews((igModel *)arg0->a, (ModelChange *)sp);
 }
 
-void FUN_004551f0(void *arg0v, int arg1, void *arg2v) {
-    A_4551f0 *arg0 = (A_4551f0 *)arg0v;
-    Rc_4551f0 *arg2 = (Rc_4551f0 *)arg2v;
+void FUN_004551f0(igFieldSynchronizer *synchronizer, igObject *model, igMetaField *field) {
+    A_4551f0 *arg0 = (A_4551f0 *)synchronizer;
+    Rc_4551f0 *arg2 = (Rc_4551f0 *)field;
     Ref_4551f0 sp4C;
-    sp4C.p = (Rc_4551f0 *)igFieldChangeView_Create((int)(igObject_GetAllocator((igObject *)arg0v)));
+    sp4C.p = (Rc_4551f0 *)igFieldChangeView_Create((int)(igObject_GetAllocator((igObject *)synchronizer)));
     ObjectList_AppendRetained((igObjectList *)arg0->f8, (igObject *)sp4C.p);
     sp4C.p->f12 = (int)arg0;
     Rc_4551f0 *t = sp4C.p;
@@ -39,7 +39,7 @@ void FUN_004551f0(void *arg0v, int arg1, void *arg2v) {
         }
     }
     t->f16 = (int)arg2;
-    igView_SetModel((igView *)sp4C.p, (igModel *)arg1);
+    igView_SetModel((igView *)sp4C.p, (igModel *)model);
 }
 
 void FUN_004552e0(int *arg0, int *arg1) {

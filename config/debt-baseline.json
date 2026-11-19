@@ -14,13 +14,14 @@
   "code_only.other.functions": 0,
   "compile.bytes": 0,
   "compile.functions": 0,
-  "decl.header_conflicts": 29,
+  "decl.header_conflicts": 0,
   "decl.local_externs": 0,
-  "decl.type_conflicts": 65,
-  "decl.varargs": 70,
+  "decl.named_placeholders": 0,
+  "decl.type_conflicts": 0,
+  "decl.varargs": 0,
   "foreign_profile.bytes": 0,
   "foreign_profile.functions": 0,
-  "fun_dat_refs": 386,
+  "fun_dat_refs": 379,
   "inline_asm.other": 0,
   "inventory.unsymbolised_bytes": 0,
   "inventory_gap.bytes": 0,
@@ -32,14 +33,8 @@
   "name_defect.functions": 0,
   "opt_pragma.statements": 0,
   "orphan.bytes": 0,
-  "profile_split.bytes": {
-   "reason": "profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile",
-   "value": 19492
-  },
-  "profile_split.units": {
-   "reason": "profile_split +1 unit (568 B): src/runtime/crt0.S, the owner-approved start-up assembly source, sits in the Metrowerks runtime region but is assembled, not compiled under the region's MWCC profile",
-   "value": 3
-  },
+  "profile_split.bytes": 0,
+  "profile_split.units": 0,
   "raw_casts.reflected": 288,
   "struct.a": 1,
   "struct.b": {
@@ -49,8 +44,8 @@
   "struct.c": 6,
   "unapproved.bytes": 0,
   "unapproved.functions": 0,
-  "unmatched.bytes": 187100,
-  "unmatched.functions": 131
+  "unmatched.bytes": 184312,
+  "unmatched.functions": 127
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."
 }

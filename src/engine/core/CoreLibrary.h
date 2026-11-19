@@ -1139,7 +1139,6 @@ extern "C" void igObjectSystem_RunRegistrationCallbacks(int *arg0, int arg1);
 extern "C" void igObjectSystem_SetEventTrackerFileName(char *arg0, char *arg1);
 extern "C" void igObjectSystem_SetSystemPoolEventTrackerFileName(char *a, char *b);
 extern "C" void igObjectSystem_SetSymbolsFileName(void *arg0, int arg1);
-extern "C" void FUN_002ed5c0(void *);
 extern "C" void *igObjectSystem_OperatorNew(unsigned int size);
 extern "C" void igObjectSystem_OperatorDelete(void *block);
 extern "C" unsigned short igBoolArrayMetaField_GetSize(void *arg0);
@@ -1202,7 +1201,6 @@ extern "C" int igCompoundMetaField_ValueFromString(int *arg0, int arg1, int arg2
 extern "C" int igContext_GetMeta(void);
 extern "C" int igDataList_GetElementSize(void);
 extern "C" void igDependencyOrderedList_TopologicalSort(igDependencyOrderedList *self);
-extern "C" int FUN_00301000(...);
 extern "C" void igDirEntry_RetainSharedRef(void);
 extern "C" void igDirEntry_ReleaseSharedRef(void);
 extern "C" int igDirEntry_GetSharedEntry(int arg0);
@@ -1245,13 +1243,11 @@ extern "C" void igDriverDatabase_ReleaseDefaults(int self);
 extern "C" int igDriverDatabase_GetCurrentProperty(void *arg0, int arg1);
 extern "C" void igDriverDatabase_ClearRawDatabase(int *p);
 extern "C" void *igDriverDatabase_ConfigNode_Destruct(void *arg0, long long arg1);
-extern "C" int FUN_002daab0(void);
 extern "C" void igDriverDatabase_LoadFromString(void *arg0, int arg1);
 extern "C" int igDriverDatabase_GetOSName(void *arg0);
 extern "C" int igDriverDatabase_GetCpuVendor(void *arg0);
 extern "C" int igDriverDatabase_GetCpuType(void *arg0);
 extern "C" bool igDriverDatabase_ReadLineFromString(igDriverDatabase *self, char **cursor, char *out, int size);
-extern "C" int FUN_0012a78c(void *);
 extern "C" void igDriverDatabase_SkipWhitespace(int *arg0);
 extern "C" void igDriverDatabase_TrimTrailingWhitespace(int arg0, char *arg1);
 extern "C" bool igDriverDatabase_ReadToken(char *arg0, int *arg1);
@@ -3167,11 +3163,11 @@ extern "C" igResult igIGBFile_BuildMetaFieldBuffer(igIGBFileView *arg1);
 extern "C" igResult igIGBFile_BuildAlignmentBuffer(igIGBFileView *self);
 extern "C" igResult igIGBFile_BuildExternalDirectoryBuffer(igIGBFileView *self);
 extern "C" igResult igIGBFile_BuildDirectoryBuffer(igIGBFile *file);
-extern "C" int FUN_00142bb0(igObjectList *list, void *key);
+#include "dw4/attrs/igObjectList.h"
 /* An object list's sorted insert: FUN_00142bb0 finds the position by the pointer's value. */
 template <class T> static inline void insertObjectSorted(igObjectList *list, T *object) {
     RetainedWord<T> word(object);
-    List_InsertWords((igDataList *)list, FUN_00142bb0(list, &word), 1, &word);
+    List_InsertWords((igDataList *)list, FUN_00142bb0(list, (igObject *const *)&word), 1, &word);
 }
 extern "C" igResult igIGBFile_ShareEntries(igIGBFileView *self);
 extern "C" igResult igIGBFile_WriteEntryBuffer(igIGBFile *file);
@@ -3721,8 +3717,6 @@ extern "C" void igMetaObject_InheritFromBase(igMetaObject *meta,igMetaObject *pa
 extern "C" void igMetaObject_SetName(igMetaObject *meta, int name);
 extern "C" void igMetaObject_AppendField(igMetaObject *meta, igMetaField *field);
 extern "C" void igMetaObject_FinalizeFieldLayout(igMetaObject *arg0);
-extern "C" int igMetaObject_GetChildCount(igMetaObject *arg0);
-extern "C" int igMetaObject_GetChildAt(igMetaObject *self, int index);
 extern "C" void igMetaObject_AddField(igMetaObject *self, void *object);
 extern "C" int igMetaObject_AddToMetaObjectList(igTDataList<igMetaObject *> *list, igMetaObject *object);
 extern "C" void igMetaObject_AssignTypeId(igMetaObject *meta);
@@ -5007,9 +5001,7 @@ extern "C" char text_Memory_Fast[];
 extern "C" char text_Section_Static_Cons[];
 extern "C" char text_Section_VTables[];
 extern "C" char text_Section_Small_Data[];
-extern "C" char __ctors_start__[];
-extern "C" char __ctors_end__[];
-extern "C" char __exception_table_start__[];
+#include "dw4/runtime/exception.h"
 extern "C" char __small_data_start__[];
 extern "C" char __small_data_size__[];
 extern "C" void igPsx2Thread_AdoptCurrentThread(igPsx2Thread *self);

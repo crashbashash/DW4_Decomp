@@ -278,14 +278,14 @@ void igCommonTraversal_InitFields(void) {
     b1b.x = 0;b1b.y = 0x3F800000;b1b.z = 0;b1b.w = 0;
     b1a.x = 0x3F800000;b1a.y = 0;b1a.z = 0;b1a.w = 0;
     igMatrix44f_FromRows((float *)&b1o, (igVec4f *)&b1a, (igVec4f *)&b1b, (igVec4f *)&b1c, (igVec4f *)&b1d);
-    FUN_0018c640(temp_s2_15, &b1o);
+    FUN_0018c640((igMetaField *)temp_s2_15, (const float *)&b1o);
     temp_s2_16 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xF)));
     b2d.x = 0;b2d.y = 0;b2d.z = 0;b2d.w = 0x3F800000;
     b2c.x = 0;b2c.y = 0;b2c.z = 0x3F800000;b2c.w = 0;
     b2b.x = 0;b2b.y = 0x3F800000;b2b.z = 0;b2b.w = 0;
     b2a.x = 0x3F800000;b2a.y = 0;b2a.z = 0;b2a.w = 0;
     igMatrix44f_FromRows((float *)&b2o, (igVec4f *)&b2a, (igVec4f *)&b2b, (igVec4f *)&b2c, (igVec4f *)&b2d);
-    FUN_0018c640(temp_s2_16, &b2o);
+    FUN_0018c640((igMetaField *)temp_s2_16, (const float *)&b2o);
     temp_s2_17 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x11)));
     ((igObjectRefMetaField *)temp_s2_17)->_metaObject = (int)igMatrixOptStateAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_17)->_construct = 1;
@@ -333,7 +333,7 @@ void igCommonTraversal_InitFields(void) {
     b3b.x = 0;b3b.y = 0x3F800000;b3b.z = 0;b3b.w = 0;
     b3a.x = 0x3F800000;b3a.y = 0;b3a.z = 0;b3a.w = 0;
     igMatrix44f_FromRows((float *)&b3o, (igVec4f *)&b3a, (igVec4f *)&b3b, (igVec4f *)&b3c, (igVec4f *)&b3d);
-    FUN_0018c640(temp_s2_27, &b3o);
+    FUN_0018c640((igMetaField *)temp_s2_27, (const float *)&b3o);
     temp_s2_28 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1E)));
     ((igObjectRefMetaField *)temp_s2_28)->_metaObject = (int)igTimeAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_28)->_construct = 1;
@@ -344,7 +344,7 @@ void igCommonTraversal_InitFields(void) {
     b4b.x = 0;b4b.y = 0x3F800000;b4b.z = 0;b4b.w = 0;
     b4a.x = 0x3F800000;b4a.y = 0;b4a.z = 0;b4a.w = 0;
     igMatrix44f_FromRows((float *)&b4o, (igVec4f *)&b4a, (igVec4f *)&b4b, (igVec4f *)&b4c, (igVec4f *)&b4d);
-    FUN_0018c640(temp_s2_29, &b4o);
+    FUN_0018c640((igMetaField *)temp_s2_29, (const float *)&b4o);
     ((igMetaField *)temp_s2_29)->_persistent = 0;
     temp_s2_30 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x21)));
     b5d.x = 0;b5d.y = 0;b5d.z = 0;b5d.w = 0x3F800000;
@@ -352,7 +352,7 @@ void igCommonTraversal_InitFields(void) {
     b5b.x = 0;b5b.y = 0x3F800000;b5b.z = 0;b5b.w = 0;
     b5a.x = 0x3F800000;b5a.y = 0;b5a.z = 0;b5a.w = 0;
     igMatrix44f_FromRows((float *)&b5o, (igVec4f *)&b5a, (igVec4f *)&b5b, (igVec4f *)&b5c, (igVec4f *)&b5d);
-    FUN_0018c640(temp_s2_30, &b5o);
+    FUN_0018c640((igMetaField *)temp_s2_30, (const float *)&b5o);
     ((igMetaField *)temp_s2_30)->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x22)))->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCommonTraversal_fieldTable, g_igCommonTraversal_fieldHandles, g_igCommonTraversal_fieldOffsets, temp_s1);

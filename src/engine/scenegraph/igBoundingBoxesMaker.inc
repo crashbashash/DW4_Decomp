@@ -1,6 +1,6 @@
-void FUN_001a4830(int arg0) {
+igBoundingBoxesMaker *FUN_001a4830(igMemoryPoolView *pool) {
     igBoundingBoxesMaker_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)g_igBoundingBoxesMaker_metaObject, (igMemoryPoolView *)arg0);
+    return (igBoundingBoxesMaker *)igMetaObject_CreateInstance(g_igBoundingBoxesMaker_metaObject, pool);
 }
 
 igMetaObject *g_igBoundingBoxesMaker_metaObject;
@@ -35,7 +35,7 @@ int igBoundingBoxesMaker_GetVTable(void) {
     obj.vt = &g_igBoundingBoxesMaker_vtable[0];
     igSmartPointer_igMetaObjectList_Destruct((igSmartPointer<igObject> *)&obj.w[8], -1);
     igSmartPointer_igStringObj_Destruct((igSmartPointer<igObject> *)&obj.w[7], -1);
-    FUN_0014dd40((R **)&obj.w[5], (short)-1);
+    FUN_0014dd40((igSmartPointer<igObject> *)&obj.w[5], -1);
     igSmartPointer_igAABox_Destruct((igSmartPointer<igObject> *)&obj.w[4], -1);
     return r;
 }

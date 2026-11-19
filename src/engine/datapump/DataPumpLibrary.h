@@ -67,7 +67,6 @@ extern "C" int igMatrixStack_GetVTable(void);
 extern "C" void igMatrixStack_EnsureRegistered(void);
 extern "C" CallbackArray *igMatrixStack_Register(void);
 extern "C" void igMatrixStack_GetMetaObjectFunction(void);
-extern "C" int FUN_001888e0(...);
 extern "C" void igMatrixStack_InitFields(void);
 extern "C" igMetaObject *igNonRefCountedMatrixObjectList_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igNonRefCountedMatrixObjectList_GetMetaObject(void);
@@ -94,7 +93,6 @@ extern "C" void igMatrixObject_EnsureRegistered(void);
 extern "C" CallbackArray *igMatrixObject_Register(void);
 extern "C" void igMatrixObject_GetMetaObjectFunction(void);
 extern "C" void igMatrixObject_InitFields(void);
-extern "C" igMetaObject *igIntObject_GetMetaObject(void);
 struct Obj_1e4e80 { int *vt; char pad[12]; };
 extern "C" int g_igIntObject_vtable[4];
 extern "C" int igIntObject_GetVTable(void);
@@ -102,7 +100,6 @@ extern "C" void igIntObject_EnsureRegistered(void);
 extern "C" CallbackArray *igIntObject_Register(void);
 extern "C" void igIntObject_GetMetaObjectFunction(void);
 extern "C" void igIntObject_InitFields(void);
-extern "C" igMetaObject *igFloatObject_GetMetaObject(void);
 struct Obj_1e5010 { int *vt; char pad[12]; };
 extern "C" int g_igFloatObject_vtable[4];
 extern "C" int igFloatObject_GetVTable(void);
@@ -193,7 +190,6 @@ extern "C" void igDataPump_EnsureRegistered(void);
 extern "C" CallbackArray *igDataPump_Register(void);
 extern "C" void igDataPump_GetMetaObjectFunction(void);
 extern "C" void igDataPump_InitFields(void);
-extern "C" igMetaObject *igBoolObject_GetMetaObject(void);
 struct O { int *vt; char post[12]; };
 extern "C" int g_igBoolObject_vtable[4];
 extern "C" int igBoolObject_GetVTable(void);
@@ -221,12 +217,14 @@ extern "C" void igMersenneTwisterRandomNumber_Seed(igMersenneTwisterRandomNumber
 #include "dw4/datapump/igRandomNumberDispatchView.h"
 extern "C" void igMersenneTwisterRandomNumber_resetFields(igMersenneTwisterRandomNumber *self, int flags);
 #include <stdio.h>
-extern "C" int FUN_0018be80(...);
 #include "dw4/datapump/igRegistryValue.h"
 #include "dw4/core/igStringRef.h"
 #include "dw4/core/igStringObj.h"
 #include "dw4/support/softfloat.h"
 #include "dw4/datapump/igMatrixObject.h"
+#include "dw4/datapump/igBoolObject.h"
+#include "dw4/datapump/igFloatObject.h"
+#include "dw4/datapump/igIntObject.h"
 #include "dw4/datapump/igCompressVec.h"
 
 struct Tag { };

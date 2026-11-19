@@ -276,10 +276,10 @@ void SystemAllocator_CollectProgramRegions(SystemAllocator *self, igDataList *re
     if (e != 0) e = DumpRegion_Init(e);
     row = e;
     e->start = (unsigned)__ctors_start__;
-    vtables = __ctors_end__;
-    row->size = vtables - __ctors_start__;
+    vtables = (char *)__ctors_end__;
+    row->size = vtables - (char *)__ctors_start__;
     insertRegion(regions, row, text_Section_Static_Cons,"Program");
-    newRegion(row, (unsigned)vtables, __exception_table_start__ - vtables);
+    newRegion(row, (unsigned)vtables, (char *)__exception_table_start__ - vtables);
     insertRegion(regions, row, text_Section_VTables,"Program");
     newRegion(row, (unsigned)__small_data_start__, (unsigned)__small_data_size__);
     insertRegion(regions, row, text_Section_Small_Data,"Program");

@@ -36,6 +36,16 @@ igResult igMatrix44f_Invert(float *inverse, const float *matrix);
  * taken back through it. */
 igResult igMatrix44f_InvertOrthonormal(float *inverse, const float *matrix);
 void Quaternion_Lerp(float *out, float t, const float *from, const float *to);
+/* Transposes the matrix in place. */
+void FUN_001903d0(float *matrix);
+/* The identity with `scale` on the diagonal. */
+void FUN_00190c60(float *matrix, const float *scale);
+/* Scales the first three rows by the three components of `scale`. */
+void FUN_00190cb0(float *matrix, const float *scale);
+/* The frustum projection with the given left, right, bottom, top, near and far planes. */
+void FUN_00191910(float *matrix, float left, float right, float bottom, float top, float nearPlane, float farPlane);
+/* The rotation matrix of a unit quaternion. */
+void FUN_00192810(const float *quaternion, float *matrix);
 }
 
 /* Alchemy's 4x4 float matrix. Its constructors are the library's out-of-line identity and

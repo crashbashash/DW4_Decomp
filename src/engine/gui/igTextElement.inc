@@ -160,27 +160,27 @@ void igTextElement_InitFields(void) {
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igTextElement_fieldTable, g_igTextElement_fieldHandles, g_igTextElement_fieldOffsets, temp_s2);
 }
 
-void *FUN_0044c110(struct S *arg0, short arg1) {
-    void *p;
+igModel *igModel_Destroy(igModel *self, short deleteFlag) {
+    igObject *views;
     int rc;
 
-    if (arg0 != 0) {
-        arg0->f0 = &g_igModel_vtable[0];
-        if (&arg0->f8) {
-            p = arg0->f8;
-            if (p != 0) {
-                rc = *(int *)((char *)(p) + 4) - 1;
-                *(int *)((char *)(p) + 4) = rc;
-                if (((unsigned long long) ((long long) *(int *)((char *)(p) + 4) << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((igObject *)p);
+    if (self != 0) {
+        self->_vtable = (int)&g_igModel_vtable[0];
+        if (&self->_views) {
+            views = (igObject *)self->_views;
+            if (views != 0) {
+                rc = views->_refCount - 1;
+                views->_refCount = rc;
+                if (((unsigned long long) ((long long) (int)views->_refCount << 0x29) >> 0x29) == 0) {
+                    igObject_Destroy(views);
                 }
             }
         }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (deleteFlag > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
 igMetaObject *igGuiComponentModel_GetPublishedMetaObject(void) {

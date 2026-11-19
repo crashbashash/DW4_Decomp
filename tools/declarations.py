@@ -4,7 +4,7 @@
 The convention: a symbol is declared once, in a header, with the type its definition has, and the file
 that defines it includes that header. Every declaration in src/ and include/ is read here (comments,
 strings, preprocessor lines and `#if 0` arms blanked; class and function bodies skipped) and judged
-against the definitions in src/. Four kinds of debt come out of it; tools/progress.py counts them in the
+against the definitions in src/. Five kinds of debt come out of it; tools/progress.py counts them in the
 debt ratchet (docs/engine/debt-ratchet.md) and fails a function's `declarations` readable check when a
 symbol its body uses carries one of the first three:
 
@@ -29,7 +29,9 @@ varargs        a prototype that does not state the parameters of a symbol that h
 type conflict  a declaration whose type differs from the symbol's C definition, compared after
                normalising whitespace, parameter names, `struct`/`class`/`union`/`enum` keywords, integer
                spellings (`unsigned int` = `unsigned`), typedefs with one meaning across the tree,
-               array parameters (= pointers) and top-level `const` on parameters and return types: data
+               macros every definition of which only decorates (a calling convention, a memory model, an
+               attribute or nothing: libpng's `PNGAPI`, zlib's `FAR`), array parameters (= pointers) and
+               top-level `const` on parameters and return types: data
                type, array against scalar or array length, return type, parameter count and types. A
                function is compared when both sides have C linkage (a C++ declaration with other
                parameters is another overload); data is always compared. A `(...)` list and a C `()`
@@ -45,12 +47,16 @@ type conflict  a declaration whose type differs from the symbol's C definition, 
                varargs reads the definition the same way.
 header conflict a symbol declared in two or more headers whose declarations disagree with each other
                (functions with C linkage and data; definitions not needed, so assembly symbols count).
+named placeholder
+               a `FUN_<va>`/`DAT_<va>` identifier in the code of src/ or include/ (macro bodies included) whose
+               address config/SLUS-20836/symbols.txt or data-names.tsv gives a recovered name: the build binds
+               it by address, so it links either way, and a rename keyed on the old name passes it by.
 
 Stock library source (src/third_party/) is its authors' text: its declarations are not counted and do not
 fail a function, but its definitions are the reference for the code that calls into it.
 
-    python3 tools/declarations.py                          # the four counts
-    python3 tools/declarations.py --list varargs [PATH]    # local | varargs | conflicts | headers
+    python3 tools/declarations.py                          # the five counts
+    python3 tools/declarations.py --list varargs [PATH]    # local | varargs | conflicts | headers | placeholders
 
 `--list local` also prints the approved copies, marked `[approved #anchor]`, so they stay visible.
 """
@@ -78,6 +84,8 @@ _DIRECTIVE = re.compile(r"[ \t]*#[ \t]*(\w+)(.*)")
 _INCLUDE = re.compile(r'^[ \t]*#[ \t]*include[ \t]*"([^"]+)"', re.M)
 _ATTR = re.compile(r"\b(?:__attribute__|__declspec)\s*\(\((?:[^()]|\([^()]*\))*\)\)|\b__declspec\s*\([^()]*\)"
                    r"|\b(?:__asm__|__asm|asm)\s*\([^()]*\)")
+_DECORATION = re.compile(r"\b(?:__cdecl|_cdecl|__stdcall|_stdcall|__fastcall|_fastcall|__pascal|__export|__import"
+                         r"|__far|_far|far|__near|_near|near|__huge|_huge|huge)\b")
 _STORAGE = re.compile(r"\b(?:extern|static|inline|__inline__|__inline|register|virtual|explicit|mutable|"
                       r"__extern_C|__extern_CPP)\b")
 _ELABORATED = re.compile(r"\b(?:struct|class|union|enum|typename)\b")
@@ -232,6 +240,29 @@ def expand(text, macros):
     return None
 
 
+def decoration_macros(texts):
+    """The object-like macros every definition of which, in any arm of any file, only decorates a
+    declaration: a calling convention, a memory model, an attribute or nothing (libpng's `PNGAPI`, zlib's
+    `FAR`). Whichever of them the compiler takes, they add nothing to a type."""
+    bodies, opaque = collections.defaultdict(set), set()
+    for text in texts:
+        if "#" not in text:
+            continue
+        for d in directive_lines(text):
+            if not d or d[0] not in ("define", "undef"):
+                continue
+            m = re.match(r"\s*([A-Za-z_]\w*)(\()?(.*)", d[1], re.S)
+            if not m:
+                continue
+            if d[0] == "undef" or m.group(2):
+                opaque.add(m.group(1))
+            else:
+                bodies[m.group(1)].add(m.group(3).strip())
+    return {name for name, found in bodies.items()
+            if name not in opaque and name not in _TYPE_WORDS
+            and not any(_DECORATION.sub(" ", _ATTR.sub(" ", b)).strip() for b in found)}
+
+
 # ---- types -------------------------------------------------------------------------------------------
 def _canon_int(words):
     unsigned = "unsigned" in words
@@ -254,6 +285,7 @@ class Types:
         self.raw = collections.defaultdict(set)
         self._resolved = {}
         self.parent = parent
+        self.decoration = parent.decoration if parent is not None else set()
 
     def known(self, name):
         return name in self.raw or (self.parent is not None and self.parent.known(name))
@@ -322,6 +354,8 @@ class Types:
             if run:
                 out.append(_canon_int(run))
                 run = []
+            if tk in self.decoration:
+                continue
             if tk not in ("const", "volatile") and (tk[0].isalpha() or tk[0] == "_"):
                 resolved = self.resolve(tk, depth) if self.known(tk) else None
                 if resolved and resolved != tk:
@@ -615,6 +649,7 @@ class Index:
                         continue
         for rel, text in self.texts.items():
             self.includes[rel] = [t for t in (self._resolve(rel, inc) for inc in _INCLUDE.findall(text)) if t]
+        self.types.decoration.update(decoration_macros(self.texts.values()))
         # units: each .c/.cpp with the `.inc` fragments it includes; headers reached from it
         self.units, self.unit_of = {}, collections.defaultdict(list)
         self.header_langs = collections.defaultdict(set)
@@ -642,6 +677,7 @@ class Index:
             for stmt in stmts:
                 self.types.add_typedef(stmt)
         self._scopes, self._unit_files, self._directives = {}, {}, {}
+        self._placeholders = None
         self.decls = {rel: parse_file(s, rel, self.types, self._file_is_c(rel)) for rel, s in scanned.items()}
         self._judge()
 
@@ -951,7 +987,39 @@ class Index:
 
     def counts(self):
         return {"decl.local_externs": len(self.local), "decl.varargs": len(self.varargs),
-                "decl.type_conflicts": len(self.conflicts), "decl.header_conflicts": len(self.header_conflicts)}
+                "decl.type_conflicts": len(self.conflicts), "decl.header_conflicts": len(self.header_conflicts),
+                "decl.named_placeholders": len(self.named_placeholders())}
+
+    def named_placeholders(self):
+        """[(path, line, placeholder, name)]: each `FUN_<va>`/`DAT_<va>` in the code of src/ and include/
+        (comments and strings blanked, preprocessor lines kept) whose address the symbol map
+        (config/SLUS-20836/symbols.txt) or the data names (data-names.tsv) give a recovered name. The build
+        binds such a call by address, so it links either way, and a rename keyed on the old name passes it by."""
+        if self._placeholders is None:
+            names = {}
+            config = os.path.join(self.root, "config", "SLUS-20836")
+            for table, col in (("data-names.tsv", 1), ("symbols.txt", 2)):
+                try:
+                    with open(os.path.join(config, table)) as fh:
+                        for row in fh:
+                            parts = row.split()
+                            if len(parts) > col and not row.startswith("#"):
+                                names[int(parts[0], 16)] = parts[col]
+                except (OSError, ValueError):
+                    continue
+            names = {va: n for va, n in names.items() if not PLACEHOLDER.search(n)}
+            out = []
+            for rel in sorted(self.texts):
+                if self.stock(rel) or not PLACEHOLDER.search(self.texts[rel]):
+                    continue
+                code = _COMMENT_OR_STRING.sub(lambda m: "".join("\n" if c == "\n" else " " for c in m.group(0)),
+                                              self.texts[rel])
+                for m in re.finditer(r"\b(?:FUN|DAT)_([0-9a-fA-F]{6,8})\b", code):
+                    name = names.get(int(m.group(1), 16))
+                    if name:
+                        out.append((rel, code.count("\n", 0, m.start()) + 1, m.group(0), name))
+            self._placeholders = out
+        return self._placeholders
 
     def unit_key(self, path):
         rel = os.path.relpath(os.path.abspath(path), self.root).replace(os.sep, "/")
@@ -1000,7 +1068,7 @@ def used_bad(body, bad):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--list", choices=("local", "varargs", "conflicts", "headers"))
+    ap.add_argument("--list", choices=("local", "varargs", "conflicts", "headers", "placeholders"))
     ap.add_argument("path", nargs="?", help="with --list: only declarations in files under this path")
     a = ap.parse_args(argv)
     idx = index()
@@ -1012,8 +1080,13 @@ def main(argv=None):
         for n in idx.header_conflicts:
             print(n)
         return 0
-    rows = {"local": idx.local_listing, "varargs": idx.varargs, "conflicts": idx.conflicts}[a.list]
     want = a.path and os.path.relpath(os.path.abspath(a.path), ROOT).replace(os.sep, "/")
+    if a.list == "placeholders":
+        for path, line, placeholder, name in idx.named_placeholders():
+            if not want or path == want or path.startswith(want.rstrip("/") + "/"):
+                print("%s:%d: %s is %s" % (path, line, placeholder, name))
+        return 0
+    rows = {"local": idx.local_listing, "varargs": idx.varargs, "conflicts": idx.conflicts}[a.list]
     for d in rows:
         approved = None
         if a.list == "local":

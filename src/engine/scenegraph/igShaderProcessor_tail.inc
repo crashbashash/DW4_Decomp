@@ -23,17 +23,17 @@ void FUN_001cb010(void *self, IniValueTarget *target, IniValueList *list) {
     igSmartPointer<IniValueObject> text(((IniValueObject *)igStringObj_Create((int)(((void *)igObject_GetAllocator((igObject *)self))))));
     for (i = 0; i < igObjectStringMap_GetCount(list); i++) {
         value = (IniValueObject *)igObjectStringMap_GetObjectAt(list, i);
-        if (igObject_IsKindOf(value, (igMetaObject *)FUN_001e4e30()) != 0) {
+        if (igObject_IsKindOf(value, igIntObject_GetMetaObject()) != 0) {
             igStringObj_SetInt((int)text.p, value->value.i, "%d");
             s = text.p->value.s;
             s = (s == 0) ? g_stringObjEmptyText : s;
             igDriverDatabase_SetSubPropertyValue((igDriverDatabase *)target, 10, (const char *)igObjectStringMap_GetNameAt(list, i), s);
-        } else if (igObject_IsKindOf(value, (igMetaObject *)FUN_001e4fc0()) != 0) {
+        } else if (igObject_IsKindOf(value, igFloatObject_GetMetaObject()) != 0) {
             igStringObj_SetFloat((int)text.p, "%f", value->value.f);
             s = text.p->value.s;
             s = (s == 0) ? g_stringObjEmptyText : s;
             igDriverDatabase_SetSubPropertyValue((igDriverDatabase *)target, 11, (const char *)igObjectStringMap_GetNameAt(list, i), s);
-        } else if (igObject_IsKindOf(value, (igMetaObject *)FUN_001e5c50()) != 0) {
+        } else if (igObject_IsKindOf(value, igBoolObject_GetMetaObject()) != 0) {
             igStringObj_SetBool((int)text.p, value->value.b, 0);
             s = text.p->value.s;
             s = (s == 0) ? g_stringObjEmptyText : s;

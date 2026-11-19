@@ -19,18 +19,13 @@ public:
     virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27();
     virtual void apply();
 };
-/* igPsx2VisualContext blend-function setter (igPsx2VisualContext_tail4.inc).
- * matching construct: type sweep — src/dst taken as `long` (64-bit on EE MWCC): the widening keeps
- * each factor in its own register before the context moves into a0, as retail does. */
-extern "C" void FUN_00174510(void *context, long src, long dst, unsigned char blendConstant, int blendStage);
-extern "C" void FUN_0016e290(igBlendEquationExt *ext, int blendA, int blendB, int blendC, int blendD, char blendConstant);
 
 /* apply: set the blend function on the visual context, then the extended blend equation if present. */
-extern "C" void Gap__Attrs__igBlendFunctionAttr__apply(igBlendFunctionAttr *self, void *context) {
-    FUN_00174510(context, self->_src, self->_dst, self->_blendConstant, self->_blendStage);
+extern "C" void Gap__Attrs__igBlendFunctionAttr__apply(igBlendFunctionAttr *self, igPsx2VisualContext *context) {
+    FUN_00174510(context, (IG_GFX_BLENDING_FUNCTION)self->_src, (IG_GFX_BLENDING_FUNCTION)self->_dst, self->_blendConstant, self->_blendStage);
     if (g_igBlendFunctionAttr_blendEquationExt != 0) {
         ((igBlendEquationExt *)g_igBlendFunctionAttr_blendEquationExt)->_equation = self->_eq;
-        FUN_0016e290((igBlendEquationExt *)g_igBlendFunctionAttr_blendEquationExt, self->_blendA, self->_blendB, self->_blendC, self->_blendD,
+        igPsx2BlendEquationExt_SetBlendFactors((igPsx2BlendEquationExt *)g_igBlendFunctionAttr_blendEquationExt, self->_blendA, self->_blendB, self->_blendC, self->_blendD,
                      (char)self->_blendConstant);
         ((igBlendEquationExtView *)g_igBlendFunctionAttr_blendEquationExt)->apply();
     }

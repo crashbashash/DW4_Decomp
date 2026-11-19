@@ -117,8 +117,8 @@ void FUN_0023b140(struct R *arg0, struct Q *arg1) {
         }
     }
     if (igObject_IsKindOf((igObject *)arg1, g_igGeometry_metaObject) != 0) {
-        FUN_0023ac20(&sp5C, arg0, arg1);
-        FUN_0018de10(arg0->f8, sp5C);
+        FUN_0023ac20((igSphere **)&sp5C, (igBoundingSphereMaker *)arg0, (igGeometry *)arg1);
+        FUN_0018de10((igSphere *)arg0->f8, (const igSphere *)sp5C);
         t = sp5C;
         if (t != 0) {
             t->f4 = (int)((int) (t->f4 - 1));
@@ -151,6 +151,6 @@ void FUN_0023b3b0(RetainedList *list, RefCounted *object) {
 
 void FUN_0023b410(int *arg0, int arg1, int arg2, int arg3) {
     arg0[4] = arg1; arg0[5] = arg2; arg0[6] = arg3;
-    FUN_00301ee0(arg0[2], arg1 * arg2 * arg3);
+    ObjectList_ResizeRetained((igTDataList<igObject *> *)arg0[2], arg1 * arg2 * arg3);
 }
 

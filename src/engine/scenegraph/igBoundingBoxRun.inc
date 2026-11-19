@@ -1,8 +1,8 @@
 int igTransformSequence_ExtendBound(AABoxFields *arg0, TransformInputView *arg1) {
     if (igObject_IsKindOf((igObject *)arg1, g_igTransformSequence_metaObject) != 0) {
-        Ref_1b2750 a((AABoxFields *)igAABox_CreateInstance((int)FUN_00301000(arg0)));
+        Ref_1b2750 a((AABoxFields *)igAABox_CreateInstance((int)igObject_GetAllocator((igObject *)arg0)));
         igVolume_ExtendBy((void **)a.o, (void **)arg0);
-        Ref_1b2750 b((AABoxFields *)igAABox_CreateInstance((int)FUN_00301000(arg0)));
+        Ref_1b2750 b((AABoxFields *)igAABox_CreateInstance((int)igObject_GetAllocator((igObject *)arg0)));
         AABoxFields *p = b.o;
         p->f8 = p->f12 = p->f16 = 3.402823466e+38f;
         p->f20 = p->f24 = p->f28 = -3.402823466e+38f;
@@ -127,12 +127,12 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
     return ok;
 }
 
-int FUN_001b2ed0(int arg0, int arg1) {
-    int temp_v0;
+igAABox *FUN_001b2ed0(igBoundingBoxesMaker *maker, igNode *node) {
+    igAABox *box;
 
-    temp_v0 = (int)igAABox_CreateInstance((int)igObject_GetAllocator((igObject *)arg1));
-    FUN_001b2f30((struct O_1b2750 *)arg0, arg1, (struct B_1b2750 *)temp_v0);
-    return temp_v0;
+    box = igAABox_CreateInstance((int)igObject_GetAllocator((igObject *)node));
+    FUN_001b2f30((struct O_1b2750 *)maker, (int)node, (struct B_1b2750 *)box);
+    return box;
 }
 
 void FUN_001b2f30(struct O_1b2750 *arg0, int arg1, struct B_1b2750 *arg2) {

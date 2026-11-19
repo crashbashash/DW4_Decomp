@@ -37,12 +37,12 @@ void FUN_0018edb0(int meta) {
     if (root == meta) {
         return;
     }
-    n = FUN_002fe2c0(root);
+    n = igMetaObject_GetChildCount((igMetaObject *)root);
     i = g_emptyFunctionList->count;
     if (i >= n) {
         return;
     }
-    ((IndexedWordPairKey *)FUN_002fe2e0(root, i))->idx = i;
+    ((IndexedWordPairKey *)igMetaObject_GetChildAt((igMetaObject *)root, i))->idx = i;
     setCount(g_rayIntersectionFunctionList, n); setSlot(g_rayIntersectionFunctionList, i, (int)FUN_0018f490);
     setCount(g_extendByRayFunctionList, n); setSlot(g_extendByRayFunctionList, i, (int)FUN_0018f480);
     setCount(g_containsRayFunctionList, n); setSlot(g_containsRayFunctionList, i, (int)FUN_0018f470);
@@ -101,35 +101,30 @@ void FUN_0018f4a0(void){
   REL(g_getCenterFunctionList)
 }
 
-InstanceListRef FUN_0018f760(int allocator) {
+igSmartPointer<igVolumeList> FUN_0018f760(igMemoryPoolView *allocator) {
     int meta = (int)g_igVolume_metaObject;
-    unsigned count = FUN_002fe2c0(meta);
+    unsigned count = igMetaObject_GetChildCount((igMetaObject *)meta);
     unsigned i;
-    InstanceListRef list((NodeList *)FUN_00186c00(allocator));
-    FUN_00301ee0(list.p, count);
+    igSmartPointer<igVolumeList> list((igVolumeList *)FUN_00186c00((int)allocator));
+    ObjectList_ResizeRetained((igTDataList<igObject *> *)list.p, count);
     for (i = 0; i < count; i++) {
-        igSmartPointer<InstanceNode> element((InstanceNode *)igMetaObject_CreateInstanceRef((igMetaObject *)FUN_002fe2e0(meta, i), (igMemoryPoolView *)allocator).get(), kRetainReference);
+        igSmartPointer<InstanceNode> element((InstanceNode *)igMetaObject_CreateInstanceRef((igMetaObject *)igMetaObject_GetChildAt((igMetaObject *)meta, i), allocator).get(), kRetainReference);
         setElement(list, i, element);
     }
     return list;
 }
 
-void **FUN_0018f980(void **arg0, int arg1) {
-    int *o;
-
-    if (arg0 != 0) {
-        o = (int *)(*arg0);
-        if (o != 0) {
-            o[1] = o[1] - 1;
-            if ((o[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
+igSmartPointer<igObject> *FUN_0018f980(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if ((short)arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 void **FUN_0018fa00(void **arg0, short arg1) {

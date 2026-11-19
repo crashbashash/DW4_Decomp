@@ -56,6 +56,9 @@ TREE = {
     "include/dw4/pnglike.h": "int Png_Read(int);\n",
     "src/game/pnglib.c": "int Png_Read(int n) { return n; }\n",
     "src/game/reader.c": "#include \"dw4/pnglike.h\"\nint Reader_Go(void) { return Png_Read(1); }\n",
+    # the symbol map names 0x401300 (user.c spells it FUN_00401300); 0x401234 has no name yet
+    "config/SLUS-20836/symbols.txt": "# va size name\n00401300 000010 Real_Named\n00401400 000010 FUN_00401400\n",
+    "src/game/alias.c": "/* FUN_00401300 in a comment */\nvoid FUN_00401400(void) { }\n",
 }
 
 
@@ -113,7 +116,8 @@ class Declarations(unittest.TestCase):
 
     def test_counts(self):
         self.assertEqual(self.idx.counts(), {"decl.local_externs": 7, "decl.varargs": 3,
-                                             "decl.type_conflicts": 2, "decl.header_conflicts": 1})
+                                             "decl.type_conflicts": 2, "decl.header_conflicts": 1,
+                                             "decl.named_placeholders": 1})
 
     def test_bad_names_per_unit(self):
         root = self.folder.name
@@ -139,6 +143,9 @@ class Declarations(unittest.TestCase):
             main = os.path.join(root, "src/game/main.cpp")
             self.assertIn("declarations", progress.readable_failures("Main_Run", main, cache))
             self.assertNotIn("declarations", progress.readable_failures("Main_Idle", main, cache))
+
+    def test_a_placeholder_for_a_named_address(self):
+        self.assertEqual(self.idx.named_placeholders(), [("src/game/user.c", 5, "FUN_00401300", "Real_Named")])
 
 
 class ApprovedLocalDeclarations(unittest.TestCase):
@@ -250,6 +257,14 @@ UNIT_VIEW_TREE = {
     # a definer that does not include the header: each side as the units reading it see it
     "src/libgcc/sub.c": "#include \"dw4/dp.h\"\n"
                         "FLO Dp_Sub(FLO a, FLO b) { return a - b; }\nFLO Dp_Div(FLO a, FLO b) { return a / b; }\n",
+    # a calling-convention macro and a memory-model one, each defined under conditions the tool cannot
+    # decide (libpng's PNGAPI, zlib's FAR): every definition only decorates, so the types agree
+    "include/dw4/api.h": "typedef struct Api_State *Api_Ptr;\nvoid Api_Read(Api_Ptr);\nint Api_Wide(Api_Ptr);\n",
+    "src/third_party/api/apiconf.h": "#ifdef _WIN32\n#define API __cdecl\n#define FAR far\n#else\n#define API\n"
+                                     "#define FAR\n#endif\n#ifdef API_WIDE\n#define WIDE long long\n#endif\n",
+    "src/third_party/api/api.c": "#include \"apiconf.h\"\n#include \"dw4/api.h\"\n"
+                                 "typedef struct Api_State FAR *Api_Ptr;\n"
+                                 "void API Api_Read(Api_Ptr p) { }\nWIDE Api_Wide(Api_Ptr p) { return 0; }\n",
 }
 
 
@@ -297,8 +312,11 @@ class UnitView(unittest.TestCase):
         self.assertIn("Dp_Mul", self.conflicts)
         self.assertIn("Dp_Div", self.conflicts)
 
+    def test_a_decorating_macro_adds_nothing_to_a_type(self):
+        self.assertNotIn("Api_Read", self.conflicts)
+
     def test_the_counts(self):
-        self.assertEqual(sorted(self.conflicts), ["Dp_Div", "Dp_Mul", "M_Cond", "M_Late", "M_Short"])
+        self.assertEqual(sorted(self.conflicts), ["Api_Wide", "Dp_Div", "Dp_Mul", "M_Cond", "M_Late", "M_Short"])
         self.assertEqual(sorted(self.varargs), ["N_Two"])
 
 

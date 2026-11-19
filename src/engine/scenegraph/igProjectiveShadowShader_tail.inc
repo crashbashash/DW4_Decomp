@@ -281,7 +281,7 @@ int FUN_001d5a70(P *arg0, Q_1d5a70 *arg1) {
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s0, (igAttr *)arg0->w152);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562850[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562820[0]);
-    FUN_001dc610(arg1->w68);
+    FUN_001dc610((igSorter *)arg1->w68);
     return arg0->w164;
 }
 
@@ -317,7 +317,7 @@ void FUN_001d5c40(A0_1d5c40 *arg0, A1_1d5c40 *arg1) {
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005627e8[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)arg1->fe8);
     FUN_001d5e00((void *)arg0, (S1_1d5e00 *)arg1);
-    FUN_001dc610(arg1->f44);
+    FUN_001dc610((igSorter *)arg1->f44);
 }
 
 void FUN_001d5e00(void *arg0, S1_1d5e00 *arg1) {
@@ -362,7 +362,7 @@ void FUN_001d5f70(A_1d5f70 *arg0, int arg1, int *arg2, int *arg3, int *arg4) {
     spA0[0] = 0x3F000000;
     spA0[2] = 0;
     spA0[1] = 0xBF000000;
-    FUN_00190c60(&sp50[0], &spA0[0]);
+    FUN_00190c60((float *)&sp50[0], (const float *)&spA0[0]);
     sp90[0] = 0x3F000000;
     sp90[2] = 0x3F800000;
     sp90[1] = 0x3F000000;
@@ -452,18 +452,18 @@ void igProjectiveShadowShader_Reset(void *arg0) {
     ((DW4VC_112_0 *)(temp_a0_2))->vX();
 }
 
-void FUN_001d6340(S0_1d6340 *arg0, S1_1d6340 *arg1) {
-    S_temp_a0_1d6340 *temp_a0;
-    if (arg1 != 0) {
-        arg1->f4 = (int)((int) (arg1->f4 + 1));
+void igSceneInfo_SetSceneGraph(igSceneInfo *self, igNode *sceneGraph) {
+    igObject *old;
+    if (sceneGraph != 0) {
+        sceneGraph->_refCount = sceneGraph->_refCount + 1;
     }
-    temp_a0 = (S_temp_a0_1d6340 *)(arg0->f14);
-    if (temp_a0 != 0) {
-        temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-        if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
+    old = (igObject *)self->_sceneGraph;
+    if (old != 0) {
+        old->_refCount = old->_refCount - 1;
+        if ((old->_refCount & 0x7fffff) == 0) {
+            igObject_Destroy(old);
         }
     }
-    arg0->f14 = (int)(arg1);
+    self->_sceneGraph = (int)sceneGraph;
 }
 

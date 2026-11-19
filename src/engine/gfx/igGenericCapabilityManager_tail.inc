@@ -567,7 +567,7 @@ bool FUN_00157140(O_157140 *arg0, int arg1, igSmartPointer<igImageConvertRows> c
     if (arg1 == arg0->f44) {
         return true;
     }
-    if (converter->findConverter(arg0->f24, arg0->f44, arg1, arg0->f8, arg0->f12) != 0) {
+    if (converter->findConverter(arg0->f24, (IG_GFX_TEXTURE_FORMAT)arg0->f44, (IG_GFX_TEXTURE_FORMAT)arg1, arg0->f8, arg0->f12) != 0) {
         r = true;
         if (arg0->f44 == 0x10000 && arg1 == 0x10001) {
             P *p = arg0->f68;
@@ -581,6 +581,128 @@ bool FUN_00157140(O_157140 *arg0, int arg1, igSmartPointer<igImageConvertRows> c
     return r;
 }
 
+
+unsigned char FUN_00157200(igImage *self, int format, igImage *source) {
+    igSmartPointer<igImageConvertRows> convert((igImageConvertRows *)igImageConvert_Create((int)igObject_GetAllocator(self)));
+    int sourceFormat;
+    igImageRowConvert rowConvert;
+    int sourceBytesPerRow;
+    char *pixels;
+    igObject *clut;
+    int sourceClut;
+    if (source == 0) {
+        source = self;
+    }
+    sourceFormat = source->_pfmt;
+    if (sourceFormat == format) {
+        ((igImageCopy *)self)->v23(source, 1);
+        return true;
+    }
+    igMetaEnum *formatEnum = IG_GFX_TEXTURE_FORMAT_GetMetaEnum();
+    igStringRef fromName = igMetaEnum_GetNameByValue(formatEnum, source->_pfmt);
+    igStringRef toName = igMetaEnum_GetNameByValue(formatEnum, format);
+    if (!FUN_00157140((O_157140 *)source, format, convert)) {
+        return false;
+    }
+    unsigned char done = ((igImageCopy *)self)->convertCustom(format, source);
+    if (done) {
+        return done;
+    }
+    rowConvert = convert->findConverter(source->_order, (IG_GFX_TEXTURE_FORMAT)source->_pfmt, (IG_GFX_TEXTURE_FORMAT)format,
+                                        self->_px, self->_py);
+    if (source != self) {
+        if (self->_pImage != 0 && self->_localImage) {
+            Memory_FreeBuffer((void *)self->_pImage);
+        }
+        self->_pImage = 0;
+        clut = (igObject *)self->_pClut;
+        if (clut != 0) {
+            igRelease(clut);
+            self->_pClut = 0;
+        }
+    }
+    sourceBytesPerRow = source->_bytesPerRow;
+    self->_px = source->_px;
+    self->_py = source->_py;
+    self->_order = source->_order;
+    self->_pfmt = format;
+    int size;
+    int bytesPerRow;
+    int components;
+    FUN_00159320(self, format, self->_px, self->_py, &size, &components, &bytesPerRow);
+    self->_imageSize = size;
+    self->_pz = components;
+    self->_bytesPerRow = bytesPerRow;
+    int bitsInt;
+    int bitsIdx;
+    int bitsRed;
+    int bitsGrn;
+    int bitsBlu;
+    int bitsAlpha;
+    int bitsDepth;
+    FUN_00159a80(format, &bitsInt, &bitsIdx, &bitsRed, &bitsGrn, &bitsBlu, &bitsAlpha, &bitsDepth);
+    clut = 0;
+    self->_bitsInt = bitsInt;
+    self->_bitsIdx = bitsIdx;
+    self->_bitsRed = bitsRed;
+    self->_bitsGrn = bitsGrn;
+    self->_bitsBlu = bitsBlu;
+    self->_bitsAlpha = bitsAlpha;
+    self->_bitsDepth = bitsDepth;
+    pixels = (char *)poolOf(self, kIGMemoryPoolHandleImage)->allocateAligned(self->_imageSize, 0x80);
+    if (source == self) {
+        if (FUN_00159f70(source->_pfmt) && FUN_00159f70(format)) {
+            clut = (igObject *)self->_pClut;
+        }
+    } else if (FUN_00159f70(source->_pfmt) && FUN_00159f70(format) && source->_pClut != 0) {
+        clut = (igObject *)igClut_Create((int)poolOf(self, kIGMemoryPoolHandleClut));
+        FUN_00154c90((igClut *)clut, (igClut *)source->_pClut, 1);
+    }
+    sourceClut = source->_pClut;
+    if ((unsigned int)(format - IG_GFX_TEXTURE_FORMAT_RGB_DXT1) <= 3 || format == IG_GFX_TEXTURE_FORMAT_TILED_DXT1_GAMECUBE ||
+        sourceFormat == IG_GFX_TEXTURE_FORMAT_TILED_DXT1_GAMECUBE ||
+        (unsigned int)(sourceFormat - IG_GFX_TEXTURE_FORMAT_RGB_DXT1) <= 2 || sourceFormat == IG_GFX_TEXTURE_FORMAT_RGBA_DXT5) {
+        rowConvert(pixels, (void *)source->_pImage, (unsigned short)self->_px | ((unsigned short)self->_py << 16), sourceClut);
+        self->_compressed = 1;
+    } else {
+        unsigned int y;
+        char *to = pixels;
+        char *from = (char *)source->_pImage;
+        for (y = 0; y < self->_py; y++) {
+            rowConvert(to, from, self->_px, sourceClut);
+            to += self->_bytesPerRow;
+            from += sourceBytesPerRow;
+        }
+    }
+    if (self->_pImage != 0 && self->_localImage) {
+        Memory_FreeBuffer((void *)self->_pImage);
+    }
+    self->_pImage = (int)pixels;
+    self->_localImage = 1;
+    if (format == IG_GFX_TEXTURE_FORMAT_TILED_DXT1_GAMECUBE ||
+        (unsigned int)(format - IG_GFX_TEXTURE_FORMAT_TILED_RGBA_5553_16_GAMECUBE) <= 4 ||
+        format == IG_GFX_TEXTURE_FORMAT_TILED_RGBA_8888_32_GAMECUBE) {
+        int postSize;
+        int postBytesPerRow;
+        int postComponents;
+        unsigned char *post;
+        FUN_00159320(self, format, self->_px, self->_py, &postSize, &postComponents, &postBytesPerRow);
+        post = (unsigned char *)poolOf(self, kIGMemoryPoolHandleImage)->allocateAligned(postSize, 0x80);
+        FUN_0015a750(self, post);
+        Memory_FreeBuffer((void *)self->_pImage);
+        self->_pImage = (int)post;
+    }
+    if ((igObject *)self->_pClut != clut) {
+        if (clut != 0) {
+            clut->_refCount = clut->_refCount + 1;
+        }
+        igRelease((igObject *)self->_pClut);
+        self->_pClut = (int)clut;
+        igRelease((igObject *)self->_pClut);
+    }
+    igImage_UpdateFormatInfo(self);
+    return true;
+}
 
 /* igFileImagePng vtable slot 42: constant-zero leaf. Slots 40 and 41 also return 0 and slot 45
  * returns 1. The receiver is not read. */

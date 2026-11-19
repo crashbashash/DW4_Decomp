@@ -166,6 +166,27 @@ void FUN_0016f780(unsigned char *dst, unsigned short *src, int count)
     }
 }
 
+/* matching construct: variant sweep — declaration order */
+void FUN_0016f7f0(unsigned int *dst, unsigned short *src, int count)
+{
+    unsigned int *d = dst + count - 1;
+    unsigned short *s = src + count - 1;
+    int i;
+    unsigned int px;
+    unsigned int alpha, g, b, r;
+
+    for (i = 0; i < count; i++) {
+        px = *s;
+        alpha = ((px >> 8) & 0xF0) + ((px >> 12) & 0xF);
+        alpha = ((alpha >> 1) + (alpha & 1)) << 24;
+        g = px & 0xF0;
+        b = px & 0xF00;
+        r = px & 0xF;
+        *d-- = (r | (r << 4)) | (((g << 8) | (g << 4)) | (alpha | ((b << 12) | (b << 8))));
+        s--;
+    }
+}
+
 void FUN_0016f8a0(unsigned int *dst, unsigned char *src, int count, unsigned char *alphaSrc)
 {
     unsigned int *d = dst + count - 1;

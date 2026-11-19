@@ -46,7 +46,7 @@ int igBoundingBoxRenderer_GetVTable(void) {
     igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
     igSmartPointer_igDisplayListAttr_Destruct((igSmartPointer<igObject> *)&obj.w4, -1);
     FUN_00459860((ObjectRefWord *)&obj.w3, -1);
-    FUN_00230f70(&obj, 0);
+    igRenderer_Destroy((igRenderer *)&obj, 0);
     return t;
 }
 

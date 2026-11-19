@@ -144,7 +144,6 @@ igMetaObject *igVec4fMetaField_GetMetaObject(void);
 
 struct Obj4 { int *vt; int pad[2]; };
 struct F { struct Obj4 obj; int *ref; int pad[12]; };
-int FUN_002fbfe0(struct F *);
 extern int g_igVec4fMetaField_vtable[4];
 
 CallbackArray *igVec4fMetaField_Register(void);
@@ -518,7 +517,6 @@ void igMatrix44fMetaField_SwapBytes(igMatrix44fMetaField *arg0, int arg1, int ar
 
 class DW4VC_208_2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual int vX(int, int); };
 
-void FUN_0018be80(int, int, int, int, int);
 
 class igMatrix44fMetaFieldView {
 public:
@@ -609,7 +607,6 @@ void FUN_0018e190(void *arg0, void *arg1);
 int FUN_0018dbc0(void *volume, igRay *ray);
 int FUN_0018ff50(void **volume, const float *point);
 int FUN_00190010(void **volume, int ray);
-void FUN_0018de10(igSphere *sphere, igSphere *other);
 void FUN_0018dfc0(void *parg0, struct S5 *arg1);
 
 typedef struct S4 { int pad[2]; float x, y, z, r, ax, ay, az; } S4;
@@ -678,7 +675,8 @@ void igVec4ucMetaField_SwapBytes(igVec4ucMetaField *arg0, int arg1, int arg2);
 
 
 
-int FUN_0018e7d0(...);
+void igVectorBlending_BlendWeighted(const float *in, unsigned int count, const float *weights, const unsigned char *bones,
+                  unsigned int weightCount, const float (*matrices)[16], float *out, int outStride);
 
 static inline void addScaled(float *out, float weight, const float *v) {
     float x = weight * v[0];
@@ -690,7 +688,8 @@ static inline void addScaled(float *out, float weight, const float *v) {
 }
 
 
-int FUN_0018ea90(...);
+void FUN_0018ea90(const float *base, const float **targets, const float *weights, unsigned int count,
+                  unsigned int targetCount, float *out, int stride);
 
 typedef int (*UnaryOp)(void **, int);
 typedef int (*BinaryOp)(void **, void **);
@@ -700,28 +699,7 @@ struct IndexedWordPairKey { char pad[8]; unsigned int idx; };
 typedef struct PairKeyedItem { int pad0[2]; unsigned int key; } PairKeyedItem;
 struct IndexedSlotKey { char pad[8]; int idx; };
 struct InstanceNode : public igObject { };
-unsigned FUN_002fe2c0(int);
-int FUN_002fe2e0(int, unsigned);
-int FUN_00301ee0(InstanceNode *, unsigned);
 struct NodeList : InstanceNode { int count; int capacity; InstanceNode **data; };
-struct InstanceListRef {
-    NodeList *p;
-    InstanceListRef(NodeList *list) : p(list) {}
-    InstanceListRef(const InstanceListRef &other) : p(other.p) {
-        if (p != 0) {
-            p->_refCount = p->_refCount + 1;
-        }
-    }
-    ~InstanceListRef() {
-        InstanceNode *node = p;
-        if (node != 0) {
-            node->_refCount = node->_refCount - 1;
-            if ((node->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(node);
-            }
-        }
-    }
-};
 class DW4VC_88_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void *vX(); };
 static inline void setEntry(OpTable *g, int idx, int v) {
     if (g->count != 0 && idx >= 0 && idx < g->count) {
@@ -738,19 +716,18 @@ static inline void setSlot(OpTable *t, int i, const int &v) {
         t->data[i] = v;
     }
 }
-void FUN_002d6790(OpTable *, int, int);
 static inline void setCount(OpTable *t, int n) {
     if (n >= 0) {
         if (n <= t->capacity) {
             t->count = n;
         } else {
-            FUN_002d6790(t, n, 4);
+            List_Resize(t, n, 4);
         }
     }
 }
-static inline void setElement(const InstanceListRef &list, int index, const igSmartPointer<InstanceNode> &element) {
+static inline void setElement(const igSmartPointer<igVolumeList> &list, int index, const igSmartPointer<InstanceNode> &element) {
     InstanceNode *value = element.p;
-    NodeList *l = list.p;
+    NodeList *l = (NodeList *)list.p;
     InstanceNode *previous;
     if (value != 0) {
         value->_refCount = value->_refCount + 1;
@@ -792,6 +769,9 @@ void FUN_00190f50(float *arg0, const float *arg1, float fparg0);
 #include "dw4/maths/igAABox.h"
 #include "dw4/maths/igAABoxList.h"
 #include "dw4/maths/igMatrix44f.h"
+#include "dw4/maths/igMatrix44d.h"
+#include "dw4/maths/igMatrix44fMetaField.h"
+#include "dw4/maths/igMathOperatorTables.h"
 #include "dw4/maths/igMatrix44fList.h"
 #include "dw4/maths/igRay.h"
 #include "dw4/maths/igRayList.h"
@@ -801,6 +781,8 @@ void FUN_00190f50(float *arg0, const float *arg1, float fparg0);
 #include "dw4/maths/igVec4ucList.h"
 #include "dw4/maths/igVec3fMetaField.h"
 #include "dw4/maths/igVec4f.h"
+#include "dw4/maths/igVec4fMetaField.h"
+#include "dw4/scenegraph/igQuaternionfList.h"
 #include "dw4/maths/igVolume.h"
 
 extern "C" {

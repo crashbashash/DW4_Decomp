@@ -34,21 +34,16 @@ void igImageUtils_GetMetaObjectFunction(void) {
     igImageUtils_GetMetaObject();
 }
 
-struct R **FUN_0014dd40(struct R **arg0, short arg1) {
-    struct R *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = *arg0;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
+igSmartPointer<igObject> *FUN_0014dd40(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
         }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 

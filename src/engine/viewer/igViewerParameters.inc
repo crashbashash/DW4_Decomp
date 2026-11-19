@@ -72,7 +72,7 @@ int igViewerParameters_GetVTable(void) {
     igSmartPointer_igGraphPathList_Destruct((igSmartPointer<igObject> *)&u.b[220], -1);
     igSmartPointer_igBitMask_Destruct((igSmartPointer<igObject> *)&u.b[204], -1);
     igSmartPointer_igGroup_Destruct((igSmartPointer<igObject> *)p, -1);
-    FUN_0044c110(u.b, 0);
+    igModel_Destroy((igModel *)u.b, 0);
     return temp_s1;
 }
 

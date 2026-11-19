@@ -44,8 +44,8 @@ int igPlanarShadowShader_GetVTable(void) {
     u.vt = (int)&D_005289f0[0];
     igSmartPointer_igStencilStateAttr_Destruct((ObjectRefWord *)&u.b[104], -1);
     igSmartPointer_igColorAttr_Destruct((igSmartPointer<igObject> *)&u.b[100], -1);
-    FUN_0018f980(&u.b[96], -1);
-    FUN_0018f980(&u.b[92], -1);
+    FUN_0018f980((igSmartPointer<igObject> *)&u.b[96], -1);
+    FUN_0018f980((igSmartPointer<igObject> *)&u.b[92], -1);
     igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&u.b[88], -1);
     igSmartPointer_igGeometryList_Destruct((igSmartPointer<igObject> *)&u.b[84], -1);
     igSmartPointer_igModelViewMatrixAttrList_Destruct((struct R * *)&u.b[80], -1);

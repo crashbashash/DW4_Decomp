@@ -99,7 +99,7 @@ void igProjectionMatrixAttr_InitFields(void) {
     o2.z = 0;
     o2.w = 0;
     igMatrix44f_FromRows((float *)&o1, (igVec4f *)&o2, (igVec4f *)&o3, (igVec4f *)&o4, (igVec4f *)&o5);
-    FUN_0018c640(field, &o1);
+    FUN_0018c640((igMetaField *)field, (const float *)&o1);
     igMetaObject_NameFields(meta, g_igProjectionMatrixAttr_fieldTable, g_igProjectionMatrixAttr_fieldHandles, g_igProjectionMatrixAttr_fieldOffsets, base);
 }
 

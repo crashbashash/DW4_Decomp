@@ -13,7 +13,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
     if (*arg1 & 1) {
         RP list;
         int alloc;
-        list.p = (RC *)FUN_0018a060(igObject_GetAllocator(arg0));
+        list.p = (RC *)igVec3fList_Create(igObject_GetAllocator(arg0));
         SIZE_LIST((DataList *)list.p, arg2, 12)
         alloc = (int)igObject_GetAllocator(arg0);
         REL_15ff10(record.p)
@@ -26,7 +26,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
     if (*arg1 & 2) {
         RP list;
         int alloc;
-        list.p = (RC *)FUN_0018a060(igObject_GetAllocator(arg0));
+        list.p = (RC *)igVec3fList_Create(igObject_GetAllocator(arg0));
         SIZE_LIST((DataList *)list.p, arg2, 12)
         alloc = (int)igObject_GetAllocator(arg0);
         REL_15ff10(record.p)
@@ -39,7 +39,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
     if (*arg1 & 4) {
         RP list;
         int alloc;
-        list.p = (RC *)FUN_00189e40(igObject_GetAllocator(arg0));
+        list.p = (RC *)igVec4ucList_Create(igObject_GetAllocator(arg0));
         SIZE_LIST((DataList *)list.p, arg2, 4)
         alloc = (int)igObject_GetAllocator(arg0);
         REL_15ff10(record.p)
@@ -54,7 +54,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
         for (index = 0; index < ((*arg1 & 0xF0000) >> 16 & 0xFF); index++) {
             RP list;
             int alloc;
-            list.p = (RC *)FUN_0018a2d0(igObject_GetAllocator(arg0));
+            list.p = (RC *)igVec2fList_Create(igObject_GetAllocator(arg0));
             SIZE_LIST((DataList *)list.p, arg2, 8)
             alloc = (int)igObject_GetAllocator(arg0);
             REL_15ff10(record.p)
@@ -115,7 +115,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
                 REL_15ff10(list.p)
             } else if (modeInt == 2) {
                 RP list;
-                list.p = (RC *)FUN_0018a2d0(igObject_GetAllocator(arg0));
+                list.p = (RC *)igVec2fList_Create(igObject_GetAllocator(arg0));
                 SIZE_LIST((DataList *)list.p, arg2, 8)
                 ATTACH((StreamRec *)record.p, list.p)
                 REL_15ff10(list.p)
@@ -126,7 +126,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
     if (*arg1 & 0x400000) {
         RP list;
         int alloc;
-        list.p = (RC *)FUN_0018a060(igObject_GetAllocator(arg0));
+        list.p = (RC *)igVec3fList_Create(igObject_GetAllocator(arg0));
         SIZE_LIST((DataList *)list.p, arg2, 12)
         alloc = (int)igObject_GetAllocator(arg0);
         REL_15ff10(record.p)
@@ -139,7 +139,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
     if (*arg1 & 0x800000) {
         RP list;
         int alloc;
-        list.p = (RC *)FUN_0018a060(igObject_GetAllocator(arg0));
+        list.p = (RC *)igVec3fList_Create(igObject_GetAllocator(arg0));
         SIZE_LIST((DataList *)list.p, arg2, 12)
         alloc = (int)igObject_GetAllocator(arg0);
         REL_15ff10(record.p)

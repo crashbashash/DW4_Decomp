@@ -26,7 +26,7 @@ void igGuiComponent_userDestruct(void *arg0) {
 }
 
 int FUN_00455510(A_455510 *arg0) {
-    int n = FUN_001c59e0();
+    int n = igGraphPath_GetCount((igGraphPath *)arg0);
     int i;
     O_455510 *o;
     if (n <= 0) return 0;

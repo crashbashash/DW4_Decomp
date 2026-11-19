@@ -11,12 +11,10 @@ int FUN_0027f240(void *arg0);
 int FUN_0027f280(int *a);
 int FUN_0027f2d0(int *sizes);
 int FUN_0027f310(void *arg0);
-struct S;
-void FUN_002800e0(struct S *s);
-struct S;
-void FUN_0027f5c0(struct S *s, float t);
-void FUN_0027f410(struct S *s, int count, float scale, int forward, float time);
-void FUN_0027f510(struct S *s, int count, int keys, float scale);
+void FUN_002800e0(struct EnbayaDecoderState *s);
+void FUN_0027f5c0(struct EnbayaDecoderState *s, float t);
+void FUN_0027f410(struct EnbayaDecoderState *s, int count, float scale, int forward, float time);
+void FUN_0027f510(struct EnbayaDecoderState *s, int count, int keys, float scale);
 
 typedef struct EnbayaSlot { unsigned char data[32]; } EnbayaSlot;
 typedef struct EnbayaSlotGroup { EnbayaSlot slots[3]; } EnbayaSlotGroup;
@@ -92,10 +90,11 @@ struct O {
         f12 = 0; f32 = 0; f36 = 0;
     }
 };
-extern "C" void FUN_0027ee00(void *pool, int n) {
+extern "C" void *FUN_0027ee00(void *pool, int n) {
     O *o = new (pool) O;
     o->f169 = 0; o->f16 = &o->e; o->f170 = 0; o->f171 = 0;
     o->f28 = n * 0x60;
+    return o;
 }
 
 struct TripleVectorState {
@@ -140,18 +139,18 @@ void FUN_0027eed0(struct TripleVectorState *o){
  o->f112=0; }
 }
 
-struct P {
+struct EnbayaAnimationData {
   virtual void d0();
   virtual int v1();
   int p4; float f8, f12; int f16, f20, f24, f28, f32, f36, f40, f44, f48, f52, f56, f60, f64, f68, f72, f76;
 };
-struct S {
-  int f0; float f4; float f8; P *f12; int f16; int f20; int f24; int f28; float f32; float f36;
+struct EnbayaDecoderState {
+  int f0; float f4; float f8; EnbayaAnimationData *f12; int f16; int f20; int f24; int f28; float f32; float f36;
   EnbayaMaskRun run; int f48; EnbayaReader reader; EnbayaDeltaReader delta; EnbayaMaskReader mask; int f116, f120, f124, f128, f132, f136, f140, f144, f148, f152, f156, f160, f164; unsigned char f168; unsigned char f169; char f170; unsigned char f171;
 };
-extern "C" void FUN_0027ef50(S *s, P *p, unsigned char c)
+extern "C" void FUN_0027ef50(EnbayaDecoderState *s, EnbayaAnimationData *p, unsigned char c)
 {
-  P *q;
+  EnbayaAnimationData *q;
   s->f32 = -1.0f;
   s->f0 = -1;
   s->f4 = -1.0f;
@@ -254,7 +253,7 @@ EnbayaSlot *FUN_0027f3b0(EnbayaContext *ctx, int group) {
     return &ctx->local[group].slots[ctx->slot ^ 1];
 }
 
-void FUN_0027f410(S *s, int count, float scale, int forward, float time) {
+void FUN_0027f410(EnbayaDecoderState *s, int count, float scale, int forward, float time) {
     int cur;
     int prev;
     s->f169 ^= 1;
@@ -320,7 +319,7 @@ void FUN_0027f410(S *s, int count, float scale, int forward, float time) {
         : : "r"(cur), "r"(prev));
 }
 
-void FUN_0027f510(S *s, int count, int keys, float scale) {
+void FUN_0027f510(EnbayaDecoderState *s, int count, int keys, float scale) {
     /* VU0 macro-mode code: lqc2/sqc2, the vector multiply-adds, vrsqrt and the I register loaded through
      * ctc2 $vi21 have no C spelling, and no MWCC version or builtin emits COP2 macro instructions. */
     __asm__ (
@@ -374,7 +373,6 @@ void FUN_0027fb50(EnbayaTrack *track, int count, EnbayaReader *reader);
 void FUN_0027fc70(EnbayaDeltaTrack *track, int count, EnbayaDeltaReader *reader);
 void FUN_0027fe90(EnbayaDeltaTrack *track, int count, EnbayaDeltaReader *reader);
 void FUN_002800c0(void);
-void FUN_002800d0(S *s);
 void FUN_00280260(EnbayaMaskRun *run, EnbayaMaskReader *reader);
 void FUN_00280330(EnbayaMaskRun *run, EnbayaMaskKey *keys, int count, EnbayaMaskReader *reader);
 void FUN_002805a0(EnbayaMaskRun *run, EnbayaMaskKey *keys, int count, EnbayaMaskReader *reader);
@@ -442,11 +440,11 @@ static inline int readRunLengthBackward(EnbayaMaskReader *r) {
     }
     return value;
 }
-void FUN_0027f5c0(S *s, float t) {
+void FUN_0027f5c0(EnbayaDecoderState *s, float t) {
     bool reset;
     bool rewind;
     bool restart;
-    P *p;
+    EnbayaAnimationData *p;
     int count;
     float scale;
     float end;
@@ -518,7 +516,7 @@ void FUN_0027fa60(EnbayaContext *ctx, float t, int track, EnbayaSlot **a, Enbaya
     if (t <= ctx->end && t >= ctx->start) in = 1;
     x = in;
     if (isZero(x)) {
-        FUN_0027f5c0((S *)ctx, t);
+        FUN_0027f5c0((EnbayaDecoderState *)ctx, t);
     }
     *b = FUN_0027f350(ctx, track);
     *a = FUN_0027f3b0(ctx, track);
@@ -681,11 +679,11 @@ void FUN_002800c0(void)
 {
 }
 
-void FUN_002800d0(S *s)
+void FUN_002800d0(EnbayaDecoderState *s)
 {
 }
 
-void FUN_002800e0(S *s) {
+void FUN_002800e0(EnbayaDecoderState *s) {
     if (s->f24) {
         if (s->f20 < 0x4000) {
             unsigned int localPad = (unsigned int)((char *)s + 176) - ((unsigned int)((char *)s + 176) & ~15);

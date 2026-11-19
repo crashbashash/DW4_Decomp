@@ -43,12 +43,13 @@ as zero.
 | `fun_dat_refs` | the matched units' source, comments and strings blanked, asm bodies excluded | occurrences of `FUN_<va>` / `DAT_<va>` identifiers (prototypes and calls), minus every occurrence of the name of each `FUN_` function the file defines (its definition and, in a C++ unit, its `extern "C"` prototype) |
 | `foreign_profile.functions`, `foreign_profile.bytes` | `data/check-categories.tsv` | functions whose code bytes match only under a provisional per-function override (compiler, flags or exception mode) that differs from their translation unit's profile in `config/SLUS-20836/units.tsv`; never counted as `match` (see [build profiles](build-profiles.md)) |
 | `orphan.bytes` | `data/check-categories.tsv` | exception-metadata orphan bytes: the `extra` + `differ` code-only bytes |
-| `profile_split.units` / `.bytes` | `config/SLUS-20836/units.tsv` by `config/SLUS-20836/regions.tsv` | units whose compiler, optimisation level, `-sdatathreshold` or `-inline` setting differs from the most common profile of their library. A library was one build, so each such unit is one whose members still match only elsewhere. The static initialisers are exempt: they are collected from every library |
+| `profile_split.units` / `.bytes` | `config/SLUS-20836/units.tsv` by `config/SLUS-20836/regions.tsv` | units whose compiler, optimisation level, `-sdatathreshold` or `-inline` setting differs from the most common profile of their library. A library was one build, so each such unit is one whose members still match only elsewhere. The static initialisers are exempt: they are collected from every library; so is a unit of owner-approved assembly sources, which is assembled, not compiled |
 | `opt_pragma.statements` | `src/` | `#pragma` lines that change the code or data b52 emits: the optimiser (`optimization_level`, `optimize_for_size`, `peephole`, `global_optimizer`, every `opt_*` switch b52 accepts), inlining (`auto_inline`, `dont_inline`, `always_inline`, `inline_depth`, `inline_bottom_up`, `defer_codegen`, `inline_intrinsics`), the MIPS back end (`schedule`, `conditional_move`, `tailcall`, `far_call`, `interrupt`, …) and data placement and types (`pool_strings`, `dont_reuse_strings`, `explicit_zero_data`, `reverse_bitfields`, `unsigned_char`, `enumsalwaysint`, …); the list is `OPT_PRAGMAS` in `tools/progress.py`, the effects are in [MWCC pragmas](mwcc-pragmas.md). Not counted: `push`, `pop`, `cplusplus`, the runtime's `exception_*`, names b52 ignores (`scheduling`, `opt_peephole`), and `readonly_strings` between `push` and `pop`, which the rule allows ([understanding shapes](understanding-shapes.md#types-and-values)); outside a closed `push`/`pop` it counts. They change the compiler for one function, which is a flag change written in the source; owner rule 2026-11-08: a rise needs the owner, as for `inline_asm` |
 | `decl.local_externs` | `src/`, `include/` (`tools/declarations.py`) | declarations, in a unit's own text, of a symbol another unit defines ([declarations](#declarations)) |
 | `decl.varargs` | `src/`, `include/` | prototypes that leave out the parameters a symbol has: `(...)` or a C `()` |
 | `decl.type_conflicts` | `src/`, `include/` | declarations whose type differs from the symbol's C definition |
 | `decl.header_conflicts` | `src/`, `include/` | symbols declared in two or more headers that disagree on the type |
+| `decl.named_placeholders` | `src/`, `include/`, `config/SLUS-20836/symbols.txt`, `data-names.tsv` | `FUN_<va>`/`DAT_<va>` identifiers for an address that already has a recovered name |
 
 `m2c_idiom.units`, `raw_casts.reflected` and `fun_dat_refs` measure readability, which is a separate
 job from matching ([matched and readable](../../CLAUDE.md#matched-and-readable)). They stay in the report
@@ -87,21 +88,28 @@ definitions are the reference for the code that calls into it.
   array against scalar or array length, data declared for a function (`char X[]`) or the reverse, return
   type, parameter count and types. Both sides are normalised first: whitespace, parameter names,
   `struct`/`class`/`union`/`enum` keywords, integer spellings (`unsigned int` is `unsigned`), typedefs
-  with one meaning across the tree, array parameters as pointers, top-level `const` on parameters and
-  return types. Functions are compared when both sides have C linkage (a C++ declaration with other
-  parameters names another overload); data is always compared. A `(...)` or C `()` list compares the
-  return type only. A symbol with no C definition, or whose C definitions disagree with each other, has
-  nothing to compare against and is not counted here. A difference found that way is checked again as the
-  compiler reads both sides, in each unit that defines the symbol (the declaration in those of them that
-  include it, else in the units that do): the object-like macros defined before each line expanded (a
-  newlib `RARG` parameter macro), and a typedef the tree gives two meanings (libgcc's `FLO_type`, double in
-  one unit and float in another) read as that unit defines it. It counts only when the two still differ. A
-  function-like macro, one that is `#undef`-ed, and one defined under a condition the tool cannot decide
-  (anything but an include guard, `#if 0`/`#if 1` or `__cplusplus`) are not expanded. The C `()` check of
-  `decl.varargs` reads the definition the same way.
+  with one meaning across the tree, macros every definition of which only decorates (a calling convention,
+  a memory model, an attribute or nothing: libpng's `PNGAPI`, zlib's `FAR`), array parameters as pointers,
+  top-level `const` on parameters and return types. Functions are compared when both sides have C linkage
+  (a C++ declaration with other parameters names another overload); data is always compared. A `(...)` or
+  C `()` list compares the return type only. A symbol with no C definition, or whose C definitions disagree
+  with each other, has nothing to compare against and is not counted here. A difference found that way is
+  checked again as the compiler reads both sides, in each unit that defines the symbol (the declaration in
+  those of them that include it, else in the units that do): the object-like macros defined before each
+  line expanded (a newlib `RARG` parameter macro), and a typedef the tree gives two meanings (libgcc's
+  `FLO_type`, double in one unit and float in another) read as that unit defines it. It counts only when
+  the two still differ. A function-like macro, one that is `#undef`-ed, and one defined under a condition
+  the tool cannot decide (anything but an include guard, `#if 0`/`#if 1` or `__cplusplus`) are not
+  expanded. The C `()` check of `decl.varargs` reads the definition the same way.
 - **`decl.header_conflicts`**: a symbol (data, or a function with C linkage) declared in two or more
   headers whose declarations disagree with each other. It needs no definition, so a symbol still in
   assembly counts.
+- **`decl.named_placeholders`**: a `FUN_<va>` or `DAT_<va>` identifier in the code of `src/` or `include/`
+  (comments and strings aside, macro bodies included) whose address the symbol map or `data-names.tsv`
+  names. The build binds a call to it by address (the unit's `externals` in `unit-objects.json`), so it
+  links and matches under either name, and `tools/apply_names.py` renames only the spelling of the old name,
+  so such a copy outlives every rename of its symbol. Spell it by its name and include the name's home.
+  `--list placeholders` prints each with the name it stands for.
 
 The README's Readable column applies the same rules per function (the `declarations` check): a function
 fails when a symbol its body uses (a call or a read, not a member after `.`, `->` or `::`) is declared,

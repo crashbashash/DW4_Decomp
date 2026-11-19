@@ -113,11 +113,11 @@ void FUN_00190b30(float *m, const ScaleVec &v) {
     m[14] += m[15] * v[2];
 }
 
-void FUN_00190c60(void *arg0, void *arg1) {
-    igMatrix44f_SetIdentity((float *)arg0);
-    *(float *)((char *)(arg0) + 0) = (float) *(float *)((char *)(arg1) + 0);
-    *(float *)((char *)(arg0) + 20) = (float) *(float *)((char *)(arg1) + 4);
-    *(float *)((char *)(arg0) + 40) = (float) *(float *)((char *)(arg1) + 8);
+void FUN_00190c60(float *matrix, const float *scale) {
+    igMatrix44f_SetIdentity(matrix);
+    matrix[0] = scale[0];
+    matrix[5] = scale[1];
+    matrix[10] = scale[2];
 }
 
 void FUN_00190cb0(float *matrix, const float *scale) {
@@ -571,7 +571,7 @@ void igMatrix44f_GetQuaternion(float *q, float *m) {
     }
 }
 
-void FUN_00192810(void *arg0, void *arg1) {
+void FUN_00192810(const float *arg0, float *arg1) {
     float temp_f12;
     float temp_f6;
     float temp_f5;

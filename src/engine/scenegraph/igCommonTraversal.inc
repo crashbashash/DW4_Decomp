@@ -55,7 +55,7 @@ int igCommonTraversal_GetVTable(void) {
     igSmartPointer_igBlendMatricesAttrPool_Destruct((O *)((char*)&o + 268), -1);
     igSmartPointer_igNodeListList_Destruct((struct Ref * *)((char*)&o + 264), -1);
     igSmartPointer_igStringObjList_Destruct((igSmartPointer<igObject> *)((char*)&o + 260), -1);
-    FUN_00150eb0((char*)&o + 256, -1);
+    igSmartPointer_igIntList_Destruct((igSmartPointer<igObject> *)((char*)&o + 256), -1);
     igSmartPointer_igNonRefCountedTransformList_Destruct((struct Ref * *)((char*)&o + 252), -1);
     igSmartPointer_igNonRefCountedTransformList_Destruct((struct Ref * *)((char*)&o + 248), -1);
     igSmartPointer_igNonRefCountedMatrixObjectList_Destruct((void * *)((char*)&o + 244), -1);

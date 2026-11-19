@@ -394,6 +394,9 @@ struct Insight {
     static long long Get(igInsightCore *i) { return i->_worldTime; }
 };
 
+/* igInsightCore::_worldTime nanoseconds of one 60 Hz frame. */
+#define FRAME_TIME 16666666ULL
+
 #define RELEASE_OBJ(o) { \
     if (o) { \
         --(o)->_refCount; \
@@ -411,18 +414,8 @@ struct RowOps {
     }
 };
 
-/* Reference stored through a pointer (the messenger's own argument slot) and the temporary handed
- * to the list insert. Its constructor reads its stored word back through a laundered pointer, fetches
- * the delay-stack handle between that read and the null test, and increments the count through that
- * pointer. */
+/* Reference release and store through a pointer (the messenger's own argument slot). */
 struct DelayRef {
-    igObject * value;
-    DelayRef(igObject *p, beMessenger *m, int &out) : value(p) {
-        DelayRef *s = (DelayRef *)(int)this;
-        igObject *v = s->value;
-        out = m->_delayStack;
-        if (v) ++s->value->_refCount;
-    }
     static void release(igObject *o) { RELEASE_OBJ(o) }
     static void assign(igObject **dest, igObject *incoming) {
         igObject *outgoing;
@@ -565,27 +558,19 @@ static inline void SetInfoName(Work *w, const char *n) { char *s; s = Intern(n);
 };
 
 typedef beMessengerGroup Group;
-typedef beMessenger Messenger;
 
-/* A retained word that lives on the stack and is then stored into a list by address. It has no
- * destructor: the list takes the reference. The constructor reads its own stored word back through
- * a laundered pointer, fetches the work-stack handle between that read and the null test, and
- * increments the count through that pointer; that shape makes the address register, delay slot and
- * stack layout come out. */
-struct RefTmp {
-    Obj * value;
-    RefTmp(Obj *p, Messenger *m, int &out) : value(p) {
-        RefTmp *s = (RefTmp *)(int)this;
-        Obj *v = s->value;
-        out = m->_workStack;
-        if (v) ++s->value->_refCount;
+/* Inserts n retained words from src into the list at index at; the list takes the references. */
+static inline void insertWords(igObjectList *l, int at, int n, RefObj **src) {
+    int i;
+    for (i = 0; i < n; i++) {
+        RefObj *v = src[i];
+        if (v) ++v->_refCount;
     }
-    static void PushFront(Messenger *m, Obj *obj) {
-        int dst;
-        RefTmp tmp(obj, m, dst);
-        List_InsertWords((igDataList *)dst, 0, 1, (void *)&tmp.value);
-    }
-};
+    List_InsertWords((igDataList *)l, at, n, (void *)src);
+}
+
+/* Inserts one object into the list at index at; the list takes a reference to it. */
+static inline void insertAt(igObjectList *l, int at, RefObj *obj) { insertWords(l, at, 1, &obj); }
 
 #define IW ((Work *)item.p)
 
@@ -622,7 +607,7 @@ void beMessenger_SelectReceivers(beMessenger *self, const char *category, const 
             OBJ_RELEASE(old);
             List_RemoveWordAt((igDataList *)l, i);
             LDATA(l)[l->_count] = 0;
-            RefTmp::PushFront(self, item.p);
+            insertAt((List *)self->_workStack, 0, item.p);
         }
         found = 1;
         break;
@@ -654,7 +639,7 @@ void beMessenger_SelectReceivers(beMessenger *self, const char *category, const 
             OBJ_RELEASE(o);
             List_RemoveWordAt((igDataList *)l2, last);
             LDATA(l2)[l2->_count] = 0;
-            RefTmp::PushFront(self, item.p);
+            insertAt((List *)self->_workStack, 0, item.p);
         }
     }
 
@@ -889,7 +874,7 @@ void beMessenger_PrepareDelayedSelection(beMessenger *self, const char *group, c
 void beMessenger_EnqueueSelected(beMessenger *self, const char *text, long long delay)
 {
     igObjectList *stack;
-    int idx, last, i, n, st;
+    int idx, last, i, n;
     igObjectList *list;
     const char *token;
 
@@ -898,7 +883,8 @@ void beMessenger_EnqueueSelected(beMessenger *self, const char *text, long long 
     igSmartPointer<beMessengerDelay> row(((beMessengerDelay **)stack->_data)[idx], kRetainReference);
     {
         long long now = Insight::Get((igInsightCore *)self->_insight);
-        row->_sendTime = now + delay * 16666666;
+        /* matching construct: variant sweep — the unsigned frame time keeps `now` a statement loaded ahead of the multiply */
+        row->_sendTime = now + delay * FRAME_TIME;
     }
 
     {
@@ -942,22 +928,13 @@ void beMessenger_EnqueueSelected(beMessenger *self, const char *text, long long 
         if (d->_sendTime > ((beMessengerDelay *)cur)->_sendTime) break;
         l2 = list;
     }
-    DelayRef tmp(row.p, self, st);
-    List_InsertWords((igDataList *)st, i, 1, (void *)&tmp.value);
+    insertAt((igObjectList *)self->_delayStack, i, row.p);
 }
 
 void beMessenger_SendDelayedNamed(beMessenger *self,const char *group,const char *name,int id,const char *message,long long delay){beMessenger_PrepareDelayedSelection(self,group,name,id);beMessenger_EnqueueSelected(self,message,delay);}
 void beMessenger_SendDelayedGroup(beMessenger *self,const char *group,const char *message,long long delay){beMessenger_PrepareDelayedSelection(self,group,0,-1);beMessenger_EnqueueSelected(self,message,delay);}
 void beMessenger_PrepareDelayedGroup(beMessenger *self,const char *group){beMessenger_PrepareDelayedSelection(self,group,0,-1);}
 
-static inline void insertWords(igObjectList *l, int at, int n, RefObj **src) {
-    int i;
-    for (i = 0; i < n; i++) {
-        RefObj *v = src[i];
-        if (v) ++v->_refCount;
-    }
-    List_InsertWords((igDataList *)l, at, n, (void *)src);
-}
 void beMessenger_PushArgContext(beMessenger *self) {
     int idx;
     int last;

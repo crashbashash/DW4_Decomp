@@ -962,3 +962,14 @@
 0x003a3bf0	ParticleArray_UsesBaseUpdate	game
 0x003a3c10	ParticleArray_Update	game
 0x00396340	beModelCtrl__OnGenerateFromParent	game
+0x00230f70	igRenderer_Destroy	engine
+0x0044c110	igModel_Destroy	engine
+0x0044e1e0	igSmartPointer_igMouseCursor_Destruct	engine
+0x00457ca0	igRenderer_SetVisualContext	engine
+0x00189bd0	igQuaternionfList_Create	engine
+0x00189e40	igVec4ucList_Create	engine
+0x0018a060	igVec3fList_Create	engine
+0x0018a2d0	igVec2fList_Create	engine
+0x001d6340	igSceneInfo_SetSceneGraph	engine
+0x001c59e0	igGraphPath_GetCount	engine
+0x0018e7d0	igVectorBlending_BlendWeighted	engine

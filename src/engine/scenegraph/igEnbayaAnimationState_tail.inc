@@ -66,7 +66,7 @@ void Gap__Sg__igEnbayaAnimationState__vfunc_23(igEnbayaAnimationState *arg0) {
         if (g_fastCacheDecodingEnabled == 0) {
             arg0->_fastCacheDecodingState = 0;
         }
-        FUN_0027ef50(arg0->_context, FUN_002808f0(found), arg0->_fastCacheDecodingState);
+        FUN_0027ef50((EnbayaDecoderState *)arg0->_context, (EnbayaAnimationData *)FUN_002808f0(found), arg0->_fastCacheDecodingState);
     }
 }
 
@@ -75,7 +75,7 @@ void Gap__Sg__igEnbayaAnimationState__vfunc_24(void *arg0) {
 
     temp_a1 = *(int *)((char *)(arg0) + 160);
     if (temp_a1 != 0) {
-        FUN_001c16a0(g_igEnbayaContextPool_instance.p, temp_a1, *(int *)((char *)(*(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 20)) + 8));
+        FUN_001c16a0((igEnbayaContextPool *)g_igEnbayaContextPool_instance.p, (void *)temp_a1, *(int *)((char *)(*(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 20)) + 8));
     }
 }
 
@@ -89,7 +89,7 @@ void Gap__Sg__igEnbayaAnimationState__vfunc_26(void *arg0) {
     DAT_00562720[0] = 0;
     temp_a0 = (void *)(*(int *)((char *)(arg0) + 160));
     if ((temp_a0 != 0) && (*(unsigned char *)((char *)(temp_a0) + 171) != 0)) {
-        FUN_002800d0((S *)temp_a0);
+        FUN_002800d0((EnbayaDecoderState *)temp_a0);
     }
 }
 

@@ -38,7 +38,7 @@ int igCreateCollisionDatabase_GetVTable(void) {
     igSmartPointer_igMetaObject_Destruct((igSmartPointer<igObject> *)p18, -1);
     FUN_00239530((O *)p17, -1);
     igStringRef_Destruct((igStringRef *)p16, -1);
-    FUN_00225790(&o, 0);
+    FUN_00225790((igOptBase *)&o, 0);
     return r;
 }
 

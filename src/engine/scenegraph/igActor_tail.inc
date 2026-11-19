@@ -189,9 +189,9 @@ int igCommonTraversal_TraverseBillboard(C_1b8f20 *arg0, D *arg1) {
     if (n == 0) v = 0; else v = *(int *)((char *)a->data + (n - 1) * 4);
     if (v != 0) {
         igMatrix44f_Multiply((float *)sp40, (const float *)(v + 12), (const float *)s0);
-        FUN_001b1aa0(arg1, sp80, sp40, s0);
+        FUN_001b1aa0((igBillboard *)arg1, (float *)sp80, (const float *)sp40, (const float *)s0);
     } else {
-        FUN_001b1aa0(arg1, sp80, ((char *)&g_matrix44Identity), s0);
+        FUN_001b1aa0((igBillboard *)arg1, (float *)sp80, (const float *)&g_matrix44Identity, (const float *)s0);
     }
     lb = arg0->l72;
     if (lb->count >= lb->cap) igObjectPool_Grow((igObjectPool *)lb, (igObject *(*)(int))((void *)&igModelViewMatrixAttr_CreateInstance));
@@ -447,7 +447,7 @@ int FUN_001b9f00(igCompileTraversal *arg0, igAttrSet *arg1) {
     igAttrList *temp_v1;
     temp_s0 = (igSorter *)arg0->_sorter;
     FUN_001d9bb0((void *)temp_s0, arg0->_attrStack);
-    temp_v0 = FUN_001be190(arg1, arg0);
+    temp_v0 = FUN_001be190(arg1, (igCompileTraversal *)arg0);
     if (temp_v0 == 0) {
         temp_v1 = (igAttrList *)arg1->_attributes;
         List_AppendWords((igDataList *)(*(int *)((char *)(temp_s0->_dlist) + 12)), temp_v1->_count, (const int *)temp_v1->_data);
@@ -468,7 +468,7 @@ int igCommonTraversal_TraverseLightStateSet(struct A_1b9fc0 *arg0, struct B_1b9f
 
     s0 = arg1->f32->n;
     for (s1 = 0; s1 < s0; s1++) {
-        FUN_001b06f0(arg0->f52, arg1->f32->data[s1], 0);
+        FUN_001b06f0((igAttrStackManager *)arg0->f52, (igLightStateAttr *)arg1->f32->data[s1], 0);
     }
     igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
     for (s0 = s0 - 1; s0 >= 0; s0--) {
@@ -607,7 +607,7 @@ int FUN_001ba260(igCommonTraversal *self, MultiPassShaderView *shader) {
             popPassAttr(manager, data[i]);
         }
     }
-    FUN_001dc610(self->_sorter);
+    FUN_001dc610((igSorter *)self->_sorter);
     if (passCount > 1) {
         popPassAttr((igAttrStackManager *)self->_attrStack, (igAttr *)self->_matrixOptimization);
     }

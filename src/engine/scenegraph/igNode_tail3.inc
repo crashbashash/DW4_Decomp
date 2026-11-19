@@ -31,7 +31,7 @@ void Gap__Sg__igNode__resetFields(igNode *arg0, int flags) {
     *(int *)((char *)(arg0) + 24) = (int)((int) *(int *)((char *)(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX()) + 8));
 }
 
-void igNode_UserPostLoad(void *arg0) {
+void igNode_UserPostLoad(igNode *arg0) {
     igObject_UserPostLoad();
     *(int *)((char *)(arg0) + 24) = (int)((int) *(int *)((char *)(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX()) + 8));
 }

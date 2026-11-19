@@ -866,7 +866,7 @@ void FUN_0017a540(igPsx2VisualContext *vc, int keepLists) {
                     }
                 }
             }
-            FUN_002ed5c0(t);
+            Memory_FreeBufferAliasB(t);
         }
         vc->_pTexList = 0;
         igRelease((igObject *)vc->_pTexLoadedList);
@@ -993,7 +993,7 @@ int igPsx2VisualContext_CreateTexture(TexContext *context, int width, int height
         list->data = (TexEntry *)(Memory_ReallocateAlignedAlias(list->data, (list->count + 4) * sizeof(TexEntry), 16));
         memset(&list->data[list->count], 0, 4 * sizeof(TexEntry));
         if (list->freeCapacity < 4) {
-            list->freeIndices = FUN_002ed520(list)->reallocate(list->freeIndices, 8);
+            list->freeIndices = ((ListAllocator *)Memory_FindBufferOwner(list))->reallocate(list->freeIndices, 8);
             list->freeCapacity = 4;
         }
         for (i = 0; i < 4; i++) {
@@ -1230,7 +1230,7 @@ unsigned char igPsx2VisualContext_SetTexture(igPsx2VisualContext *self, int inde
         FUN_0017b400((TexContext *)self, entry, stage, clut, clutIndex);
         entry->stage = stage;
         self->_currentTex = index;
-        result = FUN_0020bb20(entry->buffers, stage, (unsigned char)!self->_texPageEnable) != 0;
+        result = FUN_0020bb20((P2Texture **)entry->buffers, stage, (unsigned char)!self->_texPageEnable) != 0;
     }
     return result;
 }
@@ -1371,7 +1371,7 @@ void igPsx2VisualContext_DeleteTexture(TexContext *context, int index)
     list = context->texList;
     if (index < list->count && index >= 0) {
         if (list->freeCount >= list->freeCapacity) {
-            ListAllocator *allocator = FUN_002ed520(list);
+            ListAllocator *allocator = (ListAllocator *)Memory_FindBufferOwner(list);
             list->freeCapacity += 8;
             list->freeIndices = allocator->reallocate(list->freeIndices, list->freeCapacity * 2);
         }
@@ -1476,15 +1476,15 @@ void FUN_0017c6e0(int arg0) {
     } while (var_a3 < 0x10);
 }
 
-void FUN_0017c710(int arg0, int arg1, int arg2) {
-    if (arg1 < 8) {
-        unsigned char v = *(unsigned char *)(arg1 + arg0 + 540); if (v == (arg2 & 0xFF)) {
-            DAT_00560a3c[arg1] = DAT_00560a3c[arg1] + 1;
+void igPsx2VisualContext_SetTextureMatrixProjectiveState(igPsx2VisualContext *self, int stage, unsigned char enable) {
+    if (stage < 8) {
+        if (self->_currentTextureProjectiveState[stage] == enable) {
+            DAT_00560a3c[stage] = DAT_00560a3c[stage] + 1;
         }
     }
-    *(char *)(arg1 + arg0 + 540) = arg2;
-    if (arg1 == 0) {
-        if (arg2 != 0) {
+    self->_currentTextureProjectiveState[stage] = enable;
+    if (stage == 0) {
+        if (enable) {
             p2EnableCapability(0x1A);
             return;
         }
@@ -1492,8 +1492,8 @@ void FUN_0017c710(int arg0, int arg1, int arg2) {
     }
 }
 
-unsigned char FUN_0017c790(int arg0, int arg1) {
-    return *(int *)((char *)((arg1 + arg0)) + 540);
+unsigned char igPsx2VisualContext_GetTextureMatrixProjectiveState(igPsx2VisualContext *self, int stage) {
+    return self->_currentTextureProjectiveState[stage];
 }
 
 void igPsx2VisualContext_SetTextureStageFunc(igPsx2VisualContext *self, int arg1, int arg2) {

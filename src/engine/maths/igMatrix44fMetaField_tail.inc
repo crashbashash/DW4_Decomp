@@ -6,7 +6,7 @@ void igMatrix44fMetaField_SwapBytes(igMatrix44fMetaField *arg0, int arg1, int ar
 }
 
 void igMatrix44fMetaField_ValueFromString(int arg0, int arg1, int arg2) {
-    FUN_0018be80(arg2, arg1, 16, 4, 1);
+    FUN_0018be80((const char *)arg2, (void *)arg1, 16, 4, 1);
 }
 
 void igMatrix44fMetaField_ValueToString(int *out, void *field, const float *value) {
@@ -23,9 +23,9 @@ int igMatrix44fMetaField_GetSize(void) {
     return 0x40;
 }
 
-void FUN_0018c640(igMatrix44fMetaFieldView *self, const float *value)
+void FUN_0018c640(igMetaField *self, const float *value)
 {
-    self->SetDefault(value);
+    ((igMatrix44fMetaFieldView *)self)->SetDefault(value);
 }
 
 /* Override of the igMetaField slot at vtable +0x6c (slot 27): returns 16, one quadword rather than

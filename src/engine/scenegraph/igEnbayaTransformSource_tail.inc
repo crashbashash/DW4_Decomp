@@ -299,7 +299,7 @@ void FUN_001c2be0(EnvPassShaderView *self, EnvTraversalView *t) {
             for (j = q->_count - 1; j >= 0; j--) popEnvAttr(s, q->_data[j]);
         }
     }
-    if (self->_useContext) FUN_001dc610(t->_context);
+    if (self->_useContext) FUN_001dc610((igSorter *)t->_context);
 }
 
 void igPsx2EnvironmentMapShader_SetEnvironmentMapTexture(S0_1c2eb0 *arg0, Rc *arg1) {
@@ -319,7 +319,7 @@ void igPsx2EnvironmentMapShader_SetEnvironmentMapTexture(S0_1c2eb0 *arg0, Rc *ar
     arg0->f32->f96 = 0;
     bool b = igTextureAttr_GetImage((igTextureAttr *)arg0->f32, 0) != 0;
     if (!b) {
-        FUN_001c31e0(arg0->f32);
+        FUN_001c31e0((igTextureAttr *)arg0->f32);
     }
     arg0->f60 = 0;
 }
@@ -406,7 +406,7 @@ void FUN_001c3090(V_1c3090 *arg0, int arg1) {
         }
         arg0->f32->f96 = 2;
         if ((igTextureAttr_GetImage((igTextureAttr *)arg0->f32, 0) != 0) == 0) {
-            FUN_001c31e0(arg0->f32);
+            FUN_001c31e0((igTextureAttr *)arg0->f32);
             if (arg0->f73 != 0) {
                 FUN_00141190((int *)arg0->f32, 1);
             }

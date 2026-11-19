@@ -84,7 +84,7 @@ int igViewerRenderer_GetVTable(void) {
     igSmartPointer_igAlphaStateAttr_Destruct((igSmartPointer<igObject> *)&u.b[20], -1);
     igSmartPointer_igCullFaceAttr_Destruct((igSmartPointer<igObject> *)&u.b[16], -1);
     FUN_00459860((ObjectRefWord *)&u.b[12], -1);
-    FUN_00230f70(&u.b[0], 0);
+    igRenderer_Destroy((igRenderer *)&u.b[0], 0);
     return r;
 }
 

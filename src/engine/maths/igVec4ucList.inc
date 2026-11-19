@@ -1,9 +1,9 @@
 igMetaObject *g_igVec4ucList_metaObject;
 int g_igVec4ucList_externalStorage;
 
-void FUN_00189e40(int arg0) {
+igVec4ucList *igVec4ucList_Create(igMemoryPoolView *pool) {
     igVec4ucList_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)g_igVec4ucList_metaObject, (igMemoryPoolView *)arg0);
+    return (igVec4ucList *)igMetaObject_CreateInstance(g_igVec4ucList_metaObject, pool);
 }
 
 igMetaObject *igVec4ucList_GetMetaObject(void)

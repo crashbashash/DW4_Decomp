@@ -328,7 +328,7 @@ int igCompileTraversal_TraverseGeometry(igCompileTraversal *self, igGeometry *ge
                 pushed = true;
             }
         }
-        FUN_001db720(self->_sorter, geometry, self->_attrStack);
+        FUN_001db720((igSorter *)self->_sorter, (igGeometry *)geometry, (igAttrStackManager *)self->_attrStack);
         if (hasList) {
             FUN_001b1100((struct A_1b1100 *)self->_attrStack, (struct B_1b1100 *)restore);
             FUN_001b11b0((struct A_1b11b0 *)self->_attrStack, (struct B_1b11b0 *)g_igModelViewMatrixAttr_metaObject);

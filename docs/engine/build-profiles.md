@@ -161,8 +161,8 @@ Until one of those is done the function stays `foreign-profile` and the unit sta
 otherwise.
 
 A per-function pin on an emitted body breaks every unit that names it as a duplicate.
-`0x357a90` and `0x38c390` are emitted by the `beMessenger` unit at `0x38e8f0` (combat
-`-O3,p`, exceptions on), and default-compiler pins on them made `0x38ed70`, `0x38ef50`,
+`0x357a90` and `0x38c390` are emitted by the `beMessenger` unit at `0x38e8f0` (the bec
+library's `-O4,p`, exceptions on), and default-compiler pins on them made `0x38ed70`, `0x38ef50`,
 `0x38e6b0` and `0x38bee0` fail on the kept copy's delay-slot scheduling.
 
 ## Adding or changing a unit by hand

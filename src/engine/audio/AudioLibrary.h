@@ -265,7 +265,6 @@ igMetaObject *igAudioContext_GetPublishedMetaObject(void);
 extern int g_igPsx2AudioContext_vtable[4];
 extern int g_igPsx2AudioSourceList_vtable[4];
 
-int FUN_00301000(InitContext *);
 void *igPsx2AudioSourceList_Create(igMemoryPoolView *pool);
 unsigned FUN_00145960(void *context, void *voice);
 int FUN_00145a10(void *arg0, void *voice);

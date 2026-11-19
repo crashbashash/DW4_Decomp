@@ -50,6 +50,7 @@ void igPsx2VisualContext_SetPixelPipelineMode(struct igPsx2VisualContext *contex
 void igPsx2VisualContext_SetTextureStageFunc(struct igPsx2VisualContext *self, int arg1, int arg2);
 void igPsx2VisualContext_SetTextureStageCoordSource(struct igPsx2VisualContext *self, int n, int x, int y);
 void igPsx2VisualContext_SetBlendingState(struct igPsx2VisualContext *self, unsigned char arg1);
+void FUN_00174510(struct igPsx2VisualContext *self, IG_GFX_BLENDING_FUNCTION source, IG_GFX_BLENDING_FUNCTION destination, unsigned char blendConstant, int stage);
 void igPsx2VisualContext_SetStencilRefVal(struct igPsx2VisualContext *self, int arg1);
 void igPsx2VisualContext_SetStencilFunc(struct igPsx2VisualContext *self, unsigned int arg1);
 void igPsx2VisualContext_SetStencilOps(struct igPsx2VisualContext *self, int failOp, int passZPassOp, int passZFailOp);
@@ -107,6 +108,12 @@ void igPsx2VisualContext_SetDepthTestState(struct igPsx2VisualContext *self, boo
 void igPsx2VisualContext_SetFogState(struct igPsx2VisualContext *self, bool enabled);
 void igPsx2VisualContext_CallDmaChain(struct igPsx2VisualContext *self, void *packet, int size, int flush);
 int igPsx2VisualContext_IsDisplayingFirstBuffer(struct igPsx2VisualContext *self);
+void igPsx2VisualContext_SetMatrixPsx2(struct igPsx2VisualContext *self, int stack, const float *matrix);
+void igPsx2VisualContext_GetMatrixPsx2(struct igPsx2VisualContext *self, int stack, float *matrix);
+void igPsx2VisualContext_SetMatrixOptimizationState(struct igPsx2VisualContext *self, unsigned char enable);
+unsigned char igPsx2VisualContext_GetMatrixOptimizationState(struct igPsx2VisualContext *self);
+void igPsx2VisualContext_SetTextureMatrixProjectiveState(struct igPsx2VisualContext *self, int stage, unsigned char enable);
+unsigned char igPsx2VisualContext_GetTextureMatrixProjectiveState(struct igPsx2VisualContext *self, int stage);
 
 #ifdef __cplusplus
 }

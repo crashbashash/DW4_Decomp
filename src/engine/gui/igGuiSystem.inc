@@ -36,7 +36,7 @@ int igGuiSystem_GetVTable(void) {
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igGuiSystem_vtable[0];
     igSmartPointer_igTransform_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
-    FUN_0044e1e0((O_44e1e0 *)&obj.w6, -1);
+    igSmartPointer_igMouseCursor_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
     igSmartPointer_igAttrSet_Destruct((igSmartPointer<igObject> *)&obj.w5, -1);
     FUN_0044e160((void **)&obj.w4, -1);
     FUN_0044e0e0((Ref **)&obj.w3, -1);
@@ -93,13 +93,17 @@ void **FUN_0044e160(void **arg0, long long arg1) {
     return arg0;
 }
 
-O_44e1e0 *FUN_0044e1e0(O_44e1e0 *arg0, short arg1) {
-    if (arg0) {
-        S_temp_a0 *t = arg0->m;
-        if (t) { t->f4 -= 1; if ((t->f4 & 0x7fffff) == 0) igObject_Destroy((igObject *)t); }
-        if (arg1 > 0) operator delete(arg0);
+igSmartPointer<igObject> *igSmartPointer_igMouseCursor_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
+    if (self) {
+        igObject *object = self->p;
+        if (object) {
+            --object->_refCount;
+            if ((object->_refCount & 0x7fffff) == 0)
+                igObject_Destroy(object);
+        }
+        if (deleteFlag > 0) operator delete(self);
     }
-    return arg0;
+    return self;
 }
 
 void igGuiSystem_RunStaticInit(void)

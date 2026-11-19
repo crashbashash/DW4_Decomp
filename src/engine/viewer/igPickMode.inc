@@ -46,8 +46,8 @@ int igPickMode_GetVTable(void) {
     igSmartPointer_igGraphPath_Destruct((igSmartPointer<igObject> *)&obj.w[27], -1);
     igIntersectTraversal_igSmartPointer_igObject_Destruct((igSmartPointer<igObject> *)&obj.w[24], -1);
     FUN_0044ee80((ObjectRefWord *)&obj.w[23], -1);
-    FUN_0044e1e0(&obj.w[21], -1);
-    FUN_0044e1e0(&obj.w[20], -1);
+    igSmartPointer_igMouseCursor_Destruct((igSmartPointer<igObject> *)&obj.w[21], -1);
+    igSmartPointer_igMouseCursor_Destruct((igSmartPointer<igObject> *)&obj.w[20], -1);
     FUN_00459ae0((O *)&obj.w[19], -1);
     FUN_00459860((ObjectRefWord *)&obj.w[18], -1);
     return r;

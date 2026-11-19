@@ -9,6 +9,7 @@
 #include "dw4/scenegraph/igLightSet.h"
 #include "dw4/scenegraph/igGroup.h"
 #include "dw4/scenegraph/igAttrStackManager.h"
+#include "dw4/scenegraph/igFrustCullTraversal.h"
 #include "dw4/viewer/ViewerOptions.h"
 #include "dw4/gui/igModel.h"
 #include "dw4/core/StringPool.h"
@@ -28,7 +29,6 @@ typedef struct L { char pad[8]; int f8; int pad2; int *f16; } L;
 typedef struct C { char pad[192]; unsigned char f192; } C;
 typedef struct A { char pad[12]; C *f12; char pad2[24]; int f40; char pad3[20]; L *f64; char pad4[12]; struct { char pad[52]; T *f52; } *f80; } A;
 
-int FUN_001b06f0(...);
 
 typedef struct T3 { char pad60[60]; unsigned char f3c; } T3;
 typedef struct T2 { char pad52[52]; T3 *f34; } T2;
@@ -80,8 +80,6 @@ struct Q3 { char pad[16]; igObject *f16; };
 struct Z { char pad[8]; char b8; char pad1[3]; int f12; char pad2[8]; char b24; };
 struct Y { char pad[24]; char b24; };
 struct P { char pad[16]; int f16; int f20; int f24; int f28; int f32; C2 *f36; Q3 *f40; int f44; int f48; int f52; N *f56; char pad3[12]; Z *f72; int pad4; igObject *f80; };
-void *FUN_0019fde0(...);
-int FUN_001c5160(void *, float);
 
 void igViewerRenderer_UpdateAttr(int *a, void *arg1);
 
@@ -101,13 +99,12 @@ static inline void *createSecond() {
 }
 static inline void *createThird() {
     Tag tag = Tag();
-    return FUN_0019fde0(0, 1);
+    return FUN_0019fde0(0);
 }
 
 #include "dw4/attrs/igViewportAttr.h"
 #include "dw4/support/list-services.h"
 #include "dw4/maths/igMatrix44f.h"
-int FUN_001b0000(int, int, int, int);
 
 void FUN_001b6ce0(void*, float, float, float, float, float);
 
@@ -210,11 +207,11 @@ void igViewerRenderer_PushLightStates(A *arg0) {
     int i;
 
     t = arg0->f80->f52;
-    FUN_001b06f0(t, arg0->f40, 0);
+    FUN_001b06f0((igAttrStackManager *)t, (igLightStateAttr *)arg0->f40, 0);
     if (t->f60 == 0 && arg0->f12->f192 == 0) {
         n = arg0->f64->f8;
         for (i = 0; i < n; i++) {
-            FUN_001b06f0(t, arg0->f64->f16[i], 1);
+            FUN_001b06f0((igAttrStackManager *)t, (igLightStateAttr *)arg0->f64->f16[i], 1);
         }
     }
 }
@@ -617,7 +614,7 @@ void igViewerRenderer_resetFields(P *arg0) {
     arg0->f72->b24 = 1;
     igSmartPointer<igObject> third((igObject *)createThird());
     ((Y *)third.p)->b24 = 1;
-    FUN_001c5160(third.p, 1.1f);
+    FUN_001c5160((igFrustCullTraversal *)third.p, 1.1f);
     t = third.p;
     if (t) t->_refCount = t->_refCount + 1;
     {
@@ -634,7 +631,8 @@ void igViewerRenderer_ViewportResized(void *arg0) {
     void *temp_v0;
 
     temp_v0 = (void *)(*(int *)((char *)(arg0) + 80));
-    FUN_001b0000(*(int *)((char *)(temp_v0) + 52), (int)g_igViewportAttr_metaObject, *(int *)((char *)(temp_v0) + 36), *(int *)((char *)(temp_v0) + 32));
+    FUN_001b0000(*(igAttrStackManager **)((char *)(temp_v0) + 52), g_igViewportAttr_metaObject,
+                 *(igAttrDefaultManager **)((char *)(temp_v0) + 36), *(igVisualContextCapabilityManager **)((char *)(temp_v0) + 32));
 }
 
 void igViewerRenderer_UpdateProjection(igViewerRenderer *arg0) {

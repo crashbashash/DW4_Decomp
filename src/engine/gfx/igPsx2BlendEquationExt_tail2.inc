@@ -23,11 +23,11 @@ void Gap__Gfx__igPsx2BlendEquationExt__vfunc_30(igPsx2BlendEquationExt *ext) {
     }
 }
 
-void FUN_0016e290(igPsx2BlendEquationExt *arg0, int arg1, int arg2, int arg3, int arg4, char arg5) {
-    arg0->_blendA = arg1;
-    arg0->_blendB = arg2;
-    arg0->_blendC = arg3;
-    arg0->_blendD = arg4;
-    arg0->_blendConstant = arg5;
+void igPsx2BlendEquationExt_SetBlendFactors(igPsx2BlendEquationExt *self, int blendA, int blendB, int blendC, int blendD, char blendConstant) {
+    self->_blendA = blendA;
+    self->_blendB = blendB;
+    self->_blendC = blendC;
+    self->_blendD = blendD;
+    self->_blendConstant = blendConstant;
 }
 

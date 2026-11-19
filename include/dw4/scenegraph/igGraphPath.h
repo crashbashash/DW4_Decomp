@@ -16,6 +16,8 @@ struct igMetaObject *igGraphPath_GetOrCreateMetaObject(void);
 struct igNode *igGraphPath_GetTail(struct igGraphPath *path);
 void igGraphPath_GetTransform(struct igGraphPath *path, struct igMatrix44f *matrix, long long time);
 void igGraphPath_SetNodes(struct igGraphPath *path, struct igNodeList *nodes);
+/* The number of nodes on the path. */
+int igGraphPath_GetCount(struct igGraphPath *path);
 
 #ifdef __cplusplus
 }

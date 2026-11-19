@@ -2613,6 +2613,7 @@
 00156b20	FUN_00156b20	match	-
 00156ba0	FUN_00156ba0	match	-
 00157140	FUN_00157140	match	-
+00157200	FUN_00157200	match	-
 00157980	FUN_00157980	match	-
 00157990	FUN_00157990	match	-
 00157a50	FUN_00157a50	match	-
@@ -2952,7 +2953,7 @@
 0016e140	FUN_0016e140	match	-
 0016e180	Gap__Gfx__igPsx2BlendEquationExt__vfunc_29	match	-
 0016e1a0	Gap__Gfx__igPsx2BlendEquationExt__vfunc_30	match	-
-0016e290	FUN_0016e290	match	-
+0016e290	igPsx2BlendEquationExt_SetBlendFactors	match	-
 0016e2b0	Gap__Gfx__igPsx2DecalExt__vfunc_29	match	-
 0016e2c0	Gap__Gfx__igPsx2DecalExt__vfunc_30	match	-
 0016e2d0	igPsx2Image_UserApplyWriteProxy	match	-
@@ -2982,6 +2983,7 @@
 0016f690	FUN_0016f690	match	-
 0016f700	FUN_0016f700	match	-
 0016f780	FUN_0016f780	match	-
+0016f7f0	FUN_0016f7f0	match	-
 0016f8a0	FUN_0016f8a0	match	-
 0016f930	FUN_0016f930	match	-
 0016f9b0	FUN_0016f9b0	match	-
@@ -3062,8 +3064,8 @@
 00173900	igPsx2VisualContext_PreMultiply	match	-
 00173b30	igPsx2VisualContext_PostMultiply	match	-
 00173d60	igPsx2VisualContext_GetMatrix	match	-
-00173ed0	FUN_00173ed0	match	-
-00173fd0	FUN_00173fd0	match	-
+00173ed0	igPsx2VisualContext_SetMatrixPsx2	match	-
+00173fd0	igPsx2VisualContext_GetMatrixPsx2	match	-
 00174030	igPsx2VisualContext_SetTextureMatrixState	match	-
 00174090	FUN_00174090	match	-
 00174140	igPsx2VisualContext_ResetToDefault	match	-
@@ -3087,8 +3089,8 @@
 001747b0	igPsx2VisualContext_SetAlphaRefValue	match	-
 001747e0	igPsx2VisualContext_GetAlphaRefValue	match	-
 001747f0	FUN_001747f0	match	-
-00174850	FUN_00174850	match	-
-001748c0	FUN_001748c0	match	-
+00174850	igPsx2VisualContext_SetMatrixOptimizationState	match	-
+001748c0	igPsx2VisualContext_GetMatrixOptimizationState	match	-
 001748d0	igPsx2VisualContext_SetViewportClippingState	match	-
 00174940	igPsx2VisualContext_GetViewportClippingState	match	-
 00174950	FUN_00174950	match	-
@@ -3220,8 +3222,8 @@
 0017c600	igPsx2VisualContext_SetTextureAddressingMode	match	-
 0017c6a0	igPsx2VisualContext_GetTextureAddressingMode	match	-
 0017c6e0	FUN_0017c6e0	match	-
-0017c710	FUN_0017c710	match	-
-0017c790	FUN_0017c790	match	-
+0017c710	igPsx2VisualContext_SetTextureMatrixProjectiveState	match	-
+0017c790	igPsx2VisualContext_GetTextureMatrixProjectiveState	match	-
 0017c7a0	igPsx2VisualContext_SetTextureStageFunc	match	-
 0017c880	FUN_0017c880	match	-
 0017c8a0	FUN_0017c8a0	match	-
@@ -3592,7 +3594,7 @@
 00189a90	igMatrix44fList_Register	match	-
 00189b00	igMatrix44fList_GetMetaObjectFunction	match	-
 00189b10	FUN_00189b10	match	-
-00189bd0	FUN_00189bd0	match	-
+00189bd0	igQuaternionfList_Create	match	-
 00189c10	igQuaternionfList_GetOrCreateMetaObject	match	-
 00189c60	igQuaternionfList_GetMetaObject	match	-
 00189cb0	igQuaternionfList_GetVTable	match	-
@@ -3600,14 +3602,14 @@
 00189d00	igQuaternionfList_Register	match	-
 00189d70	igQuaternionfList_GetMetaObjectFunction	match	-
 00189d80	FUN_00189d80	match	-
-00189e40	FUN_00189e40	match	-
+00189e40	igVec4ucList_Create	match	-
 00189e80	igVec4ucList_GetMetaObject	match	-
 00189ed0	igVec4ucList_GetVTable	match	-
 00189f10	igVec4ucList_EnsureRegistered	match	-
 00189f20	igVec4ucList_Register	match	-
 00189f90	igVec4ucList_GetMetaObjectFunction	match	-
 00189fa0	FUN_00189fa0	match	-
-0018a060	FUN_0018a060	match	-
+0018a060	igVec3fList_Create	match	-
 0018a0a0	igVec3fList_GetOrCreateMetaObject	match	-
 0018a0f0	igVec3fList_GetMetaObject	match	-
 0018a140	igVec3fList_GetVTable	match	-
@@ -3615,7 +3617,7 @@
 0018a190	igVec3fList_Register	match	-
 0018a200	igVec3fList_GetMetaObjectFunction	match	-
 0018a210	FUN_0018a210	match	-
-0018a2d0	FUN_0018a2d0	match	-
+0018a2d0	igVec2fList_Create	match	-
 0018a310	igVec2fList_GetMetaObject	match	-
 0018a360	igVec2fList_GetVTable	match	-
 0018a3a0	igVec2fList_EnsureRegistered	match	-
@@ -3696,6 +3698,7 @@
 0018dbc0	FUN_0018dbc0	match	-
 0018dcb0	FUN_0018dcb0	match	-
 0018dd20	FUN_0018dd20	match	-
+0018de10	FUN_0018de10	match	-
 0018dfc0	FUN_0018dfc0	match	-
 0018e140	thunk_FUN_0018d630	match	-
 0018e150	FUN_0018e150	match	-
@@ -3726,6 +3729,7 @@
 0018e710	igVec4ucMetaField_ValueToString	match	-
 0018e7b0	Gap__igVec4ucMetaField__vfunc_25	match	-
 0018e7c0	igVec4ucMetaField_GetAlignment	match	-
+0018e7d0	igVectorBlending_BlendWeighted	match	-
 0018e8f0	FUN_0018e8f0	match	-
 0018e9b0	FUN_0018e9b0	match	-
 0018e9e0	FUN_0018e9e0	match	-
@@ -5166,7 +5170,7 @@
 001c58c0	FUN_001c58c0	match	-
 001c5990	igGraphPath_GetTail	match	-
 001c59b0	FUN_001c59b0	match	-
-001c59e0	FUN_001c59e0	match	-
+001c59e0	igGraphPath_GetCount	match	-
 001c59f0	FUN_001c59f0	match	-
 001c5b20	igNode_GetMeta	match	-
 001c5b30	igGraphPath_GetTransform	match	-
@@ -5290,7 +5294,7 @@
 001d6190	FUN_001d6190	match	-
 001d6240	igProjectiveShadowShader_UserPostLoad	match	-
 001d62f0	igProjectiveShadowShader_Reset	match	-
-001d6340	FUN_001d6340	match	-
+001d6340	igSceneInfo_SetSceneGraph	match	-
 001d63c0	Gap__Bec__ParticleInfo__vfunc_22	match	-
 001d6410	FUN_001d6410	match	-
 001d6560	igSmartPointer_igGraphPath_Destruct	match	-
@@ -6591,7 +6595,7 @@
 00230e50	dptofp	match	-
 00230ea8	dptoul	match	-
 00230f50	InsightLibrary_MarkRegistered	match	-
-00230f70	FUN_00230f70	match	-
+00230f70	igRenderer_Destroy	match	-
 00231010	FUN_00231010	match	-
 00231020	igMessage_GetPublishedMetaObject	match	-
 00231030	igInfoManager_Destroy	match	-
@@ -16999,72 +17003,72 @@
 0038b1f0	beMatCtrl_UpdateRam	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 0038bdf0	beMatCtrl_OnMessage	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
 0038bed0	beMatCtrl_GetMeta	match	DEFERRED duplicate 0x150eb0 __dt__26igSmartPointer<9igIntList>Fv 128B (compared under the profile of its retail unit)
-0038bee0	beMessenger_InitializeMemory	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038c390	igSmartPointer_beMessengerDelay_Destruct	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038c410	igSmartPointer_beMessengerWork_Destruct	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038c490	beMessenger_ResetMemory	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038ca40	beMessengerArgData_Clear	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038ce70	beMessengerDelay_Clear	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038cff0	beMessenger_Activate	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038d010	beMessenger_Deactivate	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038d030	beMessenger_Start	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038d040	beMessenger_Stop	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038d050	beMessenger_AddInfo	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038d080	beMessenger_RemoveAllInfo	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038d0a0	beMessenger_Update	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038d470	beMessenger_SetFreezeTime	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038d4a0	beMessenger_ResolveEnumValue	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038d560	beMessenger_RegisterReceiver	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038d7a0	igSmartPointer_beMessengerGroup_Destruct	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038d820	beMessenger_RegisterReceiverFromInfo	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038d860	beMessenger_SelectReceivers	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038e060	beMessenger_DispatchSelected	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038e530	igSmartPointer_beBaseInfoRam_Destruct	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038e5b0	beMessenger_SelectGroupRam	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038e5d0	beMessenger_SelectGroup	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038e5f0	beMessenger_SendNamed	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038e630	beMessenger_SendRam	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038e670	beMessenger_SendGroup	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038e6b0	beMessenger_PrepareDelayedSelection	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038e8f0	beMessenger_EnqueueSelected	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038eca0	beMessenger_SendDelayedNamed	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038ecf0	beMessenger_SendDelayedGroup	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038ed50	beMessenger_PrepareDelayedGroup	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038ed70	beMessenger_PushArgContext	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038ef50	beMessenger_PopArgContext	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f0e0	beMessenger_SetRunCheck	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f0f0	beMessenger_GetBoolCount	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f100	beMessenger_ResizeBool	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f150	beMessenger_AppendBool	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f1d0	beMessenger_ClearBool	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f1e0	beMessenger_SetBool	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f220	beMessenger_GetBool	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f240	beMessenger_GetIntCount	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f250	beMessenger_AppendInt	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f2d0	beMessenger_ClearInt	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f2e0	beMessenger_SetInt	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f320	beMessenger_GetInt	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f340	beMessenger_GetFloatCount	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f350	beMessenger_AppendFloat	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f3d0	beMessenger_GetFloat	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f3f0	beMessenger_GetLongCount	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f400	beMessenger_AppendLong	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f480	beMessenger_GetLong	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f4a0	beMessenger_GetVec3Count	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f4b0	beMessenger_AppendVec3	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f550	beMessenger_ClearVec3	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f560	beMessenger_GetVec3	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f5a0	beMessenger_GetMatrixCount	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f5b0	beMessenger_AppendMatrix	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f630	beMessenger_GetMatrix	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f660	beMessenger_GetObjectCount	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f670	beMessenger_AppendObject	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f690	beMessenger_ClearObjects	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f800	beMessenger_GetObject	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f820	beMessenger_GetStringCount	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f830	beMessenger_AppendString	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f8f0	beMessenger_GetString	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
-0038f950	beMessenger_GetMeta	match	DEFERRED duplicate 0x357a90 __dt__9ObjectRefFv 128B (compared under the profile of its retail unit)
+0038bee0	beMessenger_InitializeMemory	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038c390	igSmartPointer_beMessengerDelay_Destruct	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038c410	igSmartPointer_beMessengerWork_Destruct	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038c490	beMessenger_ResetMemory	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038ca40	beMessengerArgData_Clear	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038ce70	beMessengerDelay_Clear	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038cff0	beMessenger_Activate	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038d010	beMessenger_Deactivate	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038d030	beMessenger_Start	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038d040	beMessenger_Stop	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038d050	beMessenger_AddInfo	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038d080	beMessenger_RemoveAllInfo	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038d0a0	beMessenger_Update	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038d470	beMessenger_SetFreezeTime	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038d4a0	beMessenger_ResolveEnumValue	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038d560	beMessenger_RegisterReceiver	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038d7a0	igSmartPointer_beMessengerGroup_Destruct	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038d820	beMessenger_RegisterReceiverFromInfo	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038d860	beMessenger_SelectReceivers	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038e060	beMessenger_DispatchSelected	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038e530	igSmartPointer_beBaseInfoRam_Destruct	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038e5b0	beMessenger_SelectGroupRam	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038e5d0	beMessenger_SelectGroup	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038e5f0	beMessenger_SendNamed	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038e630	beMessenger_SendRam	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038e670	beMessenger_SendGroup	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038e6b0	beMessenger_PrepareDelayedSelection	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038e8f0	beMessenger_EnqueueSelected	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038eca0	beMessenger_SendDelayedNamed	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038ecf0	beMessenger_SendDelayedGroup	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038ed50	beMessenger_PrepareDelayedGroup	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038ed70	beMessenger_PushArgContext	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038ef50	beMessenger_PopArgContext	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f0e0	beMessenger_SetRunCheck	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f0f0	beMessenger_GetBoolCount	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f100	beMessenger_ResizeBool	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f150	beMessenger_AppendBool	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f1d0	beMessenger_ClearBool	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f1e0	beMessenger_SetBool	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f220	beMessenger_GetBool	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f240	beMessenger_GetIntCount	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f250	beMessenger_AppendInt	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f2d0	beMessenger_ClearInt	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f2e0	beMessenger_SetInt	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f320	beMessenger_GetInt	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f340	beMessenger_GetFloatCount	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f350	beMessenger_AppendFloat	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f3d0	beMessenger_GetFloat	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f3f0	beMessenger_GetLongCount	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f400	beMessenger_AppendLong	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f480	beMessenger_GetLong	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f4a0	beMessenger_GetVec3Count	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f4b0	beMessenger_AppendVec3	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f550	beMessenger_ClearVec3	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f560	beMessenger_GetVec3	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f5a0	beMessenger_GetMatrixCount	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f5b0	beMessenger_AppendMatrix	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f630	beMessenger_GetMatrix	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f660	beMessenger_GetObjectCount	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f670	beMessenger_AppendObject	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f690	beMessenger_ClearObjects	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f800	beMessenger_GetObject	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f820	beMessenger_GetStringCount	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f830	beMessenger_AppendString	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f8f0	beMessenger_GetString	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+0038f950	beMessenger_GetMeta	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
 0038f960	beMeterCtrl_Prepare	match	-
 0038f970	beMeterCtrl_GetInfoMeta	match	-
 0038f980	beMeterCtrl_OnAddRam	match	-
@@ -18847,14 +18851,14 @@
 003d45f0	beNDMWMdlPlayer_OnErase	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
 003d4820	beNDMWMdlPlayer_OnRemove	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
 003d4970	beNDMWMdlPlayer__GetMeta	match	DEFERRED duplicate 0x150eb0 __dt__10IntListRefFv 128B (compared under the profile of its retail unit)
-003d4980	beNDMWMdlPlayer2_Start	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-003d49c0	beNDMWMdlPlayer2_IsKind	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-003d49f0	beNDMWMdlPlayer2_RegisterReceiver	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-003d4a20	beNDMWMdlPlayer2_OnGenerate	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-003d4e20	igSmartPointer_beNDMWMdlPlayer2InfoWork_Destruct	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-003d4ea0	beNDMWMdlPlayer2_UpdateControl	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-003d50c0	beNDMWMdlPlayer2_OnPreMessage	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-003d58e0	beNDMWMdlPlayer2_GetMeta	match	DEFERRED duplicate 0x33e9c0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+003d4980	beNDMWMdlPlayer2_Start	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+003d49c0	beNDMWMdlPlayer2_IsKind	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+003d49f0	beNDMWMdlPlayer2_RegisterReceiver	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+003d4a20	beNDMWMdlPlayer2_OnGenerate	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+003d4e20	igSmartPointer_beNDMWMdlPlayer2InfoWork_Destruct	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+003d4ea0	beNDMWMdlPlayer2_UpdateControl	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+003d50c0	beNDMWMdlPlayer2_OnPreMessage	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
+003d58e0	beNDMWMdlPlayer2_GetMeta	match	DEFERRED duplicate 0x130720 __dt__11igStringRefFv 120B (compared under the profile of its retail unit)
 003d58f0	beNDMWStatus_Prepare	match	DEFERRED duplicate 0x1363f0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 003d5950	beNDMWStatus__GetInfoMeta	match	DEFERRED duplicate 0x1363f0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
 003d5960	beNDMWStatus_OnAddRam	match	DEFERRED duplicate 0x1363f0 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
@@ -19491,7 +19495,7 @@
 0044c020	igTextElement_GetMetaObjectFunction	match	-
 0044c030	igGeometryElement_GetPublishedMetaObject	match	-
 0044c040	igTextElement_InitFields	match	-
-0044c110	FUN_0044c110	match	-
+0044c110	igModel_Destroy	match	-
 0044c1b0	igGuiComponentModel_GetPublishedMetaObject	match	-
 0044c1c0	FUN_0044c1c0	match	-
 0044c240	igGuiComponentAspect_GetPublishedMetaObject	match	-
@@ -19589,7 +19593,7 @@
 0044e060	FUN_0044e060	match	-
 0044e0e0	FUN_0044e0e0	match	-
 0044e160	FUN_0044e160	match	-
-0044e1e0	FUN_0044e1e0	match	-
+0044e1e0	igSmartPointer_igMouseCursor_Destruct	match	-
 0044e260	igGuiSystem_RunStaticInit	match	-
 0044e270	igGuiSystem_Register	match	-
 0044e2f0	thunk_igGuiSystem_GetMetaObject	match	-
@@ -19935,7 +19939,7 @@
 00457bc0	igRadioGroupSelectedObserver_OnModelChange	match	-
 00457bf0	igOnOffValueObserver_OnModelChange	match	-
 00457c40	FUN_00457c40	match	-
-00457ca0	FUN_00457ca0	match	-
+00457ca0	igRenderer_SetVisualContext	match	-
 00457d60	igClearRenderer_InitializeDrawing	match	-
 00457de0	igClearRenderer_Render	match	-
 00457e00	Gap__Gui__igTextElement__vfunc_23	match	-

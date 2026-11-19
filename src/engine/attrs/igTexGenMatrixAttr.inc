@@ -109,7 +109,7 @@ void igTexGenMatrixAttr_InitFields(void) {
     o2.z = 0;
     o2.w = 0;
     igMatrix44f_FromRows((float *)&o1, (igVec4f *)&o2, (igVec4f *)&o3, (igVec4f *)&o4, (igVec4f *)&o5);
-    FUN_0018c640(field, &o1);
+    FUN_0018c640((igMetaField *)field, (const float *)&o1);
     fld = (Fld *)igMetaObject_GetFieldAt(meta, base + 1);
     ((igMetaField *)fld)->_invarianceFunction = (int)igTexGenMatrixAttr_SynchronizeCachedUnitID;
     igMetaObject_NameFields(meta, g_igTexGenMatrixAttr_fieldTable, g_igTexGenMatrixAttr_fieldHandles, g_igTexGenMatrixAttr_fieldOffsets, base);

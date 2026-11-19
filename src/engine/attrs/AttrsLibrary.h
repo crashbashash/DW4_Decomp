@@ -40,6 +40,7 @@
 #include "dw4/gfx/igVertexArray.h"
 #include "dw4/core/igResult.h"
 #include "dw4/core/igRegistry.h"
+#include "dw4/gfx/igPsx2BlendEquationExt.h"
 #include "dw4/gfx/igPsx2VisualContext.h"
 #include <math.h>
 #include "dw4/core/igObjectSystem.h"
@@ -153,7 +154,6 @@ extern "C" CallbackArray *igVertexBlendMatrixAttr_Register(void);
 extern "C" void igVertexBlendMatrixAttr_GetMetaObjectFunction(void);
 struct V { int x; int y; int z; int w; };
 struct M { int m[16]; };
-extern "C" int FUN_0018c640(...);
 extern "C" void igVertexBlendMatrixAttr_InitFields(void);
 extern "C" igMetaObject *g_igTimeAttr_metaObject;
 extern "C" igMetaObject *igTimeAttr_GetOrCreateMetaObject(void);
@@ -646,7 +646,6 @@ extern "C" int igBlendMatrixPaletteAttr_GetVTable(void);
 extern "C" void igBlendMatrixPaletteAttr_EnsureRegistered(void);
 extern "C" CallbackArray *igBlendMatrixPaletteAttr_Register(void);
 extern "C" void igBlendMatrixPaletteAttr_GetMetaObjectFunction(void);
-extern "C" int FUN_001888e0(...);
 extern "C" void igBlendMatrixPaletteAttr_InitFields(void);
 extern "C" igMetaObject *g_igBlendMatricesAttr_metaObject;
 extern "C" igMetaObject *igBlendMatricesAttr_GetMetaObject(void);
@@ -767,7 +766,6 @@ class VC { public: virtual void d0(); virtual void d1(); virtual void d2(); virt
 struct O_13b820 { char pad[8]; short f8; short f10; };
 
 extern "C" void igAttr_UserPostLoad(void *a);
-extern "C" void FUN_002ff130(void *);
 struct R_13b860 { int pad[2]; int f; };
 struct A {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
@@ -776,7 +774,7 @@ struct A {
     virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
     virtual R_13b860 *v20();
 };
-extern "C" void igAttr_resetFields(void *p);
+extern "C" void igAttr_resetFields(void *p, int flags);
 
 extern "C" void igAttr_RegisterClass(void *arg0);
 typedef igSmartPointer<igObject> igObjectPointer;
@@ -1028,7 +1026,6 @@ struct Rc { int w0; int refs; };
 extern "C" void FUN_00192360(const float *matrix, float *out, float *in, int count);
 extern "C" void FUN_0013dbb0(int component, igVertexArrayView *vertexArray, const float *matrix);
 extern "C" void FUN_00192430(const float *matrix, float *out, float *in, unsigned int count);
-extern "C" void FUN_001903d0(float *matrix);
 extern "C" float FUN_0018b9e0(const void *ray, const float *a, const float *b, const float *c, float *hit,
                                float *normal, int mode);
 class igIndexArrayView { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22();
@@ -1239,10 +1236,17 @@ public:
     virtual void setEmission(const igVec4f *color); virtual void setDiffuse(const igVec4f *color); virtual void setSpecular(const igVec4f *color);
 };
 extern "C" void igMaterialAttr_SynchronizeDefault(MaterialAttrView *material, MaterialContextView *context);
-extern "C" void FUN_00174850(int, unsigned char);
 extern "C" void igMatrixOptStateAttr_apply(int arg0, int arg1);
-extern "C" int FUN_001748c0(...);
-extern "C" void igMatrixOptStateAttr_SynchronizeDefault(void **arg0, int arg1);
+/* igMatrixOptStateAttr's virtual functions as synchronizeDefault calls them: slot 30 sets _enabled. */
+class igMatrixOptStateAttrView {
+public:
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
+    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
+    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
+    virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29();
+    virtual void setState(unsigned char enabled);
+};
+extern "C" void igMatrixOptStateAttr_SynchronizeDefault(igMatrixOptStateAttrView *self, igPsx2VisualContext *context);
 extern "C" void igMatrixOptStateAttr_SetState(igMatrixOptStateAttr *self, char enabled);
 
 extern "C" void igModelViewMatrixAttr_apply(char * arg0, igPsx2VisualContext *arg1);
@@ -1397,9 +1401,7 @@ extern "C" void igStencilStateAttr_SetState(void *arg0, char arg1);
 extern "C" void igTexGenMatrixAttr_SynchronizeCachedUnitID(igTexGenMatrixAttr *self);
 extern "C" void igTexGenMatrixAttr_SetUnitID(igTexGenMatrixAttr *self, int unitID);
 extern "C" void igTexGenMatrixAttr_UserPostLoad(igTexGenMatrixAttr *self);
-extern "C" void FUN_00173ed0(int, int, char *);
 extern "C" void igTexGenMatrixAttr_apply(char * arg0, int arg1);
-extern "C" void FUN_00173fd0(void *context, int which, float *m);
 extern "C" void igTexGenMatrixAttr_SynchronizeDefault(igTexGenMatrixAttr *self, void *context);
 
 extern "C" char *igTextureAttr_GetFileName(char *arg0);
@@ -1504,13 +1506,10 @@ extern "C" void igTextureFunctionAttr_SetType(igTextureFunctionAttr *self, int t
 class G { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual int v120(int, int, unsigned); virtual int v124(int, int, int); };
 struct A_141410 { char p[12]; int f12; int f16; char p2[8]; int f28; unsigned char f32; char q[3]; int f36; };
 extern "C" void igTextureFunctionAttr_apply(void *arg0x, igPsx2VisualContext *arg1);
-typedef struct { char pad[76]; int a; short pad2; unsigned char b; } S_1414d0;
-extern "C" int FUN_0017c710(int,int,unsigned char);
-extern "C" void igTextureMatrixAttr_apply(S_1414d0 *p, int q);
+extern "C" void igTextureMatrixAttr_apply(igTextureMatrixAttr *self, igPsx2VisualContext *context);
 extern "C" void igTextureMatrixAttr_SynchronizeCachedUnitID(igTextureMatrixAttr *self);
 extern "C" void igTextureMatrixAttr_UserPostLoad(igTextureMatrixAttr *self);
 extern "C" void igTextureMatrixAttr_SetUnitID(igTextureMatrixAttr *self, int unitID);
-extern "C" unsigned char FUN_0017c790(igObject *context, int unit);
 extern "C" void igTextureMatrixAttr_SynchronizeDefault(igTextureMatrixAttr *self, igObject *context);
 extern "C" void igTextureMatrixAttr_SetMatrix(igTextureMatrixAttr *self, const float *matrix);
 class igTextureMatrixAttrView;
@@ -1557,12 +1556,9 @@ extern "C" void igVertexBlendMatrixAttr_SynchronizeDefault(void *arg0, void **ar
 extern "C" void igVertexBlendMatrixAttr_SetMatrix(igVertexBlendMatrixAttr *self, const float *matrix);
 class igVertexBlendMatrixAttrView;
 extern "C" void igVertexBlendMatrixAttr_GetUnitCount(igVertexBlendMatrixAttrView *self, igVisualContextView *context);
-struct TransformPairView { char p0[12]; unsigned char f12; unsigned char f13; };
-extern "C" void FUN_001419f0(struct TransformPairView *arg0, float *m, void *arg2);
 struct Src { char p0[8]; int n; int p12; int *d; };
-struct G_141e10 { char p0[8]; int f8; };
 struct S_141e10 { char p0[12]; unsigned char f12; unsigned char f13; char p14[2]; int f16; int f20; struct Src *f24; };
-extern "C" struct G_141e10 *DAT_00562bc8[4];
+#include "dw4/datapump/igMatrixObject.h"
 
 extern "C" void igVertexBlendMatrixListAttr_apply(struct S_141e10 *arg0, igPsx2VisualContext *arg1);
 extern "C" void igVertexBlendMatrixListAttr_SynchronizeDefault(void);
@@ -1723,8 +1719,7 @@ extern "C" igMetaObject *igNonRefCountedAttrList_GetElementMeta(void);
 extern "C" int igVec3fList_GetElementSize(void);
 
 extern "C" int Gap__Core__igObject__vfunc_21(void);
-struct L_142bb0 { char pad[8]; int cnt; int pad2; unsigned *items; };
-extern "C" int FUN_00142bb0(struct L_142bb0 *arg0, unsigned *arg1);
+#include "dw4/attrs/igObjectList.h"
 extern "C" igMetaObject *igBlendMatrixPaletteAttrList_GetElementMeta(void);
 extern "C" igMetaObject *igLightStateAttrList_GetElementMeta(void);
 extern "C" igMetaObject *igLightList_GetElementMeta(void);

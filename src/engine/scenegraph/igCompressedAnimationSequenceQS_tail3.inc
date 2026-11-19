@@ -80,14 +80,14 @@ int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_23(O_1bfa60 *a0, int a1, lon
     FUN_001bf7d0((QSSequenceView *)a0, &s6f, &s6e, &s68, &s64, &s60, &s5c, a2);
     igMatrix44f_SetIdentity((float *)a1);
     if (s6f) {
-        if (a0->flags & 2) { FUN_001bf560((QSView *)a0, 0, (float *)s40); FUN_00192810(s40, a1); }
+        if (a0->flags & 2) { FUN_001bf560((QSView *)a0, 0, (float *)s40); FUN_00192810((const float *)s40, (float *)a1); }
         if (a0->flags & 1) { a0->v44(0, s50); igMatrix44f_SetTranslation((float *)a1, (float *)s50); }
     } else if (s6e) {
-        if (a0->flags & 2) { FUN_001bf560((QSView *)a0, a0->m->count - 1, (float *)s40); FUN_00192810(s40, a1); }
+        if (a0->flags & 2) { FUN_001bf560((QSView *)a0, a0->m->count - 1, (float *)s40); FUN_00192810((const float *)s40, (float *)a1); }
         if (a0->flags & 1) { a0->v44(a0->v33() - 1, s50); igMatrix44f_SetTranslation((float *)a1, (float *)s50); }
     } else {
         if (s5c < 9.99999997e-07f) f = 0.0f; else f = s60 / s5c;
-        if (a0->flags & 2) { a0->v46(s40, s68, s64, f); FUN_00192810(s40, a1); }
+        if (a0->flags & 2) { a0->v46(s40, s68, s64, f); FUN_00192810((const float *)s40, (float *)a1); }
         if (a0->flags & 1) { a0->v45(s50, s68, s64, f); igMatrix44f_SetTranslation((float *)a1, (float *)s50); }
     }
     return 1;
@@ -294,7 +294,7 @@ void FUN_001c03a0(DepthOfFieldNode *arg0, A1_1c03a0 *arg1) {
                 igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562690[0]);
                 igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_005626c0[0]);
                 igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_005626d8[0]);
-                FUN_001db720(arg1->f68, DAT_00562678[0], s0);
+                FUN_001db720((igSorter *)arg1->f68, (igGeometry *)DAT_00562678[0], (igAttrStackManager *)s0);
                 igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_005626d8[0]);
                 igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_005626c0[0]);
                 igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s0, (igAttr *)DAT_00562690[0]);
@@ -313,13 +313,13 @@ void FUN_001c03a0(DepthOfFieldNode *arg0, A1_1c03a0 *arg1) {
                 igTraversal_TraverseChildren((igTraversal *)(arg1), (igNode *)arg0);
                 igAttrStackManager_PopOverrideAttr((igAttrStackManager *)s0, (igAttr *)g_depthOfFieldNearProjectionAttr);
                 FUN_001d9bb0((void *)arg1->f68, s0);
-                FUN_001dc610(arg1->f68);
+                FUN_001dc610((igSorter *)arg1->f68);
                 return;
             }
         }
         FUN_001dc500((A_1dc500 *)arg1->f68, 0, 0);
         igTraversal_TraverseChildren((igTraversal *)(arg1), (igNode *)arg0);
-        FUN_001dc610(arg1->f68);
+        FUN_001dc610((igSorter *)arg1->f68);
     }
 }
 

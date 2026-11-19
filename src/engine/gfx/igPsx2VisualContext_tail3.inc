@@ -266,7 +266,7 @@ void igPsx2VisualContext_DrawMultiple(igPsx2VisualContext *self, int arg1, int a
             q->f64 = p2GetVif1WaitSequence();
         }
     } else {
-        FUN_0017f080(self, arg1 + 0x2000);
+        FUN_0017f080(self, arg1 + 0x2000, arg2, arg3, arg4);
     }
 }
 
@@ -339,7 +339,7 @@ int igPsx2VisualContext_BeginDraw(A_16dbe0 *arg0) {
 
 void igPsx2VisualContext_EndDraw(A_16dca0 *arg0) {
     float f20 = 0.0f;
-    N_16dca0 *n;
+    StatisticsCapture *n;
     if (arg0->b60 != 0) {
         f20 = dptofp(arg0->f56->v100());
         arg0->f56->v116();
@@ -357,7 +357,7 @@ void igPsx2VisualContext_EndDraw(A_16dca0 *arg0) {
         if (n->b16 != 0 && n->f8 == -n->f4) {
             p2GetStatistics(n->f480);
             n->f936 = arg0->f56->v104();
-            FUN_00178970(arg0, n);
+            FUN_00178970((igPsx2VisualContext *)arg0, n);
             n->b16 = 0;
         }
         n = n->f952;

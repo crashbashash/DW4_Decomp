@@ -34,7 +34,7 @@ void FUN_001dd0e0(TransformSampleView *o, int index, float (*m)[4]) {
         inv[2] = z;
         inv[1] = y;
     }
-    FUN_00190cb0(rot, inv);
+    FUN_00190cb0((float *)rot, inv);
     igMatrix44f_GetQuaternion(o->_quatList->_data[index], (float *)rot);
 }
 
@@ -43,7 +43,7 @@ void FUN_001dd250(A_1dd250 *arg0, int arg1, char *arg2) {
     float f22, f21, f20;
     int idx;
     V3_1dd250 *v;
-    FUN_00192810(arg0->b12->data + arg1 * 16, arg2);
+    FUN_00192810((const float *)(arg0->b12->data + arg1 * 16), (float *)arg2);
     idx = arg1 * 12;
     v = (V3_1dd250 *)(arg0->b8->data + idx);
     f22 = v->x;
@@ -62,7 +62,7 @@ void FUN_001dd250(A_1dd250 *arg0, int arg1, char *arg2) {
     *(float *)(arg2 + 48) = f22;
     *(float *)(arg2 + 52) = f21;
     *(float *)(arg2 + 56) = f20;
-    FUN_00190cb0(arg2, arg0->b16->data + idx);
+    FUN_00190cb0((float *)arg2, (const float *)(arg0->b16->data + idx));
 }
 
 int FUN_001dd370(void *arg0) {

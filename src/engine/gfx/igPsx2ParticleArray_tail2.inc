@@ -58,7 +58,7 @@ int Gap__Gfx__igPsx2ParticleArray__vfunc_24(PA_175c70 *arg0, int arg1) {
 }
 
 int *Gap__Gfx__igPsx2ParticleArray__vfunc_26(igPsx2ParticleArray *self, unsigned int index) {
-    int ps2Format;
+    Psx2ParticleFormat *ps2Format;
 
     self->_currentEditIndex = index;
     if (self->_hardwareSupport == 0) {
@@ -68,13 +68,14 @@ int *Gap__Gfx__igPsx2ParticleArray__vfunc_26(igPsx2ParticleArray *self, unsigned
         return 0;
     }
     FUN_0015b1e0(&g_decodedParticle_00560ac0[0]);
-    ps2Format = self->_ps2ParticleFormat;
-    FUN_001fdca0(ps2Format, index, &g_decodedParticle_00560ac0[0], &g_decodedParticle_00560acc[0], &g_decodedParticle_00560ad8[0]);
-    FUN_001fdd60(ps2Format, index, &g_decodedParticle_00560ae4[0], &g_decodedParticle_00560af4[0], &g_decodedParticle_00560b04[0]);
-    FUN_001fdeb0(ps2Format, index, &g_decodedParticle_00560b14[0], &g_decodedParticle_00560b1c[0], &g_decodedParticle_00560b24[0]);
-    FUN_001fe100(ps2Format, index, &g_decodedParticle_00560b44[0], &g_decodedParticle_00560b40[0], &g_decodedParticle_00560b3c[0]);
-    FUN_001fe260(ps2Format, index, &g_decodedParticle_00560b4c[0], &g_decodedParticle_00560b48[0]);
-    FUN_001fe320(ps2Format, index, &g_decodedParticle_00560b2c[0]);
+    ps2Format = (Psx2ParticleFormat *)self->_ps2ParticleFormat;
+    /* The decoded particle is a block of floats: positions, colours, sizes, angles, the texture coordinate. */
+    FUN_001fdca0(ps2Format, index, (float *)&g_decodedParticle_00560ac0[0], (float *)&g_decodedParticle_00560acc[0], (float *)&g_decodedParticle_00560ad8[0]);
+    FUN_001fdd60(ps2Format, index, (float *)&g_decodedParticle_00560ae4[0], (float *)&g_decodedParticle_00560af4[0], (float *)&g_decodedParticle_00560b04[0]);
+    FUN_001fdeb0(ps2Format, index, (float *)&g_decodedParticle_00560b14[0], (float *)&g_decodedParticle_00560b1c[0], (float *)&g_decodedParticle_00560b24[0]);
+    FUN_001fe100(ps2Format, index, (float *)&g_decodedParticle_00560b44[0], (float *)&g_decodedParticle_00560b40[0], (float *)&g_decodedParticle_00560b3c[0]);
+    FUN_001fe260(ps2Format, index, (float *)&g_decodedParticle_00560b4c[0], (float *)&g_decodedParticle_00560b48[0]);
+    FUN_001fe320(ps2Format, index, (float *)&g_decodedParticle_00560b2c[0]);
     return &g_decodedParticle_00560ac0[0];
 }
 
@@ -208,7 +209,7 @@ void igPsx2PointSpriteExt_Draw(int *arg0, int arg1, int arg2) {
     a1 = *q;
     a0_3 = ((unsigned int)(a1 & 0x300000) >> 0x14) & 0xFF;
     s3_2 = DAT_004df6b0[a0_3 | (((s3 & 0xFF) == 2) * 4)];
-    if (s3_2 != FUN_001f7360(a0_3, a1)) {
+    if (s3_2 != FUN_001f7360()) {
         FUN_001f7340(s3_2);
     }
     ((VB *)arg0[98])->vX(0x1000, arg1, arg2);

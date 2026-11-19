@@ -25,9 +25,9 @@ void igAttr_UserPostLoad(void *a) {
     ((short *)a)[4] = (((VC *)a)->vX())[2];
 }
 
-void igAttr_resetFields(void *p)
+void igAttr_resetFields(void *p, int flags)
 {
-    FUN_002ff130(p);
+    Gap__Core__igObject__resetFields((igObject *)p, flags);
     int t = ((A *)p)->v20()->f;
     ((short *)p)[4] = (short)t;
 }

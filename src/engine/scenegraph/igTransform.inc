@@ -199,7 +199,7 @@ void igTransform_InitFields(void) {
     o2.z = 0;
     o2.w = 0;
     igMatrix44f_FromRows((float *)&o1, (igVec4f *)&o2, (igVec4f *)&o3, (igVec4f *)&o4, (igVec4f *)&o5);
-    FUN_0018c640(temp_s1, &o1);
+    FUN_0018c640((igMetaField *)temp_s1, (const float *)&o1);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1), 0);
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
     *(int *)((char *)(temp_s1_2) + 56) = (int)igVisualAttribute_GetOrCreateMetaObject();

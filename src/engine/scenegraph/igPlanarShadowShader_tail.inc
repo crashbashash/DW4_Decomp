@@ -133,7 +133,7 @@ void FUN_001d3e20(igPlanarShadowShader *arg0, igCommonTraversal *arg1) {
             int *s5;
             igObjectPool *pool;
             char *o;
-            FUN_001908f0(sp70, arg1->_viewMatInv);
+            igMatrix44f_Copy((float *)sp70, arg1->_viewMatInv);
             igMatrix44f_Multiply((float *)sp70, (const float *)sp70, (const float *)((char *)m + 12));
             igMatrix44f_Multiply((float *)sp70, (const float *)sp70, arg1->_viewMat);
             nd = (igAttrStack *)((int *)((igObjectList *)s1->_attrStacks)->_data)[((int *)s1->_attrStackIndexTable)[((igMetaObject *)g_igProjectionMatrixAttr_metaObject)->_id]];

@@ -892,17 +892,17 @@ void igPsx2VisualContext_PopMatrix(Obj_172910 *o, int k) {
     switch (k) {
     case 0:
         o->s[0]->count--;
-        FUN_001fbce0(3, o->s[0]->data + ((o->s[0]->count - 1) << 6));
+        FUN_001fbce0(3, (const float *)(o->s[0]->data + ((o->s[0]->count - 1) << 6)));
         break;
     case 1:
         o->s[1]->count--;
-        FUN_001fbce0(0, o->s[1]->data + ((o->s[1]->count - 1) << 6));
+        FUN_001fbce0(0, (const float *)(o->s[1]->data + ((o->s[1]->count - 1) << 6)));
         break;
     case 2: {
         Stk *s = o->s[2];
         s->count--;
         igMatrix44f_Copy((float *)&m0, (float *)(s->data + (s->count << 6)));
-        FUN_001fbce0(4, o->s[2]->data + ((o->s[2]->count - 1) << 6));
+        FUN_001fbce0(4, (const float *)(o->s[2]->data + ((o->s[2]->count - 1) << 6)));
         break; }
     case 10: { Stk *s = o->s[4]; s->count--; igMatrix44f_Copy((float *)&m1, (float *)(s->data + (s->count << 6))); break; }
     case 11: { Stk *s = o->s[5]; s->count--; igMatrix44f_Copy((float *)&m2, (float *)(s->data + (s->count << 6))); break; }
@@ -923,44 +923,44 @@ void igPsx2VisualContext_SetMatrix(igPsx2VisualContext *self, int arg1, char *ar
     case 0:
         SET((St_172b00 *)self->_projMat, arg2)
         t = (St_172b00 *)self->_projMat;
-        FUN_001fbce0(3, t->data + ((t->n - 1) << 6));
+        FUN_001fbce0(3, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 1:
         SET((St_172b00 *)self->_mvMat, arg2)
         t = (St_172b00 *)self->_mvMat;
-        FUN_001fbce0(0, t->data + ((t->n - 1) << 6));
+        FUN_001fbce0(0, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 2:
         SET((St_172b00 *)self->_texMat, arg2)
         t = (St_172b00 *)self->_texMat;
-        FUN_001fbce0(4, t->data + ((t->n - 1) << 6));
+        FUN_001fbce0(4, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 10:
         igMatrix44f_SetIdentity((float *)sp110);
         SETB((St_172b00 *)self->_blendMat0, arg2)
         igMatrix44f_Invert((float *)sp110, (const float *)arg2);
-        FUN_001903d0(sp110);
+        FUN_001903d0((float *)sp110);
         SET((St_172b00 *)self->_invTransBlendMat0, sp110)
         break;
     case 11:
         igMatrix44f_SetIdentity((float *)spD0);
         SETB((St_172b00 *)self->_blendMat1, arg2)
         igMatrix44f_Invert((float *)spD0, (const float *)arg2);
-        FUN_001903d0(spD0);
+        FUN_001903d0((float *)spD0);
         SET((St_172b00 *)self->_invTransBlendMat1, spD0)
         break;
     case 12:
         igMatrix44f_SetIdentity((float *)sp90);
         SETB((St_172b00 *)self->_blendMat2, arg2)
         igMatrix44f_Invert((float *)sp90, (const float *)arg2);
-        FUN_001903d0(sp90);
+        FUN_001903d0((float *)sp90);
         SET((St_172b00 *)self->_invTransBlendMat2, sp90)
         break;
     case 13:
         igMatrix44f_SetIdentity((float *)sp50);
         SETB((St_172b00 *)self->_blendMat3, arg2)
         igMatrix44f_Invert((float *)sp50, (const float *)arg2);
-        FUN_001903d0(sp50);
+        FUN_001903d0((float *)sp50);
         SET((St_172b00 *)self->_invTransBlendMat3, sp50)
         break;
     }
@@ -976,44 +976,44 @@ void igPsx2VisualContext_PushPreMultiply(igPsx2VisualContext *self, int arg1, ch
     case 0:
         igMatrixStack_PushPreMultiply((igMatrixStack *)self->_projMat, (const float *)arg2);
         t = (St_172b00 *)self->_projMat;
-        FUN_001fbce0(3, t->data + ((t->n - 1) << 6));
+        FUN_001fbce0(3, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 1:
         igMatrixStack_PushPreMultiply((igMatrixStack *)self->_mvMat, (const float *)arg2);
         t = (St_172b00 *)self->_mvMat;
-        FUN_001fbce0(0, t->data + ((t->n - 1) << 6));
+        FUN_001fbce0(0, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 2:
         igMatrixStack_PushPreMultiply((igMatrixStack *)self->_texMat, (const float *)arg2);
         t = (St_172b00 *)self->_texMat;
-        FUN_001fbce0(4, t->data + ((t->n - 1) << 6));
+        FUN_001fbce0(4, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 10:
         igMatrix44f_SetIdentity((float *)inverse0);
         igMatrixStack_PushPreMultiply((igMatrixStack *)self->_blendMat0, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse0, (const float *)arg2);
-        FUN_001903d0(inverse0);
+        FUN_001903d0((float *)inverse0);
         SET((St_172b00 *)self->_invTransBlendMat0, inverse0)
         break;
     case 11:
         igMatrix44f_SetIdentity((float *)inverse1);
         igMatrixStack_PushPreMultiply((igMatrixStack *)self->_blendMat1, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse1, (const float *)arg2);
-        FUN_001903d0(inverse1);
+        FUN_001903d0((float *)inverse1);
         SET((St_172b00 *)self->_invTransBlendMat1, inverse1)
         break;
     case 12:
         igMatrix44f_SetIdentity((float *)inverse2);
         igMatrixStack_PushPreMultiply((igMatrixStack *)self->_blendMat2, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse2, (const float *)arg2);
-        FUN_001903d0(inverse2);
+        FUN_001903d0((float *)inverse2);
         SET((St_172b00 *)self->_invTransBlendMat2, inverse2)
         break;
     case 13:
         igMatrix44f_SetIdentity((float *)inverse3);
         igMatrixStack_PushPreMultiply((igMatrixStack *)self->_blendMat3, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse3, (const float *)arg2);
-        FUN_001903d0(inverse3);
+        FUN_001903d0((float *)inverse3);
         SET((St_172b00 *)self->_invTransBlendMat3, inverse3)
         break;
     }
@@ -1029,44 +1029,44 @@ void igPsx2VisualContext_PushPostMultiply(igPsx2VisualContext *self, int arg1, c
     case 0:
         igMatrixStack_PushPostMultiply((igMatrixStack *)self->_projMat, (const float *)arg2);
         t = (St_172b00 *)self->_projMat;
-        FUN_001fbce0(3, t->data + ((t->n - 1) << 6));
+        FUN_001fbce0(3, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 1:
         igMatrixStack_PushPostMultiply((igMatrixStack *)self->_mvMat, (const float *)arg2);
         t = (St_172b00 *)self->_mvMat;
-        FUN_001fbce0(0, t->data + ((t->n - 1) << 6));
+        FUN_001fbce0(0, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 2:
         igMatrixStack_PushPostMultiply((igMatrixStack *)self->_texMat, (const float *)arg2);
         t = (St_172b00 *)self->_texMat;
-        FUN_001fbce0(4, t->data + ((t->n - 1) << 6));
+        FUN_001fbce0(4, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 10:
         igMatrix44f_SetIdentity((float *)inverse0);
         igMatrixStack_PushPostMultiply((igMatrixStack *)self->_blendMat0, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse0, (const float *)arg2);
-        FUN_001903d0(inverse0);
+        FUN_001903d0((float *)inverse0);
         SET((St_172b00 *)self->_invTransBlendMat0, inverse0)
         break;
     case 11:
         igMatrix44f_SetIdentity((float *)inverse1);
         igMatrixStack_PushPostMultiply((igMatrixStack *)self->_blendMat1, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse1, (const float *)arg2);
-        FUN_001903d0(inverse1);
+        FUN_001903d0((float *)inverse1);
         SET((St_172b00 *)self->_invTransBlendMat1, inverse1)
         break;
     case 12:
         igMatrix44f_SetIdentity((float *)inverse2);
         igMatrixStack_PushPostMultiply((igMatrixStack *)self->_blendMat2, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse2, (const float *)arg2);
-        FUN_001903d0(inverse2);
+        FUN_001903d0((float *)inverse2);
         SET((St_172b00 *)self->_invTransBlendMat2, inverse2)
         break;
     case 13:
         igMatrix44f_SetIdentity((float *)inverse3);
         igMatrixStack_PushPostMultiply((igMatrixStack *)self->_blendMat3, (const float *)arg2);
         igMatrix44f_Invert((float *)inverse3, (const float *)arg2);
-        FUN_001903d0(inverse3);
+        FUN_001903d0((float *)inverse3);
         SET((St_172b00 *)self->_invTransBlendMat3, inverse3)
         break;
     }
@@ -1158,38 +1158,38 @@ void igPsx2VisualContext_GetMatrix(O_173d60 *o, int k, int dst) {
     }
 }
 
-void FUN_00173ed0(Obj_173ed0 *self, int op, void *m) {
-    List_173ed0 *l;
+void igPsx2VisualContext_SetMatrixPsx2(igPsx2VisualContext *self, int stack, const float *matrix) {
+    igTDataList<igMatrix44f> *texGen;
     int n;
-    switch (op) {
+    switch (stack) {
     case 14:
-        l = self->list;
-        n = l->getCount();
+        texGen = (igTDataList<igMatrix44f> *)self->_texgenMat;
+        n = texGen->getCount();
         if (n == 0) {
-            if (n < l->cap) l->count = l->count + 1;
-            else List_Resize(l, n + 1, 64);
-            igMatrix44f_Copy((float *)(l->data + n * 64), (float *)m);
+            if (n < texGen->_capacity) texGen->_count = texGen->_count + 1;
+            else List_Resize(texGen, n + 1, 64);
+            igMatrix44f_Copy(texGen->_data[n].m, matrix);
         } else {
-            igMatrix44f_Copy((float *)(l->data + (l->count - 1) * 64), (float *)m);
+            igMatrix44f_Copy(texGen->_data[texGen->_count - 1].m, matrix);
         }
-        l = self->list;
-        FUN_001fbce0(5, l->data + (l->count - 1) * 64);
+        texGen = (igTDataList<igMatrix44f> *)self->_texgenMat;
+        FUN_001fbce0(5, texGen->_data[texGen->_count - 1].m);
         break;
     default:
-        self->v203(op, m);
+        ((Obj_173ed0 *)self)->v203(stack, (void *)matrix);
         break;
     }
 }
 
-void FUN_00173fd0(int *arg0, int arg1, int arg2) {
-    int *temp_v0;
-    switch (arg1) {
-    case 0xE:
-        temp_v0 = (int *)arg0[246];
-        igMatrix44f_Copy((float *)arg2, (float *)(temp_v0[4] + ((temp_v0[2] - 1) << 6)));
+void igPsx2VisualContext_GetMatrixPsx2(igPsx2VisualContext *self, int stack, float *matrix) {
+    igTDataList<igMatrix44f> *texGen;
+    switch (stack) {
+    case 14:
+        texGen = (igTDataList<igMatrix44f> *)self->_texgenMat;
+        igMatrix44f_Copy(matrix, texGen->_data[texGen->_count - 1].m);
         break;
     default:
-        ((A_173fd0 *)arg0)->vX(arg1, arg2);
+        ((A_173fd0 *)self)->vX(stack, (int)matrix);
         break;
     }
 }
@@ -1213,7 +1213,7 @@ void FUN_00174090(void *arg0) {
     ((DW4VC_796_2 *)(((char *)(arg0) + 0)))->vX((int)(2), (int)(4));
     ((DW4VC_740_6 *)(((char *)(arg0) + 0)))->vX(0, 0, *(int *)((char *)(arg0) + 908), *(int *)((char *)(arg0) + 912), 0.0f, 1.0f);
     ((DW4VC_864_1 *)(((char *)(arg0) + 0)))->vX((int)(-1));
-    FUN_00174850((S174 *)arg0, 1);
+    igPsx2VisualContext_SetMatrixOptimizationState((igPsx2VisualContext *)arg0, 1);
 }
 
 void igPsx2VisualContext_ResetToDefault(void *a0, int arg1) {
@@ -1238,7 +1238,7 @@ void igPsx2VisualContext_ResetToDefault(void *a0, int arg1) {
     }
     igMatrix44f_SetIdentity(m);
     igMatrix44f_SetIdentity(m);
-    FUN_00173ed0((Obj_173ed0 *)a0, 14, (void *)m);
+    igPsx2VisualContext_SetMatrixPsx2((igPsx2VisualContext *)a0, 14, m);
     FUN_0016cc50((int)a0, 0);
     v.w = 0x3F800000;
     v.x = 0.501960754f;
@@ -1251,7 +1251,7 @@ void igPsx2VisualContext_ResetToDefault(void *a0, int arg1) {
     p2DisableCapability(23);
     FUN_00175640((S_175640 *)a0, 0);
     FUN_00175670((O_175670 *)a0, 0);
-    FUN_0017c710((int)a0, 0, 0);
+    igPsx2VisualContext_SetTextureMatrixProjectiveState((igPsx2VisualContext *)a0, 0, 0);
     FUN_00175790((S_175790 *)a0, 0x71603524 | (0x40712635LL << 32));
     FUN_00174950(a0, 0);
     FUN_00169be0(a0, 1);
@@ -1350,33 +1350,33 @@ void igPsx2VisualContext_SetBlendingSourceDestination(S_1744c0 *arg0, int arg1, 
     FUN_00174640((int)arg0, 0);
 }
 
-void FUN_00174510(struct R_174510 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
+void FUN_00174510(igPsx2VisualContext *self, IG_GFX_BLENDING_FUNCTION source, IG_GFX_BLENDING_FUNCTION destination, unsigned char blendConstant, int stage) {
     int n;
     int j;
     int off;
     char *p;
-    if (arg4 < 15) {
-        n = arg4;
+    if (stage < 15) {
+        n = stage;
     } else {
         n = 15;
     }
     off = n * 4;
     if (n < 8) {
-        if (arg0->a[n] == arg1) {
+        if (self->_blendSrcMode[n] == source) {
             DAT_00560928[n] += 1;
         }
-        if (arg0->b[n] == arg2) {
+        if (self->_blendDestMode[n] == destination) {
             DAT_00560968[n] += 1;
         }
-        if (arg0->c[n] == (arg3 & 0xFF)) {
+        if (self->_blendConst[n] == (blendConstant & 0xFF)) {
             DAT_00560948[n] += 1;
         }
     }
     off = n * 4;
-    p = (char *)(off + (int)arg0);
-    *(int *)(p + 1036) = arg1;
-    *(int *)(p + 1100) = arg2;
-    *(int *)(p + 1164) = arg3 & 0xFF;
+    p = (char *)(off + (int)self);
+    *(int *)(p + 1036) = source;
+    *(int *)(p + 1100) = destination;
+    *(int *)(p + 1164) = blendConstant & 0xFF;
     if (n > 1) {
         j = n - 1;
     } else {
@@ -1384,7 +1384,7 @@ void FUN_00174510(struct R_174510 *arg0, int arg1, int arg2, int arg3, int arg4,
     }
     p2CurrentProgram = n;
     p2CurrentGsRegisters = (p2GsRegisterSet *)((int *)p2GsRegisterSets + j * 112);
-    FUN_00174640((int)arg0, n);
+    FUN_00174640((int)self, n);
     p2CurrentProgram = 0;
     p2CurrentGsRegisters = p2GsRegisterSets;
 }
@@ -1465,26 +1465,26 @@ float igPsx2VisualContext_GetAlphaRefValue(void *arg0) {
 
 void FUN_001747f0(S_1747f0 *s) { if (s->b == 1) { int a = (int)(128.0f * (float)s->f); p2SetAlphaTest(DAT_0048a500[s->i], a, 0); } }
 
-void FUN_00174850(struct S174 *arg0, int arg1) {
-    int temp_v1;
+void igPsx2VisualContext_SetMatrixOptimizationState(igPsx2VisualContext *self, unsigned char enable) {
+    int state;
     if (g_igPsx2DisableExt_ext11Enabled != 0) {
-        arg1 = 0;
+        enable = 0;
     }
-    temp_v1 = arg1 & 0xFF;
-    if (arg0->f == temp_v1) {
+    state = enable & 0xFF;
+    if (self->_matrixOptimizationEnable == state) {
         DAT_005609a0[0] += 1;
     }
-    arg0->f = arg1;
-    if (temp_v1 == 1) {
+    self->_matrixOptimizationEnable = enable;
+    if (state == 1) {
         p2DisableCapability(0x13);
         return;
     }
     p2EnableCapability(0x13);
 }
 
-unsigned char FUN_001748c0(int *p)
+unsigned char igPsx2VisualContext_GetMatrixOptimizationState(igPsx2VisualContext *self)
 {
-    return *(unsigned char *)((char *)p + 1373);
+    return self->_matrixOptimizationEnable;
 }
 
 void igPsx2VisualContext_SetViewportClippingState(igPsx2VisualContext *self, unsigned char a) {

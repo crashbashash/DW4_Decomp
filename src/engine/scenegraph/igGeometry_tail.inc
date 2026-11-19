@@ -243,7 +243,7 @@ void FUN_001d0130(SceneTransformNode *self, SceneRenderer *renderer, SceneMatrix
     self->setContext(context);
     igMatrix44f_SetIdentity((float *)&world);
     igMatrix44f_Multiply((float *)&world, (const float *)&self->local, (const float *)parent);
-    igMatrix44f_Multiply((float *)(self->block + DAT_00562bc8->offset), (const float *)&self->bind, (const float *)&world);
+    igMatrix44f_Multiply((float *)(self->block + g_igMatrixObject_mMetaField->_offset), (const float *)&self->bind, (const float *)&world);
     count = 0;
     if (self->children != 0) {
         count = self->children->count;

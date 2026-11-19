@@ -76,9 +76,9 @@ void FUN_001b3c90(A0 *arg0, A1 *arg1) {
     int temp_a0;
     int temp_s0;
 
-    FUN_001b3030();
+    FUN_001b3030((igProjectiveShadowShader *)arg0, (igCommonTraversal *)arg1);
     temp_a0 = arg0->f160;
-    FUN_00157200(temp_a0, 1, temp_a0);
+    FUN_00157200((igImage *)temp_a0, 1, (igImage *)temp_a0);
     temp_s0 = arg1->f52;
     FUN_001dc500((A_1dc500 *)arg1->f68, 0, 0);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625e0[0]);
@@ -132,7 +132,7 @@ void FUN_001b3c90(A0 *arg0, A1 *arg1) {
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625d8[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625e8[0]);
     igAttrStackManager_PopOverrideAttr((igAttrStackManager *)temp_s0, (igAttr *)DAT_005625e0[0]);
-    FUN_001dc610(arg1->f68);
+    FUN_001dc610((igSorter *)arg1->f68);
 }
 
 void FUN_001b3ff0(void *arg0, int arg1) {
@@ -365,7 +365,7 @@ void FUN_001b4c40(TexGenShaderView_1b4c40 *self, igCommonTraversal *traversal) {
     }
     image = (ImageView_1b4c40 *)igTextureAttr_GetImage((igTextureAttr *)self->_eyeTexture->_texture, 0);
     if (image->_levels != 1) {
-        FUN_00157200(image, 1, image);
+        FUN_00157200((igImage *)image, 1, (igImage *)image);
     }
     self->_eyeTexture->_texture->set32(0);
     self->_eyeTexture->_texture->set33(0);
@@ -446,7 +446,7 @@ void FUN_001b4c40(TexGenShaderView_1b4c40 *self, igCommonTraversal *traversal) {
         popAttr_1b4c40(manager, DAT_00562628);
         popAttr_1b4c40(manager, DAT_00562630);
     }
-    FUN_001dc610(traversal->_sorter);
+    FUN_001dc610((igSorter *)traversal->_sorter);
 }
 
 void igCommonTraversal_RegisterClass(int arg0) {

@@ -34,30 +34,8 @@ void igIntersectTraversal_RegisterClassFunction(int arg0, int arg1) {
 }
 
 void igIntersectTraversal_resetFields(beHitLandModelTraversal *arg0, int flags) {
-    igObject *sp3C;
-    igObject *s0;
-    igObject *old;
-
     Gap__Core__igObject__resetFields((igObject *)arg0, flags);
-    FUN_0018f760(&sp3C, igObject_GetAllocator(arg0));
-    s0 = sp3C;
-    if (s0 != 0) {
-        s0->_refCount = s0->_refCount + 1;
-    }
-    old = (igObject *)arg0->_volumes;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy((igObject *)old);
-        }
-    }
-    arg0->_volumes = (int)s0;
-    if (sp3C != 0) {
-        sp3C->_refCount = sp3C->_refCount - 1;
-        if ((sp3C->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy((igObject *)sp3C);
-        }
-    }
+    *(igSmartPointer<igVolumeList> *)&arg0->_volumes = FUN_0018f760(igObject_GetAllocator(arg0));
     igIntersectTraversal_ResetStacks((igIntersectTraversal *)arg0);
 }
 

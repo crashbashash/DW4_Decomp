@@ -1,9 +1,9 @@
 void igMatrixOptStateAttr_apply(int arg0, int arg1) {
-    FUN_00174850(arg1, *(unsigned char *)((char *)(arg0) + 12));
+    igPsx2VisualContext_SetMatrixOptimizationState((igPsx2VisualContext *)arg1, *(unsigned char *)((char *)(arg0) + 12));
 }
 
-void igMatrixOptStateAttr_SynchronizeDefault(void **arg0, int arg1) {
-    ((DW4VC_128_1 *)(arg0))->vX((int)(FUN_001748c0(arg1)));
+void igMatrixOptStateAttr_SynchronizeDefault(igMatrixOptStateAttrView *self, igPsx2VisualContext *context) {
+    self->setState(igPsx2VisualContext_GetMatrixOptimizationState(context));
 }
 
 /* Setter for the attribute's reflected _enabled flag. */

@@ -1,6 +1,6 @@
-void FUN_0019fde0(int arg0) {
+igFrustCullTraversal *FUN_0019fde0(igMemoryPoolView *pool) {
     igFrustCullTraversal_EnsureRegistered();
-    igMetaObject_CreateInstance((igMetaObject *)g_igFrustCullTraversal_metaObject, (igMemoryPoolView *)arg0);
+    return (igFrustCullTraversal *)igMetaObject_CreateInstance(g_igFrustCullTraversal_metaObject, pool);
 }
 
 igMetaObject *g_igFrustCullTraversal_metaObject;
@@ -569,7 +569,7 @@ void igFrustCullTraversal_InitFields(void) {
     o2.z = 0;
     o2.w = 0;
     igMatrix44f_FromRows((float *)&o1, (igVec4f *)&o2, (igVec4f *)&o3, (igVec4f *)&o4, (igVec4f *)&o5);
-    FUN_0018c640(temp_s2, &o1);
+    FUN_0018c640((igMetaField *)temp_s2, (const float *)&o1);
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igClippingStateAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;

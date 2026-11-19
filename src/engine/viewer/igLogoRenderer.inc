@@ -28,7 +28,7 @@ int igLogoRenderer_GetVTable(void) {
     igSmartPointer_igAttrList_Destruct((igSmartPointer<igObject> *)&obj.w8, -1);
     igSmartPointer_igColorAttr_Destruct((igSmartPointer<igObject> *)&obj.w7, -1);
     igSmartPointer_igGeometryAttr_Destruct((igSmartPointer<igObject> *)&obj.w6, -1);
-    FUN_00230f70(&obj, 0);
+    igRenderer_Destroy((igRenderer *)&obj, 0);
     return t;
 }
 

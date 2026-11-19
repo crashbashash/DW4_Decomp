@@ -4,8 +4,12 @@
 #include <string.h>
 #include "dw4/maths/igMath.h"
 
+struct igMatrix44d;
+
 extern "C" {
 void igMatrix44d_SetIdentity(long long *matrix);
+/* Copies `source` into `destination` unless they are the same matrix; returns `destination`. */
+struct igMatrix44d *FUN_00190330(struct igMatrix44d *destination, const struct igMatrix44d *source);
 }
 
 /* Alchemy's 4x4 double matrix: identity by default, or copied from four rows. */

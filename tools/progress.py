@@ -34,6 +34,7 @@ Usage:
   progress.py --debt-baseline [--allow-increase "<reason>"]   # re-record the debt floor
 """
 import argparse
+import bisect
 import collections
 import json
 import os
@@ -521,6 +522,7 @@ DEBT_COUNTERS = [
     ("decl.varargs", "prototypes that leave out a symbol's parameters: `(...)` unless the C definition is variadic (counted with no C definition too), or a C `()` for a definition that takes parameters"),
     ("decl.type_conflicts", "declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters"),
     ("decl.header_conflicts", "symbols declared in two or more headers that disagree on the type"),
+    ("decl.named_placeholders", "`FUN_<va>`/`DAT_<va>` identifiers in src/ and include/ whose address config/SLUS-20836/symbols.txt or data-names.tsv names: a copy of a named symbol the build binds by address and a rename passes by"),
 ]
 
 
@@ -609,8 +611,13 @@ def _profile_key(compiler, flags):
 
 
 def profile_split():
-    """(units, bytes) of units off their library's main profile, by config/SLUS-20836/regions.tsv."""
+    """(units, bytes) of units off their library's main profile, by config/SLUS-20836/regions.tsv. A
+    unit whose every function is an owner-approved assembly source is assembled, not compiled, so no
+    compiler profile is its own: it is left out, as the static initialisers are."""
     import regions
+    assembled = set(asmsources.load())
+    starts = sorted((va, name) for va, _size, name in load_symbols())
+    addresses = [va for va, _ in starts]
     by_region = collections.defaultdict(list)
     with open(os.path.join(ROOT, "config", "SLUS-20836", "units.tsv")) as fh:
         for line in fh:
@@ -620,6 +627,9 @@ def profile_split():
             lo, hi = int(f[0], 16), int(f[1], 16)
             region = regions.of(lo)
             if region is None or region.build == "data" or region.id in PROFILE_SPLIT_EXEMPT:
+                continue
+            members = [name for _, name in starts[bisect.bisect_left(addresses, lo):bisect.bisect_left(addresses, hi)]]
+            if members and set(members) <= assembled:
                 continue
             by_region[region.id].append((_profile_key(f[3], f[4]), hi - lo))
     units = size = 0

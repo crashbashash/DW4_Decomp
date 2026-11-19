@@ -49,6 +49,9 @@ void igMetaObject_NameFields(igMetaObject *meta, const char **names, igMetaField
     int *offsets, int start);
 igMetaField *igMetaObject_GetFieldAt(igMetaObject *self, int index);
 int igMetaObject_GetFieldCount(igMetaObject *self);
+int igMetaObject_GetChildCount(igMetaObject *self);
+/* The child metaobject at `index`, as an address. */
+int igMetaObject_GetChildAt(igMetaObject *self, int index);
 igMetaField *igMetaObject_FindFieldByName(igMetaObject *meta, const char *name);
 void igMetaObject_FinalizeAndReplaceField(igMetaObject *meta, int index, igMetaField *field);
 int igMetaObject_CountInstances(igMetaObject *self, int recursive);

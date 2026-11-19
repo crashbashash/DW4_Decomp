@@ -16,6 +16,8 @@ void p2UploadGsRegisters(int count, int *registers);
 struct p2FinishFunc;
 void p2RecordFinishedSequence(struct p2FinishFunc *finish, int arg);
 int p2SequenceFinishedPredicate(long long sequence);
+/* The value FUN_001f7340 last stored. */
+int FUN_001f7360(void);
 
 #ifdef __cplusplus
 }

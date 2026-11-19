@@ -51,7 +51,7 @@ int FUN_001bab30(int a0, void **arg1) {
     }
     temp_s0 = ((DW4VC_160_1 *)(arg1))->vX((int)(arg0));
     if (temp_s1 != 0) {
-        FUN_001dc610(*(int *)((char *)(arg0) + 68));
+        FUN_001dc610(*(igSorter **)((char *)(arg0) + 68));
     }
     return temp_s0;
 }

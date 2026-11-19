@@ -246,11 +246,11 @@ igNode *igGraphPath_GetTail(igGraphPath *path) {
 }
 
 int FUN_001c59b0(void *self) {
-    return FUN_001c59e0((void *)self) == 1;
+    return igGraphPath_GetCount((igGraphPath *)self) == 1;
 }
 
-int FUN_001c59e0(void *arg0) {
-    return *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 8);
+int igGraphPath_GetCount(igGraphPath *path) {
+    return ((igNodeList *)path->_path)->_count;
 }
 
 void FUN_001c59f0(OO *arg0, int arg1, int arg2, long long arg3) {

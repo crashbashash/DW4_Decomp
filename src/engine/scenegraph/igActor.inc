@@ -211,7 +211,7 @@ void igActor_InitFields(void) {
     a3.x = 0; a3.y = 0x3F800000; a3.z = 0; a3.w = 0;
     a2.x = 0x3F800000; a2.y = 0; a2.z = 0; a2.w = 0;
     igMatrix44f_FromRows((float *)&a1, (igVec4f *)&a2, (igVec4f *)&a3, (igVec4f *)&a4, (igVec4f *)&a5);
-    FUN_0018c640(temp_s2_7, &a1);
+    FUN_0018c640((igMetaField *)temp_s2_7, (const float *)&a1);
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7)))->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8)))->_persistent = 0;
     temp_s2_8 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9)));
@@ -220,7 +220,7 @@ void igActor_InitFields(void) {
     b3.x = 0; b3.y = 0x3F800000; b3.z = 0; b3.w = 0;
     b2.x = 0x3F800000; b2.y = 0; b2.z = 0; b2.w = 0;
     igMatrix44f_FromRows((float *)&b1, (igVec4f *)&b2, (igVec4f *)&b3, (igVec4f *)&b4, (igVec4f *)&b5);
-    FUN_0018c640(temp_s2_8, &b1);
+    FUN_0018c640((igMetaField *)temp_s2_8, (const float *)&b1);
     ((igMetaField *)temp_s2_8)->_persistent = 0;
     temp_s2_9 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA)));
     c5.x = 0; c5.y = 0; c5.z = 0; c5.w = 0x3F800000;
@@ -228,7 +228,7 @@ void igActor_InitFields(void) {
     c3.x = 0; c3.y = 0x3F800000; c3.z = 0; c3.w = 0;
     c2.x = 0x3F800000; c2.y = 0; c2.z = 0; c2.w = 0;
     igMatrix44f_FromRows((float *)&c1, (igVec4f *)&c2, (igVec4f *)&c3, (igVec4f *)&c4, (igVec4f *)&c5);
-    FUN_0018c640(temp_s2_9, &c1);
+    FUN_0018c640((igMetaField *)temp_s2_9, (const float *)&c1);
     ((igMetaField *)temp_s2_9)->_persistent = 0;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB)));
     igBoolMetaField_SetDefaultValue((igMetaField *)temp_v0, 1);

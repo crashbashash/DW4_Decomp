@@ -11,6 +11,8 @@ void igDriverDatabase_SetSubPropertyValue(struct igDriverDatabase *self, int sec
 void *igDriverDatabase_Create(int pool);
 int igDriverDatabase_LoadFromFile(void *self, int text, int fileName);
 int igDriverDatabase_ApplyToRegistry(struct igDriverDatabase *self, int registry, int section, int mergeMode);
+/* ApplyToRegistry's stub twin, called after it with the same arguments: does nothing and returns 1. */
+int FUN_002daab0(struct igDriverDatabase *self, int registry, int section, int mergeMode);
 igTDataList<struct ConfigNode *> *igDriverDatabase_ParseDatabase(struct igDriverDatabase *s);
 void igDriverDatabase_DeleteConfigNodeList(void *self, igTDataList<struct ConfigNode *> *list);
 int igDriverDatabase_Load(struct igDriverDatabase *self, const char *fileName, const char *rootPath);

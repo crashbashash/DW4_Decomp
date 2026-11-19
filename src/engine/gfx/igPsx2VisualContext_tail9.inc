@@ -31,7 +31,7 @@ void FUN_00180060(O_180060 *arg0) {
             v[1] = 0;
             v[2] = 0;
             igMatrix44f_SetTranslation((float *)s2, (float *)v);
-            FUN_001903d0(s2);
+            FUN_001903d0((float *)s2);
         }
     }
     arg0->f1424 = 0;
@@ -72,7 +72,7 @@ BuildResource *s7;
         if (arg0->f1424 != 0) FUN_00180060((O_180060 *)arg0);
         second = (BuildResource *)FUN_0015f510((L *)s0, 3, 0, 0x7734);
         if (second.p == 0) {
-            igSmartPointer<BuildResource> values((BuildResource *)FUN_0018a060(0), AdoptReference());
+            igSmartPointer<BuildResource> values((BuildResource *)igVec3fList_Create(0), AdoptReference());
             ll = (ResourceList *)values.p;
             if (arg2 >= 0) {
                 if (arg2 <= ll->cap) ll->count = arg2;
@@ -91,7 +91,7 @@ BuildResource *s7;
     }
     first = (BuildResource *)FUN_0015f510((L *)s0, 1, 0, 0x7734);
     if (first.p == 0) {
-        igSmartPointer<BuildResource> values((BuildResource *)FUN_0018a060(0), AdoptReference());
+        igSmartPointer<BuildResource> values((BuildResource *)igVec3fList_Create(0), AdoptReference());
         ll = (ResourceList *)values.p;
         if (arg2 >= 0) {
             if (arg2 <= ll->cap) ll->count = arg2;

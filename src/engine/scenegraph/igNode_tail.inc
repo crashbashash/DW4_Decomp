@@ -3,7 +3,7 @@ int igNode_GetMeta(void) {
 }
 
 void igGraphPath_GetTransform(igGraphPath *path, igMatrix44f *matrix, long long time) {
-    FUN_001c59f0((OO *)path, FUN_001c59e0(path), (int)matrix, time);
+    FUN_001c59f0((OO *)path, igGraphPath_GetCount(path), (int)matrix, time);
 }
 
 void igGroup_UserPostLoad(SgLinkNode *o) {
@@ -17,7 +17,7 @@ void igGroup_UserPostLoad(SgLinkNode *o) {
     int t;
     SgChildList *m;
     int k;
-    FUN_001d3590(o);
+    igNode_UserPostLoad((igNode *)o);
     n = 0;
     if (o->_children != 0) n = o->_children->_count;
     for (i = 0; i < n; i++) {

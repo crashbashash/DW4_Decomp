@@ -1,51 +1,10 @@
-typedef struct Psx2ParticleFormat {
-    char pad0[8];
-    unsigned char positionCount;
-    char pad9;
-    unsigned char countA;
-    unsigned char countB;
-    unsigned char texCoordCount;
-    unsigned char countC;
-    unsigned char countD;
-    char pad15;
-    char *data;
-    char pad20[16];
-    unsigned char vertexWords;
-    char pad37[7];
-    short rowStride;
-    short pad46;
-    short keysPerRow;
-    short positionOffset;
-    short pad52;
-    short attributeOffset;
-    short texCoordOffset;
-} Psx2ParticleFormat;
+#include "dw4/p2/psx2ParticleFormat.h"
 
 typedef struct ParticlePositionView { char p0[8]; unsigned char n; char p9[7]; char *base; char p14[24]; short s44; short p46; short s48; short s50; } ParticlePositionView;
 
 typedef struct ParticleColourView { char pad0[9]; unsigned char f9; char pad10[6]; int f16; char pad20[24]; short f44; short pad46; short f48; short pad50; short f52; } ParticleColourView;
 
 typedef struct ParticleSizeView { char pad0[10]; unsigned char f10; unsigned char f11; char pad12; unsigned char f13; unsigned char f14; char pad15; char *f16; char pad20[16]; unsigned char f36; char pad37[7]; short f44; short pad46; short f48; short pad50; short pad52; short f54; } ParticleSizeView;
-
-typedef struct PackedTable {
-    char _pad0[10];
-    unsigned char widthA;
-    unsigned char widthB;
-    char _pad12;
-    unsigned char widthC;
-    unsigned char widthD;
-    char _pad15;
-    char *data;
-    char _pad20[16];
-    unsigned char stride;
-    char _pad37[7];
-    short rowBytes;
-    short _pad46;
-    short rowLength;
-    short _pad50;
-    short _pad52;
-    short offset;
-} PackedTable;
 
 void FUN_001fd5a0(ParticlePositionView *o, int idx, float *a2, float *a3, float *a4) {
     char *p = o->base;
@@ -257,19 +216,19 @@ void FUN_001fdca0(Psx2ParticleFormat *format, int index, float *first, float *se
     }
 }
 
-void FUN_001fdd60(ParticleColourView *o, int arg1, float *arg2, float *arg3, float *arg4) {
+void FUN_001fdd60(Psx2ParticleFormat *format, int index, float *arg2, float *arg3, float *arg4) {
     char *t5;
     int t, q, r;
-    t = o->f16 + 12;
-    q = arg1 / o->f48;
-    q *= o->f44;
+    t = (int)format->data + 12;
+    q = index / format->keysPerRow;
+    q *= format->rowStride;
     t += q;
-    t += o->f52;
-    r = arg1 % o->f48;
-    r *= o->f9;
+    t += format->colourOffset;
+    r = index % format->keysPerRow;
+    r *= format->colourCount;
     t += r * 16;
     t5 = (char *)t;
-    switch (o->f9) {
+    switch (format->colourCount) {
     case 3:
         arg4[0] = 0.00392156886f * *(float *)(t5 + 32);
         arg4[1] = 0.00392156886f * *(float *)(t5 + 36);
@@ -288,7 +247,7 @@ void FUN_001fdd60(ParticleColourView *o, int arg1, float *arg2, float *arg3, flo
     }
 }
 
-void FUN_001fdeb0(ParticleSizeView *o, int arg1, float *a2, float *a3, float *a4) {
+void FUN_001fdeb0(Psx2ParticleFormat *format, int arg1, float *a2, float *a3, float *a4) {
     int a7;
     float * t;
     int a6;
@@ -298,21 +257,21 @@ void FUN_001fdeb0(ParticleSizeView *o, int arg1, float *a2, float *a3, float *a4
     int q;
     int r;
     char * p;
-    a7 = o->f48;
-    p = o->f16;
-    a6 = o->f11;
-    t4 = o->f10;
-    v1 = o->f36;
+    a7 = format->keysPerRow;
+    p = format->data;
+    a6 = format->countB;
+    t4 = format->countA;
+    v1 = format->vertexWords;
     q = arg1 / a7;
     p += 0xC;
     r = arg1 % a7;
     t4 = ((a6 < t4) ? t4 : a6) & 0xFF;
-    a1 = o->f13;
+    a1 = format->countC;
     t4 = (a1 < t4) ? t4 : a1;
-    a1 = o->f14;
+    a1 = format->countD;
     t4 = (a1 < t4) ? t4 : a1;
-    p += q * o->f44;
-    p += o->f54;
+    p += q * format->rowStride;
+    p += format->attributeOffset;
     p += v1 * (r * t4) * 4;
     t = (float *)p;
     if (v1 == 1) {
@@ -366,7 +325,7 @@ void FUN_001fe100(Psx2ParticleFormat *format, int index, float *first, float *se
 }
 
 /* matching construct: declaration-order sweep — values, row, cursor, column, rowLength, b, c, stride, width */
-void FUN_001fe260(PackedTable *table, int index, float *first, float *second) {
+void FUN_001fe260(Psx2ParticleFormat *format, int index, float *first, float *second) {
     float *values;
     int row;
     char *cursor;
@@ -377,21 +336,21 @@ void FUN_001fe260(PackedTable *table, int index, float *first, float *second) {
     int stride;
     int width;
 
-    rowLength = table->rowLength;
-    cursor = table->data;
-    b = table->widthB;
-    width = table->widthA;
-    stride = table->stride;
+    rowLength = format->keysPerRow;
+    cursor = format->data;
+    b = format->countB;
+    width = format->countA;
+    stride = format->vertexWords;
     row = index / rowLength;
     cursor += 0xC;
     column = index % rowLength;
     width = ((b < width) ? width : b) & 0xFF;
-    c = table->widthC;
+    c = format->countC;
     width = (c < width) ? width : c;
-    c = table->widthD;
+    c = format->countD;
     width = (c < width) ? width : c;
-    cursor += row * table->rowBytes;
-    cursor += table->offset;
+    cursor += row * format->rowStride;
+    cursor += format->attributeOffset;
     cursor += stride * (column * width) * 4;
     values = (float *)cursor;
     switch (width) {

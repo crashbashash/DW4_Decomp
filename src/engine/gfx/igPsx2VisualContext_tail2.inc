@@ -43,7 +43,7 @@ void FUN_00169260(igPsx2VisualContext *arg0, int arg1) {
                     }
                 }
             }
-            FUN_002ed5c0(t);
+            Memory_FreeBufferAliasB(t);
         }
         arg0->_pBufList = 0;
     }
@@ -634,7 +634,7 @@ void FUN_0016a9f0(igPsx2VisualContext *arg0, int arg1) {
                     }
                 }
             }
-            FUN_002ed5c0(t);
+            Memory_FreeBufferAliasB(t);
         }
         arg0->_pClutList = 0;
     }
@@ -798,7 +798,7 @@ bool FUN_0016b090(Ob *arg0, int arg1) {
     }
     if (s->f20 != 5) {
         sp5C = (int)p2GetImageTexture((p2Image *)s->f8);
-        v = FUN_0020bb20(&sp5C, 0, 0) != 0;
+        v = FUN_0020bb20((P2Texture **)&sp5C, 0, 0) != 0;
     }
     s->f20 = 4;
     return v;
@@ -1216,7 +1216,7 @@ void FUN_0016c650(igPsx2VisualContext *arg0, int arg1) {
                     }
                 }
             }
-            FUN_002ed5c0(t);
+            Memory_FreeBufferAliasB(t);
         }
         arg0->_pDLists = 0;
     }
@@ -1228,7 +1228,7 @@ int igPsx2VisualContext_CreateRenderList(igPsx2VisualContext *self) {
     T192 *s1 = arg0->f960;
     int s0;
     if (s1->f4 <= 0) {
-        s1->f16 = (Ent192 **)FUN_002ed450(s1->f16, (s1->f0 + 4) * 4, 16);
+        s1->f16 = (Ent192 **)Memory_ReallocateAlignedAlias(s1->f16, (s1->f0 + 4) * 4, 16);
         memset(s1->f0 + s1->f16, 0, 16);
         if (s1->f2 < 4) {
             VM *o = (VM *)Memory_FindBufferOwner(s1);
@@ -1289,7 +1289,7 @@ done:
         if ((s2->refs & 0x7fffff) == 0) {
             igObject_Destroy((igObject *)s2);
         }
-        FUN_002ed5c0(((T193 *)self->_pDLists)->f16[arg1]);
+        Memory_FreeBufferAliasB(((T193 *)self->_pDLists)->f16[arg1]);
         ((T193 *)self->_pDLists)->Add(arg1);
     }
 }

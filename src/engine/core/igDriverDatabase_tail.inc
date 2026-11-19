@@ -250,7 +250,7 @@ int igDriverDatabase_ApplyToRegistry(igDriverDatabase *self, int registry, int s
     return r;
 }
 
-int FUN_002daab0(void)
+int FUN_002daab0(igDriverDatabase *self, int registry, int section, int mergeMode)
 {
     return 1;
 }

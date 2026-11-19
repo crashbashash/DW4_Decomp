@@ -1,11 +1,6 @@
 #include "dw4/maths/igAABox.h"
 #include "dw4/core/igMetaObject.h"
 #include "dw4/maths/igVolume.h"
-extern "C" void FUN_0022ab90(igObject *iterator, igNode *root, igMetaObject *metaObject);
-extern "C" igNode *FUN_0022ac00(igObject *iterator);
-extern "C" void FUN_0022ac70(igObject *iterator, igMetaObject *metaObject);
-extern "C" void FUN_0022b0a0(float *matrix, igObject *iterator);
-
 #include "dw4/support/emptyString.h"
 #include "dw4/base/igIterateGraph.h"
 static inline igAABox *asAABox(igObject *o) {
@@ -66,8 +61,8 @@ int Gap__igCreateCollisionDatabase__vfunc_28(igCreateCollisionDatabase *self, ig
     FUN_0023b430((igCollisionGrid *)self->_grid);
     igMetaObject *geometryMeta = g_igGeometry_metaObject;
     igSmartPointer<igObject> iterator(igIterateGraph_Create(igObject_GetAllocator(self)));
-    for (FUN_0022ab90(iterator.get(), *root, geometryMeta); FUN_0022ac00(iterator.get()) != 0; FUN_0022ac70(iterator.get(), geometryMeta)) {
-        igNode *geometry = FUN_0022ac00(iterator.get());
+    for (FUN_0022ab90((igIterateGraph *)iterator.get(), *root, geometryMeta); FUN_0022ac00((igIterateGraph *)iterator.get()) != 0; FUN_0022ac70((igIterateGraph *)iterator.get(), geometryMeta)) {
+        igNode *geometry = FUN_0022ac00((igIterateGraph *)iterator.get());
         if ((geometry->_flags & 0x10) == 0) continue;
         igSmartPointer<igObject> sphere;
         {
@@ -76,7 +71,7 @@ int Gap__igCreateCollisionDatabase__vfunc_28(igCreateCollisionDatabase *self, ig
         }
         if (sphere.get() != 0) {
             float world[16];
-            FUN_0022b0a0(world, iterator.get());
+            FUN_0022b0a0(world, (igIterateGraph *)iterator.get());
             FUN_0018d630((igSphere *)(sphere.get()), (const float *)world);
             igSmartPointer<igCollisionGroup> group = igMetaObject_CreateInstanceDefaultRef((igMetaObject *)self->_staticGroupType);
             const char *name = (const char *)geometry->_name;

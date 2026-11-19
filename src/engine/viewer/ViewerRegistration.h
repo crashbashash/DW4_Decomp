@@ -198,7 +198,6 @@ extern "C" igMetaObject* FUN_001a38e0(void);
 extern "C" igSmartPointer<igObject> *igSmartPointer_igAlphaStateAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag);
 extern "C" void** FUN_001d9870(void**, short);
 extern "C" void** FUN_00229460(void**, short);
-extern "C" int FUN_00230f70(...);
 extern "C" void** FUN_00239280(void**, short);
 extern "C" int g_igViewerRenderer_vtable[4];
 #include "dw4/gui/igRenderer.h"
@@ -228,7 +227,6 @@ extern "C" void igViewerRenderer_InitFields(void);
 struct SigViewerParameters_GetMetaObject { char pad[36]; unsigned int flags; int ok() { return (flags & 4) != 0; } };
 extern "C" SigViewerParameters_GetMetaObject *igViewerParameters_GetMetaObject(void);
 #include "dw4/maths/igMatrix44f.h"
-extern "C" int FUN_0044c110(...);
 extern "C" int g_igViewerParameters_vtable[4];
 extern "C" int DAT_00542090[8];
 union U_45b4c0 { int vt; char b[272]; };
@@ -265,7 +263,6 @@ extern "C" int text_Viewer_data_pump_manager[4];
 extern "C" void FUN_0045c040(void);
 extern "C" void *igPickMode_GetMetaObject(void);
 struct Obj_45c200 { int *vt; int w[44]; };
-extern "C" int FUN_0044e1e0(...);
 extern "C" ObjectRefWord* FUN_0044ee80(ObjectRefWord*, int);
 extern "C" int g_igPickMode_vtable[4];
 extern "C" int igPickMode_GetVTable(void);

@@ -35,7 +35,7 @@ int igGuiSystemRenderer_GetVTable(void) {
     FUN_001d9870((void **)&obj.w5, (short)-1);
     FUN_0044e0e0((Ref **)&obj.w4, -1);
     igSmartPointer_igNode_Destruct((igSmartPointer<igObject> *)&obj.w3, -1);
-    FUN_00230f70((S *)&obj, (short)0);
+    igRenderer_Destroy((igRenderer *)&obj, 0);
     return t;
 }
 

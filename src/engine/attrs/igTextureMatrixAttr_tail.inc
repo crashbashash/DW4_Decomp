@@ -1,4 +1,7 @@
-void igTextureMatrixAttr_apply(S_1414d0 *p, int q) { FUN_0017c710(q, p->a, p->b); igPsx2VisualContext_SetMatrix((igPsx2VisualContext *)q, p->a + 2, (char *)p + 12); }
+void igTextureMatrixAttr_apply(igTextureMatrixAttr *self, igPsx2VisualContext *context) {
+    igPsx2VisualContext_SetTextureMatrixProjectiveState(context, self->_unitID, self->_isProjective);
+    igPsx2VisualContext_SetMatrix(context, self->_unitID + 2, (char *)self->_m);
+}
 
 void igTextureMatrixAttr_SynchronizeCachedUnitID(igTextureMatrixAttr *self) {
     self->_cachedUnitID = self->_unitID;
@@ -21,7 +24,7 @@ void igTextureMatrixAttr_SynchronizeDefault(igTextureMatrixAttr *self, igObject 
     igMatrix44f_SetIdentity(m);
     ((VisualContextMatrixSlots *)context)->getMatrix(self->_unitID + 2, m);
     ((MatrixAttrSlots *)self)->setMatrix(m);
-    self->_isProjective = FUN_0017c790(context, self->_unitID);
+    self->_isProjective = igPsx2VisualContext_GetTextureMatrixProjectiveState((igPsx2VisualContext *)context, self->_unitID);
 }
 
 void igTextureMatrixAttr_SetMatrix(igTextureMatrixAttr *self, const float *matrix) {

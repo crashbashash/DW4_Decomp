@@ -2,8 +2,8 @@ int Gap__Sg__igCommonTraversal__vfunc_30(igCommonTraversalView *self) {
     return self->f68->slot21(self->f52);
 }
 
-void FUN_001b6cd0(int a0, float, float, float, float, float, float) {
-    FUN_00191910((char *)a0 + 272);
+void FUN_001b6cd0(int a0, float left, float right, float bottom, float top, float nearPlane, float farPlane) {
+    FUN_00191910((float *)((char *)a0 + 272), left, right, bottom, top, nearPlane, farPlane);
 }
 
 void FUN_001b6ce0(void *arg0, float fparg0, float fparg1, float fparg2, float fparg3, float fparg4) {
@@ -78,7 +78,8 @@ void FUN_001b6f30(A_1b6f30 *arg0, R_1b6f30 *arg1, R_1b6f30 *arg2) {
         }
     }
     arg0->f36 = arg1;
-    FUN_001b0000((T_1b0000 *)arg0->f52, g_igAttr_metaObject, (Obj_1b0000 *)arg0->f36, (Obj_1b0000 *)arg0->f32);
+    FUN_001b0000((igAttrStackManager *)arg0->f52, g_igAttr_metaObject, (igAttrDefaultManager *)arg0->f36,
+                 (igVisualContextCapabilityManager *)arg0->f32);
 }
 
 void Gap__Sg__igCommonTraversal__vfunc_28(O_1b7010 *arg0, R_1b7010 *arg1) {

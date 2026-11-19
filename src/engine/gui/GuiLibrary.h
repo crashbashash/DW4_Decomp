@@ -24,6 +24,7 @@
 #include "dw4/gui/igOnOffModel.h"
 #include "dw4/gui/igRadioGroup.h"
 #include "dw4/gui/igRenderer.h"
+#include "dw4/gui/igRendererDispatchView.h"
 #include "dw4/gui/igRendererOrderedList.h"
 #include "dw4/gui/igTextElement.h"
 #include "dw4/gui/igView.h"
@@ -101,12 +102,6 @@ extern "C" void igTextElement_GetMetaObjectFunction(void);
 extern "C" igMetaObject *g_igGeometryElement_metaObject;
 extern "C" igMetaObject *igGeometryElement_GetPublishedMetaObject(void);
 extern "C" void igTextElement_InitFields(void);
-struct S {
-    void *f0;
-    char pad[4];
-    void *f8;
-};
-extern "C" void *FUN_0044c110(struct S *arg0, short arg1);
 extern "C" igMetaObject *g_igGuiComponentModel_metaObject;
 extern "C" igMetaObject *igGuiComponentModel_GetPublishedMetaObject(void);
 extern "C" void **FUN_0044c1c0(void **arg0, int arg1);
@@ -242,9 +237,6 @@ extern "C" void **FUN_0044e060(void **arg0, short arg1);
 struct Ref { int pad; union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
 extern "C" void **FUN_0044e0e0(struct Ref **self, short flag);
 extern "C" void **FUN_0044e160(void **arg0, long long arg1);
-struct S_temp_a0 { char pad4[4]; int f4; };
-struct O_44e1e0 { S_temp_a0 *m; };
-extern "C" O_44e1e0 *FUN_0044e1e0(O_44e1e0 *arg0, short arg1);
 extern "C" CallbackArray *igGuiSystem_Register(void);
 extern "C" void thunk_igGuiSystem_GetMetaObject(void);
 #include "dw4/scenegraph/igTransform.h"
@@ -264,7 +256,6 @@ extern "C" igMetaObject *igGuiSystemRenderer_GetOrCreateMetaObject(void);
 extern "C" igMetaObject *igGuiSystemRenderer_GetMetaObject(void);
 struct Obj_44e750 { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; };
 extern "C" void** FUN_001d9870(void**, short);
-extern "C" int FUN_00230f70(...);
 extern "C" int g_igGuiSystemRenderer_vtable[4];
 extern "C" int igGuiSystemRenderer_GetVTable(void);
 extern "C" void igGuiSystemRenderer_RunStaticInit(void);
@@ -689,8 +680,8 @@ struct L_454770 { char p0[8]; int count; char p1[4]; V136 **items; };
 struct M_454770 { char p0[8]; L_454770 *list; };
 struct O_454770 { char p0[12]; M_454770 *m; };
 extern "C" void igEventDispatcher_WindowClose(O_454770 *arg0, V104 *arg1);
-extern "C" void FUN_002ed5c0(void *);
-struct K_454820 { int p; K_454820(int x) { p = x; } ~K_454820() { } static void operator delete(void *q) { FUN_002ed5c0(q); } };
+#include "dw4/core/igMemory.h"
+struct K_454820 { int p; K_454820(int x) { p = x; } ~K_454820() { } static void operator delete(void *q) { Memory_FreeBufferAliasB(q); } };
 class Elem { public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
     virtual int vX(int, int, float, float);
@@ -708,7 +699,7 @@ struct Finder {
     }
 };
 extern "C" void igEventDispatcher_ControllerJoystickMotion(igEventDispatcher *arg0, int arg1, int arg2, int arg3, float f0, float f1);
-struct K_454930 { int p; K_454930(int x) { p = x; } ~K_454930() { } static void operator delete(void *q) { FUN_002ed5c0(q); } };
+struct K_454930 { int p; K_454930(int x) { p = x; } ~K_454930() { } static void operator delete(void *q) { Memory_FreeBufferAliasB(q); } };
 class Lis { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual unsigned char v108(int, int, int);  };
 struct Finder_454930 {
     static int Find(igDataList *l, K_454930 &key) {
@@ -739,7 +730,7 @@ struct ReceiverHolder { char pad[8]; igTDataList<EventReceiver *> *list; };
 struct DispatchKeyHolder { char pad[8]; igTDataList<DispatchKey *> *list; };
 struct EventDispatcherView { char pad[12]; ReceiverHolder *receivers; DispatchKeyHolder *keys; };
 extern "C" void igEventDispatcher_ControllerButtonUp(EventDispatcherView *self, int, DispatchKey *key, int arg3);
-struct K_454b30 { int p; K_454b30(int x) { p = x; } ~K_454b30() { } static void operator delete(void *q) { FUN_002ed5c0(q); } };
+struct K_454b30 { int p; K_454b30(int x) { p = x; } ~K_454b30() { } static void operator delete(void *q) { Memory_FreeBufferAliasB(q); } };
 class Lis_454b30 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual unsigned char v112(int, int, float);  };
 struct IList { char pad[8]; int count; char pad2[4]; int *data; };
 struct List { char pad[8]; int n; char pad2[4]; Lis_454b30 **data; };
@@ -758,7 +749,7 @@ struct Finder_454b30 {
     }
 };
 extern "C" void igEventDispatcher_ControllerButtonPressure(igEventDispatcher *arg0, int arg1, int arg2, int arg3, float f);
-struct K_454c30 { int p; K_454c30(int x) { p = x; } ~K_454c30() { } static void operator delete(void *q) { FUN_002ed5c0(q); } };
+struct K_454c30 { int p; K_454c30(int x) { p = x; } ~K_454c30() { } static void operator delete(void *q) { Memory_FreeBufferAliasB(q); } };
 class Lis_454c30 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual unsigned char v120(int, int, float);  };
 struct Finder_454c30 {
     static int Find(igControllerList *l, K_454c30 &key) {
@@ -774,7 +765,7 @@ struct Finder_454c30 {
 };
 extern "C" void igEventDispatcher_ControllerPointOfView(igEventDispatcher *arg0, int arg1, int arg2, int arg3, float f);
 extern "C" void igEventDispatcher_ControllerSlider(EventDispatcherView *self, int, DispatchKey *key, int arg3, float f);
-struct K_454e30 { int p; K_454e30(int x) { p = x; } ~K_454e30() { } static void operator delete(void *q) { FUN_002ed5c0(q); } };
+struct K_454e30 { int p; K_454e30(int x) { p = x; } ~K_454e30() { } static void operator delete(void *q) { Memory_FreeBufferAliasB(q); } };
 class Lis_454e30 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual unsigned char v124(int, int);  };
 struct Finder_454e30 {
     static int Find(igControllerList *l, K_454e30 &key) {
@@ -813,7 +804,6 @@ struct Ref_4551f0 {
     }
 };
 struct A_4551f0 { char pad8[8]; int f8; };
-extern "C" void FUN_004551f0(void *arg0v, int arg1, void *arg2v);
 extern "C" void FUN_004552e0(int *arg0, int *arg1);
 class VC_455370 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(long long); };
 class VC100 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int); };
@@ -823,7 +813,6 @@ typedef struct B_455470 { char pad32[32]; int f20; } B_455470;
 typedef struct A_455470 { char pad12[12]; int f0c; B_455470 *f10; C *f14; char pad24[8]; unsigned char f20; } A_455470;
 extern "C" void FUN_00455470(A_455470 *arg0);
 extern "C" void igGuiComponent_userDestruct(void *arg0);
-extern "C" int FUN_001c59e0(...);
 struct O_455510 {
     char p[32]; int v;
     static O_455510 *cast(O_455510 *o) {
@@ -1035,7 +1024,7 @@ extern "C" int igHotKeyEventReceiver_ControllerButtonEvent(B_457650 *arg0, int a
 class ContextHandler { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void vX(int *out); };
 extern "C" void FUN_004576d0(igContext *context, ContextHandler *handler);
 class OV { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(void *); };
-struct K_4577f0 { void *p; K_4577f0(void *x) { p = x; } ~K_4577f0() { } static void operator delete(void *q) { FUN_002ed5c0(q); } };
+struct K_4577f0 { void *p; K_4577f0(void *x) { p = x; } ~K_4577f0() { } static void operator delete(void *q) { Memory_FreeBufferAliasB(q); } };
 struct Flags { int a; int b; int c; int d[4]; };
 struct Finder_4577f0 {
     static int Find(igObjectList *l, K_4577f0 &key) {
@@ -1061,7 +1050,7 @@ struct RadioButtonListView { char p[8]; int n; char q[4]; int *arr; };
 struct RadioSelectionView { char p[12]; int sel; };
 struct RadioGroupView { char p[8]; struct RadioSelectionView *a; char p2[4]; struct RadioButtonListView *b; int f20; int cur; };
 extern "C" void FUN_00457a10(struct RadioGroupView *s);
-struct K_457ab0 { void *p; K_457ab0(void *x) { p = x; } ~K_457ab0() { } static void operator delete(void *q) { FUN_002ed5c0(q); } };
+struct K_457ab0 { void *p; K_457ab0(void *x) { p = x; } ~K_457ab0() { } static void operator delete(void *q) { Memory_FreeBufferAliasB(q); } };
 struct Msg { int a; int b; int c; int d; };
 struct Finder_457ab0 {
     static int Find(igObjectList *l, K_457ab0 &key) {
@@ -1081,9 +1070,6 @@ extern "C" void igOnOffValueObserver_OnModelChange(void *arg0, void *arg1);
 struct T_457c40 { char pad[36]; unsigned char b; };
 struct S_457c40 { char pad[8]; struct T_457c40 *t; };
 extern "C" void FUN_00457c40(struct S_457c40 *arg0, unsigned char arg1);
-struct R_457ca0 { int w0; int refs; };
-class O_457ca0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void v92(); virtual void v96(); int w4; R_457ca0 *r; };
-extern "C" void FUN_00457ca0(O_457ca0 *arg0, R_457ca0 *arg1);
 class E_457d60 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual int v200(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual int v228(int); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97(); virtual void d98(); virtual void d99(); virtual void d100(); virtual void d101(); virtual void d102(); virtual void d103(); virtual void d104(); virtual void d105(); virtual void d106(); virtual void d107(); virtual void d108(); virtual void d109(); virtual void d110(); virtual void d111(); virtual void d112(); virtual void d113(); virtual void d114(); virtual void d115(); virtual void d116(); virtual void d117(); virtual void d118(); virtual void d119(); virtual void d120(); virtual void d121(); virtual void d122(); virtual void d123(); virtual void d124(); virtual void d125(); virtual void d126(); virtual void d127(); virtual void d128(); virtual void d129(); virtual void d130(); virtual void d131(); virtual void d132(); virtual void d133(); virtual void d134(); virtual void d135(); virtual void d136(); virtual void d137(); virtual void d138(); virtual void d139(); virtual void d140(); virtual void d141(); virtual void d142(); virtual void d143(); virtual void d144(); virtual void d145(); virtual void d146(); virtual void d147(); virtual void d148(); virtual void d149(); virtual void d150(); virtual void d151(); virtual void d152(); virtual void d153(); virtual void d154(); virtual void d155(); virtual void d156(); virtual void d157(); virtual void d158(); virtual void d159(); virtual void d160(); virtual void d161(); virtual void d162(); virtual void d163(); virtual void d164(); virtual void d165(); virtual void d166(); virtual void d167(); virtual void d168(); virtual void d169(); virtual void d170(); virtual void d171(); virtual void d172(); virtual void d173(); virtual void d174(); virtual void d175(); virtual void d176(); virtual void d177(); virtual void d178(); virtual void d179(); virtual void d180(); virtual void v732(int); };
 struct O_457d60 { int p0; int p1; E_457d60 *f8; int f12; };
 extern "C" void igClearRenderer_InitializeDrawing(O_457d60 *arg0);

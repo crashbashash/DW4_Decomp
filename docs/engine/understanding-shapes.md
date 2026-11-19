@@ -191,6 +191,12 @@ Compiler-made values (a strength-reduced offset, a hoisted invariant, a CSE temp
 makes them runs. So registers follow the order values come into existence, and a value that has to colour early is
 the caller's declared variable, not an inline's local.
 
+The order holds only for nodes simplify can push when its scan reaches them: a node whose degree is still at or
+above the register count (32 for the float class on b52) is passed over and pushed on a later scan, so it pops
+first and takes the lowest register. `regalloc.py` reports general registers only; `trace()` in
+`tools/dispatcher/regalloc_trace.py` records the float passes too (`cls` 1: each node's id, colour, neighbours and
+push order, and the IR that defines it).
+
 ### MWCC with its scheduler off
 
 **When:** the instructions are right and a few sit in another order inside one block, or a branch delay slot holds
@@ -1659,6 +1665,17 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   called with `igVec3f(0, 0, -1.2f)` builds the temporary in retail's frame slot; a named local declared for the
   call takes another one. A reference is a pointer in the ABI, so the callee's own bytes do not change. *Unit:*
   `src/movie/igMovieManager.cpp` (the caller of 0x1909b0).
+- **A value read once into a local lets a later local colour in its declared order.**
+  - *Symptom:* float registers shifted by one: a square root takes `f10` where retail has `f13`, and the three
+    direction components it scales take `f13`..`f11` where retail has `f12`..`f10`. Declaring the root first gives
+    it `f0` and shifts every other float.
+  - *Cause:* the root needs the lowest id of the group, and declared first it has it, but it interferes with 32
+    float values, so simplify passes over it and pushes it last ([the tracer](#the-register-allocator-tracer)): it
+    colours first and takes `f0`. In retail the other sphere's radius is a declared local ahead of it, live across
+    the root; pushed first, it brings the root's degree to 31, and the root is pushed in its declared order.
+  - *Spelling:* `otherRadius = other->_radius`, read once for the containment tests and the far point, declared
+    first; the root declared before the direction components.
+  - *Unit:* `src/engine/maths/MathsLibrary.cpp` (0x18de10).
 - **A class local is numbered after every declared local, wherever it is declared.**
   - *Symptom:* instructions identical, two saved registers exchanged between a result object and a pointer local
     (`s2`/`s3`). The result declared `int` and read as `.v` matches; declared as its class it does not, and no
@@ -1697,7 +1714,13 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     list one too. The parameter has the field's type, `unsigned char endianSwap`, so neither argument carries a
     conversion. In the callees the flag is tested plain, `if (endianSwap)`: `endianSwap != 0` promotes the byte,
     and the promotion the tests share becomes an `andi` into a register of its own (4 bytes more).
-  - *Unit:* `src/engine/core/CoreLibrary.cpp`.
+  - *An enum parameter:* retail loads the source and destination factors and the `short` stage before the byte
+    constant, the source into a temporary moved into `a1` in the call's delay slot (`lw v0,12(a0)` …
+    `move a1,v0`); with `int` parameters the factors load after the context moves into `a0`, 4 bytes short. The
+    callee takes the factors as the reflected enum (`IG_GFX_BLENDING_FUNCTION`) and the caller casts its `int`
+    fields to it, as the texture attribute does for its wrap and filter modes. `(int)` written on the `int`
+    field gives the plain bytes there, and the enum on the source alone leaves 2 words.
+  - *Units:* `src/engine/core/CoreLibrary.cpp`; `src/engine/attrs/AttrsLibrary.cpp` (0x13c2c0 calling 0x174510).
 - **An `int` copy of a parameter at the top of a function stands for something else.**
   - *A reassigned variable.* `m = m->_writeProxy ? proxy() : m` makes a second web of `m`, numbered after every
     declared local, so it colours before the count declared after it and takes its register (`s3`/`s4`

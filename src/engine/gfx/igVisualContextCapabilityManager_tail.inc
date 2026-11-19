@@ -245,7 +245,7 @@ void igVisualContext_SetBlendingMatrices(O_165d30 *arg0, unsigned int arg1, int 
         v[1] = 0;
         v[2] = 0;
         igMatrix44f_SetTranslation((float *)s1, (float *)v);
-        FUN_001903d0(s1);
+        FUN_001903d0((float *)s1);
         s1 += 0x40;
     }
     arg0->f76 = arg0->f76 + 1;
@@ -301,7 +301,7 @@ void *FUN_00165e50(Self *self, Obj_165e50 *src) {
         for (i = 0; i < self->matCount; i++) {
             Mat *b = buf + i;
             igMatrix44f_Invert((float *)b, (const float *)(self->mats + i));
-            FUN_001903d0(b);
+            FUN_001903d0((float *)b);
         }
         for (k = 0; k < n; k++) {
             q = src->v136(k);
@@ -529,7 +529,7 @@ void igVisualContext_LoadDefaultDriverDatabase(int value)
     if (igRegistry_IsLoadingEnabled() != 0) {
         if (igDriverDatabase_Load((igDriverDatabase *)builder, (const char *)"", (const char *)"") != 0) igDriverDatabase_ApplyToRegistry((igDriverDatabase *)builder, (int)registry, 4, 0);
     }
-    FUN_002daab0(builder, registry, 4, 0);
+    FUN_002daab0((igDriverDatabase *)builder, (int)registry, 4, 0);
 }
 
 void FUN_00166f90(void) {

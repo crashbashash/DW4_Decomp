@@ -64,7 +64,7 @@ void FUN_001d15a0(KeyReducer *self) {
             if (list->capacity > at) {
                 list->count = list->getCount() + 1;
             } else {
-                FUN_002d6790(list, at + 1, 4);
+                List_Resize(list, at + 1, 4);
             }
             list->data[at] = i;
         }

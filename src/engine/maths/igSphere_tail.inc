@@ -206,6 +206,59 @@ void FUN_0018dd20(S4 *p, S4 *q) {
     }
 }
 
+static inline bool isEmpty(const igSphere *sphere) { return sphere->_radius < 0.0f; }
+
+void FUN_0018de10(igSphere *sphere, const igSphere *other) {
+    float otherRadius;
+    float distSq, dist, dx, dy, dz, radiusDiff, invDist;
+    if (isEmpty(other)) {
+        return;
+    }
+    if (isEmpty(sphere)) {
+        sphere->_center[0] = other->_center[0];
+        sphere->_center[1] = other->_center[1];
+        sphere->_center[2] = other->_center[2];
+        sphere->_radius = other->_radius;
+        return;
+    }
+    otherRadius = other->_radius;
+    dx = sphere->_center[0] - other->_center[0];
+    dy = sphere->_center[1] - other->_center[1];
+    dz = sphere->_center[2] - other->_center[2];
+    distSq = dx * dx + dy * dy + dz * dz;
+    if (distSq <= 5e-7f) {
+        sphere->_radius = sphere->_radius > otherRadius ? sphere->_radius : otherRadius;
+        return;
+    }
+    radiusDiff = sphere->_radius - otherRadius;
+    if (distSq < radiusDiff * radiusDiff) {
+        if (otherRadius > sphere->_radius) {
+            sphere->_center[0] = other->_center[0];
+            sphere->_center[1] = other->_center[1];
+            sphere->_center[2] = other->_center[2];
+            sphere->_radius = other->_radius;
+        }
+        return;
+    }
+    dist = sqrtf(distSq);
+    invDist = 1.0f / dist;
+    dx *= invDist;
+    dy *= invDist;
+    dz *= invDist;
+    {
+        float nearX = sphere->_center[0] + sphere->_radius * dx;
+        float nearY = sphere->_center[1] + sphere->_radius * dy;
+        float nearZ = sphere->_center[2] + sphere->_radius * dz;
+        float farX = other->_center[0] + -otherRadius * dx;
+        float farY = other->_center[1] + -otherRadius * dy;
+        float farZ = other->_center[2] + -otherRadius * dz;
+        sphere->_center[0] = 0.5f * nearX + 0.5f * farX;
+        sphere->_center[1] = 0.5f * nearY + 0.5f * farY;
+        sphere->_center[2] = 0.5f * nearZ + 0.5f * farZ;
+        sphere->_radius = 0.5f * (dist + sphere->_radius + other->_radius);
+    }
+}
+
 void FUN_0018dfc0(void *parg0, S5 *arg1) {
     int arg0 = (int)parg0;
     float v[3];

@@ -36,12 +36,6 @@ class igMemoryPoolView;
 #include "dw4/core/igPluginHelper.h"
 #include "dw4/gfx/igVisualContext.h"
 extern "C" void InsightLibrary_MarkRegistered(void);
-struct S {
-    void *f0;
-    char pad[4];
-    void *f8;
-};
-extern "C" void *FUN_00230f70(struct S *arg0, short arg1);
 #include "dw4/gui/igRenderer.h"
 extern "C" igMetaObject *FUN_00231010(void);
 extern "C" igMetaObject *g_igMessage_metaObject;
@@ -592,7 +586,6 @@ extern "C" void igInsightCore_RegisterPlugin(void *arg0, void **arg1);
 extern "C" void igInsightCore_UnregisterPlugin(void *arg0, void **arg1);
 typedef struct L { char pad8[8]; int cnt; char pad12[4]; int *arr; } L;
 typedef struct A { char pad104[104]; L *f68; } A;
-extern "C" int FUN_00457ca0(...);
 #include "dw4/core/igResult.h"
 /* An info manager: its virtual slot 20 returns its meta object. */
 struct InfoManagerView { virtual int a0(); virtual int a1(); virtual int a2(); virtual int a3(); virtual int a4(); virtual int a5(); virtual int a6(); virtual int a7(); virtual int a8(); virtual int a9(); virtual int a10(); virtual int a11(); virtual int a12(); virtual int a13(); virtual int a14(); virtual int a15(); virtual int a16(); virtual int a17(); virtual int a18(); virtual int a19(); virtual igMetaObject *getMeta(); };

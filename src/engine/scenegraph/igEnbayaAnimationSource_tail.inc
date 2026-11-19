@@ -18,7 +18,7 @@ int Gap__Sg__igEnbayaAnimationSource__vfunc_23(void **arg0, int arg1, int arg2, 
     int temp_s0;
 
     temp_s0 = ((DW4VC_108_4 *)(arg0))->vX((int)sp30, (int)sp40, (int)(arg2), (int)(arg3)) & 0xFF;
-    FUN_00192810(sp30, arg1);
+    FUN_00192810((const float *)sp30, (float *)arg1);
     igMatrix44f_SetTranslation((float *)arg1, (float *)sp40);
     return temp_s0;
 }
@@ -60,7 +60,7 @@ int Gap__Sg__igEnbayaAnimationSource__vfunc_25(EnbayaSourceView *o, float *out, 
     decoder = ((EnbayaDecoderView * *)DAT_00562720)[0];
     a = 0;
     b = 0;
-    FUN_0027fa60(decoder, t, track, &a, &b);
+    FUN_0027fa60((EnbayaContext *)decoder, t, track, (EnbayaSlot **)&a, (EnbayaSlot **)&b);
     ka = a;
     kb = b;
     blend = (t - ka->_translation[3]) / decoder->_interval;
@@ -130,7 +130,7 @@ int Gap__Sg__igEnbayaAnimationSource__vfunc_27(EnbayaSourceView *o, float *out, 
     decoder = ((EnbayaDecoderView * *)DAT_00562720)[0];
     a = 0;
     b = 0;
-    FUN_0027fa60(decoder, t, track, &a, &b);
+    FUN_0027fa60((EnbayaContext *)decoder, t, track, (EnbayaSlot **)&a, (EnbayaSlot **)&b);
     ka = a;
     kb = b;
     blend = (t - ka->_translation[3]) / decoder->_interval;

@@ -299,7 +299,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
     if ((unsigned char)igRegistry_GetValueString((igRegistry *)self->ini, section, "type", &text.p, "", 0) == 0) {
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
-    meta = FUN_002fe460(text.p);
+    meta = (ShaderMetaView *)igObjectSystem_FindMetaByNameDefault(text.p);
     if (meta == 0) {
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
@@ -312,7 +312,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
     count = names.p->count;
     for (i = 0; i < count; i++) {
         field = StringList_CopyRetained((igStringRefList *)names.p, i).p;
-        info = FUN_002fdf20(meta, field);
+        info = igMetaObject_FindFieldByName((igMetaObject *)meta, field);
         if (info == 0) {
             return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
         }
@@ -329,7 +329,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
         ShaderCacheView *cache = ((ShaderCacheView *)FUN_001ca6b0((int *)self, self->kind));
         ShaderObject_1ca6c0 *existing = ((ShaderObject_1ca6c0 *)igObjectStringMap_GetObject(cache, (const char *)name));
         if (existing != 0) {
-            if (FUN_00300920(existing, (ShaderObject_1ca6c0 *)object.p) != 0) {
+            if (igObject_IsAlikeShallow((igObjectDispatchView *)existing, (igObjectDispatchView *)object.p) != 0) {
                 return igSmartPointer<ShaderObject_1ca6c0>(existing, kRetainReference);
             }
             return object;

@@ -30,7 +30,7 @@ int igInterpretedShaderData_GetVTable(void) {
     obj.w7 = 0;
     t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     obj.vt = &g_igInterpretedShaderData_vtable[0];
-    FUN_0014dd40((R **)&obj.w7, (short)-1);
+    FUN_0014dd40((igSmartPointer<igObject> *)&obj.w7, -1);
     igSmartPointer_igShaderFactory_Destruct((ObjectRefWord *)&obj.w6, -1);
     FUN_00194790((int * *)&obj, 0);
     return t;

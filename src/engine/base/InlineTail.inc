@@ -299,7 +299,7 @@ static inline igObject *createStringRefList() {
 
 template <class T> static inline int insertObjectSorted(void *list, T *object) {
     RetainedWord<T> word(object);
-    int index = FUN_00142bb0(list, &word);
+    int index = FUN_00142bb0((igObjectList *)list, (igObject *const *)&word);
     List_InsertWords((igDataList *)list, index, 1, &word);
     return index;
 }
@@ -457,23 +457,23 @@ int FUN_0022aac0(T_4 *arg0, int arg1) {
     return arg1;
 }
 
-int FUN_0022ab90(int arg0, int arg1, int arg2) {
+igNode *FUN_0022ab90(igIterateGraph *self, igNode *root, igMetaObject *kind) {
     int var_s0;
     int r;
-    var_s0 = FUN_0022aac0((T_4 *)arg0, arg1);
-    if (igObject_IsKindOf((igObject *)var_s0, (igMetaObject *)arg2) != 0) { r = var_s0; } else { var_s0 = FUN_0022ac70(arg0, arg2); r = var_s0; } return r;
+    var_s0 = FUN_0022aac0((T_4 *)self, (int)root);
+    if (igObject_IsKindOf((igObject *)var_s0, kind) != 0) { r = var_s0; } else { var_s0 = (int)FUN_0022ac70(self, kind); r = var_s0; } return (igNode *)r;
 }
 
-int FUN_0022ac00(void *arg0) {
+igNode *FUN_0022ac00(igIterateGraph *self) {
     int temp_v1;
     void *temp_v0;
 
-    temp_v0 = (void *)(*(int *)((char *)(arg0) + 12));
+    temp_v0 = (void *)self->_currentPath;
     temp_v1 = *(int *)((char *)(temp_v0) + 8);
     if (temp_v1 == 0) {
         return 0;
     }
-    return *(int *)(*(int *)((char *)(temp_v0) + 16) + ((temp_v1 - 1) * 4));
+    return (igNode *)*(int *)(*(int *)((char *)(temp_v0) + 16) + ((temp_v1 - 1) * 4));
 }
 
 int FUN_0022ac40(void *it) {
@@ -484,34 +484,34 @@ int FUN_0022ac60(void *arg0) {
     return *(int *)((char *)(*(int *)((char *)(arg0) + 12)) + 8) > 0;
 }
 
-int FUN_0022ac70(int arg0, int arg1) {
+igNode *FUN_0022ac70(igIterateGraph *self, igMetaObject *kind) {
     int v;
 
-    v = FUN_0022ad00((GraphIterator *)arg0);
-    while (FUN_0022ac60((void *)arg0) != 0) {
-        if (v != 0 && igObject_IsKindOf((igObject *)v, (igMetaObject *)arg1) != 0) {
-            return v;
+    v = FUN_0022ad00((GraphIterator *)self);
+    while (FUN_0022ac60((void *)self) != 0) {
+        if (v != 0 && igObject_IsKindOf((igObject *)v, kind) != 0) {
+            return (igNode *)v;
         }
-        v = FUN_0022ad00((GraphIterator *)arg0);
+        v = FUN_0022ad00((GraphIterator *)self);
     }
     return 0;
 }
 
 
-void FUN_0022b0a0(int arg0, int *arg1) {
+void FUN_0022b0a0(float *matrix, igIterateGraph *self) {
     float sp60[16];
     unsigned int n, i;
     int *o;
     struct TransformObjectList *l;
     igMatrix44f_SetIdentity(sp60);
-    n = *(int *)(arg1[3] + 8);
+    n = *(int *)(self->_currentPath + 8);
     for (i = 0; i < n; i++) {
-        o = ((struct TransformObjectList *)arg1[3])->data[i];
+        o = ((struct TransformObjectList *)self->_currentPath)->data[i];
         if (igObject_IsKindOf((igObject *)o, g_igTransform_metaObject) != 0) {
             igMatrix44f_Multiply(sp60, (const float *)((int)o + 0x20), sp60);
         }
     }
-    igMatrix44f_Copy((float *)arg0, sp60);
+    igMatrix44f_Copy(matrix, sp60);
 }
 
 void igListenerInterface_resetFields(igInterface *arg0, int flags) {
@@ -591,7 +591,7 @@ static inline Iterator *createGraphIterator() {
 extern "C" int igOptimizer_CheckGraph(B_2 *log, int root) {
     igSmartPointer<Iterator> it(createGraphIterator());
     FUN_0022aac0((T_4 *)it.get(), root);
-    int node = FUN_0022ac00(it.get());
+    igNode *node = FUN_0022ac00((igIterateGraph *)it.get());
     for (; FUN_0022ac60(it.get()) != 0; FUN_0022ac40(it.get())) {
         if (igObject_IsKindOf((igObject *)node, igSegment_GetMetaObject()) != 0) {
             log->put("The optimization doesn't support igSegment\n");
@@ -706,7 +706,7 @@ bool FUN_0022bac0(void *arg0, void *arg1) {
     if (r) ++r->references;
     if (((C132 *)arg1)->vX(r) != 0) {
         res = ((C112 *)arg1)->vX(&r);
-        FUN_001d6340(arg0, r);
+        igSceneInfo_SetSceneGraph((igSceneInfo *)arg0, (igNode *)r);
         RT::rel(r);
         return res;
     }
@@ -1295,7 +1295,7 @@ int FUN_0022d520(void *arg0, int arg1, void *arg2, int arg3, int arg4) {
         r2 = 0;
     }
     if (r0 != 0 && r2 != 0) {
-        FUN_00190330(arg3 + *(int *)((char *)r2 + 8), arg1 + *(int *)((char *)r0 + 8));
+        FUN_00190330((igMatrix44d *)(arg3 + *(int *)((char *)r2 + 8)), (const igMatrix44d *)(arg1 + *(int *)((char *)r0 + 8)));
         return 1;
     }
     return 0;

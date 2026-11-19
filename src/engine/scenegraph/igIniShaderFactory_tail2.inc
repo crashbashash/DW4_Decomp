@@ -151,7 +151,7 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
                 SET_OUT(result);
                 FINISH();
             }
-            entry = ((IniFieldEntry *)FUN_003022c0(source->entries, g_igIniShaderFactory_implementationNameMetaField, name));
+            entry = ((IniFieldEntry *)igProperty_FindByName((igObjectList *)source->entries, (igMetaField *)g_igIniShaderFactory_implementationNameMetaField, name));
             if (entry != 0) {
                 USE_CACHE(entry->cache);
             } else {
@@ -253,7 +253,7 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
             if (source == 0 || igObject_IsKindOf((igObject *)source, g_igShaderInfo_metaObject) == 0) {
                 return igSmartPointer<IniSectionText>((IniSectionText *)0, kRetainReference);
             }
-            entry = ((IniFieldEntry_1cdbb0 *)FUN_003022c0(source->entries, g_igIniShaderFactory_implementationNameMetaField, name));
+            entry = ((IniFieldEntry_1cdbb0 *)igProperty_FindByName((igObjectList *)source->entries, (igMetaField *)g_igIniShaderFactory_implementationNameMetaField, name));
             if (entry != 0) {
                 cache = entry->cache;
             } else {
@@ -290,7 +290,7 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
             file.p->seek(0, 2);
             size = file.p->tell();
             file.p->seek(0, 0);
-            buffer = FUN_00300d70(self, size + 1);
+            buffer = (char *)igObject_AllocateStorage((igObject *)self, size + 1);
             file.p->read(buffer, size, 1);
             file.p->close();
             buffer[size] = 0;

@@ -24,28 +24,28 @@ void FUN_00457c40(struct S_457c40 *arg0, unsigned char arg1) {
     }
 }
 
-void FUN_00457ca0(O_457ca0 *arg0, R_457ca0 *arg1) {
-    R_457ca0 *old;
-    R_457ca0 *a;
+void igRenderer_SetVisualContext(igRendererDispatchView *renderer, igVisualContext *context) {
+    igVisualContext *old;
+    igVisualContext *released;
 
-    old = arg0->r;
-    if (old != arg1) {
+    old = renderer->_visualContext;
+    if (old != context) {
         if (old != 0) {
-            arg0->v96();
+            renderer->terminateDrawing();
         }
-        if (arg1 != 0) {
-            arg1->refs = arg1->refs + 1;
+        if (context != 0) {
+            context->_refCount = context->_refCount + 1;
         }
-        a = arg0->r;
-        if (a != 0) {
-            a->refs = a->refs - 1;
-            if ((a->refs & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)a);
+        released = renderer->_visualContext;
+        if (released != 0) {
+            released->_refCount = released->_refCount - 1;
+            if ((released->_refCount & 0x7FFFFF) == 0) {
+                igObject_Destroy(released);
             }
         }
-        arg0->r = arg1;
-        if (arg0->r != 0) {
-            arg0->v92();
+        renderer->_visualContext = context;
+        if (renderer->_visualContext != 0) {
+            renderer->initializeDrawing();
         }
     }
 }

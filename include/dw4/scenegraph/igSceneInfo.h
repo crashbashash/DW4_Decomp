@@ -3,6 +3,7 @@
 
 struct CallbackArray;
 struct igMetaObject;
+struct igNode;
 struct igSceneInfo;
 
 #ifdef __cplusplus
@@ -17,6 +18,8 @@ void *igSceneInfo_Destroy(struct igSceneInfo *self, short flags);
 struct igMetaObject *igSceneInfo_GetMetaObject(void);
 struct igMetaObject *igSceneInfo_GetOrCreateMetaObject(void);
 struct CallbackArray *igSceneInfo_Register(void);
+/* Replaces the held scene graph, retaining the new one and releasing the old. */
+void igSceneInfo_SetSceneGraph(struct igSceneInfo *self, struct igNode *sceneGraph);
 
 #ifdef __cplusplus
 }

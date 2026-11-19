@@ -146,12 +146,16 @@ void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
     }
 }
 
-void FUN_001b0000(T_1b0000 *arg0, igMetaObject *arg1, Obj_1b0000 *arg2, Obj_1b0000 *arg3)
+void FUN_001b0000(igAttrStackManager *manager, igMetaObject *arg1, igAttrDefaultManager *defaultManager,
+                  igVisualContextCapabilityManager *capabilityManager)
 {
+    AttrStackManagerView *arg0 = (AttrStackManagerView *)manager;
+    AttrStackRefView *arg2 = (AttrStackRefView *)defaultManager;
+    AttrStackRefView *arg3 = (AttrStackRefView *)capabilityManager;
     List *l;
     int n;
     int i;
-    Obj_1b0000 *o;
+    AttrStackRefView *o;
     if (arg2 != 0) {
         arg2->references = arg2->references + 1;
     }

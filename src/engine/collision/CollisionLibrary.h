@@ -20,7 +20,6 @@ extern "C" igMetaObject *g_igCreateCollisionDatabase_metaObject;
 extern "C" igMetaObject *igCreateCollisionDatabase_GetMetaObject(void);
 struct W { int *vt; int f[19]; };
 #include "dw4/core/igObject.h"
-extern "C" int FUN_00225790(...);
 extern "C" int g_igCreateCollisionDatabase_vtable[4];
 #include "dw4/core/igObjectSystem.h"
 #include "dw4/base/igOptBase.h"
@@ -149,8 +148,8 @@ extern "C" void igBoundingSphereMaker_GetMetaObjectFunction(void);
 extern "C" void igBoundingSphereMaker_InitFields(void);
 extern "C" void FUN_0018d630(igSphere*, float const*);
 extern "C" void FUN_0023b110(void *arg0, void *arg1);
-extern "C" int FUN_0018de10(...);
-extern "C" int FUN_0023ac20(...);
+/* Stores in *result a new sphere bounding `geometry` (the smart pointer it returns by value). */
+extern "C" void FUN_0023ac20(igSphere **result, igBoundingSphereMaker *self, igGeometry *geometry);
 #include "dw4/scenegraph/igNode.h"
 typedef struct S1 { char pad4[4]; int f4; } S1;
 struct Ls { char p[8]; unsigned int n; char q[4]; struct Q **a; };
@@ -194,7 +193,7 @@ struct RetainedList { int pad0[2]; void *_words; int pad1[2]; int _count;
 #include "dw4/core/igDataLists.h"
 #include "dw4/maths/igSphere.h"
 extern "C" void FUN_0023b3b0(RetainedList *list, RefCounted *object);
-extern "C" void FUN_00301ee0(int, int);
+#include "dw4/support/list-services.h"
 extern "C" void FUN_0023b410(int *arg0, int arg1, int arg2, int arg3);
 struct CellList : public igObjectList {
     void set(int index, const igSmartPointer<igCollisionCell> &cell) {

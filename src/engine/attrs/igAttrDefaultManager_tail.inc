@@ -13,7 +13,7 @@ static inline void insertHeld(void *list, int index, const HeldWord &word) {
 /* Inserts object into the sorted list at its place and returns that index. */
 template <class T> static inline int insertObjectSorted(void *list, T *object) {
     RetainedWord<T> word(object);
-    int index = FUN_00142bb0((L_142bb0 *)list, (unsigned *)&word);
+    int index = FUN_00142bb0((igObjectList *)list, (igObject *const *)&word);
     List_InsertWords((igDataList *)list, index, 1, &word);
     return index;
 }

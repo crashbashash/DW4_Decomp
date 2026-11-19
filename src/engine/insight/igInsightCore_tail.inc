@@ -125,7 +125,7 @@ void igInsightCore_InitializeDrawing(igInsightCore *core) {
     temp_s1 = arg0->f28->f8->n;
     var_s0 = 0;
     while (var_s0 < temp_s1) {
-        FUN_00457ca0(arg0->f28->f8->items[var_s0], arg0->f24);
+        igRenderer_SetVisualContext((igRendererDispatchView *)arg0->f28->f8->items[var_s0], (igVisualContext *)arg0->f24);
         var_s0 += 1;
     }
 }
@@ -137,7 +137,7 @@ void igInsightCore_TerminateDrawing(igInsightCore *core) {
 
     n = arg0->m->list->count;
     for (i = 0; i < n; i++) {
-        FUN_00457ca0(arg0->m->list->items[i], 0);
+        igRenderer_SetVisualContext((igRendererDispatchView *)arg0->m->list->items[i], 0);
     }
     igAttrPool_UserUnregister();
 }

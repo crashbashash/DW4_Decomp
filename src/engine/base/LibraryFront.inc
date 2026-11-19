@@ -6,14 +6,14 @@ void BaseLibrary_MarkRegistered(void) {
     }
 }
 
-void *FUN_00225790(struct S *arg0, short arg1) {
+void *FUN_00225790(igOptBase *self, short deleteFlag) {
     igObject *p;
     int rc;
 
-    if (arg0 != 0) {
-        arg0->f0 = &DAT_0052bea0[0];
-        if (&arg0->f24) {
-            p = (igObject *)arg0->f24;
+    if (self != 0) {
+        self->_vtable = (int)&DAT_0052bea0[0];
+        if (&self->_configuration) {
+            p = (igObject *)self->_configuration;
             if (p != 0) {
                 rc = (int) p->_refCount - 1;
                 p->_refCount = rc;
@@ -22,8 +22,8 @@ void *FUN_00225790(struct S *arg0, short arg1) {
                 }
             }
         }
-        if (&arg0->f20) {
-            p = (igObject *)arg0->f20;
+        if (&self->_registry) {
+            p = (igObject *)self->_registry;
             if (p != 0) {
                 rc = (int) p->_refCount - 1;
                 p->_refCount = rc;
@@ -32,10 +32,10 @@ void *FUN_00225790(struct S *arg0, short arg1) {
                 }
             }
         }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
+        if (deleteFlag > 0) {
+            Memory_FreeBufferAliasC(self);
         }
     }
-    return arg0;
+    return self;
 }
 
