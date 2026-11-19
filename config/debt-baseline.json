@@ -35,7 +35,7 @@
   "orphan.bytes": 0,
   "profile_split.bytes": 0,
   "profile_split.units": 0,
-  "raw_casts.reflected": 1,
+  "raw_casts.reflected": 0,
   "struct.a": 0,
   "struct.b": 0,
   "struct.c": 0,

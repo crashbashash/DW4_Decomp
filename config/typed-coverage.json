@@ -738,7 +738,7 @@
   "igViewerSceneInfoManager": 193,
   "igViewerSceneInfoManagerController": 10,
   "igViewportAttr": 12,
-  "igVisualContext": 25,
+  "igVisualContext": 26,
   "igVisualContextAttrDefaultManager": 2,
   "igVisualContextCapabilityManager": 1,
   "igWindowSizeObserver": 1,
@@ -766,9 +766,9 @@
   },
   "engine": {
    "files": 50,
-   "offset_casts": 2504,
+   "offset_casts": 2503,
    "other_members": 12693,
-   "recovered": 13567,
+   "recovered": 13568,
    "recovered_pct": 40.34,
    "synthetic": 4869,
    "total": 33633
@@ -847,9 +847,9 @@
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 3207,
- "recovered": 33788,
+ "offset_casts": 3206,
+ "recovered": 33789,
  "synthetic": 5805,
  "total": 72899,
- "typeable": 1
+ "typeable": 0
 }
