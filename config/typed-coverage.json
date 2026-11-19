@@ -500,7 +500,7 @@
   "igFrustCullTraversal": 24,
   "igGeometry": 10,
   "igGeometryAttr": 16,
-  "igGeometryAttr1_5": 38,
+  "igGeometryAttr1_5": 33,
   "igGeometryAttrList": 4,
   "igGeometryElement": 5,
   "igGeometryMaskAttr": 2,
@@ -546,7 +546,7 @@
   "igLongList": 24,
   "igLongMetaField": 10,
   "igLongStack": 2,
-  "igLuaState": 2,
+  "igLuaState": 12,
   "igMallocMemoryPool": 159,
   "igMaterialAttr": 23,
   "igMatrix44fList": 7,
@@ -767,11 +767,11 @@
   "engine": {
    "files": 50,
    "offset_casts": 2503,
-   "other_members": 12709,
-   "recovered": 13583,
+   "other_members": 12714,
+   "recovered": 13588,
    "recovered_pct": 40.35,
    "synthetic": 4869,
-   "total": 33664
+   "total": 33674
   },
   "game": {
    "files": 85,
@@ -848,8 +848,8 @@
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
  "offset_casts": 3206,
- "recovered": 33804,
+ "recovered": 33809,
  "synthetic": 5805,
- "total": 72930,
+ "total": 72940,
  "typeable": 0
 }

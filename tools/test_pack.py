@@ -13,15 +13,31 @@ SCRIPT = os.path.join(ROOT, "tools", "pack.py")
 
 
 class PackTest(unittest.TestCase):
-    def run_pack(self, function, *extra):
+    def run_pack(self, function, *extra, ext=".c"):
         with tempfile.TemporaryDirectory() as out:
             r = subprocess.run([sys.executable, SCRIPT, "--function", function, "--out", out, *extra],
                                cwd=ROOT, capture_output=True, text=True)
             self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
             with open(os.path.join(out, "pack.md")) as fh:
                 md = fh.read()
-            with open(os.path.join(out, "pack.c")) as fh:
+            with open(os.path.join(out, "pack" + ext)) as fh:
                 return md, fh.read()
+
+    def test_a_member_is_found_by_its_cxx_name(self):
+        # Gap::Lua::igLuaState::runString is the definition of igLuaState_RunString
+        for name in ("igLuaState::runString", "runString__Q33Gap3Lua10igLuaStateFPCc"):
+            md, cpp = self.run_pack(name, "--keep", "0", ext=".cpp")
+            self.assertIn("- function: `igLuaState_RunString` at 0x00246620", md)
+            self.assertIn("int Gap::Lua::igLuaState::runString(const char *source) {\n", cpp)
+            self.assertIn("kept `runString`", md)
+
+    def test_a_definition_maps_to_the_member_its_class_and_name_spell(self):
+        pack.load_tools(ROOT)
+        text = "int A::get() {\n return 1;\n}\nint B::get() {\n return 2;\n}\n"
+        group = type("Group", (), {"emitted": (("get__1BFv", 0x200), ("get__1AFv", 0x100)), "owner": 0x300,
+                                   "symbol": ""})()
+        defs = pack.map_definitions(text, text, units.definitions(text), [], None, group)
+        self.assertEqual([va for _n, _s, _e, va in defs], [0x100, 0x200])
 
     def test_target_kept_others_elided(self):
         # src/cri/sjcrs.c holds seven small matched functions in one unit

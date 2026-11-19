@@ -14,7 +14,11 @@ each member's offset and size, and reports:
       whose member at an offset disagrees in size with the reflected field there, or lies beyond
       the registered instance size. The receiver is the view named for the class or taken as a function's
       first parameter (unless a later parameter is the class itself, as in a traversal's handler for a shader
-      passed first), or any view of a `_GetVTable` or `_Construct` unit; other local views describe other objects;
+      passed first), or any view of a `_GetVTable` or `_Construct` unit; other local views describe other objects.
+      A member function's receiver is its class (`void igRenderer::setVisualContext(igVisualContext *)` receives
+      an igRenderer, not its first parameter). A reflected class that declares members in reflected.h
+      (config/class-members.tsv, or the Gap:: class written for a converted class) is the class itself: a view
+      of that name anywhere is compared with it here, whatever its file is named, and never in (a);
   (c) an offset-named member (`fNN`, `wNN`, `pNN`, `_NN`, ...) whose NN is not the member's
       decimal offset (hex spellings `f0x1c` / `f_1c` are accepted when they match). A member whose name
       comes from an outside source (an SDK's debug information) is not offset-named: config/sourced-member-names.tsv
@@ -54,8 +58,13 @@ BODY_RE = re.compile(r"(?:^|[;{}\n])\s*(typedef\s+)?(struct|class|union)\s+([A-Z
                      r"[A-Za-z_][\w:]*)*)\s*)?\{")
 REFLECTED_STRUCT_RE = re.compile(r"/\* handle 0x[0-9a-f]+, \d+ field\(s\), sizeof (\d+) [^*]*\*/\n"
                                  r"typedef struct (\w+) \{(.*?)\n\} \2;", re.S)
-REFLECTED_FIELD_RE = re.compile(r"^\s*([A-Za-z_][\w ]*?)\s*(\w+)((?:\[\d+\])*);\s*(?:/\*[^*]*\*/\s*)?/\*\s*\+(\d+)\s+(\w+)",
-                                re.M)
+# a reflected field: its declaration (`int _visualContext;`, or under C++ a typed reference such as
+# `struct igVisualContext * _visualContext;`), then the offset comment
+REFLECTED_FIELD_RE = re.compile(r"^\s*([A-Za-z_][\w \*]*?)\s*(\w+)((?:\[\d+\])*);\s*(?:/\*[^*]*\*/\s*)?"
+                                r"/\*\s*\+(\d+)\s+(\w+)", re.M)
+# a member a reflected struct declares under C++ (a function, a static member or an object macro), unlike its fields
+REFLECTED_MEMBER_RE = re.compile(r"^\s*(?:static\b|[A-Z_][A-Z0-9_]*\s*\(|[^/;{}\n]*\w\s*\([^;{}\n]*\)\s*(?:const\s*)?"
+                                 r"[;{])", re.M)
 
 Member = collections.namedtuple("Member", "name type size offset count")
 View = collections.namedtuple("View", "kind name base members size file line nvirtual unknown")
@@ -224,8 +233,12 @@ def parse_view(kind, name, base, body, local, reflected, path, line):
 
 
 def parse_reflected(path):
+    """{class: {"size", "fields": {offset: (name, type, size)}, "members": bool}} from reflected.h. `members` is
+    True for a class that declares members there (functions, static members, object macros, from
+    config/class-members.tsv) or is written as a Gap:: class: such a struct is the class itself."""
     out = {}
     text = open(path, errors="replace").read()
+    converted = set(re.findall(r"\bclass\s+(\w+)\s*:\s*public\s+Gap::", text))
     for m in REFLECTED_STRUCT_RE.finditer(text):
         fields = {}
         for fm in REFLECTED_FIELD_RE.finditer(m.group(3)):
@@ -235,7 +248,9 @@ def parse_reflected(path):
                 count *= int(a)
             es = BASIC.get(re.sub(r"\s+", " ", t.strip()), 4)
             fields[int(off)] = (name, t.strip(), es * count)
-        out[m.group(2)] = {"size": int(m.group(1)), "fields": fields}
+        body = re.sub(r"^\s*#[^\n]*$|^[^\n]*/\*\s*\+\d+\s+\w+\s*\*/[^\n]*$", "", m.group(3), flags=re.M)
+        out[m.group(2)] = {"size": int(m.group(1)), "fields": fields,
+                           "members": m.group(2) in converted or bool(REFLECTED_MEMBER_RE.search(body))}
     return out
 
 
@@ -265,11 +280,12 @@ def collect(files, reflected):
     return views
 
 
-def report_a(views, out):
-    """Same non-generic name across units with clashing members or sizes."""
+def report_a(views, out, reflected=None):
+    """Same non-generic name across units with clashing members or sizes. A view named for a reflected class
+    that declares members is that class, which report (b) compares with reflected.h instead."""
     by_name = collections.defaultdict(list)
     for v in views:
-        if v.members and not GENERIC_RE.match(v.name) and v.kind != "union":
+        if v.members and not GENERIC_RE.match(v.name) and v.kind != "union" and not is_class(v.name, reflected):
             by_name[v.name].append(v)
     groups = 0
     for name in sorted(by_name):
@@ -308,19 +324,29 @@ def report_a(views, out):
 # first) is not read as taking the other object as the receiver.
 RECEIVER_RE = re.compile(r"\b\w+\s*\(\s*(?:const\s+)?(?:struct\s+|class\s+)?(\w+)\s*(?:const\s*)?[*&]"
                          r"([^;{}()]*(?:\([^;{}()]*\)[^;{}()]*)*)\)\s*(?:const\s*)?\{")
+# a member function written out of its class, `T igRenderer::setVisualContext(...) {`: its receiver is its class
+MEMBER_HEAD_RE = re.compile(r"\b(\w+)\s*::\s*~?\w+\s*\([^;{}()]*(?:\([^;{}()]*\)[^;{}()]*)*\)\s*(?:const\s*)?\{")
 _receivers = {}
 
 
 def receivers(path):
-    """The type names a file's function definitions take as their first, receiving parameter, except where a
-    later parameter is a pointer or reference to the class the file is named for."""
+    """The type names a file's function definitions take as their receiver: a free function's first parameter,
+    except where a later parameter is a pointer or reference to the class the file is named for, and a member
+    function's class (its first parameter is an argument, not the receiver)."""
     if path not in _receivers:
         text = strip_comments(open(path, errors="replace").read())
         cls = class_of_unit(path)
         own = cls and re.compile(r"\b%s\s*(?:const\s*)?[*&]" % re.escape(cls))
-        _receivers[path] = {first for first, rest in RECEIVER_RE.findall(text)
-                            if first == cls or not (own and own.search(rest))}
+        found = {m.group(1) for m in RECEIVER_RE.finditer(text)
+                 if not text[max(0, m.start() - 8):m.start()].rstrip().endswith("::")
+                 and (m.group(1) == cls or not (own and own.search(m.group(2))))}
+        _receivers[path] = found | set(MEMBER_HEAD_RE.findall(text))
     return _receivers[path]
+
+
+def is_class(name, reflected):
+    """Whether `name` is a reflected class that declares members in reflected.h: such a struct is the class."""
+    return bool(reflected) and name in reflected and reflected[name].get("members", False)
 
 
 def _builds_instance(path):
@@ -331,10 +357,14 @@ def report_b(views, reflected, out):
     """A receiver view in a unit named for a reflected class vs the recovered layout. A view counts
     as the receiver when it is named for the class or a function of the unit takes it as its first
     parameter; another local struct of the file describes some other object. A `<Class>_GetVTable` or
-    `<Class>_Construct` unit builds an instance of the class itself, so every view there counts."""
+    `<Class>_Construct` unit builds an instance of the class itself, so every view there counts. A view
+    named for a reflected class that declares members is that class, whatever unit it is in."""
     groups = 0
     by_class = collections.defaultdict(list)
     for v in views:
+        if v.members and v.kind != "union" and "reflected.h" not in v.file and is_class(v.name, reflected):
+            by_class[v.name].append(v)
+            continue
         cls = class_of_unit(v.file)
         if cls in reflected and v.members and v.kind != "union" and "reflected.h" not in v.file \
                 and (v.name == cls or v.name in receivers(v.file) or _builds_instance(v.file)):
@@ -431,7 +461,7 @@ def main(argv=None):
     counts = {}
     if "a" in a.only:
         out.append("==== (a) same struct name, clashing layouts across units ====")
-        counts["a"] = report_a(views, out)
+        counts["a"] = report_a(views, out, reflected)
         out.append("")
     if "b" in a.only:
         out.append("==== (b) receiver views vs the reflected class the unit is named for ====")

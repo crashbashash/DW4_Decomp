@@ -1,0 +1,4 @@
+# config/converted-classes.tsv — the classes scripts/gen_type_headers.py declares, under C++, as Alchemy's
+# polymorphic classes: `namespace Gap { namespace <library> { class <class> : public <parent> ... } }`, the
+# parent converted too and the root Gap::Core::igObject implied. The flat struct of each stays the C view.
+# Columns: <class>	<library namespace as retail's RTTI spells it (Core, Gfx, Sg, Attrs, Gui, Bec, ...)>.

@@ -34,15 +34,15 @@ The function count is flattered by small functions: the ones done have a median 
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**17,248** of the 20,454 matched functions are readable: **2,706,240** code bytes, **77.9 %** of the code.
+**17,250** of the 20,454 matched functions are readable: **2,706,372** code bytes, **77.9 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 1,602 | 313,176 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 2,141 | 477,012 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 2,139 | 476,880 |
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,077 | 285,180 |
 | it sits in its class or module file, not `src/unmatched/` | 0 | 0 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 914 | 277,288 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 912 | 277,156 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 1,606 | 308,296 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,063 | 237,708 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 481 | 132,808 |
@@ -97,8 +97,9 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `decl.type_conflicts` | 0 | 0 | 0 | declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters |
 | `decl.header_conflicts` | 0 | 0 | 0 | symbols declared in two or more headers that disagree on the type |
 | `decl.named_placeholders` | 0 | 0 | 0 | `FUN_<va>`/`DAT_<va>` identifiers in src/ and include/ whose address config/SLUS-20836/symbols.txt or data-names.tsv names: a copy of a named symbol the build binds by address and a rename passes by |
-| `free_methods.functions` | 12,187 | 12,187 | 0 | functions of C++ units written as `<Class>_<Method>` free functions with C linkage, for a class reflection names, where the original was most likely a member function |
-| `free_methods.bytes` | 1,837,536 | 1,837,536 | 0 | bytes of those |
+| `decl.member_conflicts` | 0 | 0 | 0 | members defined out of their class (`T Class::name(...) {`) that no declaration in the class body states the same way: parameters, constness, return or data type, or another view of the class declaring the name otherwise (tools/declarations.py) |
+| `free_methods.functions` | 12,175 | 12,175 | 0 | functions of C++ units written as `<Class>_<Method>` free functions with C linkage, for a class reflection names, where the original was most likely a member function |
+| `free_methods.bytes` | 1,836,196 | 1,836,196 | 0 | bytes of those |
 | `vfunc_slots.functions` | 402 | 402 | 0 | virtual methods known only by their slot (`Gap__<Lib>__<Class>__vfunc_N`) |
 | `virtual_views.types` | 236 | 236 | 0 | stand-in classes for virtual dispatch (`…DispatchView`, `DW4VC_*`) instead of the real class declarations |
 | `virtual_views.slots` | 32,461 | 32,461 | 0 | placeholder virtual slots in stand-in classes (`virtual void d21();`, `vX(...)`) |
@@ -206,7 +207,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 33,804 of 72,930 (46.35 %) |
+| field accesses using a **recovered** type (not an offset cast) | 33,809 of 72,940 (46.35 %) |
 | functions in the retail split (`asm/`, generated) | 20,576 |
 
 ## How these numbers are produced

@@ -43,6 +43,21 @@ class DemangleMember(unittest.TestCase):
         self.assertIsNone(progress.demangle_member("igSmartPointer_igObjectList_Destruct"))
 
 
+class MethodShaped(unittest.TestCase):
+    def test_a_function_defined_as_a_member_is_no_free_method(self):
+        # igLuaState_RunString is defined as `Gap::Lua::igLuaState::runString` (its unit-objects.json name
+        # runString__Q33Gap3Lua10igLuaStateFPCc); igRenderer_SetVisualContext is still a free function
+        syms = [(0x246620, 0x54, "igLuaState_RunString"), (0x457ca0, 0xb4, "igRenderer_SetVisualContext"),
+                (0x13b900, 0x12c, "Gap__Attrs__igAttrDefaultManager__vfunc_23")]
+        paths = {name: "src/engine/unit.cpp" for _va, _n, name in syms}
+        self.assertEqual(progress.method_shaped(syms, paths, {"igLuaState", "igRenderer"}), (1, 0xb4, 1))
+
+    def test_member_class(self):
+        self.assertEqual(progress.member_class("setVisualContext__10igRendererFP15igVisualContext"), "igRenderer")
+        self.assertIsNone(progress.member_class("igRelease__FP8igObject"))
+        self.assertIsNone(progress.member_class("igRenderer_SetVisualContext"))
+
+
 class EmittedFunctions(unittest.TestCase):
     def judge(self, symbol, compiler_names):
         with tempfile.TemporaryDirectory() as tmp:

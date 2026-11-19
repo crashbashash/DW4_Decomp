@@ -42,6 +42,7 @@ import subprocess
 import sys
 
 import cc
+import compiler_names
 import forkpool
 import exceptions as exception_records
 import units
@@ -935,7 +936,8 @@ def compiler_runtime_symbols():
 def sym_address(name, sym_by_name, symbols="config/SLUS-20836/symbols.txt"):
     """Retail address for a relocation's symbol, or None; `SymbolError` when dishonest.
 
-    Functions come from the layout; recovered data names from data-names.tsv; anything
+    Functions come from the layout; C++ compiler names a unit row binds from compiler-names.tsv
+    (tools/compiler_names.py); recovered data names from data-names.tsv; anything
     else from an address-bearing name (the bootstrap convention: `D_0056df30`,
     `DAT_0056df30`, `g_0056df30`, `FUN_00100240`). A name in none of these cannot be
     resolved yet — that is what a fuller symbol map would fix.
@@ -967,6 +969,10 @@ def sym_address(name, sym_by_name, symbols="config/SLUS-20836/symbols.txt"):
         return va
     if name in compiler_runtime_symbols():
         return compiler_runtime_symbols()[name]
+    mapped = compiler_names.load(symbols)
+    if name in mapped:
+        # a C++ compiler name another unit's row binds (config/SLUS-20836/compiler-names.tsv)
+        return mapped[name][0]
     base = name.split("+")[0].strip()
     claimed = spelled_address(base, symbols)
     if claimed is None:
@@ -1968,6 +1974,9 @@ def verify_emitted_unit(obj, group, elf, symbols, profile, recompile,
     image = read_elf(elf)
     gp = gp_override if gp_override is not None else reginfo_gp(elf)
     aliases = dict(group.externals)
+    # a whole-file row's data names bind the twin's references too, as they bind the unit's own compile (a
+    # duplicate inline accessor reading a static data member the row places under its compiler name)
+    data_addresses = dict(group.data)
     lines, success, twins_ok, twin_refusals = [], good, True, []
     for number, (twin_profile, names) in enumerate(sorted(profiles.items())):
         twin_flags = unitprofiles.command_flags(twin_profile)
@@ -1996,6 +2005,8 @@ def verify_emitted_unit(obj, group, elf, symbols, profile, recompile,
                         return addresses[symbol]
                     if symbol in aliases:
                         return aliases[symbol]
+                    if symbol in data_addresses:
+                        return data_addresses[symbol]
                     if symbol in syms and isinstance(syms[symbol][0], int):
                         return address + syms[symbol][1] if syms[symbol][0] == section else None
                     try:
@@ -2060,6 +2071,20 @@ def unshared_renames(renames, addresses=None, keep=None):
         elif addresses is not None and old in addresses and not BOOTSTRAP_NAME.search(old):
             out[old] = "%s_%08x" % (old, addresses[old])
     return out
+
+
+def mapped_references(syms, symbols, bound):
+    """{name: retail address} of the undefined references in `syms` (an `object_syms` table) that the
+    compiler-name map binds (tools/compiler_names.py) and the unit's own rows, `bound`, do not: a member
+    another unit defines, reached with no `externals` row."""
+    table = compiler_names.load(symbols)
+    return {name: table[name][0] for name, (section, _value, _size) in syms.items()
+            if section == "UND" and name in table and name not in bound}
+
+
+def retail_label(address, by_va):
+    """The name the link gives a retail address: its symbols.txt function, else `DAT_<address>`."""
+    return by_va[address][0] if address in by_va else "DAT_%08x" % address
 
 
 def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
@@ -2149,9 +2174,12 @@ def isolate_emitted_body(obj, requested, records, group, symbols, source=None):
     renames = {name: by_va[address][0] for name, (address, _, _) in records.items()}
     renames.update({name: by_va[address][0] for name, address in group.externals})
     renames.update({name: "DAT_%08x" % address for name, address in data_addresses.items()})
+    mapped = mapped_references(defined, symbols, renames)
+    renames.update({name: retail_label(address, by_va) for name, address in mapped.items()})
     addresses = {name: address for name, (address, _, _) in records.items()}
     addresses.update(dict(group.externals))
     addresses.update(data_addresses)
+    addresses.update(mapped)
     renames = unshared_renames(renames, addresses, keep=selected)
     for old, new in renames.items():
         if old != new:
@@ -2243,9 +2271,12 @@ def isolate_unit_data(source, obj, records, group, symbols, keep):
     labels = {name: by_va[address][0] for name, (address, _, _) in records.items()}
     labels.update({name: by_va[address][0] for name, address in group.externals})
     labels.update({name: "DAT_%08x" % address for name, address in data_addresses.items()})
+    mapped = mapped_references(object_syms(source)[0], symbols, labels)
+    labels.update({name: retail_label(address, by_va) for name, address in mapped.items()})
     addresses = {name: address for name, (address, _, _) in records.items()}
     addresses.update(dict(group.externals))
     addresses.update(data_addresses)
+    addresses.update(mapped)
     arguments = ["mipsel-linux-gnu-objcopy", "--remove-section=.text.owned_*",
                  "--remove-section=.mwcats", "--remove-section=.mdebug"]
     renames = unshared_renames(labels, addresses)

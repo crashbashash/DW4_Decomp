@@ -4,6 +4,10 @@
     pack.py --function <name|0xVA> [--repo <worktree>] [--keep N] [--out DIR] [--decl-depth D]
             [--notes-dir DIR] [--near-misses TSV] [--ref-dir DIR]...
 
+The function is a symbols.txt name, its display name, a retail address, or a C++ name of a member defined in source:
+its compiler name (`setVisualContext__10igRendererFP15igVisualContext`) or `Class::member` (`igRenderer::setVisualContext`),
+read through the unit-objects.json rows and config/SLUS-20836/compiler-names.tsv.
+
 Writes DIR/pack.md and DIR/pack.c|.cpp (default DIR: build/packs/<function>/):
 
   pack.c|.cpp  the unit as the compiler sees it. The unity file's own text (preamble, globals) is kept;
@@ -57,8 +61,8 @@ DEFINE = re.compile(r"#[ \t]*define[ \t]+([A-Za-z_]\w*)")
 def load_tools(repo):
     sys.path.insert(0, os.path.join(repo, "tools"))
     os.chdir(repo)          # the repository tools resolve config/ and src/ relative to the root
-    global units, unitprofiles, unitobjects, srctext
-    import units, unitprofiles, unitobjects, srctext  # noqa: E401
+    global units, unitprofiles, unitobjects, srctext, notes_for
+    import units, unitprofiles, unitobjects, srctext, notes_for  # noqa: E401
 
 
 # ---------------------------------------------------------------- symbols and status
@@ -127,17 +131,21 @@ def expand(path, repo, stack=()):
 
 
 def qualified(sig):
-    m = re.search(r"([A-Za-z_]\w*)\s*::\s*(~?\s*[A-Za-z_]\w*)\s*\(", sig)
-    return "%s::%s" % (m.group(1), m.group(2).replace(" ", "")) if m else None
+    """`Class::name` of a member definition head, or None for a free function (tools/notes_for.py)."""
+    return notes_for.member_of_head(sig)
+
 
 
 def map_definitions(text, clean, defs, symbols, unit, group):
     """[(name, start, end, va|None)] for the top-level definitions of `text`."""
+    from demangle import demangle
     by_name = {}
     for va, size, name, ghidra in symbols:
         by_name.setdefault(name, va)
         if ghidra:
             by_name.setdefault(ghidra, va)
+            if "::" in ghidra:                         # the display column's `Gap::Gui::igRenderer::setVisualContext`
+                by_name.setdefault("::".join(ghidra.rsplit("::", 2)[-2:]), va)
     emitted = {}
     if group:
         emitted = dict(group.emitted)
@@ -154,12 +162,15 @@ def map_definitions(text, clean, defs, symbols, unit, group):
             if q and q in by_name:
                 va = by_name[q]
             else:
-                # a C++ member under its mangled compiler symbol: the first unused emitted name for it
+                # a C++ function under its mangled compiler symbol: the first unused emitted name whose
+                # demangled class and name are the definition's (`igRelease__FP8igObject` for a free one)
                 for sym, addr in sorted(emitted.items(), key=lambda kv: kv[1]):
                     if addr in used:
                         continue
-                    special = unitobjects.special_member(sym)
-                    if (special and special == name) or sym.startswith(name + "__"):
+                    member = demangle(sym) if sym else None
+                    if unitobjects.special_member(sym) == name or member is not None and (
+                            ("%s::%s" % (member.class_base, member.name) == q) if member.class_name
+                            else (q is None and member.name == name)):
                         va = addr
                         break
         if va is not None and va in used:
@@ -579,8 +590,13 @@ def main(argv=None):
         target = by_va.get(int(q, 16))
     else:
         target = next((r for r in symbols if r[2] == q), None) or next((r for r in symbols if r[3] == q), None)
+        if target is None:
+            # a compiler name or a member (`igRenderer::setVisualContext`): its retail address
+            vas = set(notes_for.member_names(q).values())
+            target = by_va.get(vas.pop()) if len(vas) == 1 else None
     if target is None:
-        sys.exit("pack: no symbol %s in config/%s/symbols.txt" % (q, GAME))
+        sys.exit("pack: no symbol, compiler name or single member %s in config/%s (symbols.txt, unit-objects.json, "
+                 "compiler-names.tsv)" % (q, GAME))
     tva, tsize, tname, tghidra = target
     out_dir = out_dir or os.path.join(repo, "build", "packs", tname)
 

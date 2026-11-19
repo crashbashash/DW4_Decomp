@@ -56,5 +56,51 @@ class SourcedNames(unittest.TestCase):
         self.assertTrue(any(" f6 " in line for line in kept))
 
 
+REFLECTED = (
+    "/* handle 0x1, 2 field(s), sizeof 12 (registered instance size) */\n"
+    "typedef struct igRenderer {\n    int _vtable;\n    unsigned int _refCount;\n"
+    "#ifdef __cplusplus\n    struct igVisualContext * _visualContext;       /* +8    igObjectRefMetaField */\n#else\n"
+    "    int _visualContext;                            /* +8    igObjectRefMetaField */\n#endif\n"
+    "#ifdef __cplusplus\n    IG_ABSTRACT_OBJECT_DEFINE(igRenderer)\n"
+    "    void setVisualContext(struct igVisualContext *context);\n#endif\n} igRenderer;\n\n"
+    "/* handle 0x2, 1 field(s), sizeof 12 (registered instance size) */\n"
+    "typedef struct igPlain {\n    int _vtable;\n    unsigned int _refCount;\n"
+    "    int _value;                                    /* +8    igIntMetaField */\n} igPlain;\n")
+
+
+class MemberBearingClasses(unittest.TestCase):
+    def setUp(self):
+        self.dir = tempfile.mkdtemp()
+        self.reflected = os.path.join(self.dir, "reflected.h")
+        open(self.reflected, "w").write(REFLECTED)
+
+    def test_a_struct_declaring_members_is_the_class(self):
+        reflected = csc.parse_reflected(self.reflected)
+        self.assertTrue(reflected["igRenderer"]["members"])
+        self.assertFalse(reflected["igPlain"]["members"])
+        self.assertEqual(reflected["igRenderer"]["fields"][8][0], "_visualContext")
+
+    def test_a_view_of_the_class_is_compared_with_it_wherever_it_is(self):
+        reflected = csc.parse_reflected(self.reflected)
+        views = []
+        for name in ("a.cpp", "b.cpp"):
+            path = os.path.join(self.dir, name)
+            open(path, "w").write("struct igRenderer { int vt; int rc; short ctx; };\n"
+                                  "struct igPlain { int vt; int rc; short value; };\n")
+            views += csc.collect([path], reflected)
+        out = []
+        # the member-bearing class: its views are judged against reflected.h, not against each other
+        self.assertEqual(csc.report_b(views, reflected, out), 1)
+        self.assertTrue(any("igRenderer" in line for line in out))
+        self.assertFalse(any(line.startswith("igPlain") for line in out))
+        self.assertEqual(csc.report_a(views, [], reflected), 0)
+
+    def test_a_member_function_receives_its_class(self):
+        path = os.path.join(self.dir, "GuiLibrary.cpp")
+        open(path, "w").write("struct igVisualContext { int a; };\n"
+                              "void igRenderer::setVisualContext(igVisualContext *context) { }\n")
+        self.assertEqual(csc.receivers(path), {"igRenderer"})
+
+
 if __name__ == "__main__":
     unittest.main()

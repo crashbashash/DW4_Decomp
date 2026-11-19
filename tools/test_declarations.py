@@ -117,7 +117,7 @@ class Declarations(unittest.TestCase):
     def test_counts(self):
         self.assertEqual(self.idx.counts(), {"decl.local_externs": 7, "decl.varargs": 3,
                                              "decl.type_conflicts": 2, "decl.header_conflicts": 1,
-                                             "decl.named_placeholders": 1})
+                                             "decl.named_placeholders": 1, "decl.member_conflicts": 0})
 
     def test_bad_names_per_unit(self):
         root = self.folder.name
@@ -318,6 +318,61 @@ class UnitView(unittest.TestCase):
     def test_the_counts(self):
         self.assertEqual(sorted(self.conflicts), ["Api_Wide", "Dp_Div", "Dp_Mul", "M_Cond", "M_Late", "M_Short"])
         self.assertEqual(sorted(self.varargs), ["N_Two"])
+
+
+MEMBER_TREE = {
+    "include/dw4/core/macros.h": "#define OBJ_COMMON(C) \\\n    public: static int arkRegister(); \\\n"
+                                 "    int getMeta() const;\n",
+    "include/dw4/support/reflected.h": (
+        "#ifdef __cplusplus\n#include \"dw4/core/macros.h\"\n#endif\n"
+        "typedef struct igObject {\n    int _vtable;\n} igObject;\n"
+        "#ifdef __cplusplus\ntypedef struct Widget : public igObject {\n#else\n"
+        "typedef struct Widget {\n    int _vtable;\n#endif\n    int _count;\n"
+        "#ifdef __cplusplus\n    OBJ_COMMON(Widget)\n    static int *k_count;\n    void set(int count);\n"
+        "    unsigned int size() const;\n#endif\n} Widget;\n"),
+    # agreeing out-of-class definitions: typedefs, parameter names and a namespace are spelling only
+    "src/game/widget.cpp": (
+        "#include \"dw4/support/reflected.h\"\ntypedef unsigned int u32;\n"
+        "int *Widget::k_count;\nint Widget::arkRegister() { return 0; }\nint Widget::getMeta() const { return 0; }\n"
+        "void Widget::set(int value) { _count = value; }\nu32 Widget::size() const { return 4; }\n"
+        "namespace Gap { namespace Gui {\nclass Panel {\npublic:\n    void show();\n};\n"
+        "void Panel::show() { }\n} }\n"),
+    # a definition its class states otherwise, and a member no body of its class declares
+    "src/game/broken.cpp": (
+        "#include \"dw4/support/reflected.h\"\nstruct Helper {\n    void run(int);\n};\n"
+        "void Helper::run(long n) { }\nint Widget::missing() { return 1; }\nlong Widget::k_count;\n"),
+    # a class no body of the tree declares is not judged
+    "src/game/loose.cpp": "void Unknown::go() { }\n",
+}
+
+
+class MemberDeclarations(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.folder = tempfile.TemporaryDirectory()
+        for rel, text in MEMBER_TREE.items():
+            path = os.path.join(cls.folder.name, rel)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w") as fh:
+                fh.write(text)
+        cls.idx = declarations.Index(cls.folder.name, approvals={})
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.folder.cleanup()
+
+    def test_conflicts(self):
+        found = sorted((d.path, d.cls, d.name) for d, _why in self.idx.member_conflicts())
+        self.assertEqual(found, [("src/game/broken.cpp", "Helper", "run"),
+                                 ("src/game/broken.cpp", "Widget", "k_count"),
+                                 ("src/game/broken.cpp", "Widget", "missing")])
+        self.assertEqual(self.idx.counts()["decl.member_conflicts"], 3)
+
+    def test_the_reason_names_the_declaration(self):
+        why = {d.name: reason for d, reason in self.idx.member_conflicts()}
+        self.assertIn("void Helper::run(int)", why["run"])
+        self.assertIn("no declaration of missing", why["missing"])
+        self.assertIn("Widget::k_count", why["k_count"])
 
 
 if __name__ == "__main__":

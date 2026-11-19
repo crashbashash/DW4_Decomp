@@ -11,8 +11,10 @@ import struct
 import subprocess
 import tempfile
 import unittest
+from unittest import mock
 
 import cc
+import compiler_names
 import eegcc_compile
 import exceptions
 import unitobjects
@@ -737,9 +739,17 @@ int beTransformSync_GetVTable(void) {
         self.assertIn("MATCH exception table (beTransformSync_GetVTable) 0x54302c 15B", report)
 
     def test_without_the_cleanup_external_the_table_differs(self):
-        ok, report = self.verify(drop=(self.CLEANUP,))
+        with mock.patch.object(compiler_names, "load", return_value={}):
+            ok, report = self.verify(drop=(self.CLEANUP,))
         self.assertFalse(ok)
         self.assertIn("unresolved relocation '__dt__10igNodeViewFv'", report)
+
+    def test_the_compiler_name_map_binds_the_cleanup_without_a_row(self):
+        mapped = {self.CLEANUP: (self.EXTERNALS[self.CLEANUP], "igNodeView_Destroy")}
+        with mock.patch.object(compiler_names, "load", return_value=mapped):
+            ok, report = self.verify(drop=(self.CLEANUP,))
+        self.assertTrue(ok, report)
+        self.assertIn("exc=ok cat=match", report.splitlines()[0])
 
 
 class RuntimeRows(unittest.TestCase):

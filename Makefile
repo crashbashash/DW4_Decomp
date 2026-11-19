@@ -80,7 +80,7 @@ help:
 	@echo "make struct-report — report (not a gate) local struct views that disagree with each other or with reflected.h"
 	@echo "make link     — relink the whole section (C + retail remainder) and compare"
 	@echo "make iso [DISC=path] — publishing step, not part of the build: the relinked executable in a copy of your disc, in build/$(GAMEID)/"
-	@echo "make hygiene — fail on host-identifying details in the tree (docs/host-details-policy.md), function names in method documents, or a stale data/levers.jsonl"
+	@echo "make hygiene — fail on host-identifying details in the tree (docs/host-details-policy.md), function names in method documents, or a stale data/levers.jsonl or config/SLUS-20836/compiler-names.tsv"
 	@echo "make inventory-check — fail if code the symbol map does not own grew past the recorded debt, or data/inventory-scan.tsv is stale"
 	@echo "make lua-roundtrip — recompile every lua/ chunk with stock Lua 4.0.1 luac and fail if fewer match retail than config/lua-roundtrip-baseline.json"
 	@echo "make clean"
@@ -94,6 +94,7 @@ hygiene:
 	python3 scripts/check_host_details.py --tree
 	python3 scripts/check_doc_function_names.py
 	python3 tools/levers.py --check
+	python3 tools/compiler_names.py --check
 	@$(STAMP) pass hygiene
 
 # The function inventory (docs/engine/function-inventory.md): scripts/inventory_scan.py walks every

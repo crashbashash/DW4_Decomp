@@ -37,9 +37,9 @@ as zero.
 | `asm_body.functions` / `.bytes` | content of `src/` (an `asm` definition under `#pragma optimization_level 0`) | functions kept as an `asm` body: retail instructions kept as source, not recovered C, and in no matched figure |
 | `inline_asm.other` | `tools/inline_asm.py`, over `src/` and `include/dw4/` | `asm` statements inside C without an approval. `sync` and `ei` are not counted: C cannot spell them and the owner has approved them all. A statement passes the byte check whether or not C could produce the same bytes, so `tools/inline_asm.py --test <source>` has to show its function fails without it. A statement stops counting once every function it reaches has a current row in `config/source-approvals.tsv`, an oracle file only the owner approves; a statement reaching one function without a row still counts |
 | `unmatched.functions` / `.bytes` | `config/SLUS-20836/symbols.txt` minus the definitions in `src/` | functions still linked from `asm/` |
-| `struct.a`, `struct.b`, `struct.c` | `scripts/check_struct_conflicts.py` (imported, not re-implemented) | report groups: (a) the same view name with clashing layouts across units, (b) a receiver view disagreeing with the reflected class, (c) an offset-named member (`fNN`) whose number is not its offset; a member whose name a source gives (`config/sourced-member-names.tsv`, e.g. the CRI SDK's `d0`/`d1`) is not offset-named |
+| `struct.a`, `struct.b`, `struct.c` | `scripts/check_struct_conflicts.py` (imported, not re-implemented) | report groups: (a) the same view name with clashing layouts across units, (b) a receiver view disagreeing with the reflected class (a member function's receiver is its class; a view named for a reflected class that declares members in `reflected.h` is that class, compared with it in (b) wherever it is and never in (a)), (c) an offset-named member (`fNN`) whose number is not its offset; a member whose name a source gives (`config/sourced-member-names.tsv`, e.g. the CRI SDK's `d0`/`d1`) is not offset-named |
 | `m2c_idiom.units` | the matched units' source, comments and strings blanked, asm bodies and stock `src/third_party/` excluded | files still carrying m2c spellings: `temp_*`, `var_*`, or an `argN` identifier |
-| `raw_casts.reflected` | `tools/typed_coverage.py` (`typeable`) | raw `*(T *)((char *)this + N)` casts on the function's own receiver at an offset where reflection names the field (the mechanically convertible casts) |
+| `raw_casts.reflected` | `tools/typed_coverage.py` (`typeable`) | raw `*(T *)((char *)this + N)` casts on the function's own receiver at an offset where reflection names the field (the mechanically convertible casts); the receiver's class is the `<Class>_<Method>` prefix, or the class of a member function written out of its class (`T Class::name(...) {`), whose bare reads of a reflected field of its class count as recovered accesses |
 | `fun_dat_refs` | the matched units' source, comments and strings blanked, asm bodies excluded | occurrences of `FUN_<va>` / `DAT_<va>` identifiers (prototypes and calls), minus every occurrence of the name of each `FUN_` function the file defines (its definition and, in a C++ unit, its `extern "C"` prototype) |
 | `foreign_profile.functions`, `foreign_profile.bytes` | `data/check-categories.tsv` | functions whose code bytes match only under a provisional per-function override (compiler, flags or exception mode) that differs from their translation unit's profile in `config/SLUS-20836/units.tsv`; never counted as `match` (see [build profiles](build-profiles.md)) |
 | `orphan.bytes` | `data/check-categories.tsv` | exception-metadata orphan bytes: the `extra` + `differ` code-only bytes |
@@ -50,7 +50,8 @@ as zero.
 | `decl.type_conflicts` | `src/`, `include/` | declarations whose type differs from the symbol's C definition |
 | `decl.header_conflicts` | `src/`, `include/` | symbols declared in two or more headers that disagree on the type |
 | `decl.named_placeholders` | `src/`, `include/`, `config/SLUS-20836/symbols.txt`, `data-names.tsv` | `FUN_<va>`/`DAT_<va>` identifiers for an address that already has a recovered name |
-| `free_methods.functions` / `.bytes` | `config/SLUS-20836/symbols.txt`, `src/`, `include/dw4/support/reflected.h` | functions of C++ units written as `<Class>_<Method>` free functions with C linkage, for a class reflection names, where the original most likely had member functions |
+| `decl.member_conflicts` | `src/`, `include/` | members defined out of their class (`T Class::name(...) {`, `T Class::datum;`) that no declaration in a body of the class states the same way ([declarations](#declarations)) |
+| `free_methods.functions` / `.bytes` | `config/SLUS-20836/symbols.txt`, `src/`, `include/dw4/support/reflected.h`, `config/SLUS-20836/unit-objects.json` | functions of C++ units written as `<Class>_<Method>` free functions with C linkage, for a class reflection names, where the original most likely had member functions; a function whose whole-file row gives it a compiler name that demangles to a member (`tools/demangle.py`) is defined as that member and does not count |
 | `vfunc_slots.functions` | `config/SLUS-20836/symbols.txt`, `src/` | virtual methods known only by their slot (`Gap__<Lib>__<Class>__vfunc_N`) |
 | `virtual_views.types` / `.slots` | `src/`, `include/dw4/` | stand-in classes for virtual dispatch (`…DispatchView`, `DW4VC_*`) and their placeholder slots (`virtual void d21();`, `vX(...)`), where the original declared the real classes |
 | `boilerplate.functions` | `src/`, `include/dw4/` | reflection plumbing written out as function definitions (`<Class>_GetMetaObject`, `_Register`, `_EnsureRegistered`, `_InitFields`, `_GetVTable`, `_GetMeta`, …), which the kit generates with its declare/define macros |
@@ -75,7 +76,7 @@ library header that copies other libraries' symbols (`src/engine/core/CoreLibrar
 `*Library.h`) is not their home. `tools/declarations.py` reads every declaration in `src/` and
 `include/` (comments, strings, preprocessor lines and `#if 0` arms blanked; class and function bodies
 skipped, `extern` inside a function body read) against the definitions in `src/`;
-`python3 tools/declarations.py --list local|varargs|conflicts|headers [PATH]` lists what it counts.
+`python3 tools/declarations.py --list local|varargs|conflicts|headers|members [PATH]` lists what it counts.
 Stock source under `src/third_party/` is its authors' text: its declarations are not counted, its
 definitions are the reference for the code that calls into it.
 
@@ -122,6 +123,16 @@ definitions are the reference for the code that calls into it.
   links and matches under either name, and `tools/apply_names.py` renames only the spelling of the old name,
   so such a copy outlives every rename of its symbol. Spell it by its name and include the name's home.
   `--list placeholders` prints each with the name it stands for.
+- **`decl.member_conflicts`**: a member function or static data member defined out of its class (`int
+  Widget::getCount() {`, `igMetaField *igRenderer::k_visualContext;`) that no declaration in the class states
+  the same way: no member of that name, parameters and constness, another return or data type, or a second
+  body of the class (another unit's view of it) declaring the name only otherwise. Each file is read as C++
+  reads it (`#ifndef __cplusplus` arms blanked), class bodies with their object macros expanded
+  (`IG_ABSTRACT_OBJECT_DEFINE(igRenderer)` declares `_Meta`, `arkRegister`, ...), nested classes and namespaces
+  qualifying their names, and types normalised as for the C symbols, namespace qualifiers aside. A definition
+  whose class has no body in the tree is not judged. The compiler refuses a definition its own unit declares
+  otherwise, so what this finds is a class declared differently in two places; a member's home is its class
+  body (`reflected.h`, written from `config/class-members.tsv`).
 
 The README's Readable column applies the same rules per function (the `declarations` check): a function
 fails when a symbol its body uses (a call or a read, not a member after `.`, `->` or `::`) is declared,

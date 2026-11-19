@@ -1,0 +1,3 @@
+# config/typed-fields.tsv — object-reference fields scripts/gen_type_headers.py declares with their referenced
+# class under C++ (C keeps the reference word). Columns: <class>	<field>	<C++ type>. The referenced class is the
+# one the class's field adder gives the field (its arkRegisterInitialize sets the field's metaobject).

@@ -633,6 +633,262 @@ def rewrite_documents(docs, renamed):
     return count
 
 
+# ---------------------------------------------------------------------------------------------
+# Renaming a member: `--member Class::old new`.
+
+_MEMBER_ARG = re.compile(r"^(?:[A-Za-z_]\w*::)*([A-Za-z_]\w*)::(~?[A-Za-z_]\w*)$")
+_RECEIVER_CAST = re.compile(r"\(\s*\(\s*(?:struct\s+|class\s+)?([A-Za-z_][\w:]*)\s*\*\s*\)[^()]*(?:\([^()]*\)[^()]*)*\)\s*$")
+
+
+class MemberRename:
+    """One member of a class renamed: `cls` (its own name, namespaces aside), `old` and `new`."""
+
+    def __init__(self, cls, old, new):
+        self.cls, self.old, self.new = cls, old, new
+        self.ambiguous = False           # another class declares a member of the old name
+
+
+def _class_bodies(clean, cls):
+    """[(start, end)] of the bodies of class or struct `cls` in comment-blanked text."""
+    out = []
+    for m in re.finditer(r"\b(?:struct|class)\s+%s\b[^;{}()]*\{" % re.escape(cls), clean):
+        depth, i = 0, m.end() - 1
+        while i < len(clean):
+            depth += {"{": 1, "}": -1}.get(clean[i], 0)
+            if depth == 0:
+                break
+            i += 1
+        out.append((m.end(), i))
+    return out
+
+
+def _member_scope(clean, pos, defs):
+    """The class of the out-of-class member definition holding `pos`, or None."""
+    for _name, start, end in defs:
+        if start <= pos < end:
+            head = clean[start:clean.find("{", start)]
+            m = re.search(r"([A-Za-z_]\w*)\s*::\s*~?[A-Za-z_]\w*\s*\(", head)
+            return m.group(1) if m else None
+    return None
+
+
+def rename_member_sources(paths, renames, derives, rel=os.path.relpath):
+    """-> ({path: new text}, errors): each member's declaration in its class bodies, its definition heads and
+    qualified uses (`Class::old`), its calls through an object of the class (`obj->old(`, `obj.old(`,
+    `((Class *)e)->old(`, `this->old(`) and its bare calls inside the class's members; comments naming
+    `Class::old`. A call whose receiver's class cannot be read is renamed when no other class has a member of
+    that name, and refused when one does."""
+    import units
+    out, errors = {}, []
+    for path in paths:
+        text = open(path, errors="surrogateescape").read()
+        if not any(r.old in text for r in renames):
+            continue
+        clean = units._clean(text)
+        defs = units.definitions(text)
+        edits = {}
+        for r in renames:
+            word = re.compile(r"(?<![\w~])%s\b" % re.escape(r.old))
+            bodies = _class_bodies(clean, r.cls)
+            for m in word.finditer(clean):
+                pos = m.start()
+                before = clean[max(0, pos - 64):pos]
+                after = clean[m.end():m.end() + 2].lstrip()[:1]
+                line = text.count("\n", 0, pos) + 1
+                qualified = re.search(r"\b([A-Za-z_]\w*)\s*::\s*$", before)
+                if qualified:
+                    if qualified.group(1) == r.cls:
+                        edits[pos] = (m.end(), r.new)
+                    continue
+                inside = next(((s, e) for s, e in bodies if s <= pos < e), None)
+                arrow = re.search(r"(->|\.)\s*$", before)
+                if inside and not arrow:
+                    edits[pos] = (m.end(), r.new)          # its declaration, or a call in an inline body
+                    continue
+                if arrow:
+                    receiver = before[:arrow.start()].rstrip()
+                    cast = _RECEIVER_CAST.search(receiver)
+                    ident = re.search(r"([A-Za-z_]\w*)$", receiver)
+                    scope = _member_scope(clean, pos, defs)
+                    if cast:
+                        cls = cast.group(1).rsplit("::", 1)[-1]
+                    elif ident and ident.group(1) == "this":
+                        cls = scope
+                    elif ident:
+                        body = next((clean[s:e] for _n, s, e in defs if s <= pos < e), clean)
+                        decl = re.search(r"\b(?:struct\s+|class\s+)?([A-Za-z_]\w*)\s*[*&]?\s*\b%s\b\s*[,;=)\[]"
+                                         % re.escape(ident.group(1)), body)
+                        cls = decl.group(1) if decl and decl.group(1) not in ("return", "else") else None
+                    else:
+                        cls = None
+                    if cls is not None and derives(cls, r.cls):
+                        edits[pos] = (m.end(), r.new)
+                    elif cls is None and not r.ambiguous:
+                        edits[pos] = (m.end(), r.new)
+                    elif cls is None:
+                        errors.append("%s:%d: `%s` calls %s through an object whose class is not read here, and "
+                                      "another class has a member %s: rename it by hand"
+                                      % (rel(path), line, clean[max(0, pos - 30):m.end()].strip(), r.old, r.old))
+                    continue
+                scope = _member_scope(clean, pos, defs)
+                if after == "(" and scope is not None and derives(scope, r.cls):
+                    edits[pos] = (m.end(), r.new)          # a bare call inside a member of the class
+            for c in re.finditer(r"/\*.*?\*/|//[^\n]*", text, re.S):
+                if clean[c.start()] != " ":
+                    continue
+                for w in re.finditer(r"\b%s\s*::\s*(%s)\b" % (re.escape(r.cls), re.escape(r.old)), c.group(0)):
+                    edits[c.start() + w.start(1)] = (c.start() + w.end(1), r.new)
+        if edits:
+            parts, at = [], 0
+            for start in sorted(edits):
+                end, new = edits[start]
+                parts.append(text[at:start])
+                parts.append(new)
+                at = end
+            parts.append(text[at:])
+            out[path] = "".join(parts)
+    return out, errors
+
+
+def rename_member_table(text, renames):
+    """config/class-members.tsv with each renamed member's declaration renamed -> (text, count)."""
+    lines, count = [], 0
+    for line in text.splitlines(True):
+        cols = line.split("\t", 1)
+        if not line.startswith("#") and len(cols) == 2:
+            for r in renames:
+                if cols[0].strip() == r.cls:
+                    new, n = re.subn(r"(?<![\w~.>:])%s(?=\s*[(;\[=])" % re.escape(r.old), r.new, cols[1])
+                    cols[1], count = new, count + n
+            line = "\t".join(cols)
+        lines.append(line)
+    return "".join(lines), count
+
+
+def rename_member_rows(data, renames):
+    """Re-key every unit-objects.json name that is a renamed member's compiler name -> [(old key, new key)]."""
+    from demangle import demangle, mangle
+    out = []
+    for row in data.values():
+        for field in ("emitted", "duplicates", "externals", "data"):
+            entries = row.get(field)
+            if not isinstance(entries, dict):
+                continue
+            renamed = {}
+            for name, addr in entries.items():
+                member = demangle(name) if "__" in name else None
+                hit = member is not None and next((r for r in renames if member.class_base == r.cls
+                                                   and member.name == r.old), None)
+                if hit:
+                    qualified = member.qualified[:-len(hit.old)] + hit.new
+                    new = mangle(qualified, None if member.data else list(member.params), member.const)
+                    out.append((name, new))
+                    name = new
+                renamed[name] = addr
+            if renamed != entries:
+                row[field] = renamed
+        member = demangle(row["symbol"]) if "__" in row.get("symbol", "") else None
+        hit = member is not None and next((r for r in renames if member.class_base == r.cls
+                                           and member.name == r.old), None)
+        if hit:
+            new = mangle(member.qualified[:-len(hit.old)] + hit.new, list(member.params), member.const)
+            out.append((row["symbol"], new))
+            row["symbol"] = new
+    return out
+
+
+def main_members(a, tree):
+    """`--member Class::old new` (repeatable): rename members of classes, dry run unless --apply."""
+    import declarations
+    import memberize
+    renames, errors = [], []
+    for qualified, new in a.member:
+        m = _MEMBER_ARG.match(qualified)
+        if not m or not re.fullmatch(r"[A-Za-z_]\w*", new):
+            errors.append("--member %s %s: give `Class::member newName`" % (qualified, new))
+            continue
+        renames.append(MemberRename(m.group(1), m.group(2), new))
+    if errors:
+        for e in errors:
+            print("error: " + e, file=sys.stderr)
+        return 2
+    index = declarations.Index(tree, approvals={})
+    classes = memberize.Classes(tree, index)
+    table_path = os.path.join(tree, "config", "class-members.tsv")
+    table = open(table_path).read() if os.path.exists(table_path) else ""
+    others = class_member_names(table, index)
+    for r in renames:
+        r.ambiguous = any(cls != r.cls and r.old in names for cls, names in others.items())
+    # reflected.h is generated from class-members.tsv: its class bodies follow the table
+    generated = os.path.join(tree, "include", "dw4", "support", "reflected.h")
+    paths = [p for p in source_paths(a.src, os.path.join(tree, "include")) if os.path.abspath(p) != generated]
+    texts, errs = rename_member_sources(paths, renames, classes.derives, rel=lambda p: os.path.relpath(p, tree))
+    errors += errs
+    new_table, declared = rename_member_table(table, renames)
+    for r in renames:
+        in_table = rename_member_table(table, [r])[1]
+        in_body = any(re.search(r"(?<![\w~.>:])%s\s*[(;\[=]" % re.escape(r.old), clean[s:e])
+                      for p in paths if r.cls in index.texts.get(os.path.relpath(p, tree), "")
+                      for clean in [index._cxx.get(os.path.relpath(p, tree), "")]
+                      for s, e in _class_bodies(clean, r.cls))
+        if not in_table and not in_body:
+            errors.append("%s::%s is declared by no class-members.tsv row and no class body (an object macro's "
+                          "member, such as _Meta, is renamed in the macro): nothing renamed" % (r.cls, r.old))
+    unit_objects = a.unit_objects or os.path.join(os.path.dirname(os.path.abspath(a.symbols)), "unit-objects.json")
+    data = json.load(open(unit_objects)) if os.path.exists(unit_objects) else {}
+    keys = rename_member_rows(data, renames)
+    for r in renames:
+        print("  %s::%s -> %s::%s%s" % (r.cls, r.old, r.cls, r.new, " (another class has a member %s)" % r.old
+                                        if r.ambiguous else ""))
+    print("%d source files to rewrite, %d class-members.tsv declarations, %d unit-objects.json keys"
+          % (len(texts), declared, len(keys)))
+    for path in sorted(texts):
+        print("  " + os.path.relpath(path, tree))
+    for old, new in keys:
+        print("  unit-objects.json %s -> %s" % (old, new))
+    for e in errors:
+        print("error: " + e, file=sys.stderr)
+    if errors:
+        print("apply_names: refused (%d errors); nothing was written" % len(errors), file=sys.stderr)
+        return 2
+    if not a.apply:
+        print("\n(dry run — re-run with --apply)")
+        return 0
+    for path, text in texts.items():
+        open(path, "w", errors="surrogateescape").write(text)
+    if declared:
+        open(table_path, "w").write(new_table)
+    if keys:
+        with open(unit_objects, "w") as fh:
+            fh.write(json.dumps(data, indent=2) + "\n")
+        names_tool = os.path.join(tree, "tools", "compiler_names.py")
+        if os.path.exists(names_tool):
+            r = subprocess.run([sys.executable, names_tool, "--write"], cwd=tree)
+            if r.returncode:
+                return r.returncode
+    print("next:%s `make check` (must be green) and `make link` (must be byte-identical)"
+          % (" `python3 scripts/gen_type_headers.py` (class-members.tsv changed);" if declared else ""))
+    return 0
+
+
+def class_member_names(table, index):
+    """{class: {member names}} the class-members.tsv rows and the class bodies of the tree declare."""
+    out = {}
+    for line in table.splitlines():
+        cols = line.split("\t", 1)
+        if not line.startswith("#") and len(cols) == 2:
+            out.setdefault(cols[0].strip(), set()).update(re.findall(r"(~?[A-Za-z_]\w*)\s*(?=[(;\[=])", cols[1]))
+    import declarations
+    macros = declarations.function_macros(index.texts.values())
+    for rel, code in index._cxx.items():
+        if "class " not in code and "struct " not in code:
+            continue
+        declared, _defined, _bodies = declarations.member_scan(code, rel, index.types, macros)
+        for m in declared:
+            out.setdefault(m.cls.rsplit("::", 1)[-1], set()).add(m.name)
+    return out
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -654,7 +910,13 @@ def main(argv=None):
                     help="PATH still uses the names in symbols.txt (repeatable)")
     ap.add_argument("--assume-new", action="append", default=[], metavar="PATH",
                     help="PATH already uses the batch's new names (repeatable)")
+    ap.add_argument("--member", nargs=2, action="append", metavar=("CLASS::OLD", "NEW"),
+                    help="rename a member of a class instead of applying the overlays (repeatable): its "
+                         "declaration in config/class-members.tsv and its class bodies, its definitions, calls and "
+                         "qualified uses, and its compiler name in unit-objects.json")
     a = ap.parse_args(argv)
+    if a.member:
+        return main_members(a, os.path.dirname(os.path.abspath(a.src)))
 
     names = split.load_names(a.names)
     if not names:

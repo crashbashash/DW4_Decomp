@@ -523,6 +523,7 @@ DEBT_COUNTERS = [
     ("decl.type_conflicts", "declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters"),
     ("decl.header_conflicts", "symbols declared in two or more headers that disagree on the type"),
     ("decl.named_placeholders", "`FUN_<va>`/`DAT_<va>` identifiers in src/ and include/ whose address config/SLUS-20836/symbols.txt or data-names.tsv names: a copy of a named symbol the build binds by address and a rename passes by"),
+    ("decl.member_conflicts", "members defined out of their class (`T Class::name(...) {`) that no declaration in the class body states the same way: parameters, constness, return or data type, or another view of the class declaring the name otherwise (tools/declarations.py)"),
     ("free_methods.functions", "functions of C++ units written as `<Class>_<Method>` free functions with C linkage, for a class reflection names, where the original was most likely a member function"),
     ("free_methods.bytes", "bytes of those"),
     ("vfunc_slots.functions", "virtual methods known only by their slot (`Gap__<Lib>__<Class>__vfunc_N`)"),
@@ -596,7 +597,9 @@ _REFLECTED_CLASS = re.compile(r"^typedef struct (\w+)\s*[:{]", re.M)
 
 def method_shaped(syms, paths, classes):
     """(free functions, their bytes, slot-named virtuals) among the definitions in C++ units: a free function is
-    named `<Class>_<Method>` for one of `classes` (any `_`-separated prefix), a virtual is `Gap__*__vfunc_N`."""
+    named `<Class>_<Method>` for one of `classes` (any `_`-separated prefix) and defined under that name, not as a
+    member function (the compiler name a whole-file row gives it, `setVisualContext__10igRendererFP15igVisualContext`,
+    demangles to a member); a virtual is `Gap__*__vfunc_N`."""
     free = size = slots = 0
     for _va, n, name in syms:
         path = paths.get(name)
@@ -605,11 +608,20 @@ def method_shaped(syms, paths, classes):
         if name.startswith("Gap__") and "__vfunc_" in name:
             slots += 1
             continue
+        if member_class(units.unitobjects.source_name(name)) is not None:
+            continue
         cuts = [i for i, ch in enumerate(name) if ch == "_" and 0 < i < len(name) - 1]
         if "__" not in name and any(name[:i] in classes for i in cuts):
             free += 1
             size += n
     return free, size, slots
+
+
+def member_class(compiled):
+    """The class of a compiler name that names a member function (`setVisualContext__10igRendererFP15igVisualContext`
+    -> 'igRenderer'), else None (a plain symbol, or a mangled free function such as `igRelease__FP8igObject`)."""
+    member = demangle_member(compiled)
+    return member[0] if member else None
 
 
 def reflected_classes():
@@ -645,7 +657,7 @@ def debt_struct_counts():
                  and os.path.abspath(f) != os.path.abspath(os.path.join(inc, "support", "reflected.h"))]
         views = csc.collect(files, reflected)
         sink = []
-        return dict(a=csc.report_a(views, sink), b=csc.report_b(views, reflected, sink), c=csc.report_c(views, sink))
+        return dict(a=csc.report_a(views, sink, reflected), b=csc.report_b(views, reflected, sink), c=csc.report_c(views, sink))
     except Exception as exc:               # the report is optional input; say so, do not fake zeros
         sys.stderr.write("progress: warning: struct report unavailable (%s)\n" % exc)
         return None
@@ -1038,28 +1050,15 @@ _INCLUDE_RE = re.compile(r'^[ \t]*#[ \t]*include[ \t]+"([^"]+)"', re.M)
 
 
 def demangle_member(mangled):
-    """(class, member) of an MWCC compiler name, the class's template arguments dropped: `__dt__9ObjRef<5>Fv`
-    -> ('ObjRef', '~ObjRef'), `__ct__14NewDataListRefFRC14AllocatorValue` -> ('NewDataListRef',
-    'NewDataListRef'), `release__9StringRefFPPc` -> ('StringRef', 'release'), `igRelease__FP8igObject` ->
-    (None, 'igRelease'); None for a plain symbol."""
-    m = re.match(r"(__dt|__ct|[A-Za-z_]\w*?)__(F|Q\d|\d+)", mangled)
-    if not m:
+    """(class, member) of an MWCC compiler name (tools/demangle.py), the class's template arguments dropped:
+    `__dt__9ObjRef<5>Fv` -> ('ObjRef', '~ObjRef'), `__ct__14NewDataListRefFRC14AllocatorValue` ->
+    ('NewDataListRef', 'NewDataListRef'), `release__9StringRefFPPc` -> ('StringRef', 'release'),
+    `igRelease__FP8igObject` -> (None, 'igRelease'); None for a plain symbol."""
+    from demangle import demangle
+    member = demangle(mangled)
+    if member is None:
         return None
-    member, at = m.group(1), m.start(2)
-    if mangled[at] == "F":
-        return None if member in ("__dt", "__ct") else (None, member)
-    parts = []
-    count = int(mangled[at + 1]) if mangled[at] == "Q" else 1
-    at += 2 if mangled[at] == "Q" else 0
-    for _ in range(count):
-        n = re.match(r"\d+", mangled[at:])
-        if not n:
-            return None
-        start = at + len(n.group(0))
-        parts.append(mangled[start:start + int(n.group(0))])
-        at = start + int(n.group(0))
-    cls = parts[-1].split("<")[0]
-    return cls, {"__dt": "~" + cls, "__ct": cls}.get(member, member)
+    return (member.class_base if member.class_name else None), member.name
 
 
 def _emitted_names(va):

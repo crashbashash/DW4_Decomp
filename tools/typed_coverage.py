@@ -13,9 +13,14 @@ out of here:
     a type the metadata does not know. This is the progress bar and the gated count.
   * **typeable** -- of the offset casts that remain, the ones on the function's own receiver
     (`arg0`/`this`) at an offset where the receiver class -- taken from the function's
-    `<Class>_<Method>` name -- has a reflected field. It is a *mechanically convertible
-    subset* of the raw casts, not a ceiling: casts on other variables, on receivers the name
-    does not reveal, or at unreflected offsets are convertible by hand and are not counted.
+    `<Class>_<Method>` name, or the class of a member function -- has a reflected field. It is a
+    *mechanically convertible subset* of the raw casts, not a ceiling: casts on other variables, on
+    receivers the name does not reveal, or at unreflected offsets are convertible by hand and are not
+    counted.
+
+A member function written out of its class (`void igRenderer::setVisualContext(...) {`,
+`igMetaObject *Gap::Gui::igRenderer::getMeta() const {`) is a function of that class: its `this->x` and
+its bare reads of a reflected field of the class (`_visualContext`) are recovered accesses.
 
 Comments and string literals are blanked before counting, so `p->field` in a prose
 comment or a format string is not an access. The per-folder table shows where the raw
@@ -81,9 +86,15 @@ META_TO_C = {
     "igObjectRefArrayMetaField": "int",
 }
 
+# A definition head: a free function (`int igFoo_Bar(...) {`) or a member function written out of its class,
+# its class qualified by namespaces or not (`void igRenderer::setVisualContext(...) {`,
+# `igMetaObject *Gap::Gui::igRenderer::getMeta() const {`); the scope is the receiver's class.
 FUNC_RE = re.compile(
-    r"^(?P<ret>[A-Za-z_][\w \t\*]*?[\s\*])(?P<name>\w+)\s*\((?P<args>[^;{)]*)\)\s*\{",
+    r"^(?P<ret>[A-Za-z_][\w \t\*]*?[\s\*])(?P<scope>(?:[A-Za-z_]\w*\s*::\s*)+)?(?P<name>\w+)\s*"
+    r"\((?P<args>[^;{)]*)\)\s*(?:const\s*)?\{",
     re.M)
+# an identifier that is not a member of another object (`->x`, `.x`, `C::x`) nor a call
+IDENT_RE = re.compile(r"(?<![\w.>:])([A-Za-z_]\w*)\b(?!\s*\()")
 CAST_RE = re.compile(r"\*\(\s*([A-Za-z_][\w \t\*]*?)\s*\*\s*\)\s*\(")
 MEMBER_RE = re.compile(r"\b(\w+)\s*->\s*(\w+)")
 # `((T *)base)->field` -- an explicit cast around a temporary, which the passes in
@@ -97,6 +108,22 @@ CAST_MEMBER_RE = re.compile(r"\(\s*\(\s*([A-Za-z_]\w*)\s*\*\s*\)\s*(\w+)\s*\)\s*
 # conversion of automatch's synthetic layout into a recovered class.
 DECL_RE = re.compile(r"\b(?:struct\s+)?([A-Za-z_]\w*)\s*\*+\s*(\w+)\s*(?:=|;|,|\))")
 OFFSET_RE = re.compile(r"[+\-]\s*(\d+)\s*$")
+# a declaration at the start of a statement, `int start = ...;` / `igVisualContext *old;`
+LOCAL_DECL_RE = re.compile(r"(?:^|[;{}(])\s*(?:const\s+|unsigned\s+|signed\s+|struct\s+)*[A-Za-z_]\w*"
+                           r"(?:\s*<[^<>;{}()]*>)?[\s\*&]+([A-Za-z_]\w*)\s*(?=[;=,\[)])", re.M)
+_NOT_A_TYPE = frozenset(("return", "case", "goto", "else", "sizeof", "delete", "new", "throw", "do"))
+
+
+def local_names(signature, body):
+    """The parameter and local names of one function (its parameter list and its body), which a bare
+    identifier of the same name in the body means rather than a field of the receiver."""
+    names = {p.strip().split("[")[0].split()[-1].lstrip("*&") for p in signature.split(",")
+             if p.strip() and p.strip() != "void" and re.search(r"[\s\*&]", p.strip())}
+    for m in LOCAL_DECL_RE.finditer(body):
+        head = m.group(0).lstrip(";{}( \t\n").split()
+        if head and head[0] not in _NOT_A_TYPE:
+            names.add(m.group(1))
+    return names
 
 
 def load_classes(path):
@@ -149,9 +176,12 @@ def class_of(name):
     """The class a function name implies for its first argument, or None.
 
     The repo's naming is `<Class>_<Method>` (`igMetaEnum_GetNameCount`), so the receiver
-    type is recoverable from the name alone. Names with no underscore (`sceMtapPortOpen`)
-    imply nothing and are left untyped.
+    type is recoverable from the name alone; a member function (`igRenderer::setVisualContext`,
+    `Gap::Gui::igRenderer::getMeta`) names its class before the last `::`. Names with no
+    underscore (`sceMtapPortOpen`) imply nothing and are left untyped.
     """
+    if "::" in name:
+        return name.rsplit("::", 2)[-2]
     if name.startswith("Gap__"):
         # `Gap__Bec__<Class>__vfunc_N`: the class is the segment before `__vfunc_`
         parts = name.split("__")
@@ -189,7 +219,8 @@ def split_functions(text):
     starts = [(m, m.start()) for m in FUNC_RE.finditer(text)]
     for i, (m, pos) in enumerate(starts):
         end = starts[i + 1][1] if i + 1 < len(starts) else len(text)
-        out.append((m.group("name"), m.group("args"), pos, end))
+        scope = re.sub(r"\s+", "", m.group("scope") or "")
+        out.append((scope + m.group("name"), m.group("args"), pos, end))
     return out
 
 
@@ -337,7 +368,7 @@ def measure(reflection="data/reflection.json", src="src"):
         fns = split_functions(text)
         if fns:
             stats["parsed"] += 1
-        for name, _signature, start, end in fns:
+        for name, signature, start, end in fns:
             body = text[start:end]
             cls = class_of(name)
             rec = classes.get(cls) if cls else None
@@ -402,6 +433,19 @@ def measure(reflection="data/reflection.json", src="src"):
                 stats["accesses"].append({"file": path, "function": name, "class": cls,
                                           "offset": offset, "field": field[0],
                                           "cast_type": ctype})
+            if rec and "::" in name:
+                # a member function reads its class's fields by their bare names (`_visualContext`), not
+                # through a pointer: each use of a field name that is not a parameter, a local or a member
+                # of another object is an access on the receiver
+                fields = {f[1] for f in rec["fields"]}
+                shadowed = local_names(signature, body)
+                for m in IDENT_RE.finditer(body, body.index("{")):
+                    if m.group(1) in fields and m.group(1) not in shadowed:
+                        ff["total"] += 1
+                        stats["recovered"] += 1
+                        ff["recovered"] += 1
+                        fc["recovered"] += 1
+                        stats["by_class"][cls] = stats["by_class"].get(cls, 0) + 1
     stats["total"] = (stats["offset_casts"] + stats["recovered"] + stats["synthetic"] +
                       stats["other_members"])
     for ff in stats["by_folder"].values():

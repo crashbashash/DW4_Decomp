@@ -68,8 +68,36 @@ def tsv_rows(path):
                 yield number, line.rstrip("\n")
 
 
+def member_names(query, symbols=SYMBOLS):
+    """{compiler name: retail address} of the functions and data a C++ name means: a compiler name itself
+    (`setVisualContext__10igRendererFP15igVisualContext`) or a member (`igRenderer::setVisualContext`,
+    `Gap::Gui::igRenderer::setVisualContext`; overloads give several). Read from the compiler-name map
+    (config/SLUS-20836/compiler-names.tsv) and the whole-file rows that bind compiler names."""
+    from demangle import demangle
+    import compiler_names
+    bound = {name: va for name, (va, _retail) in compiler_names.load(os.path.join(ROOT, symbols)).items()}
+    for group in unitobjects.load():
+        for pairs in (group.emitted, group.duplicates, group.externals, group.data):
+            for name, va in pairs:
+                bound.setdefault(name, va)
+        if group.symbol:
+            bound.setdefault(group.symbol, group.owner)
+    if query in bound:
+        return {query: bound[query]}
+    if "::" not in query:
+        return {}
+    out = {}
+    for name, va in bound.items():
+        member = demangle(name) if "__" in name else None
+        if member is not None and member.class_name and (
+                member.qualified == query or member.qualified.endswith("::" + query)):
+            out[name] = va
+    return out
+
+
 def resolve(query):
-    """-> (va or None, size or None, symbol or None) for a symbol, a data name or an address."""
+    """-> (va or None, size or None, symbol or None) for a symbol, a data name, a compiler or member name or an
+    address."""
     by_name, by_va = unitobjects.names(SYMBOLS)
     if query in by_name:
         return by_name[query][0], by_name[query][1], query
@@ -90,6 +118,16 @@ def resolve(query):
                 va = int(fields[0], 16)
                 entry = by_va.get(va)
                 return va, entry[1] if entry else None, query
+    vas = set(member_names(query).values())
+    if len(vas) == 1:
+        va = vas.pop()
+        if va in by_va:
+            return va, by_va[va][1], by_va[va][0]
+        for _, line in tsv_rows(os.path.join(ROOT, CONFIG, "data-names.tsv")):
+            fields = line.split("\t")
+            if int(fields[0], 16) == va:
+                return va, None, fields[1]
+        return va, None, None
     return None, None, query
 
 
@@ -175,6 +213,23 @@ def leading_block(lines, index):
     return (first, " ".join(lines[first:index])) if first < index else None
 
 
+_MEMBER_HEAD = re.compile(r"((?:[A-Za-z_]\w*\s*::\s*)+)(~?\s*[A-Za-z_]\w*)\s*\(")
+
+
+def member_of_head(head):
+    """`Class::name` of a member definition head (`T Gap::Gui::igRenderer::setVisualContext(...)`: the class is
+    its innermost scope), or None for a free function."""
+    m = _MEMBER_HEAD.search(head)
+    if not m:
+        return None
+    return "%s::%s" % (re.sub(r"\s+", "", m.group(1))[:-2].rsplit("::", 1)[-1], m.group(2).replace(" ", ""))
+
+
+def defined_member(text, start):
+    """`Class::name` of the out-of-class member definition starting at `start`, or None."""
+    return member_of_head(text[start:text.find("{", start)])
+
+
 def source(names, datum, match_addr, match_name, limit):
     """A function's definition with its comments, a datum's source lines (at most `limit`), and every
     source line quoting the address. Files are read raw, so line numbers are the file's own (a unity
@@ -193,7 +248,8 @@ def source(names, datum, match_addr, match_name, limit):
                         out.append("%s:%d  %s" % (rel(p), number, line.strip()[:200]))
             continue
         if not datum and not defined and match_name and not p.endswith(".h") and match_name.search(text):
-            found = next(((s, e) for n, s, e in units.definitions(text) if n in names), None)
+            found = next(((s, e) for n, s, e in units.definitions(text)
+                          if n in names or defined_member(text, s) in names), None)
             if found:
                 defined = True
                 start, end = found
@@ -249,20 +305,29 @@ def documents(match_addr, match_name, limit):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("query", help="a symbol, a data name or a retail address (0x2fe9c0, 002fe9c0)")
+    ap.add_argument("query", help="a symbol, a data name, a compiler or member name (`igRenderer::setVisualContext`) "
+                                  "or a retail address (0x2fe9c0, 002fe9c0)")
     ap.add_argument("--max", type=int, default=20, help="document lines shown per heading (0: all)")
     args = ap.parse_args(argv)
 
+    from demangle import demangle
     va, size, symbol = resolve(args.query)
     names = {args.query, symbol} - {None}
+    if va is not None:
+        names.update(name for name, at in member_names(args.query).items() if at == va)
     for n in list(names):
         # the symbol map writes `Class::method` as `Class__method`, and a whole-file member may be
-        # defined under its unit-objects name
-        if "__" in n.strip("_"):
+        # defined under its unit-objects name: its compiler name, and the member that name spells
+        if "__" in n.strip("_") and "::" not in n:
             names.add(n.replace("__", "::", 1))
-        names.add(unitobjects.source_name(n, SYMBOLS))
+        for compiled in {n, unitobjects.source_name(n, SYMBOLS)}:
+            names.add(compiled)
+            member = demangle(compiled) if "__" in compiled else None
+            if member is not None and member.class_name:
+                names.update({member.qualified, "%s::%s" % (member.class_base, member.name)})
+    address_query = va is not None and symbol != args.query and _HEX.match(args.query) is not None
     match_addr = address_pattern(va) if va is not None else None
-    match_name = name_pattern(names - {args.query} if va is not None and symbol != args.query else names)
+    match_name = name_pattern(names - {args.query} if address_query else names)
     datum = va is not None and size is None
     section("symbol", identity(va, size, symbol, match_addr, match_name))
     section("state", state(va, size is not None, match_addr, match_name))

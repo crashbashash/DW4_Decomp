@@ -179,8 +179,14 @@ def _profile_sha(group, owner, flags_default, mwcc_default, units, unit_flags, u
     return sha(*parts)
 
 
+# the version tables every unit's resolution reads, beside symbols.txt (config/<GAMEID>/)
+VERSION_TABLES = ("jumptables.txt", "layout.txt", "exceptions.txt", "compiler-runtime-symbols.tsv", "data-names.tsv",
+                  "compiler-names.tsv")
+
+
 def build_inputs_sha(elf, symbols, unit_objects=None, extra_files=()):
-    """Digest of what every compile/verify result depends on besides the function's own text."""
+    """Digest of what every compile/verify result depends on besides the function's own text. The version tables
+    (`VERSION_TABLES`) are read beside `symbols`; one a test fixture lacks digests as missing."""
     cfg = os.path.join(ROOT, "config")
     parts = [
         "elf", file_sha(elf),
@@ -198,9 +204,10 @@ def build_inputs_sha(elf, symbols, unit_objects=None, extra_files=()):
     # the profile tables (units.tsv, the per-function compiler and flag overrides, unit-objects) are NOT hashed whole: adding a
     # row for one unit must not invalidate the others, so each result's key carries its own unit's rows instead
     # (unit_profile_sha). The tables every unit's resolution reads are hashed whole: the switch tables, the layout, the retail
-    # exception records and the compiler runtime addresses.
-    for name in ("jumptables.txt", "layout.txt", "exceptions.txt", "compiler-runtime-symbols.tsv", "data-names.tsv"):
-        parts += [name, file_sha(os.path.join(cfg, name))]
+    # exception records, the compiler runtime addresses, the data names and the compiler-name map.
+    version = os.path.dirname(symbols if os.path.isabs(symbols) else os.path.join(ROOT, symbols))
+    for name in VERSION_TABLES:
+        parts += [name, file_sha(os.path.join(version, name))]
     # libkernl's kernel patches (tools/kpatch.py): their sources are .c files the src-headers digest leaves out,
     # and their bytes are the owner files' data
     parts += ["kernel-patches", tree_sha(os.path.join(ROOT, "src", "sony", "libkernl", "kpatch")),

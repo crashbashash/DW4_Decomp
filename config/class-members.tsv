@@ -1,0 +1,7 @@
+# config/class-members.tsv — the members each reflected class declares under C++, written by
+# scripts/gen_type_headers.py into include/dw4/support/reflected.h in table order: into the flat struct of an
+# unconverted class, into the Gap::<library>::<class> declaration of a class config/converted-classes.tsv lists.
+# Columns: <class>	<declaration as the class body spells it>. Names and signatures follow the Alchemy kit
+# header of the class (alchemy-kit_202309 include/<library>/<Class>.h); the object macros are
+# include/dw4/core/igObjectMacros.h, and tools/gen_odl_source.py --write-members writes a class's macro and
+# field-handle rows.

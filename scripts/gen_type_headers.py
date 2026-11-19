@@ -239,7 +239,147 @@ def declare(cls, f, field_name, span, trailing, inst_size):
     return member(natural, mismatch=(nsize, span, "sub-field"))
 
 
-def main():
+def load_members(path):
+    """{class: [declaration]} from `config/class-members.tsv`: the member functions and static members a
+    class declares under C++, written into its class body in table order (empty when the table is absent)."""
+    members = {}
+    for cls, decl in table_rows(path, 2):
+        members.setdefault(cls, []).append(decl.strip())
+    return members
+
+
+def load_typed_fields(path):
+    """{(class, field): C++ type} from `config/typed-fields.tsv`: an object-reference field a class declares
+    with its referenced type under C++ (C keeps the word)."""
+    return {(cls, field): ctype.strip() for cls, field, ctype in table_rows(path, 3)}
+
+
+def load_converted(path):
+    """{class: library namespace} from `config/converted-classes.tsv`: the classes declared, under C++, as
+    `Gap::<library>::<class>` polymorphic classes beside their flat struct."""
+    return {cls: lib.strip() for cls, lib in table_rows(path, 2)}
+
+
+def table_rows(path, columns):
+    rows = []
+    if path and os.path.exists(path):
+        with open(path) as fh:
+            lines = fh.readlines()
+        for number, line in enumerate(lines, 1):
+            if line.startswith("#") or not line.strip():
+                continue
+            row = line.rstrip("\n").split("\t", columns - 1)
+            if len(row) != columns or not all(cell.strip() for cell in row):
+                sys.exit("%s:%d: expected %d tab-separated columns" % (path, number, columns))
+            rows.append(row)
+    return rows
+
+
+# Gap::Core::igObject's virtual functions in vtable order: slot n sits at vtable byte offset 8 + 4 * n,
+# after the two-word class header (include/dw4/core/igObjectDispatchView.h, the same order). Slot 20 is
+# the inline getMeta the object macros redefine in every class.
+ROOT_VIRTUALS = (
+    "virtual void destruct();",
+    "virtual void constructFields(int flag);",
+    "virtual void destructFields();",
+    "virtual void userDeepCopy(igObject *source);",
+    "virtual void userShallowCopy(int source);",
+    "virtual int userIsAlikeDeep(igObject *other);",
+    "virtual int userIsAlikeShallow(igObject *other);",
+    "virtual void userConstruct(int flag);",
+    "virtual void userDestruct();",
+    "virtual void initDefaults();",
+    "virtual void releaseDefaults();",
+    "virtual void resetFields(int flag);",
+    "virtual void userPreWrite();",
+    "virtual void userWriteFilePreProcess();",
+    "virtual void userPostRead();",
+    "virtual void userPostLoad();",
+    "virtual void trimCapacity();",
+    "virtual void userApplyWriteProxy(int value);",
+    "virtual void userMakeConcrete(igMetaObject *meta);",
+    "virtual igObject *cloneViaMetadata(int copyMode);",
+    "inline virtual igMetaObject *getMeta() const { return _Meta; }",
+)
+
+
+def converted_classes(converted, parent, layouts, members):
+    """The C++ declarations of the converted classes: each `Gap::<library>::<class>` derives from its
+    converted parent (the root `Gap::Core::igObject` at the top) and declares only its own fields, at
+    their reflected offsets after the parent's registered size, then its config/class-members.tsv rows.
+    Every converted class is promoted into `Gap` (`using <library>::<class>;`), as the kit's headers do,
+    so code in any Gap library names it unqualified; outside `Gap` the flat struct keeps the name."""
+    order, seen = [], set()
+
+    def visit(cls, chain=()):
+        if cls in seen:
+            return
+        if cls in chain:
+            sys.exit("config/converted-classes.tsv: %s is its own ancestor" % cls)
+        base = parent.get(cls)
+        if cls != "igObject":
+            if base not in converted:
+                sys.exit("config/converted-classes.tsv: %s derives from %s, which is not converted"
+                         % (cls, base))
+            visit(base, chain + (cls,))
+        seen.add(cls)
+        order.append(cls)
+
+    for cls in sorted(converted):
+        if cls not in layouts:
+            sys.exit("config/converted-classes.tsv: %s has no reflected layout" % cls)
+        visit(cls)
+
+    out = ["#ifdef __cplusplus",
+           "/* The converted classes: Alchemy's polymorphic classes in their Gap namespaces",
+           " * (config/converted-classes.tsv). The flat structs above stay the C view. */",
+           "#include \"dw4/core/igObject.h\"",
+           "namespace Gap {"]
+    for lib in sorted(set(converted.values())):
+        out.append("namespace %s { %s }" % (lib, " ".join("class %s;" % c for c in sorted(converted)
+                                                        if converted[c] == lib)))
+    out.extend("using %s::%s;" % (converted[c], c) for c in sorted(converted))
+    out.append("}")
+    for cls in order:
+        handle, nfields, size_note, size, placed = layouts[cls]
+        lib = converted[cls]
+        out.append("")
+        out.append("namespace Gap {")
+        out.append("namespace %s {" % lib)
+        out.append("/* handle 0x%06x, %d field(s), %s */" % (handle, nfields, size_note))
+        if cls == "igObject":
+            out.append("class igObject {")
+            out.append("public:")
+            out.append("    igObject();")
+            out.append("    static void operator delete(void *memory) { Memory_FreeBufferAliasC(memory); }")
+            out.extend("    " + decl for decl in ROOT_VIRTUALS)
+            out.append("    static igMetaObject *_Meta;")
+            cursor = 4
+            placed = [p for p in placed if p[0] >= 4]
+        else:
+            base = parent[cls]
+            out.append("class %s : public Gap::%s::%s {" % (cls, converted[base], base))
+            out.append("public:")
+            cursor = layouts[base][3]
+        for off, fsize, line in placed:
+            if off < cursor:
+                sys.exit("%s: field at +%d lies inside its parent (%d bytes)" % (cls, off, cursor))
+            if off > cursor:
+                out.append("    char _pad%d[%d];" % (cursor, off - cursor))
+            out.append(line)
+            cursor = off + fsize
+        if size > cursor:
+            out.append("    char _pad%d[%d];" % (cursor, size - cursor))
+        out.extend("    " + decl for decl in members.get(cls, []))
+        out.append("};")
+        out.append("}")
+        out.append("}")
+    out.append("#endif")
+    out.append("")
+    return out
+
+
+def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--reflection", default="data/reflection.json")
     ap.add_argument("--hierarchy", default="data/class-hierarchy.tsv")
@@ -247,7 +387,13 @@ def main():
                     help="assembly split holding <Class>_Register.s (registered instance sizes)")
     ap.add_argument("--out", default="include/dw4/support/reflected.h")
     ap.add_argument("--report", action="store_true")
-    args = ap.parse_args()
+    ap.add_argument("--members", default="config/class-members.tsv",
+                    help="member declarations each class gets under C++ (class, declaration)")
+    ap.add_argument("--typed-fields", default="config/typed-fields.tsv",
+                    help="object-reference fields typed under C++ (class, field, C++ type)")
+    ap.add_argument("--converted", default="config/converted-classes.tsv",
+                    help="classes declared as Gap::<Library>::<Class> polymorphic classes (class, library)")
+    args = ap.parse_args(argv)
 
     data = json.load(open(args.reflection))
     parent = load_hierarchy(args.hierarchy)
@@ -298,7 +444,11 @@ def main():
             if len(f) > 1 and not line.startswith("#"):
                 scope_classes.add(f[1])
 
+    # a converted class needs its layout for the namespaced declaration even when it gets no flat struct
+    converted_names = set(load_converted(args.converted))
+
     classes = []
+    unflat = set()
     seen = set()
     for handle, o in data["classes"].items():
         if o["class"] in seen:
@@ -310,18 +460,21 @@ def main():
         # gets no struct of its own, except igObject itself
         if not fields or (o["class"] != "igObject" and o["class"] not in scope_classes
                           and all(f.get("overlay") for f in fields)):
-            continue
+            if not fields or o["class"] not in converted_names:
+                continue
+            unflat.add(o["class"])
         seen.add(o["class"])
         classes.append((o["class"], int(handle, 16), fields))
     # igObject comes first: under C++ every other class derives from it.
     classes.sort(key=lambda c: (c[0] != "igObject", c[0]))
     inst_sizes = load_instance_sizes(args.asm, [c[0] for c in classes])
+    flat_classes = [c for c in classes if c[0] not in unflat]
 
     lines = [
         "/* GENERATED by scripts/gen_type_headers.py — do not edit.",
         " *",
         " * Structs for every class the reflection metadata recovered (%d classes, %d fields,"
-        % (len(classes), sum(len(c[2]) for c in classes)),
+        % (len(flat_classes), sum(len(c[2]) for c in flat_classes)),
         " * from data/reflection.json). Each struct carries its **ancestors' fields too**",
         " * (data/class-hierarchy.tsv): reflection lists only a class's own fields, so a subclass",
         " * whose fields are all inherited (igVec3fList, whose _count/_capacity/_data come from",
@@ -347,14 +500,26 @@ def main():
         "#define DW4_REFLECTED_H",
         "",
     ]
+    members = load_members(args.members)
+    typed_fields = load_typed_fields(args.typed_fields)
+    converted = load_converted(args.converted)
+    if converted:
+        # the polymorphic root every converted class derives from
+        converted.setdefault("igObject", "Core")
+    if members or converted:
+        lines.extend(["#ifdef __cplusplus", "#include \"dw4/core/igObjectMacros.h\"", "#endif", ""])
     mismatches = []
     aggregates = 0
     sized = 0
+    layouts = {}
     for name, handle, fields in classes:
         used, body = set(), []
         cursor = 0
         maxalign = 1
         inst_size = inst_sizes.get(name)
+        flat = name not in converted
+        own_ids = {id(f) for f in own.get(name, [])}
+        placed = []
         for i, f in enumerate(fields):
             off, raw_name = f["offset"], f["name"]
             field_name = ident(raw_name)
@@ -377,7 +542,16 @@ def main():
                 mismatches.append((name, raw_name, off, f["type"]) + mismatch)
             if off > cursor:
                 body.append("    char _pad%d[%d];" % (cursor, off - cursor))
-            body.append("    %-46s /* +%-4d %s */" % (decl, off, f["type"]))
+            line = "    %-46s /* +%-4d %s */" % (decl, off, f["type"])
+            typed = typed_fields.get((name, raw_name))
+            if typed:
+                typed_line = "    %-46s /* +%-4d %s */" % ("%s %s;" % (typed, field_name), off, f["type"])
+            if typed and flat:
+                body.extend(["#ifdef __cplusplus", typed_line, "#else", line, "#endif"])
+            else:
+                body.append(line)
+            if id(f) in own_ids:
+                placed.append((off, size, typed_line if typed else line))
             cursor = off + size
         # Close the struct at the registered instance size: tail padding so sizeof() on the
         # host is the retail one.  Fields past the registered size are reported (the offsets
@@ -396,6 +570,9 @@ def main():
             size_note = "sizeof %d (from the fields; %s)" % (
                 struct_size, "no registrar found" if inst_size is None
                 else "registered %d is smaller" % inst_size)
+        layouts[name] = (handle, len(fields), size_note, struct_size, placed)
+        if name in unflat:
+            continue
         # Under C++ a class holding igObject's two words derives from it, so a smart pointer can
         # convert T * to igObject * implicitly. The layout is the same, and C keeps the flat view.
         derives = name != "igObject" and [f["name"] for f in fields[:2]] == ["_vtable", "_refCount"] \
@@ -412,17 +589,27 @@ def main():
             lines.extend(body[2:])
         else:
             lines.extend(body)
+        if flat and members.get(name):
+            lines.append("#ifdef __cplusplus")
+            lines.extend("    " + decl for decl in members[name])
+            lines.append("#endif")
         lines.append("} %s;" % name)
         lines.append("")
 
+    if converted:
+        lines.extend(converted_classes(converted, parent, layouts, members))
+    for cls in sorted(members):
+        if cls not in converted and cls not in layouts:
+            sys.exit("config/class-members.tsv: %s has no reflected struct to hold members; "
+                     "declare it in config/converted-classes.tsv" % cls)
     lines.append("#endif /* DW4_REFLECTED_H */")
     open(args.out, "w").write("\n".join(lines) + "\n")
-    print("wrote %s: %d classes, %d fields" % (args.out, len(classes),
-                                               sum(len(c[2]) for c in classes)))
+    print("wrote %s: %d classes, %d fields" % (args.out, len(flat_classes),
+                                               sum(len(c[2]) for c in flat_classes)))
     print("  %d field(s) are inline aggregates (vectors, matrices, arrays): emitted as "
           "arrays of the element type" % aggregates)
     print("  %d of %d classes closed at their registered instance size (%s)"
-          % (sized, len(classes), args.asm))
+          % (sized, len(flat_classes), args.asm))
     if WORD_TYPED:
         print("  %d field(s) kept as `int` because matched units read them as a word"
               % len(WORD_TYPED))

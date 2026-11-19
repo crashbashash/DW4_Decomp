@@ -116,6 +116,28 @@ these rules that keep them honest:
   offsets the generator reports it, because that is a fact about the recovered metadata. The count
   is **0**.
 
+### C++ members, typed references and converted classes
+
+Three tables give the generated header its C++ side. Each is `#`-commented TSV, and with no rows the
+header is byte for byte what the reflection alone gives:
+
+- **`config/class-members.tsv`** (`<class> <declaration>`): the members a class declares under C++, in
+  table order: the object macros of `include/dw4/core/igObjectMacros.h` (`IG_OBJECT_DEFINE`,
+  `IG_ABSTRACT_OBJECT_DEFINE`, the kit's `IG_OBJECT_COMMON` members), the `k_<field>` handles, kit
+  inlines such as `igMetaObject::isValid`, and member functions. An unconverted class gets them inside
+  its flat struct under `#ifdef __cplusplus`; a class with no flat struct must be converted.
+- **`config/typed-fields.tsv`** (`<class> <field> <C++ type>`): an object-reference field typed with its
+  referenced class under C++, C keeping the word (`#ifdef __cplusplus` / `#else` around the field).
+- **`config/converted-classes.tsv`** (`<class> <library namespace>`): the class is also declared as
+  Alchemy's polymorphic class, `namespace Gap { namespace <library> { class <class> : public <parent>` },
+  after the flat structs. The parent must be converted too; the root is `Gap::Core::igObject`, implied by
+  any row, whose 20 virtual slots follow `igObjectDispatchView`'s order (slot 20 is the inline `getMeta`,
+  which the macros override in every class, so a class writes its vtable the way retail's does). A
+  converted class declares only its own fields, at their reflected offsets after its parent's registered
+  size, then its member rows, and is promoted into `Gap` (`using <library>::<class>;`) as the kit's
+  headers do, so Gap code names it unqualified while code outside `Gap` keeps the flat struct. Members
+  and typed fields of a converted class go only into this declaration; its flat struct stays the C view.
+
 ### Sizing fields by their MetaField kind and the registered instance size
 
 The generator takes **type and size from the kind**, through three tables:

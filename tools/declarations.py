@@ -56,7 +56,7 @@ Stock library source (src/third_party/) is its authors' text: its declarations a
 fail a function, but its definitions are the reference for the code that calls into it.
 
     python3 tools/declarations.py                          # the five counts
-    python3 tools/declarations.py --list varargs [PATH]    # local | varargs | conflicts | headers | placeholders
+    python3 tools/declarations.py --list varargs [PATH]    # local | varargs | conflicts | headers | placeholders | members
 
 `--list local` also prints the approved copies, marked `[approved #anchor]`, so they stay visible.
 """
@@ -617,6 +617,195 @@ def parse_file(scanned, rel, types, file_is_c):
     return out
 
 
+# ---- members -----------------------------------------------------------------------------------------
+_CLASS_HEAD = re.compile(r"(?:typedef\s+)?(?:struct|class)\s+([A-Za-z_]\w*)\s*(?::[^;{}()]*)?$")
+_NAMESPACE_HEAD = re.compile(r"namespace\s+([A-Za-z_]\w*)$")
+_ACCESS = re.compile(r"^\s*(?:(?:public|private|protected)\s*:\s*)+")
+_FUNCTION_MACRO = re.compile(r"\s*([A-Za-z_]\w*)\(([^()]*)\)(.*)", re.S)
+_SCOPE_PREFIX = re.compile(r"\b(?:[A-Za-z_]\w*\s*::\s*)+")
+
+
+class Member:
+    """A member function or static data member: declared in a class body (`static`, and `inline` when the body
+    defines it), or defined out of its class."""
+    __slots__ = ("cls", "name", "kind", "ret", "params", "const", "static", "inline", "path", "line")
+
+    def __init__(self, **kw):
+        for k in self.__slots__:
+            setattr(self, k, kw.get(k))
+
+    def signature(self):
+        if self.kind == "data":
+            return "%s %s::%s" % (self.ret, self.cls, self.name)
+        return "%s %s::%s(%s)%s" % (self.ret, self.cls, self.name, ", ".join(self.params),
+                                    " const" if self.const else "")
+
+
+def function_macros(texts):
+    """{name: (parameters, body)} of the function-like macros of `texts` defined one way only: an object macro
+    such as Alchemy's `IG_OBJECT_DEFINE(CLASSNAME)` declares members, so a class body is read expanded."""
+    found = collections.defaultdict(set)
+    for text in texts:
+        if "#" not in text or "define" not in text:
+            continue
+        for d in directive_lines(text):
+            if d and d[0] == "define":
+                m = _FUNCTION_MACRO.match(d[1])
+                if m:
+                    found[m.group(1)].add((tuple(p.strip() for p in m.group(2).split(",") if p.strip()),
+                                           m.group(3).strip()))
+    return {name: bodies.pop() for name, bodies in found.items() if len(bodies) == 1}
+
+
+def expand_function_macros(text, macros):
+    """`text` with each invocation of a function-like macro in `macros` replaced by its body (arguments
+    substituted), until none is left."""
+    if not macros:
+        return text
+    pattern = re.compile(r"\b(%s)\s*\(" % "|".join(re.escape(n) for n in sorted(macros, key=len, reverse=True)))
+    for _ in range(8):
+        out, at, changed = [], 0, False
+        for m in pattern.finditer(text):
+            if m.start() < at:
+                continue
+            close = _close(text, m.end() - 1)
+            params, body = macros[m.group(1)]
+            args = [a.strip() for a in _split_top(text[m.end():close])]
+            sub = dict(zip(params, args))
+            out.append(text[at:m.start()])
+            out.append(" %s " % _WORD.sub(lambda w: sub.get(w.group(0), w.group(0)), body))
+            at, changed = close + 1, True
+        if not changed:
+            return text
+        out.append(text[at:])
+        text = "".join(out)
+    return text
+
+
+def _cxx_view(code, langs):
+    """Cleaned code as a C++ compiler reads it: the lines only C reads (`#ifndef __cplusplus` arms) blanked."""
+    if langs is None:
+        return code
+    lines = code.split("\n")
+    return "\n".join(" " * len(line) if lang == _LANG_C else line for line, lang in zip(lines, langs))
+
+
+def _parse_member(stmt, cls, types, path, line, out_of_class):
+    """A Member for one member declaration or definition head (`static void arkRegister()`,
+    `bool isValid() const`, `igMetaObject *igRenderer::_Meta`), or None. `out_of_class` heads name their
+    class (`T Class::name(...)`), and the class they name is returned with them."""
+    s = _ACCESS.sub("", _ATTR.sub(" ", stmt)).strip()
+    if not s or re.match(r"(?:friend|typedef|using|template|enum|struct|class|union|operator)\b", s):
+        return None
+    eq = _top_equals(s)
+    head = (s if eq < 0 else s[:eq]).strip()
+    p = _first_paren(head)
+    if p < 0:
+        m = re.match(r"(.*?[\s*&])((?:[A-Za-z_]\w*\s*::\s*)*)([A-Za-z_]\w*)\s*((?:\[[^\]]*\]\s*)*)$", head, re.S)
+        if not m or (out_of_class and not m.group(2)) or (not out_of_class and "static" not in m.group(1).split()):
+            return None
+        owner = re.sub(r"\s+", "", m.group(2))[:-2] if out_of_class else cls
+        ret = types.norm(_SCOPE_PREFIX.sub("", _STORAGE.sub(" ", m.group(1))) + "".join("*" for _ in
+                                                                                        re.findall(r"\[", m.group(4))))
+        return Member(cls=owner, name=m.group(3), kind="data", ret=ret, params=(), const=False,
+                      static=not out_of_class, inline=False, path=path, line=line)
+    if re.match(r"[*&]\s*(?:const\s+)?[A-Za-z_]\w*\s*(?:\[[^\]]*\]\s*)*\)\s*\(", head[p + 1:].lstrip()):
+        return None                                    # a function-pointer field
+    m = _NAME_BEFORE_PAREN.search(head[:p])
+    if not m:
+        return None
+    qualified = re.sub(r"\s+", "", m.group(1))
+    if out_of_class != ("::" in qualified):
+        return None
+    owner, name = (qualified.rsplit("::", 1) if out_of_class else (cls, qualified))
+    if name.startswith("operator") or name in _TYPE_WORDS:
+        return None
+    close = _close(head, p)
+    tail = head[close + 1:]
+    raw = _STORAGE.sub(" ", head[:m.start()]).strip()
+    special = name.lstrip("~") == owner.rsplit("::", 1)[-1]
+    if not raw and not special:
+        return None                                    # a macro invocation or an expression, not a declaration
+    params = types.params(_SCOPE_PREFIX.sub("", head[p + 1:close]), False)
+    return Member(cls=owner, name=name, kind="func", ret=types.strip_top_cv(types.norm(_SCOPE_PREFIX.sub("", raw))),
+                  params=params, const=bool(re.match(r"\s*const\b", tail)),
+                  static=bool(re.search(r"\bstatic\b", head[:m.start()])), inline=False, path=path, line=line)
+
+
+def member_scan(code, rel, types, macros):
+    """([class body member Member], [out-of-class member Member], {class: [(path, line)] of its bodies}) for one
+    file's C++ view (`_cxx_view`): class bodies are read with the function-like macros expanded, nested classes
+    and namespaces qualify their names."""
+    declared, defined, bodies = [], [], collections.defaultdict(list)
+    newlines = [m.start() for m in re.finditer("\n", code)]
+
+    def line_of(offset):
+        return bisect.bisect_right(newlines, offset) + 1
+
+    def scope(text, i, end, ns, cls, where):
+        start, tail = i, False
+        while True:
+            m = _STATEMENT_END.search(text, i, end)
+            if not m:
+                return end
+            ch, j = m.group(0), m.start()
+            head = text[start:j].strip()
+            first = start + len(text[start:j]) - len(text[start:j].lstrip())
+            if ch == "}":
+                return j + 1
+            if ch == ";":
+                if not tail and head:
+                    if cls is not None:
+                        member = _parse_member(head, cls, types, rel, where(first), False)
+                        if member:
+                            declared.append(member)
+                    elif "::" in head:
+                        member = _parse_member(head, None, types, rel, where(first), True)
+                        if member and member.kind == "data":
+                            member.cls = "::".join(ns + [member.cls])
+                            defined.append(member)
+                start, i, tail = j + 1, j + 1, False
+                continue
+            close = _skip_block(text, j)
+            bare = _ACCESS.sub("", head).strip()
+            namespace = _NAMESPACE_HEAD.match(bare)
+            record = _CLASS_HEAD.match(bare)
+            if bare in ("__extern_C", "__extern_CPP"):
+                scope(text, j + 1, end, ns, cls, where)
+                start = i = close
+            elif namespace and cls is None:
+                scope(text, j + 1, end, ns + [namespace.group(1)], None, where)
+                start = i = close
+            elif record:
+                name = "::".join(([cls] if cls else ns) + [record.group(1)])
+                bodies[name].append((rel, where(j)))
+                inner = text[j + 1:close - 1]
+                expanded = expand_function_macros(inner, macros)
+                if expanded == inner:
+                    scope(text, j + 1, close - 1, ns, name, where)
+                else:                                  # what an object macro declares is on the class head's line
+                    head_line = where(j)
+                    scope(expanded, 0, len(expanded), ns, name, lambda _offset: head_line)
+                start, i, tail = close, close, True
+            elif "(" in bare and _top_equals(bare) < 0 and not tail:
+                if cls is not None:
+                    member = _parse_member(bare, cls, types, rel, where(first), False)
+                    if member:
+                        member.inline = True
+                        declared.append(member)
+                elif "::" in bare:
+                    member = _parse_member(re.sub(r"\)\s*:[^{}]*$", ")", bare), None, types, rel, where(first), True)
+                    if member and member.kind == "func":
+                        member.cls = "::".join(ns + [member.cls])
+                        defined.append(member)
+                start = i = close
+            else:
+                i = close                              # an initialiser, an enum or union body: part of the statement
+
+    scope(code, 0, len(code), [], None, line_of)
+    return declared, defined, bodies
+
+
 # ---- the index ---------------------------------------------------------------------------------------
 class Index:
     """Every declaration and definition under `root`/src and `root`/include, the translation units they
@@ -677,7 +866,8 @@ class Index:
             for stmt in stmts:
                 self.types.add_typedef(stmt)
         self._scopes, self._unit_files, self._directives = {}, {}, {}
-        self._placeholders = None
+        self._placeholders = self._member_conflicts = None
+        self._cxx = {rel: _cxx_view(s[0], s[1]) for rel, s in scanned.items() if not self.stock(rel)}
         self.decls = {rel: parse_file(s, rel, self.types, self._file_is_c(rel)) for rel, s in scanned.items()}
         self._judge()
 
@@ -988,7 +1178,64 @@ class Index:
     def counts(self):
         return {"decl.local_externs": len(self.local), "decl.varargs": len(self.varargs),
                 "decl.type_conflicts": len(self.conflicts), "decl.header_conflicts": len(self.header_conflicts),
-                "decl.named_placeholders": len(self.named_placeholders())}
+                "decl.named_placeholders": len(self.named_placeholders()),
+                "decl.member_conflicts": len(self.member_conflicts())}
+
+    def member_conflicts(self):
+        """[(definition Member, reason)]: each member defined out of its class (`T Class::name(...) {`,
+        `T *Class::datum;`) that no declaration in its class body states the same way: no member of that name,
+        parameters and constness, a different return or data type, or one body of the class (another unit's
+        view of it) declaring the name only otherwise. Read in each file's C++ view, class bodies with their
+        object macros expanded and every type normalised as for the C symbols; a definition whose class has no
+        body in the tree is not judged."""
+        if self._member_conflicts is not None:
+            return self._member_conflicts
+        macros = function_macros(self.texts.values())
+        declared, defined, bodies = [], [], collections.defaultdict(list)
+        scanned = set()
+
+        def read(rel):
+            scanned.add(rel)
+            d, f, b = member_scan(self._cxx[rel], rel, self.types, macros)
+            declared.extend(d)
+            defined.extend(f)
+            for name, at in b.items():
+                bodies[name].extend(at)
+
+        for rel, code in sorted(self._cxx.items()):
+            if "::" in code:
+                read(rel)
+        wanted = {d.cls.rsplit("::", 1)[-1] for d in defined}
+        if wanted:
+            heads = re.compile(r"\b(?:struct|class)\s+(?:%s)\b[^;{}()]*\{" % "|".join(sorted(wanted)))
+            for rel, code in sorted(self._cxx.items()):
+                if rel not in scanned and heads.search(code):
+                    read(rel)
+        by_class = collections.defaultdict(list)
+        for m in declared:
+            by_class[m.cls].append(m)
+        out = []
+        for d in defined:
+            names = [q for q in bodies if q == d.cls] or [q for q in bodies if q.endswith("::" + d.cls)
+                                                           or d.cls.endswith("::" + q)]
+            if not names:
+                continue
+            same = [m for q in names for m in by_class[q] if m.name == d.name and m.kind == d.kind]
+            match = [m for m in same if m.params == d.params and m.const == d.const]
+            if not match:
+                out.append((d, "no declaration of %s in its class states it" % d.name if not same else
+                            "its class declares %s otherwise: %s" % (
+                                d.name, "; ".join("%s (%s:%d)" % (m.signature(), m.path, m.line) for m in same))))
+            elif all(m.ret != d.ret for m in match):
+                m = match[0]
+                out.append((d, "declared as %s (%s:%d)" % (m.signature(), m.path, m.line)))
+            else:
+                views = {(m.path, m.cls) for m in same} - {(m.path, m.cls) for m in match}
+                if views:
+                    path, cls = sorted(views)[0]
+                    out.append((d, "%s's body in %s declares %s otherwise" % (cls, path, d.name)))
+        self._member_conflicts = out
+        return out
 
     def named_placeholders(self):
         """[(path, line, placeholder, name)]: each `FUN_<va>`/`DAT_<va>` in the code of src/ and include/
@@ -1068,13 +1315,17 @@ def used_bad(body, bad):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--list", choices=("local", "varargs", "conflicts", "headers", "placeholders"))
+    ap.add_argument("--list", choices=("local", "varargs", "conflicts", "headers", "placeholders", "members"))
     ap.add_argument("path", nargs="?", help="with --list: only declarations in files under this path")
     a = ap.parse_args(argv)
     idx = index()
     if not a.list:
         for k, v in idx.counts().items():
             print("%-24s %d" % (k, v))
+        return 0
+    if a.list == "members":
+        for d, why in idx.member_conflicts():
+            print("%s:%d: %s: %s" % (d.path, d.line, d.signature(), why))
         return 0
     if a.list == "headers":
         for n in idx.header_conflicts:

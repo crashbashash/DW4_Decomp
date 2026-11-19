@@ -5,6 +5,7 @@ import os
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -87,6 +88,42 @@ class UnitProfile(unittest.TestCase):
         # a member of the same unit-objects group shares the owner's settings
         self.assertEqual(buildcache.unit_profile_sha(0x0040f6a0, "-O3 -Iinclude", default),
                          buildcache.unit_profile_sha(0x0040ee60, "-O3 -Iinclude", default))
+
+
+class VersionTables(unittest.TestCase):
+    """The tables beside symbols.txt that every unit's resolution reads are part of every key."""
+
+    def digest(self, symbols):
+        buildcache._memo.clear()
+        with mock.patch.object(buildcache, "tree_sha", return_value="tree"):
+            return buildcache.build_inputs_sha(os.path.join(os.path.dirname(symbols), "elf"), symbols)
+
+    def test_each_table_beside_symbols_changes_the_key(self):
+        with tempfile.TemporaryDirectory() as d:
+            symbols = os.path.join(d, "symbols.txt")
+            Path(symbols).write_text("")
+            for name in buildcache.VERSION_TABLES:
+                Path(d, name).write_text("one")
+            before = self.digest(symbols)
+            for name in buildcache.VERSION_TABLES:
+                Path(d, name).write_text("two " + name)
+                after = self.digest(symbols)
+                self.assertNotEqual(before, after, name)
+                before = after
+
+    def test_a_missing_table_is_a_key_of_its_own(self):
+        with tempfile.TemporaryDirectory() as d:
+            symbols = os.path.join(d, "symbols.txt")
+            Path(symbols).write_text("")
+            for name in buildcache.VERSION_TABLES:
+                Path(d, name).write_text("")
+            present = self.digest(symbols)
+            os.remove(os.path.join(d, buildcache.VERSION_TABLES[0]))
+            self.assertNotEqual(present, self.digest(symbols))
+
+    def test_the_version_tables_exist(self):
+        for name in buildcache.VERSION_TABLES:
+            self.assertTrue((ROOT / "config" / "SLUS-20836" / name).is_file(), name)
 
 
 class StoreBehaviour(unittest.TestCase):

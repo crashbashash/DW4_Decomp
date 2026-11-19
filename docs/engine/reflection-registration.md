@@ -149,6 +149,44 @@ retained field reference and one name reference per descriptor, the two child
 references and construction flags, validity 7 and size 32, and it is repeatable. It
 does not establish complete live class bootstrap or instance creation.
 
+## Generated boilerplate
+
+The original libraries did not write this code by hand: the kit's `igen.exe` (alchemy-kit_202309
+`bin/igen.exe`) wrote each library's `ODLSource.cpp` from its class descriptions, and its templates are
+DW4's boilerplate statement for statement. `tools/gen_odl_source.py` is its equivalent. For a library
+(`--library Gui`, the latch `GuiLibrary_MarkRegistered` names it; a latch without a library name is given
+by its symbol) or single classes (`--class`) it writes the boilerplate as member functions, in retail
+address order, functions the linker dropped left out: `_Meta` and the `k_<field>` handles,
+`_instantiateFromPool`, `getClassTypeLazy`, `getClassTypeSafe`, `retrieveVTablePointer`, `arkRegister`,
+`arkRegisterInternal` (the latch, then the eleven registrar arguments above, `regFunctions` a
+function-local table) and `arkRegisterInitialize` (function-local `instFuncs`/`names`/`enumStorage`/`offsets`
+tables, `metaObject` cached in a local, `start` from the inherited field count, one block per field and per
+overridden inherited field). `getClassMetaSafe` and `getClassMeta` are inline members the compiler writes
+out where their address is taken.
+
+- The facts come from retail: the registrar call gives each role, the field adder's code is traced
+  symbolically into statements, and reflection gives the tables. A reference to another class's role is
+  that class's member when the class is in member form, otherwise its tree name (the unit's own row name
+  first, then `symbols.txt`, or the compiler name `config/SLUS-20836/compiler-names.tsv` binds).
+- The metaobject services keep their tree names (`igMetaObject_CreateFields` for igen's
+  `instantiateAndAppendFields`; `SERVICES` lists igen's spelling of each).
+- `retrieveVTablePointer` is igen's temporary-object form for a converted class; an unconverted class
+  keeps the tree's `<Class>_GetVTable` definition, copied as it is.
+- A function stored in a metafield member that reflection types as a word is stored through a
+  function-pointer lvalue: the kit member is a function pointer, and as a word MWCC keeps the address in a
+  register for a second store.
+- `--list` shows each class's roles and what cannot be written (a field adder statement with no
+  template, a class with no flat struct and no conversion, a reflection table that disagrees with the
+  code); such a class stays in the tree's form and the others name it by its tree names.
+- `--members` prints the `config/class-members.tsv` rows the classes need (the object macro and the
+  `k_` handles), `--write-members` merges them into the table, with the `igMetaObject::isValid` inline
+  `getClassTypeSafe` calls.
+- `--verify` compiles the fragment under the unit's profile in place of the unit's `.inc` fragments, with
+  `reflected.h` regenerated from the class rows into a private folder, and compares every function with
+  retail (relocations resolved; only the address halves of function-local tables are left out).
+  A kept function whose file-local types live in its own `.inc`, or a reference to a function no header
+  declares (the run lists them), cannot compile there.
+
 ## Validation and remaining work
 
 Run from the repository root:

@@ -38,11 +38,19 @@ compiled function reproduces is then reported and keeps linking from the retail 
 the file defines nothing of that name; one such file's units.tsv row covers the whole range, so the
 functions at its edges keep the file's profile.
 
-A C++ file (`--cxx`) keeps its mangled names in the rows and writes the plain ones to `--names`,
-and cross-file references stay externals. `--drop` keeps a function out of the range when it fits
-a start another function owns: stock `lua_dofile` and `lua_dobuffer` fit one retail start, and only
-a call target tells them apart; two inline destructors of one shape do too, and the one a member
-still reaches becomes a duplicate.
+A C++ file (`--cxx`) keeps its mangled names in the rows and writes the plain ones to `--names`. A
+cross-file reference the compiler-name map binds (config/SLUS-20836/compiler-names.tsv, tools/compiler_names.py:
+a member another unit's row places) gets no `externals` row, nor a `data` row when the file does not define the
+datum; any other cross-file reference stays an external. `--write` then regenerates the map, so a converted
+class's defining unit is written first and the units that call it after. `--drop` keeps a function out of the
+range when it fits a start another function owns: stock `lua_dofile` and `lua_dobuffer` fit one retail start,
+and only a call target tells them apart; two inline destructors of one shape do too, and the one a member still
+reaches becomes a duplicate.
+
+`--unit-va <va>` measures the whole-file unit of units.tsv that holds `va`: its source (the file under src/ its
+unit name ends with, or `--source`), range, compiler, flags and exception mode come from its row, and `--write`
+replaces its unit-objects.json row only, leaving units.tsv as it is. This is how the rows of a DW4 unit whose
+functions became C++ members are written: never by hand.
 
 A file with no retail function is data-only when the retail linker kept data of it
 (docs/engine/emitted-functions.md, "Data-only units"): each of its data sections is placed where another
@@ -62,12 +70,14 @@ Usage:
   whole_file_rows.py --src src/third_party/zlib --files adler32 crc32 --range 0x221870 0x2252d8 \\
       --compiler combat --flags "-O4,p -sdatathreshold 2 -lang c -I- -Isrc/third_party/libc" \\
       --unit zlib [--write] [--names config/SLUS-20836/names/zlib.tsv]
+  whole_file_rows.py --unit-va 0x44b860 --cxx [--write]
   whole_file_rows.py --src src/sony/libsdr --files sdr_main sdr_cb --range 0x118fe0 0x1194c0 \\
       --compiler ee-gcc-2.9 --flags "-O2 -G0 -ffunction-sections -Iinclude" --unit sony_libsdr \\
       --reference sdr_cb=<the SDK's libsdr.a member sdr_cb.o> [--write]
 """
 import argparse
 import collections
+import glob
 import json
 import os
 import re
@@ -79,6 +89,7 @@ import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cc
+import compiler_names
 import exceptions
 import unitprofiles
 import unitobjects
@@ -343,6 +354,49 @@ def reach(function_at, retail, syms, headers, obj, functions, records, names, hi
     return data, duplicates, externals
 
 
+def unmapped(externals, data, syms, mapped, obj):
+    """(externals, data) less the references the compiler-name map binds: every external, and each datum the
+    object does not define (a defined datum keeps its row, which places it). The map and the retail reference
+    must agree on the address."""
+    def keep(name, address, defined):
+        if name not in mapped or defined:
+            return True
+        if mapped[name][0] != address:
+            sys.exit("%s: %s reads as 0x%x, and the compiler-name map binds it at 0x%x"
+                     % (obj, name, address, mapped[name][0]))
+        return False
+    return ({name: address for name, address in externals.items() if keep(name, address, False)},
+            {name: address for name, address in data.items()
+             if keep(name, address, isinstance(syms.get(name, (None,))[0], int))})
+
+
+def unit_row(units_path, va):
+    """(lo, hi, unit name, @compiler id, flags, exception mode) of the whole-file units.tsv row holding `va`."""
+    with open(units_path) as fh:
+        rows = [line.rstrip("\n").split("\t") for line in fh]
+    for fields in rows:
+        if not fields[0].startswith("0x") or len(fields) < 8:
+            continue
+        lo, hi = int(fields[0], 16), int(fields[1], 16)
+        if lo <= va < hi:
+            if fields[7] != "whole file":
+                sys.exit("0x%x is in %s, which is not a whole-file unit" % (va, fields[2]))
+            return lo, hi, fields[2], fields[3], fields[4], fields[5]
+    sys.exit("no units.tsv row holds 0x%x" % va)
+
+
+def unit_source(name, src=os.path.join(ROOT, "src")):
+    """The one .c/.cpp file under `src` whose stem the unit name `<library>_<stem>` ends with."""
+    found = [path for ext in (".c", ".cpp") for path in glob.glob(os.path.join(src, "**", "*" + ext), recursive=True)
+             if name.endswith("_" + os.path.splitext(os.path.basename(path))[0])]
+    longest = max((len(os.path.basename(p)) for p in found), default=0)
+    found = [p for p in found if len(os.path.basename(p)) == longest]
+    if len(found) != 1:
+        sys.exit("unit %s: %s; name its file with --source" % (name, "files " + ", ".join(sorted(found))
+                                                                if found else "no source file"))
+    return found[0]
+
+
 def data_rows(data):
     """A row's `data` and `anon` from reach's {name: address}: a named datum keeps its name, an
     anonymous one is listed by its retail address alone, as verify.bind_anonymous binds it."""
@@ -576,14 +630,17 @@ def overlay_addresses(path):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--src", required=True, help="the folder holding the stock files")
+    ap.add_argument("--src", help="the folder holding the stock files")
     ap.add_argument("--ext", default=".c")
-    ap.add_argument("--files", nargs="+", required=True, help="file stems")
-    ap.add_argument("--range", nargs=2, required=True, metavar=("LO", "HI"), type=lambda v: int(v, 0))
-    ap.add_argument("--compiler", required=True, help="an @compiler id of units.tsv")
-    ap.add_argument("--flags", required=True, help="the unit's complete flag string")
+    ap.add_argument("--files", nargs="+", help="file stems")
+    ap.add_argument("--range", nargs=2, metavar=("LO", "HI"), type=lambda v: int(v, 0))
+    ap.add_argument("--compiler", help="an @compiler id of units.tsv")
+    ap.add_argument("--flags", help="the unit's complete flag string")
     ap.add_argument("--exceptions", default="off")
-    ap.add_argument("--unit", required=True, help="unit name prefix, `<unit>_<file>`")
+    ap.add_argument("--unit", help="unit name prefix, `<unit>_<file>`")
+    ap.add_argument("--unit-va", type=lambda v: int(v, 0),
+                    help="measure the whole-file units.tsv unit holding this address, from its row")
+    ap.add_argument("--source", help="with --unit-va: the unit's file, when its name does not find it")
     ap.add_argument("--at", action="append", default=[], metavar="NAME=VA")
     ap.add_argument("--drop", action="append", default=[], metavar="NAME",
                     help="a function that fits a retail start another owns: a duplicate when reached, else stripped")
@@ -600,11 +657,21 @@ def main(argv=None):
     ap.add_argument("--names", help="write the name rows for tools/apply_names.py here")
     a = ap.parse_args(argv)
 
-    lo, hi = a.range
     units_path = os.path.join(a.config, "units.tsv")
+    if a.unit_va is not None:
+        if any(v is not None for v in (a.src, a.files, a.range, a.compiler, a.flags, a.unit)):
+            ap.error("--unit-va takes the source, range and profile from units.tsv")
+        lo, hi, unit_name, a.compiler, a.flags, a.exceptions = unit_row(units_path, a.unit_va)
+        source = os.path.abspath(a.source) if a.source else unit_source(unit_name)
+        a.src, (stem, a.ext) = os.path.dirname(source), os.path.splitext(os.path.basename(source))
+        a.files, a.range = [stem], (lo, hi)
+    elif a.source or any(v is None for v in (a.src, a.files, a.range, a.compiler, a.flags, a.unit)):
+        ap.error("give --unit-va, or all of --src, --files, --range, --compiler, --flags and --unit")
+    lo, hi = a.range
     compilers = {p[1]: p[2] for p in (l.rstrip("\n").split("\t") for l in open(units_path))
                  if p[0] == "@compiler"}
     compiler = os.path.join(ROOT, compilers[a.compiler])
+    mapped = compiler_names.load(os.path.join(a.config, "symbols.txt")) if a.cxx else {}
     profile = unitprofiles.Profile(compiler, a.flags, a.exceptions)
     by_name, by_va = verify.load_symbols(os.path.join(a.config, "symbols.txt"))
     retail = Retail(a.elf)
@@ -661,7 +728,8 @@ def main(argv=None):
                                         retail, syms, headers, obj, functions, records, known, data,
                                         externals, by_va)
             members = sorted((va, name) for name, va in at.items())
-            named, anon = data_rows(data)
+            externals, kept = unmapped(externals, data, syms, mapped, obj)
+            named, anon = data_rows(kept)
             row = {"whole_file": True,
                    "emitted": {name: "0x%08x" % va for va, name in members[1:]},
                    "data": named}
@@ -674,7 +742,7 @@ def main(argv=None):
                 row["stripped"] = stripped
             if externals:
                 row["externals"] = {k: "0x%08x" % v for k, v in sorted(externals.items())}
-            if a.cxx or by_va.get(members[0][0], (members[0][1],))[0] != members[0][1]:
+            if by_va.get(members[0][0], (members[0][1],))[0] != members[0][1]:
                 # a mangled owner, or a `static` several files define that symbols.txt names apart
                 row["symbol"] = members[0][1]
             rows["0x%08x" % members[0][0]] = row
@@ -719,11 +787,17 @@ def main(argv=None):
             # in address order, a data-only row after the code
             json.dump(dict(sorted(overlay.items(), key=lambda row: int(row[0], 16))), fh, indent=2)
             fh.write("\n")
-        line = "0x%08x\t0x%08x\t%s_%s\t%s\t%s\t%s\t-\twhole file\n"
-        units_rows(units_path, lo, hi, [line % (start, end, a.unit, stem, a.compiler, a.flags, a.exceptions)
-                                        for start, end, stem in sorted(spans)])
-        for start, end, stem in data_spans:
-            units_rows(units_path, start, end, [line % (start, end, a.unit, stem, a.compiler, a.flags, a.exceptions)])
+        if a.unit_va is None:
+            line = "0x%08x\t0x%08x\t%s_%s\t%s\t%s\t%s\t-\twhole file\n"
+            units_rows(units_path, lo, hi, [line % (start, end, a.unit, stem, a.compiler, a.flags, a.exceptions)
+                                            for start, end, stem in sorted(spans)])
+            for start, end, stem in data_spans:
+                units_rows(units_path, start, end,
+                           [line % (start, end, a.unit, stem, a.compiler, a.flags, a.exceptions)])
+        # the rows bind compiler names: the map other units resolve them through follows them
+        unitobjects.load.cache_clear()
+        names_path, count = compiler_names.write(os.path.join(a.config, "symbols.txt"), path)
+        print("compiler names: %d -> %s" % (count, names_path), file=sys.stderr)
     return 0
 
 
