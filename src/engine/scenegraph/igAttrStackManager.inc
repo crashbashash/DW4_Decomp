@@ -261,14 +261,14 @@ void igAttrStackManager_InitFields(void) {
     ((igMemoryRefMetaField *)temp_s2_12)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s2_12)->_releaseOnReset = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAttrStackManager_fieldTable, g_igAttrStackManager_fieldHandles, g_igAttrStackManager_fieldOffsets, temp_s1);
-    igMetaObject_AddExitCallback((int)&thunk_FUN_001afb00);
+    igMetaObject_AddExitCallback((int)&thunk_igAttrStackManager_UserUnregister);
 }
 
 void FUN_001a58e0(void) {
-    igMetaObject_AddRegistrationCallback((int)&FUN_001afb60);
+    igMetaObject_AddRegistrationCallback((int)&igAttrStackManager_RegisterClass);
 }
 
-void thunk_FUN_001afb00(void) {
-    FUN_001afb00();
+void thunk_igAttrStackManager_UserUnregister(void) {
+    igAttrStackManager_UserUnregister();
 }
 

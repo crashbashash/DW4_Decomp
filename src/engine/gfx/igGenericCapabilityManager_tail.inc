@@ -249,7 +249,7 @@ static NamedValue g_gfxShaderConstantNames[47] = {
     { "matrix.blending", 46 },
 };
 
-int FUN_001560b0(KeyedEntryOwner *table, int key) {
+int igVisualContext_GetStateFieldHandle(KeyedEntryOwner *table, int key) {
     StringRef name = FUN_001554a0(key);
     int i = 0;
     if (table->entries->count > 0) {

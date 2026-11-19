@@ -61,7 +61,7 @@ void igAttrStackManager_userDestruct(int arg0) {
     Gap__Core__igObject__userDestruct((igObject *)arg0);
 }
 
-void FUN_001afb00(void) {
+void igAttrStackManager_UserUnregister(void) {
     R_1afb00 *p;
     int rc;
     p = DAT_00562578[0];
@@ -75,7 +75,7 @@ void FUN_001afb00(void) {
     DAT_00562578[0] = 0;
 }
 
-void FUN_001afb60(char *arg0) {
+void igAttrStackManager_RegisterClass(char *arg0) {
     int n;
     int i;
     int idx;
@@ -90,14 +90,14 @@ void FUN_001afb60(char *arg0) {
             if (((RefObj * *)DAT_00562580)[0] != 0) {
                 n = ((RefObj * *)DAT_00562580)[0]->count;
                 for (i = 0; i < n; i++) {
-                    FUN_001afc90((AttrManagerRec *)((RefObj * *)DAT_00562580)[0]->data[i], (AttrObj *)arg0);
+                    igAttrStackManager_RegisterAttribute((AttrManagerRec *)((RefObj * *)DAT_00562580)[0]->data[i], (AttrObj *)arg0);
                 }
             }
         }
     }
 }
 
-void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
+void igAttrStackManager_RegisterAttribute(AttrManagerRec *m, AttrObj *meta) {
     if (m->_defaultManager != 0 && m->_capabilityManager != 0) {
         int units;
         int end;
@@ -148,7 +148,7 @@ void FUN_001afc90(AttrManagerRec *m, AttrObj *meta) {
 
 /* Binds the default and capability managers and rebuilds one stack for every registered attribute
  * type; the type argument is unused. */
-void igAttrStackManager_Configure(igAttrStackManager *manager, igMetaObject *meta, igAttrDefaultManager *defaultManager,
+void igAttrStackManager_Setup(igAttrStackManager *manager, igMetaObject *meta, igAttrDefaultManager *defaultManager,
                                   igVisualContextCapabilityManager *capabilityManager)
 {
     AttrStackManagerView *arg0 = (AttrStackManagerView *)manager;
@@ -222,7 +222,7 @@ void igAttrStackManager_Configure(igAttrStackManager *manager, igMetaObject *met
     arg0->f12 = 0;
     n = ((List * *)DAT_00562578)[0]->count;
     for (i = 0; i < n; i++) {
-        FUN_001afc90((AttrManagerRec *)arg0, (AttrObj *)((List * *)DAT_00562578)[0]->data[i]);
+        igAttrStackManager_RegisterAttribute((AttrManagerRec *)arg0, (AttrObj *)((List * *)DAT_00562578)[0]->data[i]);
     }
 }
 

@@ -59,7 +59,7 @@ void igCompileTraversal_RegisterClassFunction(int arg0, int arg1) {
         igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)igCompileTraversal_TraverseProjectiveShadowShader);
         return;
     }
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)DAT_00561bd8[0]) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)g_igDOFShader_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)FUN_001bcd90);
         return;
     }
@@ -67,15 +67,15 @@ void igCompileTraversal_RegisterClassFunction(int arg0, int arg1) {
         igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)igCompileTraversal_TraverseEnvironmentMapShader2);
         return;
     }
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)DAT_00561860[0]) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)g_igMultiTextureShader_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)FUN_001bcda0);
         return;
     }
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)DAT_00561e98[0]) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)g_igCartoonShader_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)FUN_001bcdb0);
         return;
     }
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)DAT_00561ee8[0]) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)g_igBumpMapShader_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)FUN_001bcdc0);
         return;
     }
@@ -83,7 +83,7 @@ void igCompileTraversal_RegisterClassFunction(int arg0, int arg1) {
         igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)igCompileTraversal_TraversePlanarShadowShader);
         return;
     }
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)DAT_00561578[0]) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)g_igShader_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)FUN_001bcde0);
         return;
     }
@@ -99,7 +99,7 @@ void igCompileTraversal_RegisterClassFunction(int arg0, int arg1) {
         igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)igCompileTraversal_TraverseTransform);
         return;
     }
-    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)DAT_00561ca0[0]) != 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg1, (igMetaObject *)g_igCompiledGraph_metaObject[0]) != 0) {
         igTraversal_RegisterFunction((igTraversalFunctionList *)arg0, (igMetaObject *)arg1, (void *)FUN_001bd0e0);
         return;
     }

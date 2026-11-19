@@ -16,13 +16,19 @@ enum p2LightType {
     P2_LIGHT_SPOT
 };
 
-/* p2Light.flags */
+/* p2Light.flags, kept by the visual context's light setters */
 enum {
-    P2_LIGHT_CHANGED = 0x08
+    P2_LIGHT_SPECULAR = 0x01,           /* a specular colour */
+    P2_LIGHT_ATTENUATED = 0x02,         /* an attenuation other than (1, 0, 0) */
+    P2_LIGHT_SPOT_CONE = 0x04,          /* a spot light's cutoff other than 180 degrees */
+    P2_LIGHT_CHANGED = 0x08,
+    P2_LIGHT_AMBIENT = 0x10,            /* an ambient colour */
+    P2_LIGHT_LINEAR_ATTENUATION = 0x20  /* linear attenuation only, (0, l, 0) */
 };
 
 /* p2Material.flags */
 enum {
+    P2_MATERIAL_SPECULAR = 0x01,        /* a specular colour */
     P2_MATERIAL_CHANGED = 0x02
 };
 
@@ -64,6 +70,8 @@ extern long long p2StatMaterialSets;
 /* The lights enabled, and how many of them are point lights. */
 extern int p2ActiveLightCount;
 extern int p2ActivePointLightCount;
+/* The material's specular state (p2SetMaterialSpecularState): specular lighting needs it on. */
+extern int p2MaterialSpecularState;
 
 void p2InitLighting(void);
 void p2EnableLight(int slot);

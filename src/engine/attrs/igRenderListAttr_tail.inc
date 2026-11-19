@@ -32,7 +32,7 @@ void igRenderListAttr_Reset(O_13ffd0 *arg0) {
     arg0->obj = 0;
 }
 
-int FUN_00140050(void *arg0) {
+int igVisualContext_GetScissorType(void *arg0) {
     return *(int *)((char *)(arg0) + 104);
 }
 

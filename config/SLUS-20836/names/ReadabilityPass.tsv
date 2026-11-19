@@ -996,7 +996,6 @@
 0x001916b0	igMatrix44f_PostRotateAxisAngle	engine
 0x00227620	igIterateGraph_EnsureRegistered	engine
 0x002293d0	igSmartPointer_igIterateGraph_Destruct	engine
-0x001b0000	igAttrStackManager_Configure	engine
 0x001f8b50	p2RefreshLightState	engine
 0x001fffb0	p2BuildVertexFormat	engine
 0x001b4c40	igCommonTraversal_DrawCartoonShader	engine

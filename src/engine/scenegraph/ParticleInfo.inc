@@ -390,11 +390,11 @@ void FUN_001d7910(void) {
     clearBytes((char *)metas, 28);
     metas[0] = ((void *)g_igLightStateSet_metaObject);
     metas[1] = ((void *)g_igEnvironmentMapShader2_metaObject);
-    metas[2] = ((void *)DAT_00561860[0]);
-    metas[3] = ((void *)DAT_00561e98[0]);
-    metas[4] = ((void *)DAT_00561ee8[0]);
-    metas[5] = ((void *)DAT_00561578[0]);
-    metas[6] = ((void *)DAT_00561570);
+    metas[2] = ((void *)g_igMultiTextureShader_metaObject[0]);
+    metas[3] = ((void *)g_igCartoonShader_metaObject[0]);
+    metas[4] = ((void *)g_igBumpMapShader_metaObject[0]);
+    metas[5] = ((void *)g_igShader_metaObject[0]);
+    metas[6] = ((void *)g_igShader2_metaObject);
     for (i = 0; i < 7; i++) {
         m = &metas[i];
         count = igMetaObject_CountTree((igMetaObject *)*m);
@@ -403,9 +403,9 @@ void FUN_001d7910(void) {
         }
     }
     pairs = DAT_0048dac0;
-    pairs._pairs[0]._meta = ((void *)DAT_00561860[0]);
-    pairs._pairs[1]._meta = ((void *)DAT_00561e98[0]);
-    pairs._pairs[2]._meta = ((void *)DAT_00561ee8[0]);
+    pairs._pairs[0]._meta = ((void *)g_igMultiTextureShader_metaObject[0]);
+    pairs._pairs[1]._meta = ((void *)g_igCartoonShader_metaObject[0]);
+    pairs._pairs[2]._meta = ((void *)g_igBumpMapShader_metaObject[0]);
     pairs._pairs[3]._meta = ((void *)g_igEnvironmentMapShader2_metaObject);
     for (i = 0; i < 4; i++) {
         p = &pairs._pairs[i];

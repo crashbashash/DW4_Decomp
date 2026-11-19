@@ -34,7 +34,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
         }
     }
     if (self->flags & 2) {
-        if (igObject_IsKindOf((igObject *)node, (igMetaObject *)g_igGeometry_metaObject) != 0 || igObject_IsKindOf((igObject *)node, ((igMetaObject **)DAT_00561ca0)[0]) != 0) {
+        if (igObject_IsKindOf((igObject *)node, (igMetaObject *)g_igGeometry_metaObject) != 0 || igObject_IsKindOf((igObject *)node, ((igMetaObject **)g_igCompiledGraph_metaObject)[0]) != 0) {
             bool hit;
             unsigned int i;
             HitSegmentList *segments;

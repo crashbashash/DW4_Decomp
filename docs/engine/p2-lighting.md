@@ -19,7 +19,7 @@ recovered. The packs carry serialised `igLightAttr` records, but those are proto
 | `p2WriteDirectionalLights` | 660 | the **unlit** path: writes the first four directional lights' directions as x, y and z rows, plus three rows of half vectors toward a viewer on +z when specular lighting is on (also used from `FUN_001fbaf0`) |
 | `FUN_001fbaf0` | 484 | the tail `p2lighting` calls when the `0x56AFAE` mode is on; appends a 48-byte block and an optional 16-byte record |
 | `p2UpdateLights` | 6684 | the per-frame light updater (calls `p2AppendLightingPacket`); also the ambient accumulation in `0x1f9f20` |
-| `p2RefreshLightState` | 2260 | the light-state refresh: fills the index tables `0x56AF30`/`0x56AF38`, the count `0x56AF94` and the enable flags from the pointer table `0x56AF40` |
+| `p2RefreshLightState` | 2260 | the light-state refresh: fills the slot tables `p2DirectionalLights`/`p2LocalLights`, the counts and the light flags from `p2Lights`, and selects the lighting feature and its variant (*How the refresh classifies the lights*) |
 | `p2InitGsRegisterAddresses` | 660 | fills `p2GsRegisterAddresses` (`0x56AE50`), the GS register address of each register-set slot (`0,1,…,10,12,13,20,…,0x62,0x7f`), which `p2UploadGsRegisters` writes beside each value as the A+D address |
 | `p2SetLight` / `p2SetMaterial` | 108 / 108 | store a light into `p2Lights` (`0x56AF40`) or the material into `p2Materials` (`0x56AF60`) at a caller-supplied slot |
 | `p2SetLightingColor` | 60 | copies a 16-byte colour (the visual context passes its material's `+0x58` vector) into `0x56AEE0`, the block `p2lighting` emits as record 3 |
@@ -28,9 +28,10 @@ recovered. The packs carry serialised `igLightAttr` records, but those are proto
 | `p2InitLighting` | 148 | empties the light and material slots and turns lighting off (called from the renderer's initialisation) |
 | `p2InvertMatrix` / `p2AdjointMatrix` | 96 / 640 | the light-matrix inverse `p2lighting` uses: the adjoint scaled by one over the value `p2AdjointMatrix` returns |
 
-`p2AppendLightingPacket` reads the current program record's flags through `0x562C70 + 4*(*(0x569330))` (the
-runtime program table, the same flags decoded in [VU1 microcode](vu1-microcode.md)) and branches on four bits: `0x1000`
-(texgen), `0x100000` (scale), `0x200000`, and the mode global `0x56AED0` (1 or 5). It then copies
+`p2AppendLightingPacket` reads the current program's capability word through `0x562C70 + 4*(*(0x569330))`
+(`p2ProgramFlags[p2CurrentProgram]`, the bits `p2EnableCapability` sets) and branches on four bits: `0x1000`
+(capability 12, colour material), `0x100000` (capability 20, eye-space local lights), `0x200000` (capability 21,
+CPU light loading), and the colour-material mode `0x56AED0` (1 or 5). It then copies
 the program's 48-byte record into the transfer descriptor's cursor, appends either `p2lighting`'s
 block (lit) or `p2WriteDirectionalLights`'s (unlit), and hands the cursor on. That is the whole "lighting" step:
 `p2lighting` never touches a register, it only writes a constant buffer.
@@ -56,9 +57,9 @@ at `+0`, diffuse `+16`, specular `+32`, emission `+48`, shininess `+64`, flags `
 (the layout `igPsx2VisualContext_SetMaterial` fills from an `igMaterialAttr`). So record 0
 carries the emission, records 1 and 2 the ambient and diffuse colours, and record A's `w` the
 shininess. `L` is the light descriptor for this iteration:
-`idx = ((uint8_t *)0x56AF38)[i]`, `L = ((void **)0x56AF40)[idx]`; a NULL `L` is skipped. The loop
+`idx = p2LocalLights[i]` (`0x56AF38`), `L = ((void **)0x56AF40)[idx]`; a NULL `L` is skipped. The loop
 runs `i = 0 .. lightCount-1`, where **`lightCount = *(int *)0x56AF94`** and is also the fourth word
-of record 0. Before the loop, when `*(uint8_t *)0x56AFAE` is on and `(texgen == 0 || mode51)`:
+of record 0. Before the loop, when `*(uint8_t *)0x56AFAE` is on and `(colorMaterial == 0 || mode51)`:
 
 ```
 for i in 0 .. *(int*)0x56AF00 - 1:
@@ -133,24 +134,27 @@ so the records are prototypes, not the running values.
 | --- | --- | --- | --- |
 | `0x56AF00` | `p2DirectionalLightCount` | int | count of the directional-light table (`0x56AF30`) |
 | `0x56AF30` | `p2DirectionalLights` | u8[8] | slots of the active type-0 lights, at most four; the ambient pass and `p2WriteDirectionalLights` read them |
-| `0x56AF38` | | u8[8] | slots of the active type-1 and type-2 lights (the per-light pass) |
+| `0x56AF38` | `p2LocalLights` | u8[8] | slots of the active type-1 and type-2 lights (the per-light pass) |
 | `0x56AF40` | `p2Lights` | void*[8] | the light in each slot |
 | `0x56AF60` | `p2Materials` | void*[2] | the material in each slot; slot 0 is `p2lighting`'s `state` |
 | `0x56AEF0` / `0x56AEF8` | `p2ActiveLightCount` / `p2ActivePointLightCount` | int | lights switched on, and those of type 1 |
 | `0x56AF90` | `p2UseInfiniteLightProgram` | int | set when there are no local lights and at most four lights: the `INFINITE_4` programs light the draw |
 | `0x56AF94` | `p2LocalLightCount` | int | **the local (point and spot) light count**: the loop bound and record 0's `w` |
+| `0x56AF98` | `p2LightSpotCone` | int | some spot light has a cone (light flag 4), or the general program lights the draw: the light records carry the cone |
 | `0x56AF9C` | `p2LightSpecular` | int | enables the three half-vector rows (`+0x30/+0x40/+0x50`) in the unlit path |
-| `0x56AFA0` | | int | some local light is attenuated (light flag 2) |
+| `0x56AFA0` | `p2LightAttenuation` | int | some light is attenuated (light flag 2), or the general program lights the draw: the light records carry the attenuation |
 | `0x56AFA4` | `p2LocalLightAmbient` | int | some local light has an ambient colour (light flag `0x10`) |
 | `0x56AFA8` | `p2LinearAttenuationLightCount` | int | local lights whose attenuation is linear only (light flag `0x20`) |
 | `0x56AFAC` | `p2UseLocalLightProgram` | u8[5] | the local-light program selected: 1 `LOCAL`, 2 the same with four infinite lights (`N_INFINITE_4`, also gates the ambient pass and the `FUN_001fbaf0` tail), 3 `SPOT`, 4 spot with infinite lights |
 | `0x56AFD0` | `p2LightMatrix` | mat4 | the **light matrix** (identity in every state observed) |
 | `0x56AEE0` | `p2LightingColor` | 16 B | the colour emitted as record 3 (`p2SetLightingColor`) |
-| `0x56AED0` | `p2LightingMode` | int | lighting mode 1/5 (`p2SetLightingMode`) |
+| `0x56AED0` | `p2LightingMode` | int | the colour-material mode (`p2SetLightingMode`; `igPsx2VisualContext_SetMaterialColorMode` maps its modes 1-5 to 1, 4, 5, 3, 2); 3 is the specular colour |
 | `0x56AE50` | | u8[?] | light-type → program-index table (`p2InitGsRegisterAddresses`) |
 | `0x554BC0` | `p2LightingEnabled` | bool | lighting on (`p2EnableLighting`) |
-| `0x554BC4` | `p2LightsNeedTransform` | bool | set by `p2UpdateLights`; the unlit path then rotates the lights (object-space programs) or raises `p2LightCalcPending` |
+| `0x554BC4` | `p2LightsNeedTransform` | bool | set by `p2UpdateLights`; the unlit path then rotates the lights (with capability 21, CPU light loading) or raises `p2LightCalcPending` |
 | `0x491270` | `p2LightsChanged` | int | any light, material or mode changed; the refresh rebuilds the tables |
+| `0x491278` | `p2MaterialSpecularState` | int | the material's specular state (`p2SetMaterialSpecularState`); specular lighting needs it on |
+| `0x4910D0`-`0x491268` | `p2InfiniteLightVariants`, `p2LocalObjectLightVariants`, `p2LocalLightVariants`, `p2SpotLightVariants`, `p2SpotInfiniteLightVariants` | int[16], [32], [32], [16], [8] | the variant of each lighting feature the refresh selects (below) |
 
 Measured from an offline RAM dump (stag0102 loaded): `0x56AF00 = 2`,
 `0x56AF94 = 0`, `0x56AF60 = 0x006e9820`, `0x56AFD0` is the identity, and `0x56AF40` is **all NULL**.
@@ -159,14 +163,42 @@ during the render pass and is empty in a savestate taken outside it.
 
 ### How the refresh classifies the lights
 
-`p2RefreshLightState` runs when `p2PrepareRenderState` finds the lighting-dirty bit. The visual context keeps
-a flag word at `+0x6c` of each light record: 1 specular colour set, 2 attenuated (attenuation other than
-`(1, 0, 0)`), 4 spot cone (cutoff other than 180 degrees), 8 changed, `0x10` ambient colour set and `0x20`
-linear attenuation only (`(0, l, 0)`), each set by the matching `igPsx2VisualContext` setter. The refresh
-counts the local lights and those with flag `0x20`; when every local light attenuates linearly and none has an
-ambient colour, it selects the `LINEAR_ATT` program family (the variant tables at `0x491110`/`0x491190` index
-`| 0x10`), and `p2AppendLightingPacket` then sends two records per light instead of four (records A and C, the
-direction and ambient, are dropped).
+`p2RefreshLightState` runs when `p2PrepareRenderState` finds the lighting-dirty bit. With lighting off, or with
+capability 22 on, it clears the lighting features from `p2VertexArrayMask` and the lighting-dirty bit and stops;
+otherwise it works only when `p2LightsChanged` is set. The visual context keeps a flag word at `+0x6c` of each
+light record: 1 specular colour set, 2 attenuated (attenuation other than `(1, 0, 0)`), 4 spot cone (cutoff other
+than 180 degrees), 8 changed, `0x10` ambient colour set and `0x20` linear attenuation only (`(0, l, 0)`), each set
+by the matching `igPsx2VisualContext` setter. The refresh walks the active lights: directional ones go to
+`p2DirectionalLights` (at most four), point and spot ones to `p2LocalLights`. It counts the local lights and those
+with flag `0x20`, and notes an ambient colour (`p2LocalLightAmbient`), a spot cone (`p2LightSpotCone`), an
+attenuation of any light (`p2LightAttenuation`) and specular lighting (`p2LightSpecular`: a light's and the
+material's specular colour with `p2MaterialSpecularState` on, or colour material on the specular colour).
+
+Four capabilities of the current program steer the choice; the visual context sets three of them from the registry
+when it opens the display:
+
+| capability | set by | effect |
+| --- | --- | --- |
+| 12 | `igPsx2VisualContext_SetMaterialColorMode`, any mode but 0 | colour material: the variant follows `p2LightingMode` |
+| 20 | registry `useEyeLocalLight` | local lights lit in eye space (`LOCAL`) instead of object space (`LOCAL_OBJ`) |
+| 21 | registry `useCpuLightLoading` | the CPU loads the lights (`p2WriteDirectionalLights` transforms them): no `p2LightingProgramBits` |
+| 24 | on unless registry `useSlowSpotLight` | spot lights take the spot programs |
+
+It then selects one lighting feature: a bit of `p2VertexArrayMask`, which the program variant search matches, and a
+slot of `p2VariantSlots`, whose index picks the program from the feature's variant list. The tables index by the
+colour-material mode (0 without colour material) in bits 0-2, plus the bits named below.
+
+| feature | bit | selected when | variant |
+| --- | --- | --- | --- |
+| infinite lights (`INFINITE_4`) | `0x80` | no local light and at most four lights | `p2InfiniteLightVariants`, bit 3 specular |
+| more directional lights | `0x2000` | no local light and more lights | 1 with specular, else 0 |
+| local lights in object space (`LOCAL_OBJ`) | `0x100` | one light alone, or at most eight local lights, neither specular nor with a spot cone | `p2LocalObjectLightVariants`, bit 3 more than one light, bit 4 linear attenuation only |
+| local lights in eye space (`LOCAL`) | `0x4000` | the same with capability 20; otherwise the general program (variant 0, specular, attenuation and cone all on) | `p2LocalLightVariants`, the same bits |
+| spot lights (`SPOT`) | `0x8000` | a spot cone with capability 24 (specular and attenuation off); colour material; a spot cone | `p2SpotLightVariants` (bit 3: one spot light alone), `p2SpotInfiniteLightVariants` with other lights; variant 0 for a cone without colour material |
+
+When every local light attenuates linearly and none has an ambient colour, the local variants take the `LINEAR_ATT`
+family (index bit 4), and `p2AppendLightingPacket` then sends two records per light instead of four (records A and
+C, the direction and ambient, are dropped).
 
 The GameCube and Xbox builds have no counterpart. Their visual contexts keep 168-byte light records whose
 setters only store the value and mark the context dirty; the light classification and the program families are
@@ -220,7 +252,7 @@ practice stage with stag0001's BG02 overlay pattern has been found.
 about 1,300 parsed dumps; the Main Lobby frames contain no lit k > 0 mesh, so they neither confirm nor contradict the hub half);
 which events re-emit a fresh block in the draw-begin path `p2UpdateLights` (`p2DirtyFlags` bit 2 and the lighting-dirty state); whether
 leaving a texture-matrix transform uploads on its own (the stream shows only the entry uploads plus one restore on leaving the scope);
-the `sel`/object-space program variants (`p2WriteDirectionalLights` transforms the lights on the EE there), the `p2lighting` path and positional
+CPU light loading (capability 21: `p2WriteDirectionalLights` transforms the lights on the EE), the `p2lighting` path and positional
 or spot lights; a rotating or scaled ancestor, where `(V3 . R)^k` is an extrapolation; and a hidden switch branch (a draw skipped
 skips its upload).
 

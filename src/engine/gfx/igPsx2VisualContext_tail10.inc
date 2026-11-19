@@ -39,7 +39,7 @@ unsigned char igPsx2VisualContext_GetMaterialSpecularState(igPsx2VisualContext *
     return self->_materialSpecularState;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_121(void) {
+void igPsx2VisualContext_GetTextureInfo(void) {
 
 }
 

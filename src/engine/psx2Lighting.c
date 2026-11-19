@@ -28,7 +28,17 @@ enum {
     P2_DIRTY_LIGHTING = 0x04
 };
 
-/* p2VertexArrayMask: the bits of the normal arrays, which only lighting reads. */
+/* The lighting features of the VU1 programs. Each is a bit of p2VertexArrayMask, the capabilities the
+ * program variant search matches, and a slot of p2VariantSlots, which holds the variant selected. */
+enum {
+    P2_FEATURE_INFINITE_LIGHTS = 7,      /* at most four directional lights (INFINITE_4) */
+    P2_FEATURE_LOCAL_OBJECT_LIGHTS = 8,  /* local lights lit in object space (LOCAL_OBJ) */
+    P2_FEATURE_DIRECTIONAL_LIGHTS = 13,  /* more directional lights (LIGHT_N_..._DIRECTIONAL) */
+    P2_FEATURE_LOCAL_LIGHTS = 14,        /* local lights lit in eye space (POSITIONAL, LOCAL) */
+    P2_FEATURE_SPOT_LIGHTS = 15          /* spot lights (SPOT) */
+};
+
+/* p2VertexArrayMask: the bits of the five lighting features, the normal arrays only lighting reads. */
 enum {
     P2_NORMAL_ARRAYS = 0xE180
 };
@@ -62,6 +72,19 @@ extern int p2LocalLightCount;
 extern int p2LocalLightAmbient;
 extern int p2LinearAttenuationLightCount;
 extern char p2UseLocalLightProgram[5];
+/* The slots of the local lights, and whether the light records carry a spot cone and an attenuation:
+ * some light has one, or the general program that takes both lights the draw. */
+extern unsigned char p2LocalLights[P2_LIGHT_SLOTS];
+extern int p2LightSpotCone;
+extern int p2LightAttenuation;
+/* The variant of each lighting feature, indexed by the colour-material mode (bits 0-2) and: for the
+ * infinite lights, specular lighting (bit 3); for the local lights, more than one light (bit 3) and
+ * linear attenuation only (bit 4); for the spot lights, one spot light alone (bit 3). */
+extern int p2InfiniteLightVariants[16];
+extern int p2LocalObjectLightVariants[32];
+extern int p2LocalLightVariants[32];
+extern int p2SpotLightVariants[16];
+extern int p2SpotInfiniteLightVariants[8];
 
 void p2InitLighting(void) {
     int i;
@@ -162,7 +185,6 @@ void p2SetMaterial(int slot, p2Material *material) {
     p2DirtyFlags |= P2_DIRTY_LIGHTING;
 }
 
-/* the lighting mode lights with the texgen variant */
 static inline int p2IsMode51(void) {
     unsigned char r = 1;
 
@@ -187,6 +209,198 @@ static inline int p2AllLinearAttenuation(void) {
     return r;
 }
 
+/* Rebuilds the light tables when a light, the material or the mode changed: the slots of the
+ * directional and the local lights, what the lights need, and the lighting features and variants the
+ * VU1 programs are chosen by. */
+void p2RefreshLightState(void) {
+    int cpuLightLoading;
+    int colorMaterial;
+    char fastSpotLight;
+    p2Light *light;
+    int found;
+    int slot;
+    int eyeLocalLight;
+    int colorMode;
+    int variant;
+    unsigned char linearOnly;
+    int oldSource;
+
+    cpuLightLoading = (p2ProgramFlags[p2CurrentProgram] >> 21) & 1;
+    colorMaterial = (p2ProgramFlags[p2CurrentProgram] >> 12) & 1;
+    fastSpotLight = (p2ProgramFlags[p2CurrentProgram] >> 24) & 1;
+    if (p2LightingEnabled == 0 || ((p2ProgramFlags[p2CurrentProgram] >> 22) & 1)) {
+        p2NormalArraySource = 0;
+        p2NormalArrayMask = 0;
+        if (p2LightingProgramBits != 0 && cpuLightLoading == 0) {
+            p2LightingProgramBits = 0;
+            p2DirtyFlags |= 2;
+        }
+        p2DirtyFlags |= 1;
+        p2DirtyFlags &= ~P2_DIRTY_LIGHTING;
+        p2VertexArrayMask &= ~P2_NORMAL_ARRAYS;
+        return;
+    }
+    if (p2LightsChanged == 0) {
+        return;
+    }
+    p2LocalLightCount = 0;
+    p2LightSpotCone = 0;
+    p2LightSpecular = (unsigned char)(colorMaterial && p2LightingMode == 3 && p2MaterialSpecularState);
+    p2LightAttenuation = 0;
+    p2LinearAttenuationLightCount = 0;
+    p2LocalLightAmbient = 0;
+    p2DirectionalLightCount = 0;
+    for (slot = 0, found = 0; slot < P2_LIGHT_SLOTS && found < p2ActiveLightCount; slot++) {
+        light = p2Lights[slot];
+        if (light != 0 && light->active != 0) {
+            found++;
+            switch (light->type) {
+            case P2_LIGHT_DIRECTIONAL:
+                if (p2DirectionalLightCount < 4) {
+                    p2DirectionalLights[p2DirectionalLightCount] = slot;
+                    p2DirectionalLightCount++;
+                }
+                break;
+            case P2_LIGHT_SPOT:
+                if (light->flags & P2_LIGHT_SPOT_CONE) {
+                    p2LightSpotCone = 1;
+                }
+                /* fall through: a spot light is a local light */
+            case P2_LIGHT_POINT:
+                p2LocalLights[p2LocalLightCount] = slot;
+                p2LocalLightCount++;
+                if (light->flags & P2_LIGHT_LINEAR_ATTENUATION) {
+                    p2LinearAttenuationLightCount++;
+                }
+                if (light->flags & P2_LIGHT_AMBIENT) {
+                    p2LocalLightAmbient = 1;
+                }
+                break;
+            }
+            if (light->flags & P2_LIGHT_ATTENUATED) {
+                p2LightAttenuation = 1;
+            }
+            if ((light->flags & P2_LIGHT_SPECULAR) && (p2Materials[0]->flags & P2_MATERIAL_SPECULAR) &&
+                p2MaterialSpecularState != 0) {
+                p2LightSpecular = 1;
+            }
+        }
+    }
+    p2LightingProgramBits = 0;
+    p2UseInfiniteLightProgram = 0;
+    p2UseLocalLightProgram[1] = 0;
+    p2UseLocalLightProgram[2] = 0;
+    p2UseLocalLightProgram[3] = 0;
+    p2UseLocalLightProgram[4] = 0;
+    p2UseLocalLightProgram[0] = 0;
+    p2VertexArrayMask &= ~P2_NORMAL_ARRAYS;
+    if (p2LocalLightCount != 0) {
+        eyeLocalLight = (p2ProgramFlags[p2CurrentProgram] >> 20) & 1;
+        if (found == 1 && p2LightSpecular == 0 && p2LightSpotCone == 0) {
+            colorMode = colorMaterial != 0 ? p2LightingMode : 0;
+            linearOnly = p2NoLocalAmbient() && p2LinearAttenuationLightCount == p2LocalLightCount;
+            if (linearOnly) {
+                variant = colorMode | 0x10;
+            } else {
+                variant = colorMode;
+            }
+            p2UseLocalLightProgram[1] = 1;
+            if (eyeLocalLight == 0) {
+                p2VertexArrayMask |= 1 << P2_FEATURE_LOCAL_OBJECT_LIGHTS;
+                p2VariantSlots[P2_FEATURE_LOCAL_OBJECT_LIGHTS].index = p2LocalObjectLightVariants[variant];
+                if (cpuLightLoading == 0) {
+                    p2LightingProgramBits = linearOnly ? 0x1000 : 0xC00;
+                    p2DirtyFlags |= 2;
+                }
+            } else {
+                p2VertexArrayMask |= 1 << P2_FEATURE_LOCAL_LIGHTS;
+                p2VariantSlots[P2_FEATURE_LOCAL_LIGHTS].index = p2LocalLightVariants[variant];
+            }
+        } else if (p2LocalLightCount < 9 && p2LightSpotCone == 0 && p2LightSpecular == 0) {
+            colorMode = colorMaterial != 0 ? p2LightingMode : 0;
+            linearOnly = p2NoLocalAmbient() && p2LinearAttenuationLightCount == p2LocalLightCount;
+            if (linearOnly) {
+                variant = colorMode | 0x18;
+            } else {
+                variant = colorMode | 8;
+            }
+            p2UseLocalLightProgram[1] = 1;
+            p2UseLocalLightProgram[2] = 1;
+            if (eyeLocalLight == 0) {
+                p2VertexArrayMask |= 1 << P2_FEATURE_LOCAL_OBJECT_LIGHTS;
+                p2VariantSlots[P2_FEATURE_LOCAL_OBJECT_LIGHTS].index = p2LocalObjectLightVariants[variant];
+                if (cpuLightLoading == 0) {
+                    p2LightingProgramBits = linearOnly ? 0x1800 : 0x1400;
+                    p2DirtyFlags |= 2;
+                }
+            } else {
+                p2VertexArrayMask |= 1 << P2_FEATURE_LOCAL_LIGHTS;
+                p2VariantSlots[P2_FEATURE_LOCAL_LIGHTS].index = p2LocalLightVariants[variant];
+            }
+        } else if (fastSpotLight && p2LightSpotCone != 0) {
+            p2VertexArrayMask |= 1 << P2_FEATURE_SPOT_LIGHTS;
+            if (p2LocalLightCount == 1 && p2DirectionalLightCount == 0) {
+                p2VariantSlots[P2_FEATURE_SPOT_LIGHTS].index = p2SpotLightVariants[p2LightingMode | 8];
+            } else {
+                p2VariantSlots[P2_FEATURE_SPOT_LIGHTS].index = p2SpotInfiniteLightVariants[p2LightingMode];
+                p2UseLocalLightProgram[4] = 1;
+            }
+            p2LightSpecular = 0;
+            p2UseLocalLightProgram[3] = 1;
+            p2LightAttenuation = 0;
+        } else if (colorMaterial != 0) {
+            p2VertexArrayMask |= 1 << P2_FEATURE_SPOT_LIGHTS;
+            p2VariantSlots[P2_FEATURE_SPOT_LIGHTS].index = p2SpotLightVariants[p2LightingMode];
+            p2LightSpecular = 1;
+            p2LightAttenuation = 1;
+        } else if (p2LightSpotCone != 0) {
+            p2VariantSlots[P2_FEATURE_SPOT_LIGHTS].index = 0;
+            p2LightSpecular = 1;
+            p2LightAttenuation = 1;
+            p2VertexArrayMask |= 1 << P2_FEATURE_SPOT_LIGHTS;
+        } else {
+            p2VariantSlots[P2_FEATURE_LOCAL_LIGHTS].index = 0;
+            p2LightSpecular = 1;
+            p2LightAttenuation = 1;
+            p2LightSpotCone = 1;
+            p2VertexArrayMask |= 1 << P2_FEATURE_LOCAL_LIGHTS;
+        }
+    } else if (found < 5) {
+        p2UseInfiniteLightProgram = 1;
+        p2VertexArrayMask |= 1 << P2_FEATURE_INFINITE_LIGHTS;
+        p2VariantSlots[P2_FEATURE_INFINITE_LIGHTS].index =
+            p2InfiniteLightVariants[(p2LightSpecular << 3) | (colorMaterial != 0 ? p2LightingMode : 0)];
+        if (cpuLightLoading == 0) {
+            p2LightingProgramBits = p2LightSpecular != 0 ? 0x800 : 0x400;
+            p2DirtyFlags |= 2;
+        }
+    } else {
+        p2VertexArrayMask |= 1 << P2_FEATURE_DIRECTIONAL_LIGHTS;
+        if (p2LightSpecular != 0) {
+            p2VariantSlots[P2_FEATURE_DIRECTIONAL_LIGHTS].index = 1;
+        } else {
+            p2VariantSlots[P2_FEATURE_DIRECTIONAL_LIGHTS].index = 0;
+        }
+    }
+    oldSource = p2NormalArraySource;
+    p2NormalArrayMask = (int)(p2VertexArrayMask & P2_NORMAL_ARRAYS);
+    if (p2VertexArrayMask & (1 << P2_FEATURE_INFINITE_LIGHTS)) {
+        p2NormalArraySource = p2VariantSlots[P2_FEATURE_INFINITE_LIGHTS].index;
+    } else if (p2VertexArrayMask & (1 << P2_FEATURE_DIRECTIONAL_LIGHTS)) {
+        p2NormalArraySource = (p2VariantSlots[P2_FEATURE_DIRECTIONAL_LIGHTS].index << 4) | 0xF;
+    } else if (p2VertexArrayMask & (1 << P2_FEATURE_LOCAL_LIGHTS)) {
+        p2NormalArraySource = (p2VariantSlots[P2_FEATURE_LOCAL_LIGHTS].index << 9) | 0x1FF;
+    } else if (p2VertexArrayMask & (1 << P2_FEATURE_SPOT_LIGHTS)) {
+        p2NormalArraySource = (p2VariantSlots[P2_FEATURE_SPOT_LIGHTS].index << 10) | 0x3FF;
+    } else if (p2VertexArrayMask & (1 << P2_FEATURE_LOCAL_OBJECT_LIGHTS)) {
+        p2NormalArraySource = (p2VariantSlots[P2_FEATURE_LOCAL_OBJECT_LIGHTS].index << 15) | 0x7FFF;
+    }
+    if (oldSource != p2NormalArraySource) {
+        p2DirtyFlags |= 0x81;
+    }
+    p2LightsChanged = 0;
+}
+
 void p2SetLightingMode(int mode) {
     p2LightingMode = mode;
     p2LightsChanged = 1;
@@ -198,7 +412,7 @@ unsigned int *p2AppendLightingPacket(unsigned int *cursor) {
     unsigned char newPacket;
     int refresh;
     unsigned int *tag;
-    int texgen;
+    int colorMaterial;
     int mode51;
     int linearAttenuation;
     int words;
@@ -208,7 +422,7 @@ unsigned int *p2AppendLightingPacket(unsigned int *cursor) {
         refresh = cursor == (unsigned int *)-1;
         newPacket = cursor == 0 || refresh;
         tag = 0;
-        texgen = (p2ProgramFlags[p2CurrentProgram] >> 12) & 1;
+        colorMaterial = (p2ProgramFlags[p2CurrentProgram] >> 12) & 1;
         mode51 = p2IsMode51();
         linearAttenuation = p2AllLinearAttenuation();
         if ((refresh && (p2DirtyFlags & P2_DIRTY_LIGHTING)) ||
@@ -228,7 +442,7 @@ unsigned int *p2AppendLightingPacket(unsigned int *cursor) {
                 p2LightingTag.qwc += 7;
                 p2LightingUnpack.field.num += 7;
                 words += 28;
-                if (texgen && mode51) {
+                if (colorMaterial && mode51) {
                     words += 4;
                     p2LightingTag.qwc += 1;
                     p2LightingUnpack.field.num += 1;
@@ -289,24 +503,24 @@ unsigned int *p2AppendLightingPacket(unsigned int *cursor) {
 /* Writes the first four directional lights' directions as three rows (x, y, z of each light),
  * and with specular lighting three more rows of their half vectors toward a viewer on +z. */
 void p2WriteDirectionalLights(float rows[][4]) {
-    int objectSpace;
+    int cpuLightLoading;
     float *m;
     float zero;
     float *column;
     int i;
     p2Light *light;
 
-    objectSpace = (p2ProgramFlags[p2CurrentProgram] >> 21) & 1;
+    cpuLightLoading = (p2ProgramFlags[p2CurrentProgram] >> 21) & 1;
     zero = 0.0f;
     m = p2LightMatrix;
-    if (p2LightsNeedTransform != 0 && objectSpace == 0) {
+    if (p2LightsNeedTransform != 0 && cpuLightLoading == 0) {
         p2LightCalcPending = 1;
     }
     for (i = 0; i < 4; i++) {
         light = p2Lights[p2DirectionalLights[i]];
         column = &rows[0][i];
         if (light != 0 && i < p2DirectionalLightCount) {
-            if (p2LightsNeedTransform != 0 && objectSpace != 0) {
+            if (p2LightsNeedTransform != 0 && cpuLightLoading != 0) {
                 float x = light->direction[0], y = light->direction[1], z = light->direction[2];
                 float tx = x * m[0] + y * m[1] + z * m[2];
                 float ty = x * m[4] + y * m[5] + z * m[6];

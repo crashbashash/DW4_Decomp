@@ -532,11 +532,11 @@ void igVisualContext_LoadDefaultDriverDatabase(int value)
     FUN_002daab0((igDriverDatabase *)builder, (int)registry, 4, 0);
 }
 
-void FUN_00166f90(void) {
+void igVisualContext_SetVertexPipelineMode(void) {
 
 }
 
-int FUN_00166fa0(void) {
+int igVisualContext_GetVertexPipelineMode(void) {
     return 0;
 }
 

@@ -730,8 +730,6 @@ int p2GetActivePointLightCount(void)
     return p2ActivePointLightCount;
 }
 
-extern int p2MaterialSpecularState;
-
 void p2SetMaterialSpecularState(int enable) {
     p2MaterialSpecularState = enable;
     p2DirtyFlags |= 0x84;

@@ -231,9 +231,15 @@ build declares but never writes:
 | `p2StatTextureMemoryUsed` (`0x56c070`) | `TEXMEM_SIZE`; `TEXMEMFREE_SIZE` is the space above the texture base less it |
 
 `WAIT_TIME` sums `p2DmaWaitTime`, `p2FinishWaitTime`, `p2SleepTime` and four more never-written timer words
-(`0x56c150`, `0x56c154`, `0x56c158`, `0x56c168`); `REMAIN_TIME` is `p2SwapWaitTime`. The enumeration names
-only the sum, and the GameCube getter answers none of these ids (it answers 0-8, 58-59 and 187-192), so
-those four words stay unnamed. The capture report (`0x178970`) prints none of the never-written counters.
+(`0x56c150`, `0x56c154`, `0x56c158`, `0x56c168`); `REMAIN_TIME` is `p2SwapWaitTime`. No instruction stores to
+the four words, directly, through a base address or through a data pointer, in the USA, European or Japanese
+PS2 build (each reads them only in `p2GetStatistics`), and every timed wait the back end has (`p2ReadClock`
+around a wait) already feeds one of the named words. The enumeration names only the sum, and neither the
+GameCube getter (it answers 0-8, 58-59 and 187-192) nor the Xbox one answers these ids, so the four words stay
+unnamed. The capture report (`0x178970`) prints none of the never-written counters.
+
+The texture record's `+116`..`+128` hold the red, green, blue and alpha bit counts that
+`igPsx2VisualContext_SetTextureComponentSize` stores and `igPsx2VisualContext_GetTextureComponentSize` reads back.
 
 Open questions:
 

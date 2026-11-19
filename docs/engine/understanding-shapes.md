@@ -345,6 +345,15 @@ tables are platform-independent and name what the PS2 build's code reads by numb
 classes the PS2 build dropped: a meta-object slot no code writes belongs to a class missing from the build, and
 the PS2 `.bss` meta slots run in reverse alphabetical class order, which places it between its neighbours.
 
+Xbox (Visual C++) tables group each overload set at its first declaration, so an Xbox slot index drifts from the
+PS2 one around overloads (`createTexture`, `setTextureSource`, `setVertexArray`) and realigns after them; match the
+slots by body and argument count (`ret N`) rather than by index. Alchemy 5.0 moved some 3.2 `igVisualContext`
+methods into helper classes, so a slot the kit's `igVisualContext.h` lacks can still carry a kit name: the texture
+component-size pair is `igDxTextureHelper::setTextureComponentSize`/`getTextureComponentSize` in the kit, with the
+same arguments as the Xbox slots. The `igCommonTraversal` node-procedure table's metaobject slots are named from the
+GameCube copy of the table, whose loads come from slots each registration call names (`addi r4, r13, <slot>` with
+the class name in `r8`).
+
 ### SDK and library archives
 
 **When:** a library function may be hand-written assembly, or a Sony routine may exist in the SDK. Extract the
@@ -986,6 +995,10 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   well. The compiler pass was not traced. *Units:* `src/game/beChangePosTransform.cpp` (0x37aae0),
   `src/game/beNDMWShopCtrl00.cpp` (0x438160), `src/game/beNDMWSaveCtrl.cpp` (0x407120),
   `src/game/beNDMWLogo.cpp` (0x449030).
+- **A `char` flag compared `!= 0` is sign-extended again at the test.** `dsll32 a0,t7,24; dsra32 a0,a0,24; beqz a0`
+  where retail branches on the flag's own register (`beqz t7`), which the assignment already sign-extended:
+  `char fastSpotLight = (flags >> 24) & 1;` tested as `if (fastSpotLight && ...)` gives retail's bytes, and
+  `fastSpotLight != 0` adds the pair. *Unit:* `src/engine/psx2Lighting.c` (0x1f8b50).
 - **A loop index under an `int`-to-`unsigned` conversion keeps its `mult`.** Retail multiplies `i * stride` on every
   pass of a vertex-array loop: the stride field is `unsigned int` and the local that holds it takes that type, so the
   index is converted (`(cast)i * stride` in the IR dump) and `IRO_DoStrengthReduction` leaves the multiplication. An
@@ -1329,6 +1342,17 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     integer pipe 0. An `lwc1` needs pipe 0 and an `lw` uses the load/store unit, so an `lwc1` cannot lead a labelled
     block. Retail's `lwc1` first means its block had no label, which a rebuilt `?:` gives (see the control-flow entry).
   - *Unit:* `src/game/beModelCtrl.cpp` (0x396340).
+- **Read-modify-writes of two globals show their statement order only in the registers.**
+  - *Symptom:* `lw a2,dirty; ori a2,a2,1; ld a0,mask; and v1,a0,v1; sw a2,dirty; sd v1,mask; lw v1,dirty;
+    and v1,v1,a1; sw v1,dirty` in retail and the same instructions in the candidate, with the mask constant, the
+    `-5` and the 64-bit mask's load in other registers.
+  - *Cause:* the scheduler moves the load and store of one named global past those of another, so the listing
+    keeps neither statement order; the code generator numbers the temporaries in statement order, and that order
+    decides the colours. With the second `p2DirtyFlags` update written last, its `-5` takes an id after the
+    mask's and colours first; written ahead of the mask's update it colours after it, as in retail.
+    `#pragma schedule off` shows the statement order directly.
+  - *Spelling:* `p2DirtyFlags |= 1; p2DirtyFlags &= ~P2_DIRTY_LIGHTING; p2VertexArrayMask &= ~P2_NORMAL_ARRAYS;`.
+  - *Unit:* `src/engine/psx2Lighting.c` (0x1f8b50).
 
 ### Scheduling (EE GCC)
 
@@ -1612,6 +1636,16 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
     fall-through's first instruction. The two placements also number the temporaries differently.
   - *Spelling:* `if (!space) { piece[used++] = c; i++; } state = 2;`.
   - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2ec980, 0x32b8d0).
+- **An `else` that only copies keeps the join's first instruction out of the test's slot.**
+  - *Symptom:* `beqz a2,L; nop; ori a3,a3,0x10; L: li v1,1` in retail, where `if (linearOnly) colorMode |= 0x10;`
+    moves the `li` into the slot (`beqz a2,L; li v1,1; ori a3,a3,0x10`), the hoist of the entry above.
+  - *Cause (block dump):* written `if (linearOnly) variant = colorMode | 0x10; else variant = colorMode;`, the
+    `else` is a copy the allocator coalesces, and its block stays as the branch's target, empty, ahead of the join.
+    The target has no instruction to give, and the fall-through's `ori` writes a register live across the
+    branch, so the slot keeps its `nop`. The predecessor lists are not emptied, and the other slots are unchanged.
+  - *Spelling:* the table index is its own local, assigned in both arms, as in the sibling path that selects
+    `colorMode | 0x18` or `colorMode | 8`.
+  - *Unit:* `src/engine/psx2Lighting.c` (0x1f8b50).
 
 ### MWCC builds compared (3.0, b38, b52)
 
@@ -1684,6 +1718,15 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   - *Spelling:* `otherRadius = other->_radius`, read once for the containment tests and the far point, declared
     first; the root declared before the direction components.
   - *Unit:* `src/engine/maths/MathsLibrary.cpp` (0x18de10).
+- **A value read through the same expression in every test is one temporary that colours first.**
+  - *Symptom:* every long-lived value of a function one register off: the program's capability word in `t9`
+    where retail has `t0`, and the bits taken from it, the loop counters and the hoisted loads each one up.
+  - *Cause:* `IRO_CommonSubs` shares the repeated read of `p2ProgramFlags[p2CurrentProgram]` in a temporary whose
+    id comes after every declared local, so it colours first and takes the lowest free register. Copied into a
+    declared `flags` local it has the lowest id and colours last.
+  - *Spelling:* each capability is read as `(p2ProgramFlags[p2CurrentProgram] >> n) & 1`, as the file's other
+    functions read them, and the locals that hold the bits are declared in the order they are assigned.
+  - *Unit:* `src/engine/psx2Lighting.c` (0x1f8b50).
 - **A class local is numbered after every declared local, wherever it is declared.**
   - *Symptom:* instructions identical, two saved registers exchanged between a result object and a pointer local
     (`s2`/`s3`). The result declared `int` and read as `.v` matches; declared as its class it does not, and no

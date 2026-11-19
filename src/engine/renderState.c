@@ -28,11 +28,6 @@ p2VariantTable *p2FindVariantTable(p2VariantTable *table, long long key);
 int p2MaskGaps(long long mask);
 p2VariantTable *p2CreateVariantTable(int program);
 
-/* One slot per bit of a VU program's feature mask. p2VariantsBitN lists the programs that have bit N, one
- * entry per combination of that feature's settings (-1: none); the slot's programs points at it and
- * index is the combination the current state selects. */
-typedef struct p2VariantSlot { int index; int *programs; } p2VariantSlot;
-
 /* The compiler emits uninitialised C data last definition first, so these follow retail's address order from the bottom. */
 unsigned int p2VuBufferLayoutNop;
 unsigned int p2FunctionTablePad;

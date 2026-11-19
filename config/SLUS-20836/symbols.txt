@@ -1648,7 +1648,7 @@
 0013ff80 000008 igRenderListAttr_SynchronizeDefault
 0013ff90 000034 igRenderListAttr_ReleaseDefaults
 0013ffd0 000080 igRenderListAttr_Reset
-00140050 000008 FUN_00140050
+00140050 000008 igVisualContext_GetScissorType
 00140060 000128 igSetRenderDestinationAttr_apply
 00140190 0000ec igSetRenderDestinationAttr_SynchronizeDefault
 00140280 000034 igSetRenderDestinationAttr_ReleaseDefaults
@@ -2611,7 +2611,7 @@
 00155c00 0001a4 FUN_00155c00
 00155db0 000158 FUN_00155db0
 00155f10 0001a0 FUN_00155f10
-001560b0 0001f8 FUN_001560b0
+001560b0 0001f8 igVisualContext_GetStateFieldHandle
 001562b0 000008 FUN_001562b0
 001562c0 000008 FUN_001562c0
 001562d0 00002c FUN_001562d0
@@ -2853,8 +2853,8 @@
 00166c90 0000b0 igVisualContext_DrawNonIndexed
 00166d40 00009c igVisualContext_FindFirst
 00166de0 0001a8 igVisualContext_LoadDefaultDriverDatabase
-00166f90 000008 FUN_00166f90
-00166fa0 000008 FUN_00166fa0
+00166f90 000008 igVisualContext_SetVertexPipelineMode
+00166fa0 000008 igVisualContext_GetVertexPipelineMode
 00166fb0 000008 FUN_00166fb0
 00166fc0 000008 FUN_00166fc0
 00166fd0 000008 igVisualContext_GetLastError
@@ -2976,7 +2976,7 @@
 0016dbe0 0000b8 igPsx2VisualContext_BeginDraw
 0016dca0 00012c igPsx2VisualContext_EndDraw
 0016ddd0 00002c igPsx2VisualContext_FlushDraw
-0016de00 000340 Gap__Gfx__igPsx2VisualContext__vfunc_273 Gap::Gfx::igPsx2VisualContext::vfunc_273
+0016de00 000340 igPsx2VisualContext_SoftwareBlendVertex
 0016e140 000040 FUN_0016e140
 0016e180 000020 Gap__Gfx__igPsx2BlendEquationExt__vfunc_29 Gap::Gfx::igPsx2BlendEquationExt::vfunc_29
 0016e1a0 0000e8 Gap__Gfx__igPsx2BlendEquationExt__vfunc_30 Gap::Gfx::igPsx2BlendEquationExt::vfunc_30
@@ -3228,16 +3228,16 @@
 0017a540 0002a0 FUN_0017a540
 0017a7e0 000090 FUN_0017a7e0
 0017a870 00006c FUN_0017a870
-0017a8e0 000008 Gap__Gfx__igPsx2VisualContext__vfunc_142 Gap::Gfx::igPsx2VisualContext::vfunc_142
+0017a8e0 000008 igPsx2VisualContext_GetAvailableTextureMemory
 0017a8f0 0000d8 igPsx2VisualContext_SetTextureStageState
 0017a9d0 000024 igPsx2VisualContext_GetTextureStageState
 0017aa00 000008 igPsx2VisualContext_CreateTextureOneImage
 0017aa10 000008 Gap__Gfx__igPsx2VisualContext__createTexture Gap::Gfx::igPsx2VisualContext::createTexture
 0017aa20 000514 igPsx2VisualContext_CreateTexture
-0017af40 000008 Gap__Gfx__igPsx2VisualContext__vfunc_124 Gap::Gfx::igPsx2VisualContext::vfunc_124
-0017af50 000224 Gap__Gfx__igPsx2VisualContext__vfunc_123 Gap::Gfx::igPsx2VisualContext::vfunc_123
-0017b180 000008 igPsx2VisualContext_SetTextureRegion
-0017b190 000040 igPsx2VisualContext_GetTextureInfo
+0017af40 000008 igPsx2VisualContext_SetTextureComponentSizeIntensityAlpha
+0017af50 000224 igPsx2VisualContext_SetTextureComponentSize
+0017b180 000008 igPsx2VisualContext_GetTextureComponentSizeIntensityAlpha
+0017b190 000040 igPsx2VisualContext_GetTextureComponentSize
 0017b1d0 000014 igPsx2VisualContext_LoadTexture
 0017b1f0 00020c igPsx2VisualContext_SetTexture
 0017b400 0001f0 FUN_0017b400
@@ -3267,7 +3267,7 @@
 0017cb40 000034 igPsx2VisualContext_GetTextureStageCoordSource
 0017cb80 000130 FUN_0017cb80
 0017ccb0 00022c FUN_0017ccb0
-0017cee0 000008 Gap__Gfx__igPsx2VisualContext__vfunc_122 Gap::Gfx::igPsx2VisualContext::vfunc_122
+0017cee0 000008 igPsx2VisualContext_SetTextureRegion
 0017cef0 000114 Gap__Gfx__igPsx2UserUCodeExt__vfunc_29 Gap::Gfx::igPsx2UserUCodeExt::vfunc_29
 0017d010 00000c igPsx2VisualContext_GetMeta
 0017d020 000008 thunk_igObject_InitDefaults
@@ -3347,7 +3347,7 @@
 00180d40 000008 igPsx2VisualContext_SetNativeVisualInfo
 00180d50 000008 igPsx2VisualContext_GetNativeVisualInfo
 00180d60 000008 igPsx2VisualContext_GetMaterialSpecularState
-00180d70 000008 Gap__Gfx__igPsx2VisualContext__vfunc_121 Gap::Gfx::igPsx2VisualContext::vfunc_121
+00180d70 000008 igPsx2VisualContext_GetTextureInfo
 00180d80 00000c igPsx2VisualContext_GetTextureMatrixState
 00180d90 000008 igVisualContext_MakeCurrent
 00180da0 000008 igVisualContext_IsCurrent
@@ -4666,7 +4666,7 @@
 001a56d0 000008 igAttrStackManager_GetMetaObjectFunction
 001a56e0 0001fc igAttrStackManager_InitFields
 001a58e0 00000c FUN_001a58e0
-001a58f0 000008 thunk_FUN_001afb00
+001a58f0 000008 thunk_igAttrStackManager_UserUnregister
 001a5900 000048 igAttrStackList_GetOrCreateMetaObject
 001a5950 000048 igAttrStackList_GetMetaObject
 001a59a0 00003c igAttrStackList_GetVTable
@@ -4978,10 +4978,10 @@
 001af890 00008c Gap__Sg__igAttrStackManager__vfunc_23 Gap::Sg::igAttrStackManager::vfunc_23
 001af920 000104 igAttrStackManager_userConstruct
 001afa30 0000cc igAttrStackManager_userDestruct
-001afb00 000054 FUN_001afb00
-001afb60 000124 FUN_001afb60
-001afc90 000370 FUN_001afc90
-001b0000 000244 igAttrStackManager_Configure
+001afb00 000054 igAttrStackManager_UserUnregister
+001afb60 000124 igAttrStackManager_RegisterClass
+001afc90 000370 igAttrStackManager_RegisterAttribute
+001b0000 000244 igAttrStackManager_Setup
 001b0250 0001e4 FUN_001b0250
 001b0440 000008 FUN_001b0440
 001b0450 000298 FUN_001b0450
@@ -5039,8 +5039,8 @@
 001b6ce0 00013c igCommonTraversal_SetPerspective
 001b6e20 0000b4 Gap__Sg__igCommonTraversal__vfunc_31 Gap::Sg::igCommonTraversal::vfunc_31
 001b6ee0 000044 igCommonTraversal_SetViewMatrix
-001b6f30 0000e0 FUN_001b6f30
-001b7010 000314 Gap__Sg__igCommonTraversal__vfunc_28 Gap::Sg::igCommonTraversal::vfunc_28
+001b6f30 0000e0 igCommonTraversal_Setup
+001b7010 000314 igCommonTraversal_SetVisualContext
 001b7330 000098 FUN_001b7330
 001b73d0 000010 FUN_001b73d0
 001b73e0 0001c4 Gap__Sg__igCommonTraversal__vfunc_23 Gap::Sg::igCommonTraversal::vfunc_23
@@ -5081,8 +5081,8 @@
 001ba200 000054 igCommonTraversal_TraverseCartoonShader
 001ba260 0003ec FUN_001ba260
 001ba650 000054 igCommonTraversal_TraversePlanarShadowShader
-001ba6b0 000028 igCommonTraversal_TraverseProjectiveShadowShaderNode
-001ba6e0 00016c igCommonTraversal_TraverseProjectiveShadowShader
+001ba6b0 000028 igCommonTraversal_TraverseProjectiveShadowShader
+001ba6e0 00016c igCommonTraversal_TraverseSelfShadowShader
 001ba850 000028 FUN_001ba850
 001ba880 000170 igCommonTraversal_TraverseTransformRecorder
 001ba9f0 000008 Gap__Sg__igTransformRecorder__vfunc_38 Gap::Sg::igTransformRecorder::vfunc_38

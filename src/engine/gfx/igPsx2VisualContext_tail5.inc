@@ -928,7 +928,7 @@ void FUN_0017a870(S0_17a070 *arg0, int arg1) {
     }
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_142(void) {
+int igPsx2VisualContext_GetAvailableTextureMemory(void) {
     return 0;
 }
 
@@ -1066,7 +1066,7 @@ int igPsx2VisualContext_CreateTexture(TexContext *context, int width, int height
     return index;
 }
 
-int Gap__Gfx__igPsx2VisualContext__vfunc_124(void) {
+int igPsx2VisualContext_SetTextureComponentSizeIntensityAlpha(void) {
     return 0;
 }
 
@@ -1077,7 +1077,7 @@ static inline unsigned int colourBits(unsigned int r, unsigned int g, unsigned i
     if (g != 0) return g;
     return b;
 }
-extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_123(igPsx2VisualContext *vc, int index, unsigned int redBits, unsigned int greenBits, unsigned int blueBits, unsigned int alphaBits) {
+extern "C" int igPsx2VisualContext_SetTextureComponentSize(igPsx2VisualContext *vc, int index, unsigned int redBits, unsigned int greenBits, unsigned int blueBits, unsigned int alphaBits) {
     TexBits *entry = &((TexBitsList *)vc->_pTexList)->data[index];
     int kind;
     unsigned int bits;
@@ -1153,19 +1153,18 @@ extern "C" int Gap__Gfx__igPsx2VisualContext__vfunc_123(igPsx2VisualContext *vc,
     return 1;
 }
 
-void igPsx2VisualContext_SetTextureRegion(void) {
+void igPsx2VisualContext_GetTextureComponentSizeIntensityAlpha(void) {
 
 }
 
-void igPsx2VisualContext_GetTextureInfo(igPsx2VisualContext *self, int arg1, int *arg2, int *arg3, int *arg4, int *arg5, char *arg6) {
-    void *temp_a0;
+void igPsx2VisualContext_GetTextureComponentSize(igPsx2VisualContext *self, int handle, int *redBits, int *greenBits, int *blueBits, int *alphaBits, char *palletized) {
+    TexBits *entry = &((TexBitsList *)self->_pTexList)->data[handle];
 
-    temp_a0 = (void *)(*(int *)((char *)(self->_pTexList) + 16) + (arg1 * 0x88));
-    *arg2 = *(int *)((char *)(temp_a0) + 116);
-    *arg3 = *(int *)((char *)(temp_a0) + 120);
-    *arg4 = *(int *)((char *)(temp_a0) + 124);
-    *arg5 = *(int *)((char *)(temp_a0) + 128);
-    *arg6 = 0;
+    *redBits = entry->redBits;
+    *greenBits = entry->greenBits;
+    *blueBits = entry->blueBits;
+    *alphaBits = entry->alphaBits;
+    *palletized = 0;
 }
 
 void igPsx2VisualContext_LoadTexture(igPsx2VisualContextSlots_17a070 *self, int value, int option)
@@ -1643,7 +1642,7 @@ int FUN_0017cb80(struct ClutContextCB80 *arg0, int arg1, int *arg2) {
     return r;
 }
 
-void Gap__Gfx__igPsx2VisualContext__vfunc_122(void) {
+void igPsx2VisualContext_SetTextureRegion(void) {
 
 }
 

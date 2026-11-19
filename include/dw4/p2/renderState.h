@@ -1,6 +1,11 @@
 #ifndef DW4_RENDERSTATE_H
 #define DW4_RENDERSTATE_H
 
+/* One slot per bit of a VU program's feature mask. p2VariantsBitN lists the programs that have bit N, one
+ * entry per combination of that feature's settings (-1: none); the slot's programs points at it and
+ * index is the combination the current state selects. */
+typedef struct p2VariantSlot { int index; int *programs; } p2VariantSlot;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -10,6 +15,7 @@ extern int p2FunctionTables[72];
 extern int p2LightCalcPending;
 extern int p2LightingProgramBits;
 extern long long p2VertexArrayMask;
+extern p2VariantSlot p2VariantSlots[33];
 /* The programs with feature bit 30: [0] runs the GS register uploads, [6] draws particles. */
 extern int p2VariantsBit30[8];
 /* Statistics: render state sends, and what each send uploaded. */

@@ -622,12 +622,12 @@ int igCommonTraversal_TraversePlanarShadowShader(int a0, int arg1) {
     return 0;
 }
 
-int igCommonTraversal_TraverseProjectiveShadowShaderNode(char *arg0, struct S_1d6190 *arg1) {
+int igCommonTraversal_TraverseProjectiveShadowShader(char *arg0, struct S_1d6190 *arg1) {
     FUN_001d6190(arg1, arg0);
     return 0;
 }
 
-int igCommonTraversal_TraverseProjectiveShadowShader(igCommonTraversal *self, igProjectiveShadowShader *shader) {
+int igCommonTraversal_TraverseSelfShadowShader(igCommonTraversal *self, igProjectiveShadowShader *shader) {
     igObject *pushed;
     int n;
     igAttrStackManager *manager;

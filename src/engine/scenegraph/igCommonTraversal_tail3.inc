@@ -52,7 +52,7 @@ void igCommonTraversal_SetViewMatrix(int arg0, int *arg1) {
     igMatrix44f_Invert((float *)(arg0 + 0xA4), (const float *)arg1);
 }
 
-void FUN_001b6f30(A_1b6f30 *arg0, R_1b6f30 *arg1, R_1b6f30 *arg2) {
+void igCommonTraversal_Setup(A_1b6f30 *arg0, R_1b6f30 *arg1, R_1b6f30 *arg2) {
     R_1b6f30 *temp_a0;
     R_1b6f30 *temp_a0_2;
 
@@ -78,11 +78,11 @@ void FUN_001b6f30(A_1b6f30 *arg0, R_1b6f30 *arg1, R_1b6f30 *arg2) {
         }
     }
     arg0->f36 = arg1;
-    igAttrStackManager_Configure((igAttrStackManager *)arg0->f52, g_igAttr_metaObject, (igAttrDefaultManager *)arg0->f36,
+    igAttrStackManager_Setup((igAttrStackManager *)arg0->f52, g_igAttr_metaObject, (igAttrDefaultManager *)arg0->f36,
                  (igVisualContextCapabilityManager *)arg0->f32);
 }
 
-void Gap__Sg__igCommonTraversal__vfunc_28(O_1b7010 *arg0, R_1b7010 *arg1) {
+void igCommonTraversal_SetVisualContext(O_1b7010 *arg0, R_1b7010 *arg1) {
     void *a;
     bool var_s1;
     R_1b7010 *t;
@@ -126,7 +126,7 @@ void Gap__Sg__igCommonTraversal__vfunc_28(O_1b7010 *arg0, R_1b7010 *arg1) {
         }
     }
     if (var_s1) {
-        FUN_001b6f30((A_1b6f30 *)arg0, (R_1b6f30 *)arg0->f36, (R_1b6f30 *)arg0->f32);
+        igCommonTraversal_Setup((A_1b6f30 *)arg0, (R_1b6f30 *)arg0->f36, (R_1b6f30 *)arg0->f32);
     }
 }
 
