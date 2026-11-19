@@ -1,5 +1,5 @@
-void igShadeModelAttr_apply(int arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetShadingMode(arg1, (unsigned int)*(int *)((char *)(arg0) + 12));
+void igShadeModelAttr_apply(igShadeModelAttr *self, igPsx2VisualContext *arg1) {
+    igPsx2VisualContext_SetShadingMode(arg1, (unsigned int)self->_mode);
 }
 
 void igShadeModelAttr_SynchronizeDefault(void **arg0, void **arg1) {

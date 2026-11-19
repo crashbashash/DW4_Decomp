@@ -1,9 +1,9 @@
-void igParticleArray_UserPostLoad(void *arg0) {
+void igParticleArray_UserPostLoad(igParticleArray *self) {
     int temp_v0;
 
     temp_v0 = (int)igVisualContext_FindFirst();
     if (temp_v0 != 0) {
-        ((DW4VC_92_5 *)(((char *)(arg0) + 0)))->vX((int)(((ParticleArray *)arg0)->_particleFormat), (int)(*(int *)((char *)(arg0) + 12)), (int)(temp_v0), ((ParticleArray *)arg0)->_particleLifeStart, ((ParticleArray *)arg0)->_particleLifeEnd);
+        ((DW4VC_92_5 *)(((char *)(self) + 0)))->vX((int)(((ParticleArray *)self)->_particleFormat), (int)(*(int *)((char *)(self) + 12)), (int)(temp_v0), ((ParticleArray *)self)->_particleLifeStart, ((ParticleArray *)self)->_particleLifeEnd);
     }
 }
 
@@ -314,29 +314,29 @@ void igPointSpriteExt_SetTextureCoord(O880 *arg0, int arg1, int arg2, float *arg
     arg0->p->m200(0, base + 5, v);
 }
 
-void igPointSpriteExt_GetTextureCoord(void *arg0, int arg1, int arg2) {
+void igPointSpriteExt_GetTextureCoord(igPointSpriteExt *self, int arg1, int arg2) {
     void **temp_a0;
     void **temp_a0_2;
 
     if (arg1 == 0) {
-        temp_a0 = (void **)(*(int *)((char *)(arg0) + 24));
+        temp_a0 = (void **)(self->_vertexArray);
         ((DW4VC_204_2 *)(temp_a0))->vX((int)(0), (int)(arg2 * 6));
         return;
     }
-    temp_a0_2 = (void **)(*(int *)((char *)(arg0) + 24));
+    temp_a0_2 = (void **)(self->_vertexArray);
     ((DW4VC_204_2 *)(temp_a0_2))->vX((int)(0), (int)((arg2 * 6) + 3));
 }
 
-void igPointSpriteExt_GetTextureCoordPointer(void *arg0, int arg1, int arg2) {
+void igPointSpriteExt_GetTextureCoordPointer(igPointSpriteExt *self, int arg1, int arg2) {
     void **temp_a0;
     void **temp_a0_2;
 
     if (arg1 == 0) {
-        temp_a0 = (void **)(*(int *)((char *)(arg0) + 24));
+        temp_a0 = (void **)(self->_vertexArray);
         ((DW4VC_208_2 *)(temp_a0))->vX((int)(0), (int)(arg2 * 6));
         return;
     }
-    temp_a0_2 = (void **)(*(int *)((char *)(arg0) + 24));
+    temp_a0_2 = (void **)(self->_vertexArray);
     ((DW4VC_208_2 *)(temp_a0_2))->vX((int)(0), (int)((arg2 * 6) + 3));
 }
 

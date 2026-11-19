@@ -160,12 +160,12 @@ void Gap__Sg__igTransformSequence1_5__vfunc_49(igTransformSequence1_5 *self, int
 }
 #undef TRANSFORM_CHANNEL_SCALE
 
-long long Gap__Sg__igTransformSequence1_5__vfunc_63(void *arg0) {
-    return *(long long *)((char *)arg0 + 80);
+long long Gap__Sg__igTransformSequence1_5__vfunc_63(igTransformSequence1_5 *self) {
+    return self->_keyframeTimeOffset;
 }
 
-void Gap__Sg__igTransformSequence1_5__vfunc_64(void *arg0, long long arg1) {
-    *(long long *)((char *)arg0 + 88) = arg1;
+void Gap__Sg__igTransformSequence1_5__vfunc_64(igTransformSequence1_5 *self, long long arg1) {
+    self->_animationDuration = arg1;
 }
 
 /* Caches the sequence length: the span from the first to the last key time, computed once while the
@@ -248,22 +248,22 @@ igMetaObject *igSkeleton_GetMeta(void) {
     return g_igSkeleton_metaObject;
 }
 
-int igSkeleton_GetJointCount(void *arg0) {
-    return *(int *)((char *)(arg0) + 24);
+int igSkeleton_GetJointCount(igSkeleton *self) {
+    return self->_jointCount;
 }
 
-int *igSkeleton_GetBoneName(void *arg0, int arg1) {
+int *igSkeleton_GetBoneName(igSkeleton *self, int arg1) {
     int *temp_v0;
 
-    temp_v0 = (int *)(*(int *)((char *)((*(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 16)) + 16) + (arg1 * 4)))) + 8));
+    temp_v0 = (int *)(*(int *)((char *)((*(int *)(*(int *)((char *)(self->_boneInfoList) + 16) + (arg1 * 4)))) + 8));
     if (temp_v0 != 0) {
         return temp_v0;
     }
     return (int *)emptyString;
 }
 
-int igSkeleton_GetParent(void *arg0, int arg1) {
-    return *(int *)((char *)((*(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 16)) + 16) + (arg1 * 4)))) + 12);
+int igSkeleton_GetParent(igSkeleton *self, int arg1) {
+    return *(int *)((char *)((*(int *)(*(int *)((char *)(self->_boneInfoList) + 16) + (arg1 * 4)))) + 12);
 }
 
 igMetaObject *igShaderInfo_GetMeta(void) {
@@ -364,13 +364,13 @@ void Gap__Sg__igCommonTraversal__vfunc_29(S0_1e31f0 *arg0, S1_1e31f0 *arg1) {
     arg0->f44 = (int)(arg1);
 }
 
-void Gap__Sg__igCommonTraversal__vfunc_27(void *arg0, long long arg1) {
+void Gap__Sg__igCommonTraversal__vfunc_27(igCommonTraversal *self, long long arg1) {
     T_1e3270 *t;
 
-    t = *(T_1e3270 **)((char *)(arg0) + 240);
+    t = (T_1e3270 *)self->_timeStack;
     if (n_of_1e3270(t) == 0) {
-        *(char *)((char *)(arg0) + 48) = 0;
-        *(long long *)((char *)(arg0) + 16) = arg1;
+        self->_timeBuffered = 0;
+        self->_timeLong = arg1;
     } else {
         *(long long *)(t->arr + t->n * 8 - 8) = arg1;
     }
@@ -485,24 +485,24 @@ igMetaObject *igAnimationCombiner_GetMeta(void) {
     return g_igAnimationCombiner_metaObject;
 }
 
-unsigned char igAnimationCombiner_GetHierarchyUpdated(void *arg0) {
-    return *(int *)((char *)(arg0) + 81);
+unsigned char igAnimationCombiner_GetHierarchyUpdated(igAnimationCombiner *self) {
+    return self->_hierarchyUpdated;
 }
 
-int igAnimationCombiner_GetBoneMatrixArray(void *arg0) {
-    return *(int *)((char *)(arg0) + 84);
+int igAnimationCombiner_GetBoneMatrixArray(igAnimationCombiner *self) {
+    return self->_boneMatrixArray;
 }
 
-int igAnimationCombiner_GetBoneMatrix(void *arg0, int arg1) {
-    return *(int *)((char *)(arg0) + 84) + (arg1 << 6);
+int igAnimationCombiner_GetBoneMatrix(igAnimationCombiner *self, int arg1) {
+    return self->_boneMatrixArray + (arg1 << 6);
 }
 
-int igAnimationCombiner_GetBlendMatrixArray(void *arg0) {
-    return *(int *)((char *)(arg0) + 88);
+int igAnimationCombiner_GetBlendMatrixArray(igAnimationCombiner *self) {
+    return self->_blendMatrixArray;
 }
 
-int igAnimationCombiner_GetBlendMatrix(void *arg0, int arg1) {
-    return *(int *)((char *)(arg0) + 88) + (arg1 << 6);
+int igAnimationCombiner_GetBlendMatrix(igAnimationCombiner *self, int arg1) {
+    return self->_blendMatrixArray + (arg1 << 6);
 }
 
 int igActor_GetMeta(void) {
@@ -1001,12 +1001,12 @@ igMetaObject *igNodeList_GetElementMeta(void) {
     return g_igNode_metaObject;
 }
 
-void igUnsignedIntList_TrimCapacity(void *arg0) {
+void igUnsignedIntList_TrimCapacity(igUnsignedIntList *self) {
     int temp_a1;
 
-    temp_a1 = *(int *)((char *)arg0 + 8);
-    if (temp_a1 < *(int *)((char *)arg0 + 12)) {
-        List_Reserve((igDataList *)arg0, temp_a1, 4);
+    temp_a1 = self->_count;
+    if (temp_a1 < self->_capacity) {
+        List_Reserve((igDataList *)self, temp_a1, 4);
     }
 }
 
@@ -1019,12 +1019,12 @@ void igDoubleList_TrimCapacity(igDataList *arg0) {
     }
 }
 
-void igTraversalFunctionList_TrimCapacity(void *arg0) {
+void igTraversalFunctionList_TrimCapacity(igTraversalFunctionList *self) {
     int temp_a1;
 
-    temp_a1 = *(int *)((char *)arg0 + 8);
-    if (temp_a1 < *(int *)((char *)arg0 + 12)) {
-        List_Reserve((igDataList *)arg0, temp_a1, 4);
+    temp_a1 = self->_count;
+    if (temp_a1 < self->_capacity) {
+        List_Reserve((igDataList *)self, temp_a1, 4);
     }
 }
 

@@ -32,8 +32,8 @@ extern float p2ViewportScale;
 extern int p2DepthBias;
 extern float p2ViewportVuScale[4];
 extern float p2ViewportVuOffset[4];
-extern float DAT_0056c310[2];
-extern unsigned int DAT_0056c318;
+extern float p2ViewportOffsetBias[2];
+extern unsigned int p2ViewportPadWord;
 extern p2DmaTag p2ViewportUploadTag;
 extern p2VifCode p2ViewportFlush;
 extern p2VifCode p2ViewportUnpack;
@@ -69,16 +69,16 @@ void p2UploadViewport(void) {
     ((float *)p)[7] = p2ViewportVuScale[1];
     ((float *)p)[8] = p2ViewportVuScale[2];
     ((float *)p)[9] = p2ViewportScale;
-    ((float *)p)[10] = p2ViewportVuOffset[0] + DAT_0056c310[0];
+    ((float *)p)[10] = p2ViewportVuOffset[0] + p2ViewportOffsetBias[0];
     if (p2Display.frameMode == 0 && p2Display.frameCount == 2) {
-        ((float *)p)[11] = DAT_0056c310[1] + (p2ViewportVuOffset[1] + (p2Display.drawBuffer != 0 ? 0.5f : 0.0f));
+        ((float *)p)[11] = p2ViewportOffsetBias[1] + (p2ViewportVuOffset[1] + (p2Display.drawBuffer != 0 ? 0.5f : 0.0f));
     } else {
-        ((float *)p)[11] = p2ViewportVuOffset[1] + DAT_0056c310[1];
+        ((float *)p)[11] = p2ViewportVuOffset[1] + p2ViewportOffsetBias[1];
     }
     ((float *)p)[12] = p2ViewportVuOffset[2];
-    p[13] = DAT_0056c318;
-    p[14] = DAT_0056c318;
-    p[15] = DAT_0056c318;
+    p[13] = p2ViewportPadWord;
+    p[14] = p2ViewportPadWord;
+    p[15] = p2ViewportPadWord;
     p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)(p + 16);
     if (p2DmaCurrentPacket[P2_DMA_VIF1]->cursor >= p2DmaCurrentPacket[P2_DMA_VIF1]->limit) {
         if (p2DisplayListMode != 0) {

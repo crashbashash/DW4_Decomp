@@ -19,6 +19,7 @@ extern struct igMetaField *g_igViewerParameters_upVectorMetaField;
 extern struct igMetaField *g_igViewerParameters_ratioMetaField;
 extern struct igMetaField *g_igViewerParameters_hfovMetaField;
 extern struct igMetaField *g_igViewerParameters_nearPlaneMetaField;
+extern struct igMetaField *g_igViewerParameters_projectionMatrixMetaField;
 extern struct igMetaField *g_igViewerParameters_farPlaneMetaField;
 extern struct igMetaField *g_igViewerParameters_viewMatrixMetaField;
 extern struct igMetaField *g_igViewerParameters_drawTimeMetaField;

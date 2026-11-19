@@ -10,9 +10,9 @@ struct igNode;
 extern "C" {
 #endif
 
-struct igBoundingBoxesMaker *FUN_001a4830(struct igMemoryPoolView *pool);
+struct igBoundingBoxesMaker *igBoundingBoxesMaker_Create(struct igMemoryPoolView *pool);
 /* The bounding box of `node`, in a new box that already holds one reference. */
-struct igAABox *FUN_001b2ed0(struct igBoundingBoxesMaker *maker, struct igNode *node);
+struct igAABox *igBoundingBoxesMaker_ComputeBox(struct igBoundingBoxesMaker *maker, struct igNode *node);
 
 #ifdef __cplusplus
 }

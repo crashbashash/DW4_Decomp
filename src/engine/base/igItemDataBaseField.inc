@@ -110,8 +110,8 @@ int Gap__igItemDataBaseField__vfunc_25(void) {
     return 0xC;
 }
 
-void igItemDataBaseField_InitDefaults(void *arg0) {
-    FUN_002285d0(*(int *)((char *)arg0 + 52));
+void igItemDataBaseField_InitDefaults(igItemDataBaseField *self) {
+    FUN_002285d0(self->_fieldList);
 }
 
 void FUN_002285d0(int arg0) {

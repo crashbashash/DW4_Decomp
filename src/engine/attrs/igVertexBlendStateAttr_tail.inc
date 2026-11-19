@@ -1,5 +1,5 @@
-void igVertexBlendStateAttr_apply(int arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetVertexBlendingState(arg1, *(bool *)((char *)(arg0) + 12));
+void igVertexBlendStateAttr_apply(igVertexBlendStateAttr *self, igPsx2VisualContext *arg1) {
+    igPsx2VisualContext_SetVertexBlendingState(arg1, *(bool *)&self->_enabled);
 }
 
 void igVertexBlendStateAttr_SynchronizeDefault(void **arg0, void **arg1) {

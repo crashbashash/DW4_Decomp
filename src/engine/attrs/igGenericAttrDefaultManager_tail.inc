@@ -16,15 +16,15 @@ void FUN_0013cf80(void **arg0, int a1, int a2, int a3, int a4) {
     ((DW4VC_144_4 *)(arg0))->vX(a1, a2, a3, (int)(&sp1C), (int)(&sp18), a4, 0);
 }
 
-void igGeometryAttr1_5_Reset(void *arg0) {
+void igGeometryAttr1_5_Reset(igGeometryAttr1_5 *self) {
     void **temp_a0;
     void **temp_a0_2;
 
-    temp_a0 = (void **)(*(int *)((char *)(arg0) + 12));
+    temp_a0 = (void **)(self->_vertexArray);
     if (temp_a0 != 0) {
         ((DW4VC_236_0 *)(temp_a0))->vX();
     }
-    temp_a0_2 = (void **)(*(int *)((char *)(arg0) + 16));
+    temp_a0_2 = (void **)(self->_indexArray);
     if (temp_a0_2 != 0) {
         ((DW4VC_140_0 *)(temp_a0_2))->vX();
     }

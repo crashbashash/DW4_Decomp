@@ -1,5 +1,5 @@
-void Gap__Gfx__igPsx2DisableExt__vfunc_29(void *arg0, int arg1) {
-    *(int *)((char *)(arg0) + 20) = arg1;
+void Gap__Gfx__igPsx2DisableExt__vfunc_29(igPsx2DisableExt *self, int arg1) {
+    self->_context = arg1;
 }
 
 unsigned char g_igPsx2DisableExt_ext1Enabled;

@@ -25,8 +25,8 @@ int Gap__Sg__igTransformSequence1_5__vfunc_45(igTransformSequence1_5 *self, int 
     return 0;
 }
 
-void Gap__Sg__igTransformSequence1_5__vfunc_62(void *arg0, long long arg1) {
-    *(long long *)((char *)arg0 + 80) = arg1;
+void Gap__Sg__igTransformSequence1_5__vfunc_62(igTransformSequence1_5 *self, long long arg1) {
+    self->_keyframeTimeOffset = arg1;
 }
 
 void Gap__Sg__igTransformSequence1_5__vfunc_34(KeySequenceView *o, int index, KeyMatrixView *m) {
@@ -252,18 +252,18 @@ void Gap__Sg__igTransformSequence1_5__vfunc_57(TransformSequenceView *s, int cha
     }
 }
 
-int Gap__Sg__igTransformSequence1_5__vfunc_59(igTransformSequence1_5 *arg0, int arg1) {
-    if (!(arg0->_drivenChannels & arg1)) {
+int Gap__Sg__igTransformSequence1_5__vfunc_59(igTransformSequence1_5 *self, int arg1) {
+    if (!(self->_drivenChannels & arg1)) {
         return -1;
     }
     switch (arg1) {
     case 1:
-        return *(unsigned char *)((char *)(arg0) + 73);
+        return self->_interpolationMethod[0];
     case 2:
     case 4:
-        return *(unsigned char *)((char *)(arg0) + 74);
+        return *(unsigned char *)((char *)(self) + 74);
     case 8:
-        return *(unsigned char *)((char *)(arg0) + 75);
+        return *(unsigned char *)((char *)(self) + 75);
     default:
         return -1;
     }

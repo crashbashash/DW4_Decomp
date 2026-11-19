@@ -1,6 +1,6 @@
-void igGuiComponent_resetFields(void *arg0, int flags) {
-    Gap__Core__igObject__resetFields((igObject *)arg0, flags);
-    *(int *)((char *)(*(int *)((char *)(arg0) + 28)) + 32) = (int)(arg0);
+void igGuiComponent_resetFields(igGuiComponent *self, int flags) {
+    Gap__Core__igObject__resetFields((igObject *)self, flags);
+    *(int *)((char *)(self->_node) + 32) = (int)(self);
 }
 
 void FUN_00455470(A_455470 *arg0) {
@@ -18,10 +18,10 @@ void FUN_00455470(A_455470 *arg0) {
     }
 }
 
-void igGuiComponent_userDestruct(void *arg0) {
-    Gap__Core__igObject__userDestruct((igObject *)arg0);
-    if (*(unsigned char *)((char *)(arg0) + 32) != 0) {
-        FUN_00455470((A_455470 *)arg0);
+void igGuiComponent_userDestruct(igGuiComponent *self) {
+    Gap__Core__igObject__userDestruct((igObject *)self);
+    if (self->_linked != 0) {
+        FUN_00455470((A_455470 *)self);
     }
 }
 

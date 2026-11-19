@@ -1,5 +1,5 @@
-void igDepthWriteStateAttr_apply(int arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetDepthWriteState(arg1, *(unsigned char *)((char *)(arg0) + 12));
+void igDepthWriteStateAttr_apply(igDepthWriteStateAttr *self, igPsx2VisualContext *arg1) {
+    igPsx2VisualContext_SetDepthWriteState(arg1, self->_enabled);
 }
 
 void igDepthWriteStateAttr_SynchronizeDefault(void **arg0, void **arg1) {

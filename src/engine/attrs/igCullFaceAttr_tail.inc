@@ -15,8 +15,8 @@ void igCullFaceAttr_SetState(igCullFaceAttr *self, char enabled) {
     self->_enabled = enabled;
 }
 
-void igCullFaceAttr_apply(char *arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetCullFaceState(arg1, *(bool *)(arg0 + 12));
-    igPsx2VisualContext_SetCullFaceMode(arg1, *(int *)(arg0 + 16));
+void igCullFaceAttr_apply(igCullFaceAttr *self, igPsx2VisualContext *arg1) {
+    igPsx2VisualContext_SetCullFaceState(arg1, *(bool *)&self->_enabled);
+    igPsx2VisualContext_SetCullFaceMode(arg1, self->_mode);
 }
 

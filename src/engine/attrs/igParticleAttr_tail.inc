@@ -36,10 +36,10 @@ void igParticleAttr_SetParticleArray(igParticleAttr *self, igObject *particleArr
     self->_particleNum = particleNum;
 }
 
-int Gap__Attrs__igParticleAttr__vfunc_33(void *arg0) {
-    VC37 *o = *(VC37 **)((char *)arg0 + 16);
+int Gap__Attrs__igParticleAttr__vfunc_33(igParticleAttr *self) {
+    VC37 *o = (VC37 *)self->_particleArray;
     float v = o->vX();
-    float f = *(float *)((char *)arg0 + 40);
+    float f = self->_time;
     int r = 1;
     if (v < f) r = 0;
     return r;

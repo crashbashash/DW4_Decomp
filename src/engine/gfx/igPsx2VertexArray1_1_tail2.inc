@@ -136,19 +136,19 @@ int igPsx2VertexArray1_1_GetPositionPointer(int *arg0, int arg1) {
     return **(int **)(arg0 + 2) + arg1 * 12;
 }
 
-void igPsx2VertexArray1_1_SetNormal(igPsx2VertexArray1_1 *arg0, int arg1, void *arg2) {
+void igPsx2VertexArray1_1_SetNormal(igPsx2VertexArray1_1 *self, int arg1, void *arg2) {
     void *temp_v1;
 
-    temp_v1 = (void *)(*(int *)((char *)(arg0->_vdata) + 4) + (arg1 * 0xC));
+    temp_v1 = (void *)(*(int *)((char *)(self->_vdata) + 4) + (arg1 * 0xC));
     *(float *)((char *)(temp_v1) + 0) = (float) *(float *)((char *)(arg2) + 0);
     *(float *)((char *)(temp_v1) + 4) = (float) *(float *)((char *)(arg2) + 4);
     *(float *)((char *)(temp_v1) + 8) = (float) *(float *)((char *)(arg2) + 8);
 }
 
-void igPsx2VertexArray1_1_GetNormal(igVertexArray *arg0, int arg1, void *arg2) {
+void igPsx2VertexArray1_1_GetNormal(igVertexArray *self, int arg1, void *arg2) {
     void *temp_v1;
 
-    temp_v1 = (void *)(*(int *)((char *)(arg0->_vdata) + 4) + (arg1 * 0xC));
+    temp_v1 = (void *)(*(int *)((char *)(self->_vdata) + 4) + (arg1 * 0xC));
     *(float *)((char *)(arg2) + 0) = (float) *(float *)((char *)(temp_v1) + 0);
     *(float *)((char *)(arg2) + 4) = (float) *(float *)((char *)(temp_v1) + 4);
     *(float *)((char *)(arg2) + 8) = (float) *(float *)((char *)(temp_v1) + 8);
@@ -366,19 +366,19 @@ void igPsx2VertexArray1_1_UserApplyWriteProxy(struct VertexArrayColorView *s) {
     }
 }
 
-void igPsx2VertexArray1_1_UserMakeConcrete(void *arg0, int arg1) {
+void igPsx2VertexArray1_1_UserMakeConcrete(igPsx2VertexArray1_1 *self, int arg1) {
     unsigned int var_a6;
     unsigned int *var_a5;
     unsigned int temp_a4;
 
-    FUN_0015e050((S_arg0_15e050 *)arg0);
+    FUN_0015e050((S_arg0_15e050 *)self);
     if ((int)g_igVertexArray_metaObject == arg1) {
-        FUN_0015e2b0((igVertexArray1_1 *)arg0, arg1);
+        FUN_0015e2b0((igVertexArray1_1 *)self, arg1);
     }
-    FUN_0017d170((V_17d170 *)arg0);
-    if (*(int *)((char *)(arg0) + 28) & 4) {
-        var_a5 = (unsigned int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 8));
-        for (var_a6 = 0; var_a6 < (unsigned int) *(int *)((char *)(arg0) + 12); var_a6++) {
+    FUN_0017d170((V_17d170 *)self);
+    if (self->_vertexFormat & 4) {
+        var_a5 = (unsigned int *)(*(int *)((char *)(self->_vdata) + 8));
+        for (var_a6 = 0; var_a6 < (unsigned int) self->_numVerts; var_a6++) {
             temp_a4 = *var_a5;
             *var_a5 = (temp_a4 & 0xFFFFFF) | (((temp_a4 >> 1) & 0x7F000000) + (temp_a4 & 0x01000000));
             var_a5 += 1;

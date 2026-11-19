@@ -502,26 +502,26 @@ void igCommonTraversal_RegisterClassFunction(void *self, void *meta) {
     }
 }
 
-void igCommonTraversal_userConstruct(igCommonTraversal *arg0, int arg1) {
+void igCommonTraversal_userConstruct(igCommonTraversal *self, int arg1) {
     igObject *s0;
     igObject *a0;
 
-    igTraversal_userConstruct((A_1e0380 *)arg0, arg1);
+    igTraversal_userConstruct((A_1e0380 *)self, arg1);
     if (arg1 == 0) {
         s0 = g_igCommonTraversal_travProcs;
         if (s0 != 0) {
             s0->_refCount = s0->_refCount + 1;
         }
-        a0 = (igObject *)arg0->_travProcs;
+        a0 = (igObject *)self->_travProcs;
         if (a0 != 0) {
             --a0->_refCount;
             if (((unsigned long long)(long long)a0->_refCount & 0x7fffffULL) == 0) {
                 igObject_Destroy((igObject *)a0);
             }
         }
-        arg0->_travProcs = (int)s0;
-        ((C_1b2fa0 *)arg0->_matrixOptimization)->vX(0);
-        *(char *)(arg0->_normalizeNormalsEnable + 12) = 1;
+        self->_travProcs = (int)s0;
+        ((C_1b2fa0 *)self->_matrixOptimization)->vX(0);
+        *(char *)(self->_normalizeNormalsEnable + 12) = 1;
     }
 }
 

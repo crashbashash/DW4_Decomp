@@ -171,8 +171,8 @@ void FUN_001acb50(igAnimationCombiner *c) {
     }
 }
 
-void igAnimationCombiner_SetHierarchyUpdated(void *arg0, char arg1) {
-    *(char *)((char *)arg0 + 81) = arg1;
+void igAnimationCombiner_SetHierarchyUpdated(igAnimationCombiner *self, char arg1) {
+    self->_hierarchyUpdated = arg1;
 }
 
 int igCompressedAnimationSequenceQS_evaluateRotationAndTranslation(void **arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {

@@ -6,7 +6,7 @@ void FUN_001b6cd0(int a0, float left, float right, float bottom, float top, floa
     FUN_00191910((float *)((char *)a0 + 272), left, right, bottom, top, nearPlane, farPlane);
 }
 
-void FUN_001b6ce0(void *arg0, float fparg0, float fparg1, float fparg2, float fparg3, float fparg4) {
+void igCommonTraversal_SetPerspective(void *arg0, float fparg0, float fparg1, float fparg2, float fparg3, float fparg4) {
     float var_f23;
     float temp_f14;
     float temp_f23;
@@ -46,7 +46,7 @@ void Gap__Sg__igCommonTraversal__vfunc_31(A_1b6e20 *arg0) {
     arg0->f252->f8 = 0;
 }
 
-void FUN_001b6ee0(int arg0, int *arg1) {
+void igCommonTraversal_SetViewMatrix(int arg0, int *arg1) {
 
     igMatrix44f_Copy((float *)(arg0 + 0x64), (const float *)arg1);
     igMatrix44f_Invert((float *)(arg0 + 0xA4), (const float *)arg1);
@@ -181,11 +181,11 @@ void Gap__Sg__igCommonTraversal__vfunc_23(igCommonTraversalOps *t, int root) {
     Gap__Sg__igTraversal__vfunc_23((void *)t, root);
 }
 
-void Gap__Sg__igCommonTraversal__vfunc_32(void *arg0, long long arg1) {
+void Gap__Sg__igCommonTraversal__vfunc_32(igCommonTraversal *self, long long arg1) {
     int temp_s2;
     struct L_1b75b0 *temp_s1;
 
-    temp_s1 = *(struct L_1b75b0 **)((char *)arg0 + 240);
+    temp_s1 = (struct L_1b75b0 *)self->_timeStack;
     temp_s2 = temp_s1->size;
     if (temp_s2 < temp_s1->cap) {
         temp_s1->size = size_of(temp_s1) + 1;
@@ -217,10 +217,10 @@ void Gap__Sg__igCommonTraversal__vfunc_24(igCommonTraversal *t, int arg1) {
     Gap__Sg__igTraversal__vfunc_24(t, arg1);
 }
 
-void Gap__Sg__igCommonTraversal__vfunc_33(void *arg0) {
+void Gap__Sg__igCommonTraversal__vfunc_33(igCommonTraversal *self) {
     void *temp_a0;
 
-    temp_a0 = (void *)(*(int *)((char *)(arg0) + 240));
+    temp_a0 = (void *)(self->_timeStack);
     *(int *)((char *)(temp_a0) + 8) = (int)((int) (*(int *)((char *)(temp_a0) + 8) - 1));
 }
 

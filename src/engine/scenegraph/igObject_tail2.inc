@@ -290,10 +290,10 @@ int FUN_001d2230(int a0, S_1d2230 *src, S_1d2230 *dst, O_1d2230 *obj, int flag) 
     return r;
 }
 
-int igNode_GetParentCount(void *arg0) {
+int igNode_GetParentCount(igNode *self) {
     void *temp_v0;
 
-    temp_v0 = (void *)(*(int *)((char *)(arg0) + 16));
+    temp_v0 = (void *)(self->_parentList);
     if (temp_v0 != 0) {
         return *(int *)((char *)(temp_v0) + 8);
     }
@@ -304,10 +304,10 @@ int igNode_GetParent(void *arg0, int arg1) {
     return *(int *)(*(int *)((char *)(*(int *)((char *)(arg0) + 16)) + 16) + (arg1 * 4));
 }
 
-int igNode_AddParent(void *arg0, int arg1) {
+int igNode_AddParent(igNode *self, int arg1) {
         int temp_s2;
     struct L1d *temp_s1;
-    temp_s1 = (struct L1d *)(*(int *)((char *)(arg0) + 16));
+    temp_s1 = (struct L1d *)(self->_parentList);
     if (temp_s1 != 0) {
         temp_s2 = temp_s1->count;
         if (temp_s2 < temp_s1->cap) {

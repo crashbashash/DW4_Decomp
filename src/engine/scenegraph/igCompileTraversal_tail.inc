@@ -143,7 +143,7 @@ void Gap__Sg__igCompileTraversal__vfunc_23(igCompileTraversal *self, int arg1) {
     self->_currentBoneIndex = 1;
     int identity[16];
     igMatrix44f_SetIdentity((float *)identity);
-    FUN_001b6ee0((int)self, (int *)identity);
+    igCommonTraversal_SetViewMatrix((int)self, (int *)identity);
     matrix->setMatrix((int)&self->_viewMat);
     ObjectList_AppendRetained((igObjectList *)self->_mvmList, (igObject *)matrix.p);
     ObjectList_AppendRetained((igObjectList *)self->_xformInfoList, (igObject *)info.p);
@@ -347,8 +347,8 @@ float FUN_001bcd70(const float *v, int i) {
     return v[i];
 }
 
-int igCompileTraversal_TraverseProjectiveShadowShader(void *arg0) {
-    *(char *)((char *)(arg0) + 484) = 1;
+int igCompileTraversal_TraverseProjectiveShadowShader(igCompileTraversal *self) {
+    self->_containsShader = 1;
     return 2;
 }
 
@@ -372,8 +372,8 @@ int FUN_001bcdc0(void *arg0) {
     return 2;
 }
 
-int igCompileTraversal_TraversePlanarShadowShader(void *arg0) {
-    *(char *)((char *)(arg0) + 484) = 1;
+int igCompileTraversal_TraversePlanarShadowShader(igCompileTraversal *self) {
+    self->_containsShader = 1;
     return 2;
 }
 
@@ -382,24 +382,24 @@ int FUN_001bcde0(void *arg0) {
     return 2;
 }
 
-int igCompileTraversal_TraverseEnvironmentMapShader2(void *arg0, void **arg1) {
-    ObjectList_AppendRetained(*(igObjectList **)((char *)(arg0) + 500), (igObject *)arg1);
-    ((DW4VC_176_1 *)(arg1))->vX((int)(arg0));
+int igCompileTraversal_TraverseEnvironmentMapShader2(igCompileTraversal *self, void **arg1) {
+    ObjectList_AppendRetained((igObjectList *)self->_environmentShader2List, (igObject *)arg1);
+    ((DW4VC_176_1 *)(arg1))->vX((int)(self));
     return 0;
 }
 
-int igCompileTraversal_TraverseModelViewMatrixBoneSelect(A_1bce40 *arg0, int *arg1) {
+int igCompileTraversal_TraverseModelViewMatrixBoneSelect(igCompileTraversal *self, int *arg1) {
     X_1bce40 *temp_s2;
     X_1bce40 *temp_v0;
     int temp_s0;
     int temp_s1;
-    temp_s0 = arg0->f52;
-    *(char *)((char *)arg0 + 496) = 1;
-    temp_s2 = ((X_1bce40 *)igModelViewMatrixAttr_CreateInstance((int)igObject_GetAllocator((igObject *)arg0)));
-    temp_v0 = ((X_1bce40 *)FUN_001a3590((int)igObject_GetAllocator((igObject *)arg0)));
+    temp_s0 = self->_attrStack;
+    self->_isSkin = 1;
+    temp_s2 = ((X_1bce40 *)igModelViewMatrixAttr_CreateInstance((int)igObject_GetAllocator((igObject *)self)));
+    temp_v0 = ((X_1bce40 *)FUN_001a3590((int)igObject_GetAllocator((igObject *)self)));
     temp_v0->f8 = arg1[8];
-    ObjectList_AppendRetained((igObjectList *)arg0->f472, (igObject *)temp_s2);
-    ObjectList_AppendRetained((igObjectList *)arg0->f476, (igObject *)temp_v0);
+    ObjectList_AppendRetained((igObjectList *)self->_mvmList, (igObject *)temp_s2);
+    ObjectList_AppendRetained((igObjectList *)self->_xformInfoList, (igObject *)temp_v0);
     temp_s2->f4 = temp_s2->f4 - 1;
     if (((unsigned long long) ((long long) temp_s2->f4 << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_s2);
@@ -409,7 +409,7 @@ int igCompileTraversal_TraverseModelViewMatrixBoneSelect(A_1bce40 *arg0, int *ar
         igObject_Destroy((igObject *)temp_v0);
     }
     FUN_001b1030((igAttrStackManager *)temp_s0, (igAttr *)temp_s2);
-    temp_s1 = igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
+    temp_s1 = igTraversal_TraverseChildren((igTraversal *)self, (igNode *)arg1);
     FUN_001b1100((struct A_1b1100 *)temp_s0, (struct B_1b1100 *)temp_s2);
     if (temp_s1 == 2) {
         return 2;

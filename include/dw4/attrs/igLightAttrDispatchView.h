@@ -2,8 +2,8 @@
 #define DW4_IGLIGHTATTRDISPATCHVIEW_H
 #include "dw4/core/igObjectDispatchView.h"
 
-/* igLightAttr's virtual functions: the setters store a colour or the position and mark the light
- * changed.
+/* igLightAttr's virtual functions: the setters store a colour, the position or the direction and
+ * mark the light changed.
  * ABI view only: never instantiated. */
 class igLightAttrDispatchView : public igObjectDispatchView {
 public:
@@ -12,6 +12,7 @@ public:
     virtual void setAmbient(const float *rgba);                             /* slot 31 */
     virtual void setSpecular(const float *rgba);                            /* slot 32 */
     virtual void setPosition(const float *position);                        /* slot 33 */
+    virtual void setDirection(const float *direction);                      /* slot 34 */
 };
 
 #endif

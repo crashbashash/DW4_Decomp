@@ -127,7 +127,7 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
     return ok;
 }
 
-igAABox *FUN_001b2ed0(igBoundingBoxesMaker *maker, igNode *node) {
+igAABox *igBoundingBoxesMaker_ComputeBox(igBoundingBoxesMaker *maker, igNode *node) {
     igAABox *box;
 
     box = igAABox_CreateInstance((int)igObject_GetAllocator((igObject *)node));

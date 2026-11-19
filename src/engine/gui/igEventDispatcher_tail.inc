@@ -167,13 +167,13 @@ void igEventDispatcher_KeyDown(O_455010 *arg0, int arg1, int arg2) {
     }
 }
 
-void igEventDispatcher_KeyUp(int *arg0, int arg1, int arg2) {
+void igEventDispatcher_KeyUp(igEventDispatcher *self, int arg1, int arg2) {
     int temp_s1;
     int var_s0;
     A_4550b0 *temp_a0;
-    temp_s1 = *(int *)(*(int *)((char *)(arg0[3]) + 8) + 8);
+    temp_s1 = *(int *)(*(int *)((char *)(self->_receivers) + 8) + 8);
     for (var_s0 = 0; var_s0 < temp_s1; var_s0++) {
-        temp_a0 = (A_4550b0 *)(*(int *)(*(int *)(*(int *)((char *)(arg0[3]) + 8) + 16) + (var_s0 * 4)));
+        temp_a0 = (A_4550b0 *)(*(int *)(*(int *)(*(int *)((char *)(self->_receivers) + 8) + 16) + (var_s0 * 4)));
         if (temp_a0->vX(arg2, 0) & 0xFF) {
             break;
         }

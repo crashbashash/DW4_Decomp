@@ -765,8 +765,8 @@ void FUN_00158400(S0_158400 *arg0, int arg1, int arg2) {
     arg0->f30 = arg2;
 }
 
-void igImage_SetDefaultOrder(void *arg0) {
-    *(int *)((char *)arg0 + 24) = 0x66;
+void igImage_SetDefaultOrder(igImage *self) {
+    self->_order = 0x66;
 }
 
 void igImage_UpdateFormatInfo(igImage *arg0) {
@@ -1648,7 +1648,7 @@ void igImage_SetPixels(TextureImage *image, void *pixels, int format, int width,
 {
     image->setWidth(width);
     image->setHeight(height);
-    igImage_SetDefaultOrder(image);
+    igImage_SetDefaultOrder((igImage *)image);
     image->setFormat(format);
     if (pixels != image->pixels) {
         image->allocateImage();

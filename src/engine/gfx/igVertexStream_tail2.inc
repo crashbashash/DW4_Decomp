@@ -1,5 +1,5 @@
-int Gap__Gfx__igVertexStream__vfunc_23(void *arg0) {
-    return *(int *)((char *)(arg0) + 12);
+int Gap__Gfx__igVertexStream__vfunc_23(igVertexStream *self) {
+    return self->_stream;
 }
 
 void FUN_00180020(long long *arg0) {

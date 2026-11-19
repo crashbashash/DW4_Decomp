@@ -120,8 +120,8 @@ int Gap__Gfx__igTrackedElementMetaField__vfunc_25(void) {
     return 0xC;
 }
 
-void igTrackedElementMetaField_InitDefaults(void *arg0) {
-    FUN_0014e630(*(int *)((char *)arg0 + 52));
+void igTrackedElementMetaField_InitDefaults(igTrackedElementMetaField *self) {
+    FUN_0014e630(self->_fieldList);
 }
 
 void FUN_0014e630(int arg0) {

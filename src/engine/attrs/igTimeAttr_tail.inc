@@ -1,5 +1,5 @@
-void igTimeAttr_apply(void *arg0, void *arg1) {
-    *(long long *)((char *)(arg1) + 96) = (long long) *(long long *)((char *)(arg0) + 16);
+void igTimeAttr_apply(igTimeAttr *self, void *arg1) {
+    *(long long *)((char *)(arg1) + 96) = (long long) self->_time;
 }
 
 /* Take the 64-bit time stored at +96 of `source` (an object not typed in reflected.h) as this

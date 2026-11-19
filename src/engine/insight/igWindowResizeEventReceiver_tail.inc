@@ -70,19 +70,19 @@ void igInsightCore_RegisterAllPlugins(igInsightCore *core) {
         int type = (int)(igMetaObject_GetTreeNode((igMetaObject *)meta, i));
         igSmartPointer<Instance> plugin((Instance *)igMetaObject_CreateInstanceRef((igMetaObject *)type, igObject_GetAllocator((igObject *)self)).get(), kRetainReference);
         if (plugin.get()) {
-            igInsightCore_RegisterPlugin((void *)self, (void **)plugin.get());
+            igInsightCore_RegisterPlugin((igInsightCore *)self, (void **)plugin.get());
         }
     }
 }
 
-void igInsightCore_RegisterPlugin(void *arg0, void **arg1) {
-    ObjectList_AppendRetained(*(igObjectList **)((char *)(arg0) + 104), (igObject *)arg1);
-    ((DW4VC_92_1 *)(arg1))->vX((int)(arg0));
+void igInsightCore_RegisterPlugin(igInsightCore *self, void **arg1) {
+    ObjectList_AppendRetained((igObjectList *)self->_plugins, (igObject *)arg1);
+    ((DW4VC_92_1 *)(arg1))->vX((int)(self));
 }
 
-void igInsightCore_UnregisterPlugin(void *arg0, void **arg1) {
-    ((DW4VC_96_1 *)(arg1))->vX((int)(arg0));
-    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)(*(int *)((char *)(arg0) + 104)), (igObject *)arg1, 0);
+void igInsightCore_UnregisterPlugin(igInsightCore *self, void **arg1) {
+    ((DW4VC_96_1 *)(arg1))->vX((int)(self));
+    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)(self->_plugins), (igObject *)arg1, 0);
 }
 
 void igInsightCore_UnregisterAllPlugins(igInsightCore *core) {
@@ -90,7 +90,7 @@ void igInsightCore_UnregisterAllPlugins(igInsightCore *core) {
     int i;
 
     for (i = arg0->f68->cnt - 1; i >= 0; i--) {
-        igInsightCore_UnregisterPlugin(arg0, (void **)arg0->f68->arr[i]);
+        igInsightCore_UnregisterPlugin((igInsightCore *)arg0, (void **)arg0->f68->arr[i]);
     }
 }
 

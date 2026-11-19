@@ -1157,10 +1157,10 @@ void igPsx2VisualContext_SetTextureRegion(void) {
 
 }
 
-void igPsx2VisualContext_GetTextureInfo(igPsx2VisualContext *arg0, int arg1, int *arg2, int *arg3, int *arg4, int *arg5, char *arg6) {
+void igPsx2VisualContext_GetTextureInfo(igPsx2VisualContext *self, int arg1, int *arg2, int *arg3, int *arg4, int *arg5, char *arg6) {
     void *temp_a0;
 
-    temp_a0 = (void *)(*(int *)((char *)(arg0->_pTexList) + 16) + (arg1 * 0x88));
+    temp_a0 = (void *)(*(int *)((char *)(self->_pTexList) + 16) + (arg1 * 0x88));
     *arg2 = *(int *)((char *)(temp_a0) + 116);
     *arg3 = *(int *)((char *)(temp_a0) + 120);
     *arg4 = *(int *)((char *)(temp_a0) + 124);
@@ -1305,8 +1305,8 @@ void FUN_0017b5f0(TexContext *context, TexEntry *entry)
     }
 }
 
-int igPsx2VisualContext_GetCurrentTexture(void *arg0) {
-    return *(int *)((char *)(arg0) + 336);
+int igPsx2VisualContext_GetCurrentTexture(igPsx2VisualContext *self) {
+    return self->_currentTex;
 }
 
 void igPsx2VisualContext_UnloadTexture(igPsx2VisualContext *self, int index) {
@@ -1385,13 +1385,13 @@ void igPsx2VisualContext_SetTextureSource(igPsx2VisualContextSlots_17a070 *self,
     self->vfunc_131(value, index, 0);
 }
 
-int igPsx2VisualContext_SetTextureSourceFromBuffer(igPsx2VisualContext *arg0, int arg1, int arg2) {
+int igPsx2VisualContext_SetTextureSourceFromBuffer(igPsx2VisualContext *self, int arg1, int arg2) {
     int a0;
     int var_a3;
     int var_a4;
     char *s0;
 
-    s0 = (char *)(*(int *)((char *)(arg0->_pTexList) + 16) + (arg1 * 0x88));
+    s0 = (char *)(*(int *)((char *)(self->_pTexList) + 16) + (arg1 * 0x88));
     if (*(int *)(s0 + 20) != 2 || *(int *)(s0 + 72) == 0) {
         return 0;
     }
@@ -1409,8 +1409,8 @@ int igPsx2VisualContext_SetTextureSourceFromBuffer(igPsx2VisualContext *arg0, in
     return 1;
 }
 
-int igPsx2VisualContext_GetTextureImage(void *arg0, int arg1) {
-    return *(int *)((char *)((*(int *)((char *)(*(int *)((char *)(arg0) + 324)) + 16) + (arg1 * 0x88))) + 48);
+int igPsx2VisualContext_GetTextureImage(igPsx2VisualContext *self, int arg1) {
+    return *(int *)((char *)((*(int *)((char *)(self->_pTexList) + 16) + (arg1 * 0x88))) + 48);
 }
 
 int igPsx2VisualContext_SetTextureSourceFromTexture(void) {
@@ -1432,34 +1432,34 @@ void igPsx2VisualContext_SetTextureMagnificationFilter(igPsx2VisualContext *self
     struct TextureEntry140 *e = ((struct TextureList140 *)self->_pTexList)->arr + texture; if (magFilter == e->v) { DAT_00560a2c[0] += 1; } e = ((struct TextureList140 *)self->_pTexList)->arr + texture; e->v = magFilter; e = ((struct TextureList140 *)self->_pTexList)->arr + texture; e->flag = 1;
 }
 
-int igPsx2VisualContext_GetTextureMinificationFilter(void *arg0, int arg1) {
-    return *(int *)((char *)((*(int *)((char *)(*(int *)((char *)(arg0) + 324)) + 16) + (arg1 * 0x88))) + 4);
+int igPsx2VisualContext_GetTextureMinificationFilter(igPsx2VisualContext *self, int arg1) {
+    return *(int *)((char *)((*(int *)((char *)(self->_pTexList) + 16) + (arg1 * 0x88))) + 4);
 }
 
-int igPsx2VisualContext_GetTextureMagnificationFilter(void *arg0, int arg1) {
-    return *(int *)((char *)((*(int *)((char *)(*(int *)((char *)(arg0) + 324)) + 16) + (arg1 * 0x88))) + 8);
+int igPsx2VisualContext_GetTextureMagnificationFilter(igPsx2VisualContext *self, int arg1) {
+    return *(int *)((char *)((*(int *)((char *)(self->_pTexList) + 16) + (arg1 * 0x88))) + 8);
 }
 
-void igPsx2VisualContext_SetTextureAddressingMode(igPsx2VisualContext *arg0, int arg1, IG_GFX_TEXTURE_WRAP arg2, IG_GFX_TEXTURE_WRAP arg3) {
+void igPsx2VisualContext_SetTextureAddressingMode(igPsx2VisualContext *self, int arg1, IG_GFX_TEXTURE_WRAP arg2, IG_GFX_TEXTURE_WRAP arg3) {
     int temp_v1;
     temp_v1 = arg1 * 0x88;
-    if (arg2 == *(int *)(((struct TextureList136 *)arg0->_pTexList)->e + temp_v1 + 12)) {
+    if (arg2 == *(int *)(((struct TextureList136 *)self->_pTexList)->e + temp_v1 + 12)) {
         DAT_00560a34[0] += 1;
     }
-    if (arg3 == *(int *)(((struct TextureList136 *)arg0->_pTexList)->e + temp_v1 + 16)) {
+    if (arg3 == *(int *)(((struct TextureList136 *)self->_pTexList)->e + temp_v1 + 16)) {
         DAT_00560a38[0] += 1;
     }
-    *(int *)(((struct TextureList136 *)arg0->_pTexList)->e + temp_v1 + 12) = arg2;
-    *(int *)(((struct TextureList136 *)arg0->_pTexList)->e + temp_v1 + 16) = arg3;
-    *(char *)(((struct TextureList136 *)arg0->_pTexList)->e + temp_v1 + 80) = 1;
+    *(int *)(((struct TextureList136 *)self->_pTexList)->e + temp_v1 + 12) = arg2;
+    *(int *)(((struct TextureList136 *)self->_pTexList)->e + temp_v1 + 16) = arg3;
+    *(char *)(((struct TextureList136 *)self->_pTexList)->e + temp_v1 + 80) = 1;
 }
 
-void igPsx2VisualContext_GetTextureAddressingMode(void *arg0, int arg1, int *arg2, int *arg3) {
+void igPsx2VisualContext_GetTextureAddressingMode(igPsx2VisualContext *self, int arg1, int *arg2, int *arg3) {
     int temp_a1;
 
     temp_a1 = arg1 * 0x88;
-    *arg2 = *(int *)((char *)((*(int *)((char *)(*(int *)((char *)(arg0) + 324)) + 16) + temp_a1)) + 12);
-    *arg3 = *(int *)((char *)((*(int *)((char *)(*(int *)((char *)(arg0) + 324)) + 16) + temp_a1)) + 16);
+    *arg2 = *(int *)((char *)((*(int *)((char *)(self->_pTexList) + 16) + temp_a1)) + 12);
+    *arg3 = *(int *)((char *)((*(int *)((char *)(self->_pTexList) + 16) + temp_a1)) + 16);
 }
 
 void FUN_0017c6e0(int arg0) {

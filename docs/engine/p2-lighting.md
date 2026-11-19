@@ -14,13 +14,13 @@ recovered. The packs carry serialised `igLightAttr` records, but those are proto
 
 | function | size | role |
 | --- | --- | --- |
-| `FUN_001fb0e0` | 900 | the **program selector**: tests the capability bits of the current VU1 program record, chooses a lit or unlit path |
-| `p2lighting` `0x001fb710` | 980 | the **lit** path: emits the light constant block and returns the advanced cursor |
+| `p2AppendLightingPacket` | 900 | the **program selector**: tests the capability bits of the current VU1 program record, chooses a lit or unlit path |
+| `p2WriteLights` (`p2lighting`) | 980 | the **lit** path: emits the light constant block and returns the advanced cursor |
 | `p2WriteDirectionalLights` | 660 | the **unlit** path: writes the first four directional lights' directions as x, y and z rows, plus three rows of half vectors toward a viewer on +z when specular lighting is on (also used from `FUN_001fbaf0`) |
 | `FUN_001fbaf0` | 484 | the tail `p2lighting` calls when the `0x56AFAE` mode is on; appends a 48-byte block and an optional 16-byte record |
-| `p2UpdateLights` | 6684 | the per-frame light updater (calls `FUN_001fb0e0`); also the ambient accumulation in `0x1f9f20` |
+| `p2UpdateLights` | 6684 | the per-frame light updater (calls `p2AppendLightingPacket`); also the ambient accumulation in `0x1f9f20` |
 | `FUN_001f8b50` | 2260 | the light-state refresh: fills the index tables `0x56AF30`/`0x56AF38`, the count `0x56AF94` and the enable flags from the pointer table `0x56AF40` |
-| `p2InitGsRegisterAddresses` | 660 | initialises the light-type → program-index table at `0x56AE50` (`0,1,…,10,12,13,20,…,127`) |
+| `p2InitGsRegisterAddresses` | 660 | fills `p2GsRegisterAddresses` (`0x56AE50`), the GS register address of each register-set slot (`0,1,…,10,12,13,20,…,0x62,0x7f`), which `p2UploadGsRegisters` writes beside each value as the A+D address |
 | `p2SetLight` / `p2SetMaterial` | 108 / 108 | store a light into `p2Lights` (`0x56AF40`) or the material into `p2Materials` (`0x56AF60`) at a caller-supplied slot |
 | `p2SetLightingColor` | 60 | copies a 16-byte colour (the visual context passes its material's `+0x58` vector) into `0x56AEE0`, the block `p2lighting` emits as record 3 |
 | `p2EnableLight` / `p2DisableLight` | 156 / 156 | switch a slot's light on or off, keeping the active-light counts; disabling also empties the slot |
@@ -28,7 +28,7 @@ recovered. The packs carry serialised `igLightAttr` records, but those are proto
 | `p2InitLighting` | 148 | empties the light and material slots and turns lighting off (called from the renderer's initialisation) |
 | `p2InvertMatrix` / `p2AdjointMatrix` | 96 / 640 | the light-matrix inverse `p2lighting` uses: the adjoint scaled by one over the value `p2AdjointMatrix` returns |
 
-`FUN_001fb0e0` reads the current program record's flags through `0x562C70 + 4*(*(0x569330))` (the
+`p2AppendLightingPacket` reads the current program record's flags through `0x562C70 + 4*(*(0x569330))` (the
 runtime program table, the same flags decoded in [VU1 microcode](vu1-microcode.md)) and branches on four bits: `0x1000`
 (texgen), `0x100000` (scale), `0x200000`, and the mode global `0x56AED0` (1 or 5). It then copies
 the program's 48-byte record into the transfer descriptor's cursor, appends either `p2lighting`'s
@@ -164,10 +164,10 @@ stag0001 values; the generalisation and the event model are unconfirmed):
    normalise(-src_dir x getMatrix(1))`, the source direction times the model-view top. The `igLightAttr` itself keeps its authored
    `_direction`; nothing on the EE accumulates. In the practice stage the descriptor reads `(0, 0.98499, 0.17261)` while the attribute
    still holds `(0.3214, -0.866, 0.383)`.
-2. **Upload.** `FUN_001fb0e0` -> `p2WriteDirectionalLights` writes the raw `+0x60` vectors transposed as three quadwords (x row, y row, z row for
+2. **Upload.** `p2AppendLightingPacket` -> `p2WriteDirectionalLights` writes the raw `+0x60` vectors transposed as three quadwords (x row, y row, z row for
    four lights) in a VIF UNPACK to VU1 address `0x5a`.
 3. **Pending flag.** `FUN_001fbce0` is the single hardware matrix upload (type 0 model-view, 3 projection, 4 texture, 5, 2); every
-   type leaves through `0x1fc010..0x1fc018` with `p2LightCalcPending` (`0x56B5F8`) `= 1`. Only the model-view type also calls `FUN_001fb0e0(-1)`, which
+   type leaves through `0x1fc010..0x1fc018` with `p2LightCalcPending` (`0x56B5F8`) `= 1`. Only the model-view type also calls `p2AppendLightingPacket(-1)`, which
    re-emits a **fresh** light block (returning early when `p2DirtyFlags & 4`, the lighting-dirty bit, is set).
 4. **Draw submit.** `p2CallDisplayList` (clones `p2SubmitVertices`, `p2SubmitIndexedVertices`, `p2DrawParticles`) tests `p2LightCalcPending == 1`; if set it appends
    a 32-byte record (VIF `6001002b`, one word `DAT_0056b604` = `0x3a` to VU1 `mem[43]`), clears `DAT_0056afc8` and the flag. The flag

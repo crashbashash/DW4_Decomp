@@ -1,5 +1,5 @@
-void igClippingStateAttr_apply(int arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetViewportClippingState(arg1, *(unsigned char *)((char *)(arg0) + 12));
+void igClippingStateAttr_apply(igClippingStateAttr *self, igPsx2VisualContext *arg1) {
+    igPsx2VisualContext_SetViewportClippingState(arg1, self->_enabled);
 }
 
 void igClippingStateAttr_SynchronizeDefault(void **arg0, void **arg1) {

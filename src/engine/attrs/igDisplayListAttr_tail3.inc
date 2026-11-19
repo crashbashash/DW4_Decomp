@@ -2,7 +2,7 @@ igMetaObject *igDisplayListAttr_GetMeta(void) {
     return g_igDisplayListAttr_metaObject;
 }
 
-void igDisplayListAttr_Reset(void *arg0) {
-    *(int *)((char *)(*(int *)((char *)(arg0) + 12)) + 8) = 0;
+void igDisplayListAttr_Reset(igDisplayListAttr *self) {
+    *(int *)((char *)(self->_contents) + 8) = 0;
 }
 

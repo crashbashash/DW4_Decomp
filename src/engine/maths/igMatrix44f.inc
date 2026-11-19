@@ -98,7 +98,7 @@ void igMatrix44f_TranslateLocal(float *m, const igVec3f &v) {
     m[15] += m[3] * v[0] + m[7] * v[1] + m[11] * v[2];
 }
 
-void FUN_00190b30(float *m, const ScaleVec &v) {
+void igMatrix44f_TranslateWorld(float *m, const igVec3f &v) {
     m[0] += m[3] * v[0];
     m[1] += m[3] * v[1];
     m[2] += m[3] * v[2];
@@ -283,10 +283,10 @@ void igMatrix44f_PreRotateAxisAngle(float *matrix, const float *axis, float angl
     igMatrix44f_PreMultiply(matrix, rotation);
 }
 
-void FUN_001916b0(int arg0, float *arg1, float fparg0) {
-    int sp20[14];
-    FUN_00190e50(sp20, arg1, fparg0);
-    igMatrix44f_Multiply((float *)arg0, (float *)arg0, (float *)sp20);
+void igMatrix44f_PostRotateAxisAngle(float *matrix, const float *axis, float angle) {
+    int rotation[14];
+    FUN_00190e50(rotation, axis, angle);
+    igMatrix44f_Multiply(matrix, matrix, (float *)rotation);
 }
 
 void FUN_001916f0(void *arg0, float *arg1) {

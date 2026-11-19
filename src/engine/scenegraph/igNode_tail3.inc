@@ -31,9 +31,9 @@ void Gap__Sg__igNode__resetFields(igNode *arg0, int flags) {
     *(int *)((char *)(arg0) + 24) = (int)((int) *(int *)((char *)(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX()) + 8));
 }
 
-void igNode_UserPostLoad(igNode *arg0) {
+void igNode_UserPostLoad(igNode *self) {
     igObject_UserPostLoad();
-    *(int *)((char *)(arg0) + 24) = (int)((int) *(int *)((char *)(((DW4VC_88_0 *)(((char *)(arg0) + 0)))->vX()) + 8));
+    self->_handle = (int)((int) *(int *)((char *)(((DW4VC_88_0 *)(((char *)(self) + 0)))->vX()) + 8));
 }
 
 igSmartPointer<igObject> *igSmartPointer_igInfoList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {

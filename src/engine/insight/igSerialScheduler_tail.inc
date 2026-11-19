@@ -31,8 +31,8 @@ void igSerialScheduler_Update(igSerialScheduler *scheduler) {
     ObjectList_ResizeRetained((igTDataList<igObject *> *)scheduler->_cachedManagerList, 0);
 }
 
-void igSerialScheduler_Schedule(void *arg0, int arg1) {
-    igRendererOrderedList_Append((igDependencyOrderedList *)(*(int *)((char *)(arg0) + 8)), (igObject *)arg1, 1);
+void igSerialScheduler_Schedule(igSerialScheduler *self, int arg1) {
+    igRendererOrderedList_Append((igDependencyOrderedList *)(self->_managerList), (igObject *)arg1, 1);
 }
 
 void igSerialScheduler_Unschedule(Obj_238020 *arg0, int arg1) {

@@ -1,4 +1,4 @@
-igBoundingBoxesMaker *FUN_001a4830(igMemoryPoolView *pool) {
+igBoundingBoxesMaker *igBoundingBoxesMaker_Create(igMemoryPoolView *pool) {
     igBoundingBoxesMaker_EnsureRegistered();
     return (igBoundingBoxesMaker *)igMetaObject_CreateInstance(g_igBoundingBoxesMaker_metaObject, pool);
 }

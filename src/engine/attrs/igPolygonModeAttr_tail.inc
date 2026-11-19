@@ -1,5 +1,5 @@
-void igPolygonModeAttr_apply(int arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetRenderMode(arg1, (unsigned int)*(int *)((char *)(arg0) + 12));
+void igPolygonModeAttr_apply(igPolygonModeAttr *self, igPsx2VisualContext *arg1) {
+    igPsx2VisualContext_SetRenderMode(arg1, (unsigned int)self->_mode);
 }
 
 void igPolygonModeAttr_SynchronizeDefault(void **arg0, void **arg1) {

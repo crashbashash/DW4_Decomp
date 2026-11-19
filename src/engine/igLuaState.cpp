@@ -17,13 +17,13 @@ int g_luaAllocator;
 
 void FUN_002809e0(igObject *self);
 int FUN_002809f0(int a0, int a1);
-void Enbaya_CreateDefaultAllocator(int ***arg0, int **arg1);
+void Enbaya_CreateDefaultAllocator(int ***outAllocator, int **allocatorOverride);
 
-void *FUN_00280810(void *arg0) {
-    *(int *)((char *)(arg0) + 0) = (int)(&g_baseVtable_0052d6f0[0]);
-    *(int *)((char *)(arg0) + 0) = (int)(&g_derivedVtable_0052d6d0[0]);
-    *(int *)((char *)(arg0) + 76) = (int)((int) ((char *)arg0 + 0x50));
-    return arg0;
+void *FUN_00280810(void *self) {
+    *(int *)((char *)(self) + 0) = (int)(&g_baseVtable_0052d6f0[0]);
+    *(int *)((char *)(self) + 0) = (int)(&g_derivedVtable_0052d6d0[0]);
+    *(int *)((char *)(self) + 76) = (int)((int) ((char *)self + 0x50));
+    return self;
 }
 
 /* Deleting destructor of the 0x50-byte object built by FUN_00280810 (see FUN_00280890). Sets only the
@@ -57,8 +57,8 @@ igObject *FUN_00280890(igObject *self, long long deleteFlags) {
     return self;
 }
 
-int FUN_002808f0(int arg0) {
-    int p = FUN_002809f0(0x50, arg0); if (p != 0) { p = (int)FUN_00280810((void *)p); } return p;
+int FUN_002808f0(int owner) {
+    int p = FUN_002809f0(0x50, owner); if (p != 0) { p = (int)FUN_00280810((void *)p); } return p;
 }
 
 /* Returns 0x50 (the offset FUN_00280810 stores at +76 as the inline-data pointer) plus the int
@@ -98,30 +98,30 @@ int FUN_002809f0(int a0, int a1)
     return a1;
 }
 
-void Enbaya_InitMemoryManagement(void **arg0) {
+void Enbaya_InitMemoryManagement(void **allocatorOverride) {
     if (g_luaAllocator == 0) {
-        if (arg0 == 0) {
+        if (allocatorOverride == 0) {
             g_luaAllocator = (int)malloc(4);
         } else {
-            g_luaAllocator = ((DW4VC_12_1 *)(arg0))->vX((int)(4));
+            g_luaAllocator = ((DW4VC_12_1 *)(allocatorOverride))->vX((int)(4));
         }
-        Enbaya_CreateDefaultAllocator((int ***)g_luaAllocator, (int **)arg0);
+        Enbaya_CreateDefaultAllocator((int ***)g_luaAllocator, (int **)allocatorOverride);
     }
 }
 
-void Enbaya_CreateDefaultAllocator(int ***arg0, int **arg1) {
-    int **temp_v0;
+void Enbaya_CreateDefaultAllocator(int ***outAllocator, int **allocatorOverride) {
+    int **defaultAllocator;
 
-    if (arg1 != 0) {
-        *arg0 = arg1;
+    if (allocatorOverride != 0) {
+        *outAllocator = allocatorOverride;
         return;
     }
-    temp_v0 = (int **)malloc(4);
-    if (temp_v0 != 0) {
-        *temp_v0 = &g_baseVtable_0052d730[0];
-        *temp_v0 = &g_derivedVtable_0052d710[0];
+    defaultAllocator = (int **)malloc(4);
+    if (defaultAllocator != 0) {
+        *defaultAllocator = &g_baseVtable_0052d730[0];
+        *defaultAllocator = &g_derivedVtable_0052d710[0];
     }
-    *arg0 = temp_v0;
+    *outAllocator = defaultAllocator;
 }
 
 /* Deleting destructor of the 4-byte, vtable-only object that Enbaya_CreateDefaultAllocator builds. Resets the

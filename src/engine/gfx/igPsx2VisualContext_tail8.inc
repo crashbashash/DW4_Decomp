@@ -1,5 +1,5 @@
-int igPsx2VisualContext_GetPixelPipelineMode(void *arg0) {
-    return *(int *)((char *)(arg0) + 1512);
+int igPsx2VisualContext_GetPixelPipelineMode(igPsx2VisualContext *self) {
+    return self->_pixelPipelineMode;
 }
 
 void FUN_0017fd80(L_17fd80 **arg0, L_17fd80 **arg1, int arg2) {

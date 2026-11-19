@@ -17,7 +17,8 @@ struct VideoMode {
  * igContext's extension lookup by name; slots 175 and 176 set the colour a frame is cleared to,
  * from four floats (_clearColor, and the packed _uiClearColor derived from it) or from a packed
  * 32-bit colour (_uiClearColor); slot 184 reads the viewport (_iViewportX, _iViewportY,
- * _iViewportW, _iViewportH); slot 201 sets a matrix by type; slot 252 reports the video mode.
+ * _iViewportW, _iViewportH); slot 201 sets a matrix by type; slot 211 passes the view matrix on as a
+ * hint (igVisualContext_SetViewMatrixHint); slot 252 reports the video mode.
  * Slot 33 has no recovered name: the context's override runs an empty hook and releases its vertex,
  * index and strip-length arrays.
  * ABI view only: never instantiated. */
@@ -52,7 +53,9 @@ public:
     virtual void d195(); virtual void d196(); virtual void d197(); virtual void d198(); virtual void d199(); virtual void d200();
     virtual int setMatrix(int type, int matrix);                            /* slot 201 */
     virtual void d202(); virtual void d203(); virtual void d204();
-    virtual void d205(); virtual void d206(); virtual void d207(); virtual void d208(); virtual void d209(); virtual void d210(); virtual void d211(); virtual void d212(); virtual void d213(); virtual void d214();
+    virtual void d205(); virtual void d206(); virtual void d207(); virtual void d208(); virtual void d209(); virtual void d210();
+    virtual void SetViewMatrixHint(const float *matrix);                    /* slot 211 */
+    virtual void d212(); virtual void d213(); virtual void d214();
     virtual void d215(); virtual void d216(); virtual void d217(); virtual void d218(); virtual void d219(); virtual void d220(); virtual void d221(); virtual void d222(); virtual void d223(); virtual void d224();
     virtual void d225(); virtual void d226(); virtual void d227(); virtual void d228(); virtual void d229(); virtual void d230(); virtual void d231(); virtual void d232(); virtual void d233(); virtual void d234();
     virtual void d235(); virtual void d236(); virtual void d237(); virtual void d238(); virtual void d239(); virtual void d240(); virtual void d241(); virtual void d242(); virtual void d243(); virtual void d244();

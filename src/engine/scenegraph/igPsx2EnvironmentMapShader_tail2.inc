@@ -502,19 +502,19 @@ int FUN_001e2810(void) {
     return 0;
 }
 
-void igPsx2EnvironmentMapShader_Reset(void *arg0) {
-    *(char *)((char *)arg0 + 60) = 0;
+void igPsx2EnvironmentMapShader_Reset(igPsx2EnvironmentMapShader *self) {
+    self->_configured = 0;
 }
 
 int igPsx2EnvironmentMapShader_IsTransformable(void) {
     return 0;
 }
 
-int igGroup_HasChildren(void *arg0) {
+int igGroup_HasChildren(igGroup *self) {
     int var_v0;
     void *temp_v0;
 
-    temp_v0 = (void *)(*(int *)((char *)(arg0) + 28));
+    temp_v0 = (void *)(self->_childList);
     if (temp_v0 != 0) {
         var_v0 = *(int *)((char *)(temp_v0) + 8);
     } else {

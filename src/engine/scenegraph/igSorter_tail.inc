@@ -219,14 +219,14 @@ void FUN_001dc500(A_1dc500 *arg0, unsigned char arg1, int arg2) {
     }
 }
 
-void igSwitch_EnableChild(igSwitch *arg0, unsigned int arg1) {
+void igSwitch_EnableChild(igSwitch *self, unsigned int arg1) {
     int *temp_a1;
     int temp_a2_2;
     unsigned int temp_a3;
     void *temp_a2;
     int nv;
 
-    temp_a2 = (void *)(*(int *)((char *)(arg0) + 32));
+    temp_a2 = (void *)(self->_childMask);
     temp_a3 = arg1 >> 5;
     temp_a1 = (int *)(*(int *)((char *)(temp_a2) + 16) + (temp_a3 * 4));
     temp_a2_2 = *(int *)((char *)(temp_a2) + 8);
@@ -240,14 +240,14 @@ void igSwitch_EnableAllChildren(igSwitch *sw) {
     igBitMask_SetAll((igBitMask *)sw->_childMask);
 }
 
-void igSwitch_DisableChild(igSwitch *arg0, unsigned int arg1) {
+void igSwitch_DisableChild(igSwitch *self, unsigned int arg1) {
     int *temp_a1;
     int temp_a2_2;
     unsigned int temp_a3;
     void *temp_a2;
     int v;
 
-    temp_a2 = (void *)(*(int *)((char *)(arg0) + 32));
+    temp_a2 = (void *)(self->_childMask);
     temp_a3 = arg1 >> 5;
     temp_a1 = (int *)(*(int *)((char *)(temp_a2) + 16) + (temp_a3 * 4));
     temp_a2_2 = *(int *)((char *)(temp_a2) + 8);

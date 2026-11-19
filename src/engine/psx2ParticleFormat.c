@@ -30,38 +30,38 @@ void FUN_001fd5a0(ParticlePositionView *o, int idx, float *a2, float *a3, float 
     }
 }
 
-void FUN_001fd660(ParticleColourView *o, int arg1, float *arg2, float *arg3, float *arg4) {
+void FUN_001fd660(ParticleColourView *o, int index, float *colour0, float *colour1, float *colour2) {
     char *t5;
     int t, q, r;
     t = o->f16 + 12;
-    q = arg1 / o->f48;
+    q = index / o->f48;
     q *= o->f44;
     t += q;
     t += o->f52;
-    r = arg1 % o->f48;
+    r = index % o->f48;
     r *= o->f9;
     t += r * 16;
     t5 = (char *)t;
     switch (o->f9) {
     case 3:
-        *(float *)(t5 + 32) = 255.0f * arg4[0];
-        *(float *)(t5 + 36) = 255.0f * arg4[1];
-        *(float *)(t5 + 40) = 255.0f * arg4[2];
-        *(float *)(t5 + 44) = 128.0f * arg4[3];
+        *(float *)(t5 + 32) = 255.0f * colour2[0];
+        *(float *)(t5 + 36) = 255.0f * colour2[1];
+        *(float *)(t5 + 40) = 255.0f * colour2[2];
+        *(float *)(t5 + 44) = 128.0f * colour2[3];
     case 2:
-        *(float *)(t5 + 16) = 255.0f * arg3[0];
-        *(float *)(t5 + 20) = 255.0f * arg3[1];
-        *(float *)(t5 + 24) = 255.0f * arg3[2];
-        *(float *)(t5 + 28) = 128.0f * arg3[3];
+        *(float *)(t5 + 16) = 255.0f * colour1[0];
+        *(float *)(t5 + 20) = 255.0f * colour1[1];
+        *(float *)(t5 + 24) = 255.0f * colour1[2];
+        *(float *)(t5 + 28) = 128.0f * colour1[3];
     case 1:
-        *(float *)(t5 + 0) = 255.0f * arg2[0];
-        *(float *)(t5 + 4) = 255.0f * arg2[1];
-        *(float *)(t5 + 8) = 255.0f * arg2[2];
-        *(float *)(t5 + 12) = 128.0f * arg2[3];
+        *(float *)(t5 + 0) = 255.0f * colour0[0];
+        *(float *)(t5 + 4) = 255.0f * colour0[1];
+        *(float *)(t5 + 8) = 255.0f * colour0[2];
+        *(float *)(t5 + 12) = 128.0f * colour0[3];
     }
 }
 
-void FUN_001fd7a0(ParticleSizeView *o, int arg1, float *a2, float *a3, float *a4) {
+void FUN_001fd7a0(ParticleSizeView *o, int index, float *a2, float *a3, float *a4) {
     int a7;
     float * t;
     int a6;
@@ -76,9 +76,9 @@ void FUN_001fd7a0(ParticleSizeView *o, int arg1, float *a2, float *a3, float *a4
     a6 = o->f11;
     t4 = o->f10;
     v1 = o->f36;
-    q = arg1 / a7;
+    q = index / a7;
     p += 0xC;
-    r = arg1 % a7;
+    r = index % a7;
     t4 = ((a6 < t4) ? t4 : a6) & 0xFF;
     a1 = o->f13;
     t4 = (a1 < t4) ? t4 : a1;
@@ -216,7 +216,7 @@ void FUN_001fdca0(Psx2ParticleFormat *format, int index, float *first, float *se
     }
 }
 
-void FUN_001fdd60(Psx2ParticleFormat *format, int index, float *arg2, float *arg3, float *arg4) {
+void FUN_001fdd60(Psx2ParticleFormat *format, int index, float *colour0, float *colour1, float *colour2) {
     char *t5;
     int t, q, r;
     t = (int)format->data + 12;
@@ -230,24 +230,24 @@ void FUN_001fdd60(Psx2ParticleFormat *format, int index, float *arg2, float *arg
     t5 = (char *)t;
     switch (format->colourCount) {
     case 3:
-        arg4[0] = 0.00392156886f * *(float *)(t5 + 32);
-        arg4[1] = 0.00392156886f * *(float *)(t5 + 36);
-        arg4[2] = 0.00392156886f * *(float *)(t5 + 40);
-        arg4[3] = 0.0078125f * *(float *)(t5 + 44);
+        colour2[0] = 0.00392156886f * *(float *)(t5 + 32);
+        colour2[1] = 0.00392156886f * *(float *)(t5 + 36);
+        colour2[2] = 0.00392156886f * *(float *)(t5 + 40);
+        colour2[3] = 0.0078125f * *(float *)(t5 + 44);
     case 2:
-        arg3[0] = 0.00392156886f * *(float *)(t5 + 16);
-        arg3[1] = 0.00392156886f * *(float *)(t5 + 20);
-        arg3[2] = 0.00392156886f * *(float *)(t5 + 24);
-        arg3[3] = 0.0078125f * *(float *)(t5 + 28);
+        colour1[0] = 0.00392156886f * *(float *)(t5 + 16);
+        colour1[1] = 0.00392156886f * *(float *)(t5 + 20);
+        colour1[2] = 0.00392156886f * *(float *)(t5 + 24);
+        colour1[3] = 0.0078125f * *(float *)(t5 + 28);
     case 1:
-        arg2[0] = 0.00392156886f * *(float *)(t5 + 0);
-        arg2[1] = 0.00392156886f * *(float *)(t5 + 4);
-        arg2[2] = 0.00392156886f * *(float *)(t5 + 8);
-        arg2[3] = 0.0078125f * *(float *)(t5 + 12);
+        colour0[0] = 0.00392156886f * *(float *)(t5 + 0);
+        colour0[1] = 0.00392156886f * *(float *)(t5 + 4);
+        colour0[2] = 0.00392156886f * *(float *)(t5 + 8);
+        colour0[3] = 0.0078125f * *(float *)(t5 + 12);
     }
 }
 
-void FUN_001fdeb0(Psx2ParticleFormat *format, int arg1, float *a2, float *a3, float *a4) {
+void FUN_001fdeb0(Psx2ParticleFormat *format, int index, float *a2, float *a3, float *a4) {
     int a7;
     float * t;
     int a6;
@@ -262,9 +262,9 @@ void FUN_001fdeb0(Psx2ParticleFormat *format, int arg1, float *a2, float *a3, fl
     a6 = format->countB;
     t4 = format->countA;
     v1 = format->vertexWords;
-    q = arg1 / a7;
+    q = index / a7;
     p += 0xC;
-    r = arg1 % a7;
+    r = index % a7;
     t4 = ((a6 < t4) ? t4 : a6) & 0xFF;
     a1 = format->countC;
     t4 = (a1 < t4) ? t4 : a1;

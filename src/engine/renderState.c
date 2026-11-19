@@ -7,13 +7,27 @@
 #include "dw4/p2/renderState.h"
 #include "dw4/p2/p2multipass.h"
 #include "dw4/core/igMemory.h"
-int *p2FindVariantTable(int *arg0, long long arg1);
-int FUN_00202fa0(long long arg0);
 extern int FUN_001f8b50();
 extern int FUN_001fffb0();
 extern int p2LookupStateCacheEntry();
-struct P { long long m0; long long m8; int p16; struct P *next; int sh; int count; int tab[1]; };
-void *p2CreateVariantTable(int index);
+
+/* The programs that share a feature mask, one per combination of the settings of its features: the
+ * combination of the mask's lowest and highest feature indexes the table (the highest shifted by
+ * `shift`). A table applies while the vertex arrays have every feature of `key` and none of the
+ * `excluded` ones between them. The tables of programs with the same number of features are chained
+ * through `next`. */
+typedef struct p2VariantTable {
+    long long key;
+    long long excluded;
+    int program;                        /* the program the table was made for */
+    struct p2VariantTable *next;
+    int shift;
+    int count;
+    int programs[1];                    /* count entries; -1: no program */
+} p2VariantTable;
+p2VariantTable *p2FindVariantTable(p2VariantTable *table, long long key);
+int p2MaskGaps(long long mask);
+p2VariantTable *p2CreateVariantTable(int program);
 extern int DAT_0056ae40[4];
 
 /* One slot per bit of a VU program's feature mask. p2VariantsBitN lists the programs that have bit N, one
@@ -55,7 +69,7 @@ int p2VuProgramSpriteBits;
 int p2LightingProgramBits;
 int p2VuProgramLightingBits;
 long long p2VertexArrayMask;
-struct P *p2VariantLists[6];
+p2VariantTable *p2VariantLists[6];
 int p2VariantsBit30[8];
 int p2VariantsBit31[3];
 int p2VariantsBit21[4];
@@ -89,11 +103,11 @@ int p2VariantsBit3[1];
 int p2VariantsBit1[4];
 int p2VariantsBit0[1];
 
-void p2PrepareRenderState(int arg0) {
+void p2PrepareRenderState(int mask) {
     int s;
     int f;
     int n, a;
-    s = p2DirtyFlags & arg0;
+    s = p2DirtyFlags & mask;
     if (s != 0) {
         p2StatStateSends += 1;
     }
@@ -101,11 +115,11 @@ void p2PrepareRenderState(int arg0) {
         if (s & 4) {
             p2StatLightsSent += 1;
             FUN_001f8b50();
-            s = p2DirtyFlags & arg0;
+            s = p2DirtyFlags & mask;
         }
         if (s & 0x193) {
             p2StateCacheStatus = p2LookupStateCacheEntry();
-            s = p2DirtyFlags & arg0;
+            s = p2DirtyFlags & mask;
             if (p2StateCacheStatus == 0 || (p2StateCacheStatus == 1 && (s & 0x100))) {
                 if (s & 0x10) {
                     FUN_001fffb0(p2StateCacheStatus);
@@ -114,7 +128,7 @@ void p2PrepareRenderState(int arg0) {
                 }
                 if (s & 1) {
                     p2BuildFunctionTables();
-                    s = p2DirtyFlags & arg0;
+                    s = p2DirtyFlags & mask;
                 }
                 if (s & 2) {
                     if (p2DisplayListMode == 0) {
@@ -444,7 +458,7 @@ void p2SendGifTags(void) {
     }
 }
 
-int p2SelectVariantTables(struct P *p, long long *out) {
+int p2SelectVariantTables(p2VariantTable *table, long long *out) {
     int res = 0;
     long long m;
     int i;
@@ -455,10 +469,10 @@ int p2SelectVariantTables(struct P *p, long long *out) {
     int lo;
     int hi;
     p2VariantSlot *e;
-    for (; p != 0; p = p->next) {
-        m = p->m0;
+    for (; table != 0; table = table->next) {
+        m = table->key;
         if (m == (m & p2VertexArrayMask)) {
-            if (!(p->m8 & p2VertexArrayMask)) {
+            if (!(table->excluded & p2VertexArrayMask)) {
                 for (i = 0; i < 32; i++) {
                     if (m & (1LL << i)) break;
                 }
@@ -467,13 +481,13 @@ int p2SelectVariantTables(struct P *p, long long *out) {
                     if (m & (1LL << j)) break;
                 }
                 e = &p2VariantSlots[i];
-                w = e->index | (p2VariantSlots[j].index << p->sh);
-                k = p->tab[w];
+                w = e->index | (p2VariantSlots[j].index << table->shift);
+                k = table->programs[w];
                 if (k != -1) {
                     e->index = w;
-                    e->programs = p->tab;
-                    *out &= ~p->m0 | (1LL << i);
-                    f = *(int *)((char *)p2VuPrograms + (k << 6) + 40);
+                    e->programs = table->programs;
+                    *out &= ~table->key | (1LL << i);
+                    f = p2VuPrograms[k].flags;
                     lo = f & 0x30;
                     if (lo != 0) {
                         p2VuProgramLightingBits = (p2VuProgramLightingBits & 0x1cc0) | lo;
@@ -629,216 +643,94 @@ void p2SendVuBufferLayout(void) {
 int p2VariantsFirstSetup = 1;
 
 void p2SetupProgramVariants(void) {
-    int *temp_v0;
-    int *temp_v0_10;
-    int *temp_v0_11;
-    int *temp_v0_12;
-    int *temp_v0_13;
-    int *temp_v0_14;
-    int *temp_v0_15;
-    int *temp_v0_16;
-    int *temp_v0_17;
-    int *temp_v0_18;
-    int *temp_v0_19;
-    int *temp_v0_20;
-    int *temp_v0_21;
-    int *temp_v0_22;
-    int *temp_v0_23;
-    int *temp_v0_24;
-    int *temp_v0_25;
-    int *temp_v0_2;
-    int *temp_v0_3;
-    int *temp_v0_4;
-    int *temp_v0_5;
-    int *temp_v0_6;
-    int *temp_v0_7;
-    int *temp_v0_8;
-    int *temp_v0_9;
-    int temp_v0_26;
-    int var_a0;
-    int var_a1;
-    int var_a1_10;
-    int var_a1_11;
-    int var_a1_12;
-    int var_a1_13;
-    int var_a1_14;
-    int var_a1_15;
-    int var_a1_16;
-    int var_a1_17;
-    int var_a1_18;
-    int var_a1_19;
-    int var_a1_20;
-    int var_a1_21;
-    int var_a1_22;
-    int var_a1_23;
-    int var_a1_24;
-    int var_a1_2;
-    int var_a1_3;
-    int var_a1_4;
-    int var_a1_5;
-    int var_a1_6;
-    int var_a1_7;
-    int var_a1_8;
-    int var_a1_9;
-    int var_s3;
-    long long temp_s5;
-    char *temp_s4;
-    void *var_s2;
-    void **temp_s1;
-    int var_s0;
-    void *var_v0;
+    int i;
+    int program;
+    long long excluded;
+    p2VuProgram *entry;
+    p2VariantTable *last;
+    p2VariantTable **list;
+    int bitCount;
+    p2VariantTable *table;
 
-    var_a1 = 0;
     p2VariantsBit3[0] = -1;
     p2VariantsBit4[0] = -1;
     p2VariantsBit6[0] = -1;
     p2VariantsBit9[0] = -1;
-    do {
-        temp_v0 = (int *)(&(p2VariantsBit11)[var_a1]);
-        *temp_v0 = -1;
-        var_a1 += 1;
-    } while (var_a1 < 2);
-    var_a1_2 = 0;
-    do {
-        temp_v0_2 = (int *)(&(p2VariantsBit12)[var_a1_2]);
-        *temp_v0_2 = -1;
-        var_a1_2 += 1;
-    } while (var_a1_2 < 4);
-    var_a1_3 = 0;
+    for (i = 0; i < 2; i++) {
+        p2VariantsBit11[i] = -1;
+    }
+    for (i = 0; i < 4; i++) {
+        p2VariantsBit12[i] = -1;
+    }
     p2VariantsBit0[0] = -1;
-    do {
-        temp_v0_3 = (int *)(&(p2VariantsBit1)[var_a1_3]);
-        *temp_v0_3 = -1;
-        var_a1_3 += 1;
-    } while (var_a1_3 < 4);
-    var_a1_4 = 0;
-    do {
-        temp_v0_4 = (int *)(&(p2VariantsBit2)[var_a1_4]);
-        *temp_v0_4 = -1;
-        var_a1_4 += 1;
-    } while (var_a1_4 < 8);
-    var_a1_5 = 0;
-    do {
-        temp_v0_5 = (int *)(&(p2VariantsBit13)[var_a1_5]);
-        *temp_v0_5 = -1;
-        var_a1_5 += 1;
-    } while (var_a1_5 < 2);
-    var_a1_6 = 0;
-    do {
-        temp_v0_6 = (int *)(&(p2VariantsBit7)[var_a1_6]);
-        *temp_v0_6 = -1;
-        var_a1_6 += 1;
-    } while (var_a1_6 < 0xB);
-    var_a1_7 = 0;
-    do {
-        temp_v0_7 = (int *)(&(p2VariantsBit14)[var_a1_7]);
-        *temp_v0_7 = -1;
-        var_a1_7 += 1;
-    } while (var_a1_7 < 0x16);
-    var_a1_8 = 0;
-    do {
-        temp_v0_8 = (int *)(&(p2VariantsBit8)[var_a1_8]);
-        *temp_v0_8 = -1;
-        var_a1_8 += 1;
-    } while (var_a1_8 < 0x14);
-    var_a1_9 = 0;
-    do {
-        temp_v0_9 = (int *)(&(p2VariantsBit15)[var_a1_9]);
-        *temp_v0_9 = -1;
-        var_a1_9 += 1;
-    } while (var_a1_9 < 0x10);
-    var_a1_10 = 0;
+    for (i = 0; i < 4; i++) {
+        p2VariantsBit1[i] = -1;
+    }
+    for (i = 0; i < 8; i++) {
+        p2VariantsBit2[i] = -1;
+    }
+    for (i = 0; i < 2; i++) {
+        p2VariantsBit13[i] = -1;
+    }
+    for (i = 0; i < 11; i++) {
+        p2VariantsBit7[i] = -1;
+    }
+    for (i = 0; i < 22; i++) {
+        p2VariantsBit14[i] = -1;
+    }
+    for (i = 0; i < 20; i++) {
+        p2VariantsBit8[i] = -1;
+    }
+    for (i = 0; i < 16; i++) {
+        p2VariantsBit15[i] = -1;
+    }
     p2VariantsBit18[0] = -1;
-    do {
-        temp_v0_10 = (int *)(&(p2VariantsBit17)[var_a1_10]);
-        *temp_v0_10 = -1;
-        var_a1_10 += 1;
-    } while (var_a1_10 < 2);
-    var_a1_11 = 0;
+    for (i = 0; i < 2; i++) {
+        p2VariantsBit17[i] = -1;
+    }
     p2VariantsBit20[0] = -1;
-    do {
-        temp_v0_11 = (int *)(&(p2VariantsBit24)[var_a1_11]);
-        *temp_v0_11 = -1;
-        var_a1_11 += 1;
-    } while (var_a1_11 < 3);
-    var_a1_12 = 0;
-    do {
-        temp_v0_12 = (int *)(&(p2VariantsBit19)[var_a1_12]);
-        *temp_v0_12 = -1;
-        var_a1_12 += 1;
-    } while (var_a1_12 < 0xE);
-    var_a1_13 = 0;
-    do {
-        temp_v0_13 = (int *)(&(p2VariantsBit22)[var_a1_13]);
-        *temp_v0_13 = -1;
-        var_a1_13 += 1;
-    } while (var_a1_13 < 0x10);
-    var_a1_14 = 0;
-    do {
-        temp_v0_14 = (int *)(&(p2VariantsBit23)[var_a1_14]);
-        *temp_v0_14 = -1;
-        var_a1_14 += 1;
-    } while (var_a1_14 < 8);
-    var_a1_15 = 0;
-    do {
-        temp_v0_15 = (int *)(&(p2VariantsBit25)[var_a1_15]);
-        *temp_v0_15 = -1;
-        var_a1_15 += 1;
-    } while (var_a1_15 < 0x10);
-    var_a1_16 = 0;
-    do {
-        temp_v0_16 = (int *)(&(p2VariantsBit26)[var_a1_16]);
-        *temp_v0_16 = -1;
-        var_a1_16 += 1;
-    } while (var_a1_16 < 2);
-    var_a1_17 = 0;
-    do {
-        temp_v0_17 = (int *)(&(p2VariantsBit28)[var_a1_17]);
-        *temp_v0_17 = -1;
-        var_a1_17 += 1;
-    } while (var_a1_17 < 2);
-    var_a1_18 = 0;
-    do {
-        temp_v0_18 = (int *)(&(p2VariantsBit27)[var_a1_18]);
-        *temp_v0_18 = -1;
-        var_a1_18 += 1;
-    } while (var_a1_18 < 8);
-    var_a1_19 = 0;
-    do {
-        temp_v0_19 = (int *)(&(p2VariantsBit29)[var_a1_19]);
-        *temp_v0_19 = -1;
-        var_a1_19 += 1;
-    } while (var_a1_19 < 0xB);
-    var_a1_20 = 0;
-    do {
-        temp_v0_20 = (int *)(&(p2VariantsBit30)[var_a1_20]);
-        *temp_v0_20 = -1;
-        var_a1_20 += 1;
-    } while (var_a1_20 < 8);
-    var_a1_21 = 0;
-    do {
-        temp_v0_21 = (int *)(&(p2VariantsBit10)[var_a1_21]);
-        *temp_v0_21 = -1;
-        var_a1_21 += 1;
-    } while (var_a1_21 < 8);
-    var_a1_22 = 0;
-    do {
-        temp_v0_22 = (int *)(&(p2VariantsBit16)[var_a1_22]);
-        *temp_v0_22 = -1;
-        var_a1_22 += 1;
-    } while (var_a1_22 < 8);
-    var_a1_23 = 0;
-    do {
-        temp_v0_23 = (int *)(&(p2VariantsBit21)[var_a1_23]);
-        *temp_v0_23 = -1;
-        var_a1_23 += 1;
-    } while (var_a1_23 < 4);
-    var_a1_24 = 0;
-    do {
-        temp_v0_24 = (int *)(&(p2VariantsBit31)[var_a1_24]);
-        *temp_v0_24 = -1;
-        var_a1_24 += 1;
-    } while (var_a1_24 < 3);
+    for (i = 0; i < 3; i++) {
+        p2VariantsBit24[i] = -1;
+    }
+    for (i = 0; i < 14; i++) {
+        p2VariantsBit19[i] = -1;
+    }
+    for (i = 0; i < 16; i++) {
+        p2VariantsBit22[i] = -1;
+    }
+    for (i = 0; i < 8; i++) {
+        p2VariantsBit23[i] = -1;
+    }
+    for (i = 0; i < 16; i++) {
+        p2VariantsBit25[i] = -1;
+    }
+    for (i = 0; i < 2; i++) {
+        p2VariantsBit26[i] = -1;
+    }
+    for (i = 0; i < 2; i++) {
+        p2VariantsBit28[i] = -1;
+    }
+    for (i = 0; i < 8; i++) {
+        p2VariantsBit27[i] = -1;
+    }
+    for (i = 0; i < 11; i++) {
+        p2VariantsBit29[i] = -1;
+    }
+    for (i = 0; i < 8; i++) {
+        p2VariantsBit30[i] = -1;
+    }
+    for (i = 0; i < 8; i++) {
+        p2VariantsBit10[i] = -1;
+    }
+    for (i = 0; i < 8; i++) {
+        p2VariantsBit16[i] = -1;
+    }
+    for (i = 0; i < 4; i++) {
+        p2VariantsBit21[i] = -1;
+    }
+    for (i = 0; i < 3; i++) {
+        p2VariantsBit31[i] = -1;
+    }
     p2VariantSlots[7].index = 0;
     p2VariantSlots[7].programs = p2VariantsBit7;
     p2VariantSlots[13].programs = p2VariantsBit13;
@@ -930,110 +822,106 @@ void p2SetupProgramVariants(void) {
     if (p2VariantsFirstSetup != 0) {
         p2CachedProgramAddresses[0] = p2GetVuProgramAddress(p2VariantsBit30[2]);
         p2CachedProgramAddresses[1] = p2GetVuProgramAddress(p2VariantsBit30[3]);
-        var_a0 = 0;
-        do {
-            temp_v0_25 = (int *)((char *)p2VariantLists + (var_a0 * 4));
-            var_a0 += 1;
-            *temp_v0_25 = 0;
-        } while (var_a0 < 6);
+        for (i = 0; i < 6; i++) {
+            p2VariantLists[i] = 0;
+        }
         p2VariantsFirstSetup = 0;
     }
-    var_s3 = 0;
-    var_s0 = 0;
+    program = 0;
+    bitCount = 0;
     do {
-        var_s2 = 0;
-        temp_s1 = (void **)((char *)p2VariantLists + (var_s0 * 4));
-        while ((var_s3 = p2FindVuProgramByBitCount(var_s0 + 2, var_s3)) != 0) {
-            temp_s4 = (char *)p2VuPrograms + (var_s3 << 6);
-            temp_s5 = FUN_00202fa0(*(long long *)((char *)(temp_s4) + 0));
-            var_v0 = (void *)(p2FindVariantTable(*temp_s1, *(long long *)((char *)(temp_s4) + 0)));
-            if (var_v0 == 0) {
-                var_v0 = (void *)(p2CreateVariantTable(var_s3));
-                if (var_v0 != 0) {
-                    *(long long *)((char *)(var_v0) + 8) = temp_s5;
-                    if (var_s2 != 0) {
-                        *(int *)((char *)(var_s2) + 20) = (int)(var_v0);
+        last = 0;
+        list = &p2VariantLists[bitCount];
+        while ((program = p2FindVuProgramByBitCount(bitCount + 2, program)) != 0) {
+            entry = &p2VuPrograms[program];
+            excluded = p2MaskGaps(entry->key);
+            table = p2FindVariantTable(*list, entry->key);
+            if (table == 0) {
+                table = p2CreateVariantTable(program);
+                if (table != 0) {
+                    table->excluded = excluded;
+                    if (last != 0) {
+                        last->next = table;
                     }
-                    var_s2 = (void *)(var_v0);
-                    if (*temp_s1 == 0) {
-                        *temp_s1 = var_v0;
+                    last = table;
+                    if (*list == 0) {
+                        *list = table;
                     }
                 }
             }
-            *(int *)((char *)(((char *)var_v0 + (((unsigned int) (*(int *)((char *)(temp_s4) + 40) & 0xFFFF0000) >> 0x10) * 4))) + 32) = var_s3;
-            var_s3 += 1;
+            table->programs[(entry->flags & 0xFFFF0000) >> 16] = program;
+            program += 1;
         }
-        var_s0 += 1;
-    } while (var_s0 < 6);
+        bitCount += 1;
+    } while (bitCount < 6);
 }
 
 /* The VU program of a pass; p2SendPassSetup also passes the combine mode, which the choice ignores. */
 int p2GetPassProgramAddress(int pass, int combineMode) {
-    int temp_a1;
-    int temp_a2;
-    int var_v0;
+    int flagBits15;
+    int flagBit6;
+    int address;
 
-    var_v0 = 0;
+    address = 0;
     if (p2ExtraPassCount < pass) {
         return 0;
     }
-    temp_a2 = ((unsigned int) p2ProgramFlags[0] >> 6) & 1;
-    temp_a1 = ((unsigned int) p2ProgramFlags[0] >> 0xF) & 3;
+    flagBit6 = ((unsigned int) p2ProgramFlags[0] >> 6) & 1;
+    flagBits15 = ((unsigned int) p2ProgramFlags[0] >> 0xF) & 3;
     if (pass == 1) {
         if (p2VertexArrayMask & 0x400) {
             return p2GetVuProgramAddress(p2VariantsBit11[p2VariantSlots[11].index]);
         }
-        goto block_6;
     }
-block_6:
     if ((pass == 1) && (p2VertexArrayMask & 0x10000)) {
         return p2GetVuProgramAddress(p2VariantsBit18[p2VariantSlots[18].index]);
     }
-    if ((temp_a2 != 0) || (temp_a1 != 0)) {
+    if ((flagBit6 != 0) || (flagBits15 != 0)) {
         return p2GetVuProgramAddress(p2VariantsBit22[p2VariantSlots[22].index]);
     }
     if (p2VertexArrayMask & 0x210400) {
-        var_v0 = p2GetVuProgramAddress(p2VariantsBit25[p2VariantSlots[25].index]);
+        address = p2GetVuProgramAddress(p2VariantsBit25[p2VariantSlots[25].index]);
     }
-    return var_v0;
+    return address;
 }
 
-int *p2FindVariantTable(int *arg0, long long arg1) {
-    for (; arg0 != 0; arg0 = (int *)arg0[5]) {
-        if (arg1 == *(long long *)((char *)p2VuPrograms + (arg0[4] << 6))) break;
+p2VariantTable *p2FindVariantTable(p2VariantTable *table, long long key) {
+    for (; table != 0; table = table->next) {
+        if (key == p2VuPrograms[table->program].key) break;
     }
-    return arg0;
+    return table;
 }
 
-int FUN_00202fa0(long long arg0) {
-    long long m;
+/* The features missing from `mask` between its lowest and highest. */
+int p2MaskGaps(long long mask) {
+    long long filled;
     unsigned int i;
-    int c;
+    int bit;
     int j;
-    int b;
+    int low;
 
-    m = arg0;
+    filled = mask;
     for (i = 0; i < 0x20U; i++) {
-        b = 1 << i;
-        if (arg0 & b) {
+        low = 1 << i;
+        if (mask & low) {
             break;
         }
-        m |= b;
+        filled |= low;
     }
     j = 0x1F;
     while (1) {
-        c = 1 << j;
-        if (arg0 & c) {
+        bit = 1 << j;
+        if (mask & bit) {
             break;
         }
-        m |= c;
+        filled |= bit;
         j--;
     }
-    return ~m;
+    return ~filled;
 }
 
-void *p2CreateVariantTable(int index) {
-    struct P *p;
+p2VariantTable *p2CreateVariantTable(int program) {
+    p2VariantTable *table;
     int counts[32];
     int n;
     long long mask;
@@ -1042,7 +930,7 @@ void *p2CreateVariantTable(int index) {
     int prev;
 
     n = 0;
-    mask = *(long long *)((char *)p2VuPrograms + (index << 6));
+    mask = p2VuPrograms[program].key;
     if (mask & 1) counts[n++] = 1;
     if (mask & 2) counts[n++] = 4;
     if (mask & 4) counts[n++] = 8;
@@ -1079,33 +967,33 @@ void *p2CreateVariantTable(int index) {
         prev = total;
         total *= counts[i];
     }
-    p = Memory_AllocateAligned16(total * 4 + 0x28, 0x14);
-    if (p != 0) {
-        p->next = 0;
-        p->m0 = *(long long *)((char *)p2VuPrograms + (index << 6));
-        p->m8 = 0;
-        p->p16 = index;
-        p->sh = sqrt(prev);
-        p->count = total;
+    table = Memory_AllocateAligned16(total * 4 + 0x28, 0x14);
+    if (table != 0) {
+        table->next = 0;
+        table->key = p2VuPrograms[program].key;
+        table->excluded = 0;
+        table->program = program;
+        table->shift = sqrt(prev);
+        table->count = total;
         for (i = 0; i < total; i++) {
-            p->tab[i] = -1;
+            table->programs[i] = -1;
         }
     }
-    return p;
+    return table;
 }
 
 void p2FreeVariantTables(void) {
     int i;
-    void *p;
-    void *next;
+    p2VariantTable *table;
+    p2VariantTable *next;
 
     i = 0;
     do {
-        p = p2VariantLists[i];
-        while (p != 0) {
-            next = *(void **)((char *)p + 20);
-            Memory_FreeToSelector(p, 0x14);
-            p = next;
+        table = p2VariantLists[i];
+        while (table != 0) {
+            next = table->next;
+            Memory_FreeToSelector(table, 0x14);
+            table = next;
         }
         p2VariantLists[i] = 0;
         i += 1;

@@ -19,7 +19,7 @@ int igViewerDataPumpManager_AddInfo(igViewerDataPumpManager *self, igObject *inf
     return 0;
 }
 
-void igViewerDataPumpManager_RemoveAllInfo(igViewerDataPumpManager *arg0) {
+void igViewerDataPumpManager_RemoveAllInfo(igViewerDataPumpManager *self) {
     igDataPumpList *l;
     int n;
     int i;
@@ -30,7 +30,7 @@ void igViewerDataPumpManager_RemoveAllInfo(igViewerDataPumpManager *arg0) {
     int off2;
     igObject *o;
 
-    l = (igDataPumpList *)(((igDataPumpManager *)arg0->_dataPumpManager)->_dataPumpList);
+    l = (igDataPumpList *)(((igDataPumpManager *)self->_dataPumpManager)->_dataPumpList);
     n = l->_count;
     i = 0;
     if (0 < n) {
@@ -76,11 +76,11 @@ void igViewerDataPumpManager_RemoveAllInfo(igViewerDataPumpManager *arg0) {
         }
     }
     l->_count = 0;
-    igInsightCore_RemoveFromScheduler((struct igInsightCore *)arg0->_insight, (igObject *)arg0);
+    igInsightCore_RemoveFromScheduler((struct igInsightCore *)self->_insight, (igObject *)self);
 }
 
-void igViewerDataPumpManager_Update(int arg0) {
-    igDataPumpManager_Update((struct igDataPumpManager *)*(int *)((char *)(arg0) + 16), *(long long *)((char *)(*(int *)((char *)(arg0) + 12)) + 80));
+void igViewerDataPumpManager_Update(igViewerDataPumpManager *self) {
+    igDataPumpManager_Update((struct igDataPumpManager *)self->_dataPumpManager, *(long long *)((char *)(self->_insight) + 80));
 }
 
 struct igMetaObject *igViewerDataPumpManager_GetMeta(void) {

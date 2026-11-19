@@ -95,7 +95,6 @@ void p2SubmitIndexedVertices();
 void p2SubmitRecordedVertices(unsigned int count, int first);
 
 extern int p2RenderStateDirty;
-extern int p2SpriteSizeMode;
 extern int p2StatMask;
 extern unsigned int p2VifRowCommand;
 extern unsigned int p2AlignNop;
@@ -119,14 +118,6 @@ extern p2VifCode p2VifModeCode;
 extern p2DmaTag p2ComponentUnpackTag;
 
 extern p2VertexSubmit p2VertexSubmitter;
-extern unsigned long long p2IndexedVertexCount;
-extern unsigned long long p2StatVertexCount1;
-extern unsigned long long p2StatVertexCount4;
-extern unsigned long long p2StatVertexCount2;
-extern unsigned long long p2StatVertexCount8;
-extern unsigned long long p2StatVertexCount16;
-extern unsigned long long p2ColourModeChanges;
-extern unsigned long long p2PrimitiveChanges;
 extern const float *p2PositionArray;
 extern const float *p2NormalArray;
 extern const float *p2TexCoordArrays[16];

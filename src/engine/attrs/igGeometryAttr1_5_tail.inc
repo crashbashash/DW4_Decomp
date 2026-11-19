@@ -1,7 +1,7 @@
-int igGeometryAttr_GetPrimLength(void *arg0, int arg1) {
+int igGeometryAttr_GetPrimLength(igGeometryAttr *self, int arg1) {
     void *temp_v0;
 
-    temp_v0 = (void *)(*(int *)((char *)(arg0) + 32));
+    temp_v0 = (void *)(self->_primLengths);
     if (temp_v0 != 0) {
         return *(int *)(*(int *)((char *)(temp_v0) + 16) + (arg1 * 4));
     }
@@ -57,7 +57,7 @@ void igGeometryAttr1_5_UserMakeConcrete(S_13d180 *arg0, int arg1) {
         X_13d180 *x = (X_13d180 *)arg0->f48;
         x->grow(arg0->f32->n, 32, 0);
         for (i = 0; i < arg0->f32->n; i++) {
-            Gap__Attrs__igGeometryAttr1_5__vfunc_40((S_13de80 *)arg0, i, igGeometryAttr_GetPrimLength(arg0, i));
+            Gap__Attrs__igGeometryAttr1_5__vfunc_40((S_13de80 *)arg0, i, igGeometryAttr_GetPrimLength((igGeometryAttr *)arg0, i));
         }
     }
 }

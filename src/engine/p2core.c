@@ -198,7 +198,6 @@ extern char p2DepthTestEnabled[P2_PROGRAM_COUNT];
 extern char p2DepthFunction[P2_PROGRAM_COUNT];
 extern char p2DepthWriteDisabled[P2_PROGRAM_COUNT];
 extern p2BlendEquation p2BlendEquations[P2_PROGRAM_COUNT];
-extern long long p2StatCapabilityChanges;
 extern p2ProgramTextureState p2ProgramTexture;
 extern int p2ColorScalerState;
 extern int p2FogMode;

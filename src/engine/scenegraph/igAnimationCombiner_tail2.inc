@@ -497,8 +497,8 @@ void igAnimationCombiner_userDestruct(void **arg0) {
     }
 }
 
-int igAnimationCombiner_Configured(void *arg0) {
-    return *(int *)((char *)(arg0) + 64) != 0;
+int igAnimationCombiner_Configured(igAnimationCombiner *self) {
+    return self->_animationCacheMatrixArray != 0;
 }
 
 void igAnimationCombiner_AddAnimation(igAnimationCombiner *combiner, igAnimation *animation, int combineMode, int transitionMode, int status) {

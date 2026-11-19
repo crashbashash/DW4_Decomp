@@ -118,22 +118,22 @@ void *FUN_00175f20(void *arg0, void *arg1) {
     return arg0;
 }
 
-void Gap__Gfx__igPsx2ParticleArray__vfunc_34(igPsx2ParticleArray *arg0, float fp) {
-    arg0->_particleLifeStart = fp;
-    if (arg0->_timeControlState & 2) {
-        *(float *)(arg0->_ps2ParticleFormat + 24) = fp;
+void Gap__Gfx__igPsx2ParticleArray__vfunc_34(igPsx2ParticleArray *self, float fp) {
+    self->_particleLifeStart = fp;
+    if (self->_timeControlState & 2) {
+        *(float *)(self->_ps2ParticleFormat + 24) = fp;
         return;
     }
-    *(int *)(arg0->_ps2ParticleFormat + 24) = 0xFF800000;
+    *(int *)(self->_ps2ParticleFormat + 24) = 0xFF800000;
 }
 
-void Gap__Gfx__igPsx2ParticleArray__vfunc_35(int *arg0, float fparg0) {
-    *(float *)(arg0 + 6) = fparg0;
-    if (arg0[20] & 2) {
-        *(float *)(arg0[25] + 28) = fparg0;
+void Gap__Gfx__igPsx2ParticleArray__vfunc_35(igPsx2ParticleArray *self, float fparg0) {
+    self->_particleLifeEnd = fparg0;
+    if (self->_timeControlState & 2) {
+        *(float *)(self->_ps2ParticleFormat + 28) = fparg0;
         return;
     }
-    *(int *)(arg0[25] + 28) = 0x7f800000;
+    *(int *)(self->_ps2ParticleFormat + 28) = 0x7f800000;
 }
 
 void Gap__Gfx__igPsx2ParticleArray__vfunc_39(igPsx2ParticleArray *arg0, int arg1) {
@@ -209,15 +209,15 @@ void igPsx2PointSpriteExt_Draw(int *arg0, int arg1, int arg2) {
     a1 = *q;
     a0_3 = ((unsigned int)(a1 & 0x300000) >> 0x14) & 0xFF;
     s3_2 = DAT_004df6b0[a0_3 | (((s3 & 0xFF) == 2) * 4)];
-    if (s3_2 != FUN_001f7360()) {
-        FUN_001f7340(s3_2);
+    if (s3_2 != p2GetSpriteSizeMode()) {
+        p2SetSpriteSizeMode(s3_2);
     }
     ((VB *)arg0[98])->vX(0x1000, arg1, arg2);
 }
 
-void igPsx2PointSpriteExt_SetSpriteSize(int arg0, float farg0) {
-    *(float *)((char *)(arg0) + 28) = farg0;
-    FUN_001f7370((0.5f * farg0));
+void igPsx2PointSpriteExt_SetSpriteSize(igPsx2PointSpriteExt *self, float size) {
+    self->_spriteSize = size;
+    p2SetSpriteHalfSize((0.5f * size));
 }
 
 void igPsx2PointSpriteExt_BeginSprites(UCodeState *state) {
@@ -245,18 +245,18 @@ void igPsx2PointSpriteExt_BeginSprites(UCodeState *state) {
     state->loaded = 1;
 }
 
-void igPsx2PointSpriteExt_EndSprites(void *arg0) {
+void igPsx2PointSpriteExt_EndSprites(igPsx2PointSpriteExt *self) {
     int temp_a1;
 
-    if (!(*(int *)((char *)(*(int *)((char *)(arg0) + 24)) + 20) & 0x10)) {
-        igPointSpriteExt_EndSprites((Y *)arg0);
+    if (!(*(int *)((char *)(self->_vertexArray) + 20) & 0x10)) {
+        igPointSpriteExt_EndSprites((Y *)self);
         return;
     }
-    temp_a1 = *(int *)((char *)(arg0) + 36);
+    temp_a1 = self->_spriteSizeSpace;
     if (temp_a1 == 1) {
-        igPointSpriteExt_EndSprites((Y *)arg0);
+        igPointSpriteExt_EndSprites((Y *)self);
     }
-    *(char *)((char *)(arg0) + 32) = 0;
+    self->_inSpriteMode = 0;
 }
 
 void igPsx2PointSpriteExt_ConfigureVertexArray(O176a50 *arg0, V96 *arg1, int *arg2, int arg3, int arg4) {
@@ -292,70 +292,70 @@ int FUN_00176ba0(void *arg0) {
     return *(int *)((char *)(arg0) + 36) != 1;
 }
 
-void igPsx2PointSpriteExt_SetPosition(void *arg0, int arg1, void *arg2) {
+void igPsx2PointSpriteExt_SetPosition(igPsx2PointSpriteExt *self, int arg1, void *arg2) {
     void *temp_v1;
 
-    temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
+    temp_v1 = (void *)(self->_vertexArray);
     if (*(int *)((char *)(temp_v1) + 20) & 0x10) {
         ((DW4VC_116_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    igPointSpriteExt_SetPosition(arg0, arg1, arg2);
+    igPointSpriteExt_SetPosition(self, arg1, arg2);
 }
 
-void igPsx2PointSpriteExt_GetPosition(void *arg0, int arg1, void *arg2) {
+void igPsx2PointSpriteExt_GetPosition(igPsx2PointSpriteExt *self, int arg1, void *arg2) {
     void *temp_v1;
 
-    temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
+    temp_v1 = (void *)(self->_vertexArray);
     if (*(int *)((char *)(temp_v1) + 20) & 0x10) {
         ((DW4VC_120_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    igPointSpriteExt_GetPosition((igPsx2PointSpriteExt *)arg0, arg1, arg2);
+    igPointSpriteExt_GetPosition((igPsx2PointSpriteExt *)self, arg1, arg2);
 }
 
-void igPsx2PointSpriteExt_SetColorPacked(void *arg0, int arg1, int arg2) {
+void igPsx2PointSpriteExt_SetColorPacked(igPsx2PointSpriteExt *self, int arg1, int arg2) {
     void *temp_v1;
 
-    temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
+    temp_v1 = (void *)(self->_vertexArray);
     if (*(int *)((char *)(temp_v1) + 20) & 0x10) {
         ((DW4VC_164_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    igPointSpriteExt_SetColorPacked((S740 *)arg0, arg1, arg2);
+    igPointSpriteExt_SetColorPacked((S740 *)self, arg1, arg2);
 }
 
-void igPsx2PointSpriteExt_SetColor(void *arg0, int arg1, int arg2) {
+void igPsx2PointSpriteExt_SetColor(igPsx2PointSpriteExt *self, int arg1, int arg2) {
     void *temp_v1;
 
-    temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
+    temp_v1 = (void *)(self->_vertexArray);
     if (*(int *)((char *)(temp_v1) + 20) & 0x10) {
         ((DW4VC_168_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    igPointSpriteExt_SetColor((S7c0 *)arg0, arg1, arg2);
+    igPointSpriteExt_SetColor((S7c0 *)self, arg1, arg2);
 }
 
-void igPsx2PointSpriteExt_GetColorPacked(void *arg0, unsigned int arg1) {
+void igPsx2PointSpriteExt_GetColorPacked(igPsx2PointSpriteExt *self, unsigned int arg1) {
     void *temp_v1;
 
-    temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
+    temp_v1 = (void *)(self->_vertexArray);
     if (*(int *)((char *)(temp_v1) + 20) & 0x10) {
         ((DW4VC_172_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    igPointSpriteExt_GetColorPacked((igPointSpriteExtView *)arg0, arg1);
+    igPointSpriteExt_GetColorPacked((igPointSpriteExtView *)self, arg1);
 }
 
-void igPsx2PointSpriteExt_GetColor(void *arg0, unsigned int arg1) {
+void igPsx2PointSpriteExt_GetColor(igPsx2PointSpriteExt *self, unsigned int arg1) {
     void *temp_v1;
 
-    temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
+    temp_v1 = (void *)(self->_vertexArray);
     if (*(int *)((char *)(temp_v1) + 20) & 0x10) {
         ((DW4VC_176_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    igPointSpriteExt_GetColor((igPointSpriteExtView *)arg0, arg1);
+    igPointSpriteExt_GetColor((igPointSpriteExtView *)self, arg1);
 }
 
 void igPsx2PointSpriteExt_SetTextureCoord(W_1767c0 *arg0, int arg1, int arg2, float *arg3) {
@@ -381,47 +381,47 @@ void igPsx2PointSpriteExt_SetTextureCoord(W_1767c0 *arg0, int arg1, int arg2, fl
     igPointSpriteExt_SetTextureCoord((O880 *)arg0, arg1, arg2, arg3);
 }
 
-void igPsx2PointSpriteExt_GetTextureCoord(void *arg0, int arg1, int arg2) {
+void igPsx2PointSpriteExt_GetTextureCoord(igPsx2PointSpriteExt *self, int arg1, int arg2) {
     void *temp_v1;
 
-    temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
+    temp_v1 = (void *)(self->_vertexArray);
     if (*(int *)((char *)(temp_v1) + 20) & 0x10) {
         ((DW4VC_204_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    igPointSpriteExt_GetTextureCoord(arg0, arg1, arg2);
+    igPointSpriteExt_GetTextureCoord((igPointSpriteExt *)self, arg1, arg2);
 }
 
-void igPsx2PointSpriteExt_GetTextureCoordPointer(void *arg0, int arg1, int arg2) {
+void igPsx2PointSpriteExt_GetTextureCoordPointer(igPsx2PointSpriteExt *self, int arg1, int arg2) {
     void *temp_v1;
 
-    temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
+    temp_v1 = (void *)(self->_vertexArray);
     if (*(int *)((char *)(temp_v1) + 20) & 0x10) {
         ((DW4VC_208_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    igPointSpriteExt_GetTextureCoordPointer(arg0, arg1, arg2);
+    igPointSpriteExt_GetTextureCoordPointer((igPointSpriteExt *)self, arg1, arg2);
 }
 
-void igPsx2PointSpriteExt_SetRadian(void *arg0) {
+void igPsx2PointSpriteExt_SetRadian(igPsx2PointSpriteExt *self) {
     void *temp_v1;
 
-    temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
+    temp_v1 = (void *)(self->_vertexArray);
     if (*(int *)((char *)(temp_v1) + 20) & 0x10) {
         ((DW4VC_228_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    igPointSpriteExt_SetRadian((igPointSpriteExtView *)arg0);
+    igPointSpriteExt_SetRadian((igPointSpriteExtView *)self);
 }
 
-void igPsx2PointSpriteExt_GetRadian(void *arg0) {
+void igPsx2PointSpriteExt_GetRadian(igPsx2PointSpriteExt *self) {
     void *temp_v1;
 
-    temp_v1 = (void *)(*(int *)((char *)(arg0) + 24));
+    temp_v1 = (void *)(self->_vertexArray);
     if (*(int *)((char *)(temp_v1) + 20) & 0x10) {
         ((DW4VC_232_0 *)(((char *)(temp_v1) + 0)))->vX();
         return;
     }
-    igPointSpriteExt_GetRadian((igPointSpriteExtView *)arg0);
+    igPointSpriteExt_GetRadian((igPointSpriteExtView *)self);
 }
 

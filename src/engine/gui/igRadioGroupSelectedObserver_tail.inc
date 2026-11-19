@@ -57,12 +57,12 @@ void FUN_00457ab0(igRadioGroup *arg0, igRadioGroupSelectedObserver *arg1, int ar
     }
 }
 
-void igRadioGroupSelectedObserver_OnModelChange(void *arg0, void *arg1) {
+void igRadioGroupSelectedObserver_OnModelChange(igRadioGroupSelectedObserver *self, void *arg1) {
     int temp_a1;
 
     temp_a1 = *(int *)((char *)arg1 + 8);
     if (temp_a1 == (int)g_igRadioGroupModel_selectedMetaField) {
-        FUN_00457a10((RadioGroupView *)*(int *)((char *)arg0 + 12));
+        FUN_00457a10((RadioGroupView *)self->_group);
     }
 }
 

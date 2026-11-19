@@ -5,9 +5,9 @@ void igFilterMessageDispatcher_AddFilteringForType(FilterDispatcherSlots *self, 
     self->dispatch(message, filter.get());
 }
 
-void igFilterMessageDispatcher_AddFiltering(void *arg0, void *arg1, void *arg2) {
+void igFilterMessageDispatcher_AddFiltering(igFilterMessageDispatcher *self, void *arg1, void *arg2) {
     ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)(*(int *)((char *)(arg2) + 12)), (igObject *)arg1);
-    ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)(*(int *)((char *)(arg0) + 12)), (igObject *)arg2);
+    ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)(self->_filters), (igObject *)arg2);
 }
 
 void igFilterMessageDispatcher_RemoveFilteringForType(void **arg0, int arg1, int arg2) {

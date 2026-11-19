@@ -28,8 +28,12 @@ void igMatrix44f_Copy(float *destination, const float *source);
 void igMatrix44f_Multiply(float *product, const float *a, const float *b);
 void igMatrix44f_PreMultiply(float *matrix, const float *a);
 void igMatrix44f_PreRotateAxisAngle(float *matrix, const float *axis, float angle);
+/* Rotates the matrix by `angle` radians about `axis` after its own transform. */
+void igMatrix44f_PostRotateAxisAngle(float *matrix, const float *axis, float angle);
 /* Moves the translation by `translation` expressed in the matrix's own axes. */
 void igMatrix44f_TranslateLocal(float *matrix, const igVec3f &translation);
+/* Moves the matrix by `translation` in the space it maps into, scaled by each row's w. */
+void igMatrix44f_TranslateWorld(float *matrix, const igVec3f &translation);
 /* Fails when the matrix is singular. */
 igResult igMatrix44f_Invert(float *inverse, const float *matrix);
 /* The inverse of a rotation-and-translation matrix: the transposed rotation and the translation

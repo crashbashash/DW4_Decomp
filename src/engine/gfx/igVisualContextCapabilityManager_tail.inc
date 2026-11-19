@@ -251,8 +251,8 @@ void igVisualContext_SetBlendingMatrices(O_165d30 *arg0, unsigned int arg1, int 
     arg0->f76 = arg0->f76 + 1;
 }
 
-int igVisualContext_GetBlendingMatricesCount(void *arg0) {
-    return *(int *)((char *)(arg0) + 72);
+int igVisualContext_GetBlendingMatricesCount(igVisualContext *self) {
+    return self->_blendMatricesCount;
 }
 
 static inline Obj_165e50 *getAlloc(void *o) {

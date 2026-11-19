@@ -109,8 +109,8 @@ int Gap__Gui__igCharMetricsMetaField__vfunc_25(void) {
     return 0x28;
 }
 
-void igCharMetricsMetaField_InitDefaults(void *arg0) {
-    FUN_00452ca0(*(int *)((char *)arg0 + 52));
+void igCharMetricsMetaField_InitDefaults(igCharMetricsMetaField *self) {
+    FUN_00452ca0(self->_fieldList);
 }
 
 void FUN_00452ca0(int arg0) {

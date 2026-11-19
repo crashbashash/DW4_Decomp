@@ -16,7 +16,7 @@ void Gap__igPsx2Controller__vfunc_36(igPsx2Controller *self, igObject *window) {
     self->_attachedWindow = (int)window;
 }
 
-void Gap__igPsx2Controller__vfunc_33(void *arg0, short arg1) {
-    *(short *)((char *)arg0 + 16) = arg1;
+void Gap__igPsx2Controller__vfunc_33(igPsx2Controller *self, short arg1) {
+    self->_id = arg1;
 }
 

@@ -7,53 +7,25 @@
 #include "dw4/p2/p2swap.h"
 #include "dw4/p2/p2timer.h"
 #include "dw4/p2/dmaChannel.h"
+#include "dw4/p2/renderState.h"
 #include "dw4/sony/libkernl.h"
 #include "dw4/p2/p2textureCalls.h"
-extern long long DAT_00562cc0[4];
 extern int DAT_005690ac[4];
 extern int DAT_005690b0[4];
-extern long long DAT_00569148[4];
-extern long long DAT_00569150[4];
 extern long long DAT_00569158[4];
-extern long long DAT_00569160[4];
-extern long long DAT_00569168[4];
-extern long long DAT_00569170[4];
 extern long long DAT_00569178[4];
-extern long long DAT_00569180[4];
-extern long long DAT_00569188[4];
-extern long long DAT_00569248[4];
-extern long long DAT_00569260[4];
-extern long long DAT_00569268[4];
-extern long long DAT_00569270[4];
-extern long long DAT_00569278[4];
-extern long long DAT_00569280[4];
-extern long long DAT_00569288[4];
-extern long long DAT_00569290[4];
-extern long long DAT_00569298[4];
-extern long long DAT_005692a0[4];
-extern long long DAT_0056b5a8[4];
-extern long long DAT_0056b5b0[4];
-extern long long DAT_0056b5b8[4];
-extern long long DAT_0056b5c0[4];
-extern long long DAT_0056b5c8[4];
-extern long long DAT_0056b5d0[4];
-extern long long DAT_0056b5d8[4];
-extern long long DAT_0056b5e0[4];
-extern long long DAT_0056b5e8[4];
-extern long long DAT_0056b5f0[4];
-extern long long DAT_0056bfa0[4];
+/* The vertices and primitives drawn from display lists. */
+extern long long p2StatDisplayListVertices;
+extern long long p2StatDisplayListPrimitives;
 extern long long DAT_0056c070[4];
 extern int DAT_0056c150[4];
 extern int DAT_0056c154[4];
 extern int DAT_0056c158[4];
 extern int DAT_0056c168[4];
-extern unsigned int DAT_00490f50, DAT_00490f54, DAT_00490f58, DAT_00490f5c, DAT_00490f60, DAT_00490f68, DAT_00490f70;
-extern unsigned int DAT_00569328;
-extern const char DAT_004e5110[];
+extern const char text_GS_csr_id_d_csr_rev_d[];
 /* The newest VIF1 sequence the GS has finished drawing, as p2RecordFinishedSequence records it. */
 extern long long p2FinishedSequence[4];
-void FUN_001f7e90(int count, int *regs, int flush);
-int FUN_001f78d0();
+void p2UploadDirtyGsRegisters(void);
 typedef union DmaTag {
     struct {
         unsigned int qwc : 16;
@@ -68,7 +40,7 @@ typedef union DmaTag {
     unsigned int w[4];
 } DmaTag;
 
-extern DmaTag DAT_00491040;
+extern DmaTag p2GifCallTag;
 
 typedef struct GifTag {
     unsigned long long nloop : 15;
@@ -110,12 +82,12 @@ typedef union GifQuad {
 } GifQuad;
 
 extern int DAT_0056ae40;
-extern VifCode DAT_0056aeb8;
-extern DmaTag DAT_00490f90;
-extern GifQuad DAT_00490f80;
-extern VifQuad DAT_0056aea0;
-extern VifQuad DAT_0056aeb0;
-extern unsigned char DAT_0056ae50[];
+extern VifCode p2GsRegisterPacketMscal;
+extern DmaTag p2GsRegisterDmaTag;
+extern GifQuad p2GsRegisterGifTag;
+extern VifQuad p2GsRegisterPacketHead;
+extern VifQuad p2GsRegisterPacketTail;
+extern unsigned char p2GsRegisterAddresses[];
 
 extern char text_p2readGSPrivRegister[];
 enum GsPrivRegister {
@@ -150,70 +122,69 @@ enum GsPrivRegister {
 #define GS_IMR      (*(long long *)0x12001010)
 #define GS_BUSDIR   (*(long long *)0x12001040)
 #define GS_SIGLBLID (*(long long *)0x12001080)
-extern int DAT_00491278[4];
 
-void p2GetStatistics(void *arg0) {
-    int sp2C;
-    int temp_a1;
+void p2GetStatistics(void *statistics) {
+    p2Statistics *stats = statistics;
+    int textureSpace;
 
-    *(long long *)((char *)arg0 + 0) = p2VertexCount;
-    *(long long *)((char *)arg0 + 8) = p2PrimitiveCount;
-    *(long long *)((char *)arg0 + 384) = DAT_00569260[0];
-    *(long long *)((char *)arg0 + 392) = DAT_00569268[0];
-    *(long long *)((char *)arg0 + 16) = p2StatTextureBinds;
-    *(long long *)((char *)arg0 + 24) = DAT_0056c070[0];
-    p2GetTextureBase((int *)&sp2C);
-    sp2C = (0x4000 - sp2C) << 8;
-    *(long long *)((char *)arg0 + 200) = DAT_005690ac[0];
-    *(long long *)((char *)arg0 + 208) = DAT_005690b0[0];
-    *(long long *)((char *)arg0 + 32) = (sp2C - DAT_0056c070[0]);
-    *(long long *)((char *)arg0 + 40) = p2FramesTimed;
-    *(long long *)((char *)arg0 + 48) = DAT_0056bfa0[0];
-    *(long long *)((char *)arg0 + 56) = DAT_0056b5a8[0];
-    *(long long *)((char *)arg0 + 64) = DAT_0056b5b0[0];
-    *(long long *)((char *)arg0 + 72) = DAT_0056b5b8[0];
-    *(long long *)((char *)arg0 + 80) = DAT_0056b5c0[0];
-    *(long long *)((char *)arg0 + 88) = DAT_0056b5c8[0];
-    *(long long *)((char *)arg0 + 96) = DAT_0056b5d0[0];
-    *(long long *)((char *)arg0 + 104) = DAT_0056b5d8[0];
-    *(long long *)((char *)arg0 + 112) = DAT_0056b5e0[0];
-    *(long long *)((char *)arg0 + 120) = DAT_0056b5e8[0];
-    *(long long *)((char *)arg0 + 128) = DAT_0056b5f0[0];
-    *(long long *)((char *)arg0 + 136) = p2StatLightingSwitches;
-    *(long long *)((char *)arg0 + 144) = p2StatMaterialSets;
-    *(long long *)((char *)arg0 + 152) = p2StatLightingModeSets;
-    *(long long *)((char *)arg0 + 160) = p2StatLightSets;
-    *(long long *)((char *)arg0 + 168) = p2StatLightSwitches;
-    *(long long *)((char *)arg0 + 176) = DAT_00569298[0];
-    *(long long *)((char *)arg0 + 184) = DAT_005692a0[0];
-    *(long long *)((char *)arg0 + 192) = DAT_00562cc0[0];
-    *(long long *)((char *)arg0 + 216) = DAT_00569148[0];
-    *(long long *)((char *)arg0 + 224) = DAT_00569150[0];
-    *(long long *)((char *)arg0 + 232) = DAT_00569158[0];
-    *(long long *)((char *)arg0 + 240) = DAT_00569160[0];
-    *(long long *)((char *)arg0 + 248) = DAT_00569168[0];
-    *(long long *)((char *)arg0 + 256) = DAT_00569170[0];
-    *(long long *)((char *)arg0 + 264) = DAT_00569178[0];
-    *(long long *)((char *)arg0 + 272) = DAT_00569180[0];
-    *(long long *)((char *)arg0 + 280) = DAT_00569188[0];
-    *(long long *)((char *)arg0 + 288) = p2FrameTimeTotal;
-    *(long long *)((char *)arg0 + 296) = p2FrameTimeMin;
-    *(long long *)((char *)arg0 + 304) = p2FrameTimeMax;
-    *(long long *)((char *)arg0 + 312) = DAT_0056c150[0];
-    *(long long *)((char *)arg0 + 320) = DAT_0056c154[0];
-    *(long long *)((char *)arg0 + 328) = DAT_0056c158[0];
-    *(long long *)((char *)arg0 + 336) = p2DmaWaitTime;
-    *(long long *)((char *)arg0 + 344) = p2SwapWaitTime;
-    *(long long *)((char *)arg0 + 352) = p2FinishWaitTime;
-    *(long long *)((char *)arg0 + 360) = DAT_0056c168[0];
-    *(long long *)((char *)arg0 + 368) = p2SleepTime;
-    *(long long *)((char *)arg0 + 400) = DAT_00569270[0];
-    *(long long *)((char *)arg0 + 408) = DAT_00569278[0];
-    *(long long *)((char *)arg0 + 416) = DAT_00569280[0];
-    *(long long *)((char *)arg0 + 424) = DAT_00569288[0];
-    *(long long *)((char *)arg0 + 432) = p2StatFourWeightBlendVertices;
-    *(long long *)((char *)arg0 + 440) = DAT_00569290[0];
-    *(long long *)((char *)arg0 + 448) = DAT_00569248[0];
+    stats->vertices = p2VertexCount;
+    stats->primitives = p2PrimitiveCount;
+    stats->displayListVertices = p2StatDisplayListVertices;
+    stats->displayListPrimitives = p2StatDisplayListPrimitives;
+    stats->textureBinds = p2StatTextureBinds;
+    stats->f24 = DAT_0056c070[0];
+    p2GetTextureBase(&textureSpace);
+    textureSpace = (0x4000 - textureSpace) << 8;
+    stats->f200 = DAT_005690ac[0];
+    stats->f208 = DAT_005690b0[0];
+    stats->f32 = (textureSpace - DAT_0056c070[0]);
+    stats->framesTimed = p2FramesTimed;
+    stats->vsyncs = p2Vsyncs;
+    stats->stateSends = p2StatStateSends;
+    stats->functionTablesSent = p2StatFunctionTablesSent;
+    stats->lightingFunctionsSent = p2StatLightingFunctionsSent;
+    stats->lightsSent = p2StatLightsSent;
+    stats->gifTagsSent = p2StatGifTagsSent;
+    stats->vertexFormatsSent = p2StatVertexFormatsSent;
+    stats->blendMatricesSent = p2StatBlendMatricesSent;
+    stats->gsRegistersSent = p2StatGsRegistersSent;
+    stats->vuBufferLayoutsSent = p2StatVuBufferLayoutsSent;
+    stats->passSetupsSent = p2StatPassSetupsSent;
+    stats->lightingSwitches = p2StatLightingSwitches;
+    stats->materialSets = p2StatMaterialSets;
+    stats->lightingModeSets = p2StatLightingModeSets;
+    stats->lightSets = p2StatLightSets;
+    stats->lightSwitches = p2StatLightSwitches;
+    stats->colourModeChanges = p2ColourModeChanges;
+    stats->primitiveChanges = p2PrimitiveChanges;
+    stats->capabilityChanges = p2StatCapabilityChanges;
+    stats->vif1DmaCount = p2StatVif1DmaCount;
+    stats->vif1PartialPackets = p2StatVif1PartialPackets;
+    stats->f232 = DAT_00569158[0];
+    stats->vif1DmaTime = p2StatVif1DmaTime;
+    stats->gifDmaCount = p2StatGifDmaCount;
+    stats->gifPartialPackets = p2StatGifPartialPackets;
+    stats->f264 = DAT_00569178[0];
+    stats->gifDmaTime = p2StatGifDmaTime;
+    stats->dmaOverlapTime = p2StatDmaOverlapTime;
+    stats->frameTimeTotal = p2FrameTimeTotal;
+    stats->frameTimeMin = p2FrameTimeMin;
+    stats->frameTimeMax = p2FrameTimeMax;
+    stats->f312 = DAT_0056c150[0];
+    stats->f320 = DAT_0056c154[0];
+    stats->f328 = DAT_0056c158[0];
+    stats->dmaWaitTime = p2DmaWaitTime;
+    stats->swapWaitTime = p2SwapWaitTime;
+    stats->finishWaitTime = p2FinishWaitTime;
+    stats->f360 = DAT_0056c168[0];
+    stats->sleepTime = p2SleepTime;
+    stats->fastPathVertices = p2StatVertexCount1;
+    stats->fastLitPathVertices = p2StatVertexCount4;
+    stats->litPathVertices = p2StatVertexCount2;
+    stats->vu1BlendVertices = p2StatVertexCount8;
+    stats->vu0BlendVertices = p2StatFourWeightBlendVertices;
+    stats->vu1MultiPassVertices = p2StatVertexCount16;
+    stats->indexedVertices = p2IndexedVertexCount;
     p2FrameTimeMin = 0xFFFFFFFFLL;
     p2FrameTimeMax = 0;
 }
@@ -264,30 +235,45 @@ void FUN_001f7330(void)
 {
 }
 
-void FUN_001f7340(int arg0) {
-    *(int *)0x569220 = arg0;
-    *(int *)0x491478 = (int) (*(int *)0x491478 | 0x11);
+void p2SetSpriteSizeMode(int mode) {
+    p2SpriteSizeMode = mode;
+    p2DirtyFlags |= 0x11;
 }
 
-int FUN_001f7360(void)
+int p2GetSpriteSizeMode(void)
 {
-    return *(int *)0x00569220;
+    return p2SpriteSizeMode;
 }
 
-void FUN_001f7370(float value) {
+/* The VIF1 chain p2SetSpriteHalfSize sends: a DMA cnt tag over two quadwords, a FLUSHE, an STMASK
+ * that keeps the first element of a vector, then a masked UNPACK S-32 of one word into VU1 data
+ * memory. */
+typedef struct p2SpriteSizeCodes {
+    unsigned int tag[4];
+    VifCode flush;
+    unsigned int pad0;
+    VifCode unpack;
+    unsigned int pad1;
+    VifCode stmask;
+} p2SpriteSizeCodes;
+
+extern p2SpriteSizeCodes p2SpriteSizePacket;
+extern unsigned int p2SpriteSizeNop;
+
+void p2SetSpriteHalfSize(float halfSize) {
     unsigned int *p = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
-    p[0] = DAT_00490f50;
-    p[1] = DAT_00490f54;
-    p[2] = DAT_00490f58;
-    p[3] = DAT_00490f5c;
-    p[4] = DAT_00490f60;
-    p[5] = DAT_00490f70;
+    p[0] = p2SpriteSizePacket.tag[0];
+    p[1] = p2SpriteSizePacket.tag[1];
+    p[2] = p2SpriteSizePacket.tag[2];
+    p[3] = p2SpriteSizePacket.tag[3];
+    p[4] = p2SpriteSizePacket.flush.word;
+    p[5] = p2SpriteSizePacket.stmask.word;
     p[6] = 0xFCFCFCFC;
-    p[7] = DAT_00569328;
-    p[8] = DAT_00490f68;
-    ((float *)p)[9] = value;
-    p[10] = DAT_00569328;
-    p[11] = DAT_00569328;
+    p[7] = p2SpriteSizeNop;
+    p[8] = p2SpriteSizePacket.unpack.word;
+    ((float *)p)[9] = halfSize;
+    p[10] = p2SpriteSizeNop;
+    p[11] = p2SpriteSizeNop;
     p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)(p + 12);
     if (p2DmaCurrentPacket[P2_DMA_VIF1]->cursor >= p2DmaCurrentPacket[P2_DMA_VIF1]->limit) {
         if (p2DisplayListMode != 0) {
@@ -298,18 +284,18 @@ void FUN_001f7370(float value) {
     }
 }
 
-void p2SetPolygonMode(int arg0) {
-    *(int *)0x490D38 = arg0;
-    *(int *)0x491478 = (int) (*(int *)0x491478 | 0x19);
+void p2SetPolygonMode(int mode) {
+    *(int *)0x490D38 = mode;
+    p2DirtyFlags |= 0x19;
 }
 
 void p2PrintGsRevision(void) {
-    long long temp_v0;
-    int a, b;
-    temp_v0 = p2readGSPrivRegister(0x40);
-    a = (temp_v0 >> 0x18) & 0xFF;
-    b = (temp_v0 >> 0x10) & 0xFF;
-    printf(DAT_004e5110, a, b);
+    long long csr;
+    int id, revision;
+    csr = p2readGSPrivRegister(0x40);
+    id = (csr >> 0x18) & 0xFF;
+    revision = (csr >> 0x10) & 0xFF;
+    printf(text_GS_csr_id_d_csr_rev_d, id, revision);
 }
 
 int p2SequenceFinishedPredicate(long long sequence)
@@ -347,22 +333,22 @@ typedef struct {
     unsigned long long p1:32;
 } tGS_CSR;
 
-extern tGS_CSR DAT_0056ada0;
-extern long long DAT_0056ade0;
-extern int DAT_0056ae90;
-extern int DAT_0056ae30;
-extern int DAT_0056ae28;
+extern tGS_CSR p2GsCsr;
+extern long long p2GsImr;
+extern int p2GsInterrupts;
+extern int p2GsVsyncInterrupts;
+extern int p2GsSignalInterrupts;
 
 int p2GsInterruptHandler(int cause) {
     long long status;
 
-    DAT_0056ade0 = -1;
+    p2GsImr = -1;
     p2writeGSPrivRegister(0x41);
     status = p2readGSPrivRegister(0x40);
-    DAT_0056ae90++;
-    DAT_0056ada0.FINISH = (status & 2) ? 1 : 0;
-    DAT_0056ada0.VSINT = (status & 8) ? 1 : 0;
-    DAT_0056ada0.SIGNAL = (status & 1) ? 1 : 0;
+    p2GsInterrupts++;
+    p2GsCsr.FINISH = (status & 2) ? 1 : 0;
+    p2GsCsr.VSINT = (status & 8) ? 1 : 0;
+    p2GsCsr.SIGNAL = (status & 1) ? 1 : 0;
     p2writeGSPrivRegister(0x40);
     if (p2DisplayClosing == 0) {
         if (status & 2) {
@@ -370,31 +356,31 @@ int p2GsInterruptHandler(int cause) {
         }
         if (status & 8) {
             p2VsyncHandler();
-            DAT_0056ae30++;
+            p2GsVsyncInterrupts++;
         }
         if (status & 1) {
             p2GsSignalHandler();
-            DAT_0056ae28++;
+            p2GsSignalInterrupts++;
         }
     }
-    DAT_0056ade0 = -0xB01;
+    p2GsImr = -0xB01;
     p2writeGSPrivRegister(0x41);
     __asm__ __volatile__("sync\nei\n");
     return 0;
 }
 
-void p2SendGsRegister(int arg0) {
-    int sp1C;
+void p2SendGsRegister(int registerIndex) {
+    int registers;
 
-    sp1C = arg0;
-    p2UploadGsRegisters(1, &sp1C);
+    registers = registerIndex;
+    p2UploadGsRegisters(1, &registers);
 }
 
 void p2UploadGsRegisters(int count, int *regs) {
     int n;
 
     if (p2CurrentProgram == 0) {
-        DAT_0056aeb8.field.immediate = p2GetVuProgramAddress(DAT_0056ae40);
+        p2GsRegisterPacketMscal.field.immediate = p2GetVuProgramAddress(DAT_0056ae40);
         for (; count > 0; count -= n, regs += n) {
             int i;
             unsigned __int128 *p;
@@ -404,24 +390,24 @@ void p2UploadGsRegisters(int count, int *regs) {
             n = count < 16 ? count : 16;
             p = (unsigned __int128 *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
             r = regs;
-            DAT_00490f80.f.nreg = n;
-            DAT_00490f90.f.qwc = n + 3;
-            ((unsigned int *)p)[0] = DAT_00490f90.w[0];
-            ((unsigned int *)p)[1] = DAT_00490f90.w[1];
-            ((unsigned int *)p)[2] = DAT_00490f90.w[2];
-            ((unsigned int *)p)[3] = DAT_00490f90.w[3];
-            DAT_0056aea0.code[3].field.num = n + 1;
-            p[1] = DAT_0056aea0.q;
-            *(p += 2) = DAT_00490f80.q;
+            p2GsRegisterGifTag.f.nreg = n;
+            p2GsRegisterDmaTag.f.qwc = n + 3;
+            ((unsigned int *)p)[0] = p2GsRegisterDmaTag.w[0];
+            ((unsigned int *)p)[1] = p2GsRegisterDmaTag.w[1];
+            ((unsigned int *)p)[2] = p2GsRegisterDmaTag.w[2];
+            ((unsigned int *)p)[3] = p2GsRegisterDmaTag.w[3];
+            p2GsRegisterPacketHead.code[3].field.num = n + 1;
+            p[1] = p2GsRegisterPacketHead.q;
+            *(p += 2) = p2GsRegisterGifTag.q;
             p++;
             for (i = 0; i < n; i++) {
                 int reg = *r++;
                 ad.f.data = ((unsigned long long *)p2CurrentGsRegisters)[reg];
-                ad.f.addr = DAT_0056ae50[reg];
+                ad.f.addr = p2GsRegisterAddresses[reg];
                 *p = ad.q;
                 p++;
             }
-            *p = DAT_0056aeb0.q;
+            *p = p2GsRegisterPacketTail.q;
             p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)(p + 1);
             if (p2DmaCurrentPacket[P2_DMA_VIF1]->cursor >= p2DmaCurrentPacket[P2_DMA_VIF1]->limit) {
                 if (p2DisplayListMode != 0) {
@@ -432,26 +418,28 @@ void p2UploadGsRegisters(int count, int *regs) {
             }
         }
     } else {
-        FUN_001f7e90(count, regs, 1);
+        p2UploadGsRegistersGif(count, regs, 1);
     }
 }
 
 void p2FlushGsRegisters(void) {
-    if (*(long long *)0x56AE48 != 0) {
-        FUN_001f78d0();
+    if (p2GsDirtyRegisters != 0) {
+        p2UploadDirtyGsRegisters();
     }
 }
 
-extern unsigned int DAT_00491000, DAT_00491004, DAT_00491008, DAT_0049100c, DAT_00491010, DAT_00491018;
-extern VifCode DAT_00491020;
+extern DmaTag p2RestartPacketTag;
+extern unsigned int p2RestartPacketUnpack;
+extern unsigned int p2RestartPacketMark;
+extern VifCode p2RestartPacketMscal;
 /* A GIF tag as its two doublewords: the tag proper and the register descriptors. */
 typedef struct GifTagWords {
     unsigned long long tag;
     unsigned long long regs;
 } GifTagWords;
 
-extern GifTagWords DAT_00491030;
-extern unsigned int DAT_0056aec8;
+extern GifTagWords p2RestartPacketGifTag;
+extern unsigned int p2RestartPacketNop;
 
 /* A packet write position, stepped by words, doublewords or quadwords. */
 typedef union p2PacketPointer {
@@ -469,38 +457,38 @@ static inline void p2PutGifTag(unsigned __int128 *dest, const GifTagWords *tag) 
     ((unsigned long long *)dest)[1] = tag->regs;
 }
 
-extern DmaTag DAT_00490fc0;
-extern VifCode DAT_00490fd0;
-extern VifCode DAT_00490fd8;
-extern VifCode DAT_00490fe0;
-extern unsigned int DAT_00490fe8;
-extern GifQuad DAT_00490ff0;
-extern unsigned int DAT_0056aec0;
+extern DmaTag p2FinishPacketTag;
+extern VifCode p2FinishPacketUnpack;
+extern VifCode p2FinishPacketMark;
+extern VifCode p2FinishPacketMscal;
+extern unsigned int p2FinishPacketFlush;
+extern GifQuad p2FinishPacketGifTag;
+extern unsigned int p2FinishPacketNop;
 
-/* Loads the VU1 program with two GS registers set through the GIF (A+D): a DMA tag, the VIF codes
- * ahead of the GIF tag, the GIF tag with its two register writes, then the VIF codes that start the
- * program. */
-void FUN_001f7b00(void) {
+/* Appends the end-of-packet marker: the VU1 program sets the GS LABEL register to the packet's
+ * sequence and writes FINISH, through the GIF (A+D). A DMA tag, the VIF codes ahead of the GIF tag,
+ * the GIF tag with its two register writes, then the VIF codes that start the program. */
+void p2AppendGsFinish(void) {
     p2PacketPointer p;
     p2PacketPointer q;
     GifQuad tag;
 
     p.w = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
-    tag = DAT_00490ff0;
-    DAT_00490fe0.field.immediate = p2GetVuProgramAddress(DAT_0056ae40);
+    tag = p2FinishPacketGifTag;
+    p2FinishPacketMscal.field.immediate = p2GetVuProgramAddress(DAT_0056ae40);
     tag.f.nreg = 2;
-    DAT_00490fc0.f.qwc = 5;
-    p.w[0] = DAT_00490fc0.w[0];
-    p.w[1] = DAT_00490fc0.w[1];
-    p.w[2] = DAT_00490fc0.w[2];
-    p.w[3] = DAT_00490fc0.w[3];
+    p2FinishPacketTag.f.qwc = 5;
+    p.w[0] = p2FinishPacketTag.w[0];
+    p.w[1] = p2FinishPacketTag.w[1];
+    p.w[2] = p2FinishPacketTag.w[2];
+    p.w[3] = p2FinishPacketTag.w[3];
     p.q++;
-    DAT_00490fd8.field.immediate = 2;
-    DAT_00490fd0.field.num = 3;
-    p.w[0] = DAT_00490fe8;
-    p.w[1] = DAT_0056aec0;
-    p.w[2] = DAT_00490fd8.word;
-    p.w[3] = DAT_00490fd0.word;
+    p2FinishPacketMark.field.immediate = 2;
+    p2FinishPacketUnpack.field.num = 3;
+    p.w[0] = p2FinishPacketFlush;
+    p.w[1] = p2FinishPacketNop;
+    p.w[2] = p2FinishPacketMark.word;
+    p.w[3] = p2FinishPacketUnpack.word;
     p.q++;
     p2PutGifTag(p.q, (GifTagWords *)&tag);
     q.q = p.q + 1;
@@ -509,45 +497,45 @@ void FUN_001f7b00(void) {
     *q.d++ = ((unsigned long long *)p2CurrentGsRegisters)[54];
     *q.d++ = 0x61;
     ((unsigned long long *)p.q)[1] = (~0ULL << 8) | 0xEE;
-    DAT_00490fd8.field.immediate = 3;
-    q.w[0] = DAT_00490fd8.word;
-    q.w[1] = DAT_00490fe0.word;
-    q.w[2] = DAT_0056aec0;
-    q.w[3] = DAT_00490fe8;
+    p2FinishPacketMark.field.immediate = 3;
+    q.w[0] = p2FinishPacketMark.word;
+    q.w[1] = p2FinishPacketMscal.word;
+    q.w[2] = p2FinishPacketNop;
+    q.w[3] = p2FinishPacketFlush;
     p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)(q.w + 4);
 }
 
 /* Restarts the VU1 program: a DMA tag, the VIF codes around the program's GIF tag, then an MSCAL of
  * its entry address. */
-void FUN_001f7c90(void) {
+void p2AppendProgramRestart(void) {
     p2PacketPointer p;
 
     p.w = (unsigned int *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
-    DAT_00491020.field.immediate = p2GetVuProgramAddress(DAT_0056ae40);
-    p.w[0] = DAT_00491000;
-    p.w[1] = DAT_00491004;
-    p.w[2] = DAT_00491008;
-    p.w[3] = DAT_0049100c;
+    p2RestartPacketMscal.field.immediate = p2GetVuProgramAddress(DAT_0056ae40);
+    p.w[0] = p2RestartPacketTag.w[0];
+    p.w[1] = p2RestartPacketTag.w[1];
+    p.w[2] = p2RestartPacketTag.w[2];
+    p.w[3] = p2RestartPacketTag.w[3];
     p.w += 4;
-    p2PutWord(p.w++, DAT_0056aec8);
-    p2PutWord(p.w++, DAT_0056aec8);
-    p2PutWord(p.w++, DAT_00491018);
-    p2PutWord(p.w++, DAT_00491010);
-    p2PutGifTag(p.q++, &DAT_00491030);
-    p2PutWord(p.w++, DAT_00491020.word);
-    p2PutWord(p.w++, DAT_0056aec8);
-    p2PutWord(p.w++, DAT_0056aec8);
-    p2PutWord(p.w++, DAT_0056aec8);
+    p2PutWord(p.w++, p2RestartPacketNop);
+    p2PutWord(p.w++, p2RestartPacketNop);
+    p2PutWord(p.w++, p2RestartPacketMark);
+    p2PutWord(p.w++, p2RestartPacketUnpack);
+    p2PutGifTag(p.q++, &p2RestartPacketGifTag);
+    p2PutWord(p.w++, p2RestartPacketMscal.word);
+    p2PutWord(p.w++, p2RestartPacketNop);
+    p2PutWord(p.w++, p2RestartPacketNop);
+    p2PutWord(p.w++, p2RestartPacketNop);
     p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)p.w;
 }
 
-void FUN_001f7db0(unsigned int addr, int unused, int flush) {
+void p2CallGifChain(unsigned int chain, int unused, int flush) {
     unsigned int *p = (unsigned int *)p2DmaCurrentPacket[P2_DMA_GIF]->cursor;
-    DAT_00491040.f.addr = addr & 0x7FFFFFFF;
-    p[0] = DAT_00491040.w[0];
-    p[1] = DAT_00491040.w[1];
-    p[2] = DAT_00491040.w[2];
-    p[3] = DAT_00491040.w[3];
+    p2GifCallTag.f.addr = chain & 0x7FFFFFFF;
+    p[0] = p2GifCallTag.w[0];
+    p[1] = p2GifCallTag.w[1];
+    p[2] = p2GifCallTag.w[2];
+    p[3] = p2GifCallTag.w[3];
     p2DmaCurrentPacket[P2_DMA_GIF]->cursor = (unsigned int)(p + 4);
     if (flush != 0) {
         p2SubmitDmaPacket(2);
@@ -559,9 +547,6 @@ void FUN_001f7db0(unsigned int addr, int unused, int flush) {
         }
     }
 }
-
-extern DmaTag DAT_00491050;
-extern GifQuad DAT_00491060;
 
 /* Reads one of the Graphics Synthesizer privileged registers by register number. The numbers are
  * the GS register-map indices; the memory-mapped address is 0x12000000 + (index << 4) for the
@@ -604,8 +589,8 @@ long long p2readGSPrivRegister(int registerIndex) {
     }
 }
 
-void p2writeGSPrivRegister(int arg0) {
-    switch (arg0) {
+void p2writeGSPrivRegister(int registerIndex) {
+    switch (registerIndex) {
     case 0:
         *(long long *)0x12000000 = *(long long *)0x0056adf0;
         break;
@@ -652,13 +637,12 @@ void p2writeGSPrivRegister(int arg0) {
 }
 
 void FUN_001f8320(void) {
-    if (*(int *)0x490B60 != 0) {
+    if (p2FirstOpen != 0) {
         p2readGSPrivRegister(0x48);
     }
 }
 
 int AddIntcHandler(int cause, int (*handler)(int cause), int next);
-extern int p2FirstOpen;
 
 void p2InitGsInterrupt(void) {
     VifCode unpack = { 0x8000, 0, 0x6c };
@@ -674,14 +658,14 @@ void p2InitGsInterrupt(void) {
     EnableIntc(0);
     *(int *)0x10003010 = 4;
     p2FinishedSequence[0] = 0;
-    DAT_0056aea0.code[0].word = nop.word;
-    DAT_0056aea0.code[1].word = nop.word;
-    DAT_0056aea0.code[2].word = mark.word;
-    DAT_0056aea0.code[3].word = unpack.word;
-    DAT_0056aeb0.code[0].word = mark.word;
-    DAT_0056aeb0.code[1].word = flusha.word;
-    DAT_0056aeb0.code[2].word = mscal.word;
-    DAT_0056aeb0.code[3].word = flusha.word;
+    p2GsRegisterPacketHead.code[0].word = nop.word;
+    p2GsRegisterPacketHead.code[1].word = nop.word;
+    p2GsRegisterPacketHead.code[2].word = mark.word;
+    p2GsRegisterPacketHead.code[3].word = unpack.word;
+    p2GsRegisterPacketTail.code[0].word = mark.word;
+    p2GsRegisterPacketTail.code[1].word = flusha.word;
+    p2GsRegisterPacketTail.code[2].word = mscal.word;
+    p2GsRegisterPacketTail.code[3].word = flusha.word;
 }
 
 void p2InitGsRegisterAddresses(void) {
@@ -744,16 +728,18 @@ void p2InitGsRegisterAddresses(void) {
 
 int p2GetActiveLightCount(void)
 {
-    return *(int *)0x0056aef0;
+    return p2ActiveLightCount;
 }
 
 int p2GetActivePointLightCount(void)
 {
-    return *(int *)0x0056aef8;
+    return p2ActivePointLightCount;
 }
 
-void p2SetMaterialSpecularState(int arg0) {
-    DAT_00491278[0] = arg0;
+extern int p2MaterialSpecularState;
+
+void p2SetMaterialSpecularState(int enable) {
+    p2MaterialSpecularState = enable;
     p2DirtyFlags |= 0x84;
     p2StatLightingModeSets += 1;
 }

@@ -16,8 +16,8 @@ void igTextureMatrixStateAttr_SetUnitID(igTextureMatrixStateAttr *self, int unit
     igAttr_SetUnitID((int)self, unitID);
 }
 
-void igTextureMatrixStateAttr_SynchronizeDefault(void *arg0, void **arg1) {
-    ((DW4VC_128_1 *)(((char *)(arg0) + 0)))->vX((int)(((DW4VC_840_1 *)(arg1))->vX((int)(*(int *)((char *)(arg0) + 16)))));
+void igTextureMatrixStateAttr_SynchronizeDefault(igTextureMatrixStateAttr *self, void **arg1) {
+    ((DW4VC_128_1 *)(((char *)(self) + 0)))->vX((int)(((DW4VC_840_1 *)(arg1))->vX((int)(self->_unitID))));
 }
 
 /* Setter for the reflected bool field _enabled. */

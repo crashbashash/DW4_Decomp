@@ -1,8 +1,8 @@
-void igTextureUnloadAttr_apply(void *arg0, igPsx2VisualContext *arg1) {
+void igTextureUnloadAttr_apply(igTextureUnloadAttr *self, igPsx2VisualContext *arg1) {
     int temp_a2;
     void *temp_v1;
 
-    temp_v1 = (void *)(*(int *)((char *)(arg0) + 12));
+    temp_v1 = (void *)(self->_texture);
     if (temp_v1 != 0) {
         temp_a2 = *(int *)((char *)(temp_v1) + 36);
         if (temp_a2 != -1) {

@@ -1,5 +1,5 @@
-void igLightingStateAttr_apply(int arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetLightingState(arg1, *(unsigned char *)((char *)(arg0) + 12));
+void igLightingStateAttr_apply(igLightingStateAttr *self, igPsx2VisualContext *arg1) {
+    igPsx2VisualContext_SetLightingState(arg1, self->_enabled);
 }
 
 void igLightingStateAttr_SynchronizeDefault(void **arg0, void **arg1) {

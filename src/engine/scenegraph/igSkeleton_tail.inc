@@ -67,8 +67,8 @@ void igSkeleton_Update(SkeletonView *o, SkeletonSlots *clock, int unused, Skelet
     }
 }
 
-int igSkeleton_GetBoneCount(void *arg0) {
-    return *(int *)((char *)(*(int *)((char *)(arg0) + 16)) + 8);
+int igSkeleton_GetBoneCount(igSkeleton *self) {
+    return *(int *)((char *)(self->_boneInfoList) + 8);
 }
 
 int igSkeleton_FindBoneIndex(S_1d9500 *arg0, int arg1) {

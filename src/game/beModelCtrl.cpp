@@ -238,18 +238,18 @@ struct MoveRef {
  * a local of a static inline member (allocated after the caller's); al/p/old stay the caller's locals. Assigned
  * through igSmartPointer::operator= instead, beModelCtrl_RunMove's registers differ. */
 struct Locals {
-    static inline void CreateDataList(beBaseInfoRam *arg1, int &al, igObject *&p, igObject *&old) {
-        SELECT_ALLOCATOR(al, arg1);
+    static inline void CreateDataList(beBaseInfoRam *ram, int &al, igObject *&p, igObject *&old) {
+        SELECT_ALLOCATOR(al, ram);
         {
             igSmartPointer<igObject> sp98((igObject *)((void *)beBaseInfoDataList_Create(al)));
             p = sp98.p;
             if (p != 0) p->_refCount = p->_refCount + 1;
-            old = (igObject *)arg1->_dataList;
+            old = (igObject *)ram->_dataList;
             if (old != 0) {
                 old->_refCount = old->_refCount - 1;
                 if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
             }
-            arg1->_dataList = (int)p;
+            ram->_dataList = (int)p;
         }
     }
 };

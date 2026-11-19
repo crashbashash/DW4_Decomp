@@ -7,7 +7,7 @@ void igDepthStateAttr_SetState(igDepthStateAttr *self, char enabled) {
     self->_enabled = enabled;
 }
 
-void igDepthStateAttr_apply(int arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetDepthTestState(arg1, *(bool *)((char *)(arg0) + 12));
+void igDepthStateAttr_apply(igDepthStateAttr *self, igPsx2VisualContext *arg1) {
+    igPsx2VisualContext_SetDepthTestState(arg1, *(bool *)&self->_enabled);
 }
 

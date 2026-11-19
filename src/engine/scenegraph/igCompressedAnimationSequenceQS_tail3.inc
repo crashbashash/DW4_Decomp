@@ -29,8 +29,8 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_46(QSView *o, int index, fl
 /* Decodes a 16-bit sign-magnitude sample (bit 15 = sign, 15-bit magnitude) into a 64-bit fixed-
  * point value (magnitude << 23). One 64-bit variable is widened, masked, shifted and negated in
  * place. */
-long long Gap__Sg__igCompressedAnimationSequenceQS__vfunc_42(int *arg0, int arg1) {
-    unsigned short *d = *(unsigned short **)(arg0[4] + 16);
+long long Gap__Sg__igCompressedAnimationSequenceQS__vfunc_42(igCompressedAnimationSequenceQS *self, int arg1) {
+    unsigned short *d = *(unsigned short **)(self->_compressedTimeList + 16);
     long long v = d[arg1];
     if (v & 0x8000) { v &= 0x7FFF; v <<= 0x17; v = -v; } else v <<= 0x17;
     return v;
@@ -138,16 +138,16 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_48(struct S_1bfe90 *arg0, i
     Quaternion_Lerp((float *)arg1, fparg0, (const float *)sp60, (const float *)sp50);
 }
 
-void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_47(void *arg0, int *arg1, int arg2, int arg3, float fparg0) {
+void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_47(igCompressedAnimationSequenceQS *self, int *arg1, int arg2, int arg3, float fparg0) {
     int sp60[4];
     int sp50[4];
 
-    if (*(unsigned char *)((char *)(arg0) + 57) == 0) {
-        ((DW4VC_184_2 *)(((char *)(arg0) + 0)))->vX(arg2, arg1);
+    if (self->_interpolationMethod[0] == 0) {
+        ((DW4VC_184_2 *)(((char *)(self) + 0)))->vX(arg2, arg1);
         return;
     }
-    ((DW4VC_184_2 *)(((char *)(arg0) + 0)))->vX(arg2, &sp60[0]);
-    ((DW4VC_184_2 *)(((char *)(arg0) + 0)))->vX(arg3, &sp50[0]);
+    ((DW4VC_184_2 *)(((char *)(self) + 0)))->vX(arg2, &sp60[0]);
+    ((DW4VC_184_2 *)(((char *)(self) + 0)))->vX(arg3, &sp50[0]);
     Vec3_Lerp((float *)arg1, fparg0, (const float *)((void *)&sp60[0]), (const float *)((void *)&sp50[0]));
 }
 

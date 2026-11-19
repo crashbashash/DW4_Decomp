@@ -1,6 +1,7 @@
 #include "dw4/p2/p2dma.h"
 #include "dw4/p2/dmaChannel.h"
 #include "dw4/p2/p2core.h"
+#include "dw4/p2/p2gs.h"
 #include "dw4/p2/p2pool.h"
 #include "dw4/p2/p2swap.h"
 #include "dw4/p2/p2timer.h"
@@ -30,8 +31,6 @@ void p2CompleteDmaPacket(int channel, p2DmaPacket *packet);
 void p2SignalDmaWait(int unused);
 int p2DmaPredicatesSatisfied(int channel);
 void p2FreeDmaCompletions(int channel);
-void FUN_001f7b00(void);
-void FUN_001f7c90(void);
 int p2Vif1DmaHandler(int channel);
 int p2GifDmaHandler(int channel);
 void p2InitDmaPredicatePool(void);
@@ -49,23 +48,19 @@ extern p2PredicateName p2PredicateNames[10];
 extern char p2StoreImagePending;
 extern int p2DmaWaitSema;
 extern struct SemaParam p2DmaWaitSemaParam;
-extern struct SemaParam DAT_00490d20;
-extern int DAT_00490c74;
-extern int DAT_00490c7c;
-extern int DAT_00490c84;
-extern int DAT_00569090[P2_DMA_CHANNEL_COUNT];
-extern char DAT_005690a0[P2_DMA_CHANNEL_COUNT];
+extern struct SemaParam p2DmaFreePacketSemaParam;
+extern int p2DmaPacketReserveVif0;
+extern int p2DmaPacketReserveVif1;
+extern int p2DmaPacketReserveGif;
+extern int p2DmaFreePacketSema[P2_DMA_CHANNEL_COUNT];
+extern char p2DmaWaitingForPacket[P2_DMA_CHANNEL_COUNT];
 extern const char text_p2PreviousFinishFuncDonePredicat[];
 
 #include "dw4/p2/p2core.h"
 
-extern long long DAT_00569148;
-extern long long DAT_00569150;
-extern long long DAT_00569168;
-extern long long DAT_00569170;
 extern int DAT_0056d680;
-extern unsigned int DAT_00490cf0[4];
-extern long long DAT_00568ef8;
+extern unsigned int p2DmaEndTag[4];
+extern long long p2DmaOverlapStartTime;
 
 typedef struct DmaTagHead {
     unsigned int qwc : 16;
@@ -79,7 +74,7 @@ typedef struct p2DmaCallback {
     void (*func)(void *arg);
     void *arg;
 } p2DmaCallback;
-extern p2DmaCallback DAT_005690d0[P2_DMA_CHANNEL_COUNT];
+extern p2DmaCallback p2DmaCompletionCallbacks[P2_DMA_CHANNEL_COUNT];
 
 static inline int p2HasFinishPredicate(const p2DmaPacket *packet) {
     return packet->finishPredicate;
@@ -89,10 +84,10 @@ static inline void p2EndDmaChain(int channel) {
     /* matching construct: manual variant search — the byte offset keeps the slot address apart from
      * p2SubmitDmaPacket's `current`, so it is rebuilt here as retail does */
     unsigned int *p = (unsigned int *)(*(p2DmaPacket **)((char *)p2DmaCurrentPacket + channel * 4))->cursor;
-    p[0] = DAT_00490cf0[0];
-    p[1] = DAT_00490cf0[1];
-    p[2] = DAT_00490cf0[2];
-    p[3] = DAT_00490cf0[3];
+    p[0] = p2DmaEndTag[0];
+    p[1] = p2DmaEndTag[1];
+    p[2] = p2DmaEndTag[2];
+    p[3] = p2DmaEndTag[3];
 }
 
 void p2SubmitDmaPacket(int channel) {
@@ -104,26 +99,26 @@ void p2SubmitDmaPacket(int channel) {
     current = p2DmaCurrentPacket + channel;
     packet = *current;
     if (channel == P2_DMA_VIF1) {
-        DAT_00569148++;
+        p2StatVif1DmaCount++;
     }
     if (channel == P2_DMA_VIF1 && packet->cursor < packet->limit) {
-        DAT_00569150++;
+        p2StatVif1PartialPackets++;
     }
     if (channel == P2_DMA_GIF) {
-        DAT_00569168++;
+        p2StatGifDmaCount++;
     }
     if (channel == P2_DMA_GIF && packet->cursor < packet->limit) {
-        DAT_00569170++;
+        p2StatGifPartialPackets++;
     }
     DAT_0056d680 = 0;
     if (channel == P2_DMA_VIF1) {
         if (p2HasFinishPredicate(packet)) {
             ((unsigned int *)&p2CurrentGsRegisters->f432[1])[0] = (unsigned int)packet->sequence;
             ((unsigned int *)&p2CurrentGsRegisters->f432[1])[1] = 0xFFFF;
-            FUN_001f7b00();
+            p2AppendGsFinish();
         } else if (packet->restartProgram) {
-            FUN_001f7c90();
-            FUN_001f7c90();
+            p2AppendProgramRestart();
+            p2AppendProgramRestart();
         }
     }
     p2EndDmaChain(channel);
@@ -140,10 +135,10 @@ void p2SubmitDmaPacket(int channel) {
         FlushCache(0);
         DIntr();
         if (p2DmaFreePackets[channel] < 2) {
-            DAT_005690a0[channel] = 1;
+            p2DmaWaitingForPacket[channel] = 1;
             EIntr();
             {
-                int *sema = &DAT_00569090[channel];
+                int *sema = &p2DmaFreePacketSema[channel];
                 p2BlockedSema = *sema;
                 WaitSema(*sema);
             }
@@ -168,11 +163,11 @@ void p2CompleteDmaPacket(int channel, p2DmaPacket *packet) {
 
     packet->ready = 0;
     packet->waitSequence = -1;
-    DAT_00568ef8 = 0;
+    p2DmaOverlapStartTime = 0;
     p2DmaChannelIdle[channel] = 1;
     p2DmaCompletedSequence[channel] = p2DmaStartedSequence[channel];
-    if (DAT_005690d0[channel].func != 0) {
-        DAT_005690d0[channel].func(DAT_005690d0[channel].arg);
+    if (p2DmaCompletionCallbacks[channel].func != 0) {
+        p2DmaCompletionCallbacks[channel].func(p2DmaCompletionCallbacks[channel].arg);
     }
     for (node = packet->completions; node != 0; node = node->next) {
         node->func(node->arg);
@@ -187,13 +182,13 @@ void p2CompleteDmaPacket(int channel, p2DmaPacket *packet) {
             iSignalSema(p2DmaWaitSema);
         }
     }
-    if (DAT_005690a0[channel]) {
+    if (p2DmaWaitingForPacket[channel]) {
         struct SemaParam info;
-        iReferSemaStatus(DAT_00569090[channel], &info);
+        iReferSemaStatus(p2DmaFreePacketSema[channel], &info);
         if (info.currentCount != info.maxCount) {
-            iSignalSema(DAT_00569090[channel]);
+            iSignalSema(p2DmaFreePacketSema[channel]);
         }
-        DAT_005690a0[channel] = 0;
+        p2DmaWaitingForPacket[channel] = 0;
     }
     p2FreeDmaCompletions(channel);
     p2DmaFreePackets[channel]++;
@@ -270,21 +265,21 @@ void p2InitDmaChannel(int channel) {
  * VIF0, then enables the DMAC. */
 void p2InitDmaChannels(void) {
     struct SemaParam wait = p2DmaWaitSemaParam;
-    struct SemaParam lock = DAT_00490d20;
+    struct SemaParam lock = p2DmaFreePacketSemaParam;
 
     if (p2FirstOpen != 0) {
         p2DmaWaitSema = CreateSema(&wait);
-        DAT_00569090[P2_DMA_VIF0] = 0;
-        DAT_00569090[P2_DMA_VIF1] = CreateSema(&lock);
-        DAT_00569090[P2_DMA_GIF] = CreateSema(&lock);
+        p2DmaFreePacketSema[P2_DMA_VIF0] = 0;
+        p2DmaFreePacketSema[P2_DMA_VIF1] = CreateSema(&lock);
+        p2DmaFreePacketSema[P2_DMA_GIF] = CreateSema(&lock);
     }
-    DAT_00490c74 = 64;
-    DAT_00490c7c = 320;
-    DAT_00490c84 = 96;
+    p2DmaPacketReserveVif0 = 64;
+    p2DmaPacketReserveVif1 = 320;
+    p2DmaPacketReserveGif = 96;
     p2StoreImagePending = 0;
-    DAT_005690a0[P2_DMA_VIF0] = 0;
-    DAT_005690a0[P2_DMA_VIF1] = 0;
-    DAT_005690a0[P2_DMA_GIF] = 0;
+    p2DmaWaitingForPacket[P2_DMA_VIF0] = 0;
+    p2DmaWaitingForPacket[P2_DMA_VIF1] = 0;
+    p2DmaWaitingForPacket[P2_DMA_GIF] = 0;
     if (p2DmaPacketSizeVif0 == -1) p2DmaPacketSizeVif0 = 256;
     if (p2DmaPacketSizeVif1 == -1) p2DmaPacketSizeVif1 = 2048;
     if (p2DmaPacketSizeGif == -1) p2DmaPacketSizeGif = 256;
@@ -430,9 +425,8 @@ void p2FreeDmaCompletions(int channel) {
     packet->completions = 0;
 }
 
-extern long long DAT_00568ed8;
-extern long long DAT_00568ee0;
-extern long long DAT_00568ef8;
+extern long long p2Vif1DmaStartTime;
+extern long long p2GifDmaStartTime;
 
 void p2StartDmaPacket(int channel) {
     p2DmaPacket *packet = p2DmaActivePacket[channel];
@@ -463,9 +457,9 @@ void p2StartDmaPacket(int channel) {
         break;
     case P2_DMA_VIF1:
         p2DmaWatchFlags.busy |= 0x40;
-        p2ReadClock(&DAT_00568ed8);
+        p2ReadClock(&p2Vif1DmaStartTime);
         if (p2DmaChannelIdle[P2_DMA_VIF1] == 0 && p2DmaChannelIdle[P2_DMA_GIF] == 0) {
-            DAT_00568ef8 = DAT_00568ed8;
+            p2DmaOverlapStartTime = p2Vif1DmaStartTime;
         }
         *D1_QWC = 0;
         v = packet->chain & 0x0fffffff;
@@ -476,9 +470,9 @@ void p2StartDmaPacket(int channel) {
         break;
     case P2_DMA_GIF:
         p2DmaWatchFlags.busy |= 0x80;
-        p2ReadClock(&DAT_00568ee0);
+        p2ReadClock(&p2GifDmaStartTime);
         if (p2DmaChannelIdle[P2_DMA_VIF1] == 0 && p2DmaChannelIdle[P2_DMA_GIF] == 0) {
-            DAT_00568ef8 = DAT_00568ee0;
+            p2DmaOverlapStartTime = p2GifDmaStartTime;
         }
         *D2_QWC = 0;
         v = packet->chain & 0x0fffffff;

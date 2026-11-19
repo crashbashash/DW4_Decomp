@@ -12,6 +12,15 @@ extern p2DmaPacket *p2DmaLastPacket[P2_DMA_CHANNEL_COUNT];
 extern int p2DmaHandlerIds[P2_DMA_CHANNEL_COUNT];
 extern p2DmaPredicate *p2DmaPredicatePool;
 extern p2DmaCompletion *p2DmaCompletionPool;
+/* Statistics: packets submitted per channel, those submitted before they filled, the time each
+ * channel's transfers took and the time VIF1 and GIF transferred together. */
+extern long long p2StatVif1DmaCount;
+extern long long p2StatVif1PartialPackets;
+extern long long p2StatVif1DmaTime;
+extern long long p2StatGifDmaCount;
+extern long long p2StatGifPartialPackets;
+extern long long p2StatGifDmaTime;
+extern long long p2StatDmaOverlapTime;
 void p2AddDmaCompletion(int channel, void (*func)(void *), void *arg);
 void p2AddDmaPredicate(int channel, int (*predicate)(long long), long long arg);
 long long p2AddPreviousFinishFuncPredicate(void);

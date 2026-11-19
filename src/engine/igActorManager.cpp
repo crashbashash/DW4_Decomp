@@ -6,16 +6,16 @@ class W { public: virtual void d0(); virtual void d1(); virtual void d2(); virtu
 #include "dw4/insight/igInsightCore.h"
 #include "dw4/core/igObject.h"
 #include "dw4/viewer/igViewerSceneInfoManager.h"
-void igActorManager_Start(igActorManager *arg0);
+void igActorManager_Start(igActorManager *self);
 
 
 
 typedef struct L { char pad[8]; int n; int p; int *arr; } L;
 typedef struct A { char pad[24]; L *f24; } A;
 struct ActorListOwner;
-void igActorManager_AddUniqueActor(struct ActorListOwner *arg0, int arg1);
+void igActorManager_AddUniqueActor(struct ActorListOwner *self, int actor);
 #include "dw4/scenegraph/igActorInfo.h"
-#define F24 (*(L **)&arg1->f24)
+#define F24 (*(L **)&info->f24)
 
 #include "dw4/core/igDataLists.h"
 
@@ -40,24 +40,24 @@ static inline int indexOf(struct ActorList *list, const int *value) {
 
 #include "dw4/viewer/igActorManager.h"
 
-void igActorManager_Start(igActorManager *arg0) {
-    igObject *temp_v0;
-    igObject *temp_a0;
+void igActorManager_Start(igActorManager *self) {
+    igObject *sceneInfoManager;
+    igObject *oldViewerScene;
 
-    temp_v0 = igInsightCore_FindManager((igInsightCore *)arg0->_insight, g_igViewerSceneInfoManager_metaObject);
-    if (temp_v0 != 0) {
-        temp_v0->_refCount = temp_v0->_refCount + 1;
+    sceneInfoManager = igInsightCore_FindManager((igInsightCore *)self->_insight, g_igViewerSceneInfoManager_metaObject);
+    if (sceneInfoManager != 0) {
+        sceneInfoManager->_refCount = sceneInfoManager->_refCount + 1;
     }
-    temp_a0 = (igObject *)arg0->_vsim;
-    if (temp_a0 != 0) {
-        temp_a0->_refCount = temp_a0->_refCount - 1;
-        if ((temp_a0->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(temp_a0);
+    oldViewerScene = (igObject *)self->_vsim;
+    if (oldViewerScene != 0) {
+        oldViewerScene->_refCount = oldViewerScene->_refCount - 1;
+        if ((oldViewerScene->_refCount & 0x7FFFFF) == 0) {
+            igObject_Destroy(oldViewerScene);
         }
     }
-    arg0->_vsim = (int)temp_v0;
-    ((W *)arg0->_viewport)->vX(0, 0, 0, 0, 0.0f, 1.0f);
-    ((W *)arg0->_skelViewport)->vX(0, 0, 0, 0, 0.0f, 0.2f);
+    self->_vsim = (int)sceneInfoManager;
+    ((W *)self->_viewport)->vX(0, 0, 0, 0, 0.0f, 1.0f);
+    ((W *)self->_skelViewport)->vX(0, 0, 0, 0, 0.0f, 0.2f);
 }
 
 void igActorManager_Stop(void) {
@@ -95,15 +95,15 @@ void igActorManager_RemoveAllInfo(igActorManager *self) {
 }
 
 /* The list pointer is re-read in the body and in the loop test, with a `0 < n` guard. */
-int igActorManager_AddInfo(int arg0, A *arg1) {
+int igActorManager_AddInfo(int self, A *info) {
     int i;
     int off;
-    if (igObject_IsKindOf((igObject *)arg1, igActorInfo_GetMetaObject()) != 0) {
+    if (igObject_IsKindOf((igObject *)info, igActorInfo_GetMetaObject()) != 0) {
         i = 0;
-        if (0 < arg1->f24->n) {
+        if (0 < info->f24->n) {
             off = 0;
             do {
-                igActorManager_AddUniqueActor((ActorListOwner *)arg0, *(int *)((char *)F24->arr + off));
+                igActorManager_AddUniqueActor((ActorListOwner *)self, *(int *)((char *)F24->arr + off));
                 i++;
                 off += 4;
             } while (i < F24->n);
@@ -113,12 +113,12 @@ int igActorManager_AddInfo(int arg0, A *arg1) {
     return 0;
 }
 
-void igActorManager_AddUniqueActor(struct ActorListOwner *arg0, int arg1) {
-    struct ActorList *list = arg0->f24;
+void igActorManager_AddUniqueActor(struct ActorListOwner *self, int actor) {
+    struct ActorList *list = self->f24;
     /* matching construct: retail keeps the value in a stack slot */
-    int value = arg1;
+    int value = actor;
     if (indexOf(list, (const int *)&value) < 0) {
-        ObjectList_AppendRetained((igObjectList *)arg0->f24, (igObject *)arg1);
+        ObjectList_AppendRetained((igObjectList *)self->f24, (igObject *)actor);
     }
 }
 

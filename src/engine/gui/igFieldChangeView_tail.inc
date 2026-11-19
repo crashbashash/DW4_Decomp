@@ -1,10 +1,10 @@
-void igFieldChangeView_OnModelChange(void *arg0, void *arg1) {
+void igFieldChangeView_OnModelChange(igFieldChangeView *self, void *arg1) {
     int temp_a0;
 
-    if ((*(int *)((char *)arg1 + 0) == 0) || (*(int *)((char *)arg0 + 16) == *(int *)((char *)arg1 + 8))) {
-        temp_a0 = *(int *)((char *)arg0 + 12);
+    if ((*(int *)((char *)arg1 + 0) == 0) || (self->_field == *(int *)((char *)arg1 + 8))) {
+        temp_a0 = self->_synchronizer;
         if (temp_a0 != 0) {
-            FUN_004552e0((int *)temp_a0, (int *)arg0);
+            FUN_004552e0((int *)temp_a0, (int *)self);
         }
     }
 }
@@ -20,7 +20,7 @@ void FUN_004551a0(struct S_4551a0 *arg0, int arg1, int arg2) {
     igModel_NotifyViews((igModel *)arg0->a, (ModelChange *)sp);
 }
 
-void FUN_004551f0(igFieldSynchronizer *synchronizer, igObject *model, igMetaField *field) {
+void igFieldSynchronizer_AddField(igFieldSynchronizer *synchronizer, igObject *model, igMetaField *field) {
     A_4551f0 *arg0 = (A_4551f0 *)synchronizer;
     Rc_4551f0 *arg2 = (Rc_4551f0 *)field;
     Ref_4551f0 sp4C;

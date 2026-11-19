@@ -1,4 +1,4 @@
-igFrustCullTraversal *FUN_0019fde0(igMemoryPoolView *pool) {
+igFrustCullTraversal *igFrustCullTraversal_Create(igMemoryPoolView *pool) {
     igFrustCullTraversal_EnsureRegistered();
     return (igFrustCullTraversal *)igMetaObject_CreateInstance(g_igFrustCullTraversal_metaObject, pool);
 }

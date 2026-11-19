@@ -1,7 +1,7 @@
-void igRenderListAttr_apply(void *arg0, igPsx2VisualContext *arg1) {
+void igRenderListAttr_apply(igRenderListAttr *self, igPsx2VisualContext *arg1) {
     int temp_v1;
 
-    temp_v1 = *(int *)((char *)(arg0) + 12);
+    temp_v1 = self->_handle;
     if (temp_v1 >= 0) {
         igPsx2VisualContext_ExecuteRenderList(arg1, temp_v1);
     }

@@ -171,8 +171,8 @@ extern "C" void igInterfaceManager_HandleEvents(S *arg0);
 extern "C" void FUN_001479b0(igPsx2Controller *arg0);
 extern "C" void igPsx2Controller_InitDefaults(igPsx2Controller *self);
 #include "dw4/core/igMemory.h"
-extern "C" void igPsx2Controller_ReleaseDefaults(void *arg0);
-extern "C" void Gap__igPsx2Controller__vfunc_31(void *arg0, int arg1, float *arg2, float *arg3);
+extern "C" void igPsx2Controller_ReleaseDefaults(igPsx2Controller *self);
+extern "C" void Gap__igPsx2Controller__vfunc_31(igPsx2Controller *self, int arg1, float *arg2, float *arg3);
 class ControllerListener {
 public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
@@ -203,9 +203,9 @@ struct PropertyText : igObject { char *chars; };
 extern "C" void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int arg1);
 typedef struct S_temp_a0 { char pad4[4]; int f4; } S_temp_a0;
 extern "C" void Gap__igPsx2Controller__vfunc_36(igPsx2Controller *self, igObject *window);
-extern "C" void Gap__igPsx2Controller__vfunc_33(void *arg0, short arg1);
+extern "C" void Gap__igPsx2Controller__vfunc_33(igPsx2Controller *self, short arg1);
 extern "C" int Gap__igPsx2ControllerManager__vfunc_25(igPsx2ControllerManager *arg0);
-extern "C" void igPsx2ControllerManager_userDestruct(void *arg0);
+extern "C" void igPsx2ControllerManager_userDestruct(igPsx2ControllerManager *self);
 struct R_148b00 { int w0; int rc; };
 struct A_148b00 { char pad[24]; struct R_148b00 *f24; char pad2[4]; int *f32; int f36; char f40; };
 extern "C" void Gap__igPsx2Window__vfunc_26(struct A_148b00 *arg0);
@@ -254,10 +254,10 @@ public:
 #include <stdio.h>
 extern "C" int Gap__igPsx2Window__vfunc_24(igPsx2Window *self, const char *name, int width, int height);
 extern "C" void Gap__igPsx2Window__vfunc_27(int *arg0, char *arg1);
-extern "C" int Gap__igPsx2Window__vfunc_34(void *arg0, int dummy1, int arg2, int arg3, int arg4);
-extern "C" void Gap__igPsx2Window__vfunc_35(void *arg0, char *arg1, int *arg2, int *arg3, int *arg4);
+extern "C" int Gap__igPsx2Window__vfunc_34(igPsx2Window *self, int dummy1, int arg2, int arg3, int arg4);
+extern "C" void Gap__igPsx2Window__vfunc_35(igPsx2Window *self, char *arg1, int *arg2, int *arg3, int *arg4);
 extern "C" igMetaObject *igPsx2Window_GetMeta(void);
-extern "C" int Gap__igPsx2Window__vfunc_28(void *arg0);
+extern "C" int Gap__igPsx2Window__vfunc_28(igPsx2Window *self);
 extern "C" void Gap__igPsx2Window__vfunc_29(void);
 extern "C" void Gap__igPsx2Window__vfunc_30(void *d0, int *arg1, int *arg2);
 extern "C" void Gap__igPsx2Window__vfunc_31(void);
@@ -273,18 +273,18 @@ extern "C" void Gap__igPsx2Window__vfunc_23(void);
 extern "C" unsigned char Gap__igPsx2Window__vfunc_43(igPsx2Window *self);
 extern "C" int igPsx2ControllerManager_GetMeta(void);
 extern "C" igMetaObject *igPsx2Controller_GetMeta(void);
-extern "C" int Gap__igPsx2Controller__vfunc_24(void *arg0);
-extern "C" void Gap__igPsx2Controller__vfunc_25(void *arg0, int arg1);
-extern "C" unsigned short Gap__igPsx2Controller__vfunc_26(void *arg0);
-extern "C" void Gap__igPsx2Controller__vfunc_27(void *arg0, short arg1);
-extern "C" unsigned short Gap__igPsx2Controller__vfunc_32(void *arg0);
+extern "C" int Gap__igPsx2Controller__vfunc_24(igPsx2Controller *self);
+extern "C" void Gap__igPsx2Controller__vfunc_25(igPsx2Controller *self, int arg1);
+extern "C" unsigned short Gap__igPsx2Controller__vfunc_26(igPsx2Controller *self);
+extern "C" void Gap__igPsx2Controller__vfunc_27(igPsx2Controller *self, short arg1);
+extern "C" unsigned short Gap__igPsx2Controller__vfunc_32(igPsx2Controller *self);
 extern "C" int Gap__igPsx2Controller__vfunc_28(void *arg0, int arg1);
 class O_149230 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual int vX(int); };
 #include "dw4/support/softfloat.h"
 #include "dw4/sony/libmtap.h"
 #include "dw4/core/igPsx2File.h"
 extern "C" float Gap__igPsx2Controller__vfunc_29(O_149230 *arg0, int arg1);
-extern "C" int Gap__igPsx2Controller__vfunc_30(void *arg0);
+extern "C" int Gap__igPsx2Controller__vfunc_30(igPsx2Controller *self);
 extern "C" unsigned char Gap__igPsx2Controller__vfunc_34(igPsx2Controller *self);
 extern "C" int Gap__igPsx2Controller__vfunc_35(igPsx2Controller *self);
 extern "C" igMetaObject *FUN_00149320(void);

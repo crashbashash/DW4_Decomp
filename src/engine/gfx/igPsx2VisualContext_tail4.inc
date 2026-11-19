@@ -140,8 +140,8 @@ void igPsx2VisualContext_SetLightingState(igPsx2VisualContext *self, unsigned ch
     p2DisableCapability(8);
 }
 
-unsigned char igPsx2VisualContext_GetLightingState(void *arg0) {
-    return *(int *)((char *)(arg0) + 1340);
+unsigned char igPsx2VisualContext_GetLightingState(igPsx2VisualContext *self) {
+    return self->_bLightingEnabled;
 }
 
 int igPsx2VisualContext_CreateLight(igPsx2VisualContext *self, int arg1) {
@@ -252,11 +252,10 @@ int igPsx2VisualContext_GetLightType(void *arg0, int arg1) {
 }
 
 void igPsx2VisualContext_SetLightDiffuse(igPsx2VisualContext *self, int arg1, float *arg2) {
-    char *arg0 = (char *)self;
     char *a3;
     float *t;
     int e;
-    a3 = *(char **)(arg0 + 1336);
+    a3 = (char *)self->_pLightList;
     arg1 = *(int *)(a3 + 16) + arg1 * 0xA0;
     t = (float *)arg1;
     if (t != 0) {
@@ -272,7 +271,7 @@ void igPsx2VisualContext_SetLightDiffuse(igPsx2VisualContext *self, int arg1, fl
         t[9] = arg2[1];
         t[10] = arg2[2];
         t[11] = arg2[3];
-        FUN_00171690(arg0, t);
+        FUN_00171690(self, t);
     }
 }
 
@@ -436,10 +435,10 @@ void igPsx2VisualContext_GetLightDiffuse(igPsx2VisualContext *arg0, int arg1, vo
     *(float *)((char *)(arg2) + 12) = (float) *(float *)((char *)(temp_v1) + 44);
 }
 
-void igPsx2VisualContext_GetLightAmbient(igPsx2VisualContext *arg0, int arg1, void *arg2) {
+void igPsx2VisualContext_GetLightAmbient(igPsx2VisualContext *self, int arg1, void *arg2) {
     void *temp_v1;
 
-    temp_v1 = (void *)(*(int *)((char *)(arg0->_pLightList) + 16) + (arg1 * 0xA0));
+    temp_v1 = (void *)(*(int *)((char *)(self->_pLightList) + 16) + (arg1 * 0xA0));
     *(float *)((char *)(arg2) + 0) = (float) *(float *)((char *)(temp_v1) + 16);
     *(float *)((char *)(arg2) + 4) = (float) *(float *)((char *)(temp_v1) + 20);
     *(float *)((char *)(arg2) + 8) = (float) *(float *)((char *)(temp_v1) + 24);
@@ -479,8 +478,8 @@ float igPsx2VisualContext_GetLightFalloffRate(void) {
     return 0.0f;
 }
 
-void igPsx2VisualContext_GetLightAttenuation(igPsx2VisualContext *arg0, int arg1, void *arg2) {
-    char *p = (char *)(*(int *)((char *)(arg0->_pLightList) + 16) + (arg1 * 0xA0));
+void igPsx2VisualContext_GetLightAttenuation(igPsx2VisualContext *self, int arg1, void *arg2) {
+    char *p = (char *)(*(int *)((char *)(self->_pLightList) + 16) + (arg1 * 0xA0));
     float x, y, z;
     z = *(float *)(p + 88);
     y = *(float *)(p + 84);
@@ -685,8 +684,8 @@ void igPsx2VisualContext_SetMaterialShininess(S0_171c80 *arg0, float fparg0) {
     FUN_00172330(arg0, arg0->f1344);
 }
 
-float igPsx2VisualContext_GetMaterialShininess(void *arg0) {
-    return *(float *)((char *)(*(int *)((char *)(arg0) + 1344)) + 64);
+float igPsx2VisualContext_GetMaterialShininess(igPsx2VisualContext *self) {
+    return *(float *)((char *)(self->_currentMaterial) + 64);
 }
 
 void igPsx2VisualContext_SetMaterial(igPsx2VisualContext *self, float *ambient, float *diffuse, float *specular, float *emission, float shininess) {
@@ -775,8 +774,8 @@ void igPsx2VisualContext_SetMaterialColorMode(igPsx2VisualContext *self, unsigne
     }
 }
 
-int igPsx2VisualContext_GetMaterialColorMode(void *arg0) {
-    return *(int *)((char *)(*(int *)((char *)(arg0) + 1344)) + 84);
+int igPsx2VisualContext_GetMaterialColorMode(igPsx2VisualContext *self) {
+    return *(int *)((char *)(self->_currentMaterial) + 84);
 }
 
 void igPsx2VisualContext_SetSceneAmbient(struct H_172230 *arg0, float *arg1) {
@@ -1274,8 +1273,8 @@ void igPsx2VisualContext_SetNormalizeNormalsState(igPsx2VisualContext *self, uns
     p2DisableCapability(0x12);
 }
 
-unsigned char igPsx2VisualContext_GetNormalizeNormalsState(void *arg0) {
-    return *(int *)((char *)(arg0) + 1372);
+unsigned char igPsx2VisualContext_GetNormalizeNormalsState(igPsx2VisualContext *self) {
+    return self->_bNormalizeNormalsState;
 }
 
 void igPsx2VisualContext_SetVertexBlendingState(igPsx2VisualContext *self, bool enabled) {
@@ -1290,8 +1289,8 @@ void igPsx2VisualContext_SetVertexBlendingState(igPsx2VisualContext *self, bool 
     arg0->f = enabled;
 }
 
-unsigned char igPsx2VisualContext_GetVertexBlendingState(void *arg0) {
-    return *(int *)((char *)(arg0) + 1020);
+unsigned char igPsx2VisualContext_GetVertexBlendingState(igPsx2VisualContext *self) {
+    return self->_bVertexBlendingEnabled;
 }
 
 void igPsx2VisualContext_SetBlendingState(igPsx2VisualContext *self, unsigned char arg1) {
@@ -1310,8 +1309,8 @@ void igPsx2VisualContext_SetBlendingState(igPsx2VisualContext *self, unsigned ch
     p2DisableCapability(2);
 }
 
-unsigned char igPsx2VisualContext_GetBlendingState(void *arg0) {
-    return *(int *)((char *)(arg0) + 1032);
+unsigned char igPsx2VisualContext_GetBlendingState(igPsx2VisualContext *self) {
+    return self->_bBlendingEnabled;
 }
 
 void igPsx2VisualContext_SetBlendingSource(int *arg0, int arg1) {
@@ -1330,12 +1329,12 @@ void igPsx2VisualContext_SetBlendingDestination(struct S174470 *arg0, int arg1) 
     FUN_00174640((int)arg0, 0);
 }
 
-int igPsx2VisualContext_GetBlendingSource(void *arg0) {
-    return *(int *)((char *)(arg0) + 1036);
+int igPsx2VisualContext_GetBlendingSource(igPsx2VisualContext *self) {
+    return self->_blendSrcMode[0];
 }
 
-int igPsx2VisualContext_GetBlendingDestination(void *arg0) {
-    return *(int *)((char *)(arg0) + 1100);
+int igPsx2VisualContext_GetBlendingDestination(igPsx2VisualContext *self) {
+    return self->_blendDestMode[0];
 }
 
 void igPsx2VisualContext_SetBlendingSourceDestination(S_1744c0 *arg0, int arg1, int arg2) {
@@ -1433,8 +1432,8 @@ void igPsx2VisualContext_SetAlphaTestState(igPsx2VisualContext *self, unsigned c
     }
 }
 
-unsigned char igPsx2VisualContext_GetAlphaTestState(void *arg0) {
-    return *(int *)((char *)(arg0) + 1022);
+unsigned char igPsx2VisualContext_GetAlphaTestState(igPsx2VisualContext *self) {
+    return self->_alphaEnable;
 }
 
 void igPsx2VisualContext_SetAlphaFunc(igPsx2VisualContext *self, int arg1) {
@@ -1446,8 +1445,8 @@ void igPsx2VisualContext_SetAlphaFunc(igPsx2VisualContext *self, int arg1) {
     FUN_001747f0((S_1747f0 *)arg0);
 }
 
-int igPsx2VisualContext_GetAlphaFunc(void *arg0) {
-    return *(int *)((char *)(arg0) + 1024);
+int igPsx2VisualContext_GetAlphaFunc(igPsx2VisualContext *self) {
+    return self->_alphaFunc;
 }
 
 void igPsx2VisualContext_SetAlphaRefValue(igPsx2VisualContext *self, float fparg0) {
@@ -1459,8 +1458,8 @@ void igPsx2VisualContext_SetAlphaRefValue(igPsx2VisualContext *self, float fparg
     FUN_001747f0((S_1747f0 *)arg0);
 }
 
-float igPsx2VisualContext_GetAlphaRefValue(void *arg0) {
-    return *(float *)((char *)arg0 + 1028);
+float igPsx2VisualContext_GetAlphaRefValue(igPsx2VisualContext *self) {
+    return self->_alphaVal;
 }
 
 void FUN_001747f0(S_1747f0 *s) { if (s->b == 1) { int a = (int)(128.0f * (float)s->f); p2SetAlphaTest(DAT_0048a500[s->i], a, 0); } }
@@ -1496,8 +1495,8 @@ void igPsx2VisualContext_SetViewportClippingState(igPsx2VisualContext *self, uns
     else p2DisableCapability(6);
 }
 
-unsigned char igPsx2VisualContext_GetViewportClippingState(void *arg0) {
-    return *(int *)((char *)(arg0) + 1228);
+unsigned char igPsx2VisualContext_GetViewportClippingState(igPsx2VisualContext *self) {
+    return self->_clippingEnable;
 }
 
 void FUN_00174950(void *d0, int arg1) {
@@ -1516,11 +1515,11 @@ void igPsx2VisualContext_SetColorMask(igPsx2VisualContext *self, unsigned char a
     p2SetColourMask(arg1 & 0xFF, arg2 & 0xFF, arg3 & 0xFF, arg4 & 0xFF);
 }
 
-void igPsx2VisualContext_GetColorMask(void *arg0, unsigned char *arg1, unsigned char *arg2, unsigned char *arg3, unsigned char *arg4) {
-    *arg1 = *(unsigned char *)((char *)(arg0) + 1252);
-    *arg2 = *(unsigned char *)((char *)(arg0) + 1253);
-    *arg3 = *(unsigned char *)((char *)(arg0) + 1254);
-    *arg4 = *(unsigned char *)((char *)(arg0) + 1255);
+void igPsx2VisualContext_GetColorMask(igPsx2VisualContext *self, unsigned char *arg1, unsigned char *arg2, unsigned char *arg3, unsigned char *arg4) {
+    *arg1 = self->_colorMaskR;
+    *arg2 = self->_colorMaskG;
+    *arg3 = self->_colorMaskB;
+    *arg4 = self->_colorMaskA;
 }
 
 void igPsx2VisualContext_SetShadingMode(igPsx2VisualContext *self, int arg1) {
@@ -1536,8 +1535,8 @@ void igPsx2VisualContext_SetShadingMode(igPsx2VisualContext *self, int arg1) {
     p2EnableCapability(0x11);
 }
 
-int igPsx2VisualContext_GetShadingMode(void *arg0) {
-    return *(int *)((char *)(arg0) + 1256);
+int igPsx2VisualContext_GetShadingMode(igPsx2VisualContext *self) {
+    return self->_shadingMode;
 }
 
 void igPsx2VisualContext_SetCullFaceState(igPsx2VisualContext *self, bool enabled) {
@@ -1557,8 +1556,8 @@ void igPsx2VisualContext_SetCullFaceState(igPsx2VisualContext *self, bool enable
     p2DisableCapability(DAT_0048a538[arg0->f1272]);
 }
 
-unsigned char igPsx2VisualContext_GetCullFaceState(void *arg0) {
-    return *(int *)((char *)(arg0) + 1268);
+unsigned char igPsx2VisualContext_GetCullFaceState(igPsx2VisualContext *self) {
+    return self->_cullFaceEnable;
 }
 
 void igPsx2VisualContext_SetCullFaceMode(igPsx2VisualContext *self, int arg1) {
@@ -1575,8 +1574,8 @@ void igPsx2VisualContext_SetCullFaceMode(igPsx2VisualContext *self, int arg1) {
     self->_cullFaceMode = arg1;
 }
 
-int igPsx2VisualContext_GetCullFaceMode(void *arg0) {
-    return *(int *)((char *)(arg0) + 1272);
+int igPsx2VisualContext_GetCullFaceMode(igPsx2VisualContext *self) {
+    return self->_cullFaceMode;
 }
 
 void igPsx2VisualContext_SetDepthTestState(igPsx2VisualContext *self, bool enabled) {
@@ -1598,8 +1597,8 @@ void igPsx2VisualContext_SetDepthTestState(igPsx2VisualContext *self, bool enabl
     }
 }
 
-unsigned char igPsx2VisualContext_GetDepthTestState(void *arg0) {
-    return *(int *)((char *)(arg0) + 1277);
+unsigned char igPsx2VisualContext_GetDepthTestState(igPsx2VisualContext *self) {
+    return self->_depthTestEnable;
 }
 
 void igPsx2VisualContext_SetDepthTestFunction(S_174c50 *arg0, unsigned arg1) {
@@ -1615,8 +1614,8 @@ void igPsx2VisualContext_SetDepthTestFunction(S_174c50 *arg0, unsigned arg1) {
     }
 }
 
-int igPsx2VisualContext_GetDepthTestFunction(void *arg0) {
-    return *(int *)((char *)(arg0) + 1280);
+int igPsx2VisualContext_GetDepthTestFunction(igPsx2VisualContext *self) {
+    return self->_depthTestFunc;
 }
 
 void igPsx2VisualContext_SetDepthWriteState(igPsx2VisualContext *self, unsigned char arg1) {
@@ -1628,8 +1627,8 @@ void igPsx2VisualContext_SetDepthWriteState(igPsx2VisualContext *self, unsigned 
     FUN_00174db0(arg0);
 }
 
-unsigned char igPsx2VisualContext_GetDepthWriteState(void *arg0) {
-    return *(int *)((char *)(arg0) + 1276);
+unsigned char igPsx2VisualContext_GetDepthWriteState(igPsx2VisualContext *self) {
+    return self->_bDepthWrite;
 }
 
 void FUN_00174db0(void *arg0) {
@@ -1653,8 +1652,8 @@ void igPsx2VisualContext_SetStencilState(igPsx2VisualContext *self, bool enabled
     }
 }
 
-int igPsx2VisualContext_GetStencilState(void *arg0) {
-    return *(int *)((char *)(arg0) + 1260) != 0;
+int igPsx2VisualContext_GetStencilState(igPsx2VisualContext *self) {
+    return self->_stencilState != 0;
 }
 
 void igPsx2VisualContext_SetStencilRefVal(igPsx2VisualContext *self, int arg1) {
@@ -1666,8 +1665,8 @@ void igPsx2VisualContext_SetStencilRefVal(igPsx2VisualContext *self, int arg1) {
     p2SetDestinationAlphaMode(arg0[316] & 1);
 }
 
-int igPsx2VisualContext_GetStencilRefVal(void *arg0) {
-    return *(int *)((char *)(arg0) + 1264);
+int igPsx2VisualContext_GetStencilRefVal(igPsx2VisualContext *self) {
+    return self->_stencilRefVal;
 }
 
 void igPsx2VisualContext_SetStencilFunc(igPsx2VisualContext *self, unsigned int arg1) {
@@ -1693,8 +1692,8 @@ void igPsx2VisualContext_SetStencilFunc(igPsx2VisualContext *self, unsigned int 
     self->_stencilFunc = arg1;
 }
 
-int igPsx2VisualContext_GetStencilFunc(void *arg0) {
-    return *(int *)((char *)(arg0) + 1288);
+int igPsx2VisualContext_GetStencilFunc(igPsx2VisualContext *self) {
+    return self->_stencilFunc;
 }
 
 void igPsx2VisualContext_SetStencilOps(igPsx2VisualContext *self, int failOp, int passZPassOp, int passZFailOp) {
@@ -1733,8 +1732,8 @@ void igPsx2VisualContext_SetRenderMode(igPsx2VisualContext *self, int arg1) {
     }
 }
 
-int igPsx2VisualContext_GetRenderMode(void *arg0) {
-    return *(int *)((char *)(arg0) + 1292);
+int igPsx2VisualContext_GetRenderMode(igPsx2VisualContext *self) {
+    return self->_renderMode;
 }
 
 void FUN_00175090(S0_175090 *arg0, int arg1) {
@@ -1760,8 +1759,8 @@ void igPsx2VisualContext_SetFogState(igPsx2VisualContext *self, bool enabled) {
     p2DisableCapability(7);
 }
 
-unsigned char igPsx2VisualContext_GetFogState(void *arg0) {
-    return *(int *)((char *)(arg0) + 1300);
+unsigned char igPsx2VisualContext_GetFogState(igPsx2VisualContext *self) {
+    return self->_fogEnable;
 }
 
 void igPsx2VisualContext_SetFogDensity(igPsx2VisualContext *self, float fparg0) {
@@ -1775,8 +1774,8 @@ void igPsx2VisualContext_SetFogDensity(igPsx2VisualContext *self, float fparg0) 
     p2SetFog(DAT_0048a560[i], i, arg0->f1328, arg0->f1332, arg0->f1304, 1.0f, 0.0f, 0.0f);
 }
 
-float igPsx2VisualContext_GetFogDensity(void *arg0) {
-    return *(float *)((char *)arg0 + 1304);
+float igPsx2VisualContext_GetFogDensity(igPsx2VisualContext *self) {
+    return self->_fogDensity;
 }
 
 void igPsx2VisualContext_SetFogMode(igPsx2VisualContext *self, int arg1) {
@@ -1788,8 +1787,8 @@ void igPsx2VisualContext_SetFogMode(igPsx2VisualContext *self, int arg1) {
     p2SetFog(DAT_0048a560[arg0->f1308], arg0->f1308, arg0->f1328, arg0->f1332, arg0->f1304, 1.0f, 0.0f, 0.0f);
 }
 
-int igPsx2VisualContext_GetFogMode(void *arg0) {
-    return *(int *)((char *)(arg0) + 1308);
+int igPsx2VisualContext_GetFogMode(igPsx2VisualContext *self) {
+    return self->_fogMode;
 }
 
 void igPsx2VisualContext_SetFogColor(igPsx2VisualContext *self, float *color) {
@@ -1826,11 +1825,11 @@ void igPsx2VisualContext_SetFogColor(igPsx2VisualContext *self, float *color) {
     p2SetFogColour(color[0], color[1], color[2]);
 }
 
-void igPsx2VisualContext_GetFogColor(void *arg0, void *arg1) {
-    *(float *)((char *)(arg1) + 0) = (float) *(float *)((char *)(arg0) + 1312);
-    *(float *)((char *)(arg1) + 4) = (float) *(float *)((char *)(arg0) + 1316);
-    *(float *)((char *)(arg1) + 8) = (float) *(float *)((char *)(arg0) + 1320);
-    *(float *)((char *)(arg1) + 12) = (float) *(float *)((char *)(arg0) + 1324);
+void igPsx2VisualContext_GetFogColor(igPsx2VisualContext *self, void *arg1) {
+    *(float *)((char *)(arg1) + 0) = (float) self->_fogColor[0];
+    *(float *)((char *)(arg1) + 4) = (float) *(float *)((char *)(self) + 1316);
+    *(float *)((char *)(arg1) + 8) = (float) *(float *)((char *)(self) + 1320);
+    *(float *)((char *)(arg1) + 12) = (float) *(float *)((char *)(self) + 1324);
 }
 
 void igPsx2VisualContext_SetFogNear(igPsx2VisualContext *self, float fparg0) {
@@ -1845,8 +1844,8 @@ void igPsx2VisualContext_SetFogNear(igPsx2VisualContext *self, float fparg0) {
     p2SetFog(*(int *)((char *)&DAT_0048a560[0] + (temp_a1 * 4)), temp_a1, arg0->f1328, arg0->f1332, arg0->f1304, 1.0f, 0.0f, 0.0f);
 }
 
-float igPsx2VisualContext_GetFogNear(void *arg0) {
-    return *(float *)((char *)arg0 + 1328);
+float igPsx2VisualContext_GetFogNear(igPsx2VisualContext *self) {
+    return self->_fogNear;
 }
 
 void igPsx2VisualContext_SetFogFar(igPsx2VisualContext *arg0, float fparg0) {
@@ -1860,8 +1859,8 @@ void igPsx2VisualContext_SetFogFar(igPsx2VisualContext *arg0, float fparg0) {
     p2SetFog(DAT_0048a560[temp_a1], temp_a1, arg0->_fogNear, arg0->_fogFar, arg0->_fogDensity, 1.0f, 0.0f, 0.0f);
 }
 
-float igPsx2VisualContext_GetFogFar(void *arg0) {
-    return *(float *)((char *)arg0 + 1332);
+float igPsx2VisualContext_GetFogFar(igPsx2VisualContext *self) {
+    return self->_fogFar;
 }
 
 void igPsx2VisualContext_SetVideoMode(igResult *arg0, struct S_1753f0 *arg1, struct E_1753f0 *arg2) {

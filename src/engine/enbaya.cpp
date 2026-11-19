@@ -5,12 +5,12 @@ extern "C" {
 struct TripleVectorState;
 void *FUN_00280240(unsigned int sz, void *p);
 void FUN_0027eed0(struct TripleVectorState *o);
-int FUN_0027f1c0(int *arg0);
-int FUN_0027f200(void *arg0);
-int FUN_0027f240(void *arg0);
+int FUN_0027f1c0(int *self);
+int FUN_0027f200(void *self);
+int FUN_0027f240(void *self);
 int FUN_0027f280(int *a);
 int FUN_0027f2d0(int *sizes);
-int FUN_0027f310(void *arg0);
+int FUN_0027f310(void *self);
 void FUN_002800e0(struct EnbayaDecoderState *s);
 void FUN_0027f5c0(struct EnbayaDecoderState *s, float t);
 void FUN_0027f410(struct EnbayaDecoderState *s, int count, float scale, int forward, float time);
@@ -75,8 +75,8 @@ extern const int g_deltaNibbleValues[16];
 
 }
 
-extern "C" int FUN_0027ede0(int arg0) {
-    return ((arg0 - 1) * 0x60) + 0x110;
+extern "C" int FUN_0027ede0(int count) {
+    return ((count - 1) * 0x60) + 0x110;
 }
 
 struct E { char pad[0x60]; E() {} };
@@ -186,31 +186,31 @@ extern "C" void FUN_0027ef50(EnbayaDecoderState *s, EnbayaAnimationData *p, unsi
 
 extern "C" {
 
-int FUN_0027f1c0(int *arg0) {
-    int r = FUN_0027f240(arg0);
-    int a = arg0[10];
-    int b = arg0[11];
+int FUN_0027f1c0(int *self) {
+    int r = FUN_0027f240(self);
+    int a = self[10];
+    int b = self[11];
     r = r + a;
     r = r + b;
     return r;
 }
 
-int FUN_0027f200(void *arg0) {
-    int r = FUN_0027f280((int *)arg0);
-    r += *(int *)((char *)(arg0) + 36);
-    r += *(int *)((char *)(arg0) + 40);
+int FUN_0027f200(void *self) {
+    int r = FUN_0027f280((int *)self);
+    r += *(int *)((char *)(self) + 36);
+    r += *(int *)((char *)(self) + 40);
     return r;
 }
 
-int FUN_0027f240(void *arg0)
+int FUN_0027f240(void *self)
 {
   unsigned int new_var3;
   int new_var2;
   int new_var5;
   char *new_var;
   char *new_var4;
-  new_var5 = FUN_0027f2d0((int *)arg0);
-  new_var4 = (char *) arg0;
+  new_var5 = FUN_0027f2d0((int *)self);
+  new_var4 = (char *) self;
   new_var = new_var4;
   new_var3 = new_var5 + (*((int *) (new_var + 24)));
   ;
@@ -229,14 +229,14 @@ int FUN_0027f2d0(int *sizes) {
     return f + sizes[5];
 }
 
-int FUN_0027f310(void *arg0)
+int FUN_0027f310(void *self)
 {
   int new_var2;
   int *new_var;
-  new_var = (int *) (((char *) arg0) + (44 & 0xFFFFFFFFFFFFFFFF));
-  new_var2 = FUN_0027f200(arg0);
+  new_var = (int *) (((char *) self) + (44 & 0xFFFFFFFFFFFFFFFF));
+  new_var2 = FUN_0027f200(self);
   new_var2 = new_var2 + (*new_var);
-  return new_var2 + (*((int *) (((char *) arg0) + 56)));
+  return new_var2 + (*((int *) (((char *) self) + 56)));
 }
 
 EnbayaSlot *FUN_0027f350(EnbayaContext *ctx, int group) {

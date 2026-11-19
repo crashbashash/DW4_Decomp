@@ -700,7 +700,8 @@ def debt_summary(d, syms, matched, asm_body, paths, typed, inline):
     for k in ("a", "b", "c"):
         c["struct." + k] = st[k] if st else None
     # m2c idioms and FUN_/DAT_ references: over the matched units' source, asm bodies excluded,
-    # comments and string literals blanked so prose never counts.
+    # comments and string literals blanked so prose never counts. Stock source (src/third_party/) is its
+    # authors' text, where `arg1` is Lua's own name, so it is not counted.
     asm_names = {s[2] for s in asm_body} | {n for n, p in paths.items() if asmsources.is_assembly(p)}
     idiom_units, refs = 0, 0
     for path, names in _unit_files(paths, asm_names).items():
@@ -708,7 +709,7 @@ def debt_summary(d, syms, matched, asm_body, paths, typed, inline):
             text = strip_comments_and_strings(open(path, errors="replace").read())
         except FileNotFoundError:
             continue
-        if M2C_IDIOM_RE.search(text):
+        if M2C_IDIOM_RE.search(text) and not os.path.relpath(path, ROOT).startswith("src/third_party/"):
             idiom_units += 1
         n = sum(1 for _ in FUN_DAT_RE.finditer(text))
         # A FUN_ function the file defines is not an unnamed *reference*: subtract every

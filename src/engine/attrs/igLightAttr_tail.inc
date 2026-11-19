@@ -157,14 +157,14 @@ void igLightAttr_SetFalloffRate(igLightAttr *self, float falloff) {
     self->_changed = 1;
 }
 
-void igLightAttr_SetAttenuation(void *arg0, void *arg1) {
-    *(float *)((char *)(arg0) + 100) = (float) *(float *)((char *)(arg1) + 0);
-    *(float *)((char *)(arg0) + 104) = (float) *(float *)((char *)(arg1) + 4);
-    *(float *)((char *)(arg0) + 108) = (float) *(float *)((char *)(arg1) + 8);
-    *(char *)((char *)(arg0) + 144) = 1;
+void igLightAttr_SetAttenuation(igLightAttr *self, void *arg1) {
+    self->_attenuation[0] = (float) *(float *)((char *)(arg1) + 0);
+    *(float *)((char *)(self) + 104) = (float) *(float *)((char *)(arg1) + 4);
+    *(float *)((char *)(self) + 108) = (float) *(float *)((char *)(arg1) + 8);
+    self->_changed = 1;
 }
 
-void igLightAttr_MarkChanged(void *arg0) {
-    *(char *)((char *)(arg0) + 144) = 1;
+void igLightAttr_MarkChanged(igLightAttr *self) {
+    self->_changed = 1;
 }
 

@@ -37,8 +37,8 @@ void Gap__Sg__igTransformSequence1_5__vfunc_67(S_1aba30 *arg0) {
     arg0->ref = 0;
 }
 
-long long Gap__Sg__igTransformSequence1_5__vfunc_65(void *arg0) {
-    return *(long long *)((char *)arg0 + 88);
+long long Gap__Sg__igTransformSequence1_5__vfunc_65(igTransformSequence1_5 *self) {
+    return self->_animationDuration;
 }
 
 long long Gap__Sg__igTransformSequence1_5__vfunc_56(igTransformSequence1_5 *arg0, int arg1) {
@@ -56,10 +56,10 @@ int Gap__Sg__igTransformSequence1_5__vfunc_42(igTransformSequence1_5 *self, int 
     return 0;
 }
 
-int Gap__Sg__igTransformSequence1_5__vfunc_41(igTransformSequence1_5 *arg0) { if (arg0->_drivenChannels & 1) return *(int *)((char *)(arg0->_xlateList) + 8); return 0; }
+int Gap__Sg__igTransformSequence1_5__vfunc_41(igTransformSequence1_5 *self) { if (self->_drivenChannels & 1) return *(int *)((char *)(self->_xlateList) + 8); return 0; }
 
-int Gap__Sg__igTransformSequence1_5__vfunc_69(void *arg0) {
-    return (*(unsigned char *)((char *)(arg0) + 72) & 8) ? *(int *)((char *)(*(int *)((char *)(arg0) + 16)) + 8) : 0;
+int Gap__Sg__igTransformSequence1_5__vfunc_69(igTransformSequence1_5 *self) {
+    return (self->_drivenChannels & 8) ? *(int *)((char *)(self->_scaleList) + 8) : 0;
 }
 
 /* IgTransformSequence1_5 slot 60, returns the reflected _drivenChannels byte (+72). */

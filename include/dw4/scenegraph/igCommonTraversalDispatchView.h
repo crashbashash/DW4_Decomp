@@ -2,16 +2,21 @@
 #define DW4_IGCOMMONTRAVERSALDISPATCHVIEW_H
 #include "dw4/core/igObjectDispatchView.h"
 
-/* igCommonTraversal's virtual functions: slot 24 reads the traversal's time (the top of _timeStack,
- * else the buffered clock), slot 29 resets the per-frame state (the attribute stack, the sorter,
- * the object pools and the palette lists), slot 30 pushes the time a subtree runs at onto
- * _timeStack and slot 31 pops it again.
+/* igCommonTraversal's virtual functions: slot 23 traverses a node, slot 24 reads the traversal's time
+ * (the top of _timeStack, else the buffered clock), slot 25 sets it, slot 26 sets the visual context
+ * the traversal draws into (_vc), slot 28 hands the sorter's output for the attribute stack, slot 29
+ * resets the per-frame state (the attribute stack, the sorter, the object pools and the palette
+ * lists), slot 30 pushes the time a subtree runs at onto _timeStack and slot 31 pops it again.
  * ABI view only: never instantiated. */
 class igCommonTraversalDispatchView : public igObjectDispatchView {
 public:
-    virtual void d21(); virtual void d22(); virtual void d23();
+    virtual void d21(); virtual void d22();
+    virtual int apply(igObject *node);                                      /* slot 23 */
     virtual long long getTime();                                            /* slot 24 */
-    virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28();
+    virtual void setTime(long long time);                                   /* slot 25 */
+    virtual void setVisualContext(igObject *visualContext);                 /* slot 26 */
+    virtual void d27();
+    virtual igObject *getOutput();                                          /* slot 28 */
     virtual void reset();                                                   /* slot 29 */
     virtual void pushTime(long long time);                                  /* slot 30 */
     virtual void popTime();                                                 /* slot 31 */

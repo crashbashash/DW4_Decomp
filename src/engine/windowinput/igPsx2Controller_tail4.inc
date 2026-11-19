@@ -2,24 +2,24 @@ igMetaObject *igPsx2Controller_GetMeta(void) {
     return g_igPsx2Controller_metaObject;
 }
 
-int Gap__igPsx2Controller__vfunc_24(void *arg0) {
-    return *(int *)((char *)(arg0) + 24);
+int Gap__igPsx2Controller__vfunc_24(igPsx2Controller *self) {
+    return self->_buttonCount;
 }
 
-void Gap__igPsx2Controller__vfunc_25(void *arg0, int arg1) {
-    *(int *)((char *)(arg0) + 24) = arg1;
+void Gap__igPsx2Controller__vfunc_25(igPsx2Controller *self, int arg1) {
+    self->_buttonCount = arg1;
 }
 
-unsigned short Gap__igPsx2Controller__vfunc_26(void *arg0) {
-    return *(int *)((char *)(arg0) + 28);
+unsigned short Gap__igPsx2Controller__vfunc_26(igPsx2Controller *self) {
+    return self->_joyCount;
 }
 
-void Gap__igPsx2Controller__vfunc_27(void *arg0, short arg1) {
-    *(short *)((char *)arg0 + 28) = arg1;
+void Gap__igPsx2Controller__vfunc_27(igPsx2Controller *self, short arg1) {
+    self->_joyCount = arg1;
 }
 
-unsigned short Gap__igPsx2Controller__vfunc_32(void *arg0) {
-    return *(int *)((char *)(arg0) + 16);
+unsigned short Gap__igPsx2Controller__vfunc_32(igPsx2Controller *self) {
+    return self->_id;
 }
 
 /* The field must be shifted as unsigned (srlv); (unsigned short) promotes to signed int, so the
@@ -51,8 +51,8 @@ float Gap__igPsx2Controller__vfunc_29(O_149230 *arg0, int arg1) {
     return r;
 }
 
-int Gap__igPsx2Controller__vfunc_30(void *arg0) {
-    return ~*(unsigned short *)((char *)(arg0) + 68) & 0xFFFF;
+int Gap__igPsx2Controller__vfunc_30(igPsx2Controller *self) {
+    return ~self->_buttonState & 0xFFFF;
 }
 
 /* Reports whether the controller is connected: returns _connected (+52). */

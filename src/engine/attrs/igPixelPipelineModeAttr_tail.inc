@@ -1,9 +1,9 @@
-void igPixelPipelineModeAttr_apply(int arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetPixelPipelineMode(arg1, *(int *)((char *)(arg0) + 12));
+void igPixelPipelineModeAttr_apply(igPixelPipelineModeAttr *self, igPsx2VisualContext *arg1) {
+    igPsx2VisualContext_SetPixelPipelineMode(arg1, self->_pipelineMode);
 }
 
-void igPixelPipelineModeAttr_SynchronizeDefault(void *arg0, void **arg1) {
-    *(int *)((char *)(arg0) + 12) = ((DW4VC_588_0 *)(arg1))->vX();
+void igPixelPipelineModeAttr_SynchronizeDefault(igPixelPipelineModeAttr *self, void **arg1) {
+    self->_pipelineMode = ((DW4VC_588_0 *)(arg1))->vX();
 }
 
 /* Stores a float at +0x1c of the receiver. That offset lies past the 20 bytes the reflected

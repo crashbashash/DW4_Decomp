@@ -57,6 +57,14 @@ registered per channel (`p2Vif0DmaHandler`, `p2Vif1DmaHandler`, `p2GifDmaHandler
   `_lSequence`, from `p2GetVif1WaitSequence`) and later call `p2WaitDmaSequence(channel, sequence)`, which
   submits the current VIF1 packet and sleeps on a semaphore until the channel's completed sequence
   reaches it, adding the time slept to `p2DmaWaitTime`, which the statistics getter reports.
+* **Free packets and statistics.** A submit that leaves fewer than two free packets grows the ring;
+  when it still cannot, it sets `p2DmaWaitingForPacket[ch]` and sleeps on `p2DmaFreePacketSema[ch]`,
+  which `p2CompleteDmaPacket` signals. Each VIF1 and GIF submit counts in `p2StatVif1DmaCount` /
+  `p2StatGifDmaCount`, and in `p2StatVif1PartialPackets` / `p2StatGifPartialPackets` when the packet had
+  not reached its limit. The DMAC handlers add each transfer's time to `p2StatVif1DmaTime` /
+  `p2StatGifDmaTime`, and the time both ran together (from `p2DmaOverlapStartTime`) to
+  `p2StatDmaOverlapTime`. The game's capture report (`0x178970`) prints these as "Average VU1 Dma
+  count/time", "Average GIF Dma time" and "Average VU1+GIF Dma time".
 
 ### Reading a GS buffer back
 
@@ -183,8 +191,10 @@ Each draw then hands its vertices to the submit function in batches of at most `
 an even count and for triangles to a multiple of three. Strips repeat one shared vertex (line strip)
 or two (triangle strip) at each batch boundary. Fans submit a single batch. `p2DrawIndexedSprites`
 passes the same index list to every batch. Each batch also counts in the vertex, primitive and
-indexed-vertex statistics that `0x1f6f50` copies out, and in the five counters that `p2StatMask`
-selects.
+indexed-vertex statistics that `p2GetStatistics` copies out, and in the five counters that `p2StatMask`
+selects. The capture report labels those five, with `p2StatFourWeightBlendVertices`, as its path usage:
+`p2StatVertexCount1` fast path, `2` lit path, `4` fast lit path, `8` VU1 vertex blending, `16` VU1
+multipass, the four-weight count VU0 vertex blending.
 
 `p2SubmitVertices` and `p2SubmitIndexedVertices` build the VIF packets. They write byte-vector
 components with `p2UnpackByteTriples`, `p2UnpackBytePairs` and `p2UnpackBytes`. Each of these copies
@@ -204,8 +214,7 @@ Open questions:
   bound, the render state draws sprites as triangles. Its meaning is not known; it might be a
   rotation.
 * The meanings of the sprite-size kinds that `p2SpriteSizeMode` (`0x569220`) selects are not known.
-  Nor are those of the categories behind `p2StatMask` (`0x56bad8`, written only by display-list
-  playback) and its five counters.
+  Nor is the rule by which display-list playback sets `p2StatMask` (`0x56bad8`).
 * `p2SubmitRecordedVertices` passes no index list to `p2SubmitIndexedVertices` when the display-list
   mode is 1. What that mode means is not known.
 

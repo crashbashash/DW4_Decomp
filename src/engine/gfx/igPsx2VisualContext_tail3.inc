@@ -49,8 +49,8 @@ void igPsx2VisualContext_GetColor(S_16d010 *arg0, float *arg1) {
     arg1[3] = 0.00392156886f * f;
 }
 
-unsigned int igPsx2VisualContext_GetColorPacked(void *arg0) {
-    unsigned int t = *(unsigned int *)((char *)arg0 + 956);
+unsigned int igPsx2VisualContext_GetColorPacked(igPsx2VisualContext *self) {
+    unsigned int t = self->_currentColor;
     unsigned int a = (t & 0x80000000) >> 7;
     return (t & 0xFFFFFF) | (a + (((t & 0xFF000000) - a) * 2));
 }
@@ -113,8 +113,8 @@ void igPsx2VisualContext_SetPrimLengthArray(igPsx2VisualContext *self, igPrimLen
     self->_pStripLengthArray = (int)stripLengths;
 }
 
-int igPsx2VisualContext_GetPrimLengthArray(void *arg0) {
-    return *(int *)((char *)(arg0) + 948);
+int igPsx2VisualContext_GetPrimLengthArray(igPsx2VisualContext *self) {
+    return self->_pStripLengthArray;
 }
 
 void igPsx2VisualContext_SetIndexArray(igPsx2VisualContext *self, igIndexArray *indexArray) {
@@ -135,8 +135,8 @@ void igPsx2VisualContext_SetIndexArray(igPsx2VisualContext *self, igIndexArray *
     self->_pIndexArray = (int)indexArray;
 }
 
-int igPsx2VisualContext_GetIndexArray(void *arg0) {
-    return *(int *)((char *)(arg0) + 944);
+int igPsx2VisualContext_GetIndexArray(igPsx2VisualContext *self) {
+    return self->_pIndexArray;
 }
 
 /* The second texture-coordinate stream, which sprites read; an indexed draw addresses it from the start. */

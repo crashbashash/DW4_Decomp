@@ -32,10 +32,10 @@ void igPsx2VertexArray2_ReleaseDefaults(igPsx2VertexArray2View *self)
     self->vfunc_22();
 }
 
-void Gap__Gfx__igPsx2VertexArray2__vfunc_24(void *arg0) {
+void Gap__Gfx__igPsx2VertexArray2__vfunc_24(igPsx2VertexArray2 *self) {
     void **temp_a0;
 
-    temp_a0 = (void **)(*(int *)((char *)(arg0) + 20));
+    temp_a0 = (void **)(self->_vertexStream);
     if (temp_a0 != 0) {
         ((DW4VC_108_0 *)(temp_a0))->vX();
     }

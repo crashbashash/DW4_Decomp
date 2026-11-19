@@ -61,6 +61,9 @@ extern long long p2StatLightSwitches;
 extern long long p2StatLightingModeSets;
 extern long long p2StatLightingSwitches;
 extern long long p2StatMaterialSets;
+/* The lights enabled, and how many of them are point lights. */
+extern int p2ActiveLightCount;
+extern int p2ActivePointLightCount;
 
 void p2InitLighting(void);
 void p2EnableLight(int slot);

@@ -390,6 +390,7 @@ extern int p2CurrentProgram;
 extern p2GsRegisterSet p2GsRegisterSets[15];
 extern p2GsRegisterSet *p2CurrentGsRegisters;
 extern long long p2GsDirtyRegisters;
+extern long long p2StatCapabilityChanges;
 extern int p2ExtraPassCount;
 extern p2DisplayState p2Display;
 extern int p2DisplayFlags;

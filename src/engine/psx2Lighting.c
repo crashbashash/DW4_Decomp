@@ -33,15 +33,13 @@ enum {
     P2_NORMAL_ARRAYS = 0xE180
 };
 
-void FUN_001fb710(unsigned int *cursor, int sameCount);
+void p2WriteLights(unsigned int *cursor, int sameCount);
 
 extern char p2LightingEnabled;
 extern char p2LightsNeedTransform;
 extern int p2LightsChanged;
 extern int p2LightingMode;
 extern float p2LightingColor[4];
-extern int p2ActiveLightCount;
-extern int p2ActivePointLightCount;
 extern int p2DirectionalLightCount;
 extern unsigned char p2DirectionalLights[P2_LIGHT_SLOTS];
 extern p2Light *p2Lights[P2_LIGHT_SLOTS];
@@ -190,7 +188,7 @@ void p2SetLightingMode(int mode) {
     p2DirtyFlags |= P2_DIRTY_LIGHTING | 0x01;
 }
 
-unsigned int *FUN_001fb0e0(unsigned int *cursor) {
+unsigned int *p2AppendLightingPacket(unsigned int *cursor) {
     unsigned char newPacket;
     int refresh;
     unsigned int *tag;
@@ -240,7 +238,7 @@ unsigned int *FUN_001fb0e0(unsigned int *cursor) {
             *p = p2LightingNop.word;
             p = cursor++;
             *p = p2LightingUnpack.word;
-            FUN_001fb710(cursor, sameCount);
+            p2WriteLights(cursor, sameCount);
             cursor += words;
         } else {
             if (p2LightSpecular != 0) {

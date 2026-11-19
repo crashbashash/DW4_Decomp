@@ -70,24 +70,24 @@ void Gap__Sg__igEnbayaAnimationState__vfunc_23(igEnbayaAnimationState *arg0) {
     }
 }
 
-void Gap__Sg__igEnbayaAnimationState__vfunc_24(void *arg0) {
+void Gap__Sg__igEnbayaAnimationState__vfunc_24(igEnbayaAnimationState *self) {
     int temp_a1;
 
-    temp_a1 = *(int *)((char *)(arg0) + 160);
+    temp_a1 = self->_context;
     if (temp_a1 != 0) {
-        FUN_001c16a0((igEnbayaContextPool *)g_igEnbayaContextPool_instance.p, (void *)temp_a1, *(int *)((char *)(*(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 20)) + 8));
+        FUN_001c16a0((igEnbayaContextPool *)g_igEnbayaContextPool_instance.p, (void *)temp_a1, *(int *)((char *)(*(int *)((char *)(self->_animation) + 20)) + 8));
     }
 }
 
-void Gap__Sg__igEnbayaAnimationState__vfunc_25(void *arg0) {
-    DAT_00562720[0] = *(int *)((char *)(arg0) + 160);
+void Gap__Sg__igEnbayaAnimationState__vfunc_25(igEnbayaAnimationState *self) {
+    DAT_00562720[0] = self->_context;
 }
 
-void Gap__Sg__igEnbayaAnimationState__vfunc_26(void *arg0) {
+void Gap__Sg__igEnbayaAnimationState__vfunc_26(igEnbayaAnimationState *self) {
     void *temp_a0;
 
     DAT_00562720[0] = 0;
-    temp_a0 = (void *)(*(int *)((char *)(arg0) + 160));
+    temp_a0 = (void *)(self->_context);
     if ((temp_a0 != 0) && (*(unsigned char *)((char *)(temp_a0) + 171) != 0)) {
         FUN_002800d0((EnbayaDecoderState *)temp_a0);
     }

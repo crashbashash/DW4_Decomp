@@ -53,8 +53,8 @@ void igVertexBlendMatrixListAttr_apply(struct S_141e10 *arg0, igPsx2VisualContex
 void igVertexBlendMatrixListAttr_SynchronizeDefault(void) {
 }
 
-void igVertexBlendMatrixListAttr_ReleaseDefaults(void *arg0) {
-    igObject_FreeMemory((igObject *)arg0, (void *)(*(int *)((char *)arg0 + 16)));
-    igObject_ReleaseDefaults((igObject *)arg0);
+void igVertexBlendMatrixListAttr_ReleaseDefaults(igVertexBlendMatrixListAttr *self) {
+    igObject_FreeMemory((igObject *)self, (void *)(self->_matrixCache));
+    igObject_ReleaseDefaults((igObject *)self);
 }
 

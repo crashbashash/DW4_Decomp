@@ -554,11 +554,11 @@ int Gap__igLogInterface__vfunc_24(void *d0, FILE *stream) {
     return fflush(stream) == 0;
 }
 
-int Gap__igLogInterface__vfunc_27(void *arg0, const char *format, va_list args) {
+int Gap__igLogInterface__vfunc_27(igLogInterface *self, const char *format, va_list args) {
     int var_v0;
 
     var_v0 = -1;
-    if (*(unsigned char *)((char *)(arg0) + 32) != 0) {
+    if (self->_verbose != 0) {
         var_v0 = vprintf(format, args);
     }
     return var_v0;
@@ -718,9 +718,9 @@ void thunk_igObject_InitDefaults__0022bbc0(igObject *self) {
     igObject_InitDefaults(self);
 }
 
-void igOptInterface_resetFields(void *arg0, int flags) {
-    Gap__Core__igObject__resetFields((igObject *)arg0, flags);
-    *(int *)((char *)(arg0) + 8) = (int)(arg0);
+void igOptInterface_resetFields(igOptInterface *self, int flags) {
+    Gap__Core__igObject__resetFields((igObject *)self, flags);
+    self->_optInterface = (int)(self);
 }
 
 igMetaObject *igMetaObject_GetMeta(void) {

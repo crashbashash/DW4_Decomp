@@ -1,5 +1,5 @@
-void igMatrixOptStateAttr_apply(int arg0, int arg1) {
-    igPsx2VisualContext_SetMatrixOptimizationState((igPsx2VisualContext *)arg1, *(unsigned char *)((char *)(arg0) + 12));
+void igMatrixOptStateAttr_apply(igMatrixOptStateAttr *self, int arg1) {
+    igPsx2VisualContext_SetMatrixOptimizationState((igPsx2VisualContext *)arg1, self->_enabled);
 }
 
 void igMatrixOptStateAttr_SynchronizeDefault(igMatrixOptStateAttrView *self, igPsx2VisualContext *context) {

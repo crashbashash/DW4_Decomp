@@ -35,16 +35,16 @@ int igPsx2VisualContext_GetNativeVisualInfo(igPsx2VisualContext *self) {
     return 0;
 }
 
-unsigned char igPsx2VisualContext_GetMaterialSpecularState(void *arg0) {
-    return *(int *)((char *)(arg0) + 1450);
+unsigned char igPsx2VisualContext_GetMaterialSpecularState(igPsx2VisualContext *self) {
+    return self->_materialSpecularState;
 }
 
 void Gap__Gfx__igPsx2VisualContext__vfunc_121(void) {
 
 }
 
-int igPsx2VisualContext_GetTextureMatrixState(void *arg0) {
-    return *(unsigned char *)((char *)(arg0) + 1448) != 0;
+int igPsx2VisualContext_GetTextureMatrixState(igPsx2VisualContext *self) {
+    return self->_textureMatrixState != 0;
 }
 
 void igVisualContext_MakeCurrent(void) {

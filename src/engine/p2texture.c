@@ -409,9 +409,7 @@ typedef union p2ImageGifTag { struct { unsigned short nloop : 15; unsigned short
 typedef union p2ImageRefTag { struct { unsigned short qwc; short id; unsigned int addr : 31; unsigned int spr : 1; } bits; int w[4]; } p2ImageRefTag;
 void p2UploadTextures(P2Texture **list, int count) {
     int p2DmaPacketQueued();
-    int FUN_001f7e90();
     extern int DAT_00569128[4];
-    extern long long DAT_00569168[4];
     extern unsigned int p2TextureFormatBits[];
     extern unsigned int p2TextureFormatHalfBytes[];
     extern int p2UploadRegisters[];
@@ -449,7 +447,7 @@ void p2UploadTextures(P2Texture **list, int count) {
             }
             DAT_00569128[0]++;
             p2DmaCurrentPacket[P2_DMA_GIF] = p2DmaLastPacket[P2_DMA_GIF];
-            DAT_00569168[0]--;
+            p2StatGifDmaCount--;
         }
     }
     EIntr();
@@ -473,7 +471,7 @@ void p2UploadTextures(P2Texture **list, int count) {
             ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dsax = 0;
             ((struct p2TransferRegisters *)p2CurrentGsRegisters)->dsay = y;
             ((struct p2TransferRegisters *)p2CurrentGsRegisters)->rrh = h;
-            FUN_001f7e90(4, p2UploadRegisters, 0);
+            p2UploadGsRegistersGif(4, p2UploadRegisters, 0);
             /* matching construct: statement-order search — y += h placed before the GIF tag NLOOP store */
             y += h;
             p2UploadGifTag.bits.nloop = qwc;

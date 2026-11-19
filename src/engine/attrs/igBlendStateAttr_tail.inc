@@ -1,5 +1,5 @@
-void igBlendStateAttr_apply(int arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetBlendingState(arg1, *(unsigned char *)((char *)(arg0) + 12));
+void igBlendStateAttr_apply(igBlendStateAttr *self, igPsx2VisualContext *arg1) {
+    igPsx2VisualContext_SetBlendingState(arg1, self->_enabled);
 }
 
 void igBlendStateAttr_SynchronizeDefault(void **arg0, void **arg1) {

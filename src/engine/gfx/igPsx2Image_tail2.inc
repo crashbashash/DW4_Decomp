@@ -1,7 +1,7 @@
-void igPsx2Image_UserApplyWriteProxy(void *arg0) {
-    FUN_0015a380((S_15a380 *)arg0);
-    if (*(int *)((char *)(arg0) + 24) == 0x66) {
-        ((DW4VC_136_0 *)(((char *)(arg0) + 0)))->vX();
+void igPsx2Image_UserApplyWriteProxy(igPsx2Image *self) {
+    FUN_0015a380((S_15a380 *)self);
+    if (self->_order == 0x66) {
+        ((DW4VC_136_0 *)(((char *)(self) + 0)))->vX();
     }
 }
 

@@ -17,12 +17,12 @@ void FUN_001412a0(void) {
     *(int *)((char *)(DAT_0055ed08[0]) + 52) = (int)(&TEXTURE_FUNCTION_PSX2_GetMetaEnum);
 }
 
-void igTextureFunctionAttr_InitDefaults(void *arg0) {
-    igObject_InitDefaults((igObject *)arg0);
-    *(int *)((char *)arg0 + 20) = 3;
-    *(int *)((char *)arg0 + 24) = 0;
-    *(int *)((char *)arg0 + 28) = 2;
-    *(int *)((char *)arg0 + 36) = 2;
+void igTextureFunctionAttr_InitDefaults(igTextureFunctionAttr *self) {
+    igObject_InitDefaults((igObject *)self);
+    self->_arg0 = 3;
+    self->_arg1 = 0;
+    self->_type = 2;
+    self->_functionType = 2;
 }
 
 void igTextureFunctionAttr_ReleaseDefaults(void **arg0) {

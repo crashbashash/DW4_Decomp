@@ -160,23 +160,23 @@ void Gap__igPsx2Window__vfunc_27(int *arg0, char *arg1) {
     }
 }
 
-int Gap__igPsx2Window__vfunc_34(void *arg0, int dummy1, int arg2, int arg3, int arg4) {
-    *(int *)((char *)(arg0) + 8) = arg2;
-    *(int *)((char *)(arg0) + 12) = arg3;
-    *(int *)((char *)(arg0) + 44) = arg4;
+int Gap__igPsx2Window__vfunc_34(igPsx2Window *self, int dummy1, int arg2, int arg3, int arg4) {
+    self->_width = arg2;
+    self->_height = arg3;
+    self->_bpp = arg4;
     return 1;
 }
 
-void Gap__igPsx2Window__vfunc_35(void *arg0, char *arg1, int *arg2, int *arg3, int *arg4) {
+void Gap__igPsx2Window__vfunc_35(igPsx2Window *self, char *arg1, int *arg2, int *arg3, int *arg4) {
     *arg1 = 1;
     if (arg2 != 0) {
-        *arg2 = *(int *)((char *)(arg0) + 8);
+        *arg2 = self->_width;
     }
     if (arg3 != 0) {
-        *arg3 = *(int *)((char *)(arg0) + 12);
+        *arg3 = self->_height;
     }
     if (arg4 != 0) {
-        *arg4 = *(int *)((char *)(arg0) + 44);
+        *arg4 = self->_bpp;
     }
 }
 
@@ -184,8 +184,8 @@ igMetaObject *igPsx2Window_GetMeta(void) {
     return g_igPsx2Window_metaObject;
 }
 
-int Gap__igPsx2Window__vfunc_28(void *arg0) {
-    return *(int *)((char *)(arg0) + 32);
+int Gap__igPsx2Window__vfunc_28(igPsx2Window *self) {
+    return self->_winName;
 }
 
 void Gap__igPsx2Window__vfunc_29(void) {

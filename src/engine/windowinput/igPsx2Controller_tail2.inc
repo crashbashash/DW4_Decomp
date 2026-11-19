@@ -27,25 +27,25 @@ void igPsx2Controller_InitDefaults(igPsx2Controller *self) {
     FUN_001479b0(self);
 }
 
-void igPsx2Controller_ReleaseDefaults(void *arg0) {
+void igPsx2Controller_ReleaseDefaults(igPsx2Controller *self) {
     int temp_a0;
 
-    scePadPortClose(*(int *)((char *)arg0 + 64), *(int *)((char *)arg0 + 60));
-    temp_a0 = *(int *)((char *)arg0 + 72);
+    scePadPortClose(self->_port, self->_slot);
+    temp_a0 = self->_dmaBuffer;
     if (temp_a0 != 0) {
         Memory_FreeBuffer((void *)temp_a0);
     }
-    igObject_ReleaseDefaults((igObject *)arg0);
+    igObject_ReleaseDefaults((igObject *)self);
 }
 
-void Gap__igPsx2Controller__vfunc_31(void *arg0, int arg1, float *arg2, float *arg3) {
+void Gap__igPsx2Controller__vfunc_31(igPsx2Controller *self, int arg1, float *arg2, float *arg3) {
     int temp_a1;
     int idx;
     int temp_v1;
     temp_a1 = arg1 & 0xFFFF;
-    if (temp_a1 < (int) *(unsigned short *)((char *)(arg0) + 28)) {
+    if (temp_a1 < (int) self->_joyCount) {
         idx = temp_a1 * 4;
-        temp_v1 = idx + (int)arg0;
+        temp_v1 = idx + (int)self;
         *arg2 = *(float *)(temp_v1 + 36);
         *arg3 = *(float *)(temp_v1 + 44);
     }

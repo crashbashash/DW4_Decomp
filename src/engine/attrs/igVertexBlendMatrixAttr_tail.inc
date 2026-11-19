@@ -1,5 +1,5 @@
-void igVertexBlendMatrixAttr_apply(void *arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetMatrix(arg1, *(unsigned short *)((char *)arg0 + 76) + 10, (char *)arg0 + 0xC);
+void igVertexBlendMatrixAttr_apply(igVertexBlendMatrixAttr *self, igPsx2VisualContext *arg1) {
+    igPsx2VisualContext_SetMatrix(arg1, self->_blendMatID + 10, (char *)self + 0xC);
 }
 
 void igVertexBlendMatrixAttr_SynchronizeCachedUnitID(igVertexBlendMatrixAttr *self) {
@@ -16,12 +16,12 @@ void igVertexBlendMatrixAttr_UserPostLoad(igVertexBlendMatrixAttr *self) {
     igAttr_SetUnitID((int)self, (short)self->_blendMatID);
 }
 
-void igVertexBlendMatrixAttr_SynchronizeDefault(void *arg0, void **arg1) {
+void igVertexBlendMatrixAttr_SynchronizeDefault(igVertexBlendMatrixAttr *self, void **arg1) {
     int sp30[16];
 
     igMatrix44f_SetIdentity((float *)sp30);
-    ((V832 *)arg1)->vX(*(unsigned short *)((char *)(arg0) + 76) + 0xA, sp30);
-    ((V128 *)arg0)->vX(sp30);
+    ((V832 *)arg1)->vX(self->_blendMatID + 0xA, sp30);
+    ((V128 *)self)->vX(sp30);
 }
 
 void igVertexBlendMatrixAttr_SetMatrix(igVertexBlendMatrixAttr *self, const float *matrix) {

@@ -281,7 +281,7 @@ void igPsx2VisualContext_ClearRenderDestination(igPsx2VisualContext *self, int a
     p2Clear(var_a0, *(int *)((char *)(self) + 896), *(int *)((char *)(self) + 900));
 }
 
-int igPsx2VisualContext_CopyRenderDestinationToTexture(igPsx2VisualContext *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8) {
+int igPsx2VisualContext_CopyRenderDestinationToTexture(igPsx2VisualContext *self, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8) {
     int temp_a1;
     int temp_a2;
     int temp_v1;
@@ -290,19 +290,19 @@ int igPsx2VisualContext_CopyRenderDestinationToTexture(igPsx2VisualContext *arg0
     char *temp_s7;
 
     temp_a2 = (arg1 * 3) << 4;
-    temp_a3 = (char *)arg0->_pBufList;
+    temp_a3 = (char *)self->_pBufList;
     temp_a1 = *(int *)(temp_a3 + 16);
     temp_s7 = (char *)(temp_a1 + temp_a2);
-    temp_s0 = (char *)(*(int *)((char *)arg0->_pTexList + 16) + (arg2 * 0x88));
+    temp_s0 = (char *)(*(int *)((char *)self->_pTexList + 16) + (arg2 * 0x88));
     if (**(int **)(temp_s0 + 72) == 0) {
         **(int **)(temp_s0 + 72) = (int)p2LoadTexture(0, *(int *)(temp_s0 + 32), *(int *)(temp_s0 + 36), FUN_0017a2b0(*(int *)(temp_s0 + 0)), 0);
     }
     if ((arg7 == -1) || (arg8 == -1)) {
-        if (arg0->_textureStateFilter != 0) {
-            temp_v1 = (arg0->_textureMagFilter << 0x10) | arg0->_textureMinFilter;
-            if (arg0->_currentTextureFilter[0] != temp_v1) {
-                arg0->_currentTextureFilter[0] = temp_v1;
-                p2SetTextureFilter(DAT_0048acd0[arg0->_textureMagFilter], DAT_0048acd0[arg0->_textureMinFilter]);
+        if (self->_textureStateFilter != 0) {
+            temp_v1 = (self->_textureMagFilter << 0x10) | self->_textureMinFilter;
+            if (self->_currentTextureFilter[0] != temp_v1) {
+                self->_currentTextureFilter[0] = temp_v1;
+                p2SetTextureFilter(DAT_0048acd0[self->_textureMagFilter], DAT_0048acd0[self->_textureMinFilter]);
             }
         }
         FUN_00209cf0(*(int *)(temp_s7 + 40), **(int **)(temp_s0 + 72), arg3, arg4, arg5, arg6, 0);
@@ -372,11 +372,11 @@ void igPsx2VisualContext_SetViewport(igPsx2VisualContext *self, int arg1, int ar
     p2SetViewport(arg1, arg2, arg3, arg4, 1.0f - self->_viewportNear, 1.0f - self->_viewportFar);
 }
 
-void igPsx2VisualContext_GetViewport(void *arg0, int *arg1, int *arg2, int *arg3, int *arg4) {
-    *arg1 = *(int *)((char *)(arg0) + 916);
-    *arg2 = *(int *)((char *)(arg0) + 920);
-    *arg3 = *(int *)((char *)(arg0) + 924);
-    *arg4 = *(int *)((char *)(arg0) + 928);
+void igPsx2VisualContext_GetViewport(igPsx2VisualContext *self, int *arg1, int *arg2, int *arg3, int *arg4) {
+    *arg1 = self->_iViewportX;
+    *arg2 = self->_iViewportY;
+    *arg3 = self->_iViewportW;
+    *arg4 = self->_iViewportH;
 }
 
 void igPsx2VisualContext_GetViewportWithDepth(igPsx2VisualContext *arg0, int *arg1, int *arg2, int *arg3, int *arg4, float *arg5, float *arg6) {
@@ -403,11 +403,11 @@ void igPsx2VisualContext_SetClearColorPacked(igPsx2VisualContext *self, unsigned
     a[224] = (x & 0xffffff) | (((x >> 1) & 0x7f000000) + (x & 0x01000000));
 }
 
-int igPsx2VisualContext_GetClearColorPacked(void *arg0) {
+int igPsx2VisualContext_GetClearColorPacked(igPsx2VisualContext *self) {
     int temp_a1;
     unsigned int temp_a0;
 
-    temp_a1 = *(int *)((char *)(arg0) + 896);
+    temp_a1 = self->_uiClearColor;
     temp_a0 = (unsigned int)(temp_a1 & 0x80000000) >> 7;
     return (temp_a1 & 0xFFFFFF) | (temp_a0 + (((temp_a1 & 0xFF000000) - temp_a0) * 2));
 }
@@ -426,16 +426,16 @@ void igPsx2VisualContext_SetClearDepth(igPsx2VisualContext *self, float fparg0) 
     arg0->f900 = (unsigned)(2.1474836e9f * (1.0f - arg0->f892));
 }
 
-float igPsx2VisualContext_GetClearDepth(void *arg0) {
-    return *(float *)((char *)arg0 + 892);
+float igPsx2VisualContext_GetClearDepth(igPsx2VisualContext *self) {
+    return self->_clearDepth;
 }
 
 void igPsx2VisualContext_SetClearStencil(igPsx2VisualContext *self, int a1) {
     *(int *)((char *)self + 904) = a1;
 }
 
-int igPsx2VisualContext_GetClearStencil(void *arg0) {
-    return *(int *)((char *)(arg0) + 904);
+int igPsx2VisualContext_GetClearStencil(igPsx2VisualContext *self) {
+    return self->_clearStencil;
 }
 
 /* Getter for the record field at +0x8 of buffer `bufferIndex`: the buffer format
@@ -512,11 +512,11 @@ void igPsx2VisualContext_SetScissor(igPsx2VisualContext *arg0, int arg1, int arg
     }
 }
 
-void igPsx2VisualContext_GetScissor(void *arg0, int *arg1, int *arg2, int *arg3, int *arg4) {
-    *arg1 = *(int *)((char *)(arg0) + 1236);
-    *arg2 = *(int *)((char *)(arg0) + 1240);
-    *arg3 = *(int *)((char *)(arg0) + 1244);
-    *arg4 = *(int *)((char *)(arg0) + 1248);
+void igPsx2VisualContext_GetScissor(igPsx2VisualContext *self, int *arg1, int *arg2, int *arg3, int *arg4) {
+    *arg1 = self->_scissorX;
+    *arg2 = self->_scissorY;
+    *arg3 = self->_scissorW;
+    *arg4 = self->_scissorH;
 }
 
 void igPsx2VisualContext_SetScissorType(int a0, int a1) {
@@ -1380,7 +1380,7 @@ void igPsx2VisualContext_DetectDriverDatabaseProperties(int dummy0, int arg1) {
 }
 
 void igPsx2VisualContext_CallDmaChain(igPsx2VisualContext *self, void *packet, int size, int flush) {
-    FUN_001f7db0((unsigned int)packet, size, flush);
+    p2CallGifChain((unsigned int)packet, size, flush);
 }
 
 int igPsx2VisualContext_IsDisplayingFirstBuffer(igPsx2VisualContext *self) {

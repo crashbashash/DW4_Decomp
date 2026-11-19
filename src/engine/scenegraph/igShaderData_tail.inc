@@ -34,10 +34,10 @@ guard:
     goto done;
 }
 
-void igShaderData_AppendPass(void *arg0, int item, int arg2, int arg3) {
-    ObjectList_AppendRetained(*(igObjectList **)((char *)(arg0) + 8), (igObject *)item);
-    ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)(arg0) + 12)), (igObject *)arg2);
-    ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)(arg0) + 20)), (igObject *)arg3);
+void igShaderData_AppendPass(igShaderData *self, int item, int arg2, int arg3) {
+    ObjectList_AppendRetained((igObjectList *)self->_attrPushLists, (igObject *)item);
+    ObjectList_AppendRetained((igObjectList *)(self->_attrPopLists), (igObject *)arg2);
+    ObjectList_AppendRetained((igObjectList *)(self->_childLists), (igObject *)arg3);
 }
 
 void igShaderData_RemoveAll(struct ShaderDataView *arg0) {
@@ -181,16 +181,16 @@ void FUN_001d8870(struct A_1d8870 *arg0, int arg1, igObject *arg2) {
     }
 }
 
-void igShaderData_UserPostLoad(S0_1d8930 *arg0) {
+void igShaderData_UserPostLoad(igShaderData *self) {
     int temp_a1;
     void *temp_a0;
 
     igObject_UserPostLoad();
-    temp_a0 = (void *)(arg0->f14);
-    temp_a1 = *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 8);
+    temp_a0 = (void *)(self->_childLists);
+    temp_a1 = *(int *)((char *)(self->_attrPushLists) + 8);
     if (temp_a1 != *(int *)((char *)(temp_a0) + 8)) {
         ObjectList_ResizeRetained((igTDataList<igObject *> *)temp_a0, temp_a1);
-        ObjectList_ClearRetainedPreserveCount((igTDataList<igObject *> *)arg0->f14);
+        ObjectList_ClearRetainedPreserveCount((igTDataList<igObject *> *)self->_childLists);
     }
 }
 

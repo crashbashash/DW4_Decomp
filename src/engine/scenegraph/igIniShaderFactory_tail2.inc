@@ -79,19 +79,19 @@ void igIniShaderFactory_PreloadFileCache(IniShaderFactoryFields *self) {
     }
 }
 
-void igIniShaderFactory_UserPostLoad(void *arg0) {
+void igIniShaderFactory_UserPostLoad(igIniShaderFactory *self) {
     igObject_UserPostLoad();
-    if (*(int *)((char *)(arg0) + 20) != 2) {
-        ((DW4VC_104_0 *)(((char *)(arg0) + 0)))->vX();
+    if (self->_fileCachingMode != 2) {
+        ((DW4VC_104_0 *)(((char *)(self) + 0)))->vX();
     }
 }
 
-void igIniShaderFactory_TrimCapacity(void *arg0) {
+void igIniShaderFactory_TrimCapacity(igIniShaderFactory *self) {
     int temp_a1;
 
-    temp_a1 = *(int *)((char *)(arg0) + 20);
+    temp_a1 = self->_fileCachingMode;
     if (temp_a1 != 2) {
-        ((DW4VC_104_1 *)((int *)((char *)(arg0) + 0)))->vX((int)(temp_a1));
+        ((DW4VC_104_1 *)((int *)((char *)(self) + 0)))->vX((int)(temp_a1));
     }
 }
 

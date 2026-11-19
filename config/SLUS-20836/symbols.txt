@@ -3841,7 +3841,7 @@
 00190a10 00001c igMatrix44f_SetTranslation
 00190a30 00001c igMatrix44f_GetTranslation
 00190a50 0000d4 igMatrix44f_TranslateLocal
-00190b30 000124 FUN_00190b30
+00190b30 000124 igMatrix44f_TranslateWorld
 00190c60 000048 FUN_00190c60
 00190cb0 0000c4 FUN_00190cb0
 00190d80 0000c4 FUN_00190d80
@@ -3851,7 +3851,7 @@
 001910c0 000164 igMatrix44f_SetEulerRotation
 00191230 00043c igMatrix44f_GetEulerAngles
 00191670 000034 igMatrix44f_PreRotateAxisAngle
-001916b0 000038 FUN_001916b0
+001916b0 000038 igMatrix44f_PostRotateAxisAngle
 001916f0 000078 FUN_001916f0
 00191770 0000ec igMatrix44f_SetQuaternion
 00191860 0000a8 FUN_00191860
@@ -4453,7 +4453,7 @@
 0019fc90 000008 igGeometry_GetMetaObjectFunction
 0019fca0 000128 FUN_0019fca0
 0019fdd0 000008 thunk_FUN_001c51d0
-0019fde0 000034 FUN_0019fde0
+0019fde0 000034 igFrustCullTraversal_Create
 0019fe20 000048 igFrustCullTraversal_GetMetaObject
 0019fe70 0000a0 igFrustCullTraversal_GetVTable
 0019ff10 000080 igSmartPointer_igCapabilityManager_Destruct
@@ -4623,7 +4623,7 @@
 001a46f0 000008 igCamera_GetMetaObjectFunction
 001a4700 0000c4 igCamera_InitFields
 001a47d0 000054 FUN_001a47d0
-001a4830 000034 FUN_001a4830
+001a4830 000034 igBoundingBoxesMaker_Create
 001a4870 000048 igBoundingBoxesMaker_GetMetaObject
 001a48c0 0000b0 igBoundingBoxesMaker_GetVTable
 001a4970 00000c igBoundingBoxesMaker_EnsureRegistered
@@ -4985,7 +4985,7 @@
 001b0250 0001e4 FUN_001b0250
 001b0440 000008 FUN_001b0440
 001b0450 000298 FUN_001b0450
-001b06f0 0003ac FUN_001b06f0
+001b06f0 0003ac igAttrStackManager_PushLightStateAttr
 001b0aa0 000318 igAttrStackManager_PopLightStateAttr
 001b0dc0 0000d4 FUN_001b0dc0
 001b0ea0 000190 igAttrStackManager_IsLightEnabled
@@ -5011,7 +5011,7 @@
 001b2750 000034 Gap__Core__igObject__vfunc_37 Gap::Core::igObject::vfunc_37
 001b2790 0001e0 igTransformSequence_ExtendBound
 001b2970 000554 igNode_ComputeBound
-001b2ed0 00005c FUN_001b2ed0
+001b2ed0 00005c igBoundingBoxesMaker_ComputeBox
 001b2f30 00006c FUN_001b2f30
 001b2fa0 00008c Gap__Sg__igCommonTraversal__vfunc_26 Gap::Sg::igCommonTraversal::vfunc_26
 001b3030 000aa0 FUN_001b3030
@@ -5036,9 +5036,9 @@
 001b6ca0 000008 igCommonTraversal_userDestruct
 001b6cb0 000018 Gap__Sg__igCommonTraversal__vfunc_30 Gap::Sg::igCommonTraversal::vfunc_30
 001b6cd0 000008 FUN_001b6cd0
-001b6ce0 00013c FUN_001b6ce0
+001b6ce0 00013c igCommonTraversal_SetPerspective
 001b6e20 0000b4 Gap__Sg__igCommonTraversal__vfunc_31 Gap::Sg::igCommonTraversal::vfunc_31
-001b6ee0 000044 FUN_001b6ee0
+001b6ee0 000044 igCommonTraversal_SetViewMatrix
 001b6f30 0000e0 FUN_001b6f30
 001b7010 000314 Gap__Sg__igCommonTraversal__vfunc_28 Gap::Sg::igCommonTraversal::vfunc_28
 001b7330 000098 FUN_001b7330
@@ -5222,7 +5222,7 @@
 001c4c20 000410 FUN_001c4c20
 001c5030 0000f4 igFrustCullTraversal_TraverseNode
 001c5130 000024 igFrustCullTraversal_TraversePlanarShadowShader
-001c5160 000050 FUN_001c5160
+001c5160 000050 igFrustCullTraversal_SetOuterFrustCullScale
 001c51b0 000018 igFrustCullTraversal_ClassifyBox
 001c51d0 000138 FUN_001c51d0
 001c5310 000068 igGeometry_UserPostLoad
@@ -6041,9 +6041,9 @@
 001f6f50 000300 p2GetStatistics
 001f7250 0000d4 p2SetColour
 001f7330 000008 FUN_001f7330
-001f7340 000020 FUN_001f7340
-001f7360 00000c FUN_001f7360
-001f7370 0000f8 FUN_001f7370
+001f7340 000020 p2SetSpriteSizeMode
+001f7360 00000c p2GetSpriteSizeMode
+001f7370 0000f8 p2SetSpriteHalfSize
 001f7470 000020 p2SetPolygonMode
 001f7490 000048 p2PrintGsRevision
 001f74e0 000014 p2SequenceFinishedPredicate
@@ -6051,12 +6051,12 @@
 001f7530 000190 p2GsInterruptHandler
 001f76c0 000024 p2SendGsRegister
 001f76f0 0001d8 p2UploadGsRegisters
-001f78d0 0001f8 FUN_001f78d0
+001f78d0 0001f8 p2UploadDirtyGsRegisters
 001f7ad0 00002c p2FlushGsRegisters
-001f7b00 000188 FUN_001f7b00
-001f7c90 000118 FUN_001f7c90
-001f7db0 0000d8 FUN_001f7db0
-001f7e90 0001bc FUN_001f7e90
+001f7b00 000188 p2AppendGsFinish
+001f7c90 000118 p2AppendProgramRestart
+001f7db0 0000d8 p2CallGifChain
+001f7e90 0001bc p2UploadGsRegistersGif
 001f8050 000140 p2readGSPrivRegister
 001f8190 000190 p2writeGSPrivRegister
 001f8320 00002c FUN_001f8320
@@ -6077,9 +6077,9 @@
 001f9430 001a4c p2UpdateLights
 001fae80 000218 FUN_001fae80
 001fb0a0 000040 p2SetLightingMode
-001fb0e0 000384 FUN_001fb0e0
+001fb0e0 000384 p2AppendLightingPacket
 001fb470 000294 p2WriteDirectionalLights
-001fb710 0003d4 FUN_001fb710
+001fb710 0003d4 p2WriteLights
 001fbaf0 0001e4 FUN_001fbaf0
 001fbce0 000350 FUN_001fbce0
 001fc030 000280 p2AdjointMatrix
@@ -6120,7 +6120,7 @@
 00202300 000b18 p2SetupProgramVariants
 00202e20 000140 p2GetPassProgramAddress
 00202f60 00003c p2FindVariantTable
-00202fa0 000060 FUN_00202fa0
+00202fa0 000060 p2MaskGaps
 00203000 0004f4 p2CreateVariantTable
 00203500 000074 p2FreeVariantTables
 00203580 0006d0 FUN_00203580
@@ -19991,7 +19991,7 @@
 004550b0 000098 igEventDispatcher_KeyUp
 00455150 000044 igFieldChangeView_OnModelChange
 004551a0 000050 FUN_004551a0
-004551f0 0000e8 FUN_004551f0
+004551f0 0000e8 igFieldSynchronizer_AddField
 004552e0 000084 FUN_004552e0
 00455370 00006c beFontImage_CountTriangles
 004553e0 000060 beFontImage_CountTrianglesWide

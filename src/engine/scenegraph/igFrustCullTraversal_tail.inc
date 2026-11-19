@@ -353,7 +353,7 @@ int igFrustCullTraversal_TraversePlanarShadowShader(void *arg0, TraversalNodeVie
     return g_igCommonTraversal_travProcs->_data[arg1->_id]((igTraversal *)arg0, (igObject *)arg1);
 }
 
-int FUN_001c5160(igFrustCullTraversal *self, float scale) {
+int igFrustCullTraversal_SetOuterFrustCullScale(igFrustCullTraversal *self, float scale) {
     if (scale < self->_outerScissorWindowScale && !(scale < 1.0f)) { self->_outerFrustCullScale = scale; DAT_0048da28[0] = 1.0f / scale; return 1; } return 0;
 }
 

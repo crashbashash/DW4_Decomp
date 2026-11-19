@@ -8,6 +8,11 @@ struct igGeometry;
 extern "C" {
 #endif
 int igCommonTraversal_TraverseGeometry(struct igCommonTraversal *self, struct igGeometry *geometry);
+/* Sets the projection matrix to a perspective between `nearPlane` and `farPlane`: `vfov` (degrees) follows
+ * from `hfov` and `aspect`, or with a negative `hfov` the horizontal angle follows from `vfov`. */
+void igCommonTraversal_SetPerspective(void *traversal, float hfov, float vfov, float aspect, float nearPlane, float farPlane);
+/* Sets the view matrix (_viewMat) and its inverse (_viewMatInv). */
+void igCommonTraversal_SetViewMatrix(int traversal, int *matrix);
 #ifdef __cplusplus
 }
 

@@ -74,7 +74,6 @@ extern int p2LastDrawBuffer;
 extern long long p2FramesSwapped;
 extern int p2FinishFuncSema;
 extern long long p2VsyncsWaited;
-extern long long p2Vsyncs;
 extern unsigned int p2DisplayPacket;
 extern int p2DisplayPacketQwc;
 extern int p2FinishSequence;

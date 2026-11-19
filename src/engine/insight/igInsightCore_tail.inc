@@ -59,32 +59,31 @@ void igInsightCore_Begin(igInsightCore *core) {
     arg0->f48->vY();
 }
 
-void igInsightCore_End(igInsightCore *core) {
-    int *arg0 = (int *)core;
+void igInsightCore_End(igInsightCore *self) {
     unsigned int i;
     struct Q *q;
 
-    ((A_237280 *)arg0[12])->vX();
-    for (i = 0; i < (unsigned int)(q = *(struct Q **)(arg0[2] + 8))->count; i++) {
+    ((A_237280 *)self->_timer)->vX();
+    for (i = 0; i < (unsigned int)(q = *(struct Q **)(self->_managerList + 8))->count; i++) {
         q->data[i]->vX();
     }
 }
 
-void igInsightCore_resetFields(struct A_237300 *arg0, int flags) {
-    Gap__Core__igObject__resetFields((igObject *)arg0, flags);
+void igInsightCore_resetFields(igInsightCore *self, int flags) {
+    Gap__Core__igObject__resetFields((igObject *)self, flags);
     StringRef_237300 first("Clear done");
     StringRef_237300 second("Scenes done");
     StringRef_237300 third("Overlays done");
-    igDependencyOrderedList_AddCheckPoint((igDependencyOrderedList *)arg0->f28, (const char *)first.p);
-    igDependencyOrderedList_AddCheckPoint((igDependencyOrderedList *)arg0->f28, (const char *)second.p);
-    igDependencyOrderedList_AddCheckPoint((igDependencyOrderedList *)arg0->f28, (const char *)third.p);
-    igDependencyOrderedList_AddDependency((igDependencyOrderedList *)arg0->f28, first.p, second.p);
-    igDependencyOrderedList_AddDependency((igDependencyOrderedList *)arg0->f28, second.p, third.p);
-    igDependencyOrderedList_AddDependency((igDependencyOrderedList *)arg0->f28, (igObject *)arg0->f44, first.p);
-    igRendererOrderedList_Append((igDependencyOrderedList *)arg0->f28, (igObject *)arg0->f44, 0);
-    arg0->f72 = 0x40000;
-    *(struct A_237300 **)(arg0->f36 + 8) = arg0;
-    igEventDispatcher_AddReceiver((igEventDispatcher *)arg0->f32, (igObject *)arg0->f36);
+    igDependencyOrderedList_AddCheckPoint((igDependencyOrderedList *)self->_rendererList, (const char *)first.p);
+    igDependencyOrderedList_AddCheckPoint((igDependencyOrderedList *)self->_rendererList, (const char *)second.p);
+    igDependencyOrderedList_AddCheckPoint((igDependencyOrderedList *)self->_rendererList, (const char *)third.p);
+    igDependencyOrderedList_AddDependency((igDependencyOrderedList *)self->_rendererList, first.p, second.p);
+    igDependencyOrderedList_AddDependency((igDependencyOrderedList *)self->_rendererList, second.p, third.p);
+    igDependencyOrderedList_AddDependency((igDependencyOrderedList *)self->_rendererList, (igObject *)self->_clearRenderer, first.p);
+    igRendererOrderedList_Append((igDependencyOrderedList *)self->_rendererList, (igObject *)self->_clearRenderer, 0);
+    self->_currentToWorldTimeFactor = 0x40000;
+    *(igInsightCore **)(self->_windowResizeReceiver + 8) = self;
+    igEventDispatcher_AddReceiver((igEventDispatcher *)self->_dispatcher, (igObject *)self->_windowResizeReceiver);
 }
 
 void igInsightCore_InitializeDrawing(igInsightCore *core) {

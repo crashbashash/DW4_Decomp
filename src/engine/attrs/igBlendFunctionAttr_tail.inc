@@ -45,8 +45,8 @@ void igBlendFunctionAttr_SetDestination(igBlendFunctionAttr *self, int dstFactor
     self->_dst = dstFactor;
 }
 
-void igBlendFunctionAttr_SetSource(void *arg0, int arg1) {
-    *(int *)((char *)(arg0) + 12) = arg1;
+void igBlendFunctionAttr_SetSource(igBlendFunctionAttr *self, int arg1) {
+    self->_src = arg1;
 }
 
 void igBlendFunctionAttr_SynchronizeCachedUnitID(igBlendFunctionAttr *self) {

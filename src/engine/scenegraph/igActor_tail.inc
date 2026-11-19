@@ -98,22 +98,22 @@ void FUN_001b8a20(Src *arg0, Dst *arg1) {
     l3->items[c3] = c;
 }
 
-int igCommonTraversal_TraverseJointTransform(void *arg0, int arg1) {
+int igCommonTraversal_TraverseJointTransform(igCommonTraversal *self, int arg1) {
     int sp40[16];
     int *temp_s2;
     int temp_v0;
     void *temp_a1;
     void *temp_a2;
 
-    temp_a2 = (void *)(*(int *)((char *)(arg0) + 52));
+    temp_a2 = (void *)(self->_attrStack);
     temp_a1 = (void *)(*(int *)(*(int *)((char *)(*(int *)((char *)(temp_a2) + 16)) + 16) + (*(int *)(*(int *)((char *)(temp_a2) + 68) + (*(int *)((char *)(((void *)g_igModelViewMatrixAttr_metaObject)) + 8) * 4)) * 4)));
     temp_v0 = *(int *)((char *)(temp_a1) + 8);
     if (temp_v0 != 0) {
         temp_s2 = (int *)(*(int *)(*(int *)((char *)(temp_a1) + 16) + ((temp_v0 - 1) * 4)) + 0xC);
-        FUN_001d0130((SceneTransformNode *)arg1, (SceneRenderer *)arg0, (SceneMatrix *)temp_s2, ((DW4VC_104_2 *)(((char *)(arg0) + 0)))->vX((int)(temp_a1), (int)(temp_a2)));
+        FUN_001d0130((SceneTransformNode *)arg1, (SceneRenderer *)self, (SceneMatrix *)temp_s2, ((DW4VC_104_2 *)(((char *)(self) + 0)))->vX((int)(temp_a1), (int)(temp_a2)));
     } else {
         igMatrix44f_SetIdentity((float *)sp40);
-        FUN_001d0130((SceneTransformNode *)arg1, (SceneRenderer *)arg0, (SceneMatrix *)sp40, ((DW4VC_104_0 *)(((char *)(arg0) + 0)))->vX());
+        FUN_001d0130((SceneTransformNode *)arg1, (SceneRenderer *)self, (SceneMatrix *)sp40, ((DW4VC_104_0 *)(((char *)(self) + 0)))->vX());
     }
     return 0;
 }
@@ -147,7 +147,7 @@ void FUN_001b8cf0(igCommonTraversal *arg0, char *arg1) {
     } else {
         igMatrix44f_SetIdentity((float *)dst);
     }
-    igCommonTraversal_TraverseJointTransform((void *)arg0, (int)arg1);
+    igCommonTraversal_TraverseJointTransform((igCommonTraversal *)arg0, (int)arg1);
 }
 
 int FUN_001b8de0(Dst_1b8de0 *arg0, Src_1b8de0 *arg1) {
@@ -468,7 +468,7 @@ int igCommonTraversal_TraverseLightStateSet(struct A_1b9fc0 *arg0, struct B_1b9f
 
     s0 = arg1->f32->n;
     for (s1 = 0; s1 < s0; s1++) {
-        FUN_001b06f0((igAttrStackManager *)arg0->f52, (igLightStateAttr *)arg1->f32->data[s1], 0);
+        igAttrStackManager_PushLightStateAttr((igAttrStackManager *)arg0->f52, (igLightStateAttr *)arg1->f32->data[s1], 0);
     }
     igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
     for (s0 = s0 - 1; s0 >= 0; s0--) {

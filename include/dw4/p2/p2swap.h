@@ -23,6 +23,7 @@ extern long long p2FramesTimed;
 extern long long p2FrameTimeTotal;
 extern unsigned long long p2FrameTimeMax;
 extern unsigned long long p2FrameTimeMin;
+extern long long p2Vsyncs;
 
 void p2AddFinishFunc(void (*func)(p2FinishFunc *finish, int arg), int arg);
 void p2BuildDisplayPacket(void);

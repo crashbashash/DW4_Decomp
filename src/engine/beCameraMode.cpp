@@ -377,10 +377,8 @@ void igFlyMode_AimingChanged(igFlyMode *self)
 {
 }
 
-void FUN_00190b30(float *matrix, const igVec3f &translation);
 static inline float toRadians(float degrees) { return 0.017453292f * degrees; }
-void FUN_001916b0(float *matrix, const igVec3f *axis, float angle);
-static inline void rotateRef(float *m, const igVec3f *axis, const float &angle) { FUN_001916b0(m, axis, angle); }
+static inline void rotateRef(float *m, const igVec3f *axis, const float &angle) { igMatrix44f_PostRotateAxisAngle(m, &axis->x, angle); }
 static inline float vecLength(const igVec3f &v) { return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z); }
 
 /* Turns the eye by the right stick, at most 120 degrees per second more than the last frame: about the
@@ -412,8 +410,8 @@ void igFlyMode_ApplyRotation(igFlyMode *self, float seconds) {
     up.x *= scale;
     up.y *= scale;
     up.z *= scale;
-    FUN_001916b0(model->_viewMatrix, &up, toRadians(head));
-    FUN_001916b0(model->_viewMatrix, &g_vec3XAxis, toRadians(pitch));
+    igMatrix44f_PostRotateAxisAngle(model->_viewMatrix, &up.x, toRadians(head));
+    igMatrix44f_PostRotateAxisAngle(model->_viewMatrix, &g_vec3XAxis.x, toRadians(pitch));
 }
 
 /* While aiming, turns the eye by the mouse's movement since the last frame. */
@@ -428,9 +426,9 @@ void igFlyMode_ApplyAim(igFlyMode *self) {
         up.x *= scale;
         up.y *= scale;
         up.z *= scale;
-        FUN_001916b0(model->_viewMatrix, &up, toRadians(head));
+        igMatrix44f_PostRotateAxisAngle(model->_viewMatrix, &up.x, toRadians(head));
         /* matching construct: the (float) cast on the negated pitch orders the pi/180 constant before it. */
-        FUN_001916b0(model->_viewMatrix, &g_vec3XAxis, toRadians((float)(-pitch)));
+        igMatrix44f_PostRotateAxisAngle(model->_viewMatrix, &g_vec3XAxis.x, toRadians((float)(-pitch)));
     }
     self->_lastAim[0] = self->_mousePos[0];
     self->_lastAim[1] = self->_mousePos[1];
@@ -652,7 +650,7 @@ void igRotateMode_Update(igRotateMode *self, float seconds) {
         center[0] = -center[0];
         center[1] = -center[1];
         center[2] = -center[2];
-        FUN_00190b30(model->_viewMatrix, center);
+        igMatrix44f_TranslateWorld(model->_viewMatrix, center);
         if (self->_maya) {
             if (self->_head != 0.0f) {
                 igVec3f up;
@@ -677,7 +675,7 @@ void igRotateMode_Update(igRotateMode *self, float seconds) {
         center[1] += self->_translation[1];
         center[2] += self->_translation[2];
         self->_distance = vecLength(center);
-        FUN_00190b30(model->_viewMatrix, center);
+        igMatrix44f_TranslateWorld(model->_viewMatrix, center);
         ViewModelEvent changed;
         changed.type = VIEW_MODEL_FIELD_CHANGED;
         changed.sender = 0;

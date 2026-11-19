@@ -10,144 +10,81 @@
 #include "dw4/scenegraph/igGroup.h"
 #include "dw4/scenegraph/igAttrStackManager.h"
 #include "dw4/scenegraph/igFrustCullTraversal.h"
+#include "dw4/scenegraph/igCommonTraversal.h"
 #include "dw4/viewer/ViewerOptions.h"
 #include "dw4/gui/igModel.h"
 #include "dw4/core/StringPool.h"
+#include "dw4/core/igStringRef.h"
 #include "dw4/attrs/igColorAttr.h"
 #include "dw4/attrs/igAlphaFunctionAttr.h"
 #include "dw4/attrs/igLightStateAttr.h"
 #include "dw4/core/igDataLists.h"
 #include "dw4/core/igObjectRefMetaField.h"
+#include "dw4/viewer/igViewerParameters.h"
+#include "dw4/scenegraph/igCommonTraversalDispatchView.h"
+#include "dw4/scenegraph/igTransformDispatchView.h"
+#include "dw4/attrs/igColorAttrDispatchView.h"
+#include "dw4/attrs/igAlphaFunctionAttrDispatchView.h"
+#include "dw4/attrs/igLightAttrDispatchView.h"
+#include "dw4/attrs/igLightStateAttrDispatchView.h"
+#include "dw4/attrs/igLightingStateAttrDispatchView.h"
+#include "dw4/attrs/igAlphaStateAttrDispatchView.h"
+#include "dw4/attrs/igCullFaceAttrDispatchView.h"
+#include "dw4/attrs/igShadeModelAttrDispatchView.h"
+#include "dw4/attrs/igPolygonModeAttrDispatchView.h"
+#include "dw4/gfx/GfxMetaEnums.h"
+#include "dw4/maths/igMathConstants.h"
 extern "C" {
 
-class X { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int v88(); int pad[4]; int f20; };
-
-int igViewerRenderer_ObjectsTraverseNodeSelect(int arg0, X *arg1);
-
-typedef struct T { char pad[60]; unsigned char f60; } T;
-typedef struct L { char pad[8]; int f8; int pad2; int *f16; } L;
-typedef struct C { char pad[192]; unsigned char f192; } C;
-typedef struct A { char pad[12]; C *f12; char pad2[24]; int f40; char pad3[20]; L *f64; char pad4[12]; struct { char pad[52]; T *f52; } *f80; } A;
-
-
-typedef struct T3 { char pad60[60]; unsigned char f3c; } T3;
-typedef struct T2 { char pad52[52]; T3 *f34; } T2;
-typedef struct T1 { char pad192[192]; unsigned char fc0; } T1;
-typedef struct L2 { char pad8[8]; int cnt; char pad12[4]; int *arr; } L2;
-typedef struct S { char pad12[12]; T1 *f0c; char pad16[24]; int f28; char pad44[20]; L2 *f40; char pad68[12]; T2 *f50; } S;
-
-struct Rc { int vt; int rc; };
-class V { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int v25(int); virtual void d24(); virtual int v27(long long); virtual void d26(); virtual void d27(); virtual Rc *v30(); virtual void v31(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97(); virtual void d98(); virtual void d99(); virtual void d100(); virtual void d101(); virtual void d102(); virtual void d103(); virtual void d104(); virtual void d105(); virtual void d106(); virtual void d107(); virtual void d108(); virtual void d109(); virtual void d110(); virtual void d111(); virtual void d112(); virtual void d113(); virtual void d114(); virtual void d115(); virtual void d116(); virtual void d117(); virtual void d118(); virtual void d119(); virtual void d120(); virtual void d121(); virtual void d122(); virtual void d123(); virtual void d124(); virtual void d125(); virtual void d126(); virtual void d127(); virtual void d128(); virtual void d129(); virtual void d130(); virtual void d131(); virtual void d132(); virtual void d133(); virtual void d134(); virtual void d135(); virtual void d136(); virtual void d137(); virtual void d138(); virtual void d139(); virtual void d140(); virtual void d141(); virtual void d142(); virtual void d143(); virtual void d144(); virtual void d145(); virtual void d146(); virtual void d147(); virtual void d148(); virtual void d149(); virtual void d150(); virtual void d151(); virtual void d152(); virtual void d153(); virtual void d154(); virtual void d155(); virtual void d156(); virtual void d157(); virtual void d158(); virtual void d159(); virtual void d160(); virtual void d161(); virtual void d162(); virtual void d163(); virtual void d164(); virtual void d165(); virtual void d166(); virtual void d167(); virtual void d168(); virtual void d169(); virtual void d170(); virtual void d171(); virtual void d172(); virtual void d173(); virtual void d174(); virtual void d175(); virtual void d176(); virtual void d177(); virtual void d178(); virtual void d179(); virtual void d180(); virtual void d181(); virtual void d182(); virtual void d183(); virtual void d184(); virtual void d185(); virtual void d186(); virtual void d187(); virtual void d188(); virtual void d189(); virtual void d190(); virtual void d191(); virtual void d192(); virtual void d193(); virtual void d194(); virtual void d195(); virtual void d196(); virtual void d197(); virtual void d198(); virtual void d199(); virtual void d200(); virtual int v203(int, int); virtual void d202(); virtual void d203(); virtual void d204(); virtual void d205(); virtual void d206(); virtual void d207(); virtual void d208(); virtual void d209(); virtual void d210(); virtual int v213(int); };
-struct B { char pad0[12]; int f12; char pad16[28]; int f44; char pad48[60]; int f108; char pad112[64]; long long f176; };
-struct Q { char pad0[8]; V *f8; B *f12; char pad16[28]; int f44; char pad48[20]; unsigned char f68; char pad69[3]; V *f72; Rc *f76; V *f80; Rc *f84; };
-
-void igViewerRenderer_Traverse(Q *arg0);
-
-class V2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void *v104(void *); virtual void d25(); virtual void v112(int); };
-struct Q2 { char pad8[8]; V2 *f8; char pad12[60]; V2 *f72; char pad76[4]; V2 *f80; char pad84[4]; Rc *f88; };
-struct CameraLink;
-struct FogOwner;
-struct LightOwner;
-struct OptionPanelView;
 extern int text_igDisableExt[4];
-void igViewerRenderer_InitializeDrawing(Q2 *arg0);
 
-extern int DAT_0058ca58[4];
-extern int DAT_0058ca60[4];
-extern int DAT_0058ca68[4];
-extern int DAT_0058ca70[4];
-extern int DAT_0058ca78[4];
-extern int DAT_0058ca80[4];
-extern int DAT_0058ca88[4];
-extern int DAT_0058ca90[4];
-extern int DAT_0058ca98[4];
-extern int DAT_0058caa0[4];
-extern int DAT_0058caa8[4];
-extern int DAT_0058ca38[4];
-extern int DAT_0058ca40[4];
-extern int DAT_0058ca48[4];
-extern int DAT_0058ca50[4];
-typedef struct Sub { char pad[8]; int f8; } Sub;
-typedef struct W { char pad[184]; unsigned char f184; unsigned char f185; unsigned char f186; unsigned char f187; int f188; unsigned char f192; unsigned char f193; unsigned char f194; unsigned char f195; unsigned char f196; unsigned char f197; unsigned char f198; unsigned char f199; unsigned char f200; unsigned char f201; unsigned char f202; } W;
-typedef struct Arg { char pad[12]; W *f12; char pad2[44]; Sub *f60; } Arg;
+/* The matrix setter of the visual context; IG_GFX_MATRIX_PROJECTION is the type the projection
+ * matrix attribute passes. */
+enum { IG_GFX_MATRIX_PROJECTION = 0 };
 
-struct V4 { float a, b, c, d; };
-class A2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void vX(V4 *); };
-class B2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void v128(int); virtual void v132(float); };
-class C2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void v128(void *); virtual void v132(void *); virtual void v136(void *); virtual void d33(); virtual void v144(void *); char pad[8]; int f12; char pad2[128]; char b144; };
-struct N { char pad[28]; int f28; };
-struct Q3 { char pad[16]; igObject *f16; };
-struct Z { char pad[8]; char b8; char pad1[3]; int f12; char pad2[8]; char b24; };
-struct Y { char pad[24]; char b24; };
-struct P { char pad[16]; int f16; int f20; int f24; int f28; int f32; C2 *f36; Q3 *f40; int f44; int f48; int f52; N *f56; char pad3[12]; Z *f72; int pad4; igObject *f80; };
+void igViewerRenderer_UpdateAttr(igViewerRenderer *self, igObject *attr);
+void igViewerRenderer_SetOverride(igViewerRenderer *self, igObject *attr, int override);
+void igViewerRenderer_FindLights(igViewerRenderer *self, igGroup *node);
 
-void igViewerRenderer_UpdateAttr(int *a, void *arg1);
-
-extern float g_vec3ZAxis[4];
-extern float DAT_004e109c[4];
-extern float DAT_004e10a0[4];
-extern int g_vec4Zero[4];
-void igViewerRenderer_resetFields(P *arg0);
 struct Tag { };
-static inline void *createFirst() {
+static inline igObject *createColorAttr() {
     Tag tag = Tag();
-    return igColorAttr_CreateInstance(0);
+    return (igObject *)igColorAttr_CreateInstance(0);
 }
-static inline void *createSecond() {
+static inline igObject *createAlphaFunctionAttr() {
     Tag tag = Tag();
-    return igAlphaFunctionAttr_Create(0);
+    return (igObject *)igAlphaFunctionAttr_Create(0);
 }
-static inline void *createThird() {
+static inline igObject *createFrustCullTraversal() {
     Tag tag = Tag();
-    return FUN_0019fde0(0);
+    return (igObject *)igFrustCullTraversal_Create(0);
 }
 
 #include "dw4/attrs/igViewportAttr.h"
 #include "dw4/support/list-services.h"
 #include "dw4/maths/igMatrix44f.h"
 
-void FUN_001b6ce0(void*, float, float, float, float, float);
-
-
-extern int DAT_0058ca20[4];
-
-class E { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual int vX(int); };
-struct CameraLink { char pad[12]; int f12; char pad1[36]; E *f52; char pad2[16]; int f72; int f76; int f80; };
-void FUN_001b6ee0(int, int*);
-
-struct FogAttr { char pad[12]; int f12; char pad2[60]; int f76; };
-struct FogHolder { char pad[68]; struct FogAttr *f68; };
-struct FogConfig { char pad[184]; unsigned char b184; unsigned char b185; unsigned char b186; char p; int f188; };
-struct FogOwner { char pad[12]; struct FogConfig *f12; char pad2[64]; struct FogHolder *f80; };
-
-typedef struct Obj : public igObject { } Obj;
-typedef struct List { int pad0[2]; int count; int pad1; Obj **data; } List;
-typedef struct Hold { char pad[28]; List *l28; } Hold;
-typedef struct LightRoot { char pad[12]; int f12; } LightRoot;
-class Ob { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void v128(int); int pad; int f4x; };
-typedef struct Mk : public igObject { int f8; int f12; Obj *f16; } Mk;
-typedef struct LightOwner { char pad[12]; LightRoot *f12; char pad2[32]; Hold *f48; char pad3[8]; List *f60; List *f64; char pad4[16]; Obj *f84; } LightOwner;
-void igViewerRenderer_FindLights(igViewerRenderer *arg0, igGroup *arg1);
-#define CLEAR(src) { \
-    List *l = (src); \
-    int n = l->count; \
+/* Drops every reference `list` holds and empties it. */
+#define CLEAR(source) { \
+    igObjectList *l = (source); \
+    int n = l->_count; \
     int i; \
     int m; \
     int j; \
-    Obj *o; \
+    igObject *o; \
     for (i = 0; i < n; i++) { \
-        o = l->data[i]; \
+        o = ((igObject **)l->_data)[i]; \
         if (o != 0) { \
             o->_refCount = o->_refCount - 1; \
             if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o); \
         } \
     } \
-    m = l->count; \
+    m = l->_count; \
     for (j = 0; j < m; j++) { \
-        l->data[j] = 0; \
+        ((igObject **)l->_data)[j] = 0; \
     } \
-    l->count = 0; }
-static inline void release(Obj *object) {
+    l->_count = 0; }
+static inline void release(igObject *object) {
     if (object != 0) {
         object->_refCount = object->_refCount - 1;
         if ((object->_refCount & 0x7FFFFF) == 0) {
@@ -156,170 +93,147 @@ static inline void release(Obj *object) {
     }
 }
 struct ItemType {};
-static inline Obj *createItem(ItemType) { return (Obj *)igLightStateAttr_Create(0); }
+static inline igObject *createLightState(ItemType) { return (igObject *)igLightStateAttr_Create(0); }
 
-
-struct V3 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29(); virtual void v30(int); virtual void v31(); virtual void v32(void*); };
-void igViewerRenderer_SetOverride(void *arg0, int arg1, int arg2);
-
-struct OptionPanelView;
-class DW4VC_128 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual int vX(int); };
-class DW4VC_132 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual int vX(int); };
-struct OptionPanelConfig { char pad[195]; unsigned char b195, b196, b197, b198, b199, b200, b201, b202; };
-struct OptionPanelView { char pad[12]; OptionPanelConfig *f12; DW4VC_128 *f16; DW4VC_128 *f20; DW4VC_128 *f24; DW4VC_128 *f28; };
-enum PanelMode { kPanelOff, kPanelOn };
-
-class PropertyHolder { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); };
-struct PropertyList { char pad[32]; int f32; };
 #include "dw4/core/igMetaObject.h"
 extern int text_meta[4];
 #include "dw4/attrs/igAttr.h"
 #include "dw4/attrs/igAttrPool.h"
-int igViewerRenderer_FindAttrFromType(PropertyHolder *arg0, PropertyList *arg1);
-static inline int castToProperty(int object) {
-    if (object != 0 && igObject_IsKindOf((igObject *)object, g_igObjectRefMetaField_metaObject) != 0) {
-        return object;
+static inline int asObjectRefField(int field) {
+    if (field != 0 && igObject_IsKindOf((igObject *)field, g_igObjectRefMetaField_metaObject) != 0) {
+        return field;
     }
     return 0;
 }
-
-struct ListOwner { char pad[32]; int list; };
-
 
 static inline void removeFromList(int list, int object) {
     ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)object, 0);
 }
 
 /* The ids are held in a pointer-typed local so the compare puts the call result first (beq v0,s0). */
-int igViewerRenderer_ObjectsTraverseNodeSelect(int arg0, X *arg1) {
-    int *s0;
-    if (arg1->f20 & 1) {
-        s0 = (int *)g_igTransform_metaObject;
-        if ((int *)arg1->v88() == s0 || (s0 = (int *)g_igLightSet_metaObject, (int *)arg1->v88() == s0)) return 0;
-        if (igObject_IsKindOf((igObject *)arg1, g_igGroup_metaObject) != 0) return 2;
+int igViewerRenderer_ObjectsTraverseNodeSelect(igTraversal *traversal, igNode *node) {
+    int *kind;
+    if (node->_flags & 1) {
+        kind = (int *)g_igTransform_metaObject;
+        if ((int *)((igObjectDispatchView *)node)->GetMeta() == kind
+            || (kind = (int *)g_igLightSet_metaObject, (int *)((igObjectDispatchView *)node)->GetMeta() == kind)) return 0;
+        if (igObject_IsKindOf((igObject *)node, g_igGroup_metaObject) != 0) return 2;
     }
     return 1;
 }
 
-void igViewerRenderer_PushLightStates(A *arg0) {
-    T *t;
-    int n;
+void igViewerRenderer_PushLightStates(igViewerRenderer *self) {
+    igAttrStackManager *attrStack;
+    int count;
     int i;
 
-    t = arg0->f80->f52;
-    FUN_001b06f0((igAttrStackManager *)t, (igLightStateAttr *)arg0->f40, 0);
-    if (t->f60 == 0 && arg0->f12->f192 == 0) {
-        n = arg0->f64->f8;
-        for (i = 0; i < n; i++) {
-            FUN_001b06f0((igAttrStackManager *)t, (igLightStateAttr *)arg0->f64->f16[i], 1);
+    attrStack = (igAttrStackManager *)((igFrustCullTraversal *)self->_sceneTraversal)->_attrStack;
+    igAttrStackManager_PushLightStateAttr(attrStack, (igLightStateAttr *)self->_headlightStateAttr, 0);
+    if (attrStack->_simpleLightMgr == 0 && ((igViewerParameters *)self->_parameters)->_useSceneLights == 0) {
+        count = ((igObjectList *)self->_lightStateList)->_count;
+        for (i = 0; i < count; i++) {
+            igAttrStackManager_PushLightStateAttr(attrStack, ((igLightStateAttr **)((igObjectList *)self->_lightStateList)->_data)[i], 1);
         }
     }
 }
 
-void igViewerRenderer_PopLightStates(S *arg0) {
-    T3 *temp_s3; int temp_s2; int var_s1; int var_s0;
+void igViewerRenderer_PopLightStates(igViewerRenderer *self) {
+    igAttrStackManager *attrStack;
+    int count;
+    int i;
 
-    temp_s3 = arg0->f50->f34;
-    igAttrStackManager_PopLightStateAttr((igAttrStackManager *)temp_s3, (igLightStateAttr *)arg0->f28, 0);
-    if ((temp_s3->f3c == 0) && (arg0->f0c->fc0 == 0)) {
-        temp_s2 = arg0->f40->cnt;
-        var_s1 = 0;
-        if (0 < temp_s2) {
-            var_s0 = 0;
-            do {
-                igAttrStackManager_PopLightStateAttr((igAttrStackManager *)temp_s3, (igLightStateAttr *)*(int *)((char *)arg0->f40->arr + var_s0), 1);
-                var_s1 += 1;
-                var_s0 += 4;
-            } while (var_s1 < temp_s2);
+    attrStack = (igAttrStackManager *)((igFrustCullTraversal *)self->_sceneTraversal)->_attrStack;
+    igAttrStackManager_PopLightStateAttr(attrStack, (igLightStateAttr *)self->_headlightStateAttr, 0);
+    if ((attrStack->_simpleLightMgr == 0) && (((igViewerParameters *)self->_parameters)->_useSceneLights == 0)) {
+        count = ((igObjectList *)self->_lightStateList)->_count;
+        for (i = 0; i < count; i++) {
+            igAttrStackManager_PopLightStateAttr(attrStack, ((igLightStateAttr **)((igObjectList *)self->_lightStateList)->_data)[i], 1);
         }
     }
 }
 
-void igViewerRenderer_Traverse(Q *arg0) {
-    Rc *t;
-    Rc *n;
-    arg0->f8->v203(0, (int)arg0->f12 + 44);
-    arg0->f8->v213((int)arg0->f12 + 108);
-    t = arg0->f76;
-    if (t != 0) {
-        t->rc = t->rc - 1;
-        if (((unsigned long long)((long long)t->rc << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)t);
+void igViewerRenderer_Traverse(igViewerRenderer *self) {
+    igObject *previous;
+    igObject *output;
+    ((igVisualContextDispatchView *)self->_visualContext)->setMatrix(IG_GFX_MATRIX_PROJECTION, (int)((igViewerParameters *)self->_parameters)->_projectionMatrix);
+    ((igVisualContextDispatchView *)self->_visualContext)->SetViewMatrixHint(((igViewerParameters *)self->_parameters)->_viewMatrix);
+    previous = (igObject *)self->_lightOutput;
+    if (previous != 0) {
+        previous->_refCount = previous->_refCount - 1;
+        if (((unsigned long long)((long long)(int)previous->_refCount << 0x29) >> 0x29) == 0) {
+            igObject_Destroy(previous);
         }
     }
-    arg0->f76 = 0;
-    t = arg0->f84;
-    if (t != 0) {
-        t->rc = t->rc - 1;
-        if (((unsigned long long)((long long)t->rc << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)t);
+    self->_lightOutput = 0;
+    previous = (igObject *)self->_sceneOutput;
+    if (previous != 0) {
+        previous->_refCount = previous->_refCount - 1;
+        if (((unsigned long long)((long long)(int)previous->_refCount << 0x29) >> 0x29) == 0) {
+            igObject_Destroy(previous);
         }
     }
-    arg0->f84 = 0;
-    if (arg0->f12->f12 != 0) {
-        if (arg0->f68 != 0) {
-            arg0->f72->v31();
-            arg0->f72->v27(arg0->f12->f176);
-            arg0->f72->v25(arg0->f44);
-            n = arg0->f72->v30();
-            if (n != 0) {
-                n->rc = n->rc + 1;
+    self->_sceneOutput = 0;
+    if (((igViewerParameters *)self->_parameters)->_scene != 0) {
+        if (self->_lightingState != 0) {
+            ((igCommonTraversalDispatchView *)self->_lightTraversal)->reset();
+            ((igCommonTraversalDispatchView *)self->_lightTraversal)->setTime(((igViewerParameters *)self->_parameters)->_drawTime);
+            ((igCommonTraversalDispatchView *)self->_lightTraversal)->apply((igObject *)self->_attrSet);
+            output = ((igCommonTraversalDispatchView *)self->_lightTraversal)->getOutput();
+            if (output != 0) {
+                output->_refCount = output->_refCount + 1;
             }
-            t = arg0->f76;
-            if (t != 0) {
-                t->rc = t->rc - 1;
-                if (((unsigned long long)((long long)t->rc << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((igObject *)t);
+            previous = (igObject *)self->_lightOutput;
+            if (previous != 0) {
+                previous->_refCount = previous->_refCount - 1;
+                if (((unsigned long long)((long long)(int)previous->_refCount << 0x29) >> 0x29) == 0) {
+                    igObject_Destroy(previous);
                 }
             }
-            arg0->f76 = n;
+            self->_lightOutput = (int)output;
         }
-        arg0->f80->v31();
-        arg0->f80->v27(arg0->f12->f176);
-        igViewerRenderer_PushLightStates((A *)arg0);
-        arg0->f80->v25(arg0->f44);
-        igViewerRenderer_PopLightStates((S *)arg0);
-        n = arg0->f80->v30();
-        if (n != 0) {
-            n->rc = n->rc + 1;
+        ((igCommonTraversalDispatchView *)self->_sceneTraversal)->reset();
+        ((igCommonTraversalDispatchView *)self->_sceneTraversal)->setTime(((igViewerParameters *)self->_parameters)->_drawTime);
+        igViewerRenderer_PushLightStates(self);
+        ((igCommonTraversalDispatchView *)self->_sceneTraversal)->apply((igObject *)self->_attrSet);
+        igViewerRenderer_PopLightStates(self);
+        output = ((igCommonTraversalDispatchView *)self->_sceneTraversal)->getOutput();
+        if (output != 0) {
+            output->_refCount = output->_refCount + 1;
         }
-        t = arg0->f84;
-        if (t != 0) {
-            t->rc = t->rc - 1;
-            if (((unsigned long long)((long long)t->rc << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)t);
+        previous = (igObject *)self->_sceneOutput;
+        if (previous != 0) {
+            previous->_refCount = previous->_refCount - 1;
+            if (((unsigned long long)((long long)(int)previous->_refCount << 0x29) >> 0x29) == 0) {
+                igObject_Destroy(previous);
             }
         }
-        arg0->f84 = n;
+        self->_sceneOutput = (int)output;
     }
 }
 
-void igViewerRenderer_InitializeDrawing(Q2 *arg0) {
-    Rc *temp_v0 = (Rc *)arg0->f8->v104(&text_igDisableExt[0]);
-    if (temp_v0 != 0) {
-        temp_v0->rc = temp_v0->rc + 1;
+void igViewerRenderer_InitializeDrawing(igViewerRenderer *self) {
+    igObject *extension = ((igVisualContextDispatchView *)self->_visualContext)->GetExtension((const char *)text_igDisableExt);
+    if (extension != 0) {
+        extension->_refCount = extension->_refCount + 1;
     }
-    Rc *temp_a0_2 = arg0->f88;
-    if (temp_a0_2 != 0) {
-        temp_a0_2->rc = temp_a0_2->rc - 1;
-        if (((unsigned long long)((long long)temp_a0_2->rc << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)temp_a0_2);
+    igObject *previous = (igObject *)self->_disableExtension;
+    if (previous != 0) {
+        previous->_refCount = previous->_refCount - 1;
+        if (((unsigned long long)((long long)(int)previous->_refCount << 0x29) >> 0x29) == 0) {
+            igObject_Destroy(previous);
         }
     }
-    arg0->f88 = temp_v0;
-    arg0->f72->v112((int)arg0->f8);
-    arg0->f80->v112((int)arg0->f8);
-    igViewerRenderer_UpdateProjection((igViewerRenderer *)arg0);
-    igViewerRenderer_UpdateViewMatrix((igViewerRenderer *)arg0);
-    igViewerRenderer_UpdateSorting((igViewerRenderer *)arg0);
-    igViewerRenderer_UpdateLighting((igViewerRenderer *)arg0);
-    igViewerRenderer_UpdateRenderStates((igViewerRenderer *)arg0);
-    igViewerRenderer_UpdateScene((igViewerRenderer *)arg0);
+    self->_disableExtension = (int)extension;
+    ((igCommonTraversalDispatchView *)self->_lightTraversal)->setVisualContext((igObject *)self->_visualContext);
+    ((igCommonTraversalDispatchView *)self->_sceneTraversal)->setVisualContext((igObject *)self->_visualContext);
+    igViewerRenderer_UpdateProjection(self);
+    igViewerRenderer_UpdateViewMatrix(self);
+    igViewerRenderer_UpdateSorting(self);
+    igViewerRenderer_UpdateLighting(self);
+    igViewerRenderer_UpdateRenderStates(self);
+    igViewerRenderer_UpdateScene(self);
 }
 
-/* The matrix setter of the visual context; IG_GFX_MATRIX_PROJECTION is the type the projection
- * matrix attribute passes. */
-enum { IG_GFX_MATRIX_PROJECTION = 0 };
 /* The disable-feature extension's slot 29 switches a render feature on or off.
  * ABI view only: never instantiated. */
 class igDisableExtensionDispatchView : public igObjectDispatchView {
@@ -372,151 +286,127 @@ void Gap__Viewer__igViewerRenderer__Render(igViewerRenderer *self) {
 }
 
 void igViewerRenderer_ApplyOptions(igViewerRenderer *renderer) {
-    Arg *arg0 = (Arg *)renderer;
-    int sp0[3];
-    int sp1[3];
-    int sp2[3];
-    int sp3[3];
-    int sp4[3];
-    int sp5[3];
-    int sp6[3];
-    int sp7[3];
-    int sp8[3];
-    int sp9[3];
-    int sp10[3];
-    int sp11[3];
-    int sp12[3];
-    int sp13[3];
-    int sp14[3];
+    ModelChange useSceneLightsChanged;
+    ModelChange useHeadLightChanged;
+    ModelChange useHeadLightSpecularChanged;
+    ModelChange alphaTestChanged;
+    ModelChange alphaTestForceChanged;
+    ModelChange backFaceCullingChanged;
+    ModelChange backFaceCullingForceChanged;
+    ModelChange wireframeChanged;
+    ModelChange wireframeForceChanged;
+    ModelChange flatShadingChanged;
+    ModelChange flatShadingForceChanged;
+    ModelChange sortTextureChanged;
+    ModelChange sortTransparentChanged;
+    ModelChange sortTransparentDistanceChanged;
+    ModelChange transparencyModeChanged;
     SharedViewerOptions *f;
-    SharedViewerOptions *s0;
+    SharedViewerOptions *options;
     SharedViewerOptions *g;
-    unsigned char s1;
-    int v;
-    int s1i;
-    void *p;
-    int *h;
-    int rc;
+    unsigned char hasSceneLights;
+    int useHeadLight;
+    int headLight;
     if (g_sharedViewerOptions == 0) {
         f = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
         if (f != 0) f = igViewerDefaults_Construct(f);
         g_sharedViewerOptions = f;
     }
     g_sharedViewerOptions->useCount = g_sharedViewerOptions->useCount + 1;
-    s0 = g_sharedViewerOptions;
-    s1 = arg0->f60->f8 > 0;
-    if (s0->autoSceneLights != 0) {
-        arg0->f12->f192 = s1;
+    options = g_sharedViewerOptions;
+    hasSceneLights = ((igObjectList *)renderer->_lightList)->_count > 0;
+    if (options->autoSceneLights != 0) {
+        ((igViewerParameters *)renderer->_parameters)->_useSceneLights = hasSceneLights;
     } else {
-        arg0->f12->f192 = s0->useSceneLights;
+        ((igViewerParameters *)renderer->_parameters)->_useSceneLights = options->useSceneLights;
     }
-    sp0[1] = 0;
-    sp0[0] = 2;
-    sp0[2] = DAT_0058ca58[0];
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp0);
-    if (s0->autoHeadLight != 0) {
+    useSceneLightsChanged.source = 0;
+    useSceneLightsChanged.type = 2;
+    useSceneLightsChanged.field = g_igViewerParameters_useSceneLightsMetaField;
+    igModel_NotifyViews((igModel *)renderer->_parameters, &useSceneLightsChanged);
+    if (options->autoHeadLight != 0) {
         /* matching construct: respell sweep under C++ — the C int-valued !s1 */
-        v = (bool)s1 ^ 1;
+        useHeadLight = (bool)hasSceneLights ^ 1;
     } else {
-        v = s0->useHeadLight;
+        useHeadLight = options->useHeadLight;
     }
-    s1i = v & 0xFF;
-    arg0->f12->f193 = (s1i & ((!s0->useHeadLightSpecular) & 0xFF)) != 0;
-    sp1[1] = 0;
-    sp1[0] = 2;
-    sp1[2] = DAT_0058ca60[0];
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp1);
-    arg0->f12->f194 = (s1i & s0->useHeadLightSpecular) != 0;
-    sp2[1] = 0;
-    sp2[0] = 2;
-    sp2[2] = DAT_0058ca68[0];
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp2);
-    arg0->f12->f195 = s0->alphaTest;
-    sp3[1] = 0;
-    sp3[0] = 2;
-    sp3[2] = DAT_0058ca70[0];
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp3);
-    arg0->f12->f196 = s0->forceAlphaTest;
-    sp4[1] = 0;
-    sp4[0] = 2;
-    sp4[2] = DAT_0058ca78[0];
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp4);
-    arg0->f12->f197 = s0->backFaceCullingMode;
-    sp5[1] = 0;
-    sp5[0] = 2;
-    sp5[2] = DAT_0058ca80[0];
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp5);
-    arg0->f12->f198 = s0->forceBackFaceCulling;
-    sp6[1] = 0;
-    sp6[0] = 2;
-    sp6[2] = DAT_0058ca88[0];
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp6);
-    arg0->f12->f199 = s0->wireframeMode;
-    sp7[1] = 0;
-    sp7[0] = 2;
-    sp7[2] = DAT_0058ca90[0];
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp7);
-    arg0->f12->f200 = s0->forceWireframe;
-    sp8[1] = 0;
-    sp8[0] = 2;
-    sp8[2] = DAT_0058ca98[0];
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp8);
-    arg0->f12->f201 = 0;
-    sp9[1] = 0;
-    sp9[0] = 2;
-    sp9[2] = DAT_0058caa0[0];
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp9);
-    arg0->f12->f202 = 0;
-    sp10[1] = 0;
-    sp10[0] = 2;
-    sp10[2] = DAT_0058caa8[0];
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp10);
-    arg0->f12->f184 = 0;
-    sp11[1] = 0;
-    sp11[0] = 2;
-    sp11[2] = DAT_0058ca38[0];
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp11);
-    arg0->f12->f185 = 1;
-    sp12[1] = 0;
-    sp12[0] = 2;
-    sp12[2] = DAT_0058ca40[0];
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp12);
-    arg0->f12->f186 = 0;
-    sp13[1] = 0;
-    sp13[0] = 2;
-    sp13[2] = DAT_0058ca48[0];
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp13);
-    arg0->f12->f188 = 0;
-    sp14[1] = 0;
-    sp14[0] = 2;
-    sp14[2] = DAT_0058ca50[0];
-    igModel_NotifyViews((igModel *)arg0->f12, (ModelChange *)sp14);
+    headLight = useHeadLight & 0xFF;
+    ((igViewerParameters *)renderer->_parameters)->_useHeadLight = (headLight & ((!options->useHeadLightSpecular) & 0xFF)) != 0;
+    useHeadLightChanged.source = 0;
+    useHeadLightChanged.type = 2;
+    useHeadLightChanged.field = g_igViewerParameters_useHeadLightMetaField;
+    igModel_NotifyViews((igModel *)renderer->_parameters, &useHeadLightChanged);
+    ((igViewerParameters *)renderer->_parameters)->_useHeadLightSpecular = (headLight & options->useHeadLightSpecular) != 0;
+    useHeadLightSpecularChanged.source = 0;
+    useHeadLightSpecularChanged.type = 2;
+    useHeadLightSpecularChanged.field = g_igViewerParameters_useHeadLightSpecularMetaField;
+    igModel_NotifyViews((igModel *)renderer->_parameters, &useHeadLightSpecularChanged);
+    ((igViewerParameters *)renderer->_parameters)->_alphaTest = options->alphaTest;
+    alphaTestChanged.source = 0;
+    alphaTestChanged.type = 2;
+    alphaTestChanged.field = g_igViewerParameters_alphaTestMetaField;
+    igModel_NotifyViews((igModel *)renderer->_parameters, &alphaTestChanged);
+    ((igViewerParameters *)renderer->_parameters)->_alphaTestForce = options->forceAlphaTest;
+    alphaTestForceChanged.source = 0;
+    alphaTestForceChanged.type = 2;
+    alphaTestForceChanged.field = g_igViewerParameters_alphaTestForceMetaField;
+    igModel_NotifyViews((igModel *)renderer->_parameters, &alphaTestForceChanged);
+    ((igViewerParameters *)renderer->_parameters)->_backFaceCulling = options->backFaceCullingMode;
+    backFaceCullingChanged.source = 0;
+    backFaceCullingChanged.type = 2;
+    backFaceCullingChanged.field = g_igViewerParameters_backFaceCullingMetaField;
+    igModel_NotifyViews((igModel *)renderer->_parameters, &backFaceCullingChanged);
+    ((igViewerParameters *)renderer->_parameters)->_backFaceCullingForce = options->forceBackFaceCulling;
+    backFaceCullingForceChanged.source = 0;
+    backFaceCullingForceChanged.type = 2;
+    backFaceCullingForceChanged.field = g_igViewerParameters_backFaceCullingForceMetaField;
+    igModel_NotifyViews((igModel *)renderer->_parameters, &backFaceCullingForceChanged);
+    ((igViewerParameters *)renderer->_parameters)->_wireframe = options->wireframeMode;
+    wireframeChanged.source = 0;
+    wireframeChanged.type = 2;
+    wireframeChanged.field = g_igViewerParameters_wireframeMetaField;
+    igModel_NotifyViews((igModel *)renderer->_parameters, &wireframeChanged);
+    ((igViewerParameters *)renderer->_parameters)->_wireframeForce = options->forceWireframe;
+    wireframeForceChanged.source = 0;
+    wireframeForceChanged.type = 2;
+    wireframeForceChanged.field = g_igViewerParameters_wireframeForceMetaField;
+    igModel_NotifyViews((igModel *)renderer->_parameters, &wireframeForceChanged);
+    ((igViewerParameters *)renderer->_parameters)->_flatShading = 0;
+    flatShadingChanged.source = 0;
+    flatShadingChanged.type = 2;
+    flatShadingChanged.field = g_igViewerParameters_flatShadingMetaField;
+    igModel_NotifyViews((igModel *)renderer->_parameters, &flatShadingChanged);
+    ((igViewerParameters *)renderer->_parameters)->_flatShadingForce = 0;
+    flatShadingForceChanged.source = 0;
+    flatShadingForceChanged.type = 2;
+    flatShadingForceChanged.field = g_igViewerParameters_flatShadingForceMetaField;
+    igModel_NotifyViews((igModel *)renderer->_parameters, &flatShadingForceChanged);
+    ((igViewerParameters *)renderer->_parameters)->_sortTexture = 0;
+    sortTextureChanged.source = 0;
+    sortTextureChanged.type = 2;
+    sortTextureChanged.field = g_igViewerParameters_sortTextureMetaField;
+    igModel_NotifyViews((igModel *)renderer->_parameters, &sortTextureChanged);
+    ((igViewerParameters *)renderer->_parameters)->_sortTransparent = 1;
+    sortTransparentChanged.source = 0;
+    sortTransparentChanged.type = 2;
+    sortTransparentChanged.field = g_igViewerParameters_sortTransparentMetaField;
+    igModel_NotifyViews((igModel *)renderer->_parameters, &sortTransparentChanged);
+    ((igViewerParameters *)renderer->_parameters)->_sortTransparentDistance = 0;
+    sortTransparentDistanceChanged.source = 0;
+    sortTransparentDistanceChanged.type = 2;
+    sortTransparentDistanceChanged.field = g_igViewerParameters_sortTransparentDistanceMetaField;
+    igModel_NotifyViews((igModel *)renderer->_parameters, &sortTransparentDistanceChanged);
+    ((igViewerParameters *)renderer->_parameters)->_transparencyMode = 0;
+    transparencyModeChanged.source = 0;
+    transparencyModeChanged.type = 2;
+    transparencyModeChanged.field = g_igViewerParameters_transparencyModeMetaField;
+    igModel_NotifyViews((igModel *)renderer->_parameters, &transparencyModeChanged);
     if (g_sharedViewerOptions != 0) {
         if (--g_sharedViewerOptions->useCount <= 0) {
             f = g_sharedViewerOptions;
             if (f != 0) {
-                if (&f->internedString) {
-                    p = (void *)f->internedString;
-                    if (p != 0) {
-                        h = (int *)((char *)(p) - 8);
-                        rc = *(int *)((char *)(p) - 4) - 1;
-                        *(int *)((char *)(p) - 4) = rc;
-                        if (rc == 0) {
-                            StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
-                        }
-                    }
-                }
-                if (f != 0) {
-                    p = f->extraCommandLine;
-                    if (p != 0) {
-                        h = (int *)((char *)(p) - 8);
-                        rc = *(int *)((char *)(p) - 4) - 1;
-                        *(int *)((char *)(p) - 4) = rc;
-                        if (rc == 0) {
-                            StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
-                        }
-                    }
-                }
+                if (&f->internedString) releaseString((const char *)f->internedString);
+                if (f != 0) releaseString(f->extraCommandLine);
                 operator delete(f);
             }
             g_sharedViewerOptions = 0;
@@ -524,354 +414,308 @@ void igViewerRenderer_ApplyOptions(igViewerRenderer *renderer) {
     }
 }
 
-void igViewerRenderer_resetFields(P *arg0) {
-    V4 sp40;
-    float sp58[3];
-    SharedViewerOptions *s0;
-    igObject *t;
-    igSmartPointer<igObject> first((igObject *)createFirst());
-    sp40.a = 1.0f; sp40.b = 1.0f; sp40.c = 1.0f; sp40.d = 1.0f;
-    ((A2 *)first.p)->vX(&sp40);
+void igViewerRenderer_resetFields(igViewerRenderer *self) {
+    float white[4];
+    float direction[3];
+    SharedViewerOptions *options;
+    igObject *previous;
+    igSmartPointer<igObject> color(createColorAttr());
+    white[0] = 1.0f; white[1] = 1.0f; white[2] = 1.0f; white[3] = 1.0f;
+    ((igColorAttrDispatchView *)color.p)->SetColor(white);
     if (g_sharedViewerOptions == 0) {
         SharedViewerOptions *f = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
         if (f != 0) f = igViewerDefaults_Construct(f);
         g_sharedViewerOptions = f;
     }
     g_sharedViewerOptions->useCount = g_sharedViewerOptions->useCount + 1;
-    s0 = g_sharedViewerOptions;
-    igSmartPointer<igObject> second((igObject *)createSecond());
-    ((B2 *)second.p)->v128(4);
-    ((B2 *)second.p)->v132(s0->alphaTestReference);
-    arg0->f36->v128(s0->headLightDiffuse);
-    arg0->f36->v136(&g_vec4Zero[0]);
-    arg0->f36->v132(s0->headLightAmbient);
-    sp58[0] = -g_vec3ZAxis[0];
-    sp58[1] = -DAT_004e109c[0];
-    sp58[2] = -DAT_004e10a0[0];
-    arg0->f36->v144(sp58);
+    options = g_sharedViewerOptions;
+    igSmartPointer<igObject> alphaFunction(createAlphaFunctionAttr());
+    ((igAlphaFunctionAttrDispatchView *)alphaFunction.p)->SetAlphaFunc(IG_GFX_ALPHA_FUNCTION_GREATER);
+    ((igAlphaFunctionAttrDispatchView *)alphaFunction.p)->SetRefValue(options->alphaTestReference);
+    ((igLightAttrDispatchView *)self->_headlightAttr)->setDiffuse(options->headLightDiffuse);
+    ((igLightAttrDispatchView *)self->_headlightAttr)->setSpecular((const float *)&g_vec4Zero);
+    ((igLightAttrDispatchView *)self->_headlightAttr)->setAmbient(options->headLightAmbient);
+    direction[0] = -g_vec3ZAxis.x;
+    direction[1] = -g_vec3ZAxis.y;
+    direction[2] = -g_vec3ZAxis.z;
+    ((igLightAttrDispatchView *)self->_headlightAttr)->setDirection(direction);
     {
-        C2 *c = arg0->f36;
-        c->f12 = 0;
-        c->b144 = 1;
+        igLightAttr *headlight = (igLightAttr *)self->_headlightAttr;
+        headlight->_lightType = 0;
+        headlight->_changed = 1;
     }
     {
-        igObject *s1 = (igObject *)arg0->f36;
-        Q3 *s0b = arg0->f40;
-        if (s1 != 0) {
-            s1->_refCount = s1->_refCount + 1;
+        igObject *headlight = (igObject *)self->_headlightAttr;
+        igLightStateAttr *headlightState = (igLightStateAttr *)self->_headlightStateAttr;
+        if (headlight != 0) {
+            headlight->_refCount = headlight->_refCount + 1;
         }
-        t = s0b->f16;
-        if (t) {
-            t->_refCount = t->_refCount - 1;
-            if ((t->_refCount & 0x7FFFFF) == 0) igObject_Destroy(t);
+        previous = (igObject *)headlightState->_light;
+        if (previous) {
+            previous->_refCount = previous->_refCount - 1;
+            if ((previous->_refCount & 0x7FFFFF) == 0) igObject_Destroy(previous);
         }
-        s0b->f16 = s1;
+        headlightState->_light = (int)headlight;
     }
     if (g_sharedViewerOptions != 0) {
         if (--g_sharedViewerOptions->useCount <= 0) {
-            SharedViewerOptions *s0c = g_sharedViewerOptions;
-            if (s0c != 0) {
-                if (&s0c->internedString) {
-                    void *p = (void *)s0c->internedString;
-                    if (p != 0) {
-                        int *h = (int *)((char *)(p) - 8);
-                        int rc = *(int *)((char *)(p) - 4) - 1;
-                        *(int *)((char *)(p) - 4) = rc;
-                        if (rc == 0) {
-                            StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
-                        }
-                    }
-                }
-                if (s0c != 0) {
-                    void *p = s0c->extraCommandLine;
-                    if (p != 0) {
-                        int *h = (int *)((char *)(p) - 8);
-                        int rc = *(int *)((char *)(p) - 4) - 1;
-                        *(int *)((char *)(p) - 4) = rc;
-                        if (rc == 0) {
-                            StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
-                        }
-                    }
-                }
-                operator delete(s0c);
+            SharedViewerOptions *released = g_sharedViewerOptions;
+            if (released != 0) {
+                if (&released->internedString) releaseString((const char *)released->internedString);
+                if (released != 0) releaseString(released->extraCommandLine);
+                operator delete(released);
             }
             g_sharedViewerOptions = 0;
         }
     }
-    igViewerRenderer_UpdateAttr((int *)arg0, (void *)first.p);
-    igViewerRenderer_UpdateAttr((int *)arg0, (void *)second.p);
-    igViewerRenderer_UpdateAttr((int *)arg0, (void *)arg0->f16);
-    igViewerRenderer_UpdateAttr((int *)arg0, (void *)arg0->f20);
-    igViewerRenderer_UpdateAttr((int *)arg0, (void *)arg0->f24);
-    igViewerRenderer_UpdateAttr((int *)arg0, (void *)arg0->f28);
-    igViewerRenderer_UpdateAttr((int *)arg0, (void *)arg0->f32);
-    igGroup_AppendChild((igGroup *)arg0->f44, (igNode *)arg0->f52);
-    igGroup_AppendChild((igGroup *)arg0->f52, (igNode *)arg0->f56);
-    ObjectList_AppendRetained((igObjectList *)arg0->f56->f28, (igObject *)arg0->f36);
-    igGroup_AppendChild((igGroup *)arg0->f44, (igNode *)arg0->f48);
-    arg0->f72->b8 = 1;
-    arg0->f72->f12 = (int)&igViewerRenderer_ObjectsTraverseNodeSelect;
-    arg0->f72->b24 = 1;
-    igSmartPointer<igObject> third((igObject *)createThird());
-    ((Y *)third.p)->b24 = 1;
-    FUN_001c5160((igFrustCullTraversal *)third.p, 1.1f);
-    t = third.p;
-    if (t) t->_refCount = t->_refCount + 1;
+    igViewerRenderer_UpdateAttr(self, color.p);
+    igViewerRenderer_UpdateAttr(self, alphaFunction.p);
+    igViewerRenderer_UpdateAttr(self, (igObject *)self->_backFaceCullingAttr);
+    igViewerRenderer_UpdateAttr(self, (igObject *)self->_alphaTestAttr);
+    igViewerRenderer_UpdateAttr(self, (igObject *)self->_shadeModelAttr);
+    igViewerRenderer_UpdateAttr(self, (igObject *)self->_polygonModeAttr);
+    igViewerRenderer_UpdateAttr(self, (igObject *)self->_lightingAttr);
+    igGroup_AppendChild((igGroup *)self->_attrSet, (igNode *)self->_headlightTransform);
+    igGroup_AppendChild((igGroup *)self->_headlightTransform, (igNode *)self->_headlightSet);
+    ObjectList_AppendRetained((igObjectList *)((igLightSet *)self->_headlightSet)->_lights, (igObject *)self->_headlightAttr);
+    igGroup_AppendChild((igGroup *)self->_attrSet, (igNode *)self->_attrSetOverride);
+    ((igTraversal *)self->_lightTraversal)->_nodeSelectProcEnabled = 1;
+    ((igTraversal *)self->_lightTraversal)->_nodeSelectProc = (int)&igViewerRenderer_ObjectsTraverseNodeSelect;
+    ((igTraversal *)self->_lightTraversal)->_userTimeState = 1;
+    igSmartPointer<igObject> sceneTraversal(createFrustCullTraversal());
+    ((igTraversal *)sceneTraversal.p)->_userTimeState = 1;
+    igFrustCullTraversal_SetOuterFrustCullScale((igFrustCullTraversal *)sceneTraversal.p, 1.1f);
+    previous = sceneTraversal.p;
+    if (previous) previous->_refCount = previous->_refCount + 1;
     {
-        igObject *o = arg0->f80;
-        if (o) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
+        igObject *old = (igObject *)self->_sceneTraversal;
+        if (old) {
+            old->_refCount = old->_refCount - 1;
+            if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
         }
     }
-    arg0->f80 = t;
+    self->_sceneTraversal = (int)previous;
 }
 
-void igViewerRenderer_ViewportResized(void *arg0) {
-    void *temp_v0;
+void igViewerRenderer_ViewportResized(igViewerRenderer *self) {
+    igFrustCullTraversal *traversal;
 
-    temp_v0 = (void *)(*(int *)((char *)(arg0) + 80));
-    FUN_001b0000(*(igAttrStackManager **)((char *)(temp_v0) + 52), g_igViewportAttr_metaObject,
-                 *(igAttrDefaultManager **)((char *)(temp_v0) + 36), *(igVisualContextCapabilityManager **)((char *)(temp_v0) + 32));
+    traversal = (igFrustCullTraversal *)self->_sceneTraversal;
+    FUN_001b0000((igAttrStackManager *)traversal->_attrStack, g_igViewportAttr_metaObject,
+                 (igAttrDefaultManager *)traversal->_defaultManager, (igVisualContextCapabilityManager *)traversal->_capabilityManager);
 }
 
-void igViewerRenderer_UpdateProjection(igViewerRenderer *arg0) {
-    int sp[3];
-    igViewerParameters *temp_v1;
-    temp_v1 = (igViewerParameters *)arg0->_parameters;
-    FUN_001b6ce0((void *)arg0->_sceneTraversal, temp_v1->_hfov, -1.0f, temp_v1->_ratio, temp_v1->_nearPlane, temp_v1->_farPlane);
-    igMatrix44f_Copy(&((igViewerParameters *)arg0->_parameters)->_projectionMatrix[0], (const float *)((char *)arg0->_sceneTraversal + 0x110));
-    sp[0] = 2;
-    sp[1] = 0;
-    sp[2] = DAT_0058ca20[0];
-    igModel_NotifyViews((igModel *)arg0->_parameters, (ModelChange *)sp);
+void igViewerRenderer_UpdateProjection(igViewerRenderer *self) {
+    ModelChange projectionChanged;
+    igViewerParameters *params;
+    params = (igViewerParameters *)self->_parameters;
+    igCommonTraversal_SetPerspective((void *)self->_sceneTraversal, params->_hfov, -1.0f, params->_ratio, params->_nearPlane, params->_farPlane);
+    igMatrix44f_Copy(((igViewerParameters *)self->_parameters)->_projectionMatrix, ((igFrustCullTraversal *)self->_sceneTraversal)->_projMat);
+    projectionChanged.type = 2;
+    projectionChanged.source = 0;
+    projectionChanged.field = g_igViewerParameters_projectionMatrixMetaField;
+    igModel_NotifyViews((igModel *)self->_parameters, &projectionChanged);
 }
 
-void igViewerRenderer_UpdateViewMatrix(igViewerRenderer *renderer) {
-    CameraLink *arg0 = (CameraLink *)renderer;
-    int m[16];
+void igViewerRenderer_UpdateViewMatrix(igViewerRenderer *self) {
+    float viewMatrix[16];
 
-    igMatrix44f_Copy((float *)m, (const float *)(arg0->f12 + 0x6C));
-    FUN_001b6ee0(arg0->f80, m);
-    FUN_001b6ee0(arg0->f72, m);
-    arg0->f52->vX(arg0->f80 + 0xA4);
+    igMatrix44f_Copy(viewMatrix, ((igViewerParameters *)self->_parameters)->_viewMatrix);
+    igCommonTraversal_SetViewMatrix(self->_sceneTraversal, (int *)viewMatrix);
+    igCommonTraversal_SetViewMatrix(self->_lightTraversal, (int *)viewMatrix);
+    ((igTransformDispatchView *)self->_headlightTransform)->SetMatrix(((igFrustCullTraversal *)self->_sceneTraversal)->_viewMatInv);
 }
 
-void igViewerRenderer_UpdateSorting(igViewerRenderer *renderer) {
-    FogOwner *arg0 = (FogOwner *)renderer;
-    int var_a3;
-    struct FogAttr *temp_a2;
-    struct FogConfig *temp_a1;
+void igViewerRenderer_UpdateSorting(igViewerRenderer *self) {
+    int mode;
+    igSorter *sorter;
+    igViewerParameters *params;
 
-    temp_a2 = arg0->f80->f68;
-    temp_a1 = arg0->f12;
-    var_a3 = 0;
-    if (temp_a1->b184 != 0) {
-        var_a3 |= 0x20;
+    sorter = (igSorter *)((igFrustCullTraversal *)self->_sceneTraversal)->_sorter;
+    params = (igViewerParameters *)self->_parameters;
+    mode = 0;
+    if (params->_sortTexture != 0) {
+        mode |= 0x20;
     }
-    if (temp_a1->b185 != 0) {
-        var_a3 |= 1;
+    if (params->_sortTransparent != 0) {
+        mode |= 1;
     }
-    if (temp_a1->b186 != 0) {
-        var_a3 |= 4;
+    if (params->_sortTransparentDistance != 0) {
+        mode |= 4;
     }
-    temp_a2->f12 = temp_a2->f12 & var_a3;
-    temp_a2->f12 = temp_a2->f12 | var_a3;
-    temp_a2->f76 = arg0->f12->f188;
+    sorter->_mode = sorter->_mode & mode;
+    sorter->_mode = sorter->_mode | mode;
+    sorter->_transparencyDrawMode = ((igViewerParameters *)self->_parameters)->_transparencyMode;
 }
 
-void igViewerRenderer_UpdateScene(igViewerRenderer *renderer) {
-    LightOwner *arg0 = (LightOwner *)renderer;
-    int s5;
-    int n3;
-    Obj *s3;
-    Mk *s2;
-    int s0;
-    Hold *a1 = arg0->f48;
-    List *v1 = a1->l28;
-    int var_v1;
-    if (v1 != 0) {
-        var_v1 = v1->count;
+void igViewerRenderer_UpdateScene(igViewerRenderer *self) {
+    int i;
+    int count;
+    igObject *light;
+    igLightStateAttr *state;
+    int offset;
+    igGroup *sceneRoot = (igGroup *)self->_attrSetOverride;
+    igObjectList *children = (igObjectList *)sceneRoot->_childList;
+    int childCount;
+    if (children != 0) {
+        childCount = children->_count;
     } else {
-        var_v1 = 0;
+        childCount = 0;
     }
-    if (var_v1 > 0) {
-        igGroup_RemoveChildAt((igGroup *)a1, 0);
+    if (childCount > 0) {
+        igGroup_RemoveChildAt(sceneRoot, 0);
     }
-    CLEAR(arg0->f64)
-    CLEAR(arg0->f60)
-    if (arg0->f12->f12 != 0) {
-        igGroup_AppendChild((igGroup *)arg0->f48, (igNode *)arg0->f12->f12);
-        igViewerRenderer_FindLights((igViewerRenderer *)arg0, (igGroup *)arg0->f12->f12);
+    CLEAR((igObjectList *)self->_lightStateList)
+    CLEAR((igObjectList *)self->_lightList)
+    if (((igViewerParameters *)self->_parameters)->_scene != 0) {
+        igGroup_AppendChild((igGroup *)self->_attrSetOverride, (igNode *)((igViewerParameters *)self->_parameters)->_scene);
+        igViewerRenderer_FindLights(self, (igGroup *)((igViewerParameters *)self->_parameters)->_scene);
     }
-    n3 = arg0->f60->count;
-    s5 = 0;
-    if (0 < n3) {
-        s0 = 0;
-        do {
+    count = ((igObjectList *)self->_lightList)->_count;
+    for (i = 0; i < count; i++) {
             {
-            igSmartPointer<Obj> item(createItem(ItemType()));
-            s3 = *(Obj **)((char *)arg0->f60->data + s0);
-            s2 = (Mk *)item.p;
-            if (s3 != 0) s3->_refCount = s3->_refCount + 1;
-            release(s2->f16);
-            s2->f16 = s3;
-            ((Ob *)item.p)->v128(0);
-            ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)item.p);
+            igSmartPointer<igObject> item(createLightState(ItemType()));
+            light = ((igObject **)((igObjectList *)self->_lightList)->_data)[i];
+            state = (igLightStateAttr *)item.p;
+            if (light != 0) light->_refCount = light->_refCount + 1;
+            release((igObject *)state->_light);
+            state->_light = (int)light;
+            ((igLightStateAttrDispatchView *)item.p)->SetState(0);
+            ObjectList_AppendRetained((igObjectList *)self->_lightStateList, item.p);
             }
-            s5 += 1;
-            s0 += 4;
-        } while (s5 < n3);
     }
-    release(arg0->f84);
-    arg0->f84 = 0;
+    release((igObject *)self->_sceneOutput);
+    self->_sceneOutput = 0;
 }
 
-void igViewerRenderer_FindLights(igViewerRenderer *arg0, igGroup *arg1) {
-    int n; int i; int off;
-    if (arg1->_flags & 1) {
-        if (igObject_IsKindOf(arg1, g_igGroup_metaObject) != 0) {
-            n = 0;
-            if (arg1->_childList != 0) n = ((igNodeList *)arg1->_childList)->_count;
+void igViewerRenderer_FindLights(igViewerRenderer *self, igGroup *node) {
+    int count; int i; int offset;
+    if (node->_flags & 1) {
+        if (igObject_IsKindOf(node, g_igGroup_metaObject) != 0) {
+            count = 0;
+            if (node->_childList != 0) count = ((igNodeList *)node->_childList)->_count;
             i = 0;
-            if (0 < n) {
-                off = 0;
+            if (0 < count) {
+                offset = 0;
                 do {
-                    igViewerRenderer_FindLights(arg0, *(igGroup **)((char *)((igNodeList *)arg1->_childList)->_data + off));
+                    igViewerRenderer_FindLights(self, *(igGroup **)((char *)((igNodeList *)node->_childList)->_data + offset));
                     i += 1;
-                    off += 4;
-                } while (i < n);
+                    offset += 4;
+                } while (i < count);
             }
-        } else if (igObject_IsKindOf(arg1, g_igLightSet_metaObject) != 0) {
-            n = ((igObjectList *)arg1->_childList)->_count;
+        } else if (igObject_IsKindOf(node, g_igLightSet_metaObject) != 0) {
+            count = ((igObjectList *)node->_childList)->_count;
             i = 0;
-            if (0 < n) {
-                off = 0;
+            if (0 < count) {
+                offset = 0;
                 do {
-                    ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)arg0->_lightList, (igObject *)(*(int *)((char *)((igObjectList *)arg1->_childList)->_data + off)));
+                    ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)self->_lightList, *(igObject **)((char *)((igObjectList *)node->_childList)->_data + offset));
                     i += 1;
-                    off += 4;
-                } while (i < n);
+                    offset += 4;
+                } while (i < count);
             }
         }
     }
 }
 
-void igViewerRenderer_UpdateLighting(igViewerRenderer *arg0) {
-    bool a1 = true;
-    bool a0 = true;
-    igViewerParameters *x = (igViewerParameters *)arg0->_parameters;
-    if (x->_useSceneLights == 0 && x->_useHeadLight == 0) a0 = false;
-    if (!a0 && x->_useHeadLightSpecular == 0) a1 = false;
-    arg0->_lightingState = a1;
-    x = (igViewerParameters *)arg0->_parameters;
-    if (x->_useHeadLight != 0 || x->_useHeadLightSpecular != 0) {
-        ((V3 *)arg0->_headlightStateAttr)->v30(1);
-        if (((igViewerParameters *)arg0->_parameters)->_useHeadLightSpecular != 0) {
+void igViewerRenderer_UpdateLighting(igViewerRenderer *self) {
+    bool lighting = true;
+    bool lit = true;
+    igViewerParameters *params = (igViewerParameters *)self->_parameters;
+    if (params->_useSceneLights == 0 && params->_useHeadLight == 0) lit = false;
+    if (!lit && params->_useHeadLightSpecular == 0) lighting = false;
+    self->_lightingState = lighting;
+    params = (igViewerParameters *)self->_parameters;
+    if (params->_useHeadLight != 0 || params->_useHeadLightSpecular != 0) {
+        ((igLightStateAttrDispatchView *)self->_headlightStateAttr)->SetState(1);
+        if (((igViewerParameters *)self->_parameters)->_useHeadLightSpecular != 0) {
             if (g_sharedViewerOptions == 0) {
                 SharedViewerOptions *f = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
                 if (f != 0) f = igViewerDefaults_Construct(f);
                 g_sharedViewerOptions = f;
             }
             g_sharedViewerOptions->useCount = g_sharedViewerOptions->useCount + 1;
-            ((V3 *)arg0->_headlightAttr)->v32((char *)g_sharedViewerOptions + 116);
+            ((igLightAttrDispatchView *)self->_headlightAttr)->setSpecular(g_sharedViewerOptions->headLightSpecular);
             if (g_sharedViewerOptions != 0) {
                 if (--g_sharedViewerOptions->useCount <= 0) {
-                    SharedViewerOptions *s1 = g_sharedViewerOptions;
-                    if (s1 != 0) {
-                        if (&s1->internedString) {
-                            void *p = (void *)s1->internedString;
-                            if (p != 0) {
-                                int *h = (int *)((char *)(p) - 8);
-                                int rc = *(int *)((char *)(p) - 4) - 1;
-                                *(int *)((char *)(p) - 4) = rc;
-                                if (rc == 0) {
-                                    StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
-                                }
-                            }
-                        }
-                        if (s1 != 0) {
-                            void *p = s1->extraCommandLine;
-                            if (p != 0) {
-                                int *h = (int *)((char *)(p) - 8);
-                                int rc = *(int *)((char *)(p) - 4) - 1;
-                                *(int *)((char *)(p) - 4) = rc;
-                                if (rc == 0) {
-                                    StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
-                                }
-                            }
-                        }
-                        operator delete(s1);
+                    SharedViewerOptions *released = g_sharedViewerOptions;
+                    if (released != 0) {
+                        if (&released->internedString) releaseString((const char *)released->internedString);
+                        if (released != 0) releaseString(released->extraCommandLine);
+                        operator delete(released);
                     }
                     g_sharedViewerOptions = 0;
                 }
             }
         } else {
-            ((V3 *)arg0->_headlightAttr)->v32(&g_vec4Zero[0]);
+            ((igLightAttrDispatchView *)self->_headlightAttr)->setSpecular((const float *)&g_vec4Zero);
         }
     } else {
-        ((V3 *)arg0->_headlightStateAttr)->v30(0);
+        ((igLightStateAttrDispatchView *)self->_headlightStateAttr)->SetState(0);
     }
-    ((V3 *)arg0->_lightingAttr)->v30(arg0->_lightingState);
-    igViewerRenderer_UpdateAttr((int *)arg0, (V3 *)arg0->_lightingAttr);
-    igViewerRenderer_SetOverride(arg0, (int)(V3 *)arg0->_lightingAttr, ((bool)arg0->_lightingState) ^ 1);
+    ((igLightingStateAttrDispatchView *)self->_lightingAttr)->SetState(self->_lightingState);
+    igViewerRenderer_UpdateAttr(self, (igObject *)self->_lightingAttr);
+    igViewerRenderer_SetOverride(self, (igObject *)self->_lightingAttr, ((bool)self->_lightingState) ^ 1);
 }
 
-void igViewerRenderer_UpdateRenderStates(igViewerRenderer *renderer) {
-    OptionPanelView *arg0 = (OptionPanelView *)renderer;
-    arg0->f20->vX(arg0->f12->b195);
-    igViewerRenderer_UpdateAttr((int *)arg0, arg0->f20);
-    igViewerRenderer_SetOverride(arg0, (int)arg0->f20, arg0->f12->b196);
-    ((DW4VC_132 *)arg0->f16)->vX(arg0->f12->b197);
-    igViewerRenderer_UpdateAttr((int *)arg0, arg0->f16);
-    igViewerRenderer_SetOverride(arg0, (int)arg0->f16, arg0->f12->b198);
-    arg0->f24->vX(arg0->f12->b201 ? kPanelOff : kPanelOn);
-    igViewerRenderer_UpdateAttr((int *)arg0, arg0->f24);
-    igViewerRenderer_SetOverride(arg0, (int)arg0->f24, arg0->f12->b202);
-    arg0->f28->vX(arg0->f12->b199 ? kPanelOn : kPanelOff);
-    igViewerRenderer_UpdateAttr((int *)arg0, arg0->f28);
-    igViewerRenderer_SetOverride(arg0, (int)arg0->f28, arg0->f12->b200);
+void igViewerRenderer_UpdateRenderStates(igViewerRenderer *self) {
+    ((igAlphaStateAttrDispatchView *)self->_alphaTestAttr)->SetState(((igViewerParameters *)self->_parameters)->_alphaTest);
+    igViewerRenderer_UpdateAttr(self, (igObject *)self->_alphaTestAttr);
+    igViewerRenderer_SetOverride(self, (igObject *)self->_alphaTestAttr, ((igViewerParameters *)self->_parameters)->_alphaTestForce);
+    ((igCullFaceAttrDispatchView *)self->_backFaceCullingAttr)->SetState(((igViewerParameters *)self->_parameters)->_backFaceCulling);
+    igViewerRenderer_UpdateAttr(self, (igObject *)self->_backFaceCullingAttr);
+    igViewerRenderer_SetOverride(self, (igObject *)self->_backFaceCullingAttr, ((igViewerParameters *)self->_parameters)->_backFaceCullingForce);
+    ((igShadeModelAttrDispatchView *)self->_shadeModelAttr)->SetMode(((igViewerParameters *)self->_parameters)->_flatShading ? IG_GFX_SHADING_MODE_FACET : IG_GFX_SHADING_MODE_SMOOTH);
+    igViewerRenderer_UpdateAttr(self, (igObject *)self->_shadeModelAttr);
+    igViewerRenderer_SetOverride(self, (igObject *)self->_shadeModelAttr, ((igViewerParameters *)self->_parameters)->_flatShadingForce);
+    ((igPolygonModeAttrDispatchView *)self->_polygonModeAttr)->SetMode(((igViewerParameters *)self->_parameters)->_wireframe ? IG_GFX_RENDER_MODE_LINES : IG_GFX_RENDER_MODE_FILL);
+    igViewerRenderer_UpdateAttr(self, (igObject *)self->_polygonModeAttr);
+    igViewerRenderer_SetOverride(self, (igObject *)self->_polygonModeAttr, ((igViewerParameters *)self->_parameters)->_wireframeForce);
 }
 
-int igViewerRenderer_FindAttrFromType(PropertyHolder *arg0, PropertyList *arg1) {
-    int field = castToProperty((int)igMetaObject_FindFieldByName(g_igAttr_metaObject, (const char *)text_meta));
-    return igProperty_FindByPointer((void *)arg1->f32, (void *)field, arg0->vX());
+/* The attribute in `attrSet` of the same class as `attr`. */
+int igViewerRenderer_FindAttrFromType(igObjectDispatchView *attr, igAttrSet *attrSet) {
+    int field = asObjectRefField((int)igMetaObject_FindFieldByName(g_igAttr_metaObject, (const char *)text_meta));
+    return igProperty_FindByPointer((void *)attrSet->_attributes, (void *)field, (int)attr->GetMeta());
 }
 
-extern "C" int igViewerRenderer_UpdateSharedAttr(igObject *object, ListOwner *owner) {
-    int found = igViewerRenderer_FindAttrFromType((PropertyHolder *)object, (PropertyList *)owner);
+/* Replaces the attribute of `attr`'s class in `attrSet` by the shared pool's copy of `attr`. */
+extern "C" int igViewerRenderer_UpdateSharedAttr(igObject *attr, igAttrSet *attrSet) {
+    int found = igViewerRenderer_FindAttrFromType((igObjectDispatchView *)attr, attrSet);
     if (found != 0) {
-        removeFromList(owner->list, found);
-        igSmartPointer<igObject> wrapper = igAttrPool_GetSharedAttr(igAttrPool_GetStaticAttrPool(), igSmartPointer<igObject>(object, kRetainReference));
-        ObjectList_AppendRetained((igObjectList *)owner->list, wrapper.get());
+        removeFromList(attrSet->_attributes, found);
+        igSmartPointer<igObject> shared = igAttrPool_GetSharedAttr(igAttrPool_GetStaticAttrPool(), igSmartPointer<igObject>(attr, kRetainReference));
+        ObjectList_AppendRetained((igObjectList *)attrSet->_attributes, shared.get());
         return 1;
     }
     return 0;
 }
 
-void igViewerRenderer_TransferAttrFromType(void *arg0, void *arg1, int arg2) {
-    int temp_v0;
+/* Moves the attribute of `attr`'s class from `from` to `to`. */
+void igViewerRenderer_TransferAttrFromType(igAttrSet *from, igAttrSet *to, igObject *attr) {
+    int found;
 
-    temp_v0 = igViewerRenderer_FindAttrFromType((PropertyHolder *)arg2, (PropertyList *)arg0);
-    if (temp_v0 != 0) {
-        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)(*(int *)((char *)(arg0) + 32)), (igObject *)temp_v0, 0);
-        ObjectList_AppendRetained(*(igObjectList **)((char *)(arg1) + 32), (igObject *)temp_v0);
+    found = igViewerRenderer_FindAttrFromType((igObjectDispatchView *)attr, from);
+    if (found != 0) {
+        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)from->_attributes, (igObject *)found, 0);
+        ObjectList_AppendRetained((igObjectList *)to->_attributes, (igObject *)found);
     }
 }
 
-void igViewerRenderer_UpdateAttr(int *a, void *arg1) {
-    if ((arg1 != 0) && !(igViewerRenderer_UpdateSharedAttr((igObject *)arg1, (ListOwner *)a[12]) & 0xFF) && !(igViewerRenderer_UpdateSharedAttr((igObject *)arg1, (ListOwner *)a[11]) & 0xFF)) {
-        igSmartPointer<igObject> sp3C = igAttrPool_GetSharedAttr(igAttrPool_GetStaticAttrPool(), igSmartPointer<igObject>((igObject *)arg1, kRetainReference));
-        ObjectList_AppendRetained(*(igObjectList **)((char *)(a[11]) + 32), sp3C.get());
+void igViewerRenderer_UpdateAttr(igViewerRenderer *self, igObject *attr) {
+    if ((attr != 0) && !(igViewerRenderer_UpdateSharedAttr(attr, (igAttrSet *)self->_attrSetOverride) & 0xFF) && !(igViewerRenderer_UpdateSharedAttr(attr, (igAttrSet *)self->_attrSet) & 0xFF)) {
+        igSmartPointer<igObject> shared = igAttrPool_GetSharedAttr(igAttrPool_GetStaticAttrPool(), igSmartPointer<igObject>(attr, kRetainReference));
+        ObjectList_AppendRetained((igObjectList *)((igAttrSet *)self->_attrSet)->_attributes, shared.get());
     }
 }
 
-void igViewerRenderer_SetOverride(void *arg0, int arg1, int arg2) {
-    if (arg2 != 0) {
-        igViewerRenderer_TransferAttrFromType((void *)*(int *)((char *)(arg0) + 44), (void *)*(int *)((char *)(arg0) + 48), arg1);
+/* Moves `attr`'s class of attribute into the override set when `override` is set, back otherwise. */
+void igViewerRenderer_SetOverride(igViewerRenderer *self, igObject *attr, int override) {
+    if (override != 0) {
+        igViewerRenderer_TransferAttrFromType((igAttrSet *)self->_attrSet, (igAttrSet *)self->_attrSetOverride, attr);
         return;
     }
-    igViewerRenderer_TransferAttrFromType((void *)*(int *)((char *)(arg0) + 48), (void *)*(int *)((char *)(arg0) + 44), arg1);
+    igViewerRenderer_TransferAttrFromType((igAttrSet *)self->_attrSetOverride, (igAttrSet *)self->_attrSet, attr);
 }
 
 int igViewerRenderer_GetMeta(void) {

@@ -442,13 +442,13 @@ void igProjectiveShadowShader_UserPostLoad(struct S_1d6240 *arg0) {
     }
 }
 
-void igProjectiveShadowShader_Reset(void *arg0) {
+void igProjectiveShadowShader_Reset(igProjectiveShadowShader *self) {
     void **temp_a0;
     void **temp_a0_2;
 
-    temp_a0 = (void **)(*(int *)((char *)(arg0) + 152));
+    temp_a0 = (void **)(self->_pShadowTexRD);
     ((DW4VC_112_0 *)(temp_a0))->vX();
-    temp_a0_2 = (void **)(*(int *)((char *)(arg0) + 168));
+    temp_a0_2 = (void **)(self->_pBlurTexRD);
     ((DW4VC_112_0 *)(temp_a0_2))->vX();
 }
 

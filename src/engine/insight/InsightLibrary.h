@@ -582,8 +582,8 @@ class DW4VC_104_0 { public: virtual void d0(); virtual void d1(); virtual void d
 class DW4VC_100_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int vX(int); };
 struct Instance : public igObject { };
 class DW4VC_92_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(int); };
-extern "C" void igInsightCore_RegisterPlugin(void *arg0, void **arg1);
-extern "C" void igInsightCore_UnregisterPlugin(void *arg0, void **arg1);
+extern "C" void igInsightCore_RegisterPlugin(igInsightCore *self, void **arg1);
+extern "C" void igInsightCore_UnregisterPlugin(igInsightCore *self, void **arg1);
 typedef struct L { char pad8[8]; int cnt; char pad12[4]; int *arr; } L;
 typedef struct A { char pad104[104]; L *f68; } A;
 #include "dw4/core/igResult.h"
@@ -603,7 +603,6 @@ struct S_2371f0 { char pad8[8]; M *m; char pad12[36]; V108 *f48; char pad52[4]; 
 class A_237280 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void vX(); };
 class B { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void vX(); };
 struct Q { int p0; int p1; int count; int p3; B **data; };
-struct A_237300 { char pad[28]; int f28; int f32; int f36; char pad40[4]; int f44; char pad48[24]; int f72; };
 struct StringRef_237300 {
     int *p;
     StringRef_237300(const char *text) {
@@ -630,7 +629,7 @@ struct StringRef_237300 {
         }
     }
 };
-extern "C" void igInsightCore_resetFields(struct A_237300 *arg0, int flags);
+extern "C" void igInsightCore_resetFields(igInsightCore *self, int flags);
 extern "C" void FUN_004541f0(int*, int*);
 struct OO;
 struct R_237530;
@@ -673,7 +672,7 @@ class N;
 struct L_237b50 { char pad[8]; int cnt; int cap; N **data; };
 class N { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual int vX(int); char pad[8]; L_237b50 *f12; };
 extern "C" void igFilterMessageDispatcher_PostMessage(N *arg0, int arg1);
-extern "C" void igMessageFilter_AcceptMessage(int arg0, int arg1);
+extern "C" void igMessageFilter_AcceptMessage(igMessageFilter *self, int arg1);
 class FilterDispatcherSlots {
 public:
     virtual void vfunc_2(); virtual void vfunc_3(); virtual void vfunc_4(); virtual void vfunc_5(); virtual void vfunc_6(); virtual void vfunc_7();
@@ -683,7 +682,7 @@ public:
     virtual void dispatch(int message, igObject *filter);
 };
 extern "C" void igFilterMessageDispatcher_AddFilteringForType(FilterDispatcherSlots *self, int message, igObject *target);
-extern "C" void igFilterMessageDispatcher_AddFiltering(void *arg0, void *arg1, void *arg2);
+extern "C" void igFilterMessageDispatcher_AddFiltering(igFilterMessageDispatcher *self, void *arg1, void *arg2);
 class DW4VC_108_2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual int vX(int, int); };
 extern "C" void igFilterMessageDispatcher_RemoveFilteringForType(void **arg0, int arg1, int arg2);
 struct L_237d80 { int p0; int p1; int n; int p3; int *arr; };
@@ -724,7 +723,7 @@ struct ManagerListView : igObject {
     ManagerArray *_list;
 };
 extern "C" void igSerialScheduler_Update(igSerialScheduler *scheduler);
-extern "C" void igSerialScheduler_Schedule(void *arg0, int arg1);
+extern "C" void igSerialScheduler_Schedule(igSerialScheduler *self, int arg1);
 typedef struct Obj_238020 { char pad[8]; int f8; } Obj_238020;
 extern "C" void igSerialScheduler_Unschedule(Obj_238020 *arg0, int arg1);
 extern "C" int igSerialScheduler_IsScheduled(igSerialScheduler *scheduler, igObject *manager);
