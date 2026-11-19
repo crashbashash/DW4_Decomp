@@ -64,6 +64,17 @@ class SpecialMembers(unittest.TestCase):
     def test_a_qualified_ordinary_member_keeps_its_own_name(self):
         self.assertEqual(names("int Holder::count(int n) { return n; }\n"), ["count"])
 
+    def test_members_defined_in_their_namespaces_are_top_level(self):
+        # the kit's and igen's spelling: `namespace Gap { namespace Core {` around the class's out-of-line members
+        text = ("void before(void) { }\nnamespace Gap {\nnamespace Core {\n\n/* the root */\n"
+                "igObject::igObject() {\n    _refCount = 1;\n}\n\nvoid igObject::destruct()\n{\n}\n\n}\n}\n"
+                "int after(void) { return 1; }\n")
+        self.assertEqual(names(text), ["before", "igObject::igObject", "destruct", "after"])
+        kept = units.extract(text, "destruct")
+        self.assertIn("namespace Core {", kept)
+        self.assertNotIn("_refCount", kept)
+        self.assertNotIn("return 1", kept)
+
     def test_mangled_constructor_and_destructor_name_the_definition(self):
         import unitobjects
         self.assertEqual(unitobjects.special_member("__ct__11ViewerSetupFP8igObject"), "ViewerSetup::ViewerSetup")

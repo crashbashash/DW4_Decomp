@@ -66,6 +66,7 @@ Each folder also has its own `README.md` listing what is in it.
 | What all the non-code bytes are | [`engine/data-regions.md`](engine/data-regions.md) |
 | Which code is the Sony SDK | [`engine/platform-boundary.md`](engine/platform-boundary.md) |
 | How much of the C is typed rather than casts | [`engine/typed-coverage.md`](engine/typed-coverage.md) |
+| Moving classes from flat structs to `Gap::` polymorphic classes: the root, boundary rules, order | [`engine/member-conversion.md`](engine/member-conversion.md) |
 | What is still unknown, with status | [`systems/open-questions.md`](systems/open-questions.md) |
 | Original loading-card selection and node timing | [Stage loading recovery](engine/stage-loading.md) |
 | Hard/Soft lighting and shadows | [Retail recovery](engine/light-modes.md) |

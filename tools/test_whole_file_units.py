@@ -316,6 +316,59 @@ class Rows(unittest.TestCase):
                           ["0x00000300", "0x400", "block"], ["0x400", "0x500", "next"]])
 
 
+class Regenerate(unittest.TestCase):
+    """tools/whole_file_rows.py run again over a unit: the present row settles what it settled before."""
+
+    OLD = {"whole_file": True,
+           "emitted": {"b": "0x00100010", "__sinit_x.cpp": "0x00500000"},
+           "data": {"g_kept": "0x00300000", "g_vtable": "0x00300010", "g_stale": "0x00300020"},
+           "anon": ["0x00300040", "0x00300030"],
+           "stripped": ["zeta", "alpha"],
+           "symbol": "owner"}
+
+    def test_the_previous_rows_place_their_functions_and_static_initializer(self):
+        places = whole_file_rows.previous_places({"0x00100000": self.OLD})
+        self.assertEqual(places, {"owner": 0x100000, "b": 0x100010, "__sinit_x.cpp": 0x500000})
+
+    def test_a_partial_file_stays_partial_for_the_functions_it_left_to_retail(self):
+        previous = {"0x00100000": self.OLD}
+        self.assertTrue(whole_file_rows.settled_partial([0x100020], previous))
+        # a function the previous row placed and the compile no longer reproduces is a wrong compile
+        self.assertFalse(whole_file_rows.settled_partial([0x100010, 0x100020], previous))
+        self.assertFalse(whole_file_rows.settled_partial([0x100020], {}))
+        self.assertFalse(whole_file_rows.settled_partial([], previous))
+
+    def test_a_regenerated_row_keeps_the_names_that_still_bind(self):
+        new = {"whole_file": True, "emitted": {"b": "0x00100010", "__sinit_x.cpp": "0x00500000"},
+               "data": {"g_kept": "0x00300000", "g_bound_elsewhere": "0x00300050", "g_defined": "0x00300060",
+                        "g_new": "0x00300070"},
+               "anon": ["0x00300030", "0x00300040"], "stripped": ["alpha", "zeta"]}
+        syms = {"g_kept": (5, 0, 4), "g_vtable": ("UND", 0, 0), "g_bound_elsewhere": ("UND", 0, 0),
+                "g_defined": (6, 0, 4), "g_new": ("UND", 0, 0)}
+        resolves = {"g_bound_elsewhere": 0x300050, "g_defined": 0x300060, "g_vtable": 0x300010}.get
+        row = whole_file_rows.stable_row(new, self.OLD, "owner", syms, resolves)
+        # g_vtable: the object still references it, the old row listed it; g_stale is gone from the object;
+        # g_bound_elsewhere binds without a row and the old row did not list it; g_defined is placed here
+        self.assertEqual(row["data"], {"g_defined": "0x00300060", "g_kept": "0x00300000", "g_new": "0x00300070",
+                                       "g_vtable": "0x00300010"})
+        self.assertEqual(row["symbol"], "owner")
+        self.assertEqual(row["anon"], self.OLD["anon"])
+        self.assertEqual(row["stripped"], self.OLD["stripped"])
+        self.assertEqual(list(row), list(self.OLD))
+
+    def test_an_unchanged_row_round_trips(self):
+        new = dict(self.OLD, data={"g_kept": "0x00300000", "g_vtable": "0x00300010", "g_stale": "0x00300020"},
+                   anon=sorted(self.OLD["anon"]), stripped=sorted(self.OLD["stripped"]))
+        del new["symbol"]
+        syms = {"g_kept": (5, 0, 4), "g_vtable": ("UND", 0, 0), "g_stale": ("UND", 0, 0)}
+        row = whole_file_rows.stable_row(new, self.OLD, "owner", syms, {}.get)
+        self.assertEqual(json.dumps(row), json.dumps(self.OLD))
+
+    def test_a_new_unit_is_written_as_measured(self):
+        new = {"whole_file": True, "data": {"g": "0x00300000"}}
+        self.assertIs(whole_file_rows.stable_row(new, None, "owner", {}, {}.get), new)
+
+
 class CxxRows(unittest.TestCase):
     def test_literal_relocation_reads_as_gprel(self):
         self.assertEqual(verify.TYPES["R_MIPS_LITERAL"], verify.R_GPREL16)

@@ -25,7 +25,7 @@ CallbackArray *igVectorMorphing_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVectorMorphing_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         (igMetaObjectCallback)thunk_igVectorMorphing_GetMetaObject_00186ec0,
         "igVectorMorphing",

@@ -443,7 +443,7 @@ void igViewerSceneInfoManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igViewerSceneInfoManager_Register);
 }
 
-static igMetaObjectCallback g_igViewerSceneInfoManager_callbackList[] = { igViewerSceneInfoManagerController_EnsureRegistered, igViewerParameters_EnsureRegistered, igViewerRenderer_EnsureRegistered, igBoundingBoxRenderer_EnsureRegistered, igNormalsRenderer_EnsureRegistered, igFlushRenderer_EnsureRegistered, igGuiSystem_RunStaticInit, igViewerGuiFactory_EnsureRegistered, igBoxComponent_RunStaticInit, igGuiComponent_EnsureRegistered, igStatisticsItem_EnsureRegistered, igHotKeyEventReceiver_RunStaticInit, igViewManager_EnsureRegistered, igViewerStatisticsManager_EnsureRegistered, igGuiComponentList_EnsureRegistered, igObjectList_EnsureRegistered, igRadioGroup_EnsureRegistered, igTextureList_EnsureRegistered, igViewerModeChangeMessage_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igViewerSceneInfoManager_callbackList[] = { igViewerSceneInfoManagerController_EnsureRegistered, igViewerParameters_EnsureRegistered, igViewerRenderer_EnsureRegistered, igBoundingBoxRenderer_EnsureRegistered, igNormalsRenderer_EnsureRegistered, Gap::Insight::igFlushRenderer::arkRegister, igGuiSystem_RunStaticInit, igViewerGuiFactory_EnsureRegistered, igBoxComponent_RunStaticInit, igGuiComponent_EnsureRegistered, igStatisticsItem_EnsureRegistered, igHotKeyEventReceiver_RunStaticInit, igViewManager_EnsureRegistered, igViewerStatisticsManager_EnsureRegistered, igGuiComponentList_EnsureRegistered, igObjectList_EnsureRegistered, igRadioGroup_EnsureRegistered, igTextureList_EnsureRegistered, igViewerModeChangeMessage_EnsureRegistered, 0 };
 
 CallbackArray *igViewerSceneInfoManager_Register(void) {
     ViewerLibrary_MarkRegistered();  /* one-shot static-init latch (sets a gp-relative byte flag once) */
@@ -722,7 +722,7 @@ void FUN_00459ee0(void) {
     *(int *)((char *)(temp_s0_5) + 56) = (int)igNormalsRenderer_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_5) + 52) = 1;
     temp_s0_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 5));
-    *(int *)((char *)(temp_s0_6) + 56) = (int)igFlushRenderer_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s0_6) + 56) = (int)Gap::Insight::igFlushRenderer::getClassTypeLazy();
     *(char *)((char *)(temp_s0_6) + 52) = 1;
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 6), -1);
     temp_s0_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 7));

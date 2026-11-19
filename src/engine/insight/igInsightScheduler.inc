@@ -25,7 +25,7 @@ CallbackArray *igInsightScheduler_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igInsightScheduler_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igInsightScheduler_GetMetaObjectFunction,
         "igInsightScheduler",

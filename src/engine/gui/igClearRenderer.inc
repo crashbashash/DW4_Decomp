@@ -1,91 +1,63 @@
-igMetaObject *g_igClearRenderer_metaObject;
-igMetaField *g_igClearRenderer_buffersToClearMetaField;
+namespace Gap {
+namespace Gui {
 
-igMetaObject *igClearRenderer_GetOrCreateMetaObject(void) {
-    if (g_igClearRenderer_metaObject == 0) {
-        g_igClearRenderer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igClearRenderer_metaObject;
-}
+igMetaObject *igClearRenderer::_Meta;
+igMetaField *igClearRenderer::k_buffersToClear;
 
-igMetaObject *igClearRenderer_GetMetaObject(void)
+igMetaObject *igClearRenderer::getClassTypeLazy()
 {
-    igMetaObject *g = g_igClearRenderer_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igClearRenderer_EnsureRegistered();
-    return g_igClearRenderer_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igClearRenderer_GetVTable(void) {
-    union U_44c2f0 u;
-    int temp_s0;
-    S_ref *q0;
-
-    igObject_InitHeader((igObject *)u.b);
-    q0 = (S_ref *)&u.b[8];
-    *(int *)q0 = 0;
-    u.vt = (int)&g_igRenderer_vtable[0];
-    u.vt = (int)&g_igClearRenderer_vtable[0];
-    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igRenderer_vtable[0];
-    if (q0 != 0) {
-        q0 = *(S_ref **)q0;
-        if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q0);
-            }
-        }
-    }
-    return temp_s0;
-}
-
-void igClearRenderer_EnsureRegistered(void)
+igMetaObject *igClearRenderer::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igClearRenderer_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igClearRenderer_Register(void) {
+void *igClearRenderer::retrieveVTablePointer()
+{
+    igClearRenderer temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igClearRenderer::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igClearRenderer::arkRegisterInternal()
+{
     GuiLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igClearRenderer_metaObject,
-        igRenderer_Register,
-        igRenderer_GetPublishedMetaObject,
-        igClearRenderer_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Gui::igRenderer::arkRegisterInternal,
+        Gap::Gui::igRenderer::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igClearRenderer",
-        0x10, /* instance size */
-        igClearRenderer_GetVTable,
-        &igClearRenderer_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igClearRenderer),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igClearRenderer_GetMetaObjectFunction(void) {
-    igClearRenderer_GetMetaObject();
+void igClearRenderer::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igUnsignedIntMetaField_Create };
+    static const char *names[] = { "_buffersToClear" };
+    static igMetaField **enumStorage[] = { &k_buffersToClear };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igClearRenderer_ctorTable[] = {
-    igUnsignedIntMetaField_Create,
-};
-static const char *g_igClearRenderer_fieldTable[] = {
-    "_buffersToClear",
-};
-static igMetaField **g_igClearRenderer_fieldHandles[] = {
-    &g_igClearRenderer_buffersToClearMetaField,
-};
-static int g_igClearRenderer_fieldOffsets[] = {
-    12,
-};
-
-void igClearRenderer_InitFields(void) {
-    int temp_s1;
-    void *temp_s0;
-
-    temp_s0 = (void *)g_igClearRenderer_metaObject;
-    temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
-    igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igClearRenderer_ctorTable, 1);
-    igMetaObject_NameFields((igMetaObject *)temp_s0, g_igClearRenderer_fieldTable, g_igClearRenderer_fieldHandles, g_igClearRenderer_fieldOffsets, temp_s1);
 }
-
+}

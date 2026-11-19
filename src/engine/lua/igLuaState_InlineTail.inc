@@ -1,3 +1,8 @@
-inline igMetaObject *Gap::Lua::igLuaState::getMeta() {
+namespace Gap {
+namespace Lua {
+
+inline igMetaObject *igLuaState::getMeta() const {
     return g_igLuaState_metaObject;
+}
+}
 }

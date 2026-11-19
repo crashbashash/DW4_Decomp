@@ -1,9 +1,12 @@
 #ifndef DW4_IGOBJECT_H
 #define DW4_IGOBJECT_H
 
-/* igObject services. igObject_InitHeader writes a stack object's igObject header (vtable and a
- * reference count of 1), the probe every class's GetVTable runs. The storage calls allocate from
- * and free to the pool the object came from. */
+/* igObject services. igObject_InitHeader is Gap::Core::igObject's constructor under its retail name: it writes
+ * an object's igObject header (vtable and a reference count of 1), and a class still written as a flat struct
+ * calls it by that name for the stack probe its GetVTable runs. The slot defaults declared here by their retail
+ * names are Gap::Core::igObject's virtual functions, called directly (never through the vtable) by the
+ * overrides of classes not yet converted. The storage calls allocate from and free to the pool the object came
+ * from. */
 struct igObjectDispatchView;
 struct igObject;
 struct igMetaObject;
@@ -13,13 +16,11 @@ struct CallbackArray;
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern struct igMetaObject *g_igObject_metaObject;
 
 struct igObject *igObject_InitHeader(struct igObject *p);
 void igObject_Destroy(struct igObject *object);
 /* Class-membership test: 1 when `kind` is the object's own class or one of its ancestors, else 0. */
 int igObject_IsKindOf(struct igObject *object, struct igMetaObject *kind);
-struct CallbackArray *igObject_Register(void);
 /* The published-metaobject accessor class registrations pass for an igObject parent. */
 struct igMetaObject *igObject_GetMetaObject_ParentAccessor(void);
 
@@ -42,7 +43,6 @@ void *igObject_Reallocate(struct igObject *object, void *storage, int size);
 void *igObject_ReallocateAligned(struct igObject *object, void *storage, int size, unsigned short alignment);
 void *igObject_MallocAligned(struct igObject *object, int size, unsigned short alignment);
 void igObject_FreeMemory(struct igObject *object, void *storage);
-void igObject_EnsureRegistered(void);
 void igObject_Copy(struct igObject *dest, struct igObject *source, int copyMode);
 void igObject_DeepCopy(struct igObjectDispatchView *self, struct igObjectDispatchView *source);
 int igObject_GetFieldValueByName(void **self, int name);

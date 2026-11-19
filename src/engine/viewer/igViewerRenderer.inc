@@ -247,8 +247,8 @@ CallbackArray *igViewerRenderer_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewerRenderer_metaObject,
-        igRenderer_Register,
-        igRenderer_GetPublishedMetaObject,
+        Gap::Gui::igRenderer::arkRegisterInternal,
+        Gap::Gui::igRenderer::getClassMeta,
         igViewerRenderer_GetMetaObjectFunction,
         "igViewerRenderer",
         0x5C, /* instance size */

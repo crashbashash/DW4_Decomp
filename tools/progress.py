@@ -552,7 +552,7 @@ _DISPATCH_VIEW = re.compile(r"\b(?:struct|class)\s+(?:\w*DispatchView\w*|DW4VC_\
 _SLOT_PLACEHOLDER = re.compile(r"\bvirtual\s+[\w\s\*&]+?\b(?:d\d+|vX)\s*\(")
 _BOILERPLATE_DEF = re.compile(r"\b\w+_(?:GetMetaObject|GetOrCreateMetaObject|GetMetaObjectFunction|GetPublishedMetaObject|"
                               r"Register|EnsureRegistered|InitFields|GetVTable|GetMeta)\s*\([^;{)]*\)\s*\{")
-_UNTYPED_REF = re.compile(r"\bint\s+\w+;\s*/\*\s*\+\d+\s+igObjectRefMetaField")
+_UNTYPED_REF = re.compile(r"\bint\s+(\w+);\s*/\*\s*\+\d+\s+igObjectRefMetaField")
 _LOCAL_VIEW = re.compile(r"\b(?:struct|class)\s+(?!\w*DispatchView)\w+View\w*\s*(?::[^{;]*)?\{")
 _OFFSET_MEMBER = re.compile(r"\bf\d+\s*(?:\[[^\]]*\]\s*)*;")
 _TEXT_EXTERN = re.compile(r"\bextern\b[^;{}]*\bchar\s+text_\w+\s*\[\s*\]")
@@ -586,10 +586,37 @@ def source_accuracy():
                 c["members.offset_named"] += len(_OFFSET_MEMBER.findall(code))
                 c["strings.externs"] += len(_TEXT_EXTERN.findall(code))
     try:
-        c["reflected.untyped_refs"] = len(_UNTYPED_REF.findall(open(reflected).read()))
+        text = open(reflected).read()
     except OSError:
         c["reflected.untyped_refs"] = None
+    else:
+        c["reflected.untyped_refs"] = untyped_refs(text, typed_fields())
     return c
+
+
+def typed_fields(path=None):
+    """{(class, field)} config/typed-fields.tsv types under C++ (its C struct keeps the reference word)."""
+    path = path or os.path.join(ROOT, "config", "typed-fields.tsv")
+    out = set()
+    if os.path.exists(path):
+        for line in open(path):
+            cols = line.rstrip("\n").split("\t")
+            if len(cols) >= 3 and not line.startswith("#"):
+                out.add((cols[0], cols[1]))
+    return out
+
+
+def untyped_refs(text, typed):
+    """Object-reference fields reflected.h `text` declares `int`, less the `typed` (class, field) pairs: a typed
+    field's flat C struct still spells the word `int`, but C++ code reaches it typed."""
+    heads = [(m.start(), m.group(1)) for m in _REFLECTED_CLASS.finditer(text)]
+    starts = [h[0] for h in heads]
+    n = 0
+    for m in _UNTYPED_REF.finditer(text):
+        i = bisect.bisect_right(starts, m.start()) - 1
+        if i < 0 or (heads[i][1], m.group(1)) not in typed:
+            n += 1
+    return n
 
 
 _REFLECTED_CLASS = re.compile(r"^typedef struct (\w+)\s*[:{]", re.M)
@@ -1235,30 +1262,26 @@ def readable(syms=None, paths=None, cats=None):
 
 
 def region_table():
-    """Markdown rows: per region the code size, the share matched (C/C++ that make check classifies as
-    `match`: bytes, exception metadata and symbol rules all pass, plus owner-approved `assembly`
-    sources) and the share readable (matched and passing READABLE_CHECKS, see `readable`)."""
+    """Markdown rows: per region the code size and the share matched (C/C++ that make check classifies as
+    `match`: bytes, exception metadata and symbol rules all pass, plus owner-approved `assembly` sources)."""
     syms = load_symbols()
     paths = have_src_paths()
     cats = load_categories() or {}
-    clear = readable(syms, paths, cats)["names"]
-    rows = {r: [0, 0, 0] for r in REGION_ORDER}      # total, matched, readable
+    rows = {r: [0, 0] for r in REGION_ORDER}      # total, matched
     for va, size, name in syms:
         row = rows[region_of(va)]
         row[0] += size
         if name in paths and cats.get(va, ("",))[0] in ("match", "assembly"):
             row[1] += size
-            if name in clear:
-                row[2] += size
-    out = ["| Region | Size | Matched | Readable |",
-           "| --- | ---: | ---: | ---: |"]
-    tot = [0, 0, 0]
+    out = ["| Region | Size | Matched |",
+           "| --- | ---: | ---: |"]
+    tot = [0, 0]
     for r in REGION_ORDER:
-        t, m, c = rows[r]
+        t, m = rows[r]
         tot = [x + y for x, y in zip(tot, rows[r])]
-        out.append("| %s | %d KB | %.1f %% | %.1f %% |" % (r, round(t / 1024), pct(m, t), pct(c, t)))
-    t, m, c = tot
-    out.append("| **Total** | **%d KB** | **%.1f %%** | **%.1f %%** |" % (round(t / 1024), pct(m, t), pct(c, t)))
+        out.append("| %s | %d KB | %.1f %% |" % (r, round(t / 1024), pct(m, t)))
+    t, m = tot
+    out.append("| **Total** | **%d KB** | **%.1f %%** |" % (round(t / 1024), pct(m, t)))
     return "\n".join(out)
 
 
@@ -1268,9 +1291,9 @@ def readme_block(d):
 
     Generated on every `make progress`, so the README holds no hand-written figure that can go
     stale; `progress --check` fails when it drifts. "Matched" is make check's `match` on C/C++
-    source plus owner-approved `assembly` sources; "Readable" is the matched code that also passes
-    READABLE_CHECKS (a named assembly source passes). `d` is unused: the
-    table reads the symbol map, src/ and data/check-categories.tsv directly.
+    source plus owner-approved `assembly` sources; how far the matched source is from readable and from the
+    original's form is PROGRESS.md's debt counters. `d` is unused: the table reads the symbol map, src/ and
+    data/check-categories.tsv directly.
     """
     return ("<!-- progress:start -->\n%s\n\nThe full figures and the verification debt are in "
             "[PROGRESS.md](PROGRESS.md).\n<!-- progress:end -->" % region_table())

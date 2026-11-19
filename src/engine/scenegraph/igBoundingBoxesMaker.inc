@@ -52,7 +52,7 @@ CallbackArray *igBoundingBoxesMaker_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBoundingBoxesMaker_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igBoundingBoxesMaker_GetMetaObjectFunction,
         "igBoundingBoxesMaker",

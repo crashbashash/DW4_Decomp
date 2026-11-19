@@ -66,7 +66,7 @@ CallbackArray *igAnimationCombinerBoneInfo_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationCombinerBoneInfo_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igAnimationCombinerBoneInfo_GetMetaObjectFunction,
         "igAnimationCombinerBoneInfo",

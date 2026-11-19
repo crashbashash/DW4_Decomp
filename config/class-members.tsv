@@ -5,3 +5,52 @@
 # header of the class (alchemy-kit_202309 include/<library>/<Class>.h); the object macros are
 # include/dw4/core/igObjectMacros.h, and tools/gen_odl_source.py --write-members writes a class's macro and
 # field-handle rows.
+igObject	igObject();
+igObject	static void operator delete(void *memory) { Memory_FreeBufferAliasC(memory); }
+igObject	virtual void destruct();
+igObject	virtual void constructFields(int flag);
+igObject	virtual void destructFields();
+igObject	virtual void userDeepCopy(igObject *source);
+igObject	virtual void userShallowCopy(int source);
+igObject	virtual int userIsAlikeDeep(igObject *other);
+igObject	virtual int userIsAlikeShallow(igObject *other);
+igObject	virtual void userConstruct(int flag);
+igObject	virtual void userDestruct();
+igObject	virtual void initDefaults();
+igObject	virtual void releaseDefaults();
+igObject	virtual void resetFields(int flag);
+igObject	virtual void userPreWrite();
+igObject	virtual void userWriteFilePreProcess();
+igObject	virtual void userPostRead();
+igObject	virtual void userPostLoad();
+igObject	virtual void trimCapacity();
+igObject	virtual void userApplyWriteProxy(int value);
+igObject	virtual void userMakeConcrete(igMetaObject *meta);
+igObject	virtual igObject *cloneViaMetadata(int copyMode);
+igObject	inline virtual igMetaObject *getMeta() const { return _Meta; }
+igObject	static igMetaObject *_Meta;
+igObject	static void arkRegister();
+igObject	static CallbackArray *arkRegisterInternal();
+igObject	static inline igMetaObject *getClassMeta() { return _Meta; }
+igObject	static inline igMetaObject *getClassMetaSafe() { return _Meta; }
+igObject	static void *retrieveVTablePointer();
+igObject	static void arkRegisterInitialize();
+igRenderer	IG_ABSTRACT_OBJECT_DEFINE(igRenderer)
+igRenderer	static igMetaField *k_visualContext;
+igRenderer	void setVisualContext(igVisualContext *context);
+igRenderer	virtual void initializeDrawing() = 0;
+igRenderer	virtual void terminateDrawing() = 0;
+igRenderer	virtual void traverse() = 0;
+igRenderer	virtual void draw() = 0;
+igClearRenderer	IG_OBJECT_DEFINE(igClearRenderer)
+igClearRenderer	static igMetaField *k_buffersToClear;
+igClearRenderer	virtual void traverse() {}
+igClearRenderer	virtual void initializeDrawing();
+igClearRenderer	virtual void terminateDrawing() {}
+igClearRenderer	virtual void draw();
+igFlushRenderer	IG_OBJECT_DEFINE(igFlushRenderer)
+igFlushRenderer	virtual void traverse() {}
+igFlushRenderer	virtual void initializeDrawing() {}
+igFlushRenderer	virtual void terminateDrawing() {}
+igFlushRenderer	virtual void draw();
+igMetaObject	bool isValid() const { return (_validity & 4) ? true : false; }

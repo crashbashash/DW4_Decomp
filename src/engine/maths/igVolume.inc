@@ -38,7 +38,7 @@ CallbackArray *igVolume_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igVolume_metaObject,
-        igObject_Register,                     /* base class registrar (igObject) */
+        Gap::Core::igObject::arkRegisterInternal,                     /* base class registrar (igObject) */
         igObject_GetMetaObject_ParentAccessor,
         igVolume_GetMetaObjectFunction,
         "igVolume",

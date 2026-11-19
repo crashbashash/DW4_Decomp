@@ -56,7 +56,7 @@ CallbackArray *beTextureCtrlWork_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beTextureCtrlWork_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beTextureCtrlWork_GetMetaObjectFunction,
         "beTextureCtrlWork",

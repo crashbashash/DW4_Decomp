@@ -179,14 +179,14 @@ void igInsightCore_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igInsightCore_Register);
 }
 
-static igMetaObjectCallback g_igInsightCore_callbackList[] = { igInfoManagerOrderedList_EnsureRegistered, igInsightScheduler_EnsureRegistered, igInfoList_EnsureRegistered, igWindow_EnsureRegistered, igVisualContext_EnsureRegistered, igRendererOrderedList_EnsureRegistered, igEventDispatcher_EnsureRegistered, igWindowResizeEventReceiver_EnsureRegistered, igMessenger_EnsureRegistered, igClearRenderer_EnsureRegistered, igTimer_EnsureRegistered, igInsightPluginList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igInsightCore_callbackList[] = { igInfoManagerOrderedList_EnsureRegistered, igInsightScheduler_EnsureRegistered, igInfoList_EnsureRegistered, igWindow_EnsureRegistered, igVisualContext_EnsureRegistered, igRendererOrderedList_EnsureRegistered, igEventDispatcher_EnsureRegistered, igWindowResizeEventReceiver_EnsureRegistered, igMessenger_EnsureRegistered, Gap::Gui::igClearRenderer::arkRegister, igTimer_EnsureRegistered, igInsightPluginList_EnsureRegistered, 0 };
 
 CallbackArray *igInsightCore_Register(void) {
     InsightLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igInsightCore_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igInsightCore_GetMetaObjectFunction,
         "igInsightCore",
@@ -332,7 +332,7 @@ void igInsightCore_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)igMessenger_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_9)->_construct = 1;
     temp_s2_10 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9));
-    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)igClearRenderer_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)Gap::Gui::igClearRenderer::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_10)->_construct = 1;
     temp_s2_11 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA));
     ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)igTimer_GetOrCreateMetaObject();

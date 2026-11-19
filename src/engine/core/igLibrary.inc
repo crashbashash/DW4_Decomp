@@ -19,7 +19,7 @@ CallbackArray *igLibrary_Register(void) {
     return igMetaObject_RegisterClass(
         1,
         &g_igLibrary_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igLibrary_GetMetaObjectFunction,
         "igLibrary",

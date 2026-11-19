@@ -49,7 +49,7 @@ CallbackArray *igModel_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igModel_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igModel_GetMetaObject,
         "igModel",

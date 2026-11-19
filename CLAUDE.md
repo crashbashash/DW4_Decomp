@@ -170,7 +170,8 @@ function that matches only under a per-function override in `config/SLUS-20836/u
 `unit-compilers.tsv` is `foreign-profile` debt, not a match, and one using inline `asm` or `volatile` without
 an owner approval is `unapproved` debt.
 
-**Readable** is the second condition, measured by the README's Readable column, and every landing meets it.
+**Readable** is the second condition, measured by PROGRESS.md's Readable section and debt counters, and every
+landing meets it.
 A function is readable when all of these hold:
 
 1. It sits in its module translation unit (`src/<module>/<Class or topic>.c|.cpp`), in retail address order.

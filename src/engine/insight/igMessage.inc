@@ -24,7 +24,7 @@ CallbackArray *igMessage_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMessage_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igMessage_GetMetaObjectFunction,
         "igMessage",

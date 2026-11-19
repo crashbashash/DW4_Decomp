@@ -23,7 +23,7 @@ CallbackArray *igContext_Register(void) {
     return igMetaObject_RegisterClass(
         1,
         &g_igContext_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igContext_GetMetaObjectFunction,
         "igContext",

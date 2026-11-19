@@ -26,7 +26,7 @@ CallbackArray *beFile_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beFile_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beFile_GetMetaObjectFunction,
         "beFile",

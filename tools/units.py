@@ -157,6 +157,7 @@ def _cached_definitions(text):
 
 
 _DIRECTIVE = re.compile(r"#[ \t]*(\w+)")
+_NAMESPACE_HEAD = re.compile(r"(?:inline\s+)?namespace(?:\s+[A-Za-z_]\w*)?")
 
 
 def _definitions(text):
@@ -164,12 +165,13 @@ def _definitions(text):
 
     A top-level `{` opens a definition when the text since the previous top-level
     `;`/`}`/definition holds a declarator (`name(`).  `extern "C" { … }` and other
-    bare blocks have no declarator and are skipped; an `extern "C" { ... }` linkage block is transparent (its definitions are
-    top-level ones; the wrapper itself stays in place when `extract` blanks the others).
+    bare blocks have no declarator and are skipped; an `extern "C" { ... }` linkage block and a `namespace Gap {`
+    block are transparent (their definitions are top-level ones, a member defined in its class's namespaces as the
+    kit and igen write it; the wrapper itself stays in place when `extract` blanks the others).
     """
     clean = _clean(text)
     out, depth, stmt_start, i, n = [], 0, 0, 0, len(clean)
-    in_extern = False
+    transparent = 0         # the `extern "C" {` and `namespace X {` blocks open around this point
     starts = []
     conditionals = []
     while i < n:
@@ -207,10 +209,10 @@ def _definitions(text):
         if c == "{":
             if depth == 0:
                 sig = clean[stmt_start:i]
-                if sig.strip() == "extern" and not in_extern:
-                    # `extern "C" { ... }` (the string literal is blanked by _clean) is a linkage block, not a body:
-                    # the definitions inside it are top-level definitions
-                    in_extern = True
+                if sig.strip() == "extern" or _NAMESPACE_HEAD.fullmatch(sig.strip()):
+                    # `extern "C" { ... }` (the string literal is blanked by _clean) is a linkage block and
+                    # `namespace Gap {` a scope, not a body: the definitions inside are top-level definitions
+                    transparent += 1
                     stmt_start = i + 1
                     i += 1
                     continue
@@ -234,8 +236,8 @@ def _definitions(text):
                     continue
             depth += 1
         elif c == "}":
-            if depth == 0 and in_extern:
-                in_extern = False
+            if depth == 0 and transparent:
+                transparent -= 1
                 stmt_start = i + 1
                 i += 1
                 continue

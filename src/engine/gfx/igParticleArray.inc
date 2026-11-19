@@ -177,7 +177,7 @@ CallbackArray *igParticleArray_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igParticleArray_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igParticleArray_GetMetaObjectFunction,
         "igParticleArray",

@@ -57,7 +57,7 @@ CallbackArray *igProgramFile_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igProgramFile_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igProgramFile_GetMetaObjectFunction,
         "igProgramFile",

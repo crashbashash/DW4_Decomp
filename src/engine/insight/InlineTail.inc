@@ -72,22 +72,6 @@ int igEventReceiver_WindowCloseEvent(void) {
     return 0;
 }
 
-igMetaObject *igFlushRenderer_GetMeta(void) {
-    return g_igFlushRenderer_metaObject;
-}
-
-void igFlushRenderer_Traverse(void) {
-
-}
-
-void igFlushRenderer_InitializeDrawing(void) {
-
-}
-
-void igFlushRenderer_ReleaseDrawing(void) {
-
-}
-
 igMetaObject *igInfoManagerList_GetMeta(void) {
     return g_igInfoManagerList_metaObject;
 }
@@ -135,10 +119,6 @@ igMetaObject *igMessenger_GetMeta(void) {
 
 int igMessage_GetMeta(void) {
     return (int)g_igMessage_metaObject;
-}
-
-igMetaObject *FUN_00238cf0(void) {
-    return g_igRenderer_metaObject;
 }
 
 igMetaObject *igInsightPluginList_GetElementMeta(void) {

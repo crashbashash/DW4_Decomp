@@ -18,7 +18,7 @@ CallbackArray *igIterator_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igIterator_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igIterator_GetMetaObjectFunction,
         "igIterator",

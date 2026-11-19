@@ -24,7 +24,7 @@ CallbackArray *beSvSlotData_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_beSvSlotData_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beSvSlotData_GetMetaObjectFunction,
         "beSvSlotData",

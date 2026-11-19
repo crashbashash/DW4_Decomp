@@ -68,7 +68,7 @@ CallbackArray *igContextExtInfo_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igContextExtInfo_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igContextExtInfo_GetMetaObjectFunction,
         "igContextExtInfo",

@@ -1,17 +1,20 @@
-void igClearRenderer_InitializeDrawing(O_457d60 *arg0) {
-    E_457d60 *temp_a0;
-    E_457d60 *temp_s0;
-    temp_a0 = arg0->f8;
-    temp_a0->v732(0);
-    arg0->f12 = 3;
-    temp_s0 = arg0->f8;
-    if (temp_s0->v228(temp_s0->v200()) > 0) {
-        arg0->f12 = arg0->f12 | 4;
+namespace Gap {
+namespace Gui {
+
+void igClearRenderer::initializeDrawing() {
+    igVisualContextDispatchView *context;
+
+    ((igVisualContextDispatchView *)_visualContext.p)->setClearStencil(0);
+    _buffersToClear = 3;
+    context = (igVisualContextDispatchView *)_visualContext.p;
+    if (context->getStencilBitsPerPixel(context->getCurrentRenderDestination()) > 0) {
+        _buffersToClear = _buffersToClear | 4;
     }
 }
 
-void igClearRenderer_Render(igClearRendererView *self)
+void igClearRenderer::draw()
 {
-    self->_visualContext->vfunc_174(self->_buffersToClear);
+    ((igVisualContextDispatchView *)_visualContext.p)->clearRenderDestination(_buffersToClear);
 }
-
+}
+}

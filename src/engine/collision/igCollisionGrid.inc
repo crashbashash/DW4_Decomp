@@ -112,7 +112,7 @@ CallbackArray *igCollisionGrid_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCollisionGrid_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igCollisionGrid_GetMetaObjectFunction,
         "igCollisionGrid",

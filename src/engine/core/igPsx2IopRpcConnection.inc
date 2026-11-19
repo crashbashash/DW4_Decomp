@@ -40,7 +40,7 @@ CallbackArray *igPsx2IopRpcConnection_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igPsx2IopRpcConnection_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igPsx2IopRpcConnection_GetMetaObjectFunction,
         "igPsx2IopRpcConnection",

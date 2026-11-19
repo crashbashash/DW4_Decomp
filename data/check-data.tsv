@@ -13107,6 +13107,8 @@
 00522480	16	.vtables	00100390	match
 00522490	16	.vtables	00100390	match
 005224a0	16	.vtables	00100cf0	match
+0052ca80	108	.vtables	00230f50	match
+0052d060	108	.vtables	00230f50	match
 0052d540	92	.vtables	0023c440	match
 0052d5a0	16	.vtables	0023c860	match
 0052d5b0	16	.vtables	0023c860	match
@@ -13120,8 +13122,10 @@
 0052d630	16	.vtables	0023c860	match
 0052d640	16	.vtables	0023c860	match
 0052d650	16	.vtables	0023c860	match
+0052f0f0	92	.vtables	002b5d50	match
 00539ef0	16	.vtables	00370780	match
 00539f00	16	.vtables	00370780	match
+00540c80	108	.vtables	0044b860	match
 00554990	1	.sdata	002590c0	match
 00554994	1	.sdata	002b5d50	match
 00554998	1	.sdata	002b5d50	match

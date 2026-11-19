@@ -40,7 +40,7 @@ CallbackArray *igRay_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igRay_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igRay_GetMetaObjectFunction,
         "igRay",

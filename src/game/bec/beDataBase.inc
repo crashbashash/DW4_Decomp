@@ -74,7 +74,7 @@ CallbackArray *beDataBase_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beDataBase_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beDataBase_GetMetaObjectFunction,
         "beDataBase",

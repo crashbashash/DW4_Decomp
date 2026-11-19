@@ -46,7 +46,7 @@ CallbackArray *beCameraBoxData_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beCameraBoxData_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beCameraBoxData_GetMetaObjectFunction,
         "beCameraBoxData",

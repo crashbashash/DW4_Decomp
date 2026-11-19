@@ -51,8 +51,8 @@ CallbackArray *igGuiSystemRenderer_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGuiSystemRenderer_metaObject,
-        igRenderer_Register,
-        igRenderer_GetPublishedMetaObject,
+        Gap::Gui::igRenderer::arkRegisterInternal,
+        Gap::Gui::igRenderer::getClassMeta,
         thunk_igGuiSystemRenderer_GetMetaObject,
         "igGuiSystemRenderer",
         0x1C, /* instance size */

@@ -112,6 +112,21 @@ class FreeMethods(unittest.TestCase):
                              "layout.tail_fragments": 1, "matching_constructs": 1, "views.local": 1,
                              "members.offset_named": 1, "strings.externs": 1, "reflected.untyped_refs": 1})
 
+    def test_a_typed_field_is_not_an_untyped_reference(self):
+        text = ("typedef struct igRenderer {\n"
+                "    int _visualContext;                            /* +8    igObjectRefMetaField */\n"
+                "} igRenderer;\n"
+                "typedef struct igOther {\n"
+                "    int _visualContext;                            /* +8    igObjectRefMetaField */\n"
+                "} igOther;\n")
+        self.assertEqual(progress.untyped_refs(text, set()), 2)
+        self.assertEqual(progress.untyped_refs(text, {("igRenderer", "_visualContext")}), 1)
+
+    def test_typed_fields_reads_the_table(self):
+        path = os.path.join(tempfile.mkdtemp(), "typed-fields.tsv")
+        open(path, "w").write("# header\tx\ty\nigRenderer\t_visualContext\tigSmartPointer<igVisualContext>\n")
+        self.assertEqual(progress.typed_fields(path), {("igRenderer", "_visualContext")})
+
 
 if __name__ == "__main__":
     unittest.main()

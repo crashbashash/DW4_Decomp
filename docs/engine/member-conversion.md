@@ -1,0 +1,97 @@
+# Member conversion: the polymorphic root and staging rules
+
+The engine's classes move from flat structs with free `<Class>_<Method>` functions to Alchemy's polymorphic
+classes (`Gap::<library>::<class>`), one class at a time, with every touched unit byte-identical at every step.
+This page is the design of that migration and the rules for staging it. The tools are described in
+[build-system.md](../build-system.md#member-conversion), the tables in
+[typed coverage](typed-coverage.md#c-members-typed-references-and-converted-classes).
+
+## Tables
+
+Three `#`-commented TSV tables drive `scripts/gen_type_headers.py`, which writes `include/dw4/support/reflected.h`:
+
+| Table | Row | Effect |
+| --- | --- | --- |
+| `config/converted-classes.tsv` | `<class> <library namespace>` | the class is declared as `namespace Gap { namespace <library> { class <class> : public <parent> … } }` after the flat structs, and promoted into `Gap` with `using` |
+| `config/class-members.tsv` | `<class> <declaration>` | the class's members in table order: object macros, `k_<field>` handles, kit inlines (`igMetaObject::isValid`), member functions, virtual slots |
+| `config/typed-fields.tsv` | `<class> <field> <C++ type>` | an object-reference field typed under C++ (`igSmartPointer<igVisualContext>`); C keeps the reference word |
+
+A converted class's parent must be converted too. A converted class declares only its own fields, at their
+reflected offsets after its parent's registered size, and then its member rows.
+
+## The root
+
+`Gap::Core::igObject` is an ordinary row of `converted-classes.tsv` (`igObject Core`), and all of its
+declarations are `igObject` rows of `class-members.tsv`; the generator refuses a root that has no rows and
+writes the root's virtual slots before `_refCount`, so the vptr sits at +0 as retail's does. The rows are, in
+order:
+
+- the constructor (`igObject::igObject()`, retail's header initialisation) and `operator delete`, which frees
+  through `Memory_FreeBufferAliasC`;
+- the 20 virtual slots in `igObjectDispatchView`'s order, `destruct` through `cloneViaMetadata`, then the
+  inline virtual `getMeta` as slot 20. The macros override `getMeta` in every class, so every class writes its
+  vtable the way retail's does. The root declares no destructor;
+- the kit's static members: `_Meta`, `arkRegister`, `arkRegisterInternal`, `getClassMeta`,
+  `getClassMetaSafe`, `retrieveVTablePointer`, `arkRegisterInitialize`.
+
+The core unit defines these as members and emits igObject's vtable itself.
+
+## Coexistence with flat structs
+
+Every class keeps its flat struct as the C view: the C units and the classes not yet converted still use it.
+A converted class's members and typed fields go only into its `Gap::` declaration, and code outside `Gap`
+still names the flat struct. A typed field's flat struct still spells the reference as `int`, so
+`reflected.untyped_refs` (`tools/progress.py`) leaves out the fields `typed-fields.tsv` lists.
+
+Where converted and unconverted code meet, the boundary keeps the retail **C names** as prototypes:
+
+- a class that is not converted yet still calls the root's slot defaults and its constructor by their C
+  names;
+- a converted class whose parent is not converted, or a converted parent with flat subclasses, needs the C-name
+  prototypes the other side calls. For example, gui and viewer still call `igRenderer_Destroy`, and
+  `include/dw4/gui/igRenderer.h` keeps its prototype; the definition is now igRenderer's implicit destructor,
+  which insight emits;
+- `tools/memberize.py` decides it: while code still names a converted member's C name (a C caller, a flat
+  subclass, a flat struct's construction or destruction), the prototype stays in the home header, and in
+  another header only for a user's unit that does not read the home header; every other declaration goes, all
+  of them once nothing names the C name. `tools/memberize.py --check` reports a C-name declaration no longer
+  needed.
+
+A converted class calls through a typed member or a `…DispatchView` with named slots, such as
+`igVisualContextDispatchView` for the renderers' visual context. Stand-in views with `dN` slots (`O_…`/`E_…`,
+local `…View` classes) go away as their users convert.
+
+## Converting a class, in order
+
+1. Add the class (and any unconverted parent) to `converted-classes.tsv`, its members to `class-members.tsv` in
+   the kit header's order, and its typed fields to `typed-fields.tsv`. `tools/gen_odl_source.py
+   --write-members` writes the macro and field-handle rows.
+2. Run `tools/memberize.py <table> --apply` to rename the free functions and data to members (constructors and
+   implicit destructors included) and rewrite their callers; the definitions go into the class's namespaces.
+3. Run `tools/gen_odl_source.py` to write igen's registration boilerplate. Write any body that igen's form
+   does not cover by hand, in the kit's form. Then regenerate the header with
+   `python3 scripts/gen_type_headers.py`.
+4. Run `tools/whole_file_rows.py --unit-va <va> --cxx --write` for each touched unit, the defining unit first and
+   its callers after. The unit's present row settles its partial functions, ambiguous starts, static-initializer
+   entry and data names; `--drop`/`--at` are needed only for a start no row settled yet.
+5. Run `tools/compiler_names.py --write`.
+6. Run `tools/check.py --function <va> --cand <source>` for every touched unit. Each must report `MATCH`. Then
+   `tools/memberize.py --check` (no C-name declaration left over) and `tools/typed_coverage.py --check`.
+
+## Conversion order
+
+The root and the renderers (`igRenderer`, `igClearRenderer`, `igFlushRenderer`) are converted. The order after
+that:
+
+1. the rest of igObject's kit-declared members (the copy constructor is a candidate for `CopyConstructHeader`);
+2. the metafield family (`igMetaField` and its subclasses);
+3. `igMetaObject`, `igDataList`/`igObjectList`;
+4. attrs, then gfx, then scenegraph, then gui/insight/viewer;
+5. the game's `be*` classes last.
+
+## Known differences and gaps
+
+- Definitions written before the namespace spelling (`void Gap::Gui::igRenderer::setVisualContext(…)` at file
+  scope) compile to the same code; `tools/memberize.py --respell --apply` moves them into their namespaces.
+- A destructor a class declares out of line, and a constructor whose C form constructs its base after other
+  statements, are written by hand.

@@ -90,7 +90,7 @@ void igLightStateAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igLightStateAttr_Register);
 }
 
-static igMetaObjectCallback g_igLightStateAttr_callbackList[] = { igLightAttr_EnsureRegistered, igObject_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igLightStateAttr_callbackList[] = { igLightAttr_EnsureRegistered, Gap::Core::igObject::arkRegister, 0 };
 
 CallbackArray *igLightStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -147,7 +147,7 @@ void igLightStateAttr_InitFields(void) {
     ((igObjectRefMetaField *)field2)->_metaObject = (int)igLightAttr_GetOrCreateMetaObject();
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 1), 1);
     field = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)g_igObject_metaObject;
+    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igObject::_Meta;
     ((igMetaField *)field)->_persistent = 0;
     igMetaObject_NameFields(meta, g_igLightStateAttr_fieldTable, g_igLightStateAttr_fieldHandles, g_igLightStateAttr_fieldOffsets, base);
 }

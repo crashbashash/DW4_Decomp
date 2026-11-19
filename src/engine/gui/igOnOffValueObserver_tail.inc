@@ -24,29 +24,19 @@ void FUN_00457c40(struct S_457c40 *arg0, unsigned char arg1) {
     }
 }
 
-void igRenderer_SetVisualContext(igRendererDispatchView *renderer, igVisualContext *context) {
-    igVisualContext *old;
-    igVisualContext *released;
+namespace Gap {
+namespace Gui {
 
-    old = renderer->_visualContext;
-    if (old != context) {
-        if (old != 0) {
-            renderer->terminateDrawing();
-        }
-        if (context != 0) {
-            context->_refCount = context->_refCount + 1;
-        }
-        released = renderer->_visualContext;
-        if (released != 0) {
-            released->_refCount = released->_refCount - 1;
-            if ((released->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(released);
-            }
-        }
-        renderer->_visualContext = context;
-        if (renderer->_visualContext != 0) {
-            renderer->initializeDrawing();
-        }
+void igRenderer::setVisualContext(igVisualContext *context)
+{
+    if (_visualContext != context) {
+        if (_visualContext)
+            terminateDrawing();
+        _visualContext = context;
+        if (_visualContext)
+            initializeDrawing();
     }
+}
+}
 }
 

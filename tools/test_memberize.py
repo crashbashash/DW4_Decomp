@@ -180,6 +180,119 @@ class Memberize(unittest.TestCase):
         write(self.table, TABLE + "User_Count\tWidget::count\n")
         self.assertEqual(self.run_tool(), 2)
 
+    def test_a_virtual_function_is_never_called_through_the_vtable_by_its_c_name(self):
+        write(os.path.join(self.root, "config", "class-members.tsv"),
+              self.read("config/class-members.tsv") + "Widget\tvirtual void reset();\n")
+        write(os.path.join(self.root, "src", "game", "Widget.inc"), self.read("src/game/Widget.inc")
+              + "void Widget_Reset(Widget *self) {\n}\n")
+        write(os.path.join(self.root, "src", "game", "Users.inc"), self.read("src/game/Users.inc")
+              + "void Users_Reset(Gadget *g) {\n    Widget_Reset((Widget *)g);\n}\n"
+              + "void Gadget::poke() {\n    Widget_Reset(this);\n}\n")
+        write(os.path.join(self.root, "src", "game", "Game.h"), self.read("src/game/Game.h")
+              + "extern \"C\" void Widget_Reset(Widget *self);\n")
+        write(self.table, TABLE + "Widget_Reset\tWidget::reset\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        self.assertIn("void Widget::reset() {\n}", self.read("src/game/Widget.inc"))
+        users = self.read("src/game/Users.inc")
+        # outside the class the call keeps the C name (and its declaration); a subclass's own call is qualified
+        self.assertIn("    Widget_Reset((Widget *)g);", users)
+        self.assertIn("void Gadget::poke() {\n    Widget::reset();\n}", users)
+        self.assertIn("extern \"C\" void Widget_Reset(Widget *self);", self.read("src/game/Game.h"))
+
+    def append(self, rel, text):
+        write(os.path.join(self.root, rel), self.read(rel) + text)
+
+    def constructors(self):
+        """A constructor pair: Widget's, and Gadget's, which constructs its Widget base first."""
+        self.append("config/class-members.tsv", "Widget\tWidget();\nGadget\tGadget();\n")
+        self.append("src/game/Widget.inc",
+                    "Widget *Widget_Init(Widget *self) {\n    self->_vtable = (int)&g_Widget_vtable[0];\n"
+                    "    self->_count = 0;\n    return self;\n}\n\n"
+                    "Gadget *Gadget_Init(Gadget *self) {\n    Widget_Init((Widget *)self);\n"
+                    "    self->_vtable = (int)&g_Gadget_vtable[0];\n    self->_extra = 1;\n    return self;\n}\n")
+        # a class still written as a flat struct probes its vtable through the C name
+        self.append("src/game/Users.inc", "int Users_Probe(void) {\n    int o[2];\n"
+                                          "    Widget_Init((Widget *)o);\n    return o[0];\n}\n")
+        self.append("include/dw4/game/Widget.h", "#ifdef __cplusplus\nextern \"C\" {\n#endif\n"
+                                                 "struct Widget *Widget_Init(struct Widget *self);\n"
+                                                 "#ifdef __cplusplus\n}\n#endif\n")
+        self.append("src/game/Game.h", "extern \"C\" Widget *Widget_Init(Widget *self);\n"
+                                       "extern \"C\" Gadget *Gadget_Init(Gadget *self);\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Widget_Init\n00100140 000020 Gadget_Init\n")
+        rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
+        rows["0x00100000"]["emitted"].update({"Widget_Init": "0x00100100", "Gadget_Init": "0x00100140"})
+        write(os.path.join(self.root, "config", "SLUS-20836", "unit-objects.json"), json.dumps(rows, indent=2))
+        write(self.table, TABLE + "Widget_Init\tWidget::Widget\nGadget_Init\tGadget::Gadget\n")
+
+    def test_a_constructor_loses_what_the_compiler_writes(self):
+        self.constructors()
+        self.assertEqual(self.run_tool("--apply"), 0)
+        widget = self.read("src/game/Widget.inc")
+        # the vtable stamp and `return self;` are the compiler's; so is the base's construction, first
+        self.assertIn("Widget::Widget() {\n    _count = 0;\n}\n", widget)
+        self.assertIn("Gadget::Gadget() {\n    _extra = 1;\n}\n", widget)
+        rows = json.loads(self.read("config/SLUS-20836/unit-objects.json"))
+        self.assertEqual(rows["0x00100000"]["emitted"]["__ct__6WidgetFv"], "0x00100100")
+        self.assertEqual(rows["0x00100000"]["emitted"]["__ct__6GadgetFv"], "0x00100140")
+
+    def test_the_boundary_keeps_the_home_prototype_while_a_flat_struct_uses_the_c_name(self):
+        self.constructors()
+        self.assertEqual(self.run_tool("--apply"), 0)
+        self.assertIn("    Widget_Init((Widget *)o);", self.read("src/game/Users.inc"))
+        self.assertIn("struct Widget *Widget_Init(struct Widget *self);", self.read("include/dw4/game/Widget.h"))
+        game = self.read("src/game/Game.h")
+        # Game.cpp reads the home header: its own copy goes; nothing calls Gadget_Init by its C name any more
+        self.assertNotIn("Widget_Init", game)
+        self.assertNotIn("Gadget_Init", game)
+
+    def test_a_constructor_constructing_its_base_late_is_refused(self):
+        self.constructors()
+        # a statement of the class's own before the base's construction: C++ cannot write that order
+        text = self.read("src/game/Widget.inc").replace(
+            "    Widget_Init((Widget *)self);\n    self->_vtable = (int)&g_Gadget_vtable[0];\n    self->_extra = 1;\n",
+            "    self->_extra = 1;\n    Widget_Init((Widget *)self);\n    self->_vtable = (int)&g_Gadget_vtable[0];\n")
+        write(os.path.join(self.root, "src", "game", "Widget.inc"), text)
+        self.assertEqual(self.run_tool(), 2)
+
+    def test_an_implicit_destructor_goes_and_delete_destroys(self):
+        write(os.path.join(self.root, "config", "converted-classes.tsv"), "Widget\tGame\n")
+        self.append("src/game/Widget.inc",
+                    "/* Widget_Destroy: release, then free */\n"
+                    "Widget *Widget_Destroy(Widget *self, short deleteFlag) {\n    if (self != 0) {\n"
+                    "        self->_vtable = (int)&g_Widget_vtable[0];\n        if (deleteFlag > 0)\n"
+                    "            Memory_Free(self);\n    }\n    return self;\n}\n")
+        self.append("src/game/Users.inc",
+                    "void Users_Drop(Gap::Game::Widget *w, int o[2]) {\n    Widget_Destroy(w, 1);\n"
+                    "    Widget_Destroy((Widget *)o, 0);\n}\n")
+        self.append("src/game/Game.h", "extern \"C\" Widget *Widget_Destroy(Widget *self, short deleteFlag);\n")
+        write(self.table, TABLE + "Widget_Destroy\tWidget::~Widget\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        widget = self.read("src/game/Widget.inc")
+        self.assertNotIn("Widget_Destroy", widget)
+        self.assertNotIn("release, then free", widget)
+        users = self.read("src/game/Users.inc")
+        self.assertIn("    delete w;\n    Widget_Destroy((Widget *)o, 0);\n", users)
+        self.assertIn("Widget_Destroy", self.read("src/game/Game.h"))      # the flat probe's prototype
+        # the converted class lives in its namespace: its definitions are written inside it
+        self.assertIn("namespace Gap {\nnamespace Game {\n\nstruct Meta *Widget::_Meta;\n", widget)
+        self.assertIn("int Widget::getCount() {", widget)
+        self.assertTrue(widget.endswith("}\n}\n}\n"))
+
+    def test_check_reports_a_c_name_declaration_nothing_needs(self):
+        self.assertEqual(self.run_tool("--apply"), 0)
+        write(os.path.join(self.root, "config", "converted-classes.tsv"), "Widget\tGame\n")
+        write(os.path.join(self.root, "config", "SLUS-20836", "compiler-names.tsv"),
+              "getCount__6WidgetFv\t0x00100060\tWidget_GetCount\nattach__6WidgetFP3Ctx\t0x00100080\tWidget_Attach\n")
+        self.assertEqual(self.run_tool("--check"), 0)
+        # Widget_GetCount: user.c still calls it, through Widget.h; a declaration of Widget_Attach left behind
+        # serves no code
+        self.append("src/game/Game.h", "extern \"C\" void Widget_Attach(WidgetView *view, struct Ctx *ctx);\n")
+        self.assertEqual(self.run_tool("--check"), 1)
+        found = memberize.boundary_report(self.root)
+        self.assertEqual(len(found), 1)
+        self.assertRegex(found[0], r"^src/game/Game.h:\d+: Widget_Attach: C-name declaration no longer needed: no "
+                                   r"unconverted code")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -32,7 +32,7 @@ CallbackArray *igMatrixObject_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMatrixObject_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igMatrixObject_GetMetaObjectFunction,
         "igMatrixObject",

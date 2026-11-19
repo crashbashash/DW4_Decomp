@@ -49,7 +49,7 @@ CallbackArray *beLoadIntf2ComMdlData_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beLoadIntf2ComMdlData_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beLoadIntf2ComMdlData_GetMetaObject,
         "beLoadIntf2ComMdlData",

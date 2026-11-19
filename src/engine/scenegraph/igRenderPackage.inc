@@ -85,7 +85,7 @@ CallbackArray *igRenderPackage_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igRenderPackage_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igRenderPackage_GetMetaObjectFunction,
         "igRenderPackage",

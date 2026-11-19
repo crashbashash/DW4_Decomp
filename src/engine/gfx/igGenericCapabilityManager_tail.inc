@@ -111,7 +111,7 @@ StringRef FUN_001554a0(int arg1) {
 }
 
 
-void *igObject_GetMetaObject_Virtual(void){return g_igObject_metaObject;}
+void *igObject_GetMetaObject_Virtual(void){return Gap::Core::igObject::_Meta;}
 
 void FUN_00155c00(igResult *out, Owner *owner, int id) {
     int i;

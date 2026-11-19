@@ -44,7 +44,7 @@ CallbackArray *igMetaField_Register(void) {
     return igMetaObject_RegisterClass(
         1,
         &g_igMetaField_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igMetaField_GetMetaObjectFunction,
         "igMetaField",

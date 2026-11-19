@@ -25,7 +25,7 @@ CallbackArray *igVectorBlending_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVectorBlending_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         (igMetaObjectCallback)thunk_igVectorBlending_GetMetaObject_00186ff0,
         "igVectorBlending",

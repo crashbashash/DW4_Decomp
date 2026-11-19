@@ -432,7 +432,7 @@
   "igCharMetricsList": 4,
   "igCharMetricsMetaField": 1,
   "igClearAttr": 16,
-  "igClearRenderer": 2,
+  "igClearRenderer": 7,
   "igClippingStateAttr": 2,
   "igClut": 25,
   "igCollisionCell": 2,
@@ -571,7 +571,7 @@
   "igMetaEnum": 13,
   "igMetaField": 556,
   "igMetaFieldList": 53,
-  "igMetaObject": 1234,
+  "igMetaObject": 1235,
   "igModel": 6,
   "igModelViewMatrixAttr": 11,
   "igMousePosObserver": 23,
@@ -587,7 +587,7 @@
   "igNode": 27,
   "igNodeList": 12,
   "igNormalizeNormalsStateAttr": 2,
-  "igObject": 1966,
+  "igObject": 1970,
   "igObjectDirEntry": 39,
   "igObjectList": 935,
   "igObjectListList": 4,
@@ -658,7 +658,7 @@
   "igRegistryValue": 29,
   "igRegistryValueList": 9,
   "igRenderListAttr": 3,
-  "igRenderer": 7,
+  "igRenderer": 5,
   "igRendererOrderedList": 12,
   "igResource": 103,
   "igRotateMode": 89,
@@ -738,7 +738,7 @@
   "igViewerSceneInfoManager": 193,
   "igViewerSceneInfoManagerController": 10,
   "igViewportAttr": 12,
-  "igVisualContext": 26,
+  "igVisualContext": 29,
   "igVisualContextAttrDefaultManager": 2,
   "igVisualContextCapabilityManager": 1,
   "igWindowSizeObserver": 1,
@@ -746,6 +746,15 @@
   "libNdmwRuntimePlugin": 42
  },
  "by_folder": {
+  "(implicit)": {
+   "files": 0,
+   "offset_casts": 0,
+   "other_members": 0,
+   "recovered": 4,
+   "recovered_pct": 100.0,
+   "synthetic": 0,
+   "total": 4
+  },
   "audio": {
    "files": 3,
    "offset_casts": 3,
@@ -766,12 +775,12 @@
   },
   "engine": {
    "files": 50,
-   "offset_casts": 2503,
-   "other_members": 12714,
-   "recovered": 13588,
-   "recovered_pct": 40.35,
-   "synthetic": 4869,
-   "total": 33674
+   "offset_casts": 2505,
+   "other_members": 12709,
+   "recovered": 13595,
+   "recovered_pct": 40.37,
+   "synthetic": 4864,
+   "total": 33673
   },
   "game": {
    "files": 85,
@@ -847,9 +856,9 @@
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 3206,
- "recovered": 33809,
- "synthetic": 5805,
- "total": 72940,
+ "offset_casts": 3208,
+ "recovered": 33820,
+ "synthetic": 5800,
+ "total": 72943,
  "typeable": 0
 }

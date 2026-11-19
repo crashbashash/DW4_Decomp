@@ -1,6 +1,8 @@
+/* reflected.h first, outside the guard: a converted class's smart-pointer member includes this header back
+ * from there, after the flat structs, and must then find the template defined. */
+#include "dw4/support/reflected.h"
 #ifndef DW4_IGSMARTPOINTER_H
 #define DW4_IGSMARTPOINTER_H
-#include "dw4/support/reflected.h"
 #include "dw4/core/igObjectDispatchView.h"
 #include "dw4/core/igObject.h"
 

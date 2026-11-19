@@ -31,7 +31,7 @@ CallbackArray *igAudioContext_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igAudioContext_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igAudioContext_GetMetaObjectFunction,
         "igAudioContext",

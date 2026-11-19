@@ -24,19 +24,40 @@ For each conversion, across every source, header and `.inc` fragment of src/ and
     (cast to `T *` where it was declared as `T`). A receiver the body assigns or takes the address of is
     refused. A C function whose parameters already equal the member's (an instance member whose receiver was
     unused) keeps its list. A member the class defines inline (its declaration has a body) loses the C
-    definition instead;
+    definition instead. A class of config/converted-classes.tsv is `Gap::<Library>::Class` (the table may name it
+    bare), and its definitions are written inside its namespaces, `namespace Gap { namespace <Library> {` around
+    `T Class::name(...)` (tools/cxxscope.py, the spelling of the kit's .cpp files and of igen's ODLSource, which
+    tools/gen_odl_source.py writes too; adjacent definitions share one block);
+  * a constructor (`Class::Class`, declared in class-members.tsv) from its C form `T *Class_Init(T *self, ...)`:
+    the head has no return type, and what MWCC writes in a C++ constructor goes from the body: the store of the
+    vtable into the receiver, the closing `return self;`, and a first statement constructing a base class by its
+    C name (this batch's constructor or one the compiler-name map binds), which C++ does implicitly (with
+    arguments, the member initialiser ` : Base(args)`); a base constructed after other statements is refused;
+  * a destructor (`Class::~Class`): Alchemy's are implicit (the class declares none; the compiler writes the
+    vtable stamp, each member's release and the delete where an object is destroyed), so the C body
+    `Class_Destroy(self, flag)` goes, with its comment; a destructor the class declares out of line is refused
+    (its user body is written by hand). `Class_Destroy(p, 1)` on a pointer declared as the Gap class (or a
+    subclass) becomes `delete p`;
   * a static datum's definition `T g_x;` becomes `T Class::name;`;
   * calls and uses in C++: inside a member function of the class the bare `name(...)`; a static member elsewhere
     `Class::name(...)` (and `Class::name` as a value); an instance call `C_name(obj, a)` becomes `obj->name(a)`,
     the receiver cast to the class (`((Class *)expr)->name(a)`) unless it is declared as the class or one of its
     subclasses (`obj->name(a)`), `&x` becomes `x.name(a)`, and a call on the function's own receiver inside a
     member of the class is the bare `name(a)`;
+  * a virtual function (its class-members.tsv row says `virtual`) called by its C name runs that implementation,
+    not the object's override, so it never becomes `obj->name(a)`: a call on `this` inside a member of the class
+    or a subclass becomes the qualified `Class::name(a)`, and every other use keeps the C name, with its
+    declarations (the base call of an override not converted yet);
   * calls in C (a `.c` unit, a fragment or header only C units read) keep the C name: the link renames every
-    compiler name to its `symbols.txt` name, so the C name still resolves. The C prototype in the home header is
-    kept for them; every other declaration of the C name (`extern "C"` lines, C-linkage blocks, a unity header's
-    own prototypes) goes, and an `#ifdef __cplusplus`/`#endif` pair or `extern "C" { }` block left empty goes
-    with it;
-  * comments naming the C name name `Class::name`;
+    compiler name to its `symbols.txt` name, so the C name still resolves. So do a constructor's or destructor's
+    calls on objects of classes still written as flat structs (a GetVTable probe, an unconverted subclass);
+  * the boundary: while any code still names the C name, its prototype stays in its home header (a header under
+    include/, the one named for the class first), and in another header only where a user's unit does not read
+    the home header; every other declaration of the C name (`extern "C"` lines, C-linkage blocks, a unity
+    header's own prototypes), and all of them once nothing names it, goes, and an `#ifdef __cplusplus`/`#endif`
+    pair or `extern "C" { }` block left empty goes with it. `--check` reports a declaration of a converted
+    member's C name (compiler-names.tsv, a converted class) that rule would remove, exit status 1;
+  * comments naming the C name name `Class::name`, unless code still uses the C name;
   * config/SLUS-20836/unit-objects.json: in the unit that places the function or datum, its `emitted`/`data`
     key (or the row's `symbol`) becomes the compiler name (demangle.mangle: `setVisualContext__10igRendererFP15
     igVisualContext`), which is how tools/compiler_names.py binds the compiler name to the `symbols.txt` key;
@@ -57,6 +78,8 @@ and verify each touched unit with tools/check.py.
   memberize.py table.tsv                 # what would change
   memberize.py table.tsv --diff          # ...with the source diff
   memberize.py table.tsv --apply         # do it
+  memberize.py --respell [--apply]       # every `T Gap::Lib::Class::m(...)` definition into its namespaces
+  memberize.py --check                   # C-name declarations nothing needs any more
 """
 import argparse
 import collections
@@ -69,9 +92,11 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts"))
+import compiler_names  # noqa: E402
+import cxxscope  # noqa: E402
 import declarations  # noqa: E402
 import units  # noqa: E402
-from demangle import mangle  # noqa: E402
+from demangle import demangle, mangle  # noqa: E402
 from typed_coverage import local_names  # noqa: E402
 import check_struct_conflicts as csc  # noqa: E402
 
@@ -88,11 +113,13 @@ class Refused(Exception):
 class Conversion:
     """One C name and the member it becomes."""
 
-    def __init__(self, cname, cls, name, kind, static, const, inline, ret, params, declaration):
+    def __init__(self, cname, cls, name, kind, static, const, inline, ret, params, declaration, virtual=False):
         self.cname, self.cls, self.name, self.kind = cname, cls, name, kind
         self.static, self.const, self.inline = static, const, inline
         self.ret, self.params = ret, params            # normalised types (declarations.Types)
         self.declaration = declaration                 # the class-members.tsv text to add, or None
+        self.virtual = virtual                         # a virtual function: a call by its C name is not virtual
+        self.implicit = False                          # a destructor the class does not declare: the compiler's
         self.mangled = None
         self.va = None
 
@@ -104,6 +131,13 @@ class Conversion:
     @property
     def qualified(self):
         return "%s::%s" % (self.cls, self.name)
+
+    @property
+    def special(self):
+        """"ctor" for a constructor (`Class::Class`), "dtor" for a destructor (`Class::~Class`), else None."""
+        if self.name == self.base:
+            return "ctor"
+        return "dtor" if self.name == "~" + self.base else None
 
 
 def _read(path):
@@ -153,8 +187,14 @@ def declared_members(cls, rows, macros, types):
     return found
 
 
-_SIGNATURE = re.compile(r"^(?P<lead>(?:static\s+|inline\s+)*)(?P<ret>.*?)\b(?P<cls>(?:[A-Za-z_]\w*::)+)"
+_SIGNATURE = re.compile(r"^(?P<lead>(?:static\s+|inline\s+|virtual\s+)*)(?P<ret>.*?)\b(?P<cls>(?:[A-Za-z_]\w*::)+)"
                         r"(?P<name>~?[A-Za-z_]\w*)\s*(?P<rest>(?:\(.*\)\s*(?:const)?)?)\s*;?$", re.S)
+
+
+def declares_virtual(rows, name):
+    """Whether class-members.tsv rows declare a function `name` virtual."""
+    return any(re.match(r"(?:inline\s+)?virtual\b", row) and re.search(r"[\s*&]%s\s*\(" % re.escape(name), row)
+               for row in rows)
 
 
 def conversions(rows, members, macros, types):
@@ -174,8 +214,9 @@ def conversions(rows, members, macros, types):
         declaration = None
         if full:
             lead, ret, rest = m.group("lead"), m.group("ret").strip(), m.group("rest").strip()
-            decl_text = "%s%s%s%s%s;" % ("static " if "static" in lead.split() else "", ret,
-                                          "" if ret.endswith(("*", "&")) else " ", name, rest)
+            decl_text = "%s%s%s%s%s%s;" % ("static " if "static" in lead.split() else "",
+                                            "virtual " if "virtual" in lead.split() else "", ret,
+                                            "" if ret.endswith(("*", "&")) else " ", name, rest)
             parsed = declared_members(base, [decl_text], macros, types)
             if not parsed:
                 errors.append("table line %d: cannot read `%s`" % (line, text))
@@ -190,8 +231,19 @@ def conversions(rows, members, macros, types):
                 continue
             else:
                 declaration = decl_text
+        elif not same and name == "~" + base:
+            # an Alchemy class declares no destructor: the compiler writes it (the vtable stamp, each member's
+            # release, the delete), so the source has no body for it
+            conv = Conversion(cname, cls, name, "func", False, False, False, None, (), None)
+            conv.implicit = True
+            out.append(conv)
+            continue
         elif len(same) == 1:
             want = same[0]
+            if name == "~" + base and not want.inline:
+                errors.append("table line %d: %s declares an out-of-line destructor: its user body is written by "
+                              "hand (memberize converts an implicit or inline one)" % (line, base))
+                continue
         elif not same:
             errors.append("table line %d: %s declares no member %s in config/class-members.tsv: give the full "
                           "signature" % (line, base, name))
@@ -200,17 +252,38 @@ def conversions(rows, members, macros, types):
             errors.append("table line %d: %s declares %d members named %s: give the full signature"
                           % (line, base, len(same), name))
             continue
+        virtual = want.kind == "func" and not want.static and (
+            declares_virtual((members or {}).get(base, []) + ([declaration] if declaration else []), name))
         out.append(Conversion(cname, cls, name, want.kind, bool(want.static), bool(want.const), bool(want.inline),
-                              want.ret, tuple(want.params or ()), declaration))
+                              want.ret, tuple(want.params or ()), declaration, virtual))
     return out, errors
 
 
-def compiler_name(conv):
-    """The MWCC b52 name of a conversion's member."""
+def compiler_name(conv, converted=None):
+    """The MWCC b52 name of a conversion's member. In a member of a Gap class a parameter type naming a converted
+    class is that Gap class (`converted` is {class: library namespace}), as the class scope finds it."""
     if conv.kind == "data":
         return mangle(conv.qualified, None)
     params = [re.sub(r"\s*:\s*:\s*", "::", p) for p in conv.params]
+    if converted and conv.cls.startswith("Gap::"):
+        params = [re.sub(r"(?<![\w:])([A-Za-z_]\w*)\b",
+                         lambda m: "Gap::%s::%s" % (converted[m.group(1)], m.group(1))
+                         if m.group(1) in converted else m.group(1), p) for p in params]
     return mangle(conv.qualified, params, conv.const)
+
+
+def converted_classes(root):
+    """{class: library namespace} of config/converted-classes.tsv; the root igObject is implied by any row."""
+    path = os.path.join(root, "config", "converted-classes.tsv")
+    out = {}
+    if os.path.exists(path):
+        for line in _read(path).splitlines():
+            parts = line.split("\t")
+            if len(parts) == 2 and not line.startswith("#") and parts[0].strip():
+                out[parts[0].strip()] = parts[1].strip()
+    if out:
+        out.setdefault("igObject", "Core")
+    return out
 
 
 # ---- the tree --------------------------------------------------------------------------------------
@@ -415,6 +488,10 @@ class Planner:
         self.c_callers = collections.defaultdict(set)   # C name -> files that keep calling it
         self.defined = {}                               # C name -> file defining it
         self.inline_users = collections.defaultdict(set)
+        self.declaration_sites = []                     # (file, conversion, position, statement start, end)
+        self.base_ctors = {}                            # C name -> class of the constructor it is
+        self.boundary = {}                              # C name -> files whose declaration of it stays
+        self.comment_names = []                         # (file, start, end, conversion) of a C name in a comment
 
     def qual(self, conv, inside):
         """How code names a member: bare inside a member of its class, else qualified."""
@@ -454,7 +531,14 @@ class Planner:
             for w in _WORD.finditer(fr.text, start, end):
                 conv = self.by_cname.get(w.group(0))
                 if conv is not None:
-                    fr.edits.append((w.start(), w.end(), conv.qualified))
+                    self.comment_names.append((fr, w.start(), w.end(), conv))
+
+    def rename_comments(self):
+        """Comments naming a converted C name name the member, unless code still uses the C name (a boundary C
+        name: the comment's name is still the one that code calls)."""
+        for fr, start, end, conv in self.comment_names:
+            if not self.c_callers.get(conv.cname):
+                fr.edits.append((start, end, conv.qualified))
 
     @staticmethod
     def comment_spans(fr):
@@ -470,6 +554,12 @@ class Planner:
             return
         inside = self.member_class_of(fr, ctx)
         after = re.match(r"\s*\(", fr.clean[end:])
+        if conv.special:
+            self.plan_special_use(fr, conv, pos, end, after, ctx)
+            return
+        if conv.virtual:
+            self.plan_virtual_use(fr, conv, pos, end, after, inside)
+            return
         if conv.kind == "data" or conv.static:
             fr.edits.append((pos, end, self.qual(conv, inside)))
             if conv.inline and conv.kind == "func" and not after:
@@ -491,6 +581,67 @@ class Planner:
         # the receiver and the name are replaced; the other arguments keep their text (and their own edits)
         stop = spans[1][0] if len(spans) > 1 else close
         fr.edits.append((pos, stop, (receiver or "") + conv.name + "("))
+
+    def plan_special_use(self, fr, conv, pos, end, after, ctx):
+        """A call of a constructor's or destructor's C name. The calls a converted subclass's constructor made of
+        its base's went with its definition (an implicit base construction); a destructor called with a positive
+        delete flag on a pointer declared as the Gap class (or a subclass) is `delete p`. Every other call
+        constructs or destroys an object of a class still written as a flat struct (a GetVTable probe, an
+        unconverted subclass): the C name stays, and with it the prototype in its home header."""
+        if after and conv.special == "dtor":
+            open_ = end + after.end() - 1
+            close = declarations._close(fr.clean, open_)
+            spans = _arg_spans(fr.clean, open_, close)
+            if len(spans) == 2 and re.fullmatch(r"\(?\s*[1-9]\d*\s*\)?", fr.clean[spans[1][0]:spans[1][1]]):
+                e = _strip_parens(fr.text[spans[0][0]:spans[0][1]])
+                declared = re.search(r"\bGap\s*::\s*\w+\s*::\s*(\w+)\s*\*\s*%s\b" % re.escape(e),
+                                     fr.text[ctx[1]:ctx[2]]) if re.fullmatch(r"\w+", e) else None
+                if declared and self.classes.derives(declared.group(1), conv.base):
+                    stmt = re.match(r"\s*;", fr.clean[close + 1:])
+                    if stmt:
+                        fr.edits.append((pos, close + 1, "delete %s" % e))
+                        return
+        self.c_callers[conv.cname].add(fr.rel)
+
+    def plan_virtual_use(self, fr, conv, pos, end, after, inside):
+        """A use of a virtual function's C name runs that class's implementation, not the object's override:
+        inside a member of the class or a subclass, a call on `this` becomes the qualified, non-virtual
+        `Class::name(a)`; anywhere else the C name stays (its declaration with it), since `obj->name(a)` would
+        dispatch through the vtable."""
+        if after and inside is not None and self.classes.derives(inside.rsplit("::", 1)[-1], conv.base):
+            open_ = end + after.end() - 1
+            close = declarations._close(fr.clean, open_)
+            spans = _arg_spans(fr.clean, open_, close)
+            if len(spans) == len(conv.params) + 1:
+                e = _strip_parens(fr.text[spans[0][0]:spans[0][1]])
+                cast = _CAST.match(e)
+                if (_strip_parens(cast.group(2)) if cast else e) == "this":
+                    stop = spans[1][0] if len(spans) > 1 else close
+                    fr.edits.append((pos, stop, "%s::%s(" % (conv.base, conv.name)))
+                    return
+        self.c_callers[conv.cname].add(fr.rel)
+
+    def settle_declarations(self):
+        """Each converted C name's declarations: none stays when no use keeps the C name; else the home header's
+        stays (boundary_sites), with any other a user's unit needs because it does not read the home header."""
+        by_name = collections.defaultdict(list)
+        for site in self.declaration_sites:
+            by_name[site[1].cname].append(site)
+        for cname, sites in sorted(by_name.items()):
+            conv = sites[0][1]
+            listed = [(fr.rel, cxx_only(fr, pos)) for fr, _conv, pos, _s, _e in sites]
+            keep, notes = boundary_sites(self.index, conv.base, listed, self.c_callers.get(cname, set()))
+            self.notes.extend("%s: %s" % (cname, n) for n in notes)
+            self.boundary[cname] = sorted({listed[i][0] for i in keep})
+            for i, (fr, _conv, pos, stmt_start, stmt_end) in enumerate(sites):
+                if i in keep:
+                    continue
+                span = _line_span(fr.clean, stmt_start, stmt_end + 1)
+                if span is None:
+                    self.errors.append("%s:%d: the declaration of %s shares its line with other code: remove it by "
+                                       "hand" % (fr.rel, fr.text.count("\n", 0, pos) + 1, cname))
+                else:
+                    fr.deletes.append(span)
 
     def receiver(self, fr, conv, expr, ctx, inside):
         """The object expression with its `->`/`.` for an instance call, or None for a bare call (the enclosing
@@ -537,17 +688,11 @@ class Planner:
         declaration = (nxt == "(" and "=" not in head and conv.kind == "func") or \
                       (conv.kind == "data" and is_extern and "=" not in head)
         if declaration:
-            stmt_end = fr.clean.find(";", end)
-            if c_side and self.c_callers.get(conv.cname) is not None and not cxx_only(fr, pos):
-                return                                   # C still calls it: its C prototype stays
-            span = _line_span(fr.clean, stmt_start, stmt_end + 1)
-            if span is None:
-                self.errors.append("%s:%d: the declaration of %s shares its line with other code: remove it by hand"
-                                   % (fr.rel, fr.text.count("\n", 0, pos) + 1, conv.cname))
-            else:
-                fr.deletes.append(span)
+            # whether it stays is known once every file is read: the home header keeps it while an unconverted
+            # caller still uses the C name (settle_declarations)
+            self.declaration_sites.append((fr, conv, pos, stmt_start, fr.clean.find(";", end)))
             return
-        if c_side and not cxx_side:
+        if (c_side and not cxx_side) or conv.virtual or conv.special:
             self.c_callers[conv.cname].add(fr.rel)
             return
         if conv.kind == "func" and not conv.static:
@@ -581,7 +726,7 @@ class Planner:
             head = fr.clean[start:brace]
             if re.search(r"\bstatic\b", head[:declarations._first_paren(head)]):
                 raise Refused("%s: %s is a file-scope static: it stays a free function" % (fr.rel, conv.cname))
-            if conv.inline:
+            if conv.inline or conv.implicit:
                 p = declarations._first_paren(head)
                 ret = self.index.types.strip_top_cv(self.index.types.norm(declarations._STORAGE.sub(
                     " ", head[:head.rfind(conv.cname, 0, p)])))
@@ -593,9 +738,15 @@ class Planner:
                 if span is None:
                     raise Refused("%s: %s's definition shares its lines with other code" % (fr.rel, conv.cname))
                 ls, le = span
+                if conv.implicit:
+                    ls = cxxscope._lead_comments(fr.text, fr.clean, ls)   # its comment describes that body
                 if fr.text[le:le + 1] == "\n" and (ls == 0 or fr.text[ls - 2:ls] == "\n\n"):
                     le += 1                              # and the blank line after it
                 fr.deletes.append((ls, le))
+                if conv.implicit:
+                    self.notes.append("%s was %s's implicit destructor: its body goes, the compiler writes it where "
+                                      "an object of the class is destroyed (`delete`, a local's scope end)"
+                                      % (conv.cname, conv.cls))
                 return True
             self.rewrite_definition(fr, conv, (name, start, end))
             return True
@@ -622,18 +773,69 @@ class Planner:
             raise Refused("%s: %s's parameters (%s) are not %s's (%s)" % (
                 fr.rel, conv.cname, ", ".join(got), conv.qualified, ", ".join(conv.params)))
         ret = head[:head.rfind(conv.cname, 0, p)].rstrip()
-        ret_norm = types.strip_top_cv(types.norm(declarations._STORAGE.sub(" ", ret)))
-        if ret_norm != conv.ret and conv.ret is not None:
-            self.notes.append("%s: %s returns %s, %s is declared to return %s: the head takes the declaration's"
-                              % (fr.rel, conv.cname, ret_norm or "nothing", conv.qualified, conv.ret))
-            ret = conv.ret.replace("*", " *").replace("  ", " ").strip()
+        initializer = ""
+        if conv.special == "ctor":
+            if receiver is None:
+                raise Refused("%s: %s has no receiver: a constructor's C form takes the object first"
+                              % (fr.rel, conv.cname))
+            ret = ""                                     # a constructor returns nothing: `return self;` goes
+            initializer = self.constructor_body(fr, conv, ctx, receiver[1])
+        else:
+            ret_norm = types.strip_top_cv(types.norm(declarations._STORAGE.sub(" ", ret)))
+            if ret_norm != conv.ret and conv.ret is not None:
+                self.notes.append("%s: %s returns %s, %s is declared to return %s: the head takes the declaration's"
+                                  % (fr.rel, conv.cname, ret_norm or "nothing", conv.qualified, conv.ret))
+                ret = conv.ret.replace("*", " *").replace("  ", " ").strip()
         plist = ", ".join(("%s %s" % (t, n) if not t.endswith(("*", "&")) else "%s%s" % (t, n)) if n else t
                           for t, n in params)
-        new_head = "%s%s%s(%s)%s%s" % (ret, "" if ret.endswith(("*", "&")) or not ret else " ", conv.qualified,
-                                       plist, " const" if conv.const else "", head[close + 1:])
+        new_head = "%s%s%s(%s)%s%s%s" % (ret, "" if ret.endswith(("*", "&")) or not ret else " ", conv.qualified,
+                                         plist, " const" if conv.const else "", initializer, head[close + 1:])
         fr.edits.append((start, brace, new_head))
         if receiver is not None:
             self.rewrite_receiver(fr, conv, ctx, receiver, head[p + 1:close])
+
+    _VTABLE_STAMP = r"^[ \t]*(?:%s\s*->\s*\w+|\*\s*\([^()]*\)\s*\(?\s*%s\s*\)?)\s*=[^;]*(?:vtable|vtbl|__vt__)[^;]*;[ \t]*$"
+
+    def constructor_body(self, fr, conv, ctx, rname):
+        """The statements of a constructor's C body the compiler writes in a C++ constructor go: the store of the
+        vtable into the receiver (MWCC stamps it), the closing `return self;`, and a first statement calling a
+        base class's constructor by its C name (this batch's or one the compiler-name map binds), which C++ makes
+        implicitly — with arguments it becomes the member-initialiser ` : Base(args)`, returned."""
+        _name, start, end = ctx
+        brace = fr.head_end(start)
+        first, initializer = True, ""
+        at = fr.clean.find("\n", brace) + 1
+        while 0 < at < end:
+            stop = fr.clean.find("\n", at)
+            stop = end if stop < 0 or stop > end else stop
+            line = fr.clean[at:stop]
+            whole = (at, min(stop + 1, len(fr.text)))
+            stripped = line.strip()
+            if not stripped or stripped == "}":
+                at = stop + 1
+                continue
+            lineno = fr.text.count("\n", 0, at) + 1
+            if re.match(self._VTABLE_STAMP % (re.escape(rname), re.escape(rname)), line):
+                fr.deletes.append(whole)
+            elif re.fullmatch(r"return\s*\(?\s*%s\s*\)?\s*;" % re.escape(rname), stripped):
+                fr.deletes.append(whole)
+            elif re.match(r"return\b", stripped):
+                raise Refused("%s:%d: %s returns something other than its receiver: it is no constructor"
+                              % (fr.rel, lineno, conv.cname))
+            else:
+                call = re.fullmatch(r"(\w+)\s*\(\s*(?:\(\s*[\w:\s]+\*\s*\)\s*)?\(?\s*%s\s*\)?\s*(?:,(.*))?\)\s*;"
+                                    % re.escape(rname), stripped, re.S)
+                base = self.base_ctors.get(call.group(1)) if call else None
+                if base and base != conv.base and self.classes.derives(conv.base, base):
+                    if not first:
+                        raise Refused("%s:%d: %s constructs its base %s after other statements: C++ constructs the "
+                                      "base first" % (fr.rel, lineno, conv.cname, base))
+                    fr.deletes.append(whole)
+                    if call.group(2) and call.group(2).strip():
+                        initializer = " : %s(%s)" % (base, fr.text[at:stop].split(",", 1)[1].rsplit(")", 1)[0].strip())
+                first = False
+            at = stop + 1
+        return initializer
 
     def rewrite_receiver(self, fr, conv, ctx, receiver, signature):
         rtype, rname = receiver
@@ -692,6 +894,52 @@ def cxx_only(fr, pos):
         elif word == "endif" and depth:
             depth.pop()
     return "cxx" in depth
+
+
+# ---- the boundary: C names a converted member keeps -------------------------------------------------------
+def units_reading(index, rel):
+    """The translation units that read file `rel` (itself, the units including a fragment, those reaching a
+    header)."""
+    if rel in index.units:
+        return [rel]
+    if index.unit_of.get(rel):
+        return list(index.unit_of[rel])
+    return [u for u, info in index.units.items() if rel in info["headers"]]
+
+
+def boundary_sites(index, base, sites, users):
+    """Which declarations of a converted member's C name stay -> (set of indexes into `sites`, notes).
+
+    `sites` are the declarations, [(file, inside an `#ifdef __cplusplus` arm)]; `users` the files whose code still
+    names the C name (a C caller, an unconverted subclass's direct call of a virtual default, a flat struct's
+    construction or destruction). None stays without a user. With users, the home header's stays (a header under
+    include/, the one named for the class first), and another only where a user's unit does not read the home
+    header (or, a C unit, reads it only inside `#ifdef __cplusplus`): that unit's own declaration stays for it."""
+    if not users or not sites:
+        return set(), ([] if not users else ["used in %s and declared nowhere" % ", ".join(sorted(users))])
+    order = sorted(range(len(sites)), key=lambda i: (not sites[i][0].startswith("include/"),
+                                                     os.path.splitext(os.path.basename(sites[i][0]))[0] != base,
+                                                     sites[i][0]))
+    home = order[0]
+    keep, notes = {home}, []
+    for user in sorted(users):
+        for unit in units_reading(index, user):
+            info = index.units[unit]
+            c_unit = info["lang"] == declarations._LANG_C
+
+            def serves(i):
+                rel, cxx = sites[i]
+                return (rel in info["files"] or rel in info["headers"]) and not (c_unit and cxx)
+            if any(serves(i) for i in keep):
+                continue
+            found = [i for i in order if serves(i)]
+            if found:
+                keep.add(found[0])
+                notes.append("%s keeps its declaration: %s (through %s) does not read %s"
+                             % (sites[found[0]][0], unit, user, sites[home][0]))
+            else:
+                notes.append("no declaration of it reaches %s (unit %s)" % (user, unit))
+    return keep, notes
 
 
 # ---- unit-objects.json ------------------------------------------------------------------------------
@@ -807,8 +1055,11 @@ def plan(root, table):
     addresses = symbol_addresses(root)
     rows_path = os.path.join(root, "config", GAME, "unit-objects.json")
     rows = json.loads(_read(rows_path)) if os.path.exists(rows_path) else {}
+    converted = converted_classes(root)
     for conv in convs:
-        conv.mangled = compiler_name(conv)
+        if "::" not in conv.cls and conv.cls in converted:
+            conv.cls = "Gap::%s::%s" % (converted[conv.cls], conv.cls)   # a converted class lives in Gap::<Lib>
+        conv.mangled = compiler_name(conv, converted)
         conv.va = addresses.get(conv.cname)
         if conv.va is None:
             for row in rows.values():
@@ -820,6 +1071,7 @@ def plan(root, table):
         text = _read(os.path.join(root, rel))
         if any(c.cname in text for c in convs):
             originals[rel] = text
+    planner.base_ctors = base_constructors(root, convs)
     # 1. the definitions: heads, receivers, data definitions, inline members' C copies removed
     first = {rel: FileRewrite(rel, text) for rel, text in originals.items()}
     for conv in convs:
@@ -845,13 +1097,15 @@ def plan(root, table):
               for rel, fr in first.items()}
     for rel in sorted(second, key=lambda rel: (not c_reads(index, rel) or cxx_reads(index, rel), rel)):
         planner.plan_file(second[rel])
+    planner.settle_declarations()
+    planner.rename_comments()
     if planner.errors:
         raise Refused("\n".join(planner.errors))
     new_texts = {}
     for rel, fr in second.items():
         text = fr.result() if (fr.edits or fr.deletes) else fr.text
         if text != originals[rel]:
-            new_texts[rel] = text
+            new_texts[rel] = cxxscope.respell(text) if cxx_reads(index, rel) else text
     placing = placing_rows(rows, convs, planner.defined, index, addresses)
     changes = rename_rows(rows, convs, placing) if rows else []
     for conv in convs:
@@ -887,14 +1141,120 @@ def touched_rows(new_texts, index, rows, addresses, placing):
     return sorted(out, key=lambda key: (key not in placing, key))
 
 
+def base_constructors(root, convs):
+    """{C name: class} of the constructors a converted class's C constructor may call first: this batch's and
+    those the compiler-name map binds (`__ct__…` at the C name's address)."""
+    out = {c.cname: c.base for c in convs if c.special == "ctor"}
+    for compiled, (_va, retail) in compiler_names.load(os.path.join(root, "config", GAME, "symbols.txt")).items():
+        if compiled.startswith("__ct__"):
+            d = demangle(compiled)
+            if d and d.class_name:
+                out.setdefault(retail, d.class_name)
+    return out
+
+
+def boundary_report(root):
+    """The declarations of converted members' C names that nothing needs any more -> [finding].
+
+    A converted member's C name is the retail name config/SLUS-20836/compiler-names.tsv gives a compiler name of a
+    class in config/converted-classes.tsv. Each declaration of it in src/ and include/ is weighed as memberize
+    weighs it (boundary_sites): one stays in the home header while an unconverted user still names it, plus one
+    for a user's unit that does not read the home header; every other is reported."""
+    index = declarations.Index(root, approvals={})
+    converted = converted_classes(root)
+    cnames = {}
+    for compiled, (_va, retail) in compiler_names.load(os.path.join(root, "config", GAME, "symbols.txt")).items():
+        d = demangle(compiled)
+        if d and d.class_name in converted and retail != compiled:
+            cnames.setdefault(retail, d.class_name)
+    if not cnames:
+        return []
+    pattern = re.compile(r"\b(%s)\b" % "|".join(re.escape(n) for n in sorted(cnames, key=len, reverse=True)))
+    sites, users, defined = collections.defaultdict(list), collections.defaultdict(set), set()
+    for rel in source_files(root):
+        text = index.texts.get(rel)
+        if text is None:
+            text = _read(os.path.join(root, rel))
+        if not pattern.search(text):
+            continue
+        fr = FileRewrite(rel, text)
+        for m in pattern.finditer(fr.clean):
+            cname, pos, end = m.group(1), m.start(), m.end()
+            if fr.clean[max(0, pos - 3):pos].rstrip().endswith((".", "->", "::")) or \
+                    fr.clean[fr.clean.rfind("\n", 0, pos) + 1:pos].lstrip().startswith("#"):
+                continue
+            ctx = fr.enclosing(pos)
+            if ctx is not None and pos < fr.head_end(ctx[1]):
+                if ctx[0] == cname:
+                    defined.add(cname)                   # a C definition: not converted (an alias's own body)
+                continue
+            if ctx is not None:
+                users[cname].add(rel)
+                continue
+            stmt_start = _statement_start(fr.clean, pos)
+            head = fr.clean[stmt_start:pos]
+            nxt = re.compile(r"\s*(\S?)").match(fr.clean, end).group(1)
+            if (nxt == "(" and "=" not in head) or (re.search(r"\bextern\b", head) and "=" not in head):
+                sites[cname].append((rel, cxx_only(fr, pos), fr.text.count("\n", 0, pos) + 1))
+            else:
+                users[cname].add(rel)
+    findings = []
+    for cname, listed in sorted(sites.items()):
+        if cname in defined:
+            continue
+        keep, _notes = boundary_sites(index, cnames[cname], [(rel, cxx) for rel, cxx, _l in listed],
+                                      users.get(cname, set()))
+        home = [listed[i][0] for i in sorted(keep)]
+        for i, (rel, _cxx, line) in enumerate(listed):
+            if i not in keep:
+                why = ("its users read %s" % ", ".join(home)) if users.get(cname) else \
+                    "no unconverted code names it any more (it is a member of %s)" % cnames[cname]
+                findings.append("%s:%d: %s: C-name declaration no longer needed: %s" % (rel, line, cname, why))
+    return findings
+
+
+def respell_tree(root):
+    """{file: new text} of the C++ sources whose Gap-qualified definitions go into their namespaces
+    (tools/cxxscope.py)."""
+    out = {}
+    for rel in source_files(root):
+        if not rel.endswith((".cpp", ".inc", ".h", ".hpp")):
+            continue
+        text = _read(os.path.join(root, rel))
+        if "Gap" not in text:
+            continue
+        new = cxxscope.respell(text)
+        if new != text:
+            out[rel] = new
+    return out
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("table", help="tab-separated `<C name>\\t<member>` rows")
+    ap.add_argument("table", nargs="?", help="tab-separated `<C name>\\t<member>` rows")
     ap.add_argument("--root", default=ROOT, help="the tree to rewrite (default: this repository)")
     ap.add_argument("--apply", action="store_true", help="write the changes (default: dry run)")
     ap.add_argument("--diff", action="store_true", help="print the source changes as a unified diff")
+    ap.add_argument("--check", action="store_true",
+                    help="report each converted member's C-name declaration nothing needs any more (exit 1)")
+    ap.add_argument("--respell", action="store_true",
+                    help="put every Gap-qualified out-of-line definition into its namespaces (no table)")
     a = ap.parse_args(argv)
     root = os.path.abspath(a.root)
+    if a.check:
+        findings = boundary_report(root)
+        for f in findings:
+            print(f)
+        print("memberize --check: %d C-name declaration%s no longer needed" % (len(findings),
+                                                                             "" if len(findings) == 1 else "s"))
+        return 1 if findings else 0
+    if a.respell:
+        new_texts = respell_tree(root)
+        print("%d source files to respell" % len(new_texts))
+        show_and_write(root, new_texts, a)
+        return 0
+    if not a.table:
+        ap.error("give a conversion table, --respell or --check")
     try:
         new_texts, rows, changes, adds, convs, planner = plan(root, a.table)
     except Refused as e:
@@ -902,7 +1262,8 @@ def main(argv=None):
         return 2
     for conv in convs:
         print("  %-40s -> %s%s%s  [%s]" % (conv.cname, "static " if conv.static else "", conv.qualified,
-                                           " (inline)" if conv.inline else "", conv.mangled))
+                                           " (inline)" if conv.inline else " (implicit)" if conv.implicit else "",
+                                           conv.mangled))
     print("%d source files to rewrite, %d unit-objects.json changes, %d class-members.tsv rows to add"
           % (len(new_texts), len(changes), len(adds)))
     for rel in sorted(new_texts):
@@ -912,22 +1273,18 @@ def main(argv=None):
     for cls, decl in adds:
         print("  class-members.tsv %s\t%s" % (cls, decl))
     for cname, files in sorted(planner.c_callers.items()):
-        print("note: C keeps calling %s (%s): its C prototype stays" % (cname, ", ".join(sorted(files))))
+        kept = planner.boundary.get(cname)
+        print("note: %s keeps its C name in %s (C code, a direct call of a virtual function, a flat struct's "
+              "construction or destruction): %s" % (cname, ", ".join(sorted(files)),
+                                                     "its declaration stays in " + ", ".join(kept) if kept
+                                                     else "no declaration of it is left"))
     for member, files in sorted(planner.inline_users.items()):
         print("note: %s is inline and its address is taken in %s: those units compile a copy of it (a "
               "`duplicates` row)" % (member, ", ".join(sorted(files))))
     for n in planner.notes:
         print("note: " + n)
-    if a.diff:
-        for rel in sorted(new_texts):
-            old = _read(os.path.join(root, rel))
-            sys.stdout.writelines(difflib.unified_diff(old.splitlines(True), new_texts[rel].splitlines(True),
-                                                       "a/" + rel, "b/" + rel))
-    if not a.apply:
-        print("\n(dry run — re-run with --apply)")
+    if not show_and_write(root, new_texts, a):
         return 0
-    for rel, text in new_texts.items():
-        _write(os.path.join(root, rel), text)
     if changes:
         with open(os.path.join(root, "config", GAME, "unit-objects.json"), "w") as fh:
             fh.write(json.dumps(rows, indent=2) + "\n")
@@ -946,9 +1303,25 @@ def main(argv=None):
         steps.append("python3 scripts/gen_type_headers.py          # class-members.tsv changed")
     steps += ["python3 tools/whole_file_rows.py --unit-va %s --cxx --write" % key for key in planner.units]
     steps.append("python3 tools/check.py --function <unit va> --cand <unit file>   # each touched unit")
+    steps.append("python3 tools/memberize.py --check              # no C-name declaration left over")
     steps.append("make check-fresh && make link-fresh")
     print("next, in this order:\n" + "\n".join("  " + s for s in steps))
     return 0
+
+
+def show_and_write(root, new_texts, a):
+    """Print the diff when asked; write the texts with --apply -> whether they were written."""
+    if a.diff:
+        for rel in sorted(new_texts):
+            old = _read(os.path.join(root, rel))
+            sys.stdout.writelines(difflib.unified_diff(old.splitlines(True), new_texts[rel].splitlines(True),
+                                                       "a/" + rel, "b/" + rel))
+    if not a.apply:
+        print("\n(dry run — re-run with --apply)")
+        return False
+    for rel, text in new_texts.items():
+        _write(os.path.join(root, rel), text)
+    return True
 
 
 if __name__ == "__main__":

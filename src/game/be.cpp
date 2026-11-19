@@ -90,10 +90,10 @@ namespace Gap {
 namespace Bec {
 /* The Lua class `be`, the object scripts call the native API through. */
 struct beLuaWrapper : igLuaGlue::Class {
-    static void *operator new(unsigned int size, igObject *pool) {
+    static void *operator new(unsigned int size, ::igObject *pool) {
         return Memory_AllocateBufferDirect(size, (igMemoryPoolView *)pool);
     }
-    static void operator delete(void *memory, igObject *) {
+    static void operator delete(void *memory, ::igObject *) {
         Memory_FreeBufferWithAllocator(memory, (igMemoryPoolView *)g_luaGluePool);
     }
     beLuaWrapper();
@@ -103,10 +103,10 @@ struct beLuaWrapper : igLuaGlue::Class {
 
 /* The Lua class `Bec`, the namespace the game's classes are bound under. */
 struct BecLuaWrapper : igLuaGlue::Class {
-    static void *operator new(unsigned int size, igObject *pool) {
+    static void *operator new(unsigned int size, ::igObject *pool) {
         return Memory_AllocateBufferDirect(size, (igMemoryPoolView *)pool);
     }
-    static void operator delete(void *memory, igObject *) {
+    static void operator delete(void *memory, ::igObject *) {
         Memory_FreeBufferWithAllocator(memory, (igMemoryPoolView *)g_luaGluePool);
     }
     BecLuaWrapper();
@@ -649,7 +649,12 @@ int LuaAPI_Dispatch(lua_State *L) {
     }
 }
 
-Gap::Bec::beLuaWrapper::beLuaWrapper() : Class("be", "igInfoManager", 0, 0, 0, 0, 0) {
+namespace Gap {
+namespace Bec {
+
+beLuaWrapper::beLuaWrapper() : Class("be", "igInfoManager", 0, 0, 0, 0, 0) {
+}
+}
 }
 
 /* The start-up hook's factory for the `be` class. */
@@ -705,9 +710,14 @@ void LuaAPI_RegisterClasses(void)
 {
 }
 
-void Gap::Bec::beLuaWrapper::registerFunctions() {
+namespace Gap {
+namespace Bec {
+
+void beLuaWrapper::registerFunctions() {
     LuaClass_BindFunctions(this, 0, LuaAPI_Dispatch, g_luaApiFunctionNames,
                            LUA_API_FUNCTION_COUNT, g_luaApiFunctionCodes, 0);
+}
+}
 }
 
 void be_Activate(void)

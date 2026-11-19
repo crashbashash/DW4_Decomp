@@ -15,18 +15,6 @@ int igTextElement_GetMeta(void) {
     return (int)g_igTextElement_metaObject;
 }
 
-igMetaObject *igClearRenderer_GetMeta(void) {
-    return g_igClearRenderer_metaObject;
-}
-
-void igClearRenderer_Traverse(void) {
-
-}
-
-void igClearRenderer_ReleaseDrawing(void) {
-
-}
-
 igMetaObject *igOnOffValueObserver_GetMeta(void) {
     return g_igOnOffValueObserver_metaObject;
 }

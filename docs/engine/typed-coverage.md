@@ -130,13 +130,24 @@ header is byte for byte what the reflection alone gives:
   referenced class under C++, C keeping the word (`#ifdef __cplusplus` / `#else` around the field).
 - **`config/converted-classes.tsv`** (`<class> <library namespace>`): the class is also declared as
   Alchemy's polymorphic class, `namespace Gap { namespace <library> { class <class> : public <parent>` },
-  after the flat structs. The parent must be converted too; the root is `Gap::Core::igObject`, implied by
-  any row, whose 20 virtual slots follow `igObjectDispatchView`'s order (slot 20 is the inline `getMeta`,
-  which the macros override in every class, so a class writes its vtable the way retail's does). A
+  after the flat structs. The parent must be converted too; the root is `Gap::Core::igObject`, its own
+  `igObject Core` row, declared wholly by its `class-members.tsv` rows: 20 virtual slots in
+  `igObjectDispatchView`'s order (slot 20 is the inline `getMeta`, which the macros override in every
+  class, so a class writes its vtable the way retail's does). A
   converted class declares only its own fields, at their reflected offsets after its parent's registered
   size, then its member rows, and is promoted into `Gap` (`using <library>::<class>;`) as the kit's
   headers do, so Gap code names it unqualified while code outside `Gap` keeps the flat struct. Members
   and typed fields of a converted class go only into this declaration; its flat struct stays the C view.
+
+A converted class's code is counted as its free-function form was, so a conversion never lowers the count.
+A member function (a constructor too) counts `this->x`, its class's bare fields and reads through a typed
+member (`_visualContext->_mode`). Where the member form reaches a field through what the headers define inline,
+each use counts the inline body's accesses: an inline member called on an object of known class
+(`_Meta->isValid()` reads `_validity`, as the free form's `g->_validity & 4` did), a smart-pointer member's
+assignment (igSmartPointer's `operator=`, the reference counts the free form spelled out), and, once per class, a
+converted class's implicit destructor (a `__dt__` name of `compiler-names.tsv` with no `Class::~Class` in src/:
+each smart-pointer member read and released), listed under the `(implicit)` folder. Measured this way, the root
+and renderer conversions (a6f2edc32 to 5f9e3e300) take the count from 33,817 to 33,820.
 
 ### Sizing fields by their MetaField kind and the registered instance size
 

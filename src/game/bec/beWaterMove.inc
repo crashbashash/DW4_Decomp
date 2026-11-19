@@ -47,7 +47,7 @@ CallbackArray *beWaterMove_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beWaterMove_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beWaterMove_GetMetaObjectFunction,
         "beWaterMove",

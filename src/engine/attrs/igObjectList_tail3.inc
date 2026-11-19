@@ -1,4 +1,4 @@
 igMetaObject *igObjectList_GetElementMeta(void) {
-    return g_igObject_metaObject;
+    return Gap::Core::igObject::_Meta;
 }
 

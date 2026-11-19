@@ -46,7 +46,7 @@ CallbackArray *beSvPlatBaseData_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beSvPlatBaseData_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beSvPlatBaseData_GetMetaObjectFunction,
         "beSvPlatBaseData",

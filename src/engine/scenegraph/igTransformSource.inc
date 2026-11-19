@@ -25,7 +25,7 @@ CallbackArray *igTransformSource_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igTransformSource_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igTransformSource_GetMetaObjectFunction,
         "igTransformSource",

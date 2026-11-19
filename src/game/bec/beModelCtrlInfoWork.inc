@@ -289,7 +289,7 @@ CallbackArray *beModelCtrlInfoWork_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beModelCtrlInfoWork_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beModelCtrlInfoWork_GetMetaObjectFunction,
         "beModelCtrlInfoWork",

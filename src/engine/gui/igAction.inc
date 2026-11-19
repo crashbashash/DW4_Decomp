@@ -25,7 +25,7 @@ CallbackArray *igAction_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igAction_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igAction_GetMetaObject,
         "igAction",

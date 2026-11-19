@@ -41,8 +41,22 @@ functions at its edges keep the file's profile.
 A C++ file (`--cxx`) keeps its mangled names in the rows and writes the plain ones to `--names`. A
 cross-file reference the compiler-name map binds (config/SLUS-20836/compiler-names.tsv, tools/compiler_names.py:
 a member another unit's row places) gets no `externals` row, nor a `data` row when the file does not define the
-datum; any other cross-file reference stays an external. `--write` then regenerates the map, so a converted
-class's defining unit is written first and the units that call it after. `--drop` keeps a function out of the
+datum; any other cross-file reference stays an external. The map is read without the rows this run replaces, so
+a name only they bound (a call into the file's own range through a view's member name) stays an external.
+`--write` then regenerates the map, so a converted class's defining unit is written first and the units that
+call it after. The range's present rows settle what they settled before, so regenerating an unchanged unit writes
+its row unchanged and a conversion's row diff is what the conversion changed (stable_row):
+
+  * a compiler name they bind keeps its address (tools/memberize.py renames a converted member's key, and empty
+    virtual functions fit many starts), and a name they strip is dropped (C++ files);
+  * the static initializer's entry is theirs when the file's initializer fits several table entries;
+  * retail functions of the range no compiled function reproduces, none of which they placed, link from retail
+    as they did (the run is `--partial` without saying so); one they placed stops the run, a wrong compile;
+  * a `data` or `externals` name they listed stays while the object still names it, one they left out that binds
+    without a row (data-names.tsv, symbols.txt, the compiler-name map) stays out, a name gone from the object
+    goes; the owner's `symbol` they wrote stays; a field with their content keeps their order.
+
+`--drop` keeps a function out of the
 range when it fits a start another function owns: stock `lua_dofile` and `lua_dobuffer` fit one retail start,
 and only a call target tells them apart; two inline destructors of one shape do too, and the one a member still
 reaches becomes a duplicate.
@@ -151,10 +165,10 @@ def text_functions(obj):
     return syms, headers, out
 
 
-def static_initializer(obj, syms, headers, retail, forced):
+def static_initializer(obj, syms, headers, retail, forced, settled=None):
     """(name, Function, retail address) of the file's static initializer, or None. It is the retail
     function of the static-initializer table its bytes fit, relocated fields masked, or the one
-    `--at` names."""
+    `--at` names; of several that fit, the one the range's previous row places (`settled`)."""
     try:
         found = verify.static_initializer(obj, headers, syms)
     except ValueError as error:
@@ -166,6 +180,8 @@ def static_initializer(obj, syms, headers, retail, forced):
     lo, hi = verify.STATIC_INITIALIZERS
     entries = [forced[name]] if name in forced else [retail.word(at) for at in range(lo, hi, 4)]
     hits = [va for va in entries if function.fits(retail, va)]
+    if len(hits) > 1 and (settled or {}).get(name) in hits:
+        hits = [settled[name]]
     if len(hits) != 1:
         sys.exit("%s fits %s of the static-initializer table: fix the compile or settle with --at %s=VA"
                  % (name, "/".join("0x%x" % va for va in hits) or "no entry", name))
@@ -628,6 +644,78 @@ def overlay_addresses(path):
     return {name: addresses.pop() for name, addresses in seen.items() if len(addresses) == 1}
 
 
+def previous_rows(path, lo, hi):
+    """{key: row} of the whole-file rows of unit-objects.json inside [lo, hi): what the range's last run wrote."""
+    if not os.path.exists(path):
+        return {}
+    with open(path) as fh:
+        return {key: row for key, row in json.load(fh).items() if row.get("whole_file") and lo <= int(key, 16) < hi}
+
+
+def previous_places(previous):
+    """{name: va} of the functions the previous rows place: each row's `symbol` at its key and its `emitted`
+    names (a static initializer's too, outside the range)."""
+    out = {}
+    for key, row in previous.items():
+        if row.get("symbol"):
+            out.setdefault(row["symbol"], int(key, 16))
+        for name, va in (row.get("emitted") or {}).items():
+            if isinstance(va, str):
+                out.setdefault(name, int(va, 16))
+    return out
+
+
+def settled_partial(missing, previous):
+    """Whether the retail functions at `missing` (addresses no compiled function reproduces) were left to link
+    from retail by the previous rows: there are previous rows and none of them placed any of those addresses
+    (the range's last run was `--partial` for exactly these). A function a previous row placed and the compile
+    no longer reproduces is a wrong compile, never settled this way."""
+    if not missing or not previous:
+        return False
+    covered = {int(key, 16) for key in previous} | set(previous_places(previous).values())
+    return not any(va in covered for va in missing)
+
+
+def stable_row(row, old, owner, syms, resolves):
+    """`row` as the range's previous row `old` spelled what still holds, so that a regenerated row differs from
+    it only where the compile changed:
+
+      data, externals  an entry `old` had keeps its name and address while the object still has that name
+                       (defines or references it); an entry `old` had not, for a name the object does not
+                       define and `resolves(name)` binds at the same address without a row (data-names.tsv,
+                       symbols.txt, the compiler-name map), stays out as before; an entry whose name is gone
+                       from the object goes
+      symbol           the `symbol` `old` wrote for the owner (`owner`, its compiled name) stays
+    the fields in `old`'s order, and a field with `old`'s content in `old`'s order (a list it did not sort). Without
+    `old`, `row` as it is."""
+    if old is None:
+        return row
+    out = dict(row)
+    for field in ("data", "externals"):
+        new, before = dict(row.get(field) or {}), old.get(field) or {}
+        for name, va in list(new.items()):
+            defined = isinstance(syms.get(name, (None,))[0], int)
+            if name not in before and not defined and resolves(name) == int(va, 16):
+                del new[name]
+        for name, va in before.items():
+            if name not in new and name in syms:
+                new[name] = va
+        if new:
+            out[field] = dict(sorted(new.items()))
+        else:
+            out.pop(field, None)
+    if "symbol" not in out and old.get("symbol") == owner:
+        out["symbol"] = owner
+    for field, value in out.items():
+        before = old.get(field)
+        if isinstance(value, list) and isinstance(before, list) and sorted(value) == sorted(before):
+            out[field] = before
+        elif isinstance(value, dict) and value == before:
+            out[field] = before
+    order = list(old) + [f for f in out if f not in old]
+    return {f: out[f] for f in order if f in out}
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--src", help="the folder holding the stock files")
@@ -671,15 +759,44 @@ def main(argv=None):
     compilers = {p[1]: p[2] for p in (l.rstrip("\n").split("\t") for l in open(units_path))
                  if p[0] == "@compiler"}
     compiler = os.path.join(ROOT, compilers[a.compiler])
-    mapped = compiler_names.load(os.path.join(a.config, "symbols.txt")) if a.cxx else {}
     profile = unitprofiles.Profile(compiler, a.flags, a.exceptions)
     by_name, by_va = verify.load_symbols(os.path.join(a.config, "symbols.txt"))
+    mapped = {}
+    if a.cxx:
+        # the map as the other rows bind it: a name only the rows this run replaces bind (a call into the file's
+        # own range through a view's member name) stays an external of the new row
+        others = [g for g in unitobjects.load(os.path.join(a.config, "unit-objects.json"))
+                  if not (g.whole_file and lo <= g.owner < hi)]
+        mapped = {name: (va, retail) for name, va, retail in compiler_names.build(
+            others, by_va, verify.data_symbols(os.path.join(a.config, "symbols.txt")))}
     retail = Retail(a.elf)
     records = exceptions.load(exceptions.config_path(os.path.join(a.config, "symbols.txt")))
     starts = sorted(va for va in by_va if lo <= va < hi)
     forced = {n: int(v, 0) for n, v in (item.split("=") for item in a.at)}
     placed = {n: by_name[n][0] for n in by_name if lo <= by_name[n][0] < hi}
+    # the range's present rows: what they settled is settled again (an ambiguous start, the static initializer's
+    # table entry, the retail functions a partial file links from retail, the data names they spelled)
+    previous = previous_rows(os.path.join(a.config, "unit-objects.json"), lo, hi)
+    settled = previous_places(previous)
+    if a.cxx:
+        # a compiler name they bind (tools/memberize.py renames a converted member's key) keeps its address,
+        # since members of one shape (empty virtual functions) fit several starts, and a function they strip is
+        # dropped, since byte-identical inline copies (one shape of destructor) fit the start one of them owns
+        for name, va in settled.items():
+            if lo <= va < hi:
+                placed.setdefault(name, va)
+        for row in previous.values():
+            a.drop.extend(name for name in row.get("stripped") or () if name not in forced)
     placed.update(forced)
+    data_names = verify.data_symbols(os.path.join(a.config, "symbols.txt"))
+
+    def resolves(name):
+        """The address a name binds at with no row of this unit's: a symbols.txt function, a data-names.tsv
+        datum, a compiler name another unit's row binds."""
+        for table in (by_name, mapped):
+            if name in table:
+                return table[name][0]
+        return data_names.get(name)
 
     references = dict(item.split("=", 1) for item in a.reference)
     # the retail address of each datum other files name, for a file the linker kept the data of only
@@ -695,7 +812,7 @@ def main(argv=None):
             at = locate(functions, retail, [v for v in starts if v not in owned], placed, a.drop)
             owned.update({va: name for name, va in at.items()})
             # the static initializer is a member at its retail address, after all `.text`
-            initializer = static_initializer(obj, syms, headers, retail, forced)
+            initializer = static_initializer(obj, syms, headers, retail, forced, settled)
             if initializer and not at:
                 sys.exit("%s: only its static initializer has a retail copy" % source)
             if initializer:
@@ -704,6 +821,8 @@ def main(argv=None):
             compiled.append((stem, obj, syms, headers, functions, at,
                              Twins(profile, source, tmp, a.config, a.wibo), initializer and initializer[0]))
         missing = [by_va[v] for v in starts if v not in owned]
+        if not a.partial and settled_partial([v for v in starts if v not in owned], previous):
+            a.partial = True        # the previous rows left exactly these to link from retail
         lacking = unrecovered(missing, {n for c in compiled for n in c[4]}) if a.partial else None
         if lacking:
             print("partial: %d retail functions without source link from retail: %s"
@@ -745,7 +864,9 @@ def main(argv=None):
             if by_va.get(members[0][0], (members[0][1],))[0] != members[0][1]:
                 # a mangled owner, or a `static` several files define that symbols.txt names apart
                 row["symbol"] = members[0][1]
-            rows["0x%08x" % members[0][0]] = row
+            key = "0x%08x" % members[0][0]
+            row = stable_row(row, previous.get(key), members[0][1], syms, resolves)
+            rows[key] = row
             # the file's code ends with its last `.text` member; its `.init` sits after all `.text`
             last = max((va, name) for va, name in members if name != initializer)
             spans.append((members[0][0], last[0] + len(functions[last[1]].raw), stem))

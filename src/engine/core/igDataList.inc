@@ -42,7 +42,7 @@ CallbackArray *igDataList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igDataList_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igDataList_GetMetaObjectFunction,
         "igDataList",

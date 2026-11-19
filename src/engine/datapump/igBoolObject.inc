@@ -26,7 +26,7 @@ CallbackArray *igBoolObject_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBoolObject_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igBoolObject_GetMetaObjectFunction,
         "igBoolObject",

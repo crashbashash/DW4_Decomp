@@ -30,7 +30,7 @@ CallbackArray *igTimer_Register(void) {
     return igMetaObject_RegisterClass(
         1,
         &g_igTimer_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igTimer_GetMetaObjectFunction,
         "igTimer",

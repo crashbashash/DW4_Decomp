@@ -37,7 +37,7 @@ CallbackArray *beNumVerData_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNumVerData_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beNumVerData_GetMetaObjectFunction,
         "beNumVerData",

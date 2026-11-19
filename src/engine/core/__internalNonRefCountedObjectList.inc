@@ -60,7 +60,7 @@ CallbackArray *__internalNonRefCountedObjectList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g___internalNonRefCountedObjectList_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         __internalNonRefCountedObjectList_GetMetaObjectFunction,
         "__internalNonRefCountedObjectList",

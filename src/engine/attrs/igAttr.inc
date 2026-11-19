@@ -27,7 +27,7 @@ CallbackArray *igAttr_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igAttr_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igAttr_GetMetaObjectFunction,
         "igAttr",

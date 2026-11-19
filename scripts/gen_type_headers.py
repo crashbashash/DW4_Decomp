@@ -275,32 +275,11 @@ def table_rows(path, columns):
     return rows
 
 
-# Gap::Core::igObject's virtual functions in vtable order: slot n sits at vtable byte offset 8 + 4 * n,
-# after the two-word class header (include/dw4/core/igObjectDispatchView.h, the same order). Slot 20 is
-# the inline getMeta the object macros redefine in every class.
-ROOT_VIRTUALS = (
-    "virtual void destruct();",
-    "virtual void constructFields(int flag);",
-    "virtual void destructFields();",
-    "virtual void userDeepCopy(igObject *source);",
-    "virtual void userShallowCopy(int source);",
-    "virtual int userIsAlikeDeep(igObject *other);",
-    "virtual int userIsAlikeShallow(igObject *other);",
-    "virtual void userConstruct(int flag);",
-    "virtual void userDestruct();",
-    "virtual void initDefaults();",
-    "virtual void releaseDefaults();",
-    "virtual void resetFields(int flag);",
-    "virtual void userPreWrite();",
-    "virtual void userWriteFilePreProcess();",
-    "virtual void userPostRead();",
-    "virtual void userPostLoad();",
-    "virtual void trimCapacity();",
-    "virtual void userApplyWriteProxy(int value);",
-    "virtual void userMakeConcrete(igMetaObject *meta);",
-    "virtual igObject *cloneViaMetadata(int copyMode);",
-    "inline virtual igMetaObject *getMeta() const { return _Meta; }",
-)
+# The root's declarations are config/class-members.tsv's igObject rows, in table order: its constructor (retail's
+# igObject_InitHeader), its class operator delete, its virtual functions in vtable order (slot n at vtable byte
+# offset 8 + 4 * n, after the two-word class header; the order of include/dw4/core/igObjectDispatchView.h) with
+# the inline virtual getMeta at slot 20, then its static members. It declares no destructor: Alchemy's
+# destructors are not virtual, and slot 0 is an ordinary method.
 
 
 def converted_classes(converted, parent, layouts, members):
@@ -333,8 +312,11 @@ def converted_classes(converted, parent, layouts, members):
     out = ["#ifdef __cplusplus",
            "/* The converted classes: Alchemy's polymorphic classes in their Gap namespaces",
            " * (config/converted-classes.tsv). The flat structs above stay the C view. */",
-           "#include \"dw4/core/igObject.h\"",
-           "namespace Gap {"]
+           "#include \"dw4/core/igObject.h\""]
+    if any("igSmartPointer<" in line for cls in order for _off, _size, line in layouts[cls][4]):
+        # a smart-pointer member needs the template, which reads the flat igObject above
+        out.append("#include \"dw4/core/igSmartPointer.h\"")
+    out.append("namespace Gap {")
     for lib in sorted(set(converted.values())):
         out.append("namespace %s { %s }" % (lib, " ".join("class %s;" % c for c in sorted(converted)
                                                         if converted[c] == lib)))
@@ -348,12 +330,13 @@ def converted_classes(converted, parent, layouts, members):
         out.append("namespace %s {" % lib)
         out.append("/* handle 0x%06x, %d field(s), %s */" % (handle, nfields, size_note))
         if cls == "igObject":
+            if not any(decl.startswith(("virtual ", "inline virtual ")) for decl in members.get(cls, [])):
+                sys.exit("config/class-members.tsv: the root igObject declares no virtual function; its rows "
+                         "give its constructor, virtual slots and getMeta")
             out.append("class igObject {")
             out.append("public:")
-            out.append("    igObject();")
-            out.append("    static void operator delete(void *memory) { Memory_FreeBufferAliasC(memory); }")
-            out.extend("    " + decl for decl in ROOT_VIRTUALS)
-            out.append("    static igMetaObject *_Meta;")
+            # the slot declarations come before the reference count, as the kit's root declares them
+            out.extend("    " + decl for decl in members[cls])
             cursor = 4
             placed = [p for p in placed if p[0] >= 4]
         else:
@@ -370,7 +353,8 @@ def converted_classes(converted, parent, layouts, members):
             cursor = off + fsize
         if size > cursor:
             out.append("    char _pad%d[%d];" % (cursor, size - cursor))
-        out.extend("    " + decl for decl in members.get(cls, []))
+        if cls != "igObject":
+            out.extend("    " + decl for decl in members.get(cls, []))
         out.append("};")
         out.append("}")
         out.append("}")

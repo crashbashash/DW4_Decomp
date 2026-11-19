@@ -272,7 +272,7 @@ CallbackArray *igSorter_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igSorter_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igSorter_GetMetaObjectFunction,
         "igSorter",

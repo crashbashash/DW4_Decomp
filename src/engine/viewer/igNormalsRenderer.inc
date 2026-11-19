@@ -62,8 +62,8 @@ CallbackArray *igNormalsRenderer_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igNormalsRenderer_metaObject,
-        igRenderer_Register,
-        igRenderer_GetPublishedMetaObject,
+        Gap::Gui::igRenderer::arkRegisterInternal,
+        Gap::Gui::igRenderer::getClassMeta,
         igNormalsRenderer_GetMetaObjectFunction,
         "igNormalsRenderer",
         0x30, /* instance size */

@@ -48,7 +48,7 @@ CallbackArray *beMessengerDelay_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beMessengerDelay_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beMessengerDelay_GetMetaObjectFunction,
         "beMessengerDelay",

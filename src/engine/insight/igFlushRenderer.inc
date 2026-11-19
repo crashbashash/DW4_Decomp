@@ -1,77 +1,54 @@
-igMetaObject *g_igFlushRenderer_metaObject;
-SharedViewerOptions *g_sharedViewerOptions;
+namespace Gap {
+namespace Insight {
 
-igMetaObject *igFlushRenderer_GetOrCreateMetaObject(void) {
-    if (g_igFlushRenderer_metaObject == 0) {
-        g_igFlushRenderer_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igFlushRenderer_metaObject;
-}
+igMetaObject *igFlushRenderer::_Meta;
 
-/* Registers the class first when the slot is empty or its igMetaObject._validity (+36) lacks the
- * ready bit (mask 4), then returns the published MetaObject. */
-igMetaObject *igFlushRenderer_GetMetaObject(void)
+igMetaObject *igFlushRenderer::getClassTypeLazy()
 {
-    unsigned char ready;
-    if (g_igFlushRenderer_metaObject != 0) {
-        ready = (g_igFlushRenderer_metaObject->_validity & 4) != 0;
-        if (ready != 0) goto done;
-    }
-    igFlushRenderer_EnsureRegistered();
-done:
-    return g_igFlushRenderer_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igFlushRenderer_GetVTable(void) {
-    union U_233a90 u;
-    int temp_s0;
-    S_ref *q1;
-
-
-    igObject_InitHeader((igObject *)u.b);
-    u.w[0] = (int)(&g_igRenderer_vtable[0]);
-    q1 = (S_ref *)&u.b[8];
-    *(int *)q1 = 0;
-    u.w[0] = (int)(&g_igFlushRenderer_vtable[0]);
-    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.w[0] = (int)(&g_igRenderer_vtable[0]);
-    if (q1 != 0) {
-        q1 = *(S_ref **)q1;
-        if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q1);
-            }
-        }
-    }
-    return temp_s0;
-}
-
-void igFlushRenderer_EnsureRegistered(void)
+igMetaObject *igFlushRenderer::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igFlushRenderer_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igFlushRenderer_Register(void) {
+void *igFlushRenderer::retrieveVTablePointer()
+{
+    igFlushRenderer temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igFlushRenderer::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igFlushRenderer::arkRegisterInternal()
+{
     InsightLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igFlushRenderer_metaObject,
-        igRenderer_Register,
-        igRenderer_GetPublishedMetaObject,
-        igFlushRenderer_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Gui::igRenderer::arkRegisterInternal,
+        Gap::Gui::igRenderer::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igFlushRenderer",
-        0xC, /* instance size */
-        igFlushRenderer_GetVTable,
+        sizeof(igFlushRenderer),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igFlushRenderer_GetMetaObjectFunction(void) {
-    igFlushRenderer_GetMetaObject();
 }
+}
+
+SharedViewerOptions *g_sharedViewerOptions;
 
 static inline int countOf(const IntList *list) { return list->count; }
 
@@ -802,9 +779,14 @@ void igCommandLine_Setup(ViewerOptions *opts, igStringRefList *args)
     }
 }
 
-void igFlushRenderer_Render(igFlushRendererView *self)
+namespace Gap {
+namespace Insight {
+
+void igFlushRenderer::draw()
 {
-    self->_visualContext->vfunc_173();
+    ((igVisualContextDispatchView *)_visualContext.p)->flushDraw();
+}
+}
 }
 
 static inline int internedPool(void) {

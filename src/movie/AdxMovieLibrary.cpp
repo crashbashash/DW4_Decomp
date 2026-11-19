@@ -266,7 +266,7 @@ CallbackArray *igAdx_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAdx_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igAdx_GetMetaObjectFunction,
         "igAdx",
@@ -810,7 +810,7 @@ CallbackArray *igAdxAudio_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAdxAudio_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igAdxAudio_GetMetaObjectFunction,
         "igAdxAudio",
@@ -1183,7 +1183,7 @@ CallbackArray *igCriMovieData_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCriMovieData_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igCriMovieData_GetMetaObjectFunction,
         "igCriMovieData",
@@ -1507,7 +1507,7 @@ void igMovieInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMovieInfo_Register);
 }
 
-static igMetaObjectCallback g_igMovieInfo_callbackList[] = { igTextureBindAttrList_EnsureRegistered, igMovieCodec_EnsureRegistered, igSceneInfo_EnsureRegistered, igImage_EnsureRegistered, igTextureList_EnsureRegistered, igObject_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igMovieInfo_callbackList[] = { igTextureBindAttrList_EnsureRegistered, igMovieCodec_EnsureRegistered, igSceneInfo_EnsureRegistered, igImage_EnsureRegistered, igTextureList_EnsureRegistered, Gap::Core::igObject::arkRegister, 0 };
 
 CallbackArray *igMovieInfo_Register(void) {
     AdxMovieLibrary_MarkRegistered();
@@ -1682,7 +1682,7 @@ void igMovieInfo_InitFields(void) {
     imageFormatField->_persistent = 0;
     imageFormatField->_getMetaEnumFunction = (int)IG_GFX_TEXTURE_FORMAT_GetMetaEnum;
     userdataField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x13);
-    userdataField->_metaObject = (int)g_igObject_metaObject;
+    userdataField->_metaObject = (int)Gap::Core::igObject::_Meta;
     userdataField->_persistent = 0;
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x14), -1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igMovieInfo_fieldTable, g_igMovieInfo_fieldHandles, g_igMovieInfo_fieldOffsets, firstField);
@@ -1751,8 +1751,8 @@ CallbackArray *igMovieRenderer_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMovieRenderer_metaObject,
-        igRenderer_Register,
-        igRenderer_GetPublishedMetaObject,
+        Gap::Gui::igRenderer::arkRegisterInternal,
+        Gap::Gui::igRenderer::getClassMeta,
         igMovieRenderer_GetMetaObjectFunction,
         "igMovieRenderer",
         0x10, /* instance size */

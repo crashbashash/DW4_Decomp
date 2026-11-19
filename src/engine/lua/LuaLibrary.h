@@ -103,7 +103,7 @@ class igNamedObject : public igObject {
 public:
     char *_name;
 
-    igMetaObject *getMeta();
+    igMetaObject *getMeta() const;
 };
 }
 namespace Lua {
@@ -115,9 +115,9 @@ public:
     lua_State *_luaState;
     ::igObject *_memPool;
 
-    void userConstruct();
+    void userConstruct(int flag);
     void userDestruct();
-    igMetaObject *getMeta();
+    igMetaObject *getMeta() const;
     virtual int runString(const char *source);
     virtual int runFile(const char *path);
     virtual int runBuffer(const char *buffer, unsigned int size, const char *name);

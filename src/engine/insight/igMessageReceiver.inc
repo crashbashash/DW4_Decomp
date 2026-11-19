@@ -18,7 +18,7 @@ CallbackArray *igMessageReceiver_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igMessageReceiver_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igMessageReceiver_GetMetaObjectFunction,
         "igMessageReceiver",

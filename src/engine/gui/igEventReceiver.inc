@@ -26,7 +26,7 @@ CallbackArray *igEventReceiver_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igEventReceiver_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igEventReceiver_GetMetaObjectFunction,
         "igEventReceiver",

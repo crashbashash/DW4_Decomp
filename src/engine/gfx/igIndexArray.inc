@@ -32,7 +32,7 @@ CallbackArray *igIndexArray_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igIndexArray_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igIndexArray_GetMetaObjectFunction,
         "igIndexArray",

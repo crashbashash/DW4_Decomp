@@ -55,7 +55,7 @@ CallbackArray *igCompressedTransformSequence1_5Data_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCompressedTransformSequence1_5Data_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igCompressedTransformSequence1_5Data_GetMetaObjectFunction,
         "igCompressedTransformSequence1_5Data",

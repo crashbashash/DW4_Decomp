@@ -28,7 +28,7 @@ CallbackArray *beSvPs2McImage128k_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beSvPs2McImage128k_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beSvPs2McImage128k_GetMetaObjectFunction,
         "beSvPs2McImage128k",

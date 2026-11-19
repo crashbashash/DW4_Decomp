@@ -49,7 +49,7 @@ CallbackArray *igHotKeyBinding_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igHotKeyBinding_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igHotKeyBinding_GetMetaObject,
         "igHotKeyBinding",

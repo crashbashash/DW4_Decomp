@@ -40,7 +40,7 @@ void igExternalDirEntry_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igExternalDirEntry_Register);
 }
 
-static igMetaObjectCallback g_igExternalDirEntry_callbackList[] = { igObject_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igExternalDirEntry_callbackList[] = { Gap::Core::igObject::arkRegister, 0 };
 
 CallbackArray *igExternalDirEntry_Register(void) {
     CoreLibrary_MarkRegistered();  /* Set-once guard that first runs the sibling registrars it chains to. */
@@ -100,7 +100,7 @@ void igExternalDirEntry_InitFields(void) {
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_ref));
     field = (igMetaField *)igObjectRefMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     igMetaField_Configure(field, (const char *)text_ref, &g_igExternalDirEntry_refDescriptorCell, 0x18, meta);
-    ((igObjectRefMetaField *)field)->_metaObject = (int)g_igObject_metaObject;
+    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igObject::_Meta;
     field->_persistent = 0;
     field->_externalEnumStorage = (int)&g_igExternalDirEntry_refDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);

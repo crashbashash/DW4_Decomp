@@ -49,7 +49,7 @@ CallbackArray *beDemoManagerWork_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beDemoManagerWork_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beDemoManagerWork_GetMetaObjectFunction,
         "beDemoManagerWork",

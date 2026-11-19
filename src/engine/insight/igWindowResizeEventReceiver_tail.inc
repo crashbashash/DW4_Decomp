@@ -95,14 +95,14 @@ void igInsightCore_UnregisterAllPlugins(igInsightCore *core) {
 }
 
 void igInsightCore_AddRenderer(igInsightCore *core, igObject *renderer) {
-    igRenderer_SetVisualContext((igRendererDispatchView *)renderer, (igVisualContext *)core->_visualContext);
+    ((Gap::Gui::igRenderer *)renderer)->setVisualContext((igVisualContext *)core->_visualContext);
     igRendererOrderedList_Append((igDependencyOrderedList *)core->_rendererList, renderer, 0);
 }
 
 void igInsightCore_RemoveRenderer(igInsightCore *core, igObject *renderer) {
     igResult removed = igObjectList_RemoveRetained((igDependencyOrderedList *)core->_rendererList, renderer);
     if (removed.v == g_resultSuccess.v) {
-        igRenderer_SetVisualContext((igRendererDispatchView *)renderer, 0);
+        ((Gap::Gui::igRenderer *)renderer)->setVisualContext(0);
     }
 }
 

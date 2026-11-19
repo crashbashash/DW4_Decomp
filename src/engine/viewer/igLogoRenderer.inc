@@ -44,8 +44,8 @@ CallbackArray *igLogoRenderer_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igLogoRenderer_metaObject,
-        igRenderer_Register,
-        igRenderer_GetPublishedMetaObject,
+        Gap::Gui::igRenderer::arkRegisterInternal,
+        Gap::Gui::igRenderer::getClassMeta,
         thunk_igLogoRenderer_GetMetaObject,
         "igLogoRenderer",
         0x28, /* instance size */

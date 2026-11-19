@@ -1,8 +1,8 @@
-inline igMetaObject *igLuaGlue::getMeta() {
+inline igMetaObject *igLuaGlue::getMeta() const {
     return g_igLuaGlue_metaObject;
 }
 
-inline void igLuaGlue::userConstruct() {
+inline void igLuaGlue::userConstruct(int flag) {
     LuaGlue_Initialize();
 }
 

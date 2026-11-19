@@ -66,7 +66,7 @@ CallbackArray *igCallStackTable_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igCallStackTable_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igCallStackTable_GetMetaObjectFunction,
         "igCallStackTable",

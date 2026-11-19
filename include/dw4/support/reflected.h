@@ -25,6 +25,10 @@
 #ifndef DW4_REFLECTED_H
 #define DW4_REFLECTED_H
 
+#ifdef __cplusplus
+#include "dw4/core/igObjectMacros.h"
+#endif
+
 /* handle 0x587198, 2 field(s), sizeof 8 (registered instance size) */
 typedef struct igObject {
     int _vtable;                                   /* +0    igObjectRefMetaField */
@@ -15312,6 +15316,9 @@ typedef struct igMetaObject {
     char _pad90[2];
     int _vTablePointer;                            /* +92   igRawRefMetaField */
     int _poolName;                                 /* +96   igStringMetaField */
+#ifdef __cplusplus
+    bool isValid() const { return (_validity & 4) ? true : false; }
+#endif
 } igMetaObject;
 
 #ifdef __cplusplus
@@ -20391,5 +20398,104 @@ typedef struct libNdmwRuntimePlugin {
     int _mdlMapBase;                               /* +84   igObjectRefMetaField */
     int _mdlMapCursor;                             /* +88   igObjectRefMetaField */
 } libNdmwRuntimePlugin;
+
+#ifdef __cplusplus
+/* The converted classes: Alchemy's polymorphic classes in their Gap namespaces
+ * (config/converted-classes.tsv). The flat structs above stay the C view. */
+#include "dw4/core/igObject.h"
+#include "dw4/core/igSmartPointer.h"
+namespace Gap {
+namespace Core { class igObject; }
+namespace Gui { class igClearRenderer; class igRenderer; }
+namespace Insight { class igFlushRenderer; }
+using Gui::igClearRenderer;
+using Insight::igFlushRenderer;
+using Core::igObject;
+using Gui::igRenderer;
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x587198, 2 field(s), sizeof 8 (registered instance size) */
+class igObject {
+public:
+    igObject();
+    static void operator delete(void *memory) { Memory_FreeBufferAliasC(memory); }
+    virtual void destruct();
+    virtual void constructFields(int flag);
+    virtual void destructFields();
+    virtual void userDeepCopy(igObject *source);
+    virtual void userShallowCopy(int source);
+    virtual int userIsAlikeDeep(igObject *other);
+    virtual int userIsAlikeShallow(igObject *other);
+    virtual void userConstruct(int flag);
+    virtual void userDestruct();
+    virtual void initDefaults();
+    virtual void releaseDefaults();
+    virtual void resetFields(int flag);
+    virtual void userPreWrite();
+    virtual void userWriteFilePreProcess();
+    virtual void userPostRead();
+    virtual void userPostLoad();
+    virtual void trimCapacity();
+    virtual void userApplyWriteProxy(int value);
+    virtual void userMakeConcrete(igMetaObject *meta);
+    virtual igObject *cloneViaMetadata(int copyMode);
+    inline virtual igMetaObject *getMeta() const { return _Meta; }
+    static igMetaObject *_Meta;
+    static void arkRegister();
+    static CallbackArray *arkRegisterInternal();
+    static inline igMetaObject *getClassMeta() { return _Meta; }
+    static inline igMetaObject *getClassMetaSafe() { return _Meta; }
+    static void *retrieveVTablePointer();
+    static void arkRegisterInitialize();
+    unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+};
+}
+}
+
+namespace Gap {
+namespace Gui {
+/* handle 0x58c208, 3 field(s), sizeof 12 (registered instance size) */
+class igRenderer : public Gap::Core::igObject {
+public:
+    igSmartPointer<igVisualContext> _visualContext; /* +8    igObjectRefMetaField */
+    IG_ABSTRACT_OBJECT_DEFINE(igRenderer)
+    static igMetaField *k_visualContext;
+    void setVisualContext(igVisualContext *context);
+    virtual void initializeDrawing() = 0;
+    virtual void terminateDrawing() = 0;
+    virtual void traverse() = 0;
+    virtual void draw() = 0;
+};
+
+/* handle 0x58c1f0, 4 field(s), sizeof 16 (registered instance size) */
+class igClearRenderer : public Gap::Gui::igRenderer {
+public:
+    unsigned int _buffersToClear;                  /* +12   igUnsignedIntMetaField */
+    IG_OBJECT_DEFINE(igClearRenderer)
+    static igMetaField *k_buffersToClear;
+    virtual void traverse() {}
+    virtual void initializeDrawing();
+    virtual void terminateDrawing() {}
+    virtual void draw();
+};
+}
+}
+
+namespace Gap {
+namespace Insight {
+/* handle 0x56dc48, 3 field(s), sizeof 12 (registered instance size) */
+class igFlushRenderer : public Gap::Gui::igRenderer {
+public:
+    IG_OBJECT_DEFINE(igFlushRenderer)
+    virtual void traverse() {}
+    virtual void initializeDrawing() {}
+    virtual void terminateDrawing() {}
+    virtual void draw();
+};
+}
+}
+#endif
 
 #endif /* DW4_REFLECTED_H */

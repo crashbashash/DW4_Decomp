@@ -18,7 +18,7 @@ CallbackArray *igImageUtils_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igImageUtils_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igImageUtils_GetMetaObjectFunction,
         "igImageUtils",

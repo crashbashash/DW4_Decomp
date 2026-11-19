@@ -69,7 +69,7 @@ CallbackArray *igTraversal_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTraversal_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igTraversal_GetMetaObjectFunction,
         "igTraversal",

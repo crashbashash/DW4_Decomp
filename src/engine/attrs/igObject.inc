@@ -37,5 +37,5 @@ igSmartPointer<igObject> *igSmartPointer_igFloatList_Destruct(igSmartPointer<igO
     return self;
 }
 
-igMetaObject *igObject_GetMetaObject_ParentAccessor(void){return g_igObject_metaObject;}
+igMetaObject *igObject_GetMetaObject_ParentAccessor(void){return Gap::Core::igObject::_Meta;}
 

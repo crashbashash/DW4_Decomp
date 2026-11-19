@@ -114,13 +114,13 @@ void igMetaObject_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMetaObject_Register);
 }
 
-static igMetaObjectCallback g_igMetaObject_callbackList[] = { __internalObjectList_EnsureRegistered, __internalNonRefCountedObjectList_EnsureRegistered, igObject_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igMetaObject_callbackList[] = { __internalObjectList_EnsureRegistered, __internalNonRefCountedObjectList_EnsureRegistered, Gap::Core::igObject::arkRegister, 0 };
 
 CallbackArray *igMetaObject_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igMetaObject_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igMetaObject_GetMetaObjectFunction,
         "igMetaObject",
@@ -298,7 +298,7 @@ void igMetaObject_InitFields(void) {
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xF))))->_persistent = 0;
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x10))))->_persistent = 0;
     field8 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x11)));
-    ((igObjectRefMetaField *)field8)->_metaObject = (int)((int) g_igObject_metaObject);
+    ((igObjectRefMetaField *)field8)->_metaObject = (int)((int) Gap::Core::igObject::_Meta);
     ((igObjectRefMetaField *)field8)->_destruct = 1;
     ((igObjectRefMetaField *)field8)->_refCounted = 0;
     ((igObjectRefMetaField *)field8)->_persistent = 0;

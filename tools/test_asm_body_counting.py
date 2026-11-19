@@ -67,11 +67,10 @@ class Categories(unittest.TestCase):
         with mock.patch.object(progress, "load_categories", return_value=rows), \
                 mock.patch.object(progress, "load_symbols", return_value=units), \
                 mock.patch.object(progress, "have_src_paths", return_value=paths), \
-                mock.patch.object(progress, "readable", return_value={"names": set()}), \
                 mock.patch.object(progress, "region_of", return_value="newlib"):
             table = progress.region_table()
             result = progress.categorise(units)
-        self.assertIn("| newlib | 0 KB | 75.0 % | 0.0 % |", table)
+        self.assertIn("| newlib | 0 KB | 75.0 % |", table)
         self.assertEqual(result["fully_verified"], {"functions": 1, "bytes": 16})
         self.assertEqual(result["fully_matched"], {"functions": 2, "bytes": 48})
 

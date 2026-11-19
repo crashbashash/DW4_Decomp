@@ -75,7 +75,7 @@ CallbackArray *igEnbayaContextPool_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igEnbayaContextPool_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igEnbayaContextPool_GetMetaObject,
         "igEnbayaContextPool",

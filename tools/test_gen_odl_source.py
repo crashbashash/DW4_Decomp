@@ -28,6 +28,9 @@ REFLECTION = {"classes": {
 HIERARCHY = "# class\tbase\nigRenderer\tigObject\nigClearRenderer\tigRenderer\n"
 OVERLAY = ("igObject\t0\tigObjectRefMetaField\t_vtable\tvtable\n"
            "igObject\t4\tigUnsignedIntMetaField\t_refCount\tcount\n")
+# the root's declarations as the repository's table gives them (constructor, delete, slots, getMeta, statics)
+ROOT_ROWS = "".join(line for line in open(os.path.join(ROOT, "config", "class-members.tsv"))
+                    if line.startswith("igObject\t"))
 
 
 class Tree:
@@ -91,7 +94,7 @@ class TypeHeaderTables(unittest.TestCase):
 
     def test_converted_classes_are_namespaced_and_polymorphic(self):
         with tempfile.TemporaryDirectory() as tmp:
-            text = Tree(tmp, members="igClearRenderer\tvirtual void draw();\n",
+            text = Tree(tmp, members=ROOT_ROWS + "igClearRenderer\tvirtual void draw();\n",
                         converted="igRenderer\tGui\nigClearRenderer\tGui\n").generate()
             cpp = text[text.index("The converted classes"):]
             self.assertIn("using Gui::igRenderer;", cpp)
@@ -101,6 +104,8 @@ class TypeHeaderTables(unittest.TestCase):
             self.assertEqual(len(slots), 21)       # 20 slots and the inline getMeta at slot 20
             self.assertTrue(slots[19].startswith("virtual igObject *cloneViaMetadata"))
             self.assertIn("getMeta() const", slots[20])
+            # the slot declarations come before the reference count, which follows the vptr
+            self.assertLess(root.index("getMeta() const"), root.index("_refCount;"))
             self.assertIn("class igRenderer : public Gap::Core::igObject {", cpp)
             clear = cpp[cpp.index("class igClearRenderer : public Gap::Gui::igRenderer {"):]
             clear = clear[:clear.index("};")]
@@ -116,6 +121,11 @@ class TypeHeaderTables(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(SystemExit):
                 Tree(tmp, converted="igClearRenderer\tGui\n").generate()
+
+    def test_the_root_needs_its_rows(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaises(SystemExit):
+                Tree(tmp, converted="igRenderer\tGui\n").generate()
 
     def test_members_need_a_struct(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -267,7 +277,8 @@ class RetailRoles(unittest.TestCase):
         self.assertIn("static igMetaObjectCallback regFunctions[] = { igVisualContext_EnsureRegistered, 0 };",
                       text)
         self.assertIn("    GuiLibrary_MarkRegistered();\n    return igMetaObject_RegisterClass(\n        true,\n"
-                      "        &_Meta,\n        igObject_Register,\n        igObject_GetMetaObject_ParentAccessor,\n"
+                      "        &_Meta,\n        Gap::Core::igObject::arkRegisterInternal,\n"
+                      "        Gap::Core::igObject::getClassMeta,\n"
                       "        (igMetaObjectCallback)getClassMetaSafe,\n        \"igRenderer\",\n"
                       "        sizeof(igRenderer),\n        0,\n        &arkRegisterInitialize,\n        0,\n"
                       "        regFunctions\n    );", text)

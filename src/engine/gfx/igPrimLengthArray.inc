@@ -33,7 +33,7 @@ CallbackArray *igPrimLengthArray_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igPrimLengthArray_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igPrimLengthArray_GetMetaObjectFunction,
         "igPrimLengthArray",

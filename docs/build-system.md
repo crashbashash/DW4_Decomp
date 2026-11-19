@@ -41,12 +41,46 @@ member as `Class::name`, declared in `config/class-members.tsv` (object macros e
 (`static CallbackArray *igRenderer::arkRegisterInternal()`), whose declaration it adds to that table. It rewrites
 the definition head, the receiver as `this` without a local copy of it (`self->x` becomes `x`, a dispatch view's
 virtual `((View *)this)->f()`), a member the class defines inline loses its C copy, the C++ callers
-(`obj->m(a)`, `Class::m`, bare inside the class's members) and comments; C callers keep the C name through the
-prototype the home header keeps for them, and every other declaration of the C name goes. In
-`unit-objects.json` the placing unit's key becomes the compiler name, which `tools/compiler_names.py --write`
-then binds; it prints the `tools/whole_file_rows.py --unit-va <va> --cxx --write` runs that regenerate the
-touched units' rows. A body spelled for its bytes in igen's form (tables as function-local statics, a cast a
-function pointer's new type needs) is written by hand afterwards; the tool notes the casts.
+(`obj->m(a)`, `Class::m`, bare inside the class's members) and comments. In `unit-objects.json` the placing
+unit's key becomes the compiler name, which `tools/compiler_names.py --write` then binds; it prints the
+`tools/whole_file_rows.py --unit-va <va> --cxx --write` runs that regenerate the touched units' rows. A body
+spelled for its bytes in igen's form (tables as function-local statics, a cast a function pointer's new type
+needs) is written by hand afterwards; the tool notes the casts. The root design, the boundary rules and the
+conversion order are in [member conversion](engine/member-conversion.md).
+
+- **Spelling.** A converted class (`config/converted-classes.tsv`) is `Gap::<Library>::Class`, and its
+  out-of-line definitions are written as the kit's `.cpp` files and igen's ODLSource write them: inside
+  `namespace Gap { namespace <Library> {`, the head naming the class alone (`void igRenderer::draw()`), one block
+  per run of adjacent members (a free function between them stays outside). `tools/gen_odl_source.py` writes its
+  fragments the same way; both take the block from `tools/cxxscope.py`. `memberize.py --respell` puts every
+  remaining `T Gap::<Library>::Class::m(...)` definition of the tree into that form. `tools/units.py` reads a
+  namespace block as transparent, as it reads `extern "C" { }`, so every tool still finds the definitions.
+- **Constructors.** `Class_Init(T *self, …)`-style C constructors become `Class::Class(…)` (declared in
+  `class-members.tsv`): no return type, and the statements MWCC writes itself go — the vtable store into the
+  receiver, `return self;`, and a first-statement call of a base class's constructor (this batch's or one the
+  compiler-name map binds), which becomes implicit or, with arguments, the initialiser ` : Base(args)`. A base
+  constructed after other statements is refused.
+- **Destructors.** Alchemy's destructors are implicit and not virtual: `Class::~Class` for a class that declares
+  none removes the C body `Class_Destroy(self, flag)` (the compiler writes the vtable stamp, the members'
+  release and the delete where an object is destroyed). `Class_Destroy(p, 1)` on a pointer declared as the Gap
+  class becomes `delete p`. A declared out-of-line destructor is refused (its user body is written by hand).
+- **The boundary.** Code that still names a converted member's C name keeps it: C callers, an unconverted
+  subclass's direct call of a virtual default, a construction or destruction of an object still written as a
+  flat struct (a GetVTable probe). While such a user exists the prototype stays in the home header (under
+  `include/`, named for the class first), and in another header only for a user's unit that does not read the
+  home header; every other declaration goes, and all of them once no code names the C name.
+  `memberize.py --check` reports each declaration of a converted member's C name (a retail name of
+  `compiler-names.tsv` for a converted class's member) that rule would remove, and exits 1 when there is one.
+- **Rows.** `tools/whole_file_rows.py --unit-va <va> --cxx --write` regenerates a unit's row from its present
+  row: the addresses, strips, static-initializer entry and data names it settled stay settled, the retail
+  functions it left to link from retail (a partial file) stay so without `--partial`, and a name it left out
+  that binds without a row stays out. Regenerating an unchanged unit writes its row unchanged, so a
+  conversion's row diff is what the conversion changed.
+- **Typed coverage.** `tools/typed_coverage.py` counts a member's accesses as it counts a free function's
+  (`this->x`, a bare field, a read through a typed member such as `_visualContext->x`, a constructor's body),
+  and the accesses the compiled code makes through what the headers define inline: an inline member called on
+  an object of known class (`_Meta->isValid()`), a smart-pointer member's assignment, and a converted class's
+  implicit destructor (counted once). A conversion never lowers the count.
 
 `tools/apply_names.py --member Class::old new` (repeatable, dry run unless `--apply`) renames a member: its
 `config/class-members.tsv` declaration and class bodies (not `reflected.h`, which is regenerated), its definitions

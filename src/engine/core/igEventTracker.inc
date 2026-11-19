@@ -103,7 +103,7 @@ CallbackArray *igEventTracker_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igEventTracker_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igEventTracker_GetMetaObjectFunction,
         "igEventTracker",

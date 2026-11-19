@@ -43,7 +43,7 @@ CallbackArray *igDependencyOrderedList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igDependencyOrderedList_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igDependencyOrderedList_GetMetaObjectFunction,
         "igDependencyOrderedList",

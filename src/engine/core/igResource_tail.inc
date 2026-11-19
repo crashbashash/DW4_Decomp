@@ -349,7 +349,7 @@ void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromNa
                         if (((unsigned long long)(long long)created->_refCount & 0x7fffffULL) == 0) igObject_Destroy(created);
                     }
                     fieldCount = igMetaObject_GetFieldCount(fromMeta);
-                    for (field = igMetaObject_GetFieldCount((igMetaObject *)g_igObject_metaObject); field < fieldCount; field++) {
+                    for (field = igMetaObject_GetFieldCount((igMetaObject *)Gap::Core::igObject::_Meta); field < fieldCount; field++) {
                         igMetaField *from = (igMetaField *)igMetaObject_GetFieldAt(fromMeta, field);
                         igMetaField *to = (igMetaField *)igMetaObject_FindFieldByName(toMeta, (const char *)from->_fieldName);
                         if (to != 0) {

@@ -30,14 +30,12 @@ class igMemoryPoolView;
 #include "dw4/core/igInfoList.h"
 #include "dw4/gui/igRendererOrderedList.h"
 #include "dw4/gui/igEventDispatcher.h"
-#include "dw4/gui/igClearRenderer.h"
 #include "dw4/core/igTimer.h"
 #include "dw4/core/igReport.h"
 #include "dw4/core/igPluginHelper.h"
 #include "dw4/gfx/igVisualContext.h"
 extern "C" void InsightLibrary_MarkRegistered(void);
 #include "dw4/gui/igRenderer.h"
-extern "C" igMetaObject *FUN_00231010(void);
 extern "C" igMetaObject *g_igMessage_metaObject;
 extern "C" igMetaObject *igMessage_GetPublishedMetaObject(void);
 #include "dw4/core/StringPool.h"
@@ -255,15 +253,7 @@ extern "C" igMetaObject *igInfoManager_GetMetaObject(void);
 extern "C" void igInfoManager_EnsureRegistered(void);
 extern "C" void igInfoManager_GetMetaObjectFunction(void);
 extern "C" void igInfoManager_InitFields(void);
-extern "C" igMetaObject *g_igFlushRenderer_metaObject;
-extern "C" igMetaObject *igFlushRenderer_GetOrCreateMetaObject(void);
 union U_233a90 { int vt; int w[3]; char b[12]; };
-extern "C" int g_igFlushRenderer_vtable[4];
-extern "C" igMetaObject *igFlushRenderer_GetMetaObject(void);
-extern "C" int igFlushRenderer_GetVTable(void);
-extern "C" void igFlushRenderer_EnsureRegistered(void);
-extern "C" CallbackArray *igFlushRenderer_Register(void);
-extern "C" void igFlushRenderer_GetMetaObjectFunction(void);
 typedef struct IntList {
     int _unk00[2];
     int count;
@@ -481,17 +471,8 @@ extern "C" void igViewerDefaults_ReleaseInstance(void);
 extern "C" void igCommandLine_Setup(ViewerOptions *opts, igStringRefList *args);
 /* The frame-buffer format the viewer options request, and the one the visual context reports. */
 struct FrameBufferFormat { int enabled; int width; int height; int colorBits; int alphaBits; int depthBits; int stencilBits; float scale; };
-/* The video mode a visual context is set to: the NTSC or PAL refresh rate, the swap interval and
- * whether the frame keeps its full height. */
-struct VideoMode {
-    unsigned char enable;
-    unsigned char interlace;
-    int outputFormat;
-    int fullHeight;
-    float refreshRate;
-    int swapInterval;
-    int pal;
-};
+/* VideoMode, the mode a visual context is set to, and the context's named slots. */
+#include "dw4/gfx/igVisualContextDispatchView.h"
 struct VideoModeResult { int code; };
 class igVisualContextView : public igVirtualObject {
 public:
@@ -553,13 +534,6 @@ public:
     virtual int setVisualContext(igVisualContextView *context);
 };
 #include "dw4/windowinput/igWindow.h"
-class igFlushRendererView {
-public:
-    int _vtable;
-    unsigned int _refCount;
-    igVisualContextView *_visualContext;
-};
-extern "C" void igFlushRenderer_Render(igFlushRendererView *self);
 struct NamedObject : public igObject { int name; };
 #include "dw4/core/igFolder.h"
 struct G { char p[76]; int f76; };
@@ -758,10 +732,6 @@ extern "C" int igEventReceiver_ControllerConnectionEvent(void);
 extern "C" int igEventReceiver_WindowMoveEvent(void);
 extern "C" int igEventReceiver_WindowCloseEvent(void);
 extern "C" int igEventReceiver_WindowResizeEvent(void);
-extern "C" igMetaObject *igFlushRenderer_GetMeta(void);
-extern "C" void igFlushRenderer_Traverse(void);
-extern "C" void igFlushRenderer_InitializeDrawing(void);
-extern "C" void igFlushRenderer_ReleaseDrawing(void);
 extern "C" igMetaObject *igInfoManagerList_GetMeta(void);
 extern "C" igMetaObject *igInfoManagerOrderedList_GetMeta(void);
 extern "C" int igDependencyOrderedList_GetMeta(void);
@@ -773,7 +743,6 @@ extern "C" igMetaObject *igMessageFilterList_GetMeta(void);
 extern "C" igMetaObject *igMessageReceiverList_GetMeta(void);
 extern "C" igMetaObject *igMessenger_GetMeta(void);
 extern "C" int igMessage_GetMeta(void);
-extern "C" igMetaObject *FUN_00238cf0(void);
 extern "C" igMetaObject *igInsightPluginList_GetElementMeta(void);
 extern "C" igMetaObject *igMessageFilterList_GetElementMeta(void);
 extern "C" igMetaObject *igInfoManagerList_GetElementMeta(void);

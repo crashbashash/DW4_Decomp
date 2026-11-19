@@ -19,8 +19,17 @@ out of here:
     counted.
 
 A member function written out of its class (`void igRenderer::setVisualContext(...) {`,
-`igMetaObject *Gap::Gui::igRenderer::getMeta() const {`) is a function of that class: its `this->x` and
-its bare reads of a reflected field of the class (`_visualContext`) are recovered accesses.
+`igMetaObject *Gap::Gui::igRenderer::getMeta() const {`, a constructor `Gap::Core::igObject::igObject() {`) is a
+function of that class: its `this->x` and its bare reads of a reflected field of the class (`_visualContext`) are
+recovered accesses, and so is a read through a typed member of the class (`_visualContext->_mode`).
+
+A converted class's code reaches the fields the free-function form spelled out through members the headers define
+inline, so each use counts the reflected-field accesses of the inline body it runs: an inline member called on an
+object of known class (`_Meta->isValid()`, `meta->isValid()`, a bare inline member of the class), a smart-pointer
+member's assignment (`_visualContext = context`, igSmartPointer's operator=). A converted class whose destructor
+the compiler writes (a `__dt__` name of compiler-names.tsv, no `Class::~Class` in src/) counts its implicit
+destructor once: each smart-pointer member read and released. So writing a class's functions as its members
+never lowers the count.
 
 Comments and string literals are blanked before counting, so `p->field` in a prose
 comment or a format string is not an access. The per-folder table shows where the raw
@@ -92,6 +101,12 @@ META_TO_C = {
 FUNC_RE = re.compile(
     r"^(?P<ret>[A-Za-z_][\w \t\*]*?[\s\*])(?P<scope>(?:[A-Za-z_]\w*\s*::\s*)+)?(?P<name>\w+)\s*"
     r"\((?P<args>[^;{)]*)\)\s*(?:const\s*)?\{",
+    re.M)
+# a constructor or destructor written out of its class (`Gap::Core::igObject::igObject() {`, `igRenderer::~igRenderer()`,
+# with or without a member-initialiser list): no return type, its class's name for a name
+SPECIAL_RE = re.compile(
+    r"^[ \t]*(?P<scope>(?:[A-Za-z_]\w*\s*::\s*)*(?P<cls>[A-Za-z_]\w*)\s*::\s*)(?P<name>~?(?P=cls))\s*"
+    r"\((?P<args>[^;{)]*)\)\s*(?::[^;{]*)?\{",
     re.M)
 # an identifier that is not a member of another object (`->x`, `.x`, `C::x`) nor a call
 IDENT_RE = re.compile(r"(?<![\w.>:])([A-Za-z_]\w*)\b(?!\s*\()")
@@ -216,7 +231,10 @@ def strip_comments_and_strings(text):
 def split_functions(text):
     """[(name, args, body_start, body_end)] for top-level definitions in `text`."""
     out = []
-    starts = [(m, m.start()) for m in FUNC_RE.finditer(text)]
+    found = {m.start(): m for m in FUNC_RE.finditer(text)}
+    for m in SPECIAL_RE.finditer(text):
+        found.setdefault(m.start(), m)
+    starts = [(found[pos], pos) for pos in sorted(found)]
     for i, (m, pos) in enumerate(starts):
         end = starts[i + 1][1] if i + 1 < len(starts) else len(text)
         scope = re.sub(r"\s+", "", m.group("scope") or "")
@@ -332,6 +350,315 @@ def template_arguments(text):
     return found
 
 
+# ---- what a member's typed code reaches through inline and implicit members ------------------------------
+# A converted class's member writes `_Meta->isValid()`, `_visualContext = context` or nothing at all (an implicit
+# destructor) where the free function it was spelled `g->_validity & 4`, the reference count arithmetic and a
+# `<Class>_Destroy` body. The compiled code still makes those reads, on typed objects, through the inline members
+# and template the headers define: each use counts the accesses of the inline body it runs, as if written there.
+_CONDITIONAL_RE = re.compile(r"^[ \t]*#[ \t]*(ifdef|ifndef|if|elif|else|endif)\b(.*)$")
+_DEFINE_RE = re.compile(r"^[ \t]*#[ \t]*define[ \t]+(\w+)\(([^)]*)\)((?:[^\n]*\\\n)*[^\n]*)", re.M)
+_CLASS_RE = re.compile(r"(?:template\s*<\s*(?:class|typename)\s+(?P<tparam>\w+)\s*>\s*)?"
+                       r"\b(?:struct|class)\s+(?P<name>[A-Za-z_]\w*)\s*(?::(?P<bases>[^{;()]*))?\{")
+_FREE_INLINE_RE = re.compile(r"^[ \t]*(?:static\s+)?inline\s+[^;{}()]*?\b(?P<name>\w+)\s*\((?P<params>[^;{)]*)\)\s*\{",
+                             re.M)
+_CALL_RE = re.compile(r"(?:\b(?P<base>\w+)\s*(?P<op>->|\.)\s*)?(?<![\w~])(?P<name>[A-Za-z_]\w*)\s*\((?P<args>[^()]*)\)")
+_ASSIGN_RE = re.compile(r"(?<![\w.>])(?:this\s*->\s*)?(?P<name>[A-Za-z_]\w*)\s*=(?!=)")
+_SMART_RE = re.compile(r"^igSmartPointer\s*<\s*(?:struct\s+)?([\w:]+)\s*>$")
+_KEYWORDS = frozenset(("if", "while", "for", "switch", "return", "sizeof", "do", "else", "case", "new", "delete"))
+
+
+def cxx_view(text):
+    """`text` as C++ reads it: of an `#ifdef __cplusplus` / `#ifndef __cplusplus` conditional only the arm C++
+    compiles stays, the other arm's lines are blanked; other conditionals keep every arm."""
+    out, stack, live = [], [], True
+    for line in text.split("\n"):
+        m = _CONDITIONAL_RE.match(line)
+        if m:
+            word, rest = m.group(1), m.group(2).strip()
+            if word in ("ifdef", "ifndef", "if"):
+                cxx = rest == "__cplusplus" and word != "if"
+                stack.append((cxx, live))
+                if cxx:
+                    live = live and word == "ifdef"
+            elif word in ("else", "elif") and stack and stack[-1][0]:
+                live = stack[-1][1] and not live
+            elif word == "endif" and stack:
+                live = stack.pop()[1]
+            out.append("")
+            continue
+        out.append(line if live else "")
+    return "\n".join(out)
+
+
+def _member_type(decl):
+    """(kind, type) of a member declaration's type text: ("smart", T) for `igSmartPointer<T>`, ("ptr", T) for a
+    pointer to T, or None."""
+    decl = re.sub(r"\b(?:static|struct|class|const|mutable|volatile)\b", " ", decl).strip()
+    smart = _SMART_RE.match(re.sub(r"\s+", " ", decl))
+    if smart:
+        return "smart", smart.group(1).rsplit("::", 1)[-1]
+    m = re.match(r"^([A-Za-z_][\w:]*)\s*\*$", decl)
+    return ("ptr", m.group(1).rsplit("::", 1)[-1]) if m else None
+
+
+def _params(text):
+    """{name: type} of a parameter list's pointer parameters (`T *next`, `igObject *o`)."""
+    out = {}
+    for p in text.split(","):
+        m = re.match(r"^\s*(?:const\s+|struct\s+|class\s+)*([A-Za-z_][\w:]*)\s*\*+\s*&?\s*(\w+)\s*$", p)
+        if m:
+            out[m.group(2)] = m.group(1).rsplit("::", 1)[-1]
+    return out
+
+
+def _close_brace(text, open_idx):
+    depth = 0
+    for i in range(open_idx, len(text)):
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return i
+    return -1
+
+
+class Inlines:
+    """The inline members and free inline functions the headers define, and the classes' typed members: what a use
+    of a member runs, as reflected-field accesses on typed objects."""
+
+    def __init__(self, texts, fields):
+        self.fields = fields                    # {class: set(reflected field names)}, ancestors merged
+        self.methods = {}                       # (class, name) -> (params {name: type}, body)
+        self.free = {}                          # name -> (params, body), the first definition
+        self.members = collections.defaultdict(dict)    # class -> {member: (kind, type)}
+        self.bases = collections.defaultdict(list)
+        self.templates = {}                     # class -> its template parameter
+        self._cache = {}
+        macros = {}
+        views = [cxx_view(strip_comments_and_strings(t)) for t in texts]
+        for text in views:
+            for m in _DEFINE_RE.finditer(text):
+                macros[m.group(1)] = ([p.strip() for p in m.group(2).split(",") if p.strip()],
+                                      m.group(3).replace("\\\n", "\n"))
+        for text in views:
+            for m in _FREE_INLINE_RE.finditer(text):
+                close = _close_brace(text, m.end() - 1)
+                if close > 0:
+                    self.free.setdefault(m.group("name"), (_params(m.group("params")), text[m.end():close]))
+            for m in _CLASS_RE.finditer(text):
+                close = _close_brace(text, m.end() - 1)
+                if close < 0:
+                    continue
+                name = m.group("name")
+                if m.group("tparam"):
+                    self.templates[name] = m.group("tparam")
+                for base in (m.group("bases") or "").split(","):
+                    words = re.findall(r"[A-Za-z_][\w:]*", base)
+                    if words and words[-1] not in ("public", "private", "protected", "virtual"):
+                        self.bases[name].append(words[-1].rsplit("::", 1)[-1])
+                self._read_body(name, self._expand(text[m.end():close], macros))
+
+    @staticmethod
+    def _expand(body, macros, depth=0):
+        if depth > 3:
+            return body
+
+        def one(m):
+            params, text = macros[m.group(1)]
+            args = [a.strip() for a in m.group(2).split(",")]
+            for p, a in zip(params, args):
+                text = re.sub(r"\b%s\b" % re.escape(p), a, text)
+            return text + ";"
+        names = [n for n in macros if n in body]
+        if not names:
+            return body
+        new = re.sub(r"\b(%s)\s*\(([^()]*)\)" % "|".join(map(re.escape, names)), one, body)
+        return Inlines._expand(new, macros, depth + 1) if new != body else body
+
+    def _read_body(self, cls, body):
+        """The class body's members at its own depth: data members' types, inline functions' bodies."""
+        at, depth, start = 0, 0, 0
+        while at < len(body):
+            ch = body[at]
+            if ch == "{":
+                head = body[start:at]
+                close = _close_brace(body, at)
+                if close < 0:
+                    return
+                paren = head.find("(")
+                if paren > 0 and not re.search(r"\b(?:struct|class|union|enum)\b", head[:paren]):
+                    name = re.search(r"(operator\s*[^\s(]+|operator\s+[\w\s\*]+?|~?\w+)\s*$", head[:paren])
+                    if name:
+                        key = re.sub(r"\s+", " ", name.group(1)).replace("operator =", "operator=")
+                        pclose = matching_paren(head, paren)
+                        self.methods.setdefault((cls, key), (_params(head[paren + 1:pclose]), body[at + 1:close]))
+                at, start = close + 1, close + 1
+                if body[start:start + 1] == ";":
+                    at = start = start + 1
+                continue
+            if ch in ";:" and depth == 0:
+                stmt = body[start:at]
+                if ch == ":" and body[at:at + 2] == "::":
+                    at += 2
+                    continue
+                if ch == ";" and "(" not in stmt:
+                    m = re.match(r"^\s*(.*?)\b(\w+)\s*(?:\[[^\]]*\]\s*)*$", stmt, re.S)
+                    if m:
+                        typed = _member_type(m.group(1))
+                        if typed:
+                            self.members[cls].setdefault(m.group(2), typed)
+                start = at + 1
+            at += 1
+
+    def member(self, cls, name, seen=None):
+        """(kind, type) of `cls`'s member `name`, its bases' included, or None."""
+        seen = seen or set()
+        if cls in seen or cls is None:
+            return None
+        seen.add(cls)
+        if name in self.members.get(cls, {}):
+            return self.members[cls][name]
+        for b in self.bases.get(cls, ()):
+            found = self.member(b, name, seen)
+            if found:
+                return found
+        return None
+
+    def method(self, cls, name, seen=None):
+        """(class defining it, params, body) of the inline member `name` of `cls` or a base, or None."""
+        seen = seen or set()
+        if cls in seen or cls is None:
+            return None
+        seen.add(cls)
+        if (cls, name) in self.methods:
+            return (cls,) + self.methods[(cls, name)]
+        for b in self.bases.get(cls, ()):
+            found = self.method(b, name, seen)
+            if found:
+                return found
+        return None
+
+    def run(self, cls, name, binding=(), depth=0):
+        """Counter{(class, field)} of the reflected-field accesses a call of the inline member `cls::name` makes,
+        with the template parameter bound (`binding`, ((parameter, type),)); empty when it is not inline."""
+        found = self.method(cls, name)
+        if found is None:
+            return collections.Counter()
+        owner, params, body = found
+        key = (owner, name, binding)
+        if key not in self._cache:
+            self._cache[key] = collections.Counter()      # a recursion reads nothing more
+            self._cache[key] = self._body(owner, params, body, dict(binding), depth)
+        return self._cache[key]
+
+    def run_free(self, name, args, depth=0):
+        """The accesses of a call of the free inline function `name` whose pointer arguments have the classes
+        `args` (None where unknown): an access through a parameter is one on its argument's class."""
+        if name not in self.free or depth > 4:
+            return collections.Counter()
+        params, body = self.free[name]
+        names = list(params)
+        typed = dict(params)
+        for i, a in enumerate(args[:len(names)]):
+            if a:
+                typed[names[i]] = a
+        return self._body(None, typed, body, {}, depth + 1)
+
+    def _body(self, owner, params, body, binding, depth):
+        out = collections.Counter()
+        if depth > 4:
+            return out
+        bind = lambda t: binding.get(t, t)  # noqa: E731
+        types = {v: bind(t) for v, t in params.items()}
+        for t, v in DECL_RE.findall(body):
+            if t not in _NOT_A_TYPE:
+                types.setdefault(v, bind(t))
+        if owner:
+            for name, (kind, t) in self.members.get(owner, {}).items():
+                if kind == "ptr":
+                    types.setdefault(name, bind(t))
+        for base, field in MEMBER_RE.findall(body):
+            cls = owner if base == "this" else types.get(base)
+            if cls and field in self.fields.get(cls, ()):
+                out[(cls, field)] += 1
+        if owner and owner in self.fields:
+            local = local_names(",".join(params), body)
+            for m in IDENT_RE.finditer(body):
+                if m.group(1) in self.fields[owner] and m.group(1) not in local and m.group(1) not in params:
+                    if not body[max(0, m.start() - 2):m.start()].endswith("->"):
+                        out[(owner, m.group(1))] += 1
+        for m in _CALL_RE.finditer(body):
+            name, base = m.group("name"), m.group("base")
+            if name in _KEYWORDS:
+                continue
+            if base is None and owner and self.method(owner, name):
+                out.update(self.run(owner, name, tuple(sorted(binding.items())), depth + 1))
+            elif base is None and name in self.free:
+                args = [types.get(a.strip()) for a in m.group("args").split(",")]
+                out.update(self.run_free(name, args, depth))
+            elif base is not None and types.get(base):
+                out.update(self.run(types[base], name, (), depth + 1))
+        return out
+
+    def smart(self, operation, held):
+        """The accesses of an igSmartPointer<held> member function (`operator=`, `~igSmartPointer`)."""
+        param = self.templates.get("igSmartPointer", "T")
+        return self.run("igSmartPointer", operation, ((param, held),))
+
+    def implicit_destructor(self, cls, seen=None):
+        """The accesses of `cls`'s implicit destructor: each smart-pointer member read and released, then the
+        bases' implicit destructors."""
+        seen = seen or set()
+        out = collections.Counter()
+        if cls in seen:
+            return out
+        seen.add(cls)
+        for name, (kind, held) in self.members.get(cls, {}).items():
+            if kind == "smart":
+                if name in self.fields.get(cls, ()):
+                    out[(cls, name)] += 1
+                out.update(self.smart("~igSmartPointer", held))
+        for b in self.bases.get(cls, ()):
+            out.update(self.implicit_destructor(b, seen))
+        return out
+
+
+def header_texts(roots):
+    """The texts of every header under `roots` (include/, src/)."""
+    out = []
+    for root in roots:
+        for path in sorted(glob.glob(os.path.join(root, "**", "*.h"), recursive=True)):
+            try:
+                out.append(srctext.read(path, errors="replace"))
+            except (FileNotFoundError, UnicodeDecodeError):
+                continue
+    return out
+
+
+def implicit_destructors(root, defined):
+    """The converted classes whose destructor the compiler writes (a `__dt__` compiler name of
+    config/SLUS-20836/compiler-names.tsv on a class of config/converted-classes.tsv) and the source does not define
+    (`defined`, the `Class::~Class` names of src/)."""
+    from demangle import demangle
+    out = []
+    path = os.path.join(root, "config", "converted-classes.tsv")
+    names = os.path.join(root, "config", "SLUS-20836", "compiler-names.tsv")
+    if not (os.path.exists(path) and os.path.exists(names)):
+        return out
+    with open(path) as fh:
+        converted = {line.split("\t")[0].strip() for line in fh
+                     if line.strip() and not line.startswith("#") and "\t" in line}
+    with open(names) as fh:
+        compiled = [line.split("\t", 1)[0] for line in fh if line.startswith("__dt__")]
+    for name in compiled:
+        d = demangle(name)
+        cls = d.class_name if d else None
+        if cls in converted and "%s::~%s" % (cls, cls) not in defined and cls not in out:
+            out.append(cls)
+    return out
+
+
 def measure(reflection="data/reflection.json", src="src"):
     """The two numbers, plus what could be converted and where.
 
@@ -339,6 +666,10 @@ def measure(reflection="data/reflection.json", src="src"):
     one this tool prints can never disagree.
     """
     classes = load_classes(reflection)
+    root = os.path.dirname(os.path.dirname(os.path.abspath(reflection)))
+    inlines = Inlines(header_texts([os.path.join(root, "include"), src]),
+                      {name: {f[1] for f in c["fields"]} for name, c in classes.items()})
+    defined_destructors = set()
     # `dw4u_*` are the transient one-function splits tools/units.py writes while a check
     # runs; they duplicate a unit's function and may vanish mid-walk, so they are not units.
     files = sorted(p for p in glob.glob(os.path.join(src, "**", "*.c"), recursive=True) +
@@ -363,6 +694,16 @@ def measure(reflection="data/reflection.json", src="src"):
             folder, dict(total=0, offset_casts=0, recovered=0, synthetic=0,
                          other_members=0, files=0))
         ff["files"] += 1
+
+        def credit(found, fc, ff=ff):
+            """Count the accesses an inline or implicit member makes (Inlines) as recovered ones."""
+            for (owner, _field), n in found.items():
+                ff["total"] += n
+                stats["recovered"] += n
+                ff["recovered"] += n
+                fc["recovered"] += n
+                stats["by_class"][owner] = stats["by_class"].get(owner, 0) + n
+
         synth_structs = synthetic_structs(text)
         template_args = template_arguments(text)
         fns = split_functions(text)
@@ -378,12 +719,25 @@ def measure(reflection="data/reflection.json", src="src"):
                     decls[var] = next((a for a in template_args[declared] if a in classes), declared)
             fc = collections.Counter()
             stats["per_function"][(path, name)] = fc
+            shadowed = local_names(signature, body)
+            if "::~" in name:
+                defined_destructors.add("::".join(name.rsplit("::", 2)[-2:]))
+
+            def typed_member(var):
+                """(kind, class) of a member of a member function's class that `var` names (not a local), or
+                None."""
+                if "::" not in name or not cls or var in shadowed or var in decls:
+                    return None
+                return inlines.member(cls, var)
+
             for kind, ctype, offset, base, span in accesses(body):
                 ff["total"] += 1
                 if kind == "member":
                     member, decl_class = ctype, decls.get(base)
                     if decl_class is None and base in ("arg0", "this"):
                         decl_class = cls
+                    if decl_class is None and typed_member(base):
+                        decl_class = typed_member(base)[1]      # through a typed member (`_visualContext->x`)
                     if decl_class and decl_class in synth_structs and \
                             any(f[1] == member for f in synth_structs[decl_class]):
                         stats["synthetic"] += 1
@@ -446,6 +800,43 @@ def measure(reflection="data/reflection.json", src="src"):
                         ff["recovered"] += 1
                         fc["recovered"] += 1
                         stats["by_class"][cls] = stats["by_class"].get(cls, 0) + 1
+            # what the body runs through inline members: `_Meta->isValid()`, `meta->isValid()`, a bare inline member
+            # of the class, and a smart-pointer member's operators (`_visualContext = context`)
+            opened = body.find("{")
+            for m in _CALL_RE.finditer(body, max(0, opened)):
+                call, base, op = m.group("name"), m.group("base"), m.group("op")
+                if call in _KEYWORDS:
+                    continue
+                if base is None:
+                    if "::" in name and call not in shadowed:
+                        credit(inlines.run(cls, call), fc)
+                    continue
+                owner = cls if base in ("this", "arg0") and op == "->" else decls.get(base) if op == "->" else None
+                member = typed_member(base) if owner is None and base not in ("this", "arg0") else None
+                if member and member[0] == "smart" and op == ".":
+                    credit(inlines.smart(call, member[1]), fc)
+                elif member and op == "->":
+                    credit(inlines.run(member[1], call), fc)
+                elif owner:
+                    credit(inlines.run(owner, call), fc)
+            for m in _ASSIGN_RE.finditer(body, max(0, opened)):
+                member = typed_member(m.group("name"))
+                if member and member[0] == "smart":
+                    credit(inlines.smart("operator=", member[1]), fc)
+    # an implicit destructor has no text: its member releases are counted once for the class whose destructor the
+    # compiled code holds
+    implicit = implicit_destructors(root, defined_destructors)
+    if implicit:
+        ff = stats["by_folder"].setdefault("(implicit)", dict(total=0, offset_casts=0, recovered=0, synthetic=0,
+                                                              other_members=0, files=0))
+        for cls in implicit:
+            fc = stats["per_function"].setdefault(("(implicit)", "%s::~%s" % (cls, cls)), collections.Counter())
+            for (owner, _field), n in inlines.implicit_destructor(cls).items():
+                ff["total"] += n
+                stats["recovered"] += n
+                ff["recovered"] += n
+                fc["recovered"] += n
+                stats["by_class"][owner] = stats["by_class"].get(owner, 0) + n
     stats["total"] = (stats["offset_casts"] + stats["recovered"] + stats["synthetic"] +
                       stats["other_members"])
     for ff in stats["by_folder"].values():

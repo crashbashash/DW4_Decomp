@@ -86,8 +86,11 @@ void igLuaState_MakeCurrent(Gap::Lua::igLuaState *state) {
     g_currentLuaState = state;
 }
 
+namespace Gap {
+namespace Lua {
+
 /* Opens the Lua state in the object's memory pool with the standard libraries and the glue's. */
-void Gap::Lua::igLuaState::userConstruct() {
+void igLuaState::userConstruct(int flag) {
     ::igObject *pool;
     ::igObject *old;
     lua_State *L;
@@ -117,12 +120,12 @@ void Gap::Lua::igLuaState::userConstruct() {
     LuaGlue_OpenLibrary(L);
 }
 
-void Gap::Lua::igLuaState::userDestruct() {
+void igLuaState::userDestruct() {
     lua_close(_luaState);
     ThreadLocal_FreeSlot(g_luaStateSlot);
 }
 
-int Gap::Lua::igLuaState::runString(const char *source) {
+int igLuaState::runString(const char *source) {
     int status = lua_dostring(_luaState, source);
     if (status != 0) {
         LuaError("igLuaState::runString() failed - reason %s", g_luaErrorNames[status]);
@@ -130,7 +133,7 @@ int Gap::Lua::igLuaState::runString(const char *source) {
     return status;
 }
 
-int Gap::Lua::igLuaState::runFile(const char *path) {
+int igLuaState::runFile(const char *path) {
     int status = lua_dofile(_luaState, path);
     if (status != 0) {
         LuaError("igLuaState::runFile(%s) failed - reason %s", path, g_luaErrorNames[status]);
@@ -138,12 +141,14 @@ int Gap::Lua::igLuaState::runFile(const char *path) {
     return status;
 }
 
-int Gap::Lua::igLuaState::runBuffer(const char *buffer, unsigned int size, const char *name) {
+int igLuaState::runBuffer(const char *buffer, unsigned int size, const char *name) {
     int status = lua_dobuffer(_luaState, buffer, size, name);
     if (status != 0) {
         LuaError("igLuaState::runBuffer(%s) failed - reason %s", name, g_luaErrorNames[status]);
     }
     return status;
+}
+}
 }
 
 void LuaBinding_SetErrorHandler(LuaErrorHandler handler, void *data) {

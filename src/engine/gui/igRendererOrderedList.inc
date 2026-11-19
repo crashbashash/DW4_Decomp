@@ -58,7 +58,7 @@ void igRendererOrderedList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igRendererOrderedList_Register);
 }
 
-static igMetaObjectCallback g_igRendererOrderedList_callbackList[] = { igRenderer_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igRendererOrderedList_callbackList[] = { Gap::Gui::igRenderer::arkRegister, 0 };
 
 CallbackArray *igRendererOrderedList_Register(void) {
     GuiLibrary_MarkRegistered();

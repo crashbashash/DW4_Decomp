@@ -62,8 +62,8 @@ CallbackArray *igBoundingBoxRenderer_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBoundingBoxRenderer_metaObject,
-        igRenderer_Register,
-        igRenderer_GetPublishedMetaObject,
+        Gap::Gui::igRenderer::arkRegisterInternal,
+        Gap::Gui::igRenderer::getClassMeta,
         igBoundingBoxRenderer_GetMetaObjectFunction,
         "igBoundingBoxRenderer",
         0x2C, /* instance size */

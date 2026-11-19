@@ -377,7 +377,6 @@ extern "C" void igActorManager_GetMetaObjectFunction(void);
 #include "dw4/datapump/igDataPumpManager.h"
 #include "dw4/gfx/GfxMetaEnums.h"
 #include "dw4/gfx/igDisableExt.h"
-#include "dw4/insight/igFlushRenderer.h"
 #include "dw4/scenegraph/igBitMask.h"
 #include "dw4/scenegraph/igGraphPathList.h"
 #include "dw4/scenegraph/igIntersectTraversal.h"

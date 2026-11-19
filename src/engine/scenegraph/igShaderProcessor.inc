@@ -30,7 +30,7 @@ CallbackArray *igShaderProcessor_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igShaderProcessor_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igShaderProcessor_GetMetaObjectFunction,
         "igShaderProcessor",

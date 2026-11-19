@@ -80,7 +80,7 @@ CallbackArray *igMetaEnum_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igMetaEnum_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igMetaEnum_GetMetaObjectFunction,
         "igMetaEnum",

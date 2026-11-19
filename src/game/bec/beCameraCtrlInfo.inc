@@ -31,7 +31,7 @@ void beCameraCtrlInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beCameraCtrlInfo_Register);
 }
 
-static igMetaObjectCallback g_beCameraCtrlInfo_callbackList[] = { igObject_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beCameraCtrlInfo_callbackList[] = { Gap::Core::igObject::arkRegister, 0 };
 
 CallbackArray *beCameraCtrlInfo_Register(void) {
     BecLibrary_MarkRegistered();
@@ -77,7 +77,7 @@ void beCameraCtrlInfo_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCameraCtrlInfo_ctorTable, 1);
     f = igMetaObject_GetFieldAt(meta, base);
-    ((igObjectRefMetaField *)f)->_metaObject = (int)g_igObject_metaObject;
+    ((igObjectRefMetaField *)f)->_metaObject = (int)Gap::Core::igObject::_Meta;
     igMetaObject_NameFields(meta, g_beCameraCtrlInfo_fieldTable, g_beCameraCtrlInfo_fieldHandles, g_beCameraCtrlInfo_fieldOffsets, base);
 }
 

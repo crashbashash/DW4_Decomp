@@ -60,7 +60,7 @@ CallbackArray *igAnimationTransitionDefinition_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationTransitionDefinition_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igAnimationTransitionDefinition_GetMetaObjectFunction,
         "igAnimationTransitionDefinition",

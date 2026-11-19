@@ -73,7 +73,7 @@ CallbackArray *igStringTable_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igStringTable_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igStringTable_GetMetaObjectFunction,
         "igStringTable",

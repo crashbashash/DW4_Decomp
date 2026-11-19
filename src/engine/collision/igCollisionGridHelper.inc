@@ -60,7 +60,7 @@ CallbackArray *igCollisionGridHelper_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCollisionGridHelper_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         igCollisionGridHelper_GetMetaObjectFunction,
         "igCollisionGridHelper",

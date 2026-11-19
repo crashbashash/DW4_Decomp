@@ -54,7 +54,7 @@ CallbackArray *beNDMWLoadSlotPlayer_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWLoadSlotPlayer_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beNDMWLoadSlotPlayer_GetMetaObject,
         "beNDMWLoadSlotPlayer",

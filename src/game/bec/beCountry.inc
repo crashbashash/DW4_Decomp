@@ -26,7 +26,7 @@ CallbackArray *beCountry_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beCountry_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beCountry_GetMetaObjectFunction,
         "beCountry",

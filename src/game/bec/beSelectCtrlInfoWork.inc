@@ -56,7 +56,7 @@ CallbackArray *beSelectCtrlInfoWork_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beSelectCtrlInfoWork_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         beSelectCtrlInfoWork_GetMetaObjectFunction,
         "beSelectCtrlInfoWork",

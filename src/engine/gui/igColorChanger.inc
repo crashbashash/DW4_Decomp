@@ -32,7 +32,7 @@ CallbackArray *igColorChanger_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igColorChanger_metaObject,
-        igObject_Register,
+        Gap::Core::igObject::arkRegisterInternal,
         igObject_GetMetaObject_ParentAccessor,
         thunk_igColorChanger_GetMetaObject,
         "igColorChanger",

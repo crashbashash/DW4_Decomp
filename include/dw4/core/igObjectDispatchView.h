@@ -1,6 +1,8 @@
+/* reflected.h first, outside the guard: its converted classes can include this header back (through
+ * igSmartPointer.h) and must then find the view declared. */
+#include "dw4/support/reflected.h"
 #ifndef DW4_IGOBJECTDISPATCHVIEW_H
 #define DW4_IGOBJECTDISPATCHVIEW_H
-#include "dw4/support/reflected.h"
 #include "dw4/core/igObject.h"
 
 /* igObject's virtual functions: slot n sits at vtable byte offset 8 + 4 * n (the first two words
