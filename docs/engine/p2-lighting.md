@@ -216,7 +216,7 @@ stag0001 values; the generalisation and the event model are unconfirmed):
    still holds `(0.3214, -0.866, 0.383)`.
 2. **Upload.** `p2AppendLightingPacket` -> `p2WriteDirectionalLights` writes the raw `+0x60` vectors transposed as three quadwords (x row, y row, z row for
    four lights) in a VIF UNPACK to VU1 address `0x5a`.
-3. **Pending flag.** `FUN_001fbce0` is the single hardware matrix upload (type 0 model-view, 3 projection, 4 texture, 5, 2); every
+3. **Pending flag.** `p2SetMatrix` is the single hardware matrix upload (type 0 model-view, 3 projection, 4 texture, 5, 2); every
    type leaves through `0x1fc010..0x1fc018` with `p2LightCalcPending` (`0x56B5F8`) `= 1`. Only the model-view type also calls `p2AppendLightingPacket(-1)`, which
    re-emits a **fresh** light block (returning early when `p2DirtyFlags & 4`, the lighting-dirty bit, is set).
 4. **Draw submit.** `p2CallDisplayList` (clones `p2SubmitVertices`, `p2SubmitIndexedVertices`, `p2DrawParticles`) tests `p2LightCalcPending == 1`; if set it appends

@@ -572,7 +572,7 @@ void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1) {
 
 char g_disableBumpDotProduct;
 
-int FUN_001d81e0(void) {
+int getSgMaxLightStateCount(void) {
     int temp_s0;
 
     if (DAT_0048dae0[0] == -1) {
@@ -588,7 +588,7 @@ int FUN_001d8270(int arg0) {
         return 1;
     }
     if (arg0 == ((int)g_igLightStateAttr_metaObject)) {
-        return FUN_001d81e0();
+        return getSgMaxLightStateCount();
     }
     return 0;
 }

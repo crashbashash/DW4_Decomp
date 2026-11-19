@@ -78,5 +78,18 @@ class Ratchet(unittest.TestCase):
         self.assertEqual(saved["fun_dat_refs"], 12)
 
 
+class FreeMethods(unittest.TestCase):
+    def test_class_named_functions_of_cpp_units_count(self):
+        syms = [(0x100, 16, "igNode_Update"), (0x110, 8, "igNode_GetMeta"), (0x120, 4, "p2SetViewport"),
+                (0x130, 4, "Gap__Sg__igNode__vfunc_21"), (0x140, 4, "igNode_Helper"), (0x150, 4, "FUN_00100150"),
+                (0x160, 4, "__dt__6igNodeFv")]
+        paths = {"igNode_Update": "src/engine/sg/Sg.cpp", "igNode_GetMeta": "src/engine/sg/Sg.cpp",
+                 "p2SetViewport": "src/engine/p2gs.c", "Gap__Sg__igNode__vfunc_21": "src/engine/sg/Sg.cpp",
+                 "igNode_Helper": "src/engine/p2gs.c", "FUN_00100150": "src/engine/sg/Sg.cpp",
+                 "__dt__6igNodeFv": "src/engine/sg/Sg.cpp"}
+        # free functions only in C++ units, named for a known class; slot-named virtuals apart
+        self.assertEqual(progress.method_shaped(syms, paths, {"igNode"}), (2, 24, 1))
+
+
 if __name__ == "__main__":
     unittest.main()

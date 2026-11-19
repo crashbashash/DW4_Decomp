@@ -891,17 +891,17 @@ void igPsx2VisualContext_PopMatrix(Obj_172910 *o, int k) {
     switch (k) {
     case 0:
         o->s[0]->count--;
-        FUN_001fbce0(3, (const float *)(o->s[0]->data + ((o->s[0]->count - 1) << 6)));
+        p2SetMatrix(3, (const float *)(o->s[0]->data + ((o->s[0]->count - 1) << 6)));
         break;
     case 1:
         o->s[1]->count--;
-        FUN_001fbce0(0, (const float *)(o->s[1]->data + ((o->s[1]->count - 1) << 6)));
+        p2SetMatrix(0, (const float *)(o->s[1]->data + ((o->s[1]->count - 1) << 6)));
         break;
     case 2: {
         Stk *s = o->s[2];
         s->count--;
         igMatrix44f_Copy((float *)&m0, (float *)(s->data + (s->count << 6)));
-        FUN_001fbce0(4, (const float *)(o->s[2]->data + ((o->s[2]->count - 1) << 6)));
+        p2SetMatrix(4, (const float *)(o->s[2]->data + ((o->s[2]->count - 1) << 6)));
         break; }
     case 10: { Stk *s = o->s[4]; s->count--; igMatrix44f_Copy((float *)&m1, (float *)(s->data + (s->count << 6))); break; }
     case 11: { Stk *s = o->s[5]; s->count--; igMatrix44f_Copy((float *)&m2, (float *)(s->data + (s->count << 6))); break; }
@@ -922,17 +922,17 @@ void igPsx2VisualContext_SetMatrix(igPsx2VisualContext *self, int arg1, char *ar
     case 0:
         SET((St_172b00 *)self->_projMat, arg2)
         t = (St_172b00 *)self->_projMat;
-        FUN_001fbce0(3, (const float *)(t->data + ((t->n - 1) << 6)));
+        p2SetMatrix(3, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 1:
         SET((St_172b00 *)self->_mvMat, arg2)
         t = (St_172b00 *)self->_mvMat;
-        FUN_001fbce0(0, (const float *)(t->data + ((t->n - 1) << 6)));
+        p2SetMatrix(0, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 2:
         SET((St_172b00 *)self->_texMat, arg2)
         t = (St_172b00 *)self->_texMat;
-        FUN_001fbce0(4, (const float *)(t->data + ((t->n - 1) << 6)));
+        p2SetMatrix(4, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 10:
         igMatrix44f_SetIdentity((float *)sp110);
@@ -975,17 +975,17 @@ void igPsx2VisualContext_PushPreMultiply(igPsx2VisualContext *self, int arg1, ch
     case 0:
         igMatrixStack_PushPreMultiply((igMatrixStack *)self->_projMat, (const float *)arg2);
         t = (St_172b00 *)self->_projMat;
-        FUN_001fbce0(3, (const float *)(t->data + ((t->n - 1) << 6)));
+        p2SetMatrix(3, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 1:
         igMatrixStack_PushPreMultiply((igMatrixStack *)self->_mvMat, (const float *)arg2);
         t = (St_172b00 *)self->_mvMat;
-        FUN_001fbce0(0, (const float *)(t->data + ((t->n - 1) << 6)));
+        p2SetMatrix(0, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 2:
         igMatrixStack_PushPreMultiply((igMatrixStack *)self->_texMat, (const float *)arg2);
         t = (St_172b00 *)self->_texMat;
-        FUN_001fbce0(4, (const float *)(t->data + ((t->n - 1) << 6)));
+        p2SetMatrix(4, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 10:
         igMatrix44f_SetIdentity((float *)inverse0);
@@ -1028,17 +1028,17 @@ void igPsx2VisualContext_PushPostMultiply(igPsx2VisualContext *self, int arg1, c
     case 0:
         igMatrixStack_PushPostMultiply((igMatrixStack *)self->_projMat, (const float *)arg2);
         t = (St_172b00 *)self->_projMat;
-        FUN_001fbce0(3, (const float *)(t->data + ((t->n - 1) << 6)));
+        p2SetMatrix(3, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 1:
         igMatrixStack_PushPostMultiply((igMatrixStack *)self->_mvMat, (const float *)arg2);
         t = (St_172b00 *)self->_mvMat;
-        FUN_001fbce0(0, (const float *)(t->data + ((t->n - 1) << 6)));
+        p2SetMatrix(0, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 2:
         igMatrixStack_PushPostMultiply((igMatrixStack *)self->_texMat, (const float *)arg2);
         t = (St_172b00 *)self->_texMat;
-        FUN_001fbce0(4, (const float *)(t->data + ((t->n - 1) << 6)));
+        p2SetMatrix(4, (const float *)(t->data + ((t->n - 1) << 6)));
         break;
     case 10:
         igMatrix44f_SetIdentity((float *)inverse0);
@@ -1172,7 +1172,7 @@ void igPsx2VisualContext_SetMatrixPsx2(igPsx2VisualContext *self, int stack, con
             igMatrix44f_Copy(texGen->_data[texGen->_count - 1].m, matrix);
         }
         texGen = (igTDataList<igMatrix44f> *)self->_texgenMat;
-        FUN_001fbce0(5, texGen->_data[texGen->_count - 1].m);
+        p2SetMatrix(5, texGen->_data[texGen->_count - 1].m);
         break;
     default:
         ((Obj_173ed0 *)self)->v203(stack, (void *)matrix);

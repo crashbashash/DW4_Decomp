@@ -334,6 +334,58 @@ void FUN_001b0450(A_1b0450 *arg0, Rc_1b0450 *arg1) {
     arg0->f8 = 0;
 }
 
+void igAttrStackManager_PushLightStateAttr(igAttrStackManager *self, igLightStateAttr *lightState, int isOverride) {
+    LightStateAttrView *attr = (LightStateAttrView *)lightState;
+    int slot;
+    int index;
+    int stackIndex;
+    igLightAttr *key;
+    igLightAttr *light = attr->getLight();
+    if (light == 0) {
+        return;
+    }
+    if (self->_simpleLightMgr == 1) {
+        int n;
+        igTDataList<LightStateAttrView *> *updates = (igTDataList<LightStateAttrView *> *)self->_updateLightAttrs;
+        n = updates->getCount();
+        if (n < updates->_capacity) {
+            updates->_count = updates->_count + 1;
+        } else {
+            List_Resize(updates, n + 1, 4);
+        }
+        updates->_data[n] = attr;
+        return;
+    }
+    key = light;
+    {
+        igTDataList<igLightAttr *> *lights = (igTDataList<igLightAttr *> *)self->_lightAttrAddrs;
+        index = lights->sortedFind(&key);
+    }
+    if (index != -1) {
+        slot = ((int *)((igIntList *)self->_lightAttrStackAddrs)->_data)[index] + ((int *)self->_attrStackIndexTable)[attr->_cachedAttrIndex];
+    } else {
+        stackIndex = ((LightAttrAddrList *)self->_lightAttrAddrs)->_count;
+        if (stackIndex >= getSgMaxLightStateCount()) {
+            return;
+        }
+        index = ((LightAttrAddrList *)self->_lightAttrAddrs)->sortedAdd(light);
+        List_InsertWords((igDataList *)self->_lightAttrStackAddrs, index, 1, &stackIndex);
+        slot = stackIndex + ((int *)self->_attrStackIndexTable)[attr->_cachedAttrIndex];
+        LightStateAttrView *defaults = ((igTDataList<LightStateAttrView *> *)self->_attrDefaults)->_data[slot];
+        if (light != 0) {
+            light->_refCount = light->_refCount + 1;
+        }
+        igRelease((igObject *)defaults->_light);
+        defaults->_light = light;
+        ((igTDataList<LightStateAttrView *> *)self->_attrDefaults)->_data[slot]->setEnabled(false);
+    }
+    if (isOverride != 0) {
+        fastPushOverride(self, (igObject *)attr, slot);
+    } else {
+        fastPushAttr(self, (igObject *)attr, slot);
+    }
+}
+
 void igAttrStackManager_PopLightStateAttr(igAttrStackManager *self, igLightStateAttr *lightState, int isOverride) {
     LightStateAttrView *attr = (LightStateAttrView *)lightState;
     igLightAttr *key;

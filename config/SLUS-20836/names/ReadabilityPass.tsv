@@ -167,6 +167,7 @@
 0x001f8ae0	p2SetMaterial	engine
 0x001fb0a0	p2SetLightingMode	engine
 0x001fb470	p2WriteDirectionalLights	engine
+0x001fbce0	p2SetMatrix	engine
 0x001fc030	p2AdjointMatrix	engine
 0x001fc2b0	p2InvertMatrix	engine
 0x001fc310	p2SetPassCount	engine

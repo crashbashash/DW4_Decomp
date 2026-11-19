@@ -3622,9 +3622,6 @@ typedef struct S_172600 { char p[972]; L_172600 *l972; L_172600 *l976; L_172600 
 extern "C" void igPsx2VisualContext_PushMatrix(S_172600 *arg0, int arg1);
 typedef struct Mat_172910 { float m[16]; } Mat_172910;
 typedef struct Obj_172910 { char pad[972]; Stk *s[8]; } Obj_172910;
-/* Loads the top of a matrix stack into the p2 renderer's matrix `slot` (3 projection, 0 model-view, 4 texture,
- * 5 texture generation). */
-extern "C" void FUN_001fbce0(int slot, const float *matrix);
 extern "C" void igPsx2VisualContext_PopMatrix(Obj_172910 *o, int k);
 typedef struct St_172b00 { char pad0[8]; int n; int cap; char *data; } St_172b00;
 #define SET(l, m) { \

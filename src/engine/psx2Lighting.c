@@ -5,6 +5,7 @@
 #include "dw4/p2/p2draw.h"
 #include "dw4/p2/p2lighting.h"
 #include "dw4/p2/renderState.h"
+#include "dw4/p2/p2viewport.h"
 #include <math.h>
 
 /* A VIF code, written to the packet as one word. */
@@ -63,6 +64,14 @@ extern p2VifCode p2LightingFlush;
 extern p2VifCode p2LightingUnpack;
 extern p2VifCode p2LightingMark;
 extern p2VifCode p2LightingNop;
+extern unsigned short p2MatrixAddresses[8];
+extern p2VifCode p2MatrixFlush;
+extern p2DmaTag p2MatrixTag;
+extern p2VifCode p2MatrixUnpack;
+extern p2VifCode p2MatrixMark;
+extern p2VifCode p2MatrixNop;
+extern int p2MatricesChanged;
+extern float DAT_00491090[16];
 /* p2RefreshLightState's light classification: whether the four-infinite-light program lights the
  * draw, how many local (point and spot) lights there are, whether one of them has an ambient colour,
  * how many of them attenuate linearly only, and which local-light programs are selected (1 local,
@@ -564,19 +573,80 @@ void p2WriteDirectionalLights(float rows[][4]) {
     }
 }
 
+/* Copies a 4x4 matrix: four quadwords through a2 and a3 when both are 16-byte aligned, else word by word. */
 static inline void p2CopyMatrix(float *dst, const float *src) {
     int i;
 
     if ((((unsigned int)dst | (unsigned int)src) & 0xF) == 0) {
-        ((__int128 *)dst)[0] = ((const __int128 *)src)[0];
-        ((__int128 *)dst)[1] = ((const __int128 *)src)[1];
-        ((__int128 *)dst)[2] = ((const __int128 *)src)[2];
-        ((__int128 *)dst)[3] = ((const __int128 *)src)[3];
+        __asm__("lq $6, 0(%1)\n\tlq $7, 16(%1)\n\tsq $6, 0(%0)\n\tsq $7, 16(%0)\n\tlq $6, 32(%1)\n\tlq $7, 48(%1)\n\tsq $6, 32(%0)\n\tsq $7, 48(%0)" : : "r"(dst), "r"(src) : "$6", "$7", "memory");
     } else {
         for (i = 0; i < 16; i++) {
             *dst++ = *src++;
         }
     }
+}
+
+/* Uploads one matrix of the VU1 matrix stack: a packet that unpacks it to p2MatrixAddresses[slot] (the
+ * projection, slot 3, scaled by the viewport), then marks the slot changed in p2MatricesChanged and keeps
+ * the copies lighting reads (slot 0 in p2LightMatrix, slot 2 in DAT_00491090). */
+void p2SetMatrix(int slot, const float *matrix) {
+    unsigned __int128 *q;
+    float scale;
+
+    q = (unsigned __int128 *)p2DmaCurrentPacket[P2_DMA_VIF1]->cursor;
+    p2MatrixUnpack.field.immediate = p2MatrixAddresses[slot];
+    ((unsigned int *)q)[0] = p2MatrixTag.word[0];
+    ((unsigned int *)q)[1] = p2MatrixTag.word[1];
+    ((unsigned int *)q)[2] = p2MatrixTag.word[2];
+    ((unsigned int *)q)[3] = p2MatrixTag.word[3];
+    q++;
+    ((unsigned int *)q)[0] = p2MatrixMark.word;
+    ((unsigned int *)q)[1] = p2MatrixFlush.word;
+    ((unsigned int *)q)[2] = p2MatrixNop.word;
+    ((unsigned int *)q)[3] = p2MatrixUnpack.word;
+    q++;
+    p2CopyMatrix((float *)q, matrix);
+    if (slot == 3) {
+        scale = 1.0f / p2ViewportScale;
+        ((float *)q)[0] *= scale;
+        ((float *)q)[4] *= scale;
+        ((float *)q)[8] *= scale;
+        ((float *)q)[12] *= scale;
+        ((float *)q)[1] *= scale;
+        ((float *)q)[5] *= scale;
+        ((float *)q)[9] *= scale;
+        ((float *)q)[13] *= scale;
+    }
+    q += 4;
+    p2DmaCurrentPacket[P2_DMA_VIF1]->cursor = (unsigned int)q;
+    if (p2DmaCurrentPacket[P2_DMA_VIF1]->cursor >= p2DmaCurrentPacket[P2_DMA_VIF1]->limit) {
+        if (p2DisplayListMode != 0) {
+            p2GrowDisplayList();
+        } else {
+            p2SubmitDmaPacket(P2_DMA_VIF1);
+        }
+    }
+    switch (slot) {
+    case 0:
+        p2MatricesChanged |= 0xF;
+        p2CopyMatrix(p2LightMatrix, matrix);
+        p2AppendLightingPacket((unsigned int *)-1);
+        break;
+    case 3:
+        p2MatricesChanged |= 4;
+        break;
+    case 4:
+        p2MatricesChanged |= 8;
+        break;
+    case 5:
+        p2MatricesChanged |= 8;
+        break;
+    case 2:
+        p2CopyMatrix(DAT_00491090, matrix);
+        p2MatricesChanged &= ~3;
+        break;
+    }
+    p2LightCalcPending = 1;
 }
 
 float p2AdjointMatrix(const float *m, float *adjoint) {

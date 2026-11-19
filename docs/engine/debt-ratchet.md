@@ -50,10 +50,15 @@ as zero.
 | `decl.type_conflicts` | `src/`, `include/` | declarations whose type differs from the symbol's C definition |
 | `decl.header_conflicts` | `src/`, `include/` | symbols declared in two or more headers that disagree on the type |
 | `decl.named_placeholders` | `src/`, `include/`, `config/SLUS-20836/symbols.txt`, `data-names.tsv` | `FUN_<va>`/`DAT_<va>` identifiers for an address that already has a recovered name |
+| `free_methods.functions` / `.bytes` | `config/SLUS-20836/symbols.txt`, `src/`, `include/dw4/support/reflected.h` | functions of C++ units written as `<Class>_<Method>` free functions with C linkage, for a class reflection names, where the original most likely had member functions |
+| `vfunc_slots.functions` | `config/SLUS-20836/symbols.txt`, `src/` | virtual methods known only by their slot (`Gap__<Lib>__<Class>__vfunc_N`) |
 
 `m2c_idiom.units`, `raw_casts.reflected` and `fun_dat_refs` measure readability, which is a separate
 job from matching ([matched and readable](../../CLAUDE.md#matched-and-readable)). They stay in the report
-and may rise without a recorded reason, so a byte-matching change is never refused for them.
+and may rise without a recorded reason, so a byte-matching change is never refused for them. So may the
+free-method counters, which measure how far the C++ units are from the original's member functions: every C++
+function matched under the current `<Class>_<Method>` convention adds to them until a member-function convention
+is decided.
 
 ## Declarations
 

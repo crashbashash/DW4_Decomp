@@ -168,6 +168,7 @@
 0x001cfaa0	igIntersectTraversal_TraverseTransform	engine	high	registered by igIntersectTraversal_RegisterClassFunction for igTransform
 0x001cf990	igIntersectTraversal_TraverseGroup	engine	high	registered by igIntersectTraversal_RegisterClassFunction for igGroup
 0x001cf980	igIntersectTraversal_TraverseNode	engine	high	registered by igIntersectTraversal_RegisterClassFunction for the remaining igNode metas; body returns 0
+0x001d81e0	getSgMaxLightStateCount	engine	medium	reads the registry value "maxLightStateCount" (default 256) once into a global initialised to -1 (with "disableBumpDotProduct") and returns it; igAttrStackManager_PushLightStateAttr's limit on light stacks and igLightStateAttr's unit count in 0x1d8270: kit alchemy-kit_202309 include/igSg/igSg.h getSgMaxLightStateCount() over IG_SG_MAX_LIGHT_STATE_COUNT
 0x001e02e0	igTraversal_RegisterClass	engine	medium	calls 0x1e02f0 with igTraversal's procedure list and its meta argument: kit igTraversal.h macro static registerClass(meta)
 0x001e02f0	igTraversal_RegisterClassFunction	engine	medium	registers igTraversal_TraverseChildren for igGroup metas and 0x1e0790 for other igNode metas: kit igTraversal.h macro _registerClass(tpl, meta)
 0x001e0790	igTraversal_TraverseLeaf	engine	medium	registered by igTraversal_RegisterClassFunction for igNode metas that are not igGroup; body returns 0; alternative igTraversal_TraverseNode, already the dispatcher's name

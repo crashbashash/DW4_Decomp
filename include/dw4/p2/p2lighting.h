@@ -86,6 +86,9 @@ void p2SetLightingColor(const float *color);
 void p2SetMaterial(int slot, p2Material *material);
 void p2SetLightingMode(int mode);
 void p2WriteDirectionalLights(float rows[][4]);
+/* Uploads a matrix to the renderer's VU1 matrix `slot` (3 projection, 0 model-view, 4 texture, 5 texture
+ * generation, 2 the one lighting keeps in DAT_00491090). */
+void p2SetMatrix(int slot, const float *matrix);
 float p2AdjointMatrix(const float *m, float *adjoint);
 void p2InvertMatrix(const float *m, float *inverse);
 

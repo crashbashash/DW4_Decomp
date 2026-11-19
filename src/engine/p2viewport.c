@@ -28,7 +28,6 @@ typedef union p2VifCode {
 #include "dw4/p2/p2texture.h"
 
 extern p2ViewportRect p2Viewport;
-extern float p2ViewportScale;
 extern int p2DepthBias;
 extern float p2ViewportVuScale[4];
 extern float p2ViewportVuOffset[4];

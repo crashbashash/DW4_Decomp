@@ -72,6 +72,38 @@ void FUN_00190470(float *product, const float *a, const float *b) {
     }
 }
 
+void igMatrix44f_Copy(float *destination, const float *source) {
+    if ((((unsigned int)destination | (unsigned int)source) & 0xF) == 0) {
+        asm {
+            lq a2, 0(source)
+            lq a3, 16(source)
+            lq t0, 32(source)
+            lq t1, 48(source)
+            sq a2, 0(destination)
+            sq a3, 16(destination)
+            sq t0, 32(destination)
+            sq t1, 48(destination)
+        }
+    } else {
+        destination[0] = source[0];
+        destination[1] = source[1];
+        destination[2] = source[2];
+        destination[3] = source[3];
+        destination[4] = source[4];
+        destination[5] = source[5];
+        destination[6] = source[6];
+        destination[7] = source[7];
+        destination[8] = source[8];
+        destination[9] = source[9];
+        destination[10] = source[10];
+        destination[11] = source[11];
+        destination[12] = source[12];
+        destination[13] = source[13];
+        destination[14] = source[14];
+        destination[15] = source[15];
+    }
+}
+
 void igMatrix44f_FromTranslation(float *matrix, const igVec3f &translation) {
     matrix[0]=1.0f; matrix[1]=0; matrix[2]=0; matrix[3]=0;
     matrix[4]=0; matrix[5]=1.0f; matrix[6]=0; matrix[7]=0;

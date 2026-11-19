@@ -70,6 +70,7 @@
 #include "dw4/attrs/igProjectionMatrixAttr.h"
 #include "dw4/core/igObjectSystem.h"
 #include "dw4/core/igObjectList.h"
+#include "dw4/attrs/igObjectList.h"
 #include "dw4/core/igObject.h"
 #include "dw4/datapump/igNonRefCountedObjectStack.h"
 #include "dw4/core/igNamedObject.h"
@@ -1129,10 +1130,30 @@ typedef struct C { char pad8[8]; int n; } C;
 typedef struct G { char pad8[8]; int idx; } G;
 typedef struct O_1b0dc0 { char pad16[16]; L_1b0dc0 *l; char pad20[16]; C *c24; C *c28; char pad2c[24]; int *base; } O_1b0dc0;
 
+/* An igAttrStack seen as its object stack. The pushes follow the stack classes' layering: the
+ * override push marks where the overrides start, the object stack's push hands the object to the
+ * data stack by reference, and the data stack stores it at the old count. */
 struct AttrObjectStack : igTDataList<igObject *> {
     int _default;
     int _cachedOverride;
     void (*_popProc)(igObject *, int);
+    int pushItem(igObject *const &item) {
+        const int count = getCount();
+        if (count < _capacity) {
+            _count++;
+        } else {
+            List_Resize(this, count + 1, sizeof(igObject *));
+        }
+        _data[count] = item;
+        return count;
+    }
+    int push(const igObject *object) { return pushItem((igObject *const &)object); }
+    void pushOverride(const igObject *override) {
+        if (_cachedOverride < 0) {
+            _cachedOverride = _count;
+        }
+        push(override);
+    }
 };
 struct Q_1b1100 { char p[8]; int n; char r[4]; int *a; char s[8]; int (*cb)(int, int); };
 struct X_1b1100 { char p[16]; struct Q_1b1100 **q; };
@@ -4899,7 +4920,7 @@ extern "C" void FUN_001d7630(void *arg0, float *arg1);
 extern "C" void FUN_001d7910(void);
 extern "C" void FUN_001d7b10(void *arg0, void *arg1);
 extern "C" void FUN_001d7b70(S0_1d7b70 *arg0, S1_1d7b70 *arg1);
-extern "C" int FUN_001d81e0(void);
+extern "C" int getSgMaxLightStateCount(void);
 extern "C" int FUN_001d8270(int arg0);
 extern "C" int FUN_001d82c0(void *arg0, int arg1, int arg2);
 extern "C" int FUN_001d82f0(void *arg0, int arg1);
@@ -5752,6 +5773,33 @@ extern "C" igMetaField *g_igTextureMatrixAttr_mField[4];
 extern "C" igMetaField *g_igVertexBlendMatrixAttr_mField[4];
 
 typedef igTDataList<AttrObjectStack *> AttrObjectStackList;
+static inline AttrObjectStack *getAttrStack(igAttrStackManager *manager, int attrHandle) {
+    return ((AttrObjectStackList *)manager->_attrStacks)->get(attrHandle);
+}
+static inline void fastPushAttr(igAttrStackManager *manager, const igObject *attribute, int attrHandle) {
+    AttrObjectStack *attrStack = getAttrStack(manager, attrHandle);
+    attrStack->push(attribute);
+    igAttrStackManager_MarkStackChanged(manager, (igAttrStack *)attrStack, attrHandle);
+}
+static inline void fastPushOverride(igAttrStackManager *manager, const igObject *override, int attrHandle) {
+    AttrObjectStack *attrStack = getAttrStack(manager, attrHandle);
+    attrStack->pushOverride(override);
+    igAttrStackManager_MarkStackChanged(manager, (igAttrStack *)attrStack, attrHandle);
+}
+/* The manager's light addresses, an igNonRefCountedAttrList kept sorted by address. Its typed
+ * sortedAdd passes the light on as an igObject, and the data list's sortedAdd takes that by
+ * reference. */
+struct LightAttrAddrList : igTDataList<igObject *> {
+    int binaryInsert(igObject *const &item) const { return FUN_00142bb0((igObjectList *)this, &item); }
+    void insert(int index, igObject *const &item) { List_InsertWords((igDataList *)this, index, 1, &item); }
+    int sortedAddItem(igObject *const &item) {
+        const int index = binaryInsert(item);
+        insert(index, item);
+        return index;
+    }
+    int sortedAddObject(igObject *object) { return sortedAddItem(object); }
+    int sortedAdd(igLightAttr *light) { return sortedAddObject((igObject *)light); }
+};
 static inline igObject *topAttr(AttrObjectStack *stack) {
     int n = stack->_count;
     if (n == 0) {
@@ -5783,6 +5831,7 @@ public:
     igObject *_internal;
     igLightAttr *_light;
     bool _enabled;
+    igLightAttr *getLight() const { return _light; }
 };
 class MatrixAttrView {
 public:

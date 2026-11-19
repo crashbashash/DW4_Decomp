@@ -523,11 +523,46 @@ DEBT_COUNTERS = [
     ("decl.type_conflicts", "declarations whose type differs from the symbol's C definition: data type, array against scalar, return type, parameters"),
     ("decl.header_conflicts", "symbols declared in two or more headers that disagree on the type"),
     ("decl.named_placeholders", "`FUN_<va>`/`DAT_<va>` identifiers in src/ and include/ whose address config/SLUS-20836/symbols.txt or data-names.tsv names: a copy of a named symbol the build binds by address and a rename passes by"),
+    ("free_methods.functions", "functions of C++ units written as `<Class>_<Method>` free functions with C linkage, for a class reflection names, where the original was most likely a member function"),
+    ("free_methods.bytes", "bytes of those"),
+    ("vfunc_slots.functions", "virtual methods known only by their slot (`Gap__<Lib>__<Class>__vfunc_N`)"),
 ]
 
 
-# Readability is a separate job from matching, so these are tracked and never refuse a change.
-READABILITY_COUNTERS = {"m2c_idiom.units", "raw_casts.reflected", "fun_dat_refs"}
+# Readability is a separate job from matching, so these are tracked and never refuse a change. The free-method
+# counters measure how far C++ units are from the original's member functions; they refuse nothing until the
+# owner rules on the member-function convention.
+READABILITY_COUNTERS = {"m2c_idiom.units", "raw_casts.reflected", "fun_dat_refs",
+                        "free_methods.functions", "free_methods.bytes", "vfunc_slots.functions"}
+
+_REFLECTED_CLASS = re.compile(r"^typedef struct (\w+)\s*[:{]", re.M)
+
+
+def method_shaped(syms, paths, classes):
+    """(free functions, their bytes, slot-named virtuals) among the definitions in C++ units: a free function is
+    named `<Class>_<Method>` for one of `classes` (any `_`-separated prefix), a virtual is `Gap__*__vfunc_N`."""
+    free = size = slots = 0
+    for _va, n, name in syms:
+        path = paths.get(name)
+        if not path or not path.endswith(".cpp"):
+            continue
+        if name.startswith("Gap__") and "__vfunc_" in name:
+            slots += 1
+            continue
+        cuts = [i for i, ch in enumerate(name) if ch == "_" and 0 < i < len(name) - 1]
+        if "__" not in name and any(name[:i] in classes for i in cuts):
+            free += 1
+            size += n
+    return free, size, slots
+
+
+def reflected_classes():
+    """The class names include/dw4/support/reflected.h defines."""
+    try:
+        with open(os.path.join(ROOT, "include", "dw4", "support", "reflected.h")) as fh:
+            return set(_REFLECTED_CLASS.findall(fh.read()))
+    except OSError:
+        return None
 
 
 def _unit_files(paths, asm_body_names):
@@ -721,6 +756,12 @@ def debt_summary(d, syms, matched, asm_body, paths, typed, inline):
     c["m2c_idiom.units"] = idiom_units
     c["raw_casts.reflected"] = None if typed.get("error") else typed.get("typeable", 0)
     c["fun_dat_refs"] = refs
+    classes = reflected_classes()
+    if classes is None:
+        c["free_methods.functions"] = c["free_methods.bytes"] = c["vfunc_slots.functions"] = None
+    else:
+        c["free_methods.functions"], c["free_methods.bytes"], c["vfunc_slots.functions"] = \
+            method_shaped(syms, paths, classes)
     c["orphan.bytes"] = (exc["extra"]["bytes"] + exc["differ"]["bytes"] + cats["foreign_orphan_bytes"]) if rec else None
     # The function inventory's own debt: code the symbol map does not own, read from the
     # committed scan (`scripts/inventory_scan.py --write`; `make inventory-check` keeps it fresh).

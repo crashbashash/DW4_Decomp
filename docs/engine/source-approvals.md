@@ -1063,8 +1063,8 @@ row.
 `igMatrix44f_Multiply` and `igMatrix44f_PreMultiply` have no source: an MWCC `asm` function reproduces each, but the
 owner held that form out (2026-11-17). A SceneGraph function (0x1be190) inlines Multiply's body (C alignment test, then
 the instructions), so the original is likely an inline C function with `asm` blocks; that form is still 4 rows short.
-`igMatrix44f_Copy` has no source either: its `lq`/`sq`/`lwc1`/`swc1` all have C spellings, so this anchor does not
-cover it.
+`igMatrix44f_Copy` is not covered by this anchor: its `lq`/`sq`/`lwc1`/`swc1` all have C spellings. Its block is approved
+under [quadword-copy-registers](#quadword-copy-registers).
 
 The frustum test of a box (0x1c47f0, SceneGraph whole file, `src/engine/scenegraph/igFrustCullTraversal_tail.inc`) is
 C around three `asm volatile { }` blocks: the unaligned loads of the matrix and the two corners (`mtsab; lq; qfsrv;
@@ -1108,6 +1108,50 @@ by the weight and three `vadd.xyzw` into the sum, and `sqc2` of the sum. The gro
   remainder, there with the products in registers. The Xbox morph pair was not found; the Xbox blending selector
   (0xb28f0) reads `useSimdBlending` and `forceOneWeightSimd` and installs a weighted and a one-weight blend, the PS2
   file's `igVectorBlending_BlendWeighted` and `igVectorBlending_BlendOneWeight`.
+
+### quadword-copy-registers
+
+Two 64-byte matrix copies each hold one `asm` statement of `lq`/`sq`, under the owner's standing rule for quadword copies
+C cannot allocate (2026-11-19): `igMatrix44f_Copy` (0x1908f0, Maths whole file, `src/engine/maths/igMatrix44f.inc`) and
+`p2SetMatrix` (0x1fbce0, `src/engine/psx2Lighting.c`), which reaches its statement through the inline copy helper
+`p2CopyMatrix`, inlined three times (the packet, `p2LightMatrix`, `DAT_00491090`).
+
+* Everything but the quadword moves is C: the alignment test `((dst | src) & 0xF) == 0`, the branch and the word-by-word
+  copy. `igMatrix44f_Copy` writes the sixteen element assignments out, retail's sixteen `lwc1`/`swc1 $f0` pairs (MWCC
+  does not unroll a `for` loop into them); `p2CopyMatrix` keeps the 16-trip loop retail has there. The statement holds
+  only the loads and stores, with the C pointers as operands: `lq a2, a3, t0, t1` then `sq a2, a3, t0, t1` in
+  `igMatrix44f_Copy`, two `lq, lq, sq, sq` groups through `a2`/`a3` in `p2CopyMatrix`. The assembler works in reorder
+  mode and moves the last `sq` into the delay slot of the branch over the word copy, as retail has it.
+* Why C cannot give the registers. MWCC b52 gives each value the lowest free register of `v0, v1, a0, a1, a2, ...` not
+  held by a neighbour in the interference graph. On these aligned paths `v1` (the `or`/`andi` value dies at the `bnez`)
+  and `v0` hold nothing live, and `a0`/`a1` are the pointers or dead, so a quadword temporary in any C shape takes `v1`,
+  `v0` or `a0` first. Retail uses `a2, a3, t0, t1` in source order with the lower registers free, which no colouring
+  gives: the registers were picked by hand. The register-allocator trace on `igMatrix44f_Copy` shows the temporaries'
+  only neighbours are `v0` (a void function's return register interferes with everything), `a0`, `a1` and each other.
+  `p2UploadBlendMatrices` is no counter-example: its temporaries reach `a2` and up only because `v1`, `a0` and `a1` are
+  live across its loop, and they come out in scrambled order.
+* `igMatrix44f_Copy`: about 25 C shapes are in its attempt file (the `p2UploadBlendMatrices` spelling, `__int128`
+  temporaries at block and function scope in either declaration order, struct and array copies, return types, an
+  inline store helper, `*s++` temporaries). The closest colours rows 1 to 3 `a2, a3, t0` and row 0 `v1`, loaded last.
+  Removing the statement (four `__int128` assignments) gives the right size with 8 of 47 words different: one register,
+  `v1`, for every quadword.
+* `p2SetMatrix`: the closest C (the packet cursor as a pointer union, the copy as two 32-byte struct assignments) has
+  retail's instructions word for word, with 56 of 212 words different in registers only: the copies' temporaries are
+  `v1`/`v0`/`a0`, retail's `a2`/`a3` in all three. Removing the statement (four `__int128` assignments) gives 844 bytes
+  against retail's 848. Its tries are in the attempt file under its address name.
+* Spelling. `p2CopyMatrix` uses a GCC-style `__asm__` statement with `"r"` operands and `$6`/`$7` named as clobbers, as
+  the Enbaya statements do in this compiler (see [enbaya-vu0-macro](#enbaya-vu0-macro)). The native `asm { }` block
+  naming `a2`/`a3` (or `$6`/`$7`) keeps the inline's source pointer copy out of `a2`, where retail's word loop has it,
+  and moves the packet cursor to `t1`: 39 words differ. `igMatrix44f_Copy` uses the `asm { }` block like the matrix
+  product (0x190470) beside it, which matches.
+* The register signature is common in retail Alchemy code: 26 retail functions load a quadword into `a2` from a
+  non-stack address. Besides these two, they are the Maths VU0 functions (`igMatrix44f_Multiply`,
+  `igMatrix44f_PreMultiply`, 0x192360, 0x192430, 0x192ab0), the SceneGraph functions at 0x1be190 and 0x1c47f0, the `p2`
+  software blends and `igPsx2VisualContext_SoftwareBlendVertex`, `p2UploadBlendMatrices`, `p2UpdateLights`, the `p2`
+  packet builders (`p2BuildDisplayPacket`, `p2InitDmaChannels`, `p2SendGifTags`, `p2SendVuBufferLayout`,
+  `p2UploadDirtyGsRegisters`, `p2UploadGsRegisters`), `beNDMWShopJunk_Update` and two hand-written routines
+  (`__PopStackFrame`, `_kExitTLBHandler`).
+* One `asm` use each, one row each.
 
 ### scratchpad-traversal-stack
 

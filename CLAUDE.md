@@ -31,7 +31,11 @@ readable, evidence-named source that rebuilds to a byte-identical retail ELF.
   - **Instructions C cannot spell:** an `asm` statement for COP0, COP2/VU0 macro instructions
     (`lqc2`/`sqc2`/`qmtc2`/`qmfc2`, `v*`, `cfc2`/`ctc2`), `qfsrv`/`mtsab`, `di`, writes to `sp`, `syscall`,
     `plzcw` and trapping `add`/`sub`/`addi`, with every operand and the logic around it in C. Instructions
-    C has a spelling for (`lq`, `sq`, `lwc1`, `swc1`, …) are not covered.
+    C has a spelling for (`lq`, `sq`, `lwc1`, `swc1`, …) are not covered, with one exception:
+  - **Quadword copies C cannot allocate:** an `asm` block for `lq`/`sq` copies when the register-allocator
+    trace shows MWCC cannot give retail's registers in that function (retail's in-order hand-picked registers,
+    such as `a2`, `a3`, `t0`, `t1` with lower ones free, where MWCC colours the lowest free register), with every
+    operand and all other logic in C and the C tries recorded with the function.
   - **Volatile VU0 or hardware blocks:** an `asm volatile` qualifier on an asm block that drives VU0 or
     hardware state, when no plain `asm { }` spelling matches (the tries recorded with the function) and the
     function still matches with every one of its asm blocks written `asm volatile`. The function then writes
