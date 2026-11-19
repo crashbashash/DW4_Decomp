@@ -58,7 +58,6 @@ extern const char text_p2PreviousFinishFuncDonePredicat[];
 
 #include "dw4/p2/p2core.h"
 
-extern int DAT_0056d680;
 extern unsigned int p2DmaEndTag[4];
 extern long long p2DmaOverlapStartTime;
 
@@ -110,7 +109,7 @@ void p2SubmitDmaPacket(int channel) {
     if (channel == P2_DMA_GIF && packet->cursor < packet->limit) {
         p2StatGifPartialPackets++;
     }
-    DAT_0056d680 = 0;
+    p2WatchdogTicks = 0;
     if (channel == P2_DMA_VIF1) {
         if (p2HasFinishPredicate(packet)) {
             ((unsigned int *)&p2CurrentGsRegisters->f432[1])[0] = (unsigned int)packet->sequence;

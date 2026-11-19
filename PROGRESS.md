@@ -39,10 +39,10 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 1,629 | 325,304 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 2,168 | 487,924 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 2,167 | 487,148 |
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,077 | 285,180 |
 | it sits in its class or module file, not `src/unmatched/` | 0 | 0 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 940 | 289,280 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 939 | 288,504 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 1,612 | 311,836 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,067 | 239,324 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 481 | 132,808 |
@@ -82,7 +82,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `struct.c` | 4 | 4 | 0 | struct-report groups: offset-named member whose number is not its offset |
 | `m2c_idiom.units` | 0 | 0 | 0 | source files (asm bodies excluded) still carrying m2c idioms: `temp_*`, `var_*` or `argN` |
 | `raw_casts.reflected` | 0 | 0 | 0 | raw offset casts on a named receiver where reflection names the field (tools/typed_coverage.py `typeable`) |
-| `fun_dat_refs` | 59 | 59 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
+| `fun_dat_refs` | 57 | 57 | 0 | FUN_/DAT_-named references in matched units' code (comments and strings excluded, definitions subtracted) |
 | `foreign_profile.functions` | 0 | 0 | 0 | code bytes match only under a provisional per-function override that differs from the unit's profile in config/SLUS-20836/units.tsv (data/check-categories.tsv) |
 | `foreign_profile.bytes` | 0 | 0 | 0 | bytes of those |
 | `unapproved.functions` | 0 | 0 | 0 | code bytes match, but the source uses inline `asm` or `volatile` with no owner approval (config/source-approvals.tsv) |

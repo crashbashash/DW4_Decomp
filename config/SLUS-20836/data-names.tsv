@@ -7993,6 +7993,7 @@
 0x0056c640	p2Vu0LockState	recovered-global
 0x0056c650	p2VifRowScale	recovered-global
 0x0056c658	p2VifMask	recovered-global
+0x0056d680	p2WatchdogTicks	recovered-global
 0x0056dc50	g_sharedViewerOptions	recovered-global
 0x0056dfb0	adxm_vsync_frame_cb	recovered-global
 0x0056dfb8	adxm_mwidle_sleep_cb	recovered-global

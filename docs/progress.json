@@ -264,7 +264,7 @@
    },
    "fun_dat_refs": {
     "reason": null,
-    "value": 59
+    "value": 57
    },
    "inline_asm.other": {
     "reason": null,
@@ -373,7 +373,7 @@
    "decl.varargs": 0,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "fun_dat_refs": 59,
+   "fun_dat_refs": 57,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
@@ -500,8 +500,8 @@
   "bytes": 2691620,
   "failing": {
    "addresses": {
-    "bytes": 487924,
-    "functions": 2168
+    "bytes": 487148,
+    "functions": 2167
    },
    "declarations": {
     "bytes": 0,
@@ -524,8 +524,8 @@
     "functions": 0
    },
    "references": {
-    "bytes": 289280,
-    "functions": 940
+    "bytes": 288504,
+    "functions": 939
    },
    "types": {
     "bytes": 285180,

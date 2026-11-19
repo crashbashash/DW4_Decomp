@@ -303,7 +303,8 @@ volatile	p2GsSignalHandler	1	#dma-channel-shared-words
 asm	p2StartDmaPacket	2	#dma-packet-kick
 volatile	p2StartDmaPacket	2	#dma-packet-kick
 volatile	p2PrintWatchdogReport	2	#dma-channel-shared-words
-volatile	p2RunWatchdog	3	#dma-channel-shared-words
+volatile	p2RunWatchdog	4	#dma-channel-shared-words
+volatile	p2SubmitDmaPacket	1	#dma-channel-shared-words
 volatile	p2GsInterruptHandler	1	#gs-interrupt-sync-ei
 volatile	p2Timer1Handler	1	#gs-interrupt-sync-ei
 volatile	p2Timer0Handler	1	#gs-interrupt-sync-ei
