@@ -52,13 +52,20 @@ as zero.
 | `decl.named_placeholders` | `src/`, `include/`, `config/SLUS-20836/symbols.txt`, `data-names.tsv` | `FUN_<va>`/`DAT_<va>` identifiers for an address that already has a recovered name |
 | `free_methods.functions` / `.bytes` | `config/SLUS-20836/symbols.txt`, `src/`, `include/dw4/support/reflected.h` | functions of C++ units written as `<Class>_<Method>` free functions with C linkage, for a class reflection names, where the original most likely had member functions |
 | `vfunc_slots.functions` | `config/SLUS-20836/symbols.txt`, `src/` | virtual methods known only by their slot (`Gap__<Lib>__<Class>__vfunc_N`) |
+| `virtual_views.types` / `.slots` | `src/`, `include/dw4/` | stand-in classes for virtual dispatch (`…DispatchView`, `DW4VC_*`) and their placeholder slots (`virtual void d21();`, `vX(...)`), where the original declared the real classes |
+| `boilerplate.functions` | `src/`, `include/dw4/` | reflection plumbing written out as function definitions (`<Class>_GetMetaObject`, `_Register`, `_EnsureRegistered`, `_InitFields`, `_GetVTable`, `_GetMeta`, …), which the kit generates with its declare/define macros |
+| `reflected.untyped_refs` | `include/dw4/support/reflected.h` | object-reference fields typed `int` instead of a typed reference |
+| `layout.tail_fragments` | `src/` | `.inc` fragments named `_tail` after how the work was split, not after the original's per-class files |
+| `matching_constructs` | `src/` | `matching construct` comments: shapes chosen from the compiler's output, not from evidence of the original |
+| `views.local`, `members.offset_named`, `strings.externs` | `src/`, `include/dw4/` | local `…View` structs, `fNN` members, and strings declared as `text_…` externs instead of literals |
 
 `m2c_idiom.units`, `raw_casts.reflected` and `fun_dat_refs` measure readability, which is a separate
 job from matching ([matched and readable](../../CLAUDE.md#matched-and-readable)). They stay in the report
 and may rise without a recorded reason, so a byte-matching change is never refused for them. So may the
-free-method counters, which measure how far the C++ units are from the original's member functions: every C++
-function matched under the current `<Class>_<Method>` convention adds to them until a member-function convention
-is decided.
+free-method and source-accuracy counters, which measure how far the matched code is from the original's form
+(member functions, class declarations, the kit's macros, typed references, per-class files): the current
+conventions add to them until the owner rules on new ones. Stock `src/third_party/` and `reflected.h` itself
+(except for `reflected.untyped_refs`) are not counted.
 
 ## Declarations
 

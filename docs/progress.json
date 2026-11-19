@@ -186,6 +186,10 @@
     "reason": null,
     "value": 0
    },
+   "boilerplate.functions": {
+    "reason": null,
+    "value": 7453
+   },
    "code_only.bytes": {
     "reason": null,
     "value": 0
@@ -290,9 +294,21 @@
     "reason": null,
     "value": 0
    },
+   "layout.tail_fragments": {
+    "reason": null,
+    "value": 481
+   },
    "m2c_idiom.units": {
     "reason": null,
     "value": 0
+   },
+   "matching_constructs": {
+    "reason": null,
+    "value": 535
+   },
+   "members.offset_named": {
+    "reason": null,
+    "value": 2587
    },
    "mismatch.bytes": {
     "reason": null,
@@ -330,6 +346,14 @@
     "reason": null,
     "value": 0
    },
+   "reflected.untyped_refs": {
+    "reason": null,
+    "value": 3994
+   },
+   "strings.externs": {
+    "reason": null,
+    "value": 48
+   },
    "struct.a": {
     "reason": null,
     "value": 0
@@ -361,11 +385,24 @@
    "vfunc_slots.functions": {
     "reason": null,
     "value": 402
+   },
+   "views.local": {
+    "reason": null,
+    "value": 307
+   },
+   "virtual_views.slots": {
+    "reason": null,
+    "value": 32461
+   },
+   "virtual_views.types": {
+    "reason": null,
+    "value": 236
    }
   },
   "counters": {
    "asm_body.bytes": 0,
    "asm_body.functions": 0,
+   "boilerplate.functions": 7453,
    "code_only.bytes": 0,
    "code_only.differ.bytes": 0,
    "code_only.differ.functions": 0,
@@ -392,7 +429,10 @@
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
+   "layout.tail_fragments": 481,
    "m2c_idiom.units": 0,
+   "matching_constructs": 535,
+   "members.offset_named": 2587,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
@@ -402,6 +442,8 @@
    "profile_split.bytes": 0,
    "profile_split.units": 0,
    "raw_casts.reflected": 0,
+   "reflected.untyped_refs": 3994,
+   "strings.externs": 48,
    "struct.a": 0,
    "struct.b": 0,
    "struct.c": 0,
@@ -409,7 +451,10 @@
    "unapproved.functions": 0,
    "unmatched.bytes": 179704,
    "unmatched.functions": 122,
-   "vfunc_slots.functions": 402
+   "vfunc_slots.functions": 402,
+   "views.local": 307,
+   "virtual_views.slots": 32461,
+   "virtual_views.types": 236
   }
  },
  "functions": {

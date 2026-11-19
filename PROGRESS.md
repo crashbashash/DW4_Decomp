@@ -100,6 +100,15 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `free_methods.functions` | 12,187 | 12,187 | 0 | functions of C++ units written as `<Class>_<Method>` free functions with C linkage, for a class reflection names, where the original was most likely a member function |
 | `free_methods.bytes` | 1,837,536 | 1,837,536 | 0 | bytes of those |
 | `vfunc_slots.functions` | 402 | 402 | 0 | virtual methods known only by their slot (`Gap__<Lib>__<Class>__vfunc_N`) |
+| `virtual_views.types` | 236 | 236 | 0 | stand-in classes for virtual dispatch (`…DispatchView`, `DW4VC_*`) instead of the real class declarations |
+| `virtual_views.slots` | 32,461 | 32,461 | 0 | placeholder virtual slots in stand-in classes (`virtual void d21();`, `vX(...)`) |
+| `boilerplate.functions` | 7,453 | 7,453 | 0 | reflection plumbing written out as function definitions (`<Class>_GetMetaObject`, `_Register`, `_EnsureRegistered`, `_InitFields`, `_GetVTable`, `_GetMeta`, ...) where the kit generates it with its declare/define macros |
+| `reflected.untyped_refs` | 3,994 | 3,994 | 0 | object-reference fields include/dw4/support/reflected.h types as `int` instead of a typed reference |
+| `layout.tail_fragments` | 481 | 481 | 0 | `.inc` fragments of src/ named `_tail` after how the work was split, not after the original's per-class files |
+| `matching_constructs` | 535 | 535 | 0 | `matching construct` comments in src/: shapes chosen from the compiler's output, not from evidence of the original |
+| `views.local` | 307 | 307 | 0 | local `…View` structs standing in for real types (dispatch views counted apart) |
+| `members.offset_named` | 2,587 | 2,587 | 0 | struct members still named by offset (`fNN`) in src/ and include/ |
+| `strings.externs` | 48 | 48 | 0 | strings declared as `text_…` externs instead of written as literals |
 
 ## The data half
 

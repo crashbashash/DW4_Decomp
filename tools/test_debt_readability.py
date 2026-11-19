@@ -90,6 +90,28 @@ class FreeMethods(unittest.TestCase):
         # free functions only in C++ units, named for a known class; slot-named virtuals apart
         self.assertEqual(progress.method_shaped(syms, paths, {"igNode"}), (2, 24, 1))
 
+    def test_source_accuracy_counts_the_stand_ins(self):
+        root = tempfile.mkdtemp()
+        os.makedirs(os.path.join(root, "src", "engine"))
+        os.makedirs(os.path.join(root, "src", "third_party"))
+        os.makedirs(os.path.join(root, "include", "dw4", "support"))
+        open(os.path.join(root, "src", "engine", "igNode_tail2.inc"), "w").write(
+            "/* matching construct: sweep — order */\n"
+            "struct igNodeDispatchView { virtual void d0(); virtual void d1(); virtual int vX(int); };\n"
+            "struct ListView { int f12; char pad[4]; };\n"
+            "extern \"C\" const char text_hello[];\n"
+            "int igNode_GetMetaObject(void) { return 0; }\n"
+            "int igNode_Update(void) { return 0; }\n")
+        open(os.path.join(root, "src", "third_party", "x.c"), "w").write("struct AView { int f4; };\n")
+        open(os.path.join(root, "include", "dw4", "support", "reflected.h"), "w").write(
+            "    int _parent;                                   /* +8    igObjectRefMetaField */\n"
+            "    int _count;                                    /* +12   igIntMetaField */\n")
+        with mock.patch.object(progress, "ROOT", root), mock.patch.object(progress, "SRC", os.path.join(root, "src")):
+            c = progress.source_accuracy()
+        self.assertEqual(c, {"virtual_views.types": 1, "virtual_views.slots": 3, "boilerplate.functions": 1,
+                             "layout.tail_fragments": 1, "matching_constructs": 1, "views.local": 1,
+                             "members.offset_named": 1, "strings.externs": 1, "reflected.untyped_refs": 1})
+
 
 if __name__ == "__main__":
     unittest.main()

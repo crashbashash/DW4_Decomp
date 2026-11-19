@@ -526,14 +526,70 @@ DEBT_COUNTERS = [
     ("free_methods.functions", "functions of C++ units written as `<Class>_<Method>` free functions with C linkage, for a class reflection names, where the original was most likely a member function"),
     ("free_methods.bytes", "bytes of those"),
     ("vfunc_slots.functions", "virtual methods known only by their slot (`Gap__<Lib>__<Class>__vfunc_N`)"),
+    ("virtual_views.types", "stand-in classes for virtual dispatch (`…DispatchView`, `DW4VC_*`) instead of the real class declarations"),
+    ("virtual_views.slots", "placeholder virtual slots in stand-in classes (`virtual void d21();`, `vX(...)`)"),
+    ("boilerplate.functions", "reflection plumbing written out as function definitions (`<Class>_GetMetaObject`, `_Register`, `_EnsureRegistered`, `_InitFields`, `_GetVTable`, `_GetMeta`, ...) where the kit generates it with its declare/define macros"),
+    ("reflected.untyped_refs", "object-reference fields include/dw4/support/reflected.h types as `int` instead of a typed reference"),
+    ("layout.tail_fragments", "`.inc` fragments of src/ named `_tail` after how the work was split, not after the original's per-class files"),
+    ("matching_constructs", "`matching construct` comments in src/: shapes chosen from the compiler's output, not from evidence of the original"),
+    ("views.local", "local `…View` structs standing in for real types (dispatch views counted apart)"),
+    ("members.offset_named", "struct members still named by offset (`fNN`) in src/ and include/"),
+    ("strings.externs", "strings declared as `text_…` externs instead of written as literals"),
 ]
 
 
-# Readability is a separate job from matching, so these are tracked and never refuse a change. The free-method
-# counters measure how far C++ units are from the original's member functions; they refuse nothing until the
-# owner rules on the member-function convention.
+# Readability is a separate job from matching, so these are tracked and never refuse a change. The free-method and
+# source-accuracy counters measure how far the matched code is from the original's form (member functions, class
+# declarations, the kit's macros, per-class files); they refuse nothing until the owner rules on those conventions.
 READABILITY_COUNTERS = {"m2c_idiom.units", "raw_casts.reflected", "fun_dat_refs",
-                        "free_methods.functions", "free_methods.bytes", "vfunc_slots.functions"}
+                        "free_methods.functions", "free_methods.bytes", "vfunc_slots.functions",
+                        "virtual_views.types", "virtual_views.slots", "boilerplate.functions",
+                        "reflected.untyped_refs", "layout.tail_fragments", "matching_constructs",
+                        "views.local", "members.offset_named", "strings.externs"}
+
+_DISPATCH_VIEW = re.compile(r"\b(?:struct|class)\s+(?:\w*DispatchView\w*|DW4VC_\w+)\s*(?::[^{;]*)?\{")
+_SLOT_PLACEHOLDER = re.compile(r"\bvirtual\s+[\w\s\*&]+?\b(?:d\d+|vX)\s*\(")
+_BOILERPLATE_DEF = re.compile(r"\b\w+_(?:GetMetaObject|GetOrCreateMetaObject|GetMetaObjectFunction|GetPublishedMetaObject|"
+                              r"Register|EnsureRegistered|InitFields|GetVTable|GetMeta)\s*\([^;{)]*\)\s*\{")
+_UNTYPED_REF = re.compile(r"\bint\s+\w+;\s*/\*\s*\+\d+\s+igObjectRefMetaField")
+_LOCAL_VIEW = re.compile(r"\b(?:struct|class)\s+(?!\w*DispatchView)\w+View\w*\s*(?::[^{;]*)?\{")
+_OFFSET_MEMBER = re.compile(r"\bf\d+\s*(?:\[[^\]]*\]\s*)*;")
+_TEXT_EXTERN = re.compile(r"\bextern\b[^;{}]*\bchar\s+text_\w+\s*\[\s*\]")
+
+
+def source_accuracy():
+    """{counter: n} for the source-accuracy counters, read from src/ (stock src/third_party/ aside) and include/dw4/."""
+    from typed_coverage import strip_comments_and_strings
+    c = dict.fromkeys(("virtual_views.types", "virtual_views.slots", "boilerplate.functions", "layout.tail_fragments",
+                       "matching_constructs", "views.local", "members.offset_named", "strings.externs"), 0)
+    reflected = os.path.join(ROOT, "include", "dw4", "support", "reflected.h")
+    for top in (SRC, os.path.join(ROOT, "include", "dw4")):
+        for root, _dirs, files in os.walk(top):
+            if os.sep + "third_party" in root:
+                continue
+            for f in files:
+                if not f.endswith((".c", ".cpp", ".h", ".inc", ".hpp")) or f.startswith("dw4u_"):
+                    continue
+                path = os.path.join(root, f)
+                if os.path.abspath(path) == os.path.abspath(reflected):
+                    continue
+                raw = open(path, errors="replace").read()
+                code = strip_comments_and_strings(raw)
+                if f.endswith(".inc") and "_tail" in f:
+                    c["layout.tail_fragments"] += 1
+                c["matching_constructs"] += raw.count("matching construct")
+                c["virtual_views.types"] += len(_DISPATCH_VIEW.findall(code))
+                c["virtual_views.slots"] += len(_SLOT_PLACEHOLDER.findall(code))
+                c["boilerplate.functions"] += len(_BOILERPLATE_DEF.findall(code))
+                c["views.local"] += len(_LOCAL_VIEW.findall(code))
+                c["members.offset_named"] += len(_OFFSET_MEMBER.findall(code))
+                c["strings.externs"] += len(_TEXT_EXTERN.findall(code))
+    try:
+        c["reflected.untyped_refs"] = len(_UNTYPED_REF.findall(open(reflected).read()))
+    except OSError:
+        c["reflected.untyped_refs"] = None
+    return c
+
 
 _REFLECTED_CLASS = re.compile(r"^typedef struct (\w+)\s*[:{]", re.M)
 
@@ -762,6 +818,7 @@ def debt_summary(d, syms, matched, asm_body, paths, typed, inline):
     else:
         c["free_methods.functions"], c["free_methods.bytes"], c["vfunc_slots.functions"] = \
             method_shaped(syms, paths, classes)
+    c.update(source_accuracy())
     c["orphan.bytes"] = (exc["extra"]["bytes"] + exc["differ"]["bytes"] + cats["foreign_orphan_bytes"]) if rec else None
     # The function inventory's own debt: code the symbol map does not own, read from the
     # committed scan (`scripts/inventory_scan.py --write`; `make inventory-check` keeps it fresh).
