@@ -43,7 +43,7 @@ Matching proves the bytes; it does not make the source readable. A matched funct
 | the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,077 | 285,180 |
 | it sits in its class or module file, not `src/unmatched/` | 0 | 0 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 914 | 277,288 |
-| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 1,609 | 311,636 |
+| no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 1,606 | 308,296 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,063 | 237,708 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 481 | 132,808 |
 | what it calls and reads is declared once, in a header, with its real type: no local `extern` of another unit's symbol (a copy with an owner `local-decl` row aside), no `(...)` or C `()` prototype in place of the parameters, no type that differs from the definition | 0 | 0 |

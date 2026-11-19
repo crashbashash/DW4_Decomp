@@ -1,5 +1,5 @@
 int FUN_001c6520(O_1c6520 *arg0, int arg1) {
-    Ob *sp3C;
+    Ob *document;
     Ob *a0;
     Ob *s0;
     int s0i;
@@ -8,8 +8,8 @@ int FUN_001c6520(O_1c6520 *arg0, int arg1) {
     if (arg1 == 0 && arg0->f28 != 0) {
         return 1;
     }
-    FUN_001cd150((IniDocument * *)((Ob **)&sp3C), (IniFactoryState *)arg0, (char *)arg0->f24);
-    if (sp3C != arg0->f28) {
+    FUN_001cd150((IniDocument * *)((Ob **)&document), (IniFactoryState *)arg0, (char *)arg0->f24);
+    if (document != arg0->f28) {
         a0 = arg0->f32;
         if (a0 != 0) {
             a0->refs = a0->refs - 1;
@@ -37,7 +37,7 @@ int FUN_001c6520(O_1c6520 *arg0, int arg1) {
         }
         arg0->f36 = s;
         arg0->f40 = -1;
-        s0 = sp3C;
+        s0 = document;
         if (s0 != 0) {
             s0->refs = s0->refs + 1;
         }
@@ -51,7 +51,7 @@ int FUN_001c6520(O_1c6520 *arg0, int arg1) {
         arg0->f28 = s0;
     }
     s0i = arg0->f28 != 0;
-    a0 = sp3C;
+    a0 = document;
     if (a0 != 0) {
         a0->refs = a0->refs - 1;
         if ((a0->refs & 0x7fffff) == 0) {
@@ -65,16 +65,16 @@ int FUN_001c6520(O_1c6520 *arg0, int arg1) {
 #define RET_OBJ(o) { Obj_1c66c0 *t_ = (o); if (t_ != 0) t_->u.w = t_->u.w + 1; }
 #define REL_TMP(o) { if (o != 0) { o->u.w = o->u.w - 1; if (o->u.b.cnt == 0) igObject_Destroy((igObject *)o); } }
 #define REL_STR(s) { char *t_ = (s); if (t_ != 0) { int *hd_ = (int *)t_ - 2; int c_ = ((int *)t_)[-1] - 1; ((int *)t_)[-1] = c_; if (c_ == 0) StringChunk_ReleaseHeader((StringChunk *)*hd_, (StringTokenHeader *)hd_); } }
-#define REL_ALL() { REL_OBJ(sp40.p) REL_OBJ(sp44.p) REL_STR(sp48) REL_STR(sp4C) }
+#define REL_ALL() { REL_OBJ(ownDoc.p) REL_OBJ(fileDoc.p) REL_STR(sectionName) REL_STR(fileName) }
 int FUN_001c66c0(Node *self, int force)
 {
-    char *sp4C;
-    char *sp48;
-    RP sp44;
-    RP sp40;
-    Obj_1c66c0 *sp3C;
-    Obj_1c66c0 *sp38;
-    Obj_1c66c0 *sp34;
+    char *fileName;
+    char *sectionName;
+    RP fileDoc;
+    RP ownDoc;
+    Obj_1c66c0 *ownDocTemp;
+    Obj_1c66c0 *fileDocTemp;
+    Obj_1c66c0 *loadedDocTemp;
     int idx;
     char *s;
     char *t;
@@ -102,48 +102,48 @@ int FUN_001c66c0(Node *self, int force)
     if (idx < 0) {
         return 0;
     }
-    sp4C = 0;
-    sp48 = 0;
+    fileName = 0;
+    sectionName = 0;
     {
-        unsigned char found = igRegistry_GetValueString((igRegistry *)self->f28, idx, "fileName", &sp4C, "", 0);
-        sp44.p = 0;
-        RET_OBJ(sp44.p)
-        sp40.p = 0;
-        RET_OBJ(sp40.p)
+        unsigned char found = igRegistry_GetValueString((igRegistry *)self->f28, idx, "fileName", &fileName, "", 0);
+        fileDoc.p = 0;
+        RET_OBJ(fileDoc.p)
+        ownDoc.p = 0;
+        RET_OBJ(ownDoc.p)
         if (!found) {
             t = self->f24;
             if (t != 0) ((int *)t)[-1] = ((int *)t)[-1] + 1;
-            REL_STR(sp4C)
-            sp4C = self->f24;
+            REL_STR(fileName)
+            fileName = self->f24;
         }
     }
-    if (!(igRegistry_GetValueString((igRegistry *)self->f28, idx, "section", &sp48, "", 0) & 0xFF)) {
+    if (!(igRegistry_GetValueString((igRegistry *)self->f28, idx, "section", &sectionName, "", 0) & 0xFF)) {
         REL_ALL()
         return 0;
     }
-    FUN_001ce400((IniStringObject * *)&sp3C, self->f24);
+    FUN_001ce400((IniStringObject * *)&ownDocTemp, self->f24);
     {
-        Obj_1c66c0 *n = sp3C;
+        Obj_1c66c0 *n = ownDocTemp;
         if (n != 0) n->u.w = n->u.w + 1;
-        REL_OBJ(sp40.p)
-        sp40.p = n;
+        REL_OBJ(ownDoc.p)
+        ownDoc.p = n;
     }
-    REL_TMP(sp3C)
-    FUN_001ce400((IniStringObject * *)&sp38, sp4C);
+    REL_TMP(ownDocTemp)
+    FUN_001ce400((IniStringObject * *)&fileDocTemp, fileName);
     {
-        Obj_1c66c0 *n = sp38;
+        Obj_1c66c0 *n = fileDocTemp;
         if (n != 0) n->u.w = n->u.w + 1;
-        REL_OBJ(sp44.p)
-        sp44.p = n;
+        REL_OBJ(fileDoc.p)
+        fileDoc.p = n;
     }
-    REL_TMP(sp38)
-    if (sp44.p == 0) {
+    REL_TMP(fileDocTemp)
+    if (fileDoc.p == 0) {
         REL_ALL()
         return 0;
     }
     {
-        Obj_1c66c0 *o40 = sp40.p;
-        a = sp44.p->f8;
+        Obj_1c66c0 *o40 = ownDoc.p;
+        a = fileDoc.p->f8;
         if (a == 0) a = g_stringObjEmptyText;
         b = o40->f8;
         if (b == 0) b = g_stringObjEmptyText;
@@ -154,30 +154,30 @@ int FUN_001c66c0(Node *self, int force)
         REL_OBJ(self->f32)
         self->f32 = par;
     } else {
-        FUN_001cd150((IniDocument * *)&sp34, (IniFactoryState *)self, sp4C);
+        FUN_001cd150((IniDocument * *)&loadedDocTemp, (IniFactoryState *)self, fileName);
         {
-            Obj_1c66c0 *n = sp34;
+            Obj_1c66c0 *n = loadedDocTemp;
             if (n != 0) n->u.w = n->u.w + 1;
             REL_OBJ(self->f32)
             self->f32 = n;
         }
-        REL_TMP(sp34)
+        REL_TMP(loadedDocTemp)
         if (self->f32 == 0) {
             REL_ALL()
             return 0;
         }
     }
-    self->f40 = igRegistry_GetSectionIndex((igRegistry *)self->f32, sp48, 0);
+    self->f40 = igRegistry_GetSectionIndex((igRegistry *)self->f32, sectionName, 0);
     if (self->f40 == -1) {
         REL_OBJ(self->f32)
         self->f32 = 0;
         REL_ALL()
         return 0;
     }
-    t = sp4C;
+    t = fileName;
     if (t != 0) ((int *)t)[-1] = ((int *)t)[-1] + 1;
     REL_STR(self->f36)
-    self->f36 = sp4C;
+    self->f36 = fileName;
     REL_ALL()
     return 1;
 }

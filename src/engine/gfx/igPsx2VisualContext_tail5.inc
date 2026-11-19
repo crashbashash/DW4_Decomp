@@ -618,17 +618,17 @@ void FUN_00179e00(StatContext *arg0) {
     int idx;
     StatNode *n;
     int a1;
-    Ref_1778e0 sp6C((O_1778e0 *)igStringObj_Create(igVisualContext_GetStatisticsMemoryPool((int *)arg0)));
-    Ref_1778e0 sp68((O_1778e0 *)igStringObj_Create(igVisualContext_GetStatisticsMemoryPool((int *)arg0)));
+    Ref_1778e0 sectionName((O_1778e0 *)igStringObj_Create(igVisualContext_GetStatisticsMemoryPool((int *)arg0)));
+    Ref_1778e0 indexText((O_1778e0 *)igStringObj_Create(igVisualContext_GetStatisticsMemoryPool((int *)arg0)));
     s3 = ((G_1778e0 *)g_objectSystem)->f56;
     s2 = 0;
-    igStringObj_Set((igStringObj *)(O_1778e0 *)sp6C, "STATISTICS_CAPTURE_");
-    igStringObj_SetInt((int)(O_1778e0 *)sp68, 0, "%d");
-    { int y = sp68->f12; int x = sp6C->f12;
-    a1 = sp68->f8;
+    igStringObj_Set((igStringObj *)(O_1778e0 *)sectionName, "STATISTICS_CAPTURE_");
+    igStringObj_SetInt((int)(O_1778e0 *)indexText, 0, "%d");
+    { int y = indexText->f12; int x = sectionName->f12;
+    a1 = indexText->f8;
     if (a1 == 0) a1 = (int)g_stringObjEmptyText;
-    igStringObj_Insert((igStringObj *)(O_1778e0 *)sp6C, (char *)a1, x, y); }
-    while ((idx = igRegistry_GetSectionIndex((igRegistry *)s3, (char *)(sp6C->f8 == 0 ? (int)g_stringObjEmptyText : sp6C->f8), 0)) != -1) {
+    igStringObj_Insert((igStringObj *)(O_1778e0 *)sectionName, (char *)a1, x, y); }
+    while ((idx = igRegistry_GetSectionIndex((igRegistry *)s3, (char *)(sectionName->f8 == 0 ? (int)g_stringObjEmptyText : sectionName->f8), 0)) != -1) {
         n = (StatNode *)((StatAllocator *)igVisualContext_GetStatisticsMemoryPool((int *)arg0))->v52(960);
         if (n == 0) break;
         n->f16 = 1;
@@ -640,12 +640,12 @@ void FUN_00179e00(StatContext *arg0) {
         s2 += 1;
         n->f952 = arg0->f1552;
         arg0->f1552 = n;
-        igStringObj_SetInt((int)(O_1778e0 *)sp68, s2, "%d");
-        igStringObj_Set((igStringObj *)(O_1778e0 *)sp6C, "STATISTICS_CAPTURE_");
-        { int y = sp68->f12; int x = sp6C->f12;
-        a1 = sp68->f8;
+        igStringObj_SetInt((int)(O_1778e0 *)indexText, s2, "%d");
+        igStringObj_Set((igStringObj *)(O_1778e0 *)sectionName, "STATISTICS_CAPTURE_");
+        { int y = indexText->f12; int x = sectionName->f12;
+        a1 = indexText->f8;
         if (a1 == 0) a1 = (int)g_stringObjEmptyText;
-        igStringObj_Insert((igStringObj *)(O_1778e0 *)sp6C, (char *)a1, x, y); }
+        igStringObj_Insert((igStringObj *)(O_1778e0 *)sectionName, (char *)a1, x, y); }
     }
 }
 
@@ -749,18 +749,18 @@ int FUN_0017a2b0(int arg0) {
 }
 
 void FUN_0017a300(Self_17a070 *self) {
-    int sp5C;
+    int textureArraySize;
     int bi;
     Buf_17a070 *b;
     T *o;
     int i;
-    sp5C = 0x40;
-    igGetRegistryValue_Int((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 4, "IG_GFX_VC_TEXTURE_ARRAY_SIZE", &sp5C, 0x40, 0);
+    textureArraySize = 0x40;
+    igGetRegistryValue_Int((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 4, "IG_GFX_VC_TEXTURE_ARRAY_SIZE", &textureArraySize, 0x40, 0);
     Buf_17a070 *r = (Buf_17a070 *)Memory_AllocateBufferDirect(0x14, (igMemoryPoolView *)igVisualContext_GetListMemoryPool((int *)self));
     if (r != 0) {
         bi = (int)r;
         b = (Buf_17a070 *)bi;
-        int n = sp5C;
+        int n = textureArraySize;
         Owner_17a070 *ow;
         int k;
         int *old;
@@ -892,16 +892,16 @@ void FUN_0017a540(igPsx2VisualContext *vc, int keepLists) {
 
 void FUN_0017a7e0(S0_17a070 *arg0) {
     /* matching construct: variant search — decl order [3, 2, 1, 0]; the unit compiler (combat build -O3 -Iinclude) assigns stack slots and registers in declaration order, the reverse of the 2001 default */
-    int sp2C;
-    int sp28;
-    int sp24;
-    int sp20;
+    int displayWidth;
+    int displayHeight;
+    int colorFormat;
+    int depthFormat;
 
     FUN_0017a870(arg0, 0);
-    p2GetDisplaySize(&sp2C, &sp28, &sp24, &sp20);
-    *(int *)((char *)(arg0) + 1524) = (int)p2LoadTexture(0, sp2C, sp28, sp24, 1);
-    *(int *)((char *)(arg0) + 1528) = (int)p2LoadTexture(0, sp2C, sp28, sp24, 2);
-    *(int *)((char *)(arg0) + 1532) = (int)p2LoadTexture(0, sp2C, sp28, sp20, 3);
+    p2GetDisplaySize(&displayWidth, &displayHeight, &colorFormat, &depthFormat);
+    *(int *)((char *)(arg0) + 1524) = (int)p2LoadTexture(0, displayWidth, displayHeight, colorFormat, 1);
+    *(int *)((char *)(arg0) + 1528) = (int)p2LoadTexture(0, displayWidth, displayHeight, colorFormat, 2);
+    *(int *)((char *)(arg0) + 1532) = (int)p2LoadTexture(0, displayWidth, displayHeight, depthFormat, 3);
 }
 
 void FUN_0017a870(S0_17a070 *arg0, int arg1) {
@@ -1604,21 +1604,21 @@ void igPsx2VisualContext_GetTextureStageCoordSource(int arg0, int arg1, int *arg
 }
 
 int FUN_0017cb80(struct ClutContextCB80 *arg0, int arg1, int *arg2) {
-    int sp3C = 0;
+    int result = 0;
     int r = -1;
     switch (arg1) {
     case 0:
         if (arg0->f836 == -1) {
-            arg0->f836 = FUN_0017ccb0(arg0, 0, 8, &sp3C);
-            arg0->f852 = sp3C;
+            arg0->f836 = FUN_0017ccb0(arg0, 0, 8, &result);
+            arg0->f852 = result;
         }
         r = arg0->f836;
         *arg2 = 0x10000;
         break;
     case 1:
         if (arg0->f840 == -1) {
-            arg0->f840 = FUN_0017ccb0(arg0, 8, 0, &sp3C);
-            arg0->f856 = sp3C;
+            arg0->f840 = FUN_0017ccb0(arg0, 8, 0, &result);
+            arg0->f856 = result;
         }
         r = arg0->f840;
         *arg2 = 0x10000;
@@ -1626,8 +1626,8 @@ int FUN_0017cb80(struct ClutContextCB80 *arg0, int arg1, int *arg2) {
     case 3:
     case 2:
         if (arg0->f844 == -1) {
-            arg0->f844 = FUN_0017ccb0(arg0, 4, 4, &sp3C);
-            arg0->f860 = sp3C;
+            arg0->f844 = FUN_0017ccb0(arg0, 4, 4, &result);
+            arg0->f860 = result;
         }
         *arg2 = 0x10000;
         r = arg0->f844;

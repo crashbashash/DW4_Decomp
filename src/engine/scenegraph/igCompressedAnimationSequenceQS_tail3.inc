@@ -120,7 +120,7 @@ void FUN_001bfc70(O_1bfc70 *o, long long t, int *a2, int *a3, float *a4, float *
 }
 
 void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_48(struct S_1bfe90 *arg0, int *arg1, void *arg2, int *arg3, float fparg0) {
-    int sp80[4]; int sp70[4]; int sp60[4]; int sp50[4];
+    int slerpFrom[4]; int slerpTo[4]; int lerpFrom[4]; int lerpTo[4];
     unsigned char t;
     t = arg0->f58;
     if (t == 0) {
@@ -128,65 +128,65 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_48(struct S_1bfe90 *arg0, i
         return;
     }
     if (t == 3) {
-        FUN_001bf560((QSView *)arg0, (int)(arg2), (float *)sp80);
-        FUN_001bf560((QSView *)arg0, (int)(arg3), (float *)sp70);
-        FUN_00192ab0((float *)arg1, fparg0, (void *)sp80, (void *)sp70);
+        FUN_001bf560((QSView *)arg0, (int)(arg2), (float *)slerpFrom);
+        FUN_001bf560((QSView *)arg0, (int)(arg3), (float *)slerpTo);
+        FUN_00192ab0((float *)arg1, fparg0, (void *)slerpFrom, (void *)slerpTo);
         return;
     }
-    FUN_001bf560((QSView *)arg0, (int)(arg2), (float *)sp60);
-    FUN_001bf560((QSView *)arg0, (int)(arg3), (float *)sp50);
-    Quaternion_Lerp((float *)arg1, fparg0, (const float *)sp60, (const float *)sp50);
+    FUN_001bf560((QSView *)arg0, (int)(arg2), (float *)lerpFrom);
+    FUN_001bf560((QSView *)arg0, (int)(arg3), (float *)lerpTo);
+    Quaternion_Lerp((float *)arg1, fparg0, (const float *)lerpFrom, (const float *)lerpTo);
 }
 
 void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_47(igCompressedAnimationSequenceQS *self, int *arg1, int arg2, int arg3, float fparg0) {
-    int sp60[4];
-    int sp50[4];
+    int vecFrom[4];
+    int vecTo[4];
 
     if (self->_interpolationMethod[0] == 0) {
         ((DW4VC_184_2 *)(((char *)(self) + 0)))->vX(arg2, arg1);
         return;
     }
-    ((DW4VC_184_2 *)(((char *)(self) + 0)))->vX(arg2, &sp60[0]);
-    ((DW4VC_184_2 *)(((char *)(self) + 0)))->vX(arg3, &sp50[0]);
-    Vec3_Lerp((float *)arg1, fparg0, (const float *)((void *)&sp60[0]), (const float *)((void *)&sp50[0]));
+    ((DW4VC_184_2 *)(((char *)(self) + 0)))->vX(arg2, &vecFrom[0]);
+    ((DW4VC_184_2 *)(((char *)(self) + 0)))->vX(arg3, &vecTo[0]);
+    Vec3_Lerp((float *)arg1, fparg0, (const float *)((void *)&vecFrom[0]), (const float *)((void *)&vecTo[0]));
 }
 
 int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_25(S_1c0010 *arg0, int arg1, long long arg2) {
-    unsigned char sp4F;
-    unsigned char sp4E;
-    int sp48;
-    int sp44;
-    float sp40;
-    float sp3C;
+    unsigned char beforeStart;
+    unsigned char afterEnd;
+    int key0;
+    int key1;
+    float elapsed;
+    float duration;
 
-    FUN_001bf7d0((QSSequenceView *)arg0, &sp4F, &sp4E, &sp48, &sp44, &sp40, &sp3C, arg2);
-    if (sp4F != 0) {
+    FUN_001bf7d0((QSSequenceView *)arg0, &beforeStart, &afterEnd, &key0, &key1, &elapsed, &duration, arg2);
+    if (beforeStart != 0) {
         FUN_001bf560((QSView *)arg0, 0, (float *)arg1);
-    } else if (sp4E != 0) {
+    } else if (afterEnd != 0) {
         FUN_001bf560((QSView *)arg0, arg0->f16->cnt - 1, (float *)arg1);
     } else {
-        ((V192 *)arg0)->vX(arg1, sp48, sp44, sp40 / sp3C);
+        ((V192 *)arg0)->vX(arg1, key0, key1, elapsed / duration);
     }
     return 1;
 }
 
 int Gap__Sg__igCompressedAnimationSequenceQS__vfunc_27(O_1c00e0 *arg0, int arg1, int arg2, long long arg3) {
-    unsigned char sp6F; unsigned char sp6E; int sp68; int sp64; float sp60; float sp5C; float f20;
-    FUN_001bf7d0((QSSequenceView *)arg0, &sp6F, &sp6E, &sp68, &sp64, &sp60, &sp5C, arg3);
-    if (sp6F != 0) {
+    unsigned char beforeStart; unsigned char afterEnd; int key0; int key1; float elapsed; float duration; float f20;
+    FUN_001bf7d0((QSSequenceView *)arg0, &beforeStart, &afterEnd, &key0, &key1, &elapsed, &duration, arg3);
+    if (beforeStart != 0) {
         FUN_001bf560((QSView *)arg0, 0, (float *)arg1);
         arg0->v184(0, arg2);
-    } else if (sp6E != 0) {
+    } else if (afterEnd != 0) {
         FUN_001bf560((QSView *)arg0, arg0->f16->n - 1, (float *)arg1);
         arg0->v184(arg0->v140() - 1, arg2);
     } else {
-        if (sp5C < 9.99999997e-07f) {
+        if (duration < 9.99999997e-07f) {
             f20 = 0.0f;
         } else {
-            f20 = sp60 / sp5C;
+            f20 = elapsed / duration;
         }
-        arg0->v192(arg1, sp68, sp64, f20);
-        arg0->v188(arg2, sp68, sp64, f20);
+        arg0->v192(arg1, key0, key1, f20);
+        arg0->v188(arg2, key0, key1, f20);
     }
     return 1;
 }
@@ -237,7 +237,7 @@ int FUN_001c0390(void *, int) {
 }
 
 void FUN_001c03a0(DepthOfFieldNode *arg0, A1_1c03a0 *arg1) {
-    float sp70[4];
+    float color[4];
     float f20;
     Cls *s1;
     int s0;
@@ -257,14 +257,14 @@ void FUN_001c03a0(DepthOfFieldNode *arg0, A1_1c03a0 *arg1) {
                     DepthOfField_UpdateProjections(arg0);
                     arg0->_projectionDirty = 0;
                 }
-                s1->v716(sp70);
+                s1->v716(color);
                 f20 = s1->v728();
                 s4 = DAT_00562660[0];
-                s4->a[0] = sp70[0];
-                s4->a[1] = sp70[1];
-                s4->a[2] = sp70[2];
-                s4->a[3] = sp70[3];
-                s4->f60 = igVec4f_PackColor(sp70, 1);
+                s4->a[0] = color[0];
+                s4->a[1] = color[1];
+                s4->a[2] = color[2];
+                s4->a[3] = color[3];
+                s4->f60 = igVec4f_PackColor(color, 1);
                 s4 = DAT_00562660[0];
                 s4->f48 = fptodp(f20);
                 s4->f64 = f20;

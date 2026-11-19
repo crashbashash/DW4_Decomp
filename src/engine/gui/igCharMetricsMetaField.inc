@@ -114,12 +114,12 @@ void igCharMetricsMetaField_InitDefaults(igCharMetricsMetaField *self) {
 }
 
 void FUN_00452ca0(int arg0) {
-    void *sp4C;
-    void *sp48;
-    void *sp44;
-    void *sp40;
-    void *sp3C;
-    void *sp38;
+    void *charNumberName;
+    void *stepName;
+    void *offsetName;
+    void *sizeName;
+    void *texCoordMinName;
+    void *texCoordMaxName;
     int *temp_a1;
     int *temp_a1_2;
     int *temp_a1_3;
@@ -164,12 +164,12 @@ void FUN_00452ca0(int arg0) {
         }
         var_v0 = (void *)(StringPool_Intern(g_stringPool, "charNumber"));
     }
-    sp4C = (void *)(var_v0);
-    igMetaField_SetFieldName((igMetaField *)temp_s1, &sp4C);
-    if (sp4C != 0) {
-        temp_a1 = (int *)((char *)sp4C - 8);
-        temp_v0 = *(int *)((char *)(sp4C) - 4) - 1;
-        *(int *)((char *)(sp4C) - 4) = temp_v0;
+    charNumberName = (void *)(var_v0);
+    igMetaField_SetFieldName((igMetaField *)temp_s1, &charNumberName);
+    if (charNumberName != 0) {
+        temp_a1 = (int *)((char *)charNumberName - 8);
+        temp_v0 = *(int *)((char *)(charNumberName) - 4) - 1;
+        *(int *)((char *)(charNumberName) - 4) = temp_v0;
         if (temp_v0 == 0) {
             StringChunk_ReleaseHeader((StringChunk *)(*temp_a1), (StringTokenHeader *)temp_a1);
         }
@@ -194,12 +194,12 @@ void FUN_00452ca0(int arg0) {
         }
         var_v0_3 = (void *)(StringPool_Intern(g_stringPool, "step"));
     }
-    sp48 = (void *)(var_v0_3);
-    igMetaField_SetFieldName((igMetaField *)temp_s1_2, &sp48);
-    if (sp48 != 0) {
-        temp_a1_2 = (int *)((char *)sp48 - 8);
-        temp_v0_2 = *(int *)((char *)(sp48) - 4) - 1;
-        *(int *)((char *)(sp48) - 4) = temp_v0_2;
+    stepName = (void *)(var_v0_3);
+    igMetaField_SetFieldName((igMetaField *)temp_s1_2, &stepName);
+    if (stepName != 0) {
+        temp_a1_2 = (int *)((char *)stepName - 8);
+        temp_v0_2 = *(int *)((char *)(stepName) - 4) - 1;
+        *(int *)((char *)(stepName) - 4) = temp_v0_2;
         if (temp_v0_2 == 0) {
             StringChunk_ReleaseHeader((StringChunk *)(*temp_a1_2), (StringTokenHeader *)temp_a1_2);
         }
@@ -224,12 +224,12 @@ void FUN_00452ca0(int arg0) {
         }
         var_v0_5 = (void *)(StringPool_Intern(g_stringPool, "offset"));
     }
-    sp44 = (void *)(var_v0_5);
-    igMetaField_SetFieldName((igMetaField *)temp_s1_3, &sp44);
-    if (sp44 != 0) {
-        temp_a1_3 = (int *)((char *)sp44 - 8);
-        temp_v0_3 = *(int *)((char *)(sp44) - 4) - 1;
-        *(int *)((char *)(sp44) - 4) = temp_v0_3;
+    offsetName = (void *)(var_v0_5);
+    igMetaField_SetFieldName((igMetaField *)temp_s1_3, &offsetName);
+    if (offsetName != 0) {
+        temp_a1_3 = (int *)((char *)offsetName - 8);
+        temp_v0_3 = *(int *)((char *)(offsetName) - 4) - 1;
+        *(int *)((char *)(offsetName) - 4) = temp_v0_3;
         if (temp_v0_3 == 0) {
             StringChunk_ReleaseHeader((StringChunk *)(*temp_a1_3), (StringTokenHeader *)temp_a1_3);
         }
@@ -254,12 +254,12 @@ void FUN_00452ca0(int arg0) {
         }
         var_v0_7 = (void *)(StringPool_Intern(g_stringPool, "size"));
     }
-    sp40 = (void *)(var_v0_7);
-    igMetaField_SetFieldName((igMetaField *)temp_s1_4, &sp40);
-    if (sp40 != 0) {
-        temp_a1_4 = (int *)((char *)sp40 - 8);
-        temp_v0_4 = *(int *)((char *)(sp40) - 4) - 1;
-        *(int *)((char *)(sp40) - 4) = temp_v0_4;
+    sizeName = (void *)(var_v0_7);
+    igMetaField_SetFieldName((igMetaField *)temp_s1_4, &sizeName);
+    if (sizeName != 0) {
+        temp_a1_4 = (int *)((char *)sizeName - 8);
+        temp_v0_4 = *(int *)((char *)(sizeName) - 4) - 1;
+        *(int *)((char *)(sizeName) - 4) = temp_v0_4;
         if (temp_v0_4 == 0) {
             StringChunk_ReleaseHeader((StringChunk *)(*temp_a1_4), (StringTokenHeader *)temp_a1_4);
         }
@@ -284,12 +284,12 @@ void FUN_00452ca0(int arg0) {
         }
         var_v0_9 = (void *)(StringPool_Intern(g_stringPool, "texCoordMin"));
     }
-    sp3C = (void *)(var_v0_9);
-    igMetaField_SetFieldName((igMetaField *)temp_s1_5, &sp3C);
-    if (sp3C != 0) {
-        temp_a1_5 = (int *)((char *)sp3C - 8);
-        temp_v0_5 = *(int *)((char *)(sp3C) - 4) - 1;
-        *(int *)((char *)(sp3C) - 4) = temp_v0_5;
+    texCoordMinName = (void *)(var_v0_9);
+    igMetaField_SetFieldName((igMetaField *)temp_s1_5, &texCoordMinName);
+    if (texCoordMinName != 0) {
+        temp_a1_5 = (int *)((char *)texCoordMinName - 8);
+        temp_v0_5 = *(int *)((char *)(texCoordMinName) - 4) - 1;
+        *(int *)((char *)(texCoordMinName) - 4) = temp_v0_5;
         if (temp_v0_5 == 0) {
             StringChunk_ReleaseHeader((StringChunk *)(*temp_a1_5), (StringTokenHeader *)temp_a1_5);
         }
@@ -314,12 +314,12 @@ void FUN_00452ca0(int arg0) {
         }
         var_v0_11 = (void *)(StringPool_Intern(g_stringPool, "texCoordMax"));
     }
-    sp38 = (void *)(var_v0_11);
-    igMetaField_SetFieldName((igMetaField *)temp_s1_6, &sp38);
-    if (sp38 != 0) {
-        temp_a1_6 = (int *)((char *)sp38 - 8);
-        temp_v0_6 = *(int *)((char *)(sp38) - 4) - 1;
-        *(int *)((char *)(sp38) - 4) = temp_v0_6;
+    texCoordMaxName = (void *)(var_v0_11);
+    igMetaField_SetFieldName((igMetaField *)temp_s1_6, &texCoordMaxName);
+    if (texCoordMaxName != 0) {
+        temp_a1_6 = (int *)((char *)texCoordMaxName - 8);
+        temp_v0_6 = *(int *)((char *)(texCoordMaxName) - 4) - 1;
+        *(int *)((char *)(texCoordMaxName) - 4) = temp_v0_6;
         if (temp_v0_6 == 0) {
             StringChunk_ReleaseHeader((StringChunk *)(*temp_a1_6), (StringTokenHeader *)temp_a1_6);
         }

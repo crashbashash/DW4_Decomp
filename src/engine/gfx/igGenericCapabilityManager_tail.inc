@@ -377,9 +377,9 @@ static inline void release(T_1566c0 *object) {
 void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, int arg5) {
     igSmartPointer<T_1566c0> converted(0);
     igSmartPointer<T_1566c0> spare((T_1566c0 *)igImageConvert_Create((int)igObject_GetAllocator((igObject *)arg0)));
-    int spA4;
-    int spA0;
-    int sp9C;
+    int imageSize;
+    int bytesPerRow;
+    int components;
     S_1566c0 *src;
     char *var_s5;
     int var_s4;
@@ -403,10 +403,10 @@ void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, 
     }
     arg0->f8 = arg4;
     arg0->f12 = arg5;
-    FUN_00159320(arg0, arg0->f44, arg0->f8, arg0->f12, &spA4, &sp9C, &spA0);
-    arg0->f48 = spA4;
-    arg0->f16 = sp9C;
-    arg0->f76 = spA0;
+    FUN_00159320(arg0, arg0->f44, arg0->f8, arg0->f12, &imageSize, &components, &bytesPerRow);
+    arg0->f48 = imageSize;
+    arg0->f16 = components;
+    arg0->f76 = bytesPerRow;
     {
         void **alloc = (void **)igObject_GetAllocator((igObject *)arg0);
         void **v;
@@ -711,29 +711,29 @@ int FUN_00157980(void) {
 }
 
 void FUN_00157990(S_arg0 *arg0, int arg1) {
-    int sp4C;
-    int sp48;
-    int sp44;
-    int sp40;
-    int sp3C;
-    int sp38;
-    int sp34;
-    int sp30;
-    int sp2C;
-    int sp28;
+    int imageSize;
+    int bytesPerRow;
+    int bitsInt;
+    int bitsIdx;
+    int bitsRed;
+    int bitsGrn;
+    int bitsBlu;
+    int bitsAlpha;
+    int bitsDepth;
+    int components;
 
     arg0->f44 = arg1;
     if (FUN_0015a270(arg0->f44) == 0) {
-        FUN_00159a80(arg0->f44, &sp44, &sp40, &sp3C, &sp38, &sp34, &sp30, &sp2C);
-        arg0->f64 = sp44;
-        arg0->f72 = sp40;
-        arg0->f28 = sp3C;
-        arg0->f32 = sp38;
-        arg0->f36 = sp34;
-        arg0->f40 = sp30;
-        arg0->f84 = sp2C;
-        FUN_00159320(arg0, arg0->f44, arg0->f8, arg0->f12, &sp4C, &sp28, &sp48);
-        arg0->f16 = sp28;
+        FUN_00159a80(arg0->f44, &bitsInt, &bitsIdx, &bitsRed, &bitsGrn, &bitsBlu, &bitsAlpha, &bitsDepth);
+        arg0->f64 = bitsInt;
+        arg0->f72 = bitsIdx;
+        arg0->f28 = bitsRed;
+        arg0->f32 = bitsGrn;
+        arg0->f36 = bitsBlu;
+        arg0->f40 = bitsAlpha;
+        arg0->f84 = bitsDepth;
+        FUN_00159320(arg0, arg0->f44, arg0->f8, arg0->f12, &imageSize, &components, &bytesPerRow);
+        arg0->f16 = components;
     }
 }
 
@@ -770,16 +770,16 @@ void igImage_SetDefaultOrder(igImage *self) {
 }
 
 void igImage_UpdateFormatInfo(igImage *arg0) {
-    int sp5C;
-    int sp58;
-    int sp54;
-    int sp50;
-    int sp4C;
-    int sp48;
-    int sp44;
-    int sp40;
-    int sp3C;
-    int sp38;
+    int components;
+    int imageSize;
+    int bytesPerRow;
+    int bitsInt;
+    int bitsIdx;
+    int bitsRed;
+    int bitsGrn;
+    int bitsBlu;
+    int bitsAlpha;
+    int bitsDepth;
     int temp_s1;
     int temp_v1;
     unsigned int temp_a0;
@@ -802,18 +802,18 @@ void igImage_UpdateFormatInfo(igImage *arg0) {
             break;
         }
         temp_s1 = arg0->_pfmt;
-        FUN_00159320(arg0, temp_s1, arg0->_px, arg0->_py, &sp58, &sp5C, &sp54);
-        arg0->_imageSize = sp58;
-        arg0->_bytesPerRow = sp54;
-        FUN_00159a80(temp_s1, &sp50, &sp4C, &sp48, &sp44, &sp40, &sp3C, &sp38);
-        arg0->_bitsInt = sp50;
-        arg0->_bitsIdx = sp4C;
-        arg0->_bitsRed = sp48;
-        arg0->_bitsGrn = sp44;
-        arg0->_bitsBlu = sp40;
-        arg0->_bitsAlpha = sp3C;
-        arg0->_bitsDepth = sp38;
-        arg0->_pz = sp5C;
+        FUN_00159320(arg0, temp_s1, arg0->_px, arg0->_py, &imageSize, &components, &bytesPerRow);
+        arg0->_imageSize = imageSize;
+        arg0->_bytesPerRow = bytesPerRow;
+        FUN_00159a80(temp_s1, &bitsInt, &bitsIdx, &bitsRed, &bitsGrn, &bitsBlu, &bitsAlpha, &bitsDepth);
+        arg0->_bitsInt = bitsInt;
+        arg0->_bitsIdx = bitsIdx;
+        arg0->_bitsRed = bitsRed;
+        arg0->_bitsGrn = bitsGrn;
+        arg0->_bitsBlu = bitsBlu;
+        arg0->_bitsAlpha = bitsAlpha;
+        arg0->_bitsDepth = bitsDepth;
+        arg0->_pz = components;
     }
 }
 
@@ -962,9 +962,9 @@ int FUN_00158ab0(igImage *self, VStream *file) {
 }
 
 int FUN_00158cc0(S_158cc0 *arg0, void **arg1) {
-    unsigned int sp5C;
-    unsigned int sp58;
-    int sp54, sp50, sp4C, sp48, sp44, sp40, sp3C, sp38, sp34, sp30;
+    unsigned int skippedWord;
+    unsigned int maskWord;
+    int imageSize, components, bytesPerRow, bitsInt, bitsIdx, bitsRed, bitsGrn, bitsBlu, bitsAlpha, bitsDepth;
     int temp_s0;
     void **var_v0;
     VStream *st = (VStream *)arg1;
@@ -975,16 +975,16 @@ int FUN_00158cc0(S_158cc0 *arg0, void **arg1) {
         st->v25((char *)arg0 + 12, 4, 1);
         st->v25((char *)arg0 + 16, 4, 1);
         st->v25((char *)arg0 + 20, 4, 1);
-        st->v25(&sp58, 4, 1);
-        arg0->f28 = (sp58 >> 24) & 0xFF;
-        arg0->f32 = (sp58 >> 16) & 0xFF;
-        arg0->f36 = (sp58 >> 8) & 0xFF;
-        arg0->f40 = (unsigned char)sp58;
+        st->v25(&maskWord, 4, 1);
+        arg0->f28 = (maskWord >> 24) & 0xFF;
+        arg0->f32 = (maskWord >> 16) & 0xFF;
+        arg0->f36 = (maskWord >> 8) & 0xFF;
+        arg0->f40 = (unsigned char)maskWord;
         arg0->f84 = 0;
         arg0->f72 = 0;
         arg0->f64 = 0;
-        st->v25(&sp5C, 4, 1);
-        st->v25(&sp5C, 4, 1);
+        st->v25(&skippedWord, 4, 1);
+        st->v25(&skippedWord, 4, 1);
         var_v0 = (void **)igObject_GetAllocator((igObject *)arg0);
         var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : (void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
         arg0->f52 = ((VAlloc *)var_v0)->v53(arg0->f48, 0x80);
@@ -994,16 +994,16 @@ int FUN_00158cc0(S_158cc0 *arg0, void **arg1) {
         arg0->f44 = FUN_00159f00(arg0->f16);
     }
     temp_s0 = arg0->f44;
-    FUN_00159320(arg0, temp_s0, arg0->f8, arg0->f12, &sp54, &sp50, &sp4C);
-    arg0->f76 = sp4C;
-    FUN_00159a80(temp_s0, &sp48, &sp44, &sp40, &sp3C, &sp38, &sp34, &sp30);
-    arg0->f64 = sp48;
-    arg0->f72 = sp44;
-    arg0->f28 = sp40;
-    arg0->f32 = sp3C;
-    arg0->f36 = sp38;
-    arg0->f40 = sp34;
-    arg0->f84 = sp30;
+    FUN_00159320(arg0, temp_s0, arg0->f8, arg0->f12, &imageSize, &components, &bytesPerRow);
+    arg0->f76 = bytesPerRow;
+    FUN_00159a80(temp_s0, &bitsInt, &bitsIdx, &bitsRed, &bitsGrn, &bitsBlu, &bitsAlpha, &bitsDepth);
+    arg0->f64 = bitsInt;
+    arg0->f72 = bitsIdx;
+    arg0->f28 = bitsRed;
+    arg0->f32 = bitsGrn;
+    arg0->f36 = bitsBlu;
+    arg0->f40 = bitsAlpha;
+    arg0->f84 = bitsDepth;
     arg0->f24 = 0x64;
     return 1;
 }
@@ -1015,7 +1015,7 @@ int FUN_00158f40(void) {
 }
 
 int FUN_00158f50(S_158f50 *arg0, int arg1) {
-    int sp5C, sp58, sp54, sp50, sp4C, sp48, sp44;
+    int bitsInt, bitsIdx, bitsRed, bitsGrn, bitsBlu, bitsAlpha, bitsDepth;
     int r;
     if (arg0->f52 != 0 && arg0->f60 != 0) Memory_FreeBuffer((void *)arg0->f52);
     arg0->f52 = 0;
@@ -1030,34 +1030,34 @@ int FUN_00158f50(S_158f50 *arg0, int arg1) {
     if ((arg0->v37(arg1) & 0xFF) == 1) {
         if (arg0->f44 < 0) {
             arg0->f44 = FUN_00159f00(arg0->f16);
-            FUN_00159a80(arg0->f44, &sp5C, &sp58, &sp54, &sp50, &sp4C, &sp48, &sp44);
-            arg0->f64 = sp5C;
-            arg0->f72 = sp58;
-            arg0->f28 = sp54;
-            arg0->f32 = sp50;
-            arg0->f36 = sp4C;
-            arg0->f40 = sp48;
-            arg0->f84 = sp44;
+            FUN_00159a80(arg0->f44, &bitsInt, &bitsIdx, &bitsRed, &bitsGrn, &bitsBlu, &bitsAlpha, &bitsDepth);
+            arg0->f64 = bitsInt;
+            arg0->f72 = bitsIdx;
+            arg0->f28 = bitsRed;
+            arg0->f32 = bitsGrn;
+            arg0->f36 = bitsBlu;
+            arg0->f40 = bitsAlpha;
+            arg0->f84 = bitsDepth;
         }
         return 1;
     }
-    igSmartPointer<VStream_158f50> sp40((VStream_158f50 *)igFile_Create((int)igObject_GetAllocator((igObject *)arg0)));
-    int sp3C;
-    if (sp40.p->v23(arg1, "rb") == 0) {
+    igSmartPointer<VStream_158f50> file((VStream_158f50 *)igFile_Create((int)igObject_GetAllocator((igObject *)arg0)));
+    int signature;
+    if (file.p->v23(arg1, "rb") == 0) {
         return 0;
     }
-    sp40.p->v25(&sp3C, 4, 1);
-    switch (sp3C) {
+    file.p->v25(&signature, 4, 1);
+    switch (signature) {
     case 0x1F295FF4:
     case 0xF45F291F:
-        r = arg0->v42(sp40.p) & 0xFF;
+        r = arg0->v42(file.p) & 0xFF;
         return r;
     case 0x312A57F2:
     case 0xF2572A31:
-        r = FUN_00158cc0((S_158cc0 *)arg0, (void **)sp40.p) & 0xFF;
+        r = FUN_00158cc0((S_158cc0 *)arg0, (void **)file.p) & 0xFF;
         return r;
     default:
-        sp40.p->v24();
+        file.p->v24();
         return 0;
     }
 }
