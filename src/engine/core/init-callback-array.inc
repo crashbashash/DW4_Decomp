@@ -52,7 +52,7 @@ void igObjectSystem_Startup(ObjectSystemView *self) {
     Gap::Core::igFloatMetaField::arkRegister();
     Gap::Core::igLongMetaField::arkRegister();
     Gap::Core::igUnsignedCharMetaField::arkRegister();
-    (*(int *)&g_igRefMetaField_descriptor) = igRawRefMetaField_GetDefaultDescriptor();
+    Gap::Core::igRefMetaField::setMetaField(Gap::Core::igRawRefMetaField::getMetaField());
     g_currentMemoryContext->OnStartupComplete();
 }
 

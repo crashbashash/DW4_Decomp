@@ -45,8 +45,8 @@ CallbackArray *igRawRefArrayMetaField_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igRawRefArrayMetaField_metaObject,
-        igRawRefMetaField_Register,
-        igRawRefMetaField_GetPublishedMetaObject,
+        Gap::Core::igRawRefMetaField::arkRegisterInternal,
+        Gap::Core::igRawRefMetaField::getClassMeta,
         igRawRefArrayMetaField_GetMetaObjectFunction,
         "igRawRefArrayMetaField",
         0x3C,
@@ -59,10 +59,6 @@ CallbackArray *igRawRefArrayMetaField_Register(void) {
 
 void igRawRefArrayMetaField_GetMetaObjectFunction(void) {
     igRawRefArrayMetaField_GetMetaObject();
-}
-
-igMetaObject *igRawRefMetaField_GetPublishedMetaObject(void) {
-    return g_igRawRefMetaField_metaObject;
 }
 
 static FieldFactory g_igRawRefArrayMetaField_ctorTable[] = {
@@ -88,7 +84,6 @@ void igRawRefArrayMetaField_InitFields(void) {
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igRawRefArrayMetaField_fieldTable, g_igRawRefArrayMetaField_fieldDescriptors, g_igRawRefArrayMetaField_fieldOffsets, base);
 }
-
 
 void igRawRefArrayMetaField_CreateDefaultDescriptor(void) {
     igRawRefArrayMetaField *descriptor;

@@ -91,8 +91,8 @@ CallbackArray *igObjectRefMetaField_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igObjectRefMetaField_metaObject,
-        igRefMetaField_Register,
-        igRefMetaField_GetPublishedMetaObject,
+        Gap::Core::igRefMetaField::arkRegisterInternal,
+        Gap::Core::igRefMetaField::getClassMeta,
         igObjectRefMetaField_GetMetaObjectFunction,
         "igObjectRefMetaField",
         0x44,
@@ -144,7 +144,6 @@ void igObjectRefMetaField_InitFields(void) {
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igObjectRefMetaField_fieldTable, g_igObjectRefMetaField_fieldDescriptors, g_igObjectRefMetaField_fieldOffsets, base);
 }
-
 
 void igObjectRefMetaField_CreateDefaultDescriptor(void) {
     igObjectRefMetaField *descriptor;

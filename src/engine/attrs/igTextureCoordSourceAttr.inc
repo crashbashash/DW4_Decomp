@@ -92,7 +92,7 @@ void igTextureCoordSourceAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igTextureCoordSourceAttr_ctorTable, 3);
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base));
-    igEnumMetaField_SetDefaultValue((igMetaField *)field2, 0);
+    ((Gap::Core::igEnumMetaField *)field2)->setDefault(0);
     ((igEnumMetaField *)field2)->_getMetaEnumFunction = (int)&IG_GFX_TEXTURE_COORD_SOURCE_GetMetaEnum;
     field = igMetaObject_GetFieldAt(meta, base + 2);
     ((igMetaField *)field)->_invarianceFunction = (int)igTextureCoordSourceAttr_SynchronizeCachedUnitID;

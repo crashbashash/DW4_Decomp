@@ -178,7 +178,7 @@ void igImage_InitFields(void) {
     ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 3)))->setDefault(1);
     ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 4)))->setDefault(0x64);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 9));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, g_igImage_pfmtDefault);
+    ((Gap::Core::igEnumMetaField *)temp_v0)->setDefault(g_igImage_pfmtDefault);
     *(int *)((char *)(temp_v0) + 52) = (int)(&IG_GFX_TEXTURE_FORMAT_GetMetaEnum);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xA)))->setDefault(-2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xB));

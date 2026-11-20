@@ -134,7 +134,7 @@ void igSearchSceneGraph_InitFields(void) {
     secondRef = igMetaObject_GetFieldAt(meta, first + 2);
     *(int *)((char *)secondRef + 56) = (int)igMetaObject_GetOrCreateMetaObject();
     enumField = igMetaObject_GetFieldAt(meta, first + 3);
-    igEnumMetaField_SetDefaultValue((igMetaField *)enumField, 0);
+    ((Gap::Core::igEnumMetaField *)enumField)->setDefault(0);
     *(int *)((char *)enumField + 52) = (int)&FUN_00238d70;
     igMetaObject_NameFields(meta, g_igSearchSceneGraph_fieldTable, g_igSearchSceneGraph_fieldHandles, g_igSearchSceneGraph_fieldOffsets, first);
 }

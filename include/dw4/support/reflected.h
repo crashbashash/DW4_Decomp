@@ -20915,25 +20915,41 @@ typedef struct libNdmwRuntimePlugin {
 #include "dw4/core/igSmartPointer.h"
 #include "dw4/core/igStringRef.h"
 namespace Gap {
-namespace Core { class igBoolMetaField; class igCharMetaField; class igDoubleMetaField; class igFloatMetaField; class igIntMetaField; class igLongMetaField; class igMetaField; class igObject; class igShortMetaField; class igUnsignedCharMetaField; class igUnsignedIntMetaField; class igUnsignedLongMetaField; class igUnsignedShortMetaField; }
+namespace Core { class igBoolArrayMetaField; class igBoolMetaField; class igCharArrayMetaField; class igCharMetaField; class igDoubleArrayMetaField; class igDoubleMetaField; class igEnumMetaField; class igFloatArrayMetaField; class igFloatMetaField; class igIntArrayMetaField; class igIntMetaField; class igLongArrayMetaField; class igLongMetaField; class igMetaField; class igObject; class igRawRefMetaField; class igRefMetaField; class igShortArrayMetaField; class igShortMetaField; class igStructMetaField; class igUnsignedCharArrayMetaField; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
 namespace Gui { class igClearRenderer; class igRenderer; }
 namespace Insight { class igFlushRenderer; }
+using Core::igBoolArrayMetaField;
 using Core::igBoolMetaField;
+using Core::igCharArrayMetaField;
 using Core::igCharMetaField;
 using Gui::igClearRenderer;
+using Core::igDoubleArrayMetaField;
 using Core::igDoubleMetaField;
+using Core::igEnumMetaField;
+using Core::igFloatArrayMetaField;
 using Core::igFloatMetaField;
 using Insight::igFlushRenderer;
+using Core::igIntArrayMetaField;
 using Core::igIntMetaField;
+using Core::igLongArrayMetaField;
 using Core::igLongMetaField;
 using Core::igMetaField;
 using Core::igObject;
+using Core::igRawRefMetaField;
+using Core::igRefMetaField;
 using Gui::igRenderer;
+using Core::igShortArrayMetaField;
 using Core::igShortMetaField;
+using Core::igStructMetaField;
+using Core::igUnsignedCharArrayMetaField;
 using Core::igUnsignedCharMetaField;
+using Core::igUnsignedIntArrayMetaField;
 using Core::igUnsignedIntMetaField;
+using Core::igUnsignedLongArrayMetaField;
 using Core::igUnsignedLongMetaField;
+using Core::igUnsignedShortArrayMetaField;
 using Core::igUnsignedShortMetaField;
+using Core::igVirtualCFuncMetaField;
 }
 
 namespace Gap {
@@ -21109,7 +21125,7 @@ public:
     virtual void print(const igObject *src, unsigned int deep, const char *indent);
     virtual void traverse(igObject *obj, void *visitFunc, void *traversalData);
     virtual int addToDirectory(igObject *obj, igDirectory *dir);
-    virtual unsigned char compare(const igObject *obj1, const igObject *obj2) const;
+    virtual int compare(const igObject *obj1, const igObject *obj2) const;
     virtual int isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const;
     virtual int isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const;
     virtual int isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const;
@@ -21126,7 +21142,7 @@ public:
     virtual igStringRef getByString(const igObject *obj, igDirectory *dir);
     virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
     virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
-    virtual igStringRef convertMemoryToString(const void *mem, int num, igDirectory *dir);
+    virtual igStringRef convertMemoryToString(const void *mem, int num, igDirectory *dir, const char *hdr, int fieldIndent);
     virtual int convertStringToMemory(const char *val, void *mem, int num, igDirectory *dir);
     virtual void userPostRead();
     short getTypeIndex();
@@ -21153,6 +21169,26 @@ public:
 
 namespace Gap {
 namespace Core {
+/* handle 0x586998, 21 field(s), sizeof 56 (registered instance size) */
+class igBoolArrayMetaField : public Gap::Core::igBoolMetaField {
+public:
+    int _num;                                      /* +52   igIntMetaField */
+    IG_OBJECT_DEFINE(igBoolArrayMetaField)
+    IG_METAFIELD_SETUP(igBoolArrayMetaField)
+private:
+    static igMetaField *k_num;
+public:
+    inline void setNum(int numParam) { _num = numParam; }
+    inline int getNum() const { return _num; }
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
+    void setDefault(bool val);
+};
+}
+}
+
+namespace Gap {
+namespace Core {
 /* handle 0x586930, 20 field(s), sizeof 52 (registered instance size) */
 class igCharMetaField : public Gap::Core::igMetaField {
 public:
@@ -21163,6 +21199,26 @@ public:
     virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
     void setDefault(char def);
     virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x586940, 21 field(s), sizeof 56 (registered instance size) */
+class igCharArrayMetaField : public Gap::Core::igCharMetaField {
+public:
+    int _num;                                      /* +52   igIntMetaField */
+    IG_OBJECT_DEFINE(igCharArrayMetaField)
+    IG_METAFIELD_SETUP(igCharArrayMetaField)
+private:
+    static igMetaField *k_num;
+public:
+    inline void setNum(int numParam) { _num = numParam; }
+    inline int getNum() const { return _num; }
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
+    void setDefault(unsigned int index, char val);
 };
 }
 }
@@ -21222,6 +21278,46 @@ public:
 
 namespace Gap {
 namespace Core {
+/* handle 0x586648, 21 field(s), sizeof 56 (registered instance size) */
+class igDoubleArrayMetaField : public Gap::Core::igDoubleMetaField {
+public:
+    int _num;                                      /* +52   igIntMetaField */
+    IG_OBJECT_DEFINE(igDoubleArrayMetaField)
+    IG_METAFIELD_SETUP(igDoubleArrayMetaField)
+private:
+    static igMetaField *k_num;
+public:
+    inline void setNum(int numParam) { _num = numParam; }
+    inline int getNum() const { return _num; }
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x586598, 21 field(s), sizeof 56 (registered instance size) */
+class igEnumMetaField : public Gap::Core::igMetaField {
+public:
+    int _getMetaEnumFunction;                      /* +52   igRawRefMetaField */
+    IG_BOOTSTRAP_OBJECT_DEFINE(igEnumMetaField)
+    IG_METAFIELD_SETUP(igEnumMetaField)
+private:
+    static igMetaField *k_getMetaEnumFunction;
+public:
+    virtual unsigned short computeSize();
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(const int &def);
+    virtual int computeRequiredAlignment();
+    inline const igMetaEnum *getMetaEnum() const { return ((igMetaEnum *(*)())_getMetaEnumFunction)(); }
+};
+}
+}
+
+namespace Gap {
+namespace Core {
 /* handle 0x586378, 20 field(s), sizeof 52 (registered instance size) */
 class igFloatMetaField : public Gap::Core::igMetaField {
 public:
@@ -21232,6 +21328,25 @@ public:
     virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
     void setDefault(float def);
     virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x586388, 21 field(s), sizeof 56 (registered instance size) */
+class igFloatArrayMetaField : public Gap::Core::igFloatMetaField {
+public:
+    int _num;                                      /* +52   igIntMetaField */
+    IG_OBJECT_DEFINE(igFloatArrayMetaField)
+    IG_METAFIELD_SETUP(igFloatArrayMetaField)
+private:
+    static igMetaField *k_num;
+public:
+    inline void setNum(int numParam) { _num = numParam; }
+    inline int getNum() const { return _num; }
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
 };
 }
 }
@@ -21268,6 +21383,26 @@ public:
 
 namespace Gap {
 namespace Core {
+/* handle 0x586108, 21 field(s), sizeof 56 (registered instance size) */
+class igIntArrayMetaField : public Gap::Core::igIntMetaField {
+public:
+    int _num;                                      /* +52   igIntMetaField */
+    IG_OBJECT_DEFINE(igIntArrayMetaField)
+    IG_METAFIELD_SETUP(igIntArrayMetaField)
+private:
+    static igMetaField *k_num;
+public:
+    inline void setNum(int numParam) { _num = numParam; }
+    inline int getNum() const { return _num; }
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
+    void setDefault(int val);
+};
+}
+}
+
+namespace Gap {
+namespace Core {
 /* handle 0x586050, 20 field(s), sizeof 52 (registered instance size) */
 class igLongMetaField : public Gap::Core::igMetaField {
 public:
@@ -21284,6 +21419,73 @@ public:
 
 namespace Gap {
 namespace Core {
+/* handle 0x586060, 21 field(s), sizeof 56 (registered instance size) */
+class igLongArrayMetaField : public Gap::Core::igLongMetaField {
+public:
+    int _num;                                      /* +52   igIntMetaField */
+    IG_OBJECT_DEFINE(igLongArrayMetaField)
+    IG_METAFIELD_SETUP(igLongArrayMetaField)
+private:
+    static igMetaField *k_num;
+public:
+    inline void setNum(int numParam) { _num = numParam; }
+    inline int getNum() const { return _num; }
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585a60, 22 field(s), sizeof 56 (registered instance size) */
+class igRefMetaField : public Gap::Core::igMetaField {
+public:
+    unsigned char _construct;                      /* +52   igBoolMetaField */
+    unsigned char _destruct;                       /* +53   igBoolMetaField */
+    char _pad54[2];
+    IG_BOOTSTRAP_ABSTRACT_OBJECT_DEFINE(igRefMetaField)
+    IG_METAFIELD_SETUP(igRefMetaField)
+protected:
+    static igMetaField *k_construct;
+    static igMetaField *k_destruct;
+public:
+    inline void setConstruct(bool constructParam) { _construct = constructParam; }
+    inline bool getConstruct() const { return _construct; }
+    inline void setDestruct(bool destructParam) { _destruct = destructParam; }
+    inline bool getDestruct() const { return _destruct; }
+    virtual unsigned short computeSize();
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    virtual int constructPerformsReset() const;
+    virtual void commission(igObject *src);
+    virtual void decommission(igObject *src);
+    virtual int writeRawFieldMemory(const void *fieldMem, void *dstMem, igDirectory *dir, bool endianSwap) const;
+    virtual int readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const;
+    virtual igStringRef convertMemoryToString(const void *mem, int num, igDirectory *dir, const char *hdr, int fieldIndent);
+    virtual int convertStringToMemory(const char *val, void *mem, int num, igDirectory *dir);
+    virtual int compare(const igObject *obj1, const igObject *obj2) const;
+    virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585a80, 22 field(s), sizeof 56 (registered instance size) */
+class igRawRefMetaField : public Gap::Core::igRefMetaField {
+public:
+    IG_BOOTSTRAP_OBJECT_DEFINE(igRawRefMetaField)
+    IG_METAFIELD_SETUP(igRawRefMetaField)
+    virtual unsigned short computeSize();
+    virtual void print(const igObject *src, unsigned int deep, const char *indent);
+    virtual int addToDirectory(igObject *obj, igDirectory *dir);
+};
+}
+}
+
+namespace Gap {
+namespace Core {
 /* handle 0x585948, 20 field(s), sizeof 52 (registered instance size) */
 class igShortMetaField : public Gap::Core::igMetaField {
 public:
@@ -21293,6 +21495,56 @@ public:
     virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
     virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
     void setDefault(short def);
+    virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585958, 21 field(s), sizeof 56 (registered instance size) */
+class igShortArrayMetaField : public Gap::Core::igShortMetaField {
+public:
+    int _num;                                      /* +52   igIntMetaField */
+    IG_OBJECT_DEFINE(igShortArrayMetaField)
+    IG_METAFIELD_SETUP(igShortArrayMetaField)
+private:
+    static igMetaField *k_num;
+public:
+    inline void setNum(int numParam) { _num = numParam; }
+    inline int getNum() const { return _num; }
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585880, 23 field(s), sizeof 64 (registered instance size) */
+class igStructMetaField : public Gap::Core::igMetaField {
+public:
+    int _alignment;                                /* +52   igIntMetaField */
+    int _cppConstructor;                           /* +56   igRawRefMetaField */
+    int _cppDestructor;                            /* +60   igRawRefMetaField */
+    IG_OBJECT_DEFINE(igStructMetaField)
+    IG_METAFIELD_SETUP(igStructMetaField)
+private:
+    static igUnsignedShortMetaField *k_size;
+    static igMetaField *k_alignment;
+    static igMetaField *k_cppConstructor;
+    static igMetaField *k_cppDestructor;
+public:
+    inline void setAlignment(int alignmentParam) { _alignment = alignmentParam; }
+    inline int getAlignment() const { return _alignment; }
+    virtual unsigned short computeSize();
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    virtual void construct(igObject *src);
+    virtual void destruct(igObject *src);
+    virtual void resetByValue(igObject *src);
+    virtual void resetByReference(igObject *src);
+    virtual int constructPerformsReset() const;
     virtual int computeRequiredAlignment();
 };
 }
@@ -21316,6 +21568,25 @@ public:
 
 namespace Gap {
 namespace Core {
+/* handle 0x585770, 21 field(s), sizeof 56 (registered instance size) */
+class igUnsignedCharArrayMetaField : public Gap::Core::igUnsignedCharMetaField {
+public:
+    int _num;                                      /* +52   igIntMetaField */
+    IG_OBJECT_DEFINE(igUnsignedCharArrayMetaField)
+    IG_METAFIELD_SETUP(igUnsignedCharArrayMetaField)
+private:
+    static igMetaField *k_num;
+public:
+    inline void setNum(int numParam) { _num = numParam; }
+    inline int getNum() const { return _num; }
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
+};
+}
+}
+
+namespace Gap {
+namespace Core {
 /* handle 0x585738, 20 field(s), sizeof 52 (registered instance size) */
 class igUnsignedIntMetaField : public Gap::Core::igMetaField {
 public:
@@ -21326,6 +21597,25 @@ public:
     virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
     void setDefault(unsigned int def);
     virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585748, 21 field(s), sizeof 56 (registered instance size) */
+class igUnsignedIntArrayMetaField : public Gap::Core::igUnsignedIntMetaField {
+public:
+    int _num;                                      /* +52   igIntMetaField */
+    IG_OBJECT_DEFINE(igUnsignedIntArrayMetaField)
+    IG_METAFIELD_SETUP(igUnsignedIntArrayMetaField)
+private:
+    static igMetaField *k_num;
+public:
+    inline void setNum(int numParam) { _num = numParam; }
+    inline int getNum() const { return _num; }
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
 };
 }
 }
@@ -21348,6 +21638,25 @@ public:
 
 namespace Gap {
 namespace Core {
+/* handle 0x585720, 21 field(s), sizeof 56 (registered instance size) */
+class igUnsignedLongArrayMetaField : public Gap::Core::igUnsignedLongMetaField {
+public:
+    int _num;                                      /* +52   igIntMetaField */
+    IG_OBJECT_DEFINE(igUnsignedLongArrayMetaField)
+    IG_METAFIELD_SETUP(igUnsignedLongArrayMetaField)
+private:
+    static igMetaField *k_num;
+public:
+    inline void setNum(int numParam) { _num = numParam; }
+    inline int getNum() const { return _num; }
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
+};
+}
+}
+
+namespace Gap {
+namespace Core {
 /* handle 0x5856e8, 20 field(s), sizeof 52 (registered instance size) */
 class igUnsignedShortMetaField : public Gap::Core::igMetaField {
 public:
@@ -21358,6 +21667,42 @@ public:
     virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
     void setDefault(unsigned short def);
     virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x5856f8, 21 field(s), sizeof 56 (registered instance size) */
+class igUnsignedShortArrayMetaField : public Gap::Core::igUnsignedShortMetaField {
+public:
+    int _num;                                      /* +52   igIntMetaField */
+    IG_OBJECT_DEFINE(igUnsignedShortArrayMetaField)
+    IG_METAFIELD_SETUP(igUnsignedShortArrayMetaField)
+private:
+    static igMetaField *k_num;
+public:
+    inline void setNum(int numParam) { _num = numParam; }
+    inline int getNum() const { return _num; }
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x5856d8, 20 field(s), sizeof 52 (registered instance size) */
+class igVirtualCFuncMetaField : public Gap::Core::igMetaField {
+public:
+    IG_OBJECT_DEFINE(igVirtualCFuncMetaField)
+    IG_METAFIELD_SETUP(igVirtualCFuncMetaField)
+    virtual unsigned short computeSize();
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    virtual int computeRequiredAlignment();
+    virtual void resetByValue(igObject *src);
+    virtual void resetByReference(igObject *src);
 };
 }
 }

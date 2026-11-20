@@ -1644,7 +1644,7 @@ void igMovieInfo_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_igMovieInfo_ctorTable, 0x15);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField), 0);
     typeField = (igEnumMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 1);
-    igEnumMetaField_SetDefaultValue((igMetaField *)typeField, 0);
+    ((Gap::Core::igEnumMetaField *)typeField)->setDefault(0);
     typeField->_getMetaEnumFunction = (int)igMovieInfo_GetMovieTypeMetaEnum;
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 3)))->setDefault(-1);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 4)))->setDefault(-1);
@@ -1653,11 +1653,11 @@ void igMovieInfo_InitFields(void) {
     videoTexturesField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 7);
     videoTexturesField->_metaObject = (int)igTextureBindAttrList_GetOrCreateMetaObject();
     minificationFilterField = (igEnumMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 8);
-    igEnumMetaField_SetDefaultValue((igMetaField *)minificationFilterField, 0);
+    ((Gap::Core::igEnumMetaField *)minificationFilterField)->setDefault(0);
     /* matching construct: a function-pointer store; an int store pools the getter addresses in .data */
     *(void (**)(void))&minificationFilterField->_getMetaEnumFunction = (void (*)())IG_GFX_TEXTURE_FILTER_GetMetaEnum;
     magnificationFilterField = (igEnumMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 9);
-    igEnumMetaField_SetDefaultValue((igMetaField *)magnificationFilterField, 0);
+    ((Gap::Core::igEnumMetaField *)magnificationFilterField)->setDefault(0);
     *(void (**)(void))&magnificationFilterField->_getMetaEnumFunction = (void (*)())IG_GFX_TEXTURE_FILTER_GetMetaEnum;
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xA)))->setDefault(-1);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xB)))->setDefault(-1);
@@ -1666,7 +1666,7 @@ void igMovieInfo_InitFields(void) {
     codecField->_metaObject = (int)igMovieCodec_GetOrCreateMetaObject();
     codecField->_persistent = 0;
     stateField = (igEnumMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xE);
-    igEnumMetaField_SetDefaultValue((igMetaField *)stateField, 1);
+    ((Gap::Core::igEnumMetaField *)stateField)->setDefault(1);
     stateField->_getMetaEnumFunction = (int)igMovieInfo_GetMovieStateMetaEnum;
     sceneInfoField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xF);
     sceneInfoField->_metaObject = (int)igSceneInfo_GetOrCreateMetaObject();
@@ -1678,7 +1678,7 @@ void igMovieInfo_InitFields(void) {
     runtimeTexturesField->_metaObject = (int)igTextureList_GetOrCreateMetaObject();
     runtimeTexturesField->_persistent = 0;
     imageFormatField = (igEnumMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x12);
-    igEnumMetaField_SetDefaultValue((igMetaField *)imageFormatField, 7);
+    ((Gap::Core::igEnumMetaField *)imageFormatField)->setDefault(7);
     imageFormatField->_persistent = 0;
     imageFormatField->_getMetaEnumFunction = (int)IG_GFX_TEXTURE_FORMAT_GetMetaEnum;
     userdataField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x13);

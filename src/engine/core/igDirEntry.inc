@@ -134,11 +134,11 @@ void igDirEntry_InitFields(void) {
     ((Gap::Core::igIntMetaField *)indexField)->setDefault(-1);
     ((igIntMetaField *)indexField)->_persistent = 0;
     resolveMethodField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 1)));
-    igEnumMetaField_SetDefaultValue((igMetaField *)resolveMethodField, 0);
+    ((Gap::Core::igEnumMetaField *)resolveMethodField)->setDefault(0);
     ((igEnumMetaField *)resolveMethodField)->_persistent = 0;
     ((igEnumMetaField *)resolveMethodField)->_getMetaEnumFunction = (int)(&igDirEntry_GetResolveMethodMetaEnum);
     refTypeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2)));
-    igEnumMetaField_SetDefaultValue((igMetaField *)refTypeField, 0);
+    ((Gap::Core::igEnumMetaField *)refTypeField)->setDefault(0);
     ((igEnumMetaField *)refTypeField)->_persistent = 0;
     ((igEnumMetaField *)refTypeField)->_getMetaEnumFunction = (int)(igDirEntry_GetRefTypeMetaEnum);
     *(char *)((char *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 3))) + 38) = 0;

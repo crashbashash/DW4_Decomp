@@ -101,18 +101,18 @@ void igStencilFunctionAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igStencilFunctionAttr_ctorTable, 7);
     field = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
-    igEnumMetaField_SetDefaultValue((igMetaField *)field, g_igStencilFunctionAttr_funcDefault);
+    ((Gap::Core::igEnumMetaField *)field)->setDefault(g_igStencilFunctionAttr_funcDefault);
     *(void **)&((igEnumMetaField *)field)->_getMetaEnumFunction = (void *)IG_GFX_STENCIL_FUNCTION_GetMetaEnum;
     ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)))->setDefault(-1);
     ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)))->setDefault(-1);
     field = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
-    igEnumMetaField_SetDefaultValue((igMetaField *)field, 0);
+    ((Gap::Core::igEnumMetaField *)field)->setDefault(0);
     *(void **)&((igEnumMetaField *)field)->_getMetaEnumFunction = (void *)IG_GFX_STENCIL_OPERATION_GetMetaEnum;
     field = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5));
-    igEnumMetaField_SetDefaultValue((igMetaField *)field, 0);
+    ((Gap::Core::igEnumMetaField *)field)->setDefault(0);
     *(void **)&((igEnumMetaField *)field)->_getMetaEnumFunction = (void *)IG_GFX_STENCIL_OPERATION_GetMetaEnum;
     field = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6));
-    igEnumMetaField_SetDefaultValue((igMetaField *)field, 0);
+    ((Gap::Core::igEnumMetaField *)field)->setDefault(0);
     *(void **)&((igEnumMetaField *)field)->_getMetaEnumFunction = (void *)IG_GFX_STENCIL_OPERATION_GetMetaEnum;
     igMetaObject_NameFields((igMetaObject *)meta, g_igStencilFunctionAttr_fieldTable, g_igStencilFunctionAttr_fieldHandles, g_igStencilFunctionAttr_fieldOffsets, base);
 }

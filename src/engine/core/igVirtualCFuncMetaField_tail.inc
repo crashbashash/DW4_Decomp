@@ -1,56 +1,51 @@
-int igVirtualCFuncMetaField_ValueFromString(int self, int value, int text) {
+namespace Gap {
+namespace Core {
+
+int igVirtualCFuncMetaField::setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir)
+{
     int consumed;
 
     consumed = 0;
-    sscanf((const char *)text, "0x%08x%n", value, &consumed);
+    sscanf(strVal, "0x%08x%n", (int *)dstMem, &consumed);
     return consumed;
 }
 
-void igVirtualCFuncMetaField_ValueToString(int *out, int self, int *value) {
-    char text[1024];
-    int pool;
-    int interned;
+igStringRef igVirtualCFuncMetaField::getStringFromMemory(const void *srcMem, igDirectory *dir)
+{
+    char buffer[1024];
 
-    sprintf(text, (const char *)&text_0x_08x[0], *value);
-    if (text == 0) {
-        interned = 0;
-    } else {
-        if (g_stringPool == 0) {
-            pool = ((int)StringPool_Allocate(0x10));
-            if (pool != 0) {
-                pool = ((int)StringPool_Construct((StringPool *)pool));
-            }
-            g_stringPool = (StringPool *)pool;
-        }
-        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)text);
-    }
-    *out = interned;
+    sprintf(buffer, (const char *)&text_0x_08x[0], *(const int *)srcMem);
+    return igStringRef(buffer);
 }
 
-int igVirtualCFuncMetaField_GetSize(void) {
+unsigned short igVirtualCFuncMetaField::computeSize()
+{
     return 4;
 }
 
-void igVirtualCFuncMetaField_SetToDefault(void *field, int object) {
- if (object != 0) {
-int offset = *(int *)((igMetaField *)field)->_default;
- int vtable = *(int *)(object + g_objectSystem->vtableProbeOffset);
- ((igMetaFieldView *)field)->SetValue(object, vtable + offset);
-}
-}
-
-void igVirtualCFuncMetaField_CopyDefaultToValue(int *field, int object) {
-    if (object != 0) {
-        int *defaultOffset = (int *)((igMetaField *)field)->_default;
-        int vtable = *(int *)(object + g_objectSystem->vtableProbeOffset);
-        ((igMetaFieldView *)field)->SetValue(object, vtable + *defaultOffset);
+void igVirtualCFuncMetaField::resetByValue(igObject *src)
+{
+    if (src != 0) {
+        int offset = *(int *)_default;
+        char *vtable = *(char **)((char *)src + g_objectSystem->vtableProbeOffset);
+        setFromMemory(src, vtable + offset);
     }
 }
 
-/* igVirtualCFuncMetaField override of the igMetaField slot at vtable +0x6c (slot 27): returns 4.
- * Base igMetaField returns -1 and the ref fields also return 4. The receiver is not read. */
-int igVirtualCFuncMetaField_GetAlignment(void) {
+void igVirtualCFuncMetaField::resetByReference(igObject *src)
+{
+    if (src != 0) {
+        int offset = *(int *)_default;
+        char *vtable = *(char **)((char *)src + g_objectSystem->vtableProbeOffset);
+        setFromMemory(src, vtable + offset);
+    }
+}
+
+int igVirtualCFuncMetaField::computeRequiredAlignment()
+{
     return 4;
+}
+}
 }
 
 char *g_arenaTriggerEventNames[4] = { "None", "Alloc", "Free", "" };

@@ -186,7 +186,7 @@ void igMallocMemoryPool_InitFields(void) {
     allocationLock->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
     messageLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 8);
     defaultMessageLevel = g_igMallocMemoryPool_defaultMessageLevel;
-    igEnumMetaField_SetDefaultValue((igMetaField *)messageLevel, defaultMessageLevel);
+    ((Gap::Core::igEnumMetaField *)messageLevel)->setDefault(defaultMessageLevel);
     messageLevel->_getMetaEnumFunction = (int)igMallocMemoryPool_GetMessageLevelMetaEnum;
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 9)))->setDefault(g_igMallocMemoryPool_defaultPoolOptionFlags);
     igMetaObject_NameFields(meta, g_igMallocMemoryPool_fieldTable, g_igMallocMemoryPool_fieldDescriptors, g_igMallocMemoryPool_fieldOffsets, base);

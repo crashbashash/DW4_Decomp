@@ -113,34 +113,6 @@ void *igMemoryRefMetaField_Destroy(igMemoryRefMetaField *self, long long flags) 
     return self;
 }
 
-void *igRefMetaField_Destroy(igRefMetaField *self, short flags) {
-    void *p;
-    int *h;
-    int rc;
-
-    if (self != 0) {
-        self->_vtable = (int)&g_igRefMetaField_vtable[0];
-        if (self != 0) {
-            self->_vtable = (int)&g_igMetaField_vtable[0];
-            if (&self->_fieldName) {
-                p = (void *)self->_fieldName;
-                if (p != 0) {
-                    h = (int *)((char *)(p) - 8);
-                    rc = *(int *)((char *)(p) - 4) - 1;
-                    *(int *)((char *)(p) - 4) = rc;
-                    if (rc == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)(*h), (StringTokenHeader *)h);
-                    }
-                }
-            }
-        }
-        if (flags > 0) {
-            Memory_FreeBufferAliasC(self);
-        }
-    }
-    return self;
-}
-
 void igMemoryRefMetaField_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igMemoryRefMetaField_Register);
@@ -152,8 +124,8 @@ CallbackArray *igMemoryRefMetaField_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igMemoryRefMetaField_metaObject,
-        igRefMetaField_Register,
-        igRefMetaField_GetPublishedMetaObject,
+        Gap::Core::igRefMetaField::arkRegisterInternal,
+        Gap::Core::igRefMetaField::getClassMeta,
         igMemoryRefMetaField_GetMetaObjectFunction,
         "igMemoryRefMetaField",
         0x50,
@@ -237,7 +209,7 @@ void igMemoryRefMetaField_InitFields(void) {
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_resetMethod));
     field = (igMetaField *)igEnumMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     ((Gap::Core::igMetaField *)field)->setBasicProperties((const char *)text_resetMethod, (Gap::Core::igMetaField **)&g_igMemoryRefMetaField_resetMethodStorage, 0x24, meta);
-    igEnumMetaField_SetDefaultValue((igMetaField *)field, g_igMemoryRefMetaField_resetMethodDefault);
+    ((Gap::Core::igEnumMetaField *)field)->setDefault(g_igMemoryRefMetaField_resetMethodDefault);
     ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)igMetaField_GetResetTypeMetaEnum;
     field->_externalEnumStorage = (int)&g_igMemoryRefMetaField_resetMethodStorage;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);
@@ -249,7 +221,6 @@ void igMemoryRefMetaField_InitFields(void) {
     ref->_deepCopyMethod = 1;
     igMetaObject_NameFields(meta, g_igMemoryRefMetaField_fieldTable, g_igMemoryRefMetaField_fieldDescriptors, g_igMemoryRefMetaField_fieldOffsets, base);
 }
-
 
 void igMemoryRefMetaField_CreateDefaultDescriptor(void) {
     igMemoryRefMetaField *descriptor;

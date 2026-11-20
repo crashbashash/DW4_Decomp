@@ -125,10 +125,10 @@ void igFile_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_igFile_ctorTable, 8);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, base), "DefaultFileName");
     readMode = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    igEnumMetaField_SetDefaultValue((igMetaField *)readMode, 0);
+    ((Gap::Core::igEnumMetaField *)readMode)->setDefault(0);
     ((igEnumMetaField *)readMode)->_getMetaEnumFunction = (int)(&igFile_GetReadModeMetaEnum);
     openMode = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    igEnumMetaField_SetDefaultValue((igMetaField *)openMode, 0);
+    ((Gap::Core::igEnumMetaField *)openMode)->setDefault(0);
     ((igEnumMetaField *)openMode)->_getMetaEnumFunction = (int)(&igFile_GetOpenModeMetaEnum);
     ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3))->_persistent = 0;
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)))->setDefault(0x100000);

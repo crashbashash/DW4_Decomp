@@ -309,6 +309,40 @@ class FlatCasts(unittest.TestCase):
         self.assertEqual(w.cast_to("igMetaObject *", "m", "int"), "(igMetaObject *)m")
         self.assertEqual(w.cast_to("igMetaField *", "f", "igMetaField *"), "f")
 
+    def test_a_converted_class_is_released_as_the_flat_root(self):
+        w = odl.Writer(None, set(), {"igObject": "Core", "igUnsignedShortMetaField": "Core"}, {}, {}, {}, None)
+        self.assertEqual(w.cast_to("igObject *", "metaField", "igUnsignedShortMetaField *"),
+                         "(::igObject *)metaField")
+
+
+class MemberCalls(unittest.TestCase):
+    def test_a_converted_class_member_is_called_on_its_receiver(self):
+        lib = types.SimpleNamespace(role_at={}, parent={"igIntMetaField": "igMetaField"})
+        rows = {"igIntMetaField": ["IG_BOOTSTRAP_OBJECT_DEFINE(igIntMetaField)", "void setDefault(int def);"],
+                "igMetaField": ["protected: static igMetaField *_MetaField;", "void validate();"]}
+        w = odl.Writer(lib, set(), {"igIntMetaField": "Core", "igMetaField": "Core"},
+                       {0x1000: "setDefault__Q33Gap4Core14igIntMetaFieldFi",
+                        0x2000: "validate__Q33Gap4Core11igMetaFieldFv"}, {}, {}, None, rows)
+        ctx = {"cls": "igIntArrayMetaField", "names": {("ret", 0): "metaField"},
+               "types": {("ret", 0): "igIntMetaField"}, "start": None}
+        call = {"k": "call", "target": 0x1000, "args": [("ret", 0), ("k", 1)], "fargs": [], "stack": {}}
+        self.assertEqual(w.call_expr(call, 1, [], ctx), "metaField->setDefault(1)")
+        # a member inherited from the parent's rows: a subclass receiver as it is, another one cast
+        call = {"k": "call", "target": 0x2000, "args": [("ret", 0)], "fargs": [], "stack": {}}
+        self.assertEqual(w.call_expr(call, 1, [], ctx), "metaField->validate()")
+        ctx["types"][("ret", 0)] = "igMetaObject"
+        self.assertEqual(w.call_expr(call, 1, [], ctx), "((igMetaField *)metaField)->validate()")
+        self.assertIsNone(w.member_signature("Gap::Core::igMetaField::_MetaField"))
+
+    def test_a_macro_declared_member_is_handed_over_bare_in_its_class(self):
+        lib = types.SimpleNamespace(role_at={}, parent={})
+        w = odl.Writer(lib, set(), {"igIntArrayMetaField": "Core"},
+                       {0x1000: "arkRegisterMetaValidate__Q33Gap4Core19igIntArrayMetaFieldFv"}, {}, {}, None, {})
+        self.assertEqual(w.callback(0x1000, "igIntArrayMetaField", "igMetaObjectCallback", ("void", [])),
+                         "arkRegisterMetaValidate")
+        self.assertEqual(w.callback(0x1000, "igOther", "igMetaObjectCallback", ("void", [])),
+                         "Gap::Core::igIntArrayMetaField::arkRegisterMetaValidate")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -524,15 +524,15 @@ int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igI
         if (field->_isRunTime != 0) {
             runTimeFields += 1;
             ((igMetaFieldView *)field)->ConstructValue((int)object);
-            if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) == 0 || ((igRefMetaField *)field)->_construct == 0) ((Gap::Core::igMetaField *)field)->reset((Gap::Core::igObject *)object);
+            if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)Gap::Core::igRefMetaField::getClassMeta()) == 0 || ((igRefMetaField *)field)->_construct == 0) ((Gap::Core::igMetaField *)field)->reset((Gap::Core::igObject *)object);
         } else if (readFields >= head->fieldCount) {
             ((igMetaFieldView *)field)->ConstructValue((int)object);
-            if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) == 0 || ((igRefMetaField *)field)->_construct == 0) ((Gap::Core::igMetaField *)field)->reset((Gap::Core::igObject *)object);
+            if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)Gap::Core::igRefMetaField::getClassMeta()) == 0 || ((igRefMetaField *)field)->_construct == 0) ((Gap::Core::igMetaField *)field)->reset((Gap::Core::igObject *)object);
         } else {
             if (endianSwap) Gap::Core::igShortMetaField::getMetaField()->endianSwapMemory(data, 2);
             if (i < *(short *)data + runTimeFields) {
                 ((igMetaFieldView *)field)->ConstructValue((int)object);
-                if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) == 0 || ((igRefMetaField *)field)->_construct == 0) ((Gap::Core::igMetaField *)field)->reset((Gap::Core::igObject *)object);
+                if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)Gap::Core::igRefMetaField::getClassMeta()) == 0 || ((igRefMetaField *)field)->_construct == 0) ((Gap::Core::igMetaField *)field)->reset((Gap::Core::igObject *)object);
                 if (endianSwap) Gap::Core::igShortMetaField::getMetaField()->endianSwapMemory(data, 2);
             } else {
                 readFields += 1;
@@ -584,7 +584,7 @@ int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead 
         field = (igMetaFieldView *)igMetaObject_GetFieldAt(meta, i);
         if (i < limit) {
             field->ConstructValue((int)object);
-            if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) == 0 || ((igRefMetaField *)field)->_construct == 0) {
+            if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)Gap::Core::igRefMetaField::getClassMeta()) == 0 || ((igRefMetaField *)field)->_construct == 0) {
                 ((Gap::Core::igMetaField *)field)->reset((Gap::Core::igObject *)object);
             }
         } else {

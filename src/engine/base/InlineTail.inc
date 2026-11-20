@@ -828,7 +828,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
             return true;
         }
     }
-    if (((Gap::Core::igObject *)field)->isOfType(g_igEnumMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)field)->isOfType(Gap::Core::igEnumMetaField::getClassMeta()) != 0) {
         int value;
         if (igRegistry_GetValueInt(registry, section, stringObjText(*key), &value, 0, 0)) {
             *(int *)((char *)object + field->_offset) = value;
@@ -1501,12 +1501,12 @@ int FUN_0022df20(void *arg0, int arg1, void *arg2, int arg3, int arg4) {
     int r;
     void *a;
     void *b;
-    if (arg0 != 0 && ((Gap::Core::igObject *)arg0)->isOfType(g_igEnumMetaField_metaObject) != 0) {
+    if (arg0 != 0 && ((Gap::Core::igObject *)arg0)->isOfType(Gap::Core::igEnumMetaField::getClassMeta()) != 0) {
         a = arg0;
     } else {
         a = 0;
     }
-    if (arg2 != 0 && ((Gap::Core::igObject *)arg2)->isOfType(g_igEnumMetaField_metaObject) != 0) {
+    if (arg2 != 0 && ((Gap::Core::igObject *)arg2)->isOfType(Gap::Core::igEnumMetaField::getClassMeta()) != 0) {
         b = arg2;
     } else {
         b = 0;

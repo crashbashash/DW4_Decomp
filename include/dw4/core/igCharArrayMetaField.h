@@ -7,7 +7,6 @@ struct igMetaField;
 #ifdef __cplusplus
 extern "C" {
 #endif
-void igCharArrayMetaField_SetDefaultElement(void *self, int index, char value);
 struct igMetaField *igCharArrayMetaField_Create(struct igMemoryPoolView *pool);
 
 #ifdef __cplusplus

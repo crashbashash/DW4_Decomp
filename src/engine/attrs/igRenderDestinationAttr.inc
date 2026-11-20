@@ -223,11 +223,11 @@ void igRenderDestinationAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igRenderDestinationAttr_ctorTable, 0xE);
     field3 = (void *)(igMetaObject_GetFieldAt(meta, base));
-    igEnumMetaField_SetDefaultValue((igMetaField *)field3, 0);
+    ((Gap::Core::igEnumMetaField *)field3)->setDefault(0);
     ((igMetaField *)field3)->_persistent = 0;
     ((igEnumMetaField *)field3)->_getMetaEnumFunction = (int)(&igRenderDestinationAttr_GetCreateModeMetaEnum);
     field6 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    igEnumMetaField_SetDefaultValue((igMetaField *)field6, 0);
+    ((Gap::Core::igEnumMetaField *)field6)->setDefault(0);
     ((igMetaField *)field6)->_persistent = 0;
     ((igEnumMetaField *)field6)->_getMetaEnumFunction = (int)(&igRenderDestinationAttr_GetTextureCreateModeMetaEnum);
     field7 = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
@@ -244,7 +244,7 @@ void igRenderDestinationAttr_InitFields(void) {
     ((igObjectRefMetaField *)field)->_metaObject = (int)igTextureAttr_GetOrCreateMetaObject();
     ((igMetaField *)field)->_persistent = 0;
     field9 = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
-    igEnumMetaField_SetDefaultValue((igMetaField *)field9, g_igRenderDestinationAttr_iTypeDefault);
+    ((Gap::Core::igEnumMetaField *)field9)->setDefault(g_igRenderDestinationAttr_iTypeDefault);
     ((igEnumMetaField *)field9)->_getMetaEnumFunction = (int)(&IG_GFX_RENDERDESTINATION_TYPE_GetMetaEnum);
     field10 = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
     ((Gap::Core::igIntMetaField *)field10)->setDefault(-1);

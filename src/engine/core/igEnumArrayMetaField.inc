@@ -55,8 +55,8 @@ CallbackArray *igEnumArrayMetaField_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igEnumArrayMetaField_metaObject,
-        igEnumMetaField_Register,
-        igEnumMetaField_GetPublishedMetaObject,
+        Gap::Core::igEnumMetaField::arkRegisterInternal,
+        Gap::Core::igEnumMetaField::getClassMeta,
         igEnumArrayMetaField_GetMetaObjectFunction,
         "igEnumArrayMetaField",
         0x3C,
@@ -69,10 +69,6 @@ CallbackArray *igEnumArrayMetaField_Register(void) {
 
 void igEnumArrayMetaField_GetMetaObjectFunction(void) {
     igEnumArrayMetaField_GetMetaObject();
-}
-
-igMetaObject *igEnumMetaField_GetPublishedMetaObject(void) {
-    return g_igEnumMetaField_metaObject;
 }
 
 static FieldFactory g_igEnumArrayMetaField_ctorTable[] = {
@@ -98,7 +94,6 @@ void igEnumArrayMetaField_InitFields(void) {
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igEnumArrayMetaField_fieldTable, g_igEnumArrayMetaField_fieldDescriptors, g_igEnumArrayMetaField_fieldOffsets, base);
 }
-
 
 void igEnumArrayMetaField_CreateDefaultDescriptor(void) {
     int *s0;

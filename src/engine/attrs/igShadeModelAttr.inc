@@ -74,7 +74,7 @@ void igShadeModelAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igShadeModelAttr_ctorTable, 1);
     field = (void *)(igMetaObject_GetFieldAt(meta, base));
-    igEnumMetaField_SetDefaultValue((igMetaField *)field, g_igShadeModelAttr_modeDefault);
+    ((Gap::Core::igEnumMetaField *)field)->setDefault(g_igShadeModelAttr_modeDefault);
     ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)(&IG_GFX_SHADING_MODE_GetMetaEnum);
     igMetaObject_NameFields(meta, g_igShadeModelAttr_fieldTable, g_igShadeModelAttr_fieldHandles, g_igShadeModelAttr_fieldOffsets, base);
 }

@@ -9,15 +9,11 @@ extern "C" {
 #endif
 
 /* Core */
-void igBoolArrayMetaField_EnsureRegistered(void);
 void igBoolList_EnsureRegistered(void);
 void igDependencyMetaField_EnsureRegistered(void);
-void igDoubleArrayMetaField_EnsureRegistered(void);
 void igEnumArrayMetaField_EnsureRegistered(void);
-void igFloatArrayMetaField_EnsureRegistered(void);
 void igFloatListList_EnsureRegistered(void);
 void igFloatList_EnsureRegistered(void);
-void igLongArrayMetaField_EnsureRegistered(void);
 void igLongList_EnsureRegistered(void);
 void igMemoryDescriptorMetaField_EnsureRegistered(void);
 void igMemoryFileEntryList_EnsureRegistered(void);
@@ -28,14 +24,8 @@ void igObjectRefArrayMetaField_EnsureRegistered(void);
 void igObjectStringMap_EnsureRegistered(void);
 void igPointerListList_EnsureRegistered(void);
 void igRawRefArrayMetaField_EnsureRegistered(void);
-void igShortArrayMetaField_EnsureRegistered(void);
 void igStringArrayMetaField_EnsureRegistered(void);
-void igUnsignedCharArrayMetaField_EnsureRegistered(void);
-void igUnsignedIntArrayMetaField_EnsureRegistered(void);
-void igUnsignedLongArrayMetaField_EnsureRegistered(void);
-void igUnsignedShortArrayMetaField_EnsureRegistered(void);
 void igUnsignedShortList_EnsureRegistered(void);
-void igVirtualCFuncMetaField_EnsureRegistered(void);
 
 /* Maths */
 void igAABox_EnsureRegistered(void);

@@ -85,8 +85,8 @@ CallbackArray *igStringMetaField_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igStringMetaField_metaObject,
-        igRefMetaField_Register,
-        igRefMetaField_GetPublishedMetaObject,
+        Gap::Core::igRefMetaField::arkRegisterInternal,
+        Gap::Core::igRefMetaField::getClassMeta,
         igStringMetaField_GetMetaObjectFunction,
         "igStringMetaField",
         0x3C,
@@ -101,13 +101,14 @@ void igStringMetaField_GetMetaObjectFunction(void) {
     igStringMetaField_GetMetaObject();
 }
 
-igMetaObject *g_igRefMetaField_metaObject;
-void *g_igRefMetaField_descriptor;
-igMetaField *g_igRefMetaField_constructMetaField;
-igMetaField *g_igRefMetaField_destructMetaField;
+namespace Gap {
+namespace Core {
 
-igMetaObject *igRefMetaField_GetPublishedMetaObject(void) {
-    return g_igRefMetaField_metaObject;
+igMetaObject *igRefMetaField::_Meta;
+igRefMetaField *igRefMetaField::_MetaField;
+igMetaField *igRefMetaField::k_construct;
+igMetaField *igRefMetaField::k_destruct;
+}
 }
 
 static FieldFactory g_igStringMetaField_ctorTable[] = {
@@ -122,7 +123,6 @@ static igMetaField **g_igStringMetaField_fieldDescriptors[] = {
 static int g_igStringMetaField_fieldOffsets[] = {
     56,
 };
-
 
 void igStringMetaField_InitFields(void) {
     int first;
@@ -158,7 +158,6 @@ void igStringMetaField_InitFields(void) {
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igStringMetaField_fieldTable, g_igStringMetaField_fieldDescriptors, g_igStringMetaField_fieldOffsets, first);
 }
-
 
 void igStringMetaField_CreateDefaultDescriptor(void) {
     int *s0;

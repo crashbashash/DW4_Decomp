@@ -175,7 +175,7 @@ void igLightAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igLightAttr_ctorTable, 0x10);
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base);
-    igEnumMetaField_SetDefaultValue((igMetaField *)field, g_igLightAttr_lightTypeDefault);
+    ((Gap::Core::igEnumMetaField *)field)->setDefault(g_igLightAttr_lightTypeDefault);
     field->_invarianceFunction = (void (*)())igLightAttr_MarkChanged;
     field->_getMetaEnumFunction = (void (*)(void))IG_GFX_LIGHT_TYPE_GetMetaEnum;
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 1);

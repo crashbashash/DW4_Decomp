@@ -227,7 +227,7 @@ void igPsx2Controller_InitFields(void) {
     { struct Fld *q = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6); q->f52 = 2; }
     { struct Fld *q = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7); q->f52 = 2; }
     temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 1);
+    ((Gap::Core::igEnumMetaField *)temp_v0)->setDefault(1);
     *(int *)((char *)(temp_v0) + 52) = (int)(&igMetaEnum_GetEmpty);
     ((Gap::Core::igUnsignedShortMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC)))->setDefault(0xFFFF);
     { struct Fld *q = (struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xE); q->f52 = 2; }
@@ -236,7 +236,7 @@ void igPsx2Controller_InitFields(void) {
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x11)))->setDefault(1);
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x12)))->setDefault(1);
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x14));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_2, 0);
+    ((Gap::Core::igEnumMetaField *)temp_v0_2)->setDefault(0);
     *(int *)((char *)(temp_v0_2) + 52) = (int)(&FUN_00147030);
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x15)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igPsx2Controller_fieldTable, g_igPsx2Controller_fieldHandles, g_igPsx2Controller_fieldOffsets, temp_s1);

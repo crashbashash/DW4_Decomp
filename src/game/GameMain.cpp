@@ -204,13 +204,13 @@ void GameMain_ClearScene(Blk *app);
 
 extern "C" void GameMain_RegisterEngineClasses(void) {
     igExternalImageEntry_EnsureRegistered();
-    igVirtualCFuncMetaField_EnsureRegistered();
-    igUnsignedShortArrayMetaField_EnsureRegistered();
-    igUnsignedLongArrayMetaField_EnsureRegistered();
-    igUnsignedIntArrayMetaField_EnsureRegistered();
-    igUnsignedCharArrayMetaField_EnsureRegistered();
+    Gap::Core::igVirtualCFuncMetaField::arkRegister();
+    Gap::Core::igUnsignedShortArrayMetaField::arkRegister();
+    Gap::Core::igUnsignedLongArrayMetaField::arkRegister();
+    Gap::Core::igUnsignedIntArrayMetaField::arkRegister();
+    Gap::Core::igUnsignedCharArrayMetaField::arkRegister();
     igStringArrayMetaField_EnsureRegistered();
-    igShortArrayMetaField_EnsureRegistered();
+    Gap::Core::igShortArrayMetaField::arkRegister();
     igRawRefArrayMetaField_EnsureRegistered();
     igObjectStringMap_EnsureRegistered();
     igNamedObjectList_EnsureRegistered();
@@ -218,14 +218,14 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igNamedObjectInfo_EnsureRegistered();
     igMemoryRefArrayMetaField_EnsureRegistered();
     igMemoryFileEntryList_EnsureRegistered();
-    igLongArrayMetaField_EnsureRegistered();
-    igFloatArrayMetaField_EnsureRegistered();
+    Gap::Core::igLongArrayMetaField::arkRegister();
+    Gap::Core::igFloatArrayMetaField::arkRegister();
     igEnumArrayMetaField_EnsureRegistered();
     Gap::Core::igDoubleMetaField::arkRegister();
-    igDoubleArrayMetaField_EnsureRegistered();
+    Gap::Core::igDoubleArrayMetaField::arkRegister();
     igDependencyMetaField_EnsureRegistered();
     igPointerListList_EnsureRegistered();
-    igBoolArrayMetaField_EnsureRegistered();
+    Gap::Core::igBoolArrayMetaField::arkRegister();
     igMemoryDescriptorMetaField_EnsureRegistered();
     igRayIntersectionFunctionList_EnsureRegistered();
     igExtendByRayFunctionList_EnsureRegistered();

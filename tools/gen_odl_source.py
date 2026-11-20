@@ -108,6 +108,7 @@ ROLE_SIGNATURES = {
     "getClassMetaSafe": ("igMetaObject *", []),
     "getClassMeta": ("igMetaObject *", []),
     "arkRegisterInitialize": ("void", []),
+    "arkRegisterMetaValidate": ("void", []),
 }
 
 
@@ -711,7 +712,8 @@ def field_handle_name(field):
 
 
 class Writer:
-    def __init__(self, lib, members_form, converted, compiler_names, prototypes, layouts, sources):
+    def __init__(self, lib, members_form, converted, compiler_names, prototypes, layouts, sources,
+                 member_rows=None):
         self.lib = lib
         self.members_form = members_form          # classes written as members
         self.converted = converted                # {class: Gap namespace}
@@ -719,8 +721,38 @@ class Writer:
         self.protos = prototypes
         self.layouts = layouts
         self.sources = sources
+        self.member_rows = member_rows or {}      # {class: [class-members.tsv declaration]}
         self.handles_of = {}
         self.undeclared = set()
+
+    def member_signature(self, qualified):
+        """-> [parameter type] of the non-static member function `Gap::<lib>::<class>::<member>` as its
+        class's class-members.tsv row declares it (its own class or the nearest ancestor that does), or
+        None when no row declares it or it is static."""
+        m = re.match(r"Gap::\w+::(\w+)::(\w+)$", qualified)
+        if not m:
+            return None
+        cls, member = m.groups()
+        while cls:
+            for decl in self.member_rows.get(cls, ()):
+                decl = re.sub(r"^\s*(public|protected|private)\s*:\s*", "", decl)
+                d = re.match(r"((?:\w+\s+)*)[\w:<>\s\*&]*?\b%s\s*\(([^)]*)\)" % re.escape(member), decl)
+                if not d:
+                    continue
+                if "static" in d.group(1).split():
+                    return None
+                inner = d.group(2).strip()
+                return [] if inner in ("", "void") else [param_type(p) for p in split_params(inner)]
+            cls = self.lib.parent.get(cls) if self.lib is not None else None
+        return None
+
+    def derives(self, cls, base):
+        """Is `cls` the class `base` or one of its descendants?"""
+        while cls:
+            if cls == base:
+                return True
+            cls = self.lib.parent.get(cls) if self.lib is not None else None
+        return False
 
     # --- names
 
@@ -757,8 +789,14 @@ class Writer:
         differs from `want` (return type, parameter types)."""
         name = self.function(va, here)
         role = self.lib.role_at.get(va)
+        macro = re.match(r"Gap::\w+::(\w+)::(\w+)$", name)
         if role and (name == role[1] or name.endswith("::" + role[1])):
             have = ROLE_SIGNATURES.get(role[1])
+        elif macro and macro.group(2) in ROLE_SIGNATURES:
+            # a member the object macros declare (a metafield's arkRegisterMetaValidate), bare in its class
+            have = ROLE_SIGNATURES[macro.group(2)]
+            if macro.group(1) == here:
+                name = macro.group(2)
         else:
             have = self.protos.signature(name)
             if have == (None, None) and "::" not in name:
@@ -1009,7 +1047,8 @@ class Writer:
                         raise Unsupported("an override without the release of its copy")
                     lines.extend(["        metaField->_refCount = metaField->_refCount - 1;",
                                   "        if (((unsigned long long)(long long)metaField->_refCount & 0x7fffffULL) == 0) {",
-                                  "            igObject_Destroy(metaField);",
+                                  "            igObject_Destroy(%s);"
+                                  % self.cast_to("igObject *", "metaField", mtype + " *"),
                                   "        }"])
                     j += 1
                 lines.append("    }")
@@ -1092,13 +1131,28 @@ class Writer:
             raise Unsupported("a virtual call outside an override")
         name = self.function(e["target"], ctx["cls"])
         role = self.lib.role_at.get(e["target"])
+        receiver = None
         if role and role[0] in self.members_form:
             params = ["igMemoryPoolView *"] if role[1] == "_instantiateFromPool" else []
         else:
-            params = self.protos.params(name)
+            params = self.member_signature(name)
+            if params is not None:
+                # a member function of a converted class: the first argument register holds `this`,
+                # written as the Gap class (a receiver of another type is cast to it)
+                cls = name.split("::")[-2]
+                this = e["args"][0]
+                if this in ctx["names"] and self.derives(ctx["types"].get(this), cls):
+                    receiver = ctx["names"][this]
+                elif this in ctx["names"]:
+                    receiver = "((%s *)%s)" % (cls, ctx["names"][this])
+                else:
+                    receiver = "((%s *)%s)" % (cls, self.value(this, "void *", events, ctx, e))
+                name = name.split("::")[-1]
+            else:
+                params = self.protos.params(name)
         if params is None:
             raise Unsupported("no declaration of %s" % name)
-        args, ints, floats = [], 0, 0
+        args, ints, floats = [], 1 if receiver is not None else 0, 0
         for ptype in params:
             if re.match(r"(const )?(float|double)\b", ptype) and "*" not in ptype:
                 raw = e["fargs"][floats] if floats < len(e["fargs"]) else None
@@ -1107,6 +1161,8 @@ class Writer:
                 raw = e["args"][ints] if ints < len(ARG_REGS) else e["stack"].get(16 + 8 * (ints - len(ARG_REGS)))
                 ints += 1
             args.append(self.value(raw, ptype, events, ctx, e))
+        if receiver is not None:
+            return "%s->%s(%s)" % (receiver, name, ", ".join(args))
         return "%s(%s)" % (name, ", ".join(args))
 
     def value(self, v, ptype, events, ctx, at):
@@ -1381,8 +1437,12 @@ def generate(lib, classes, members_path, converted_path, compiler_names_path, re
     names: the classes are written again without it until no further class fails."""
     converted = {row[0]: row[1] for row in load_table(converted_path, 2) if len(row) == 2}
     tabled = member_form_classes(members_path, converted)
+    member_rows = {}
+    for row in load_table(members_path, 2):
+        if len(row) == 2:
+            member_rows.setdefault(row[0], []).append(row[1])
     writer = Writer(lib, tabled | set(classes), converted, load_compiler_names(compiler_names_path),
-                    Prototypes(root), reflected_layouts(reflected_path), Sources(root))
+                    Prototypes(root), reflected_layouts(reflected_path), Sources(root), member_rows)
     failed = {}
     while True:
         writer.members_form = tabled | (set(classes) - set(failed))

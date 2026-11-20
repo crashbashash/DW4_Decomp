@@ -246,7 +246,7 @@ void igPointSpriteExt_InitFields(void) {
     ((igMetaField *)temp_v0)->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 3))->_persistent = 0;
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 4));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_2, 0);
+    ((Gap::Core::igEnumMetaField *)temp_v0_2)->setDefault(0);
     ((igMetaField *)temp_v0_2)->_persistent = 0;
     ((igEnumMetaField *)temp_v0_2)->_getMetaEnumFunction = (int)(&IG_GFX_SPRITE_SIZE_SPACE_GetMetaEnum);
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 5))->_persistent = 0;

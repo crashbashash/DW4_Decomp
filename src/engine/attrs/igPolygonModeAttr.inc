@@ -71,7 +71,7 @@ void igPolygonModeAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igPolygonModeAttr_ctorTable, 1);
     field = (void *)(igMetaObject_GetFieldAt(meta, base));
-    igEnumMetaField_SetDefaultValue((igMetaField *)field, 0);
+    ((Gap::Core::igEnumMetaField *)field)->setDefault(0);
     ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)(&IG_GFX_RENDER_MODE_GetMetaEnum);
     igMetaObject_NameFields(meta, g_igPolygonModeAttr_fieldTable, g_igPolygonModeAttr_fieldHandles, g_igPolygonModeAttr_fieldOffsets, base);
 }

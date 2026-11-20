@@ -10,7 +10,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igEnumMetaField_metaObject;
 struct igMetaField *igEnumMetaField_Create(struct igMemoryPoolView *pool);
 
 #ifdef __cplusplus
@@ -18,8 +17,5 @@ struct igMetaField *igEnumMetaField_Create(struct igMemoryPoolView *pool);
 #endif
 
 /* The default arrives by reference, which only C++ can declare. */
-#ifdef __cplusplus
-extern "C" void igEnumMetaField_SetDefaultValue(struct igMetaField *self, const int &value);
-#endif
 
 #endif

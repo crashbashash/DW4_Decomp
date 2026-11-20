@@ -168,7 +168,7 @@ void igGeometrySetAttr_InitFields(void) {
     field2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)field2)->_metaObject = (int)igGeometryAttrList_GetOrCreateMetaObject();
     field4 = (struct F_136f30 *)(igMetaObject_GetFieldAt(meta, base + 3));
-    igEnumMetaField_SetDefaultValue((igMetaField *)field4, 0);
+    ((Gap::Core::igEnumMetaField *)field4)->setDefault(0);
     ((igMetaField *)field4)->_persistent = 0;
     ((igEnumMetaField *)field4)->_getMetaEnumFunction = (int)&igGeometrySetAttr_GetAttrFlagsMetaEnum;
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(1);

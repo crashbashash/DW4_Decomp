@@ -1,7 +1,7 @@
 void igEnumArrayMetaField_SwapBytes(igEnumArrayMetaField *self, int buffer, int count) {
     void **elementField;
 
-    elementField = (void **)(((void **)igEnumMetaField_GetDefaultDescriptor()));
+    elementField = (void **)(((void **)Gap::Core::igEnumMetaField::getMetaField()));
     ((igMetaFieldView *)(elementField))->SwapBytes((void *)(buffer), (int)(count * self->_num));
 }
 
@@ -23,8 +23,13 @@ void igEnumArrayMetaField_SetDefault(igMetaField *self, int value) {
     }
 }
 
-void igEnumMetaField_SetDefaultValue(igMetaField *self, const int &value)
+namespace Gap {
+namespace Core {
+
+void igEnumMetaField::setDefault(const int &def)
 {
-    ((igMetaFieldView *)self)->SetDefault(&value);
+    setDefaultMemory(&def);
+}
+}
 }
 

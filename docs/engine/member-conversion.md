@@ -119,7 +119,24 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `setDefault`. Retail builds some as bootstrap classes (`IG_BOOTSTRAP_OBJECT_DEFINE`: three constructors,
    `__bootstrapDestruct` and the root's copy slot) and the others (float, double, long, unsigned char) with
    `IG_OBJECT_DEFINE`, whose constructor is implicit. Their `_instantiateFromPool` (`<Class>_Create`, the
-   factory every field table names) is still free;
+   factory every field table names) is still free. The fixed-size arrays of these
+   (`igBoolArrayMetaField` ... `igUnsignedShortArrayMetaField`, eleven) are converted the same way
+   (`IG_OBJECT_DEFINE`, `IG_METAFIELD_SETUP`, the private `k_num` handle and the kit's `setNum`/`getNum`), with
+   the kit's `IG_ARRAY_IMPL` `endianSwapMemory` (the element metafield's `getMetaField()->endianSwapMemory(mem,
+   getNum() * num)`), `computeSize` (`getNum() * sizeof(element)`) and the `setDefault` overloads retail keeps
+   (int and bool fill every element, char sets one); retail drops their unreferenced `getMetaField`, so it is
+   declared and not defined. Their boilerplate, the field adder included, is the generator's.
+   `igEnumMetaField` (bootstrap; `setDefault(const int &)`, the string overrides through the kit's
+   `getMetaEnum()`), `igStructMetaField` (the C++ constructor and destructor hooks behind `construct`,
+   `destruct` and `resetByValue`, which fall back on igMetaField's) and `igVirtualCFuncMetaField` (whose reset
+   copies the slot at the default's offset out of the object's vtable) are converted too; their implicit
+   destructors fit the retail start of igRefMetaField's and are dropped (`--drop`). The reference family's
+   root `igRefMetaField` (`IG_BOOTSTRAP_ABSTRACT_OBJECT_DEFINE`, protected `k_construct`/`k_destruct`, the kit's
+   `commission`/`decommission`, `readRawFieldMemory`/`writeRawFieldMemory` through the directory,
+   `convertMemoryToString`/`convertStringToMemory`, `compare`) and `igRawRefMetaField` (`print`,
+   `addToDirectory`) are converted; igMetaField's `convertMemoryToString` takes the kit's `hdr` and
+   `fieldIndent` and its `compare` returns `int` (`!isAlikeExactly(...)`), so igRefMetaField overrides them;
+   startup stores the reference descriptor with `igRefMetaField::setMetaField(igRawRefMetaField::getMetaField())`;
 3. `igMetaObject`, `igDataList`/`igObjectList`; igMetaObject, igIGBFile and igObjectDirEntry then also call
    igObject's protected and private construction members directly (the kit makes them friends);
 4. attrs, then gfx, then scenegraph, then gui/insight/viewer;

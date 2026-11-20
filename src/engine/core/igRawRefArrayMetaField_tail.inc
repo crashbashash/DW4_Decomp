@@ -1,7 +1,7 @@
 void igRawRefArrayMetaField_SwapBytes(igRawRefArrayMetaField *self, int item, int count) {
     void **descriptor;
 
-    descriptor = (void **)(((void **)igRawRefMetaField_GetDefaultDescriptor()));
+    descriptor = (void **)(((void **)Gap::Core::igRawRefMetaField::getMetaField()));
     ((igMetaFieldView *)(descriptor))->SwapBytes((void *)(item), (int)(count * self->_num));
 }
 
@@ -46,7 +46,13 @@ int igRawRefArrayMetaField_GetSize(igRawRefArrayMetaField *self) {
 
 /* IgPluginRepositoryList slot 53, a constant-returning override that returns 4. */
 
-int igRawRefMetaField_GetSize(igPluginRepositoryList *self) {
+namespace Gap {
+namespace Core {
+
+unsigned short igRawRefMetaField::computeSize()
+{
     return 4;
+}
+}
 }
 

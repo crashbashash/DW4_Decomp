@@ -1,5 +1,5 @@
 void igMemoryDirEntry_IsRefMemory(int entry) {
-    ((Gap::Core::igObject *)(((igMemoryDirEntry *)entry)->_memType))->isOfType((igMetaObject *)(((int)g_igRefMetaField_metaObject)));
+    ((Gap::Core::igObject *)(((igMemoryDirEntry *)entry)->_memType))->isOfType((igMetaObject *)(((int)Gap::Core::igRefMetaField::getClassMeta())));
 }
 
 void igMemoryDirEntry_AllocateMemory(igMemoryDirEntry *self, igIGBFile *file) {
@@ -42,7 +42,7 @@ void igMemoryDirEntry_WriteMemory(igMemoryDirEntry *self, igIGBFile *file) {
     int esz = ((igMetaField *)s1)->_size;
     int per = cnt / esz;
     int s0, s7, i, src, j, dst, t0, t1, t2;
-    if (((((Gap::Core::igObject *)s1)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) != 0) ^ 1) && file->_endianSwap != 0) {
+    if (((((Gap::Core::igObject *)s1)->isOfType((igMetaObject *)Gap::Core::igRefMetaField::getClassMeta()) != 0) ^ 1) && file->_endianSwap != 0) {
         s1->SwapBytes((void *)self->_ref, per);
     }
     s7 = 0;
@@ -51,7 +51,7 @@ void igMemoryDirEntry_WriteMemory(igMemoryDirEntry *self, igIGBFile *file) {
     while (i < cnt) {
         t0 = cnt - i;
         s0 = (t0 < s2) ? t0 : s2;
-        if (((Gap::Core::igObject *)s1)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) != 0) {
+        if (((Gap::Core::igObject *)s1)->isOfType((igMetaObject *)Gap::Core::igRefMetaField::getClassMeta()) != 0) {
             int q = s0 / esz;
             t1 = per - s7;
             s7 = (t1 < q) ? t1 : q;
@@ -82,7 +82,7 @@ void igMemoryDirEntry_WriteMemory(igMemoryDirEntry *self, igIGBFile *file) {
             s2 = (t2 < s4) ? t2 : s4;
             s4 = s2;
         }
-        if (((((Gap::Core::igObject *)s1)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) != 0) ^ 1) && file->_endianSwap != 0) {
+        if (((((Gap::Core::igObject *)s1)->isOfType((igMetaObject *)Gap::Core::igRefMetaField::getClassMeta()) != 0) ^ 1) && file->_endianSwap != 0) {
             s1->SwapBytes((void *)self->_ref, per);
         }
         file->_memoryBytesCopied = s6;
@@ -201,10 +201,10 @@ void igMemoryDirEntry_ResolveRefOld(igMemoryDirEntryView *self, igIGBFileView *f
 void igMemoryDirEntry_ResolveMemory(igMemoryDirEntryView *self, igIGBFileView *r) {
     igMetaFieldView *f = ((igMetaFieldView **)r->_metaFieldListInFile->_data)[self->_memTypeIndex];
     self->_memType = (int)f;
-    if (((((Gap::Core::igObject *)f)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) != 0) ^ 1) && r->_endianSwap != 0) {
+    if (((((Gap::Core::igObject *)f)->isOfType((igMetaObject *)Gap::Core::igRefMetaField::getClassMeta()) != 0) ^ 1) && r->_endianSwap != 0) {
         f->SwapBytes((void *)self->_ref, self->_memSize / f->_size);
     }
-    if (((Gap::Core::igObject *)f)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)f)->isOfType((igMetaObject *)Gap::Core::igRefMetaField::getClassMeta()) != 0) {
         int esize = f->_size;
         int count = self->_memSize / esize;
         int base = self->_ref;

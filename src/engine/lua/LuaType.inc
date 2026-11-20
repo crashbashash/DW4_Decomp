@@ -252,7 +252,7 @@ LuaType LuaType_FromMetaField(LuaMetaFieldView *field) {
         result.kind = LUA_KIND_LONG;
     } else if (Gap::Core::igUnsignedLongMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_ULONG;
-    } else if (g_igEnumMetaField_metaObject == meta) {
+    } else if (Gap::Core::igEnumMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_ENUM;
     } else if (Gap::Core::igFloatMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_FLOAT;

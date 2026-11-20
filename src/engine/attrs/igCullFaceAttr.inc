@@ -82,7 +82,7 @@ void igCullFaceAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igCullFaceAttr_ctorTable, 2);
     field = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    igEnumMetaField_SetDefaultValue((igMetaField *)field, 0);
+    ((Gap::Core::igEnumMetaField *)field)->setDefault(0);
     ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)(&IG_GFX_CULL_FACE_MODE_GetMetaEnum);
     igMetaObject_NameFields(meta, g_igCullFaceAttr_fieldTable, g_igCullFaceAttr_fieldHandles, g_igCullFaceAttr_fieldOffsets, base);
 }

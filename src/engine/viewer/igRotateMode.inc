@@ -184,7 +184,7 @@ void igRotateMode_InitFields(void) {
     spC[1] = 0;
     igVec2fMetaField_SetDefault((igMetaField *)temp_a0_3, (const float *)spC);
     temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 8));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
+    ((Gap::Core::igEnumMetaField *)temp_v0)->setDefault(0);
     *(int *)((char *)(temp_v0) + 52) = (int)(&FUN_0045c540);
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 9)))->setDefault(1);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 0xB)))->setDefault(0.0f);

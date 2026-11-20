@@ -93,7 +93,7 @@ void igIndexArray_InitFields(void) {
     ((igMemoryRefMetaField *)dataField)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)dataField)->_releaseOnReset = 1;
     dataSizeField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
-    igEnumMetaField_SetDefaultValue((igMetaField *)dataSizeField, 0);
+    ((Gap::Core::igEnumMetaField *)dataSizeField)->setDefault(0);
     ((igEnumMetaField *)dataSizeField)->_getMetaEnumFunction = (int)(&IG_GFX_INDEX_DATA_SIZE_GetMetaEnum);
     memoryPoolField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 4));
     ((igObjectRefMetaField *)memoryPoolField)->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();

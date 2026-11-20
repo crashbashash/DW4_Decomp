@@ -113,7 +113,7 @@ void igTextureFunctionAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igTextureFunctionAttr_ctorTable, 7);
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base);
-    igEnumMetaField_SetDefaultValue((igMetaField *)field, g_igTextureFunctionAttr_modeDefault);
+    ((Gap::Core::igEnumMetaField *)field)->setDefault(g_igTextureFunctionAttr_modeDefault);
     field->_getMetaEnumFunction = (void (*)())igMetaEnum_GetEmpty;
     t1 = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 1);
     t1->_invarianceFunction = (void (*)())igTextureFunctionAttr_SynchronizeCachedUnitID;
@@ -125,7 +125,7 @@ void igTextureFunctionAttr_InitFields(void) {
     t4->_getMetaEnumFunction = (void (*)())TEXTURE_STAGE_TYPE_GetMetaEnum;
     ((Gap::Core::igUnsignedCharMetaField *)(igMetaObject_GetFieldAt(meta, base + 5)))->setDefault(2);
     field2 = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 6);
-    igEnumMetaField_SetDefaultValue((igMetaField *)field2, 0);
+    ((Gap::Core::igEnumMetaField *)field2)->setDefault(0);
     field2->_getMetaEnumFunction = (void (*)())TEXTURE_FUNCTION_TYPE_GetMetaEnum;
     igMetaObject_NameFields(meta, g_igTextureFunctionAttr_fieldTable, g_igTextureFunctionAttr_fieldHandles, g_igTextureFunctionAttr_fieldOffsets, base);
 }

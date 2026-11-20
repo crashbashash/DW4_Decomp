@@ -1,14 +1,18 @@
-void igDoubleArrayMetaField_SwapBytes(igDoubleArrayMetaField *self, int data, int count) {
-    void **element;
+namespace Gap {
+namespace Core {
 
-    element = (void **)(((void **)Gap::Core::igDoubleMetaField::getMetaField()));
-    ((igMetaFieldView *)(element))->SwapBytes((void *)(data), (int)(count * self->_num));
+void igDoubleArrayMetaField::endianSwapMemory(void *mem, int num) const
+{
+    igDoubleMetaField::getMetaField()->endianSwapMemory(mem, getNum() * num);
 }
 
 /* Storage size in bytes of the field's array: `_num` elements of 8 bytes (double), truncated to
  * the 16-bit size the meta field system uses. */
 
-int igDoubleArrayMetaField_GetSize(igDoubleArrayMetaField *self) {
-    return (self->_num * 8) & 0xFFFF;
+unsigned short igDoubleArrayMetaField::computeSize()
+{
+    return getNum() * sizeof(double);
+}
+}
 }
 

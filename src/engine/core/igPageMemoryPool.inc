@@ -152,7 +152,7 @@ void igPageMemoryPool_InitFields(void) {
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(-1);
     messageLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
     defaultMessageLevel = g_igPageMemoryPool_defaultMessageLevel;
-    igEnumMetaField_SetDefaultValue((igMetaField *)messageLevel, defaultMessageLevel);
+    ((Gap::Core::igEnumMetaField *)messageLevel)->setDefault(defaultMessageLevel);
     messageLevel->_getMetaEnumFunction = (int)igPageMemoryPool_GetMessageLevelMetaEnum;
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 6)))->setDefault(g_igPageMemoryPool_defaultPoolOptionFlags);
     igMetaObject_NameFields(meta, g_igPageMemoryPool_fieldTable, g_igPageMemoryPool_fieldDescriptors, g_igPageMemoryPool_fieldOffsets, base);

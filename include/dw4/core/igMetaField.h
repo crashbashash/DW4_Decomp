@@ -16,7 +16,6 @@ extern "C" {
 
 struct igMetaObject *igMetaField_GetPublishedMetaObject(void);
 struct igMetaField *igMetaField_Init(struct igMetaField *field);
-void igMetaField_Destruct(struct igMetaField *self);
 extern int g_igMetaField_vtable[4];
 void igMetaField_AllocateArray(int *outStatus, struct igMemoryRefMetaField *field, void *object, int count, struct igMemoryPoolView *allocator);
 

@@ -152,7 +152,7 @@ void igStandardQueue_InitFields(void) {
     ((igObjectRefMetaField *)queueSema)->_construct = 1;
     ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)))->setDefault(4);
     data = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)));
-    ((igMemoryRefMetaField *)data)->_memType = igRawRefMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)data)->_memType = (int)Gap::Core::igRawRefMetaField::getMetaField();
     ((igMemoryRefMetaField *)data)->_destruct = 1;
     ((igMemoryRefMetaField *)data)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)data)->_releaseOnReset = 1;

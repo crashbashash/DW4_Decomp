@@ -1,13 +1,17 @@
-void igUnsignedLongArrayMetaField_SwapBytes(igUnsignedLongArrayMetaField *self, int item, int count) {
-    void **descriptor;
+namespace Gap {
+namespace Core {
 
-    descriptor = (void **)(((void **)Gap::Core::igUnsignedLongMetaField::getMetaField()));
-    ((igMetaFieldView *)(descriptor))->SwapBytes((void *)(item), (int)(count * self->_num));
+void igUnsignedLongArrayMetaField::endianSwapMemory(void *mem, int num) const
+{
+    igUnsignedLongMetaField::getMetaField()->endianSwapMemory(mem, getNum() * num);
 }
 
 /* Byte size of the array field's storage: `_num` elements of 8 bytes each, truncated to 16 bits
  * like the field descriptor's `_size`. */
-int igUnsignedLongArrayMetaField_GetSize(igUnsignedLongArrayMetaField *self) {
-    return (self->_num * 8) & 0xFFFF;
+unsigned short igUnsignedLongArrayMetaField::computeSize()
+{
+    return getNum() * sizeof(unsigned long long);
+}
+}
 }
 

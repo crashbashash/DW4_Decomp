@@ -1,21 +1,27 @@
-void igBoolArrayMetaField_SwapBytes(igBoolArrayMetaField *self, int buffer, int count) {
-    void **elementField;
+namespace Gap {
+namespace Core {
 
-    elementField = (void **)(((void **)Gap::Core::igBoolMetaField::getMetaField()));
-    ((igMetaFieldView *)(elementField))->SwapBytes((void *)(buffer), (int)(count * self->_num));
+void igBoolArrayMetaField::endianSwapMemory(void *mem, int num) const
+{
+    igBoolMetaField::getMetaField()->endianSwapMemory(mem, getNum() * num);
 }
 
-unsigned short igBoolArrayMetaField_GetSize(void *self) {
-    return ((igBoolArrayMetaField *)self)->_num;
+unsigned short igBoolArrayMetaField::computeSize()
+{
+    return getNum() * sizeof(bool);
 }
 
-void igBoolArrayMetaField_SetDefaultAll(igBoolArrayMetaField *self, int value) {
-    char *base;
+void igBoolArrayMetaField::setDefault(bool val)
+{
+    bool *mem;
     int i;
-    ((igMetaFieldView *)self)->SetDefault(0);
-    base = (char *)self->_default;
-    for (i = 0; i < self->_num; i++) {
-        base[i] = value;
+
+    setDefaultMemory(0);
+    mem = (bool *)_default;
+    for (i = 0; i < getNum(); i++) {
+        mem[i] = val;
     }
+}
+}
 }
 

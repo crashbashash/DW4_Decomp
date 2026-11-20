@@ -176,13 +176,13 @@ void igVertexStream_InitFields(void) {
     dataListField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
     ((igObjectRefMetaField *)dataListField)->_metaObject = (int)igVertexDataList_GetOrCreateMetaObject();
     accessModeField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 3));
-    igEnumMetaField_SetDefaultValue((igMetaField *)accessModeField, 0);
+    ((Gap::Core::igEnumMetaField *)accessModeField)->setDefault(0);
     ((igEnumMetaField *)accessModeField)->_getMetaEnumFunction = (int)(&IG_VERTEX_ACCESS_MODE_GetMetaEnum);
     primitiveTypeField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 4));
-    igEnumMetaField_SetDefaultValue((igMetaField *)primitiveTypeField, 0);
+    ((Gap::Core::igEnumMetaField *)primitiveTypeField)->setDefault(0);
     ((igEnumMetaField *)primitiveTypeField)->_getMetaEnumFunction = (int)(&IG_GFX_DRAW_GetMetaEnum);
     compileModeField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 5));
-    igEnumMetaField_SetDefaultValue((igMetaField *)compileModeField, 0);
+    ((Gap::Core::igEnumMetaField *)compileModeField)->setDefault(0);
     ((igEnumMetaField *)compileModeField)->_getMetaEnumFunction = (int)(IG_VERTEX_STREAM_COMPILE_MODE_GetMetaEnum);
     igMetaObject_NameFields(meta, g_igVertexStream_fieldTable, g_igVertexStream_fieldHandles, g_igVertexStream_fieldOffsets, fieldStart);
     ((igMetaObject *)g_igVertexStream_metaObject)->_abstractProxy = (int)igPsx2VertexStream_GetMetaObjectFunction;

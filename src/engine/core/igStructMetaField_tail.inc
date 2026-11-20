@@ -1,77 +1,67 @@
-unsigned short igStructMetaField_GetSize(void *self) {
-    return ((igMetaField *)self)->_size;
+namespace Gap {
+namespace Core {
+
+unsigned short igStructMetaField::computeSize()
+{
+    return _size;
 }
 
-void igStructMetaField_ValueFromString(int self, int value, int text) {
-    strlen((const char *)text);
+int igStructMetaField::setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir)
+{
+    return strlen(strVal);
 }
 
-void igStructMetaField_ValueToString(int *result, void *self) {
-    int name;
-    int pool;
-    int interned;
-
-    name = ((igMetaField *)self)->_fieldName;
-    if (name == 0) {
-        interned = 0;
-    } else {
-        if (g_stringPool == 0) {
-            pool = ((int)StringPool_Allocate(0x10));
-            if (pool != 0) {
-                pool = ((int)StringPool_Construct((StringPool *)pool));
-            }
-            g_stringPool = (StringPool *)pool;
-        }
-        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)name);
-    }
-    *result = interned;
+igStringRef igStructMetaField::getStringFromMemory(const void *srcMem, igDirectory *dir)
+{
+    return igStringRef(getFieldName());
 }
 
 /* Accessor: returns the field's byte alignment (`_alignment`, igIntMetaField, +52). */
-int igStructMetaField_GetAlignment(igStructMetaField *self) {
-    return self->_alignment;
-}
-
-void igStructMetaField_ConstructValue(igStructMetaField *self, int instance) {
-    int (*constructor)(int);
-
-    constructor = (int (*)(int))(self->_cppConstructor);
-    if (constructor != 0) {
-        constructor(instance + self->_offset);
-        return;
-    }
-    igMetaField_ConstructValue();
-}
-
-void igStructMetaField_DestructValue(igStructMetaField *self, int instance) {
-    int (*destructor)(int);
-
-    destructor = (int (*)(int))(self->_cppDestructor);
-    if (destructor != 0) {
-        destructor(instance + self->_offset);
-        return;
-    }
-    igMetaField_DestructValue();
-}
-
-void igStructMetaField_SetToDefault(igStructMetaField *self, int instance) {
-    if (self->_cppConstructor != 0) {
-        ((int (*)(...))self->_cppDestructor)(instance + self->_offset);
-        ((int (*)(...))self->_cppConstructor)(instance + self->_offset);
-        return;
-    }
-    igMetaField_SetToDefault((igMetaField *)self, instance);
-}
-
-void igStructMetaField_CopyDefaultToValue(igMetaFieldView *self, void *object)
+int igStructMetaField::computeRequiredAlignment()
 {
-    self->SetToDefault((int)object);
+    return getAlignment();
+}
+
+void igStructMetaField::construct(igObject *src)
+{
+    if (_cppConstructor != 0) {
+        ((void (*)(void *))_cppConstructor)((char *)src + _offset);
+        return;
+    }
+    igMetaField::construct(src);
+}
+
+void igStructMetaField::destruct(igObject *src)
+{
+    if (_cppDestructor != 0) {
+        ((void (*)(void *))_cppDestructor)((char *)src + _offset);
+        return;
+    }
+    igMetaField::destruct(src);
+}
+
+void igStructMetaField::resetByValue(igObject *src)
+{
+    if (_cppConstructor != 0) {
+        ((void (*)(void *))_cppDestructor)((char *)src + _offset);
+        ((void (*)(void *))_cppConstructor)((char *)src + _offset);
+        return;
+    }
+    igMetaField::resetByValue(src);
+}
+
+void igStructMetaField::resetByReference(igObject *src)
+{
+    resetByValue(src);
 }
 
 /* Predicate: true when the struct field metadata has a C++ constructor hook (`_cppConstructor`,
  * igRawRefMetaField, +56) set. */
-int igStructMetaField_IsConstruct(igStructMetaField *self) {
-    return self->_cppConstructor != 0;
+int igStructMetaField::constructPerformsReset() const
+{
+    return _cppConstructor != 0;
+}
+}
 }
 
 void igSymbolTable_SetCapacity(int table, int capacity)

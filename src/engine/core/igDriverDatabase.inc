@@ -180,7 +180,7 @@ void igDriverDatabase_InitFields(void) {
     ((igObjectRefMetaField *)overrideSourceField)->_metaObject = (int)igRegistry_GetOrCreateMetaObject();
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)))->setDefault(-1);
     overrideModeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)));
-    igEnumMetaField_SetDefaultValue((igMetaField *)overrideModeField, 0);
+    ((Gap::Core::igEnumMetaField *)overrideModeField)->setDefault(0);
     ((igEnumMetaField *)overrideModeField)->_getMetaEnumFunction = (int)(&igDriverDatabase_GetSectionOverrideModeMetaEnum);
     databaseFileField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)));
     ((igObjectRefMetaField *)databaseFileField)->_metaObject = (int)igFile_GetOrCreateMetaObject();

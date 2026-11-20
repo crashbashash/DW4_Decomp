@@ -1,15 +1,19 @@
-void igShortArrayMetaField_SwapBytes(igShortArrayMetaField *self, int item, int count) {
-    void **descriptor;
+namespace Gap {
+namespace Core {
 
-    descriptor = (void **)(((void **)Gap::Core::igShortMetaField::getMetaField()));
-    ((igMetaFieldView *)(descriptor))->SwapBytes((void *)(item), (int)(count * self->_num));
+void igShortArrayMetaField::endianSwapMemory(void *mem, int num) const
+{
+    igShortMetaField::getMetaField()->endianSwapMemory(mem, getNum() * num);
 }
 
 /* Storage size in bytes of an array field of _num shorts, truncated to 16 bits. Vtable slot 25 is
  * the element-size query that the aligned array allocation calls through slot 100 and truncates
  * the same way. */
 
-int igShortArrayMetaField_GetSize(igShortArrayMetaField *self) {
-    return (self->_num * sizeof(short)) & 0xFFFF;
+unsigned short igShortArrayMetaField::computeSize()
+{
+    return getNum() * sizeof(short);
+}
+}
 }
 

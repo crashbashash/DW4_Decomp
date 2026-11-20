@@ -1,22 +1,27 @@
-void igIntArrayMetaField_SwapBytes(igIntArrayMetaField *self, int passThrough, int perElement) {
-    void **elementDescriptor;
+namespace Gap {
+namespace Core {
 
-    elementDescriptor = (void **)(((void **)Gap::Core::igIntMetaField::getMetaField()));
-    ((igMetaFieldView *)(elementDescriptor))->SwapBytes((void *)(passThrough), (int)(perElement * self->_num));
+void igIntArrayMetaField::endianSwapMemory(void *mem, int num) const
+{
+    igIntMetaField::getMetaField()->endianSwapMemory(mem, getNum() * num);
 }
 
-int igIntArrayMetaField_GetSize(igIntArrayMetaField *self) {
-    return (self->_num * 4) & 0xFFFF;
+unsigned short igIntArrayMetaField::computeSize()
+{
+    return getNum() * sizeof(int);
 }
 
-void igIntArrayMetaField_SetDefaultValue(igMetaField *field, int value) {
-    int *p;
-    igIntArrayMetaField *o = (igIntArrayMetaField *)field;
-    ((igMetaFieldView *)field)->SetDefault(0);
+void igIntArrayMetaField::setDefault(int val)
+{
+    int *mem;
     int i;
-    p = (int *)o->_default;
-    for (i = 0; i < o->_num; i++) {
-        p[i] = value;
+
+    setDefaultMemory(0);
+    mem = (int *)_default;
+    for (i = 0; i < getNum(); i++) {
+        mem[i] = val;
     }
+}
+}
 }
 

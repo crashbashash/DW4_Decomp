@@ -184,7 +184,7 @@ void igCopyRenderDestinationAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igCopyRenderDestinationAttr_ctorTable, 0xA);
     field = (void *)(igMetaObject_GetFieldAt(meta, base));
-    igEnumMetaField_SetDefaultValue((igMetaField *)field, 0);
+    ((Gap::Core::igEnumMetaField *)field)->setDefault(0);
     ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)(&igCopyRenderDestinationAttr_GetCopyTypeMetaEnum);
     field4 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)field4)->_metaObject = (int)igRenderDestinationAttr_GetOrCreateMetaObject();

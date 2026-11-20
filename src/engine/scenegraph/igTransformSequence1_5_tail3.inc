@@ -196,9 +196,9 @@ void FUN_001ddfd0(void) {
     if (g_igTransformSequence1_5_metaObject != 0) {
         temp_v0 = (int)igMetaObject_FindFieldByName(g_igTransformSequence1_5_metaObject, "_interpolationMethod");
         if (temp_v0 != 0) {
-            igCharArrayMetaField_SetDefaultElement((void *)temp_v0, 0, 1);
-            igCharArrayMetaField_SetDefaultElement((void *)temp_v0, 1, 3);
-            igCharArrayMetaField_SetDefaultElement((void *)temp_v0, 2, 1);
+            ((Gap::Core::igCharArrayMetaField *)temp_v0)->setDefault(0, 1);
+            ((Gap::Core::igCharArrayMetaField *)temp_v0)->setDefault(1, 3);
+            ((Gap::Core::igCharArrayMetaField *)temp_v0)->setDefault(2, 1);
         }
     }
 }

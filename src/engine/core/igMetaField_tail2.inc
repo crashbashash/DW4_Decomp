@@ -289,7 +289,7 @@ int igMetaField::computeTypeSize() {
     return computeSize() & 0xFFFF;
 }
 
-igStringRef igMetaField::convertMemoryToString(const void *mem, int num, igDirectory *dir)
+igStringRef igMetaField::convertMemoryToString(const void *mem, int num, igDirectory *dir, const char *hdr, int fieldIndent)
 {
     int i;
     igStringRef *list;
@@ -420,8 +420,8 @@ int igMetaField::isAlikeCompareNoCompare(const igObject *obj1, const igObject *o
     return 1;
 }
 
-unsigned char igMetaField::compare(const igObject *obj1, const igObject *obj2) const {
-    return (isAlikeExactly(obj1, obj2) != 0) ^ 1;
+int igMetaField::compare(const igObject *obj1, const igObject *obj2) const {
+    return !isAlikeExactly(obj1, obj2);
 }
 
 /* A plain field holds no references to visit. */

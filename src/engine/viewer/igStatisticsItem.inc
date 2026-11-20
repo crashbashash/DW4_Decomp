@@ -191,7 +191,7 @@ void igStatisticsItem_InitFields(void) {
     temp_s2_4->_metaObject = (int)igViewerStatisticsManager_GetOrCreateMetaObject();
     temp_s2_4->_refCounted = 0;
     temp_v0 = (igEnumMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xA));
-    igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, -1);
+    ((Gap::Core::igEnumMetaField *)temp_v0)->setDefault(-1);
     temp_v0->_getMetaEnumFunction = (int)(&IG_GFX_STATISTIC_GetMetaEnum);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xB)))->setDefault(-1);
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igStatisticsItem_fieldTable, g_igStatisticsItem_fieldHandles, g_igStatisticsItem_fieldOffsets, temp_s0);
