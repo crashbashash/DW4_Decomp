@@ -2,6 +2,7 @@
 #ifndef NEWLIB_MALLOCR_H
 #define NEWLIB_MALLOCR_H
 #include "dw4/newlib/newlib_reent.h"
+#include "dw4/newlib/newlib_mallinfo.h"
 typedef unsigned int INTERNAL_SIZE_T;
 typedef struct malloc_chunk {
     INTERNAL_SIZE_T prev_size;
@@ -17,7 +18,6 @@ extern unsigned long __malloc_top_pad;
 extern char *__malloc_sbrk_base;
 extern unsigned long __malloc_max_sbrked_mem;
 extern unsigned long __malloc_max_total_mem;
-struct mallinfo { int arena; int ordblks; int smblks; int hblks; int hblkhd; int usmblks; int fsmblks; int uordblks; int fordblks; int keepcost; };
 extern struct mallinfo __malloc_current_mallinfo;
 extern char *_sbrk_r(struct _reent *, int);
 extern void __malloc_lock(struct _reent *);

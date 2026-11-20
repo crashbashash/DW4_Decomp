@@ -65,10 +65,12 @@ int SuspendThread(int thread);
 int ResumeThread(int thread);
 int ChangeThreadPriority(int thread, int priority);
 
-/* the linker's symbols: the small-data base the start-up code loads into $gp, and the end of the
- * image, where the heap starts */
+/* the linker's symbols: the small-data base the start-up code loads into $gp, the end of the
+ * image, where the heap starts, and the stack and heap sizes, as addresses */
 extern char _gp[];
 extern char _end[];
+extern char _stack_size[];
+extern char _heap_size[];
 
 #ifdef __cplusplus
 }

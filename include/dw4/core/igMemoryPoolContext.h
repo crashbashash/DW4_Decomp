@@ -68,6 +68,7 @@ igMemoryPoolView *Memory_GetAllocatorBySelector(int selector);
 int Memory_GetCurrentContextAlias(void);
 igMemoryPoolView *Memory_GetCurrentAllocator(void);
 void *Memory_SystemAllocate(unsigned int size);
+void Memory_SystemFree(void *block);
 }
 
 #endif

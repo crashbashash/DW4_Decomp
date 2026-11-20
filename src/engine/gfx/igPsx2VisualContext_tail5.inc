@@ -612,6 +612,233 @@ void FUN_001788e0(StatContext88 *arg0, int arg1) {
     arg0->f610 = 0;
 }
 
+#define REPORT(args) { igReport_Printf args; igReport_Flush(); }
+#define PER_FRAME(field) ((int)((capture->end.field - capture->start.field) / frameCount))
+#define DMA_MS(field) (1000.0f * (__floatdisf(capture->end.field - capture->start.field) / (float)9216000) / frameCount)
+#define PERCENT(part, whole) (100.0f * ((float)(part) / (float)(whole)))
+
+void FUN_00178970(igPsx2VisualContext *self, StatisticsCapture *capture) {
+    int frameCount;
+    int internalFrames;
+    int vsyncs;
+    int vertices;
+    int polygons;
+    float strip;
+    float vu1Time;
+    float gifTime;
+    float totalTime;
+    float dmaCount;
+    float listedVertices;
+    float listedPolygons;
+    int fastPath;
+    int litPath;
+    int fastLitPath;
+    int vu0Blend;
+    int vu1Blend;
+    int multipass;
+    float ratio;
+    int programSize;
+    int heapSize;
+    int stackSize;
+    int stateCount;
+    int validations;
+    int path;
+    int prePath;
+    int lighting;
+    int giftag;
+    int state;
+    int blending;
+    int gsRegister;
+    int memoryLayout;
+    int multipassState;
+    int lightingState;
+    int material;
+    int materialMode;
+    int light;
+    int lightState;
+    int byGlobalColor;
+    int byPrimitive;
+
+    {
+        int text = (int)capture->name->_buffer;
+        if (text == 0) text = (int)g_stringObjEmptyText;
+        REPORT(("\nCapture report for %d (%s)\n--------------------------------\n", capture->index, text))
+    }
+    frameCount = capture->frameCount;
+    internalFrames = (int)(capture->end.framesTimed - capture->start.framesTimed);
+    vsyncs = (int)(capture->end.vsyncs - capture->start.vsyncs);
+    REPORT(("Frame Count : %d (internal frame count %d)\n", frameCount, internalFrames))
+    REPORT(("Frame Rate : %2.02f ( vsync %d approx.)\n", (double)(60.0f * (float)internalFrames / (float)vsyncs), vsyncs))
+    REPORT(("\n"))
+    vertices = PER_FRAME(vertices);
+    polygons = PER_FRAME(primitives);
+    if (polygons == 0) polygons = 1;
+    strip = (float)vertices / (float)polygons;
+    if (vertices == 0) vertices = 1;
+    REPORT(("1. Geometry\n"))
+    REPORT(("   Average Polygon Count %d\n", polygons))
+    REPORT(("   Average Vertex Count %d\n", vertices))
+    REPORT(("   Strip Coefficient %2.04f %%", (double)strip))
+    if (strip >= 2.9f) {
+        REPORT(("(%s)\n", "Extremely poor strip efficiency"))
+    } else if (strip >= 2.3f) {
+        REPORT(("(%s)\n", "Bad strip efficiency"))
+    } else if (strip >= 1.5f) {
+        REPORT(("(%s)\n", "Average strip efficiency"))
+    } else {
+        REPORT(("(%s)\n", "Good strip efficiency"))
+    }
+    REPORT(("\n"))
+    vu1Time = DMA_MS(vif1DmaTime);
+    gifTime = DMA_MS(gifDmaTime);
+    totalTime = DMA_MS(dmaOverlapTime);
+    dmaCount = __floatdisf(capture->end.vif1DmaCount - capture->start.vif1DmaCount) / (float)frameCount;
+    REPORT(("2. DMAs\n"))
+    REPORT(("   Average VU1 Dma time %2.04f ms\n", (double)vu1Time))
+    REPORT(("   Average VU1 Dma count %f \n", (double)dmaCount))
+    REPORT(("   Average GIF Dma time %2.04f ms", (double)gifTime))
+    if (gifTime <= 0.000001f) {
+        REPORT(("(%s)\n", "No texture is being paged"))
+    } else {
+        REPORT(("(%s)\n", "Texture is being paged"))
+        REPORT(("   Average GIF Dma count %f \n", (double)dmaCount))
+    }
+    REPORT(("   Average VU1+GIF Dma time %2.04f ms\n", (double)totalTime))
+    REPORT(("\n"))
+    listedVertices = PERCENT(PER_FRAME(displayListVertices), vertices);
+    listedPolygons = PERCENT(PER_FRAME(displayListPrimitives), polygons);
+    REPORT(("3. percentage render list-ed %0.02f %%(based on vertices)\n", (double)listedVertices))
+    REPORT(("   percentage render list-ed %0.02f %%(based on polys)\n", (double)listedPolygons))
+    if (listedVertices > 70.0f) {
+        REPORT(("   %s\n", "Good use of render lists."))
+    } else if (listedVertices > 40.0f) {
+        REPORT(("   %s\n", "Use more render list for your geometry."))
+    } else {
+        REPORT(("   %s\n", "You need to use render list for your geometry."))
+    }
+    REPORT(("\n"))
+    fastPath = PER_FRAME(fastPathVertices);
+    litPath = PER_FRAME(litPathVertices);
+    fastLitPath = PER_FRAME(fastLitPathVertices);
+    vu0Blend = PER_FRAME(vu0BlendVertices);
+    vu1Blend = PER_FRAME(vu1BlendVertices);
+    multipass = PER_FRAME(vu1MultiPassVertices);
+    REPORT(("4. Path usage\n"))
+    REPORT(("   Fast path percentage %0.02f %%( vertex count %d )\n", (double)PERCENT(fastPath, vertices), fastPath))
+    REPORT(("   Lit path percentage %0.02f %%( vertex count %d )\n", (double)PERCENT(litPath, vertices), litPath))
+    REPORT(("   Fast lit path percentage %0.02f %%( vertex count %d )\n", (double)PERCENT(fastLitPath, vertices), fastLitPath))
+    REPORT(("   VU0 vertex blending percentage %0.02f %%( vertex count %d )\n", (double)PERCENT(vu0Blend, vertices), vu0Blend))
+    REPORT(("   VU1 vertex blending percentage %0.02f %%( vertex count %d )\n", (double)PERCENT(vu1Blend, vertices), vu1Blend))
+    REPORT(("   VU1 MultiPass percentage %0.02f %%( vertex count %d )\n", (double)PERCENT(multipass, vertices), multipass))
+    if (vu0Blend + vu1Blend != 0) {
+        ratio = PERCENT(vu0Blend, vu0Blend + vu1Blend);
+        REPORT(("   VU0 / VU1 percentage %0.02f %%", (double)ratio))
+        if (ratio < 50.0f) {
+            REPORT(("(Vertex blending runs more on VU1 than VU0)\n"))
+        } else {
+            REPORT(("(Vertex blending runs more on VU0 than VU1)\n"))
+        }
+    }
+    if (litPath != 0) {
+        ratio = PERCENT(fastLitPath, litPath);
+        REPORT(("   Fast / Lit percentage %0.02f %%", (double)ratio))
+        if (ratio < 50.0f) {
+            REPORT(("(Lighting is run mostly in slow mode)\n"))
+        } else {
+            REPORT(("(Lighting is run mostly in fast mode)\n"))
+        }
+    }
+    REPORT(("\n"))
+    struct mallinfo mi = mallinfo();
+    heapSize = (int)_heap_size;
+    programSize = (int)_end;
+    stackSize = (int)_stack_size;
+    if (heapSize == -1) {
+        int used = mi.uordblks + (programSize + stackSize);
+        int probeSize = 0x2000400 - used;
+        if (used <= 0) {
+            heapSize = 0x8000000;
+        } else {
+            void *probe = Memory_SystemAllocate(probeSize);
+            if (probe == 0) {
+                heapSize = 0x2000000;
+            } else {
+                heapSize = 0x8000000;
+                Memory_SystemFree(probe);
+            }
+        }
+    }
+    heapSize = heapSize - programSize - stackSize;
+    REPORT(("5. Memory usage\n"))
+    REPORT(("   Program size %.2f Mb\n", (double)((float)programSize * (1.0f / 1048576.0f))))
+    REPORT(("   Stack size %.2f Mb\n", (double)((float)stackSize * (1.0f / 1048576.0f))))
+    REPORT(("   Heap size %.2f Mb\n", (double)((float)heapSize * (1.0f / 1048576.0f))))
+    REPORT(("   Total size %.0f Mb\n", (double)((float)(heapSize + (programSize + stackSize)) * (1.0f / 1048576.0f))))
+    REPORT(("   Heap used %.0f bytes (%.0f bytes)\n", (double)(float)mi.uordblks, (double)(float)mi.arena))
+    REPORT(("   Heap available %.0f bytes\n", (double)(float)(heapSize - mi.uordblks)))
+    REPORT(("\n"))
+    stateCount = PER_FRAME(capabilityChanges);
+    validations = PER_FRAME(stateSends);
+    path = PER_FRAME(functionTablesSent);
+    prePath = PER_FRAME(lightingFunctionsSent);
+    lighting = PER_FRAME(lightsSent);
+    giftag = PER_FRAME(gifTagsSent);
+    state = PER_FRAME(vertexFormatsSent);
+    blending = PER_FRAME(blendMatricesSent);
+    gsRegister = PER_FRAME(gsRegistersSent);
+    memoryLayout = PER_FRAME(vuBufferLayoutsSent);
+    multipassState = PER_FRAME(passSetupsSent);
+    lightingState = PER_FRAME(lightingSwitches);
+    material = PER_FRAME(materialSets);
+    materialMode = PER_FRAME(lightingModeSets);
+    light = PER_FRAME(lightSets);
+    lightState = PER_FRAME(lightSwitches);
+    byGlobalColor = PER_FRAME(colourModeChanges);
+    byPrimitive = PER_FRAME(primitiveChanges);
+    REPORT(("6. State management\n"))
+    REPORT(("   Average vertex per state change %.04f (count %d)\n", (double)((float)vertices / (float)stateCount), stateCount))
+    REPORT(("   State validation per frame %d\n", validations))
+    if (validations != 0) {
+        REPORT(("      Path         %d (%3.1f %%)\n", path, (double)PERCENT(path, validations)))
+        REPORT(("         By global color       %d\n", byGlobalColor))
+        REPORT(("         By changing primitive %d\n", byPrimitive))
+        REPORT(("      PrePath      %d (%3.1f %%)\n", prePath, (double)PERCENT(prePath, validations)))
+        REPORT(("      Giftag       %d (%3.1f %%)\n", giftag, (double)PERCENT(giftag, validations)))
+        REPORT(("      State        %d (%3.1f %%)\n", state, (double)PERCENT(state, validations)))
+        REPORT(("      Blending     %d (%3.1f %%)\n", blending, (double)PERCENT(blending, validations)))
+        REPORT(("      GSRegister   %d (%3.1f %%)\n", gsRegister, (double)PERCENT(gsRegister, validations)))
+        REPORT(("      MemoryLayout %d (%3.1f %%)\n", memoryLayout, (double)PERCENT(memoryLayout, validations)))
+        REPORT(("      Multipass    %d (%3.1f %%)\n", multipassState, (double)PERCENT(multipassState, validations)))
+        REPORT(("      Lighting     %d (%3.1f %%)\n", lighting, (double)PERCENT(lighting, validations)))
+        REPORT(("         Lighting State %d\n", lightingState))
+        REPORT(("         Material       %d\n", material))
+        REPORT(("         MaterialMode   %d\n", materialMode))
+        REPORT(("         Light          %d\n", light))
+        REPORT(("         Light State    %d\n", lightState))
+    }
+    REPORT(("\n"))
+    REPORT(("7. Internal struct size\n"))
+    REPORT(("   IG_GFX_INTERNAL_STRUCT_CLUT_PSX2 %d\n", p2GetPoolAllocated(3)))
+    REPORT(("   IG_GFX_INTERNAL_STRUCT_DMAPREDICATE_PSX2 %d\n", p2GetPoolAllocated(7)))
+    REPORT(("   IG_GFX_INTERNAL_STRUCT_DMACOMPLETION_PSX2 %d\n", p2GetPoolAllocated(8)))
+    REPORT(("   IG_GFX_INTERNAL_STRUCT_FINISH_PSX2 %d\n", p2GetPoolAllocated(9)))
+    REPORT(("   IG_GFX_INTERNAL_STRUCT_TEXTURE_PSX2 %d\n", p2GetPoolAllocated(10)))
+    REPORT(("   IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF0_PSX2 %d\n", p2GetPoolAllocated(0)))
+    REPORT(("   IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF1_PSX2 %d\n", p2GetPoolAllocated(1)))
+    REPORT(("   IG_GFX_INTERNAL_STRUCT_DMABUFFER_GIF_PSX2 %d\n", p2GetPoolAllocated(2)))
+    REPORT(("   IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF0_SIZE_PSX2 %d\n", p2GetPoolAllocated(4)))
+    REPORT(("   IG_GFX_INTERNAL_STRUCT_DMABUFFER_VIF1_SIZE_PSX2 %d\n", p2GetPoolAllocated(5)))
+    REPORT(("   IG_GFX_INTERNAL_STRUCT_DMABUFFER_GIF_SIZE_PSX2 %d\n", p2GetPoolAllocated(6)))
+    REPORT(("   IG_GFX_INTERNAL_STRUCT_STATE_CACHE_PSX2 %d\n", p2GetPoolAllocated(11)))
+    REPORT(("   IG_GFX_INTERNAL_STRUCT_MULTIPASS_PSX2 %d\n", p2GetPoolAllocated(12)))
+    REPORT(("   IG_GFX_INTERNAL_STRUCT_RENDERLIST_PSX2 %d\n", p2GetPoolAllocated(13)))
+    REPORT(("\n"))
+}
+#undef REPORT
+#undef PER_FRAME
+#undef DMA_MS
+#undef PERCENT
+
 void FUN_00179e00(StatContext *arg0) {
     int s3;
     int s2;

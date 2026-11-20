@@ -114,6 +114,8 @@ typedef void (*igMetaObjectCallback)();
 #include "dw4/gfx/igGenericCapabilityManager.h"
 #include "dw4/gfx/igVisualContextCapabilityManager.h"
 #include "dw4/gfx/igPrimLengthArray.h"
+#include "dw4/support/eekernel.h"
+#include "dw4/newlib/newlib_mallinfo.h"
 
 extern "C" igMetaObject *g_igVertexArray_metaObject;
 extern "C" igMetaObject *g_igScissorExt_metaObject;
@@ -3050,12 +3052,22 @@ extern "C" int igPsx2VisualContext_BeginDraw(A_16dbe0 *arg0);
 
 /* A statistics capture the registry's STATISTICS_CAPTURE_<n> sections configure (numCapture, startCapture,
  * stringCapture); the visual context keeps them in a list and prints each one's report when it completes. */
-struct StatisticsCapture;
+struct StatisticsCapture {
+    int index;                    /* the n of STATISTICS_CAPTURE_<n> */
+    int frameCount;               /* numCapture */
+    int startCapture;             /* frames left before the capture starts, counted down past -frameCount */
+    igStringObj *name;            /* stringCapture */
+    unsigned char active;
+    p2Statistics start;           /* +24: the counters when the capture started */
+    p2Statistics end;             /* +480: the counters when it completed */
+    long long f936;
+    char pad944[8];
+    StatisticsCapture *next;      /* +952 */
+};
 /* Prints a completed capture's report. */
 extern "C" void FUN_00178970(igPsx2VisualContext *self, StatisticsCapture *capture);
 class B_16dca0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual double v100(); virtual long long v104(); virtual void d25(); virtual void d26(); virtual void v116(); };
 class A_16dca0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void v112(float,float); virtual void v116(float); char pad[52]; B_16dca0 *f56; unsigned char b60; char p61[3]; int f64; float f68; char pad2[1480]; StatisticsCapture *f1552; };
-struct StatisticsCapture { char pad0[4]; int f4; int f8; char pad1[4]; unsigned char b16; char pad2[463]; char f480[456]; long long f936; char pad3[8]; StatisticsCapture *f952; };
 extern "C" void igPsx2VisualContext_EndDraw(A_16dca0 *arg0);
 
 extern "C" void igPsx2VisualContext_FlushDraw(void);

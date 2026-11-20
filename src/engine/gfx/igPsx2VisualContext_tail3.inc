@@ -354,13 +354,13 @@ void igPsx2VisualContext_EndDraw(A_16dca0 *arg0) {
     n = arg0->f1552;
     if (n != 0) {
       while (n != 0) {
-        if (n->b16 != 0 && n->f8 == -n->f4) {
-            p2GetStatistics(n->f480);
+        if (n->active != 0 && n->startCapture == -n->frameCount) {
+            p2GetStatistics(&n->end);
             n->f936 = arg0->f56->v104();
             FUN_00178970((igPsx2VisualContext *)arg0, n);
-            n->b16 = 0;
+            n->active = 0;
         }
-        n = n->f952;
+        n = n->next;
       }
     }
 }
