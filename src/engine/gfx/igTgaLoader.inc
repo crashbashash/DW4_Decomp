@@ -155,11 +155,11 @@ void igTgaLoader_InitFields(void) {
     fileField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
     ((igObjectRefMetaField *)fileField)->_metaObject = (int)igFile_GetOrCreateMetaObject();
     paletteField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
-    ((igMemoryRefMetaField *)paletteField)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)paletteField)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     tempMapField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
-    ((igMemoryRefMetaField *)tempMapField)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)tempMapField)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     tempRowField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 3));
-    ((igMemoryRefMetaField *)tempRowField)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)tempRowField)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     igMetaObject_NameFields(meta, g_igTgaLoader_fieldTable, g_igTgaLoader_fieldHandles, g_igTgaLoader_fieldOffsets, fieldStart);
 }
 

@@ -106,13 +106,13 @@ void igStructMetaField_InitFields(void) {
     field = ((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_size));
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)field);
     field = (igMetaField *)((igObjectDispatchView *)field)->CloneViaMetadata(1);
-    igUnsignedShortMetaField_SetDefaultValue((igMetaField *)field, (short)1);
+    ((Gap::Core::igUnsignedShortMetaField *)field)->setDefault((short)1);
     field->_persistent = 0;
     field->_externalEnumStorage = (int)&g_igStructMetaField_sizeDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);
     releaseField(field);
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base));
-    igIntMetaField_SetDefault((igMetaField *)field, 1);
+    ((Gap::Core::igIntMetaField *)field)->setDefault(1);
     field->_persistent = 0;
     igMetaObject_NameFields(meta, g_igStructMetaField_fieldTable, g_igStructMetaField_fieldDescriptors, g_igStructMetaField_fieldOffsets, base);
 }

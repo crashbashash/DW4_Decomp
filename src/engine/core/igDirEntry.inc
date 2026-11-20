@@ -131,7 +131,7 @@ void igDirEntry_InitFields(void) {
     first = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igDirEntry_ctorTable, 4);
     indexField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first)));
-    igIntMetaField_SetDefault((igMetaField *)indexField, -1);
+    ((Gap::Core::igIntMetaField *)indexField)->setDefault(-1);
     ((igIntMetaField *)indexField)->_persistent = 0;
     resolveMethodField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 1)));
     igEnumMetaField_SetDefaultValue((igMetaField *)resolveMethodField, 0);

@@ -175,7 +175,7 @@ void igEnvironmentMapShader2_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igTextureCubeAttr_GetOrCreateMetaObject();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igTextureBindAttr_GetOrCreateMetaObject();
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3), 1.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)))->setDefault(1.0f);
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igTextureAttr_GetOrCreateMetaObject();
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7))))->_persistent = 0;

@@ -95,7 +95,7 @@ void igRenderListAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igRenderListAttr_ctorTable, 2);
     field = (struct F_134020 *)(igMetaObject_GetFieldAt(meta, base));
-    igIntMetaField_SetDefault((igMetaField *)field, -1);
+    ((Gap::Core::igIntMetaField *)field)->setDefault(-1);
     field->b38 = 0;
     field2 = (struct F_134020 *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)field2)->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();

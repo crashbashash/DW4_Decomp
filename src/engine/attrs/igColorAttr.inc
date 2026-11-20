@@ -93,7 +93,7 @@ void igColorAttr_InitFields(void) {
     igVec4fMetaField_SetDefault((igMetaField *)field, (const float *)value);
     ((igMetaField *)field3)->_invarianceFunction = (int)&igColorAttr_SynchronizeColorPacked;
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    igUnsignedIntMetaField_SetDefaultValue((igMetaField *)field2, -1);
+    ((Gap::Core::igUnsignedIntMetaField *)field2)->setDefault(-1);
     ((igMetaField *)field2)->_persistent = 0;
     igMetaObject_NameFields(meta, g_igColorAttr_fieldTable, g_igColorAttr_fieldHandles, g_igColorAttr_fieldOffsets, base);
 }

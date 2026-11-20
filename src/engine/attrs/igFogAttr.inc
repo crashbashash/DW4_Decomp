@@ -90,7 +90,7 @@ void igFogAttr_InitFields(void) {
     field = (void *)(igMetaObject_GetFieldAt(meta, base));
     igEnumMetaField_SetDefaultValue((igMetaField *)field, g_igFogAttr_modeDefault);
     ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)&IG_GFX_FOG_MODE_GetMetaEnum;
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 2), 1000.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(1000.0f);
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
     sp[0] = 0.0f;
     sp[3] = 1.0f;

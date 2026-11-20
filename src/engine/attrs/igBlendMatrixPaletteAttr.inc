@@ -97,7 +97,7 @@ void igBlendMatrixPaletteAttr_InitFields(void) {
     ((igMemoryRefMetaField *)field2)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)field2)->_releaseOnReset = 1;
     field = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igMemoryRefMetaField *)field)->_memType = igUnsignedIntMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igUnsignedIntMetaField::getMetaField();
     ((igRefMetaField *)field)->_destruct = 1;
     ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)field)->_releaseOnReset = 1;

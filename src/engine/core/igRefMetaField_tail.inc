@@ -22,7 +22,7 @@ int igRefMetaField_ReadRawFieldMem(void *self, int destination, int *source, int
     if ((directory != 0) && (stored = *source, (stored != -1))) {
         index = stored;
         if (swap != 0) {
-            indexField = (void **)(((void **)igIntMetaField_GetDefaultDescriptor()));
+            indexField = (void **)(((void **)Gap::Core::igIntMetaField::getMetaField()));
             ((igMetaFieldView *)(indexField))->SwapBytes(&index, 1);
         }
         entry = (igDirEntry *)(igDirectory_GetEntry((int *)directory, index));

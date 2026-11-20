@@ -201,13 +201,13 @@ void igAliasMemoryPool_InitFields(void) {
     igMetaObject *meta = g_igAliasMemoryPool_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igAliasMemoryPool_ctorTable, 14);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base), -1);
-    igUnsignedLongMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 4), 0xFFFFFFFFFFFFFFFFULL);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(-1);
+    ((Gap::Core::igUnsignedLongMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(0xFFFFFFFFFFFFFFFFULL);
     eventTracker = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
     eventTracker->_metaObject = (int)igEventTracker_GetOrCreateMetaObject();
     allocationLock = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 10);
     allocationLock->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
-    igUnsignedShortMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 12), 8);
+    ((Gap::Core::igUnsignedShortMetaField *)(igMetaObject_GetFieldAt(meta, base + 12)))->setDefault(8);
     aliasedPool = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 13);
     aliasedPool->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
     aliasedPool->_construct = 0;

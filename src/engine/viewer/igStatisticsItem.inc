@@ -178,8 +178,8 @@ void igStatisticsItem_InitFields(void) {
     temp_s1 = g_igStatisticsItem_metaObject;
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igStatisticsItem_ctorTable, 0xC);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0), 0.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1), -1.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)))->setDefault(0.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 1)))->setDefault(-1.0f);
     temp_s2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6));
     temp_s2->_metaObject = (int)(igGuiComponent_GetOrCreateMetaObject());
     temp_s2_2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7));
@@ -193,7 +193,7 @@ void igStatisticsItem_InitFields(void) {
     temp_v0 = (igEnumMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xA));
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, -1);
     temp_v0->_getMetaEnumFunction = (int)(&IG_GFX_STATISTIC_GetMetaEnum);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xB), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xB)))->setDefault(-1);
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igStatisticsItem_fieldTable, g_igStatisticsItem_fieldHandles, g_igStatisticsItem_fieldOffsets, temp_s0);
 }
 

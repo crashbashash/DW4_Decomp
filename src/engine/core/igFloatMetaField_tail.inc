@@ -1,16 +1,19 @@
-int igFloatMetaField_GetSize(void) {
+namespace Gap {
+namespace Core {
+
+unsigned short igFloatMetaField::computeSize() {
     return 4;
 }
 
-void igFloatMetaField_SetDefault(igMetaField *self, float value) {
-    float defaultValue;
-
-    defaultValue = value;
-    ((igMetaFieldView *)(self))->SetDefault(&defaultValue);
+void igFloatMetaField::setDefault(float def)
+{
+    setDefaultMemory(&def);
 }
 
-int igFloatMetaField_GetAlignment(void) {
+int igFloatMetaField::computeRequiredAlignment() {
     return 0x10;
+}
+}
 }
 
 void igFolder_SetFolderName(igFolderView *self, const char *name) {

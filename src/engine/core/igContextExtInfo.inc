@@ -121,7 +121,7 @@ void igContextExtInfo_InitFields(void) {
     igStringMetaField_SetDefaultText((igMetaField *)nameField, 0);
     ((igStringMetaField *)nameField)->_destruct = 1;
     vendorNameField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igMemoryRefMetaField *)vendorNameField)->_memType = igCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)vendorNameField)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
     igMetaObject_NameFields((igMetaObject *)meta, g_igContextExtInfo_fieldTable, g_igContextExtInfo_fieldDescriptors, g_igContextExtInfo_fieldOffsets, base);
 }
 

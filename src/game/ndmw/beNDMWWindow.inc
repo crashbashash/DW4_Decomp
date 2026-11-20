@@ -169,7 +169,7 @@ void beNDMWWindow_InitFields(void) {
     padManager = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)padManager)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)padManager)->_refCounted = 0;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 4), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(1);
     subWindow = (void *)(igMetaObject_GetFieldAt(meta, base + 0xB));
     ((igObjectRefMetaField *)subWindow)->_metaObject = (int)beNDMWWindowList_GetOrCreateMetaObject();
     ((igRefMetaField *)subWindow)->_construct = 1;

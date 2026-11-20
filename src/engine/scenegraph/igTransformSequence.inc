@@ -94,10 +94,10 @@ void igTransformSequence1_5_InitFields(void) {
     temp_s0_3->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
     temp_s0_4 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 3));
     temp_s0_4->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
-    igUnsignedCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 4), 0xB);
+    ((Gap::Core::igUnsignedCharMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 4)))->setDefault(0xB);
     t5 = (igUnsignedCharArrayMetaField *)igMetaObject_GetFieldAt(temp_s1, temp_s2 + 5);
     t5->_num = 3;
-    igLongMetaField_SetDefault(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 7), -1);
+    ((Gap::Core::igLongMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 7)))->setDefault(-1);
     temp_s0_5 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 8));
     temp_s0_5->_metaObject = (int)igCompressedTransformSequence1_5Data_GetOrCreateMetaObject();
     igMetaObject_NameFields(temp_s1, g_igTransformSequence1_5_fieldTable, g_igTransformSequence1_5_fieldHandles, g_igTransformSequence1_5_fieldOffsets, temp_s2);
@@ -219,12 +219,12 @@ void igTransformSequence_InitFields(void) {
     temp_s2_4 = ((struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3));
     temp_s2_4->f56 = (int)igDoubleList_GetOrCreateMetaObject();
     temp_s2_4->f52 = 1;
-    igDoubleMetaField_SetDefaultDouble(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4), -1.0);
+    ((Gap::Core::igDoubleMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4)))->setDefault(-1.0);
     temp_v0 = ((struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6));
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
     *(int *)((char *)temp_v0 + 52) = (int)&igMetaEnum_GetEmpty;
     temp_v0_2 = ((struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7));
-    igIntMetaField_SetDefault((igMetaField *)temp_v0_2, 1);
+    ((Gap::Core::igIntMetaField *)temp_v0_2)->setDefault(1);
     temp_v0_2->f38 = 0;
     temp_a0 = ((struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8));
     sp40[0] = 0;

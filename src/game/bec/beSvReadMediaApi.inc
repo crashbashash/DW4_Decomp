@@ -123,7 +123,7 @@ void beSvReadMediaApi_InitFields(void) {
     gameData = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)gameData)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)gameData)->_refCounted = 0;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 2), 0x10);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(0x10);
     lodeData = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
     ((igObjectRefMetaField *)lodeData)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();
     loadWorkList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));

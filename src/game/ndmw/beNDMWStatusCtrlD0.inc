@@ -129,7 +129,7 @@ void beNDMWStatusCtrlD0_InitFields(void) {
     kindList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)kindList)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)kindList)->_construct = 1;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 6), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 6)))->setDefault(1);
     decideList = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
     ((igObjectRefMetaField *)decideList)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
     ((igRefMetaField *)decideList)->_construct = 1;

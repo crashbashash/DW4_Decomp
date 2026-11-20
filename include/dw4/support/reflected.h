@@ -20408,15 +20408,27 @@ typedef struct libNdmwRuntimePlugin {
  * (config/converted-classes.tsv). The flat structs above stay the C view. */
 #include "dw4/core/igObject.h"
 #include "dw4/core/igSmartPointer.h"
+#include "dw4/core/igStringRef.h"
 namespace Gap {
-namespace Core { class igMetaField; class igObject; }
+namespace Core { class igBoolMetaField; class igCharMetaField; class igDoubleMetaField; class igFloatMetaField; class igIntMetaField; class igLongMetaField; class igMetaField; class igObject; class igShortMetaField; class igUnsignedCharMetaField; class igUnsignedIntMetaField; class igUnsignedLongMetaField; class igUnsignedShortMetaField; }
 namespace Gui { class igClearRenderer; class igRenderer; }
 namespace Insight { class igFlushRenderer; }
+using Core::igBoolMetaField;
+using Core::igCharMetaField;
 using Gui::igClearRenderer;
+using Core::igDoubleMetaField;
+using Core::igFloatMetaField;
 using Insight::igFlushRenderer;
+using Core::igIntMetaField;
+using Core::igLongMetaField;
 using Core::igMetaField;
 using Core::igObject;
 using Gui::igRenderer;
+using Core::igShortMetaField;
+using Core::igUnsignedCharMetaField;
+using Core::igUnsignedIntMetaField;
+using Core::igUnsignedLongMetaField;
+using Core::igUnsignedShortMetaField;
 }
 
 namespace Gap {
@@ -20502,63 +20514,12 @@ public:
 }
 
 namespace Gap {
-namespace Gui {
-/* handle 0x58c208, 3 field(s), sizeof 12 (registered instance size) */
-class igRenderer : public Gap::Core::igObject {
-public:
-    igSmartPointer<igVisualContext> _visualContext; /* +8    igObjectRefMetaField */
-    IG_ABSTRACT_OBJECT_DEFINE(igRenderer)
-protected:
-    static igMetaField *k_visualContext;
-public:
-    void setVisualContext(igVisualContext *context);
-    virtual void initializeDrawing() = 0;
-    virtual void terminateDrawing() = 0;
-    virtual void traverse() = 0;
-    virtual void draw() = 0;
-};
-}
-}
-
-namespace Gap {
-namespace Gui {
-/* handle 0x58c1f0, 4 field(s), sizeof 16 (registered instance size) */
-class igClearRenderer : public Gap::Gui::igRenderer {
-public:
-    unsigned int _buffersToClear;                  /* +12   igUnsignedIntMetaField */
-    IG_OBJECT_DEFINE(igClearRenderer)
-private:
-    static igMetaField *k_buffersToClear;
-public:
-    virtual void traverse() {}
-    virtual void initializeDrawing();
-    virtual void terminateDrawing() {}
-    virtual void draw();
-};
-}
-}
-
-namespace Gap {
-namespace Insight {
-/* handle 0x56dc48, 3 field(s), sizeof 12 (registered instance size) */
-class igFlushRenderer : public Gap::Gui::igRenderer {
-public:
-    IG_OBJECT_DEFINE(igFlushRenderer)
-    virtual void traverse() {}
-    virtual void initializeDrawing() {}
-    virtual void terminateDrawing() {}
-    virtual void draw();
-};
-}
-}
-
-namespace Gap {
 namespace Core {
 /* handle 0x585cc8, 20 field(s), sizeof 52 (registered instance size) */
 class igMetaField : public Gap::Core::igObject {
 public:
     int _offset;                                   /* +8    igIntMetaField */
-    int _fieldName;                                /* +12   igStringMetaField */
+    igStringRef _fieldName;                        /* +12   igStringMetaField */
     short _typeIndex;                              /* +16   igShortMetaField */
     short _internalIndex;                          /* +18   igShortMetaField */
     unsigned short _size;                          /* +20   igUnsignedShortMetaField */
@@ -20607,7 +20568,7 @@ public:
     static __internalObjectList *getMetaFieldTypes();
     void setBasicProperties(const char *name, igMetaField **storage, int offset, igMetaObject *parent);
     void setFieldName(void **s);
-    inline const char *getFieldName() const { return (const char *)_fieldName; }
+    inline const char *getFieldName() const { return _fieldName.p; }
     virtual void setFromMemory(igObject *obj, const void *fieldStorage);
     void setFromField(igObject *toObject, igMetaField *fromField, igObject *fromObject);
 private:
@@ -20665,6 +20626,233 @@ public:
     virtual void userPostRead();
     short getTypeIndex();
     virtual int constructPerformsReset() const;
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x586988, 20 field(s), sizeof 52 (registered instance size) */
+class igBoolMetaField : public Gap::Core::igMetaField {
+public:
+    IG_BOOTSTRAP_OBJECT_DEFINE(igBoolMetaField)
+    IG_METAFIELD_SETUP(igBoolMetaField)
+    virtual unsigned short computeSize();
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(bool def);
+    virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x586930, 20 field(s), sizeof 52 (registered instance size) */
+class igCharMetaField : public Gap::Core::igMetaField {
+public:
+    IG_BOOTSTRAP_OBJECT_DEFINE(igCharMetaField)
+    IG_METAFIELD_SETUP(igCharMetaField)
+    virtual unsigned short computeSize();
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(char def);
+    virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Gui {
+/* handle 0x58c208, 3 field(s), sizeof 12 (registered instance size) */
+class igRenderer : public Gap::Core::igObject {
+public:
+    igSmartPointer<igVisualContext> _visualContext; /* +8    igObjectRefMetaField */
+    IG_ABSTRACT_OBJECT_DEFINE(igRenderer)
+protected:
+    static igMetaField *k_visualContext;
+public:
+    void setVisualContext(igVisualContext *context);
+    virtual void initializeDrawing() = 0;
+    virtual void terminateDrawing() = 0;
+    virtual void traverse() = 0;
+    virtual void draw() = 0;
+};
+}
+}
+
+namespace Gap {
+namespace Gui {
+/* handle 0x58c1f0, 4 field(s), sizeof 16 (registered instance size) */
+class igClearRenderer : public Gap::Gui::igRenderer {
+public:
+    unsigned int _buffersToClear;                  /* +12   igUnsignedIntMetaField */
+    IG_OBJECT_DEFINE(igClearRenderer)
+private:
+    static igMetaField *k_buffersToClear;
+public:
+    virtual void traverse() {}
+    virtual void initializeDrawing();
+    virtual void terminateDrawing() {}
+    virtual void draw();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x586638, 20 field(s), sizeof 52 (registered instance size) */
+class igDoubleMetaField : public Gap::Core::igMetaField {
+public:
+    IG_OBJECT_DEFINE(igDoubleMetaField)
+    IG_METAFIELD_SETUP(igDoubleMetaField)
+    virtual unsigned short computeSize();
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(double def);
+    virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x586378, 20 field(s), sizeof 52 (registered instance size) */
+class igFloatMetaField : public Gap::Core::igMetaField {
+public:
+    IG_OBJECT_DEFINE(igFloatMetaField)
+    IG_METAFIELD_SETUP(igFloatMetaField)
+    virtual unsigned short computeSize();
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(float def);
+    virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Insight {
+/* handle 0x56dc48, 3 field(s), sizeof 12 (registered instance size) */
+class igFlushRenderer : public Gap::Gui::igRenderer {
+public:
+    IG_OBJECT_DEFINE(igFlushRenderer)
+    virtual void traverse() {}
+    virtual void initializeDrawing() {}
+    virtual void terminateDrawing() {}
+    virtual void draw();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x5860f8, 20 field(s), sizeof 52 (registered instance size) */
+class igIntMetaField : public Gap::Core::igMetaField {
+public:
+    IG_BOOTSTRAP_OBJECT_DEFINE(igIntMetaField)
+    IG_METAFIELD_SETUP(igIntMetaField)
+    virtual unsigned short computeSize();
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(int def);
+    virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x586050, 20 field(s), sizeof 52 (registered instance size) */
+class igLongMetaField : public Gap::Core::igMetaField {
+public:
+    IG_OBJECT_DEFINE(igLongMetaField)
+    IG_METAFIELD_SETUP(igLongMetaField)
+    virtual unsigned short computeSize();
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(long long def);
+    virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585948, 20 field(s), sizeof 52 (registered instance size) */
+class igShortMetaField : public Gap::Core::igMetaField {
+public:
+    IG_BOOTSTRAP_OBJECT_DEFINE(igShortMetaField)
+    IG_METAFIELD_SETUP(igShortMetaField)
+    virtual unsigned short computeSize();
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(short def);
+    virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585760, 20 field(s), sizeof 52 (registered instance size) */
+class igUnsignedCharMetaField : public Gap::Core::igMetaField {
+public:
+    IG_OBJECT_DEFINE(igUnsignedCharMetaField)
+    IG_METAFIELD_SETUP(igUnsignedCharMetaField)
+    virtual unsigned short computeSize();
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(unsigned char def);
+    virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585738, 20 field(s), sizeof 52 (registered instance size) */
+class igUnsignedIntMetaField : public Gap::Core::igMetaField {
+public:
+    IG_BOOTSTRAP_OBJECT_DEFINE(igUnsignedIntMetaField)
+    IG_METAFIELD_SETUP(igUnsignedIntMetaField)
+    virtual unsigned short computeSize();
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(unsigned int def);
+    virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585710, 20 field(s), sizeof 52 (registered instance size) */
+class igUnsignedLongMetaField : public Gap::Core::igMetaField {
+public:
+    IG_BOOTSTRAP_OBJECT_DEFINE(igUnsignedLongMetaField)
+    IG_METAFIELD_SETUP(igUnsignedLongMetaField)
+    virtual unsigned short computeSize();
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(unsigned long long def);
+    virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x5856e8, 20 field(s), sizeof 52 (registered instance size) */
+class igUnsignedShortMetaField : public Gap::Core::igMetaField {
+public:
+    IG_BOOTSTRAP_OBJECT_DEFINE(igUnsignedShortMetaField)
+    IG_METAFIELD_SETUP(igUnsignedShortMetaField)
+    virtual unsigned short computeSize();
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(unsigned short def);
+    virtual int computeRequiredAlignment();
 };
 }
 }

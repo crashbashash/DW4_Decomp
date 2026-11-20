@@ -82,7 +82,7 @@ void igStringObj_InitFields(void) {
     first = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igStringObj_ctorTable, 2);
     field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first)));
-    ((igMemoryRefMetaField *)field)->_memType = igCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
     ((igRefMetaField *)field)->_destruct = 1;
     ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)field)->_releaseOnReset = 1;

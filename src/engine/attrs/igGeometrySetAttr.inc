@@ -160,7 +160,7 @@ void igGeometrySetAttr_InitFields(void) {
     ((igMetaField *)field)->_shallowCopyMethod = 1;
     ((igMetaField *)field)->_isAlikeShallowMethod = 3;
     field3 = (struct F_136f30 *)(igMetaObject_GetFieldAt(meta, base + 1));
-    igIntMetaField_SetDefault((igMetaField *)field3, -1);
+    ((Gap::Core::igIntMetaField *)field3)->setDefault(-1);
     ((igMetaField *)field3)->_persistent = 0;
     ((igMetaField *)field3)->_deepCopyMethod = 4;
     ((igMetaField *)field3)->_shallowCopyMethod = 4;
@@ -171,7 +171,7 @@ void igGeometrySetAttr_InitFields(void) {
     igEnumMetaField_SetDefaultValue((igMetaField *)field4, 0);
     ((igMetaField *)field4)->_persistent = 0;
     ((igEnumMetaField *)field4)->_getMetaEnumFunction = (int)&igGeometrySetAttr_GetAttrFlagsMetaEnum;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 4), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(1);
     igMetaObject_NameFields(meta, g_igGeometrySetAttr_fieldTable, g_igGeometrySetAttr_fieldHandles, g_igGeometrySetAttr_fieldOffsets, base);
 }
 

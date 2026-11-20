@@ -1,76 +1,59 @@
-int igCharMetaField_ValueFromString(void *self, char *value, int text) {
+namespace Gap {
+namespace Core {
+
+int igCharMetaField::setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir)
+{
     int consumed;
     int parsed;
-    int t;
+
     consumed = 0;
     parsed = 0;
-    sscanf((const char *)text,"%d%n", &parsed, &consumed);
-    t = parsed;
-    *value = t;
+    sscanf(strVal, "%d%n", &parsed, &consumed);
+    *(char *)dstMem = parsed;
     return consumed;
 }
 
-void igCharMetaField_ValueToString(int *out, int self, char *value) {
+igStringRef igCharMetaField::getStringFromMemory(const void *srcMem, igDirectory *dir)
+{
     char buffer[1024];
-    int pool;
-    int interned;
 
-    sprintf(buffer, (const char *)&percent_d_7[0], *value);
-    if (buffer == 0) {
-        interned = 0;
-    } else {
-        if (g_stringPool == 0) {
-            pool = ((int)StringPool_Allocate(0x10));
-            if (pool != 0) {
-                pool = ((int)StringPool_Construct((StringPool *)pool));
-            }
-            g_stringPool = (StringPool *)pool;
-        }
-        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)buffer);
-    }
-    *out = interned;
+    sprintf(buffer, (const char *)&percent_d_7[0], *(const char *)srcMem);
+    return igStringRef(buffer);
 }
 
-int **igCharMetaField_Construct(int **self, int source) {
-    igMetaField_Construct((igMetaField *)self);
-    *self = &g_igCharMetaField_vtable[0];
-    if (self != 0) {
-        igCharMetaField_Init(self);
-    }
-    return self;
+igCharMetaField::igCharMetaField(bool boot) : igMetaField(boot)
+{
+    new (this, 0) igCharMetaField;
 }
 
-int **igCharMetaField_Init(int **self) {
-    igMetaField_Init((igMetaField *)self);
-    *self = &g_igCharMetaField_vtable[0];
-    return self;
+igCharMetaField::igCharMetaField()
+{
 }
 
-int **igCharMetaField_CopyConstruct(int **self, int source) {
-    igMetaField_CopyConstruct((igMetaField *)self, (igMetaField *)source);
-    *self = &g_igCharMetaField_vtable[0];
-    return self;
+igCharMetaField::igCharMetaField(const igCharMetaField &other) : igMetaField(other)
+{
 }
 
-void igCharMetaField_Destruct(int extra0) {
-    igMetaField_Destruct((igMetaField *)extra0);
+void igCharMetaField::__bootstrapDestruct()
+{
+    igMetaField::__bootstrapDestruct();
 }
 
-int igCharMetaField_GetSize(void) {
+unsigned short igCharMetaField::computeSize() {
     return 1;
 }
 
-void igCharMetaField_SetDefaultValue(igMetaField *self, char value) {
-    char defaultValue;
-
-    defaultValue = value;
-    ((igMetaFieldView *)(self))->SetDefault(&defaultValue);
+void igCharMetaField::setDefault(char def)
+{
+    setDefaultMemory(&def);
 }
 
 /* igMetaField slot 27 (+0x6c) for a char array: returns 1, the alignment of a single char element.
  * The receiver is not read. */
-int igCharMetaField_GetAlignment(void) {
+int igCharMetaField::computeRequiredAlignment() {
     return 1;
+}
+}
 }
 
 unsigned short igCompoundMetaField_GetElementSize(void *self) {

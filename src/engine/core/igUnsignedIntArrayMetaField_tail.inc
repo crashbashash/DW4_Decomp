@@ -1,7 +1,7 @@
 void igUnsignedIntArrayMetaField_SwapBytes(igUnsignedIntArrayMetaField *self, int item, int count) {
     void **descriptor;
 
-    descriptor = (void **)(((void **)igUnsignedIntMetaField_GetDefaultDescriptor()));
+    descriptor = (void **)(((void **)Gap::Core::igUnsignedIntMetaField::getMetaField()));
     ((igMetaFieldView *)(descriptor))->SwapBytes((void *)(item), (int)(count * self->_num));
 }
 

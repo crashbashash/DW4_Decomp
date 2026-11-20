@@ -140,7 +140,7 @@ void beNumberCtrlInfoRam_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beNumberCtrlInfoRam_ctorTable, 6);
     geometry = (void *)(igMetaObject_GetFieldAt(meta, base));
     ((igObjectRefMetaField *)geometry)->_metaObject = (int)igGeometry_GetOrCreateMetaObject();
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), 0.09375f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(0.09375f);
     numList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
     ((igObjectRefMetaField *)numList)->_metaObject = (int)beNumVerDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)numList)->_construct = 1;

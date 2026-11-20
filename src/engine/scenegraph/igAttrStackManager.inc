@@ -256,7 +256,7 @@ void igAttrStackManager_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)igLightStateAttrPool_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_11)->_construct = 1;
     temp_s2_12 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xF)));
-    ((igMemoryRefMetaField *)temp_s2_12)->_memType = igIntMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)temp_s2_12)->_memType = (int)Gap::Core::igIntMetaField::getMetaField();
     ((igMemoryRefMetaField *)temp_s2_12)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s2_12)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s2_12)->_releaseOnReset = 1;

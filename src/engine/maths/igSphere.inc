@@ -93,7 +93,7 @@ void igSphere_InitFields(void) {
     v[1] = 0;
     v[2] = 0;
     igVec3fMetaField_SetDefault((igMetaField *)field, (const float *)v);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1), -1.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)))->setDefault(-1.0f);
     igMetaObject_NameFields((igMetaObject *)meta, (const char **)g_igSphere_fieldTable, (igMetaField ***)g_igSphere_fieldHandles, (int *)g_igSphere_fieldOffsets, base);
 }
 

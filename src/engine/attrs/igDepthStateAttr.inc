@@ -67,7 +67,7 @@ void igDepthStateAttr_InitFields(void) {
     meta = g_igDepthStateAttr_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igDepthStateAttr_ctorTable, 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(1);
     igMetaObject_NameFields(meta, g_igDepthStateAttr_fieldTable, g_igDepthStateAttr_fieldHandles, g_igDepthStateAttr_fieldOffsets, base);
 }
 

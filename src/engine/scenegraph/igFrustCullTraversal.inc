@@ -573,8 +573,8 @@ void igFrustCullTraversal_InitFields(void) {
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igClippingStateAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4), 1.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5), 2.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4)))->setDefault(1.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5)))->setDefault(2.0f);
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igAABox_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;

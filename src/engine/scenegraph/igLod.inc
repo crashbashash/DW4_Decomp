@@ -129,13 +129,13 @@ void igLod_InitFields(void) {
     ((igObjectRefMetaField *)lastRangeField)->_metaObject = (int)igNode_GetOrCreateMetaObject();
     ((igMetaField *)lastRangeField)->_persistent = 0;
     lastIndexField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    igIntMetaField_SetDefault((igMetaField *)lastIndexField, -1);
+    ((Gap::Core::igIntMetaField *)lastIndexField)->setDefault(-1);
     ((igIntMetaField *)lastIndexField)->_persistent = 0;
     lastLowerField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
-    igFloatMetaField_SetDefault((igMetaField *)lastLowerField, 0.0f);
+    ((Gap::Core::igFloatMetaField *)lastLowerField)->setDefault(0.0f);
     ((igFloatMetaField *)lastLowerField)->_persistent = 0;
     lastUpperField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)));
-    igFloatMetaField_SetDefault((igMetaField *)lastUpperField, 0.0f);
+    ((Gap::Core::igFloatMetaField *)lastUpperField)->setDefault(0.0f);
     ((igFloatMetaField *)lastUpperField)->_persistent = 0;
     centerField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)));
     defaultCenter[0] = 0;

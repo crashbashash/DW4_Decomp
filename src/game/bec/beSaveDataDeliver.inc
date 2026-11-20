@@ -81,7 +81,7 @@ void beSaveDataDeliver_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSaveDataDeliver_ctorTable, 2);
     data = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igMemoryRefMetaField *)data)->_memType = igCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)data)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
     igMetaObject_NameFields(meta, g_beSaveDataDeliver_fieldTable, g_beSaveDataDeliver_fieldHandles, g_beSaveDataDeliver_fieldOffsets, base);
 }
 

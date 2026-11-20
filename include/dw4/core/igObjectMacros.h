@@ -3,13 +3,15 @@
 
 /* The reflection members every registered class declares, as Alchemy's object macros spell them
  * (alchemy-kit_202309 include/igCore/igObjectMacros.h: IG_OBJECT_COMMON, IG_OBJECT_DEFINE,
- * IG_ABSTRACT_OBJECT_DEFINE, IG_OBJECT_BOOTSTRAP, IG_BOOTSTRAP_ABSTRACT_OBJECT_DEFINE), kept to the members
+ * IG_ABSTRACT_OBJECT_DEFINE, IG_OBJECT_BOOTSTRAP, IG_OBJECT_BOOTSTRAP_NON_ABSTRACT, IG_BOOTSTRAP_OBJECT_DEFINE,
+ * IG_BOOTSTRAP_ABSTRACT_OBJECT_DEFINE), kept to the members
  * this engine's registration has: _Meta is the handle
  * the registrar fills, arkRegisterInternal registers the class (a subclass passes it as its parent
  * registrar), arkRegister runs that once, getClassTypeSafe registers on first use and returns _Meta,
  * getClassTypeLazy creates the bare metaobject, _instantiateFromPool registers the class and creates an
  * instance from a pool, getClassMetaSafe is the class's own accessor and
- * getClassMeta the one a subclass passes for its parent, arkRegisterInitialize adds the fields, and
+ * getClassMeta the one a subclass passes for its parent, arkRegisterInitialize adds the fields,
+ * arkRegisterMetaValidate creates and validates a metafield type's own descriptor instance, and
  * retrieveVTablePointer reads the vtable of a class that can be instantiated. Their definitions are the
  * library's generated boilerplate. getMeta is the kit's inline accessor: in a class derived from the
  * polymorphic Gap::Core::igObject it overrides that root's virtual slot 20, so the compiler writes it
@@ -26,6 +28,7 @@ struct CallbackArray;
     static igMetaObject *_Meta; \
     private: \
     static void arkRegisterInitialize(); \
+    static void arkRegisterMetaValidate(); \
     public: \
     static CLASSNAME *_instantiateFromPool(igMemoryPoolView *pool); \
     static void arkRegister(); \
@@ -56,9 +59,31 @@ struct CallbackArray;
     CLASSNAME(const CLASSNAME &other); \
     virtual void __bootstrapDestruct();
 
+/* A bootstrap class that can be instantiated also overrides the root's copy slot (the kit's createCopy). */
+#define IG_OBJECT_BOOTSTRAP_NON_ABSTRACT(CLASSNAME) \
+    public: \
+    virtual Gap::Core::igObject *cloneViaMetadata(int copyMode);
+
+#define IG_BOOTSTRAP_OBJECT_DEFINE(CLASSNAME) \
+    IG_OBJECT_NON_ABSTRACT(CLASSNAME) \
+    IG_OBJECT_BOOTSTRAP_NON_ABSTRACT(CLASSNAME) \
+    IG_OBJECT_BOOTSTRAP(CLASSNAME) \
+    IG_OBJECT_COMMON(CLASSNAME)
+
 #define IG_BOOTSTRAP_ABSTRACT_OBJECT_DEFINE(CLASSNAME) \
     IG_OBJECT_BOOTSTRAP(CLASSNAME) \
     IG_OBJECT_COMMON(CLASSNAME)
+
+/* Every metafield type keeps one instance describing a field of its type (alchemy-kit_202309
+ * include/igCore/igMetaField.h, IG_METAFIELD_SETUP): getMetaField registers the class on first use and
+ * returns it, and the inline getGenericMetaField overrides igMetaField's slot with it. */
+#define IG_METAFIELD_SETUP(METAFIELDTYPE) \
+    protected: \
+    static METAFIELDTYPE *_MetaField; \
+    public: \
+    static METAFIELDTYPE *getMetaField(); \
+    inline virtual Gap::Core::igMetaField *getGenericMetaField() const { return _MetaField; } \
+    static void setMetaField(METAFIELDTYPE *val) { _MetaField = val; }
 #endif
 
 #endif

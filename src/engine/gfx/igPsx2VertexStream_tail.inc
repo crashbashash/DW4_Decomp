@@ -133,15 +133,15 @@ void igPsx2VertexStream_InitFields(void) {
     meta = g_igPsx2VertexStream_metaObject;
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igPsx2VertexStream_ctorTable, 0xA);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart)))->setDefault(1);
     *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart + 1)) + 38) = 0;
     f = igMetaObject_GetFieldAt(meta, fieldStart + 2);
     *(int *)((char *)f + 52) = 0x10;
     *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart + 7)) + 38) = 0;
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 8));
-    *(int *)((char *)(temp_s1) + 60) = igUnsignedCharMetaField_GetDefaultDescriptor();
+    *(int *)((char *)(temp_s1) + 60) = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 9));
-    *(int *)((char *)(temp_s1_2) + 60) = igUnsignedCharMetaField_GetDefaultDescriptor();
+    *(int *)((char *)(temp_s1_2) + 60) = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     igMetaObject_NameFields(meta, g_igPsx2VertexStream_fieldTable, g_igPsx2VertexStream_fieldHandles, g_igPsx2VertexStream_fieldOffsets, fieldStart);
 }
 

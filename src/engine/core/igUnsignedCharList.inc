@@ -59,7 +59,7 @@ void igUnsignedCharList_InitFields(void) {
     found = (void **)(((void **)igMetaObject_FindFieldByName(meta, data)));
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
     field = (igMemoryRefMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
-    field->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    field->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     field->_memSize = 0;
     field->_externalEnumStorage = (int)(&g_igUnsignedCharList_dataDescriptorCell);
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);

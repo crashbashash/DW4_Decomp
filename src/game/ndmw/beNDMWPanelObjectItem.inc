@@ -100,7 +100,7 @@ void beNDMWPanelObjectItem_InitFields(void) {
     inheritedPage = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_page"));
     pageIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)((char *)((igMetaObject *)meta)->_metaFields), (int)inheritedPage);
     pageField = (igIntMetaField *)((igObjectDispatchView *)inheritedPage)->CloneViaMetadata(1);
-    igIntMetaField_SetDefault((igMetaField *)pageField, 1);
+    ((Gap::Core::igIntMetaField *)pageField)->setDefault(1);
     pageField->_externalEnumStorage = (int)(&g_beNDMWPanelObjectItem_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, pageIndex, (igMetaField *)pageField);
     pageField->_refCount = pageField->_refCount - 1;

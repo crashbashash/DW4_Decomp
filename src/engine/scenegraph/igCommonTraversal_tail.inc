@@ -300,7 +300,7 @@ void igCommonTraversal_InitFields(void) {
     ((igRefMetaField *)temp_s2_20)->_construct = 1;
     ((igMetaField *)temp_s2_20)->_persistent = 0;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x15)));
-    igLongMetaField_SetDefault((igMetaField *)temp_v0, -1);
+    ((Gap::Core::igLongMetaField *)temp_v0)->setDefault(-1);
     ((igMetaField *)temp_v0)->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x16)))->_persistent = 0;
     temp_s2_21 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x17)));

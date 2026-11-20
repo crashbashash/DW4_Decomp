@@ -90,7 +90,7 @@ void igRadioGroupModel_InitFields(void) {
     temp_s0 = (void *)g_igRadioGroupModel_metaObject;
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igRadioGroupModel_ctorTable, 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)))->setDefault(-1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igRadioGroupModel_fieldTable, g_igRadioGroupModel_fieldHandles, g_igRadioGroupModel_fieldOffsets, temp_s1);
 }
 

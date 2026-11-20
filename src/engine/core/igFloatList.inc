@@ -66,7 +66,7 @@ void igFloatList_InitFields(void) {
     found = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)meta, data)));
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)((char *)((igMetaObject *)meta)->_metaFields), (int)found);
     field = (igMemoryRefMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
-    field->_memType = igFloatMetaField_GetDefaultDescriptor();
+    field->_memType = (int)Gap::Core::igFloatMetaField::getMetaField();
     field->_memSize = 0;
     field->_externalEnumStorage = (int)(&g_igFloatList_dataStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)field);

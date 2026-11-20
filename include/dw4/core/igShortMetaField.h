@@ -10,9 +10,7 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igShortMetaField_metaObject;
 struct igMetaField *igShortMetaField_Create(struct igMemoryPoolView *pool);
-void igShortMetaField_SetDefault(struct igMetaField *self, short value);
 
 #ifdef __cplusplus
 }

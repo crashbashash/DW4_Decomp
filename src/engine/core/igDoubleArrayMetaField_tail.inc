@@ -1,7 +1,7 @@
 void igDoubleArrayMetaField_SwapBytes(igDoubleArrayMetaField *self, int data, int count) {
     void **element;
 
-    element = (void **)(((void **)igDoubleMetaField_GetDefaultDescriptor()));
+    element = (void **)(((void **)Gap::Core::igDoubleMetaField::getMetaField()));
     ((igMetaFieldView *)(element))->SwapBytes((void *)(data), (int)(count * self->_num));
 }
 

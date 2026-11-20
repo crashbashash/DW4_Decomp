@@ -122,11 +122,11 @@ void igPsx2Thread_InitFields(void) {
     meta = (void *)(g_igPsx2Thread_metaObject);
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igPsx2Thread_ctorTable, 6);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)))->setDefault(-1);
     field = (igObjectRefMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
     field->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
     field->_construct = 1;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igPsx2Thread_fieldTable, g_igPsx2Thread_fieldDescriptors, g_igPsx2Thread_fieldOffsets, base);
     *(int *)((char *)(g_igPsx2Thread_metaObject) + 64) = (int)(&igThread_GetMetaObjectFunction);
 }

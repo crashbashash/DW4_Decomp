@@ -127,9 +127,9 @@ void beHitLandDelivInfoRam_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beHitLandDelivInfoRam_ctorTable, 9);
     transform = (void *)(igMetaObject_GetFieldAt(meta, base));
     ((igObjectRefMetaField *)transform)->_metaObject = (int)igTransform_GetOrCreateMetaObject();
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 2), 3.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, 3 + base), 4.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, 4 + base), 4.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(3.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, 3 + base)))->setDefault(4.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, 4 + base)))->setDefault(4.0f);
     pos = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
     va[0] = 0;
     va[1] = 0;

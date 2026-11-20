@@ -122,15 +122,15 @@ void igViewportAttr_InitFields(void) {
     meta = g_igViewportAttr_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igViewportAttr_ctorTable, 7);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 2), 0x27F);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 3), 0x1BF);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(0x27F);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 3)))->setDefault(0x1BF);
     field = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
     ((igObjectRefMetaField *)field)->_metaObject = (int)igScissorExt_GetOrCreateMetaObject();
     ((igMetaField *)field)->_persistent = 0;
     ((igMetaField *)field)->_deepCopyMethod = 1;
     ((igMetaField *)field)->_shallowCopyMethod = 1;
     ((igMetaField *)field)->_isAlikeShallowMethod = 3;
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 6), 1.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 6)))->setDefault(1.0f);
     igMetaObject_NameFields(meta, g_igViewportAttr_fieldTable, g_igViewportAttr_fieldHandles, g_igViewportAttr_fieldOffsets, base);
 }
 

@@ -94,7 +94,7 @@ void beModelCtrlNode2_InitFields(void) {
     meta = g_beModelCtrlNode2_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlNode2_ctorTable, 4);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), 1.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(1.0f);
     overrideAttrList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
     ((igObjectRefMetaField *)overrideAttrList)->_metaObject = (int)igAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)overrideAttrList)->_construct = 1;

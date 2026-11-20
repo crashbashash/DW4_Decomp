@@ -132,8 +132,8 @@ void igStackMemoryPool_InitFields(void) {
     meta = (void *)g_igStackMemoryPool_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igStackMemoryPool_ctorTable, 0xA);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base), -1);
-    igUnsignedShortMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1), 4);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)))->setDefault(-1);
+    ((Gap::Core::igUnsignedShortMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)))->setDefault(4);
     field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 9)));
     ((igObjectRefMetaField *)field)->_metaObject = (int)igEventTracker_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)meta, g_igStackMemoryPool_fieldTable, g_igStackMemoryPool_fieldDescriptors, g_igStackMemoryPool_fieldOffsets, base);

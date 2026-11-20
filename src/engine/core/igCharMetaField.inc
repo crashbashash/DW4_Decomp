@@ -1,12 +1,17 @@
-igMetaObject *g_igCharMetaField_metaObject;
-void *g_igCharMetaField_descriptor;
+namespace Gap {
+namespace Core {
+
+igMetaObject *igCharMetaField::_Meta;
+igCharMetaField *igCharMetaField::_MetaField;
+}
+}
 
 igMetaField *igCharMetaField_Create(igMemoryPoolView *pool) {
     void **field;
 
     if (g_objectSystem->active != 0) {
-        igCharMetaField_EnsureRegistered();
-        field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igCharMetaField_metaObject, pool)));
+        Gap::Core::igCharMetaField::arkRegister();
+        field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)Gap::Core::igCharMetaField::getClassMeta(), pool)));
     } else {
         field = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, pool)));
         if (field != 0) {
@@ -18,104 +23,84 @@ igMetaField *igCharMetaField_Create(igMemoryPoolView *pool) {
     return (igMetaField *)field;
 }
 
-void *igCharMetaField_Clone(void *source, void *copyMode) {
-    void *copy;
+namespace Gap {
+namespace Core {
+
+igObject *igCharMetaField::cloneViaMetadata(int copyMode)
+{
     if (g_objectSystem->active != 0) {
-        igCharMetaField_EnsureRegistered();
-        return ((void *)igObject_CloneViaMetadata((void **)source, (int)copyMode));
+        arkRegister();
+        return igObject::cloneViaMetadata(copyMode);
     }
-    copy = igObject_AllocateRawStorageDefault(0x34, 0);
-    if (copy) copy = ((void *)igCharMetaField_CopyConstruct((int **)copy, (int)source));
-    return copy;
+    return new (igObject_AllocateRawStorageDefault(sizeof(igCharMetaField), 0), 0) igCharMetaField(*this);
 }
 
-igMetaObject *igCharMetaField_GetMetaObject(void)
+igMetaObject *igCharMetaField::getClassTypeSafe()
 {
-    igMetaObject *g = g_igCharMetaField_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igCharMetaField_EnsureRegistered();
-    return g_igCharMetaField_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igCharMetaField_GetVTable(void) {
-    igCharMetaField field;
-    int vtable;
-    char *name;
-    int *text;
-    int *header;
-    int references;
-
-    igCharMetaField_Init((int **)&field);
-    vtable = *(int *)((char *)&field + g_objectSystem->vtableProbeOffset);
-    field._vtable = (int)&g_igMetaField_vtable[0];
-    name = (char *)&field._fieldName;
-    if (name != 0) {
-        text = *(int **)name;
-        if (text != 0) {
-            header = text - 2;
-            references = text[-1] - 1;
-            text[-1] = references;
-            if (references == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
-            }
-        }
-    }
-    return vtable;
-}
-
-void igCharMetaField_EnsureRegistered(void)
+void *igCharMetaField::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igCharMetaField_Register);
+    igCharMetaField temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-static igMetaObjectCallback g_igCharMetaField_callbackList[] = { igCharMetaField_CreateDefaultDescriptor, 0 };
+void igCharMetaField::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igCharMetaField_Register(void) {
+CallbackArray *igCharMetaField::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { arkRegisterMetaValidate, 0 };
+
     return igMetaObject_RegisterClass(
-        0,
-        &g_igCharMetaField_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igMetaField::arkRegisterInternal,
-        igMetaField_GetPublishedMetaObject,
-        igCharMetaField_GetMetaObjectFunction,
+        Gap::Core::igMetaField::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igCharMetaField",
-        0x34,
-        igCharMetaField_GetVTable,
+        sizeof(igCharMetaField),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
         0,
-        g_igCharMetaField_callbackList
+        regFunctions
     );
 }
 
-void igCharMetaField_GetMetaObjectFunction(void) {
-    igCharMetaField_GetMetaObject();
-}
 
+void igCharMetaField::arkRegisterMetaValidate()
+{
+    igCharMetaField *metaField;
 
-void igCharMetaField_CreateDefaultDescriptor(void) {
-    void *descriptor;
-
-    if (g_igCharMetaField_descriptor == 0) {
-        g_igCharMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igCharMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
-        descriptor = (void *)(g_igCharMetaField_descriptor);
-        if (descriptor != 0) {
-            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
+    if (_MetaField == 0) {
+        _MetaField = (igCharMetaField *)igMetaObject_CreateInstance(_Meta, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+        metaField = _MetaField;
+        if (metaField != 0) {
+            MetaRefList_AppendRetained(getMetaFieldTypes(), (::igObject *)metaField);
             {
-                igMetaField *held = (igMetaField *)g_igCharMetaField_descriptor;
+                ::igObject *held = (::igObject *)_MetaField;
                 held->_refCount = (int)held->_refCount - 1;
                 if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
                     igObject_Destroy(held);
                 }
             }
-            ((igMetaField *)g_igCharMetaField_descriptor)->_internalIndex = (short)(Gap::Core::igMetaField::getMetaFieldTypes()->_count - 1);
-            ((Gap::Core::igMetaField *)g_igCharMetaField_descriptor)->validate();
+            _MetaField->_internalIndex = (short)(getMetaFieldTypes()->_count - 1);
+            _MetaField->validate();
         }
     }
 }
 
-int igCharMetaField_GetDefaultDescriptor(void) {
-    if ((*(int *)&g_igCharMetaField_descriptor) == 0) {
-        igCharMetaField_EnsureRegistered();
-    }
-    return (*(int *)&g_igCharMetaField_descriptor);
+igCharMetaField *igCharMetaField::getMetaField()
+{
+    if (_MetaField == 0)
+        arkRegister();
+    return _MetaField;
+}
+}
 }
 

@@ -490,7 +490,7 @@ int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, ig
     buffer[0] = index;
     buffer[1] = ((Gap::Core::igObject *)object)->getIoSize();
     if (endianSwap) {
-        ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(buffer, 2);
+        Gap::Core::igIntMetaField::getMetaField()->endianSwapMemory(buffer, 2);
     }
     buffer += 2;
     for (; i < count; i++) {
@@ -512,7 +512,7 @@ int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igI
     meta = object->GetMeta();
     if (meta->_persistent == 0) return 0;
     if (endianSwap) {
-        ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(head, 3);
+        Gap::Core::igIntMetaField::getMetaField()->endianSwapMemory(head, 3);
     }
     data = (char *)&head[1];
     i = igMetaObject_GetFieldCount(Gap::Core::igObject::getClassMeta());
@@ -529,11 +529,11 @@ int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igI
             ((igMetaFieldView *)field)->ConstructValue((int)object);
             if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) == 0 || ((igRefMetaField *)field)->_construct == 0) ((Gap::Core::igMetaField *)field)->reset((Gap::Core::igObject *)object);
         } else {
-            if (endianSwap) ((igMetaFieldView *)igShortMetaField_GetDefaultDescriptor())->SwapBytes(data, 2);
+            if (endianSwap) Gap::Core::igShortMetaField::getMetaField()->endianSwapMemory(data, 2);
             if (i < *(short *)data + runTimeFields) {
                 ((igMetaFieldView *)field)->ConstructValue((int)object);
                 if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) == 0 || ((igRefMetaField *)field)->_construct == 0) ((Gap::Core::igMetaField *)field)->reset((Gap::Core::igObject *)object);
-                if (endianSwap) ((igMetaFieldView *)igShortMetaField_GetDefaultDescriptor())->SwapBytes(data, 2);
+                if (endianSwap) Gap::Core::igShortMetaField::getMetaField()->endianSwapMemory(data, 2);
             } else {
                 readFields += 1;
                 data += ((Gap::Core::igMetaField *)field)->readFromMemoryVersion3((Gap::Core::igObject *)object, data, (igDirectory *)file, endianSwap);
@@ -542,7 +542,7 @@ int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igI
     }
     {
         int size = head->size;
-        if (endianSwap) ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(head, 3);
+        if (endianSwap) Gap::Core::igIntMetaField::getMetaField()->endianSwapMemory(head, 3);
         object->userPostRead();
         return size;
     }
@@ -567,7 +567,7 @@ int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead 
     }
     lists = dir->_metaFieldPerObjectIndices;
     if (endianSwap) {
-        ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(head, 2);
+        Gap::Core::igIntMetaField::getMetaField()->endianSwapMemory(head, 2);
     }
     offsets = lists->_data[head->kind];
     data = (char *)&head->fieldCount;  /* this record format has no field count: the fields start in its place */
@@ -599,7 +599,7 @@ int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead 
     }
     size = head->size;
     if (endianSwap) {
-        ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(head, 2);
+        Gap::Core::igIntMetaField::getMetaField()->endianSwapMemory(head, 2);
     }
     object->userPostRead();
     return size;

@@ -112,8 +112,8 @@ void beCriFxInfo_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCriFxInfo_ctorTable, 4);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base), 0);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), -1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 2), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(-1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(-1);
     xbFxParam = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
     ((igObjectRefMetaField *)xbFxParam)->_metaObject = (int)beCriFxXbData_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beCriFxInfo_fieldTable, g_beCriFxInfo_fieldHandles, g_beCriFxInfo_fieldOffsets, base);

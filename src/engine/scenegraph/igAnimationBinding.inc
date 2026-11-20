@@ -136,7 +136,7 @@ void igAnimationBinding_InitFields(void) {
     hierarchyField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
     ((igObjectRefMetaField *)hierarchyField)->_metaObject = (int)igAnimationHierarchy_GetOrCreateMetaObject();
     boneTrackIdxArrayField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igMemoryRefMetaField *)boneTrackIdxArrayField)->_memType = igIntMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)boneTrackIdxArrayField)->_memType = (int)Gap::Core::igIntMetaField::getMetaField();
     ((igRefMetaField *)boneTrackIdxArrayField)->_destruct = 1;
     ((igMemoryRefMetaField *)boneTrackIdxArrayField)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)boneTrackIdxArrayField)->_releaseOnReset = 1;

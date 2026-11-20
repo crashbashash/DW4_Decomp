@@ -187,11 +187,11 @@ void igPsx2AudioContext_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igThread_GetOrCreateMetaObject();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)igWindow_GetOrCreateMetaObject();
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3), 0);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 5), 2);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6), 0x30);
+    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3)))->setDefault(0);
+    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 5)))->setDefault(2);
+    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6)))->setDefault(0x30);
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 7));
-    ((igMemoryRefMetaField *)temp_s1_4)->_memType = igUnsignedIntMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)temp_s1_4)->_memType = (int)Gap::Core::igUnsignedIntMetaField::getMetaField();
     temp_s1_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 9));
     ((igObjectRefMetaField *)temp_s1_5)->_metaObject = (int)igWindow_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igPsx2AudioContext_fieldTable, g_igPsx2AudioContext_fieldHandles, g_igPsx2AudioContext_fieldOffsets, temp_s2);

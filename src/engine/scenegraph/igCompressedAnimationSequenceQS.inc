@@ -175,14 +175,14 @@ void igCompressedAnimationSequenceQS_InitFields(void) {
     temp_s2_2->f56 = (int)igUnsignedShortList_GetOrCreateMetaObject();
     temp_s2_3 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
     temp_s2_3->f56 = (int)igUnsignedShortList_GetOrCreateMetaObject();
-    igUnsignedLongMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7), 0xFFFFFFFFFFFFFFFFULL);
+    ((Gap::Core::igUnsignedLongMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7)))->setDefault(0xFFFFFFFFFFFFFFFFULL);
     temp_v0 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
     temp_v0->f52 = (int)&igMetaEnum_GetEmpty;
     temp_v0_2 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 9));
-    igIntMetaField_SetDefault((igMetaField *)temp_v0_2, 1);
+    ((Gap::Core::igIntMetaField *)temp_v0_2)->setDefault(1);
     temp_v0_2->f38 = 0;
-    igUnsignedCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA), 0);
+    ((Gap::Core::igUnsignedCharMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xA)))->setDefault(0);
     temp_s2_4 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 0xB));
     temp_s2_4->f52 = 3;
     igMetaObject_NameFields(temp_s1, g_igCompressedAnimationSequenceQS_fieldTable, g_igCompressedAnimationSequenceQS_fieldHandles, g_igCompressedAnimationSequenceQS_fieldOffsets, temp_s0);

@@ -2,7 +2,6 @@ namespace Gap {
 namespace Core {
 
 igMetaField::igMetaField(bool boot) : igObject(boot) {
-    _fieldName = 0;
     new (this, 0) igMetaField;
 }
 
@@ -10,11 +9,6 @@ igMetaField::igMetaField(bool boot) : igObject(boot) {
  * selectors 0, 1 and 2. The name is assigned the interned empty string: the shared pool is created
  * on first use, and the previous name (none yet) has its reference dropped. */
 igMetaField::igMetaField() {
-    int pool;
-    void *emptyToken;
-    int oldName,refCount;
-    int *oldHeader;
-    _fieldName=0;
     _offset=0;
     _isRunTime=0;
     _typeIndex=-1;
@@ -22,22 +16,7 @@ igMetaField::igMetaField() {
     _size=0;
     _default=0;
     _externalEnumStorage=0;
-    if(g_stringPool==0){
-        pool=((int)StringPool_Allocate(16));
-        if(pool)pool=((int)StringPool_Construct((StringPool *)pool));
-        g_stringPool=(StringPool *)pool;
-    }
-    emptyToken=((char *)StringPool_Intern((StringPool *)g_stringPool, (const char *)0));
-    /* Interned strings carry a header in front of the characters: owner chunk at -8, reference
-     * count at -4. */
-    oldName=_fieldName;
-    if(oldName){
-        oldHeader=(int *)(oldName-8);
-        refCount=*(int *)(oldName-4)-1;
-        *(int *)(oldName-4)=refCount;
-        if(!refCount)StringChunk_ReleaseHeader((StringChunk *)(*oldHeader), (StringTokenHeader *)oldHeader);
-    }
-    _fieldName=(int)emptyToken;
+    _fieldName=(const char *)0;
     _parentMetaObject=0;
     _invarianceFunction=0;
     _resetMethod=0;
@@ -51,31 +30,12 @@ igMetaField::igMetaField() {
 }
 
 igMetaField::igMetaField(const igMetaField &other) : igObject(other) {
-    int name;
-    int refCount;
-    int *nameHeader;
-
-    _fieldName = 0;
     _offset = other._offset;
     _isRunTime = other._isRunTime;
     _typeIndex = other._typeIndex;
     _size = other._size;
     _internalIndex = other._internalIndex;
     _externalEnumStorage = other._externalEnumStorage;
-
-    name = other._fieldName;
-    if (name) {
-        ++*(int *)(name - 4);
-    }
-    name = _fieldName;
-    if (name) {
-        nameHeader = (int *)(name - 8);
-        refCount = *(int *)(name - 4) - 1;
-        *(int *)(name - 4) = refCount;
-        if (!refCount) {
-            StringChunk_ReleaseHeader((StringChunk *)(*nameHeader), (StringTokenHeader *)nameHeader);
-        }
-    }
     _fieldName = other._fieldName;
 
     _parentMetaObject = other._parentMetaObject;
@@ -176,26 +136,7 @@ void igMetaField::setDefaultMemory(const void *mem) {
 }
 
 void igMetaField::setFieldName(void **newName) {
-    int *chunkHeader;
-    int refCount;
-    void *incoming;
-    void *previous;
-
-    /* Retain the new name before releasing the old one. */
-    incoming = *newName;
-    if (incoming != 0) {
-        *(int *)((char *)incoming - 4) += 1;
-    }
-    previous = (void *)_fieldName;
-    if (previous != 0) {
-        chunkHeader = (int *)((char *)previous - 8);
-        refCount = *(int *)((char *)previous - 4) - 1;
-        *(int *)((char *)previous - 4) = refCount;
-        if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*chunkHeader), (StringTokenHeader *)chunkHeader);
-        }
-    }
-    _fieldName = (int)*newName;
+    _fieldName = *(const igStringRef *)newName;
 }
 
 void igMetaField::reset(igObject *src){
@@ -413,7 +354,7 @@ int igMetaField::setMemoryByString(void *dstMem, const char *strVal, igDirectory
 }
 
 igStringRef igMetaField::getStringFromMemory(const void *srcMem, igDirectory *dir) {
-    return igStringRef((const char *)_fieldName);
+    return igStringRef(_fieldName.p);
 }
 
 int igMetaField::addToDirectory(igObject *obj, igDirectory *dir) {
@@ -511,7 +452,7 @@ namespace Core {
 void igMetaField::print(const igObject *src, unsigned int deep, const char *indent) {
     igStringRef text = getStringFromMemory((const char *)src + _offset, 0);
     if (indent == 0) indent = &emptyIndent;
-    igReport_Printf("%s%s = %s\n", indent, _fieldName, text.p);
+    igReport_Printf("%s%s = %s\n", indent, _fieldName.p, text.p);
     igReport_Flush();
 }
 

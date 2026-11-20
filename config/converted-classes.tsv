@@ -7,3 +7,14 @@ igClearRenderer	Gui
 igFlushRenderer	Insight
 igRenderer	Gui
 igMetaField	Core
+igIntMetaField	Core
+igShortMetaField	Core
+igCharMetaField	Core
+igUnsignedShortMetaField	Core
+igUnsignedIntMetaField	Core
+igLongMetaField	Core
+igUnsignedLongMetaField	Core
+igUnsignedCharMetaField	Core
+igDoubleMetaField	Core
+igFloatMetaField	Core
+igBoolMetaField	Core

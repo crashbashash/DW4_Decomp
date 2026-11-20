@@ -141,7 +141,7 @@ void igObjectRefMetaField_InitFields(void) {
     ((igObjectRefMetaField *)metaObjectField)->_refCounted = 0;
     ((igMetaField *)metaObjectField)->_deepCopyMethod = 1;
     ((igMetaField *)metaObjectField)->_shallowCopyMethod = 1;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igObjectRefMetaField_fieldTable, g_igObjectRefMetaField_fieldDescriptors, g_igObjectRefMetaField_fieldOffsets, base);
 }
 

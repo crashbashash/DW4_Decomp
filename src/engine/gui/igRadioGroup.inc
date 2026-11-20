@@ -150,8 +150,8 @@ void igRadioGroup_InitFields(void) {
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igOnOffValueObserverList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3), 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4), -1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)))->setDefault(1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4)))->setDefault(-1);
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igRadioGroup_fieldTable, g_igRadioGroup_fieldHandles, g_igRadioGroup_fieldOffsets, temp_s0);
 }
 

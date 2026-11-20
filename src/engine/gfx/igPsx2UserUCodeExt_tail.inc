@@ -97,7 +97,7 @@ void igPsx2UserUCodeExt_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPsx2UserUCodeExt_Register);
 }
 
-static igMetaObjectCallback g_igPsx2UserUCodeExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, igIntMetaField_EnsureRegistered, igRawRefMetaField_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igPsx2UserUCodeExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, Gap::Core::igIntMetaField::arkRegister, igRawRefMetaField_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2UserUCodeExt_Register(void) {
     FUN_00149bc0();
@@ -159,7 +159,7 @@ void igPsx2UserUCodeExt_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igPsx2VisualContext_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igIntMetaField_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)Gap::Core::igIntMetaField::getClassTypeLazy();
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)igRawRefMetaField_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_igPsx2UserUCodeExt_fieldTable, g_igPsx2UserUCodeExt_fieldHandles, g_igPsx2UserUCodeExt_fieldOffsets, fieldStart);

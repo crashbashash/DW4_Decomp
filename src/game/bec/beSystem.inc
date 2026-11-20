@@ -246,7 +246,7 @@ void beSystem_InitFields(void) {
     meta = g_beSystem_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSystem_ctorTable, 0x1A);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 3), 1.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 3)))->setDefault(1.0f);
     random = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
     ((igObjectRefMetaField *)random)->_metaObject = (int)igRandomNumber_GetOrCreateMetaObject();
     ((igRefMetaField *)random)->_construct = 1;
@@ -254,7 +254,7 @@ void beSystem_InitFields(void) {
     ((igObjectRefMetaField *)readFileList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)readFileList)->_construct = 1;
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0xA), 0);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0xB), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xB)))->setDefault(1);
     bootDirectory = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
     ((igObjectRefMetaField *)bootDirectory)->_metaObject = (int)igDirectory_GetOrCreateMetaObject();
     globalStrObj = (void *)(igMetaObject_GetFieldAt(meta, base + 0xD));
@@ -266,7 +266,7 @@ void beSystem_InitFields(void) {
     viewerScene = (void *)(igMetaObject_GetFieldAt(meta, base + 0xF));
     ((igObjectRefMetaField *)viewerScene)->_metaObject = (int)igGroup_GetOrCreateMetaObject();
     ((igRefMetaField *)viewerScene)->_construct = 1;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0x15), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x15)))->setDefault(1);
     igMetaObject_NameFields(meta, g_beSystem_fieldTable, g_beSystem_fieldHandles, g_beSystem_fieldOffsets, base);
 }
 

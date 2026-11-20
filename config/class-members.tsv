@@ -116,7 +116,7 @@ igMetaField	static inline void setMetaField(igMetaField *val) { _MetaField = val
 igMetaField	static __internalObjectList *getMetaFieldTypes();
 igMetaField	void setBasicProperties(const char *name, igMetaField **storage, int offset, igMetaObject *parent);
 igMetaField	void setFieldName(void **s);
-igMetaField	inline const char *getFieldName() const { return (const char *)_fieldName; }
+igMetaField	inline const char *getFieldName() const { return _fieldName.p; }
 igMetaField	virtual void setFromMemory(igObject *obj, const void *fieldStorage);
 igMetaField	void setFromField(igObject *toObject, igMetaField *fromField, igObject *fromObject);
 igMetaField	private: void copy(igObject *dst, const igObject *src, int copyMethod);
@@ -170,3 +170,80 @@ igMetaField	virtual int convertStringToMemory(const char *val, void *mem, int nu
 igMetaField	virtual void userPostRead();
 igMetaField	short getTypeIndex();
 igMetaField	virtual int constructPerformsReset() const;
+igIntMetaField	IG_BOOTSTRAP_OBJECT_DEFINE(igIntMetaField)
+igIntMetaField	IG_METAFIELD_SETUP(igIntMetaField)
+igIntMetaField	virtual unsigned short computeSize();
+igIntMetaField	virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+igIntMetaField	virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+igIntMetaField	void setDefault(int def);
+igIntMetaField	virtual int computeRequiredAlignment();
+igShortMetaField	IG_BOOTSTRAP_OBJECT_DEFINE(igShortMetaField)
+igShortMetaField	IG_METAFIELD_SETUP(igShortMetaField)
+igShortMetaField	virtual unsigned short computeSize();
+igShortMetaField	virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+igShortMetaField	virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+igShortMetaField	void setDefault(short def);
+igShortMetaField	virtual int computeRequiredAlignment();
+igCharMetaField	IG_BOOTSTRAP_OBJECT_DEFINE(igCharMetaField)
+igCharMetaField	IG_METAFIELD_SETUP(igCharMetaField)
+igCharMetaField	virtual unsigned short computeSize();
+igCharMetaField	virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+igCharMetaField	virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+igCharMetaField	void setDefault(char def);
+igCharMetaField	virtual int computeRequiredAlignment();
+igUnsignedShortMetaField	IG_BOOTSTRAP_OBJECT_DEFINE(igUnsignedShortMetaField)
+igUnsignedShortMetaField	IG_METAFIELD_SETUP(igUnsignedShortMetaField)
+igUnsignedShortMetaField	virtual unsigned short computeSize();
+igUnsignedShortMetaField	virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+igUnsignedShortMetaField	virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+igUnsignedShortMetaField	void setDefault(unsigned short def);
+igUnsignedShortMetaField	virtual int computeRequiredAlignment();
+igUnsignedIntMetaField	IG_BOOTSTRAP_OBJECT_DEFINE(igUnsignedIntMetaField)
+igUnsignedIntMetaField	IG_METAFIELD_SETUP(igUnsignedIntMetaField)
+igUnsignedIntMetaField	virtual unsigned short computeSize();
+igUnsignedIntMetaField	virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+igUnsignedIntMetaField	virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+igUnsignedIntMetaField	void setDefault(unsigned int def);
+igUnsignedIntMetaField	virtual int computeRequiredAlignment();
+igLongMetaField	IG_OBJECT_DEFINE(igLongMetaField)
+igLongMetaField	IG_METAFIELD_SETUP(igLongMetaField)
+igLongMetaField	virtual unsigned short computeSize();
+igLongMetaField	virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+igLongMetaField	virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+igLongMetaField	void setDefault(long long def);
+igLongMetaField	virtual int computeRequiredAlignment();
+igUnsignedLongMetaField	IG_BOOTSTRAP_OBJECT_DEFINE(igUnsignedLongMetaField)
+igUnsignedLongMetaField	IG_METAFIELD_SETUP(igUnsignedLongMetaField)
+igUnsignedLongMetaField	virtual unsigned short computeSize();
+igUnsignedLongMetaField	virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+igUnsignedLongMetaField	virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+igUnsignedLongMetaField	void setDefault(unsigned long long def);
+igUnsignedLongMetaField	virtual int computeRequiredAlignment();
+igUnsignedCharMetaField	IG_OBJECT_DEFINE(igUnsignedCharMetaField)
+igUnsignedCharMetaField	IG_METAFIELD_SETUP(igUnsignedCharMetaField)
+igUnsignedCharMetaField	virtual unsigned short computeSize();
+igUnsignedCharMetaField	virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+igUnsignedCharMetaField	virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+igUnsignedCharMetaField	void setDefault(unsigned char def);
+igUnsignedCharMetaField	virtual int computeRequiredAlignment();
+igDoubleMetaField	IG_OBJECT_DEFINE(igDoubleMetaField)
+igDoubleMetaField	IG_METAFIELD_SETUP(igDoubleMetaField)
+igDoubleMetaField	virtual unsigned short computeSize();
+igDoubleMetaField	virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+igDoubleMetaField	virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+igDoubleMetaField	void setDefault(double def);
+igDoubleMetaField	virtual int computeRequiredAlignment();
+igFloatMetaField	IG_OBJECT_DEFINE(igFloatMetaField)
+igFloatMetaField	IG_METAFIELD_SETUP(igFloatMetaField)
+igFloatMetaField	virtual unsigned short computeSize();
+igFloatMetaField	virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+igFloatMetaField	virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+igFloatMetaField	void setDefault(float def);
+igFloatMetaField	virtual int computeRequiredAlignment();
+igBoolMetaField	IG_BOOTSTRAP_OBJECT_DEFINE(igBoolMetaField)
+igBoolMetaField	IG_METAFIELD_SETUP(igBoolMetaField)
+igBoolMetaField	virtual unsigned short computeSize();
+igBoolMetaField	virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+igBoolMetaField	virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+igBoolMetaField	void setDefault(bool def);
+igBoolMetaField	virtual int computeRequiredAlignment();

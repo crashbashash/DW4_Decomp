@@ -87,7 +87,7 @@ void igEnbayaTransformSource_InitFields(void) {
     meta = (void *)g_igEnbayaTransformSource_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igEnbayaTransformSource_ctorTable, 2);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)))->setDefault(-1);
     enbayaAnimationSourceField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
     ((igObjectRefMetaField *)enbayaAnimationSourceField)->_metaObject = (int)igEnbayaAnimationSource_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)meta, g_igEnbayaTransformSource_fieldTable, g_igEnbayaTransformSource_fieldHandles, g_igEnbayaTransformSource_fieldOffsets, base);

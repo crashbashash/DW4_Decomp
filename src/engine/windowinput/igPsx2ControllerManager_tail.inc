@@ -109,7 +109,7 @@ void igPsx2ControllerManager_InitFields(void) {
     temp_v0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, 0);
     ((igEnumMetaField *)temp_v0)->_getMetaEnumFunction = (int)(&FUN_00146d90);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igPsx2ControllerManager_fieldTable, g_igPsx2ControllerManager_fieldHandles, g_igPsx2ControllerManager_fieldOffsets, temp_s2);
 }
 

@@ -242,7 +242,7 @@ void igPointSpriteExt_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igVertexArray_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_2)->_persistent = 0;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
-    igFloatMetaField_SetDefault((igMetaField *)temp_v0, 1.0f);
+    ((Gap::Core::igFloatMetaField *)temp_v0)->setDefault(1.0f);
     ((igMetaField *)temp_v0)->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 3))->_persistent = 0;
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 4));

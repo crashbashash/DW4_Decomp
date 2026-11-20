@@ -1,97 +1,86 @@
-igMetaObject *g_igUnsignedCharMetaField_metaObject;
-void *g_igUnsignedCharMetaField_descriptor;
+namespace Gap {
+namespace Core {
+
+igMetaObject *igUnsignedCharMetaField::_Meta;
+igUnsignedCharMetaField *igUnsignedCharMetaField::_MetaField;
+}
+}
 
 igMetaField *igUnsignedCharMetaField_Create(igMemoryPoolView *pool) {
-    igUnsignedCharMetaField_EnsureRegistered();
-    return (igMetaField *)igMetaObject_CreateInstance(g_igUnsignedCharMetaField_metaObject, pool);
+    Gap::Core::igUnsignedCharMetaField::arkRegister();
+    return (igMetaField *)igMetaObject_CreateInstance(Gap::Core::igUnsignedCharMetaField::getClassMeta(), pool);
 }
 
-igMetaObject *igUnsignedCharMetaField_GetMetaObject(void)
+namespace Gap {
+namespace Core {
+
+igMetaObject *igUnsignedCharMetaField::getClassTypeSafe()
 {
-    igMetaObject *g = g_igUnsignedCharMetaField_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igUnsignedCharMetaField_EnsureRegistered();
-    return g_igUnsignedCharMetaField_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igUnsignedCharMetaField_GetVTable(void) {
-    igUnsignedCharMetaField obj;
-    char *o;
-    int *a1;
-    int v0;
-    int t;
-    igMetaField_Init((igMetaField *)&obj);
-    obj._vtable = (int)&g_igUnsignedCharMetaField_vtable[0];
-    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj._vtable = (int)&g_igMetaField_vtable[0];
-    if (&obj._fieldName != 0) {
-        o = (char *)obj._fieldName;
-        if (o != 0) {
-            a1 = (int *)(o - 8);
-            v0 = *(int *)(o - 4) - 1;
-            *(int *)(o - 4) = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
-            }
-        }
-    }
-    return t;
-}
-
-void igUnsignedCharMetaField_EnsureRegistered(void)
+void *igUnsignedCharMetaField::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igUnsignedCharMetaField_Register);
+    igUnsignedCharMetaField temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-static igMetaObjectCallback g_igUnsignedCharMetaField_callbackList[] = { igUnsignedCharMetaField_CreateDefaultDescriptor, 0 };
+void igUnsignedCharMetaField::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igUnsignedCharMetaField_Register(void) {
+CallbackArray *igUnsignedCharMetaField::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { arkRegisterMetaValidate, 0 };
+
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igUnsignedCharMetaField_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igMetaField::arkRegisterInternal,
-        igMetaField_GetPublishedMetaObject,
-        igUnsignedCharMetaField_GetMetaObjectFunction,
+        Gap::Core::igMetaField::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igUnsignedCharMetaField",
-        0x34,
-        igUnsignedCharMetaField_GetVTable,
+        sizeof(igUnsignedCharMetaField),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
         0,
-        g_igUnsignedCharMetaField_callbackList
+        regFunctions
     );
 }
 
-void igUnsignedCharMetaField_GetMetaObjectFunction(void) {
-    igUnsignedCharMetaField_GetMetaObject();
-}
 
+void igUnsignedCharMetaField::arkRegisterMetaValidate()
+{
+    igUnsignedCharMetaField *metaField;
 
-void igUnsignedCharMetaField_CreateDefaultDescriptor(void) {
-    void *descriptor;
-
-    if (g_igUnsignedCharMetaField_descriptor == 0) {
-        g_igUnsignedCharMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igUnsignedCharMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
-        descriptor = (void *)(g_igUnsignedCharMetaField_descriptor);
-        if (descriptor != 0) {
-            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
+    if (_MetaField == 0) {
+        _MetaField = (igUnsignedCharMetaField *)igMetaObject_CreateInstance(_Meta, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+        metaField = _MetaField;
+        if (metaField != 0) {
+            MetaRefList_AppendRetained(getMetaFieldTypes(), (::igObject *)metaField);
             {
-                void *held = (void *)g_igUnsignedCharMetaField_descriptor;
-                ((igObject *)held)->_refCount = ((igObject *)held)->_refCount - 1;
-                if (((unsigned long long) ((long long) (int) ((igObject *)held)->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((igObject *)held);
+                ::igObject *held = (::igObject *)_MetaField;
+                held->_refCount = (int)held->_refCount - 1;
+                if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
+                    igObject_Destroy(held);
                 }
             }
-            ((igMetaField *)g_igUnsignedCharMetaField_descriptor)->_internalIndex = (short) (Gap::Core::igMetaField::getMetaFieldTypes()->_count - 1);
-            ((Gap::Core::igMetaField *)g_igUnsignedCharMetaField_descriptor)->validate();
+            _MetaField->_internalIndex = (short)(getMetaFieldTypes()->_count - 1);
+            _MetaField->validate();
         }
     }
 }
 
-int igUnsignedCharMetaField_GetDefaultDescriptor(void) {
-    if (g_igUnsignedCharMetaField_descriptor == 0) {
-        igUnsignedCharMetaField_EnsureRegistered();
-    }
-    return (int)g_igUnsignedCharMetaField_descriptor;
+igUnsignedCharMetaField *igUnsignedCharMetaField::getMetaField()
+{
+    if (_MetaField == 0)
+        arkRegister();
+    return _MetaField;
+}
+}
 }
 

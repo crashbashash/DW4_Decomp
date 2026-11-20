@@ -200,7 +200,7 @@ void igIntersectTraversal_InitFields(void) {
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igProbe_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3), 5);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)))->setDefault(5);
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, 4 + temp_s0))))->_persistent = 0;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igVolumeList_GetOrCreateMetaObject();

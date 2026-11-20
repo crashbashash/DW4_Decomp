@@ -1,47 +1,38 @@
-int igLongMetaField_ValueFromString(int self, int unused, int string) {
+namespace Gap {
+namespace Core {
+
+int igLongMetaField::setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir)
+{
     int consumed;
 
     consumed = 0;
-    sscanf((const char *)string, "%ld%n", unused, &consumed);
+    sscanf(strVal, "%ld%n", (long long *)dstMem, &consumed);
     return consumed;
 }
 
-void igLongMetaField_ValueToString(int *out, int self, long long *value) {
-    int text[256];
-    int pool;
-    int interned;
+igStringRef igLongMetaField::getStringFromMemory(const void *srcMem, igDirectory *dir)
+{
+    char buffer[1024];
 
-    sprintf((char *)&text[0], "%ld", *value);
-    if (&text[0] == 0) {
-        interned = 0;
-    } else {
-        if (g_stringPool == 0) {
-            pool = ((int)StringPool_Allocate(0x10));
-            if (pool != 0) {
-                pool = ((int)StringPool_Construct((StringPool *)pool));
-            }
-            g_stringPool = (StringPool *)pool;
-        }
-        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)&text[0]);
-    }
-    *out = interned;
+    sprintf(buffer, "%ld", *(const long long *)srcMem);
+    return igStringRef(buffer);
 }
 
 /* igLongMetaField vtable slot +0x64 (GetSize): the byte size of one field value. A "long" field is
  * 8 bytes wide in the reflected layout. */
-int igLongMetaField_GetSize(void) {
+unsigned short igLongMetaField::computeSize() {
     return 8;
 }
 
-void igLongMetaField_SetDefault(igMetaField *self, long long value) {
-    long long stored;
-
-    stored = value;
-    ((igMetaFieldView *)(self))->SetDefault(&stored);
+void igLongMetaField::setDefault(long long def)
+{
+    setDefaultMemory(&def);
 }
 
-int igLongMetaField_GetAlignment(void) {
+int igLongMetaField::computeRequiredAlignment() {
     return 8;
+}
+}
 }
 
 igMediaView *g_defaultMedia;

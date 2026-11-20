@@ -73,8 +73,8 @@ void igObjectPool_InitFields(void) {
     meta = (void *)g_igObjectPool_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igObjectPool_ctorTable, 3);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1), 0x32);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2), 1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)))->setDefault(0x32);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igObjectPool_fieldTable, g_igObjectPool_fieldHandles, g_igObjectPool_fieldOffsets, base);
 }
 

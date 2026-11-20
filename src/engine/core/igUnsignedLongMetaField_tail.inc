@@ -1,70 +1,56 @@
-int igUnsignedLongMetaField_ValueFromString(int self, int value, int text) {
+namespace Gap {
+namespace Core {
+
+int igUnsignedLongMetaField::setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir)
+{
     int consumed;
 
     consumed = 0;
-    sscanf((const char *)text, "%ld%n", value, &consumed);
+    sscanf(strVal, "%ld%n", (unsigned long long *)dstMem, &consumed);
     return consumed;
 }
 
-void igUnsignedLongMetaField_ValueToString(int *out, int self, long long *value) {
-    struct { int w; int pad[255]; } text;
-    int pool;
-    int interned;
+igStringRef igUnsignedLongMetaField::getStringFromMemory(const void *srcMem, igDirectory *dir)
+{
+    char buffer[1024];
 
-    sprintf((char *)((int *)&text), "%ld", *value);
-    if ((int *)&text == 0) {
-        interned = 0;
-    } else {
-        if (g_stringPool == 0) {
-            pool = ((int)StringPool_Allocate(0x10));
-            if (pool != 0) {
-                pool = ((int)StringPool_Construct((StringPool *)pool));
-            }
-            g_stringPool = (StringPool *)pool;
-        }
-        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)((int *)&text));
-    }
-    *out = interned;
+    sprintf(buffer, "%ld", *(const unsigned long long *)srcMem);
+    return igStringRef(buffer);
 }
 
-int igUnsignedLongMetaField_GetSize(void) {
+unsigned short igUnsignedLongMetaField::computeSize() {
     return 8;
 }
 
-int **igUnsignedLongMetaField_Construct(int **self, int extra1) {
-    igMetaField_Construct((igMetaField *)self);
-    *self = &g_igUnsignedLongMetaField_vtable[0];
-    if (self != 0) {
-        igUnsignedLongMetaField_Init(self);
-    }
-    return self;
+igUnsignedLongMetaField::igUnsignedLongMetaField(bool boot) : igMetaField(boot)
+{
+    new (this, 0) igUnsignedLongMetaField;
 }
 
-int **igUnsignedLongMetaField_Init(int **self) {
-    igMetaField_Init((igMetaField *)self);
-    *self = &g_igUnsignedLongMetaField_vtable[0];
-    return self;
+igUnsignedLongMetaField::igUnsignedLongMetaField()
+{
 }
 
-int **igUnsignedLongMetaField_CopyConstruct(int **self, int source) {
-    igMetaField_CopyConstruct((igMetaField *)self, (igMetaField *)source);
-    *self = &g_igUnsignedLongMetaField_vtable[0];
-    return self;
+igUnsignedLongMetaField::igUnsignedLongMetaField(const igUnsignedLongMetaField &other) : igMetaField(other)
+{
 }
 
-void igUnsignedLongMetaField_Destruct(int extra0) {
-    igMetaField_Destruct((igMetaField *)extra0);
+void igUnsignedLongMetaField::__bootstrapDestruct()
+{
+    igMetaField::__bootstrapDestruct();
 }
 
-void igUnsignedLongMetaField_SetDefaultValue(igMetaField *field, unsigned long long value) {
-    unsigned long long defaultValue = value;
-    ((igMetaFieldView *)field)->SetDefault(&defaultValue);
+void igUnsignedLongMetaField::setDefault(unsigned long long def)
+{
+    setDefaultMemory(&def);
 }
 
 /* igUnsignedLongArrayMetaField vtable slot 27 (+0x6c): constant leaf returning 8, the byte size of
  * one unsigned long element (a 64-bit value on this target). The same igMetaField slot is the
  * base's `return -1` and igStructMetaField's `_alignment` accessor. */
-int igUnsignedLongMetaField_GetAlignment(igUnsignedLongArrayMetaField *self) {
+int igUnsignedLongMetaField::computeRequiredAlignment() {
     return 8;
+}
+}
 }
 

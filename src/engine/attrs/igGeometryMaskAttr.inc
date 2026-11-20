@@ -68,7 +68,7 @@ void igGeometryMaskAttr_InitFields(void) {
     meta = g_igGeometryMaskAttr_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igGeometryMaskAttr_ctorTable, 1);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base), -1);
+    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(-1);
     igMetaObject_NameFields(meta, g_igGeometryMaskAttr_fieldTable, g_igGeometryMaskAttr_fieldHandles, g_igGeometryMaskAttr_fieldOffsets, base);
 }
 

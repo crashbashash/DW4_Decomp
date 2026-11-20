@@ -62,7 +62,7 @@ void igPrimLengthArray1_1_InitFields(void) {
     temp_v0 = (void **)(igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_lengthData"));
     temp_s2 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(*(int *)((char *)(temp_s1) + 40)), (int)temp_v0);
     temp_s0 = ((DW4VC_84_1 *)(temp_v0))->vX(1);
-    temp_s0->f60 = igUnsignedIntMetaField_GetDefaultDescriptor();
+    temp_s0->f60 = (int)Gap::Core::igUnsignedIntMetaField::getMetaField();
     temp_s0->f56 = 0;
     igMemoryRefMetaField_SetDefaultWord((igMetaField *)temp_s0, 0);
     temp_s0->f53 = 1;

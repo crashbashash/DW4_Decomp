@@ -1,48 +1,40 @@
-int igUnsignedCharMetaField_ValueFromString(void *self, char *value, int text) {
+namespace Gap {
+namespace Core {
+
+int igUnsignedCharMetaField::setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir)
+{
     int consumed;
     int parsed;
 
     consumed = 0;
     parsed = 0;
-    sscanf((const char *)text, "%u%n", &parsed, &consumed);
-    *value = (char) parsed;
+    sscanf(strVal, "%u%n", &parsed, &consumed);
+    *(char *)dstMem = parsed;
     return consumed;
 }
 
-void igUnsignedCharMetaField_ValueToString(int *result, int self, unsigned char *value) {
-    int text[256];
-    int pool;
-    int interned;
-    sprintf((char *)text, (const char *)&percent_u[0], *value);
-    if (text == 0) {
-        interned = 0;
-    } else {
-        if (g_stringPool == 0) {
-            pool = ((int)StringPool_Allocate(0x10));
-            if (pool != 0) {
-                pool = ((int)StringPool_Construct((StringPool *)pool));
-            }
-            g_stringPool = (StringPool *)pool;
-        }
-        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)text);
-    }
-    *result = interned;
+igStringRef igUnsignedCharMetaField::getStringFromMemory(const void *srcMem, igDirectory *dir)
+{
+    char buffer[1024];
+
+    sprintf(buffer, (const char *)&percent_u[0], *(const unsigned char *)srcMem);
+    return igStringRef(buffer);
 }
 
 /* igMetaField slot +0x64 (GetSize): the byte size of one field value. An unsigned char is a single
  * byte. The field constructor stores this result as the field's `_size` (+0x14). */
-int igUnsignedCharMetaField_GetSize(void) {
+unsigned short igUnsignedCharMetaField::computeSize() {
     return 1;
 }
 
-void igUnsignedCharMetaField_SetDefaultValue(igMetaField *self, unsigned char value) {
-    unsigned char defaultValue;
-
-    defaultValue = value;
-    ((igMetaFieldView *)(self))->SetDefault(&defaultValue);
+void igUnsignedCharMetaField::setDefault(unsigned char def)
+{
+    setDefaultMemory(&def);
 }
 
-int igUnsignedCharMetaField_GetAlignment(void) {
+int igUnsignedCharMetaField::computeRequiredAlignment() {
     return 1;
+}
+}
 }
 

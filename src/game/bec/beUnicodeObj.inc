@@ -79,7 +79,7 @@ void beUnicodeObj_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beUnicodeObj_ctorTable, 1);
     buffer = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igMemoryRefMetaField *)buffer)->_memType = igUnsignedShortMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)buffer)->_memType = (int)Gap::Core::igUnsignedShortMetaField::getMetaField();
     igMetaObject_NameFields(meta, g_beUnicodeObj_fieldTable, g_beUnicodeObj_fieldHandles, g_beUnicodeObj_fieldOffsets, base);
 }
 

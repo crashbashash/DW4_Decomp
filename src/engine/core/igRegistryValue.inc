@@ -93,7 +93,7 @@ void igRegistryValue_InitFields(void) {
     meta = (void *)g_igRegistryValue_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igRegistryValue_ctorTable, 3);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)))->setDefault(-1);
     value = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
     ((igObjectRefMetaField *)value)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
     ((igRefMetaField *)value)->_construct = 1;

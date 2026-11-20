@@ -155,10 +155,10 @@ void igViewModel_InitFields(void) {
     temp_s0 = g_igViewModel_metaObject;
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewModel_ctorTable, 0xD);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1), 1.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2), 45.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3), 1.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4), 1000.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)))->setDefault(1.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)))->setDefault(45.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)))->setDefault(1.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4)))->setDefault(1000.0f);
     temp_a1 = igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5);
     v1[0] = 0.0f; v1[1] = 0.0f; v1[2] = 0.0f;
     igVec3fMetaField_SetDefault((igMetaField *)temp_a1, v1);

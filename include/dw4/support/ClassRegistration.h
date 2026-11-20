@@ -13,7 +13,6 @@ void igBoolArrayMetaField_EnsureRegistered(void);
 void igBoolList_EnsureRegistered(void);
 void igDependencyMetaField_EnsureRegistered(void);
 void igDoubleArrayMetaField_EnsureRegistered(void);
-void igDoubleMetaField_EnsureRegistered(void);
 void igEnumArrayMetaField_EnsureRegistered(void);
 void igFloatArrayMetaField_EnsureRegistered(void);
 void igFloatListList_EnsureRegistered(void);

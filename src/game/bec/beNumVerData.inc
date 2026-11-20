@@ -79,7 +79,7 @@ void beNumVerData_InitFields(void) {
     meta = g_beNumVerData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNumVerData_ctorTable, 2);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(-1);
     verDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)verDataList)->_metaObject = (int)beNumVerInsideDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)verDataList)->_construct = 1;

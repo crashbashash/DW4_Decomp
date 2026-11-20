@@ -86,9 +86,9 @@ void beNumberCtrlInfoWork_InitFields(void) {
     meta = g_beNumberCtrlInfoWork_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNumberCtrlInfoWork_ctorTable, 3);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base), -1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), -1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 2), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(-1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(-1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(-1);
     igMetaObject_NameFields(meta, g_beNumberCtrlInfoWork_fieldTable, g_beNumberCtrlInfoWork_fieldHandles, g_beNumberCtrlInfoWork_fieldOffsets, base);
 }
 

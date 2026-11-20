@@ -115,12 +115,12 @@ void igClearAttr_InitFields(void) {
     v2.z = 0;
     v2.w = 0;
     igVec4fMetaField_SetDefault((igMetaField *)field3, (const float *)&v2);
-    igDoubleMetaField_SetDefaultDouble(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3), 1.0);
+    ((Gap::Core::igDoubleMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)))->setDefault(1.0);
     field2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5));
-    igUnsignedIntMetaField_SetDefaultValue((igMetaField *)field2, -1);
+    ((Gap::Core::igUnsignedIntMetaField *)field2)->setDefault(-1);
     ((igMetaField *)field2)->_persistent = 0;
     field = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6));
-    igFloatMetaField_SetDefault((igMetaField *)field, 1.0f);
+    ((Gap::Core::igFloatMetaField *)field)->setDefault(1.0f);
     ((igMetaField *)field)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)meta, g_igClearAttr_fieldTable, g_igClearAttr_fieldHandles, g_igClearAttr_fieldOffsets, base);
 }

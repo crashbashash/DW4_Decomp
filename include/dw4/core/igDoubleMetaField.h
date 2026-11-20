@@ -12,7 +12,6 @@ extern "C" {
 
 extern struct igMetaObject *g_igDoubleMetaField_metaObject;
 struct igMetaField *igDoubleMetaField_Create(struct igMemoryPoolView *pool);
-void igDoubleMetaField_SetDefaultDouble(struct igMetaField *self, double value);
 
 #ifdef __cplusplus
 }

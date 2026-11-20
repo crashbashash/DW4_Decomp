@@ -110,7 +110,7 @@ void beSelectCtrlInfoWork_InitFields(void) {
     meta = g_beSelectCtrlInfoWork_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSelectCtrlInfoWork_ctorTable, 5);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 2), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(1);
     decideList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
     ((igObjectRefMetaField *)decideList)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beSelectCtrlInfoWork_fieldTable, g_beSelectCtrlInfoWork_fieldHandles, g_beSelectCtrlInfoWork_fieldOffsets, base);

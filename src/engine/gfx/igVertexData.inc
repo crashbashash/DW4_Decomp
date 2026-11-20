@@ -153,7 +153,7 @@ void igVertexData_InitFields(void) {
     componentTypeField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
     igEnumMetaField_SetDefaultValue((igMetaField *)componentTypeField, 0);
     ((igEnumMetaField *)componentTypeField)->_getMetaEnumFunction = (int)(IG_VERTEX_COMPONENT_TYPE_GetMetaEnum);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 3), 1);
+    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 3)))->setDefault(1);
     igMetaObject_NameFields(meta, g_igVertexData_fieldTable, g_igVertexData_fieldHandles, g_igVertexData_fieldOffsets, fieldStart);
 }
 

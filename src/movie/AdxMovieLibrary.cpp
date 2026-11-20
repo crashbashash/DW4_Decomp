@@ -733,12 +733,12 @@ void igAdxFile_InitFields(void) {
     meta = g_igAdxFile_metaObject;
     firstField = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igAdxFile_ctorTable, 0xE);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 4), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 5), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 6), 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 8), 0x20000);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xC), 0x800);
-    igUnsignedLongMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xD), 0xFE502A);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 4)))->setDefault(1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 5)))->setDefault(1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 6)))->setDefault(1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 8)))->setDefault(0x20000);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xC)))->setDefault(0x800);
+    ((Gap::Core::igUnsignedLongMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xD)))->setDefault(0xFE502A);
     igMetaObject_NameFields((igMetaObject *)meta, g_igAdxFile_fieldTable, g_igAdxFile_fieldHandles, g_igAdxFile_fieldOffsets, firstField);
     g_igAdxFile_metaObject->_writeProxy = (int)(&igFile_GetMetaObjectFunction);
     igMetaObject_AddExitCallback((int)&igAdxFile_ExitCallback);
@@ -879,10 +879,10 @@ void igAdxAudio_InitFields(void) {
     meta = g_igAdxAudio_metaObject;
     firstField = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igAdxAudio_ctorTable, 9);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 2), 4);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 3), 2);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 5), 4);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 6), 0xBB80);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 2)))->setDefault(4);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 3)))->setDefault(2);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 5)))->setDefault(4);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 6)))->setDefault(0xBB80);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 8), 0);
     igMetaObject_NameFields((igMetaObject *)meta, g_igAdxAudio_fieldTable, g_igAdxAudio_fieldHandles, g_igAdxAudio_fieldOffsets, firstField);
 }
@@ -1646,10 +1646,10 @@ void igMovieInfo_InitFields(void) {
     typeField = (igEnumMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 1);
     igEnumMetaField_SetDefaultValue((igMetaField *)typeField, 0);
     typeField->_getMetaEnumFunction = (int)igMovieInfo_GetMovieTypeMetaEnum;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 3), -1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 4), -1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 5), -1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 6), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 3)))->setDefault(-1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 4)))->setDefault(-1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 5)))->setDefault(-1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 6)))->setDefault(-1);
     videoTexturesField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 7);
     videoTexturesField->_metaObject = (int)igTextureBindAttrList_GetOrCreateMetaObject();
     minificationFilterField = (igEnumMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 8);
@@ -1659,8 +1659,8 @@ void igMovieInfo_InitFields(void) {
     magnificationFilterField = (igEnumMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 9);
     igEnumMetaField_SetDefaultValue((igMetaField *)magnificationFilterField, 0);
     *(void (**)(void))&magnificationFilterField->_getMetaEnumFunction = (void (*)())IG_GFX_TEXTURE_FILTER_GetMetaEnum;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xA), -1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xB), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xA)))->setDefault(-1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xB)))->setDefault(-1);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xC), 0);
     codecField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xD);
     codecField->_metaObject = (int)igMovieCodec_GetOrCreateMetaObject();
@@ -1684,7 +1684,7 @@ void igMovieInfo_InitFields(void) {
     userdataField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x13);
     userdataField->_metaObject = (int)Gap::Core::igObject::getClassMeta();
     userdataField->_persistent = 0;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x14), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x14)))->setDefault(-1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igMovieInfo_fieldTable, g_igMovieInfo_fieldHandles, g_igMovieInfo_fieldOffsets, firstField);
 }
 

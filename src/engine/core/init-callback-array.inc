@@ -49,9 +49,9 @@ void igObjectSystem_Startup(ObjectSystemView *self) {
     igPsx2CallStackTracer_EnsureRegistered();
     igLocationTable_EnsureRegistered();
     igEventTracker_EnsureRegistered();
-    igFloatMetaField_EnsureRegistered();
-    igLongMetaField_EnsureRegistered();
-    igUnsignedCharMetaField_EnsureRegistered();
+    Gap::Core::igFloatMetaField::arkRegister();
+    Gap::Core::igLongMetaField::arkRegister();
+    Gap::Core::igUnsignedCharMetaField::arkRegister();
     (*(int *)&g_igRefMetaField_descriptor) = igRawRefMetaField_GetDefaultDescriptor();
     g_currentMemoryContext->OnStartupComplete();
 }

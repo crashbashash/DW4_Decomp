@@ -127,7 +127,7 @@ void beModelCtrlInfoHitBody_InitFields(void) {
     meta = g_beModelCtrlInfoHitBody_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlInfoHitBody_ctorTable, 7);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(1);
     orgAABoxList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
     ((igObjectRefMetaField *)orgAABoxList)->_metaObject = (int)igAABoxList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)orgAABoxList)->_refCounted = 0;

@@ -146,7 +146,7 @@ void igPsx2Media_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igPsx2Media_ctorTable, 8);
     field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igMemoryRefMetaField *)field)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     ((igMemoryRefMetaField *)field)->_resetMethod = 3;
     ((igMemoryRefMetaField *)field)->_destruct = 1;
     ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
@@ -158,13 +158,13 @@ void igPsx2Media_InitFields(void) {
     ((igObjectRefMetaField *)field)->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)field)->_construct = 1;
     field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
-    ((igMemoryRefMetaField *)field)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     ((igMemoryRefMetaField *)field)->_resetMethod = 3;
     ((igMemoryRefMetaField *)field)->_destruct = 1;
     ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)field)->_releaseOnReset = 1;
     field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)));
-    ((igMemoryRefMetaField *)field)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     ((igMemoryRefMetaField *)field)->_resetMethod = 3;
     ((igMemoryRefMetaField *)field)->_destruct = 1;
     ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;

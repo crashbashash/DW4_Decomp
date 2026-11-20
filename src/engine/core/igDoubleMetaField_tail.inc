@@ -1,44 +1,35 @@
-int igDoubleMetaField_ValueFromString(int self, int value, int text) {
+namespace Gap {
+namespace Core {
+
+int igDoubleMetaField::setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir)
+{
     int consumed;
 
     consumed = 0;
-    sscanf((const char *)text, "%lg%n", value, &consumed);
+    sscanf(strVal, "%lg%n", (double *)dstMem, &consumed);
     return consumed;
 }
 
-void igDoubleMetaField_ValueToString(int *out, int self, long long *value) {
-    int buffer[256];
-    int pool;
-    int interned;
+igStringRef igDoubleMetaField::getStringFromMemory(const void *srcMem, igDirectory *dir)
+{
+    char buffer[1024];
 
-    sprintf((char *)buffer, "%g", *value);
-    if (buffer == 0) {
-        interned = 0;
-    } else {
-        if (g_stringPool == 0) {
-            pool = ((int)StringPool_Allocate(0x10));
-            if (pool != 0) {
-                pool = ((int)StringPool_Construct((StringPool *)pool));
-            }
-            g_stringPool = (StringPool *)pool;
-        }
-        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)buffer);
-    }
-    *out = interned;
+    sprintf(buffer, "%g", *(const double *)srcMem);
+    return igStringRef(buffer);
 }
 
-int igDoubleMetaField_GetSize(void) {
+unsigned short igDoubleMetaField::computeSize() {
     return 8;
 }
 
-void igDoubleMetaField_SetDefaultDouble(igMetaField *field, double value) {
-    double defaultValue;
-
-    defaultValue = value;
-    ((igMetaFieldView *)(field))->SetDefault(&defaultValue);
+void igDoubleMetaField::setDefault(double def)
+{
+    setDefaultMemory(&def);
 }
 
-int igDoubleMetaField_GetAlignment(void) {
+int igDoubleMetaField::computeRequiredAlignment() {
     return 8;
+}
+}
 }
 

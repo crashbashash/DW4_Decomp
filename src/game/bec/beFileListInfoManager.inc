@@ -165,7 +165,7 @@ void beFileListInfoManager_InitFields(void) {
     sceneInfoManager = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)sceneInfoManager)->_metaObject = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)sceneInfoManager)->_refCounted = 0;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 4), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(-1);
     fnames = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
     ((igObjectRefMetaField *)fnames)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)fnames)->_construct = 1;

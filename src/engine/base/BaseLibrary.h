@@ -682,11 +682,11 @@ static inline void storeHeld(Lst *list, int index, const igSmartPointer<T_5> &va
     it->held = held;
 }
 static inline void * cast0(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igVec4ucMetaField_metaObject) != 0) { return o; } return 0; }
-static inline void * cast0_2(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igUnsignedShortMetaField_metaObject) != 0) { return o; } return 0; }
-static inline void * cast0_3(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igUnsignedIntMetaField_metaObject) != 0) { return o; } return 0; }
+static inline void * cast0_2(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Core::igUnsignedShortMetaField::getClassMeta()) != 0) { return o; } return 0; }
+static inline void * cast0_3(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Core::igUnsignedIntMetaField::getClassMeta()) != 0) { return o; } return 0; }
 static inline void * cast0_4(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igStringMetaField_metaObject) != 0) { return o; } return 0; }
 static inline int *castToType(int *object) {
-    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_igShortMetaField_metaObject) != 0) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(Gap::Core::igShortMetaField::getClassMeta()) != 0) {
         return object;
     }
     return 0;
@@ -694,9 +694,9 @@ static inline int *castToType(int *object) {
 static inline void * cast0_5(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igRawRefMetaField_metaObject) != 0) { return o; } return 0; }
 static inline void * cast0_6(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igObjectRefMetaField_metaObject) != 0) { return o; } return 0; }
 static inline void * cast0_7(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igMemoryRefMetaField_metaObject) != 0) { return o; } return 0; }
-static inline void * cast0_8(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igFloatMetaField_metaObject) != 0) { return o; } return 0; }
-static inline void * cast0_9(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igCharMetaField_metaObject) != 0) { return o; } return 0; }
-static inline void * cast0_10(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igBoolMetaField_metaObject) != 0) { return o; } return 0; }
+static inline void * cast0_8(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Core::igFloatMetaField::getClassMeta()) != 0) { return o; } return 0; }
+static inline void * cast0_9(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Core::igCharMetaField::getClassMeta()) != 0) { return o; } return 0; }
+static inline void * cast0_10(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Core::igBoolMetaField::getClassMeta()) != 0) { return o; } return 0; }
 static inline int f8_of(const S_6 *list) { return list->f8; }
 
 #endif

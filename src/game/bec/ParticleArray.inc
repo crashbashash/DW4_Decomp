@@ -131,10 +131,10 @@ void ParticleArray_InitFields(void) {
     meta = g_ParticleArray_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_ParticleArray_ctorTable, 0xB);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base), 1.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), 1.0f);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 2), 1);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 4), 0.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(1.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(1.0f);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(1);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(0.0f);
     vertexArray1 = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
     ((igObjectRefMetaField *)vertexArray1)->_metaObject = (int)igVertexArray_GetOrCreateMetaObject();
     ((igMetaField *)vertexArray1)->_persistent = 0;

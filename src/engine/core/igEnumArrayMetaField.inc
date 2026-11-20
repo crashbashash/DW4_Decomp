@@ -95,7 +95,7 @@ void igEnumArrayMetaField_InitFields(void) {
     meta = (void *)g_igEnumArrayMetaField_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igEnumArrayMetaField_ctorTable, 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base), 1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igEnumArrayMetaField_fieldTable, g_igEnumArrayMetaField_fieldDescriptors, g_igEnumArrayMetaField_fieldOffsets, base);
 }
 

@@ -143,7 +143,7 @@ void igEnbayaAnimationState_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igEnbayaAnimationState_ctorTable, 2);
     *(char *)((char *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1))) + 38) = 0;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igEnbayaAnimationState_fieldTable, g_igEnbayaAnimationState_fieldHandles, g_igEnbayaAnimationState_fieldOffsets, temp_s1);
     igMetaObject_AddExitCallback((int)FUN_001a21a0);
 }

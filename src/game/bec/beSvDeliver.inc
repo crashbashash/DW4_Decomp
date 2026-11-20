@@ -180,8 +180,8 @@ void beSvDeliver_InitFields(void) {
     actConnect = (void *)(igMetaObject_GetFieldAt(meta, base));
     ((igObjectRefMetaField *)actConnect)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)actConnect)->_construct = 1;
-    igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 7), -1);
-    igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 8), 0);
+    ((Gap::Core::igCharMetaField *)(igMetaObject_GetFieldAt(meta, base + 7)))->setDefault(-1);
+    ((Gap::Core::igCharMetaField *)(igMetaObject_GetFieldAt(meta, base + 8)))->setDefault(0);
     freeSizeList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
     ((igObjectRefMetaField *)freeSizeList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igRefMetaField *)freeSizeList)->_construct = 1;

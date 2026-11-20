@@ -67,7 +67,7 @@ void igAudioContext_InitFields(void) {
     temp_s0 = (void *)(g_igAudioContext_metaObject);
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAudioContext_ctorTable, 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igAudioContext_fieldTable, g_igAudioContext_fieldHandles, g_igAudioContext_fieldOffsets, temp_s1);
     *(int *)((char *)(g_igAudioContext_metaObject) + 60) = (int)(igPsx2AudioContext_GetMetaObjectFunction);
 }

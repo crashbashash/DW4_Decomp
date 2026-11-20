@@ -239,7 +239,7 @@ void beNDMWLoadIntf2NameSel_InitFields(void) {
     textOrder = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
     ((igObjectRefMetaField *)textOrder)->_metaObject = (int)beNDMWLoadIntf2TextOrder_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)textOrder)->_refCounted = 0;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xE), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xE)))->setDefault(-1);
     igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWLoadIntf2NameSel_fieldTable, g_beNDMWLoadIntf2NameSel_fieldHandles, g_beNDMWLoadIntf2NameSel_fieldOffsets, base);
 }
 

@@ -224,7 +224,7 @@ void igVisualContext_InitFields(void) {
     meta = g_igVisualContext_metaObject;
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igVisualContext_ctorTable, 0x1C);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart)))->setDefault(-1);
     temp_s2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igTimer_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2)->_resetMethod = 3;
@@ -239,7 +239,7 @@ void igVisualContext_InitFields(void) {
     ((igRawRefMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 9))->_persistent = 0;
     ((igUnsignedIntMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0xA))->_persistent = 0;
     temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xB));
-    igLongMetaField_SetDefault((igMetaField *)temp_v0, 0);
+    ((Gap::Core::igLongMetaField *)temp_v0)->setDefault(0);
     ((igLongMetaField *)temp_v0)->_persistent = 0;
     temp_v0_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xC));
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0_2, 0);
@@ -247,7 +247,7 @@ void igVisualContext_InitFields(void) {
     ((igMatrix44fMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0xD))->_persistent = 0;
     ((igMatrix44fMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 0xE))->_persistent = 0;
     temp_v0_3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xF));
-    igBoolMetaField_SetDefaultValue((igMetaField *)temp_v0_3, 1);
+    ((Gap::Core::igBoolMetaField *)temp_v0_3)->setDefault(1);
     ((igBoolMetaField *)temp_v0_3)->_persistent = 0;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x10));
     ((igObjectRefArrayMetaField *)temp_s2_3)->_metaObject = (int)igVertexArray2_GetOrCreateMetaObject();

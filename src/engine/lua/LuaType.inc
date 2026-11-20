@@ -236,31 +236,31 @@ LuaType LuaType_FromMetaField(LuaMetaFieldView *field) {
     igMetaObject *meta = field->getMeta();
     LuaType result(LUA_KIND_NONE, 0, 0, 0);
 
-    if (g_igCharMetaField_metaObject == meta) {
+    if (Gap::Core::igCharMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_CHAR;
-    } else if (g_igUnsignedCharMetaField_metaObject == meta) {
+    } else if (Gap::Core::igUnsignedCharMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_UCHAR;
-    } else if (g_igIntMetaField_metaObject == meta) {
+    } else if (Gap::Core::igIntMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_INT;
-    } else if (g_igUnsignedIntMetaField_metaObject == meta) {
+    } else if (Gap::Core::igUnsignedIntMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_UINT;
-    } else if (g_igShortMetaField_metaObject == meta) {
+    } else if (Gap::Core::igShortMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_SHORT;
-    } else if (g_igUnsignedShortMetaField_metaObject == meta) {
+    } else if (Gap::Core::igUnsignedShortMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_USHORT;
-    } else if (g_igLongMetaField_metaObject == meta) {
+    } else if (Gap::Core::igLongMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_LONG;
-    } else if (g_igUnsignedLongMetaField_metaObject == meta) {
+    } else if (Gap::Core::igUnsignedLongMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_ULONG;
     } else if (g_igEnumMetaField_metaObject == meta) {
         result.kind = LUA_KIND_ENUM;
-    } else if (g_igFloatMetaField_metaObject == meta) {
+    } else if (Gap::Core::igFloatMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_FLOAT;
-    } else if (g_igDoubleMetaField_metaObject == meta) {
+    } else if (Gap::Core::igDoubleMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_DOUBLE;
     } else if (g_igStringMetaField_metaObject == meta) {
         result.kind = LUA_KIND_STRING;
-    } else if (g_igBoolMetaField_metaObject == meta) {
+    } else if (Gap::Core::igBoolMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_BOOL;
     } else if (g_igMemoryRefMetaField_metaObject == meta) {
         result = LuaType_FromMetaField((LuaMetaFieldView *)((igMemoryRefMetaField *)field)->_memType);

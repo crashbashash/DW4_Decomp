@@ -75,7 +75,7 @@ void beSvEndApi_InitFields(void) {
     found = (void **)(igMetaObject_FindFieldByName(meta, "_orderType"));
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(((igMetaObject *)meta)->_metaFields), (int)found);
     clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
-    igIntMetaField_SetDefault((igMetaField *)clone, 0xB);
+    ((Gap::Core::igIntMetaField *)clone)->setDefault(0xB);
     clone->_externalEnumStorage = (int)(&g_beSvEndApi_orderTypeStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;

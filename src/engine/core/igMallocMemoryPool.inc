@@ -177,9 +177,9 @@ void igMallocMemoryPool_InitFields(void) {
     igEnumMetaField *messageLevel;
     int defaultMessageLevel;
     igMetaObject_CreateFields(meta, g_igMallocMemoryPool_ctorTable, 10);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base), -1);
-    igUnsignedLongMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 2), 0xFFFFFFFFFFFFFFFFULL);
-    igUnsignedShortMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 4), 4);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(-1);
+    ((Gap::Core::igUnsignedLongMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(0xFFFFFFFFFFFFFFFFULL);
+    ((Gap::Core::igUnsignedShortMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(4);
     eventTracker = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
     eventTracker->_metaObject = (int)igEventTracker_GetOrCreateMetaObject();
     allocationLock = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 7);
@@ -188,7 +188,7 @@ void igMallocMemoryPool_InitFields(void) {
     defaultMessageLevel = g_igMallocMemoryPool_defaultMessageLevel;
     igEnumMetaField_SetDefaultValue((igMetaField *)messageLevel, defaultMessageLevel);
     messageLevel->_getMetaEnumFunction = (int)igMallocMemoryPool_GetMessageLevelMetaEnum;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 9), g_igMallocMemoryPool_defaultPoolOptionFlags);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 9)))->setDefault(g_igMallocMemoryPool_defaultPoolOptionFlags);
     igMetaObject_NameFields(meta, g_igMallocMemoryPool_fieldTable, g_igMallocMemoryPool_fieldDescriptors, g_igMallocMemoryPool_fieldOffsets, base);
     g_igMallocMemoryPool_metaObject->_writeProxy = (int)igMemoryPool_GetMetaObjectFunction;
 }

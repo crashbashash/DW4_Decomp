@@ -97,7 +97,7 @@ void igVec4fArrayMetaField_InitFields(void) {
     meta = (void *)g_igVec4fArrayMetaField_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, (FieldFactory *)g_igVec4fArrayMetaField_ctorTable, 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base), 1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, (const char **)g_igVec4fArrayMetaField_fieldTable, (igMetaField ***)g_igVec4fArrayMetaField_fieldHandles, (int *)g_igVec4fArrayMetaField_fieldOffsets, base);
 }
 

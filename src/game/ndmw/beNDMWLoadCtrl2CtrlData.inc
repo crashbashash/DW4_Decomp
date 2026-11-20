@@ -116,7 +116,7 @@ void beNDMWLoadCtrl2CtrlData_InitFields(void) {
     if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
         igObject_Destroy(nameField);
     }
-    igBoolMetaField_SetDefaultValue((igMetaObject_GetFieldAt((igMetaObject *)meta, base)), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWLoadCtrl2CtrlData_fieldTable, g_beNDMWLoadCtrl2CtrlData_fieldHandles, g_beNDMWLoadCtrl2CtrlData_fieldOffsets, base);
 }
 

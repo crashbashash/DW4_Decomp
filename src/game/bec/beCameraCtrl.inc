@@ -159,8 +159,8 @@ void beCameraCtrl_InitFields(void) {
     ((igObjectRefMetaField *)viewerPara)->_refCounted = 0;
     cameraMode = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)cameraMode)->_metaObject = (int)beCameraMode_GetOrCreateMetaObject();
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 0xB), 1.0f);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0xC), 1);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xB)))->setDefault(1.0f);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xC)))->setDefault(1);
     igMetaObject_NameFields(meta, g_beCameraCtrl_fieldTable, g_beCameraCtrl_fieldHandles, g_beCameraCtrl_fieldOffsets, base);
 }
 

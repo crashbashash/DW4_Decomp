@@ -135,7 +135,7 @@ void igMediaFile_InitFields(void) {
     first = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igMediaFile_ctorTable, 9);
     bufferField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 7)));
-    ((igMemoryRefMetaField *)bufferField)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)bufferField)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     mediaField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 8)));
     ((igObjectRefMetaField *)mediaField)->_metaObject = (int)igMedia_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)meta, g_igMediaFile_fieldTable, g_igMediaFile_fieldDescriptors, g_igMediaFile_fieldOffsets, first);

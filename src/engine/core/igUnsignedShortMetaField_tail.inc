@@ -1,72 +1,56 @@
-int igUnsignedShortMetaField_ValueFromString(int self, int value, int text) {
+namespace Gap {
+namespace Core {
+
+int igUnsignedShortMetaField::setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir)
+{
     int consumed;
 
     consumed = 0;
-    sscanf((const char *)text, "%hd%n", value, &consumed);
+    sscanf(strVal, "%hd%n", (unsigned short *)dstMem, &consumed);
     return consumed;
 }
 
-void igUnsignedShortMetaField_ValueToString(int *out, int self, unsigned short *value) {
+igStringRef igUnsignedShortMetaField::getStringFromMemory(const void *srcMem, igDirectory *dir)
+{
     char buffer[1024];
-    int pool;
-    int interned;
 
-    sprintf(buffer, "%hd", *value);
-    if (buffer == 0) {
-        interned = 0;
-    } else {
-        if (g_stringPool == 0) {
-            pool = ((int)StringPool_Allocate(0x10));
-            if (pool != 0) {
-                pool = ((int)StringPool_Construct((StringPool *)pool));
-            }
-            g_stringPool = (StringPool *)pool;
-        }
-        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)buffer);
-    }
-    *out = interned;
+    sprintf(buffer, "%hd", *(const unsigned short *)srcMem);
+    return igStringRef(buffer);
 }
 
-int igUnsignedShortMetaField_GetSize(void) {
+unsigned short igUnsignedShortMetaField::computeSize() {
     return 2;
 }
 
-void igUnsignedShortMetaField_SetDefaultValue(igMetaField *self, unsigned short value) {
-    unsigned short stored;
-
-    stored = value;
-    ((igMetaFieldView *)(self))->SetDefault(&stored);
+void igUnsignedShortMetaField::setDefault(unsigned short def)
+{
+    setDefaultMemory(&def);
 }
 
-int **igUnsignedShortMetaField_Construct(int **self, int flags) {
-    igMetaField_Construct((igMetaField *)self);
-    *self = &g_igUnsignedShortMetaField_vtable[0];
-    if (self != 0) {
-        igUnsignedShortMetaField_Init(self);
-    }
-    return self;
+igUnsignedShortMetaField::igUnsignedShortMetaField(bool boot) : igMetaField(boot)
+{
+    new (this, 0) igUnsignedShortMetaField;
 }
 
-int **igUnsignedShortMetaField_Init(int **self) {
-    igMetaField_Init((igMetaField *)self);
-    *self = &g_igUnsignedShortMetaField_vtable[0];
-    return self;
+igUnsignedShortMetaField::igUnsignedShortMetaField()
+{
 }
 
-int **igUnsignedShortMetaField_CopyConstruct(int **self, int source) {
-    igMetaField_CopyConstruct((igMetaField *)self, (igMetaField *)source);
-    *self = &g_igUnsignedShortMetaField_vtable[0];
-    return self;
+igUnsignedShortMetaField::igUnsignedShortMetaField(const igUnsignedShortMetaField &other) : igMetaField(other)
+{
 }
 
-void igUnsignedShortMetaField_Destruct(int extra0) {
-    igMetaField_Destruct((igMetaField *)extra0);
+void igUnsignedShortMetaField::__bootstrapDestruct()
+{
+    igMetaField::__bootstrapDestruct();
 }
 
 /* igUnsignedShortArrayMetaField vtable slot 27 (+0x6c): constant leaf returning 2, the byte size
  * of one unsigned short element. The same igMetaField slot is the base's `return -1` and
  * igStructMetaField's `_alignment` accessor. */
-int igUnsignedShortMetaField_GetAlignment(igUnsignedShortArrayMetaField *self) {
+int igUnsignedShortMetaField::computeRequiredAlignment() {
     return 2;
+}
+}
 }
 

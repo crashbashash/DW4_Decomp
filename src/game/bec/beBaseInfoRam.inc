@@ -131,7 +131,7 @@ void beBaseInfoRam_InitFields(void) {
     ((igObjectRefMetaField *)parentManager)->_metaObject = (int)beBaseInfoManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)parentManager)->_refCounted = 0;
     ((igMetaField *)parentManager)->_persistent = 0;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 3), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 3)))->setDefault(1);
     dataList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
     ((igObjectRefMetaField *)dataList)->_metaObject = (int)beBaseInfoDataList_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beBaseInfoRam_fieldTable, g_beBaseInfoRam_fieldHandles, g_beBaseInfoRam_fieldOffsets, base);

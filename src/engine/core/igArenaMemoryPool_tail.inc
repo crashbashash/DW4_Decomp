@@ -215,13 +215,13 @@ void igArenaMemoryPool_InitFields(void) {
     arenaState = (igRawRefMetaField *)igMetaObject_GetFieldAt(meta, base);
     arenaState->_resetMethod = 3;
     arenaState->_persistent = 0;
-    igUnsignedLongMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 5), 0xFFFFFFFFFFFFFFFFULL);
-    igUnsignedShortMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 8), 8);
+    ((Gap::Core::igUnsignedLongMetaField *)(igMetaObject_GetFieldAt(meta, base + 5)))->setDefault(0xFFFFFFFFFFFFFFFFULL);
+    ((Gap::Core::igUnsignedShortMetaField *)(igMetaObject_GetFieldAt(meta, base + 8)))->setDefault(8);
     eventTracker = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 9);
     eventTracker->_metaObject = (int)igEventTracker_GetOrCreateMetaObject();
     allocationLock = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 11);
     allocationLock->_metaObject = (int)igSemaphore_GetOrCreateMetaObject();
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 12), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 12)))->setDefault(-1);
     heapIntegrityCheckLevel = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 13);
     defaultHeapCheck = g_igArenaMemoryPool_defaultHeapIntegrityCheckLevel;
     igEnumMetaField_SetDefaultValue((igMetaField *)heapIntegrityCheckLevel, defaultHeapCheck);
@@ -230,8 +230,8 @@ void igArenaMemoryPool_InitFields(void) {
     defaultMessageLevel = g_igArenaMemoryPool_defaultMessageLevel;
     igEnumMetaField_SetDefaultValue((igMetaField *)messageLevel, defaultMessageLevel);
     messageLevel->_getMetaEnumFunction = (int)igArenaMemoryPool_GetMessageLevelMetaEnum;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 15), g_igArenaMemoryPool_defaultPoolOptionFlags);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 17), 16);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 15)))->setDefault(g_igArenaMemoryPool_defaultPoolOptionFlags);
+    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 17)))->setDefault(16);
     igMetaObject_NameFields(meta, g_igArenaMemoryPool_fieldTable, g_igArenaMemoryPool_fieldDescriptors, g_igArenaMemoryPool_fieldOffsets, base);
     g_igArenaMemoryPool_metaObject->_writeProxy = (int)igMemoryPool_GetMetaObjectFunction;
 }

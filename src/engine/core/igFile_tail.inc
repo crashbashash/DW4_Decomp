@@ -131,9 +131,9 @@ void igFile_InitFields(void) {
     igEnumMetaField_SetDefaultValue((igMetaField *)openMode, 0);
     ((igEnumMetaField *)openMode)->_getMetaEnumFunction = (int)(&igFile_GetOpenModeMetaEnum);
     ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3))->_persistent = 0;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4), 0x100000);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5), 0x100000);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6), 0x1000);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)))->setDefault(0x100000);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)))->setDefault(0x100000);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)))->setDefault(0x1000);
     ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7))->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)meta, g_igFile_fieldTable, g_igFile_fieldDescriptors, g_igFile_fieldOffsets, base);
     *(int *)((char *)((void *)g_igFile_metaObject) + 60) = (int)(&igPsx2File_GetMetaObjectFunction);

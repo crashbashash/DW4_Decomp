@@ -222,7 +222,7 @@ void igMemoryRefMetaField_InitFields(void) {
     field = (igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_shallowCopyMethod);
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)field);
     field = (igMetaField *)((igObjectDispatchView *)field)->CloneViaMetadata(1);
-    igCharMetaField_SetDefaultValue((igMetaField *)field, 2);
+    ((Gap::Core::igCharMetaField *)field)->setDefault(2);
     field->_externalEnumStorage = (int)&g_igMemoryRefMetaField_shallowCopyMethodStorage;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);
     releaseField(field);
@@ -231,8 +231,8 @@ void igMemoryRefMetaField_InitFields(void) {
     ref->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
     ref->_refCounted = 0;
     ref->_deepCopyMethod = 1;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 2), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 3), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 3)))->setDefault(1);
     fields = meta->_metaFields;
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_resetMethod));
     field = (igMetaField *)igEnumMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
@@ -242,8 +242,8 @@ void igMemoryRefMetaField_InitFields(void) {
     field->_externalEnumStorage = (int)&g_igMemoryRefMetaField_resetMethodStorage;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);
     releaseField(field);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 4), 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 5), -1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 5)))->setDefault(-1);
     ref = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 6);
     ref->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
     ref->_deepCopyMethod = 1;

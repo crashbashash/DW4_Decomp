@@ -147,8 +147,8 @@ void beNDMWLogo_InitFields(void) {
     ((igObjectRefMetaField *)system)->_refCounted = 0;
     mcUtilCtrl = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)mcUtilCtrl)->_metaObject = (int)beNDMWMcUtilCtrl_GetOrCreateMetaObject();
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 6), 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 9), -1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 6)))->setDefault(1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 9)))->setDefault(-1);
     igMetaObject_NameFields(meta, g_beNDMWLogo_fieldTable, g_beNDMWLogo_fieldHandles, g_beNDMWLogo_fieldOffsets, base);
 }
 

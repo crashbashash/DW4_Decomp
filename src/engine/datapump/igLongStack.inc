@@ -60,7 +60,7 @@ void igLongStack_InitFields(void) {
     found = (void **)igMetaObject_FindFieldByName(meta, "_data");
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
     field = (igMemoryRefMetaField *)((igObjectDispatchView *)found)->CloneViaMetadata(1);
-    field->_memType = igLongMetaField_GetDefaultDescriptor();
+    field->_memType = (int)Gap::Core::igLongMetaField::getMetaField();
     field->_memSize = 0;
     field->_externalEnumStorage = (int)&g_igLongStack_dataMetaField;
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);

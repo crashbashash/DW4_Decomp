@@ -376,7 +376,7 @@ int igDirectory_AddMemoryRef(igDirectoryView *self, int field, int memory, int m
         index = igDirectory_FindSortedInsertIndex(self, (igMetaField *)g_igDirEntry_refField, memory);
         if (index < self->_count) { int r = igDirectory_GetObject(self, index); if (r == memory) return -1; }
     }
-    if (memType == 0) memType = igCharMetaField_GetDefaultDescriptor();
+    if (memType == 0) memType = (int)Gap::Core::igCharMetaField::getMetaField();
     igSmartPointer<igMemoryDirEntryView> record(((igMemoryDirEntryView *)igMemoryDirEntry_Create((int)((Gap::Core::igObject *)self)->getMemoryPool())));
     record.get()->_index = index;
     insertObject((igDataList *)self, index, record.get());

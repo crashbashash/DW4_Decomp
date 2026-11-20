@@ -99,7 +99,7 @@ void igPsx2DecalExt_InitFields(void) {
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igPsx2VisualContext_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 1), 1);
+    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 1)))->setDefault(1);
     igMetaObject_NameFields(meta, g_igPsx2DecalExt_fieldTable, g_igPsx2DecalExt_fieldHandles, g_igPsx2DecalExt_fieldOffsets, fieldStart);
 }
 

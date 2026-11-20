@@ -1,7 +1,7 @@
 void igBoolArrayMetaField_SwapBytes(igBoolArrayMetaField *self, int buffer, int count) {
     void **elementField;
 
-    elementField = (void **)(((void **)igBoolMetaField_GetDefaultDescriptor()));
+    elementField = (void **)(((void **)Gap::Core::igBoolMetaField::getMetaField()));
     ((igMetaFieldView *)(elementField))->SwapBytes((void *)(buffer), (int)(count * self->_num));
 }
 

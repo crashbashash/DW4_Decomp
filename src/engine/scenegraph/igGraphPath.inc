@@ -115,7 +115,7 @@ void igGraphPath_InitFields(void) {
     defaultCenter.y = 0;
     defaultCenter.z = 0;
     igVec3fMetaField_SetDefault((igMetaField *)centerField, (const float *)&defaultCenter);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2), 1.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)))->setDefault(1.0f);
     igMetaObject_NameFields((igMetaObject *)meta, g_igGraphPath_fieldTable, g_igGraphPath_fieldHandles, g_igGraphPath_fieldOffsets, base);
 }
 

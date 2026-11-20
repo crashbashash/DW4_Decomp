@@ -169,7 +169,7 @@ void igPsx2MultiTextureExt_InitFields(void) {
     f = igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 6);
     igEnumMetaField_SetDefaultValue((igMetaField *)f, g_igPsx2MultiTextureExt_blendDDefault);
     *(void **)&((igEnumMetaField *)f)->_getMetaEnumFunction = (void *)BLENDING_FUNCTION_COLOR_PSX2_GetMetaEnum;
-    igUnsignedCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 7), 0x80);
+    ((Gap::Core::igUnsignedCharMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, fieldStart + 7)))->setDefault(0x80);
     igMetaObject_NameFields((igMetaObject *)meta, g_igPsx2MultiTextureExt_fieldTable, g_igPsx2MultiTextureExt_fieldHandles, g_igPsx2MultiTextureExt_fieldOffsets, fieldStart);
 }
 

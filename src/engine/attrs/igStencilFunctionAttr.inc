@@ -103,8 +103,8 @@ void igStencilFunctionAttr_InitFields(void) {
     field = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
     igEnumMetaField_SetDefaultValue((igMetaField *)field, g_igStencilFunctionAttr_funcDefault);
     *(void **)&((igEnumMetaField *)field)->_getMetaEnumFunction = (void *)IG_GFX_STENCIL_FUNCTION_GetMetaEnum;
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2), -1);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3), -1);
+    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)))->setDefault(-1);
+    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)))->setDefault(-1);
     field = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
     igEnumMetaField_SetDefaultValue((igMetaField *)field, 0);
     *(void **)&((igEnumMetaField *)field)->_getMetaEnumFunction = (void *)IG_GFX_STENCIL_OPERATION_GetMetaEnum;

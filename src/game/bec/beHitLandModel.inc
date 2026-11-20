@@ -130,7 +130,7 @@ void beHitLandModel_InitFields(void) {
     ((igObjectRefMetaField *)hitTraversal)->_metaObject = (int)beHitLandModelTraversal_GetOrCreateMetaObject();
     probe = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)probe)->_metaObject = (int)igProbe_GetOrCreateMetaObject();
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 3), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 3)))->setDefault(1);
     igMetaObject_NameFields(meta, g_beHitLandModel_fieldTable, g_beHitLandModel_fieldHandles, g_beHitLandModel_fieldOffsets, base);
 }
 

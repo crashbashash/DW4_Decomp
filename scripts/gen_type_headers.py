@@ -340,6 +340,9 @@ def converted_classes(converted, parent, layouts, members):
     if any("igSmartPointer<" in line for cls in order for _off, _size, line in layouts[cls][4]):
         # a smart-pointer member needs the template, which reads the flat igObject above
         out.append("#include \"dw4/core/igSmartPointer.h\"")
+    if any(re.search(r"\bigStringRef \w+;", line) for cls in order for _off, _size, line in layouts[cls][4]):
+        # a string member is the pool's counted reference
+        out.append("#include \"dw4/core/igStringRef.h\"")
     out.append("namespace Gap {")
     for lib in sorted(set(converted.values())):
         out.append("namespace %s { %s }" % (lib, " ".join("class %s;" % c for c in sorted(converted)

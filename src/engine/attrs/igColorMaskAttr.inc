@@ -88,10 +88,10 @@ void igColorMaskAttr_InitFields(void) {
     meta = g_igColorMaskAttr_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igColorMaskAttr_ctorTable, 5);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 1), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 2), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 3), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 3)))->setDefault(1);
     igMetaObject_NameFields(meta, g_igColorMaskAttr_fieldTable, g_igColorMaskAttr_fieldHandles, g_igColorMaskAttr_fieldOffsets, base);
 }
 

@@ -87,7 +87,7 @@ void igPsx2ParticleArray_InitFields(void) {
     *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart)) + 38) = 0;
     *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart + 1)) + 38) = 0;
     *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart + 2)) + 38) = 0;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 3), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 3)))->setDefault(1);
     *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart + 4)) + 38) = 0;
     igMetaObject_NameFields(meta, g_igPsx2ParticleArray_fieldTable, g_igPsx2ParticleArray_fieldHandles, g_igPsx2ParticleArray_fieldOffsets, fieldStart);
     *(int *)((char *)(g_igPsx2ParticleArray_metaObject) + 64) = (int)(&igParticleArray_GetMetaObjectFunction);

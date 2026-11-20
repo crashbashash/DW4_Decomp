@@ -144,8 +144,8 @@ void igObjectDirEntry_InitFields(void) {
     field->_externalEnumStorage = (int)&g_igObjectDirEntry_refField;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);
     releaseField(field);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 4), -1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 5), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(-1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 5)))->setDefault(-1);
     igMetaObject_NameFields(meta, g_igObjectDirEntry_fieldTable, g_igObjectDirEntry_fieldDescriptors, g_igObjectDirEntry_fieldOffsets, base);
 }
 

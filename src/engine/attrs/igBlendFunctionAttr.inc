@@ -210,11 +210,11 @@ void igBlendFunctionAttr_InitFields(void) {
     field->_deepCopyMethod = 1;
     field->_shallowCopyMethod = 1;
     field->_isAlikeShallowMethod = 3;
-    igUnsignedCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 4), 0);
+    ((Gap::Core::igUnsignedCharMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(0);
     t5 = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 5);
     t5->_invarianceFunction = (void (*)())igBlendFunctionAttr_SynchronizeCachedUnitID;
     field5 = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 6);
-    igFloatMetaField_SetDefault((igMetaField *)field5, 0);
+    ((Gap::Core::igFloatMetaField *)field5)->setDefault(0);
     field5->_persistent = 0;
     field5->_invarianceFunction = (void (*)())igBlendFunctionAttr_SynchronizeBlendConstant;
     field6 = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 7);

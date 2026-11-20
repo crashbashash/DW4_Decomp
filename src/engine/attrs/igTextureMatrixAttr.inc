@@ -119,7 +119,7 @@ void igTextureMatrixAttr_InitFields(void) {
     FUN_0018c640((igMetaField *)field, (const float *)&o1);
     fld = (Fld *)igMetaObject_GetFieldAt(meta, base + 1);
     ((igMetaField *)fld)->_invarianceFunction = (int)igTextureMatrixAttr_SynchronizeCachedUnitID;
-    igShortMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 2), -1);
+    ((Gap::Core::igShortMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(-1);
     igMetaObject_NameFields(meta, g_igTextureMatrixAttr_fieldTable, g_igTextureMatrixAttr_fieldHandles, g_igTextureMatrixAttr_fieldOffsets, base);
 }
 

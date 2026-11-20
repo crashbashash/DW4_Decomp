@@ -194,7 +194,7 @@ void igTextureAttr_InitFields(void) {
     igEnumMetaField_SetDefaultValue((igMetaField *)field8, g_igTextureAttr_wrapTDefault);
     *(void **)&((igEnumMetaField *)field8)->_getMetaEnumFunction = (void *)IG_GFX_TEXTURE_WRAP_GetMetaEnum;
     field9 = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
-    igIntMetaField_SetDefault((igMetaField *)field9, -1);
+    ((Gap::Core::igIntMetaField *)field9)->setDefault(-1);
     ((igIntMetaField *)field9)->_persistent = 0;
     ((igIntMetaField *)field9)->_deepCopyMethod = 4;
     ((igIntMetaField *)field9)->_shallowCopyMethod = 4;
@@ -209,7 +209,7 @@ void igTextureAttr_InitFields(void) {
     ((igObjectRefMetaField *)field)->_metaObject = (int)igImage_GetOrCreateMetaObject();
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 0xA));
     ((igObjectRefMetaField *)field2)->_metaObject = (int)igTextureUnloadAttr_GetOrCreateMetaObject();
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 0xB), 1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xB)))->setDefault(1);
     field3 = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
     ((igObjectRefMetaField *)field3)->_metaObject = (int)igImageMipMapList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)field3)->_construct = 1;

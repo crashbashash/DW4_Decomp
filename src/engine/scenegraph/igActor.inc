@@ -231,10 +231,10 @@ void igActor_InitFields(void) {
     FUN_0018c640((igMetaField *)temp_s2_9, (const float *)&c1);
     ((igMetaField *)temp_s2_9)->_persistent = 0;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB)));
-    igBoolMetaField_SetDefaultValue((igMetaField *)temp_v0, 1);
+    ((Gap::Core::igBoolMetaField *)temp_v0)->setDefault(1);
     ((igMetaField *)temp_v0)->_persistent = 0;
     temp_v0_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC)));
-    igBoolMetaField_SetDefaultValue((igMetaField *)temp_v0_2, 1);
+    ((Gap::Core::igBoolMetaField *)temp_v0_2)->setDefault(1);
     ((igMetaField *)temp_v0_2)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igActor_fieldTable, g_igActor_fieldHandles, g_igActor_fieldOffsets, temp_s1);
 }

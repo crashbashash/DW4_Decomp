@@ -2,12 +2,12 @@ inline bool igResult::failed() const { return v == g_resultFailure.v; }
 
 int igIGBFile_GetObjectSize(void *self, int record) {
     int size;
-    igMetaFieldView *intField;
+    Gap::Core::igIntMetaField *intField;
 
     size = ((FieldRecordHead *)record)->size;
     if (((igIGBFileView *)self)->_endianSwap != 0) {
-        intField = (igMetaFieldView *)igIntMetaField_GetDefaultDescriptor();
-        intField->SwapBytes(&size, 1);
+        intField = Gap::Core::igIntMetaField::getMetaField();
+        intField->endianSwapMemory(&size, 1);
     }
     return size;
 }
@@ -271,7 +271,7 @@ igResult igIGBFile_BuildMetaObjectBuffer(igIGBFileView *self) {
         int off;
         igMetaObject *t;
         __internalObjectList *fields;
-        desc = (igMetaFieldView *)((void *)igShortMetaField_GetDefaultDescriptor());
+        desc = (igMetaFieldView *)((void *)Gap::Core::igShortMetaField::getMetaField());
         for (k = 0; k < self->_metaObjectCount; k++) {
             off = k * 4;
             t = *(igMetaObject **)((char *)self->_metaObjectListInFile->_data + off);
@@ -622,12 +622,12 @@ int igIGBFile_WriteFile(igIGBFileView *self, const char *fileName) {
     pp = (int *)((int)&infoResult + 0);
     if (*pp == g_resultFailure.v) return 0;
     igObjectList_SortByField((igTDataList<igObject *> *)self, (igMetaField *)g_igDirEntry_refField);
-    a = (igObject *)igIntMetaField_GetDefaultDescriptor();
+    a = (igObject *)Gap::Core::igIntMetaField::getMetaField();
     if (a != 0) a->_refCount = a->_refCount + 1;
     t = (igObject *)self->imf;
     IG_OBJECT_RELEASE(t);
     self->imf = (igMetaFieldView *)a;
-    b = (igObject *)igShortMetaField_GetDefaultDescriptor();
+    b = (igObject *)Gap::Core::igShortMetaField::getMetaField();
     if (b != 0) b->_refCount = b->_refCount + 1;
     t2 = (igObject *)self->smf;
     IG_OBJECT_RELEASE(t2);
@@ -727,14 +727,14 @@ igResult igIGBFile_ReadHeader(igIGBFileView *self) {
     }
     h = (IgbFileHeader *)self->_chunk;
     self->_file->Read(h, 4, 0xC);
-    o = (igObject *)igIntMetaField_GetDefaultDescriptor();
+    o = (igObject *)Gap::Core::igIntMetaField::getMetaField();
     if (o != 0) {
         o->_refCount = o->_refCount + 1;
     }
     t = (igObject *)self->imf;
     IG_OBJECT_RELEASE(t);
     self->imf = (igMetaFieldView *)o;
-    o = (igObject *)igShortMetaField_GetDefaultDescriptor();
+    o = (igObject *)Gap::Core::igShortMetaField::getMetaField();
     if (o != 0) {
         o->_refCount = o->_refCount + 1;
     }
@@ -877,7 +877,7 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
                     field = (MetaTableField *)(name + record->nameSize);
                     j = 0;
                     if (file->_endianSwap != 0) {
-                        ((igMetaFieldView *)igShortMetaField_GetDefaultDescriptor())->SwapBytes(field, fieldWords * record->fieldCount);
+                        Gap::Core::igShortMetaField::getMetaField()->endianSwapMemory(field, fieldWords * record->fieldCount);
                     }
                     for (; j < record->fieldCount; j++) {
                         /* The class that declares the slot: the nearest ancestor whose own slots reach it. */
@@ -923,7 +923,7 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
             ObjectList_AppendRetained(file->_metaObjectListInFile, (igObject *)blind);
             field = (MetaTableField *)(name + record->nameSize);
             if (file->_endianSwap != 0) {
-                ((igMetaFieldView *)igShortMetaField_GetDefaultDescriptor())->SwapBytes(field, fieldWords * record->fieldCount);
+                Gap::Core::igShortMetaField::getMetaField()->endianSwapMemory(field, fieldWords * record->fieldCount);
             }
             for (j = 0; j < record->fieldCount; j++) {
                 igMetaField *created;
@@ -1058,7 +1058,7 @@ SectionObjectRef igIGBFile_ReadObject(igIGBFile *file) {
     record = (int *)(file->_chunk + file->_chunkPlace);
     metaIndex = *record;
     if (file->_endianSwap != 0) {
-        ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(&metaIndex, 1);
+        Gap::Core::igIntMetaField::getMetaField()->endianSwapMemory(&metaIndex, 1);
     }
     igSmartPointer<IgbReadEntry> object(castToKind((IgbReadEntry *)igMetaObject_CreateInstanceWithPool(((igMetaObject **)((igObjectList *)file->_metaObjectListInFile)->_data)[metaIndex], (igMemoryPoolView *)file->_temporaryMemoryPool)), kRetainReference);
     object->release();

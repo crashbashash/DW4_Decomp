@@ -724,7 +724,7 @@ void FUN_00459ee0(void) {
     temp_s0_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 5));
     *(int *)((char *)(temp_s0_6) + 56) = (int)Gap::Insight::igFlushRenderer::getClassTypeLazy();
     *(char *)((char *)(temp_s0_6) + 52) = 1;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 6), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 6)))->setDefault(-1);
     temp_s0_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2 + 7));
     *(int *)((char *)(temp_s0_7) + 56) = (int)igGuiSystem_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_7) + 52) = 1;

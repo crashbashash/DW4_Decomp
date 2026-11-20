@@ -75,7 +75,7 @@ void igCompoundList_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igCompoundList_ctorTable, 3);
     field = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igMemoryRefMetaField *)field)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     ((igRefMetaField *)field)->_destruct = 1;
     ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)field)->_releaseOnReset = 1;

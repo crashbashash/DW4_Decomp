@@ -117,11 +117,11 @@ void beNodeAnim_InitFields(void) {
     meta = g_beNodeAnim_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNodeAnim_ctorTable, 0xA);
-    igLongMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base), 0x13DE4355);
-    igLongMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), 0x77359400);
-    igLongMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 2), ((long long)0xEE6B << 0x10) | 0x2800);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 4), 1);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 6), 1.0f);
+    ((Gap::Core::igLongMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(0x13DE4355);
+    ((Gap::Core::igLongMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(0x77359400);
+    ((Gap::Core::igLongMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(((long long)0xEE6B << 0x10) | 0x2800);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(1);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 6)))->setDefault(1.0f);
     igMetaObject_NameFields(meta, g_beNodeAnim_fieldTable, g_beNodeAnim_fieldHandles, g_beNodeAnim_fieldOffsets, base);
 }
 

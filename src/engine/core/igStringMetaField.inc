@@ -138,7 +138,7 @@ void igStringMetaField_InitFields(void) {
     found = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)meta, (const char *)&text_shallowCopyMethod[0])));
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
     shallowCopyField = (igMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
-    igCharMetaField_SetDefaultValue((igMetaField *)shallowCopyField, 2);
+    ((Gap::Core::igCharMetaField *)shallowCopyField)->setDefault(2);
     shallowCopyField->_externalEnumStorage = (int)(&g_igStringMetaField_shallowCopyMethodCell);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)shallowCopyField);
     shallowCopyField->_refCount = shallowCopyField->_refCount - 1;
@@ -148,14 +148,14 @@ void igStringMetaField_InitFields(void) {
     found = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)meta, (const char *)&text_destruct[0])));
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
     destructField = (igMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
-    igBoolMetaField_SetDefaultValue((igMetaField *)destructField, 1);
+    ((Gap::Core::igBoolMetaField *)destructField)->setDefault(1);
     destructField->_externalEnumStorage = (int)(&g_igStringMetaField_destructCell);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)destructField);
     destructField->_refCount = destructField->_refCount - 1;
     if (((unsigned long long)(long long)destructField->_refCount & 0x7fffffULL) == 0) {
         igObject_Destroy(destructField);
     }
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, first), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igStringMetaField_fieldTable, g_igStringMetaField_fieldDescriptors, g_igStringMetaField_fieldOffsets, first);
 }
 

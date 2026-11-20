@@ -70,7 +70,7 @@ void igClippingStateAttr_InitFields(void) {
     meta = g_igClippingStateAttr_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igClippingStateAttr_ctorTable, 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(1);
     igMetaObject_NameFields(meta, g_igClippingStateAttr_fieldTable, g_igClippingStateAttr_fieldHandles, g_igClippingStateAttr_fieldOffsets, base);
 }
 

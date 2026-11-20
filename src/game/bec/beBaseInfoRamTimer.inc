@@ -102,8 +102,8 @@ void beBaseInfoRamTimer_InitFields(void) {
     meta = g_beBaseInfoRamTimer_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beBaseInfoRamTimer_ctorTable, 6);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base), 1.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 5), 0.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(1.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 5)))->setDefault(0.0f);
     igMetaObject_NameFields(meta, g_beBaseInfoRamTimer_fieldTable, g_beBaseInfoRamTimer_fieldHandles, g_beBaseInfoRamTimer_fieldOffsets, base);
 }
 

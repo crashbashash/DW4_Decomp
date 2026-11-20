@@ -1,7 +1,7 @@
 void igVec4ucMetaField_SwapBytes(igVec4ucMetaField *arg0, int arg1, int arg2) {
     void **temp_v0;
 
-    temp_v0 = (void **)(igUnsignedCharMetaField_GetDefaultDescriptor());
+    temp_v0 = (void **)(Gap::Core::igUnsignedCharMetaField::getMetaField());
     ((DW4VC_208_2 *)(temp_v0))->vX((int)(arg1), (int)(arg2 * arg0->_size));
 }
 

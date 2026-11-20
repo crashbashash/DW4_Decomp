@@ -95,7 +95,7 @@ void igInfo_InitFields(void) {
     ((igObjectRefMetaField *)field)->_metaObject = (int)igDirectory_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)field)->_refCounted = 0;
     ((igMetaField *)field)->_persistent = 0;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igInfo_fieldTable, g_igInfo_fieldDescriptors, g_igInfo_fieldOffsets, base);
 }
 

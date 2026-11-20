@@ -123,7 +123,7 @@ void igTextureFunctionAttr_InitFields(void) {
     t3->_getMetaEnumFunction = (void (*)())TEXTURE_ARGUMENT_GetMetaEnum;
     t4 = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 4);
     t4->_getMetaEnumFunction = (void (*)())TEXTURE_STAGE_TYPE_GetMetaEnum;
-    igUnsignedCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 5), 2);
+    ((Gap::Core::igUnsignedCharMetaField *)(igMetaObject_GetFieldAt(meta, base + 5)))->setDefault(2);
     field2 = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 6);
     igEnumMetaField_SetDefaultValue((igMetaField *)field2, 0);
     field2->_getMetaEnumFunction = (void (*)())TEXTURE_FUNCTION_TYPE_GetMetaEnum;

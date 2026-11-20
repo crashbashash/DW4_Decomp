@@ -99,7 +99,7 @@ int igMemoryRefMetaField_ReadRawFieldMem(igMemoryRefMetaField *self, int destina
     if (directory != 0 && (raw = *source) != -1) {
         index.w0 = raw;
         if (swapBytes != 0) {
-            ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(&index.w0, 1);
+            Gap::Core::igIntMetaField::getMetaField()->endianSwapMemory(&index.w0, 1);
         }
         entry = (igMemoryDirEntry *)igDirectory_GetEntry((int *)directory, index.w0);
         if (entry != 0) {

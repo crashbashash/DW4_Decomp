@@ -1,7 +1,7 @@
 void igLongArrayMetaField_SwapBytes(igLongArrayMetaField *self, int data, int count) {
     void **element;
 
-    element = (void **)(((void **)igLongMetaField_GetDefaultDescriptor()));
+    element = (void **)(((void **)Gap::Core::igLongMetaField::getMetaField()));
     ((igMetaFieldView *)(element))->SwapBytes((void *)(data), (int)(count * self->_num));
 }
 

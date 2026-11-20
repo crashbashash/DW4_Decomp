@@ -115,7 +115,7 @@ void igPsx2BlendEquationExt_InitFields(void) {
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igPsx2VisualContext_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igCharMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 5), -0x80);
+    ((Gap::Core::igCharMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 5)))->setDefault(-0x80);
     igMetaObject_NameFields(meta, g_igPsx2BlendEquationExt_fieldTable, g_igPsx2BlendEquationExt_fieldHandles, g_igPsx2BlendEquationExt_fieldOffsets, fieldStart);
 }
 

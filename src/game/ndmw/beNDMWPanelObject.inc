@@ -146,7 +146,7 @@ void beNDMWPanelObject_InitFields(void) {
     messenger = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)messenger)->_refCounted = 0;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 6), 2);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 6)))->setDefault(2);
     playerDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
     ((igObjectRefMetaField *)playerDataList)->_metaObject = (int)beDataObjList_GetOrCreateMetaObject();
     textSetList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));

@@ -1,70 +1,53 @@
-int igShortMetaField_ValueFromString(int self, int value, int text) {
+namespace Gap {
+namespace Core {
+
+int igShortMetaField::setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir)
+{
     int consumed;
 
     consumed = 0;
-    sscanf((const char *)text, "%hd%n", value, &consumed);
+    sscanf(strVal, "%hd%n", (short *)dstMem, &consumed);
     return consumed;
 }
 
-void igShortMetaField_ValueToString(int *out, int self, short *value) {
+igStringRef igShortMetaField::getStringFromMemory(const void *srcMem, igDirectory *dir)
+{
     char buffer[1024];
-    int pool;
-    int interned;
 
-    sprintf(buffer, "%hd", *value);
-    if (buffer == 0) {
-        interned = 0;
-    } else {
-        if (g_stringPool == 0) {
-            pool = ((int)StringPool_Allocate(0x10));
-            if (pool != 0) {
-                pool = ((int)StringPool_Construct((StringPool *)pool));
-            }
-            g_stringPool = (StringPool *)pool;
-        }
-        interned = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)buffer);
-    }
-    *out = interned;
+    sprintf(buffer, "%hd", *(const short *)srcMem);
+    return igStringRef(buffer);
 }
 
-int **igShortMetaField_Construct(int **self, int source) {
-    igMetaField_Construct((igMetaField *)self);
-    *self = &g_igShortMetaField_vtable[0];
-    if (self != 0) {
-        igShortMetaField_Init(self);
-    }
-    return self;
+igShortMetaField::igShortMetaField(bool boot) : igMetaField(boot)
+{
+    new (this, 0) igShortMetaField;
 }
 
-int **igShortMetaField_Init(int **self) {
-    igMetaField_Init((igMetaField *)self);
-    *self = &g_igShortMetaField_vtable[0];
-    return self;
+igShortMetaField::igShortMetaField()
+{
 }
 
-int **igShortMetaField_CopyConstruct(int **self, int source) {
-    igMetaField_CopyConstruct((igMetaField *)self, (igMetaField *)source);
-    *self = &g_igShortMetaField_vtable[0];
-    return self;
+igShortMetaField::igShortMetaField(const igShortMetaField &other) : igMetaField(other)
+{
 }
 
-void igShortMetaField_Destruct(int extra0) {
-    igMetaField_Destruct((igMetaField *)extra0);
+void igShortMetaField::__bootstrapDestruct()
+{
+    igMetaField::__bootstrapDestruct();
 }
 
-/* igRegistryValueList vtable slot 53 (+0xd4): constant leaf returning 2. */
-int igShortMetaField_GetSize(igRegistryValueList *self) {
+unsigned short igShortMetaField::computeSize() {
     return 2;
 }
 
-void igShortMetaField_SetDefault(igMetaField *self, short value) {
-    short defaultValue;
-
-    defaultValue = value;
-    ((igMetaFieldView *)(self))->SetDefault(&defaultValue);
+void igShortMetaField::setDefault(short def)
+{
+    setDefaultMemory(&def);
 }
 
-int igShortMetaField_GetAlignment(void) {
+int igShortMetaField::computeRequiredAlignment() {
     return 2;
+}
+}
 }
 

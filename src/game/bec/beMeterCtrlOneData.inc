@@ -160,8 +160,8 @@ void beMeterCtrlOneData_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beMeterCtrlOneData_ctorTable, 0xE);
     node = (void *)(igMetaObject_GetFieldAt(meta, base));
     ((igObjectRefMetaField *)node)->_metaObject = (int)beMeterCtrlNode_GetOrCreateMetaObject();
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 4), 0.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 5), 0.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(0.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 5)))->setDefault(0.0f);
     hp = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
     ((igObjectRefMetaField *)hp)->_metaObject = (int)beDataObjInt_GetOrCreateMetaObject();
     mHp = (void *)(igMetaObject_GetFieldAt(meta, base + 0xD));

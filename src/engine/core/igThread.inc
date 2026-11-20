@@ -191,7 +191,7 @@ void igThread_InitFields(void) {
     state = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
     igEnumMetaField_SetDefaultValue((igMetaField *)state, 0);
     ((igEnumMetaField *)state)->_getMetaEnumFunction = (int)(&igThread_GetStateMetaEnum);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6), 0x1000);
+    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)))->setDefault(0x1000);
     igMetaObject_NameFields((igMetaObject *)meta, g_igThread_fieldTable, g_igThread_fieldDescriptors, g_igThread_fieldOffsets, base);
     *(int *)((char *)((void *)g_igThread_metaObject) + 60) = (int)igPsx2Thread_GetMetaObjectFunction;
 }

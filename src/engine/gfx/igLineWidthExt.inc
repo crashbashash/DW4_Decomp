@@ -62,7 +62,7 @@ void igLineWidthExt_InitFields(void) {
     meta = g_igLineWidthExt_metaObject;
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igLineWidthExt_ctorTable, 1);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart), 1.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart)))->setDefault(1.0f);
     igMetaObject_NameFields(meta, g_igLineWidthExt_fieldTable, g_igLineWidthExt_fieldHandles, g_igLineWidthExt_fieldOffsets, fieldStart);
 }
 

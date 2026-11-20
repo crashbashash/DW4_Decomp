@@ -70,7 +70,7 @@ void igCharList_InitFields(void) {
     found = (void **)igMetaObject_FindFieldByName(meta, data);
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
     field = (igMemoryRefMetaField *)((igObjectDispatchView *)found)->CloneViaMetadata(1);
-    field->_memType = igCharMetaField_GetDefaultDescriptor();
+    field->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
     field->_memSize = 0;
     field->_externalEnumStorage = (int)&g_igCharList_dataDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);

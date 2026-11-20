@@ -168,7 +168,7 @@ void igPickMode_InitFields(void) {
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6));
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)igRay_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_6)->_construct = 1;
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7), 0.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7)))->setDefault(0.0f);
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 9));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)(igGraphPath_GetOrCreateMetaObject());
     temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xB));

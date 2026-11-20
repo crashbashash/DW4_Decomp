@@ -179,7 +179,7 @@ void igLightAttr_InitFields(void) {
     field->_invarianceFunction = (void (*)())igLightAttr_MarkChanged;
     field->_getMetaEnumFunction = (void (*)(void))IG_GFX_LIGHT_TYPE_GetMetaEnum;
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 1);
-    igIntMetaField_SetDefault((igMetaField *)field, -1);
+    ((Gap::Core::igIntMetaField *)field)->setDefault(-1);
     field->_persistent = 0;
     field->_deepCopyMethod = 4;
     field->_shallowCopyMethod = 4;
@@ -207,7 +207,7 @@ void igLightAttr_InitFields(void) {
     tv = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 7);
     tv->_invarianceFunction = (void (*)())igLightAttr_MarkChanged;
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 8);
-    igFloatMetaField_SetDefault((igMetaField *)field, 180.0f);
+    ((Gap::Core::igFloatMetaField *)field)->setDefault(180.0f);
     field->_invarianceFunction = (void (*)())igLightAttr_MarkChanged;
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 9);
     vf[0] = 1.0f; vf[1] = 0; vf[2] = 0;
@@ -228,10 +228,10 @@ void igLightAttr_InitFields(void) {
     field->_shallowCopyMethod = 1;
     field->_isAlikeShallowMethod = 3;
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 0xE);
-    igBoolMetaField_SetDefaultValue((igMetaField *)field, 1);
+    ((Gap::Core::igBoolMetaField *)field)->setDefault(1);
     field->_persistent = 0;
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 0xF);
-    igBoolMetaField_SetDefaultValue((igMetaField *)field, 1);
+    ((Gap::Core::igBoolMetaField *)field)->setDefault(1);
     field->_persistent = 0;
     igMetaObject_NameFields(meta, g_igLightAttr_fieldTable, g_igLightAttr_fieldHandles, g_igLightAttr_fieldOffsets, base);
 }

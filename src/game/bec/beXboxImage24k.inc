@@ -81,7 +81,7 @@ void beXboxImage24k_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beXboxImage24k_ctorTable, 2);
     data = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igMemoryRefMetaField *)data)->_memType = igCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)data)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
     igMetaObject_NameFields(meta, g_beXboxImage24k_fieldTable, g_beXboxImage24k_fieldHandles, g_beXboxImage24k_fieldOffsets, base);
 }
 

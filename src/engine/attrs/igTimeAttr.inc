@@ -74,7 +74,7 @@ void igTimeAttr_InitFields(void) {
     meta = g_igTimeAttr_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igTimeAttr_ctorTable, 1);
-    igLongMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base), 0);
+    ((Gap::Core::igLongMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(0);
     igMetaObject_NameFields(meta, g_igTimeAttr_fieldTable, g_igTimeAttr_fieldHandles, g_igTimeAttr_fieldOffsets, base);
 }
 

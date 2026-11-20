@@ -112,10 +112,10 @@ void beSoundData_InitFields(void) {
     meta = g_beSoundData_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSoundData_ctorTable, 6);
-    igShortMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base), -1);
-    igShortMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), -1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 2), -1);
-    igShortMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 3), 1);
+    ((Gap::Core::igShortMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(-1);
+    ((Gap::Core::igShortMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(-1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(-1);
+    ((Gap::Core::igShortMetaField *)(igMetaObject_GetFieldAt(meta, base + 3)))->setDefault(1);
     igMetaObject_NameFields(meta, g_beSoundData_fieldTable, g_beSoundData_fieldHandles, g_beSoundData_fieldOffsets, base);
 }
 

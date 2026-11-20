@@ -1,7 +1,7 @@
 void igShortArrayMetaField_SwapBytes(igShortArrayMetaField *self, int item, int count) {
     void **descriptor;
 
-    descriptor = (void **)(((void **)igShortMetaField_GetDefaultDescriptor()));
+    descriptor = (void **)(((void **)Gap::Core::igShortMetaField::getMetaField()));
     ((igMetaFieldView *)(descriptor))->SwapBytes((void *)(item), (int)(count * self->_num));
 }
 

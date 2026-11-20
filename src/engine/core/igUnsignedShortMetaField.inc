@@ -1,12 +1,17 @@
-igMetaObject *g_igUnsignedShortMetaField_metaObject;
-void *g_igUnsignedShortMetaField_descriptor;
+namespace Gap {
+namespace Core {
+
+igMetaObject *igUnsignedShortMetaField::_Meta;
+igUnsignedShortMetaField *igUnsignedShortMetaField::_MetaField;
+}
+}
 
 igMetaField *igUnsignedShortMetaField_Create(igMemoryPoolView *pool) {
     void **field;
 
     if (g_objectSystem->active != 0) {
-        igUnsignedShortMetaField_EnsureRegistered();
-        field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)g_igUnsignedShortMetaField_metaObject, pool)));
+        Gap::Core::igUnsignedShortMetaField::arkRegister();
+        field = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)Gap::Core::igUnsignedShortMetaField::getClassMeta(), pool)));
     } else {
         field = (void **)(((void **)igObject_AllocateRawStorage(0x34, 0, pool)));
         if (field != 0) {
@@ -18,105 +23,84 @@ igMetaField *igUnsignedShortMetaField_Create(igMemoryPoolView *pool) {
     return (igMetaField *)field;
 }
 
-int igUnsignedShortMetaField_Clone(int source, int flags) {
-    int copy;
+namespace Gap {
+namespace Core {
 
+igObject *igUnsignedShortMetaField::cloneViaMetadata(int copyMode)
+{
     if (g_objectSystem->active != 0) {
-        igUnsignedShortMetaField_EnsureRegistered();
-        return igObject_CloneViaMetadata((void **)source, flags);
+        arkRegister();
+        return igObject::cloneViaMetadata(copyMode);
     }
-    copy = ((int)igObject_AllocateRawStorageDefault(0x34, 0));
-    if (copy != 0) {
-        copy = ((int)igUnsignedShortMetaField_CopyConstruct((int **)copy, source));
-    }
-    return copy;
+    return new (igObject_AllocateRawStorageDefault(sizeof(igUnsignedShortMetaField), 0), 0) igUnsignedShortMetaField(*this);
 }
 
-igMetaObject *igUnsignedShortMetaField_GetMetaObject(void)
+igMetaObject *igUnsignedShortMetaField::getClassTypeSafe()
 {
-    igMetaObject *g = g_igUnsignedShortMetaField_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igUnsignedShortMetaField_EnsureRegistered();
-    return g_igUnsignedShortMetaField_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igUnsignedShortMetaField_GetVTable(void) {
-    igUnsignedShortMetaField o;
-    int r;
-    char *p;
-    int *hdr;
-    int c;
-
-    igUnsignedShortMetaField_Init((int **)&o);
-    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
-    o._vtable = (int)&g_igMetaField_vtable[0];
-    if (&o._fieldName != 0) {
-        p = (char *)o._fieldName;
-        if (p != 0) {
-            hdr = (int *)(p - 8);
-            c = *(int *)(p - 4) - 1;
-            *(int *)(p - 4) = c;
-            if (c == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*hdr), (StringTokenHeader *)hdr);
-            }
-        }
-    }
-    return r;
-}
-
-void igUnsignedShortMetaField_EnsureRegistered(void)
+void *igUnsignedShortMetaField::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igUnsignedShortMetaField_Register);
+    igUnsignedShortMetaField temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-static igMetaObjectCallback g_igUnsignedShortMetaField_callbackList[] = { igUnsignedShortMetaField_CreateDefaultDescriptor, 0 };
+void igUnsignedShortMetaField::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igUnsignedShortMetaField_Register(void) {
+CallbackArray *igUnsignedShortMetaField::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { arkRegisterMetaValidate, 0 };
+
     return igMetaObject_RegisterClass(
-        0,
-        &g_igUnsignedShortMetaField_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igMetaField::arkRegisterInternal,
-        igMetaField_GetPublishedMetaObject,
-        igUnsignedShortMetaField_GetMetaObjectFunction,
+        Gap::Core::igMetaField::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igUnsignedShortMetaField",
-        0x34,
-        igUnsignedShortMetaField_GetVTable,
+        sizeof(igUnsignedShortMetaField),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
         0,
-        g_igUnsignedShortMetaField_callbackList
+        regFunctions
     );
 }
 
-void igUnsignedShortMetaField_GetMetaObjectFunction(void) {
-    igUnsignedShortMetaField_GetMetaObject();
-}
 
+void igUnsignedShortMetaField::arkRegisterMetaValidate()
+{
+    igUnsignedShortMetaField *metaField;
 
-void igUnsignedShortMetaField_CreateDefaultDescriptor(void) {
-    void *descriptor;
-
-    if (g_igUnsignedShortMetaField_descriptor == 0) {
-        g_igUnsignedShortMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igUnsignedShortMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
-        descriptor = (void *)(g_igUnsignedShortMetaField_descriptor);
-        if (descriptor != 0) {
-            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
+    if (_MetaField == 0) {
+        _MetaField = (igUnsignedShortMetaField *)igMetaObject_CreateInstance(_Meta, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+        metaField = _MetaField;
+        if (metaField != 0) {
+            MetaRefList_AppendRetained(getMetaFieldTypes(), (::igObject *)metaField);
             {
-                igObject *held = (igObject *)g_igUnsignedShortMetaField_descriptor;
+                ::igObject *held = (::igObject *)_MetaField;
                 held->_refCount = (int)held->_refCount - 1;
                 if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
                     igObject_Destroy(held);
                 }
             }
-            ((igMetaField *)g_igUnsignedShortMetaField_descriptor)->_internalIndex = (short) (Gap::Core::igMetaField::getMetaFieldTypes()->_count - 1);
-            ((Gap::Core::igMetaField *)g_igUnsignedShortMetaField_descriptor)->validate();
+            _MetaField->_internalIndex = (short)(getMetaFieldTypes()->_count - 1);
+            _MetaField->validate();
         }
     }
 }
 
-int igUnsignedShortMetaField_GetDefaultDescriptor(void) {
-    if ((*(int *)&g_igUnsignedShortMetaField_descriptor) == 0) {
-        igUnsignedShortMetaField_EnsureRegistered();
-    }
-    return (*(int *)&g_igUnsignedShortMetaField_descriptor);
+igUnsignedShortMetaField *igUnsignedShortMetaField::getMetaField()
+{
+    if (_MetaField == 0)
+        arkRegister();
+    return _MetaField;
+}
+}
 }
 

@@ -113,7 +113,7 @@ void beNDMWStatusCtrlBaseEquip_InitFields(void) {
     meta = g_beNDMWStatusCtrlBaseEquip_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWStatusCtrlBaseEquip_ctorTable, 0xA);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 1), 1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(1);
     playerList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
     ((igObjectRefMetaField *)playerList)->_metaObject = (int)beDataObjList_GetOrCreateMetaObject();
     powerSocket = (void *)(igMetaObject_GetFieldAt(meta, base + 4));

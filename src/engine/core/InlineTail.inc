@@ -115,14 +115,6 @@ int igUnsignedIntArrayMetaField_GetDescriptor(void) {
     return (int)g_igUnsignedIntArrayMetaField_descriptor;
 }
 
-int igUnsignedCharMetaField_GetMeta(void) {
-    return (int)g_igUnsignedCharMetaField_metaObject;
-}
-
-int igUnsignedCharMetaField_GetDescriptor(void) {
-    return (int)g_igUnsignedCharMetaField_descriptor;
-}
-
 int igUnsignedCharArrayMetaField_GetMeta(void) {
     return (int)g_igUnsignedCharArrayMetaField_metaObject;
 }
@@ -256,14 +248,6 @@ igMetaObject *igMediaFile_GetMeta(void) {
     return g_igMediaFile_metaObject;
 }
 
-int igLongMetaField_GetMeta(void) {
-    return (int)g_igLongMetaField_metaObject;
-}
-
-int igLongMetaField_GetDescriptor(void) {
-    return (int)g_igLongMetaField_descriptor;
-}
-
 int igLongArrayMetaField_GetMeta(void) {
     return (int)g_igLongArrayMetaField_metaObject;
 }
@@ -290,14 +274,6 @@ int igIGBFile_GetMeta(void) {
 
 igMetaObject *igFolder_GetMeta(void) {
     return g_igFolder_metaObject;
-}
-
-igMetaObject *igFloatMetaField_GetMeta(void) {
-    return g_igFloatMetaField_metaObject;
-}
-
-int igFloatMetaField_GetDescriptor(void) {
-    return (*(int *)&g_igFloatMetaField_descriptor);
 }
 
 int igFloatArrayMetaField_GetMeta(void) {
@@ -338,14 +314,6 @@ int igEnumArrayMetaField_GetDescriptor(void) {
 
 int igDriverDatabase_GetMeta(void) {
     return (int)g_igDriverDatabase_metaObject;
-}
-
-igMetaObject *igDoubleMetaField_GetMeta(void) {
-    return g_igDoubleMetaField_metaObject;
-}
-
-int igDoubleMetaField_GetDescriptor(void) {
-    return (*(int *)&g_igDoubleMetaField_descriptor);
 }
 
 int igDoubleArrayMetaField_GetMeta(void) {
@@ -440,22 +408,6 @@ int igAliasMemoryPool_GetMeta(void) {
 
 int Gap__Core__igAliasMemoryPool__vfunc_83(void) {
     return 1;
-}
-
-igMetaObject *igBoolMetaField_GetMeta(void) {
-    return g_igBoolMetaField_metaObject;
-}
-
-int igBoolMetaField_GetDescriptor(void) {
-    return (*(int *)&g_igBoolMetaField_descriptor);
-}
-
-igMetaObject *igCharMetaField_GetMeta(void) {
-    return g_igCharMetaField_metaObject;
-}
-
-int igCharMetaField_GetDescriptor(void) {
-    return (*(int *)&g_igCharMetaField_descriptor);
 }
 
 igMetaObject *igCompoundMetaField_GetMeta(void) {
@@ -602,14 +554,6 @@ int igInfoList_GetMeta(void) {
     return (int)g_igInfoList_metaObject;
 }
 
-int igIntMetaField_GetMeta(void) {
-    return (int)g_igIntMetaField_metaObject;
-}
-
-int igIntMetaField_GetDescriptor(void) {
-    return (int)g_igIntMetaField_descriptor;
-}
-
 igMetaObject *__internalNonRefCountedObjectList_GetMeta(void) {
     return g___internalNonRefCountedObjectList_metaObject;
 }
@@ -690,14 +634,6 @@ igMetaObject *igRegistryValueList_GetMeta(void) {
     return g_igRegistryValueList_metaObject;
 }
 
-int igShortMetaField_GetMeta(void) {
-    return (int)g_igShortMetaField_metaObject;
-}
-
-int igShortMetaField_GetDescriptor(void) {
-    return (int)g_igShortMetaField_descriptor;
-}
-
 igMetaObject *igStringMetaField_GetMeta(void) {
     return g_igStringMetaField_metaObject;
 }
@@ -720,30 +656,6 @@ igMetaObject *igThreadList_GetMeta(void) {
 
 igMetaObject *igNonRefCountedThreadList_GetMeta(void) {
     return g_igNonRefCountedThreadList_metaObject;
-}
-
-int igUnsignedIntMetaField_GetMeta(void) {
-    return (int)g_igUnsignedIntMetaField_metaObject;
-}
-
-int igUnsignedIntMetaField_GetDescriptor(void) {
-    return (int)g_igUnsignedIntMetaField_descriptor;
-}
-
-igMetaObject *igUnsignedLongMetaField_GetMeta(void) {
-    return g_igUnsignedLongMetaField_metaObject;
-}
-
-int igUnsignedLongMetaField_GetDescriptor(void) {
-    return (*(int *)&g_igUnsignedLongMetaField_descriptor);
-}
-
-igMetaObject *igUnsignedShortMetaField_GetMeta(void) {
-    return g_igUnsignedShortMetaField_metaObject;
-}
-
-int igUnsignedShortMetaField_GetDescriptor(void) {
-    return (*(int *)&g_igUnsignedShortMetaField_descriptor);
 }
 
 int igContextList_GetElementMeta(void) {

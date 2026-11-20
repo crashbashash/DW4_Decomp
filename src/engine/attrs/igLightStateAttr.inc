@@ -145,7 +145,7 @@ void igLightStateAttr_InitFields(void) {
     igMetaObject_CreateFields(meta, g_igLightStateAttr_ctorTable, 3);
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base));
     ((igObjectRefMetaField *)field2)->_metaObject = (int)igLightAttr_GetOrCreateMetaObject();
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 1), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(1);
     field = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igObject::getClassMeta();
     ((igMetaField *)field)->_persistent = 0;

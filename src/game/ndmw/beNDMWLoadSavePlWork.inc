@@ -137,8 +137,8 @@ void beNDMWLoadSavePlWork_InitFields(void) {
     meta = g_beNDMWLoadSavePlWork_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWLoadSavePlWork_ctorTable, 0xE);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 3), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 4), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 3)))->setDefault(1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(1);
     haveSaveData = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
     ((igObjectRefMetaField *)haveSaveData)->_metaObject = (int)beNDMWLoadSlotPlayer_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)haveSaveData)->_refCounted = 0;

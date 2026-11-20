@@ -236,7 +236,7 @@ void igCollisionGrid_InitFields(void) {
     temp_s2_8 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB));
     ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)igAABox_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_8)->_construct = 1;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xD), 1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xD)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCollisionGrid_fieldTable, g_igCollisionGrid_fieldHandles, g_igCollisionGrid_fieldOffsets, temp_s1);
 }
 

@@ -67,7 +67,7 @@ void beBinDataObject_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beBinDataObject_ctorTable, 2);
     dataBuffer = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igMemoryRefMetaField *)dataBuffer)->_memType = igCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)dataBuffer)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
     igMetaObject_NameFields(meta, g_beBinDataObject_fieldTable, g_beBinDataObject_fieldHandles, g_beBinDataObject_fieldOffsets, base);
 }
 

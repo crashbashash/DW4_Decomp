@@ -161,7 +161,7 @@ void beNDMWDegiData_InitFields(void) {
     dmNameUni = igMetaObject_GetFieldAt(meta, base + 5);
     ((igUnsignedShortArrayMetaField *)dmNameUni)->_num = 0xA;
     data = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
-    ((igMemoryRefMetaField *)data)->_memType = igCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)data)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
     igMetaObject_NameFields(meta, g_beNDMWDegiData_fieldTable, g_beNDMWDegiData_fieldHandles, g_beNDMWDegiData_fieldOffsets, base);
 }
 

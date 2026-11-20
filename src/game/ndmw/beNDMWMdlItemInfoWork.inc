@@ -128,7 +128,7 @@ void beNDMWMdlItemInfoWork_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beNDMWMdlItemInfoWork_ctorTable, 8);
     itemObject = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)itemObject)->_metaObject = (int)beNDMWItemBase_GetOrCreateMetaObject();
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 4), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(-1);
     igMetaObject_NameFields(meta, g_beNDMWMdlItemInfoWork_fieldTable, g_beNDMWMdlItemInfoWork_fieldHandles, g_beNDMWMdlItemInfoWork_fieldOffsets, base);
 }
 

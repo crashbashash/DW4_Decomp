@@ -111,7 +111,7 @@ void igPsx2File_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igPsx2File_ctorTable, 8);
     bufferField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igMemoryRefMetaField *)bufferField)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)bufferField)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     prefixField = ((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7));
     ((igMetaField *)prefixField)->_resetMethod = 3;
     igMetaObject_NameFields((igMetaObject *)meta, g_igPsx2File_fieldTable, g_igPsx2File_fieldDescriptors, g_igPsx2File_fieldOffsets, base);

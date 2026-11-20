@@ -156,7 +156,7 @@ int igStringMetaField_ReadRawValue(void *self, void *value, void *source, int di
     RawStringValue *raw = (RawStringValue *)source;
     int size = raw->size;
     if (swap != 0) {
-        ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(&size, 1);
+        Gap::Core::igIntMetaField::getMetaField()->endianSwapMemory(&size, 1);
     }
     consumed += 4;
     if (size > 0) {
@@ -191,8 +191,8 @@ int igStringMetaField_WriteRawValue(void *self, void *value, void *dst, int a3, 
   size = (len + 3) & ~3;
   *(int *)cursor = size;
   if (swap != 0) {
-   igMetaFieldView *d = (igMetaFieldView *)igIntMetaField_GetDefaultDescriptor();
-   d->SwapBytes((int *)cursor, 1);
+   Gap::Core::igIntMetaField *d = Gap::Core::igIntMetaField::getMetaField();
+   d->endianSwapMemory((int *)cursor, 1);
   }
   cursor += 4;
   strcpy(cursor, *v);

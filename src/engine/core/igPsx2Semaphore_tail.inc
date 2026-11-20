@@ -94,9 +94,9 @@ void igPsx2Semaphore_InitFields(void) {
     meta = (void *)(g_igPsx2Semaphore_metaObject);
     first = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igPsx2Semaphore_ctorTable, 3);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, first), -1);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 1), 1);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2), 1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first)))->setDefault(-1);
+    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 1)))->setDefault(1);
+    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igPsx2Semaphore_fieldTable, g_igPsx2Semaphore_fieldDescriptors, g_igPsx2Semaphore_fieldOffsets, first);
     g_igPsx2Semaphore_metaObject->_writeProxy = (int)(&igSemaphore_GetMetaObjectFunction);
 }

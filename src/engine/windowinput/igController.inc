@@ -62,7 +62,7 @@ void igController_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igController_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
-    *(int *)((char *)(temp_s1) + 60) = igIntMetaField_GetDefaultDescriptor();
+    *(int *)((char *)(temp_s1) + 60) = (int)Gap::Core::igIntMetaField::getMetaField();
     *(char *)((char *)(temp_s1) + 53) = 1;
     *(char *)((char *)(temp_s1) + 64) = 1;
     *(char *)((char *)(temp_s1) + 65) = 1;

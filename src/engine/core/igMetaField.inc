@@ -75,12 +75,12 @@ void igMetaField::arkRegisterInitialize()
     }
     {
         igShortMetaField *metaField = (igShortMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
-        igShortMetaField_SetDefault((::igMetaField *)metaField, -1);
+        ((igShortMetaField *)metaField)->setDefault(-1);
         metaField->_persistent = 0;
     }
     {
         igShortMetaField *metaField = (igShortMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
-        igShortMetaField_SetDefault((::igMetaField *)metaField, -1);
+        ((igShortMetaField *)metaField)->setDefault(-1);
         metaField->_persistent = 0;
     }
     {
@@ -109,35 +109,35 @@ void igMetaField::arkRegisterInitialize()
     }
     {
         igCharMetaField *metaField = (igCharMetaField *)igMetaObject_GetFieldAt(metaObject, start + 8);
-        igCharMetaField_SetDefaultValue((::igMetaField *)metaField, 0);
+        ((igCharMetaField *)metaField)->setDefault(0);
     }
     {
         igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 10);
-        igBoolMetaField_SetDefaultValue((::igMetaField *)metaField, 1);
+        ((igBoolMetaField *)metaField)->setDefault(1);
     }
     {
         igCharMetaField *metaField = (igCharMetaField *)igMetaObject_GetFieldAt(metaObject, start + 11);
-        igCharMetaField_SetDefaultValue((::igMetaField *)metaField, 1);
+        ((igCharMetaField *)metaField)->setDefault(1);
     }
     {
         igCharMetaField *metaField = (igCharMetaField *)igMetaObject_GetFieldAt(metaObject, start + 12);
-        igCharMetaField_SetDefaultValue((::igMetaField *)metaField, 0);
+        ((igCharMetaField *)metaField)->setDefault(0);
     }
     {
         igCharMetaField *metaField = (igCharMetaField *)igMetaObject_GetFieldAt(metaObject, start + 13);
-        igCharMetaField_SetDefaultValue((::igMetaField *)metaField, 0);
+        ((igCharMetaField *)metaField)->setDefault(0);
     }
     {
         igCharMetaField *metaField = (igCharMetaField *)igMetaObject_GetFieldAt(metaObject, start + 14);
-        igCharMetaField_SetDefaultValue((::igMetaField *)metaField, 0);
+        ((igCharMetaField *)metaField)->setDefault(0);
     }
     {
         igCharMetaField *metaField = (igCharMetaField *)igMetaObject_GetFieldAt(metaObject, start + 15);
-        igCharMetaField_SetDefaultValue((::igMetaField *)metaField, 1);
+        ((igCharMetaField *)metaField)->setDefault(1);
     }
     {
         igCharMetaField *metaField = (igCharMetaField *)igMetaObject_GetFieldAt(metaObject, start + 16);
-        igCharMetaField_SetDefaultValue((::igMetaField *)metaField, 2);
+        ((igCharMetaField *)metaField)->setDefault(2);
     }
     {
         igRawRefMetaField *metaField = (igRawRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 17);

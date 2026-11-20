@@ -224,23 +224,23 @@ void igResource_InitFields(void) {
     ((igObjectRefMetaField *)loadQueueField)->_metaObject = (int)igQueue_GetOrCreateMetaObject();
     loadThreadField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)));
     ((igObjectRefMetaField *)loadThreadField)->_metaObject = (int)igThread_GetOrCreateMetaObject();
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7)))->setDefault(1);
     alignmentStringsField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 8)));
     ((igObjectRefMetaField *)alignmentStringsField)->_metaObject = (int)igStringObjList_GetOrCreateMetaObject();
     ((igMetaField *)alignmentStringsField)->_persistent = 0;
     alignmentValuesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 9)));
     ((igObjectRefMetaField *)alignmentValuesField)->_metaObject = igIntList_GetOrCreateMetaObject();
     ((igMetaField *)alignmentValuesField)->_persistent = 0;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xA), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xA)))->setDefault(1);
     temporaryMemoryPoolField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xB)));
     ((igObjectRefMetaField *)temporaryMemoryPoolField)->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
     dataMemoryPoolField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xC)));
     ((igObjectRefMetaField *)dataMemoryPoolField)->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
     objectMemoryPoolField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xD)));
     ((igObjectRefMetaField *)objectMemoryPoolField)->_metaObject = (int)igMemoryPool_GetOrCreateMetaObject();
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xE), 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xF), 0x20000);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x10), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xE)))->setDefault(1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xF)))->setDefault(0x20000);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x10)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igResource_fieldTable, g_igResource_fieldDescriptors, g_igResource_fieldOffsets, base);
 }
 

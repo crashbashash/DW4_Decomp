@@ -107,8 +107,19 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `userPostRead`. The I/O chain's `endianSwap` is the kit's `igBool` (`bool`, tested as `if (endianSwap)`), so
    `igIGBFile::_endianSwap` is typed `bool` under C++. Not kit-declared and still free: `ConstructCopy`,
    `GetMangledName`, `FindByName`, `AllocateArray`. Flat subclasses still construct and destroy through the C
-   names (`igMetaField_Init`, `igMetaField_Destruct`). Next: its subclasses top-down with
-   `tools/gen_odl_source.py` boilerplate;
+   names (`igMetaField_Init`, `igMetaField_Destruct`). `_fieldName` is the kit's `igStringRef` under C++, so
+   igMetaField's constructors assign it as the kit does and its implicit destructor releases it: a subclass's
+   `retrieveVTablePointer` is the kit's form (a temporary whose destructor stamps igMetaField's vtable and
+   releases the name), and the implicit destructors MWCC emits out of line are dead-stripped (`stripped`).
+   The scalar metafields (`igIntMetaField`, `igShortMetaField`, `igUnsignedShortMetaField`, `igUnsignedIntMetaField`,
+   `igLongMetaField`, `igUnsignedLongMetaField`, `igCharMetaField`, `igUnsignedCharMetaField`, `igBoolMetaField`,
+   `igFloatMetaField`, `igDoubleMetaField`) are converted: `IG_METAFIELD_SETUP` (the descriptor `_MetaField`,
+   `getMetaField`, the inline `getGenericMetaField`), igen's `arkRegisterMetaValidate` that creates the
+   descriptor, `computeSize`, `computeRequiredAlignment`, `setMemoryByString`, `getStringFromMemory` and
+   `setDefault`. Retail builds some as bootstrap classes (`IG_BOOTSTRAP_OBJECT_DEFINE`: three constructors,
+   `__bootstrapDestruct` and the root's copy slot) and the others (float, double, long, unsigned char) with
+   `IG_OBJECT_DEFINE`, whose constructor is implicit. Their `_instantiateFromPool` (`<Class>_Create`, the
+   factory every field table names) is still free;
 3. `igMetaObject`, `igDataList`/`igObjectList`; igMetaObject, igIGBFile and igObjectDirEntry then also call
    igObject's protected and private construction members directly (the kit makes them friends);
 4. attrs, then gfx, then scenegraph, then gui/insight/viewer;

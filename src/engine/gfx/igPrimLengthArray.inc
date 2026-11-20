@@ -79,11 +79,11 @@ void igPrimLengthArray_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igPrimLengthArray_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igMemoryRefMetaField *)temp_s1)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)temp_s1)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     ((igRefMetaField *)temp_s1)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s1)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 2), 0x20);
+    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 2)))->setDefault(0x20);
     igMetaObject_NameFields(meta, g_igPrimLengthArray_fieldTable, g_igPrimLengthArray_fieldHandles, g_igPrimLengthArray_fieldOffsets, fieldStart);
     *(int *)((char *)(g_igPrimLengthArray_metaObject) + 60) = (int)(igPrimLengthArray1_1_GetMetaObjectFunction);
 }

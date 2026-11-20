@@ -54,8 +54,8 @@ CallbackArray *igUnsignedIntArrayMetaField_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igUnsignedIntArrayMetaField_metaObject,
-        igUnsignedIntMetaField_Register,
-        igUnsignedIntMetaField_GetPublishedMetaObject,
+        Gap::Core::igUnsignedIntMetaField::arkRegisterInternal,
+        Gap::Core::igUnsignedIntMetaField::getClassMeta,
         igUnsignedIntArrayMetaField_GetMetaObjectFunction,
         "igUnsignedIntArrayMetaField",
         0x38,
@@ -68,10 +68,6 @@ CallbackArray *igUnsignedIntArrayMetaField_Register(void) {
 
 void igUnsignedIntArrayMetaField_GetMetaObjectFunction(void) {
     igUnsignedIntArrayMetaField_GetMetaObject();
-}
-
-igMetaObject *igUnsignedIntMetaField_GetPublishedMetaObject(void) {
-    return g_igUnsignedIntMetaField_metaObject;
 }
 
 static FieldFactory g_igUnsignedIntArrayMetaField_ctorTable[] = {
@@ -94,7 +90,7 @@ void igUnsignedIntArrayMetaField_InitFields(void) {
     meta = (void *)g_igUnsignedIntArrayMetaField_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igUnsignedIntArrayMetaField_ctorTable, 1);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, base), 1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)))->setDefault(1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igUnsignedIntArrayMetaField_fieldTable, g_igUnsignedIntArrayMetaField_fieldDescriptors, g_igUnsignedIntArrayMetaField_fieldOffsets, base);
 }
 

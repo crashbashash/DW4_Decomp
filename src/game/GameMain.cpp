@@ -221,7 +221,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igLongArrayMetaField_EnsureRegistered();
     igFloatArrayMetaField_EnsureRegistered();
     igEnumArrayMetaField_EnsureRegistered();
-    igDoubleMetaField_EnsureRegistered();
+    Gap::Core::igDoubleMetaField::arkRegister();
     igDoubleArrayMetaField_EnsureRegistered();
     igDependencyMetaField_EnsureRegistered();
     igPointerListList_EnsureRegistered();

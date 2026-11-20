@@ -147,7 +147,7 @@ void beSvPlatDataGC_InitFields(void) {
     found = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_connectMax"));
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(((igMetaObject *)meta)->_metaFields), (int)found);
     clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
-    igIntMetaField_SetDefault((igMetaField *)clone, 2);
+    ((Gap::Core::igIntMetaField *)clone)->setDefault(2);
     clone->_externalEnumStorage = (int)(&g_beSvPlatDataGC_connectMaxStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
     clone->_refCount = (int)clone->_refCount - 1;
@@ -157,9 +157,9 @@ void beSvPlatDataGC_InitFields(void) {
     dataOffSet = igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2);
     ((igIntArrayMetaField *)dataOffSet)->_num = 2;
     banTplData = (igMetaObject_GetFieldAt((igMetaObject *)meta, base + 9));
-    ((igMemoryRefMetaField *)banTplData)->_memType = igCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)banTplData)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
     iconTplData = (igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xB));
-    ((igMemoryRefMetaField *)iconTplData)->_memType = igCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)iconTplData)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
     comment = igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xC);
     ((igCharArrayMetaField *)comment)->_num = 0x40;
     igMetaObject_NameFields((igMetaObject *)meta, g_beSvPlatDataGC_fieldTable, g_beSvPlatDataGC_fieldHandles, g_beSvPlatDataGC_fieldOffsets, base);

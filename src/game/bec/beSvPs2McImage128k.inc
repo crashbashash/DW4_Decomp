@@ -71,7 +71,7 @@ void beSvPs2McImage128k_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSvPs2McImage128k_ctorTable, 2);
     data = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igMemoryRefMetaField *)data)->_memType = igCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)data)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
     igMetaObject_NameFields(meta, g_beSvPs2McImage128k_fieldTable, g_beSvPs2McImage128k_fieldHandles, g_beSvPs2McImage128k_fieldOffsets, base);
 }
 

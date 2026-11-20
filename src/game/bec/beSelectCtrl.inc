@@ -100,7 +100,7 @@ void beSelectCtrl_InitFields(void) {
     padManager = (void *)(igMetaObject_GetFieldAt(meta, base));
     ((igObjectRefMetaField *)padManager)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)padManager)->_refCounted = 0;
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 1), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(1);
     igMetaObject_NameFields(meta, g_beSelectCtrl_fieldTable, g_beSelectCtrl_fieldHandles, g_beSelectCtrl_fieldOffsets, base);
 }
 

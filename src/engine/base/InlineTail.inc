@@ -820,7 +820,7 @@ static inline void assignToken(igMetaField *field, void *object, const RecoveryS
 }
 
 extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, int section, igMetaField *field, void *object) {
-    if (((Gap::Core::igObject *)field)->isOfType(g_igIntMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)field)->isOfType(Gap::Core::igIntMetaField::getClassMeta()) != 0) {
         int value;
         if (igRegistry_GetValueInt(registry, section, stringObjText(*key), &value, 0, 0)) {
             *(int *)((char *)object + field->_offset) = value;
@@ -836,7 +836,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
             return true;
         }
     }
-    if (((Gap::Core::igObject *)field)->isOfType(g_igUnsignedIntMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)field)->isOfType(Gap::Core::igUnsignedIntMetaField::getClassMeta()) != 0) {
         int value;
         if (igRegistry_GetValueInt(registry, section, stringObjText(*key), &value, 0, 0)) {
             if (value < 0) {
@@ -847,7 +847,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
             return true;
         }
     }
-    if (((Gap::Core::igObject *)field)->isOfType(g_igFloatMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)field)->isOfType(Gap::Core::igFloatMetaField::getClassMeta()) != 0) {
         float value;
         if (igRegistry_GetValueFloat(registry, section, stringObjText(*key), &value, 0, 0.0f)) {
             *(float *)((char *)object + field->_offset) = value;
@@ -855,7 +855,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
             return true;
         }
     }
-    if (((Gap::Core::igObject *)field)->isOfType(g_igBoolMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)field)->isOfType(Gap::Core::igBoolMetaField::getClassMeta()) != 0) {
         bool value;
         if (igRegistry_GetValueBool(registry, section, stringObjText(*key), (unsigned char *)&value, 0, 0)) {
             *(bool *)((char *)object + field->_offset) = value;
@@ -1319,12 +1319,12 @@ int FUN_0022d6a0(Q *arg0, int arg1, Q *arg2, int arg3, int arg4) {
     Q *var_s3;
     Q *var_s1;
 
-    if ((arg0 != 0) && (((Gap::Core::igObject *)arg0)->isOfType(g_igUnsignedLongMetaField_metaObject) != 0)) {
+    if ((arg0 != 0) && (((Gap::Core::igObject *)arg0)->isOfType(Gap::Core::igUnsignedLongMetaField::getClassMeta()) != 0)) {
         var_s3 = arg0;
     } else {
         var_s3 = 0;
     }
-    if ((arg2 != 0) && (((Gap::Core::igObject *)arg2)->isOfType(g_igUnsignedLongMetaField_metaObject) != 0)) {
+    if ((arg2 != 0) && (((Gap::Core::igObject *)arg2)->isOfType(Gap::Core::igUnsignedLongMetaField::getClassMeta()) != 0)) {
         var_s1 = arg2;
     } else {
         var_s1 = 0;
@@ -1353,12 +1353,12 @@ int FUN_0022d760(void *arg0, int arg1, void *arg2, int arg3, int arg4) {
 int FUN_0022d820(void *arg0, int arg1, void *arg2, int arg3, int arg4) {
     void *r0;
     void *r2;
-    if (arg0 != 0 && ((Gap::Core::igObject *)arg0)->isOfType(g_igUnsignedCharMetaField_metaObject) != 0) {
+    if (arg0 != 0 && ((Gap::Core::igObject *)arg0)->isOfType(Gap::Core::igUnsignedCharMetaField::getClassMeta()) != 0) {
         r0 = arg0;
     } else {
         r0 = 0;
     }
-    if (arg2 != 0 && ((Gap::Core::igObject *)arg2)->isOfType(g_igUnsignedCharMetaField_metaObject) != 0) {
+    if (arg2 != 0 && ((Gap::Core::igObject *)arg2)->isOfType(Gap::Core::igUnsignedCharMetaField::getClassMeta()) != 0) {
         r2 = arg2;
     } else {
         r2 = 0;
@@ -1468,12 +1468,12 @@ int FUN_0022dda0(Q *arg0, int arg1, Q *arg2, int arg3, int arg4) {
     Q *var_s3;
     Q *var_s1;
 
-    if ((arg0 != 0) && (((Gap::Core::igObject *)arg0)->isOfType(g_igIntMetaField_metaObject) != 0)) {
+    if ((arg0 != 0) && (((Gap::Core::igObject *)arg0)->isOfType(Gap::Core::igIntMetaField::getClassMeta()) != 0)) {
         var_s3 = arg0;
     } else {
         var_s3 = 0;
     }
-    if ((arg2 != 0) && (((Gap::Core::igObject *)arg2)->isOfType(g_igIntMetaField_metaObject) != 0)) {
+    if ((arg2 != 0) && (((Gap::Core::igObject *)arg2)->isOfType(Gap::Core::igIntMetaField::getClassMeta()) != 0)) {
         var_s1 = arg2;
     } else {
         var_s1 = 0;

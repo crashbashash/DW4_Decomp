@@ -122,8 +122,8 @@ void igPsx2ScissorExt_InitFields(void) {
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igPsx2VisualContext_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 4), 0x280);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 5), 0x1C0);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 4)))->setDefault(0x280);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 5)))->setDefault(0x1C0);
     igMetaObject_NameFields(meta, g_igPsx2ScissorExt_fieldTable, g_igPsx2ScissorExt_fieldHandles, g_igPsx2ScissorExt_fieldOffsets, fieldStart);
 }
 

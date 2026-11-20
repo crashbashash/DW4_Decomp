@@ -175,21 +175,21 @@ void igImage_InitFields(void) {
     meta = g_igImage_metaObject;
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igImage_ctorTable, 0x15);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 3), 1);
-    igUnsignedIntMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 4), 0x64);
+    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 3)))->setDefault(1);
+    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 4)))->setDefault(0x64);
     temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 9));
     igEnumMetaField_SetDefaultValue((igMetaField *)temp_v0, g_igImage_pfmtDefault);
     *(int *)((char *)(temp_v0) + 52) = (int)(&IG_GFX_TEXTURE_FORMAT_GetMetaEnum);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0xA), -2);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xA)))->setDefault(-2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xB));
-    *(int *)((char *)(temp_s1) + 60) = igUnsignedCharMetaField_GetDefaultDescriptor();
+    *(int *)((char *)(temp_s1) + 60) = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     igMemoryRefMetaField_SetPoolName((igMemoryRefMetaField *)temp_s1, "Image");
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xC));
-    *(int *)((char *)(temp_s1_2) + 60) = igCharMetaField_GetDefaultDescriptor();
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, fieldStart + 0xD), 1);
+    *(int *)((char *)(temp_s1_2) + 60) = (int)Gap::Core::igCharMetaField::getMetaField();
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xD)))->setDefault(1);
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xF));
     *(int *)((char *)(temp_s1_3) + 56) = (int)igClut_GetOrCreateMetaObject();
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, fieldStart + 0x11), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x11)))->setDefault(-1);
     igMetaObject_NameFields(meta, g_igImage_fieldTable, g_igImage_fieldHandles, g_igImage_fieldOffsets, fieldStart);
     *(int *)((char *)(g_igImage_metaObject) + 60) = (int)igPsx2Image_GetMetaObjectFunction;
 }

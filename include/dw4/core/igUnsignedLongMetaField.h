@@ -10,9 +10,7 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igUnsignedLongMetaField_metaObject;
 struct igMetaField *igUnsignedLongMetaField_Create(struct igMemoryPoolView *pool);
-void igUnsignedLongMetaField_SetDefaultValue(struct igMetaField *self, unsigned long long value);
 
 #ifdef __cplusplus
 }

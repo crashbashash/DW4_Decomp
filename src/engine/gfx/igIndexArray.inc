@@ -88,7 +88,7 @@ void igIndexArray_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igIndexArray_ctorTable, 5);
     dataField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igMemoryRefMetaField *)dataField)->_memType = igUnsignedCharMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)dataField)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     ((igMemoryRefMetaField *)dataField)->_destruct = 1;
     ((igMemoryRefMetaField *)dataField)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)dataField)->_releaseOnReset = 1;

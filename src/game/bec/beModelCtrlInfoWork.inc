@@ -544,7 +544,7 @@ void beModelCtrlInfoWork_InitFields(void) {
     hp = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)hp)->_metaObject = (int)beDataObjInt_GetOrCreateMetaObject();
     ((igRefMetaField *)hp)->_construct = 1;
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 2), -1);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(-1);
     comData = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
     ((igObjectRefMetaField *)comData)->_metaObject = (int)beModelCtrlData_GetOrCreateMetaObject();
     labelSeqList = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
@@ -556,7 +556,7 @@ void beModelCtrlInfoWork_InitFields(void) {
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0xA), 0);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0xB), 0);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0xC), 0);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0xF), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xF)))->setDefault(1);
     pdMoveDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 0x11));
     ((igObjectRefMetaField *)pdMoveDataList)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
     ((igRefMetaField *)pdMoveDataList)->_construct = 1;
@@ -566,8 +566,8 @@ void beModelCtrlInfoWork_InitFields(void) {
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0x15), 0);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0x16), 0);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0x17), 0);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 0x1C), 0.0f);
-    igFloatMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 0x20), -1.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x1C)))->setDefault(0.0f);
+    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x20)))->setDefault(-1.0f);
     posLockNode = (void *)(igMetaObject_GetFieldAt(meta, base + 0x22));
     ((igObjectRefMetaField *)posLockNode)->_metaObject = (int)beModelCtrlNode2_GetOrCreateMetaObject();
     posLockTrc = (void *)(igMetaObject_GetFieldAt(meta, base + 0x23));
@@ -581,11 +581,11 @@ void beModelCtrlInfoWork_InitFields(void) {
     ((igObjectRefMetaField *)debugHitBoxNode)->_metaObject = (int)igGroup_GetOrCreateMetaObject();
     hitBody = (void *)(igMetaObject_GetFieldAt(meta, base + 0x2A));
     ((igObjectRefMetaField *)hitBody)->_metaObject = (int)beModelCtrlInfoHitBody_GetOrCreateMetaObject();
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0x2B), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0x2C), 1);
-    igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 0x2D), 1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x2B)))->setDefault(1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x2C)))->setDefault(1);
+    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x2D)))->setDefault(1);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0x2E), 0);
-    igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 0x2F), 0);
+    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x2F)))->setDefault(0);
     subCommand = (void *)(igMetaObject_GetFieldAt(meta, base + 0x30));
     ((igObjectRefMetaField *)subCommand)->_metaObject = (int)beModelCtrlSubCom_GetOrCreateMetaObject();
     ((igRefMetaField *)subCommand)->_construct = 1;
