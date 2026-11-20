@@ -59,8 +59,7 @@ float g_textColorRgb[12];
 }
 struct SetOp { static inline void go(igStringRefList *L, int idx, const igStringRef &r) { int cnt; int *slot; int *t; int *a1; int c; cnt = L->_count; if (cnt != 0 && idx >= 0 && idx < cnt) { slot = (int *)L->_data + idx; t = (int *)r.p; if (t != 0) t[-1] = t[-1] + 1; t = (int *)(*slot); if (t != 0) { a1 = t - 2; c = t[-1] - 1; t[-1] = c; if (c == 0) StringChunk_ReleaseHeader((StringChunk *)*a1, (StringTokenHeader *)a1); } *slot = (int)r.p; } } };
 extern "C" void beNDMWPanelObject_SetCellText(beNDMWPanelObject *self, int g, int s, int *name, int val);
-struct PanelPosition { float x; float y; float z; };
-extern "C" void beNDMWPanelObject_GetBasePosition(beNDMWPanelObject *panel, struct PanelPosition *position);
+extern "C" void beNDMWPanelObject_GetBasePosition(beNDMWPanelObject *panel, igVec3f *position);
 extern "C" void beNDMWPanelObject_SendModelCommand(beNDMWPanelObject *panel, const void *target, const void *message, float *position, int sequence);
 extern "C" void beNDMWPanelObject_Open(beNDMWPanelObject *panel, int generate, int silent);
 extern "C" void beNDMWPanelObject_MoveCursorUp(beNDMWPanelObject *panel);
@@ -203,10 +202,8 @@ void beNDMWPanelObject_SetCellText(beNDMWPanelObject *self, int g, int s, int *n
     }
 }
 
-void beNDMWPanelObject_GetBasePosition(beNDMWPanelObject *panel, struct PanelPosition *position) {
-    position->x = 150.0f * (float) panel->_playerNo - 260.0f;
-    position->y = -160.0f;
-    position->z = 0.0f;
+void beNDMWPanelObject_GetBasePosition(beNDMWPanelObject *panel, igVec3f *position) {
+    position->set(150.0f * (float) panel->_playerNo - 260.0f, -160.0f, 0.0f);
 }
 
 void beNDMWPanelObject_SendModelCommand(beNDMWPanelObject *panel, const void *target, const void *message, float *position, int sequence) {
@@ -245,7 +242,7 @@ void beNDMWPanelObject_Open(beNDMWPanelObject *panel, int generate, int silent) 
     }
     panel->_lineMode = lineMode;
     if (generate != 0) {
-        beNDMWPanelObject_GetBasePosition(panel, (struct PanelPosition *)origin);
+        beNDMWPanelObject_GetBasePosition(panel, (igVec3f *)origin);
         beNDMWPanelObject_SendModelCommand(panel, "i_wzslbase00", "GENERATE", (float *)origin, (int)g_panelPageSeqs[panel->_page][lineMode]);
     } else {
         beNDMWPanelObject_SendModelCommand(panel, "i_wzslbase00", g_panelPageSeqs[panel->_page][lineMode], (float *)0, 0);
@@ -371,7 +368,7 @@ void beNDMWPanelObjectWaza_Refresh(beNDMWPanelObjectWaza *self) {
         self->_offset = 0;
         self->_listKazu = c2;
     }
-    beNDMWPanelObject_GetBasePosition((beNDMWPanelObject *)self, (struct PanelPosition *)pos);
+    beNDMWPanelObject_GetBasePosition((beNDMWPanelObject *)self, (igVec3f *)pos);
     int i = 0;
     do {
         int slot = i + self->_playerNo * 4;
@@ -515,7 +512,7 @@ void beNDMWPanelObjectItem_Refresh(beNDMWPanelObjectItem *self) {
         self->_offset = 0;
         self->_listKazu = c2;
     }
-    beNDMWPanelObject_GetBasePosition((beNDMWPanelObject *)self, (struct PanelPosition *)pos);
+    beNDMWPanelObject_GetBasePosition((beNDMWPanelObject *)self, (igVec3f *)pos);
     int i = 0;
     do {
         int slot = i + self->_playerNo * 4;
@@ -698,7 +695,7 @@ void beNDMWPanelObjectStat_Refresh(beNDMWPanelObjectStat *self) {
         self->_offset = 0;
         self->_listKazu = c2;
     }
-    beNDMWPanelObject_GetBasePosition((beNDMWPanelObject *)self, (struct PanelPosition *)pos);
+    beNDMWPanelObject_GetBasePosition((beNDMWPanelObject *)self, (igVec3f *)pos);
     int i = 0;
     do {
         int slot = i + self->_playerNo * 4;
@@ -931,7 +928,7 @@ void beNDMWPanelWaza_UpdateRam(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ra
             if (show) {
                 sel = panel->_cursor + panel->_lineMode;
                 if (work->_isCursorGenerate == 0) {
-                    beNDMWPanelObject_GetBasePosition(panel, (struct PanelPosition *)vec);
+                    beNDMWPanelObject_GetBasePosition(panel, (igVec3f *)vec);
                     beNDMWPanelObject_SendModelCommand(panel, "i_wzslcursel", "GENERATE", (float *)vec, (int)g_panelLineSelectSeqs[sel]);
                     work->_isCursorGenerate = 1;
                     return;

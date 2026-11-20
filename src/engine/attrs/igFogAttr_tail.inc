@@ -1,7 +1,7 @@
 void igFogAttr_apply(igFogAttr *arg0, int arg1) {
     igPsx2VisualContext_SetFogMode((igPsx2VisualContext *)arg1, (unsigned int)arg0->_mode);
     igPsx2VisualContext_SetFogDensity((igPsx2VisualContext *)arg1, arg0->_density);
-    igPsx2VisualContext_SetFogColor((igPsx2VisualContext *)arg1, arg0->_color);
+    igPsx2VisualContext_SetFogColor((igPsx2VisualContext *)arg1, &arg0->_color);
     igPsx2VisualContext_SetFogNear((igPsx2VisualContext *)arg1, arg0->_nearVal);
     igPsx2VisualContext_SetFogFar((igPsx2VisualContext *)arg1, arg0->_farVal);
 }

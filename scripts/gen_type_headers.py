@@ -101,7 +101,9 @@ VECTOR = {
 # a whole, float-aligned field of that kind is declared as the type under C++, and C keeps the floats.
 # {kind: (C++ type, header)}
 KIT_VECTOR = {
+    "igVec2fMetaField": ("igVec2f", "dw4/maths/igVec2f.h"),
     "igVec3fMetaField": ("igVec3f", "dw4/maths/igVec3f.h"),
+    "igVec4fMetaField": ("igVec4f", "dw4/maths/igVec4f.h"),
 }
 
 # Inline arrays: the element type comes from the kind, the element count from the distance to the

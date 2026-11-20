@@ -270,7 +270,7 @@ int igCompileTraversal_TraverseGeometry(igCompileTraversal *self, igGeometry *ge
             grow_1bc1e0(mn, mx, bmin, bmax);
             found = true;
         } else if (DAT_0055f158[0] == ((GeometryAttrView_1bc1e0 *)attr)->getMeta()) {
-            FUN_001b21d0((A_1b21d0 *)attr, (V3_1b21d0 *)&bmin, (V3_1b21d0 *)&bmax);
+            FUN_001b21d0((A_1b21d0 *)attr, (igVec3f *)&bmin, (igVec3f *)&bmax);
             grow_1bc1e0(mn, mx, bmin, bmax);
             found = true;
         }

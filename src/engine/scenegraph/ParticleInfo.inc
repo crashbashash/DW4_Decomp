@@ -167,7 +167,7 @@ int FUN_001d6900(Primitive **out) {
 
 void FUN_001d6a70(void) {
   Ref_1d6a70 *scratch;
-  Vec3x eye, origin, up;
+  igVec3f eye, origin, up;
   Vec4 white;
   Vec4 forward;
   Lens *lens, *tint;
@@ -239,9 +239,9 @@ void FUN_001d6a70(void) {
   }
   ObjectList_AppendRetained((igObjectList *)DAT_005629a0[0]->items, (igObject *)scratch);
   FUN_00191860((char *)DAT_005629a8[0] + 12, -1.0f, 1.0f, -1.0f, 1.0f, -5.0f, 5.0f);
-  up.x = 0.0f; up.y = 1.0f; up.z = 0.0f;
-  origin.x = 0.0f; origin.y = 0.0f; origin.z = 0.0f;
-  eye.x = 0.0f; eye.y = 0.0f; eye.z = 5.0f;
+  up.vec[0] = 0.0f; up.vec[1] = 1.0f; up.vec[2] = 0.0f;
+  origin.vec[0] = 0.0f; origin.vec[1] = 0.0f; origin.vec[2] = 0.0f;
+  eye.vec[0] = 0.0f; eye.vec[1] = 0.0f; eye.vec[2] = 5.0f;
   igMatrix44f_MakeLookAt((float *)((char *)DAT_005629b0[0] + 12), (const float *)&eye, (const float *)&origin, (const float *)&up);
   {
     Ref_1d6a70 *o = scratch;

@@ -27,7 +27,9 @@
 
 #ifdef __cplusplus
 #include "dw4/core/igObjectMacros.h"
+#include "dw4/maths/igVec2f.h"
 #include "dw4/maths/igVec3f.h"
+#include "dw4/maths/igVec4f.h"
 #endif
 
 /* handle 0x587198, 2 field(s), sizeof 8 (registered instance size) */
@@ -712,7 +714,11 @@ typedef struct beBkColorInfo {
     char _pad17[3];
     int _dataList;                                 /* +20   igObjectRefMetaField */
     int _ramList;                                  /* +24   igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec4f _rgba;                                 /* +28   igVec4fMetaField */
+#else
     float _rgba[4];                                /* +28   igVec4fMetaField */
+#endif
 } beBkColorInfo;
 
 #ifdef __cplusplus
@@ -2064,7 +2070,11 @@ typedef struct beLOA {
     char _pad44[4];
     long long _oldTime;                            /* +48   igLongMetaField */
     int _status;                                   /* +56   igIntMetaField */
+#ifdef __cplusplus
+    igVec4f _color;                                /* +60   igVec4fMetaField */
+#else
     float _color[4];                               /* +60   igVec4fMetaField */
+#endif
     int _overrideAttrList;                         /* +76   igObjectRefMetaField */
     int _blendStateAttr;                           /* +80   igObjectRefMetaField */
     int _blendFunctionAttr;                        /* +84   igObjectRefMetaField */
@@ -8144,8 +8154,16 @@ typedef struct bePadData {
 #endif
     unsigned char _isConnect;                      /* +8    igBoolMetaField */
     char _pad9[3];
+#ifdef __cplusplus
+    igVec2f _LStick;                               /* +12   igVec2fMetaField */
+#else
     float _LStick[2];                              /* +12   igVec2fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec2f _RStick;                               /* +20   igVec2fMetaField */
+#else
     float _RStick[2];                              /* +20   igVec2fMetaField */
+#endif
     int _lTrg;                                     /* +28   igIntMetaField */
     int _lRpt;                                     /* +32   igIntMetaField */
     int _lStk;                                     /* +36   igIntMetaField */
@@ -10215,7 +10233,11 @@ typedef struct igAnimationCombinerBoneInfo {
     int _lastKeyframe;                             /* +8    igIntMetaField */
     int _animationState;                           /* +12   igObjectRefMetaField */
     int _transformSource;                          /* +16   igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec4f _constantQuaternion;                   /* +20   igVec4fMetaField */
+#else
     float _constantQuaternion[4];                  /* +20   igVec4fMetaField */
+#endif
 #ifdef __cplusplus
     igVec3f _constantTranslation;                  /* +36   igVec3fMetaField */
 #else
@@ -10445,7 +10467,11 @@ typedef struct igAnimationTrack {
 #endif
     int _name;                                     /* +8    igStringMetaField */
     int _source;                                   /* +12   igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec4f _constantQuaternion;                   /* +16   igVec4fMetaField */
+#else
     float _constantQuaternion[4];                  /* +16   igVec4fMetaField */
+#endif
 #ifdef __cplusplus
     igVec3f _constantTranslation;                  /* +32   igVec3fMetaField */
 #else
@@ -10794,7 +10820,11 @@ typedef struct igBasicColorChanger {
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
     float _colors[16];                             /* +8    igVec4fArrayMetaField */
+#ifdef __cplusplus
+    igVec4f _disabledColor;                        /* +72   igVec4fMetaField */
+#else
     float _disabledColor[4];                       /* +72   igVec4fMetaField */
+#endif
 } igBasicColorChanger;
 
 #ifdef __cplusplus
@@ -11364,8 +11394,16 @@ typedef struct igClearAttr {
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     unsigned int _clearMode;                       /* +12   igUnsignedIntMetaField */
+#ifdef __cplusplus
+    igVec4f _color;                                /* +16   igVec4fMetaField */
+#else
     float _color[4];                               /* +16   igVec4fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec4f _accum;                                /* +32   igVec4fMetaField */
+#else
     float _accum[4];                               /* +32   igVec4fMetaField */
+#endif
     double _depth;                                 /* +48   igDoubleMetaField */
     unsigned int _stencil;                         /* +56   igUnsignedIntMetaField */
     unsigned int _colorPacked;                     /* +60   igUnsignedIntMetaField */
@@ -11566,7 +11604,11 @@ typedef struct igColorAttr {
 #endif
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
+#ifdef __cplusplus
+    igVec4f _color;                                /* +12   igVec4fMetaField */
+#else
     float _color[4];                               /* +12   igVec4fMetaField */
+#endif
     unsigned int _colorPacked;                     /* +28   igUnsignedIntMetaField */
 } igColorAttr;
 
@@ -13325,19 +13367,35 @@ typedef struct igFlyMode {
 #else
     float _joystickT[3];                           /* +88   igVec3fMetaField */
 #endif
+#ifdef __cplusplus
+    igVec2f _joystickR;                            /* +100  igVec2fMetaField */
+#else
     float _joystickR[2];                           /* +100  igVec2fMetaField */
+#endif
 #ifdef __cplusplus
     igVec3f _lastTranslation;                      /* +108  igVec3fMetaField */
 #else
     float _lastTranslation[3];                     /* +108  igVec3fMetaField */
 #endif
+#ifdef __cplusplus
+    igVec2f _lastRotation;                         /* +120  igVec2fMetaField */
+#else
     float _lastRotation[2];                        /* +120  igVec2fMetaField */
+#endif
     float _speed;                                  /* +128  igFloatMetaField */
     unsigned char _aiming;                         /* +132  igBoolMetaField */
     char _pad133[3];
     int _window;                                   /* +136  igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec2f _mousePos;                             /* +140  igVec2fMetaField */
+#else
     float _mousePos[2];                            /* +140  igVec2fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec2f _lastAim;                              /* +148  igVec2fMetaField */
+#else
     float _lastAim[2];                             /* +148  igVec2fMetaField */
+#endif
     unsigned char _lastAimValid;                   /* +156  igBoolMetaField */
     char _pad157[3];
 } igFlyMode;
@@ -13356,7 +13414,11 @@ typedef struct igFogAttr {
     float _nearVal;                                /* +16   igFloatMetaField */
     float _farVal;                                 /* +20   igFloatMetaField */
     float _density;                                /* +24   igFloatMetaField */
+#ifdef __cplusplus
+    igVec4f _color;                                /* +28   igVec4fMetaField */
+#else
     float _color[4];                               /* +28   igVec4fMetaField */
+#endif
 } igFogAttr;
 
 #ifdef __cplusplus
@@ -13549,7 +13611,11 @@ typedef struct igGeometryElement {
 #else
     float _defaultSize[3];                         /* +12   igVec3fMetaField */
 #endif
+#ifdef __cplusplus
+    igVec4f _color;                                /* +24   igVec4fMetaField */
+#else
     float _color[4];                               /* +24   igVec4fMetaField */
+#endif
     int _sharableAttrs;                            /* +40   igObjectRefMetaField */
 } igGeometryElement;
 
@@ -13787,8 +13853,16 @@ typedef struct igGuiSystemModel {
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
     int _views;                                    /* +8    igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec2f _windowSize;                           /* +12   igVec2fMetaField */
+#else
     float _windowSize[2];                          /* +12   igVec2fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec2f _mousePosition;                        /* +20   igVec2fMetaField */
+#else
     float _mousePosition[2];                       /* +20   igVec2fMetaField */
+#endif
     unsigned char _mousePressed;                   /* +28   igBoolMetaField */
     char _pad29[3];
     float _viewMatrix[16];                         /* +32   igMatrix44fMetaField */
@@ -14539,9 +14613,21 @@ typedef struct igLightAttr {
 #else
     float _position[3];                            /* +20   igVec3fMetaField */
 #endif
+#ifdef __cplusplus
+    igVec4f _ambient;                              /* +32   igVec4fMetaField */
+#else
     float _ambient[4];                             /* +32   igVec4fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec4f _diffuse;                              /* +48   igVec4fMetaField */
+#else
     float _diffuse[4];                             /* +48   igVec4fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec4f _specular;                             /* +64   igVec4fMetaField */
+#else
     float _specular[4];                            /* +64   igVec4fMetaField */
+#endif
 #ifdef __cplusplus
     igVec3f _direction;                            /* +80   igVec3fMetaField */
 #else
@@ -15042,10 +15128,26 @@ typedef struct igMaterialAttr {
     short _cachedAttrIndex;                        /* +8    igShortMetaField */
     short _cachedUnitID;                           /* +10   igShortMetaField */
     float _shininess;                              /* +12   igFloatMetaField */
+#ifdef __cplusplus
+    igVec4f _diffuse;                              /* +16   igVec4fMetaField */
+#else
     float _diffuse[4];                             /* +16   igVec4fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec4f _ambient;                              /* +32   igVec4fMetaField */
+#else
     float _ambient[4];                             /* +32   igVec4fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec4f _emission;                             /* +48   igVec4fMetaField */
+#else
     float _emission[4];                            /* +48   igVec4fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec4f _specular;                             /* +64   igVec4fMetaField */
+#else
     float _specular[4];                            /* +64   igVec4fMetaField */
+#endif
     unsigned int _flags;                           /* +80   igUnsignedIntMetaField */
 } igMaterialAttr;
 
@@ -15869,7 +15971,11 @@ typedef struct igMouseCursor {
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
     int _geometryElement;                          /* +8    igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec2f _offset;                               /* +12   igVec2fMetaField */
+#else
     float _offset[2];                              /* +12   igVec2fMetaField */
+#endif
 } igMouseCursor;
 
 #ifdef __cplusplus
@@ -16425,7 +16531,11 @@ typedef struct igOnOffColorChanger {
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
     float _colors[16];                             /* +8    igVec4fArrayMetaField */
+#ifdef __cplusplus
+    igVec4f _disabledColor;                        /* +72   igVec4fMetaField */
+#else
     float _disabledColor[4];                       /* +72   igVec4fMetaField */
+#endif
 } igOnOffColorChanger;
 
 #ifdef __cplusplus
@@ -16666,7 +16776,11 @@ typedef struct igPickMode {
     char _pad109[3];
     int _hitPath;                                  /* +112  igObjectRefMetaField */
     float _inverseProjectionMatrix[16];            /* +116  igMatrix44fMetaField */
+#ifdef __cplusplus
+    igVec2f _joystickT;                            /* +180  igVec2fMetaField */
+#else
     float _joystickT[2];                           /* +180  igVec2fMetaField */
+#endif
 } igPickMode;
 
 #ifdef __cplusplus
@@ -16701,8 +16815,16 @@ typedef struct igPlanarShadowShader {
     char _pad37[3];
     int _lights;                                   /* +40   igObjectRefMetaField */
     int _mvmList;                                  /* +44   igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec4f _shadowPlane;                          /* +48   igVec4fMetaField */
+#else
     float _shadowPlane[4];                         /* +48   igVec4fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec4f _shadowColor;                          /* +64   igVec4fMetaField */
+#else
     float _shadowColor[4];                         /* +64   igVec4fMetaField */
+#endif
     int _mats;                                     /* +80   igObjectRefMetaField */
     int _geoms;                                    /* +84   igObjectRefMetaField */
     int _blendmats;                                /* +88   igObjectRefMetaField */
@@ -17705,7 +17827,11 @@ typedef struct igPsx2VisualContext {
     int _pCLUT_IA8;                                /* +864  igMemoryRefMetaField */
     int _pBufList;                                 /* +868  igRawRefMetaField */
     int _currentBuf;                               /* +872  igIntMetaField */
+#ifdef __cplusplus
+    igVec4f _clearColor;                           /* +876  igVec4fMetaField */
+#else
     float _clearColor[4];                          /* +876  igVec4fMetaField */
+#endif
     float _clearDepth;                             /* +892  igFloatMetaField */
     unsigned int _uiClearColor;                    /* +896  igUnsignedIntMetaField */
     unsigned int _uiClearDepth;                    /* +900  igUnsignedIntMetaField */
@@ -17780,7 +17906,11 @@ typedef struct igPsx2VisualContext {
     char _pad1301[3];
     float _fogDensity;                             /* +1304 igFloatMetaField */
     int _fogMode;                                  /* +1308 igEnumMetaField */
+#ifdef __cplusplus
+    igVec4f _fogColor;                             /* +1312 igVec4fMetaField */
+#else
     float _fogColor[4];                            /* +1312 igVec4fMetaField */
+#endif
     float _fogNear;                                /* +1328 igFloatMetaField */
     float _fogFar;                                 /* +1332 igFloatMetaField */
     int _pLightList;                               /* +1336 igRawRefMetaField */
@@ -17809,7 +17939,11 @@ typedef struct igPsx2VisualContext {
     unsigned char _inverseTransposeNeedValidation; /* +1424 igBoolMetaField */
     char _pad1425[3];
     int _colorScalerState;                         /* +1428 igEnumMetaField */
+#ifdef __cplusplus
+    igVec4f _colorScalerValue;                     /* +1432 igVec4fMetaField */
+#else
     float _colorScalerValue[4];                    /* +1432 igVec4fMetaField */
+#endif
     unsigned char _textureMatrixState;             /* +1448 igBoolMetaField */
     unsigned char _colorClampState;                /* +1449 igBoolMetaField */
     unsigned char _materialSpecularState;          /* +1450 igBoolMetaField */
@@ -18279,13 +18413,25 @@ typedef struct igRotateMode {
     int _model;                                    /* +8    igObjectRefMetaField */
     float _inverseMatrix[16];                      /* +12   igMatrix44fMetaField */
     float _distance;                               /* +76   igFloatMetaField */
+#ifdef __cplusplus
+    igVec2f _lastMousePos;                         /* +80   igVec2fMetaField */
+#else
     float _lastMousePos[2];                        /* +80   igVec2fMetaField */
+#endif
     unsigned char _leftMouseActive;                /* +88   igBoolMetaField */
     unsigned char _middleMouseActive;              /* +89   igBoolMetaField */
     unsigned char _rightMouseActive;               /* +90   igBoolMetaField */
     char _pad91[1];
+#ifdef __cplusplus
+    igVec2f _joystickT;                            /* +92   igVec2fMetaField */
+#else
     float _joystickT[2];                           /* +92   igVec2fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec2f _joystickR;                            /* +100  igVec2fMetaField */
+#else
     float _joystickR[2];                           /* +100  igVec2fMetaField */
+#endif
     unsigned char _constraint;                     /* +108  igBoolMetaField */
     char _pad109[3];
     int _constraintAxis;                           /* +112  igEnumMetaField */
@@ -19068,7 +19214,11 @@ typedef struct igTextElement {
 #else
     float _defaultSize[3];                         /* +12   igVec3fMetaField */
 #endif
+#ifdef __cplusplus
+    igVec4f _color;                                /* +24   igVec4fMetaField */
+#else
     float _color[4];                               /* +24   igVec4fMetaField */
+#endif
     int _sharableAttrs;                            /* +40   igObjectRefMetaField */
     int _font;                                     /* +44   igObjectRefMetaField */
     int _geometryAttr;                             /* +48   igObjectRefMetaField */
@@ -20507,7 +20657,11 @@ typedef struct igViewerParameters {
     int _timeOperation;                            /* +244  igIntMetaField */
     int _loopMode;                                 /* +248  igIntMetaField */
     float _speed;                                  /* +252  igFloatMetaField */
+#ifdef __cplusplus
+    igVec2f _cursorPosition;                       /* +256  igVec2fMetaField */
+#else
     float _cursorPosition[2];                      /* +256  igVec2fMetaField */
+#endif
 } igViewerParameters;
 
 #ifdef __cplusplus
@@ -20667,8 +20821,16 @@ typedef struct igViewportResizedMessage {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
+#ifdef __cplusplus
+    igVec2f _origin;                               /* +8    igVec2fMetaField */
+#else
     float _origin[2];                              /* +8    igVec2fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec2f _size;                                 /* +16   igVec2fMetaField */
+#else
     float _size[2];                                /* +16   igVec2fMetaField */
+#endif
 } igViewportResizedMessage;
 
 #ifdef __cplusplus

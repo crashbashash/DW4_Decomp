@@ -43,10 +43,10 @@ void Gap__Sg__igTransformSequence1_5__vfunc_34(KeySequenceView *o, int index, Ke
     float inv[3];
     float rot[16];
     if (o->_drivenChannels & 1) {
-        KeyVec3View *t = &o->_xlateList->_data[index];
-        t->x = m->tx;
-        t->y = m->ty;
-        t->z = m->tz;
+        igVec3f *t = &o->_xlateList->_data[index];
+        t->vec[0] = m->tx;
+        t->vec[1] = m->ty;
+        t->vec[2] = m->tz;
     }
     igMatrix44f_SetIdentity(rot);
     if (o->_drivenChannels & 8) {
@@ -104,36 +104,36 @@ void Gap__Sg__igTransformSequence1_5__vfunc_34(KeySequenceView *o, int index, Ke
  * The three interpolation-data lists (+60/+64/+68) are hypothesised to be Vec3f lists (12-byte elements, two per key); kept as igDataList. */
 void Gap__Sg__igTransformSequence1_5__vfunc_37(igTransformSequence1_5 *t, int idx) {
     long long sp216;
-    V3_1dda90 sp200;
-    V3_1dda90 sp184;
-    V3_1dda90 sp168;
-    V3_1dda90 sp152;
-    V3_1dda90 sp136;
-    V3_1dda90 sp120;
-    V3_1dda90 sp104;
-    V3_1dda90 sp88;
+    igVec3f sp200;
+    igVec3f sp184;
+    igVec3f sp168;
+    igVec3f sp152;
+    igVec3f sp136;
+    igVec3f sp120;
+    igVec3f sp104;
+    igVec3f sp88;
     V4_1dda90 sp64;
     int s0;
     sp216 = ((long long *)((igLongList *)t->_timeListLong)->_data)[idx];
     List_InsertBytes((igDataList *)t->_timeListLong, idx, 1, &sp216, 8);
     if (t->_drivenChannels & 1) {
-        sp200 = ((V3_1dda90 *)((igVec3fList *)t->_xlateList)->_data)[idx];
+        sp200 = ((igVec3f *)((igVec3fList *)t->_xlateList)->_data)[idx];
         List_InsertBytes((igDataList *)t->_xlateList, idx, 1, &sp200, 12);
         if (t->_interpolationDataTranslation != 0) {
             s0 = idx * 2;
-            sp184 = ((V3_1dda90 *)((igDataList *)t->_interpolationDataTranslation)->_data)[idx * 2];
-            sp168 = ((V3_1dda90 *)((igDataList *)t->_interpolationDataTranslation)->_data)[s0 + 1];
+            sp184 = ((igVec3f *)((igDataList *)t->_interpolationDataTranslation)->_data)[idx * 2];
+            sp168 = ((igVec3f *)((igDataList *)t->_interpolationDataTranslation)->_data)[s0 + 1];
             List_InsertBytes((igDataList *)t->_interpolationDataTranslation, s0, 1, &sp168, 12);
             List_InsertBytes((igDataList *)t->_interpolationDataTranslation, s0, 1, &sp184, 12);
         }
     }
     if (t->_drivenChannels & 8) {
-        sp152 = ((V3_1dda90 *)((igVec3fList *)t->_scaleList)->_data)[idx];
+        sp152 = ((igVec3f *)((igVec3fList *)t->_scaleList)->_data)[idx];
         List_InsertBytes((igDataList *)t->_scaleList, idx, 1, &sp152, 12);
         if (t->_interpolationDataScale != 0) {
             s0 = idx * 2;
-            sp136 = ((V3_1dda90 *)((igDataList *)t->_interpolationDataScale)->_data)[idx * 2];
-            sp120 = ((V3_1dda90 *)((igDataList *)t->_interpolationDataScale)->_data)[s0 + 1];
+            sp136 = ((igVec3f *)((igDataList *)t->_interpolationDataScale)->_data)[idx * 2];
+            sp120 = ((igVec3f *)((igDataList *)t->_interpolationDataScale)->_data)[s0 + 1];
             List_InsertBytes((igDataList *)t->_interpolationDataScale, s0, 1, &sp120, 12);
             List_InsertBytes((igDataList *)t->_interpolationDataScale, s0, 1, &sp136, 12);
         }
@@ -143,8 +143,8 @@ void Gap__Sg__igTransformSequence1_5__vfunc_37(igTransformSequence1_5 *t, int id
         List_InsertBytes((igDataList *)t->_quatList, idx, 1, &sp64, 16);
         if (t->_interpolationDataRotation != 0) {
             s0 = idx * 2;
-            sp104 = ((V3_1dda90 *)((igDataList *)t->_interpolationDataRotation)->_data)[idx * 2];
-            sp88 = ((V3_1dda90 *)((igDataList *)t->_interpolationDataRotation)->_data)[s0 + 1];
+            sp104 = ((igVec3f *)((igDataList *)t->_interpolationDataRotation)->_data)[idx * 2];
+            sp88 = ((igVec3f *)((igDataList *)t->_interpolationDataRotation)->_data)[s0 + 1];
             List_InsertBytes((igDataList *)t->_interpolationDataRotation, s0, 1, &sp88, 12);
             List_InsertBytes((igDataList *)t->_interpolationDataRotation, s0, 1, &sp104, 12);
         }
@@ -318,11 +318,11 @@ void Gap__Sg__igTransformSequence1_5__vfunc_58(TransformSequenceView *s, unsigne
     s->scales = 0;
 }
 
-void Gap__Sg__igTransformSequence1_5__vfunc_61(T_1de9c0 *t, int idx, int ch, V_1de9c0 *p, V_1de9c0 *q) {
+void Gap__Sg__igTransformSequence1_5__vfunc_61(T_1de9c0 *t, int idx, int ch, igVec3f *p, igVec3f *q) {
     L_1de9c0 *l;
     int n;
     int i;
-    V_1de9c0 *e;
+    igVec3f *e;
     if (t->flags & ch) {
         l = 0;
         if (ch & 1) {

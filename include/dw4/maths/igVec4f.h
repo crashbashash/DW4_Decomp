@@ -21,6 +21,10 @@ public:
         vec[3] = vector.vec[3];
         return *this;
     }
+    bool operator==(const igVec4f &vector) const {
+        return (vec[0] == vector.vec[0]) && (vec[1] == vector.vec[1]) && (vec[2] == vector.vec[2]) &&
+               (vec[3] == vector.vec[3]);
+    }
     float &operator[](int idx) { return vec[idx]; }
     float operator[](int idx) const { return vec[idx]; }
 
@@ -45,6 +49,24 @@ public:
         vec[1] = y;
         vec[2] = z;
         vec[3] = w;
+    }
+    void set(const float *vector) {
+        vec[0] = vector[0];
+        vec[1] = vector[1];
+        vec[2] = vector[2];
+        vec[3] = vector[3];
+    }
+    void makeMin(const igVec4f &vector) {
+        if (vec[0] > vector.vec[0]) vec[0] = vector.vec[0];
+        if (vec[1] > vector.vec[1]) vec[1] = vector.vec[1];
+        if (vec[2] > vector.vec[2]) vec[2] = vector.vec[2];
+        if (vec[3] > vector.vec[3]) vec[3] = vector.vec[3];
+    }
+    void makeMax(const igVec4f &vector) {
+        if (vec[0] < vector.vec[0]) vec[0] = vector.vec[0];
+        if (vec[1] < vector.vec[1]) vec[1] = vector.vec[1];
+        if (vec[2] < vector.vec[2]) vec[2] = vector.vec[2];
+        if (vec[3] < vector.vec[3]) vec[3] = vector.vec[3];
     }
 };
 #endif

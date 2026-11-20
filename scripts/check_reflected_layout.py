@@ -26,7 +26,7 @@ import sys
 import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from gen_type_headers import ARRAY, SCALAR, VECTOR  # noqa: E402  (the generator's own tables)
+from gen_type_headers import ARRAY, KIT_VECTOR, SCALAR, VECTOR  # noqa: E402  (the generator's own tables)
 
 STRUCT_RE = re.compile(r"/\* handle 0x[0-9a-f]+, \d+ field\(s\), sizeof (\d+) [^*]*\*/\n"
                        r"typedef struct (\w+) \{(.*?)\} \2;", re.S)
@@ -39,11 +39,17 @@ def expected_type(kind, ctype, count):
     """None when (ctype, count) is what `kind` prescribes, else the expected spelling."""
     if kind in SCALAR:
         want = SCALAR[kind][0]
-        return None if (ctype, count) == (want, None) else want
+        if (ctype, count) == (want, None):
+            return None
+        if kind == "igBoolMetaField" and (ctype, count) == ("bool", None):
+            return None  # the kit's igBool (`typedef bool`) under C++, typed through config/typed-fields.tsv
+        return want
     if kind in VECTOR:
         elem, n = VECTOR[kind]
         if (ctype, count) == (elem, n) or (ctype == "unsigned char" and count == 4 * n):
             return None
+        if kind in KIT_VECTOR and (ctype, count) == (KIT_VECTOR[kind][0], None):
+            return None  # the C++ spelling of the same field (the C branch keeps the floats)
         return "%s[%d]" % (elem, n)
     if kind in ARRAY:
         elem = ARRAY[kind]

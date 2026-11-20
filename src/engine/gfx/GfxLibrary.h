@@ -2137,9 +2137,8 @@ struct VertexFormatOwner : igObject {
 };
 extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_26(igVertexArray2Helper *helper, unsigned int flags);
 extern "C" int Gap__Gfx__igVertexArray2Helper__vfunc_27(igVertexArray2Helper *self);
-struct V_15ff10 { float x, y, z; };
 struct A28 {
-    char pad[8]; int f8; char pad2[4]; V_15ff10 *f16;
+    char pad[8]; int f8; char pad2[4]; igVec3f *f16;
     static inline A28 *Cast(A28 *p) {
         if (p != 0 && ((Gap::Core::igObject *)p)->isOfType(g_igVec3fList_metaObject) != 0) {
             return p;
@@ -2148,7 +2147,7 @@ struct A28 {
     }
 };
 struct H { char pad[12]; void *f12; };
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_28(H *arg0, int arg1, V_15ff10 *arg2);
+extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_28(H *arg0, int arg1, igVec3f *arg2);
 extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_29(igVertexArray2Helper *arg0, int arg1, float *arg2);
 struct A30 { int a,b,c,d; };
 struct B_15ff10 { int a,b,c,d,e; };
@@ -2158,16 +2157,16 @@ struct M { char pad[8]; int cnt; char p2[4]; char *data; };
 struct H31 { char pad[12]; struct A_15ff10 *a; };
 extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_31(struct H31 *arg0, int arg1, float *arg2);
 typedef struct O_15ff10 { char pad[12]; void *f12; } O_15ff10;
-typedef struct Q_15ff10 { char pad[16]; V_15ff10 *f16; } Q_15ff10;
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_32(A_15ff10 *arg0, int arg1, V_15ff10 *arg2);
+typedef struct Q_15ff10 { char pad[16]; igVec3f *f16; } Q_15ff10;
+extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_32(A_15ff10 *arg0, int arg1, igVec3f *arg2);
 extern "C" int Gap__Gfx__igVertexArray2Helper__vfunc_33(igVertexArray2Helper *arg0, int arg1);
-typedef struct Q34 { char pad[8]; int f8; char pad2[4]; V_15ff10 *f16; } Q34;
-extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_34(A_15ff10 *arg0, int arg1, V_15ff10 *arg2);
+typedef struct Q34 { char pad[8]; int f8; char pad2[4]; igVec3f *f16; } Q34;
+extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_34(A_15ff10 *arg0, int arg1, igVec3f *arg2);
 extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_35(igVertexArray2Helper *arg0, int arg1, float *arg2);
-extern "C" V_15ff10 *Gap__Gfx__igVertexArray2Helper__vfunc_36(A_15ff10 *arg0, int arg1);
+extern "C" igVec3f *Gap__Gfx__igVertexArray2Helper__vfunc_36(A_15ff10 *arg0, int arg1);
 extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_37(igVertexArray2Helper *arg0, int arg1, void *arg2);
 extern "C" void Gap__Gfx__igVertexArray2Helper__vfunc_38(igVertexArray2Helper *arg0, int arg1, void *arg2);
-extern "C" V_15ff10 *Gap__Gfx__igVertexArray2Helper__vfunc_39(A_15ff10 *arg0, int arg1);
+extern "C" igVec3f *Gap__Gfx__igVertexArray2Helper__vfunc_39(A_15ff10 *arg0, int arg1);
 struct B4 { unsigned char b[4]; };
 union U_15ff10 { int i; B4 b; };
 class VC_15ff10 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); };

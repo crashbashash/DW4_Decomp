@@ -53,7 +53,6 @@ struct RefRelease { static inline void go(igObject *object) {
             igObject_Destroy(object);
     }
 } };
-struct Vec3f { float x, y, z; };
 extern "C" void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *self, beBaseInfoRam *ram);
 
 #pragma push
@@ -111,16 +110,14 @@ void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *self, beBaseInfoRam *ram
     beModelCtrlInfoRamData *r;
     int m1[16];
     int m2[16];
-    Vec3f sum;
-    Vec3f t;
+    igVec3f sum;
+    igVec3f t;
     bool s2;
     bool s1;
-    float *py = &sum.y;
-    float *pz = &sum.z;
     s2 = false;
-    sum.x = g_vec3Zero[0];
-    *py = g_vec3Zero[1];
-    *pz = g_vec3Zero[2];
+    sum[0] = g_vec3Zero[0];
+    sum[1] = g_vec3Zero[1];
+    sum[2] = g_vec3Zero[2];
     s1 = false;
     beMessenger_SendRam((beMessenger *)self->_messenger, "PLAYER", ram->_ramNo, "GETMATRIX");
     if (beMessenger_GetMatrixCount((beMessenger *)self->_messenger) != 0) {
@@ -160,10 +157,10 @@ void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *self, beBaseInfoRam *ram
         beMessenger_SendGroup((beMessenger *)self->_messenger, "MAPBASE", "GETMATRIX");
         if (beMessenger_GetMatrixCount((beMessenger *)self->_messenger) != 0) {
             beMessenger_GetMatrix(m2, (beMessenger *)self->_messenger, 0);
-            igMatrix44f_GetTranslation((const float *)m2, (float *)&t);
-            sum.x += t.x;
-            *py += t.y;
-            *pz += t.z;
+            igMatrix44f_GetTranslation((const float *)m2, t.vec);
+            sum[0] += t[0];
+            sum[1] += t[1];
+            sum[2] += t[2];
             if (ram->_dataList == 0) {
                 igMemoryPoolView *alloc = ((Gap::Core::igObject *)ram)->getMemoryPool();
                 igMemoryPoolView *a;
@@ -181,7 +178,7 @@ void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *self, beBaseInfoRam *ram
                 ram->_dataList = (int)s0;
             }
             r = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
-            *py = 0.0f;
+            sum[1] = 0.0f;
             igMatrix44f_SetTranslation((float *)((char *)r->_node + 32), (const float *)&sum);
         }
     }

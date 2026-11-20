@@ -39,22 +39,22 @@ void FUN_001dd0e0(TransformSampleView *o, int index, float (*m)[4]) {
 }
 
 void FUN_001dd250(A_1dd250 *arg0, int arg1, char *arg2) {
-    V3_1dd250 sp50;
+    igVec3f sp50;
     float f22, f21, f20;
     int idx;
-    V3_1dd250 *v;
+    igVec3f *v;
     FUN_00192810((const float *)(arg0->b12->data + arg1 * 16), (float *)arg2);
     idx = arg1 * 12;
-    v = (V3_1dd250 *)(arg0->b8->data + idx);
-    f22 = v->x;
-    f21 = v->y;
-    f20 = v->z;
+    v = (igVec3f *)(arg0->b8->data + idx);
+    f22 = v->vec[0];
+    f21 = v->vec[1];
+    f20 = v->vec[2];
     if (arg0->f44 == 0.0f && arg0->f48 == 0.0f && arg0->f52 == 0.0f) {
     } else {
         Vec3f_TransformDirection((float *)&sp50, (const float *)&arg0->f44, (const float *)arg2);
-        f22 = f22 - sp50.x;
-        f21 = f21 - sp50.y;
-        f20 = f20 - sp50.z;
+        f22 = f22 - sp50.vec[0];
+        f21 = f21 - sp50.vec[1];
+        f20 = f20 - sp50.vec[2];
         f22 = f22 + arg0->f44;
         f21 = f21 + arg0->f48;
         f20 = f20 + arg0->f52;

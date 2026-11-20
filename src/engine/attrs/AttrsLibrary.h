@@ -1189,24 +1189,10 @@ extern "C" void igLightingStateAttr_SynchronizeDefault(void **arg0, void **arg1)
 extern "C" void igLightingStateAttr_SetState(igLightingStateAttr *self, char enabled);
 extern "C" void igMaterialAttr_SetShininess(igMaterialAttr *self, float shininess);
 
-extern "C" float DAT_004e1180[4];
-typedef struct { char pad[16]; float c[4]; } A_13f0b0;
-typedef struct { float c[4]; } B_13f0b0;
-extern "C" void igMaterialAttr_SetDiffuse(A_13f0b0 *a, B_13f0b0 *b);
-extern "C" float D_004e1170[4], D_004e1174[4], D_004e1178[4], D_004e117c[4], D_004e1180[4], D_004e1184[4], D_004e1188[4], D_004e118c[4];
-typedef struct S_13f1c0 { char pad[64]; float r, g, b, a; } S_13f1c0;
-extern "C" void igMaterialAttr_SetSpecular(S_13f1c0 *self, float *src);
-extern "C" void igMaterialAttr_SetAmbient(igMaterialAttr *material, const float *color);
-extern "C" float g_004e1170[4];
-extern "C" float g_004e1180[4];
-extern "C" float DAT_004e1174[4];
-extern "C" float DAT_004e1178[4];
-extern "C" float DAT_004e117c[4];
-extern "C" float DAT_004e1184[4];
-extern "C" float DAT_004e1188[4];
-extern "C" float DAT_004e118c[4];
-typedef struct { char pad[48]; float v[4]; } A_13f3e0;
-extern "C" void igMaterialAttr_SetEmission(A_13f3e0 *a, float *b);
+extern "C" void igMaterialAttr_SetDiffuse(igMaterialAttr *self, const igVec4f *color);
+extern "C" void igMaterialAttr_SetSpecular(igMaterialAttr *self, const igVec4f *color);
+extern "C" void igMaterialAttr_SetAmbient(igMaterialAttr *self, const igVec4f *color);
+extern "C" void igMaterialAttr_SetEmission(igMaterialAttr *self, const igVec4f *color);
 extern "C" void igMaterialAttr_apply(igMaterialAttr *self, igObject *context);
 class MaterialContextView {
 public:

@@ -111,9 +111,9 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
                             pointReport.query = self->query;
                             Vec3f_TransformProjective((float *)&pointReport.local, (const float *)&pointReport.point, (const float *)matrix);
                             {
-                                float dx = segment->x - pointReport.local.x;
-                                float dy = segment->y - pointReport.local.y;
-                                float dz = segment->z - pointReport.local.z;
+                                float dx = segment->x - pointReport.local.vec[0];
+                                float dy = segment->y - pointReport.local.vec[1];
+                                float dz = segment->z - pointReport.local.vec[2];
                                 pointReport.distance = sqrtf(dx * dx + dy * dy + dz * dz);
                             }
                             r = self->callback(self, node, &pointReport);

@@ -34,15 +34,15 @@ The function count is flattered by small functions: the ones done have a median 
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**17,236** of the 20,458 matched functions are readable: **2,707,932** code bytes, **78.0 %** of the code.
+**17,240** of the 20,458 matched functions are readable: **2,709,020** code bytes, **78.0 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 1,606 | 322,540 |
-| no name holds an address: not the function's own, nor any function, variable or type it uses | 2,169 | 486,444 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,060 | 278,784 |
+| no name holds an address: not the function's own, nor any function, variable or type it uses | 2,164 | 485,172 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 1,056 | 277,812 |
 | it sits in its class or module file, not `src/unmatched/` | 0 | 0 |
-| what it calls and reads is named: no `FUN_`/`DAT_` references | 942 | 281,520 |
+| what it calls and reads is named: no `FUN_`/`DAT_` references | 938 | 280,432 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 1,628 | 308,112 |
 | fields are reached through named struct members: no `fNN`/`unkNN` members, no cast of a pointer plus an offset | 1,083 | 236,980 |
 | virtual calls go through a named method, not a slot number such as `v216` or a cast function pointer | 506 | 133,204 |
@@ -107,7 +107,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `reflected.untyped_refs` | 3,994 | 3,994 | 0 | object-reference fields include/dw4/support/reflected.h types as `int` instead of a typed reference |
 | `layout.tail_fragments` | 481 | 481 | 0 | `.inc` fragments of src/ named `_tail` after how the work was split, not after the original's per-class files |
 | `matching_constructs` | 535 | 535 | 0 | `matching construct` comments in src/: shapes chosen from the compiler's output, not from evidence of the original |
-| `views.local` | 304 | 304 | 0 | local `…View` structs standing in for real types (dispatch views counted apart) |
+| `views.local` | 304 | 303 | -1 | local `…View` structs standing in for real types (dispatch views counted apart) |
 | `members.offset_named` | 2,575 | 2,575 | 0 | struct members still named by offset (`fNN`) in src/ and include/ |
 | `strings.externs` | 48 | 48 | 0 | strings declared as `text_…` externs instead of written as literals |
 
@@ -207,7 +207,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 33,790 of 72,783 (46.43 %) |
+| field accesses using a **recovered** type (not an offset cast) | 33,784 of 72,726 (46.45 %) |
 | functions in the retail split (`asm/`, generated) | 20,576 |
 
 ## How these numbers are produced

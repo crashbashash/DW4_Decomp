@@ -45,7 +45,6 @@ extern "C" int GETMATRIX_8[4];
 /* Owning stack reference to the freshly created data list; released on scope exit (reference count
  * in the low 23 bits of _refCount). */
 
-struct Vec3Float { float x, y, z; };
 extern "C" void beNDMWMdlMapBase_OnUpdateRam(beNDMWMdlMapBase *self, beBaseInfoRam *ram);
 
 #pragma push
@@ -105,36 +104,34 @@ void beNDMWMdlMapBase_OnGenerate(beNDMWMdlMapBase *self, beBaseInfoRam *ram) {
 void beNDMWMdlMapBase_OnUpdateRam(beNDMWMdlMapBase *self, beBaseInfoRam *ram) {
     beModelCtrlInfoRamData *r;
     int m[16];
-    Vec3Float sum;
-    Vec3Float t;
+    igVec3f sum;
+    igVec3f t;
     int n, i;
-    float *py = &sum.y;
-    float *pz = &sum.z;
-    sum.x = g_vec3Zero[0];
-    *py = g_vec3Zero[1];
-    *pz = g_vec3Zero[2];
+    sum[0] = g_vec3Zero[0];
+    sum[1] = g_vec3Zero[1];
+    sum[2] = g_vec3Zero[2];
     beMessenger_SendGroup((beMessenger *)self->_messenger, (const char *)PLAYER_10, (const char *)GETMATRIX_8);
     if (beMessenger_GetMatrixCount((beMessenger *)self->_messenger) != 0) {
         n = beMessenger_GetMatrixCount((beMessenger *)self->_messenger);
         for (i = 0; i < n; i++) {
             {
                 beMessenger_GetMatrix(m, (beMessenger *)self->_messenger, i);
-                igMatrix44f_GetTranslation((const float *)m, (float *)&t);
-                sum.x += t.x;
-                *py += t.y;
-                *pz += t.z;
+                igMatrix44f_GetTranslation((const float *)m, t.vec);
+                sum[0] += t[0];
+                sum[1] += t[1];
+                sum[2] += t[2];
             }
         }
         switch (n) {
         case 0: break;
         case 1: break;
-        case 2: sum.x /= 2.0f; *pz /= 2.0f; break;
-        case 3: sum.x /= 3.0f; *pz /= 3.0f; break;
-        case 4: sum.x /= 4.0f; *pz /= 4.0f; break;
+        case 2: sum[0] /= 2.0f; sum[2] /= 2.0f; break;
+        case 3: sum[0] /= 3.0f; sum[2] /= 3.0f; break;
+        case 4: sum[0] /= 4.0f; sum[2] /= 4.0f; break;
         }
-        sum.x = -sum.x;
-        *py = 0.0f;
-        *pz = -*pz;
+        sum[0] = -sum[0];
+        sum[1] = 0.0f;
+        sum[2] = -sum[2];
     }
     if (ram->_dataList == 0) {
         igMemoryPoolView *alloc = ((Gap::Core::igObject *)ram)->getMemoryPool();

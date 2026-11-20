@@ -10,13 +10,18 @@ extern "C" {
 
 struct bePadData *bePadData_Create(int allocator);
 void bePadData_UpdateButtons(struct bePadData *pad, int buttons);
-void bePadData_UpdateLeftStick(struct bePadData *pad, float *stick);
-void bePadData_UpdateRightStick(struct bePadData *pad, float *stick);
 
 extern struct igMetaObject *g_bePadData_metaObject;
 
 #ifdef __cplusplus
 }
+#endif
+
+#ifdef __cplusplus
+#include "dw4/maths/igVec2f.h"
+
+extern "C" void bePadData_UpdateLeftStick(struct bePadData *pad, igVec2f stick);
+extern "C" void bePadData_UpdateRightStick(struct bePadData *pad, igVec2f stick);
 #endif
 
 #endif

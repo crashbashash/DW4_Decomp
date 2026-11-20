@@ -97,10 +97,6 @@ void bePadManager_Update(bePadManager *self) {
     igControllerDispatchView *pad;
     bePadData *slot;
     igVec2f stick;
-    igVec2f left;
-    igVec2f right;
-    igVec2f noLeft;
-    igVec2f noRight;
     if (((beSystem *)self->_system)->_isFrameSkip == 0) {
         keyboardTaken = false;
         list = (igControllerList *)((igControllerManager *)((igEventDispatcher *)((igInsightCore *)self->_insight)->_dispatcher)->_controllerManager)->_controllers;
@@ -123,17 +119,13 @@ void bePadManager_Update(bePadManager *self) {
                 slot->_isConnect = connected;
                 if (connected != 0) {
                     pad->getStick(0, &stick[0], &stick[1]);
-                    left = stick;
-                    bePadData_UpdateLeftStick(slot, (float *)&left);
+                    bePadData_UpdateLeftStick(slot, stick);
                     pad->getStick(1, &stick[0], &stick[1]);
-                    right = stick;
-                    bePadData_UpdateRightStick(slot, (float *)&right);
+                    bePadData_UpdateRightStick(slot, stick);
                     bePadData_UpdateButtons(slot, pad->getButtons());
                 } else {
-                    noLeft.set(0.0f, 0.0f);
-                    bePadData_UpdateLeftStick(slot, (float *)&noLeft);
-                    noRight.set(0.0f, 0.0f);
-                    bePadData_UpdateRightStick(slot, (float *)&noRight);
+                    bePadData_UpdateLeftStick(slot, igVec2f(0.0f, 0.0f));
+                    bePadData_UpdateRightStick(slot, igVec2f(0.0f, 0.0f));
                     bePadData_UpdateButtons(slot, 0);
                 }
             }

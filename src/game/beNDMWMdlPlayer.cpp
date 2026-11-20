@@ -186,8 +186,8 @@ void beNDMWMdlPlayer_UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     work = (beNDMWMdlPlayerInfoWork *)((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE"))->_work;
     pad = bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, ram->_ramNo);
     stickDir = pad->_lStk;
-    stickX = *(float *)&pad->_LStick[0];
-    stickY = *(float *)&pad->_LStick[1];
+    stickX = pad->_LStick[0];
+    stickY = pad->_LStick[1];
     turnTimersFull = 0;
     if (stickDir != 0) {
         int slot;

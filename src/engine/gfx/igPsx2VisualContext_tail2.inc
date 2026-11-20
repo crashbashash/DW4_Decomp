@@ -389,13 +389,10 @@ void igPsx2VisualContext_GetViewportWithDepth(igPsx2VisualContext *arg0, int *ar
 }
 
 void igPsx2VisualContext_SetClearColor(igPsx2VisualContext *self, float *color) {
-    self->_clearColor[0] = color[0];
-    self->_clearColor[1] = color[1];
-    self->_clearColor[2] = color[2];
-    self->_clearColor[3] = color[3];
-    int green = (unsigned int)(255.0f * self->_clearColor[1]) << 8;
-    self->_uiClearColor = ((unsigned int)(255.0f * ((128.0f * self->_clearColor[3]) / 255.0f)) << 24)
-        + (((unsigned int)(255.0f * self->_clearColor[2]) << 16) + ((unsigned int)(255.0f * self->_clearColor[0]) + green));
+    self->_clearColor.set(color);
+    int green = (unsigned int)(255.0f * self->_clearColor.vec[1]) << 8;
+    self->_uiClearColor = ((unsigned int)(255.0f * ((128.0f * self->_clearColor.vec[3]) / 255.0f)) << 24)
+        + (((unsigned int)(255.0f * self->_clearColor.vec[2]) << 16) + ((unsigned int)(255.0f * self->_clearColor.vec[0]) + green));
 }
 
 void igPsx2VisualContext_SetClearColorPacked(igPsx2VisualContext *self, unsigned int x) {

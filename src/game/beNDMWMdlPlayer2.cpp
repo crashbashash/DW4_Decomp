@@ -34,7 +34,6 @@ extern "C" char GAMERAM_15[];
 extern "C" char GETCOMMON_7[];
 extern "C" char BKCHIPSTAGE[];
 extern "C" char BKCHIPPOS[];
-struct Vec3Float { float x, y, z; };
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
 
@@ -98,7 +97,7 @@ void beNDMWMdlPlayer2_RegisterReceiver(beNDMWMdlPlayer2 * p0, int p1, char * p2)
 }
 
 void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) {
-    Vec3Float t;
+    igVec3f t;
     beModelCtrlInfoRamData *r;
     beDataObjStringList *s4;
     beDataObjFloatList *s3;
@@ -137,9 +136,9 @@ void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) {
             *e = name;
         }
     }
-    igMatrix44f_GetTranslation((const float *)((char *)r->_node + 32), (float *)&t);
+    igMatrix44f_GetTranslation((const float *)((char *)r->_node + 32), t.vec);
     {
-        float *v = &t.x;
+        float *v = &t[0];
         igFloatList *l = (igFloatList *)s3->_data;
         int n = l->_count;
         if (n != 0) {
@@ -148,7 +147,7 @@ void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) {
         }
     }
     {
-        float *v = &t.y;
+        float *v = &t[1];
         igFloatList *l = (igFloatList *)s3->_data;
         int n = l->_count;
         if (n != 0) {
@@ -157,7 +156,7 @@ void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) {
         }
     }
     {
-        float *v = &t.z;
+        float *v = &t[2];
         igFloatList *l = (igFloatList *)s3->_data;
         int n = l->_count;
         if (n != 0) {

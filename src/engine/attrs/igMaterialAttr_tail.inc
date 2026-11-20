@@ -3,61 +3,32 @@ void igMaterialAttr_SetShininess(igMaterialAttr *self, float shininess) {
     self->_shininess = shininess;
 }
 
-static inline void clampColor(float *c, const float *lo, const float *hi) {
-    if (c[0] < lo[0]) c[0] = lo[0];
-    if (c[1] < lo[1]) c[1] = lo[1];
-    if (c[2] < lo[2]) c[2] = lo[2];
-    if (c[3] < lo[3]) c[3] = lo[3];
-    if (!(c[0] <= hi[0])) c[0] = hi[0];
-    if (!(c[1] <= hi[1])) c[1] = hi[1];
-    if (!(c[2] <= hi[2])) c[2] = hi[2];
-    if (!(c[3] <= hi[3])) c[3] = hi[3];
+void igMaterialAttr_SetDiffuse(igMaterialAttr *self, const igVec4f *color) {
+    self->_diffuse = *color;
+    self->_diffuse.makeMax(g_vec4Zero);
+    self->_diffuse.makeMin(g_vec4One);
 }
 
-void igMaterialAttr_SetDiffuse(A_13f0b0 *a, B_13f0b0 *b) {
-    a->c[0] = b->c[0]; a->c[1] = b->c[1]; a->c[2] = b->c[2]; a->c[3] = b->c[3];
-    clampColor(a->c, g_vec4Zero.vec, DAT_004e1180);
+void igMaterialAttr_SetSpecular(igMaterialAttr *self, const igVec4f *color) {
+    self->_specular = *color;
+    self->_specular.makeMax(g_vec4Zero);
+    self->_specular.makeMin(g_vec4One);
 }
 
-void igMaterialAttr_SetSpecular(S_13f1c0 *self, float *src) {
-    self->r = src[0];
-    self->g = src[1];
-    self->b = src[2];
-    self->a = src[3];
-    { float lo = g_vec4Zero[0]; if (self->r < D_004e1170[0]) self->r = lo; }
-    if (self->g < D_004e1174[0]) self->g = D_004e1174[0];
-    if (self->b < D_004e1178[0]) self->b = D_004e1178[0];
-    if (self->a < D_004e117c[0]) self->a = D_004e117c[0];
-    { float hi = DAT_004e1180[0]; if (self->r > D_004e1180[0]) self->r = hi; }
-    if (self->g > D_004e1184[0]) self->g = D_004e1184[0];
-    if (self->b > D_004e1188[0]) self->b = D_004e1188[0];
-    if (self->a > D_004e118c[0]) self->a = D_004e118c[0];
+void igMaterialAttr_SetAmbient(igMaterialAttr *self, const igVec4f *color) {
+    self->_ambient = *color;
+    self->_ambient.makeMax(g_vec4Zero);
+    self->_ambient.makeMin(g_vec4One);
 }
 
-void igMaterialAttr_SetAmbient(igMaterialAttr *material, const float *color) {
-    material->_ambient[0] = color[0];
-    material->_ambient[1] = color[1];
-    material->_ambient[2] = color[2];
-    material->_ambient[3] = color[3];
-    clampColor(material->_ambient, g_vec4Zero.vec, DAT_004e1180);
-}
-
-void igMaterialAttr_SetEmission(A_13f3e0 *a, float *b) {
-    a->v[0] = b[0]; a->v[1] = b[1]; a->v[2] = b[2]; a->v[3] = b[3];
-    { float lo = g_004e1170[0];
-    if (a->v[0] < g_vec4Zero[0]) a->v[0] = lo; }
-    if (a->v[1] < DAT_004e1174[0]) a->v[1] = DAT_004e1174[0];
-    if (a->v[2] < DAT_004e1178[0]) a->v[2] = DAT_004e1178[0];
-    if (a->v[3] < DAT_004e117c[0]) a->v[3] = DAT_004e117c[0];
-    { float hi = g_004e1180[0];
-    if (!(a->v[0] <= DAT_004e1180[0])) a->v[0] = hi; }
-    if (!(a->v[1] <= DAT_004e1184[0])) a->v[1] = DAT_004e1184[0];
-    if (!(a->v[2] <= DAT_004e1188[0])) a->v[2] = DAT_004e1188[0];
-    if (!(a->v[3] <= DAT_004e118c[0])) a->v[3] = DAT_004e118c[0];
+void igMaterialAttr_SetEmission(igMaterialAttr *self, const igVec4f *color) {
+    self->_emission = *color;
+    self->_emission.makeMax(g_vec4Zero);
+    self->_emission.makeMin(g_vec4One);
 }
 
 void igMaterialAttr_apply(igMaterialAttr *self, igObject *context) {
-    igPsx2VisualContext_SetMaterial((igPsx2VisualContext *)context, self->_ambient, self->_diffuse, self->_specular, self->_emission, self->_shininess);
+    igPsx2VisualContext_SetMaterial((igPsx2VisualContext *)context, self->_ambient.vec, self->_diffuse.vec, self->_specular.vec, self->_emission.vec, self->_shininess);
 }
 
 void igMaterialAttr_SynchronizeDefault(MaterialAttrView *material, MaterialContextView *context) {

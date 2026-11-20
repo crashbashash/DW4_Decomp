@@ -109,7 +109,7 @@ void FUN_001d3e20(igPlanarShadowShader *arg0, igCommonTraversal *arg1) {
     int sp70[16];
     igAttrStackManager *s1 = (igAttrStackManager *)arg1->_attrStack;
     int i;
-    ((VA_1d3e20 *)arg0->_shadowColorAttr)->v30(arg0->_shadowColor);
+    ((VA_1d3e20 *)arg0->_shadowColorAttr)->v30(arg0->_shadowColor.vec);
     ((VB *)arg0->_stencilState)->v30(arg0->_shadowUseStencil);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s1, (igAttr *)((int *)DAT_005627a8)[0]);
     igAttrStackManager_PushOverrideAttr((igAttrStackManager *)s1, (igAttr *)((int *)DAT_005627b0)[0]);

@@ -29,13 +29,13 @@ void FUN_001b1fa0(igGeometryAttr *geometry, igVec3f *min, igVec3f *max) {
 }
 
 /* matching construct: the receiver class is not established (the +12 vertex array and +32 index base are accessed through FUN_001b23b0 / f32 below), so it keeps a local layout; _objList data, _data and the vertex array reference are 4-byte handles, so the handle and the array stay ONE variable */
-void FUN_001b21d0(A_1b21d0 *arg0, V3_1b21d0 *arg1, V3_1b21d0 *arg2) {
+void FUN_001b21d0(A_1b21d0 *arg0, igVec3f *arg1, igVec3f *arg2) {
     igVertexArray2 *sp7C;
     igVec3fList *s3;
     unsigned s4, s5;
-    V3_1b21d0 *v;
-    arg1->x = arg1->y = arg1->z = 1.00000002e+20f;
-    arg2->x = arg2->y = arg2->z = -1.00000002e+20f;
+    igVec3f *v;
+    arg1->vec[0] = arg1->vec[1] = arg1->vec[2] = 1.00000002e+20f;
+    arg2->vec[0] = arg2->vec[1] = arg2->vec[2] = -1.00000002e+20f;
     FUN_001b23b0((int *)&sp7C, (int *)arg0);
     s3 = (igVec3fList *)igVertexArray2__FindVertexData(sp7C, 1, 0);
     if (sp7C != 0) {
@@ -51,14 +51,14 @@ void FUN_001b21d0(A_1b21d0 *arg0, V3_1b21d0 *arg1, V3_1b21d0 *arg2) {
         }
         s4 = arg0->f32;
         while (s5 = arg0->f32, s4 < s5 + arg0->v34()) {
-            v = (V3_1b21d0 *)((char *)s3->_data + s4 * 12);
-            if (!(arg1->x <= v->x)) arg1->x = v->x;
-            if (!(arg1->y <= v->y)) arg1->y = v->y;
-            if (!(arg1->z <= v->z)) arg1->z = v->z;
-            v = (V3_1b21d0 *)((char *)s3->_data + s4 * 12);
-            if (arg2->x < v->x) arg2->x = v->x;
-            if (arg2->y < v->y) arg2->y = v->y;
-            if (arg2->z < v->z) arg2->z = v->z;
+            v = (igVec3f *)((char *)s3->_data + s4 * 12);
+            if (!(arg1->vec[0] <= v->vec[0])) arg1->vec[0] = v->vec[0];
+            if (!(arg1->vec[1] <= v->vec[1])) arg1->vec[1] = v->vec[1];
+            if (!(arg1->vec[2] <= v->vec[2])) arg1->vec[2] = v->vec[2];
+            v = (igVec3f *)((char *)s3->_data + s4 * 12);
+            if (arg2->vec[0] < v->vec[0]) arg2->vec[0] = v->vec[0];
+            if (arg2->vec[1] < v->vec[1]) arg2->vec[1] = v->vec[1];
+            if (arg2->vec[2] < v->vec[2]) arg2->vec[2] = v->vec[2];
             s4++;
         }
     }
@@ -74,8 +74,8 @@ void FUN_001b23b0(int *arg0, int *arg1) {
 }
 
 int FUN_001b23e0(int arg0, Y *arg1) {
-    V3_1b23e0 sp40;
-    V3_1b23e0 sp30;
+    igVec3f sp40;
+    igVec3f sp30;
     igSmartPointer<X_1b23e0> created(((X_1b23e0 *)igAABox_CreateInstance((int)((Gap::Core::igObject *)arg0)->getMemoryPool())));
     FUN_001b1fa0((igGeometryAttr *)arg1, (igVec3f *)&sp40, (igVec3f *)&sp30);
     created.get()->a = sp40;
@@ -87,9 +87,9 @@ int FUN_001b23e0(int arg0, Y *arg1) {
 int FUN_001b24d0(int arg0, int arg1) {
     igSmartPointer<BoundsObject> bounds(((BoundsObject *)igAABox_CreateInstance((int)((Gap::Core::igObject *)arg0)->getMemoryPool())));
     BoundsObject *array;
-    V3_1b24d0 min;
-    V3_1b24d0 max;
-    FUN_001b21d0((A_1b21d0 *)arg1, (V3_1b21d0 *)&min, (V3_1b21d0 *)&max);
+    igVec3f min;
+    igVec3f max;
+    FUN_001b21d0((A_1b21d0 *)arg1, (igVec3f *)&min, (igVec3f *)&max);
     bounds.get()->min = min;
     bounds.get()->max = max;
     igVolume_ExtendBy((void **)arg0, (void **)(bounds.get()));

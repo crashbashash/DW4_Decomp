@@ -16,9 +16,9 @@ void igLightAttr_apply(igLightAttr *self, igObject *context) {
         self->_changed = 1;
     }
     if (!self->_cacheable || self->_changed) {
-        igPsx2VisualContext_SetLightAmbient((igPsx2VisualContext *)context, self->_lightId, self->_ambient);
-        igPsx2VisualContext_SetLightDiffuse((igPsx2VisualContext *)context, self->_lightId, self->_diffuse);
-        igPsx2VisualContext_SetLightSpecular((igPsx2VisualContext *)context, self->_lightId, self->_specular);
+        igPsx2VisualContext_SetLightAmbient((igPsx2VisualContext *)context, self->_lightId, self->_ambient.vec);
+        igPsx2VisualContext_SetLightDiffuse((igPsx2VisualContext *)context, self->_lightId, self->_diffuse.vec);
+        igPsx2VisualContext_SetLightSpecular((igPsx2VisualContext *)context, self->_lightId, self->_specular.vec);
         switch (self->_lightType) {
         case 1:
             igPsx2VisualContext_SetLightAttenuation(context, self->_lightId, self->_attenuation.vec);

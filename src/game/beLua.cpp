@@ -134,8 +134,8 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
         }
         break;
     case 1:
-        if (node->_color[3] > node->_maxAlpha) {
-            alpha = &node->_color[3];
+        if (node->_color.vec[3] > node->_maxAlpha) {
+            alpha = &node->_color.vec[3];
             frames = (float)(now - node->_oldTime) / 16666667.0f;
             *alpha -= frames * node->_addAlpha;
             if (*alpha < node->_maxAlpha) {
@@ -145,7 +145,7 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
         }
         break;
     case 3:
-        alpha = &node->_color[3];
+        alpha = &node->_color.vec[3];
         if (*alpha < 1.0f) {
             frames = (float)(now - node->_oldTime) / 16666667.0f;
             if ((*alpha += frames * node->_addAlpha) > 1.0f) {
@@ -155,7 +155,7 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
         }
         break;
     }
-    if (node->_color[3] == 1.0f) {
+    if (node->_color.vec[3] == 1.0f) {
         while (((igObjectList *)node->_overrideAttrList)->_count != 0) {
             list = OverrideAttrsOf(node);
             attr = ((igObject **)list->_data)[0];
@@ -175,7 +175,7 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
             ObjectList_AppendRetained((igObjectList *)node->_overrideAttrList, (igObject *)node->_blendFunctionAttr);
             ObjectList_AppendRetained((igObjectList *)node->_overrideAttrList, (igObject *)node->_colorAttr);
         }
-        ((OverrideAttr *)node->_colorAttr)->SetValue(node->_color);
+        ((OverrideAttr *)node->_colorAttr)->SetValue(&node->_color);
     }
     node->_oldTime = now;
     for (i = 0; i < ((igObjectList *)node->_overrideAttrList)->_count; i++) {

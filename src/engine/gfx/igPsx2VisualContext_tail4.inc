@@ -1791,38 +1791,12 @@ int igPsx2VisualContext_GetFogMode(igPsx2VisualContext *self) {
     return self->_fogMode;
 }
 
-void igPsx2VisualContext_SetFogColor(igPsx2VisualContext *self, float *color) {
-    int same;
-    same = 1;
-    if (self->_fogColor[0] != color[0]) {
-        same = 0;
-    }
-    if (same != 0) {
-        same = 1;
-        if (self->_fogColor[1] != color[1]) {
-            same = 0;
-        }
-    }
-    if (same != 0) {
-        same = 1;
-        if (self->_fogColor[2] != color[2]) {
-            same = 0;
-        }
-    }
-    if (same != 0) {
-        same = 1;
-        if (self->_fogColor[3] != color[3]) {
-            same = 0;
-        }
-    }
-    if (same != 0) {
+void igPsx2VisualContext_SetFogColor(igPsx2VisualContext *self, const igVec4f *color) {
+    if (self->_fogColor == *color) {
         DAT_005609d8[0] += 1;
     }
-    self->_fogColor[0] = color[0];
-    self->_fogColor[1] = color[1];
-    self->_fogColor[2] = color[2];
-    self->_fogColor[3] = color[3];
-    p2SetFogColour(color[0], color[1], color[2]);
+    self->_fogColor = *color;
+    p2SetFogColour((*color)[0], (*color)[1], (*color)[2]);
 }
 
 void igPsx2VisualContext_GetFogColor(igPsx2VisualContext *self, void *arg1) {

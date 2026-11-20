@@ -1175,15 +1175,12 @@ struct igBitMaskWords { char pad8[8]; int _count; int _capacity; unsigned int *_
     inline unsigned int getWord(unsigned int i) { return _data[i]; }
 };
 extern unsigned int DAT_0048d8d0;
-struct V3_1b21d0 { float x, y, z; };
 struct A_1b21d0 { virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual unsigned v34(); char pad[28]; unsigned f32; };
 class VC_100_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int *vX(); };
-struct V3_1b23e0 { float x, y, z; };
-struct X_1b23e0 : public igObject { V3_1b23e0 a; V3_1b23e0 b; };
+struct X_1b23e0 : public igObject { igVec3f a; igVec3f b; };
 struct Y { char pad[12]; VC_100_0 *f12; };
 extern "C" void FUN_001b1fa0(igGeometryAttr *geometry, igVec3f *min, igVec3f *max);
-struct V3_1b24d0 { float x, y, z; };
-struct BoundsObject : public igObject { V3_1b24d0 min; V3_1b24d0 max; };
+struct BoundsObject : public igObject { igVec3f min; igVec3f max; };
 extern "C" int DAT_0055f158[4];
 
 class Elem { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual int vX(); };
@@ -2424,7 +2421,6 @@ typedef struct TraversalMatrixState { int p[8]; MatrixStackList *mats; Releasabl
 
 struct HitMetaView { char pad0[8]; int index; };
 struct HitMatrix { float m[16]; };
-struct HitVector { float x, y, z; };
 class HitBound {
 public:
     virtual void d0();    virtual void d1();    virtual void d2();    virtual void d3();    virtual void d4();    virtual void d5();    virtual void d6();    virtual void d7();    virtual void d8();    virtual void d9();    virtual void d10();    virtual void d11();    virtual void d12();    virtual void d13();    virtual void d14();    virtual void d15();    virtual void d16();    virtual void d17();    virtual void d18();    virtual void d19();
@@ -2446,9 +2442,9 @@ struct HitReport {
     HitMatrix *matrix;
     void *object;
     float distance;
-    HitVector local;
-    HitVector point;
-    HitVector normal;
+    igVec3f local;
+    igVec3f point;
+    igVec3f normal;
     int index;
     int first;
     int second;
@@ -2469,7 +2465,7 @@ struct HitTraversal {
 extern "C" int FUN_0018ffa0(void**, void**);
 extern "C" int FUN_00190010(void**, int);
 extern "C" void FUN_001901b0(HitBound *, HitMatrix *);
-extern "C" int FUN_001cef70(HitTraversal *, HitAttr *, HitBound *, HitVector *, HitVector *, int *, int *, void *, long long);
+extern "C" int FUN_001cef70(HitTraversal *, HitAttr *, HitBound *, igVec3f *, igVec3f *, int *, int *, void *, long long);
 typedef struct S_1cf990 { char pad4[4]; int f4; } S_1cf990;
 typedef struct Ls_1cf990 { char pad8[8]; int n; char pad12[4]; S_1cf990 **data; } Ls_1cf990;
 typedef struct A_1cf990 { char pad36[36]; Ls_1cf990 *f36; } A_1cf990;
@@ -2841,7 +2837,6 @@ struct Primitive : public igVirtualObject {
  * loads/stores. Build: local/mwcps2/combat/mwccps2.exe (sha256
  * acf1088553362dddef7eee2d269848b03208e29fd26caa441848e57b6299786a), -O3 -Iinclude. */
 struct Vec4 { float x, y, z, w; };
-struct Vec3x { float x, y, z; };
 class Gfx;
 class Lens;
 class GfxQuad;
@@ -3155,7 +3150,6 @@ extern "C" float FUN_00192290(float const*);
 typedef struct TransformSampleVec3ListView { int _vtable; unsigned int _refCount; int _count; int _capacity; float (*_data)[3]; } TransformSampleVec3ListView;
 typedef struct TransformSampleQuatListView { int _vtable; unsigned int _refCount; int _count; int _capacity; float (*_data)[4]; } TransformSampleQuatListView;
 typedef struct TransformSampleView { int _vtable; unsigned int _refCount; TransformSampleVec3ListView *_xlateList; TransformSampleQuatListView *_quatList; TransformSampleVec3ListView *_scaleList; } TransformSampleView;
-typedef struct V3_1dd250 { float x, y, z; } V3_1dd250;
 typedef struct B_1dd250 { char pad[16]; char *data; } B_1dd250;
 typedef struct A_1dd250 { char pad[8]; B_1dd250 *b8; B_1dd250 *b12; B_1dd250 *b16; char pad2[24]; float f44; float f48; float f52; } A_1dd250;
 
@@ -3170,13 +3164,11 @@ extern "C" int DAT_00562a28[4];
 extern "C" long long DAT_00562a30[4];
 class VC_1dd570 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual int v156(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual float *v180(int); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual unsigned char v240(); };
 extern "C" void FUN_00192990(void *, float *, float *, float *);
-typedef struct KeyVec3View { float x, y, z; } KeyVec3View;
-typedef struct KeyVec3ListView { int _vtable; unsigned int _refCount; int _count; int _capacity; KeyVec3View *_data; } KeyVec3ListView;
+typedef struct KeyVec3ListView { int _vtable; unsigned int _refCount; int _count; int _capacity; igVec3f *_data; } KeyVec3ListView;
 typedef struct KeyQuatView { float x, y, z, w; } KeyQuatView;
 typedef struct KeyQuatListView { int _vtable; unsigned int _refCount; int _count; int _capacity; KeyQuatView *_data; } KeyQuatListView;
 typedef struct KeySequenceView { int _vtable; unsigned int _refCount; KeyVec3ListView *_xlateList; KeyQuatListView *_quatList; KeyVec3ListView *_scaleList; char pad[52]; unsigned char _drivenChannels; } KeySequenceView;
 typedef struct KeyMatrixView { float r[3][4]; float tx, ty, tz, tw; } KeyMatrixView;
-struct V3_1dda90 { float x, y, z; };
 struct V4_1dda90 { float x, y, z, w; };
 struct SeqData {
     char pad0[4];
@@ -3210,14 +3202,13 @@ struct TransformSequenceView {
     unsigned char rotationMode;
     unsigned char scaleMode;
 };
-typedef struct V_1de9c0 { float x, y, z; } V_1de9c0;
-typedef struct L_1de9c0 { int pad[2]; int count; int cap; V_1de9c0 *data; } L_1de9c0;
+typedef struct L_1de9c0 { int pad[2]; int count; int cap; igVec3f *data; } L_1de9c0;
 typedef struct LL_1de9c0 { int pad[2]; int count; } LL_1de9c0;
 typedef struct T_1de9c0 { char pad[56]; LL_1de9c0 *tl; L_1de9c0 *a; L_1de9c0 *b; L_1de9c0 *c; unsigned char flags; } T_1de9c0;
-struct Set { static inline void put(L_1de9c0 *l, int i, V_1de9c0 *p) {
-    V_1de9c0 *e;
+struct Set { static inline void put(L_1de9c0 *l, int i, igVec3f *p) {
+    igVec3f *e;
     if (l->count != 0 && i >= 0 && i < l->count) {
-        e = l->data + i; e->x = p->x; e->y = p->y; e->z = p->z;
+        e = l->data + i; e->vec[0] = p->vec[0]; e->vec[1] = p->vec[1]; e->vec[2] = p->vec[2];
     }
 } };
 /* The rates are read as unsigned, so the unsigned-int to float conversion yields the srl/andi/or
@@ -4501,7 +4492,7 @@ extern "C" void FUN_001b1030(igAttrStackManager *self, igAttr *attr);
 extern "C" void FUN_001b1100(struct A_1b1100 *arg0, struct B_1b1100 *arg1);
 extern "C" void FUN_001b11b0(struct A_1b11b0 *arg0, struct B_1b11b0 *arg1);
 extern "C" void FUN_001b1250(struct A_1b1250 *arg0, struct B_1b1250 *arg1, int arg2);
-extern "C" void FUN_001b21d0(A_1b21d0 *arg0, V3_1b21d0 *arg1, V3_1b21d0 *arg2);
+extern "C" void FUN_001b21d0(A_1b21d0 *arg0, igVec3f *arg1, igVec3f *arg2);
 extern "C" void FUN_001b23b0(int *arg0, int *arg1);
 extern "C" int FUN_001b23e0(int arg0, Y *arg1);
 extern "C" int FUN_001b24d0(int arg0, int arg1);
@@ -5001,7 +4992,7 @@ extern "C" void FUN_001ddfd0(void);
 extern "C" void Gap__Sg__igTransformSequence1_5__vfunc_57(TransformSequenceView *s, int channel, unsigned int mode);
 extern "C" int Gap__Sg__igTransformSequence1_5__vfunc_59(igTransformSequence1_5 *arg0, int arg1);
 extern "C" void Gap__Sg__igTransformSequence1_5__vfunc_58(TransformSequenceView *s, unsigned char channels);
-extern "C" void Gap__Sg__igTransformSequence1_5__vfunc_61(T_1de9c0 *t, int idx, int ch, V_1de9c0 *p, V_1de9c0 *q);
+extern "C" void Gap__Sg__igTransformSequence1_5__vfunc_61(T_1de9c0 *t, int idx, int ch, igVec3f *p, igVec3f *q);
 extern "C" int Gap__Sg__igTransformSequence1_5__vfunc_48(igTransformSequence1_5 *self, int index);
 extern "C" void igTransformSequence1_5_InterpolateTranslation(igTransformSequence1_5 *self, float *out, int from, int to, float t);
 extern "C" void igTransformSequence1_5_InterpolateRotation(igTransformSequence1_5 *self, float *out, int from, int to, float t);

@@ -1,6 +1,8 @@
 #ifndef DW4_IGVEC2F_H
 #define DW4_IGVEC2F_H
 
+#include <math.h>
+
 /* Alchemy's two-float vector: an array of two floats with inline accessors (Alchemy 5.0 kit,
  * igMath/igVec2f.h). Returning one by value runs its copy constructor. */
 class igVec2f {
@@ -29,6 +31,8 @@ public:
         vec[0] = x;
         vec[1] = y;
     }
+    float length2() const { return vec[0] * vec[0] + vec[1] * vec[1]; }
+    float length() const { return sqrtf(length2()); }
 };
 
 #endif

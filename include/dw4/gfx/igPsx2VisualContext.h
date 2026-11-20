@@ -5,6 +5,7 @@
 
 struct igMetaObject;
 struct igPsx2VisualContext;
+struct igVec4f;
 struct igVertexArray;
 struct igIndexArray;
 struct igPrimLengthArray;
@@ -38,7 +39,7 @@ int Gap__Gfx__igPsx2VisualContext__createTexture(struct igPsx2VisualContext *sel
 void igPsx2VisualContext_SetTextureAddressingMode(struct igPsx2VisualContext *self, int texture, IG_GFX_TEXTURE_WRAP wrapS, IG_GFX_TEXTURE_WRAP wrapT);
 void igPsx2VisualContext_SetTextureMinificationFilter(struct igPsx2VisualContext *self, int texture, IG_GFX_TEXTURE_FILTER minFilter);
 void igPsx2VisualContext_SetTextureMagnificationFilter(struct igPsx2VisualContext *self, int texture, IG_GFX_TEXTURE_FILTER magFilter);
-void igPsx2VisualContext_SetFogColor(struct igPsx2VisualContext *self, float *color);
+void igPsx2VisualContext_SetFogColor(struct igPsx2VisualContext *self, const struct igVec4f *color);
 int igPsx2VisualContext_SetTextureSourceFromBuffer(struct igPsx2VisualContext *self, int texture, int videoBuffer);
 void igPsx2VisualContext_SetRenderDestination(struct igPsx2VisualContext *self, int bufferIndex);
 void igPsx2VisualContext_DrawMultiple(struct igPsx2VisualContext *self, int arg1, int arg2, int arg3, int arg4);

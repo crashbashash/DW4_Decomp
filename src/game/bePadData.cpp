@@ -12,7 +12,7 @@ typedef void (*TraversalFunction)(void);
 
 extern "C" {
 
-void bePadData_StickDirections(bePadData *pad, int *directions, float *stick);
+void bePadData_StickDirections(bePadData *pad, int *directions, igVec2f stick);
 }
 
 #define CLOCK_TICK_SHIFT 18
@@ -146,15 +146,11 @@ extern "C" void bePadData_UpdateButtons(bePadData *pad, int buttons)
     pad->_rptime = pad->_2ndtime;
 }
 
-extern "C" void bePadData_UpdateLeftStick(bePadData *pad, float *stick)
+extern "C" void bePadData_UpdateLeftStick(bePadData *pad, igVec2f stick)
 {
-    float view[2];
-    pad->_LStick[0] = stick[0];
-    pad->_LStick[1] = stick[1];
+    pad->_LStick = stick;
     pad->_lLast = pad->_lStk;
-    view[0] = pad->_LStick[0];
-    view[1] = pad->_LStick[1];
-    bePadData_StickDirections(pad, &pad->_lStk, view);
+    bePadData_StickDirections(pad, &pad->_lStk, pad->_LStick);
     pad->_lTrg = pad->_lStk & (pad->_lLast ^ pad->_lStk);
     if ((pad->_lLast ^ pad->_lStk) != 0) {
         pad->_lRpt = pad->_lTrg;
@@ -169,15 +165,11 @@ extern "C" void bePadData_UpdateLeftStick(bePadData *pad, float *stick)
     }
 }
 
-extern "C" void bePadData_UpdateRightStick(bePadData *pad, float *stick)
+extern "C" void bePadData_UpdateRightStick(bePadData *pad, igVec2f stick)
 {
-    float view[2];
-    pad->_RStick[0] = stick[0];
-    pad->_RStick[1] = stick[1];
+    pad->_RStick = stick;
     pad->_rLast = pad->_rStk;
-    view[0] = pad->_RStick[0];
-    view[1] = pad->_RStick[1];
-    bePadData_StickDirections(pad, &pad->_rStk, view);
+    bePadData_StickDirections(pad, &pad->_rStk, pad->_RStick);
     int held = pad->_rStk;
     pad->_rTrg = held & (pad->_rLast ^ held);
     if ((pad->_rLast ^ pad->_rStk) != 0) {
@@ -197,18 +189,11 @@ extern "C" void bePadData_UpdateRightStick(bePadData *pad, float *stick)
 
 /* Stick vector to direction bits (8 left, 4 down, 2 right, 1 up): a quadrant widened by half of
  * _adAngle on each side, nothing inside the _enaLen dead zone. */
-extern "C" void bePadData_StickDirections(bePadData *pad, int *directions, float *stick)
+extern "C" void bePadData_StickDirections(bePadData *pad, int *directions, igVec2f stick)
 {
-    const float *view = stick;
-    float length;
-    float angle;
-    float half;
-    float y, x;
-    x = view[0];
-    y = view[1];
-    length = sqrtf(x * x + y * y);
-    angle = atan2f(stick[1], stick[0]);
-    half = 0.5f * pad->_adAngle;
+    float length = stick.length();
+    float angle = atan2f(stick[1], stick[0]);
+    float half = 0.5f * pad->_adAngle;
     *directions = 0;
     if (!(length < pad->_enaLen)) {
         if (angle < -2.3561945f + half) {

@@ -85,8 +85,6 @@ public:
     virtual void configure(int primType, int primCount, int offset);
 };
 
-/* Adds `shift` to `vector` in place (Alchemy's igVec3f::operator+=). */
-static inline igVec3f &addVec3(igVec3f &vector, const igVec3f &shift) { vector[0] += shift[0]; vector[1] += shift[1]; vector[2] += shift[2]; return vector; }
 
 /* One row of the Shift-JIS to UTF-16 table; a row of 0xffff ends it. */
 struct SjisUnicodePair { unsigned short unicode; unsigned short sjis; };
@@ -1050,7 +1048,7 @@ void beFont_AlignLines(beFont *self, int text, beFontInfoData *entry, igVertexAr
         while (vertexIndex < end) {
             for (i = vertexIndex; i < vertexIndex + 6; i++) {
                 vertex = (igVec3f *)(base + positions->stride * i);
-                addVec3(*vertex, shift);
+                *vertex += shift;
             }
             vertexIndex += 6;
         }
