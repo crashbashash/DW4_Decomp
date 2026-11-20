@@ -85,7 +85,6 @@ public:
     virtual void configure(int primType, int primCount, int offset);
 };
 
-struct igColor4f { float r; float g; float b; float a; };
 /* Adds `shift` to `vector` in place (Alchemy's igVec3f::operator+=). */
 static inline igVec3f &addVec3(igVec3f &vector, const igVec3f &shift) { vector[0] += shift[0]; vector[1] += shift[1]; vector[2] += shift[2]; return vector; }
 
@@ -611,11 +610,11 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                         do {
                         attribute = ((igNodeView **)attributes->_data)[a];
                         if (g_igColorAttr_metaObject == attribute->GetMeta()) {
-                            igColor4f color;
-                            Color4f_Unpack((Color4f *)&color, 1, ((igColorAttr *)attribute)->_colorPacked);
-                            color.r = red;
-                            color.g = green;
-                            color.b = blue;
+                            igVec4f color;
+                            Color4f_Unpack(&color, 1, ((igColorAttr *)attribute)->_colorPacked);
+                            color[0] = red;
+                            color[1] = green;
+                            color[2] = blue;
                             attribute->setColor(&color);
                         }
                         a++;

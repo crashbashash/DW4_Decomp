@@ -36,8 +36,6 @@
 #pragma push
 #pragma readonly_strings on
 
-/* An RGBA colour in floats, as Color4f_Unpack writes it. */
-struct Color4f { float x, y, z, w; };
 
 /* The override attributes FLASHSET and FADESET put on a node (igColorAttr, igBlendStateAttr,
  * igTextureStateAttr, igLightingStateAttr) all take their value through slot 30. */
@@ -247,10 +245,10 @@ unsigned char beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram,
         IG_OBJECT_RELEASE(old);
         work->_lightingStateAttr = (int)attr;
     }
-    Color4f color;
+    igVec4f color;
     Color4f_Unpack(&color, 1, ((igColorAttr *)work->_colorAttr)->_colorPacked);
-    color.y = 1.0f;
-    color.x = 1.0f;
+    color[1] = 1.0f;
+    color[0] = 1.0f;
     ((OverrideAttr *)work->_colorAttr)->SetValue(&color);
     ((OverrideAttr *)work->_textureStateAttr)->SetValue(0);
     ((OverrideAttr *)work->_lightingStateAttr)->SetValue(0);
@@ -356,18 +354,16 @@ void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
     switch (work->_fadeSt0) {
     case 1: {
         float frames;
-        Color4f color;
-        float *alpha;
+        igVec4f color;
         int list;
         igObject *attr;
         frames = beBaseInfoRam_GetTimerFrameDelta((beBaseInfoRam *)ram, "FADE");
         if (frames != 0.0f) {
             Color4f_Unpack(&color, 1, ((igColorAttr *)work->_colorAttr)->_colorPacked);
-            alpha = &color.w;
-            *alpha = work->_fadeValue + frames * work->_fadeAddValue;
+            color[3] = work->_fadeValue + frames * work->_fadeAddValue;
             ((OverrideAttr *)work->_colorAttr)->SetValue(&color);
-            work->_fadeValue = *alpha;
-            if (*alpha >= fadeLimit(work)) {
+            work->_fadeValue = color[3];
+            if (color[3] >= fadeLimit(work)) {
                 list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
                 if (work->_textureStateAttr == 0) {
                     ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)work->_colorAttr, 0);
@@ -391,19 +387,17 @@ void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
     }
     case 2: {
         float frames;
-        Color4f color;
-        float *alpha;
+        igVec4f color;
         float next;
         frames = beBaseInfoRam_GetTimerFrameDelta((beBaseInfoRam *)ram, "FADE");
         if (frames != 0.0f) {
             Color4f_Unpack(&color, 1, ((igColorAttr *)work->_colorAttr)->_colorPacked);
             next = work->_fadeValue - frames * work->_fadeAddValue;
-            alpha = &color.w;
-            *alpha = next;
-            if (next < 0.0f) *alpha = 0.0f;
+            color[3] = next;
+            if (next < 0.0f) color[3] = 0.0f;
             ((OverrideAttr *)work->_colorAttr)->SetValue(&color);
-            work->_fadeValue = *alpha;
-            if (*alpha <= 0.0f) {
+            work->_fadeValue = color[3];
+            if (color[3] <= 0.0f) {
                 beBaseInfoRam_RemoveTimer((beBaseInfoRam *)ram, "FADE");
                 work->_fadeSt0 = 3;
             }
@@ -468,9 +462,9 @@ unsigned char beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, 
         char *mode = (char *)component->_name;
         mode = mode != 0 ? mode : (char *)emptyString;
         if (*mode == 'I') {
-            Color4f color;
+            igVec4f color;
             Color4f_Unpack(&color, 1, ((igColorAttr *)work->_colorAttr)->_colorPacked);
-            color.w = 0.0f;
+            color[3] = 0.0f;
             ((OverrideAttr *)work->_colorAttr)->SetValue(&color);
             ((OverrideAttr *)work->_blendStateAttr)->SetValue((void *)1);
             ((OverrideAttr *)work->_lightingStateAttr)->SetValue((void *)0);
@@ -479,9 +473,9 @@ unsigned char beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, 
             work->_fadeAddValue = component->_fadeValue / component->_fadeTime;
             work->_fadeSt0 = 1;
         } else {
-            Color4f color;
+            igVec4f color;
             Color4f_Unpack(&color, 1, ((igColorAttr *)work->_colorAttr)->_colorPacked);
-            color.w = component->_fadeValue;
+            color[3] = component->_fadeValue;
             ((OverrideAttr *)work->_colorAttr)->SetValue(&color);
             ((OverrideAttr *)work->_blendStateAttr)->SetValue((void *)1);
             ((OverrideAttr *)work->_lightingStateAttr)->SetValue((void *)0);

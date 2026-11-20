@@ -346,11 +346,7 @@ void igPointSpriteExt_SetUniformSize(igPointSpriteExtView *self, unsigned int in
 }
 
 void igPointSpriteExt_SetSize(igPointSpriteExt *self, int index, igVec2f size) {
-    V2f v;
-    v.x = size.x;
-    v.y = size.y;
-    /* Sdb00: stand-in view of the extension's vertex array and its size slot */
-    ((Sdb00 *)self)->o->vX(index, &v);
+    ((igPointSpriteExtView *)self)->_vertexArray->setPointSize2(index, size);
 }
 
 void igPointSpriteExt_SetRadian(igPointSpriteExtView *self)

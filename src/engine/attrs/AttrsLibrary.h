@@ -152,8 +152,6 @@ extern "C" int igVertexBlendMatrixAttr_GetVTable(void);
 extern "C" void igVertexBlendMatrixAttr_EnsureRegistered(void);
 extern "C" CallbackArray *igVertexBlendMatrixAttr_Register(void);
 extern "C" void igVertexBlendMatrixAttr_GetMetaObjectFunction(void);
-struct V { int x; int y; int z; int w; };
-struct M { int m[16]; };
 extern "C" void igVertexBlendMatrixAttr_InitFields(void);
 extern "C" igMetaObject *g_igTimeAttr_metaObject;
 extern "C" igMetaObject *igTimeAttr_GetOrCreateMetaObject(void);

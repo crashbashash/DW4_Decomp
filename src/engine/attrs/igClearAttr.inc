@@ -97,24 +97,14 @@ void igClearAttr_InitFields(void) {
     void *field4;
     void *meta;
     int base;
-    struct V v1;
-    struct V v2;
 
     meta = (void *)g_igClearAttr_metaObject;
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igClearAttr_ctorTable, 7);
     field4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
-    v1.x = 0;
-    v1.w = 0x3F800000;
-    v1.y = 0;
-    v1.z = 0;
-    igVec4fMetaField_SetDefault((igMetaField *)field4, (const float *)&v1);
+    igVec4fMetaField_SetDefault((igMetaField *)field4, igVec4f(0.0f, 0.0f, 0.0f, 1.0f).vec);
     field3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2));
-    v2.x = 0;
-    v2.y = 0;
-    v2.z = 0;
-    v2.w = 0;
-    igVec4fMetaField_SetDefault((igMetaField *)field3, (const float *)&v2);
+    igVec4fMetaField_SetDefault((igMetaField *)field3, igVec4f(0.0f, 0.0f, 0.0f, 0.0f).vec);
     ((Gap::Core::igDoubleMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)))->setDefault(1.0);
     field2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5));
     ((Gap::Core::igUnsignedIntMetaField *)field2)->setDefault(-1);

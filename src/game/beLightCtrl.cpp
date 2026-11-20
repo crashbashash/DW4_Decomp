@@ -52,13 +52,13 @@ int beLightCtrl_OnMessageText(beLightCtrl *self, beBaseInfoRam *ram, const char 
         if (lightSet != 0) {
             lights = (igLightAttrDispatchView **)((igLightList *)lightSet->_lights)->_data;
             light = *lights;
-            colour.w = 1.0f;
-            colour.x = ambient[0]; colour.y = ambient[1]; colour.z = ambient[2];
-            light->setAmbient(&colour.x);
-            colour.x = diffuse[0]; colour.y = diffuse[1]; colour.z = diffuse[2];
-            light->setDiffuse(&colour.x);
-            colour.x = specular[0]; colour.y = specular[1]; colour.z = specular[2];
-            light->setSpecular(&colour.x);
+            colour[3] = 1.0f;
+            colour.set(ambient);
+            light->setAmbient(colour.vec);
+            colour.set(diffuse);
+            light->setDiffuse(colour.vec);
+            colour.set(specular);
+            light->setSpecular(colour.vec);
         }
         return 1;
     }

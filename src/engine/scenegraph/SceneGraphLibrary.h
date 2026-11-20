@@ -406,7 +406,6 @@ struct S_1962d0 {
     void *f68;
 };
 struct V { int x; int y; int z; int w; };
-struct M_196570 { int m[16]; };
 
 struct Obj_196780 { int *vt; char pad[28]; };
 extern "C" int g_igObjectPool_vtable[4];
@@ -542,7 +541,6 @@ struct S_19fde0 { int *vt; char pad[468]; int a; char b[72]; int c; };
 struct T_19fde0 { int w0; int refs; };
 struct T1a0910 { int word0; int references; };
 struct Obj_19fde0;
-struct M_19fde0 { int m[16]; };
 extern "C" int FUN_001510a0(int);
 extern "C" int g_igFrustCullTraversal_vtable[4];
 extern "C" int g_igCommonTraversal_vtable[4];
@@ -620,7 +618,6 @@ union U_1a3620 { int vt; int w[12]; void *p[12]; char b[48]; };
 extern "C" int g_igCompiledTransform_vtable[4];
 struct Fld_1a37a0 { char p0[38]; char f38; char p39[13]; char f52; char p53[3]; int f56; };
 struct O_1a38e0 { int vt; char b[468]; };
-struct M_1a38e0 { int m[16]; };
 
 extern "C" int D_005293c0[4];
 typedef struct { int *vt; int w[15]; } Obj_1a4600;
@@ -730,8 +727,6 @@ struct igActorView : igNodeView, igActorVtable {
     igActorView() : igActorVtable(&vtable) { }
     ~igActorView() { vtable = g_igActor_vtable; }
 };
-struct ActorVectorWords { int x; int y; int z; int w; };
-struct ActorMatrixWords { int m[16]; };
 extern "C" int g_igPsx2EnvironmentMapShader_vtable[4];
 union U_1aae40 { int *vt; char b[128]; };
 extern "C" int DAT_00528fa0[4];

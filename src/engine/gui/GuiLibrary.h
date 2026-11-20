@@ -908,9 +908,6 @@ class T_4569c0 { public: virtual void d0(); virtual void d1(); virtual void d2()
   char pad[20]; float f24; float f28; float f32; float f36; };
 struct M_4569c0 { int p0; int p1; T_4569c0 *t; };
 struct O_4569c0 { char pad[24]; M_4569c0 *m; char pad2[4]; char f32; };
-extern "C" float DAT_004e1174[4];
-extern "C" float DAT_004e1178[4];
-extern "C" float DAT_004e117c[4];
 typedef struct Rc_456a60 { int vt; int rc; int p8; } Rc_456a60;
 typedef struct Q { char pad8[8]; int f8; } Q;
 typedef struct P_456a60 { char pad28[28]; Q *f28; } P_456a60;

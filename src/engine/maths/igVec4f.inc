@@ -3,14 +3,14 @@ int igVec4f_PackColor(const float *arg0, unsigned int arg1) {
     int res;
     r = arg0[0]; g = arg0[1]; b = arg0[2]; a = arg0[3];
     res = 0;
-    if (r > g_vec4One.x) r = g_vec4One.x;
-    if (g > g_vec4One.y) g = g_vec4One.y;
-    if (b > g_vec4One.z) b = g_vec4One.z;
-    if (a > g_vec4One.w) a = g_vec4One.w;
-    if (r < g_vec4Zero.x) r = g_vec4Zero.x;
-    if (g < g_vec4Zero.y) g = g_vec4Zero.y;
-    if (b < g_vec4Zero.z) b = g_vec4Zero.z;
-    if (a < g_vec4Zero.w) a = g_vec4Zero.w;
+    if (r > g_vec4One[0]) r = g_vec4One[0];
+    if (g > g_vec4One[1]) g = g_vec4One[1];
+    if (b > g_vec4One[2]) b = g_vec4One[2];
+    if (a > g_vec4One[3]) a = g_vec4One[3];
+    if (r < g_vec4Zero[0]) r = g_vec4Zero[0];
+    if (g < g_vec4Zero[1]) g = g_vec4Zero[1];
+    if (b < g_vec4Zero[2]) b = g_vec4Zero[2];
+    if (a < g_vec4Zero[3]) a = g_vec4Zero[3];
     switch (arg1) {
     case 4: res |= (int)(0.5f + 255.0f * r); res |= (int)(0.5f + 255.0f * g) << 8; res |= (int)(0.5f + 255.0f * b) << 16; break;
     case 3: res |= (int)(0.5f + 255.0f * b); res |= (int)(0.5f + 255.0f * g) << 8; res |= (int)(0.5f + 255.0f * r) << 16; break;
@@ -22,47 +22,47 @@ int igVec4f_PackColor(const float *arg0, unsigned int arg1) {
     return res;
 }
 
-/* Unpacks a packed 32-bit colour into a 4-float vector, selected by pixel format: each case
- * converts the four bytes of arg2 with (float)(byte) / 255.0f and stores x,y,z,w. Formats: 0 RGBA,
- * 1 ABGR, 2 BGRA, 3 RGB (w=0), 4 BGR (w=0), 6 ARGB; 5 is not handled (no-op). */
-void Color4f_Unpack(Color4f *out, unsigned int format, unsigned int packed)
+/* Unpacks a packed 32-bit colour into the vector, selected by pixel format: each case converts
+ * the four bytes of `packed` with (float)(byte) / 255.0f. Formats: 0 RGBA, 1 ABGR, 2 BGRA, 3 RGB
+ * (alpha 0), 4 BGR (alpha 0), 6 ARGB; 5 is not handled (no-op). */
+void Color4f_Unpack(igVec4f *out, unsigned int format, unsigned int packed)
 {
     switch (format) {
     case 2:
-        out->z = BYTE_TO_UNIT(packed, 0xFF000000, 24);
-        out->y = BYTE_TO_UNIT(packed, 0x00FF0000, 16);
-        out->x = BYTE_TO_UNIT(packed, 0x0000FF00, 8);
-        out->w = BYTE_TO_UNIT(packed, 0x000000FF, 0);
+        out->vec[2] = BYTE_TO_UNIT(packed, 0xFF000000, 24);
+        out->vec[1] = BYTE_TO_UNIT(packed, 0x00FF0000, 16);
+        out->vec[0] = BYTE_TO_UNIT(packed, 0x0000FF00, 8);
+        out->vec[3] = BYTE_TO_UNIT(packed, 0x000000FF, 0);
         break;
     case 0:
-        out->x = BYTE_TO_UNIT(packed, 0xFF000000, 24);
-        out->y = BYTE_TO_UNIT(packed, 0x00FF0000, 16);
-        out->z = BYTE_TO_UNIT(packed, 0x0000FF00, 8);
-        out->w = BYTE_TO_UNIT(packed, 0x000000FF, 0);
+        out->vec[0] = BYTE_TO_UNIT(packed, 0xFF000000, 24);
+        out->vec[1] = BYTE_TO_UNIT(packed, 0x00FF0000, 16);
+        out->vec[2] = BYTE_TO_UNIT(packed, 0x0000FF00, 8);
+        out->vec[3] = BYTE_TO_UNIT(packed, 0x000000FF, 0);
         break;
     case 3:
-        out->w = 0.0f;
-        out->x = BYTE_TO_UNIT(packed, 0x00FF0000, 16);
-        out->y = BYTE_TO_UNIT(packed, 0x0000FF00, 8);
-        out->z = BYTE_TO_UNIT(packed, 0x000000FF, 0);
+        out->vec[3] = 0.0f;
+        out->vec[0] = BYTE_TO_UNIT(packed, 0x00FF0000, 16);
+        out->vec[1] = BYTE_TO_UNIT(packed, 0x0000FF00, 8);
+        out->vec[2] = BYTE_TO_UNIT(packed, 0x000000FF, 0);
         break;
     case 4:
-        out->w = 0.0f;
-        out->z = BYTE_TO_UNIT(packed, 0x00FF0000, 16);
-        out->y = BYTE_TO_UNIT(packed, 0x0000FF00, 8);
-        out->x = BYTE_TO_UNIT(packed, 0x000000FF, 0);
+        out->vec[3] = 0.0f;
+        out->vec[2] = BYTE_TO_UNIT(packed, 0x00FF0000, 16);
+        out->vec[1] = BYTE_TO_UNIT(packed, 0x0000FF00, 8);
+        out->vec[0] = BYTE_TO_UNIT(packed, 0x000000FF, 0);
         break;
     case 1:
-        out->w = BYTE_TO_UNIT(packed, 0xFF000000, 24);
-        out->z = BYTE_TO_UNIT(packed, 0x00FF0000, 16);
-        out->y = BYTE_TO_UNIT(packed, 0x0000FF00, 8);
-        out->x = BYTE_TO_UNIT(packed, 0x000000FF, 0);
+        out->vec[3] = BYTE_TO_UNIT(packed, 0xFF000000, 24);
+        out->vec[2] = BYTE_TO_UNIT(packed, 0x00FF0000, 16);
+        out->vec[1] = BYTE_TO_UNIT(packed, 0x0000FF00, 8);
+        out->vec[0] = BYTE_TO_UNIT(packed, 0x000000FF, 0);
         break;
     case 6:
-        out->w = BYTE_TO_UNIT(packed, 0xFF000000, 24);
-        out->x = BYTE_TO_UNIT(packed, 0x00FF0000, 16);
-        out->y = BYTE_TO_UNIT(packed, 0x0000FF00, 8);
-        out->z = BYTE_TO_UNIT(packed, 0x000000FF, 0);
+        out->vec[3] = BYTE_TO_UNIT(packed, 0xFF000000, 24);
+        out->vec[0] = BYTE_TO_UNIT(packed, 0x00FF0000, 16);
+        out->vec[1] = BYTE_TO_UNIT(packed, 0x0000FF00, 8);
+        out->vec[2] = BYTE_TO_UNIT(packed, 0x000000FF, 0);
         break;
     default:
         break;

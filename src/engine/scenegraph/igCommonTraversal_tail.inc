@@ -204,31 +204,6 @@ void igCommonTraversal_InitFields(void) {
     void *temp_s2;
     int temp_s1;
     void *temp_s0;
-    struct M_1a38e0 b1o;
-    struct V b1a;
-    struct V b1b;
-    struct V b1c;
-    struct V b1d;
-    struct M_1a38e0 b2o;
-    struct V b2a;
-    struct V b2b;
-    struct V b2c;
-    struct V b2d;
-    struct M_1a38e0 b3o;
-    struct V b3a;
-    struct V b3b;
-    struct V b3c;
-    struct V b3d;
-    struct M_1a38e0 b4o;
-    struct V b4a;
-    struct V b4b;
-    struct V b4c;
-    struct V b4d;
-    struct M_1a38e0 b5o;
-    struct V b5a;
-    struct V b5b;
-    struct V b5c;
-    struct V b5d;
 
     temp_s0 = (void *)g_igCommonTraversal_metaObject;
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
@@ -273,19 +248,11 @@ void igCommonTraversal_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_14)->_metaObject = (int)igProjectionMatrixAttrPool_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_14)->_construct = 1;
     temp_s2_15 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xE)));
-    b1d.x = 0;b1d.y = 0;b1d.z = 0;b1d.w = 0x3F800000;
-    b1c.x = 0;b1c.y = 0;b1c.z = 0x3F800000;b1c.w = 0;
-    b1b.x = 0;b1b.y = 0x3F800000;b1b.z = 0;b1b.w = 0;
-    b1a.x = 0x3F800000;b1a.y = 0;b1a.z = 0;b1a.w = 0;
-    igMatrix44f_FromRows((float *)&b1o, (igVec4f *)&b1a, (igVec4f *)&b1b, (igVec4f *)&b1c, (igVec4f *)&b1d);
-    FUN_0018c640((igMetaField *)temp_s2_15, (const float *)&b1o);
+    FUN_0018c640((igMetaField *)temp_s2_15, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                        igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
     temp_s2_16 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xF)));
-    b2d.x = 0;b2d.y = 0;b2d.z = 0;b2d.w = 0x3F800000;
-    b2c.x = 0;b2c.y = 0;b2c.z = 0x3F800000;b2c.w = 0;
-    b2b.x = 0;b2b.y = 0x3F800000;b2b.z = 0;b2b.w = 0;
-    b2a.x = 0x3F800000;b2a.y = 0;b2a.z = 0;b2a.w = 0;
-    igMatrix44f_FromRows((float *)&b2o, (igVec4f *)&b2a, (igVec4f *)&b2b, (igVec4f *)&b2c, (igVec4f *)&b2d);
-    FUN_0018c640((igMetaField *)temp_s2_16, (const float *)&b2o);
+    FUN_0018c640((igMetaField *)temp_s2_16, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                        igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
     temp_s2_17 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x11)));
     ((igObjectRefMetaField *)temp_s2_17)->_metaObject = (int)igMatrixOptStateAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_17)->_construct = 1;
@@ -328,31 +295,19 @@ void igCommonTraversal_InitFields(void) {
     ((igRefMetaField *)temp_s2_26)->_construct = 1;
     ((igMetaField *)temp_s2_26)->_persistent = 0;
     temp_s2_27 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1D)));
-    b3d.x = 0;b3d.y = 0;b3d.z = 0;b3d.w = 0x3F800000;
-    b3c.x = 0;b3c.y = 0;b3c.z = 0x3F800000;b3c.w = 0;
-    b3b.x = 0;b3b.y = 0x3F800000;b3b.z = 0;b3b.w = 0;
-    b3a.x = 0x3F800000;b3a.y = 0;b3a.z = 0;b3a.w = 0;
-    igMatrix44f_FromRows((float *)&b3o, (igVec4f *)&b3a, (igVec4f *)&b3b, (igVec4f *)&b3c, (igVec4f *)&b3d);
-    FUN_0018c640((igMetaField *)temp_s2_27, (const float *)&b3o);
+    FUN_0018c640((igMetaField *)temp_s2_27, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                        igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
     temp_s2_28 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1E)));
     ((igObjectRefMetaField *)temp_s2_28)->_metaObject = (int)igTimeAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_28)->_construct = 1;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1F)))->_persistent = 0;
     temp_s2_29 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x20)));
-    b4d.x = 0;b4d.y = 0;b4d.z = 0;b4d.w = 0x3F800000;
-    b4c.x = 0;b4c.y = 0;b4c.z = 0x3F800000;b4c.w = 0;
-    b4b.x = 0;b4b.y = 0x3F800000;b4b.z = 0;b4b.w = 0;
-    b4a.x = 0x3F800000;b4a.y = 0;b4a.z = 0;b4a.w = 0;
-    igMatrix44f_FromRows((float *)&b4o, (igVec4f *)&b4a, (igVec4f *)&b4b, (igVec4f *)&b4c, (igVec4f *)&b4d);
-    FUN_0018c640((igMetaField *)temp_s2_29, (const float *)&b4o);
+    FUN_0018c640((igMetaField *)temp_s2_29, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                        igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
     ((igMetaField *)temp_s2_29)->_persistent = 0;
     temp_s2_30 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x21)));
-    b5d.x = 0;b5d.y = 0;b5d.z = 0;b5d.w = 0x3F800000;
-    b5c.x = 0;b5c.y = 0;b5c.z = 0x3F800000;b5c.w = 0;
-    b5b.x = 0;b5b.y = 0x3F800000;b5b.z = 0;b5b.w = 0;
-    b5a.x = 0x3F800000;b5a.y = 0;b5a.z = 0;b5a.w = 0;
-    igMatrix44f_FromRows((float *)&b5o, (igVec4f *)&b5a, (igVec4f *)&b5b, (igVec4f *)&b5c, (igVec4f *)&b5d);
-    FUN_0018c640((igMetaField *)temp_s2_30, (const float *)&b5o);
+    FUN_0018c640((igMetaField *)temp_s2_30, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                        igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
     ((igMetaField *)temp_s2_30)->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x22)))->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCommonTraversal_fieldTable, g_igCommonTraversal_fieldHandles, g_igCommonTraversal_fieldOffsets, temp_s1);

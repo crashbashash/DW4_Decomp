@@ -152,10 +152,10 @@ void igCommandLine_PrintUsage(const char *programName)
     {
         const char *optionName = "--head-light-ambient";
         if (optionName) {
-            defaultHeadLightAmbient[0] = g_vec4Zero.x;
-            defaultHeadLightAmbient[1] = g_vec4Zero.y;
-            defaultHeadLightAmbient[2] = g_vec4Zero.z;
-            defaultHeadLightAmbient[3] = g_vec4Zero.w;
+            defaultHeadLightAmbient[0] = g_vec4Zero[0];
+            defaultHeadLightAmbient[1] = g_vec4Zero[1];
+            defaultHeadLightAmbient[2] = g_vec4Zero[2];
+            defaultHeadLightAmbient[3] = g_vec4Zero[3];
             igCommandLine_PrintOptionVec4f(optionName, "sets the ambient color for the head light", defaultHeadLightAmbient);
         }
     }
@@ -398,10 +398,10 @@ struct FlushSettings *igCommandLine_Construct(struct FlushSettings *s) {
     s->f100[5] = 1.0f;
     s->f100[6] = 1.0f;
     s->f100[7] = 1.0f;
-    s->f132[0] = g_vec4Zero.x;
-    s->f132[1] = g_vec4Zero.y;
-    s->f132[2] = g_vec4Zero.z;
-    s->f132[3] = g_vec4Zero.w;
+    s->f132[0] = g_vec4Zero[0];
+    s->f132[1] = g_vec4Zero[1];
+    s->f132[2] = g_vec4Zero[2];
+    s->f132[3] = g_vec4Zero[3];
     s->f148 = 0.2f;
     s->f152 = 0.2f;
     s->f156 = 0.2f;

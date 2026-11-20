@@ -33,7 +33,7 @@
   "layout.tail_fragments": 481,
   "m2c_idiom.units": 0,
   "matching_constructs": 535,
-  "members.offset_named": 2576,
+  "members.offset_named": 2575,
   "mismatch.bytes": 0,
   "mismatch.functions": 0,
   "name_defect.bytes": 0,
@@ -54,7 +54,7 @@
   "unmatched.functions": 118,
   "vfunc_slots.functions": 402,
   "views.local": 304,
-  "virtual_views.slots": 32104,
+  "virtual_views.slots": 32049,
   "virtual_views.types": 235
  },
  "note": "Debt ratchet baseline for tools/progress.py --debt-check: every counter may only go down. Re-record with --debt-baseline; an increase needs --allow-increase \"<reason>\" and the reason is kept next to the value. See docs/engine/debt-ratchet.md."

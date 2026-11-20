@@ -542,34 +542,13 @@ void igFrustCullTraversal_InitFields(void) {
     void *temp_s2;
     void *temp_s1;
     int temp_s0;
-    struct M_19fde0 o1;
-    struct V o2;
-    struct V o3;
-    struct V o4;
-    struct V o5;
 
     temp_s1 = (void *)g_igFrustCullTraversal_metaObject;
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igFrustCullTraversal_ctorTable, 7);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
-    o5.x = 0;
-    o5.y = 0;
-    o5.z = 0;
-    o5.w = 0x3F800000;
-    o4.x = 0;
-    o4.y = 0;
-    o4.z = 0x3F800000;
-    o4.w = 0;
-    o3.x = 0;
-    o3.y = 0x3F800000;
-    o3.z = 0;
-    o3.w = 0;
-    o2.x = 0x3F800000;
-    o2.y = 0;
-    o2.z = 0;
-    o2.w = 0;
-    igMatrix44f_FromRows((float *)&o1, (igVec4f *)&o2, (igVec4f *)&o3, (igVec4f *)&o4, (igVec4f *)&o5);
-    FUN_0018c640((igMetaField *)temp_s2, (const float *)&o1);
+    FUN_0018c640((igMetaField *)temp_s2, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                     igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igClippingStateAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;

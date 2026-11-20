@@ -163,12 +163,6 @@ static int g_igActor_fieldOffsets[] = {
 };
 
 void igActor_InitFields(void) {
-    struct ActorMatrixWords a1;
-    struct ActorVectorWords a2, a3, a4, a5;
-    struct ActorMatrixWords b1;
-    struct ActorVectorWords b2, b3, b4, b5;
-    struct ActorMatrixWords c1;
-    struct ActorVectorWords c2, c3, c4, c5;
     int temp_s1;
     void *temp_s0;
     void *temp_s2;
@@ -206,29 +200,17 @@ void igActor_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)igAnimationModifierList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)));
-    a5.x = 0; a5.y = 0; a5.z = 0; a5.w = 0x3F800000;
-    a4.x = 0; a4.y = 0; a4.z = 0x3F800000; a4.w = 0;
-    a3.x = 0; a3.y = 0x3F800000; a3.z = 0; a3.w = 0;
-    a2.x = 0x3F800000; a2.y = 0; a2.z = 0; a2.w = 0;
-    igMatrix44f_FromRows((float *)&a1, (igVec4f *)&a2, (igVec4f *)&a3, (igVec4f *)&a4, (igVec4f *)&a5);
-    FUN_0018c640((igMetaField *)temp_s2_7, (const float *)&a1);
+    FUN_0018c640((igMetaField *)temp_s2_7, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                       igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7)))->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8)))->_persistent = 0;
     temp_s2_8 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9)));
-    b5.x = 0; b5.y = 0; b5.z = 0; b5.w = 0x3F800000;
-    b4.x = 0; b4.y = 0; b4.z = 0x3F800000; b4.w = 0;
-    b3.x = 0; b3.y = 0x3F800000; b3.z = 0; b3.w = 0;
-    b2.x = 0x3F800000; b2.y = 0; b2.z = 0; b2.w = 0;
-    igMatrix44f_FromRows((float *)&b1, (igVec4f *)&b2, (igVec4f *)&b3, (igVec4f *)&b4, (igVec4f *)&b5);
-    FUN_0018c640((igMetaField *)temp_s2_8, (const float *)&b1);
+    FUN_0018c640((igMetaField *)temp_s2_8, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                       igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
     ((igMetaField *)temp_s2_8)->_persistent = 0;
     temp_s2_9 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA)));
-    c5.x = 0; c5.y = 0; c5.z = 0; c5.w = 0x3F800000;
-    c4.x = 0; c4.y = 0; c4.z = 0x3F800000; c4.w = 0;
-    c3.x = 0; c3.y = 0x3F800000; c3.z = 0; c3.w = 0;
-    c2.x = 0x3F800000; c2.y = 0; c2.z = 0; c2.w = 0;
-    igMatrix44f_FromRows((float *)&c1, (igVec4f *)&c2, (igVec4f *)&c3, (igVec4f *)&c4, (igVec4f *)&c5);
-    FUN_0018c640((igMetaField *)temp_s2_9, (const float *)&c1);
+    FUN_0018c640((igMetaField *)temp_s2_9, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                       igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
     ((igMetaField *)temp_s2_9)->_persistent = 0;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB)));
     ((Gap::Core::igBoolMetaField *)temp_v0)->setDefault(1);

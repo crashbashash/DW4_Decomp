@@ -122,17 +122,17 @@ void bePadManager_Update(bePadManager *self) {
                 slot = ((bePadData **)pads->_data)[(unsigned short)((unsigned)id >> 1)];
                 slot->_isConnect = connected;
                 if (connected != 0) {
-                    pad->getStick(0, &stick.x, &stick.y);
-                    left.x = stick.x; left.y = stick.y;
+                    pad->getStick(0, &stick[0], &stick[1]);
+                    left = stick;
                     bePadData_UpdateLeftStick(slot, (float *)&left);
-                    pad->getStick(1, &stick.x, &stick.y);
-                    right.x = stick.x; right.y = stick.y;
+                    pad->getStick(1, &stick[0], &stick[1]);
+                    right = stick;
                     bePadData_UpdateRightStick(slot, (float *)&right);
                     bePadData_UpdateButtons(slot, pad->getButtons());
                 } else {
-                    noLeft.x = 0; noLeft.y = 0;
+                    noLeft.set(0.0f, 0.0f);
                     bePadData_UpdateLeftStick(slot, (float *)&noLeft);
-                    noRight.x = 0; noRight.y = 0;
+                    noRight.set(0.0f, 0.0f);
                     bePadData_UpdateRightStick(slot, (float *)&noRight);
                     bePadData_UpdateButtons(slot, 0);
                 }

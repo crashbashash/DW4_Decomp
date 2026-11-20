@@ -51,10 +51,10 @@ void igGuiSystem_SetMouseCursorVisible(igGuiSystem *gui, bool visible) {
         return;
     }
     temp_a0 = ((M_4569c0 *)gui->_mouseCursor)->t;
-    temp_a0->f24 = g_vec4Zero.x;
-    temp_a0->f28 = DAT_004e1174[0];
-    temp_a0->f32 = DAT_004e1178[0];
-    temp_a0->f36 = DAT_004e117c[0];
+    temp_a0->f24 = g_vec4Zero[0];
+    temp_a0->f28 = g_vec4Zero[1];
+    temp_a0->f32 = g_vec4Zero[2];
+    temp_a0->f36 = g_vec4Zero[3];
     temp_a0->vX();
 }
 

@@ -184,10 +184,10 @@ void FUN_00190d80(float *m, const ScaleVec &v) {
 
 void FUN_00190e50(void *arg0, const float *arg1, float fparg0) {
     FUN_00190f50((float *)arg0, arg1, fparg0);
-    *(float *)((char *)(arg0) + 48) = (float) g_vec4WAxis.x;
-    *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis.y;
-    *(float *)((char *)(arg0) + 56) = (float) g_vec4WAxis.z;
-    *(float *)((char *)(arg0) + 60) = (float) g_vec4WAxis.w;
+    *(float *)((char *)(arg0) + 48) = (float) g_vec4WAxis[0];
+    *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis[1];
+    *(float *)((char *)(arg0) + 56) = (float) g_vec4WAxis[2];
+    *(float *)((char *)(arg0) + 60) = (float) g_vec4WAxis[3];
     *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero[0];
     *(float *)((char *)(arg0) + 28) = (float) g_vec3Zero[1];
     *(float *)((char *)(arg0) + 44) = (float) g_vec3Zero[2];
@@ -195,10 +195,10 @@ void FUN_00190e50(void *arg0, const float *arg1, float fparg0) {
 
 void igMatrix44f_MakeEulerRotation(void *arg0, float x, float y, float z) {
     igMatrix44f_SetEulerRotation((float *)arg0, x, y, z);
-    *(float *)((char *)(arg0) + 48) = (float) g_vec4WAxis.x;
-    *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis.y;
-    *(float *)((char *)(arg0) + 56) = (float) g_vec4WAxis.z;
-    *(float *)((char *)(arg0) + 60) = (float) g_vec4WAxis.w;
+    *(float *)((char *)(arg0) + 48) = (float) g_vec4WAxis[0];
+    *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis[1];
+    *(float *)((char *)(arg0) + 56) = (float) g_vec4WAxis[2];
+    *(float *)((char *)(arg0) + 60) = (float) g_vec4WAxis[3];
     *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero[0];
     *(float *)((char *)(arg0) + 28) = (float) g_vec3Zero[1];
     *(float *)((char *)(arg0) + 44) = (float) g_vec3Zero[2];
@@ -323,10 +323,10 @@ void igMatrix44f_PostRotateAxisAngle(float *matrix, const float *axis, float ang
 
 void FUN_001916f0(void *arg0, float *arg1) {
     igMatrix44f_SetQuaternion((float *)arg0, arg1);
-    *(float *)((char *)(arg0) + 48) = (float) g_vec4WAxis.x;
-    *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis.y;
-    *(float *)((char *)(arg0) + 56) = (float) g_vec4WAxis.z;
-    *(float *)((char *)(arg0) + 60) = (float) g_vec4WAxis.w;
+    *(float *)((char *)(arg0) + 48) = (float) g_vec4WAxis[0];
+    *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis[1];
+    *(float *)((char *)(arg0) + 56) = (float) g_vec4WAxis[2];
+    *(float *)((char *)(arg0) + 60) = (float) g_vec4WAxis[3];
     *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero[0];
     *(float *)((char *)(arg0) + 28) = (float) g_vec3Zero[1];
     *(float *)((char *)(arg0) + 44) = (float) g_vec3Zero[2];

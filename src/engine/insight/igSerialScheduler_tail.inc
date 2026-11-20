@@ -98,10 +98,10 @@ SharedViewerOptions *igViewerDefaults_Construct(SharedViewerOptions *self) {
     self->headLightSpecular[1] = 1.0f;
     self->headLightSpecular[2] = 1.0f;
     self->headLightSpecular[3] = 1.0f;
-    self->headLightAmbient[0] = g_vec4Zero.x;
-    self->headLightAmbient[1] = g_vec4Zero.y;
-    self->headLightAmbient[2] = g_vec4Zero.z;
-    self->headLightAmbient[3] = g_vec4Zero.w;
+    self->headLightAmbient[0] = g_vec4Zero[0];
+    self->headLightAmbient[1] = g_vec4Zero[1];
+    self->headLightAmbient[2] = g_vec4Zero[2];
+    self->headLightAmbient[3] = g_vec4Zero[3];
     self->clearColor[0] = 0.2f;
     self->clearColor[1] = 0.2f;
     self->clearColor[2] = 0.2f;

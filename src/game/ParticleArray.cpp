@@ -333,15 +333,15 @@ int ParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int off
         if (*constantsWritten == 0 || isAnimated((igGfxParticleCoord)particleFormat(self)->_textureCoord)) {
             texCoord0 = particle->texCoord0 + particle->texCoord0Velocity * age + particle->texCoord0Acceleration * age2;
             float count = self->_xImageCount;
-            if (!(count <= 1.0f)) texCoord0.x -= fmod(texCoord0.x, 1.0f / count);
+            if (!(count <= 1.0f)) texCoord0[0] -= fmod(texCoord0[0], 1.0f / count);
             count = self->_yImageCount;
-            if (!(count <= 1.0f)) texCoord0.y -= fmod(texCoord0.y, 1.0f / count);
+            if (!(count <= 1.0f)) texCoord0[1] -= fmod(texCoord0[1], 1.0f / count);
             pointSprite(self)->setTexCoord(0, i, &texCoord0);
             texCoord1 = particle->texCoord1 + particle->texCoord1Velocity * age + particle->texCoord1Acceleration * age2;
             count = self->_xImageCount;
-            if (!(count <= 1.0f)) texCoord1.x -= fmod(texCoord1.x, 1.0f / count);
+            if (!(count <= 1.0f)) texCoord1[0] -= fmod(texCoord1[0], 1.0f / count);
             count = self->_yImageCount;
-            if (!(count <= 1.0f)) texCoord1.y -= fmod(texCoord1.y, 1.0f / count);
+            if (!(count <= 1.0f)) texCoord1[1] -= fmod(texCoord1[1], 1.0f / count);
             pointSprite(self)->setTexCoord(1, i, &texCoord1);
         }
     }

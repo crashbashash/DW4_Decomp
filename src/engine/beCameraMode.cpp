@@ -705,7 +705,7 @@ void igPickMode_Update(igPickMode *pickMode, float seconds) {
     float dx = pickMode->_joystickT[0];
     float dy = pickMode->_joystickT[1];
     ViewModelEvent event;
-    bool moving = dx != g_vec2Zero.x || dy != g_vec2Zero.y;
+    bool moving = dx != g_vec2Zero[0] || dy != g_vec2Zero[1];
 
     if (moving) {
         dx *= seconds;

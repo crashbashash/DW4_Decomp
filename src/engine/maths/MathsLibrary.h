@@ -798,7 +798,6 @@ typedef struct S6 { float f0; char p4[28]; float f32; float f36; float f40; char
 struct CurvePoint4 { float x, y, z, w; };
 
 
-typedef struct Color4f { float x, y, z, w; } Color4f;
 #define BYTE_TO_UNIT(packed, mask, shift) ((float)(((packed) & (mask)) >> (shift)) / 255.0f)
 
 

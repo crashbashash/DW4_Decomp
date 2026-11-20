@@ -433,7 +433,7 @@ void igViewerRenderer_resetFields(igViewerRenderer *self) {
     ((igAlphaFunctionAttrDispatchView *)alphaFunction.p)->SetAlphaFunc(IG_GFX_ALPHA_FUNCTION_GREATER);
     ((igAlphaFunctionAttrDispatchView *)alphaFunction.p)->SetRefValue(options->alphaTestReference);
     ((igLightAttrDispatchView *)self->_headlightAttr)->setDiffuse(options->headLightDiffuse);
-    ((igLightAttrDispatchView *)self->_headlightAttr)->setSpecular((const float *)&g_vec4Zero);
+    ((igLightAttrDispatchView *)self->_headlightAttr)->setSpecular(g_vec4Zero.vec);
     ((igLightAttrDispatchView *)self->_headlightAttr)->setAmbient(options->headLightAmbient);
     direction[0] = -g_vec3ZAxis[0];
     direction[1] = -g_vec3ZAxis[1];
@@ -648,7 +648,7 @@ void igViewerRenderer_UpdateLighting(igViewerRenderer *self) {
                 }
             }
         } else {
-            ((igLightAttrDispatchView *)self->_headlightAttr)->setSpecular((const float *)&g_vec4Zero);
+            ((igLightAttrDispatchView *)self->_headlightAttr)->setSpecular(g_vec4Zero.vec);
         }
     } else {
         ((igLightStateAttrDispatchView *)self->_headlightStateAttr)->SetState(0);

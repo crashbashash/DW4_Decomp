@@ -412,8 +412,8 @@ int igPsx2VisualContext_GetClearColorPacked(igPsx2VisualContext *self) {
     return (temp_a1 & 0xFFFFFF) | (temp_a0 + (((temp_a1 & 0xFF000000) - temp_a0) * 2));
 }
 
-void igPsx2VisualContext_GetClearColor(Obj179 *arg0, void *arg1) {
-    Color4f_Unpack((Color4f *)arg1, 1, arg0->f896);
+void igPsx2VisualContext_GetClearColor(igPsx2VisualContext *self, igVec4f *color) {
+    Color4f_Unpack(color, 1, self->_uiClearColor);
 }
 
 void igPsx2VisualContext_SetClearDepth(igPsx2VisualContext *self, float fparg0) {

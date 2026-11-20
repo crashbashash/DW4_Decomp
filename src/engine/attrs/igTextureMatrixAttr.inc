@@ -85,38 +85,17 @@ static int g_igTextureMatrixAttr_fieldOffsets[] = {
 };
 
 void igTextureMatrixAttr_InitFields(void) {
-    struct M o1;
     int base;
-    struct V o2;
-    struct V o3;
     struct Fld *fld;
     void *field;
-    struct V o4;
-    struct V o5;
     igMetaObject *meta;
 
     meta = g_igTextureMatrixAttr_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igTextureMatrixAttr_ctorTable, 4);
     field = igMetaObject_GetFieldAt(meta, base);
-    o5.x = 0;
-    o5.y = 0;
-    o5.z = 0;
-    o5.w = 0x3F800000;
-    o4.x = 0;
-    o4.y = 0;
-    o4.z = 0x3F800000;
-    o4.w = 0;
-    o3.x = 0;
-    o3.y = 0x3F800000;
-    o3.z = 0;
-    o3.w = 0;
-    o2.x = 0x3F800000;
-    o2.y = 0;
-    o2.z = 0;
-    o2.w = 0;
-    igMatrix44f_FromRows((float *)&o1, (igVec4f *)&o2, (igVec4f *)&o3, (igVec4f *)&o4, (igVec4f *)&o5);
-    FUN_0018c640((igMetaField *)field, (const float *)&o1);
+    FUN_0018c640((igMetaField *)field, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                   igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
     fld = (Fld *)igMetaObject_GetFieldAt(meta, base + 1);
     ((igMetaField *)fld)->_invarianceFunction = (int)igTextureMatrixAttr_SynchronizeCachedUnitID;
     ((Gap::Core::igShortMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(-1);
