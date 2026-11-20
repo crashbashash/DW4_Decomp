@@ -20418,10 +20418,11 @@ namespace Gap {
 namespace Core {
 /* handle 0x587198, 2 field(s), sizeof 8 (registered instance size) */
 class igObject {
-public:
+protected:
     igObject();
     igObject(bool bootstrap);
     igObject(const igObject &other);
+public:
     static void *operator new(unsigned int size, void *memory, void *unused) { return memory; }
     static void operator delete(void *memory) { Memory_FreeBufferAliasC(memory); }
     virtual void destruct();
@@ -20445,7 +20446,9 @@ public:
     virtual void userMakeConcrete(igMetaObject *meta);
     virtual igObject *cloneViaMetadata(int copyMode);
     inline virtual igMetaObject *getMeta() const { return _Meta; }
+protected:
     static igMetaObject *_Meta;
+public:
     static void arkRegister();
     static CallbackArray *arkRegisterInternal();
     static inline igMetaObject *getClassMeta() { return _Meta; }
@@ -20477,7 +20480,9 @@ class igRenderer : public Gap::Core::igObject {
 public:
     igSmartPointer<igVisualContext> _visualContext; /* +8    igObjectRefMetaField */
     IG_ABSTRACT_OBJECT_DEFINE(igRenderer)
+protected:
     static igMetaField *k_visualContext;
+public:
     void setVisualContext(igVisualContext *context);
     virtual void initializeDrawing() = 0;
     virtual void terminateDrawing() = 0;
@@ -20494,7 +20499,9 @@ class igClearRenderer : public Gap::Gui::igRenderer {
 public:
     unsigned int _buffersToClear;                  /* +12   igUnsignedIntMetaField */
     IG_OBJECT_DEFINE(igClearRenderer)
+private:
     static igMetaField *k_buffersToClear;
+public:
     virtual void traverse() {}
     virtual void initializeDrawing();
     virtual void terminateDrawing() {}

@@ -52,9 +52,11 @@ its row unchanged and a conversion's row diff is what the conversion changed (st
   * the static initializer's entry is theirs when the file's initializer fits several table entries;
   * retail functions of the range no compiled function reproduces, none of which they placed, link from retail
     as they did (the run is `--partial` without saying so); one they placed stops the run, a wrong compile;
-  * a `data` or `externals` name they listed stays while the object still names it, one they left out that binds
-    without a row (data-names.tsv, symbols.txt, the compiler-name map) stays out, a name gone from the object
-    goes; the owner's `symbol` they wrote stays; a field with their content keeps their order.
+  * a `data` or `externals` name they listed stays in its place while it still binds at its address (the object
+    names it, or symbols.txt, data-names.tsv, the compiler-name map, another unit's row or the address in the name
+    binds it), so a caller whose code changed only at call sites keeps its row; one they left out that binds
+    without a row (the same tables, less the other rows) stays out; a new one follows theirs; their `anon`
+    addresses stay; the owner's `symbol` they wrote stays; a field with their content keeps their order.
 
 `--drop` keeps a function out of the
 range when it fits a start another function owns: stock `lua_dofile` and `lua_dobuffer` fit one retail start,
@@ -631,13 +633,15 @@ def merge_rows(overlay, lo, hi, rows):
     return overlay
 
 
-def overlay_addresses(path):
+def overlay_addresses(path, skip=()):
     """{name: retail address} of the data the rows of unit-objects.json name, where every row naming it
-    agrees; a section symbol (`@data`) is each object's own and is left out."""
+    agrees; a section symbol (`@data`) is each object's own and is left out, and so are the rows `skip` keys."""
     seen = collections.defaultdict(set)
     with open(path) as fh:
         rows = json.load(fh)
-    for row in rows.values():
+    for key, row in rows.items():
+        if key in skip:
+            continue
         for name, address in row.get("data", {}).items():
             if not name.startswith("@"):
                 seen[name].add(int(address, 0))
@@ -676,34 +680,45 @@ def settled_partial(missing, previous):
     return not any(va in covered for va in missing)
 
 
-def stable_row(row, old, owner, syms, resolves):
+def stable_row(row, old, owner, syms, resolves, elsewhere=None):
     """`row` as the range's previous row `old` spelled what still holds, so that a regenerated row differs from
-    it only where the compile changed:
+    it only where the compile changed (a unit whose code changed only at call sites keeps its row):
 
-      data, externals  an entry `old` had keeps its name and address while the object still has that name
-                       (defines or references it); an entry `old` had not, for a name the object does not
-                       define and `resolves(name)` binds at the same address without a row (data-names.tsv,
-                       symbols.txt, the compiler-name map), stays out as before; an entry whose name is gone
-                       from the object goes
+      data, externals  an entry `old` had stays, in `old`'s order, while its name still binds at its address:
+                       the object has the name (at a new address the entry takes it), or it binds there without
+                       this row (`resolves(name)`: symbols.txt, data-names.tsv, the compiler-name map, the address
+                       an address-bearing name spells; `elsewhere`, {name: address} another unit's row binds); an
+                       entry `old` had not, for a name the object does not define and `resolves(name)` binds at
+                       the same address without a row, stays out as before; the other new entries follow `old`'s
+                       in name order
+      anon             `old`'s addresses stay, in `old`'s order (an address binds itself); new ones follow
       symbol           the `symbol` `old` wrote for the owner (`owner`, its compiled name) stays
-    the fields in `old`'s order, and a field with `old`'s content in `old`'s order (a list it did not sort). Without
-    `old`, `row` as it is."""
+    the fields in `old`'s order, a field `old` had empty kept, and a field with `old`'s content in `old`'s order (a
+    list it did not sort). Without `old`, `row` as it is."""
     if old is None:
         return row
+    elsewhere = elsewhere or {}
     out = dict(row)
     for field in ("data", "externals"):
         new, before = dict(row.get(field) or {}), old.get(field) or {}
-        for name, va in list(new.items()):
-            defined = isinstance(syms.get(name, (None,))[0], int)
-            if name not in before and not defined and resolves(name) == int(va, 16):
-                del new[name]
+        kept = {}
         for name, va in before.items():
-            if name not in new and name in syms:
-                new[name] = va
-        if new:
-            out[field] = dict(sorted(new.items()))
+            if name in new:
+                kept[name] = new[name]
+            elif name in syms or int(va, 16) in (resolves(name), elsewhere.get(name)):
+                kept[name] = va
+        for name, va in sorted(new.items()):
+            defined = isinstance(syms.get(name, (None,))[0], int)
+            if name not in kept and (defined or resolves(name) != int(va, 16)):
+                kept[name] = va
+        if kept or field in old:
+            out[field] = kept
         else:
             out.pop(field, None)
+    if old.get("anon") is not None:
+        anon = list(old["anon"])
+        anon += [va for va in row.get("anon") or () if va not in anon]
+        out["anon"] = anon
     if "symbol" not in out and old.get("symbol") == owner:
         out["symbol"] = owner
     for field, value in out.items():
@@ -788,19 +803,22 @@ def main(argv=None):
         for row in previous.values():
             a.drop.extend(name for name in row.get("stripped") or () if name not in forced)
     placed.update(forced)
-    data_names = verify.data_symbols(os.path.join(a.config, "symbols.txt"))
+    symbols_path = os.path.join(a.config, "symbols.txt")
 
     def resolves(name):
-        """The address a name binds at with no row of this unit's: a symbols.txt function, a data-names.tsv
-        datum, a compiler name another unit's row binds."""
+        """The address a name binds at with no row of this unit's: a symbols.txt function, a compiler name another
+        unit's row binds, a data-names.tsv datum, the address an address-bearing name spells (`DAT_0056df30`), as
+        verify.sym_address resolves it."""
         for table in (by_name, mapped):
             if name in table:
                 return table[name][0]
-        return data_names.get(name)
+        return verify.spelled_address(name, symbols_path)
 
     references = dict(item.split("=", 1) for item in a.reference)
     # the retail address of each datum other files name, for a file the linker kept the data of only
     addresses = overlay_addresses(os.path.join(a.config, "unit-objects.json"))
+    # the data the other units' rows bind: a name the present row spelled still binds while one of them does
+    elsewhere = overlay_addresses(os.path.join(a.config, "unit-objects.json"), skip=set(previous))
     rows, spans, data_spans, names, owned = {}, [], [], {}, {}
     with tempfile.TemporaryDirectory(prefix="dw4-whole-file-rows-") as tmp:
         compiled = []
@@ -865,7 +883,7 @@ def main(argv=None):
                 # a mangled owner, or a `static` several files define that symbols.txt names apart
                 row["symbol"] = members[0][1]
             key = "0x%08x" % members[0][0]
-            row = stable_row(row, previous.get(key), members[0][1], syms, resolves)
+            row = stable_row(row, previous.get(key), members[0][1], syms, resolves, elsewhere)
             rows[key] = row
             # the file's code ends with its last `.text` member; its `.init` sits after all `.text`
             last = max((va, name) for va, name in members if name != initializer)

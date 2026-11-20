@@ -13,11 +13,15 @@ Three `#`-commented TSV tables drive `scripts/gen_type_headers.py`, which writes
 | Table | Row | Effect |
 | --- | --- | --- |
 | `config/converted-classes.tsv` | `<class> <library namespace>` | the class is declared as `namespace Gap { namespace <library> { class <class> : public <parent> … } }` after the flat structs, and promoted into `Gap` with `using` |
-| `config/class-members.tsv` | `<class> <declaration>` | the class's members in table order: object macros, `k_<field>` handles, kit inlines (`igMetaObject::isValid`), member functions, virtual slots |
+| `config/class-members.tsv` | `<class> <declaration>` | the class's members in table order: object macros, `k_<field>` handles, kit inlines (`igMetaObject::isValid`), member functions, virtual slots; each in the kit header's access (`protected: igObject();`, unlabelled is public), a section opening where the access changes |
 | `config/typed-fields.tsv` | `<class> <field> <C++ type>` | an object-reference field typed under C++ (`igSmartPointer<igVisualContext>`); C keeps the reference word |
 
 A converted class's parent must be converted too. A converted class declares only its own fields, at their
-reflected offsets after its parent's registered size, and then its member rows.
+reflected offsets after its parent's registered size, and then its member rows. Access follows the kit header
+(owner ruling 6): igObject's constructors and `_Meta` are protected, igRenderer's `k_visualContext` protected,
+igClearRenderer's `k_buffersToClear` private; the fields stay public, since C code reads them as data. Code outside
+a class reads a protected `_Meta` through the public `getClassMeta()`, as igen's code does
+(`Gap::Core::igObject::getClassMeta()`), which compiles to the same load.
 
 ## The root
 
@@ -101,9 +105,14 @@ and `copy`, `copyShallow`, `isAlikeExactly`, `traverseFields`, `getIoSize`, `pri
   scope) compile to the same code; `tools/memberize.py --respell --apply` moves them into their namespaces.
 - A destructor a class declares out of line, and a constructor whose C form constructs its base after other
   statements, are written by hand.
-- `tools/memberize.py` reads the flat struct `igObject` and the class `Gap::Core::igObject` as one type: a caller
-  passing an uncast flat pointer as the receiver (`igObject_Reallocate(m, …)`) or as an `igObject *` argument
-  (`igObject_Copy(a, (igObject *)b, 1)`), and a converted body passing `this` to a C name taking the flat struct,
-  are written without the cast they need (`((Gap::Core::igObject *)m)->realloc(…)`, `(::igObject *)this`) and
-  fixed by hand. A C form taking a reference where the member takes one (`igObject(const igObject &)`) is
-  refused and written by hand.
+- The flat struct `igObject` and the class `Gap::Core::igObject` are two types of one name, and
+  `tools/memberize.py` writes the casts between them: a receiver or a `Class *` argument declared as the flat struct
+  (or a flat subclass, or not declared) is cast to the Gap class (`((Gap::Core::igObject *)m)->realloc(…)`,
+  `->copy((Gap::Core::igObject *)g_x, 1)`, `igObject` alone in Gap's scope), a cast of `this` to the flat struct
+  passed to a Gap parameter goes, and a body moving into the class keeps what its types meant: its bare receiver
+  passed on is `(::igObject *)this`, and every other bare `igObject` in it `::igObject`. A C form taking a reference
+  where the member takes one (`igObject(const igObject &)`) is refused and written by hand.
+- `tools/whole_file_rows.py` keeps a caller unit's row as it was where the compile did not change it: an entry
+  stays in its place while its name still binds at its address (the object names it, or symbols.txt,
+  data-names.tsv, the compiler-name map, another unit's row or the address in the name binds it), so stale aliases
+  (`DAT_004fb410` beside `g_resultSuccess`) stay until their name stops binding.

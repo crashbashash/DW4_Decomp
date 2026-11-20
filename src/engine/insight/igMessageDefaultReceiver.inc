@@ -102,7 +102,7 @@ void igMessageDefaultReceiver_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igMessageDefaultReceiver_ctorTable, 2);
     p = (char *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1);
-    *(int *)(p + 56) = (int)Gap::Core::igObject::_Meta;
+    *(int *)(p + 56) = (int)Gap::Core::igObject::getClassMeta();
     p = (char *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1);
     *(short *)(p + 20) = 0xC;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igMessageDefaultReceiver_fieldTable, g_igMessageDefaultReceiver_fieldHandles, g_igMessageDefaultReceiver_fieldOffsets, temp_s1);

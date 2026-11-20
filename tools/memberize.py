@@ -21,7 +21,9 @@ For each conversion, across every source, header and `.inc` fragment of src/ and
     is a field or member of the class (`this->field` where a parameter or local of that name hides it) and the
     receiver's declared type reads it with the same type; any other `self->x` becomes `((T *)this)->x` for a
     receiver declared as some other type `T` (a dispatch view), else `this->x`; a bare `self` becomes `this`
-    (cast to `T *` where it was declared as `T`). A receiver the body assigns or takes the address of is
+    (cast to `T *` where it was declared as `T`, to `::Class *` where it was the flat struct of a converted class,
+    except returned). A converted class's body moving in from file scope keeps what its types meant: a bare
+    `Class` there was the flat struct and becomes `::Class`. A receiver the body assigns or takes the address of is
     refused. A C function whose parameters already equal the member's (an instance member whose receiver was
     unused) keeps its list. A member the class defines inline (its declaration has a body) loses the C
     definition instead. A class of config/converted-classes.tsv is `Gap::<Library>::Class` (the table may name it
@@ -42,8 +44,11 @@ For each conversion, across every source, header and `.inc` fragment of src/ and
   * calls and uses in C++: inside a member function of the class the bare `name(...)`; a static member elsewhere
     `Class::name(...)` (and `Class::name` as a value); an instance call `C_name(obj, a)` becomes `obj->name(a)`,
     the receiver cast to the class (`((Class *)expr)->name(a)`) unless it is declared as the class or one of its
-    subclasses (`obj->name(a)`), `&x` becomes `x.name(a)`, and a call on the function's own receiver inside a
-    member of the class is the bare `name(a)`;
+    subclasses (`obj->name(a)`), `&x` becomes `x.name(a)` (`((Class *)&x)->name(a)` for a converted class), and a
+    call on the function's own receiver inside a member of the class is the bare `name(a)`. For a converted class
+    the flat struct of the same name is another type: a receiver declared as it (or a flat subclass) is cast to
+    the Gap class too (`Class` alone in Gap's scope), and so is an argument for a `Class *` parameter that is not
+    declared as the Gap class or a Gap subclass, while a cast of `this` to the flat struct passed there goes;
   * a virtual function (its class-members.tsv row says `virtual`) called by its C name runs that implementation,
     not the object's override, so it never becomes `obj->name(a)`: a call on `this` inside a member of the class
     or a subclass becomes the qualified `Class::name(a)`, and every other use keeps the C name, with its
@@ -193,8 +198,8 @@ _SIGNATURE = re.compile(r"^(?P<lead>(?:static\s+|inline\s+|virtual\s+)*)(?P<ret>
 
 def declares_virtual(rows, name):
     """Whether class-members.tsv rows declare a function `name` virtual."""
-    return any(re.match(r"(?:inline\s+)?virtual\b", row) and re.search(r"[\s*&]%s\s*\(" % re.escape(name), row)
-               for row in rows)
+    return any(re.match(r"(?:(?:public|protected|private)\s*:\s*)?(?:inline\s+)?virtual\b", row) and
+               re.search(r"[\s*&]%s\s*\(" % re.escape(name), row) for row in rows)
 
 
 def conversions(rows, members, macros, types):
@@ -362,7 +367,8 @@ class Classes:
 # ---- one file ---------------------------------------------------------------------------------------
 _ARROW = re.compile(r"\s*->\s*([A-Za-z_]\w*)")
 _ASSIGNED = re.compile(r"\s*(?:=(?!=)|\+\+|--|[-+*/%&|^]=|<<=|>>=)")
-_CAST = re.compile(r"^\(\s*(?:struct\s+|class\s+)?([A-Za-z_][\w:]*)\s*\*\s*\)\s*(.+)$", re.S)
+_CAST = re.compile(r"^\(\s*(?:struct\s+|class\s+)?((?:::\s*)?[A-Za-z_][\w:]*)\s*\*\s*\)\s*(.+)$", re.S)
+_CAST_AT = re.compile(r"\(\s*(?:struct\s+|class\s+)?((?:::\s*)?[A-Za-z_][\w:]*)\s*\*\s*\)")
 _POSTFIX = re.compile(r"^[A-Za-z_]\w*(?:\s*(?:->|\.)\s*[A-Za-z_]\w*|\s*\[[^\[\]]*\])*$")
 _MEMBER_HEAD = re.compile(r"([A-Za-z_][\w:]*)\s*::\s*~?[A-Za-z_]\w*\s*\($")
 
@@ -402,9 +408,15 @@ def _split_args(text):
 
 
 def _declared_type(ident, text):
-    """The class a pointer `ident` is declared as in `text` (a function's head and body), or None."""
-    m = re.search(r"\b(?:struct\s+|class\s+)?([A-Za-z_]\w*)\s*\*\s*%s\b\s*[,;=)\[]" % re.escape(ident), text)
-    return m.group(1) if m else None
+    """The class a pointer `ident` is declared as in `text` (a function's head and body), as spelled
+    (`igObject`, `::igObject`, `Gap::Core::igObject`), or None."""
+    m = re.search(r"(?:\b(?:struct|class)\s+)?((?:::\s*)?(?:[A-Za-z_]\w*\s*::\s*)*[A-Za-z_]\w*)\s*\*\s*%s\b\s*[,;=)\[]"
+                  % re.escape(ident), text)
+    return re.sub(r"\s+", "", m.group(1)) if m else None
+
+
+def _base_name(spelled):
+    return spelled.rsplit("::", 1)[-1]
 
 
 class FileRewrite:
@@ -416,6 +428,8 @@ class FileRewrite:
         self.defs = units.definitions(text)
         self.edits = []                                # (start, end, replacement)
         self.deletes = []                              # (start, end) of whole lines
+        self.gap_blocks = [(m.end(), units._match_brace(self.clean, m.end() - 1))
+                           for m in re.finditer(r"\bnamespace\s+Gap\s*\{", self.clean)]
 
     def enclosing(self, pos):
         for name, start, end in self.defs:
@@ -492,6 +506,7 @@ class Planner:
         self.base_ctors = {}                            # C name -> class of the constructor it is
         self.boundary = {}                              # C name -> files whose declaration of it stays
         self.comment_names = []                         # (file, start, end, conversion) of a C name in a comment
+        self.converted = {}                              # class -> library namespace (converted-classes.tsv)
 
     def qual(self, conv, inside):
         """How code names a member: bare inside a member of its class, else qualified."""
@@ -507,6 +522,71 @@ class Planner:
         p = declarations._first_paren(head)
         m = _MEMBER_HEAD.search(re.sub(r"\s+", " ", head[:p + 1])) if p >= 0 else None
         return m.group(1) if m else None
+
+    # A converted class has two types of one name: the flat struct `igObject` (the C view, at file scope) and the
+    # class `Gap::Core::igObject`. Neither converts to the other, so where the conversion moves a pointer from one
+    # to the other it writes the cast the source then needs.
+    def gap_scope(self, fr, pos, ctx=None):
+        """Whether an unqualified class name at `pos` finds a Gap class: inside a `namespace Gap {` block or the
+        body of a member of a Gap class (`T Gap::Core::igObject::f(...) {`)."""
+        if any(s <= pos < e for s, e in fr.gap_blocks):
+            return True
+        inside = self.member_class_of(fr, ctx if ctx is not None else fr.enclosing(pos))
+        return bool(inside and re.match(r"(?:::)?Gap::", inside))
+
+    def gap_class(self, spelled, gap):
+        """The converted class a declared type names (`Gap::Core::igObject`, or bare `igObject` where `gap`), or
+        None for a flat struct (`::igObject`, a bare name at file scope) or a class not converted."""
+        if not spelled:
+            return None
+        spelled = re.sub(r"\s+", "", spelled)
+        base = _base_name(spelled)
+        if base not in self.converted:
+            return None
+        if re.match(r"(?:::)?Gap::", spelled):
+            return base
+        return base if gap and not spelled.startswith("::") else None
+
+    def spell(self, cls, gap):
+        """How code at a place names converted class `cls` (bare): bare in Gap's scope, else qualified."""
+        return cls if gap or cls not in self.converted else "Gap::%s::%s" % (self.converted[cls], cls)
+
+    def gap_receiver(self, conv, inside, gap):
+        """Whether `this` in the member function enclosing a use is a `conv` object of the Gap class."""
+        return inside is not None and self.classes.derives(_base_name(inside), conv.base) and \
+            (gap or not conv.cls.startswith("Gap::"))
+
+    def gap_argument(self, fr, span, cls, ctx, inside, gap):
+        """Edits giving an argument passed for a parameter `cls *` (a converted class) that type: a flat pointer
+        (cast to the flat struct, or declared as one) is cast to the Gap class; a cast of `this` drops where `this`
+        is already one."""
+        s, e = span
+        while s < e and fr.clean[s] == "(" and declarations._close(fr.clean, s) == e - 1:
+            s, e = s + 1, e - 1                          # (x): the expression inside
+        expr = fr.text[s:e].strip()
+        cast = _CAST_AT.match(fr.clean, s)
+        if cast:
+            if self.gap_class(cast.group(1), gap) is not None:
+                return
+            rest = _strip_parens(fr.text[cast.end():e])
+            if rest == "this" and self.classes.derives(_base_name(inside or ""), cls) and gap:
+                fr.edits.append((s, e, "this"))
+            else:
+                fr.edits.append((cast.start(), cast.end(), "(%s *)" % self.spell(cls, gap)))
+            return
+        if expr in ("0", "NULL", "nullptr"):
+            return
+        if expr == "this" and inside is not None and gap and self.classes.derives(_base_name(inside), cls):
+            return
+        if re.fullmatch(r"[A-Za-z_]\w*", expr) and ctx is not None:
+            declared = self.gap_class(_declared_type(expr, fr.text[ctx[1]:ctx[2]]), gap)
+            if declared is not None and self.classes.derives(declared, cls):
+                return
+        if _POSTFIX.match(expr):
+            fr.edits.append((s, s, "(%s *)" % self.spell(cls, gap)))
+        else:
+            fr.edits.append((s, s, "(%s *)(" % self.spell(cls, gap)))
+            fr.edits.append((e, e, ")"))
 
     def plan_file(self, fr):
         c_side, cxx_side = c_reads(self.index, fr.rel), cxx_reads(self.index, fr.rel)
@@ -577,10 +657,17 @@ class Planner:
                                % (fr.rel, fr.text.count("\n", 0, pos) + 1, conv.cname, len(spans), conv.qualified,
                                   len(conv.params)))
             return
-        receiver = self.receiver(fr, conv, fr.text[spans[0][0]:spans[0][1]], ctx, inside)
-        # the receiver and the name are replaced; the other arguments keep their text (and their own edits)
+        gap = self.gap_scope(fr, pos, ctx)
+        receiver = self.receiver(fr, conv, fr.text[spans[0][0]:spans[0][1]], ctx, inside, gap)
+        # the receiver and the name are replaced; the other arguments keep their text (and their own edits), cast
+        # to a converted class's Gap type where a parameter is a pointer to one
         stop = spans[1][0] if len(spans) > 1 else close
         fr.edits.append((pos, stop, (receiver or "") + conv.name + "("))
+        if conv.cls.startswith("Gap::"):
+            for span, param in zip(spans[1:], conv.params):
+                pointee = re.fullmatch(r"([A-Za-z_]\w*)(?: const)?\*", param or "")
+                if pointee and pointee.group(1) in self.converted:
+                    self.gap_argument(fr, span, pointee.group(1), ctx, inside, gap)
 
     def plan_special_use(self, fr, conv, pos, end, after, ctx):
         """A call of a constructor's or destructor's C name. The calls a converted subclass's constructor made of
@@ -643,26 +730,31 @@ class Planner:
                 else:
                     fr.deletes.append(span)
 
-    def receiver(self, fr, conv, expr, ctx, inside):
+    def receiver(self, fr, conv, expr, ctx, inside, gap):
         """The object expression with its `->`/`.` for an instance call, or None for a bare call (the enclosing
-        member's own `this`, its class or a subclass of it being the member's)."""
+        member's own `this`, its class or a subclass of it being the member's). A converted class's receiver is
+        cast to its Gap class unless it is declared as that class or a Gap subclass: a flat struct pointer (the C
+        view of the same name) is another type."""
+        gap_conv = conv.cls.startswith("Gap::")
+        cls = self.spell(conv.base, gap) if gap_conv else conv.cls
         e = _strip_parens(expr)
         cast = _CAST.match(e)
         bare = _strip_parens(cast.group(2)) if cast else e
-        if bare == "this" and inside is not None and self.classes.derives(inside.rsplit("::", 1)[-1], conv.base):
+        if bare == "this" and self.gap_receiver(conv, inside, gap):
             return None
-        if e == "this":
+        if e == "this" and not gap_conv:
             return "this->"
         if cast:
             inner = bare if _POSTFIX.match(bare) else "(%s)" % bare
-            return "((%s *)%s)->" % (conv.cls, inner)
+            return "((%s *)%s)->" % (cls, inner)
         if e.startswith("&") and _POSTFIX.match(e[1:].strip()):
-            return e[1:].strip() + "."
+            return ("((%s *)&%s)->" % (cls, e[1:].strip())) if gap_conv else e[1:].strip() + "."
         if re.fullmatch(r"[A-Za-z_]\w*", e):
             declared = _declared_type(e, fr.text[ctx[1]:ctx[2]])
-            if declared and self.classes.derives(declared, conv.base):
+            base = self.gap_class(declared, gap) if gap_conv else declared and _base_name(declared)
+            if base and self.classes.derives(base, conv.base):
                 return e + "->"
-        return "((%s *)%s)->" % (conv.cls, e if _POSTFIX.match(e) else "(%s)" % e)
+        return "((%s *)%s)->" % (cls, e if _POSTFIX.match(e) else "(%s)" % e)
 
     def def_params(self, fr, ctx):
         """[(declared type, name)] of a definition's parameters."""
@@ -797,8 +889,25 @@ class Planner:
         new_head = "%s%s%s(%s)%s%s%s" % (ret, "" if ret.endswith(("*", "&")) or not ret else " ", conv.qualified,
                                          plist, " const" if conv.const else "", initializer, head[close + 1:])
         fr.edits.append((start, brace, new_head))
+        if conv.cls.startswith("Gap::") and not self.gap_scope(fr, start, ctx):
+            self.keep_flat_names(fr, brace, end)
         if receiver is not None:
             self.rewrite_receiver(fr, conv, ctx, receiver, head[p + 1:close])
+
+    def keep_flat_names(self, fr, start, end):
+        """A body moving from file scope into a Gap class keeps what its types meant: a bare converted class's name
+        there was the flat struct (`(igObject *)x`), and inside the class it would be the Gap class, so it becomes
+        `::igObject`."""
+        if not self.converted:
+            return
+        names = re.compile(r"\b(?:%s)\b" % "|".join(re.escape(n) for n in sorted(self.converted, key=len,
+                                                                                  reverse=True)))
+        for m in names.finditer(fr.clean, start, end):
+            p = m.start()
+            if re.search(r"(?:::|\.|->)\s*$", fr.clean[max(start, p - 4):p]) or \
+                    re.compile(r"\s*::").match(fr.clean, m.end()):
+                continue
+            fr.edits.append((p, p, " ::" if fr.clean[p - 1] == "<" else "::"))
 
     _VTABLE_STAMP = r"^[ \t]*(?:%s\s*->\s*\w+|\*\s*\([^()]*\)\s*\(?\s*%s\s*\)?)\s*=[^;]*(?:vtable|vtbl|__vt__)[^;]*;[ \t]*$"
 
@@ -848,8 +957,13 @@ class Planner:
         _name, start, end = ctx
         brace = fr.head_end(start)
         declared = re.sub(r"\b(?:struct|class|const)\b|\*|&", " ", rtype).split()
-        rclass = declared[-1] if declared else conv.base
-        same = rclass == conv.base or rclass == conv.cls
+        spelled = declared[-1] if declared else conv.base
+        rclass = _base_name(spelled)
+        same = rclass == conv.base
+        # a receiver declared as the flat struct of a converted class (`igObject *object` at file scope) passed on
+        # bare still has the flat type: `this` is the Gap class's, so the use is `(::igObject *)this`
+        flat = same and conv.cls.startswith("Gap::") and \
+            self.gap_class(spelled, self.gap_scope(fr, start, ctx)) is None
         body = fr.clean[brace:end]
         shadowed = local_names(signature, body) - {rname}
         members = self.classes.all_fields(conv.base)
@@ -878,8 +992,14 @@ class Planner:
                     fr.edits.append((pos, arrow.end(), "%s->%s" % (cast, field)))
                 continue
             casted = re.search(r"\)\s*$", fr.clean[max(start, pos - 40):pos]) and \
-                re.search(r"\(\s*(?:struct\s+|class\s+)?[A-Za-z_][\w:]*\s*\*+\s*\)\s*$", fr.clean[max(start, pos - 60):pos])
-            fr.edits.append((pos, after, "this" if same or casted else "(%s *)this" % _pointee(rtype)))
+                re.search(r"\(\s*(?:struct\s+|class\s+)?(?:::\s*)?[A-Za-z_][\w:]*\s*\*+\s*\)\s*$",
+                          fr.clean[max(start, pos - 60):pos])
+            returned = re.search(r"\breturn\s*$", fr.clean[max(start, pos - 12):pos]) and \
+                re.compile(r"\s*;").match(fr.clean, after)
+            if casted or (same and (not flat or returned)):
+                fr.edits.append((pos, after, "this"))
+            else:
+                fr.edits.append((pos, after, "(::%s *)this" % conv.base if same else "(%s *)this" % _pointee(rtype)))
 
 
 def _pointee(t):
@@ -1062,6 +1182,7 @@ def plan(root, table):
     rows_path = os.path.join(root, "config", GAME, "unit-objects.json")
     rows = json.loads(_read(rows_path)) if os.path.exists(rows_path) else {}
     converted = converted_classes(root)
+    planner.converted = converted
     for conv in convs:
         if "::" not in conv.cls and conv.cls in converted:
             conv.cls = "Gap::%s::%s" % (converted[conv.cls], conv.cls)   # a converted class lives in Gap::<Lib>

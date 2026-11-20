@@ -287,6 +287,40 @@ class Memberize(unittest.TestCase):
         self.assertIn("int Widget::getCount() {", widget)
         self.assertTrue(widget.endswith("}\n}\n}\n"))
 
+    def test_a_flat_struct_pointer_is_cast_to_the_converted_class_and_back(self):
+        # the flat struct Widget (the C view) and Gap::Game::Widget are two types: a flat pointer passed as the
+        # receiver or as a Widget * argument is cast to the Gap class, and a converted body passes `this` to C as
+        # the flat struct
+        write(os.path.join(self.root, "config", "converted-classes.tsv"), "Widget\tGame\n")
+        self.append("config/class-members.tsv", "Widget\tvoid take(Widget *other);\nWidget\tvoid poke(::Widget *flat);\n")
+        self.append("src/game/Game.h", "extern \"C\" void Widget_Helper(Widget *w);\n"
+                                       "extern \"C\" void Widget_Take(Widget *self, Widget *other);\n")
+        self.append("src/game/Widget.inc",
+                    "void Widget_Take(Widget *self, Widget *other) {\n    Widget_Helper(self);\n"
+                    "    Widget_Helper((Widget *)self);\n    self->_count = other->_count;\n}\n\n"
+                    "namespace Gap {\nnamespace Game {\n\nvoid Widget::poke(::Widget *flat) {\n"
+                    "    Widget_Take(flat, (::Widget *)this);\n    Widget_Take((::Widget *)this, flat);\n}\n}\n}\n")
+        self.append("src/game/Users.inc",
+                    "void Users_Give(Widget *w, Widget *o, Gap::Game::Widget *g, void *v) {\n"
+                    "    Widget_Take(w, o);\n    Widget_Take(g, (Widget *)o);\n    Widget_Take(g, g);\n"
+                    "    Widget_Take(g, w + 1);\n    Widget_Take(g, (Gap::Game::Widget *)v);\n    Widget_Take(g, 0);\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Widget_Take\n")
+        write(self.table, TABLE + "Widget_Take\tWidget::take\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        widget = self.read("src/game/Widget.inc")
+        self.assertIn("void Widget::take(Widget *other) {\n    Widget_Helper((::Widget *)this);\n"
+                      "    Widget_Helper((::Widget *)this);\n    _count = other->_count;\n}\n", widget)
+        # in Gap's scope the bare name is the Gap class; a cast of `this` to the flat struct goes
+        self.assertIn("void Widget::poke(::Widget *flat) {\n    ((Widget *)flat)->take(this);\n"
+                      "    take((Widget *)flat);\n}\n", widget)
+        users = self.read("src/game/Users.inc")
+        self.assertIn("    ((Gap::Game::Widget *)w)->take((Gap::Game::Widget *)o);\n"
+                      "    g->take((Gap::Game::Widget *)o);\n    g->take(g);\n"
+                      "    g->take((Gap::Game::Widget *)(w + 1));\n    g->take((Gap::Game::Widget *)v);\n"
+                      "    g->take(0);\n", users)
+        # a flat receiver is no Gap object either
+        self.assertIn("((Gap::Game::Widget *)w)->getCount()", users)
+
     def test_check_reports_a_c_name_declaration_nothing_needs(self):
         self.assertEqual(self.run_tool("--apply"), 0)
         write(os.path.join(self.root, "config", "converted-classes.tsv"), "Widget\tGame\n")

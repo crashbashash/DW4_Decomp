@@ -55,6 +55,11 @@ conversion order are in [member conversion](engine/member-conversion.md).
   fragments the same way; both take the block from `tools/cxxscope.py`. `memberize.py --respell` puts every
   remaining `T Gap::<Library>::Class::m(...)` definition of the tree into that form. `tools/units.py` reads a
   namespace block as transparent, as it reads `extern "C" { }`, so every tool still finds the definitions.
+- **Flat and Gap types.** The flat struct of a converted class and its Gap class are two types of one name. A
+  receiver or `Class *` argument declared as the flat struct (or a flat subclass, or not declared) is cast to the
+  Gap class (`((Gap::Core::igObject *)m)->realloc(…)`; bare `igObject` in Gap's scope), a cast of `this` to the
+  flat struct passed as a Gap parameter goes, and a body moving into the class keeps its types' meaning: its bare
+  receiver passed on is `(::igObject *)this`, every other bare `igObject` in it `::igObject`.
 - **Constructors.** `Class_Init(T *self, …)`-style C constructors become `Class::Class(…)` (declared in
   `class-members.tsv`): no return type, and the statements MWCC writes itself go — the vtable store into the
   receiver, `return self;`, and a first-statement call of a base class's constructor (this batch's or one the
@@ -73,14 +78,20 @@ conversion order are in [member conversion](engine/member-conversion.md).
   `compiler-names.tsv` for a converted class's member) that rule would remove, and exits 1 when there is one.
 - **Rows.** `tools/whole_file_rows.py --unit-va <va> --cxx --write` regenerates a unit's row from its present
   row: the addresses, strips, static-initializer entry and data names it settled stay settled, the retail
-  functions it left to link from retail (a partial file) stay so without `--partial`, and a name it left out
-  that binds without a row stays out. Regenerating an unchanged unit writes its row unchanged, so a
-  conversion's row diff is what the conversion changed.
+  functions it left to link from retail (a partial file) stay so without `--partial`, a name it left out
+  that binds without a row stays out, and a `data`/`externals` entry or `anon` address it listed stays in its
+  place while its name still binds at that address (the object, symbols.txt, data-names.tsv, the compiler-name
+  map, another unit's row or the address in the name). Regenerating an unchanged unit, or a caller whose code
+  changed only at call sites, writes its row unchanged, so a conversion's row diff is what the conversion changed.
 - **Typed coverage.** `tools/typed_coverage.py` counts a member's accesses as it counts a free function's
   (`this->x`, a bare field, a read through a typed member such as `_visualContext->x`, a constructor's body),
-  and the accesses the compiled code makes through what the headers define inline: an inline member called on
+  a read through a reference (`other._refCount`) as one through a pointer, a converted class's constructor's vtable
+  store, and the accesses the compiled code makes through what the headers define inline: an inline member called on
   an object of known class (`_Meta->isValid()`), a smart-pointer member's assignment, and a converted class's
   implicit destructor (counted once). A conversion never lowers the count.
+- **Access.** A `class-members.tsv` declaration carries the kit header's access as a label
+  (`protected: igObject();`; none is public); `scripts/gen_type_headers.py` opens a section where it changes, and
+  `tools/gen_odl_source.py --write-members` keeps a regenerated field handle's label.
 
 `tools/apply_names.py --member Class::old new` (repeatable, dry run unless `--apply`) renames a member: its
 `config/class-members.tsv` declaration and class bodies (not `reflected.h`, which is regenerated), its definitions

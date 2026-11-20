@@ -77,7 +77,7 @@ void beCameraCtrlInfo_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beCameraCtrlInfo_ctorTable, 1);
     f = igMetaObject_GetFieldAt(meta, base);
-    ((igObjectRefMetaField *)f)->_metaObject = (int)Gap::Core::igObject::_Meta;
+    ((igObjectRefMetaField *)f)->_metaObject = (int)Gap::Core::igObject::getClassMeta();
     igMetaObject_NameFields(meta, g_beCameraCtrlInfo_fieldTable, g_beCameraCtrlInfo_fieldHandles, g_beCameraCtrlInfo_fieldOffsets, base);
 }
 

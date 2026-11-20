@@ -122,6 +122,10 @@ CAST_MEMBER_RE = re.compile(r"\(\s*\(\s*([A-Za-z_]\w*)\s*\*\s*\)\s*(\w+)\s*\)\s*
 # strongest evidence for what a member access on it means, and it is what catches the
 # conversion of automatch's synthetic layout into a recovered class.
 DECL_RE = re.compile(r"\b(?:struct\s+)?([A-Za-z_]\w*)\s*\*+\s*(\w+)\s*(?:=|;|,|\))")
+# `const igObject &other` / `igObject &o = ...` -- a reference to a class: `other._refCount` reads the class's field
+# as `p->_refCount` does through a pointer
+REF_DECL_RE = re.compile(r"\b(?:struct\s+)?([A-Za-z_]\w*)\s*(?:const\s*)?&\s*([A-Za-z_]\w*)\s*(?=[=;,)])")
+DOT_RE = re.compile(r"(?<![\w.>:])([A-Za-z_]\w*)\s*\.\s*([A-Za-z_]\w*)\b(?!\s*\()")
 OFFSET_RE = re.compile(r"[+\-]\s*(\d+)\s*$")
 # a declaration at the start of a statement, `int start = ...;` / `igVisualContext *old;`
 LOCAL_DECL_RE = re.compile(r"(?:^|[;{}(])\s*(?:const\s+|unsigned\s+|signed\s+|struct\s+)*[A-Za-z_]\w*"
@@ -636,19 +640,25 @@ def header_texts(roots):
     return out
 
 
+def converted_classes(root):
+    """The classes of config/converted-classes.tsv: Alchemy's polymorphic Gap classes."""
+    path = os.path.join(root, "config", "converted-classes.tsv")
+    if not os.path.exists(path):
+        return set()
+    with open(path) as fh:
+        return {line.split("\t")[0].strip() for line in fh if line.strip() and not line.startswith("#") and "\t" in line}
+
+
 def implicit_destructors(root, defined):
     """The converted classes whose destructor the compiler writes (a `__dt__` compiler name of
     config/SLUS-20836/compiler-names.tsv on a class of config/converted-classes.tsv) and the source does not define
     (`defined`, the `Class::~Class` names of src/)."""
     from demangle import demangle
     out = []
-    path = os.path.join(root, "config", "converted-classes.tsv")
+    converted = converted_classes(root)
     names = os.path.join(root, "config", "SLUS-20836", "compiler-names.tsv")
-    if not (os.path.exists(path) and os.path.exists(names)):
+    if not (converted and os.path.exists(names)):
         return out
-    with open(path) as fh:
-        converted = {line.split("\t")[0].strip() for line in fh
-                     if line.strip() and not line.startswith("#") and "\t" in line}
     with open(names) as fh:
         compiled = [line.split("\t", 1)[0] for line in fh if line.startswith("__dt__")]
     for name in compiled:
@@ -669,6 +679,7 @@ def measure(reflection="data/reflection.json", src="src"):
     root = os.path.dirname(os.path.dirname(os.path.abspath(reflection)))
     inlines = Inlines(header_texts([os.path.join(root, "include"), src]),
                       {name: {f[1] for f in c["fields"]} for name, c in classes.items()})
+    converted = converted_classes(root)
     defined_destructors = set()
     # `dw4u_*` are the transient one-function splits tools/units.py writes while a check
     # runs; they duplicate a unit's function and may vanish mid-walk, so they are not units.
@@ -787,6 +798,33 @@ def measure(reflection="data/reflection.json", src="src"):
                 stats["accesses"].append({"file": path, "function": name, "class": cls,
                                           "offset": offset, "field": field[0],
                                           "cast_type": ctype})
+            # a reference to a class reads its fields with `.`, as a pointer does with `->` (`other._refCount` in
+            # `igObject(const igObject &other)`)
+            refs = {var: t for t, var in REF_DECL_RE.findall(body) if t in classes and var not in decls}
+            if refs:
+                for m in DOT_RE.finditer(body):
+                    if m.group(1) not in refs:
+                        continue
+                    ref_class = refs[m.group(1)]
+                    ff["total"] += 1
+                    if any(f[1] == m.group(2) for f in classes[ref_class]["fields"]):
+                        stats["recovered"] += 1
+                        ff["recovered"] += 1
+                        fc["recovered"] += 1
+                        stats["by_class"][ref_class] = stats["by_class"].get(ref_class, 0) + 1
+                    else:
+                        stats["other_members"] += 1
+                        ff["other_members"] += 1
+                        fc["other"] += 1
+            # a constructor of a converted (polymorphic) class stores the class's vtable into `_vtable`: the
+            # compiler writes the store the C form spelled (`self->_vtable = (int)&g_X_vtable[0]`)
+            if rec and cls in converted and name.rsplit("::", 2)[-2:] == [cls, cls] and \
+                    any(f[1] == "_vtable" for f in rec["fields"]):
+                ff["total"] += 1
+                stats["recovered"] += 1
+                ff["recovered"] += 1
+                fc["recovered"] += 1
+                stats["by_class"][cls] = stats["by_class"].get(cls, 0) + 1
             if rec and "::" in name:
                 # a member function reads its class's fields by their bare names (`_visualContext`), not
                 # through a pointer: each use of a field name that is not a parameter, a local or a member

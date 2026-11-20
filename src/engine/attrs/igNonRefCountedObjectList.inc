@@ -8,6 +8,6 @@ int igNonRefCountedObjectList_GetMeta(void) {
 }
 
 igMetaObject *igNonRefCountedObjectList_GetElementMeta(void) {
-    return Gap::Core::igObject::_Meta;
+    return Gap::Core::igObject::getClassMeta();
 }
 

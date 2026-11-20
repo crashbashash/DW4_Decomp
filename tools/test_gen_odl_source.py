@@ -217,6 +217,20 @@ class MembersTable(unittest.TestCase):
                                          "igRenderer\tvoid setVisualContext(igVisualContext *context);"])
             self.assertIn("igMetaObject\t" + odl.SUPPORT_ROWS[0][1], rows)
 
+    def test_a_regenerated_field_handle_keeps_its_access(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "class-members.tsv")
+            open(path, "w").write("igRenderer\tIG_ABSTRACT_OBJECT_DEFINE(igRenderer)\n"
+                                  "igRenderer\tprotected: static igMetaField *k_visualContext;\n"
+                                  "igRenderer\tvoid setVisualContext(igVisualContext *context);\n")
+            odl.merge_member_rows(path, [("igRenderer", "IG_ABSTRACT_OBJECT_DEFINE(igRenderer)"),
+                                         ("igRenderer", "static igMetaField *k_visualContext;")],
+                                  ["igRenderer"])
+            self.assertEqual(open(path).read().split("\n")[:3], [
+                "igRenderer\tIG_ABSTRACT_OBJECT_DEFINE(igRenderer)",
+                "igRenderer\tprotected: static igMetaField *k_visualContext;",
+                "igRenderer\tvoid setVisualContext(igVisualContext *context);"])
+
 
 class DisplayColumn(unittest.TestCase):
     def test_converted_members_get_their_demangled_name(self):

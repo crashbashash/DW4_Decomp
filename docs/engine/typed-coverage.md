@@ -124,7 +124,9 @@ header is byte for byte what the reflection alone gives:
 - **`config/class-members.tsv`** (`<class> <declaration>`): the members a class declares under C++, in
   table order: the object macros of `include/dw4/core/igObjectMacros.h` (`IG_OBJECT_DEFINE`,
   `IG_ABSTRACT_OBJECT_DEFINE`, the kit's `IG_OBJECT_COMMON` members), the `k_<field>` handles, kit
-  inlines such as `igMetaObject::isValid`, and member functions. An unconverted class gets them inside
+  inlines such as `igMetaObject::isValid`, and member functions. A declaration the kit header makes
+  protected or private opens with that label (`protected: igObject();`), one without is public, and the
+  class body opens a section wherever the access changes. An unconverted class gets them inside
   its flat struct under `#ifdef __cplusplus`; a class with no flat struct must be converted.
 - **`config/typed-fields.tsv`** (`<class> <field> <C++ type>`): an object-reference field typed with its
   referenced class under C++, C keeping the word (`#ifdef __cplusplus` / `#else` around the field).
@@ -141,13 +143,18 @@ header is byte for byte what the reflection alone gives:
 
 A converted class's code is counted as its free-function form was, so a conversion never lowers the count.
 A member function (a constructor too) counts `this->x`, its class's bare fields and reads through a typed
-member (`_visualContext->_mode`). Where the member form reaches a field through what the headers define inline,
+member (`_visualContext->_mode`); any function counts a read through a reference to a class (`other._refCount` in
+`igObject(const igObject &other)`) as it counts one through a pointer, and a constructor of a converted class
+counts its store of the vtable into `_vtable`, which the compiler writes where the C form spelled
+`self->_vtable = (int)&g_X_vtable[0]`. Where the member form reaches a field through what the headers define inline,
 each use counts the inline body's accesses: an inline member called on an object of known class
 (`_Meta->isValid()` reads `_validity`, as the free form's `g->_validity & 4` did), a smart-pointer member's
 assignment (igSmartPointer's `operator=`, the reference counts the free form spelled out), and, once per class, a
 converted class's implicit destructor (a `__dt__` name of `compiler-names.tsv` with no `Class::~Class` in src/:
 each smart-pointer member read and released), listed under the `(implicit)` folder. Measured this way, the root
-and renderer conversions (a6f2edc32 to 5f9e3e300) take the count from 33,817 to 33,820.
+and renderer conversions (a6f2edc32 to 5f9e3e300) take the count from 33,817 to 33,820. The first igObject batch
+(35468f0fe) lowered the count by 2 before the reference and constructor rules; with them the tree counts 33,832
+(the 3 vtable stores of igObject's constructors, `other._refCount`, and 7 reference reads elsewhere: 33,821 before).
 
 ### Sizing fields by their MetaField kind and the registered instance size
 

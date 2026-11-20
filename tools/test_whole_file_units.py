@@ -368,6 +368,30 @@ class Regenerate(unittest.TestCase):
         new = {"whole_file": True, "data": {"g": "0x00300000"}}
         self.assertIs(whole_file_rows.stable_row(new, None, "owner", {}, {}.get), new)
 
+    def test_a_caller_row_keeps_its_order_and_the_names_that_bind_without_it(self):
+        # a unit whose code changed only at call sites: the old row's aliases and stale names that still bind stay
+        # where they were, and the names the compile reads that bind without a row stay out
+        old = {"whole_file": True, "emitted": {"b": "0x00100010"},
+               "data": {"g_z": "0x00300000", "DAT_00300010": "0x00300010", "g_result": "0x00300010",
+                        "g_other_unit": "0x00300020", "g_gone": "0x00300030", "a_new_spot": "0x00300040"},
+               "externals": {}, "anon": ["0x00300090", "0x00300080"]}
+        new = {"whole_file": True, "emitted": {"b": "0x00100010"},
+               "data": {"a_new_spot": "0x00300044", "g_result": "0x00300010", "g_z": "0x00300000",
+                        "DAT_00300050": "0x00300050", "g_added": "0x00300060"},
+               "anon": ["0x00300080"]}
+        syms = {name: ("UND", 0, 0) for name in new["data"]}
+        resolves = {"DAT_00300010": 0x300010, "DAT_00300050": 0x300050}.get
+        row = whole_file_rows.stable_row(new, old, "owner", syms, resolves, {"g_other_unit": 0x300020})
+        self.assertEqual(json.dumps(row["data"]), json.dumps({
+            "g_z": "0x00300000", "DAT_00300010": "0x00300010", "g_result": "0x00300010",
+            "g_other_unit": "0x00300020", "a_new_spot": "0x00300044", "g_added": "0x00300060"}))
+        self.assertEqual(row["externals"], {})
+        self.assertEqual(row["anon"], old["anon"])
+        self.assertEqual(list(row), list(old))
+        # regenerating the same compile again changes nothing
+        self.assertEqual(json.dumps(whole_file_rows.stable_row(new, row, "owner", syms, resolves,
+                                                               {"g_other_unit": 0x300020})), json.dumps(row))
+
 
 class CxxRows(unittest.TestCase):
     def test_literal_relocation_reads_as_gprel(self):

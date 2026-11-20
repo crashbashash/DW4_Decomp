@@ -100,7 +100,7 @@ void igExternalDirEntry_InitFields(void) {
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_ref));
     field = (igMetaField *)igObjectRefMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     igMetaField_Configure(field, (const char *)text_ref, &g_igExternalDirEntry_refDescriptorCell, 0x18, meta);
-    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igObject::_Meta;
+    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igObject::getClassMeta();
     field->_persistent = 0;
     field->_externalEnumStorage = (int)&g_igExternalDirEntry_refDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);

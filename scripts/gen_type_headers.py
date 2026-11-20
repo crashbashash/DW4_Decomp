@@ -241,11 +241,35 @@ def declare(cls, f, field_name, span, trailing, inst_size):
 
 def load_members(path):
     """{class: [declaration]} from `config/class-members.tsv`: the member functions and static members a
-    class declares under C++, written into its class body in table order (empty when the table is absent)."""
+    class declares under C++, written into its class body in table order (empty when the table is absent).
+    A declaration may open with the kit's access label (`protected: igObject();`); one without is public."""
     members = {}
     for cls, decl in table_rows(path, 2):
         members.setdefault(cls, []).append(decl.strip())
     return members
+
+
+_ACCESS = re.compile(r"^(public|protected|private)\s*:\s*")
+
+
+def split_access(decl):
+    """(access, declaration) of a class-members.tsv declaration: its label's, else public."""
+    m = _ACCESS.match(decl)
+    return (m.group(1), decl[m.end():]) if m else ("public", decl)
+
+
+def member_lines(decls, access):
+    """The class-body lines of a class's rows in table order, a label opening each run of one access (the kit
+    header's sections); `access` is the one in effect before them -> (lines, access after them). An object
+    macro row leaves the class public, as the macros end."""
+    out = []
+    for decl in decls:
+        want, text = split_access(decl)
+        if want != access:
+            out.append("%s:" % want)
+            access = want
+        out.append("    " + text)
+    return out, access
 
 
 def load_typed_fields(path):
@@ -330,13 +354,18 @@ def converted_classes(converted, parent, layouts, members):
         out.append("namespace %s {" % lib)
         out.append("/* handle 0x%06x, %d field(s), %s */" % (handle, nfields, size_note))
         if cls == "igObject":
-            if not any(decl.startswith(("virtual ", "inline virtual ")) for decl in members.get(cls, [])):
+            if not any(split_access(decl)[1].startswith(("virtual ", "inline virtual "))
+                       for decl in members.get(cls, [])):
                 sys.exit("config/class-members.tsv: the root igObject declares no virtual function; its rows "
                          "give its constructor, virtual slots and getMeta")
             out.append("class igObject {")
-            out.append("public:")
             # the slot declarations come before the reference count, as the kit's root declares them
-            out.extend("    " + decl for decl in members[cls])
+            access = split_access(members[cls][0])[0]
+            out.append("%s:" % access)
+            lines, access = member_lines(members[cls], access)
+            out.extend(lines)
+            if access != "public":
+                out.append("public:")                    # the fields: C code reads them as data
             cursor = 4
             placed = [p for p in placed if p[0] >= 4]
         else:
@@ -354,7 +383,7 @@ def converted_classes(converted, parent, layouts, members):
         if size > cursor:
             out.append("    char _pad%d[%d];" % (cursor, size - cursor))
         if cls != "igObject":
-            out.extend("    " + decl for decl in members.get(cls, []))
+            out.extend(member_lines(members.get(cls, []), "public")[0])
         out.append("};")
         out.append("}")
         out.append("}")
@@ -575,7 +604,7 @@ def main(argv=None):
             lines.extend(body)
         if flat and members.get(name):
             lines.append("#ifdef __cplusplus")
-            lines.extend("    " + decl for decl in members[name])
+            lines.extend(member_lines(members[name], "public")[0])
             lines.append("#endif")
         lines.append("} %s;" % name)
         lines.append("")

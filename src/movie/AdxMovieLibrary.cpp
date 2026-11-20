@@ -1682,7 +1682,7 @@ void igMovieInfo_InitFields(void) {
     imageFormatField->_persistent = 0;
     imageFormatField->_getMetaEnumFunction = (int)IG_GFX_TEXTURE_FORMAT_GetMetaEnum;
     userdataField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x13);
-    userdataField->_metaObject = (int)Gap::Core::igObject::_Meta;
+    userdataField->_metaObject = (int)Gap::Core::igObject::getClassMeta();
     userdataField->_persistent = 0;
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x14), -1);
     igMetaObject_NameFields((igMetaObject *)meta, g_igMovieInfo_fieldTable, g_igMovieInfo_fieldHandles, g_igMovieInfo_fieldOffsets, firstField);

@@ -106,7 +106,7 @@ void igDataPump_InitFields(void) {
     firstField = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igDataPump_ctorTable, 5);
     destObjField = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField));
-    *(int *)((char *)(destObjField) + 56) = (int)Gap::Core::igObject::_Meta;
+    *(int *)((char *)(destObjField) + 56) = (int)Gap::Core::igObject::getClassMeta();
     *(char *)((char *)(destObjField) + 52) = 1;
     destMetaField = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 1));
     *(int *)((char *)(destMetaField) + 56) = (int)igMetaField_GetOrCreateMetaObject();

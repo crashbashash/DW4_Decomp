@@ -116,10 +116,10 @@ class Conversion(unittest.TestCase):
     """A class's functions written as its members count the accesses their free-function form counted: through
     inline members, a smart-pointer member's operators, typed members, constructors and implicit destructors."""
 
-    def measure(self, source, converted):
+    def measure(self, source, converted, reflection=REFLECTION):
         with tempfile.TemporaryDirectory() as tree:
             files = dict(HEADERS, **{"src/gui/r.cpp": source})
-            files["data/reflection.json"] = json.dumps(REFLECTION)
+            files["data/reflection.json"] = json.dumps(reflection)
             files["data/class-hierarchy.tsv"] = ("igMetaObject\tigObject\nigVisualContext\tigObject\n"
                                                  "igRenderer\tigObject\n")
             if converted:
@@ -150,6 +150,25 @@ class Conversion(unittest.TestCase):
     def test_a_destructor_the_source_defines_is_not_counted_twice(self):
         stats = self.measure(MEMBER + "Gap::Gui::igRenderer::~igRenderer() {\n}\n", True)
         self.assertNotIn(("(implicit)", "igRenderer::~igRenderer"), stats["per_function"])
+
+    def test_a_constructor_reads_through_a_reference_and_stores_the_vtable(self):
+        # the C form spelled the vtable store and read its source through a pointer; the constructor's store is
+        # the compiler's, and it reads its source through a reference
+        reflection = json.loads(json.dumps(REFLECTION))
+        reflection["classes"]["0x1"]["fields"].insert(0, {"offset": 0, "name": "_vtable",
+                                                          "type": "igObjectRefMetaField"})
+        flat = self.measure("igObject *igObject_CopyConstructHeader(igObject *self, igObject *source) {\n"
+                            "    self->_vtable = (int)&g_igObject_vtable[0];\n"
+                            "    self->_refCount = source->_refCount;\n    return self;\n}\n", False, reflection)
+        member = self.measure("Gap::Core::igObject::igObject(const igObject &other) {\n"
+                              "    _refCount = other._refCount;\n    other.x = 0;\n}\n"
+                              "int f(igObject &o, int &n) {\n    return o._refCount + n;\n}\n", True, reflection)
+        self.assertEqual(flat["by_class"]["igObject"], 3)
+        self.assertEqual(member["by_class"]["igObject"], 4)
+        per = {name: fc["recovered"] for (_path, name), fc in member["per_function"].items()}
+        self.assertEqual(per["Gap::Core::igObject::igObject"], 3)
+        self.assertEqual(per["f"], 1)
+        self.assertEqual(member["other_members"], 1)          # `other.x`: no field of the class
 
     def test_cxx_view_keeps_the_cplusplus_arm(self):
         text = "#ifdef __cplusplus\nstruct A : public B {\n#else\nstruct A {\n#endif\n  int x;\n};\n"

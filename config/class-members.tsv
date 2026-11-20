@@ -2,12 +2,14 @@
 # scripts/gen_type_headers.py into include/dw4/support/reflected.h in table order: into the flat struct of an
 # unconverted class, into the Gap::<library>::<class> declaration of a class config/converted-classes.tsv lists.
 # Columns: <class>	<declaration as the class body spells it>. Names and signatures follow the Alchemy kit
-# header of the class (alchemy-kit_202309 include/<library>/<Class>.h); the object macros are
-# include/dw4/core/igObjectMacros.h, and tools/gen_odl_source.py --write-members writes a class's macro and
-# field-handle rows.
-igObject	igObject();
-igObject	igObject(bool bootstrap);
-igObject	igObject(const igObject &other);
+# header of the class (alchemy-kit_202309 include/<library>/<Class>.h), and so does access: a declaration the kit
+# makes protected or private opens with that label (`protected: igObject();`), one without is public; the class
+# body opens a section where the access changes, in table order (an object macro leaves the class public). The
+# object macros are include/dw4/core/igObjectMacros.h, and tools/gen_odl_source.py --write-members writes a
+# class's macro and field-handle rows.
+igObject	protected: igObject();
+igObject	protected: igObject(bool bootstrap);
+igObject	protected: igObject(const igObject &other);
 igObject	static void *operator new(unsigned int size, void *memory, void *unused) { return memory; }
 igObject	static void operator delete(void *memory) { Memory_FreeBufferAliasC(memory); }
 igObject	virtual void destruct();
@@ -31,7 +33,7 @@ igObject	virtual void userApplyWriteProxy(int value);
 igObject	virtual void userMakeConcrete(igMetaObject *meta);
 igObject	virtual igObject *cloneViaMetadata(int copyMode);
 igObject	inline virtual igMetaObject *getMeta() const { return _Meta; }
-igObject	static igMetaObject *_Meta;
+igObject	protected: static igMetaObject *_Meta;
 igObject	static void arkRegister();
 igObject	static CallbackArray *arkRegisterInternal();
 igObject	static inline igMetaObject *getClassMeta() { return _Meta; }
@@ -52,14 +54,14 @@ igObject	void free(void *storage) const;
 igObject	char *strdup(const char *string) const;
 igObject	void copy(igObject *source, int copyMode);
 igRenderer	IG_ABSTRACT_OBJECT_DEFINE(igRenderer)
-igRenderer	static igMetaField *k_visualContext;
+igRenderer	protected: static igMetaField *k_visualContext;
 igRenderer	void setVisualContext(igVisualContext *context);
 igRenderer	virtual void initializeDrawing() = 0;
 igRenderer	virtual void terminateDrawing() = 0;
 igRenderer	virtual void traverse() = 0;
 igRenderer	virtual void draw() = 0;
 igClearRenderer	IG_OBJECT_DEFINE(igClearRenderer)
-igClearRenderer	static igMetaField *k_buffersToClear;
+igClearRenderer	private: static igMetaField *k_buffersToClear;
 igClearRenderer	virtual void traverse() {}
 igClearRenderer	virtual void initializeDrawing();
 igClearRenderer	virtual void terminateDrawing() {}

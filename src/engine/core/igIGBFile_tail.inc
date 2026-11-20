@@ -211,7 +211,7 @@ igResult igIGBFile_BuildMetaObjectBuffer(igIGBFileView *self) {
         int k;
         for (k = 0; k < n; k++) { d[k] = g_igIGBFile_persistentFieldCountFill[0]; }
     }
-    base = igMetaObject_GetFieldCount((igMetaObject *)Gap::Core::igObject::_Meta);
+    base = igMetaObject_GetFieldCount((igMetaObject *)Gap::Core::igObject::getClassMeta());
     for (i = 0; i < self->_metaObjectCount; i++) {
         int j;
         __internalObjectList *fields;

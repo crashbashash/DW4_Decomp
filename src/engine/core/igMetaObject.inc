@@ -298,7 +298,7 @@ void igMetaObject_InitFields(void) {
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xF))))->_persistent = 0;
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x10))))->_persistent = 0;
     field8 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x11)));
-    ((igObjectRefMetaField *)field8)->_metaObject = (int)((int) Gap::Core::igObject::_Meta);
+    ((igObjectRefMetaField *)field8)->_metaObject = (int)((int) Gap::Core::igObject::getClassMeta());
     ((igObjectRefMetaField *)field8)->_destruct = 1;
     ((igObjectRefMetaField *)field8)->_refCounted = 0;
     ((igObjectRefMetaField *)field8)->_persistent = 0;

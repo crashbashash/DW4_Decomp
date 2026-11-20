@@ -1323,24 +1323,36 @@ SUPPORT_ROWS = (
 
 def merge_member_rows(path, rows, classes):
     """config/class-members.tsv with each written class's object macro and field handles in front of its
-    other rows (an existing macro or handle row of the class is replaced)."""
+    other rows (an existing macro or handle row of the class is replaced, keeping its access label: a field
+    handle is declared in its field's section of the kit header, `protected: static igMetaField *k_x;`)."""
     header, body = [], []
     if os.path.exists(path):
         for line in open(path):
             (header if line.startswith("#") and not body else body).append(line.rstrip("\n"))
-    generated = re.compile(r"^(IG_(ABSTRACT_)?OBJECT_DEFINE\(\w+\)|static igMetaField \*k_\w+;)$")
+    generated = re.compile(r"^((?:public|protected|private)\s*:\s*)?"
+                           r"(IG_(ABSTRACT_)?OBJECT_DEFINE\(\w+\)|static igMetaField \*k_\w+;)$")
+    labels = {}
+    for ln in body:
+        cls, _tab, decl = ln.partition("\t")
+        m = generated.match(decl)
+        if cls in classes and m and m.group(1):
+            labels[(cls, m.group(2))] = m.group(1)
     kept = [ln for ln in body if ln.strip() and not (ln.split("\t", 1)[0] in classes
                                                      and generated.match(ln.split("\t", 1)[1]))]
+
+    def labelled(r):
+        return "%s\t%s%s" % (r[0], labels.get((r[0], r[1]), ""), r[1])
+
     out, placed = [], set()
     for ln in kept:
         cls = ln.split("\t", 1)[0]
         if cls in classes and cls not in placed:
-            out.extend("%s\t%s" % r for r in rows if r[0] == cls)
+            out.extend(labelled(r) for r in rows if r[0] == cls)
             placed.add(cls)
         out.append(ln)
     for cls in classes:
         if cls not in placed:
-            out.extend("%s\t%s" % r for r in rows if r[0] == cls)
+            out.extend(labelled(r) for r in rows if r[0] == cls)
     present = {tuple(ln.split("\t", 1)) for ln in out if "\t" in ln}
     out.extend("%s\t%s" % row for row in SUPPORT_ROWS if row not in present)
     with open(path, "w") as fh:
