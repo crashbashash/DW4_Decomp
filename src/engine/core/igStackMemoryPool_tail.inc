@@ -502,7 +502,7 @@ int igStackMemoryPool_GetEventTracker(igStackMemoryPool *self) {
 
 void igStackMemoryPool_SetEventTracker(igStackMemoryPool *self, igObject *tracker) {
     igObject *old;
-    if ((tracker == 0) || (((void *)igObject_GetAllocator((igObject *)tracker)) != self)) {
+    if ((tracker == 0) || (((void *)((Gap::Core::igObject *)tracker)->getMemoryPool()) != self)) {
         if (tracker != 0) {
             tracker->_refCount = (int)((int) (tracker->_refCount + 1));
         }

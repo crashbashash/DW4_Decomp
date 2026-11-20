@@ -30,7 +30,7 @@ extern "C" int beSaveUtil_OnMessage(beSaveUtil *self, beSaveUtilInfoRam *info, b
 
 extern "C" void beSaveUtil_UpdateRam(beSaveUtil *self, beSaveUtilInfoRam *info);
 
-#define ALLOC(a, self) { int base_ = (int)igObject_GetAllocator(self); if (g_useOwnerAllocator != 0) { a = base_; } else { a = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); } }
+#define ALLOC(a, self) { int base_ = (int)((Gap::Core::igObject *)(self))->getMemoryPool(); if (g_useOwnerAllocator != 0) { a = base_; } else { a = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); } }
 
 #define DELIVERY(info) ((beSvDeliver *)(info)->_deliver)
 #define API(self) ((beSaveApiDispatchView *)(self)->_api)

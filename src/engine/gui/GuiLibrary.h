@@ -803,7 +803,7 @@ extern "C" void igGuiComponent_userDestruct(igGuiComponent *self);
 struct O_455510 {
     char p[32]; int v;
     static O_455510 *cast(O_455510 *o) {
-        if (o != 0 && igObject_IsKindOf((igObject *)o, g_igGuiComponentNode_metaObject) != 0) return o;
+        if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igGuiComponentNode_metaObject) != 0) return o;
         return 0;
     }
 };

@@ -67,7 +67,7 @@
 #include "dw4/support/emptyString.h"
 #include "dw4/support/list-services.h"
 #include "dw4/maths/igAABox.h"
-#define SELECT_ALLOCATOR(var, arg) { int base_ = (int)igObject_GetAllocator(arg); if (g_useOwnerAllocator != 0) var = base_; else var = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
+#define SELECT_ALLOCATOR(var, arg) { int base_ = (int)((Gap::Core::igObject *)(arg))->getMemoryPool(); if (g_useOwnerAllocator != 0) var = base_; else var = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
 #define RELEASE(q) { igObject *o_ = (igObject *)(q); if (o_) { o_->_refCount = o_->_refCount - 1; if ((o_->_refCount & 0x7fffff) == 0) igObject_Destroy(o_); } }
 #define RETAIN(q) { igObject *o_ = (igObject *)(q); if (o_) o_->_refCount = o_->_refCount + 1; }
 
@@ -318,7 +318,7 @@ template <int kind> struct ObjRef {
 struct DataList {
     static inline void Ensure(beBaseInfoRam *ram, beModelCtrlInfoRideOn *&held) {
         if (ram->_dataList == 0) {
-            int a = (int)igObject_GetAllocator(ram);
+            int a = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
             a = g_useOwnerAllocator ? a : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             igSmartPointer<igObject> r((igObject *)(beBaseInfoDataList_Create(a)));
             held = (beModelCtrlInfoRideOn *)r.p;
@@ -495,7 +495,7 @@ igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, b
                 extent->x = above[0]; extent->y = above[1]; extent->z = above[2];
             }
             {
-                int alloc = (int)igObject_GetAllocator(body);
+                int alloc = (int)((Gap::Core::igObject *)body)->getMemoryPool();
                 int a;
                 if (g_useOwnerAllocator != 0) a = alloc; else a = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                 igSmartPointer<igAABox> created(igAABox_CreateInstance(a));
@@ -598,7 +598,7 @@ void beModelCtrl_UpdateMapAI(beModelCtrl *self, void *info, beBaseInfoRam *ram, 
     char *old;
     float value;
     if (ram->_dataList == 0) {
-        pool = (int)igObject_GetAllocator(ram);
+        pool = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         pool = (g_useOwnerAllocator != 0) ? pool : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         DataListInstall::make(ram, pool);
     }
@@ -732,7 +732,7 @@ void beModelCtrl_UpdateHomingAI(beModelCtrl *self, beModelCtrlInfo *info, beBase
     float originX, originY, originZ;
     float targetX, targetY, targetZ;
     if (ram->_dataList == 0) {
-        allocator = (int)igObject_GetAllocator(ram);
+        allocator = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         DataListInstall::make(ram, allocator);
     }
@@ -839,7 +839,7 @@ void beModelCtrl_UpdateControl(beModelCtrl *self, beBaseInfoRam *ram) {
     igObject *old;
     info = (beBaseInfo *)ram->_parentInfo;
     if (ram->_dataList == 0) {
-        allocator = (int)igObject_GetAllocator(ram);
+        allocator = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
         list = ref.p;
@@ -1211,7 +1211,7 @@ void beModelCtrl_CheckWallAndFloor(beModelCtrl *self, beBaseInfo *info, beBaseIn
                         ((Slot *)&work->_rideOnData)->set(0);
                     }
                 } else if (rideOn == 0) {
-                    int base = (int)igObject_GetAllocator(self);
+                    int base = (int)((Gap::Core::igObject *)self)->getMemoryPool();
                     int allocator;
                     beModelCtrlInfoRideOn4 *created;
                     if (g_useOwnerAllocator != 0) allocator = base; else allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
@@ -1378,7 +1378,7 @@ void beModelCtrl_ApplyMoves(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *
         objects = (beModelCtrlMoveObject **)moves->_data;
         if (objects[0]->_isRun != 0 || objects[1]->_isRun != 0 || objects[2]->_isRun != 0) {
             if (ram->_dataList == 0) {
-                allocator = (int)igObject_GetAllocator(ram);
+                allocator = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
                 allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                 {
                     igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
@@ -1628,7 +1628,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
     if (seqList == 0) {
         LabelListRef listRef;
         igSmartPointer<igIntList> intListRef;
-        base = (int)igObject_GetAllocator(self);
+        base = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         if (g_useOwnerAllocator != 0) {
             allocator = base;
         } else {
@@ -1650,7 +1650,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
         work->_labelSeqList = (int)created;
         seqList = (igStringRefList *)listRef.p;
 
-        base = (int)igObject_GetAllocator(self);
+        base = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         if (g_useOwnerAllocator != 0) {
             allocator = base;
         } else {
@@ -1672,7 +1672,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
         work->_labelNameList = (int)created;
         labelList = (igStringRefList *)listRef.p;
 
-        base = (int)igObject_GetAllocator(self);
+        base = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         if (g_useOwnerAllocator != 0) {
             allocator = base;
         } else {
@@ -1758,7 +1758,7 @@ void beModelCtrl_CallLua(beModelCtrl *self, beBaseInfoRam *ram, const char *func
     beDataObjInt *hp;
 
     if (ram->_dataList == 0) {
-        base = (int)igObject_GetAllocator(ram);
+        base = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         if (g_useOwnerAllocator != 0) {
             allocator = base;
         } else {
@@ -2156,7 +2156,7 @@ void beModelCtrl_UpdateDirection(beModelCtrl *self, beBaseInfo *info, beBaseInfo
         if (!diff) goto done;
     }
     if (((igObject *)ram->_dataList) == 0) {
-        int base = (int)igObject_GetAllocator(ram);
+        int base = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         int allocator;
         if (g_useOwnerAllocator != 0) allocator = base; else allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<igObject> created(((igObject *)beBaseInfoDataList_Create(allocator)));
@@ -2202,7 +2202,7 @@ void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
     float world[16];
     beBaseInfo *info = (beBaseInfo *)ram->_parentInfo;
     if (ram->_dataList == 0) {
-        int allocator = (int)igObject_GetAllocator(ram);
+        int allocator = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         int chosen;
         if (g_useOwnerAllocator != 0) { chosen = allocator; } else { chosen = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
         DataListInstall::make(ram, chosen);
@@ -2355,7 +2355,7 @@ void beModelCtrl__OnGenerateFromParent(beModelCtrl *self, beBaseInfoRam *ram) {
     unsigned char posLock;
     char *hitParentName;
     if (ram->_dataList == 0) {
-        allocator = (int)igObject_GetAllocator(ram);
+        allocator = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         {
             igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
@@ -2444,7 +2444,7 @@ void beModelCtrl__OnGenerate(beModelCtrl *self, beBaseInfoRam *ram) {
     igObject *created;
     igObject *old;
     if (ram->_dataList == 0) {
-        allocator = (int)igObject_GetAllocator(ram);
+        allocator = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         {
             igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
@@ -2486,7 +2486,7 @@ void beModelCtrl_UpdateBound(beModelCtrl *self, beModelCtrlNode2 *node, igAABox 
     igAABox *bound;
     bound = (igAABox *)node->_bound;
     if (bound == 0) {
-        int base = (int)igObject_GetAllocator(self);
+        int base = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         int allocator;
         if (g_useOwnerAllocator != 0) {
             allocator = base;
@@ -2506,7 +2506,7 @@ void beModelCtrl_UpdateBound(beModelCtrl *self, beModelCtrlNode2 *node, igAABox 
     igAABox_Transform(bound, node->_m);
 }
 
-#define ALLOCATOR(a, o) int a = (int)igObject_GetAllocator(o); a = g_useOwnerAllocator ? a : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+#define ALLOCATOR(a, o) int a = (int)((Gap::Core::igObject *)(o))->getMemoryPool(); a = g_useOwnerAllocator ? a : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 #define POOL() if (g_stringPool == 0) { StringPool *pl_ = (StringPool *)StringPool_Allocate(0x10); if (pl_ != 0) pl_ = StringPool_Construct(pl_); g_stringPool = pl_; }
 #define RELEASE_STRING(old) if (old) { int *h_ = (int *)old - 2; int c_ = ((int *)old)[-1] - 1; ((int *)old)[-1] = c_; if (c_ == 0) StringChunk_ReleaseHeader((StringChunk *)*h_, (StringTokenHeader *)h_); }
 #define SET_WORK_STRING(fld, txt) { POOL() const char *tk_ = ((const char *)StringPool_Intern(g_stringPool, (const char *)txt)); const char *old_ = (const char *)work->fld; RELEASE_STRING(old_) work->fld = (int)tk_; }

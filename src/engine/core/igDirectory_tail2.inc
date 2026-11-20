@@ -123,14 +123,14 @@ static inline void releaseBound(igObjectDispatchView *o) {
 }
 
 static inline igObjectDirEntry *castBinding(igObjectDirEntry *o) {
-    if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
+    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType((igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
         return o;
     }
     return 0;
 }
 
 static inline igObjectRefMetaField *castRefField(igObjectRefMetaField *o) {
-    if (o != 0 && igObject_IsKindOf(o, (igMetaObject *)(((int)g_igObjectRefMetaField_metaObject))) != 0) {
+    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType((igMetaObject *)(((int)g_igObjectRefMetaField_metaObject))) != 0) {
         return o;
     }
     return 0;
@@ -320,7 +320,7 @@ int igDirectory_InsertObject(igDirectoryView *self, igObjectDispatchView *obj, c
     }
     if (obj != 0) {
         obj->TrimCapacity();
-        if (igObject_IsKindOf((igObject *)self, (igMetaObject *)(((int)g_igIGBFile_metaObject))) != 0) {
+        if (((Gap::Core::igObject *)self)->isOfType((igMetaObject *)(((int)g_igIGBFile_metaObject))) != 0) {
             if (self->_autoWriteFilePreProcessState == 1) {
                 obj->userWriteFilePreProcess();
             }
@@ -334,7 +334,7 @@ int igDirectory_InsertObject(igDirectoryView *self, igObjectDispatchView *obj, c
             }
         }
     }
-    igSmartPointer<igDirEntryView> record(((igDirEntryView *)igObjectDirEntry_Create((int)(((void *)igObject_GetAllocator((igObject *)self))))));
+    igSmartPointer<igDirEntryView> record(((igDirEntryView *)igObjectDirEntry_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool())))));
     record.get()->_index = index;
     insertObject((igDataList *)self, index, record.get());
     if (name != 0) {
@@ -350,7 +350,7 @@ int igDirectory_InsertObject(igDirectoryView *self, igObjectDispatchView *obj, c
             pool = Memory_GetAllocatorByName((char *)igMetaObject_GetPoolName((int *)info));
         }
         if (pool == 0) {
-            pool = ((void *)igObject_GetAllocator((igObject *)obj));
+            pool = ((void *)((Gap::Core::igObject *)obj)->getMemoryPool());
         }
         if (pool != 0) {
             mode = ((MemoryContext *)Memory_GetCurrentContextAlias())->IndexOfAllocator(pool);
@@ -377,7 +377,7 @@ int igDirectory_AddMemoryRef(igDirectoryView *self, int field, int memory, int m
         if (index < self->_count) { int r = igDirectory_GetObject(self, index); if (r == memory) return -1; }
     }
     if (memType == 0) memType = igCharMetaField_GetDefaultDescriptor();
-    igSmartPointer<igMemoryDirEntryView> record(((igMemoryDirEntryView *)igMemoryDirEntry_Create((int)igObject_GetAllocator((igObject *)self))));
+    igSmartPointer<igMemoryDirEntryView> record(((igMemoryDirEntryView *)igMemoryDirEntry_Create((int)((Gap::Core::igObject *)self)->getMemoryPool())));
     record.get()->_index = index;
     insertObject((igDataList *)self, index, record.get());
     if (name) igNamedObject_SetName((igNamedObject *)(record.get()), (const char *)name);
@@ -415,7 +415,7 @@ int igDirectory_AddRawRef(igDirectoryView *list, int key, int name, int val) {
             if (f == key) return -1;
         }
     }
-    igSmartPointer<igDirEntryView> entry((igDirEntryView *)igDirEntry_Create((int)(((void *)igObject_GetAllocator((igObject *)list)))));
+    igSmartPointer<igDirEntryView> entry((igDirEntryView *)igDirEntry_Create((int)(((void *)((Gap::Core::igObject *)list)->getMemoryPool()))));
     igNamedObject_SetName((igNamedObject *)(entry.get()), (const char *)name);
     entry.get()->_resolveMethod = val;
     entry.get()->_refType = 2;

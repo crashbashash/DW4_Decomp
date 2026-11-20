@@ -209,7 +209,7 @@ unsigned char beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram,
     beAction2InfoWork *work = (beAction2InfoWork *)ram->_work;
     int list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
     if (work->_colorAttr == 0) {
-        int ownerAllocator = (int)igObject_GetAllocator(manager);
+        int ownerAllocator = (int)((Gap::Core::igObject *)manager)->getMemoryPool();
         int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         AttrRef<0> created((igObject *)igColorAttr_CreateInstance(allocator));
         igObject *attr;
@@ -222,7 +222,7 @@ unsigned char beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram,
         work->_colorAttr = (int)attr;
     }
     if (work->_textureStateAttr == 0) {
-        int ownerAllocator = (int)igObject_GetAllocator(manager);
+        int ownerAllocator = (int)((Gap::Core::igObject *)manager)->getMemoryPool();
         int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         AttrRef<3> created((igObject *)igTextureStateAttr_CreateInstance(allocator));
         igObject *attr;
@@ -235,7 +235,7 @@ unsigned char beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram,
         work->_textureStateAttr = (int)attr;
     }
     if (work->_lightingStateAttr == 0) {
-        int ownerAllocator = (int)igObject_GetAllocator(manager);
+        int ownerAllocator = (int)((Gap::Core::igObject *)manager)->getMemoryPool();
         int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         AttrRef<2> created((igObject *)igLightingStateAttr_CreateInstance(allocator));
         igObject *attr;
@@ -427,7 +427,7 @@ unsigned char beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, 
         ClearMaskBit(mask, ram->_ramNo);
     } else {
         if (work->_colorAttr == 0) {
-            int ownerAllocator = (int)igObject_GetAllocator(manager);
+            int ownerAllocator = (int)((Gap::Core::igObject *)manager)->getMemoryPool();
             int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             igObject *attr;
             igObject *old;
@@ -440,7 +440,7 @@ unsigned char beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, 
             work->_colorAttr = (int)attr;
         }
         if (work->_blendStateAttr == 0) {
-            int ownerAllocator = (int)igObject_GetAllocator(manager);
+            int ownerAllocator = (int)((Gap::Core::igObject *)manager)->getMemoryPool();
             int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             igObject *attr;
             igObject *old;
@@ -453,7 +453,7 @@ unsigned char beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, 
             work->_blendStateAttr = (int)attr;
         }
         if (work->_lightingStateAttr == 0) {
-            int ownerAllocator = (int)igObject_GetAllocator(manager);
+            int ownerAllocator = (int)((Gap::Core::igObject *)manager)->getMemoryPool();
             int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             igObject *attr;
             igObject *old;
@@ -672,7 +672,7 @@ unsigned char beAction2MOTIONSET_Start(beAction2 *manager, beAction2InfoRam *ram
     for (j = 0; j < tracks->_count; j++) {
         void *source = (void *)((igAnimationTrack **)tracks->_data)[j]->_source;
         if (source != 0) {
-            if (igObject_IsKindOf((igObject *)source, g_igEnbayaTransformSource_metaObject) != 0) {
+            if (((Gap::Core::igObject *)source)->isOfType(g_igEnbayaTransformSource_metaObject) != 0) {
                 igEnbayaAnimationSource *enbaya = (igEnbayaAnimationSource *)((igEnbayaTransformSource *)source)->_enbayaAnimationSource;
                 if (isLoop) enbaya->_playMode = 0; else enbaya->_playMode = 4;
                 break;
@@ -933,7 +933,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
             return 1;
         }
         if (workRef.p == 0) {
-            void *allocator = ((void *)igObject_GetAllocator(self));
+            void *allocator = ((void *)((Gap::Core::igObject *)self)->getMemoryPool());
             beAction2InfoWork *created;
             allocator = g_useOwnerAllocator ? allocator : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
             { beAction2InfoWork *held = workRef.p; IG_OBJECT_RELEASE(held); }

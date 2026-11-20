@@ -80,7 +80,7 @@ void beNDMWMdlEnemy_OnGenerate(beNDMWMdlEnemy *self, beBaseInfoRam *ram) {
     int rarity;
     info = (beBaseInfo *)ram->_parentInfo;
     if (ram->_dataList == 0) {
-        igMemoryPoolView *allocator = igObject_GetAllocator(ram);
+        igMemoryPoolView *allocator = ((Gap::Core::igObject *)ram)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igObject *created = beBaseInfoDataList_Create((int)allocator);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
@@ -89,7 +89,7 @@ void beNDMWMdlEnemy_OnGenerate(beNDMWMdlEnemy *self, beBaseInfoRam *ram) {
     }
     record = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
     {
-        igMemoryPoolView *allocator = igObject_GetAllocator(self);
+        igMemoryPoolView *allocator = ((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         InfoWorkRef work(beNDMWMdlEnemyInfoWork_Create((int)allocator));
         igObject *held = work.p;

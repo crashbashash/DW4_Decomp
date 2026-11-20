@@ -282,7 +282,9 @@ def data_only_units(path=None):
     return tuple(group for group in load(path) if group.data_only)
 
 
-def augment_sources(index, symbols="config/SLUS-20836/symbols.txt", path=None):
+def augment_sources(index, symbols="config/SLUS-20836/symbols.txt", path=None, overridable=frozenset()):
+    """Add the functions unit rows emit to `index`. A name in `overridable` (only `static` overloads define it,
+    such as a C++ forwarder kept beside a member that took the retail name) goes to the emitting unit."""
     _, by_va = names(str(symbols))
     for group in load(path):
         if group.data_only:
@@ -301,7 +303,7 @@ def augment_sources(index, symbols="config/SLUS-20836/symbols.txt", path=None):
             index[owner] = places.pop()
         for _, va in group.emitted:
             name = by_va[va][0]
-            if index.get(name, index[owner]) != index[owner]:
+            if index.get(name, index[owner]) != index[owner] and name not in overridable:
                 raise ValueError(f"{name} has both an explicit and emitted definition")
             index[name] = index[owner]
     return index

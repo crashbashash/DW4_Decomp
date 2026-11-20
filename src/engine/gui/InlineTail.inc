@@ -20,7 +20,7 @@ igMetaObject *igOnOffValueObserver_GetMeta(void) {
 }
 
 void igOnOffValueObserver_IsCompatible(void *arg0, int arg1) {
-    igObject_IsKindOf((igObject *)arg1, igOnOffModel_GetMetaObject());
+    ((Gap::Core::igObject *)arg1)->isOfType(igOnOffModel_GetMetaObject());
 }
 
 igMetaObject *igRadioGroupSelectedObserver_GetMeta(void) {
@@ -28,7 +28,7 @@ igMetaObject *igRadioGroupSelectedObserver_GetMeta(void) {
 }
 
 void igRadioGroupSelectedObserver_IsCompatible(void *arg0, int arg1) {
-    igObject_IsKindOf((igObject *)arg1, igRadioGroupModel_GetMetaObject());
+    ((Gap::Core::igObject *)arg1)->isOfType(igRadioGroupModel_GetMetaObject());
 }
 
 igMetaObject *igRadioGroup_GetMeta(void) {
@@ -56,7 +56,7 @@ igMetaObject *igActiveComponentsObserver_GetMeta(void) {
 }
 
 void igActiveComponentsObserver_IsCompatible(void *arg0, int arg1) {
-    igObject_IsKindOf((igObject *)arg1, igGuiSystemModel_GetMetaObject());
+    ((Gap::Core::igObject *)arg1)->isOfType(igGuiSystemModel_GetMetaObject());
 }
 
 igMetaObject *igMousePosObserver_GetMeta(void) {
@@ -64,7 +64,7 @@ igMetaObject *igMousePosObserver_GetMeta(void) {
 }
 
 void igMousePosObserver_IsCompatible(void *arg0, int arg1) {
-    igObject_IsKindOf((igObject *)arg1, igGuiSystemModel_GetMetaObject());
+    ((Gap::Core::igObject *)arg1)->isOfType(igGuiSystemModel_GetMetaObject());
 }
 
 igMetaObject *igWindowSizeObserver_GetMeta(void) {
@@ -72,7 +72,7 @@ igMetaObject *igWindowSizeObserver_GetMeta(void) {
 }
 
 void igWindowSizeObserver_IsCompatible(void *arg0, int arg1) {
-    igObject_IsKindOf((igObject *)arg1, igGuiSystemModel_GetMetaObject());
+    ((Gap::Core::igObject *)arg1)->isOfType(igGuiSystemModel_GetMetaObject());
 }
 
 igMetaObject *igGuiSystemModel_GetMeta(void) {
@@ -108,7 +108,7 @@ int igDefaultAspect_GetMeta(void) {
 }
 
 void igDefaultAspect_IsCompatible(igDefaultAspect *self, int model) {
-    igObject_IsKindOf((igObject *)model, igGuiComponentModel_GetMetaObject());
+    ((Gap::Core::igObject *)model)->isOfType(igGuiComponentModel_GetMetaObject());
 }
 
 igMetaObject *igOnOffColorChanger_GetMeta(void) {

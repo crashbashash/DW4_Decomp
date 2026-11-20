@@ -100,7 +100,7 @@ extern int text_meta[4];
 #include "dw4/attrs/igAttr.h"
 #include "dw4/attrs/igAttrPool.h"
 static inline int asObjectRefField(int field) {
-    if (field != 0 && igObject_IsKindOf((igObject *)field, g_igObjectRefMetaField_metaObject) != 0) {
+    if (field != 0 && ((Gap::Core::igObject *)field)->isOfType(g_igObjectRefMetaField_metaObject) != 0) {
         return field;
     }
     return 0;
@@ -117,7 +117,7 @@ int igViewerRenderer_ObjectsTraverseNodeSelect(igTraversal *traversal, igNode *n
         kind = (int *)g_igTransform_metaObject;
         if ((int *)((igObjectDispatchView *)node)->GetMeta() == kind
             || (kind = (int *)g_igLightSet_metaObject, (int *)((igObjectDispatchView *)node)->GetMeta() == kind)) return 0;
-        if (igObject_IsKindOf((igObject *)node, g_igGroup_metaObject) != 0) return 2;
+        if (((Gap::Core::igObject *)node)->isOfType(g_igGroup_metaObject) != 0) return 2;
     }
     return 1;
 }
@@ -591,7 +591,7 @@ void igViewerRenderer_UpdateScene(igViewerRenderer *self) {
 void igViewerRenderer_FindLights(igViewerRenderer *self, igGroup *node) {
     int count; int i; int offset;
     if (node->_flags & 1) {
-        if (igObject_IsKindOf(node, g_igGroup_metaObject) != 0) {
+        if (((Gap::Core::igObject *)node)->isOfType(g_igGroup_metaObject) != 0) {
             count = 0;
             if (node->_childList != 0) count = ((igNodeList *)node->_childList)->_count;
             i = 0;
@@ -603,7 +603,7 @@ void igViewerRenderer_FindLights(igViewerRenderer *self, igGroup *node) {
                     offset += 4;
                 } while (i < count);
             }
-        } else if (igObject_IsKindOf(node, g_igLightSet_metaObject) != 0) {
+        } else if (((Gap::Core::igObject *)node)->isOfType(g_igLightSet_metaObject) != 0) {
             count = ((igObjectList *)node->_childList)->_count;
             i = 0;
             if (0 < count) {

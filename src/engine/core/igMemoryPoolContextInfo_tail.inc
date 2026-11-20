@@ -209,7 +209,7 @@ igResult igMemoryPoolContextInfo_ReadConfiguration(MemoryContext *self, int conf
     int allocator;
     igObject *old;
     if (self->contextInfo == 0) {
-        allocator = ((int)igObject_GetAllocator((igObject *)self));
+        allocator = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
         old = (igObject *)self->contextInfo;
         if (old != 0) {
             ((igRefCountWord *)&old->_refCount)->word = ((igRefCountWord *)&old->_refCount)->word - 1;
@@ -232,7 +232,7 @@ igResult igMemoryPoolContextInfo_LoadFromRegistry(MemoryContext *self, int confi
     int allocator;
     igObject *old;
     if (self->contextInfo == 0) {
-        allocator = ((int)igObject_GetAllocator((igObject *)self));
+        allocator = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
         old = (igObject *)self->contextInfo;
         if (old != 0) {
             ((igRefCountWord *)&old->_refCount)->word = ((igRefCountWord *)&old->_refCount)->word - 1;
@@ -257,7 +257,7 @@ igResult igMemoryPoolContextInfo_GetPoolInfos(MemoryContext *self, int file) {
     igMemoryPoolContextInfo_ClearMemoryPoolInfos((void *)file);
     for (i = 0; i < 46; i++) {
         if (self->records[i].descriptor != 0) {
-            igMemoryPoolInfo *o = (igMemoryPoolInfo *)igMemoryPoolInfo_Create(((int)igObject_GetAllocator((igObject *)file)));
+            igMemoryPoolInfo *o = (igMemoryPoolInfo *)igMemoryPoolInfo_Create(((int)((Gap::Core::igObject *)file)->getMemoryPool()));
             if (self->FillMemoryPoolInfo(i, o) == g_resultFailure) {
                 result = g_resultFailure;
                 o->_refCount = o->_refCount - 1;
@@ -275,7 +275,7 @@ igResult igMemoryPoolContextInfo_SetPoolInfos(MemoryContext *self, int file, int
     igResult result = g_resultSuccess;
     int i;
     if (self->contextInfo == 0) {
-        int allocator = ((int)igObject_GetAllocator((igObject *)self));
+        int allocator = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
         igMemoryPoolContextInfoView *old = self->contextInfo;
         if (old != 0) { old->_refCount = old->_refCount - 1; if (((unsigned long long)((long long)(int)old->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(old); }
         self->contextInfo = (igMemoryPoolContextInfoView *)igMemoryPoolContextInfo_Create(allocator);
@@ -319,7 +319,7 @@ void igMemoryPoolContextInfo_FillMemoryPoolInfo(int *result, MemoryContext *cont
             ASSIGN_TOKEN(info->_aliasedTo, entry->descriptor->_aliasedTo);
             object = (igMemoryPoolView *)context->records[index].allocator;
             if (object != 0) {
-                if (igObject_IsKindOf((igObject *)object, (igMetaObject *)g_igArenaMemoryPool_metaObject) != 0) {
+                if (((Gap::Core::igObject *)object)->isOfType((igMetaObject *)g_igArenaMemoryPool_metaObject) != 0) {
                     if (object->GetPreSize() != 0) {
                         if (((igArenaMemoryPoolView *)object)->GetLocalNetAllocatedWithOverheadHigh() > object->GetPreSize()) {
                             entry->descriptor->_size = (int)((igArenaMemoryPoolView *)object)->GetLocalNetAllocatedWithOverheadHigh();
@@ -681,7 +681,7 @@ igResult igMemoryPoolContextInfo_Initialize(MemoryContext *self) {
     g_igArenaMemoryPool_defaultHeapIntegrityCheckLevel = optC;
     for (i = 0; i < 46; i++) {
         o = (igMemoryPoolView *)self->records[i].allocator;
-        if (o != 0 && igObject_IsKindOf((igObject *)o, g_igArenaMemoryPool_metaObject) != 0) {
+        if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igArenaMemoryPool_metaObject) != 0) {
             igArenaMemoryPool_SetPoolOptionFlags((igArenaMemoryPool *)o, (options & ~1) | (((igArenaMemoryPool *)o)->_poolOptionFlags & 1));
         }
     }
@@ -2094,7 +2094,7 @@ igResult igMemoryPoolContextInfo_ReadFromRegistrySection(igMemoryPoolContextInfo
             bool created;
             poolInfo = igMemoryPoolContextInfo_FindMemoryPoolInfoByName(self, (int)igStringObj_Text(key));
             if (poolInfo.p == 0) {
-                igMemoryPoolView *pool = igObject_GetAllocator((igObject *)self);
+                igMemoryPoolView *pool = ((Gap::Core::igObject *)self)->getMemoryPool();
                 poolInfo.release();
                 poolInfo.p = (igMemoryPoolInfo *)igMemoryPoolInfo_Create((int)pool);
                 created = true;

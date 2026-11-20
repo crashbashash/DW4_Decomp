@@ -885,7 +885,7 @@ void beNumVerData_userConstruct(beNumVerData *self, int flag) {
     if (!(flag & 0xFF)) {
         i = 0;
         do {
-            allocator = igObject_GetAllocator(self);
+            allocator = ((Gap::Core::igObject *)self)->getMemoryPool();
             allocator = (g_useOwnerAllocator != 0) ? allocator : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
             {
                 igSmartPointer<beNumVerInsideData> item((beNumVerInsideData *)beNumVerInsideData_Create((int)allocator));

@@ -44,7 +44,7 @@ void igProjectiveShadowShader_ConfigureSharedAttrs(void) {
         image.p = (ShadowSetupObj *)igTextureAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
         ((ShadowSetupObj *)DAT_005628d8[0])->s31((int)image.p);
         ShadowRef texture;
-        texture.p = (ShadowSetupObj *)igImage_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+        texture.p = (ShadowSetupObj *)igImage_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
         igTextureAttr_SetImage((igTextureAttr *)image.p, (igImage *)texture.p, 0);
         texture.p->s26(1);
         texture.p->s27(1);

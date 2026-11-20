@@ -269,7 +269,7 @@ def scan(src_dir="src", symbols="config/SLUS-20836/symbols.txt", unit_objects=No
     compiler-emitted members share their actual owner's source path. The kernel
     patches' sources (tools/kpatch.py) are not image units and stay out.
     """
-    out, shared, members = {}, set(), set()
+    out, shared, members, statics, plain = {}, set(), set(), set(), set()
     for root, dirs, files in os.walk(src_dir):
         if kpatch.is_patch_source(root):
             dirs[:] = []
@@ -313,10 +313,16 @@ def scan(src_dir="src", symbols="config/SLUS-20836/symbols.txt", unit_objects=No
                     shared.add(name)
                 if member:
                     members.add(name)
+                # a `static` C++ overload of a retail name (forwarding another pointer type to it) is no
+                # definition of that symbol when a unit emits it under a member's compiler name
+                if _s != _e and re.match(r"\s*static\b", text[_s:text.find("{", _s)]):
+                    statics.add(name)
+                else:
+                    plain.add(name)
                 out[name] = path
     for name in shared:
         del out[name]
-    return unitobjects.augment_sources(out, symbols, unit_objects)
+    return unitobjects.augment_sources(out, symbols, unit_objects, overridable=statics - plain)
 
 
 _NOT_NEWLINE = re.compile(r"[^\n]")

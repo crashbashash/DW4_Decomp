@@ -34,7 +34,7 @@
 #include "dw4/support/emptyString.h"
 #include "dw4/maths/igVec3f.h"
 #define HOLDER_BODY { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
-#define ALLOC_OF(owner, a, sel) { a = igObject_GetAllocator(owner); a = g_useOwnerAllocator ? a : Memory_GetAllocatorBySelector(sel); }
+#define ALLOC_OF(owner, a, sel) { a = ((Gap::Core::igObject *)(owner))->getMemoryPool(); a = g_useOwnerAllocator ? a : Memory_GetAllocatorBySelector(sel); }
 #define ALLOC(a, sel) ALLOC_OF(self, a, sel)
 #define REL(o) { igObject *rr = (o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 #define STORE_REF(slot, fresh) { igObject *held2 = fresh; if (held2 != 0) held2->_refCount = held2->_refCount + 1; REL((igObject *)slot) slot = (int)held2; }
@@ -289,7 +289,7 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
     float playerMatrix[16];
     float distSq;
     if (ram->_dataList == 0) {
-        int alloc = ((int)igObject_GetAllocator(ram));
+        int alloc = ((int)((Gap::Core::igObject *)ram)->getMemoryPool());
         int a;
         if (g_useOwnerAllocator != 0) {
             a = alloc;
@@ -488,7 +488,7 @@ void beNDMWMdlItem_OnErase(beNDMWMdlItem *self, beBaseInfoRam *ram) {
     igObjectList *locks;
     int cnt, off;
     if (ram->_dataList == 0) {
-        int alloc = ((int)igObject_GetAllocator(ram));
+        int alloc = ((int)((Gap::Core::igObject *)ram)->getMemoryPool());
         int a;
         if (g_useOwnerAllocator != 0) {
             a = alloc;
@@ -538,7 +538,7 @@ static inline void adoptDataList(beBaseInfoRam *ram, igObject *created) {
 
 void beNDMWMdlItem_OnSequenceChange(beNDMWMdlItem *self, beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
-        void *a = igObject_GetAllocator(ram);
+        void *a = ((Gap::Core::igObject *)ram)->getMemoryPool();
         void *al = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igObject *created = (igObject *)((void *)beBaseInfoDataList_Create((int)al));
         adoptDataList(ram, created);
@@ -555,7 +555,7 @@ void beNDMWMdlItem_OnAction1(beNDMWMdlItem *self, beNDMWGameRamInfoRam *ram) {
     bool canTake;
     int player;
     if (ram->_dataList == 0) {
-        int alloc = ((int)igObject_GetAllocator(ram));
+        int alloc = ((int)((Gap::Core::igObject *)ram)->getMemoryPool());
         int a;
         if (g_useOwnerAllocator != 0) {
             a = alloc;

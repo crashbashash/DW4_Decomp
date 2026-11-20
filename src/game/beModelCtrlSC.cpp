@@ -189,13 +189,13 @@ int beModelCtrlSCHitBox_Start(beModelCtrlSCHitBox *self, beBaseInfoRam *ram) {
     beBaseInfo *info = (beBaseInfo *)ram->_parentInfo;
     igAABox *box;
     if (ram->_dataList == 0) {
-        int own = (int)igObject_GetAllocator(ram);
+        int own = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         RamDataList::create(ram, g_useOwnerAllocator != 0 ? own : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     }
     ramData = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
     work = (beModelCtrlInfoWork *)ramData->_work;
     ctrl = (beModelCtrl *)ram->_parentManager;
-    int own = (int)igObject_GetAllocator(self);
+    int own = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     int allocator;
     if (g_useOwnerAllocator != 0) {
         allocator = own;
@@ -320,7 +320,7 @@ int beModelCtrlSCEffect_Start(beModelCtrlSCEffect *self, beBaseInfoRam *ram) {
         beMessenger_AppendString((beMessenger *)manager->_messenger, (const char *)ownerName);
         beMessenger_AppendString((beMessenger *)manager->_messenger, (const char *)self->_seqName);
         if (ram->_dataList == 0) {
-            int own = (int)igObject_GetAllocator(ram);
+            int own = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
             RamDataList::create(ram, g_useOwnerAllocator != 0 ? own : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
         }
         work = (beModelCtrlInfoWork *)((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE"))->_work;
@@ -530,7 +530,7 @@ static inline void setInternedString(int *field, int text) {
 void beModelCtrlSubCom_AddEffect(beModelCtrlSubCom *self, const char *modelName, const char *seqName, float startFrame, const igVec3f &offset, igVec3f rotation, unsigned char isSeqDead, unsigned char isPositionLock) {
     int own;
     beModelCtrlSCEffect *record;
-    own = (int)igObject_GetAllocator(self);
+    own = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     igSmartPointer<beModelCtrlSCEffect> effect(beModelCtrlSCEffect_Create(g_useOwnerAllocator != 0 ? own : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1)));
     record = effect.p;
     setInternedString(&record->_modelName, (int)modelName);
@@ -561,7 +561,7 @@ void beModelCtrlSubCom_AddHitBox(beModelCtrlSubCom *self, beModelCtrlHITBOX *hit
     beModelCtrlSCHitBox *box;
     int kind;
 
-    allocator = (int)igObject_GetAllocator(self);
+    allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     igSmartPointer<beModelCtrlSCHitBox> command(beModelCtrlSCHitBox_Create(allocator));
     command.p->_startFrame = hitBox->_start;
@@ -622,7 +622,7 @@ void beModelCtrlSubCom_AddSound(beModelCtrlSubCom *self, const char *sndName, fl
     beModelCtrlSCSound *sound;
 
     name = sndName;
-    allocator = (int)igObject_GetAllocator(self);
+    allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     igSmartPointer<beModelCtrlSCSound> command(beModelCtrlSCSound_Create(allocator));
     sound = command.p;

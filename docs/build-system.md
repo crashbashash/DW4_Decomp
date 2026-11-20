@@ -71,11 +71,20 @@ conversion order are in [member conversion](engine/member-conversion.md).
   class becomes `delete p`. A declared out-of-line destructor is refused (its user body is written by hand).
 - **The boundary.** Code that still names a converted member's C name keeps it: C callers, an unconverted
   subclass's direct call of a virtual default, a construction or destruction of an object still written as a
-  flat struct (a GetVTable probe). While such a user exists the prototype stays in the home header (under
-  `include/`, named for the class first), and in another header only for a user's unit that does not read the
-  home header; every other declaration goes, and all of them once no code names the C name.
-  `memberize.py --check` reports each declaration of a converted member's C name (a retail name of
-  `compiler-names.tsv` for a converted class's member) that rule would remove, and exits 1 when there is one.
+  flat struct (a GetVTable probe), and a call of a private member from outside its class (a protected one from
+  outside the class and its subclasses), which the kit reaches only through the class's own inlines
+  (`igObject::release()` for `internalRelease`). While such a user exists the prototype stays in the home header
+  (under `include/`, named for the class first), and in another header only for a user's unit that does not read
+  the home header; every other declaration goes, and all of them once no code names the C name. A `static
+  inline` C++ overload of the C name that forwarded another pointer type to it goes when no C++ code names the C
+  name any more. `memberize.py --check` reports each declaration of a converted member's C name (a retail name
+  of `compiler-names.tsv` for a converted class's member) that rule would remove, and exits 1 when there is one.
+- **Macros and class bodies.** A call in a `#define`'s replacement text (continuation lines included) is
+  rewritten like any call, its receiver cast to the class (a macro parameter parenthesised), and so is a call in
+  a member function a class body defines; a statement is a declaration of the C name only when a type precedes
+  it. A parameter spelled `Gap::<Library>::Class *` in a C form compares equal to the member's bare `Class *`
+  and is written bare in the class's scope. Rows a batch adds to `class-members.tsv` go after their class's
+  last row.
 - **Rows.** `tools/whole_file_rows.py --unit-va <va> --cxx --write` regenerates a unit's row from its present
   row: the addresses, strips, static-initializer entry and data names it settled stay settled, the retail
   functions it left to link from retail (a partial file) stay so without `--partial`, a name it left out

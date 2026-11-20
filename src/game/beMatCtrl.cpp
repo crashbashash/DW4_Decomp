@@ -240,7 +240,7 @@ static inline void StoreListRef(igObject *object, igObjectList *list, int index)
 }
 
 static inline void *OwnerAllocator(beMatCtrl *self) {
-    void *owner = igObject_GetAllocator(self);
+    void *owner = ((Gap::Core::igObject *)self)->getMemoryPool();
     return g_useOwnerAllocator != 0 ? owner : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 }
 

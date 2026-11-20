@@ -1510,19 +1510,11 @@ extern "C" int igMetaObject_GetPoolName(int *object);
 extern "C" int igObject_Destruct(int extra0);
 extern "C" void igObject_TrimCapacity(int extra0);
 extern "C" void igObject_RegisterInstance(void **arg0, void *arg1);
-extern "C" CallbackArray *igObject_CreateEmptyInitCallbacks(void);
-extern "C" void *igObject_GetNoParentMetaObject(void);
 extern "C" char *igObject_AllocateRawStorage(int size, int prefix_size, igMemoryPoolView *requested_pool);
 extern "C" void *igObject_AllocateRawStorageDefault(int size,int prefix);
 class igObjectDispatchView;
-extern "C" void igObject_ZeroFields(igObjectDispatchView *object);
-extern "C" void igObject_ConstructFields(igObjectDispatchView *object);
-extern "C" void igObject_ResetUnconstructedFields(igObjectDispatchView *object);
-extern "C" void igObject_DestructFieldValues(int *arg0);
-extern "C" void igObject_ClearFieldValues(int *arg0);
 extern "C" void igObject_CopyFields(igObjectDispatchView *self, int source);
 extern "C" int igObject_CloneViaMetadata(void **source, int copyMode);
-extern "C" void *igObject_GetAllocationBase(void *self);
 extern "C" void igObject_FreeStorage(int object, int storage);
 extern "C" int igObjectDirEntry_GetMeta(void);
 class igObjectDirEntryView;
@@ -3728,7 +3720,6 @@ extern "C" int igObject_WritePersistentFields(igObjectDispatchView *object, int 
 struct FieldRecordHead { int kind; int size; int fieldCount; };
 extern "C" int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap);
 extern "C" int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead *head, igDirectoryView *dir, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap);
-extern "C" int igObject_IsAlikeDeep(igObjectDispatchView *a, igObjectDispatchView *b);
 extern "C" void igObjectDirEntry_ReleaseDefaults(igObjectDirEntry *self);
 /* An igObjectList of igObjectDirEntry, or of such lists (an igIGBFile's _entryPool, one per type meta). */
 static inline igObjectDirEntry *objectDirEntryAt(const igObjectList *list, int index) { return ((igObjectDirEntry *const *)list->_data)[index]; }
@@ -3847,11 +3838,11 @@ extern "C" void igResource_ClearDirectories(igResource *self);
 extern "C" void igResource_RemoveIGBFiles(igResource *self);
 extern "C" void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromName, const char *toName);
 static inline igObjectRefMetaField *AsObjectRefMetaField(void *p) {
-    if (p != 0 && igObject_IsKindOf((igObject *)p, (igMetaObject *)((void *)g_igObjectRefMetaField_metaObject)) != 0) { return (igObjectRefMetaField *)p; }
+    if (p != 0 && ((Gap::Core::igObject *)p)->isOfType((igMetaObject *)((void *)g_igObjectRefMetaField_metaObject)) != 0) { return (igObjectRefMetaField *)p; }
     return 0;
 }
 static inline void *AsObjectList(void *p) {
-    if (p != 0 && igObject_IsKindOf((igObject *)p, (igMetaObject *)((void *)g_igObjectList_metaObject)) != 0) { return p; }
+    if (p != 0 && ((Gap::Core::igObject *)p)->isOfType((igMetaObject *)((void *)g_igObjectList_metaObject)) != 0) { return p; }
     return 0;
 }
 extern "C" void igResource_FinishAsyncLoad(igResource *arg0, int arg1);

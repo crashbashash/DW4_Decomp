@@ -1,6 +1,6 @@
 int igShaderFactory_ConfigureShader(void *dummy, VA_1d8980 *arg1, void *, int) {
     VO_1d8980 *shader = ((P_1d8980 *)arg1)->f36;
-    igSmartPointer<Attr> attr(((Attr *)igAttrList_Create(igObject_GetAllocator((igObject *)dummy))));
+    igSmartPointer<Attr> attr(((Attr *)igAttrList_Create(((Gap::Core::igObject *)dummy)->getMemoryPool())));
     shader->v100();
     shader->v96(attr.get(), attr.get(), 0);
     arg1->v124();

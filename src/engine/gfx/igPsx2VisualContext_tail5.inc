@@ -1256,7 +1256,7 @@ void FUN_0017b5f0(TexContext *context, TexEntry *entry)
             int i;
 
             for (i = 0; i < count; i++) {
-                igSmartPointer<MipImage> mip((MipImage *)igImage_CreateInstance(igVisualContext_GetImageMemoryPool((int *)context)));
+                igSmartPointer<MipImage> mip((MipImage *)igImage_CreateInstance((igMemoryPoolView *)igVisualContext_GetImageMemoryPool((int *)context)));
                 int mipFormat;
 
                 mip->reduceFrom(previous);

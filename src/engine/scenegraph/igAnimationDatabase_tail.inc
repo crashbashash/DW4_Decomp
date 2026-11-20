@@ -30,7 +30,7 @@ void *Gap__Sg__igAnimationDatabase__vfunc_24(O_1aea60 *arg0, char *arg1) {
     if (strncmp(arg1, "__TS__", strlen("__TS__")) == 0) {
         if (DAT_00562560[0] == 0) {
             var_s1 = ((R_1aea60 *)igMetaObject_FindFieldByName(g_igAnimation_metaObject, "_trackList"));
-            if ((var_s1 != 0) && (igObject_IsKindOf(var_s1, g_igObjectRefMetaField_metaObject) != 0)) {
+            if ((var_s1 != 0) && (((Gap::Core::igObject *)var_s1)->isOfType(g_igObjectRefMetaField_metaObject) != 0)) {
                 var_s1 = (R_1aea60 *)var_s1;
             } else {
                 var_s1 = 0;
@@ -41,7 +41,7 @@ void *Gap__Sg__igAnimationDatabase__vfunc_24(O_1aea60 *arg0, char *arg1) {
         igSmartPointer<R_1aea60> record(((R_1aea60 *)igProperty_FindByName((igObjectList *)arg0->f24, g_propertyNameField, sp50)), kRetainReference);
         if (record.get() != 0) {
             var_s1 = *(R_1aea60 **)((char *)record.get() + DAT_00562560[0][2]);
-            if ((var_s1 != 0) && (igObject_IsKindOf(var_s1, g_igAnimationTrackList_metaObject) != 0)) {
+            if ((var_s1 != 0) && (((Gap::Core::igObject *)var_s1)->isOfType(g_igAnimationTrackList_metaObject) != 0)) {
                 var_s1 = (R_1aea60 *)var_s1;
             } else {
                 var_s1 = 0;
@@ -71,7 +71,7 @@ int FUN_001aedd0(void *self, igTDataList<AnimDbRecord *> *list, int file, AnimDb
     return 0;
 }
 
-#define CAST_INLINE(NAME, META) static inline AnimDbObject *NAME(AnimDbObject *o) { if (o != 0 && igObject_IsKindOf(o, META) != 0) { return o; } return 0; }
+#define CAST_INLINE(NAME, META) static inline AnimDbObject *NAME(AnimDbObject *o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(META) != 0) { return o; } return 0; }
 bool igAnimationDatabase_FindObjectReference(AnimDbRec *db, int file, AnimDbObject *obj) {
     char name[4096];
     if ((void *)obj == (void *)db) {

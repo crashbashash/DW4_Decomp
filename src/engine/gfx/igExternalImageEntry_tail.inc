@@ -1,6 +1,6 @@
 int igExternalImageEntry_LoadExternalFile(A *arg0) {
     igObject *temp_v0;
-    temp_v0 = (igObject *)igImage_CreateInstance((int)igObject_GetAllocator((igObject *)arg0));
+    temp_v0 = (igObject *)igImage_CreateInstance(((Gap::Core::igObject *)arg0)->getMemoryPool());
     if (FUN_001551f0((S_1551f0 *)arg0, (V_1551f0 *)temp_v0) == 0) {
         temp_v0->_refCount = temp_v0->_refCount - 1;
         if ((temp_v0->_refCount & 0x7FFFFF) == 0) {

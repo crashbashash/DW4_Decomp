@@ -20,7 +20,7 @@ static inline void setLock(igEventTrackerView *self, igSemaphoreView *pool) {
 void igEventTracker_SetThreadSafe(igEventTrackerView *self, int open) {
     if (open != 0) {
         if (self->_lock == 0) {
-            igSmartPointer<igSemaphoreView> created(((igSemaphoreView *)igSemaphore_Create(((int)igObject_GetAllocator((igObject *)self)))));
+            igSmartPointer<igSemaphoreView> created(((igSemaphoreView *)igSemaphore_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool()))));
             created.get()->Create();
             setLock(self, created.get());
         }
@@ -1776,8 +1776,8 @@ igResult igEventTracker_WriteFile(igEventTrackerView *self, int fileName) {
         self->ResolveAllCallStackSymbols();
     }
     {
-    igSmartPointer<igIGBFileView> file(((igIGBFileView *)igIGBFile_Create((int)(((igObject *)igObject_GetAllocator((igObject *)self))))));
-    a = ((igObject *)igObject_GetAllocator((igObject *)self));
+    igSmartPointer<igIGBFileView> file(((igIGBFileView *)igIGBFile_Create((int)(((igObject *)((Gap::Core::igObject *)self)->getMemoryPool())))));
+    a = ((igObject *)((Gap::Core::igObject *)self)->getMemoryPool());
     o = file.p;
     if (a != 0) a->_refCount = a->_refCount + 1;
     old = (igObject *)o->_temporaryMemoryPool;
@@ -1786,7 +1786,7 @@ igResult igEventTracker_WriteFile(igEventTrackerView *self, int fileName) {
         if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old);
     }
     o->_temporaryMemoryPool = (igMemoryPoolView *)a;
-    a = ((igObject *)igObject_GetAllocator((igObject *)self));
+    a = ((igObject *)((Gap::Core::igObject *)self)->getMemoryPool());
     o = file.p;
     if (a != 0) a->_refCount = a->_refCount + 1;
     old = (igObject *)o->_objectMemoryPool;
@@ -1795,7 +1795,7 @@ igResult igEventTracker_WriteFile(igEventTrackerView *self, int fileName) {
         if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old);
     }
     o->_objectMemoryPool = (igMemoryPoolView *)a;
-    a = ((igObject *)igObject_GetAllocator((igObject *)self));
+    a = ((igObject *)((Gap::Core::igObject *)self)->getMemoryPool());
     o = file.p;
     if (a != 0) a->_refCount = a->_refCount + 1;
     old = (igObject *)o->_dataMemoryPool;

@@ -186,7 +186,7 @@ struct Assign {
 };
 /* The manager when it is a viewer scene-info manager, else null. */
 static inline igViewerSceneInfoManager *AsSceneInfoManager(igObject *manager) {
-    if (manager != 0 && igObject_IsKindOf(manager, g_igViewerSceneInfoManager_metaObject) != 0) return (igViewerSceneInfoManager *)manager; else return 0;
+    if (manager != 0 && ((Gap::Core::igObject *)manager)->isOfType(g_igViewerSceneInfoManager_metaObject) != 0) return (igViewerSceneInfoManager *)manager; else return 0;
 }
 /* Defined below their first use. */
 extern "C" {

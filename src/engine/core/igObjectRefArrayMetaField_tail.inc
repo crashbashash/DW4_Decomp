@@ -51,10 +51,10 @@ void igObjectRefArrayMetaField_ConstructValue(igObjectRefArrayMetaField *self, i
         if ((poolName != 0) && (*poolName != 0)) {
             allocator = (int)Memory_GetAllocatorByName(poolName);
             if (allocator == 0) {
-                allocator = ((int)igObject_GetAllocator((igObject *)object));
+                allocator = ((int)((Gap::Core::igObject *)object)->getMemoryPool());
             }
         } else {
-            allocator = ((int)igObject_GetAllocator((igObject *)object));
+            allocator = ((int)((Gap::Core::igObject *)object)->getMemoryPool());
         }
         for (i = 0; i < self->_num; i++) {
             element = ((igObject *)igMetaObject_CreateInstance((igMetaObject *)self->_metaObject, (igMemoryPoolView *)allocator));
@@ -143,7 +143,7 @@ void igObjectRefArrayMetaField_DeepCopy(igObjectRefArrayMetaField *s, char *a1, 
         igObjectDispatchView *y = *(igObjectDispatchView **)(a2 + base + off);
         if (x == 0 && y == 0) break;
         if (x != 0 && y != 0) {
-            igObject_DeepCopy((igObjectDispatchView *)x, (igObjectDispatchView *)y);
+            ((Gap::Core::igObject *)x)->copyDeep((Gap::Core::igObject *)y);
         } else if (x == 0) {
             igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)s, (int)a1, i, (igObject *)(y->CloneViaMetadata(1)));
         } else if (y == 0) {
@@ -265,7 +265,7 @@ int igObjectRefArrayMetaField_IsAlikeDeep(igObjectRefArrayMetaField *self, int f
             if (a == 0 || b == 0) {
                 return 0;
             }
-            if (!(igObject_IsAlikeDeep((igObjectDispatchView *)a, (igObjectDispatchView *)b) & 0xFF)) {
+            if (!(((Gap::Core::igObject *)a)->isAlikeDeep((Gap::Core::igObject *)b) & 0xFF)) {
                 return 0;
             }
         }
@@ -285,7 +285,7 @@ int igObjectRefArrayMetaField_IsAlikeShallow(igObjectRefArrayMetaField *self, in
             if ((a == 0) || (b == 0)) {
                 return 0;
             }
-            if (!(igObject_IsAlikeShallow((igObjectDispatchView *)a, (igObjectDispatchView *)b) & 0xFF)) {
+            if (!(((Gap::Core::igObject *)a)->isAlikeShallow((Gap::Core::igObject *)b) & 0xFF)) {
                 return 0;
             }
         }

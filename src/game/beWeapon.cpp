@@ -78,7 +78,7 @@ void beWeapon_OnAddRam(beWeapon *self, beWeaponInfoRam *ram) {
     igObject *retained;
     igObject *old;
     if (self->_attachDataList == 0) {
-        allocator = (int)igObject_GetAllocator(self);
+        allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<igObject> list(beWeaponAttachDataList_Create(allocator));
         retained = list.p;
@@ -94,7 +94,7 @@ void beWeapon_OnAddRam(beWeapon *self, beWeaponInfoRam *ram) {
         }
         self->_attachDataList = (int)retained;
         for (attachIndex = 0; attachIndex < 4; attachIndex++) {
-            allocator = (int)igObject_GetAllocator(self);
+            allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
             allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             ObjectRef data(beWeaponAttachData_Create(allocator));
             ObjectList_AppendRetained((igObjectList *)self->_attachDataList, data.p);
@@ -133,7 +133,7 @@ int beWeapon_OnMessageText(beWeapon *self, beWeaponInfoRam *ram, const char *mes
                 igNamedObject *boneName = ((igNamedObject **)((igObjectList *)info->_boneNameList)->_data)[j];
                 int bone = skeleton->FindBoneIndex(nameOf(boneName->_name));
                 if (bone >= 0) {
-                    int allocator = (int)igObject_GetAllocator(self);
+                    int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
                     allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                     igSmartPointer<igModelViewMatrixBoneSelect> boneSelect(igModelViewMatrixBoneSelect_CreateInstance(allocator));
                     boneSelect.p->_matrixIndex = bone;

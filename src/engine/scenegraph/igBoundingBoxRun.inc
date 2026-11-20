@@ -1,8 +1,8 @@
 int igTransformSequence_ExtendBound(AABoxFields *arg0, TransformInputView *arg1) {
-    if (igObject_IsKindOf((igObject *)arg1, g_igTransformSequence_metaObject) != 0) {
-        Ref_1b2750 a((AABoxFields *)igAABox_CreateInstance((int)igObject_GetAllocator((igObject *)arg0)));
+    if (((Gap::Core::igObject *)arg1)->isOfType(g_igTransformSequence_metaObject) != 0) {
+        Ref_1b2750 a((AABoxFields *)igAABox_CreateInstance((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
         igVolume_ExtendBy((void **)a.o, (void **)arg0);
-        Ref_1b2750 b((AABoxFields *)igAABox_CreateInstance((int)igObject_GetAllocator((igObject *)arg0)));
+        Ref_1b2750 b((AABoxFields *)igAABox_CreateInstance((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
         AABoxFields *p = b.o;
         p->f8 = p->f12 = p->f16 = 3.402823466e+38f;
         p->f20 = p->f24 = p->f28 = -3.402823466e+38f;
@@ -46,16 +46,16 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
     igNode *node = (igNode *)nodeHandle;
     igAABox *cached = (igAABox *)node->_bound;
     if (cached != 0) {
-        if (igObject_IsKindOf(node, g_igPlanarShadowShader_metaObject) != 0) return 0;
+        if (((Gap::Core::igObject *)node)->isOfType(g_igPlanarShadowShader_metaObject) != 0) return 0;
         igVolume_ExtendBy((void **)bound, (void **)cached);
         return 1;
     }
-    igSmartPointer<igAABox> box((igAABox *)igAABox_CreateInstance((int)igObject_GetAllocator(node)));
+    igSmartPointer<igAABox> box((igAABox *)igAABox_CreateInstance((int)((Gap::Core::igObject *)node)->getMemoryPool()));
     makeEmpty(box);
-    igSmartPointer<igAABox> uncachedBox((igAABox *)igAABox_CreateInstance((int)igObject_GetAllocator(node)));
+    igSmartPointer<igAABox> uncachedBox((igAABox *)igAABox_CreateInstance((int)((Gap::Core::igObject *)node)->getMemoryPool()));
     makeEmpty(uncachedBox);
     unsigned char ok = boundCacheable(node, cacheBound);
-    if (igObject_IsKindOf(node, g_igGroup_metaObject) != 0) {
+    if (((Gap::Core::igObject *)node)->isOfType(g_igGroup_metaObject) != 0) {
         igGroup *group = (igGroup *)node;
         unsigned count = 0;
         if (group->_childList != 0) count = ((igNodeList *)group->_childList)->_count;
@@ -66,43 +66,43 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
                  ok;
         }
     }
-    if (igObject_IsKindOf(node, g_igGeometry_metaObject) != 0) {
+    if (((Gap::Core::igObject *)node)->isOfType(g_igGeometry_metaObject) != 0) {
         if (!igGeometry_ExtendBound((int)box.get(), node)) {
             ok = 0;
             igGeometry_ExtendBound((int)uncachedBox.get(), node);
         }
-    } else if (igObject_IsKindOf(node, g_igTransform_metaObject) != 0) {
+    } else if (((Gap::Core::igObject *)node)->isOfType(g_igTransform_metaObject) != 0) {
         igTransform *transform = (igTransform *)node;
         int input = transform->_transformInput;
         if (transform->_target == 0) {
             if (applySequences) {
                 if (input != 0) {
                     unsigned char sequenced = igTransformSequence_ExtendBound((AABoxFields *)box.get(), (TransformInputView *)input);
-                    if (igObject_IsKindOf(node, g_unlinkedTransformClass_metaObject) != 0) {
+                    if (((Gap::Core::igObject *)node)->isOfType(g_unlinkedTransformClass_metaObject) != 0) {
                         /* the parent test is made and its answer discarded: a sequenced child never caches */
-                        if (parentHandle != 0 && igObject_IsKindOf((igObject *)parentHandle, g_unlinkedTransformClass_metaObject) != 0) {
+                        if (parentHandle != 0 && ((Gap::Core::igObject *)parentHandle)->isOfType(g_unlinkedTransformClass_metaObject) != 0) {
                         }
                         sequenced = 0;
                     }
                     ok = ok && sequenced;
-                } else if (igObject_IsKindOf(node, g_unlinkedTransformClass_metaObject) != 0) {
+                } else if (((Gap::Core::igObject *)node)->isOfType(g_unlinkedTransformClass_metaObject) != 0) {
                     ok = 0;
                 } else {
                     igTransform_ExtendBound((int)box.get(), node, 0);
                 }
-            } else if (igObject_IsKindOf(node, g_unlinkedTransformClass_metaObject) != 0) {
+            } else if (((Gap::Core::igObject *)node)->isOfType(g_unlinkedTransformClass_metaObject) != 0) {
                 ok = 0;
             } else {
                 igTransform_ExtendBound((int)box.get(), node, time);
             }
         }
-    } else if (igObject_IsKindOf(node, g_igPlanarShadowShader_metaObject) != 0) {
+    } else if (((Gap::Core::igObject *)node)->isOfType(g_igPlanarShadowShader_metaObject) != 0) {
         igAABox *shadowBox = box;
         if (shadowBox->_min[0] <= shadowBox->_max[0] && ok) {
             (igSmartPointer<igAABox> &)node->_bound = shadowBox;
         }
         ok = 0;
-    } else if (igObject_IsKindOf(node, g_igActor_metaObject) != 0) {
+    } else if (((Gap::Core::igObject *)node)->isOfType(g_igActor_metaObject) != 0) {
         igActor *actor = (igActor *)node;
         igSkin *skin = (igSkin *)((igAppearance *)actor->_appearance)->_skin;
         igNode_ComputeBound(box.get(), uncachedBound, skin->_skinnedGraph, nodeHandle, applySequences, 0, time);
@@ -130,7 +130,7 @@ unsigned char igNode_ComputeBound(igAABox *bound, igAABox *uncachedBound, int no
 igAABox *igBoundingBoxesMaker_ComputeBox(igBoundingBoxesMaker *maker, igNode *node) {
     igAABox *box;
 
-    box = igAABox_CreateInstance((int)igObject_GetAllocator((igObject *)node));
+    box = igAABox_CreateInstance((int)((Gap::Core::igObject *)node)->getMemoryPool());
     FUN_001b2f30((struct O_1b2750 *)maker, (int)node, (struct B_1b2750 *)box);
     return box;
 }

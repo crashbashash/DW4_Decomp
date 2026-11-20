@@ -89,7 +89,7 @@ void beNDMWWindow_QueueObjectText(beNDMWWindow *self, const char *textType, cons
 }
 
 static inline igObject *castToLuaManager(igObject *object) {
-    if (object != 0 && igObject_IsKindOf(object, g_beLua_metaObject) != 0) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_beLua_metaObject) != 0) {
         return object;
     }
     return 0;

@@ -6,7 +6,7 @@ int igInfo_FindObjectReference(void **self, int directory, int target) {
     meta = (int)((igObjectDispatchView *)(self))->GetMeta();
     for (i = 0; i < igMetaObject_GetFieldCount((igMetaObject *)meta); i++) {
         field = (igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, i);
-        if (igObject_IsKindOf((igObject *)field, (igMetaObject *)g_igRefMetaField_metaObject) != 0) {
+        if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) != 0) {
           value = *(int *)((char *)self + field->_offset);
           if (value == target) {
             igDirectory_AddExternalInfoRef((igDirectoryView *)directory, (igInfoView *)self, (char *)field->_fieldName, (igObject *)target);

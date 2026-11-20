@@ -74,7 +74,7 @@ void igExternalDirEntry_SetRef(igDirEntry *self, igObject *ref) {
 }
 
 int igExternalDirEntry_LoadExternalFile(igExternalDirEntryView *self, int loadFunction) {
-    igSmartPointer<igIGBFileView> stream(((igIGBFileView *)igIGBFile_Create(((int)igObject_GetAllocator((igObject *)self)))));
+    igSmartPointer<igIGBFileView> stream(((igIGBFileView *)igIGBFile_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool()))));
     char *s1;
     int len;
     int c;
@@ -116,7 +116,7 @@ int igExternalDirEntry_ResolveDirectory(igExternalDirEntryView *self, int loadFu
     igResource *resource = g_objectSystem->resource;
     igSmartPointer<igObject> directory = igResource_GetDirectory(resource, (const char *)self->_directoryName);
     if (directory.get() == 0) {
-        pool = igObject_GetAllocator((igObject *)self);
+        pool = ((Gap::Core::igObject *)self)->getMemoryPool();
         directory.release();
         directory.p = (igObject *)igDirectory_Create((int)pool);
         igDirectory_SetName((igDirectoryView *)directory.get(), self->_directoryName);

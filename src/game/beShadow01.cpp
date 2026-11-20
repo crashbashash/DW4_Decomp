@@ -137,7 +137,7 @@ void beShadow01_AttachPendingInfos(beShadow01 *self, beShadow01Info *info) {
 int beShadow01_AddInfo(beShadow01 *self, beShadow01Info *info) {
     igProjectiveShadowShader *shader;
 
-    if (igObject_IsKindOf(info, g_beShadow01Info_metaObject) != 0) {
+    if (((Gap::Core::igObject *)info)->isOfType(g_beShadow01Info_metaObject) != 0) {
         shader = (igProjectiveShadowShader *)info->_projShadowShader;
         if (shader != 0) {
             shader->_drawReceiver = 0;

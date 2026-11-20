@@ -236,9 +236,9 @@ void FUN_001e16a0(EnvMapShaderView *arg0, void *) {
     float f;
     unsigned int v;
     EnvMapRef attrListA;
-    attrListA.p = ((EnvMapAttr *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
+    attrListA.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     EnvMapRef attrListB;
-    attrListB.p = ((EnvMapAttr *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
+    attrListB.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)attrListA.p);
     ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)attrListB.p);
     arg0->f120->vX(2);
@@ -281,7 +281,7 @@ void FUN_001e16a0(EnvMapShaderView *arg0, void *) {
         ObjectList_AppendRetained((igObjectList *)attrListA.p, (igObject *)g_envMapTextureUnit1On.p);
         ObjectList_AppendRetained((igObjectList *)attrListB.p, (igObject *)g_envMapTextureUnit1On.p);
         EnvMapRef texBindAttr;
-        texBindAttr.p = ((EnvMapAttr *)igTextureBindAttr_CreateInstance((int)igObject_GetAllocator((igObject *)arg0)));
+        texBindAttr.p = ((EnvMapAttr *)igTextureBindAttr_CreateInstance((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
         ((EnvMapAttrOps *)texBindAttr.p)->d23(1);
         ((EnvMapAttrOps *)texBindAttr.p)->vY(arg0->f36->f12);
         ObjectList_AppendRetained((igObjectList *)attrListA.p, (igObject *)texBindAttr.p);
@@ -302,15 +302,15 @@ void FUN_001e1ac0(S_1e1ac0 *arg0, void *) {
     float f;
     unsigned int v;
     Ref_1e1ac0 attrListA;
-    attrListA.p = ((X_1e1ac0 *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
+    attrListA.p = ((X_1e1ac0 *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     Ref_1e1ac0 attrListB;
-    attrListB.p = ((X_1e1ac0 *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
+    attrListB.p = ((X_1e1ac0 *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)attrListA.p);
     ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)attrListB.p);
     Ref_1e1ac0 attrListC;
-    attrListC.p = ((X_1e1ac0 *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
+    attrListC.p = ((X_1e1ac0 *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     Ref_1e1ac0 attrListD;
-    attrListD.p = ((X_1e1ac0 *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
+    attrListD.p = ((X_1e1ac0 *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)attrListC.p);
     ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)attrListD.p);
     ObjectList_AppendRetained((igObjectList *)attrListA.p, (igObject *)(((X_1e1ac0 *)g_envMapMatrixOptStateAttr.p)));
@@ -358,21 +358,21 @@ void FUN_001e1ac0(S_1e1ac0 *arg0, void *) {
 
 void FUN_001e1e70(EnvMapShaderView_1e1e70 *arg0, void *) {
     EnvMapRef r60;
-    r60.p = ((EnvMapAttr *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
+    r60.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     EnvMapRef r56;
-    r56.p = ((EnvMapAttr *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
+    r56.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)r60.p);
     ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)r56.p);
     EnvMapRef r52;
-    r52.p = ((EnvMapAttr *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
+    r52.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     EnvMapRef r48;
-    r48.p = ((EnvMapAttr *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
+    r48.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)r52.p);
     ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)r48.p);
     EnvMapRef r44;
-    r44.p = ((EnvMapAttr *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
+    r44.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     EnvMapRef r40;
-    r40.p = ((EnvMapAttr *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
+    r40.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)r44.p);
     ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)r40.p);
     ObjectList_AppendRetained((igObjectList *)r60.p, (igObject *)(((EnvMapAttr *)g_envMapMatrixOptStateAttr.p)));
@@ -424,12 +424,12 @@ void FUN_001e22c0(EnvMapShaderView_1e22c0 *arg0, void *) {
     EnvMapRef a;
     EnvMapRef b;
     if (arg0->f104 == arg0->f88) {
-        assignRef_1e22c0(arg0->f104, EnvMapTempRef(((EnvMapAttr *)igTextureCoordSourceAttr_Create(igObject_GetAllocator((igObject *)arg0)))));
+        assignRef_1e22c0(arg0->f104, EnvMapTempRef(((EnvMapAttr *)igTextureCoordSourceAttr_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()))));
         arg0->f104->vX(0);
         arg0->f104->vY(arg0->f56);
     }
-    a.p = ((EnvMapAttr *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
-    b.p = ((EnvMapAttr *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
+    a.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    b.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)a.p);
     ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)b.p);
     arg0->f120->vX(3);
@@ -478,7 +478,7 @@ void FUN_001e22c0(EnvMapShaderView_1e22c0 *arg0, void *) {
         ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)(((EnvMapAttr *)g_envMapTextureUnit2On.p)));
         ObjectList_AppendRetained((igObjectList *)b.p, (igObject *)(((EnvMapAttr *)g_envMapTextureUnit2On.p)));
         EnvMapRef c;
-        c.p = ((EnvMapAttr *)igTextureBindAttr_CreateInstance((int)igObject_GetAllocator((igObject *)arg0)));
+        c.p = ((EnvMapAttr *)igTextureBindAttr_CreateInstance((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
         ((EnvMapAttrOps *)c.p)->d23(2);
         ((EnvMapAttrOps *)c.p)->vY(arg0->f36->f12);
         ObjectList_AppendRetained((igObjectList *)a.p, (igObject *)c.p);

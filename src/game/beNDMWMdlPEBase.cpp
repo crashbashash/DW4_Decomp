@@ -98,14 +98,14 @@ static inline void AssignReference(int &field, igObject *object) {
 }
 
 static inline int OwnAllocator(void *object) {
-    int allocator = (int)igObject_GetAllocator((igObject *)object);
+    int allocator = (int)((Gap::Core::igObject *)object)->getMemoryPool();
     return g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 }
 
 /* Creates the ram's data list when it has none. */
 static inline void EnsureDataList(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
-        int allocator = (int)igObject_GetAllocator(ram);
+        int allocator = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         igSmartPointer<beBaseInfoDataList> created(beBaseInfoDataList_Create((int)(g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1))));
         AssignReference(ram->_dataList, created.p);
     }
@@ -598,7 +598,7 @@ void beNDMWMdlPEBase_LoadDownData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beN
     }
     {
         int ownAllocator;
-        ownAllocator = (int)igObject_GetAllocator(self);
+        ownAllocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         /* An enemy starts from zeroes, owned by the stack reference until the work holds its own. */
         IntListRef created((igIntList *)igIntList_Create((int)(g_useOwnerAllocator != 0 ? ownAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1))));
         if (created.p->_count < DOWN_DATA_COUNT + 1) List_Reserve((igDataList *)created.p, DOWN_DATA_COUNT, sizeof(int));
@@ -621,7 +621,7 @@ void beNDMWMdlPEBase_LoadUpData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDM
     }
     {
         int ownAllocator;
-        ownAllocator = (int)igObject_GetAllocator(self);
+        ownAllocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         /* An enemy starts from zeroes, owned by the stack reference until the work holds its own. */
         IntListRef created((igIntList *)igIntList_Create((int)(g_useOwnerAllocator != 0 ? ownAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1))));
         if (created.p->_count < UP_DATA_COUNT + 1) List_Reserve((igDataList *)created.p, UP_DATA_COUNT, sizeof(int));

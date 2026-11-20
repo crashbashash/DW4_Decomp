@@ -14,14 +14,14 @@ void igVisualContext_constructFields(igVisualContextFieldsView *self, int flags)
     if (p != 0) {
         self->driverDataMemoryPool = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
         p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDriverData);
         if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
-            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
             p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDriverData);
             self->driverDataMemoryPool = p;
         } else {
-            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
             self->driverDataMemoryPool = p;
         }
     }
@@ -29,14 +29,14 @@ void igVisualContext_constructFields(igVisualContextFieldsView *self, int flags)
     if (p != 0) {
         self->vertexMemoryPool = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
         p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleVertex);
         if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
-            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
             p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleVertex);
             self->vertexMemoryPool = p;
         } else {
-            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
             self->vertexMemoryPool = p;
         }
     }
@@ -44,21 +44,21 @@ void igVisualContext_constructFields(igVisualContextFieldsView *self, int flags)
     if (p != 0) {
         self->internalMemoryPool = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
         self->internalMemoryPool = p;
     }
     p = g_igVisualContext_defaultTemporaryMemoryPool[0];
     if (p != 0) {
         self->temporaryMemoryPool = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
         p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
         if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
-            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
             p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
             self->temporaryMemoryPool = p;
         } else {
-            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
             self->temporaryMemoryPool = p;
         }
     }
@@ -66,14 +66,14 @@ void igVisualContext_constructFields(igVisualContextFieldsView *self, int flags)
     if (p != 0) {
         self->imageMemoryPool = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
         p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
         if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
-            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
             p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
             self->imageMemoryPool = p;
         } else {
-            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
             self->imageMemoryPool = p;
         }
     }
@@ -81,14 +81,14 @@ void igVisualContext_constructFields(igVisualContextFieldsView *self, int flags)
     if (p != 0) {
         self->textureMemoryPool = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
         p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTexture);
         if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
-            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
             p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTexture);
             self->textureMemoryPool = p;
         } else {
-            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
             self->textureMemoryPool = p;
         }
     }
@@ -96,21 +96,21 @@ void igVisualContext_constructFields(igVisualContextFieldsView *self, int flags)
     if (p != 0) {
         self->statisticsMemoryPool = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
         self->statisticsMemoryPool = p;
     }
     p = g_igVisualContext_defaultListMemoryPool[0];
     if (p != 0) {
         self->listMemoryPool = p;
     } else {
-        p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+        p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
         p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList);
         if (p != (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault)) {
-            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
             p = g_useOwnerAllocator != 0 ? p : (igObjectSlotView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList);
             self->listMemoryPool = p;
         } else {
-            p = (igObjectSlotView *)igObject_GetAllocator((igObject *)self);
+            p = (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool();
             self->listMemoryPool = p;
         }
     }
@@ -256,7 +256,7 @@ int igVisualContext_GetBlendingMatricesCount(igVisualContext *self) {
 }
 
 static inline Obj_165e50 *getAlloc(void *o) {
-    Obj_165e50 *a = (Obj_165e50 *)igObject_GetAllocator((igObject *)o);
+    Obj_165e50 *a = (Obj_165e50 *)((Gap::Core::igObject *)o)->getMemoryPool();
     if (g_useOwnerAllocator != 0) return a;
     return (Obj_165e50 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
 }
@@ -496,7 +496,7 @@ igVisualContext *igVisualContext_FindFirst(void) {
     r = 0;
     if (((L_166d40 *)DAT_00560758) != 0) {
         for (i = 0; i < ((L_166d40 *)DAT_00560758)->count; i++) {
-            if (igObject_IsKindOf((igObject *)(((L_166d40 *)DAT_00560758)->items[i]), g_igVisualContext_metaObject) != 0) {
+            if (((Gap::Core::igObject *)(((L_166d40 *)DAT_00560758)->items[i]))->isOfType(g_igVisualContext_metaObject) != 0) {
                 r = ((L_166d40 *)DAT_00560758)->items[i];
                 break;
             }

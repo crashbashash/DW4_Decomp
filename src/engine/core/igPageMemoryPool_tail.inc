@@ -25,7 +25,7 @@ void Gap__Core__igPageMemoryPool__constructFields(int extra0, int extra1) {
 }
 
 void Gap__Core__igPageMemoryPool__destructFields(igPageMemoryPoolView *self) {
-    igMemoryPoolView *alloc = (igMemoryPoolView *)((void *)igObject_GetAllocator((igObject *)self));
+    igMemoryPoolView *alloc = (igMemoryPoolView *)((void *)((Gap::Core::igObject *)self)->getMemoryPool());
     int i;
     for (i = 0; i < 32; i++) {
         if (self->pageTables[i] != 0) {
@@ -108,7 +108,7 @@ void igPageMemoryPool_Reset(igPageMemoryPoolView *self) {
     unsigned **table;
     unsigned *pages;
     self->ResetStatistics();
-    alloc = (igMemoryPoolView *)igObject_GetAllocator((igObject *)self);
+    alloc = (igMemoryPoolView *)((Gap::Core::igObject *)self)->getMemoryPool();
     i = 0;
     do {
         table = &self->pageTables[i];
@@ -195,7 +195,7 @@ igResult igPageMemoryPool_EnableAllocationLock(igPageMemoryPoolView *self, int e
         if (self->allocationLock.p != 0) {
             return g_resultSuccess.v;
         }
-        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((igObject *)self)))));
+        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool()))));
         created.p->Create();
         self->allocationLock = created;
     }
@@ -400,7 +400,7 @@ int igPageMemoryPool_GetEventTracker(igPageMemoryPool *self) {
 
 void igPageMemoryPool_SetEventTracker(igPageMemoryPool *self, igObject *tracker) {
     igObject *o;
-    if (tracker == 0 || (void *)igObject_GetAllocator((igObject *)tracker) != self) {
+    if (tracker == 0 || (void *)((Gap::Core::igObject *)tracker)->getMemoryPool() != self) {
         if (tracker != 0) {
             tracker->_refCount++;
         }
@@ -624,7 +624,7 @@ void igPageMemoryPool_MarkPages(igPageMemoryPoolView *self, unsigned int a, int 
         pg = (a & 0x7ffffff) >> 12;
         idx = pg >> 4;
         bit = 1 << ((pg & 0xF) * 2);
-        if (t == 0) { t = (unsigned int *)((igMemoryPoolView *)((void *)igObject_GetAllocator((igObject *)self)))->Callocate(0x800, 4); self->pageTables[a >> 27] = t; }
+        if (t == 0) { t = (unsigned int *)((igMemoryPoolView *)((void *)((Gap::Core::igObject *)self)->getMemoryPool()))->Callocate(0x800, 4); self->pageTables[a >> 27] = t; }
         if (set != 0) t[idx] |= bit; else t[idx] &= ~bit;
     }
     if (n > 0) n -= 1;
@@ -640,7 +640,7 @@ void igPageMemoryPool_MarkPages(igPageMemoryPoolView *self, unsigned int a, int 
         pg = (a & 0x7ffffff) >> 12;
         idx = pg >> 4;
         bit = 2 << ((pg & 0xF) * 2);
-        if (t == 0) { t = (unsigned int *)((igMemoryPoolView *)((void *)igObject_GetAllocator((igObject *)self)))->Callocate(0x800, 4); *slot = t; }
+        if (t == 0) { t = (unsigned int *)((igMemoryPoolView *)((void *)((Gap::Core::igObject *)self)->getMemoryPool()))->Callocate(0x800, 4); *slot = t; }
         if (set != 0) t[idx] |= bit; else t[idx] &= ~bit;
     }
 }

@@ -39,7 +39,7 @@ igResult igMallocMemoryPool_EnableAllocationLock(igMallocMemoryPoolView *self, u
         self->_allocationLock.clear();
     } else if (enable == 1) {
         if (self->_allocationLock.p != 0) return igResult(g_resultSuccess.v);
-        igSmartPointer<igSemaphoreView> semaphore((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((igObject *)self)))));
+        igSmartPointer<igSemaphoreView> semaphore((igSemaphoreView *)igSemaphore_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool()))));
         created = semaphore.p->Create();
         self->_allocationLock = semaphore;
     }
@@ -708,7 +708,7 @@ int igMallocMemoryPool_GetEventTracker(void *pool) {
 
 void igMallocMemoryPool_SetEventTracker(igMallocMemoryPool *self, igObject *tracker) {
     igObject *old;
-    if ((tracker == 0) || (((void *)igObject_GetAllocator((igObject *)tracker)) != self)) {
+    if ((tracker == 0) || (((void *)((Gap::Core::igObject *)tracker)->getMemoryPool()) != self)) {
         if (tracker != 0) {
             tracker->_refCount = tracker->_refCount + 1;
         }
@@ -728,7 +728,7 @@ void igMallocMemoryPool_Dump(void *self, int unused1, int unused2, int unused3, 
     igMallocMemoryPool_Lock(self);
     message = "The method dump() has no meaning for an igMallocMemoryPool\n";
     if (fileName != 0) {
-        igSmartPointer<igFileView> file((igFileView *)igFile_Create((int)(((void *)igObject_GetAllocator((igObject *)self)))));
+        igSmartPointer<igFileView> file((igFileView *)igFile_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool()))));
         if (file.p->Open((const char *)fileName, (const char *)"w") == 0) {
             if (((igMallocMemoryPool *)self)->_messageLevel >= 2) {
                 igReport_Warning("igMallocMemoryPool::dump() Could not open file (%s) for output\n", fileName);

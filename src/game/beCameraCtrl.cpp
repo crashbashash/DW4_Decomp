@@ -27,7 +27,7 @@
 #include "dw4/maths/igVec3f.h"
 #pragma push
 #pragma readonly_strings on
-#define SELECT_ALLOCATOR(var, owner) { var = (int)igObject_GetAllocator((igObject *)owner); var = g_useOwnerAllocator ? var : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
+#define SELECT_ALLOCATOR(var, owner) { var = (int)((Gap::Core::igObject *)(owner))->getMemoryPool(); var = g_useOwnerAllocator ? var : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
 #define RELEASE(q) { igObject *o_ = (q); if (o_ != 0) { o_->_refCount = o_->_refCount - 1; if (((unsigned long long)((long long)(int)o_->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o_); } } }
 #define OBJECT_LIST(handle) ((igObjectList *)(handle))
 #define TRANSFORM_AT(list, i) ((igTransform *)((int *)OBJECT_LIST(list)->_data)[i])
@@ -663,7 +663,7 @@ igMetaObject *beCameraCtrl_GetMeta(void)
     return g_beCameraCtrl_metaObject;
 }
 
-static inline igObject *AsCamera(igObject *o) { if (o != 0 && igObject_IsKindOf(o, g_igCamera_metaObject) != 0) { return o; } return 0; }
+static inline igObject *AsCamera(igObject *o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igCamera_metaObject) != 0) { return o; } return 0; }
 
 void beCameraMode_SetCameraPath(beCameraMode *mode, igObject *path) {
     igObject *camera;

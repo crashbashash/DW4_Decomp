@@ -1038,7 +1038,7 @@ igResult igIGBFile_ReadNextChunk(igIGBFileView *self) {
 }
 
 static inline IgbReadEntry *castToKind(IgbReadEntry *object) {
-    if (object != 0 && igObject_IsKindOf((igObject *)object, (igMetaObject *)g_igDirEntry_metaObject) != 0) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType((igMetaObject *)g_igDirEntry_metaObject) != 0) {
         return object;
     }
     return 0;
@@ -1427,19 +1427,19 @@ igResult igIGBFile_ReadObjects(igIGBFileView *self) {
     }
     n = self->_count;
     for (i = 0; i < n; i++) {
-        if (igObject_IsKindOf((igObject *)self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
+        if (((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
             ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ResolveEntry(self);
         }
     }
     if (self->_magicVersion < 4) {
         for (i = 0; i < n; i++) {
-            if (igObject_IsKindOf((igObject *)self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
+            if (((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
                 ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ResolveRefOld(self);
             }
         }
     } else {
         for (i = 0; i < n; i++) {
-            if (igObject_IsKindOf((igObject *)self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
+            if (((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
                 igSmartPointer<igDirEntryView> e((igDirEntryView *)igDirectory_GetEntry((int *)self, i), kRetainReference);
                 e.p->ResolveRef(self);
             }
@@ -1451,19 +1451,19 @@ igResult igIGBFile_ReadObjects(igIGBFileView *self) {
 igResult igIGBFile_ReadMemoryRefs(igIGBFileView *self) {
     int i;
     for (i = 0; i < self->_count; i++) {
-        if (((igObject_IsKindOf((igObject *)self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) ^ 1) != 0) {
+        if (((((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)g_igObjectDirEntry_metaObject) != 0) ^ 1) != 0) {
             ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ResolveEntry(self);
         }
     }
     if (self->_magicVersion < 4) {
         for (i = 0; i < self->_count; i++) {
-            if (((igObject_IsKindOf((igObject *)self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) ^ 1) != 0) {
+            if (((((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)g_igObjectDirEntry_metaObject) != 0) ^ 1) != 0) {
                 ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ResolveRefOld(self);
             }
         }
     } else {
         for (i = 0; i < self->_count; i++) {
-            if (((igObject_IsKindOf((igObject *)self->_data[i], (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) ^ 1) != 0) {
+            if (((((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)g_igObjectDirEntry_metaObject) != 0) ^ 1) != 0) {
                 ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ResolveRef(self);
             }
         }
@@ -1768,7 +1768,7 @@ void igIGBFile_ReadFilePostProcess(int *result, igIGBFileView *self) {
     }
 }
 
-static inline igIGBFileView *castInfo(igIGBFileView *o) { if (o != 0 && igObject_IsKindOf((igObject *)o, (igMetaObject *)((int)g_igIGBFile_metaObject)) != 0) { return o; } return 0; }
+static inline igIGBFileView *castInfo(igIGBFileView *o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType((igMetaObject *)((int)g_igIGBFile_metaObject)) != 0) { return o; } return 0; }
 
 /* Checks each external file, then this file's own post-read step. */
 igResult igIGBFile_ReadFilePostProcessAll(igIGBFileView *self) {

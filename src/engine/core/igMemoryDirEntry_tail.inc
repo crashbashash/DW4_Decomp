@@ -1,5 +1,5 @@
 void igMemoryDirEntry_IsRefMemory(int entry) {
-    igObject_IsKindOf((igObject *)(((igMemoryDirEntry *)entry)->_memType), (igMetaObject *)(((int)g_igRefMetaField_metaObject)));
+    ((Gap::Core::igObject *)(((igMemoryDirEntry *)entry)->_memType))->isOfType((igMetaObject *)(((int)g_igRefMetaField_metaObject)));
 }
 
 void igMemoryDirEntry_AllocateMemory(igMemoryDirEntry *self, igIGBFile *file) {
@@ -42,7 +42,7 @@ void igMemoryDirEntry_WriteMemory(igMemoryDirEntry *self, igIGBFile *file) {
     int esz = ((igMetaField *)s1)->_size;
     int per = cnt / esz;
     int s0, s7, i, src, j, dst, t0, t1, t2;
-    if (((igObject_IsKindOf((igObject *)s1, (igMetaObject *)g_igRefMetaField_metaObject) != 0) ^ 1) && file->_endianSwap != 0) {
+    if (((((Gap::Core::igObject *)s1)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) != 0) ^ 1) && file->_endianSwap != 0) {
         s1->SwapBytes((void *)self->_ref, per);
     }
     s7 = 0;
@@ -51,7 +51,7 @@ void igMemoryDirEntry_WriteMemory(igMemoryDirEntry *self, igIGBFile *file) {
     while (i < cnt) {
         t0 = cnt - i;
         s0 = (t0 < s2) ? t0 : s2;
-        if (igObject_IsKindOf((igObject *)s1, (igMetaObject *)g_igRefMetaField_metaObject) != 0) {
+        if (((Gap::Core::igObject *)s1)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) != 0) {
             int q = s0 / esz;
             t1 = per - s7;
             s7 = (t1 < q) ? t1 : q;
@@ -82,7 +82,7 @@ void igMemoryDirEntry_WriteMemory(igMemoryDirEntry *self, igIGBFile *file) {
             s2 = (t2 < s4) ? t2 : s4;
             s4 = s2;
         }
-        if (((igObject_IsKindOf((igObject *)s1, (igMetaObject *)g_igRefMetaField_metaObject) != 0) ^ 1) && file->_endianSwap != 0) {
+        if (((((Gap::Core::igObject *)s1)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) != 0) ^ 1) && file->_endianSwap != 0) {
             s1->SwapBytes((void *)self->_ref, per);
         }
         file->_memoryBytesCopied = s6;
@@ -103,7 +103,7 @@ void igMemoryDirEntry_AccumulateFileSize(igMemoryDirEntry *self, igIGBFile *file
 }
 
 static inline igObjectList *asEntryList(igObject *object) {
-    if (object != 0 && igObject_IsKindOf(object, (igMetaObject *)g_igObjectList_metaObject) != 0) return (igObjectList *)object;
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType((igMetaObject *)g_igObjectList_metaObject) != 0) return (igObjectList *)object;
     return 0;
 }
 
@@ -201,15 +201,15 @@ void igMemoryDirEntry_ResolveRefOld(igMemoryDirEntryView *self, igIGBFileView *f
 void igMemoryDirEntry_ResolveMemory(igMemoryDirEntryView *self, igIGBFileView *r) {
     igMetaFieldView *f = ((igMetaFieldView **)r->_metaFieldListInFile->_data)[self->_memTypeIndex];
     self->_memType = (int)f;
-    if (((igObject_IsKindOf((igObject *)f, (igMetaObject *)g_igRefMetaField_metaObject) != 0) ^ 1) && r->_endianSwap != 0) {
+    if (((((Gap::Core::igObject *)f)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) != 0) ^ 1) && r->_endianSwap != 0) {
         f->SwapBytes((void *)self->_ref, self->_memSize / f->_size);
     }
-    if (igObject_IsKindOf((igObject *)f, (igMetaObject *)g_igRefMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)f)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) != 0) {
         int esize = f->_size;
         int count = self->_memSize / esize;
         int base = self->_ref;
         unsigned char saved = 0;
-        int isSwap = igObject_IsKindOf((igObject *)f, (igMetaObject *)g_igObjectRefMetaField_metaObject) & 0xff;
+        int isSwap = ((Gap::Core::igObject *)f)->isOfType((igMetaObject *)g_igObjectRefMetaField_metaObject) & 0xff;
         int i;
         if (isSwap != 0) {
             saved = ((igObjectRefMetaField *)f)->_refCounted;

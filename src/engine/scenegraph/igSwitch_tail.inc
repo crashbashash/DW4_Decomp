@@ -47,7 +47,7 @@ void igObjectPool_Grow(igObjectPool *pool, igObject *(*create)(int)) {
     c = count_of_1dca40(arg0);
     n = arg0->f24 + c;
     ObjectList_ResizeRetained((igTDataList<igObject *> *)arg0, n);
-    alloc = (int)igObject_GetAllocator((igObject *)arg0);
+    alloc = (int)((Gap::Core::igObject *)arg0)->getMemoryPool();
     i = arg0->f20;
     for (; i < n; i++) {
         o = arg1(alloc);

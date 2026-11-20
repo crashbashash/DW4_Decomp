@@ -267,7 +267,7 @@ void beLua_ResetLuaState(beLua *self) {
     int ownerAllocator;
     igObject *luaState;
 
-    ownerAllocator = (int)igObject_GetAllocator(self);
+    ownerAllocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     if (g_useOwnerAllocator != 0) {
         allocator = ownerAllocator;
     } else {
@@ -313,7 +313,7 @@ void beLua_Stop(void)
 }
 
 int beLua_AddInfo(beLua *self, int info) {
-    if (igObject_IsKindOf((igObject *)info, g_beLuaInfo_metaObject) != 0) {
+    if (((Gap::Core::igObject *)info)->isOfType(g_beLuaInfo_metaObject) != 0) {
         ObjectList_AppendRetained((igObjectList *)self->_infoList, (igObject *)info);
         return 1;
     }

@@ -16,7 +16,7 @@ static inline void setDestination(Attr *self, const igSmartPointer<Destination> 
 
 void igSetRenderDestinationAttr_SynchronizeDefault(Attr *self, int value) {
     if (self->f12 == 0) {
-        setDestination(self, igSmartPointer<Destination>((Destination *)igRenderDestinationAttr_Create(igObject_GetAllocator((igObject *)self))));
+        setDestination(self, igSmartPointer<Destination>((Destination *)igRenderDestinationAttr_Create(((Gap::Core::igObject *)self)->getMemoryPool())));
     }
     ((Renderable *)self->f12)->vX(value);
 }

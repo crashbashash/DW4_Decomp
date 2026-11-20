@@ -1119,7 +1119,7 @@ int beNDMWPanelWaza_OnMessage(beNDMWPanelWaza *self, beNDMWPanelWazaInfoRam *ram
     kind = beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beNDMWPanelObject_GetMessageEnum(), (const char *)message->_message);
     work = (beNDMWPanelWazaInfoWork *)ram->_work;
     if (work == 0) {
-        alloc = igObject_GetAllocator(self);
+        alloc = ((Gap::Core::igObject *)self)->getMemoryPool();
         alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<igObject> created((igObject *)beNDMWPanelWazaInfoWork_Create((int)alloc));
         { igObject *n = created.p; RET(n) { igObject *o = (igObject *)ram->_work; REL(o) } ram->_work = (int)n; }

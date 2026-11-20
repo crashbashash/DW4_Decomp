@@ -20,7 +20,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
             igPsx2_LoadIopModule("padman.irx", 1, 0, 0);
         }
         scePadInit(0);
-        base = igObject_GetAllocator(arg0);
+        base = ((Gap::Core::igObject *)arg0)->getMemoryPool();
         if (g_useOwnerAllocator != 0) {
             al = base;
         } else {
@@ -62,7 +62,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
             s1 = 0;
             { unsigned m = arg0->_multitap; s2 = !(m & (1u << s3)) ? 1 : 4; }
             for (; s1 < s2; s1++) {
-                base = igObject_GetAllocator(arg0);
+                base = ((Gap::Core::igObject *)arg0)->getMemoryPool();
                 if (g_useOwnerAllocator != 0) {
                     al2 = (Al *)base;
                 } else {
@@ -72,7 +72,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
                 if (scePadPortOpen(s3, s1, (void *)mem) != 1) {
                     Memory_FreeBuffer((void *)mem);
                 } else {
-                    igSmartPointer<igPsx2Controller> controller((igPsx2Controller *)igPsx2Controller_Create((int)igObject_GetAllocator(arg0)));
+                    igSmartPointer<igPsx2Controller> controller((igPsx2Controller *)igPsx2Controller_Create((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
                     controller.get()->_port = s3;
                     controller.get()->_slot = s1;
                     ((Pd *)controller.get())->vX((s3 | (s1 * 2)) & 0xFFFF);

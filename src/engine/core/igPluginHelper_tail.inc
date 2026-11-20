@@ -31,7 +31,7 @@ void igPluginHelper_LoadPluginsFromRegistry(void *self) {
             if (!igRegistry_GetKeyName((int)ini, section, i, &key)) {
                 dropKey(key);
             } else {
-                *(igTDataList<char *> **)&values = ((igTDataList<char *> *)igStringRefList_Create(((int)igObject_GetAllocator((igObject *)self))));
+                *(igTDataList<char *> **)&values = ((igTDataList<char *> *)igStringRefList_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
                 held = values;
                 if (!igRegistry_GetValueStringList(ini, section, keyText(key), (igStringRefList *)held, 0)) {
                     dropValues(values);
@@ -86,7 +86,7 @@ int igPluginHelper_ThreadLoop(Args *args) {
 
 void **igQueue_StartServiceThread(void *queue, int function, unsigned stackSize) {
     void **a; Args *args;
-    a = (void **)(((void **)igObject_GetAllocator((igObject *)queue)));
+    a = (void **)(((void **)((Gap::Core::igObject *)queue)->getMemoryPool()));
     args = (Args *)((igMemoryPoolView *)a)->Allocate(8);
     args->fn = (igResult (*)(int))function;
     args->queue = (igStandardQueueView *)queue;

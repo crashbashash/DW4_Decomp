@@ -29,7 +29,7 @@
  * 23 bits of _refCount and allocated from the plugin's own allocator when g_useOwnerAllocator is set,
  * then adds each manager that exists to the core. vfunc_22 removes them again. */
 static inline igMemoryPoolView *PluginAllocator(libNdmwRuntimePlugin *plugin) {
-    igMemoryPoolView *allocator = igObject_GetAllocator(plugin);
+    igMemoryPoolView *allocator = ((Gap::Core::igObject *)plugin)->getMemoryPool();
     return g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
 }
 

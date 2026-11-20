@@ -22,7 +22,7 @@ void igMousePosObserver_resetFields(MousePosObserverView *self, int flags) {
     ObserverIntListView *list;
     int top;
     Gap__Core__igObject__resetFields((igObject *)self, flags);
-    igSmartPointer<ObserverEventView> event((ObserverEventView *)igProbe_Create((int)(igObject_GetAllocator((igObject *)self))));
+    igSmartPointer<ObserverEventView> event((ObserverEventView *)igProbe_Create((int)(((Gap::Core::igObject *)self)->getMemoryPool())));
     created = event.get();
     ObjectList_AppendRetained((igObjectList *)created->a, (igObject *)self->f20);
     list = created->list;
@@ -98,7 +98,7 @@ void FUN_00455f50(Z *arg0, Y *arg1) {
     if (arg1->f20 <= arg0->f24) {
         arg0->f28 = 1;
         arg0->f24 = arg1->f20;
-        setPick(arg0, igSmartPointer<Obj_455f50>((Obj_455f50 *)igGraphPath_Create((int)(igObject_GetAllocator((igObject *)arg0)))));
+        setPick(arg0, igSmartPointer<Obj_455f50>((Obj_455f50 *)igGraphPath_Create((int)(((Gap::Core::igObject *)arg0)->getMemoryPool()))));
         igGraphPath_SetNodes((igGraphPath *)arg0->f32, (igNodeList *)s1);
     }
 }

@@ -47,7 +47,7 @@
  * 23 bits of _refCount and allocated from the plugin's own allocator when g_useOwnerAllocator is set,
  * then adds each manager that exists to the core. vfunc_22 removes them again. */
 static inline int PluginAllocator(libBecRuntimePlugin *plugin) {
-    int allocator = (int)igObject_GetAllocator(plugin);
+    int allocator = (int)((Gap::Core::igObject *)plugin)->getMemoryPool();
     return g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
 }
 

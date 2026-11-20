@@ -14,7 +14,7 @@ void igGeometryAttr1_5_SynchronizeDefault(void) {
 
 extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_32(igGeometryAttr1_5 *self, int a, int b, int c, int d) {
     if (self->_vertexArray == 0) {
-        igObject *created = (igObject *)igVertexArray_Create((int)igObject_GetAllocator(self));
+        igObject *created = (igObject *)igVertexArray_Create((int)((Gap::Core::igObject *)self)->getMemoryPool());
         igObject *previous;
         if (created != 0) {
             created->_refCount = created->_refCount + 1;
@@ -44,7 +44,7 @@ void igGeometryAttr1_5_UserMakeConcrete(S_13d180 *arg0, int arg1) {
             old->refs = old->refs - 1;
             if (((unsigned long long)(long long)old->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)old);
         }
-        sp3C = (Rc *)igPrimLengthArray_Create(igObject_GetAllocator((igObject *)arg0));
+        sp3C = (Rc *)igPrimLengthArray_Create(((Gap::Core::igObject *)arg0)->getMemoryPool());
         s0 = *(Rc **)&sp3C;
         if (s0 != 0) s0->refs = s0->refs + 1;
         old = arg0->f48;
@@ -131,7 +131,7 @@ int Gap__Attrs__igGeometryAttr1_5__vfunc_39(T_13d460 *arg0, int arg1, unsigned a
     int t = arg0->f20;
     if ((unsigned)(t - 4) <= 1U || t == 2) {
         if (arg0->f48 == 0) {
-            arg0->setBuffer(igSmartPointer<R_13d460>((R_13d460 *)igPrimLengthArray_Create(igObject_GetAllocator((igObject *)arg0))));
+            arg0->setBuffer(igSmartPointer<R_13d460>((R_13d460 *)igPrimLengthArray_Create(((Gap::Core::igObject *)arg0)->getMemoryPool())));
         }
         if (((R_13d460 *)arg0->f48)->cap < arg2) {
             arg0->f48->v92(arg2, 0x20, 0);
@@ -304,7 +304,7 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_40(S_13de80 *arg0, int arg1, int arg2)
     Rc *s0;
     Rc *old;
     if (arg0->f48 == 0) {
-        sp5C = (Rc *)igPrimLengthArray_Create(igObject_GetAllocator((igObject *)arg0));
+        sp5C = (Rc *)igPrimLengthArray_Create(((Gap::Core::igObject *)arg0)->getMemoryPool());
         s0 = *(Rc **)&sp5C;
         if (s0 != 0) s0->refs = s0->refs + 1;
         old = arg0->f48;

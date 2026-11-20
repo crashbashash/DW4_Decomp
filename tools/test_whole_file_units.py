@@ -112,6 +112,9 @@ class Overlay(unittest.TestCase):
                          {"one": "a.c", "two": "a.c"})
         with self.assertRaisesRegex(ValueError, "explicit and emitted"):
             unitobjects.augment_sources({"one": "a.c", "two": "b.c"}, **arguments)
+        # a name only `static` overloads define elsewhere (a C++ forwarder) goes to the emitting unit
+        self.assertEqual(unitobjects.augment_sources({"one": "a.c", "two": "b.c"}, overridable={"two"},
+                                                     **arguments), {"one": "a.c", "two": "a.c"})
 
     def test_a_row_places_one_static_initializer(self):
         with self.assertRaisesRegex(ValueError, "one static initializer"):
@@ -715,7 +718,10 @@ class ProfileTwin(unittest.TestCase):
         _data, _duplicates, externals = whole_file_rows.reach(
             {self.NAME: self.OWNER}, whole_file_rows.Retail(str(self.elf)), syms, headers, str(self.obj),
             functions, exceptions.load(), self.names(), self.OWNER + 4, twins)
-        self.assertEqual(externals, dict(unitobjects.group_for(self.OWNER).externals))
+        # a member's compiler name the compiler-name map binds needs no row (tools/memberize.py drops it)
+        bound = compiler_names.load(str(self.CONFIG / "symbols.txt"))
+        self.assertEqual({k: v for k, v in externals.items() if k not in bound},
+                         dict(unitobjects.group_for(self.OWNER).externals))
 
 
 class TableExternals(unittest.TestCase):

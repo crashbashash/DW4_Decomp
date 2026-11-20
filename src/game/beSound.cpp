@@ -95,7 +95,7 @@ static inline void ReleaseString(char *text) {
 
 /* The allocator for an object the owner creates: its own, or the default one. */
 static inline void *AllocatorFor(void *owner) {
-    void *allocator = igObject_GetAllocator((igObject *)owner);
+    void *allocator = ((Gap::Core::igObject *)owner)->getMemoryPool();
     return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 }
 

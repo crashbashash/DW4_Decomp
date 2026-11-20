@@ -37,7 +37,7 @@ int igMemoryRefArrayMetaField_GetSize(igMemoryRefArrayMetaField *self) {
 
 void igMemoryRefArrayMetaField_ReleaseElements(igMemoryRefArrayMetaField *self, int object, int visitor, int context) {
     int i;
-    if (igObject_IsKindOf((igObject *)self->_memType, (igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)self->_memType)->isOfType((igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
         for (i = 0; i < self->_num; i++) {
             int block = *(int *)(object + self->_offset + i * 4);
             if (block != 0) {

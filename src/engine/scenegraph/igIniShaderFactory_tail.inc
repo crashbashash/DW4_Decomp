@@ -307,7 +307,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
     if (object.p == 0) {
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
-    igSmartPointer<ShaderNameList> names((ShaderNameList *)igStringRefList_Create((int)(((void *)igObject_GetAllocator((igObject *)self)))));
+    igSmartPointer<ShaderNameList> names((ShaderNameList *)igStringRefList_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool()))));
     igRegistry_GetValueStringList((void *)self->ini, section, "fields", (igStringRefList *)names.p, 0);
     count = names.p->count;
     for (i = 0; i < count; i++) {
@@ -329,7 +329,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
         ShaderCacheView *cache = ((ShaderCacheView *)FUN_001ca6b0((int *)self, self->kind));
         ShaderObject_1ca6c0 *existing = ((ShaderObject_1ca6c0 *)igObjectStringMap_GetObject(cache, (const char *)name));
         if (existing != 0) {
-            if (igObject_IsAlikeShallow((igObjectDispatchView *)existing, (igObjectDispatchView *)object.p) != 0) {
+            if (((Gap::Core::igObject *)existing)->isAlikeShallow((Gap::Core::igObject *)object.p) != 0) {
                 return igSmartPointer<ShaderObject_1ca6c0>(existing, kRetainReference);
             }
             return object;
@@ -350,7 +350,7 @@ void FUN_001cade0(void *self, IniFieldTarget *target, IniItemList *items, void *
             igStringRef fieldName = StringList_CopyRetained((igStringRefList *)fieldNames, index);
             IniFieldView *field;
             field = asObjectRefField((IniFieldView *)igMetaObject_FindFieldByName((igMetaObject *)(target->getMeta()), fieldName.p));
-            if (field != 0 && igObject_IsKindOf((igObject *)item, (igMetaObject *)field->refMeta) != 0) {
+            if (field != 0 && ((Gap::Core::igObject *)item)->isOfType((igMetaObject *)field->refMeta) != 0) {
                 igObjectRefMetaField_Assign((igObjectRefMetaField *)field, target, (igObject *)item);
             }
         }

@@ -12,7 +12,7 @@ igObject	protected: igObject(bool bootstrap);
 igObject	protected: igObject(const igObject &other);
 igObject	static void *operator new(unsigned int size, void *memory, void *unused) { return memory; }
 igObject	static void operator delete(void *memory) { Memory_FreeBufferAliasC(memory); }
-igObject	virtual void destruct();
+igObject	virtual void __bootstrapDestruct();
 igObject	virtual void constructFields(int flag);
 igObject	virtual void destructFields();
 igObject	virtual void userDeepCopy(igObject *source);
@@ -40,9 +40,23 @@ igObject	static inline igMetaObject *getClassMeta() { return _Meta; }
 igObject	static inline igMetaObject *getClassMetaSafe() { return _Meta; }
 igObject	static void *retrieveVTablePointer();
 igObject	static void arkRegisterInitialize();
+igObject	static CallbackArray *emptyArkRegisterInternal();
+igObject	static igMetaObject *emptyGetClassMetaSafe();
+igObject	protected: void constructDerived(igMetaObject *meta);
+igObject	protected: void constructDerivedFromFile(igMetaObject *meta);
+igObject	void *getClassStorage() const;
+igObject	private: void commission();
+igObject	private: void construct();
+igObject	private: void finishConstructDerivedFromFile(igMetaObject *typeMeta);
+igObject	private: void internalResetFields();
+igObject	void destruct();
+igObject	void decommission();
 igObject	void traverseFields(Visitor callback, void *context);
+igObject	void copyDeep(igObject *source);
 igObject	void copyShallow(int source);
 igObject	int isAlikeExactly(void *other) const;
+igObject	int isAlikeDeep(igObject *other);
+igObject	int isAlikeShallow(igObject *other);
 igObject	int getIoSize() const;
 igObject	void printFields(int depth, int indent);
 igObject	void *malloc(int size) const;
@@ -52,7 +66,10 @@ igObject	void *realloc(void *storage, int size) const;
 igObject	void *reallocAligned(void *storage, int size, unsigned short alignment) const;
 igObject	void free(void *storage) const;
 igObject	char *strdup(const char *string) const;
+igObject	private: void internalRelease() const;
+igObject	int isOfType(const igMetaObject *meta) const;
 igObject	void copy(igObject *source, int copyMode);
+igObject	igMemoryPoolView *getMemoryPool() const;
 igRenderer	IG_ABSTRACT_OBJECT_DEFINE(igRenderer)
 igRenderer	protected: static igMetaField *k_visualContext;
 igRenderer	void setVisualContext(igVisualContext *context);

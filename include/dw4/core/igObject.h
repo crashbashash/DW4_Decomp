@@ -39,11 +39,8 @@ void igObject_UserPostLoad(void);
 
 int Memory_FreeBufferAliasC(void *block);
 
-struct igMemoryPoolView *igObject_GetAllocator(struct igObject *object);
-void igObject_DeepCopy(struct igObjectDispatchView *self, struct igObjectDispatchView *source);
 int igObject_GetFieldValueByName(void **self, int name);
 void igObject_ResetFields(struct igObjectDispatchView *object);
-int igObject_IsAlikeShallow(struct igObjectDispatchView *a, struct igObjectDispatchView *b);
 void igObject_UserPostRead(void);
 
 #ifdef __cplusplus

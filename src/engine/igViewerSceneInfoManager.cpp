@@ -546,13 +546,13 @@ int igViewerSceneInfoManager_HasGeometry(igDisplayListAttr *attr) {
     if (attr == 0) {
         return 0;
     }
-    if (igObject_IsKindOf(attr, g_igGeometryAttr_metaObject) != 0) {
+    if (((Gap::Core::igObject *)attr)->isOfType(g_igGeometryAttr_metaObject) != 0) {
         return 1;
     }
-    if (igObject_IsKindOf(attr, g_igParticleAttr_metaObject) != 0) {
+    if (((Gap::Core::igObject *)attr)->isOfType(g_igParticleAttr_metaObject) != 0) {
         return 1;
     }
-    if (igObject_IsKindOf(attr, g_igDisplayListAttr_metaObject) != 0) {
+    if (((Gap::Core::igObject *)attr)->isOfType(g_igDisplayListAttr_metaObject) != 0) {
         n = ((igObjectList *)attr->_contents)->_count;
         i = 0;
         if (0 < n) {
@@ -626,7 +626,7 @@ int igViewerSceneInfoManager_AddInfo(igViewerSceneInfoManager *self, igSceneInfo
     SharedViewerOptions *options;
     bool useSceneUpVector;
     bool upVectorUnset;
-    if (igObject_IsKindOf(info, igSceneInfo_GetMetaObject()) != 0) {
+    if (((Gap::Core::igObject *)info)->isOfType(igSceneInfo_GetMetaObject()) != 0) {
         if (info->_sceneGraph == 0) {
             return 0;
         }
@@ -1052,7 +1052,7 @@ igMetaObject *igViewerSceneInfoManagerController_GetMeta(void) {
 }
 
 void igViewerSceneInfoManagerController_IsCompatible(igViewerSceneInfoManagerController *self, igObject *model) {
-    igObject_IsKindOf(model, g_igViewerParameters_metaObject);
+    ((Gap::Core::igObject *)model)->isOfType(g_igViewerParameters_metaObject);
 }
 
 void igStatisticsItem_OnModelChange(void) {
@@ -1096,7 +1096,7 @@ igMetaObject *igStatisticsItem_GetMeta(void) {
 }
 
 void igStatisticsItem_IsCompatible(igStatisticsItem *self, igObject *model) {
-    igObject_IsKindOf(model, igOnOffModel_GetMetaObject());
+    ((Gap::Core::igObject *)model)->isOfType(igOnOffModel_GetMetaObject());
 }
 
 }

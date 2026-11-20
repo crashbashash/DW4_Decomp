@@ -141,7 +141,7 @@ public:
 struct Locals {
     static inline void CreateDataList(beBaseInfoRam *ram) {
         void *alloc;
-        alloc = ((void *)igObject_GetAllocator(ram));
+        alloc = ((void *)((Gap::Core::igObject *)ram)->getMemoryPool());
         alloc = g_useOwnerAllocator ? alloc : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
         {
             igSmartPointer<igObject> list(beBaseInfoDataList_Create((int)alloc));
@@ -312,7 +312,7 @@ void beNDMWMdlPlayer_UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
             } else if (pressed & 0x4000) {
                 if (work->_isMainLobby != 0) {
                     beModelCtrlHITBOX *box;
-                    void *alloc = ((void *)igObject_GetAllocator(self));
+                    void *alloc = ((void *)((Gap::Core::igObject *)self)->getMemoryPool());
                     alloc = g_useOwnerAllocator ? alloc : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
                     {
                         HitBoxRef hitBox((beModelCtrlHITBOX *)beModelCtrlHITBOX_Create((int)alloc));
@@ -398,7 +398,7 @@ void beNDMWMdlPlayer_OnWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     int ramNo;
     info = (beBaseInfo *)ram->_parentInfo;
     if (ram->_dataList == 0) {
-        int owner = (int)igObject_GetAllocator(ram);
+        int owner = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         int alloc;
         if (g_useOwnerAllocator != 0) {
             alloc = owner;
@@ -471,7 +471,7 @@ void beNDMWMdlPlayer_OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     igIntList *timers;
     info = (beBaseInfo *)ram->_parentInfo;
     if (ram->_dataList == 0) {
-        int owner = (int)igObject_GetAllocator(ram);
+        int owner = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         int alloc;
         if (g_useOwnerAllocator != 0) {
             alloc = owner;
@@ -482,7 +482,7 @@ void beNDMWMdlPlayer_OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     }
     record = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
     {
-        int owner = (int)igObject_GetAllocator(self);
+        int owner = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         int alloc;
         if (g_useOwnerAllocator != 0) {
             alloc = owner;
@@ -502,7 +502,7 @@ void beNDMWMdlPlayer_OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         work->_directionLimiter[1] = 7.0f;
         work->_directionLimiter[2] = 0.0f;
         {
-            int owner = (int)igObject_GetAllocator(self);
+            int owner = (int)((Gap::Core::igObject *)self)->getMemoryPool();
             int alloc;
             if (g_useOwnerAllocator != 0) {
                 alloc = owner;
@@ -651,7 +651,7 @@ void beNDMWMdlPlayer_OnControlOff(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     beNDMWMdlPlayerInfoWork *work;
 
     if (ram->_dataList == 0) {
-        int owner = (int)igObject_GetAllocator(ram);
+        int owner = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         igSmartPointer<igObject> list(beBaseInfoDataList_Create((int)(g_useOwnerAllocator != 0 ? owner : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1))));
         igObject *created = list.p;
         if (created != 0) {
@@ -676,7 +676,7 @@ void beNDMWMdlPlayer_OnControlOff(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
 void beNDMWMdlPlayer_OnFreeze(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     igObject *created;
     if (ram->_dataList == 0) {
-        int owner = (int)igObject_GetAllocator(ram);
+        int owner = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         int alloc;
         igObject *old;
         if (g_useOwnerAllocator != 0) {
@@ -706,7 +706,7 @@ void beNDMWMdlPlayer_OnFreeze(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
 static inline void EnsureDataList(beBaseInfoRam *ram)
 {
     if (ram->_dataList == 0) {
-        void *owner = ((void *)igObject_GetAllocator(ram));
+        void *owner = ((void *)((Gap::Core::igObject *)ram)->getMemoryPool());
         void *alloc;
         if (g_useOwnerAllocator != 0) {
             alloc = owner;
@@ -764,7 +764,7 @@ void beNDMWMdlPlayer_OnErase(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     beModelCtrlInfoRamData *record;
     beNDMWMdlPlayerInfoWork *work;
     if (ram->_dataList == 0) {
-        int owner = (int)igObject_GetAllocator(ram);
+        int owner = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         int alloc;
         if (g_useOwnerAllocator != 0) {
             alloc = owner;
@@ -802,7 +802,7 @@ void beNDMWMdlPlayer_OnErase(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
 void beNDMWMdlPlayer_OnRemove(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     igObject *created;
     if (((igObject *)ram->_dataList) == 0) {
-        int owner = (int)igObject_GetAllocator(ram);
+        int owner = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         int alloc;
         if (g_useOwnerAllocator != 0) {
             alloc = owner;

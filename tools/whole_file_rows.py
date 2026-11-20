@@ -691,7 +691,8 @@ def stable_row(row, old, owner, syms, resolves, elsewhere=None):
                        entry `old` had not, for a name the object does not define and `resolves(name)` binds at
                        the same address without a row, stays out as before; the other new entries follow `old`'s
                        in name order
-      anon             `old`'s addresses stay, in `old`'s order (an address binds itself); new ones follow
+      anon             `old`'s addresses stay (an address binds itself); new ones join them, the list in ascending
+                       order as unitobjects.load requires
       symbol           the `symbol` `old` wrote for the owner (`owner`, its compiled name) stays
     the fields in `old`'s order, a field `old` had empty kept, and a field with `old`'s content in `old`'s order (a
     list it did not sort). Without `old`, `row` as it is."""
@@ -718,7 +719,7 @@ def stable_row(row, old, owner, syms, resolves, elsewhere=None):
     if old.get("anon") is not None:
         anon = list(old["anon"])
         anon += [va for va in row.get("anon") or () if va not in anon]
-        out["anon"] = anon
+        out["anon"] = sorted(anon, key=lambda va: int(va, 16))
     if "symbol" not in out and old.get("symbol") == owner:
         out["symbol"] = owner
     for field, value in out.items():

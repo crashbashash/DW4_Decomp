@@ -35,7 +35,7 @@ void igIntersectTraversal_RegisterClassFunction(int arg0, int arg1) {
 
 void igIntersectTraversal_resetFields(beHitLandModelTraversal *arg0, int flags) {
     Gap__Core__igObject__resetFields((igObject *)arg0, flags);
-    *(igSmartPointer<igVolumeList> *)&arg0->_volumes = FUN_0018f760(igObject_GetAllocator(arg0));
+    *(igSmartPointer<igVolumeList> *)&arg0->_volumes = FUN_0018f760(((Gap::Core::igObject *)arg0)->getMemoryPool());
     igIntersectTraversal_ResetStacks((igIntersectTraversal *)arg0);
 }
 

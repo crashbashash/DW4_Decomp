@@ -62,7 +62,7 @@ igResult igProgramFile_Open(igProgramFile *self, const char *path) {
         }
     }
     file->path = (const char *)name;
-    allocator = (int)igObject_GetAllocator((igObject *)self);
+    allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     stream = file->stream;
     if (stream != 0) {
         stream->_refCount = stream->_refCount - 1;

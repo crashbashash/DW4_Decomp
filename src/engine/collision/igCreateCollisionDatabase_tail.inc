@@ -4,7 +4,7 @@
 #include "dw4/support/emptyString.h"
 #include "dw4/base/igIterateGraph.h"
 static inline igAABox *asAABox(igObject *o) {
-    if (o != 0 && igObject_IsKindOf(o, g_igAABox_metaObject) != 0) return (igAABox *)o;
+    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igAABox_metaObject) != 0) return (igAABox *)o;
     return 0;
 }
 
@@ -60,7 +60,7 @@ int Gap__igCreateCollisionDatabase__vfunc_28(igCreateCollisionDatabase *self, ig
     igVolume_ExtendBy((void **)grid->box, (void **)bound);
     FUN_0023b430((igCollisionGrid *)self->_grid);
     igMetaObject *geometryMeta = g_igGeometry_metaObject;
-    igSmartPointer<igObject> iterator(igIterateGraph_Create(igObject_GetAllocator(self)));
+    igSmartPointer<igObject> iterator(igIterateGraph_Create(((Gap::Core::igObject *)self)->getMemoryPool()));
     for (FUN_0022ab90((igIterateGraph *)iterator.get(), *root, geometryMeta); FUN_0022ac00((igIterateGraph *)iterator.get()) != 0; FUN_0022ac70((igIterateGraph *)iterator.get(), geometryMeta)) {
         igNode *geometry = FUN_0022ac00((igIterateGraph *)iterator.get());
         if ((geometry->_flags & 0x10) == 0) continue;

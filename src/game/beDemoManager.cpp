@@ -26,7 +26,7 @@ igMetaObject *beDemoManager_GetMetaObject_Virtual(void);
 
 /* The allocator an object's new members come from: its own, or the default one. */
 static inline int allocatorFor(void *object) {
-    int allocator = (int)(igObject_GetAllocator((igObject *)object));
+    int allocator = (int)(((Gap::Core::igObject *)object)->getMemoryPool());
     return (int)(g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
 }
 

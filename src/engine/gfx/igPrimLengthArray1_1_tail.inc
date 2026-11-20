@@ -19,7 +19,7 @@ void igPsx2VertexArray1_1_resetFields(S0_15df80 *arg0, int flags) {
     S_temp_a0 *temp_a0;
     S_temp_v0 *temp_v0;
     Gap__Core__igObject__resetFields((igObject *)arg0, flags);
-    temp_v0 = (S_temp_v0 *)((void *)(igObject_GetAllocator((igObject *)arg0)));
+    temp_v0 = (S_temp_v0 *)((void *)(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     if (temp_v0 != 0) {
         temp_v0->f4 = (int)((int) (temp_v0->f4 + 1));
     }
@@ -55,7 +55,7 @@ void FUN_0015e050(struct S_arg0_15e050 *arg0) {
         }
     }
     if (arg0->f24 == 0) {
-        temp_v0_2 = (struct S_temp_v0_2 *)(igObject_GetAllocator((igObject *)arg0));
+        temp_v0_2 = (struct S_temp_v0_2 *)(((Gap::Core::igObject *)arg0)->getMemoryPool());
         if (temp_v0_2 != 0) {
             temp_v0_2->f4 = (int)((int) (temp_v0_2->f4 + 1));
         }
@@ -139,7 +139,7 @@ void FUN_0015e2b0(igVertexArray1_1 *arg0, int arg1) {
     arg0->_vertexFormat = fmt;
     arg0->_vtype = 0;
     if (arg0->_memPool == 0) {
-        igObject *v0 = (igObject *)igObject_GetAllocator(arg0);
+        igObject *v0 = (igObject *)((Gap::Core::igObject *)arg0)->getMemoryPool();
         if (v0 != 0) v0->_refCount = v0->_refCount + 1;
         {
             igObject *a = (igObject *)arg0->_memPool;
@@ -209,7 +209,7 @@ int FUN_0015e4e0(VA_15e4e0 *arg0) {
     s2 = 0;
     s1 = arg0->v23();
     if (arg0->f24 == 0) {
-        v0 = (igObject *)igObject_GetAllocator((igObject *)arg0);
+        v0 = (igObject *)((Gap::Core::igObject *)arg0)->getMemoryPool();
         if (v0 != 0) v0->_refCount = v0->_refCount + 1;
         {
             igObject *a = (igObject *)arg0->f24;
@@ -403,7 +403,7 @@ float FUN_0015ece0(void *arg0, int arg1) {
 }
 
 int igVertexArray1_1_Reconfigure(V_15ed00 *arg0, int arg1, unsigned int arg2, int arg3, int arg4) {
-    igSmartPointer<V_15ed00> resized((V_15ed00 *)igVertexArray1_1_Create((int)igObject_GetAllocator((igObject *)arg0)));
+    igSmartPointer<V_15ed00> resized((V_15ed00 *)igVertexArray1_1_Create((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
     unsigned int n;
     int sp88;
     int r;

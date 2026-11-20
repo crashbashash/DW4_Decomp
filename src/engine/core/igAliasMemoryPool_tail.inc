@@ -99,7 +99,7 @@ igResult igAliasMemoryPool_EnableAllocationLock(igAliasMemoryPool *pool, int ena
         if (pool->_allocationLock != 0) {
             return g_resultSuccess.v;
         }
-        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((igObject *)pool)))));
+        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)((Gap::Core::igObject *)pool)->getMemoryPool()))));
         created.get()->Create();
         setLock(pool, created.get());
     }
@@ -391,7 +391,7 @@ void igAliasMemoryPool_Dump(igAliasMemoryPool *self, int a1, int a2, int a3, int
     igAliasMemoryPool_Lock(self);
     g = "The method dump() has no meaning for an igAliasMemoryPool\n";
     if (t0 != 0) {
-        igSmartPointer<igFileView> r((igFileView *)igFile_Create((int)(((void *)igObject_GetAllocator((igObject *)self)))));
+        igSmartPointer<igFileView> r((igFileView *)igFile_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool()))));
         if (r.p->Open((const char *)t0, (const char *)"w") == 0) {
             igAliasMemoryPool_Unlock(self);
             return;

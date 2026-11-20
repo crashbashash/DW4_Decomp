@@ -43,7 +43,7 @@
 #define DEGI(p) ((beNDMWDegiData *)(p))
 #define DNAME(d) ((unsigned short *)(d)->_dmNameUni)
 #define REL(o) { igObject *rr = (o); if (rr != 0) { REFS(rr) = REFS(rr) - 1; if (((unsigned long long)((long long)REFS(rr) << 0x29) >> 0x29) == 0) { igObject_Destroy((igObject *)rr); } } }
-#define ALLOC(a, self) { a = ((void *)igObject_GetAllocator(self)); a = g_useOwnerAllocator ? a : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1)); }
+#define ALLOC(a, self) { a = ((void *)((Gap::Core::igObject *)(self))->getMemoryPool()); a = g_useOwnerAllocator ? a : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1)); }
 #define PLW_AT(list, off) (*(beNDMWLoadSavePlWork **)((char *)((beNDMWLoadSavePlWorkList *)(list))->_data + (off)))
 #include "dw4/core/igSmartPointer.h"
 #include "dw4/core/igTDataList.h"
@@ -55,7 +55,7 @@
 #define FIND1(DSTV, REC) { igObjectList *l = ((igObjectList *)igProperty_GetRecordFolder((igObject *)props, REC)->_data); igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "DEVICEFOLDER")->_data); IdObject *v = ((IdObject **)l->_data)[0]; if (v == 0) { DSTV = -1; } else { DSTV = t->find(v); } }
 #define FINDV(DST, REC) { igObjectList *l = ((igObjectList *)igProperty_GetRecordFolder((igObject *)props, REC)->_data); igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "DEVICEFOLDER")->_data); int a; for (a = 0; a < l->_count; a++) { IdObject *v = ((IdObject **)l->_data)[a]; if (v == 0) { DST[a] = -1; } else { DST[a] = t->find(v); } } }
 #define INTS(DST, FN, REC) { igIntList *l = (igIntList *)FN((igObject *)props, REC)->_data; int i = 0; if (0 < l->_count) { do { DST[i] = ((int *)l->_data)[i]; i++; } while (i < l->_count); } }
-#define OWNER_ALLOCATOR(dst, obj) { int alloc = (int)igObject_GetAllocator(obj); if (g_useOwnerAllocator != 0) { dst = alloc; } else { dst = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); } }
+#define OWNER_ALLOCATOR(dst, obj) { int alloc = (int)((Gap::Core::igObject *)(obj))->getMemoryPool(); if (g_useOwnerAllocator != 0) { dst = alloc; } else { dst = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); } }
 
 extern "C" void beNDMWDegiData__CopyFrom(beNDMWDegiData *dst, beNDMWDegiData *src);
 /* kept local: ObjectList_ResizeRetained has no include/dw4 home (only CoreLibrary.h declares it). */
@@ -1771,7 +1771,7 @@ void beNDMWDegiData__LoadFromProperties(beNDMWDegiData *degi, int props) {
 template <int K> struct CreatedItemRef { igObject *p; CreatedItemRef(igObject *o) : p(o) {} ~CreatedItemRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 
 static inline int itemAllocator(void *owner) {
-    int alloc = (int)igObject_GetAllocator((igObject *)owner);
+    int alloc = (int)((Gap::Core::igObject *)owner)->getMemoryPool();
     int a;
     if (g_useOwnerAllocator != 0) {
         a = alloc;
@@ -1847,7 +1847,7 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
     rs->_data = (int)interned;
     igObjectList *playerNameList = ((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "PLAYERNAME")->_data);
     ObjectListOps::Clear(playerNameList);
-    int alloc = (int)igObject_GetAllocator(degi);
+    int alloc = (int)((Gap::Core::igObject *)degi)->getMemoryPool();
     int a;
     if (g_useOwnerAllocator != 0)
         a = alloc;
@@ -2082,7 +2082,7 @@ void beNDMWMcUtilCtrl__Init(beNDMWMcUtilCtrl *util, int messenger, int kindHard)
     switch (kindHard) {
     case 0:
         for (i = 0; i < 5; i++) {
-            int owner = (int)igObject_GetAllocator(util);
+            int owner = (int)((Gap::Core::igObject *)util)->getMemoryPool();
             int alloc = g_useOwnerAllocator ? owner : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             SlotRef<0> slot(beNDMWMcSlotPS2_Create(alloc));
             ObjectList_AppendRetained((igObjectList *)util->_slot, slot.p);
@@ -2090,7 +2090,7 @@ void beNDMWMcUtilCtrl__Init(beNDMWMcUtilCtrl *util, int messenger, int kindHard)
         return;
     case 1:
         for (i = 0; i < 2; i++) {
-            int owner = (int)igObject_GetAllocator(util);
+            int owner = (int)((Gap::Core::igObject *)util)->getMemoryPool();
             int alloc = g_useOwnerAllocator ? owner : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             SlotRef<1> slot(beNDMWMcSlotGC_Create(alloc));
             ObjectList_AppendRetained((igObjectList *)util->_slot, slot.p);
@@ -2098,7 +2098,7 @@ void beNDMWMcUtilCtrl__Init(beNDMWMcUtilCtrl *util, int messenger, int kindHard)
         return;
     case 2:
         for (i = 0; i < 9; i++) {
-            int owner = (int)igObject_GetAllocator(util);
+            int owner = (int)((Gap::Core::igObject *)util)->getMemoryPool();
             int alloc = g_useOwnerAllocator ? owner : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             SlotRef<2> slot(beNDMWMcSlotXbox_Create(alloc));
             ObjectList_AppendRetained((igObjectList *)util->_slot, slot.p);
@@ -2345,7 +2345,7 @@ void beNDMWLoadCtrl2_UpdateRam(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
         if (ram->_dataList == 0) {
             igObject *o;
             igObject *old;
-            int base = (int)igObject_GetAllocator(ram);
+            int base = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
             int a;
             if (g_useOwnerAllocator != 0) { a = base; } else { a = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
             igSmartPointer<igObject> list((igObject *)beBaseInfoDataList_Create(a));
@@ -2364,7 +2364,7 @@ void beNDMWLoadCtrl2_UpdateRam(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
         if (ram->_dataList == 0) {
             igObject *o;
             igObject *old;
-            int base = (int)igObject_GetAllocator(ram);
+            int base = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
             int a;
             if (g_useOwnerAllocator != 0) { a = base; } else { a = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
             igSmartPointer<igObject> list((igObject *)beBaseInfoDataList_Create(a));

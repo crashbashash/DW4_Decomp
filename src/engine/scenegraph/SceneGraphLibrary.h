@@ -84,6 +84,7 @@
 #include "dw4/attrs/igLightStateAttr.h"
 #include "dw4/attrs/igLightAttr.h"
 #include "dw4/gfx/igImage.h"
+#include "dw4/gfx/GfxMetaEnums.h"
 #include "dw4/attrs/igGeometrySetAttr.h"
 #include "dw4/attrs/igGeometryAttr.h"
 #include "dw4/attrs/igDisplayListAttr.h"
@@ -4796,7 +4797,7 @@ public:
 struct IniItemList { char pad0[8]; int count; char pad1[4]; void **data; };
 struct IniFieldView { char pad0[56]; void *refMeta; };
 static inline IniFieldView *asObjectRefField(IniFieldView *f) {
-    if (f != 0 && igObject_IsKindOf((igObject *)f, g_igObjectRefMetaField_metaObject) != 0) {
+    if (f != 0 && ((Gap::Core::igObject *)f)->isOfType(g_igObjectRefMetaField_metaObject) != 0) {
         return f;
     }
     return 0;
@@ -5319,7 +5320,7 @@ static inline void setBase(CombinerStateView *c, int bone, int value) {
     c->_cacheValid = 0;
 }
 static inline AnimDbRecord *castToNamed(AnimDbRecord *object) {
-    if (object != 0 && igObject_IsKindOf((igObject *)object, g_igNamedObject_metaObject) != 0) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_igNamedObject_metaObject) != 0) {
         return object;
     }
     return 0;
@@ -5331,7 +5332,7 @@ static inline const char *nameOf(AnimDbRecord *object) {
     }
     return ((char *)emptyString);
 }
-#define CAST_INLINE(NAME, META) static inline AnimDbObject *NAME(AnimDbObject *o) { if (o != 0 && igObject_IsKindOf(o, META) != 0) { return o; } return 0; }
+#define CAST_INLINE(NAME, META) static inline AnimDbObject *NAME(AnimDbObject *o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(META) != 0) { return o; } return 0; }
 CAST_INLINE(castSkeleton, ((igMetaObject *)g_igTransformSource_metaObject))
 CAST_INLINE(castField, ((igMetaObject *)g_igObjectRefMetaField_metaObject))
 CAST_INLINE(castBoolList, ((igMetaObject *)g_igAnimationTrackList_metaObject))

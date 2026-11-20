@@ -157,21 +157,21 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
         }
     }
     if (self->_order == 0) {
-        int allocator = (int)igObject_GetAllocator(self);
+        int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igObject *old = (igObject *)self->_order;
         IG_OBJECT_RELEASE(old);
         self->_order = (int)beHitLandModelOrder_Create(allocator);
     }
     if (self->_hitTraversal == 0) {
-        int allocator = (int)igObject_GetAllocator(self);
+        int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igObject *old = (igObject *)self->_hitTraversal;
         IG_OBJECT_RELEASE(old);
         self->_hitTraversal = (int)beHitLandModelTraversal_Create(allocator);
     }
     if (self->_probe == 0) {
-        int allocator = (int)igObject_GetAllocator(self);
+        int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igObject *old = (igObject *)self->_probe;
         IG_OBJECT_RELEASE(old);
@@ -946,7 +946,7 @@ void beHitLandModelOrder_AddHitResult(beHitLandModelOrder *self, HitRecord *hit)
     beHitLandResultData *result;
     const char *old;
     if (self->_hitdataCount >= ((igObjectList *)self->_hitdataList)->_count) {
-        void *alloc = igObject_GetAllocator(self);
+        void *alloc = ((Gap::Core::igObject *)self)->getMemoryPool();
         alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<beHitLandResultData> created(beHitLandResultData_Create((int)alloc));
         ObjectList_AppendRetained((igObjectList *)self->_hitdataList, (igObject *)created);
@@ -1000,7 +1000,7 @@ HitRecord &HitRecord::operator=(const HitRecord &other) {
 
 void beHitLandModelOrder_AddRay(beHitLandModelOrder *self, int a1, int a2) {
     if (self->_rayCount >= ((igRayList *)self->_rayList)->_count) {
-        int a = ((int)igObject_GetAllocator(self));
+        int a = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
         igSmartPointer<igObject> ray(igRay_CreateInstance(g_useOwnerAllocator != 0 ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1))));
         /* matching construct: the (void *)(long) cast fixes the argument evaluation order of the append */
         ObjectList_AppendRetained((igObjectList *)((void *)(long)self->_rayList), ray.p);

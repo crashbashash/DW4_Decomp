@@ -38,7 +38,7 @@ enum SwtCtl { SWTCTL_CLR, SWTCTL_SET, SWTCTL_FLIP };
 #define NAME_OF(object) ((object)->_name ? (char *)(object)->_name : emptyString)
 #define LAYER_SWITCH(self) ((igSwitch *)(self)->_layerSwt)
 #define LAYERS(self) CHILDREN(LAYER_SWITCH(self))
-#define PICK_ALLOCATOR(allocator, owner, selector) { allocator = igObject_GetAllocator(owner); allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(selector); }
+#define PICK_ALLOCATOR(allocator, owner, selector) { allocator = ((Gap::Core::igObject *)(owner))->getMemoryPool(); allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(selector); }
 
 
 #define META_OF(node) (((igObjectDispatchView *)(node))->GetMeta())

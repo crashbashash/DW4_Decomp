@@ -45,7 +45,7 @@ enum StatusMessage {
 #define NEXT_STATE(ram) { (ram)->_st0 = (ram)->_st0 + 1; (ram)->_st3 = 0; (ram)->_st2 = 0; (ram)->_st1 = 0; }
 #define REPLACE_WINDOW(window, create) { \
     void *allocator; \
-    void *ownerAllocator = igObject_GetAllocator(self); \
+    void *ownerAllocator = ((Gap::Core::igObject *)self)->getMemoryPool(); \
     if (g_useOwnerAllocator != 0) { allocator = ownerAllocator; } else { allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); } \
     RELEASE(beNDMWWindow, (window).p) \
     (window).p = (beNDMWWindow *)create((int)allocator); }
@@ -96,7 +96,7 @@ enum StatusMessage {
     SELECT_TEXT_COLOR(label) \
     beMessenger_DispatchSelected((beMessenger *)self->_messenger, "DEFAULTCOLOR");
 #define SALES_LIST(field) ((igObjectList *)work->field)
-#define PICK_ALLOCATOR(allocator, selector) { allocator = igObject_GetAllocator(owner); allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(selector); }
+#define PICK_ALLOCATOR(allocator, selector) { allocator = ((Gap::Core::igObject *)owner)->getMemoryPool(); allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(selector); }
 #define STOCK_ITEM(K, T, holder, list, id) { \
     PICK_ALLOCATOR(allocator, kIGMemoryPoolHandleUser0) \
     ItemRef<K> holder((igObject *)T##_Create((int)allocator)); \

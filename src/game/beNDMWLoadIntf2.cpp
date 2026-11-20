@@ -200,7 +200,7 @@ static inline void NoteUseData(beNDMWLoadIntf2DegiState *self, beNDMWDegiData *d
 /* Writes the record's name (the text after the leading marker unit of _dmNameUni, at most eight
  * characters) into status text slot nameSlot. */
 static inline void DrawName(beNDMWLoadIntf2DegiState *self, beNDMWDegiData *data, int nameSlot) {
-    int allocator = (int)igObject_GetAllocator(self);
+    int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     igSmartPointer<beUnicodeObj> text(beUnicodeObj_Create(g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1)));
     beUnicodeObj_AllocateBuffer(text.p, 8);
     unsigned short *dst = (unsigned short *)text.p->_buffer;
@@ -585,47 +585,47 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
   /* matching construct: each lookup repeats the empty-reference check here; moving it into an
    * inline helper changes the exception cleanup emitted for FreshDataList::Assign's temporary. */
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)((Gap::Core::igObject *)host)->getMemoryPool());
   }
   common = (beNDMWLoadCtrl2CommonIntf *)FindWorkObject(host, "COMMONINTF");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)((Gap::Core::igObject *)host)->getMemoryPool());
   }
   control = (beNDMWLoadIntf2CtrlData *)FindWorkObject(host, "CTRL");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)((Gap::Core::igObject *)host)->getMemoryPool());
   }
   creation = (beNDMWLoadIntf2MakeChr *)FindWorkObject(host, "MAKECHR");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)((Gap::Core::igObject *)host)->getMemoryPool());
   }
   models = (beNDMWLoadIntf2ComMdlCtrl *)FindWorkObject(host, "COMMDLCTRL");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)((Gap::Core::igObject *)host)->getMemoryPool());
   }
   messages = (beNDMWLoadIntf2MesWin *)FindWorkObject(host, "MESWIN");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)((Gap::Core::igObject *)host)->getMemoryPool());
   }
   slots = (beNDMWLoadIntf2SelSlot *)FindWorkObject(host, "SELSLOT");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)((Gap::Core::igObject *)host)->getMemoryPool());
   }
   nameEntry = (beNDMWLoadIntf2NameSel *)FindWorkObject(host, "NAMESEL");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)((Gap::Core::igObject *)host)->getMemoryPool());
   }
   textOrder = (beNDMWLoadIntf2TextOrder *)FindWorkObject(host, "TEXTORDER");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)((Gap::Core::igObject *)host)->getMemoryPool());
   }
   status = (beNDMWLoadIntf2DegiStateCtrl *)FindWorkObject(host, "DEGISTATECTRL");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)((Gap::Core::igObject *)host)->getMemoryPool());
   }
   dataSelection = (beNDMWLoadIntf2DataSelIntf *)FindWorkObject(host, "DATASELINTF");
   if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&host->_dataList) == 0) {
-    FreshDataList::Assign(&host->_dataList, (int)igObject_GetAllocator(host));
+    FreshDataList::Assign(&host->_dataList, (int)((Gap::Core::igObject *)host)->getMemoryPool());
   }
   difficulty = (beNDMWLoadIntf2Diffselect *)FindWorkObject(host, "DIFFSELECT");
   beNDMWLoadIntf2ComMdlCtrl__Poll(models);
@@ -1301,7 +1301,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           break;
         case 1:
           if (beNDMWLoadIntf2DataSelIntf__CloseAll(dataSelection, 0) == 1) {
-            int allocator = SelectAllocator(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
+            int allocator = SelectAllocator(&kIGMemoryPoolHandleUser1, (int)((Gap::Core::igObject *)self)->getMemoryPool());
             {
               DegiDataRef freshData(beNDMWDegiData_Create(allocator));
               beNDMWLoadIntf2_igObjectList_Set((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)freshData.value);
@@ -1328,7 +1328,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
             if (control->_isRdyCancel == 1) {
               if (control->_isNewMake == 1) {
                 RequestGameRam(self, host, "GAMEDATAINIT");
-                int allocator = SelectAllocator(&kIGMemoryPoolHandleUser0, (int)igObject_GetAllocator(self));
+                int allocator = SelectAllocator(&kIGMemoryPoolHandleUser0, (int)((Gap::Core::igObject *)self)->getMemoryPool());
                 beUnicodeObj *nameObject = beUnicodeObj_Create(allocator);
                 {
                   igSmartPointer<beUnicodeObj> nameRef(nameObject);
@@ -1407,7 +1407,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           case 1:
             if (beNDMWLoadIntf2Diffselect__Update(difficulty, HostWork(common, host)->_isCtrl) == 1) {
               if (difficulty->_isCancel == 1) {
-                int allocator = SelectAllocator(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
+                int allocator = SelectAllocator(&kIGMemoryPoolHandleUser1, (int)((Gap::Core::igObject *)self)->getMemoryPool());
                 {
                   DegiDataRef freshData(beNDMWDegiData_Create(allocator));
                   beNDMWLoadIntf2_igObjectList_Set((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)freshData.value);
@@ -1511,7 +1511,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
               EnterState(control, LOAD_SCREEN_NAME);
               beNDMWLoadIntf2NameSel__Init(nameEntry, 0);
             } else {
-              int allocator = SelectAllocator(&kIGMemoryPoolHandleUser1, (int)igObject_GetAllocator(self));
+              int allocator = SelectAllocator(&kIGMemoryPoolHandleUser1, (int)((Gap::Core::igObject *)self)->getMemoryPool());
               {
                 DegiDataRef freshData(beNDMWDegiData_Create(allocator));
                 beNDMWLoadIntf2_igObjectList_Set((igDataList *)common->_gameUseData, host->_ramNo, (ObjectRefTarget *)freshData.value);
@@ -2289,7 +2289,7 @@ static inline void RequestPrompt(beNDMWLoadIntf2DataSelIntf *self, int mesWin, i
  * matching construct: one expression and the handle's .value, not its conversion operator: every
  * extra node here stops the save-area callers from inlining this and ShowSaveAreaName's other callees. */
 static inline beUnicodeObj *CreateUnicodeText(beNDMWLoadIntf2DataSelIntf *self) {
-    int allocator = (int)igObject_GetAllocator(self);
+    int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     return beUnicodeObj_Create(g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1.value));
 }
 
@@ -3171,7 +3171,7 @@ void beNDMWLoadIntf2NameSel__Init(beNDMWLoadIntf2NameSel *nameSel, unsigned char
 /* A new text object for one letter of the name-entry fonts, from the owner's allocator when
  * g_useOwnerAllocator is set. */
 static inline beUnicodeObj *NameSelNewLetterText(beNDMWLoadIntf2NameSel *nameSel) {
-    int allocator = (int)igObject_GetAllocator(nameSel);
+    int allocator = (int)((Gap::Core::igObject *)nameSel)->getMemoryPool();
     allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     return beUnicodeObj_Create(allocator);
 }
@@ -4415,7 +4415,7 @@ enum LoadIntf2Message {
 
 /* The allocator for objects an owner creates: its own, or the default selector's. */
 static inline int OwnerAllocator(void *owner) {
-    int ownAllocator = (int)igObject_GetAllocator((igObject *)owner);
+    int ownAllocator = (int)((Gap::Core::igObject *)owner)->getMemoryPool();
     if (g_useOwnerAllocator != 0) {
         return ownAllocator;
     }

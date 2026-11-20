@@ -17,7 +17,7 @@
 #include "dw4/core/igObject.h"
 #define ALLOC(dst, obj)                                                                            \
     {                                                                                              \
-        int alloc = (int)igObject_GetAllocator(obj);                                                    \
+        int alloc = (int)((Gap::Core::igObject *)(obj))->getMemoryPool();                                                    \
         if (g_useOwnerAllocator != 0) {                                                                   \
             dst = alloc;                                                                           \
         } else {                                                                                   \

@@ -1,7 +1,7 @@
 void igMemoryFile_AddMemoryFileEntry(int name, int buffer, int size) {
     igMemoryFile_EnsureRegistered();
     if (buffer != 0) {
-        igSmartPointer<igMemoryFileEntry> entry((igMemoryFileEntry *)igMemoryFileEntry_Create(((int)igObject_GetAllocator((*(igObject **)&g_memoryFileEntries)))));
+        igSmartPointer<igMemoryFileEntry> entry((igMemoryFileEntry *)igMemoryFileEntry_Create(((int)((Gap::Core::igObject *)(*(igObject **)&g_memoryFileEntries))->getMemoryPool())));
         igNamedObject_SetName((igNamedObject *)entry.p, (const char *)name);
         entry->_size = size;
         entry->_buffer = buffer;

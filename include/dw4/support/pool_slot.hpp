@@ -17,7 +17,7 @@ public:
 static inline void igObject_Destroy(igObjectSlotView *object) { igObject_Destroy((igObject *)object); }
 
 /* The pool allocators, seen through the slot view the manager's slots hold. */
-static inline igObjectSlotView *slot_owner_allocator(void *self) { return (igObjectSlotView *)igObject_GetAllocator((igObject *)self); }
+static inline igObjectSlotView *slot_owner_allocator(void *self) { return (igObjectSlotView *)((Gap::Core::igObject *)self)->getMemoryPool(); }
 static inline igObjectSlotView *slot_selector_allocator(int selector) { return (igObjectSlotView *)Memory_GetAllocatorBySelector(selector); }
 
 static inline void retain(igObjectSlotView *o)

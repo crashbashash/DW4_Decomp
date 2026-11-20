@@ -16,7 +16,7 @@ bool igDirectory_AddExternalInfoRef(igDirectoryView *directory, igInfoView *info
     if (index >= 0 && index < directory->_count && (igObject *)igDirectory_GetObject(directory, index) == object) {
         return 0;
     }
-    igSmartPointer<igExternalInfoEntryView> entry((igExternalInfoEntryView *)igExternalInfoEntry_Create((int)igObject_GetAllocator((igObject *)directory)));
+    igSmartPointer<igExternalInfoEntryView> entry((igExternalInfoEntryView *)igExternalInfoEntry_Create((int)((Gap::Core::igObject *)directory)->getMemoryPool()));
     entry.get()->setDirectoryIndex(((igSmartPointer<igTDataList<igDirectoryView *> > &)directory->_externalDirectoryList)->find((igDirectoryView *)info->_directory));
     entry.get()->setInfoName(info->_name != 0 ? (char *)info->_name : (char *)emptyString);
     entry.get()->setKey(key);

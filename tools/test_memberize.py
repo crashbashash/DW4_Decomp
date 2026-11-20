@@ -180,14 +180,66 @@ class Memberize(unittest.TestCase):
         write(self.table, TABLE + "User_Count\tWidget::count\n")
         self.assertEqual(self.run_tool(), 2)
 
-    def test_a_static_inline_overload_forwarding_to_the_c_name_is_a_user(self):
+    def test_a_static_inline_overload_forwarding_to_the_c_name_goes_with_its_callers(self):
         path = os.path.join(self.root, "src", "game", "Game.h")
         write(path, self.read("src/game/Game.h") + "static inline int Widget_GetCount(WidgetView *view) "
               "{ return Widget_GetCount((Widget *)view); }\n")
         self.assertEqual(self.run_tool("--apply"), 0)
-        self.assertIn("static inline int Widget_GetCount(WidgetView *view) { return ((Widget *)view)->getCount(); }",
-                      self.read("src/game/Game.h"))
+        # every C++ call is a member call now, so the overload serves no code; C (user.c) keeps the prototype
+        self.assertNotIn("Widget_GetCount", self.read("src/game/Game.h"))
         self.assertIn("int Widget::getCount() {", self.read("src/game/Widget.inc"))
+        self.assertIn("int Widget_GetCount(struct Widget *self);", self.read("include/dw4/game/Widget.h"))
+
+    def test_macro_bodies_and_class_body_members_call_the_member(self):
+        self.append("src/game/Users.inc",
+                    "#define COUNT_OF(w) Widget_GetCount(w)\n"
+                    "#define TWICE(a, w) { \\\n    a = Widget_GetCount((Widget *)w); \\\n"
+                    "    a += Widget_GetCount(holder); }\n"
+                    "struct Counter { static int count(Gadget *g) { return Widget_GetCount(g); }\n"
+                    "    static void touch(Gadget *g) { Widget_GetCount(g); } };\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        users = self.read("src/game/Users.inc")
+        self.assertIn("#define COUNT_OF(w) ((Widget *)(w))->getCount()\n", users)
+        self.assertIn("    a = ((Widget *)(w))->getCount(); \\\n    a += ((Widget *)holder)->getCount(); }\n", users)
+        # a call in a member a class body defines is no declaration: it is rewritten, not removed
+        self.assertIn("return ((Widget *)g)->getCount(); }\n", users)
+        self.assertIn("static void touch(Gadget *g) { ((Widget *)g)->getCount(); } };\n", users)
+        # macros expanded by C++ name the member; --check counts them as users
+        self.assertEqual(memberize.macro_body("#define X(a, b) f(a)\n", 16), frozenset(("a", "b")))
+        self.assertIsNone(memberize.macro_body("#define X(a, b) f(a)\n", 9))
+        self.assertEqual(memberize.macro_body("#define Y \\\n  f()\n", 14), frozenset())
+
+    def test_a_private_member_is_reached_by_its_c_name_outside_its_class(self):
+        self.append("config/class-members.tsv", "Widget\tprivate: void release();\n")
+        self.append("src/game/Widget.inc",
+                    "void Widget_Release(Widget *self) {\n    self->_count = 0;\n}\n\n"
+                    "void Widget::reset() {\n    Widget_Release(this);\n}\n")
+        self.append("src/game/Users.inc", "void Users_Drop(Widget *w) {\n    Widget_Release(w);\n}\n")
+        self.append("include/dw4/game/Widget.h", "#ifdef __cplusplus\nextern \"C\" void Widget_Release(struct Widget *self);\n#endif\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100200 000010 Widget_Release\n")
+        write(self.table, TABLE + "Widget_Release\tWidget::release\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        widget = self.read("src/game/Widget.inc")
+        self.assertIn("void Widget::release() {\n    _count = 0;\n}\n", widget)
+        self.assertIn("void Widget::reset() {\n    release();\n}\n", widget)
+        # outside the class the private member is out of reach: the C name and its prototype stay
+        self.assertIn("    Widget_Release(w);\n", self.read("src/game/Users.inc"))
+        self.assertIn("Widget_Release(struct Widget *self);", self.read("include/dw4/game/Widget.h"))
+
+    def test_gap_qualified_parameters_and_rows_in_their_class(self):
+        write(os.path.join(self.root, "config", "converted-classes.tsv"), "Widget\tGame\n")
+        self.append("config/class-members.tsv", "Gadget\tint extra();\n")
+        self.append("src/game/Widget.inc",
+                    "void Widget_Merge(Gap::Game::Widget *self, Gap::Game::Widget *other) {\n"
+                    "    self->_count = other->_count;\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100200 000010 Widget_Merge\n")
+        write(self.table, TABLE + "Widget_Merge\tvoid Widget::merge(Widget *other)\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        # a Gap-qualified parameter is the member's bare class in the class's scope
+        self.assertIn("void Widget::merge(Widget *other) {\n    _count = other->_count;\n}\n",
+                      self.read("src/game/Widget.inc"))
+        members = self.read("config/class-members.tsv")
+        self.assertIn("Widget\tvoid merge(Widget *other);\nGadget\tint extra();\n", members)
 
     def test_a_virtual_function_is_never_called_through_the_vtable_by_its_c_name(self):
         write(os.path.join(self.root, "config", "class-members.tsv"),

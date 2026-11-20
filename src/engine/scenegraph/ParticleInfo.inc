@@ -14,7 +14,7 @@ void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
     int child;
     NodeList *children;
     if (node != 0) {
-        if (igObject_IsKindOf((igObject *)node, g_igGroup_metaObject) != 0) {
+        if (((Gap::Core::igObject *)node)->isOfType(g_igGroup_metaObject) != 0) {
             children = node->children;
             count = 0;
             if (children != 0) {
@@ -27,8 +27,8 @@ void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
                 FUN_001c58c0((T_1c58c0 *)path);
             }
         }
-        if (igObject_IsKindOf((igObject *)node, g_igCamera_metaObject) != 0) {
-            igSmartPointer<PathEntry> entry(((PathEntry *)igGraphPath_Create((int)igObject_GetAllocator((igObject *)collector))));
+        if (((Gap::Core::igObject *)node)->isOfType(g_igCamera_metaObject) != 0) {
+            igSmartPointer<PathEntry> entry(((PathEntry *)igGraphPath_Create((int)((Gap::Core::igObject *)collector)->getMemoryPool())));
             FUN_001c5740((U_1c5740 *)entry.p, (T_1c5740 *)path);
             ObjectList_AppendRetained((igObjectList *)collector->children, (igObject *)entry.p);
         }
@@ -50,7 +50,7 @@ igSmartPointer<igObject> *igSmartPointer_igGraphPath_Destruct(igSmartPointer<igO
 
 void igSceneInfo_CollectCameras(igSceneInfo *info) {
     O_1d65e0 *self = (O_1d65e0 *)info;
-    igObject *created = ((igObject *)FUN_0019f480((int)igObject_GetAllocator((igObject *)self)));
+    igObject *created = ((igObject *)FUN_0019f480((int)((Gap::Core::igObject *)self)->getMemoryPool()));
     if (created != 0) {
         created->_refCount = created->_refCount + 1;
     }
@@ -67,14 +67,14 @@ void igSceneInfo_CollectCameras(igSceneInfo *info) {
     if ((held->_refCount & 0x7FFFFF) == 0) {
         igObject_Destroy(held);
     }
-    igSmartPointer<igObject> second(((igObject *)igGraphPath_Create((int)igObject_GetAllocator((igObject *)self))));
+    igSmartPointer<igObject> second(((igObject *)igGraphPath_Create((int)((Gap::Core::igObject *)self)->getMemoryPool())));
     FUN_001c5730((int *)(second.get()), (igObject *)self->f20);
     FUN_001d6410((TraversedNode *)self, (TraversedNode *)self->f20, (void *)(second.get()));
 }
 
 void igSceneInfo_ComputeAnimationRange(igSceneInfo *info) {
     ChildOwner *self = (ChildOwner *)info;
-    igSmartPointer<ChildObject> created((ChildObject *)igDirectory_Create((int)igObject_GetAllocator((igObject *)self)));
+    igSmartPointer<ChildObject> created((ChildObject *)igDirectory_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
     igDirectory_AddObjectRecursive((int)(created.get()), self->f20, 0, 0);
     FUN_001d6790((OO_1d6790 *)self, (AA *)(created.get()));
 }
@@ -94,12 +94,12 @@ void FUN_001d6790(OO_1d6790 *arg0, AA *arg1) {
     var_s2 = 0;
     while (var_s2 < temp_s3) {
         temp_v0 = (EE_1d6790 *)igDirectory_GetEntry((int *)arg1, var_s2);
-        if (0 != igObject_IsKindOf((igObject *)temp_v0, g_igObjectDirEntry_metaObject)) {
+        if (0 != ((Gap::Core::igObject *)temp_v0)->isOfType(g_igObjectDirEntry_metaObject)) {
             temp_s6 = temp_v0->f24;
-            if (igObject_IsKindOf((igObject *)temp_s6, g_igTransformSource_metaObject) != 0) {
+            if (((Gap::Core::igObject *)temp_s6)->isOfType(g_igTransformSource_metaObject) != 0) {
                 temp_s1 = ((DW4VC_124_0_1d6790 *)(temp_s6))->vX();
                 var_s0 = ((DW4VC_128_0 *)(temp_s6))->vX();
-                if (igObject_IsKindOf((igObject *)temp_s6, g_igTransformSequence1_5_metaObject) != 0) {
+                if (((Gap::Core::igObject *)temp_s6)->isOfType(g_igTransformSequence1_5_metaObject) != 0) {
                     temp_v1 = temp_s1 + ((DW4VC_260_0 *)(temp_s6))->vX();
                     if (var_s0 < temp_v1) {
                         var_s0 = temp_v1;

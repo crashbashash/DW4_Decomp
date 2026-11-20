@@ -12,7 +12,7 @@ void igDriverDatabase_InitDefaults(igDriverDatabase *database) {
     i = 0;
     do {
         {
-            igSmartPointer<igStringObj> value((igStringObj *)igStringObj_Create((int)igObject_GetAllocator((igObject *)database)));
+            igSmartPointer<igStringObj> value((igStringObj *)igStringObj_Create((int)((Gap::Core::igObject *)database)->getMemoryPool()));
             objectListSetRetained(i, value.get(), (igObjectList *)database->_currentProperties);
         }
         i++;
@@ -82,7 +82,7 @@ static inline char *textOf(const igSmartPointer<igStringObj> &ref) {
 
 void igDriverDatabase_GatherProperties(void *self, igTDataList<igVisualContextView *> *list) {
     int i;
-    igSmartPointer<igStringObj> text(((igStringObj *)igStringObj_Create((int)(((void *)igObject_GetAllocator((igObject *)self))))));
+    igSmartPointer<igStringObj> text(((igStringObj *)igStringObj_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool())))));
     if (igDriverDatabase_GetOSName((void *)(text.get())) != 0) {
         igDriverDatabase_SetCurrentProperty(self, 0, textOf(text));
     }
@@ -115,7 +115,7 @@ int igDriverDatabase_Load(igDriverDatabase *self, const char *fileName, const ch
         name = (char *)"drivers.ini";
     }
     {
-        int al = ((int)igObject_GetAllocator((igObject *)self));
+        int al = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
         igRelease((igObject *)self->_databaseFile);
         self->_databaseFile = (int)((igObject *)igFile_Create(al));
     }
@@ -125,13 +125,13 @@ int igDriverDatabase_Load(igDriverDatabase *self, const char *fileName, const ch
             rootPath = ((const char *)igObjectSystem_GetRootPath((int *)((*(int *)&g_objectSystem))));
         }
         if (rootPath != 0 && strlen(rootPath) != 0) {
-            igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)igObject_GetAllocator((igObject *)self))));
+            igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
             folder.p->setFolderName((char *)rootPath);
             opened = openPath(self, folder.p->GetFullPath(name.p));
         }
     }
     if (opened == 0) {
-        igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)igObject_GetAllocator((igObject *)self))));
+        igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
         folder.p->setFolderName((char *)igObjectSystem_GetBasePath((int *)((*(int *)&g_objectSystem))));
         opened = openPath(self, folder.p->GetFullPath(name.p));
     }
@@ -170,7 +170,7 @@ igTDataList<ConfigNode *> *igDriverDatabase_ParseDatabase(igDriverDatabase *s) {
     igTDataList<ConfigNode *> *l;
     int v;
 
-    l = ((igTDataList<ConfigNode *> *)igDataList_Create(((int)igObject_GetAllocator((igObject *)s))));
+    l = ((igTDataList<ConfigNode *> *)igDataList_Create(((int)((Gap::Core::igObject *)s)->getMemoryPool())));
     s->_currentLine = 1;
     v = ((igStringObj *)s->_rawDatabase)->_buffer;
     if (v == 0) {
@@ -238,7 +238,7 @@ int igDriverDatabase_ApplyToRegistry(igDriverDatabase *self, int registry, int s
     int r;
     igTDataList<ConfigNode *> *a;
     int i;
-    igSmartPointer<igRegistry> parsed(((igRegistry *)igRegistry_Create(((int)igObject_GetAllocator((igObject *)self)))));
+    igSmartPointer<igRegistry> parsed(((igRegistry *)igRegistry_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool()))));
     a = igDriverDatabase_ParseDatabase(self);
     for (i = 0; i < a->_count; i++) {
         igDriverDatabase_ProcessConfigNode(self, a->_data[i], parsed.p, section);
@@ -382,7 +382,7 @@ ConfigNode *igDriverDatabase_ParseNode(igDriverDatabase *self) {
     }
     if (igDriverDatabase_ParseIdentifier(self, (int *)&word)) {
         if (strcmp(igStringObj_Text(word),"SETTINGS") == 0) {
-            void *memory = Memory_AllocateBufferDirect(16, (igMemoryPoolView *)igObject_GetAllocator((igObject *)self));
+            void *memory = Memory_AllocateBufferDirect(16, (igMemoryPoolView *)((Gap::Core::igObject *)self)->getMemoryPool());
             ConfigSettingsNode *settings = (ConfigSettingsNode *)memory;
             if (memory != 0) {
                 settings = (ConfigSettingsNode *)igDriverDatabase_SettingsNode_Construct(memory);
@@ -404,7 +404,7 @@ ConfigNode *igDriverDatabase_ParseNode(igDriverDatabase *self) {
                 }
             }
             if (found) {
-                void *memory = Memory_AllocateBufferDirect(28, (igMemoryPoolView *)igObject_GetAllocator((igObject *)self));
+                void *memory = Memory_AllocateBufferDirect(28, (igMemoryPoolView *)((Gap::Core::igObject *)self)->getMemoryPool());
                 ConfigSectionNode *section = (ConfigSectionNode *)memory;
                 if (memory != 0) {
                     section = (ConfigSectionNode *)igDriverDatabase_PropertyNode_Construct(memory, keyword);
@@ -469,7 +469,7 @@ void igDriverDatabase_ApplySettings(igDriverDatabase *self, igTDataList<ConfigPa
     int i;
     ConfigPair *pair;
     char *value;
-    igStringObj *scratch = (igStringObj *)igStringObj_Create((int)igObject_GetAllocator((igObject *)self));
+    igStringObj *scratch = (igStringObj *)igStringObj_Create((int)((Gap::Core::igObject *)self)->getMemoryPool());
     for (i = 0; i < entries->_count; i++) {
         pair = entries->_data[i];
         key = igStringObj_Text(pair->key);
@@ -492,7 +492,7 @@ int igDriverDatabase_ResolveSettingsSection(igDriverDatabase *self, igStringObj 
         }
         return fallback;
     }
-    name = (igStringObj *)igStringObj_Create((int)igObject_GetAllocator((igObject *)self));
+    name = (igStringObj *)igStringObj_Create((int)((Gap::Core::igObject *)self)->getMemoryPool());
     if (self->_overrideSource == 0) {
         igStringObj *held = name;
         char *s = (char *)sectionName->_buffer;
@@ -542,7 +542,7 @@ bool igDriverDatabase_ParseIdentifier(igDriverDatabase *self, int *out) {
     igDriverDatabase_SkipWhitespace((int *)self);
     if (sscanf((const char *)self->_dbIndex, "%[_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789./\\-]", word) == 1) {
         self->_dbIndex = self->_dbIndex + strlen(word);
-        *out = ((int)igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
+        *out = ((int)igStringObj_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
         igStringObj_Set((igStringObj *)*out, word);
         found = 1;
     }
@@ -559,7 +559,7 @@ bool igDriverDatabase_ReadToken(char *parser, int *out) {
     if (sscanf((const char *)database->_dbIndex, "%[^\r\n{};]", buf) == 1) {
         database->_dbIndex = database->_dbIndex + strlen(buf);
         igDriverDatabase_TrimTrailingWhitespace((int)parser, (char *)buf);
-        *out = ((int)igStringObj_Create(((int)igObject_GetAllocator((igObject *)parser))));
+        *out = ((int)igStringObj_Create(((int)((Gap::Core::igObject *)parser)->getMemoryPool())));
         igStringObj_Set((igStringObj *)*out, buf);
         found = true;
     }
@@ -652,7 +652,7 @@ int igDriverDatabase_ParseSettingsBlock(igDriverDatabase *self, ConfigSettingsNo
             return 0;
         }
         igDriverDatabase_SkipWhitespace((int *)self);
-        created = (ConfigPair *)Memory_AllocateBufferDirect(sizeof(ConfigPair), igObject_GetAllocator((igObject *)self));
+        created = (ConfigPair *)Memory_AllocateBufferDirect(sizeof(ConfigPair), ((Gap::Core::igObject *)self)->getMemoryPool());
         pair = created;
         if (created != 0) {
             pair = (ConfigPair *)igDriverDatabase_Setting_Construct(created);
@@ -772,7 +772,7 @@ unsigned char igDriverDatabase_CompareTyped(igDriverDatabase *self, int valueTyp
     case 3: {
         unsigned char first = 0;
         unsigned char second = 0;
-        igSmartPointer<igStringObj> text((igStringObj *)igStringObj_Create((int)igObject_GetAllocator((igObject *)self)));
+        igSmartPointer<igStringObj> text((igStringObj *)igStringObj_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
         igStringObj_Set(text.get(), actual);
         if (!igStringObj_ParseBool(text.get(), (char *)&first)) return 0;
         igStringObj_Set(text.get(), expected);

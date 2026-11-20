@@ -20425,7 +20425,7 @@ protected:
 public:
     static void *operator new(unsigned int size, void *memory, void *unused) { return memory; }
     static void operator delete(void *memory) { Memory_FreeBufferAliasC(memory); }
-    virtual void destruct();
+    virtual void __bootstrapDestruct();
     virtual void constructFields(int flag);
     virtual void destructFields();
     virtual void userDeepCopy(igObject *source);
@@ -20455,9 +20455,27 @@ public:
     static inline igMetaObject *getClassMetaSafe() { return _Meta; }
     static void *retrieveVTablePointer();
     static void arkRegisterInitialize();
+    static CallbackArray *emptyArkRegisterInternal();
+    static igMetaObject *emptyGetClassMetaSafe();
+protected:
+    void constructDerived(igMetaObject *meta);
+    void constructDerivedFromFile(igMetaObject *meta);
+public:
+    void *getClassStorage() const;
+private:
+    void commission();
+    void construct();
+    void finishConstructDerivedFromFile(igMetaObject *typeMeta);
+    void internalResetFields();
+public:
+    void destruct();
+    void decommission();
     void traverseFields(Visitor callback, void *context);
+    void copyDeep(igObject *source);
     void copyShallow(int source);
     int isAlikeExactly(void *other) const;
+    int isAlikeDeep(igObject *other);
+    int isAlikeShallow(igObject *other);
     int getIoSize() const;
     void printFields(int depth, int indent);
     void *malloc(int size) const;
@@ -20467,7 +20485,12 @@ public:
     void *reallocAligned(void *storage, int size, unsigned short alignment) const;
     void free(void *storage) const;
     char *strdup(const char *string) const;
+private:
+    void internalRelease() const;
+public:
+    int isOfType(const igMetaObject *meta) const;
     void copy(igObject *source, int copyMode);
+    igMemoryPoolView *getMemoryPool() const;
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 };
 }

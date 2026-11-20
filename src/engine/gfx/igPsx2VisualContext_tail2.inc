@@ -354,7 +354,7 @@ int FUN_00169e40(VisualContextTextures *self, int index, TextureImage *image, vo
         image->setPixels(pixels, format, 100, width, height);
         Memory_FreeBuffer(pixels);
     } else {
-        igImage_SetPixels(image, pixels, format, width, height);
+        igImage_SetPixels((igImage *)image, pixels, format, width, height);
     }
     return 1;
 }

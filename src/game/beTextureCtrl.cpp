@@ -43,7 +43,7 @@ void beTextureCtrl_OnAddRam(beTextureCtrl *self, beBaseInfoRam *ram) {
     igObject *old;
 
     if (self->_work == 0) {
-        allocator = (int)igObject_GetAllocator(self);
+        allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         if (g_useOwnerAllocator != 0) {
             allocator = (int)allocator;
         } else {
@@ -120,7 +120,7 @@ void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
                     }
                     property = (beTextureCtrlData *)igProperty_FindByName((igObjectList *)work->_textureList, g_propertyNameField, (const char *)name);
                     if (property != 0) {
-                        allocator = (int)igObject_GetAllocator(self);
+                        allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
                         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                         igSmartPointer<igTextureBindAttrDispatchView> attr((igTextureBindAttrDispatchView *)igTextureBindAttr_CreateInstance(allocator));
                         attr.p->setTexture((igObject *)property->_tex);

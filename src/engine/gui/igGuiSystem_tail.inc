@@ -15,16 +15,16 @@ static inline void set(R_456780 *&field, R_456780 *value) {
 void igGuiSystem_resetFields(A_456780 *self, int flags) {
     Gap__Core__igObject__resetFields((igObject *)self, flags);
     igSmartPointer<R_456780> first(0);
-    int allocator = (int)(igObject_GetAllocator((igObject *)self));
+    int allocator = (int)(((Gap::Core::igObject *)self)->getMemoryPool());
     first.release();
     first.p = (R_456780 *)igWindowSizeObserver_Create(allocator);
     igView_SetModel((igView *)(first.get()), (igModel *)self->f12);
     ObjectList_AppendRetained((igObjectList *)self->f16, (igObject *)(first.get()));
-    igSmartPointer<R_456780> second((R_456780 *)igMousePosObserver_Create((int)(igObject_GetAllocator((igObject *)self))));
+    igSmartPointer<R_456780> second((R_456780 *)igMousePosObserver_Create((int)(((Gap::Core::igObject *)self)->getMemoryPool())));
     second.get()->wc = (int)self;
     igView_SetModel((igView *)(second.get()), (igModel *)self->f12);
     ObjectList_AppendRetained((igObjectList *)self->f16, (igObject *)(second.get()));
-    allocator = (int)(igObject_GetAllocator((igObject *)self));
+    allocator = (int)(((Gap::Core::igObject *)self)->getMemoryPool());
     first.release();
     first.p = (R_456780 *)igActiveComponentsObserver_Create(allocator);
     igView_SetModel((igView *)(first.get()), (igModel *)self->f12);

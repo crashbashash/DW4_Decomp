@@ -1,5 +1,5 @@
 void igGuiComponentController_IsCompatible(igGuiComponentController *self, int model) {
-    igObject_IsKindOf((igObject *)model, igGuiComponentModel_GetMetaObject());
+    ((Gap::Core::igObject *)model)->isOfType(igGuiComponentModel_GetMetaObject());
 }
 
 void igGuiComponentController_OnModelChange(igGuiComponentController *arg0, void *arg1) {

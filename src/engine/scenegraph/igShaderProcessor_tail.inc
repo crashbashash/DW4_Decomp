@@ -20,20 +20,20 @@ void FUN_001cb010(void *self, IniValueTarget *target, IniValueList *list) {
     int i;
     IniValueObject *value;
     char *s;
-    igSmartPointer<IniValueObject> text(((IniValueObject *)igStringObj_Create((int)(((void *)igObject_GetAllocator((igObject *)self))))));
+    igSmartPointer<IniValueObject> text(((IniValueObject *)igStringObj_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool())))));
     for (i = 0; i < igObjectStringMap_GetCount(list); i++) {
         value = (IniValueObject *)igObjectStringMap_GetObjectAt(list, i);
-        if (igObject_IsKindOf(value, igIntObject_GetMetaObject()) != 0) {
+        if (((Gap::Core::igObject *)value)->isOfType(igIntObject_GetMetaObject()) != 0) {
             igStringObj_SetInt((int)text.p, value->value.i, "%d");
             s = text.p->value.s;
             s = (s == 0) ? g_stringObjEmptyText : s;
             igDriverDatabase_SetSubPropertyValue((igDriverDatabase *)target, 10, (const char *)igObjectStringMap_GetNameAt(list, i), s);
-        } else if (igObject_IsKindOf(value, igFloatObject_GetMetaObject()) != 0) {
+        } else if (((Gap::Core::igObject *)value)->isOfType(igFloatObject_GetMetaObject()) != 0) {
             igStringObj_SetFloat((int)text.p, "%f", value->value.f);
             s = text.p->value.s;
             s = (s == 0) ? g_stringObjEmptyText : s;
             igDriverDatabase_SetSubPropertyValue((igDriverDatabase *)target, 11, (const char *)igObjectStringMap_GetNameAt(list, i), s);
-        } else if (igObject_IsKindOf(value, igBoolObject_GetMetaObject()) != 0) {
+        } else if (((Gap::Core::igObject *)value)->isOfType(igBoolObject_GetMetaObject()) != 0) {
             igStringObj_SetBool((int)text.p, value->value.b, 0);
             s = text.p->value.s;
             s = (s == 0) ? g_stringObjEmptyText : s;
@@ -62,14 +62,14 @@ void FUN_001cb2d0(void *self, void *types, const char *key, void *target) {
 }
 
 static inline ShaderObject_1ca6c0 *asMaterial(ShaderObject_1ca6c0 *o) {
-    if (o != 0 && igObject_IsKindOf(o, g_igAttrList_metaObject) != 0) {
+    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igAttrList_metaObject) != 0) {
         return o;
     }
     return 0;
 }
 
 static inline ShaderObject_1ca6c0 *asTexture(ShaderObject_1ca6c0 *o) {
-    if (o != 0 && igObject_IsKindOf(o, g_igNodeList_metaObject) != 0) {
+    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igNodeList_metaObject) != 0) {
         return o;
     }
     return 0;
@@ -121,22 +121,22 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
     if (section == -1) {
         return 0;
     }
-    igSmartPointer<ShaderNameList> names((ShaderNameList *)igStringRefList_Create((int)((void *)igObject_GetAllocator((igObject *)self))));
+    igSmartPointer<ShaderNameList> names((ShaderNameList *)igStringRefList_Create((int)((void *)((Gap::Core::igObject *)self)->getMemoryPool())));
     if (igRegistry_GetValueStringList((void *)self->ini, section, "passes", (igStringRefList *)names.p, 0) == 0) {
         return 0;
     }
     IniStrRef infoName((char *)0);
     igSmartPointer<ShaderObject_1ca6c0> info;
-    igSmartPointer<ShaderNameList> keys((ShaderNameList *)igStringRefList_Create((int)((void *)igObject_GetAllocator((igObject *)self))));
-    igSmartPointer<ShaderNameList> values((ShaderNameList *)igStringRefList_Create((int)((void *)igObject_GetAllocator((igObject *)self))));
+    igSmartPointer<ShaderNameList> keys((ShaderNameList *)igStringRefList_Create((int)((void *)((Gap::Core::igObject *)self)->getMemoryPool())));
+    igSmartPointer<ShaderNameList> values((ShaderNameList *)igStringRefList_Create((int)((void *)((Gap::Core::igObject *)self)->getMemoryPool())));
     count = names.p->count;
     if ((unsigned char)igRegistry_GetValueString((igRegistry *)self->ini, section, "processor", &infoName.p, "", 0) != 0) {
         infoSection = igRegistry_GetSectionIndex((igRegistry *)self->ini, infoName.p, 0);
         info = igSmartPointer<ShaderObject_1ca6c0>(FUN_001ca6c0(self, infoName.p, 1));
-        igSmartPointer<ShaderNameList> pending((ShaderNameList *)igStringRefList_Create((int)((void *)igObject_GetAllocator((igObject *)self))));
+        igSmartPointer<ShaderNameList> pending((ShaderNameList *)igStringRefList_Create((int)((void *)((Gap::Core::igObject *)self)->getMemoryPool())));
         igRegistry_GetValueStringList((void *)self->ini, infoSection, "fields", (igStringRefList *)pending.p, 0);
-        igSmartPointer<ShaderStringObject> value((ShaderStringObject *)igStringObj_Create((int)((void *)igObject_GetAllocator((igObject *)self))));
-        igSmartPointer<ShaderStringObject> key((ShaderStringObject *)igStringObj_Create((int)((void *)igObject_GetAllocator((igObject *)self))));
+        igSmartPointer<ShaderStringObject> value((ShaderStringObject *)igStringObj_Create((int)((void *)((Gap::Core::igObject *)self)->getMemoryPool())));
+        igSmartPointer<ShaderStringObject> key((ShaderStringObject *)igStringObj_Create((int)((void *)((Gap::Core::igObject *)self)->getMemoryPool())));
         while (pending.p->count != 0) {
             int ok;
             igStringObj_Set((igStringObj *)key.p, FUN_001ccb20((igStringRefList *)pending.p).p);
@@ -199,7 +199,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
     }
     target->setInfo(info.p);
     passes->setCount(count);
-    igSmartPointer<ShaderNameList> shared((ShaderNameList *)igStringRefList_Create((int)((void *)igObject_GetAllocator((igObject *)self))));
+    igSmartPointer<ShaderNameList> shared((ShaderNameList *)igStringRefList_Create((int)((void *)((Gap::Core::igObject *)self)->getMemoryPool())));
     for (i = 0; i < count; i++) {
         FUN_001d9090((SkeletonBitOwnerView *)target, i, 1);
         passName = StringList_CopyRetained((igStringRefList *)names.p, i).p;

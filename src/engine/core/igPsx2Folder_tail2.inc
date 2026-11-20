@@ -6,7 +6,7 @@ igSmartPointer<igObject> igPsx2Folder_ListEntries(igPsx2Folder *self) {
          * result and re-reads it for the reference-count test. */
         return igSmartPointer<igObject>(0, kRetainReference);
     }
-    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)igObject_GetAllocator((igObject *)self))));
+    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
     while (sceDread(handle, &entry) != 0) {
         igStringRef text(entry.bytes + 64);
         StringList_AppendRetained((igStringRefList *)list.p, (char *const *)&text);

@@ -34,7 +34,7 @@ public:
 
 /* The object when it is an igAttr, otherwise none. */
 static inline igObject *asAttr(igObject *object) {
-    if (object != 0 && igObject_IsKindOf((igObject *)object, (igMetaObject *)g_igAttr_metaObject) != 0) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType((igMetaObject *)g_igAttr_metaObject) != 0) {
         return object;
     }
     return 0;
@@ -46,7 +46,7 @@ extern "C" igObjectPointer Gap__Attrs__igVisualContextAttrDefaultManager__create
     if (meta == 0 || self->_visualContext == 0) {
         return igObjectPointer(0, kRetainReference);
     }
-    igObjectPointer created = igMetaObject_CreateInstanceRef(meta, igObject_GetAllocator(self));
+    igObjectPointer created = igMetaObject_CreateInstanceRef(meta, ((Gap::Core::igObject *)self)->getMemoryPool());
     igObject *object = asAttr(created.get());
     igObjectPointer attr(object, kRetainReference);
     if (attr != 0) {

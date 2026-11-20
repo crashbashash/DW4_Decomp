@@ -461,7 +461,7 @@ igNode *FUN_0022ab90(igIterateGraph *self, igNode *root, igMetaObject *kind) {
     int var_s0;
     int r;
     var_s0 = FUN_0022aac0((T_4 *)self, (int)root);
-    if (igObject_IsKindOf((igObject *)var_s0, kind) != 0) { r = var_s0; } else { var_s0 = (int)FUN_0022ac70(self, kind); r = var_s0; } return (igNode *)r;
+    if (((Gap::Core::igObject *)var_s0)->isOfType(kind) != 0) { r = var_s0; } else { var_s0 = (int)FUN_0022ac70(self, kind); r = var_s0; } return (igNode *)r;
 }
 
 igNode *FUN_0022ac00(igIterateGraph *self) {
@@ -489,7 +489,7 @@ igNode *FUN_0022ac70(igIterateGraph *self, igMetaObject *kind) {
 
     v = FUN_0022ad00((GraphIterator *)self);
     while (FUN_0022ac60((void *)self) != 0) {
-        if (v != 0 && igObject_IsKindOf((igObject *)v, kind) != 0) {
+        if (v != 0 && ((Gap::Core::igObject *)v)->isOfType(kind) != 0) {
             return (igNode *)v;
         }
         v = FUN_0022ad00((GraphIterator *)self);
@@ -507,7 +507,7 @@ void FUN_0022b0a0(float *matrix, igIterateGraph *self) {
     n = *(int *)(self->_currentPath + 8);
     for (i = 0; i < n; i++) {
         o = ((struct TransformObjectList *)self->_currentPath)->data[i];
-        if (igObject_IsKindOf((igObject *)o, g_igTransform_metaObject) != 0) {
+        if (((Gap::Core::igObject *)o)->isOfType(g_igTransform_metaObject) != 0) {
             igMatrix44f_Multiply(sp60, (const float *)((int)o + 0x20), sp60);
         }
     }
@@ -593,7 +593,7 @@ extern "C" int igOptimizer_CheckGraph(B_2 *log, int root) {
     FUN_0022aac0((T_4 *)it.get(), root);
     igNode *node = FUN_0022ac00((igIterateGraph *)it.get());
     for (; FUN_0022ac60(it.get()) != 0; FUN_0022ac40(it.get())) {
-        if (igObject_IsKindOf((igObject *)node, igSegment_GetMetaObject()) != 0) {
+        if (((Gap::Core::igObject *)node)->isOfType(igSegment_GetMetaObject()) != 0) {
             log->put("The optimization doesn't support igSegment\n");
             return 0;
         }
@@ -660,21 +660,21 @@ extern "C" bool igOptPass_ApplyToObjects(OptPass *self) {
 }
 
 bool FUN_0022b820(int arg0, int arg1) {
-    if (igObject_IsKindOf((igObject *)arg1, g_igSceneInfo_metaObject) != 0) {
+    if (((Gap::Core::igObject *)arg1)->isOfType(g_igSceneInfo_metaObject) != 0) {
         return FUN_0022bac0((void *)arg1, (void *)arg0);
     }
-    if (igObject_IsKindOf((igObject *)arg1, g_igAnimationDatabase_metaObject) != 0) {
+    if (((Gap::Core::igObject *)arg1)->isOfType(g_igAnimationDatabase_metaObject) != 0) {
         return FUN_0022b910((Own *)arg1, (V *)arg0);
     }
     return 0;
 }
 
 void FUN_0022b8a0(void **arg0, void *arg1) {
-    if (igObject_IsKindOf((igObject *)arg1, g_igSceneInfo_metaObject) != 0) {
+    if (((Gap::Core::igObject *)arg1)->isOfType(g_igSceneInfo_metaObject) != 0) {
         ((DW4VC_132_1 *)(arg0))->vX((int)(*(int *)((char *)(arg1) + 20)));
         return;
     }
-    igObject_IsKindOf((igObject *)arg1, g_igAnimationDatabase_metaObject);
+    ((Gap::Core::igObject *)arg1)->isOfType(g_igAnimationDatabase_metaObject);
 }
 
 extern "C" bool FUN_0022b910(Own *arg0, V *arg1) {
@@ -820,7 +820,7 @@ static inline void assignToken(igMetaField *field, void *object, const RecoveryS
 }
 
 extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, int section, igMetaField *field, void *object) {
-    if (igObject_IsKindOf(field, g_igIntMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)field)->isOfType(g_igIntMetaField_metaObject) != 0) {
         int value;
         if (igRegistry_GetValueInt(registry, section, stringObjText(*key), &value, 0, 0)) {
             *(int *)((char *)object + field->_offset) = value;
@@ -828,7 +828,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
             return true;
         }
     }
-    if (igObject_IsKindOf(field, g_igEnumMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)field)->isOfType(g_igEnumMetaField_metaObject) != 0) {
         int value;
         if (igRegistry_GetValueInt(registry, section, stringObjText(*key), &value, 0, 0)) {
             *(int *)((char *)object + field->_offset) = value;
@@ -836,7 +836,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
             return true;
         }
     }
-    if (igObject_IsKindOf(field, g_igUnsignedIntMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)field)->isOfType(g_igUnsignedIntMetaField_metaObject) != 0) {
         int value;
         if (igRegistry_GetValueInt(registry, section, stringObjText(*key), &value, 0, 0)) {
             if (value < 0) {
@@ -847,7 +847,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
             return true;
         }
     }
-    if (igObject_IsKindOf(field, g_igFloatMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)field)->isOfType(g_igFloatMetaField_metaObject) != 0) {
         float value;
         if (igRegistry_GetValueFloat(registry, section, stringObjText(*key), &value, 0, 0.0f)) {
             *(float *)((char *)object + field->_offset) = value;
@@ -855,7 +855,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
             return true;
         }
     }
-    if (igObject_IsKindOf(field, g_igBoolMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)field)->isOfType(g_igBoolMetaField_metaObject) != 0) {
         bool value;
         if (igRegistry_GetValueBool(registry, section, stringObjText(*key), (unsigned char *)&value, 0, 0)) {
             *(bool *)((char *)object + field->_offset) = value;
@@ -863,7 +863,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
             return true;
         }
     }
-    if (igObject_IsKindOf(field, g_igStringMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)field)->isOfType(g_igStringMetaField_metaObject) != 0) {
         igSmartPointer<igStringObj> value(createStringObj());
         if (igRegistry_GetValueStringObj(registry, section, stringObjText(*key), (igStringObj **)&value, "", 0)) {
             assignToken(field, object, RecoveryString(internString(stringObjText(*value))));
@@ -871,7 +871,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
             return true;
         }
     }
-    if (igObject_IsKindOf(field, g_igObjectRefMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)field)->isOfType(g_igObjectRefMetaField_metaObject) != 0) {
         if ((igMetaObject *)((igObjectRefMetaField *)field)->_metaObject == g_igMetaObject_metaObject) {
             igSmartPointer<igStringObj> value(createStringObj());
             if (igRegistry_GetValueStringObj(registry, section, stringObjText(*key), (igStringObj **)&value, "", 0)) {
@@ -1134,12 +1134,12 @@ int FUN_0022cf70(Q *arg0, int arg1, Q *arg2, int arg3, int arg4) {
     Q *var_s3;
     Q *var_s1;
 
-    if ((arg0 != 0) && (igObject_IsKindOf((igObject *)arg0, (igMetaObject *)DAT_00560f60[0]) != 0)) {
+    if ((arg0 != 0) && (((Gap::Core::igObject *)arg0)->isOfType((igMetaObject *)DAT_00560f60[0]) != 0)) {
         var_s3 = arg0;
     } else {
         var_s3 = 0;
     }
-    if ((arg2 != 0) && (igObject_IsKindOf((igObject *)arg2, (igMetaObject *)DAT_00560f60[0]) != 0)) {
+    if ((arg2 != 0) && (((Gap::Core::igObject *)arg2)->isOfType((igMetaObject *)DAT_00560f60[0]) != 0)) {
         var_s1 = arg2;
     } else {
         var_s1 = 0;
@@ -1162,12 +1162,12 @@ int FUN_0022d050(Q *arg0, int arg1, Q *arg2, int arg3, int arg4) {
     Q *var_s3;
     Q *var_s1;
 
-    if ((arg0 != 0) && (igObject_IsKindOf((igObject *)arg0, (igMetaObject *)DAT_00560f68[0]) != 0)) {
+    if ((arg0 != 0) && (((Gap::Core::igObject *)arg0)->isOfType((igMetaObject *)DAT_00560f68[0]) != 0)) {
         var_s3 = arg0;
     } else {
         var_s3 = 0;
     }
-    if ((arg2 != 0) && (igObject_IsKindOf((igObject *)arg2, (igMetaObject *)DAT_00560f68[0]) != 0)) {
+    if ((arg2 != 0) && (((Gap::Core::igObject *)arg2)->isOfType((igMetaObject *)DAT_00560f68[0]) != 0)) {
         var_s1 = arg2;
     } else {
         var_s1 = 0;
@@ -1189,12 +1189,12 @@ int FUN_0022d120(Q *arg0, int arg1, Q *arg2, int arg3, int arg4) {
     Q *var_s3;
     Q *var_s1;
 
-    if ((arg0 != 0) && (igObject_IsKindOf((igObject *)arg0, g_igVec3fMetaField_metaObject) != 0)) {
+    if ((arg0 != 0) && (((Gap::Core::igObject *)arg0)->isOfType(g_igVec3fMetaField_metaObject) != 0)) {
         var_s3 = arg0;
     } else {
         var_s3 = 0;
     }
-    if ((arg2 != 0) && (igObject_IsKindOf((igObject *)arg2, g_igVec3fMetaField_metaObject) != 0)) {
+    if ((arg2 != 0) && (((Gap::Core::igObject *)arg2)->isOfType(g_igVec3fMetaField_metaObject) != 0)) {
         var_s1 = arg2;
     } else {
         var_s1 = 0;
@@ -1251,12 +1251,12 @@ int FUN_0022d390(Q *arg0, int arg1, Q *arg2, int arg3, int arg4) {
     Q *var_s3;
     Q *var_s1;
 
-    if ((arg0 != 0) && (igObject_IsKindOf((igObject *)arg0, (igMetaObject *)DAT_00560f98[0]) != 0)) {
+    if ((arg0 != 0) && (((Gap::Core::igObject *)arg0)->isOfType((igMetaObject *)DAT_00560f98[0]) != 0)) {
         var_s3 = arg0;
     } else {
         var_s3 = 0;
     }
-    if ((arg2 != 0) && (igObject_IsKindOf((igObject *)arg2, (igMetaObject *)DAT_00560f98[0]) != 0)) {
+    if ((arg2 != 0) && (((Gap::Core::igObject *)arg2)->isOfType((igMetaObject *)DAT_00560f98[0]) != 0)) {
         var_s1 = arg2;
     } else {
         var_s1 = 0;
@@ -1284,12 +1284,12 @@ extern "C" int FUN_0022d460(O_2 *arg0, int arg1, O_2 *arg2, int arg3, int arg4) 
 int FUN_0022d520(void *arg0, int arg1, void *arg2, int arg3, int arg4) {
     void *r0;
     void *r2;
-    if (arg0 != 0 && igObject_IsKindOf((igObject *)arg0, (igMetaObject *)DAT_00561010[0]) != 0) {
+    if (arg0 != 0 && ((Gap::Core::igObject *)arg0)->isOfType((igMetaObject *)DAT_00561010[0]) != 0) {
         r0 = arg0;
     } else {
         r0 = 0;
     }
-    if (arg2 != 0 && igObject_IsKindOf((igObject *)arg2, (igMetaObject *)DAT_00561010[0]) != 0) {
+    if (arg2 != 0 && ((Gap::Core::igObject *)arg2)->isOfType((igMetaObject *)DAT_00561010[0]) != 0) {
         r2 = arg2;
     } else {
         r2 = 0;
@@ -1319,12 +1319,12 @@ int FUN_0022d6a0(Q *arg0, int arg1, Q *arg2, int arg3, int arg4) {
     Q *var_s3;
     Q *var_s1;
 
-    if ((arg0 != 0) && (igObject_IsKindOf((igObject *)arg0, g_igUnsignedLongMetaField_metaObject) != 0)) {
+    if ((arg0 != 0) && (((Gap::Core::igObject *)arg0)->isOfType(g_igUnsignedLongMetaField_metaObject) != 0)) {
         var_s3 = arg0;
     } else {
         var_s3 = 0;
     }
-    if ((arg2 != 0) && (igObject_IsKindOf((igObject *)arg2, g_igUnsignedLongMetaField_metaObject) != 0)) {
+    if ((arg2 != 0) && (((Gap::Core::igObject *)arg2)->isOfType(g_igUnsignedLongMetaField_metaObject) != 0)) {
         var_s1 = arg2;
     } else {
         var_s1 = 0;
@@ -1353,12 +1353,12 @@ int FUN_0022d760(void *arg0, int arg1, void *arg2, int arg3, int arg4) {
 int FUN_0022d820(void *arg0, int arg1, void *arg2, int arg3, int arg4) {
     void *r0;
     void *r2;
-    if (arg0 != 0 && igObject_IsKindOf((igObject *)arg0, g_igUnsignedCharMetaField_metaObject) != 0) {
+    if (arg0 != 0 && ((Gap::Core::igObject *)arg0)->isOfType(g_igUnsignedCharMetaField_metaObject) != 0) {
         r0 = arg0;
     } else {
         r0 = 0;
     }
-    if (arg2 != 0 && igObject_IsKindOf((igObject *)arg2, g_igUnsignedCharMetaField_metaObject) != 0) {
+    if (arg2 != 0 && ((Gap::Core::igObject *)arg2)->isOfType(g_igUnsignedCharMetaField_metaObject) != 0) {
         r2 = arg2;
     } else {
         r2 = 0;
@@ -1468,12 +1468,12 @@ int FUN_0022dda0(Q *arg0, int arg1, Q *arg2, int arg3, int arg4) {
     Q *var_s3;
     Q *var_s1;
 
-    if ((arg0 != 0) && (igObject_IsKindOf((igObject *)arg0, g_igIntMetaField_metaObject) != 0)) {
+    if ((arg0 != 0) && (((Gap::Core::igObject *)arg0)->isOfType(g_igIntMetaField_metaObject) != 0)) {
         var_s3 = arg0;
     } else {
         var_s3 = 0;
     }
-    if ((arg2 != 0) && (igObject_IsKindOf((igObject *)arg2, g_igIntMetaField_metaObject) != 0)) {
+    if ((arg2 != 0) && (((Gap::Core::igObject *)arg2)->isOfType(g_igIntMetaField_metaObject) != 0)) {
         var_s1 = arg2;
     } else {
         var_s1 = 0;
@@ -1501,12 +1501,12 @@ int FUN_0022df20(void *arg0, int arg1, void *arg2, int arg3, int arg4) {
     int r;
     void *a;
     void *b;
-    if (arg0 != 0 && igObject_IsKindOf((igObject *)arg0, g_igEnumMetaField_metaObject) != 0) {
+    if (arg0 != 0 && ((Gap::Core::igObject *)arg0)->isOfType(g_igEnumMetaField_metaObject) != 0) {
         a = arg0;
     } else {
         a = 0;
     }
-    if (arg2 != 0 && igObject_IsKindOf((igObject *)arg2, g_igEnumMetaField_metaObject) != 0) {
+    if (arg2 != 0 && ((Gap::Core::igObject *)arg2)->isOfType(g_igEnumMetaField_metaObject) != 0) {
         b = arg2;
     } else {
         b = 0;

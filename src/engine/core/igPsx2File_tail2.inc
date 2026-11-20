@@ -570,8 +570,8 @@ igSmartPointer<igObject> igPsx2Folder_ListFiles(igPsx2Folder *self) {
     if (handle < 0) {
         return igSmartPointer<igObject>(0, kRetainReference);
     }
-    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)igObject_GetAllocator((igObject *)self))));
-    igSmartPointer<igObject> path((igObject *)igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
+    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
+    igSmartPointer<igObject> path((igObject *)igStringObj_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
     while (sceDread(handle, &entry) != 0) {
         /* matching construct: the name is addressed as the byte after the stat here and as entry.name below; one
          * spelling for both is common-subexpression-eliminated into a saved register retail does not use */
@@ -599,8 +599,8 @@ igSmartPointer<igObject> igPsx2Folder_ListDirectories(igPsx2Folder *self) {
     if (handle < 0) {
         return igSmartPointer<igObject>(0, kRetainReference);
     }
-    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)igObject_GetAllocator((igObject *)self))));
-    igSmartPointer<igObject> path((igObject *)igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
+    igSmartPointer<igObject> list((igObject *)igStringRefList_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
+    igSmartPointer<igObject> path((igObject *)igStringObj_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
     while (sceDread(handle, &entry) != 0) {
         /* matching construct: the name is addressed as the byte after the stat here and as entry.name below; one
          * spelling for both is common-subexpression-eliminated into a saved register retail does not use */

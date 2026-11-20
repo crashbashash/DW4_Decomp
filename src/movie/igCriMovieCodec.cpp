@@ -152,7 +152,7 @@ static inline AdxtObj *Adxt(igCriMovieData *data)
 
 static inline igCriMovieData *AsCriMovieData(void *object)
 {
-    if (object != 0 && igObject_IsKindOf((igObject *)object, g_igCriMovieData_metaObject) != 0) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_igCriMovieData_metaObject) != 0) {
         return (igCriMovieData *)object;
     }
     return 0;
@@ -271,11 +271,11 @@ int igCriMovieCodec_InitializeDrawing(igCriMovieCodec *self, igMovieInfo *movie,
 
     columns = (unsigned int)movie->_width >> 4;
     rows = (unsigned int)movie->_height >> 4;
-    pool = igObject_GetAllocator(self);
+    pool = ((Gap::Core::igObject *)self)->getMemoryPool();
     pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
     g_criMovieUploadPacket = Memory_AllocateAlignedWithAllocator(((unsigned int)((((columns * rows * 6) + 0xA) * 4) + 0x3F) >> 6) << 8, 0x40, pool);
     object = *visualContext;
-    if ((object != 0) && (igObject_IsKindOf(object, g_igPsx2VisualContext_metaObject) != 0)) {
+    if ((object != 0) && (((Gap::Core::igObject *)object)->isOfType(g_igPsx2VisualContext_metaObject) != 0)) {
         context = object;
     } else {
         context = 0;
@@ -287,7 +287,7 @@ int igCriMovieCodec_InitializeDrawing(igCriMovieCodec *self, igMovieInfo *movie,
 int igCriMovieCodec_ReleaseDrawing(igCriMovieCodec *self) {
     igMemoryPoolView *pool;
 
-    pool = igObject_GetAllocator(self);
+    pool = ((Gap::Core::igObject *)self)->getMemoryPool();
     pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
     Memory_FreeBufferWithAllocator(g_criMovieUploadPacket, pool);
     return 1;
@@ -398,13 +398,13 @@ int igCriMovieCodec_Open(igCriMovieCodec *self, igMovieInfo *movie) {
     if (g_criMovieUseRawPath != 0) {
         path = (char *)movie->_path;
     } else {
-        pool = igObject_GetAllocator(self);
+        pool = ((Gap::Core::igObject *)self)->getMemoryPool();
         pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<igFileDispatchView> file((igFileDispatchView *)igFile_Create((int)pool));
         path = file->MakeCompleteFilename((const char *)movie->_path);
     }
     afsIndex = igAdx_FindAfsFile(path);
-    pool = igObject_GetAllocator(self);
+    pool = ((Gap::Core::igObject *)self)->getMemoryPool();
     pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     igSmartPointer<igCriMovieData> data(igCriMovieData_Create((int)pool));
     if (afsIndex != -1) {
@@ -701,21 +701,21 @@ int igCriMovieCodec_Update(igCriMovieCodecView *self, igMovieInfo *movie) {
 void *CriMovie_Allocate(igCriMovieCodec *codec, unsigned int size) {
     igMemoryPoolView *pool;
 
-    pool = igObject_GetAllocator(codec);
+    pool = ((Gap::Core::igObject *)codec)->getMemoryPool();
     return pool->Allocate(size);
 }
 
 void *CriMovie_AllocateAligned(igCriMovieCodec *codec, unsigned int size, unsigned char alignment) {
     igMemoryPoolView *pool;
 
-    pool = igObject_GetAllocator(codec);
+    pool = ((Gap::Core::igObject *)codec)->getMemoryPool();
     return pool->AllocateAligned(size, alignment);
 }
 
 void CriMovie_Free(igCriMovieCodec *codec, void *block) {
     igMemoryPoolView *pool;
 
-    pool = igObject_GetAllocator(codec);
+    pool = ((Gap::Core::igObject *)codec)->getMemoryPool();
     pool->Free(block);
 }
 

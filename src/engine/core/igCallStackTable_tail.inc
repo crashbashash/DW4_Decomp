@@ -282,7 +282,7 @@ void igCallStackTable_RebuildHashIndex(igCallStackTableView *self, int hashCapac
     igCallStackTable_SetHashCapacity(self, hashCapacity);
     if (hashCapacity != 0) {
         if (self->_hashIndex == 0) {
-            allocator = ((int)igObject_GetAllocator((igObject *)self));
+            allocator = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
             r = (igObject *)self->_hashIndex;
             if (r != 0) {
                 ((igRefCountWord *)&r->_refCount)->word = ((igRefCountWord *)&r->_refCount)->word - 1;

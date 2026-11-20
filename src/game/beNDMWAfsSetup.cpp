@@ -44,7 +44,7 @@ void beNDMWAfsSetup_Stop(beNDMWAfsSetup *self) {
 }
 
 int beNDMWAfsSetup_AddInfo(beNDMWAfsSetup *self, igObject *info) {
-    if (igObject_IsKindOf(info, g_beNDMWAfsSetupInfo_metaObject)) {
+    if (((Gap::Core::igObject *)info)->isOfType(g_beNDMWAfsSetupInfo_metaObject)) {
         beCri *cri = (beCri *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beCri_metaObject);
         if (cri == 0) return 0;
         ObjectList_AppendRetained((igObjectList *)self->_infoList, info);

@@ -92,16 +92,16 @@ void igCommonTraversal_SetVisualContext(O_1b7010 *arg0, R_1b7010 *arg1) {
     arg0->f60 = arg1;
     var_s1 = 0;
     if (arg1 == 0) {
-        a = ((void *)igObject_GetAllocator((igObject *)arg0));
+        a = ((void *)((Gap::Core::igObject *)arg0)->getMemoryPool());
         release(arg0->f36);
         arg0->f36 = (R_1b7010 *)igGenericAttrDefaultManager_Create((igMemoryPoolView *)a);
-        a = ((void *)igObject_GetAllocator((igObject *)arg0));
+        a = ((void *)((Gap::Core::igObject *)arg0)->getMemoryPool());
         release(arg0->f32);
         arg0->f32 = (R_1b7010 *)igGenericCapabilityManager_Create((igMemoryPoolView *)a);
         var_s1 = 1;
     } else {
         if (arg0->f36 == 0) {
-            igSmartPointer<R_1b7010> created((R_1b7010 *)igVisualContextAttrDefaultManager_Create(igObject_GetAllocator((igObject *)arg0)));
+            igSmartPointer<R_1b7010> created((R_1b7010 *)igVisualContextAttrDefaultManager_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
             t = created.get();
             retain_1b7010(arg1);
             release(t->f8);
@@ -113,7 +113,7 @@ void igCommonTraversal_SetVisualContext(O_1b7010 *arg0, R_1b7010 *arg1) {
             var_s1 = 1;
         }
         if (arg0->f32 == 0) {
-            igSmartPointer<R_1b7010> created((R_1b7010 *)igVisualContextCapabilityManager_Create(igObject_GetAllocator((igObject *)arg0)));
+            igSmartPointer<R_1b7010> created((R_1b7010 *)igVisualContextCapabilityManager_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
             t = created.get();
             retain_1b7010(arg1);
             release(t->f8);
@@ -249,7 +249,7 @@ void FUN_001b7770(igCommonTraversal *self, int name, int value) {
     igObject *str;
     igObject *stack;
     int pos;
-    int al = (int)igObject_GetAllocator(self);
+    int al = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     al = (int)(g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     str = ((igObject *)igStringObj_Create(al));
     igStringObj_Set((igStringObj *)str, (char *)name);

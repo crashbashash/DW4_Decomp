@@ -57,8 +57,8 @@ void igObjectRefMetaField_ConstructValue(igObjectRefMetaField *field,void *objec
     void *allocator;
     if(!field->_construct)return;
     const char *name=(const char *)field->_poolName;
-    if(name&&*name){allocator=Memory_GetAllocatorByName(name);if(!allocator)allocator=((void *)igObject_GetAllocator((igObject *)object));}
-    else allocator=((void *)igObject_GetAllocator((igObject *)object));
+    if(name&&*name){allocator=Memory_GetAllocatorByName(name);if(!allocator)allocator=((void *)((Gap::Core::igObject *)object)->getMemoryPool());}
+    else allocator=((void *)((Gap::Core::igObject *)object)->getMemoryPool());
     igObject *child=(igObject *)igMetaObject_CreateInstance((igMetaObject *)((void *)field->_metaObject), (igMemoryPoolView *)allocator);
     igObjectRefMetaField_Assign(field,object,child);
     if((field->_refCounted||field->_destruct)&&child){--child->_refCount;if(!(child->_refCount&0x7fffff))igObject_Destroy(child);}
@@ -102,7 +102,7 @@ void igObjectRefMetaField_DeepCopy(igObjectRefMetaField *self, char *dst, char *
     if (to != 0 || from != 0) {
         if (to != 0 && from != 0) {
             from->TrimCapacity();
-            igObject_DeepCopy(to, from);
+            ((Gap::Core::igObject *)to)->copyDeep((Gap::Core::igObject *)from);
             return;
         }
         if (to == 0) {
@@ -219,7 +219,7 @@ int igObjectRefMetaField_IsAlikeDeep(igObjectRefMetaField *self, int objectA, in
     if ((refA == 0) || (refB == 0)) {
         return 0;
     }
-    return igObject_IsAlikeDeep((igObjectDispatchView *)refA, (igObjectDispatchView *)refB);
+    return ((Gap::Core::igObject *)refA)->isAlikeDeep((Gap::Core::igObject *)refB);
 }
 
 int igObjectRefMetaField_IsAlikeShallow(igObjectRefMetaField *self, int objectA, int objectB) {
@@ -236,7 +236,7 @@ int igObjectRefMetaField_IsAlikeShallow(igObjectRefMetaField *self, int objectA,
     if ((refA == 0) || (refB == 0)) {
         return 0;
     }
-    return igObject_IsAlikeShallow((igObjectDispatchView *)refA, (igObjectDispatchView *)refB);
+    return ((Gap::Core::igObject *)refA)->isAlikeShallow((Gap::Core::igObject *)refB);
 }
 
 void *igObjectRefMetaField_Construct(igObjectRefMetaField *self, int extra1) {
@@ -275,7 +275,7 @@ void igObjectStringMap_Add(igObjectStringMap *self, const char *name, void *obje
     igObject *entry;
     igObject *held;
 
-    *(igObject **)&entry = (igObject *)(igNamedObject_Create(((int)igObject_GetAllocator((igObject *)self))));
+    *(igObject **)&entry = (igObject *)(igNamedObject_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
     igNamedObject_SetName((igNamedObject *)entry, name);
     ObjectList_AppendRetained((igObjectList *)self->_names, (igObject *)entry);
     ObjectList_AppendRetained((igObjectList *)self->_data, (igObject *)object);
@@ -523,7 +523,7 @@ void igPluginHelper_AddRepository(igPluginHelper *helper, int name, int location
     char *text;
     igPluginRepository *target;
     char *old;
-    igSmartPointer<igPluginRepository> repository(((igPluginRepository *)igPluginRepository_Create(((int)igObject_GetAllocator((igObject *)helper)))));
+    igSmartPointer<igPluginRepository> repository(((igPluginRepository *)igPluginRepository_Create(((int)((Gap::Core::igObject *)helper)->getMemoryPool()))));
     igNamedObject_SetName((igNamedObject *)repository.p, (const char *)name);
     target = repository.p;
     if (g_stringPool == 0) {
@@ -572,7 +572,7 @@ const char *g_applicationRootToken = "$(ApplicationRoot)";
 void igPluginHelper_AddRepositoryFromConfig(igPluginHelper *self, int name, const char *path) {
     static const int alchemyRootLength = strlen(g_alchemyRootToken);
     static const int applicationRootLength = strlen(g_applicationRootToken);
-    igSmartPointer<igPluginRepository> repository((igPluginRepository *)igPluginRepository_Create((int)igObject_GetAllocator((igObject *)self)));
+    igSmartPointer<igPluginRepository> repository((igPluginRepository *)igPluginRepository_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
     igNamedObject_SetName((igNamedObject *)repository.get(), (const char *)name);
     if (strncmp(path, g_alchemyRootToken, alchemyRootLength) == 0) {
         setRepositoryLocation(repository, path, alchemyRootLength);

@@ -21,9 +21,9 @@ igMetaField *g_igImage_compressedMetaField;
 igMetaField *g_igImage_bitsDepthMetaField;
 igMetaField *g_igImage_pNameStringMetaField;
 
-igImage *igImage_CreateInstance(int allocator) {
+igImage *igImage_CreateInstance(igMemoryPoolView *pool) {
     igImage_EnsureRegistered();
-    return (igImage *)igMetaObject_CreateInstance(g_igImage_metaObject, (igMemoryPoolView *)allocator);
+    return (igImage *)igMetaObject_CreateInstance(g_igImage_metaObject, pool);
 }
 
 igMetaObject *igImage_GetOrCreateMetaObject(void) {

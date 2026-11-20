@@ -48,7 +48,7 @@
 #include "dw4/support/list-services.h"
 #include "dw4/core/igMetaEnum.h"
 #define RELEASE_REF(T, q) { T *rr = (q); if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }
-#define ALLOC(owner, var) { void *got = ((void *)igObject_GetAllocator(owner)); if (g_useOwnerAllocator) var = got; else var = ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0)); }
+#define ALLOC(owner, var) { void *got = ((void *)((Gap::Core::igObject *)(owner))->getMemoryPool()); if (g_useOwnerAllocator) var = got; else var = ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0)); }
 #define RESERVE(LT, h, SZ) { LT *l = (LT *)(h)->_data; if (!(entry->count < l->_count)) List_Reserve((igDataList *)l, entry->count, SZ); }
 #define RESIZE(LT, h, SZ) { int n = entry->count; LT *l = (LT *)(h)->_data; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize(l, n, SZ); } }
 /* Sentinel for the `absolute` argument of the HP update: apply `delta` instead. */
@@ -669,7 +669,7 @@ void beNDMWGameRam_ResetPlayer(beNDMWGameRam *self, int player) {
         if (count(players) < 5) List_Reserve((igDataList *)players, 4, 4);
         ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_playerDataListList, 4);
     }
-    allocator = (int)igObject_GetAllocator(self);
+    allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     if (g_useOwnerAllocator != 0) {
         allocator = (int)allocator;
     } else {
@@ -691,7 +691,7 @@ void beNDMWGameRam_ResetPlayer(beNDMWGameRam *self, int player) {
         }
     }
     for (disk = 0; disk < 12; disk++) {
-        diskAllocator = (int)igObject_GetAllocator(self);
+        diskAllocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         if (g_useOwnerAllocator != 0) {
             diskAllocator = (int)diskAllocator;
         } else {
@@ -718,7 +718,7 @@ void beNDMWGameRam_Start(beNDMWGameRam *self) {
     int playersAllocator;
 
     beBaseInfoManager_Start((beBaseInfoManager *)self);
-    allocator = (int)igObject_GetAllocator(self);
+    allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     if (g_useOwnerAllocator != 0) {
         allocator = (int)allocator;
     } else {
@@ -730,7 +730,7 @@ void beNDMWGameRam_Start(beNDMWGameRam *self) {
         igSmartPointer<igObject> common(beDataObjList_Create(allocator));
         (igSmartPointer<igObject> &)self->_commonDataList = common;
     }
-    playersAllocator = (int)igObject_GetAllocator(self);
+    playersAllocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     if (g_useOwnerAllocator != 0) {
         playersAllocator = (int)playersAllocator;
     } else {
@@ -824,10 +824,10 @@ int beNDMWGameRam_AddInfo(beNDMWGameRam *self) {
     beNDMWGameRamInfoRam *created;
     infos = (beBaseInfoList *)self->_infoList;
     if (infos->_count == 0) {
-        allocator = (int)igObject_GetAllocator(self);
+        allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<beNDMWGameRamInfo> info(beNDMWGameRamInfo_Create(allocator));
-        allocator = (int)igObject_GetAllocator(self);
+        allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         RamRef ram(beNDMWGameRamInfoRam_Create(allocator));
         igNamedObject_SetName((igNamedObject *)info.p, "gameram");
@@ -1051,7 +1051,7 @@ void beNDMWGameRam_GiveInitialWeapons(beNDMWGameRam *self, int index) {
     slot = 0;
     field = g_initialWeaponFields;
     do {
-        allocator = (int)igObject_GetAllocator(self);
+        allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
         {
         RecoveryRef<1> weaponRef(beNDMWItemWeapon_Create(allocator), false);
@@ -1281,7 +1281,7 @@ void beNDMWGameRam_JoinPlayerWithName(beNDMWGameRam *self, int index, void *mode
     igObject *released;
     beNDMWGameRam_JoinPlayer(self, index, (const char *)modelName);
     player = ((int *)(((igObjectList *)self->_playerDataListList)->_data))[index];
-    allocator = (int)igObject_GetAllocator(self);
+    allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
     igSmartPointer<beUnicodeObj> unicodeName(beUnicodeObj_Create(allocator));
     beUnicodeObj_AllocateBuffer(unicodeName.p, 8);
@@ -1713,7 +1713,7 @@ void beNDMWGameRam_RecomputeStats(beNDMWGameRam *self, int index, unsigned char 
             if (beDataBase_GetRecordInt((beDataBase *)(RecomputeHelpers::shinka(self)), species, g_techniqueLevelFields[slot]) <= level) {
                 for (int rank = 4; rank >= 0; rank--) {
                     if (beDataBase_GetRecordInt((beDataBase *)(RecomputeHelpers::shinka(self)), species, g_techniqueSkillFields[slot][rank]) <= skillVal) {
-                        IntListRef waza((IntList *)beNDMWItemWaza_Create(RecomputeHelpers::select_allocator((int)igObject_GetAllocator(self))));
+                        IntListRef waza((IntList *)beNDMWItemWaza_Create(RecomputeHelpers::select_allocator((int)((Gap::Core::igObject *)self)->getMemoryPool())));
                         beNDMWItemWaza_Set((beNDMWItemWaza *)(igObject *)waza.value, tech + rank, tech);
                         ObjectList_AppendRetained(list, (igObject *)waza.value);
                         break;
@@ -1885,7 +1885,7 @@ NearbyListRef beNDMWGameRam_CollectNearbyNonzeroHp(beNDMWGameRam *self,const cha
     int member_id;
     int append_index;
     IntList *list;
-    int selfAllocator=(int)igObject_GetAllocator(self);
+    int selfAllocator=(int)((Gap::Core::igObject *)self)->getMemoryPool();
     NearbyListRef result(((IntList *)igIntList_Create((int)(g_useOwnerAllocator ? selfAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1)))));
     beMessenger_SendGroup((beMessenger *)self->_messenger,group,GETMATRIX);
     int count=beMessenger_GetIntCount((beMessenger *)self->_messenger);
@@ -2840,7 +2840,7 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *messa
                     } else {
                         switch (slotKind) {
                         case ITEMSLOT_WEAPON: {
-                            int allocator = (int)igObject_GetAllocator(self);
+                            int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
                             int pooledAllocator = beNDMWLoadIntf2_Memory_SelectAllocator(&kIGMemoryPoolHandleUser0, allocator);
                             void *created = (void *)(beNDMWItemWeapon_Create(beNDMWGameRam_beNDMWItemWeapon_MakeAllocatorValue(pooledAllocator).v));
                             { RecoveryRef<1> item(created, false);
@@ -2850,7 +2850,7 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *messa
                             break;
                         }
                         case ITEMSLOT_ARMOR1: {
-                            int allocator = (int)igObject_GetAllocator(self);
+                            int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
                             int pooledAllocator = beNDMWLoadIntf2_Memory_SelectAllocator(&kIGMemoryPoolHandleUser0, allocator);
                             void *created = (void *)(beNDMWItemBlueArmor_Create(beNDMWGameRam_beNDMWItemBlueArmor_MakeAllocatorValue(pooledAllocator).v));
                             { RecoveryRef<2> item(created, false);
@@ -2860,7 +2860,7 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *messa
                             break;
                         }
                         case ITEMSLOT_ARMOR2: {
-                            int allocator = (int)igObject_GetAllocator(self);
+                            int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
                             int pooledAllocator = beNDMWLoadIntf2_Memory_SelectAllocator(&kIGMemoryPoolHandleUser0, allocator);
                             void *created = (void *)(beNDMWItemYellowArmor_Create(beNDMWGameRam_beNDMWItemYellowArmor_MakeAllocatorValue(pooledAllocator).v));
                             { RecoveryRef<3> item(created, false);
@@ -2870,7 +2870,7 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *messa
                             break;
                         }
                         case ITEMSLOT_ABCHIP: {
-                            int allocator = (int)igObject_GetAllocator(self);
+                            int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
                             int pooledAllocator = beNDMWLoadIntf2_Memory_SelectAllocator(&kIGMemoryPoolHandleUser0, allocator);
                             void *created = (void *)(beNDMWItemAbilityChip_Create(beNDMWGameRam_beNDMWItemAbilityChip_MakeAllocatorValue(pooledAllocator).v));
                             { RecoveryRef<4> item(created, false);
@@ -4219,7 +4219,7 @@ loop_449:
             }
             if (rank == 2) {
                 if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&rankEnemy->_dataList) == 0) {
-                    ObjectRefAssigner::Assign(&rankEnemy->_dataList, (int)igObject_GetAllocator(rankEnemy));
+                    ObjectRefAssigner::Assign(&rankEnemy->_dataList, (int)((Gap::Core::igObject *)rankEnemy)->getMemoryPool());
                 }
                 rankMoveList = (void *)(beNDMWGameRam_igSmartPointer_beModelCtrlMoveObjectList_Get(&((beNDMWMdlPEBaseInfoWork *)beNDMWGameRam_igSmartPointer_beModelCtrlInfoWork_Get(&((beModelCtrlInfoRamData *)beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&rankEnemy->_dataList), (int)g_propertyNameField, "ONE"))->_work))->_moveObjectList));
                 if (((beModelCtrlMoveObjectList *)rankMoveList)->_count != 0) {

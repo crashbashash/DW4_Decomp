@@ -142,7 +142,7 @@ int igStringMetaField_GetRawFieldMemSize(igStringMetaField *self, int object) {
 
 /* The pool a temporary buffer for a field of `owner` comes from. */
 static inline igMemoryPoolView *temporaryPool(void *owner) {
-    igMemoryPoolView *pool = igObject_GetAllocator((igObject *)owner);
+    igMemoryPoolView *pool = ((Gap::Core::igObject *)owner)->getMemoryPool();
     return g_useOwnerAllocator != 0 ? pool : (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
 }
 
@@ -657,7 +657,7 @@ int igStringObj_Erase(igStringObj *self, unsigned int pos, unsigned int len) {
     if (pos > self->_length - 1 || (end = pos + len) > self->_length) {
         return 0;
     }
-    *(igStringObj **)&tmp = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
+    *(igStringObj **)&tmp = (igStringObj *)(igStringObj_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
     igStringObj_Set(tmp, (char *)self->_buffer + end);
     igStringObj_Insert((igStringObj *)tmp, (char *)self->_buffer, 0, pos);
     igStringObj_Set(self, igStringObj_Text(tmp));

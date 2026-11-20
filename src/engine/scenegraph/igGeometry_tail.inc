@@ -34,7 +34,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
         }
     }
     if (self->flags & 2) {
-        if (igObject_IsKindOf((igObject *)node, (igMetaObject *)g_igGeometry_metaObject) != 0 || igObject_IsKindOf((igObject *)node, ((igMetaObject **)g_igCompiledGraph_metaObject)[0]) != 0) {
+        if (((Gap::Core::igObject *)node)->isOfType((igMetaObject *)g_igGeometry_metaObject) != 0 || ((Gap::Core::igObject *)node)->isOfType(((igMetaObject **)g_igCompiledGraph_metaObject)[0]) != 0) {
             bool hit;
             unsigned int i;
             HitSegmentList *segments;
@@ -66,7 +66,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
         }
     }
     if (self->flags & 4) {
-        if (igObject_IsKindOf((igObject *)node, g_igGeometry_metaObject) != 0) {
+        if (((Gap::Core::igObject *)node)->isOfType(g_igGeometry_metaObject) != 0) {
             HitMatrix *matrix;
             unsigned int attrCount;
             unsigned int segmentCount;
@@ -95,7 +95,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
                 }
                 for (a = 0; a < attrCount; a++) {
                     HitAttr *attr = attrs->data[a];
-                    if (igObject_IsKindOf((igObject *)attr, (igMetaObject *)(((void *)g_igGeometryAttr_metaObject))) != 0 || igObject_IsKindOf((igObject *)attr, ((igMetaObject **)DAT_0055f158)[0]) != 0) {
+                    if (((Gap::Core::igObject *)attr)->isOfType((igMetaObject *)(((void *)g_igGeometryAttr_metaObject))) != 0 || ((Gap::Core::igObject *)attr)->isOfType(((igMetaObject **)DAT_0055f158)[0]) != 0) {
                         int *f = &pointReport.first;
                         int *g = &pointReport.second;
                         *f = -1;

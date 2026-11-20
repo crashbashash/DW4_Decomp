@@ -87,15 +87,25 @@ local `…View` classes) go away as their users convert.
 The root and the renderers (`igRenderer`, `igClearRenderer`, `igFlushRenderer`) are converted, and of igObject's
 kit-declared members also the bootstrap and copy constructors (`igObject(bool bootstrap)`,
 `igObject(const igObject &)`, which construct the header with the kit's placement `operator new(size_t, void *,
-void *)`), the storage calls (`malloc`, `mallocAligned`, `calloc`, `realloc`, `reallocAligned`, `free`, `strdup`)
-and `copy`, `copyShallow`, `isAlikeExactly`, `traverseFields`, `getIoSize`, `printFields`. The order after that:
+void *)`), the storage calls (`malloc`, `mallocAligned`, `calloc`, `realloc`, `reallocAligned`, `free`, `strdup`),
+`copy`, `copyDeep`, `copyShallow`, `isAlikeExactly`, `isAlikeDeep`, `isAlikeShallow`, `traverseFields`,
+`getIoSize`, `printFields`, `isOfType`, `getMemoryPool`, `getClassStorage`, the private `internalRelease`, the
+construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConstructDerivedFromFile`,
+`commission`, `construct`, `internalResetFields`, `destruct`, `decommission`), `emptyArkRegisterInternal`,
+`emptyGetClassMetaSafe`, and slot 0 is the kit's `__bootstrapDestruct`. The order after that:
 
-1. the rest of igObject's kit-declared members: `internalRelease` (`igObject_Destroy`), `isOfType`
-   (`igObject_IsKindOf`) and `getMemoryPool` (`igObject_GetAllocator`), which macros and inline casts of
-   unconverted classes call; `copyDeep`, `isAlikeDeep`, `isAlikeShallow`, whose C forms take
-   `igObjectDispatchView *` parameters;
-2. the metafield family (`igMetaField` and its subclasses);
-3. `igMetaObject`, `igDataList`/`igObjectList`;
+1. igObject's last kit members: `resetFields()` (`igObject_ResetFields`; memberize reads a name as virtual when
+   any overload is, so the non-virtual overload of the `resetFields(int)` slot needs its signature matched
+   first), `free(igRawRef)` (`igObject_FreeStorage`), `createCopyRef` (`igObject_Clone`, whose return type is a
+   smart pointer of the flat struct), the I/O members (`writeToMemory`, `readFromMemory`), the `operator new`
+   pair (`igObject_AllocateRawStorage`); and the release idiom: the callers outside igObject still call
+   `igObject_Destroy` by its C name, since `internalRelease` is private, until their inline release is written as
+   the kit's `release()`;
+2. the metafield family (`igMetaField` and its subclasses): igMetaField is a bootstrap class like igObject (its
+   registration is hand-written, not igen's), with 73 `igMetaField_` functions, so it converts as the root did,
+   then its subclasses top-down with `tools/gen_odl_source.py` boilerplate;
+3. `igMetaObject`, `igDataList`/`igObjectList`; igMetaObject, igIGBFile and igObjectDirEntry then also call
+   igObject's protected and private construction members directly (the kit makes them friends);
 4. attrs, then gfx, then scenegraph, then gui/insight/viewer;
 5. the game's `be*` classes last.
 
@@ -116,3 +126,6 @@ and `copy`, `copyShallow`, `isAlikeExactly`, `traverseFields`, `getIoSize`, `pri
   stays in its place while its name still binds at its address (the object names it, or symbols.txt,
   data-names.tsv, the compiler-name map, another unit's row or the address in the name binds it), so stale aliases
   (`DAT_004fb410` beside `g_resultSuccess`) stay until their name stops binding.
+- `tools/whole_file_rows.py --unit-va <va> --write` cannot regenerate some caller units' rows (an ambiguous retail
+  start such as `0x37a600`, which three duplicate smart-pointer destructors fit, or a unit name with two source
+  files), on main as well; their rows stay as they were and still verify.

@@ -1644,7 +1644,7 @@ void igArenaMemoryPool_EnableAllocationLock(int *ret, igArenaMemoryPool *p, int 
         }
     } else if ((unsigned char)flag == 1) {
         if (p->_allocationLock != 0) { *ret = g_resultSuccess.v; return; }
-        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)igObject_GetAllocator((igObject *)p)))));
+        igSmartPointer<igSemaphoreView> created((igSemaphoreView *)igSemaphore_Create((int)(((void *)((Gap::Core::igObject *)p)->getMemoryPool()))));
         created->Create();
         igSemaphoreView *t = created.p;
         if (t) t->_refCount = t->_refCount + 1;
@@ -2347,7 +2347,7 @@ int igArenaMemoryPool_GetEventTracker(igArenaMemoryPool *self) {
 
 void igArenaMemoryPool_SetEventTracker(igArenaMemoryPool *self, igObject *tracker) {
     igObject *previous;
-    if (tracker == 0 || (igArenaMemoryPool *)((void *)igObject_GetAllocator((igObject *)tracker)) != self) {
+    if (tracker == 0 || (igArenaMemoryPool *)((void *)((Gap::Core::igObject *)tracker)->getMemoryPool()) != self) {
         if (tracker != 0) {
             tracker->_refCount++;
         }

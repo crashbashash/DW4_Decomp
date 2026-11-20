@@ -148,10 +148,9 @@ extern "C" void igBoundingSphereMaker_GetMetaObjectFunction(void);
 extern "C" void igBoundingSphereMaker_InitFields(void);
 extern "C" void FUN_0018d630(igSphere*, float const*);
 extern "C" void FUN_0023b110(void *arg0, void *arg1);
-/* Stores in *result a new sphere bounding `geometry` (the smart pointer it returns by value). */
-extern "C" void FUN_0023ac20(igSphere **result, igBoundingSphereMaker *self, igGeometry *geometry);
+/* A new sphere bounding the vertices of `geometry` (Ritter's method). */
+extern "C" igSmartPointer<igSphere> FUN_0023ac20(igBoundingSphereMaker *self, igGeometry *geometry);
 #include "dw4/scenegraph/igNode.h"
-typedef struct S1 { char pad4[4]; int f4; } S1;
 struct Ls { char p[8]; unsigned int n; char q[4]; struct Q **a; };
 struct Q { char p[28]; struct Ls *f28; };
 struct R { char p[8]; int f8; };

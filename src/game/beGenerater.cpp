@@ -279,7 +279,7 @@ static inline void setGeneEnemyName(beGeneraterInfoWork *work, const char *name)
 /* The allocator an object's new members come from: its own, or the default one. */
 static inline int allocatorFor(void *object)
 {
-    int allocator = (int)(igObject_GetAllocator((igObject *)object));
+    int allocator = (int)(((Gap::Core::igObject *)object)->getMemoryPool());
     return (int)(g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
 }
 

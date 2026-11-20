@@ -236,7 +236,7 @@ SjisUnicodeTable g_sjisToUnicodeTable = {{
 static inline igNodeView *nodeAt(igObjectList *list, int index) { return ((igNodeView **)list->_data)[index]; }
 static inline int countOf(igObjectList *list) { if (list != 0) return list->_count; return 0; }
 static inline igNodeView *asAttrSet(igNodeView *node) {
-    if (node != 0 && igObject_IsKindOf(node, g_igAttrSet_metaObject) != 0) return node; else return 0;
+    if (node != 0 && ((Gap::Core::igObject *)node)->isOfType(g_igAttrSet_metaObject) != 0) return node; else return 0;
 }
 
 /* Marks the load as failed, so the font ignores every later message. */
@@ -423,13 +423,13 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
             while (j < countOf(categorySwitch->_childList)) {
                 panel = asAttrSet(nodeAt(categorySwitch->_childList, j));
                 {
-                    void *allocator = igObject_GetAllocator(self);
+                    void *allocator = ((Gap::Core::igObject *)self)->getMemoryPool();
                     void *creator;
                     if (g_useOwnerAllocator != 0) creator = allocator; else creator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                     igSmartPointer<beFontGeomAttrPair> newPair(beFontGeomAttrPair_Create((int)creator));
                     SET_POOLED_STRING(newPair.p, _category, category->_name)
                     SET_POOLED_STRING(newPair.p, _panel, panel->_name)
-                    allocator = igObject_GetAllocator(self);
+                    allocator = ((Gap::Core::igObject *)self)->getMemoryPool();
                     if (g_useOwnerAllocator != 0) creator = allocator; else creator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                     igSmartPointer<igGeometryAttr> geometry(igGeometryAttr_Create((int)creator));
                     ObjectList_AppendRetained((igObjectList *)newPair.p->_geomAttrs, (igObject *)geometry.p);
@@ -727,7 +727,7 @@ igSmartPointer<beUnicodeObj> beFont_ConvertToUnicode(beFont *self, const char *t
             i++;
         }
     }
-    allocator = ((int)igObject_GetAllocator(self));
+    allocator = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     allocator = g_useOwnerAllocator ? allocator : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beUnicodeObj> result(beUnicodeObj_Create(allocator));
     beUnicodeObj_AllocateBuffer(result.p, length);
@@ -882,7 +882,7 @@ void beFont_ReplaceVertexArray(beFont *self, igGeometryAttr *geometry, int fontI
     if (held != 0) {
         held->_refCount = held->_refCount + 1;
     }
-    allocator = igObject_GetAllocator(self);
+    allocator = ((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     held = vertices.p;
     if (held != 0) {
@@ -1149,7 +1149,7 @@ int beFont_FindNextLayoutEntry(beFont *self, beBaseInfoRam *ram) {
 
 void beUnicodeObj_userDestruct(beUnicodeObj *self) {
     if (self->_buffer != 0) {
-        Memory_FreeBufferWithAllocator((void *)self->_buffer, igObject_GetAllocator((igObject *)self));
+        Memory_FreeBufferWithAllocator((void *)self->_buffer, ((Gap::Core::igObject *)self)->getMemoryPool());
     }
     Gap__Core__igObject__userDestruct((igObject *)self);
 }
@@ -1160,11 +1160,11 @@ void beUnicodeObj_AllocateBuffer(beUnicodeObj *self, int length) {
     if (self->_buffer != 0) {
         need = (length + 1) * 2;
         if (Memory_GetBufferSize((void *)self->_buffer) < need) {
-            Memory_FreeBufferWithAllocator((void *)self->_buffer, igObject_GetAllocator((igObject *)self));
-            self->_buffer = (int)Memory_AllocateAlignedWithAllocator(need, 0x10, igObject_GetAllocator((igObject *)self));
+            Memory_FreeBufferWithAllocator((void *)self->_buffer, ((Gap::Core::igObject *)self)->getMemoryPool());
+            self->_buffer = (int)Memory_AllocateAlignedWithAllocator(need, 0x10, ((Gap::Core::igObject *)self)->getMemoryPool());
         }
     } else {
-        self->_buffer = (int)Memory_AllocateAlignedWithAllocator((length + 1) * 2, 0x10, igObject_GetAllocator((igObject *)self));
+        self->_buffer = (int)Memory_AllocateAlignedWithAllocator((length + 1) * 2, 0x10, ((Gap::Core::igObject *)self)->getMemoryPool());
     }
     memset((void *)self->_buffer, 0, Memory_GetBufferSize((void *)self->_buffer));
 }

@@ -137,11 +137,11 @@ int Gap__Gfx__igPsx2Image__vfunc_39(G *arg0, int arg1)
     }
 block_4:
     {
-      igSmartPointer<O0> name((O0 *)igStringObj_Create((int)igObject_GetAllocator((igObject *)arg0)));
+      igSmartPointer<O0> name((O0 *)igStringObj_Create((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
       igStringObj_Set((igStringObj *)((int)name.p), (char *)arg1);
-      LoaderRef loader((O1 *)igTgaLoader_Create((int)igObject_GetAllocator((igObject *)arg0)));
+      LoaderRef loader((O1 *)igTgaLoader_Create((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
       var_s0 = loader.p->v21(name.p, arg0) & 0xFF;
-      FUN_00156340((S0_156340 *)arg0, (void **)&PathText(arg1).text);
+      FUN_00156340((igImage *)arg0, &igStringRef((const char *)arg1));
     }
     return var_s0;
   }
@@ -151,7 +151,7 @@ block_22:
       if (strcmp((char *)s, ".PNG") == 0) goto block_26;
     } else {
 block_26:
-      ReaderRef reader((O2 *)igFileImagePng_Create((int)igObject_GetAllocator((igObject *)arg0)));
+      ReaderRef reader((O2 *)igFileImagePng_Create((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
       var_s0 = reader.p->v31(arg1) & 0xFF;
       if (var_s0 != 0) {
         arg0->v21(reader.p, 1);
@@ -190,7 +190,7 @@ int Gap__Gfx__igPsx2Image__vfunc_40(Img_16e8f0 *p, Strm *s) {
 }
 
 int Gap__Gfx__igPsx2Image__vfunc_41(igPsx2Image *image, Stream *stream) {
-    igSmartPointer<ConvertedImage> converted((ConvertedImage *)igImage_CreateInstance((int)igObject_GetAllocator(image)));
+    igSmartPointer<ConvertedImage> converted((ConvertedImage *)igImage_CreateInstance(((Gap::Core::igObject *)image)->getMemoryPool()));
     int word;
     int masks;
     converted->convert(image, 1);

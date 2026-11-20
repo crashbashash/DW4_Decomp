@@ -138,22 +138,22 @@ void FUN_001c20b0(Controller *self) {
   flag = 1;
   igGetRegistryValue_Bool((igRegistry *)props, 7, "envMapDiscardUnusedImages", &flag, 1, 1);
   self->enabled = flag;
-  assign(self->f76, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureBindAttr_CreateInstance((int)igObject_GetAllocator((igObject *)self)))));
+  assign(self->f76, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureBindAttr_CreateInstance((int)((Gap::Core::igObject *)self)->getMemoryPool()))));
   self->f76->setValue(self->a32);
   self->f76->configure(0);
-  assign(self->f80, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureCoordSourceAttr_Create(igObject_GetAllocator((igObject *)self)))));
+  assign(self->f80, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureCoordSourceAttr_Create(((Gap::Core::igObject *)self)->getMemoryPool()))));
   self->f80->setKind(2);
   self->f80->configure(0);
-  assign(self->f84, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureFunctionAttr_Create(igObject_GetAllocator((igObject *)self)))));
+  assign(self->f84, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureFunctionAttr_Create(((Gap::Core::igObject *)self)->getMemoryPool()))));
   self->f84->field12 = 2;
   self->f84->configure(0);
   if (self->p36 != 0) {
     self->p36->configure(0);
-    assign(self->f88, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureCoordSourceAttr_Create(igObject_GetAllocator((igObject *)self)))));
+    assign(self->f88, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureCoordSourceAttr_Create(((Gap::Core::igObject *)self)->getMemoryPool()))));
     self->f88->setKind(0);
     self->f88->configure(0);
     self->f88->setValue(self->a40);
-    assign(self->f92, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureFunctionAttr_Create(igObject_GetAllocator((igObject *)self)))));
+    assign(self->f92, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureFunctionAttr_Create(((Gap::Core::igObject *)self)->getMemoryPool()))));
     self->f92->field12 = 1;
     self->f92->configure(0);
     if (self->flag48) {
@@ -165,19 +165,19 @@ void FUN_001c20b0(Controller *self) {
     }
   }
   if (self->a52 != 0) {
-    assign(self->f100, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureBindAttr_CreateInstance((int)igObject_GetAllocator((igObject *)self)))));
+    assign(self->f100, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureBindAttr_CreateInstance((int)((Gap::Core::igObject *)self)->getMemoryPool()))));
     self->f100->setValue(self->a52);
     self->f100->configure(0);
     s1 = self->f88;
     if (s1 != 0 && self->a56 == self->a40) {
       assign(self->f104, s1);
     } else {
-      assign(self->f104, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureCoordSourceAttr_Create(igObject_GetAllocator((igObject *)self)))));
+      assign(self->f104, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureCoordSourceAttr_Create(((Gap::Core::igObject *)self)->getMemoryPool()))));
       self->f104->setKind(0);
       self->f104->configure(0);
       self->f104->setValue(self->a56);
     }
-    assign(self->f108, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureFunctionAttr_Create(igObject_GetAllocator((igObject *)self)))));
+    assign(self->f108, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureFunctionAttr_Create(((Gap::Core::igObject *)self)->getMemoryPool()))));
     self->f108->field12 = 0;
     self->f108->configure(0);
   }
@@ -397,7 +397,7 @@ void FUN_001c3090(V_1c3090 *arg0, int arg1) {
     arg0->b(arg1);
     arg0->f60 = 1;
     if (arg0->f32 != 0) {
-        o = ((Obj_1c3090 *)igAttrList_Create(igObject_GetAllocator((igObject *)arg0)));
+        o = ((Obj_1c3090 *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
         ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)o);
         ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)o);
         o->refs = o->refs - 1;
@@ -420,6 +420,63 @@ void FUN_001c3090(V_1c3090 *arg0, int arg1) {
 
 void FUN_001c31d0(void) {
 
+}
+
+/* The pool for scratch buffers: the current pool when objects allocate from their owner's pool, else the
+ * temporary pool. */
+static inline igMemoryPoolView *temporaryPool(void) {
+    if (g_useOwnerAllocator != 0) {
+        return Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent);
+    }
+    return Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
+}
+
+/* Builds a sphere map from the six faces of a cube texture and makes it the texture's image. When the faces
+ * have a palette, each is converted to RGBA 8888 first; if the first face cannot be converted, the faces are
+ * used as they are. */
+void FUN_001c31e0(igTextureAttr *texture) {
+    igTextureCubeAttr *cube = (igTextureCubeAttr *)texture;
+    igSmartPointer<igImage> faces[6];
+    int i;
+    int bytesPerPixel;
+    int size;
+    igImage *first;
+    int width;
+    int height;
+    unsigned char *pixels;
+
+    for (i = 0; i < 6; i++) {
+        faces[i] = igTextureCubeAttr_GetCubeImage(cube, (CubeFaceID)i);
+        if (faces[i].p == 0) {
+            return;
+        }
+    }
+    if (faces[0].p->_pClut != 0) {
+        for (i = 0; i < 6; i++) {
+            igSmartPointer<igImage> converted(igImage_CreateInstance(((Gap::Core::igObject *)texture)->getMemoryPool()));
+            if (!FUN_00157200(converted.p, IG_GFX_TEXTURE_FORMAT_RGBA_8888_32, faces[i].p)) {
+                if (i > 0) {
+                    return;
+                }
+                break;
+            }
+            faces[i] = converted;
+        }
+    }
+    first = faces[0].p;
+    width = first->_px;
+    height = first->_py;
+    bytesPerPixel = (int)(first->_bitsDepth + (first->_bitsInt + (first->_bitsIdx + (first->_bitsAlpha + (first->_bitsBlu + (first->_bitsRed + first->_bitsGrn)))))) / 8;
+    size = bytesPerPixel * (width * height);
+    pixels = (unsigned char *)temporaryPool()->Allocate(size);
+    memset(pixels, 0, size);
+    FUN_001c3ab0(width, height, bytesPerPixel, faces[1].p, faces[0].p, faces[3].p, faces[2].p, faces[5].p, faces[4].p, pixels);
+    igSmartPointer<igImage> image(igImage_CreateInstance(((Gap::Core::igObject *)texture)->getMemoryPool()));
+    FUN_00156340(image.p, &igStringRef("SphereImage"));
+    igImage_SetPixels(image.p, pixels, faces[0].p->_pfmt, width, height);
+    temporaryPool()->Free(pixels);
+    igTextureAttr_SetImage(texture, image.p, 0);
+    texture->_source = 0;
 }
 
 void FUN_001c3ab0(int width, int height, int bpp, void *face1, void *face0, void *face3, void *face2, void *face5, void *face4, unsigned char *out) {

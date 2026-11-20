@@ -11,7 +11,7 @@ void igEnbayaContextPool_resetFields(int arg0, int flags) {
 
     Gap__Core__igObject__resetFields((igObject *)arg0, flags);
     temp_s2 = *(int *)((char *)g_objectSystem + 56);
-    var_v0 = (int)igObject_GetAllocator((igObject *)arg0);
+    var_v0 = (int)((Gap::Core::igObject *)arg0)->getMemoryPool();
     var_v0 = (int)(g_useOwnerAllocator != 0 ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     sp5C = (void *)(igStringObj_Create(var_v0));
     temp_s0 = igRegistry_GetNumValuesInSection(temp_s2, 7);
@@ -60,7 +60,7 @@ void igEnbayaContextPool_destructFields(Obj_1c1450 *arg0) {
         m = inner->count;
         for (j = 0; j < m; j++) {
             x = (void *)inner->data[j];
-            al = ((Alloc *)igObject_GetAllocator((igObject *)arg0));
+            al = ((Alloc *)((Gap::Core::igObject *)arg0)->getMemoryPool());
             al->vX(x);
         }
     }
@@ -111,7 +111,7 @@ void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount) {
     n0 = l0->_count;
     if (findIndex(l0, n0, boneCount, i) == -1) {
         PoolListHolder list;
-        list.p = (PoolObject *)igPointerList_Create((int)igObject_GetAllocator((igObject *)o));
+        list.p = (PoolObject *)igPointerList_Create((int)((Gap::Core::igObject *)o)->getMemoryPool());
         ObjectList_AppendRetained((igObjectList *)o->_poolList, (igObject *)list.p);
         l1 = o->_boneCountList;
         n1 = l1->_count;
@@ -158,7 +158,7 @@ void FUN_001c1950(T_1c1a80 *pool, igTDataList<void *> *list, int boneCount, int 
         reserveContexts(list, count);
         for (unsigned int i = n; i < count; i++) {
             int size = FUN_0027ede0(boneCount);
-            void *context = FUN_0027ee00(((igMemoryPoolView *)igObject_GetAllocator((igObject *)pool))->AllocateAligned(size, 16), boneCount);
+            void *context = FUN_0027ee00(((igMemoryPoolView *)((Gap::Core::igObject *)pool)->getMemoryPool())->AllocateAligned(size, 16), boneCount);
             if (list->_count != 0 && (int)i >= 0 && (int)i < list->_count) {
                 list->_data[i] = context;
             }

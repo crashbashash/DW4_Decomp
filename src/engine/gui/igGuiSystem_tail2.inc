@@ -199,7 +199,7 @@ static inline void assign(igObject **slot, igObject *value) {
 }
 
 void igHotKeyEventReceiver_AddBinding(igHotKeyEventReceiver *receiver, int key, int button, igObject *action) {
-    igSmartPointer<Entry> entry((Entry *)igHotKeyBinding_Create((int)(igObject_GetAllocator(receiver))));
+    igSmartPointer<Entry> entry((Entry *)igHotKeyBinding_Create((int)(((Gap::Core::igObject *)receiver)->getMemoryPool())));
     entry->a = key;
     entry->b = button;
     assign(&entry->value, action);

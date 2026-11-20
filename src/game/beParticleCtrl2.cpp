@@ -196,7 +196,7 @@ int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram
             beMessenger_SendNamed((beMessenger *)self->_messenger, (const char *)MODELCTRL_12, (const char *)modelName, ramNo, (const char *)GETMATRIX_5);
             beMessenger_GetMatrix(matrix, (beMessenger *)self->_messenger, 0);
             if (lockToNode) {
-                int alloc = (int)igObject_GetAllocator(self);
+                int alloc = (int)((Gap::Core::igObject *)self)->getMemoryPool();
                 int a;
                 if (g_useOwnerAllocator != 0) {
                     a = alloc;

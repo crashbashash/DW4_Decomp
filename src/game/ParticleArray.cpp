@@ -149,12 +149,12 @@ static inline void createContext(ParticleArray *self) {
 int ParticleTimer_TraversalFunction(igObject *traversal, igObject *node) {
     igCommonTraversal *common;
     ParticleTimer *timer;
-    if (traversal != 0 && igObject_IsKindOf(traversal, g_igCommonTraversal_metaObject) != 0) {
+    if (traversal != 0 && ((Gap::Core::igObject *)traversal)->isOfType(g_igCommonTraversal_metaObject) != 0) {
         common = (igCommonTraversal *)traversal;
     } else {
         common = 0;
     }
-    if (node != 0 && igObject_IsKindOf(node, g_ParticleTimer_metaObject) != 0) {
+    if (node != 0 && ((Gap::Core::igObject *)node)->isOfType(g_ParticleTimer_metaObject) != 0) {
         timer = (ParticleTimer *)node;
     } else {
         timer = 0;
@@ -281,10 +281,10 @@ int ParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int off
         assignReference(self->_pointSpriteInterface, ((igVisualContextDispatchView *)self->_context)->GetExtension("igPointSpriteExt"));
     }
     if (self->_vertexArray1 == 0) {
-        int allocator = (int)igObject_GetAllocator(self);
+        int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         igRelease((igObject *)self->_vertexArray1);
         self->_vertexArray1 = (int)igVertexArray_Create(allocator);
-        allocator = (int)igObject_GetAllocator(self);
+        allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         igRelease((igObject *)self->_vertexArray2);
         self->_vertexArray2 = (int)igVertexArray_Create(allocator);
         igVertexFormat format;

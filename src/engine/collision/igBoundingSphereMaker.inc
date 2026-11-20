@@ -98,13 +98,11 @@ void FUN_0023b110(void *arg0, void *arg1) {
 }
 
 void FUN_0023b140(struct R *arg0, struct Q *arg1) {
-    S1 *sp5C;
-    S1 *t;
     unsigned int var_s1;
     unsigned int var_s0;
     struct Ls *temp_v0;
 
-    if (igObject_IsKindOf((igObject *)arg1, g_igGroup_metaObject) != 0) {
+    if (((Gap::Core::igObject *)arg1)->isOfType(g_igGroup_metaObject) != 0) {
         temp_v0 = arg1->f28;
         var_s1 = 0;
         if (temp_v0 != 0) {
@@ -116,17 +114,10 @@ void FUN_0023b140(struct R *arg0, struct Q *arg1) {
             var_s0 += 1;
         }
     }
-    if (igObject_IsKindOf((igObject *)arg1, g_igGeometry_metaObject) != 0) {
-        FUN_0023ac20((igSphere **)&sp5C, (igBoundingSphereMaker *)arg0, (igGeometry *)arg1);
-        FUN_0018de10((igSphere *)arg0->f8, (const igSphere *)sp5C);
-        t = sp5C;
-        if (t != 0) {
-            t->f4 = (int)((int) (t->f4 - 1));
-            if (((unsigned long long) ((long long) t->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)t);
-            }
-        }
-    } else if (igObject_IsKindOf((igObject *)arg1, g_igTransform_metaObject) != 0) {
+    if (((Gap::Core::igObject *)arg1)->isOfType(g_igGeometry_metaObject) != 0) {
+        igSmartPointer<igSphere> sphere(FUN_0023ac20((igBoundingSphereMaker *)arg0, (igGeometry *)arg1));
+        FUN_0018de10((igSphere *)arg0->f8, sphere);
+    } else if (((Gap::Core::igObject *)arg1)->isOfType(g_igTransform_metaObject) != 0) {
         FUN_0023b110(arg0, arg1);
     }
 }

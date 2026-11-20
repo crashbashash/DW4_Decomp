@@ -10,7 +10,7 @@ int igDirectory_GetRefByName(int directory, int name) {
 
 int igDirectory_GetObjectByName(int directory, int name) {
     igObjectDirEntry *entry;
-    entry = (igObjectDirEntry *)((void *)igProperty_FindByName((igObjectList *)directory, (igMetaField *)g_propertyNameField, (const char *)name)); if (entry == 0) return 0; if (igObject_IsKindOf(entry, (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) return entry->_ref; return 0;
+    entry = (igObjectDirEntry *)((void *)igProperty_FindByName((igObjectList *)directory, (igMetaField *)g_propertyNameField, (const char *)name)); if (entry == 0) return 0; if (((Gap::Core::igObject *)entry)->isOfType((igMetaObject *)g_igObjectDirEntry_metaObject) != 0) return entry->_ref; return 0;
 }
 
 void *igDirectory_GetEntryByName(int directory, int name) {
@@ -26,7 +26,7 @@ void igDirectory_MakeConcrete(igDirectoryView *self) {
         i = 0;
         while (i < count) {
             entry = (igObjectDirEntry *)igDirectory_GetEntry((int *)self, i);
-            if (entry != 0 && igObject_IsKindOf(entry, (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
+            if (entry != 0 && ((Gap::Core::igObject *)entry)->isOfType((igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
                 if (entry->_typeMeta != 0 && ((igMetaObject *)entry->_typeMeta)->_abstractProxy != 0) {
                     ((igObjectDispatchView *)entry->_ref)->userMakeConcrete((igMetaObject *)entry->_typeMeta);
                 }

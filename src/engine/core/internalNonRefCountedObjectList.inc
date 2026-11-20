@@ -6,7 +6,7 @@ void *ObjectPointerList_Construct(__internalNonRefCountedObjectList *self, int e
     if (self != 0) {
         ObjectPointerList_Init(self);
     }
-    allocator = (void **)(((void **)igObject_GetAllocator((igObject *)self)));
+    allocator = (void **)(((void **)((Gap::Core::igObject *)self)->getMemoryPool()));
     self->_data = (int)((igMemoryPoolView *)allocator)->Allocate(0x10);
     return self;
 }
@@ -26,7 +26,7 @@ __internalNonRefCountedObjectList *ObjectPointerList_CopyConstruct(__internalNon
     self->_count = source->_count;
     if (source->_data) {
         bytes = self->_count * 4;
-        igMemoryPoolView *allocator = (igMemoryPoolView *)igObject_GetAllocator((igObject *)self);
+        igMemoryPoolView *allocator = (igMemoryPoolView *)((Gap::Core::igObject *)self)->getMemoryPool();
         self->_data = (int)allocator->Allocate(bytes);
         memcpy((void *)self->_data, (void *)source->_data, bytes);
     } else {
@@ -41,7 +41,7 @@ void ObjectPointerList_Destruct(__internalNonRefCountedObjectList *self) {
 
     buffer = self->_data;
     if (buffer != 0) {
-        allocator = (void **)(((void **)igObject_GetAllocator((igObject *)self)));
+        allocator = (void **)(((void **)((Gap::Core::igObject *)self)->getMemoryPool()));
         ((igMemoryPoolView *)allocator)->Free((void *)buffer);
     }
     igObject_Destruct((int)self);

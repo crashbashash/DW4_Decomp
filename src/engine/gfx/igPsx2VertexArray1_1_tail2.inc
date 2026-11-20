@@ -27,7 +27,7 @@ int igPsx2VertexArray1_1_Configure(S_17d0c0 *arg0, int *arg1, int arg2, int arg3
     arg0->f1c = *arg1;
     arg0->f10 = 0;
     arg0->f14 = arg3;
-    a = (VC_17d0c0 *)igObject_GetAllocator((igObject *)arg0);
+    a = (VC_17d0c0 *)((Gap::Core::igObject *)arg0)->getMemoryPool();
     arg0->f8 = a->vX(0x14, 4);
     total += 0x50;
     total += FUN_0015e4e0((VA_15e4e0 *)arg0);
@@ -42,7 +42,7 @@ void FUN_0017d170(V_17d170 *arg0) {
     if ((unsigned char)((*flags & 0xF0) >> 4) > 0) {
         Obj_17d170 *o;
         int a;
-        a = (int)igObject_GetAllocator((igObject *)arg0);
+        a = (int)((Gap::Core::igObject *)arg0)->getMemoryPool();
         o = arg0->f56;
         if (o != 0) {
             o->refs = o->refs - 1;
@@ -51,7 +51,7 @@ void FUN_0017d170(V_17d170 *arg0) {
             }
         }
         arg0->f56 = (Obj_17d170 *)igPsx2LongList_Create(a);
-        a = (int)igObject_GetAllocator((igObject *)arg0);
+        a = (int)((Gap::Core::igObject *)arg0)->getMemoryPool();
         o = arg0->f48;
         if (o != 0) {
             o->refs = o->refs - 1;
@@ -61,7 +61,7 @@ void FUN_0017d170(V_17d170 *arg0) {
         }
         arg0->f48 = (Obj_17d170 *)igPointerList_Create(a);
         if (*flags & 2) {
-            a = (int)igObject_GetAllocator((igObject *)arg0);
+            a = (int)((Gap::Core::igObject *)arg0)->getMemoryPool();
             o = arg0->f52;
             if (o != 0) {
                 o->refs = o->refs - 1;

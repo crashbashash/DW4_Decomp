@@ -92,7 +92,7 @@ int igAdxAudio_Initialize(igAdxAudio *audio, int maxChannels, int type, int maxS
         sectors = ((audio->_iMaxStreams + 1) * samples + 0x800) / 0x800;
         streamSize = (sectors << 11) + 0x24;
         { int decodeSize = audio->_iMaxChannels * 0x40C0; audio->_iWorkSize = decodeSize + streamSize + 0x40; }
-        audio->_pWorkArea = (int)Memory_AllocateAlignedWithAllocator(audio->_iWorkSize, 16, igObject_GetAllocator(audio));
+        audio->_pWorkArea = (int)Memory_AllocateAlignedWithAllocator(audio->_iWorkSize, 16, ((Gap::Core::igObject *)audio)->getMemoryPool());
         if (audio->_pWorkArea == 0) return 0;
         audio->_bIsInitialized = 1;
     }
@@ -195,7 +195,7 @@ void igAdxAudio_Shutdown(igAdxAudio *audio) {
         ADXT_Destroy((AdxtObj *)audio->_adxt);
     }
     if (audio->_pWorkArea != 0) {
-        Memory_FreeBufferWithAllocator((void *)audio->_pWorkArea, igObject_GetAllocator(audio));
+        Memory_FreeBufferWithAllocator((void *)audio->_pWorkArea, ((Gap::Core::igObject *)audio)->getMemoryPool());
     }
 }
 

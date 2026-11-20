@@ -55,7 +55,7 @@ enum PadBits {
 };
 
 #define RELEASE(type, object) { type *released = (type *)(object); if (released != 0) { released->_refCount = (int)released->_refCount - 1; if ((released->_refCount & 0x7FFFFF) == 0) igObject_Destroy(released); } }
-#define PICK_ALLOCATOR(allocator, owner) { allocator = (int)igObject_GetAllocator(owner); allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
+#define PICK_ALLOCATOR(allocator, owner) { allocator = (int)((Gap::Core::igObject *)(owner))->getMemoryPool(); allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
 #define INFO_NAME (info->_name ? info->_name : (int)emptyString)
 #define SELECT_MODEL() { int ramNo = ram->_ramNo; beMessenger_SelectReceivers((beMessenger *)self->_messenger, "MODELCTRL", (const char *)INFO_NAME, ramNo); }
 #define SEND_MODEL(sequence) { int ramNo = ram->_ramNo; beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", (const char *)INFO_NAME, ramNo, (const char *)sequence); }
@@ -200,7 +200,7 @@ void beSelectCtrl_UpdateRam(beSelectCtrl *self, beBaseInfoRam *ram) {
     info = (beBaseInfo *)ram->_parentInfo;
     if (ram->_dataList == 0) {
         igObject *created;
-        allocator = (int)igObject_GetAllocator(ram);
+        allocator = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         allocator = g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(allocator));
         created = list.p;

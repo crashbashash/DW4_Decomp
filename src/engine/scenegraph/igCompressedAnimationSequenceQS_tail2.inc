@@ -20,7 +20,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QS
     if (s0 != 0) arg0->_interpolationMethod[1] = arg1->v236(2);
     if (s5 != 0) {
         if (arg0->_compressedTranslationList == 0) {
-            al = (int)igObject_GetAllocator((igObject *)arg0);
+            al = (int)((Gap::Core::igObject *)arg0)->getMemoryPool();
             old = arg0->_compressedTranslationList;
             if (old != 0) {
                 old->_refCount = old->_refCount - 1;
@@ -43,7 +43,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QS
     }
     if (s0 != 0) {
         if (arg0->_compressedQuaternionList == 0) {
-            al = (int)igObject_GetAllocator((igObject *)arg0);
+            al = (int)((Gap::Core::igObject *)arg0)->getMemoryPool();
             old = arg0->_compressedQuaternionList;
             if (old != 0) {
                 old->_refCount = old->_refCount - 1;
@@ -65,7 +65,7 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QS
         arg0->_quaternionRangeOverMaxUShort = 1.52590219e-05f * sp78;
     }
     if (arg0->_compressedTimeList == 0) {
-        al = (int)igObject_GetAllocator((igObject *)arg0);
+        al = (int)((Gap::Core::igObject *)arg0)->getMemoryPool();
         old = arg0->_compressedTimeList;
         if (old != 0) {
             old->_refCount = old->_refCount - 1;

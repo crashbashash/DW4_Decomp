@@ -396,7 +396,7 @@ void igContext_BuildExtensionInfoList(igContext *self) {
         igContextExtInfoList *list;
         int meta;
         int i;
-        list = ((igContextExtInfoList *)igContextExtInfoList_Create(((int)igObject_GetAllocator((igObject *)self))));
+        list = ((igContextExtInfoList *)igContextExtInfoList_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
         if (list != 0) ++list->_refCount;
         igRelease((igObject *)self->_pExtList);
         self->_pExtList = (int)list;
@@ -416,7 +416,7 @@ void igContext_BuildExtensionInfoList(igContext *self) {
             igContextExtInfo *info;
             igContextExtInfoList *infoList;
             node = ((igMetaObject *)igMetaObject_GetTreeNode((igMetaObject *)meta, i + 1));
-            info = ((igContextExtInfo *)igContextExtInfo_Create(((int)igObject_GetAllocator((igObject *)self))));
+            info = ((igContextExtInfo *)igContextExtInfo_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
             if (node != 0) ++node->_refCount;
             igRelease((igObject *)info->_pMeta);
             info->_pMeta = (int)node;
@@ -500,7 +500,7 @@ void *igContext_GetExtension(igVisualContext *self, int name) {
     }
     extension = (igObject *)(((void *)igContext_FindExtensionInstance((igContext *)self, meta)));
     if (extension == 0) {
-        extension = (igObject *)(((void *)igMetaObject_CreateInstance((igMetaObject *)meta, (igMemoryPoolView *)(((int)igObject_GetAllocator((igObject *)self))))));
+        extension = (igObject *)(((void *)igMetaObject_CreateInstance((igMetaObject *)meta, (igMemoryPoolView *)(((int)((Gap::Core::igObject *)self)->getMemoryPool())))));
         if (extension != 0) {
             if (((igContextExtView *)extension)->IsSupported(self) == 0) {
                 extension->_refCount = extension->_refCount - 1;
@@ -524,7 +524,7 @@ void *igContext_GetExtension(igVisualContext *self, int name) {
 int igContext_FindExtensionInstance(igContext *self, int meta) {
     int i;
     for (i = 0; i < ((igObjectList *)self->_pExtInstances)->_count; i++) {
-        if (igObject_IsKindOf((igObject *)((int *)((igObjectList *)self->_pExtInstances)->_data)[i], (igMetaObject *)meta) != 0) {
+        if (((Gap::Core::igObject *)(((int *)((igObjectList *)self->_pExtInstances)->_data)[i]))->isOfType((igMetaObject *)meta) != 0) {
             return ((int *)((igObjectList *)self->_pExtInstances)->_data)[i];
         }
     }

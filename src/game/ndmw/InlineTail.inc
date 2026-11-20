@@ -97,7 +97,7 @@ void beNDMWDegiData_userConstruct(beNDMWDegiData *self, int flag) {
     igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
     if (!(flag & 0xFF)) {
         self->_dataSize = 0x2000;
-        allocator = (int)igObject_GetAllocator(self);
+        allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         self->_data = (int)Memory_AllocateBufferDirect(0x2000, (igMemoryPoolView *)allocator);
     }
@@ -107,7 +107,7 @@ void beNDMWDegiData_userDestruct(beNDMWDegiData *self) {
     int allocator;
 
     if (self->_data != 0) {
-        allocator = (int)igObject_GetAllocator(self);
+        allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         Memory_FreeBufferWithAllocator((void *)self->_data, (igMemoryPoolView *)allocator);
     }

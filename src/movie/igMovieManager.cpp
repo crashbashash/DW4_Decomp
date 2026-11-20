@@ -251,7 +251,7 @@ extern char Failed_to_build_the_scene_for_a_movie_info[];
 
 /* The pool the manager creates objects in: its own, unless the user pool is selected. */
 static inline int MovieAllocator(igMovieManager *self) {
-    int allocator = (int)igObject_GetAllocator(self);
+    int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     return g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 }
 
@@ -284,21 +284,21 @@ static inline int NextPowerOfTwo(int n) {
 }
 
 static inline igSceneInfo *AsSceneInfo(igObject *object) {
-    if (object != 0 && igObject_IsKindOf(object, g_igSceneInfo_metaObject)) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_igSceneInfo_metaObject)) {
         return (igSceneInfo *)object;
     }
     return 0;
 }
 
 static inline igAttrSet *AsAttrSet(igObject *object) {
-    if (object != 0 && igObject_IsKindOf(object, g_igAttrSet_metaObject)) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_igAttrSet_metaObject)) {
         return (igAttrSet *)object;
     }
     return 0;
 }
 
 static inline igTextureBindAttrView *AsTextureBindAttr(igObject *object) {
-    if (object != 0 && igObject_IsKindOf(object, g_igTextureBindAttr_metaObject)) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_igTextureBindAttr_metaObject)) {
         return (igTextureBindAttrView *)object;
     }
     return 0;
@@ -386,7 +386,7 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
     int i;
     igMovieInfo *movie;
     int allocator;
-    if (object != 0 && igObject_IsKindOf(object, g_igMovieInfo_metaObject) != 0) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_igMovieInfo_metaObject) != 0) {
         movie = (igMovieInfo *)object;
     } else {
         movie = 0;
@@ -422,7 +422,7 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
                 allocator = MovieAllocator(self);
                 igObject *created = igMetaObject_CreateInstance((igMetaObject *)meta, (igMemoryPoolView *)allocator);
                 igMovieCodecDispatchView *createdCodec;
-                if (created != 0 && igObject_IsKindOf(created, g_igMovieCodec_metaObject) != 0) {
+                if (created != 0 && ((Gap::Core::igObject *)created)->isOfType(g_igMovieCodec_metaObject) != 0) {
                     createdCodec = (igMovieCodecDispatchView *)created;
                 } else {
                     createdCodec = 0;
@@ -513,7 +513,7 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
 int igMovieManager_StopMovie(igMovieManager *self, void *object) {
     int index;
     igMovieInfo *movie;
-    if (object != 0 && igObject_IsKindOf((igObject *)object, g_igMovieInfo_metaObject) != 0) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_igMovieInfo_metaObject) != 0) {
         movie = (igMovieInfo *)object;
     } else {
         movie = 0;
@@ -800,7 +800,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             {
                 int allocator = MovieAllocator(self);
                 image.release();
-                image.p = (igImageDispatchView *)igImage_CreateInstance(allocator);
+                image.p = (igImageDispatchView *)igImage_CreateInstance((igMemoryPoolView *)allocator);
             }
             image->setWidth(textureWidth);
             image->setHeight(textureHeight);
@@ -828,7 +828,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             {
                 int allocator = MovieAllocator(self);
                 image.release();
-                image.p = (igImageDispatchView *)igImage_CreateInstance(allocator);
+                image.p = (igImageDispatchView *)igImage_CreateInstance((igMemoryPoolView *)allocator);
             }
             image->setWidth(movie->_width);
             image->setHeight(movie->_height);

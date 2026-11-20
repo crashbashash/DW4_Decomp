@@ -314,7 +314,7 @@ static inline void clearStringList(igStringRefList *list) {
 
 /* The allocator an object's new members come from: its own, or the default one. */
 static inline int allocatorFor(igObject *object) {
-    int allocator = (int)igObject_GetAllocator(object);
+    int allocator = (int)((Gap::Core::igObject *)object)->getMemoryPool();
     return g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 }
 

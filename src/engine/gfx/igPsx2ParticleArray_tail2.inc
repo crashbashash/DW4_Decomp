@@ -148,7 +148,7 @@ void igPsx2ParticleArray_UserApplyWriteProxy(PA_1765f0 *arg0) {
     unsigned i;
     char *d;
     if (arg0->flag != 0) {
-        buf = ((AL *)igObject_GetAllocator((igObject *)arg0))->vX(arg0->stride * arg0->n);
+        buf = ((AL *)((Gap::Core::igObject *)arg0)->getMemoryPool())->vX(arg0->stride * arg0->n);
         for (i = 0; i < arg0->n; i++) {
             e = ((PV *)arg0)->vX(i);
             d = buf + i * arg0->stride;

@@ -51,7 +51,7 @@ public:
 
 struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
-        int alloc = (int)igObject_GetAllocator(ram);
+        int alloc = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         int a;
         if (g_useOwnerAllocator != 0) {
             a = alloc;
@@ -108,7 +108,7 @@ void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) {
     RamDataList::Ensure(ram);
     r = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_13);
     {
-        int alloc = (int)igObject_GetAllocator(self);
+        int alloc = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         int a;
         if (g_useOwnerAllocator != 0) {
             a = alloc;
@@ -172,7 +172,7 @@ void beNDMWMdlPlayer2_UpdateControl(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) 
     beNDMWMdlPlayer2InfoWork *q;
     float f;
     if (ram->_dataList == 0) {
-        int alloc = (int)igObject_GetAllocator(ram);
+        int alloc = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         int a;
         if (g_useOwnerAllocator != 0) {
             a = alloc;

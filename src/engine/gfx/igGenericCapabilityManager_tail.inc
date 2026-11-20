@@ -288,32 +288,16 @@ void FUN_00156300(void) {
     igMemoryRefMetaField_SetAlignmentType((igMemoryRefMetaField *)g_igImage_pImageMetaField, "ImageData");
 }
 
-void FUN_00156340(S0_156340 *arg0, void **arg1) {
-    int *temp_a1;
-    int temp_v1;
-    void *temp_a0;
-    void *temp_a0_2;
-
-    temp_a0 = (void *)(*arg1);
-    if (temp_a0 != 0) {
-        *(int *)((char *)(temp_a0) - 4) = (int)((int) (*(int *)((char *)(temp_a0) - 4) + 1));
-    }
-    temp_a0_2 = (void *)(arg0->f58);
-    if (temp_a0_2 != 0) {
-        temp_a1 = (int *)((char *)temp_a0_2 - 8);
-        temp_v1 = *(int *)((char *)(temp_a0_2) - 4) - 1;
-        *(int *)((char *)(temp_a0_2) - 4) = temp_v1;
-        if (temp_v1 == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)*temp_a1, (StringTokenHeader *)temp_a1);
-        }
-    }
-    arg0->f58 = (int)((int) *arg1);
+void FUN_00156340(igImage *self, const igStringRef *name) {
+    retainString(name->p);
+    releaseString((const char *)self->_pNameString);
+    self->_pNameString = (int)name->p;
 }
 
 void FUN_001563b0(igImage *self, igImage *source, int deep) {
     if (source == self) {
         if (!self->_localImage && deep && self->_pImage != 0) {
-            void **allocator = (void **)igObject_GetAllocator(self);
+            void **allocator = (void **)((Gap::Core::igObject *)self)->getMemoryPool();
             void *pixels;
             allocator = (g_useOwnerAllocator != 0) ? allocator : (void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
             pixels = ((VAlloc *)allocator)->v53(self->_imageSize, 0x80);
@@ -330,7 +314,7 @@ void FUN_001563b0(igImage *self, igImage *source, int deep) {
     self->_order = source->_order;
     self->_pfmt = source->_pfmt;
     self->_compressed = source->_compressed;
-    FUN_00156340((S0_156340 *)self, (void **)&ImageName(source->_pNameString).text);
+    FUN_00156340(self, &igStringRef((const char *)source->_pNameString));
     self->_imageSize = source->_imageSize;
     self->_bytesPerRow = source->_bytesPerRow;
     self->_bitsInt = source->_bitsInt;
@@ -350,14 +334,14 @@ void FUN_001563b0(igImage *self, igImage *source, int deep) {
     }
     if (deep) {
         if (source->_pImage != 0) {
-            void **allocator = (void **)igObject_GetAllocator(self);
+            void **allocator = (void **)((Gap::Core::igObject *)self)->getMemoryPool();
             allocator = (g_useOwnerAllocator != 0) ? allocator : (void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
             self->_pImage = (int)((VAlloc *)allocator)->v53(self->_imageSize, 0x80);
             self->_localImage = 1;
             memcpy((void *)self->_pImage, (const void *)source->_pImage, self->_imageSize);
         }
         if (source->_pClut != 0) {
-            int allocator = (int)igObject_GetAllocator(self);
+            int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
             igRelease((igObject *)self->_pClut);
             self->_pClut = igClut_Create(allocator);
             FUN_00154c90((igClut *)self->_pClut, (igClut *)source->_pClut, 1);
@@ -376,7 +360,7 @@ static inline void release(T_1566c0 *object) {
 
 void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, int arg5) {
     igSmartPointer<T_1566c0> converted(0);
-    igSmartPointer<T_1566c0> spare((T_1566c0 *)igImageConvert_Create((int)igObject_GetAllocator((igObject *)arg0)));
+    igSmartPointer<T_1566c0> spare((T_1566c0 *)igImageConvert_Create((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
     int imageSize;
     int bytesPerRow;
     int components;
@@ -385,9 +369,9 @@ void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, 
     int var_s4;
     int var_s3;
     if ((arg1->f84 + (arg1->f64 + (arg1->f72 + (arg1->f40 + (arg1->f36 + (arg1->f28 + arg1->f32)))))) & 7) {
-        void **a = (void **)igObject_GetAllocator((igObject *)arg0);
+        igMemoryPoolView *a = ((Gap::Core::igObject *)arg0)->getMemoryPool();
         release(converted.p);
-        converted.p = (T_1566c0 *)igImage_CreateInstance((int)a);
+        converted.p = (T_1566c0 *)igImage_CreateInstance(a);
         T_1566c0 *created = converted.p;
         if (!(FUN_00157200((igImage *)created, FUN_0015ac10(arg1->f44), (igImage *)arg1) & 0xFF)) {
             return;
@@ -408,7 +392,7 @@ void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, 
     arg0->f16 = components;
     arg0->f76 = bytesPerRow;
     {
-        void **alloc = (void **)igObject_GetAllocator((igObject *)arg0);
+        void **alloc = (void **)((Gap::Core::igObject *)arg0)->getMemoryPool();
         void **v;
         if (g_useOwnerAllocator != 0) {
             v = alloc;
@@ -428,7 +412,7 @@ void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, 
         var_s5 += arg0->f76;
     }
     if (arg1->f68 != 0) {
-        void **a2 = (void **)igObject_GetAllocator((igObject *)arg0);
+        void **a2 = (void **)((Gap::Core::igObject *)arg0)->getMemoryPool();
         release(arg0->f68);
         arg0->f68 = (T_1566c0 *)igClut_Create((int)a2);
         FUN_00154c90((igClut *)arg0->f68, (igClut *)arg1->f68, 1);
@@ -463,7 +447,7 @@ void FUN_00156b20(S0_156b20 *arg0, S1_156b20 *arg1) {
     arg0->f44 = (int)(arg1);
 }
 void FUN_00156ba0(igImage *self, int width, int height, igImage *source) {
-    igSmartPointer<igImageConvertRows> convert((igImageConvertRows *)igImageConvert_Create((int)igObject_GetAllocator(self)));
+    igSmartPointer<igImageConvertRows> convert((igImageConvertRows *)igImageConvert_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
     if (source == 0) {
         source = self;
     } else {
@@ -555,7 +539,7 @@ void FUN_00156ba0(igImage *self, int width, int height, igImage *source) {
     self->_pImage = (int)pixels;
     self->_localImage = 1;
     if (FUN_00159f70(source->_pfmt) && source != self && source->_pClut != 0) {
-        igSmartPointer<igObject> clut((igObject *)igClut_Create((int)igObject_GetAllocator(self)));
+        igSmartPointer<igObject> clut((igObject *)igClut_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
         FUN_00154c90((igClut *)clut.p, (igClut *)source->_pClut, 1);
         FUN_00156b20((S0_156b20 *)self, (S1_156b20 *)clut.p);
     }
@@ -583,7 +567,7 @@ bool FUN_00157140(O_157140 *arg0, int arg1, igSmartPointer<igImageConvertRows> c
 
 
 unsigned char FUN_00157200(igImage *self, int format, igImage *source) {
-    igSmartPointer<igImageConvertRows> convert((igImageConvertRows *)igImageConvert_Create((int)igObject_GetAllocator(self)));
+    igSmartPointer<igImageConvertRows> convert((igImageConvertRows *)igImageConvert_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
     int sourceFormat;
     igImageRowConvert rowConvert;
     int sourceBytesPerRow;
@@ -827,7 +811,7 @@ void FUN_001585d0(S_1585d0 *arg0) {
         arg0->f34 = 0;
     }
     igImage_UpdateFormatInfo((igImage *)arg0);
-    var_v0 = (void **)(igObject_GetAllocator((igObject *)arg0));
+    var_v0 = (void **)(((Gap::Core::igObject *)arg0)->getMemoryPool());
     var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : (void **)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage));
     arg0->f34 = ((DW4VC_220_2 *)(var_v0))->vX((int)(arg0->f30), (int)(0x80));
     arg0->f3c = 1;
@@ -840,7 +824,7 @@ void FUN_00158670(ImageView *img, int x, int y, const void *src) {
 
 bool FUN_001586d0(igImage *self) {
     bool result = true;
-    igSmartPointer<igImageConvertView> convert((igImageConvertView *)igImageConvert_Create((int)igObject_GetAllocator(self)));
+    igSmartPointer<igImageConvertView> convert((igImageConvertView *)igImageConvert_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
     switch (self->_pfmt) {
     case 7:
         convert->v25((void *)self->_pImage, self->_px * self->_py, &self->_order);
@@ -922,7 +906,7 @@ int FUN_00158ab0(igImage *self, VStream *file) {
     file->v25(&self->_px, 4, 1);
     file->v25(&self->_py, 4, 1);
     self->_ps = 1;
-    allocator = (void **)igObject_GetAllocator(self);
+    allocator = (void **)((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = (g_useOwnerAllocator != 0) ? allocator : (void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
     self->_pImage = (int)((VAlloc *)allocator)->v53(self->_imageSize, 0x80);
     self->_localImage = 1;
@@ -985,7 +969,7 @@ int FUN_00158cc0(S_158cc0 *arg0, void **arg1) {
         arg0->f64 = 0;
         st->v25(&skippedWord, 4, 1);
         st->v25(&skippedWord, 4, 1);
-        var_v0 = (void **)igObject_GetAllocator((igObject *)arg0);
+        var_v0 = (void **)((Gap::Core::igObject *)arg0)->getMemoryPool();
         var_v0 = (g_useOwnerAllocator != 0) ? var_v0 : (void **)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
         arg0->f52 = ((VAlloc *)var_v0)->v53(arg0->f48, 0x80);
         arg0->f60 = 1;
@@ -1026,7 +1010,7 @@ int FUN_00158f50(S_158f50 *arg0, int arg1) {
     arg0->f36 = 0;
     arg0->f40 = 0;
     arg0->f84 = 0;
-    FUN_00156340((S0_156340 *)arg0, (void **)&ImageName(arg1).text);
+    FUN_00156340((igImage *)arg0, &igStringRef((const char *)arg1));
     if ((arg0->v37(arg1) & 0xFF) == 1) {
         if (arg0->f44 < 0) {
             arg0->f44 = FUN_00159f00(arg0->f16);
@@ -1041,7 +1025,7 @@ int FUN_00158f50(S_158f50 *arg0, int arg1) {
         }
         return 1;
     }
-    igSmartPointer<VStream_158f50> file((VStream_158f50 *)igFile_Create((int)igObject_GetAllocator((igObject *)arg0)));
+    igSmartPointer<VStream_158f50> file((VStream_158f50 *)igFile_Create((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
     int signature;
     if (file.p->v23(arg1, "rb") == 0) {
         return 0;
@@ -1569,7 +1553,7 @@ void FUN_0015a100(S_15a100 *arg0) {
     }
     igImage_UpdateFormatInfo((igImage *)arg0);
     if (arg0->f52 != 0 && n != arg0->f76) {
-        al = (A_15a100 *)igObject_GetAllocator((igObject *)arg0);
+        al = (A_15a100 *)((Gap::Core::igObject *)arg0)->getMemoryPool();
         al = (g_useOwnerAllocator != 0) ? al : (A_15a100 *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleImage);
         buf = al->vX(arg0->f48, 0x80);
         src = arg0->f52;
@@ -1644,18 +1628,19 @@ void FUN_0015a520(void *arg0, int arg1) {
     *(int *)((char *)(arg0) + 8) = (int) (arg1 & 0xFFFF);
 }
 
-void igImage_SetPixels(TextureImage *image, void *pixels, int format, int width, int height)
+void igImage_SetPixels(igImage *self, void *pixels, int format, int width, int height)
 {
+    TextureImage *image = (TextureImage *)self;
     image->setWidth(width);
     image->setHeight(height);
-    igImage_SetDefaultOrder((igImage *)image);
+    igImage_SetDefaultOrder(self);
     image->setFormat(format);
     if (pixels != image->pixels) {
         image->allocateImage();
         memcpy(image->pixels, pixels, (unsigned int)image->imageSize);
     } else {
         image->localImage = 1;
-        igImage_UpdateFormatInfo((igImage *)image);
+        igImage_UpdateFormatInfo(self);
     }
 }
 
@@ -1818,7 +1803,7 @@ int FUN_0015adb0(S0_15adb0 *arg0, int arg1, int arg2, int arg3) {
         var_s1 = arg0->f16 * 4;
     }
     if (arg0->f8 == 0) {
-        temp_v0 = (Rc_15adb0 *)igObject_GetAllocator((igObject *)arg0);
+        temp_v0 = (Rc_15adb0 *)((Gap::Core::igObject *)arg0)->getMemoryPool();
         if (temp_v0 != 0) {
             temp_v0->rc = temp_v0->rc + 1;
         }

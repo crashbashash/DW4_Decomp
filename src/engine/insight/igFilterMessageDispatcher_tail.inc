@@ -17,7 +17,7 @@ igSmartPointer<MessageFilter> igFilterMessageDispatcher_GetFilterOrCreate(Filter
 {
     igSmartPointer<MessageFilter> filter((MessageFilter *)igFilterMessageDispatcher_GetFilter((const A_237990 *)self, (int)target), kRetainReference);
     if (filter == 0) {
-        void *allocator = (void *)igObject_GetAllocator(self);
+        void *allocator = (void *)((Gap::Core::igObject *)self)->getMemoryPool();
         filter.release();
         filter.p = (MessageFilter *)FUN_00231b40((int)allocator);
         filter->_target = target;

@@ -49,6 +49,7 @@
 #include "dw4/cri/sndf.h"
 #include "dw4/cri/cri_adxt.h"
 #include "dw4/core/StringPool.h"
+#include "dw4/core/igStringRef.h"
 #include "dw4/game/ParticleArray.h"
 #include <math.h>
 #include "dw4/maths/igVec4fMetaField.h"
@@ -1018,8 +1019,6 @@ struct B { char pad[16]; struct C **tab; };
 struct A_1562d0 { char pad[308]; struct B *b; };
 extern "C" int FUN_001562d0(struct A_1562d0 *arg0, int arg1);
 extern "C" void FUN_00156300(void);
-typedef struct S0_156340 { char pad88[88]; int f58; } S0_156340;
-extern "C" void FUN_00156340(S0_156340 *arg0, void **arg1);
 struct T_1566c0 : public igObject { };
 /* An igImage pixel format's storage for width x height: image size, components, and row bytes (aligned by the
  * image's slot 43); returns the image size, -1 for 0x8000. */
@@ -1077,7 +1076,7 @@ public:
     virtual void free(void *block);
 };
 static inline igMemoryPoolView *poolOf(igObject *object, const igMemoryPoolHandle &handle) {
-    igMemoryPoolView *pool = igObject_GetAllocator(object);
+    igMemoryPoolView *pool = ((Gap::Core::igObject *)object)->getMemoryPool();
     return (g_useOwnerAllocator != 0) ? pool : Memory_GetAllocatorBySelector(handle);
 }
 class V_157140 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21();  virtual int vm(int, int, int, int, int); };
@@ -1160,31 +1159,6 @@ extern "C" bool FUN_001586d0(igImage *self);
 extern "C" int FUN_00158f40(void);
 class VStream_158f50 : public igVirtualObject { public: virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual int v23(int, const char *); virtual void v24(); virtual int v25(void *, int, int); };
 class S_158f50 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual int v37(int); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual int v42(void *);  char pad4[12]; int f16; char pad20[8]; int f28, f32, f36, f40, f44; char pad48[4]; int f52; char pad56[4]; unsigned char f60; char pad61[3]; int f64; char pad68[4]; int f72; char pad76[8]; int f84; };
-struct ImageName {
-    int text;
-    ImageName(int name) {
-        int interned;
-        if (name == 0) {
-            interned = 0;
-        } else {
-            if (g_stringPool == 0) {
-                StringPool *v = (StringPool *)StringPool_Allocate(16);
-                if (v != 0) v = StringPool_Construct(v);
-                g_stringPool = v;
-            }
-            interned = (int)StringPool_Intern(g_stringPool, (const char *)name);
-        }
-        text = interned;
-    }
-    ~ImageName() {
-        if (text != 0) {
-            int *hd = (int *)text - 2;
-            int c = ((int *)text)[-1] - 1;
-            ((int *)text)[-1] = c;
-            if (c == 0) StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd);
-        }
-    }
-};
 extern "C" int FUN_00158f50(S_158f50 *arg0, int arg1);
 extern "C" int FUN_001592a0(void);
 extern "C" int FUN_001592b0(void);
@@ -1822,46 +1796,6 @@ struct igVertexFormat {
     }
 };
 extern "C" void FUN_00164e90(igVertexFormat *out, const igVertexFormat *a, const igVertexFormat *b);
-/* igVertexArray's per-vertex accessors (vtable slots 29-56): each array has a setter and, one slot later, a getter. */
-class igVertexArrayAccess : public igVirtualObject {
-public:
-    virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8();
-    virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14();
-    virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual void d21(); virtual void d22(); virtual void d23();
-    /* Allocates the arrays `format` names for `vertexCount` vertices from `pool`. */
-    virtual void configure(igVertexFormat *format, unsigned int vertexCount, unsigned int count2, int pool);
-    virtual void d25(); virtual void d26();
-    virtual void d27(); virtual void d28();
-    virtual void setPosition(unsigned int index, igVec3f *position);
-    virtual void getPosition(unsigned int index, igVec3f *position);
-    virtual void d31();
-    virtual void setNormal(unsigned int index, igVec3f *normal);
-    virtual void getNormal(unsigned int index, igVec3f *normal);
-    virtual void d34();
-    virtual void v35(unsigned int index, igVec4f *value);
-    virtual void v36(unsigned int index, igVec4f *value);
-    virtual void d37();
-    virtual void v38(unsigned int index, igVec4f *value);
-    virtual void v39(unsigned int index, igVec4f *value);
-    virtual void d40();
-    virtual void setColor(unsigned int index, unsigned int color);
-    virtual void d42();
-    virtual unsigned int getColor(unsigned int index);
-    virtual void d44();
-    virtual void setWeight(unsigned int weight, unsigned int index, float value);
-    virtual float getWeight(unsigned int weight, unsigned int index);
-    virtual void d47();
-    virtual void setBlendIndex(unsigned int blend, unsigned int index, unsigned char value);
-    virtual int getBlendIndex(unsigned int blend, unsigned int index);
-    virtual void setTextureCoord(unsigned int set, unsigned int index, igVec2f *coord);
-    virtual void getTextureCoord(unsigned int set, unsigned int index, igVec2f *coord);
-    virtual void d52();
-    virtual void setPointSize(unsigned int index, float size);
-    virtual float getPointSize(unsigned int index);
-    virtual void setPointSize2(unsigned int index, igVec2f size);
-    virtual void getPointSize2(unsigned int index, igVec2f *size);
-};
 /* igVertexArray2 as its internal-buffer conversion uses it: slot 23 (+100) answers the vertex count. */
 class igVertexArray2View : public igVirtualObject {
 public:
@@ -2206,7 +2140,7 @@ struct V_15ff10 { float x, y, z; };
 struct A28 {
     char pad[8]; int f8; char pad2[4]; V_15ff10 *f16;
     static inline A28 *Cast(A28 *p) {
-        if (p != 0 && igObject_IsKindOf((igObject *)p, g_igVec3fList_metaObject) != 0) {
+        if (p != 0 && ((Gap::Core::igObject *)p)->isOfType(g_igVec3fList_metaObject) != 0) {
             return p;
         }
         return 0;
@@ -2284,7 +2218,7 @@ struct V53 { float x, y; };
 struct A53 {
     char pad[8]; int f8; char pad2[4]; V53 *f16;
     static inline A53 *Cast(A53 *p) {
-        if (p != 0 && igObject_IsKindOf((igObject *)p, g_igVec2fList_metaObject) != 0) {
+        if (p != 0 && ((Gap::Core::igObject *)p)->isOfType(g_igVec2fList_metaObject) != 0) {
             return p;
         }
         return 0;
@@ -2825,7 +2759,6 @@ struct OB1d0;
 extern "C" void p2CallDisplayList(p2DisplayList *list);
 
 extern "C" void FUN_0017a540(igPsx2VisualContext *vc, int keepLists);
-extern "C" void igImage_SetPixels(TextureImage *image, void *pixels, int format, int width, int height);
 
 extern "C" void FUN_00203580(void *source, int sourceFormat, int width, int height, int layout, void *pixels, int flags);
 extern "C" void FUN_00203c50(void *source, int sourceFormat, int width, int height, int layout, void *pixels, int flags);
@@ -3210,32 +3143,6 @@ struct ReaderRef {
         if ((o = p) != 0) {
             o->_refCount = o->_refCount - 1;
             if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
-    }
-};
-struct PathText;
-struct PathText {
-    int text;
-    PathText(int path) {
-        int a;
-        if (path == 0) {
-            a = 0;
-        } else {
-            if (g_stringPool == 0) {
-                StringPool *t = (StringPool *)StringPool_Allocate(0x10);
-                if (t != 0) t = StringPool_Construct(t);
-                g_stringPool = t;
-            }
-            a = (int)StringPool_Intern(g_stringPool, (const char *)path);
-        }
-        text = a;
-    }
-    ~PathText() {
-        if (text != 0) {
-            int *h = (int *)text - 2;
-            int t = ((int *)text)[-1] - 1;
-            ((int *)text)[-1] = t;
-            if (t == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h);
         }
     }
 };

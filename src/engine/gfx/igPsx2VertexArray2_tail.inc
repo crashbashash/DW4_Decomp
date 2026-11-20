@@ -1,6 +1,6 @@
 int Gap__Gfx__igPsx2VertexArray2__vfunc_23(igVertexArray2 *array, int primitive, int arg2, Info *info, Disp *display) {
     if (array->_vertexStream == 0) {
-        igSmartPointer<Rc_17f2b0> created((Rc_17f2b0 *)igVertexStream_Create((int)igObject_GetAllocator(array)));
+        igSmartPointer<Rc_17f2b0> created((Rc_17f2b0 *)igVertexStream_Create((int)((Gap::Core::igObject *)array)->getMemoryPool()));
         Rc_17f2b0 *stream = created.p;
         if (stream != 0) stream->_refCount = stream->_refCount + 1;
         Rc_17f2b0 *old = (Rc_17f2b0 *)array->_vertexStream;
@@ -12,7 +12,7 @@ int Gap__Gfx__igPsx2VertexArray2__vfunc_23(igVertexArray2 *array, int primitive,
     }
     igVertexStream *vs = (igVertexStream *)array->_vertexStream;
     if (vs->_isConfigured != 0) return 1;
-    igSmartPointer<Rc_17f2b0> format((Rc_17f2b0 *)igVertexDataList_Create((int)igObject_GetAllocator(array)));
+    igSmartPointer<Rc_17f2b0> format((Rc_17f2b0 *)igVertexDataList_Create((int)((Gap::Core::igObject *)array)->getMemoryPool()));
     FUN_0015f660(array, format);
     if (info != 0 && info->f12 > 1 && !(primitive & 0x2000)) {
         switch (primitive) {

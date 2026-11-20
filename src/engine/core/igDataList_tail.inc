@@ -11,7 +11,7 @@ void List_Reserve(igDataList *list, int capacity, int elementSize) {
         int oldData = list->_data;
         igMemoryRefMetaField *field = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(((igObjectDispatchView *)list)->GetMeta(), g_igDataList_dataField->_internalIndex);
         unsigned elementCount = (unsigned)(capacity * elementSize) / (unsigned)(((igMetaFieldView *)field->_memType)->GetSize() & 0xFFFF);
-        igMetaField_AllocateArray(&allocResult, field, (void *)list, elementCount, (igMemoryPoolView *)(((int)igObject_GetAllocator((igObject *)list))));
+        igMetaField_AllocateArray(&allocResult, field, (void *)list, elementCount, (igMemoryPoolView *)(((int)((Gap::Core::igObject *)list)->getMemoryPool())));
         if (oldData != 0) {
             int oldCapacity = list->_capacity;
             int copyCount = (oldCapacity < capacity) ? oldCapacity : capacity;

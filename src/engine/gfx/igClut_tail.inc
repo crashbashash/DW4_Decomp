@@ -175,7 +175,7 @@ int FUN_00154f30(Arr *self, int arg1) {
     int a, b;
     int i;
     int *p;
-    a = (int)igObject_GetAllocator((igObject *)self);
+    a = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     if (g_useOwnerAllocator != 0) { b = a; } else { b = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary); } a = b;
     igSmartPointer<DW4VC_100_2> h((DW4VC_100_2 *)igFile_Create(a), kRetainReference);
     { DW4VC_100_2 *x = h.p; --x->_refCount; if ((x->_refCount & 0x7fffff) == 0) igObject_Destroy(x); }

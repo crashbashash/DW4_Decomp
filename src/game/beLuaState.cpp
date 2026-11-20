@@ -34,7 +34,7 @@ void beLuaState_userDestruct(beLuaState *self) {
     int allocator;
 
     if (self->_lp != 0) {
-        allocator = (int)igObject_GetAllocator(self);
+        allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         Memory_FreeBufferWithAllocator((void *)self->_lp, (igMemoryPoolView *)allocator);
     }
@@ -52,13 +52,13 @@ int beLuaState_RunFile(beLuaState *self, const char *fileName) {
     char *buffer;
     int length;
     bool found;
-    allocator = (int)igObject_GetAllocator((igObject *)self);
+    allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     igSmartPointer<igObject> locator(beFileChkObj_Create(allocator));
     if (beFileChkObj_FileExists((beFileChkObj *)locator.p, fileName) == 0) {
         return 2;
     }
-    allocator = (int)igObject_GetAllocator(self);
+    allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     ReaderRef reader(igAdxFile_Create(allocator));
     if (((igFileDispatchView *)reader.p)->OpenFile(fileName, "rb") == 0) {
@@ -66,11 +66,11 @@ int beLuaState_RunFile(beLuaState *self, const char *fileName) {
     }
     fileSize = igAdxFile_GetFileSize((igAdxFile *)reader.p);
     if (self->_lp != 0) {
-        allocator = (int)igObject_GetAllocator(self);
+        allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         Memory_FreeBufferWithAllocator((void *)self->_lp, (igMemoryPoolView *)allocator);
     }
-    allocator = (int)igObject_GetAllocator(self);
+    allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     self->_lp = (int)Memory_AllocateAlignedWithAllocator(fileSize, 0x40, (igMemoryPoolView *)allocator);
     if (self->_lp == 0) {

@@ -1,7 +1,7 @@
 void igGuiComponentNode_resetFields(Node *self, int flags) {
     Vec3 origin;
     Gap__Sg__igNode__resetFields((igNode *)self, flags);
-    igSmartPointer<igObject> transform(igAABox_CreateInstance((int)(igObject_GetAllocator(self))));
+    igSmartPointer<igObject> transform(igAABox_CreateInstance((int)(((Gap::Core::igObject *)self)->getMemoryPool())));
     origin.x = 0;
     origin.y = 0;
     origin.z = 0;

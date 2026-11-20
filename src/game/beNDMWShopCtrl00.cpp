@@ -330,7 +330,7 @@ extern "C" char OFPREVIEW_2[];
 /* The window's own allocator, or the default selector's when owner allocation is off. */
 static inline void *OwnerAllocator(void *owner)
 {
-    void *allocator = igObject_GetAllocator((igObject *)owner);
+    void *allocator = ((Gap::Core::igObject *)owner)->getMemoryPool();
     if (g_useOwnerAllocator != 0) return allocator;
     return Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 }
@@ -403,7 +403,7 @@ template <class Window> static inline int CurrentState(const Window *window)
 
 /* The owner's allocator, or the default selector's when owner allocation is off. */
 #define PICK_ALLOCATOR(allocator, owner) { \
-    allocator = igObject_GetAllocator(owner); \
+    allocator = ((Gap::Core::igObject *)(owner))->getMemoryPool(); \
     allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
 #define CHILD_COUNT(window) (((igObjectList *)(window)->_subWindow)->_count)
 #define ObjectList_Count(list) (((igObjectList *)(list))->_count)
@@ -508,7 +508,7 @@ struct PagedWindow {
 /* The window as a device list, or null when it is another kind of window. */
 static inline beNDMWStatusCtrlD0 *AsDeviceList(igObject *window)
 {
-    if (window != 0 && igObject_IsKindOf(window, g_beNDMWStatusCtrlD0_metaObject) != 0) {
+    if (window != 0 && ((Gap::Core::igObject *)window)->isOfType(g_beNDMWStatusCtrlD0_metaObject) != 0) {
         return (beNDMWStatusCtrlD0 *)window;
     }
     return 0;
@@ -517,7 +517,7 @@ static inline beNDMWStatusCtrlD0 *AsDeviceList(igObject *window)
 /* The window as a player title, or null when it is another kind of window. */
 static inline beNDMWStatusTitle01 *AsPlayerTitle(igObject *window)
 {
-    if (window != 0 && igObject_IsKindOf(window, g_beNDMWStatusTitle01_metaObject) != 0) {
+    if (window != 0 && ((Gap::Core::igObject *)window)->isOfType(g_beNDMWStatusTitle01_metaObject) != 0) {
         return (beNDMWStatusTitle01 *)window;
     }
     return 0;
@@ -526,7 +526,7 @@ static inline beNDMWStatusTitle01 *AsPlayerTitle(igObject *window)
 /* The page selector, when the first child window is one. */
 static inline beNDMWWindowSelect *AsPageSelector(igObject *window)
 {
-    if (window != 0 && igObject_IsKindOf(window, g_beNDMWStatusSelectE1_metaObject) != 0) {
+    if (window != 0 && ((Gap::Core::igObject *)window)->isOfType(g_beNDMWStatusSelectE1_metaObject) != 0) {
         return (beNDMWWindowSelect *)window;
     }
     return 0;

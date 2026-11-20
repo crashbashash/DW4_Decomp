@@ -66,7 +66,7 @@ void beNDMWMdlEffect_OnGenerate(beNDMWMdlEffect *self, beBaseInfoRam *ram) {
     igMemoryPoolView *alloc;
     igMemoryPoolView *a;
     if (ram->_dataList == 0) {
-        alloc = igObject_GetAllocator(ram);
+        alloc = ((Gap::Core::igObject *)ram)->getMemoryPool();
         if (g_useOwnerAllocator != 0) {
             a = alloc;
         } else {
@@ -75,7 +75,7 @@ void beNDMWMdlEffect_OnGenerate(beNDMWMdlEffect *self, beBaseInfoRam *ram) {
         DataList::create(ram, a);
     }
     s1 = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
-    alloc = igObject_GetAllocator(self);
+    alloc = ((Gap::Core::igObject *)self)->getMemoryPool();
     if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {

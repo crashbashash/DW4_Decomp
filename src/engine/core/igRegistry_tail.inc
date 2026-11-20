@@ -22,13 +22,13 @@ bool igRegistry_Load(igRegistry *self, char *name, char *dir) {
             dir = ((char *)igObjectSystem_GetRootPath((int *)(((*(void * *)&g_objectSystem)))));
         }
         if (dir != 0 && strlen(dir) != 0) {
-            igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)igObject_GetAllocator((igObject *)self))));
+            igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
             folder.p->setFolderName(dir);
             found = openPath(self, folder.p->GetFullPath(held.p));
         }
     }
     if (found == 0) {
-        igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)igObject_GetAllocator((igObject *)self))));
+        igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
         folder.p->setFolderName(((char *)igObjectSystem_GetBasePath((int *)(((*(void * *)&g_objectSystem))))));
         found = openPath(self, folder.p->GetFullPath(held.p));
     }
@@ -95,7 +95,7 @@ int igRegistry_GetSectionIndex(igRegistry *self, char *name, int create) {
         }
     }
     if (create != 0) {
-        igSmartPointer<igStringObj> section((igStringObj *)igStringObj_Create((int)igObject_GetAllocator((igObject *)self)));
+        igSmartPointer<igStringObj> section((igStringObj *)igStringObj_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
         igStringObj_Set(section.get(), name);
         ObjectList_AppendRetained((igObjectList *)self->_additionalSectionNames, section.get());
         return n + 11;
@@ -190,7 +190,7 @@ int igRegistry_GetValueStringObj(igRegistry *registry, int section, const char *
         }
         *out = string;
     } else {
-        igSmartPointer<igStringObj> created((igStringObj *)igStringObj_Create(((int)igObject_GetAllocator((igObject *)registry))));
+        igSmartPointer<igStringObj> created((igStringObj *)igStringObj_Create(((int)((Gap::Core::igObject *)registry)->getMemoryPool())));
         igStringObj_Set(created.p, defaultValue);
         string = created.p;
         if (string) {
@@ -312,7 +312,7 @@ bool igRegistry_GetValueStringList(void *self, int section, const char *key, igS
     p = igRegistry_FindValue((igRegistry *)self, section, key, 0);
     if (p != 0) {
         igStringObj_Split((igStringObj *)p->_value, 0x2C, (igTDataList<char *> *)list);
-        *(igStringObj **)&a = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
+        *(igStringObj **)&a = (igStringObj *)(igStringObj_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
         for (i = 0; i < list->_count; i++) {
             {
                 igStringRef r1 = StringList_CopyRetained(list, i);
@@ -332,7 +332,7 @@ bool igRegistry_GetValueStringList(void *self, int section, const char *key, igS
             }
         }
     } else if (create != 0) {
-        *(igStringObj **)&b = (igStringObj *)(igStringObj_Create(((int)igObject_GetAllocator((igObject *)self))));
+        *(igStringObj **)&b = (igStringObj *)(igStringObj_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
         n = list->_count;
         if (n != 0) {
             igStringRef r2 = StringList_CopyRetained(list, 0);
@@ -732,7 +732,7 @@ igRegistryValue *igRegistry_FindValue(igRegistry *self, int section, const char 
             freeSlot = ((igRegistryValueList *)self->_valueTable)->_count;
             ObjectList_ResizeRetained((igTDataList<igObject *> *)(((igRegistryValueList *)self->_valueTable)), freeSlot * 2);
         }
-        entry = ((int)igObject_GetAllocator((igObject *)self));
+        entry = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
         old = r.p;
         if (old != 0) {
             old->_refCount = old->_refCount - 1;
@@ -782,9 +782,9 @@ void igRegistry_ProcessInclude(igRegistry *self, igFileView *file, char *line, i
     if ((open == '"' && close != '"') || (open == '<' && close != '>')) return;
     if (g_registryIncludeDepth < 12) {
         g_registryIncludeDepth += 1;
-        igSmartPointer<igRegistry> include((igRegistry *)igRegistry_Create((int)igObject_GetAllocator((igObject *)self)));
+        igSmartPointer<igRegistry> include((igRegistry *)igRegistry_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
         found = 0;
-        igSmartPointer<igStringObj> directory((igStringObj *)igStringObj_Create((int)igObject_GetAllocator((igObject *)self)));
+        igSmartPointer<igStringObj> directory((igStringObj *)igStringObj_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
         igStringObj_Set(directory.get(), file->_fileName);
         igStringObj_RemovePathFilename(directory.get());
         if (directory.get()->_length != 0) {
@@ -969,10 +969,10 @@ static inline void setValues(igResource *self, const igSmartPointer<igObject> &v
 
 void igResource_AddAlignment(igResource *self, const char *name, int value) {
     if (self->_alignmentStrings == 0) {
-        setNames(self, igSmartPointer<igObject>((igObject *)igStringObjList_Create((int)(((void *)igObject_GetAllocator((igObject *)self))))));
-        setValues(self, igSmartPointer<igObject>((igObject *)igIntList_Create((int)(((void *)igObject_GetAllocator((igObject *)self))))));
+        setNames(self, igSmartPointer<igObject>((igObject *)igStringObjList_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool())))));
+        setValues(self, igSmartPointer<igObject>((igObject *)igIntList_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool())))));
     }
-    igSmartPointer<igStringObj> entry((igStringObj *)igStringObj_Create((int)(((void *)igObject_GetAllocator((igObject *)self)))));
+    igSmartPointer<igStringObj> entry((igStringObj *)igStringObj_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool()))));
     igStringObj_Set(entry.p, name);
     ObjectList_AppendRetained((igObjectList *)self->_alignmentStrings, (igObject *)entry.p);
     igTDataList<int> *values = (igTDataList<int> *)self->_alignmentValues;
@@ -1004,7 +1004,7 @@ igDirectory *igResource_GetImageDirectory(igResource *self) {
         int s2;
         igDirectory *s0;
         int old;
-        setImageDirectory(self, igSmartPointer<igDirectory>(((igDirectory *)igDirectory_Create((int)igObject_GetAllocator((igObject *)self)))));
+        setImageDirectory(self, igSmartPointer<igDirectory>(((igDirectory *)igDirectory_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()))));
         s0 = (igDirectory *)self->_imageDirectory;
         if (0 == g_stringPool) {
             v = ((int)StringPool_Allocate(16));

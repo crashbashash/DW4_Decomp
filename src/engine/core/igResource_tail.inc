@@ -1,7 +1,7 @@
 int g_resourceLoaderStackSize = 0x100000;
 
 void igResource_StartAsyncLoading(igResourceView *self) {
-    self->_loadQueue = (igStandardQueueView *)igSmartPointer<igObject>((igObject *)igQueue_Create((int)igObject_GetAllocator((igObject *)self))).get();
+    self->_loadQueue = (igStandardQueueView *)igSmartPointer<igObject>((igObject *)igQueue_Create((int)((Gap::Core::igObject *)self)->getMemoryPool())).get();
     self->_loadQueue->Create();
     self->_loadThread = (igPsx2ThreadView *)igQueue_StartServiceThread(self->_loadQueue, (int)&igResource_AsyncLoadThreadProc, g_resourceLoaderStackSize);
     self->_loadThread->SetPriority(255);
@@ -63,7 +63,7 @@ void igResource_ReleaseDefaults(igResource *self) {
 }
 
 /* The pool the resource assigns to its files: the configured one, else the resource's own allocator. */
-#define RESOURCE_POOL(self, pool) ((self)->pool != 0 ? (igObject *)(self)->pool : (igObject *)igObject_GetAllocator((igObject *)(self)))
+#define RESOURCE_POOL(self, pool) ((self)->pool != 0 ? (igObject *)(self)->pool : (igObject *)((Gap::Core::igObject *)(self))->getMemoryPool())
 
 /* Returns the directory named `path`, else creates its IGB file (configured like the resource's
  * files, in the resource's pools) and reads it synchronously through the search paths. */
@@ -275,7 +275,7 @@ void igResource_RemoveIGBFiles(igResource *self) {
     igObject *o;
     for (i = ((igTDataList<igObject *> *)self->_directoryList)->_count - 1; i >= 0; i--) {
         off = i * 4;
-        if (igObject_IsKindOf((igObject *)(*(igObject **)((char *)((igTDataList<igObject *> *)self->_directoryList)->_data + off)), (igMetaObject *)((int)g_igIGBFile_metaObject)) != 0) {
+        if (((Gap::Core::igObject *)(*(igObject **)((char *)((igTDataList<igObject *> *)self->_directoryList)->_data + off)))->isOfType((igMetaObject *)((int)g_igIGBFile_metaObject)) != 0) {
             l = (igTDataList<igObject *> *)self->_directoryList;
             o = *(igObject **)((char *)l->_data + off);
             if (o != 0) {
@@ -306,7 +306,7 @@ int igDirectory_GetNthObjectOfType(igResource *resource, const char *name, const
     }
     found = 0;
     for (i = 0; i < (unsigned int)igDirectory_GetInfoCount(directory.get()); i++) {
-        if (igObject_IsKindOf((igObject *)igDirectory_GetInfo(directory.get(), i), (igMetaObject *)meta.get()) != 0) {
+        if (((Gap::Core::igObject *)(igDirectory_GetInfo(directory.get(), i)))->isOfType((igMetaObject *)meta.get()) != 0) {
             if (found++ == wanted) {
                 return igDirectory_GetInfo(directory.get(), i);
             }
@@ -316,7 +316,7 @@ int igDirectory_GetNthObjectOfType(igResource *resource, const char *name, const
 }
 
 static inline igObjectDirEntryView *AsObjectDirEntry(void *p) {
-    if (p != 0 && igObject_IsKindOf((igObject *)p, (igMetaObject *)g_igObjectDirEntry_metaObject) != 0) { return (igObjectDirEntryView *)p; }
+    if (p != 0 && ((Gap::Core::igObject *)p)->isOfType((igMetaObject *)g_igObjectDirEntry_metaObject) != 0) { return (igObjectDirEntryView *)p; }
     return 0;
 }
 
@@ -338,7 +338,7 @@ void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromNa
             count = directory->_count;
             for (i = 0; i < count; i++) {
                 entry = AsObjectDirEntry(igDirectory_GetEntry((int *)directory, i));
-                if (entry != 0 && igObject_IsKindOf((igObject *)entry->_ref, fromMeta) != 0) {
+                if (entry != 0 && ((Gap::Core::igObject *)entry->_ref)->isOfType(fromMeta) != 0) {
                     if (toMeta == 0) return;
                     igSmartPointer<igObject> source((igObject *)entry->_ref, kRetainReference);
                     igSmartPointer<igObject> target((igObject *)igMetaObject_CreateInstanceDefault(toMeta), kRetainReference);
@@ -353,7 +353,7 @@ void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromNa
                         igMetaField *from = (igMetaField *)igMetaObject_GetFieldAt(fromMeta, field);
                         igMetaField *to = (igMetaField *)igMetaObject_FindFieldByName(toMeta, (const char *)from->_fieldName);
                         if (to != 0) {
-                            bool compatible = igObject_IsKindOf(to, ((igObjectDispatchView *)from)->GetMeta()) != 0;
+                            bool compatible = ((Gap::Core::igObject *)to)->isOfType(((igObjectDispatchView *)from)->GetMeta()) != 0;
                             /* matching construct: the negation is materialised (sltu; xori; bnez); `!compatible`
                              * folds into the branch, and only the explicit xor keeps it (understanding-shapes.md,
                              * "A negated flag ... normalises first") */
@@ -362,7 +362,7 @@ void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromNa
                         }
                     }
                     igDirectory_ReplaceReference((igDirectoryView *)directory, igSmartPointer<igVirtualObject>(source), igSmartPointer<igVirtualObject>(target));
-                    if (igObject_IsKindOf(target.p, (igMetaObject *)g_igInfo_metaObject) != 0) {
+                    if (((Gap::Core::igObject *)target.p)->isOfType((igMetaObject *)g_igInfo_metaObject) != 0) {
                         igDirectory_AddInfo(directory, target.p);
                     }
                 }
@@ -379,7 +379,7 @@ void igResource_WrapRootInSceneInfo(int directory) {
         nodeMeta = igObjectSystem_FindMetaByNameDefault((const char *)"igNode");
         if (nodeMeta != 0) {
             root = ((void *)igDirectory_GetObjectByName(directory, (int)"root"));
-            if (root != 0 && igObject_IsKindOf((igObject *)root, (igMetaObject *)nodeMeta) != 0) {
+            if (root != 0 && ((Gap::Core::igObject *)root)->isOfType((igMetaObject *)nodeMeta) != 0) {
                 infoMeta = igObjectSystem_FindMetaByNameDefault((const char *)"igSceneInfo");
                 if (infoMeta != 0) {
                     igObject *t;

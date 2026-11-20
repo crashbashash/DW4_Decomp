@@ -1,5 +1,5 @@
 int igWindowResizeEventReceiver_WindowResizeEvent(Receiver *self, int width, int height) {
-    igSmartPointer<ResizeEvent> event((ResizeEvent *)FUN_002332b0((int)(igObject_GetAllocator((igObject *)self))));
+    igSmartPointer<ResizeEvent> event((ResizeEvent *)FUN_002332b0((int)(((Gap::Core::igObject *)self)->getMemoryPool())));
     {
         ResizeEvent *e = event.get();
         e->origin[0] = DAT_004e0fa0[0];
@@ -68,7 +68,7 @@ void igInsightCore_RegisterAllPlugins(igInsightCore *core) {
     count = igMetaObject_CountTree((igMetaObject *)(meta = (int)igInsightPlugin_GetMetaObject()));
     for (i = 0; i < count; i++) {
         int type = (int)(igMetaObject_GetTreeNode((igMetaObject *)meta, i));
-        igSmartPointer<Instance> plugin((Instance *)igMetaObject_CreateInstanceRef((igMetaObject *)type, igObject_GetAllocator((igObject *)self)).get(), kRetainReference);
+        igSmartPointer<Instance> plugin((Instance *)igMetaObject_CreateInstanceRef((igMetaObject *)type, ((Gap::Core::igObject *)self)->getMemoryPool()).get(), kRetainReference);
         if (plugin.get()) {
             igInsightCore_RegisterPlugin((igInsightCore *)self, (void **)plugin.get());
         }

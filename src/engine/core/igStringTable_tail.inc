@@ -276,7 +276,7 @@ void igStringTable_SetHashing(igStringTableView *self, int enable) {
     igStringTable_SetHashCapacity((int)self, enable);
     if (enable != 0) {
         if (self->_hashIndex == 0) {
-            alloc = ((int)igObject_GetAllocator((igObject *)self));
+            alloc = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
             old = self->_hashIndex;
             if (old != 0) {
                 --old->_refCount;

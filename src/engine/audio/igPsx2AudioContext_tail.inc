@@ -6,7 +6,7 @@ void Gap__igPsx2AudioContext__vfunc_23(ContextView *arg0, int arg1) {
 }
 
 void igPsx2AudioContext_InitDefaults(igPsx2AudioContext *self) {
-    igMemoryPoolView *allocator = igObject_GetAllocator((igObject *)self);
+    igMemoryPoolView *allocator = ((Gap::Core::igObject *)self)->getMemoryPool();
     g_audioTableOwner.release();
     g_audioTableOwner.p = (igPsx2AudioSourceList *)igPsx2AudioSourceList_Create(allocator);
 }
@@ -80,7 +80,7 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
             return;
         }
     }
-    s0 = (int)igObject_GetAllocator((igObject *)arg1);
+    s0 = (int)((Gap::Core::igObject *)arg1)->getMemoryPool();
     o = arg1->conn;
     if (o != 0) {
         o->rc = o->rc - 1;
@@ -288,7 +288,7 @@ int Gap__igPsx2AudioContext__vfunc_51(igPsx2AudioContext *self) {
     int replyBuffer;
     igMemoryPoolView *allocator;
 
-    allocator = igObject_GetAllocator((igObject *)self);
+    allocator = ((Gap::Core::igObject *)self)->getMemoryPool();
     replyBuffer = ((AllocatorAllocateSlot *)(allocator))->Allocate((int)(0x20), (int)(0x10));
     igPsx2IopRpcConnection_Call((igPsx2IopRpcConnectionView *)self->_connection, 0x10000, 0, 0, (void *)replyBuffer, 0x20, 0);
     return replyBuffer;

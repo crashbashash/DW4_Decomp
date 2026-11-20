@@ -7,7 +7,7 @@
 #define STICK_LEFT 8
 #define BUTTON_RIGHT 0x20
 #define BUTTON_LEFT 0x80
-#define NEWWIN(H, var, ctor, ga) { al = igObject_GetAllocator(ga);  al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);  igSmartPointer<H> var((H *)ctor(al));  beNDMWWindow_BindContext(var.p, self, self->_insight, self->_playerNo, 0);  lst = self->_subWindow;  ObjectList_AppendRetained(lst, var.p); }
+#define NEWWIN(H, var, ctor, ga) { al = ((Gap::Core::igObject *)(ga))->getMemoryPool();  al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);  igSmartPointer<H> var((H *)ctor(al));  beNDMWWindow_BindContext(var.p, self, self->_insight, self->_playerNo, 0);  lst = self->_subWindow;  ObjectList_AppendRetained(lst, var.p); }
 #define GRP(a, b) { beMessenger_SelectGroup((beMessenger *)self->_messenger, LAYERCTL);  beMessenger_AppendString((beMessenger *)self->_messenger, &a[0]);  beMessenger_AppendString((beMessenger *)self->_messenger, &b[0]);  beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4); }
 #define NEXT0() { self->_st1 = self->_st1 + 1; self->_st3 = 0; self->_st2 = 0; }
 #define FIN(a) { self->_st1 = a; self->_st3 = 0; self->_st2 = 0; }
@@ -26,7 +26,7 @@
 #define PUSHB(LP, B) { int n_; igUnsignedCharList *l_ = (igUnsignedCharList *)(LP); n_ = l_->_count; if (n_ < l_->_capacity) { l_->_count = n_ + 1; } else { List_Resize(l_, n_ + 1, 1); } ((unsigned char *)l_->_data)[n_] = (B); }
 #define SETB(LP, IDX, B) { igUnsignedCharList *l_ = (igUnsignedCharList *)(LP); if (l_->_count != 0 && (IDX) >= 0 && (IDX) < l_->_count) { ((unsigned char *)l_->_data)[(IDX)] = (B); } }
 #define SWV(h) ((igObjectList *)*(int *)&(h))
-#define FIND(W) { int i_; (W) = 0; for (i_ = 0; i_ < ((igObjectList *)p->_subWindow)->_count; i_++) { (W) = ((int *)SWV(p->_subWindow)->_data)[i_]; if ((W) && igObject_IsKindOf((igObject *)(W), g_beNDMWStatusCtrlD0_metaObject)) { (W) = (int)(int *)(W); } else { (W) = 0; } if ((W)) break; } }
+#define FIND(W) { int i_; (W) = 0; for (i_ = 0; i_ < ((igObjectList *)p->_subWindow)->_count; i_++) { (W) = ((int *)SWV(p->_subWindow)->_data)[i_]; if ((W) && ((Gap::Core::igObject *)(W))->isOfType(g_beNDMWStatusCtrlD0_metaObject)) { (W) = (int)(int *)(W); } else { (W) = 0; } if ((W)) break; } }
 #define SETSLOT(L, IDX, V_) { Obj *v_ = (V_); Obj *old_; if (v_ != 0) { v_->_refCount = v_->_refCount + 1; } old_ = ((Obj **)(L)->_data)[(IDX)]; if (old_ != 0) { --old_->_refCount; if (((unsigned long long)(long long)(int)old_->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old_); } if ((L)->_count != 0 && (IDX) >= 0 && (IDX) < (L)->_count) { ((Obj **)(L)->_data)[(IDX)] = v_; } }
 /* matching construct: cxx_sweep — the item is read inside its retain test */
 #define SET_ITEM(IDX, ITEM) { Obj *v; int r = (IDX); igObjectList *l = (igObjectList *)p->_powerSocket; \
@@ -100,14 +100,14 @@ static inline int RowIndex(int pageBase, int row) { return pageBase + row; }
 #define REL(o) { igObject *rr = (igObject *)(o); if (rr != 0) { rr->_refCount = rr->_refCount - 1; if ((rr->_refCount & 0x7FFFFF) == 0) { igObject_Destroy(rr); } } }
 #define LIST_CLEAR_AT(L, i) { REL((L)->_data[i]); \
     if ((L)->_count != 0 && (i) >= 0 && (i) < (L)->_count) (L)->_data[i] = 0; }
-#define GET_ALLOC(v) { void *ga = igObject_GetAllocator((igObject *)self); if (g_useOwnerAllocator != 0) { v = ga; } else { v = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); } }
+#define GET_ALLOC(v) { void *ga = ((Gap::Core::igObject *)self)->getMemoryPool(); if (g_useOwnerAllocator != 0) { v = ga; } else { v = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); } }
 #define RELEASE_STR(slot) { const char *held = slot; \
     if (held != 0) { int *hd = (int *)held - 2; \
         int cnt = ((int *)held)[-1] - 1; ((int *)held)[-1] = cnt; \
         if (cnt == 0) StringChunk_ReleaseHeader(*hd, hd); } }
 #define RETAIN_OBJ(o) { igObject *rr = (igObject *)(o); if (rr != 0) rr->_refCount = rr->_refCount + 1; }
 #define NEXT_ST0() { self->_st0 = self->_st0 + 1; self->_st3 = 0; self->_st2 = 0; self->_st1 = 0; }
-#define ALLOC(al) al = igObject_GetAllocator(self); al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
+#define ALLOC(al) al = ((Gap::Core::igObject *)self)->getMemoryPool(); al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 #define MSG() { beMessenger_SelectGroup((beMessenger *)self->_messenger, TEXTCTL_5); beMessenger_AppendString((beMessenger *)self->_messenger, STWINFONT29_3); beMessenger_AppendString((beMessenger *)self->_messenger, font100_2); beMessenger_AppendString((beMessenger *)self->_messenger, DISPOFF_2); beMessenger_DispatchSelected((beMessenger *)self->_messenger, SWITCH_4); }
 #define CLEAR(lst) { igDataList *l = (igDataList *)(lst); int n = l->_count; int i; int *slot; int *nw; int o; int *old; if (0 < n) { i = 0; o = 0; do { slot = (int *)(l->_data + o); if (g_stringPool == 0) { int v = ((int)StringPool_Allocate(0x10)); if (v != 0) { v = ((int)StringPool_Construct((StringPool *)v)); } g_stringPool = (StringPool *)v; } nw = (int *)StringPool_Intern(g_stringPool, 0); old = (int *)*slot; if (old != 0) { int *hd = old - 2; int c = old[-1] - 1; old[-1] = c; if (c == 0) { StringChunk_ReleaseHeader((StringChunk *)*hd, (StringTokenHeader *)hd); } } i++; *slot = (int)nw; o += 4; } while (i < n); } l->_count = 0; }
 #define WSETI84(w, v) { beNDMWWindowSelect *wt = (beNDMWWindowSelect *)(w); wt->_selectMax = (v); }
@@ -370,7 +370,7 @@ extern "C" char BLUEAB[];
 extern "C" int beNDMWStatusCtrlD0_UpdatePageCount(beNDMWStatusCtrlD0 *self);
 /* matching construct: inline type-checked cast; its early return gives the retail empty-arm branch. */
 struct FolderHelpers {
-static beNDMWStatusCtrlD0 *CastTo(beNDMWStatusCtrlD0 *p) { if (p != 0) { if (igObject_IsKindOf(p, g_beNDMWStatusCtrlD0_metaObject) != 0) { return p; } } return 0; }
+static beNDMWStatusCtrlD0 *CastTo(beNDMWStatusCtrlD0 *p) { if (p != 0) { if (((Gap::Core::igObject *)p)->isOfType(g_beNDMWStatusCtrlD0_metaObject) != 0) { return p; } } return 0; }
 static beNDMWStatusCtrlD0 *FindSub(beNDMWStatusCtrlFolder *w) { beNDMWStatusCtrlD0 *f = 0; int fi = 0; if (0 < ((igDataList *)w->_subWindow)->_count) { L:  f = CastTo(((beNDMWStatusCtrlD0 **)(*(igDataList **)&w->_subWindow)->_data)[fi]); if (f == 0) { fi++; if (fi < (*(igDataList **)&w->_subWindow)->_count) goto L; } } return f; }
 };
 extern "C" void beNDMWStatusCtrlFolder_Update(beNDMWStatusCtrlFolder *self);
@@ -597,7 +597,7 @@ template <class Window> static inline void SetStep2(Window *window, int step)
 /* The allocator new child windows come from. */
 static inline void *WindowAllocator(void *owner)
 {
-    void *allocator = igObject_GetAllocator((igObject *)owner);
+    void *allocator = ((Gap::Core::igObject *)owner)->getMemoryPool();
     return g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 }
 
@@ -619,7 +619,7 @@ static inline void *WindowAllocator(void *owner)
     int child_ = 0; \
     for (i_ = 0; i_ < CHILD_COUNT(window); i_++) { \
         child_ = ((int *)((igObjectList *)(window)->_subWindow)->_data)[i_]; \
-        if (child_ == 0 || igObject_IsKindOf(child_, metaObject) == 0) child_ = 0; \
+        if (child_ == 0 || ((Gap::Core::igObject *)child_)->isOfType(metaObject) == 0) child_ = 0; \
         if (child_ != 0) break; \
     } \
     (found) = (beNDMWStatusCtrlD0 *)child_; }
@@ -1639,7 +1639,7 @@ void beNDMWStatus_AssignEquipment(StatusPanel *self, ItemList *slotList, int slo
                 } while (i < slotList->_count);
             }
             if ((newItem->_kind == 3) == 1) {
-                alloc = igObject_GetAllocator(self);
+                alloc = ((Gap::Core::igObject *)self)->getMemoryPool();
                 alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                 {
                 igSmartPointer<igObject> names((igObject *)igStringRefList_Create((int)alloc));
@@ -1656,7 +1656,7 @@ void beNDMWStatus_AssignEquipment(StatusPanel *self, ItemList *slotList, int slo
                 StringList_AppendRetained((igStringRefList *)(int)names.p, igStringRef(MPDRAIN_2).ref());
                 StringList_AppendRetained((igStringRefList *)(int)names.p, igStringRef(CHOHATURITSU_2).ref());
                 rec = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject);
-                alloc = igObject_GetAllocator(self);
+                alloc = ((Gap::Core::igObject *)self)->getMemoryPool();
                 alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                 igSmartPointer<igIntList> tmp = (igIntList *)igIntList_Create((int)alloc);
                 cat = -1;
@@ -1711,7 +1711,7 @@ static inline igObjectList *SubWindows(const beNDMWStatusCtrlBaseEquip &window) 
 /* The object as a device-folder list window, or null for any other kind of window. */
 static inline beNDMWStatusCtrlD0 *AsStatusCtrlD0(igObject *object)
 {
-    if (object != 0 && igObject_IsKindOf(object, g_beNDMWStatusCtrlD0_metaObject) != 0) return (beNDMWStatusCtrlD0 *)object;
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_beNDMWStatusCtrlD0_metaObject) != 0) return (beNDMWStatusCtrlD0 *)object;
     return 0;
 }
 
@@ -2058,7 +2058,7 @@ void beNDMWStatusPowerSocket_OpenSlotMenu(beNDMWStatusPowerSocket *self) {
     const char *s3;
     igIntList *t;
 
-    a = ((int)igObject_GetAllocator(self));
+    a = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beNDMWStatusSelectE0> win(beNDMWStatusSelectE0_Create(a));
     beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
@@ -2073,7 +2073,7 @@ void beNDMWStatusPowerSocket_OpenSlotMenu(beNDMWStatusPowerSocket *self) {
         win.p->_selectMax = 3;
         break;
     }
-    a = ((int)igObject_GetAllocator(self));
+    a = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<igBoolList> flags(igBoolList_Create((int)a));
     BoolList_Append(flags.p, true);
@@ -2176,7 +2176,7 @@ void beNDMWStatusPowerSocket_OpenDeviceFolder(beNDMWStatusPowerSocket *self) {
     int a;
     int s1;
     igIntList *s0;
-    alloc = ((int)igObject_GetAllocator(self));
+    alloc = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {
@@ -2251,7 +2251,7 @@ void beNDMWStatusPowerSocket_PreviewSlotDevice(beNDMWStatusPowerSocket *self, in
 void beNDMWStatusPowerSocket_OpenPocketList(beNDMWStatusPowerSocket *self) {
     int alloc;
     int pocketCount;
-    alloc = (int)igObject_GetAllocator(self);
+    alloc = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     if (g_useOwnerAllocator != 0) {
         alloc = (int)alloc;
     } else {
@@ -2315,7 +2315,7 @@ static inline void setDecideList(const igSmartPointer<beNDMWStatusSelectE0> &win
 void beNDMWStatusPowerSocket_OpenPocketMenu(beNDMWStatusPowerSocket *self) {
     int a;
 
-    a = ((int)igObject_GetAllocator(self));
+    a = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beNDMWStatusSelectE0> win(beNDMWStatusSelectE0_Create(a));
     beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
@@ -2323,7 +2323,7 @@ void beNDMWStatusPowerSocket_OpenPocketMenu(beNDMWStatusPowerSocket *self) {
     win.p->_selectMax = 2;
     beNDMWWindow_QueueText((beNDMWWindow *)win.p, STWINFONT29_3, font000_2, space, LEFT_3);
     beNDMWWindow_QueueText((beNDMWWindow *)win.p, STWINFONT29_3, font001_2, space, LEFT_3);
-    a = ((int)igObject_GetAllocator(self));
+    a = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<igBoolList> decide(igBoolList_Create((int)a));
     setDecideList(win, decide);
@@ -2345,7 +2345,7 @@ void beNDMWStatusPowerSocket_OpenPocketFolder(beNDMWStatusPowerSocket *self) {
     int a;
     int s1;
     igDataList *s0;
-    alloc = ((int)igObject_GetAllocator(self));
+    alloc = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {
@@ -2652,14 +2652,14 @@ void beNDMWStatusMainSlot_OpenSlotMenu(beNDMWStatusMainSlot *self) {
     const char *s3;
     igIntList *t;
 
-    a = ((int)igObject_GetAllocator(self));
+    a = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beNDMWStatusSelectE0> win(beNDMWStatusSelectE0_Create(a));
     beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
     ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)win.p);
     win.p->_selectMax = 3;
     win.p->_entCode = 0x78;
-    a = ((int)igObject_GetAllocator(self));
+    a = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<igBoolList> flags(igBoolList_Create((int)a));
     BoolList_Append(flags.p, true);
@@ -2748,7 +2748,7 @@ void beNDMWStatusMainSlot_OpenDeviceFolder(beNDMWStatusMainSlot *self) {
     int c;
     igDataList *l;
 
-    al = ((int)igObject_GetAllocator(self));
+    al = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     al = (g_useOwnerAllocator != 0) ? al : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beNDMWStatusCtrlD0> win(beNDMWStatusCtrlD0_Create(al));
     beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
@@ -2821,7 +2821,7 @@ void beNDMWStatusMainSlot_PreviewSlotDevice(beNDMWStatusMainSlot *self, int inde
 void beNDMWStatusMainSlot_OpenPocketList(beNDMWStatusMainSlot *self) {
     void *alloc;
     int pocketCount;
-    alloc = igObject_GetAllocator(self);
+    alloc = ((Gap::Core::igObject *)self)->getMemoryPool();
     alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     igSmartPointer<beNDMWStatusSelectE1> win(((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)alloc)));
     beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
@@ -2875,7 +2875,7 @@ void beNDMWStatusMainSlot_ShowPocketDescription(beNDMWStatusMainSlot *self) {
 void beNDMWStatusMainSlot_OpenPocketMenu(beNDMWStatusMainSlot *self) {
     int a;
 
-    a = ((int)igObject_GetAllocator(self));
+    a = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beNDMWStatusSelectE0> win(beNDMWStatusSelectE0_Create(a));
     beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
@@ -2883,7 +2883,7 @@ void beNDMWStatusMainSlot_OpenPocketMenu(beNDMWStatusMainSlot *self) {
     win.p->_selectMax = 2;
     beNDMWWindow_QueueText((beNDMWWindow *)win.p, STWINFONT29_3, font000_2, space, LEFT_3);
     beNDMWWindow_QueueText((beNDMWWindow *)win.p, STWINFONT29_3, font001_2, space, LEFT_3);
-    a = ((int)igObject_GetAllocator(self));
+    a = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<igBoolList> decide(igBoolList_Create((int)a));
     setDecideList(win, decide);
@@ -2911,7 +2911,7 @@ void beNDMWStatusMainSlot_OpenPocketFolder(beNDMWStatusMainSlot *self) {
     igIntList *l;
     beNDMWStatusCtrlD0 *w;
 
-    al = ((int)igObject_GetAllocator(self));
+    al = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     al = (g_useOwnerAllocator != 0) ? al : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beNDMWStatusCtrlD0> window(beNDMWStatusCtrlD0_Create(al));
     beNDMWWindow_BindContext((beNDMWWindow *)window.p, (igObject *)self, self->_insight, self->_playerNo, 0);
@@ -3154,14 +3154,14 @@ void beNDMWStatusSubSlot_OpenSlotMenu(beNDMWStatusSubSlot *self) {
     const char *s3;
     igIntList *t;
 
-    a = ((int)igObject_GetAllocator(self));
+    a = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<beNDMWStatusSelectE0> win(beNDMWStatusSelectE0_Create(a));
     beNDMWWindow_BindContext((beNDMWWindow *)win.p, (igObject *)self, self->_insight, self->_playerNo, 0);
     ObjectList_AppendRetained((igObjectList *)self->_subWindow, (igObject *)win.p);
     win.p->_selectMax = 3;
     win.p->_entCode = 0x78;
-    a = ((int)igObject_GetAllocator(self));
+    a = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     a = g_useOwnerAllocator ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     igSmartPointer<igBoolList> flags(igBoolList_Create((int)a));
     BoolList_Append(flags.p, true);
@@ -3242,7 +3242,7 @@ void beNDMWStatusSubSlot_OpenDeviceFolder(beNDMWStatusSubSlot *self) {
     int a;
     int s1;
     igDataList *s0;
-    alloc = ((int)igObject_GetAllocator(self));
+    alloc = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {
@@ -4078,7 +4078,7 @@ void beNDMWStatusCtrlFlag_Update(beNDMWStatusCtrlFlag *self) {
         beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT23, g_statusFontNames[0], space, RIGHT_2);
         beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT23, g_statusFontNames[1], space, RIGHT_2);
         beNDMWWindow_QueueText((beNDMWWindow *)self, STWINFONT29_3, g_statusFontNames[0], space, LEFT_3);
-        al = ((int)igObject_GetAllocator(self));
+        al = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
         al = (g_useOwnerAllocator != 0) ? al : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
         {
         /* the list window is owned by the stack reference while it is bound, listed and set up; its
@@ -4842,7 +4842,7 @@ void beNDMWStatusCtrlBit_Update(beNDMWStatusCtrlBit *self) {
         case 0:
             switch (self->_st2) {
             case 0:
-                al = ((int)igObject_GetAllocator(self));
+                al = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
                 al = (g_useOwnerAllocator != 0) ? al : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
                 {
                     igSmartPointer<beNDMWShopSelect00> win((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)al));
@@ -4870,7 +4870,7 @@ void beNDMWStatusCtrlBit_Update(beNDMWStatusCtrlBit *self) {
         case 1:
             switch (self->_st2) {
             case 0:
-                al = ((int)igObject_GetAllocator(self));
+                al = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
                 al = (g_useOwnerAllocator != 0) ? al : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
                 {
                     igSmartPointer<beNDMWStatusCtrlSendBit> win((beNDMWStatusCtrlSendBit *)beNDMWStatusCtrlSendBit_Create(al));
@@ -5401,7 +5401,7 @@ void beNDMWStatusCtrlSkill_Update(beNDMWStatusCtrlSkill *self)
                         int i;
                         for (i = 0; i < SW(self->_subWindow)->_count; i++) {
                             found = ((int *)SWV(self->_subWindow)->_data)[i];
-                            if (found && igObject_IsKindOf((igObject *)found, g_beNDMWStatusSelectE1_metaObject)) {
+                            if (found && ((Gap::Core::igObject *)found)->isOfType(g_beNDMWStatusSelectE1_metaObject)) {
                                 found = (int)(int *)found;
                             } else
                                 found = 0;

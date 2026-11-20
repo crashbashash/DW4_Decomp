@@ -44,7 +44,7 @@ void FUN_001b21d0(A_1b21d0 *arg0, V3_1b21d0 *arg1, V3_1b21d0 *arg2) {
     }
     if (s3 != 0) {
         s3 = (igVec3fList *)((igVertexData *)s3)->_data;
-        if (s3 != 0 && igObject_IsKindOf(s3, g_igVec3fList_metaObject) != 0) {
+        if (s3 != 0 && ((Gap::Core::igObject *)s3)->isOfType(g_igVec3fList_metaObject) != 0) {
             s3 = (igVec3fList *)s3;
         } else {
             s3 = 0;
@@ -76,7 +76,7 @@ void FUN_001b23b0(int *arg0, int *arg1) {
 int FUN_001b23e0(int arg0, Y *arg1) {
     V3_1b23e0 sp40;
     V3_1b23e0 sp30;
-    igSmartPointer<X_1b23e0> created(((X_1b23e0 *)igAABox_CreateInstance((int)igObject_GetAllocator((igObject *)arg0))));
+    igSmartPointer<X_1b23e0> created(((X_1b23e0 *)igAABox_CreateInstance((int)((Gap::Core::igObject *)arg0)->getMemoryPool())));
     FUN_001b1fa0((igGeometryAttr *)arg1, (igVec3f *)&sp40, (igVec3f *)&sp30);
     created.get()->a = sp40;
     created.get()->b = sp30;
@@ -85,7 +85,7 @@ int FUN_001b23e0(int arg0, Y *arg1) {
 }
 
 int FUN_001b24d0(int arg0, int arg1) {
-    igSmartPointer<BoundsObject> bounds(((BoundsObject *)igAABox_CreateInstance((int)igObject_GetAllocator((igObject *)arg0))));
+    igSmartPointer<BoundsObject> bounds(((BoundsObject *)igAABox_CreateInstance((int)((Gap::Core::igObject *)arg0)->getMemoryPool())));
     BoundsObject *array;
     V3_1b24d0 min;
     V3_1b24d0 max;
@@ -115,7 +115,7 @@ bool igGeometry_ExtendBound(int arg0, void *arg1) {
     n = l->count;
     for (i = 0; i < n; i++) {
         e = l->data[i];
-        if (igObject_IsKindOf((igObject *)e, g_igGeometryAttr_metaObject) != 0) {
+        if (((Gap::Core::igObject *)e)->isOfType(g_igGeometryAttr_metaObject) != 0) {
             if (FUN_001b23e0(arg0, (Y *)e) == 0) {
                 ok = false;
             }

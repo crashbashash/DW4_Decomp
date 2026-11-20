@@ -210,7 +210,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_57(TransformSequenceView *s, int cha
         if (mode < 3) {
             s->translationMode = mode;
             if (mode == 2) {
-                assignRef(s->translations, SeqTempRef((SeqData *)igVec3fList_Create(igObject_GetAllocator((igObject *)s))));
+                assignRef(s->translations, SeqTempRef((SeqData *)igVec3fList_Create(((Gap::Core::igObject *)s)->getMemoryPool())));
                 setCount_1de040(s->translations, s->keys->count * 2, 12);
             } else {
                 releaseRef_1de040(s->translations);
@@ -229,7 +229,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_57(TransformSequenceView *s, int cha
         if (mode < 3) {
             s->rotationMode = mode;
             if (mode == 2) {
-                assignRef(s->rotations, SeqTempRef((SeqData *)igVec3fList_Create(igObject_GetAllocator((igObject *)s))));
+                assignRef(s->rotations, SeqTempRef((SeqData *)igVec3fList_Create(((Gap::Core::igObject *)s)->getMemoryPool())));
                 setCount_1de040(s->rotations, s->keys->count * 2, 12);
             } else {
                 releaseRef_1de040(s->rotations);
@@ -241,7 +241,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_57(TransformSequenceView *s, int cha
         if (mode < 3) {
             s->scaleMode = mode;
             if (mode == 2) {
-                assignRef(s->scales, SeqTempRef((SeqData *)igVec3fList_Create(igObject_GetAllocator((igObject *)s))));
+                assignRef(s->scales, SeqTempRef((SeqData *)igVec3fList_Create(((Gap::Core::igObject *)s)->getMemoryPool())));
                 setCount_1de040(s->scales, s->keys->count * 2, 12);
             } else {
                 releaseRef_1de040(s->scales);
@@ -277,7 +277,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_58(TransformSequenceView *s, unsigne
     if ((channels & 1) != 0) {
         s->translationMode = 1;
         if ((old & 1) == 0) {
-            assignRef_1de4e0(s->translationKeys, SeqTempRef((SeqData *)igVec3fList_Create(igObject_GetAllocator((igObject *)s))));
+            assignRef_1de4e0(s->translationKeys, SeqTempRef((SeqData *)igVec3fList_Create(((Gap::Core::igObject *)s)->getMemoryPool())));
             setCount_1de4e0(s->translationKeys, s->keys->count, 12);
             releaseRef_1de4e0(s->translations);
             s->translations = 0;
@@ -290,7 +290,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_58(TransformSequenceView *s, unsigne
     s->translations = 0;
     if ((channels & 2) != 0 || (channels & 4) != 0) {
         if ((old & 2) == 0 && (old & 4) == 0) {
-            assignRef_1de4e0(s->rotationKeys, SeqTempRef((SeqData *)igQuaternionfList_Create(igObject_GetAllocator((igObject *)s))));
+            assignRef_1de4e0(s->rotationKeys, SeqTempRef((SeqData *)igQuaternionfList_Create(((Gap::Core::igObject *)s)->getMemoryPool())));
             setCount_1de4e0(s->rotationKeys, s->keys->count, 16);
         }
         if ((channels & 2) != 0) {
@@ -306,7 +306,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_58(TransformSequenceView *s, unsigne
     s->rotations = 0;
     if ((channels & 8) != 0) {
         if ((old & 8) == 0) {
-            assignRef_1de4e0(s->scaleKeys, SeqTempRef((SeqData *)igVec3fList_Create(igObject_GetAllocator((igObject *)s))));
+            assignRef_1de4e0(s->scaleKeys, SeqTempRef((SeqData *)igVec3fList_Create(((Gap::Core::igObject *)s)->getMemoryPool())));
             setCount_1de4e0(s->scaleKeys, s->keys->count, 12);
         }
         s->scaleMode = 1;

@@ -46,7 +46,7 @@ void beNDMWMdlObject_RegisterReceiver(void)
 
 void beNDMWMdlObject_OnGenerate(beNDMWMdlObject *self, beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
-        igMemoryPoolView *a = igObject_GetAllocator(ram);
+        igMemoryPoolView *a = ((Gap::Core::igObject *)ram)->getMemoryPool();
         igMemoryPoolView *al = g_useOwnerAllocator != 0 ? a : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igObject *created = beBaseInfoDataList_Create((int)al);
         /* matching construct: the new list is a temporary bound to the setter's reference parameter (it
@@ -55,7 +55,7 @@ void beNDMWMdlObject_OnGenerate(beNDMWMdlObject *self, beBaseInfoRam *ram) {
     }
     beModelCtrlInfoRamData *s3 = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
     {
-        igMemoryPoolView *a2 = igObject_GetAllocator(self);
+        igMemoryPoolView *a2 = ((Gap::Core::igObject *)self)->getMemoryPool();
         igMemoryPoolView *al2 = g_useOwnerAllocator != 0 ? a2 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         InfoWorkRef w(beModelCtrlInfoWork_Create((int)al2));
         igObject *t2 = w.p;

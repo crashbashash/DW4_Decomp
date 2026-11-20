@@ -55,13 +55,19 @@ For each conversion, across every source, header and `.inc` fragment of src/ and
     declarations (the base call of an override not converted yet);
   * calls in C (a `.c` unit, a fragment or header only C units read) keep the C name: the link renames every
     compiler name to its `symbols.txt` name, so the C name still resolves. So do a constructor's or destructor's
-    calls on objects of classes still written as flat structs (a GetVTable probe, an unconverted subclass);
+    calls on objects of classes still written as flat structs (a GetVTable probe, an unconverted subclass), and a
+    call of a private member (`private:` on its class-members.tsv row) outside its class or of a protected one
+    outside the class and its subclasses: the kit reaches those only through the class's own inlines;
+  * a call in a `#define`'s replacement text (its continuation lines included) or in a member function a class
+    body defines is a call like any other, its receiver cast to the class (a macro parameter parenthesised);
+    a statement names the C name as a declaration only when a type comes before the name;
   * the boundary: while any code still names the C name, its prototype stays in its home header (a header under
     include/, the one named for the class first), and in another header only where a user's unit does not read
     the home header; every other declaration of the C name (`extern "C"` lines, C-linkage blocks, a unity
     header's own prototypes), and all of them once nothing names it, goes, and an `#ifdef __cplusplus`/`#endif`
-    pair or `extern "C" { }` block left empty goes with it. `--check` reports a declaration of a converted
-    member's C name (compiler-names.tsv, a converted class) that rule would remove, exit status 1;
+    pair or `extern "C" { }` block left empty goes with it; so does a `static inline` C++ overload forwarding
+    another pointer type to the C name once no C++ code names it. `--check` reports a declaration of a
+    converted member's C name (compiler-names.tsv, a converted class) that rule would remove, exit status 1;
   * comments naming the C name name `Class::name`, unless code still uses the C name;
   * config/SLUS-20836/unit-objects.json: in the unit that places the function or datum, its `emitted`/`data`
     key (or the row's `symbol`) becomes the compiler name (demangle.mangle: `setVisualContext__10igRendererFP15
@@ -127,6 +133,7 @@ class Conversion:
         self.implicit = False                          # a destructor the class does not declare: the compiler's
         self.mangled = None
         self.va = None
+        self.access = None                             # `private`/`protected` from its class-members.tsv row
 
     @property
     def base(self):
@@ -202,6 +209,15 @@ def declares_virtual(rows, name):
                re.search(r"[\s*&]%s\s*\(" % re.escape(name), row) for row in rows)
 
 
+def declared_access(rows, name):
+    """The access label (`private`, `protected`) a class-members.tsv row gives member `name`, or None for public."""
+    for row in rows:
+        m = re.match(r"\s*(public|protected|private)\s*:", row)
+        if re.search(r"(?:^|[\s*&:])%s\s*(?:\(|;|\[|$)" % re.escape(name), row):
+            return m.group(1) if m and m.group(1) != "public" else None
+    return None
+
+
 def conversions(rows, members, macros, types):
     """[Conversion] for the table rows -> (conversions, errors)."""
     out, errors, cache = [], [], {}
@@ -257,10 +273,12 @@ def conversions(rows, members, macros, types):
             errors.append("table line %d: %s declares %d members named %s: give the full signature"
                           % (line, base, len(same), name))
             continue
-        virtual = want.kind == "func" and not want.static and (
-            declares_virtual((members or {}).get(base, []) + ([declaration] if declaration else []), name))
-        out.append(Conversion(cname, cls, name, want.kind, bool(want.static), bool(want.const), bool(want.inline),
-                              want.ret, tuple(want.params or ()), declaration, virtual))
+        class_rows = (members or {}).get(base, []) + ([declaration] if declaration else [])
+        virtual = want.kind == "func" and not want.static and declares_virtual(class_rows, name)
+        conv = Conversion(cname, cls, name, want.kind, bool(want.static), bool(want.const), bool(want.inline),
+                          want.ret, tuple(want.params or ()), declaration, virtual)
+        conv.access = declared_access(class_rows, name)
+        out.append(conv)
     return out, errors
 
 
@@ -401,6 +419,26 @@ def _arg_spans(clean, open_, close):
     return out
 
 
+_DEFINE = re.compile(r"[ \t]*#[ \t]*define[ \t]+[A-Za-z_]\w*(\([^()]*\))?")
+
+
+def macro_body(clean, pos):
+    """The parameter names of the `#define` whose replacement text holds `pos` (its continuation lines included),
+    or None when `pos` is not in one (outside a macro, or its name or parameter list)."""
+    start = clean.rfind("\n", 0, pos) + 1
+    while start > 0:                                     # back to the first line of a `\`-continued logical line
+        prev = clean.rfind("\n", 0, start - 1) + 1
+        if clean[prev:start - 1].rstrip(" \t\r").endswith("\\"):
+            start = prev
+        else:
+            break
+    m = _DEFINE.match(clean, start)
+    if not m or pos < m.end():
+        return None
+    params = m.group(1) or ""
+    return frozenset(p.strip() for p in params.strip("()").split(",") if p.strip())
+
+
 def _split_args(text):
     if not text.strip():
         return []
@@ -465,6 +503,18 @@ def tidy(text):
             return text
         text = new
     return text
+
+
+_NOT_A_TYPE = frozenset(("return", "else", "do", "case", "throw", "delete", "new", "sizeof", "goto"))
+
+
+def _declares(head):
+    """Whether the text of a statement before a function's name declares it (`extern "C" int `, `T *`), rather than
+    calling it (an empty head, `return `, `if (x && `)."""
+    if "=" in head or head.count("(") != head.count(")"):
+        return False
+    m = re.search(r"([A-Za-z_]\w*)[\s*&]*$", head)
+    return m is not None and m.group(1) not in _NOT_A_TYPE
 
 
 def _statement_start(clean, pos):
@@ -599,6 +649,10 @@ class Planner:
             if prev.endswith((".", "->", "::")):
                 continue                                # a member of something else
             line_start = fr.clean.rfind("\n", 0, pos) + 1
+            macro = macro_body(fr.clean, pos)
+            if macro is not None:
+                self.plan_macro_use(fr, conv, pos, end, macro, c_side and not cxx_side)
+                continue
             if fr.clean[line_start:pos].lstrip().startswith("#"):
                 continue                                # a macro name or test
             ctx = fr.enclosing(pos)
@@ -628,11 +682,66 @@ class Planner:
                 out.append((m.start(), m.end()))
         return out
 
+    def plan_macro_use(self, fr, conv, pos, end, params, c_only):
+        """A use in a `#define`'s replacement text, which the C++ code expanding it compiles: a call becomes the
+        member call on its receiver cast to the class (a macro parameter's type is the expansion's, unknown here,
+        and is parenthesised), the other arguments as at any call."""
+        if c_only or conv.virtual or conv.special or conv.access:
+            self.c_callers[conv.cname].add(fr.rel)
+            return
+        gap = any(s <= pos < e for s, e in fr.gap_blocks)
+        after = re.match(r"\s*\(", fr.clean[end:])
+        if conv.kind == "data" or conv.static:
+            fr.edits.append((pos, end, conv.qualified))
+            return
+        if not after:
+            self.errors.append("%s:%d: instance member %s is used as a value (%s); convert that use by hand"
+                               % (fr.rel, fr.text.count("\n", 0, pos) + 1, conv.qualified, conv.cname))
+            return
+        open_ = end + after.end() - 1
+        close = declarations._close(fr.clean, open_)
+        spans = _arg_spans(fr.clean, open_, close)
+        if len(spans) != len(conv.params) + 1:
+            self.errors.append("%s:%d: %s(...) passes %d arguments; instance member %s takes a receiver and %d"
+                               % (fr.rel, fr.text.count("\n", 0, pos) + 1, conv.cname, len(spans), conv.qualified,
+                                  len(conv.params)))
+            return
+        expr = _strip_parens(fr.text[spans[0][0]:spans[0][1]].strip())
+        cls = self.spell(conv.base, gap) if conv.cls.startswith("Gap::") else conv.cls
+        cast = _CAST.match(expr)
+        if cast:
+            bare = _strip_parens(cast.group(2))
+            inner = bare if _POSTFIX.match(bare) and bare not in params else "(%s)" % bare
+        else:
+            inner = expr if _POSTFIX.match(expr) and expr not in params else "(%s)" % expr
+        stop = spans[1][0] if len(spans) > 1 else close
+        fr.edits.append((pos, stop, "((%s *)%s)->%s(" % (cls, inner, conv.name)))
+        if conv.cls.startswith("Gap::"):
+            for span, param in zip(spans[1:], conv.params):
+                pointee = re.fullmatch(r"([A-Za-z_]\w*)(?: const)?\*", param or "")
+                if pointee and pointee.group(1) in self.converted:
+                    self.gap_argument(fr, span, pointee.group(1), None, None, gap)
+
+    def may_access(self, conv, inside):
+        """Whether a member function of class `inside` may name `conv`'s member: any for a public one, the class's
+        own for a private one, the class's and its subclasses' for a protected one."""
+        if not conv.access:
+            return True
+        if inside is None:
+            return False
+        own = inside.rsplit("::", 1)[-1]
+        return own == conv.base if conv.access == "private" else self.classes.derives(own, conv.base)
+
     def plan_use(self, fr, conv, pos, end, ctx, c_only):
         if c_only:
             self.c_callers[conv.cname].add(fr.rel)
             return
         inside = self.member_class_of(fr, ctx)
+        if conv.access and not self.may_access(conv, inside):
+            # outside the class (a private member) or its subclasses (a protected one) the member is out of
+            # reach: the caller still names the C name until it is written the kit's way (igObject::release())
+            self.c_callers[conv.cname].add(fr.rel)
+            return
         after = re.match(r"\s*\(", fr.clean[end:])
         if conv.special:
             self.plan_special_use(fr, conv, pos, end, after, ctx)
@@ -708,6 +817,24 @@ class Planner:
                     return
         self.c_callers[conv.cname].add(fr.rel)
 
+    def drop_forwarders(self, frs):
+        """A `static inline` C++ overload of a converted C name that forwards to it (`igObject_IsKindOf(View *o, …)
+        { return igObject_IsKindOf((igObject *)o, …); }`) existed for C++ callers passing another type; those calls
+        are member calls now, so it goes unless C++ code still names the C name (a boundary use)."""
+        for rel, fr in frs.items():
+            for name, start, end in fr.defs:
+                if name not in self.by_cname:
+                    continue
+                head = fr.clean[start:fr.head_end(start)]
+                lead = head[:declarations._first_paren(head)]
+                if not (re.search(r"\bstatic\b", lead) and re.search(r"\binline\b", lead)):
+                    continue
+                if any(cxx_reads(self.index, f) for f in self.c_callers.get(name, ())):
+                    continue
+                span = _line_span(fr.text, start, end)
+                if span is not None:
+                    fr.deletes.append(span)
+
     def settle_declarations(self):
         """Each converted C name's declarations: none stays when no use keeps the C name; else the home header's
         stays (boundary_sites), with any other a user's unit needs because it does not read the home header."""
@@ -780,17 +907,20 @@ class Planner:
         if conv.kind == "data" and not is_extern and "=" not in head and "(" not in head and "&" not in head \
                 and re.search(r"[A-Za-z_]", head):
             return                                       # the datum's definition (plan_definition)
-        declaration = (nxt == "(" and "=" not in head and conv.kind == "func") or \
+        declaration = (nxt == "(" and conv.kind == "func" and _declares(head)) or \
                       (conv.kind == "data" and is_extern and "=" not in head)
         if declaration:
             # whether it stays is known once every file is read: the home header keeps it while an unconverted
             # caller still uses the C name (settle_declarations)
             self.declaration_sites.append((fr, conv, pos, stmt_start, fr.clean.find(";", end)))
             return
-        if (c_side and not cxx_side) or conv.virtual or conv.special:
+        if (c_side and not cxx_side) or conv.virtual or conv.special or conv.access:
             self.c_callers[conv.cname].add(fr.rel)
             return
         if conv.kind == "func" and not conv.static:
+            if nxt == "(":                               # a call in code the definition scan does not see (a
+                self.plan_macro_use(fr, conv, pos, end, frozenset(), False)   # member defined in a class body)
+                return
             self.errors.append("%s:%d: instance member %s is used as a value (%s); convert that use by hand"
                                % (fr.rel, fr.text.count("\n", 0, pos) + 1, conv.qualified, conv.cname))
             return
@@ -866,7 +996,10 @@ class Planner:
                 fr.rel, conv.cname, len(params), conv.qualified, len(conv.params),
                 "" if conv.static else " (and an instance member's receiver)"))
         types = self.index.types
-        got = tuple(types.param(t + " " + (n or "")) for t, n in params)
+        # a parameter spelled `Gap::Lib::Class *` at file scope is the member's bare `Class *` in the class's scope
+        got = tuple(re.sub(r"\bGap\s*:\s*:\s*\w+\s*:\s*:\s*(\w+)",
+                           lambda m: m.group(1) if m.group(1) in self.converted else m.group(0), q)
+                    if q else q for q in (types.param(t + " " + (n or "")) for t, n in params))
         if got != tuple(conv.params):
             raise Refused("%s: %s's parameters (%s) are not %s's (%s)" % (
                 fr.rel, conv.cname, ", ".join(got), conv.qualified, ", ".join(conv.params)))
@@ -886,6 +1019,9 @@ class Planner:
                 ret = conv.ret.replace("*", " *").replace("  ", " ").strip()
         plist = ", ".join(("%s %s" % (t, n) if not t.endswith(("*", "&")) else "%s%s" % (t, n)) if n else t
                           for t, n in params)
+        if conv.cls.startswith("Gap::"):                 # in the class's scope a converted class is its bare name
+            plist = re.sub(r"\bGap\s*::\s*\w+\s*::\s*(\w+)\b",
+                           lambda m: m.group(1) if m.group(1) in self.converted else m.group(0), plist)
         new_head = "%s%s%s(%s)%s%s%s" % (ret, "" if ret.endswith(("*", "&")) or not ret else " ", conv.qualified,
                                          plist, " const" if conv.const else "", initializer, head[close + 1:])
         fr.edits.append((start, brace, new_head))
@@ -1224,6 +1360,7 @@ def plan(root, table):
               for rel, fr in first.items()}
     for rel in sorted(second, key=lambda rel: (not c_reads(index, rel) or cxx_reads(index, rel), rel)):
         planner.plan_file(second[rel])
+    planner.drop_forwarders(second)
     planner.settle_declarations()
     planner.rename_comments()
     if planner.errors:
@@ -1307,8 +1444,12 @@ def boundary_report(root):
         fr = FileRewrite(rel, text)
         for m in pattern.finditer(fr.clean):
             cname, pos, end = m.group(1), m.start(), m.end()
-            if fr.clean[max(0, pos - 3):pos].rstrip().endswith((".", "->", "::")) or \
-                    fr.clean[fr.clean.rfind("\n", 0, pos) + 1:pos].lstrip().startswith("#"):
+            if fr.clean[max(0, pos - 3):pos].rstrip().endswith((".", "->", "::")):
+                continue
+            if macro_body(fr.clean, pos) is not None:
+                users[cname].add(rel)                    # a macro's replacement text: code that expands it
+                continue
+            if fr.clean[fr.clean.rfind("\n", 0, pos) + 1:pos].lstrip().startswith("#"):
                 continue
             ctx = fr.enclosing(pos)
             if ctx is not None and pos < fr.head_end(ctx[1]):
@@ -1321,7 +1462,7 @@ def boundary_report(root):
             stmt_start = _statement_start(fr.clean, pos)
             head = fr.clean[stmt_start:pos]
             nxt = re.compile(r"\s*(\S?)").match(fr.clean, end).group(1)
-            if (nxt == "(" and "=" not in head) or (re.search(r"\bextern\b", head) and "=" not in head):
+            if (nxt == "(" and _declares(head)) or (re.search(r"\bextern\b", head) and "=" not in head):
                 sites[cname].append((rel, cxx_only(fr, pos), fr.text.count("\n", 0, pos) + 1))
             else:
                 users[cname].add(rel)
@@ -1354,6 +1495,27 @@ def respell_tree(root):
         if new != text:
             out[rel] = new
     return out
+
+
+def insert_member_rows(path, adds):
+    """Add `(class, declaration)` rows to class-members.tsv, each after its class's last row (in `adds` order), or at
+    the end for a class with no row yet."""
+    with open(path) as fh:
+        lines = fh.readlines()
+    if lines and not lines[-1].endswith("\n"):
+        lines[-1] += "\n"
+    for cls, decl in adds:
+        at = None
+        for i, line in enumerate(lines):
+            if not line.startswith("#") and line.split("\t", 1)[0] == cls:
+                at = i + 1
+        row = "%s\t%s\n" % (cls, decl)
+        if at is None:
+            lines.append(row)
+        else:
+            lines.insert(at, row)
+    with open(path, "w") as fh:
+        fh.writelines(lines)
 
 
 def main(argv=None):
@@ -1402,9 +1564,9 @@ def main(argv=None):
     for cname, files in sorted(planner.c_callers.items()):
         kept = planner.boundary.get(cname)
         print("note: %s keeps its C name in %s (C code, a direct call of a virtual function, a flat struct's "
-              "construction or destruction): %s" % (cname, ", ".join(sorted(files)),
-                                                     "its declaration stays in " + ", ".join(kept) if kept
-                                                     else "no declaration of it is left"))
+              "construction or destruction, a non-public member out of the caller's reach): %s"
+              % (cname, ", ".join(sorted(files)),
+                 "its declaration stays in " + ", ".join(kept) if kept else "no declaration of it is left"))
     for member, files in sorted(planner.inline_users.items()):
         print("note: %s is inline and its address is taken in %s: those units compile a copy of it (a "
               "`duplicates` row)" % (member, ", ".join(sorted(files))))
@@ -1416,8 +1578,7 @@ def main(argv=None):
         with open(os.path.join(root, "config", GAME, "unit-objects.json"), "w") as fh:
             fh.write(json.dumps(rows, indent=2) + "\n")
     if adds:
-        with open(os.path.join(root, "config", "class-members.tsv"), "a") as fh:
-            fh.writelines("%s\t%s\n" % row for row in adds)
+        insert_member_rows(os.path.join(root, "config", "class-members.tsv"), adds)
     print("memberize: rewrote %d files, %d row changes, %d declarations added" % (len(new_texts), len(changes),
                                                                                  len(adds)))
     names_tool = os.path.join(root, "tools", "compiler_names.py")

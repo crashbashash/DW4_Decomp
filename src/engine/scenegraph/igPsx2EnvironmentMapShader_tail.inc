@@ -223,7 +223,7 @@ int FUN_001ab770(void *arg0, void **arg1, void **arg2) {
     int var_s2;
     int temp_s1;
     int var_s0;
-    temp_v0 = (void *)(((void *)FUN_001a8c30((int)igObject_GetAllocator((igObject *)arg0))));
+    temp_v0 = (void *)(((void *)FUN_001a8c30((int)((Gap::Core::igObject *)arg0)->getMemoryPool())));
     FUN_001abb50((S_1abb50 *)temp_v0, (A *)arg1);
     temp_s1 = ((DW4VC_96_0 *)(arg1))->vX();
     var_s0 = 0;

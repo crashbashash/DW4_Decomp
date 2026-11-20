@@ -37,7 +37,7 @@ public:
 struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
     igObject *s0;
     if (ram->_dataList == 0) {
-        igMemoryPoolView *alloc = igObject_GetAllocator(ram);
+        igMemoryPoolView *alloc = ((Gap::Core::igObject *)ram)->getMemoryPool();
         igMemoryPoolView *a;
         if (g_useOwnerAllocator != 0) {
             a = alloc;
@@ -73,7 +73,7 @@ void beNDMWMdlEBullet_OnGenerate(beNDMWMdlEBullet *self, beBaseInfoRam *ram) {
     igMemoryPoolView *a;
     RamDataList::Ensure(ram);
     s1 = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
-    alloc = igObject_GetAllocator(self);
+    alloc = ((Gap::Core::igObject *)self)->getMemoryPool();
     if (g_useOwnerAllocator != 0) {
         a = alloc;
     } else {

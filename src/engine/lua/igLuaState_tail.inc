@@ -95,7 +95,7 @@ void igLuaState::userConstruct(int flag) {
     ::igObject *old;
     lua_State *L;
 
-    pool = (::igObject *)igObject_GetAllocator((::igObject *)this);
+    pool = (::igObject *)getMemoryPool();
     pool = g_useOwnerAllocator != 0 ? pool : (::igObject *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleLevel);
     if (pool != 0) {
         pool->_refCount = pool->_refCount + 1;

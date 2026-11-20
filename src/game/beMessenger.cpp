@@ -106,7 +106,7 @@ public:
 };
 
 #define ALLOC(var, owner) \
-    { var = (int)igObject_GetAllocator(owner); var = g_useOwnerAllocator ? var : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
+    { var = (int)((Gap::Core::igObject *)(owner))->getMemoryPool(); var = g_useOwnerAllocator ? var : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
 
 template <class Ref> static inline void storeAt(const int &list, int i, const Ref &slot) {
     igObject *cur = slot.p;
@@ -510,7 +510,7 @@ void beMessenger_RegisterReceiver(beMessenger *self, beBaseInfoRam *recv, const 
     igSmartPointer<beMessengerGroup> grp((beMessengerGroup *)igProperty_FindByName((igObjectList *)self->_groupList, g_propertyNameField, name));
     RETAIN_REF(grp.p)
     if (grp.p == 0) {
-        allocator = (int)igObject_GetAllocator(self);
+        allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         RELEASE_REF(grp.p)
         grp.p = beMessengerGroup_Create(allocator);
@@ -860,7 +860,7 @@ void beMessenger_PrepareDelayedSelection(beMessenger *self, const char *group, c
     igSmartPointer<beMessengerDelay> row(((beMessengerDelay **)stack->_data)[last]);
     RETAIN_REF(row.p)
     if (row->_isUse) {
-        allocator = (int)igObject_GetAllocator(self);
+        allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         RELEASE_REF(row.p)
         row.p = beMessengerDelay_Create(allocator);

@@ -66,7 +66,7 @@ void igPickMode_RecordHit(igPickMode *self, IntersectHit *hit);
 void igPickMode_Pick(igPickMode *self);
 
 static inline igObject *asCamera(igObject *o) {
-    if (o != 0 && igObject_IsKindOf(o, g_igCamera_metaObject) != 0) {
+    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igCamera_metaObject) != 0) {
         return o;
     }
     return 0;
@@ -119,7 +119,7 @@ static inline void setHitPath(igPickMode *pickMode, const igSmartPointer<igGraph
 static inline igGraphPath *createGraphPath() { AdoptReference tag = AdoptReference(); return igGraphPath_Create(0); }
 
 void igViewMode_IsCompatible(igViewMode *self, igObject *model) {
-    igObject_IsKindOf(model, g_igViewModel_metaObject);
+    ((Gap::Core::igObject *)model)->isOfType(g_igViewModel_metaObject);
 }
 
 void igViewMode_OnModelChange(igViewModeDispatchView *self, ViewModelEvent *event) {

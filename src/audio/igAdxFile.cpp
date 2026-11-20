@@ -84,7 +84,7 @@ void igAdxFile_userConstruct(igAdxFile *self)
 {
     Gap__Core__igObject__userConstruct(self);
     igMetaObject_CountInstances(((igObjectDispatchView *)self)->GetMeta(), 1);
-    self->_pBuffer = (int)Memory_AllocateAlignedWithAllocator(self->_iBufferSize, 0x40, igObject_GetAllocator(self));
+    self->_pBuffer = (int)Memory_AllocateAlignedWithAllocator(self->_iBufferSize, 0x40, ((Gap::Core::igObject *)self)->getMemoryPool());
     /* matching construct: hand search — the failed-allocation return folds into the epilogue, leaving the reload of
        _pBuffer; the GameCube build keeps the same compare with no branch after it */
     if (self->_pBuffer == 0) {
@@ -100,11 +100,11 @@ int igAdxFile_GetMeta(void)
 void igAdxFile_destructFields(igAdxFile *self)
 {
     if (self->_pBuffer != 0) {
-        Memory_FreeBufferWithAllocator((void *)self->_pBuffer, igObject_GetAllocator(self));
+        Memory_FreeBufferWithAllocator((void *)self->_pBuffer, ((Gap::Core::igObject *)self)->getMemoryPool());
         self->_pBufferPtr = 0;
     }
     if (self->_pTmpBuffer != 0) {
-        Memory_FreeBufferWithAllocator((void *)self->_pTmpBuffer, igObject_GetAllocator(self));
+        Memory_FreeBufferWithAllocator((void *)self->_pTmpBuffer, ((Gap::Core::igObject *)self)->getMemoryPool());
     }
 }
 
@@ -300,7 +300,7 @@ int igAdxFile_Read(igAdxFile *self, char *dest, int size, int count)
         return count;
     }
     if (self->_pTmpBuffer == 0) {
-        self->_pTmpBuffer = (int)Memory_AllocateAlignedWithAllocator(self->_iBufferSize, 0x40, igObject_GetAllocator(self));
+        self->_pTmpBuffer = (int)Memory_AllocateAlignedWithAllocator(self->_iBufferSize, 0x40, ((Gap::Core::igObject *)self)->getMemoryPool());
         if (self->_pTmpBuffer == 0) {
             return 0;
         }

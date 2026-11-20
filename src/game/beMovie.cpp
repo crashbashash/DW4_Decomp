@@ -69,7 +69,7 @@ static inline beCriSndf *sndfOf(beCriAudio *s) { return (beCriSndf *)s->_sndf; }
 
 int beCriAudio_Setup(beCriAudio *self, int channels) {
     if (channels < 0) {
-        int allocator = (int)igObject_GetAllocator(self);
+        int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
         igRelease((igObject *)self->_sndf);
         self->_sndf = (int)beCriSndf_Create(allocator);
@@ -77,7 +77,7 @@ int beCriAudio_Setup(beCriAudio *self, int channels) {
         self->_adxt = 0;
         self->_audioType = kAudioSndf;
     } else {
-        int allocator = (int)igObject_GetAllocator(self);
+        int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
         igRelease((igObject *)self->_adxt);
         self->_adxt = (int)igAdxAudio_Create(allocator);
@@ -418,7 +418,7 @@ struct TimerHolder {
 
 /* The allocator new members come from: the owner's own, or the user pool. */
 static inline int allocatorFor(void *owner) {
-    int allocator = (int)igObject_GetAllocator((igObject *)owner);
+    int allocator = (int)((Gap::Core::igObject *)owner)->getMemoryPool();
     return g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
 }
 
@@ -716,7 +716,7 @@ void beMovie_UpdateRam(beMovie *self, beBaseInfoRam *ram) {
             list = (beBaseInfoDataList *)((beMovieInfo *)ram->_parentInfo)->_dataList;
             for (i = 0; i < list->_count; i++) {
                 entry = ((igObject **)list->_data)[i];
-                if (entry != 0 && igObject_IsKindOf(entry, g_beMovieInfoData_metaObject) != 0) data = (beMovieInfoData *)entry;
+                if (entry != 0 && ((Gap::Core::igObject *)entry)->isOfType(g_beMovieInfoData_metaObject) != 0) data = (beMovieInfoData *)entry;
                 else data = 0;
                 if (data == 0) return;
                 name = nameOf(data);
@@ -743,7 +743,7 @@ int beMovie_OnMessage(beMovie *self, beBaseInfoRam *ram, beMessengerWork *work) 
         for (int i = 0; i < list->_count; i++) {
             igObject *entry = ((igObject **)list->_data)[i];
             beMovieInfoData *data;
-            if (entry != 0 && igObject_IsKindOf(entry, g_beMovieInfoData_metaObject) != 0) data = (beMovieInfoData *)entry;
+            if (entry != 0 && ((Gap::Core::igObject *)entry)->isOfType(g_beMovieInfoData_metaObject) != 0) data = (beMovieInfoData *)entry;
             else data = 0;
             if (data == 0) return 1;
             if (strcmp((const char *)movieName, nameOf(data)) != 0) continue;
@@ -759,18 +759,18 @@ int beMovie_OnMessage(beMovie *self, beBaseInfoRam *ram, beMessengerWork *work) 
                 if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) <= 0) return 1;
                 igObject *object = beMessenger_GetObject((beMessenger *)self->_messenger, 0);
                 igGroup *layer;
-                if (object != 0 && igObject_IsKindOf(object, g_igGroup_metaObject) != 0) layer = (igGroup *)object;
+                if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_igGroup_metaObject) != 0) layer = (igGroup *)object;
                 else layer = 0;
                 if (layer == 0) return 1;
                 igObject *child = ((igObject **)((igObjectList *)layer->_childList)->_data)[0];
                 igAttrSet *layerNode;
-                if (child != 0 && igObject_IsKindOf(child, g_igAttrSet_metaObject) != 0) layerNode = (igAttrSet *)child;
+                if (child != 0 && ((Gap::Core::igObject *)child)->isOfType(g_igAttrSet_metaObject) != 0) layerNode = (igAttrSet *)child;
                 else layerNode = 0;
                 if (layerNode == 0) return 1;
                 if (movie.p->_sceneInfo == 0) return 1;
                 igObject *graph = (igObject *)((igSceneInfo *)movie.p->_sceneInfo)->_sceneGraph;
                 igAttrSet *scene;
-                if (graph != 0 && igObject_IsKindOf(graph, g_igAttrSet_metaObject) != 0) scene = (igAttrSet *)graph;
+                if (graph != 0 && ((Gap::Core::igObject *)graph)->isOfType(g_igAttrSet_metaObject) != 0) scene = (igAttrSet *)graph;
                 else scene = 0;
                 if (scene == 0) return 1;
                 igGroup_AppendChild((igGroup *)layerNode, (igNode *)scene);

@@ -62,7 +62,7 @@ enum CardFlag { CardUnusable = 0x04, CardFull = 0x08, CardPresent = 0x80 };
 
 /* The owner's allocator, or the default selector's when owner allocation is off. */
 #define PICK_ALLOCATOR(allocator, owner) { \
-    allocator = igObject_GetAllocator(owner); \
+    allocator = ((Gap::Core::igObject *)(owner))->getMemoryPool(); \
     allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
 
 /* The step read afresh: `_st1 = CurrentStep(ctrl) + 1` reloads the value the switch tested. */

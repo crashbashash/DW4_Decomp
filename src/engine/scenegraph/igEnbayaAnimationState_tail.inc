@@ -56,7 +56,7 @@ void Gap__Sg__igEnbayaAnimationState__vfunc_23(igEnbayaAnimationState *arg0) {
     n = l->_count;
     for (i = 0; i < n; i++) {
         e = (igAnimationTrack *)((int *)l->_data)[i];
-        if (e != 0 && (c = (igEnbayaTransformSource *)e->_source) != 0 && igObject_IsKindOf(c, g_igEnbayaTransformSource_metaObject) != 0) {
+        if (e != 0 && (c = (igEnbayaTransformSource *)e->_source) != 0 && ((Gap::Core::igObject *)c)->isOfType(g_igEnbayaTransformSource_metaObject) != 0) {
             found = ((igEnbayaAnimationSource *)c->_enbayaAnimationSource)->_enbayaAnimationStream;
             break;
         }

@@ -27,7 +27,7 @@ void igAttrStackManager_userConstruct(unsigned char *arg0, int arg1) {
     Gap__Core__igObject__userConstruct((igObject *)arg0);
     if (arg1 == 0) {
         if (DAT_00562580[0] == 0) {
-            al = (int)igObject_GetAllocator((igObject *)arg0);
+            al = (int)((Gap::Core::igObject *)arg0)->getMemoryPool();
             al = (int)(g_useOwnerAllocator != 0 ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleAttribute));
             DAT_00562580[0] = ((struct L_1af920 *)FUN_001a51d0(al));
         }
@@ -125,7 +125,7 @@ void igAttrStackManager_RegisterAttribute(AttrManagerRec *m, AttrObj *meta) {
         m->_numAttrStacks = end;
         for (i = 0; i < units; i++, first++) {
             igSmartPointer<AttrObj> def = m->_defaultManager->getDefault(meta, i);
-            igSmartPointer<AttrStackRec> stack((AttrStackRec *)((AttrObj *)FUN_001a5a70((int)igObject_GetAllocator(m))));
+            igSmartPointer<AttrStackRec> stack((AttrStackRec *)((AttrObj *)FUN_001a5a70((int)((Gap::Core::igObject *)m)->getMemoryPool())));
             AttrObj **slot;
             AttrObj *value;
             slot = &stack.p->_default;

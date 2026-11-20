@@ -101,7 +101,7 @@ int igRefMetaField_ArrayToString(igStringRef *out, void *owner, int *refs, int c
     if (prefix == 0) prefix = &g_igRefMetaField_defaultArrayPrefix;
     if (width == -1) width = strlen(prefix) + 5;
     sprintf(itemFormat,"%%-%ds", width);
-    a = ((igMemoryPoolView *)igObject_GetAllocator((igObject *)owner));
+    a = ((igMemoryPoolView *)((Gap::Core::igObject *)owner)->getMemoryPool());
     a = g_useOwnerAllocator ? a : ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     buf = (char *)a->Allocate(count * (strlen(itemFormat) + 0x80));
     w = buf;
@@ -130,7 +130,7 @@ block12:
         }
     }
     igStringRef text(buf);
-    a = ((igMemoryPoolView *)igObject_GetAllocator((igObject *)owner));
+    a = ((igMemoryPoolView *)((Gap::Core::igObject *)owner)->getMemoryPool());
     a = g_useOwnerAllocator ? a : ((igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     a->Free(buf);
     char *src = text.p;

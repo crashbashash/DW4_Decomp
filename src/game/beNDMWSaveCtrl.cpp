@@ -22,7 +22,7 @@
 #pragma push
 #pragma readonly_strings on
 
-#define OWNER_ALLOCATOR(dst, obj) { int alloc = (int)igObject_GetAllocator(obj); if (g_useOwnerAllocator != 0) { dst = alloc; } else { dst = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); } }
+#define OWNER_ALLOCATOR(dst, obj) { int alloc = (int)((Gap::Core::igObject *)(obj))->getMemoryPool(); if (g_useOwnerAllocator != 0) { dst = alloc; } else { dst = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); } }
 /* The per-player work records of the common interface, and its memory-card utility. */
 #define PLW(common, i) (((beNDMWLoadSavePlWork **)((beNDMWLoadSavePlWorkList *)(common)->_flagWork)->_data)[i])
 #define MCU(common) ((beNDMWMcUtilCtrl *)(common)->_mcUtilCtrl)

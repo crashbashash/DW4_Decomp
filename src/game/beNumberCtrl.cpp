@@ -24,7 +24,7 @@ enum NumberCtrlMessage { kGetValue = 0, kSetValue = 1, kSetValueDirect = 2, kAdd
 
 /* The allocator new members come from: the owner's own, or the user pool. */
 static inline int allocatorFor(void *owner) {
-    int allocator = (int)(igObject_GetAllocator((igObject *)owner));
+    int allocator = (int)(((Gap::Core::igObject *)owner)->getMemoryPool());
     return (int)(g_useOwnerAllocator != 0 ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
 }
 

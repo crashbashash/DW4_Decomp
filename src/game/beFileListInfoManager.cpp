@@ -203,7 +203,7 @@ void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *self) {
 #define SET_POOL(pool, selector) { \
     igResource *context; \
     int allocator; \
-    int ownerAllocator = (int)igObject_GetAllocator(self); \
+    int ownerAllocator = (int)((Gap::Core::igObject *)self)->getMemoryPool(); \
     igObject *old; \
     if (g_useOwnerAllocator != 0) { allocator = ownerAllocator; } else { allocator = (int)Memory_GetAllocatorBySelector(selector); } \
     context = (igResource *)g_globalContext; \
@@ -251,7 +251,7 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
                         meta = g_igSceneInfo_metaObject;
                         if (meta == info->GetMeta()) {
                             igSceneInfo *scene;
-                            if (info != 0 && igObject_IsKindOf((igObject *)info, g_igSceneInfo_metaObject) != 0) {
+                            if (info != 0 && ((Gap::Core::igObject *)info)->isOfType(g_igSceneInfo_metaObject) != 0) {
                                 scene = (igSceneInfo *)info;
                             } else {
                                 scene = 0;

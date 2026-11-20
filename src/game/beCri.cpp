@@ -82,7 +82,7 @@ static inline beCriSfpData *BankAt(igObjectList *list, int i) { return ((beCriSf
 
 /* The allocator the controller's handles come from: its own, or the NDMW allocator. */
 static inline int HandleAllocator(beCri *self) {
-    int allocator = (int)igObject_GetAllocator(self);
+    int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     return g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
 }
 
@@ -251,7 +251,7 @@ void beCri_Activate(beCri *self) {
     if (registry == 0) return;
     section = igRegistry_GetSectionIndex(registry, "BECRUNTIME", 0);
     if (section == -1) return;
-    int allocator = (int)igObject_GetAllocator(self);
+    int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     igSmartPointer<igStringObj> path((igStringObj *)igStringObj_Create(allocator));
     if (igRegistry_GetValueStringObj(registry, section, "AdxModulePath", (igStringObj **)&path, "", 0) == 0) {
@@ -1043,7 +1043,7 @@ void beCri_SetSndfVolume(beCri *self, int volume) {
 }
 
 static inline int AsMemoryRefField(int field) {
-    if (field != 0 && igObject_IsKindOf((igObject *)field, g_igMemoryRefMetaField_metaObject) != 0) {
+    if (field != 0 && ((Gap::Core::igObject *)field)->isOfType(g_igMemoryRefMetaField_metaObject) != 0) {
         return field;
     }
     return 0;

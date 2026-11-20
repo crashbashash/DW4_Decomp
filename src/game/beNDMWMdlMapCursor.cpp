@@ -35,7 +35,7 @@ public:
  * list reference is laid out after the caller's own value reference (+0x58 below +0x5c), as retail does. */
 struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
     if (ram->_dataList == 0) {
-        igMemoryPoolView *al = igObject_GetAllocator(ram);
+        igMemoryPoolView *al = ((Gap::Core::igObject *)ram)->getMemoryPool();
         al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<igObject> list(beBaseInfoDataList_Create((int)al));
         igObject *t = list.p;
@@ -72,7 +72,7 @@ void beNDMWMdlMapCursor_OnGenerate(beNDMWMdlMapCursor *self, beBaseInfoRam *ram)
     const char *s;
     RamDataList::Ensure(ram);
     pr = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
-    al = igObject_GetAllocator(self);
+    al = ((Gap::Core::igObject *)self)->getMemoryPool();
     al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     {
     /* The new value object is owned by the stack reference while it replaces the record's value and
@@ -165,7 +165,7 @@ void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *self, beBaseInfoRam *ram
             *py += t.y;
             *pz += t.z;
             if (ram->_dataList == 0) {
-                igMemoryPoolView *alloc = igObject_GetAllocator(ram);
+                igMemoryPoolView *alloc = ((Gap::Core::igObject *)ram)->getMemoryPool();
                 igMemoryPoolView *a;
                 if (g_useOwnerAllocator != 0) {
                     a = alloc;

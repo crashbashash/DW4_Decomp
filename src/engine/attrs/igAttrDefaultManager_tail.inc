@@ -37,7 +37,7 @@ igObjectPointer igAttrPool_GetSharedAttr(igAttrPool *pool, igObjectPointer attr)
     int index = metaList->sortedIndex(meta);
     igSmartPointer<igAttrList> list((igAttrList *)0, kRetainReference);
     if (index == -1) {
-        igMemoryPoolView *allocator = igObject_GetAllocator(pool);
+        igMemoryPoolView *allocator = ((Gap::Core::igObject *)pool)->getMemoryPool();
         list.release();
         list.p = igAttrList_Create(allocator);
         int at = insertObjectSorted((void *)pool->_metaList, meta);
@@ -48,7 +48,7 @@ igObjectPointer igAttrPool_GetSharedAttr(igAttrPool *pool, igObjectPointer attr)
     unsigned int count = list->_count;
     for (unsigned int i = 0; i < count; i++) {
         igObjectPointer item(((igObject **)list->_data)[i], kRetainReference);
-        if (igObject_IsAlikeShallow((igObjectDispatchView *)item.get(), (igObjectDispatchView *)attr.get())) {
+        if (((Gap::Core::igObject *)(item.get()))->isAlikeShallow((Gap::Core::igObject *)attr.get())) {
             return item;
         }
     }

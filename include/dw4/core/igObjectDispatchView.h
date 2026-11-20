@@ -34,5 +34,4 @@ public:
 };
 
 static inline void igObject_Destroy(igObjectDispatchView *object) { igObject_Destroy((igObject *)object); }
-static inline int igObject_IsKindOf(igObjectDispatchView *object, igMetaObject *kind) { return igObject_IsKindOf((igObject *)object, kind); }
 #endif

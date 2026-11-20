@@ -10,7 +10,7 @@ static inline const char *entryNameOf(const igObjectDirEntry *entry) {
 }
 
 static inline igObjectList *asObjectEntryList(igObject *object) {
-    if (object != 0 && igObject_IsKindOf(object, (igMetaObject *)g_igObjectList_metaObject) != 0) return (igObjectList *)object;
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType((igMetaObject *)g_igObjectList_metaObject) != 0) return (igObjectList *)object;
     return 0;
 }
 

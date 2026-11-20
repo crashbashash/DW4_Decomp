@@ -12,7 +12,7 @@ extern "C" igMetaObject *igMoviePlugin_GetMeta(void);
 void igMoviePlugin_Attach(igMoviePlugin *self, igInsightCore *insight) {
     int allocator;
     igMovieManager *old;
-    allocator = (int)igObject_GetAllocator(self);
+    allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
     old = (igMovieManager *)self->_movieManager;
     if (old != 0) {

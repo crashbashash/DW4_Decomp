@@ -115,7 +115,7 @@ void igDependencyOrderedList_AddDependency(igDependencyOrderedList *self, void *
 }
 
 void igDependencyOrderedList_Rebuild(igDependencyOrderedListView *owner) {
-    igSmartPointer<igObjectList> copy(((igObjectList *)igObjectList_Create(((int)igObject_GetAllocator((igObject *)owner)))));
+    igSmartPointer<igObjectList> copy(((igObjectList *)igObjectList_Create(((int)((Gap::Core::igObject *)owner)->getMemoryPool()))));
     ObjectList_AppendRetainedList((igTDataList<igObject *> *)copy.p, owner->_objectList);
     igTDataList<igObject *> *children = owner->_objectList;
     int count = children->_count;
