@@ -154,9 +154,9 @@ void beNDMWWindow_PresentModel(beNDMWWindow *self, const char *model, int id, co
 
 void beNDMWWindow_PresentModelAtOrigin(beNDMWWindow *self, const char *model, int id, const char *sequence, const char *close) {
     float origin[3];
-    origin[0] = g_vec3Zero.x;
-    origin[1] = g_vec3Zero.y;
-    origin[2] = g_vec3Zero.z;
+    origin[0] = g_vec3Zero[0];
+    origin[1] = g_vec3Zero[1];
+    origin[2] = g_vec3Zero[2];
     beNDMWWindow_PresentModel(self, model, id, sequence, close, origin);
 }
 

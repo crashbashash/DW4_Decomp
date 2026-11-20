@@ -2,8 +2,8 @@
 void FUN_001b1fa0(igGeometryAttr *geometry, igVec3f *min, igVec3f *max) {
     igVertexArrayLock lock;
     igVec3f *v;
-    min->x = min->y = min->z = 1.00000002e+20f;
-    max->x = max->y = max->z = -1.00000002e+20f;
+    min->vec[0] = min->vec[1] = min->vec[2] = 1.00000002e+20f;
+    max->vec[0] = max->vec[1] = max->vec[2] = -1.00000002e+20f;
     igVertexArrayLock_Init(&lock);
     lock.component = 0;
     lock.firstVertex = 0;
@@ -12,16 +12,16 @@ void FUN_001b1fa0(igGeometryAttr *geometry, igVec3f *min, igVec3f *max) {
     ((igVertexArrayView *)geometry->_vertexArray)->lock(&lock, 0);
     for (unsigned int i = 0; i < lock.count; i++) {
         v = (igVec3f *)(lock.getData() + i * lock.getStride());
-        if (!(min->x <= v->x)) min->x = v->x;
-        if (!(min->y <= v->y)) min->y = v->y;
-        if (!(min->z <= v->z)) min->z = v->z;
+        if (!(min->vec[0] <= v->vec[0])) min->vec[0] = v->vec[0];
+        if (!(min->vec[1] <= v->vec[1])) min->vec[1] = v->vec[1];
+        if (!(min->vec[2] <= v->vec[2])) min->vec[2] = v->vec[2];
         v = (igVec3f *)(lock.getData() + i * lock.getStride());
-        if (max->x < v->x) max->x = v->x;
-        if (max->y < v->y) max->y = v->y;
-        if (max->z < v->z) max->z = v->z;
+        if (max->vec[0] < v->vec[0]) max->vec[0] = v->vec[0];
+        if (max->vec[1] < v->vec[1]) max->vec[1] = v->vec[1];
+        if (max->vec[2] < v->vec[2]) max->vec[2] = v->vec[2];
     }
     igVec3f half = (*max - *min) * 0.5f;
-    half.scale(g_unitScale);
+    half.multiply(g_unitScale);
     igVec3f center = (*min + *max) * 0.5f;
     *min = center - half;
     *max = center + half;

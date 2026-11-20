@@ -109,9 +109,9 @@ extern "C" void beTargetObj_GatherPositions(beTargetObj *self, igVec3fList *posi
             List_Resize(positions, n + 1, sizeof(igVec3f));
         }
         slot = &((igVec3f *)positions->_data)[n];
-        slot->x = position[0];
-        slot->y = position[1];
-        slot->z = position[2];
+        slot->vec[0] = position[0];
+        slot->vec[1] = position[1];
+        slot->vec[2] = position[2];
         if (ramNos != 0) {
             ramNo = beMessenger_GetInt(g_targetMessenger, i);
             n = ramNosView->_count;
@@ -139,12 +139,12 @@ extern "C" void beTargetObj_FindNearest(beTargetObj *self, igVec3fList *position
     count = positions->_count;
     for (i = 0; i < count; i++) {
         igVec3f *p = &((igVec3f *)positions->_data)[i];
-        px = p->x;
-        py = p->y;
-        pz = p->z;
-        dy = from->y - py;
-        dx = from->x - px;
-        dz = from->z - pz;
+        px = p->vec[0];
+        py = p->vec[1];
+        pz = p->vec[2];
+        dy = from->vec[1] - py;
+        dx = from->vec[0] - px;
+        dz = from->vec[2] - pz;
         distanceSq = dx * dx + dy * dy + dz * dz;
         if (i == 0 || !(best <= distanceSq)) {
             best = distanceSq;
@@ -154,9 +154,9 @@ extern "C" void beTargetObj_FindNearest(beTargetObj *self, igVec3fList *position
             if (ramNos) ramNo = ((int *)ramNos->_data)[i];
         }
     }
-    outPosition->x = bestX;
-    outPosition->y = bestY;
-    outPosition->z = bestZ;
+    outPosition->vec[0] = bestX;
+    outPosition->vec[1] = bestY;
+    outPosition->vec[2] = bestZ;
     *outDistanceSq = best;
     *outRamNo = ramNo;
 }
@@ -175,10 +175,10 @@ extern "C" void beTargetObj_FindFacing(beTargetObj *self, igVec3fList *positions
     count = positions->_count;
     for (i = 0; i < count; i++) {
         igVec3f *p = &((igVec3f *)positions->_data)[i];
-        px = p->x;
-        py = p->y;
-        pz = p->z;
-        turn = atan2f(px - from->x, pz - from->z) - heading;
+        px = p->vec[0];
+        py = p->vec[1];
+        pz = p->vec[2];
+        turn = atan2f(px - from->vec[0], pz - from->vec[2]) - heading;
         if (turn < 0.0f) turn = -turn;
         while (turn > TWO_PI) turn -= TWO_PI;
         if (i == 0 || !(best <= turn)) {
@@ -189,12 +189,12 @@ extern "C" void beTargetObj_FindFacing(beTargetObj *self, igVec3fList *positions
             ramNo = ((int *)ramNos->_data)[i];
         }
     }
-    outPosition->x = bestX;
-    outPosition->y = bestY;
-    outPosition->z = bestZ;
-    dy = from->y - bestY;
-    dx = from->x - bestX;
-    dz = from->z - bestZ;
+    outPosition->vec[0] = bestX;
+    outPosition->vec[1] = bestY;
+    outPosition->vec[2] = bestZ;
+    dy = from->vec[1] - bestY;
+    dx = from->vec[0] - bestX;
+    dz = from->vec[2] - bestZ;
     *outDistanceSq = dx * dx + dy * dy + dz * dz;
     *outRamNo = ramNo;
 }
@@ -209,15 +209,15 @@ extern "C" int beTargetObj_GetPlayerCentre(float *out)
                                     (igIntList *)g_targetObj->_playerRamNoList, "PLAYER", "GETMATRIX");
         if (((igVec3fList *)g_targetObj->_playerPosList)->_count == 0) return 0;
     }
-    out[0] = g_vec3Zero.x;
-    out[1] = g_vec3Zero.y;
-    out[2] = g_vec3Zero.z;
+    out[0] = g_vec3Zero[0];
+    out[1] = g_vec3Zero[1];
+    out[2] = g_vec3Zero[2];
     count = ((igVec3fList *)g_targetObj->_playerPosList)->_count;
     for (i = 0; i < count; i++) {
         igVec3f *p = &((igVec3f *)((igVec3fList *)g_targetObj->_playerPosList)->_data)[i];
-        out[0] += p->x;
-        out[1] += p->y;
-        out[2] += p->z;
+        out[0] += p->vec[0];
+        out[1] += p->vec[1];
+        out[2] += p->vec[2];
     }
     switch (count) {
     case 0:
@@ -309,21 +309,21 @@ extern "C" unsigned char beTargetObj_SelectTarget(float *matrix, const char *gro
 
     igMatrix44f_Copy(g_targetOriginMatrix.m, matrix);
     igMatrix44f_GetTranslation(matrix, (float *)&origin);
-    g_targetOrigin.x = origin.x;
-    g_targetOrigin.y = origin.y;
-    g_targetOrigin.z = origin.z;
+    g_targetOrigin[0] = origin[0];
+    g_targetOrigin[1] = origin[1];
+    g_targetOrigin[2] = origin[2];
     g_targetOriginHeading = TARGET_HEADING_UNSET;
     nearest = strcmp(mode, "NEAR") == 0;
     if (strcmp(group, "PLAYER") == 0) {
-        playerFrom.x = origin.x;
-        playerFrom.y = origin.y;
-        playerFrom.z = origin.z;
+        playerFrom[0] = origin[0];
+        playerFrom[1] = origin[1];
+        playerFrom[2] = origin[2];
         return beTargetObj_TargetPlayer(g_targetObj, (float *)&playerFrom, nearest);
     }
     if (strcmp(group, "ENEMY") == 0) {
-        enemyFrom.x = origin.x;
-        enemyFrom.y = origin.y;
-        enemyFrom.z = origin.z;
+        enemyFrom[0] = origin[0];
+        enemyFrom[1] = origin[1];
+        enemyFrom[2] = origin[2];
         return beTargetObj_TargetEnemy(g_targetObj, (float *)&enemyFrom, nearest);
     }
     return 0;
@@ -336,14 +336,14 @@ extern "C" unsigned char beTargetObj_SetTarget(float *matrix, float *position)
     float dx, dy, dz;
 
     igMatrix44f_GetTranslation(matrix, origin);
-    g_targetOrigin.x = origin[0];
-    g_targetOrigin.y = origin[1];
-    g_targetOrigin.z = origin[2];
+    g_targetOrigin[0] = origin[0];
+    g_targetOrigin[1] = origin[1];
+    g_targetOrigin[2] = origin[2];
     igMatrix44f_Copy(g_targetOriginMatrix.m, matrix);
     g_targetOriginHeading = TARGET_HEADING_UNSET;
-    g_targetPosition.x = position[0];
-    g_targetPosition.y = position[1];
-    g_targetPosition.z = position[2];
+    g_targetPosition[0] = position[0];
+    g_targetPosition[1] = position[1];
+    g_targetPosition[2] = position[2];
     dy = origin[1] - position[1];
     dx = origin[0] - position[0];
     dz = origin[2] - position[2];
@@ -363,7 +363,7 @@ extern "C" float beTargetObj_GetOriginHeading(beTargetObj *self)
     float forward[4];
 
     if (g_targetOriginHeading == TARGET_HEADING_UNSET) {
-        Vec3f_TransformDirection(forward, &g_vec3ZAxis.x, g_targetOriginMatrix.m);
+        Vec3f_TransformDirection(forward, g_vec3ZAxis.vec, g_targetOriginMatrix.m);
         g_targetOriginHeading = atan2f(forward[0], forward[2]);
     }
     return g_targetOriginHeading;
@@ -382,7 +382,7 @@ extern "C" float beTargetObj_GetTargetDistanceSq(void)
 /* The target's bearing from the origin, plus `offset`. */
 extern "C" float beTargetObj_GetTargetBearing(float offset)
 {
-    return offset + atan2f(g_targetPosition.x - g_targetOrigin.x, g_targetPosition.z - g_targetOrigin.z);
+    return offset + atan2f(g_targetPosition[0] - g_targetOrigin[0], g_targetPosition[2] - g_targetOrigin[2]);
 }
 
 extern "C" int beTargetObj_GetTargetRamNo(void)

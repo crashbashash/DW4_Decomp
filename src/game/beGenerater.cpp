@@ -100,14 +100,15 @@ int beGenerater_SpawnEnemies(beGenerater *self, beBaseInfoRam *ram, int count)
             position = *((Vec3fList *)data->_genePosList)->at(point);
         } else {
             igVec3f relative = *((Vec3fList *)data->_genePosList)->at(point);
-            /* matching construct: IR dump — the one-pass loop puts the sum after the return path; the indexed
-             * stores and the x term read from the data keep its stack offsets and operand order */
+            /* matching construct: IR dump, sweep — the one-pass loop puts the sum after the return path; the stores
+             * through a float pointer to the indexed vector keep their stack offsets, and the offset's elements read
+             * as plain members (no operator[] call) with the x term from the data keep the operand order */
             for (int i = 0; i < 1; i++) {
                 const float *origin = data->_pos;
                 const igVec3f &offset = (&relative)[i];
-                position.x = offset.x + data->_pos[0];
-                (&position)[i].y = offset.y + origin[1];
-                (&position)[i].z = offset.z + origin[2];
+                ((float *)&(&position)[i])[0] = offset.vec[0] + data->_pos[0];
+                ((float *)&(&position)[i])[1] = offset.vec[1] + origin[1];
+                ((float *)&(&position)[i])[2] = offset.vec[2] + origin[2];
             }
         }
         float degrees = 57.29578f * ((FloatList *)data->_geneRotYRadianList)->at(point);

@@ -74,7 +74,7 @@ extern struct igMetaObject *g_beMessenger_metaObject;
 
 /* A vector passed by value: the caller copies it and the definition reads the copy's three floats. */
 inline void beMessenger_AppendVec3(struct beMessenger *self, igVec3f value) {
-    beMessenger_AppendVec3(self, &value.x);
+    beMessenger_AppendVec3(self, value.vec);
 }
 
 /* The vector reply, returned by value. */

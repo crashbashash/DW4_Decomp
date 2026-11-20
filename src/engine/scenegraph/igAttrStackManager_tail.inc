@@ -640,47 +640,47 @@ void FUN_001b1aa0(igBillboard *billboard, float *matrix, const float *modelView,
     igVec3f position;
     igVec3f up;
     igVec3f origin;
-    igMatrix44f_GetTranslation(modelView, &position.x);
-    Vec3f_TransformDirection(&origin.x, billboard->_origin, modelView);
+    igMatrix44f_GetTranslation(modelView, position.vec);
+    Vec3f_TransformDirection(origin.vec, billboard->_origin, modelView);
     position.add(origin);
     igVec3f viewPosition(view[12], view[13], view[14]);
     igVec3f direction = viewPosition - position;
     switch (billboard->_mode) {
     case 1:
-        Vec3f_TransformDirection(&up.x, billboard->_axis, modelView);
+        Vec3f_TransformDirection(up.vec, billboard->_axis, modelView);
         break;
     case 2: {
         igVec3f side;
-        up.x = 0.0f;
-        up.y = 1.0f;
-        up.z = 0.0f;
-        FUN_00192dd0(&side.x, &up.x, &direction.x);
-        FUN_00192dd0(&up.x, &direction.x, &side.x);
+        up[0] = 0.0f;
+        up[1] = 1.0f;
+        up[2] = 0.0f;
+        FUN_00192dd0(side.vec, up.vec, direction.vec);
+        FUN_00192dd0(up.vec, direction.vec, side.vec);
         break;
     }
     case 3:
         if (view != 0) {
             igVec3f viewUp;
             igVec3f side;
-            viewUp.x = 0.0f;
-            viewUp.y = 1.0f;
-            viewUp.z = 0.0f;
-            Vec3f_TransformDirection(&viewUp.x, &viewUp.x, view);
-            FUN_00192dd0(&side.x, &viewUp.x, &direction.x);
+            viewUp[0] = 0.0f;
+            viewUp[1] = 1.0f;
+            viewUp[2] = 0.0f;
+            Vec3f_TransformDirection(viewUp.vec, viewUp.vec, view);
+            FUN_00192dd0(side.vec, viewUp.vec, direction.vec);
             side.scale(1.0f / sqrtf(side.dot(side)));
-            FUN_00192dd0(&up.x, &direction.x, &side.x);
+            FUN_00192dd0(up.vec, direction.vec, side.vec);
             up.scale(1.0f / sqrtf(up.dot(up)));
         }
         break;
     case 0:
     default:
-        up.x = 0.0f;
-        up.y = 1.0f;
-        up.z = 0.0f;
+        up[0] = 0.0f;
+        up[1] = 1.0f;
+        up[2] = 0.0f;
         break;
     }
-    FUN_001b1590(matrix, &up.x, &direction.x);
-    igMatrix44f_SetTranslation(matrix, &position.x);
+    FUN_001b1590(matrix, up.vec, direction.vec);
+    igMatrix44f_SetTranslation(matrix, position.vec);
 }
 
 void igBitMask_SetAll(igBitMask *mask) {

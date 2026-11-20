@@ -167,7 +167,7 @@ extern "C" igTextureFunctionAttr *g_shadowTextureFunctionAttr0[4];
 /* The igLightAttr meta-field of the light's direction; its _offset locates the field. */
 /* True when the vectors differ in any component. */
 static inline bool Vec3Differs(const igVec3f &a, const igVec3f &b) {
-    return a.x != b.x || a.y != b.y || a.z != b.z;
+    return a[0] != b[0] || a[1] != b[1] || a[2] != b[2];
 }
 
 /* Copy a three-float vector; the source pointer shares &centre.y / &centre.z between the two copies. */
@@ -201,18 +201,18 @@ void beShadow01_UpdateRam(beShadow01 *self, beBaseInfoRam *ram) {
         break;
     }
     }
-    if (beTargetObj_GetPlayerCentre(&centre.x)) {
-        centre.y += 200.0f;
+    if (beTargetObj_GetPlayerCentre(centre.vec)) {
+        centre[1] += 200.0f;
         /* matching construct: fdiff — the saved-position reference is a variable of its own, so its address
          * (addiu a0,s2,36) is kept for the second and third compares. */
         igVec3f &saved = *(igVec3f *)self->_savePos;
         if (Vec3Differs(centre, saved)) {
             igLightAttr *light = (igLightAttr *)((igProjectiveShadowShader *)info->_projShadowShader)->_light;
             float *direction = (float *)((char *)light + g_igLightAttr_directionMetaField->_offset);
-            ((igLightAttrDispatchView *)light)->setPosition(&centre.x);
-            Vec3Copy(light->_cachedPosition, &centre.x);
+            ((igLightAttrDispatchView *)light)->setPosition(centre.vec);
+            Vec3Copy(light->_cachedPosition, centre.vec);
             Vec3Copy(light->_cachedDirection, direction);
-            Vec3Copy(self->_savePos, &centre.x);
+            Vec3Copy(self->_savePos, centre.vec);
         }
     }
 }

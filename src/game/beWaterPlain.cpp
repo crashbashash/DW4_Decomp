@@ -363,8 +363,8 @@ int beWaterPlain_OnMessage(beWaterPlain *self, beWaterPlainInfoRam *ram, beMesse
     case 0:
         if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) > 0 && ram->_st0 == 1) {
             igVec3f pos = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
-            if (beWaterPlain_IsPointInWater(self, ram, &pos.x))
-                beWaterPlain_Splash(self, ram, heightGrid(ram, 0), &pos.x, 1.0f);
+            if (beWaterPlain_IsPointInWater(self, ram, pos.vec))
+                beWaterPlain_Splash(self, ram, heightGrid(ram, 0), pos.vec, 1.0f);
         }
         break;
     default:

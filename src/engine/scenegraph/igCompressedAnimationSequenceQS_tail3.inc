@@ -4,7 +4,7 @@ extern "C" igVec3f *Gap__Sg__igCompressedAnimationSequenceQS__getTranslationKey(
 igVec3f *Gap__Sg__igCompressedAnimationSequenceQS__getTranslationKey(QSView *o, int index) {
     static igVec3f translation;
     unsigned short *p = o->_compressedTranslationList->_data + index * 3;
-    float *out = &translation.x;
+    float *out = translation.vec;
     *out++ = o->_translationBase + (float)(unsigned int)*p++ * o->_translationRangeOverMaxUShort;
     *out++ = o->_translationBase + (float)(unsigned int)*p++ * o->_translationRangeOverMaxUShort;
     *out++ = o->_translationBase + (float)(unsigned int)*p++ * o->_translationRangeOverMaxUShort;

@@ -34,17 +34,17 @@ void igRay_SetFromPoints(igRay *ray, const float *from, const float *to) {
 }
 
 void igRay_Transform(igRay *ray, const float *matrix) {
-    igVec3f2 end;
+    igVec3f end;
     float len;
     float scale;
 
     len = ray->_len;
-    end.x = ray->_pos[0] + len * ray->_dir[0];
-    end.y = ray->_pos[1] + len * ray->_dir[1];
-    end.z = ray->_pos[2] + len * ray->_dir[2];
+    end[0] = ray->_pos[0] + len * ray->_dir[0];
+    end[1] = ray->_pos[1] + len * ray->_dir[1];
+    end[2] = ray->_pos[2] + len * ray->_dir[2];
     Vec3f_TransformProjective(ray->_pos, ray->_pos, matrix);
-    Vec3f_TransformProjective(&end.x, &end.x, matrix);
-    end.subtractInto(ray->_dir, ray->_pos);
+    Vec3f_TransformProjective(end.vec, end.vec, matrix);
+    ((igVec3f *)ray->_dir)->subtract(end, *(const igVec3f *)ray->_pos);
     len = lengthOf(ray->_dir);
     scale = 1.0f / len;
     ray->_dir[0] = ray->_dir[0] * scale;

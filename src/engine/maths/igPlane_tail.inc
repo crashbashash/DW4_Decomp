@@ -25,16 +25,16 @@ void FUN_0018c820(igPlane *plane, const void *matrix) {
     float scale;
 
     d = plane->_offset;
-    point.x = d * plane->_norm[0];
-    point.y = d * plane->_norm[1];
-    point.z = d * plane->_norm[2];
+    point[0] = d * plane->_norm[0];
+    point[1] = d * plane->_norm[1];
+    point[2] = d * plane->_norm[2];
     Vec3f_TransformDirection(plane->_norm, plane->_norm, (float *)matrix);
-    Vec3f_TransformProjective((float *)&point, (float *)&point, (float *)matrix);
+    Vec3f_TransformProjective(point.vec, point.vec, (float *)matrix);
     scale = 1.0f / lengthOf(plane->_norm);
     plane->_norm[0] = plane->_norm[0] * scale;
     plane->_norm[1] = plane->_norm[1] * scale;
     plane->_norm[2] = plane->_norm[2] * scale;
-    plane->_offset = point.dot(plane->_norm);
+    plane->_offset = ((const igVec3f *)plane->_norm)->dot(point);
     plane->_octant = Vec3_GetOctant(plane->_norm);
 }
 

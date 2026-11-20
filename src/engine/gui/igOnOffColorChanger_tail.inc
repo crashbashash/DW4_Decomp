@@ -21,7 +21,7 @@ void igDefaultAspectElement_PlaceGeometry(igDefaultAspectElement *self, const ig
     igMatrix44f_SetIdentity(m);
     geom = (B *)self->_geometryElement;
     width = geom->x;
-    y = (size->y - geom->y) / 2.0f;
+    y = (size->vec[1] - geom->y) / 2.0f;
     switch (self->_fitMode) {
     case 0: {
         igMatrix44f_SetIdentity(m);
@@ -32,14 +32,14 @@ void igDefaultAspectElement_PlaceGeometry(igDefaultAspectElement *self, const ig
     }
     case 2: {
         igMatrix44f_SetIdentity(m);
-        igVec3f t(size->x - width, y, 0.0f);
+        igVec3f t(size->vec[0] - width, y, 0.0f);
         igMatrix44f_SetTranslation((float *)m, (const float *)&t);
         ((Obj_456b80 *)self->_transform)->vX(m);
         break;
     }
     case 1: {
         igMatrix44f_SetIdentity(m);
-        igVec3f t((size->x - width) / 2.0f, y, 0.0f);
+        igVec3f t((size->vec[0] - width) / 2.0f, y, 0.0f);
         igMatrix44f_SetTranslation((float *)m, (const float *)&t);
         ((Obj_456b80 *)self->_transform)->vX(m);
         break;
@@ -50,8 +50,8 @@ void igDefaultAspectElement_PlaceGeometry(igDefaultAspectElement *self, const ig
         igMatrix44f_SetTranslation((float *)m, (const float *)&t);
         ((Obj_456b80 *)self->_transform)->vX(m);
         /* matching construct: hand variant — reading the width into a local first gives retail's register choice. */
-        float areaWidth = size->x;
-        igVec3f s(areaWidth - 2.0f * self->_hMargin, size->y - 2.0f * self->_vMargin, size->z);
+        float areaWidth = size->vec[0];
+        igVec3f s(areaWidth - 2.0f * self->_hMargin, size->vec[1] - 2.0f * self->_vMargin, size->vec[2]);
         ((igGeometryElementSizeView *)self->_geometryElement)->setSize(&s);
         break;
     }

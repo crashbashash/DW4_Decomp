@@ -654,8 +654,8 @@ int igViewerSceneInfoManager_AddInfo(igViewerSceneInfoManager *self, igSceneInfo
         useSceneUpVector = false;
         float x = options->upVector[0];
         upVectorUnset = false;
-        if (!(x != g_vec3Zero.x)) { if (!(options->upVector[1] != g_vec3Zero.y)) { upVectorUnset = true; } }
-        if (upVectorUnset && options->upVector[2] == g_vec3Zero.z) {
+        if (!(x != g_vec3Zero[0])) { if (!(options->upVector[1] != g_vec3Zero[1])) { upVectorUnset = true; } }
+        if (upVectorUnset && options->upVector[2] == g_vec3Zero[2]) {
             useSceneUpVector = true;
         }
         if (useSceneUpVector) {

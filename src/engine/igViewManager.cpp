@@ -303,28 +303,23 @@ void igViewManager_FrameObject(igViewManager *manager, igNode *object) {
 
     center.set(0.0f, 0.0f, 0.0f);
     size = 0.0f;
-    igViewManager_GetObjectProps(object, &center.x, &size, true, -1);
+    igViewManager_GetObjectProps(object, center.vec, &size, true, -1);
     if (size == 0.0f) {
         size = 1.0f;
     }
     size *= 1.5f;
-    up.copy(((igViewModel *)manager->_viewModel)->_sceneUpVector);
+    up.set(((igViewModel *)manager->_viewModel)->_sceneUpVector);
     eye[0] = up[2];
     eye[1] = up[0];
     eye[2] = up[1];
-    eye.scale(size);
-    eye[0] += center[0];
-    eye[1] += center[1];
-    eye[2] += center[2];
-    igMatrix44f_MakeLookAt(((igViewModel *)manager->_viewModel)->_viewMatrix, (const float *)&eye, (const float *)&center, (const float *)&up);
+    eye *= size;
+    eye += center;
+    igMatrix44f_MakeLookAt(((igViewModel *)manager->_viewModel)->_viewMatrix, eye.vec, center.vec, up.vec);
     event.type = 2;
     event.source = 0;
     event.field = g_igViewModel_viewMatrixMetaField;
     igModel_NotifyViews((igModel *)manager->_viewModel, &event);
-    igViewModel *model = (igViewModel *)manager->_viewModel;
-    model->_selectedCenter[0] = center[0];
-    model->_selectedCenter[1] = center[1];
-    model->_selectedCenter[2] = center[2];
+    *(igVec3f *)((igViewModel *)manager->_viewModel)->_selectedCenter = center;
     ((igViewModel *)manager->_viewModel)->_selectedLength = size;
 }
 
@@ -389,7 +384,7 @@ void igViewManager_CenterSelection(igViewManager *manager, bool resetEye) {
     ModelChange event;
 
     if (resetEye) {
-        up.copy(((igViewModel *)manager->_viewModel)->_sceneUpVector);
+        up.set(((igViewModel *)manager->_viewModel)->_sceneUpVector);
         float distance = 1.5f * ((igViewModel *)manager->_viewModel)->_selectedLength;
         eye[0] = up[2];
         eye[1] = up[0];
@@ -413,21 +408,17 @@ void igViewManager_FitSelection(igViewManager *manager) {
     igVec3f eye;
     ModelChange event;
 
-    eye.copy(((igViewModel *)manager->_viewModel)->_position);
-    eye[0] -= center[0];
-    eye[1] -= center[1];
-    eye[2] -= center[2];
-    float distance = sqrtf(eye.x * eye.x + eye.y * eye.y + eye.z * eye.z);
+    eye.set(((igViewModel *)manager->_viewModel)->_position);
+    eye -= center;
+    float distance = sqrtf(eye.length2());
     if (distance == 0.0) {
-        eye.copy(((igViewModel *)manager->_viewModel)->_direction);
+        eye.set(((igViewModel *)manager->_viewModel)->_direction);
         distance = 1.0f;
     }
     eye.scale(1.5f * ((igViewModel *)manager->_viewModel)->_selectedLength / distance);
-    eye[0] += center[0];
-    eye[1] += center[1];
-    eye[2] += center[2];
+    eye += center;
     igViewModel *model = (igViewModel *)manager->_viewModel;
-    igMatrix44f_MakeLookAt(model->_viewMatrix, (const float *)&eye, (const float *)&center, model->_viewUpVector);
+    igMatrix44f_MakeLookAt(model->_viewMatrix, eye.vec, center.vec, model->_viewUpVector);
     event.type = 2;
     event.source = 0;
     event.field = g_igViewModel_viewMatrixMetaField;

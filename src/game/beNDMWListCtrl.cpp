@@ -3608,7 +3608,7 @@ void beNDMWStatusCtrlD0_RefreshText(beNDMWStatusCtrlD0 *self, int refreshRows, i
                 if (*(unsigned char *)(((igBoolList *)self->_decideList)->_data + i) != 0) {
                     m = self->_messenger;
                     beNDMWItemBase_GetRevisionColor(&vec, item);
-                    beMessenger_AppendVec3((beMessenger *)m, &vec.x);
+                    beMessenger_AppendVec3((beMessenger *)m, vec.vec);
                     beMessenger_DispatchSelected((beMessenger *)self->_messenger, COLOR);
                 } else {
                     beMessenger_DispatchSelected((beMessenger *)self->_messenger, CANCELCOLOR_2);

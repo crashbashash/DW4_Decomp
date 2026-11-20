@@ -118,9 +118,9 @@ void igCommandLine_PrintUsage(const char *programName)
     {
         const char *optionName = "--up-vector";
         if (optionName) {
-            defaultUpVector[0] = g_vec3Zero.x;
-            defaultUpVector[1] = g_vec3Zero.y;
-            defaultUpVector[2] = g_vec3Zero.z;
+            defaultUpVector[0] = g_vec3Zero[0];
+            defaultUpVector[1] = g_vec3Zero[1];
+            defaultUpVector[2] = g_vec3Zero[2];
             igCommandLine_PrintOptionVec3f(optionName, "sets the default up vector (<0,0,0> means use scene up vector)", defaultUpVector);
         }
     }
@@ -382,9 +382,9 @@ struct FlushSettings *igCommandLine_Construct(struct FlushSettings *s) {
     s->b68 = 1;
     s->f72 = 0.1f;
     s->f76 = 1000.0f;
-    s->f80[0] = g_vec3Zero.x;
-    s->f80[1] = g_vec3Zero.y;
-    s->f80[2] = g_vec3Zero.z;
+    s->f80[0] = g_vec3Zero[0];
+    s->f80[1] = g_vec3Zero[1];
+    s->f80[2] = g_vec3Zero[2];
     s->b92 = 1;
     s->b93 = 0;
     s->b94 = 0;

@@ -240,12 +240,12 @@ static inline igObject *current_1bc1e0(AttrObjectStack *s) {
 }
 /* Grows [mn, mx] to cover [bmin, bmax], one component at a time through igVec3f::operator[]. */
 static inline void grow_1bc1e0(igVec3f &mn, igVec3f &mx, const igVec3f &bmin, const igVec3f &bmax) {
-    if (FUN_001bcd70(&bmin.x, 0) < *FUN_001bcd60(&mn.x, 0)) *FUN_001bcd60(&mn.x, 0) = FUN_001bcd70(&bmin.x, 0);
-    if (FUN_001bcd70(&bmax.x, 0) > *FUN_001bcd60(&mx.x, 0)) *FUN_001bcd60(&mx.x, 0) = FUN_001bcd70(&bmax.x, 0);
-    if (FUN_001bcd70(&bmin.x, 1) < *FUN_001bcd60(&mn.x, 1)) *FUN_001bcd60(&mn.x, 1) = FUN_001bcd70(&bmin.x, 1);
-    if (FUN_001bcd70(&bmax.x, 1) > *FUN_001bcd60(&mx.x, 1)) *FUN_001bcd60(&mx.x, 1) = FUN_001bcd70(&bmax.x, 1);
-    if (FUN_001bcd70(&bmin.x, 2) < *FUN_001bcd60(&mn.x, 2)) *FUN_001bcd60(&mn.x, 2) = FUN_001bcd70(&bmin.x, 2);
-    if (FUN_001bcd70(&bmax.x, 2) > *FUN_001bcd60(&mx.x, 2)) *FUN_001bcd60(&mx.x, 2) = FUN_001bcd70(&bmax.x, 2);
+    if (FUN_001bcd70(bmin.vec, 0) < *FUN_001bcd60(mn.vec, 0)) *FUN_001bcd60(mn.vec, 0) = FUN_001bcd70(bmin.vec, 0);
+    if (FUN_001bcd70(bmax.vec, 0) > *FUN_001bcd60(mx.vec, 0)) *FUN_001bcd60(mx.vec, 0) = FUN_001bcd70(bmax.vec, 0);
+    if (FUN_001bcd70(bmin.vec, 1) < *FUN_001bcd60(mn.vec, 1)) *FUN_001bcd60(mn.vec, 1) = FUN_001bcd70(bmin.vec, 1);
+    if (FUN_001bcd70(bmax.vec, 1) > *FUN_001bcd60(mx.vec, 1)) *FUN_001bcd60(mx.vec, 1) = FUN_001bcd70(bmax.vec, 1);
+    if (FUN_001bcd70(bmin.vec, 2) < *FUN_001bcd60(mn.vec, 2)) *FUN_001bcd60(mn.vec, 2) = FUN_001bcd70(bmin.vec, 2);
+    if (FUN_001bcd70(bmax.vec, 2) > *FUN_001bcd60(mx.vec, 2)) *FUN_001bcd60(mx.vec, 2) = FUN_001bcd70(bmax.vec, 2);
 }
 
 int igCompileTraversal_TraverseGeometry(igCompileTraversal *self, igGeometry *geometry) {
@@ -255,8 +255,8 @@ int igCompileTraversal_TraverseGeometry(igCompileTraversal *self, igGeometry *ge
     int n = ((igTDataList<igObject *> *)geometry->_attributes)->_count;
     igVec3f mn;
     igVec3f mx;
-    mn.x = mn.y = mn.z = 1e20f;
-    mx.x = mx.y = mx.z = -1e20f;
+    mn[0] = mn[1] = mn[2] = 1e20f;
+    mx[0] = mx[1] = mx[2] = -1e20f;
     igTDataList<igObject *> *list = (igTDataList<igObject *> *)geometry->_attributes;
     int i;
     /* matching construct: `found` declared after `i` gives it s3 (retail); declared first it takes s0 */

@@ -84,14 +84,14 @@ int beHitLandDeliv_OnMessageText(beHitLandDeliv *self, beHitLandDelivInfoRam *ra
         unsigned char hitWall = 0;
         igVec3f position;
         igMatrix44f_GetTranslation(TransformMatrix(ram), (float *)&position);
-        if (ram->_oldPos[0] != position.x || ram->_oldPos[2] != position.z) {
+        if (ram->_oldPos[0] != position[0] || ram->_oldPos[2] != position[2]) {
             beMessenger_SelectGroup((beMessenger *)self->_messenger, "HITLANDMODEL");
             beMessenger_AppendVec3((beMessenger *)self->_messenger, position);
-            igVec3f direction(position.x - ram->_oldPos[0], 0.0f, position.z - ram->_oldPos[2]);
-            float inv = 1.0f / sqrtf(direction.x * direction.x + direction.y * direction.y + direction.z * direction.z);
-            direction.x *= inv;
-            direction.y *= inv;
-            direction.z *= inv;
+            igVec3f direction(position[0] - ram->_oldPos[0], 0.0f, position[2] - ram->_oldPos[2]);
+            float inv = 1.0f / sqrtf(direction[0] * direction[0] + direction[1] * direction[1] + direction[2] * direction[2]);
+            direction[0] *= inv;
+            direction[1] *= inv;
+            direction[2] *= inv;
             beMessenger_AppendVec3((beMessenger *)self->_messenger, direction);
             AppendRayRange(self, ram);
             AppendTouching(self, ram);
@@ -110,7 +110,7 @@ int beHitLandDeliv_OnMessageText(beHitLandDeliv *self, beHitLandDelivInfoRam *ra
                 moved = true;
                 wallHit = moved;
                 float *matrix = TransformMatrix(ram);
-                igMatrix44f_SetTranslation(matrix, &beMessenger_GetVec3((beMessenger *)self->_messenger, 0).x);
+                igMatrix44f_SetTranslation(matrix, beMessenger_GetVec3((beMessenger *)self->_messenger, 0).vec);
             }
             *(igVec3f *)ram->_oldPos = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
         }
@@ -143,7 +143,7 @@ int beHitLandDeliv_OnMessageText(beHitLandDeliv *self, beHitLandDelivInfoRam *ra
                 moved = true;
                 wallHit = moved;
                 float *matrix = TransformMatrix(ram);
-                igMatrix44f_SetTranslation(matrix, &beMessenger_GetVec3((beMessenger *)self->_messenger, 0).x);
+                igMatrix44f_SetTranslation(matrix, beMessenger_GetVec3((beMessenger *)self->_messenger, 0).vec);
             }
             *(igVec3f *)ram->_oldPos = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
         }
@@ -173,12 +173,12 @@ int beHitLandDeliv_OnMessageText(beHitLandDeliv *self, beHitLandDelivInfoRam *ra
             floorHit = beMessenger_GetBool((beMessenger *)self->_messenger, 1);
             landPosOK = beMessenger_GetBool((beMessenger *)self->_messenger, 2);
         }
-        if (floor.y < 1.0f) {
+        if (floor[1] < 1.0f) {
             igVec3f current;
             igMatrix44f_GetTranslation(TransformMatrix(ram), (float *)&current);
-            if (current.y < 0.0f) {
-                ((igVec3f *)ram->_landPos)->set(floor.x, 0.0f, floor.z);
-                ((igVec3f *)ram->_oldPos)->set(floor.x, 0.0f, floor.z);
+            if (current[1] < 0.0f) {
+                ((igVec3f *)ram->_landPos)->set(floor[0], 0.0f, floor[2]);
+                ((igVec3f *)ram->_oldPos)->set(floor[0], 0.0f, floor[2]);
                 ram->_landPosOK = 1;
                 landed = 1;
                 floorHit = 1;

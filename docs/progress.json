@@ -436,7 +436,7 @@
    "inventory_gap.functions": 0,
    "layout.tail_fragments": 481,
    "m2c_idiom.units": 0,
-   "matching_constructs": 535,
+   "matching_constructs": 533,
    "members.offset_named": 2581,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
@@ -736,11 +736,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 3204,
+  "offset_casts": 3205,
   "pct": 46.4,
-  "recovered": 33844,
+  "recovered": 33838,
   "synthetic": 5800,
-  "total": 72934,
+  "total": 72930,
   "typeable": 0,
   "typeable_pct": 0.0
  }

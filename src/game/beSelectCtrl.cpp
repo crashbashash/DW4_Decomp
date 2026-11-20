@@ -419,13 +419,13 @@ int beSelectCtrl_OnMessageText(beSelectCtrl *self, beBaseInfoRam *ram, int messa
         }
         if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) != 0) {
             igVec3f offset = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
-            created->_offsetPos[0] = offset.x;
-            created->_offsetPos[1] = offset.y;
-            created->_offsetPos[2] = offset.z;
+            created->_offsetPos[0] = offset[0];
+            created->_offsetPos[1] = offset[1];
+            created->_offsetPos[2] = offset[2];
         } else {
-            created->_offsetPos[0] = g_vec3Zero.x;
-            created->_offsetPos[1] = g_vec3Zero.y;
-            created->_offsetPos[2] = g_vec3Zero.z;
+            created->_offsetPos[0] = g_vec3Zero[0];
+            created->_offsetPos[1] = g_vec3Zero[1];
+            created->_offsetPos[2] = g_vec3Zero[2];
         }
         if (beMessenger_GetStringCount((beMessenger *)self->_messenger) != 0) {
             if (strcmp(beMessenger_GetString((beMessenger *)self->_messenger, 0), "NOCANCEL") == 0) {

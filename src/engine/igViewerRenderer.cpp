@@ -435,9 +435,9 @@ void igViewerRenderer_resetFields(igViewerRenderer *self) {
     ((igLightAttrDispatchView *)self->_headlightAttr)->setDiffuse(options->headLightDiffuse);
     ((igLightAttrDispatchView *)self->_headlightAttr)->setSpecular((const float *)&g_vec4Zero);
     ((igLightAttrDispatchView *)self->_headlightAttr)->setAmbient(options->headLightAmbient);
-    direction[0] = -g_vec3ZAxis.x;
-    direction[1] = -g_vec3ZAxis.y;
-    direction[2] = -g_vec3ZAxis.z;
+    direction[0] = -g_vec3ZAxis[0];
+    direction[1] = -g_vec3ZAxis[1];
+    direction[2] = -g_vec3ZAxis[2];
     ((igLightAttrDispatchView *)self->_headlightAttr)->setDirection(direction);
     {
         igLightAttr *headlight = (igLightAttr *)self->_headlightAttr;

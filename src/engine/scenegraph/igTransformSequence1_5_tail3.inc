@@ -180,9 +180,9 @@ void Gap__Sg__igTransformSequence1_5__vfunc_35(igTransformSequence1_5 *self, int
     }
     if (self->_drivenChannels & 1) {
         igVec3f translation = ((igTDataList<igVec3f> *)self->_xlateList)->_data[index];
-        matrix[12] += translation.x;
-        matrix[13] += translation.y;
-        matrix[14] += translation.z;
+        matrix[12] += translation[0];
+        matrix[13] += translation[1];
+        matrix[14] += translation[2];
     }
     if (self->_drivenChannels & 8) {
         igVec3f scale = ((igTDataList<igVec3f> *)self->_scaleList)->_data[index];
@@ -675,7 +675,7 @@ int Gap__Sg__igTransformSequence1_5__evaluateRotation(igTransformSequence1_5 *se
 
 
 static inline bool centerOfRotationIsSet(const igTransformSequence1_5 *o) {
-    return o->_centerOfRotation[0] != g_vec3Zero.x || o->_centerOfRotation[1] != DAT_004e105c[0] || o->_centerOfRotation[2] != DAT_004e1060[0];
+    return o->_centerOfRotation[0] != g_vec3Zero[0] || o->_centerOfRotation[1] != DAT_004e105c[0] || o->_centerOfRotation[2] != DAT_004e1060[0];
 }
 
 bool Gap__Sg__igTransformSequence1_5__vfunc_29(igTransformSequence1_5 *o) {

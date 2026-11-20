@@ -24,9 +24,9 @@ void igDefaultAspect_UpdateMinimumSize(igDefaultAspect *self) {
     maxZ = maxY = maxX = 0.0f;
     for (i = 0; i < ((igDefaultAspectElementList *)self->_elementList)->_count; i++) {
         igVec3f size = FUN_00453b90(((A **)((igDefaultAspectElementList *)self->_elementList)->_data)[i]);
-        raiseTo(&maxX, &size.x);
-        raiseTo(&maxY, &size.y);
-        raiseTo(&maxZ, &size.z);
+        raiseTo(&maxX, size.vec);
+        raiseTo(&maxY, &size.vec[1]);
+        raiseTo(&maxZ, &size.vec[2]);
     }
     self->_minSize[0] = maxX;
     self->_minSize[1] = maxY;
@@ -53,7 +53,7 @@ void Gap__Gui__igDefaultAspect__vfunc_26(A_453f70 *arg0) {
         var_s0 -= 1;
     }
     temp_v1 = arg0->f8;
-    temp_v1->f16 = g_vec3Zero.x;
+    temp_v1->f16 = g_vec3Zero[0];
     temp_v1->f20 = DAT_004e105c[0];
     temp_v1->f24 = DAT_004e1060[0];
     sp30[0] = 2;

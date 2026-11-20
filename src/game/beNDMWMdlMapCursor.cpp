@@ -118,9 +118,9 @@ void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *self, beBaseInfoRam *ram
     float *py = &sum.y;
     float *pz = &sum.z;
     s2 = false;
-    sum.x = g_vec3Zero.x;
-    *py = g_vec3Zero.y;
-    *pz = g_vec3Zero.z;
+    sum.x = g_vec3Zero[0];
+    *py = g_vec3Zero[1];
+    *pz = g_vec3Zero[2];
     s1 = false;
     beMessenger_SendRam((beMessenger *)self->_messenger, "PLAYER", ram->_ramNo, "GETMATRIX");
     if (beMessenger_GetMatrixCount((beMessenger *)self->_messenger) != 0) {

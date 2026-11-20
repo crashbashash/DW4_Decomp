@@ -143,7 +143,7 @@
   "beModelCtrlInfoRideOn": 14,
   "beModelCtrlInfoRideOn2": 5,
   "beModelCtrlInfoRideOn3": 15,
-  "beModelCtrlInfoRideOn4": 38,
+  "beModelCtrlInfoRideOn4": 34,
   "beModelCtrlInfoWork": 352,
   "beModelCtrlJUMP": 1,
   "beModelCtrlLABEL": 2,
@@ -732,7 +732,7 @@
   "igView": 3,
   "igViewManager": 55,
   "igViewMode": 9,
-  "igViewModel": 94,
+  "igViewModel": 92,
   "igViewerDataPumpManager": 6,
   "igViewerParameters": 134,
   "igViewerRenderer": 183,
@@ -776,10 +776,10 @@
   },
   "engine": {
    "files": 50,
-   "offset_casts": 2501,
-   "other_members": 12680,
-   "recovered": 13615,
-   "recovered_pct": 40.45,
+   "offset_casts": 2502,
+   "other_members": 12681,
+   "recovered": 13613,
+   "recovered_pct": 40.44,
    "synthetic": 4864,
    "total": 33660
   },
@@ -787,10 +787,10 @@
    "files": 85,
    "offset_casts": 669,
    "other_members": 2603,
-   "recovered": 19707,
+   "recovered": 19703,
    "recovered_pct": 85.23,
    "synthetic": 142,
-   "total": 23121
+   "total": 23117
   },
   "libgcc": {
    "files": 7,
@@ -857,9 +857,9 @@
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 3204,
- "recovered": 33844,
+ "offset_casts": 3205,
+ "recovered": 33838,
  "synthetic": 5800,
- "total": 72934,
+ "total": 72930,
  "typeable": 0
 }

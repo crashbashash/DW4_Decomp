@@ -110,9 +110,9 @@ void beNDMWMdlMapBase_OnUpdateRam(beNDMWMdlMapBase *self, beBaseInfoRam *ram) {
     int n, i;
     float *py = &sum.y;
     float *pz = &sum.z;
-    sum.x = g_vec3Zero.x;
-    *py = g_vec3Zero.y;
-    *pz = g_vec3Zero.z;
+    sum.x = g_vec3Zero[0];
+    *py = g_vec3Zero[1];
+    *pz = g_vec3Zero[2];
     beMessenger_SendGroup((beMessenger *)self->_messenger, (const char *)PLAYER_10, (const char *)GETMATRIX_8);
     if (beMessenger_GetMatrixCount((beMessenger *)self->_messenger) != 0) {
         n = beMessenger_GetMatrixCount((beMessenger *)self->_messenger);

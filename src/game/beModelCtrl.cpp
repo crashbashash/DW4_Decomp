@@ -413,9 +413,9 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
             if (i != 0) {
                 /* matching construct: IR dump — read through the float view, x stays an assignment where the front end
                  * makes y and z compound `+=` updates; as `translation.x` the x load moves behind the offset's */
-                translation.x = ((float *)&translation)[0] + meter->_numberOffset[0];
-                translation.y = translation.y + meter->_numberOffset[1];
-                translation.z = translation.z + meter->_numberOffset[2];
+                translation[0] = ((float *)&translation)[0] + meter->_numberOffset[0];
+                translation[1] = translation[1] + meter->_numberOffset[1];
+                translation[2] = translation[2] + meter->_numberOffset[2];
             }
             igMatrix44f_SetTranslation(modelView, (const float *)&translation);
             matrixAttr->setMatrix(modelView);
@@ -484,7 +484,7 @@ igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, b
                 k = list->_count;
                 if (k < list->_capacity) list->_count = k + 1; else List_Resize(list, k + 1, 12);
                 igVec3f *extent = &((igVec3f *)list->_data)[k];
-                extent->x = below[0]; extent->y = below[1]; extent->z = below[2];
+                extent->vec[0] = below[0]; extent->vec[1] = below[1]; extent->vec[2] = below[2];
             }
             {
                 int k;
@@ -492,7 +492,7 @@ igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, b
                 k = list->_count;
                 if (k < list->_capacity) list->_count = k + 1; else List_Resize(list, k + 1, 12);
                 igVec3f *extent = &((igVec3f *)list->_data)[k];
-                extent->x = above[0]; extent->y = above[1]; extent->z = above[2];
+                extent->vec[0] = above[0]; extent->vec[1] = above[1]; extent->vec[2] = above[2];
             }
             {
                 int alloc = (int)((Gap::Core::igObject *)body)->getMemoryPool();
@@ -782,13 +782,13 @@ void beModelCtrl_UpdateHomingAI(beModelCtrl *self, beModelCtrlInfo *info, beBase
         distanceSq = beTargetObj_GetTargetDistanceSq();
         if (distanceSq <= homing->_areaSquare) {
             origin = beTargetObj_GetOrigin();
-            originX = origin->x;
-            originY = origin->y;
-            originZ = origin->z;
+            originX = origin->vec[0];
+            originY = origin->vec[1];
+            originZ = origin->vec[2];
             target = beTargetObj_GetTargetPosition();
-            targetX = target->x;
-            targetY = target->y;
-            targetZ = target->z;
+            targetX = target->vec[0];
+            targetY = target->vec[1];
+            targetZ = target->vec[2];
             if (turnX && homing->_isXHoming) {
                 work->_directionLimiter[0] = homing->_limitRotX;
                 work->_targetDirection[0] = -atan2f(targetY + work->_aIHOffsetY - originY, sqrtf(distanceSq));
@@ -1007,7 +1007,7 @@ unsigned char beModelCtrlInfoRideOn_IsModel(beModelCtrlInfoRideOn *self, int mod
  * into the translation of the model node's matrix (+0x20 of a node, the igTransform `_m` offset).
  * igMatrix44f_SetTranslation copies vec3 into matrix words 12..14. */
 void beModelCtrlInfoRideOn2_Move(beModelCtrlInfoRideOn2 *self) {
-    igMatrix44f_SetTranslation(self->_oldMatrix, &g_vec3Zero.x);
+    igMatrix44f_SetTranslation(self->_oldMatrix, g_vec3Zero.vec);
     igMatrix44f_SetTranslation(NodeMatrix(self->_modelNode), self->_vector);
 }
 
@@ -1015,20 +1015,20 @@ void beModelCtrlInfoRideOn3_Move(beModelCtrlInfoRideOn3 *self, void *m) {
     igVec3f t;
     igVec3f d;
     float e, x, g, k, b, z, len, inv, y, c, a;
-    igMatrix44f_SetTranslation((float *)((char *)self->_oldMatrix), &g_vec3Zero.x);
+    igMatrix44f_SetTranslation((float *)((char *)self->_oldMatrix), g_vec3Zero.vec);
     igMatrix44f_GetTranslation((const float *)m, (float *)&t);
-    d.x = ((igVec3f *)self->_worldPosition)->x;
-    d.y = ((igVec3f *)self->_worldPosition)->y;
-    d.z = ((igVec3f *)self->_worldPosition)->z;
-    d.x = d.x - t.x;
-    d.y = d.y - t.y;
-    d.z = d.z - t.z;
-    y = ((igVec3f *)&d)->y; x = d.x; z = ((igVec3f *)&d)->z;
+    d[0] = ((igVec3f *)self->_worldPosition)->vec[0];
+    d[1] = ((igVec3f *)self->_worldPosition)->vec[1];
+    d[2] = ((igVec3f *)self->_worldPosition)->vec[2];
+    d[0] = d[0] - t[0];
+    d[1] = d[1] - t[1];
+    d[2] = d[2] - t[2];
+    y = ((igVec3f *)&d)->vec[1]; x = d[0]; z = ((igVec3f *)&d)->vec[2];
     len = sqrtf(x * x + y * y + z * z);
     inv = 1.0f / len;
-    d.x = d.x * inv;
-    d.y = d.y * inv;
-    d.z = d.z * inv;
+    d[0] = d[0] * inv;
+    d[1] = d[1] * inv;
+    d[2] = d[2] * inv;
     k = self->_minSpeed;
     a = self->_maxSpeed;
     b = self->_minKyori;
@@ -1048,9 +1048,9 @@ void beModelCtrlInfoRideOn3_Move(beModelCtrlInfoRideOn3 *self, void *m) {
             k = a - ((len - b) / (g / e));
         }
     }
-    d.x = d.x * k;
-    d.y = d.y * k;
-    d.z = d.z * k;
+    d[0] = d[0] * k;
+    d[1] = d[1] * k;
+    d[2] = d[2] * k;
     igMatrix44f_SetTranslation(NodeMatrix(self->_modelNode), (const float *)&d);
 }
 
@@ -1065,67 +1065,51 @@ void beModelCtrlInfoRideOn4_Move(beModelCtrlInfoRideOn4 *self, void *m) {
     igVec3f delta;
     igVec3f step;
     float height;
-    igMatrix44f_SetTranslation(self->_oldMatrix, &g_vec3Zero.x);
-    igMatrix44f_GetTranslation((const float *)m, (float *)&player);
-    height = (&player.x)[1];
-    (&player.x)[1] = 0;
-    last.x = self->_oldPlayerPos[0];
-    (&last.x)[1] = self->_oldPlayerPos[1];
-    (&last.x)[2] = self->_oldPlayerPos[2];
-    (&last.x)[1] = 0;
-    delta.x = player.x - last.x;
-    delta.y = player.y - last.y;
-    delta.z = player.z - last.z;
+    igMatrix44f_SetTranslation(self->_oldMatrix, g_vec3Zero.vec);
+    igMatrix44f_GetTranslation((const float *)m, player.vec);
+    height = player[1];
+    player[1] = 0;
+    last.set(self->_oldPlayerPos);
+    last[1] = 0;
+    delta.subtract(player, last);
     switch (self->_isFirst) {
     case 0:
-        igMatrix44f_SetTranslation(NodeMatrix(self->_modelNode), &g_vec3Zero.x);
+        igMatrix44f_SetTranslation(NodeMatrix(self->_modelNode), g_vec3Zero.vec);
         self->_isFirst = 1;
         break;
     case 1: {
         float lengthSq;
-        delta.y = 0;
-        /* matching construct: post-allocation peephole trace — y read by index, not as delta.y, keeps it a copy of the stored zero */
-        lengthSq = delta.x * delta.x + delta[1] * delta[1] + delta.z * delta.z;
+        delta[1] = 0;
+        lengthSq = delta.length2();
         if (!(lengthSq < 0.6f * 0.6f)) {
-            float inverse = 1.0f / sqrtf(lengthSq);
-            delta.x = delta.x * inverse;
-            delta.y = delta.y * inverse;
-            delta.z = delta.z * inverse;
-            delta.x = delta.x * 0.6f;
-            delta.y = delta.y * 0.6f;
-            delta.z = delta.z * 0.6f;
+            delta.scale(1.0f / sqrtf(lengthSq));
+            delta.scale(0.6f);
         }
-        self->_vector[0] = delta.x;
-        self->_vector[1] = delta[1];
-        self->_vector[2] = delta.z;
-        igMatrix44f_SetTranslation(NodeMatrix(self->_modelNode), &g_vec3Zero.x);
+        *(igVec3f *)self->_vector = delta;
+        igMatrix44f_SetTranslation(NodeMatrix(self->_modelNode), g_vec3Zero.vec);
         self->_isFirst = 2;
         break;
     }
     default: {
         int i;
         igVec3f zero;
-        Vec3_Lerp((float *)&step, self->_scalar, self->_vector, (const float *)&delta);
-        zero.x = g_vec3Zero.x;
-        zero.y = g_vec3Zero.y;
-        zero.z = g_vec3Zero.z;
+        Vec3_Lerp(step.vec, self->_scalar, self->_vector, delta.vec);
+        zero = g_vec3Zero;
         for (i = 0; i < 3; i++) {
             if (i == 1) {
-                (&step.x)[i] = 0;
+                step[i] = 0;
             }
-            if (!((&step.x)[i] <= self->_limitter)) break;
-            if ((&step.x)[i] < -self->_limitter) break;
+            if (!(step[i] <= self->_limitter)) break;
+            if (step[i] < -self->_limitter) break;
             if (i == 2) {
                 step = zero;
             }
         }
         *(igVec3f *)self->_vector = step;
-        igMatrix44f_SetTranslation(NodeMatrix(self->_modelNode), (const float *)&step);
-        step.x = step.x + last.x;
-        step.y = step.y + last.y;
-        step.z = step.z + last.z;
-        last.y = height;
-        igMatrix44f_SetTranslation((float *)m, (const float *)&last);
+        igMatrix44f_SetTranslation(NodeMatrix(self->_modelNode), step.vec);
+        step += last;
+        last[1] = height;
+        igMatrix44f_SetTranslation((float *)m, last.vec);
         break;
     }
     }
@@ -1426,7 +1410,7 @@ unsigned char beModelCtrl_RunMove(beModelCtrl *self, beBaseInfoRam *ram, beModel
             igObject *pool, *old;
             Locals::CreateDataList(ram, allocator, pool, old);
         }
-        Vec3f_TransformDirection(&forward[0], &g_vec3ZAxis.x, NodeMatrix(((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_3))->_node));
+        Vec3f_TransformDirection(&forward[0], g_vec3ZAxis.vec, NodeMatrix(((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_3))->_node));
         {
             float angle = atan2f(forward[0], forward[2]);
             work->_direction[1] = angle;
@@ -1880,7 +1864,7 @@ found:
             infoName = (int *)info->_name;
             infoName = infoName != 0 ? infoName : (int *)emptyString;
             beModelCtrl_CallLua(self, ram, (const char *)aim, (const char *)WPos, (const char *)infoName, 0, 0, (const char *)0, 0, 0);
-            { beModelCtrlInfoAI *ai2 = (beModelCtrlInfoAI *)work->_aI; ai2->_worldPos[0] = target.x; ai2->_worldPos[1] = target.y; ai2->_worldPos[2] = target.z; }
+            { beModelCtrlInfoAI *ai2 = (beModelCtrlInfoAI *)work->_aI; ai2->_worldPos[0] = target[0]; ai2->_worldPos[1] = target[1]; ai2->_worldPos[2] = target[2]; }
             g_mdlWorldPosTarget = 0;
         }
     }
@@ -2152,7 +2136,7 @@ void beModelCtrl_UpdateDirection(beModelCtrl *self, beBaseInfo *info, beBaseInfo
     if (force == 0) {
         bool diff;
         direction = (float *)&work->_direction[0];
-        diff = rotation.x != direction[0] || rotation.y != direction[1] || rotation.z != direction[2];
+        diff = rotation != *(const igVec3f *)direction;
         if (!diff) goto done;
     }
     if (((igObject *)ram->_dataList) == 0) {
@@ -2171,17 +2155,17 @@ void beModelCtrl_UpdateDirection(beModelCtrl *self, beBaseInfo *info, beBaseInfo
     }
     matrix = (int)NodeMatrix(((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)((igObject *)ram->_dataList), g_propertyNameField, ONE_3))->_node);
     igMatrix44f_GetTranslation((const float *)matrix, translation);
-    igMatrix44f_MakeEulerRotation((void *)matrix, rotation.x, ((float*)&rotation)[1], ((float*)&rotation)[2]);
+    igMatrix44f_MakeEulerRotation((void *)matrix, rotation[0], ((float*)&rotation)[1], ((float*)&rotation)[2]);
     igMatrix44f_SetTranslation((float *)matrix, (const float *)translation);
-    work->_direction[0] = rotation.x;
-    work->_direction[1] = rotation.y;
-    work->_direction[2] = rotation.z;
+    work->_direction[0] = rotation[0];
+    work->_direction[1] = rotation[1];
+    work->_direction[2] = rotation[2];
 done:
     return;
 pre:
     current = (float *)&work->_direction[0];
     offset = 0;
-    next = &rotation.x;
+    next = rotation.vec;
     goto test;
 }
 
@@ -2272,7 +2256,7 @@ void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
             delta[2] = newPos[2] - oldPos[2];
             igMatrix44f_Copy((float *)oldRotation, rideOn->_oldMatrix);
             igMatrix44f_Copy((float *)offset, (const float *)NodeMatrix(ramData->_node));
-            igMatrix44f_SetTranslation((float *)oldRotation, (const float *)&g_vec3Zero.x);
+            igMatrix44f_SetTranslation((float *)oldRotation, g_vec3Zero.vec);
             igMatrix44f_Invert((float *)oldRotation, (const float *)oldRotation);
             igMatrix44f_SetTranslation((float *)offset, (const float *)delta);
             igMatrix44f_SetIdentity((float *)local);
@@ -2418,20 +2402,20 @@ void beModelCtrl__OnGenerateFromParent(beModelCtrl *self, beBaseInfoRam *ram) {
             }
         }
         work->_posLockNode = (int)node;
-        work->_posLockOffset[0] = offset.x;
-        work->_posLockOffset[1] = offset.y;
-        work->_posLockOffset[2] = offset.z;
+        work->_posLockOffset[0] = offset[0];
+        work->_posLockOffset[1] = offset[1];
+        work->_posLockOffset[2] = offset[2];
         work->_isPosLock = 1;
     }
     igMatrix44f_SetIdentity(matrix);
     beMessenger_GetMatrix(parentMatrix, (beMessenger *)self->_messenger, 0);
     igMatrix44f_Copy(matrix, parentMatrix);
     igMatrix44f_TranslateLocal(matrix, offset);
-    if (rotation.x != 0.0f) igMatrix44f_PreRotateAxisAngle(matrix, &g_vec3XAxis.x, rotation.x);
-    if (rotation.y != 0.0f) igMatrix44f_PreRotateAxisAngle(matrix, &g_vec3YAxis.x, rotation.y);
-    if (rotation.z != 0.0f) igMatrix44f_PreRotateAxisAngle(matrix, (float *)&g_vec3ZAxis, rotation.z);
+    if (rotation[0] != 0.0f) igMatrix44f_PreRotateAxisAngle(matrix, g_vec3XAxis.vec, rotation[0]);
+    if (rotation[1] != 0.0f) igMatrix44f_PreRotateAxisAngle(matrix, g_vec3YAxis.vec, rotation[1]);
+    if (rotation[2] != 0.0f) igMatrix44f_PreRotateAxisAngle(matrix, (float *)&g_vec3ZAxis, rotation[2]);
     ((igTransformDispatchView *)ramData->_node)->SetMatrix(matrix);
-    work->_aIHOffsetY = offset.y;
+    work->_aIHOffsetY = offset[1];
 }
 
 /* Install the optional placement carried by the generate message: a position (with an optional
@@ -2465,7 +2449,7 @@ void beModelCtrl__OnGenerate(beModelCtrl *self, beBaseInfoRam *ram) {
     ramData = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_3);
     if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) != 0) {
         igMatrix44f_Copy(matrix, NodeMatrix(ramData->_node));
-        igMatrix44f_SetTranslation(matrix, &beMessenger_GetVec3((beMessenger *)self->_messenger, 0).x);
+        igMatrix44f_SetTranslation(matrix, beMessenger_GetVec3((beMessenger *)self->_messenger, 0).vec);
         if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) == 2) {
             igVec3f rotation = beMessenger_GetVec3((beMessenger *)self->_messenger, 1);
             igMatrix44f_SetEulerRotation(matrix, 0.017453292f * Component(rotation, 0), 0.017453292f * Component(rotation, 1), 0.017453292f * Component(rotation, 2));
@@ -2553,8 +2537,8 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
         beModelCtrlNode2 *modelNode = MODEL_NODE;
         RELEASE(modelNode->_bound)
         modelNode->_bound = 0;
-        Vec3f_TransformDirection((float *)&startForward, &g_vec3ZAxis.x, MODEL_NODE->_m);
-        float ang = atan2f(startForward.x, startForward.z);
+        Vec3f_TransformDirection((float *)&startForward, g_vec3ZAxis.vec, MODEL_NODE->_m);
+        float ang = atan2f(startForward[0], startForward[2]);
         started->_direction[1] = ang;
         started->_targetDirection[1] = ang;
         if (((beBaseInfoData *)igProperty_FindByName((igObjectList *)info->_dataList, g_propertyNameField, AIM)) != 0 ||
@@ -2660,8 +2644,8 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
             beMessenger_GetMatrix(setMatrix, (beMessenger *)MESSENGER, 0);
             ((igTransformDispatchView *)ramData->_node)->SetMatrix(setMatrix);
             if (work != 0) {
-                Vec3f_TransformDirection((float *)&setForward, &g_vec3ZAxis.x, setMatrix);
-                float ang = atan2f(setForward.x, setForward.z);
+                Vec3f_TransformDirection((float *)&setForward, g_vec3ZAxis.vec, setMatrix);
+                float ang = atan2f(setForward[0], setForward[2]);
                 work->_direction[1] = ang;
                 work->_targetDirection[1] = ang;
             }
@@ -2752,11 +2736,11 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
             igVec3f moveRotation = beMessenger_GetVec3((beMessenger *)MESSENGER, 1);
             igMatrix44f_SetIdentity(moveMatrix);
             igMatrix44f_FromTranslation(moveMatrix, movePosition);
-            if (moveRotation.x != 0.0f) igMatrix44f_PreRotateAxisAngle(moveMatrix, &g_vec3XAxis.x, 0.017453292f * moveRotation.x);
-            if (moveRotation.y != 0.0f) igMatrix44f_PreRotateAxisAngle(moveMatrix, &g_vec3YAxis.x, 0.017453292f * moveRotation.y);
-            { float rz = moveRotation.z; if (rz != 0.0f) igMatrix44f_PreRotateAxisAngle(moveMatrix, (float *)&g_vec3ZAxis, 0.017453292f * rz); }
+            if (moveRotation[0] != 0.0f) igMatrix44f_PreRotateAxisAngle(moveMatrix, g_vec3XAxis.vec, 0.017453292f * moveRotation[0]);
+            if (moveRotation[1] != 0.0f) igMatrix44f_PreRotateAxisAngle(moveMatrix, g_vec3YAxis.vec, 0.017453292f * moveRotation[1]);
+            { float rz = moveRotation[2]; if (rz != 0.0f) igMatrix44f_PreRotateAxisAngle(moveMatrix, (float *)&g_vec3ZAxis, 0.017453292f * rz); }
             ((igTransformDispatchView *)ramData->_node)->SetMatrix(moveMatrix);
-            work->_targetDirection[1] = 0.017453292f * moveRotation.y;
+            work->_targetDirection[1] = 0.017453292f * moveRotation[1];
             beModelCtrl_UpdateDirection(self, info, ram, work, 1);
             igObject *a2 = (igObject *)work->_baseAABox;
             if (a2 != 0) beModelCtrl_UpdateBound(self, MODEL_NODE, (igAABox *)a2);
@@ -2843,7 +2827,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
                     INFO_NAME(n)
                     beModelCtrl_CallLua(self, ram, hit, Hit, n, bulletKind, hitBox, hitterName, hitterRamNo, hitterRecNo);
                     if (((unsigned char *)g_mdlDmgTurn)[0] != 0) {
-                        work->_targetDirection[1] = atan2f(bulletPos.x - modelPos.x, bulletPos.z - modelPos.z);
+                        work->_targetDirection[1] = atan2f(bulletPos[0] - modelPos[0], bulletPos[2] - modelPos[2]);
                         beModelCtrl_UpdateDirection(self, info, ram, work, 1);
                     }
                 }
@@ -3010,8 +2994,8 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
                     }
                     igMatrix44f_Copy(((beModelCtrlInfoRideOn4 *)r.p)->_oldMatrix, floorMatrix);
                     ((int *)&floorPos)[1] = 0;
-                    { beModelCtrlInfoRideOn4 *f4 = (beModelCtrlInfoRideOn4 *)r.p; f4->_oldPlayerPos[0] = floorPos.x; f4->_oldPlayerPos[1] = floorPos.y; f4->_oldPlayerPos[2] = floorPos.z; }
-                    { beModelCtrlInfoRideOn4 *f4 = (beModelCtrlInfoRideOn4 *)r.p; f4->_vector[0] = g_vec3Zero.x; f4->_vector[1] = g_vec3Zero.y; f4->_vector[2] = g_vec3Zero.z; }
+                    { beModelCtrlInfoRideOn4 *f4 = (beModelCtrlInfoRideOn4 *)r.p; f4->_oldPlayerPos[0] = floorPos[0]; f4->_oldPlayerPos[1] = floorPos[1]; f4->_oldPlayerPos[2] = floorPos[2]; }
+                    { beModelCtrlInfoRideOn4 *f4 = (beModelCtrlInfoRideOn4 *)r.p; f4->_vector[0] = g_vec3Zero[0]; f4->_vector[1] = g_vec3Zero[1]; f4->_vector[2] = g_vec3Zero[2]; }
                     ((beModelCtrlInfoRideOn4 *)r.p)->_scalar = beMessenger_GetFloat((beMessenger *)MESSENGER, 0);
                     ((beModelCtrlInfoRideOn4 *)r.p)->_limitter = beMessenger_GetFloat((beMessenger *)MESSENGER, 1);
                     {

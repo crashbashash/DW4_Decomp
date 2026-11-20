@@ -4510,9 +4510,9 @@ void beNDMWLoadIntf2ComMdlCtrl__StartAt(beNDMWLoadIntf2ComMdlCtrl *self, int ram
     igVec3f at;
 
     beMessenger_SelectReceivers((beMessenger *)self->_messenger, "MODELCTRL", infoName, ramNo);
-    at.x = position[0];
-    at.y = position[1];
-    at.z = position[2];
+    at[0] = position[0];
+    at[1] = position[1];
+    at[2] = position[2];
     beMessenger_AppendVec3((beMessenger *)self->_messenger, (float *)&at);
     beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GENERATE");
     beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", infoName, ramNo, openSQ);

@@ -87,7 +87,7 @@ public:
 
 struct igColor4f { float r; float g; float b; float a; };
 /* Adds `shift` to `vector` in place (Alchemy's igVec3f::operator+=). */
-static inline igVec3f &addVec3(igVec3f &vector, const igVec3f &shift) { vector.x += shift.x; vector.y += shift.y; vector.z += shift.z; return vector; }
+static inline igVec3f &addVec3(igVec3f &vector, const igVec3f &shift) { vector[0] += shift[0]; vector[1] += shift[1]; vector[2] += shift[2]; return vector; }
 
 /* One row of the Shift-JIS to UTF-16 table; a row of 0xffff ends it. */
 struct SjisUnicodePair { unsigned short unicode; unsigned short sjis; };
@@ -576,7 +576,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
             if (index != -1) {
                 do {
                     igNodeView *attrSet = (igNodeView *)((beFontInfoData **)((igObjectList *)info->_dataList)->_data)[index]->_attrSet;
-                    igMatrix44f_SetTranslation(((igTransform *)nodeAt(attrSet->_childList, 0))->_m, &position.x);
+                    igMatrix44f_SetTranslation(((igTransform *)nodeAt(attrSet->_childList, 0))->_m, position.vec);
                     index = beFont_FindNextLayoutEntry(self, ram);
                 } while (index != -1);
             }
@@ -596,9 +596,9 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                 blue = green = red = 0.5f;
             } else {
                 igVec3f requested = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
-                red = requested.x;
-                green = requested.y;
-                blue = requested.z;
+                red = requested[0];
+                green = requested[1];
+                blue = requested[2];
             }
             index = beFont_FindFirstLayoutEntry(self, ram, dataName, setName);
             if (index != -1) {
@@ -1042,10 +1042,10 @@ void beFont_AlignLines(beFont *self, int text, beFontInfoData *entry, igVertexAr
         end = ((UnsignedIntListView *)self->_lineFeedList)->data[line];
         switch (align) {
         case 1:
-            shift.x = width - ((FloatListView *)self->_alignList)->data[line];
+            shift[0] = width - ((FloatListView *)self->_alignList)->data[line];
             break;
         case 2:
-            shift.x = (width - ((FloatListView *)self->_alignList)->data[line]) / 2.0f;
+            shift[0] = (width - ((FloatListView *)self->_alignList)->data[line]) / 2.0f;
             break;
         }
         while (vertexIndex < end) {

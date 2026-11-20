@@ -182,16 +182,16 @@ int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram
             unsigned char lockToNode = beMessenger_GetBool((beMessenger *)self->_messenger, 0);
             if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) == 2) {
                 igVec3f rotation = beMessenger_GetVec3((beMessenger *)self->_messenger, 1);
-                rotationY = rotation.y;
-                rotationX = rotation.x;
-                rotationZ = rotation.z;
+                rotationY = rotation[1];
+                rotationX = rotation[0];
+                rotationZ = rotation[2];
                 if (!(rotationY <= 6.2831855f)) {
                     rotationY = (float)(((igRandomNumberDispatchView *)((beSystem *)self->_system)->_random)->genrand() % 6144U) / 1000.0f;
                 }
             } else {
-                rotationX = g_vec3Zero.x;
-                rotationY = g_vec3Zero.y;
-                rotationZ = g_vec3Zero.z;
+                rotationX = g_vec3Zero[0];
+                rotationY = g_vec3Zero[1];
+                rotationZ = g_vec3Zero[2];
             }
             beMessenger_SendNamed((beMessenger *)self->_messenger, (const char *)MODELCTRL_12, (const char *)modelName, ramNo, (const char *)GETMATRIX_5);
             beMessenger_GetMatrix(matrix, (beMessenger *)self->_messenger, 0);
@@ -213,9 +213,9 @@ int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram
                 held->_positionLockNode = (int)node;
                 beParticleCtrl2InfoWork *target = lockWork.p;
                 igVec3f *lockOffset = (igVec3f *)&target->_positionLockOffset;
-                lockOffset->x = offset.x;
-                lockOffset->y = offset.y;
-                lockOffset->z = offset.z;
+                lockOffset->vec[0] = offset[0];
+                lockOffset->vec[1] = offset[1];
+                lockOffset->vec[2] = offset[2];
                 held = lockWork.p;
                 if (held != 0) {
                     held->_refCount = held->_refCount + 1;
@@ -225,13 +225,13 @@ int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram
             }
             igMatrix44f_TranslateLocal(matrix, offset);
             if (rotationX != 0.0f) {
-                igMatrix44f_PreRotateAxisAngle(matrix, &g_vec3XAxis.x, rotationX);
+                igMatrix44f_PreRotateAxisAngle(matrix, g_vec3XAxis.vec, rotationX);
             }
             if (rotationY != 0.0f) {
-                igMatrix44f_PreRotateAxisAngle(matrix, &g_vec3YAxis.x, rotationY);
+                igMatrix44f_PreRotateAxisAngle(matrix, g_vec3YAxis.vec, rotationY);
             }
             if (rotationZ != 0.0f) {
-                igMatrix44f_PreRotateAxisAngle(matrix, &g_vec3ZAxis.x, rotationZ);
+                igMatrix44f_PreRotateAxisAngle(matrix, g_vec3ZAxis.vec, rotationZ);
             }
             ((igTransformDispatchView *)ram->_transform)->SetMatrix(matrix);
         } else {

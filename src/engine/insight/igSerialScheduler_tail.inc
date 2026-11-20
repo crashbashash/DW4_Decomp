@@ -82,9 +82,9 @@ SharedViewerOptions *igViewerDefaults_Construct(SharedViewerOptions *self) {
     self->autoPlanes = 1;
     self->defaultNearPlane = 0.1f;
     self->defaultFarPlane = 1000.0f;
-    self->upVector[0] = g_vec3Zero.x;
-    self->upVector[1] = g_vec3Zero.y;
-    self->upVector[2] = g_vec3Zero.z;
+    self->upVector[0] = g_vec3Zero[0];
+    self->upVector[1] = g_vec3Zero[1];
+    self->upVector[2] = g_vec3Zero[2];
     self->autoSceneLights = 1;
     self->autoHeadLight = 0;
     self->useSceneLights = 0;

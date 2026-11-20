@@ -260,45 +260,10 @@ int beHitLandModel_OnMessage(beHitLandModel *self, beHitLandModelInfoRam *ram, b
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
-static inline float Length(const igVec3f &v)
-{
-    return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
-}
-
-/* Moves the point the distance along the direction. */
-/* matching construct: hand search — the const distance makes each product load the direction before the point */
-static inline void MoveAlong(igVec3f &point, const float distance, const igVec3f &direction)
-{
-    point.x += distance * direction.x;
-    point.y += distance * direction.y;
-    point.z += distance * direction.z;
-}
-
-static inline void Translate(igVec3f &point, const igVec3f &offset)
-{
-    point.x += offset.x;
-    point.y += offset.y;
-    point.z += offset.z;
-}
-
-/* Scales the vector to unit length. */
-static inline void Normalize(igVec3f &v)
-{
-    float scale = 1.0f / Length(v);
-    v.x *= scale;
-    v.y *= scale;
-    v.z *= scale;
-}
-
-static inline float Dot(const igVec3f &a, const igVec3f &b)
-{
-    return a.x * b.x + a.y * b.y + a.z * b.z;
-}
-
 /* The angle between two vectors. */
 static inline float AngleBetween(const igVec3f &a, const igVec3f &b)
 {
-    float cosine = Dot(a, b) / (Length(a) * Length(b));
+    float cosine = a.dot(b) / (a.length() * b.length());
     return acosf(MIN(MAX(cosine, -1.0f), 1.0f));
 }
 
@@ -338,20 +303,20 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
     hit = false;
     reach = 1.42f * radius;
     wallAhead = false;
-    igVec3f start(position.x, height + position.y, position.z);
+    igVec3f start(position[0], height + position[1], position[2]);
     igVec3f end(start);
     igVec3f side;
-    Vec3f_TransformDirection(&side.x, &direction.x, self->_mat90);
-    Normalize(side);
+    Vec3f_TransformDirection(side.vec, direction.vec, self->_mat90);
+    side.normalize();
     {
         igVec3f offset(0.0f, 0.0f, 0.0f);
-        MoveAlong(offset, reach, direction);
-        Translate(end, offset);
+        offset.addScaled(reach, direction);
+        end += offset;
     }
     {
         igVec3f offset(0.0f, 0.0f, 0.0f);
-        MoveAlong(offset, -reach, direction);
-        Translate(start, offset);
+        offset.addScaled(-reach, direction);
+        start += offset;
     }
     if (skipPreCheck == 0) {
         beHitLandModelOrder_Reset((beHitLandModelOrder *)self->_order);
@@ -364,34 +329,34 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
         igVec3f rightEnd(end);
         {
             igVec3f offset(0.0f, 0.0f, 0.0f);
-            MoveAlong(offset, reach, side);
-            Translate(leftStart, offset);
-            Translate(leftEnd, offset);
+            offset.addScaled(reach, side);
+            leftStart += offset;
+            leftEnd += offset;
         }
         ((beHitLandModelOrderMethods *)order)->AddRay(&leftStart, &leftEnd);
         {
             igVec3f offset(0.0f, 0.0f, 0.0f);
-            MoveAlong(offset, -reach, side);
-            Translate(rightStart, offset);
-            Translate(rightEnd, offset);
+            offset.addScaled(-reach, side);
+            rightStart += offset;
+            rightEnd += offset;
         }
         ((beHitLandModelOrderMethods *)order)->AddRay(&rightStart, &rightEnd);
         igVec3f max(leftStart);
-        beHitLandModel_UpdateBound(self, &max.x, &rightStart.x, 0);
-        beHitLandModel_UpdateBound(self, &max.x, &leftEnd.x, 0);
-        beHitLandModel_UpdateBound(self, &max.x, &rightEnd.x, 0);
-        beHitLandModel_UpdateBound(self, &max.z, &rightStart.z, 0);
-        beHitLandModel_UpdateBound(self, &max.z, &leftEnd.z, 0);
-        beHitLandModel_UpdateBound(self, &max.z, &rightEnd.z, 0);
-        ((igVec3f *)order->_raymax)->set(max.x, position.y, max.z);
+        beHitLandModel_UpdateBound(self, max.vec, rightStart.vec, 0);
+        beHitLandModel_UpdateBound(self, max.vec, leftEnd.vec, 0);
+        beHitLandModel_UpdateBound(self, max.vec, rightEnd.vec, 0);
+        beHitLandModel_UpdateBound(self, &max.vec[2], &rightStart.vec[2], 0);
+        beHitLandModel_UpdateBound(self, &max.vec[2], &leftEnd.vec[2], 0);
+        beHitLandModel_UpdateBound(self, &max.vec[2], &rightEnd.vec[2], 0);
+        ((igVec3f *)order->_raymax)->set(max[0], position[1], max[2]);
         igVec3f min(leftStart);
-        beHitLandModel_UpdateBound(self, &min.x, &rightStart.x, 1);
-        beHitLandModel_UpdateBound(self, &min.x, &leftEnd.x, 1);
-        beHitLandModel_UpdateBound(self, &min.x, &rightEnd.x, 1);
-        beHitLandModel_UpdateBound(self, &min.z, &rightStart.z, 1);
-        beHitLandModel_UpdateBound(self, &min.z, &leftEnd.z, 1);
-        beHitLandModel_UpdateBound(self, &min.z, &rightEnd.z, 1);
-        ((igVec3f *)order->_raymin)->set(min.x, position.y, min.z);
+        beHitLandModel_UpdateBound(self, min.vec, rightStart.vec, 1);
+        beHitLandModel_UpdateBound(self, min.vec, leftEnd.vec, 1);
+        beHitLandModel_UpdateBound(self, min.vec, rightEnd.vec, 1);
+        beHitLandModel_UpdateBound(self, &min.vec[2], &rightStart.vec[2], 1);
+        beHitLandModel_UpdateBound(self, &min.vec[2], &leftEnd.vec[2], 1);
+        beHitLandModel_UpdateBound(self, &min.vec[2], &rightEnd.vec[2], 1);
+        ((igVec3f *)order->_raymin)->set(min[0], position[1], min[2]);
         beHitLandModel_TraceOrder(self, order);
         if (order->_hitdataCount > 0) wallAhead = true;
     } else {
@@ -413,34 +378,34 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
             float half = reach / 2.0f;
             {
                 igVec3f offset(0.0f, 0.0f, 0.0f);
-                MoveAlong(offset, half, side);
-                Translate(leftStart, offset);
-                Translate(leftEnd, offset);
+                offset.addScaled(half, side);
+                leftStart += offset;
+                leftEnd += offset;
             }
             ((beHitLandModelOrderMethods *)order)->AddRay(&leftStart, &leftEnd);
             {
                 igVec3f offset(0.0f, 0.0f, 0.0f);
-                MoveAlong(offset, -half, side);
-                Translate(rightStart, offset);
-                Translate(rightEnd, offset);
+                offset.addScaled(-half, side);
+                rightStart += offset;
+                rightEnd += offset;
             }
             ((beHitLandModelOrderMethods *)order)->AddRay(&rightStart, &rightEnd);
             igVec3f max(leftStart);
-            beHitLandModel_UpdateBound(self, &max.x, &rightStart.x, 0);
-            beHitLandModel_UpdateBound(self, &max.x, &leftEnd.x, 0);
-            beHitLandModel_UpdateBound(self, &max.x, &rightEnd.x, 0);
-            beHitLandModel_UpdateBound(self, &max.z, &rightStart.z, 0);
-            beHitLandModel_UpdateBound(self, &max.z, &leftEnd.z, 0);
-            beHitLandModel_UpdateBound(self, &max.z, &rightEnd.z, 0);
-            ((igVec3f *)order->_raymax)->set(max.x, position.y, max.z);
+            beHitLandModel_UpdateBound(self, max.vec, rightStart.vec, 0);
+            beHitLandModel_UpdateBound(self, max.vec, leftEnd.vec, 0);
+            beHitLandModel_UpdateBound(self, max.vec, rightEnd.vec, 0);
+            beHitLandModel_UpdateBound(self, &max.vec[2], &rightStart.vec[2], 0);
+            beHitLandModel_UpdateBound(self, &max.vec[2], &leftEnd.vec[2], 0);
+            beHitLandModel_UpdateBound(self, &max.vec[2], &rightEnd.vec[2], 0);
+            ((igVec3f *)order->_raymax)->set(max[0], position[1], max[2]);
             igVec3f min(leftStart);
-            beHitLandModel_UpdateBound(self, &min.x, &rightStart.x, 1);
-            beHitLandModel_UpdateBound(self, &min.x, &leftEnd.x, 1);
-            beHitLandModel_UpdateBound(self, &min.x, &rightEnd.x, 1);
-            beHitLandModel_UpdateBound(self, &min.z, &rightStart.z, 1);
-            beHitLandModel_UpdateBound(self, &min.z, &leftEnd.z, 1);
-            beHitLandModel_UpdateBound(self, &min.z, &rightEnd.z, 1);
-            ((igVec3f *)order->_raymin)->set(min.x, position.y, min.z);
+            beHitLandModel_UpdateBound(self, min.vec, rightStart.vec, 1);
+            beHitLandModel_UpdateBound(self, min.vec, leftEnd.vec, 1);
+            beHitLandModel_UpdateBound(self, min.vec, rightEnd.vec, 1);
+            beHitLandModel_UpdateBound(self, &min.vec[2], &rightStart.vec[2], 1);
+            beHitLandModel_UpdateBound(self, &min.vec[2], &leftEnd.vec[2], 1);
+            beHitLandModel_UpdateBound(self, &min.vec[2], &rightEnd.vec[2], 1);
+            ((igVec3f *)order->_raymin)->set(min[0], position[1], min[2]);
             beHitLandModel_TraceOrder(self, order);
             int count = order->_hitdataCount;
             if (count > 0) {
@@ -455,7 +420,7 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
                         best = i;
                     }
                 }
-                MoveAlong(position, -(probeLength - nearest), direction);
+                position.addScaled(-(probeLength - nearest), direction);
                 beHitLandResultData *result = ((HitResultListRef &)order->_hitdataList)->get(best);
                 const char *name = (const char *)result->_infoName;
                 beMessenger_AppendInt((beMessenger *)self->_messenger, result->_ramNo);
@@ -468,26 +433,26 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
             beHitLandModelOrder_Reset((beHitLandModelOrder *)self->_order);
             beHitLandModelOrder *order = (beHitLandModelOrder *)self->_order;
             order->_kind = kind;
-            igVec3f centre(position.x, height + position.y, position.z);
+            igVec3f centre(position[0], height + position[1], position[2]);
             {
                 igVec3f offset(0.0f, 0.0f, 0.0f);
-                MoveAlong(offset, (3.0f * reach) / 4.0f, direction);
-                Translate(centre, offset);
+                offset.addScaled((3.0f * reach) / 4.0f, direction);
+                centre += offset;
             }
             igVec3f left(centre);
-            MoveAlong(left, reach, side);
+            left.addScaled(reach, side);
             ((beHitLandModelOrderMethods *)order)->AddRay(&centre, &left);
             igVec3f right(centre);
-            MoveAlong(right, -reach, side);
+            right.addScaled(-reach, side);
             ((beHitLandModelOrderMethods *)order)->AddRay(&centre, &right);
             igVec3f max(left);
-            beHitLandModel_UpdateBound(self, &max.x, &right.x, 0);
-            beHitLandModel_UpdateBound(self, &max.z, &right.z, 0);
-            ((igVec3f *)order->_raymax)->set(max.x, position.y, max.z);
+            beHitLandModel_UpdateBound(self, max.vec, right.vec, 0);
+            beHitLandModel_UpdateBound(self, &max.vec[2], &right.vec[2], 0);
+            ((igVec3f *)order->_raymax)->set(max[0], position[1], max[2]);
             igVec3f min(left);
-            beHitLandModel_UpdateBound(self, &min.x, &right.x, 1);
-            beHitLandModel_UpdateBound(self, &min.z, &right.z, 1);
-            ((igVec3f *)order->_raymin)->set(min.x, position.y, min.z);
+            beHitLandModel_UpdateBound(self, min.vec, right.vec, 1);
+            beHitLandModel_UpdateBound(self, &min.vec[2], &right.vec[2], 1);
+            ((igVec3f *)order->_raymin)->set(min[0], position[1], min[2]);
             beHitLandModel_TraceOrder(self, order);
             int count = order->_hitdataCount;
             int nearest = 0;
@@ -497,7 +462,7 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
                 }
                 HitRecord *wall = OrderHit(order, nearest);
                 float push = (reach - wall->distance) * cosf(AngleBetween(wall->normal, wall->normal));
-                MoveAlong(position, push, wall->normal);
+                position.addScaled(push, wall->normal);
                 beHitLandResultData *result = ((HitResultListRef &)order->_hitdataList)->get(nearest);
                 const char *name = (const char *)result->_infoName;
                 beMessenger_AppendInt((beMessenger *)self->_messenger, result->_ramNo);
@@ -543,23 +508,23 @@ void beHitLandModel_CheckWallFull(beHitLandModel *self)
         igVec3f direction(1.0f, 0.0f, 0.0f);
         igMatrix44f rotation;
         igMatrix44f_MakeEulerRotation(&rotation, 0.0f, 0.7853982f, 0.0f);
-        igVec3f centre(position.x, height + position.y, position.z);
+        igVec3f centre(position[0], height + position[1], position[2]);
         igVec3f max(centre);
         igVec3f min(centre);
         for (int i = 0; i < 8; i++) {
             igVec3f end(centre);
-            MoveAlong(end, reach, direction);
+            end.addScaled(reach, direction);
             ((beHitLandModelOrderMethods *)order)->AddRay(&centre, &end);
-            beHitLandModel_UpdateBound(self, &max.x, &end.x, 0);
-            beHitLandModel_UpdateBound(self, &max.z, &end.z, 0);
-            beHitLandModel_UpdateBound(self, &min.x, &end.x, 1);
-            beHitLandModel_UpdateBound(self, &min.z, &end.z, 1);
+            beHitLandModel_UpdateBound(self, max.vec, end.vec, 0);
+            beHitLandModel_UpdateBound(self, &max.vec[2], &end.vec[2], 0);
+            beHitLandModel_UpdateBound(self, min.vec, end.vec, 1);
+            beHitLandModel_UpdateBound(self, &min.vec[2], &end.vec[2], 1);
             if (i >= 7) break;
-            Vec3f_TransformDirection(&direction.x, (const float *)&direction.x, (const float *)&rotation);
-            Normalize(direction);
+            Vec3f_TransformDirection(direction.vec, (const float *)&direction[0], (const float *)&rotation);
+            direction.normalize();
         }
-        ((igVec3f *)order->_raymax)->set(max.x, position.y, max.z);
-        ((igVec3f *)order->_raymin)->set(min.x, position.y, min.z);
+        ((igVec3f *)order->_raymax)->set(max[0], position[1], max[2]);
+        ((igVec3f *)order->_raymin)->set(min[0], position[1], min[2]);
         beHitLandModel_TraceOrder(self, order);
         int count = order->_hitdataCount;
         int nearest = 0;
@@ -569,7 +534,7 @@ void beHitLandModel_CheckWallFull(beHitLandModel *self)
             }
             HitRecord *wall = OrderHit(order, nearest);
             float push = (reach - wall->distance) * cosf(AngleBetween(wall->normal, wall->normal));
-            MoveAlong(position, push, wall->normal);
+            position.addScaled(push, wall->normal);
             beHitLandResultData *result = ((HitResultListRef &)order->_hitdataList)->get(nearest);
             const char *name = (const char *)result->_infoName;
             beMessenger_AppendInt((beMessenger *)self->_messenger, result->_ramNo);
@@ -586,23 +551,23 @@ void beHitLandModel_CheckWallFull(beHitLandModel *self)
         igVec3f direction(1.0f, 0.0f, 0.0f);
         igMatrix44f rotation;
         igMatrix44f_MakeEulerRotation(&rotation, 0.0f, 0.7853982f, 0.0f);
-        igVec3f centre(position.x, height + position.y, position.z);
+        igVec3f centre(position[0], height + position[1], position[2]);
         igVec3f max(centre);
         igVec3f min(centre);
         for (int i = 0; i < 8; i++) {
             igVec3f end(centre);
-            MoveAlong(end, reach, direction);
+            end.addScaled(reach, direction);
             ((beHitLandModelOrderMethods *)order)->AddRay(&centre, &end);
-            beHitLandModel_UpdateBound(self, &max.x, &end.x, 0);
-            beHitLandModel_UpdateBound(self, &max.z, &end.z, 0);
-            beHitLandModel_UpdateBound(self, &min.x, &end.x, 1);
-            beHitLandModel_UpdateBound(self, &min.z, &end.z, 1);
+            beHitLandModel_UpdateBound(self, max.vec, end.vec, 0);
+            beHitLandModel_UpdateBound(self, &max.vec[2], &end.vec[2], 0);
+            beHitLandModel_UpdateBound(self, min.vec, end.vec, 1);
+            beHitLandModel_UpdateBound(self, &min.vec[2], &end.vec[2], 1);
             if (i >= 7) break;
-            Vec3f_TransformDirection(&direction.x, (const float *)&direction.x, (const float *)&rotation);
-            Normalize(direction);
+            Vec3f_TransformDirection(direction.vec, (const float *)&direction[0], (const float *)&rotation);
+            direction.normalize();
         }
-        ((igVec3f *)order->_raymax)->set(max.x, position.y, max.z);
-        ((igVec3f *)order->_raymin)->set(min.x, position.y, min.z);
+        ((igVec3f *)order->_raymax)->set(max[0], position[1], max[2]);
+        ((igVec3f *)order->_raymin)->set(min[0], position[1], min[2]);
         beHitLandModel_TraceOrder(self, order);
         int count = order->_hitdataCount;
         int nearest = 0;
@@ -612,7 +577,7 @@ void beHitLandModel_CheckWallFull(beHitLandModel *self)
             }
             HitRecord *wall = OrderHit(order, nearest);
             float push = (reach - wall->distance) * cosf(AngleBetween(wall->normal, wall->normal));
-            MoveAlong(position, push, wall->normal);
+            position.addScaled(push, wall->normal);
             beHitLandResultData *result = ((HitResultListRef &)order->_hitdataList)->get(nearest);
             const char *name = (const char *)result->_infoName;
             beMessenger_AppendInt((beMessenger *)self->_messenger, result->_ramNo);
@@ -663,27 +628,27 @@ static void beHitLandModel_FindLand(beHitLandModel *self)
     grounded = false;
     beHitLandModelOrder_Reset((beHitLandModelOrder *)self->_order);
     order = (beHitLandModelOrder *)self->_order;
-    maxX = radius + position.x;
-    maxZ = radius + position.z;
-    minX = position.x - radius;
-    minZ = position.z - radius;
+    maxX = radius + position[0];
+    maxZ = radius + position[2];
+    minX = position[0] - radius;
+    minZ = position[2] - radius;
 
-    start.x = maxX; start.y = 1000.0f; start.z = maxZ;
-    end.x = maxX; end.y = -100.0f; end.z = maxZ;
+    start[0] = maxX; start[1] = 1000.0f; start[2] = maxZ;
+    end[0] = maxX; end[1] = -100.0f; end[2] = maxZ;
     ((beHitLandModelOrderMethods *)order)->AddRay(&start, &end);
-    start.x = minX; start.y = 1000.0f; start.z = maxZ;
-    end.x = minX; end.y = -100.0f; end.z = maxZ;
+    start[0] = minX; start[1] = 1000.0f; start[2] = maxZ;
+    end[0] = minX; end[1] = -100.0f; end[2] = maxZ;
     ((beHitLandModelOrderMethods *)order)->AddRay(&start, &end);
-    start.x = maxX; start.y = 1000.0f; start.z = minZ;
-    end.x = maxX; end.y = -100.0f; end.z = minZ;
+    start[0] = maxX; start[1] = 1000.0f; start[2] = minZ;
+    end[0] = maxX; end[1] = -100.0f; end[2] = minZ;
     ((beHitLandModelOrderMethods *)order)->AddRay(&start, &end);
-    start.x = minX; start.y = 1000.0f; start.z = minZ;
-    end.x = minX; end.y = -100.0f; end.z = minZ;
+    start[0] = minX; start[1] = 1000.0f; start[2] = minZ;
+    end[0] = minX; end[1] = -100.0f; end[2] = minZ;
     ((beHitLandModelOrderMethods *)order)->AddRay(&start, &end);
 
-    start.x = maxX; start.y = 1000.0f; start.z = maxZ;
+    start[0] = maxX; start[1] = 1000.0f; start[2] = maxZ;
     *(igVec3f *)order->_raymax = start;
-    end.x = minX; end.y = -100.0f; end.z = minZ;
+    end[0] = minX; end[1] = -100.0f; end[2] = minZ;
     *(igVec3f *)order->_raymin = end;
     order->_kind = 1;
     beHitLandModel_TraceOrder(self, order);
@@ -698,14 +663,14 @@ static void beHitLandModel_FindLand(beHitLandModel *self)
         const char *name;
 
         for (int i = 0; i < count; i++) {
-            if (up + HitHeight(order, i) > position.y && HitHeight(order, i) - down < position.y) {
+            if (up + HitHeight(order, i) > position[1] && HitHeight(order, i) - down < position[1]) {
                 if (first) {
-                    bestDistance = HitHeight(order, i) - position.y;
+                    bestDistance = HitHeight(order, i) - position[1];
                     first = false;
                     best = i;
                     bestHeight = HitHeight(order, i);
                 } else {
-                    float distance = HitHeight(order, i) - position.y;
+                    float distance = HitHeight(order, i) - position[1];
                     if (distance > bestDistance) {
                         bestHeight = HitHeight(order, i);
                         best = i;
@@ -716,16 +681,16 @@ static void beHitLandModel_FindLand(beHitLandModel *self)
         }
         if (first) {
             for (int i = 0; i < count; i++) {
-                if (HitHeight(order, i) < position.y) {
+                if (HitHeight(order, i) < position[1]) {
                     if (first) {
-                        bestDistance = position.y - HitHeight(order, i);
+                        bestDistance = position[1] - HitHeight(order, i);
                         first = false;
                         best = i;
                         bestHeight = HitHeight(order, i);
-                    } else if (position.y - HitHeight(order, i) < bestDistance) {
+                    } else if (position[1] - HitHeight(order, i) < bestDistance) {
                         bestHeight = HitHeight(order, i);
                         best = i;
-                        bestDistance = position.y - HitHeight(order, i);
+                        bestDistance = position[1] - HitHeight(order, i);
                     }
                 }
             }
@@ -744,17 +709,17 @@ static void beHitLandModel_FindLand(beHitLandModel *self)
                 }
             }
         }
-        if (bestHeight + up > position.y && bestHeight - down < position.y) {
+        if (bestHeight + up > position[1] && bestHeight - down < position[1]) {
             inWindow = true;
         } else {
             inWindow = false;
         }
-        if (position.y - bestHeight <= 0.0f) {
+        if (position[1] - bestHeight <= 0.0f) {
             grounded = true;
         } else {
             grounded = false;
         }
-        position.y = bestHeight;
+        position[1] = bestHeight;
         beMessenger_ClearInt((beMessenger *)self->_messenger);
         result = ((HitResultListRef &)order->_hitdataList)->get(best);
         name = (const char *)result->_infoName;
@@ -762,7 +727,7 @@ static void beHitLandModel_FindLand(beHitLandModel *self)
         beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)name);
         found = true;
     } else {
-        position.y = -1.0f;
+        position[1] = -1.0f;
         found = false;
     }
     beMessenger_ClearBool((beMessenger *)self->_messenger);
@@ -911,8 +876,8 @@ void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order)
                             igAABox *bound = (igAABox *)((igNode **)((igObjectList *)part->_childList)->_data)[0]->_bound;
                             boundMax = *(igVec3f *)bound->_max;
                             boundMin = *(igVec3f *)bound->_min;
-                            Translate(boundMax, translation);
-                            Translate(boundMin, translation);
+                            boundMax += translation;
+                            boundMin += translation;
                             if (beHitLandModel_BoundsOverlapXZ(self, (float *)&boundMax, (float *)&rayMax, (float *)&boundMin, (float *)&rayMin)) {
                                 ((TraversalMethods *)self->_hitTraversal)->traverse(part);
                             }
@@ -951,7 +916,7 @@ void beHitLandModelOrder_AddHitResult(beHitLandModelOrder *self, HitRecord *hit)
         igSmartPointer<beHitLandResultData> created(beHitLandResultData_Create((int)alloc));
         ObjectList_AppendRetained((igObjectList *)self->_hitdataList, (igObject *)created);
     }
-    Vec3f_TransformDirection(&hit->normal.x, (const float *)&hit->normal.x, (const float *)hit->matrix);
+    Vec3f_TransformDirection(hit->normal.vec, (const float *)&hit->normal[0], (const float *)hit->matrix);
     ((ResultRecord *)((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount])->hit = *hit;
     result = ((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount];
     name = (const char *)self->_infoName;
@@ -986,9 +951,9 @@ HitRecord &HitRecord::operator=(const HitRecord &other) {
     unknown36[0] = other.unknown36[0];
     unknown36[1] = other.unknown36[1];
     unknown36[2] = other.unknown36[2];
-    normal.x = other.normal.x;
-    normal.y = other.normal.y;
-    normal.z = other.normal.z;
+    normal[0] = other.normal[0];
+    normal[1] = other.normal[1];
+    normal[2] = other.normal[2];
     unknown60[0] = other.unknown60[0];
     unknown60[1] = other.unknown60[1];
     unknown60[2] = other.unknown60[2];

@@ -1358,7 +1358,7 @@ char *MDLgetRotStr(float x, float y, float z) {
     float heading;
     igMatrix44f_SetIdentity(matrix);
     igMatrix44f_Copy(matrix, g_mdlMatrix);
-    Vec3f_TransformDirection(forward, &g_vec3ZAxis.x, matrix);
+    Vec3f_TransformDirection(forward, g_vec3ZAxis.vec, matrix);
     heading = atan2f(forward[0], forward[2]);
     sprintf(g_mdlRotStrBuffer, "V<%f,%f,%f>", x, RADIANS_TO_DEGREES * heading + y, z);
     return g_mdlRotStrBuffer;
@@ -1584,7 +1584,7 @@ char *PLAYERgetDataStr(int point, int index, float yaw) {
     beMessenger_DispatchSelected(g_beMessenger, "GETMATRIXDIRECT");
     beMessenger_GetMatrix(matrix, g_beMessenger, 0);
     igMatrix44f_GetTranslation(matrix, position);
-    Vec3f_TransformDirection(forward, &g_vec3ZAxis.x, matrix);
+    Vec3f_TransformDirection(forward, g_vec3ZAxis.vec, matrix);
     heading = atan2f(forward[0], forward[2]);
     sprintf(g_playerDataStrBuffer, "V<%f,%f,%f>/V<0,%f,0>", position[0], position[1], position[2], (RADIANS_TO_DEGREES * heading) + yaw);
     return g_playerDataStrBuffer;

@@ -106,7 +106,7 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `boilerplate.functions` | 7,428 | 7,428 | 0 | reflection plumbing written out as function definitions (`<Class>_GetMetaObject`, `_Register`, `_EnsureRegistered`, `_InitFields`, `_GetVTable`, `_GetMeta`, ...) where the kit generates it with its declare/define macros |
 | `reflected.untyped_refs` | 3,993 | 3,993 | 0 | object-reference fields include/dw4/support/reflected.h types as `int` instead of a typed reference |
 | `layout.tail_fragments` | 481 | 481 | 0 | `.inc` fragments of src/ named `_tail` after how the work was split, not after the original's per-class files |
-| `matching_constructs` | 535 | 535 | 0 | `matching construct` comments in src/: shapes chosen from the compiler's output, not from evidence of the original |
+| `matching_constructs` | 535 | 533 | -2 | `matching construct` comments in src/: shapes chosen from the compiler's output, not from evidence of the original |
 | `views.local` | 304 | 304 | 0 | local `…View` structs standing in for real types (dispatch views counted apart) |
 | `members.offset_named` | 2,581 | 2,581 | 0 | struct members still named by offset (`fNN`) in src/ and include/ |
 | `strings.externs` | 48 | 48 | 0 | strings declared as `text_…` externs instead of written as literals |
@@ -207,7 +207,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 33,844 of 72,934 (46.40 %) |
+| field accesses using a **recovered** type (not an offset cast) | 33,838 of 72,930 (46.40 %) |
 | functions in the retail split (`asm/`, generated) | 20,576 |
 
 ## How these numbers are produced

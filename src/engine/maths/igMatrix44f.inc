@@ -108,7 +108,7 @@ void igMatrix44f_FromTranslation(float *matrix, const igVec3f &translation) {
     matrix[0]=1.0f; matrix[1]=0; matrix[2]=0; matrix[3]=0;
     matrix[4]=0; matrix[5]=1.0f; matrix[6]=0; matrix[7]=0;
     matrix[8]=0; matrix[9]=0; matrix[10]=1.0f; matrix[11]=0;
-    matrix[12]=translation.x; matrix[13]=translation.y; matrix[14]=translation.z; matrix[15]=1.0f;
+    matrix[12]=translation[0]; matrix[13]=translation[1]; matrix[14]=translation[2]; matrix[15]=1.0f;
 }
 
 void igMatrix44f_SetTranslation(float *matrix, const float *vector) {
@@ -188,9 +188,9 @@ void FUN_00190e50(void *arg0, const float *arg1, float fparg0) {
     *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis.y;
     *(float *)((char *)(arg0) + 56) = (float) g_vec4WAxis.z;
     *(float *)((char *)(arg0) + 60) = (float) g_vec4WAxis.w;
-    *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero.x;
-    *(float *)((char *)(arg0) + 28) = (float) g_vec3Zero.y;
-    *(float *)((char *)(arg0) + 44) = (float) g_vec3Zero.z;
+    *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero[0];
+    *(float *)((char *)(arg0) + 28) = (float) g_vec3Zero[1];
+    *(float *)((char *)(arg0) + 44) = (float) g_vec3Zero[2];
 }
 
 void igMatrix44f_MakeEulerRotation(void *arg0, float x, float y, float z) {
@@ -199,9 +199,9 @@ void igMatrix44f_MakeEulerRotation(void *arg0, float x, float y, float z) {
     *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis.y;
     *(float *)((char *)(arg0) + 56) = (float) g_vec4WAxis.z;
     *(float *)((char *)(arg0) + 60) = (float) g_vec4WAxis.w;
-    *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero.x;
-    *(float *)((char *)(arg0) + 28) = (float) g_vec3Zero.y;
-    *(float *)((char *)(arg0) + 44) = (float) g_vec3Zero.z;
+    *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero[0];
+    *(float *)((char *)(arg0) + 28) = (float) g_vec3Zero[1];
+    *(float *)((char *)(arg0) + 44) = (float) g_vec3Zero[2];
 }
 
 /* Axis-angle rotation matrix (Rodrigues); the sign bit is cleared through a byte bit-field union,
@@ -327,9 +327,9 @@ void FUN_001916f0(void *arg0, float *arg1) {
     *(float *)((char *)(arg0) + 52) = (float) g_vec4WAxis.y;
     *(float *)((char *)(arg0) + 56) = (float) g_vec4WAxis.z;
     *(float *)((char *)(arg0) + 60) = (float) g_vec4WAxis.w;
-    *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero.x;
-    *(float *)((char *)(arg0) + 28) = (float) g_vec3Zero.y;
-    *(float *)((char *)(arg0) + 44) = (float) g_vec3Zero.z;
+    *(float *)((char *)(arg0) + 12) = (float) g_vec3Zero[0];
+    *(float *)((char *)(arg0) + 28) = (float) g_vec3Zero[1];
+    *(float *)((char *)(arg0) + 44) = (float) g_vec3Zero[2];
 }
 
 void igMatrix44f_SetQuaternion(float *m, float *q) {

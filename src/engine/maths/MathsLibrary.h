@@ -575,13 +575,6 @@ struct S18d110 { char pad[8]; float a; char pad2[8]; float b; };
 struct A { char p[8]; float f8; float f12; float f16; };
 struct B5 { char p[8]; float f8; float f12; float f16; float f20; };
 
-struct igVec3f2 {
-    float x;
-    float y;
-    float z;
-    void subtractInto(float *out, const float *o) const { out[0] = x - o[0]; out[1] = y - o[1]; out[2] = z - o[2]; }
-};
-
 Intersection FUN_0018d9b0(igSphere *sphere, void *other);
 void FUN_0018dd20(struct S4 *p, struct S4 *q);
 void thunk_FUN_0018d630(igSphere *sphere, const float *matrix);
