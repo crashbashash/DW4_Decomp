@@ -150,6 +150,9 @@ extern "C" void FUN_0018d630(igSphere*, float const*);
 extern "C" void FUN_0023b110(void *arg0, void *arg1);
 /* A new sphere bounding the vertices of `geometry` (Ritter's method). */
 extern "C" igSmartPointer<igSphere> FUN_0023ac20(igBoundingSphereMaker *self, igGeometry *geometry);
+#include "dw4/attrs/igGeometryAttr.h"
+#include "dw4/gfx/igVertexArray.h"
+#include "dw4/maths/igVec3f.h"
 #include "dw4/scenegraph/igNode.h"
 struct Ls { char p[8]; unsigned int n; char q[4]; struct Q **a; };
 struct Q { char p[28]; struct Ls *f28; };

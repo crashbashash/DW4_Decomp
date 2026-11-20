@@ -502,8 +502,8 @@
   "igFolder": 4,
   "igFont": 4,
   "igFrustCullTraversal": 24,
-  "igGeometry": 10,
-  "igGeometryAttr": 16,
+  "igGeometry": 11,
+  "igGeometryAttr": 20,
   "igGeometryAttr1_5": 33,
   "igGeometryAttrList": 4,
   "igGeometryElement": 5,
@@ -593,7 +593,7 @@
   "igNormalizeNormalsStateAttr": 2,
   "igObject": 1981,
   "igObjectDirEntry": 39,
-  "igObjectList": 936,
+  "igObjectList": 939,
   "igObjectListList": 4,
   "igObjectPool": 27,
   "igObjectRefArrayMetaField": 49,
@@ -724,7 +724,7 @@
   "igVec4fArrayMetaField": 2,
   "igVec4fMetaField": 3,
   "igVec4ucMetaField": 1,
-  "igVertexArray": 26,
+  "igVertexArray": 28,
   "igVertexArray1_1": 22,
   "igVertexArray2": 10,
   "igVertexArray2Helper": 28,
@@ -781,11 +781,11 @@
   "engine": {
    "files": 50,
    "offset_casts": 2502,
-   "other_members": 12630,
-   "recovered": 13623,
-   "recovered_pct": 40.5,
+   "other_members": 12634,
+   "recovered": 13633,
+   "recovered_pct": 40.52,
    "synthetic": 4879,
-   "total": 33634
+   "total": 33648
   },
   "game": {
    "files": 85,
@@ -862,8 +862,8 @@
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
  "offset_casts": 3205,
- "recovered": 33876,
+ "recovered": 33886,
  "synthetic": 5822,
- "total": 72904,
+ "total": 72918,
  "typeable": 0
 }

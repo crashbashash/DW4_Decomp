@@ -6929,6 +6929,7 @@
 0023ab00	igBoundingSphereMaker_Register	match	-
 0023ab80	igBoundingSphereMaker_GetMetaObjectFunction	match	-
 0023ab90	igBoundingSphereMaker_InitFields	match	-
+0023ac20	FUN_0023ac20	match	-
 0023b110	FUN_0023b110	match	-
 0023b140	FUN_0023b140	match	-
 0023b270	FUN_0023b270	match	-

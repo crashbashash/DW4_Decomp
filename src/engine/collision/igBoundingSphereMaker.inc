@@ -91,6 +91,96 @@ void igBoundingSphereMaker_InitFields(void) {
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igBoundingSphereMaker_fieldTable, g_igBoundingSphereMaker_fieldHandles, g_igBoundingSphereMaker_fieldOffsets, temp_s2);
 }
 
+static inline igGeometryAttr *asGeometryAttr(igObject *o) {
+    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igGeometryAttr_metaObject) != 0) return (igGeometryAttr *)o;
+    return 0;
+}
+
+/* Ritter's bounding sphere: the farthest apart of the vertex pairs extreme in x, in y and in z gives a first
+ * sphere, which a second pass over the vertices grows to take in each vertex still outside it. */
+igSmartPointer<igSphere> FUN_0023ac20(igBoundingSphereMaker *self, igGeometry *geometry) {
+    igSmartPointer<igSphere> sphere((igSphere *)FUN_00187e10(0), AdoptReference());
+    igVec3f minX(3.402823466e+38f, 3.402823466e+38f, 3.402823466e+38f);
+    igVec3f minY(3.402823466e+38f, 3.402823466e+38f, 3.402823466e+38f);
+    igVec3f minZ(3.402823466e+38f, 3.402823466e+38f, 3.402823466e+38f);
+    igVec3f maxX(-3.402823466e+38f, -3.402823466e+38f, -3.402823466e+38f);
+    igVec3f maxY(-3.402823466e+38f, -3.402823466e+38f, -3.402823466e+38f);
+    igVec3f maxZ(-3.402823466e+38f, -3.402823466e+38f, -3.402823466e+38f);
+    igObjectList *attributes = (igObjectList *)geometry->_attributes;
+    int count = attributes->_count;
+    int i;
+
+    for (i = 0; i < count; i++) {
+        igObject *object = ((igObject **)attributes->_data)[i];
+        igGeometryAttr *attr = asGeometryAttr(object);
+        if (attr != 0) {
+            unsigned int vertexCount = ((igVertexArray *)attr->_vertexArray)->_numVerts;
+            for (unsigned int v = 0; v < vertexCount; v++) {
+                igVec3f p;
+                ((igVertexArrayAccess *)attr->_vertexArray)->getPosition(v, &p);
+                if (p[0] < minX[0]) minX = p;
+                if (p[1] < minY[1]) minY = p;
+                if (p[2] < minZ[2]) minZ = p;
+                if (maxX[0] < p[0]) maxX = p;
+                if (maxY[1] < p[1]) maxY = p;
+                if (maxZ[2] < p[2]) maxZ = p;
+            }
+        }
+    }
+    /* matching construct: manual search — x's difference vector summed after y's and z's sums, spanX declared first */
+    float spanX;
+    igVec3f diameter = maxX - minX;
+    float spanY = (maxY[0] - minY[0]) * (maxY[0] - minY[0]) + (maxY[1] - minY[1]) * (maxY[1] - minY[1]) + (maxY[2] - minY[2]) * (maxY[2] - minY[2]);
+    float spanZ = (maxZ[0] - minZ[0]) * (maxZ[0] - minZ[0]) + (maxZ[1] - minZ[1]) * (maxZ[1] - minZ[1]) + (maxZ[2] - minZ[2]) * (maxZ[2] - minZ[2]);
+    spanX = diameter.length2();
+    if (spanX < spanY) {
+        minX = minY;
+        maxX = maxY;
+        spanX = spanY;
+    }
+    if (spanX < spanZ) {
+        minX = minZ;
+        maxX = maxZ;
+    }
+    igVec3f center;
+    center[0] = 0.5f * minX[0] + 0.5f * maxX[0];
+    center[1] = 0.5f * minX[1] + 0.5f * maxX[1];
+    center[2] = 0.5f * minX[2] + 0.5f * maxX[2];
+    igVec3f toEdge;
+    toEdge.subtract(center, maxX);
+    float radiusSquared = toEdge.length2();
+    float radius = sqrtf(radiusSquared);
+    for (i = 0; i < count; i++) {
+        igObject *object = ((igObject **)attributes->_data)[i];
+        igGeometryAttr *attr = asGeometryAttr(object);
+        if (attr != 0) {
+            unsigned int vertexCount = ((igVertexArray *)attr->_vertexArray)->_numVerts;
+            for (unsigned int v = 0; v < vertexCount; v++) {
+                igVec3f p;
+                ((igVertexArrayAccess *)attr->_vertexArray)->getPosition(v, &p);
+                float dx = center[0] - p[0];
+                float dy = center[1] - p[1];
+                float dz = center[2] - p[2];
+                float distanceSquared = dx * dx + dy * dy + dz * dz;
+                if (radiusSquared < distanceSquared) {
+                    float distance = sqrtf(distanceSquared);
+                    radius = (radius + distance) / 2.0f;
+                    float keep = radius / distance;
+                    radiusSquared = radius * radius;
+                    float move = 1.0f - keep;
+                    /* matching construct: manual search — x read through the const operator[] is reloaded, y and z are reused */
+                    center[0] = keep * center[0] + move * ((const igVec3f &)p)[0];
+                    center[1] = keep * center[1] + move * p[1];
+                    center[2] = keep * center[2] + move * p[2];
+                }
+            }
+        }
+    }
+    *(igVec3f *)sphere->_center = center;
+    sphere->_radius = radius;
+    return sphere;
+}
+
 void FUN_0023b110(void *arg0, void *arg1) {
     if (*(int *)((char *)(arg1) + 96) == 0) {
         FUN_0018d630((igSphere *)(*(int *)((char *)(arg0) + 8)), (const float *)((char *)arg1 + 0x20));

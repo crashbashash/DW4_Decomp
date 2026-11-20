@@ -15190,6 +15190,7 @@
       "igBoundingSphereMaker_Register": "0x0023ab00",
       "igBoundingSphereMaker_GetMetaObjectFunction": "0x0023ab80",
       "igBoundingSphereMaker_InitFields": "0x0023ab90",
+      "FUN_0023ac20": "0x0023ac20",
       "FUN_0023b110": "0x0023b110",
       "FUN_0023b140": "0x0023b140",
       "FUN_0023b270": "0x0023b270",
@@ -15320,7 +15321,8 @@
       "g_igGeometry_metaObject": "0x00561a38",
       "g_objectSystem": "0x00586dc8",
       "g_igAABox_metaObject": "0x005610e0",
-      "emptyString": "0x004e0858"
+      "emptyString": "0x004e0858",
+      "g_igGeometryAttr_metaObject": "0x0055f170"
     },
     "stripped": [
       "__dt__19igSmartPointer<2Rc>Fv",
