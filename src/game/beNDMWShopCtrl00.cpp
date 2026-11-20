@@ -3238,7 +3238,7 @@ void beNDMWShopCtrlEvolve_Update(beNDMWShopCtrlEvolve *self) {
                 beNDMWWindow_BindContext((beNDMWWindow *)selector.p, (igObject *)self, self->_insight, self->_playerNo, 0);
                 ObjectList_AppendRetained((igObjectList *)self->_subWindow, selector.p);
                 {
-                    float *offset = selector->_offsetPos;
+                    float *offset = selector->_offsetPos.vec;
                     offset[0] = -283.0f;
                     offset[1] = 92.0f;
                     offset[2] = 0.0f;

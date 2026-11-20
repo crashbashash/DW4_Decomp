@@ -74,7 +74,7 @@ void beChangePosTransform_UpdateRam(beChangePosTransform *self, beChangePosTrans
             DivideByCount(centre, count);
         }
         float *transformMatrix = ((igTransform *)info->_transform)->_m;
-        *(igVec3f *)self->_oldPos = centre;
+        self->_oldPos = centre;
         igMatrix44f_SetTranslation(transformMatrix, centre.vec);
         info->_st0++;
         info->_st3 = 0;
@@ -109,9 +109,9 @@ void beChangePosTransform_UpdateRam(beChangePosTransform *self, beChangePosTrans
             float *transformMatrix = ((igTransform *)info->_transform)->_m;
             /* matching construct: hand search — `== false` tests the flag as an int (andi 0xff); `!allNear` does not */
             if (allNear == false) {
-                igMatrix44f_SetTranslation(transformMatrix, self->_oldPos);
+                igMatrix44f_SetTranslation(transformMatrix, self->_oldPos.vec);
             } else {
-                *(igVec3f *)self->_oldPos = centre;
+                self->_oldPos = centre;
                 igMatrix44f_SetTranslation(transformMatrix, centre.vec);
             }
         }

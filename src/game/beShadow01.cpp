@@ -205,14 +205,14 @@ void beShadow01_UpdateRam(beShadow01 *self, beBaseInfoRam *ram) {
         centre[1] += 200.0f;
         /* matching construct: fdiff — the saved-position reference is a variable of its own, so its address
          * (addiu a0,s2,36) is kept for the second and third compares. */
-        igVec3f &saved = *(igVec3f *)self->_savePos;
+        igVec3f &saved = self->_savePos;
         if (Vec3Differs(centre, saved)) {
             igLightAttr *light = (igLightAttr *)((igProjectiveShadowShader *)info->_projShadowShader)->_light;
             float *direction = (float *)((char *)light + g_igLightAttr_directionMetaField->_offset);
             ((igLightAttrDispatchView *)light)->setPosition(centre.vec);
-            Vec3Copy(light->_cachedPosition, centre.vec);
-            Vec3Copy(light->_cachedDirection, direction);
-            Vec3Copy(self->_savePos, centre.vec);
+            Vec3Copy(light->_cachedPosition.vec, centre.vec);
+            Vec3Copy(light->_cachedDirection.vec, direction);
+            Vec3Copy(self->_savePos.vec, centre.vec);
         }
     }
 }

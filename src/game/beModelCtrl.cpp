@@ -411,13 +411,12 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
         for (i = 0; i < count; i++) {
             time = ((long long *)((igObjectList *)meter->_timeList)->_data)[i];
             if (i != 0) {
-                /* matching construct: IR dump — read through the float view, x stays an assignment where the front end
-                 * makes y and z compound `+=` updates; as `translation.x` the x load moves behind the offset's */
-                translation[0] = ((float *)&translation)[0] + meter->_numberOffset[0];
-                translation[1] = translation[1] + meter->_numberOffset[1];
-                translation[2] = translation[2] + meter->_numberOffset[2];
+                /* matching construct: the offset through a named const reference; `translation +=` the
+                 * field itself moves the x load of translation behind the offset's */
+                const igVec3f &offset = meter->_numberOffset;
+                translation += offset;
             }
-            igMatrix44f_SetTranslation(modelView, (const float *)&translation);
+            igMatrix44f_SetTranslation(modelView, translation.vec);
             matrixAttr->setMatrix(modelView);
             clock->_time = time;
             ((igCommonTraversalDispatchView *)traversal)->pushTime(time);
@@ -512,18 +511,16 @@ igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, b
         for (i = 0; i < n; i++) {
             igAABox *src = ((igAABox **)((igAABoxList *)body->_orgAABoxList)->_data)[i];
             igAABox *dst = ((igAABox **)((igAABoxList *)body->_AABoxList)->_data)[i];
-            float center[3];
-            float below[3];
-            float above[3];
+            igVec3f center;
+            igVec3f below;
+            igVec3f above;
             int k;
-            for (k = 0; k < 3; k++) { float *a = &dst->_min[k]; float *box = &dst->_max[k]; *a = src->_min[k]; *box = src->_max[k]; }
+            for (k = 0; k < 3; k++) { dst->_min[k] = src->_min[k]; dst->_max[k] = src->_max[k]; }
             thunk_igAABox_Transform(dst, (const float *)matrix);
-            center[0] = (dst->_min[0]) * 0.5f + (dst->_max[0]) * 0.5f;
-            center[1] = (dst->_min[1]) * 0.5f + (dst->_max[1]) * 0.5f;
-            center[2] = (dst->_min[2]) * 0.5f + (dst->_max[2]) * 0.5f;
-            *(igVec3f *)below = ((igVec3f *)((igDataList *)body->_AABoxMinList)->_data)[i];
-            *(igVec3f *)above = ((igVec3f *)((igDataList *)body->_AABoxMaxList)->_data)[i];
-            for (k = 0; k < 3; k++) { float *a = &dst->_min[k]; float *box = &dst->_max[k]; *a = center[k] - below[k]; *box = center[k] + above[k]; }
+            center.combine(0.5f, dst->_min, 0.5f, dst->_max);
+            below = ((igVec3f *)((igDataList *)body->_AABoxMinList)->_data)[i];
+            above = ((igVec3f *)((igDataList *)body->_AABoxMaxList)->_data)[i];
+            for (k = 0; k < 3; k++) { dst->_min[k] = center[k] - below[k]; dst->_max[k] = center[k] + above[k]; }
         }
     }
     return (igAABoxList *)body->_AABoxList;
@@ -1008,7 +1005,7 @@ unsigned char beModelCtrlInfoRideOn_IsModel(beModelCtrlInfoRideOn *self, int mod
  * igMatrix44f_SetTranslation copies vec3 into matrix words 12..14. */
 void beModelCtrlInfoRideOn2_Move(beModelCtrlInfoRideOn2 *self) {
     igMatrix44f_SetTranslation(self->_oldMatrix, g_vec3Zero.vec);
-    igMatrix44f_SetTranslation(NodeMatrix(self->_modelNode), self->_vector);
+    igMatrix44f_SetTranslation(NodeMatrix(self->_modelNode), self->_vector.vec);
 }
 
 void beModelCtrlInfoRideOn3_Move(beModelCtrlInfoRideOn3 *self, void *m) {
@@ -1017,9 +1014,9 @@ void beModelCtrlInfoRideOn3_Move(beModelCtrlInfoRideOn3 *self, void *m) {
     float e, x, g, k, b, z, len, inv, y, c, a;
     igMatrix44f_SetTranslation((float *)((char *)self->_oldMatrix), g_vec3Zero.vec);
     igMatrix44f_GetTranslation((const float *)m, (float *)&t);
-    d[0] = ((igVec3f *)self->_worldPosition)->vec[0];
-    d[1] = ((igVec3f *)self->_worldPosition)->vec[1];
-    d[2] = ((igVec3f *)self->_worldPosition)->vec[2];
+    d[0] = self->_worldPosition.vec[0];
+    d[1] = self->_worldPosition.vec[1];
+    d[2] = self->_worldPosition.vec[2];
     d[0] = d[0] - t[0];
     d[1] = d[1] - t[1];
     d[2] = d[2] - t[2];
@@ -1085,7 +1082,7 @@ void beModelCtrlInfoRideOn4_Move(beModelCtrlInfoRideOn4 *self, void *m) {
             delta.scale(1.0f / sqrtf(lengthSq));
             delta.scale(0.6f);
         }
-        *(igVec3f *)self->_vector = delta;
+        self->_vector = delta;
         igMatrix44f_SetTranslation(NodeMatrix(self->_modelNode), g_vec3Zero.vec);
         self->_isFirst = 2;
         break;
@@ -1093,7 +1090,7 @@ void beModelCtrlInfoRideOn4_Move(beModelCtrlInfoRideOn4 *self, void *m) {
     default: {
         int i;
         igVec3f zero;
-        Vec3_Lerp(step.vec, self->_scalar, self->_vector, delta.vec);
+        Vec3_Lerp(step.vec, self->_scalar, self->_vector.vec, delta.vec);
         zero = g_vec3Zero;
         for (i = 0; i < 3; i++) {
             if (i == 1) {
@@ -1105,7 +1102,7 @@ void beModelCtrlInfoRideOn4_Move(beModelCtrlInfoRideOn4 *self, void *m) {
                 step = zero;
             }
         }
-        *(igVec3f *)self->_vector = step;
+        self->_vector = step;
         igMatrix44f_SetTranslation(NodeMatrix(self->_modelNode), step.vec);
         step += last;
         last[1] = height;
@@ -2226,7 +2223,7 @@ void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
         } else {
             if (work->_posLockNode != 0) {
                 igMatrix44f_Copy(lockMatrix, NodeMatrix(work->_posLockNode));
-                igMatrix44f_TranslateLocal(lockMatrix, *(const igVec3f *)work->_posLockOffset);
+                igMatrix44f_TranslateLocal(lockMatrix, work->_posLockOffset);
                 ((igTransformDispatchView *)ramData->_node)->SetMatrix(lockMatrix);
             } else if (work->_posLockTrc != 0) {
                 ((igTransformDispatchView *)ramData->_node)->SetMatrix((float *)(*(int *)(work->_posLockTrc + 16) + g_igTransformRecorder_mMetaField->_offset));
@@ -2919,7 +2916,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
                         held->_modelNode = (int)node2;
                     }
                     igMatrix44f_Copy(((beModelCtrlInfoRideOn2 *)r.p)->_oldMatrix, mt);
-                    *(igVec3f *)((beModelCtrlInfoRideOn2 *)r.p)->_vector = beMessenger_GetVec3((beMessenger *)MESSENGER, 0);
+                    ((beModelCtrlInfoRideOn2 *)r.p)->_vector = beMessenger_GetVec3((beMessenger *)MESSENGER, 0);
                     {
                         igObject *s = r.p;
                         RETAIN(s)
@@ -2954,7 +2951,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
                         held->_modelNode = (int)node2;
                     }
                     igMatrix44f_Copy(((beModelCtrlInfoRideOn3 *)r.p)->_oldMatrix, quicksandMatrix);
-                    *(igVec3f *)((beModelCtrlInfoRideOn3 *)r.p)->_worldPosition = beMessenger_GetVec3((beMessenger *)MESSENGER, 0);
+                    ((beModelCtrlInfoRideOn3 *)r.p)->_worldPosition = beMessenger_GetVec3((beMessenger *)MESSENGER, 0);
                     ((beModelCtrlInfoRideOn3 *)r.p)->_minKyori = beMessenger_GetFloat((beMessenger *)MESSENGER, 0);
                     ((beModelCtrlInfoRideOn3 *)r.p)->_maxKyori = beMessenger_GetFloat((beMessenger *)MESSENGER, 1);
                     ((beModelCtrlInfoRideOn3 *)r.p)->_minSpeed = beMessenger_GetFloat((beMessenger *)MESSENGER, 2);

@@ -27,6 +27,7 @@
 
 #ifdef __cplusplus
 #include "dw4/core/igObjectMacros.h"
+#include "dw4/maths/igVec3f.h"
 #endif
 
 /* handle 0x587198, 2 field(s), sizeof 8 (registered instance size) */
@@ -99,7 +100,11 @@ typedef struct ParticleInfo {
     int _cameras;                                  /* +28   igObjectRefMetaField */
     long long _animationBegin;                     /* +32   igLongMetaField */
     long long _animationEnd;                       /* +40   igLongMetaField */
+#ifdef __cplusplus
+    igVec3f _upVector;                             /* +48   igVec3fMetaField */
+#else
     float _upVector[3];                            /* +48   igVec3fMetaField */
+#endif
     int _sceneGraphList;                           /* +60   igObjectRefMetaField */
     float _points[192];                            /* +64   igFloatArrayMetaField */
     int _numControls[32];                          /* +832  igIntArrayMetaField */
@@ -412,7 +417,11 @@ typedef struct beActionStarterData {
     int _name;                                     /* +8    igStringMetaField */
     int _message;                                  /* +12   igStringMetaField */
     int _delay;                                    /* +16   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offset;                               /* +20   igVec3fMetaField */
+#else
     float _offset[3];                              /* +20   igVec3fMetaField */
+#endif
     unsigned char _isSeqDead;                      /* +32   igBoolMetaField */
     unsigned char _isPositionLock;                 /* +33   igBoolMetaField */
     char _pad34[2];
@@ -429,11 +438,19 @@ typedef struct beActionStarterData2 {
     int _name;                                     /* +8    igStringMetaField */
     int _message;                                  /* +12   igStringMetaField */
     int _delay;                                    /* +16   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offset;                               /* +20   igVec3fMetaField */
+#else
     float _offset[3];                              /* +20   igVec3fMetaField */
+#endif
     unsigned char _isSeqDead;                      /* +32   igBoolMetaField */
     unsigned char _isPositionLock;                 /* +33   igBoolMetaField */
     char _pad34[2];
+#ifdef __cplusplus
+    igVec3f _rotation;                             /* +36   igVec3fMetaField */
+#else
     float _rotation[3];                            /* +36   igVec3fMetaField */
+#endif
 } beActionStarterData2;
 
 #ifdef __cplusplus
@@ -731,8 +748,16 @@ typedef struct beCameraCtrl {
     int _viewerMang;                               /* +32   igObjectRefMetaField */
     int _viewerPara;                               /* +36   igObjectRefMetaField */
     int _cameraMode;                               /* +40   igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec3f _avgPos;                               /* +44   igVec3fMetaField */
+#else
     float _avgPos[3];                              /* +44   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _savePos;                              /* +56   igVec3fMetaField */
+#else
     float _savePos[3];                             /* +56   igVec3fMetaField */
+#endif
     unsigned char _isPosChange;                    /* +68   igBoolMetaField */
     char _pad69[3];
     float _cameraNowFrame;                         /* +72   igFloatMetaField */
@@ -774,8 +799,16 @@ typedef struct beCameraCtrlInfoRamShake {
     int _version;                                  /* +12   igIntMetaField */
     unsigned char _isFirst;                        /* +16   igBoolMetaField */
     char _pad17[3];
+#ifdef __cplusplus
+    igVec3f _svEyePos;                             /* +20   igVec3fMetaField */
+#else
     float _svEyePos[3];                            /* +20   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _svIntPos;                             /* +32   igVec3fMetaField */
+#else
     float _svIntPos[3];                            /* +32   igVec3fMetaField */
+#endif
     int _moveCode;                                 /* +44   igStringMetaField */
     float _value;                                  /* +48   igFloatMetaField */
     float _oneTime;                                /* +52   igFloatMetaField */
@@ -834,7 +867,11 @@ typedef struct beChangePosTransform {
     int _infoList;                                 /* +24   igObjectRefMetaField */
     unsigned char _isUpdateRun;                    /* +28   igBoolMetaField */
     char _pad29[3];
+#ifdef __cplusplus
+    igVec3f _oldPos;                               /* +32   igVec3fMetaField */
+#else
     float _oldPos[3];                              /* +32   igVec3fMetaField */
+#endif
 } beChangePosTransform;
 
 #ifdef __cplusplus
@@ -1580,7 +1617,11 @@ typedef struct beGeneraterData {
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
     int _name;                                     /* +8    igStringMetaField */
+#ifdef __cplusplus
+    igVec3f _pos;                                  /* +12   igVec3fMetaField */
+#else
     float _pos[3];                                 /* +12   igVec3fMetaField */
+#endif
     unsigned char _genePosIsGlobal;                /* +24   igBoolMetaField */
     char _pad25[3];
     int _genePosList;                              /* +28   igObjectRefMetaField */
@@ -1830,9 +1871,21 @@ typedef struct beHitLandDelivInfoRam {
     float _halfWidth;                              /* +52   igFloatMetaField */
     float _upRange;                                /* +56   igFloatMetaField */
     float _downRange;                              /* +60   igFloatMetaField */
+#ifdef __cplusplus
+    igVec3f _pos;                                  /* +64   igVec3fMetaField */
+#else
     float _pos[3];                                 /* +64   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _oldPos;                               /* +76   igVec3fMetaField */
+#else
     float _oldPos[3];                              /* +76   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _landPos;                              /* +88   igVec3fMetaField */
+#else
     float _landPos[3];                             /* +88   igVec3fMetaField */
+#endif
     unsigned char _landPosOK;                      /* +100  igBoolMetaField */
     char _pad101[3];
 } beHitLandDelivInfoRam;
@@ -1908,8 +1961,16 @@ typedef struct beHitLandModelOrder {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
+#ifdef __cplusplus
+    igVec3f _raymax;                               /* +8    igVec3fMetaField */
+#else
     float _raymax[3];                              /* +8    igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _raymin;                               /* +20   igVec3fMetaField */
+#else
     float _raymin[3];                              /* +20   igVec3fMetaField */
+#endif
     int _infoName;                                 /* +32   igStringMetaField */
     int _ramNo;                                    /* +36   igIntMetaField */
     int _kind;                                     /* +40   igIntMetaField */
@@ -2637,7 +2698,11 @@ typedef struct beMeterCtrlNode {
     unsigned char _isMeter;                        /* +32   igBoolMetaField */
     char _pad33[3];
     int _timeList;                                 /* +36   igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec3f _numberOffset;                         /* +40   igVec3fMetaField */
+#else
     float _numberOffset[3];                        /* +40   igVec3fMetaField */
+#endif
 } beMeterCtrlNode;
 
 #ifdef __cplusplus
@@ -2819,8 +2884,16 @@ typedef struct beModelCtrlHITBOX {
     int _kind;                                     /* +12   igIntMetaField */
     float _start;                                  /* +16   igFloatMetaField */
     float _length;                                 /* +20   igFloatMetaField */
+#ifdef __cplusplus
+    igVec3f _offset;                               /* +24   igVec3fMetaField */
+#else
     float _offset[3];                              /* +24   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _boxSize;                              /* +36   igVec3fMetaField */
+#else
     float _boxSize[3];                             /* +36   igVec3fMetaField */
+#endif
 } beModelCtrlHITBOX;
 
 #ifdef __cplusplus
@@ -2850,7 +2923,11 @@ typedef struct beModelCtrlInfoAI {
 #endif
     int _seqName;                                  /* +8    igStringMetaField */
     int _mapNo;                                    /* +12   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _worldPos;                             /* +16   igVec3fMetaField */
+#else
     float _worldPos[3];                            /* +16   igVec3fMetaField */
+#endif
     int _hStatus;                                  /* +28   igIntMetaField */
     int _hCount;                                   /* +32   igIntMetaField */
 } beModelCtrlInfoAI;
@@ -3005,7 +3082,11 @@ typedef struct beModelCtrlInfoRideOn2 {
     int _modelRamNo;                               /* +12   igIntMetaField */
     int _modelNode;                                /* +16   igObjectRefMetaField */
     float _oldMatrix[16];                          /* +20   igMatrix44fMetaField */
+#ifdef __cplusplus
+    igVec3f _vector;                               /* +84   igVec3fMetaField */
+#else
     float _vector[3];                              /* +84   igVec3fMetaField */
+#endif
 } beModelCtrlInfoRideOn2;
 
 #ifdef __cplusplus
@@ -3020,7 +3101,11 @@ typedef struct beModelCtrlInfoRideOn3 {
     int _modelRamNo;                               /* +12   igIntMetaField */
     int _modelNode;                                /* +16   igObjectRefMetaField */
     float _oldMatrix[16];                          /* +20   igMatrix44fMetaField */
+#ifdef __cplusplus
+    igVec3f _worldPosition;                        /* +84   igVec3fMetaField */
+#else
     float _worldPosition[3];                       /* +84   igVec3fMetaField */
+#endif
     float _minSpeed;                               /* +96   igFloatMetaField */
     float _maxSpeed;                               /* +100  igFloatMetaField */
     float _minKyori;                               /* +104  igFloatMetaField */
@@ -3039,8 +3124,16 @@ typedef struct beModelCtrlInfoRideOn4 {
     int _modelRamNo;                               /* +12   igIntMetaField */
     int _modelNode;                                /* +16   igObjectRefMetaField */
     float _oldMatrix[16];                          /* +20   igMatrix44fMetaField */
+#ifdef __cplusplus
+    igVec3f _oldPlayerPos;                         /* +84   igVec3fMetaField */
+#else
     float _oldPlayerPos[3];                        /* +84   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _vector;                               /* +96   igVec3fMetaField */
+#else
     float _vector[3];                              /* +96   igVec3fMetaField */
+#endif
     float _scalar;                                 /* +108  igFloatMetaField */
     float _limitter;                               /* +112  igFloatMetaField */
     int _isFirst;                                  /* +116  igIntMetaField */
@@ -3079,16 +3172,32 @@ typedef struct beModelCtrlInfoWork {
     int _targetMode;                               /* +88   igStringMetaField */
     int _targetKind;                               /* +92   igStringMetaField */
     int _targetSpc1;                               /* +96   igStringMetaField */
+#ifdef __cplusplus
+    igVec3f _targetPos;                            /* +100  igVec3fMetaField */
+#else
     float _targetPos[3];                           /* +100  igVec3fMetaField */
+#endif
     unsigned char _keyInput;                       /* +112  igBoolMetaField */
     char _pad113[3];
     int _keyEventName;                             /* +116  igStringMetaField */
     unsigned char _isHitCheck;                     /* +120  igBoolMetaField */
     char _pad121[3];
     float _mutekiCount;                            /* +124  igFloatMetaField */
+#ifdef __cplusplus
+    igVec3f _targetDirection;                      /* +128  igVec3fMetaField */
+#else
     float _targetDirection[3];                     /* +128  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _directionLimiter;                     /* +140  igVec3fMetaField */
+#else
     float _directionLimiter[3];                    /* +140  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _direction;                            /* +152  igVec3fMetaField */
+#else
     float _direction[3];                           /* +152  igVec3fMetaField */
+#endif
     float _svLODHighRange;                         /* +164  igFloatMetaField */
     unsigned char _isPosLock;                      /* +168  igBoolMetaField */
     char _pad169[3];
@@ -3096,7 +3205,11 @@ typedef struct beModelCtrlInfoWork {
     int _posLockTrc;                               /* +176  igObjectRefMetaField */
     int _posLockModelName;                         /* +180  igStringMetaField */
     int _posLockBoneName;                          /* +184  igStringMetaField */
+#ifdef __cplusplus
+    igVec3f _posLockOffset;                        /* +188  igVec3fMetaField */
+#else
     float _posLockOffset[3];                       /* +188  igVec3fMetaField */
+#endif
     int _moveObjectList;                           /* +200  igObjectRefMetaField */
     int _rideOnData;                               /* +204  igObjectRefMetaField */
     int _debugHitBoxNode;                          /* +208  igObjectRefMetaField */
@@ -3313,8 +3426,16 @@ typedef struct beModelCtrlSCEffect {
     int _geneRamNo;                                /* +20   igIntMetaField */
     int _modelName;                                /* +24   igStringMetaField */
     int _seqName;                                  /* +28   igStringMetaField */
+#ifdef __cplusplus
+    igVec3f _offset;                               /* +32   igVec3fMetaField */
+#else
     float _offset[3];                              /* +32   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _rotation;                             /* +44   igVec3fMetaField */
+#else
     float _rotation[3];                            /* +44   igVec3fMetaField */
+#endif
     unsigned char _isSeqDead;                      /* +56   igBoolMetaField */
     unsigned char _isPositionLock;                 /* +57   igBoolMetaField */
     char _pad58[2];
@@ -3335,8 +3456,16 @@ typedef struct beModelCtrlSCHitBox {
     int _kind;                                     /* +20   igIntMetaField */
     int _bulletMode;                               /* +24   igIntMetaField */
     float _endFrame;                               /* +28   igFloatMetaField */
+#ifdef __cplusplus
+    igVec3f _offset;                               /* +32   igVec3fMetaField */
+#else
     float _offset[3];                              /* +32   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _boxSize;                              /* +44   igVec3fMetaField */
+#else
     float _boxSize[3];                             /* +44   igVec3fMetaField */
+#endif
     unsigned char _isPositionLock;                 /* +56   igBoolMetaField */
     char _pad57[3];
 } beModelCtrlSCHitBox;
@@ -3970,7 +4099,11 @@ typedef struct beNDMWLoadIntf2ComMdlCtrl {
     int _messenger;                                /* +16   igObjectRefMetaField */
     int _openDataList;                             /* +20   igObjectRefMetaField */
     int _closeDataList;                            /* +24   igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec3f _pos;                                  /* +28   igVec3fMetaField */
+#else
     float _pos[3];                                 /* +28   igVec3fMetaField */
+#endif
 } beNDMWLoadIntf2ComMdlCtrl;
 
 #ifdef __cplusplus
@@ -4609,16 +4742,32 @@ typedef struct beNDMWMdlEnemyInfoWork {
     int _targetMode;                               /* +88   igStringMetaField */
     int _targetKind;                               /* +92   igStringMetaField */
     int _targetSpc1;                               /* +96   igStringMetaField */
+#ifdef __cplusplus
+    igVec3f _targetPos;                            /* +100  igVec3fMetaField */
+#else
     float _targetPos[3];                           /* +100  igVec3fMetaField */
+#endif
     unsigned char _keyInput;                       /* +112  igBoolMetaField */
     char _pad113[3];
     int _keyEventName;                             /* +116  igStringMetaField */
     unsigned char _isHitCheck;                     /* +120  igBoolMetaField */
     char _pad121[3];
     float _mutekiCount;                            /* +124  igFloatMetaField */
+#ifdef __cplusplus
+    igVec3f _targetDirection;                      /* +128  igVec3fMetaField */
+#else
     float _targetDirection[3];                     /* +128  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _directionLimiter;                     /* +140  igVec3fMetaField */
+#else
     float _directionLimiter[3];                    /* +140  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _direction;                            /* +152  igVec3fMetaField */
+#else
     float _direction[3];                           /* +152  igVec3fMetaField */
+#endif
     float _svLODHighRange;                         /* +164  igFloatMetaField */
     unsigned char _isPosLock;                      /* +168  igBoolMetaField */
     char _pad169[3];
@@ -4626,7 +4775,11 @@ typedef struct beNDMWMdlEnemyInfoWork {
     int _posLockTrc;                               /* +176  igObjectRefMetaField */
     int _posLockModelName;                         /* +180  igStringMetaField */
     int _posLockBoneName;                          /* +184  igStringMetaField */
+#ifdef __cplusplus
+    igVec3f _posLockOffset;                        /* +188  igVec3fMetaField */
+#else
     float _posLockOffset[3];                       /* +188  igVec3fMetaField */
+#endif
     int _moveObjectList;                           /* +200  igObjectRefMetaField */
     int _rideOnData;                               /* +204  igObjectRefMetaField */
     int _debugHitBoxNode;                          /* +208  igObjectRefMetaField */
@@ -4708,16 +4861,32 @@ typedef struct beNDMWMdlItemInfoWork {
     int _targetMode;                               /* +88   igStringMetaField */
     int _targetKind;                               /* +92   igStringMetaField */
     int _targetSpc1;                               /* +96   igStringMetaField */
+#ifdef __cplusplus
+    igVec3f _targetPos;                            /* +100  igVec3fMetaField */
+#else
     float _targetPos[3];                           /* +100  igVec3fMetaField */
+#endif
     unsigned char _keyInput;                       /* +112  igBoolMetaField */
     char _pad113[3];
     int _keyEventName;                             /* +116  igStringMetaField */
     unsigned char _isHitCheck;                     /* +120  igBoolMetaField */
     char _pad121[3];
     float _mutekiCount;                            /* +124  igFloatMetaField */
+#ifdef __cplusplus
+    igVec3f _targetDirection;                      /* +128  igVec3fMetaField */
+#else
     float _targetDirection[3];                     /* +128  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _directionLimiter;                     /* +140  igVec3fMetaField */
+#else
     float _directionLimiter[3];                    /* +140  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _direction;                            /* +152  igVec3fMetaField */
+#else
     float _direction[3];                           /* +152  igVec3fMetaField */
+#endif
     float _svLODHighRange;                         /* +164  igFloatMetaField */
     unsigned char _isPosLock;                      /* +168  igBoolMetaField */
     char _pad169[3];
@@ -4725,7 +4894,11 @@ typedef struct beNDMWMdlItemInfoWork {
     int _posLockTrc;                               /* +176  igObjectRefMetaField */
     int _posLockModelName;                         /* +180  igStringMetaField */
     int _posLockBoneName;                          /* +184  igStringMetaField */
+#ifdef __cplusplus
+    igVec3f _posLockOffset;                        /* +188  igVec3fMetaField */
+#else
     float _posLockOffset[3];                       /* +188  igVec3fMetaField */
+#endif
     int _moveObjectList;                           /* +200  igObjectRefMetaField */
     int _rideOnData;                               /* +204  igObjectRefMetaField */
     int _debugHitBoxNode;                          /* +208  igObjectRefMetaField */
@@ -4889,16 +5062,32 @@ typedef struct beNDMWMdlPEBaseInfoWork {
     int _targetMode;                               /* +88   igStringMetaField */
     int _targetKind;                               /* +92   igStringMetaField */
     int _targetSpc1;                               /* +96   igStringMetaField */
+#ifdef __cplusplus
+    igVec3f _targetPos;                            /* +100  igVec3fMetaField */
+#else
     float _targetPos[3];                           /* +100  igVec3fMetaField */
+#endif
     unsigned char _keyInput;                       /* +112  igBoolMetaField */
     char _pad113[3];
     int _keyEventName;                             /* +116  igStringMetaField */
     unsigned char _isHitCheck;                     /* +120  igBoolMetaField */
     char _pad121[3];
     float _mutekiCount;                            /* +124  igFloatMetaField */
+#ifdef __cplusplus
+    igVec3f _targetDirection;                      /* +128  igVec3fMetaField */
+#else
     float _targetDirection[3];                     /* +128  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _directionLimiter;                     /* +140  igVec3fMetaField */
+#else
     float _directionLimiter[3];                    /* +140  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _direction;                            /* +152  igVec3fMetaField */
+#else
     float _direction[3];                           /* +152  igVec3fMetaField */
+#endif
     float _svLODHighRange;                         /* +164  igFloatMetaField */
     unsigned char _isPosLock;                      /* +168  igBoolMetaField */
     char _pad169[3];
@@ -4906,7 +5095,11 @@ typedef struct beNDMWMdlPEBaseInfoWork {
     int _posLockTrc;                               /* +176  igObjectRefMetaField */
     int _posLockModelName;                         /* +180  igStringMetaField */
     int _posLockBoneName;                          /* +184  igStringMetaField */
+#ifdef __cplusplus
+    igVec3f _posLockOffset;                        /* +188  igVec3fMetaField */
+#else
     float _posLockOffset[3];                       /* +188  igVec3fMetaField */
+#endif
     int _moveObjectList;                           /* +200  igObjectRefMetaField */
     int _rideOnData;                               /* +204  igObjectRefMetaField */
     int _debugHitBoxNode;                          /* +208  igObjectRefMetaField */
@@ -5011,16 +5204,32 @@ typedef struct beNDMWMdlPlayer2InfoWork {
     int _targetMode;                               /* +88   igStringMetaField */
     int _targetKind;                               /* +92   igStringMetaField */
     int _targetSpc1;                               /* +96   igStringMetaField */
+#ifdef __cplusplus
+    igVec3f _targetPos;                            /* +100  igVec3fMetaField */
+#else
     float _targetPos[3];                           /* +100  igVec3fMetaField */
+#endif
     unsigned char _keyInput;                       /* +112  igBoolMetaField */
     char _pad113[3];
     int _keyEventName;                             /* +116  igStringMetaField */
     unsigned char _isHitCheck;                     /* +120  igBoolMetaField */
     char _pad121[3];
     float _mutekiCount;                            /* +124  igFloatMetaField */
+#ifdef __cplusplus
+    igVec3f _targetDirection;                      /* +128  igVec3fMetaField */
+#else
     float _targetDirection[3];                     /* +128  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _directionLimiter;                     /* +140  igVec3fMetaField */
+#else
     float _directionLimiter[3];                    /* +140  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _direction;                            /* +152  igVec3fMetaField */
+#else
     float _direction[3];                           /* +152  igVec3fMetaField */
+#endif
     float _svLODHighRange;                         /* +164  igFloatMetaField */
     unsigned char _isPosLock;                      /* +168  igBoolMetaField */
     char _pad169[3];
@@ -5028,7 +5237,11 @@ typedef struct beNDMWMdlPlayer2InfoWork {
     int _posLockTrc;                               /* +176  igObjectRefMetaField */
     int _posLockModelName;                         /* +180  igStringMetaField */
     int _posLockBoneName;                          /* +184  igStringMetaField */
+#ifdef __cplusplus
+    igVec3f _posLockOffset;                        /* +188  igVec3fMetaField */
+#else
     float _posLockOffset[3];                       /* +188  igVec3fMetaField */
+#endif
     int _moveObjectList;                           /* +200  igObjectRefMetaField */
     int _rideOnData;                               /* +204  igObjectRefMetaField */
     int _debugHitBoxNode;                          /* +208  igObjectRefMetaField */
@@ -5081,16 +5294,32 @@ typedef struct beNDMWMdlPlayerInfoWork {
     int _targetMode;                               /* +88   igStringMetaField */
     int _targetKind;                               /* +92   igStringMetaField */
     int _targetSpc1;                               /* +96   igStringMetaField */
+#ifdef __cplusplus
+    igVec3f _targetPos;                            /* +100  igVec3fMetaField */
+#else
     float _targetPos[3];                           /* +100  igVec3fMetaField */
+#endif
     unsigned char _keyInput;                       /* +112  igBoolMetaField */
     char _pad113[3];
     int _keyEventName;                             /* +116  igStringMetaField */
     unsigned char _isHitCheck;                     /* +120  igBoolMetaField */
     char _pad121[3];
     float _mutekiCount;                            /* +124  igFloatMetaField */
+#ifdef __cplusplus
+    igVec3f _targetDirection;                      /* +128  igVec3fMetaField */
+#else
     float _targetDirection[3];                     /* +128  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _directionLimiter;                     /* +140  igVec3fMetaField */
+#else
     float _directionLimiter[3];                    /* +140  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _direction;                            /* +152  igVec3fMetaField */
+#else
     float _direction[3];                           /* +152  igVec3fMetaField */
+#endif
     float _svLODHighRange;                         /* +164  igFloatMetaField */
     unsigned char _isPosLock;                      /* +168  igBoolMetaField */
     char _pad169[3];
@@ -5098,7 +5327,11 @@ typedef struct beNDMWMdlPlayerInfoWork {
     int _posLockTrc;                               /* +176  igObjectRefMetaField */
     int _posLockModelName;                         /* +180  igStringMetaField */
     int _posLockBoneName;                          /* +184  igStringMetaField */
+#ifdef __cplusplus
+    igVec3f _posLockOffset;                        /* +188  igVec3fMetaField */
+#else
     float _posLockOffset[3];                       /* +188  igVec3fMetaField */
+#endif
     int _moveObjectList;                           /* +200  igObjectRefMetaField */
     int _rideOnData;                               /* +204  igObjectRefMetaField */
     int _debugHitBoxNode;                          /* +208  igObjectRefMetaField */
@@ -5413,7 +5646,11 @@ typedef struct beNDMWSaveIntfComMdlCtrl {
     int _messenger;                                /* +16   igObjectRefMetaField */
     int _openDataList;                             /* +20   igObjectRefMetaField */
     int _closeDataList;                            /* +24   igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec3f _pos;                                  /* +28   igVec3fMetaField */
+#else
     float _pos[3];                                 /* +28   igVec3fMetaField */
+#endif
 } beNDMWSaveIntfComMdlCtrl;
 
 #ifdef __cplusplus
@@ -6140,7 +6377,11 @@ typedef struct beNDMWShopSelect00 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
     int _infoName;                                 /* +80   igStringMetaField */
     int _selectMax;                                /* +84   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offsetPos;                            /* +88   igVec3fMetaField */
+#else
     float _offsetPos[3];                           /* +88   igVec3fMetaField */
+#endif
     int _startPoint;                               /* +100  igIntMetaField */
     unsigned char _isNoCancel;                     /* +104  igBoolMetaField */
     char _pad105[3];
@@ -6177,7 +6418,11 @@ typedef struct beNDMWShopSelect01 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
     int _infoName;                                 /* +80   igStringMetaField */
     int _selectMax;                                /* +84   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offsetPos;                            /* +88   igVec3fMetaField */
+#else
     float _offsetPos[3];                           /* +88   igVec3fMetaField */
+#endif
     int _startPoint;                               /* +100  igIntMetaField */
     unsigned char _isNoCancel;                     /* +104  igBoolMetaField */
     char _pad105[3];
@@ -6213,7 +6458,11 @@ typedef struct beNDMWShopSelect02 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
     int _infoName;                                 /* +80   igStringMetaField */
     int _selectMax;                                /* +84   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offsetPos;                            /* +88   igVec3fMetaField */
+#else
     float _offsetPos[3];                           /* +88   igVec3fMetaField */
+#endif
     int _startPoint;                               /* +100  igIntMetaField */
     unsigned char _isNoCancel;                     /* +104  igBoolMetaField */
     char _pad105[3];
@@ -6250,7 +6499,11 @@ typedef struct beNDMWShopSelect03 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
     int _infoName;                                 /* +80   igStringMetaField */
     int _selectMax;                                /* +84   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offsetPos;                            /* +88   igVec3fMetaField */
+#else
     float _offsetPos[3];                           /* +88   igVec3fMetaField */
+#endif
     int _startPoint;                               /* +100  igIntMetaField */
     unsigned char _isNoCancel;                     /* +104  igBoolMetaField */
     char _pad105[3];
@@ -6286,7 +6539,11 @@ typedef struct beNDMWShopSelect11 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
     int _infoName;                                 /* +80   igStringMetaField */
     int _selectMax;                                /* +84   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offsetPos;                            /* +88   igVec3fMetaField */
+#else
     float _offsetPos[3];                           /* +88   igVec3fMetaField */
+#endif
     int _startPoint;                               /* +100  igIntMetaField */
     unsigned char _isNoCancel;                     /* +104  igBoolMetaField */
     char _pad105[3];
@@ -6322,7 +6579,11 @@ typedef struct beNDMWShopSelect34 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
     int _infoName;                                 /* +80   igStringMetaField */
     int _selectMax;                                /* +84   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offsetPos;                            /* +88   igVec3fMetaField */
+#else
     float _offsetPos[3];                           /* +88   igVec3fMetaField */
+#endif
     int _startPoint;                               /* +100  igIntMetaField */
     unsigned char _isNoCancel;                     /* +104  igBoolMetaField */
     char _pad105[3];
@@ -6358,7 +6619,11 @@ typedef struct beNDMWShopSelect52 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
     int _infoName;                                 /* +80   igStringMetaField */
     int _selectMax;                                /* +84   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offsetPos;                            /* +88   igVec3fMetaField */
+#else
     float _offsetPos[3];                           /* +88   igVec3fMetaField */
+#endif
     int _startPoint;                               /* +100  igIntMetaField */
     unsigned char _isNoCancel;                     /* +104  igBoolMetaField */
     char _pad105[3];
@@ -6394,7 +6659,11 @@ typedef struct beNDMWShopSelectA0 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
     int _infoName;                                 /* +80   igStringMetaField */
     int _selectMax;                                /* +84   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offsetPos;                            /* +88   igVec3fMetaField */
+#else
     float _offsetPos[3];                           /* +88   igVec3fMetaField */
+#endif
     int _startPoint;                               /* +100  igIntMetaField */
     unsigned char _isNoCancel;                     /* +104  igBoolMetaField */
     char _pad105[3];
@@ -6430,7 +6699,11 @@ typedef struct beNDMWShopSelectB0 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
     int _infoName;                                 /* +80   igStringMetaField */
     int _selectMax;                                /* +84   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offsetPos;                            /* +88   igVec3fMetaField */
+#else
     float _offsetPos[3];                           /* +88   igVec3fMetaField */
+#endif
     int _startPoint;                               /* +100  igIntMetaField */
     unsigned char _isNoCancel;                     /* +104  igBoolMetaField */
     char _pad105[3];
@@ -7104,7 +7377,11 @@ typedef struct beNDMWStatusSelect00 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
     int _infoName;                                 /* +80   igStringMetaField */
     int _selectMax;                                /* +84   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offsetPos;                            /* +88   igVec3fMetaField */
+#else
     float _offsetPos[3];                           /* +88   igVec3fMetaField */
+#endif
     int _startPoint;                               /* +100  igIntMetaField */
     unsigned char _isNoCancel;                     /* +104  igBoolMetaField */
     char _pad105[3];
@@ -7140,7 +7417,11 @@ typedef struct beNDMWStatusSelect01 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
     int _infoName;                                 /* +80   igStringMetaField */
     int _selectMax;                                /* +84   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offsetPos;                            /* +88   igVec3fMetaField */
+#else
     float _offsetPos[3];                           /* +88   igVec3fMetaField */
+#endif
     int _startPoint;                               /* +100  igIntMetaField */
     unsigned char _isNoCancel;                     /* +104  igBoolMetaField */
     char _pad105[3];
@@ -7176,7 +7457,11 @@ typedef struct beNDMWStatusSelectE0 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
     int _infoName;                                 /* +80   igStringMetaField */
     int _selectMax;                                /* +84   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offsetPos;                            /* +88   igVec3fMetaField */
+#else
     float _offsetPos[3];                           /* +88   igVec3fMetaField */
+#endif
     int _startPoint;                               /* +100  igIntMetaField */
     unsigned char _isNoCancel;                     /* +104  igBoolMetaField */
     char _pad105[3];
@@ -7212,7 +7497,11 @@ typedef struct beNDMWStatusSelectE1 {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
     int _infoName;                                 /* +80   igStringMetaField */
     int _selectMax;                                /* +84   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offsetPos;                            /* +88   igVec3fMetaField */
+#else
     float _offsetPos[3];                           /* +88   igVec3fMetaField */
+#endif
     int _startPoint;                               /* +100  igIntMetaField */
     unsigned char _isNoCancel;                     /* +104  igBoolMetaField */
     char _pad105[3];
@@ -7623,7 +7912,11 @@ typedef struct beNDMWWindowSelect {
     int _modelCloseSeqNameList;                    /* +76   igObjectRefMetaField */
     int _infoName;                                 /* +80   igStringMetaField */
     int _selectMax;                                /* +84   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _offsetPos;                            /* +88   igVec3fMetaField */
+#else
     float _offsetPos[3];                           /* +88   igVec3fMetaField */
+#endif
     int _startPoint;                               /* +100  igIntMetaField */
     unsigned char _isNoCancel;                     /* +104  igBoolMetaField */
     char _pad105[3];
@@ -7974,7 +8267,11 @@ typedef struct beParticleCtrl2InfoWork {
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
     int _positionLockNode;                         /* +8    igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec3f _positionLockOffset;                   /* +12   igVec3fMetaField */
+#else
     float _positionLockOffset[3];                  /* +12   igVec3fMetaField */
+#endif
 } beParticleCtrl2InfoWork;
 
 #ifdef __cplusplus
@@ -8326,7 +8623,11 @@ typedef struct beSelectCtrlInfoWork {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
+#ifdef __cplusplus
+    igVec3f _offsetPos;                            /* +8    igVec3fMetaField */
+#else
     float _offsetPos[3];                           /* +8    igVec3fMetaField */
+#endif
     int _selectMax;                                /* +20   igIntMetaField */
     unsigned char _isCancel;                       /* +24   igBoolMetaField */
     char _pad25[3];
@@ -8350,7 +8651,11 @@ typedef struct beShadow01 {
     unsigned char _isUpdateRun;                    /* +28   igBoolMetaField */
     char _pad29[3];
     int _svInfoList;                               /* +32   igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec3f _savePos;                              /* +36   igVec3fMetaField */
+#else
     float _savePos[3];                             /* +36   igVec3fMetaField */
+#endif
 } beShadow01;
 
 #ifdef __cplusplus
@@ -9373,9 +9678,21 @@ typedef struct beWaterPlainInfoRam {
     int _dplist2VertexNO;                          /* +92   igObjectRefMetaField */
     unsigned int _mapWidth;                        /* +96   igUnsignedIntMetaField */
     unsigned int _mapHeight;                       /* +100  igUnsignedIntMetaField */
+#ifdef __cplusplus
+    igVec3f _pos;                                  /* +104  igVec3fMetaField */
+#else
     float _pos[3];                                 /* +104  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _areaMax;                              /* +116  igVec3fMetaField */
+#else
     float _areaMax[3];                             /* +116  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _areaMin;                              /* +128  igVec3fMetaField */
+#else
     float _areaMin[3];                             /* +128  igVec3fMetaField */
+#endif
     float _xsize;                                  /* +140  igFloatMetaField */
     float _zsize;                                  /* +144  igFloatMetaField */
     float _cellSize;                               /* +148  igFloatMetaField */
@@ -9515,8 +9832,16 @@ typedef struct igAABox {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
+#ifdef __cplusplus
+    igVec3f _min;                                  /* +8    igVec3fMetaField */
+#else
     float _min[3];                                 /* +8    igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _max;                                  /* +20   igVec3fMetaField */
+#else
     float _max[3];                                 /* +20   igVec3fMetaField */
+#endif
 } igAABox;
 
 #ifdef __cplusplus
@@ -9891,7 +10216,11 @@ typedef struct igAnimationCombinerBoneInfo {
     int _animationState;                           /* +12   igObjectRefMetaField */
     int _transformSource;                          /* +16   igObjectRefMetaField */
     float _constantQuaternion[4];                  /* +20   igVec4fMetaField */
+#ifdef __cplusplus
+    igVec3f _constantTranslation;                  /* +36   igVec3fMetaField */
+#else
     float _constantTranslation[3];                 /* +36   igVec3fMetaField */
+#endif
     int _priority;                                 /* +48   igIntMetaField */
     unsigned char _useAnimationTranslation;        /* +52   igBoolMetaField */
     char _pad53[3];
@@ -10117,7 +10446,11 @@ typedef struct igAnimationTrack {
     int _name;                                     /* +8    igStringMetaField */
     int _source;                                   /* +12   igObjectRefMetaField */
     float _constantQuaternion[4];                  /* +16   igVec4fMetaField */
+#ifdef __cplusplus
+    igVec3f _constantTranslation;                  /* +32   igVec3fMetaField */
+#else
     float _constantTranslation[3];                 /* +32   igVec3fMetaField */
+#endif
 } igAnimationTrack;
 
 #ifdef __cplusplus
@@ -10479,8 +10812,16 @@ typedef struct igBillboard {
     int _handle;                                   /* +24   igIntMetaField */
     int _childList;                                /* +28   igObjectRefMetaField */
     int _mode;                                     /* +32   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _axis;                                 /* +36   igVec3fMetaField */
+#else
     float _axis[3];                                /* +36   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _origin;                               /* +48   igVec3fMetaField */
+#else
     float _origin[3];                              /* +48   igVec3fMetaField */
+#endif
     int _mvm;                                      /* +60   igObjectRefMetaField */
 } igBillboard;
 
@@ -11127,7 +11468,11 @@ typedef struct igCollisionGrid {
     int _staticCollisions;                         /* +48   igObjectRefMetaField */
     int _lostGroups;                               /* +52   igObjectRefMetaField */
     int _bound;                                    /* +56   igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec3f _deltas;                               /* +60   igVec3fMetaField */
+#else
     float _deltas[3];                              /* +60   igVec3fMetaField */
+#endif
     int _rate;                                     /* +72   igIntMetaField */
 } igCollisionGrid;
 
@@ -11158,10 +11503,26 @@ typedef struct igCollisionGroup {
     int _handle;                                   /* +24   igIntMetaField */
     int _childList;                                /* +28   igObjectRefMetaField */
     int _transform;                                /* +32   igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec3f _position;                             /* +36   igVec3fMetaField */
+#else
     float _position[3];                            /* +36   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _lastPosition;                         /* +48   igVec3fMetaField */
+#else
     float _lastPosition[3];                        /* +48   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _collisionPosition;                    /* +60   igVec3fMetaField */
+#else
     float _collisionPosition[3];                   /* +60   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _direction;                            /* +72   igVec3fMetaField */
+#else
     float _direction[3];                           /* +72   igVec3fMetaField */
+#endif
     float _radius;                                 /* +84   igFloatMetaField */
     float _time;                                   /* +88   igFloatMetaField */
     int _collisionCells;                           /* +92   igIntMetaField */
@@ -11867,8 +12228,16 @@ typedef struct igDefaultAspect {
 #endif
     int _model;                                    /* +8    igObjectRefMetaField */
     int _node;                                     /* +12   igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec3f _minSize;                              /* +16   igVec3fMetaField */
+#else
     float _minSize[3];                             /* +16   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _maxSize;                              /* +28   igVec3fMetaField */
+#else
     float _maxSize[3];                             /* +28   igVec3fMetaField */
+#endif
     int _elementList;                              /* +40   igObjectRefMetaField */
 } igDefaultAspect;
 
@@ -12946,10 +13315,22 @@ typedef struct igFlyMode {
 #endif
     int _model;                                    /* +8    igObjectRefMetaField */
     float _inverseMatrix[16];                      /* +12   igMatrix44fMetaField */
+#ifdef __cplusplus
+    igVec3f _moveDirection;                        /* +76   igVec3fMetaField */
+#else
     float _moveDirection[3];                       /* +76   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _joystickT;                            /* +88   igVec3fMetaField */
+#else
     float _joystickT[3];                           /* +88   igVec3fMetaField */
+#endif
     float _joystickR[2];                           /* +100  igVec2fMetaField */
+#ifdef __cplusplus
+    igVec3f _lastTranslation;                      /* +108  igVec3fMetaField */
+#else
     float _lastTranslation[3];                     /* +108  igVec3fMetaField */
+#endif
     float _lastRotation[2];                        /* +120  igVec2fMetaField */
     float _speed;                                  /* +128  igFloatMetaField */
     unsigned char _aiming;                         /* +132  igBoolMetaField */
@@ -13163,7 +13544,11 @@ typedef struct igGeometryElement {
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
     int _geometry;                                 /* +8    igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec3f _defaultSize;                          /* +12   igVec3fMetaField */
+#else
     float _defaultSize[3];                         /* +12   igVec3fMetaField */
+#endif
     float _color[4];                               /* +24   igVec4fMetaField */
     int _sharableAttrs;                            /* +40   igObjectRefMetaField */
 } igGeometryElement;
@@ -13234,7 +13619,11 @@ typedef struct igGraphPath {
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
     int _path;                                     /* +8    igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec3f _center;                               /* +12   igVec3fMetaField */
+#else
     float _center[3];                              /* +12   igVec3fMetaField */
+#endif
     float _length;                                 /* +24   igFloatMetaField */
 } igGraphPath;
 
@@ -13295,8 +13684,16 @@ typedef struct igGuiComponentAspect {
 #endif
     int _model;                                    /* +8    igObjectRefMetaField */
     int _node;                                     /* +12   igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec3f _minSize;                              /* +16   igVec3fMetaField */
+#else
     float _minSize[3];                             /* +16   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _maxSize;                              /* +28   igVec3fMetaField */
+#else
     float _maxSize[3];                             /* +28   igVec3fMetaField */
+#endif
 } igGuiComponentAspect;
 
 #ifdef __cplusplus
@@ -13336,7 +13733,11 @@ typedef struct igGuiComponentModel {
     unsigned char _hasFocus;                       /* +13   igBoolMetaField */
     unsigned char _mouseOver;                      /* +14   igBoolMetaField */
     unsigned char _pushed;                         /* +15   igBoolMetaField */
+#ifdef __cplusplus
+    igVec3f _size;                                 /* +16   igVec3fMetaField */
+#else
     float _size[3];                                /* +16   igVec3fMetaField */
+#endif
     unsigned char _childHasFocus;                  /* +28   igBoolMetaField */
     char _pad29[3];
     int _component;                                /* +32   igObjectRefMetaField */
@@ -14133,17 +14534,37 @@ typedef struct igLightAttr {
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _lightType;                                /* +12   igEnumMetaField */
     int _lightId;                                  /* +16   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _position;                             /* +20   igVec3fMetaField */
+#else
     float _position[3];                            /* +20   igVec3fMetaField */
+#endif
     float _ambient[4];                             /* +32   igVec4fMetaField */
     float _diffuse[4];                             /* +48   igVec4fMetaField */
     float _specular[4];                            /* +64   igVec4fMetaField */
+#ifdef __cplusplus
+    igVec3f _direction;                            /* +80   igVec3fMetaField */
+#else
     float _direction[3];                           /* +80   igVec3fMetaField */
+#endif
     float _falloff;                                /* +92   igFloatMetaField */
     float _cutoff;                                 /* +96   igFloatMetaField */
+#ifdef __cplusplus
+    igVec3f _attenuation;                          /* +100  igVec3fMetaField */
+#else
     float _attenuation[3];                         /* +100  igVec3fMetaField */
+#endif
     float _shininess;                              /* +112  igFloatMetaField */
+#ifdef __cplusplus
+    igVec3f _cachedPosition;                       /* +116  igVec3fMetaField */
+#else
     float _cachedPosition[3];                      /* +116  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _cachedDirection;                      /* +128  igVec3fMetaField */
+#else
     float _cachedDirection[3];                     /* +128  igVec3fMetaField */
+#endif
     int _vc;                                       /* +140  igObjectRefMetaField */
     unsigned char _changed;                        /* +144  igBoolMetaField */
     unsigned char _cacheable;                      /* +145  igBoolMetaField */
@@ -14415,7 +14836,11 @@ typedef struct igLod {
     int _lastIndex;                                /* +40   igIntMetaField */
     float _lastLower;                              /* +44   igFloatMetaField */
     float _lastUpper;                              /* +48   igFloatMetaField */
+#ifdef __cplusplus
+    igVec3f _center;                               /* +52   igVec3fMetaField */
+#else
     float _center[3];                              /* +52   igVec3fMetaField */
+#endif
     int _hysteresisList;                           /* +64   igObjectRefMetaField */
 } igLod;
 
@@ -16016,7 +16441,11 @@ typedef struct igOnOffModel {
     unsigned char _hasFocus;                       /* +13   igBoolMetaField */
     unsigned char _mouseOver;                      /* +14   igBoolMetaField */
     unsigned char _pushed;                         /* +15   igBoolMetaField */
+#ifdef __cplusplus
+    igVec3f _size;                                 /* +16   igVec3fMetaField */
+#else
     float _size[3];                                /* +16   igVec3fMetaField */
+#endif
     unsigned char _childHasFocus;                  /* +28   igBoolMetaField */
     char _pad29[3];
     int _component;                                /* +32   igObjectRefMetaField */
@@ -16294,7 +16723,11 @@ typedef struct igPlane {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
+#ifdef __cplusplus
+    igVec3f _norm;                                 /* +8    igVec3fMetaField */
+#else
     float _norm[3];                                /* +8    igVec3fMetaField */
+#endif
     float _offset;                                 /* +20   igFloatMetaField */
     int _octant;                                   /* +24   igEnumMetaField */
 } igPlane;
@@ -16505,8 +16938,16 @@ typedef struct igProjectiveShadowShader {
     int _flags;                                    /* +20   igIntMetaField */
     int _handle;                                   /* +24   igIntMetaField */
     int _childList;                                /* +28   igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec3f _lightPos;                             /* +32   igVec3fMetaField */
+#else
     float _lightPos[3];                            /* +32   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _lightDir;                             /* +44   igVec3fMetaField */
+#else
     float _lightDir[3];                            /* +44   igVec3fMetaField */
+#endif
     float _cutoff;                                 /* +56   igFloatMetaField */
     int _shadowCasters;                            /* +60   igObjectRefMetaField */
     int _shadowReceivers;                          /* +64   igObjectRefMetaField */
@@ -16527,7 +16968,11 @@ typedef struct igProjectiveShadowShader {
     char _pad121[3];
     float _zNear;                                  /* +124  igFloatMetaField */
     float _zFar;                                   /* +128  igFloatMetaField */
+#ifdef __cplusplus
+    igVec3f _upVector;                             /* +132  igVec3fMetaField */
+#else
     float _upVector[3];                            /* +132  igVec3fMetaField */
+#endif
     int _viewToProjectedLightTextureMatrix;        /* +144  igObjectRefMetaField */
     unsigned char _drawReceiver;                   /* +148  igBoolMetaField */
     unsigned char _updateShadowMap;                /* +149  igBoolMetaField */
@@ -17563,8 +18008,16 @@ typedef struct igRay {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
+#ifdef __cplusplus
+    igVec3f _pos;                                  /* +8    igVec3fMetaField */
+#else
     float _pos[3];                                 /* +8    igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _dir;                                  /* +20   igVec3fMetaField */
+#else
     float _dir[3];                                 /* +20   igVec3fMetaField */
+#endif
     float _len;                                    /* +32   igFloatMetaField */
 } igRay;
 
@@ -17843,7 +18296,11 @@ typedef struct igRotateMode {
     float _roll;                                   /* +124  igFloatMetaField */
     float _pitch;                                  /* +128  igFloatMetaField */
     float _zoom;                                   /* +132  igFloatMetaField */
+#ifdef __cplusplus
+    igVec3f _translation;                          /* +136  igVec3fMetaField */
+#else
     float _translation[3];                         /* +136  igVec3fMetaField */
+#endif
 } igRotateMode;
 
 #ifdef __cplusplus
@@ -17863,7 +18320,11 @@ typedef struct igSceneInfo {
     int _cameras;                                  /* +28   igObjectRefMetaField */
     long long _animationBegin;                     /* +32   igLongMetaField */
     long long _animationEnd;                       /* +40   igLongMetaField */
+#ifdef __cplusplus
+    igVec3f _upVector;                             /* +48   igVec3fMetaField */
+#else
     float _upVector[3];                            /* +48   igVec3fMetaField */
+#endif
     int _sceneGraphList;                           /* +60   igObjectRefMetaField */
 } igSceneInfo;
 
@@ -18239,7 +18700,11 @@ typedef struct igSphere {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
+#ifdef __cplusplus
+    igVec3f _center;                               /* +8    igVec3fMetaField */
+#else
     float _center[3];                              /* +8    igVec3fMetaField */
+#endif
     float _radius;                                 /* +20   igFloatMetaField */
 } igSphere;
 
@@ -18598,7 +19063,11 @@ typedef struct igTextElement {
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 #endif
     int _geometry;                                 /* +8    igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec3f _defaultSize;                          /* +12   igVec3fMetaField */
+#else
     float _defaultSize[3];                         /* +12   igVec3fMetaField */
+#endif
     float _color[4];                               /* +24   igVec4fMetaField */
     int _sharableAttrs;                            /* +40   igObjectRefMetaField */
     int _font;                                     /* +44   igObjectRefMetaField */
@@ -19028,7 +19497,11 @@ typedef struct igTransformSequence {
     char _pad33[3];
     int _playMode;                                 /* +36   igEnumMetaField */
     int _lastTime;                                 /* +40   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _centerOfRotation;                     /* +44   igVec3fMetaField */
+#else
     float _centerOfRotation[3];                    /* +44   igVec3fMetaField */
+#endif
 } igTransformSequence;
 
 #ifdef __cplusplus
@@ -19048,7 +19521,11 @@ typedef struct igTransformSequence1_5 {
     char _pad33[3];
     int _playMode;                                 /* +36   igEnumMetaField */
     int _lastTime;                                 /* +40   igIntMetaField */
+#ifdef __cplusplus
+    igVec3f _centerOfRotation;                     /* +44   igVec3fMetaField */
+#else
     float _centerOfRotation[3];                    /* +44   igVec3fMetaField */
+#endif
     int _timeListLong;                             /* +56   igObjectRefMetaField */
     int _interpolationDataTranslation;             /* +60   igObjectRefMetaField */
     int _interpolationDataRotation;                /* +64   igObjectRefMetaField */
@@ -19872,13 +20349,37 @@ typedef struct igViewModel {
     float _hfov;                                   /* +80   igFloatMetaField */
     float _nearPlane;                              /* +84   igFloatMetaField */
     float _farPlane;                               /* +88   igFloatMetaField */
+#ifdef __cplusplus
+    igVec3f _position;                             /* +92   igVec3fMetaField */
+#else
     float _position[3];                            /* +92   igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _direction;                            /* +104  igVec3fMetaField */
+#else
     float _direction[3];                           /* +104  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _viewUpVector;                         /* +116  igVec3fMetaField */
+#else
     float _viewUpVector[3];                        /* +116  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _viewLeftVector;                       /* +128  igVec3fMetaField */
+#else
     float _viewLeftVector[3];                      /* +128  igVec3fMetaField */
+#endif
+#ifdef __cplusplus
+    igVec3f _sceneUpVector;                        /* +140  igVec3fMetaField */
+#else
     float _sceneUpVector[3];                       /* +140  igVec3fMetaField */
+#endif
     long long _drawTime;                           /* +152  igLongMetaField */
+#ifdef __cplusplus
+    igVec3f _selectedCenter;                       /* +160  igVec3fMetaField */
+#else
     float _selectedCenter[3];                      /* +160  igVec3fMetaField */
+#endif
     float _selectedLength;                         /* +172  igFloatMetaField */
 } igViewModel;
 
@@ -19962,7 +20463,11 @@ typedef struct igViewerParameters {
 #endif
     int _views;                                    /* +8    igObjectRefMetaField */
     int _scene;                                    /* +12   igObjectRefMetaField */
+#ifdef __cplusplus
+    igVec3f _upVector;                             /* +16   igVec3fMetaField */
+#else
     float _upVector[3];                            /* +16   igVec3fMetaField */
+#endif
     float _ratio;                                  /* +28   igFloatMetaField */
     float _hfov;                                   /* +32   igFloatMetaField */
     float _nearPlane;                              /* +36   igFloatMetaField */

@@ -335,7 +335,7 @@ void igFrustCullTraversal_TraverseNode(igFrustCullTraversal *arg0, igNode *arg1)
             } else {
                 igAABox *x = (igAABox *)arg0->_boundingBox;
                 var = x;
-                float *mn = (float *)x->_min;
+                float *mn = x->_min.vec;
                 float *mx = (float *)&x->_max;
                 mn[0] = mn[1] = mn[2] = 3.4028235e38f;
                 mx[0] = mx[1] = mx[2] = -3.4028235e38f;

@@ -641,13 +641,13 @@ void FUN_001b1aa0(igBillboard *billboard, float *matrix, const float *modelView,
     igVec3f up;
     igVec3f origin;
     igMatrix44f_GetTranslation(modelView, position.vec);
-    Vec3f_TransformDirection(origin.vec, billboard->_origin, modelView);
+    Vec3f_TransformDirection(origin.vec, billboard->_origin.vec, modelView);
     position.add(origin);
     igVec3f viewPosition(view[12], view[13], view[14]);
     igVec3f direction = viewPosition - position;
     switch (billboard->_mode) {
     case 1:
-        Vec3f_TransformDirection(up.vec, billboard->_axis, modelView);
+        Vec3f_TransformDirection(up.vec, billboard->_axis.vec, modelView);
         break;
     case 2: {
         igVec3f side;

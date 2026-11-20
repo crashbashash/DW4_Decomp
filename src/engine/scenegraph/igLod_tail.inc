@@ -20,6 +20,6 @@ void igLod_UserPostLoad(void **arg0) {
 
 void igLod_Transform(igLod *self, float *matrix) {
     igGroup_Transform((int *)self, (int)(matrix));
-    Vec3f_TransformProjective(self->_center, self->_center, matrix);
+    Vec3f_TransformProjective(self->_center.vec, self->_center.vec, matrix);
 }
 

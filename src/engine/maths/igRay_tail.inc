@@ -16,40 +16,25 @@ void FUN_0018d280(void *arg0, void *arg1) {
 }
 
 void igRay_SetFromPoints(igRay *ray, const float *from, const float *to) {
-    float len, inv;
-    ray->_pos[0] = from[0];
-    ray->_pos[1] = from[1];
-    ray->_pos[2] = from[2];
+    float len;
+    ray->_pos.set(from);
     ray->_dir[0] = to[0] - from[0];
     ray->_dir[1] = to[1] - from[1];
     ray->_dir[2] = to[2] - from[2];
-    len = sqrtf(ray->_dir[0] * ray->_dir[0] + ray->_dir[1] * ray->_dir[1] + ray->_dir[2] * ray->_dir[2]);
+    len = ray->_dir.length();
     ray->_len = len;
     if (4.99999999e-07f < len) {
-        inv = 1.0f / len;
-        ray->_dir[0] = ray->_dir[0] * inv;
-        ray->_dir[1] = ray->_dir[1] * inv;
-        ray->_dir[2] = ray->_dir[2] * inv;
+        ray->_dir.scale(1.0f / len);
     }
 }
 
 void igRay_Transform(igRay *ray, const float *matrix) {
     igVec3f end;
-    float len;
-    float scale;
 
-    len = ray->_len;
-    end[0] = ray->_pos[0] + len * ray->_dir[0];
-    end[1] = ray->_pos[1] + len * ray->_dir[1];
-    end[2] = ray->_pos[2] + len * ray->_dir[2];
-    Vec3f_TransformProjective(ray->_pos, ray->_pos, matrix);
+    end.addScaled(ray->_pos, ray->_len, ray->_dir);
+    Vec3f_TransformProjective(ray->_pos.vec, ray->_pos.vec, matrix);
     Vec3f_TransformProjective(end.vec, end.vec, matrix);
-    ((igVec3f *)ray->_dir)->subtract(end, *(const igVec3f *)ray->_pos);
-    len = lengthOf(ray->_dir);
-    scale = 1.0f / len;
-    ray->_dir[0] = ray->_dir[0] * scale;
-    ray->_dir[1] = ray->_dir[1] * scale;
-    ray->_dir[2] = ray->_dir[2] * scale;
-    ray->_len = len;
+    ray->_dir.subtract(end, ray->_pos);
+    ray->_len = ray->_dir.normalize();
 }
 

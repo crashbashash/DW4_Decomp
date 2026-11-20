@@ -104,7 +104,7 @@ int beGenerater_SpawnEnemies(beGenerater *self, beBaseInfoRam *ram, int count)
              * through a float pointer to the indexed vector keep their stack offsets, and the offset's elements read
              * as plain members (no operator[] call) with the x term from the data keep the operand order */
             for (int i = 0; i < 1; i++) {
-                const float *origin = data->_pos;
+                const float *origin = data->_pos.vec;
                 const igVec3f &offset = (&relative)[i];
                 ((float *)&(&position)[i])[0] = offset.vec[0] + data->_pos[0];
                 ((float *)&(&position)[i])[1] = offset.vec[1] + origin[1];
@@ -365,7 +365,7 @@ void beGenerater_UpdateRam(beGenerater *self, beBaseInfoRam *ram)
         case 'r': {
             float matrix[16];
             igMatrix44f_SetIdentity(matrix);
-            igMatrix44f_SetTranslation(matrix, data->_pos);
+            igMatrix44f_SetTranslation(matrix, data->_pos.vec);
             if (beTargetObj_SelectTarget(matrix, "PLAYER", "NEAR") != 0) {
                 float range = data->_startData;
                 if (beTargetObj_GetTargetDistanceSq() <= range) {

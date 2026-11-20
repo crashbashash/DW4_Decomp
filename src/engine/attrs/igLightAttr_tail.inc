@@ -21,26 +21,26 @@ void igLightAttr_apply(igLightAttr *self, igObject *context) {
         igPsx2VisualContext_SetLightSpecular((igPsx2VisualContext *)context, self->_lightId, self->_specular);
         switch (self->_lightType) {
         case 1:
-            igPsx2VisualContext_SetLightAttenuation(context, self->_lightId, self->_attenuation);
+            igPsx2VisualContext_SetLightAttenuation(context, self->_lightId, self->_attenuation.vec);
             break;
         case 2:
             igPsx2VisualContext_SetLightCutoffAngle((igPsx2VisualContext *)context, self->_lightId, self->_cutoff);
             igPsx2VisualContext_SetLightFalloffRate((igPsx2VisualContext *)context, self->_lightId, self->_falloff);
-            igPsx2VisualContext_SetLightAttenuation(context, self->_lightId, self->_attenuation);
+            igPsx2VisualContext_SetLightAttenuation(context, self->_lightId, self->_attenuation.vec);
             break;
         }
         self->_changed = 0;
     }
     switch (self->_lightType) {
     case 0:
-        igPsx2VisualContext_SetLightDirection(context, self->_lightId, self->_direction);
+        igPsx2VisualContext_SetLightDirection(context, self->_lightId, self->_direction.vec);
         break;
     case 1:
-        igPsx2VisualContext_SetLightPosition((igPsx2VisualContext *)context, self->_lightId, self->_position);
+        igPsx2VisualContext_SetLightPosition((igPsx2VisualContext *)context, self->_lightId, self->_position.vec);
         break;
     case 2:
-        igPsx2VisualContext_SetLightDirection(context, self->_lightId, self->_direction);
-        igPsx2VisualContext_SetLightPosition((igPsx2VisualContext *)context, self->_lightId, self->_position);
+        igPsx2VisualContext_SetLightDirection(context, self->_lightId, self->_direction.vec);
+        igPsx2VisualContext_SetLightPosition((igPsx2VisualContext *)context, self->_lightId, self->_position.vec);
         break;
     }
 }

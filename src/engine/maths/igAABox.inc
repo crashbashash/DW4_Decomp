@@ -294,7 +294,7 @@ int FUN_0018b170(void *volume, igRay *ray) {
     igAABox *box = (igAABox *)volume;
     float tNear, tFar;
     int i;
-    if (igAABox_IntersectPoint(box, ray->_pos) == 2) {
+    if (igAABox_IntersectPoint(box, ray->_pos.vec) == 2) {
         return 1;
     }
     tNear = -3.402823466e+38f;
@@ -412,7 +412,7 @@ void igAABox_ExtendByRay(igAABox *box, igRay *ray) {
     Box *bounds = (Box *)box;
     float end[3];
     float len;
-    FUN_0018b890(bounds, ray->_pos);
+    FUN_0018b890(bounds, ray->_pos.vec);
     len = ray->_len;
     end[0] = ray->_pos[0] + len * ray->_dir[0];
     end[1] = ray->_pos[1] + len * ray->_dir[1];
@@ -421,35 +421,24 @@ void igAABox_ExtendByRay(igAABox *box, igRay *ray) {
 }
 
 void FUN_0018b730(igAABox *box, igAABox *other) {
-    if (!(box->_min[0] <= other->_min[0])) box->_min[0] = other->_min[0];
-    if (!(box->_min[1] <= other->_min[1])) box->_min[1] = other->_min[1];
-    if (!(box->_min[2] <= other->_min[2])) box->_min[2] = other->_min[2];
-    if (box->_max[0] < other->_max[0]) box->_max[0] = other->_max[0];
-    if (box->_max[1] < other->_max[1]) box->_max[1] = other->_max[1];
-    if (box->_max[2] < other->_max[2]) box->_max[2] = other->_max[2];
+    box->_min.makeMin(other->_min);
+    box->_max.makeMax(other->_max);
 }
 
 void FUN_0018b7d0(igAABox *box, igSphere *sphere) {
     float radius;
-    float low[3];
-    float high[3];
 
     radius = sphere->_radius;
     if (radius < 0.0f) {
         return;
     }
-    low[0] = sphere->_center[0] - radius;
-    low[1] = sphere->_center[1] - radius;
-    low[2] = sphere->_center[2] - radius;
-    high[0] = sphere->_center[0] + radius;
-    high[1] = sphere->_center[1] + radius;
-    high[2] = sphere->_center[2] + radius;
-    if (!(box->_min[0] <= low[0])) box->_min[0] = low[0];
-    if (!(box->_min[1] <= low[1])) box->_min[1] = low[1];
-    if (!(box->_min[2] <= low[2])) box->_min[2] = low[2];
-    if (box->_max[0] < high[0]) box->_max[0] = high[0];
-    if (box->_max[1] < high[1]) box->_max[1] = high[1];
-    if (box->_max[2] < high[2]) box->_max[2] = high[2];
+    igVec3f extent(radius, radius, radius);
+    igVec3f low;
+    low.subtract(sphere->_center, extent);
+    igVec3f high;
+    high.add(sphere->_center, extent);
+    box->_min.makeMin(low);
+    box->_max.makeMax(high);
 }
 
 void FUN_0018b890(struct Box *arg0, float *arg1) {

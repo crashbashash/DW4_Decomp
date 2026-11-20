@@ -81,9 +81,9 @@ int beActionStarter_OnMessage(beActionStarter *self, beActionStarterInfoRam *ram
                     beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)infoNameString);
                     beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)command->_message);
                     beMessenger_AppendFloat((beMessenger *)self->_messenger, (float)command->_delay);
-                    offset[0] = ((float *)command->_offset)[0];
-                    offset[1] = ((float *)command->_offset)[1];
-                    offset[2] = ((float *)command->_offset)[2];
+                    offset[0] = command->_offset[0];
+                    offset[1] = command->_offset[1];
+                    offset[2] = command->_offset[2];
                     beMessenger_AppendVec3((beMessenger *)self->_messenger, offset);
                     beMessenger_AppendBool((beMessenger *)self->_messenger, command->_isSeqDead);
                     beMessenger_AppendBool((beMessenger *)self->_messenger, command->_isPositionLock);

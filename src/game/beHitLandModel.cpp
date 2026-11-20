@@ -348,7 +348,7 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
         beHitLandModel_UpdateBound(self, &max.vec[2], &rightStart.vec[2], 0);
         beHitLandModel_UpdateBound(self, &max.vec[2], &leftEnd.vec[2], 0);
         beHitLandModel_UpdateBound(self, &max.vec[2], &rightEnd.vec[2], 0);
-        ((igVec3f *)order->_raymax)->set(max[0], position[1], max[2]);
+        order->_raymax.set(max[0], position[1], max[2]);
         igVec3f min(leftStart);
         beHitLandModel_UpdateBound(self, min.vec, rightStart.vec, 1);
         beHitLandModel_UpdateBound(self, min.vec, leftEnd.vec, 1);
@@ -356,7 +356,7 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
         beHitLandModel_UpdateBound(self, &min.vec[2], &rightStart.vec[2], 1);
         beHitLandModel_UpdateBound(self, &min.vec[2], &leftEnd.vec[2], 1);
         beHitLandModel_UpdateBound(self, &min.vec[2], &rightEnd.vec[2], 1);
-        ((igVec3f *)order->_raymin)->set(min[0], position[1], min[2]);
+        order->_raymin.set(min[0], position[1], min[2]);
         beHitLandModel_TraceOrder(self, order);
         if (order->_hitdataCount > 0) wallAhead = true;
     } else {
@@ -397,7 +397,7 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
             beHitLandModel_UpdateBound(self, &max.vec[2], &rightStart.vec[2], 0);
             beHitLandModel_UpdateBound(self, &max.vec[2], &leftEnd.vec[2], 0);
             beHitLandModel_UpdateBound(self, &max.vec[2], &rightEnd.vec[2], 0);
-            ((igVec3f *)order->_raymax)->set(max[0], position[1], max[2]);
+            order->_raymax.set(max[0], position[1], max[2]);
             igVec3f min(leftStart);
             beHitLandModel_UpdateBound(self, min.vec, rightStart.vec, 1);
             beHitLandModel_UpdateBound(self, min.vec, leftEnd.vec, 1);
@@ -405,7 +405,7 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
             beHitLandModel_UpdateBound(self, &min.vec[2], &rightStart.vec[2], 1);
             beHitLandModel_UpdateBound(self, &min.vec[2], &leftEnd.vec[2], 1);
             beHitLandModel_UpdateBound(self, &min.vec[2], &rightEnd.vec[2], 1);
-            ((igVec3f *)order->_raymin)->set(min[0], position[1], min[2]);
+            order->_raymin.set(min[0], position[1], min[2]);
             beHitLandModel_TraceOrder(self, order);
             int count = order->_hitdataCount;
             if (count > 0) {
@@ -448,11 +448,11 @@ void beHitLandModel_CheckWall(beHitLandModel *self)
             igVec3f max(left);
             beHitLandModel_UpdateBound(self, max.vec, right.vec, 0);
             beHitLandModel_UpdateBound(self, &max.vec[2], &right.vec[2], 0);
-            ((igVec3f *)order->_raymax)->set(max[0], position[1], max[2]);
+            order->_raymax.set(max[0], position[1], max[2]);
             igVec3f min(left);
             beHitLandModel_UpdateBound(self, min.vec, right.vec, 1);
             beHitLandModel_UpdateBound(self, &min.vec[2], &right.vec[2], 1);
-            ((igVec3f *)order->_raymin)->set(min[0], position[1], min[2]);
+            order->_raymin.set(min[0], position[1], min[2]);
             beHitLandModel_TraceOrder(self, order);
             int count = order->_hitdataCount;
             int nearest = 0;
@@ -523,8 +523,8 @@ void beHitLandModel_CheckWallFull(beHitLandModel *self)
             Vec3f_TransformDirection(direction.vec, (const float *)&direction[0], (const float *)&rotation);
             direction.normalize();
         }
-        ((igVec3f *)order->_raymax)->set(max[0], position[1], max[2]);
-        ((igVec3f *)order->_raymin)->set(min[0], position[1], min[2]);
+        order->_raymax.set(max[0], position[1], max[2]);
+        order->_raymin.set(min[0], position[1], min[2]);
         beHitLandModel_TraceOrder(self, order);
         int count = order->_hitdataCount;
         int nearest = 0;
@@ -566,8 +566,8 @@ void beHitLandModel_CheckWallFull(beHitLandModel *self)
             Vec3f_TransformDirection(direction.vec, (const float *)&direction[0], (const float *)&rotation);
             direction.normalize();
         }
-        ((igVec3f *)order->_raymax)->set(max[0], position[1], max[2]);
-        ((igVec3f *)order->_raymin)->set(min[0], position[1], min[2]);
+        order->_raymax.set(max[0], position[1], max[2]);
+        order->_raymin.set(min[0], position[1], min[2]);
         beHitLandModel_TraceOrder(self, order);
         int count = order->_hitdataCount;
         int nearest = 0;
@@ -647,9 +647,9 @@ static void beHitLandModel_FindLand(beHitLandModel *self)
     ((beHitLandModelOrderMethods *)order)->AddRay(&start, &end);
 
     start[0] = maxX; start[1] = 1000.0f; start[2] = maxZ;
-    *(igVec3f *)order->_raymax = start;
+    order->_raymax = start;
     end[0] = minX; end[1] = -100.0f; end[2] = minZ;
-    *(igVec3f *)order->_raymin = end;
+    order->_raymin = end;
     order->_kind = 1;
     beHitLandModel_TraceOrder(self, order);
 
@@ -834,8 +834,8 @@ void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order)
         }
         ((beHitLandModelTraversal *)self->_hitTraversal)->_hitProc = (int)beHitLandModel_HitProc;
         ((beHitLandModelTraversal *)self->_hitTraversal)->_mode |= 4;
-        igVec3f rayMax(*(igVec3f *)order->_raymax);
-        igVec3f rayMin(*(igVec3f *)order->_raymin);
+        igVec3f rayMax(order->_raymax);
+        igVec3f rayMin(order->_raymin);
         /* matching construct: hand search — kinds declared before infoCount orders their two spill slots */
         int kinds;
         int infoCount = ((igObjectList *)self->_infoList)->_count;
@@ -874,8 +874,8 @@ void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order)
                             igMatrix44f_Copy(part->_m, ((igTransform *)part->_srcTransform)->_m);
                             igMatrix44f_GetTranslation(part->_m, (float *)&translation);
                             igAABox *bound = (igAABox *)((igNode **)((igObjectList *)part->_childList)->_data)[0]->_bound;
-                            boundMax = *(igVec3f *)bound->_max;
-                            boundMin = *(igVec3f *)bound->_min;
+                            boundMax = bound->_max;
+                            boundMin = bound->_min;
                             boundMax += translation;
                             boundMin += translation;
                             if (beHitLandModel_BoundsOverlapXZ(self, (float *)&boundMax, (float *)&rayMax, (float *)&boundMin, (float *)&rayMin)) {
@@ -890,7 +890,7 @@ void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order)
                             igNode *part = ((igNode **)((igObjectList *)parts->_childList)->_data)[j];
                             igAABox *bound = (igAABox *)part->_bound;
                             if (bound != 0) {
-                                if (beHitLandModel_BoundsOverlapXZ(self, bound->_max, (float *)&rayMax, bound->_min, (float *)&rayMin)) {
+                                if (beHitLandModel_BoundsOverlapXZ(self, bound->_max.vec, (float *)&rayMax, bound->_min.vec, (float *)&rayMin)) {
                                     ((TraversalMethods *)self->_hitTraversal)->traverse(((igNode **)((igObjectList *)parts->_childList)->_data)[j]);
                                 }
                             } else {

@@ -2244,11 +2244,8 @@ static inline int FindPlayerModelRow(beNDMWDegiData *data) {
 
 /* Starts `sequence` on the model window `window`, placed at the model controller's position. */
 static inline void OpenWindowAtModels(beNDMWLoadIntf2DataSelIntf *self, beNDMWLoadIntf2ComMdlCtrl *models, const char *window, const char *sequence) {
-    float position[3];
-    position[0] = models->_pos[0];
-    position[1] = models->_pos[1];
-    position[2] = models->_pos[2];
-    beNDMWLoadIntf2ComMdlCtrl__StartAt(models, self->_plNo, window, sequence, position, 1);
+    igVec3f position(models->_pos);
+    beNDMWLoadIntf2ComMdlCtrl__StartAt(models, self->_plNo, window, sequence, position.vec, 1);
 }
 
 static inline void PlaySequence(beNDMWLoadIntf2ComMdlCtrl *models, int player, const char *window, const char *sequence) {
@@ -3313,7 +3310,7 @@ static inline beNDMWLoadIntf2ComMdlCtrl *NameSelComMdl(beNDMWLoadIntf2NameSel *s
 /* Opens one of the name-entry windows at the model controller's position. */
 static inline void NameSelOpen(beNDMWLoadIntf2NameSel *sel, const char *window, const char *sequence, int track) {
     float pos[3];
-    const float *at = NameSelComMdl(sel)->_pos;
+    const float *at = NameSelComMdl(sel)->_pos.vec;
     pos[0] = at[0]; pos[1] = at[1]; pos[2] = at[2];
     beNDMWLoadIntf2ComMdlCtrl__StartAt(NameSelComMdl(sel), sel->_ramNo, window, sequence, pos, track);
 }
@@ -3321,7 +3318,7 @@ static inline void NameSelOpen(beNDMWLoadIntf2NameSel *sel, const char *window, 
 /* Opens the Digimon face window with the selected model's open sequence. */
 static inline void NameSelOpenFace(beNDMWLoadIntf2NameSel *sel) {
     float pos[3];
-    const float *at = NameSelComMdl(sel)->_pos;
+    const float *at = NameSelComMdl(sel)->_pos.vec;
     pos[0] = at[0]; pos[1] = at[1]; pos[2] = at[2];
     beNDMWLoadIntf2ComMdlCtrl__StartAt(NameSelComMdl(sel), sel->_ramNo, (const char *)"j_digifacewin", g_playerModelRow[sel->_selDataNo].openSequence, pos, 1);
 }

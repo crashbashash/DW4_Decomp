@@ -103,7 +103,7 @@ void beParticleCtrl2_UpdateRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ra
             float matrix[16];
             igMatrix44f_SetIdentity(matrix);
             igMatrix44f_Copy(matrix, ((igTransform *)work->_positionLockNode)->_m);
-            igMatrix44f_TranslateLocal(matrix, *(const igVec3f *)work->_positionLockOffset);
+            igMatrix44f_TranslateLocal(matrix, work->_positionLockOffset);
             ((igTransformDispatchView *)ram->_transform)->SetMatrix(matrix);
         }
         switch (StateOf(ram)) {
@@ -211,11 +211,7 @@ int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram
                 }
                 Rel::go((igObject *)held->_positionLockNode);
                 held->_positionLockNode = (int)node;
-                beParticleCtrl2InfoWork *target = lockWork.p;
-                igVec3f *lockOffset = (igVec3f *)&target->_positionLockOffset;
-                lockOffset->vec[0] = offset[0];
-                lockOffset->vec[1] = offset[1];
-                lockOffset->vec[2] = offset[2];
+                lockWork->_positionLockOffset = offset;
                 held = lockWork.p;
                 if (held != 0) {
                     held->_refCount = held->_refCount + 1;

@@ -29,8 +29,8 @@ int beWaterPlain_OnMessage(beWaterPlain *self, beWaterPlainInfoRam *ram, beMesse
 igMetaObject *beWaterPlain_GetMeta(void);
 }
 
-/* an igVec3fMetaField member, which reflected.h declares as float[3] */
-static inline const igVec3f &vec3f(const float *field) { return *(const igVec3f *)field; }
+/* an igVec3fMetaField member read through the vector's const accessors */
+static inline const igVec3f &vec3f(const igVec3f &field) { return field; }
 static inline float listFloat(igFloatList *list, int i) { return ((float *)list->_data)[i]; }
 static inline int listInt(igIntList *list, int i) { return ((int *)list->_data)[i]; }
 
@@ -167,16 +167,16 @@ void beWaterPlain_SetHeightAtCell(beWaterPlain *self, beWaterPlainInfoRam *ram, 
 }
 
 void beWaterPlain_Splash(beWaterPlain *self, beWaterPlainInfoRam *ram, igFloatList *heights, const float *point, float amount) {
-    int row = (int)((point[2] - vec3f(ram->_areaMin)[2] - ram->_pos[2]) / ram->_cellSize);
-    int column = (int)((point[0] - vec3f(ram->_areaMin)[0] - ram->_pos[0]) / ram->_cellSize);
+    int row = (int)((point[2] - vec3f(ram->_areaMin)[2] - ram->_pos.vec[2]) / ram->_cellSize);
+    int column = (int)((point[0] - vec3f(ram->_areaMin)[0] - ram->_pos.vec[0]) / ram->_cellSize);
     int width = ram->_mapWidth;
     int index = column + row * width;
     igIntList *vertexNo = (igIntList *)ram->_dplist2VertexNO;
     if (index < vertexNo->_count && listInt(vertexNo, index) != -1) {
         float factor = -2.0f;
         float y = point[1];
-        if (!(ram->_pos[1] + ram->_shallmin < y) && (ram->_pos[1] + ram->_shallmax < y)) factor = ram->_shalldamp;
-        else if (!(ram->_pos[1] + ram->_deepmin < y) && (ram->_pos[1] + ram->_deepmax < y)) factor = ram->_deepdamp;
+        if (!(ram->_pos.vec[1] + ram->_shallmin < y) && (ram->_pos.vec[1] + ram->_shallmax < y)) factor = ram->_shalldamp;
+        else if (!(ram->_pos.vec[1] + ram->_deepmin < y) && (ram->_pos.vec[1] + ram->_deepmax < y)) factor = ram->_deepdamp;
         factor *= amount;
         beWaterPlain_SetHeightAtCell(self, ram, heights, width, index, factor);
     }
@@ -186,12 +186,12 @@ bool beWaterPlain_IsPointInWater(beWaterPlain *self, beWaterPlainInfoRam *ram, f
     bool inside = false;
     float margin = ram->_cellSize;
     float y = point[1];
-    float originX = ram->_pos[0];
-    float minX = originX + (ram->_areaMin[0] + margin);
+    float originX = ram->_pos.vec[0];
+    float minX = originX + (ram->_areaMin.vec[0] + margin);
     float maxX = originX + (vec3f(ram->_areaMax)[0] - margin);
-    float minZ = ram->_pos[2] + (ram->_areaMin[2] + margin);
-    float maxZ = ram->_pos[2] + (vec3f(ram->_areaMax)[2] - margin);
-    if ((!(ram->_pos[1] + ram->_shallmin < y) && (ram->_pos[1] + ram->_shallmax < y)) || (!(ram->_pos[1] + ram->_deepmin < y) && (ram->_pos[1] + ram->_deepmax < y))) {
+    float minZ = ram->_pos.vec[2] + (ram->_areaMin.vec[2] + margin);
+    float maxZ = ram->_pos.vec[2] + (vec3f(ram->_areaMax)[2] - margin);
+    if ((!(ram->_pos.vec[1] + ram->_shallmin < y) && (ram->_pos.vec[1] + ram->_shallmax < y)) || (!(ram->_pos.vec[1] + ram->_deepmin < y) && (ram->_pos.vec[1] + ram->_deepmax < y))) {
         if (minX <= point[0] && !(maxX < point[0])) {
             if (minZ <= point[2] && !(maxZ < point[2])) inside = true;
         }
@@ -253,11 +253,11 @@ void beWaterPlain_Simulate(beWaterPlain *self, beWaterPlainInfoRam *ram) {
             for (i = 0; i < ((igVec3fList *)splash->_posList)->_count; i++) {
                 float point[3];
                 float x = ((float *)((igVec3fList *)splash->_posList)->_data)[i * 3];
-                point[0] = x + ram->_pos[0];
+                point[0] = x + ram->_pos.vec[0];
                 float y = ((float *)((igVec3fList *)splash->_posList)->_data)[i * 3 + 1];
-                point[1] = y + ram->_pos[1];
+                point[1] = y + ram->_pos.vec[1];
                 float z = ((float *)((igVec3fList *)splash->_posList)->_data)[i * 3 + 2];
-                point[2] = z + ram->_pos[2];
+                point[2] = z + ram->_pos.vec[2];
                 if (beWaterPlain_IsPointInWater(self, ram, point)) beWaterPlain_Splash(self, ram, heights, point, splash->_power);
             }
         }

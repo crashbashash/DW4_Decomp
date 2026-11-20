@@ -38,7 +38,7 @@ void FUN_0018d630(igSphere *sphere, const float *matrix) {
             maxScale = scaleZ;
         }
         sphere->_radius *= sqrtf(maxScale);
-        Vec3f_TransformProjective(sphere->_center, sphere->_center, (float *)matrix);
+        Vec3f_TransformProjective(sphere->_center.vec, sphere->_center.vec, (float *)matrix);
     }
 }
 
@@ -74,7 +74,7 @@ int FUN_0018d7b0(igSphere *sphere, igPlane *plane) {
     float radius = sphere->_radius; if (radius < 0.0f) return 0; 
     /* matching construct: hand enumeration under C++ — int result set then cleared, no bool narrowing */
     int hit = 1;
-    if (!(0.0f <= radius + plane->_offset - (sphere->_center[0] * plane->_norm[0] + sphere->_center[1] * plane->_norm[1] + sphere->_center[2] * plane->_norm[2]))) hit = 0;
+    if (!(0.0f <= radius + plane->_offset - sphere->_center.dot(plane->_norm))) hit = 0;
     return hit;
 }
 
@@ -157,7 +157,7 @@ int FUN_0018dbc0(void *volume, igRay *ray) {
     if (sphere->_radius < 0.0f) {
         return 0;
     }
-    startInside = FUN_0018ff50((void **)sphere, ray->_pos) != 0;
+    startInside = FUN_0018ff50((void **)sphere, ray->_pos.vec) != 0;
     len = ray->_len;
     end[0] = ray->_pos[0] + len * ray->_dir[0];
     end[1] = ray->_pos[1] + len * ray->_dir[1];
@@ -210,22 +210,19 @@ static inline bool isEmpty(const igSphere *sphere) { return sphere->_radius < 0.
 
 void FUN_0018de10(igSphere *sphere, const igSphere *other) {
     float otherRadius;
-    float distSq, dist, dx, dy, dz, radiusDiff, invDist;
+    float distSq, dist, radiusDiff;
     if (isEmpty(other)) {
         return;
     }
     if (isEmpty(sphere)) {
-        sphere->_center[0] = other->_center[0];
-        sphere->_center[1] = other->_center[1];
-        sphere->_center[2] = other->_center[2];
+        sphere->_center = other->_center;
         sphere->_radius = other->_radius;
         return;
     }
     otherRadius = other->_radius;
-    dx = sphere->_center[0] - other->_center[0];
-    dy = sphere->_center[1] - other->_center[1];
-    dz = sphere->_center[2] - other->_center[2];
-    distSq = dx * dx + dy * dy + dz * dz;
+    igVec3f diff;
+    diff.subtract(sphere->_center, other->_center);
+    distSq = diff.length2();
     if (distSq <= 5e-7f) {
         sphere->_radius = sphere->_radius > otherRadius ? sphere->_radius : otherRadius;
         return;
@@ -233,30 +230,19 @@ void FUN_0018de10(igSphere *sphere, const igSphere *other) {
     radiusDiff = sphere->_radius - otherRadius;
     if (distSq < radiusDiff * radiusDiff) {
         if (otherRadius > sphere->_radius) {
-            sphere->_center[0] = other->_center[0];
-            sphere->_center[1] = other->_center[1];
-            sphere->_center[2] = other->_center[2];
+            sphere->_center = other->_center;
             sphere->_radius = other->_radius;
         }
         return;
     }
     dist = sqrtf(distSq);
-    invDist = 1.0f / dist;
-    dx *= invDist;
-    dy *= invDist;
-    dz *= invDist;
-    {
-        float nearX = sphere->_center[0] + sphere->_radius * dx;
-        float nearY = sphere->_center[1] + sphere->_radius * dy;
-        float nearZ = sphere->_center[2] + sphere->_radius * dz;
-        float farX = other->_center[0] + -otherRadius * dx;
-        float farY = other->_center[1] + -otherRadius * dy;
-        float farZ = other->_center[2] + -otherRadius * dz;
-        sphere->_center[0] = 0.5f * nearX + 0.5f * farX;
-        sphere->_center[1] = 0.5f * nearY + 0.5f * farY;
-        sphere->_center[2] = 0.5f * nearZ + 0.5f * farZ;
-        sphere->_radius = 0.5f * (dist + sphere->_radius + other->_radius);
-    }
+    diff.scale(1.0f / dist);
+    igVec3f nearPoint;
+    nearPoint.addScaled(sphere->_center, sphere->_radius, diff);
+    igVec3f farPoint;
+    farPoint.addScaled(other->_center, -otherRadius, diff);
+    sphere->_center.combine(0.5f, nearPoint, 0.5f, farPoint);
+    sphere->_radius = 0.5f * (dist + sphere->_radius + other->_radius);
 }
 
 void FUN_0018dfc0(void *parg0, S5 *arg1) {

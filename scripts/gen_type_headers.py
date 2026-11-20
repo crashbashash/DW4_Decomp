@@ -97,6 +97,13 @@ VECTOR = {
     "igMatrix44fMetaField": ("float", 16),
 }
 
+# Vector kinds whose C++ type exists in the kit's form (an array of floats with inline operations):
+# a whole, float-aligned field of that kind is declared as the type under C++, and C keeps the floats.
+# {kind: (C++ type, header)}
+KIT_VECTOR = {
+    "igVec3fMetaField": ("igVec3f", "dw4/maths/igVec3f.h"),
+}
+
 # Inline arrays: the element type comes from the kind, the element count from the distance to the
 # next field (reflection records no count), or for a last field from the registered instance size.
 ARRAY = {
@@ -522,8 +529,11 @@ def main(argv=None):
     if converted:
         # the polymorphic root every converted class derives from
         converted.setdefault("igObject", "Core")
-    if members or converted:
-        lines.extend(["#ifdef __cplusplus", "#include \"dw4/core/igObjectMacros.h\"", "#endif", ""])
+    kit_headers = sorted({header for _type, header in KIT_VECTOR.values()})
+    if members or converted or kit_headers:
+        lines.extend(["#ifdef __cplusplus"]
+                     + (["#include \"dw4/core/igObjectMacros.h\""] if members or converted else [])
+                     + ["#include \"%s\"" % header for header in kit_headers] + ["#endif", ""])
     mismatches = []
     aggregates = 0
     sized = 0
@@ -560,6 +570,10 @@ def main(argv=None):
                 body.append("    char _pad%d[%d];" % (cursor, off - cursor))
             line = "    %-46s /* +%-4d %s */" % (decl, off, f["type"])
             typed = typed_fields.get((name, raw_name))
+            kit = KIT_VECTOR.get(f["type"])
+            if not typed and kit and decl == "float %s[%d];" % (field_name, VECTOR[f["type"]][1]):
+                # the whole vector, float-aligned: the kit's type under C++
+                typed = kit[0]
             if typed:
                 typed_line = "    %-46s /* +%-4d %s */" % ("%s %s;" % (typed, field_name), off, f["type"])
             if typed and flat:

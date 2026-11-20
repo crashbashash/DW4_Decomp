@@ -174,7 +174,7 @@ void igViewMode_UpdateModelVectors(igViewMode *self) {
     positionChanged.sender = self;
     positionChanged.field = g_igViewModel_positionMetaField;
     igModel_NotifyViews((igModel *)model, (ModelChange *)&positionChanged);
-    Vec3f_TransformDirection(model->_direction, g_vec3ZAxis.vec, self->_inverseMatrix);
+    Vec3f_TransformDirection(model->_direction.vec, g_vec3ZAxis.vec, self->_inverseMatrix);
     model->_direction[0] = -model->_direction[0];
     model->_direction[1] = -model->_direction[1];
     model->_direction[2] = -model->_direction[2];
@@ -182,7 +182,7 @@ void igViewMode_UpdateModelVectors(igViewMode *self) {
     directionChanged.sender = self;
     directionChanged.field = g_igViewModel_directionMetaField;
     igModel_NotifyViews((igModel *)model, (ModelChange *)&directionChanged);
-    Vec3f_TransformDirection(model->_viewLeftVector, g_vec3XAxis.vec, self->_inverseMatrix);
+    Vec3f_TransformDirection(model->_viewLeftVector.vec, g_vec3XAxis.vec, self->_inverseMatrix);
     leftChanged.type = VIEW_MODEL_FIELD_CHANGED;
     leftChanged.sender = self;
     leftChanged.field = g_igViewModel_viewLeftVectorMetaField;
@@ -200,7 +200,7 @@ void igViewMode_UpdateViewMatrix(igViewMode *self) {
     center[0] = center[0] + model->_direction[0];
     center[1] += model->_direction[1];
     center[2] += model->_direction[2];
-    igMatrix44f_MakeLookAt(model->_viewMatrix, model->_position, center, model->_viewUpVector);
+    igMatrix44f_MakeLookAt(model->_viewMatrix, model->_position.vec, center, model->_viewUpVector.vec);
 }
 
 void igCameraMode_SetCameraPath(igCameraMode *self, igObject *path) {
@@ -405,7 +405,7 @@ void igFlyMode_ApplyRotation(igFlyMode *self, float seconds) {
     pitch *= seconds;
     igViewModel *model = (igViewModel *)self->_model;
     igVec3f up;
-    Vec3f_TransformDirection((float *)&up, model->_sceneUpVector, model->_viewMatrix);
+    Vec3f_TransformDirection((float *)&up, model->_sceneUpVector.vec, model->_viewMatrix);
     float scale = 1.0f / vecLength(up);
     up[0] *= scale;
     up[1] *= scale;
@@ -421,7 +421,7 @@ void igFlyMode_ApplyAim(igFlyMode *self) {
         float pitch = 30.0f * (self->_mousePos[1] - self->_lastAim[1]);
         float head = 60.0f * (self->_mousePos[0] - self->_lastAim[0]);
         igVec3f up;
-        Vec3f_TransformDirection((float *)&up, model->_sceneUpVector, model->_viewMatrix);
+        Vec3f_TransformDirection((float *)&up, model->_sceneUpVector.vec, model->_viewMatrix);
         float scale = 1.0f / vecLength(up);
         up[0] *= scale;
         up[1] *= scale;
@@ -568,8 +568,8 @@ void Gap__Viewer__igRotateMode__ApplyDrag(igRotateMode *state, const float *delt
         state->_pitch += pi * delta[1];
     }
     if (state->_middleMouseActive) {
-        setVec3(state->_translation, delta[0], delta[1] / model->_ratio, 0.0f);
-        scaleVec3(state->_translation, state->_distance / 2.0f);
+        setVec3(state->_translation.vec, delta[0], delta[1] / model->_ratio, 0.0f);
+        scaleVec3(state->_translation.vec, state->_distance / 2.0f);
     }
     if (state->_rightMouseActive) {
         float dx = delta[0];
@@ -592,8 +592,8 @@ void igRotateMode_MouseMotionNormal(igRotateMode *state, const float *delta) {
             state->_pitch += pi * delta[1];
         }
     } else if (state->_middleMouseActive) {
-        setVec3(state->_translation, delta[0], delta[1] / model->_ratio, 0.0f);
-        scaleVec3(state->_translation, state->_distance / 2.0f);
+        setVec3(state->_translation.vec, delta[0], delta[1] / model->_ratio, 0.0f);
+        scaleVec3(state->_translation.vec, state->_distance / 2.0f);
     }
 }
 
@@ -646,7 +646,7 @@ void igRotateMode_Update(igRotateMode *self, float seconds) {
     self->_zoom *= 1.0f - 0.1f * (frames * self->_joystickT[1]);
     if (self->_active) {
         igVec3f center;
-        Vec3f_TransformProjective((float *)&center, model->_selectedCenter, model->_viewMatrix);
+        Vec3f_TransformProjective((float *)&center, model->_selectedCenter.vec, model->_viewMatrix);
         center[0] = -center[0];
         center[1] = -center[1];
         center[2] = -center[2];
@@ -654,7 +654,7 @@ void igRotateMode_Update(igRotateMode *self, float seconds) {
         if (self->_maya) {
             if (self->_head != 0.0f) {
                 igVec3f up;
-                Vec3f_TransformDirection((float *)&up, model->_sceneUpVector, model->_viewMatrix);
+                Vec3f_TransformDirection((float *)&up, model->_sceneUpVector.vec, model->_viewMatrix);
                 float scale = 1.0f / vecLength(up);
                 up[0] *= scale;
                 up[1] *= scale;

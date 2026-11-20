@@ -243,9 +243,7 @@ void igViewManager_SetSceneUpVector(igViewManager *manager, const float *upVecto
     igViewModel *model;
 
     model = (igViewModel *)manager->_viewModel;
-    model->_sceneUpVector[0] = upVector[0];
-    model->_sceneUpVector[1] = upVector[1];
-    model->_sceneUpVector[2] = upVector[2];
+    model->_sceneUpVector.set(upVector);
     event.type = 2;
     event.source = 0;
     event.field = g_igViewModel_sceneUpVectorMetaField;
@@ -319,7 +317,7 @@ void igViewManager_FrameObject(igViewManager *manager, igNode *object) {
     event.source = 0;
     event.field = g_igViewModel_viewMatrixMetaField;
     igModel_NotifyViews((igModel *)manager->_viewModel, &event);
-    *(igVec3f *)((igViewModel *)manager->_viewModel)->_selectedCenter = center;
+    ((igViewModel *)manager->_viewModel)->_selectedCenter = center;
     ((igViewModel *)manager->_viewModel)->_selectedLength = size;
 }
 
@@ -372,13 +370,10 @@ void igViewManager_ApplyOptions(igViewManager *manager, igObject *scene) {
     }
 }
 
-/* igViewModel's vector fields are igVec3f values (igVec3fMetaField). */
-static inline const igVec3f &asVec3f(const float *v) { return *(const igVec3f *)v; }
-
 /* Looks at the selection's centre: from the current eye, or (`resetEye`) from one and a half selection
  * lengths across the scene's up vector. */
 void igViewManager_CenterSelection(igViewManager *manager, bool resetEye) {
-    igVec3f center(asVec3f(((igViewModel *)manager->_viewModel)->_selectedCenter));
+    igVec3f center(((igViewModel *)manager->_viewModel)->_selectedCenter);
     igVec3f eye;
     igVec3f up;
     ModelChange event;
@@ -391,10 +386,10 @@ void igViewManager_CenterSelection(igViewManager *manager, bool resetEye) {
         eye[2] = up[1];
         eye.scale(distance);
         eye.add(center);
-        igMatrix44f_MakeLookAt(((igViewModel *)manager->_viewModel)->_viewMatrix, (const float *)&eye, (const float *)&center, (const float *)&up);
+        igMatrix44f_MakeLookAt(((igViewModel *)manager->_viewModel)->_viewMatrix, eye.vec, center.vec, up.vec);
     } else {
         igViewModel *model = (igViewModel *)manager->_viewModel;
-        igMatrix44f_MakeLookAt(model->_viewMatrix, model->_position, (const float *)&center, model->_viewUpVector);
+        igMatrix44f_MakeLookAt(model->_viewMatrix, model->_position.vec, center.vec, model->_viewUpVector.vec);
     }
     event.type = 2;
     event.source = 0;
@@ -404,7 +399,7 @@ void igViewManager_CenterSelection(igViewManager *manager, bool resetEye) {
 
 /* Moves the eye along its line to the selection's centre until the selection fills the view. */
 void igViewManager_FitSelection(igViewManager *manager) {
-    igVec3f center(asVec3f(((igViewModel *)manager->_viewModel)->_selectedCenter));
+    igVec3f center(((igViewModel *)manager->_viewModel)->_selectedCenter);
     igVec3f eye;
     ModelChange event;
 
@@ -418,7 +413,7 @@ void igViewManager_FitSelection(igViewManager *manager) {
     eye.scale(1.5f * ((igViewModel *)manager->_viewModel)->_selectedLength / distance);
     eye += center;
     igViewModel *model = (igViewModel *)manager->_viewModel;
-    igMatrix44f_MakeLookAt(model->_viewMatrix, eye.vec, center.vec, model->_viewUpVector);
+    igMatrix44f_MakeLookAt(model->_viewMatrix, eye.vec, center.vec, model->_viewUpVector.vec);
     event.type = 2;
     event.source = 0;
     event.field = g_igViewModel_viewMatrixMetaField;

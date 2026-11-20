@@ -1225,7 +1225,7 @@ void beNDMWStatusCtrlBaseEquip_Update(beNDMWStatusCtrlBaseEquip *p)
             beNDMWWindow_BindContext((beNDMWWindow *)h.p, (igObject *)p, p->_insight, p->_playerNo, 0);
             ObjectList_AppendRetained((igObjectList *)p->_subWindow, (igObject *)h.p);
             h.p->_selectMax = p->_kindListMax;
-            { float *q = h.p->_offsetPos; q[0] = -83.0f; q[1] = 148.0f; q[2] = 0.0f; }
+            { float *q = h.p->_offsetPos.vec; q[0] = -83.0f; q[1] = 148.0f; q[2] = 0.0f; }
             h.p->_startPoint = p->_kindListPos;
         }
         p->_nowProcKazu = CHILD_COUNT(p);
@@ -1372,7 +1372,7 @@ void beNDMWStatusCtrlBaseEquip_Update(beNDMWStatusCtrlBaseEquip *p)
                 beNDMWWindow_BindContext((beNDMWWindow *)hw.p, (igObject *)p, p->_insight, p->_playerNo, 0);
                 ObjectList_AppendRetained((igObjectList *)p->_subWindow, (igObject *)hw.p);
                 hw.p->_selectMax = p->_kindListMax;
-                { float *q = hw.p->_offsetPos; q[0] = -83.0f; q[1] = 148.0f; q[2] = 0.0f; }
+                { float *q = hw.p->_offsetPos.vec; q[0] = -83.0f; q[1] = 148.0f; q[2] = 0.0f; }
                 hw.p->_startPoint = p->_kindListPos;
                 igSmartPointer<igBoolList> hl(igBoolList_Create((int)WindowAllocator(p)));
                 for (i = 0; i < p->_kindListMax; i++) {
@@ -5020,7 +5020,7 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
             igSmartPointer<beNDMWStatusSelectE1> r118((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)al));
             beNDMWWindow_BindContext((beNDMWWindow *)r118.p, (igObject *)p, p->_insight, p->_playerNo, 0);
             ObjectList_AppendRetained((igObjectList *)p->_subWindow, (igObject *)r118.p);
-            q118 = (float *)((beNDMWStatusSelectE1 *)r118.p)->_offsetPos;
+            q118 = ((beNDMWStatusSelectE1 *)r118.p)->_offsetPos.vec;
             q118[0] = -121.0f;
             q118[1] = 109.0f;
             q118[2] = 0.0f;

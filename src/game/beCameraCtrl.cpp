@@ -221,7 +221,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
         default:
             break;
         }
-        { float *avg = self->_avgPos; moved = (avg[0] != x) || (avg[1] != y) || (avg[2] != z); }
+        { float *avg = self->_avgPos.vec; moved = (avg[0] != x) || (avg[1] != y) || (avg[2] != z); }
         if (moved) {
             self->_avgPos[0] = x;
             self->_avgPos[1] = y;
@@ -238,15 +238,15 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                     if (shake->_isFirst != 0) {
                         shake->_isFirst = 0;
                     } else {
-                        igMatrix44f_SetTranslation(TRANSFORM_AT(box->_eyePosList, 0)->_m, shake->_svEyePos);
-                        igMatrix44f_SetTranslation(TRANSFORM_AT(box->_intPosList, 0)->_m, shake->_svIntPos);
+                        igMatrix44f_SetTranslation(TRANSFORM_AT(box->_eyePosList, 0)->_m, shake->_svEyePos.vec);
+                        igMatrix44f_SetTranslation(TRANSFORM_AT(box->_intPosList, 0)->_m, shake->_svIntPos.vec);
                     }
                 }
             }
         }
         if (self->_isPosChange != 0) {
             camera = 0;
-            igMatrix44f_SetTranslation(TRANSFORM_AT(box->_transformList, 0)->_m, self->_avgPos);
+            igMatrix44f_SetTranslation(TRANSFORM_AT(box->_transformList, 0)->_m, self->_avgPos.vec);
             self->_savePos[0] = self->_avgPos[0];
             self->_savePos[1] = self->_avgPos[1];
             self->_savePos[2] = self->_avgPos[2];
@@ -366,15 +366,11 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                         if (k == 0) {
                             matrix44 = TRANSFORM_AT(box->_eyePosList, 0)->_m;
                             igMatrix44f_GetTranslation(matrix44, shakePos);
-                            shake->_svEyePos[0] = shakePos[0];
-                            shake->_svEyePos[1] = shakePos[1];
-                            shake->_svEyePos[2] = shakePos[2];
+                            shake->_svEyePos.set(shakePos);
                         } else {
                             matrix44 = TRANSFORM_AT(box->_intPosList, 0)->_m;
                             igMatrix44f_GetTranslation(matrix44, shakePos);
-                            shake->_svIntPos[0] = shakePos[0];
-                            shake->_svIntPos[1] = shakePos[1];
-                            shake->_svIntPos[2] = shakePos[2];
+                            shake->_svIntPos.set(shakePos);
                         }
                         AddShakeOffset(&shakePos[0], offsetX, shake->_value);
                         AddShakeOffset(&shakePos[1], offsetY, shake->_value);
@@ -388,8 +384,8 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                         beBaseInfoRam_StartTimer(ram, "SHAKEONE", FramesToTime(shake->_oneTime));
                     }
                     if (beBaseInfoRam_IsTimerExpired(ram, "SHAKEALL")) {
-                        igMatrix44f_SetTranslation(TRANSFORM_AT(box->_eyePosList, 0)->_m, shake->_svEyePos);
-                        igMatrix44f_SetTranslation(TRANSFORM_AT(box->_intPosList, 0)->_m, shake->_svIntPos);
+                        igMatrix44f_SetTranslation(TRANSFORM_AT(box->_eyePosList, 0)->_m, shake->_svEyePos.vec);
+                        igMatrix44f_SetTranslation(TRANSFORM_AT(box->_intPosList, 0)->_m, shake->_svIntPos.vec);
                         /* matching construct: a named result takes retail's frame slot (+0x194); an unnamed one lies 4 bytes higher */
                         igResult removed = ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)ram->_dataList, (igObject *)shake, 0);
                         beBaseInfoRam_RemoveTimer(ram, "SHAKEALL");

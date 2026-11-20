@@ -73,7 +73,7 @@ static inline void SetTouching(beHitLandDelivInfoRam *ram, unsigned char hitWall
     } else {
         touching.set(0.0f, 0.0f, 0.0f);
     }
-    *(igVec3f *)ram->_pos = touching;
+    ram->_pos = touching;
 }
 
 int beHitLandDeliv_OnMessageText(beHitLandDeliv *self, beHitLandDelivInfoRam *ram, const char *message)
@@ -112,7 +112,7 @@ int beHitLandDeliv_OnMessageText(beHitLandDeliv *self, beHitLandDelivInfoRam *ra
                 float *matrix = TransformMatrix(ram);
                 igMatrix44f_SetTranslation(matrix, beMessenger_GetVec3((beMessenger *)self->_messenger, 0).vec);
             }
-            *(igVec3f *)ram->_oldPos = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
+            ram->_oldPos = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
         }
         beMessenger_ResizeBool((beMessenger *)self->_messenger, 3);
         beMessenger_SetBool((beMessenger *)self->_messenger, 0, moved);
@@ -145,7 +145,7 @@ int beHitLandDeliv_OnMessageText(beHitLandDeliv *self, beHitLandDelivInfoRam *ra
                 float *matrix = TransformMatrix(ram);
                 igMatrix44f_SetTranslation(matrix, beMessenger_GetVec3((beMessenger *)self->_messenger, 0).vec);
             }
-            *(igVec3f *)ram->_oldPos = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
+            ram->_oldPos = beMessenger_GetVec3((beMessenger *)self->_messenger, 0);
         }
         beMessenger_ResizeBool((beMessenger *)self->_messenger, 3);
         beMessenger_SetBool((beMessenger *)self->_messenger, 0, moved);
@@ -177,8 +177,8 @@ int beHitLandDeliv_OnMessageText(beHitLandDeliv *self, beHitLandDelivInfoRam *ra
             igVec3f current;
             igMatrix44f_GetTranslation(TransformMatrix(ram), (float *)&current);
             if (current[1] < 0.0f) {
-                ((igVec3f *)ram->_landPos)->set(floor[0], 0.0f, floor[2]);
-                ((igVec3f *)ram->_oldPos)->set(floor[0], 0.0f, floor[2]);
+                ram->_landPos.set(floor[0], 0.0f, floor[2]);
+                ram->_oldPos.set(floor[0], 0.0f, floor[2]);
                 ram->_landPosOK = 1;
                 landed = 1;
                 floorHit = 1;
@@ -188,8 +188,8 @@ int beHitLandDeliv_OnMessageText(beHitLandDeliv *self, beHitLandDelivInfoRam *ra
                 floorHit = 0;
             }
         } else {
-            *(igVec3f *)ram->_landPos = floor;
-            *(igVec3f *)ram->_oldPos = floor;
+            ram->_landPos = floor;
+            ram->_oldPos = floor;
             ram->_landPosOK = landPosOK;
         }
         beMessenger_ResizeBool((beMessenger *)self->_messenger, 2);
@@ -201,7 +201,7 @@ int beHitLandDeliv_OnMessageText(beHitLandDeliv *self, beHitLandDelivInfoRam *ra
     }
     case HITFLOORADJUST:
         if (ram->_landPosOK) {
-            igMatrix44f_SetTranslation(TransformMatrix(ram), ram->_landPos);
+            igMatrix44f_SetTranslation(TransformMatrix(ram), ram->_landPos.vec);
         }
         break;
     default:

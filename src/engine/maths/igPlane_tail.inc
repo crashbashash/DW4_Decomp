@@ -21,21 +21,13 @@ void FUN_0018c660(void) {
 
 void FUN_0018c820(igPlane *plane, const void *matrix) {
     igVec3f point;
-    float d;
-    float scale;
 
-    d = plane->_offset;
-    point[0] = d * plane->_norm[0];
-    point[1] = d * plane->_norm[1];
-    point[2] = d * plane->_norm[2];
-    Vec3f_TransformDirection(plane->_norm, plane->_norm, (float *)matrix);
+    point.scale(plane->_offset, plane->_norm);
+    Vec3f_TransformDirection(plane->_norm.vec, plane->_norm.vec, (float *)matrix);
     Vec3f_TransformProjective(point.vec, point.vec, (float *)matrix);
-    scale = 1.0f / lengthOf(plane->_norm);
-    plane->_norm[0] = plane->_norm[0] * scale;
-    plane->_norm[1] = plane->_norm[1] * scale;
-    plane->_norm[2] = plane->_norm[2] * scale;
-    plane->_offset = ((const igVec3f *)plane->_norm)->dot(point);
-    plane->_octant = Vec3_GetOctant(plane->_norm);
+    plane->_norm.normalize();
+    plane->_offset = plane->_norm.dot(point);
+    plane->_octant = Vec3_GetOctant(plane->_norm.vec);
 }
 
 int FUN_0018c920(void *arg0, void *arg1) {
@@ -109,7 +101,7 @@ int FUN_0018cb10(Plane *a, Plane *b) {
 }
 
 int FUN_0018cf20(igPlane *plane, igSphere *sphere) {
-    float radius = sphere->_radius; float d; int r; if (radius < 0.0f) return 0; d = plane->_norm[0] * sphere->_center[0] + plane->_norm[1] * sphere->_center[1] + plane->_norm[2] * sphere->_center[2] - plane->_offset; if (d <= -radius) r = 2; else if (d <= radius) r = 1; else r = 0; return r;
+    float radius = sphere->_radius; float d; int r; if (radius < 0.0f) return 0; d = plane->_norm.dot(sphere->_center) - plane->_offset; if (d <= -radius) r = 2; else if (d <= radius) r = 1; else r = 0; return r;
 }
 
 int FUN_0018cfb0(void *arg0, struct S2 *arg1) {

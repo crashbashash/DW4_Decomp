@@ -176,7 +176,7 @@ igSmartPointer<igSphere> FUN_0023ac20(igBoundingSphereMaker *self, igGeometry *g
             }
         }
     }
-    *(igVec3f *)sphere->_center = center;
+    sphere->_center = center;
     sphere->_radius = radius;
     return sphere;
 }

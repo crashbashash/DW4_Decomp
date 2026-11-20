@@ -314,7 +314,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                 case SAVE_OPEN:
                     switch (ctrl->_st1) {
                     default: {
-                        ModelPos openPos(*(ModelPos *)comMdl->_pos);
+                        ModelPos openPos(*(ModelPos *)comMdl->_pos.vec);
                         beNDMWLoadIntf2ComMdlCtrl__StartAt(comMdl, ram->_ramNo, "j_chrselbase", "SQ_OPEN", (float *)&openPos, 1);
                         NextStep(ctrl);
                         return;
@@ -362,7 +362,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                 case SAVE_OPEN_WINDOW:
                     switch (ctrl->_st1) {
                     case 0: {
-                        ModelPos winPos(*(ModelPos *)comMdl->_pos);
+                        ModelPos winPos(*(ModelPos *)comMdl->_pos.vec);
                         beNDMWLoadIntf2ComMdlCtrl__StartAt(comMdl, ram->_ramNo, "j_chrselmesswin", "SQ_OPEN", (float *)&winPos, 1);
                         beNDMWLoadIntf2MesWin__RequestOpen(mesWin);
                         NextStep(ctrl);

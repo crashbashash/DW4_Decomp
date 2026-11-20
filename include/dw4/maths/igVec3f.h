@@ -90,10 +90,40 @@ public:
         vec[1] *= scalar;
         vec[2] *= scalar;
     }
+    void scale(const float scalar, const igVec3f &vector) {
+        vec[0] = scalar * vector.vec[0];
+        vec[1] = scalar * vector.vec[1];
+        vec[2] = scalar * vector.vec[2];
+    }
+    void addScaled(const igVec3f &vector1, float scalar, const igVec3f &vector2) {
+        vec[0] = vector1.vec[0] + scalar * vector2.vec[0];
+        vec[1] = vector1.vec[1] + scalar * vector2.vec[1];
+        vec[2] = vector1.vec[2] + scalar * vector2.vec[2];
+    }
     void addScaled(const float scalar, const igVec3f &vector) {
         vec[0] += scalar * vector.vec[0];
         vec[1] += scalar * vector.vec[1];
         vec[2] += scalar * vector.vec[2];
+    }
+    void combine(float scalar1, const igVec3f &vector1, float scalar2, const igVec3f &vector2) {
+        vec[0] = scalar1 * vector1.vec[0] + scalar2 * vector2.vec[0];
+        vec[1] = scalar1 * vector1.vec[1] + scalar2 * vector2.vec[1];
+        vec[2] = scalar1 * vector1.vec[2] + scalar2 * vector2.vec[2];
+    }
+    void add(const igVec3f &vector1, const igVec3f &vector2) {
+        vec[0] = vector1.vec[0] + vector2.vec[0];
+        vec[1] = vector1.vec[1] + vector2.vec[1];
+        vec[2] = vector1.vec[2] + vector2.vec[2];
+    }
+    void makeMin(const igVec3f &vector) {
+        if (vec[0] > vector.vec[0]) vec[0] = vector.vec[0];
+        if (vec[1] > vector.vec[1]) vec[1] = vector.vec[1];
+        if (vec[2] > vector.vec[2]) vec[2] = vector.vec[2];
+    }
+    void makeMax(const igVec3f &vector) {
+        if (vec[0] < vector.vec[0]) vec[0] = vector.vec[0];
+        if (vec[1] < vector.vec[1]) vec[1] = vector.vec[1];
+        if (vec[2] < vector.vec[2]) vec[2] = vector.vec[2];
     }
     float length2() const { return vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]; }
     float length() const { return sqrtf(length2()); }

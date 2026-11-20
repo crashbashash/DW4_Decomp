@@ -279,15 +279,15 @@ int igCompileTraversal_TraverseGeometry(igCompileTraversal *self, igGeometry *ge
         if (self->_bound == 0) {
             igAABox *box = (igAABox *)igAABox_CreateInstance((int)((Gap::Core::igObject *)self)->getMemoryPool());
             ((igSmartPointer<igAABox> &)self->_bound) = box;
-            *(igVec3f *)((igAABox *)self->_bound)->_min = mn;
-            *(igVec3f *)((igAABox *)self->_bound)->_max = mx;
+            ((igAABox *)self->_bound)->_min = mn;
+            ((igAABox *)self->_bound)->_max = mx;
             releaseKnown_1bc1e0(box);
         } else {
-            igVec3f curMin = *(igVec3f *)((igAABox *)self->_bound)->_min;
-            igVec3f curMax = *(igVec3f *)((igAABox *)self->_bound)->_max;
+            igVec3f curMin = ((igAABox *)self->_bound)->_min;
+            igVec3f curMax = ((igAABox *)self->_bound)->_max;
             grow_1bc1e0(curMin, curMax, mn, mx);
-            *(igVec3f *)((igAABox *)self->_bound)->_min = curMin;
-            *(igVec3f *)((igAABox *)self->_bound)->_max = curMax;
+            ((igAABox *)self->_bound)->_min = curMin;
+            ((igAABox *)self->_bound)->_max = curMax;
         }
     }
     if ((geometry->_flags & 0x20) != 0) {

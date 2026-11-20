@@ -772,7 +772,7 @@ void igViewerSceneInfoManager_HomeView(igViewerSceneInfoManager *self) {
     modeChanged.source = 0;
     modeChanged.field = g_igViewerParameters_operationModeMetaField;
     igModel_NotifyViews((igModel *)self->_parameters, (ModelChange *)&modeChanged);
-    igViewManager_SetSceneUpVector((igViewManager *)self->_viewManager, (const float *)(((igViewerParameters *)self->_parameters)->_upVector));
+    igViewManager_SetSceneUpVector((igViewManager *)self->_viewManager, (const float *)(((igViewerParameters *)self->_parameters)->_upVector.vec));
     igViewManager_FrameObject((igViewManager *)self->_viewManager, (igNode *)(((igViewerParameters *)self->_parameters)->_scene));
 }
 

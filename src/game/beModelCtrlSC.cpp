@@ -180,7 +180,7 @@ void beModelCtrlNode2_RegisterTraversalFunction(void) {
  * matrix), draws it in debug mode, and sends it to the bullet group of _bulletMode. When a receiver
  * reports a hit, the owner's BHit Lua function runs. */
 int beModelCtrlSCHitBox_Start(beModelCtrlSCHitBox *self, beBaseInfoRam *ram) {
-    float center[3];
+    igVec3f center;
     int i;
     float color[4];
     beModelCtrlInfoRamData *ramData;
@@ -207,9 +207,7 @@ int beModelCtrlSCHitBox_Start(beModelCtrlSCHitBox *self, beBaseInfoRam *ram) {
 toNodeSpace:
     thunk_igAABox_Transform(hitBox.p, ((beModelCtrlNode2 *)ramData->_node)->_m);
     { box = hitBox.p;
-    center[0] = box->_min[0] * 0.5f + box->_max[0] * 0.5f;
-    center[1] = box->_min[1] * 0.5f + box->_max[1] * 0.5f;
-    center[2] = box->_min[2] * 0.5f + box->_max[2] * 0.5f; }
+    center.combine(0.5f, box->_min, 0.5f, box->_max); }
     goto sizeAroundCenter;
 send:
     if (ctrl->_isDebugHitBox != 0 && work != 0) {
@@ -275,10 +273,8 @@ send:
 sizeAroundCenter:
     for (i = 0; i < 3; i++) {
         float size = self->_boxSize[i];
-        box = hitBox.p;
-        box->_min[i] = center[i] - size / 2.0f;
-        box = hitBox.p;
-        box->_max[i] = size / 2.0f + center[i];
+        hitBox->_min[i] = center[i] - size / 2.0f;
+        hitBox->_max[i] = size / 2.0f + center[i];
     }
     goto send;
 placeAtOffset:
