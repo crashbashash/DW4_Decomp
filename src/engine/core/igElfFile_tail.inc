@@ -138,16 +138,16 @@ void igElfFile_Open(int *result, ElfFileView *self, const char *path) {
 
 void igElfFile_Close(int *result, ElfFileView *self) {
     if (self->sectionHeaders != 0) {
-        igObject_FreeMemory((igObject *)self, (void *)self->sectionHeaders);
+        ((Gap::Core::igObject *)self)->free((void *)self->sectionHeaders);
     }
     if (self->sectionNames != 0) {
-        igObject_FreeMemory((igObject *)self, (void *)self->sectionNames);
+        ((Gap::Core::igObject *)self)->free((void *)self->sectionNames);
     }
     if (self->strings != 0) {
-        igObject_FreeMemory((igObject *)self, (void *)self->strings);
+        ((Gap::Core::igObject *)self)->free((void *)self->strings);
     }
     if (self->symbols != 0) {
-        igObject_FreeMemory((igObject *)self, (void *)self->symbols);
+        ((Gap::Core::igObject *)self)->free((void *)self->symbols);
     }
     igProgramFile_Close(result, self);
 }

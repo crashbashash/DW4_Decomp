@@ -176,7 +176,7 @@ void igObjectRefArrayMetaField_ShallowCopy(igObjectRefArrayMetaField *self, int 
         sourceElement = *(igObjectDispatchView **)(sourceBase + byteOffset);
         if (element != 0 || sourceElement != 0) {
             if (element != 0 && sourceElement != 0) {
-                igObject_ShallowCopy((igObjectDispatchView *)element, (int)sourceElement);
+                ((Gap::Core::igObject *)element)->copyShallow((int)sourceElement);
             } else if (element == 0) {
                 igObjectRefArrayMetaField_SetElement((igObjectRefArrayMetaField *)self, object, i, (igObject *)(sourceElement->CloneViaMetadata(1)));
             } else if (sourceElement == 0) {
@@ -230,7 +230,7 @@ void igObjectRefArrayMetaField_ReleaseElements(igObjectRefArrayMetaField *self, 
     for (i = 0; i < self->_num; i++) {
         element = *(int *)(object + self->_offset + (i * 4));
         if (element != 0) {
-            igObject_VisitFields((igObjectDispatchView *)element, (int (*)(void *, void *, void *))visitor, (void *)context);
+            ((Gap::Core::igObject *)element)->traverseFields((int (*)(void *, void *, void *))visitor, (void *)context);
         }
     }
 }
@@ -248,7 +248,7 @@ int igObjectRefArrayMetaField_IsAlikeExactly(igObjectRefArrayMetaField *self, in
             if (a == 0 || b == 0) {
                 return 0;
             }
-            if (!(igObject_IsAlikeExactly((void *)a, (void *)b) & 0xFF)) {
+            if (!(((Gap::Core::igObject *)a)->isAlikeExactly((void *)b) & 0xFF)) {
                 return 0;
             }
         }

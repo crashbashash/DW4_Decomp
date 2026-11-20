@@ -269,7 +269,7 @@ def scan(src_dir="src", symbols="config/SLUS-20836/symbols.txt", unit_objects=No
     compiler-emitted members share their actual owner's source path. The kernel
     patches' sources (tools/kpatch.py) are not image units and stay out.
     """
-    out, shared = {}, set()
+    out, shared, members = {}, set(), set()
     for root, dirs, files in os.walk(src_dir):
         if kpatch.is_patch_source(root):
             dirs[:] = []
@@ -293,6 +293,16 @@ def scan(src_dir="src", symbols="config/SLUS-20836/symbols.txt", unit_objects=No
                 # the source that owns it.
                 if os.sep + "third_party" + os.sep in path and name in out:
                     continue
+                # a member is read under its bare name (`void *igObject::malloc(int) const`); the C
+                # function of that name (newlib's malloc) is the symbol, so it keeps the name
+                member = _s != _e and re.search(r"::\s*%s\s*\(" % re.escape(name),
+                                                text[_s:text.find("{", _s)]) is not None
+                if out.get(name, path) != path and member != (name in members):
+                    if member:
+                        continue
+                    members.discard(name)
+                    out[name] = path
+                    continue
                 # within one file these are `#ifdef` alternatives; a real clash fails to compile
                 if out.get(name, path) != path:
                     # two stock files may each keep a `static` of one name: the unit row says
@@ -301,6 +311,8 @@ def scan(src_dir="src", symbols="config/SLUS-20836/symbols.txt", unit_objects=No
                         raise ValueError("%s defines %s, already defined in %s"
                                          % (path, name, out[name]))
                     shared.add(name)
+                if member:
+                    members.add(name)
                 out[name] = path
     for name in shared:
         del out[name]

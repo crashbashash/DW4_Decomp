@@ -20420,6 +20420,9 @@ namespace Core {
 class igObject {
 public:
     igObject();
+    igObject(bool bootstrap);
+    igObject(const igObject &other);
+    static void *operator new(unsigned int size, void *memory, void *unused) { return memory; }
     static void operator delete(void *memory) { Memory_FreeBufferAliasC(memory); }
     virtual void destruct();
     virtual void constructFields(int flag);
@@ -20449,6 +20452,19 @@ public:
     static inline igMetaObject *getClassMetaSafe() { return _Meta; }
     static void *retrieveVTablePointer();
     static void arkRegisterInitialize();
+    void traverseFields(Visitor callback, void *context);
+    void copyShallow(int source);
+    int isAlikeExactly(void *other) const;
+    int getIoSize() const;
+    void printFields(int depth, int indent);
+    void *malloc(int size) const;
+    void *mallocAligned(int size, unsigned short alignment) const;
+    void *calloc(int count, int size) const;
+    void *realloc(void *storage, int size) const;
+    void *reallocAligned(void *storage, int size, unsigned short alignment) const;
+    void free(void *storage) const;
+    char *strdup(const char *string) const;
+    void copy(igObject *source, int copyMode);
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
 };
 }
@@ -20468,7 +20484,11 @@ public:
     virtual void traverse() = 0;
     virtual void draw() = 0;
 };
+}
+}
 
+namespace Gap {
+namespace Gui {
 /* handle 0x58c1f0, 4 field(s), sizeof 16 (registered instance size) */
 class igClearRenderer : public Gap::Gui::igRenderer {
 public:

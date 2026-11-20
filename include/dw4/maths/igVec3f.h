@@ -68,6 +68,8 @@ int igConvertString_Vec3f(const char *text, float *vector, const char *format);
 void Vec3_Lerp(float *out, float t, const float *from, const float *to);
 /* vector = vector x other. */
 void Vec3f_CrossInPlace(float *vector, const float *other);
+/* out = a x b. */
+void FUN_00192dd0(float *out, const float *a, const float *b);
 /* out = v through the matrix's rotation part (no translation). */
 void Vec3f_TransformDirection(float *out, const float *v, const float *matrix);
 /* out = v through the whole matrix, divided by the resulting w. */

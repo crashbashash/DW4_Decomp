@@ -4,7 +4,7 @@ void igPsx2VertexArray1_1_ReleaseDefaults(igPsx2VertexArray1_1 *self) {
     }
     if (self->_vdata != 0) {
         FUN_0015e7b0((VertexBufferOwner *)self);
-        igObject_FreeMemory((igObject *)self, (void *)self->_vdata);
+        ((Gap::Core::igObject *)self)->free((void *)self->_vdata);
         self->_vdata = 0;
         self->_numVerts = 0;
     }

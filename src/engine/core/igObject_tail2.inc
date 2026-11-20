@@ -6,43 +6,34 @@ igObject::igObject() {
     ((igRefCountWord *)&_refCount)->header.flag = 0;
     ((igRefCountWord *)&_refCount)->header.poolIndex = 0;
 }
-}
-}
 
-igObject *igObject_CopyConstructHeader(igObject *self, igObject *source) {
-    self->_vtable = (int)&g_igObject_vtable[0];
-    if (self != 0) {
-        igObject_InitHeader(self);
-    }
-    ((igRefCountWord *)&self->_refCount)->bytes.flag = ((igRefCountWord *)&source->_refCount)->bytes.flag;
+/* The copy constructor and the bootstrap constructor are the ones the bootstrap classes (igMetaField,
+ * igMetaObject, igMemoryPool, __internalNonRefCountedObjectList) construct their base with: the header
+ * through the default constructor, then the pool index the object was allocated from. The copy also keeps
+ * the source's flag bit. */
+igObject::igObject(const igObject &other) {
+    new (this, 0) igObject;
+    ((igRefCountWord *)&_refCount)->bytes.flag = ((igRefCountWord *)&other._refCount)->bytes.flag;
     if (g_objectSystem->active != 0) {
-        ((igRefCountWord *)&self->_refCount)->bytes.poolIndex = ((char)igAllocator_EncodeIndex((igMemoryPoolView *)(Memory_FindOwningAllocator((int)(igObject_GetAllocationBase(self))))));
+        ((igRefCountWord *)&_refCount)->bytes.poolIndex = ((char)igAllocator_EncodeIndex((igMemoryPoolView *)(Memory_FindOwningAllocator((int)(igObject_GetAllocationBase(this))))));
     }
-    return self;
 }
 
-igObject *igObject_ConstructHeader(igObject *self) {
+igObject::igObject(bool bootstrap) {
     void **owner;
 
-    self->_vtable = (int)(&g_igObject_vtable[0]);
-    if (self != 0) {
-        igObject_InitHeader((igObject *)self);
-    }
+    new (this, 0) igObject;
     if (g_objectSystem->active != 0) {
-        owner = (void **)(Memory_FindOwningAllocator((int)(igObject_GetAllocationBase(self))));
+        owner = (void **)(Memory_FindOwningAllocator((int)(igObject_GetAllocationBase(this))));
         if (owner != 0) {
-            ((igRefCountWord *)&self->_refCount)->bytes.poolIndex = ((igMemoryPoolView *)(owner))->GetPoolIndex();
+            ((igRefCountWord *)&_refCount)->bytes.poolIndex = ((igMemoryPoolView *)(owner))->GetPoolIndex();
         } else {
-            ((igRefCountWord *)&self->_refCount)->bytes.poolIndex = 0;
+            ((igRefCountWord *)&_refCount)->bytes.poolIndex = 0;
         }
     } else {
-        ((igRefCountWord *)&self->_refCount)->bytes.poolIndex = 0;
+        ((igRefCountWord *)&_refCount)->bytes.poolIndex = 0;
     }
-    return self;
 }
-
-namespace Gap {
-namespace Core {
 
 /* Shared default virtual slots that almost every class inherits, so most are empty or return a
  * constant. The slot number is the only name evidence, so the bodies are documented by what they
@@ -457,8 +448,11 @@ void igObject_ClearFieldValues(int *object) {
     }
 }
 
-int igObject_GetSerializedSize(igObjectDispatchView *object) {
-    igMetaObject *m0 = object->GetMeta();
+namespace Gap {
+namespace Core {
+
+int igObject::getIoSize() const {
+    igMetaObject *m0 = ((igObjectDispatchView *)this)->GetMeta();
     igMetaObject *m;
     int size, i, n;
     igMetaObject *(*fp)();
@@ -468,8 +462,10 @@ int igObject_GetSerializedSize(igObjectDispatchView *object) {
     size = 8;
     i = igMetaObject_GetFieldCount(Gap::Core::igObject::_Meta);
     n = igMetaObject_GetFieldCount(m);
-    for (; i < n; i++) { size += ((igMetaFieldView *)igMetaObject_GetFieldAt(m, i))->GetRawFieldMemSize((int)object); }
+    for (; i < n; i++) { size += ((igMetaFieldView *)igMetaObject_GetFieldAt(m, i))->GetRawFieldMemSize((int)(igObjectDispatchView *)this); }
     return size;
+}
+}
 }
 
 int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap) {
@@ -486,7 +482,7 @@ int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, ig
     int count = igMetaObject_GetFieldCount(writeMeta);
     int i = igMetaObject_GetFieldCount(Gap::Core::igObject::_Meta);
     buffer[0] = index;
-    buffer[1] = igObject_GetSerializedSize(object);
+    buffer[1] = ((Gap::Core::igObject *)object)->getIoSize();
     if (endianSwap) {
         ((igMetaFieldView *)igIntMetaField_GetDefaultDescriptor())->SwapBytes(buffer, 2);
     }
@@ -497,7 +493,7 @@ int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, ig
             buffer = (int *)((char *)buffer + igMetaField_WritePersistentValue(field, object, buffer, file, endianSwap));
         }
     }
-    return igObject_GetSerializedSize(object);
+    return ((Gap::Core::igObject *)object)->getIoSize();
 }
 
 int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap) {
@@ -603,20 +599,23 @@ int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead 
     return size;
 }
 
-void igObject_Print(void **object, int depth, int indent) {
+namespace Gap {
+namespace Core {
+
+void igObject::printFields(int depth, int indent) {
     void **field;
     __internalObjectList *fields;
     int prefix;
     unsigned int count;
     unsigned int i;
 
-    fields = (__internalObjectList *)(((igObjectDispatchView *)object)->GetMeta()->_metaFields);
-    igReport_Printf("%s0x%x (type %s)\n", indent, object, ((igObjectDispatchView *)object)->GetMeta()->_name);
+    fields = (__internalObjectList *)(((igObjectDispatchView *)this)->GetMeta()->_metaFields);
+    igReport_Printf("%s0x%x (type %s)\n", indent, (void * *)this, ((igObjectDispatchView *)this)->GetMeta()->_name);
     igReport_Flush();
     if (depth != 0) {
-        prefix = (int)igObject_AllocateStorage((igObject *)object, (strlen((const char *)indent) + 2) * 4);
+        prefix = (int)malloc((strlen((const char *)indent) + 2) * 4);
         sprintf((char *)prefix, "\t%s", indent);
-        ((igObjectDispatchView *)object)->TrimCapacity();
+        ((igObjectDispatchView *)this)->TrimCapacity();
         count = fields->_count;
         i = ((__internalObjectList *)Gap::Core::igObject::_Meta->_metaFields)->_count;
         igReport_Printf("%s{\n", indent);
@@ -624,12 +623,14 @@ void igObject_Print(void **object, int depth, int indent) {
         for (; i < count; i++) {
             int *base = (int *)fields->_data;
             field = (void **)base[i];
-            { int d = depth - 1; ((igMetaFieldView *)field)->Print((int)object, d, (int)prefix); }
+            { int d = depth - 1; ((igMetaFieldView *)field)->Print((int)(void * *)this, d, (int)prefix); }
         }
         igReport_Printf("%s}\n", indent);
         igReport_Flush();
-        igObject_FreeMemory((igObject *)object, (void *)prefix);
+        free((void *)prefix);
     }
+}
+}
 }
 
 void igObject_CopyFields(igObjectDispatchView *self, int source) {
@@ -657,14 +658,19 @@ void igObject_DeepCopy(igObjectDispatchView *self, igObjectDispatchView *source)
     self->userDeepCopy(source);
 }
 
-void igObject_ShallowCopy(igObjectDispatchView *self, int source) {
-    __internalObjectList *m = (__internalObjectList *)self->GetMeta()->_metaFields;
+namespace Gap {
+namespace Core {
+
+void igObject::copyShallow(int source) {
+    __internalObjectList *m = (__internalObjectList *)((igObjectDispatchView *)this)->GetMeta()->_metaFields;
     int n = m->_count;
     int i;
     for (i = igMetaObject_GetFieldCount(Gap::Core::igObject::_Meta); i < n; i++) {
-        igMetaField_ShallowCopy(((int *)m->_data)[i], (int)self, source);
+        igMetaField_ShallowCopy(((int *)m->_data)[i], (int)(igObjectDispatchView *)this, source);
     }
-    self->userShallowCopy(source);
+    ((igObjectDispatchView *)this)->userShallowCopy(source);
+}
+}
 }
 
 int igObject_IsAlikeDeep(igObjectDispatchView *a, igObjectDispatchView *b) {
@@ -700,57 +706,57 @@ int igObject_IsAlikeShallow(igObjectDispatchView *a, igObjectDispatchView *b) {
     return a->userIsAlikeShallow(b);
 }
 
-int igObject_IsAlikeExactly(void *a, void *b) {
+namespace Gap {
+namespace Core {
+
+int igObject::isAlikeExactly(void *b) const {
     int meta;
     int i;
     __internalObjectList *fields;
     int count;
 
     meta = (int)((igObjectDispatchView *)b)->GetMeta();
-    if (meta != (int)((igObjectDispatchView *)a)->GetMeta()) {
+    if (meta != (int)((igObjectDispatchView *)this)->GetMeta()) {
         return 0;
     }
-    fields = (__internalObjectList *)((igObjectDispatchView *)a)->GetMeta()->_metaFields;
+    fields = (__internalObjectList *)((igObjectDispatchView *)this)->GetMeta()->_metaFields;
     count = fields->_count;
     for (i = igMetaObject_GetFieldCount(Gap::Core::igObject::_Meta); i < count; i++) {
-        if (igMetaField_IsAlikeExactly(((int *)fields->_data)[i], (int)a, (int)b) == 0) {
+        if (igMetaField_IsAlikeExactly(((int *)fields->_data)[i], (int)(void *)this, (int)b) == 0) {
             return 0;
         }
     }
     return 1;
 }
 
-void igObject_VisitFields(igObjectDispatchView *object,Visitor callback,void *context){
+void igObject::traverseFields(Visitor callback, void *context){
     __internalObjectList *fields;
     int count;
     int i;
     igMetaFieldView *field;
-    if(callback(object,0,context)==1)return;
-    object->TrimCapacity();
-    fields=(__internalObjectList *)object->GetMeta()->_metaFields;
+    if(callback((igObjectDispatchView *)this,0,context)==1)return;
+    ((igObjectDispatchView *)this)->TrimCapacity();
+    fields=(__internalObjectList *)((igObjectDispatchView *)this)->GetMeta()->_metaFields;
     count=fields->_count;
     for(i=igMetaObject_GetFieldCount((igMetaObject *)Gap::Core::igObject::_Meta);i<count;++i){
         field=((igMetaFieldView **)fields->_data)[i];
-        if(callback(object,field,context)!=1)field->ReleaseElements((int)object,(int)callback,(int)context);
+        if(callback((igObjectDispatchView *)this,field,context)!=1)field->ReleaseElements((int)(igObjectDispatchView *)this,(int)callback,(int)context);
     }
 }
 
-void igObject_Copy(igObject *dest, igObject *source, int copyMode) {
+void igObject::copy(igObject *source, int copyMode) {
     switch (copyMode) {
     case 1:
-        igObject_DeepCopy((igObjectDispatchView *)dest, (igObjectDispatchView *)source);
+        igObject_DeepCopy((igObjectDispatchView *)this, (igObjectDispatchView *)source);
         break;
     case 0:
-        igObject_ShallowCopy((igObjectDispatchView *)dest, (int)source);
+        copyShallow((int)source);
         break;
     case 2:
-        igObject_CopyFields((igObjectDispatchView *)dest, (int)source);
+        igObject_CopyFields((igObjectDispatchView *)this, (int)source);
         break;
     }
 }
-
-namespace Gap {
-namespace Core {
 
 /* Generic clone of any object. Asks the source for its metaobject through vtable slot 20 (the
  * GetMetaObject slot), creates an instance of that class on the source's own allocator and copies
@@ -759,7 +765,7 @@ namespace Core {
 igObject *igObject::cloneViaMetadata(int copyMode) {
     igMetaObject *meta = getMeta();
     ::igObject *copy = igMetaObject_CreateInstance(meta, igObject_GetAllocator((::igObject *)this));
-    igObject_Copy(copy, (::igObject *)this, copyMode);
+    ((igObject *)copy)->copy(this, copyMode);
     return (igObject *)copy;
 }
 }
@@ -778,32 +784,37 @@ void *igObject_GetAllocationBase(void *self) {
     return (char *)self - ((igObjectDispatchView *)self)->GetMeta()->_runTimeSize;
 }
 
+namespace Gap {
+namespace Core {
+
 /* Object storage dispatch: every helper re-selects the allocator from the object header
  * (igObject_GetAllocator) and calls one slot of that allocator's vtable, forwarding its arguments
  * unchanged. */
-void *igObject_AllocateStorage(igObject *object, int size) {
-    igMemoryPoolView *allocator = igObject_GetAllocator(object);
+void *igObject::malloc(int size) const {
+    igMemoryPoolView *allocator = igObject_GetAllocator((::igObject *)this);
     return allocator->Allocate(size);
 }
 
-void *igObject_MallocAligned(igObject *object, int size, unsigned short alignment) {
-    igMemoryPoolView *allocator = igObject_GetAllocator(object);
+void *igObject::mallocAligned(int size, unsigned short alignment) const {
+    igMemoryPoolView *allocator = igObject_GetAllocator((::igObject *)this);
     return allocator->AllocateAligned(size, alignment);
 }
 
-void *igObject_Callocate(igObject *object, int count, int size) {
-    igMemoryPoolView *allocator = igObject_GetAllocator(object);
+void *igObject::calloc(int count, int size) const {
+    igMemoryPoolView *allocator = igObject_GetAllocator((::igObject *)this);
     return allocator->Callocate(count, size);
 }
 
-void *igObject_Reallocate(igObject *object, void *storage, int size) {
-    igMemoryPoolView *allocator = igObject_GetAllocator(object);
+void *igObject::realloc(void *storage, int size) const {
+    igMemoryPoolView *allocator = igObject_GetAllocator((::igObject *)this);
     return allocator->Reallocate(storage, size);
 }
 
-void *igObject_ReallocateAligned(igObject *object, void *storage, int size, unsigned short alignment) {
-    igMemoryPoolView *allocator = igObject_GetAllocator(object);
+void *igObject::reallocAligned(void *storage, int size, unsigned short alignment) const {
+    igMemoryPoolView *allocator = igObject_GetAllocator((::igObject *)this);
     return allocator->ReallocateAligned(storage, size, alignment);
+}
+}
 }
 
 /* A null storage pointer returns without touching the allocator */
@@ -814,23 +825,28 @@ void igObject_FreeStorage(int object, int storage) {
     }
 }
 
+namespace Gap {
+namespace Core {
+
 /* Same instruction body as igObject_FreeStorage. */
-void igObject_FreeMemory(igObject *object, void *storage) {
+void igObject::free(void *storage) const {
     if (storage != 0) {
-        igMemoryPoolView *allocator = igObject_GetAllocator(object);
+        igMemoryPoolView *allocator = igObject_GetAllocator((::igObject *)this);
         allocator->Free(storage);
     }
 }
 
 /* Copy a C string into storage owned by `self`: allocate strlen + 1 bytes with the igObject
- * storage allocator (vtable slot 216, igObject_AllocateStorage), strcpy into it and return the
+ * storage allocator (vtable slot 216, Gap::Core::igObject::malloc), strcpy into it and return the
  * copy. */
-char *igObject_DuplicateString(void *self, const char *string) {
+char *igObject::strdup(const char *string) const {
     char *copy;
 
-    copy = (char *)igObject_AllocateStorage((igObject *)self, strlen(string) + 1);
+    copy = (char *)malloc(strlen(string) + 1);
     strcpy(copy, string);
     return copy;
+}
+}
 }
 
 igMemoryPoolView *igObject_GetAllocator(igObject *object) {

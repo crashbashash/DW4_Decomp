@@ -20,7 +20,7 @@ void igPsx2Thread_ReleaseDefaults(igPsx2Thread *self) {
     if (self->_userStack == 0) {
         stack = self->_stack;
         if (stack != 0) {
-            igObject_FreeMemory((igObject *)self, (void *)stack);
+            ((Gap::Core::igObject *)self)->free((void *)stack);
         }
     }
 }
@@ -47,7 +47,7 @@ igResult igPsx2Thread_SetStack(igPsx2ThreadView *self, int stack, int size) {
         if (self->_userStack == 0) {
             int a1 = self->_stack;
             if (a1 != 0) {
-                igObject_FreeMemory((igObject *)self, (void *)a1);
+                ((Gap::Core::igObject *)self)->free((void *)a1);
             }
         }
         self->_stack = stack;

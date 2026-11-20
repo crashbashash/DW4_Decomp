@@ -86,7 +86,7 @@ int FUN_001abb50(S_1abb50 *arg0, A *arg1) {
         }
     }
     arg0->f8 = (Rc_1abb50 *)arg1;
-    arg0->f12 = igObject_AllocateStorage((igObject *)arg0, n * 4);
+    arg0->f12 = ((Gap::Core::igObject *)arg0)->malloc(n * 4);
     return 1;
 }
 

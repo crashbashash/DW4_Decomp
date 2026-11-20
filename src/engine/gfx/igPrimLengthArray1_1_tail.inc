@@ -50,7 +50,7 @@ void FUN_0015e050(struct S_arg0_15e050 *arg0) {
         temp_v0 = Memory_GetBufferSize((void *)temp_a0);
         temp_s0 = 0x50 - temp_v0;
         if (temp_s0 > 0) {
-            arg0->f8 = (int)igObject_Reallocate((igObject *)arg0, (void *)arg0->f8, 0x50);
+            arg0->f8 = (int)((Gap::Core::igObject *)arg0)->realloc((void *)arg0->f8, 0x50);
             memset((void *)(arg0->f8 + temp_v0), 0, temp_s0);
         }
     }

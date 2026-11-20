@@ -61,7 +61,7 @@ void ObjectPointerList_EnsureIndex(__internalNonRefCountedObjectList *list, int 
         while (!(index < (int)n)) {
             if ((int)n < 512) n *= 2; else n += 512;
         }
-        list->_data = (int)igObject_Reallocate((igObject *)list, (void *)list->_data, n * 4);
+        list->_data = (int)((Gap::Core::igObject *)list)->realloc((void *)list->_data, n * 4);
         char *p = (char *)list->_data;
         p += old * 4;
         memset(p, 0, (n - old) * 4);

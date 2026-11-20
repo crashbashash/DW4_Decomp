@@ -136,7 +136,7 @@ void igObjectDirEntry_ComputeWriteSize(igObjectDirEntryView *self, igIGBFile *fi
     }
     self->_typeMetaIndex = igMetaObject_AddToMetaObjectList((igTDataList<igMetaObject *> *)file->_metaObjectListInFile, (igMetaObject *)meta);
     bufferSize = file->_objectBufferSize;
-    file->_objectBufferSize = bufferSize + igObject_GetSerializedSize((igObjectDispatchView *)object);
+    file->_objectBufferSize = bufferSize + ((Gap::Core::igObject *)object)->getIoSize();
     file->_objectCount = file->_objectCount + 1;
 }
 

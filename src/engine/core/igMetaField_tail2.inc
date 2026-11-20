@@ -99,7 +99,7 @@ igMetaField *igMetaField_CopyConstruct(igMetaField *dest, igMetaField *source) {
     dest->_isAlikeShallowMethod = source->_isAlikeShallowMethod;
     dest->_persistent = source->_persistent;
 
-    dest->_default = (int)((char *)igObject_AllocateStorage((igObject *)dest, dest->_size));
+    dest->_default = (int)((char *)((Gap::Core::igObject *)dest)->malloc(dest->_size));
     memcpy((void *)dest->_default, (void *)source->_default, dest->_size);
     return dest;
 }
@@ -171,12 +171,12 @@ void igMetaField_Configure(igMetaField *self, const char *fieldName, igMetaField
 
 void igMetaField_EnsureDefaultStorage(igMetaField *field){
     field->_size=(unsigned short)((igMetaFieldView *)field)->GetSize();
-    if(field->_default==0)field->_default=(int)igObject_Callocate((igObject *)field, (int)field->_size, 1);
+    if(field->_default==0)field->_default=(int)((Gap::Core::igObject *)field)->calloc((int)field->_size, 1);
     else {
         int size=field->_size;
         if(((int)Memory_GetBufferSize((void *)field->_default))<size){
             igObject_FreeStorage((int)field, (int)((void *)field->_default));
-            field->_default=(int)igObject_Callocate((igObject *)field, (int)field->_size, 1);
+            field->_default=(int)((Gap::Core::igObject *)field)->calloc((int)field->_size, 1);
         }
     }
 }
@@ -369,7 +369,7 @@ igStringRef igMetaField_ArrayToString(igMetaFieldView *self, int value, int coun
     char *buf;
     char *p;
 
-    list = (igStringRef *)((char *)igObject_AllocateStorage((igObject *)self, count * 4));
+    list = (igStringRef *)((char *)((Gap::Core::igObject *)self)->malloc(count * 4));
     total = 0;
     cnt = 0;
     for (i = 0; i < count; i++) {
@@ -380,15 +380,15 @@ igStringRef igMetaField_ArrayToString(igMetaFieldView *self, int value, int coun
             value += self->GetElementSize();
         }
     }
-    buf = ((char *)igObject_AllocateStorage((igObject *)self, total + 1));
+    buf = ((char *)((Gap::Core::igObject *)self)->malloc(total + 1));
     p = buf;
     for (i = 0; i < cnt; i++) {
         p += sprintf(p, (const char *)percent_s, list[i].p);
     }
     *p = 0;
     igStringRef result(buf);
-    igObject_FreeMemory((igObject *)self, (void *)list);
-    igObject_FreeMemory((igObject *)self, (void *)buf);
+    ((Gap::Core::igObject *)self)->free((void *)list);
+    ((Gap::Core::igObject *)self)->free((void *)buf);
     return result;
 }
 

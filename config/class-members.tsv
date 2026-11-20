@@ -6,6 +6,9 @@
 # include/dw4/core/igObjectMacros.h, and tools/gen_odl_source.py --write-members writes a class's macro and
 # field-handle rows.
 igObject	igObject();
+igObject	igObject(bool bootstrap);
+igObject	igObject(const igObject &other);
+igObject	static void *operator new(unsigned int size, void *memory, void *unused) { return memory; }
 igObject	static void operator delete(void *memory) { Memory_FreeBufferAliasC(memory); }
 igObject	virtual void destruct();
 igObject	virtual void constructFields(int flag);
@@ -35,6 +38,19 @@ igObject	static inline igMetaObject *getClassMeta() { return _Meta; }
 igObject	static inline igMetaObject *getClassMetaSafe() { return _Meta; }
 igObject	static void *retrieveVTablePointer();
 igObject	static void arkRegisterInitialize();
+igObject	void traverseFields(Visitor callback, void *context);
+igObject	void copyShallow(int source);
+igObject	int isAlikeExactly(void *other) const;
+igObject	int getIoSize() const;
+igObject	void printFields(int depth, int indent);
+igObject	void *malloc(int size) const;
+igObject	void *mallocAligned(int size, unsigned short alignment) const;
+igObject	void *calloc(int count, int size) const;
+igObject	void *realloc(void *storage, int size) const;
+igObject	void *reallocAligned(void *storage, int size, unsigned short alignment) const;
+igObject	void free(void *storage) const;
+igObject	char *strdup(const char *string) const;
+igObject	void copy(igObject *source, int copyMode);
 igRenderer	IG_ABSTRACT_OBJECT_DEFINE(igRenderer)
 igRenderer	static igMetaField *k_visualContext;
 igRenderer	void setVisualContext(igVisualContext *context);

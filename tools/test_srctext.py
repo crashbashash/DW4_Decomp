@@ -83,6 +83,22 @@ class ScanThroughUnits(unittest.TestCase):
                 srctext.ROOT = old
             self.assertEqual(table.get("fragment_a"), unit)
 
+    def test_a_c_function_keeps_its_name_over_a_member_of_that_name(self):
+        with tempfile.TemporaryDirectory() as root:
+            member = write(root, "src/engine/core/Core.cpp",
+                           "namespace Gap {\nnamespace Core {\n"
+                           "void *igObject::malloc(int size) const {\n    return 0;\n}\n}\n}\n")
+            stock = write(root, "src/newlib/malloc.c", "void *malloc(int size) {\n    return 0;\n}\n")
+            empty = write(root, "unit-objects.json", "{}")
+            old = srctext.ROOT
+            srctext.ROOT = root
+            try:
+                table = units.scan(os.path.join(root, "src"), symbols=os.devnull, unit_objects=empty)
+            finally:
+                srctext.ROOT = old
+            self.assertEqual(table.get("malloc"), stock)
+            self.assertNotEqual(member, stock)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -137,9 +137,9 @@ int igCommonTraversal_TraverseBlendMatrixSelect(CompileTraversalHead *o, BlendNo
     n = node->_boneIndices->_count;
     if (frame->_capacity < n) {
         if (frame->_matrices != 0) {
-            igObject_FreeMemory((igObject *)frame, frame->_matrices);
+            ((Gap::Core::igObject *)frame)->free(frame->_matrices);
         }
-        frame->_matrices = (char *)igObject_MallocAligned((igObject *)frame, n << 6, 16);
+        frame->_matrices = (char *)((Gap::Core::igObject *)frame)->mallocAligned(n << 6, 16);
         frame->_capacity = n;
     }
     frame->_count = n;

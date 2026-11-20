@@ -32,7 +32,7 @@ void igVertexBlendMatrixListAttr_apply(struct S_141e10 *arg0, igPsx2VisualContex
         FUN_001419f0((igVertexBlendMatrixListAttr *)arg0, (const float *)((char *)arg0 + 0x1C), (const float *)((char *)arg0 + 0x5C));
     }
     if (arg0->f16 == 0 && n > 0) {
-        arg0->f16 = (int)igObject_MallocAligned((igObject *)arg0, n << 6, 0x10);
+        arg0->f16 = (int)((Gap::Core::igObject *)arg0)->mallocAligned(n << 6, 0x10);
         arg0->f20 = n;
     }
     if (arg0->f12 == 0) {
@@ -54,7 +54,7 @@ void igVertexBlendMatrixListAttr_SynchronizeDefault(void) {
 }
 
 void igVertexBlendMatrixListAttr_ReleaseDefaults(igVertexBlendMatrixListAttr *self) {
-    igObject_FreeMemory((igObject *)self, (void *)(self->_matrixCache));
+    ((Gap::Core::igObject *)self)->free((void *)(self->_matrixCache));
     igObject_ReleaseDefaults((igObject *)self);
 }
 

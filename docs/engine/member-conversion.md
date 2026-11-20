@@ -80,10 +80,16 @@ local `…View` classes) go away as their users convert.
 
 ## Conversion order
 
-The root and the renderers (`igRenderer`, `igClearRenderer`, `igFlushRenderer`) are converted. The order after
-that:
+The root and the renderers (`igRenderer`, `igClearRenderer`, `igFlushRenderer`) are converted, and of igObject's
+kit-declared members also the bootstrap and copy constructors (`igObject(bool bootstrap)`,
+`igObject(const igObject &)`, which construct the header with the kit's placement `operator new(size_t, void *,
+void *)`), the storage calls (`malloc`, `mallocAligned`, `calloc`, `realloc`, `reallocAligned`, `free`, `strdup`)
+and `copy`, `copyShallow`, `isAlikeExactly`, `traverseFields`, `getIoSize`, `printFields`. The order after that:
 
-1. the rest of igObject's kit-declared members (the copy constructor is a candidate for `CopyConstructHeader`);
+1. the rest of igObject's kit-declared members: `internalRelease` (`igObject_Destroy`), `isOfType`
+   (`igObject_IsKindOf`) and `getMemoryPool` (`igObject_GetAllocator`), which macros and inline casts of
+   unconverted classes call; `copyDeep`, `isAlikeDeep`, `isAlikeShallow`, whose C forms take
+   `igObjectDispatchView *` parameters;
 2. the metafield family (`igMetaField` and its subclasses);
 3. `igMetaObject`, `igDataList`/`igObjectList`;
 4. attrs, then gfx, then scenegraph, then gui/insight/viewer;
@@ -95,3 +101,9 @@ that:
   scope) compile to the same code; `tools/memberize.py --respell --apply` moves them into their namespaces.
 - A destructor a class declares out of line, and a constructor whose C form constructs its base after other
   statements, are written by hand.
+- `tools/memberize.py` reads the flat struct `igObject` and the class `Gap::Core::igObject` as one type: a caller
+  passing an uncast flat pointer as the receiver (`igObject_Reallocate(m, …)`) or as an `igObject *` argument
+  (`igObject_Copy(a, (igObject *)b, 1)`), and a converted body passing `this` to a C name taking the flat struct,
+  are written without the cast they need (`((Gap::Core::igObject *)m)->realloc(…)`, `(::igObject *)this`) and
+  fixed by hand. A C form taking a reference where the member takes one (`igObject(const igObject &)`) is
+  refused and written by hand.

@@ -86,12 +86,12 @@ int igExternalDirEntry_LoadExternalFile(igExternalDirEntryView *self, int loadFu
         len = strlen((const char *)self->_externalFilePath);
         len = len + strlen(s1);
         c = strlen("/");
-        buf = (char *)igObject_AllocateStorage((igObject *)self, c + len + 1);
+        buf = (char *)((Gap::Core::igObject *)self)->malloc(c + len + 1);
         strcpy(buf, (const char *)self->_externalFilePath);
         strcat(buf, "/");
         strcat(buf, (const char *)self->_directoryName);
         stream.get()->ReadFile(buf);
-        igObject_FreeMemory((igObject *)self, (void *)buf);
+        ((Gap::Core::igObject *)self)->free((void *)buf);
     }
     self->SetRef(igDirectory_GetRefByName((int)(stream.get()), self->_entryName));
     if (self->_ref == 0) {

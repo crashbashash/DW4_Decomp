@@ -4940,6 +4940,7 @@
 001b12f0	igAttrStackManager_PushOverrideAttr	match	-
 001b13d0	igAttrStackManager_PopOverrideAttr	match	-
 001b1490	igAttrStackManager_MarkStackChanged	match	-
+001b1aa0	FUN_001b1aa0	match	-
 001b1cf0	igBitMask_SetAll	match	-
 001b1dc0	igBitMask_ClearAll	match	-
 001b1e50	igBitMask_SetBitCount	match	-

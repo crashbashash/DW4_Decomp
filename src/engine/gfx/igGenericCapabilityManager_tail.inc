@@ -1080,7 +1080,7 @@ void FUN_001592c0(LongListStorageView *self) {
 
     storage = self->storage;
     if (storage != 0) {
-        igObject_FreeMemory((igObject *)self, (void *)storage);
+        ((Gap::Core::igObject *)self)->free((void *)storage);
     }
     buffer = self->buffer;
     if ((buffer != 0) && (self->ownsBuffer != 0)) {
@@ -1543,7 +1543,7 @@ void igImage_UserPostLoad(struct A_15a030 *arg0) {
             }
         }
         arg0->f88 = s0;
-        igObject_FreeMemory((igObject *)arg0, (void *)arg0->f56);
+        ((Gap::Core::igObject *)arg0)->free((void *)arg0->f56);
         arg0->f56 = 0;
     }
     FUN_0015a100((S_15a100 *)arg0);

@@ -412,7 +412,7 @@ igResult igIGBFile_BuildDirectoryBuffer(igIGBFile *file) {
     file->_entryBufferSize = 0;
     file->_entryCount = ((igObjectList *)file->_uniqueEntryList)->_count;
     for (i = 0; i < file->_entryCount; i++) {
-        file->_entryBufferSize = file->_entryBufferSize + igObject_GetSerializedSize((igObjectDispatchView *)igDirectory_GetEntryAlias((int *)file->_uniqueEntryList, i));
+        file->_entryBufferSize = file->_entryBufferSize + ((Gap::Core::igObject *)(igDirectory_GetEntryAlias((int *)file->_uniqueEntryList, i)))->getIoSize();
     }
     file->_dirBuf = (int)((igMemoryPoolView *)file->_temporaryMemoryPool)->AllocateAligned(file->_entryBufferSize, 16);
     cursor = (char *)file->_dirBuf;
@@ -504,7 +504,7 @@ igResult igIGBFile_WriteEntryBuffer(igIGBFile *file) {
     file->_entryBufferSize = 0;
     file->_entryCount = file->_count;
     for (i = 0; i < file->_entryCount; i++) {
-        file->_entryBufferSize = file->_entryBufferSize + igObject_GetSerializedSize(((igObjectDispatchView **)file->_data)[i]);
+        file->_entryBufferSize = file->_entryBufferSize + ((Gap::Core::igObject *)(((igObjectDispatchView **)file->_data)[i]))->getIoSize();
     }
     file->_dirBuf = (int)((igMemoryPoolView *)file->_temporaryMemoryPool)->AllocateAligned(file->_entryBufferSize, 16);
     cursor = (char *)file->_dirBuf;

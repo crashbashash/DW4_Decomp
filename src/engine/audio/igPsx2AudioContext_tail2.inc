@@ -1,5 +1,5 @@
 int Gap__igPsx2AudioContext__vfunc_55(void **self, int value) {
-    return (int)igObject_MallocAligned((igObject *)self, value, ((DW4VC_132_0 *)(self))->vX()) | 0x20000000;
+    return (int)((Gap::Core::igObject *)self)->mallocAligned(value, ((DW4VC_132_0 *)(self))->vX()) | 0x20000000;
 }
 
 int Gap__igPsx2AudioContext__vfunc_33(igPsx2AudioContext *self) {
@@ -7,7 +7,7 @@ int Gap__igPsx2AudioContext__vfunc_33(igPsx2AudioContext *self) {
 }
 
 void Gap__igPsx2AudioContext__vfunc_56(int arg0, int arg1) {
-    igObject_FreeMemory((igObject *)arg0, (void *)((arg1 & 0xDFFFFFFF)));
+    ((Gap::Core::igObject *)arg0)->free((void *)((arg1 & 0xDFFFFFFF)));
 }
 
 void Gap__igPsx2AudioContext__vfunc_57(int arg0, int arg1) {

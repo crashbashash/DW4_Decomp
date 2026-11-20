@@ -470,11 +470,11 @@ extern "C" igResult igPsx2Thread_SetStackSize(igPsx2ThreadView *self, unsigned i
         if (self->_userStack == 0) {
             int stack = self->_stack;
             if (stack != 0) {
-                igObject_FreeMemory((igObject *)self, (void *)stack);
+                ((Gap::Core::igObject *)self)->free((void *)stack);
             }
         }
         self->_userStack = 0;
-        self->_stack = (int)igObject_MallocAligned((igObject *)self, self->_stackSize, self->GetStackAlignment());
+        self->_stack = (int)((Gap::Core::igObject *)self)->mallocAligned(self->_stackSize, self->GetStackAlignment());
         return g_resultSuccess;
     }
     return g_resultFailure;

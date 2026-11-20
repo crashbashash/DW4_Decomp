@@ -107,7 +107,7 @@ void igAttrStackManager_RegisterAttribute(AttrManagerRec *m, AttrObj *meta) {
         id = meta->_id;
         if (id >= m->_attrStackIndexTableSize) {
             m->_attrStackIndexTableSize = id + 4;
-            m->_attrStackIndexTable = (int *)igObject_Reallocate(m, m->_attrStackIndexTable, m->_attrStackIndexTableSize * 4);
+            m->_attrStackIndexTable = (int *)((Gap::Core::igObject *)m)->realloc(m->_attrStackIndexTable, m->_attrStackIndexTableSize * 4);
         }
         units = FUN_001d8270((int)(meta));
         if (units <= 0) {
@@ -632,6 +632,55 @@ void igAttrStackManager_MarkStackChanged(igAttrStackManager *manager, igAttrStac
         stack->_hasChangedFromRoot = 1U;
     }
     manager->_stackChanged = 1;
+}
+
+/* Turns the billboard to face the camera: `matrix` gets the billboard's rotation for its mode and the
+ * model-view position moved by the billboard's origin. */
+void FUN_001b1aa0(igBillboard *billboard, float *matrix, const float *modelView, const float *view) {
+    igVec3f position;
+    igVec3f up;
+    igVec3f origin;
+    igMatrix44f_GetTranslation(modelView, &position.x);
+    Vec3f_TransformDirection(&origin.x, billboard->_origin, modelView);
+    position.add(origin);
+    igVec3f viewPosition(view[12], view[13], view[14]);
+    igVec3f direction = viewPosition - position;
+    switch (billboard->_mode) {
+    case 1:
+        Vec3f_TransformDirection(&up.x, billboard->_axis, modelView);
+        break;
+    case 2: {
+        igVec3f side;
+        up.x = 0.0f;
+        up.y = 1.0f;
+        up.z = 0.0f;
+        FUN_00192dd0(&side.x, &up.x, &direction.x);
+        FUN_00192dd0(&up.x, &direction.x, &side.x);
+        break;
+    }
+    case 3:
+        if (view != 0) {
+            igVec3f viewUp;
+            igVec3f side;
+            viewUp.x = 0.0f;
+            viewUp.y = 1.0f;
+            viewUp.z = 0.0f;
+            Vec3f_TransformDirection(&viewUp.x, &viewUp.x, view);
+            FUN_00192dd0(&side.x, &viewUp.x, &direction.x);
+            side.scale(1.0f / sqrtf(side.dot(side)));
+            FUN_00192dd0(&up.x, &direction.x, &side.x);
+            up.scale(1.0f / sqrtf(up.dot(up)));
+        }
+        break;
+    case 0:
+    default:
+        up.x = 0.0f;
+        up.y = 1.0f;
+        up.z = 0.0f;
+        break;
+    }
+    FUN_001b1590(matrix, &up.x, &direction.x);
+    igMatrix44f_SetTranslation(matrix, &position.x);
 }
 
 void igBitMask_SetAll(igBitMask *mask) {

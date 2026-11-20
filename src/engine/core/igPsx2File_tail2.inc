@@ -108,7 +108,7 @@ void igPsx2File_Close(igPsx2FileView *self) {
         sceClose(self->_fileHandle);
         self->_fileHandle = -1;
         if (self->_fBuf != 0) {
-            igObject_FreeMemory((igObject *)self, (void *)self->_fBuf);
+            ((Gap::Core::igObject *)self)->free((void *)self->_fBuf);
         }
         self->_fBuf = 0;
         self->_bufSize = 0;
@@ -188,9 +188,9 @@ void igPsx2File_GrowBuffer(igPsx2FileView *self, int size) {
             n = size * 2;
         }
         if (self->_fBuf != 0) {
-            self->_fBuf = (unsigned char *)igObject_Reallocate((igObject *)self, (void *)self->_fBuf, n);
+            self->_fBuf = (unsigned char *)((Gap::Core::igObject *)self)->realloc((void *)self->_fBuf, n);
         } else {
-            self->_fBuf = (unsigned char *)igObject_AllocateStorage((igObject *)self, n);
+            self->_fBuf = (unsigned char *)((Gap::Core::igObject *)self)->malloc(n);
         }
         self->_bufSize = n;
     }

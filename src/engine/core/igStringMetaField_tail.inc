@@ -393,13 +393,13 @@ void igStringObj_SetN(igStringObj *self, int text, int length) {
         self->_buffer = 0;
         self->_length = 0;
     } else {
-        self->_buffer = (int)igObject_AllocateStorage((igObject *)self, length + 1);
+        self->_buffer = (int)((Gap::Core::igObject *)self)->malloc(length + 1);
         memcpy((char *)self->_buffer, (void *)text, length);
         *(char *)(self->_buffer + length) = 0;
         self->_length = length;
     }
     if (previous != 0) {
-        igObject_FreeMemory((igObject *)self, (void *)previous);
+        ((Gap::Core::igObject *)self)->free((void *)previous);
     }
 }
 
@@ -416,7 +416,7 @@ void igStringObj_Clear(igStringObj *self) {
 
     buffer = self->_buffer;
     if (buffer != 0) {
-        igObject_FreeMemory((igObject *)self, (void *)buffer);
+        ((Gap::Core::igObject *)self)->free((void *)buffer);
     }
     self->_buffer = 0;
     self->_length = 0;
@@ -430,7 +430,7 @@ void igStringObj_Insert(igStringObj *self, char *insert, unsigned int at, unsign
         igStringObj_SetN(self, (int)insert, (int)n);
     } else {
     total = n + self->_length;
-    buf = (char *)igObject_AllocateStorage((igObject *)self, total + 1);
+    buf = (char *)((Gap::Core::igObject *)self)->malloc(total + 1);
     if (at >= self->_length) {
         memcpy(buf, (char *)self->_buffer, self->_length);
         memcpy(buf + self->_length, insert, n);
@@ -444,7 +444,7 @@ void igStringObj_Insert(igStringObj *self, char *insert, unsigned int at, unsign
         memcpy(buf + (at + n), (char *)self->_buffer + at, (self->_length - at) + 1);
     }
     if (self->_buffer != 0) {
-        igObject_FreeMemory((igObject *)self, (void *)self->_buffer);
+        ((Gap::Core::igObject *)self)->free((void *)self->_buffer);
     }
     self->_buffer = (int)buf;
     self->_length = total;
@@ -686,7 +686,7 @@ void igStringObj_Split(igStringObj *src, long long delim, igTDataList<char *> *l
     }
     list->_count = 0;
     if (src->_buffer != 0) {
-        char *buf = igObject_DuplicateString(src, (const char *)src->_buffer);
+        char *buf = ((Gap::Core::igObject *)src)->strdup((const char *)src->_buffer);
         for (unsigned i = 0; i < src->_length; i++) {
             if ((char)delim == buf[i]) buf[i] = 0;
         }
@@ -722,7 +722,7 @@ void igStringObj_Trim(igStringObj *self) {
     char *copy;
     char *p;
     if (self->_buffer != 0) {
-        copy = igObject_DuplicateString(self, (const char *)self->_buffer);
+        copy = ((Gap::Core::igObject *)self)->strdup((const char *)self->_buffer);
         n = strlen(copy) - 1;
         while (n >= 0 && (_ctype_[copy[n] + 1] & 8)) {
             copy[n] = 0;

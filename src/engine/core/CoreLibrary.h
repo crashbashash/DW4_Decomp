@@ -1520,14 +1520,10 @@ extern "C" void igObject_ConstructFields(igObjectDispatchView *object);
 extern "C" void igObject_ResetUnconstructedFields(igObjectDispatchView *object);
 extern "C" void igObject_DestructFieldValues(int *arg0);
 extern "C" void igObject_ClearFieldValues(int *arg0);
-extern "C" void igObject_Print(void **arg0, int arg1, int arg2);
 extern "C" void igObject_CopyFields(igObjectDispatchView *self, int source);
-extern "C" void igObject_ShallowCopy(igObjectDispatchView *self, int source);
-extern "C" int igObject_IsAlikeExactly(void *arg0, void *arg1);
 extern "C" int igObject_CloneViaMetadata(void **source, int copyMode);
 extern "C" void *igObject_GetAllocationBase(void *self);
 extern "C" void igObject_FreeStorage(int object, int storage);
-extern "C" char *igObject_DuplicateString(void *self, const char *string);
 extern "C" int igObjectDirEntry_GetMeta(void);
 class igObjectDirEntryView;
 extern "C" void igObjectDirEntry_PrepareWrite(igObjectDirEntryView *arg0);
@@ -3714,7 +3710,6 @@ extern "C" igResult igMetaObject_CopyVTable(igMetaObject *meta, igMemoryPoolView
 extern "C" void igNamedObjectInfo_FindObjectReference(igNamedObjectInfo *self, int file, igNamedObject *object);
 extern "C" igNamedObject *igNamedObjectInfo_GetFieldValueByName(igNamedObjectInfo *self, const char *name);
 extern "C" int igObjectList_FindByIntField(igTDataList<int> *list, igMetaField *field, int value);
-extern "C" int g_igObject_vtable[4];
 extern "C" igObject *igObject_CopyConstructHeader(igObject *arg0, igObject *arg1);
 /* Stamps the igObject vtable, runs igObject_InitHeader, then fills the header's allocator byte
  * (+7): with the object system active it is the result of the owning allocator's virtual slot 364
@@ -3727,7 +3722,6 @@ extern "C" void igObject_ConstructPooled(igObject *arg0, char *arg1);
  * when there is no allocator at all. It returns the address prefix_size bytes into the block, so a
  * header can precede the object. The allocator method called is vtable offset 216 (vfunc_54), the
  * allocate-bytes slot. */
-extern "C" int igObject_GetSerializedSize(igObjectDispatchView *arg0);
 extern "C" int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap);
 /* An object record in an .igb object section: its meta-object index and byte size, then (old format)
  * the count of persistent fields written. */
@@ -3735,8 +3729,6 @@ struct FieldRecordHead { int kind; int size; int fieldCount; };
 extern "C" int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap);
 extern "C" int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead *head, igDirectoryView *dir, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap);
 extern "C" int igObject_IsAlikeDeep(igObjectDispatchView *a, igObjectDispatchView *b);
-typedef int (*Visitor)(void *,void *,void *);
-extern "C" void igObject_VisitFields(igObjectDispatchView *object,Visitor callback,void *context);
 extern "C" void igObjectDirEntry_ReleaseDefaults(igObjectDirEntry *self);
 /* An igObjectList of igObjectDirEntry, or of such lists (an igIGBFile's _entryPool, one per type meta). */
 static inline igObjectDirEntry *objectDirEntryAt(const igObjectList *list, int index) { return ((igObjectDirEntry *const *)list->_data)[index]; }

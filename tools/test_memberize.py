@@ -180,6 +180,15 @@ class Memberize(unittest.TestCase):
         write(self.table, TABLE + "User_Count\tWidget::count\n")
         self.assertEqual(self.run_tool(), 2)
 
+    def test_a_static_inline_overload_forwarding_to_the_c_name_is_a_user(self):
+        path = os.path.join(self.root, "src", "game", "Game.h")
+        write(path, self.read("src/game/Game.h") + "static inline int Widget_GetCount(WidgetView *view) "
+              "{ return Widget_GetCount((Widget *)view); }\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        self.assertIn("static inline int Widget_GetCount(WidgetView *view) { return ((Widget *)view)->getCount(); }",
+                      self.read("src/game/Game.h"))
+        self.assertIn("int Widget::getCount() {", self.read("src/game/Widget.inc"))
+
     def test_a_virtual_function_is_never_called_through_the_vtable_by_its_c_name(self):
         write(os.path.join(self.root, "config", "class-members.tsv"),
               self.read("config/class-members.tsv") + "Widget\tvirtual void reset();\n")

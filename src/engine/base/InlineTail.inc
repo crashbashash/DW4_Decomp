@@ -1560,11 +1560,11 @@ void igItemDataBaseList_TrimCapacity(S_5 *arg0) {
     temp_s0 = arg0->f8;
     if (temp_s0 < arg0->fC) {
         if (temp_s0 != 0) {
-            arg0->f10 = (int)igObject_Reallocate((igObject *)arg0, (void *)arg0->f10, temp_s0 * 0xC);
+            arg0->f10 = (int)((Gap::Core::igObject *)arg0)->realloc((void *)arg0->f10, temp_s0 * 0xC);
             arg0->fC = temp_s0;
             return;
         }
-        igObject_FreeMemory((igObject *)arg0, (void *)arg0->f10);
+        ((Gap::Core::igObject *)arg0)->free((void *)arg0->f10);
         arg0->f10 = 0;
         arg0->fC = arg0->f8;
     }
@@ -1595,7 +1595,7 @@ void igItemDataBaseList_destructFields(S_6 *arg0) {
             }
             cap = (q != 0) ? c + ((q + 1) << 0xA) : c * 2;
         }
-        arg0->f10 = (unsigned int)igObject_Reallocate((igObject *)arg0, (void *)arg0->f10, cap * 0xC);
+        arg0->f10 = (unsigned int)((Gap::Core::igObject *)arg0)->realloc((void *)arg0->f10, cap * 0xC);
         arg0->fC = cap;
         arg0->f8 = 0;
     }

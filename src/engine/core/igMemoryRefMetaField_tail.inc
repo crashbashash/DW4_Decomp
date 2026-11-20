@@ -152,7 +152,7 @@ void igMemoryRefMetaField_Print(igMemoryRefMetaField *self, int object, int dept
             for (i = 0; i < (int)count; i++) {
                 int e = *(int *)(buffer + i * 4);
                 if (e != 0) {
-                    igObject_Print((void **)e, depth, indent);
+                    ((Gap::Core::igObject *)((void **)e))->printFields(depth, indent);
                 }
             }
         }
@@ -172,7 +172,7 @@ void igMemoryRefMetaField_ReleaseElements(igMemoryRefMetaField *self, int object
                 element = elements[i];
                 if (element != 0) {
                     element->TrimCapacity();
-                    igObject_VisitFields((igObjectDispatchView *)elements[i], (Visitor)visitor, (void *)context);
+                    ((Gap::Core::igObject *)elements[i])->traverseFields((Visitor)visitor, (void *)context);
                 }
             }
         }

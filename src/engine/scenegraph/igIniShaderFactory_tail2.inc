@@ -290,12 +290,12 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
             file.p->seek(0, 2);
             size = file.p->tell();
             file.p->seek(0, 0);
-            buffer = (char *)igObject_AllocateStorage((igObject *)self, size + 1);
+            buffer = (char *)((Gap::Core::igObject *)self)->malloc(size + 1);
             file.p->read(buffer, size, 1);
             file.p->close();
             buffer[size] = 0;
             igStringObj_Set((igStringObj *)result.p, buffer);
-            igObject_FreeMemory((igObject *)self, buffer);
+            ((Gap::Core::igObject *)self)->free(buffer);
             if (self->mode != 0) {
                 igObjectStringMap_Add((igObjectStringMap *)cache.p, (const char *)name, result.p);
             }

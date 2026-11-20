@@ -1456,6 +1456,8 @@ struct G_1b8de0 { char p0[8]; int f8; };
 struct Src_1b8de0 : V140 { char p0[24]; LA *list; };
 struct Dst_1b8de0 { char p0[52]; int f52; char p1[16]; LB *l72; };
 extern "C" void FUN_001b1aa0(igBillboard *billboard, float *matrix, const float *modelView, const float *view);
+/* Builds the billboard rotation in `matrix` from its up vector and the direction to the viewer. */
+extern "C" void FUN_001b1590(float *matrix, const float *up, const float *direction);
 
 typedef struct RC { int p0; unsigned refs; } RC;
 typedef struct G_1b8f20 { char p[8]; int f8; } G_1b8f20;
@@ -5534,12 +5536,12 @@ static inline void setAt(RemapObjectList *l, int i, RemapObject *v) {
 static inline void setCount_1bd890(RemapTable *t, unsigned int n) {
     if (t->_capacity < n) {
         if (t->_storage != 0) {
-            igObject_FreeMemory((igObject *)t, t->_storage);
+            ((Gap::Core::igObject *)t)->free(t->_storage);
         }
         if (t->_data != 0) {
-            igObject_FreeMemory((igObject *)t, t->_data);
+            ((Gap::Core::igObject *)t)->free(t->_data);
         }
-        t->_data = ((int *)igObject_AllocateStorage((igObject *)t, n * 4));
+        t->_data = ((int *)((Gap::Core::igObject *)t)->malloc(n * 4));
         t->_capacity = n;
     }
     t->_count = n;

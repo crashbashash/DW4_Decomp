@@ -50,7 +50,7 @@ void Gap__igPsx2AudioContext__vfunc_25(igPsx2AudioContext *context) {
         context->_connection = 0;
     }
     if (context->_batchMemory != 0) {
-        igObject_FreeMemory((igObject *)context, (void *)context->_batchMemory);
+        ((Gap::Core::igObject *)context)->free((void *)context->_batchMemory);
         context->_batchMemory = 0;
     }
 }
@@ -89,7 +89,7 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
     }
     arg1->conn = (struct InitRef *)igPsx2IopRpcConnection_Create(s0);
     igPsx2IopRpcConnection_Bind((igPsx2IopRpcConnectionView *)arg1->conn, 0x12111);
-    s0 = (int)igObject_MallocAligned((igObject *)arg1, 0x10, (unsigned short)0x10);
+    s0 = (int)((Gap::Core::igObject *)arg1)->mallocAligned(0x10, (unsigned short)0x10);
     buf = (int *)s0;
     buf[0] = arg1->f24;
     buf[1] = arg1->f32;
@@ -105,10 +105,10 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
     n = ((struct VoiceList *)g_audioTableOwner.p)->count;
     if (n != 0) memset((void *)((struct VoiceList *)g_audioTableOwner.p)->data, 0, n * 0x24);
     SendRpc(arg1->conn, 0x20000, s0, 0x10, 0, 0, 0);
-    igObject_FreeMemory((igObject *)arg1, (void *)s0);
+    ((Gap::Core::igObject *)arg1)->free((void *)s0);
     CallRpc(arg1->conn, 0x40000, 0x3FFF3FFFu, 0, 0);
     CallRpc(arg1->conn, 0x40001, 0x3FFF3FFF, 0, 0);
-    arg1->f40 = (int)igObject_MallocAligned((igObject *)arg1, 0x2000, (unsigned short)0x10);
+    arg1->f40 = (int)((Gap::Core::igObject *)arg1)->mallocAligned(0x2000, (unsigned short)0x10);
     DIntr();
     sceSifAddCmdHandler((unsigned int)3, (void (*)(void *, void *))FUN_00143800, (void *)0);
     EIntr();
@@ -225,8 +225,8 @@ void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, 
         *arg0 = g_resultFailure.v;
         return;
     }
-    p = (int *)(igObject_MallocAligned((igObject *)arg1, 16, (unsigned short)16));
-    q = (int *)(igObject_MallocAligned((igObject *)arg1, 16, (unsigned short)16));
+    p = (int *)(((Gap::Core::igObject *)arg1)->mallocAligned(16, (unsigned short)16));
+    q = (int *)(((Gap::Core::igObject *)arg1)->mallocAligned(16, (unsigned short)16));
     if (e->b2) {
         k = 4;
     } else if (e->b3) {
@@ -252,7 +252,7 @@ void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, 
     } else {
         igPsx2IopRpcConnection_Call((igPsx2IopRpcConnectionView *)arg1->h, arg2 | 0x70000, p, 16, q, 16, 0);
     }
-    igObject_FreeMemory((igObject *)arg1, (void *)p);
+    ((Gap::Core::igObject *)arg1)->free((void *)p);
     e->c4 = 1;
     v = *q;
     if (v != -1) {
@@ -264,10 +264,10 @@ void FUN_00144030(int *arg0, UploadContext *arg1, int arg2, int arg3, int arg4, 
         } else {
             e->b3 = 1;
         }
-        igObject_FreeMemory((igObject *)arg1, (void *)q);
+        ((Gap::Core::igObject *)arg1)->free((void *)q);
         *arg0 = g_resultSuccess.v;
     } else {
-        igObject_FreeMemory((igObject *)arg1, (void *)q);
+        ((Gap::Core::igObject *)arg1)->free((void *)q);
         *arg0 = g_resultFailure.v;
     }
 }

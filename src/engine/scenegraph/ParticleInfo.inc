@@ -385,8 +385,8 @@ void FUN_001d7910(void) {
     int n;
     int j;
     void **m;
-    igObject_Copy(DAT_005628e0[0], g_igCommonTraversal_travProcs, 1);
-    igObject_Copy(DAT_005628e8[0], g_igCommonTraversal_travProcs, 1);
+    ((Gap::Core::igObject *)DAT_005628e0[0])->copy((Gap::Core::igObject *)g_igCommonTraversal_travProcs, 1);
+    ((Gap::Core::igObject *)DAT_005628e8[0])->copy((Gap::Core::igObject *)g_igCommonTraversal_travProcs, 1);
     clearBytes((char *)metas, 28);
     metas[0] = ((void *)g_igLightStateSet_metaObject);
     metas[1] = ((void *)g_igEnvironmentMapShader2_metaObject);

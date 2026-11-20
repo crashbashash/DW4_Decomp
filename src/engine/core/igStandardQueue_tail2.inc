@@ -14,11 +14,11 @@ void igStandardQueue_ReleaseDefaults(igStandardQueueView *self) {
 }
 
 void igStandardQueue_Create(igStandardQueue *self) {
-    self->_data = (int)igObject_AllocateStorage((igObject *)self, self->_capacity * 4);
+    self->_data = (int)((Gap::Core::igObject *)self)->malloc(self->_capacity * 4);
 }
 
 void igStandardQueue_Destroy(igStandardQueue *self) {
-    igObject_FreeMemory((igObject *)self, (void *)self->_data);
+    ((Gap::Core::igObject *)self)->free((void *)self->_data);
     self->_data = 0;
 }
 
@@ -88,7 +88,7 @@ void igStandardQueue_Resize(igStandardQueueView *queue, int capacity) {
     unsigned a2;
     unsigned v0;
     if (capacity != queue->_capacity) {
-        s0 = (int)igObject_AllocateStorage((igObject *)queue, capacity * 4);
+        s0 = (int)((Gap::Core::igObject *)queue)->malloc(capacity * 4);
         a2 = queue->_removeElement;
         v0 = queue->_insertElement;
         if (a2 < v0) {
@@ -98,7 +98,7 @@ void igStandardQueue_Resize(igStandardQueueView *queue, int capacity) {
             memmove((void *)s0, (void *)(int)(queue->_data + a2), s3);
             memmove((void *)(s0 + s3), (void *)(int)queue->_data, queue->_insertElement * 4);
         }
-        igObject_FreeMemory((igObject *)queue, (void *)queue->_data);
+        ((Gap::Core::igObject *)queue)->free((void *)queue->_data);
         queue->_data = (int *)s0;
         queue->_insertElement = queue->GetCount();
         queue->_removeElement = 0;

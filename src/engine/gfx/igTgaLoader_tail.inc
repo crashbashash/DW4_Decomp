@@ -18,11 +18,11 @@ int FUN_001682e0(S_1682e0 *arg0, int arg1) {
         }
         arg0->f8 = 0;
     }
-    igObject_FreeMemory((igObject *)arg0, (void *)arg0->f12);
+    ((Gap::Core::igObject *)arg0)->free((void *)arg0->f12);
     arg0->f12 = 0;
-    igObject_FreeMemory((igObject *)arg0, (void *)arg0->f16);
+    ((Gap::Core::igObject *)arg0)->free((void *)arg0->f16);
     arg0->f16 = 0;
-    igObject_FreeMemory((igObject *)arg0, (void *)arg0->f20);
+    ((Gap::Core::igObject *)arg0)->free((void *)arg0->f20);
     arg0->f20 = 0;
     arg0->f24 = 0;
     arg0->f28 = 0;

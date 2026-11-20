@@ -186,7 +186,7 @@ int FUN_001c5730(int *p, igObject *object)
 
 void FUN_001c5740(U_1c5740 *arg0, T_1c5740 *arg1) {
     ((DW4VC_72_0 *)(arg1->f))->vX();
-    igObject_Copy((igObject *)arg0->f, (igObject *)arg1->f, 0);
+    ((Gap::Core::igObject *)arg0->f)->copy((Gap::Core::igObject *)arg1->f, 0);
 }
 
 void igGraphPath_SetNodes(igGraphPath *path, igNodeList *nodes) {

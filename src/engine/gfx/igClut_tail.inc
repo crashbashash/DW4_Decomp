@@ -8,14 +8,14 @@ int Gap__Gfx__igClut__vfunc_25(struct S_154980 *arg0, int arg1, int arg2, int ar
         return 1;
     }
     if (arg0->f20 != 0) {
-        igObject_FreeMemory((igObject *)arg0, (void *)arg0->f20);
+        ((Gap::Core::igObject *)arg0)->free((void *)arg0->f20);
     }
     arg0->f8 = arg1;
     arg0->f12 = arg2;
     FUN_00154b80(arg1, arg2, &sp5C, &sp58);
     arg0->f24 = sp5C;
     arg0->f16 = sp58;
-    arg0->f20 = (int)igObject_MallocAligned((igObject *)arg0, arg0->f24, 0x80);
+    arg0->f20 = (int)((Gap::Core::igObject *)arg0)->mallocAligned(arg0->f24, 0x80);
     if (arg3 != 0) {
         memcpy((void *)arg0->f20, (void *)arg3, clutSize(arg0));
     } else {
@@ -90,7 +90,7 @@ void FUN_00154c90(igClut *arg0, igClut *arg1, int arg2) {
     if (arg0 != arg1) {
         temp_a1 = arg0->_pData;
         if (temp_a1 != 0) {
-            igObject_FreeMemory((igObject *)arg0, (void *)temp_a1);
+            ((Gap::Core::igObject *)arg0)->free((void *)temp_a1);
             arg0->_pData = 0;
         }
         arg0->_fmt = arg1->_fmt;
@@ -99,7 +99,7 @@ void FUN_00154c90(igClut *arg0, igClut *arg1, int arg2) {
         arg0->_clutSize = arg1->_clutSize;
         arg0->_isAlphaScaled = arg1->_isAlphaScaled;
         if (arg2 != 0) {
-            arg0->_pData = (int)igObject_MallocAligned(arg0, arg0->_clutSize, 0x80);
+            arg0->_pData = (int)((Gap::Core::igObject *)arg0)->mallocAligned(arg0->_clutSize, 0x80);
             sz = arg0->_clutSize;
             memcpy((void *)arg0->_pData, (void *)arg1->_pData, sz);
         }
@@ -140,14 +140,14 @@ void igClut_ReleaseDefaults(S0 *arg0) {
 
     temp_a1 = arg0->f14;
     if (temp_a1 != 0) {
-        igObject_FreeMemory((igObject *)arg0, (void *)temp_a1);
+        ((Gap::Core::igObject *)arg0)->free((void *)temp_a1);
         arg0->f14 = 0;
     }
 }
 
 void FUN_00154e40(S0_154e40 *arg0, int arg1) {
     if (arg1 != arg0->fC) {
-        arg0->f14 = (int)igObject_ReallocateAligned((igObject *)arg0, (void *)arg0->f14, arg1 * arg0->f10, 0x80);
+        arg0->f14 = (int)((Gap::Core::igObject *)arg0)->reallocAligned((void *)arg0->f14, arg1 * arg0->f10, 0x80);
         arg0->fC = arg1;
         arg0->f18 = (int)((int) (arg1 * arg0->f10));
     }
@@ -179,12 +179,12 @@ int FUN_00154f30(Arr *self, int arg1) {
     if (g_useOwnerAllocator != 0) { b = a; } else { b = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary); } a = b;
     igSmartPointer<DW4VC_100_2> h((DW4VC_100_2 *)igFile_Create(a), kRetainReference);
     { DW4VC_100_2 *x = h.p; --x->_refCount; if ((x->_refCount & 0x7fffff) == 0) igObject_Destroy(x); }
-    if (self->a20 != 0) igObject_FreeMemory((igObject *)self, self->a20);
+    if (self->a20 != 0) ((Gap::Core::igObject *)self)->free(self->a20);
     self->a20 = 0;
     if (h.p->vX(arg1, (int)"rb") == 0) {
         return 0;
     }
-    self->a20 = (void *)igObject_MallocAligned((igObject *)self, 0x400, 0x80);
+    self->a20 = (void *)((Gap::Core::igObject *)self)->mallocAligned(0x400, 0x80);
     p = (int *)self->a20;
     i = 0;
     do {

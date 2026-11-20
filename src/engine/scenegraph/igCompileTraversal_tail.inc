@@ -428,9 +428,9 @@ int igCompileTraversal_TraverseBlendMatrixSelect(A_1bcf70 *arg0, B_1bcf70 *arg1)
     if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy((igObject *)o);
     unsigned int n = arg1->f40->count;
     if (o->f24 < n) {
-        if (o->f12 != 0) igObject_FreeMemory((igObject *)o, (void *)o->f12);
-        if (o->f16 != 0) igObject_FreeMemory((igObject *)o, o->f16);
-        o->f16 = ((int *)igObject_AllocateStorage((igObject *)o, n * 4));
+        if (o->f12 != 0) ((Gap::Core::igObject *)o)->free((void *)o->f12);
+        if (o->f16 != 0) ((Gap::Core::igObject *)o)->free(o->f16);
+        o->f16 = ((int *)((Gap::Core::igObject *)o)->malloc(n * 4));
         o->f24 = n;
     }
     o->f20 = n;

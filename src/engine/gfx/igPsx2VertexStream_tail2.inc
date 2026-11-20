@@ -16,7 +16,7 @@ void igPsx2VertexStream_UserWriteFilePreProcess(S0_17f630 *arg0) {
     if (arg0->f10 != 0) {
         temp_a0 = arg0->f80;
         if ((temp_a0 != 0) && ((temp_a1 = arg0->f18, (temp_a1 == 3)) || (temp_a1 == 2)) && (arg0->f84 == 0)) {
-            arg0->f84 = (int)igObject_MallocAligned((igObject *)arg0, p2GetDisplayListSize((p2DisplayList *)temp_a0), 0x10);
+            arg0->f84 = (int)((Gap::Core::igObject *)arg0)->mallocAligned(p2GetDisplayListSize((p2DisplayList *)temp_a0), 0x10);
             p2CopyDisplayListData((p2DisplayList *)arg0->f80, (char *)arg0->f84);
             arg0->f88 = (int)p2CopyDisplayList((p2DisplayList *)arg0->f80);
         }

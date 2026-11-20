@@ -506,8 +506,6 @@ static inline float dotv(V2 a, V2 b) { return a.x * b.x + a.y * b.y + a.z * b.z;
 static inline float madd_(float o, float t, float d) { return o + t * d; }
 struct Ray { char pad[8]; V2 o; V2 d; float maxT; };
 
-void FUN_00192dd0(float *arg0, float *arg1, float *arg2);
-
 static inline float dot(const V2 *a, const V2 *b) { return a->x * b->x + a->y * b->y + a->z * b->z; }
 static inline float dot3(float ax, float ay, float az, float bx, float by, float bz) { return ax * bx + ay * by + az * bz; }
 static inline float lerp(float o, float t, float d) { float m = t * d; return o + m; }

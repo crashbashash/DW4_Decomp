@@ -132,7 +132,7 @@ void igObjectRefMetaField_ShallowCopy(igObjectRefMetaField *self, int dst, int s
     from = *(igObjectDispatchView **)(src + off);
     if ((to != 0) || (from != 0)) {
         if ((to != 0) && (from != 0)) {
-            igObject_ShallowCopy((igObjectDispatchView *)to, (int)from);
+            ((Gap::Core::igObject *)to)->copyShallow((int)from);
             return;
         }
         if (to == 0) {
@@ -167,7 +167,7 @@ void igObjectRefMetaField_Print(igObjectRefMetaField *self, char *object, int de
     if (depth != 0) {
         void **referenced = *(void ***)(object + self->_offset);
         if (referenced != 0) {
-            igObject_Print(referenced, depth, (int)indent);
+            ((Gap::Core::igObject *)referenced)->printFields(depth, (int)indent);
         }
     }
 }
@@ -177,7 +177,7 @@ void igObjectRefMetaField_ReleaseElements(igObjectRefMetaField *self, int object
 
     child = *(int *)(object + self->_offset);
     if (child != 0) {
-        igObject_VisitFields((igObjectDispatchView *)child, (int (*)(void *, void *, void *))visitor, (void *)context);
+        ((Gap::Core::igObject *)child)->traverseFields((int (*)(void *, void *, void *))visitor, (void *)context);
     }
 }
 
@@ -202,7 +202,7 @@ int igObjectRefMetaField_IsAlikeExactly(igObjectRefMetaField *self, int objectA,
     if ((refA == 0) || (refB == 0)) {
         return 0;
     }
-    return igObject_IsAlikeExactly((void *)refA, (void *)refB);
+    return ((Gap::Core::igObject *)refA)->isAlikeExactly((void *)refB);
 }
 
 int igObjectRefMetaField_IsAlikeDeep(igObjectRefMetaField *self, int objectA, int objectB) {

@@ -269,7 +269,7 @@ int igDirectory_AddObjectRecursive(int directory, int object, int name, int extr
     int index;
 
     if (object != 0) {
-        igObject_VisitFields((igObjectDispatchView *)object, (int (*)(void *, void *, void *))&igDirectory_AddObjectCallback, (void *)directory);
+        ((Gap::Core::igObject *)object)->traverseFields((int (*)(void *, void *, void *))&igDirectory_AddObjectCallback, (void *)directory);
         index = igDirectory_FindSortedInsertIndex((igDirectoryView *)directory, (igMetaField *)g_igDirEntry_refField, object);
         igNamedObject_SetName((igNamedObject *)(igDirectory_GetEntry((int *)directory, index)), (const char *)name);
         return index;

@@ -678,6 +678,9 @@ class Planner:
         return out
 
     def plan_file_scope(self, fr, conv, pos, end, c_side, cxx_side):
+        if conv.kind == "func" and any(name == conv.cname and start <= pos < fr.head_end(start)
+                                       for name, start, _end in fr.defs):
+            return                                       # a definition's head (plan_definition)
         stmt_start = _statement_start(fr.clean, pos)
         head = fr.clean[stmt_start:pos]
         nxt = re.compile(r"\s*(\S?)").match(fr.clean, end).group(1)
@@ -725,6 +728,9 @@ class Planner:
             brace = fr.head_end(start)
             head = fr.clean[start:brace]
             if re.search(r"\bstatic\b", head[:declarations._first_paren(head)]):
+                if re.search(r"\binline\b", head[:declarations._first_paren(head)]) and \
+                        re.search(r"\b%s\s*\(" % re.escape(conv.cname), fr.clean[brace:end]):
+                    continue                             # a C++ overload forwarding to the C name: one of its users
                 raise Refused("%s: %s is a file-scope static: it stays a free function" % (fr.rel, conv.cname))
             if conv.inline or conv.implicit:
                 p = declarations._first_paren(head)

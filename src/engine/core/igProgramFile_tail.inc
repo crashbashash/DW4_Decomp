@@ -97,7 +97,7 @@ void igProgramFile_Load(int *result, ProgramFileView *self, int offset, int size
         return;
     }
     if (*dest == 0) {
-        *dest = (void *)igObject_AllocateStorage((igObject *)self, size);
+        *dest = (void *)((Gap::Core::igObject *)self)->malloc(size);
         if (*dest == 0) {
             igReport_Printf("Error allocating buffer size 0x%x in: %s\n", size, self->path);
             igReport_Flush();

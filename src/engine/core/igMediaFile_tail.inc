@@ -119,7 +119,7 @@ void igMediaFile_Close(igMediaFileView *self) {
         REL(media)
         self->_media = 0;
         self->_fileHandle = -1;
-        igObject_FreeMemory((igObject *)self, (void *)self->_fBuf);
+        ((Gap::Core::igObject *)self)->free((void *)self->_fBuf);
         self->_fBuf = 0;
         self->_bufSize = 0;
         self->_bufPos = 0;
@@ -200,9 +200,9 @@ void igMediaFile_SetFileSize(igMediaFileView *self, int size) {
         }
         buffer = (int)self->_fBuf;
         if (buffer != 0) {
-            storage = (int)igObject_Reallocate((igObject *)self, (void *)buffer, capacity);
+            storage = (int)((Gap::Core::igObject *)self)->realloc((void *)buffer, capacity);
         } else {
-            storage = (int)igObject_AllocateStorage((igObject *)self, capacity);
+            storage = (int)((Gap::Core::igObject *)self)->malloc(capacity);
         }
         self->_fBuf = (unsigned char *)storage;
         self->_bufSize = capacity;

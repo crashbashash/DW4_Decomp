@@ -5,7 +5,7 @@ int igDataList_GetElementSize(void) {
 void List_Reserve(igDataList *list, int capacity, int elementSize) {
     int allocResult;
     if (capacity == 0) {
-        igObject_FreeMemory((igObject *)list, (void *)list->_data);
+        ((Gap::Core::igObject *)list)->free((void *)list->_data);
         list->_data = 0;
     } else {
         int oldData = list->_data;
@@ -16,7 +16,7 @@ void List_Reserve(igDataList *list, int capacity, int elementSize) {
             int oldCapacity = list->_capacity;
             int copyCount = (oldCapacity < capacity) ? oldCapacity : capacity;
             memcpy((void *)list->_data, (void *)oldData, copyCount * elementSize);
-            igObject_FreeMemory((igObject *)list, (void *)oldData);
+            ((Gap::Core::igObject *)list)->free((void *)oldData);
         }
     }
     list->_capacity = capacity;

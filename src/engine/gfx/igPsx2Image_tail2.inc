@@ -179,7 +179,7 @@ int Gap__Gfx__igPsx2Image__vfunc_40(Img_16e8f0 *p, Strm *s) {
     p->f84 = 0;
     s->Read(&b, 4, 1);
     s->Read(&b, 4, 1);
-    p->f52 = (int)igObject_MallocAligned((igObject *)p, p->f48, 0x80);
+    p->f52 = (int)((Gap::Core::igObject *)p)->mallocAligned(p->f48, 0x80);
     p->f60 = 1;
     s->Read((void *)p->f52, 1, p->f48);
     s->d24();
@@ -230,7 +230,7 @@ int Gap__Gfx__igPsx2Image__vfunc_44(Img_16ece0 *arg0, Strm_16ece0 *arg1) {
     arg1->v25((char *)arg0 + 8, 4, 1);
     arg1->v25((char *)arg0 + 12, 4, 1);
     arg0->f20 = 1;
-    arg0->f52 = (int)igObject_MallocAligned((igObject *)arg0, arg0->f48, 0x80);
+    arg0->f52 = (int)((Gap::Core::igObject *)arg0)->mallocAligned(arg0->f48, 0x80);
     arg0->f60 = 1;
     arg1->v25((void *)arg0->f52, 1, arg0->f48);
     arg1->v24();

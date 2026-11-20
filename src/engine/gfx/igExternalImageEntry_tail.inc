@@ -29,15 +29,15 @@ int FUN_001551f0(S_1551f0 *arg0, V_1551f0 *arg1) {
         n2 = n + strlen((char *)"/");
         tot = strlen(s1);
         tot = tot + n2;
-        buf = (char *)igObject_AllocateStorage((igObject *)arg0, tot + 1);
+        buf = (char *)((Gap::Core::igObject *)arg0)->malloc(tot + 1);
         strcpy(buf, arg0->f40);
         strcat(buf, (char *)"/");
         strcat(buf, arg0->f32);
         if (arg1->vX(buf) == 0) {
-            igObject_FreeMemory((igObject *)arg0, buf);
+            ((Gap::Core::igObject *)arg0)->free(buf);
             return 0;
         }
-        igObject_FreeMemory((igObject *)arg0, buf);
+        ((Gap::Core::igObject *)arg0)->free(buf);
     }
     return 1;
 }

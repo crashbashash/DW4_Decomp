@@ -12,6 +12,9 @@ struct igObject;
 struct igMetaObject;
 struct igMemoryPoolView;
 struct CallbackArray;
+/* igObject::traverseFields' callback: (object, field or 0 for the object itself, context); a 1 for the object
+ * ends the walk, a 1 for a field skips that field's elements. */
+typedef int (*Visitor)(void *, void *, void *);
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,13 +40,6 @@ void igObject_UserPostLoad(void);
 int Memory_FreeBufferAliasC(void *block);
 
 struct igMemoryPoolView *igObject_GetAllocator(struct igObject *object);
-void *igObject_AllocateStorage(struct igObject *object, int size);
-void *igObject_Callocate(struct igObject *object, int count, int size);
-void *igObject_Reallocate(struct igObject *object, void *storage, int size);
-void *igObject_ReallocateAligned(struct igObject *object, void *storage, int size, unsigned short alignment);
-void *igObject_MallocAligned(struct igObject *object, int size, unsigned short alignment);
-void igObject_FreeMemory(struct igObject *object, void *storage);
-void igObject_Copy(struct igObject *dest, struct igObject *source, int copyMode);
 void igObject_DeepCopy(struct igObjectDispatchView *self, struct igObjectDispatchView *source);
 int igObject_GetFieldValueByName(void **self, int name);
 void igObject_ResetFields(struct igObjectDispatchView *object);

@@ -356,7 +356,7 @@ int igCompoundMetaField_ValueToString(igStringRef *out, igMetaFieldView *ctx, in
     char *sepB = (char *)" } ";
     igMetaFieldList *list = (igMetaFieldList *)ctx->GetDescriptor()->_fieldList;
     int n = list->_count;
-    igStringRef *arr = (igStringRef *)((void *)igObject_Callocate((igObject *)ctx, n, 4));
+    igStringRef *arr = (igStringRef *)((void *)((Gap::Core::igObject *)ctx)->calloc(n, 4));
     int total = 9;
     int i;
     for (i = 0; i < n; i++) {
@@ -365,7 +365,7 @@ int igCompoundMetaField_ValueToString(igStringRef *out, igMetaFieldView *ctx, in
         *(igStringRef *)((char *)arr + off) = e->ValueToString(a2 + ((igMetaField *)e)->_offset, a3);
         total += strlen(((igStringRef *)((char *)arr + off))->p) + 1;
     }
-    char *buf = ((char *)igObject_AllocateStorage((igObject *)ctx, total));
+    char *buf = ((char *)((Gap::Core::igObject *)ctx)->malloc(total));
     strcpy(buf, sepA);
     char *p = buf + 4;
     buf[3] = 0x20;
@@ -377,7 +377,7 @@ int igCompoundMetaField_ValueToString(igStringRef *out, igMetaFieldView *ctx, in
     }
     strcpy(p, sepB);
     igStringRef res(buf);
-    igObject_FreeMemory((igObject *)ctx, (void *)buf);
+    ((Gap::Core::igObject *)ctx)->free((void *)buf);
     out->p = res.p;
     if (out->p != 0) *(int *)(out->p - 4) = *(int *)(out->p - 4) + 1;
     return 0;

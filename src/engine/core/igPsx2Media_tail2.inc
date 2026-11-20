@@ -44,8 +44,8 @@ void Gap__Core__igPsx2Media__constructFields(igPsx2MediaView *self, int extra1) 
     MediaHandlePool *pool;
 
     Gap__Core__igObject__constructFields((igObject *)self, extra1);
-    self->_headAndTailBuffer = (char *)igObject_MallocAligned((igObject *)self, 0x80, 0x40);
-    self->_commandBuffer = (MediaIoRequest *)igObject_MallocAligned((igObject *)self, 0x90, 0x10);
+    self->_headAndTailBuffer = (char *)((Gap::Core::igObject *)self)->mallocAligned(0x80, 0x40);
+    self->_commandBuffer = (MediaIoRequest *)((Gap::Core::igObject *)self)->mallocAligned(0x90, 0x10);
     buffer = (int)self->_headAndTailBuffer;
     SyncDCache((void *)buffer, (void *)(buffer + 0x80));
     pool = ((MediaHandlePool *)Memory_AllocateDefaultBuffer(0x10));
@@ -351,7 +351,7 @@ int igPsx2Media_Write(igPsx2MediaView *self, int slot, char *data, int size) {
     reply = &request->kind;
     if ((int)data & 0x3F) {
         if (self->_writeBuffer == 0) {
-            self->_writeBuffer = (char *)igObject_MallocAligned((igObject *)self, 0x8000, 0x40);
+            self->_writeBuffer = (char *)((Gap::Core::igObject *)self)->mallocAligned(0x8000, 0x40);
         }
         row = slot * 3 * 4;
         left = size;

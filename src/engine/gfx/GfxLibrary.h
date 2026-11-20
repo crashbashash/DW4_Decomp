@@ -1195,7 +1195,7 @@ extern "C" int FUN_001592b0(void);
 typedef struct LongListStorageView {
     char pad52[52];
     int buffer;                 /* +0x34: block returned to Memory_FreeBuffer */
-    int storage;                /* +0x38: block released with igObject_FreeMemory */
+    int storage;                /* +0x38: block released with Gap::Core::igObject::free */
     unsigned char ownsBuffer;   /* +0x3C: nonzero when buffer must be freed */
 } LongListStorageView;
 extern "C" void FUN_001592c0(LongListStorageView *self);
