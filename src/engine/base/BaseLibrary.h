@@ -692,8 +692,8 @@ static inline int *castToType(int *object) {
     return 0;
 }
 static inline void * cast0_5(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Core::igRawRefMetaField::getClassMeta()) != 0) { return o; } return 0; }
-static inline void * cast0_6(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igObjectRefMetaField_metaObject) != 0) { return o; } return 0; }
-static inline void * cast0_7(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igMemoryRefMetaField_metaObject) != 0) { return o; } return 0; }
+static inline void * cast0_6(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Core::igObjectRefMetaField::getClassMeta()) != 0) { return o; } return 0; }
+static inline void * cast0_7(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Core::igMemoryRefMetaField::getClassMeta()) != 0) { return o; } return 0; }
 static inline void * cast0_8(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Core::igFloatMetaField::getClassMeta()) != 0) { return o; } return 0; }
 static inline void * cast0_9(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Core::igCharMetaField::getClassMeta()) != 0) { return o; } return 0; }
 static inline void * cast0_10(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Core::igBoolMetaField::getClassMeta()) != 0) { return o; } return 0; }

@@ -386,3 +386,88 @@ igRawRefMetaField	IG_METAFIELD_SETUP(igRawRefMetaField)
 igRawRefMetaField	virtual unsigned short computeSize();
 igRawRefMetaField	virtual void print(const igObject *src, unsigned int deep, const char *indent);
 igRawRefMetaField	virtual int addToDirectory(igObject *obj, igDirectory *dir);
+igEnumArrayMetaField	IG_OBJECT_DEFINE(igEnumArrayMetaField)
+igEnumArrayMetaField	IG_METAFIELD_SETUP(igEnumArrayMetaField)
+igEnumArrayMetaField	private: static igMetaField *k_num;
+igEnumArrayMetaField	inline void setNum(int numParam) { _num = numParam; }
+igEnumArrayMetaField	inline int getNum() const { return _num; }
+igEnumArrayMetaField	virtual unsigned short computeSize();
+igEnumArrayMetaField	virtual void endianSwapMemory(void *mem, int num) const;
+igEnumArrayMetaField	void setDefault(int val);
+igRawRefArrayMetaField	IG_OBJECT_DEFINE(igRawRefArrayMetaField)
+igRawRefArrayMetaField	IG_METAFIELD_SETUP(igRawRefArrayMetaField)
+igRawRefArrayMetaField	private: static igMetaField *k_num;
+igRawRefArrayMetaField	inline void setNum(int numParam) { _num = numParam; }
+igRawRefArrayMetaField	inline int getNum() const { return _num; }
+igRawRefArrayMetaField	virtual unsigned short computeSize();
+igRawRefArrayMetaField	virtual void endianSwapMemory(void *mem, int num) const;
+igRawRefArrayMetaField	virtual int readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const;
+igRawRefArrayMetaField	virtual int writeRawFieldMemory(const void *fieldMem, void *dstMem, igDirectory *dir, bool endianSwap) const;
+igObjectRefMetaField	IG_BOOTSTRAP_OBJECT_DEFINE(igObjectRefMetaField)
+igObjectRefMetaField	IG_METAFIELD_SETUP(igObjectRefMetaField)
+igObjectRefMetaField	protected: static igMetaField *k_metaObject;
+igObjectRefMetaField	protected: static igMetaField *k_refCounted;
+igObjectRefMetaField	protected: static igMetaField *k_poolName;
+igObjectRefMetaField	inline void setRefCounted(bool refCountedParam) { _refCounted = refCountedParam; }
+igObjectRefMetaField	inline bool getRefCounted() const { return _refCounted; }
+igObjectRefMetaField	virtual unsigned short computeSize();
+igObjectRefMetaField	virtual void construct(igObject *src);
+igObjectRefMetaField	virtual void destruct(igObject *src);
+igObjectRefMetaField	virtual void decommission(igObject *src);
+igObjectRefMetaField	virtual int readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const;
+igObjectRefMetaField	virtual void resetByValue(igObject *src);
+igObjectRefMetaField	virtual void resetByReference(igObject *src);
+igObjectRefMetaField	virtual void copyByReference(igObject *dst, const igObject *src);
+igObjectRefMetaField	virtual void copyByValue(igObject *dst, const igObject *src);
+igObjectRefMetaField	virtual void copyByValueShallow(igObject *dst, const igObject *src);
+igObjectRefMetaField	virtual int compare(const igObject *obj1, const igObject *obj2) const;
+igObjectRefMetaField	virtual int isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const;
+igObjectRefMetaField	virtual int isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const;
+igObjectRefMetaField	virtual int isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const;
+igObjectRefMetaField	virtual void copyByReset(igObject *dst, const igObject *src);
+igObjectRefMetaField	virtual void print(const igObject *src, unsigned int deep, const char *indent);
+igObjectRefMetaField	virtual void traverse(igObject *obj, void *visitFunc, void *traversalData);
+igObjectRefMetaField	virtual void releaseDefaults();
+igObjectRefMetaField	virtual void initDefaults();
+igObjectRefMetaField	void set(igObject *obj, igObject *val) const;
+igObjectRefMetaField	virtual void setFromMemory(igObject *object, const void *fieldStorage);
+igObjectRefMetaField	void setDefault(igObject *val);
+igMemoryRefMetaField	IG_BOOTSTRAP_OBJECT_DEFINE(igMemoryRefMetaField)
+igMemoryRefMetaField	IG_METAFIELD_SETUP(igMemoryRefMetaField)
+igMemoryRefMetaField	private: static igMetaField *k_shallowCopyMethod;
+igMemoryRefMetaField	private: static igMetaField *k_memSize;
+igMemoryRefMetaField	private: static igMetaField *k_memType;
+igMemoryRefMetaField	private: static igMetaField *k_releaseOnCopy;
+igMemoryRefMetaField	private: static igMetaField *k_releaseOnReset;
+igMemoryRefMetaField	private: static igMetaField *k_resetMethod;
+igMemoryRefMetaField	private: static igMetaField *k_refCounted;
+igMemoryRefMetaField	private: static igMetaField *k_alignmentType;
+igMemoryRefMetaField	private: static igMetaField *k_memTypeRef;
+igMemoryRefMetaField	protected: static igMetaField *k_poolName;
+igMemoryRefMetaField	inline void setMemSize(int memSizeParam) { _memSize = memSizeParam; }
+igMemoryRefMetaField	inline int getMemSize() const { return _memSize; }
+igMemoryRefMetaField	inline void setReleaseOnCopy(bool releaseOnCopyParam) { _releaseOnCopy = releaseOnCopyParam; }
+igMemoryRefMetaField	inline bool getReleaseOnCopy() const { return _releaseOnCopy; }
+igMemoryRefMetaField	inline void setReleaseOnReset(bool releaseOnResetParam) { _releaseOnReset = releaseOnResetParam; }
+igMemoryRefMetaField	inline bool getReleaseOnReset() const { return _releaseOnReset; }
+igMemoryRefMetaField	inline void setRefCounted(bool refCountedParam) { _refCounted = refCountedParam; }
+igMemoryRefMetaField	inline bool getRefCounted() const { return _refCounted; }
+igMemoryRefMetaField	virtual unsigned short computeSize();
+igMemoryRefMetaField	void setPool(const char *poolName);
+igMemoryRefMetaField	const char *getPool();
+igMemoryRefMetaField	virtual int readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const;
+igMemoryRefMetaField	virtual void resetByValue(igObject *src);
+igMemoryRefMetaField	virtual void construct(igObject *src);
+igMemoryRefMetaField	virtual void destruct(igObject *src);
+igMemoryRefMetaField	virtual void copyByValue(igObject *dst, const igObject *src);
+igMemoryRefMetaField	virtual void copyByValueShallow(igObject *dst, const igObject *src);
+igMemoryRefMetaField	virtual void print(const igObject *src, unsigned int deep, const char *indent);
+igMemoryRefMetaField	virtual void traverse(igObject *obj, void *visitFunc, void *traversalData);
+igMemoryRefMetaField	virtual int addToDirectory(igObject *obj, igDirectory *dir);
+igMemoryRefMetaField	virtual int isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const;
+igMemoryRefMetaField	virtual int isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const;
+igMemoryRefMetaField	virtual int isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const;
+igMemoryRefMetaField	void setDefault(void *val);
+igMemoryRefMetaField	void setAlignmentType(const char *alignment);
+igMemoryRefMetaField	private: void refObjects(igObject *obj);
+igMemoryRefMetaField	private: void releaseObjects(igObject *obj);

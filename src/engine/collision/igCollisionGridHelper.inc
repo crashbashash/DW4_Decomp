@@ -106,7 +106,7 @@ void igCollisionGridHelper_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igCollisionGrid_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)(igMetaObject_GetOrCreateMetaObject());
-    igObjectRefMetaField_SetDefault((igObjectRefMetaField *)temp_s1_2, (igObject *)igCollisionGroup_GetMetaObject());
+    ((Gap::Core::igObjectRefMetaField *)temp_s1_2)->setDefault((Gap::Core::igObject *)igCollisionGroup_GetMetaObject());
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCollisionGridHelper_fieldTable, g_igCollisionGridHelper_fieldHandles, g_igCollisionGridHelper_fieldOffsets, temp_s2);
 }
 

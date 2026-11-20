@@ -4,3 +4,6 @@
 igRenderer	_visualContext	igSmartPointer<igVisualContext>
 igIGBFile	_endianSwap	bool
 igMetaField	_fieldName	igStringRef
+igObjectRefMetaField	_poolName	igStringRef
+igMemoryRefMetaField	_memTypeRef	igSmartPointer< ::igMetaField>
+igMemoryRefMetaField	_poolName	igStringRef

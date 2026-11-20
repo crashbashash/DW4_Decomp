@@ -209,7 +209,7 @@ void igMemoryDirEntry_ResolveMemory(igMemoryDirEntryView *self, igIGBFileView *r
         int count = self->_memSize / esize;
         int base = self->_ref;
         unsigned char saved = 0;
-        int isSwap = ((Gap::Core::igObject *)f)->isOfType((igMetaObject *)g_igObjectRefMetaField_metaObject) & 0xff;
+        int isSwap = ((Gap::Core::igObject *)f)->isOfType((igMetaObject *)Gap::Core::igObjectRefMetaField::getClassMeta()) & 0xff;
         int i;
         if (isSwap != 0) {
             saved = ((igObjectRefMetaField *)f)->_refCounted;

@@ -211,7 +211,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Core::igUnsignedCharArrayMetaField::arkRegister();
     igStringArrayMetaField_EnsureRegistered();
     Gap::Core::igShortArrayMetaField::arkRegister();
-    igRawRefArrayMetaField_EnsureRegistered();
+    Gap::Core::igRawRefArrayMetaField::arkRegister();
     igObjectStringMap_EnsureRegistered();
     igNamedObjectList_EnsureRegistered();
     igObjectRefArrayMetaField_EnsureRegistered();
@@ -220,7 +220,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igMemoryFileEntryList_EnsureRegistered();
     Gap::Core::igLongArrayMetaField::arkRegister();
     Gap::Core::igFloatArrayMetaField::arkRegister();
-    igEnumArrayMetaField_EnsureRegistered();
+    Gap::Core::igEnumArrayMetaField::arkRegister();
     Gap::Core::igDoubleMetaField::arkRegister();
     Gap::Core::igDoubleArrayMetaField::arkRegister();
     igDependencyMetaField_EnsureRegistered();

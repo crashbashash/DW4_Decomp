@@ -136,7 +136,20 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `convertMemoryToString`/`convertStringToMemory`, `compare`) and `igRawRefMetaField` (`print`,
    `addToDirectory`) are converted; igMetaField's `convertMemoryToString` takes the kit's `hdr` and
    `fieldIndent` and its `compare` returns `int` (`!isAlikeExactly(...)`), so igRefMetaField overrides them;
-   startup stores the reference descriptor with `igRefMetaField::setMetaField(igRawRefMetaField::getMetaField())`;
+   startup stores the reference descriptor with `igRefMetaField::setMetaField(igRawRefMetaField::getMetaField())`.
+   Their arrays `igEnumArrayMetaField` (the kit's `setDefault(igEnum)` filling every element) and
+   `igRawRefArrayMetaField` (whose `readRawFieldMemory`/`writeRawFieldMemory` loop over the elements through
+   `igRawRefMetaField::`'s versions, called non-virtually) are converted as the scalar arrays are.
+   `igObjectRefMetaField` (bootstrap; protected `k_metaObject`/`k_refCounted`/`k_poolName`, `_poolName` an
+   `igStringRef` under C++ so the implicit destructor releases it, the kit's `set`/`setDefault(igObject *)`
+   with the reference counting `_refCounted || _destruct` asks for, and its slot overrides: `computeSize`,
+   the construct/destruct/reset/copy/compare/isAlike family, `print`, `traverse`, `readRawFieldMemory`,
+   `initDefaults`/`releaseDefaults`) is converted. `igMemoryRefMetaField` (bootstrap; `_memTypeRef` an
+   `igSmartPointer< ::igMetaField>` and `_poolName` an `igStringRef` under C++, so its implicit destructor is
+   retail's `igMemoryRefMetaField_Destroy`; the kit's `setPool`/`getPool`, `setAlignmentType`,
+   `setDefault(igMemoryRef)`, the private `refObjects`/`releaseObjects`, and its slot overrides) is converted;
+   its field adder replaces the inherited `_resetMethod` by a new `igEnumMetaField`, which the generator
+   writes;
 3. `igMetaObject`, `igDataList`/`igObjectList`; igMetaObject, igIGBFile and igObjectDirEntry then also call
    igObject's protected and private construction members directly (the kit makes them friends);
 4. attrs, then gfx, then scenegraph, then gui/insight/viewer;

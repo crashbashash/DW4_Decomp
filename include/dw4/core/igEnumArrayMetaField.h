@@ -10,7 +10,6 @@ extern "C" {
 #endif
 
 struct igMetaField *igEnumArrayMetaField_Create(struct igMemoryPoolView *pool);
-void igEnumArrayMetaField_SetDefault(struct igMetaField *self, int value);
 
 #ifdef __cplusplus
 }

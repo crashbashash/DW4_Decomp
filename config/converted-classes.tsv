@@ -34,3 +34,7 @@ igEnumMetaField	Core
 igStructMetaField	Core
 igRefMetaField	Core
 igRawRefMetaField	Core
+igEnumArrayMetaField	Core
+igRawRefArrayMetaField	Core
+igObjectRefMetaField	Core
+igMemoryRefMetaField	Core

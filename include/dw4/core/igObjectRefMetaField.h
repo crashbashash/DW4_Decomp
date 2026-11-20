@@ -14,9 +14,6 @@ extern "C" {
 
 extern struct igMetaObject *g_igObjectRefMetaField_metaObject;
 struct igMetaField *igObjectRefMetaField_Create(struct igMemoryPoolView *pool);
-void igObjectRefMetaField_SetDefault(struct igObjectRefMetaField *self, struct igObject *value);
-int igObjectRefMetaField_GetDefaultDescriptor(void);
-void igObjectRefMetaField_Assign(struct igObjectRefMetaField *field, void *object, struct igObject *value);
 
 #ifdef __cplusplus
 }

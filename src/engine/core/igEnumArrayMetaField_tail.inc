@@ -1,30 +1,31 @@
-void igEnumArrayMetaField_SwapBytes(igEnumArrayMetaField *self, int buffer, int count) {
-    void **elementField;
+namespace Gap {
+namespace Core {
 
-    elementField = (void **)(((void **)Gap::Core::igEnumMetaField::getMetaField()));
-    ((igMetaFieldView *)(elementField))->SwapBytes((void *)(buffer), (int)(count * self->_num));
+void igEnumArrayMetaField::endianSwapMemory(void *mem, int num) const
+{
+    igEnumMetaField::getMetaField()->endianSwapMemory(mem, getNum() * num);
 }
 
 /* IgEnumArrayMetaField virtual getter 25. Returns the array's storage size in bytes truncated to
  * 16 bits: `_num` elements of 4 bytes each (the enum values are ints). The 16-bit result matches
  * the reflected `_size` field (unsigned short, +20) that the metafield base class carries. */
 
-int igEnumArrayMetaField_GetSize(igEnumArrayMetaField *self) {
-    return (self->_num * 4) & 0xFFFF;
+unsigned short igEnumArrayMetaField::computeSize()
+{
+    return getNum() * sizeof(int);
 }
 
-void igEnumArrayMetaField_SetDefault(igMetaField *self, int value) {
-    int *a;
+void igEnumArrayMetaField::setDefault(int val)
+{
+    int *mem;
     int i;
-    ((igMetaFieldView *)self)->SetDefault(0);
-    a = (int *)((igEnumArrayMetaField *)self)->_default;
-    for (i = 0; i < ((igEnumArrayMetaField *)self)->_num; i++) {
-        a[i] = value;
+
+    setDefaultMemory(0);
+    mem = (int *)_default;
+    for (i = 0; i < getNum(); i++) {
+        mem[i] = val;
     }
 }
-
-namespace Gap {
-namespace Core {
 
 void igEnumMetaField::setDefault(const int &def)
 {

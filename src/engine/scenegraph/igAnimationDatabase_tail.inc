@@ -30,7 +30,7 @@ void *Gap__Sg__igAnimationDatabase__vfunc_24(O_1aea60 *arg0, char *arg1) {
     if (strncmp(arg1, "__TS__", strlen("__TS__")) == 0) {
         if (DAT_00562560[0] == 0) {
             var_s1 = ((R_1aea60 *)igMetaObject_FindFieldByName(g_igAnimation_metaObject, "_trackList"));
-            if ((var_s1 != 0) && (((Gap::Core::igObject *)var_s1)->isOfType(g_igObjectRefMetaField_metaObject) != 0)) {
+            if ((var_s1 != 0) && (((Gap::Core::igObject *)var_s1)->isOfType(Gap::Core::igObjectRefMetaField::getClassMeta()) != 0)) {
                 var_s1 = (R_1aea60 *)var_s1;
             } else {
                 var_s1 = 0;

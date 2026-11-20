@@ -35,7 +35,7 @@ void igPsx2VertexArray1_1_resetFields(S0_15df80 *arg0, int flags) {
 
 void FUN_0015e010(void) {
     igResource_AddAlignment((igResource *)g_globalContext, "VertexArrayData", 0x10);
-    igMemoryRefMetaField_SetAlignmentType((igMemoryRefMetaField *)g_igVertexArray1_1_blendWeightsMetaField, "VertexArrayData");
+    ((Gap::Core::igMemoryRefMetaField *)g_igVertexArray1_1_blendWeightsMetaField)->setAlignmentType("VertexArrayData");
 }
 
 void FUN_0015e050(struct S_arg0_15e050 *arg0) {

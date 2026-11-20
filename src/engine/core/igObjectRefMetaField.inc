@@ -1,16 +1,21 @@
-igMetaObject *g_igObjectRefMetaField_metaObject;
-igObjectRefMetaField *g_igObjectRefMetaField_descriptor;
-igMetaField *g_igObjectRefMetaField_metaObjectMetaField;
-igMetaField *g_igObjectRefMetaField_refCountedMetaField;
-igMetaField *g_igObjectRefMetaField_poolNameMetaField;
+namespace Gap {
+namespace Core {
+
+igMetaObject *igObjectRefMetaField::_Meta;
+igObjectRefMetaField *igObjectRefMetaField::_MetaField;
+igMetaField *igObjectRefMetaField::k_metaObject;
+igMetaField *igObjectRefMetaField::k_refCounted;
+igMetaField *igObjectRefMetaField::k_poolName;
+}
+}
 
 /* Same factory shape for an igObjectRefMetaField (68-byte instance). */
 igMetaField *igObjectRefMetaField_Create(igMemoryPoolView *pool) {
     void **field;
 
     if (g_objectSystem->active != 0) {
-        igObjectRefMetaField_EnsureRegistered();
-        field = ((void **)igMetaObject_CreateInstance((igMetaObject *)((int)g_igObjectRefMetaField_metaObject), pool));
+        Gap::Core::igObjectRefMetaField::arkRegister();
+        field = ((void **)igMetaObject_CreateInstance((igMetaObject *)((int)Gap::Core::igObjectRefMetaField::getClassMeta()), pool));
     } else {
         field = ((void **)igObject_AllocateRawStorage(0x44, 0, pool));
         if (field != 0) {
@@ -22,155 +27,107 @@ igMetaField *igObjectRefMetaField_Create(igMemoryPoolView *pool) {
     return (igMetaField *)field;
 }
 
-int igObjectRefMetaField_Clone(int source, int flags) {
-    int copy;
+namespace Gap {
+namespace Core {
 
+igObject *igObjectRefMetaField::cloneViaMetadata(int copyMode)
+{
     if (g_objectSystem->active != 0) {
-        igObjectRefMetaField_EnsureRegistered();
-        return igObject_CloneViaMetadata((void **)source, flags);
+        arkRegister();
+        return igObject::cloneViaMetadata(copyMode);
     }
-    copy = ((int)igObject_AllocateRawStorageDefault(0x44, 0));
-    if (copy != 0) {
-        copy = ((int)igObjectRefMetaField_CopyConstruct((igObjectRefMetaField *)copy, (void *)source));
-    }
-    return copy;
+    return new (igObject_AllocateRawStorageDefault(sizeof(igObjectRefMetaField), 0), 0) igObjectRefMetaField(*this);
 }
 
-igMetaObject *igObjectRefMetaField_GetMetaObject(void)
+igMetaObject *igObjectRefMetaField::getClassTypeSafe()
 {
-    igMetaObject *g = g_igObjectRefMetaField_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igObjectRefMetaField_EnsureRegistered();
-    return g_igObjectRefMetaField_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igObjectRefMetaField_GetVTable(void) {
-    igObjectRefMetaField o;
-    int r;
-    char *p;
-    int *hdr;
-    int c;
-
-    igObjectRefMetaField_Init((igObjectRefMetaField *)&o);
-    r = *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
-    o._vtable = (int)&g_igObjectRefMetaField_vtable[0];
-    if (&o._poolName != 0) {
-        p = (char *)o._poolName;
-        if (p != 0) {
-            hdr = (int *)(p - 8);
-            c = *(int *)(p - 4) - 1;
-            *(int *)(p - 4) = c;
-            if (c == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*hdr), (StringTokenHeader *)hdr);
-            }
-        }
-    }
-    o._vtable = (int)&g_igMetaField_vtable[0];
-    if (&o._fieldName != 0) {
-        p = (char *)o._fieldName;
-        if (p != 0) {
-            hdr = (int *)(p - 8);
-            c = *(int *)(p - 4) - 1;
-            *(int *)(p - 4) = c;
-            if (c == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*hdr), (StringTokenHeader *)hdr);
-            }
-        }
-    }
-    return r;
-}
-
-void igObjectRefMetaField_EnsureRegistered(void)
+void *igObjectRefMetaField::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igObjectRefMetaField_Register);
+    igObjectRefMetaField temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-static igMetaObjectCallback g_igObjectRefMetaField_callbackList[] = { igMetaObject_EnsureRegistered, igObjectRefMetaField_CreateDefaultDescriptor, 0 };
+void igObjectRefMetaField::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igObjectRefMetaField_Register(void) {
+CallbackArray *igObjectRefMetaField::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igMetaObject_EnsureRegistered, arkRegisterMetaValidate, 0 };
+
     return igMetaObject_RegisterClass(
-        0,
-        &g_igObjectRefMetaField_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igRefMetaField::arkRegisterInternal,
         Gap::Core::igRefMetaField::getClassMeta,
-        igObjectRefMetaField_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igObjectRefMetaField",
-        0x44,
-        igObjectRefMetaField_GetVTable,
-        igObjectRefMetaField_InitFields,
+        sizeof(igObjectRefMetaField),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
         0,
-        g_igObjectRefMetaField_callbackList
+        regFunctions
     );
 }
 
-void igObjectRefMetaField_GetMetaObjectFunction(void) {
-    igObjectRefMetaField_GetMetaObject();
+void igObjectRefMetaField::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igBoolMetaField_Create, igStringMetaField_Create };
+    static const char *names[] = { "_metaObject", "_refCounted", "_poolName" };
+    static igMetaField **enumStorage[] = { &k_metaObject, &k_refCounted, &k_poolName };
+    static int offsets[] = { 56, 60, 64 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
+        metaField->_refCounted = 0;
+        metaField->_deepCopyMethod = 1;
+        metaField->_shallowCopyMethod = 1;
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(1);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
 
-static FieldFactory g_igObjectRefMetaField_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igStringMetaField_Create,
-};
-static const char *g_igObjectRefMetaField_fieldTable[] = {
-    "_metaObject",
-    "_refCounted",
-    "_poolName",
-};
-static igMetaField **g_igObjectRefMetaField_fieldDescriptors[] = {
-    &g_igObjectRefMetaField_metaObjectMetaField,
-    &g_igObjectRefMetaField_refCountedMetaField,
-    &g_igObjectRefMetaField_poolNameMetaField,
-};
-static int g_igObjectRefMetaField_fieldOffsets[] = {
-    56,
-    60,
-    64,
-};
+void igObjectRefMetaField::arkRegisterMetaValidate()
+{
+    igObjectRefMetaField *metaField;
 
-void igObjectRefMetaField_InitFields(void) {
-    int base;
-    void *metaObjectField;
-    void *meta;
-
-    meta = (void *)g_igObjectRefMetaField_metaObject;
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igObjectRefMetaField_ctorTable, 3);
-    metaObjectField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)metaObjectField)->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)metaObjectField)->_refCounted = 0;
-    ((igMetaField *)metaObjectField)->_deepCopyMethod = 1;
-    ((igMetaField *)metaObjectField)->_shallowCopyMethod = 1;
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)))->setDefault(1);
-    igMetaObject_NameFields((igMetaObject *)meta, g_igObjectRefMetaField_fieldTable, g_igObjectRefMetaField_fieldDescriptors, g_igObjectRefMetaField_fieldOffsets, base);
-}
-
-void igObjectRefMetaField_CreateDefaultDescriptor(void) {
-    igObjectRefMetaField *descriptor;
-    igObjectRefMetaField *held;
-    int len;
-
-    if (g_igObjectRefMetaField_descriptor == 0) {
-        g_igObjectRefMetaField_descriptor = ((igObjectRefMetaField *)igMetaObject_CreateInstance((igMetaObject *)g_igObjectRefMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
-        descriptor = g_igObjectRefMetaField_descriptor;
-        if (descriptor != 0) {
-            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
-            held = g_igObjectRefMetaField_descriptor;
-            held->_refCount = held->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(held);
+    if (_MetaField == 0) {
+        _MetaField = (igObjectRefMetaField *)igMetaObject_CreateInstance(_Meta, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+        metaField = _MetaField;
+        if (metaField != 0) {
+            MetaRefList_AppendRetained(getMetaFieldTypes(), (::igObject *)metaField);
+            {
+                ::igObject *held = (::igObject *)_MetaField;
+                held->_refCount = (int)held->_refCount - 1;
+                if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
+                    igObject_Destroy(held);
+                }
             }
-            len = Gap::Core::igMetaField::getMetaFieldTypes()->_count;
-            g_igObjectRefMetaField_descriptor->_internalIndex = len - 1;
-            ((Gap::Core::igMetaField *)g_igObjectRefMetaField_descriptor)->validate();
+            _MetaField->_internalIndex = (short)(getMetaFieldTypes()->_count - 1);
+            _MetaField->validate();
         }
     }
 }
 
-int igObjectRefMetaField_GetDefaultDescriptor(void) {
-    if (g_igObjectRefMetaField_descriptor == 0) {
-        igObjectRefMetaField_EnsureRegistered();
-    }
-    return (int)g_igObjectRefMetaField_descriptor;
+igObjectRefMetaField *igObjectRefMetaField::getMetaField()
+{
+    if (_MetaField == 0)
+        arkRegister();
+    return _MetaField;
+}
+}
 }
 

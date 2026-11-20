@@ -1,7 +1,7 @@
 void igMemoryRefArrayMetaField_SwapBytes(igMemoryRefArrayMetaField *self, int buffer, int count) {
     void **elementField;
 
-    elementField = (void **)(((void **)igMemoryRefMetaField_GetDefaultDescriptor()));
+    elementField = (void **)(((void **)Gap::Core::igMemoryRefMetaField::getMetaField()));
     ((igMetaFieldView *)(elementField))->SwapBytes((void *)(buffer), (int)(count * self->_num));
 }
 
@@ -37,7 +37,7 @@ int igMemoryRefArrayMetaField_GetSize(igMemoryRefArrayMetaField *self) {
 
 void igMemoryRefArrayMetaField_ReleaseElements(igMemoryRefArrayMetaField *self, int object, int visitor, int context) {
     int i;
-    if (((Gap::Core::igObject *)self->_memType)->isOfType((igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)self->_memType)->isOfType((igMetaObject *)Gap::Core::igObjectRefMetaField::getClassMeta()) != 0) {
         for (i = 0; i < self->_num; i++) {
             int block = *(int *)(object + self->_offset + i * 4);
             if (block != 0) {

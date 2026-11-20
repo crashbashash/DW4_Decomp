@@ -1,47 +1,47 @@
-void igRawRefArrayMetaField_SwapBytes(igRawRefArrayMetaField *self, int item, int count) {
-    void **descriptor;
+namespace Gap {
+namespace Core {
 
-    descriptor = (void **)(((void **)Gap::Core::igRawRefMetaField::getMetaField()));
-    ((igMetaFieldView *)(descriptor))->SwapBytes((void *)(item), (int)(count * self->_num));
+void igRawRefArrayMetaField::endianSwapMemory(void *mem, int num) const
+{
+    igRawRefMetaField::getMetaField()->endianSwapMemory(mem, getNum() * num);
 }
 
-int igRawRefArrayMetaField_ReadRawFieldMem(igRawRefArrayMetaField *self, int src, void *dst, int a3, int a4) {
-    int s;
-    int d;
-    int start;
+int igRawRefArrayMetaField::readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const
+{
+    void **field = (void **)fieldMem;
+    const char *src = (const char *)srcMem;
+    const char *start = src;
     int i;
 
-    s = src;
-    d = (int)dst;
-    start = d;
-    for (i = 0; i < self->_num; i++) {
-        d += igRefMetaField_ReadRawFieldMem((void *)self, s, (int *)d, a3, a4);
-        s += 4;
+    for (i = 0; i < getNum(); i++) {
+        src += igRawRefMetaField::readRawFieldMemory(field, src, dir, endianSwap);
+        field++;
     }
-    return d - start;
+    return src - start;
 }
 
-int igRawRefArrayMetaField_WriteRawFieldMem(igRawRefArrayMetaField *self, int src, void *dst, int a3, int a4) {
-    int s;
-    int d;
-    int start;
+int igRawRefArrayMetaField::writeRawFieldMemory(const void *fieldMem, void *dstMem, igDirectory *dir, bool endianSwap) const
+{
+    void *const *field = (void *const *)fieldMem;
+    char *dst = (char *)dstMem;
+    char *start = dst;
     int i;
 
-    s = src;
-    d = (int)dst;
-    start = d;
-    for (i = 0; i < self->_num; i++) {
-        d += igMemoryRefMetaField_WriteRawFieldMem((igMetaFieldView *)self, (int *)s, (void *)d, a3, a4);
-        s += 4;
+    for (i = 0; i < getNum(); i++) {
+        dst += igRawRefMetaField::writeRawFieldMemory(field, dst, dir, endianSwap);
+        field++;
     }
-    return ((d - start) + 3) & ~3;
+    return ((dst - start) + 3) & ~3;
 }
 
 /* Storage size in bytes of an array field of _num raw references (4 bytes each), truncated to 16
  * bits. Vtable slot 25 is the element-size query. */
 
-int igRawRefArrayMetaField_GetSize(igRawRefArrayMetaField *self) {
-    return (self->_num * sizeof(int)) & 0xFFFF;
+unsigned short igRawRefArrayMetaField::computeSize()
+{
+    return getNum() * sizeof(void *);
+}
+}
 }
 
 /* IgPluginRepositoryList slot 53, a constant-returning override that returns 4. */

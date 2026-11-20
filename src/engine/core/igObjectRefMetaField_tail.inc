@@ -1,275 +1,343 @@
-void igObjectRefMetaField_ReleaseDefaults(int self) {
-    igObjectRefMetaField_SetDefault((igObjectRefMetaField *)self, 0);
-    igObject_ReleaseDefaults((igObject *)self);
+namespace Gap {
+namespace Core {
+
+void igObjectRefMetaField::releaseDefaults()
+{
+    setDefault(0);
+    igObject::releaseDefaults();
 }
 
-void igObjectRefMetaField_InitDefaults(void **self) {
-    igObject_InitDefaults((igObject *)self);
-    ((igMetaFieldView *)self)->SetDefault(0);
+void igObjectRefMetaField::initDefaults()
+{
+    igObject::initDefaults();
+    setDefaultMemory(0);
 }
 
-void igObjectRefMetaField_Assign(igObjectRefMetaField *field,void *object,igObject *value){
-    igObject *old=*(igObject **)((char *)object+field->_offset);
-    if(field->_refCounted||field->_destruct){
-        if(value)++value->_refCount;
-        if(old){--old->_refCount;if(!(old->_refCount&0x7fffff))igObject_Destroy(old);}
-    }
-    *(igObject **)((char *)object+field->_offset)=value;
-}
+void igObjectRefMetaField::set(igObject *obj, igObject *val) const
+{
+    ::igObject *value = (::igObject *)val;
+    ::igObject *old = *(::igObject **)((char *)obj + _offset);
 
-void igObjectRefMetaField_SetValue(int self, int object, int value) {
-    igObjectRefMetaField_Assign((igObjectRefMetaField *)self, (void *)object, (igObject *)*(int *)value);
-}
-
-int igObjectRefMetaField_GetTypeSize(igObjectRefMetaField *) { return 4; }
-
-void igObjectRefMetaField_SetDefault(igObjectRefMetaField *self, igObject *value) {
-    igObject **slot;
-    igObject *old;
-
-    slot = (igObject **)(self->_default);
-    if (value != 0) {
-        value->_refCount = (int)((int) (value->_refCount + 1));
-    }
-    old = (igObject *)(*slot);
-    if (old != 0) {
-        old->_refCount = (int)((int) (old->_refCount - 1));
-        if (((unsigned long long) ((long long) (int) old->_refCount << 0x29) >> 0x29) == 0) {
+    if (_refCounted || _destruct) {
+        if (value != 0) {
+            value->_refCount = value->_refCount + 1;
+        }
+        if (old != 0) {
+        old->_refCount = old->_refCount - 1;
+        if ((old->_refCount & 0x7fffff) == 0) {
             igObject_Destroy(old);
         }
     }
-    *slot = value;
+    }
+    *(::igObject **)((char *)obj + _offset) = value;
 }
 
-int igObjectRefMetaField_ReadRawFieldMem(igObjectRefMetaField *self, igObject **valueSlot, int extra2, int extra3, int extra4) {
-    igObject *object;
+void igObjectRefMetaField::setFromMemory(igObject *object, const void *fieldStorage)
+{
+    set(object, *(igObject *const *)fieldStorage);
+}
 
-    igRefMetaField_ReadRawFieldMem((void *)self, (int)valueSlot, (int *)extra2, extra3, extra4);
-    if ((self->_refCounted != 0) || (self->_destruct != 0)) {
-        object = *valueSlot;
+unsigned short igObjectRefMetaField::computeSize()
+{
+    return 4;
+}
+
+void igObjectRefMetaField::setDefault(igObject *val)
+{
+    ::igObject **slot;
+    ::igObject *old;
+
+    slot = (::igObject **)_default;
+    if (val != 0) {
+        val->_refCount = val->_refCount + 1;
+    }
+    old = *slot;
+    if (old != 0) {
+        old->_refCount = old->_refCount - 1;
+        if ((old->_refCount & 0x7fffff) == 0) {
+            igObject_Destroy(old);
+        }
+    }
+    *slot = (::igObject *)val;
+}
+
+int igObjectRefMetaField::readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const
+{
+    int size;
+    ::igObject *object;
+
+    size = igRefMetaField::readRawFieldMemory(fieldMem, srcMem, dir, endianSwap);
+    if (_refCounted || _destruct) {
+        object = *(::igObject **)fieldMem;
         if (object != 0) {
             object->_refCount = object->_refCount + 1;
         }
     }
+    return size;
 }
 
-void igObjectRefMetaField_ConstructValue(igObjectRefMetaField *field,void *object){
-    void *allocator;
-    if(!field->_construct)return;
-    const char *name=(const char *)field->_poolName;
-    if(name&&*name){allocator=Memory_GetAllocatorByName(name);if(!allocator)allocator=((void *)((Gap::Core::igObject *)object)->getMemoryPool());}
-    else allocator=((void *)((Gap::Core::igObject *)object)->getMemoryPool());
-    igObject *child=(igObject *)igMetaObject_CreateInstance((igMetaObject *)((void *)field->_metaObject), (igMemoryPoolView *)allocator);
-    igObjectRefMetaField_Assign(field,object,child);
-    if((field->_refCounted||field->_destruct)&&child){--child->_refCount;if(!(child->_refCount&0x7fffff))igObject_Destroy(child);}
+void igObjectRefMetaField::construct(igObject *src)
+{
+    igMemoryPoolView *pool;
+    const char *name;
+    ::igObject *child;
+
+    if (!_construct) {
+        return;
+    }
+    name = _poolName.p;
+    if ((name != 0) && (*name != 0)) {
+        pool = (igMemoryPoolView *)Memory_GetAllocatorByName(name);
+        if (pool == 0) {
+            pool = src->getMemoryPool();
+        }
+    } else {
+        pool = src->getMemoryPool();
+    }
+    child = (::igObject *)igMetaObject_CreateInstance((igMetaObject *)_metaObject, pool);
+    set(src, (igObject *)child);
+    if ((_refCounted || _destruct) && (child != 0)) {
+        child->_refCount = child->_refCount - 1;
+        if ((child->_refCount & 0x7fffff) == 0) {
+            igObject_Destroy(child);
+        }
+    }
 }
 
-void igObjectRefMetaField_DestructValue(igObjectRefMetaField *field,void *object){
-    if(field->_destruct){igObject *child=*(igObject **)((char *)object+field->_offset);
-        if(child){--child->_refCount;if(!(child->_refCount&0x7fffff))igObject_Destroy(child);}}
+void igObjectRefMetaField::destruct(igObject *src)
+{
+    ::igObject *child;
+
+    if (_destruct) {
+        child = *(::igObject **)((char *)src + _offset);
+        if (child != 0) {
+        child->_refCount = child->_refCount - 1;
+        if ((child->_refCount & 0x7fffff) == 0) {
+            igObject_Destroy(child);
+        }
+    }
+    }
 }
 
-void igObjectRefMetaField_ClearValue(igObjectRefMetaField *field,void *object){
-    if(field->_refCounted){igObject *child=*(igObject **)((char *)object+field->_offset);
-        if(child){--child->_refCount;if(!(child->_refCount&0x7fffff))igObject_Destroy(child);}}
-    igRefMetaField_ClearValue((igMetaField *)field,object);
+void igObjectRefMetaField::decommission(igObject *src)
+{
+    ::igObject *child;
+
+    if (_refCounted) {
+        child = *(::igObject **)((char *)src + _offset);
+        if (child != 0) {
+        child->_refCount = child->_refCount - 1;
+        if ((child->_refCount & 0x7fffff) == 0) {
+            igObject_Destroy(child);
+        }
+    }
+    }
+    igRefMetaField::decommission(src);
 }
 
-void igObjectRefMetaField_SetToDefault(void *self, int object) {
-    int child;
+void igObjectRefMetaField::resetByValue(igObject *src)
+{
+    igObject *child;
 
-    child = *(int *)(object + ((igObjectRefMetaField *)self)->_offset);
+    child = *(igObject **)((char *)src + _offset);
     if (child != 0) {
         igObject_ResetFields((igObjectDispatchView *)child);
     }
 }
 
-void igObjectRefMetaField_CopyDefaultToValue(char *self, int object) {
-    igObjectRefMetaField_Assign((igObjectRefMetaField *)self, (void *)object, (igObject *)*(int *)((igObjectRefMetaField *)self)->_default);
+void igObjectRefMetaField::resetByReference(igObject *src)
+{
+    set(src, *(igObject **)_default);
 }
 
-void igObjectRefMetaField_CopyReference(int self, int object, int source) {
-    igObjectRefMetaField_Assign((igObjectRefMetaField *)self, (void *)object, (igObject *)*(int *)(source + ((igObjectRefMetaField *)self)->_offset));
+void igObjectRefMetaField::copyByReference(igObject *dst, const igObject *src)
+{
+    set(dst, *(igObject *const *)((const char *)src + _offset));
 }
 
-void igObjectRefMetaField_DeepCopy(igObjectRefMetaField *self, char *dst, char *src) {
-    igObjectDispatchView *to;
-    igObjectDispatchView *from;
-    igObject *copy;
+void igObjectRefMetaField::copyByValue(igObject *dst, const igObject *src)
+{
+    igObject *to;
+    igObject *from;
+    ::igObject *copy;
 
-    to = *(igObjectDispatchView **)(dst + self->_offset);
-    from = *(igObjectDispatchView **)(src + self->_offset);
+    to = *(igObject **)((char *)dst + _offset);
+    from = *(igObject *const *)((const char *)src + _offset);
     if (to != 0 || from != 0) {
         if (to != 0 && from != 0) {
-            from->TrimCapacity();
-            ((Gap::Core::igObject *)to)->copyDeep((Gap::Core::igObject *)from);
+            from->trimCapacity();
+            to->copyDeep(from);
             return;
         }
         if (to == 0) {
-            from->TrimCapacity();
-            copy = from->CloneViaMetadata(1);
-            igObjectRefMetaField_Assign(self, dst, copy);
-            if (self->_destruct == 0 && copy != 0) {
+            from->trimCapacity();
+            copy = (::igObject *)from->cloneViaMetadata(1);
+            set(dst, (igObject *)copy);
+            if (_destruct == 0 && copy != 0) {
                 copy->_refCount = copy->_refCount - 1;
-                if ((copy->_refCount & 0x7FFFFF) == 0) {
+                if ((copy->_refCount & 0x7fffff) == 0) {
                     igObject_Destroy(copy);
                 }
             }
         } else if (from == 0) {
-            igObjectRefMetaField_Assign(self, dst, 0);
+            set(dst, 0);
         }
     }
 }
 
-void igObjectRefMetaField_ShallowCopy(igObjectRefMetaField *self, int dst, int src) {
-    int to;
-    igObjectDispatchView *from;
-    igObject *copy;
+void igObjectRefMetaField::copyByValueShallow(igObject *dst, const igObject *src)
+{
+    igObject *to;
+    igObject *from;
+    ::igObject *copy;
     int off;
 
-    off = self->_offset;
-    to = *(int *)(dst + off);
-    from = *(igObjectDispatchView **)(src + off);
+    off = _offset;
+    to = *(igObject **)((char *)dst + off);
+    from = *(igObject *const *)((const char *)src + off);
     if ((to != 0) || (from != 0)) {
         if ((to != 0) && (from != 0)) {
-            ((Gap::Core::igObject *)to)->copyShallow((int)from);
+            to->copyShallow((int)from);
             return;
         }
         if (to == 0) {
-            copy = (igObject *)from->CloneViaMetadata(0);
-            igObjectRefMetaField_Assign((igObjectRefMetaField *)self, (void *)dst, (igObject *)copy);
-            if ((self->_destruct == 0) && (copy != 0)) {
+            copy = (::igObject *)from->cloneViaMetadata(0);
+            set(dst, (igObject *)copy);
+            if ((_destruct == 0) && (copy != 0)) {
                 copy->_refCount = copy->_refCount - 1;
-                if (((unsigned long long) ((long long)(int)copy->_refCount << 0x29) >> 0x29) == 0) {
+                if ((copy->_refCount & 0x7fffff) == 0) {
                     igObject_Destroy(copy);
                 }
             }
         } else if (from == 0) {
-            igObjectRefMetaField_Assign((igObjectRefMetaField *)self, (void *)dst, 0);
+            set(dst, 0);
         }
     }
 }
 
-void igObjectRefMetaField_ResetValue(igObjectRefMetaField *self, int instance) {
-    int object;
+void igObjectRefMetaField::copyByReset(igObject *dst, const igObject *src)
+{
+    igObject *child;
 
-    object = *(int *)(instance + self->_offset);
-    if (object != 0) {
-        igObject_ResetFields((igObjectDispatchView *)object);
+    child = *(igObject **)((char *)dst + _offset);
+    if (child != 0) {
+        igObject_ResetFields((igObjectDispatchView *)child);
     }
 }
 
 /* Prints `<indent><field> = 0x<value>`, then the referenced object's own fields when `depth` asks
  * for them. */
-void igObjectRefMetaField_Print(igObjectRefMetaField *self, char *object, int depth, const char *indent) {
-    igReport_Printf("%s%s = 0x%x\n", indent, self->_fieldName, *(int *)(object + self->_offset));
+void igObjectRefMetaField::print(const igObject *src, unsigned int deep, const char *indent)
+{
+    igObject *referenced;
+
+    igReport_Printf("%s%s = 0x%x\n", indent, getFieldName(), *(int *)((char *)src + _offset));
     igReport_Flush();
-    if (depth != 0) {
-        void **referenced = *(void ***)(object + self->_offset);
+    if (deep != 0) {
+        referenced = *(igObject **)((char *)src + _offset);
         if (referenced != 0) {
-            ((Gap::Core::igObject *)referenced)->printFields(depth, (int)indent);
+            referenced->printFields(deep, (int)indent);
         }
     }
 }
 
-void igObjectRefMetaField_ReleaseElements(igObjectRefMetaField *self, int object, int visitor, int context) {
-    int child;
+void igObjectRefMetaField::traverse(igObject *obj, void *visitFunc, void *traversalData)
+{
+    igObject *child;
 
-    child = *(int *)(object + self->_offset);
+    child = *(igObject **)((char *)obj + _offset);
     if (child != 0) {
-        ((Gap::Core::igObject *)child)->traverseFields((int (*)(void *, void *, void *))visitor, (void *)context);
+        child->traverseFields((Visitor)visitFunc, traversalData);
     }
 }
 
-int igObjectRefMetaField_Compare(igObjectRefMetaField *self, int a, int b) {
+int igObjectRefMetaField::compare(const igObject *obj1, const igObject *obj2) const
+{
     int offset;
 
-    offset = self->_offset;
-    return *(int *)(a + offset) - *(int *)(b + offset);
+    offset = _offset;
+    return *(const int *)((const char *)obj1 + offset) - *(const int *)((const char *)obj2 + offset);
 }
 
-int igObjectRefMetaField_IsAlikeExactly(igObjectRefMetaField *self, int objectA, int objectB) {
-    int refA;
-    int refB;
+int igObjectRefMetaField::isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const
+{
     int fieldOffset;
+    igObject *refA;
+    igObject *refB;
 
-    fieldOffset = self->_offset;
-    refA = *(int *)(objectA + fieldOffset);
-    refB = *(int *)(objectB + fieldOffset);
+    fieldOffset = _offset;
+    refA = *(igObject **)((char *)obj1 + fieldOffset);
+    refB = *(igObject **)((char *)obj2 + fieldOffset);
     if (refA == refB) {
         return 1;
     }
     if ((refA == 0) || (refB == 0)) {
         return 0;
     }
-    return ((Gap::Core::igObject *)refA)->isAlikeExactly((void *)refB);
+    return refA->isAlikeExactly(refB);
 }
 
-int igObjectRefMetaField_IsAlikeDeep(igObjectRefMetaField *self, int objectA, int objectB) {
-    int refA;
-    int refB;
+int igObjectRefMetaField::isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const
+{
     int fieldOffset;
+    igObject *refA;
+    igObject *refB;
 
-    fieldOffset = self->_offset;
-    refA = *(int *)(objectA + fieldOffset);
-    refB = *(int *)(objectB + fieldOffset);
+    fieldOffset = _offset;
+    refA = *(igObject **)((char *)obj1 + fieldOffset);
+    refB = *(igObject **)((char *)obj2 + fieldOffset);
     if (refA == refB) {
         return 1;
     }
     if ((refA == 0) || (refB == 0)) {
         return 0;
     }
-    return ((Gap::Core::igObject *)refA)->isAlikeDeep((Gap::Core::igObject *)refB);
+    return refA->isAlikeDeep(refB);
 }
 
-int igObjectRefMetaField_IsAlikeShallow(igObjectRefMetaField *self, int objectA, int objectB) {
-    int refA;
-    int refB;
+int igObjectRefMetaField::isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const
+{
     int fieldOffset;
+    igObject *refA;
+    igObject *refB;
 
-    fieldOffset = self->_offset;
-    refA = *(int *)(objectA + fieldOffset);
-    refB = *(int *)(objectB + fieldOffset);
+    fieldOffset = _offset;
+    refA = *(igObject **)((char *)obj1 + fieldOffset);
+    refB = *(igObject **)((char *)obj2 + fieldOffset);
     if (refA == refB) {
         return 1;
     }
     if ((refA == 0) || (refB == 0)) {
         return 0;
     }
-    return ((Gap::Core::igObject *)refA)->isAlikeShallow((Gap::Core::igObject *)refB);
+    return refA->isAlikeShallow(refB);
 }
 
-void *igObjectRefMetaField_Construct(igObjectRefMetaField *self, int extra1) {
-    igRefMetaField_Construct((igRefMetaField *)self);
-    self->_vtable = (int)g_igObjectRefMetaField_vtable;
-    self->_poolName = 0;
-    if (self) {
-        igObjectRefMetaField_Init(self);
-    }
-    return self;
+igObjectRefMetaField::igObjectRefMetaField(bool boot) : igRefMetaField(boot)
+{
+    new (this, 0) igObjectRefMetaField;
 }
 
-void *igObjectRefMetaField_Init(igObjectRefMetaField *self) {
-    igRefMetaField_Init((igRefMetaField *)self);
-    self->_vtable = (int)g_igObjectRefMetaField_vtable;
-    self->_poolName = 0;
-    self->_refCounted = 1;
-    self->_metaObject = 0;
-    return self;
+igObjectRefMetaField::igObjectRefMetaField()
+{
+    _refCounted = 1;
+    _metaObject = 0;
 }
 
-void *igObjectRefMetaField_CopyConstruct(igObjectRefMetaField *self, void *source) {
-    igRefMetaField_CopyConstruct((igRefMetaField *)self, (igRefMetaField *)source);
-    self->_vtable = (int)(&g_igObjectRefMetaField_vtable[0]);
-    self->_poolName = 0;
-    self->_refCounted = (unsigned char) ((igObjectRefMetaField *)source)->_refCounted;
-    self->_metaObject = (int)((int) ((igObjectRefMetaField *)source)->_metaObject);
-    return self;
+igObjectRefMetaField::igObjectRefMetaField(const igObjectRefMetaField &other) : igRefMetaField(other)
+{
+    _refCounted = other._refCounted;
+    _metaObject = other._metaObject;
 }
 
-void igObjectRefMetaField_Destruct(igObjectRefMetaField *self) {
-    igRefMetaField_Destruct((igRefMetaField *)self);
+void igObjectRefMetaField::__bootstrapDestruct()
+{
+    igRefMetaField::__bootstrapDestruct();
 }
+}
+}
+
+
 
 void igObjectStringMap_Add(igObjectStringMap *self, const char *name, void *object) {
     igObject *entry;

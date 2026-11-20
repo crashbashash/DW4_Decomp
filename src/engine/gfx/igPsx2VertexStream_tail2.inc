@@ -1,4 +1,4 @@
-static inline int cast0(int o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType((igMetaObject *)g_igMemoryRefMetaField_metaObject) != 0) { return o; } return 0; }
+static inline int cast0(int o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType((igMetaObject *)Gap::Core::igMemoryRefMetaField::getClassMeta()) != 0) { return o; } return 0; }
 
 void FUN_0017f5a0(void) {
     int var_s0;
@@ -6,7 +6,7 @@ void FUN_0017f5a0(void) {
     igResource_AddAlignment((igResource *)g_globalContext, "DMABuffer_PS2", 0x10);
     var_s0 = (int)igMetaObject_FindFieldByName(g_igPsx2VertexStream_metaObject, "_dmaBuffer");
     var_s0 = cast0(var_s0);
-    igMemoryRefMetaField_SetAlignmentType((igMemoryRefMetaField *)var_s0, "DMABuffer_PS2");
+    ((Gap::Core::igMemoryRefMetaField *)var_s0)->setAlignmentType("DMABuffer_PS2");
 }
 
 void igPsx2VertexStream_UserWriteFilePreProcess(S0_17f630 *arg0) {

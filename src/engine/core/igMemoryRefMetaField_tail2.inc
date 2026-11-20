@@ -4,14 +4,16 @@ static inline void dropNames(igTDataList<igStringObj *> *o) {
 
 static inline int countOf(igTDataList<igStringObj *> *l) { if (l != 0) { return l->_count; } return 0; }
 
+namespace Gap {
+namespace Core {
 
-void igMemoryRefMetaField_SetAlignmentType(igMemoryRefMetaField *self, const char *name) {
+void igMemoryRefMetaField::setAlignmentType(const char *name) {
     igTDataList<igStringObj *> *names;
     igTDataList<igStringObj *> *held;
     int n;
     int i;
     if (name == 0) {
-        self->_alignmentType = -1;
+        _alignmentType = -1;
         return;
     }
     *(igTDataList<igStringObj *> **)&names = g_globalContext->_alignmentStrings;
@@ -20,7 +22,7 @@ void igMemoryRefMetaField_SetAlignmentType(igMemoryRefMetaField *self, const cha
     n = countOf(names);
     for (i = 0; i < n; i++) {
         if (strcmp(igStringObj_Text(names->_data[i]), name) == 0) {
-            self->_alignmentType = i;
+            _alignmentType = i;
             dropNames(names);
             return;
         }
@@ -28,84 +30,95 @@ void igMemoryRefMetaField_SetAlignmentType(igMemoryRefMetaField *self, const cha
     dropNames(names);
 }
 
-int igMemoryRefMetaField_Write(igMemoryRefMetaField *f, int off, int a2) {
+int igMemoryRefMetaField::addToDirectory(igObject *obj, igDirectory *dir)
+{
     unsigned int n;
     int p;
-    int s1;
-    int s0;
-    if (f->_persistent == 0) return -1;
-    p = *(int *)(off + f->_offset);
-    if (p == 0) return -1;
-    if (((Gap::Core::igObject *)f->_memType)->isOfType((igMetaObject *)((int)g_igMemoryRefMetaField_metaObject)) != 0) {
+    int ref;
+    int i;
+
+    if (_persistent == 0) {
+        return -1;
+    }
+    p = *(int *)((char *)obj + _offset);
+    if (p == 0) {
+        return -1;
+    }
+    if (((igMetaField *)_memType)->isOfType(igMemoryRefMetaField::getClassMeta()) != 0) {
         n = Memory_GetBufferSize((void *)p) >> 2;
-        s1 = igDirectory_AddMemoryRef((igDirectoryView *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, 1);
-        for (s0 = 0; s0 < (int)n; s0++) {
-            int e = *(int *)(p + s0 * 4);
-            if (e != 0) igDirectory_AddMemoryRef((igDirectoryView *)a2, (int)f, e, 0, f->_alignmentType, 0, 0, 1);
+        ref = igDirectory_AddMemoryRef((igDirectoryView *)dir, (int)this, p, _memType, _alignmentType, 0, 0, 1);
+        for (i = 0; i < (int)n; i++) {
+            int e = *(int *)(p + i * 4);
+            if (e != 0) {
+                igDirectory_AddMemoryRef((igDirectoryView *)dir, (int)this, e, 0, _alignmentType, 0, 0, 1);
+            }
         }
-        return s1;
+        return ref;
     }
-    if (((Gap::Core::igObject *)f->_memType)->isOfType((igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
-        s1 = igDirectory_AddMemoryRef((igDirectoryView *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, f->_refCounted);
-        return s1;
+    if (((igMetaField *)_memType)->isOfType(igObjectRefMetaField::getClassMeta()) != 0) {
+        ref = igDirectory_AddMemoryRef((igDirectoryView *)dir, (int)this, p, _memType, _alignmentType, 0, 0, _refCounted);
+        return ref;
     }
-    return igDirectory_AddMemoryRef((igDirectoryView *)a2, (int)f, p, f->_memType, f->_alignmentType, 0, 0, 1);
+    return igDirectory_AddMemoryRef((igDirectoryView *)dir, (int)this, p, _memType, _alignmentType, 0, 0, 1);
 }
 
-int igMemoryRefMetaField_IsAlikeExactly(igMemoryRefMetaField *self, int a, int b) {
+int igMemoryRefMetaField::isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const
+{
     int offset;
 
-    offset = self->_offset;
-    return *(int *)(a + offset) == *(int *)(b + offset);
+    offset = _offset;
+    return *(const int *)((const char *)obj1 + offset) == *(const int *)((const char *)obj2 + offset);
 }
 
-int igMemoryRefMetaField_IsAlikeDeep(igMemoryRefMetaField *self, int objectA, int objectB) {
+int igMemoryRefMetaField::isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const
+{
     int off;
     int n;
     int a;
     int b;
     int i;
 
-    if (((Gap::Core::igObject *)self->_memType)->isOfType((igMetaObject *)g_igObjectRefMetaField_metaObject) == 0) {
-        return ((igMetaFieldView *)self)->IsAlikeShallow(objectA, objectB);
+    if (((igMetaField *)_memType)->isOfType(igObjectRefMetaField::getClassMeta()) == 0) {
+        return isAlikeCompareShallow(obj1, obj2);
     }
-    off = self->_offset;
-    a = *(int *)(objectA + off);
-    b = *(int *)(objectB + off);
+    off = _offset;
+    a = *(const int *)((const char *)obj1 + off);
+    b = *(const int *)((const char *)obj2 + off);
     if (a == b) {
         return 1;
     }
     if (a == 0 || b == 0) {
         return 0;
     }
-    n = ((int)Memory_GetBufferSize((void *)a));
-    if (n != ((int)Memory_GetBufferSize((void *)b))) {
+    n = (int)Memory_GetBufferSize((void *)a);
+    if (n != (int)Memory_GetBufferSize((void *)b)) {
         return 0;
     }
     for (i = 0; i < n; i++) {
-        if (!(((Gap::Core::igObject *)(*(int *)(a + i * 4)))->isAlikeDeep((Gap::Core::igObject *)(*(int *)(b + i * 4))) & 0xFF)) {
+        if (!((*(igObject **)(a + i * 4))->isAlikeDeep(*(igObject **)(b + i * 4)) & 0xFF)) {
             return 0;
         }
     }
     return 1;
 }
 
-int igMemoryRefMetaField_ReadRawFieldMem(igMemoryRefMetaField *self, int destination, int *source, void *directory, int swapBytes) {
+int igMemoryRefMetaField::readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const
+{
     struct { int w0; } index;
-    int *out = (int *)destination;
+    int *out = (int *)fieldMem;
     int raw;
     igMemoryDirEntry *entry;
 
-    if (directory != 0 && (raw = *source) != -1) {
+    if (dir != 0 && (raw = *(const int *)srcMem) != -1) {
         index.w0 = raw;
-        if (swapBytes != 0) {
-            Gap::Core::igIntMetaField::getMetaField()->endianSwapMemory(&index.w0, 1);
+        if (endianSwap) {
+            igIntMetaField::getMetaField()->endianSwapMemory(&index.w0, 1);
         }
-        entry = (igMemoryDirEntry *)igDirectory_GetEntry((int *)directory, index.w0);
+        entry = (igMemoryDirEntry *)igDirectory_GetEntry((int *)dir, index.w0);
         if (entry != 0) {
             *out = entry->_ref;
-            if (self->_memType == 0 && self != (*(void * *)&g_igMemoryRefMetaField_descriptor)) {
-                self->_memType = entry->_memType;
+            if (_memType == 0 && this != _MetaField) {
+                ((igMemoryRefMetaField *)this)->_memType = entry->_memType;
             }
         } else {
             *out = 0;
@@ -116,24 +129,25 @@ int igMemoryRefMetaField_ReadRawFieldMem(igMemoryRefMetaField *self, int destina
     return 4;
 }
 
-int igMemoryRefMetaField_IsAlikeShallow(igMemoryRefMetaField *self, int objectA, int objectB) {
+int igMemoryRefMetaField::isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const
+{
     int off;
     int n;
     char *a;
     char *b;
     int i;
 
-    off = self->_offset;
-    a = *(char **)(objectA + off);
-    b = *(char **)(objectB + off);
+    off = _offset;
+    a = *(char **)((const char *)obj1 + off);
+    b = *(char **)((const char *)obj2 + off);
     if (a == b) {
         return 1;
     }
     if (a == 0 || b == 0) {
         return 0;
     }
-    n = ((int)Memory_GetBufferSize(a));
-    if (n != ((int)Memory_GetBufferSize(b))) {
+    n = (int)Memory_GetBufferSize(a);
+    if (n != (int)Memory_GetBufferSize(b)) {
         return 0;
     }
     for (i = 0; i < n; i++) {
@@ -144,88 +158,78 @@ int igMemoryRefMetaField_IsAlikeShallow(igMemoryRefMetaField *self, int objectA,
     return 1;
 }
 
-void igMemoryRefMetaField_SetPoolName(igMemoryRefMetaField *self, const char *name) {
-    int *header;
-    int references;
-    int pool;
-    char *previous;
-    char *interned;
-
-    if (g_stringPool == 0) {
-        pool = ((int)StringPool_Allocate(0x10));
-        if (pool != 0) {
-            pool = ((int)StringPool_Construct((StringPool *)pool));
-        }
-        g_stringPool = (StringPool *)pool;
-    }
-    interned = ((char *)StringPool_Intern((StringPool *)g_stringPool, name));
-    previous = (char *)self->_poolName;
-    if (previous != 0) {
-        header = (int *)(previous - 8);
-        references = *(int *)(previous - 4) - 1;
-        *(int *)(previous - 4) = references;
-        if (references == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
-        }
-    }
-    self->_poolName = (int)interned;
+void igMemoryRefMetaField::setPool(const char *poolName)
+{
+    _poolName = poolName;
 }
 
-int igMemoryRefMetaField_GetPoolName(igMemoryRefMetaField *self)
+const char *igMemoryRefMetaField::getPool()
 {
-    return self->_poolName;
+    return _poolName.p;
+}
+}
 }
 
 /* Run the base-class constructor, point the descriptor at its own vtable and
  * clear the two reference members, then (for a live object) apply the field
  * defaults with igMemoryRefMetaField_Init. */
-igMemoryRefMetaField *igMemoryRefMetaField_Construct(igMemoryRefMetaField *self, int extra1) {
-    igRefMetaField_Construct((igRefMetaField *)self);
-    self->_vtable = (int)g_igMemoryRefMetaField_vtable;
-    self->_memTypeRef = 0;
-    self->_poolName = 0;
-    if (self) igMemoryRefMetaField_Init(self);
-    return self;
+namespace Gap {
+namespace Core {
+
+igMemoryRefMetaField::igMemoryRefMetaField(bool boot) : igRefMetaField(boot)
+{
+    new (this, 0) igMemoryRefMetaField;
 }
+}
+}
+
+
 
 /* Default values of a memory-reference descriptor: reference counted, no size
  * or memory type, reset method 3, release on reset and on copy, alignment
  * type -1 and shallow-copy method 2. */
-igMemoryRefMetaField *igMemoryRefMetaField_Init(igMemoryRefMetaField *self) {
-    igRefMetaField_Init((igRefMetaField *)self);
-    self->_vtable = (int)g_igMemoryRefMetaField_vtable;
-    self->_memTypeRef = 0;
-    self->_poolName = 0;
-    self->_refCounted = 1;
-    self->_memSize = 0;
-    self->_memType = 0;
-    self->_resetMethod = 3;
-    self->_releaseOnReset = 1;
-    self->_releaseOnCopy = 1;
-    self->_alignmentType = -1;
-    self->_shallowCopyMethod = 2;
-    return self;
+namespace Gap {
+namespace Core {
+
+igMemoryRefMetaField::igMemoryRefMetaField()
+{
+    _refCounted = 1;
+    _memSize = 0;
+    _memType = 0;
+    _resetMethod = 3;
+    _releaseOnReset = 1;
+    _releaseOnCopy = 1;
+    _alignmentType = -1;
+    _shallowCopyMethod = 2;
 }
+}
+}
+
+
 
 /* Copy the reference layer, stamp the memory-reference vtable and clear the two borrowed
  * references (_memTypeRef, _poolName), then copy the ref-counting, memory type/size, reset,
  * release and alignment settings. */
-igMemoryRefMetaField *igMemoryRefMetaField_CopyConstruct(igMemoryRefMetaField *self, igMemoryRefMetaField *source) {
-    igRefMetaField_CopyConstruct((igRefMetaField *)self, (igRefMetaField *)source);
-    self->_vtable = (int)g_igMemoryRefMetaField_vtable;
-    self->_memTypeRef = 0;
-    self->_poolName = 0;
-    self->_refCounted = source->_refCounted;
-    self->_memType = source->_memType;
-    self->_memSize = source->_memSize;
-    self->_resetMethod = source->_resetMethod;
-    self->_releaseOnReset = source->_releaseOnReset;
-    self->_releaseOnCopy = source->_releaseOnCopy;
-    self->_alignmentType = source->_alignmentType;
-    return self;
+namespace Gap {
+namespace Core {
+
+igMemoryRefMetaField::igMemoryRefMetaField(const igMemoryRefMetaField &other) : igRefMetaField(other)
+{
+    _refCounted = other._refCounted;
+    _memType = other._memType;
+    _memSize = other._memSize;
+    _resetMethod = other._resetMethod;
+    _releaseOnReset = other._releaseOnReset;
+    _releaseOnCopy = other._releaseOnCopy;
+    _alignmentType = other._alignmentType;
 }
 
-void igMemoryRefMetaField_Destruct(igMemoryRefMetaField *self) {
-    igRefMetaField_Destruct((igRefMetaField *)self);
+void igMemoryRefMetaField::__bootstrapDestruct()
+{
+    igRefMetaField::__bootstrapDestruct();
 }
+}
+}
+
+
 

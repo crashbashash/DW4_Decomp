@@ -871,13 +871,13 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
             return true;
         }
     }
-    if (((Gap::Core::igObject *)field)->isOfType(g_igObjectRefMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)field)->isOfType(Gap::Core::igObjectRefMetaField::getClassMeta()) != 0) {
         if ((igMetaObject *)((igObjectRefMetaField *)field)->_metaObject == g_igMetaObject_metaObject) {
             igSmartPointer<igStringObj> value(createStringObj());
             if (igRegistry_GetValueStringObj(registry, section, stringObjText(*key), (igStringObj **)&value, "", 0)) {
                 igMetaObject *meta = (igMetaObject *)igObjectSystem_FindMetaByNameDefault(stringObjText(*value));
                 if (meta != 0) {
-                    igObjectRefMetaField_Assign((igObjectRefMetaField *)field, object, (igObject *)meta);
+                    ((Gap::Core::igObjectRefMetaField *)field)->set((Gap::Core::igObject *)object, (Gap::Core::igObject *)meta);
                     log->put("(%s:%s) ", stringObjText(*key), stringObjText(*value));
                 } else {
                     log->put("(%s:%s not found) ", stringObjText(*key), stringObjText(*value));
@@ -1430,7 +1430,7 @@ int FUN_0022db60(struct M *arg0, int arg1, int arg2, int arg3, int arg4) {
     arg0 = (M *)cast0_6(arg0);
     arg2 = (int)cast0_6((void *)arg2);
     if ((arg0 != 0) && (arg2 != 0)) {
-        igObjectRefMetaField_Assign((igObjectRefMetaField *)arg2, (void *)arg3, (igObject *)(*(int *)(arg1 + arg0->f8)));
+        ((Gap::Core::igObjectRefMetaField *)arg2)->set((Gap::Core::igObject *)arg3, (Gap::Core::igObject *)(*(int *)(arg1 + arg0->f8)));
         var_v0 = 1;
     }
     else { var_v0 = 0; }

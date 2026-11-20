@@ -977,11 +977,11 @@ void igPsx2VisualContext_InitFields(void) {
     { igMetaField *q = igMetaObject_GetFieldAt(meta, fieldStart + 0xE); ((igBoolArrayMetaField *)q)->_num = 0x10; }
     temp_v0_5 = igMetaObject_GetFieldAt(meta, fieldStart + 0xF);
     ((igEnumArrayMetaField *)temp_v0_5)->_num = 0x10;
-    igEnumArrayMetaField_SetDefault(temp_v0_5, 0);
+    ((Gap::Core::igEnumArrayMetaField *)temp_v0_5)->setDefault(0);
     *(int (**)())&((igEnumArrayMetaField *)temp_v0_5)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
     temp_v0_6 = igMetaObject_GetFieldAt(meta, fieldStart + 0x10);
     ((igEnumArrayMetaField *)temp_v0_6)->_num = 0x10;
-    igEnumArrayMetaField_SetDefault(temp_v0_6, 0);
+    ((Gap::Core::igEnumArrayMetaField *)temp_v0_6)->setDefault(0);
     *(int (**)())&((igEnumArrayMetaField *)temp_v0_6)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
     { igMetaField *q = igMetaObject_GetFieldAt(meta, fieldStart + 0x11); ((igIntArrayMetaField *)q)->_num = 0x10; }
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x13)))->setDefault(-1);
@@ -1056,11 +1056,11 @@ void igPsx2VisualContext_InitFields(void) {
     *(int (**)())&((igEnumMetaField *)temp_v0_7)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
     temp_v0_8 = igMetaObject_GetFieldAt(meta, fieldStart + 0x44);
     ((igEnumArrayMetaField *)temp_v0_8)->_num = 0x10;
-    igEnumArrayMetaField_SetDefault(temp_v0_8, 0);
+    ((Gap::Core::igEnumArrayMetaField *)temp_v0_8)->setDefault(0);
     *(int (**)())&((igEnumArrayMetaField *)temp_v0_8)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
     temp_v0_9 = igMetaObject_GetFieldAt(meta, fieldStart + 0x45);
     ((igEnumArrayMetaField *)temp_v0_9)->_num = 0x10;
-    igEnumArrayMetaField_SetDefault(temp_v0_9, 0);
+    ((Gap::Core::igEnumArrayMetaField *)temp_v0_9)->setDefault(0);
     *(int (**)())&((igEnumArrayMetaField *)temp_v0_9)->_getMetaEnumFunction = (int (*)())igMetaEnum_GetEmpty;
     { igMetaField *q = igMetaObject_GetFieldAt(meta, fieldStart + 0x46); ((igIntArrayMetaField *)q)->_num = 0x10; }
     temp_s2_21 = igMetaObject_GetFieldAt(meta, fieldStart + 0x48);

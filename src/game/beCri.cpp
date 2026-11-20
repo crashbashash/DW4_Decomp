@@ -1043,7 +1043,7 @@ void beCri_SetSndfVolume(beCri *self, int volume) {
 }
 
 static inline int AsMemoryRefField(int field) {
-    if (field != 0 && ((Gap::Core::igObject *)field)->isOfType(g_igMemoryRefMetaField_metaObject) != 0) {
+    if (field != 0 && ((Gap::Core::igObject *)field)->isOfType(Gap::Core::igMemoryRefMetaField::getClassMeta()) != 0) {
         return field;
     }
     return 0;
@@ -1057,7 +1057,7 @@ void beCriSfpData_SetupBufferAlignment(void) {
     igResource_AddAlignment((igResource *)g_globalContext, "sndfBuffer", 0x20);
     field = (int)igMetaObject_FindFieldByName(g_beCriSfpData_metaObject, "_dataBuffer");
     field = AsMemoryRefField(field);
-    igMemoryRefMetaField_SetAlignmentType((igMemoryRefMetaField *)field, "sndfBuffer");
+    ((Gap::Core::igMemoryRefMetaField *)field)->setAlignmentType("sndfBuffer");
 }
 
 igMetaObject *beCri_GetMeta(void)

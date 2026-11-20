@@ -394,12 +394,12 @@ void igResource_WrapRootInSceneInfo(int directory) {
                         if (((unsigned long long)(long long)(int)u->_refCount & 0x7fffffULL) == 0) igObject_Destroy(u);
                     }
                     sceneGraphField = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)info)->GetMeta(), (const char *)"_sceneGraph"));
-                    igObjectRefMetaField_Assign(sceneGraphField, (void *)info, (igObject *)root);
+                    ((Gap::Core::igObjectRefMetaField *)sceneGraphField)->set((Gap::Core::igObject *)info, (Gap::Core::igObject *)root);
                     camerasField = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)info)->GetMeta(), (const char *)"_cameras"));
                     sceneGraphListField = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)info)->GetMeta(), (const char *)"_sceneGraphList"));
                     sceneGraphList = AsObjectList(*(void **)((char *)info + sceneGraphListField->_offset));
                     if (sceneGraphList != 0) ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)sceneGraphList, (igObject *)root);
-                    igObjectRefMetaField_Assign(camerasField, (void *)info, (igObject *)0);
+                    ((Gap::Core::igObjectRefMetaField *)camerasField)->set((Gap::Core::igObject *)info, (Gap::Core::igObject *)0);
                     igDirectory_AddInfo((void *)directory, (void *)info);
                     {
                         igObject *u = info;

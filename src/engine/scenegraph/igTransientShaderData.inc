@@ -167,7 +167,7 @@ void igTransientShaderData_InitFields(void) {
     temp_s2 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)temp_s1->f40, (int)temp_v0);
     temp_s0 = (T_194b40 *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     temp_s0->f56 = (int)igDataPumpInfo_GetOrCreateMetaObject();
-    igObjectRefMetaField_SetDefault((igObjectRefMetaField *)temp_s0, (igObject *)0);
+    ((Gap::Core::igObjectRefMetaField *)temp_s0)->setDefault((Gap::Core::igObject *)0);
     temp_s0->f38 = 0;
     temp_s0->f28 = (int)(&g_igTransientShaderData_dataPumpsMetaField);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)temp_s1, temp_s2, (igMetaField *)temp_s0);

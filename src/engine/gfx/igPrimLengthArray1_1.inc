@@ -64,7 +64,7 @@ void igPrimLengthArray1_1_InitFields(void) {
     temp_s0 = ((DW4VC_84_1 *)(temp_v0))->vX(1);
     temp_s0->f60 = (int)Gap::Core::igUnsignedIntMetaField::getMetaField();
     temp_s0->f56 = 0;
-    igMemoryRefMetaField_SetDefaultWord((igMetaField *)temp_s0, 0);
+    ((Gap::Core::igMemoryRefMetaField *)temp_s0)->setDefault(0);
     temp_s0->f53 = 1;
     temp_s0->f64 = 1;
     temp_s0->f65 = 1;

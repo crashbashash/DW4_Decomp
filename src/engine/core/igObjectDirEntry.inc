@@ -139,7 +139,7 @@ void igObjectDirEntry_InitFields(void) {
     field = (igMetaField *)igObjectRefMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     ((Gap::Core::igMetaField *)field)->setBasicProperties((const char *)text_ref, (Gap::Core::igMetaField **)&g_igObjectDirEntry_refField, 0x18, meta);
     ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igObject::getClassMeta();
-    igObjectRefMetaField_SetDefault((igObjectRefMetaField *)field, 0);
+    ((Gap::Core::igObjectRefMetaField *)field)->setDefault(0);
     field->_persistent = 0;
     field->_externalEnumStorage = (int)&g_igObjectDirEntry_refField;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);

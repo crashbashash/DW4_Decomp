@@ -183,7 +183,7 @@ void igImage_InitFields(void) {
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xA)))->setDefault(-2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xB));
     *(int *)((char *)(temp_s1) + 60) = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
-    igMemoryRefMetaField_SetPoolName((igMemoryRefMetaField *)temp_s1, "Image");
+    ((Gap::Core::igMemoryRefMetaField *)temp_s1)->setPool("Image");
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xC));
     *(int *)((char *)(temp_s1_2) + 60) = (int)Gap::Core::igCharMetaField::getMetaField();
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xD)))->setDefault(1);

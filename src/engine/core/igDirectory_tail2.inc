@@ -130,7 +130,7 @@ static inline igObjectDirEntry *castBinding(igObjectDirEntry *o) {
 }
 
 static inline igObjectRefMetaField *castRefField(igObjectRefMetaField *o) {
-    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType((igMetaObject *)(((int)g_igObjectRefMetaField_metaObject))) != 0) {
+    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType((igMetaObject *)(((int)Gap::Core::igObjectRefMetaField::getClassMeta()))) != 0) {
         return o;
     }
     return 0;
@@ -177,7 +177,7 @@ int igDirectory_ReplaceReference(igDirectoryView *self, const igSmartPointer<igV
                 f = castRefField(((igObjectRefMetaField *)igMetaObject_GetFieldAt(((igObjectDispatchView *)source.get())->GetMeta(), j)));
                 if (f != 0) {
                     if (*(igObjectDispatchView **)((char *)source.get() + f->_offset) == ((igObjectDispatchView *)field.p)) {
-                        igObjectRefMetaField_Assign(f, (void *)(source.get()), (igObject *)((igObjectDispatchView *)value.p));
+                        ((Gap::Core::igObjectRefMetaField *)f)->set((Gap::Core::igObject *)(source.get()), (Gap::Core::igObject *)((igObjectDispatchView *)value.p));
                         changed++;
                     }
                 }
@@ -391,7 +391,7 @@ int igDirectory_AddMemoryRef(igDirectoryView *self, int field, int memory, int m
     record.get()->_refCounted = refCounted;
     if (self->_useMemoryPoolAssignmentsState) {
         pool = 0;
-        if (self->_forceWriteMemoryPoolInfoFromMetaState && field && igMemoryRefMetaField_GetPoolName((igMemoryRefMetaField *)field)) pool = (int)Memory_GetAllocatorByName((const char *)igMemoryRefMetaField_GetPoolName((igMemoryRefMetaField *)field));
+        if (self->_forceWriteMemoryPoolInfoFromMetaState && field && ((Gap::Core::igMemoryRefMetaField *)field)->getPool()) pool = (int)Memory_GetAllocatorByName((const char *)((Gap::Core::igMemoryRefMetaField *)field)->getPool());
         if (pool == 0) pool = (int)Memory_FindOwningAllocator(memory);
         if (pool) {
             poolIndex = ((MemoryContext *)Memory_GetCurrentContextAlias())->IndexOfAllocator((void *)pool);

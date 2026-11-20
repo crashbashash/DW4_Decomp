@@ -84,7 +84,7 @@ void igVertexArray_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igVertexArray_ctorTable, 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    *(int *)((char *)(temp_s1) + 60) = igMemoryRefMetaField_GetDefaultDescriptor();
+    *(int *)((char *)(temp_s1) + 60) = (int)Gap::Core::igMemoryRefMetaField::getMetaField();
     *(char *)((char *)(temp_s1) + 40) = 0;
     igMetaObject_NameFields(meta, g_igVertexArray_fieldTable, g_igVertexArray_fieldHandles, g_igVertexArray_fieldOffsets, fieldStart);
     *(int *)((char *)(g_igVertexArray_metaObject) + 60) = (int)(&igPsx2VertexArray1_1_GetMetaObjectFunction);

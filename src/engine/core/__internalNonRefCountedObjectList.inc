@@ -102,7 +102,7 @@ void __internalNonRefCountedObjectList_InitFields(void) {
     first = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g___internalNonRefCountedObjectList_ctorTable, 2);
     field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first)));
-    ((igMemoryRefMetaField *)field)->_memType = igObjectRefMetaField_GetDefaultDescriptor();
+    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igObjectRefMetaField::getMetaField();
     ((igMemoryRefMetaField *)field)->_memSize = 0x40;
     ((igRefMetaField *)field)->_construct = 1;
     ((igRefMetaField *)field)->_destruct = 1;

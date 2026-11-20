@@ -1,181 +1,251 @@
-int igMemoryRefMetaField_GetSize(void) {
+namespace Gap {
+namespace Core {
+
+unsigned short igMemoryRefMetaField::computeSize()
+{
     return 4;
 }
 
-void igMemoryRefMetaField_SetDefaultWord(igMetaField *self, int defaultWord) {
-    int defaultCell;
-
-    defaultCell = defaultWord;
-    ((igMetaFieldView *)(self))->SetDefault(&defaultCell);
+void igMemoryRefMetaField::setDefault(void *val)
+{
+    setDefaultMemory(&val);
 }
 
 /* Allocates the array a memory-reference field points at, if the field is constructed
  * (_construct). The element count is memSize rounded up to whole elements of the element type's
  * size (element-size virtual, low 16 bits); the pool name picks a named allocator, falling back to
  * the owning object's allocator when the name is empty or unknown. */
-void igMemoryRefMetaField_ConstructValue(igMemoryRefMetaField *self, int object) {
+void igMemoryRefMetaField::construct(igObject *src)
+{
     int status;
-    int allocator;
-    char *poolName;
+    igMemoryPoolView *pool;
+    const char *poolName;
     unsigned int elementCount;
     unsigned int elementSize;
-    void **memType;
 
-    if (self->_construct != 0) {
-        memType = (void **)(self->_memType);
-        elementSize = ((igMetaFieldView *)(memType))->GetSize() & 0xFFFF;
-        poolName = (char *)(self->_poolName);
-        elementCount = (int)((unsigned int) ((self->_memSize + elementSize) - 1) / elementSize);
+    if (_construct != 0) {
+        elementSize = ((igMetaField *)_memType)->computeSize() & 0xFFFF;
+        poolName = _poolName.p;
+        elementCount = (unsigned int)((_memSize + elementSize) - 1) / elementSize;
         if ((poolName != 0) && (*poolName != 0)) {
-            allocator = (int)Memory_GetAllocatorByName(poolName);
-            if (allocator == 0) {
-                allocator = ((int)((Gap::Core::igObject *)object)->getMemoryPool());
+            pool = Memory_GetAllocatorByName(poolName);
+            if (pool == 0) {
+                pool = src->getMemoryPool();
             }
         } else {
-            allocator = ((int)((Gap::Core::igObject *)object)->getMemoryPool());
+            pool = src->getMemoryPool();
         }
-        igMetaField_AllocateArray(&status, self, (void *)object, elementCount, (igMemoryPoolView *)allocator);
+        igMetaField_AllocateArray(&status, (::igMemoryRefMetaField *)this, src, elementCount, pool);
     }
 }
 
-void igMemoryRefMetaField_DestructValue(igMemoryRefMetaField *field,void *object, int extra2){
-    if(field->_destruct){
-        igMemoryRefMetaField_ReleaseElementRefs(field, object, extra2);
-        Memory_FreeBuffer(*(void **)((char *)object+field->_offset));
-        *(void **)((char *)object+field->_offset)=0;
+void igMemoryRefMetaField::destruct(igObject *src)
+{
+    if (_destruct) {
+        releaseObjects(src);
+        Memory_FreeBuffer(*(void **)((char *)src + _offset));
+        *(void **)((char *)src + _offset) = 0;
     }
 }
 
-void igMemoryRefMetaField_AddElementRefs(igMemoryRefMetaField *field,void *object){
-    igObject **data;
+void igMemoryRefMetaField::refObjects(igObject *obj)
+{
+    ::igObject **data;
     int n;
     int i;
-    igObject *value;
-    if(!field->_refCounted)return;
-    if(!field->_memType)return;
-    if(!((Gap::Core::igObject *)field->_memType)->isOfType((igMetaObject *)((int)g_igObjectRefMetaField_metaObject)))return;
-    data=*(igObject ***)((char *)object+field->_offset);
-    if(!data)return;
-    n=Memory_GetBufferSize(data)>>2;
-    for(i=0;i<n;i++){value=data[i];if(value)++value->_refCount;}
-}
+    ::igObject *value;
 
-void igMemoryRefMetaField_ReleaseElementRefs(igMemoryRefMetaField *field,void *object, int extra2){
-    igObject **data;
-    int n;
-    int i;
-    igObject *value;
-    if(!field->_refCounted)return;
-    if(!field->_memType)return;
-    if(!((Gap::Core::igObject *)field->_memType)->isOfType((igMetaObject *)((int)g_igObjectRefMetaField_metaObject)))return;
-    data=*(igObject ***)((char *)object+field->_offset);
-    if(!data)return;
-    n=Memory_GetBufferSize(data)>>2;
-    for(i=0;i<n;i++){
-        value=data[i];
-        if(value){--value->_refCount;if(!(value->_refCount&0x7fffff))igObject_Destroy(value);}
+    if (!_refCounted) {
+        return;
+    }
+    if (!_memType) {
+        return;
+    }
+    if (!((igMetaField *)_memType)->isOfType(igObjectRefMetaField::getClassMeta())) {
+        return;
+    }
+    data = *(::igObject ***)((char *)obj + _offset);
+    if (!data) {
+        return;
+    }
+    n = Memory_GetBufferSize(data) >> 2;
+    for (i = 0; i < n; i++) {
+        value = data[i];
+        if (value) {
+            ++value->_refCount;
+        }
     }
 }
 
-void igMemoryRefMetaField_SetToDefault(igMemoryRefMetaField *field,void *object, int extra2){
-    void *value,*result;
-    igMemoryRefMetaField_ReleaseElementRefs(field, object, extra2);
-    if(field->_releaseOnReset){value=*(void **)((char *)object+field->_offset);if(value)Memory_FreeOwnedBufferUnchecked(value);}
-    value=*(void **)field->_default;
-    result=value?Memory_DuplicateBuffer(value):0;
-    *(void **)((char *)object+field->_offset)=result;
-    igMemoryRefMetaField_AddElementRefs(field,object);
+void igMemoryRefMetaField::releaseObjects(igObject *obj)
+{
+    ::igObject **data;
+    int n;
+    int i;
+    ::igObject *value;
+
+    if (!_refCounted) {
+        return;
+    }
+    if (!_memType) {
+        return;
+    }
+    if (!((igMetaField *)_memType)->isOfType(igObjectRefMetaField::getClassMeta())) {
+        return;
+    }
+    data = *(::igObject ***)((char *)obj + _offset);
+    if (!data) {
+        return;
+    }
+    n = Memory_GetBufferSize(data) >> 2;
+    for (i = 0; i < n; i++) {
+        value = data[i];
+        if (value) {
+            --value->_refCount;
+            if (!(value->_refCount & 0x7fffff)) {
+                igObject_Destroy(value);
+            }
+        }
+    }
 }
 
-void igMemoryRefMetaField_DeepCopy(igMemoryRefMetaField *self, int destination, int source) {
+void igMemoryRefMetaField::resetByValue(igObject *src)
+{
+    void *value;
+    void *result;
+
+    releaseObjects(src);
+    if (_releaseOnReset) {
+        value = *(void **)((char *)src + _offset);
+        if (value) {
+            Memory_FreeOwnedBufferUnchecked(value);
+        }
+    }
+    value = *(void **)_default;
+    result = value ? Memory_DuplicateBuffer(value) : 0;
+    *(void **)((char *)src + _offset) = result;
+    refObjects(src);
+}
+
+void igMemoryRefMetaField::copyByValue(igObject *dst, const igObject *src)
+{
     int copy;
-    igMemoryRefMetaField_ReleaseElementRefs(self, (void *)destination, source);
-    if (self->_releaseOnCopy != 0) {
-        int owned = *(int *)(destination + self->_offset);
-        if (owned != 0) Memory_FreeOwnedBufferUnchecked((void *)owned);
+
+    releaseObjects(dst);
+    if (_releaseOnCopy != 0) {
+        int owned = *(int *)((char *)dst + _offset);
+        if (owned != 0) {
+            Memory_FreeOwnedBufferUnchecked((void *)owned);
+        }
     }
     {
-        int buffer = *(int *)(source + self->_offset);
-        if (buffer != 0) copy = ((int)Memory_DuplicateBuffer((void *)buffer)); else copy = 0;
-        *(int *)(destination + self->_offset) = copy;
+        int buffer = *(int *)((const char *)src + _offset);
+        if (buffer != 0) {
+            copy = (int)Memory_DuplicateBuffer((void *)buffer);
+        } else {
+            copy = 0;
+        }
+        *(int *)((char *)dst + _offset) = copy;
     }
-    if (self->_memType != 0) {
-        if (((Gap::Core::igObject *)self->_memType)->isOfType((igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
-            int src = *(int *)(source + self->_offset);
-            int dst = *(int *)(destination + self->_offset);
-            if (src != 0 && dst != 0) {
-                unsigned n = Memory_GetBufferSize((void *)src) >> 2;
+    if (_memType != 0) {
+        if (((igMetaField *)_memType)->isOfType(igObjectRefMetaField::getClassMeta()) != 0) {
+            int from = *(int *)((const char *)src + _offset);
+            int to = *(int *)((char *)dst + _offset);
+            if (from != 0 && to != 0) {
+                unsigned n = Memory_GetBufferSize((void *)from) >> 2;
                 int i;
                 for (i = 0; i < (int)n; i++) {
-                    igObjectDispatchView *e = *(igObjectDispatchView **)(src + i * 4);
+                    igObject *e = *(igObject **)(from + i * 4);
                     int clone = 0;
-                    if (e != 0) clone = (int)e->CloneViaMetadata(1);
-                    *(int *)(dst + i * 4) = clone;
+                    if (e != 0) {
+                        clone = (int)e->cloneViaMetadata(1);
+                    }
+                    *(int *)(to + i * 4) = clone;
                 }
             }
-        } else if (((Gap::Core::igObject *)self->_memType)->isOfType((igMetaObject *)((int)g_igMemoryRefMetaField_metaObject)) != 0) {
-            int src = *(int *)(source + self->_offset);
-            int dst = *(int *)(destination + self->_offset);
-            unsigned n = Memory_GetBufferSize((void *)src) >> 2;
+        } else if (((igMetaField *)_memType)->isOfType(igMemoryRefMetaField::getClassMeta()) != 0) {
+            int from = *(int *)((const char *)src + _offset);
+            int to = *(int *)((char *)dst + _offset);
+            unsigned n = Memory_GetBufferSize((void *)from) >> 2;
             int i;
             for (i = 0; i < (int)n; i++) {
-                int e = *(int *)(src + i * 4);
+                int e = *(int *)(from + i * 4);
                 int clone;
-                if (e != 0) clone = ((int)Memory_DuplicateBuffer((void *)e)); else clone = 0;
-                *(int *)(dst + i * 4) = clone;
+                if (e != 0) {
+                    clone = (int)Memory_DuplicateBuffer((void *)e);
+                } else {
+                    clone = 0;
+                }
+                *(int *)(to + i * 4) = clone;
             }
         }
     }
 }
 
-void igMemoryRefMetaField_ShallowCopy(igMemoryRefMetaField *field,void *dest,void *source){
-    igMemoryRefMetaField_ReleaseElementRefs(field, dest, (int)source);
-    if(field->_releaseOnCopy){void *old=*(void **)((char *)dest+field->_offset);if(old)Memory_FreeOwnedBufferUnchecked(old);}
-    void *value=*(void **)((char *)source+field->_offset);
-    void *copy=value?Memory_DuplicateBuffer(value):0;
-    *(void **)((char *)dest+field->_offset)=copy;
-    igMemoryRefMetaField_AddElementRefs(field,dest);
+void igMemoryRefMetaField::copyByValueShallow(igObject *dst, const igObject *src)
+{
+    void *old;
+    void *value;
+    void *copy;
+
+    releaseObjects(dst);
+    if (_releaseOnCopy) {
+        old = *(void **)((char *)dst + _offset);
+        if (old) {
+            Memory_FreeOwnedBufferUnchecked(old);
+        }
+    }
+    value = *(void **)((const char *)src + _offset);
+    copy = value ? Memory_DuplicateBuffer(value) : 0;
+    *(void **)((char *)dst + _offset) = copy;
+    refObjects(dst);
 }
 
-void igMemoryRefMetaField_Print(igMemoryRefMetaField *self, int object, int depth, int indent) {
+void igMemoryRefMetaField::print(const igObject *src, unsigned int deep, const char *indent)
+{
     unsigned int count;
     unsigned int elementSize;
     int buffer;
     int i;
-    buffer = *(int *)(object + self->_offset);
-    igReport_Printf("%s%s = 0x%x\n", indent, self->_fieldName, buffer);
+
+    buffer = *(int *)((const char *)src + _offset);
+    igReport_Printf("%s%s = 0x%x\n", indent, getFieldName(), buffer);
     igReport_Flush();
-    if (depth != 0 && buffer != 0) {
-        elementSize = ((igMetaFieldView *)self->_memType)->GetElementSize();
+    if (deep != 0 && buffer != 0) {
+        elementSize = ((igMetaField *)_memType)->computeTypeSize();
         count = Memory_GetBufferSize((void *)buffer) / elementSize;
-        if (((Gap::Core::igObject *)self->_memType)->isOfType((igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
+        if (((igMetaField *)_memType)->isOfType(igObjectRefMetaField::getClassMeta()) != 0) {
             for (i = 0; i < (int)count; i++) {
-                int e = *(int *)(buffer + i * 4);
+                igObject *e = *(igObject **)(buffer + i * 4);
                 if (e != 0) {
-                    ((Gap::Core::igObject *)((void **)e))->printFields(depth, indent);
+                    e->printFields(deep, (int)indent);
                 }
             }
         }
     }
 }
 
-void igMemoryRefMetaField_ReleaseElements(igMemoryRefMetaField *self, int object, int visitor, int context) {
-    igObjectDispatchView **elements;
+void igMemoryRefMetaField::traverse(igObject *obj, void *visitFunc, void *traversalData)
+{
+    igObject **elements;
     unsigned int count;
     int i;
-    igObjectDispatchView *element;
-    if (((Gap::Core::igObject *)self->_memType)->isOfType((igMetaObject *)g_igObjectRefMetaField_metaObject) != 0) {
-        elements = *(igObjectDispatchView ***)(object + self->_offset);
+    igObject *element;
+
+    if (((igMetaField *)_memType)->isOfType(igObjectRefMetaField::getClassMeta()) != 0) {
+        elements = *(igObject ***)((char *)obj + _offset);
         if (elements != 0) {
             count = Memory_GetBufferSize((void *)elements) >> 2;
             for (i = 0; i < (int)count; i++) {
                 element = elements[i];
                 if (element != 0) {
-                    element->TrimCapacity();
-                    ((Gap::Core::igObject *)elements[i])->traverseFields((Visitor)visitor, (void *)context);
+                    element->trimCapacity();
+                    elements[i]->traverseFields((Visitor)visitFunc, traversalData);
                 }
             }
         }
     }
+}
+}
 }
 

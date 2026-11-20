@@ -1,22 +1,27 @@
-igMetaObject *g_igMemoryRefMetaField_metaObject;
-igMemoryRefMetaField *g_igMemoryRefMetaField_descriptor;
-igMetaField *g_igMemoryRefMetaField_shallowCopyMethodStorage;
-igMetaField *g_igMemoryRefMetaField_memSizeMetaField;
-igMetaField *g_igMemoryRefMetaField_memTypeMetaField;
-igMetaField *g_igMemoryRefMetaField_releaseOnCopyMetaField;
-igMetaField *g_igMemoryRefMetaField_releaseOnResetMetaField;
-igMetaField *g_igMemoryRefMetaField_resetMethodStorage;
-igMetaField *g_igMemoryRefMetaField_refCountedMetaField;
-igMetaField *g_igMemoryRefMetaField_alignmentTypeMetaField;
-igMetaField *g_igMemoryRefMetaField_memTypeRefMetaField;
-igMetaField *g_igMemoryRefMetaField_poolNameMetaField;
+namespace Gap {
+namespace Core {
+
+igMetaObject *igMemoryRefMetaField::_Meta;
+igMemoryRefMetaField *igMemoryRefMetaField::_MetaField;
+igMetaField *igMemoryRefMetaField::k_shallowCopyMethod;
+igMetaField *igMemoryRefMetaField::k_memSize;
+igMetaField *igMemoryRefMetaField::k_memType;
+igMetaField *igMemoryRefMetaField::k_releaseOnCopy;
+igMetaField *igMemoryRefMetaField::k_releaseOnReset;
+igMetaField *igMemoryRefMetaField::k_resetMethod;
+igMetaField *igMemoryRefMetaField::k_refCounted;
+igMetaField *igMemoryRefMetaField::k_alignmentType;
+igMetaField *igMemoryRefMetaField::k_memTypeRef;
+igMetaField *igMemoryRefMetaField::k_poolName;
+}
+}
 
 igMetaField *igMemoryRefMetaField_Create(igMemoryPoolView *pool) {
     void **instance;
 
     if (g_objectSystem->active != 0) {
-        igMemoryRefMetaField_EnsureRegistered();
-        instance = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)((int)g_igMemoryRefMetaField_metaObject), pool)));
+        Gap::Core::igMemoryRefMetaField::arkRegister();
+        instance = (void **)(((void **)igMetaObject_CreateInstance((igMetaObject *)((int)Gap::Core::igMemoryRefMetaField::getClassMeta()), pool)));
     } else {
         instance = (void **)(((void **)igObject_AllocateRawStorage(0x50, 0, pool)));
         if (instance != 0) {
@@ -28,224 +33,158 @@ igMetaField *igMemoryRefMetaField_Create(igMemoryPoolView *pool) {
     return (igMetaField *)instance;
 }
 
-igMemoryRefMetaField *igMemoryRefMetaField_Clone(igMemoryRefMetaField *source, int copyMode) {
-    igMemoryRefMetaField *clone;
+namespace Gap {
+namespace Core {
 
+igObject *igMemoryRefMetaField::cloneViaMetadata(int copyMode)
+{
     if (g_objectSystem->active != 0) {
-        igMemoryRefMetaField_EnsureRegistered();
-        return (igMemoryRefMetaField *)igObject_CloneViaMetadata((void **)source, copyMode);
+        arkRegister();
+        return igObject::cloneViaMetadata(copyMode);
     }
-    clone = (igMemoryRefMetaField *)igObject_AllocateRawStorageDefault(0x50, 0);
-    if (clone != 0) {
-        clone = igMemoryRefMetaField_CopyConstruct(clone, source);
-    }
-    return clone;
+    return new (igObject_AllocateRawStorageDefault(sizeof(igMemoryRefMetaField), 0), 0) igMemoryRefMetaField(*this);
 }
 
-igMetaObject *igMemoryRefMetaField_GetMetaObject(void)
+igMetaObject *igMemoryRefMetaField::getClassTypeSafe()
 {
-    igMetaObject *g = g_igMemoryRefMetaField_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMemoryRefMetaField_EnsureRegistered();
-    return g_igMemoryRefMetaField_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igMemoryRefMetaField_GetVTable(void) {
-    igMemoryRefMetaField prototype;
-    int vtable;
-
-    igMemoryRefMetaField_Init((igMemoryRefMetaField *)&prototype);
-    vtable = *(int *)((char *)&prototype + g_objectSystem->vtableProbeOffset);
-    prototype._vtable = (int)&g_igMemoryRefMetaField_vtable[0];
-    igStringRef_Destruct((igStringRef *)&prototype._poolName, -1);
-    igSmartPointer_igMetaField_Destruct((igSmartPointer<igObject> *)&prototype._memTypeRef, -1);
-    igRefMetaField_Destroy((igRefMetaField *)&prototype, 0);
-    return vtable;
-}
-
-void *igMemoryRefMetaField_Destroy(igMemoryRefMetaField *self, long long flags) {
-    igObject *o;
-    int *a1;
-    int v0;
-    if (self != 0) {
-        self->_vtable = (int)&g_igMemoryRefMetaField_vtable[0];
-        if (&self->_poolName != 0) {
-            char *p = (char *)self->_poolName;
-            if (p != 0) {
-                a1 = (int *)(p - 8);
-                v0 = *(int *)(p - 4) - 1;
-                *(int *)(p - 4) = v0;
-                if (v0 == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
-                }
-            }
-        }
-        if (&self->_memTypeRef != 0) {
-            o = (igObject *)self->_memTypeRef;
-            if (o != 0) {
-                o->_refCount = o->_refCount - 1;
-                if ((o->_refCount & 0x7FFFFF) == 0) {
-                    igObject_Destroy(o);
-                }
-            }
-        }
-        if (self != 0) {
-            self->_vtable = (int)&g_igRefMetaField_vtable[0];
-            if (self != 0) {
-                self->_vtable = (int)&g_igMetaField_vtable[0];
-                if (&self->_fieldName != 0) {
-                    char *p = (char *)self->_fieldName;
-                    if (p != 0) {
-                        a1 = (int *)(p - 8);
-                        v0 = *(int *)(p - 4) - 1;
-                        *(int *)(p - 4) = v0;
-                        if (v0 == 0) {
-                            StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
-                        }
-                    }
-                }
-            }
-        }
-        if ((short)flags > 0) {
-            Memory_FreeBufferAliasC(self);
-        }
-    }
-    return self;
-}
-
-void igMemoryRefMetaField_EnsureRegistered(void)
+void *igMemoryRefMetaField::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igMemoryRefMetaField_Register);
+    igMemoryRefMetaField temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-static igMetaObjectCallback g_igMemoryRefMetaField_callbackList[] = { Gap::Core::igMetaField::arkRegister, igMemoryRefMetaField_CreateDefaultDescriptor, 0 };
+void igMemoryRefMetaField::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igMemoryRefMetaField_Register(void) {
+CallbackArray *igMemoryRefMetaField::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igMetaField::arkRegister, arkRegisterMetaValidate, 0 };
+
     return igMetaObject_RegisterClass(
-        0,
-        &g_igMemoryRefMetaField_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igRefMetaField::arkRegisterInternal,
         Gap::Core::igRefMetaField::getClassMeta,
-        igMemoryRefMetaField_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMemoryRefMetaField",
-        0x50,
-        igMemoryRefMetaField_GetVTable,
-        igMemoryRefMetaField_InitFields,
+        sizeof(igMemoryRefMetaField),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
         0,
-        g_igMemoryRefMetaField_callbackList
+        regFunctions
     );
 }
-
-void igMemoryRefMetaField_GetMetaObjectFunction(void) {
-    igMemoryRefMetaField_GetMetaObject();
+}
 }
 
-static FieldFactory g_igMemoryRefMetaField_ctorTable[] = {
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igStringMetaField_Create,
-};
-static const char *g_igMemoryRefMetaField_fieldTable[] = {
-    "_memSize",
-    "_memType",
-    "_releaseOnCopy",
-    "_releaseOnReset",
-    "_refCounted",
-    "_alignmentType",
-    "_memTypeRef",
-    "_poolName",
-};
-static igMetaField **g_igMemoryRefMetaField_fieldDescriptors[] = {
-    &g_igMemoryRefMetaField_memSizeMetaField,
-    &g_igMemoryRefMetaField_memTypeMetaField,
-    &g_igMemoryRefMetaField_releaseOnCopyMetaField,
-    &g_igMemoryRefMetaField_releaseOnResetMetaField,
-    &g_igMemoryRefMetaField_refCountedMetaField,
-    &g_igMemoryRefMetaField_alignmentTypeMetaField,
-    &g_igMemoryRefMetaField_memTypeRefMetaField,
-    &g_igMemoryRefMetaField_poolNameMetaField,
-};
-static int g_igMemoryRefMetaField_fieldOffsets[] = {
-    56,
-    60,
-    64,
-    65,
-    66,
-    68,
-    72,
-    76,
-};
+namespace Gap {
+namespace Core {
 
-int g_igMemoryRefMetaField_resetMethodDefault = 3;
+void igMemoryRefMetaField::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igIntMetaField_Create, igObjectRefMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igBoolMetaField_Create, igIntMetaField_Create, igObjectRefMetaField_Create, igStringMetaField_Create };
+    static const char *names[] = { "_memSize", "_memType", "_releaseOnCopy", "_releaseOnReset", "_refCounted", "_alignmentType", "_memTypeRef", "_poolName" };
+    static igMetaField **enumStorage[] = { &k_memSize, &k_memType, &k_releaseOnCopy, &k_releaseOnReset, &k_refCounted, &k_alignmentType, &k_memTypeRef, &k_poolName };
+    static int offsets[] = { 56, 60, 64, 65, 66, 68, 72, 76 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
 
-void igMemoryRefMetaField_InitFields(void) {
-    igMetaObject *meta = g_igMemoryRefMetaField_metaObject;
-    int base = igMetaObject_GetFieldCount(meta);
-    igMetaField *field;
-    igObjectRefMetaField *ref;
-    int index;
-    int fields;
-    igMetaObject_CreateFields(meta, g_igMemoryRefMetaField_ctorTable, 8);
-    field = (igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)text_shallowCopyMethod);
-    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)field);
-    field = (igMetaField *)((igObjectDispatchView *)field)->CloneViaMetadata(1);
-    ((Gap::Core::igCharMetaField *)field)->setDefault(2);
-    field->_externalEnumStorage = (int)&g_igMemoryRefMetaField_shallowCopyMethodStorage;
-    igMetaObject_FinalizeAndReplaceField(meta, index, field);
-    releaseField(field);
-    ((igMetaField *)igMetaObject_GetFieldAt(meta, base))->_persistent = 0;
-    ref = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 1);
-    ref->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
-    ref->_refCounted = 0;
-    ref->_deepCopyMethod = 1;
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(1);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 3)))->setDefault(1);
-    fields = meta->_metaFields;
-    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_resetMethod));
-    field = (igMetaField *)igEnumMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    ((Gap::Core::igMetaField *)field)->setBasicProperties((const char *)text_resetMethod, (Gap::Core::igMetaField **)&g_igMemoryRefMetaField_resetMethodStorage, 0x24, meta);
-    ((Gap::Core::igEnumMetaField *)field)->setDefault(g_igMemoryRefMetaField_resetMethodDefault);
-    ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)igMetaField_GetResetTypeMetaEnum;
-    field->_externalEnumStorage = (int)&g_igMemoryRefMetaField_resetMethodStorage;
-    igMetaObject_FinalizeAndReplaceField(meta, index, field);
-    releaseField(field);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(1);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 5)))->setDefault(-1);
-    ref = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 6);
-    ref->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
-    ref->_deepCopyMethod = 1;
-    igMetaObject_NameFields(meta, g_igMemoryRefMetaField_fieldTable, g_igMemoryRefMetaField_fieldDescriptors, g_igMemoryRefMetaField_fieldOffsets, base);
+    igMetaObject_CreateFields(metaObject, instFuncs, 8);
+    {
+        igCharMetaField *metaField = (igCharMetaField *)igMetaObject_FindFieldByName(metaObject, "_shallowCopyMethod");
+        int metaIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)metaObject->_metaFields, (int)metaField);
+        metaField = (igCharMetaField *)((igObjectDispatchView *)metaField)->CloneViaMetadata(1);
+        metaField->setDefault(2);
+        metaField->_externalEnumStorage = (int)&k_shallowCopyMethod;
+        igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
+        metaField->_refCount = metaField->_refCount - 1;
+        if (((unsigned long long)(long long)metaField->_refCount & 0x7fffffULL) == 0) {
+            igObject_Destroy((::igObject *)metaField);
+        }
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_persistent = 0;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
+        metaField->_refCounted = 0;
+        metaField->_deepCopyMethod = 1;
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(1);
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->setDefault(1);
+    }
+    {
+        __internalNonRefCountedObjectList *metaFields = (__internalNonRefCountedObjectList *)metaObject->_metaFields;
+        int metaIndex = ObjectPointerList_FindIndex(metaFields, (int)igMetaObject_FindFieldByName(metaObject, "_resetMethod"));
+        igEnumMetaField *metaField = (igEnumMetaField *)igEnumMetaField_Create(Memory_GetAllocatorBySelector((int)kIGMemoryPoolHandleMetaData));
+        metaField->setBasicProperties("_resetMethod", &k_resetMethod, 36, metaObject);
+        metaField->setDefault(3);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaField_GetResetTypeMetaEnum;
+        metaField->_externalEnumStorage = (int)&k_resetMethod;
+        igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
+        metaField->_refCount = metaField->_refCount - 1;
+        if (((unsigned long long)(long long)metaField->_refCount & 0x7fffffULL) == 0) {
+            igObject_Destroy((::igObject *)metaField);
+        }
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->setDefault(1);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->setDefault(-1);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 6);
+        metaField->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
+        metaField->_deepCopyMethod = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
 
-void igMemoryRefMetaField_CreateDefaultDescriptor(void) {
-    igMemoryRefMetaField *descriptor;
-    igMemoryRefMetaField *p;
+void igMemoryRefMetaField::arkRegisterMetaValidate()
+{
+    igMemoryRefMetaField *metaField;
 
-    if (g_igMemoryRefMetaField_descriptor == 0) {
-        g_igMemoryRefMetaField_descriptor = ((igMemoryRefMetaField *)igMetaObject_CreateInstance((igMetaObject *)((int)g_igMemoryRefMetaField_metaObject), Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
-        descriptor = g_igMemoryRefMetaField_descriptor;
-        if (descriptor != 0) {
-            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
-            p = g_igMemoryRefMetaField_descriptor;
-            p->_refCount = p->_refCount - 1;
-            if (((unsigned long long)(long long)p->_refCount & 0x7fffffULL) == 0) {
-                igObject_Destroy(p);
+    if (_MetaField == 0) {
+        _MetaField = (igMemoryRefMetaField *)igMetaObject_CreateInstance(_Meta, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+        metaField = _MetaField;
+        if (metaField != 0) {
+            MetaRefList_AppendRetained(getMetaFieldTypes(), (::igObject *)metaField);
+            {
+                ::igObject *held = (::igObject *)_MetaField;
+                held->_refCount = (int)held->_refCount - 1;
+                if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
+                    igObject_Destroy(held);
+                }
             }
-            g_igMemoryRefMetaField_descriptor->_internalIndex = Gap::Core::igMetaField::getMetaFieldTypes()->_count - 1;
-            ((Gap::Core::igMetaField *)g_igMemoryRefMetaField_descriptor)->validate();
+            _MetaField->_internalIndex = (short)(getMetaFieldTypes()->_count - 1);
+            _MetaField->validate();
         }
     }
 }
 
-int igMemoryRefMetaField_GetDefaultDescriptor(void) {
-    if ((*(int *)&g_igMemoryRefMetaField_descriptor) == 0) {
-        igMemoryRefMetaField_EnsureRegistered();
-    }
-    return (*(int *)&g_igMemoryRefMetaField_descriptor);
+igMemoryRefMetaField *igMemoryRefMetaField::getMetaField()
+{
+    if (_MetaField == 0)
+        arkRegister();
+    return _MetaField;
+}
+}
 }
 

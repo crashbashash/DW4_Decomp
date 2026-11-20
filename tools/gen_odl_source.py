@@ -1005,25 +1005,57 @@ class Writer:
             raise Unsupported("an override without the index lookup")
         index = ("ret", j)
         j += 1
+        # a call computing the factory's argument (its allocator) is written inside the factory call
+        while j + 1 < len(events) and events[j]["k"] == "call" and events[j + 1]["k"] == "call" \
+                and ("ret", j) in events[j + 1]["args"] \
+                and not self.lib.role_at.get(events[j]["target"]) \
+                and not re.match(r"\w+_Create$", self.function(events[j]["target"], ctx["cls"])):
+            j += 1
         e = events[j]
-        if not (e["k"] == "vcall" and e["target"] == ("fld", ("fld", found, 0), 8 + 4 * CLONE_SLOT)
-                and e["args"][0] == found and e["args"][1][0] == "k"):
-            raise Unsupported("an override without the clone")
-        copy_mode = e["args"][1][1]
-        clone = ("ret", j)
-        mtype = self.override_type(ctx["cls"], name)
-        ctx["names"][clone] = "metaField"
-        ctx["types"][clone] = mtype
-        ctx["names"][found] = "metaField"
-        ctx["types"][found] = mtype
-        ctx["names"][index] = "metaIndex"
-        lines = ["    {",
-                 "        %s *metaField = (%s *)igMetaObject_FindFieldByName(metaObject, \"%s\");"
-                 % (mtype, mtype, name),
-                 "        int metaIndex = ObjectPointerList_FindIndex("
-                 "(__internalNonRefCountedObjectList *)metaObject->_metaFields, (int)metaField);",
-                 "        metaField = (%s *)((igObjectDispatchView *)metaField)->%s(%d);"
-                 % (mtype, CLONE_NAME, copy_mode)]
+        role = self.lib.role_at.get(e["target"]) if e["k"] == "call" else None
+        factory = re.match(r"(\w+)_Create$", self.function(e["target"], ctx["cls"])) \
+            if e["k"] == "call" and not role else None
+        if (role and role[1] == "_instantiateFromPool") or factory:
+            # the inherited field replaced by a new one of another type: created, given the inherited
+            # field's name, handle and offset (setBasicProperties), set, and put in the old one's place
+            mtype = role[0] if role else factory.group(1)
+            clone = ("ret", j)
+            ctx["names"][clone] = "metaField"
+            ctx["types"][clone] = mtype
+            ctx["names"][index] = "metaIndex"
+            for k in range(j + 1, len(events)):
+                s = events[k]
+                if s["k"] == "store" and s["base"] == clone and s["off"] == 28 and s["val"][0] == "k":
+                    handles.setdefault(s["val"][1], field_handle_name(name))
+                    ctx.setdefault("handle_names", {})[s["val"][1]] = field_handle_name(name)
+                    break
+            # the field list is read before the lookup that is its index argument (retail keeps it in a
+            # saved register across the FindFieldByName call)
+            lines = ["    {",
+                     "        __internalNonRefCountedObjectList *metaFields = "
+                     "(__internalNonRefCountedObjectList *)metaObject->_metaFields;",
+                     "        int metaIndex = ObjectPointerList_FindIndex(metaFields, "
+                     "(int)igMetaObject_FindFieldByName(metaObject, \"%s\"));" % name,
+                     "        %s *metaField = (%s *)%s;" % (mtype, mtype, self.call_expr(e, j, events, ctx))]
+        else:
+            if not (e["k"] == "vcall" and e["target"] == ("fld", ("fld", found, 0), 8 + 4 * CLONE_SLOT)
+                    and e["args"][0] == found and e["args"][1][0] == "k"):
+                raise Unsupported("an override without the clone")
+            copy_mode = e["args"][1][1]
+            clone = ("ret", j)
+            mtype = self.override_type(ctx["cls"], name)
+            ctx["names"][clone] = "metaField"
+            ctx["types"][clone] = mtype
+            ctx["names"][found] = "metaField"
+            ctx["types"][found] = mtype
+            ctx["names"][index] = "metaIndex"
+            lines = ["    {",
+                     "        %s *metaField = (%s *)igMetaObject_FindFieldByName(metaObject, \"%s\");"
+                     % (mtype, mtype, name),
+                     "        int metaIndex = ObjectPointerList_FindIndex("
+                     "(__internalNonRefCountedObjectList *)metaObject->_metaFields, (int)metaField);",
+                     "        metaField = (%s *)((igObjectDispatchView *)metaField)->%s(%d);"
+                     % (mtype, CLONE_NAME, copy_mode)]
         j += 1
         while j < len(events):
             e = events[j]
@@ -1217,7 +1249,8 @@ class Writer:
                     word = self.lib.image.word(n)
                     base = ptype.rstrip("&").replace("const ", "").strip()
                     return self.value(("k", word), base, events, ctx, at)
-                name = self.lib.data_name(n)
+                # the class's own field handle (an override's setBasicProperties storage)
+                name = ctx.get("handle_names", {}).get(n) or self.lib.data_name(n)
                 if name is None:
                     raise Unsupported("an address 0x%x the generator cannot name" % n)
                 return "(int)&%s" % name if ptype.strip() == "int" else "&" + name

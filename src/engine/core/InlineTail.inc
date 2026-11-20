@@ -123,14 +123,6 @@ igMetaObject *igRegistry_GetMeta(void) {
     return g_igRegistry_metaObject;
 }
 
-int igRawRefArrayMetaField_GetMeta(void) {
-    return (int)g_igRawRefArrayMetaField_metaObject;
-}
-
-int igRawRefArrayMetaField_GetDescriptor(void) {
-    return (int)g_igRawRefArrayMetaField_descriptor;
-}
-
 igMetaObject *igQueue_GetMeta(void) {
     return g_igQueue_metaObject;
 }
@@ -218,14 +210,6 @@ int igExternalDirEntry_GetMeta(void) {
 
 int igEventTracker_GetMeta(void) {
     return (int)g_igEventTracker_metaObject;
-}
-
-int igEnumArrayMetaField_GetMeta(void) {
-    return (int)g_igEnumArrayMetaField_metaObject;
-}
-
-int igEnumArrayMetaField_GetDescriptor(void) {
-    return (int)g_igEnumArrayMetaField_descriptor;
 }
 
 int igDriverDatabase_GetMeta(void) {
@@ -466,28 +450,12 @@ igMetaObject *igMemoryPoolInfoList_GetMeta(void) {
     return g_igMemoryPoolInfoList_metaObject;
 }
 
-int igMemoryRefMetaField_GetMeta(void) {
-    return (int)g_igMemoryRefMetaField_metaObject;
-}
-
-int igMemoryRefMetaField_GetDescriptor(void) {
-    return (*(int *)&g_igMemoryRefMetaField_descriptor);
-}
-
 int igMetaEnum_GetMeta(void) {
     return (int)g_igMetaEnum_metaObject;
 }
 
 igMetaObject *igNamedObjectList_GetMeta(void) {
     return g_igNamedObjectList_metaObject;
-}
-
-igMetaObject *igObjectRefMetaField_GetMeta(void) {
-    return g_igObjectRefMetaField_metaObject;
-}
-
-int igObjectRefMetaField_GetDescriptor(void) {
-    return (*(int *)&g_igObjectRefMetaField_descriptor);
 }
 
 int igObjectStringMap_GetMeta(void) {

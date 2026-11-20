@@ -262,11 +262,11 @@ LuaType LuaType_FromMetaField(LuaMetaFieldView *field) {
         result.kind = LUA_KIND_STRING;
     } else if (Gap::Core::igBoolMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_BOOL;
-    } else if (g_igMemoryRefMetaField_metaObject == meta) {
+    } else if (Gap::Core::igMemoryRefMetaField::getClassMeta() == meta) {
         result = LuaType_FromMetaField((LuaMetaFieldView *)((igMemoryRefMetaField *)field)->_memType);
         result.indirection = 1;
         result.byValue = 0;
-    } else if (g_igObjectRefMetaField_metaObject == meta) {
+    } else if (Gap::Core::igObjectRefMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_OBJECT;
         result.metaObject = (igMetaObject *)((igObjectRefMetaField *)field)->_metaObject;
         result.indirection = 1;
@@ -591,7 +591,7 @@ int LuaObject_StoreField(lua_State *L, igMetaField *field, LuaBoundObject *objec
             break;
         case LUA_KIND_OBJECT:
             if (type.metaObject != 0) {
-                igObjectRefMetaField_Assign((igObjectRefMetaField *)field, object, (igObject *)value.data.object);
+                ((Gap::Core::igObjectRefMetaField *)field)->set((Gap::Core::igObject *)object, (Gap::Core::igObject *)value.data.object);
             } else if (type.indirection == 1) {
                 LuaObject_Field<LuaBoundObject *>(object, field) = (LuaBoundObject *)value.data.object;
             } else {

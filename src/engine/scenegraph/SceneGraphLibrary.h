@@ -4783,7 +4783,7 @@ public:
 struct IniItemList { char pad0[8]; int count; char pad1[4]; void **data; };
 struct IniFieldView { char pad0[56]; void *refMeta; };
 static inline IniFieldView *asObjectRefField(IniFieldView *f) {
-    if (f != 0 && ((Gap::Core::igObject *)f)->isOfType(g_igObjectRefMetaField_metaObject) != 0) {
+    if (f != 0 && ((Gap::Core::igObject *)f)->isOfType(Gap::Core::igObjectRefMetaField::getClassMeta()) != 0) {
         return f;
     }
     return 0;

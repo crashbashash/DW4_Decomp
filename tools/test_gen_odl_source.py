@@ -300,6 +300,27 @@ class RetailRoles(unittest.TestCase):
         self.assertEqual(rows, [("igRenderer", "IG_ABSTRACT_OBJECT_DEFINE(igRenderer)"),
                                 ("igRenderer", "static igMetaField *k_visualContext;")])
 
+    def test_an_inherited_field_replaced_by_a_new_type(self):
+        # igMemoryRefMetaField's adder replaces the inherited _resetMethod (a char field) by a new
+        # igEnumMetaField: created, given the inherited name, handle and offset, set, put in place
+        written, _rows, failed, _w = odl.generate(
+            self.lib, ["igMemoryRefMetaField"], os.path.join(ROOT, "config", "class-members.tsv"),
+            os.path.join(ROOT, "config", "converted-classes.tsv"),
+            os.path.join(ROOT, "config", "SLUS-20836", "compiler-names.tsv"),
+            os.path.join(ROOT, "include", "dw4", "support", "reflected.h"))
+        self.assertEqual(failed, {})
+        text = "\n".join(written[0][1])
+        self.assertIn(
+            "        __internalNonRefCountedObjectList *metaFields = (__internalNonRefCountedObjectList *)"
+            "metaObject->_metaFields;\n"
+            "        int metaIndex = ObjectPointerList_FindIndex(metaFields, "
+            "(int)igMetaObject_FindFieldByName(metaObject, \"_resetMethod\"));\n"
+            "        igEnumMetaField *metaField = (igEnumMetaField *)igEnumMetaField_Create(", text)
+        self.assertIn("        metaField->setBasicProperties(\"_resetMethod\", &k_resetMethod, 36, metaObject);\n",
+                      text)
+        self.assertIn("        metaField->_externalEnumStorage = (int)&k_resetMethod;\n"
+                      "        igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, ", text)
+
 
 class FlatCasts(unittest.TestCase):
     def test_a_converted_class_named_by_a_c_parameter_is_the_flat_struct(self):

@@ -128,7 +128,7 @@ void igMemoryDirEntry_InitFields(void) {
     ((igMetaField *)memTypeSizeField)->_persistent = 0;
     memTypeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
     ((igObjectRefMetaField *)memTypeField)->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
-    igObjectRefMetaField_SetDefault((igObjectRefMetaField *)memTypeField, (igObject *)(Gap::Core::igCharMetaField::getMetaField()));
+    ((Gap::Core::igObjectRefMetaField *)memTypeField)->setDefault((Gap::Core::igObject *)(Gap::Core::igCharMetaField::getMetaField()));
     ((igObjectRefMetaField *)memTypeField)->_refCounted = 0;
     ((igObjectRefMetaField *)memTypeField)->_persistent = 0;
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)))->setDefault(-1);

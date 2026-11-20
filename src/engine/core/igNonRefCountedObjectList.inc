@@ -43,7 +43,6 @@ void igNonRefCountedObjectList_GetMetaObjectFunction(void) {
     igNonRefCountedObjectList_GetMetaObject();
 }
 
-
 void igNonRefCountedObjectList_InitFields(void) {
     int index;
     void **found;
@@ -54,7 +53,7 @@ void igNonRefCountedObjectList_InitFields(void) {
     found = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)meta, data)));
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)((char *)((igMetaObject *)meta)->_metaFields), (int)found);
     field = (igMemoryRefMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
-    field->_memType = igObjectRefMetaField_GetDefaultDescriptor();
+    field->_memType = (int)Gap::Core::igObjectRefMetaField::getMetaField();
     field->_memSize = 0;
     field->_refCounted = 0;
     field->_externalEnumStorage = (int)(&g_igNonRefCountedObjectList_dataStorage);
