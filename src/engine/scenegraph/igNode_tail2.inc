@@ -28,7 +28,7 @@ void FUN_001c63e0(int arg0, int arg1) {
     int (*temp_v1)(int);
 
     if (g_invarianceFunctionFieldResolved == 0) {
-        g_invarianceFunctionMetaField = (void *)(((void *)igMetaObject_FindFieldByName(g_igMetaField_metaObject, "_invarianceFunction")));
+        g_invarianceFunctionMetaField = (void *)(((void *)igMetaObject_FindFieldByName(Gap::Core::igMetaField::getClassMeta(), "_invarianceFunction")));
         g_invarianceFunctionFieldResolved = 1;
     }
     temp_v1 = (int (*)(int))(*(int *)(arg0 + *(int *)((char *)(g_invarianceFunctionMetaField) + 8)));

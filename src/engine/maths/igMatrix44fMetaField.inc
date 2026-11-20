@@ -53,7 +53,7 @@ CallbackArray *igMatrix44fMetaField_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMatrix44fMetaField_metaObject,
-        igMetaField_Register,
+        Gap::Core::igMetaField::arkRegisterInternal,
         igMetaField_GetPublishedMetaObject,
         igMatrix44fMetaField_GetMetaObjectFunction,
         "igMatrix44fMetaField",
@@ -76,7 +76,7 @@ void FUN_00188810(void) {
         g_igMatrix44fMetaField_descriptor = (int)(igMetaObject_CreateInstance(g_igMatrix44fMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
         temp_s0 = (void *)(g_igMatrix44fMetaField_descriptor);
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)temp_s0);
+            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)temp_s0);
             {
                 void *held = (void *)g_igMatrix44fMetaField_descriptor;
                 *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
@@ -84,8 +84,8 @@ void FUN_00188810(void) {
                     igObject_Destroy((igObject *)held);
                 }
             }
-            *(short *)((char *)(g_igMatrix44fMetaField_descriptor) + 18) = (short) (*(int *)((char *)(igMetaField_GetMetaFieldList()) + 12) - 1);
-            igMetaField_FinalizeDescriptor((igMetaField *)g_igMatrix44fMetaField_descriptor);
+            *(short *)((char *)(g_igMatrix44fMetaField_descriptor) + 18) = (short) (*(int *)((char *)(Gap::Core::igMetaField::getMetaFieldTypes()) + 12) - 1);
+            ((Gap::Core::igMetaField *)g_igMatrix44fMetaField_descriptor)->validate();
         }
     }
 }

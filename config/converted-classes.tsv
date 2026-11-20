@@ -6,3 +6,4 @@ igObject	Core
 igClearRenderer	Gui
 igFlushRenderer	Insight
 igRenderer	Gui
+igMetaField	Core

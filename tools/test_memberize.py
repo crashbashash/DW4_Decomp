@@ -2,6 +2,7 @@
 """tools/memberize.py rewrites free `<Class>_<Method>` functions and data as members, on a small tree."""
 import json
 import os
+import re
 import sys
 import tempfile
 import unittest
@@ -387,6 +388,46 @@ class Memberize(unittest.TestCase):
         self.assertEqual(len(found), 1)
         self.assertRegex(found[0], r"^src/game/Game.h:\d+: Widget_Attach: C-name declaration no longer needed: no "
                                    r"unconverted code")
+
+    def test_a_protected_static_is_read_outside_its_class_through_its_public_getter(self):
+        self.append("src/game/Users.inc", "struct Meta *Users_Meta(void) {\n    return g_Widget_meta;\n}\n"
+                                          "void Users_Reset(void) {\n    g_Widget_meta = 0;\n}\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        users = self.read("src/game/Users.inc")
+        self.assertIn("return Widget::getClassMeta();", users)
+        # a write cannot go through the getter: it keeps the C name
+        self.assertIn("g_Widget_meta = 0;", users)
+
+
+class Helpers(unittest.TestCase):
+    MACROS = {"OBJ_BOOT": (("C",), "public: C(); virtual void __bootstrapDestruct(); "
+                                   "protected: static struct Meta *_Meta; public: "
+                                   "static inline struct Meta *getClassMeta() { return _Meta; }")}
+
+    def test_a_virtual_a_macro_declares_is_virtual(self):
+        rows = ["OBJ_BOOT(Widget)", "void reset();"]
+        types = memberize.declarations.Types()
+        self.assertTrue(memberize.declares_virtual(rows, "__bootstrapDestruct", (), self.MACROS, types, "Widget"))
+        self.assertEqual(memberize.declared_access(rows, "_Meta", self.MACROS), "protected")
+        self.assertIsNone(memberize.declared_access(rows, "reset", self.MACROS))
+        self.assertEqual(memberize.public_getter(rows, "_Meta", self.MACROS), "getClassMeta")
+
+    def test_a_non_virtual_overload_of_a_virtual_name_is_not_virtual(self):
+        rows = ["virtual void resetFields(int flag);", "void resetFields();"]
+        types = memberize.declarations.Types()
+        self.assertTrue(memberize.declares_virtual(rows, "resetFields", ("int",), None, types, "Widget"))
+        self.assertFalse(memberize.declares_virtual(rows, "resetFields", (), None, types, "Widget"))
+
+    def test_a_read_is_neither_assigned_nor_addressed(self):
+        clean = "x = g; g = 1; f(&g); g == 2; g += 1; ++g;"
+        reads = [memberize._is_read(clean, m.start(), m.end()) for m in re.finditer(r"\bg\b", clean)]
+        self.assertEqual(reads, [True, False, False, True, False, False])
+
+    def test_a_string_literal_argument_is_kept(self):
+        text = 'f(o, "name", 0)'
+        clean = 'f(o,       , 0)'
+        spans = memberize._arg_spans(clean, 1, len(text) - 1, text)
+        self.assertEqual([text[s:e] for s, e in spans], ["o", '"name"', "0"])
 
 
 if __name__ == "__main__":

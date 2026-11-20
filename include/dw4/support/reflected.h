@@ -13512,7 +13512,11 @@ typedef struct igIGBFile {
     int _memoryRefBufferSize;                      /* +156  igIntMetaField */
     int _userLoadFunction;                         /* +160  igRawRefMetaField */
     int _forceChunkSize;                           /* +164  igIntMetaField */
+#ifdef __cplusplus
+    bool _endianSwap;                              /* +168  igBoolMetaField */
+#else
     unsigned char _endianSwap;                     /* +168  igBoolMetaField */
+#endif
     char _pad169[3];
     int _metaObjectBuffer;                         /* +172  igMemoryRefMetaField */
     int _dirBuf;                                   /* +176  igMemoryRefMetaField */
@@ -20405,11 +20409,12 @@ typedef struct libNdmwRuntimePlugin {
 #include "dw4/core/igObject.h"
 #include "dw4/core/igSmartPointer.h"
 namespace Gap {
-namespace Core { class igObject; }
+namespace Core { class igMetaField; class igObject; }
 namespace Gui { class igClearRenderer; class igRenderer; }
 namespace Insight { class igFlushRenderer; }
 using Gui::igClearRenderer;
 using Insight::igFlushRenderer;
+using Core::igMetaField;
 using Core::igObject;
 using Gui::igRenderer;
 }
@@ -20543,6 +20548,123 @@ public:
     virtual void initializeDrawing() {}
     virtual void terminateDrawing() {}
     virtual void draw();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585cc8, 20 field(s), sizeof 52 (registered instance size) */
+class igMetaField : public Gap::Core::igObject {
+public:
+    int _offset;                                   /* +8    igIntMetaField */
+    int _fieldName;                                /* +12   igStringMetaField */
+    short _typeIndex;                              /* +16   igShortMetaField */
+    short _internalIndex;                          /* +18   igShortMetaField */
+    unsigned short _size;                          /* +20   igUnsignedShortMetaField */
+    char _pad22[2];
+    int _parentMetaObject;                         /* +24   igObjectRefMetaField */
+    int _externalEnumStorage;                      /* +28   igRawRefMetaField */
+    int _default;                                  /* +32   igMemoryRefMetaField */
+    char _resetMethod;                             /* +36   igCharMetaField */
+    unsigned char _isRunTime;                      /* +37   igBoolMetaField */
+    unsigned char _persistent;                     /* +38   igBoolMetaField */
+    char _shallowCopyMethod;                       /* +39   igCharMetaField */
+    char _deepCopyMethod;                          /* +40   igCharMetaField */
+    char _constructCopyMethod;                     /* +41   igCharMetaField */
+    char _isAlikeExactlyMethod;                    /* +42   igCharMetaField */
+    char _isAlikeDeepMethod;                       /* +43   igCharMetaField */
+    char _isAlikeShallowMethod;                    /* +44   igCharMetaField */
+    char _pad45[3];
+    int _invarianceFunction;                       /* +48   igRawRefMetaField */
+    IG_BOOTSTRAP_ABSTRACT_OBJECT_DEFINE(igMetaField)
+    static igMetaField *k_offset;
+    static igMetaField *k_fieldName;
+    static igMetaField *k_typeIndex;
+    static igMetaField *k_internalIndex;
+    static igMetaField *k_size;
+    static igMetaField *k_parentMetaObject;
+    static igMetaField *k_externalEnumStorage;
+    static igMetaField *k_default;
+    static igMetaField *k_resetMethod;
+    static igMetaField *k_isRunTime;
+    static igMetaField *k_persistent;
+    static igMetaField *k_shallowCopyMethod;
+    static igMetaField *k_deepCopyMethod;
+    static igMetaField *k_constructCopyMethod;
+    static igMetaField *k_isAlikeExactlyMethod;
+    static igMetaField *k_isAlikeDeepMethod;
+    static igMetaField *k_isAlikeShallowMethod;
+private:
+    static igMetaField *k_invarianceFunction;
+protected:
+    static igMetaField *_MetaField;
+    void initDefaultMemory();
+public:
+    static inline igMetaField *getMetaField() { return _MetaField; }
+    virtual igMetaField *getGenericMetaField() const;
+    static inline void setMetaField(igMetaField *val) { _MetaField = val; }
+    static __internalObjectList *getMetaFieldTypes();
+    void setBasicProperties(const char *name, igMetaField **storage, int offset, igMetaObject *parent);
+    void setFieldName(void **s);
+    inline const char *getFieldName() const { return (const char *)_fieldName; }
+    virtual void setFromMemory(igObject *obj, const void *fieldStorage);
+    void setFromField(igObject *toObject, igMetaField *fromField, igObject *fromObject);
+private:
+    void copy(igObject *dst, const igObject *src, int copyMethod);
+public:
+    void reset(igObject *src);
+    void copyDeep(igObject *dst, const igObject *src);
+    void copyShallow(igObject *dst, const igObject *src);
+    int align(int size);
+private:
+    int isAlike(const igObject *obj1, const igObject *obj2, int method) const;
+public:
+    int isAlikeExactly(const igObject *obj1, const igObject *obj2) const;
+    int isAlikeDeep(const igObject *obj1, const igObject *obj2) const;
+    int isAlikeShallow(const igObject *obj1, const igObject *obj2) const;
+    void validate();
+    virtual unsigned short computeSize();
+    virtual int computeTypeSize();
+    virtual int computeRequiredAlignment();
+    virtual void resetByValue(igObject *src);
+    virtual void resetByNoReset(igObject *src);
+    virtual void resetByReference(igObject *src);
+    virtual void construct(igObject *src);
+    virtual void destruct(igObject *src);
+    virtual void commission(igObject *src);
+    virtual void decommission(igObject *src);
+    virtual void setDefaultMemory(const void *mem);
+    virtual void copyByValue(igObject *dst, const igObject *src);
+    virtual void copyByReference(igObject *dst, const igObject *src);
+    virtual void copyByValueShallow(igObject *dst, const igObject *src);
+    virtual void copyByReset(igObject *dst, const igObject *src);
+    virtual void copyByNoCopy(igObject *dst, const igObject *src);
+    virtual void print(const igObject *src, unsigned int deep, const char *indent);
+    virtual void traverse(igObject *obj, void *visitFunc, void *traversalData);
+    virtual int addToDirectory(igObject *obj, igDirectory *dir);
+    virtual unsigned char compare(const igObject *obj1, const igObject *obj2) const;
+    virtual int isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const;
+    virtual int isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const;
+    virtual int isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const;
+    virtual int isAlikeCompareNoCompare(const igObject *obj1, const igObject *obj2) const;
+    virtual int getIoSize(const igObject *obj) const;
+    int readFromMemoryVersion3(igObject *obj, const void *src, igDirectory *dir, bool endianSwap);
+    int readFromMemory(igObject *obj, const void *src, igDirectory *dir, bool endianSwap);
+    int writeToMemory(const igObject *obj, void *dst, igDirectory *dir, bool endianSwap);
+    virtual int writeRawFieldMemory(const void *fieldMem, void *dstMem, igDirectory *dir, bool endianSwap) const;
+    virtual int readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const;
+    virtual void endianSwapMemory(void *fieldMem, int nFieldElts) const;
+    virtual void endianSwap(igObject *obj) const;
+    virtual int setByString(igObject *obj, const char *val, igDirectory *dir);
+    virtual igStringRef getByString(const igObject *obj, igDirectory *dir);
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    virtual igStringRef convertMemoryToString(const void *mem, int num, igDirectory *dir);
+    virtual int convertStringToMemory(const char *val, void *mem, int num, igDirectory *dir);
+    virtual void userPostRead();
+    short getTypeIndex();
+    virtual int constructPerformsReset() const;
 };
 }
 }

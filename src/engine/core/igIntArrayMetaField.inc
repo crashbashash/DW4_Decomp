@@ -104,14 +104,14 @@ void igIntArrayMetaField_CreateDefaultDescriptor(void) {
         g_igIntArrayMetaField_descriptor = (igIntArrayMetaField *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igIntArrayMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
         descriptor = g_igIntArrayMetaField_descriptor;
         if (descriptor != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);
+            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
             held = g_igIntArrayMetaField_descriptor;
             held->_refCount = held->_refCount - 1;
             if ((held->_refCount & 0x7FFFFF) == 0) {
                 igObject_Destroy(held);
             }
-            g_igIntArrayMetaField_descriptor->_internalIndex = igMetaField_GetMetaFieldList()->_count - 1;
-            igMetaField_FinalizeDescriptor((igMetaField *)g_igIntArrayMetaField_descriptor);
+            g_igIntArrayMetaField_descriptor->_internalIndex = Gap::Core::igMetaField::getMetaFieldTypes()->_count - 1;
+            ((Gap::Core::igMetaField *)g_igIntArrayMetaField_descriptor)->validate();
         }
     }
 }

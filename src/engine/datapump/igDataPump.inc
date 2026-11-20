@@ -43,7 +43,7 @@ void igDataPump_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igDataPump_Register);
 }
 
-static igMetaObjectCallback g_igDataPump_callbackList[] = { Gap::Core::igObject::arkRegister, igMetaField_EnsureRegistered, igDataPumpInterface_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igDataPump_callbackList[] = { Gap::Core::igObject::arkRegister, Gap::Core::igMetaField::arkRegister, igDataPumpInterface_EnsureRegistered, 0 };
 
 CallbackArray *igDataPump_Register(void) {
     DataPumpLibrary_MarkRegistered();
@@ -109,7 +109,7 @@ void igDataPump_InitFields(void) {
     *(int *)((char *)(destObjField) + 56) = (int)Gap::Core::igObject::getClassMeta();
     *(char *)((char *)(destObjField) + 52) = 1;
     destMetaField = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 1));
-    *(int *)((char *)(destMetaField) + 56) = (int)igMetaField_GetOrCreateMetaObject();
+    *(int *)((char *)(destMetaField) + 56) = (int)Gap::Core::igMetaField::getClassTypeLazy();
     *(char *)((char *)(destMetaField) + 38) = 0;
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 2), 0);
     igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 3), 0);

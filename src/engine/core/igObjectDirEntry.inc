@@ -137,7 +137,7 @@ void igObjectDirEntry_InitFields(void) {
     fields = meta->_metaFields;
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_ref));
     field = (igMetaField *)igObjectRefMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    igMetaField_Configure(field, (const char *)text_ref, &g_igObjectDirEntry_refField, 0x18, meta);
+    ((Gap::Core::igMetaField *)field)->setBasicProperties((const char *)text_ref, (Gap::Core::igMetaField **)&g_igObjectDirEntry_refField, 0x18, meta);
     ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igObject::getClassMeta();
     igObjectRefMetaField_SetDefault((igObjectRefMetaField *)field, 0);
     field->_persistent = 0;

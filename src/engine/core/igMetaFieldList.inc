@@ -33,7 +33,7 @@ void igMetaFieldList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMetaFieldList_Register);
 }
 
-static igMetaObjectCallback g_igMetaFieldList_callbackList[] = { igMetaField_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igMetaFieldList_callbackList[] = { Gap::Core::igMetaField::arkRegister, 0 };
 
 CallbackArray *igMetaFieldList_Register(void) {
     CoreLibrary_MarkRegistered();

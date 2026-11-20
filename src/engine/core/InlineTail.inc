@@ -894,7 +894,7 @@ igMetaObject *igIntListList_GetElementMeta(void) {
 }
 
 igMetaObject *igMetaFieldList_GetElementMeta(void) {
-    return g_igMetaField_metaObject;
+    return Gap::Core::igMetaField::getClassMeta();
 }
 
 igMetaObject *igMetaObjectListList_GetElementMeta(void) {

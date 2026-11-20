@@ -110,15 +110,15 @@ void igFloatArrayMetaField_CreateDefaultDescriptor(void) {
         g_igFloatArrayMetaField_descriptor = ((igFloatArrayMetaField *)igMetaObject_CreateInstance((igMetaObject *)g_igFloatArrayMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
         descriptor = g_igFloatArrayMetaField_descriptor;
         if (descriptor != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);
+            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
             held = g_igFloatArrayMetaField_descriptor;
             held->_refCount = (int)((int) (held->_refCount - 1));
             if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
                 igObject_Destroy(held);
             }
-            n = igMetaField_GetMetaFieldList()->_count - 1;
+            n = Gap::Core::igMetaField::getMetaFieldTypes()->_count - 1;
             g_igFloatArrayMetaField_descriptor->_internalIndex = n;
-            igMetaField_FinalizeDescriptor((igMetaField *)g_igFloatArrayMetaField_descriptor);
+            ((Gap::Core::igMetaField *)g_igFloatArrayMetaField_descriptor)->validate();
         }
     }
 }

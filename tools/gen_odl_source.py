@@ -1040,9 +1040,14 @@ class Writer:
         return "igMetaField"
 
     def cast_to(self, want, expr, have):
+        """`expr` cast to `want`, a C prototype's parameter type. The fragment is written inside Gap's
+        namespaces, where a converted class's bare name is its Gap class: the flat struct the C service
+        takes is spelled `::Class` there."""
         if want is None or have is None or norm_type(want) == norm_type(have):
             return expr
-        return "(%s)%s" % (want.strip(), expr)
+        want = re.sub(r"(?<![\w:])([A-Za-z_]\w*)", lambda m: "::" + m.group(1)
+                      if m.group(1) in self.converted else m.group(1), want.strip())
+        return "(%s)%s" % (want, expr)
 
     def statement(self, e, i, events, ctx):
         if e["k"] == "call":

@@ -86,7 +86,7 @@ void igMemoryDescriptorMetaField_CreateDefaultDescriptor(void) {
         g_igMemoryDescriptorMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igMemoryDescriptorMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
         descriptor = (void *)(g_igMemoryDescriptorMetaField_descriptor);
         if (descriptor != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);
+            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
             {
                 void *held = (void *)g_igMemoryDescriptorMetaField_descriptor;
                 ((igObject *)held)->_refCount = ((igObject *)held)->_refCount - 1;
@@ -94,8 +94,8 @@ void igMemoryDescriptorMetaField_CreateDefaultDescriptor(void) {
                     igObject_Destroy((igObject *)held);
                 }
             }
-            ((igMetaField *)g_igMemoryDescriptorMetaField_descriptor)->_internalIndex = (short) (igMetaField_GetMetaFieldList()->_count - 1);
-            igMetaField_FinalizeDescriptor((igMetaField *)g_igMemoryDescriptorMetaField_descriptor);
+            ((igMetaField *)g_igMemoryDescriptorMetaField_descriptor)->_internalIndex = (short) (Gap::Core::igMetaField::getMetaFieldTypes()->_count - 1);
+            ((Gap::Core::igMetaField *)g_igMemoryDescriptorMetaField_descriptor)->validate();
         }
     }
 }
@@ -134,7 +134,7 @@ void igMemoryDescriptorMetaField_AddSubFields(int fieldList) {
         name = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)"_sizeAndStatus")));
     }
     fieldName = (void *)(name);
-    igMetaField_SetFieldName((igMetaField *)field, &fieldName);
+    ((Gap::Core::igMetaField *)field)->setFieldName(&fieldName);
     if (fieldName != 0) {
         header = (int *)((char *)fieldName - 8);
         refs = *(int *)((char *)(fieldName) - 4) - 1;
@@ -144,7 +144,7 @@ void igMemoryDescriptorMetaField_AddSubFields(int fieldList) {
         }
     }
     ((igMetaField *)field)->_offset = 0;
-    igMetaField_FinalizeDescriptor((igMetaField *)field);
+    ((Gap::Core::igMetaField *)field)->validate();
     ObjectList_AppendRetained((igObjectList *)fieldList, (igObject *)field);
     ((igObject *)field)->_refCount = (int)((int) (((igObject *)field)->_refCount - 1));
     if (((unsigned long long) ((long long) (int) ((igObject *)field)->_refCount << 0x29) >> 0x29) == 0) {

@@ -6,7 +6,7 @@ void FUN_001c51d0(void) {
         field.p = (ObjectRefFieldView *)igObjectRefMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
         ((ObjectRefFieldView * *)DAT_00562768)[0] = field.p;
         name = internText("_geoSet");
-        igMetaField_SetFieldName((igMetaField *)field.p, (void **)&name);
+        ((Gap::Core::igMetaField *)field.p)->setFieldName((void **)&name);
         if (name != 0) {
             int *header = (int *)name - 2;
             int count = ((int *)name)[-1] - 1;

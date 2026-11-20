@@ -100,14 +100,14 @@ void igStringArrayMetaField_CreateDefaultDescriptor(void) {
         g_igStringArrayMetaField_descriptor = ((int *)igMetaObject_CreateInstance((igMetaObject *)g_igStringArrayMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
         s0 = g_igStringArrayMetaField_descriptor;
         if (s0 != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)s0);
+            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)s0);
             g = g_igStringArrayMetaField_descriptor;
             g[1] = g[1] - 1;
             if ((g[1] & 0x7FFFFF) == 0) {
                 igObject_Destroy((igObject *)g);
             }
-            *(short *)((char *)g_igStringArrayMetaField_descriptor + 18) = (short)(((int *)igMetaField_GetMetaFieldList())[3] - 1);
-            igMetaField_FinalizeDescriptor((igMetaField *)g_igStringArrayMetaField_descriptor);
+            *(short *)((char *)g_igStringArrayMetaField_descriptor + 18) = (short)(((int *)Gap::Core::igMetaField::getMetaFieldTypes())[3] - 1);
+            ((Gap::Core::igMetaField *)g_igStringArrayMetaField_descriptor)->validate();
         }
     }
 }

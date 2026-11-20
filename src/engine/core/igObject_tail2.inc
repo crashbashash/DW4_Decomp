@@ -271,7 +271,7 @@ void igObject::arkRegisterInitialize() {
         interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)"_refCount")));
     }
     refCountName = (void *)(interned);
-    igMetaField_SetFieldName((igMetaField *)refCountField, &refCountName);
+    ((igMetaField *)refCountField)->setFieldName(&refCountName);
     if (refCountName != 0) {
         header = (int *)((char *)refCountName - 8);
         count = *(int *)((char *)(refCountName) - 4) - 1;
@@ -303,7 +303,7 @@ void igObject::arkRegisterInitialize() {
         interned2 = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)"_memPoolIndex")));
     }
     poolIndexName = (void *)(interned2);
-    igMetaField_SetFieldName((igMetaField *)poolIndexField, &poolIndexName);
+    ((igMetaField *)poolIndexField)->setFieldName(&poolIndexName);
     if (poolIndexName != 0) {
         header2 = (int *)((char *)poolIndexName - 8);
         count2 = *(int *)((char *)(poolIndexName) - 4) - 1;
@@ -409,7 +409,7 @@ void igObject_ResetFields(igObjectDispatchView *object) {
     int first = ((__internalObjectList *)Gap::Core::igObject::getClassMeta()->_metaFields)->_count;
     int count = fields->_count;
     for (int i = first; i < count; i++) {
-        igMetaField_Reset(((igMetaField **)fields->_data)[i], object);
+        ((Gap::Core::igMetaField *)(((igMetaField **)fields->_data)[i]))->reset((Gap::Core::igObject *)object);
     }
     object->resetFields(1);
 }
@@ -424,7 +424,7 @@ void igObject::internalResetFields() {
     for (int i = first; i < count; i++) {
         igMetaFieldView *field = ((igMetaFieldView **)fields->_data)[i];
         if (field->IsConstruct() == 0) {
-            igMetaField_Reset((igMetaField *)field, this);
+            ((igMetaField *)field)->reset(this);
         }
     }
     resetFields(1);
@@ -474,7 +474,7 @@ int igObject::getIoSize() const {
 }
 }
 
-int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap) {
+int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap) {
     igMetaObject *meta = object->GetMeta();
     if (meta->_persistent == 0) {
         return 0;
@@ -496,13 +496,13 @@ int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, ig
     for (; i < count; i++) {
         igMetaField *field = (igMetaField *)igMetaObject_GetFieldAt(writeMeta, i);
         if (field->_persistent == 1 && field->_isRunTime == 0) {
-            buffer = (int *)((char *)buffer + igMetaField_WritePersistentValue(field, object, buffer, file, endianSwap));
+            buffer = (int *)((char *)buffer + ((Gap::Core::igMetaField *)field)->writeToMemory((Gap::Core::igObject *)object, buffer, (igDirectory *)file, endianSwap));
         }
     }
     return ((Gap::Core::igObject *)object)->getIoSize();
 }
 
-int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap) {
+int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap) {
     igMetaObject *meta;
     char *data;
     int i;
@@ -524,19 +524,19 @@ int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igI
         if (field->_isRunTime != 0) {
             runTimeFields += 1;
             ((igMetaFieldView *)field)->ConstructValue((int)object);
-            if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) == 0 || ((igRefMetaField *)field)->_construct == 0) igMetaField_Reset(field, object);
+            if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) == 0 || ((igRefMetaField *)field)->_construct == 0) ((Gap::Core::igMetaField *)field)->reset((Gap::Core::igObject *)object);
         } else if (readFields >= head->fieldCount) {
             ((igMetaFieldView *)field)->ConstructValue((int)object);
-            if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) == 0 || ((igRefMetaField *)field)->_construct == 0) igMetaField_Reset(field, object);
+            if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) == 0 || ((igRefMetaField *)field)->_construct == 0) ((Gap::Core::igMetaField *)field)->reset((Gap::Core::igObject *)object);
         } else {
             if (endianSwap) ((igMetaFieldView *)igShortMetaField_GetDefaultDescriptor())->SwapBytes(data, 2);
             if (i < *(short *)data + runTimeFields) {
                 ((igMetaFieldView *)field)->ConstructValue((int)object);
-                if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) == 0 || ((igRefMetaField *)field)->_construct == 0) igMetaField_Reset(field, object);
+                if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) == 0 || ((igRefMetaField *)field)->_construct == 0) ((Gap::Core::igMetaField *)field)->reset((Gap::Core::igObject *)object);
                 if (endianSwap) ((igMetaFieldView *)igShortMetaField_GetDefaultDescriptor())->SwapBytes(data, 2);
             } else {
                 readFields += 1;
-                data += igMetaField_ReadFieldMem((igMetaFieldView *)field, (char *)object, data, file, endianSwap);
+                data += ((Gap::Core::igMetaField *)field)->readFromMemoryVersion3((Gap::Core::igObject *)object, data, (igDirectory *)file, endianSwap);
             }
         }
     }
@@ -548,7 +548,7 @@ int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igI
     }
 }
 
-int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead *head, igDirectoryView *dir, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap) {
+int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead *head, igDirectoryView *dir, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap) {
     igMetaObject *meta;
     igTDataList<igTDataList<short> *> *lists;
     igTDataList<short> *offsets;
@@ -585,11 +585,11 @@ int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead 
         if (i < limit) {
             field->ConstructValue((int)object);
             if (((Gap::Core::igObject *)field)->isOfType((igMetaObject *)g_igRefMetaField_metaObject) == 0 || ((igRefMetaField *)field)->_construct == 0) {
-                igMetaField_Reset((igMetaField *)field, object);
+                ((Gap::Core::igMetaField *)field)->reset((Gap::Core::igObject *)object);
             }
         } else {
             done++;
-            data += igMetaField_ReadRawFieldMemAligned(field, object, data, dir, endianSwap);
+            data += ((Gap::Core::igMetaField *)field)->readFromMemory((Gap::Core::igObject *)object, data, (igDirectory *)dir, endianSwap);
             if (done == offsets->_count) {
                 limit = count;
             } else {
@@ -662,7 +662,7 @@ void igObject::copyDeep(igObject *source) {
     meta = (__internalObjectList *)holder->_metaFields;
     n = meta->_count;
     for (i = igMetaObject_GetFieldCount(Gap::Core::igObject::getClassMeta()); i < n; i++) {
-        igMetaField_DeepCopy(((int *)meta->_data)[i], (int)this, (int)source);
+        ((igMetaField *)(((int *)meta->_data)[i]))->copyDeep((igObject *)((int)this), (igObject *)((int)source));
     }
     userDeepCopy(source);
 }
@@ -672,7 +672,7 @@ void igObject::copyShallow(int source) {
     int n = m->_count;
     int i;
     for (i = igMetaObject_GetFieldCount(Gap::Core::igObject::_Meta); i < n; i++) {
-        igMetaField_ShallowCopy(((int *)m->_data)[i], (int)(igObjectDispatchView *)this, source);
+        ((igMetaField *)(((int *)m->_data)[i]))->copyShallow((igObject *)((int)(igObjectDispatchView *)this), (igObject *)source);
     }
     ((igObjectDispatchView *)this)->userShallowCopy(source);
 }
@@ -686,7 +686,7 @@ int igObject::isAlikeDeep(igObject *b) {
     n = fl->_count;
     i = igMetaObject_GetFieldCount(Gap::Core::igObject::getClassMeta());
     for (; i < n; i++) {
-        if (igMetaField_IsAlikeDeep(((int *)fl->_data)[i], (int)this, (int)b) == 0) return 0;
+        if (((igMetaField *)(((int *)fl->_data)[i]))->isAlikeDeep((igObject *)((int)this), (igObject *)((int)b)) == 0) return 0;
     }
     return userIsAlikeDeep(b);
 }
@@ -703,7 +703,7 @@ int igObject::isAlikeShallow(igObject *b) {
     fields = (__internalObjectList *)getMeta()->_metaFields;
     count = fields->_count;
     for (i = igMetaObject_GetFieldCount(Gap::Core::igObject::getClassMeta()); i < count; i++) {
-        if (igMetaField_IsAlikeShallow(((int *)fields->_data)[i], (int)this, (int)b) == 0) {
+        if (((igMetaField *)(((int *)fields->_data)[i]))->isAlikeShallow((igObject *)((int)this), (igObject *)((int)b)) == 0) {
             return 0;
         }
     }
@@ -723,7 +723,7 @@ int igObject::isAlikeExactly(void *b) const {
     fields = (__internalObjectList *)((igObjectDispatchView *)this)->GetMeta()->_metaFields;
     count = fields->_count;
     for (i = igMetaObject_GetFieldCount(Gap::Core::igObject::_Meta); i < count; i++) {
-        if (igMetaField_IsAlikeExactly(((int *)fields->_data)[i], (int)(void *)this, (int)b) == 0) {
+        if (((igMetaField *)(((int *)fields->_data)[i]))->isAlikeExactly((igObject *)((int)(void *)this), (igObject *)((int)b)) == 0) {
             return 0;
         }
     }

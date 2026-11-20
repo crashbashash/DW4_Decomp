@@ -74,7 +74,7 @@ void igCustomStateField_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igCustomStateField_Register);
 }
 
-static igMetaObjectCallback g_igCustomStateField_callbackList[] = { igMetaField_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igCustomStateField_callbackList[] = { Gap::Core::igMetaField::arkRegister, 0 };
 
 CallbackArray *igCustomStateField_Register(void) {
     FUN_00149bc0();
@@ -123,7 +123,7 @@ void igCustomStateField_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igCustomStateField_ctorTable, 2);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igMetaField_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_igCustomStateField_fieldTable, g_igCustomStateField_fieldHandles, g_igCustomStateField_fieldOffsets, fieldStart);
 }
 

@@ -204,7 +204,7 @@ void igIGBFile_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igIGBFile_Register);
 }
 
-static igMetaObjectCallback g_igIGBFile_callbackList[] = { igFile_EnsureRegistered, igMetaFieldList_EnsureRegistered, igMetaObjectList_EnsureRegistered, igMetaField_EnsureRegistered, igIntList_EnsureRegistered, igMemoryPool_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igIGBFile_callbackList[] = { igFile_EnsureRegistered, igMetaFieldList_EnsureRegistered, igMetaObjectList_EnsureRegistered, Gap::Core::igMetaField::arkRegister, igIntList_EnsureRegistered, igMemoryPool_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
 
 CallbackArray *igIGBFile_Register(void) {
     CoreLibrary_MarkRegistered();  /* First-use initializer: sets a gp byte flag, then runs five one-time init calls. */
@@ -575,9 +575,9 @@ void igIGBFile_InitFields(void) {
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x1C));
     ((igMemoryRefMetaField *)field)->_memType = igCharMetaField_GetDefaultDescriptor();
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x1D));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)igMetaField_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x1E));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)igMetaField_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 0x24), -1);
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x25));
     ((igMemoryRefMetaField *)field)->_memType = igCharMetaField_GetDefaultDescriptor();

@@ -76,7 +76,7 @@ int FUN_00155340(FieldTypeTable *table, unsigned int type) {
 }
 
 int FUN_00155490(void) {
-    return (int)g_igMetaField_metaObject;
+    return (int)Gap::Core::igMetaField::getClassMeta();
 }
 
 StringRef FUN_001554a0(int arg1) {

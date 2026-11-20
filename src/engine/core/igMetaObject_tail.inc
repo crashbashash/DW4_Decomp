@@ -239,11 +239,11 @@ void igMetaObject_AppendField(igMetaObject *meta, igMetaField *field)
 }
 
 void igMetaObject_FinalizeAndAppendField(void *meta,void *field){
-    igMetaField_FinalizeDescriptor((igMetaField *)field);igMetaObject_AppendField((igMetaObject *)meta,(igMetaField *)field);
+    ((Gap::Core::igMetaField *)field)->validate();igMetaObject_AppendField((igMetaObject *)meta,(igMetaField *)field);
 }
 
 void igMetaObject_FinalizeAndReplaceField(igMetaObject *meta,int index,igMetaField *field){
-    igMetaField_FinalizeDescriptor((igMetaField *)field);
+    ((Gap::Core::igMetaField *)field)->validate();
     InternalObjectList_SetAtRetained((__internalObjectList *)((void *)meta->_metaFields), index, (igObject *)field);
 }
 
@@ -258,7 +258,7 @@ igMetaField *igMetaObject_GetFieldAt(igMetaObject *self, int index) {
 }
 
 igMetaField *igMetaObject_FindFieldByName(igMetaObject *meta, const char *name) {
-    return (igMetaField *)ObjectPointerList_FindByStringField((__internalNonRefCountedObjectList *)((void *)meta->_metaFields), g_fieldNameMember, name);
+    return (igMetaField *)ObjectPointerList_FindByStringField((__internalNonRefCountedObjectList *)((void *)meta->_metaFields), (igMetaField *)Gap::Core::igMetaField::k_fieldName, name);
 }
 
 void igMetaObject_CreateFields(igMetaObject *meta,FieldFactory *factories,int count){
@@ -280,8 +280,8 @@ void igMetaObject_NameFields(igMetaObject *meta,const char **names,igMetaField *
     row=0;
     for(;start<count;start++,row++){
         field=((igMetaField **)((__internalObjectList *)meta->_metaFields)->_data)[start];
-        igMetaField_Configure(field,names[row],handles[row],offsets[row],meta);
-        igMetaField_FinalizeDescriptor(field);
+        ((Gap::Core::igMetaField *)field)->setBasicProperties(names[row],(Gap::Core::igMetaField **)handles[row],offsets[row],meta);
+        ((Gap::Core::igMetaField *)field)->validate();
     }
 }
 
@@ -425,7 +425,7 @@ void igMetaObject_AddField(igMetaObject *self, void *object) {
     self->_validity = flags & ~4;
     field->_isRunTime = 1;
     field->_parentMetaObject = (int)(self);
-    igMetaField_FinalizeDescriptor(field);
+    ((Gap::Core::igMetaField *)field)->validate();
     index = MetaRefList_AppendRetained((__internalObjectList *)((void *)self->_metaFields), (igObject *)field);
     nodeCount = igMetaObject_CountTree((igMetaObject *)self);
     for (i = 1; i < nodeCount; i++) {

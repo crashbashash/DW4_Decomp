@@ -54,7 +54,7 @@ void igMemoryDirEntry_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMemoryDirEntry_Register);
 }
 
-static igMetaObjectCallback g_igMemoryDirEntry_callbackList[] = { igMetaField_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igMemoryDirEntry_callbackList[] = { Gap::Core::igMetaField::arkRegister, 0 };
 
 CallbackArray *igMemoryDirEntry_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -127,7 +127,7 @@ void igMemoryDirEntry_InitFields(void) {
     igIntMetaField_SetDefault((igMetaField *)memTypeSizeField, -1);
     ((igMetaField *)memTypeSizeField)->_persistent = 0;
     memTypeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)memTypeField)->_metaObject = (int)igMetaField_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)memTypeField)->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
     igObjectRefMetaField_SetDefault((igObjectRefMetaField *)memTypeField, (igObject *)(igCharMetaField_GetDefaultDescriptor()));
     ((igObjectRefMetaField *)memTypeField)->_refCounted = 0;
     ((igObjectRefMetaField *)memTypeField)->_persistent = 0;

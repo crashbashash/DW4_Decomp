@@ -67,4 +67,12 @@ extern struct igMetaObject *g_igMetaObject_metaObject;
 void igMetaObject_AddFieldAndFinalize(struct igMetaObject *self, void *field);
 }
 
+/* A converted class's field handles are Gap::Core::igMetaField statics (`k_x`); the C service names the same
+ * words. A template, so a unit that sees one igMetaField under both names keeps the C function alone. */
+template <class Field>
+static inline void igMetaObject_NameFields(igMetaObject *meta, const char **names, Field ***handles, int *offsets,
+    int start) {
+    igMetaObject_NameFields(meta, names, (igMetaField ***)handles, offsets, start);
+}
+
 #endif

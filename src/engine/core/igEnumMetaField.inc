@@ -76,7 +76,7 @@ CallbackArray *igEnumMetaField_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igEnumMetaField_metaObject,
-        igMetaField_Register,
+        Gap::Core::igMetaField::arkRegisterInternal,
         igMetaField_GetPublishedMetaObject,
         igEnumMetaField_GetMetaObjectFunction,
         "igEnumMetaField",
@@ -126,15 +126,15 @@ void igEnumMetaField_CreateDefaultDescriptor(void) {
         g_igEnumMetaField_descriptor = ((int *)igMetaObject_CreateInstance((igMetaObject *)g_igEnumMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
         s0 = g_igEnumMetaField_descriptor;
         if (s0 != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)s0);
+            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)s0);
             o = g_igEnumMetaField_descriptor;
             o[1] = o[1] - 1;
             if ((o[1] & 0x7FFFFF) == 0) {
                 igObject_Destroy((igObject *)o);
             }
-            count = *(int *)((char *)((void *)igMetaField_GetMetaFieldList()) + 12); /* Read as a whole word first; a direct `short = int - 1` store would be narrowed to an lh. */
+            count = *(int *)((char *)((void *)Gap::Core::igMetaField::getMetaFieldTypes()) + 12); /* Read as a whole word first; a direct `short = int - 1` store would be narrowed to an lh. */
             *(short *)((char *)g_igEnumMetaField_descriptor + 18) = count - 1;
-            igMetaField_FinalizeDescriptor((igMetaField *)g_igEnumMetaField_descriptor);
+            ((Gap::Core::igMetaField *)g_igEnumMetaField_descriptor)->validate();
         }
     }
 }

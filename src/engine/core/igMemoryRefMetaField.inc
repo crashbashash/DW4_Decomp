@@ -146,7 +146,7 @@ void igMemoryRefMetaField_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMemoryRefMetaField_Register);
 }
 
-static igMetaObjectCallback g_igMemoryRefMetaField_callbackList[] = { igMetaField_EnsureRegistered, igMemoryRefMetaField_CreateDefaultDescriptor, 0 };
+static igMetaObjectCallback g_igMemoryRefMetaField_callbackList[] = { Gap::Core::igMetaField::arkRegister, igMemoryRefMetaField_CreateDefaultDescriptor, 0 };
 
 CallbackArray *igMemoryRefMetaField_Register(void) {
     return igMetaObject_RegisterClass(
@@ -228,7 +228,7 @@ void igMemoryRefMetaField_InitFields(void) {
     releaseField(field);
     ((igMetaField *)igMetaObject_GetFieldAt(meta, base))->_persistent = 0;
     ref = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 1);
-    ref->_metaObject = (int)igMetaField_GetOrCreateMetaObject();
+    ref->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
     ref->_refCounted = 0;
     ref->_deepCopyMethod = 1;
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 2), 1);
@@ -236,7 +236,7 @@ void igMemoryRefMetaField_InitFields(void) {
     fields = meta->_metaFields;
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)fields, (int)igMetaObject_FindFieldByName(meta, (const char *)text_resetMethod));
     field = (igMetaField *)igEnumMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    igMetaField_Configure(field, (const char *)text_resetMethod, &g_igMemoryRefMetaField_resetMethodStorage, 0x24, meta);
+    ((Gap::Core::igMetaField *)field)->setBasicProperties((const char *)text_resetMethod, (Gap::Core::igMetaField **)&g_igMemoryRefMetaField_resetMethodStorage, 0x24, meta);
     igEnumMetaField_SetDefaultValue((igMetaField *)field, g_igMemoryRefMetaField_resetMethodDefault);
     ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)igMetaField_GetResetTypeMetaEnum;
     field->_externalEnumStorage = (int)&g_igMemoryRefMetaField_resetMethodStorage;
@@ -245,7 +245,7 @@ void igMemoryRefMetaField_InitFields(void) {
     igBoolMetaField_SetDefaultValue(igMetaObject_GetFieldAt(meta, base + 4), 1);
     igIntMetaField_SetDefault(igMetaObject_GetFieldAt(meta, base + 5), -1);
     ref = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 6);
-    ref->_metaObject = (int)igMetaField_GetOrCreateMetaObject();
+    ref->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
     ref->_deepCopyMethod = 1;
     igMetaObject_NameFields(meta, g_igMemoryRefMetaField_fieldTable, g_igMemoryRefMetaField_fieldDescriptors, g_igMemoryRefMetaField_fieldOffsets, base);
 }
@@ -259,14 +259,14 @@ void igMemoryRefMetaField_CreateDefaultDescriptor(void) {
         g_igMemoryRefMetaField_descriptor = ((igMemoryRefMetaField *)igMetaObject_CreateInstance((igMetaObject *)((int)g_igMemoryRefMetaField_metaObject), Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
         descriptor = g_igMemoryRefMetaField_descriptor;
         if (descriptor != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);
+            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
             p = g_igMemoryRefMetaField_descriptor;
             p->_refCount = p->_refCount - 1;
             if (((unsigned long long)(long long)p->_refCount & 0x7fffffULL) == 0) {
                 igObject_Destroy(p);
             }
-            g_igMemoryRefMetaField_descriptor->_internalIndex = igMetaField_GetMetaFieldList()->_count - 1;
-            igMetaField_FinalizeDescriptor((igMetaField *)g_igMemoryRefMetaField_descriptor);
+            g_igMemoryRefMetaField_descriptor->_internalIndex = Gap::Core::igMetaField::getMetaFieldTypes()->_count - 1;
+            ((Gap::Core::igMetaField *)g_igMemoryRefMetaField_descriptor)->validate();
         }
     }
 }

@@ -94,16 +94,21 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
 `commission`, `construct`, `internalResetFields`, `destruct`, `decommission`), `emptyArkRegisterInternal`,
 `emptyGetClassMetaSafe`, and slot 0 is the kit's `__bootstrapDestruct`. The order after that:
 
-1. igObject's last kit members: `resetFields()` (`igObject_ResetFields`; memberize reads a name as virtual when
-   any overload is, so the non-virtual overload of the `resetFields(int)` slot needs its signature matched
-   first), `free(igRawRef)` (`igObject_FreeStorage`), `createCopyRef` (`igObject_Clone`, whose return type is a
+1. igObject's last kit members: `resetFields()` (`igObject_ResetFields`; memberize tells this non-virtual
+   overload from the virtual `resetFields(int)` slot by its parameters), `free(igRawRef)` (`igObject_FreeStorage`),
+   `createCopyRef` (`igObject_Clone`, whose return type is a
    smart pointer of the flat struct), the I/O members (`writeToMemory`, `readFromMemory`), the `operator new`
    pair (`igObject_AllocateRawStorage`); and the release idiom: the callers outside igObject still call
    `igObject_Destroy` by its C name, since `internalRelease` is private, until their inline release is written as
    the kit's `release()`;
-2. the metafield family (`igMetaField` and its subclasses): igMetaField is a bootstrap class like igObject (its
-   registration is hand-written, not igen's), with 73 `igMetaField_` functions, so it converts as the root did,
-   then its subclasses top-down with `tools/gen_odl_source.py` boilerplate;
+2. the metafield family: `Gap::Core::igMetaField` is converted (`IG_BOOTSTRAP_ABSTRACT_OBJECT_DEFINE`, its three
+   constructors, the 38 slots 21-58 in retail's vtable order with kit names, igen's registration); DW4's vtable has
+   no `computeTypeCount`, no virtual `readFromMemory`/`writeToMemory` and no `postRead`, and overrides
+   `userPostRead`. The I/O chain's `endianSwap` is the kit's `igBool` (`bool`, tested as `if (endianSwap)`), so
+   `igIGBFile::_endianSwap` is typed `bool` under C++. Not kit-declared and still free: `ConstructCopy`,
+   `GetMangledName`, `FindByName`, `AllocateArray`. Flat subclasses still construct and destroy through the C
+   names (`igMetaField_Init`, `igMetaField_Destruct`). Next: its subclasses top-down with
+   `tools/gen_odl_source.py` boilerplate;
 3. `igMetaObject`, `igDataList`/`igObjectList`; igMetaObject, igIGBFile and igObjectDirEntry then also call
    igObject's protected and private construction members directly (the kit makes them friends);
 4. attrs, then gfx, then scenegraph, then gui/insight/viewer;

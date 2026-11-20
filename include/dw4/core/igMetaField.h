@@ -14,19 +14,11 @@ struct igMetaFieldView;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igMetaField_metaObject;
-
-struct CallbackArray *igMetaField_Register(void);
 struct igMetaObject *igMetaField_GetPublishedMetaObject(void);
-void igMetaField_EnsureRegistered(void);
 struct igMetaField *igMetaField_Init(struct igMetaField *field);
-void igMetaField_SetFieldName(struct igMetaField *self, void **newName);
-void igMetaField_FinalizeDescriptor(struct igMetaField *field);
-struct __internalObjectList *igMetaField_GetMetaFieldList(void);
+void igMetaField_Destruct(struct igMetaField *self);
 extern int g_igMetaField_vtable[4];
 void igMetaField_AllocateArray(int *outStatus, struct igMemoryRefMetaField *field, void *object, int count, struct igMemoryPoolView *allocator);
-struct igMetaObject *igMetaField_GetOrCreateMetaObject(void);
-void igMetaField_SetValueFromField(struct igMetaFieldView *self, void *object, struct igMetaFieldView *field, char *source);
 
 #ifdef __cplusplus
 }

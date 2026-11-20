@@ -84,7 +84,7 @@ igLuaGlue::Class::Class(const char *className, const char *baseClassName, lua_CF
     if (meta != 0) {
         count = igMetaObject_GetFieldCount(meta);
         for (i = 0; i < count; i++) {
-            new (g_luaGluePool) LuaFieldEntry(meta, (igMetaField *)igMetaObject_GetFieldAt(meta, i));
+            new (g_luaGluePool) LuaFieldEntry(meta, (::igMetaField *)igMetaObject_GetFieldAt(meta, i));
         }
     }
     {

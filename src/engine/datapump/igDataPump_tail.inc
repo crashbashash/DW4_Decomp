@@ -97,7 +97,7 @@ int igDataPump_Update(ValueBinding *binding, long long time) {
     binding->sink->write(binding->key, (int)binding->source + value->offset);
     static FieldDesc *invarianceFunctionField;
     if (invarianceFunctionField == 0) {
-        invarianceFunctionField = (FieldDesc *)igMetaObject_FindFieldByName(g_igMetaField_metaObject, "_invarianceFunction");
+        invarianceFunctionField = (FieldDesc *)igMetaObject_FindFieldByName(Gap::Core::igMetaField::getClassMeta(), "_invarianceFunction");
     }
     Notify notify = *(Notify *)((char *)binding->sink + invarianceFunctionField->offset);
     if (notify != 0) {

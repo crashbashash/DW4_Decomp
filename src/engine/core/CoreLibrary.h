@@ -547,8 +547,6 @@ extern "C" void igMetaFieldInfo_EnsureRegistered(void);
 extern "C" CallbackArray *igMetaFieldInfo_Register(void);
 extern "C" void igMetaFieldInfo_GetMetaObjectFunction(void);
 extern "C" int igMetaField_GetResetTypeMetaEnum(void);
-extern "C" void igMetaField_GetMetaObjectFunction(void);
-extern "C" void igMetaField_InitFields(void);
 extern "C" void * igMetaEnum_CreateInstance(int arg0);
 extern "C" int igMetaEnum_GetVTable(void);
 extern "C" void igMetaEnum_EnsureRegistered(void);
@@ -1471,37 +1469,10 @@ extern "C" int igMemoryRefMetaField_GetPoolName(igMemoryRefMetaField *self);
 extern "C" void igMemoryRefMetaField_Destruct(igMemoryRefMetaField *self);
 extern "C" igStringRef igMetaEnum_GetNameAt(igMetaEnum *self, int index);
 extern "C" int igMetaEnum_GetValueAt(void *arg0, int arg1);
-extern "C" int igMetaField_GetAlignment(void);
-extern "C" int igMetaField_GetSize(void);
-extern "C" void igMetaField_IgnoreReset(void);
-extern "C" int igMetaField_GetDescriptor(void);
-extern "C" int igMetaField_AlignSize(void *p, int size);
 class igMetaFieldView;
-extern "C" int igMetaField_ReadRawFieldMemAligned(igMetaFieldView *field, void *object, char *data, void *directory, unsigned char swap);
-extern "C" unsigned short igMetaField_WriteRawFieldMem(igMetaFieldView *arg0, int arg1, int arg2, int arg3, int arg4);
-extern "C" void igMetaField_ShallowCopy(int a0, int a1, int a2);
-extern "C" void igMetaField_DeepCopy(int a0, int a1, int a2);
 extern "C" void igMetaField_ConstructCopy(int a0, int a1, int a2);
-extern "C" void igMetaField_DeepCopyValue(void *arg0, int arg1, int arg2);
-extern "C" void igMetaField_CopyReference(void *arg0, int arg1, int arg2);
-extern "C" void igMetaField_IgnoreCopy(void);
-extern "C" int igMetaField_GetElementSize(void **arg0);
-extern "C" void igMetaField_ValueFromString(int arg0, int arg1, int arg2);
-extern "C" void igMetaField_ValueToString(int *arg0, void *arg1);
-extern "C" int igMetaField_IsAlikeByTechnique(void **arg0, int arg1, int arg2, int arg3);
-extern "C" int igMetaField_IsAlikeExactly(int a0, int a1, int a2);
-extern "C" int igMetaField_IsAlikeDeep(int a0, int a1, int a2);
-extern "C" int igMetaField_IsAlikeShallow(int a0, int a1, int a2);
-extern "C" int igMetaField_IsAlikeIgnore(void);
-extern "C" unsigned char igMetaField_Compare(int a0, int a1, int a2, int a3);
-extern "C" void igMetaField_ReleaseElements(void);
 extern "C" void igMetaField_ConstructValue(void);
 extern "C" void igMetaField_DestructValue(void);
-extern "C" void igMetaField_ZeroValue(void);
-extern "C" void igMetaField_ClearValue(void);
-extern "C" void igMetaField_Print(void *arg0, int arg1, int arg2, const char *arg3);
-extern "C" void igMetaField_UserPostRead(int arg0);
-extern "C" int igMetaField_IsConstruct(void);
 extern "C" void igMetaObject_FinalizeAndAppendField(void *meta,void *field);
 extern "C" int FUN_002fdef0(int a0, int a1);
 extern "C" void igMetaObject_FinalizeFieldLayoutTree(int arg0);
@@ -2196,7 +2167,6 @@ extern "C" int g_igMetaObject_vtable[4];
 extern "C" igMetaObject *g_igMetaFieldInfo_metaObject;
 extern "C" igMetaObject *igMetaFieldInfo_GetMetaObject(void);
 extern "C" int g_igMetaFieldInfo_vtable[4];
-extern "C" igMetaObject *igMetaField_GetMetaObject(void);
 extern "C" igMetaObject *g_igMetaEnum_metaObject;
 extern "C" igMetaObject *igMetaEnum_GetMetaObject(void);
 extern "C" int g_igMetaEnum_vtable[4];
@@ -3038,7 +3008,7 @@ class igIGBFileView : public igDirectoryView { public:
     int _entryBufferSize; int _metaObjectCount; int _metaObjectBufferSize; int _metaFieldCount; int _metaFieldBufferSize;
     int _objectCount; int _objectBufferSize; int _memoryRefCount; int _memoryRefBufferSize; /* +144 */
     int _userLoadFunction; int _forceChunkSize;                     /* +160 */
-    unsigned char _endianSwap; char _pad169[3];
+    bool _endianSwap; char _pad169[3];
     void *_metaObjectBuffer; void *_dirBuf; void *_objBuf; char *_mfBuf; /* +172 */
     igObjectList *_metaFieldListInFile;                             /* +188 */
     igObjectList *_metaObjectListInFile;
@@ -3182,7 +3152,7 @@ extern "C" igResult igIGBFile_ReadFinished(igIGBFileView *arg1);
 extern "C" igResult igIGBFile_ReadObjectSectionOld(igIGBFileView *file);
 extern "C" void igIGBFile_SetCurrentPosition(igIGBFileView *self, int at);
 extern "C" igResult igIGBFile_FreeBasePath(igIGBFileView *arg1);
-/* The registered meta-field descriptors igMetaField_GetMetaFieldList returns; each entry's getMeta is its meta object. */
+/* The registered meta-field descriptors Gap::Core::igMetaField::getMetaFieldTypes returns; each entry's getMeta is its meta object. */
 static inline igObjectDispatchView *registeredMetaField(__internalObjectList *fields, int index) {
     return ((igObjectDispatchView **)fields->_data)[index];
 }
@@ -3638,32 +3608,8 @@ extern "C" int igMetaEnum_GetNameCount(igMetaEnum *self);
 typedef struct MetaEnumView { char pad[4]; int _refCount; char *name; igTDataList<char *> *names; igTDataList<int> *values; } MetaEnumView;
 extern "C" void *igMetaField_Construct(igMetaField *self);
 extern "C" igMetaField *igMetaField_CopyConstruct(igMetaField *dest, igMetaField *source);
-extern "C" void igMetaField_Destruct(igMetaField *arg0);
-extern "C" void igMetaField_Configure(igMetaField *self, const char *fieldName, igMetaField **externalEnumStorage, int offset, igMetaObject *parentMetaObject);
-extern "C" void igMetaField_EnsureDefaultStorage(igMetaField *field);
-extern "C" void igMetaField_SetDefault(igMetaField *self, int defaultValue);
-extern "C" void igMetaField_Reset(igMetaField *field,void *object);
 extern "C" void igMetaField_SetToDefault(igMetaField *arg0, int arg1);
-extern "C" void igMetaField_CopyDefaultToValue(igMetaField *arg0, int arg1);
-extern "C" short igMetaField_GetTypeIndex(igMetaFieldView *arg0);
-extern "C" int igMetaField_WritePersistentValue(igMetaField *field,void *object,void *output,void *context,unsigned char swap);
-extern "C" int igMetaField_ReadFieldMem(igMetaFieldView *field, char *object, char *data, igIGBFile *file, unsigned char endianSwap);
-extern "C" unsigned short igMetaField_ReadRawFieldMem(igMetaFieldView *arg0, int arg1, int arg2, int arg3, int arg4);
-extern "C" int igMetaField_GetRawFieldMemSize(igMetaField *arg0);
 extern "C" void igMetaField_CopyByTechnique(igMetaFieldView *arg0, int arg1, int arg2, int arg3);
-extern "C" void igMetaField_ShallowCopyValue(igMetaField *arg0, int arg1, int arg2);
-extern "C" void igMetaField_ResetValue(igMetaField *field, void *object);
-extern "C" igStringRef igMetaField_ArrayToString(igMetaFieldView *arg1, int arg2, int arg3, int arg4);
-extern "C" int igMetaField_ArrayFromString(igMetaFieldView *arg0, int arg1, int arg2, int arg3, int arg4);
-extern "C" int igMetaField_FromString(igMetaFieldView *field, int object, int text, int directory);
-extern "C" int igMetaField_Write(igMetaField *arg0);
-extern "C" int igMetaField_IsAlikeExactlyValue(igMetaField *arg0, unsigned char *arg1, unsigned char *arg2);
-extern "C" int igMetaField_IsAlikeDeepValue(igMetaFieldView *self, const void *left, const void *right);
-extern "C" int igMetaField_IsAlikeShallowValue(igMetaFieldView *self, const void *left, const void *right);
-extern "C" igStringRef igMetaField_ToString(igMetaFieldView *self, char *object, int directory);
-extern "C" void igMetaField_SetValue(igMetaField *arg0, int arg1, int arg2);
-extern "C" void igMetaField_SwapBytes(igMetaField *arg0, unsigned char *arg1, int arg2);
-extern "C" void igMetaField_SwapValue(igMetaFieldView *self, char *object);
 extern "C" int igMetaField_GetMangledName(igMetaField *arg0, void **arg1);
 /* igMetaFieldInfo's own virtual functions past igObject's (slot n at vtable byte offset 4 * n);
  * slot 24 is igMetaField_FindByName (config names/ObjectModel.tsv). ABI view only. */
@@ -3684,7 +3630,6 @@ extern "C" igMetaField *igMetaField_FindByName(int arg0, char *arg1);
  * result at full width: declared unsigned char or bool, the `== 0` test in igMemoryPoolContextInfo_Activate gains the
  * `andi 0xff` of a byte-returning callee (156 bytes against retail's 152). */
 extern "C" int g_igMetaObject_vtable[4];
-extern "C" igMetaField *g_fieldNameMember;
 extern "C" void *igMetaObject_Construct(igMetaObject *meta, int extra1);
 extern "C" igMetaObject *igMetaObject_Init(igMetaObject *meta);
 extern "C" void *igMetaObject_CopyConstruct(igMetaObject *meta,void *source);
@@ -3714,12 +3659,12 @@ extern "C" void igObject_ConstructPooled(igObject *arg0, char *arg1);
  * when there is no allocator at all. It returns the address prefix_size bytes into the block, so a
  * header can precede the object. The allocator method called is vtable offset 216 (vfunc_54), the
  * allocate-bytes slot. */
-extern "C" int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap);
+extern "C" int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap);
 /* An object record in an .igb object section: its meta-object index and byte size, then (old format)
  * the count of persistent fields written. */
 struct FieldRecordHead { int kind; int size; int fieldCount; };
-extern "C" int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap);
-extern "C" int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead *head, igDirectoryView *dir, igTDataList<igMetaObject *> *metaObjectList, unsigned char endianSwap);
+extern "C" int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap);
+extern "C" int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead *head, igDirectoryView *dir, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap);
 extern "C" void igObjectDirEntry_ReleaseDefaults(igObjectDirEntry *self);
 /* An igObjectList of igObjectDirEntry, or of such lists (an igIGBFile's _entryPool, one per type meta). */
 static inline igObjectDirEntry *objectDirEntryAt(const igObjectList *list, int index) { return ((igObjectDirEntry *const *)list->_data)[index]; }

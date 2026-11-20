@@ -134,6 +134,7 @@ class Conversion:
         self.mangled = None
         self.va = None
         self.access = None                             # `private`/`protected` from its class-members.tsv row
+        self.getter = None                             # a public static inline `{ return name; }` of the class
 
     @property
     def base(self):
@@ -203,19 +204,88 @@ _SIGNATURE = re.compile(r"^(?P<lead>(?:static\s+|inline\s+|virtual\s+)*)(?P<ret>
                         r"(?P<name>~?[A-Za-z_]\w*)\s*(?P<rest>(?:\(.*\)\s*(?:const)?)?)\s*;?$", re.S)
 
 
-def declares_virtual(rows, name):
-    """Whether class-members.tsv rows declare a function `name` virtual."""
-    return any(re.match(r"(?:(?:public|protected|private)\s*:\s*)?(?:inline\s+)?virtual\b", row) and
-               re.search(r"[\s*&]%s\s*\(" % re.escape(name), row) for row in rows)
+_ACCESS = re.compile(r"\b(public|protected|private)\s*:(?!:)\s*")
 
 
-def declared_access(rows, name):
-    """The access label (`private`, `protected`) a class-members.tsv row gives member `name`, or None for public."""
+def row_statements(rows, macros=None):
+    """[(access, declaration)] of class-members.tsv rows in table order, object macros expanded: a row's leading
+    label (none is public) holds for the row, and a label inside a macro's body for the rest of that row."""
+    out = []
     for row in rows:
-        m = re.match(r"\s*(public|protected|private)\s*:", row)
-        if re.search(r"(?:^|[\s*&:])%s\s*(?:\(|;|\[|$)" % re.escape(name), row):
-            return m.group(1) if m and m.group(1) != "public" else None
+        m = _ACCESS.match(row.lstrip())
+        access = m.group(1) if m else "public"
+        body = row.lstrip()[m.end():] if m else row
+        body = declarations.expand_function_macros(body, macros) if macros else body
+        at, depth, start = 0, 0, 0
+        while at < len(body):
+            c = body[at]
+            if depth == 0:
+                label = _ACCESS.match(body, at)
+                if label and not body[start:at].strip():
+                    access, at = label.group(1), label.end()
+                    start = at
+                    continue
+            if c == "{":
+                depth += 1
+            elif c == "}":
+                depth -= 1
+                if depth == 0:
+                    out.append((access, body[start:at + 1].strip()))
+                    start = at + 1
+            elif c == ";" and depth == 0:
+                out.append((access, body[start:at + 1].strip()))
+                start = at + 1
+            at += 1
+        if body[start:].strip():
+            out.append((access, body[start:].strip()))
+    return out
+
+
+def _names(statement, name):
+    return re.search(r"(?:^|[\s*&:~])%s\s*(?:\(|;|\[|$)" % re.escape(name), statement)
+
+
+def declares_virtual(rows, name, params=None, macros=None, types=None, cls="C"):
+    """Whether class-members.tsv rows of class `cls` declare function `name` virtual (object macros expanded);
+    with `params`, the overload taking those parameters (a non-virtual overload of a virtual name is not)."""
+    for _access, stmt in row_statements(rows, macros):
+        if not (re.match(r"(?:inline\s+)?virtual\b", stmt) and re.search(r"[\s*&]%s\s*\(" % re.escape(name), stmt)):
+            continue
+        if params is None:
+            return True
+        found = declared_members(cls, [stmt if stmt.endswith((";", "}")) else stmt + ";"], macros, types)
+        if any(d.name == name and tuple(d.params or ()) == tuple(params) for d in found):
+            return True
+    return False
+
+
+def declared_access(rows, name, macros=None):
+    """The access (`private`, `protected`) class-members.tsv rows give member `name` (object macros expanded),
+    or None for public."""
+    for access, stmt in row_statements(rows, macros):
+        if _names(stmt, name):
+            return access if access != "public" else None
     return None
+
+
+def public_getter(rows, name, macros=None):
+    """The public static inline function of class-members.tsv rows whose body is `{ return name; }` (the kit's
+    `getClassMeta()` for `_Meta`), or None."""
+    for access, stmt in row_statements(rows, macros):
+        m = re.match(r"static\s+inline\s+[^;{]*?\b([A-Za-z_]\w*)\s*\(\s*\)\s*\{\s*return\s+%s\s*;\s*\}$"
+                     % re.escape(name), stmt)
+        if m and access == "public":
+            return m.group(1)
+    return None
+
+
+def _is_read(clean, pos, end):
+    """Whether the name at clean[pos:end] is read only: not assigned, incremented or having its address taken."""
+    before = clean[:pos].rstrip()
+    after = clean[end:].lstrip()
+    if before.endswith(("&", "++", "--")) and not before.endswith("&&"):
+        return False
+    return not (re.match(r"(?:[-+*/%&|^]|<<|>>)?=(?!=)", after) or after.startswith(("++", "--")))
 
 
 def conversions(rows, members, macros, types):
@@ -274,10 +344,13 @@ def conversions(rows, members, macros, types):
                           % (line, base, len(same), name))
             continue
         class_rows = (members or {}).get(base, []) + ([declaration] if declaration else [])
-        virtual = want.kind == "func" and not want.static and declares_virtual(class_rows, name)
+        virtual = want.kind == "func" and not want.static and declares_virtual(
+            class_rows, name, tuple(want.params or ()), macros, types, base)
         conv = Conversion(cname, cls, name, want.kind, bool(want.static), bool(want.const), bool(want.inline),
                           want.ret, tuple(want.params or ()), declaration, virtual)
-        conv.access = declared_access(class_rows, name)
+        conv.access = declared_access(class_rows, name, macros)
+        if conv.kind == "data" and conv.access:
+            conv.getter = public_getter(class_rows, name, macros)
         out.append(conv)
     return out, errors
 
@@ -398,8 +471,12 @@ def _strip_parens(e):
     return e
 
 
-def _arg_spans(clean, open_, close):
-    """[(start, end)] of each argument of the call whose parentheses are at `open_` and `close`, blanks trimmed."""
+def _arg_spans(clean, open_, close, text=None):
+    """[(start, end)] of each argument of the call whose parentheses are at `open_` and `close`, blanks trimmed.
+    `text` is the source `clean` was made from: a string literal, blank in `clean`, is not a blank to trim."""
+    def blank(k):
+        return clean[k].isspace() and (text is None or text[k].isspace())
+
     out, depth, at = [], 0, open_ + 1
     for i in range(open_ + 1, close + 1):
         ch = clean[i]
@@ -409,9 +486,9 @@ def _arg_spans(clean, open_, close):
             depth -= 1
         if (ch == "," and depth == 0) or i == close:
             s, e = at, i
-            while s < e and clean[s].isspace():
+            while s < e and blank(s):
                 s += 1
-            while e > s and clean[e - 1].isspace():
+            while e > s and blank(e - 1):
                 e -= 1
             if s < e or out or ch == ",":
                 out.append((s, e))
@@ -700,7 +777,7 @@ class Planner:
             return
         open_ = end + after.end() - 1
         close = declarations._close(fr.clean, open_)
-        spans = _arg_spans(fr.clean, open_, close)
+        spans = _arg_spans(fr.clean, open_, close, fr.text)
         if len(spans) != len(conv.params) + 1:
             self.errors.append("%s:%d: %s(...) passes %d arguments; instance member %s takes a receiver and %d"
                                % (fr.rel, fr.text.count("\n", 0, pos) + 1, conv.cname, len(spans), conv.qualified,
@@ -738,6 +815,10 @@ class Planner:
             return
         inside = self.member_class_of(fr, ctx)
         if conv.access and not self.may_access(conv, inside):
+            if conv.getter and _is_read(fr.clean, pos, end):
+                # the kit reads a protected `_Meta` outside its class through the public `getClassMeta()`
+                fr.edits.append((pos, end, "%s::%s()" % (conv.cls, conv.getter)))
+                return
             # outside the class (a private member) or its subclasses (a protected one) the member is out of
             # reach: the caller still names the C name until it is written the kit's way (igObject::release())
             self.c_callers[conv.cname].add(fr.rel)
@@ -760,7 +841,7 @@ class Planner:
             return
         open_ = end + after.end() - 1
         close = declarations._close(fr.clean, open_)
-        spans = _arg_spans(fr.clean, open_, close)
+        spans = _arg_spans(fr.clean, open_, close, fr.text)
         if len(spans) != len(conv.params) + 1:
             self.errors.append("%s:%d: %s(...) passes %d arguments; instance member %s takes a receiver and %d"
                                % (fr.rel, fr.text.count("\n", 0, pos) + 1, conv.cname, len(spans), conv.qualified,
@@ -787,7 +868,7 @@ class Planner:
         if after and conv.special == "dtor":
             open_ = end + after.end() - 1
             close = declarations._close(fr.clean, open_)
-            spans = _arg_spans(fr.clean, open_, close)
+            spans = _arg_spans(fr.clean, open_, close, fr.text)
             if len(spans) == 2 and re.fullmatch(r"\(?\s*[1-9]\d*\s*\)?", fr.clean[spans[1][0]:spans[1][1]]):
                 e = _strip_parens(fr.text[spans[0][0]:spans[0][1]])
                 declared = re.search(r"\bGap\s*::\s*\w+\s*::\s*(\w+)\s*\*\s*%s\b" % re.escape(e),
@@ -807,7 +888,7 @@ class Planner:
         if after and inside is not None and self.classes.derives(inside.rsplit("::", 1)[-1], conv.base):
             open_ = end + after.end() - 1
             close = declarations._close(fr.clean, open_)
-            spans = _arg_spans(fr.clean, open_, close)
+            spans = _arg_spans(fr.clean, open_, close, fr.text)
             if len(spans) == len(conv.params) + 1:
                 e = _strip_parens(fr.text[spans[0][0]:spans[0][1]])
                 cast = _CAST.match(e)

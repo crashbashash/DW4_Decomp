@@ -110,15 +110,15 @@ void FUN_001877c0(void) {
         g_igVec4fArrayMetaField_descriptor = (M *)igMetaObject_CreateInstance(g_igVec4fArrayMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
         temp_s0 = g_igVec4fArrayMetaField_descriptor;
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)temp_s0);
+            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)temp_s0);
             o = g_igVec4fArrayMetaField_descriptor;
             o->f4 = o->f4 - 1;
             if ((o->f4 & 0x7FFFFF) == 0) {
                 igObject_Destroy((igObject *)o);
             }
-            t = igMetaField_GetMetaFieldList()->_count - 1;
+            t = Gap::Core::igMetaField::getMetaFieldTypes()->_count - 1;
             g_igVec4fArrayMetaField_descriptor->f18 = t;
-            igMetaField_FinalizeDescriptor((igMetaField *)g_igVec4fArrayMetaField_descriptor);
+            ((Gap::Core::igMetaField *)g_igVec4fArrayMetaField_descriptor)->validate();
         }
     }
 }

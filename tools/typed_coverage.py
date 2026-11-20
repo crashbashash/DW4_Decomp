@@ -728,6 +728,19 @@ def measure(reflection="data/reflection.json", src="src"):
             for var, declared in list(decls.items()):
                 if declared in template_args:
                     decls[var] = next((a for a in template_args[declared] if a in classes), declared)
+            # a name declared again in a later block (igen's `{ T *metaField = ...; }` per field) has the type
+            # of the declaration before the access
+            placed = collections.defaultdict(list)
+            for m in DECL_RE.finditer(body):
+                t = m.group(1)
+                if t in template_args:
+                    t = next((a for a in template_args[t] if a in classes), t)
+                placed[m.group(2)].append((m.start(), t))
+
+            def declared_at(var, at):
+                before = [t for p, t in placed.get(var, ()) if p < at]
+                return before[-1] if before else decls.get(var)
+
             fc = collections.Counter()
             stats["per_function"][(path, name)] = fc
             shadowed = local_names(signature, body)
@@ -744,7 +757,7 @@ def measure(reflection="data/reflection.json", src="src"):
             for kind, ctype, offset, base, span in accesses(body):
                 ff["total"] += 1
                 if kind == "member":
-                    member, decl_class = ctype, decls.get(base)
+                    member, decl_class = ctype, declared_at(base, span[0])
                     if decl_class is None and base in ("arg0", "this"):
                         decl_class = cls
                     if decl_class is None and typed_member(base):

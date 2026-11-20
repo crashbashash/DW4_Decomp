@@ -22,7 +22,7 @@ CallbackArray *igCompoundMetaField_Register(void) {
     return igMetaObject_RegisterClass(
         1,
         &g_igCompoundMetaField_metaObject,
-        igMetaField_Register,
+        Gap::Core::igMetaField::arkRegisterInternal,
         igMetaField_GetPublishedMetaObject,
         igCompoundMetaField_GetMetaObjectFunction,
         "igCompoundMetaField",
@@ -75,15 +75,15 @@ void igCompoundMetaField_CreateDefaultDescriptor(void) {
         g_igCompoundMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igCompoundMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
         descriptor = (void *)(g_igCompoundMetaField_descriptor);
         if (descriptor != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);
+            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
             o = (igCompoundMetaField *)g_igCompoundMetaField_descriptor;
             o->_refCount = o->_refCount - 1;
             if ((o->_refCount & 0x7FFFFF) == 0) {
                 igObject_Destroy(o);
             }
-            t = igMetaField_GetMetaFieldList()->_count - 1;
+            t = Gap::Core::igMetaField::getMetaFieldTypes()->_count - 1;
             ((igCompoundMetaField *)g_igCompoundMetaField_descriptor)->_internalIndex = (short) t;
-            igMetaField_FinalizeDescriptor((igMetaField *)g_igCompoundMetaField_descriptor);
+            ((Gap::Core::igMetaField *)g_igCompoundMetaField_descriptor)->validate();
         }
     }
 }

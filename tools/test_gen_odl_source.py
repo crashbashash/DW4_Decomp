@@ -301,5 +301,14 @@ class RetailRoles(unittest.TestCase):
                                 ("igRenderer", "static igMetaField *k_visualContext;")])
 
 
+class FlatCasts(unittest.TestCase):
+    def test_a_converted_class_named_by_a_c_parameter_is_the_flat_struct(self):
+        w = odl.Writer(None, set(), {"igMetaField": "Core"}, {}, {}, {}, None)
+        self.assertEqual(w.cast_to("igMetaField *", "metaField", "igShortMetaField *"),
+                         "(::igMetaField *)metaField")
+        self.assertEqual(w.cast_to("igMetaObject *", "m", "int"), "(igMetaObject *)m")
+        self.assertEqual(w.cast_to("igMetaField *", "f", "igMetaField *"), "f")
+
+
 if __name__ == "__main__":
     unittest.main()

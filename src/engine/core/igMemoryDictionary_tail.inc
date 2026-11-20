@@ -276,7 +276,7 @@ void igMemoryDirEntry_SetMemType(igMemoryDirEntry *self, igObjectDispatchView *m
 
     self->_memType = (int)memType;
     if (memType != 0) {
-        l = ((__internalObjectList *)igMetaField_GetMetaFieldList());
+        l = ((__internalObjectList *)Gap::Core::igMetaField::getMetaFieldTypes());
         n = l->_count;
         for (i = 0; i < n; i++) {
             o = ((igObjectDispatchView **)l->_data)[i];

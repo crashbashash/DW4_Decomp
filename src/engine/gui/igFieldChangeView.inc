@@ -41,7 +41,7 @@ void igFieldChangeView_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igFieldChangeView_Register);
 }
 
-static igMetaObjectCallback g_igFieldChangeView_callbackList[] = { igFieldSynchronizer_EnsureRegistered, igMetaField_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igFieldChangeView_callbackList[] = { igFieldSynchronizer_EnsureRegistered, Gap::Core::igMetaField::arkRegister, 0 };
 
 CallbackArray *igFieldChangeView_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -94,7 +94,7 @@ void igFieldChangeView_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igFieldSynchronizer_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s1)->_refCounted = 0;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igMetaField_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igFieldChangeView_fieldTable, g_igFieldChangeView_fieldHandles, g_igFieldChangeView_fieldOffsets, temp_s2);
 }
 

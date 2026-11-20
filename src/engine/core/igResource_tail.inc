@@ -358,7 +358,7 @@ void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromNa
                              * folds into the branch, and only the explicit xor keeps it (understanding-shapes.md,
                              * "A negated flag ... normalises first") */
                             if (compatible ^ true) continue;
-                            igMetaField_ShallowCopy((int)from, (int)((char *)target.p + to->_offset - from->_offset), (int)source.p);
+                            ((Gap::Core::igMetaField *)((int)from))->copyShallow((Gap::Core::igObject *)((int)((char *)target.p + to->_offset - from->_offset)), (Gap::Core::igObject *)((int)source.p));
                         }
                     }
                     igDirectory_ReplaceReference((igDirectoryView *)directory, igSmartPointer<igVirtualObject>(source), igSmartPointer<igVirtualObject>(target));

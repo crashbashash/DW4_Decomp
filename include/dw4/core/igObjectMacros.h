@@ -3,7 +3,8 @@
 
 /* The reflection members every registered class declares, as Alchemy's object macros spell them
  * (alchemy-kit_202309 include/igCore/igObjectMacros.h: IG_OBJECT_COMMON, IG_OBJECT_DEFINE,
- * IG_ABSTRACT_OBJECT_DEFINE), kept to the members this engine's registration has: _Meta is the handle
+ * IG_ABSTRACT_OBJECT_DEFINE, IG_OBJECT_BOOTSTRAP, IG_BOOTSTRAP_ABSTRACT_OBJECT_DEFINE), kept to the members
+ * this engine's registration has: _Meta is the handle
  * the registrar fills, arkRegisterInternal registers the class (a subclass passes it as its parent
  * registrar), arkRegister runs that once, getClassTypeSafe registers on first use and returns _Meta,
  * getClassTypeLazy creates the bare metaobject, _instantiateFromPool registers the class and creates an
@@ -44,6 +45,19 @@ struct CallbackArray;
     IG_OBJECT_COMMON(CLASSNAME)
 
 #define IG_ABSTRACT_OBJECT_DEFINE(CLASSNAME) \
+    IG_OBJECT_COMMON(CLASSNAME)
+
+/* A bootstrap class (igMetaField, igMetaObject, ...) is constructed before the object system runs: it
+ * declares its constructors and the slot-0 destruct override itself. */
+#define IG_OBJECT_BOOTSTRAP(CLASSNAME) \
+    public: \
+    CLASSNAME(); \
+    CLASSNAME(bool boot); \
+    CLASSNAME(const CLASSNAME &other); \
+    virtual void __bootstrapDestruct();
+
+#define IG_BOOTSTRAP_ABSTRACT_OBJECT_DEFINE(CLASSNAME) \
+    IG_OBJECT_BOOTSTRAP(CLASSNAME) \
     IG_OBJECT_COMMON(CLASSNAME)
 #endif
 

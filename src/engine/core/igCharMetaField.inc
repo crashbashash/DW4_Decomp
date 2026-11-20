@@ -74,7 +74,7 @@ CallbackArray *igCharMetaField_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igCharMetaField_metaObject,
-        igMetaField_Register,
+        Gap::Core::igMetaField::arkRegisterInternal,
         igMetaField_GetPublishedMetaObject,
         igCharMetaField_GetMetaObjectFunction,
         "igCharMetaField",
@@ -98,7 +98,7 @@ void igCharMetaField_CreateDefaultDescriptor(void) {
         g_igCharMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igCharMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
         descriptor = (void *)(g_igCharMetaField_descriptor);
         if (descriptor != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);
+            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
             {
                 igMetaField *held = (igMetaField *)g_igCharMetaField_descriptor;
                 held->_refCount = (int)held->_refCount - 1;
@@ -106,8 +106,8 @@ void igCharMetaField_CreateDefaultDescriptor(void) {
                     igObject_Destroy(held);
                 }
             }
-            ((igMetaField *)g_igCharMetaField_descriptor)->_internalIndex = (short)(igMetaField_GetMetaFieldList()->_count - 1);
-            igMetaField_FinalizeDescriptor((igMetaField *)g_igCharMetaField_descriptor);
+            ((igMetaField *)g_igCharMetaField_descriptor)->_internalIndex = (short)(Gap::Core::igMetaField::getMetaFieldTypes()->_count - 1);
+            ((Gap::Core::igMetaField *)g_igCharMetaField_descriptor)->validate();
         }
     }
 }

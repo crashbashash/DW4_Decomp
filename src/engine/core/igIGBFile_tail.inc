@@ -284,7 +284,7 @@ igResult igIGBFile_BuildMetaObjectBuffer(igIGBFileView *self) {
             for (; j < n; j++) {
                 f = ((igMetaField **)fields->_data)[j];
                 if (f->_persistent != 0 && f->_isRunTime == 0) {
-                    p[0] = igMetaField_GetTypeIndex((igMetaFieldView *)f);
+                    p[0] = ((Gap::Core::igMetaField *)f)->getTypeIndex();
                     p[1] = f->_internalIndex;
                     p[2] = f->_size;
                     p += 3;
@@ -309,16 +309,16 @@ igResult igIGBFile_BuildMetaFieldBuffer(igIGBFileView *self) {
     int *s4;
     char *s2;
     igObjectDispatchView *p;
-    self->_metaFieldCount = igMetaField_GetMetaFieldList()->_count;
+    self->_metaFieldCount = Gap::Core::igMetaField::getMetaFieldTypes()->_count;
     self->_metaFieldBufferSize = self->_metaFieldCount * 12;
     for (i = 0; i < self->_metaFieldCount; i++) {
-        self->_metaFieldBufferSize = self->_metaFieldBufferSize + (strlen((const char *)registeredMetaField(igMetaField_GetMetaFieldList(), i)->GetMeta()->_name) + 1);
+        self->_metaFieldBufferSize = self->_metaFieldBufferSize + (strlen((const char *)registeredMetaField(Gap::Core::igMetaField::getMetaFieldTypes(), i)->GetMeta()->_name) + 1);
     }
     self->_mfBuf = (char *)self->_temporaryMemoryPool->AllocateAligned(self->_metaFieldBufferSize, 16);
     s5 = 0;
     s4 = (int *)self->_mfBuf;
     for (i = 0; i < self->_metaFieldCount; i++) {
-        p = registeredMetaField(igMetaField_GetMetaFieldList(), i);
+        p = registeredMetaField(Gap::Core::igMetaField::getMetaFieldTypes(), i);
         s4[s5] = strlen((const char *)p->GetMeta()->_name) + 1;
         s5++;
         s4[s5] = p->GetMeta()->_majorVersion;
@@ -328,7 +328,7 @@ igResult igIGBFile_BuildMetaFieldBuffer(igIGBFileView *self) {
     }
     s2 = self->_mfBuf + self->_metaFieldCount * 12;
     for (j = 0; j < self->_metaFieldCount; j++) {
-        strcpy(s2, (const char *)registeredMetaField(igMetaField_GetMetaFieldList(), j)->GetMeta()->_name);
+        strcpy(s2, (const char *)registeredMetaField(Gap::Core::igMetaField::getMetaFieldTypes(), j)->GetMeta()->_name);
         s2 += *(int *)(self->_mfBuf + j * 12);
     }
     if (self->_endianSwap != 0) self->imf->SwapBytes(self->_mfBuf, self->_metaFieldCount * 3);
@@ -935,7 +935,7 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
                 while (slot < target) {
                     created = (igMetaField *)igCharMetaField_Create((igMemoryPoolView *)file->_temporaryMemoryPool);
                     created->_persistent = 0;
-                    igMetaField_Configure(created, "fakeField", 0, -1, blind);
+                    ((Gap::Core::igMetaField *)created)->setBasicProperties("fakeField", 0, -1, blind);
                     created->_internalIndex = slot;
                     created->_size = 1;
                     appendAlignedField(blind, created);
@@ -944,7 +944,7 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
                 }
                 created = (igMetaField *)igMetaObject_CreateInstance(
                     ((igObjectDispatchView **)file->_metaFieldListInFile->_data)[field->typeIndex]->GetMeta(), (igMemoryPoolView *)Memory_GetDefaultAllocator());
-                igMetaField_Configure(created, "Generated", 0, -1, blind);
+                ((Gap::Core::igMetaField *)created)->setBasicProperties("Generated", 0, -1, blind);
                 created->_internalIndex = target;
                 created->_size = field->size;
                 appendAlignedField(blind, created);
@@ -1303,7 +1303,7 @@ igResult igIGBFile_ReadMetaFieldList(igIGBFileView *self) {
     }
     self->_mfBuf = self->_chunk;
     self->_file->Read(self->_mfBuf, self->_metaFieldBufferSize, 1);
-    table = igMetaField_GetMetaFieldList();
+    table = Gap::Core::igMetaField::getMetaFieldTypes();
     count = table->_count;
     sizes = (int *)self->_mfBuf;
     name = (char *)sizes + self->_metaFieldCount * 12;

@@ -2,3 +2,4 @@
 # class under C++ (C keeps the reference word). Columns: <class>	<field>	<C++ type>. The referenced class is the
 # one the class's field adder gives the field (its arkRegisterInitialize sets the field's metaobject).
 igRenderer	_visualContext	igSmartPointer<igVisualContext>
+igIGBFile	_endianSwap	bool

@@ -85,7 +85,7 @@ void FUN_002284a0(void) {
         g_igItemDataBaseField_defaultDescriptor = (int)(igMetaObject_CreateInstance(g_igItemDataBaseField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
         temp_s0 = (void *)(g_igItemDataBaseField_defaultDescriptor);
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)temp_s0);
+            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)temp_s0);
             {
                 void *held = (void *)g_igItemDataBaseField_defaultDescriptor;
                 *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
@@ -93,8 +93,8 @@ void FUN_002284a0(void) {
                     igObject_Destroy((igObject *)held);
                 }
             }
-            *(short *)((char *)(g_igItemDataBaseField_defaultDescriptor) + 18) = (short) (*(int *)((char *)(igMetaField_GetMetaFieldList()) + 12) - 1);
-            igMetaField_FinalizeDescriptor((igMetaField *)g_igItemDataBaseField_defaultDescriptor);
+            *(short *)((char *)(g_igItemDataBaseField_defaultDescriptor) + 18) = (short) (*(int *)((char *)(Gap::Core::igMetaField::getMetaFieldTypes()) + 12) - 1);
+            ((Gap::Core::igMetaField *)g_igItemDataBaseField_defaultDescriptor)->validate();
         }
     }
 }
@@ -148,7 +148,7 @@ void FUN_002285d0(int arg0) {
         var_v0 = (void *)(StringPool_Intern(g_stringPool, "_interfacedMeta"));
     }
     sp3C = (void *)(var_v0);
-    igMetaField_SetFieldName((igMetaField *)temp_s0, &sp3C);
+    ((Gap::Core::igMetaField *)temp_s0)->setFieldName(&sp3C);
     if (sp3C != 0) {
         temp_a1 = (int *)((char *)sp3C - 8);
         temp_v0 = *(int *)((char *)(sp3C) - 4) - 1;
@@ -159,7 +159,7 @@ void FUN_002285d0(int arg0) {
     }
     *(int *)((char *)(temp_s0) + 8) = 0;
     *(int *)((char *)(temp_s0) + 56) = (int)igMetaObject_GetOrCreateMetaObject();
-    igMetaField_FinalizeDescriptor((igMetaField *)temp_s0);
+    ((Gap::Core::igMetaField *)temp_s0)->validate();
     ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s0);
     *(int *)((char *)(temp_s0) + 4) = (int)((int) (*(int *)((char *)(temp_s0) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s0) + 4) << 0x29) >> 0x29) == 0) {
@@ -179,7 +179,7 @@ void FUN_002285d0(int arg0) {
         var_v0_3 = (void *)(StringPool_Intern(g_stringPool, "_itemList"));
     }
     sp38 = (void *)(var_v0_3);
-    igMetaField_SetFieldName((igMetaField *)temp_s0_2, &sp38);
+    ((Gap::Core::igMetaField *)temp_s0_2)->setFieldName(&sp38);
     if (sp38 != 0) {
         temp_a1_2 = (int *)((char *)sp38 - 8);
         temp_v0_2 = *(int *)((char *)(sp38) - 4) - 1;
@@ -191,7 +191,7 @@ void FUN_002285d0(int arg0) {
     *(int *)((char *)(temp_s0_2) + 8) = 4;
     *(int *)((char *)(temp_s0_2) + 56) = (int)igMetaObjectList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_2) + 52) = 1;
-    igMetaField_FinalizeDescriptor((igMetaField *)temp_s0_2);
+    ((Gap::Core::igMetaField *)temp_s0_2)->validate();
     ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s0_2);
     *(int *)((char *)(temp_s0_2) + 4) = (int)((int) (*(int *)((char *)(temp_s0_2) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s0_2) + 4) << 0x29) >> 0x29) == 0) {
@@ -211,7 +211,7 @@ void FUN_002285d0(int arg0) {
         var_v0_5 = (void *)(StringPool_Intern(g_stringPool, "_itemName"));
     }
     sp34 = (void *)(var_v0_5);
-    igMetaField_SetFieldName((igMetaField *)temp_s0_3, &sp34);
+    ((Gap::Core::igMetaField *)temp_s0_3)->setFieldName(&sp34);
     if (sp34 != 0) {
         temp_a1_3 = (int *)((char *)sp34 - 8);
         temp_v0_3 = *(int *)((char *)(sp34) - 4) - 1;
@@ -223,7 +223,7 @@ void FUN_002285d0(int arg0) {
     *(int *)((char *)(temp_s0_3) + 8) = 8;
     *(int *)((char *)(temp_s0_3) + 56) = (int)igStringRefList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_3) + 52) = 1;
-    igMetaField_FinalizeDescriptor((igMetaField *)temp_s0_3);
+    ((Gap::Core::igMetaField *)temp_s0_3)->validate();
     ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s0_3);
     *(int *)((char *)(temp_s0_3) + 4) = (int)((int) (*(int *)((char *)(temp_s0_3) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s0_3) + 4) << 0x29) >> 0x29) == 0) {

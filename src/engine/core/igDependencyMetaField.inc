@@ -86,7 +86,7 @@ void igDependencyMetaField_CreateDefaultDescriptor(void) {
         g_igDependencyMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igDependencyMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
         descriptor = (void *)(g_igDependencyMetaField_descriptor);
         if (descriptor != 0) {
-            MetaRefList_AppendRetained(igMetaField_GetMetaFieldList(), (igObject *)descriptor);
+            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
             {
                 void *held = (void *)g_igDependencyMetaField_descriptor;
                 ((igObject *)held)->_refCount = ((igObject *)held)->_refCount - 1;
@@ -94,8 +94,8 @@ void igDependencyMetaField_CreateDefaultDescriptor(void) {
                     igObject_Destroy((igObject *)held);
                 }
             }
-            ((igMetaField *)g_igDependencyMetaField_descriptor)->_internalIndex = (short) (igMetaField_GetMetaFieldList()->_count - 1);
-            igMetaField_FinalizeDescriptor((igMetaField *)g_igDependencyMetaField_descriptor);
+            ((igMetaField *)g_igDependencyMetaField_descriptor)->_internalIndex = (short) (Gap::Core::igMetaField::getMetaFieldTypes()->_count - 1);
+            ((Gap::Core::igMetaField *)g_igDependencyMetaField_descriptor)->validate();
         }
     }
 }
@@ -145,7 +145,7 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
         beforeText = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)"_before")));
     }
     beforeName = (void *)(beforeText);
-    igMetaField_SetFieldName((igMetaField *)beforeField, &beforeName);
+    ((Gap::Core::igMetaField *)beforeField)->setFieldName(&beforeName);
     if (beforeName != 0) {
         beforeHeader = (int *)((char *)beforeName - 8);
         beforeRefs = *(int *)((char *)(beforeName) - 4) - 1;
@@ -155,7 +155,7 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
         }
     }
     ((igMetaField *)beforeField)->_offset = 0;
-    igMetaField_FinalizeDescriptor((igMetaField *)beforeField);
+    ((Gap::Core::igMetaField *)beforeField)->validate();
     ObjectList_AppendRetained((igObjectList *)fieldList, (igObject *)beforeField);
     ((igObject *)beforeField)->_refCount = (int)((int) (((igObject *)beforeField)->_refCount - 1));
     if (((unsigned long long) ((long long) (int) ((igObject *)beforeField)->_refCount << 0x29) >> 0x29) == 0) {
@@ -175,7 +175,7 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
         afterText = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)"_after")));
     }
     afterName = (void *)(afterText);
-    igMetaField_SetFieldName((igMetaField *)afterField, &afterName);
+    ((Gap::Core::igMetaField *)afterField)->setFieldName(&afterName);
     if (afterName != 0) {
         afterHeader = (int *)((char *)afterName - 8);
         afterRefs = *(int *)((char *)(afterName) - 4) - 1;
@@ -185,7 +185,7 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
         }
     }
     ((igMetaField *)afterField)->_offset = 4;
-    igMetaField_FinalizeDescriptor((igMetaField *)afterField);
+    ((Gap::Core::igMetaField *)afterField)->validate();
     ObjectList_AppendRetained((igObjectList *)fieldList, (igObject *)afterField);
     ((igObject *)afterField)->_refCount = (int)((int) (((igObject *)afterField)->_refCount - 1));
     if (((unsigned long long) ((long long) (int) ((igObject *)afterField)->_refCount << 0x29) >> 0x29) == 0) {
