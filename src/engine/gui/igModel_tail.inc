@@ -8,7 +8,7 @@ void FUN_004576d0(igContext *context, ContextHandler *handler) {
         if (n < list->_capacity) {
             list->_count = list->count() + 1;
         } else {
-            List_Resize(list, n + 1, 4);
+            ((Gap::Core::igDataList *)list)->resizeAndSetCount(n + 1, 4);
         }
         list->_data[n] = handler;
     } else if (list->count() != 0 && index >= 0 && index < list->count()) {

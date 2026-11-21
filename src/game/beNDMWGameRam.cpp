@@ -49,8 +49,8 @@
 #include "dw4/core/igMetaEnum.h"
 #define RELEASE_REF(T, q) { T *rr = (q); if (rr) { --rr->_refCount; if (!(rr->_refCount & 0x7fffff)) igObject_Destroy(rr); } }
 #define ALLOC(owner, var) { void *got = ((void *)((Gap::Core::igObject *)(owner))->getMemoryPool()); if (g_useOwnerAllocator) var = got; else var = ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0)); }
-#define RESERVE(LT, h, SZ) { LT *l = (LT *)(h)->_data; if (!(entry->count < l->_count)) List_Reserve((igDataList *)l, entry->count, SZ); }
-#define RESIZE(LT, h, SZ) { int n = entry->count; LT *l = (LT *)(h)->_data; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize(l, n, SZ); } }
+#define RESERVE(LT, h, SZ) { LT *l = (LT *)(h)->_data; if (!(entry->count < l->_count)) ((Gap::Core::igDataList *)l)->setCapacity(entry->count, SZ); }
+#define RESIZE(LT, h, SZ) { int n = entry->count; LT *l = (LT *)(h)->_data; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, SZ); } }
 /* Sentinel for the `absolute` argument of the HP update: apply `delta` instead. */
 #define NO_ABSOLUTE_HP (-1)
 #define NEARBY_RADIUS_SQUARED 900.0f
@@ -619,7 +619,7 @@ void beNDMWGameRam_BuildDataList(beNDMWGameRam *self, igObjectList *out, const D
     } while (done == 0);
     {
         int n = out->_count;
-        if (!(n < countOf(out))) List_Reserve((igDataList *)out, n, 4);
+        if (!(n < countOf(out))) ((Gap::Core::igDataList *)out)->setCapacity(n, 4);
     }
 }
 
@@ -666,7 +666,7 @@ void beNDMWGameRam_ResetPlayer(beNDMWGameRam *self, int player) {
     }
     players = (igObjectList *)self->_playerDataListList;
     if (players->_count != 4) {
-        if (count(players) < 5) List_Reserve((igDataList *)players, 4, 4);
+        if (count(players) < 5) ((Gap::Core::igDataList *)players)->setCapacity(4, 4);
         ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_playerDataListList, 4);
     }
     allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
@@ -782,7 +782,7 @@ void beNDMWGameRam_Stop(beNDMWGameRam *self) {
         common->data[c] = 0;
     }
     common->count = 0;
-    if (!(0 < ((ObjectRefList *)self->_commonDataList)->count)) List_Reserve((igDataList *)self->_commonDataList, 0, 4);
+    if (!(0 < ((ObjectRefList *)self->_commonDataList)->count)) ((Gap::Core::igDataList *)self->_commonDataList)->setCapacity(0, 4);
     players = (ObjectRefList *)self->_playerDataListList;
     playerCount = players->count;
     j = 0;
@@ -803,7 +803,7 @@ void beNDMWGameRam_Stop(beNDMWGameRam *self) {
         players->data[k] = 0;
     }
     players->count = 0;
-    if (!(0 < ((ObjectRefList *)self->_playerDataListList)->count)) List_Reserve((igDataList *)self->_playerDataListList, 0, 4);
+    if (!(0 < ((ObjectRefList *)self->_playerDataListList)->count)) ((Gap::Core::igDataList *)self->_playerDataListList)->setCapacity(0, 4);
 }
 
 void beNDMWGameRam_Prepare(beNDMWGameRam *self) {
@@ -1908,7 +1908,7 @@ NearbyListRef beNDMWGameRam_CollectNearbyNonzeroHp(beNDMWGameRam *self,const cha
                     list=result.value;
                     append_index=list->getCount();
                     if(append_index<list->capacity) ++list->count;
-                    else List_Resize(list,append_index+1,4);
+                    else ((Gap::Core::igDataList *)list)->resizeAndSetCount(append_index+1,4);
                     list->data[append_index]=member_id;
                 }
                 beMessenger_PopArgContext((beMessenger *)self->_messenger);
@@ -1949,7 +1949,7 @@ class IntListAppend { public:
   if (index < h->capacity) {
    h->count = view->count + 1;
   } else {
-   List_Resize(list, index + 1, 4);
+   ((Gap::Core::igDataList *)list)->resizeAndSetCount(index + 1, 4);
   }
   ((int *)beNDMWLoadIntf2_igIntList_GetData((igDataList *)list))[index] = value;
  }

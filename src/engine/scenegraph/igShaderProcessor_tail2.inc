@@ -16,7 +16,7 @@ void FUN_001d9090(SkeletonBitOwnerView *o, int index, int value) {
         words = (unsigned int)(n + 31) >> 5;
         if ((int)words >= 0) {
             if ((int)words <= l->_capacity) { l->_count = words; }
-            else { List_Resize(l, words, 4); }
+            else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(words, 4); }
         }
         {
             int j;

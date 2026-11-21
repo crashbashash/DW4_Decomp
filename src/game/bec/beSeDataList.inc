@@ -36,8 +36,8 @@ CallbackArray *beSeDataList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beSeDataList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beSeDataList_GetMetaObjectFunction,
         "beSeDataList",
         0x14, /* instance size */

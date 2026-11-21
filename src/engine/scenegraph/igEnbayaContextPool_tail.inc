@@ -118,7 +118,7 @@ void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount) {
         if (n1 < l1->_capacity) {
             l1->_count = l1->count() + 1;
         } else {
-            List_Resize((void *)l1, n1 + 1, 4);
+            ((Gap::Core::igDataList *)l1)->resizeAndSetCount(n1 + 1, 4);
         }
         l1->_data[n1] = boneCount;
         l2 = o->_freeIndexList;
@@ -126,7 +126,7 @@ void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount) {
         if (n2 < l2->_capacity) {
             l2->_count = l2->count() + 1;
         } else {
-            List_Resize((void *)l2, n2 + 1, 4);
+            ((Gap::Core::igDataList *)l2)->resizeAndSetCount(n2 + 1, 4);
         }
         l2->_data[n2] = DAT_0048da08[0];
         held = list.p;
@@ -141,13 +141,13 @@ void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount) {
 
 static inline void reserveContexts(igTDataList<void *> *list, int count) {
     if (count >= list->getCount()) {
-        List_Reserve((igDataList *)list, count, 4);
+        ((Gap::Core::igDataList *)list)->setCapacity(count, 4);
     }
     if (count >= 0) {
         if (count <= list->_capacity) {
             list->_count = count;
         } else {
-            List_Resize(list, count, 4);
+            ((Gap::Core::igDataList *)list)->resizeAndSetCount(count, 4);
         }
     }
 }

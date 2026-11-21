@@ -84,7 +84,7 @@ grow:
         if (count <= list->_capacity) {
             list->_count = count;
         } else {
-            List_Resize(list, count, 4);
+            ((Gap::Core::igDataList *)list)->resizeAndSetCount(count, 4);
         }
     }
     memset(list->_data + n, 0, (count - n) * 4);

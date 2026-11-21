@@ -621,7 +621,7 @@ void beBaseInfoRam_RemoveAllTimers(beBaseInfoRam *self) {
         list = (igObjectList *)self->_dataList;
         size = list->_count;
         if (size >= countOf(list)) {
-            List_Reserve((igDataList *)list, size, 4);
+            ((Gap::Core::igDataList *)list)->setCapacity(size, 4);
         }
     }
 }

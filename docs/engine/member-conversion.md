@@ -191,15 +191,33 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `k_count`/`k_capacity`/`k_data`, the kit's inline `getCount()` and the slot-21 `getElementSize()`, -1 here). Its
    inline virtual `getMeta` and its `getCount` have out-of-line retail copies in the attrs and base units (the
    units that compiled igDataList's vtable and called `getCount` uninlined), which stay C functions there until
-   those units build their lists in C++; DW4's `GetOrCreateMetaObject` and the list services (`List_Reserve`, the
-   kit's protected `setCapacity`, and the rest) are still free;
+   those units build their lists in C++; DW4's `GetOrCreateMetaObject` is still free. The list services are its
+   members in the kit's access (alchemy-kit_202309 igCore/igDataList.h): the public `setCapacity` (`List_Reserve`)
+   and `resizeAndSetCount` (`List_Resize`), and the protected `insert`, `append`, `remove(pos, itemSize)`,
+   `sortedFind`, `resizeAndSetCount4For1` (`List_AppendWord`), `insert4`, `append4`, `remove4(pos)`, `sortedFind4`
+   and `binaryInsert4` (`List_LowerBound`), in retail's order; the kit's other overloads (`find`, `bubbleSort`,
+   the ranged `remove`, …) are not in DW4's image and are not declared. The item size is the kit's unsigned
+   (`setCapacity`'s `divu` needs it), `_data` the kit's `unsigned char *` under C++, and the compare callback the
+   kit's `Gap::igCompareFunction` (`include/dw4/core/igCore.h`) without the kit's later user-data argument.
+   Code outside igDataList's subclasses still calls the protected services by their C names, as their
+   prototypes in `igDataLists.h` keep them, until it is written through a typed list's inlines;
 3. the flat metafield subclasses above, with igMetaFieldList (a kit `igTObjectList<igMetaField>`), so that the
    compound's loops read `_fieldList->get(i)`;
-4. igDataList's list services as its protected members (`List_Reserve` is `setCapacity`, `List_Resize`
-   `resizeAndSetCount`, `List_InsertBytes` `insert`, …), then `igObjectList`: the kit derives it from
-   `igTDataList<igObject *>`, whose inline overrides (`userPreWrite` calling `trimCapacity`, `trimCapacity` through
-   `setCapacity`, `getElementSize` returning 4, the new slot 22 `getElementMeta`, `getMeta`) have their retail copies
-   in attrs, as igDataList's do; its field adder replaces `_data` with a clone retyped to igObjectRefMetaField. Then
+4. `igObjectList` is converted (`IG_OBJECT_DEFINE`, the private `k_data`, igen's field adder that replaces `_data`
+   with a clone retyped to igObjectRefMetaField). Its C++ base is the kit's `igTDataList<igObject *>`
+   (converted-classes.tsv's third column; the template is `Gap::Core::igTDataList` in `include/dw4/core/igTDataList.h`,
+   which reflected.h reads after igDataList): retail's igDirectory constructor stamps igDataList's, the template
+   instance's and igObjectList's vtables in turn, and the instance's vtable overrides slot 16 `trimCapacity` (the
+   kit's `clean`, through `setCapacityToCount`) and slot 21 `getElementSize` (4). igObjectList adds the inline
+   `userPreWrite` (calling `trimCapacity`), `getMeta` and the new slot 22 `getElementMeta` (igObject's `_Meta`).
+   Retail kept those inline copies and igObjectList's vtable from attrs; core's copies are `duplicates` rows
+   (its `userPreWrite` copy also fits igStringRefList's identical body, so the core row is written with `--drop`),
+   and attrs' C definitions stay until attrs builds its lists in C++. The flat view template `igTDataList<T>`
+   stays for unconverted code; inside `Gap::Core` it is spelled `::igTDataList`. igObjectList's services
+   (`ObjectList_AppendRetained` is the kit's `append`, `AppendRetainedList` `concatenate`, `FillRetained` `setAll`,
+   `ClearRetainedPreserveCount` `clearAll`, `ResizeRetained` `setCount`, `RemoveFirstRetained` `removeByValue`,
+   `RemoveAllRetained` `removeAllByValue`, `AppendUniqueRetained` `appendUnique`, the `igProperty_Find*` searches
+   and `SortByField` the field-keyed `search`/`sortedSearch`/`bubbleSort`) are still free. Then
    `igMetaObject`: converting it makes `igMetaObject` in every Gap scope the class, so every converted class's
    `_Meta`, the registrar's `igMetaObject_RegisterClass(…, &_Meta, …)` and the ~2,250 field-adder calls
    (`igMetaObject_GetFieldAt` is the kit's `getIndexedMetaField`, `CreateFields` `instantiateAndAppendFields`,
@@ -207,7 +225,7 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    once, across ~1,100 files; the generator's templates change with it, and `RegisterClass`/`RunStaticInit` are the
    kit's free `igArkRegister` overloads. igMetaObject, igIGBFile and igObjectDirEntry then also call igObject's
    protected and private construction members directly (the kit makes them friends). Of the 154 classes the core
-   unit registers, 39 are converted; the other 57 the kit declares (the memory pools, files and media, directory
+   unit registers, 40 are converted; the other 56 the kit declares (the memory pools, files and media, directory
    entries, igMetaEnum, igRegistry, the threads and timers, …) follow, and 58 have no kit header (DW4's typed lists
    such as igIntList, the `igPsx2*` platform classes, `__internal*ObjectList`, igDependencyMetaField and
    igMemoryDescriptorMetaField), which take their form from retail alone;

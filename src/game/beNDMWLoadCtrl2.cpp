@@ -1373,7 +1373,7 @@ int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *intf, in
                 accessList = (igIntList *)SLOT_PLAYER(slotPlayer.p)->_accessPlList;
                 count = accessList->_count;
                 if (count < accessList->_capacity) accessList->_count = countOf(accessList) + 1;
-                else List_Resize(accessList, count + 1, 4);
+                else ((Gap::Core::igDataList *)accessList)->resizeAndSetCount(count + 1, 4);
                 ((int *)accessList->_data)[count] = player;
                 ObjectList_AppendRetained((igObjectList *)intf->_slotSaveData, slotPlayer.p);
                 for (j = 0; j < 4; j++) {

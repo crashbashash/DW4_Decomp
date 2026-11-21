@@ -227,7 +227,7 @@ static inline void releaseAll(igObjectList *list)
 static inline void setCapacity(igObjectList *list, int capacity)
 {
     if (capacity >= list->_count) {
-        List_Reserve((igDataList *)list, capacity, 4);
+        ((Gap::Core::igDataList *)list)->setCapacity(capacity, 4);
     }
 }
 

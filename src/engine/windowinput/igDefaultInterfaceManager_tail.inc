@@ -165,7 +165,7 @@ void igInterfaceManager_RemoveAllEventProducers(struct A *arg0) {
     }
     l->cnt = 0;
     if (0 >= arg0->list->cnt) {
-        List_Reserve((igDataList *)arg0->list, 0, 4);
+        ((Gap::Core::igDataList *)arg0->list)->setCapacity(0, 4);
     }
 }
 

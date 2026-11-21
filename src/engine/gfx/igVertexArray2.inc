@@ -90,7 +90,7 @@ void igVertexArray2_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igVertexArray2_Register);
 }
 
-static igMetaObjectCallback g_igVertexArray2_callbackList[] = { igObjectList_EnsureRegistered, igVertexStream_EnsureRegistered, Gap::Core::igObject::arkRegister, 0 };
+static igMetaObjectCallback g_igVertexArray2_callbackList[] = { Gap::Core::igObjectList::arkRegister, igVertexStream_EnsureRegistered, Gap::Core::igObject::arkRegister, 0 };
 
 CallbackArray *igVertexArray2_Register(void) {
     FUN_00149bc0();
@@ -145,7 +145,7 @@ void igVertexArray2_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igVertexArray2_ctorTable, 3);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igVertexStream_GetOrCreateMetaObject();

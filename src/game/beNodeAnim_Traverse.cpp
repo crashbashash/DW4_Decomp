@@ -58,7 +58,7 @@ extern "C" int beNodeAnim_Traverse(beNodeAnim *node, igCommonTraversal *traversa
     if (count < stack->_capacity) {
         stack->_count = stack->_count + 1;
     } else {
-        List_Resize(stack, count + 1, 4);
+        ((Gap::Core::igDataList *)stack)->resizeAndSetCount(count + 1, 4);
     }
     ((AttrList *)stack)->set(count, &pushed);
     igAttrStackManager_MarkStackChanged(attrs, stack, index);

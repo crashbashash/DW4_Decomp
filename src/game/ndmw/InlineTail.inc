@@ -418,7 +418,7 @@ void beNDMWPanelWazaInfoWork_userConstruct(beNDMWPanelWazaInfoWork *self) {
     Gap__Core__igObject__userConstruct(self);
     l = (igDataList *)self->_textSetList;
     if (l->_count < 0x31) {
-        List_Reserve(l, 0x30, 4);
+        ((Gap::Core::igDataList *)l)->setCapacity(0x30, 4);
     }
     StringList_Resize((igTDataList<char *> *)self->_textSetList, 0x30);
     {
@@ -447,13 +447,13 @@ void beNDMWPanelWazaInfoWork_userConstruct(beNDMWPanelWazaInfoWork *self) {
     }
     l = (igDataList *)self->_textColorList;
     if (l->_count < 0x31) {
-        List_Reserve(l, 0x30, 4);
+        ((Gap::Core::igDataList *)l)->setCapacity(0x30, 4);
     }
     l = (igDataList *)self->_textColorList;
     if (l->_capacity >= 0x30) {
         l->_count = 0x30;
     } else {
-        List_Resize(l, 0x30, 4);
+        ((Gap::Core::igDataList *)l)->resizeAndSetCount(0x30, 4);
     }
     l = (igDataList *)self->_textColorList;
     n2 = l->_count;

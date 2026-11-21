@@ -34,8 +34,8 @@ CallbackArray *igMediaList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igMediaList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igMediaList_GetMetaObjectFunction,
         "igMediaList",
         0x14,

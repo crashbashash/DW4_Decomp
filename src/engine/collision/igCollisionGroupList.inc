@@ -35,8 +35,8 @@ CallbackArray *igCollisionGroupList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCollisionGroupList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igCollisionGroupList_GetMetaObjectFunction,
         "igCollisionGroupList",
         0x14, /* instance size */

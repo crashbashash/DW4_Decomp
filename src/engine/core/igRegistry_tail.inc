@@ -980,7 +980,7 @@ void igResource_AddAlignment(igResource *self, const char *name, int value) {
     if (top < values->_capacity) {
         values->_count = values->_count + 1;
     } else {
-        List_Resize(values, top + 1, 4);
+        ((Gap::Core::igDataList *)values)->resizeAndSetCount(top + 1, 4);
     }
     values->_data[top] = value;
 }

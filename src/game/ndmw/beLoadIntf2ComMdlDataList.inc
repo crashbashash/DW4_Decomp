@@ -35,8 +35,8 @@ CallbackArray *beLoadIntf2ComMdlDataList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beLoadIntf2ComMdlDataList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beLoadIntf2ComMdlDataList_GetMetaObject,
         "beLoadIntf2ComMdlDataList",
         0x14, /* instance size */

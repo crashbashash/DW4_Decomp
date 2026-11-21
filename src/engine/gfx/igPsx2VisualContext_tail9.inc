@@ -76,7 +76,7 @@ BuildResource *s7;
             ll = (ResourceList *)values.p;
             if (arg2 >= 0) {
                 if (arg2 <= ll->cap) ll->count = arg2;
-                else List_Resize((BuildResource *)ll, arg2, 12);
+                else ((Gap::Core::igDataList *)ll)->resizeAndSetCount(arg2, 12);
             }
             createOwned(second, AdoptReference());
             setMember(second, values);
@@ -95,7 +95,7 @@ BuildResource *s7;
         ll = (ResourceList *)values.p;
         if (arg2 >= 0) {
             if (arg2 <= ll->cap) ll->count = arg2;
-            else List_Resize((BuildResource *)ll, arg2, 12);
+            else ((Gap::Core::igDataList *)ll)->resizeAndSetCount(arg2, 12);
         }
         createOwned(first, AdoptReference());
         setMember(first, values);

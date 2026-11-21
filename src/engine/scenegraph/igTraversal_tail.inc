@@ -129,7 +129,7 @@ void igTraversal_RegisterFunction(igTraversalFunctionList *table, igMetaObject *
             if (a1 <= table->_capacity) {
                 table->_count = a1;
             } else {
-                List_Resize((void *)table, a1, 4);
+                ((Gap::Core::igDataList *)table)->resizeAndSetCount(a1, 4);
             }
         }
         v1 = table->_count;

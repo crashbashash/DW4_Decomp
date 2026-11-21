@@ -35,8 +35,8 @@ CallbackArray *beLayerGroupList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beLayerGroupList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beLayerGroupList_GetMetaObjectFunction,
         "beLayerGroupList",
         0x14, /* instance size */

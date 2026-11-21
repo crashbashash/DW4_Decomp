@@ -103,7 +103,7 @@ void igMemoryDirEntry_AccumulateFileSize(igMemoryDirEntry *self, igIGBFile *file
 }
 
 static inline igObjectList *asEntryList(igObject *object) {
-    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType((igMetaObject *)g_igObjectList_metaObject) != 0) return (igObjectList *)object;
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType((igMetaObject *)Gap::Core::igObjectList::getClassMeta()) != 0) return (igObjectList *)object;
     return 0;
 }
 
@@ -119,7 +119,7 @@ igMemoryDirEntry *igMemoryDirEntry_GetSharedEntry(igMemoryDirEntry *self, igIGBF
     if (entries.p == 0) {
         int pool = file->_temporaryMemoryPool;
         entries.release();
-        entries.p = ((igObjectList *)igObjectList_Create(pool));
+        entries.p = ((igObjectList *)Gap::Core::igObjectList::_instantiateFromPool((igMemoryPoolView *)pool));
         objectListSetRetained(index, entries.p, lists.p);
     }
     int i;

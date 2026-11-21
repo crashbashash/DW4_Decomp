@@ -145,7 +145,7 @@ void beNDMWWindow_PresentModel(beNDMWWindow *self, const char *model, int id, co
         {
             int n; igDataList *l = (igDataList *)self->_modelCloseRamNoList;
             n = l->_count;
-            if (n < l->_capacity) l->_count = count(l) + 1; else List_Resize(l, n + 1, 4);
+            if (n < l->_capacity) l->_count = count(l) + 1; else ((Gap::Core::igDataList *)l)->resizeAndSetCount(n + 1, 4);
             ((int *)l->_data)[n] = id;
         }
         INTERN_APPEND(self->_modelCloseSeqNameList, close)

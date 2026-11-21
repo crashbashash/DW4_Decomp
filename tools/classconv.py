@@ -25,7 +25,9 @@ The rows of touched units, the compiler-name map and the checks are the caller's
 A spec file is Python defining SPECS = {<class>: dict(...)}; `import classconv` gives it the shared pieces
 (COMMON, GEN, STRINGS, array_spec). The keys of a class's dict:
 
-  lib      library namespace (default "Core"); base: the parent class (a bootstrap class's constructors)
+  lib      library namespace (default "Core"); base: the parent class (a bootstrap class's constructors);
+           cxxbase: the kit template instance the class derives from over its registered parent
+           (converted-classes.tsv's third column, `igTDataList<igObject *>`)
   rows     class-members.tsv declarations, in the kit header's order
   typed    [(field, C++ type)] rows for typed-fields.tsv
   map      {C suffix: member} for `<Class>_<suffix>` functions; extra: {C name: member} for other C names
@@ -348,7 +350,8 @@ def step_tables(tree, classes, specs):
         if c in converted:
             raise ConvError("%s is converted already" % c)
         spec = specs[c]
-        tree.append_rows("config/converted-classes.tsv", c, [lib_of(spec)])
+        tree.append_rows("config/converted-classes.tsv", c,
+                         ["\t".join([lib_of(spec)] + ([spec["cxxbase"]] if spec.get("cxxbase") else []))])
         tree.append_rows("config/class-members.tsv", c, spec["rows"])
         if spec.get("typed"):
             tree.append_rows("config/typed-fields.tsv", c, ["%s\t%s" % ft for ft in spec["typed"]])

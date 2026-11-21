@@ -28,8 +28,8 @@ CallbackArray *igListenerList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igListenerList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igListenerList_GetMetaObjectFunction,
         "igListenerList",
         0x14, /* instance size */

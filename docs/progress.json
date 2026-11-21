@@ -164,13 +164,13 @@
    "ptr": 3040,
    "ref": 69523,
    "region": 109384,
-   "source": 510189,
+   "source": 510289,
    "str": 68640,
    "table": 22212,
-   "vtable": 114160
+   "vtable": 114060
   },
-  "matched": 510189,
-  "matched_pct": 39.25,
+  "matched": 510289,
+  "matched_pct": 39.26,
   "pct": 99.62,
   "start_only": 185099,
   "start_only_pct": 14.24,
@@ -406,7 +406,7 @@
   "counters": {
    "asm_body.bytes": 0,
    "asm_body.functions": 0,
-   "boilerplate.functions": 7121,
+   "boilerplate.functions": 7113,
    "code_only.bytes": 0,
    "code_only.differ.bytes": 0,
    "code_only.differ.functions": 0,
@@ -427,8 +427,8 @@
    "decl.varargs": 0,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "free_methods.bytes": 1764408,
-   "free_methods.functions": 11286,
+   "free_methods.bytes": 1763820,
+   "free_methods.functions": 11277,
    "fun_dat_refs": 2,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
@@ -530,13 +530,13 @@
  ],
  "link": {
   "asm_bytes": 170340,
-  "data_bytes": 400536,
+  "data_bytes": 400636,
   "from_asm_body_bytes": 0,
   "from_asm_body_pct": 0.0,
   "from_asm_body_units": 0,
   "from_assembly_bytes": 8288,
   "from_assembly_units": 165,
-  "from_c_bytes": 3694608,
+  "from_c_bytes": 3694708,
   "from_c_pct": 81.36,
   "from_c_units": 20293,
   "image_bytes": 4772480,
@@ -562,7 +562,7 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2712364,
+  "bytes": 2712488,
   "failing": {
    "addresses": {
     "bytes": 481428,
@@ -573,8 +573,8 @@
     "functions": 0
    },
    "fields": {
-    "bytes": 235644,
-    "functions": 1090
+    "bytes": 235520,
+    "functions": 1089
    },
    "idioms": {
     "bytes": 306020,
@@ -601,7 +601,7 @@
     "functions": 516
    }
   },
-  "functions": 17248,
+  "functions": 17249,
   "matched_functions": 20458
  },
  "regions": [
@@ -738,9 +738,9 @@
   "error": null,
   "offset_casts": 3073,
   "pct": 46.61,
-  "recovered": 34052,
+  "recovered": 34054,
   "synthetic": 5887,
-  "total": 73061,
+  "total": 73062,
   "typeable": 0,
   "typeable_pct": 0.0
  }

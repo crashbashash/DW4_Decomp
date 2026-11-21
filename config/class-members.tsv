@@ -633,3 +633,19 @@ igDataList	protected: static igMetaField *k_capacity;
 igDataList	protected: static igMetaField *k_data;
 igDataList	inline int getCount() const { return _count; }
 igDataList	virtual int getElementSize() const;
+igDataList	void resizeAndSetCount(int newCount, unsigned int itemSize);
+igDataList	void setCapacity(int newCapacity, unsigned int itemSize);
+igDataList	protected: void insert(int pos, int numItems, const unsigned char *items, unsigned int itemSize);
+igDataList	protected: void append(int numitems, const unsigned char *items, unsigned int itemSize);
+igDataList	protected: void remove(int pos, unsigned int itemSize);
+igDataList	protected: int sortedFind(const unsigned char *item, igCompareFunction *compare, unsigned int itemSize) const;
+igDataList	protected: void resizeAndSetCount4For1(int value);
+igDataList	protected: void insert4(int pos, int numItems, const unsigned char *items);
+igDataList	protected: void append4(int numitems, const unsigned char *items);
+igDataList	protected: void remove4(int pos);
+igDataList	protected: int sortedFind4(const unsigned char *item, igCompareFunction *compare) const;
+igDataList	protected: int binaryInsert4(const unsigned char *item, igCompareFunction *compare) const;
+igObjectList	IG_OBJECT_DEFINE(igObjectList)
+igObjectList	private: static igMetaField *k_data;
+igObjectList	inline virtual void userPreWrite() { trimCapacity(); }
+igObjectList	inline virtual igMetaObject *getElementMeta() const { return igObject::getClassMeta(); }

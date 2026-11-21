@@ -28,7 +28,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_38(struct T_1e2970 *t, int n) {
         if (n <= l->cap) {
             l->count = n;
         } else {
-            List_Resize((void *)l, n, 8);
+            ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 8);
         }
     }
     if (t->flags & 1) {
@@ -37,7 +37,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_38(struct T_1e2970 *t, int n) {
             if (n <= l->cap) {
                 l->count = n;
             } else {
-                List_Resize((void *)l, n, 12);
+                ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 12);
             }
         }
     }
@@ -47,7 +47,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_38(struct T_1e2970 *t, int n) {
             if (n <= l->cap) {
                 l->count = n;
             } else {
-                List_Resize((void *)l, n, 16);
+                ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 16);
             }
         }
     }
@@ -57,7 +57,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_38(struct T_1e2970 *t, int n) {
             if (n <= l->cap) {
                 l->count = n;
             } else {
-                List_Resize((void *)l, n, 12);
+                ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 12);
             }
         }
     }
@@ -1006,7 +1006,7 @@ void igUnsignedIntList_TrimCapacity(igUnsignedIntList *self) {
 
     temp_a1 = self->_count;
     if (temp_a1 < self->_capacity) {
-        List_Reserve((igDataList *)self, temp_a1, 4);
+        ((Gap::Core::igDataList *)self)->setCapacity(temp_a1, 4);
     }
 }
 
@@ -1015,7 +1015,7 @@ void igDoubleList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 8);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 8);
     }
 }
 
@@ -1024,7 +1024,7 @@ void igTraversalFunctionList_TrimCapacity(igTraversalFunctionList *self) {
 
     temp_a1 = self->_count;
     if (temp_a1 < self->_capacity) {
-        List_Reserve((igDataList *)self, temp_a1, 4);
+        ((Gap::Core::igDataList *)self)->setCapacity(temp_a1, 4);
     }
 }
 

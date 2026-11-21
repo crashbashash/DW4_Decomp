@@ -56,7 +56,7 @@ void ObjectList_ResizeRetained(igTDataList<igObject *> *self, int count) {
         if (count <= self->_capacity) {
             self->_count = count;
         } else {
-            List_Resize(self, count, 4);
+            ((Gap::Core::igDataList *)self)->resizeAndSetCount(count, 4);
         }
     }
     memset((char *)self->_data + n * 4, 0, (count - n) * 4);

@@ -88,7 +88,7 @@ class TypeHeaderTables(unittest.TestCase):
                         typed="igRenderer\t_visualContext\tstruct igVisualContext *\n").generate()
             self.assertIn('#include "dw4/core/igObjectMacros.h"', text)
             body = text[text.index("typedef struct igRenderer"):text.index("} igRenderer;")]
-            self.assertIn("#ifdef __cplusplus\n    struct igVisualContext * _visualContext;", body)
+            self.assertIn("#ifdef __cplusplus\n    struct igVisualContext *_visualContext;", body)
             self.assertIn("#else\n    int _visualContext;", body)
             self.assertIn("#ifdef __cplusplus\n    IG_ABSTRACT_OBJECT_DEFINE(igRenderer)\n#endif", body)
 

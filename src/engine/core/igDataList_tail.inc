@@ -5,103 +5,240 @@ int igDataList::getElementSize() const
 {
     return -1;
 }
-}
-}
 
-void List_Reserve(igDataList *list, int capacity, int elementSize) {
+void igDataList::setCapacity(int newCapacity, unsigned int itemSize)
+{
     int allocResult;
-    if (capacity == 0) {
-        ((Gap::Core::igObject *)list)->free((void *)list->_data);
-        list->_data = 0;
+    if (newCapacity == 0) {
+        free(_data);
+        _data = 0;
     } else {
-        int oldData = list->_data;
-        igMemoryRefMetaField *field = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(((igObjectDispatchView *)list)->GetMeta(), g_igDataList_dataField->_internalIndex);
-        unsigned elementCount = (unsigned)(capacity * elementSize) / (unsigned)(((igMetaFieldView *)field->_memType)->GetSize() & 0xFFFF);
-        igMetaField_AllocateArray(&allocResult, field, (void *)list, elementCount, (igMemoryPoolView *)(((int)((Gap::Core::igObject *)list)->getMemoryPool())));
+        unsigned char *oldData = _data;
+        ::igMemoryRefMetaField *field =
+            (::igMemoryRefMetaField *)igMetaObject_GetFieldAt(getMeta(), k_data->_internalIndex);
+        unsigned int elementCount = newCapacity * itemSize / ((igMetaField *)field->_memType)->computeSize();
+        igMetaField_AllocateArray(&allocResult, field, this, elementCount, getMemoryPool());
         if (oldData != 0) {
-            int oldCapacity = list->_capacity;
-            int copyCount = (oldCapacity < capacity) ? oldCapacity : capacity;
-            memcpy((void *)list->_data, (void *)oldData, copyCount * elementSize);
-            ((Gap::Core::igObject *)list)->free((void *)oldData);
+            int oldCapacity = _capacity;
+            int copyCount = (oldCapacity < newCapacity) ? oldCapacity : newCapacity;
+            memcpy(_data, oldData, copyCount * itemSize);
+            free(oldData);
         }
     }
-    list->_capacity = capacity;
+    _capacity = newCapacity;
 }
 
-int List_Resize(void *list, int count, int extra2)
+void igDataList::resizeAndSetCount(int newCount, unsigned int itemSize)
 {
-    int capacity = ((igDataList *)list)->_capacity > 4 ? ((igDataList *)list)->_capacity : 4;
-    while (capacity < count) {
+    int capacity = _capacity > 4 ? _capacity : 4;
+    while (capacity < newCount) {
         capacity = capacity < 1024 ? capacity * 2 : capacity + 1024;
     }
-    List_Reserve(((igDataList *)list), capacity, extra2);
-    ((igDataList *)list)->_count = count;
+    setCapacity(capacity, itemSize);
+    _count = newCount;
 }
 
-static inline int countOf(const igDataList *list) { return list->_count; }
-
-extern "C" void List_InsertBytes(igDataList *list, int index, int count, const void *src, int stride) {
+void igDataList::insert(int pos, int numItems, const unsigned char *items, unsigned int itemSize)
+{
     int oldCount;
     int newCount;
-    int at;
-    int dst;
+    unsigned char *at;
+    unsigned char *dst;
     int tail;
-    if (index < 0 || index > countOf(list)) {
+    if (pos < 0 || pos > getCount()) {
         return;
     }
-    if (count >= 0 && count != 0) {
-        oldCount = list->_count;
-        newCount = oldCount + count;
-        if (newCount <= list->_capacity) { list->_count = newCount; } else { List_Resize((void *)list, newCount, stride); }
-        at = list->_data + index * stride;
-        count *= stride;
-        dst = at + count;
-        tail = oldCount - index;
-        if (tail != 0) {
-            memmove((void *)dst, (void *)at, tail * stride);
-        }
-        memcpy((void *)at, (void *)src, count);
-    }
-}
-
-void List_AppendBytes(igDataList *l, int cnt, int src, int sz) {
-    int old;
-    int nn;
-    if (cnt >= 0 && cnt != 0) {
-        old = l->_count;
-        nn = old + cnt;
-        if (nn <= l->_capacity) { l->_count = nn; } else { List_Resize((void *)l, nn, sz); }
-        memcpy((void *)(l->_data + old * sz), (void *)src, cnt * sz);
-    }
-}
-
-void List_RemoveAt(igDataList *l, int i, int sz) {
-    int n = l->_count; int d;
- if (n <= 0 || i < 0 || i >= n) return; if (i != n - 1) { d = l->_data + i * sz; memmove((void *)d, (void *)(d + sz), sz * (n - (i + 1))); } l->_count = l->_count - 1;
-}
-
-int List_BinarySearch(igDataList *list, int key, int (*compare)(int, int), int elementSize) {
-    int lo = 0;
-    int hi = list->_count - 1;
-    int mid;
-    int r;
-    while (lo < hi) {
-        mid = (lo + hi) >> 1;
-        r = compare(list->_data + elementSize * mid, key);
-        if (r < 0) {
-            lo = mid + 1;
-        } else if (r > 0) {
-            hi = mid - 1;
+    if (numItems >= 0 && numItems != 0) {
+        oldCount = _count;
+        newCount = oldCount + numItems;
+        if (newCount <= _capacity) {
+            _count = newCount;
         } else {
-            return mid;
+            resizeAndSetCount(newCount, itemSize);
+        }
+        at = _data + pos * itemSize;
+        numItems *= itemSize;
+        dst = at + numItems;
+        tail = oldCount - pos;
+        if (tail != 0) {
+            memmove(dst, at, tail * itemSize);
+        }
+        memcpy(at, items, numItems);
+    }
+}
+
+void igDataList::append(int numitems, const unsigned char *items, unsigned int itemSize)
+{
+    int oldCount;
+    int newCount;
+    if (numitems >= 0 && numitems != 0) {
+        oldCount = _count;
+        newCount = oldCount + numitems;
+        if (newCount <= _capacity) {
+            _count = newCount;
+        } else {
+            resizeAndSetCount(newCount, itemSize);
+        }
+        memcpy(_data + oldCount * itemSize, items, numitems * itemSize);
+    }
+}
+
+void igDataList::remove(int pos, unsigned int itemSize)
+{
+    int count = _count;
+    unsigned char *at;
+    if (count <= 0 || pos < 0 || pos >= count) {
+        return;
+    }
+    if (pos != count - 1) {
+        at = _data + pos * itemSize;
+        memmove(at, at + itemSize, itemSize * (count - (pos + 1)));
+    }
+    _count = _count - 1;
+}
+
+int igDataList::sortedFind(const unsigned char *item, igCompareFunction *compare, unsigned int itemSize) const
+{
+    int left = 0;
+    int right = _count - 1;
+    int middle;
+    int order;
+    while (left < right) {
+        middle = (left + right) >> 1;
+        order = compare(_data + itemSize * middle, item);
+        if (order < 0) {
+            left = middle + 1;
+        } else if (order > 0) {
+            right = middle - 1;
+        } else {
+            return middle;
         }
     }
-    if (list->_count == 0) {
+    if (_count == 0) {
         return -1;
     }
-    if (compare(list->_data + elementSize * lo, key) == 0) {
-        return lo;
+    if (compare(_data + itemSize * left, item) == 0) {
+        return left;
     }
     return -1;
 }
 
+void igDataList::resizeAndSetCount4For1(int value)
+{
+    int index = _count;
+    resizeAndSetCount(index + 1, 4);
+    ((int *)_data)[index] = value;
+}
+
+void igDataList::insert4(int pos, int numItems, const unsigned char *items)
+{
+    int oldCount;
+    int newCount;
+    unsigned char *at;
+    unsigned char *dst;
+    int tail;
+    if (pos < 0 || pos > getCount()) {
+        return;
+    }
+    if (numItems >= 0 && numItems != 0) {
+        oldCount = _count;
+        newCount = oldCount + numItems;
+        if (newCount <= _capacity) {
+            _count = newCount;
+        } else {
+            resizeAndSetCount(newCount, 4);
+        }
+        at = _data + pos * 4;
+        numItems *= 4;
+        dst = at + numItems;
+        tail = oldCount - pos;
+        if (tail != 0) {
+            memmove(dst, at, tail * 4);
+        }
+        memcpy(at, items, numItems);
+    }
+}
+
+void igDataList::append4(int numitems, const unsigned char *items)
+{
+    int oldCount;
+    int newCount;
+    if (numitems >= 0 && numitems != 0) {
+        oldCount = _count;
+        newCount = oldCount + numitems;
+        if (newCount <= _capacity) {
+            _count = newCount;
+        } else {
+            resizeAndSetCount(newCount, 4);
+        }
+        memcpy(_data + oldCount * 4, items, numitems * 4);
+    }
+}
+
+void igDataList::remove4(int pos)
+{
+    int count = _count;
+    unsigned char *at;
+    if (count <= 0 || pos < 0 || pos >= count) {
+        return;
+    }
+    if (pos != count - 1) {
+        at = _data + pos * 4;
+        memmove(at, at + 4, 4 * (count - (pos + 1)));
+    }
+    _count = _count - 1;
+}
+
+int igDataList::sortedFind4(const unsigned char *item, igCompareFunction *compare) const
+{
+    int left = 0;
+    int right = _count - 1;
+    int middle;
+    int order;
+    while (left < right) {
+        middle = (left + right) >> 1;
+        order = compare(_data + middle * 4, item);
+        if (order < 0) {
+            left = middle + 1;
+        } else if (order > 0) {
+            right = middle - 1;
+        } else {
+            return middle;
+        }
+    }
+    if (_count == 0) {
+        return -1;
+    }
+    if (compare(_data + left * 4, item) == 0) {
+        return left;
+    }
+    return -1;
+}
+
+int igDataList::binaryInsert4(const unsigned char *item, igCompareFunction *compare) const
+{
+    int left = 0;
+    int right = _count - 1;
+    int middle;
+    int order;
+    while (left < right) {
+        middle = (left + right) >> 1;
+        order = compare((int *)_data + middle, item);
+        if (order < 0) {
+            left = middle + 1;
+        } else if (order > 0) {
+            right = middle - 1;
+        } else {
+            return middle;
+        }
+    }
+    if (_count == 0) {
+        return 0;
+    }
+    if (compare((int *)_data + left, item) < 0) {
+        left++;
+    }
+    return left;
+}
+}
+}

@@ -38,8 +38,8 @@ CallbackArray *beNDMWDegiDataList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWDegiDataList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beNDMWDegiDataList_GetMetaObject,
         "beNDMWDegiDataList",
         0x14, /* instance size */

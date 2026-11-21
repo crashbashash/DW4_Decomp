@@ -41,8 +41,8 @@ CallbackArray *igStringObjList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igStringObjList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igStringObjList_GetMetaObjectFunction,
         "igStringObjList",
         0x14,

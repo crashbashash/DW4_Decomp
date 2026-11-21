@@ -352,14 +352,14 @@ void beNDMWPanelObjectWaza_Refresh(beNDMWPanelObjectWaza *self) {
     int cnt = ((igObjectList *)self->_listFolder)->_count;
     igIntList *d = (igIntList *)self->_listColor;
     if (d->_count < cnt) {
-        if (!(cnt < countOf(d))) List_Reserve((igDataList *)d, cnt, 4);
+        if (!(cnt < countOf(d))) ((Gap::Core::igDataList *)d)->setCapacity(cnt, 4);
     }
     d = (igIntList *)self->_listColor;
     if (cnt >= 0) {
         if (cnt <= d->_capacity) {
             d->_count = cnt;
         } else {
-            List_Resize(d, cnt, 4);
+            ((Gap::Core::igDataList *)d)->resizeAndSetCount(cnt, 4);
         }
     }
     int c2 = ((igObjectList *)self->_listFolder)->_count;
@@ -496,14 +496,14 @@ void beNDMWPanelObjectItem_Refresh(beNDMWPanelObjectItem *self) {
     int cnt = ((igObjectList *)self->_listFolder)->_count;
     igIntList *d = (igIntList *)self->_listColor;
     if (d->_count < cnt) {
-        if (!(cnt < countOf(d))) List_Reserve((igDataList *)d, cnt, 4);
+        if (!(cnt < countOf(d))) ((Gap::Core::igDataList *)d)->setCapacity(cnt, 4);
     }
     d = (igIntList *)self->_listColor;
     if (cnt >= 0) {
         if (cnt <= d->_capacity) {
             d->_count = cnt;
         } else {
-            List_Resize(d, cnt, 4);
+            ((Gap::Core::igDataList *)d)->resizeAndSetCount(cnt, 4);
         }
     }
     int c2 = ((igObjectList *)self->_listFolder)->_count;
@@ -681,7 +681,7 @@ void beNDMWPanelObjectStat_Refresh(beNDMWPanelObjectStat *self) {
                     igIntList *colors;
                     colors = (igIntList *)self->_listColor;
                     c = colors->_count;
-                    if (c < colors->_capacity) colors->_count = listCount(colors) + 1; else List_Resize(colors, c + 1, 4);
+                    if (c < colors->_capacity) colors->_count = listCount(colors) + 1; else ((Gap::Core::igDataList *)colors)->resizeAndSetCount(c + 1, 4);
                     ((int *)colors->_data)[c] = color;
                     igStringRef name(beDataBase_GetRecordString(db, i, "NAME"));
                     StringList_AppendRetained((igStringRefList *)self->_listFolder, name.ref());

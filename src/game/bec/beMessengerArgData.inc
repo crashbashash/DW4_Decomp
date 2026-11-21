@@ -58,7 +58,7 @@ int beMessengerArgData_GetVTable(void) {
 
 void beMessengerArgData_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerArgData_Register);}
 
-static igMetaObjectCallback g_beMessengerArgData_callbackList[] = { igBoolList_EnsureRegistered, igIntList_EnsureRegistered, igFloatList_EnsureRegistered, igLongList_EnsureRegistered, igVec3fList_EnsureRegistered, igMatrix44fList_EnsureRegistered, igObjectList_EnsureRegistered, igStringRefList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beMessengerArgData_callbackList[] = { igBoolList_EnsureRegistered, igIntList_EnsureRegistered, igFloatList_EnsureRegistered, igLongList_EnsureRegistered, igVec3fList_EnsureRegistered, igMatrix44fList_EnsureRegistered, Gap::Core::igObjectList::arkRegister, igStringRefList_EnsureRegistered, 0 };
 
 CallbackArray *beMessengerArgData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -165,7 +165,7 @@ void beMessengerArgData_InitFields(void) {
     ((igObjectRefMetaField *)matrix44fList)->_metaObject = (int)igMatrix44fList_GetOrCreateMetaObject();
     ((igRefMetaField *)matrix44fList)->_construct = 1;
     objectList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
-    ((igObjectRefMetaField *)objectList)->_metaObject = (int)igObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)objectList)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
     ((igRefMetaField *)objectList)->_construct = 1;
     stringList = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
     ((igObjectRefMetaField *)stringList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();

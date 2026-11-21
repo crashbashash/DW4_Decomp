@@ -29,15 +29,15 @@ void igObjectListList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igObjectListList_Register);
 }
 
-static igMetaObjectCallback g_igObjectListList_callbackList[] = { igObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igObjectListList_callbackList[] = { Gap::Core::igObjectList::arkRegister, 0 };
 
 CallbackArray *igObjectListList_Register(void) {
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0,
         &g_igObjectListList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igObjectListList_GetMetaObjectFunction,
         "igObjectListList",
         0x14,

@@ -438,21 +438,21 @@ int FUN_0022aac0(T_4 *arg0, int arg1) {
     if (0 <= a->cap) {
         a->cnt = 0;
     } else {
-        List_Resize(a, 0, 4);
+        ((Gap::Core::igDataList *)a)->resizeAndSetCount(0, 4);
     }
     b = arg0->l12;
     n = b->cnt;
     if (n < b->cap) {
         b->cnt = cnt_of(b) + 1;
     } else {
-        List_Resize(b, n + 1, 4);
+        ((Gap::Core::igDataList *)b)->resizeAndSetCount(n + 1, 4);
     }
     b->data[n] = arg1;
     a = arg0->l16;
     if (0 <= a->cap) {
         a->cnt = 0;
     } else {
-        List_Resize(a, 0, 4);
+        ((Gap::Core::igDataList *)a)->resizeAndSetCount(0, 4);
     }
     return arg1;
 }

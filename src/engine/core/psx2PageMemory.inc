@@ -570,7 +570,7 @@ void SystemAllocatorBase_PrintMemoryMap(SystemAllocator *self, char *title, char
     self->GetStatistics(&stats);
     igSmartPointer<igPointerList> list((igPointerList *)igPointerList_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked)));
     if (list->_count <= 1024) {
-        List_Reserve((igDataList *)list.p, 1024, 4);
+        ((Gap::Core::igDataList *)list.p)->setCapacity(1024, 4);
     }
     if (a != 0) {
         self->CollectHardwareRegions(list);

@@ -184,7 +184,7 @@ igTDataList<ConfigNode *> *igDriverDatabase_ParseDatabase(igDriverDatabase *s) {
             if (cnt < l->_capacity) {
                 l->_count = n_of(l) + 1;
             } else {
-                List_Resize(l, cnt + 1, 4);
+                ((Gap::Core::igDataList *)l)->resizeAndSetCount(cnt + 1, 4);
             }
             l->_data[cnt] = r;
         }
@@ -593,7 +593,7 @@ static inline void append(igTDataList<int> *l, int v) {
     if (i < l->_capacity) {
         l->_count = l->count() + 1;
     } else {
-        List_Resize((void *)l, i + 1, 4);
+        ((Gap::Core::igDataList *)l)->resizeAndSetCount(i + 1, 4);
     }
     l->_data[i] = v;
 }
@@ -664,7 +664,7 @@ int igDriverDatabase_ParseSettingsBlock(igDriverDatabase *self, ConfigSettingsNo
         if (index < list->_capacity) {
             list->_count = list->count() + 1;
         } else {
-            List_Resize(list, index + 1, 4);
+            ((Gap::Core::igDataList *)list)->resizeAndSetCount(index + 1, 4);
         }
         list->_data[index] = pair;
         dropText(key);

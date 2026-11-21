@@ -73,7 +73,7 @@ void igViewManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igViewManager_Register);
 }
 
-static igMetaObjectCallback g_igViewManager_callbackList[] = { igViewMode_EnsureRegistered, igViewModel_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igViewManager_callbackList[] = { igViewMode_EnsureRegistered, igViewModel_EnsureRegistered, Gap::Core::igObjectList::arkRegister, 0 };
 
 CallbackArray *igViewManager_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -138,7 +138,7 @@ void igViewManager_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igViewModel_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igViewManager_fieldTable, g_igViewManager_fieldHandles, g_igViewManager_fieldOffsets, temp_s2);
 }

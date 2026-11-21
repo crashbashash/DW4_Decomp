@@ -37,7 +37,7 @@ void beNDMWLoadCtrl2Info_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWLoadCtrl2Info_Register);
 }
 
-static igMetaObjectCallback g_beNDMWLoadCtrl2Info_callbackList[] = { igObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWLoadCtrl2Info_callbackList[] = { Gap::Core::igObjectList::arkRegister, 0 };
 
 CallbackArray *beNDMWLoadCtrl2Info_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -83,7 +83,7 @@ void beNDMWLoadCtrl2Info_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWLoadCtrl2Info_ctorTable, 1);
     nameSelList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)nameSelList)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)nameSelList)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beNDMWLoadCtrl2Info_fieldTable, g_beNDMWLoadCtrl2Info_fieldHandles, g_beNDMWLoadCtrl2Info_fieldOffsets, base);
 }
 

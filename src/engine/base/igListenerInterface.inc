@@ -59,7 +59,7 @@ void FUN_00226e30(void)
     igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igListenerInterface_Register);
 }
 
-static igMetaObjectCallback g_igListenerInterface_callbackList[] = { igObjectList_EnsureRegistered, FUN_002270b0, igMetaObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igListenerInterface_callbackList[] = { Gap::Core::igObjectList::arkRegister, FUN_002270b0, igMetaObjectList_EnsureRegistered, 0 };
 
 CallbackArray *igListenerInterface_Register(void) {
     BaseLibrary_MarkRegistered();
@@ -119,7 +119,7 @@ void igListenerInterface_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igListenerInterface_ctorTable, 4);
     field = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)field)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
     ((igRefMetaField *)field)->_construct = 1;
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)field2)->_metaObject = (int)igListenerListList_GetOrCreateMetaObject();

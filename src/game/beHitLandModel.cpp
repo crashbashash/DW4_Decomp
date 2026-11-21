@@ -767,7 +767,7 @@ struct IntList : igIntList {
         if (count <= _capacity) {
             _count = count;
         } else {
-            List_Resize(this, count, 4);
+            ((Gap::Core::igDataList *)this)->resizeAndSetCount(count, 4);
         }
     }
 };
@@ -809,7 +809,7 @@ void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order)
             if (n < faces->_capacity) {
                 faces->_count = faces->getCount() + 1;
             } else {
-                List_Resize(faces, n + 1, 4);
+                ((Gap::Core::igDataList *)faces)->resizeAndSetCount(n + 1, 4);
             }
             ((int *)faces->_data)[n] = 0;
         }

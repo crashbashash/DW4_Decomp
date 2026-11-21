@@ -38,8 +38,8 @@ CallbackArray *beAsTargetModelDataList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beAsTargetModelDataList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beAsTargetModelDataList_GetMetaObjectFunction,
         "beAsTargetModelDataList",
         0x14, /* instance size */

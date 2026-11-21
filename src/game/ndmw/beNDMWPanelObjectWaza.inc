@@ -45,7 +45,7 @@ void beNDMWPanelObjectWaza_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWPanelObjectWaza_Register);
 }
 
-static igMetaObjectCallback g_beNDMWPanelObjectWaza_callbackList[] = { igObjectList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWPanelObjectWaza_callbackList[] = { Gap::Core::igObjectList::arkRegister, igIntList_EnsureRegistered, 0 };
 
 CallbackArray *beNDMWPanelObjectWaza_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -111,7 +111,7 @@ void beNDMWPanelObjectWaza_InitFields(void) {
         igObject_Destroy(pageField);
     }
     listFolder = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
-    ((igObjectRefMetaField *)listFolder)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)listFolder)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
     ((igObjectRefMetaField *)listFolder)->_construct = 1;
     listColor = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
     ((igObjectRefMetaField *)listColor)->_metaObject = igIntList_GetOrCreateMetaObject();

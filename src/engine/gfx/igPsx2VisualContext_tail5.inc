@@ -1057,7 +1057,7 @@ void FUN_0017a540(igPsx2VisualContext *vc, int keepLists) {
         loaded->_count = 0;
         loaded = (igDataList *)vc->_pTexLoadedList;
         if ((loaded->_count > 0) == false) {
-            List_Reserve(loaded, 0, 4);
+            ((Gap::Core::igDataList *)loaded)->setCapacity(0, 4);
         }
     } else {
         t = (T9f0 *)vc->_pTexList;

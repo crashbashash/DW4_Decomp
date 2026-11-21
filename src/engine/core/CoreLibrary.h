@@ -110,7 +110,7 @@ template <class T, class U> static inline void assignReference(T *&field, const 
 /* Reallocates the list to hold `capacity` elements; a capacity below the count is ignored. */
 template <class T> static inline void setCapacity(igTDataList<T> *list, int capacity) {
     if (capacity >= list->_count) {
-        List_Reserve((igDataList *)list, capacity, sizeof(T));
+        ((Gap::Core::igDataList *)list)->setCapacity(capacity, sizeof(T));
     }
 }
 
@@ -393,10 +393,6 @@ extern "C" int igObjectStringMap_GetVTable(void);
 extern "C" CallbackArray *igObjectStringMap_Register(void);
 extern "C" void igObjectStringMap_GetMetaObjectFunction(void);
 extern "C" void igObjectStringMap_InitFields(void);
-extern "C" void * igObjectList_Create(int arg0);
-extern "C" int igObjectList_GetVTable(void);
-extern "C" void igObjectList_GetMetaObjectFunction(void);
-extern "C" void igObjectList_InitFields(void);
 extern "C" int igObjectDirEntry_Create(int arg0);
 extern "C" int igObjectDirEntry_GetVTable(void);
 extern "C" void igObjectDirEntry_EnsureRegistered(void);
@@ -1682,7 +1678,6 @@ extern "C" igMetaObject *g_igPluginRepository_metaObject;
 extern "C" igMetaObject *g_igObjectStringMap_metaObject;
 extern "C" igMetaObject *igObjectStringMap_GetMetaObject(void);
 extern "C" int g_igObjectStringMap_vtable[4];
-extern "C" igMetaObject *igObjectList_GetMetaObject(void);
 extern "C" int g_igObjectList_vtable[4];
 extern "C" char data[];
 extern "C" igMetaObject *igObjectDirEntry_GetMetaObject(void);
@@ -2167,7 +2162,6 @@ public:
 };
 extern "C" void *igContext_GetExtension(igVisualContext *arg0, int extra1);
 extern "C" int igContext_FindExtensionInstance(igContext *arg0, int arg1);
-extern "C" igMetaField *g_igDataList_dataField;
 extern "C" void List_AppendBytes(igDataList *l, int cnt, int src, int sz);
 extern "C" int List_AppendWord(igDataList *list, int value);
 typedef int (*Cmp)(int *, void *);
@@ -3165,7 +3159,7 @@ static inline igObjectRefMetaField *AsObjectRefMetaField(void *p) {
     return 0;
 }
 static inline void *AsObjectList(void *p) {
-    if (p != 0 && ((Gap::Core::igObject *)p)->isOfType((igMetaObject *)((void *)g_igObjectList_metaObject)) != 0) { return p; }
+    if (p != 0 && ((Gap::Core::igObject *)p)->isOfType((igMetaObject *)((void *)Gap::Core::igObjectList::getClassMeta())) != 0) { return p; }
     return 0;
 }
 extern "C" void igResource_FinishAsyncLoad(igResource *arg0, int arg1);

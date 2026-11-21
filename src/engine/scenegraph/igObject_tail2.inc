@@ -8,9 +8,9 @@ bool FUN_001d08d0(Self *arg0, int arg1) {
         setFloats(arg0->f48, igSmartPointer<igFloatList>((igFloatList *)igFloatList_Create((int)((Gap::Core::igObject *)arg0)->getMemoryPool())));
         setFloats(arg0->f52, igSmartPointer<igFloatList>((igFloatList *)igFloatList_Create((int)((Gap::Core::igObject *)arg0)->getMemoryPool())));
         setBytes(arg0->f56, igSmartPointer<igUnsignedCharList>((igUnsignedCharList *)igUnsignedCharList_Create((int)((Gap::Core::igObject *)arg0)->getMemoryPool())));
-        { igFloatList *l = arg0->f48; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize((void *)l, n, 4); } }
-        { igFloatList *l = arg0->f52; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize((void *)l, n, 4); } }
-        { igUnsignedCharList *l = arg0->f56; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else List_Resize((void *)l, n, 1); } }
+        { igFloatList *l = arg0->f48; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 4); } }
+        { igFloatList *l = arg0->f52; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 4); } }
+        { igUnsignedCharList *l = arg0->f56; if (n >= 0) { if (n <= l->_capacity) l->_count = n; else ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 1); } }
         for (i = 0; i < n; i++) {
             igFloatList *a = arg0->f48;
             int c = a->_count;
@@ -64,7 +64,7 @@ void FUN_001d15a0(KeyReducer *self) {
             if (list->capacity > at) {
                 list->count = list->getCount() + 1;
             } else {
-                List_Resize(list, at + 1, 4);
+                ((Gap::Core::igDataList *)list)->resizeAndSetCount(at + 1, 4);
             }
             list->data[at] = i;
         }
@@ -313,7 +313,7 @@ int igNode_AddParent(igNode *self, int arg1) {
         if (temp_s2 < temp_s1->cap) {
             temp_s1->count = 1 + count_of(temp_s1);
         } else {
-            List_Resize((void *)temp_s1, temp_s2 + 1, 4);
+            ((Gap::Core::igDataList *)temp_s1)->resizeAndSetCount(temp_s2 + 1, 4);
         }
         temp_s1->data[temp_s2] = arg1;
     }

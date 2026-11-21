@@ -33,7 +33,7 @@ void igAttrStackManager_userConstruct(unsigned char *arg0, int arg1) {
         }
         l = DAT_00562580[0];
         idx = n_of(l);
-        if (idx < l->cap) { l->n = l->n + 1; } else { List_Resize((void *)l, idx + 1, 4); }
+        if (idx < l->cap) { l->n = l->n + 1; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(idx + 1, 4); }
         l->data[idx] = (int)arg0;
         z = ((struct Z *)g_objectSystem)->f56;
         sp4F = arg0[60];
@@ -226,7 +226,7 @@ void igAttrStackManager_Setup(igAttrStackManager *manager, igMetaObject *meta, i
     }
 }
 
-#define SETCNT(l, n) if ((n) >= 0) { if ((n) <= (l)->cap) (l)->cnt = (n); else List_Resize((l), (n), 4); }
+#define SETCNT(l, n) if ((n) >= 0) { if ((n) <= (l)->cap) (l)->cnt = (n); else ((Gap::Core::igDataList *)(l))->resizeAndSetCount((n), 4); }
 void FUN_001b0250(PendingValueCollector *arg0, PendingIntList *arg1) {
     PendingIntList *ixl;
     int *a2;
@@ -294,11 +294,11 @@ void FUN_001b0450(A_1b0450 *arg0, Rc_1b0450 *arg1) {
     n = arg0->f28.p->n;
     a = arg0->f32.p;
     if (n >= 0) {
-        if (n <= a->cap) a->n = n; else List_Resize((void *)a, n, 4);
+        if (n <= a->cap) a->n = n; else ((Gap::Core::igDataList *)a)->resizeAndSetCount(n, 4);
     }
     j = 0;
     if (n >= 0) {
-        if (n <= arg1->cap) arg1->n = n; else List_Resize((void *)arg1, n, 4);
+        if (n <= arg1->cap) arg1->n = n; else ((Gap::Core::igDataList *)arg1)->resizeAndSetCount(n, 4);
     }
     keys = arg0->f28.p->data;
     out = arg0->f32.p->data;
@@ -320,11 +320,11 @@ void FUN_001b0450(A_1b0450 *arg0, Rc_1b0450 *arg1) {
         }
     }
     if (j >= 0) {
-        if (j <= arg1->cap) arg1->n = j; else List_Resize((void *)arg1, j, 4);
+        if (j <= arg1->cap) arg1->n = j; else ((Gap::Core::igDataList *)arg1)->resizeAndSetCount(j, 4);
     }
     a = arg0->f32.p;
     if (j >= 0) {
-        if (j <= a->cap) a->n = j; else List_Resize((void *)a, j, 4);
+        if (j <= a->cap) a->n = j; else ((Gap::Core::igDataList *)a)->resizeAndSetCount(j, 4);
     }
     {
         igSmartPointer<Rc_1b0450> swapped(arg0->f32);
@@ -351,7 +351,7 @@ void igAttrStackManager_PushLightStateAttr(igAttrStackManager *self, igLightStat
         if (n < updates->_capacity) {
             updates->_count = updates->_count + 1;
         } else {
-            List_Resize(updates, n + 1, 4);
+            ((Gap::Core::igDataList *)updates)->resizeAndSetCount(n + 1, 4);
         }
         updates->_data[n] = attr;
         return;
@@ -418,7 +418,7 @@ void igAttrStackManager_PopLightStateAttr(igAttrStackManager *self, igLightState
         if (n < updates->_capacity) {
             updates->_count = updates->_count + 1;
         } else {
-            List_Resize(updates, n + 1, 4);
+            ((Gap::Core::igDataList *)updates)->resizeAndSetCount(n + 1, 4);
         }
         updates->_data[n] = undo;
         return;
@@ -615,7 +615,7 @@ void igAttrStackManager_MarkStackChanged(igAttrStackManager *manager, igAttrStac
         if (c1 < l1->cap) {
             l1->n = n_of_1b1490(l1) + 1;
         } else {
-            List_Resize((void *)l1, c1 + 1, 4);
+            ((Gap::Core::igDataList *)l1)->resizeAndSetCount(c1 + 1, 4);
         }
         l1->arr[c1] = index;
         stack->_hasChangedFromLastIncrementalFlush = 1U;
@@ -626,7 +626,7 @@ void igAttrStackManager_MarkStackChanged(igAttrStackManager *manager, igAttrStac
         if (c2 < l2->cap) {
             l2->n = n_of_1b1490(l2) + 1;
         } else {
-            List_Resize((void *)l2, c2 + 1, 4);
+            ((Gap::Core::igDataList *)l2)->resizeAndSetCount(c2 + 1, 4);
         }
         l2->arr[c2] = index;
         stack->_hasChangedFromRoot = 1U;

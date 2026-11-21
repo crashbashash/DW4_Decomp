@@ -36,8 +36,8 @@ CallbackArray *beNDMWShinkaObjectList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWShinkaObjectList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beNDMWShinkaObjectList_GetMetaObject,
         "beNDMWShinkaObjectList",
         0x14, /* instance size */

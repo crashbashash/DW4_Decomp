@@ -41,8 +41,8 @@ CallbackArray *igGraphPathList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGraphPathList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igGraphPathList_GetMetaObjectFunction,
         "igGraphPathList",
         0x14, /* instance size */

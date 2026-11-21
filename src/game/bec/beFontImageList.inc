@@ -38,8 +38,8 @@ CallbackArray *beFontImageList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beFontImageList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beFontImageList_GetMetaObjectFunction,
         "beFontImageList",
         0x14, /* instance size */

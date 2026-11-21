@@ -104,7 +104,7 @@ void beNDMWAfsSetup_RemoveAllInfo(beNDMWAfsSetup *self) {
     }
     l->_count = 0;
     if (!(0 < ((igDataList *)self->_infoList)->_count)) {
-        List_Reserve((igDataList *)self->_infoList, 0, 4);
+        ((Gap::Core::igDataList *)self->_infoList)->setCapacity(0, 4);
     }
     igInsightCore_RemoveFromScheduler((igInsightCore *)self->_insight, (igObject *)self);
 }

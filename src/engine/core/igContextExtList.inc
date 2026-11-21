@@ -35,8 +35,8 @@ CallbackArray *igContextExtList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igContextExtList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igContextExtList_GetMetaObjectFunction,
         "igContextExtList",
         0x14,

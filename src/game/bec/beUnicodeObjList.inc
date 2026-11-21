@@ -36,8 +36,8 @@ CallbackArray *beUnicodeObjList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beUnicodeObjList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beUnicodeObjList_GetMetaObjectFunction,
         "beUnicodeObjList",
         0x14, /* instance size */

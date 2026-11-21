@@ -1138,7 +1138,7 @@ struct AttrObjectStack : igTDataList<igObject *> {
         if (count < _capacity) {
             _count++;
         } else {
-            List_Resize(this, count + 1, sizeof(igObject *));
+            ((Gap::Core::igDataList *)this)->resizeAndSetCount(count + 1, sizeof(igObject *));
         }
         _data[count] = item;
         return count;
@@ -5370,7 +5370,7 @@ inline void igBitMaskWords::setCount(int n) {
         if (!(n > _capacity)) {
             _count = n;
         } else {
-            List_Resize((void *)this, n, 4);
+            ((Gap::Core::igDataList *)this)->resizeAndSetCount(n, 4);
         }
     }
 }
@@ -5648,7 +5648,7 @@ static inline void appendIndex(KeyIndexList *l, int v) {
     if (l->capacity > n) {
         l->count = l->count + 1;
     } else {
-        List_Resize(l, n + 1, 4);
+        ((Gap::Core::igDataList *)l)->resizeAndSetCount(n + 1, 4);
     }
     l->data[n] = v;
 }
@@ -5724,7 +5724,7 @@ static inline void assignRef(SeqData *&field, const SeqTempRef &r) {
 }
 static inline void setCount_1de040(SeqData *list, int n, int size) {
     if (n >= 0) {
-        if (n <= list->capacity) { list->count = n; } else { List_Resize((void *)list, n, size); }
+        if (n <= list->capacity) { list->count = n; } else { ((Gap::Core::igDataList *)list)->resizeAndSetCount(n, size); }
     }
 }
 static inline void releaseRef_1de4e0(SeqData *old) {
@@ -5742,7 +5742,7 @@ static inline void assignRef_1de4e0(SeqData *&field, const SeqTempRef &r) {
 }
 static inline void setCount_1de4e0(SeqData *list, int n, int size) {
     if (n >= 0) {
-        if (n <= list->capacity) { list->count = n; } else { List_Resize((void *)list, n, size); }
+        if (n <= list->capacity) { list->count = n; } else { ((Gap::Core::igDataList *)list)->resizeAndSetCount(n, size); }
     }
 }
 static inline void assignRef_1e22c0(EnvMapAttrOps *&field, const EnvMapTempRef &r) {

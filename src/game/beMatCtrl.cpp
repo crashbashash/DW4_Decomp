@@ -212,7 +212,7 @@ template <class List> static inline void SetListCount(List *list, int count, int
         if (count <= list->_capacity) {
             list->_count = count;
         } else {
-            List_Resize(list, count, elementSize);
+            ((Gap::Core::igDataList *)list)->resizeAndSetCount(count, elementSize);
         }
     }
 }

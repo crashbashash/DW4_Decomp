@@ -1,8 +1,32 @@
+/* reflected.h comes first, outside the guard: it reads this header itself, just before the first converted class
+ * deriving from the kit's template, so the template follows its parent igDataList there whichever header a
+ * unit names first. */
+#include "dw4/support/reflected.h"
 #ifndef DW4_IGTDATALIST_H
 #define DW4_IGTDATALIST_H
-#include "dw4/support/reflected.h"
 
-extern "C" int List_Resize(void *, int, int);
+namespace Gap {
+namespace Core {
+
+/* The kit's typed list (alchemy-kit_202309 igCore/igTDataList.h): igDataList's storage read as an array of T,
+ * with the item size its services take. */
+template <class T> class igTDataList : public igDataList {
+private:
+    typedef igDataList Parent;
+    inline T *getArrayInternal() const { return (T *)_data; }
+public:
+    inline void setCapacityToCount() {
+        if (_capacity > _count) {
+            Parent::setCapacity(_count, sizeof(T));
+        }
+    }
+    inline const T *getArray() const { return (const T *)_data; }
+    inline T &get(int index) const { return getArrayInternal()[index]; }
+    inline virtual void trimCapacity() { setCapacityToCount(); }
+    inline virtual int getElementSize() const { return sizeof(T); }
+};
+}
+}
 
 /* A typed igDataList: the igObject header, then the count, capacity and element array. */
 template <class T> class igTDataList : public igObject {
@@ -104,7 +128,7 @@ public:
         if (n < _capacity) {
             _count = _count + 1;
         } else {
-            List_Resize(this, n + 1, sizeof(T));
+            ((Gap::Core::igDataList *)this)->resizeAndSetCount(n + 1, sizeof(T));
         }
         const T *p = &v;
         _data[n] = *p;

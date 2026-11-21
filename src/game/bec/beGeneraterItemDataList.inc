@@ -35,8 +35,8 @@ CallbackArray *beGeneraterItemDataList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beGeneraterItemDataList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beGeneraterItemDataList_GetMetaObjectFunction,
         "beGeneraterItemDataList",
         0x14, /* instance size */

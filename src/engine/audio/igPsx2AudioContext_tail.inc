@@ -95,12 +95,12 @@ void Gap__igPsx2AudioContext__vfunc_24(int *arg0, struct InitContext *arg1) {
     buf[1] = arg1->f32;
     buf[2] = arg1->f36;
     n = arg1->f32 + arg1->f36;
-    if (n >= ((struct VoiceList *)g_audioTableOwner.p)->count) List_Reserve((igDataList *)(((struct VoiceList *)g_audioTableOwner.p)), n, 0x24);
+    if (n >= ((struct VoiceList *)g_audioTableOwner.p)->count) ((Gap::Core::igDataList *)((struct VoiceList *)g_audioTableOwner.p))->setCapacity(n, 0x24);
     n = arg1->f32 + arg1->f36;
     l = ((struct VoiceList *)g_audioTableOwner.p);
     if (n >= 0) {
         if (n <= l->cap) l->count = n;
-        else List_Resize(l, n, 0x24);
+        else ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 0x24);
     }
     n = ((struct VoiceList *)g_audioTableOwner.p)->count;
     if (n != 0) memset((void *)((struct VoiceList *)g_audioTableOwner.p)->data, 0, n * 0x24);

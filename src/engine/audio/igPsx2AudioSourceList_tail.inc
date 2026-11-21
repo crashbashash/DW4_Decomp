@@ -13,7 +13,7 @@ void igPsx2AudioSourceList_TrimCapacity(igPsx2AudioSourceList *self) {
 
     count = self->_count;
     if (count < self->_capacity) {
-        List_Reserve((igDataList *)self, count, 0x24);
+        ((Gap::Core::igDataList *)self)->setCapacity(count, 0x24);
     }
 }
 }

@@ -1824,7 +1824,7 @@ extern "C" void beNDMWLoadIntf2_UpdateRam(beNDMWLoadIntf2 *self, beBaseInfoRam *
           if (accessCount < accessList->_capacity) {
             accessList->_count = IntListCount(accessList) + 1;
           } else {
-            List_Resize(accessList, accessCount + 1, 4);
+            ((Gap::Core::igDataList *)accessList)->resizeAndSetCount(accessCount + 1, 4);
           }
           ((int *)beNDMWLoadIntf2_igIntList_GetData((igDataList *)accessList))[accessCount] = accessPlayer;
           cardWork->_haveSaveData = (int)slotPlayer;

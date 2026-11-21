@@ -65,17 +65,17 @@ extern "C" void beTargetObj_RemoveAllInfo(beTargetObj *self)
     ((igVec3fList *)self->_playerPosList)->_count = 0;
     playerPositions = (igVec3fList *)self->_playerPosList;
     if (!(0 < playerPositions->_count)) {
-        List_Reserve((igDataList *)playerPositions, 0, sizeof(igVec3f));
+        ((Gap::Core::igDataList *)playerPositions)->setCapacity(0, sizeof(igVec3f));
     }
     ((igIntList *)self->_playerRamNoList)->_count = 0;
     playerRamNos = (igIntList *)self->_playerRamNoList;
     if (!(0 < playerRamNos->_count)) {
-        List_Reserve((igDataList *)playerRamNos, 0, sizeof(int));
+        ((Gap::Core::igDataList *)playerRamNos)->setCapacity(0, sizeof(int));
     }
     ((igVec3fList *)self->_enemyPosList)->_count = 0;
     enemyPositions = (igVec3fList *)self->_enemyPosList;
     if (!(0 < enemyPositions->_count)) {
-        List_Reserve((igDataList *)enemyPositions, 0, sizeof(igVec3f));
+        ((Gap::Core::igDataList *)enemyPositions)->setCapacity(0, sizeof(igVec3f));
     }
 }
 
@@ -106,7 +106,7 @@ extern "C" void beTargetObj_GatherPositions(beTargetObj *self, igVec3fList *posi
         if (n < positions->_capacity) {
             positions->_count = n + 1;
         } else {
-            List_Resize(positions, n + 1, sizeof(igVec3f));
+            ((Gap::Core::igDataList *)positions)->resizeAndSetCount(n + 1, sizeof(igVec3f));
         }
         slot = &((igVec3f *)positions->_data)[n];
         slot->vec[0] = position[0];
@@ -118,7 +118,7 @@ extern "C" void beTargetObj_GatherPositions(beTargetObj *self, igVec3fList *posi
             if (n < ramNos->_capacity) {
                 ramNos->_count = ramNos->_count + 1;
             } else {
-                List_Resize(ramNos, n + 1, sizeof(int));
+                ((Gap::Core::igDataList *)ramNos)->resizeAndSetCount(n + 1, sizeof(int));
             }
             ((int *)ramNos->_data)[n] = ramNo;
         }

@@ -30,7 +30,7 @@ void igMousePosObserver_resetFields(MousePosObserverView *self, int flags) {
     if (top < list->cap) {
         list->cnt = list->cnt + 1;
     } else {
-        List_Resize(list, top + 1, 4);
+        ((Gap::Core::igDataList *)list)->resizeAndSetCount(top + 1, 4);
     }
     list->data[top] = 2;
     setEvent(self, event);

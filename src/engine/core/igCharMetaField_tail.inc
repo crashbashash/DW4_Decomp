@@ -409,7 +409,7 @@ void igContext_BuildExtensionInfoList(igContext *self) {
         ((igObjectDispatchView *)self)->GetMeta();
         meta = igObjectSystem_FindMetaByNameDefault("igContextExt");
         self->_iNumExts = igMetaObject_CountTree((igMetaObject *)meta) - 1;
-        if (self->_iNumExts >= ((igContextExtInfoList *)self->_pExtList)->_count) List_Reserve((igDataList *)((igContextExtInfoList *)self->_pExtList), self->_iNumExts, 4);
+        if (self->_iNumExts >= ((igContextExtInfoList *)self->_pExtList)->_count) ((Gap::Core::igDataList *)((igContextExtInfoList *)self->_pExtList))->setCapacity(self->_iNumExts, 4);
         ObjectList_ResizeRetained((igTDataList<igObject *> *)((igContextExtInfoList *)self->_pExtList), self->_iNumExts);
         for (i = 0; i < self->_iNumExts; i++) {
             int name;

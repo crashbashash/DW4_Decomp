@@ -35,8 +35,8 @@ CallbackArray *igAnimationTrackList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationTrackList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igAnimationTrackList_GetMetaObjectFunction,
         "igAnimationTrackList",
         0x14, /* instance size */

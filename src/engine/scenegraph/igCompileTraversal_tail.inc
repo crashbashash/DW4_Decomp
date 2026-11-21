@@ -481,7 +481,7 @@ void FUN_001bd170(struct A_1bd170 *arg0, struct B_1bd170 *arg1) {
             if (idx < o->cap) {
                 o->n = n_of_1bd170(o) + 1;
             } else {
-                List_Resize((void *)o, idx + 1, 4);
+                ((Gap::Core::igDataList *)o)->resizeAndSetCount(idx + 1, 4);
             }
             o->data[idx] = (int)c;
         }
@@ -509,7 +509,7 @@ template <class T> static inline void appendValue(igTDataList<T> *list, T value)
     if (n < list->_capacity) {
         list->_count = list->count() + 1;
     } else {
-        List_Resize(list, n + 1, 4);
+        ((Gap::Core::igDataList *)list)->resizeAndSetCount(n + 1, 4);
     }
     list->_data[n] = value;
 }
@@ -529,7 +529,7 @@ static inline void appendSlotAttr(CompiledAttrSet *set, CompiledAttr *attr) {
     if (n < slotAttrs->_capacity) {
         slotAttrs->_count = slotAttrs->count() + 1;
     } else {
-        List_Resize(slotAttrs, n + 1, 4);
+        ((Gap::Core::igDataList *)slotAttrs)->resizeAndSetCount(n + 1, 4);
     }
     slotAttrs->_data[n] = attr;
 }
@@ -611,7 +611,7 @@ void FUN_001bd6b0(Links *links, Shape *shape) {
             if (index < indices->_capacity) {
                 indices->_count = indices->count() + 1;
             } else {
-                List_Resize(indices, index + 1, 4);
+                ((Gap::Core::igDataList *)indices)->resizeAndSetCount(index + 1, 4);
             }
             indices->_data[index] = i;
             slot = links->targets->_data + j;
@@ -620,7 +620,7 @@ void FUN_001bd6b0(Links *links, Shape *shape) {
             if (index2 < slots->_capacity) {
                 slots->_count = slots->count() + 1;
             } else {
-                List_Resize(slots, index2 + 1, 4);
+                ((Gap::Core::igDataList *)slots)->resizeAndSetCount(index2 + 1, 4);
             }
             slots->_data[index2] = slot;
             j = links->targets->find(target, j + 1);

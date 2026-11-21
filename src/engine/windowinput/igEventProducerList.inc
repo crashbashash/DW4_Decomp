@@ -35,8 +35,8 @@ CallbackArray *igEventProducerList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igEventProducerList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igEventProducerList_GetMetaObjectFunction,
         "igEventProducerList",
         0x14, /* instance size */

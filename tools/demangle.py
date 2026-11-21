@@ -477,8 +477,14 @@ def _builtin_code(words):
     return _BUILTIN_CODES[spelling]
 
 
+# the kit's function typedefs, which a compiler name spells out: `igCompareFunction *` is the pointer to its type
+TYPEDEFS = {"igCompareFunction": ("int", "(const void *, const void *)")}
+
+
 def parse_type(text):
     """The type tree of a C++ type spelling (`const char *`, `int (*)(lua_State *)`)."""
+    for name, (ret, args) in TYPEDEFS.items():
+        text = re.sub(r"\b(?:Gap::)?%s\s*\*" % name, "%s (*)%s" % (ret, args), text)
     parser = _Parser(text)
     t = parser.type_()
     if not parser.done():

@@ -21075,10 +21075,11 @@ typedef struct libNdmwRuntimePlugin {
 /* The converted classes: Alchemy's polymorphic classes in their Gap namespaces
  * (config/converted-classes.tsv). The flat structs above stay the C view. */
 #include "dw4/core/igObject.h"
+#include "dw4/core/igCore.h"
 #include "dw4/core/igSmartPointer.h"
 #include "dw4/core/igStringRef.h"
 namespace Gap {
-namespace Core { class igBoolArrayMetaField; class igBoolMetaField; class igCharArrayMetaField; class igCharMetaField; class igCompoundMetaField; class igDataList; class igDoubleArrayMetaField; class igDoubleMetaField; class igEnumArrayMetaField; class igEnumMetaField; class igFloatArrayMetaField; class igFloatMetaField; class igIntArrayMetaField; class igIntMetaField; class igLongArrayMetaField; class igLongMetaField; class igMemoryRefArrayMetaField; class igMemoryRefMetaField; class igMetaField; class igObject; class igObjectRefArrayMetaField; class igObjectRefMetaField; class igRawRefArrayMetaField; class igRawRefMetaField; class igRefMetaField; class igShortArrayMetaField; class igShortMetaField; class igStringArrayMetaField; class igStringMetaField; class igStructMetaField; class igUnsignedCharArrayMetaField; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
+namespace Core { class igBoolArrayMetaField; class igBoolMetaField; class igCharArrayMetaField; class igCharMetaField; class igCompoundMetaField; class igDataList; class igDoubleArrayMetaField; class igDoubleMetaField; class igEnumArrayMetaField; class igEnumMetaField; class igFloatArrayMetaField; class igFloatMetaField; class igIntArrayMetaField; class igIntMetaField; class igLongArrayMetaField; class igLongMetaField; class igMemoryRefArrayMetaField; class igMemoryRefMetaField; class igMetaField; class igObject; class igObjectList; class igObjectRefArrayMetaField; class igObjectRefMetaField; class igRawRefArrayMetaField; class igRawRefMetaField; class igRefMetaField; class igShortArrayMetaField; class igShortMetaField; class igStringArrayMetaField; class igStringMetaField; class igStructMetaField; class igUnsignedCharArrayMetaField; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
 namespace Gui { class igClearRenderer; class igRenderer; }
 namespace Insight { class igFlushRenderer; }
 namespace Math { class igMatrix44fMetaField; class igVec2fMetaField; class igVec3fMetaField; class igVec4fArrayMetaField; class igVec4fMetaField; class igVec4ucMetaField; }
@@ -21105,6 +21106,7 @@ using Core::igMemoryRefArrayMetaField;
 using Core::igMemoryRefMetaField;
 using Core::igMetaField;
 using Core::igObject;
+using Core::igObjectList;
 using Core::igObjectRefArrayMetaField;
 using Core::igObjectRefMetaField;
 using Core::igRawRefArrayMetaField;
@@ -21494,7 +21496,7 @@ class igDataList : public Gap::Core::igObject {
 public:
     int _count;                                    /* +8    igIntMetaField */
     int _capacity;                                 /* +12   igIntMetaField */
-    int _data;                                     /* +16   igMemoryRefMetaField */
+    unsigned char *_data;                          /* +16   igMemoryRefMetaField */
     IG_OBJECT_DEFINE(igDataList)
 protected:
     static igMetaField *k_count;
@@ -21503,6 +21505,19 @@ protected:
 public:
     inline int getCount() const { return _count; }
     virtual int getElementSize() const;
+    void resizeAndSetCount(int newCount, unsigned int itemSize);
+    void setCapacity(int newCapacity, unsigned int itemSize);
+protected:
+    void insert(int pos, int numItems, const unsigned char *items, unsigned int itemSize);
+    void append(int numitems, const unsigned char *items, unsigned int itemSize);
+    void remove(int pos, unsigned int itemSize);
+    int sortedFind(const unsigned char *item, igCompareFunction *compare, unsigned int itemSize) const;
+    void resizeAndSetCount4For1(int value);
+    void insert4(int pos, int numItems, const unsigned char *items);
+    void append4(int numitems, const unsigned char *items);
+    void remove4(int pos);
+    int sortedFind4(const unsigned char *item, igCompareFunction *compare) const;
+    int binaryInsert4(const unsigned char *item, igCompareFunction *compare) const;
 };
 }
 }
@@ -21834,6 +21849,23 @@ public:
     virtual int writeRawFieldMemory(const void *fieldMem, void *dstMem, igDirectory *dir, bool endianSwap) const;
     void setDefault(unsigned int index, void *val);
     virtual void traverse(igObject *obj, void *visitFunc, void *traversalData);
+};
+}
+}
+
+#include "dw4/core/igTDataList.h"
+
+namespace Gap {
+namespace Core {
+/* handle 0x585b60, 5 field(s), sizeof 20 (registered instance size) */
+class igObjectList : public Gap::Core::igTDataList<igObject *> {
+public:
+    IG_OBJECT_DEFINE(igObjectList)
+private:
+    static igMetaField *k_data;
+public:
+    inline virtual void userPreWrite() { trimCapacity(); }
+    inline virtual igMetaObject *getElementMeta() const { return igObject::getClassMeta(); }
 };
 }
 }

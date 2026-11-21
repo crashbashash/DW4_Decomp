@@ -194,7 +194,7 @@ void igIntersectionFunctionList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 4);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 4);
     }
 }
 
@@ -203,7 +203,7 @@ void igExtendByFunctionList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 4);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 4);
     }
 }
 
@@ -212,7 +212,7 @@ void igContainsFunctionList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 4);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 4);
     }
 }
 
@@ -221,7 +221,7 @@ void igRayIntersectionFunctionList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 4);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 4);
     }
 }
 
@@ -230,7 +230,7 @@ void igExtendByRayFunctionList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 4);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 4);
     }
 }
 
@@ -239,7 +239,7 @@ void igContainsRayFunctionList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 4);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 4);
     }
 }
 
@@ -248,7 +248,7 @@ void igExtendByVecFunctionList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 4);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 4);
     }
 }
 
@@ -257,7 +257,7 @@ void igContainsVecFunctionList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 4);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 4);
     }
 }
 
@@ -266,7 +266,7 @@ void igTransformFunctionList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 4);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 4);
     }
 }
 
@@ -275,7 +275,7 @@ void igEmptyFunctionList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 4);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 4);
     }
 }
 
@@ -284,7 +284,7 @@ void igIsEmptyFunctionList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 4);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 4);
     }
 }
 
@@ -293,7 +293,7 @@ void igGetCenterFunctionList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 4);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 4);
     }
 }
 
@@ -302,7 +302,7 @@ void igVec2fList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 8);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 8);
     }
 }
 
@@ -311,7 +311,7 @@ void igVec4ucList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 4);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 4);
     }
 }
 
@@ -320,7 +320,7 @@ void igQuaternionfList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 0x10);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 0x10);
     }
 }
 
@@ -329,7 +329,7 @@ void igMatrix44fList_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 0x40);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 0x40);
     }
 }
 

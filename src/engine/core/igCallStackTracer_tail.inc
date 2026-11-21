@@ -3,7 +3,7 @@ int *igCallStackTracer_CaptureCallStack(int *stack) {
     if (stack[3] > 0) {
         stack[2] = 1;
     } else {
-        List_Resize(stack, 1, 4);
+        ((Gap::Core::igDataList *)stack)->resizeAndSetCount(1, 4);
     }
     count = stack[2];
     if (count != 0 && 0 < count) {

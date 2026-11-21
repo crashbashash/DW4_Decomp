@@ -18,7 +18,7 @@ void igStringTable_Reserve(void *object) {
     capacity = self->_capacity;
     strings = (igDataList *)self->_strings;
     if (capacity >= strings->_count) {
-        List_Reserve(strings, capacity, 1);
+        ((Gap::Core::igDataList *)strings)->setCapacity(capacity, 1);
     }
     ((igStringTableView *)self)->SetHashing(self->_hashCapacity);
 }
@@ -32,22 +32,22 @@ void igStringTable_Clear(igStringTableView *table) {
     if (!(0 > strings->_capacity)) {
         strings->_count = 0;
     } else {
-        List_Resize(strings, 0, 1);
+        ((Gap::Core::igDataList *)strings)->resizeAndSetCount(0, 1);
     }
     strings2 = table->_strings;
     if (!(0 < strings2->_count)) {
-        List_Reserve((igDataList *)strings2, 0, 1);
+        ((Gap::Core::igDataList *)strings2)->setCapacity(0, 1);
     }
     hashIndex = table->_hashIndex;
     if (hashIndex != 0) {
         if (!(0 > hashIndex->_capacity)) {
             hashIndex->_count = 0;
         } else {
-            List_Resize(hashIndex, 0, 4);
+            ((Gap::Core::igDataList *)hashIndex)->resizeAndSetCount(0, 4);
         }
         hashIndex2 = table->_hashIndex;
         if (!(0 < hashIndex2->_count)) {
-            List_Reserve((igDataList *)hashIndex2, 0, 4);
+            ((Gap::Core::igDataList *)hashIndex2)->setCapacity(0, 4);
         }
     }
 }
@@ -87,7 +87,7 @@ static inline void setStringBytes(igTDataList<char> *strings, int n) {
         if (n <= strings->_capacity) {
             strings->_count = n;
         } else {
-            List_Resize(strings, n, 1);
+            ((Gap::Core::igDataList *)strings)->resizeAndSetCount(n, 1);
         }
     }
 }
@@ -139,7 +139,7 @@ static inline void reserveStringBytes(const igTDataList<char> *strings, int n) {
     int grown = strings->_capacity * 2;
     if (strings->_capacity < n) {
         if (!(grown < strings->_count)) {
-            List_Reserve((igDataList *)strings, grown, 1);
+            ((Gap::Core::igDataList *)strings)->setCapacity(grown, 1);
         }
     }
 }
@@ -291,12 +291,12 @@ void igStringTable_SetHashing(igStringTableView *self, int enable) {
             if (enable <= l->_capacity) {
                 l->_count = enable;
             } else {
-                List_Resize(l, enable, 4);
+                ((Gap::Core::igDataList *)l)->resizeAndSetCount(enable, 4);
             }
         }
         l = self->_hashIndex;
         if (enable >= l->_count) {
-            List_Reserve((igDataList *)l, enable, 4);
+            ((Gap::Core::igDataList *)l)->setCapacity(enable, 4);
         }
         l = self->_hashIndex;
         n = l->_count;

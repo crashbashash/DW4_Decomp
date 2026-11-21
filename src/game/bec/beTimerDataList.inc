@@ -35,8 +35,8 @@ CallbackArray *beTimerDataList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beTimerDataList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beTimerDataList_GetMetaObjectFunction,
         "beTimerDataList",
         0x14, /* instance size */

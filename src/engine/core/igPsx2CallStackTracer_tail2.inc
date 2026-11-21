@@ -7,7 +7,7 @@ int igPsx2CallStackTracer_CaptureCallStack(igCallStackTracerView *tracer) {
     if (index < tracer->_capacity) {
         tracer->_count = tracer->_count + 1;
     } else {
-        List_Resize(tracer, index + 1, 4);
+        ((Gap::Core::igDataList *)tracer)->resizeAndSetCount(index + 1, 4);
     }
     tracer->_data[index] = g_igPsx2CallStackTracer_terminatorAddress[0];
     return (int)tracer->_data;
@@ -24,7 +24,7 @@ unsigned int *Gap__Core__igPsx2CallStackTracer__vfunc_31(igCallStackTracerView *
     if (index < tracer->_capacity) {
         tracer->_count = tracer->_count + 1;
     } else {
-        List_Resize(tracer, index + 1, 4);
+        ((Gap::Core::igDataList *)tracer)->resizeAndSetCount(index + 1, 4);
     }
     tracer->_data[index] = DAT_004c2620;
     return tracer->_data;

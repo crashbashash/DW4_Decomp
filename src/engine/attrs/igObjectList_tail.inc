@@ -3,7 +3,7 @@ void igObjectList_TrimCapacity(igObjectList *self) {
 
     count = self->_count;
     if (count < self->_capacity) {
-        List_Reserve((igDataList *)self, count, 4);
+        ((Gap::Core::igDataList *)self)->setCapacity(count, 4);
     }
 }
 

@@ -33,7 +33,7 @@ struct AttrList : igTDataList<igAttr *> {
         if (n < _capacity)
             _count = _count + 1;
         else
-            List_Resize(this, n + 1, 4);
+            ((Gap::Core::igDataList *)this)->resizeAndSetCount(n + 1, 4);
         igAttr *const *p = &value;
         _data[n] = *p;
     }

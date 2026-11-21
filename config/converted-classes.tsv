@@ -1,7 +1,9 @@
 # config/converted-classes.tsv — the classes scripts/gen_type_headers.py declares, under C++, as Alchemy's
 # polymorphic classes: `namespace Gap { namespace <library> { class <class> : public <parent> ... } }`, the
 # parent converted too and the root Gap::Core::igObject implied. The flat struct of each stays the C view.
-# Columns: <class>	<library namespace as retail's RTTI spells it (Core, Gfx, Sg, Attrs, Gui, Bec, ...)>.
+# Columns: <class>	<library namespace as retail's RTTI spells it (Core, Gfx, Sg, Attrs, Gui, Bec, ...)>
+# [	<C++ base: the kit template instance it derives from over its registered parent, whose header
+# include/dw4/<library>/<template>.h declares it>].
 igObject	Core
 igClearRenderer	Gui
 igFlushRenderer	Insight
@@ -50,3 +52,4 @@ igMatrix44fMetaField	Math
 igVec4fArrayMetaField	Math
 igCompoundMetaField	Core
 igDataList	Core
+igObjectList	Core	igTDataList<igObject *>

@@ -25,7 +25,7 @@ void igSymbolTable_ReserveStorage(igSymbolTableView *self) {
     words = self->_capacity * 4;
     symbols = self->_symbols;
     if (words >= symbols->_count) {
-        List_Reserve((igDataList *)symbols, words, 4);
+        ((Gap::Core::igDataList *)symbols)->setCapacity(words, 4);
     }
     self->RebuildHashIndex(self->_hashCapacity);
     igStringTable_SetCapacity(self->_symbolNames, self->_capacity * 4);
@@ -50,7 +50,7 @@ void igSymbolTable_SetSymbolCount(int *result, igSymbolTableView *self, int coun
         if (n <= l->_capacity) {
             l->_count = n;
         } else {
-            List_Resize((void *)l, n, 4);
+            ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 4);
         }
     }
     *result = g_resultSuccess.v;
@@ -209,9 +209,9 @@ done:
     return 1;
 }
 
-static inline void reserve(igTDataList<int> *l, int n) { if (n >= l->_count) { List_Reserve((igDataList *)l, n, 4); } }
+static inline void reserve(igTDataList<int> *l, int n) { if (n >= l->_count) { ((Gap::Core::igDataList *)l)->setCapacity(n, 4); } }
 
-static inline void setListCount(igTDataList<int> *l, int n) { if (n >= 0) { if (n <= l->_capacity) { l->_count = n; } else { List_Resize(l, n, 4); } } }
+static inline void setListCount(igTDataList<int> *l, int n) { if (n >= 0) { if (n <= l->_capacity) { l->_count = n; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 4); } } }
 
 int g_igSymbolTable_emptyHashSlot = -1;
 

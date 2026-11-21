@@ -43,7 +43,7 @@ void igInsightCore_RemoveAllInfos(igInsightCore *arg0) {
     }
     l->_count = 0;
     if (!(0 < ((igObjectList *)arg0->_infoList)->_count)) {
-        List_Reserve((igDataList *)arg0->_infoList, 0, 4);
+        ((Gap::Core::igDataList *)arg0->_infoList)->setCapacity(0, 4);
     }
 }
 

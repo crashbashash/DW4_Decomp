@@ -174,25 +174,25 @@ void beFileListInfoManager_RemoveAllInfo(beFileListInfoManager *self) {
     {
         igInfoList *l2 = (igInfoList *)self->_infoList;
         if (!(0 < l2->_count)) {
-            List_Reserve((igDataList *)l2, 0, 4);
+            ((Gap::Core::igDataList *)l2)->setCapacity(0, 4);
         }
     }
     {
         igDirectoryList *l2 = (igDirectoryList *)self->_dirList;
         if (!(0 < l2->_count)) {
-            List_Reserve((igDataList *)l2, 0, 4);
+            ((Gap::Core::igDataList *)l2)->setCapacity(0, 4);
         }
     }
     {
         igInfoList *l2 = (igInfoList *)self->_importantInfoList;
         if (!(0 < l2->_count)) {
-            List_Reserve((igDataList *)l2, 0, 4);
+            ((Gap::Core::igDataList *)l2)->setCapacity(0, 4);
         }
     }
     {
         igInfoList *l2 = (igInfoList *)self->_readInfoList;
         if (!(0 < l2->_count)) {
-            List_Reserve((igDataList *)l2, 0, 4);
+            ((Gap::Core::igDataList *)l2)->setCapacity(0, 4);
         }
     }
     self->_loaded = 0;

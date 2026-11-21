@@ -37,7 +37,7 @@ void igPsx2ThreadManager_AddThread(igPsx2ThreadManagerView *self, igPsx2ThreadVi
     if (n < lst->_capacity) {
         lst->_count = lst->count() + 1;
     } else {
-        List_Resize(lst, n + 1, 4);
+        ((Gap::Core::igDataList *)lst)->resizeAndSetCount(n + 1, 4);
     }
     lst->_data[n] = thread;
     ChangeThreadPriority(id, prio);

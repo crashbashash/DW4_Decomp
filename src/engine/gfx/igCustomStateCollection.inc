@@ -40,8 +40,8 @@ CallbackArray *igCustomStateCollection_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCustomStateCollection_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igCustomStateCollection_GetMetaObjectFunction,
         "igCustomStateCollection",
         0x1C, /* instance size */

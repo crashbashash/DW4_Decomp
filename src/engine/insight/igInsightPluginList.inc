@@ -35,8 +35,8 @@ CallbackArray *igInsightPluginList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igInsightPluginList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igInsightPluginList_GetMetaObjectFunction,
         "igInsightPluginList",
         0x14, /* instance size */

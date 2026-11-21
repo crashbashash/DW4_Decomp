@@ -35,8 +35,8 @@ CallbackArray *igControllerList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igControllerList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igControllerList_GetMetaObjectFunction,
         "igControllerList",
         0x14, /* instance size */

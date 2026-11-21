@@ -36,8 +36,8 @@ CallbackArray *beDemoKeepMesList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beDemoKeepMesList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beDemoKeepMesList_GetMetaObjectFunction,
         "beDemoKeepMesList",
         0x14, /* instance size */

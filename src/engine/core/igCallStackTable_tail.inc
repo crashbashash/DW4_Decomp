@@ -10,7 +10,7 @@ void igCallStackTable_ApplyCapacity(igCallStackTableView *table) {
     capacity = table->_capacity;
     callStacks = table->_callStacks;
     if (capacity >= callStacks->_count) {
-        List_Reserve((igDataList *)callStacks, capacity, 4);
+        ((Gap::Core::igDataList *)callStacks)->setCapacity(capacity, 4);
     }
     table->RebuildHashIndex(table->_hashCapacity);
 }
@@ -25,28 +25,28 @@ void igCallStackTable_Clear(igCallStackTableView *table) {
     if (!(0 > callStacks->_capacity)) {
         callStacks->_count = 0;
     } else {
-        List_Resize(callStacks, 0, 4);
+        ((Gap::Core::igDataList *)callStacks)->resizeAndSetCount(0, 4);
     }
     callStacks2 = table->_callStacks;
     if (!(0 < callStacks2->_count)) {
-        List_Reserve((igDataList *)callStacks2, 0, 4);
+        ((Gap::Core::igDataList *)callStacks2)->setCapacity(0, 4);
     }
     hashIndex = table->_hashIndex;
     if (!(0 > hashIndex->_capacity)) {
         hashIndex->_count = 0;
     } else {
-        List_Resize(hashIndex, 0, 4);
+        ((Gap::Core::igDataList *)hashIndex)->resizeAndSetCount(0, 4);
     }
     hashIndex2 = table->_hashIndex;
     if (hashIndex2 != 0) {
     if (!(0 > hashIndex2->_capacity)) {
         hashIndex2->_count = 0;
     } else {
-        List_Resize(hashIndex2, 0, 4);
+        ((Gap::Core::igDataList *)hashIndex2)->resizeAndSetCount(0, 4);
     }
     hashIndex3 = table->_hashIndex;
     if (!(0 < hashIndex3->_count)) {
-        List_Reserve((igDataList *)hashIndex3, 0, 4);
+        ((Gap::Core::igDataList *)hashIndex3)->setCapacity(0, 4);
     }
     }
 }
@@ -89,7 +89,7 @@ void igCallStackTable_TruncateCallStacks(igResult *result, igCallStackTableView 
     n = l->_count;
     cnt = 0;
     if (count == 0) {
-        if (0 <= l->_capacity) { l->_count = 0; } else { List_Resize(l, 0, 4); }
+        if (0 <= l->_capacity) { l->_count = 0; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(0, 4); }
         result->v = g_resultSuccess.v;
         return;
     }
@@ -99,7 +99,7 @@ void igCallStackTable_TruncateCallStacks(igResult *result, igCallStackTableView 
             if (cnt == count) {
                 t = i + 1;
                 if (t >= 0) {
-                    if (t <= l->_capacity) { l->_count = t; } else { List_Resize(l, t, 4); }
+                    if (t <= l->_capacity) { l->_count = t; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(t, 4); }
                 }
                 result->v = g_resultSuccess.v;
                 return;
@@ -118,7 +118,7 @@ static inline void reserveCallStackWords(const igTDataList<unsigned int> *words,
     int grown = words->_capacity * 2;
     if (words->_capacity < n) {
         if (!(grown < words->_count)) {
-            List_Reserve((igDataList *)words, grown, 4);
+            ((Gap::Core::igDataList *)words)->setCapacity(grown, 4);
         }
     }
 }
@@ -291,11 +291,11 @@ void igCallStackTable_RebuildHashIndex(igCallStackTableView *self, int hashCapac
             self->_hashIndex = (igTDataList<int> *)igIntListNoClean_Create(allocator);
         }
         l = self->_hashIndex;
-        if (hashCapacity >= l->_count) List_Reserve((igDataList *)l, hashCapacity, 4);
+        if (hashCapacity >= l->_count) ((Gap::Core::igDataList *)l)->setCapacity(hashCapacity, 4);
         l = self->_hashIndex;
         if (hashCapacity >= 0) {
             if (hashCapacity <= l->_capacity) l->_count = hashCapacity;
-            else List_Resize(l, hashCapacity, 4);
+            else ((Gap::Core::igDataList *)l)->resizeAndSetCount(hashCapacity, 4);
         }
         hashIndex = self->_hashIndex;
         cnt = hashIndex->_count;

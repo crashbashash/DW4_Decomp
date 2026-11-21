@@ -35,8 +35,8 @@ CallbackArray *igDefaultAspectElementList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igDefaultAspectElementList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igDefaultAspectElementList_GetMetaObjectFunction,
         "igDefaultAspectElementList",
         0x14, /* instance size */

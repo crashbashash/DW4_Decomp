@@ -82,19 +82,19 @@ void FUN_001b8a20(Src *arg0, Dst *arg1) {
     l1 = arg1->l248;
     c1 = l1->count;
     if (c1 < l1->cap) l1->count = l1->getCount() + 1;
-    else List_Resize((void *)l1, c1 + 1, 4);
+    else ((Gap::Core::igDataList *)l1)->resizeAndSetCount(c1 + 1, 4);
     l1->items[c1] = a;
     c = ((Sub *)((Mid *)arg0->f32)->f12)->g100();
     if (arg0->f121 != 0) b = arg0->f40; else b = arg0->f32->g116();
     l2 = arg1->l252;
     c2 = l2->count;
     if (c2 < l2->cap) l2->count = l2->getCount() + 1;
-    else List_Resize((void *)l2, c2 + 1, 4);
+    else ((Gap::Core::igDataList *)l2)->resizeAndSetCount(c2 + 1, 4);
     l2->items[c2] = b;
     l3 = arg1->l256;
     c3 = l3->count;
     if (c3 < l3->cap) l3->count = l3->getCount() + 1;
-    else List_Resize((void *)l3, c3 + 1, 4);
+    else ((Gap::Core::igDataList *)l3)->resizeAndSetCount(c3 + 1, 4);
     l3->items[c3] = c;
 }
 
@@ -240,7 +240,7 @@ int igCommonTraversal_TraverseOverrideAttrSet(igCommonTraversal *self, igOverrid
             if (n < stack->_capacity) {
                 stack->_count++;
             } else {
-                List_Resize(stack, n + 1, 4);
+                ((Gap::Core::igDataList *)stack)->resizeAndSetCount(n + 1, 4);
             }
             stack->set(n, &pushed);
         }
@@ -303,7 +303,7 @@ int igCommonTraversal_TraverseAttrSet(igCommonTraversal *self, igAttrSet *set) {
             if (n < stack->_capacity) {
                 stack->_count = stack->_count + 1;
             } else {
-                List_Resize(stack, n + 1, 4);
+                ((Gap::Core::igDataList *)stack)->resizeAndSetCount(n + 1, 4);
             }
             stack->set(n, &pushed);
         }
@@ -533,7 +533,7 @@ static inline void pushPassAttr(igAttrStackManager *manager, igAttr *attr) {
     if (n < stack->_capacity) {
         stack->_count = stack->_count + 1;
     } else {
-        List_Resize(stack, n + 1, 4);
+        ((Gap::Core::igDataList *)stack)->resizeAndSetCount(n + 1, 4);
     }
     stack->set(n, &pushed);
     igAttrStackManager_MarkStackChanged(manager, (igAttrStack *)stack, slot);
@@ -554,7 +554,7 @@ static inline void pushTraversalAttr(igCommonTraversal *self, igAttr *attr) {
     if (n < stack->_capacity) {
         stack->_count = stack->_count + 1;
     } else {
-        List_Resize(stack, n + 1, 4);
+        ((Gap::Core::igDataList *)stack)->resizeAndSetCount(n + 1, 4);
     }
     stack->set(n, &pushed);
     igAttrStackManager_MarkStackChanged(manager, (igAttrStack *)stack, slot);
@@ -645,7 +645,7 @@ int igCommonTraversal_TraverseSelfShadowShader(igCommonTraversal *self, igProjec
     if (n < stack->_capacity) {
         stack->_count = stack->_count + 1;
     } else {
-        List_Resize(stack, n + 1, 4);
+        ((Gap::Core::igDataList *)stack)->resizeAndSetCount(n + 1, 4);
     }
     stack->set(n, &pushed);
     igAttrStackManager_MarkStackChanged((igAttrStackManager *)manager, (igAttrStack *)stack, slot);

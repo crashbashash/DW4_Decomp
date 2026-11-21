@@ -21,7 +21,6 @@ igSmartPointer<igCustomVectorStateList> g_igVectorConstantAttr_stateList(0, kRet
 #include "src/engine/attrs/igViewportAttr.inc"
 #include "src/engine/attrs/igVertexBlendStateAttr.inc"
 #include "src/engine/attrs/igVertexBlendMatrixListAttr.inc"
-#include "src/engine/attrs/igObjectList.inc"
 #include "src/engine/attrs/igVertexBlendMatrixAttr.inc"
 #include "src/engine/attrs/igTimeAttr.inc"
 #include "src/engine/attrs/igTextureUnloadAttr.inc"

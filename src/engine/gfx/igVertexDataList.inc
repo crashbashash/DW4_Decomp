@@ -39,8 +39,8 @@ CallbackArray *igVertexDataList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVertexDataList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igVertexDataList_GetMetaObjectFunction,
         "igVertexDataList",
         0x14, /* instance size */

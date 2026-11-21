@@ -57,7 +57,7 @@ enum StatusMessage {
 #endif
 #define PARAMETERS ((igIntList *)work->_parameter)
 #define PARAMETER(i) (((int *)PARAMETERS->_data)[i])
-#define APPEND_PARAMETER(idx, value) { igIntList *list = PARAMETERS; idx = list->_count; if (idx < list->_capacity) list->_count = countOf(list) + 1; else List_Resize(list, idx + 1, 4); ((int *)list->_data)[idx] = (value); }
+#define APPEND_PARAMETER(idx, value) { igIntList *list = PARAMETERS; idx = list->_count; if (idx < list->_capacity) list->_count = countOf(list) + 1; else ((Gap::Core::igDataList *)list)->resizeAndSetCount(idx + 1, 4); ((int *)list->_data)[idx] = (value); }
 #define SET_TEXT(font, label, text) { \
     beMessenger_SelectGroup((beMessenger *)self->_messenger, "TEXTCTL"); \
     beMessenger_AppendString((beMessenger *)self->_messenger, (const char *)font); \
@@ -124,7 +124,7 @@ extern "C" int beNDMWStatus__GetMeta(void);
 template <int K> struct ItemRef { igObject *p; ItemRef(igObject *o) : p(o) {} ~ItemRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
 
 /* A sales list holds 36 slots. */
-struct SalesList { static inline void Reserve(const igObjectList *list) { if (list->_count < 37) List_Reserve((igDataList *)list, 36, 4); } };
+struct SalesList { static inline void Reserve(const igObjectList *list) { if (list->_count < 37) ((Gap::Core::igDataList *)list)->setCapacity(36, 4); } };
 
 static inline int countOf(const igIntList *list) { return list->_count; }
 

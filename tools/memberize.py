@@ -381,7 +381,7 @@ def converted_classes(root):
     if os.path.exists(path):
         for line in _read(path).splitlines():
             parts = line.split("\t")
-            if len(parts) == 2 and not line.startswith("#") and parts[0].strip():
+            if len(parts) in (2, 3) and not line.startswith("#") and parts[0].strip():
                 out[parts[0].strip()] = parts[1].strip()
     if out:
         out.setdefault("igObject", "Core")

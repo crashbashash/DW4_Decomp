@@ -181,7 +181,7 @@ int igMatrixStack_PushPreMultiply(igMatrixStack *self, const float *matrix) {
         if (index < self->_capacity) {
             self->_count = matrixCount(self) + 1;
         } else {
-            List_Resize(self, index + 1, 0x40);
+            ((Gap::Core::igDataList *)self)->resizeAndSetCount(index + 1, 0x40);
         }
         igMatrix44f_Copy(((igMatrixStackEntry *)self->_data)[index], matrix);
     } else {
@@ -192,7 +192,7 @@ int igMatrixStack_PushPreMultiply(igMatrixStack *self, const float *matrix) {
             if (index < self->_capacity) {
                 self->_count = count + 1;
             } else {
-                List_Resize(self, index + 1, 0x40);
+                ((Gap::Core::igDataList *)self)->resizeAndSetCount(index + 1, 0x40);
             }
             matrices = (igMatrixStackEntry *)self->_data;
             igMatrix44f_Copy(matrices[index], matrices[index - 1]);
@@ -213,7 +213,7 @@ int igMatrixStack_PushPostMultiply(igMatrixStack *self, const float *matrix) {
         if (index < self->_capacity) {
             self->_count = self->_count + 1;
         } else {
-            List_Resize(self, index + 1, 0x40);
+            ((Gap::Core::igDataList *)self)->resizeAndSetCount(index + 1, 0x40);
         }
         igMatrix44f_Copy(((igMatrixStackEntry *)self->_data)[index], matrix);
     } else {
@@ -224,7 +224,7 @@ int igMatrixStack_PushPostMultiply(igMatrixStack *self, const float *matrix) {
             if (index < self->_capacity) {
                 self->_count = count + 1;
             } else {
-                List_Resize(self, index + 1, 0x40);
+                ((Gap::Core::igDataList *)self)->resizeAndSetCount(index + 1, 0x40);
             }
             matrices = (igMatrixStackEntry *)self->_data;
             igMatrix44f_Copy(matrices[index], matrices[index - 1]);

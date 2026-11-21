@@ -1,6 +1,7 @@
 # config/typed-fields.tsv — object-reference fields scripts/gen_type_headers.py declares with their referenced
 # class under C++ (C keeps the reference word). Columns: <class>	<field>	<C++ type>. The referenced class is the
-# one the class's field adder gives the field (its arkRegisterInitialize sets the field's metaobject).
+# one the class's field adder gives the field (its arkRegisterInitialize sets the field's metaobject); a memory
+# reference is a pointer to its element type, a string the pool's igStringRef.
 igRenderer	_visualContext	igSmartPointer<igVisualContext>
 igIGBFile	_endianSwap	bool
 igMetaField	_fieldName	igStringRef
@@ -8,3 +9,4 @@ igObjectRefMetaField	_poolName	igStringRef
 igMemoryRefMetaField	_memTypeRef	igSmartPointer< ::igMetaField>
 igMemoryRefMetaField	_poolName	igStringRef
 igCompoundMetaField	_fieldList	igSmartPointer<igMetaFieldList>
+igDataList	_data	unsigned char *

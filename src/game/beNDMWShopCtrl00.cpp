@@ -356,7 +356,7 @@ extern "C" void beNDMWShopCtrlXdataChip_RefreshText(beNDMWShopCtrlXdataChip *sel
 extern "C" void beNDMWShopDevice_Update(beNDMWShopDevice *self);
 
 /* `count` is declared ahead of the list it counts: MWCC numbers the locals in that order, which is
- * what gives the list the lower saved register where a caller keeps both across List_Resize. */
+ * what gives the list the lower saved register where a caller keeps both across Gap::Core::igDataList::resizeAndSetCount. */
 static inline void BoolList_Append(igObject *target, const bool &value)
 {
     int count;
@@ -365,7 +365,7 @@ static inline void BoolList_Append(igObject *target, const bool &value)
     if (count < list->_capacity) {
         list->_count = count + 1;
     } else {
-        List_Resize(list, count + 1, 1);
+        ((Gap::Core::igDataList *)list)->resizeAndSetCount(count + 1, 1);
     }
     ((bool *)list->_data)[count] = value;
 }
@@ -2321,7 +2321,7 @@ template <class ListRef> static inline void IntList_Append(ListRef listRef, cons
     if (count < list->_capacity) {
         list->_count = countOf(list) + 1;
     } else {
-        List_Resize(list, count + 1, 4);
+        ((Gap::Core::igDataList *)list)->resizeAndSetCount(count + 1, 4);
     }
     ((int *)list->_data)[count] = value;
 }
@@ -3846,7 +3846,7 @@ void beNDMWShopCtrlDigilabo_Update(beNDMWShopCtrlDigilabo *self) {
                         if (index < choices->_capacity) {
                             choices->_count = countOf(choices) + 1;
                         } else {
-                            List_Resize(choices, index + 1, 4);
+                            ((Gap::Core::igDataList *)choices)->resizeAndSetCount(index + 1, 4);
                         }
                         ((int *)choices->_data)[index] = *playerNo;
                     }
@@ -4906,7 +4906,7 @@ int beNDMWShopCtrlDeviceSell_UpdatePageCount(beNDMWShopCtrlDeviceSell *self) {
             else if (beNDMWItemRevisionPocketBase_GetPrice((beNDMWItemRevisionPocketBase *)device, status, KAITORI_2) <= 0) sellable = false;
             decide = (igBoolList *)self->_decideList;
             slot = decide->_count;
-            if (slot < decide->_capacity) decide->_count = slot + 1; else List_Resize(decide, slot + 1, 1);
+            if (slot < decide->_capacity) decide->_count = slot + 1; else ((Gap::Core::igDataList *)decide)->resizeAndSetCount(slot + 1, 1);
             ((unsigned char *)decide->_data)[slot] = sellable;
         }
         row++;

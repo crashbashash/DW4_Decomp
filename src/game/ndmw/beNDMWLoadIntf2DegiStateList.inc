@@ -34,8 +34,8 @@ CallbackArray *beNDMWLoadIntf2DegiStateList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWLoadIntf2DegiStateList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beNDMWLoadIntf2DegiStateList_GetMetaObject,
         "beNDMWLoadIntf2DegiStateList",
         0x14, /* instance size */

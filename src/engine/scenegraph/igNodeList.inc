@@ -40,8 +40,8 @@ CallbackArray *igNodeList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igNodeList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igNodeList_GetMetaObjectFunction,
         "igNodeList",
         0x14, /* instance size */

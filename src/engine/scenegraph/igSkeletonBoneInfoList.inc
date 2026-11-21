@@ -35,8 +35,8 @@ CallbackArray *igSkeletonBoneInfoList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igSkeletonBoneInfoList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igSkeletonBoneInfoList_GetMetaObjectFunction,
         "igSkeletonBoneInfoList",
         0x14, /* instance size */

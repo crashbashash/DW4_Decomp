@@ -888,7 +888,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
             list->_count = 0;
             int nonEmpty = ((igObjectList *)((beModelCtrlNode2 *)ram->_node)->_overrideAttrList)->_count > 0;
             if (!nonEmpty) {
-                List_Reserve((igDataList *)((void *)((beModelCtrlNode2 *)ram->_node)->_overrideAttrList), 0, 4);
+                ((Gap::Core::igDataList *)((void *)((beModelCtrlNode2 *)ram->_node)->_overrideAttrList))->setCapacity(0, 4);
             }
             ClearMaskBit(mask, ramNo);
             { igObject *held = (igObject *)ram->_work; IG_OBJECT_RELEASE(held); }

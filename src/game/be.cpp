@@ -755,7 +755,7 @@ void be_RemoveAllInfo(void) {
     {
         igStringRefList *list = (igStringRefList *)g_be->_stringRefList;
         if (!(0 < list->_count)) {
-            List_Reserve((igDataList *)list, 0, 4);
+            ((Gap::Core::igDataList *)list)->setCapacity(0, 4);
         }
     }
 }
@@ -1007,7 +1007,7 @@ void CFLclear(void) {
     {
         igStringRefList *list = (igStringRefList *)g_beSystem->_readFileList;
         if (!(0 < list->_count)) {
-            List_Reserve((igDataList *)list, 0, 4);
+            ((Gap::Core::igDataList *)list)->setCapacity(0, 4);
         }
     }
 }

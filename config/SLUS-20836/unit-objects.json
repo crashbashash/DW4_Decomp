@@ -1157,7 +1157,7 @@
       "igVertexBlendMatrixListAttr_Register": "0x00130a80",
       "igVertexBlendMatrixListAttr_GetMetaObjectFunction": "0x00130b00",
       "igVertexBlendMatrixListAttr_InitFields": "0x00130b10",
-      "igObjectList_GetPublishedMetaObject": "0x00130c00",
+      "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00",
       "igVertexBlendMatrixAttr_Create": "0x00130c10",
       "igVertexBlendMatrixAttr_GetMetaObject": "0x00130c50",
       "igVertexBlendMatrixAttr_GetVTable": "0x00130ca0",
@@ -2660,7 +2660,6 @@
       "g_igImage_metaObject": "0x0055fd80",
       "g_igVec3fList_metaObject": "0x005610b8",
       "g_igMatrixObject_mMetaField": "0x00562bc8",
-      "g_igObjectList_metaObject": "0x00585b60",
       "g_igNonRefCountedObjectList_metaObject": "0x00585bb0",
       "g_igNamedObject_metaObject": "0x00585bd8",
       "g_igInfo_metaObject": "0x00586128",
@@ -3660,7 +3659,10 @@
     "stripped": [
       "__dt__34igSmartPointer<16igPsx2Controller>Fv"
     ],
-    "symbol": "WindowInputLibrary_MarkRegistered"
+    "symbol": "WindowInputLibrary_MarkRegistered",
+    "duplicates": {
+      "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00"
+    }
   },
   "0x001493e0": {
     "whole_file": true,
@@ -7231,7 +7233,8 @@
     },
     "symbol": "IG_GFX_INDEX_DATA_SIZE_GetMetaEnum",
     "duplicates": {
-      "getClassMeta__Q33Gap4Core10igDataListFv": "0x00143720"
+      "getClassMeta__Q33Gap4Core10igDataListFv": "0x00143720",
+      "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00"
     }
   },
   "0x001869e0": {
@@ -7979,7 +7982,8 @@
       "FUN_00301ee0": "0x00301ee0"
     },
     "duplicates": {
-      "getClassMeta__Q33Gap4Core10igDataListFv": "0x00143720"
+      "getClassMeta__Q33Gap4Core10igDataListFv": "0x00143720",
+      "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00"
     }
   },
   "0x00194380": {
@@ -11732,7 +11736,8 @@
       "__dt__20ActorAppearanceFieldFv": "0x001aa950"
     },
     "duplicates": {
-      "getClassMeta__Q33Gap4Core10igDataListFv": "0x00143720"
+      "getClassMeta__Q33Gap4Core10igDataListFv": "0x00143720",
+      "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00"
     }
   },
   "0x001e3ff0": {
@@ -12019,7 +12024,8 @@
     ],
     "symbol": "DataPumpLibrary_MarkRegistered",
     "duplicates": {
-      "getClassMeta__Q33Gap4Core10igDataListFv": "0x00143720"
+      "getClassMeta__Q33Gap4Core10igDataListFv": "0x00143720",
+      "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00"
     }
   },
   "0x001e74b0": {
@@ -14397,7 +14403,8 @@
       "FUN_00300cd0": "0x00300cd0"
     },
     "duplicates": {
-      "__dt__26igSmartPointer<9igIntList>Fv": "0x00150eb0"
+      "__dt__26igSmartPointer<9igIntList>Fv": "0x00150eb0",
+      "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00"
     },
     "anon": [
       "0x004e7980",
@@ -15135,7 +15142,10 @@
       "__dt__37igSmartPointer<19igVisualContextView>Fv",
       "__dt__9StringRefFv",
       "__dt__Q33Gap7Insight15igFlushRendererFv"
-    ]
+    ],
+    "duplicates": {
+      "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00"
+    }
   },
   "0x00238d40": {
     "whole_file": true,
@@ -15445,7 +15455,10 @@
       "0x004ea158",
       "0x004ea160",
       "0x004ea178"
-    ]
+    ],
+    "duplicates": {
+      "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00"
+    }
   },
   "0x0023c440": {
     "whole_file": true,
@@ -22124,14 +22137,14 @@
       "getClassMeta__Q33Gap4Core20igObjectRefMetaFieldFv": "0x002bd510",
       "arkRegisterInitialize__Q33Gap4Core25igObjectRefArrayMetaFieldFv": "0x002bd520",
       "arkRegisterMetaValidate__Q33Gap4Core25igObjectRefArrayMetaFieldFv": "0x002bd5b0",
-      "igObjectList_Create": "0x002bd680",
-      "igObjectList_GetOrCreateMetaObject": "0x002bd6c0",
-      "igObjectList_GetMetaObject": "0x002bd710",
-      "igObjectList_GetVTable": "0x002bd760",
-      "igObjectList_EnsureRegistered": "0x002bd7a0",
-      "igObjectList_Register": "0x002bd7b0",
-      "igObjectList_GetMetaObjectFunction": "0x002bd820",
-      "igObjectList_InitFields": "0x002bd830",
+      "_instantiateFromPool__Q33Gap4Core12igObjectListFP16igMemoryPoolView": "0x002bd680",
+      "getClassTypeLazy__Q33Gap4Core12igObjectListFv": "0x002bd6c0",
+      "getClassTypeSafe__Q33Gap4Core12igObjectListFv": "0x002bd710",
+      "retrieveVTablePointer__Q33Gap4Core12igObjectListFv": "0x002bd760",
+      "arkRegister__Q33Gap4Core12igObjectListFv": "0x002bd7a0",
+      "arkRegisterInternal__Q33Gap4Core12igObjectListFv": "0x002bd7b0",
+      "getClassMetaSafe__Q33Gap4Core12igObjectListFv": "0x002bd820",
+      "arkRegisterInitialize__Q33Gap4Core12igObjectListFv": "0x002bd830",
       "igObjectDirEntry_Create": "0x002bd8f0",
       "igObjectDirEntry_GetMetaObject": "0x002bd930",
       "igObjectDirEntry_GetVTable": "0x002bd980",
@@ -23148,18 +23161,18 @@
       "igContext_GetExtension": "0x002d64c0",
       "igContext_FindExtensionInstance": "0x002d65e0",
       "getElementSize__Q33Gap4Core10igDataListCFv": "0x002d6670",
-      "List_Reserve": "0x002d6680",
-      "List_Resize": "0x002d6790",
-      "List_InsertBytes": "0x002d6810",
-      "List_AppendBytes": "0x002d6900",
-      "List_RemoveAt": "0x002d69a0",
-      "List_BinarySearch": "0x002d6a20",
-      "List_AppendWord": "0x002d6b20",
-      "List_InsertWords": "0x002d6b80",
-      "List_AppendWords": "0x002d6c60",
-      "List_RemoveWordAt": "0x002d6cf0",
-      "List_BinarySearchWords": "0x002d6d70",
-      "List_LowerBound": "0x002d6e60",
+      "setCapacity__Q33Gap4Core10igDataListFiUi": "0x002d6680",
+      "resizeAndSetCount__Q33Gap4Core10igDataListFiUi": "0x002d6790",
+      "insert__Q33Gap4Core10igDataListFiiPCUcUi": "0x002d6810",
+      "append__Q33Gap4Core10igDataListFiPCUcUi": "0x002d6900",
+      "remove__Q33Gap4Core10igDataListFiUi": "0x002d69a0",
+      "sortedFind__Q33Gap4Core10igDataListCFPCUcPFPCvPCv_iUi": "0x002d6a20",
+      "resizeAndSetCount4For1__Q33Gap4Core10igDataListFi": "0x002d6b20",
+      "insert4__Q33Gap4Core10igDataListFiiPCUc": "0x002d6b80",
+      "append4__Q33Gap4Core10igDataListFiPCUc": "0x002d6c60",
+      "remove4__Q33Gap4Core10igDataListFi": "0x002d6cf0",
+      "sortedFind4__Q33Gap4Core10igDataListCFPCUcPFPCvPCv_i": "0x002d6d70",
+      "binaryInsert4__Q33Gap4Core10igDataListCFPCUcPFPCvPCv_i": "0x002d6e60",
       "igRendererOrderedList_Append": "0x002d6f50",
       "igDependencyOrderedList_AddDependency": "0x002d7090",
       "igDependencyOrderedList_Rebuild": "0x002d7130",
@@ -26067,8 +26080,8 @@
       "g_igObjectListList_callbackList": "0x004c13c8",
       "g_igObjectListList_metaObject": "0x005867b0",
       "g_igObjectListList_vtable": "0x00532180",
-      "g_igObjectList_dataDescriptorCell": "0x00585b68",
-      "g_igObjectList_metaObject": "0x00585b60",
+      "k_data__Q33Gap4Core12igObjectList": "0x00585b68",
+      "_Meta__Q33Gap4Core12igObjectList": "0x00585b60",
       "g_igObjectList_vtable": "0x005249b0",
       "_MetaField__Q33Gap4Core25igObjectRefArrayMetaField": "0x00585b50",
       "_Meta__Q33Gap4Core25igObjectRefArrayMetaField": "0x00585b48",
@@ -26686,8 +26699,8 @@
       "__vt__Q33Gap4Core25igMemoryRefArrayMetaField": "0x0052f330",
       "__vt__Q33Gap4Core25igObjectRefArrayMetaField": "0x0052ef40",
       "__vt__Q33Gap4Core10igDataList": "0x005309b0",
-      "g_igDataList_dataField": "0x005867a0",
-      "g_igDataList_metaObject": "0x00586788"
+      "g_igDataList_metaObject": "0x00586788",
+      "__vt__Q33Gap4Core12igObjectList": "0x005249b0"
     },
     "anon": [
       "0x004bf2a0",
@@ -28218,11 +28231,17 @@
       "__dt__29igSmartPointer<11igMetaField>Fv": "0x0014ec50",
       "getClassMeta__Q33Gap4Core10igDataListFv": "0x00143720",
       "getClassMeta__Q33Gap4Core11igMetaFieldFv": "0x00187180",
+      "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00",
       "getClassMeta__Q33Gap4Core8igObjectFv": "0x00135530",
+      "getElementMeta__Q33Gap4Core12igObjectListCFv": "0x00142b70",
+      "getElementSize__Q33Gap4Core34igTDataList<PQ33Gap4Core8igObject>CFv": "0x00142ba0",
       "getMeta__Q33Gap4Core10igDataListCFv": "0x00142b40",
       "getMeta__Q33Gap4Core11igMetaFieldCFv": "0x00155490",
+      "getMeta__Q33Gap4Core12igObjectListCFv": "0x00142a70",
       "getMeta__Q33Gap4Core8igObjectCFv": "0x00155b80",
-      "set__Q33Gap4Core17igStringMetaFieldCFPQ33Gap4Core8igObject11igStringRef": "0x001c8c00"
+      "set__Q33Gap4Core17igStringMetaFieldCFPQ33Gap4Core8igObject11igStringRef": "0x001c8c00",
+      "trimCapacity__Q33Gap4Core34igTDataList<PQ33Gap4Core8igObject>Fv": "0x0013c180",
+      "userPreWrite__Q33Gap4Core12igObjectListFv": "0x00142a60"
     },
     "stripped": [
       "__dl__Q33Gap4Core8igObjectFPv",
@@ -28857,7 +28876,8 @@
       "0x005006f8"
     ],
     "duplicates": {
-      "getClassMeta__Q33Gap3Gui10igRendererFv": "0x00231010"
+      "getClassMeta__Q33Gap3Gui10igRendererFv": "0x00231010",
+      "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00"
     }
   },
   "0x00337410": {
@@ -33931,7 +33951,8 @@
       "__vt__20BecRuntimePluginView": "0x0053b6d0"
     },
     "duplicates": {
-      "__dt__14ModelNameFieldFv": "0x00130720"
+      "__dt__14ModelNameFieldFv": "0x00130720",
+      "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00"
     },
     "stripped": [
       "__dt__10RideOnViewFv",
@@ -40307,7 +40328,8 @@
       "__vt__21NdmwRuntimePluginView": "0x0053de30"
     },
     "duplicates": {
-      "__dt__13HeldStringRefFv": "0x00130720"
+      "__dt__13HeldStringRefFv": "0x00130720",
+      "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00"
     },
     "stripped": [
       "__dt__12ItemInfoWorkFv",
@@ -45771,6 +45793,7 @@
       "__dt__29igSmartPointer<11igGraphPath>Fv": "0x001d6560",
       "getClassMeta__Q33Gap3Gui10igRendererFv": "0x00231010",
       "getClassMeta__Q33Gap4Core10igDataListFv": "0x00143720",
+      "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00",
       "getClassMeta__Q33Gap4Core8igObjectFv": "0x00135530",
       "getMeta__Q33Gap3Gui10igRendererCFv": "0x00238cf0"
     },
@@ -46715,7 +46738,8 @@
       "0x0051fa98"
     ],
     "duplicates": {
-      "getClassMeta__Q33Gap3Gui10igRendererFv": "0x00231010"
+      "getClassMeta__Q33Gap3Gui10igRendererFv": "0x00231010",
+      "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00"
     }
   },
   "0x0045e9a0": {

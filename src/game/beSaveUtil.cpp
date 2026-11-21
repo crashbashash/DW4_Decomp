@@ -98,7 +98,7 @@ struct SlotList : igTDataList<int> {
         if (n < _capacity) {
             _count = _count + 1;
         } else {
-            List_Resize(this, n + 1, sizeof(int));
+            ((Gap::Core::igDataList *)this)->resizeAndSetCount(n + 1, sizeof(int));
         }
         _data[n] = value;
     }

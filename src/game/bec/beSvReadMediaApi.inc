@@ -54,7 +54,7 @@ void beSvReadMediaApi_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvReadMediaApi_Register);
 }
 
-static igMetaObjectCallback g_beSvReadMediaApi_callbackList[] = { beSvPlatBaseData_EnsureRegistered, beSaveDataDeliver_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beSvReadMediaApi_callbackList[] = { beSvPlatBaseData_EnsureRegistered, beSaveDataDeliver_EnsureRegistered, Gap::Core::igObjectList::arkRegister, 0 };
 
 CallbackArray *beSvReadMediaApi_Register(void) {
     BecLibrary_MarkRegistered();
@@ -127,7 +127,7 @@ void beSvReadMediaApi_InitFields(void) {
     lodeData = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
     ((igObjectRefMetaField *)lodeData)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();
     loadWorkList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)loadWorkList)->_metaObject = (int)igObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)loadWorkList)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
     ((igRefMetaField *)loadWorkList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beSvReadMediaApi_fieldTable, g_beSvReadMediaApi_fieldHandles, g_beSvReadMediaApi_fieldOffsets, base);
 }

@@ -338,8 +338,8 @@ CallbackArray *igAdxAfsFileList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAdxAfsFileList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igAdxAfsFileList_GetMetaObjectFunction,
         "igAdxAfsFileList",
         0x14, /* instance size */
@@ -483,8 +483,8 @@ CallbackArray *igFileNameList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igFileNameList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igFileNameList_GetMetaObjectFunction,
         "igFileNameList",
         0x14, /* instance size */
@@ -931,8 +931,8 @@ CallbackArray *igMovieCodecList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMovieCodecList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igMovieCodecList_GetMetaObjectFunction,
         "igMovieCodecList",
         0x14, /* instance size */
@@ -1298,8 +1298,8 @@ CallbackArray *igMovieInfoList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMovieInfoList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igMovieInfoList_GetMetaObjectFunction,
         "igMovieInfoList",
         0x14, /* instance size */
@@ -1354,8 +1354,8 @@ CallbackArray *igTextureBindAttrList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureBindAttrList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igTextureBindAttrList_GetMetaObjectFunction,
         "igTextureBindAttrList",
         0x14, /* instance size */

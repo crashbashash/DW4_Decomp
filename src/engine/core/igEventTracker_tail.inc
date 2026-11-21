@@ -111,7 +111,7 @@ void igEventTracker_Initialize(igEventTrackerView *self) {
     }
     n = self->_capacity * 0x14;
     if (n >= self->_eventRecords->_count) {
-        List_Reserve((igDataList *)self->_eventRecords, n, 1);
+        ((Gap::Core::igDataList *)self->_eventRecords)->setCapacity(n, 1);
     }
     self->RebuildHashIndex(self->_capacity * 2);
     igEventTracker_CodeReference();
@@ -135,10 +135,10 @@ void igEventTracker_Shutdown(igEventTrackerView *self) {
         if (0 <= self->_eventRecords->_capacity) {
             self->_eventRecords->_count = 0;
         } else {
-            List_Resize(self->_eventRecords, 0, 1);
+            ((Gap::Core::igDataList *)self->_eventRecords)->resizeAndSetCount(0, 1);
         }
         if (!(0 < self->_eventRecords->_count)) {
-            List_Reserve((igDataList *)self->_eventRecords, 0, 1);
+            ((Gap::Core::igDataList *)self->_eventRecords)->setCapacity(0, 1);
         }
         igEventTracker_SetThreadSafe(self, 0);
         self->_flags = self->_flags & ~2;
@@ -158,7 +158,7 @@ void igEventTracker_Reset(igEventTrackerView *self) {
     if (0 <= l->_capacity) {
         l->_count = 0;
     } else {
-        List_Resize(l, 0, 1);
+        ((Gap::Core::igDataList *)l)->resizeAndSetCount(0, 1);
     }
     self->RebuildHashIndex(self->_hashIndex->_capacity);
 }
@@ -1092,7 +1092,7 @@ static inline void setCount(igTDataList<int> *l, int n) {
         if (n <= l->_capacity) {
             l->_count = n;
         } else {
-            List_Resize((void *)l, n, 4);
+            ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 4);
         }
     }
 }
@@ -1108,7 +1108,7 @@ void igEventTracker_RebuildHashIndex(igEventTrackerView *self, int n) {
     int offset;
     igEventTracker_SetCapacity((int)self, n);
     if (n >= self->_hashIndex->_count) {
-        List_Reserve((igDataList *)self->_hashIndex, n, 4);
+        ((Gap::Core::igDataList *)self->_hashIndex)->setCapacity(n, 4);
     }
     setCount(self->_hashIndex, n);
     {

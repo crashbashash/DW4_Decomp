@@ -458,7 +458,7 @@
   "igCriMovieCodec": 5,
   "igCriMovieData": 15,
   "igCullFaceAttr": 4,
-  "igDataList": 384,
+  "igDataList": 385,
   "igDataPump": 16,
   "igDataPumpInfo": 2,
   "igDataPumpList": 17,
@@ -575,7 +575,7 @@
   "igMessageInterface": 1,
   "igMessenger": 1,
   "igMetaEnum": 13,
-  "igMetaField": 503,
+  "igMetaField": 504,
   "igMetaFieldList": 53,
   "igMetaObject": 1238,
   "igModel": 6,
@@ -786,8 +786,8 @@
   "engine": {
    "files": 50,
    "offset_casts": 2370,
-   "other_members": 12668,
-   "recovered": 13647,
+   "other_members": 12666,
+   "recovered": 13649,
    "recovered_pct": 40.59,
    "synthetic": 4939,
    "total": 33624
@@ -867,7 +867,7 @@
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
  "offset_casts": 3073,
- "recovered": 34052,
+ "recovered": 34054,
  "synthetic": 5887,
  "total": 73061,
  "typeable": 0

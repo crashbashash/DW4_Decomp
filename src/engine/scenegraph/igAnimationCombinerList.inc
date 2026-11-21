@@ -35,8 +35,8 @@ CallbackArray *igAnimationCombinerList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationCombinerList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igAnimationCombinerList_GetMetaObjectFunction,
         "igAnimationCombinerList",
         0x14, /* instance size */

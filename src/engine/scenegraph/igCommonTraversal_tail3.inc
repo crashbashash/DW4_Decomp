@@ -190,7 +190,7 @@ void Gap__Sg__igCommonTraversal__vfunc_32(igCommonTraversal *self, long long arg
     if (temp_s2 < temp_s1->cap) {
         temp_s1->size = size_of(temp_s1) + 1;
     } else {
-        List_Resize((void *)temp_s1, temp_s2 + 1, 8);
+        ((Gap::Core::igDataList *)temp_s1)->resizeAndSetCount(temp_s2 + 1, 8);
     }
     temp_s1->data[temp_s2] = arg1;
 }
@@ -432,7 +432,7 @@ static inline void pushMatrixAttr(igAttrStackManager *manager, MatrixAttrView *a
     if (n < stack->_capacity) {
         stack->_count = stack->_count + 1;
     } else {
-        List_Resize(stack, n + 1, 4);
+        ((Gap::Core::igDataList *)stack)->resizeAndSetCount(n + 1, 4);
     }
     stack->set(n, &pushed);
     igAttrStackManager_MarkStackChanged((igAttrStackManager *)manager, (igAttrStack *)stack, slot);

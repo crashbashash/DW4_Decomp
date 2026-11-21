@@ -41,8 +41,8 @@ CallbackArray *beBaseInfoRamList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beBaseInfoRamList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         (igMetaObjectCallback)beBaseInfoRamList_GetMetaObject,
         "beBaseInfoRamList",
         0x14, /* instance size */

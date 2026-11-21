@@ -18,7 +18,7 @@ void igMemoryDictionary_InitEntries(igMemoryDictionaryView *self) {
     a = self->_capacity * 2;
     l = self->_memoryEntries;
     if (a >= l->_count) {
-        List_Reserve((igDataList *)l, a, 4);
+        ((Gap::Core::igDataList *)l)->setCapacity(a, 4);
     }
     b = self->_capacity * 2;
     l = self->_memoryEntries;
@@ -26,7 +26,7 @@ void igMemoryDictionary_InitEntries(igMemoryDictionaryView *self) {
         if (b <= l->_capacity) {
             l->_count = b;
         } else {
-            List_Resize(l, b, 4);
+            ((Gap::Core::igDataList *)l)->resizeAndSetCount(b, 4);
         }
     }
     self->ResetEntries();
@@ -40,11 +40,11 @@ void igMemoryDictionary_Clear(igMemoryDictionaryView *self) {
     if (0 <= entries->_capacity) {
         entries->_count = 0;
     } else {
-        List_Resize(entries, 0, 4);
+        ((Gap::Core::igDataList *)entries)->resizeAndSetCount(0, 4);
     }
     entries2 = self->_memoryEntries;
     if (!(0 < entries2->_count)) {
-        List_Reserve((igDataList *)entries2, 0, 4);
+        ((Gap::Core::igDataList *)entries2)->setCapacity(0, 4);
     }
     self->_count = 0;
     self->_cachedIndex = 0;
@@ -236,7 +236,7 @@ int igMemoryDictionary_Resize(igResult *result, igMemoryDictionaryView *self, in
     self->_memoryEntries = (igTDataList<MemoryDictionaryEntry> *)igUnsignedIntListNoClean_Create(allocator);
     words = self->_capacity * 2;
     if (words >= self->_memoryEntries->_count) {
-        List_Reserve((igDataList *)self->_memoryEntries, words, 4);
+        ((Gap::Core::igDataList *)self->_memoryEntries)->setCapacity(words, 4);
     }
     table = self->_memoryEntries;
     if (table->_data == 0) {
@@ -248,7 +248,7 @@ int igMemoryDictionary_Resize(igResult *result, igMemoryDictionaryView *self, in
         if (words <= table->_capacity) {
             table->_count = words;
         } else {
-            List_Resize(table, words, 4);
+            ((Gap::Core::igDataList *)table)->resizeAndSetCount(words, 4);
         }
     }
     table = self->_memoryEntries;

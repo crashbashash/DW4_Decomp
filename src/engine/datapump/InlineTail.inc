@@ -71,7 +71,7 @@ void igLongStack_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 8);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 8);
     }
 }
 
@@ -80,7 +80,7 @@ void igMatrixStack_TrimCapacity(igDataList *arg0) {
 
     temp_a1 = arg0->_count;
     if (temp_a1 < arg0->_capacity) {
-        List_Reserve(arg0, temp_a1, 0x40);
+        ((Gap::Core::igDataList *)arg0)->setCapacity(temp_a1, 0x40);
     }
 }
 

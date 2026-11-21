@@ -103,7 +103,7 @@ void igStringRefList_UserPreWrite(igObjectDispatchView *self)
 void igStringRefList_TrimCapacity(igStringRefList *l) {
     int n = l->_count;
     if (n < l->_capacity) {
-        List_Reserve((igDataList *)l, n, 4);
+        ((Gap::Core::igDataList *)l)->setCapacity(n, 4);
     }
 }
 
@@ -138,7 +138,6 @@ int igMemoryPoolInfo_GetMeta(void) {
 igMetaObject *igMemoryPoolContextInfo_GetMeta(void) {
     return g_igMemoryPoolContextInfo_metaObject;
 }
-
 
 int MemoryContext_GetMeta(void) {
     return g_MemoryContext_metaObject;
@@ -475,7 +474,7 @@ igMetaObject *igNonRefCountedThreadList_GetElementMeta(void) {
 }
 
 /* Element size in bytes of the list's items: 8. The same class's TrimCapacity (vfunc_18) re-sizes
- * the buffer with List_Reserve(self, count, 8), and the sibling lists igCharMetricsList (0x28) and
+ * the buffer with Gap::Core::igDataList::setCapacity(self, count, 8), and the sibling lists igCharMetricsList (0x28) and
  * igPsx2AudioSourceList (0x24) return their item size from this same slot 23. */
 int igDependencyList_GetElementSize(void) {
     return 8;
@@ -606,7 +605,7 @@ igMetaObject *igStringRefListList_GetElementMeta(void) {
 }
 
 igMetaObject *igObjectListList_GetElementMeta(void) {
-    return g_igObjectList_metaObject;
+    return Gap::Core::igObjectList::getClassMeta();
 }
 
 igMetaObject *igIntListList_GetElementMeta(void) {
@@ -642,7 +641,7 @@ void igBoolList_TrimCapacity(igDataList *list) {
 
     count = list->_count;
     if (count < list->_capacity) {
-        List_Reserve((igDataList *)list, count, 1);
+        ((Gap::Core::igDataList *)list)->setCapacity(count, 1);
     }
 }
 
@@ -651,7 +650,7 @@ void igCharList_TrimCapacity(igCharList *list) {
 
     count = list->_count;
     if (count < list->_capacity) {
-        List_Reserve((igDataList *)list, count, 1);
+        ((Gap::Core::igDataList *)list)->setCapacity(count, 1);
     }
 }
 
@@ -660,7 +659,7 @@ void igIntList_TrimCapacity(igIntList *self) {
 
     count = self->_count;
     if (count < self->_capacity) {
-        List_Reserve((igDataList *)self, count, 4);
+        ((Gap::Core::igDataList *)self)->setCapacity(count, 4);
     }
 }
 
@@ -669,7 +668,7 @@ void igUnsignedShortList_TrimCapacity(igDataList *list) {
 
     count = list->_count;
     if (count < list->_capacity) {
-        List_Reserve((igDataList *)list, count, 2);
+        ((Gap::Core::igDataList *)list)->setCapacity(count, 2);
     }
 }
 
@@ -678,7 +677,7 @@ void igShortList_TrimCapacity(igDataList *list) {
 
     count = list->_count;
     if (count < list->_capacity) {
-        List_Reserve((igDataList *)list, count, 2);
+        ((Gap::Core::igDataList *)list)->setCapacity(count, 2);
     }
 }
 
@@ -687,7 +686,7 @@ void igUnsignedCharList_TrimCapacity(igDataList *list) {
 
     count = list->_count;
     if (count < list->_capacity) {
-        List_Reserve((igDataList *)list, count, 1);
+        ((Gap::Core::igDataList *)list)->setCapacity(count, 1);
     }
 }
 
@@ -696,7 +695,7 @@ void igFloatList_TrimCapacity(igDataList *list) {
 
     count = list->_count;
     if (count < list->_capacity) {
-        List_Reserve((igDataList *)list, count, 4);
+        ((Gap::Core::igDataList *)list)->setCapacity(count, 4);
     }
 }
 
@@ -705,7 +704,7 @@ void igPointerList_TrimCapacity(igDataList *list) {
 
     count = list->_count;
     if (count < list->_capacity) {
-        List_Reserve((igDataList *)list, count, 4);
+        ((Gap::Core::igDataList *)list)->setCapacity(count, 4);
     }
 }
 
@@ -714,7 +713,7 @@ void igDependencyList_TrimCapacity(igDependencyList *self) {
 
     count = self->_count;
     if (count < self->_capacity) {
-        List_Reserve((igDataList *)self, count, 8);
+        ((Gap::Core::igDataList *)self)->setCapacity(count, 8);
     }
 }
 

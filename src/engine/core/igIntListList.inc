@@ -35,8 +35,8 @@ CallbackArray *igIntListList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igIntListList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igIntListList_GetMetaObjectFunction,
         "igIntListList",
         0x14,

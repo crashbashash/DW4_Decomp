@@ -176,7 +176,7 @@ igResult igIGBFile_ComputeBufferSizes(igIGBFile *self) {
 static inline void bump(const igSmartPointer<igTDataList<int> > &r, int off) { int *c = (int *)((char *)r.p->_data + off); *c = *c + 1; }
 
 static inline void fillWords(igTDataList<int> *l, int c, int *value) {
-    if (c >= 0) { if (c <= l->_capacity) { l->_count = c; } else { List_Resize(l, c, 4); } }
+    if (c >= 0) { if (c <= l->_capacity) { l->_count = c; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(c, 4); } }
 }
 
 static inline int indexOfParent(igObjectList *l, const MetaTableKey &key) {
@@ -453,13 +453,13 @@ igResult igIGBFile_ShareEntries(igIGBFileView *self) {
     {
         int c = self->_count;
         igTDataList<int> *l = self->_refList;
-        if (c >= 0) { if (c <= l->_capacity) { l->_count = c; } else { List_Resize(l, c, 4); } }
+        if (c >= 0) { if (c <= l->_capacity) { l->_count = c; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(c, 4); } }
     }
     {
         igObject *old = self->_entryPool;
         int pool = (int)self->_temporaryMemoryPool;
         IG_OBJECT_RELEASE(old);
-        self->_entryPool = (igObject *)igObjectList_Create(pool);
+        self->_entryPool = (igObject *)Gap::Core::igObjectList::_instantiateFromPool((igMemoryPoolView *)pool);
     }
     {
         igObjectList *old = self->_uniqueEntryList;
@@ -1188,7 +1188,7 @@ igResult igIGBFile_ReadFinished(igIGBFileView *self) {
         if (count <= refList->_capacity) {
             refList->_count = count;
         } else {
-            List_Resize(refList, count, 4);
+            ((Gap::Core::igDataList *)refList)->resizeAndSetCount(count, 4);
         }
     }
     for (i = 0; i < count; i++) {
@@ -1214,13 +1214,13 @@ igResult igIGBFile_ReadObjectSectionOld(igIGBFileView *file) {
             if (count <= indices->_capacity) {
                 indices->_count = count;
             } else {
-                List_Resize(indices, count, 4);
+                ((Gap::Core::igDataList *)indices)->resizeAndSetCount(count, 4);
             }
         }
         igObject *previous = file->_entryPool;
         pool = (int)file->_temporaryMemoryPool;
         igRelease(previous);
-        file->_entryPool = (igObject *)igObjectList_Create(pool);
+        file->_entryPool = (igObject *)Gap::Core::igObjectList::_instantiateFromPool((igMemoryPoolView *)pool);
     }
     if (igIGBFile_ReadNextChunk(file) == g_resultFailure) {
         return g_resultFailure;
@@ -1319,7 +1319,7 @@ igResult igIGBFile_ReadMetaFieldList(igIGBFileView *self) {
     {
         igObjectList *l = self->_metaFieldListInFile;
         int want = self->_metaFieldCount;
-        if (want >= l->_count) { List_Reserve((igDataList *)l, want, 4); }
+        if (want >= l->_count) { ((Gap::Core::igDataList *)l)->setCapacity(want, 4); }
     }
     for (i = 0; i < self->_metaFieldCount; i++) {
         bool found = false;
@@ -1364,7 +1364,7 @@ void Gap__Core__igIGBFile__resetFields(igIGBFileView *self) {
 static inline void addType(igTDataList<int> *l, int v) {
     int idx;
     idx = l->_count;
-    if (l->_capacity > idx) { l->_count = l->getCount() + 1; } else { List_Resize(l, idx + 1, 4); }
+    if (l->_capacity > idx) { l->_count = l->getCount() + 1; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(idx + 1, 4); }
     l->_data[idx] = v;
 }
 
@@ -1394,7 +1394,7 @@ igResult igIGBFile_ReadAlignmentTable(igIGBFileView *self) {
     {
         igTDataList<int> *l = (igTDataList<int> *)self->_alignmentListInFile;
         int want = self->_alignmentCount;
-        if (want >= l->_count) { List_Reserve((igDataList *)l, want, 4); }
+        if (want >= l->_count) { ((Gap::Core::igDataList *)l)->setCapacity(want, 4); }
     }
     for (i = 0; i < self->_alignmentCount; i++) {
         bool found = false;
@@ -1601,7 +1601,7 @@ igResult igIGBFile_ReadExternalDirectories(igIGBFileView *self) {
 
 static inline void addName(igTDataList<int> *l, const int &v) {
     int idx = l->_count;
-    if (l->_capacity > idx) { l->_count = l->getCount() + 1; } else { List_Resize(l, idx + 1, 4); }
+    if (l->_capacity > idx) { l->_count = l->getCount() + 1; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(idx + 1, 4); }
     l->_data[idx] = v;
 }
 
@@ -1633,7 +1633,7 @@ igResult igIGBFile_ReadMemoryPoolNames(igIGBFileView *self) {
     }
     for (; i < 46; i++) {
         int idx; igTDataList<int> *l; l = (igTDataList<int> *)self->_memoryPoolHandles; idx = l->_count;
-        if (l->_capacity > idx) { l->_count = l->getCount() + 1; } else { List_Resize(l, idx + 1, 4); }
+        if (l->_capacity > idx) { l->_count = l->getCount() + 1; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(idx + 1, 4); }
         l->_data[idx] = g_igIGBFile_memoryPoolHandleFill;
     }
     self->_temporaryMemoryPool->Free(buf);

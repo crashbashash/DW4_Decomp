@@ -818,29 +818,29 @@ void FUN_00172330(void *arg0, void *arg1) {
 void igPsx2VisualContext_SetStackSize(Obj_172370 *o, int k, int n) {
     switch (k) {
     case 0:
-        if (n >= o->s[0]->count) List_Reserve((igDataList *)o->s[0], n, 64);
+        if (n >= o->s[0]->count) ((Gap::Core::igDataList *)o->s[0])->setCapacity(n, 64);
         break;
     case 1:
-        if (n >= o->s[1]->count) List_Reserve((igDataList *)o->s[1], n, 64);
+        if (n >= o->s[1]->count) ((Gap::Core::igDataList *)o->s[1])->setCapacity(n, 64);
         break;
     case 2:
-        if (n >= o->s[2]->count) List_Reserve((igDataList *)o->s[2], n, 64);
+        if (n >= o->s[2]->count) ((Gap::Core::igDataList *)o->s[2])->setCapacity(n, 64);
         break;
     case 10:
-        if (n >= o->s[4]->count) List_Reserve((igDataList *)o->s[4], n, 64);
-        if (n >= o->s[8]->count) List_Reserve((igDataList *)o->s[8], n, 64);
+        if (n >= o->s[4]->count) ((Gap::Core::igDataList *)o->s[4])->setCapacity(n, 64);
+        if (n >= o->s[8]->count) ((Gap::Core::igDataList *)o->s[8])->setCapacity(n, 64);
         break;
     case 11:
-        if (n >= o->s[5]->count) List_Reserve((igDataList *)o->s[5], n, 64);
-        if (n >= o->s[9]->count) List_Reserve((igDataList *)o->s[9], n, 64);
+        if (n >= o->s[5]->count) ((Gap::Core::igDataList *)o->s[5])->setCapacity(n, 64);
+        if (n >= o->s[9]->count) ((Gap::Core::igDataList *)o->s[9])->setCapacity(n, 64);
         break;
     case 12:
-        if (n >= o->s[6]->count) List_Reserve((igDataList *)o->s[6], n, 64);
-        if (n >= o->s[10]->count) List_Reserve((igDataList *)o->s[10], n, 64);
+        if (n >= o->s[6]->count) ((Gap::Core::igDataList *)o->s[6])->setCapacity(n, 64);
+        if (n >= o->s[10]->count) ((Gap::Core::igDataList *)o->s[10])->setCapacity(n, 64);
         break;
     case 13:
-        if (n >= o->s[7]->count) List_Reserve((igDataList *)o->s[7], n, 64);
-        if (n >= o->s[11]->count) List_Reserve((igDataList *)o->s[11], n, 64);
+        if (n >= o->s[7]->count) ((Gap::Core::igDataList *)o->s[7])->setCapacity(n, 64);
+        if (n >= o->s[11]->count) ((Gap::Core::igDataList *)o->s[11])->setCapacity(n, 64);
         break;
     }
 }
@@ -1166,7 +1166,7 @@ void igPsx2VisualContext_SetMatrixPsx2(igPsx2VisualContext *self, int stack, con
         n = texGen->getCount();
         if (n == 0) {
             if (n < texGen->_capacity) texGen->_count = texGen->_count + 1;
-            else List_Resize(texGen, n + 1, 64);
+            else ((Gap::Core::igDataList *)texGen)->resizeAndSetCount(n + 1, 64);
             igMatrix44f_Copy(texGen->_data[n].m, matrix);
         } else {
             igMatrix44f_Copy(texGen->_data[texGen->_count - 1].m, matrix);

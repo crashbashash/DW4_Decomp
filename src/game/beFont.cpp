@@ -341,7 +341,7 @@ void beFont_Prepare(beFont *self) {
         }
         pairs->_count = 0;
         if (!(0 < ((beFontGeomAttrPairList *)self->_gaPairList)->_count)) {
-            List_Reserve((igDataList *)self->_gaPairList, 0, 4);
+            ((Gap::Core::igDataList *)self->_gaPairList)->setCapacity(0, 4);
         }
     }
     igStringObj_Clear((igStringObj *)self->_convertData);
@@ -977,14 +977,14 @@ void beFont_LayoutLines(beFont *self, unsigned short *text, int entry, igVertexA
                     lineEnds = ((UnsignedIntListView *)self->_lineFeedList);
                     line = lineEnds->count;
                     vertex = (float *)(base + positions->stride * vertexIndex);
-                    if (line < lineEnds->capacity) lineEnds->count = lineEnds->getCount() + 1; else List_Resize(lineEnds, line + 1, 4);
+                    if (line < lineEnds->capacity) lineEnds->count = lineEnds->getCount() + 1; else ((Gap::Core::igDataList *)lineEnds)->resizeAndSetCount(line + 1, 4);
                     lineEnds->data[line] = vertexIndex;
                     start.f = x;
                     start.bits.sign = 0;
                     lineWidths = ((FloatListView *)self->_alignList);
                     width = lineWidths->count;
                     x = *vertex - start.f;
-                    if (width < lineWidths->capacity) lineWidths->count = lineWidths->getCount() + 1; else List_Resize(lineWidths, width + 1, 4);
+                    if (width < lineWidths->capacity) lineWidths->count = lineWidths->getCount() + 1; else ((Gap::Core::igDataList *)lineWidths)->resizeAndSetCount(width + 1, 4);
                     lineWidths->data[width] = x;
                     x = -*vertex;
                     y = y - ((beFontImage **)((beFontImageList *)self->_fonts)->_data)[self->_fontIdx]->_height;
@@ -1014,11 +1014,11 @@ void beFont_LayoutLines(beFont *self, unsigned short *text, int entry, igVertexA
     positions->count = vertexIndex;
     lineEnds = ((UnsignedIntListView *)self->_lineFeedList);
     lastLine = lineEnds->count;
-    if (lastLine < lineEnds->capacity) lineEnds->count = lineEnds->getCount() + 1; else List_Resize(lineEnds, lastLine + 1, 4);
+    if (lastLine < lineEnds->capacity) lineEnds->count = lineEnds->getCount() + 1; else ((Gap::Core::igDataList *)lineEnds)->resizeAndSetCount(lastLine + 1, 4);
     lineEnds->data[lastLine] = vertexIndex;
     lineWidths = ((FloatListView *)self->_alignList);
     lastWidth = lineWidths->count;
-    if (lastWidth < lineWidths->capacity) lineWidths->count = lineWidths->getCount() + 1; else List_Resize(lineWidths, lastWidth + 1, 4);
+    if (lastWidth < lineWidths->capacity) lineWidths->count = lineWidths->getCount() + 1; else ((Gap::Core::igDataList *)lineWidths)->resizeAndSetCount(lastWidth + 1, 4);
     lineWidths->data[lastWidth] = *vertex;
 }
 

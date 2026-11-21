@@ -513,7 +513,7 @@ void beNDMWMdlPlayer_OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
             {
                 igIntList *t = newTimers.p;
                 if (t->_count < 9) {
-                    List_Reserve((igDataList *)t, 8, 4);
+                    ((Gap::Core::igDataList *)t)->setCapacity(8, 4);
                 }
             }
             {
@@ -521,7 +521,7 @@ void beNDMWMdlPlayer_OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
                 if (t->_capacity >= 8) {
                     t->_count = 8;
                 } else {
-                    List_Resize(t, 8, 4);
+                    ((Gap::Core::igDataList *)t)->resizeAndSetCount(8, 4);
                 }
             }
             timers = newTimers.p;

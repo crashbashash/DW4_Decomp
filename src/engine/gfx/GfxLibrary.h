@@ -2107,7 +2107,7 @@ struct StreamRec { int vt; int rc; int pad8; DataList *list; int kind; int index
 /* matching construct: stack smart-pointer slot (empty destructor) */
 struct RP { RC *p; ~RP() {} };
 #define REL_15ff10(x) { RC *q_ = (x); if (q_ != 0) { q_->rc = q_->rc - 1; if (((unsigned long long)((long long)q_->rc << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)q_); } }
-#define SIZE_LIST(lst, n, esz) { DataList *dl_ = (lst); if ((n) >= 0) { if ((n) <= dl_->cap) { dl_->count = (n); } else { List_Resize(dl_, (n), (esz)); } } }
+#define SIZE_LIST(lst, n, esz) { DataList *dl_ = (lst); if ((n) >= 0) { if ((n) <= dl_->cap) { dl_->count = (n); } else { ((Gap::Core::igDataList *)dl_)->resizeAndSetCount((n), (esz)); } } }
 #define ATTACH(rec, lst) { RC *l_ = (RC *)(lst); StreamRec *r_ = (rec); if (l_ != 0) l_->rc = l_->rc + 1; REL_15ff10((RC *)r_->list) r_->list = (DataList *)l_; }
 extern "C" int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigned int *arg1, int arg2);
 struct VertexArrayFormat : igObject {
@@ -3531,7 +3531,7 @@ struct S_172550 { char pad0[972]; struct N_172550 *f972; struct N_172550 *f976; 
 extern "C" int igPsx2VisualContext_GetStackSize(struct S_172550 *arg0, int arg1);
 typedef struct L_172600 { int p0; int p4; int count; int cap; char *data; } L_172600;
 typedef struct S_172600 { char p[972]; L_172600 *l972; L_172600 *l976; L_172600 *l980; int p984; L_172600 *l988; L_172600 *l992; L_172600 *l996; L_172600 *l1000; } S_172600;
-#define PUSH(f) do { int n; L_172600 *l; int v; l = arg0->f; v = count_of_172600(l); if (v != 0) { n = l->count; if (n < l->cap) { l->count = v + 1; } else { List_Resize(l, n + 1, 64); } igMatrix44f_Copy((float *)(l->data + (n << 6)), (const float *)(l->data + ((n - 1) << 6))); } } while (0)
+#define PUSH(f) do { int n; L_172600 *l; int v; l = arg0->f; v = count_of_172600(l); if (v != 0) { n = l->count; if (n < l->cap) { l->count = v + 1; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(n + 1, 64); } igMatrix44f_Copy((float *)(l->data + (n << 6)), (const float *)(l->data + ((n - 1) << 6))); } } while (0)
 extern "C" void igPsx2VisualContext_PushMatrix(S_172600 *arg0, int arg1);
 typedef struct Mat_172910 { float m[16]; } Mat_172910;
 typedef struct Obj_172910 { char pad[972]; Stk *s[8]; } Obj_172910;
@@ -3544,7 +3544,7 @@ typedef struct St_172b00 { char pad0[8]; int n; int cap; char *data; } St_172b00
     if (n == 0) { \
         n1 = n + 1; \
         if (n < s->cap) s->n = n_of(s) + 1; \
-        else List_Resize(s, n1, 0x40); \
+        else ((Gap::Core::igDataList *)s)->resizeAndSetCount(n1, 0x40); \
         igMatrix44f_Copy((float *)(s->data + (n << 6)), (const float *)(m)); \
     } else { \
         igMatrix44f_Copy((float *)(s->data + ((n_of(s) - 1) << 6)), (const float *)(m)); \
@@ -3557,7 +3557,7 @@ typedef struct St_172b00 { char pad0[8]; int n; int cap; char *data; } St_172b00
     if (n == 0) { \
         n1 = n + 1; \
         if (n < s->cap) s->n = n_of(s) + 1; \
-        else List_Resize(s, n1, 0x40); \
+        else ((Gap::Core::igDataList *)s)->resizeAndSetCount(n1, 0x40); \
         igMatrix44f_Copy((float *)(s->data + (n << 6)), (const float *)(m)); \
     } else { \
         igMatrix44f_Copy((float *)(s->data + ((n_of(s) - 1) << 6)), (const float *)(m)); \

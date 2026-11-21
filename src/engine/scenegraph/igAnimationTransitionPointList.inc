@@ -35,8 +35,8 @@ CallbackArray *igAnimationTransitionPointList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAnimationTransitionPointList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igAnimationTransitionPointList_GetMetaObjectFunction,
         "igAnimationTransitionPointList",
         0x14, /* instance size */

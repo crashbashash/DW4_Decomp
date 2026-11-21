@@ -1356,7 +1356,7 @@ void FUN_0016cc60(char *arg0) {
         if (top < list->_capacity) {
             list->_count = list->_count + 1;
         } else {
-            List_Resize(list, top + 1, 4);
+            ((Gap::Core::igDataList *)list)->resizeAndSetCount(top + 1, 4);
         }
         list->_data[top] = value;
     }

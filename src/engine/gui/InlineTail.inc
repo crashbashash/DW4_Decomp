@@ -216,7 +216,7 @@ igMetaObject *igNonRefCountedViewList_GetElementMeta(void) {
 }
 
 /* Element size in bytes of the list's items: 0x28 (one igCharMetrics record). The same class's
- * TrimCapacity (vfunc_18) re-sizes the buffer with List_Reserve(self, count, 0x28), and the
+ * TrimCapacity (vfunc_18) re-sizes the buffer with Gap::Core::igDataList::setCapacity(self, count, 0x28), and the
  * sibling lists igDependencyList (8) and igPsx2AudioSourceList (0x24) return their item size from
  * this same slot 23. */
 
@@ -253,7 +253,7 @@ void igCharMetricsList_TrimCapacity(igCharMetricsList *self) {
 
     count = self->_count;
     if (count < self->_capacity) {
-        List_Reserve((igDataList *)self, count, 0x28);
+        ((Gap::Core::igDataList *)self)->setCapacity(count, 0x28);
     }
 }
 

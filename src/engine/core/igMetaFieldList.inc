@@ -40,8 +40,8 @@ CallbackArray *igMetaFieldList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igMetaFieldList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igMetaFieldList_GetMetaObjectFunction,
         "igMetaFieldList",
         0x14,

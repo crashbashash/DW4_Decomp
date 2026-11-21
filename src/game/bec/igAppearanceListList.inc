@@ -38,8 +38,8 @@ CallbackArray *igAppearanceListList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAppearanceListList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igAppearanceListList_GetMetaObjectFunction,
         "igAppearanceListList",
         0x14, /* instance size */

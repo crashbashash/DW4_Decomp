@@ -9,7 +9,7 @@ void igLocationTable_Allocate(igLocationTableView *self) {
     size = self->_capacity * 5;
     locations = self->_locations;
     if (size >= locations->_count) {
-        List_Reserve((igDataList *)locations, size, 4);
+        ((Gap::Core::igDataList *)locations)->setCapacity(size, 4);
     }
     self->Rehash(self->_hashCapacity);
     igStringTable_SetCapacity(self->_symbolNames, self->_capacity * 4);
@@ -27,22 +27,22 @@ void igLocationTable_Clear(igLocationTableView *table) {
     if (0 <= locations->_capacity) {
         locations->_count = 0;
     } else {
-        List_Resize(locations, 0, 4);
+        ((Gap::Core::igDataList *)locations)->resizeAndSetCount(0, 4);
     }
     locations = table->_locations;
     if (!(0 < locations->_count)) {
-        List_Reserve((igDataList *)locations, 0, 4);
+        ((Gap::Core::igDataList *)locations)->setCapacity(0, 4);
     }
     if (table->_hashIndex != 0) {
         hashIndex = table->_hashIndex;
         if (0 <= hashIndex->_capacity) {
             hashIndex->_count = 0;
         } else {
-            List_Resize(hashIndex, 0, 4);
+            ((Gap::Core::igDataList *)hashIndex)->resizeAndSetCount(0, 4);
         }
         hashIndex = table->_hashIndex;
         if (!(0 < hashIndex->_count)) {
-            List_Reserve((igDataList *)hashIndex, 0, 4);
+            ((Gap::Core::igDataList *)hashIndex)->setCapacity(0, 4);
         }
     }
     igStringTable_Clear((igStringTableView *)table->_symbolNames);
@@ -74,7 +74,7 @@ void igLocationTable_Resize(int *result, igLocationTable *self, int count)
     }
     else
     {
-      List_Resize(locations, size, 4);
+      ((Gap::Core::igDataList *)locations)->resizeAndSetCount(size, 4);
     }
   }
   *result = g_resultSuccess.v;
@@ -261,10 +261,10 @@ void igLocationTable_Rehash(igLocationTableView *self, int capacity) {
     igTDataList<int> *l; int n; int *a; int i; LocationRecord *s1; LocationRecord *s0; LocationRecord *s3;
     igLocationTable_SetHashCapacity((int)self, capacity);
     l = self->_hashIndex;
-    if (!(capacity < l->_count)) List_Reserve((igDataList *)l, capacity, 4);
+    if (!(capacity < l->_count)) ((Gap::Core::igDataList *)l)->setCapacity(capacity, 4);
     l = self->_hashIndex;
     if (capacity >= 0) {
-        if (!(capacity > l->_capacity)) { l->_count = capacity; } else { List_Resize((void *)l, capacity, 4); }
+        if (!(capacity > l->_capacity)) { l->_count = capacity; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(capacity, 4); }
     }
     l = self->_hashIndex;
     n = l->_count;

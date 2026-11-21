@@ -36,7 +36,7 @@ void igDependencyOrderedList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igDependencyOrderedList_Register);
 }
 
-static igMetaObjectCallback g_igDependencyOrderedList_callbackList[] = { igObjectList_EnsureRegistered, igDependencyList_EnsureRegistered, igPointerList_EnsureRegistered, igStringRefList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igDependencyOrderedList_callbackList[] = { Gap::Core::igObjectList::arkRegister, igDependencyList_EnsureRegistered, igPointerList_EnsureRegistered, igStringRefList_EnsureRegistered, 0 };
 
 CallbackArray *igDependencyOrderedList_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -100,7 +100,7 @@ void igDependencyOrderedList_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igDependencyOrderedList_ctorTable, 5);
     objectListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)objectListField)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)objectListField)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
     ((igRefMetaField *)objectListField)->_construct = 1;
     dependenciesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
     ((igObjectRefMetaField *)dependenciesField)->_metaObject = (int)igDependencyList_GetOrCreateMetaObject();

@@ -122,7 +122,7 @@ igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values,
         if (!(count > valueList->_capacity)) {
             valueList->_count = count;
         } else {
-            List_Resize((void *)valueList, count, 4);
+            ((Gap::Core::igDataList *)valueList)->resizeAndSetCount(count, 4);
         }
     }
     for (i = 0; i < count; i++) {

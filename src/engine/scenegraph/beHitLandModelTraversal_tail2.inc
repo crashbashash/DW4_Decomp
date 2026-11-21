@@ -54,7 +54,7 @@ void igIntersectTraversal_ResetStacks(igIntersectTraversal *traversal) {
     if (idx < m->cap) {
         m->n = n_of_1ce970(m) + 1;
     } else {
-        List_Resize(m, idx + 1, 64);
+        ((Gap::Core::igDataList *)m)->resizeAndSetCount(idx + 1, 64);
     }
     igMatrix44f_Copy((float *)(m->data + idx), g_matrix44Identity.m);
     o = self->objs;

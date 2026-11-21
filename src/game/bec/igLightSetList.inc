@@ -38,8 +38,8 @@ CallbackArray *igLightSetList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igLightSetList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igLightSetList_GetMetaObjectFunction,
         "igLightSetList",
         0x14, /* instance size */

@@ -147,9 +147,9 @@ static inline void BoolList_Fill(igBoolList *list, const bool &value) {
 }
 /* Sets the count of the data list a field holds, growing its storage first. */
 static inline void List_SetCount(const int &list, int count, int elementSize) {
-    if (((igDataList *)list)->_count < count + 1) List_Reserve((igDataList *)list, count, elementSize);
+    if (((igDataList *)list)->_count < count + 1) ((Gap::Core::igDataList *)list)->setCapacity(count, elementSize);
     if (((igDataList *)list)->_capacity >= count) ((igDataList *)list)->_count = count;
-    else List_Resize((igDataList *)list, count, elementSize);
+    else ((Gap::Core::igDataList *)list)->resizeAndSetCount(count, elementSize);
 }
 
 /* Owning stack reference to each new int list of a work while it is sized and filled; releases the
@@ -601,9 +601,9 @@ void beNDMWMdlPEBase_LoadDownData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beN
         ownAllocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         /* An enemy starts from zeroes, owned by the stack reference until the work holds its own. */
         IntListRef created((igIntList *)igIntList_Create((int)(g_useOwnerAllocator != 0 ? ownAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1))));
-        if (created.p->_count < DOWN_DATA_COUNT + 1) List_Reserve((igDataList *)created.p, DOWN_DATA_COUNT, sizeof(int));
+        if (created.p->_count < DOWN_DATA_COUNT + 1) ((Gap::Core::igDataList *)created.p)->setCapacity(DOWN_DATA_COUNT, sizeof(int));
         if (created.p->_capacity >= DOWN_DATA_COUNT) created.p->_count = DOWN_DATA_COUNT;
-        else List_Resize(created.p, DOWN_DATA_COUNT, sizeof(int));
+        else ((Gap::Core::igDataList *)created.p)->resizeAndSetCount(DOWN_DATA_COUNT, sizeof(int));
         IntList_Fill(created.p, 0);
         AssignReference(work->_downDataList, created.p);
     }
@@ -624,9 +624,9 @@ void beNDMWMdlPEBase_LoadUpData(beNDMWMdlPEBase *self, beBaseInfoRam *ram, beNDM
         ownAllocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         /* An enemy starts from zeroes, owned by the stack reference until the work holds its own. */
         IntListRef created((igIntList *)igIntList_Create((int)(g_useOwnerAllocator != 0 ? ownAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1))));
-        if (created.p->_count < UP_DATA_COUNT + 1) List_Reserve((igDataList *)created.p, UP_DATA_COUNT, sizeof(int));
+        if (created.p->_count < UP_DATA_COUNT + 1) ((Gap::Core::igDataList *)created.p)->setCapacity(UP_DATA_COUNT, sizeof(int));
         if (created.p->_capacity >= UP_DATA_COUNT) created.p->_count = UP_DATA_COUNT;
-        else List_Resize(created.p, UP_DATA_COUNT, sizeof(int));
+        else ((Gap::Core::igDataList *)created.p)->resizeAndSetCount(UP_DATA_COUNT, sizeof(int));
         IntList_Fill(created.p, 0);
         AssignReference(work->_upDataList, created.p);
     }

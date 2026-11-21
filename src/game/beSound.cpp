@@ -150,7 +150,7 @@ static inline void ReleaseAll(igObjectList *list) {
 static inline void ReserveIfEmpty(igObjectList *list) {
     bool hasEntries = list->_count > 0;
     if (hasEntries == false) {
-        List_Reserve((igDataList *)list, 0, 4);
+        ((Gap::Core::igDataList *)list)->setCapacity(0, 4);
     }
 }
 

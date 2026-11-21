@@ -37,8 +37,8 @@ CallbackArray *beHitLandResultDataList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beHitLandResultDataList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beHitLandResultDataList_GetMetaObjectFunction,
         "beHitLandResultDataList",
         0x14, /* instance size */

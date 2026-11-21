@@ -532,7 +532,7 @@ void GameMain_ReplaceSceneFile(Blk *app, int text, int fullReload) {
     if (index < counts->_capacity) {
         counts->_count = counts->count() + 1;
     } else {
-        List_Resize(counts, index + 1, 4);
+        ((Gap::Core::igDataList *)counts)->resizeAndSetCount(index + 1, 4);
     }
     defaultCount = g_defaultNameValue;
     counts->_data[index] = defaultCount;

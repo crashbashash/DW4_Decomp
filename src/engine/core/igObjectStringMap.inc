@@ -60,7 +60,7 @@ void igObjectStringMap_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igObjectStringMap_Register);
 }
 
-static igMetaObjectCallback g_igObjectStringMap_callbackList[] = { igNamedObjectList_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igObjectStringMap_callbackList[] = { igNamedObjectList_EnsureRegistered, Gap::Core::igObjectList::arkRegister, 0 };
 
 CallbackArray *igObjectStringMap_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -113,7 +113,7 @@ void igObjectStringMap_InitFields(void) {
     ((igObjectRefMetaField *)namesField)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)namesField)->_construct = 1;
     dataField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igObjectRefMetaField *)dataField)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dataField)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
     ((igRefMetaField *)dataField)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)meta, g_igObjectStringMap_fieldTable, g_igObjectStringMap_fieldDescriptors, g_igObjectStringMap_fieldOffsets, base);
 }

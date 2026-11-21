@@ -105,7 +105,7 @@ void beBaseInfoManager_RemoveAllInfo(beBaseInfoManager *self) {
     infosForRelease = (beBaseInfoList *)self->_infoList;
     int ok = infosForRelease->_count > 0;
     if (ok == 0) {
-        List_Reserve((igDataList *)infosForRelease, 0, 4);
+        ((Gap::Core::igDataList *)infosForRelease)->setCapacity(0, 4);
     }
     igInsightCore_RemoveFromScheduler((igInsightCore *)self->_insight, (igObject *)self);
     self->_isUpdateRun = 0;

@@ -36,7 +36,7 @@ void beModelCtrlSubCom_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlSubCom_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlSubCom_callbackList[] = { igObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beModelCtrlSubCom_callbackList[] = { Gap::Core::igObjectList::arkRegister, 0 };
 
 CallbackArray *beModelCtrlSubCom_Register(void) {
     BecLibrary_MarkRegistered();
@@ -82,7 +82,7 @@ void beModelCtrlSubCom_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beModelCtrlSubCom_ctorTable, 1);
     comList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)comList)->_metaObject = (int)igObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)comList)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
     ((igRefMetaField *)comList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beModelCtrlSubCom_fieldTable, g_beModelCtrlSubCom_fieldHandles, g_beModelCtrlSubCom_fieldOffsets, base);
 }

@@ -770,7 +770,7 @@ void igCommandLine_Setup(ViewerOptions *opts, igStringRefList *args)
             if (slot < repeats->capacity) {
                 repeats->count = countOf(repeats) + 1;
             } else {
-                List_Resize(repeats, slot + 1, 4);
+                ((Gap::Core::igDataList *)repeats)->resizeAndSetCount(slot + 1, 4);
             }
             repeats->data[slot] = repeat;
             repeat = 1;

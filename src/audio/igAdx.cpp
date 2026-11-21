@@ -540,7 +540,7 @@ void igAdx_AddPartitionName(int partition, const char *name) {
         }
         names->_count = 0;
         empty = g_adxPartitionNames.p->_count > 0;
-        if (empty == 0) List_Reserve((igDataList *)g_adxPartitionNames.p, 0, 4);
+        if (empty == 0) ((Gap::Core::igDataList *)g_adxPartitionNames.p)->setCapacity(0, 4);
         g_adxPartitionNames.clear();
         {
             igAdxAfsFileList *files = g_adxAfsFileList.p;
@@ -556,7 +556,7 @@ void igAdx_AddPartitionName(int partition, const char *name) {
                 for (j = 0; j < m; j++) ((igAdxAfsFile **)files->_data)[j] = 0;
                 files->_count = 0;
                 empty = g_adxAfsFileList.p->_count > 0;
-                if (empty == 0) List_Reserve((igDataList *)g_adxAfsFileList.p, 0, 4);
+                if (empty == 0) ((Gap::Core::igDataList *)g_adxAfsFileList.p)->setCapacity(0, 4);
                 g_adxAfsFileList.clear();
             }
         }

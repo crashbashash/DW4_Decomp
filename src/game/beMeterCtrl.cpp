@@ -74,7 +74,7 @@ static inline void AppendTime(igTDataList<long long> *times, const long long &ti
     if (n < times->_capacity) {
         times->_count = n + 1;
     } else {
-        List_Resize(times, n + 1, sizeof(long long));
+        ((Gap::Core::igDataList *)times)->resizeAndSetCount(n + 1, sizeof(long long));
     }
     times->_data[n] = time;
 }

@@ -771,7 +771,7 @@ void igPickMode_OnAttach(igPickMode *pickMode) {
     if (top < faceTypes->_capacity) {
         faceTypes->_count = faceTypes->_count + 1;
     } else {
-        List_Resize(faceTypes, top + 1, 4);
+        ((Gap::Core::igDataList *)faceTypes)->resizeAndSetCount(top + 1, 4);
     }
     ((int *)faceTypes->_data)[top] = 2;
     setProbe(pickMode, probe);

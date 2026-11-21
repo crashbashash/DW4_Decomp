@@ -271,7 +271,7 @@ static inline void pushCullAttr(igFrustCullTraversal *self, igAttr *attr) {
     if (n < stack->_capacity) {
         stack->_count = stack->_count + 1;
     } else {
-        List_Resize(stack, n + 1, 4);
+        ((Gap::Core::igDataList *)stack)->resizeAndSetCount(n + 1, 4);
     }
     stack->set(n, &pushed);
     igAttrStackManager_MarkStackChanged(manager, (igAttrStack *)stack, slot);

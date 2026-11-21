@@ -35,8 +35,8 @@ CallbackArray *beShadow01InfoList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beShadow01InfoList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beShadow01InfoList_GetMetaObjectFunction,
         "beShadow01InfoList",
         0x14, /* instance size */

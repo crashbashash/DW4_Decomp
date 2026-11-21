@@ -23,7 +23,7 @@
 #define API(d) beMessenger_AppendInt((beMessenger *)p->_messenger, d)
 #define DSP(d) beMessenger_DispatchSelected((beMessenger *)p->_messenger, d)
 #define SUBCOUNT (((igObjectList *)p->_subWindow)->_count)
-#define PUSHB(LP, B) { int n_; igUnsignedCharList *l_ = (igUnsignedCharList *)(LP); n_ = l_->_count; if (n_ < l_->_capacity) { l_->_count = n_ + 1; } else { List_Resize(l_, n_ + 1, 1); } ((unsigned char *)l_->_data)[n_] = (B); }
+#define PUSHB(LP, B) { int n_; igUnsignedCharList *l_ = (igUnsignedCharList *)(LP); n_ = l_->_count; if (n_ < l_->_capacity) { l_->_count = n_ + 1; } else { ((Gap::Core::igDataList *)l_)->resizeAndSetCount(n_ + 1, 1); } ((unsigned char *)l_->_data)[n_] = (B); }
 #define SETB(LP, IDX, B) { igUnsignedCharList *l_ = (igUnsignedCharList *)(LP); if (l_->_count != 0 && (IDX) >= 0 && (IDX) < l_->_count) { ((unsigned char *)l_->_data)[(IDX)] = (B); } }
 #define SWV(h) ((igObjectList *)*(int *)&(h))
 #define FIND(W) { int i_; (W) = 0; for (i_ = 0; i_ < ((igObjectList *)p->_subWindow)->_count; i_++) { (W) = ((int *)SWV(p->_subWindow)->_data)[i_]; if ((W) && ((Gap::Core::igObject *)(W))->isOfType(g_beNDMWStatusCtrlD0_metaObject)) { (W) = (int)(int *)(W); } else { (W) = 0; } if ((W)) break; } }
@@ -119,7 +119,7 @@ static inline int RowIndex(int pageBase, int row) { return pageBase + row; }
 #define SYNC_COUNT() { self->_nowProcKazu = ((igObjectList *)self->_subWindow)->_count; }
 #define WIN_PENDING() (((igObjectList *)self->_subWindow)->_count != self->_nowProcKazu)
 #define LIST_ADD(decided, val) { int n_ = ((igDataList *)(decided))->_count; igDataList *l_ = (igDataList *)(decided); \
-    if (n_ < l_->_capacity) l_->_count = ListCount(l_) + 1; else List_Resize(l_, n_ + 1, 4); \
+    if (n_ < l_->_capacity) l_->_count = ListCount(l_) + 1; else ((Gap::Core::igDataList *)l_)->resizeAndSetCount(n_ + 1, 4); \
     ((int *)l_->_data)[n_] = (val); }
 #define SEND_CLOSE() beMessenger_SendNamed((beMessenger *)self->_messenger, MODELCTRL_3, i_stcursor04, 0, SQ_CLOSE_3)
 #define RESET_ST1() { self->_st1 = 0; self->_st3 = 0; self->_st2 = 0; }
@@ -740,7 +740,7 @@ static inline void BoolList_Append(igBoolList *list, const bool &value)
     if (count < list->_capacity) {
         list->_count = count + 1;
     } else {
-        List_Resize(list, count + 1, 1);
+        ((Gap::Core::igDataList *)list)->resizeAndSetCount(count + 1, 1);
     }
     ((bool *)list->_data)[count] = value;
 }
@@ -2193,7 +2193,7 @@ void beNDMWStatusPowerSocket_OpenDeviceFolder(beNDMWStatusPowerSocket *self) {
     if (s1 < s0->_capacity) {
         s0->_count = ListCount(s0) + 1;
     } else {
-        List_Resize(s0, s1 + 1, 4);
+        ((Gap::Core::igDataList *)s0)->resizeAndSetCount(s1 + 1, 4);
     }
     static const int kindFilter[1] = {0};
     ((int *)s0->_data)[s1] = kindFilter[0];
@@ -2297,7 +2297,7 @@ static inline void append(const igSmartPointer<igBoolList> &list, const unsigned
     if (n < l->_capacity) {
         l->_count = n + 1;
     } else {
-        List_Resize(l, n + 1, 1);
+        ((Gap::Core::igDataList *)l)->resizeAndSetCount(n + 1, 1);
     }
     ((unsigned char *)l->_data)[n] = value;
 }
@@ -2359,7 +2359,7 @@ void beNDMWStatusPowerSocket_OpenPocketFolder(beNDMWStatusPowerSocket *self) {
     if (s1 < s0->_capacity) {
                 s0->_count = ListCount(s0) + 1;
     } else {
-        List_Resize(s0, s1 + 1, 4);
+        ((Gap::Core::igDataList *)s0)->resizeAndSetCount(s1 + 1, 4);
     }
     static const int kindFilter[1] = {3};
     ((int *)s0->_data)[s1] = kindFilter[0];
@@ -2761,7 +2761,7 @@ void beNDMWStatusMainSlot_OpenDeviceFolder(beNDMWStatusMainSlot *self) {
     if (c < l->_capacity) {
         l->_count = ListCount(l) + 1;
     } else {
-        List_Resize(l, c + 1, 4);
+        ((Gap::Core::igDataList *)l)->resizeAndSetCount(c + 1, 4);
     }
     static const int kindFilter[1] = {1};
     ((int *)l->_data)[c] = kindFilter[0];
@@ -2922,7 +2922,7 @@ void beNDMWStatusMainSlot_OpenPocketFolder(beNDMWStatusMainSlot *self) {
     if (c < l->_capacity) {
         l->_count = ListCount(l) + 1;
     } else {
-        List_Resize(l, c + 1, 4);
+        ((Gap::Core::igDataList *)l)->resizeAndSetCount(c + 1, 4);
     }
     static const int kindFilter[1] = {3};
     ((int *)l->_data)[c] = kindFilter[0];
@@ -3259,7 +3259,7 @@ void beNDMWStatusSubSlot_OpenDeviceFolder(beNDMWStatusSubSlot *self) {
     if (s1 < s0->_capacity) {
         s0->_count = ListCount(s0) + 1;
     } else {
-        List_Resize(s0, s1 + 1, 4);
+        ((Gap::Core::igDataList *)s0)->resizeAndSetCount(s1 + 1, 4);
     }
     static const int kindFilter[1] = {2};
     ((int *)s0->_data)[s1] = kindFilter[0];
@@ -3778,7 +3778,7 @@ int beNDMWStatusCtrlD0_UpdatePageCount(beNDMWStatusCtrlD0 *self) {
         out = (igDataList *)self->_decideList;
         n = out->_count;
         if (n < out->_capacity) out->_count = n + 1;
-        else List_Resize(out, n + 1, 1);
+        else ((Gap::Core::igDataList *)out)->resizeAndSetCount(n + 1, 1);
         *(unsigned char *)(n + out->_data) = ok;
     }
     if (self->_maxPage == 0) self->_maxPage = 1;
@@ -4057,7 +4057,7 @@ void beNDMWStatusCtrlFlag_Update(beNDMWStatusCtrlFlag *self) {
                     if (s1 < l4->_capacity) {
                         l4->_count = ListCount(l4) + 1;
                     } else {
-                        List_Resize(l4, s1 + 1, 4);
+                        ((Gap::Core::igDataList *)l4)->resizeAndSetCount(s1 + 1, 4);
                     }
                     ((int *)l4->_data)[s1] = s2;
                 }
@@ -4818,7 +4818,7 @@ void beNDMWStatusCtrlBit_Update(beNDMWStatusCtrlBit *self) {
                 if (s1 < l4->_capacity) {
                     l4->_count = ListCount(l4) + 1;
                 } else {
-                    List_Resize(l4, s1 + 1, 4);
+                    ((Gap::Core::igDataList *)l4)->resizeAndSetCount(s1 + 1, 4);
                 }
                 ((int *)l4->_data)[s1] = i;
             }
@@ -5794,7 +5794,7 @@ void beNDMWStatusSubMenu_Update(beNDMWStatusSubMenu *self)
                     MSG_SELECT_INT(i)
                     if (igProperty_GetRecordByte(beMessenger_GetObject((beMessenger *)self->_messenger, 0), ISUSE_7)->_data != 0 && i != self->_playerNo) {
                         nN = ((igDataList *)(self->_playerNoList))->_count; lL = (igDataList *)(self->_playerNoList);
-                        if (nN < lL->_capacity) lL->_count = ListCount(lL) + 1; else List_Resize(lL, nN + 1, 4);
+                        if (nN < lL->_capacity) lL->_count = ListCount(lL) + 1; else ((Gap::Core::igDataList *)lL)->resizeAndSetCount(nN + 1, 4);
                         ((int *)lL->_data)[nN] = i;
                     }
                 }

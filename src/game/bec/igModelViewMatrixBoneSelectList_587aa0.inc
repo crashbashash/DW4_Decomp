@@ -23,8 +23,8 @@ CallbackArray *igModelViewMatrixBoneSelectListBec_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igModelViewMatrixBoneSelectListBec_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igModelViewMatrixBoneSelectListBec_GetMetaObjectFunction,
         "igModelViewMatrixBoneSelectList",
         0x14, /* instance size */

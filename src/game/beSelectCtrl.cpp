@@ -110,7 +110,7 @@ enum PadBits {
                 if (slot < list->_capacity) { \
                     list->_count = slot + 1; \
                 } else { \
-                    List_Resize(list, slot + 1, 1); \
+                    ((Gap::Core::igDataList *)(list))->resizeAndSetCount(slot + 1, 1); \
                 } \
                 i += 1; \
                 ((unsigned char *)list->_data)[slot] = flag; \

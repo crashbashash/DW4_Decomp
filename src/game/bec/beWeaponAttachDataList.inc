@@ -41,8 +41,8 @@ CallbackArray *beWeaponAttachDataList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beWeaponAttachDataList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beWeaponAttachDataList_GetMetaObjectFunction,
         "beWeaponAttachDataList",
         0x14, /* instance size */

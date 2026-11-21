@@ -31,8 +31,8 @@ CallbackArray *beModelCtrlInfoList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beModelCtrlInfoList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beModelCtrlInfoList_GetMetaObjectFunction,
         "beModelCtrlInfoList",
         0x14, /* instance size */

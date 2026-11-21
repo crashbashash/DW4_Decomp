@@ -28,8 +28,8 @@ CallbackArray *beTextureCtrlInfoList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beTextureCtrlInfoList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beTextureCtrlInfoList_GetMetaObjectFunction,
         "beTextureCtrlInfoList",
         0x14, /* instance size */

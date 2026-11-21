@@ -294,10 +294,16 @@ def load_typed_fields(path):
 def load_converted(path):
     """{class: library namespace} from `config/converted-classes.tsv`: the classes declared, under C++, as
     `Gap::<library>::<class>` polymorphic classes beside their flat struct."""
-    return {cls: lib.strip() for cls, lib in table_rows(path, 2)}
+    return {row[0]: row[1].strip() for row in table_rows(path, 2, 3)}
 
 
-def table_rows(path, columns):
+def load_bases(path):
+    """{class: C++ base} of the `config/converted-classes.tsv` rows that name one: a class whose kit parent is a
+    template instance reflection does not register (igObjectList's `igTDataList<igObject *>`)."""
+    return {row[0]: row[2].strip() for row in table_rows(path, 2, 3) if len(row) == 3}
+
+
+def table_rows(path, columns, most=None):
     rows = []
     if path and os.path.exists(path):
         with open(path) as fh:
@@ -305,8 +311,8 @@ def table_rows(path, columns):
         for number, line in enumerate(lines, 1):
             if line.startswith("#") or not line.strip():
                 continue
-            row = line.rstrip("\n").split("\t", columns - 1)
-            if len(row) != columns or not all(cell.strip() for cell in row):
+            row = line.rstrip("\n").split("\t", (most or columns) - 1)
+            if not columns <= len(row) <= (most or columns) or not all(cell.strip() for cell in row):
                 sys.exit("%s:%d: expected %d tab-separated columns" % (path, number, columns))
             rows.append(row)
     return rows
@@ -319,12 +325,16 @@ def table_rows(path, columns):
 # destructors are not virtual, and slot 0 is an ordinary method.
 
 
-def converted_classes(converted, parent, layouts, members):
+def converted_classes(converted, parent, layouts, members, bases=None):
     """The C++ declarations of the converted classes: each `Gap::<library>::<class>` derives from its
     converted parent (the root `Gap::Core::igObject` at the top) and declares only its own fields, at
     their reflected offsets after the parent's registered size, then its config/class-members.tsv rows.
     Every converted class is promoted into `Gap` (`using <library>::<class>;`), as the kit's headers do,
-    so code in any Gap library names it unqualified; outside `Gap` the flat struct keeps the name."""
+    so code in any Gap library names it unqualified; outside `Gap` the flat struct keeps the name. A class
+    whose row names a C++ base (`bases`, a kit template instance over its registered parent) derives from that
+    instead; the template's header, `include/dw4/<library>/<template>.h`, is read just before the first such
+    class, once the parent it derives from is declared."""
+    bases = bases or {}
     order, seen = [], set()
 
     def visit(cls, chain=()):
@@ -350,6 +360,9 @@ def converted_classes(converted, parent, layouts, members):
            "/* The converted classes: Alchemy's polymorphic classes in their Gap namespaces",
            " * (config/converted-classes.tsv). The flat structs above stay the C view. */",
            "#include \"dw4/core/igObject.h\""]
+    if any("igCompareFunction" in decl for cls in order for decl in members.get(cls, [])):
+        # a list's comparison callback is the core library's typedef
+        out.append("#include \"dw4/core/igCore.h\"")
     if any("igSmartPointer<" in line for cls in order for _off, _size, line in layouts[cls][4]):
         # a smart-pointer member needs the template, which reads the flat igObject above
         out.append("#include \"dw4/core/igSmartPointer.h\"")
@@ -386,7 +399,16 @@ def converted_classes(converted, parent, layouts, members):
             placed = [p for p in placed if p[0] >= 4]
         else:
             base = parent[cls]
-            out.append("class %s : public Gap::%s::%s {" % (cls, converted[base], base))
+            spelled = bases.get(cls)
+            if spelled:
+                header = "dw4/%s/%s.h" % (converted[base].lower(), spelled.split("<")[0].strip())
+                include = "#include \"%s\"" % header
+                if include not in out:
+                    # the kit's template over the parent, which reads the parent above
+                    out[-3:-3] = [include, ""]
+                out.append("class %s : public Gap::%s::%s {" % (cls, converted[base], spelled))
+            else:
+                out.append("class %s : public Gap::%s::%s {" % (cls, converted[base], base))
             out.append("public:")
             cursor = layouts[base][3]
         for off, fsize, line in placed:
@@ -582,7 +604,8 @@ def main(argv=None):
                 # the whole vector, float-aligned: the kit's type under C++
                 typed = kit[0]
             if typed:
-                typed_line = "    %-46s /* +%-4d %s */" % ("%s %s;" % (typed, field_name), off, f["type"])
+                spelled = "%s%s%s;" % (typed, "" if typed.endswith("*") else " ", field_name)
+                typed_line = "    %-46s /* +%-4d %s */" % (spelled, off, f["type"])
             if typed and flat:
                 body.extend(["#ifdef __cplusplus", typed_line, "#else", line, "#endif"])
             else:
@@ -634,7 +657,7 @@ def main(argv=None):
         lines.append("")
 
     if converted:
-        lines.extend(converted_classes(converted, parent, layouts, members))
+        lines.extend(converted_classes(converted, parent, layouts, members, load_bases(args.converted)))
     for cls in sorted(members):
         if cls not in converted and cls not in layouts:
             sys.exit("config/class-members.tsv: %s has no reflected struct to hold members; "

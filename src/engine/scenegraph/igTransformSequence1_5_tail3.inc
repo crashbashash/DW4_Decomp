@@ -338,7 +338,7 @@ void Gap__Sg__igTransformSequence1_5__vfunc_61(T_1de9c0 *t, int idx, int ch, igV
                 if (n <= l->cap) {
                     l->count = n;
                 } else {
-                    List_Resize((void *)l, n, 12);
+                    ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 12);
                 }
             }
         }

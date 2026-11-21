@@ -1,46 +1,3 @@
-void List_RemoveWordAt(igDataList *l, int i) {
-    int n = l->_count; int d;
-    if (n <= 0 || i < 0 || i >= n) return;
-    if (i != n - 1) { d = l->_data + i * 4; memmove((void *)d, (void *)(d + 4), 4 * (n - (i + 1))); }
-    l->_count = l->_count - 1; }
-
-int List_BinarySearchWords(igDataList *list, int key, int (*compare)(int, int)) {
-    int lo = 0;
-    int hi = list->_count - 1;
-    int mid;
-    int r;
-    while (lo < hi) {
-        mid = (lo + hi) >> 1;
-        r = compare(list->_data + mid * 4, key);
-        if (r < 0) {
-            lo = mid + 1;
-        } else if (r > 0) {
-            hi = mid - 1;
-        } else {
-            return mid;
-        }
-    }
-    if (list->_count == 0) {
-        return -1;
-    }
-    if (compare(list->_data + lo * 4, key) == 0) {
-        return lo;
-    }
-    return -1;
-}
-
-int List_LowerBound(igDataList *l, void *key, Cmp cmp) {
-    int lo = 0; int hi = l->_count - 1; int mid; int r;
-    while (lo < hi) {
-        mid = (lo + hi) >> 1;
-        r = cmp((int *)l->_data + mid, key);
-        if (r < 0) lo = mid + 1; else if (r > 0) hi = mid - 1; else return mid;
-    }
-    if (l->_count == 0) return 0;
-    if (cmp((int *)l->_data + lo, key) < 0) lo++;
-    return lo;
-}
-
 typedef igSmartPointer<igTDataList<igObject *> > igObjectListRef;
 
 /* Index of object in list, or -1. */
@@ -105,7 +62,7 @@ void igDependencyOrderedList_AddDependency(igDependencyOrderedList *self, void *
     if (n < pairs->_capacity) {
         pairs->_count = count_of(pairs) + 1;
     } else {
-        List_Resize(pairs, n + 1, 8);
+        ((Gap::Core::igDataList *)pairs)->resizeAndSetCount(n + 1, 8);
     }
     pair = (DependencyPair *)((char *)pairs->_data + n * 8);
     pair->a = dependent;
@@ -115,7 +72,7 @@ void igDependencyOrderedList_AddDependency(igDependencyOrderedList *self, void *
 }
 
 void igDependencyOrderedList_Rebuild(igDependencyOrderedListView *owner) {
-    igSmartPointer<igObjectList> copy(((igObjectList *)igObjectList_Create(((int)((Gap::Core::igObject *)owner)->getMemoryPool()))));
+    igSmartPointer<igObjectList> copy((igObjectList *)Gap::Core::igObjectList::_instantiateFromPool(((Gap::Core::igObject *)owner)->getMemoryPool()));
     ObjectList_AppendRetainedList((igTDataList<igObject *> *)copy.p, owner->_objectList);
     igTDataList<igObject *> *children = owner->_objectList;
     int count = children->_count;

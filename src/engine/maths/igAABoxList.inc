@@ -35,8 +35,8 @@ CallbackArray *igAABoxList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAABoxList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igAABoxList_GetMetaObjectFunction,
         "igAABoxList",
         0x14, /* instance size */

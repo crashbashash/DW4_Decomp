@@ -32,11 +32,11 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QS
         l = arg0->_compressedTranslationList;
         if (c >= 0) {
             if (c <= l->_capacity) l->_count = c;
-            else List_Resize(l, c, 2);
+            else ((Gap::Core::igDataList *)l)->resizeAndSetCount(c, 2);
         }
         l = arg0->_compressedTranslationList;
         c = l->_count;
-        if (c < l->_capacity) List_Reserve((igDataList *)l, c, 2);
+        if (c < l->_capacity) ((Gap::Core::igDataList *)l)->setCapacity(c, 2);
         igCompressVec3fList((igVec3fList *)arg1->v172(), (unsigned short *)arg0->_compressedTranslationList->_data, &sp7C, &sp78);
         arg0->_translationBase = sp7C;
         arg0->_translationRangeOverMaxUShort = 1.52590219e-05f * sp78;
@@ -55,11 +55,11 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QS
         l = arg0->_compressedQuaternionList;
         if (c >= 0) {
             if (c <= l->_capacity) l->_count = c;
-            else List_Resize(l, c, 2);
+            else ((Gap::Core::igDataList *)l)->resizeAndSetCount(c, 2);
         }
         l = arg0->_compressedQuaternionList;
         c = l->_count;
-        if (c < l->_capacity) List_Reserve((igDataList *)l, c, 2);
+        if (c < l->_capacity) ((Gap::Core::igDataList *)l)->setCapacity(c, 2);
         igCompressVec4fList((igQuaternionfList *)arg1->v184(), (short *)arg0->_compressedQuaternionList->_data, &sp7C, &sp78);
         arg0->_quaternionBase = sp7C;
         arg0->_quaternionRangeOverMaxUShort = 1.52590219e-05f * sp78;
@@ -76,11 +76,11 @@ void Gap__Sg__igCompressedAnimationSequenceQS__vfunc_44(QSSequenceView *arg0, QS
     l = arg0->_compressedTimeList;
     if (n >= 0) {
         if (n <= l->_capacity) l->_count = n;
-        else List_Resize(l, n, 2);
+        else ((Gap::Core::igDataList *)l)->resizeAndSetCount(n, 2);
     }
     l = arg0->_compressedTimeList;
     int c = l->_count;
-    if (c < l->_capacity) { List_Reserve((igDataList *)l, c, 2); }
+    if (c < l->_capacity) { ((Gap::Core::igDataList *)l)->setCapacity(c, 2); }
     for (s0 = 0; s0 < n; s0++) FUN_001bf400((int)arg0, s0, arg1->v224(s0));
 }
 

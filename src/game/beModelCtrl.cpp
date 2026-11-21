@@ -481,7 +481,7 @@ igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, b
                 int k;
                 igDataList *list = (igDataList *)body->_AABoxMinList;
                 k = list->_count;
-                if (k < list->_capacity) list->_count = k + 1; else List_Resize(list, k + 1, 12);
+                if (k < list->_capacity) list->_count = k + 1; else ((Gap::Core::igDataList *)list)->resizeAndSetCount(k + 1, 12);
                 igVec3f *extent = &((igVec3f *)list->_data)[k];
                 extent->vec[0] = below[0]; extent->vec[1] = below[1]; extent->vec[2] = below[2];
             }
@@ -489,7 +489,7 @@ igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, b
                 int k;
                 igDataList *list = (igDataList *)body->_AABoxMaxList;
                 k = list->_count;
-                if (k < list->_capacity) list->_count = k + 1; else List_Resize(list, k + 1, 12);
+                if (k < list->_capacity) list->_count = k + 1; else ((Gap::Core::igDataList *)list)->resizeAndSetCount(k + 1, 12);
                 igVec3f *extent = &((igVec3f *)list->_data)[k];
                 extent->vec[0] = above[0]; extent->vec[1] = above[1]; extent->vec[2] = above[2];
             }
@@ -1570,7 +1570,7 @@ unsigned char beModelCtrl_RunPdMove(beModelCtrl *self, beBaseInfoRam *ram, beMod
             if (k < list->_capacity) {
                 list->_count = list->_count + 1;
             } else {
-                List_Resize(list, k + 1, 4);
+                ((Gap::Core::igDataList *)list)->resizeAndSetCount(k + 1, 4);
             }
             ListStoreAt(list->_data, k, 0.0f);
         }
@@ -1711,7 +1711,7 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
         if (k < offsetList->_capacity) {
             offsetList->_count = offsetList->_count + 1;
         } else {
-            List_Resize(offsetList, k + 1, 4);
+            ((Gap::Core::igDataList *)offsetList)->resizeAndSetCount(k + 1, 4);
         }
         ListStoreAt((int *)offsetList->_data, k, -1);
     }

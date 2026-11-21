@@ -40,8 +40,8 @@ CallbackArray *igTextureList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igTextureList_GetMetaObjectFunction,
         "igTextureList",
         0x14, /* instance size */

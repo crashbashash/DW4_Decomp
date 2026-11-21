@@ -575,7 +575,7 @@ static inline void setCount(OpTable *t, int n) {
         if (n <= t->capacity) {
             t->count = n;
         } else {
-            List_Resize(t, n, 4);
+            ((Gap::Core::igDataList *)t)->resizeAndSetCount(n, 4);
         }
     }
 }

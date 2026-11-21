@@ -31,8 +31,8 @@ CallbackArray *beAction2InfoList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beAction2InfoList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         beAction2InfoList_GetMetaObjectFunction,
         "beAction2InfoList",
         0x14, /* instance size */

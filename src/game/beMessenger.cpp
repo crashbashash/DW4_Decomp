@@ -118,7 +118,7 @@ template <class Ref> static inline void storeAt(const int &list, int i, const Re
 }
 #define GROUP(field, CNT, factory, Ref, T) { \
     igObjectList *list = (igObjectList *)self->field; \
-    if (list->_count < (CNT) + 1) List_Reserve((igDataList *)list, CNT, 4); \
+    if (list->_count < (CNT) + 1) ((Gap::Core::igDataList *)list)->setCapacity(CNT, 4); \
     ObjectList_ResizeRetained((igTDataList<igObject *> *)self->field, CNT); \
     int i; \
     for (i = 0; i < (CNT); i += 1) { \
@@ -174,13 +174,13 @@ void beMessenger_ResetMemory(beMessenger *self) {
     }
     self->_argData = 0;
     CLEAR(self->_groupList)
-    if (((igObjectList *)self->_groupList)->_count < 5) List_Reserve((igDataList *)self->_groupList, 4, 4);
+    if (((igObjectList *)self->_groupList)->_count < 5) ((Gap::Core::igDataList *)self->_groupList)->setCapacity(4, 4);
     CLEAR(self->_workStack)
-    if (((igObjectList *)self->_workStack)->_count < 5) List_Reserve((igDataList *)self->_workStack, 4, 4);
+    if (((igObjectList *)self->_workStack)->_count < 5) ((Gap::Core::igDataList *)self->_workStack)->setCapacity(4, 4);
     CLEAR(self->_delayStack)
-    if (((igObjectList *)self->_delayStack)->_count < 5) List_Reserve((igDataList *)self->_delayStack, 4, 4);
+    if (((igObjectList *)self->_delayStack)->_count < 5) ((Gap::Core::igDataList *)self->_delayStack)->setCapacity(4, 4);
     CLEAR(self->_pushPopStack)
-    if (((igObjectList *)self->_pushPopStack)->_count < 5) List_Reserve((igDataList *)self->_pushPopStack, 4, 4);
+    if (((igObjectList *)self->_pushPopStack)->_count < 5) ((Gap::Core::igDataList *)self->_pushPopStack)->setCapacity(4, 4);
     self->_pushPopCount = 0;
     self->_freezeTime = 0;
     self->_isMemoryAssign = 0;
@@ -222,22 +222,22 @@ void beMessengerArgData_Clear(beMessengerArgData *self) {
     ((igBoolList *)self->_boolList)->_count = 0;
     l = (igDataList *)self->_boolList;
     /* matching construct: list shrink guard spelled as nested ifs ("&&" or "> 4" changes the compare) */
-    if (l->_capacity > 4) { if (l->_count < 5) List_Reserve(l, 4, 1); }
+    if (l->_capacity > 4) { if (l->_count < 5) ((Gap::Core::igDataList *)l)->setCapacity(4, 1); }
     ((igIntList *)self->_intList)->_count = 0;
     l = (igDataList *)self->_intList;
-    if (l->_capacity > 4) { if (l->_count < 5) List_Reserve(l, 4, 4); }
+    if (l->_capacity > 4) { if (l->_count < 5) ((Gap::Core::igDataList *)l)->setCapacity(4, 4); }
     ((igFloatList *)self->_floatList)->_count = 0;
     l = (igDataList *)self->_floatList;
-    if (l->_capacity > 4) { if (l->_count < 5) List_Reserve(l, 4, 4); }
+    if (l->_capacity > 4) { if (l->_count < 5) ((Gap::Core::igDataList *)l)->setCapacity(4, 4); }
     ((igLongList *)self->_longList)->_count = 0;
     l = (igDataList *)self->_longList;
-    if (l->_capacity > 4) { if (l->_count < 5) List_Reserve(l, 4, 8); }
+    if (l->_capacity > 4) { if (l->_count < 5) ((Gap::Core::igDataList *)l)->setCapacity(4, 8); }
     ((igVec3fList *)self->_vec3fList)->_count = 0;
     l = (igDataList *)self->_vec3fList;
-    if (l->_capacity > 4) { if (l->_count < 5) List_Reserve(l, 4, 12); }
+    if (l->_capacity > 4) { if (l->_count < 5) ((Gap::Core::igDataList *)l)->setCapacity(4, 12); }
     ((igMatrix44fList *)self->_matrix44fList)->_count = 0;
     l = (igDataList *)self->_matrix44fList;
-    if (l->_capacity > 4) { if (l->_count < 5) List_Reserve(l, 4, 64); }
+    if (l->_capacity > 4) { if (l->_count < 5) ((Gap::Core::igDataList *)l)->setCapacity(4, 64); }
     sl = (igDataList *)self->_stringList;
 
     /* matching construct: separate n/i counters per loop and block-local rr/m/j fix register allocation */
@@ -267,7 +267,7 @@ void beMessengerArgData_Clear(beMessengerArgData *self) {
 
     sl->_count = 0;
     sl = (igDataList *)self->_stringList;
-    if (sl->_capacity > 4) { if (sl->_count < 5) List_Reserve(sl, 4, 4); }
+    if (sl->_capacity > 4) { if (sl->_count < 5) ((Gap::Core::igDataList *)sl)->setCapacity(4, 4); }
     lo = (igDataList *)self->_objectList;
 
     n2 = lo->_count;
@@ -290,7 +290,7 @@ void beMessengerArgData_Clear(beMessengerArgData *self) {
     }
     lo->_count = 0;
     l = (igDataList *)self->_objectList;
-    if (l->_capacity > 4) { if (l->_count < 5) List_Reserve(l, 4, 4); }
+    if (l->_capacity > 4) { if (l->_count < 5) ((Gap::Core::igDataList *)l)->setCapacity(4, 4); }
 }
 
 void beMessengerDelay_Clear(beMessengerDelay *self) {
@@ -525,7 +525,7 @@ void beMessenger_RegisterReceiver(beMessenger *self, beBaseInfoRam *recv, const 
     l = (igIntList *)grp.p->_ramNoList;
     n = l->_count;
     if (n < l->_capacity) l->_count = countOf(l) + 1;
-    else List_Resize(l, n + 1, 4);
+    else ((Gap::Core::igDataList *)l)->resizeAndSetCount(n + 1, 4);
     ((int *)l->_data)[n] = value;
 }
 
@@ -621,7 +621,7 @@ void beMessenger_SelectReceivers(beMessenger *self, const char *category, const 
         IW->_ramNo = id;
         ((List *)IW->_findRamNoList)->_count = 0;
         q = (List *)IW->_findRamNoList;
-        if (q->_capacity > 4 && q->_count < 5) List_Reserve((igDataList *)q, 4, 4);
+        if (q->_capacity > 4 && q->_count < 5) ((Gap::Core::igDataList *)q)->setCapacity(4, 4);
         {
             List *r = (List *)IW->_findRamList;
             int m = r->_count, k;
@@ -630,7 +630,7 @@ void beMessenger_SelectReceivers(beMessenger *self, const char *category, const 
             for (k = 0; k < m; k++) LDATA(r)[k] = 0;
             r->_count = 0;
             q = (List *)IW->_findRamList;
-            if (q->_capacity > 4 && q->_count < 5) List_Reserve((igDataList *)q, 4, 4);
+            if (q->_capacity > 4 && q->_count < 5) ((Gap::Core::igDataList *)q)->setCapacity(4, 4);
         }
         {
             List *l2 = (List *)self->_workStack;
@@ -656,7 +656,7 @@ void beMessenger_SelectReceivers(beMessenger *self, const char *category, const 
                     l = (List *)work->_findRamNoList;
                     c = l->_count;
                     if (c < l->_capacity) l->_count = countOf(l) + 1;
-                    else List_Resize(l, c + 1, 4);
+                    else ((Gap::Core::igDataList *)l)->resizeAndSetCount(c + 1, 4);
                     LDATA(l)[c] = *src;
                     ObjectList_AppendRetained((igObjectList *)work->_findRamList, LDATA((List *)g->_ramList)[k]);
                 }
@@ -776,20 +776,20 @@ void beMessenger_DispatchSelected(beMessenger *self, const char *name)
             if (matches) {
                 igBoolList *bla = (igBoolList *)((beMessengerArgData *)self->_argData)->_boolList;
                 int na = bla->_count;
-                if (na < bla->_capacity) bla->_count = na + 1; else List_Resize(bla, na + 1, 1);
+                if (na < bla->_capacity) bla->_count = na + 1; else ((Gap::Core::igDataList *)bla)->resizeAndSetCount(na + 1, 1);
                 ListStore(bla, na, true);
                 il = (igIntList *)((beMessengerArgData *)self->_argData)->_intList;
                 n = il->_count;
-                if (n < il->_capacity) il->_count = listCount(il) + 1; else List_Resize(il, n + 1, 4);
+                if (n < il->_capacity) il->_count = listCount(il) + 1; else ((Gap::Core::igDataList *)il)->resizeAndSetCount(n + 1, 4);
                 ((int *)il->_data)[n] = matches;
             } else {
                 igBoolList *blc = (igBoolList *)((beMessengerArgData *)self->_argData)->_boolList;
                 n = blc->_count;
-                if (n < blc->_capacity) blc->_count = n + 1; else List_Resize(blc, n + 1, 1);
+                if (n < blc->_capacity) blc->_count = n + 1; else ((Gap::Core::igDataList *)blc)->resizeAndSetCount(n + 1, 1);
                 ListStore(blc, n, false);
                 il = (igIntList *)((beMessengerArgData *)self->_argData)->_intList;
                 int nd = il->_count;
-                if (nd < il->_capacity) il->_count = listCount(il) + 1; else List_Resize(il, nd + 1, 4);
+                if (nd < il->_capacity) il->_count = listCount(il) + 1; else ((Gap::Core::igDataList *)il)->resizeAndSetCount(nd + 1, 4);
                 ListStore(il, nd, 0);
             }
         }
@@ -1007,7 +1007,7 @@ void beMessenger_ResizeBool(beMessenger *self, int count) {
             list->_count = count;
             return;
         }
-        List_Resize(list, count, 1);
+        ((Gap::Core::igDataList *)list)->resizeAndSetCount(count, 1);
     }
 }
 
@@ -1021,7 +1021,7 @@ void beMessenger_AppendBool(beMessenger *self, unsigned char value)
     if (index < list->_capacity)
         list->_count = index + 1;
     else
-        List_Resize(list, index + 1, 1);
+        ((Gap::Core::igDataList *)list)->resizeAndSetCount(index + 1, 1);
     ((char *)list->_data)[index] = value;
 }
 
@@ -1061,7 +1061,7 @@ void beMessenger_AppendInt(beMessenger *self, int value)
     if (index < list->_capacity)
         list->_count = countOf(list) + 1;
     else
-        List_Resize(list, index + 1, 4);
+        ((Gap::Core::igDataList *)list)->resizeAndSetCount(index + 1, 4);
     ((int *)list->_data)[index] = value;
 }
 
@@ -1102,7 +1102,7 @@ void beMessenger_AppendFloat(beMessenger *self, float value)
     if (index < list->_capacity)
         list->_count = countOf(list) + 1;
     else
-        List_Resize(list, index + 1, 4);
+        ((Gap::Core::igDataList *)list)->resizeAndSetCount(index + 1, 4);
     ((float *)list->_data)[index] = value;
 }
 
@@ -1129,7 +1129,7 @@ void beMessenger_AppendLong(beMessenger *self, long long value) {
     if (index < list->_capacity) {
         list->_count = index + 1;
     } else {
-        List_Resize(list, index + 1, 8);
+        ((Gap::Core::igDataList *)list)->resizeAndSetCount(index + 1, 8);
     }
     ((long long *)list->_data)[index] = value;
 }
@@ -1157,7 +1157,7 @@ void beMessenger_AppendVec3(beMessenger *self, float *value)
     if (index < list->_capacity)
         list->_count = index + 1;
     else
-        List_Resize(list, index + 1, 12);
+        ((Gap::Core::igDataList *)list)->resizeAndSetCount(index + 1, 12);
     slot = (float *)list->_data + index * 3;
     slot[0] = value[0];
     slot[1] = value[1];
@@ -1192,7 +1192,7 @@ void beMessenger_AppendMatrix(beMessenger *self, void *value)
     if (index < list->_capacity)
         list->_count = index + 1;
     else
-        List_Resize(list, index + 1, 64);
+        ((Gap::Core::igDataList *)list)->resizeAndSetCount(index + 1, 64);
     igMatrix44f_Copy((float *)((char *)list->_data + index * 64), (const float *)value);
 }
 

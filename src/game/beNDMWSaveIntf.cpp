@@ -1495,7 +1495,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     if (accessCount < accessList->capacity) {
                         accessList->count = (accessList->getCount() + 1);
                     } else {
-                        List_Resize(accessList, accessCount + 1, 4);
+                        ((Gap::Core::igDataList *)accessList)->resizeAndSetCount(accessCount + 1, 4);
                     }
                     ((int *)beNDMWLoadIntf2_igIntList_GetData((igDataList *)accessList))[accessCount] = accessPlayer;
                     cardWork->_haveSaveData = (int)(slotPlayer);
@@ -1645,7 +1645,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                     if (newAccessCount < accessList->capacity) {
                         accessList->count = (accessList->getCount() + 1);
                     } else {
-                        List_Resize(accessList, newAccessCount + 1, 4);
+                        ((Gap::Core::igDataList *)accessList)->resizeAndSetCount(newAccessCount + 1, 4);
                     }
                     ((int *)beNDMWLoadIntf2_igIntList_GetData((igDataList *)accessList))[newAccessCount] = newAccessPlayer;
                     ObjectList_AppendRetained((igObjectList *)(common->_slotSaveData), (igObject *)newSlotPlayer.value);

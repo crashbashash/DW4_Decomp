@@ -88,14 +88,14 @@ void igSorter_userConstruct(SorterState *o, int arg1) {
         if (s3 < s2->cap) {
             s2->count = s2->getCount() + 1;
         } else {
-            List_Resize((void *)s2, s3 + 1, 4);
+            ((Gap::Core::igDataList *)s2)->resizeAndSetCount(s3 + 1, 4);
         }
         s2->items[s3] = (int)s0;
         l = o->l88;
         if (l->cap > 0) {
             l->count = 1;
         } else {
-            List_Resize((void *)l, 1, 4);
+            ((Gap::Core::igDataList *)l)->resizeAndSetCount(1, 4);
         }
         setRef(o->l88, 0, DAT_0048dae8[0]);
     }
@@ -115,7 +115,7 @@ void FUN_001db500(A_1db500 *arg0) {
     if (temp_s3 < temp_s2->cap) {
         temp_s2->count = count_of_1db500(temp_s2) + 1;
     } else {
-        List_Resize((void *)temp_s2, temp_s3 + 1, 4);
+        ((Gap::Core::igDataList *)temp_s2)->resizeAndSetCount(temp_s3 + 1, 4);
     }
     temp_s2->data[temp_s3] = temp_s0;
     temp_s0_2 = arg0->f40;
@@ -124,7 +124,7 @@ void FUN_001db500(A_1db500 *arg0) {
     if (temp_s2_2 < temp_s1->cap) {
         temp_s1->count = count_of_1db500(temp_s1) + 1;
     } else {
-        List_Resize((void *)temp_s1, temp_s2_2 + 1, 4);
+        ((Gap::Core::igDataList *)temp_s1)->resizeAndSetCount(temp_s2_2 + 1, 4);
     }
     temp_s1->data[temp_s2_2] = temp_s0_2;
 }
@@ -141,7 +141,7 @@ void Gap__Sg__igSorter__vfunc_24(Sorter *arg0) {
     arg0->f28->f8 = 0;
     for (; i < arg0->f16->f8; i++) {
         l = arg0->f16->f16[i]->f28;
-        if (0 <= l->f12) { l->f8 = 0; } else { List_Resize((void *)l, 0, 4); }
+        if (0 <= l->f12) { l->f8 = 0; } else { ((Gap::Core::igDataList *)l)->resizeAndSetCount(0, 4); }
     }
     arg0->f16->f20 = 0;
     arg0->f40->vX();
@@ -173,7 +173,7 @@ void FUN_001dc400(igSorter *arg0, igGroup *arg1, igAttrStackManager *arg2) {
     if (n < l->cap) {
         l->cnt = cnt_of(l) + 1;
     } else {
-        List_Resize((void *)l, n + 1, 4);
+        ((Gap::Core::igDataList *)l)->resizeAndSetCount(n + 1, 4);
     }
     l->data[n] = v;
     List_AppendWords((igDataList *)(((struct LA_1dc400 *)arg0->_lightAttrs)->l), ((igNodeList *)arg1->_childList)->_count, (const int *)(((igNodeList *)arg1->_childList)->_data));
@@ -215,7 +215,7 @@ void FUN_001dc500(A_1dc500 *arg0, unsigned char arg1, int arg2) {
             temp_a0_3->f8 = 0;
             return;
         }
-        List_Resize((void *)temp_a0_3, 0, 4);
+        ((Gap::Core::igDataList *)temp_a0_3)->resizeAndSetCount(0, 4);
     }
 }
 

@@ -1481,7 +1481,7 @@ def generate(lib, classes, members_path, converted_path, compiler_names_path, re
 
     A class that cannot be written stays in the tree's form, so the others refer to it by its tree
     names: the classes are written again without it until no further class fails."""
-    converted = {row[0]: row[1] for row in load_table(converted_path, 2) if len(row) == 2}
+    converted = {row[0]: row[1].split("\t")[0] for row in load_table(converted_path, 2) if len(row) == 2}
     tabled = member_form_classes(members_path, converted)
     member_rows = {}
     for row in load_table(members_path, 2):

@@ -29,8 +29,8 @@ CallbackArray *igObjectPool_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igObjectPool_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igObjectPool_GetMetaObjectFunction,
         "igObjectPool",
         0x20, /* instance size */

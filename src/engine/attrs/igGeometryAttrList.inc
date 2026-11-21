@@ -34,8 +34,8 @@ CallbackArray *igGeometryAttrList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGeometryAttrList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igGeometryAttrList_GetMetaObjectFunction,
         "igGeometryAttrList",
         0x14, /* instance size */

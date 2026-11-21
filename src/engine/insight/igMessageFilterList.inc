@@ -35,8 +35,8 @@ CallbackArray *igMessageFilterList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMessageFilterList_metaObject,
-        igObjectList_Register,
-        igObjectList_GetPublishedMetaObject,
+        Gap::Core::igObjectList::arkRegisterInternal,
+        Gap::Core::igObjectList::getClassMeta,
         igMessageFilterList_GetMetaObjectFunction,
         "igMessageFilterList",
         0x14, /* instance size */

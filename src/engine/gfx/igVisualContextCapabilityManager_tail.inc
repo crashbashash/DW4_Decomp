@@ -143,7 +143,7 @@ void FUN_00165a80(VisualContextCapabilityManager *self) {
     if (count < list->_capacity) {
         list->_count = list->_count + 1;
     } else {
-        List_Resize(list, count + 1, 4);
+        ((Gap::Core::igDataList *)list)->resizeAndSetCount(count + 1, 4);
     }
     list->_data[count] = self;
     properties = ((PropertyRoot *)g_objectSystem)->properties;
@@ -522,7 +522,7 @@ void igVisualContext_LoadDefaultDriverDatabase(int value)
     if (count < l->_capacity) {
         l->_count = countOf(l) + 1;
     } else {
-        List_Resize(l, count + 1, 4);
+        ((Gap::Core::igDataList *)l)->resizeAndSetCount(count + 1, 4);
     }
     ((int *)l->_data)[count] = value;
     igDriverDatabase_GatherProperties(builder, (igTDataList<igVisualContextView *> *)(igIntList *)list);

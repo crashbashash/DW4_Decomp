@@ -61,7 +61,7 @@ void beSvPlatDataPS2_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvPlatDataPS2_Register);
 }
 
-static igMetaObjectCallback g_beSvPlatDataPS2_callbackList[] = { igObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beSvPlatDataPS2_callbackList[] = { Gap::Core::igObjectList::arkRegister, 0 };
 
 CallbackArray *beSvPlatDataPS2_Register(void) {
     BecLibrary_MarkRegistered();
@@ -216,7 +216,7 @@ void beSvPlatDataPS2_InitFields(void) {
     field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 0xE); field->_getMetaEnumFunction = 4;
     field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 0x13); field->_getMetaEnumFunction = 2;
     igObjectRefMetaField *image = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x15));
-    image->_metaObject = (int)igObjectList_GetOrCreateMetaObject();
+    image->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
     image->_construct = 1;
     igMetaObject_NameFields(meta, g_beSvPlatDataPS2_fieldTable, g_beSvPlatDataPS2_fieldHandles, g_beSvPlatDataPS2_fieldOffsets, base);
 }

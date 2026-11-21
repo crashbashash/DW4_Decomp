@@ -72,7 +72,7 @@ void beShadow01_Prepare(beShadow01 *self) {
     }
     l->_count = 0;
     if (!(0 < ((igDataList *)self->_svInfoList)->_count)) {
-        List_Reserve((igDataList *)self->_svInfoList, 0, 4);
+        ((Gap::Core::igDataList *)self->_svInfoList)->setCapacity(0, 4);
     }
     self->_savePos[0] = 0.0f;
     self->_savePos[1] = 0.0f;
@@ -131,7 +131,7 @@ void beShadow01_AttachPendingInfos(beShadow01 *self, beShadow01Info *info) {
         ((igObject **)list->_data)[i3] = 0;
     }
     list->_count = 0;
-    if (!(0 < ((beShadow01InfoList *)self->_svInfoList)->_count)) List_Reserve((igDataList *)self->_svInfoList, 0, 4);
+    if (!(0 < ((beShadow01InfoList *)self->_svInfoList)->_count)) ((Gap::Core::igDataList *)self->_svInfoList)->setCapacity(0, 4);
 }
 
 int beShadow01_AddInfo(beShadow01 *self, beShadow01Info *info) {

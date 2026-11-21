@@ -8,15 +8,15 @@ namespace Gap {
 namespace Core {
 
 void igMemoryRefMetaField::setAlignmentType(const char *name) {
-    igTDataList<igStringObj *> *names;
-    igTDataList<igStringObj *> *held;
+    ::igTDataList<igStringObj *> *names;
+    ::igTDataList<igStringObj *> *held;
     int n;
     int i;
     if (name == 0) {
         _alignmentType = -1;
         return;
     }
-    *(igTDataList<igStringObj *> **)&names = g_globalContext->_alignmentStrings;
+    *(::igTDataList<igStringObj *> **)&names = g_globalContext->_alignmentStrings;
     held = names;
     if (held != 0) { held->_refCount = (int)held->_refCount + 1; }
     n = countOf(names);

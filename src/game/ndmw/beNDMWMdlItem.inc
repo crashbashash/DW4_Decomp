@@ -43,7 +43,7 @@ void beNDMWMdlItem_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWMdlItem_Register);
 }
 
-static igMetaObjectCallback g_beNDMWMdlItem_callbackList[] = { igViewerSceneInfoManager_EnsureRegistered, igObjectList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWMdlItem_callbackList[] = { igViewerSceneInfoManager_EnsureRegistered, Gap::Core::igObjectList::arkRegister, 0 };
 
 CallbackArray *beNDMWMdlItem_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -97,7 +97,7 @@ void beNDMWMdlItem_InitFields(void) {
     ((igObjectRefMetaField *)viewerSIManager)->_metaObject = (int)igViewerSceneInfoManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)viewerSIManager)->_refCounted = 0;
     lockRamList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)lockRamList)->_metaObject = igObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)lockRamList)->_metaObject = (int)Gap::Core::igObjectList::getClassTypeLazy();
     ((igRefMetaField *)lockRamList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWMdlItem_fieldTable, g_beNDMWMdlItem_fieldHandles, g_beNDMWMdlItem_fieldOffsets, base);
 }
