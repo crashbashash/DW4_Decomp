@@ -350,6 +350,10 @@ class _Parser:
                 words.append(self.take())
             elif (token is not None and re.fullmatch(r"[A-Za-z_$][\w$]*", token) and not words and named is None):
                 named = self.scope()
+            elif token == "::" and not words and named is None:
+                # a global-scope name (`::igAttr`, the flat struct beside a Gap class) is the name itself
+                self.take("::")
+                named = self.scope()
             else:
                 break
         if named is not None:

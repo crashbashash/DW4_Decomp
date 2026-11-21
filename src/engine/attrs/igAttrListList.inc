@@ -1,53 +1,52 @@
-igMetaObject *g_igAttrListList_metaObject;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igAttrListList_GetOrCreateMetaObject(void) {
-    if (g_igAttrListList_metaObject == 0) {
-        g_igAttrListList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igAttrListList_metaObject;
-}
+igMetaObject *igAttrListList::_Meta;
 
-igMetaObject *igAttrListList_GetMetaObject(void)
+igMetaObject *igAttrListList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igAttrListList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAttrListList_EnsureRegistered();
-    return g_igAttrListList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igAttrListList_GetVTable(void) {
-    struct Obj_13ac70 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igAttrListList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igAttrListList_EnsureRegistered(void)
+igMetaObject *igAttrListList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igAttrListList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igAttrListList_callbackList[] = { igAttrList_EnsureRegistered, 0 };
+void *igAttrListList::retrieveVTablePointer()
+{
+    igAttrListList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igAttrListList_Register(void) {
+void igAttrListList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igAttrListList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igAttrList::arkRegister, 0 };
+
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igAttrListList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igAttrListList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAttrListList",
-        0x14, /* instance size */
-        igAttrListList_GetVTable,
+        sizeof(igAttrListList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igAttrListList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igAttrListList_GetMetaObjectFunction(void) {
-    igAttrListList_GetMetaObject();
+}
 }
 

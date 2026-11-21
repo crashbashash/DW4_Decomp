@@ -24,7 +24,7 @@ void igGeometryElement_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igGeometryElement_Register);
 }
 
-static igMetaObjectCallback g_igGeometryElement_callbackList[] = { igGeometry_EnsureRegistered, igAttrList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igGeometryElement_callbackList[] = { igGeometry_EnsureRegistered, Gap::Attrs::igAttrList::arkRegister, 0 };
 
 CallbackArray *igGeometryElement_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -101,7 +101,7 @@ void igGeometryElement_InitFields(void) {
     v4[3] = 1.0f;
     ((Gap::Math::igVec4fMetaField *)temp_a0_2)->setDefault(*(const igVec4f *)v4);
     temp_s1_2 = (struct GeometryMetaFieldView *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3));
-    temp_s1_2->f56 = (int)(igAttrList_GetOrCreateMetaObject());
+    temp_s1_2->f56 = (int)(Gap::Attrs::igAttrList::getClassTypeLazy());
     temp_s1_2->f52 = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igGeometryElement_fieldTable, g_igGeometryElement_fieldHandles, g_igGeometryElement_fieldOffsets, temp_s2);
 }

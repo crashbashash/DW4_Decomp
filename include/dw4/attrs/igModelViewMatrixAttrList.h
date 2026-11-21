@@ -7,8 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-void igModelViewMatrixAttrList_EnsureRegistered(void);
-struct igMetaObject *igModelViewMatrixAttrList_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

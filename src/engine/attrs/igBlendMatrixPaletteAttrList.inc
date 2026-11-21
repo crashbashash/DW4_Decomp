@@ -1,52 +1,52 @@
-igMetaObject *g_igBlendMatrixPaletteAttrList_metaObject;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igBlendMatrixPaletteAttrList_GetOrCreateMetaObject(void) {
-    if (g_igBlendMatrixPaletteAttrList_metaObject == 0) {
-        g_igBlendMatrixPaletteAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igBlendMatrixPaletteAttrList_metaObject;
-}
+igMetaObject *igBlendMatrixPaletteAttrList::_Meta;
 
-igMetaObject *igBlendMatrixPaletteAttrList_GetMetaObject(void)
+igMetaObject *igBlendMatrixPaletteAttrList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igBlendMatrixPaletteAttrList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igBlendMatrixPaletteAttrList_EnsureRegistered();
-    return g_igBlendMatrixPaletteAttrList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igBlendMatrixPaletteAttrList_GetVTable(void) {
-    int obj[8];
-    igObject_InitHeader((igObject *)obj);
-    obj[0] = (int)&g_igBlendMatrixPaletteAttrList_vtable[0];
-    return *(int *)((char *)obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igBlendMatrixPaletteAttrList_EnsureRegistered(void)
+igMetaObject *igBlendMatrixPaletteAttrList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igBlendMatrixPaletteAttrList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igBlendMatrixPaletteAttrList_callbackList[] = { Gap::Attrs::igBlendMatrixPaletteAttr::arkRegister, 0 };
+void *igBlendMatrixPaletteAttrList::retrieveVTablePointer()
+{
+    igBlendMatrixPaletteAttrList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igBlendMatrixPaletteAttrList_Register(void) {
+void igBlendMatrixPaletteAttrList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igBlendMatrixPaletteAttrList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igBlendMatrixPaletteAttr::arkRegister, 0 };
+
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igBlendMatrixPaletteAttrList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igBlendMatrixPaletteAttrList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igBlendMatrixPaletteAttrList",
-        0x14, /* instance size */
-        igBlendMatrixPaletteAttrList_GetVTable,
+        sizeof(igBlendMatrixPaletteAttrList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igBlendMatrixPaletteAttrList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igBlendMatrixPaletteAttrList_GetMetaObjectFunction(void) {
-    igBlendMatrixPaletteAttrList_GetMetaObject();
+}
 }
 

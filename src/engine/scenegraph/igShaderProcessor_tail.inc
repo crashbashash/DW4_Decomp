@@ -62,7 +62,7 @@ void FUN_001cb2d0(void *self, void *types, const char *key, void *target) {
 }
 
 static inline ShaderObject_1ca6c0 *asMaterial(ShaderObject_1ca6c0 *o) {
-    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igAttrList_metaObject) != 0) {
+    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Attrs::igAttrList::getClassMeta()) != 0) {
         return o;
     }
     return 0;
@@ -211,12 +211,12 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
         igSmartPointer<ShaderObject_1ca6c0> second((ShaderObject_1ca6c0 *)0, kRetainReference);
         igSmartPointer<ShaderObject_1ca6c0> third((ShaderObject_1ca6c0 *)0, kRetainReference);
         igSmartPointer<igObject> found((igObject *)0, kRetainReference);
-        found = FUN_001c8c80(self, pass, "pushAttrs", g_igAttrList_metaObject, shared.p);
+        found = FUN_001c8c80(self, pass, "pushAttrs", Gap::Attrs::igAttrList::getClassMeta(), shared.p);
         held = (ShaderObject_1ca6c0 *)found.p;
         if (held != 0) {
             primary = asMaterial(held);
             FUN_001cade0(self, (IniFieldTarget *)info.p, (IniItemList *)primary.p, shared.p, keys.p, values.p);
-            found = FUN_001c8c80(self, pass, "popAttrs", g_igAttrList_metaObject, shared.p);
+            found = FUN_001c8c80(self, pass, "popAttrs", Gap::Attrs::igAttrList::getClassMeta(), shared.p);
             held = (ShaderObject_1ca6c0 *)found.get();
             if (held == 0) {
                 return 0;
@@ -224,7 +224,7 @@ int FUN_001cb340(ShaderProcessorView *self, ShaderTarget *target, int arg) {
             second = asMaterial(held);
             FUN_001cade0(self, (IniFieldTarget *)info.p, (IniItemList *)second.p, shared.p, keys.p, values.p);
         } else {
-            found = FUN_001c8c80(self, pass, "attrs", g_igAttrList_metaObject, shared.p);
+            found = FUN_001c8c80(self, pass, "attrs", Gap::Attrs::igAttrList::getClassMeta(), shared.p);
             held = (ShaderObject_1ca6c0 *)found.get();
             if (held == 0) {
                 return 0;

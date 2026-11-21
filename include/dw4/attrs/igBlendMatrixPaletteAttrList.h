@@ -7,8 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-void igBlendMatrixPaletteAttrList_EnsureRegistered(void);
-struct igMetaObject *igBlendMatrixPaletteAttrList_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

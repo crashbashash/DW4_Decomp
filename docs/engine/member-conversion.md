@@ -301,19 +301,28 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    converted as well. The two extension attrs keep the kit's static `_extension` and call it through
    `igBlendEquationExtDispatchView` and `igMultiTextureExtDispatchView`. A field naming another Gap class stays an
    `igSmartPointer<::flat>` until igSmartPointer can hold a Gap class (it releases through the flat `igRelease`).
-   igViewerRenderer calls the converted colour, alpha-function, shade and polygon attrs' members, and their
-   dispatch views are gone; the kit's `setState(igBool)` normalises the unsigned char fields the viewer passes, so
-   the alpha-test, cull-face and lighting state calls keep their views. Next: the remaining igVisualAttribute
-   subclasses, coupled through their smart-pointer fields: `igTextureAttr` with `igTextureCubeAttr`,
-   `igTextureBindAttr` and `igCopyRenderDestinationAttr`; `igLightAttr` with `igLightStateAttr`;
-   `igRenderDestinationAttr` with `igSetRenderDestinationAttr`; `igGeometryAttr`, `igGeometryAttr1_5` and
-   `igGeometrySetAttr`; `igParticleAttr` (its array is a Gap::Bec class) and `igVertexBlendMatrixListAttr`. Then the
-   game's `igModelViewMatrixAttrDispatchView` uses (beCri, beModelCtrl, beModelCtrlSC, beSeCtl, igTraversalView.h),
-   the default managers (`igAttrDefaultManager` first) and `igAttrPool`, and the attr lists over `igObjectList`.
+   igViewerRenderer calls the converted colour, alpha-function, shade, polygon and lighting-state attrs' members
+   (`_lightingState` is the kit's igBool), and their dispatch views are gone; the alpha-test and cull-face calls keep
+   their views, since typing igViewerParameters' `_alphaTest`/`_backFaceCulling` bool moves the kit's igBool
+   normalisation into `igViewerRenderer_ApplyOptions`, whose ViewerOptions, registry and command-line readers are
+   unsigned char. The game's matrix attrs (beCri, beModelCtrl, beModelCtrlSC, beSeCtl) are
+   `Gap::Attrs::igModelViewMatrixAttr` and call `setMatrix`. The default managers (`igAttrDefaultManager`,
+   `igGenericAttrDefaultManager`, `igVisualContextAttrDefaultManager`) and `igAttrPool` are converted, the kit's
+   igAttrRef spelled `igSmartPointer< ::igAttr>`; `igAttrList`, `igAttrListList`, `igModelViewMatrixAttrList` and
+   `igBlendMatrixPaletteAttrList` derive from the kit's `igTObjectList<T>` (include/dw4/core/igTObjectList.h, whose
+   `getElementMeta` is `T::getClassMeta()`), so attrs compiles igObjectList's vtable and inline copies. Next: the
+   remaining igVisualAttribute subclasses, coupled through their smart-pointer fields: `igTextureAttr` with
+   `igTextureCubeAttr`, `igTextureBindAttr` and `igCopyRenderDestinationAttr`; `igLightAttr` with
+   `igLightStateAttr`; `igRenderDestinationAttr` with `igSetRenderDestinationAttr`; `igGeometryAttr`,
+   `igGeometryAttr1_5` and `igGeometrySetAttr`; `igParticleAttr` (its array is a Gap::Bec class) and
+   `igVertexBlendMatrixListAttr`, each with its list (`igTextureList`, `igImageMipMapList`, `igLightList`,
+   `igLightStateAttrList`, `igGeometryAttrList`, over `igTObjectList<T>` once T is converted); and
+   `igNonRefCountedAttrList`, which needs core's `igNonRefCountedObjectList` converted first (its subclasses in
+   core, gfx, gui, datapump and scenegraph register through the attrs copy of its getClassMeta, 0x13aeb0).
    The specs stay in the agents' scratch (`scratch/Attrs2/specs/visual.py`, `visual2.py`;
-   `scratch/Attrs3/specs/unit.py`, `simple.py`, `ext.py`). memberize casts a pool passed as `int` to a factory
-   taking `igMemoryPoolView *` (or drops the `int` cast). Gfx then starts from `igVisualContext`, whose dispatch
-   view already names the slots the attrs call;
+   `scratch/Attrs3/specs/unit.py`, `simple.py`, `ext.py`; `scratch/Attrs4/specs/mgr.py`). memberize casts a pool
+   passed as `int` to a factory taking `igMemoryPoolView *` (or drops the `int` cast). Gfx then starts from
+   `igVisualContext`, whose dispatch view already names the slots the attrs call;
 6. the game's `be*` classes last.
 
 ## Known differences and gaps

@@ -7,16 +7,9 @@ igMetaObject *igLightAttr_GetMeta(void) {
  * the new one. */
 void igLightAttr_SetVisualContext(igLightAttr *self, igObject *vertexCache) {
     igObject *previousVertexCache;
-    if (vertexCache != 0) {
-        vertexCache->_refCount = vertexCache->_refCount + 1;
-    }
+    igObject::ref(vertexCache);
     previousVertexCache = (igObject *)(self->_vc);
-    if (previousVertexCache != 0) {
-        previousVertexCache->_refCount = previousVertexCache->_refCount - 1;
-        if ((previousVertexCache->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(previousVertexCache);
-        }
-    }
+    igObject::release(previousVertexCache);
     self->_vc = (int)vertexCache;
 }
 

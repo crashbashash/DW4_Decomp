@@ -105,7 +105,7 @@ void igAttrStackManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAttrStackManager_Register);
 }
 
-static igMetaObjectCallback g_igAttrStackManager_callbackList[] = { igAttrStackList_EnsureRegistered, igAttrList_EnsureRegistered, Gap::Core::igIntList::arkRegister, igNonRefCountedAttrList_EnsureRegistered, Gap::Core::igIntList::arkRegister, igCapabilityManager_EnsureRegistered, igAttrDefaultManager_EnsureRegistered, igLightStateAttrPool_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAttrStackManager_callbackList[] = { igAttrStackList_EnsureRegistered, Gap::Attrs::igAttrList::arkRegister, Gap::Core::igIntList::arkRegister, igNonRefCountedAttrList_EnsureRegistered, Gap::Core::igIntList::arkRegister, igCapabilityManager_EnsureRegistered, Gap::Attrs::igAttrDefaultManager::arkRegister, igLightStateAttrPool_EnsureRegistered, 0 };
 
 CallbackArray *igAttrStackManager_Register(void) {
     SceneGraphLibrary_MarkRegistered();  /* Shared set-once latch run before every registration of this family. */
@@ -228,7 +228,7 @@ void igAttrStackManager_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igAttrStackList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igAttrList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)Gap::Attrs::igAttrList::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
@@ -251,7 +251,7 @@ void igAttrStackManager_InitFields(void) {
     temp_s2_9 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA)));
     ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)igCapabilityManager_GetOrCreateMetaObject();
     temp_s2_10 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB)));
-    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)igAttrDefaultManager_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)Gap::Attrs::igAttrDefaultManager::getClassTypeLazy();
     temp_s2_11 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xD)));
     ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)igLightStateAttrPool_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_11)->_construct = 1;

@@ -1,16 +1,9 @@
 static inline void setDestination(Attr *self, const igSmartPointer<Destination> &destination) {
     Destination *held = destination.get();
     Destination *previous;
-    if (held != 0) {
-        held->_refCount = held->_refCount + 1;
-    }
+    igObject::ref(held);
     previous = self->f12;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     self->f12 = held;
 }
 

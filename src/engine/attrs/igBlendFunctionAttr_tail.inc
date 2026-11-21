@@ -8,11 +8,6 @@ void igBlendFunctionAttr::releaseDefaults()
         _extension = 0;
     igVisualAttribute::releaseDefaults();
 }
-}
-}
-
-namespace Gap {
-namespace Attrs {
 
 void igBlendFunctionAttr::apply(igVisualContext *vc)
 {
@@ -24,11 +19,6 @@ void igBlendFunctionAttr::apply(igVisualContext *vc)
         ((igBlendEquationExtDispatchView *)_extension)->applyEquation();
     }
 }
-}
-}
-
-namespace Gap {
-namespace Attrs {
 
 void igBlendFunctionAttr::synchronizeDefault(igVisualContext *vc)
 {

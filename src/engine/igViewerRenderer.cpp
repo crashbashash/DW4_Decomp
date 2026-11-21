@@ -24,7 +24,6 @@
 #include "dw4/scenegraph/igCommonTraversalDispatchView.h"
 #include "dw4/scenegraph/igTransformDispatchView.h"
 #include "dw4/attrs/igLightAttrDispatchView.h"
-#include "dw4/attrs/igLightingStateAttrDispatchView.h"
 #include "dw4/attrs/igAlphaStateAttrDispatchView.h"
 #include "dw4/attrs/igCullFaceAttrDispatchView.h"
 #include "dw4/attrs/igLightStateAttrDispatchView.h"
@@ -604,12 +603,15 @@ void igViewerRenderer_UpdateLighting(igViewerRenderer *self) {
     } else {
         ((igLightStateAttrDispatchView *)self->_headlightStateAttr)->SetState(0);
     }
-    ((igLightingStateAttrDispatchView *)self->_lightingAttr)->SetState(self->_lightingState);
+    ((Gap::Attrs::igLightingStateAttr *)self->_lightingAttr)->setState(self->_lightingState);
     igViewerRenderer_UpdateAttr(self, (igObject *)self->_lightingAttr);
-    igViewerRenderer_SetOverride(self, (igObject *)self->_lightingAttr, ((bool)self->_lightingState) ^ 1);
+    igViewerRenderer_SetOverride(self, (igObject *)self->_lightingAttr, (self->_lightingState != false) ^ 1);
 }
 
 void igViewerRenderer_UpdateRenderStates(igViewerRenderer *self) {
+    /* setState through the views: the kit's setState(igBool) would normalise these unsigned char fields, and typing
+     * them bool moves the normalisation into igViewerRenderer_ApplyOptions, whose ViewerOptions source, registry
+     * and command-line readers are unsigned char too. */
     ((igAlphaStateAttrDispatchView *)self->_alphaTestAttr)->SetState(((igViewerParameters *)self->_parameters)->_alphaTest);
     igViewerRenderer_UpdateAttr(self, (igObject *)self->_alphaTestAttr);
     igViewerRenderer_SetOverride(self, (igObject *)self->_alphaTestAttr, ((igViewerParameters *)self->_parameters)->_alphaTestForce);
@@ -635,7 +637,7 @@ extern "C" int igViewerRenderer_UpdateSharedAttr(igObject *attr, igAttrSet *attr
     int found = igViewerRenderer_FindAttrFromType((igObjectDispatchView *)attr, attrSet);
     if (found != 0) {
         removeFromList(attrSet->_attributes, found);
-        igSmartPointer<igObject> shared = igAttrPool_GetSharedAttr(igAttrPool_GetStaticAttrPool(), igSmartPointer<igObject>(attr, kRetainReference));
+        igSmartPointer< ::igAttr> shared = Gap::Attrs::igAttrPool::getStaticAttrPool()->getSharedAttr(igSmartPointer< ::igAttr>((::igAttr *)attr, kRetainReference));
         ((Gap::Core::igObjectList *)attrSet->_attributes)->append((Gap::Core::igObject *)(shared.get()));
         return 1;
     }
@@ -655,7 +657,7 @@ void igViewerRenderer_TransferAttrFromType(igAttrSet *from, igAttrSet *to, igObj
 
 void igViewerRenderer_UpdateAttr(igViewerRenderer *self, igObject *attr) {
     if ((attr != 0) && !(igViewerRenderer_UpdateSharedAttr(attr, (igAttrSet *)self->_attrSetOverride) & 0xFF) && !(igViewerRenderer_UpdateSharedAttr(attr, (igAttrSet *)self->_attrSet) & 0xFF)) {
-        igSmartPointer<igObject> shared = igAttrPool_GetSharedAttr(igAttrPool_GetStaticAttrPool(), igSmartPointer<igObject>(attr, kRetainReference));
+        igSmartPointer< ::igAttr> shared = Gap::Attrs::igAttrPool::getStaticAttrPool()->getSharedAttr(igSmartPointer< ::igAttr>((::igAttr *)attr, kRetainReference));
         ((Gap::Core::igObjectList *)(((igAttrSet *)self->_attrSet)->_attributes))->append((Gap::Core::igObject *)(shared.get()));
     }
 }

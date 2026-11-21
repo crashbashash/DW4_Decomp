@@ -7,16 +7,9 @@ igMetaObject *igTextureBindAttr_GetMeta(void) {
  * then store the new one. */
 void igTextureBindAttr_SetTexture(igTextureBindAttr *self, igObject *texture) {
     igObject *previousTexture;
-    if (texture != 0) {
-        texture->_refCount = texture->_refCount + 1;
-    }
+    igObject::ref(texture);
     previousTexture = (igObject *)(self->_texture);
-    if (previousTexture != 0) {
-        previousTexture->_refCount = previousTexture->_refCount - 1;
-        if ((previousTexture->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(previousTexture);
-        }
-    }
+    igObject::release(previousTexture);
     self->_texture = (int)texture;
 }
 

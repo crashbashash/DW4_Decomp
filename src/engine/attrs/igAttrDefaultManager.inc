@@ -1,43 +1,44 @@
-igMetaObject *g_igAttrDefaultManager_metaObject;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igAttrDefaultManager_GetOrCreateMetaObject(void) {
-    if (g_igAttrDefaultManager_metaObject == 0) {
-        g_igAttrDefaultManager_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igAttrDefaultManager_metaObject;
-}
+igMetaObject *igAttrDefaultManager::_Meta;
 
-igMetaObject *igAttrDefaultManager_GetMetaObject(void)
+igMetaObject *igAttrDefaultManager::getClassTypeLazy()
 {
-    igMetaObject *g = g_igAttrDefaultManager_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igAttrDefaultManager_EnsureRegistered();
-    return g_igAttrDefaultManager_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-void igAttrDefaultManager_EnsureRegistered(void)
+igMetaObject *igAttrDefaultManager::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igAttrDefaultManager_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igAttrDefaultManager_Register(void) {
+void igAttrDefaultManager::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igAttrDefaultManager::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igAttrDefaultManager_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
         Gap::Core::igObject::getClassMeta,
-        igAttrDefaultManager_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igAttrDefaultManager",
-        8, /* instance size */
+        sizeof(igAttrDefaultManager),
         0,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igAttrDefaultManager_GetMetaObjectFunction(void) {
-    igAttrDefaultManager_GetMetaObject();
+}
 }
 

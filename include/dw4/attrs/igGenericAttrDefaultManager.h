@@ -8,7 +8,6 @@ struct igMemoryPoolView;
 extern "C" {
 #endif
 
-struct igGenericAttrDefaultManager *igGenericAttrDefaultManager_Create(struct igMemoryPoolView *pool);
 
 #ifdef __cplusplus
 }

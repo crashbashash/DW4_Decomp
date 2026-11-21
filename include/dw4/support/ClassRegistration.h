@@ -47,9 +47,6 @@ void igTrackedElementMetaField_EnsureRegistered(void);
 void igVertexArray1_1_EnsureRegistered(void);
 
 /* Attrs */
-void igAttrListList_EnsureRegistered(void);
-void igAttrList_EnsureRegistered(void);
-void igAttrPool_EnsureRegistered(void);
 void igCopyRenderDestinationAttr_EnsureRegistered(void);
 void igGeometryAttr1_5_EnsureRegistered(void);
 void igGeometrySetAttr_EnsureRegistered(void);

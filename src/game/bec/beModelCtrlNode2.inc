@@ -37,7 +37,7 @@ void beModelCtrlNode2_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlNode2_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlNode2_callbackList[] = { igAttrList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beModelCtrlNode2_callbackList[] = { Gap::Attrs::igAttrList::arkRegister, 0 };
 
 CallbackArray *beModelCtrlNode2_Register(void) {
     BecLibrary_MarkRegistered();
@@ -96,7 +96,7 @@ void beModelCtrlNode2_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beModelCtrlNode2_ctorTable, 4);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(1.0f);
     overrideAttrList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)overrideAttrList)->_metaObject = (int)igAttrList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)overrideAttrList)->_metaObject = (int)Gap::Attrs::igAttrList::getClassTypeLazy();
     ((igRefMetaField *)overrideAttrList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beModelCtrlNode2_fieldTable, g_beModelCtrlNode2_fieldHandles, g_beModelCtrlNode2_fieldOffsets, base);
 }

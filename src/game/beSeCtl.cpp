@@ -1,7 +1,6 @@
 #include "dw4/support/reflected.h"
 #include "dw4/core/igTDataList.h"
 #include "dw4/scenegraph/igCommonTraversalDispatchView.h"
-#include "dw4/attrs/igModelViewMatrixAttrDispatchView.h"
 #include "dw4/game/beResetNode.h"
 #include "dw4/game/beMessenger.h"
 #include "dw4/game/beSeCtl.h"
@@ -54,7 +53,7 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
     float t[3];
     long long time;
     float m[16];
-    igModelViewMatrixAttr *matAttr;
+    Gap::Attrs::igModelViewMatrixAttr *matAttr;
     igTimeAttr *timeAttr;
     igAttrStackManager *mgr = (igAttrStackManager *)trav->_attrStack;
     igObjectList *mvStack = (igObjectList *)AttrStackOps::stackFor(mgr, Gap::Attrs::igModelViewMatrixAttr::getClassMeta()->_id);
@@ -68,8 +67,8 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
         igObjectPool *pool = (igObjectPool *)trav->_matrixPool;
         if (pool->_freeIndex >= pool->_count)
             igObjectPool_Grow(pool, (igObject *(*)(int))Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool);
-        matAttr = ((igModelViewMatrixAttr **)pool->_data)[pool->_freeIndex++];
-        ((igModelViewMatrixAttrDispatchView *)matAttr)->setMatrix(m);
+        matAttr = ((Gap::Attrs::igModelViewMatrixAttr **)pool->_data)[pool->_freeIndex++];
+        matAttr->setMatrix((const igMatrix44f &)m);
     }
     time = 0;
     timeAttr = 0;

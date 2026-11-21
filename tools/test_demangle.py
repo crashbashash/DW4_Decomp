@@ -114,7 +114,9 @@ class Mangle(unittest.TestCase):
                                ("igSmartPointer<igSmartPointer<igObject>>",
                                 "43igSmartPointer<25igSmartPointer<8igObject>>"),
                                ("int (*)[3]", "PA3_i"), ("signed char", "Sc"), ("long double", "r"),
-                               ("igCompareFunction *", "PFPCvPCv_i"), ("Gap::igCompareFunction*", "PFPCvPCv_i")]:
+                               ("igCompareFunction *", "PFPCvPCv_i"), ("Gap::igCompareFunction*", "PFPCvPCv_i"),
+                               ("igSmartPointer< ::igAttr>", "23igSmartPointer<6igAttr>"),
+                               ("::igObject *", "P8igObject")]:
             self.assertEqual(dm.encode_type(spelling), code, spelling)
             self.assertEqual(dm.encode_type(dm.format_type(dm.parse_type(spelling))), code, spelling)
 

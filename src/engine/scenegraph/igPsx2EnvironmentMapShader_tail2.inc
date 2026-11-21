@@ -236,9 +236,9 @@ void FUN_001e16a0(EnvMapShaderView *arg0, void *) {
     float f;
     unsigned int v;
     EnvMapRef attrListA;
-    attrListA.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    attrListA.p = ((EnvMapAttr *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     EnvMapRef attrListB;
-    attrListB.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    attrListB.p = ((EnvMapAttr *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     ((Gap::Core::igObjectList *)arg0->f64)->append((Gap::Core::igObject *)attrListA.p);
     ((Gap::Core::igObjectList *)arg0->f68)->append((Gap::Core::igObject *)attrListB.p);
     arg0->f120->vX(2);
@@ -302,15 +302,15 @@ void FUN_001e1ac0(S_1e1ac0 *arg0, void *) {
     float f;
     unsigned int v;
     Ref_1e1ac0 attrListA;
-    attrListA.p = ((X_1e1ac0 *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    attrListA.p = ((X_1e1ac0 *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     Ref_1e1ac0 attrListB;
-    attrListB.p = ((X_1e1ac0 *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    attrListB.p = ((X_1e1ac0 *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     ((Gap::Core::igObjectList *)arg0->f64)->append((Gap::Core::igObject *)attrListA.p);
     ((Gap::Core::igObjectList *)arg0->f68)->append((Gap::Core::igObject *)attrListB.p);
     Ref_1e1ac0 attrListC;
-    attrListC.p = ((X_1e1ac0 *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    attrListC.p = ((X_1e1ac0 *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     Ref_1e1ac0 attrListD;
-    attrListD.p = ((X_1e1ac0 *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    attrListD.p = ((X_1e1ac0 *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     ((Gap::Core::igObjectList *)arg0->f64)->append((Gap::Core::igObject *)attrListC.p);
     ((Gap::Core::igObjectList *)arg0->f68)->append((Gap::Core::igObject *)attrListD.p);
     ((Gap::Core::igObjectList *)attrListA.p)->append((Gap::Core::igObject *)(((X_1e1ac0 *)g_envMapMatrixOptStateAttr.p)));
@@ -358,21 +358,21 @@ void FUN_001e1ac0(S_1e1ac0 *arg0, void *) {
 
 void FUN_001e1e70(EnvMapShaderView_1e1e70 *arg0, void *) {
     EnvMapRef r60;
-    r60.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    r60.p = ((EnvMapAttr *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     EnvMapRef r56;
-    r56.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    r56.p = ((EnvMapAttr *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     ((Gap::Core::igObjectList *)arg0->f64)->append((Gap::Core::igObject *)r60.p);
     ((Gap::Core::igObjectList *)arg0->f68)->append((Gap::Core::igObject *)r56.p);
     EnvMapRef r52;
-    r52.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    r52.p = ((EnvMapAttr *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     EnvMapRef r48;
-    r48.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    r48.p = ((EnvMapAttr *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     ((Gap::Core::igObjectList *)arg0->f64)->append((Gap::Core::igObject *)r52.p);
     ((Gap::Core::igObjectList *)arg0->f68)->append((Gap::Core::igObject *)r48.p);
     EnvMapRef r44;
-    r44.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    r44.p = ((EnvMapAttr *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     EnvMapRef r40;
-    r40.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    r40.p = ((EnvMapAttr *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     ((Gap::Core::igObjectList *)arg0->f64)->append((Gap::Core::igObject *)r44.p);
     ((Gap::Core::igObjectList *)arg0->f68)->append((Gap::Core::igObject *)r40.p);
     ((Gap::Core::igObjectList *)r60.p)->append((Gap::Core::igObject *)(((EnvMapAttr *)g_envMapMatrixOptStateAttr.p)));
@@ -428,8 +428,8 @@ void FUN_001e22c0(EnvMapShaderView_1e22c0 *arg0, void *) {
         arg0->f104->vX(0);
         arg0->f104->vY(arg0->f56);
     }
-    a.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
-    b.p = ((EnvMapAttr *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    a.p = ((EnvMapAttr *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    b.p = ((EnvMapAttr *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     ((Gap::Core::igObjectList *)arg0->f64)->append((Gap::Core::igObject *)a.p);
     ((Gap::Core::igObjectList *)arg0->f68)->append((Gap::Core::igObject *)b.p);
     arg0->f120->vX(3);

@@ -92,7 +92,7 @@ void igCompileTraversal_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igCompileTraversal_Register);
 }
 
-static igMetaObjectCallback g_igCompileTraversal_callbackList[] = { igModelViewMatrixAttrList_EnsureRegistered, igCompiledTransformList_EnsureRegistered, igNonRefCountedMatrixObjectList_EnsureRegistered, igAABox_EnsureRegistered, igNonRefCountedTransformList_EnsureRegistered, igEnvironmentMapShader2List_EnsureRegistered, igBlendMatrixPaletteAttrList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igCompileTraversal_callbackList[] = { Gap::Attrs::igModelViewMatrixAttrList::arkRegister, igCompiledTransformList_EnsureRegistered, igNonRefCountedMatrixObjectList_EnsureRegistered, igAABox_EnsureRegistered, igNonRefCountedTransformList_EnsureRegistered, igEnvironmentMapShader2List_EnsureRegistered, Gap::Attrs::igBlendMatrixPaletteAttrList::arkRegister, 0 };
 
 CallbackArray *igCompileTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -187,7 +187,7 @@ void igCompileTraversal_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igCompileTraversal_ctorTable, 0xC);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igModelViewMatrixAttrList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)Gap::Attrs::igModelViewMatrixAttrList::getClassTypeLazy();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     ((igMetaField *)temp_s2)->_persistent = 0;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)));
@@ -212,7 +212,7 @@ void igCompileTraversal_InitFields(void) {
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     ((igMetaField *)temp_s2_6)->_persistent = 0;
     temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8)));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)igBlendMatrixPaletteAttrList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)Gap::Attrs::igBlendMatrixPaletteAttrList::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_7)->_construct = 1;
     ((igMetaField *)temp_s2_7)->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9)))->_persistent = 0;

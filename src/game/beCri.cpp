@@ -125,7 +125,7 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
     long long time;
     igObjectPool *matrixPool;
     igObjectPool *timePool;
-    igModelViewMatrixAttrDispatchView *matrixAttr;
+    Gap::Attrs::igModelViewMatrixAttr *matrixAttr;
     igTimeAttr *timeAttr;
     igAttrStack *stack;
     int matrixIndex;
@@ -151,17 +151,17 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
         igMatrix44f_Multiply(modelView, node->_m, identity);
     }
     matrixPool = (igObjectPool *)traversal->_matrixPool;
-    matrixAttr = (igModelViewMatrixAttrDispatchView *)TakePooled(matrixPool, (igObject *(*)(int))Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool);
-    matrixAttr->setMatrix(modelView);
+    matrixAttr = (Gap::Attrs::igModelViewMatrixAttr *)TakePooled(matrixPool, (igObject *(*)(int))Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool);
+    matrixAttr->setMatrix((const igMatrix44f &)modelView);
     timePool = (igObjectPool *)traversal->_timePool;
     timeAttr = (igTimeAttr *)TakePooled(timePool, (igObject *(*)(int))Gap::Attrs::igTimeAttr::_instantiateFromPool);
     timeAttr->_time = time;
     ((igCommonTraversalDispatchView *)traversal)->pushTime(time);
-    matrixAttrIndex = &((igAttr *)matrixAttr)->_cachedAttrIndex;
-    matrixUnitID = &((igAttr *)matrixAttr)->_cachedUnitID;
+    matrixAttrIndex = &matrixAttr->_cachedAttrIndex;
+    matrixUnitID = &matrixAttr->_cachedUnitID;
     matrixIndex = *matrixUnitID + ((int *)attrs->_attrStackIndexTable)[*matrixAttrIndex];
     stack = ((igAttrStack **)((igObjectList *)attrs->_attrStacks)->_data)[matrixIndex];
-    ((igTDataList<igModelViewMatrixAttrDispatchView *> *)stack)->append(matrixAttr);
+    ((igTDataList<Gap::Attrs::igModelViewMatrixAttr *> *)stack)->append(matrixAttr);
     igAttrStackManager_MarkStackChanged(attrs, stack, matrixIndex);
     timeAttrIndex = &timeAttr->_cachedAttrIndex;
     timeUnitID = &timeAttr->_cachedUnitID;
@@ -195,7 +195,7 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
     float modelView[16];
     float identity[16];
     igObjectPool *matrixPool;
-    igModelViewMatrixAttrDispatchView *matrixAttr;
+    Gap::Attrs::igModelViewMatrixAttr *matrixAttr;
     igAttrStack *stack;
     int index;
     int result;
@@ -218,15 +218,15 @@ int beCopyTransform_Traverse(beCopyTransform *node, igCommonTraversal *traversal
         igMatrix44f_Multiply(modelView, node->_m, identity);
     }
     matrixPool = (igObjectPool *)traversal->_matrixPool;
-    matrixAttr = (igModelViewMatrixAttrDispatchView *)TakePooled(matrixPool, (igObject *(*)(int))Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool);
-    matrixAttr->setMatrix(modelView);
-    attrIndex = &((igAttr *)matrixAttr)->_cachedAttrIndex;
-    unitID = &((igAttr *)matrixAttr)->_cachedUnitID;
+    matrixAttr = (Gap::Attrs::igModelViewMatrixAttr *)TakePooled(matrixPool, (igObject *(*)(int))Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool);
+    matrixAttr->setMatrix((const igMatrix44f &)modelView);
+    attrIndex = &matrixAttr->_cachedAttrIndex;
+    unitID = &matrixAttr->_cachedUnitID;
     stack = (igAttrStack *)attrs->_attrStacks;
     index = *attrIndex;
     index = *unitID + ((int *)attrs->_attrStackIndexTable)[index];
     stack = ((igAttrStack **)stack->_data)[index];
-    ((igTDataList<igModelViewMatrixAttrDispatchView *> *)stack)->append(matrixAttr);
+    ((igTDataList<Gap::Attrs::igModelViewMatrixAttr *> *)stack)->append(matrixAttr);
     igAttrStackManager_MarkStackChanged(attrs, stack, index);
     result = igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)node);
     PopAttr(attrs, *unitID + ((int *)attrs->_attrStackIndexTable)[*attrIndex]);

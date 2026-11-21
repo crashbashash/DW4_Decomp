@@ -2,16 +2,9 @@ void igLightAttr_apply(igLightAttr *self, igObject *context) {
     if (self->_lightId == -1) {
         igObject *old;
         self->_lightId = igPsx2VisualContext_CreateLight((igPsx2VisualContext *)context, self->_lightType);
-        if (context) {
-            context->_refCount++;
-        }
+        igObject::ref(context);
         old = (igObject *)self->_vc;
-        if (old) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7fffff) == 0) {
-                igObject_Destroy(old);
-            }
-        }
+        igObject::release(old);
         self->_vc = (int)context;
         self->_changed = 1;
     }

@@ -38,16 +38,9 @@ bool FUN_0013e6e0(igGeometrySetAttr *arg0, int arg1) {
 
 void igGeometrySetAttr_SetVisualContext(igGeometrySetAttr *self, igObject *newVc) {
     igObject *oldVc;
-    if (newVc != 0) {
-        newVc->_refCount = newVc->_refCount + 1;
-    }
+    igObject::ref(newVc);
     oldVc = (igObject *)self->_vc;
-    if (oldVc != 0) {
-        oldVc->_refCount = oldVc->_refCount - 1;
-        if ((oldVc->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(oldVc);
-        }
-    }
+    igObject::release(oldVc);
     self->_vc = (int)newVc;
 }
 

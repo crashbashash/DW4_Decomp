@@ -41,7 +41,7 @@ void igAttrSet_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAttrSet_Register);
 }
 
-static igMetaObjectCallback g_igAttrSet_callbackList[] = { igAttrList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAttrSet_callbackList[] = { Gap::Attrs::igAttrList::arkRegister, 0 };
 
 CallbackArray *igAttrSet_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -90,7 +90,7 @@ void igAttrSet_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igAttrSet_ctorTable, 2);
     attributesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)attributesField)->_metaObject = (int)igAttrList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)attributesField)->_metaObject = (int)Gap::Attrs::igAttrList::getClassTypeLazy();
     ((igRefMetaField *)attributesField)->_construct = 1;
     ((igMetaField *)attributesField)->_deepCopyMethod = 0;
     ((igMetaField *)attributesField)->_shallowCopyMethod = 2;

@@ -138,11 +138,7 @@ void *FUN_00132230(struct S_132230 *arg0, short arg1) {
 igSmartPointer<igObject> *igSmartPointer_igImage_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;

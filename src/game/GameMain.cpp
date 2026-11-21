@@ -252,9 +252,9 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Attrs::igCullFaceAttr::arkRegister();
     Gap::Attrs::igBlendStateAttr::arkRegister();
     Gap::Attrs::igBlendFunctionAttr::arkRegister();
-    igAttrPool_EnsureRegistered();
-    igAttrListList_EnsureRegistered();
-    igAttrList_EnsureRegistered();
+    Gap::Attrs::igAttrPool::arkRegister();
+    Gap::Attrs::igAttrListList::arkRegister();
+    Gap::Attrs::igAttrList::arkRegister();
     Gap::Attrs::igAlphaStateAttr::arkRegister();
     Gap::Math::igVec4fArrayMetaField::arkRegister();
     igTraversalFunctionList_EnsureRegistered();

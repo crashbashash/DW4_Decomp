@@ -138,7 +138,7 @@ void igInsightCore_TerminateDrawing(igInsightCore *core) {
     for (i = 0; i < n; i++) {
         ((Gap::Gui::igRenderer *)arg0->m->list->items[i])->setVisualContext(0);
     }
-    igAttrPool_UserUnregister();
+    Gap::Attrs::igAttrPool::userUnregister();
 }
 
 void igInsightCore_HandleEvents(igInsightCore *core) {

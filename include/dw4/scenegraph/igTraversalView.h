@@ -5,7 +5,6 @@
 #include "dw4/scenegraph/igAttrStackManager.h"
 #include "dw4/scenegraph/igCommonTraversalDispatchView.h"
 #include "dw4/attrs/igModelViewMatrixAttr.h"
-#include "dw4/attrs/igModelViewMatrixAttrDispatchView.h"
 #include "dw4/scenegraph/igObjectPool.h"
 #include "dw4/attrs/igTimeAttr.h"
 

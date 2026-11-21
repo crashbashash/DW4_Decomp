@@ -1,9 +1,3 @@
-/* Default slot 21: constant 4. */
-int Gap__Core__igObject__vfunc_21(void)
-{
-    return 4;
-}
-
 int FUN_00142bb0(igObjectList *list, igObject *const *key) {
     int mid;
     int lo;

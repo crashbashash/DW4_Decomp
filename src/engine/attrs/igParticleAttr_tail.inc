@@ -20,9 +20,7 @@ void igParticleAttr_apply(igParticleAttr *arg0, char *arg1) {
 
 void igParticleAttr_SetParticleArray(igParticleAttr *self, igObject *particleArray, int particleNum, int particleOffset) {
     igObject *previous;
-    if (particleArray != 0) {
-        particleArray->_refCount = particleArray->_refCount + 1;
-    }
+    igObject::ref(particleArray);
     previous = (igObject *)self->_particleArray;
     if (previous != 0) {
         previous->_refCount = previous->_refCount - 1;

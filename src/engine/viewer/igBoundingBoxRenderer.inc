@@ -55,7 +55,7 @@ void igBoundingBoxRenderer_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igBoundingBoxRenderer_Register);
 }
 
-static igMetaObjectCallback g_igBoundingBoxRenderer_callbackList[] = { igViewerParameters_EnsureRegistered, Gap::Attrs::igDisplayListAttr::arkRegister, igAttrList_EnsureRegistered, Gap::Attrs::igModelViewMatrixAttr::arkRegister, igGeometryAttr_EnsureRegistered, igGraphPath_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igBoundingBoxRenderer_callbackList[] = { igViewerParameters_EnsureRegistered, Gap::Attrs::igDisplayListAttr::arkRegister, Gap::Attrs::igAttrList::arkRegister, Gap::Attrs::igModelViewMatrixAttr::arkRegister, igGeometryAttr_EnsureRegistered, igGraphPath_EnsureRegistered, 0 };
 
 CallbackArray *igBoundingBoxRenderer_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -139,7 +139,7 @@ void igBoundingBoxRenderer_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)Gap::Attrs::igDisplayListAttr::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)(igAttrList_GetOrCreateMetaObject());
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)(Gap::Attrs::igAttrList::getClassTypeLazy());
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)Gap::Attrs::igModelViewMatrixAttr::getClassTypeLazy();

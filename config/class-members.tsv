@@ -1136,3 +1136,28 @@ igTextureFunctionAttr	inline short getNonCachedUnitID() const { return (short)_u
 igTextureFunctionAttr	virtual void setUnitID(short id);
 igTextureFunctionAttr	virtual void synchronizeDefault(igVisualContext *vc);
 igTextureFunctionAttr	virtual int getUnitCount(igCapabilityManager *capabilityManager);
+igAttrDefaultManager	IG_ABSTRACT_OBJECT_DEFINE(igAttrDefaultManager)
+igAttrDefaultManager	virtual igSmartPointer< ::igAttr> getSharedDefaultAttr(igMetaObject *meta, int unitID) const;
+igAttrDefaultManager	virtual igSmartPointer< ::igAttr> createDefaultAttr(igMetaObject *meta, int unitID) const = 0;
+igGenericAttrDefaultManager	IG_OBJECT_DEFINE(igGenericAttrDefaultManager)
+igGenericAttrDefaultManager	virtual igSmartPointer< ::igAttr> createDefaultAttr(igMetaObject *meta, int unitID) const;
+igVisualContextAttrDefaultManager	IG_OBJECT_DEFINE(igVisualContextAttrDefaultManager)
+igVisualContextAttrDefaultManager	private: static igMetaField *k_visualContext;
+igVisualContextAttrDefaultManager	inline void setVisualContext(igVisualContext *visualContextParam) { _visualContext = visualContextParam; }
+igVisualContextAttrDefaultManager	inline const igVisualContext *getVisualContext() const { return _visualContext; }
+igVisualContextAttrDefaultManager	virtual igSmartPointer< ::igAttr> createDefaultAttr(igMetaObject *meta, int unitID) const;
+igAttrPool	IG_OBJECT_DEFINE(igAttrPool)
+igAttrPool	private: static igMetaField *k_metaList;
+igAttrPool	private: static igMetaField *k_nonSharableMetaList;
+igAttrPool	private: static igMetaField *k_attributeList;
+igAttrPool	igSmartPointer< ::igAttr> getSharedAttr(igSmartPointer< ::igAttr> attribute);
+igAttrPool	void addNonSharableType(igMetaObject *meta);
+igAttrPool	static igAttrPool *getStaticAttrPool();
+igAttrPool	static void userUnregister();
+igAttrPool	static void userRegister();
+igAttrPool	virtual void resetFields(int flag);
+igAttrPool	private: static void arkRegisterUser();
+igAttrList	IG_OBJECT_DEFINE(igAttrList)
+igAttrListList	IG_OBJECT_DEFINE(igAttrListList)
+igModelViewMatrixAttrList	IG_OBJECT_DEFINE(igModelViewMatrixAttrList)
+igBlendMatrixPaletteAttrList	IG_OBJECT_DEFINE(igBlendMatrixPaletteAttrList)

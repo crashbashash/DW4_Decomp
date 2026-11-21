@@ -94,14 +94,14 @@ void igCommonTraversal_SetVisualContext(O_1b7010 *arg0, R_1b7010 *arg1) {
     if (arg1 == 0) {
         a = ((void *)((Gap::Core::igObject *)arg0)->getMemoryPool());
         release(arg0->f36);
-        arg0->f36 = (R_1b7010 *)igGenericAttrDefaultManager_Create((igMemoryPoolView *)a);
+        arg0->f36 = (R_1b7010 *)Gap::Attrs::igGenericAttrDefaultManager::_instantiateFromPool((igMemoryPoolView *)a);
         a = ((void *)((Gap::Core::igObject *)arg0)->getMemoryPool());
         release(arg0->f32);
         arg0->f32 = (R_1b7010 *)igGenericCapabilityManager_Create((igMemoryPoolView *)a);
         var_s1 = 1;
     } else {
         if (arg0->f36 == 0) {
-            igSmartPointer<R_1b7010> created((R_1b7010 *)igVisualContextAttrDefaultManager_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+            igSmartPointer<R_1b7010> created((R_1b7010 *)Gap::Attrs::igVisualContextAttrDefaultManager::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
             t = created.get();
             retain_1b7010(arg1);
             release(t->f8);

@@ -4,6 +4,7 @@
 # reference is a pointer to its element type, a string the pool's igStringRef.
 igRenderer	_visualContext	igSmartPointer<igVisualContext>
 igIGBFile	_endianSwap	bool
+igViewerRenderer	_lightingState	bool
 igMetaField	_fieldName	igStringRef
 igObjectRefMetaField	_poolName	igStringRef
 igMemoryRefMetaField	_memTypeRef	igSmartPointer< ::igMetaField>
@@ -38,3 +39,7 @@ igModelViewMatrixAttr	_m	igMatrix44f
 igDisplayListAttr	_contents	igSmartPointer<igNonRefCountedAttrList>
 igRenderListAttr	_vc	igSmartPointer<igVisualContext>
 igBlendFunctionAttr	_blendEquationExt	igSmartPointer<igBlendEquationExt>
+igVisualContextAttrDefaultManager	_visualContext	igSmartPointer<igVisualContext>
+igAttrPool	_metaList	igSmartPointer< ::igMetaObjectList>
+igAttrPool	_nonSharableMetaList	igSmartPointer< ::igMetaObjectList>
+igAttrPool	_attributeList	igSmartPointer< ::igAttrListList>

@@ -37,7 +37,7 @@ void igLogoRenderer_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igLogoRenderer_Register);
 }
 
-static igMetaObjectCallback g_igLogoRenderer_callbackList[] = { igGeometryAttr_EnsureRegistered, Gap::Attrs::igColorAttr::arkRegister, igAttrList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igLogoRenderer_callbackList[] = { igGeometryAttr_EnsureRegistered, Gap::Attrs::igColorAttr::arkRegister, Gap::Attrs::igAttrList::arkRegister, 0 };
 
 CallbackArray *igLogoRenderer_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -101,7 +101,7 @@ void igLogoRenderer_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)(Gap::Attrs::igColorAttr::getClassTypeLazy());
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)(igAttrList_GetOrCreateMetaObject());
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)(Gap::Attrs::igAttrList::getClassTypeLazy());
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igLogoRenderer_fieldTable, g_igLogoRenderer_fieldHandles, g_igLogoRenderer_fieldOffsets, temp_s2);
 }

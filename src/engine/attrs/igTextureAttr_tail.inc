@@ -15,7 +15,7 @@ char *igTextureAttr_GetFileName(char *arg0) {
     return p;
 }
 
-static inline void retain(Image *o) { if (o != 0) { o->_refCount = o->_refCount + 1; } }
+static inline void retain(Image *o) { igObject::ref(o); }
 
 static inline unsigned magFilter(const TextureAttr *a) { return a->magFilter; }
 
@@ -128,9 +128,7 @@ void igTextureAttr_apply(igTextureAttr *self, igObject *context) {
             self->_texId = Gap__Gfx__igPsx2VisualContext__createTexture((igPsx2VisualContext *)context, image->_px, image->_py, image->_pfmt, 3, 0, 1);
             break;
         }
-        if (context != 0) {
-            context->_refCount = context->_refCount + 1;
-        }
+        igObject::ref(context);
         igRelease((igObject *)self->_vc);
         self->_vc = (int)context;
     }
@@ -151,9 +149,7 @@ void igTextureAttr_SetImage(igTextureAttr *self, igImage *image, int level) {
     int v1;
     int *a0b;
     if (level == 0) {
-        if (image != 0) {
-            image->_refCount = image->_refCount + 1;
-        }
+        igObject::ref(image);
         a0 = arg0->f48;
         if (a0 != 0) {
             a0[1] = a0[1] - 1;
@@ -168,9 +164,7 @@ void igTextureAttr_SetImage(igTextureAttr *self, igImage *image, int level) {
         ((Gap::Core::igObjectList *)arg0->f64)->setCount(arg0->f60 - 1);
     }
     s1 = arg0->f64;
-    if (image != 0) {
-        image->_refCount = image->_refCount + 1;
-    }
+    igObject::ref(image);
     s0 = level * 4;
     a0b = *(int **)((char *)s1->d + s0 - 4);
     if (a0b != 0) {

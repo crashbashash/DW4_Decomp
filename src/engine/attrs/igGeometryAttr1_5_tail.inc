@@ -16,18 +16,13 @@ extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_32(igGeometryAttr1_5 *self,
     if (self->_vertexArray == 0) {
         igObject *created = (igObject *)igVertexArray_Create((int)((Gap::Core::igObject *)self)->getMemoryPool());
         igObject *previous;
-        if (created != 0) {
-            created->_refCount = created->_refCount + 1;
-        }
+        igObject::ref(created);
         previous = (igObject *)self->_vertexArray;
         igRelease(previous);
         self->_vertexArray = (int)created;
         {
             igObject *vertexArray = (igObject *)self->_vertexArray;
-            vertexArray->_refCount = vertexArray->_refCount - 1;
-            if ((vertexArray->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(vertexArray);
-            }
+            vertexArray->release();
         }
     }
     ((VertexArrayConfigureView *)self->_vertexArray)->configure(a, b, c, d);
@@ -111,16 +106,9 @@ void igGeometryAttr1_5_apply(igGeometryAttr1_5 *self, void *context)
 
 inline void T_13d460::setBuffer(const igSmartPointer<R_13d460> &buffer) {
     R_13d460 *held = buffer.get();
-    if (held != 0) {
-        held->_refCount = held->_refCount + 1;
-    }
+    igObject::ref(held);
     R_13d460 *previous = (R_13d460 *)f48;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     f48 = (Buf *)held;
 }
 

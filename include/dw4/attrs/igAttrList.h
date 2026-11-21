@@ -9,9 +9,6 @@ struct igMemoryPoolView;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igAttrList_metaObject;
-struct igMetaObject *igAttrList_GetOrCreateMetaObject(void);
-struct igAttrList *igAttrList_Create(struct igMemoryPoolView *pool);
 
 #ifdef __cplusplus
 }

@@ -1,53 +1,52 @@
-igMetaObject *g_igModelViewMatrixAttrList_metaObject;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igModelViewMatrixAttrList_GetOrCreateMetaObject(void) {
-    if (g_igModelViewMatrixAttrList_metaObject == 0) {
-        g_igModelViewMatrixAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igModelViewMatrixAttrList_metaObject;
-}
+igMetaObject *igModelViewMatrixAttrList::_Meta;
 
-igMetaObject *igModelViewMatrixAttrList_GetMetaObject(void)
+igMetaObject *igModelViewMatrixAttrList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igModelViewMatrixAttrList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igModelViewMatrixAttrList_EnsureRegistered();
-    return g_igModelViewMatrixAttrList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igModelViewMatrixAttrList_GetVTable(void) {
-    struct Obj_1355e0 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igModelViewMatrixAttrList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igModelViewMatrixAttrList_EnsureRegistered(void)
+igMetaObject *igModelViewMatrixAttrList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igModelViewMatrixAttrList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igModelViewMatrixAttrList_callbackList[] = { Gap::Attrs::igModelViewMatrixAttr::arkRegister, 0 };
+void *igModelViewMatrixAttrList::retrieveVTablePointer()
+{
+    igModelViewMatrixAttrList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igModelViewMatrixAttrList_Register(void) {
+void igModelViewMatrixAttrList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igModelViewMatrixAttrList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igModelViewMatrixAttr::arkRegister, 0 };
+
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igModelViewMatrixAttrList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igModelViewMatrixAttrList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igModelViewMatrixAttrList",
-        0x14, /* instance size */
-        igModelViewMatrixAttrList_GetVTable,
+        sizeof(igModelViewMatrixAttrList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igModelViewMatrixAttrList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igModelViewMatrixAttrList_GetMetaObjectFunction(void) {
-    igModelViewMatrixAttrList_GetMetaObject();
+}
 }
 

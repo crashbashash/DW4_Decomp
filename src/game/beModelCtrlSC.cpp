@@ -97,7 +97,7 @@ int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav) {
     short *matUnitID;
     igAttrStackManager *mgr;
     igAttrStack *stack;
-    igModelViewMatrixAttr *matAttr;
+    Gap::Attrs::igModelViewMatrixAttr *matAttr;
     igTimeAttr *timeAttr;
     int metaId;
     int matSlot;
@@ -129,8 +129,8 @@ int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav) {
         igMatrix44f_SetIdentity(identity);
         igMatrix44f_Multiply(m, node->_m, identity);
     }
-    matAttr = (igModelViewMatrixAttr *)TakePooled((igObjectPool *)trav->_matrixPool, (igObject *(*)(int))Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool);
-    ((igModelViewMatrixAttrDispatchView *)matAttr)->setMatrix(m);
+    matAttr = (Gap::Attrs::igModelViewMatrixAttr *)TakePooled((igObjectPool *)trav->_matrixPool, (igObject *(*)(int))Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool);
+    matAttr->setMatrix((const igMatrix44f &)m);
     timeAttr = (igTimeAttr *)TakePooled((igObjectPool *)trav->_timePool, (igObject *(*)(int))Gap::Attrs::igTimeAttr::_instantiateFromPool);
     timeAttr->_time = time;
     ((igCommonTraversalDispatchView *)trav)->pushTime(time);

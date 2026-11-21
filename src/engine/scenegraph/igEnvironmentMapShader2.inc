@@ -34,7 +34,7 @@ void igEnvironmentMapShader2_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igEnvironmentMapShader2_Register);
 }
 
-static igMetaObjectCallback g_igEnvironmentMapShader2_callbackList[] = { igTextureCubeAttr_EnsureRegistered, igTextureBindAttr_EnsureRegistered, igTextureAttr_EnsureRegistered, igAttrListList_EnsureRegistered, igTextureBindAttr_EnsureRegistered, Gap::Attrs::igTextureCoordSourceAttr::arkRegister, Gap::Attrs::igTextureFunctionAttr::arkRegister, Gap::Attrs::igBlendStateAttr::arkRegister, 0 };
+static igMetaObjectCallback g_igEnvironmentMapShader2_callbackList[] = { igTextureCubeAttr_EnsureRegistered, igTextureBindAttr_EnsureRegistered, igTextureAttr_EnsureRegistered, Gap::Attrs::igAttrListList::arkRegister, igTextureBindAttr_EnsureRegistered, Gap::Attrs::igTextureCoordSourceAttr::arkRegister, Gap::Attrs::igTextureFunctionAttr::arkRegister, Gap::Attrs::igBlendStateAttr::arkRegister, 0 };
 
 CallbackArray *igEnvironmentMapShader2_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -180,11 +180,11 @@ void igEnvironmentMapShader2_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igTextureAttr_GetOrCreateMetaObject();
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7))))->_persistent = 0;
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 8)));
-    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igAttrListList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)Gap::Attrs::igAttrListList::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s2_4)->_construct = 1;
     ((igMetaField *)temp_s2_4)->_persistent = 0;
     temp_s2_5 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 9)));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igAttrListList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)Gap::Attrs::igAttrListList::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s2_5)->_construct = 1;
     ((igMetaField *)temp_s2_5)->_persistent = 0;
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xA))))->_persistent = 0;

@@ -383,7 +383,7 @@ void FUN_001c3090(V_1c3090 *arg0, int arg1) {
     arg0->b(arg1);
     arg0->f60 = 1;
     if (arg0->f32 != 0) {
-        o = ((Obj_1c3090 *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+        o = ((Obj_1c3090 *)Gap::Attrs::igAttrList::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
         ((Gap::Core::igObjectList *)arg0->f64)->append((Gap::Core::igObject *)o);
         ((Gap::Core::igObjectList *)arg0->f68)->append((Gap::Core::igObject *)o);
         o->refs = o->refs - 1;

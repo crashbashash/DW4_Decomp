@@ -26,7 +26,7 @@ void igFont_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igFont_Register);
 }
 
-static igMetaObjectCallback g_igFont_callbackList[] = { igAttrList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igFont_callbackList[] = { Gap::Attrs::igAttrList::arkRegister, 0 };
 
 CallbackArray *igFont_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -83,7 +83,7 @@ void igFont_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igFont_ctorTable, 4);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)(igAttrList_GetOrCreateMetaObject());
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)(Gap::Attrs::igAttrList::getClassTypeLazy());
     ((igRefMetaField *)temp_s1)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igFont_fieldTable, g_igFont_fieldHandles, g_igFont_fieldOffsets, temp_s2);
 }

@@ -1,6 +1,11 @@
-int igAttrPool_AddNonSharableType(int *p, void *meta)
+namespace Gap {
+namespace Attrs {
+
+void igAttrPool::addNonSharableType(igMetaObject *meta)
 {
-    return ((Gap::Core::igObjectList *)(*(int *)((char *)p + 12)))->appendUnique((Gap::Core::igObject *)meta);
+    ((igObjectList *)(::igMetaObjectList *)_nonSharableMetaList)->appendUnique((igObject *)meta);
+}
+}
 }
 
 static inline void clearBytes(char *p, unsigned int n) {
@@ -13,17 +18,24 @@ static inline void clearBytes(char *p, unsigned int n) {
     }
 }
 
-void igAttrPool_resetFields(igAttrPool *self, int flags) {
-    void *metas[4];
+namespace Gap {
+namespace Attrs {
+
+void igAttrPool::resetFields(int flag)
+{
+    igMetaObject *metas[4];
     int i;
-    Gap__Core__igObject__resetFields((igObject *)self, flags);
+
+    igObject::resetFields(flag);
     clearBytes((char *)metas, sizeof(metas));
     metas[0] = igTextureBindAttr_GetMetaObject();
     metas[1] = igTextureAttr_GetMetaObject();
     metas[2] = igLightAttr_GetMetaObject();
     metas[3] = igLightStateAttr_GetMetaObject();
     for (i = 0; i < 4; i++) {
-        igAttrPool_AddNonSharableType((int *)self, metas[i]);
+        addNonSharableType(metas[i]);
     }
+}
+}
 }
 
