@@ -44,8 +44,8 @@ typedef struct igObject {
 #ifdef __cplusplus
     inline void ref() const;
     inline void release() const;
-    static inline void release(const igObject *obj);
-    static inline void ref(const igObject *obj);
+    static inline void release(igObject *obj);
+    static inline void ref(igObject *obj);
 #endif
 } igObject;
 
@@ -21059,7 +21059,6 @@ typedef struct libNdmwRuntimePlugin {
 #include "dw4/core/igObject.h"
 #include "dw4/core/igCore.h"
 #include "dw4/core/igResult.h"
-#include "dw4/core/igSmartPointer.h"
 #include "dw4/core/igStringRef.h"
 namespace Gap {
 namespace Attrs { class igAlphaFunctionAttr; class igAlphaStateAttr; class igAttr; class igAttrDefaultManager; class igAttrList; class igAttrListList; class igAttrPool; class igBlendFunctionAttr; class igBlendMatricesAttr; class igBlendMatrixPaletteAttr; class igBlendMatrixPaletteAttrList; class igBlendStateAttr; class igClearAttr; class igClippingStateAttr; class igColorAttr; class igColorMaskAttr; class igCullFaceAttr; class igDepthStateAttr; class igDepthWriteStateAttr; class igDisplayListAttr; class igFogAttr; class igFogStateAttr; class igGenericAttrDefaultManager; class igGeometryMaskAttr; class igLightingStateAttr; class igMaterialAttr; class igMatrixOptStateAttr; class igModelViewMatrixAttr; class igModelViewMatrixAttrList; class igMultiPassStateAttr; class igNormalizeNormalsStateAttr; class igPixelPipelineModeAttr; class igPolygonModeAttr; class igProjectionMatrixAttr; class igRenderListAttr; class igShadeModelAttr; class igStencilFunctionAttr; class igStencilStateAttr; class igTexGenMatrixAttr; class igTextureCoordSourceAttr; class igTextureFunctionAttr; class igTextureMatrixAttr; class igTextureMatrixStateAttr; class igTextureStateAttr; class igTextureUnloadAttr; class igTimeAttr; class igVertexBlendMatrixAttr; class igVertexBlendStateAttr; class igViewportAttr; class igVisualAttribute; class igVisualContextAttrDefaultManager; }
@@ -21265,6 +21264,7 @@ protected:
 };
 }
 }
+#include "dw4/core/igSmartPointer.h"
 
 namespace Gap {
 namespace Attrs {
@@ -21359,8 +21359,8 @@ namespace Attrs {
 class igAttrDefaultManager : public Gap::Core::igObject {
 public:
     IG_ABSTRACT_OBJECT_DEFINE(igAttrDefaultManager)
-    virtual igSmartPointer< ::igAttr> getSharedDefaultAttr(igMetaObject *meta, int unitID) const;
-    virtual igSmartPointer< ::igAttr> createDefaultAttr(igMetaObject *meta, int unitID) const = 0;
+    virtual igSmartPointer<igAttr> getSharedDefaultAttr(igMetaObject *meta, int unitID) const;
+    virtual igSmartPointer<igAttr> createDefaultAttr(igMetaObject *meta, int unitID) const = 0;
 };
 }
 }
@@ -21466,7 +21466,7 @@ private:
     static igMetaField *k_nonSharableMetaList;
     static igMetaField *k_attributeList;
 public:
-    igSmartPointer< ::igAttr> getSharedAttr(igSmartPointer< ::igAttr> attribute);
+    igSmartPointer<igAttr> getSharedAttr(igSmartPointer<igAttr> attribute);
     void addNonSharableType(igMetaObject *meta);
     static igAttrPool *getStaticAttrPool();
     static void userUnregister();
@@ -22307,7 +22307,7 @@ namespace Attrs {
 class igGenericAttrDefaultManager : public Gap::Attrs::igAttrDefaultManager {
 public:
     IG_OBJECT_DEFINE(igGenericAttrDefaultManager)
-    virtual igSmartPointer< ::igAttr> createDefaultAttr(igMetaObject *meta, int unitID) const;
+    virtual igSmartPointer<igAttr> createDefaultAttr(igMetaObject *meta, int unitID) const;
 };
 }
 }
@@ -22557,7 +22557,7 @@ public:
     unsigned char _refCounted;                     /* +66   igBoolMetaField */
     char _pad67[1];
     int _alignmentType;                            /* +68   igIntMetaField */
-    igSmartPointer< ::igMetaField> _memTypeRef;    /* +72   igObjectRefMetaField */
+    igSmartPointer<igMetaField> _memTypeRef;       /* +72   igObjectRefMetaField */
     igStringRef _poolName;                         /* +76   igStringMetaField */
     IG_BOOTSTRAP_OBJECT_DEFINE(igMemoryRefMetaField)
     IG_METAFIELD_SETUP(igMemoryRefMetaField)
@@ -23700,15 +23700,15 @@ private:
 public:
     inline void setVisualContext(igVisualContext *visualContextParam) { _visualContext = visualContextParam; }
     inline const igVisualContext *getVisualContext() const { return _visualContext; }
-    virtual igSmartPointer< ::igAttr> createDefaultAttr(igMetaObject *meta, int unitID) const;
+    virtual igSmartPointer<igAttr> createDefaultAttr(igMetaObject *meta, int unitID) const;
 };
 }
 }
 
 inline void igObject::ref() const { ((const Gap::Core::igObject *)this)->ref(); }
 inline void igObject::release() const { ((const Gap::Core::igObject *)this)->release(); }
-inline void igObject::release(const igObject *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->release(); }
-inline void igObject::ref(const igObject *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->ref(); }
+inline void igObject::release(igObject *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->release(); }
+inline void igObject::ref(igObject *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->ref(); }
 #endif
 
 #endif /* DW4_REFLECTED_H */

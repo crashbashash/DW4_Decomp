@@ -38,7 +38,7 @@ static inline igFloatList *heightGrid(beWaterPlainInfoRam *ram, int index) { ret
 
 static inline void igObjectListSet(igObject *object, igObjectList *list, int index) {
     if (object != 0) object->_refCount = object->_refCount + 1;
-    igRelease(((igObject **)list->_data)[index]);
+    igObject::release(((igObject **)list->_data)[index]);
     if (list->_count != 0 && index >= 0 && index < list->_count) ((igObject **)list->_data)[index] = object;
 }
 

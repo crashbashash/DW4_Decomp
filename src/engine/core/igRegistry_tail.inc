@@ -885,7 +885,7 @@ void igReport_ReadSettings(void) {
                 g_reportLevel = 1;
             }
         }
-        igRelease(name);
+        igObject::release(name);
     }
 }
 

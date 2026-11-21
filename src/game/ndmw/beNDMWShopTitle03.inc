@@ -36,25 +36,25 @@ void *beNDMWWindow_Destroy(beNDMWWindowCtrl *self, short flags) {
     if (self != 0) {
         self->_vtable = (int)&g_beNDMWWindow_vtable[0];
         if (&self->_modelCloseSeqNameList != 0) {
-            igRelease((igObject *)self->_modelCloseSeqNameList);
+            igObject::release((igObject *)self->_modelCloseSeqNameList);
         }
         if (&self->_modelCloseRamNoList != 0) {
-            igRelease((igObject *)self->_modelCloseRamNoList);
+            igObject::release((igObject *)self->_modelCloseRamNoList);
         }
         if (&self->_modelCloseInfoNameList != 0) {
-            igRelease((igObject *)self->_modelCloseInfoNameList);
+            igObject::release((igObject *)self->_modelCloseInfoNameList);
         }
         if (&self->_textCloseNameList != 0) {
-            igRelease((igObject *)self->_textCloseNameList);
+            igObject::release((igObject *)self->_textCloseNameList);
         }
         if (&self->_textCloseTypeList != 0) {
-            igRelease((igObject *)self->_textCloseTypeList);
+            igObject::release((igObject *)self->_textCloseTypeList);
         }
         if (&self->_mother != 0) {
-            igRelease((igObject *)self->_mother);
+            igObject::release((igObject *)self->_mother);
         }
         if (&self->_subWindow != 0) {
-            igRelease((igObject *)self->_subWindow);
+            igObject::release((igObject *)self->_subWindow);
         }
         if (flags > 0) {
             Memory_FreeBufferAliasC(self);

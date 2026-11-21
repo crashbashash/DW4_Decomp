@@ -71,17 +71,17 @@ int beCriAudio_Setup(beCriAudio *self, int channels) {
     if (channels < 0) {
         int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
-        igRelease((igObject *)self->_sndf);
+        igObject::release((igObject *)self->_sndf);
         self->_sndf = (int)beCriSndf_Create(allocator);
-        igRelease((igObject *)self->_adxt);
+        igObject::release((igObject *)self->_adxt);
         self->_adxt = 0;
         self->_audioType = kAudioSndf;
     } else {
         int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
-        igRelease((igObject *)self->_adxt);
+        igObject::release((igObject *)self->_adxt);
         self->_adxt = (int)igAdxAudio_Create(allocator);
-        igRelease((igObject *)self->_sndf);
+        igObject::release((igObject *)self->_sndf);
         self->_sndf = 0;
         self->_audioType = kAudioAdxFile;
         int frequency = (channels == 2) ? 48000 : 24000;
@@ -93,12 +93,12 @@ int beCriAudio_Setup(beCriAudio *self, int channels) {
 }
 
 void beCriAudio_Release(beCriAudio *self) {
-    igRelease((igObject *)self->_sndf);
+    igObject::release((igObject *)self->_sndf);
     self->_sndf = 0;
     if (self->_adxt != 0) {
         igAdxAudio_Shutdown(adxOf(self));
     }
-    igRelease((igObject *)self->_adxt);
+    igObject::release((igObject *)self->_adxt);
     self->_adxt = 0;
 }
 
@@ -413,7 +413,7 @@ int beCriVolume_StepSndfLevel(beCriVolume *self, int baseVolume) {
 struct TimerHolder {
     igObject *p;
     TimerHolder(void *timer) { p = (igObject *)timer; }
-    ~TimerHolder() { igRelease(p); }
+    ~TimerHolder() { igObject::release(p); }
 };
 
 /* The allocator new members come from: the owner's own, or the user pool. */
@@ -428,7 +428,7 @@ static inline void ensureTimerList(beBaseInfoRam *ram) {
         igSmartPointer<igObject> created(beBaseInfoDataList_Create(allocatorFor(ram)));
         igObject *list = created.p;
         if (list != 0) list->_refCount = list->_refCount + 1;
-        igRelease((igObject *)ram->_dataList);
+        igObject::release((igObject *)ram->_dataList);
         ram->_dataList = (int)list;
     }
 }
@@ -452,7 +452,7 @@ void beBaseInfoRam_StartTimer(beBaseInfoRam *self, const char *name, long long e
             igSmartPointer<igObject> list(beBaseInfoDataList_Create(allocatorFor(self)));
             igObject *retained = list.p;
             if (retained != 0) retained->_refCount = retained->_refCount + 1;
-            igRelease((igObject *)self->_dataList);
+            igObject::release((igObject *)self->_dataList);
             self->_dataList = (int)retained;
         }
         ((Gap::Core::igObjectList *)self->_dataList)->append((Gap::Core::igObject *)created.p);
@@ -579,7 +579,7 @@ void beBaseInfoRam_RemoveTimer(beBaseInfoRam *self, const char *name) {
             list = (igTDataList<igObject *> *)self->_dataList;
             index = list->find(found);
             list = (igTDataList<igObject *> *)self->_dataList;
-            igRelease(list->_data[index]);
+            igObject::release(list->_data[index]);
             List_RemoveWordAt((igDataList *)list, index);
             list->_data[list->_count] = 0;
         }
@@ -609,7 +609,7 @@ void beBaseInfoRam_RemoveAllTimers(beBaseInfoRam *self) {
                 timerMeta = g_beBaseInfoRamTimer_metaObject;
                 if (timerMeta == entry->GetMeta()) {
                     list = ((igObjectList *)self->_dataList);
-                    igRelease(*(igObject **)(list->_data + offset));
+                    igObject::release(*(igObject **)(list->_data + offset));
                     List_RemoveWordAt((igDataList *)list, i);
                     count -= 1;
                     i -= 1;
@@ -630,7 +630,7 @@ void beBaseInfoRam_RemoveAllTimers(beBaseInfoRam *self) {
 void beMovie_Prepare(beMovie *self) {
     igObject *manager = igInsightCore_FindManager((igInsightCore *)self->_insight, g_igMovieManager_metaObject);
     igObject::ref(manager);
-    igRelease((igObject *)self->_movie);
+    igObject::release((igObject *)self->_movie);
     self->_movie = (int)manager;
 }
 

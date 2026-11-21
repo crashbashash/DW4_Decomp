@@ -26,7 +26,7 @@ int igLuaState_GetVTable(void) {
     /* The destructors, each testing its member's address as a member destructor does. */
     state.vtable = g_igLuaState_vtable;
     if (memPool != 0) {
-        igRelease(*memPool);
+        igObject::release(*memPool);
     }
     state.vtable = g_igNamedObject_vtable;
     if (name != 0) {

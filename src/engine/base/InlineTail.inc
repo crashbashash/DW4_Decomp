@@ -331,7 +331,7 @@ extern "C" void Gap__igItemInterface__vfunc_29(ItemRegistry *self, const StringR
     } else {
         if (item != 0) item->_refCount = item->_refCount + 1;
         igObject *old = items->_data[slot];
-        igRelease(old);
+        igObject::release(old);
         if (items->_count != 0 && slot >= 0 && slot < items->_count) {
             items->_data[slot] = item;
         }

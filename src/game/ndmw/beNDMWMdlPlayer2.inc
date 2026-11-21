@@ -41,7 +41,7 @@ beModelCtrl *beModelCtrl_Destroy(beModelCtrl *self, short flags) {
         if (self != 0) {
             *(int **)&self->_vtable = &g_beBaseInfoManager_vtable[0];
             if (&self->_infoList != 0) {
-                igRelease((igObject *)self->_infoList);
+                igObject::release((igObject *)self->_infoList);
             }
             if (self != 0) {
                 *(int **)&self->_vtable = &g_igInfoManager_vtable[0];

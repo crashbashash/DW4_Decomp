@@ -383,7 +383,7 @@ int igAdxAfsFile_GetVTable(void) {
     vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igFileName_vtable[0];
     if (pathListRef != 0) {
-        igRelease((igObject *)*pathListRef);
+        igObject::release((igObject *)*pathListRef);
     }
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     if (nameRef != 0) {
@@ -526,7 +526,7 @@ int igFileName_GetVTable(void) {
     vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igFileName_vtable[0];
     if (pathListRef != 0) {
-        igRelease((igObject *)*pathListRef);
+        igObject::release((igObject *)*pathListRef);
     }
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     if (nameRef != 0) {
@@ -1705,11 +1705,11 @@ int igMovieRenderer_GetVTable(void) {
     vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igMovieRenderer_vtable[0];
     if (&obj._movieManager != 0) {
-        igRelease((igObject *)obj._movieManager);
+        igObject::release((igObject *)obj._movieManager);
     }
     *(int **)&obj._vtable = &g_igRenderer_vtable[0];
     if (&obj._visualContext != 0) {
-        igRelease((igObject *)obj._visualContext);
+        igObject::release((igObject *)obj._visualContext);
     }
     return vtable;
 }
@@ -1973,7 +1973,7 @@ int igMoviePlugin_GetVTable(void) {
     vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_igMoviePlugin_vtable[0];
     if (&obj._movieManager != 0) {
-        igRelease((igObject *)obj._movieManager);
+        igObject::release((igObject *)obj._movieManager);
     }
     return vtable;
 }

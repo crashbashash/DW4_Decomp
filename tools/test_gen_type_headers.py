@@ -78,5 +78,25 @@ class FlatView(unittest.TestCase):
                                     "#endif", ""])
 
 
+class SmartPointerInclude(unittest.TestCase):
+    def test_the_template_is_read_once_the_root_is_complete(self):
+        layouts = dict(LAYOUTS, igRenderer=(0x1, 1, "sizeof 12", 12,
+                                            [(8, 4, "    igSmartPointer<igVisualContext> _visualContext;")]))
+        members = {"igObject": ["virtual void destruct();"], "igRenderer": ["void setVisualContext(int *context);"]}
+        out = gth.converted_classes({"igObject": "Core", "igRenderer": "Gui"}, {"igRenderer": "igObject"}, layouts,
+                                    members)
+        include = out.index("#include \"dw4/core/igSmartPointer.h\"")
+        self.assertEqual(out.count("#include \"dw4/core/igSmartPointer.h\""), 1)
+        # after the root's closing braces, before the first class holding a smart pointer
+        self.assertEqual(out[include - 3:include], ["};", "}", "}"])
+        self.assertLess(out.index("class igObject {"), include)
+        self.assertLess(include, out.index("class igRenderer : public Gap::Core::igObject {"))
+
+    def test_no_smart_pointer_member_no_include(self):
+        out = gth.converted_classes({"igObject": "Core", "igRenderer": "Gui"}, {"igRenderer": "igObject"}, LAYOUTS,
+                                    {"igObject": ["virtual void destruct();"]})
+        self.assertNotIn("#include \"dw4/core/igSmartPointer.h\"", out)
+
+
 if __name__ == "__main__":
     unittest.main()

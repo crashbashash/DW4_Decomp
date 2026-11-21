@@ -1,7 +1,7 @@
 namespace Gap {
 namespace Attrs {
 
-igSmartPointer< ::igAttr> igGenericAttrDefaultManager::createDefaultAttr(igMetaObject *meta, int unitID) const
+igSmartPointer<igAttr> igGenericAttrDefaultManager::createDefaultAttr(igMetaObject *meta, int unitID) const
 {
     igMetaObject_IsOfType(meta, igAttr::getClassMeta());
     return igMetaObject_CreateInstanceDefaultRef(meta);

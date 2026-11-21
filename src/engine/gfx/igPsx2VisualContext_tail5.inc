@@ -1086,7 +1086,7 @@ void FUN_0017a540(igPsx2VisualContext *vc, int keepLists) {
             Memory_FreeBufferAliasB(t);
         }
         vc->_pTexList = 0;
-        igRelease((igObject *)vc->_pTexLoadedList);
+        igObject::release((igObject *)vc->_pTexLoadedList);
         vc->_pTexLoadedList = 0;
     }
     if (vc->_iCLUT_A8 != -1) FUN_0016ab80((Oab80 *)vc, vc->_iCLUT_A8);
@@ -1193,7 +1193,7 @@ int Gap__Gfx__igPsx2VisualContext__createTexture(igPsx2VisualContext *self, int 
 
 inline void adoptNewImage(MipImage *&image, AdoptReference)
 {
-    igRelease(image);
+    igVirtualObject::release(image);
     image = (MipImage *)igImage_CreateInstance(0);
 }
 
@@ -1232,9 +1232,9 @@ int igPsx2VisualContext_CreateTexture(TexContext *context, int width, int height
     entry->format = format;
     entry->kind = kind;
     entry->flags = flags;
-    igRelease(entry->palette);
+    igObject::release(entry->palette);
     entry->palette = 0;
-    igRelease(entry->image);
+    igVirtualObject::release(entry->image);
     entry->image = 0;
     entry->depth = -1;
     entry->mipCount = mipLevels > 6 ? 6 : mipLevels;

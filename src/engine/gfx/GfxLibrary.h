@@ -971,7 +971,7 @@ struct igObjectRefList : public igObject {
     }
     void set(int index, igObject *v) {
         if (v != 0) v->_refCount = v->_refCount + 1;
-        igRelease(_data[index]);
+        igObject::release(_data[index]);
         if (_count != 0 && index >= 0 && index < _count) _data[index] = v;
     }
 };
@@ -1842,7 +1842,7 @@ public:
     igVertexArray2View *_vertexArray;
     void setVertexArray(igVertexArray2View *array) {
         if (array != 0) array->_refCount = array->_refCount + 1;
-        igRelease(_vertexArray);
+        igVirtualObject::release(_vertexArray);
         _vertexArray = array;
     }
 };
@@ -2122,16 +2122,9 @@ struct VertexFormatOwner : igObject {
         VertexArrayFormat *object = next.p;
         VertexArrayFormat *previous;
 
-        if (object != 0) {
-            object->_refCount = object->_refCount + 1;
-        }
+        igObject::ref(object);
         previous = format;
-        if (previous != 0) {
-            previous->_refCount = previous->_refCount - 1;
-            if ((previous->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(previous);
-            }
-        }
+        igObject::release(previous);
         format = object;
     }
 };
@@ -2279,13 +2272,6 @@ struct igQuantizedVertexData {
 struct igVec2fListView { int vt; int rc; int count; int cap; igVec2f *data; };
 struct igVec3fListView { int vt; int rc; int count; int cap; igVec3f *data; };
 struct igVec4fListView { int vt; int rc; int count; int cap; igVec4f *data; };
-/* Home at landing: igTDataList.h (CoreLibrary.h holds the same template). */
-template <class T> static inline void igRelease(igTDataList<T> *o) {
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-    }
-}
 extern "C" float Gap__Gfx__igVertexArray2Helper__vfunc_61(igVertexArray2Helper *self, int type, int bytes,
                                                           bool useFixed, bool isSigned, int bits, int index);
 extern "C" ObjectRefWord *FUN_00164870(ObjectRefWord *self,int delete_storage);
@@ -2316,6 +2302,9 @@ public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28();
     virtual void vfunc_29();
     unsigned int _refCount; /* +4: 23-bit reference count, flags above it */
+    /* the kit's static ref/release, forwarding to Gap::Core::igObject's members as the flat igObject's do */
+    static inline void release(igObjectSlotView *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->release(); }
+    static inline void ref(igObjectSlotView *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->ref(); }
 };
 static inline void igObject_Destroy(igObjectSlotView *object) { igObject_Destroy((igObject *)object); }
 /* igVisualContext as its constructFields writes it: the memory pools and the timer are smart pointers

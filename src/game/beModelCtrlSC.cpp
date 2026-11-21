@@ -66,7 +66,7 @@ typedef igTDataList<igAttr *> AttrList;
 struct RamDataList { static inline void assign(beBaseInfoRam *ram, const igSmartPointer<igObject> &created) {
         igObject *list = created.p;
         igObject::ref(list);
-        igRelease((igObject *)ram->_dataList);
+        igObject::release((igObject *)ram->_dataList);
         ram->_dataList = (int)list;
 }
 static inline void create(beBaseInfoRam *ram, int allocator) { igSmartPointer<igObject> list(beBaseInfoDataList_Create(allocator)); assign(ram, list); }
@@ -419,7 +419,7 @@ void beModelCtrlSubCom_Update(beModelCtrlSubCom *self, beBaseInfoRam *ram) {
         do {
             if (beModelCtrlSubComBase_Advance(((beModelCtrlSubComBase **)((igObjectList *)self->_comList)->_data)[i], ram) == 0) {
                 list = (igObjectList *)(self->_comList);
-                igRelease(((igObject **)list->_data)[i]);
+                igObject::release(((igObject **)list->_data)[i]);
                 List_RemoveWordAt((igDataList *)list, i);
                 i -= 1;
                 count -= 1;
@@ -459,7 +459,7 @@ void beModelCtrlSubCom_StopAll(beModelCtrlSubCom *self, beBaseInfoRam *ram) {
     j = 0;
     if (0 < count) {
         do {
-            igRelease(((igObject **)list->_data)[j]);
+            igObject::release(((igObject **)list->_data)[j]);
             j += 1;
         } while (j < count);
     }
@@ -481,7 +481,7 @@ void beModelCtrlSubCom_StopType(beModelCtrlSubCom *self, beBaseInfoRam *ram, igM
             if (metaObject == command->GetMeta()) {
                 command->Stop(ram);
                 list = (igObjectList *)self->_comList;
-                igRelease(((igObject **)list->_data)[i]);
+                igObject::release(((igObject **)list->_data)[i]);
                 List_RemoveWordAt((igDataList *)list, i);
                 i--;
                 count--;

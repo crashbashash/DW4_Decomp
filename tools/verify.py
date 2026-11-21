@@ -2007,6 +2007,10 @@ def verify_emitted_unit(obj, group, elf, symbols, profile, recompile,
                         return aliases[symbol]
                     if symbol in data_addresses:
                         return data_addresses[symbol]
+                    if records and symbol in records:
+                        # a body the unit itself emits (the twin defines it too, in its own section):
+                        # the twin's call reaches the unit's copy, at its retail address
+                        return records[symbol][0]
                     if symbol in syms and isinstance(syms[symbol][0], int):
                         return address + syms[symbol][1] if syms[symbol][0] == section else None
                     try:

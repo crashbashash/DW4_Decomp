@@ -1033,7 +1033,7 @@ igResult igIGBFile_ReadNextChunk(igIGBFileView *self) {
     }
 }
 
-static inline IgbReadEntry *castToKind(IgbReadEntry *object) {
+static inline igObject *castToKind(igObject *object) {
     if (object != 0 && ((Gap::Core::igObject *)object)->isOfType((igMetaObject *)g_igDirEntry_metaObject) != 0) {
         return object;
     }
@@ -1056,7 +1056,7 @@ SectionObjectRef igIGBFile_ReadObject(igIGBFile *file) {
     if (file->_endianSwap != 0) {
         Gap::Core::igIntMetaField::getMetaField()->endianSwapMemory(&metaIndex, 1);
     }
-    igSmartPointer<IgbReadEntry> object(castToKind((IgbReadEntry *)igMetaObject_CreateInstanceWithPool(((igMetaObject **)((igObjectList *)file->_metaObjectListInFile)->_data)[metaIndex], (igMemoryPoolView *)file->_temporaryMemoryPool)), kRetainReference);
+    igSmartPointer<igObject> object(castToKind((igObject *)igMetaObject_CreateInstanceWithPool(((igMetaObject **)((igObjectList *)file->_metaObjectListInFile)->_data)[metaIndex], (igMemoryPoolView *)file->_temporaryMemoryPool)), kRetainReference);
     object->release();
     igObject_RegisterInstance((void **)object.p, 0);
     int read;
@@ -1191,7 +1191,7 @@ igResult igIGBFile_ReadObjectSectionOld(igIGBFileView *file) {
     if (file->_sharingState != 0) {
         igTDataList<int> *old = file->_refList;
         pool = (int)file->_temporaryMemoryPool;
-        igRelease((igObject *)old);
+        igObject::release((igObject *)old);
         file->_refList = (igTDataList<int> *)igPointerList_Create(pool);
         int count = file->_entryCount;
         igTDataList<int> *indices = file->_refList;
@@ -1204,7 +1204,7 @@ igResult igIGBFile_ReadObjectSectionOld(igIGBFileView *file) {
         }
         igObject *previous = file->_entryPool;
         pool = (int)file->_temporaryMemoryPool;
-        igRelease(previous);
+        igObject::release(previous);
         file->_entryPool = (igObject *)Gap::Core::igObjectList::_instantiateFromPool((igMemoryPoolView *)pool);
     }
     if (igIGBFile_ReadNextChunk(file) == g_resultFailure) {

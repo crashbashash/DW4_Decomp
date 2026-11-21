@@ -329,7 +329,7 @@ void FUN_001563b0(igImage *self, igImage *source, int deep) {
     }
     self->_pImage = 0;
     if (self->_pClut != 0) {
-        igRelease((igObject *)self->_pClut);
+        igObject::release((igObject *)self->_pClut);
         self->_pClut = 0;
     }
     if (deep) {
@@ -342,7 +342,7 @@ void FUN_001563b0(igImage *self, igImage *source, int deep) {
         }
         if (source->_pClut != 0) {
             int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
-            igRelease((igObject *)self->_pClut);
+            igObject::release((igObject *)self->_pClut);
             self->_pClut = igClut_Create(allocator);
             FUN_00154c90((igClut *)self->_pClut, (igClut *)source->_pClut, 1);
         }
@@ -596,7 +596,7 @@ unsigned char FUN_00157200(igImage *self, int format, igImage *source) {
         self->_pImage = 0;
         clut = (igObject *)self->_pClut;
         if (clut != 0) {
-            igRelease(clut);
+            igObject::release(clut);
             self->_pClut = 0;
         }
     }
@@ -673,9 +673,9 @@ unsigned char FUN_00157200(igImage *self, int format, igImage *source) {
     }
     if ((igObject *)self->_pClut != clut) {
         igObject::ref(clut);
-        igRelease((igObject *)self->_pClut);
+        igObject::release((igObject *)self->_pClut);
         self->_pClut = (int)clut;
-        igRelease((igObject *)self->_pClut);
+        igObject::release((igObject *)self->_pClut);
     }
     igImage_UpdateFormatInfo(self);
     return true;

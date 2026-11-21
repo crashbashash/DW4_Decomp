@@ -62,7 +62,7 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
          * unit's profile leaves the operator an out-of-line call inside the inline */
         igObject *s0 = list.p;
         igObject::ref(s0);
-        igRelease((igObject *)ram->_dataList);
+        igObject::release((igObject *)ram->_dataList);
         ram->_dataList = (int)s0;
     }
 } };

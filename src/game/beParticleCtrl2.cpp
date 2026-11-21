@@ -115,7 +115,7 @@ void beParticleCtrl2_UpdateRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ra
             TimerOf(ram)->_timeRunning = 0;
             igSwitch_DisableChild((igSwitch *)info->_subSwitch, ram->_ramNo);
             ram->_isRun = 0;
-            igRelease((igObject *)ram->_work);
+            igObject::release((igObject *)ram->_work);
             ram->_work = 0;
             igObjectList *children = (igObjectList *)((igSwitch *)info->_subSwitch)->_childList;
             int count = children != 0 ? children->_count : 0;

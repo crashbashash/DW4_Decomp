@@ -329,8 +329,7 @@ int beNDMWStatus_OnMessage(beNDMWStatus *self, beNDMWStatusInfoRam *ram, beBaseI
         beMessenger_AppendInt((beMessenger *)self->_messenger, playerNo);
         beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GETPLAYER");
         player = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
-        igSmartPointer<igObject> name(((igObject **)((igObjectList *)igProperty_GetRecordFolder((igObject *)player, "PLAYERNAME")->_data)->_data)[0]);
-        if (name.p != 0) name.p->_refCount = name.p->_refCount + 1;
+        igSmartPointer<igObject> name(((igObject **)((igObjectList *)igProperty_GetRecordFolder((igObject *)player, "PLAYERNAME")->_data)->_data)[0], kRetainReference);
         beMessenger_SelectGroup((beMessenger *)self->_messenger, "TEXTCTL");
         beMessenger_AppendString((beMessenger *)self->_messenger, "STWINFONT02");
         beMessenger_AppendString((beMessenger *)self->_messenger, "font000");

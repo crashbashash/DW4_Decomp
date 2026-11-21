@@ -101,7 +101,7 @@ int Gap__igPsx2Window__vfunc_24(igPsx2Window *self, const char *name, int width,
     } else {
         VisualContext *created = (VisualContext *)(igVisualContext_CreateInstance((int)(((Gap::Core::igObject *)self)->getMemoryPool())));
         if (created != 0) created->_refCount = created->_refCount + 1;
-        igRelease((igObject *)self->_vc);
+        igObject::release((igObject *)self->_vc);
         self->_vc = (int)created;
         VisualContext *vc = (VisualContext *)self->_vc;
         if (vc == 0) {

@@ -120,13 +120,13 @@ static inline void SetString(int *field, char *text) {
 struct NameListRef {
     igStringRefList *p;
     NameListRef(igStringRefList *o) : p(o) {}
-    ~NameListRef() { igRelease(p); }
+    ~NameListRef() { igObject::release(p); }
 };
 /* Shared stack reference to the system's scratch string object, released on scope exit. */
 struct GlobalStrRef {
     igStringObj *p;
     GlobalStrRef(igStringObj *o) : p(o) { if (p != 0) p->_refCount = p->_refCount + 1; }
-    ~GlobalStrRef() { igRelease(p); }
+    ~GlobalStrRef() { igObject::release(p); }
 };
 
 /* Drops the list's share of every object it holds and empties it. */
@@ -134,7 +134,7 @@ static inline void ReleaseAll(igObjectList *list) {
     int count = list->_count;
     int i;
     for (i = 0; i < count; i++) {
-        igRelease(((igObject **)list->_data)[i]);
+        igObject::release(((igObject **)list->_data)[i]);
     }
     {
         int size = list->_count;
@@ -167,7 +167,7 @@ void beSound_Prepare(beSound *self) {
     if (self->_cri == 0) {
         igObject *cri = (igObject *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beCri_metaObject);
         igObject::ref(cri);
-        igRelease((igObject *)self->_cri);
+        igObject::release((igObject *)self->_cri);
         self->_cri = (int)cri;
     }
     ReleaseAll((igObjectList *)self->_playSEs);
@@ -218,7 +218,7 @@ void beSound_UpdateRam(beSound *self, beBaseInfoRam *ram) {
             }
             ReleaseAll((igObjectList *)info->_dataList);
             ReserveIfEmpty((igObjectList *)info->_dataList);
-            igRelease(((igObject **)infos->_data)[infoIndex]);
+            igObject::release(((igObject **)infos->_data)[infoIndex]);
             List_RemoveWordAt((igDataList *)infos, infoIndex);
             ((igObject **)infos->_data)[infos->_count] = 0;
         } while (infoIndex < infos->_count);

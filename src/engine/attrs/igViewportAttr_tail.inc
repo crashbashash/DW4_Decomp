@@ -40,13 +40,13 @@ namespace Gap {
 namespace Attrs {
 
 /* createDefault: instantiate `meta`, and when it is an igAttr seed it from the managed context. */
-igSmartPointer< ::igAttr> igVisualContextAttrDefaultManager::createDefaultAttr(igMetaObject *meta, int unitID) const
+igSmartPointer<igAttr> igVisualContextAttrDefaultManager::createDefaultAttr(igMetaObject *meta, int unitID) const
 {
     if (meta == 0 || _visualContext == 0) {
-        return igSmartPointer< ::igAttr>(0, kRetainReference);
+        return igSmartPointer<igAttr>(0, kRetainReference);
     }
     igObjectPointer created = igMetaObject_CreateInstanceRef(meta, getMemoryPool());
-    igSmartPointer< ::igAttr> attr((::igAttr *)asAttr(created.get()), kRetainReference);
+    igSmartPointer<igAttr> attr((igAttr *)asAttr(created.get()), kRetainReference);
     if (attr != 0) {
         ((igAttr *)attr.get())->setUnitID(unitID);
         ((igAttr *)attr.get())->synchronizeDefault((igVisualContext *)_visualContext);

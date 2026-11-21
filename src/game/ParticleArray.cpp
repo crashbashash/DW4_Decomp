@@ -111,7 +111,7 @@ public:
 /* Stores a new reference to `object` in an object-reference field, releasing the one it held. */
 static inline void assignReference(int &field, igObject *object) {
     if (object != 0) object->_refCount = object->_refCount + 1;
-    igRelease((igObject *)field);
+    igObject::release((igObject *)field);
     field = (int)object;
 }
 
@@ -119,7 +119,7 @@ static inline void assignReference(int &field, igObject *object) {
 static inline void setSpriteVertexArray(ParticleArray *self, igObject *array) {
     igPointSpriteExt *sprite = (igPointSpriteExt *)self->_pointSpriteInterface;
     if (array != 0) array->_refCount = array->_refCount + 1;
-    igRelease((igObject *)sprite->_vertexArray);
+    igObject::release((igObject *)sprite->_vertexArray);
     sprite->_vertexArray = (int)array;
 }
 
@@ -282,10 +282,10 @@ int ParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int off
     }
     if (self->_vertexArray1 == 0) {
         int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
-        igRelease((igObject *)self->_vertexArray1);
+        igObject::release((igObject *)self->_vertexArray1);
         self->_vertexArray1 = (int)igVertexArray_Create(allocator);
         allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
-        igRelease((igObject *)self->_vertexArray2);
+        igObject::release((igObject *)self->_vertexArray2);
         self->_vertexArray2 = (int)igVertexArray_Create(allocator);
         igVertexFormat format;
         format.bits = 0;

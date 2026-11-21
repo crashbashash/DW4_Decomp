@@ -40,7 +40,7 @@ static inline void ReleaseAll(igObjectList *list) {
     int count = list->_count;
     int i;
     for (i = 0; i < count; i++) {
-        igRelease(((igObject **)list->_data)[i]);
+        igObject::release(((igObject **)list->_data)[i]);
     }
     {
         int size = list->_count;

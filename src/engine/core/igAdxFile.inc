@@ -177,7 +177,7 @@ void igAdxFile_LoadSearchFilePath(void) {
             path = (int)g_stringObjEmptyText;
         }
         igAdxFile_SetBasePath(path);
-        igRelease(text);
+        igObject::release(text);
     }
 }
 

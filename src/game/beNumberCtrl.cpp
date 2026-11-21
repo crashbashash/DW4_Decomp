@@ -31,7 +31,7 @@ static inline int allocatorFor(void *owner) {
 /* Makes `work` the ram's counter record, retaining it and releasing the one it held. */
 static inline void setWork(beNumberCtrlInfoRam *ram, igObject *work) {
     if (work != 0) work->_refCount = work->_refCount + 1;
-    igRelease((igObject *)ram->_work);
+    igObject::release((igObject *)ram->_work);
     ram->_work = (int)work;
 }
 

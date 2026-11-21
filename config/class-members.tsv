@@ -77,8 +77,8 @@ igObject	igMemoryPoolView *getMemoryPool() const;
 igObject	protected: union { mutable unsigned int _both; struct { mutable unsigned int _refCount : 23; unsigned int _memPoolIndex : 9; } _either; } _refAndMemPool;
 ::igObject	inline void ref() const { ((const Gap::Core::igObject *)this)->ref(); }
 ::igObject	inline void release() const { ((const Gap::Core::igObject *)this)->release(); }
-::igObject	static inline void release(const igObject *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->release(); }
-::igObject	static inline void ref(const igObject *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->ref(); }
+::igObject	static inline void release(igObject *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->release(); }
+::igObject	static inline void ref(igObject *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->ref(); }
 igRenderer	IG_ABSTRACT_OBJECT_DEFINE(igRenderer)
 igRenderer	protected: static igMetaField *k_visualContext;
 igRenderer	void setVisualContext(igVisualContext *context);
@@ -1137,20 +1137,20 @@ igTextureFunctionAttr	virtual void setUnitID(short id);
 igTextureFunctionAttr	virtual void synchronizeDefault(igVisualContext *vc);
 igTextureFunctionAttr	virtual int getUnitCount(igCapabilityManager *capabilityManager);
 igAttrDefaultManager	IG_ABSTRACT_OBJECT_DEFINE(igAttrDefaultManager)
-igAttrDefaultManager	virtual igSmartPointer< ::igAttr> getSharedDefaultAttr(igMetaObject *meta, int unitID) const;
-igAttrDefaultManager	virtual igSmartPointer< ::igAttr> createDefaultAttr(igMetaObject *meta, int unitID) const = 0;
+igAttrDefaultManager	virtual igSmartPointer<igAttr> getSharedDefaultAttr(igMetaObject *meta, int unitID) const;
+igAttrDefaultManager	virtual igSmartPointer<igAttr> createDefaultAttr(igMetaObject *meta, int unitID) const = 0;
 igGenericAttrDefaultManager	IG_OBJECT_DEFINE(igGenericAttrDefaultManager)
-igGenericAttrDefaultManager	virtual igSmartPointer< ::igAttr> createDefaultAttr(igMetaObject *meta, int unitID) const;
+igGenericAttrDefaultManager	virtual igSmartPointer<igAttr> createDefaultAttr(igMetaObject *meta, int unitID) const;
 igVisualContextAttrDefaultManager	IG_OBJECT_DEFINE(igVisualContextAttrDefaultManager)
 igVisualContextAttrDefaultManager	private: static igMetaField *k_visualContext;
 igVisualContextAttrDefaultManager	inline void setVisualContext(igVisualContext *visualContextParam) { _visualContext = visualContextParam; }
 igVisualContextAttrDefaultManager	inline const igVisualContext *getVisualContext() const { return _visualContext; }
-igVisualContextAttrDefaultManager	virtual igSmartPointer< ::igAttr> createDefaultAttr(igMetaObject *meta, int unitID) const;
+igVisualContextAttrDefaultManager	virtual igSmartPointer<igAttr> createDefaultAttr(igMetaObject *meta, int unitID) const;
 igAttrPool	IG_OBJECT_DEFINE(igAttrPool)
 igAttrPool	private: static igMetaField *k_metaList;
 igAttrPool	private: static igMetaField *k_nonSharableMetaList;
 igAttrPool	private: static igMetaField *k_attributeList;
-igAttrPool	igSmartPointer< ::igAttr> getSharedAttr(igSmartPointer< ::igAttr> attribute);
+igAttrPool	igSmartPointer<igAttr> getSharedAttr(igSmartPointer<igAttr> attribute);
 igAttrPool	void addNonSharableType(igMetaObject *meta);
 igAttrPool	static igAttrPool *getStaticAttrPool();
 igAttrPool	static void userUnregister();

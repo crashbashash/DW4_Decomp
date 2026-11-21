@@ -51,7 +51,30 @@ A flat struct's C++ view may carry the kit's inlines of its converted class, for
 code holding a flat pointer already reads in the kit's form and keeps it when its class converts. Their rows are
 `class-members.tsv` rows keyed `::<class>`: the generator declares them in the flat struct under `#ifdef
 __cplusplus` and defines them after the `Gap::` classes. The flat `igObject` has `ref()`, `release()` and the
-static `ref`/`release(const igObject *)`, each forwarding to `Gap::Core::igObject`'s; C keeps the word.
+static `ref`/`release(igObject *)`, each forwarding to `Gap::Core::igObject`'s; C keeps the word. The views that
+stand in for igObject in C++ (`igVirtualObject`, `igObjectDispatchView`, gfx's `igObjectSlotView`) carry the same
+static `ref`/`release` forwarders.
+
+**Smart pointers** (include/dw4/core/igSmartPointer.h) are the kit's igCore/igSmartPointer.h in their count
+handling: every ref and release is the kit's static `igObject::ref/release`, which the kit calls as
+`igObject::release((igObject *)_ptr)`. DW4 calls it through the held class, `T::release(p)` / `T::ref(p)`: a Gap
+class inherits the root's statics, a flat struct its C++ view's forwarders, a view its own. So
+`igSmartPointer<GapClass>` works (`igMemoryRefMetaField::_memTypeRef` is `igSmartPointer<igMetaField>`, and core's
+copy of its destructor is retail's 0x14ec50), the call binds at instantiation, and the pointer reaches the static
+uncast. That last point is what retail's codegen needs: MWCC substitutes an inline's argument that has the
+parameter's type, and copies one that needs a conversion (an explicit cast, or even `T *` to `const T *`). A copied
+argument loses the reload retail shows when a temporary's release re-reads `p` from its stack slot
+(igDirectory_ReplaceReference, and the shader processor's temporaries in scenegraph). This is why the flat and
+view statics take a non-const pointer, while the Gap root keeps the kit's `const igObject *`. `clear()` releases
+directly, and the depth from a
+destructor to the count body is the template, then the static, then `release()`. That is the depth retail's
+units built without `-inline level=8` inline. The assignments are the kit's `igSmartPointerAssign` written inline
+(ref the new object, release the old, store); DW4's pointer adopts the reference a `T *` hands it, and
+`kRetainReference` retains it as the kit's `igSmartPointer(T *)` does. reflected.h includes the header right
+after `Gap::Core::igObject`, because the views' forwarders read the root's members. DW4's `igRelease` helper is
+gone: its callers are the kit's `igObject::release(p)` (or a view's `release`), and `tools/releaseconv.py`
+rewrites any that remain. beNDMWLoadIntf2's retail out-of-line release at 0x3e9110 is the kit's
+`igObject::release(igObject *)`.
 
 Where converted and unconverted code meet, the boundary keeps the retail **C names** as prototypes:
 
@@ -122,7 +145,8 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    little-endian order; the kit header, alchemy-kit_202309 igCore/igObject.h, splits a `_scriptFlag : 1` off a
    22-bit count), protected as in the kit; igObject's own constructors and `getMemoryPool` read it through the
    `igRefCountWord` views. `release()` is `_both--; if (_either._refCount == 0) internalRelease();`, `ref()` is
-   `_both++`, and the static `release`/`ref(const igObject *)` test for null. MWCC writes the decrement, the reload
+   `_both++`, and the static `release`/`ref(const igObject *)` test for null (the flat view's take `igObject *`,
+   above). MWCC writes the decrement, the reload
    and the `dsll32 9`/`dsrl32 9` test every release site has, and the `addiu 1` increment. The kit's `release()`
    calls a `decrementRefCount()` that holds that body; DW4's is written in `release()` itself, because the units
    built without `-inline level=8` (GameMain, igAdx, the movie units) stop inlining one call short of the flat
@@ -178,7 +202,7 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    with the reference counting `_refCounted || _destruct` asks for, and its slot overrides: `computeSize`,
    the construct/destruct/reset/copy/compare/isAlike family, `print`, `traverse`, `readRawFieldMemory`,
    `initDefaults`/`releaseDefaults`) is converted. `igMemoryRefMetaField` (bootstrap; `_memTypeRef` an
-   `igSmartPointer< ::igMetaField>` and `_poolName` an `igStringRef` under C++, so its implicit destructor is
+   `igSmartPointer<igMetaField>` and `_poolName` an `igStringRef` under C++, so its implicit destructor is
    retail's `igMemoryRefMetaField_Destroy`; the kit's `setPool`/`getPool`, `setAlignmentType`,
    `setDefault(igMemoryRef)`, the private `refObjects`/`releaseObjects`, and its slot overrides) is converted;
    its field adder replaces the inherited `_resetMethod` by a new `igEnumMetaField`, which the generator
@@ -299,8 +323,8 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `igBlendMatrixPaletteAttr` (igPsx2VisualContext_SetBlendingMatrices takes the kit's unsigned count and
    `igMatrix44f *`, which retail's scheduling needs), `igDisplayListAttr` (an igAttr) and `igRenderListAttr` are
    converted as well. The two extension attrs keep the kit's static `_extension` and call it through
-   `igBlendEquationExtDispatchView` and `igMultiTextureExtDispatchView`. A field naming another Gap class stays an
-   `igSmartPointer<::flat>` until igSmartPointer can hold a Gap class (it releases through the flat `igRelease`).
+   `igBlendEquationExtDispatchView` and `igMultiTextureExtDispatchView`. A field naming another Gap class is an
+   `igSmartPointer<GapClass>` (smart pointers, above).
    igViewerRenderer calls the converted colour, alpha-function, shade, polygon and lighting-state attrs' members
    (`_lightingState` is the kit's igBool), and their dispatch views are gone; the alpha-test and cull-face calls keep
    their views, since typing igViewerParameters' `_alphaTest`/`_backFaceCulling` bool moves the kit's igBool
@@ -308,7 +332,8 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    unsigned char. The game's matrix attrs (beCri, beModelCtrl, beModelCtrlSC, beSeCtl) are
    `Gap::Attrs::igModelViewMatrixAttr` and call `setMatrix`. The default managers (`igAttrDefaultManager`,
    `igGenericAttrDefaultManager`, `igVisualContextAttrDefaultManager`) and `igAttrPool` are converted, the kit's
-   igAttrRef spelled `igSmartPointer< ::igAttr>`; `igAttrList`, `igAttrListList`, `igModelViewMatrixAttrList` and
+   igAttrRef the Gap `igSmartPointer<igAttr>` (igAttrPool's list fields stay flat smart pointers for now: its code
+   reads them through flat list casts); `igAttrList`, `igAttrListList`, `igModelViewMatrixAttrList` and
    `igBlendMatrixPaletteAttrList` derive from the kit's `igTObjectList<T>` (include/dw4/core/igTObjectList.h, whose
    `getElementMeta` is `T::getClassMeta()`), so attrs compiles igObjectList's vtable and inline copies. Next: the
    remaining igVisualAttribute subclasses, coupled through their smart-pointer fields: `igTextureAttr` with

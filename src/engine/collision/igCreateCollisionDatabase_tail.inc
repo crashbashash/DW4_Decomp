@@ -10,14 +10,14 @@ static inline igAABox *asAABox(igObject *o) {
 
 static inline void assignObject(int &slot, igObject *object) {
     if (object != 0) object->_refCount = object->_refCount + 1;
-    igRelease((igObject *)slot);
+    igObject::release((igObject *)slot);
     slot = (int)object;
 }
 
 static inline void createGrid(int &slot) {
     /* matching construct: a tag made inside the inline takes the frame slot below the caller's temporaries */
     AdoptReference tag = AdoptReference();
-    igRelease((igObject *)slot);
+    igObject::release((igObject *)slot);
     slot = (int)igCollisionGrid_Create(0);
 }
 static inline igObject *newSphereMaker() {
@@ -28,7 +28,7 @@ static inline igObject *newSphereMaker() {
 
 static inline void setBound(igCollisionGroup *group, igObject *bound) {
     if (bound != 0) bound->_refCount = bound->_refCount + 1;
-    igRelease((igObject *)group->_bound);
+    igObject::release((igObject *)group->_bound);
     group->_bound = (int)bound;
 }
 

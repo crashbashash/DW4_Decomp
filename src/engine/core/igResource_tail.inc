@@ -218,7 +218,7 @@ void igResource_UnloadDirectory(igResource *self, const char *name) {
     }
     int remaining = igDirectory_UnrefLoaded((igDirectoryView *)found.get());
     if (current && remaining <= 0) {
-        igRelease((igObject *)self->_imageDirectory);
+        igObject::release((igObject *)self->_imageDirectory);
         self->_imageDirectory = 0;
     }
 }

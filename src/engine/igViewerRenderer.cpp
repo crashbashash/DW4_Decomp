@@ -637,7 +637,7 @@ extern "C" int igViewerRenderer_UpdateSharedAttr(igObject *attr, igAttrSet *attr
     int found = igViewerRenderer_FindAttrFromType((igObjectDispatchView *)attr, attrSet);
     if (found != 0) {
         removeFromList(attrSet->_attributes, found);
-        igSmartPointer< ::igAttr> shared = Gap::Attrs::igAttrPool::getStaticAttrPool()->getSharedAttr(igSmartPointer< ::igAttr>((::igAttr *)attr, kRetainReference));
+        igSmartPointer<Gap::Attrs::igAttr> shared = Gap::Attrs::igAttrPool::getStaticAttrPool()->getSharedAttr(igSmartPointer<Gap::Attrs::igAttr>((Gap::Attrs::igAttr *)attr, kRetainReference));
         ((Gap::Core::igObjectList *)attrSet->_attributes)->append((Gap::Core::igObject *)(shared.get()));
         return 1;
     }
@@ -657,7 +657,7 @@ void igViewerRenderer_TransferAttrFromType(igAttrSet *from, igAttrSet *to, igObj
 
 void igViewerRenderer_UpdateAttr(igViewerRenderer *self, igObject *attr) {
     if ((attr != 0) && !(igViewerRenderer_UpdateSharedAttr(attr, (igAttrSet *)self->_attrSetOverride) & 0xFF) && !(igViewerRenderer_UpdateSharedAttr(attr, (igAttrSet *)self->_attrSet) & 0xFF)) {
-        igSmartPointer< ::igAttr> shared = Gap::Attrs::igAttrPool::getStaticAttrPool()->getSharedAttr(igSmartPointer< ::igAttr>((::igAttr *)attr, kRetainReference));
+        igSmartPointer<Gap::Attrs::igAttr> shared = Gap::Attrs::igAttrPool::getStaticAttrPool()->getSharedAttr(igSmartPointer<Gap::Attrs::igAttr>((Gap::Attrs::igAttr *)attr, kRetainReference));
         ((Gap::Core::igObjectList *)(((igAttrSet *)self->_attrSet)->_attributes))->append((Gap::Core::igObject *)(shared.get()));
     }
 }

@@ -159,7 +159,7 @@ public:
     igVertexArrayDispatchView *_vertexArray;                                 /* +12 */
     void setVertexArray(igVertexArrayDispatchView *vertices) {
         if (vertices != 0) vertices->_refCount = vertices->_refCount + 1;
-        igRelease(_vertexArray);
+        igObjectDispatchView::release(_vertexArray);
         _vertexArray = vertices;
     }
 };
@@ -253,7 +253,7 @@ static inline int MovieAllocator(igMovieManager *self) {
 /* Gives the movie renderer its reference to the manager. */
 static inline void SetMovieManager(igMovieRenderer *renderer, igMovieManager *manager) {
     if (manager != 0) manager->_refCount = manager->_refCount + 1;
-    igRelease((igObject *)renderer->_movieManager);
+    igObject::release((igObject *)renderer->_movieManager);
     renderer->_movieManager = (int)manager;
 }
 
@@ -432,7 +432,7 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
                 if (codec->isReusable() != 0) {
                     if (self->_codecList == 0) {
                         allocator = MovieAllocator(self);
-                        igRelease((igObject *)self->_codecList);
+                        igObject::release((igObject *)self->_codecList);
                         self->_codecList = (int)igMovieCodecList_Create(allocator);
                     }
                     ((Gap::Core::igObjectList *)self->_codecList)->append((Gap::Core::igObject *)codec.p);
@@ -441,7 +441,7 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
             (igSmartPointer<igMovieCodecDispatchView> &)movie->_codec = codec;
             if (self->_audioDisabled == 0 && self->_audio == 0) {
                 allocator = MovieAllocator(self);
-                igRelease((igObject *)self->_audio);
+                igObject::release((igObject *)self->_audio);
                 self->_audio = (int)igAudioContext_CreateInstance(allocator);
                 ((igAudioContextDispatchView *)self->_audio)->setWindow((igObject *)((igInsightCore *)self->_insight)->_window);
                 ((igAudioContextDispatchView *)self->_audio)->initialize();
@@ -460,7 +460,7 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
                     }
                     if (self->_movieList == 0) {
                         allocator = MovieAllocator(self);
-                        igRelease((igObject *)self->_movieList);
+                        igObject::release((igObject *)self->_movieList);
                         self->_movieList = (int)igMovieInfoList_Create(allocator);
                     }
                     ((Gap::Core::igObjectList *)self->_movieList)->append((Gap::Core::igObject *)movie);
@@ -468,7 +468,7 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
                     SetMovieManager((igMovieRenderer *)self->_movieRenderer, self);
                     if (self->_rendererList == 0) {
                         allocator = MovieAllocator(self);
-                        igRelease((igObject *)self->_rendererList);
+                        igObject::release((igObject *)self->_rendererList);
                         self->_rendererList = (int)igRendererOrderedList_CreateInstance(allocator);
                     }
                     {
@@ -541,17 +541,17 @@ int igMovieManager_StopMovie(igMovieManager *self, void *object) {
             ((igMovieCodecDispatchView *)movie->_codec)->close(movie);
             {
                 igMovieInfoListView *list = (igMovieInfoListView *)self->_movieList;
-                igRelease(list->_data[index]);
+                igObject::release(list->_data[index]);
                 List_RemoveWordAt((igDataList *)list, index);
                 list->_data[list->_count] = 0;
             }
             if (((igMovieInfoListView *)self->_movieList)->_count == 0) {
                 igInsightCore_RemoveFromScheduler((igInsightCore *)self->_insight, self);
-                igRelease((igObject *)self->_movieList);
+                igObject::release((igObject *)self->_movieList);
                 self->_movieList = 0;
             }
             if (self->_codecList != 0) {
-                igRelease((igObject *)self->_codecList);
+                igObject::release((igObject *)self->_codecList);
                 self->_codecList = 0;
             }
             igRendererOrderedList_Clear((igDependencyOrderedList *)((igInsightCore *)self->_insight)->_rendererList);
@@ -565,7 +565,7 @@ int igMovieManager_StopMovie(igMovieManager *self, void *object) {
                 }
             }
             igRendererOrderedList_Clear((igDependencyOrderedList *)self->_rendererList);
-            igRelease((igObject *)self->_rendererList);
+            igObject::release((igObject *)self->_rendererList);
             self->_rendererList = 0;
             return 1;
         }

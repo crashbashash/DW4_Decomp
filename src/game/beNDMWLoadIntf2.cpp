@@ -299,7 +299,7 @@ public:
     if (retain)
       beNDMWLoadIntf2_igObject_Retain((ObjectRefTarget *)value);
   }
-  ~DegiDataRef() { igRelease((igObject *)value); }
+  ~DegiDataRef() { igObject::release((igObject *)value); }
 };
 /* Pad bits as read from bePadData::_trigger/_repeat (the PS2 libpad button layout). Cross confirms
  * and Circle cancels in the slot/portrait/difficulty screens. The stick bits of _lTrg/_lRpt are
@@ -4426,7 +4426,7 @@ static inline beLoadIntf2ComMdlData *QueuedRequest(int queue, int index) {
 
 /* Releases the request at `index` and removes it from the queue, clearing the vacated last slot. */
 static inline void DropQueuedRequest(beLoadIntf2ComMdlDataList *queue, int index) {
-    igRelease(((igObject **)queue->_data)[index]);
+    igObject::release(((igObject **)queue->_data)[index]);
     List_RemoveWordAt((igDataList *)queue, index);
     ((beLoadIntf2ComMdlData **)queue->_data)[queue->_count] = 0;
 }
@@ -4447,7 +4447,7 @@ static inline void SetDataList(beBaseInfoRam *ram, beBaseInfoDataList *list) {
 
     igObject::ref(list);
     previous = (igObject *)ram->_dataList;
-    igRelease(previous);
+    igObject::release(previous);
     ram->_dataList = (int)list;
 }
 

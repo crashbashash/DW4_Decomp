@@ -37,7 +37,7 @@ int beNDMWPanelWaza_GetVTable(void) {
     vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beBaseInfoManager_vtable[0];
     if (infoListRef != 0) {
-        igRelease((igObject *)*infoListRef);
+        igObject::release((igObject *)*infoListRef);
     }
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     if (nameRef != 0) {

@@ -33,7 +33,7 @@ int beNDMWStageCtl_GetVTable(void) {
     vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beBaseInfoManager_vtable[0];
     if (&obj._infoList != 0) {
-        igRelease((igObject *)obj._infoList);
+        igObject::release((igObject *)obj._infoList);
     }
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     if (&obj._name != 0) {

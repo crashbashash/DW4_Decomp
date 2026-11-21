@@ -93,7 +93,7 @@ static inline void AssignReference(int &field, igObject *object) {
     igObject *old;
     if (object != 0) object->_refCount = object->_refCount + 1;
     old = (igObject *)field;
-    igRelease(old);
+    igObject::release(old);
     field = (int)object;
 }
 
@@ -199,7 +199,7 @@ void beNDMWShinkaCtrl_BuildFormList(beNDMWShinkaCtrl *self) {
     count = forms->_count;
     for (i = 0; i < count; i++) {
         object = ((igObject **)forms->_data)[i];
-        igRelease(object);
+        igObject::release(object);
     }
     cleared = forms->_count;
     for (j = 0; j < cleared; j++) {

@@ -18,7 +18,7 @@ extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_32(igGeometryAttr1_5 *self,
         igObject *previous;
         igObject::ref(created);
         previous = (igObject *)self->_vertexArray;
-        igRelease(previous);
+        igObject::release(previous);
         self->_vertexArray = (int)created;
         {
             igObject *vertexArray = (igObject *)self->_vertexArray;

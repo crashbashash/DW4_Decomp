@@ -1,13 +1,13 @@
 /* The new instance arrives with one reference; the pointer takes its own and drops that one. */
 igSmartPointer<igObject> igMetaObject_CreateInstanceDefaultRef(igMetaObject *meta) {
     igSmartPointer<igObject> created(igMetaObject_CreateInstanceDefault(meta), kRetainReference);
-    igRelease(created.get());
+    igObject::release(created.get());
     return created;
 }
 
 igSmartPointer<igObject> igMetaObject_CreateInstanceRef(igMetaObject *meta, igMemoryPoolView *pool) {
     igSmartPointer<igObject> created(igMetaObject_CreateInstance(meta, pool), kRetainReference);
-    igRelease(created.get());
+    igObject::release(created.get());
     return created;
 }
 

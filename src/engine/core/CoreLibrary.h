@@ -83,27 +83,14 @@ extern "C" {
 #include "dw4/game/beFont.h"
 #include "dw4/gui/igRendererOrderedList.h"
 
-/* igSmartPointer's release for a list held as igTDataList<T>. */
-template <class T> static inline void igRelease(igTDataList<T> *o) {
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-    }
-}
-
 /* Assigning a smart pointer to an object-reference field: the field takes its own reference on the
  * new object and drops the one it held. */
 template <class T, class U> static inline void assignReference(T *&field, const igSmartPointer<U> &value) {
     U *next = value.p;
     T *old;
-    if (next != 0) {
-        next->_refCount = next->_refCount + 1;
-    }
+    U::ref(next);
     old = field;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-    }
+    T::release(old);
     field = (T *)next;
 }
 
@@ -2394,23 +2381,17 @@ class igIGBFileView : public igDirectoryView { public:
     /* Stores an entry, retaining it and releasing the one it replaces. */
     void setEntry(int i, const igSmartPointer<igDirEntryView> &held) {
         igDirEntryView *entry = held.p;
-        if (entry != 0) entry->_refCount = entry->_refCount + 1;
+        igVirtualObject::ref(entry);
         igVirtualObject *old = _data[i];
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-        }
+        igVirtualObject::release(old);
         if (_count != 0 && i >= 0 && i < _count) {
             _data[i] = entry;
         }
     }
     void setEntryRaw(int i, igDirEntryView *entry) {
-        if (entry != 0) entry->_refCount = entry->_refCount + 1;
+        igVirtualObject::ref(entry);
         igVirtualObject *old = _data[i];
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-        }
+        igVirtualObject::release(old);
         if (_count != 0 && i >= 0 && i < _count) {
             _data[i] = entry;
         }
@@ -2495,14 +2476,6 @@ extern "C" igResult igIGBFile_ReadHeader(igIGBFileView *arg1);
 extern "C" igResult igIGBFile_ReadMetaObjectBuffer(igIGBFileView *arg1);
 extern "C" igResult igIGBFile_SetupBasePath(igIGBFileView *arg1);
 extern "C" igResult igIGBFile_ReadNextChunk(igIGBFileView *arg1);
-struct IgbReadEntry : public igObject {
-    void release() {
-        _refCount = _refCount - 1;
-        if ((_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(this);
-        }
-    }
-};
 typedef igSmartPointer<igDirEntryView> SectionObjectRef;
 extern "C" SectionObjectRef igIGBFile_ReadObject(igIGBFile *file);
 extern "C" igResult igIGBFile_ReadObjectSection(igIGBFileView *file);

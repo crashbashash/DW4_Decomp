@@ -169,7 +169,7 @@ void ViewerSetup_ClearInfos(ViewerSetup *setup)
 }
 
 static inline void createSynchronizer(igSmartPointer<igFieldSynchronizer> &synchronizer, AdoptReference) {
-    igRelease(synchronizer.p);
+    igObject::release(synchronizer.p);
     synchronizer.p = igFieldSynchronizer_Create(0);
 }
 

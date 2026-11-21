@@ -24,11 +24,11 @@ int beNDMWStatusInfoRam_GetVTable(void) {
     vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWStatusInfoRam_vtable[0];
     if (workRef != 0) {
-        igRelease((igObject *)*workRef);
+        igObject::release((igObject *)*workRef);
     }
     *(int **)&obj._vtable = &g_beBaseInfoRam_vtable[0];
     if (dataListRef != 0) {
-        igRelease((igObject *)*dataListRef);
+        igObject::release((igObject *)*dataListRef);
     }
     return vtable;
 }

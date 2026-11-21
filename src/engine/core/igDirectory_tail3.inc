@@ -129,7 +129,7 @@ int igDirectory_UnrefLoaded(igDirectoryView *self) {
 
 /* The new semaphore arrives with its reference already counted (an adopted reference). */
 static inline igSemaphoreView *recreateLoadingSemaphore(igDirectoryView *directory, AdoptReference) {
-    igRelease(directory->_loadingSemaphore);
+    igVirtualObject::release(directory->_loadingSemaphore);
     directory->_loadingSemaphore = ((igSemaphoreView *)igSemaphore_Create(0));
     return directory->_loadingSemaphore;
 }

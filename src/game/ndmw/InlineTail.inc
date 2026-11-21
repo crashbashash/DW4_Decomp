@@ -144,7 +144,7 @@ void beNDMWLoadSlotPlayer_userDestruct(beNDMWLoadSlotPlayer *self) {
     if (0 < n) {
         off = 0;
         do {
-            igRelease(((igObject **)l->_data)[i]);
+            igObject::release(((igObject **)l->_data)[i]);
             i++;
             off += 4;
         } while (i < n);
@@ -502,9 +502,9 @@ void beNDMWPanelObjectStat_TrimCapacity(beNDMWPanelObjectStat *self) {
     const char **slot = 0;
     const char *tok = 0;
     int off = 0;
-    igRelease((igObject *)self->_playerDataList);
+    igObject::release((igObject *)self->_playerDataList);
     self->_playerDataList = 0;
-    igRelease((igObject *)self->_playerWork);
+    igObject::release((igObject *)self->_playerWork);
     self->_playerWork = 0;
     l = (igDataList *)self->_listFolder;
     n = l->_count;
@@ -537,7 +537,7 @@ void beNDMWPanelObjectStat_TrimCapacity(beNDMWPanelObjectStat *self) {
 
 void beNDMWPanelObjectItem_TrimCapacity(beNDMWPanelObjectItem *self) {
     igObjectList *l;
-    igRelease((igObject *)self->_playerDataList);
+    igObject::release((igObject *)self->_playerDataList);
     self->_playerDataList = 0;
     l = (igObjectList *)self->_listFolder;
     int n = l->_count;
@@ -547,7 +547,7 @@ void beNDMWPanelObjectItem_TrimCapacity(beNDMWPanelObjectItem *self) {
     if (0 < n) {
         off = 0;
         do {
-            igRelease(*(igObject **)((char *)l->_data + off));
+            igObject::release(*(igObject **)((char *)l->_data + off));
             i++;
             off += 4;
         } while (i < n);
@@ -590,7 +590,7 @@ void beNDMWPanelObjectItem_TrimCapacity(beNDMWPanelObjectItem *self) {
 
 void beNDMWPanelObjectWaza_TrimCapacity(beNDMWPanelObjectWaza *self) {
     igObjectList *l;
-    igRelease((igObject *)self->_playerDataList);
+    igObject::release((igObject *)self->_playerDataList);
     self->_playerDataList = 0;
     l = (igObjectList *)self->_listFolder;
     int n = l->_count;
@@ -600,7 +600,7 @@ void beNDMWPanelObjectWaza_TrimCapacity(beNDMWPanelObjectWaza *self) {
     if (0 < n) {
         off = 0;
         do {
-            igRelease(*(igObject **)((char *)l->_data + off));
+            igObject::release(*(igObject **)((char *)l->_data + off));
             i++;
             off += 4;
         } while (i < n);

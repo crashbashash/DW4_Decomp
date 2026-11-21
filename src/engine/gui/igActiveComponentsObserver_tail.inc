@@ -1,6 +1,6 @@
 static inline void setComponent_4561e0(int *slot, igObject *next) {
     igObject::ref(next);
-    igRelease((igObject *)*slot);
+    igObject::release((igObject *)*slot);
     *slot = (int)next;
 }
 void igActiveComponentsObserver_OnModelChange(igActiveComponentsObserver *self, struct GuiMessage_455d80 *msg) {

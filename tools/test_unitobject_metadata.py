@@ -69,7 +69,7 @@ extern "C" int fixture_owner(int *p, int c) {
         verify.rename_object_sections(str(obj), names)
         script = self.root / f"{tag}.ld"
         lines = [f"{n} = 0x{a:x};" for n, a in
-                 dict(self.EXTERNALS, __dl__FPv=self.EXTERNALS["fixture_delete"],
+                 dict(self.EXTERNALS, __dl__FPv=self.EXTERNALS["fixture_delete"], fixture_owner=self.OWNER,
                       **{self.dtor: self.DUP}).items()]
         lines.append("SECTIONS {")
         lines += [f".out{i} 0x{a:x} : {{ *({names[i]}) }}" for i, a in placements.items()]
@@ -375,6 +375,26 @@ extern "C" int fixture_owner(int *p, int c) {
         placed = [name for name, h in verify.elf_section_headers(
             str(self.root / "objects" / f"u_{self.OWNER:08x}.o")) if h[2] & 2 and h[5]]
         self.assertEqual(sorted(placed), [".rodata", ".text"])
+
+
+class TwinCallingAUnitBody(EmittedMetadata):
+    """The profile twin's body calls a function the unit itself emits, as core's copy of the
+    igSmartPointer<Gap::Core::igMetaField> destructor (an Attrs-profile twin) calls
+    Gap::Core::igObject::internalRelease (igObject_Destroy), which core defines: the twin object defines
+    the callee too, in a section of its own, and the call binds the unit's body at its retail address."""
+    SOURCE = EmittedMetadata.SOURCE.replace(
+        "class Guard {", 'extern "C" int fixture_owner(int *p, int c);\nclass Guard {').replace(
+        "~Guard() { if(value) Drop(value); }", "~Guard() { if(value) fixture_owner(value, 6); }")
+
+    def test_a_twin_call_into_the_unit_binds_the_units_body(self):
+        twin = self.compile("twin.o", self.alt_flags)
+        syms, _ = verify.object_syms(str(twin))
+        self.assertIn("fixture_owner", {r[3] for r in verify.object_relocs(str(twin), syms[self.dtor][0])})
+        self.assertNotEqual(syms["fixture_owner"][0], syms[self.dtor][0])
+        ok, report = self.check()
+        self.assertTrue(ok, report)
+        self.assertIn("MATCH duplicate 0x180200", report)
+        self.assertNotIn("unresolved", report)
 
 
 if __name__ == "__main__":

@@ -1,40 +1,22 @@
-/* reflected.h first, outside the guard: a converted class's smart-pointer member includes this header back
- * from there, after the flat structs, and must then find the template defined. */
+/* reflected.h first, outside the guard: reflected.h includes this header back once the Gap root
+ * Gap::Core::igObject is complete, and a smart-pointer member of a converted class then finds the template. */
 #include "dw4/support/reflected.h"
 #ifndef DW4_IGSMARTPOINTER_H
 #define DW4_IGSMARTPOINTER_H
 #include "dw4/core/igObjectDispatchView.h"
 #include "dw4/core/igObject.h"
 
-/* igObject with its vtable as a real vptr, for classes whose virtual functions are called. */
+/* igObject with its vtable as a real vptr, for classes whose virtual functions are called. Like the flat
+ * igObject's C++ view, it carries the kit's static ref/release forwarding to Gap::Core::igObject's members. */
 class igVirtualObject {
 public:
     virtual void firstSlot();
     unsigned int _refCount;
+    static inline void release(igVirtualObject *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->release(); }
+    static inline void ref(igVirtualObject *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->ref(); }
 };
 
 static inline void igObject_Destroy(igVirtualObject *object) { igObject_Destroy((igObject *)object); }
-
-static inline void igRelease(igObject *o) {
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-    }
-}
-
-static inline void igRelease(igVirtualObject *o) {
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-    }
-}
-
-static inline void igRelease(igObjectDispatchView *o) {
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-    }
-}
 
 /* An empty class passed by value writes one byte to the stack; an enum tag writes nothing. */
 struct AdoptReference {};
@@ -48,11 +30,7 @@ enum RetainReference { kRetainReference };
  * against 724). */
 template <class T> struct RetainedWord {
     T *p;
-    RetainedWord(T *object) : p(object) {
-        if (p != 0) {
-            p->_refCount = p->_refCount + 1;
-        }
-    }
+    RetainedWord(T *object) : p(object) { T::ref(p); }
 };
 
 /* A pointer word handed to a list insert as a temporary argument, which the insert helper retains
@@ -62,12 +40,20 @@ template <class T> struct RetainedWord {
 struct HeldWord {
     igObject *p;
     HeldWord(igObject *object) : p(object) {}
-    void retain() const {
-        if (p != 0) p->_refCount = p->_refCount + 1;
-    }
+    void retain() const { igObject::ref(p); }
 };
 
-/* A temporary smart pointer (one built in an argument bound to a const reference, or a by-value
+/* The kit's smart pointer (alchemy-kit_202309 igCore/igSmartPointer.h): every count change is the kit's
+ * static igObject::ref/release, which the kit calls as `igObject::ref((igObject *)_ptr)`. DW4 calls it
+ * through the held class, `T::ref(p)`: a Gap class inherits the root's statics, the flat structs' C++ view
+ * and the views (igVirtualObject, igObjectDispatchView) carry forwarders to Gap::Core::igObject's members. The
+ * pointer then reaches the static uncast, which is what retail's codegen needs: an explicit cast makes MWCC
+ * copy the argument, and the release of a temporary no longer reloads p from its stack slot (below); and
+ * the call binds at instantiation, so the template reads no class the Gap section declares later.
+ * DW4's pointer adopts the reference a T * hands it (retain with kRetainReference), and its assignments are
+ * the kit's igSmartPointerAssign written inline (ref the new object, release the old, store), as retail
+ * inlines them; `clear()` releases directly, as deep as retail's units without `-inline level=8` inline.
+ * A temporary smart pointer (one built in an argument bound to a const reference, or a by-value
  * return used in place) is released with p reloaded from its stack slot after the count store. A
  * named local passed the same way is released from one read. So a caller that shows the reload
  * holds a temporary, not a second class. */
@@ -79,51 +65,33 @@ template <class T> struct igSmartPointer {
     igSmartPointer(T *object, RetainReference) : p(object) { retain(); }
     igSmartPointer(const igSmartPointer &other) : p(other.p) { retain(); }
     template <class U> igSmartPointer(const igSmartPointer<U> &other) : p((T *)other.p) { retain(); }
-    ~igSmartPointer() { igRelease(p); }
+    ~igSmartPointer() { T::release(p); }
     T *get() const { return p; }
     T *operator->() const { return p; }
     operator T *() const { return p; }
-    void retain() const {
-        T *o = p;
-        if (o != 0) o->_refCount = o->_refCount + 1;
-    }
-    void release() { igRelease(p); }
+    void retain() const { T::ref(p); }
+    void release() { T::release(p); }
     void clear() {
-        release();
+        T::release(p);
         p = 0;
     }
     igSmartPointer &operator=(T *next) {
-        T *o;
-        if (next != 0) next->_refCount = next->_refCount + 1;
-        o = p;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
+        T::ref(next);
+        T::release(p);
         p = next;
         return *this;
     }
     igSmartPointer &operator=(const igSmartPointer &other) {
         T *next = other.p;
-        T *o;
-        if (next != 0) next->_refCount = next->_refCount + 1;
-        o = p;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
+        T::ref(next);
+        T::release(p);
         p = next;
         return *this;
     }
     template <class U> igSmartPointer &operator=(const igSmartPointer<U> &other) {
         T *next = (T *)other.p;
-        T *o;
-        if (next != 0) next->_refCount = next->_refCount + 1;
-        o = p;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-        }
+        T::ref(next);
+        T::release(p);
         p = next;
         return *this;
     }

@@ -182,7 +182,7 @@ ViewerGuiStyle g_viewerGuiStyle;
 #include "dw4/viewer/igViewerGuiFactory.h"
 
 static inline void createAction(igSmartPointer<igViewerAction> &holder, AdoptReference) {
-    igRelease(holder.p);
+    igObject::release(holder.p);
     holder.p = igViewerAction_Create(0);
 }
 

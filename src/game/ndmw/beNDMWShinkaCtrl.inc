@@ -39,13 +39,13 @@ int beNDMWShinkaCtrl_GetVTable(void) {
     vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWShinkaCtrl_vtable[0];
     if (listRef != 0) {
-        igRelease((igObject *)*listRef);
+        igObject::release((igObject *)*listRef);
     }
     if (dBShinkaRef != 0) {
-        igRelease((igObject *)*dBShinkaRef);
+        igObject::release((igObject *)*dBShinkaRef);
     }
     if (playerParameterRef != 0) {
-        igRelease((igObject *)*playerParameterRef);
+        igObject::release((igObject *)*playerParameterRef);
     }
     return vtable;
 }

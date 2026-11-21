@@ -44,22 +44,22 @@ beNDMWMdlPEBaseInfoWork *beNDMWMdlPEBaseInfoWork_Destroy(beNDMWMdlPEBaseInfoWork
     if (self) {
         *(int **)&self->_vtable = g_beNDMWMdlPEBaseInfoWork_vtable;
         if (&self->_upDataList != 0) {
-            igRelease((igObject *)self->_upDataList);
+            igObject::release((igObject *)self->_upDataList);
         }
         if (&self->_downDataList != 0) {
-            igRelease((igObject *)self->_downDataList);
+            igObject::release((igObject *)self->_downDataList);
         }
         if (&self->_isFirstList != 0) {
-            igRelease((igObject *)self->_isFirstList);
+            igObject::release((igObject *)self->_isFirstList);
         }
         if (&self->_timerList != 0) {
-            igRelease((igObject *)self->_timerList);
+            igObject::release((igObject *)self->_timerList);
         }
         if (&self->_dispPosNoList != 0) {
-            igRelease((igObject *)self->_dispPosNoList);
+            igObject::release((igObject *)self->_dispPosNoList);
         }
         if (&self->_dispRamNoList != 0) {
-            igRelease((igObject *)self->_dispRamNoList);
+            igObject::release((igObject *)self->_dispRamNoList);
         }
         if (self) {
             *(int **)&self->_vtable = g_beModelCtrlInfoWork_vtable;

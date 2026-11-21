@@ -89,7 +89,7 @@ static inline int &connectResult(beNDMWLogo *self) {
 /* Stores `list` as the ram's data list, retaining it and releasing the old one. */
 static inline void setDataList(beBaseInfoRam *ram, igObject *list) {
     if (list != 0) list->_refCount = list->_refCount + 1;
-    igRelease((igObject *)ram->_dataList);
+    igObject::release((igObject *)ram->_dataList);
     ram->_dataList = (int)list;
 }
 
@@ -244,7 +244,7 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
                 break;
             case 1:
                 PICK_ALLOCATOR(allocator, self);
-                igRelease((igObject *)self->_mcUtilCtrl);
+                igObject::release((igObject *)self->_mcUtilCtrl);
                 self->_mcUtilCtrl = (int)beNDMWMcUtilCtrl_Create((int)allocator);
                 beNDMWMcUtilCtrl__Init(mcUtil(self), self->_messenger, 0);
                 NEXT_PHASE(ctrl);
@@ -399,7 +399,7 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
                 break;
             case 1:
                 if (beNDMWMcUtilCtrl__IsRemoved(mcUtil(self)) == true) {
-                    igRelease((igObject *)self->_mcUtilCtrl);
+                    igObject::release((igObject *)self->_mcUtilCtrl);
                     self->_mcUtilCtrl = 0;
                     NEXT_PHASE(ctrl);
                 }

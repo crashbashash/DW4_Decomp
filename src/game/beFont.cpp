@@ -297,7 +297,7 @@ void beFont_Stop(beFont *self) {
     count = fonts->_count;
     for (i = 0; i < count; i++) {
         font = ((igObject **)fonts->_data)[i];
-        igRelease(font);
+        igObject::release(font);
     }
     clearCount = fonts->_count;
     for (j = 0; j < clearCount; j++) {
@@ -326,14 +326,14 @@ void beFont_Prepare(beFont *self) {
     igObject *root;
 
     root = (igObject *)self->_root;
-    igRelease(root);
+    igObject::release(root);
     self->_root = 0;
     pairs = (beFontGeomAttrPairList *)self->_gaPairList;
     if (count(pairs) > 0) {
         pairCount = pairs->_count;
         for (i = 0; i < pairCount; i++) {
             pair = ((igObject **)pairs->_data)[i];
-            igRelease(pair);
+            igObject::release(pair);
         }
         clearCount = pairs->_count;
         for (j = 0; j < clearCount; j++) {
@@ -406,7 +406,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
         if (pair) pair->_refCount = pair->_refCount + 1;
         {
             igNodeView *old = (igNodeView *)self->_root;
-            igRelease((igObject *)old);
+            igObject::release((igObject *)old);
         }
         self->_root = (int)pair;
         layers = nodeAt(((igNodeView *)self->_root)->_childList, 0);
@@ -857,12 +857,12 @@ void beFont_SetText(beFont *self, beBaseInfoRam *ram, igNodeView *text, int inde
     igObjectList *targetAttributes = target->_attributes;
     if (geometry != 0) ++geometry->_refCount;
     igGeometryAttr *old = (igGeometryAttr *)((int *)targetAttributes->_data)[0];
-    igRelease(old);
+    igObject::release(old);
     int slot = 0;
     if (targetAttributes->_count != 0 && slot >= 0 && slot < targetAttributes->_count) ((int *)targetAttributes->_data)[0] = (int)geometry;
     igObjectList *pairGeometry = (igObjectList *)pair->_geomAttrs;
     igGeometryAttr *taken = (igGeometryAttr *)((int *)pairGeometry->_data)[0];
-    igRelease(taken);
+    igObject::release(taken);
     List_RemoveWordAt((igDataList *)pairGeometry, 0);
     ((int *)pairGeometry->_data)[pairGeometry->_count] = 0;
 }

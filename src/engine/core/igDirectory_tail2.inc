@@ -113,15 +113,6 @@ void *igDirectory_GetEntry(int *directory, int index) {
     return ((igDirectoryView *)directory)->_data[index];
 }
 
-static inline void releaseBound(igObjectDispatchView *o) {
-    if (o != 0) {
-        o->_refCount = (int)o->_refCount - 1;
-        if ((o->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(o);
-        }
-    }
-}
-
 static inline igObjectDirEntry *castBinding(igObjectDirEntry *o) {
     if (o != 0 && ((Gap::Core::igObject *)o)->isOfType((igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
         return o;
@@ -155,10 +146,8 @@ int igDirectory_ReplaceReference(igDirectoryView *self, const igSmartPointer<igV
         current = ((igObjectDispatchView *)field.p);
         if ((igObjectDispatchView *)igDirectory_GetObject(self, i) == (igObjectDispatchView *)current) {
             if (self->_refList != 0) {
-                releaseBound(((igObjectDispatchView *)field.p));
-                if (((igObjectDispatchView *)value.p) != 0) {
-                    ((igObjectDispatchView *)value.p)->_refCount = ((igObjectDispatchView *)value.p)->_refCount + 1;
-                }
+                igVirtualObject::release(field.p);
+                igVirtualObject::ref(value.p);
                 setSlot(self->_refList, i, ((igObjectDispatchView *)value.p));
             } else {
                 self->_data[i]->SetRef((int)((igObjectDispatchView *)value.p));

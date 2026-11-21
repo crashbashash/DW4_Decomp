@@ -34,13 +34,13 @@ The function count is flattered by small functions: the ones done have a median 
 
 Matching proves the bytes; it does not make the source readable. A matched function counts as **readable** when it also passes every test below. The tests are mechanical, so this is a floor: a function can pass them all and still be hard to follow. An owner-approved assembly source counts as readable when it has a recovered name, because its approval records that no C reproduces it. A static initialiser (`__sinit_<file>`) has no source text of its own, so the tests read its file's global definitions: the file without its function definitions.
 
-**17,391** of the 20,458 matched functions are readable: **2,721,504** code bytes, **78.4 %** of the code.
+**17,379** of the 20,458 matched functions are readable: **2,719,968** code bytes, **78.3 %** of the code.
 
 | A matched function is readable when | matched functions failing it | code bytes |
 | --- | ---: | ---: |
 | the function has a recovered name, not `FUN_<address>` or a numbered virtual slot | 1,606 | 322,540 |
 | no name holds an address: not the function's own, nor any function, variable or type it uses | 2,117 | 477,008 |
-| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 981 | 270,152 |
+| the types it uses have real names, not a placeholder such as `S`, `Obj`, `Info176` or `DW4VC_232_2` | 993 | 271,688 |
 | it sits in its class or module file, not `src/unmatched/` | 0 | 0 |
 | what it calls and reads is named: no `FUN_`/`DAT_` references | 933 | 274,648 |
 | no decompiler leftovers: `temp_*`, `var_*`, `argN`, stack-offset locals such as `sp5C` | 1,546 | 301,104 |
@@ -98,8 +98,8 @@ The debt ratchet ([`docs/engine/debt-ratchet.md`](docs/engine/debt-ratchet.md)):
 | `decl.header_conflicts` | 0 | 0 | 0 | symbols declared in two or more headers that disagree on the type |
 | `decl.named_placeholders` | 0 | 0 | 0 | `FUN_<va>`/`DAT_<va>` identifiers in src/ and include/ whose address config/SLUS-20836/symbols.txt or data-names.tsv names: a copy of a named symbol the build binds by address and a rename passes by |
 | `decl.member_conflicts` | 0 | 0 | 0 | members defined out of their class (`T Class::name(...) {`) that no declaration in the class body states the same way: parameters, constness, return or data type, or another view of the class declaring the name otherwise (tools/declarations.py) |
-| `free_methods.functions` | 11,502 | 10,572 | -930 | functions of C++ units written as `<Class>_<Method>` free functions with C linkage, for a class reflection names, where the original was most likely a member function |
-| `free_methods.bytes` | 1,784,656 | 1,720,884 | -63772 | bytes of those |
+| `free_methods.functions` | 11,502 | 10,571 | -931 | functions of C++ units written as `<Class>_<Method>` free functions with C linkage, for a class reflection names, where the original was most likely a member function |
+| `free_methods.bytes` | 1,784,656 | 1,720,816 | -63840 | bytes of those |
 | `vfunc_slots.functions` | 402 | 402 | 0 | virtual methods known only by their slot (`Gap__<Lib>__<Class>__vfunc_N`) |
 | `virtual_views.types` | 235 | 200 | -35 | stand-in classes for virtual dispatch (`…DispatchView`, `DW4VC_*`) instead of the real class declarations |
 | `virtual_views.slots` | 32,049 | 25,555 | -6494 | placeholder virtual slots in stand-in classes (`virtual void d21();`, `vX(...)`) |
@@ -207,7 +207,7 @@ The section in 16 equal parts. `0x00100000` is the start of everything.
 | reflection fields with offset and type | 3,680 |
 | switch jump tables recovered | 209 tables, 4,147 entries, in 172 functions |
 | Lua chunks decompiled | 5,291 |
-| field accesses using a **recovered** type (not an offset cast) | 31,920 of 70,996 (44.96 %) |
+| field accesses using a **recovered** type (not an offset cast) | 31,887 of 70,940 (44.95 %) |
 | functions in the retail split (`asm/`, generated) | 20,576 |
 
 ## How these numbers are produced

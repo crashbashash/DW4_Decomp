@@ -95,5 +95,36 @@ class RefTest(unittest.TestCase):
         self.assertEqual(rc.convert(text)[0], text)
 
 
+class HelperTest(unittest.TestCase):
+    def test_a_helper_call_becomes_the_static_release(self):
+        text = ("    igRelease((igObject *)self->_vc);\n"
+                "    if (old != 0) igRelease(old);\n")
+        new, sites = rc.convert(text)
+        self.assertEqual(new, "    igObject::release((igObject *)self->_vc);\n"
+                              "    if (old != 0) igObject::release(old);\n")
+        self.assertEqual([(s.kind, s.form, s.line, s.new_lines) for s in sites],
+                         [("helper", "static", 1, (1, 1)), ("helper", "static", 2, (2, 2))])
+
+    def test_a_view_and_a_kept_call(self):
+        text = "    igRelease(entry);\n    igRelease(list);\n    igRelease(name);\n"
+        new, sites = rc.convert(text, keep={3}, view={1: "igVirtualObject"})
+        self.assertEqual(new, "    igVirtualObject::release(entry);\n    igObject::release(list);\n"
+                              "    igRelease(name);\n")
+        self.assertEqual([s.form for s in sites], ["view", "static", "keep"])
+
+    def test_definitions_macros_and_other_names_are_left(self):
+        text = ("static inline void igRelease(igObject *o) {\n}\n"
+                "template <class T> static inline void igRelease(igTDataList<T> *o) {\n}\n"
+                "#define DROP(o) igRelease(o)\n"
+                "    p->igRelease(o);\n    myigRelease(o);\n")
+        self.assertEqual(rc.convert(text), (text, []))
+
+    def test_sites_keep_text_order_with_open_releases(self):
+        text = ("    igRelease(a);\n"
+                "    if (b != 0) {\n        b->_refCount = b->_refCount + 1;\n    }\n")
+        _new, sites = rc.convert(text)
+        self.assertEqual([(s.kind, s.line) for s in sites], [("helper", 1), ("ref", 3)])
+
+
 if __name__ == "__main__":
     unittest.main()

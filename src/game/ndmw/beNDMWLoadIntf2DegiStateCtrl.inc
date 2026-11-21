@@ -40,7 +40,7 @@ int beNDMWLoadIntf2DegiStateCtrl_GetVTable(void) {
     vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWLoadIntf2DegiStateCtrl_vtable[0];
     if (statDataListRef != 0) {
-        igRelease((igObject *)*statDataListRef);
+        igObject::release((igObject *)*statDataListRef);
     }
     *(int **)&obj._vtable = &g_igNamedObject_vtable[0];
     if (nameRef != 0) {

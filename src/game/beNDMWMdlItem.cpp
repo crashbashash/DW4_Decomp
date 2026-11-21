@@ -514,7 +514,7 @@ void beNDMWMdlItem_OnErase(beNDMWMdlItem *self, beBaseInfoRam *ram) {
 static inline void setDataList(beBaseInfoRam *ram, const ObjectRef &list) {
     igObject *t = list.p;
     if (t != 0) t->_refCount = t->_refCount + 1;
-    igRelease((igObject *)ram->_dataList);
+    igObject::release((igObject *)ram->_dataList);
     ram->_dataList = (int)t;
 }
 

@@ -33,25 +33,25 @@ void *beNDMWStatusCtrlBaseEquip_Destroy(beNDMWStatusCtrlBaseEquip *self, short f
     if (self != 0) {
         *(int **)&self->_vtable = &g_beNDMWStatusCtrlBaseEquip_vtable[0];
         if (&self->_deviceFolder != 0) {
-            igRelease((igObject *)self->_deviceFolder);
+            igObject::release((igObject *)self->_deviceFolder);
         }
         if (&self->_apuPocket != 0) {
-            igRelease((igObject *)self->_apuPocket);
+            igObject::release((igObject *)self->_apuPocket);
         }
         if (&self->_wpuPocket != 0) {
-            igRelease((igObject *)self->_wpuPocket);
+            igObject::release((igObject *)self->_wpuPocket);
         }
         if (&self->_subSlot != 0) {
-            igRelease((igObject *)self->_subSlot);
+            igObject::release((igObject *)self->_subSlot);
         }
         if (&self->_mainSlot != 0) {
-            igRelease((igObject *)self->_mainSlot);
+            igObject::release((igObject *)self->_mainSlot);
         }
         if (&self->_powerSocket != 0) {
-            igRelease((igObject *)self->_powerSocket);
+            igObject::release((igObject *)self->_powerSocket);
         }
         if (&self->_playerList != 0) {
-            igRelease((igObject *)self->_playerList);
+            igObject::release((igObject *)self->_playerList);
         }
         if (self != 0) {
             *(int **)&self->_vtable = &g_beNDMWWindowCtrl_vtable[0];

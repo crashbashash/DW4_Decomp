@@ -7,7 +7,7 @@ igIGBFile	_endianSwap	bool
 igViewerRenderer	_lightingState	bool
 igMetaField	_fieldName	igStringRef
 igObjectRefMetaField	_poolName	igStringRef
-igMemoryRefMetaField	_memTypeRef	igSmartPointer< ::igMetaField>
+igMemoryRefMetaField	_memTypeRef	igSmartPointer<igMetaField>
 igMemoryRefMetaField	_poolName	igStringRef
 igCompoundMetaField	_fieldList	igSmartPointer<igMetaFieldList>
 igDataList	_data	unsigned char *

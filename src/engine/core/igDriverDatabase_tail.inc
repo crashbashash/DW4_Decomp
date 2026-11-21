@@ -116,7 +116,7 @@ int igDriverDatabase_Load(igDriverDatabase *self, const char *fileName, const ch
     }
     {
         int al = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
-        igRelease((igObject *)self->_databaseFile);
+        igObject::release((igObject *)self->_databaseFile);
         self->_databaseFile = (int)((igObject *)igFile_Create(al));
     }
     opened = ((igFileView *)self->_databaseFile)->Open(name.p, (const char *)"r");
@@ -136,14 +136,14 @@ int igDriverDatabase_Load(igDriverDatabase *self, const char *fileName, const ch
         opened = openPath(self, folder.p->GetFullPath(name.p));
     }
     if (opened == 0) {
-        igRelease((igObject *)self->_databaseFile);
+        igObject::release((igObject *)self->_databaseFile);
         self->_databaseFile = 0;
         return 0;
     }
     igStringObj_Set((igStringObj *)self->_databaseFileName, (const char *)((igFile *)opened)->_fileName);
     igDriverDatabase_LoadDatabaseFile(self, (igFileView *)self->_databaseFile);
     ((igFileView *)self->_databaseFile)->Close();
-    igRelease((igObject *)self->_databaseFile);
+    igObject::release((igObject *)self->_databaseFile);
     self->_databaseFile = 0;
     return 1;
 }
@@ -472,7 +472,7 @@ void igDriverDatabase_ApplySettings(igDriverDatabase *self, igTDataList<ConfigPa
         value = igStringObj_Text(pair->value);
         igRegistry_SetValueString(registry, section, key, value);
     }
-    igRelease(scratch);
+    igObject::release(scratch);
 }
 
 /* The registry section a settings node names, resolved through the override source when there is
@@ -498,12 +498,12 @@ int igDriverDatabase_ResolveSettingsSection(igDriverDatabase *self, igStringObj 
         char *key = (s == 0) ? g_stringObjEmptyText : s;
         s = (s == 0) ? g_stringObjEmptyText : s;
         if ((igRegistry_GetValueStringObj((igRegistry *)self->_overrideSource, self->_overrideSourceSection, key, &name, s, 0) & 0xff) == 0 && self->_overrideMode == 1) {
-            igRelease(name);
+            igObject::release(name);
             return -1;
         }
     }
     result = igRegistry_GetSectionIndex(registry, igStringObj_Text(name), 1);
-    igRelease(name);
+    igObject::release(name);
     return result;
 }
 

@@ -399,7 +399,7 @@ void igContext_BuildExtensionInfoList(igContext *self) {
         int i;
         list = ((igContextExtInfoList *)igContextExtInfoList_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
         if (list != 0) ++list->_refCount;
-        igRelease((igObject *)self->_pExtList);
+        igObject::release((igObject *)self->_pExtList);
         self->_pExtList = (int)list;
         {
             igContextExtInfoList *o = (igContextExtInfoList *)self->_pExtList;
@@ -418,7 +418,7 @@ void igContext_BuildExtensionInfoList(igContext *self) {
             node = ((igMetaObject *)igMetaObject_GetTreeNode((igMetaObject *)meta, i + 1));
             info = ((igContextExtInfo *)igContextExtInfo_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
             if (node != 0) ++node->_refCount;
-            igRelease((igObject *)info->_pMeta);
+            igObject::release((igObject *)info->_pMeta);
             info->_pMeta = (int)node;
             name = node->_name;
             if (g_stringPool == 0) {
@@ -440,7 +440,7 @@ void igContext_BuildExtensionInfoList(igContext *self) {
             info->_pVendorName = 0;
             infoList = (igContextExtInfoList *)self->_pExtList;
             if (info != 0) ++info->_refCount;
-            igRelease(((igObject **)infoList->_data)[i]);
+            igObject::release(((igObject **)infoList->_data)[i]);
             if (infoList->_count != 0 && i >= 0 && i < infoList->_count) ((igContextExtInfo **)infoList->_data)[i] = info;
             info->release();
         }

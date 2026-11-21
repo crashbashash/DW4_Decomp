@@ -129,7 +129,7 @@ void igTextureAttr_apply(igTextureAttr *self, igObject *context) {
             break;
         }
         igObject::ref(context);
-        igRelease((igObject *)self->_vc);
+        igObject::release((igObject *)self->_vc);
         self->_vc = (int)context;
     }
     if (self->_source == 2) {

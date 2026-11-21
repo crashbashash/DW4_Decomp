@@ -45,13 +45,13 @@ beNDMWPanelObject *beNDMWPanelObject_Destroy(beNDMWPanelObject *self, short flag
     if (self) {
         *(int **)&self->_vtable = &g_beNDMWPanelObject_vtable[0];
         if (&self->_textColorList != 0) {
-            igRelease((igObject *)self->_textColorList);
+            igObject::release((igObject *)self->_textColorList);
         }
         if (&self->_textSetList != 0) {
-            igRelease((igObject *)self->_textSetList);
+            igObject::release((igObject *)self->_textSetList);
         }
         if (&self->_playerDataList != 0) {
-            igRelease((igObject *)self->_playerDataList);
+            igObject::release((igObject *)self->_playerDataList);
         }
         if (flags > 0) {
             Memory_FreeBufferAliasC(self);

@@ -908,7 +908,7 @@ void beNumVerData_userDestruct(beNumVerData *self) {
     if (beNumVerDataList_GetCount(list) > 0) {
         releaseCount = list->_count;
         for (releaseIndex = 0; releaseIndex < releaseCount; releaseIndex++) {
-            igRelease(((igObject **)list->_data)[releaseIndex]);
+            igObject::release(((igObject **)list->_data)[releaseIndex]);
         }
         clearCount = list->_count;
         for (clearIndex = 0; clearIndex < clearCount; clearIndex++) {

@@ -21,7 +21,11 @@ view forwards to it. This tool rewrites the spellings it recognises:
   `if` becomes `igObject::release(p);`;
 - the increment (`p->_refCount = p->_refCount + 1;`, `++p->_refCount;`, `p->_refCount++;`,
   `p->_refCount += 1;`) becomes `p->ref();`, and under an `if (p != 0)` holding nothing else
-  `igObject::ref(p);`.
+  `igObject::ref(p);`;
+- a call of DW4's release helper `igRelease(p)` (include/dw4/core/igSmartPointer.h, which holds the guarded
+  release) becomes the kit's static `igObject::release(p)`; `--view FILE:LINE=CLASS` writes it as
+  `CLASS::release(p)` for a pointer typed as a view that carries the kit statics (`igVirtualObject`,
+  `igObjectDispatchView`).
 
 Only the `_refCount` word is read: local views spelling it `f4` or `refs`, or reading `+4` through casts, stay
 open until their type is written. Whether a site's pointer has the members (a converted class, or a flat struct
@@ -30,7 +34,8 @@ only the call inside it (code in `Gap` holding a flat pointer, where `igObject` 
 FILE:LINE` leaves a site as it is (its pointer is a view, or the rewritten unit no longer matches). LINE is the
 first line of the site in the file as it was (`--sites` lists them, with each site's lines after the rewrite).
 
-usage: releaseconv.py FILE... [--member FILE:LINE]... [--keep FILE:LINE]... [--sites] [--dry-run]
+usage: releaseconv.py FILE... [--member FILE:LINE]... [--keep FILE:LINE]... [--view FILE:LINE=CLASS]...
+                      [--sites] [--dry-run]
 Tests: tools/test_releaseconv.py.
 """
 import argparse
@@ -51,6 +56,7 @@ _INC = re.compile(r"(?:\+\+\s*(?P<i1>%s)\s*->\s*_refCount\s*;"
                   r"|(?P<i3>%s)\s*->\s*_refCount\s*=\s*(?P<rhs>[^;{}]+);)" % (_EXPR, _EXPR, _EXPR))
 _LEAD = re.compile(r"(?:^|(?<=[;{}]))[ \t]*", re.M)
 _GUARD = re.compile(r"if\s*\(\s*(?P<w>[^;{}]+?)\s*(?:!=\s*(?:0|NULL)\s*)?\)\s*(?P<open>\{)?\s*$")
+_HELPER = re.compile(r"(?<![\w:.>])igRelease\s*\(")
 
 
 def bare(expr):
@@ -187,12 +193,31 @@ def find_sites(text):
             head = _GUARD.search(text, max(0, site.start - 400), site.start)
             if head and not head.group("open") and bare(head.group("w")) == bare(site.obj):
                 site.guard = (head.start(), site.end)
+    sites.extend(helper_sites(text))
+    sites.sort(key=lambda s: s.start)
     return sites
 
 
-def convert(text, member=(), keep=()):
+def helper_sites(text):
+    """[Site] of the calls `igRelease(p)` in `text` (kind "helper", obj p, span the call without its `;`); the
+    helper's own definitions and macro bodies are left."""
+    sites = []
+    for m in _HELPER.finditer(text):
+        line_start = text.rfind("\n", 0, m.start()) + 1
+        if _in_directive(text, m.start()) or re.search(r"\bvoid\s*$", text[line_start:m.start()]):
+            continue
+        end = _close(text, m.end() - 1)
+        if end is None or not re.match(r"\s*;", text[end:]):
+            continue
+        sites.append(Site("helper", m.start(), end, text[m.end():end - 1].strip(), None, "",
+                          text.count("\n", 0, m.start()) + 1))
+    return sites
+
+
+def convert(text, member=(), keep=(), view=None):
     """-> (rewritten text, [Site]); `member`/`keep` are the original first lines of sites to write in the member
-    form inside their `if` and to leave open."""
+    form inside their `if` and to leave open, `view` {line: class} the helper calls whose pointer is that view."""
+    view = view or {}
     sites = find_sites(text)
     out, cursor = [], 0
     for site in sites:
@@ -200,7 +225,11 @@ def convert(text, member=(), keep=()):
             site.form = "keep"
             continue
         call = "%s->%s();" % (site.obj, site.kind)
-        if site.guard and site.line not in member:
+        if site.kind == "helper":
+            start, end = site.start, site.end
+            replacement = "%s::release(%s)" % (view.get(site.line, "igObject"), site.obj)
+            site.form = "view" if site.line in view else "static"
+        elif site.guard and site.line not in member:
             start, end = site.guard
             line_start = text.rfind("\n", 0, start) + 1
             if text[line_start:start].strip() == "":
@@ -240,19 +269,29 @@ def _locations(values):
     return found
 
 
+def _views(values):
+    found = {}
+    for value in values or ():
+        where, _, cls = value.partition("=")
+        path, _, line = where.rpartition(":")
+        found.setdefault(path, {})[int(line)] = cls
+    return found
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("files", nargs="+")
     ap.add_argument("--member", action="append", help="FILE:LINE of a site written as p->ref()/release() in its if")
     ap.add_argument("--keep", action="append", help="FILE:LINE of a site left open")
+    ap.add_argument("--view", action="append", help="FILE:LINE=CLASS of an igRelease call written CLASS::release(p)")
     ap.add_argument("--sites", action="store_true", help="list each site: file, line, form, rewritten lines")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args(argv)
-    member, keep = _locations(args.member), _locations(args.keep)
+    member, keep, view = _locations(args.member), _locations(args.keep), _views(args.view)
     total = {}
     for path in args.files:
         text = open(path).read()
-        new, sites = convert(text, member.get(path, ()), keep.get(path, ()))
+        new, sites = convert(text, member.get(path, ()), keep.get(path, ()), view.get(path))
         for site in sites:
             total[site.form] = total.get(site.form, 0) + 1
             if args.sites:

@@ -1712,8 +1712,7 @@ void beNDMWDegiData__LoadFromProperties(beNDMWDegiData *degi, int props) {
     {
         igStringObjList *sl = (igStringObjList *)((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "PLAYERNAME")->_data);
         if (sl->_count != 0) {
-            igSmartPointer<beUnicodeObj> s(((beUnicodeObj **)sl->_data)[0]);
-            if (s.p != 0) s.p->_refCount = s.p->_refCount + 1;
+            igSmartPointer<beUnicodeObj> s(((beUnicodeObj **)sl->_data)[0], kRetainReference);
             {
                 unsigned short *src;
                 unsigned short *base;

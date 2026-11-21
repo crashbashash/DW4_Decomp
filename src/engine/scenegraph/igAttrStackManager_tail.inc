@@ -373,7 +373,7 @@ void igAttrStackManager_PushLightStateAttr(igAttrStackManager *self, igLightStat
         slot = stackIndex + ((int *)self->_attrStackIndexTable)[attr->_cachedAttrIndex];
         LightStateAttrView *defaults = ((igTDataList<LightStateAttrView *> *)self->_attrDefaults)->_data[slot];
         igObject::ref(light);
-        igRelease((igObject *)defaults->_light);
+        igObject::release((igObject *)defaults->_light);
         defaults->_light = light;
         ((igTDataList<LightStateAttrView *> *)self->_attrDefaults)->_data[slot]->setEnabled(false);
     }

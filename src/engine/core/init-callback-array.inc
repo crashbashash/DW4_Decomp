@@ -101,13 +101,13 @@ static inline void setName(igDirectory *directory, char *name) {
 static inline void setRegistryFile(igRegistry *registry, const igSmartPointer<igObject> &value) {
     igObject *file = value.p;
     if (file != 0) file->_refCount = file->_refCount + 1;
-    igRelease((igObject *)registry->_registryFile);
+    igObject::release((igObject *)registry->_registryFile);
     registry->_registryFile = (int)file;
 }
 
 static inline void setTemporaryMemoryPool(igResource *resource, igObject *pool) {
     if (pool != 0) pool->_refCount = pool->_refCount + 1;
-    igRelease((igObject *)resource->_temporaryMemoryPool);
+    igObject::release((igObject *)resource->_temporaryMemoryPool);
     resource->_temporaryMemoryPool = (int)pool;
 }
 
@@ -268,13 +268,13 @@ void igObjectSystem_Finalize(ObjectSystemView *self) {
         igResource_StopAsyncLoading((igResourceView *)self->resource);
     }
     resource = self->resource;
-    igRelease((igObject *)resource->_temporaryMemoryPool);
+    igObject::release((igObject *)resource->_temporaryMemoryPool);
     resource->_temporaryMemoryPool = 0;
     resource = self->resource;
-    igRelease((igObject *)resource->_objectMemoryPool);
+    igObject::release((igObject *)resource->_objectMemoryPool);
     resource->_objectMemoryPool = 0;
     resource = self->resource;
-    igRelease((igObject *)resource->_dataMemoryPool);
+    igObject::release((igObject *)resource->_dataMemoryPool);
     resource->_dataMemoryPool = 0;
     StringTable_SetSynchronization(0);
     count = g_secondaryAllocatorList->count;
@@ -326,7 +326,7 @@ void igObjectSystem_Finalize(ObjectSystemView *self) {
             Memory_FreeBuffer((void *)memory);
         }
         resource = self->resource;
-        igRelease((igObject *)resource->_temporaryMemoryPool);
+        igObject::release((igObject *)resource->_temporaryMemoryPool);
         resource->_temporaryMemoryPool = 0;
         releaseObject((igObject *)self->resourceTempPool);
         self->resourceTempPool = 0;

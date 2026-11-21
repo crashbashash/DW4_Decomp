@@ -442,7 +442,7 @@ struct MessageReceiver : igObject {
     ResizeFunction function;
     void setHandler(igObject *object, ResizeFunction f) {
         igObject::ref(object);
-        igRelease(handler);
+        igObject::release(handler);
         handler = object;
         function = f;
     }

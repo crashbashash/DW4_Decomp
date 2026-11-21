@@ -4749,8 +4749,7 @@ void beNDMWShopCtrlDeviceSell_RefreshText(beNDMWShopCtrlDeviceSell *self, int dr
     beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
     beMessenger_DispatchSelected((beMessenger *)self->_messenger, GETPLAYER_10);
     igObjectList *devices = PlayerFolder(beMessenger_GetObject((beMessenger *)self->_messenger, 0), DEVICEFOLDER_4);
-    igSmartPointer<igStringObj> text((igStringObj *)((beSystem *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSystem_metaObject))->_globalStrObj);
-    if (text.p != 0) text.p->_refCount = text.p->_refCount + 1;
+    igSmartPointer<igStringObj> text((igStringObj *)((beSystem *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSystem_metaObject))->_globalStrObj, kRetainReference);
     char pageText[2];
     char pocketText[2];
     char chipPocketText[2];

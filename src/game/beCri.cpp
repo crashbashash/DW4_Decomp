@@ -92,7 +92,7 @@ static inline void ReleaseAll(igObjectList *list) {
     int i;
     for (i = 0; i < count; i++) {
         igObject *object = ((igObject **)list->_data)[i];
-        igRelease(object);
+        igObject::release(object);
     }
     int remaining = list->_count;
     int j;
@@ -293,13 +293,13 @@ void beCri_Start(beCri *self) {
     self->_system = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSystem_metaObject);
     allocator = HandleAllocator(self);
     old = Bgm(self);
-    igRelease(old);
+    igObject::release(old);
     self->_hdBGM = (int)beCriHandle_Create(allocator);
     beCriAudio_Setup((beCriAudio *)Bgm(self)->_audio, 2);
     igNamedObject_SetName((igNamedObject *)self->_hdBGM, 0);
     ambienceAllocator = (void *)HandleAllocator(self);
     old = Env(self);
-    igRelease(old);
+    igObject::release(old);
     self->_hdENV = (int)beCriHandle_Create((int)ambienceAllocator);
     beCriAudio_Setup((beCriAudio *)Env(self)->_audio, 2);
     igNamedObject_SetName((igNamedObject *)self->_hdENV, 0);
@@ -809,7 +809,7 @@ void beCri_ReleaseEffectVoices(beCri *self) {
         beCriAudio_Release((beCriAudio *)HandleAt(Handles(self), 0)->_audio);
         list = Handles(self);
         first = HandleAt(list, 0);
-        igRelease(first);
+        igObject::release(first);
         List_RemoveWordAt((igDataList *)list, 0);
         ((int *)list->_data)[list->_count] = 0; /* the slot the removal vacated */
     }

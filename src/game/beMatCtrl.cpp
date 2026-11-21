@@ -156,7 +156,7 @@ static inline void DropMaskList(int &masks) {
     igIntList *list = (igIntList *)masks;
     if (list != 0) {
         list->_count = 0;
-        igRelease((igObject *)masks);
+        igObject::release((igObject *)masks);
         masks = 0;
     }
 }
@@ -227,7 +227,7 @@ template <class T, class List> static inline void FillList(List *list, const T &
 /* Makes a reference field hold next: retains next, then releases what the field held. */
 static inline void AssignRef(int &field, igObject *next) {
     if (next != 0) next->_refCount = next->_refCount + 1;
-    igRelease((igObject *)field);
+    igObject::release((igObject *)field);
     field = (int)next;
 }
 
@@ -235,7 +235,7 @@ static inline void AssignRef(int &field, igObject *next) {
  * when the index is inside the list. */
 static inline void StoreListRef(igObject *object, igObjectList *list, int index) {
     if (object != 0) object->_refCount = object->_refCount + 1;
-    igRelease(((igObject **)list->_data)[index]);
+    igObject::release(((igObject **)list->_data)[index]);
     ListSet(list, index, object);
 }
 
@@ -276,7 +276,7 @@ void beMatCtrl_UpdateRam(beMatCtrl *self, beMatCtrlInfoRam *ram) {
         case 1:
             break;
         default: {
-            igRelease((igObject *)ram->_work);
+            igObject::release((igObject *)ram->_work);
             ram->_work = 0;
             {
                 WorkRef created(beMatCtrlInfoWork_Create((int)OwnerAllocator(self)));

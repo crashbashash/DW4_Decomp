@@ -38,7 +38,7 @@ void *beNDMWWindowSelect_Destroy(beNDMWWindowSelect *self, short flags) {
     if (self != 0) {
         *(int **)&self->_vtable = &g_beNDMWWindowSelect_vtable[0];
         if (&self->_decideList != 0) {
-            igRelease((igObject *)self->_decideList);
+            igObject::release((igObject *)self->_decideList);
         }
         if (&self->_infoName != 0) {
             releaseString((const char *)self->_infoName);

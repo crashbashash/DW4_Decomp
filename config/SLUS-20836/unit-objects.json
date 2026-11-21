@@ -1674,7 +1674,7 @@
       "resetFields__Q33Gap5Attrs6igAttrFi": "0x0013b860",
       "registerClass__Q33Gap5Attrs6igAttrFP12igMetaObject": "0x0013b8a0",
       "getSharedDefaultAttr__Q33Gap5Attrs20igAttrDefaultManagerCFP12igMetaObjecti": "0x0013b900",
-      "getSharedAttr__Q33Gap5Attrs10igAttrPoolF23igSmartPointer<6igAttr>": "0x0013ba30",
+      "getSharedAttr__Q33Gap5Attrs10igAttrPoolF35igSmartPointer<Q33Gap5Attrs6igAttr>": "0x0013ba30",
       "igSmartPointer_igAttrList_Destruct": "0x0013bfe0",
       "getStaticAttrPool__Q33Gap5Attrs10igAttrPoolFv": "0x0013c060",
       "userUnregister__Q33Gap5Attrs10igAttrPoolFv": "0x0013c110",
@@ -2535,7 +2535,6 @@
     },
     "stripped": [
       "__dt__22igSmartPointer<5Image>Fv",
-      "__dt__23igSmartPointer<6igAttr>Fv",
       "__dt__25igSmartPointer<8R_13d460>Fv",
       "__dt__25igSmartPointer<8igObject>Fv",
       "__dt__28igSmartPointer<10igAttrList>Fv",
@@ -2544,6 +2543,7 @@
       "__dt__32igSmartPointer<14igAttrListList>Fv",
       "__dt__33igSmartPointer<15igVisualContext>Fv",
       "__dt__34igSmartPointer<16igMetaObjectList>Fv",
+      "__dt__35igSmartPointer<Q33Gap5Attrs6igAttr>Fv",
       "__dt__36igSmartPointer<18igBlendEquationExt>Fv",
       "__dt__41igSmartPointer<23igNonRefCountedAttrList>Fv",
       "__dt__Q33Gap5Attrs10igAttrPoolFv",
@@ -28305,7 +28305,7 @@
     ],
     "duplicates": {
       "__dt__11igStringRefFv": "0x00130720",
-      "__dt__29igSmartPointer<11igMetaField>Fv": "0x0014ec50",
+      "__dt__40igSmartPointer<Q33Gap4Core11igMetaField>Fv": "0x0014ec50",
       "getClassMeta__Q33Gap4Core10igDataListFv": "0x00143720",
       "getClassMeta__Q33Gap4Core11igMetaFieldFv": "0x00187180",
       "getClassMeta__Q33Gap4Core12igObjectListFv": "0x00130c00",
@@ -28331,8 +28331,8 @@
       "__dt__28igSmartPointer<10igFileView>Fv",
       "__dt__28igSmartPointer<10igRegistry>Fv",
       "__dt__29igSmartPointer<11igDirectory>Fv",
+      "__dt__29igSmartPointer<11igMetaField>Fv",
       "__dt__29igSmartPointer<11igStringObj>Fv",
-      "__dt__30igSmartPointer<12IgbReadEntry>Fv",
       "__dt__30igSmartPointer<12igFolderView>Fv",
       "__dt__31igSmartPointer<13igIGBFileView>Fv",
       "__dt__31igSmartPointer<13igPointerList>Fv",
@@ -41921,7 +41921,7 @@
       "beNDMWLoadSavePlWork__GetIsEntry": "0x003e90c0",
       "beNDMWLoadIntf2_igObject_Retain": "0x003e90d0",
       "beNDMWLoadIntf2_beNDMWDegiDataList_Get": "0x003e90f0",
-      "igRelease__FP8igObject": "0x003e9110",
+      "release__8igObjectFP8igObject": "0x003e9110",
       "beNDMWLoadIntf2_igObjectList_Set": "0x003e9160",
       "Vec3f_Copy": "0x003e9220",
       "beNDMWLoadIntf2_beNDMWLoadSavePlWorkList_Get": "0x003e9240",
@@ -46940,9 +46940,9 @@
       "text_meta": "0x0051fab8"
     },
     "stripped": [
-      "__dt__23igSmartPointer<6igAttr>Fv",
       "__dt__23igSmartPointer<6igNode>Fv",
       "__dt__25igSmartPointer<8igObject>Fv",
+      "__dt__35igSmartPointer<Q33Gap5Attrs6igAttr>Fv",
       "set__Q33Gap5Attrs11igColorAttrFRC7igVec4f"
     ],
     "symbol": "igViewerRenderer_ObjectsTraverseNodeSelect",

@@ -393,9 +393,9 @@ def converted_classes(converted, parent, layouts, members, bases=None):
     if any(re.search(r"\bigResult\b", decl) for cls in order for decl in members.get(cls, [])):
         # a member returning a status returns the core library's result class
         out.append("#include \"dw4/core/igResult.h\"")
-    if any("igSmartPointer<" in line for cls in order for _off, _size, line in layouts[cls][4]):
-        # a smart-pointer member needs the template, which reads the flat igObject above
-        out.append("#include \"dw4/core/igSmartPointer.h\"")
+    # a smart-pointer member needs the template, included once the Gap root is complete (below): its
+    # ref/release are the kit's static igObject::ref/release on Gap::Core::igObject
+    smart = any("igSmartPointer<" in line for cls in order for _off, _size, line in layouts[cls][4])
     if any(re.search(r"\bigStringRef \w+;", line) for cls in order for _off, _size, line in layouts[cls][4]):
         # a string member is the pool's counted reference
         out.append("#include \"dw4/core/igStringRef.h\"")
@@ -460,6 +460,8 @@ def converted_classes(converted, parent, layouts, members, bases=None):
         out.append("};")
         out.append("}")
         out.append("}")
+        if cls == "igObject" and smart:
+            out.append("#include \"dw4/core/igSmartPointer.h\"")
     for cls in order:
         view = members.get(FLAT_VIEW + cls)
         if view:

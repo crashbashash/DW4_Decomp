@@ -56,10 +56,10 @@ void igMousePosObserver_OnModelChange(igMousePosObserver *self, struct GuiMessag
         }
         if (model->_mousePressed) {
             igObject::ref(under);
-            igRelease((igObject *)model->_pushedComponent);
+            igObject::release((igObject *)model->_pushedComponent);
             model->_pushedComponent = (int)under;
         } else {
-            igRelease((igObject *)model->_pushedComponent);
+            igObject::release((igObject *)model->_pushedComponent);
             model->_pushedComponent = 0;
         }
         m[0] = 2;

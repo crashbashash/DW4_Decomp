@@ -61,7 +61,7 @@ static inline void setKeepMesString(beDemoKeepMes *mes, int beDemoKeepMes::*fiel
 static inline void ensureBuildData(beDemoManager *self) {
     if (self->_buildData == 0) {
         int allocator = allocatorFor(self);
-        igRelease((igObject *)self->_buildData);
+        igObject::release((igObject *)self->_buildData);
         self->_buildData = (int)beDemoManagerWork_CreateInstance(allocator);
         self->_turningOK = 0;
     }
@@ -168,7 +168,7 @@ void beDemoManager_Run(beDemoManager *self) {
     igObject *work = (igObject *)self->_buildData;
     if ((work != 0) && (self->_turningOK != 1)) {
         ((Gap::Core::igObjectList *)self->_activeDataList)->append((Gap::Core::igObject *)work);
-        igRelease((igObject *)self->_buildData);
+        igObject::release((igObject *)self->_buildData);
         self->_buildData = 0;
         self->_turningOK = 0;
     }
@@ -212,7 +212,7 @@ static inline void releaseAll(igObjectList *list) {
     int count = list->_count;
     int i;
     for (i = 0; i < count; i++) {
-        igRelease(((igObject **)list->_data)[i]);
+        igObject::release(((igObject **)list->_data)[i]);
     }
     removeAll(list);
 }
@@ -232,7 +232,7 @@ void beDemoManager_RemoveAllInfo(beDemoManager *self) {
     }
     releaseAll((igObjectList *)self->_activeDataList);
     setCapacity((igObjectList *)self->_activeDataList, 0);
-    igRelease((igObject *)self->_buildData);
+    igObject::release((igObject *)self->_buildData);
     self->_buildData = 0;
     self->_turningOK = 0;
     self->_calledRemoveAll = 0;
@@ -321,7 +321,7 @@ void beDemoManager_Update(beDemoManager *self) {
         beDemoManagerWorkList *list = (beDemoManagerWorkList *)self->_activeDataList;
         beDemoManagerWork *work = ((beDemoManagerWork **)list->_data)[k];
         if (work->_advancec < keepMesList(work)->_count) continue;
-        igRelease((igObject *)work);
+        igObject::release((igObject *)work);
         List_RemoveWordAt((igDataList *)list, k);
         ((int *)list->_data)[list->_count] = 0;
     }

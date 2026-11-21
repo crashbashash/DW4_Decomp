@@ -1,10 +1,10 @@
 namespace Gap {
 namespace Attrs {
 
-igSmartPointer< ::igAttr> igAttrDefaultManager::getSharedDefaultAttr(igMetaObject *meta, int unitID) const
+igSmartPointer<igAttr> igAttrDefaultManager::getSharedDefaultAttr(igMetaObject *meta, int unitID) const
 {
-    igSmartPointer< ::igAttr> created = createDefaultAttr(meta, unitID);
-    igSmartPointer< ::igAttr> shared = igAttrPool::getStaticAttrPool()->getSharedAttr(created);
+    igSmartPointer<igAttr> created = createDefaultAttr(meta, unitID);
+    igSmartPointer<igAttr> shared = igAttrPool::getStaticAttrPool()->getSharedAttr(created);
     return shared;
 }
 }
@@ -32,10 +32,10 @@ namespace Attrs {
  * list). The non-sharable test compares the search result with 0, not -1, so attr comes back
  * unshared unless its type is the first entry of the non-sharable list.
  * matching construct: each list pointer is a named local read after its GetMeta call. */
-igSmartPointer< ::igAttr> igAttrPool::getSharedAttr(igSmartPointer< ::igAttr> attribute)
+igSmartPointer<igAttr> igAttrPool::getSharedAttr(igSmartPointer<igAttr> attribute)
 {
     if (attribute == 0) {
-        return igSmartPointer< ::igAttr>(0, kRetainReference);
+        return igSmartPointer<igAttr>(0, kRetainReference);
     }
     igMetaObject *type = ((igAttr *)attribute.get())->getMeta();
     ::igTDataList<igMetaObject *> *nonSharable = (::igTDataList<igMetaObject *> *)(::igMetaObjectList *)_nonSharableMetaList;
@@ -57,13 +57,13 @@ igSmartPointer< ::igAttr> igAttrPool::getSharedAttr(igSmartPointer< ::igAttr> at
     }
     unsigned int count = list->_count;
     for (unsigned int i = 0; i < count; i++) {
-        igSmartPointer< ::igAttr> item(((::igAttr **)list->_data)[i], kRetainReference);
+        igSmartPointer<igAttr> item(((igAttr **)list->_data)[i], kRetainReference);
         if (((igObject *)item.get())->isAlikeShallow((igObject *)attribute.get())) {
             return item;
         }
     }
     igObjectPointer cloned = igObject_Clone((igObjectDispatchView *)attribute.get(), 0);
-    igSmartPointer< ::igAttr> shared = cloned;
+    igSmartPointer<igAttr> shared = cloned;
     ((igObjectList *)(::igAttrList *)list.get())->append((igObject *)shared.get());
     return shared;
 }

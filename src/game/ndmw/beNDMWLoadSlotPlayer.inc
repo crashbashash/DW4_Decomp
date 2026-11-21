@@ -34,10 +34,10 @@ int beNDMWLoadSlotPlayer_GetVTable(void) {
     vtable = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
     *(int **)&obj._vtable = &g_beNDMWLoadSlotPlayer_vtable[0];
     if (&obj._accessPlList != 0) {
-        igRelease((igObject *)obj._accessPlList);
+        igObject::release((igObject *)obj._accessPlList);
     }
     if (&obj._saveDataList != 0) {
-        igRelease((igObject *)obj._saveDataList);
+        igObject::release((igObject *)obj._saveDataList);
     }
     return vtable;
 }

@@ -31,6 +31,9 @@ public:
     virtual igObject *CloneViaMetadata(int copyMode);
     virtual igMetaObject *GetMeta();
     unsigned int _refCount;
+    /* the kit's static ref/release, forwarding to Gap::Core::igObject's members as the flat igObject's do */
+    static inline void release(igObjectDispatchView *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->release(); }
+    static inline void ref(igObjectDispatchView *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->ref(); }
 };
 
 static inline void igObject_Destroy(igObjectDispatchView *object) { igObject_Destroy((igObject *)object); }
