@@ -59,7 +59,7 @@ void igDirectory_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igDirectory_Register);
 }
 
-static igMetaObjectCallback g_igDirectory_callbackList[] = { igDirEntry_EnsureRegistered, igDirectoryList_EnsureRegistered, igInfoList_EnsureRegistered, igResource_EnsureRegistered, igShortListList_EnsureRegistered, igPointerList_EnsureRegistered, igSemaphore_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igDirectory_callbackList[] = { igDirEntry_EnsureRegistered, igDirectoryList_EnsureRegistered, igInfoList_EnsureRegistered, igResource_EnsureRegistered, igShortListList_EnsureRegistered, Gap::Core::igPointerList::arkRegister, igSemaphore_EnsureRegistered, 0 };
 
 CallbackArray *igDirectory_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -197,7 +197,7 @@ void igDirectory_InitFields(void) {
     uniqueEntryListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xC)));
     ((igObjectRefMetaField *)uniqueEntryListField)->_metaObject = (int)igDirectory_GetOrCreateMetaObject();
     refListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xD)));
-    ((igObjectRefMetaField *)refListField)->_metaObject = (int)igPointerList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)refListField)->_metaObject = (int)Gap::Core::igPointerList::getClassTypeLazy();
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xE)))->setDefault(1);
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xF)))->setDefault(1);
     loadingSemaphoreField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x11)));

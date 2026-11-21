@@ -52,7 +52,7 @@ void beMatCtrl_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beMatCtrl_Register);
 }
 
-static igMetaObjectCallback g_beMatCtrl_callbackList[] = { igIntList_EnsureRegistered, beLua_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beMatCtrl_callbackList[] = { Gap::Core::igIntList::arkRegister, beLua_EnsureRegistered, 0 };
 
 CallbackArray *beMatCtrl_Register(void) {
     BecLibrary_MarkRegistered();
@@ -135,9 +135,9 @@ void beMatCtrl_InitFields(void) {
     wkPlExist = (igBoolArrayMetaField *)igMetaObject_GetFieldAt(meta, base + 4);
     wkPlExist->_num = 4;
     wkMatOnList = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 5);
-    wkMatOnList->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    wkMatOnList->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     wkMatOldOnList = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 6);
-    wkMatOldOnList->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    wkMatOldOnList->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     lua = (igObjectRefMetaField *)igMetaObject_GetFieldAt(meta, base + 8);
     lua->_metaObject = (int)beLua_GetOrCreateMetaObject();
     lua->_refCounted = 0;

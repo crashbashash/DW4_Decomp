@@ -28,7 +28,7 @@ void igPointerListList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPointerListList_Register);
 }
 
-static igMetaObjectCallback g_igPointerListList_callbackList[] = { igPointerList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igPointerListList_callbackList[] = { Gap::Core::igPointerList::arkRegister, 0 };
 
 CallbackArray *igPointerListList_Register(void) {
     CoreLibrary_MarkRegistered();

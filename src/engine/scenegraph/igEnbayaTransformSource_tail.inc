@@ -398,8 +398,8 @@ void FUN_001c3090(V_1c3090 *arg0, int arg1) {
     arg0->f60 = 1;
     if (arg0->f32 != 0) {
         o = ((Obj_1c3090 *)igAttrList_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
-        ObjectList_AppendRetained((igObjectList *)arg0->f64, (igObject *)o);
-        ObjectList_AppendRetained((igObjectList *)arg0->f68, (igObject *)o);
+        ((Gap::Core::igObjectList *)arg0->f64)->append((Gap::Core::igObject *)o);
+        ((Gap::Core::igObjectList *)arg0->f68)->append((Gap::Core::igObject *)o);
         o->refs = o->refs - 1;
         if ((o->refs & 0x7FFFFF) == 0) {
             igObject_Destroy((igObject *)o);
@@ -411,10 +411,10 @@ void FUN_001c3090(V_1c3090 *arg0, int arg1) {
                 FUN_00141190((int *)arg0->f32, 1);
             }
         }
-        ObjectList_AppendRetained((igObjectList *)o, (igObject *)arg0->f80);
-        ObjectList_AppendRetained((igObjectList *)o, (igObject *)(((int *)DAT_00562730)[0]));
-        ObjectList_AppendRetained((igObjectList *)o, (igObject *)arg0->f76);
-        ObjectList_AppendRetained((igObjectList *)o, (igObject *)arg0->f84);
+        ((Gap::Core::igObjectList *)o)->append((Gap::Core::igObject *)arg0->f80);
+        ((Gap::Core::igObjectList *)o)->append((Gap::Core::igObject *)(((int *)DAT_00562730)[0]));
+        ((Gap::Core::igObjectList *)o)->append((Gap::Core::igObject *)arg0->f76);
+        ((Gap::Core::igObjectList *)o)->append((Gap::Core::igObject *)arg0->f84);
     }
 }
 

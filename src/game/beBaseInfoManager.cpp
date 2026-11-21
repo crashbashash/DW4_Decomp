@@ -41,7 +41,7 @@ int beBaseInfoManager_AddInfo(beBaseInfoManager *self, beBaseInfo *info) {
     if (infoMeta == ((igObjectDispatchView *)info)->GetMeta()) {
         int count;
         int i;
-        ObjectList_AppendRetained((igObjectList *)self->_infoList, (igObject *)info);
+        ((Gap::Core::igObjectList *)self->_infoList)->append((Gap::Core::igObject *)info);
         manager->OnAddInfo(info);
         count = ((beBaseInfoRamList *)info->_ramList)->_count;
         for (i = 0; i < count; i++) {

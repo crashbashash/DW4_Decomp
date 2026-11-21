@@ -673,7 +673,7 @@ int igViewerSceneInfoManager_AddInfo(igViewerSceneInfoManager *self, igSceneInfo
         upVectorChanged.source = 0;
         upVectorChanged.field = g_igViewerParameters_upVectorMetaField;
         igModel_NotifyViews((igModel *)self->_parameters, (ModelChange *)&upVectorChanged);
-        ObjectList_AppendRetainedList((igTDataList<igObject *> *)(((igViewerParameters *)self->_parameters)->_cameras), (igTDataList<igObject *> *)info->_cameras);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)(((igViewerParameters *)self->_parameters)->_cameras)))->concatenate((Gap::Core::igObjectList *)((igTDataList<igObject *> *)info->_cameras));
         camerasChanged.type = 2;
         camerasChanged.source = 0;
         camerasChanged.field = g_igViewerParameters_camerasMetaField;

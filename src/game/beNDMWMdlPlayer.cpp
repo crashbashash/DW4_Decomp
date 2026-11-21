@@ -183,7 +183,7 @@ void beNDMWMdlPlayer_UpdateControl(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
     float cameraForward[3];
 
     if (ram->_dataList == 0) Locals::CreateDataList(ram);
-    work = (beNDMWMdlPlayerInfoWork *)((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE"))->_work;
+    work = (beNDMWMdlPlayerInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE"))->_work;
     pad = bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, ram->_ramNo);
     stickDir = pad->_lStk;
     stickX = pad->_LStick[0];
@@ -413,7 +413,7 @@ void beNDMWMdlPlayer_OnWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         ReleaseObject((igObject *)ram->_dataList);
         ram->_dataList = (int)created;
     }
-    work = (beNDMWMdlPlayerInfoWork *)((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE"))->_work;
+    work = (beNDMWMdlPlayerInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE"))->_work;
     held = 0;
     if (work->_isOnCtrl != 0) {
         held = bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, ram->_ramNo)->_button;
@@ -480,7 +480,7 @@ void beNDMWMdlPlayer_OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         }
         Slot::adopt(ram, beBaseInfoDataList_Create(alloc));
     }
-    record = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
+    record = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
     {
         int owner = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         int alloc;
@@ -666,7 +666,7 @@ void beNDMWMdlPlayer_OnControlOff(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         }
         ram->_dataList = (int)created;
     }
-    work = (beNDMWMdlPlayerInfoWork *)((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE"))->_work;
+    work = (beNDMWMdlPlayerInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE"))->_work;
     if (work->_isPanel != 0) {
         work->_isPanel = 0U;
         beMessenger_SendNamed((beMessenger *)self->_messenger, "NDMWPANEL", 0, ram->_ramNo, "REMOVE");
@@ -696,7 +696,7 @@ void beNDMWMdlPlayer_OnFreeze(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         }
         ram->_dataList = (int)created;
     }
-    beNDMWMdlPlayerInfoWork *work = (beNDMWMdlPlayerInfoWork *)((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE"))->_work;
+    beNDMWMdlPlayerInfoWork *work = (beNDMWMdlPlayerInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE"))->_work;
     if (work->_isPanel != 0) {
         work->_isPanel = 0;
         beMessenger_SendNamed((beMessenger *)self->_messenger, "NDMWPANEL", 0, ram->_ramNo, "REMOVE");
@@ -734,7 +734,7 @@ void beNDMWMdlPlayer_OnSequenceChange(beNDMWMdlPlayer *self, beBaseInfoRam *ram)
     int enumValue;
     EnsureDataList(ram);
     int list = ram->_dataList;
-    work = (beNDMWMdlPlayerInfoWork *)((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)list, g_propertyNameField, ("ONE")))->_work;
+    work = (beNDMWMdlPlayerInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)list)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ("ONE")))->_work;
     if (strcmp((const char *)work->_seqCodeName, ("SQ_WAIT")) == 0) {
         const char *infoName = (const char *)info->_name;
         int ramNo = ram->_ramNo;
@@ -781,7 +781,7 @@ void beNDMWMdlPlayer_OnErase(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
             ram->_dataList = (int)created;
         }
     }
-    record = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
+    record = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
     work = (beNDMWMdlPlayerInfoWork *)record->_work;
     beMessenger_SelectReceivers((beMessenger *)self->_messenger, "MODELCTRL", "g_000bcaps", ram->_ramNo);
     beMessenger_AppendMatrix((beMessenger *)self->_messenger, (void *)(record->_node + 32));
@@ -817,7 +817,7 @@ void beNDMWMdlPlayer_OnRemove(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         ReleaseObject(((igObject *)ram->_dataList));
         ram->_dataList = (int)created;
     }
-    beNDMWMdlPlayerInfoWork *work = (beNDMWMdlPlayerInfoWork *)((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)((igObject *)ram->_dataList), g_propertyNameField, "ONE"))->_work;
+    beNDMWMdlPlayerInfoWork *work = (beNDMWMdlPlayerInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)((igObject *)ram->_dataList))->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE"))->_work;
     if (work->_isPanel != 0) {
         work->_isPanel = 0;
         beMessenger_SendNamed((beMessenger *)self->_messenger, "NDMWPANEL", 0, ram->_ramNo, "REMOVE");

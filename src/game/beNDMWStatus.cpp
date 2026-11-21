@@ -101,15 +101,15 @@ enum StatusMessage {
     PICK_ALLOCATOR(allocator, kIGMemoryPoolHandleUser0) \
     ItemRef<K> holder((igObject *)T##_Create((int)allocator)); \
     T##_SetRandom((T *)holder.p, id, owner, level); \
-    ObjectList_AppendRetained(list, holder.p); }
+    ((Gap::Core::igObjectList *)(list))->append((Gap::Core::igObject *)holder.p); }
 #define STOCK_CHIP(holder, list, id) { \
     PICK_ALLOCATOR(allocator, kIGMemoryPoolHandleUser0) \
     ItemRef<4> holder((igObject *)beNDMWItemAbilityChip_Create((int)allocator)); \
     beNDMWItemAbilityChip_Set((beNDMWItemAbilityChip *)holder.p, id); \
-    ObjectList_AppendRetained(list, holder.p); }
+    ((Gap::Core::igObjectList *)(list))->append((Gap::Core::igObject *)holder.p); }
 #define COLUMN_KEY(key, column) { key[0] = column / 10 + '0'; key[1] = column % 10 + '0'; key[2] = 0; }
 
-/* kept local: ObjectList_FillRetained has no include/dw4 home (only CoreLibrary.h declares it). */
+/* kept local: Gap::Core::igObjectList::setAll has no include/dw4 home (only CoreLibrary.h declares it). */
 
 extern "C" void beNDMWStatus_Prepare(beNDMWStatus *self);
 extern "C" int beNDMWStatus__GetInfoMeta(void);
@@ -525,7 +525,7 @@ void beNDMWStatus__PrepareWork(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
     case SUBWND_WPU:
         if (SALES_LIST(_weaponSalesList)->_count <= 0) {
             SalesList::Reserve(SALES_LIST(_weaponSalesList));
-            ObjectList_FillRetained((igTDataList<igObject *> *)SALES_LIST(_weaponSalesList), 0);
+            ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)SALES_LIST(_weaponSalesList)))->setAll(0);
             if (partySize > 1) {
                 baseRow = 150;
             } else {
@@ -573,7 +573,7 @@ void beNDMWStatus__PrepareWork(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
                 if (id != -1) {
                     STOCK_ITEM(1, beNDMWItemWeapon, weapon, SALES_LIST(_weaponSalesList), id)
                 } else {
-                    ObjectList_AppendRetained(SALES_LIST(_weaponSalesList), 0);
+                    ((Gap::Core::igObjectList *)(SALES_LIST(_weaponSalesList)))->append(0);
                 }
                 weaponColumn += 1;
             } while (weaponColumn < 36);
@@ -582,7 +582,7 @@ void beNDMWStatus__PrepareWork(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
     case SUBWND_APU:
         if (SALES_LIST(_armorSalesList)->_count <= 0) {
             SalesList::Reserve(SALES_LIST(_armorSalesList));
-            ObjectList_FillRetained((igTDataList<igObject *> *)SALES_LIST(_armorSalesList), 0);
+            ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)SALES_LIST(_armorSalesList)))->setAll(0);
             if (level < 10) row = 0;
             else if (level < 17) row = 1;
             else if (level < 22) row = 2;
@@ -629,7 +629,7 @@ void beNDMWStatus__PrepareWork(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
                 if (itemKind != -1) {
                     STOCK_ITEM(3, beNDMWItemYellowArmor, yellowArmor, SALES_LIST(_armorSalesList), itemKind)
                 } else {
-                    ObjectList_AppendRetained(SALES_LIST(_armorSalesList), 0);
+                    ((Gap::Core::igObjectList *)(SALES_LIST(_armorSalesList)))->append(0);
                 }
                 yellowColumn += 1;
             } while (yellowColumn < 36);
@@ -638,7 +638,7 @@ void beNDMWStatus__PrepareWork(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
     case SUBWND_CHIP:
         if (SALES_LIST(_chipSalesList)->_count <= 0) {
             SalesList::Reserve(SALES_LIST(_chipSalesList));
-            ObjectList_FillRetained((igTDataList<igObject *> *)SALES_LIST(_chipSalesList), 0);
+            ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)SALES_LIST(_chipSalesList)))->setAll(0);
             if (level < 10) chipRow = 0;
             else if (level < 17) chipRow = 1;
             else if (level < 22) chipRow = 2;
@@ -678,7 +678,7 @@ void beNDMWStatus__PrepareWork(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
                 if (id != -1) {
                     STOCK_CHIP(chip, SALES_LIST(_chipSalesList), id)
                 } else {
-                    ObjectList_AppendRetained(SALES_LIST(_chipSalesList), 0);
+                    ((Gap::Core::igObjectList *)(SALES_LIST(_chipSalesList)))->append(0);
                 }
                 chipColumn += 1;
             } while (chipColumn < 36);
@@ -702,7 +702,7 @@ void beNDMWStatus__PrepareWork(beNDMWStatus *owner, beNDMWStatusInfoRam *ram) {
         if (SALES_LIST(_junkSalesList)->_count <= 0) {
             work->_junkGift = junkCounter;
             SalesList::Reserve(SALES_LIST(_junkSalesList));
-            ObjectList_FillRetained((igTDataList<igObject *> *)SALES_LIST(_junkSalesList), 0);
+            ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)SALES_LIST(_junkSalesList)))->setAll(0);
             if (junkRow != -1) {
                 beMessenger_SendNamed((beMessenger *)owner->_messenger, "DATABASE", "shopJunk", 0, "GETDATABASE");
                 database = (int)beMessenger_GetObject((beMessenger *)owner->_messenger, 0);

@@ -160,7 +160,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                 int a2;
                 if (a1 == 0) { a2 = (int)g_stringObjEmptyText; } else { a2 = a1; }
                 r = (int)igResource_LoadDirectory((igResource *)g_globalContext, (const char *)a2);
-                ObjectList_AppendRetained((igObjectList *)self->_dirList, (igObject *)r);
+                ((Gap::Core::igObjectList *)self->_dirList)->append((Gap::Core::igObject *)r);
             }
             }
             self->_proc = 1;
@@ -366,7 +366,7 @@ extern "C" void beFileListInfoManager_Update(beFileListInfoManager *self) {
                     igInfoList *l;
                     int *o;
                     l = (igInfoList *)self->_importantInfoList;
-                    ObjectList_AppendRetained((igObjectList *)self->_readInfoList, (igObject *)*(int *)l->_data);
+                    ((Gap::Core::igObjectList *)self->_readInfoList)->append((Gap::Core::igObject *)*(int *)l->_data);
                     l = (igInfoList *)self->_importantInfoList;
                     o = *(int **)l->_data;
                     REL_OBJ(o)

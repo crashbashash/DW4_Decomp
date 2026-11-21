@@ -4467,7 +4467,7 @@ struct ChildList {
     }
     static inline void *Find(beBaseInfoRam *ram, const void *name) {
         Ensure(ram);
-        return (void *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, (const char *)name);
+        return (void *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name);
     }
 };
 
@@ -4494,7 +4494,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Start(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
         sequenceToken = (const char *)InternString(openSQ);
         ReleaseStringToken(request->_openSQ);
         request->_openSQ = (int)sequenceToken;
-        ObjectList_AppendRetained((igObjectList *)self->_openDataList, (igObject *)created.p);
+        ((Gap::Core::igObjectList *)self->_openDataList)->append((Gap::Core::igObject *)created.p);
     }
 }
 
@@ -4524,7 +4524,7 @@ void beNDMWLoadIntf2ComMdlCtrl__StartAt(beNDMWLoadIntf2ComMdlCtrl *self, int ram
         sequenceToken = (const char *)InternString(openSQ);
         ReleaseStringToken(request->_openSQ);
         request->_openSQ = (int)sequenceToken;
-        ObjectList_AppendRetained((igObjectList *)self->_openDataList, (igObject *)created.p);
+        ((Gap::Core::igObjectList *)self->_openDataList)->append((Gap::Core::igObject *)created.p);
     }
 }
 
@@ -4548,7 +4548,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Play(beNDMWLoadIntf2ComMdlCtrl *self, int slot, 
         sequenceToken = (const char *)InternString((const char *)sequenceName);
         ReleaseStringToken(request->_openSQ);
         request->_openSQ = (int)sequenceToken;
-        ObjectList_AppendRetained((igObjectList *)self->_openDataList, (igObject *)created.p);
+        ((Gap::Core::igObjectList *)self->_openDataList)->append((Gap::Core::igObject *)created.p);
     }
 }
 
@@ -4585,7 +4585,7 @@ void beNDMWLoadIntf2ComMdlCtrl__Close(beNDMWLoadIntf2ComMdlCtrl *self, int ramNo
         sequenceToken = (const char *)InternString(openSequence);
         ReleaseStringToken(request->_openSQ);
         request->_openSQ = (int)sequenceToken;
-        ObjectList_AppendRetained((igObjectList *)self->_closeDataList, (igObject *)created.p);
+        ((Gap::Core::igObjectList *)self->_closeDataList)->append((Gap::Core::igObject *)created.p);
     }
 }
 
@@ -4715,7 +4715,7 @@ int beNDMWLoadIntf2_igObjectList_Get(igDataList *list, int index)
 /* The child of `list` whose name field (`nameField`) is `name`. */
 void *beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(int list, int nameField, const void *name)
 {
-    return (void *)igProperty_FindByName((igObjectList *)list, (igMetaField *)nameField, (const char *)name);
+    return (void *)((Gap::Core::igObjectList *)list)->search((Gap::Core::igStringMetaField *)nameField, (const char *)name);
 }
 
 int beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(int *reference)
@@ -4784,7 +4784,7 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
             self->_system_ = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beSystem_metaObject);
             {
                 igSmartPointer<beNDMWLoadIntf2CtrlData> ctrl(beNDMWLoadIntf2CtrlData_Create(OwnerAllocator(self)));
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)ctrl.p);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)ctrl.p);
                 ctrl.p->_isRun = 1;
                 /* matching construct: hand search — each branch stores all three flags (player 1
                  * starts entered) */
@@ -4799,14 +4799,14 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
                 }
             }
             beMessenger_SendNamed((beMessenger *)self->_messenger, "LOADCTRL2", 0, 0, "GETCOMMON");
-            ObjectList_AppendRetained((igObjectList *)ram->_dataList, beMessenger_GetObject((beMessenger *)self->_messenger, 0));
+            ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)(beMessenger_GetObject((beMessenger *)self->_messenger, 0)));
             {
                 igSmartPointer<beNDMWLoadIntf2MakeChr> maker(beNDMWLoadIntf2MakeChr_Create(OwnerAllocator(self)));
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)maker.p);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)maker.p);
             }
             {
                 igSmartPointer<beNDMWLoadIntf2ComMdlCtrl> models(beNDMWLoadIntf2ComMdlCtrl_Create(OwnerAllocator(self)));
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)models.p);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)models.p);
                 models.p->_messenger = self->_messenger;
                 {
                     /* matching construct: hand search — the controller read once into a local, and the
@@ -4829,7 +4829,7 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
                     beNDMWLoadIntf2TextOrder *order = text.p;
                     order->_lua = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beLua_metaObject);
                 }
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)text.p);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)text.p);
             }
             {
                 igSmartPointer<beNDMWLoadIntf2SelSlot> slots(beNDMWLoadIntf2SelSlot_Create(OwnerAllocator(self)));
@@ -4839,7 +4839,7 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
                 slots.p->_comMdlCtrl = (int)ChildList::Find(ram, "COMMDLCTRL");
                 slots.p->_textOrder = (int)ChildList::Find(ram, "TEXTORDER");
                 slots.p->_commonIntf = (int)ChildList::Find(ram, "COMMONINTF");
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)slots.p);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)slots.p);
             }
             {
                 igSmartPointer<beNDMWLoadIntf2NameSel> names(beNDMWLoadIntf2NameSel_Create(OwnerAllocator(self)));
@@ -4852,14 +4852,14 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
                 textOrder = ChildList::Find(ram, "TEXTORDER");
                 names.p->_comMdlCtrl = (int)comMdlCtrl;
                 names.p->_textOrder = (int)textOrder;
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)names.p);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)names.p);
             }
             {
                 igSmartPointer<beNDMWLoadIntf2MesWin> window(beNDMWLoadIntf2MesWin_Create(OwnerAllocator(self)));
                 window.p->_ramNo = ram->_ramNo;
                 window.p->_messenger = self->_messenger;
                 window.p->_padManager = (int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)window.p);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)window.p);
                 window.p->_textOrder = (int)ChildList::Find(ram, "TEXTORDER");
             }
             {
@@ -4871,7 +4871,7 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
                     commonIntf = ChildList::Find(ram, "COMMONINTF");
                     textOrder = ChildList::Find(ram, "TEXTORDER");
                     beNDMWLoadIntf2DegiState__Init(upper.p, ram->_ramNo, (int)commonIntf, (int)textOrder, (int)ChildList::Find(ram, "COMMDLCTRL"), self->_messenger, 0);
-                    ObjectList_AppendRetained((igObjectList *)status.p->_statDataList, (igObject *)upper.p);
+                    ((Gap::Core::igObjectList *)status.p->_statDataList)->append((Gap::Core::igObject *)upper.p);
                 }
                 {
                     igSmartPointer<beNDMWLoadIntf2DegiState> lower(beNDMWLoadIntf2DegiState_Create(OwnerAllocator(self)));
@@ -4880,9 +4880,9 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
                     commonIntf = ChildList::Find(ram, "COMMONINTF");
                     textOrder = ChildList::Find(ram, "TEXTORDER");
                     beNDMWLoadIntf2DegiState__Init(lower.p, ram->_ramNo, (int)commonIntf, (int)textOrder, (int)ChildList::Find(ram, "COMMDLCTRL"), self->_messenger, 1);
-                    ObjectList_AppendRetained((igObjectList *)status.p->_statDataList, (igObject *)lower.p);
+                    ((Gap::Core::igObjectList *)status.p->_statDataList)->append((Gap::Core::igObject *)lower.p);
                 }
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)status.p);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)status.p);
             }
             {
                 igSmartPointer<beNDMWLoadIntf2DataSelIntf> dataSel(beNDMWLoadIntf2DataSelIntf_Create(OwnerAllocator(self)));
@@ -4892,7 +4892,7 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
                 dataSel.p->_commonIntf = (int)ChildList::Find(ram, "COMMONINTF");
                 dataSel.p->_mesWin = (int)ChildList::Find(ram, "MESWIN");
                 dataSel.p->_statDisp = (int)ChildList::Find(ram, "DEGISTATECTRL");
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)dataSel.p);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)dataSel.p);
             }
             {
                 igSmartPointer<beNDMWLoadIntf2Diffselect> difficulty(beNDMWLoadIntf2Diffselect_Create(OwnerAllocator(self)));
@@ -4901,7 +4901,7 @@ int beNDMWLoadIntf2_OnMessage(beNDMWLoadIntf2 *self, beBaseInfoRam *ram, beMesse
                 difficulty.p->_textOrder = (int)ChildList::Find(ram, "TEXTORDER");
                 difficulty.p->_commonIntf = (int)ChildList::Find(ram, "COMMONINTF");
                 difficulty.p->_mesWin = (int)ChildList::Find(ram, "MESWIN");
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)difficulty.p);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)difficulty.p);
             }
         }
         return 1;

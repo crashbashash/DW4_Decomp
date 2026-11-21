@@ -1,63 +1,63 @@
-igMetaObject *g_igIntList_metaObject;
-int g_igIntList_dataDescriptorCell;
+namespace Gap {
+namespace Core {
 
-igMetaObject *igIntList_GetPublishedMetaObject(void) {
-    return g_igIntList_metaObject;
+igMetaObject *igIntList::_Meta;
+igMetaField *igIntList::k_data;
+}
 }
 
 igIntList *igIntList_Create(int allocator) {
-    igIntList_EnsureRegistered();
-    return (igIntList *)igMetaObject_CreateInstance(g_igIntList_metaObject, (igMemoryPoolView *)allocator);
+    Gap::Core::igIntList::arkRegister();
+    return (igIntList *)igMetaObject_CreateInstance(Gap::Core::igIntList::getClassMeta(), (igMemoryPoolView *)allocator);
 }
+
+namespace Gap {
+namespace Core {
 
 /* Created with allocation only when missing. */
-int igIntList_GetOrCreateMetaObject(void) {
-    if ((int)g_igIntList_metaObject == 0) {
-        g_igIntList_metaObject = (igMetaObject *)(int)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return (int)g_igIntList_metaObject;
-}
-
-igMetaObject *igIntList_GetMetaObject(void)
+igMetaObject *igIntList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igIntList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igIntList_EnsureRegistered();
-    return g_igIntList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igIntList_GetVTable(void) {
-    igIntList list;
-
-    igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&g_igIntList_vtable[0];
-    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
-}
-
-void igIntList_EnsureRegistered(void)
+igMetaObject *igIntList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igIntList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igIntList_Register(void) {
+void *igIntList::retrieveVTablePointer()
+{
+    igIntList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igIntList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igIntList::arkRegisterInternal()
+{
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igIntList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igDataList::arkRegisterInternal,
         Gap::Core::igDataList::getClassMeta,
-        igIntList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igIntList",
-        0x14,
-        igIntList_GetVTable,
-        igIntList_InitFields,
+        sizeof(igIntList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
         0,
         0
     );
 }
-
-void igIntList_GetMetaObjectFunction(void) {
-    igIntList_GetMetaObject();
+}
 }
 
 static inline void releaseDataField(igMemoryRefMetaField *f) {
@@ -67,15 +67,27 @@ static inline void releaseDataField(igMemoryRefMetaField *f) {
     }
 }
 
-void igIntList_InitFields(void) {
-    igMetaObject *meta = g_igIntList_metaObject;
-    igMemoryRefMetaField *field = (igMemoryRefMetaField *)((igMetaField *)igMetaObject_FindFieldByName(meta, (const char *)data));
-    int index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)field);
-    field = (igMemoryRefMetaField *)((igObjectDispatchView *)field)->CloneViaMetadata(1);
-    field->_memType = (int)Gap::Core::igIntMetaField::getMetaField();
-    field->_memSize = 0;
-    field->_externalEnumStorage = (int)&g_igIntList_dataDescriptorCell;
-    igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);
-    releaseDataField(field);
+namespace Gap {
+namespace Core {
+
+void igIntList::arkRegisterInitialize()
+{
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_FindFieldByName(metaObject, "_data");
+        int metaIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)metaObject->_metaFields, (int)metaField);
+        metaField = (igMemoryRefMetaField *)((igObjectDispatchView *)metaField)->CloneViaMetadata(1);
+        metaField->_memType = (int)Gap::Core::igIntMetaField::getMetaField();
+        metaField->_memSize = 0;
+        metaField->_externalEnumStorage = (int)&k_data;
+        igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
+        metaField->_refCount = metaField->_refCount - 1;
+        if (((unsigned long long)(long long)metaField->_refCount & 0x7fffffULL) == 0) {
+            igObject_Destroy((::igObject *)metaField);
+        }
+    }
+}
+}
 }
 

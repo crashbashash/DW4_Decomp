@@ -1,51 +1,50 @@
-igMetaObject *g_igCharListNoClean_metaObject;
+namespace Gap {
+namespace Core {
 
-igMetaObject *igCharListNoClean_GetOrCreateMetaObject(void) {
-    if (g_igCharListNoClean_metaObject == 0) {
-        g_igCharListNoClean_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igCharListNoClean_metaObject;
-}
+igMetaObject *igCharListNoClean::_Meta;
 
-igMetaObject *igCharListNoClean_GetMetaObject(void)
+igMetaObject *igCharListNoClean::getClassTypeLazy()
 {
-    igMetaObject *g = g_igCharListNoClean_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igCharListNoClean_EnsureRegistered();
-    return g_igCharListNoClean_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igCharListNoClean_GetVTable(void) {
-    igCharListNoClean list;
-
-    igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&g_igCharListNoClean_vtable[0];
-    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
-}
-
-void igCharListNoClean_EnsureRegistered(void)
+igMetaObject *igCharListNoClean::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igCharListNoClean_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igCharListNoClean_Register(void) {
+void *igCharListNoClean::retrieveVTablePointer()
+{
+    igCharListNoClean temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igCharListNoClean::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igCharListNoClean::arkRegisterInternal()
+{
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igCharListNoClean_metaObject,
-        igCharList_Register,
-        igCharList_GetPublishedMetaObject,
-        igCharListNoClean_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Core::igCharList::arkRegisterInternal,
+        Gap::Core::igCharList::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igCharListNoClean",
-        0x14,
-        igCharListNoClean_GetVTable,
+        sizeof(igCharListNoClean),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
         0,
         0
     );
 }
-
-void igCharListNoClean_GetMetaObjectFunction(void) {
-    igCharListNoClean_GetMetaObject();
+}
 }
 

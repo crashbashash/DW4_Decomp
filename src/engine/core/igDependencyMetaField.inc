@@ -155,7 +155,7 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
     }
     ((igMetaField *)beforeField)->_offset = 0;
     ((Gap::Core::igMetaField *)beforeField)->validate();
-    ObjectList_AppendRetained((igObjectList *)fieldList, (igObject *)beforeField);
+    ((Gap::Core::igObjectList *)fieldList)->append((Gap::Core::igObject *)beforeField);
     ((igObject *)beforeField)->_refCount = (int)((int) (((igObject *)beforeField)->_refCount - 1));
     if (((unsigned long long) ((long long) (int) ((igObject *)beforeField)->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)beforeField);
@@ -185,7 +185,7 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
     }
     ((igMetaField *)afterField)->_offset = 4;
     ((Gap::Core::igMetaField *)afterField)->validate();
-    ObjectList_AppendRetained((igObjectList *)fieldList, (igObject *)afterField);
+    ((Gap::Core::igObjectList *)fieldList)->append((Gap::Core::igObject *)afterField);
     ((igObject *)afterField)->_refCount = (int)((int) (((igObject *)afterField)->_refCount - 1));
     if (((unsigned long long) ((long long) (int) ((igObject *)afterField)->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)afterField);

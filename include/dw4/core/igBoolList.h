@@ -9,7 +9,6 @@ struct igBoolList;
 extern "C" {
 #endif
 
-struct igMetaObject *igBoolList_GetOrCreateMetaObject(void);
 struct igBoolList *igBoolList_Create(int pool);
 
 #ifdef __cplusplus

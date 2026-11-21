@@ -31,7 +31,7 @@ void beNDMWPanelObject_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWPanelObject_Register);
 }
 
-static igMetaObjectCallback g_beNDMWPanelObject_callbackList[] = { beBaseInfoManager_EnsureRegistered, beMessenger_EnsureRegistered, beDataObjList_EnsureRegistered, igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWPanelObject_callbackList[] = { beBaseInfoManager_EnsureRegistered, beMessenger_EnsureRegistered, beDataObjList_EnsureRegistered, igStringRefList_EnsureRegistered, Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *beNDMWPanelObject_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -152,7 +152,7 @@ void beNDMWPanelObject_InitFields(void) {
     textSetList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
     ((igObjectRefMetaField *)textSetList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     textColorList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xD));
-    ((igObjectRefMetaField *)textColorList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)textColorList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beNDMWPanelObject_fieldTable, g_beNDMWPanelObject_fieldHandles, g_beNDMWPanelObject_fieldOffsets, base);
 }
 

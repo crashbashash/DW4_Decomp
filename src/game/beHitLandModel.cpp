@@ -797,11 +797,11 @@ void beHitLandModel_TraceOrder(beHitLandModel *self, beHitLandModelOrder *order)
     int rayCount = order->_rayCount;
     if (rayCount > 0) {
         igProbe *probe = (igProbe *)self->_probe;
-        ObjectList_ResizeRetained((igTDataList<igObject *> *)probe->_rays, 0);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)probe->_rays))->setCount(0);
         ((IntList *)probe->_intersectFaceType)->setCount(0);
         for (int i = 0; i < rayCount; i++) {
             igProbe *target = (igProbe *)self->_probe;
-            ObjectList_AppendRetained((igObjectList *)target->_rays, (igObject *)(((igRay **)((igObjectList *)order->_rayList)->_data)[i]));
+            ((Gap::Core::igObjectList *)target->_rays)->append((Gap::Core::igObject *)(((igRay **)((igObjectList *)order->_rayList)->_data)[i]));
             /* matching construct: register-allocator tracer — n declared before faces gives faces s1 and n s2 */
             int n;
             IntList *faces = (IntList *)target->_intersectFaceType;
@@ -914,7 +914,7 @@ void beHitLandModelOrder_AddHitResult(beHitLandModelOrder *self, HitRecord *hit)
         void *alloc = ((Gap::Core::igObject *)self)->getMemoryPool();
         alloc = g_useOwnerAllocator ? alloc : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<beHitLandResultData> created(beHitLandResultData_Create((int)alloc));
-        ObjectList_AppendRetained((igObjectList *)self->_hitdataList, (igObject *)created);
+        ((Gap::Core::igObjectList *)self->_hitdataList)->append((Gap::Core::igObject *)created.get());
     }
     Vec3f_TransformDirection(hit->normal.vec, (const float *)&hit->normal[0], (const float *)hit->matrix);
     ((ResultRecord *)((beHitLandResultData **)((igObjectList *)self->_hitdataList)->_data)[self->_hitdataCount])->hit = *hit;
@@ -968,7 +968,7 @@ void beHitLandModelOrder_AddRay(beHitLandModelOrder *self, int a1, int a2) {
         int a = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
         igSmartPointer<igObject> ray(igRay_CreateInstance(g_useOwnerAllocator != 0 ? a : ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1))));
         /* matching construct: the (void *)(long) cast fixes the argument evaluation order of the append */
-        ObjectList_AppendRetained((igObjectList *)((void *)(long)self->_rayList), ray.p);
+        ((Gap::Core::igObjectList *)((void *)(long)self->_rayList))->append((Gap::Core::igObject *)ray.p);
     }
     igRay_SetFromPoints((igRay *)(((int *)((igRayList *)self->_rayList)->_data)[self->_rayCount]), (const float *)a1, (const float *)a2);
     self->_rayCount = self->_rayCount + 1;

@@ -82,7 +82,7 @@ BuildResource *s7;
             setMember(second, values);
             second.p->f16 = 3;
             second.p->f28 = 0x7734;
-            ObjectList_AppendRetained((igObjectList *)s0, (igObject *)second.p);
+            ((Gap::Core::igObjectList *)s0)->append((Gap::Core::igObject *)second.p);
             s2 = (BuildResource *)FUN_0015f4a0((S_15f430 *)s0, 3, 0);
             s2->f20 = 0x7734;
         } else {
@@ -101,7 +101,7 @@ BuildResource *s7;
         setMember(first, values);
         first.p->f16 = 1;
         first.p->f28 = 0x7734;
-        ObjectList_AppendRetained((igObjectList *)s0, (igObject *)first.p);
+        ((Gap::Core::igObjectList *)s0)->append((Gap::Core::igObject *)first.p);
         s0o = (BuildResource *)FUN_0015f4a0((S_15f430 *)s0, 1, 0);
         s0o->f20 = 0x7734;
     } else {

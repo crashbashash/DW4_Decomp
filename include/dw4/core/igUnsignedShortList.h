@@ -8,7 +8,6 @@ struct igUnsignedShortList;
 extern "C" {
 #endif
 extern struct igMetaObject *g_igUnsignedShortList_metaObject;
-struct igMetaObject *igUnsignedShortList_GetOrCreateMetaObject(void);
 struct igUnsignedShortList *igUnsignedShortList_Create(int pool);
 #ifdef __cplusplus
 }

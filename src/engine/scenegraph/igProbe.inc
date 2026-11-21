@@ -75,7 +75,7 @@ void igProbe_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igProbe_Register);
 }
 
-static igMetaObjectCallback g_igProbe_callbackList[] = { igVolume_EnsureRegistered, igRayList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igProbe_callbackList[] = { igVolume_EnsureRegistered, igRayList_EnsureRegistered, Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *igProbe_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -135,7 +135,7 @@ void igProbe_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igRayList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igProbe_fieldTable, g_igProbe_fieldHandles, g_igProbe_fieldOffsets, temp_s2);
 }

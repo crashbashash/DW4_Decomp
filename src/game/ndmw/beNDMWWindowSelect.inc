@@ -16,7 +16,7 @@ void beNDMWWindowSelect_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWWindowSelect_Register);
 }
 
-static igMetaObjectCallback g_beNDMWWindowSelect_callbackList[] = { igBoolList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWWindowSelect_callbackList[] = { Gap::Core::igBoolList::arkRegister, 0 };
 
 CallbackArray *beNDMWWindowSelect_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -82,7 +82,7 @@ void beNDMWWindowSelect_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWWindowSelect_ctorTable, 6);
     decideList = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
-    ((igObjectRefMetaField *)decideList)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)decideList)->_metaObject = (int)Gap::Core::igBoolList::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beNDMWWindowSelect_fieldTable, g_beNDMWWindowSelect_fieldHandles, g_beNDMWWindowSelect_fieldOffsets, base);
 }
 

@@ -66,3 +66,13 @@ igMatrixOptStateAttr	Attrs
 igStencilStateAttr	Attrs
 igVertexBlendStateAttr	Attrs
 igNormalizeNormalsStateAttr	Attrs
+igIntList	Core	igTDataList<int>
+igIntListNoClean	Core
+igBoolList	Core	igTDataList<bool>
+igCharList	Core	igTDataList<char>
+igShortList	Core	igTDataList<short>
+igUnsignedShortList	Core	igTDataList<unsigned short>
+igUnsignedCharList	Core	igTDataList<unsigned char>
+igFloatList	Core	igTDataList<float>
+igPointerList	Core	igTDataList<void *>
+igCharListNoClean	Core

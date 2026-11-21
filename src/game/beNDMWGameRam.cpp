@@ -58,7 +58,7 @@
 #define CLAMP_ATTR(v) if ((v) <= 0) (v) = 1; if ((v) > 9999) (v) = 9999;
 
 class StringRef;
-/* The property records igProperty_FindByName returns: the value sits after a 12-byte header. */
+/* The property records Gap::Core::igObjectList::search returns: the value sits after a 12-byte header. */
 struct IntListProperty { char header[12]; igIntList *list; };
 struct DataListProperty { char header[12]; igDataList *list; };
 struct ObjectListProperty { char header[12]; igObjectList *list; };
@@ -529,7 +529,7 @@ void beNDMWGameRam_BuildDataList(beNDMWGameRam *self, igObjectList *out, const D
             ALLOC(self, alloc)
             igSmartPointer<beDataObjInt> s0((beDataObjInt *)beDataObjInt_Create((int)alloc));
             igNamedObject_SetName((igNamedObject *)s0.p, (const char *)entry->name);
-            ObjectList_AppendRetained(out, s0.p);
+            ((Gap::Core::igObjectList *)out)->append((Gap::Core::igObject *)s0.p);
             break;
         }
         case DATA_INT_LIST: {
@@ -544,14 +544,14 @@ void beNDMWGameRam_BuildDataList(beNDMWGameRam *self, igObjectList *out, const D
                 int *d1 = (int *)l1->_data;
                 for (i1 = 0; i1 < n1; i1++) ListStoreAt(d1, i1, 0);
             }
-            ObjectList_AppendRetained(out, s1.p);
+            ((Gap::Core::igObjectList *)out)->append((Gap::Core::igObject *)s1.p);
             break;
         }
         case DATA_BOOL: {
             ALLOC(self, alloc)
             igSmartPointer<beDataObjBool> s2((beDataObjBool *)beDataObjBool_Create((int)alloc));
             igNamedObject_SetName((igNamedObject *)s2.p, (const char *)entry->name);
-            ObjectList_AppendRetained(out, s2.p);
+            ((Gap::Core::igObjectList *)out)->append((Gap::Core::igObject *)s2.p);
             break;
         }
         case DATA_BOOL_LIST: {
@@ -566,14 +566,14 @@ void beNDMWGameRam_BuildDataList(beNDMWGameRam *self, igObjectList *out, const D
                 unsigned char *d3 = (unsigned char *)l3->_data;
                 for (int i3 = 0; i3 < n3; i3++) ListStoreAt(d3, i3, (unsigned char)0);
             }
-            ObjectList_AppendRetained(out, s3.p);
+            ((Gap::Core::igObjectList *)out)->append((Gap::Core::igObject *)s3.p);
             break;
         }
         case DATA_STRING: {
             ALLOC(self, alloc)
             igSmartPointer<beDataObjString> s4((beDataObjString *)beDataObjString_Create((int)alloc));
             igNamedObject_SetName((igNamedObject *)s4.p, (const char *)entry->name);
-            ObjectList_AppendRetained(out, s4.p);
+            ((Gap::Core::igObjectList *)out)->append((Gap::Core::igObject *)s4.p);
             break;
         }
         case DATA_STRING_LIST: {
@@ -583,7 +583,7 @@ void beNDMWGameRam_BuildDataList(beNDMWGameRam *self, igObjectList *out, const D
             RESERVE(igStringRefList, s5.p, 4)
             StringList_Resize((igTDataList<char *> *)(void *)s5.p->_data, entry->count);
             Fill::emptyStrings(s5.p, StringRef(0), n5, d5, i5);
-            ObjectList_AppendRetained(out, s5.p);
+            ((Gap::Core::igObjectList *)out)->append((Gap::Core::igObject *)s5.p);
             break;
         }
         case DATA_OBJECT_LIST: {
@@ -591,9 +591,9 @@ void beNDMWGameRam_BuildDataList(beNDMWGameRam *self, igObjectList *out, const D
             igSmartPointer<beDataObjObjectList> s6((beDataObjObjectList *)beDataObjObjectList_Create((int)alloc));
             igNamedObject_SetName((igNamedObject *)s6.p, (const char *)entry->name);
             RESERVE(igObjectList, s6.p, 4)
-            ObjectList_ResizeRetained((igTDataList<igObject *> *)(void *)s6.p->_data, entry->count);
-            ObjectList_FillRetained((igTDataList<igObject *> *)(void *)s6.p->_data, 0);
-            ObjectList_AppendRetained(out, s6.p);
+            ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)(void *)s6.p->_data))->setCount(entry->count);
+            ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)(void *)s6.p->_data))->setAll(0);
+            ((Gap::Core::igObjectList *)out)->append((Gap::Core::igObject *)s6.p);
             break;
         }
         case DATA_FLOAT_LIST: {
@@ -608,7 +608,7 @@ void beNDMWGameRam_BuildDataList(beNDMWGameRam *self, igObjectList *out, const D
                 float *d7 = (float *)l7->_data;
                 for (int i7 = 0; i7 < n7; i7++) ListStoreAt(d7, i7, 0.0f);
             }
-            ObjectList_AppendRetained(out, s7.p);
+            ((Gap::Core::igObjectList *)out)->append((Gap::Core::igObject *)s7.p);
             break;
         }
         case DATA_END:
@@ -667,7 +667,7 @@ void beNDMWGameRam_ResetPlayer(beNDMWGameRam *self, int player) {
     players = (igObjectList *)self->_playerDataListList;
     if (players->_count != 4) {
         if (count(players) < 5) ((Gap::Core::igDataList *)players)->setCapacity(4, 4);
-        ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_playerDataListList, 4);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_playerDataListList))->setCount(4);
     }
     allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     if (g_useOwnerAllocator != 0) {
@@ -702,7 +702,7 @@ void beNDMWGameRam_ResetPlayer(beNDMWGameRam *self, int player) {
         playerData = data.p;
         diskItem = item.p;
         igObject **folder = (igObject **)igProperty_GetRecordFolder(playerData, "DISKFOLDER");
-        ObjectList_AppendRetained((igObjectList *)folder[3], diskItem);
+        ((Gap::Core::igObjectList *)folder[3])->append((Gap::Core::igObject *)diskItem);
     }
     flags = (igObjectList *)((igObject **)igProperty_GetRecordArray(data.p, "BASE_FLAG"))[3];
     if (flags->_count != 0) {
@@ -841,8 +841,8 @@ int beNDMWGameRam_AddInfo(beNDMWGameRam *self) {
         ram.p->_ramNo = 0;
         ram.p->_isRun = 1;
         rams = (beBaseInfoRamList *)info.p->_ramList;
-        ObjectList_AppendRetained((igObjectList *)(unsigned)rams, (igObject *)ram.p);
-        ObjectList_AppendRetained((igObjectList *)(unsigned)self->_infoList, (igObject *)info.p);
+        ((Gap::Core::igObjectList *)((unsigned)rams))->append((Gap::Core::igObject *)ram.p);
+        ((Gap::Core::igObjectList *)((unsigned)self->_infoList))->append((Gap::Core::igObject *)info.p);
         beMessenger_RegisterReceiverFromInfo((beMessenger *)self->_messenger, (beBaseInfoRam *)ram.p, "GAMERAM");
     }
     return 0;
@@ -1070,7 +1070,7 @@ void beNDMWGameRam_GiveInitialWeapons(beNDMWGameRam *self, int index) {
             self->_dBShinka = (int)fetched;
         }
         beNDMWItemWeapon_Set((beNDMWItemWeapon *)weapon, beDataBase_GetRecordInt((beDataBase *)(void *)self->_dBShinka, species, *field), 0, 0);
-        ObjectList_AppendRetained(devices, (igObject *)weaponRef.value);
+        ((Gap::Core::igObjectList *)devices)->append((Gap::Core::igObject *)weaponRef.value);
         }
         slot += 1;
         field += 1;
@@ -1115,7 +1115,7 @@ void beNDMWGameRam_EquipWeapon(beNDMWGameRam *self, int index, int apply)
             if (sockets->_count == 3) break;
             beNDMWItemBase *item = ((beNDMWItemBase **)pocket->_data)[p];
             if (item->_kindNo == 0) {
-                ObjectList_AppendRetained(sockets, item);
+                ((Gap::Core::igObjectList *)sockets)->append((Gap::Core::igObject *)item);
                 const char *model = beNDMWItemBase_GetRecordString(item, (beNDMWStatus *)self, "MODEL");
                 char *interned;
                 if (!model) {
@@ -1142,7 +1142,7 @@ void beNDMWGameRam_EquipWeapon(beNDMWGameRam *self, int index, int apply)
             beNDMWItemBase *item = ((beNDMWItemBase **)pocket->_data)[u];
             if (item->_kindNo == 0) item->_isEquip = 0;
         }
-        ObjectList_FillRetained((igTDataList<igObject *> *)sockets, 0);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)sockets))->setAll(0);
         int nameCount = names->_count;
         for (int i = 0; i < nameCount; i++) {
             char **entry = &((char **)names->_data)[i];
@@ -1315,7 +1315,7 @@ void beNDMWGameRam_JoinPlayerWithName(beNDMWGameRam *self, int index, void *mode
         for (j = 0; j < n2; j++) ((igObject **)names->_data)[j] = 0;
         names->_count = 0;
     }
-    ObjectList_AppendRetained(names, unicodeName.p);
+    ((Gap::Core::igObjectList *)names)->append((Gap::Core::igObject *)unicodeName.p);
 }
 
 void beNDMWGameRam_JoinPlayerWithUnicodeName(beNDMWGameRam *self, int index, void *modelName, RecoveryRef<0> name) {
@@ -1347,7 +1347,7 @@ void beNDMWGameRam_JoinPlayerWithUnicodeName(beNDMWGameRam *self, int index, voi
         }
         names->_count = 0;
     }
-    ObjectList_AppendRetained(names, (igObject *)name.value);
+    ((Gap::Core::igObjectList *)names)->append((Gap::Core::igObject *)name.value);
 }
 
 void beNDMWGameRam_LeavePlayer(beNDMWGameRam *self, int index) {
@@ -1715,7 +1715,7 @@ void beNDMWGameRam_RecomputeStats(beNDMWGameRam *self, int index, unsigned char 
                     if (beDataBase_GetRecordInt((beDataBase *)(RecomputeHelpers::shinka(self)), species, g_techniqueSkillFields[slot][rank]) <= skillVal) {
                         IntListRef waza((IntList *)beNDMWItemWaza_Create(RecomputeHelpers::select_allocator((int)((Gap::Core::igObject *)self)->getMemoryPool())));
                         beNDMWItemWaza_Set((beNDMWItemWaza *)(igObject *)waza.value, tech + rank, tech);
-                        ObjectList_AppendRetained(list, (igObject *)waza.value);
+                        ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)waza.value);
                         break;
                     }
                 }
@@ -2845,7 +2845,7 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *messa
                             void *created = (void *)(beNDMWItemWeapon_Create(beNDMWGameRam_beNDMWItemWeapon_MakeAllocatorValue(pooledAllocator).v));
                             { RecoveryRef<1> item(created, false);
                             beNDMWItemWeapon_Set((beNDMWItemWeapon *)item.value, recNo, pocketOrAmount, revision);
-                            ObjectList_AppendRetained(items, (igObject *)item.value);
+                            ((Gap::Core::igObjectList *)items)->append((Gap::Core::igObject *)item.value);
                             }
                             break;
                         }
@@ -2855,7 +2855,7 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *messa
                             void *created = (void *)(beNDMWItemBlueArmor_Create(beNDMWGameRam_beNDMWItemBlueArmor_MakeAllocatorValue(pooledAllocator).v));
                             { RecoveryRef<2> item(created, false);
                             beNDMWItemBlueArmor_Set((beNDMWItemBlueArmor *)item.value, recNo, pocketOrAmount, revision);
-                            ObjectList_AppendRetained(items, (igObject *)item.value);
+                            ((Gap::Core::igObjectList *)items)->append((Gap::Core::igObject *)item.value);
                             }
                             break;
                         }
@@ -2865,7 +2865,7 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *messa
                             void *created = (void *)(beNDMWItemYellowArmor_Create(beNDMWGameRam_beNDMWItemYellowArmor_MakeAllocatorValue(pooledAllocator).v));
                             { RecoveryRef<3> item(created, false);
                             beNDMWItemYellowArmor_Set((beNDMWItemYellowArmor *)item.value, recNo, revision);
-                            ObjectList_AppendRetained(items, (igObject *)item.value);
+                            ((Gap::Core::igObjectList *)items)->append((Gap::Core::igObject *)item.value);
                             }
                             break;
                         }
@@ -2875,7 +2875,7 @@ int beNDMWGameRam_OnMessage(beNDMWGameRam *self, int ram, beMessengerWork *messa
                             void *created = (void *)(beNDMWItemAbilityChip_Create(beNDMWGameRam_beNDMWItemAbilityChip_MakeAllocatorValue(pooledAllocator).v));
                             { RecoveryRef<4> item(created, false);
                             beNDMWItemAbilityChip_Set((beNDMWItemAbilityChip *)item.value, recNo);
-                            ObjectList_AppendRetained(items, (igObject *)item.value);
+                            ((Gap::Core::igObjectList *)items)->append((Gap::Core::igObject *)item.value);
                             }
                             break;
                         }

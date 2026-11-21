@@ -61,7 +61,7 @@ void beNDMWStatusSubMenu_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWStatusSubMenu_Register);
 }
 
-static igMetaObjectCallback g_beNDMWStatusSubMenu_callbackList[] = { beNDMWWindowCtrl_EnsureRegistered, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWStatusSubMenu_callbackList[] = { beNDMWWindowCtrl_EnsureRegistered, Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *beNDMWStatusSubMenu_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -127,10 +127,10 @@ void beNDMWStatusSubMenu_InitFields(void) {
     deviceFolderList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)deviceFolderList)->_metaObject = (int)beNDMWWindowCtrl_GetOrCreateMetaObject();
     playerNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)playerNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)playerNoList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)playerNoList)->_construct = 1;
     playerDeviceCnt = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)playerDeviceCnt)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)playerDeviceCnt)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)playerDeviceCnt)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWStatusSubMenu_fieldTable, g_beNDMWStatusSubMenu_fieldHandles, g_beNDMWStatusSubMenu_fieldOffsets, base);
 }

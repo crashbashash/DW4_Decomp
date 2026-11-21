@@ -51,7 +51,7 @@ void bePadManager_Start(bePadManager *self) {
     for (int i = 0; i < 5; i++) {
         int ownerAllocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         igSmartPointer<igObject> padData((igObject *)bePadData_Create((int)(g_useOwnerAllocator != 0 ? ownerAllocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0))));
-        ObjectList_AppendRetained((igObjectList *)self->_padList, padData.p);
+        ((Gap::Core::igObjectList *)self->_padList)->append((Gap::Core::igObject *)padData.p);
     }
     igInsightCore *insight = (igInsightCore *)self->_insight;
     int dispatcher = insight->_dispatcher;

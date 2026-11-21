@@ -48,7 +48,7 @@ void igCompressedTransformSequence1_5Data_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igCompressedTransformSequence1_5Data_Register);
 }
 
-static igMetaObjectCallback g_igCompressedTransformSequence1_5Data_callbackList[] = { igUnsignedShortList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igCompressedTransformSequence1_5Data_callbackList[] = { Gap::Core::igUnsignedShortList::arkRegister, 0 };
 
 CallbackArray *igCompressedTransformSequence1_5Data_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -132,13 +132,13 @@ void igCompressedTransformSequence1_5Data_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igCompressedTransformSequence1_5Data_ctorTable, 0xA);
     compressedTranslationListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)compressedTranslationListField)->_metaObject = (int)igUnsignedShortList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)compressedTranslationListField)->_metaObject = (int)Gap::Core::igUnsignedShortList::getClassTypeLazy();
     compressedQuatListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igObjectRefMetaField *)compressedQuatListField)->_metaObject = (int)igUnsignedShortList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)compressedQuatListField)->_metaObject = (int)Gap::Core::igUnsignedShortList::getClassTypeLazy();
     compressedScaleListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)compressedScaleListField)->_metaObject = (int)igUnsignedShortList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)compressedScaleListField)->_metaObject = (int)Gap::Core::igUnsignedShortList::getClassTypeLazy();
     compressedTimeListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
-    ((igObjectRefMetaField *)compressedTimeListField)->_metaObject = (int)igUnsignedShortList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)compressedTimeListField)->_metaObject = (int)Gap::Core::igUnsignedShortList::getClassTypeLazy();
     igMetaObject_NameFields((igMetaObject *)meta, g_igCompressedTransformSequence1_5Data_fieldTable, g_igCompressedTransformSequence1_5Data_fieldHandles, g_igCompressedTransformSequence1_5Data_fieldOffsets, base);
 }
 

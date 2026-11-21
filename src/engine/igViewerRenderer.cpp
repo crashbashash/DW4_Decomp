@@ -106,7 +106,7 @@ static inline int asObjectRefField(int field) {
 }
 
 static inline void removeFromList(int list, int object) {
-    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)object, 0);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)list))->removeByValue((Gap::Core::igObject *)object, 0);
 }
 
 /* The ids are held in a pointer-typed local so the compare puts the call result first (beq v0,s0). */
@@ -476,7 +476,7 @@ void igViewerRenderer_resetFields(igViewerRenderer *self) {
     igViewerRenderer_UpdateAttr(self, (igObject *)self->_lightingAttr);
     igGroup_AppendChild((igGroup *)self->_attrSet, (igNode *)self->_headlightTransform);
     igGroup_AppendChild((igGroup *)self->_headlightTransform, (igNode *)self->_headlightSet);
-    ObjectList_AppendRetained((igObjectList *)((igLightSet *)self->_headlightSet)->_lights, (igObject *)self->_headlightAttr);
+    ((Gap::Core::igObjectList *)(((igLightSet *)self->_headlightSet)->_lights))->append((Gap::Core::igObject *)self->_headlightAttr);
     igGroup_AppendChild((igGroup *)self->_attrSet, (igNode *)self->_attrSetOverride);
     ((igTraversal *)self->_lightTraversal)->_nodeSelectProcEnabled = 1;
     ((igTraversal *)self->_lightTraversal)->_nodeSelectProc = (int)&igViewerRenderer_ObjectsTraverseNodeSelect;
@@ -580,7 +580,7 @@ void igViewerRenderer_UpdateScene(igViewerRenderer *self) {
             release((igObject *)state->_light);
             state->_light = (int)light;
             ((igLightStateAttrDispatchView *)item.p)->SetState(0);
-            ObjectList_AppendRetained((igObjectList *)self->_lightStateList, item.p);
+            ((Gap::Core::igObjectList *)self->_lightStateList)->append((Gap::Core::igObject *)item.p);
             }
     }
     release((igObject *)self->_sceneOutput);
@@ -608,7 +608,7 @@ void igViewerRenderer_FindLights(igViewerRenderer *self, igGroup *node) {
             if (0 < count) {
                 offset = 0;
                 do {
-                    ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)self->_lightList, *(igObject **)((char *)((igObjectList *)node->_childList)->_data + offset));
+                    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_lightList))->appendUnique((Gap::Core::igObject *)(*(igObject **)((char *)((igObjectList *)node->_childList)->_data + offset)));
                     i += 1;
                     offset += 4;
                 } while (i < count);
@@ -675,7 +675,7 @@ void igViewerRenderer_UpdateRenderStates(igViewerRenderer *self) {
 /* The attribute in `attrSet` of the same class as `attr`. */
 int igViewerRenderer_FindAttrFromType(igObjectDispatchView *attr, igAttrSet *attrSet) {
     int field = asObjectRefField((int)igMetaObject_FindFieldByName(Gap::Attrs::igAttr::getClassMeta(), (const char *)text_meta));
-    return igProperty_FindByPointer((void *)attrSet->_attributes, (void *)field, (int)attr->GetMeta());
+    return (int)((Gap::Core::igObjectList *)attrSet->_attributes)->search((Gap::Core::igObjectRefMetaField *)field, (Gap::Core::igObject *)((int)attr->GetMeta()));
 }
 
 /* Replaces the attribute of `attr`'s class in `attrSet` by the shared pool's copy of `attr`. */
@@ -684,7 +684,7 @@ extern "C" int igViewerRenderer_UpdateSharedAttr(igObject *attr, igAttrSet *attr
     if (found != 0) {
         removeFromList(attrSet->_attributes, found);
         igSmartPointer<igObject> shared = igAttrPool_GetSharedAttr(igAttrPool_GetStaticAttrPool(), igSmartPointer<igObject>(attr, kRetainReference));
-        ObjectList_AppendRetained((igObjectList *)attrSet->_attributes, shared.get());
+        ((Gap::Core::igObjectList *)attrSet->_attributes)->append((Gap::Core::igObject *)(shared.get()));
         return 1;
     }
     return 0;
@@ -696,15 +696,15 @@ void igViewerRenderer_TransferAttrFromType(igAttrSet *from, igAttrSet *to, igObj
 
     found = igViewerRenderer_FindAttrFromType((igObjectDispatchView *)attr, from);
     if (found != 0) {
-        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)from->_attributes, (igObject *)found, 0);
-        ObjectList_AppendRetained((igObjectList *)to->_attributes, (igObject *)found);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)from->_attributes))->removeByValue((Gap::Core::igObject *)found, 0);
+        ((Gap::Core::igObjectList *)to->_attributes)->append((Gap::Core::igObject *)found);
     }
 }
 
 void igViewerRenderer_UpdateAttr(igViewerRenderer *self, igObject *attr) {
     if ((attr != 0) && !(igViewerRenderer_UpdateSharedAttr(attr, (igAttrSet *)self->_attrSetOverride) & 0xFF) && !(igViewerRenderer_UpdateSharedAttr(attr, (igAttrSet *)self->_attrSet) & 0xFF)) {
         igSmartPointer<igObject> shared = igAttrPool_GetSharedAttr(igAttrPool_GetStaticAttrPool(), igSmartPointer<igObject>(attr, kRetainReference));
-        ObjectList_AppendRetained((igObjectList *)((igAttrSet *)self->_attrSet)->_attributes, shared.get());
+        ((Gap::Core::igObjectList *)(((igAttrSet *)self->_attrSet)->_attributes))->append((Gap::Core::igObject *)(shared.get()));
     }
 }
 

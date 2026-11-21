@@ -46,7 +46,7 @@ void beNDMWStatusCtrlSkill_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWStatusCtrlSkill_Register);
 }
 
-static igMetaObjectCallback g_beNDMWStatusCtrlSkill_callbackList[] = { beNDMWShinkaCtrl_EnsureRegistered, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWStatusCtrlSkill_callbackList[] = { beNDMWShinkaCtrl_EnsureRegistered, Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *beNDMWStatusCtrlSkill_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -104,7 +104,7 @@ void beNDMWStatusCtrlSkill_InitFields(void) {
     ((igObjectRefMetaField *)shinkaCtrl)->_metaObject = (int)beNDMWShinkaCtrl_GetOrCreateMetaObject();
     ((igRefMetaField *)shinkaCtrl)->_construct = 1;
     skillList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)skillList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)skillList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)skillList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWStatusCtrlSkill_fieldTable, g_beNDMWStatusCtrlSkill_fieldHandles, g_beNDMWStatusCtrlSkill_fieldOffsets, base);
 }

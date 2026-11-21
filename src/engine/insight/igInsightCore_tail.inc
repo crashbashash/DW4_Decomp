@@ -9,7 +9,7 @@ void igInsightCore_AddInfo(igInsightCore *self, igObject *info) {
             break;
         }
     }
-    ObjectList_AppendRetained((igObjectList *)self->_infoList, info);
+    ((Gap::Core::igObjectList *)self->_infoList)->append((Gap::Core::igObject *)info);
 }
 
 void igInsightCore_RemoveAllInfos(igInsightCore *arg0) {

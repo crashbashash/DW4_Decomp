@@ -398,7 +398,7 @@ void igResource_WrapRootInSceneInfo(int directory) {
                     camerasField = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)info)->GetMeta(), (const char *)"_cameras"));
                     sceneGraphListField = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)info)->GetMeta(), (const char *)"_sceneGraphList"));
                     sceneGraphList = AsObjectList(*(void **)((char *)info + sceneGraphListField->_offset));
-                    if (sceneGraphList != 0) ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)sceneGraphList, (igObject *)root);
+                    if (sceneGraphList != 0) ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)sceneGraphList))->appendUnique((Gap::Core::igObject *)root);
                     ((Gap::Core::igObjectRefMetaField *)camerasField)->set((Gap::Core::igObject *)info, (Gap::Core::igObject *)0);
                     igDirectory_AddInfo((void *)directory, (void *)info);
                     {

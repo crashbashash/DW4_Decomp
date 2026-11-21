@@ -42,7 +42,7 @@ int beMessengerWork_GetVTable(void) {
 
 void beMessengerWork_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerWork_Register);}
 
-static igMetaObjectCallback g_beMessengerWork_callbackList[] = { igIntList_EnsureRegistered, beBaseInfoRamList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beMessengerWork_callbackList[] = { Gap::Core::igIntList::arkRegister, beBaseInfoRamList_EnsureRegistered, 0 };
 
 CallbackArray *beMessengerWork_Register(void) {
     BecLibrary_MarkRegistered();
@@ -109,7 +109,7 @@ void beMessengerWork_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMessengerWork_ctorTable, 6);
     findRamNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)findRamNoList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)findRamNoList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)findRamNoList)->_construct = 1;
     findRamList = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
     ((igObjectRefMetaField *)findRamList)->_metaObject = (int)beBaseInfoRamList_GetOrCreateMetaObject();

@@ -326,7 +326,7 @@ int beCri_AddInfo(beCri *self, igObjectDispatchView *info) {
 
     meta = g_beCriFxInfo_metaObject;
     if (meta == info->GetMeta()) {
-        ObjectList_AppendRetained((igObjectList *)self->_infoList, (igObject *)info);
+        ((Gap::Core::igObjectList *)self->_infoList)->append((Gap::Core::igObject *)info);
         return 1;
     }
     return 0;
@@ -356,31 +356,31 @@ void beCri_Update(beCri *self) {
     igAdx_ExecServer(1);
     if (self->_execDvdErr > 0) {
         if (((beSystem *)self->_system)->_execDvdErr == 0) {
-            ObjectList_AppendRetained(Handles(self), (igObject *)self->_hdBGM);
-            ObjectList_AppendRetained(Handles(self), (igObject *)self->_hdENV);
+            ((Gap::Core::igObjectList *)(Handles(self)))->append((Gap::Core::igObject *)self->_hdBGM);
+            ((Gap::Core::igObjectList *)(Handles(self)))->append((Gap::Core::igObject *)self->_hdENV);
             for (i = 0; i < Handles(self)->_count; i++) {
                 t = HandleAt(Handles(self), i);
                 if (t->_playID != 0) beCriAudio_Resume((beCriAudio *)t->_audio);
             }
-            ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)Handles(self), (igObject *)self->_hdBGM, 0);
-            ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)Handles(self), (igObject *)self->_hdENV, 0);
+            ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)Handles(self)))->removeByValue((Gap::Core::igObject *)self->_hdBGM, 0);
+            ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)Handles(self)))->removeByValue((Gap::Core::igObject *)self->_hdENV, 0);
             self->_execDvdErr = 0;
         }
     } else {
         if (((beSystem *)self->_system)->_execDvdErr > 0) {
-            ObjectList_AppendRetained(Handles(self), (igObject *)self->_hdBGM);
-            ObjectList_AppendRetained(Handles(self), (igObject *)self->_hdENV);
+            ((Gap::Core::igObjectList *)(Handles(self)))->append((Gap::Core::igObject *)self->_hdBGM);
+            ((Gap::Core::igObjectList *)(Handles(self)))->append((Gap::Core::igObject *)self->_hdENV);
             for (j = 0; j < Handles(self)->_count; j++) {
                 t = HandleAt(Handles(self), j);
                 if (t->_playID != 0) beCriAudio_Suspend((beCriAudio *)t->_audio);
             }
-            ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)Handles(self), (igObject *)self->_hdBGM, 0);
-            ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)Handles(self), (igObject *)self->_hdENV, 0);
+            ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)Handles(self)))->removeByValue((Gap::Core::igObject *)self->_hdBGM, 0);
+            ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)Handles(self)))->removeByValue((Gap::Core::igObject *)self->_hdENV, 0);
             self->_execDvdErr = 1;
             return;
         }
-        ObjectList_AppendRetained(Handles(self), (igObject *)self->_hdBGM);
-        ObjectList_AppendRetained(Handles(self), (igObject *)self->_hdENV);
+        ((Gap::Core::igObjectList *)(Handles(self)))->append((Gap::Core::igObject *)self->_hdBGM);
+        ((Gap::Core::igObjectList *)(Handles(self)))->append((Gap::Core::igObject *)self->_hdENV);
         for (k = 0; k < Handles(self)->_count; k++) {
             handle = ((beCriHandle **)Handles(self)->_data)[k];
             if (handle->_playID == 0) continue;
@@ -414,8 +414,8 @@ void beCri_Update(beCri *self) {
                 break;
             }
         }
-        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)Handles(self), (igObject *)self->_hdBGM, 0);
-        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)Handles(self), (igObject *)self->_hdENV, 0);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)Handles(self)))->removeByValue((Gap::Core::igObject *)self->_hdBGM, 0);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)Handles(self)))->removeByValue((Gap::Core::igObject *)self->_hdENV, 0);
     }
 }
 
@@ -785,7 +785,7 @@ static inline void AppendVoice(beCri *self, int channels) {
     igSmartPointer<beCriHandle> handle(beCriHandle_Create(HandleAllocator(self)));
     beCriAudio_Setup((beCriAudio *)handle->_audio, channels);
     igNamedObject_SetName((igNamedObject *)handle.p, 0);
-    ObjectList_AppendRetained((igObjectList *)self->_hdSEs, (igObject *)handle);
+    ((Gap::Core::igObjectList *)self->_hdSEs)->append((Gap::Core::igObject *)handle.get());
 }
 
 /* The effect handles: 4 single-channel ADX voices, then 48 sound-bank voices. */
@@ -1001,8 +1001,8 @@ unsigned char beCri_IsReady(beCri *self, const char *name) {
     beCriHandle *each;
     if (strcmp(name, "ALL") == 0) {
         allReady = 1;
-        ObjectList_AppendRetained((igObjectList *)self->_hdSEs, (igObject *)self->_hdBGM);
-        ObjectList_AppendRetained((igObjectList *)self->_hdSEs, (igObject *)self->_hdENV);
+        ((Gap::Core::igObjectList *)self->_hdSEs)->append((Gap::Core::igObject *)self->_hdBGM);
+        ((Gap::Core::igObjectList *)self->_hdSEs)->append((Gap::Core::igObject *)self->_hdENV);
         for (i = 0; i < Handles(self)->_count; i++) {
             each = HandleAt(Handles(self), i);
             if (each->_playID != 0 && ((beCriAudio *)each->_audio)->_audioType == 1 && igAdxAudio_GetStatus((igAdxAudio *)((beCriAudio *)each->_audio)->_adxt) != 3) {
@@ -1010,8 +1010,8 @@ unsigned char beCri_IsReady(beCri *self, const char *name) {
                 break;
             }
         }
-        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)self->_hdSEs, (igObject *)self->_hdBGM, 0);
-        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)self->_hdSEs, (igObject *)self->_hdENV, 0);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_hdSEs))->removeByValue((Gap::Core::igObject *)self->_hdBGM, 0);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_hdSEs))->removeByValue((Gap::Core::igObject *)self->_hdENV, 0);
         return allReady;
     }
     ready = 1;

@@ -114,7 +114,7 @@ void beNDMWMdlPlayerInfoWork_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWMdlPlayerInfoWork_Register);
 }
 
-static igMetaObjectCallback g_beNDMWMdlPlayerInfoWork_callbackList[] = { igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWMdlPlayerInfoWork_callbackList[] = { Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *beNDMWMdlPlayerInfoWork_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -192,7 +192,7 @@ void beNDMWMdlPlayerInfoWork_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWMdlPlayerInfoWork_ctorTable, 8);
     turnAtkTimer = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)turnAtkTimer)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)turnAtkTimer)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beNDMWMdlPlayerInfoWork_fieldTable, g_beNDMWMdlPlayerInfoWork_fieldHandles, g_beNDMWMdlPlayerInfoWork_fieldOffsets, base);
 }
 

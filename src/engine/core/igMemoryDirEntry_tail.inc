@@ -112,7 +112,7 @@ igMemoryDirEntry *igMemoryDirEntry_GetSharedEntry(igMemoryDirEntry *self, igIGBF
     if (lists.p == 0) return self;
     int index = ((igObjectDispatchView *)self)->GetMeta()->_index;
     if (lists->_count <= index) {
-        ObjectList_ResizeRetained((igTDataList<igObject *> *)lists.p, index + 1);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)lists.p))->setCount(index + 1);
         objectListSetRetained(index, 0, lists.p);
     }
     igSmartPointer<igObjectList> entries(asEntryList(((igObject **)lists->_data)[index]), kRetainReference);
@@ -134,7 +134,7 @@ igMemoryDirEntry *igMemoryDirEntry_GetSharedEntry(igMemoryDirEntry *self, igIGBF
             return entry;
         }
     }
-    ObjectList_AppendRetained((igObjectList *)list, (igObject *)self);
+    ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)self);
     return self;
 }
 

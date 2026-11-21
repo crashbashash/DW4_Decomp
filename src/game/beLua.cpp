@@ -171,9 +171,9 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
     } else {
         list = (igObjectList *)node->_overrideAttrList;
         if (list->_count == 0) {
-            ObjectList_AppendRetained((igObjectList *)list, (igObject *)node->_blendStateAttr);
-            ObjectList_AppendRetained((igObjectList *)node->_overrideAttrList, (igObject *)node->_blendFunctionAttr);
-            ObjectList_AppendRetained((igObjectList *)node->_overrideAttrList, (igObject *)node->_colorAttr);
+            ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)node->_blendStateAttr);
+            ((Gap::Core::igObjectList *)node->_overrideAttrList)->append((Gap::Core::igObject *)node->_blendFunctionAttr);
+            ((Gap::Core::igObjectList *)node->_overrideAttrList)->append((Gap::Core::igObject *)node->_colorAttr);
         }
         ((OverrideAttr *)node->_colorAttr)->SetValue(&node->_color);
     }
@@ -314,7 +314,7 @@ void beLua_Stop(void)
 
 int beLua_AddInfo(beLua *self, int info) {
     if (((Gap::Core::igObject *)info)->isOfType(g_beLuaInfo_metaObject) != 0) {
-        ObjectList_AppendRetained((igObjectList *)self->_infoList, (igObject *)info);
+        ((Gap::Core::igObjectList *)self->_infoList)->append((Gap::Core::igObject *)info);
         return 1;
     }
     return 0;

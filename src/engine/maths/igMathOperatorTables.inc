@@ -106,7 +106,7 @@ igSmartPointer<igVolumeList> FUN_0018f760(igMemoryPoolView *allocator) {
     unsigned count = igMetaObject_GetChildCount((igMetaObject *)meta);
     unsigned i;
     igSmartPointer<igVolumeList> list((igVolumeList *)FUN_00186c00((int)allocator));
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)list.p, count);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)list.p))->setCount(count);
     for (i = 0; i < count; i++) {
         igSmartPointer<InstanceNode> element((InstanceNode *)igMetaObject_CreateInstanceRef((igMetaObject *)igMetaObject_GetChildAt((igMetaObject *)meta, i), allocator).get(), kRetainReference);
         setElement(list, i, element);

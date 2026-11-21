@@ -3,7 +3,7 @@ igMetaObject *FUN_00149320(void) {
 }
 
 void igInterfaceManager_AddEventProducer(void *a0, igObject *object) {
-    ObjectList_AppendRetained(*(igObjectList **)((char *)a0 + 8), object);
+    ((Gap::Core::igObjectList *)(*(igObjectList **)((char *)a0 + 8)))->append((Gap::Core::igObject *)object);
 }
 
 int igDefaultInterfaceManager_GetMeta(void) {

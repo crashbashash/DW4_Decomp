@@ -4,10 +4,10 @@ extern "C" void Gap__Sg__igShaderData__resize(ShaderDataView *self, int count);
 /* Resizes the push, pop and child lists to {count}; child slots past the old count are released and cleared. */
 void Gap__Sg__igShaderData__resize(ShaderDataView *self, int count) {
     int i;
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_attrPushLists, count);
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_attrPopLists, count);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_attrPushLists))->setCount(count);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_attrPopLists))->setCount(count);
     i = self->_childLists->count;
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_childLists, count);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_childLists))->setCount(count);
     /* matching construct: check.py — the loop guard is emitted after the loop and re-enters at the test */
     goto guard;
 next:
@@ -35,9 +35,9 @@ guard:
 }
 
 void igShaderData_AppendPass(igShaderData *self, int item, int arg2, int arg3) {
-    ObjectList_AppendRetained((igObjectList *)self->_attrPushLists, (igObject *)item);
-    ObjectList_AppendRetained((igObjectList *)(self->_attrPopLists), (igObject *)arg2);
-    ObjectList_AppendRetained((igObjectList *)(self->_childLists), (igObject *)arg3);
+    ((Gap::Core::igObjectList *)self->_attrPushLists)->append((Gap::Core::igObject *)item);
+    ((Gap::Core::igObjectList *)self->_attrPopLists)->append((Gap::Core::igObject *)arg2);
+    ((Gap::Core::igObjectList *)self->_childLists)->append((Gap::Core::igObject *)arg3);
 }
 
 void igShaderData_RemoveAll(struct ShaderDataView *arg0) {
@@ -189,8 +189,8 @@ void igShaderData_UserPostLoad(igShaderData *self) {
     temp_a0 = (void *)(self->_childLists);
     temp_a1 = *(int *)((char *)(self->_attrPushLists) + 8);
     if (temp_a1 != *(int *)((char *)(temp_a0) + 8)) {
-        ObjectList_ResizeRetained((igTDataList<igObject *> *)temp_a0, temp_a1);
-        ObjectList_ClearRetainedPreserveCount((igTDataList<igObject *> *)self->_childLists);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)temp_a0))->setCount(temp_a1);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_childLists))->clearAll();
     }
 }
 

@@ -160,7 +160,7 @@ void FUN_002285d0(int arg0) {
     *(int *)((char *)(temp_s0) + 8) = 0;
     *(int *)((char *)(temp_s0) + 56) = (int)igMetaObject_GetOrCreateMetaObject();
     ((Gap::Core::igMetaField *)temp_s0)->validate();
-    ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s0);
+    ((Gap::Core::igObjectList *)arg0)->append((Gap::Core::igObject *)temp_s0);
     *(int *)((char *)(temp_s0) + 4) = (int)((int) (*(int *)((char *)(temp_s0) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s0) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_s0);
@@ -192,7 +192,7 @@ void FUN_002285d0(int arg0) {
     *(int *)((char *)(temp_s0_2) + 56) = (int)igMetaObjectList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_2) + 52) = 1;
     ((Gap::Core::igMetaField *)temp_s0_2)->validate();
-    ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s0_2);
+    ((Gap::Core::igObjectList *)arg0)->append((Gap::Core::igObject *)temp_s0_2);
     *(int *)((char *)(temp_s0_2) + 4) = (int)((int) (*(int *)((char *)(temp_s0_2) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s0_2) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_s0_2);
@@ -224,7 +224,7 @@ void FUN_002285d0(int arg0) {
     *(int *)((char *)(temp_s0_3) + 56) = (int)igStringRefList_GetOrCreateMetaObject();
     *(char *)((char *)(temp_s0_3) + 52) = 1;
     ((Gap::Core::igMetaField *)temp_s0_3)->validate();
-    ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s0_3);
+    ((Gap::Core::igObjectList *)arg0)->append((Gap::Core::igObject *)temp_s0_3);
     *(int *)((char *)(temp_s0_3) + 4) = (int)((int) (*(int *)((char *)(temp_s0_3) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s0_3) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_s0_3);

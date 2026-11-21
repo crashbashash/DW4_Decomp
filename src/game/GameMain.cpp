@@ -294,8 +294,8 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igTransform_EnsureRegistered();
     igPrimLengthArray1_1_EnsureRegistered();
     igIndexArray_EnsureRegistered();
-    igBoolList_EnsureRegistered();
-    igFloatList_EnsureRegistered();
+    Gap::Core::igBoolList::arkRegister();
+    Gap::Core::igFloatList::arkRegister();
     Gap::Attrs::igVertexBlendStateAttr::arkRegister();
     igSkin_EnsureRegistered();
     igSkinList_EnsureRegistered();
@@ -357,7 +357,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igGraphPath_EnsureRegistered();
     igGeometryList_EnsureRegistered();
     igCamera_EnsureRegistered();
-    igUnsignedShortList_EnsureRegistered();
+    Gap::Core::igUnsignedShortList::arkRegister();
     igCompressedAnimationSequenceQS_EnsureRegistered();
     igModelViewMatrixBoneSelect_EnsureRegistered();
     igFloatListList_EnsureRegistered();

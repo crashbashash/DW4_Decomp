@@ -1,6 +1,6 @@
 void igRegistry_InitDefaults(void *self) {
     igObject_InitDefaults((igObject *)self);
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)((igRegistry *)self)->_valueTable, 0x100);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)((igRegistry *)self)->_valueTable))->setCount(0x100);
 }
 
 static inline char *pathText(igStringObj *s) { char *t = (char *)s->_buffer; if (t == 0) { return (g_stringObjEmptyText); } return t; }
@@ -97,7 +97,7 @@ int igRegistry_GetSectionIndex(igRegistry *self, char *name, int create) {
     if (create != 0) {
         igSmartPointer<igStringObj> section((igStringObj *)igStringObj_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
         igStringObj_Set(section.get(), name);
-        ObjectList_AppendRetained((igObjectList *)self->_additionalSectionNames, section.get());
+        ((Gap::Core::igObjectList *)self->_additionalSectionNames)->append((Gap::Core::igObject *)(section.get()));
         return n + 11;
     }
     return -1;
@@ -597,7 +597,7 @@ void igRegistry_Clear(igRegistry *self) {
         l->_data[j] = 0;
     }
     l->_count = 0;
-    ObjectList_ClearRetainedPreserveCount((igTDataList<igObject *> *)self->_valueTable);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_valueTable))->clearAll();
 }
 
 /* Read registry text: `[section]` lines open a section, `key = value` lines set values (only new ones
@@ -730,7 +730,7 @@ igRegistryValue *igRegistry_FindValue(igRegistry *self, int section, const char 
         igRegistryValue *t;
         if (freeSlot < 0) {
             freeSlot = ((igRegistryValueList *)self->_valueTable)->_count;
-            ObjectList_ResizeRetained((igTDataList<igObject *> *)(((igRegistryValueList *)self->_valueTable)), freeSlot * 2);
+            ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)(((igRegistryValueList *)self->_valueTable))))->setCount(freeSlot * 2);
         }
         entry = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
         old = r.p;
@@ -935,12 +935,12 @@ igSmartPointer<igObject> igResource_GetDirectory(void *directory, const char *na
     if (strcmp(name, "igImageDirectory") == 0) {
         return igSmartPointer<igObject>((igObject *)igResource_GetImageDirectory((igResource *)directory), kRetainReference);
     }
-    return igSmartPointer<igObject>((igObject *)igProperty_FindByName((igObjectList *)((igResource *)directory)->_directoryList, (igMetaField *)g_igDirectory_nameField, name), kRetainReference);
+    return igSmartPointer<igObject>((igObject *)((Gap::Core::igObjectList *)(((igResource *)directory)->_directoryList))->search((Gap::Core::igStringMetaField *)g_igDirectory_nameField, name), kRetainReference);
 }
 
-int igResource_AddDirectory(int *p, int directory)
+void igResource_AddDirectory(int *p, int directory)
 {
-    return ObjectList_AppendRetained((igObjectList *)((igResource *)p)->_directoryList, (igObject *)directory);
+    ((Gap::Core::igObjectList *)(((igResource *)p)->_directoryList))->append((Gap::Core::igObject *)directory);
 }
 
 static inline void setNames(igResource *self, const igSmartPointer<igObject> &value) {
@@ -974,7 +974,7 @@ void igResource_AddAlignment(igResource *self, const char *name, int value) {
     }
     igSmartPointer<igStringObj> entry((igStringObj *)igStringObj_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool()))));
     igStringObj_Set(entry.p, name);
-    ObjectList_AppendRetained((igObjectList *)self->_alignmentStrings, (igObject *)entry.p);
+    ((Gap::Core::igObjectList *)self->_alignmentStrings)->append((Gap::Core::igObject *)entry.p);
     igTDataList<int> *values = (igTDataList<int> *)self->_alignmentValues;
     int top = values->count();
     if (top < values->_capacity) {

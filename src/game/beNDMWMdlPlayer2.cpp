@@ -105,7 +105,7 @@ void beNDMWMdlPlayer2_OnGenerate(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) {
     igStringRef *e;
     int s1;
     RamDataList::Ensure(ram);
-    r = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_13);
+    r = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_13);
     {
         int alloc = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         int a;
@@ -190,7 +190,7 @@ void beNDMWMdlPlayer2_UpdateControl(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) 
         }
         ram->_dataList = (int)s0;
     }
-    prop = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_13);
+    prop = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_13);
     q = (beNDMWMdlPlayer2InfoWork *)prop->_work;
     if (q->_timerCount < 10) {
         q->_timerCount = q->_timerCount + 1;
@@ -280,7 +280,7 @@ int beNDMWMdlPlayer2_OnPreMessage(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram, co
         return 1;
     } else if (strcmp(command, RAISE_2) == 0) {
         RamDataList::Ensure(ram);
-        beNDMWMdlPlayer2InfoWork *work = (beNDMWMdlPlayer2InfoWork *)((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_13))->_work;
+        beNDMWMdlPlayer2InfoWork *work = (beNDMWMdlPlayer2InfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_13))->_work;
         if (work->_timerCount < 10)
             return 1;
         float matrix[16];

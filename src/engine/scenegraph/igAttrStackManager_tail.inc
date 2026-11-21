@@ -86,7 +86,7 @@ void igAttrStackManager_RegisterClass(char *arg0) {
         K key(arg0);
         idx = Finder_1afb60::Find(((RefObj * *)DAT_00562578)[0], key);
         if (idx < 0) {
-            ObjectList_AppendRetained((igObjectList *)(((RefObj * *)DAT_00562578)[0]), (igObject *)arg0);
+            ((Gap::Core::igObjectList *)(((RefObj * *)DAT_00562578)[0]))->append((Gap::Core::igObject *)arg0);
             if (((RefObj * *)DAT_00562580)[0] != 0) {
                 n = ((RefObj * *)DAT_00562580)[0]->count;
                 for (i = 0; i < n; i++) {
@@ -119,8 +119,8 @@ void igAttrStackManager_RegisterAttribute(AttrManagerRec *m, AttrObj *meta) {
         }
         first = m->_numAttrStacks;
         end = first + units;
-        ObjectList_ResizeRetained((igTDataList<igObject *> *)m->_attrDefaults, end);
-        ObjectList_ResizeRetained((igTDataList<igObject *> *)m->_attrStacks, end);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)m->_attrDefaults))->setCount(end);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)m->_attrStacks))->setCount(end);
         m->_attrStackIndexTable[id] = first;
         m->_numAttrStacks = end;
         for (i = 0; i < units; i++, first++) {

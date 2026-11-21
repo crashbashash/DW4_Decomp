@@ -4730,7 +4730,7 @@ extern "C" void igGeometry_EnableFlags(ParticleTimer *arg0, int arg1, int arg2);
 extern "C" void igGeometry_Transform(ParticleTimer *arg0, int arg1);
 extern "C" void igGeometry_Reset(ParticleAttributeObj *arg0);
 extern "C" void FUN_001c5660(Z_1c5660 *arg0, int arg1, int arg2);
-extern "C" int FUN_001c5730(int *p, igObject *object);
+extern "C" void FUN_001c5730(int *p, igObject *object);
 extern "C" void FUN_001c5740(U_1c5740 *arg0, T_1c5740 *arg1);
 extern "C" void FUN_001c5870(void *arg0, int arg1);
 extern "C" int FUN_001c58c0(T_1c58c0 *arg0);

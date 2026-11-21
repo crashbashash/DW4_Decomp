@@ -410,7 +410,7 @@ void igContext_BuildExtensionInfoList(igContext *self) {
         meta = igObjectSystem_FindMetaByNameDefault("igContextExt");
         self->_iNumExts = igMetaObject_CountTree((igMetaObject *)meta) - 1;
         if (self->_iNumExts >= ((igContextExtInfoList *)self->_pExtList)->_count) ((Gap::Core::igDataList *)((igContextExtInfoList *)self->_pExtList))->setCapacity(self->_iNumExts, 4);
-        ObjectList_ResizeRetained((igTDataList<igObject *> *)((igContextExtInfoList *)self->_pExtList), self->_iNumExts);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)((igContextExtInfoList *)self->_pExtList)))->setCount(self->_iNumExts);
         for (i = 0; i < self->_iNumExts; i++) {
             int name;
             igMetaObject *node;
@@ -510,7 +510,7 @@ void *igContext_GetExtension(igVisualContext *self, int name) {
                 }
                 extension = (igObject *)(0);
             } else {
-                ObjectList_AppendRetained((igObjectList *)self->_pExtInstances, extension);
+                ((Gap::Core::igObjectList *)self->_pExtInstances)->append((Gap::Core::igObject *)extension);
                 extension->_refCount = extension->_refCount - 1;
                 if ((extension->_refCount & 0x7FFFFF) == 0) {
                     igObject_Destroy(extension);

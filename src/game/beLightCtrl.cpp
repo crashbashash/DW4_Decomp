@@ -48,7 +48,7 @@ int beLightCtrl_OnMessageText(beLightCtrl *self, beBaseInfoRam *ram, const char 
         igVec3f diffuse = beMessenger_GetVec3((beMessenger *)self->_messenger, 1);
         igVec3f specular = beMessenger_GetVec3((beMessenger *)self->_messenger, 2);
         igVec4f colour;
-        lightSet = (igLightSet *)igProperty_FindByName((igObjectList *)info->_lightSetList, g_propertyNameField, (const char *)name);
+        lightSet = (igLightSet *)((Gap::Core::igObjectList *)info->_lightSetList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name);
         if (lightSet != 0) {
             lights = (igLightAttrDispatchView **)((igLightList *)lightSet->_lights)->_data;
             light = *lights;

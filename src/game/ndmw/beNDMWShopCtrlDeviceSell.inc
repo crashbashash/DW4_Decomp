@@ -40,7 +40,7 @@ void beNDMWShopCtrlDeviceSell_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWShopCtrlDeviceSell_Register);
 }
 
-static igMetaObjectCallback g_beNDMWShopCtrlDeviceSell_callbackList[] = { igBoolList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWShopCtrlDeviceSell_callbackList[] = { Gap::Core::igBoolList::arkRegister, 0 };
 
 CallbackArray *beNDMWShopCtrlDeviceSell_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -86,7 +86,7 @@ void beNDMWShopCtrlDeviceSell_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWShopCtrlDeviceSell_ctorTable, 1);
     decideList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)decideList)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)decideList)->_metaObject = (int)Gap::Core::igBoolList::getClassTypeLazy();
     ((igRefMetaField *)decideList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWShopCtrlDeviceSell_fieldTable, g_beNDMWShopCtrlDeviceSell_fieldHandles, g_beNDMWShopCtrlDeviceSell_fieldOffsets, base);
 }

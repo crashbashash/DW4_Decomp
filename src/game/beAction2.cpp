@@ -181,16 +181,16 @@ void beAction2FLASHSET_Update(beAction2 *manager, beAction2InfoRam *ram) {
         if (beBaseInfoRam_IsTimerExpired((beBaseInfoRam *)ram, "FLASH")) {
             list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
             if (work->_blendStateAttr == 0) {
-                ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)work->_colorAttr, 0);
+                ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)list))->removeByValue((Gap::Core::igObject *)work->_colorAttr, 0);
                 attr = (igObject *)work->_colorAttr;
                 IG_OBJECT_RELEASE(attr);
                 work->_colorAttr = 0;
-                ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)work->_lightingStateAttr, 0);
+                ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)list))->removeByValue((Gap::Core::igObject *)work->_lightingStateAttr, 0);
                 attr = (igObject *)work->_lightingStateAttr;
                 IG_OBJECT_RELEASE(attr);
                 work->_lightingStateAttr = 0;
             }
-            ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)work->_textureStateAttr, 0);
+            ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)list))->removeByValue((Gap::Core::igObject *)work->_textureStateAttr, 0);
             attr = (igObject *)work->_textureStateAttr;
             IG_OBJECT_RELEASE(attr);
             work->_textureStateAttr = 0;
@@ -212,7 +212,7 @@ unsigned char beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram,
         AttrRef<0> created((igObject *)igColorAttr_CreateInstance(allocator));
         igObject *attr;
         igObject *old;
-        ObjectList_AppendRetained((igObjectList *)list, created.p);
+        ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created.p);
         attr = created.p;
         if (attr != 0) attr->_refCount = attr->_refCount + 1;
         old = (igObject *)work->_colorAttr;
@@ -225,7 +225,7 @@ unsigned char beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram,
         AttrRef<3> created((igObject *)igTextureStateAttr_CreateInstance(allocator));
         igObject *attr;
         igObject *old;
-        ObjectList_AppendRetained((igObjectList *)list, created.p);
+        ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created.p);
         attr = created.p;
         if (attr != 0) attr->_refCount = attr->_refCount + 1;
         old = (igObject *)work->_textureStateAttr;
@@ -238,7 +238,7 @@ unsigned char beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram,
         AttrRef<2> created((igObject *)Gap::Attrs::igLightingStateAttr::_instantiateFromPool((igMemoryPoolView *)allocator));
         igObject *attr;
         igObject *old;
-        ObjectList_AppendRetained((igObjectList *)list, created.p);
+        ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created.p);
         attr = created.p;
         if (attr != 0) attr->_refCount = attr->_refCount + 1;
         old = (igObject *)work->_lightingStateAttr;
@@ -366,16 +366,16 @@ void beAction2FADESET_Update(beAction2 *manager, beAction2InfoRam *ram) {
             if (color[3] >= fadeLimit(work)) {
                 list = ((beModelCtrlNode2 *)ram->_node)->_overrideAttrList;
                 if (work->_textureStateAttr == 0) {
-                    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)work->_colorAttr, 0);
+                    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)list))->removeByValue((Gap::Core::igObject *)work->_colorAttr, 0);
                     attr = (igObject *)work->_colorAttr;
                     IG_OBJECT_RELEASE(attr);
                     work->_colorAttr = 0;
-                    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)work->_lightingStateAttr, 0);
+                    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)list))->removeByValue((Gap::Core::igObject *)work->_lightingStateAttr, 0);
                     attr = (igObject *)work->_lightingStateAttr;
                     IG_OBJECT_RELEASE(attr);
                     work->_lightingStateAttr = 0;
                 }
-                ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)list, (igObject *)work->_blendStateAttr, 0);
+                ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)list))->removeByValue((Gap::Core::igObject *)work->_blendStateAttr, 0);
                 attr = (igObject *)work->_blendStateAttr;
                 IG_OBJECT_RELEASE(attr);
                 work->_blendStateAttr = 0;
@@ -426,7 +426,7 @@ unsigned char beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, 
             igObject *attr;
             igObject *old;
             AttrRef<0> created((igObject *)igColorAttr_CreateInstance(allocator));
-            ObjectList_AppendRetained((igObjectList *)list, created.p);
+            ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created.p);
             attr = created.p;
             if (attr != 0) attr->_refCount = attr->_refCount + 1;
             old = (igObject *)work->_colorAttr;
@@ -439,7 +439,7 @@ unsigned char beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, 
             igObject *attr;
             igObject *old;
             AttrRef<1> created((igObject *)Gap::Attrs::igBlendStateAttr::_instantiateFromPool((igMemoryPoolView *)allocator));
-            ObjectList_AppendRetained((igObjectList *)list, created.p);
+            ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created.p);
             attr = created.p;
             if (attr != 0) attr->_refCount = attr->_refCount + 1;
             old = (igObject *)work->_blendStateAttr;
@@ -452,7 +452,7 @@ unsigned char beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, 
             igObject *attr;
             igObject *old;
             AttrRef<2> created((igObject *)Gap::Attrs::igLightingStateAttr::_instantiateFromPool((igMemoryPoolView *)allocator));
-            ObjectList_AppendRetained((igObjectList *)list, created.p);
+            ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created.p);
             attr = created.p;
             if (attr != 0) attr->_refCount = attr->_refCount + 1;
             old = (igObject *)work->_lightingStateAttr;
@@ -621,7 +621,7 @@ unsigned char beAction2MOTIONSET_Start(beAction2 *manager, beAction2InfoRam *ram
     int name = component->_name;
     int nameOrEmpty;
     if (name != 0) nameOrEmpty = name; else nameOrEmpty = (int)emptyString;
-    igAnimation *animation = (igAnimation *)igProperty_FindByName((igObjectList *)animations, g_propertyNameField, (const char *)nameOrEmpty);
+    igAnimation *animation = (igAnimation *)((Gap::Core::igObjectList *)animations)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)nameOrEmpty);
     igAnimationCombiner *combiner = ((igAnimationCombiner **)((igAnimationCombinerList *)((igAnimationDatabase *)info->_animationDatabase)->_combinerList)->_data)[ram->_ramNo];
     long biasOld; /* matching construct: decomp-permuter (found on beAction2MOTIONSET_Update) — the saved time bias is a `long` (igLong, 64-bit under mwccps2), not `long long` */
     float zero = 0.0f;
@@ -966,7 +966,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
             workRef.p->_isNoHokan = 0;
         }
         {
-            int data = (int)igProperty_FindByName((igObjectList *)info->_dataList_, g_propertyNameField, (const char *)name);
+            int data = (int)((Gap::Core::igObjectList *)info->_dataList_)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name);
             beAction2InfoWork *work = workRef.p;
             if (work->_comData != data) {
                 if (data != 0) ((igObject *)data)->_refCount = ((igObject *)data)->_refCount + 1;

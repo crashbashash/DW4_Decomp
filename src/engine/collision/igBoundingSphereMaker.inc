@@ -232,6 +232,6 @@ void FUN_0023b3b0(RetainedList *list, RefCounted *object) {
 
 void FUN_0023b410(int *arg0, int arg1, int arg2, int arg3) {
     arg0[4] = arg1; arg0[5] = arg2; arg0[6] = arg3;
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)arg0[2], arg1 * arg2 * arg3);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)arg0[2]))->setCount(arg1 * arg2 * arg3);
 }
 

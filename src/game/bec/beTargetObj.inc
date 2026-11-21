@@ -47,7 +47,7 @@ void beTargetObj_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beTargetObj_Register);
 }
 
-static igMetaObjectCallback g_beTargetObj_callbackList[] = { igVec3fList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beTargetObj_callbackList[] = { igVec3fList_EnsureRegistered, Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *beTargetObj_Register(void) {
     BecLibrary_MarkRegistered();
@@ -106,7 +106,7 @@ void beTargetObj_InitFields(void) {
     ((igObjectRefMetaField *)playerPosList)->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
     ((igRefMetaField *)playerPosList)->_construct = 1;
     playerRamNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)playerRamNoList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)playerRamNoList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)playerRamNoList)->_construct = 1;
     enemyPosList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)enemyPosList)->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();

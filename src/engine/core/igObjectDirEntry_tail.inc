@@ -19,7 +19,7 @@ igObjectDirEntry *igObjectDirEntry_GetSharedEntry(igObjectDirEntry *self, igIGBF
     if (lists.p == 0) return self;
     int index = ((igObjectDispatchView *)self)->GetMeta()->_index;
     if (lists->_count <= index) {
-        ObjectList_ResizeRetained((igTDataList<igObject *> *)lists.p, index + 1);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)lists.p))->setCount(index + 1);
         objectListSetRetained(index, 0, lists.p);
     }
     igSmartPointer<igObjectList> entries(asObjectEntryList(((igObject **)lists->_data)[index]), kRetainReference);
@@ -43,7 +43,7 @@ igObjectDirEntry *igObjectDirEntry_GetSharedEntry(igObjectDirEntry *self, igIGBF
             return objectDirEntryAt(list, i);
         }
     }
-    ObjectList_AppendRetained((igObjectList *)list, (igObject *)self);
+    ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)self);
     return self;
 }
 
@@ -254,54 +254,3 @@ void igObjectDirEntry_SetMemoryPoolHandle(igObjectDirEntry *self, int memoryPool
 int igObjectDirEntry_GetMemoryPoolHandle(igObjectDirEntry *self) {
     return self->_memoryPoolHandle;
 }
-
-void ObjectList_FillRetained(igTDataList<igObject *> *list, igObject *object) {
-    int n;
-    int i;
-    int j;
-    int cnt;
-    igObject **data;
-    int k;
-    igObject *t;
-    n = list->_count;
-    if (object != 0) {
-        for (i = 0; i < n; i++) {
-            object->_refCount = object->_refCount + 1;
-        }
-    }
-    for (j = 0; j < n; j++) {
-        t = list->_data[j];
-        if (t != 0) {
-            t->_refCount = t->_refCount - 1;
-            if (((unsigned long long)((long long)(int)t->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
-            }
-        }
-    }
-    cnt = list->_count;
-    data = list->_data;
-    for (k = 0; k < cnt; k++) {
-        data[k] = object;
-    }
-}
-
-void ObjectList_ClearRetainedPreserveCount(igTDataList<igObject *> *list) {
-    int n;
-    int i;
-    igObject *o;
-
-    n = list->_count;
-    for (i = 0; i < n; i++) {
-        o = list->_data[i];
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
-    }
-    if (list->_count != 0) {
-        memset(list->_data, 0, list->_count * 4);
-    }
-}
-

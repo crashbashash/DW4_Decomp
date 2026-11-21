@@ -1629,7 +1629,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)((Gap::Core::igObject *)self)->getMemoryPool());
                         {
                         CreatedRef<0> degiData((void *)(beNDMWDegiData_Create(allocator)));
-                        ObjectList_AppendRetained((igObjectList *)((beNDMWLoadSlotPlayer *)(newSlotPlayer.value))->_saveDataList, (igObject *)degiData.value);
+                        ((Gap::Core::igObjectList *)(((beNDMWLoadSlotPlayer *)(newSlotPlayer.value))->_saveDataList))->append((Gap::Core::igObject *)degiData.value);
                         }
                         degiIndex += 1;
                     } while (degiIndex < 4);
@@ -1648,7 +1648,7 @@ void beNDMWSaveIntf_UpdateRam(beNDMWSaveIntf *self, beBaseInfoRam *ram) {
                         ((Gap::Core::igDataList *)accessList)->resizeAndSetCount(newAccessCount + 1, 4);
                     }
                     ((int *)beNDMWLoadIntf2_igIntList_GetData((igDataList *)accessList))[newAccessCount] = newAccessPlayer;
-                    ObjectList_AppendRetained((igObjectList *)(common->_slotSaveData), (igObject *)newSlotPlayer.value);
+                    ((Gap::Core::igObjectList *)common->_slotSaveData)->append((Gap::Core::igObject *)newSlotPlayer.value);
                     cardWork->_haveSaveData = (int)(newSlotPlayer.value);
                     }
                     cardWork->_utilReturn = 0;
@@ -1907,7 +1907,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
             {
                 int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)((Gap::Core::igObject *)self)->getMemoryPool());
                 ChildRef<1> ctrlData((RefObject *)beNDMWSaveIntfCtrlData_Create(allocator));
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)ctrlData.object);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)ctrlData.object);
                 ((beNDMWSaveIntfCtrlData *)ctrlData.object)->_isRun = 1;
                 if (ram->_ramNo == 0) {
                     ((beNDMWSaveIntfCtrlData *)ctrlData.object)->_isRdy = 0;
@@ -1920,19 +1920,19 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                 }
             }
             beMessenger_SendNamed((beMessenger *)self->_messenger, "SAVECTRL", 0, 0, "GETCOMMON");
-            ObjectList_AppendRetained((igObjectList *)ram->_dataList, beMessenger_GetObject((beMessenger *)self->_messenger, 0));
+            ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)(beMessenger_GetObject((beMessenger *)self->_messenger, 0)));
             {
                 int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)((Gap::Core::igObject *)self)->getMemoryPool());
                 ChildRef<2> textOrder((RefObject *)beNDMWLoadIntf2TextOrder_Create(allocator));
                 ((beNDMWLoadIntf2TextOrder *)textOrder.object)->_messenger = self->_messenger;
                 beNDMWLoadIntf2TextOrder *order = (beNDMWLoadIntf2TextOrder *)textOrder.object;
                 order->_lua = ((int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beLua_metaObject));
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)textOrder.object);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)textOrder.object);
             }
             {
                 int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)((Gap::Core::igObject *)self)->getMemoryPool());
                 ChildRef<3> model((RefObject *)beNDMWLoadIntf2ComMdlCtrl_Create(allocator));
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)model.object);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)model.object);
                 ((beNDMWLoadIntf2ComMdlCtrl *)model.object)->_messenger = self->_messenger;
                 int player = ram->_ramNo;
                 beNDMWLoadIntf2ComMdlCtrl *modelCtrl = (beNDMWLoadIntf2ComMdlCtrl *)model.object;
@@ -1950,9 +1950,9 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                 ((beNDMWLoadIntf2MesWin *)window.object)->_ramNo = ram->_ramNo;
                 ((beNDMWLoadIntf2MesWin *)window.object)->_messenger = self->_messenger;
                 ((beNDMWLoadIntf2MesWin *)window.object)->_padManager = ((int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject));
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)window.object);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)window.object);
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2MesWin *)window.object)->_textOrder = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "TEXTORDER");
+                ((beNDMWLoadIntf2MesWin *)window.object)->_textOrder = (int)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "TEXTORDER");
             }
             {
                 int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)((Gap::Core::igObject *)self)->getMemoryPool());
@@ -1961,12 +1961,12 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                 ((beNDMWLoadIntf2SelSlot *)slots.object)->_messenger = self->_messenger;
                 ((beNDMWLoadIntf2SelSlot *)slots.object)->_padManager = ((int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject));
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2SelSlot *)slots.object)->_comMdlCtrl = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMDLCTRL");
+                ((beNDMWLoadIntf2SelSlot *)slots.object)->_comMdlCtrl = (int)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMDLCTRL");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2SelSlot *)slots.object)->_textOrder = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "TEXTORDER");
+                ((beNDMWLoadIntf2SelSlot *)slots.object)->_textOrder = (int)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "TEXTORDER");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2SelSlot *)slots.object)->_commonIntf = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMONINTF");
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)slots.object);
+                ((beNDMWLoadIntf2SelSlot *)slots.object)->_commonIntf = (int)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMONINTF");
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)slots.object);
             }
             {
                 int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)((Gap::Core::igObject *)self)->getMemoryPool());
@@ -1975,41 +1975,41 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
                     int allocator2 = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)((Gap::Core::igObject *)self)->getMemoryPool());
                     ChildRef<7> upperState((RefObject *)beNDMWLoadIntf2DegiState_Create(allocator2));
                     DataListGuard::Ensure(ram);
-                    void *commonIntf = (void *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMONINTF");
+                    void *commonIntf = (void *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMONINTF");
                     DataListGuard::Ensure(ram);
-                    void *textOrderObj = (void *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "TEXTORDER");
+                    void *textOrderObj = (void *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "TEXTORDER");
                     DataListGuard::Ensure(ram);
-                    beNDMWLoadIntf2DegiState__Init((beNDMWLoadIntf2DegiState *)upperState.object, ram->_ramNo, (int)commonIntf, (int)textOrderObj, igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMDLCTRL"), self->_messenger, 0);
-                    ObjectList_AppendRetained((igObjectList *)((beNDMWLoadIntf2DegiStateCtrl *)stateCtrl.object)->_statDataList, (igObject *)upperState.object);
+                    beNDMWLoadIntf2DegiState__Init((beNDMWLoadIntf2DegiState *)upperState.object, ram->_ramNo, (int)commonIntf, (int)textOrderObj, (int)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMDLCTRL"), self->_messenger, 0);
+                    ((Gap::Core::igObjectList *)(((beNDMWLoadIntf2DegiStateCtrl *)stateCtrl.object)->_statDataList))->append((Gap::Core::igObject *)upperState.object);
                 }
                 {
                     int allocator2 = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)((Gap::Core::igObject *)self)->getMemoryPool());
                     ChildRef<7> lowerState((RefObject *)beNDMWLoadIntf2DegiState_Create(allocator2));
                     DataListGuard::Ensure(ram);
-                    void *commonIntf = (void *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMONINTF");
+                    void *commonIntf = (void *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMONINTF");
                     DataListGuard::Ensure(ram);
-                    void *textOrderObj = (void *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "TEXTORDER");
+                    void *textOrderObj = (void *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "TEXTORDER");
                     DataListGuard::Ensure(ram);
-                    beNDMWLoadIntf2DegiState__Init((beNDMWLoadIntf2DegiState *)lowerState.object, ram->_ramNo, (int)commonIntf, (int)textOrderObj, igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMDLCTRL"), self->_messenger, 1);
-                    ObjectList_AppendRetained((igObjectList *)((beNDMWLoadIntf2DegiStateCtrl *)stateCtrl.object)->_statDataList, (igObject *)lowerState.object);
+                    beNDMWLoadIntf2DegiState__Init((beNDMWLoadIntf2DegiState *)lowerState.object, ram->_ramNo, (int)commonIntf, (int)textOrderObj, (int)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMDLCTRL"), self->_messenger, 1);
+                    ((Gap::Core::igObjectList *)(((beNDMWLoadIntf2DegiStateCtrl *)stateCtrl.object)->_statDataList))->append((Gap::Core::igObject *)lowerState.object);
                 }
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)stateCtrl.object);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)stateCtrl.object);
             }
             {
                 int allocator = AllocatorChoice::Select(&kIGMemoryPoolHandleUser1, (int)((Gap::Core::igObject *)self)->getMemoryPool());
                 ChildRef<8> dataSel((RefObject *)beNDMWLoadIntf2DataSelIntf_Create(allocator));
                 ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_padManager = ((int)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject));
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_comMdlCtrl = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMDLCTRL");
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_comMdlCtrl = (int)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMDLCTRL");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_textOrder = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "TEXTORDER");
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_textOrder = (int)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "TEXTORDER");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_commonIntf = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMONINTF");
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_commonIntf = (int)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMONINTF");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_mesWin = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "MESWIN");
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_mesWin = (int)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "MESWIN");
                 DataListGuard::Ensure(ram);
-                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_statDisp = (int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "DEGISTATECTRL");
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)dataSel.object);
+                ((beNDMWLoadIntf2DataSelIntf *)dataSel.object)->_statDisp = (int)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "DEGISTATECTRL");
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)dataSel.object);
             }
         }
         return 1;
@@ -2018,10 +2018,10 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
         return 1;
     }
     DataListGuard::Ensure(ram);
-    beNDMWSaveIntfCtrlData *ctrl = (beNDMWSaveIntfCtrlData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "CTRL");
+    beNDMWSaveIntfCtrlData *ctrl = (beNDMWSaveIntfCtrlData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "CTRL");
     switch (command) {
     case MSG_LINKCOMMON:
-        ObjectList_AppendRetained((igObjectList *)ram->_dataList, beMessenger_GetObject((beMessenger *)self->_messenger, 0));
+        ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)(beMessenger_GetObject((beMessenger *)self->_messenger, 0)));
         return 1;
     case MSG_ISENTRY:
         if (beMessenger_GetIntCount((beMessenger *)self->_messenger) == 0) {
@@ -2048,7 +2048,7 @@ int beNDMWSaveIntf_OnMessage(beNDMWSaveIntf *self, beBaseInfoRam *ram, MessageAr
     case MSG_SETSELECT_DATA:
         DataListGuard::Ensure(ram);
         {
-            beNDMWLoadCtrl2CommonIntf *common = (beNDMWLoadCtrl2CommonIntf *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMONINTF");
+            beNDMWLoadCtrl2CommonIntf *common = (beNDMWLoadCtrl2CommonIntf *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMONINTF");
             if (((beNDMWLoadSavePlWork **)((beNDMWLoadSavePlWorkList *)common->_flagWork)->_data)[ram->_ramNo]->_isRdy != 1) {
                 beMessenger_SelectGroup((beMessenger *)self->_messenger, "GAMERAM");
                 beMessenger_AppendInt((beMessenger *)self->_messenger, ram->_ramNo);

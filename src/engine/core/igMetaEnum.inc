@@ -73,7 +73,7 @@ void igMetaEnum_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMetaEnum_Register);
 }
 
-static igMetaObjectCallback g_igMetaEnum_callbackList[] = { igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igMetaEnum_callbackList[] = { igStringRefList_EnsureRegistered, Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *igMetaEnum_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -129,7 +129,7 @@ void igMetaEnum_InitFields(void) {
     names = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
     ((igObjectRefMetaField *)names)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     values = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)values)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)values)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     igMetaObject_NameFields((igMetaObject *)meta, g_igMetaEnum_fieldTable, g_igMetaEnum_fieldDescriptors, g_igMetaEnum_fieldOffsets, base);
 }
 

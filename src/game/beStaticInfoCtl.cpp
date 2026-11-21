@@ -96,7 +96,7 @@ void beStaticInfoCtl_OnAddRam(beStaticInfoCtl *self, beBaseInfoRam *ram) {
     ramNo = ram->_ramNo;
     name = name != 0 ? name : (int *)emptyString;
     beMessenger_RegisterReceiver((beMessenger *)messenger, ram, (const char *)&STATICINFO_2[0], (const char *)name, ramNo);
-    ObjectList_AppendRetained((igObjectList *)self->_staticInfoList, (igObject *)info);
+    ((Gap::Core::igObjectList *)self->_staticInfoList)->append((Gap::Core::igObject *)info);
 }
 
 int beStaticInfoCtl_OnMessage(beStaticInfoCtl *self, beBaseInfoRam *ram, beMessengerWork *work) {

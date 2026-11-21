@@ -45,7 +45,7 @@ void igLod_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igLod_Register);
 }
 
-static igMetaObjectCallback g_igLod_callbackList[] = { igFloatList_EnsureRegistered, igNode_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igLod_callbackList[] = { Gap::Core::igFloatList::arkRegister, igNode_EnsureRegistered, 0 };
 
 CallbackArray *igLod_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -121,7 +121,7 @@ void igLod_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igLod_ctorTable, 7);
     rangeListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)rangeListField)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)rangeListField)->_metaObject = (int)Gap::Core::igFloatList::getClassTypeLazy();
     ((igRefMetaField *)rangeListField)->_construct = 1;
     ((igMetaField *)rangeListField)->_deepCopyMethod = 0;
     ((igMetaField *)rangeListField)->_shallowCopyMethod = 2;
@@ -143,7 +143,7 @@ void igLod_InitFields(void) {
     defaultCenter[2] = 0;
     ((Gap::Math::igVec3fMetaField *)centerField)->setDefault(*(const igVec3f *)defaultCenter);
     hysteresisListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)));
-    ((igObjectRefMetaField *)hysteresisListField)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)hysteresisListField)->_metaObject = (int)Gap::Core::igFloatList::getClassTypeLazy();
     igMetaObject_NameFields((igMetaObject *)meta, g_igLod_fieldTable, g_igLod_fieldHandles, g_igLod_fieldOffsets, base);
 }
 

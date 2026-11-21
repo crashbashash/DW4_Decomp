@@ -83,7 +83,7 @@ void FUN_00226a10(void)
     igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igLockInterface_Register);
 }
 
-static igMetaObjectCallback g_igLockInterface_callbackList[] = { igStringRefList_EnsureRegistered, igBoolList_EnsureRegistered, igObjectListList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igLockInterface_callbackList[] = { igStringRefList_EnsureRegistered, Gap::Core::igBoolList::arkRegister, igObjectListList_EnsureRegistered, 0 };
 
 CallbackArray *igLockInterface_Register(void) {
     BaseLibrary_MarkRegistered();
@@ -141,7 +141,7 @@ void igLockInterface_InitFields(void) {
     ((igObjectRefMetaField *)field3)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)field3)->_construct = 1;
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)field2)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)Gap::Core::igBoolList::getClassTypeLazy();
     ((igRefMetaField *)field2)->_construct = 1;
     field = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)field)->_metaObject = (int)igObjectListList_GetOrCreateMetaObject();

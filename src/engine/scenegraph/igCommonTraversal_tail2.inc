@@ -385,8 +385,8 @@ void igCommonTraversal_DrawCartoonShader(igCartoonShader *self, igCommonTraversa
         igTraversal_RegisterFunction((igTraversalFunctionList *)procs, node, (void *)FUN_001b4bb0);
     }
     DAT_00562638[0] = (VC_1b2fa0 *)self;
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_mats, 0);
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->_geoms, 0);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_mats))->setCount(0);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_geoms))->setCount(0);
     igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)self);
     for (i = 0; i < count; i++) {
         igTraversal_RegisterFunction((igTraversalFunctionList *)procs, (igMetaObject *)igMetaObject_GetTreeNode(meta, i), (void *)saved[i]);

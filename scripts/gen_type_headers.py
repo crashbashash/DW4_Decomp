@@ -364,6 +364,9 @@ def converted_classes(converted, parent, layouts, members, bases=None):
     if any("igCompareFunction" in decl for cls in order for decl in members.get(cls, [])):
         # a list's comparison callback is the core library's typedef
         out.append("#include \"dw4/core/igCore.h\"")
+    if any(re.search(r"\bigResult\b", decl) for cls in order for decl in members.get(cls, [])):
+        # a member returning a status returns the core library's result class
+        out.append("#include \"dw4/core/igResult.h\"")
     if any("igSmartPointer<" in line for cls in order for _off, _size, line in layouts[cls][4]):
         # a smart-pointer member needs the template, which reads the flat igObject above
         out.append("#include \"dw4/core/igSmartPointer.h\"")

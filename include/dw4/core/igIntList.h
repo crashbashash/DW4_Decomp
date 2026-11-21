@@ -7,8 +7,6 @@
 extern "C" {
 #endif
 
-int igIntList_GetOrCreateMetaObject(void);
-void igIntList_EnsureRegistered(void);
 
 #ifdef __cplusplus
 }

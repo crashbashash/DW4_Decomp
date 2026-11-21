@@ -30,7 +30,7 @@ void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
         if (((Gap::Core::igObject *)node)->isOfType(g_igCamera_metaObject) != 0) {
             igSmartPointer<PathEntry> entry(((PathEntry *)igGraphPath_Create((int)((Gap::Core::igObject *)collector)->getMemoryPool())));
             FUN_001c5740((U_1c5740 *)entry.p, (T_1c5740 *)path);
-            ObjectList_AppendRetained((igObjectList *)collector->children, (igObject *)entry.p);
+            ((Gap::Core::igObjectList *)collector->children)->append((Gap::Core::igObject *)entry.p);
         }
     }
 }
@@ -237,7 +237,7 @@ void FUN_001d6a70(void) {
     for (i = 0; i < m; i++) list->data[i] = 0;
     list->count = 0;
   }
-  ObjectList_AppendRetained((igObjectList *)DAT_005629a0[0]->items, (igObject *)scratch);
+  ((Gap::Core::igObjectList *)DAT_005629a0[0]->items)->append((Gap::Core::igObject *)scratch);
   FUN_00191860((char *)DAT_005629a8[0] + 12, -1.0f, 1.0f, -1.0f, 1.0f, -5.0f, 5.0f);
   up.vec[0] = 0.0f; up.vec[1] = 1.0f; up.vec[2] = 0.0f;
   origin.vec[0] = 0.0f; origin.vec[1] = 0.0f; origin.vec[2] = 0.0f;

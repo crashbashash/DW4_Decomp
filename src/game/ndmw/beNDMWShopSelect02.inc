@@ -42,7 +42,7 @@ void beNDMWShopSelect02_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWShopSelect02_Register);
 }
 
-static igMetaObjectCallback g_beNDMWShopSelect02_callbackList[] = { igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWShopSelect02_callbackList[] = { Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *beNDMWShopSelect02_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -88,7 +88,7 @@ void beNDMWShopSelect02_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWShopSelect02_ctorTable, 1);
     playerNoList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)playerNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)playerNoList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)playerNoList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWShopSelect02_fieldTable, g_beNDMWShopSelect02_fieldHandles, g_beNDMWShopSelect02_fieldOffsets, base);
 }

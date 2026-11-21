@@ -116,7 +116,7 @@ void igAnimationCombiner_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAnimationCombiner_Register);
 }
 
-static igMetaObjectCallback g_igAnimationCombiner_callbackList[] = { igAnimationCombinerBoneInfoListList_EnsureRegistered, igIntList_EnsureRegistered, igAnimationStateList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAnimationCombiner_callbackList[] = { igAnimationCombinerBoneInfoListList_EnsureRegistered, Gap::Core::igIntList::arkRegister, igAnimationStateList_EnsureRegistered, 0 };
 
 CallbackArray *igAnimationCombiner_Register(void) {
     SceneGraphLibrary_MarkRegistered();  /* Shared set-once latch run before every registration of this family. */
@@ -226,7 +226,7 @@ void igAnimationCombiner_InitFields(void) {
     temp_s2->f56 = (int)igAnimationCombinerBoneInfoListList_GetOrCreateMetaObject();
     temp_s2->f52 = 1;
     temp_s2_2 = ((struct Fld_1a88b0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1));
-    temp_s2_2->f56 = igIntList_GetOrCreateMetaObject();
+    temp_s2_2->f56 = (int)Gap::Core::igIntList::getClassTypeLazy();
     temp_s2_2->f52 = 1;
     temp_s2_3 = ((struct Fld_1a88b0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2));
     temp_s2_3->f56 = (int)igAnimationStateList_GetOrCreateMetaObject();

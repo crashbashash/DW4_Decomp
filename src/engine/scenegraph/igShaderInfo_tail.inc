@@ -30,10 +30,10 @@ int igShaderInfo_FindObjectReference(ShaderFieldTable *self, int arg1, ShaderFie
 }
 
 int Gap__Sg__igShaderInfo__vfunc_24(struct S1d *arg0, int *arg1) {
-    int r = igProperty_FindByName((igObjectList *)arg0->f20, g_propertyNameField, (const char *)arg1);
+    int r = (int)((Gap::Core::igObjectList *)arg0->f20)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)arg1);
     if (r != 0) {
         return r;
     }
-    return igProperty_FindByName((igObjectList *)arg0->f20, g_propertyNameField, "empty");
+    return (int)((Gap::Core::igObjectList *)arg0->f20)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "empty");
 }
 

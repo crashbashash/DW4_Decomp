@@ -233,7 +233,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
         if (ram->_dataList != 0) {
             ENSURE_DATA_LIST(ram)
             {
-                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "SHK");
+                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "SHK");
                 if (shake != 0) {
                     if (shake->_isFirst != 0) {
                         shake->_isFirst = 0;
@@ -356,7 +356,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
         if (ram->_dataList != 0) {
             ENSURE_DATA_LIST(ram)
             {
-                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "SHK");
+                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "SHK");
                 if (shake != 0) {
                     float *matrix44;
                     int k = 0;
@@ -387,7 +387,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
                         igMatrix44f_SetTranslation(TRANSFORM_AT(box->_eyePosList, 0)->_m, shake->_svEyePos.vec);
                         igMatrix44f_SetTranslation(TRANSFORM_AT(box->_intPosList, 0)->_m, shake->_svIntPos.vec);
                         /* matching construct: a named result takes retail's frame slot (+0x194); an unnamed one lies 4 bytes higher */
-                        igResult removed = ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)ram->_dataList, (igObject *)shake, 0);
+                        igResult removed = ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)ram->_dataList))->removeByValue((Gap::Core::igObject *)shake, 0);
                         beBaseInfoRam_RemoveTimer(ram, "SHAKEALL");
                         beBaseInfoRam_RemoveTimer(ram, "SHAKEONE");
                     }
@@ -573,12 +573,12 @@ int beCameraCtrl_OnMessageText(beCameraCtrl *self, beBaseInfoRam *ram, int messa
                 ram->_dataList = (int)r;
             }
             DataList::Ensure(ram, ram);
-            shake = (beCameraCtrlInfoRamShake *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "SHK");
+            shake = (beCameraCtrlInfoRamShake *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "SHK");
             if (shake == 0) {
                 int alloc;
                 SELECT_ALLOCATOR(alloc, self)
                 ShakeRef created(beCameraCtrlInfoRamShake_Create(alloc));
-                ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)created.p);
+                ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)created.p);
                 shake = (beCameraCtrlInfoRamShake *)created.p;
             }
             moveCode = (char *)beMessenger_GetString((beMessenger *)self->_messenger, 0);

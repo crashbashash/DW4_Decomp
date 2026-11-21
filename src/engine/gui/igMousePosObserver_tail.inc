@@ -24,7 +24,7 @@ void igMousePosObserver_resetFields(MousePosObserverView *self, int flags) {
     Gap__Core__igObject__resetFields((igObject *)self, flags);
     igSmartPointer<ObserverEventView> event((ObserverEventView *)igProbe_Create((int)(((Gap::Core::igObject *)self)->getMemoryPool())));
     created = event.get();
-    ObjectList_AppendRetained((igObjectList *)created->a, (igObject *)self->f20);
+    ((Gap::Core::igObjectList *)created->a)->append((Gap::Core::igObject *)self->f20);
     list = created->list;
     top = count_of(list);
     if (top < list->cap) {

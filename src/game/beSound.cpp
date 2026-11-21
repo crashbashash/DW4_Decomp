@@ -234,7 +234,7 @@ void beSound_UpdateRam(beSound *self, beBaseInfoRam *ram) {
         for (int i = 0; i < ((PlaySEListRef &)self->_playSEs)->getCount(); i++) {
             bePlaySE *playSE = ((PlaySEListRef &)self->_playSEs)->get(i);
             if (playSE->_time < now) {
-                ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)((PlaySEListRef &)self->_playSEs).p, (igObject *)playSE, i);
+                ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)((PlaySEListRef &)self->_playSEs).p))->removeByValue((Gap::Core::igObject *)playSE, i);
                 i--;
             }
         }
@@ -314,7 +314,7 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
                 igSmartPointer<bePlaySE> row(bePlaySE_CreateInstance((int)allocator));
                 row->_id = index;
                 row->_time = now + EFFECT_REPEAT_HOLD;
-                ObjectList_AppendRetained((igObjectList *)self->_playSEs, row.p);
+                ((Gap::Core::igObjectList *)self->_playSEs)->append((Gap::Core::igObject *)row.p);
             }
             break;
         }
@@ -441,7 +441,7 @@ int beSound_OnMessage(beSound *self, beBaseInfoRam *ram, beMessengerWork *messag
                     for (objectIndex = 0; objectIndex < objects->_count; objectIndex++) {
                         object = ((igNamedObject **)objects->_data)[objectIndex];
                         if (strcmp(NameOf(object->_name), bankName) == 0) {
-                            ObjectList_AppendRetained((igObjectList *)((beCri *)self->_cri)->_lsBinObjs, object);
+                            ((Gap::Core::igObjectList *)(((beCri *)self->_cri)->_lsBinObjs))->append((Gap::Core::igObject *)object);
                             bankFound = true;
                             break;
                         }

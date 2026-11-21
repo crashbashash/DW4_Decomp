@@ -568,31 +568,31 @@ void beNDMWShopCtrl00_Update(beNDMWShopCtrl00 *self)
         {
             igSmartPointer<beNDMWShopTitle00> shopTitle((beNDMWShopTitle00 *)beNDMWShopTitle00_Create((int)allocator));
             beNDMWWindow_BindContext((beNDMWWindow *)shopTitle.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-            ObjectList_AppendRetained((igObjectList *)self->_subWindow, shopTitle.p);
+            ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)shopTitle.p);
         }
         PICK_ALLOCATOR(allocator, self);
         {
             igSmartPointer<beNDMWStatusTitle01> statusTitle1((beNDMWStatusTitle01 *)beNDMWStatusTitle01_Create((int)allocator));
             beNDMWWindow_BindContext((beNDMWWindow *)statusTitle1.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-            ObjectList_AppendRetained((igObjectList *)self->_subWindow, statusTitle1.p);
+            ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)statusTitle1.p);
         }
         PICK_ALLOCATOR(allocator, self);
         {
             igSmartPointer<beNDMWStatusTitle02> statusTitle2((beNDMWStatusTitle02 *)beNDMWStatusTitle02_Create((int)allocator));
             beNDMWWindow_BindContext((beNDMWWindow *)statusTitle2.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-            ObjectList_AppendRetained((igObjectList *)self->_subWindow, statusTitle2.p);
+            ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)statusTitle2.p);
         }
         PICK_ALLOCATOR(allocator, self);
         {
             igSmartPointer<beNDMWStatusTitle03> statusTitle3((beNDMWStatusTitle03 *)beNDMWStatusTitle03_Create((int)allocator));
             beNDMWWindow_BindContext((beNDMWWindow *)statusTitle3.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-            ObjectList_AppendRetained((igObjectList *)self->_subWindow, statusTitle3.p);
+            ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)statusTitle3.p);
         }
         PICK_ALLOCATOR(allocator, self);
         {
             igSmartPointer<beNDMWShopTitle01> serviceTitle((beNDMWShopTitle01 *)beNDMWShopTitle01_Create((int)allocator));
             beNDMWWindow_BindContext((beNDMWWindow *)serviceTitle.p, (igObject *)self, self->_insight, self->_playerNo, self->_entCode);
-            ObjectList_AppendRetained((igObjectList *)self->_subWindow, serviceTitle.p);
+            ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)serviceTitle.p);
         }
         NEXT_STATE(self);
         return;
@@ -648,7 +648,7 @@ void beNDMWShopCtrl00_Update(beNDMWShopCtrl00 *self)
                     break;
                 }
                 beNDMWWindow_BindContext(service.p, self, self->_insight, self->_playerNo, self->_entCode);
-                ObjectList_AppendRetained((igObjectList *)self->_subWindow, service.p);
+                ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)service.p);
             }
             self->_nowProcKazu = CHILD_COUNT(self);
             NEXT_STEP(self);
@@ -794,7 +794,7 @@ void beNDMWShopCtrl10_Update(beNDMWShopCtrl10 *self)
                 {
                     igSmartPointer<beNDMWShopSelect01> menu((beNDMWShopSelect01 *)beNDMWShopSelect01_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)menu.p, (igObject *)self, self->_insight, self->_playerNo, XDATA_MSG_MAIN_MENU);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, menu.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)menu.p);
                     menu.p->_startPoint = self->_xdataMenu;
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
@@ -831,7 +831,7 @@ void beNDMWShopCtrl10_Update(beNDMWShopCtrl10 *self)
                 {
                     igSmartPointer<beNDMWShopSelect11> statList((beNDMWShopSelect11 *)beNDMWShopSelect11_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)statList.p, (igObject *)self, self->_insight, self->_playerNo, self->_parameter);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, statList.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)statList.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -884,7 +884,7 @@ void beNDMWShopCtrl10_Update(beNDMWShopCtrl10 *self)
                     {
                         igSmartPointer<beNDMWShopSelect00> quote((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                         beNDMWWindow_BindContext((beNDMWWindow *)quote.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, quote.p);
+                        ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)quote.p);
                         NEXT_PHASE(self);
                         xdata = PlayerInt(player, XDATA_4)->_data;
                         /* _st3: whether the quote offers the upgrade */
@@ -932,7 +932,7 @@ void beNDMWShopCtrl10_Update(beNDMWShopCtrl10 *self)
                     {
                         igSmartPointer<beNDMWShopSelect01> confirm((beNDMWShopSelect01 *)beNDMWShopSelect01_Create((int)allocator));
                         beNDMWWindow_BindContext((beNDMWWindow *)confirm.p, (igObject *)self, self->_insight, self->_playerNo, XDATA_MSG_CONFIRM);
-                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, confirm.p);
+                        ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)confirm.p);
                     }
                     self->_nowProcKazu = CHILD_COUNT(self);
                     NEXT_PHASE(self);
@@ -981,7 +981,7 @@ void beNDMWShopCtrl10_Update(beNDMWShopCtrl10 *self)
                         {
                             igSmartPointer<beNDMWShopSelect00> notice((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                             beNDMWWindow_BindContext((beNDMWWindow *)notice.p, (igObject *)self, self->_insight, self->_playerNo, XDATA_MSG_UPGRADED);
-                            ObjectList_AppendRetained((igObjectList *)self->_subWindow, notice.p);
+                            ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)notice.p);
                         }
                         self->_nowProcKazu = CHILD_COUNT(self);
                         NEXT_PHASE(self);
@@ -1000,7 +1000,7 @@ void beNDMWShopCtrl10_Update(beNDMWShopCtrl10 *self)
                     {
                         igSmartPointer<beNDMWShopSelect01> question((beNDMWShopSelect01 *)beNDMWShopSelect01_Create((int)allocator));
                         beNDMWWindow_BindContext((beNDMWWindow *)question.p, (igObject *)self, self->_insight, self->_playerNo, XDATA_MSG_CONTINUE);
-                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, question.p);
+                        ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)question.p);
                     }
                     self->_nowProcKazu = CHILD_COUNT(self);
                     NEXT_PHASE(self);
@@ -1030,7 +1030,7 @@ void beNDMWShopCtrl10_Update(beNDMWShopCtrl10 *self)
                 {
                     igSmartPointer<beNDMWShopCtrlXdataChip> chips((beNDMWShopCtrlXdataChip *)beNDMWShopCtrlXdataChip_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)chips.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, chips.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)chips.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -1150,7 +1150,7 @@ void beNDMWShopCtrl30_Update(beNDMWShopCtrl30 *self)
                 {
                     igSmartPointer<beNDMWShopSelect01> menu((beNDMWShopSelect01 *)beNDMWShopSelect01_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)menu.p, (igObject *)self, self->_insight, self->_playerNo, BANK_MSG_MAIN_MENU);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, menu.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)menu.p);
                     menu.p->_startPoint = self->_bankMenu;
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
@@ -1179,7 +1179,7 @@ void beNDMWShopCtrl30_Update(beNDMWShopCtrl30 *self)
                 {
                     igSmartPointer<beNDMWShopSelect01> menu((beNDMWShopSelect01 *)beNDMWShopSelect01_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)menu.p, (igObject *)self, self->_insight, self->_playerNo, BANK_MSG_KIND_MENU);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, menu.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)menu.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -1229,7 +1229,7 @@ void beNDMWShopCtrl30_Update(beNDMWShopCtrl30 *self)
                 {
                     igSmartPointer<beNDMWStatusCtrlD0> list((beNDMWStatusCtrlD0 *)beNDMWStatusCtrlD0_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)list.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, list.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)list.p);
                     list.p->_isAutoClose = 0;
                     list.p->_isEquipDisable = 1;
                     if (self->_st1 == BANK_STEP_WITHDRAW_DEVICES) list.p->_isBankFolder = 1;
@@ -1275,8 +1275,8 @@ void beNDMWShopCtrl30_Update(beNDMWShopCtrl30 *self)
                                 return;
                             }
                             if (device->_isEquip == 0) {
-                                ObjectList_AppendRetained(bank, device);
-                                ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)folder, (igObject *)device, 0);
+                                ((Gap::Core::igObjectList *)bank)->append((Gap::Core::igObject *)device);
+                                ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)folder))->removeByValue((Gap::Core::igObject *)device, 0);
                             }
                             ENTER_PHASE(list, DEVICE_LIST_REOPEN);
                             return;
@@ -1287,8 +1287,8 @@ void beNDMWShopCtrl30_Update(beNDMWShopCtrl30 *self)
                                 self->_st3 = BANK_MSG_DEVICE_FOLDER_FULL;
                                 return;
                             }
-                            ObjectList_AppendRetained(folder, device);
-                            ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)bank, (igObject *)device, 0);
+                            ((Gap::Core::igObjectList *)folder)->append((Gap::Core::igObject *)device);
+                            ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)bank))->removeByValue((Gap::Core::igObject *)device, 0);
                             if (bank->_count <= 0) {
                                 ENTER_PHASE(self, BANK_DEVICES_OPEN_NOTICE);
                                 self->_st3 = BANK_MSG_BANK_EMPTY;
@@ -1308,7 +1308,7 @@ void beNDMWShopCtrl30_Update(beNDMWShopCtrl30 *self)
                 {
                     igSmartPointer<beNDMWShopSelect00> notice((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)notice.p, (igObject *)self, self->_insight, self->_playerNo, self->_st3);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, notice.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)notice.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -1342,7 +1342,7 @@ void beNDMWShopCtrl30_Update(beNDMWShopCtrl30 *self)
                 {
                     igSmartPointer<beNDMWShopCtrlEditBit> editor((beNDMWShopCtrlEditBit *)beNDMWShopCtrlEditBit_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)editor.p, (igObject *)self, self->_insight, self->_playerNo, self->_bankMenu);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, editor.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)editor.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -1386,7 +1386,7 @@ void beNDMWShopCtrl30_Update(beNDMWShopCtrl30 *self)
                 {
                     igSmartPointer<beNDMWShopSelect00> notice((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)notice.p, (igObject *)self, self->_insight, self->_playerNo, self->_st3);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, notice.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)notice.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -1456,7 +1456,7 @@ void beNDMWShopCtrl40_Update(beNDMWShopCtrl40 *self) {
                 {
                     igSmartPointer<beNDMWStatusCtrlD0> list((beNDMWStatusCtrlD0 *)beNDMWStatusCtrlD0_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)list.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, list.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)list.p);
                     list.p->_isAutoClose = 0;
                     list.p->_isUnknownEnable = 1;
                 }
@@ -1493,7 +1493,7 @@ void beNDMWShopCtrl40_Update(beNDMWShopCtrl40 *self) {
                 {
                     igSmartPointer<beNDMWShopSelect00> message((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)message.p, (igObject *)self, self->_insight, self->_playerNo, 0x5AC);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, message.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)message.p);
                 }
                 self->_nowProcKazu = ObjectList_Count(self->_subWindow);
                 NEXT_PHASE(self)
@@ -1503,7 +1503,7 @@ void beNDMWShopCtrl40_Update(beNDMWShopCtrl40 *self) {
                 {
                     igSmartPointer<beNDMWShopSelect01> yesNo((beNDMWShopSelect01 *)beNDMWShopSelect01_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)yesNo.p, (igObject *)self, self->_insight, self->_playerNo, 0x5AD);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, yesNo.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)yesNo.p);
                 }
                 self->_nowProcKazu = ObjectList_Count(self->_subWindow);
                 NEXT_PHASE(self)
@@ -1586,7 +1586,7 @@ void beNDMWShopCtrl40_Update(beNDMWShopCtrl40 *self) {
                 {
                     igSmartPointer<beNDMWShopSelect00> message((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)message.p, (igObject *)self, self->_insight, self->_playerNo, 0x5AB);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, message.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)message.p);
                 }
                 self->_nowProcKazu = ObjectList_Count(self->_subWindow);
                 NEXT_PHASE(self)
@@ -1727,7 +1727,7 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                 {
                     igSmartPointer<beNDMWShopSelect01> menu((beNDMWShopSelect01 *)beNDMWShopSelect01_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)menu.p, (igObject *)self, self->_insight, self->_playerNo, 0x60E);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, menu.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)menu.p);
                 }
                 self->_nowProcKazu = ObjectList_Count(self->_subWindow);
                 NEXT_PHASE(self)
@@ -1785,7 +1785,7 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                     igSmartPointer<beNDMWStatusSelectE1> select((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)allocator));
                     beNDMWStatusSelectE1 *selectWindow;
                     beNDMWWindow_BindContext((beNDMWWindow *)select.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, select.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)select.p);
                     selectWindow = select.p;
                     selectWindow->_offsetPos[0] = -121.0f;
                     selectWindow->_offsetPos[1] = 128.0f;
@@ -1867,7 +1867,7 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                     igSmartPointer<beNDMWShopSelect52> quantity((beNDMWShopSelect52 *)beNDMWShopSelect52_Create((int)allocator));
                     beNDMWShopSelect52 *quantityWindow;
                     beNDMWWindow_BindContext((beNDMWWindow *)quantity.p, (igObject *)self, self->_insight, self->_playerNo, DISK_STACK_MAX - self->_diskCnt);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, quantity.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)quantity.p);
                     quantityWindow = quantity.p;
                     quantityWindow->_offsetPos[0] = 52.0f;
                     quantityWindow->_offsetPos[1] = -69.0f;
@@ -1926,7 +1926,7 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                 {
                     igSmartPointer<beNDMWShopSelect00> message((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)message.p, (igObject *)self, self->_insight, self->_playerNo, 0x613);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, message.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)message.p);
                 }
                 self->_nowProcKazu = ObjectList_Count(self->_subWindow);
                 NEXT_PHASE(self)
@@ -1936,7 +1936,7 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                     {
                         igSmartPointer<beNDMWShopSelect01> yesNo((beNDMWShopSelect01 *)beNDMWShopSelect01_Create((int)allocator));
                         beNDMWWindow_BindContext((beNDMWWindow *)yesNo.p, (igObject *)self, self->_insight, self->_playerNo, 0x614);
-                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, yesNo.p);
+                        ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)yesNo.p);
                     }
                     self->_nowProcKazu = ObjectList_Count(self->_subWindow);
                     NEXT_PHASE(self)
@@ -1986,7 +1986,7 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                 {
                     igSmartPointer<beNDMWShopSelect00> message((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)message.p, (igObject *)self, self->_insight, self->_playerNo, self->_st3);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, message.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)message.p);
                 }
                 self->_nowProcKazu = ObjectList_Count(self->_subWindow);
                 NEXT_PHASE(self)
@@ -2006,7 +2006,7 @@ void beNDMWShopCtrl50_Update(beNDMWShopCtrl50 *self) {
                 {
                     igSmartPointer<beNDMWShopCtrlSell> sell((beNDMWShopCtrlSell *)beNDMWShopCtrlSell_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)sell.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, sell.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)sell.p);
                 }
                 self->_nowProcKazu = ObjectList_Count(self->_subWindow);
                 NEXT_PHASE(self)
@@ -2136,7 +2136,7 @@ void beNDMWShopJunk_Update(beNDMWShopJunk *self) {
                 {
                     igSmartPointer<beNDMWShopSelect01> menu((beNDMWShopSelect01 *)beNDMWShopSelect01_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)menu.p, (igObject *)self, self->_insight, self->_playerNo, 0x79e);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, menu.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)menu.p);
                     menu.p->_startPoint = self->_junkMenu;
                     PICK_ALLOCATOR(allocator, self);
                     igSmartPointer<igBoolList> enabled(igBoolList_Create((int)allocator));
@@ -2203,7 +2203,7 @@ void beNDMWShopJunk_Update(beNDMWShopJunk *self) {
                 {
                     igSmartPointer<beNDMWShopCtrlEditBit> amount((beNDMWShopCtrlEditBit *)beNDMWShopCtrlEditBit_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)amount.p, (igObject *)self, self->_insight, self->_playerNo, EDITBIT_MODE_DONATE);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, amount.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)amount.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -2260,7 +2260,7 @@ void beNDMWShopJunk_Update(beNDMWShopJunk *self) {
                 {
                     igSmartPointer<beNDMWShopCtrlSales> sales((beNDMWShopCtrlSales *)beNDMWShopCtrlSales_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)sales.p, (igObject *)self, self->_insight, self->_playerNo, SUBWND_MODE_JUNK);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, sales.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)sales.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -2279,7 +2279,7 @@ void beNDMWShopJunk_Update(beNDMWShopJunk *self) {
                 {
                     igSmartPointer<beNDMWShopSelect00> message((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)message.p, (igObject *)self, self->_insight, self->_playerNo, 0x7b2);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, message.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)message.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -2362,13 +2362,13 @@ void beNDMWShopCtrlA0_Update(beNDMWShopCtrlA0 *self) {
                 {
                     igSmartPointer<beNDMWShopTitle03> shopTitle((beNDMWShopTitle03 *)beNDMWShopTitle03_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)shopTitle.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, shopTitle.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)shopTitle.p);
                 }
                 PICK_ALLOCATOR(allocator, self);
                 {
                     igSmartPointer<beNDMWStatusTitle03> account((beNDMWStatusTitle03 *)beNDMWStatusTitle03_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)account.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, account.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)account.p);
                     SET_OBJECT_REF(self->_account, account.p);
                     beNDMWStatusTitle03_SetCancelPromptEnabled((beNDMWStatusTitle03 *)self->_account, 0);
                 }
@@ -2376,7 +2376,7 @@ void beNDMWShopCtrlA0_Update(beNDMWShopCtrlA0 *self) {
                 {
                     igSmartPointer<beNDMWShopTitle01> serviceTitle((beNDMWShopTitle01 *)beNDMWShopTitle01_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)serviceTitle.p, (igObject *)self, self->_insight, self->_playerNo, self->_entCode);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, serviceTitle.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)serviceTitle.p);
                 }
                 for (i = 0; i < MAX_PLAYERS; i++) {
                     beMessenger_SelectGroup((beMessenger *)self->_messenger, GAMERAM_14);
@@ -2390,7 +2390,7 @@ void beNDMWShopCtrlA0_Update(beNDMWShopCtrlA0 *self) {
                 {
                     igSmartPointer<beNDMWStatusTitle01> playerTitle((beNDMWStatusTitle01 *)beNDMWStatusTitle01_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)playerTitle.p, (igObject *)self, self->_insight, self->_playerNo, 1);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, playerTitle.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)playerTitle.p);
                 }
                 NEXT_STATE(self);
                 return;
@@ -2416,7 +2416,7 @@ void beNDMWShopCtrlA0_Update(beNDMWShopCtrlA0 *self) {
                 {
                     igSmartPointer<beNDMWShopSelect02> menu((beNDMWShopSelect02 *)beNDMWShopSelect02_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)menu.p, (igObject *)self, self->_insight, self->_playerNo, 0x7D3);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, menu.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)menu.p);
                     beNDMWStatusTitle03_SetCancelPromptEnabled((beNDMWStatusTitle03 *)self->_account, 0);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
@@ -2444,7 +2444,7 @@ void beNDMWShopCtrlA0_Update(beNDMWShopCtrlA0 *self) {
                 {
                     igSmartPointer<beNDMWShopSelect02> picker((beNDMWShopSelect02 *)beNDMWShopSelect02_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)picker.p, (igObject *)self, self->_insight, self->_playerNo, -1);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, picker.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)picker.p);
                     {
                         int j;
                         for (j = 0; j < ((igIntList *)self->_playerNoList)->_count; j++) {
@@ -2475,7 +2475,7 @@ void beNDMWShopCtrlA0_Update(beNDMWShopCtrlA0 *self) {
                         {
                             igSmartPointer<beNDMWShopCtrlA1> playerMenu((beNDMWShopCtrlA1 *)beNDMWShopCtrlA1_Create((int)allocator));
                             beNDMWWindow_BindContext((beNDMWWindow *)playerMenu.p, (igObject *)self, self->_insight, IntList_Get(self->_playerNoList, self->_retCode), 0);
-                            ObjectList_AppendRetained((igObjectList *)self->_subWindow, playerMenu.p);
+                            ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)playerMenu.p);
                         }
                         self->_nowProcKazu = CHILD_COUNT(self);
                         ENTER_STEP(self, CARD_STEP_PLAYER_MENU);
@@ -2554,7 +2554,7 @@ void beNDMWShopCtrlA1_Update(beNDMWShopCtrlA1 *self) {
                 {
                     igSmartPointer<beNDMWShopSelect02> menu((beNDMWShopSelect02 *)beNDMWShopSelect02_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)menu.p, (igObject *)self, self->_insight, self->_playerNo, 0x7D5);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, menu.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)menu.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -2596,12 +2596,12 @@ void beNDMWShopCtrlA1_Update(beNDMWShopCtrlA1 *self) {
                     PICK_ALLOCATOR(allocator, self);
                     igSmartPointer<beNDMWShopCtrlA2> opener((beNDMWShopCtrlA2 *)beNDMWShopCtrlA2_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)opener.p, (igObject *)self, self->_insight, self->_playerNo, boosters);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, opener.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)opener.p);
                 } else {
                     PICK_ALLOCATOR(allocator, self);
                     igSmartPointer<beNDMWShopSelect03> message((beNDMWShopSelect03 *)beNDMWShopSelect03_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)message.p, (igObject *)self, self->_insight, self->_playerNo, 0x7D7);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, message.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)message.p);
                     beMessenger_SelectGroup((beMessenger *)self->_messenger, SOUND_8);
                     beMessenger_AppendString((beMessenger *)self->_messenger, CURSOR_NG_4);
                     beMessenger_DispatchSelected((beMessenger *)self->_messenger, PLAY_6);
@@ -2640,7 +2640,7 @@ void beNDMWShopCtrlA1_Update(beNDMWShopCtrlA1 *self) {
                 {
                     igSmartPointer<beNDMWShopSelectA0> pager((beNDMWShopSelectA0 *)beNDMWShopSelectA0_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)pager.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, pager.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)pager.p);
                 }
                 beNDMWShopCtrlA1_ShowFirstAlbumPage(self);
                 self->_nowProcKazu = CHILD_COUNT(self);
@@ -3004,7 +3004,7 @@ void beNDMWShopCtrlA2_Update(beNDMWShopCtrlA2 *self) {
                 {
                     igSmartPointer<beNDMWShopSelect03> description((beNDMWShopSelect03 *)beNDMWShopSelect03_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)description.p, (igObject *)self, self->_insight, self->_playerNo, 0x7DD);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, description.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)description.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -3018,7 +3018,7 @@ void beNDMWShopCtrlA2_Update(beNDMWShopCtrlA2 *self) {
                 {
                     igSmartPointer<beNDMWShopSelect02> question((beNDMWShopSelect02 *)beNDMWShopSelect02_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)question.p, (igObject *)self, self->_insight, self->_playerNo, 0x7D8);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, question.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)question.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -3052,7 +3052,7 @@ void beNDMWShopCtrlA2_Update(beNDMWShopCtrlA2 *self) {
                 {
                     igSmartPointer<beNDMWShopSelect03> result((beNDMWShopSelect03 *)beNDMWShopSelect03_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)result.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, result.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)result.p);
                     SEND_PLAYER_MESSAGE(self, GAMERAM_14, GETPLAYER_10);
                     player = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
                     {
@@ -3236,7 +3236,7 @@ void beNDMWShopCtrlEvolve_Update(beNDMWShopCtrlEvolve *self) {
             {
                 igSmartPointer<beNDMWStatusSelectE1> selector((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)allocator));
                 beNDMWWindow_BindContext((beNDMWWindow *)selector.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained((igObjectList *)self->_subWindow, selector.p);
+                ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)selector.p);
                 {
                     float *offset = selector->_offsetPos.vec;
                     offset[0] = -283.0f;
@@ -3356,7 +3356,7 @@ void beNDMWShopCtrlEvolve_Update(beNDMWShopCtrlEvolve *self) {
                 {
                     igSmartPointer<beNDMWShopSelect01> question((beNDMWShopSelect01 *)beNDMWShopSelect01_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)question.p, (igObject *)self, self->_insight, self->_playerNo, 0x4E7);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, question.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)question.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -3378,7 +3378,7 @@ void beNDMWShopCtrlEvolve_Update(beNDMWShopCtrlEvolve *self) {
                 {
                     igSmartPointer<beNDMWShopSelect00> notice((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)notice.p, (igObject *)self, self->_insight, self->_playerNo, 0x4E9);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, notice.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)notice.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -3390,7 +3390,7 @@ void beNDMWShopCtrlEvolve_Update(beNDMWShopCtrlEvolve *self) {
                 {
                     igSmartPointer<beNDMWShopSelect01> question((beNDMWShopSelect01 *)beNDMWShopSelect01_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)question.p, (igObject *)self, self->_insight, self->_playerNo, 0x4EA);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, question.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)question.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self);
@@ -3415,7 +3415,7 @@ void beNDMWShopCtrlEvolve_Update(beNDMWShopCtrlEvolve *self) {
                 {
                     igSmartPointer<beNDMWShopSelect00> message((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)message.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, message.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)message.p);
                     APPEND_INTERNED(message->_textCloseTypeList, STWINFONT29);
                     APPEND_INTERNED(message->_textCloseNameList, font100_3);
                     beNDMWWindow_RunMessageScript((beNDMWWindow *)self, txt_shop_lua_2, 0x4EC);
@@ -3451,7 +3451,7 @@ void beNDMWShopCtrlEvolve_Update(beNDMWShopCtrlEvolve *self) {
                 {
                     igSmartPointer<beNDMWShopSelect00> message((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)message.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, message.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)message.p);
                     APPEND_INTERNED(message->_textCloseTypeList, STWINFONT29);
                     APPEND_INTERNED(message->_textCloseNameList, font000_5);
                     if (self->_st2 == REFUSE_CURRENT_SPECIES) {
@@ -3641,7 +3641,7 @@ check_first:
     PICK_ALLOCATOR(allocator, self) \
     igSmartPointer<Type> child(Type##_Create((int)allocator)); \
     beNDMWWindow_BindContext((beNDMWWindow *)child.p, (igObject *)self, self->_insight, self->_playerNo, entCode); \
-    ObjectList_AppendRetained((igObjectList *)self->_subWindow, child.p); }
+    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)child.p); }
 /* Remembers the child count and moves on to the phase that waits for the child to close. */
 #define AWAIT_CHILD(window) { (window)->_nowProcKazu = CHILD_COUNT(window); NEXT_PHASE(window) }
 #define CHILD_CLOSED(window) (CHILD_COUNT(window) != (window)->_nowProcKazu)
@@ -3777,7 +3777,7 @@ void beNDMWShopCtrlDigilabo_Update(beNDMWShopCtrlDigilabo *self) {
                     PICK_ALLOCATOR(allocator, self)
                     igSmartPointer<beNDMWStatusCtrlEquip> equip((beNDMWStatusCtrlEquip *)beNDMWStatusCtrlEquip_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)equip.p, (igObject *)self, self->_insight, self->_playerNo, 1);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, equip.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)equip.p);
                     beNDMWWindow_PresentModelAtOrigin((beNDMWWindow *)equip.p, i_messwn_3, 0, SQ_STOPEN_3, SQ_STCLOSE_2);
                 }
                 AWAIT_CHILD(self)
@@ -3838,7 +3838,7 @@ void beNDMWShopCtrlDigilabo_Update(beNDMWShopCtrlDigilabo *self) {
                     PICK_ALLOCATOR(allocator, self)
                     igSmartPointer<beNDMWShopSelect02> chooser((beNDMWShopSelect02 *)beNDMWShopSelect02_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)chooser.p, (igObject *)self, self->_insight, self->_playerNo, -1);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, chooser.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)chooser.p);
                     for (j = 0; j < PLAYER_COUNT(self); j++) {
                         playerNo = &PLAYER_NO(self, j);
                         choices = (igIntList *)chooser.p->_playerNoList;
@@ -3976,7 +3976,7 @@ void beNDMWShopCtrlDigilabo_SnapshotParty(beNDMWShopCtrlDigilabo *self) {
                     IntList_Append(weaponNos.p, weaponNo);
                 }
             }
-            ObjectList_AppendRetained((igObjectList *)self->_wpuNoListList, weaponNos.p);
+            ((Gap::Core::igObjectList *)self->_wpuNoListList)->append((Gap::Core::igObject *)weaponNos.p);
         }
         playerNo += 1;
     } while (playerNo < MAX_PLAYERS);
@@ -4057,7 +4057,7 @@ void beNDMWShopCtrlDigilabo_ShowPlayerTitle(beNDMWWindow *self, int playerNo, in
         PICK_ALLOCATOR(allocator, self)
         igSmartPointer<beNDMWStatusTitle01> created((beNDMWStatusTitle01 *)beNDMWStatusTitle01_Create((int)allocator));
         beNDMWWindow_BindContext((beNDMWWindow *)created.p, (igObject *)self, self->_insight, playerNo, 1);
-        ObjectList_AppendRetained((igObjectList *)self->_subWindow, created.p);
+        ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)created.p);
     } else {
         title->_playerNo = playerNo;
         beNDMWStatusTitle01_ShowShopLayout(title);
@@ -4236,7 +4236,7 @@ void beNDMWShopCtrlEditBit_Update(beNDMWShopCtrlEditBit *self) {
                 PICK_ALLOCATOR(allocator, self)
                 igSmartPointer<beNDMWShopSelect00> confirm((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                 beNDMWWindow_BindContext((beNDMWWindow *)confirm.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained((igObjectList *)self->_subWindow, confirm.p);
+                ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)confirm.p);
                 switch (self->_entCode) {
                 case EDITBIT_DEPOSIT:
                     confirm.p->_entCode = 0x552;
@@ -4387,7 +4387,7 @@ void beNDMWShopCtrlSell_Update(beNDMWShopCtrlSell *self) {
                 {
                 igSmartPointer<beNDMWShopSelectB0> choice((beNDMWShopSelectB0 *)beNDMWShopSelectB0_Create((int)allocator));
                 beNDMWWindow_BindContext((beNDMWWindow *)choice.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained((igObjectList *)self->_subWindow, choice.p);
+                ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)choice.p);
                 switch (self->_st3) {
                 case SELL_CHOICE_NO_DEVICES: {
                     PICK_ALLOCATOR(allocator, self)
@@ -4442,12 +4442,12 @@ void beNDMWShopCtrlSell_Update(beNDMWShopCtrlSell *self) {
                     PICK_ALLOCATOR(allocator, self)
                     igSmartPointer<beNDMWShopCtrlDeviceSell> list((beNDMWShopCtrlDeviceSell *)beNDMWShopCtrlDeviceSell_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)list.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, list.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)list.p);
                 } else {
                     PICK_ALLOCATOR(allocator, self)
                     igSmartPointer<beNDMWShopCtrlDiskSell> list((beNDMWShopCtrlDiskSell *)beNDMWShopCtrlDiskSell_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)list.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, list.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)list.p);
                 }
                 self->_nowProcKazu = ObjectList_Count(self->_subWindow);
                 NEXT_PHASE(self)
@@ -4466,7 +4466,7 @@ void beNDMWShopCtrlSell_Update(beNDMWShopCtrlSell *self) {
                 {
                 igSmartPointer<beNDMWShopSelect00> notice((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                 beNDMWWindow_BindContext((beNDMWWindow *)notice.p, (igObject *)self, self->_insight, self->_playerNo, 0x628);
-                ObjectList_AppendRetained((igObjectList *)self->_subWindow, notice.p);
+                ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)notice.p);
                 }
                 self->_nowProcKazu = ObjectList_Count(self->_subWindow);
                 NEXT_PHASE(self)
@@ -4570,7 +4570,7 @@ void beNDMWShopCtrlDeviceSell_Update(beNDMWShopCtrlDeviceSell *self)
                     igSmartPointer<beNDMWStatusSelectE1> selectWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)allocator));
                     self->_retCode = self->_cursor;
                     beNDMWWindow_BindContext((beNDMWWindow *)selectWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, selectWin.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)selectWin.p);
                     {
                         beNDMWStatusSelectE1 *select = selectWin.p;
                         select->_offsetPos[0] = -121.0f;
@@ -4644,7 +4644,7 @@ void beNDMWShopCtrlDeviceSell_Update(beNDMWShopCtrlDeviceSell *self)
                 {
                     igSmartPointer<beNDMWShopSelect00> priceWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)priceWin.p, (igObject *)self, self->_insight, self->_playerNo, 0x619);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, priceWin.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)priceWin.p);
                 }
             }
                 self->_nowProcKazu = ObjectList_Count(self->_subWindow);
@@ -4656,7 +4656,7 @@ void beNDMWShopCtrlDeviceSell_Update(beNDMWShopCtrlDeviceSell *self)
                     {
                         igSmartPointer<beNDMWShopSelect01> yesNoWin((beNDMWShopSelect01 *)beNDMWShopSelect01_Create((int)allocator));
                         beNDMWWindow_BindContext((beNDMWWindow *)yesNoWin.p, (igObject *)self, self->_insight, self->_playerNo, 0x61A);
-                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, yesNoWin.p);
+                        ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)yesNoWin.p);
                     }
                     self->_nowProcKazu = ObjectList_Count(self->_subWindow);
                     NEXT_PHASE(self)
@@ -4690,7 +4690,7 @@ void beNDMWShopCtrlDeviceSell_Update(beNDMWShopCtrlDeviceSell *self)
                             money = money + price;
                             if (money > MONEY_MAX) money = MONEY_MAX;
                             igProperty_GetRecord((igObject *)player, BIT_7)->_data = money;
-                            ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)devices, (igObject *)device, 0);
+                            ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)devices))->removeByValue((Gap::Core::igObject *)device, 0);
                             beMessenger_SelectGroup((beMessenger *)self->_messenger, SUBWND_8);
                             beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
                             beMessenger_DispatchSelected((beMessenger *)self->_messenger, UPDATE_3);
@@ -5008,7 +5008,7 @@ void beNDMWShopCtrlDiskSell_Update(beNDMWShopCtrlDiskSell *self) {
                 igSmartPointer<beNDMWStatusSelectE1> selector((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)allocator));
                 self->_retCode = self->_cursor;
                 beNDMWWindow_BindContext((beNDMWWindow *)selector.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained((igObjectList *)self->_subWindow, selector.p);
+                ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)selector.p);
                 {
                     beNDMWStatusSelectE1 *window = selector.p;
                     window->_offsetPos[0] = -121.0f;
@@ -5081,7 +5081,7 @@ void beNDMWShopCtrlDiskSell_Update(beNDMWShopCtrlDiskSell *self) {
                 {
                 igSmartPointer<beNDMWShopSelect52> quantity((beNDMWShopSelect52 *)beNDMWShopSelect52_Create((int)allocator));
                 beNDMWWindow_BindContext((beNDMWWindow *)quantity.p, (igObject *)self, self->_insight, self->_playerNo, self->_maxSell);
-                ObjectList_AppendRetained((igObjectList *)self->_subWindow, quantity.p);
+                ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)quantity.p);
                 {
                     beNDMWShopSelect52 *window = quantity.p;
                     window->_offsetPos[0] = 52.0f;
@@ -5126,7 +5126,7 @@ void beNDMWShopCtrlDiskSell_Update(beNDMWShopCtrlDiskSell *self) {
                 {
                 igSmartPointer<beNDMWShopSelect00> question((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                 beNDMWWindow_BindContext((beNDMWWindow *)question.p, (igObject *)self, self->_insight, self->_playerNo, 1561);
-                ObjectList_AppendRetained((igObjectList *)self->_subWindow, question.p);
+                ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)question.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self)
@@ -5136,7 +5136,7 @@ void beNDMWShopCtrlDiskSell_Update(beNDMWShopCtrlDiskSell *self) {
                     {
                     igSmartPointer<beNDMWShopSelect01> answer((beNDMWShopSelect01 *)beNDMWShopSelect01_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)answer.p, (igObject *)self, self->_insight, self->_playerNo, 1562);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, answer.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)answer.p);
                     }
                     self->_nowProcKazu = CHILD_COUNT(self);
                     NEXT_PHASE(self)
@@ -5361,7 +5361,7 @@ void beNDMWShopCtrlSales_Update(beNDMWShopCtrlSales *self) {
                     igSmartPointer<beNDMWStatusSelectE1> selectWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)allocator));
                     self->_retCode = self->_cursor;
                     beNDMWWindow_BindContext((beNDMWWindow *)selectWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, selectWin.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)selectWin.p);
                     {
                         beNDMWStatusSelectE1 *select = selectWin.p;
                         select->_offsetPos[0] = -121.0f;
@@ -5467,7 +5467,7 @@ void beNDMWShopCtrlSales_Update(beNDMWShopCtrlSales *self) {
                         }
                     }
                     beNDMWWindow_BindContext((beNDMWWindow *)questionWin.p, (igObject *)self, self->_insight, self->_playerNo, message);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, questionWin.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)questionWin.p);
                 }
                 self->_nowProcKazu = ObjectList_Count(self->_subWindow);
                 NEXT_PHASE(self)
@@ -5486,7 +5486,7 @@ void beNDMWShopCtrlSales_Update(beNDMWShopCtrlSales *self) {
                             message = 0x740;
                         }
                         beNDMWWindow_BindContext((beNDMWWindow *)yesNoWin.p, (igObject *)self, self->_insight, self->_playerNo, message);
-                        ObjectList_AppendRetained((igObjectList *)self->_subWindow, yesNoWin.p);
+                        ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)yesNoWin.p);
                     }
                     self->_nowProcKazu = ObjectList_Count(self->_subWindow);
                     NEXT_PHASE(self)
@@ -5511,7 +5511,7 @@ void beNDMWShopCtrlSales_Update(beNDMWShopCtrlSales *self) {
                         player = (int)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
                         bits = PlayerInt(player, BIT_7)->_data;
                         PlayerInt(player, BIT_7)->_data = bits - price;
-                        ObjectList_AppendRetained(PlayerFolder(player, DEVICEFOLDER_4), item);
+                        ((Gap::Core::igObjectList *)(PlayerFolder(player, DEVICEFOLDER_4)))->append((Gap::Core::igObject *)item);
                         PICK_ALLOCATOR(allocator, self)
                         {
                             igSmartPointer<beNDMWItemAbilityChip> soldOut((beNDMWItemAbilityChip *)beNDMWItemAbilityChip_Create((int)allocator));
@@ -5542,7 +5542,7 @@ void beNDMWShopCtrlSales_Update(beNDMWShopCtrlSales *self) {
                 {
                     igSmartPointer<beNDMWShopSelect00> messageWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)messageWin.p, (igObject *)self, self->_insight, self->_playerNo, self->_st3);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, messageWin.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)messageWin.p);
                 }
                 self->_nowProcKazu = ObjectList_Count(self->_subWindow);
                 NEXT_PHASE(self)
@@ -5804,7 +5804,7 @@ void beNDMWShopCtrlSales_StashEquipment(void *owner, igObjectList *slots, igObje
     goto enterSlots;
 nextSlot:
     item = ((beNDMWItemBase **)slots->_data)[slot];
-    ObjectList_AppendRetained(stashedSlots, item);
+    ((Gap::Core::igObjectList *)stashedSlots)->append((Gap::Core::igObject *)item);
     if (item != 0) item->_isEquip = 0;
     held = ((igObject **)slots->_data)[slot];
     ReleaseObject(held);
@@ -5821,7 +5821,7 @@ slotsDone:
             goto enterPockets;
 nextPocket:
             item = ((beNDMWItemBase **)pockets->_data)[pocket];
-            ObjectList_AppendRetained(stashedPockets, item);
+            ((Gap::Core::igObjectList *)stashedPockets)->append((Gap::Core::igObject *)item);
             if (item != 0) item->_isEquip = 0;
             held = ((igObject **)pockets->_data)[pocket];
             ReleaseObject(held);
@@ -6043,7 +6043,7 @@ void beNDMWShopCtrlXdataChip_Update(beNDMWShopCtrlXdataChip *self) {
                 beNDMWItemBase *device = ((beNDMWItemBase **)deviceFolder->_data)[folderIndex];
                 if (device != 0) {
                     int isChip = device->_kindNo == CHIP_KIND;
-                    if (isChip) ObjectList_AppendRetained((igObjectList *)self->_itemBaseList, device);
+                    if (isChip) ((Gap::Core::igObjectList *)self->_itemBaseList)->append((Gap::Core::igObject *)device);
                 }
             }
             if (((igObjectList *)self->_itemBaseList)->_count <= 0) {
@@ -6067,7 +6067,7 @@ void beNDMWShopCtrlXdataChip_Update(beNDMWShopCtrlXdataChip *self) {
             {
                 igSmartPointer<beNDMWStatusSelectE1> pageWin((beNDMWStatusSelectE1 *)beNDMWStatusSelectE1_Create((int)allocator));
                 beNDMWWindow_BindContext((beNDMWWindow *)pageWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                ObjectList_AppendRetained((igObjectList *)self->_subWindow, pageWin.p);
+                ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)pageWin.p);
                 {
                     beNDMWStatusSelectE1 *window = pageWin.p;
                     window->_offsetPos[0] = -121.0f;
@@ -6152,7 +6152,7 @@ void beNDMWShopCtrlXdataChip_Update(beNDMWShopCtrlXdataChip *self) {
                     PICK_ALLOCATOR(allocator, self)
                     igSmartPointer<beNDMWShopSelect00> infoWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)infoWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, infoWin.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)infoWin.p);
                     int chipIndex = self->_cursor + self->_nowPage * CHIPS_PER_PAGE;
                     chipStatusManager = igInsightCore_FindManager((igInsightCore *)self->_insight, g_beNDMWStatus_metaObject);
                     chip = CHIP_AT(self, chipIndex);
@@ -6218,7 +6218,7 @@ void beNDMWShopCtrlXdataChip_Update(beNDMWShopCtrlXdataChip *self) {
                 {
                     igSmartPointer<beNDMWShopSelect01> confirmWin((beNDMWShopSelect01 *)beNDMWShopSelect01_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)confirmWin.p, (igObject *)self, self->_insight, self->_playerNo, CHIP_MSG_CONFIRM);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, confirmWin.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)confirmWin.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self)
@@ -6261,7 +6261,7 @@ void beNDMWShopCtrlXdataChip_Update(beNDMWShopCtrlXdataChip *self) {
                 {
                     igSmartPointer<beNDMWShopSelect00> noticeWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)noticeWin.p, (igObject *)self, self->_insight, self->_playerNo, self->_st3);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, noticeWin.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)noticeWin.p);
                     beNDMWShopSelect00 *window = noticeWin.p;
                     const char *panelName = InternLiteral(font100_3);
                     ReleaseString((const char *)window->_panelName);
@@ -6284,7 +6284,7 @@ void beNDMWShopCtrlXdataChip_Update(beNDMWShopCtrlXdataChip *self) {
                 {
                     igSmartPointer<beNDMWShopSelect00> noticeWin((beNDMWShopSelect00 *)beNDMWShopSelect00_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)noticeWin.p, (igObject *)self, self->_insight, self->_playerNo, self->_st3);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, noticeWin.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)noticeWin.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self)
@@ -6457,7 +6457,7 @@ void beNDMWShopDevice_Update(beNDMWShopDevice *self) {
                 {
                     igSmartPointer<beNDMWShopSelect01> menuWin((beNDMWShopSelect01 *)beNDMWShopSelect01_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)menuWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, menuWin.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)menuWin.p);
                     switch (self->_entCode) {
                     case DEVICE_SHOP_WPU: menuWin.p->_entCode = WPU_MENU_MESSAGE; break;
                     case DEVICE_SHOP_APU: menuWin.p->_entCode = APU_MENU_MESSAGE; break;
@@ -6491,7 +6491,7 @@ void beNDMWShopDevice_Update(beNDMWShopDevice *self) {
                 {
                     igSmartPointer<beNDMWShopCtrlSales> salesWin((beNDMWShopCtrlSales *)beNDMWShopCtrlSales_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)salesWin.p, (igObject *)self, self->_insight, self->_playerNo, self->_entCode);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, salesWin.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)salesWin.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self)
@@ -6510,7 +6510,7 @@ void beNDMWShopDevice_Update(beNDMWShopDevice *self) {
                 {
                     igSmartPointer<beNDMWShopCtrlSell> sellWin((beNDMWShopCtrlSell *)beNDMWShopCtrlSell_Create((int)allocator));
                     beNDMWWindow_BindContext((beNDMWWindow *)sellWin.p, (igObject *)self, self->_insight, self->_playerNo, 0);
-                    ObjectList_AppendRetained((igObjectList *)self->_subWindow, sellWin.p);
+                    ((Gap::Core::igObjectList *)self->_subWindow)->append((Gap::Core::igObject *)sellWin.p);
                 }
                 self->_nowProcKazu = CHILD_COUNT(self);
                 NEXT_PHASE(self)

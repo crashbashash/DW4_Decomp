@@ -282,7 +282,7 @@ void beModelCtrlInfoWork_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beModelCtrlInfoWork_Register);
 }
 
-static igMetaObjectCallback g_beModelCtrlInfoWork_callbackList[] = { beDataObjInt_EnsureRegistered, beModelCtrlData_EnsureRegistered, igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, igFloatList_EnsureRegistered, beModelCtrlInfoAI_EnsureRegistered, beModelCtrlNode2_EnsureRegistered, beModelCtrlInfoDataTrc_EnsureRegistered, beModelCtrlMoveObjectList_EnsureRegistered, beModelCtrlInfoRideOn_EnsureRegistered, igGroup_EnsureRegistered, beModelCtrlInfoHitBody_EnsureRegistered, beModelCtrlSubCom_EnsureRegistered, igAABox_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beModelCtrlInfoWork_callbackList[] = { beDataObjInt_EnsureRegistered, beModelCtrlData_EnsureRegistered, igStringRefList_EnsureRegistered, Gap::Core::igIntList::arkRegister, Gap::Core::igFloatList::arkRegister, beModelCtrlInfoAI_EnsureRegistered, beModelCtrlNode2_EnsureRegistered, beModelCtrlInfoDataTrc_EnsureRegistered, beModelCtrlMoveObjectList_EnsureRegistered, beModelCtrlInfoRideOn_EnsureRegistered, igGroup_EnsureRegistered, beModelCtrlInfoHitBody_EnsureRegistered, beModelCtrlSubCom_EnsureRegistered, igAABox_EnsureRegistered, 0 };
 
 CallbackArray *beModelCtrlInfoWork_Register(void) {
     BecLibrary_MarkRegistered();
@@ -552,13 +552,13 @@ void beModelCtrlInfoWork_InitFields(void) {
     labelNameList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
     ((igObjectRefMetaField *)labelNameList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     labelOffsetList = (void *)(igMetaObject_GetFieldAt(meta, base + 9));
-    ((igObjectRefMetaField *)labelOffsetList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)labelOffsetList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xA)))->setDefault(0);
     ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xB)))->setDefault(0);
     ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xC)))->setDefault(0);
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xF)))->setDefault(1);
     pdMoveDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 0x11));
-    ((igObjectRefMetaField *)pdMoveDataList)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)pdMoveDataList)->_metaObject = (int)Gap::Core::igFloatList::getClassTypeLazy();
     ((igRefMetaField *)pdMoveDataList)->_construct = 1;
     ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x12)))->setDefault(0);
     aI = (void *)(igMetaObject_GetFieldAt(meta, base + 0x13));

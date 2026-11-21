@@ -78,7 +78,7 @@ void igPsx2VertexArray1_1_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPsx2VertexArray1_1_Register);
 }
 
-static igMetaObjectCallback g_igPsx2VertexArray1_1_callbackList[] = { igPointerList_EnsureRegistered, igPsx2LongList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igPsx2VertexArray1_1_callbackList[] = { Gap::Core::igPointerList::arkRegister, igPsx2LongList_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2VertexArray1_1_Register(void) {
     FUN_00149bc0();
@@ -151,10 +151,10 @@ void igPsx2VertexArray1_1_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igPsx2VertexArray1_1_ctorTable, 7);
     f1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)f1)->_metaObject = (int)igPointerList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)f1)->_metaObject = (int)Gap::Core::igPointerList::getClassTypeLazy();
     ((igObjectRefMetaField *)f1)->_persistent = 0;
     f2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
-    ((igObjectRefMetaField *)f2)->_metaObject = (int)igPointerList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)f2)->_metaObject = (int)Gap::Core::igPointerList::getClassTypeLazy();
     ((igObjectRefMetaField *)f2)->_persistent = 0;
     f3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
     ((igObjectRefMetaField *)f3)->_metaObject = igPsx2LongList_GetOrCreateMetaObject();

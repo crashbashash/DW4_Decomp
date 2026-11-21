@@ -40,7 +40,7 @@ void beNDMWShopCtrlA1_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWShopCtrlA1_Register);
 }
 
-static igMetaObjectCallback g_beNDMWShopCtrlA1_callbackList[] = { igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWShopCtrlA1_callbackList[] = { igStringRefList_EnsureRegistered, Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *beNDMWShopCtrlA1_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -94,7 +94,7 @@ void beNDMWShopCtrlA1_InitFields(void) {
     ((igObjectRefMetaField *)cardInfoList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)cardInfoList)->_construct = 1;
     cardRamNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)cardRamNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)cardRamNoList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)cardRamNoList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWShopCtrlA1_fieldTable, g_beNDMWShopCtrlA1_fieldHandles, g_beNDMWShopCtrlA1_fieldOffsets, base);
 }

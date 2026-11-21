@@ -347,7 +347,7 @@ void beNDMWPanelObjectWaza_Refresh(beNDMWPanelObjectWaza *self) {
     list->_count = 0;
     int n2 = wazaFolder->_count;
     for (int k = 0; k < n2; k++) {
-        ObjectList_AppendRetained((igObjectList *)self->_listFolder, (igObject *)(int)((igObject **)wazaFolder->_data)[k]);
+        ((Gap::Core::igObjectList *)self->_listFolder)->append((Gap::Core::igObject *)(int)((igObject **)wazaFolder->_data)[k]);
     }
     int cnt = ((igObjectList *)self->_listFolder)->_count;
     igIntList *d = (igIntList *)self->_listColor;
@@ -490,7 +490,7 @@ void beNDMWPanelObjectItem_Refresh(beNDMWPanelObjectItem *self) {
     for (int k = 0; k < n2; k++) {
         beNDMWItemDisk *disk = ((beNDMWItemDisk **)diskFolder->_data)[k];
         if (disk->_kazu != 0) {
-            ObjectList_AppendRetained((igObjectList *)self->_listFolder, (igObject *)(int)disk);
+            ((Gap::Core::igObjectList *)self->_listFolder)->append((Gap::Core::igObject *)(int)disk);
         }
     }
     int cnt = ((igObjectList *)self->_listFolder)->_count;

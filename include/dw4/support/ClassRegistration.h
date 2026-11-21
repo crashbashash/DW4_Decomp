@@ -9,10 +9,8 @@ extern "C" {
 #endif
 
 /* Core */
-void igBoolList_EnsureRegistered(void);
 void igDependencyMetaField_EnsureRegistered(void);
 void igFloatListList_EnsureRegistered(void);
-void igFloatList_EnsureRegistered(void);
 void igLongList_EnsureRegistered(void);
 void igMemoryDescriptorMetaField_EnsureRegistered(void);
 void igMemoryFileEntryList_EnsureRegistered(void);
@@ -20,7 +18,6 @@ void igNamedObjectInfo_EnsureRegistered(void);
 void igNamedObjectList_EnsureRegistered(void);
 void igObjectStringMap_EnsureRegistered(void);
 void igPointerListList_EnsureRegistered(void);
-void igUnsignedShortList_EnsureRegistered(void);
 
 /* Maths */
 void igAABox_EnsureRegistered(void);

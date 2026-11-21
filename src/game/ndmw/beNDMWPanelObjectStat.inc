@@ -65,7 +65,7 @@ void beNDMWPanelObjectStat_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWPanelObjectStat_Register);
 }
 
-static igMetaObjectCallback g_beNDMWPanelObjectStat_callbackList[] = { igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, beNDMWMdlPlayerInfoWork_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWPanelObjectStat_callbackList[] = { igStringRefList_EnsureRegistered, Gap::Core::igIntList::arkRegister, beNDMWMdlPlayerInfoWork_EnsureRegistered, 0 };
 
 CallbackArray *beNDMWPanelObjectStat_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -143,7 +143,7 @@ void beNDMWPanelObjectStat_InitFields(void) {
     listFolder->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     listFolder->_construct = 1;
     listColor = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base + 1));
-    listColor->_metaObject = igIntList_GetOrCreateMetaObject();
+    listColor->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     listColor->_construct = 1;
     playerWork = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base + 2));
     playerWork->_metaObject = (int)beNDMWMdlPlayerInfoWork_GetOrCreateMetaObject();

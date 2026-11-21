@@ -118,7 +118,7 @@ void igActorManager_AddUniqueActor(struct ActorListOwner *self, int actor) {
     /* matching construct: retail keeps the value in a stack slot */
     int value = actor;
     if (indexOf(list, (const int *)&value) < 0) {
-        ObjectList_AppendRetained((igObjectList *)self->f24, (igObject *)actor);
+        ((Gap::Core::igObjectList *)self->f24)->append((Gap::Core::igObject *)actor);
     }
 }
 

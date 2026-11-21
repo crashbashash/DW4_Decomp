@@ -66,7 +66,7 @@ void igStringTable_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igStringTable_Register);
 }
 
-static igMetaObjectCallback g_igStringTable_callbackList[] = { igCharListNoClean_EnsureRegistered, igIntListNoClean_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igStringTable_callbackList[] = { Gap::Core::igCharListNoClean::arkRegister, Gap::Core::igIntListNoClean::arkRegister, 0 };
 
 CallbackArray *igStringTable_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -124,10 +124,10 @@ void igStringTable_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igStringTable_ctorTable, 4);
     field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)igCharListNoClean_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igCharListNoClean::getClassTypeLazy();
     ((igRefMetaField *)field)->_construct = 1;
     field2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
-    ((igObjectRefMetaField *)field2)->_metaObject = (int)igIntListNoClean_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)Gap::Core::igIntListNoClean::getClassTypeLazy();
     igMetaObject_NameFields((igMetaObject *)meta, g_igStringTable_fieldTable, g_igStringTable_fieldDescriptors, g_igStringTable_fieldOffsets, base);
 }
 

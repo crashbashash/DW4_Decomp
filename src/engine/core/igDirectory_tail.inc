@@ -27,9 +27,9 @@ void igRendererOrderedList_Append(igDependencyOrderedList *list, igObject *objec
     int rank = indexOfObject(self->_order, object);
     if (rank < 0) {
         if (unique != 0) {
-            ObjectList_AppendUniqueRetained(self->_objectList, object);
+            ((Gap::Core::igObjectList *)self->_objectList)->appendUnique((Gap::Core::igObject *)object);
         } else {
-            ObjectList_AppendRetained((igObjectList *)self->_objectList, object);
+            ((Gap::Core::igObjectList *)self->_objectList)->append((Gap::Core::igObject *)object);
         }
         return;
     }
@@ -47,7 +47,7 @@ void igRendererOrderedList_Append(igDependencyOrderedList *list, igObject *objec
             return;
         }
     }
-    ObjectList_AppendRetained((igObjectList *)((igObjectListRef &)self->_objectList).get(), object);
+    ((Gap::Core::igObjectList *)(((igObjectListRef &)self->_objectList).get()))->append((Gap::Core::igObject *)object);
 }
 
 static inline int count_of(const igTDataList<DependencyPair> *list) { return list->_count; }
@@ -73,7 +73,7 @@ void igDependencyOrderedList_AddDependency(igDependencyOrderedList *self, void *
 
 void igDependencyOrderedList_Rebuild(igDependencyOrderedListView *owner) {
     igSmartPointer<igObjectList> copy((igObjectList *)Gap::Core::igObjectList::_instantiateFromPool(((Gap::Core::igObject *)owner)->getMemoryPool()));
-    ObjectList_AppendRetainedList((igTDataList<igObject *> *)copy.p, owner->_objectList);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)copy.p))->concatenate((Gap::Core::igObjectList *)owner->_objectList);
     igTDataList<igObject *> *children = owner->_objectList;
     int count = children->_count;
     int i;
@@ -121,7 +121,7 @@ void igRendererOrderedList_Clear(igDependencyOrderedList *self) {
 }
 
 igResult igObjectList_RemoveRetained(igDependencyOrderedList *list, igObject *object) {
-    return ObjectList_RemoveFirstRetained(((igDependencyOrderedListView *)list)->_objectList, object, 0);
+    return ((Gap::Core::igObjectList *)(((igDependencyOrderedListView *)list)->_objectList))->removeByValue((Gap::Core::igObject *)object, 0);
 }
 
 igResult igDependencyOrderedList_RemoveDependency(igDependencyOrderedList *list, void *dependent, void *dependency) {

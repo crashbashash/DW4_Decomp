@@ -78,7 +78,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
                     ((Pd *)controller.get())->vX((s3 | (s1 * 2)) & 0xFFFF);
                     controller.get()->_dmaBuffer = mem;
                     ((Pe *)controller.get())->vX(arg1);
-                    ObjectList_AppendRetained((igObjectList *)((int)(igObject *)arg0->_controllers), (igObject *)((int)controller.get()));
+                    ((Gap::Core::igObjectList *)((int)(igObject *)arg0->_controllers))->append((Gap::Core::igObject *)((int)controller.get()));
                 }
             }
             s3 += 1;

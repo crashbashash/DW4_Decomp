@@ -136,7 +136,7 @@ igDataPumpList *igDataPumpInfo_GetList(igDataPumpInfo *self)
 }
 
 int igDataPumpInfo_Append(igDataPumpInfo *self, igObject *pump) {
-    ObjectList_AppendRetained((igObjectList *)self->_dataPumpList, pump);
+    ((Gap::Core::igObjectList *)self->_dataPumpList)->append((Gap::Core::igObject *)pump);
     return 1;
 }
 
@@ -157,7 +157,7 @@ int igDataPumpManager_AppendList(igDataPumpManager *self, igDataPumpList *list) 
 
     n = list->_count;
     for (i = 0; i < n; i++) {
-        ObjectList_AppendRetained((igObjectList *)self->_dataPumpList, ((igObject **)list->_data)[i]);
+        ((Gap::Core::igObjectList *)self->_dataPumpList)->append((Gap::Core::igObject *)(((igObject **)list->_data)[i]));
     }
     return 1;
 }

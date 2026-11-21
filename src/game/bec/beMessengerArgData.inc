@@ -58,7 +58,7 @@ int beMessengerArgData_GetVTable(void) {
 
 void beMessengerArgData_EnsureRegistered(){igMetaObject_RunStaticInit(beMessengerArgData_Register);}
 
-static igMetaObjectCallback g_beMessengerArgData_callbackList[] = { igBoolList_EnsureRegistered, igIntList_EnsureRegistered, igFloatList_EnsureRegistered, igLongList_EnsureRegistered, igVec3fList_EnsureRegistered, igMatrix44fList_EnsureRegistered, Gap::Core::igObjectList::arkRegister, igStringRefList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beMessengerArgData_callbackList[] = { Gap::Core::igBoolList::arkRegister, Gap::Core::igIntList::arkRegister, Gap::Core::igFloatList::arkRegister, igLongList_EnsureRegistered, igVec3fList_EnsureRegistered, igMatrix44fList_EnsureRegistered, Gap::Core::igObjectList::arkRegister, igStringRefList_EnsureRegistered, 0 };
 
 CallbackArray *beMessengerArgData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -147,13 +147,13 @@ void beMessengerArgData_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMessengerArgData_ctorTable, 0xA);
     boolList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)boolList)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)boolList)->_metaObject = (int)Gap::Core::igBoolList::getClassTypeLazy();
     ((igRefMetaField *)boolList)->_construct = 1;
     intList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)intList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)intList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)intList)->_construct = 1;
     floatList = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)floatList)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)floatList)->_metaObject = (int)Gap::Core::igFloatList::getClassTypeLazy();
     ((igRefMetaField *)floatList)->_construct = 1;
     longList = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
     ((igObjectRefMetaField *)longList)->_metaObject = (int)igLongList_GetOrCreateMetaObject();

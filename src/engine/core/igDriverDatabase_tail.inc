@@ -6,9 +6,9 @@ void igDriverDatabase_InitDefaults(igDriverDatabase *database) {
     igObject_InitDefaults((igObject *)database);
     igRegistry_GetValueBool(g_objectSystem->configRegistry, 2,"driverDatabaseVerbose", &verbose, database->_verbose, 1);
     database->_verbose = verbose;
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)database->_currentProperties, 13);
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)database->_subPropertyNames, 13);
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)database->_subPropertyValues, 13);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)database->_currentProperties))->setCount(13);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)database->_subPropertyNames))->setCount(13);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)database->_subPropertyValues))->setCount(13);
     i = 0;
     do {
         {

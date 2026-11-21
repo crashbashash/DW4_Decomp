@@ -36,7 +36,7 @@ void beKeyboardReceiver_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beKeyboardReceiver_Register);
 }
 
-static igMetaObjectCallback g_beKeyboardReceiver_callbackList[] = { igBoolList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beKeyboardReceiver_callbackList[] = { Gap::Core::igBoolList::arkRegister, 0 };
 
 CallbackArray *beKeyboardReceiver_Register(void) {
     BecLibrary_MarkRegistered();
@@ -82,7 +82,7 @@ void beKeyboardReceiver_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beKeyboardReceiver_ctorTable, 1);
     keyboard = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)keyboard)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)keyboard)->_metaObject = (int)Gap::Core::igBoolList::getClassTypeLazy();
     ((igRefMetaField *)keyboard)->_construct = 1;
     igMetaObject_NameFields(meta, g_beKeyboardReceiver_fieldTable, g_beKeyboardReceiver_fieldHandles, g_beKeyboardReceiver_fieldOffsets, base);
 }

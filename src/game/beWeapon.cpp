@@ -97,7 +97,7 @@ void beWeapon_OnAddRam(beWeapon *self, beWeaponInfoRam *ram) {
             allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
             allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             ObjectRef data(beWeaponAttachData_Create(allocator));
-            ObjectList_AppendRetained((igObjectList *)self->_attachDataList, data.p);
+            ((Gap::Core::igObjectList *)self->_attachDataList)->append((Gap::Core::igObject *)data.p);
         }
     }
     beMessenger_RegisterReceiverFromInfo((beMessenger *)self->_messenger, (beBaseInfoRam *)ram, "PLAYERARMS");
@@ -143,8 +143,8 @@ int beWeapon_OnMessageText(beWeapon *self, beWeaponInfoRam *ram, const char *mes
                         igAppearance_AttachGraph((igAppearance *)(((igObject **)appearances->_data)[k]), (igNode *)boneSelect.p);
                     }
                     beWeaponAttachData *attach = ((beWeaponAttachData **)((beWeaponAttachDataList *)self->_attachDataList)->_data)[ram->_ramNo];
-                    ObjectList_AppendRetained((igObjectList *)attach->_boneSelectList, (igObject *)boneSelect.p);
-                    ObjectList_AppendRetained((igObjectList *)attach->_appearanceListList, (igObject *)appearances);
+                    ((Gap::Core::igObjectList *)attach->_boneSelectList)->append((Gap::Core::igObject *)boneSelect.p);
+                    ((Gap::Core::igObjectList *)attach->_appearanceListList)->append((Gap::Core::igObject *)appearances);
                 }
             }
         }

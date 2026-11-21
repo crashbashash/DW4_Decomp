@@ -43,7 +43,7 @@ void beNDMWShopCtrlSales_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWShopCtrlSales_Register);
 }
 
-static igMetaObjectCallback g_beNDMWShopCtrlSales_callbackList[] = { beNDMWItemBaseList_EnsureRegistered, igBoolList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWShopCtrlSales_callbackList[] = { beNDMWItemBaseList_EnsureRegistered, Gap::Core::igBoolList::arkRegister, 0 };
 
 CallbackArray *beNDMWShopCtrlSales_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -96,7 +96,7 @@ void beNDMWShopCtrlSales_InitFields(void) {
     salesItemList = (void *)(igMetaObject_GetFieldAt(meta, base));
     ((igObjectRefMetaField *)salesItemList)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();
     decideList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)decideList)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)decideList)->_metaObject = (int)Gap::Core::igBoolList::getClassTypeLazy();
     ((igRefMetaField *)decideList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWShopCtrlSales_fieldTable, g_beNDMWShopCtrlSales_fieldHandles, g_beNDMWShopCtrlSales_fieldOffsets, base);
 }

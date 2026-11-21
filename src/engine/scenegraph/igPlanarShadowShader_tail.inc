@@ -100,9 +100,9 @@ void igPlanarShadowShader_userDestruct(T_1d39b0 *arg0)
 }
 
 void Gap__Sg__igPlanarShadowShader__vfunc_39(igPlanarShadowShader *arg0, int geom, int arg2, int arg3) {
-    ObjectList_AppendRetained((igObjectList *)arg0->_geoms, (igObject *)geom);
-    ObjectList_AppendRetained((igObjectList *)arg0->_mats, (igObject *)arg2);
-    ObjectList_AppendRetained((igObjectList *)arg0->_blendmats, (igObject *)arg3);
+    ((Gap::Core::igObjectList *)arg0->_geoms)->append((Gap::Core::igObject *)geom);
+    ((Gap::Core::igObjectList *)arg0->_mats)->append((Gap::Core::igObject *)arg2);
+    ((Gap::Core::igObjectList *)arg0->_blendmats)->append((Gap::Core::igObject *)arg3);
 }
 
 void FUN_001d3e20(igPlanarShadowShader *arg0, igCommonTraversal *arg1) {

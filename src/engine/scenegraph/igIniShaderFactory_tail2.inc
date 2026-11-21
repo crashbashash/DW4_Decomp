@@ -151,7 +151,7 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
                 SET_OUT(result);
                 FINISH();
             }
-            entry = ((IniFieldEntry *)igProperty_FindByName((igObjectList *)source->entries, (igMetaField *)g_igIniShaderFactory_implementationNameMetaField, name));
+            entry = ((IniFieldEntry *)((Gap::Core::igObjectList *)source->entries)->search((Gap::Core::igStringMetaField *)g_igIniShaderFactory_implementationNameMetaField, name));
             if (entry != 0) {
                 USE_CACHE(entry->cache);
             } else {
@@ -253,7 +253,7 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
             if (source == 0 || ((Gap::Core::igObject *)source)->isOfType(g_igShaderInfo_metaObject) == 0) {
                 return igSmartPointer<IniSectionText>((IniSectionText *)0, kRetainReference);
             }
-            entry = ((IniFieldEntry_1cdbb0 *)igProperty_FindByName((igObjectList *)source->entries, (igMetaField *)g_igIniShaderFactory_implementationNameMetaField, name));
+            entry = ((IniFieldEntry_1cdbb0 *)((Gap::Core::igObjectList *)source->entries)->search((Gap::Core::igStringMetaField *)g_igIniShaderFactory_implementationNameMetaField, name));
             if (entry != 0) {
                 cache = entry->cache;
             } else {

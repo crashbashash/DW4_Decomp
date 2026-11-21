@@ -132,7 +132,7 @@ int igExternalDirEntry_ResolveDirectory(igExternalDirEntryView *self, int loadFu
         entry->_refType = 0;
         entry->SetRef(self->_ref);
         entry->_index = ((igDirectoryView *)directory.get())->_count;
-        ObjectList_AppendRetained((igObjectList *)directory.get(), (igObject *)entry.get());
+        ((Gap::Core::igObjectList *)(directory.get()))->append((Gap::Core::igObject *)entry.get());
         return 1;
     }
     return 0;

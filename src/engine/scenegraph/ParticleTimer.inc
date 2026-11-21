@@ -179,9 +179,9 @@ void FUN_001c5660(Z_1c5660 *arg0, int arg1, int arg2) {
     }
 }
 
-int FUN_001c5730(int *p, igObject *object)
+void FUN_001c5730(int *p, igObject *object)
 {
-    return ObjectList_AppendRetained(*(igObjectList **)((char *)p + 8), object);
+    ((Gap::Core::igObjectList *)(*(igObjectList **)((char *)p + 8)))->append((Gap::Core::igObject *)object);
 }
 
 void FUN_001c5740(U_1c5740 *arg0, T_1c5740 *arg1) {
@@ -207,14 +207,14 @@ void igGraphPath_SetNodes(igGraphPath *path, igNodeList *nodes) {
         l->arr[j] = 0;
     }
     l->n = 0;
-    ObjectList_AppendRetainedList((igTDataList<igObject *> *)path->_path, (igTDataList<igObject *> *)nodes);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)path->_path))->concatenate((Gap::Core::igObjectList *)((igTDataList<igObject *> *)nodes));
 }
 
 void FUN_001c5870(void *arg0, int arg1) {
     int idx, tbl;
     tbl = *(int *)(*(int *)((char *)((void *)igGraphPath_GetTail((igGraphPath *)arg0)) + 28) + 16);
     idx = arg1 * 4;
-    ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)(arg0) + 8)), (igObject *)(*(int *)(tbl + idx)));
+    ((Gap::Core::igObjectList *)(*(int *)((char *)(arg0) + 8)))->append((Gap::Core::igObject *)(*(int *)(tbl + idx)));
 }
 
 int FUN_001c58c0(T_1c58c0 *arg0) {

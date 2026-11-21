@@ -46,7 +46,7 @@ void beMatCtrlInfoWork_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beMatCtrlInfoWork_Register);
 }
 
-static igMetaObjectCallback g_beMatCtrlInfoWork_callbackList[] = { igBoolList_EnsureRegistered, igIntListList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beMatCtrlInfoWork_callbackList[] = { Gap::Core::igBoolList::arkRegister, igIntListList_EnsureRegistered, 0 };
 
 CallbackArray *beMatCtrlInfoWork_Register(void) {
     BecLibrary_MarkRegistered();
@@ -97,7 +97,7 @@ void beMatCtrlInfoWork_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMatCtrlInfoWork_ctorTable, 2);
     runFlagList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)runFlagList)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)runFlagList)->_metaObject = (int)Gap::Core::igBoolList::getClassTypeLazy();
     ((igRefMetaField *)runFlagList)->_construct = 1;
     matOnPlLists = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)matOnPlLists)->_metaObject = (int)igIntListList_GetOrCreateMetaObject();

@@ -36,10 +36,10 @@ void igObjectSystem_Startup(ObjectSystemView *self) {
     igAliasMemoryPool_EnsureRegistered();
     igPageMemoryPool_EnsureRegistered();
     igMemoryDictionary_EnsureRegistered();
-    igCharList_EnsureRegistered();
-    igCharListNoClean_EnsureRegistered();
-    igIntList_EnsureRegistered();
-    igIntListNoClean_EnsureRegistered();
+    Gap::Core::igCharList::arkRegister();
+    Gap::Core::igCharListNoClean::arkRegister();
+    Gap::Core::igIntList::arkRegister();
+    Gap::Core::igIntListNoClean::arkRegister();
     igUnsignedIntList_EnsureRegistered();
     igUnsignedIntListNoClean_EnsureRegistered();
     igStringTable_EnsureRegistered();

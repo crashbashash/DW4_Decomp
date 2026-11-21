@@ -43,7 +43,7 @@ void beNDMWStatusCtrlSendBit_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWStatusCtrlSendBit_Register);
 }
 
-static igMetaObjectCallback g_beNDMWStatusCtrlSendBit_callbackList[] = { igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWStatusCtrlSendBit_callbackList[] = { Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *beNDMWStatusCtrlSendBit_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -101,7 +101,7 @@ void beNDMWStatusCtrlSendBit_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWStatusCtrlSendBit_ctorTable, 4);
     playerNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)playerNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)playerNoList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beNDMWStatusCtrlSendBit_fieldTable, g_beNDMWStatusCtrlSendBit_fieldHandles, g_beNDMWStatusCtrlSendBit_fieldOffsets, base);
 }
 

@@ -47,7 +47,7 @@ int beNDMWAfsSetup_AddInfo(beNDMWAfsSetup *self, igObject *info) {
     if (((Gap::Core::igObject *)info)->isOfType(g_beNDMWAfsSetupInfo_metaObject)) {
         beCri *cri = (beCri *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beCri_metaObject);
         if (cri == 0) return 0;
-        ObjectList_AppendRetained((igObjectList *)self->_infoList, info);
+        ((Gap::Core::igObjectList *)self->_infoList)->append((Gap::Core::igObject *)info);
         igInsightCore_AddToScheduler((igInsightCore *)self->_insight, (igObject *)self);
         beNDMWAfsSetupInfo *setup = (beNDMWAfsSetupInfo *)info;
         igObjectList *files = (igObjectList *)setup->_dataList;

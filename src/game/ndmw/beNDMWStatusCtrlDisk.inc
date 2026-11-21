@@ -63,7 +63,7 @@ void beNDMWStatusCtrlDisk_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWStatusCtrlDisk_Register);
 }
 
-static igMetaObjectCallback g_beNDMWStatusCtrlDisk_callbackList[] = { igIntList_EnsureRegistered, beNDMWItemBaseList_EnsureRegistered, beNDMWItemDisk_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWStatusCtrlDisk_callbackList[] = { Gap::Core::igIntList::arkRegister, beNDMWItemBaseList_EnsureRegistered, beNDMWItemDisk_EnsureRegistered, 0 };
 
 CallbackArray *beNDMWStatusCtrlDisk_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -131,7 +131,7 @@ void beNDMWStatusCtrlDisk_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWStatusCtrlDisk_ctorTable, 6);
     playerNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)playerNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)playerNoList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)playerNoList)->_construct = 1;
     diskList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
     ((igObjectRefMetaField *)diskList)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();

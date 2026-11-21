@@ -96,7 +96,7 @@ void igEventTracker_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igEventTracker_Register);
 }
 
-static igMetaObjectCallback g_igEventTracker_callbackList[] = { igStringTable_EnsureRegistered, igCallStackTable_EnsureRegistered, igLocationTable_EnsureRegistered, igCharListNoClean_EnsureRegistered, igIntListNoClean_EnsureRegistered, igCallStackTracer_EnsureRegistered, igSemaphore_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igEventTracker_callbackList[] = { igStringTable_EnsureRegistered, igCallStackTable_EnsureRegistered, igLocationTable_EnsureRegistered, Gap::Core::igCharListNoClean::arkRegister, Gap::Core::igIntListNoClean::arkRegister, igCallStackTracer_EnsureRegistered, igSemaphore_EnsureRegistered, 0 };
 
 CallbackArray *igEventTracker_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -316,10 +316,10 @@ void igEventTracker_InitFields(void) {
     ((igObjectRefMetaField *)locations)->_metaObject = (int)igLocationTable_GetOrCreateMetaObject();
     ((igRefMetaField *)locations)->_construct = 1;
     eventRecords = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x11));
-    ((igObjectRefMetaField *)eventRecords)->_metaObject = (int)igCharListNoClean_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)eventRecords)->_metaObject = (int)Gap::Core::igCharListNoClean::getClassTypeLazy();
     ((igRefMetaField *)eventRecords)->_construct = 1;
     hashIndex = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x12));
-    ((igObjectRefMetaField *)hashIndex)->_metaObject = (int)igIntListNoClean_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)hashIndex)->_metaObject = (int)Gap::Core::igIntListNoClean::getClassTypeLazy();
     ((igRefMetaField *)hashIndex)->_construct = 1;
     callStackTracer = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x14));
     ((igObjectRefMetaField *)callStackTracer)->_metaObject = (int)igCallStackTracer_GetOrCreateMetaObject();

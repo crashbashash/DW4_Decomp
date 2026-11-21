@@ -106,7 +106,7 @@ void beDemoManager_SwitchEnd(beDemoManager *self) {
             allocator = allocatorFor(self);
             igSmartPointer<beDemoKeepMes> mes(beDemoKeepMes_CreateInstance(allocator));
             mes->_kind = DEMO_MES_SWITCH_END;
-            ObjectList_AppendRetained((igObjectList *)work->_keepMesList, (igObject *)mes.p);
+            ((Gap::Core::igObjectList *)work->_keepMesList)->append((Gap::Core::igObject *)mes.p);
         }
     }
 }
@@ -121,7 +121,7 @@ void beDemoManager_Case(beDemoManager *self, int ramNo) {
         igSmartPointer<beDemoKeepMes> mes(beDemoKeepMes_CreateInstance(allocator));
         mes->_kind = DEMO_MES_CASE;
         mes->_ramNo = ramNo;
-        ObjectList_AppendRetained((igObjectList *)work->_keepMesList, (igObject *)mes.p);
+        ((Gap::Core::igObjectList *)work->_keepMesList)->append((Gap::Core::igObject *)mes.p);
     }
 }
 
@@ -136,7 +136,7 @@ void beDemoManager_AddKeepMes(beDemoManager *self, int kind, const char *group, 
     mes->_ramNo = ramNo;
     setKeepMesString(mes, &beDemoKeepMes::_message, message);
     setKeepMesString(mes, &beDemoKeepMes::_mesParam, param);
-    ObjectList_AppendRetained((igObjectList *)work->_keepMesList, (igObject *)mes.p);
+    ((Gap::Core::igObjectList *)work->_keepMesList)->append((Gap::Core::igObject *)mes.p);
 }
 
 void beDemoManager_SetLua(beDemoManager *self, const char *chunk) {
@@ -151,7 +151,7 @@ void beDemoManager_SetLua(beDemoManager *self, const char *chunk) {
     token = StringPool_Intern((StringPool *)stringPool(), chunk);
     releaseString((char *)target->_mesParam);
     target->_mesParam = (int)token;
-    ObjectList_AppendRetained((igObjectList *)work->_keepMesList, (igObject *)mes.p);
+    ((Gap::Core::igObjectList *)work->_keepMesList)->append((Gap::Core::igObject *)mes.p);
 }
 
 void beDemoManager_MsgBox(beDemoManager *self, const char *text, int ramNo) {
@@ -160,14 +160,14 @@ void beDemoManager_MsgBox(beDemoManager *self, const char *text, int ramNo) {
     mes->_kind = DEMO_MES_MSGBOX;
     setKeepMesString(mes, &beDemoKeepMes::_mesParam, text);
     mes->_ramNo = ramNo;
-    ObjectList_AppendRetained((igObjectList *)work->_keepMesList, (igObject *)mes.p);
+    ((Gap::Core::igObjectList *)work->_keepMesList)->append((Gap::Core::igObject *)mes.p);
 }
 
 /* Hands the build data over to play, unless a switch is still open. */
 void beDemoManager_Run(beDemoManager *self) {
     igObject *work = (igObject *)self->_buildData;
     if ((work != 0) && (self->_turningOK != 1)) {
-        ObjectList_AppendRetained((igObjectList *)self->_activeDataList, work);
+        ((Gap::Core::igObjectList *)self->_activeDataList)->append((Gap::Core::igObject *)work);
         igRelease((igObject *)self->_buildData);
         self->_buildData = 0;
         self->_turningOK = 0;

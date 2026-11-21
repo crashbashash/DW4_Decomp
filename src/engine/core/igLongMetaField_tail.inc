@@ -72,7 +72,7 @@ void igMedia_CreateMediaList(void) {
 }
 
 void igMedia_AddMedia(int media) {
-    ObjectList_AppendRetained(g_fileDeviceList.p, (igObject *)media);
+    ((Gap::Core::igObjectList *)g_fileDeviceList.p)->append((Gap::Core::igObject *)media);
 }
 
 void igMedia_ReleaseMediaList(void) {

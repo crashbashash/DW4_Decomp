@@ -265,7 +265,7 @@ void igSorter_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igSorter_Register);
 }
 
-static igMetaObjectCallback g_igSorter_callbackList[] = { igDisplayListAttr_EnsureRegistered, igRenderPackagePool_EnsureRegistered, igNonRefCountedAttrList_EnsureRegistered, igRenderPackageList_EnsureRegistered, igIntList_EnsureRegistered, Gap::Attrs::igDepthWriteStateAttr::arkRegister, igCullFaceAttr_EnsureRegistered, igRenderPackage_EnsureRegistered, igGeometry_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igSorter_callbackList[] = { igDisplayListAttr_EnsureRegistered, igRenderPackagePool_EnsureRegistered, igNonRefCountedAttrList_EnsureRegistered, igRenderPackageList_EnsureRegistered, Gap::Core::igIntList::arkRegister, Gap::Attrs::igDepthWriteStateAttr::arkRegister, igCullFaceAttr_EnsureRegistered, igRenderPackage_EnsureRegistered, igGeometry_EnsureRegistered, 0 };
 
 CallbackArray *igSorter_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -505,13 +505,13 @@ void igSorter_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)igDisplayListAttr_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_10)->_construct = 1;
     temp_s2_11 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB)));
-    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s2_11)->_construct = 1;
     temp_s2_12 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xC)));
-    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s2_12)->_construct = 1;
     temp_s2_13 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xD)));
-    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s2_13)->_construct = 1;
     temp_s2_14 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xE)));
     ((igObjectRefMetaField *)temp_s2_14)->_metaObject = (int)Gap::Attrs::igDepthWriteStateAttr::getClassTypeLazy();
@@ -529,7 +529,7 @@ void igSorter_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_18)->_metaObject = (int)igRenderPackageList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_18)->_construct = 1;
     temp_s2_19 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x14)));
-    ((igObjectRefMetaField *)temp_s2_19)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_19)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s2_19)->_construct = 1;
     temp_s2_20 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x15)));
     ((igObjectRefMetaField *)temp_s2_20)->_metaObject = (int)igDisplayListAttr_GetOrCreateMetaObject();
@@ -541,10 +541,10 @@ void igSorter_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_22)->_metaObject = (int)igGeometry_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_22)->_construct = 1;
     temp_s2_23 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x18)));
-    ((igObjectRefMetaField *)temp_s2_23)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_23)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s2_23)->_construct = 1;
     temp_s2_24 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x19)));
-    ((igObjectRefMetaField *)temp_s2_24)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_24)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s2_24)->_construct = 1;
     temp_s2_25 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1D)));
     ((igObjectRefMetaField *)temp_s2_25)->_metaObject = (int)igRenderPackage_GetOrCreateMetaObject();

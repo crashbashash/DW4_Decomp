@@ -117,7 +117,7 @@ igResult igIGBFile_BuildMetaObjectList(igIGBFileView *self) {
     meta = g_igDirEntry_metaObject;
     n = ((unsigned int)igMetaObject_CountTree((igMetaObject *)meta));
     for (i = 0; i < n; i++) {
-        ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)self->_metaObjectListInFile, (igObject *)(((int)igMetaObject_GetTreeNode((igMetaObject *)meta, (int)i))));
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->_metaObjectListInFile))->appendUnique((Gap::Core::igObject *)(((int)igMetaObject_GetTreeNode((igMetaObject *)meta, (int)i))));
     }
     return g_resultSuccess;
 }
@@ -621,7 +621,7 @@ int igIGBFile_WriteFile(igIGBFileView *self, const char *fileName) {
     igResult infoResult = igIGBFile_AddInfoListEntry(self);
     pp = (int *)((int)&infoResult + 0);
     if (*pp == g_resultFailure.v) return 0;
-    igObjectList_SortByField((igTDataList<igObject *> *)self, (igMetaField *)g_igDirEntry_refField);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self))->bubbleSort((Gap::Core::igRefMetaField *)g_igDirEntry_refField);
     a = (igObject *)Gap::Core::igIntMetaField::getMetaField();
     if (a != 0) a->_refCount = a->_refCount + 1;
     t = (igObject *)self->imf;
@@ -867,13 +867,13 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
                 majorVersion = 1;
             }
             if (majorVersion == meta->_majorVersion && record->minorVersion == meta->_minorVersion) {
-                ObjectList_AppendRetained(file->_metaObjectListInFile, (igObject *)meta);
+                ((Gap::Core::igObjectList *)file->_metaObjectListInFile)->append((Gap::Core::igObject *)meta);
                 if (hasFields) {
                     igSmartPointer<igShortListData> slots(igShortList_Create(file->_temporaryMemoryPool));
                     MetaTableField *field;
                     int j;
                     setCapacity(slots.p, record->fieldCount);
-                    ObjectList_AppendRetained((igObjectList *)file->_metaFieldPerObjectIndices, (igObject *)slots.p);
+                    ((Gap::Core::igObjectList *)file->_metaFieldPerObjectIndices)->append((Gap::Core::igObject *)slots.p);
                     field = (MetaTableField *)(name + record->nameSize);
                     j = 0;
                     if (file->_endianSwap != 0) {
@@ -920,7 +920,7 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
             blind = (igMetaObject *)igMetaObject_Create((igMemoryPoolView *)Memory_GetDefaultAllocator());
             igMetaObject_SetName(blind, (int)name);
             igMetaObject_InheritFromBase(blind, parent);
-            ObjectList_AppendRetained(file->_metaObjectListInFile, (igObject *)blind);
+            ((Gap::Core::igObjectList *)file->_metaObjectListInFile)->append((Gap::Core::igObject *)blind);
             field = (MetaTableField *)(name + record->nameSize);
             if (file->_endianSwap != 0) {
                 Gap::Core::igShortMetaField::getMetaField()->endianSwapMemory(field, fieldWords * record->fieldCount);
@@ -959,7 +959,7 @@ igResult igIGBFile_ReadMetaObjectList(igIGBFileView *file) {
             field = (MetaTableField *)(name + record->nameSize);
             {
                 igSmartPointer<igShortListData> slots(igShortList_Create(file->_temporaryMemoryPool));
-                ObjectList_AppendRetained((igObjectList *)file->_metaFieldPerObjectIndices, (igObject *)slots.p);
+                ((Gap::Core::igObjectList *)file->_metaFieldPerObjectIndices)->append((Gap::Core::igObject *)slots.p);
                 for (j = 0; j < record->fieldCount; j++) {
                     int firstOwnSlot = record->persistCount;
                     int owner = i;
@@ -1090,7 +1090,7 @@ igResult igIGBFile_ReadObjectSection(igIGBFileView *file) {
         if ((list->_refCount & 0x7FFFFF) == 0) igObject_Destroy(list);
     }
     file->_uniqueEntryList = (igObjectList *)igDirectory_Create(pool);
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)file->_uniqueEntryList, file->_entryCount);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)file->_uniqueEntryList))->setCount(file->_entryCount);
     if (igIGBFile_ReadNextChunk(file) == g_resultFailure) {
         return g_resultFailure;
     }
@@ -1142,7 +1142,7 @@ igResult igIGBFile_ReadObjectIndex(igIGBFileView *self) {
         return g_resultFailure;
     }
     pos = 8;
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)self, count);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self))->setCount(count);
     for (; pos < self->_indexBufferSize; pos += chunk) {
         int rest = self->_indexBufferSize - pos;
         chunk = self->_chunkSize & ~1;
@@ -1225,7 +1225,7 @@ igResult igIGBFile_ReadObjectSectionOld(igIGBFileView *file) {
     if (igIGBFile_ReadNextChunk(file) == g_resultFailure) {
         return g_resultFailure;
     }
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)file, file->_entryCount);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)file))->setCount(file->_entryCount);
     for (i = 0; i < file->_entryCount; i++) {
         SectionObjectRef object = igIGBFile_ReadObject((igIGBFile *)file);
         if (object.p == 0) {
@@ -1330,7 +1330,7 @@ igResult igIGBFile_ReadMetaFieldList(igIGBFileView *self) {
             if (strcmp((const char *)t->GetMeta()->_name, name) == 0) { found = true; break; }
         }
         if (!found) { t = 0; } else { t->GetMeta(); }
-        ObjectList_AppendRetained(self->_metaFieldListInFile, (igObject *)t);
+        ((Gap::Core::igObjectList *)self->_metaFieldListInFile)->append((Gap::Core::igObject *)t);
         name += sizes[i * 3];
     }
     self->_mfBuf = 0;
@@ -1585,7 +1585,7 @@ igResult igIGBFile_ReadExternalDirectories(igIGBFileView *self) {
             { char *n; n = self->_basePath; dir = self->_managingResource; setPooled((char **)&dir->_relativeFilePath, n); }
         }
         for (i = 0; i < count; i++) {
-            ObjectList_AppendRetained((igObjectList *)self->_externalDirectoryList, (igObject *)(((int)igResource_GetOrLoadDirectory(self->_managingResource, (int)name))));
+            ((Gap::Core::igObjectList *)self->_externalDirectoryList)->append((Gap::Core::igObject *)(((int)igResource_GetOrLoadDirectory(self->_managingResource, (int)name))));
             name += sizes[i];
         }
         self->_temporaryMemoryPool->Free(self->_externalDirectoryBuffer);

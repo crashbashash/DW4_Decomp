@@ -1938,7 +1938,7 @@ int igMemoryPoolContextInfo_GetMemoryPoolInfo(void *info, int index) {
 
 void igMemoryPoolContextInfo_AdoptMemoryPoolInfo(void *info, void *poolInfo) {
     if (poolInfo != 0) {
-        ObjectList_AppendRetained((igObjectList *)((igMemoryPoolContextInfo *)info)->_memoryPoolInfos, (igObject *)poolInfo);
+        ((Gap::Core::igObjectList *)(((igMemoryPoolContextInfo *)info)->_memoryPoolInfos))->append((Gap::Core::igObject *)poolInfo);
         ((igObject *)poolInfo)->_refCount = (int) (((igObject *)poolInfo)->_refCount - 1);
         if (((unsigned long long) ((long long)(int)((igObject *)poolInfo)->_refCount << 0x29) >> 0x29) == 0) {
             igObject_Destroy((igObject *)poolInfo);
@@ -1946,13 +1946,13 @@ void igMemoryPoolContextInfo_AdoptMemoryPoolInfo(void *info, void *poolInfo) {
     }
 }
 
-int igMemoryPoolContextInfo_AddMemoryPoolInfo(igMemoryPoolContextInfo *self, int poolInfo)
+void igMemoryPoolContextInfo_AddMemoryPoolInfo(igMemoryPoolContextInfo *self, int poolInfo)
 {
-    return ObjectList_AppendRetained((igObjectList *)self->_memoryPoolInfos, (igObject *)poolInfo);
+    ((Gap::Core::igObjectList *)self->_memoryPoolInfos)->append((Gap::Core::igObject *)poolInfo);
 }
 
 void igMemoryPoolContextInfo_RemoveMemoryPoolInfo(igMemoryPoolContextInfo *info, igMemoryPoolInfo *poolInfo) {
-    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)info->_memoryPoolInfos, (igObject *)poolInfo, 0);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)info->_memoryPoolInfos))->removeByValue((Gap::Core::igObject *)poolInfo, 0);
 }
 
 void igMemoryPoolContextInfo_ClearMemoryPoolInfos(void *info) {

@@ -25,7 +25,7 @@ void igFieldSynchronizer_AddField(igFieldSynchronizer *synchronizer, igObject *m
     Rc_4551f0 *arg2 = (Rc_4551f0 *)field;
     Ref_4551f0 sp4C;
     sp4C.p = (Rc_4551f0 *)igFieldChangeView_Create((int)(((Gap::Core::igObject *)synchronizer)->getMemoryPool()));
-    ObjectList_AppendRetained((igObjectList *)arg0->f8, (igObject *)sp4C.p);
+    ((Gap::Core::igObjectList *)arg0->f8)->append((Gap::Core::igObject *)sp4C.p);
     sp4C.p->f12 = (int)arg0;
     Rc_4551f0 *t = sp4C.p;
     if (arg2 != 0) {

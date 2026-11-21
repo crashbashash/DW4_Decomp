@@ -28,7 +28,7 @@ void igFloatListList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igFloatListList_Register);
 }
 
-static igMetaObjectCallback g_igFloatListList_callbackList[] = { igFloatList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igFloatListList_callbackList[] = { Gap::Core::igFloatList::arkRegister, 0 };
 
 CallbackArray *igFloatListList_Register(void) {
     CoreLibrary_MarkRegistered();

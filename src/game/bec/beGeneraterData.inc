@@ -65,7 +65,7 @@ void beGeneraterData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beGeneraterData_Register);
 }
 
-static igMetaObjectCallback g_beGeneraterData_callbackList[] = { igVec3fList_EnsureRegistered, igFloatList_EnsureRegistered, beGeneraterPlayerDataList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beGeneraterData_callbackList[] = { igVec3fList_EnsureRegistered, Gap::Core::igFloatList::arkRegister, beGeneraterPlayerDataList_EnsureRegistered, 0 };
 
 CallbackArray *beGeneraterData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -160,7 +160,7 @@ void beGeneraterData_InitFields(void) {
     ((igObjectRefMetaField *)genePosList)->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
     ((igRefMetaField *)genePosList)->_construct = 1;
     geneRotYRadianList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((igObjectRefMetaField *)geneRotYRadianList)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)geneRotYRadianList)->_metaObject = (int)Gap::Core::igFloatList::getClassTypeLazy();
     ((igRefMetaField *)geneRotYRadianList)->_construct = 1;
     ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 5)))->setDefault(0);
     ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xA)))->setDefault(0);

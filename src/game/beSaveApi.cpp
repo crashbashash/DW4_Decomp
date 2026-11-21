@@ -1552,7 +1552,7 @@ void beSvReadMediaApi_Start(beSvReadMediaApiWork *self, beSvDeliver *deliver) {
         allocator = g_useOwnerAllocator != 0 ? own : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<beSaveMemoryObj> buffer(beSaveMemoryObj_CreateInstance(allocator));
         beSaveMemoryObj_Allocate(buffer, platform->_dataSize, 0);
-        ObjectList_AppendRetained((igObjectList *)self->_loadWorkList, buffer);
+        ((Gap::Core::igObjectList *)self->_loadWorkList)->append((Gap::Core::igObject *)buffer.get());
     }
     self->_phase = 0;
     self->_st3 = 0;

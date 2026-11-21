@@ -288,13 +288,13 @@ void beMatCtrl_UpdateRam(beMatCtrl *self, beMatCtrlInfoRam *ram) {
                 igSmartPointer<igIntList> masks(igIntList_Create((int)OwnerAllocator(self)));
                 SetListCount(masks.p, materialCount, sizeof(int));
                 FillList(masks.p, 0);
-                ObjectList_AppendRetained((igObjectList *)work->_matOnPlLists, (igObject *)masks.p);
+                ((Gap::Core::igObjectList *)work->_matOnPlLists)->append((Gap::Core::igObject *)masks.p);
             }
             {
                 igSmartPointer<igIntList> masks(igIntList_Create((int)OwnerAllocator(self)));
                 SetListCount(masks.p, materialCount, sizeof(int));
                 FillList(masks.p, 0);
-                ObjectList_AppendRetained((igObjectList *)work->_matOnPlLists, (igObject *)masks.p);
+                ((Gap::Core::igObjectList *)work->_matOnPlLists)->append((Gap::Core::igObject *)masks.p);
             }
             SetListCount((igBoolList *)work->_runFlagList, materialCount, sizeof(bool));
             FillList((igBoolList *)work->_runFlagList, true);

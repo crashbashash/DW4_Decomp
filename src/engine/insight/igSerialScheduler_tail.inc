@@ -21,14 +21,14 @@ void igSerialScheduler_Update(igSerialScheduler *scheduler) {
     unsigned int count = ((ManagerListView *)scheduler->_managerList)->_list->_count;
     int i;
 
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)scheduler->_cachedManagerList, count);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)scheduler->_cachedManagerList))->setCount(count);
     for (i = 0; i < count; i++) {
         setRetained(((ManagerListView *)scheduler->_managerList)->_list->_data[i], (ManagerArray *)scheduler->_cachedManagerList, i);
     }
     for (i = 0; i < count; i++) {
         ((ManagerArray *)scheduler->_cachedManagerList)->_data[i]->update();
     }
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)scheduler->_cachedManagerList, 0);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)scheduler->_cachedManagerList))->setCount(0);
 }
 
 void igSerialScheduler_Schedule(igSerialScheduler *self, int arg1) {

@@ -59,7 +59,7 @@ void igCallStackTable_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igCallStackTable_Register);
 }
 
-static igMetaObjectCallback g_igCallStackTable_callbackList[] = { igUnsignedIntListNoClean_EnsureRegistered, igIntListNoClean_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igCallStackTable_callbackList[] = { igUnsignedIntListNoClean_EnsureRegistered, Gap::Core::igIntListNoClean::arkRegister, 0 };
 
 CallbackArray *igCallStackTable_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -120,7 +120,7 @@ void igCallStackTable_InitFields(void) {
     ((igObjectRefMetaField *)callStacks)->_metaObject = (int)igUnsignedIntListNoClean_GetOrCreateMetaObject();
     ((igRefMetaField *)callStacks)->_construct = 1;
     hashIndex = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
-    ((igObjectRefMetaField *)hashIndex)->_metaObject = (int)igIntListNoClean_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)hashIndex)->_metaObject = (int)Gap::Core::igIntListNoClean::getClassTypeLazy();
     igMetaObject_NameFields((igMetaObject *)meta, g_igCallStackTable_fieldTable, g_igCallStackTable_fieldDescriptors, g_igCallStackTable_fieldOffsets, base);
 }
 

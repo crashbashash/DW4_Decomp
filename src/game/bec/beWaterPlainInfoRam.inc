@@ -89,7 +89,7 @@ void beWaterPlainInfoRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beWaterPlainInfoRam_Register);
 }
 
-static igMetaObjectCallback g_beWaterPlainInfoRam_callbackList[] = { igVertexArray_EnsureRegistered, igFloatList_EnsureRegistered, igIntList_EnsureRegistered, igFloatListList_EnsureRegistered, beWaterMove_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beWaterPlainInfoRam_callbackList[] = { igVertexArray_EnsureRegistered, Gap::Core::igFloatList::arkRegister, Gap::Core::igIntList::arkRegister, igFloatListList_EnsureRegistered, beWaterMove_EnsureRegistered, 0 };
 
 CallbackArray *beWaterPlainInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
@@ -245,10 +245,10 @@ void beWaterPlainInfoRam_InitFields(void) {
     vertexArray = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xA));
     ((igObjectRefMetaField *)vertexArray)->_metaObject = (int)igVertexArray_GetOrCreateMetaObject();
     dampeningGrid = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xB));
-    ((igObjectRefMetaField *)dampeningGrid)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dampeningGrid)->_metaObject = (int)Gap::Core::igFloatList::getClassTypeLazy();
     ((igRefMetaField *)dampeningGrid)->_construct = 1;
     dplist2VertexNO = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xC));
-    ((igObjectRefMetaField *)dplist2VertexNO)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dplist2VertexNO)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)dplist2VertexNO)->_construct = 1;
     gridLists = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x15));
     ((igObjectRefMetaField *)gridLists)->_metaObject = (int)igFloatListList_GetOrCreateMetaObject();

@@ -165,7 +165,7 @@ void beNDMWMdlItem_OnGenerate(beNDMWMdlItem *self, beBaseInfoRam *info) {
         ALLOC_OF(info, alloc, kIGMemoryPoolHandleUser1)
         Store::assign(info->_dataList, ObjectRef(beBaseInfoDataList_Create((int)alloc)).p);
     }
-    prop = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)info->_dataList, g_propertyNameField, "ONE");
+    prop = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)info->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
     ALLOC(alloc, kIGMemoryPoolHandleUser1)
     {
     igSmartPointer<beNDMWMdlItemInfoWork> work((beNDMWMdlItemInfoWork *)beNDMWMdlItemInfoWork_Create((int)alloc));
@@ -304,11 +304,11 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
         RefRelease::go((igObject *)ram->_dataList);
         ram->_dataList = (int)s0;
     }
-    ramData = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
+    ramData = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
     work = (beNDMWMdlItemInfoWork *)ramData->_work;
     if (((igObjectList *)self->_lockRamList)->_count == 0) {
         for (i = 0; i < 4; i++) {
-            ObjectList_AppendRetained((igObjectList *)self->_lockRamList, 0);
+            ((Gap::Core::igObjectList *)self->_lockRamList)->append(0);
         }
     }
     isNear = 0;
@@ -503,7 +503,7 @@ void beNDMWMdlItem_OnErase(beNDMWMdlItem *self, beBaseInfoRam *ram) {
         RefRelease::go((igObject *)ram->_dataList);
         ram->_dataList = (int)s0;
     }
-    record = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
+    record = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
     work = (beNDMWMdlItemInfoWork *)record->_work;
     if (work->_isDispName != 0) {
         work->_isDispName = 0;
@@ -543,7 +543,7 @@ void beNDMWMdlItem_OnSequenceChange(beNDMWMdlItem *self, beBaseInfoRam *ram) {
         igObject *created = (igObject *)((void *)beBaseInfoDataList_Create((int)al));
         adoptDataList(ram, created);
     }
-    beModelCtrlInfoRamData *one = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ("ONE")));
+    beModelCtrlInfoRamData *one = ((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ("ONE")));
     if (strcmp((const char *)((beModelCtrlInfoWork *)one->_work)->_seqCodeName, "SQ_EXIT") == 0)
         ((beModelCtrlDispatchView *)self)->OnErase(ram);
 }
@@ -570,7 +570,7 @@ void beNDMWMdlItem_OnAction1(beNDMWMdlItem *self, beNDMWGameRamInfoRam *ram) {
         RefRelease::go((igObject *)ram->_dataList);
         ram->_dataList = (int)dataList;
     }
-    work = (beNDMWMdlItemInfoWork *)((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE"))->_work;
+    work = (beNDMWMdlItemInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE"))->_work;
     if (beMessenger_GetBoolCount((beMessenger *)self->_messenger) == 0 && work->_isNamed != 0 && work->_isDispName != 0) {
         playerNo = beMessenger_GetInt((beMessenger *)self->_messenger, 0);
         if (playerNo == work->_dispPlayerRamNo) {
@@ -606,7 +606,7 @@ void beNDMWMdlItem_OnAction1(beNDMWMdlItem *self, beNDMWGameRamInfoRam *ram) {
                 case 0:
                 case 1:
                 case 6:
-                    ObjectList_AppendRetained(a2, (igObject *)work->_itemObject);
+                    ((Gap::Core::igObjectList *)a2)->append((Gap::Core::igObject *)work->_itemObject);
                     break;
                 case 2:
                 case 3:

@@ -23,18 +23,12 @@ void StringList_AppendRetained(struct igStringRefList *list, char *const *value)
 int igStringRefList_IndexOf(struct igStringRefList *list, char *const *key, int start);
 /* Stores *token in the field's slot of `object`, releasing the string it held. */
 void igStringMetaField_AssignRetainedToken(struct igStringMetaField *field, void *object, char **token);
-int ObjectList_RemoveAllRetained(igTDataList<struct igObject *> *list, struct igObject *object, int start);
-void ObjectList_ResizeRetained(igTDataList<struct igObject *> *self, int count);
 void List_AppendWords(struct igDataList *list, int count, const int *words);
-void ObjectList_AppendRetainedList(igTDataList<struct igObject *> *self, igTDataList<struct igObject *> *source);
 /* Retains `value` and appends it to the meta-object list. */
 int MetaRefList_AppendRetained(struct __internalObjectList *list, struct igObject *value);
 /* Appends `object` (retained) unless the list holds it already; returns its index. */
 int ObjectList_AppendUniqueRetained(igTDataList<struct igObject *> *list, struct igObject *object);
-/* Stores `value` (retained) in every slot, releasing what each held. */
-void ObjectList_FillRetained(igTDataList<struct igObject *> *list, struct igObject *value);
-/* Releases and removes the first `value` at or after `start`. */
-igResult ObjectList_RemoveFirstRetained(igTDataList<struct igObject *> *list, struct igObject *value, int start);
+void ObjectList_ResizeRetained(igTDataList<struct igObject *> *self, int count);
 
 #ifdef __cplusplus
 }

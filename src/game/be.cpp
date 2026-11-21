@@ -1552,7 +1552,7 @@ unsigned char MDLisSeqName(const char *sequence) {
         }
         model->_dataList = (int)list;
     }
-    beModelCtrlInfoRamData *data = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)model->_dataList, g_propertyNameField, "ONE");
+    beModelCtrlInfoRamData *data = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)model->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
     return strcmp((const char *)((beModelCtrlInfoWork *)data->_work)->_seqCodeName, sequence) == 0;
 }
 

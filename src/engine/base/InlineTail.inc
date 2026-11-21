@@ -642,7 +642,7 @@ extern "C" bool igOptPass_ApplyToObjects(OptPass *self) {
     OptObjectSource *source = context->source;
     igSmartPointer<Rc> objects(createObjectList(Tag()));
     for (int i = 0, n = source->objects->count(); i < n; i++) {
-        ObjectList_AppendRetained((igObjectList *)objects.p, (igObject *)source->objects->_data[i]);
+        ((Gap::Core::igObjectList *)objects.p)->append((Gap::Core::igObject *)source->objects->_data[i]);
     }
     bool ok = true;
     int count = ((NamedObjectList *)objects.p)->count();

@@ -19,7 +19,7 @@ void FUN_0015f660(igVertexArray2 *arg0, igSmartPointer<Rc_17f2b0> list) {
     int i;
     void *x;
     void *r;
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)list.p, 0);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)list.p))->setCount(0);
     for (i = 0; i < *(int *)(*(int *)((char *)arg0 + 16) + 8); i++) {
         x = (void *)*(int *)(*(int *)(*(int *)((char *)arg0 + 16) + 16) + i * 4);
         if (x != 0 && ((Gap::Core::igObject *)x)->isOfType(g_igVertexData_metaObject) != 0) {
@@ -28,7 +28,7 @@ void FUN_0015f660(igVertexArray2 *arg0, igSmartPointer<Rc_17f2b0> list) {
             r = 0;
         }
         if (r != 0 && FUN_00164d60((int)arg0, (A_164d60 *)r) != 0) {
-            ObjectList_AppendRetained((igObjectList *)list.p, (igObject *)r);
+            ((Gap::Core::igObjectList *)list.p)->append((Gap::Core::igObject *)r);
         }
     }
 }

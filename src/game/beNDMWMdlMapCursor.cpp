@@ -70,7 +70,7 @@ void beNDMWMdlMapCursor_OnGenerate(beNDMWMdlMapCursor *self, beBaseInfoRam *ram)
     beModelCtrlInfoRamData *pr;
     const char *s;
     RamDataList::Ensure(ram);
-    pr = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
+    pr = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
     al = ((Gap::Core::igObject *)self)->getMemoryPool();
     al = g_useOwnerAllocator ? al : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     {
@@ -177,7 +177,7 @@ void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *self, beBaseInfoRam *ram
                 RefRelease::go((igObject *)ram->_dataList);
                 ram->_dataList = (int)s0;
             }
-            r = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
+            r = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
             sum[1] = 0.0f;
             igMatrix44f_SetTranslation((float *)((char *)r->_node + 32), (const float *)&sum);
         }

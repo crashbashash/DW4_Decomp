@@ -22,7 +22,7 @@ void igBlendMatrixSelect_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igBlendMatrixSelect_Register);
 }
 
-static igMetaObjectCallback g_igBlendMatrixSelect_callbackList[] = { igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igBlendMatrixSelect_callbackList[] = { Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *igBlendMatrixSelect_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -75,7 +75,7 @@ void igBlendMatrixSelect_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igBlendMatrixSelect_ctorTable, 3);
     blendMatrixIndicesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)blendMatrixIndicesField)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)blendMatrixIndicesField)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)blendMatrixIndicesField)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)meta, g_igBlendMatrixSelect_fieldTable, g_igBlendMatrixSelect_fieldHandles, g_igBlendMatrixSelect_fieldOffsets, base);
 }

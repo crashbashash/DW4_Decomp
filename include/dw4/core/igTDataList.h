@@ -22,6 +22,15 @@ public:
     }
     inline const T *getArray() const { return (const T *)_data; }
     inline T &get(int index) const { return getArrayInternal()[index]; }
+    inline int find(const T &value, int startIndex) const {
+        const int count = _count;
+        for (int i = startIndex; i < count; i++) {
+            if (value == getArray()[i]) {
+                return i;
+            }
+        }
+        return -1;
+    }
     inline virtual void trimCapacity() { setCapacityToCount(); }
     inline virtual int getElementSize() const { return sizeof(T); }
 };

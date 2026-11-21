@@ -210,14 +210,14 @@ void beNDMWLogo_UpdateRam(beNDMWLogo *self, beBaseInfoRam *infoRam) {
         setDataList(infoRam, createdList.p);
         PICK_ALLOCATOR(allocator, self);
         igSmartPointer<beNDMWLogoCtrlData> createdCtrl(beNDMWLogoCtrlData_Create((int)allocator));
-        ObjectList_AppendRetained((igObjectList *)infoRam->_dataList, createdCtrl.p);
+        ((Gap::Core::igObjectList *)infoRam->_dataList)->append((Gap::Core::igObject *)createdCtrl.p);
     }
     if (infoRam->_dataList == 0) {
         PICK_ALLOCATOR(allocator, infoRam);
         igSmartPointer<igObject> createdList(beBaseInfoDataList_Create((int)allocator));
         setDataList(infoRam, createdList.p);
     }
-    ctrl = (beNDMWLogoCtrlData *)igProperty_FindByName((igObjectList *)infoRam->_dataList, g_propertyNameField, "CTRL");
+    ctrl = (beNDMWLogoCtrlData *)((Gap::Core::igObjectList *)infoRam->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "CTRL");
     bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, 0);
     switch (ctrl->_st0) {
     case LogoStateCardCheck:

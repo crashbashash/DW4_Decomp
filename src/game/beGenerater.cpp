@@ -93,7 +93,7 @@ int beGenerater_SpawnEnemies(beGenerater *self, beBaseInfoRam *ram, int count)
             break;
         }
         beBaseInfoRam *enemyRam = (beBaseInfoRam *)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
-        ObjectList_AppendRetained((igObjectList *)work->_enemyRamList, (igObject *)enemyRam);
+        ((Gap::Core::igObjectList *)work->_enemyRamList)->append((Gap::Core::igObject *)enemyRam);
         beMessenger_SelectReceivers((beMessenger *)self->_messenger, "MODELCTRL", (const char *)work->_geneEnemyName, enemyRam->_ramNo);
         igVec3f position;
         if (data->_genePosIsGlobal) {

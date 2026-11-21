@@ -71,7 +71,7 @@ found:
         }
         return 0;
     }
-    return igProperty_FindBySortedKey((void *)self, (void *)g_igDirEntry_refField, (int)key);
+    return (int)((Gap::Core::igObjectList *)self)->sortedSearch((Gap::Core::igRefMetaField *)g_igDirEntry_refField, (const void *)key);
 }
 
 void *igDirectory_GetEntryAlias(int *directory, int index)
@@ -188,7 +188,7 @@ int igDirectory_ReplaceReference(igDirectoryView *self, const igSmartPointer<igV
 }
 
 void igDirectory_RemoveInfoByName(void *directory, int name) {
-    igDirectory_RemoveInfo((igDirectoryView *)directory, (igObject *)((void *)igProperty_FindByName((igObjectList *)((igDirectoryView *)directory)->_infoList, g_propertyNameField, (const char *)name)));
+    igDirectory_RemoveInfo((igDirectoryView *)directory, (igObject *)((void *)((Gap::Core::igObjectList *)(((igDirectoryView *)directory)->_infoList))->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name)));
 }
 
 void igDirectory_RemoveInfo(igDirectoryView *h, igObject *object) {
@@ -202,12 +202,12 @@ void igDirectory_RemoveInfo(igDirectoryView *h, igObject *object) {
 }
 
 void igDirectory_AddInfo(void *directory, void *info) {
-    ObjectList_AppendRetained((igObjectList *)((igDirectoryView *)directory)->_infoList, (igObject *)info);
+    ((Gap::Core::igObjectList *)(((igDirectoryView *)directory)->_infoList))->append((Gap::Core::igObject *)info);
     ((igInfoView *)info)->_directory = (int)directory;
 }
 
 void * igDirectory_FindInfoByName(int *directory, int name) {
-    return ((void *)igProperty_FindByName((igObjectList *)((igDirectoryView *)directory)->_infoList, (igMetaField *)g_propertyNameField, (const char *)name));
+    return ((void *)((Gap::Core::igObjectList *)(((igDirectoryView *)directory)->_infoList))->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name));
 }
 
 /* The lower bound is spelled `arg1 <= -1` so it fuses into slti at. */

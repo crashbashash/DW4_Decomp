@@ -192,7 +192,7 @@ int beModelCtrlSCHitBox_Start(beModelCtrlSCHitBox *self, beBaseInfoRam *ram) {
         int own = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         RamDataList::create(ram, g_useOwnerAllocator != 0 ? own : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     }
-    ramData = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
+    ramData = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
     work = (beModelCtrlInfoWork *)ramData->_work;
     ctrl = (beModelCtrl *)ram->_parentManager;
     int own = (int)((Gap::Core::igObject *)self)->getMemoryPool();
@@ -319,7 +319,7 @@ int beModelCtrlSCEffect_Start(beModelCtrlSCEffect *self, beBaseInfoRam *ram) {
             int own = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
             RamDataList::create(ram, g_useOwnerAllocator != 0 ? own : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
         }
-        work = (beModelCtrlInfoWork *)((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE"))->_work;
+        work = (beModelCtrlInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE"))->_work;
         if (work->_hitParentName == 0) {
             name = (int *)info->_name;
             if (name != 0) ownerName = name; else ownerName = (int *)emptyString;
@@ -544,7 +544,7 @@ void beModelCtrlSubCom_AddEffect(beModelCtrlSubCom *self, const char *modelName,
     record->_rotation[2] = rotation[2];
     effect.p->_isSeqDead = isSeqDead;
     effect.p->_isPositionLock = isPositionLock;
-    ObjectList_AppendRetained((igObjectList *)self->_comList, (igObject *)effect.p);
+    ((Gap::Core::igObjectList *)self->_comList)->append((Gap::Core::igObject *)effect.p);
 }
 
 /* Appends a hit-box sub-command built from a HITBOX command; a length of -1 never ends. The bullet
@@ -604,7 +604,7 @@ void beModelCtrlSubCom_AddHitBox(beModelCtrlSubCom *self, beModelCtrlHITBOX *hit
         break;
     }
     command.p->_kind = hitBox->_kind;
-    ObjectList_AppendRetained((igObjectList *)self->_comList, (igObject *)command.p);
+    ((Gap::Core::igObjectList *)self->_comList)->append((Gap::Core::igObject *)command.p);
 }
 
 /* Appends a sound sub-command with an interned sound name. */
@@ -641,7 +641,7 @@ void beModelCtrlSubCom_AddSound(beModelCtrlSubCom *self, const char *sndName, fl
     }
     sound->_sndName = (int)name;
     command.p->_startFrame = startFrame;
-    ObjectList_AppendRetained((igObjectList *)self->_comList, (igObject *)command.p);
+    ((Gap::Core::igObjectList *)self->_comList)->append((Gap::Core::igObject *)command.p);
 }
 
 igMetaObject *beModelCtrlSCSound_GetMeta(void)

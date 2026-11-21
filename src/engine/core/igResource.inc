@@ -96,7 +96,7 @@ void igResource_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igResource_Register);
 }
 
-static igMetaObjectCallback g_igResource_callbackList[] = { igDirectory_EnsureRegistered, igDirectoryList_EnsureRegistered, igQueue_EnsureRegistered, igThread_EnsureRegistered, igStringObjList_EnsureRegistered, igIntList_EnsureRegistered, igMemoryPool_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igResource_callbackList[] = { igDirectory_EnsureRegistered, igDirectoryList_EnsureRegistered, igQueue_EnsureRegistered, igThread_EnsureRegistered, igStringObjList_EnsureRegistered, Gap::Core::igIntList::arkRegister, igMemoryPool_EnsureRegistered, 0 };
 
 CallbackArray *igResource_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -229,7 +229,7 @@ void igResource_InitFields(void) {
     ((igObjectRefMetaField *)alignmentStringsField)->_metaObject = (int)igStringObjList_GetOrCreateMetaObject();
     ((igMetaField *)alignmentStringsField)->_persistent = 0;
     alignmentValuesField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 9)));
-    ((igObjectRefMetaField *)alignmentValuesField)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)alignmentValuesField)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igMetaField *)alignmentValuesField)->_persistent = 0;
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xA)))->setDefault(1);
     temporaryMemoryPoolField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xB)));

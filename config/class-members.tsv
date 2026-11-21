@@ -647,8 +647,23 @@ igDataList	protected: int sortedFind4(const unsigned char *item, igCompareFuncti
 igDataList	protected: int binaryInsert4(const unsigned char *item, igCompareFunction *compare) const;
 igObjectList	IG_OBJECT_DEFINE(igObjectList)
 igObjectList	private: static igMetaField *k_data;
+igObjectList	private: typedef igTDataList<igObject *> Parent;
 igObjectList	inline virtual void userPreWrite() { trimCapacity(); }
 igObjectList	inline virtual igMetaObject *getElementMeta() const { return igObject::getClassMeta(); }
+igObjectList	void append(igObject *object);
+igObjectList	void concatenate(const igObjectList *list);
+igObjectList	void setAll(igObject *object);
+igObjectList	igObject *search(igStringMetaField *field, const char *name) const;
+igObjectList	igObject *search(igObjectRefMetaField *field, const igObject *obj) const;
+igObjectList	void bubbleSort(igRefMetaField *field);
+igObjectList	igObject *sortedSearch(const igRefMetaField *field, const void *val) const;
+igObjectList	int fastBinaryFind(const igRefMetaField *field, const void *val) const;
+igObjectList	inline int find(const igObject *obj, int startIndex) const { return Parent::find((igObject *const &)obj, startIndex); }
+igObjectList	igResult removeByValue(const igObject *obj, int startIndex);
+igObjectList	int removeAllByValue(const igObject *obj, int startIndex);
+igObjectList	int appendUnique(igObject *obj);
+igObjectList	void setCount(int newCount);
+igObjectList	void clearAll();
 igAttr	IG_ABSTRACT_OBJECT_DEFINE(igAttr)
 igAttr	private: static igMetaField *k_cachedAttrIndex;
 igAttr	protected: static igMetaField *k_cachedUnitID;
@@ -737,3 +752,23 @@ igNormalizeNormalsStateAttr	virtual void apply(igVisualContext *vc);
 igNormalizeNormalsStateAttr	inline void setState(bool enabled) { _enabled = enabled; }
 igNormalizeNormalsStateAttr	inline bool getState() const { return _enabled; }
 igNormalizeNormalsStateAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igIntList	IG_OBJECT_DEFINE(igIntList)
+igIntList	private: static igMetaField *k_data;
+igIntListNoClean	IG_OBJECT_DEFINE(igIntListNoClean)
+igIntListNoClean	inline virtual void trimCapacity() {}
+igBoolList	IG_OBJECT_DEFINE(igBoolList)
+igBoolList	private: static igMetaField *k_data;
+igCharList	IG_OBJECT_DEFINE(igCharList)
+igCharList	private: static igMetaField *k_data;
+igShortList	IG_OBJECT_DEFINE(igShortList)
+igShortList	private: static igMetaField *k_data;
+igUnsignedShortList	IG_OBJECT_DEFINE(igUnsignedShortList)
+igUnsignedShortList	private: static igMetaField *k_data;
+igUnsignedCharList	IG_OBJECT_DEFINE(igUnsignedCharList)
+igUnsignedCharList	private: static igMetaField *k_data;
+igFloatList	IG_OBJECT_DEFINE(igFloatList)
+igFloatList	private: static igMetaField *k_data;
+igPointerList	IG_OBJECT_DEFINE(igPointerList)
+igPointerList	private: static igMetaField *k_data;
+igCharListNoClean	IG_OBJECT_DEFINE(igCharListNoClean)
+igCharListNoClean	inline virtual void trimCapacity() {}

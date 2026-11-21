@@ -55,11 +55,11 @@ int FUN_001af620(igAppearanceView *a, void *t) {
     return result;
 }
 
-int igAppearance_AttachGraph(igAppearance *appearance, igNode *graph) {
-    return ObjectList_AppendRetained((igObjectList *)appearance->_attachedGraphs, (igObject *)graph);
+void igAppearance_AttachGraph(igAppearance *appearance, igNode *graph) {
+    ((Gap::Core::igObjectList *)appearance->_attachedGraphs)->append((Gap::Core::igObject *)graph);
 }
 
 int igAppearance_DetachGraph(igAppearance *appearance, igNode *graph) {
-    return ObjectList_RemoveAllRetained((igTDataList<igObject *> *)appearance->_attachedGraphs, (igObject *)graph, 0) > 0;
+    return ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)appearance->_attachedGraphs))->removeAllByValue((Gap::Core::igObject *)graph, 0) > 0;
 }
 

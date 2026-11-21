@@ -5,7 +5,7 @@ void igMemoryFile_AddMemoryFileEntry(int name, int buffer, int size) {
         igNamedObject_SetName((igNamedObject *)entry.p, (const char *)name);
         entry->_size = size;
         entry->_buffer = buffer;
-        ObjectList_AppendRetained((igObjectList *)((*(int *)&g_memoryFileEntries)), (igObject *)entry.p);
+        ((Gap::Core::igObjectList *)(*(int *)&g_memoryFileEntries))->append((Gap::Core::igObject *)entry.p);
     }
 }
 
@@ -17,7 +17,7 @@ void igMemoryFile_LookupMemoryBuffer(int name, int *buffer, int *size) {
     *size = 0;
     entries = (*(int *)&g_memoryFileEntries);
     if (entries != 0) {
-        entry = ((igMemoryFileEntry *)igProperty_FindByName((igObjectList *)entries, (igMetaField *)g_propertyNameField, (const char *)name));
+        entry = ((igMemoryFileEntry *)((Gap::Core::igObjectList *)entries)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name));
         if (entry != 0) {
             *buffer = entry->_buffer;
             *size = entry->_size;

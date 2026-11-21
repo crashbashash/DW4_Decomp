@@ -58,7 +58,7 @@ void beSvDeliver_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSvDeliver_Register);
 }
 
-static igMetaObjectCallback g_beSvDeliver_callbackList[] = { igIntList_EnsureRegistered, beSaveDataDeliver_EnsureRegistered, beSvPlatBaseData_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beSvDeliver_callbackList[] = { Gap::Core::igIntList::arkRegister, beSaveDataDeliver_EnsureRegistered, beSvPlatBaseData_EnsureRegistered, 0 };
 
 CallbackArray *beSvDeliver_Register(void) {
     BecLibrary_MarkRegistered();
@@ -178,21 +178,21 @@ void beSvDeliver_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beSvDeliver_ctorTable, 0x12);
     actConnect = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)actConnect)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)actConnect)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)actConnect)->_construct = 1;
     ((Gap::Core::igCharMetaField *)(igMetaObject_GetFieldAt(meta, base + 7)))->setDefault(-1);
     ((Gap::Core::igCharMetaField *)(igMetaObject_GetFieldAt(meta, base + 8)))->setDefault(0);
     freeSizeList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
-    ((igObjectRefMetaField *)freeSizeList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)freeSizeList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)freeSizeList)->_construct = 1;
     freeFileList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xD));
-    ((igObjectRefMetaField *)freeFileList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)freeFileList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)freeFileList)->_construct = 1;
     formatList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xE));
-    ((igObjectRefMetaField *)formatList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)formatList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)formatList)->_construct = 1;
     totalSizeList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xF));
-    ((igObjectRefMetaField *)totalSizeList)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)totalSizeList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)totalSizeList)->_construct = 1;
     gameData = (void *)(igMetaObject_GetFieldAt(meta, base + 0x10));
     ((igObjectRefMetaField *)gameData)->_metaObject = (int)beSaveDataDeliver_GetOrCreateMetaObject();

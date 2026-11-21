@@ -72,7 +72,7 @@ void beNDMWMdlPBullet_OnGenerate(beNDMWMdlPBullet *self, beBaseInfoRam *ram) {
     igMemoryPoolView *alloc;
     igMemoryPoolView *a;
     RamDataList::Ensure(ram);
-    s1 = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
+    s1 = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
     alloc = ((Gap::Core::igObject *)self)->getMemoryPool();
     if (g_useOwnerAllocator != 0) {
         a = alloc;

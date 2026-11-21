@@ -277,34 +277,6 @@ igMetaObject *igContextExtList_GetMeta(void) {
     return g_igContextExtList_metaObject;
 }
 
-igMetaObject *igBoolList_GetMeta(void) {
-    return g_igBoolList_metaObject;
-}
-
-igMetaObject *igCharListNoClean_GetMeta(void) {
-    return g_igCharListNoClean_metaObject;
-}
-
-void igCharListNoClean_TrimCapacity(void) {
-
-}
-
-igMetaObject *igCharList_GetMeta(void) {
-    return g_igCharList_metaObject;
-}
-
-igMetaObject *igIntListNoClean_GetMeta(void) {
-    return g_igIntListNoClean_metaObject;
-}
-
-void igIntListNoClean_TrimCapacity(void) {
-
-}
-
-int igIntList_GetMetaObject_Virtual(void) {
-    return (int)g_igIntList_metaObject;
-}
-
 igMetaObject *igLongList_GetMeta(void) {
     return g_igLongList_metaObject;
 }
@@ -313,32 +285,12 @@ igMetaObject *igUnsignedIntListNoClean_GetMeta(void) {
     return g_igUnsignedIntListNoClean_metaObject;
 }
 
-igMetaObject *igUnsignedShortList_GetMeta(void) {
-    return g_igUnsignedShortList_metaObject;
-}
-
-igMetaObject *igShortList_GetMeta(void) {
-    return g_igShortList_metaObject;
-}
-
 igMetaObject *igShortListList_GetMeta(void) {
     return g_igShortListList_metaObject;
 }
 
-int igUnsignedCharList_GetMeta(void) {
-    return (int)g_igUnsignedCharList_metaObject;
-}
-
-igMetaObject *igFloatList_GetMeta(void) {
-    return g_igFloatList_metaObject;
-}
-
 igMetaObject *igFloatListList_GetMeta(void) {
     return g_igFloatListList_metaObject;
-}
-
-igMetaObject *igPointerList_GetMeta(void) {
-    return g_igPointerList_metaObject;
 }
 
 igMetaObject *igPointerListList_GetMeta(void) {
@@ -480,9 +432,6 @@ int igDependencyList_GetElementSize(void) {
     return 8;
 }
 
-int igPointerList_GetElementSize(void) {
-    return 4;
-}
 
 int List_LowerBoundWords(igTDataList<unsigned int> *list, unsigned int *key) {
     unsigned int value;
@@ -511,33 +460,11 @@ int List_LowerBoundWords(igTDataList<unsigned int> *list, unsigned int *key) {
     return lo;
 }
 
-int igFloatList_GetElementSize(void) {
-    return 4;
-}
 
-int igUnsignedCharList_GetElementSize(void) {
-    return 1;
-}
 
-int igShortList_GetElementSize(void) {
-    return 2;
-}
 
-int igUnsignedShortList_GetElementSize(void) {
-    return 2;
-}
 
-int igIntList_GetElementSize(void) {
-    return 4;
-}
 
-int igCharList_GetElementSize(void) {
-    return 1;
-}
-
-int igBoolList_GetElementSize(void) {
-    return 1;
-}
 
 int igStringRefList_GetElementSize(void) {
     return 4;
@@ -609,7 +536,7 @@ igMetaObject *igObjectListList_GetElementMeta(void) {
 }
 
 igMetaObject *igIntListList_GetElementMeta(void) {
-    return g_igIntList_metaObject;
+    return Gap::Core::igIntList::getClassMeta();
 }
 
 igMetaObject *igMetaFieldList_GetElementMeta(void) {
@@ -625,88 +552,23 @@ igMetaObject *igMetaObjectList_GetElementMeta(void) {
 }
 
 igMetaObject *igPointerListList_GetElementMeta(void) {
-    return g_igPointerList_metaObject;
+    return Gap::Core::igPointerList::getClassMeta();
 }
 
 igMetaObject *igFloatListList_GetElementMeta(void) {
-    return g_igFloatList_metaObject;
+    return Gap::Core::igFloatList::getClassMeta();
 }
 
 igMetaObject *igShortListList_GetElementMeta(void) {
-    return g_igShortList_metaObject;
+    return Gap::Core::igShortList::getClassMeta();
 }
 
-void igBoolList_TrimCapacity(igDataList *list) {
-    int count;
 
-    count = list->_count;
-    if (count < list->_capacity) {
-        ((Gap::Core::igDataList *)list)->setCapacity(count, 1);
-    }
-}
 
-void igCharList_TrimCapacity(igCharList *list) {
-    int count;
 
-    count = list->_count;
-    if (count < list->_capacity) {
-        ((Gap::Core::igDataList *)list)->setCapacity(count, 1);
-    }
-}
 
-void igIntList_TrimCapacity(igIntList *self) {
-    int count;
 
-    count = self->_count;
-    if (count < self->_capacity) {
-        ((Gap::Core::igDataList *)self)->setCapacity(count, 4);
-    }
-}
 
-void igUnsignedShortList_TrimCapacity(igDataList *list) {
-    int count;
-
-    count = list->_count;
-    if (count < list->_capacity) {
-        ((Gap::Core::igDataList *)list)->setCapacity(count, 2);
-    }
-}
-
-void igShortList_TrimCapacity(igDataList *list) {
-    int count;
-
-    count = list->_count;
-    if (count < list->_capacity) {
-        ((Gap::Core::igDataList *)list)->setCapacity(count, 2);
-    }
-}
-
-void igUnsignedCharList_TrimCapacity(igDataList *list) {
-    int count;
-
-    count = list->_count;
-    if (count < list->_capacity) {
-        ((Gap::Core::igDataList *)list)->setCapacity(count, 1);
-    }
-}
-
-void igFloatList_TrimCapacity(igDataList *list) {
-    int count;
-
-    count = list->_count;
-    if (count < list->_capacity) {
-        ((Gap::Core::igDataList *)list)->setCapacity(count, 4);
-    }
-}
-
-void igPointerList_TrimCapacity(igDataList *list) {
-    int count;
-
-    count = list->_count;
-    if (count < list->_capacity) {
-        ((Gap::Core::igDataList *)list)->setCapacity(count, 4);
-    }
-}
 
 void igDependencyList_TrimCapacity(igDependencyList *self) {
     int count;

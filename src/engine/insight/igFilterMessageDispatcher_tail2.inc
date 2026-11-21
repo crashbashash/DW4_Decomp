@@ -6,8 +6,8 @@ void igFilterMessageDispatcher_AddFilteringForType(FilterDispatcherSlots *self, 
 }
 
 void igFilterMessageDispatcher_AddFiltering(igFilterMessageDispatcher *self, void *arg1, void *arg2) {
-    ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)(*(int *)((char *)(arg2) + 12)), (igObject *)arg1);
-    ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)(self->_filters), (igObject *)arg2);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)(*(int *)((char *)(arg2) + 12))))->appendUnique((Gap::Core::igObject *)arg1);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)(self->_filters)))->appendUnique((Gap::Core::igObject *)arg2);
 }
 
 void igFilterMessageDispatcher_RemoveFilteringForType(void **arg0, int arg1, int arg2) {
@@ -27,10 +27,10 @@ void igFilterMessageDispatcher_RemoveFilteringForReceiver(V *arg0, int arg1) {
 }
 
 void igFilterMessageDispatcher_RemoveFiltering(S_arg0 *arg0, void *arg1, S_arg2 *arg2) {
-    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)arg2->f12, (igObject *)arg1, 0);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)arg2->f12))->removeByValue((Gap::Core::igObject *)arg1, 0);
     if (*(int *)((char *)(arg2->f12) + 8) == 0) {
-        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)arg0->f12, (igObject *)arg2, 0);
-        ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)arg0->f8, (igObject *)arg2, 0);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)arg0->f12))->removeByValue((Gap::Core::igObject *)arg2, 0);
+        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)arg0->f8))->removeByValue((Gap::Core::igObject *)arg2, 0);
     }
 }
 

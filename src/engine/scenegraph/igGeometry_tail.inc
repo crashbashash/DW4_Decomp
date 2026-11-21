@@ -156,7 +156,7 @@ int igIntersectTraversal_TraverseGroup(A_1cf990 *arg0, B_1cf990 *arg1) {
         n = 0;
     }
     if (n == 0) return 0;
-    ObjectList_AppendRetained((igObjectList *)arg0->f36, (igObject *)arg1);
+    ((Gap::Core::igObjectList *)arg0->f36)->append((Gap::Core::igObject *)arg1);
     r = FUN_001ceab0((HitTraversal *)arg0, (HitNode *)arg1);
     if (r == 0) {
         r = igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
@@ -192,7 +192,7 @@ int igIntersectTraversal_TraverseTransform(ModelTraversal *self, TraversalNode *
         }
     }
     node->setContext(self->context());
-    ObjectList_AppendRetained((igObjectList *)self->nodes, (igObject *)node);
+    ((Gap::Core::igObjectList *)self->nodes)->append((Gap::Core::igObject *)node);
     result = FUN_001ceab0((HitTraversal *)self, (HitNode *)node);
     if (result == 0) {
         igMatrixStack_PushPreMultiply((igMatrixStack *)self->matrices, node->transform);

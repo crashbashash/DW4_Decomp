@@ -345,8 +345,8 @@ void igObjectStringMap_Add(igObjectStringMap *self, const char *name, void *obje
 
     *(igObject **)&entry = (igObject *)(igNamedObject_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
     igNamedObject_SetName((igNamedObject *)entry, name);
-    ObjectList_AppendRetained((igObjectList *)self->_names, (igObject *)entry);
-    ObjectList_AppendRetained((igObjectList *)self->_data, (igObject *)object);
+    ((Gap::Core::igObjectList *)self->_names)->append((Gap::Core::igObject *)entry);
+    ((Gap::Core::igObjectList *)self->_data)->append((Gap::Core::igObject *)object);
     held = entry;
     if (held != 0) {
         held->_refCount = held->_refCount - 1;
@@ -367,7 +367,7 @@ int igObjectStringMap_GetObject(void *self, const char *name) {
 }
 
 int igObjectStringMap_GetIndexByName(igObjectStringMap *map, const char *name) {
-    igObject *field = ((igObject *)igProperty_FindByName((igObjectList *)map->_names, (igMetaField *)g_propertyNameField, name));
+    igObject *field = ((igObject *)((Gap::Core::igObjectList *)map->_names)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name));
     if (field == 0) {
         return -1;
     }
@@ -613,7 +613,7 @@ void igPluginHelper_AddRepository(igPluginHelper *helper, int name, int location
     }
     target->_location = (int)text;
     repository.p->_locationType = locationType;
-    ObjectList_AppendRetained((igObjectList *)helper->_repositoryList, (igObject *)repository.p);
+    ((Gap::Core::igObjectList *)helper->_repositoryList)->append((Gap::Core::igObject *)repository.p);
 }
 
 /* Store an interned copy of `location` as the repository's location, releasing the one it held. */
@@ -652,7 +652,7 @@ void igPluginHelper_AddRepositoryFromConfig(igPluginHelper *self, int name, cons
         setRepositoryLocation(repository, path);
         repository.get()->_locationType = 0;
     }
-    ObjectList_AppendRetained((igObjectList *)self->_repositoryList, (igObject *)repository.get());
+    ((Gap::Core::igObjectList *)self->_repositoryList)->append((Gap::Core::igObject *)repository.get());
 }
 
 static inline void setLocation(const igSmartPointer<igPluginRepository> &ref, int path, const int &skip) {

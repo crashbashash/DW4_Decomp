@@ -21,11 +21,6 @@ enum { kPrimitiveTriangleStrip = 4 };
 /* The size of an MPEG macroblock: a tile this wide holds one column of the decoded picture. */
 enum { kMacroblockSize = 16 };
 
-/* The status Alchemy's operations return. */
-struct igResult {
-    int value;
-};
-
 /* An object list with its inline accessors. */
 struct igObjectListView : igObject {
     int _count;
@@ -440,7 +435,7 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
                         igRelease((igObject *)self->_codecList);
                         self->_codecList = (int)igMovieCodecList_Create(allocator);
                     }
-                    ObjectList_AppendRetained((igObjectList *)self->_codecList, (igObject *)codec.p);
+                    ((Gap::Core::igObjectList *)self->_codecList)->append((Gap::Core::igObject *)codec.p);
                 }
             }
             (igSmartPointer<igMovieCodecDispatchView> &)movie->_codec = codec;
@@ -468,7 +463,7 @@ int igMovieManager_AddInfo(igMovieManager *self, igObject *object) {
                         igRelease((igObject *)self->_movieList);
                         self->_movieList = (int)igMovieInfoList_Create(allocator);
                     }
-                    ObjectList_AppendRetained((igObjectList *)self->_movieList, movie);
+                    ((Gap::Core::igObjectList *)self->_movieList)->append((Gap::Core::igObject *)movie);
                     igInsightCore_AddToScheduler((igInsightCore *)self->_insight, self);
                     SetMovieManager((igMovieRenderer *)self->_movieRenderer, self);
                     if (self->_rendererList == 0) {
@@ -651,13 +646,13 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                                 binds.release();
                                 binds.p = igTextureBindAttrList_Create(allocator);
                             }
-                            ObjectList_AppendRetained((igObjectList *)binds.p, (igObject *)bind.p);
+                            ((Gap::Core::igObjectList *)binds.p)->append((Gap::Core::igObject *)bind.p);
                             if (textures == 0) {
                                 int allocator = MovieAllocator(self);
                                 textures.release();
                                 textures.p = igTextureList_CreateInstance(allocator);
                             }
-                            ObjectList_AppendRetained((igObjectList *)textures.p, (igObject *)bind->_texture);
+                            ((Gap::Core::igObjectList *)textures.p)->append((Gap::Core::igObject *)bind->_texture);
                         }
                     }
                 }
@@ -682,10 +677,10 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             igNamedObject_SetName((igNamedObject *)root.p, Scene_Root);
             igSmartPointer<igBlendStateAttrDispatchView> blend((igBlendStateAttrDispatchView *)Gap::Attrs::igBlendStateAttr::_instantiateFromPool((igMemoryPoolView *)MovieAllocator(self)));
             blend->setEnabled(true);
-            ObjectList_AppendRetained((igObjectList *)root->_attributes, (igObject *)blend.p);
+            ((Gap::Core::igObjectList *)root->_attributes)->append((Gap::Core::igObject *)blend.p);
             igSmartPointer<igTextureStateAttrDispatchView> textureState((igTextureStateAttrDispatchView *)igTextureStateAttr_CreateInstance(MovieAllocator(self)));
             textureState->setEnabled(true);
-            ObjectList_AppendRetained((igObjectList *)root->_attributes, (igObject *)textureState.p);
+            ((Gap::Core::igObjectList *)root->_attributes)->append((Gap::Core::igObject *)textureState.p);
 
             float width;
             int movieHeight = movie->_height;
@@ -752,10 +747,10 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                         bind.release();
                         bind.p = (igTextureBindAttrView *)igTextureBindAttr_CreateInstance(allocator);
                     }
-                    ObjectList_AppendRetained((igObjectList *)binds.p, (igObject *)bind.p);
-                    ObjectList_AppendRetained((igObjectList *)tile->_attributes, (igObject *)bind.p);
+                    ((Gap::Core::igObjectList *)binds.p)->append((Gap::Core::igObject *)bind.p);
+                    ((Gap::Core::igObjectList *)tile->_attributes)->append((Gap::Core::igObject *)bind.p);
                     igGroup_AppendChild((igGroup *)tile.p, (igNode *)geometry.p);
-                    ObjectList_AppendRetained((igObjectList *)geometry->_attributes, (igObject *)geometryAttr.p);
+                    ((Gap::Core::igObjectList *)geometry->_attributes)->append((Gap::Core::igObject *)geometryAttr.p);
                     igGroup_AppendChild((igGroup *)root.p, (igNode *)tile.p);
                     x += tileSizeX;
                 }
@@ -819,7 +814,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             texture->setMagFilter(movie->_magnificationFilter);
             igTextureAttr_SetImage((igTextureAttr *)texture.p, (igImage *)image.p, 0);
             ((igTextureBindAttrView **)binds->_data)[i]->setTexture((igObject *)texture.p);
-            ObjectList_AppendRetained((igObjectList *)textures.p, (igObject *)texture.p);
+            ((Gap::Core::igObjectList *)textures.p)->append((Gap::Core::igObject *)texture.p);
         }
         (igSmartPointer<igTextureList> &)movie->_runtimeTextures = textures;
         if (binds->_count == 1) {

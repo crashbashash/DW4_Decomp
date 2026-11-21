@@ -70,7 +70,7 @@ void igAnimationBinding_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAnimationBinding_Register);
 }
 
-static igMetaObjectCallback g_igAnimationBinding_callbackList[] = { igAnimationHierarchy_EnsureRegistered, igIntList_EnsureRegistered, igBitMask_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAnimationBinding_callbackList[] = { igAnimationHierarchy_EnsureRegistered, Gap::Core::igIntList::arkRegister, igBitMask_EnsureRegistered, 0 };
 
 CallbackArray *igAnimationBinding_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -141,7 +141,7 @@ void igAnimationBinding_InitFields(void) {
     ((igMemoryRefMetaField *)boneTrackIdxArrayField)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)boneTrackIdxArrayField)->_releaseOnReset = 1;
     chainSwapListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
-    ((igObjectRefMetaField *)chainSwapListField)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)chainSwapListField)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     reflectTrackField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)));
     ((igObjectRefMetaField *)reflectTrackField)->_metaObject = (int)igBitMask_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)meta, g_igAnimationBinding_fieldTable, g_igAnimationBinding_fieldHandles, g_igAnimationBinding_fieldOffsets, base);

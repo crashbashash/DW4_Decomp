@@ -120,13 +120,13 @@ int FUN_00453830(beFontImage *arg0, int arg1) {
 void igBitmapFont_resetFields(FontImage *self, int enable) {
     Gap__Core__igObject__resetFields((igObject *)self, enable);
     if (enable != 0) {
-        ObjectList_AppendRetained((igObjectList *)((unsigned)self->layers), (igObject *)((void *)self->base));
+        ((Gap::Core::igObjectList *)((unsigned)self->layers))->append((Gap::Core::igObject *)((void *)self->base));
         igSmartPointer<FillLayer> first((FillLayer *)Gap::Attrs::igBlendStateAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
         first.get()->setEnabled(1);
-        ObjectList_AppendRetained((igObjectList *)((unsigned)self->layers), (igObject *)(first.get()));
+        ((Gap::Core::igObjectList *)((unsigned)self->layers))->append((Gap::Core::igObject *)(first.get()));
         igSmartPointer<OutlineLayer> second((OutlineLayer *)igTextureStateAttr_CreateInstance((int)(((Gap::Core::igObject *)self)->getMemoryPool())));
         second.get()->setEnabled(1);
-        ObjectList_AppendRetained((igObjectList *)((unsigned)self->layers), (igObject *)(second.get()));
+        ((Gap::Core::igObjectList *)((unsigned)self->layers))->append((Gap::Core::igObject *)(second.get()));
         self->state = 0x10001;
     }
 }

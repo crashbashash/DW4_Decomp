@@ -19,7 +19,7 @@ void FUN_001c0f00(int mode) {
             ((Meta *)((void *)igAnimationState_GetMetaObject()))->f60 = DAT_00562728[0];
             g_igEnbayaContextPool_instance.clear();
         }
-        if (g_igAnimationStatePool_instance.p != 0) ObjectList_ResizeRetained((igTDataList<igObject *> *)g_igAnimationStatePool_instance.p, saved);
+        if (g_igAnimationStatePool_instance.p != 0) ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)g_igAnimationStatePool_instance.p))->setCount(saved);
         g_enbayaEnabled = mode;
     }
 }

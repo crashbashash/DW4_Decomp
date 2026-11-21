@@ -149,9 +149,9 @@ void beNDMWSaveCtrl_UpdateRam(beNDMWSaveCtrl *self, beBaseInfoRam *ram) {
         return;
     }
     ensureDataList(ram);
-    ctrl = (beNDMWSaveCtrlCtrlData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "CTRL");
+    ctrl = (beNDMWSaveCtrlCtrlData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "CTRL");
     ensureDataList(ram);
-    common = (beNDMWLoadCtrl2CommonIntf *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMONINTF");
+    common = (beNDMWLoadCtrl2CommonIntf *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMONINTF");
     switch (ctrl->_st0) {
     case 0:
         break;
@@ -365,7 +365,7 @@ int beNDMWSaveCtrl_OnMessage(beNDMWSaveCtrl *self, beBaseInfoRam *ram, beBaseInf
             OWNER_ALLOCATOR(a, self);
             {
             SaveCtrlDataRef ctrl(beNDMWSaveCtrlCtrlData_Create(a));
-            ObjectList_AppendRetained((igObjectList *)(int)(igObject *)ram->_dataList, (igObject *)(int)ctrl.p);
+            ((Gap::Core::igObjectList *)((int)(igObject *)ram->_dataList))->append((Gap::Core::igObject *)(int)ctrl.p);
             beNDMWSaveCtrlCtrlData *o = (beNDMWSaveCtrlCtrlData *)ctrl.p;
             o->_st0 = 1;
             o->_st3 = 0;
@@ -383,18 +383,18 @@ int beNDMWSaveCtrl_OnMessage(beNDMWSaveCtrl *self, beBaseInfoRam *ram, beBaseInf
                 OWNER_ALLOCATOR(a, self);
                 {
                 DegiDataRef degi(beNDMWDegiData_Create(a));
-                ObjectList_AppendRetained((igObjectList *)((beNDMWLoadCtrl2CommonIntf *)common.p)->_gameUseData, (igObject *)(int)degi.p);
+                ((Gap::Core::igObjectList *)(((beNDMWLoadCtrl2CommonIntf *)common.p)->_gameUseData))->append((Gap::Core::igObject *)(int)degi.p);
                 }
                 OWNER_ALLOCATOR(a, self);
                 {
                 FlagWorkRef flag(beNDMWLoadSavePlWork_Create(a));
-                ObjectList_AppendRetained((igObjectList *)((beNDMWLoadCtrl2CommonIntf *)common.p)->_flagWork, (igObject *)(int)flag.p);
+                ((Gap::Core::igObjectList *)(((beNDMWLoadCtrl2CommonIntf *)common.p)->_flagWork))->append((Gap::Core::igObject *)(int)flag.p);
                 }
                 i++;
             } while (i < 4);
             ((beNDMWLoadCtrl2CommonIntf *)common.p)->_kindHard = 0;
             beNDMWMcUtilCtrl__Init((beNDMWMcUtilCtrl *)((beNDMWLoadCtrl2CommonIntf *)common.p)->_mcUtilCtrl, self->_messenger, 0);
-            ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)(int)common.p);
+            ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)(int)common.p);
             }
             }
         }
@@ -402,7 +402,7 @@ int beNDMWSaveCtrl_OnMessage(beNDMWSaveCtrl *self, beBaseInfoRam *ram, beBaseInf
     }
     if (ram->_dataList == 0) return 1;
     ensureDataList(ram);
-    igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "CTRL");
+    ((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "CTRL");
     switch (message) {
     case 1:
         return 1;
@@ -411,7 +411,7 @@ int beNDMWSaveCtrl_OnMessage(beNDMWSaveCtrl *self, beBaseInfoRam *ram, beBaseInf
     case 3:
         if (beMessenger_GetObjectCount((beMessenger *)self->_messenger) == 0) {
             ensureDataList(ram);
-            beMessenger_AppendObject((beMessenger *)self->_messenger, (igObject *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMONINTF"));
+            beMessenger_AppendObject((beMessenger *)self->_messenger, (igObject *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMONINTF"));
         }
         return 1;
     default:

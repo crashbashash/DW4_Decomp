@@ -50,7 +50,7 @@ void beNDMWShopCtrlDigilabo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWShopCtrlDigilabo_Register);
 }
 
-static igMetaObjectCallback g_beNDMWShopCtrlDigilabo_callbackList[] = { igIntList_EnsureRegistered, igIntListList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWShopCtrlDigilabo_callbackList[] = { Gap::Core::igIntList::arkRegister, igIntListList_EnsureRegistered, 0 };
 
 CallbackArray *beNDMWShopCtrlDigilabo_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -122,10 +122,10 @@ void beNDMWShopCtrlDigilabo_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWShopCtrlDigilabo_ctorTable, 7);
     playerNoList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)playerNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)playerNoList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)playerNoList)->_construct = 1;
     digimonNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)digimonNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)digimonNoList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)digimonNoList)->_construct = 1;
     wpuNoListList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)wpuNoListList)->_metaObject = (int)igIntListList_GetOrCreateMetaObject();

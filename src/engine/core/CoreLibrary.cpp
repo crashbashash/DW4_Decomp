@@ -228,7 +228,7 @@
 #include "src/engine/core/igNamedObjectInfo_tail.inc"
 #include "src/engine/core/igObject_tail2.inc"
 #include "src/engine/core/igObjectDirEntry_tail.inc"
-#include "src/engine/core/list-services_tail.inc"
+#include "src/engine/core/igObjectList_tail.inc"
 #include "src/engine/core/igObjectRefArrayMetaField_tail.inc"
 #include "src/engine/core/igObjectRefMetaField_tail.inc"
 #include "src/engine/core/igFolder_tail2.inc"

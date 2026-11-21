@@ -119,7 +119,7 @@ template <class Ref> static inline void storeAt(const int &list, int i, const Re
 #define GROUP(field, CNT, factory, Ref, T) { \
     igObjectList *list = (igObjectList *)self->field; \
     if (list->_count < (CNT) + 1) ((Gap::Core::igDataList *)list)->setCapacity(CNT, 4); \
-    ObjectList_ResizeRetained((igTDataList<igObject *> *)self->field, CNT); \
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)self->field))->setCount(CNT); \
     int i; \
     for (i = 0; i < (CNT); i += 1) { \
         int alloc; \
@@ -461,7 +461,7 @@ void beMessenger_Update(beMessenger *self)
                     DelayRef::release(((igObject **)stack->_data)[0]);
                     List_RemoveWordAt((igDataList *)stack, 0);
                     ((igObject **)stack->_data)[stack->_count] = 0;
-                    ObjectList_AppendRetained((igObjectList *)self->_delayStack, (igObject *)row.p);
+                    ((Gap::Core::igObjectList *)self->_delayStack)->append((Gap::Core::igObject *)row.p);
                 }
             } else {
                 long long now = Insight::Get((igInsightCore *)self->_insight);
@@ -507,7 +507,7 @@ void beMessenger_RegisterReceiver(beMessenger *self, beBaseInfoRam *recv, const 
     igIntList *l;
     int n;
 
-    igSmartPointer<beMessengerGroup> grp((beMessengerGroup *)igProperty_FindByName((igObjectList *)self->_groupList, g_propertyNameField, name));
+    igSmartPointer<beMessengerGroup> grp((beMessengerGroup *)((Gap::Core::igObjectList *)self->_groupList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name));
     RETAIN_REF(grp.p)
     if (grp.p == 0) {
         allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
@@ -515,9 +515,9 @@ void beMessenger_RegisterReceiver(beMessenger *self, beBaseInfoRam *recv, const 
         RELEASE_REF(grp.p)
         grp.p = beMessengerGroup_Create(allocator);
         igNamedObject_SetName((igNamedObject *)grp.p, name);
-        ObjectList_AppendRetained((igObjectList *)self->_groupList, (igObject *)grp.p);
+        ((Gap::Core::igObjectList *)self->_groupList)->append((Gap::Core::igObject *)grp.p);
     }
-    ObjectList_AppendRetained((igObjectList *)grp.p->_ramList, (igObject *)recv);
+    ((Gap::Core::igObjectList *)grp.p->_ramList)->append((Gap::Core::igObject *)recv);
     {
         igStringRef token((char *)text);
         StringList_AppendRetained((igStringRefList *)grp.p->_infoNameList, &token.p);
@@ -645,7 +645,7 @@ void beMessenger_SelectReceivers(beMessenger *self, const char *category, const 
 
     work = (Work *)LDATA((List *)self->_workStack)[0];
     if (((List *)work->_findRamList)->_count == 0) {
-        g = (Group *)igProperty_FindByName((igObjectList *)self->_groupList, g_propertyNameField, (const char *)work->_groupName);
+        g = (Group *)((Gap::Core::igObjectList *)self->_groupList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)work->_groupName);
         if (g) {
             m = ((List *)g->_ramList)->_count;
             for (k = 0; k < m; k++) {
@@ -658,7 +658,7 @@ void beMessenger_SelectReceivers(beMessenger *self, const char *category, const 
                     if (c < l->_capacity) l->_count = countOf(l) + 1;
                     else ((Gap::Core::igDataList *)l)->resizeAndSetCount(c + 1, 4);
                     LDATA(l)[c] = *src;
-                    ObjectList_AppendRetained((igObjectList *)work->_findRamList, LDATA((List *)g->_ramList)[k]);
+                    ((Gap::Core::igObjectList *)work->_findRamList)->append((Gap::Core::igObject *)(LDATA((List *)g->_ramList)[k]));
                 }
             }
         }
@@ -803,7 +803,7 @@ void beMessenger_DispatchSelected(beMessenger *self, const char *name)
                 break;
             }
         }
-        if (held.value) ObjectList_AppendRetained((igObjectList *)((beMessengerArgData *)self->_argData)->_objectList, (igObject *)held.value);
+        if (held.value) ((Gap::Core::igObjectList *)(((beMessengerArgData *)self->_argData)->_objectList))->append((Gap::Core::igObject *)held.value);
     } else {
         for (i3 = 0; i3 < count; i3++) {
             int sid = work->_ramNo;
@@ -864,7 +864,7 @@ void beMessenger_PrepareDelayedSelection(beMessenger *self, const char *group, c
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         RELEASE_REF(row.p)
         row.p = beMessengerDelay_Create(allocator);
-        ObjectList_AppendRetained((igObjectList *)self->_delayStack, (igObject *)row.p);
+        ((Gap::Core::igObjectList *)self->_delayStack)->append((Gap::Core::igObject *)row.p);
     }
     SET_STRING(_groupName, group)
     SET_STRING(_infoName, name)
@@ -983,7 +983,7 @@ void beMessenger_PopArgContext(beMessenger *self) {
         ArgRef::release(((RefObj **)list->_data)[0]);
         List_RemoveWordAt((igDataList *)list, 0);
         ((RefObj **)list->_data)[list->_count] = 0;
-        ObjectList_AppendRetained((igObjectList *)self->_pushPopStack, saved.p);
+        ((Gap::Core::igObjectList *)self->_pushPopStack)->append((Gap::Core::igObject *)saved.p);
     }
     --self->_pushPopCount;
 }
@@ -1209,7 +1209,7 @@ int beMessenger_GetObjectCount(beMessenger *self) {
 
 void beMessenger_AppendObject(beMessenger *self, igObject *object)
 {
-    ObjectList_AppendRetained((igObjectList *)((beMessengerArgData *)self->_argData)->_objectList, object);
+    ((Gap::Core::igObjectList *)(((beMessengerArgData *)self->_argData)->_objectList))->append((Gap::Core::igObject *)object);
 }
 
 void beMessenger_ClearObjects(beMessenger *self) {

@@ -204,7 +204,7 @@ void igIGBFile_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igIGBFile_Register);
 }
 
-static igMetaObjectCallback g_igIGBFile_callbackList[] = { igFile_EnsureRegistered, igMetaFieldList_EnsureRegistered, igMetaObjectList_EnsureRegistered, Gap::Core::igMetaField::arkRegister, igIntList_EnsureRegistered, igMemoryPool_EnsureRegistered, Gap::Core::igObjectList::arkRegister, 0 };
+static igMetaObjectCallback g_igIGBFile_callbackList[] = { igFile_EnsureRegistered, igMetaFieldList_EnsureRegistered, igMetaObjectList_EnsureRegistered, Gap::Core::igMetaField::arkRegister, Gap::Core::igIntList::arkRegister, igMemoryPool_EnsureRegistered, Gap::Core::igObjectList::arkRegister, 0 };
 
 CallbackArray *igIGBFile_Register(void) {
     CoreLibrary_MarkRegistered();  /* First-use initializer: sets a gp byte flag, then runs five one-time init calls. */
@@ -584,7 +584,7 @@ void igIGBFile_InitFields(void) {
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x28));
     ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x2A));
-    ((igObjectRefMetaField *)field)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x2C));
     ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x2E)))->setDefault(-1);
@@ -604,7 +604,7 @@ void igIGBFile_InitFields(void) {
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x3F));
     ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x40));
-    ((igObjectRefMetaField *)field)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_igIGBFile_fieldTable, g_igIGBFile_fieldDescriptors, g_igIGBFile_fieldOffsets, base);
 }
 

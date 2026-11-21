@@ -34,7 +34,7 @@ void beNDMWMdlPEBaseInfoWork_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWMdlPEBaseInfoWork_Register);
 }
 
-static igMetaObjectCallback g_beNDMWMdlPEBaseInfoWork_callbackList[] = { igIntList_EnsureRegistered, igBoolList_EnsureRegistered, beMessenger_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWMdlPEBaseInfoWork_callbackList[] = { Gap::Core::igIntList::arkRegister, Gap::Core::igBoolList::arkRegister, beMessenger_EnsureRegistered, 0 };
 
 CallbackArray *beNDMWMdlPEBaseInfoWork_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -124,17 +124,17 @@ void beNDMWMdlPEBaseInfoWork_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWMdlPEBaseInfoWork_ctorTable, 0xA);
     dispRamNoList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
-    ((igObjectRefMetaField *)dispRamNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dispRamNoList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     dispPosNoList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2));
-    ((igObjectRefMetaField *)dispPosNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dispPosNoList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     timerList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3));
-    ((igObjectRefMetaField *)timerList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)timerList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     isFirstList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4));
-    ((igObjectRefMetaField *)isFirstList)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)isFirstList)->_metaObject = (int)Gap::Core::igBoolList::getClassTypeLazy();
     downDataList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7));
-    ((igObjectRefMetaField *)downDataList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)downDataList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     upDataList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 8));
-    ((igObjectRefMetaField *)upDataList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)upDataList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     messenger = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 9));
     ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)messenger)->_refCounted = 0;

@@ -25,15 +25,12 @@ int List_BinarySearchWords(struct igDataList *list, int key, int (*compare)(int,
 int List_BinarySearch(struct igDataList *list, int key, int (*compare)(int, int), int elementSize);
 int List_LowerBound(struct igDataList *list, void *key, int (*compare)(int *, void *));
 /* Retains `object` (reference count +1) and appends it. */
-int ObjectList_AppendRetained(struct igObjectList *list, struct igObject *object);
-int igProperty_FindByName(struct igObjectList *list, struct igMetaField *field, const char *name);
+void ObjectList_AppendRetained(struct igObjectList *list, struct igObject *object);
 extern struct igMetaObject *g_igDataList_metaObject;
-void ObjectList_ClearRetainedPreserveCount(igTDataList<struct igObject *> *list);
 void List_InsertBytes(struct igDataList *list, int index, int count, const void *src, int stride);
 void List_RemoveAt(struct igDataList *l, int i, int sz);
 int igDataList_GetCount(struct igDataList *list);
 struct igMetaObject *igDataList_GetOrCreateMetaObject(void);
-int igProperty_FindByPointer(void *listObject, void *fieldObject, int key);
 
 #ifdef __cplusplus
 }

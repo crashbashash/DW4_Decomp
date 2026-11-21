@@ -203,7 +203,7 @@ void igHotKeyEventReceiver_AddBinding(igHotKeyEventReceiver *receiver, int key, 
     entry->a = key;
     entry->b = button;
     assign(&entry->value, action);
-    ObjectList_AppendRetained((igObjectList *)receiver->_hotKeyList, (igObject *)(entry.get()));
+    ((Gap::Core::igObjectList *)receiver->_hotKeyList)->append((Gap::Core::igObject *)(entry.get()));
 }
 
 void igHotKeyEventReceiver_RemoveBinding(igHotKeyEventReceiver *receiver, int button) {

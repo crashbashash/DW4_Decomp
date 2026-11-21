@@ -415,7 +415,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
         do {
             category = nodeAt((igObjectList *)categories, i);
             categorySwitch = nodeAt(category->_childList, 0);
-            ObjectList_AppendRetainedList((igTDataList<igObject *> *)category->_attributes, (igTDataList<igObject *> *)((void *)((beFontImage **)((beFontImageList *)self->_fonts)->_data)[beFont_FindFontIndex(self, (int)(categorySwitch->_name ? (const char *)categorySwitch->_name : (const char *)emptyString))]->_attrList));
+            ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)category->_attributes))->concatenate((Gap::Core::igObjectList *)((igTDataList<igObject *> *)((void *)((beFontImage **)((beFontImageList *)self->_fonts)->_data)[beFont_FindFontIndex(self, (int)(categorySwitch->_name ? (const char *)categorySwitch->_name : (const char *)emptyString))]->_attrList)));
             j = 0;
             while (j < countOf(categorySwitch->_childList)) {
                 panel = asAttrSet(nodeAt(categorySwitch->_childList, j));
@@ -429,8 +429,8 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                     allocator = ((Gap::Core::igObject *)self)->getMemoryPool();
                     if (g_useOwnerAllocator != 0) creator = allocator; else creator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                     igSmartPointer<igGeometryAttr> geometry(igGeometryAttr_Create((int)creator));
-                    ObjectList_AppendRetained((igObjectList *)newPair.p->_geomAttrs, (igObject *)geometry.p);
-                    ObjectList_AppendRetained((igObjectList *)self->_gaPairList, (igObject *)newPair.p);
+                    ((Gap::Core::igObjectList *)newPair.p->_geomAttrs)->append((Gap::Core::igObject *)geometry.p);
+                    ((Gap::Core::igObjectList *)self->_gaPairList)->append((Gap::Core::igObject *)newPair.p);
                 }
                 j++;
             }
@@ -667,7 +667,7 @@ void beFont_AddFontImages(beFont *self, igNamedObjectInfo *info) {
         igNodeView *object = objectAt(named->objects, i);
         igMetaObject *fontImageMeta = g_beFontImage_metaObject;
         if (fontImageMeta == object->GetMeta()) {
-            ObjectList_AppendRetained((igObjectList *)self->_fonts, (igObject *)object);
+            ((Gap::Core::igObjectList *)self->_fonts)->append((Gap::Core::igObject *)object);
         }
     }
 }
@@ -853,7 +853,7 @@ void beFont_SetText(beFont *self, beBaseInfoRam *ram, igNodeView *text, int inde
     if (entry->_align == 1 || entry->_align == 2) beFont_AlignLines(self, characters, entry, &positions);
     vertices->unlock(&texCoords, 0);
     vertices->unlock(&positions, 0);
-    ObjectList_AppendRetained((igObjectList *)pair->_geomAttrs, (igObject *)spare);
+    ((Gap::Core::igObjectList *)pair->_geomAttrs)->append((Gap::Core::igObject *)spare);
     igObjectList *targetAttributes = target->_attributes;
     if (geometry != 0) ++geometry->_refCount;
     igGeometryAttr *old = (igGeometryAttr *)((int *)targetAttributes->_data)[0];

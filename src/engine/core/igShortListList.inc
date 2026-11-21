@@ -33,7 +33,7 @@ void igShortListList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igShortListList_Register);
 }
 
-static igMetaObjectCallback g_igShortListList_callbackList[] = { igShortList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igShortListList_callbackList[] = { Gap::Core::igShortList::arkRegister, 0 };
 
 CallbackArray *igShortListList_Register(void) {
     CoreLibrary_MarkRegistered();

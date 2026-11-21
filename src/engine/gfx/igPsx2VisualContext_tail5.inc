@@ -133,7 +133,7 @@ int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, unsigned char *use
         } else {
             attrs = geom->attrs;
             node = (AttrNode1774 *)FUN_0015f4a0((S_15f430 *)attrs, 6, 0);
-            int m1 = (int)g_igUnsignedCharList_metaObject; /* matching construct: spelling sweep — the compared metas are locals, spilled with sw */
+            int m1 = (int)Gap::Core::igUnsignedCharList::getClassMeta(); /* matching construct: spelling sweep — the compared metas are locals, spilled with sw */
             if (m1 == node->obj->meta()) {
                 matrices = node->obj->f16;
                 levels = node->f24;
@@ -153,22 +153,22 @@ int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, unsigned char *use
             node = (AttrNode1774 *)FUN_0015f4a0((S_15f430 *)attrs, 5, 0);
             if (node != 0) {
                 value = node->obj;
-                if (value->meta() == (int)g_igCharList_metaObject) {
+                if ((int)Gap::Core::igCharList::getClassMeta() == value->meta()) {
                     int a = node->f32;
                     p2SetComponentLayout(3, 1, 7 - a, a);
                     texture = value->f16;
                     *useTexture = 1;
-                } else if (node->obj->meta() == (int)g_igUnsignedCharList_metaObject) {
+                } else if ((int)Gap::Core::igUnsignedCharList::getClassMeta() == node->obj->meta()) {
                     int a = node->f32;
                     p2SetComponentLayout(3, 0, 8 - a, a);
                     texture = value->f16;
                     *useTexture = 1;
-                } else if (node->obj->meta() == (int)g_igShortList_metaObject) {
+                } else if ((int)Gap::Core::igShortList::getClassMeta() == node->obj->meta()) {
                     int a = node->f32;
                     p2SetComponentLayout(3, 1, 0xF - a, a);
                     texture = value->f16;
                     *useTexture = 1;
-                } else if (node->obj->meta() == (int)g_igUnsignedShortList_metaObject) {
+                } else if ((int)Gap::Core::igUnsignedShortList::getClassMeta() == node->obj->meta()) {
                     int a = node->f32;
                     p2SetComponentLayout(3, 0, 0x10 - a, a);
                     texture = value->f16;

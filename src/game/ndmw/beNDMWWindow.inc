@@ -38,7 +38,7 @@ void beNDMWWindow_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWWindow_Register);
 }
 
-static igMetaObjectCallback g_beNDMWWindow_callbackList[] = { igInsightCore_EnsureRegistered, beMessenger_EnsureRegistered, bePadManager_EnsureRegistered, beNDMWWindowList_EnsureRegistered, igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWWindow_callbackList[] = { igInsightCore_EnsureRegistered, beMessenger_EnsureRegistered, bePadManager_EnsureRegistered, beNDMWWindowList_EnsureRegistered, igStringRefList_EnsureRegistered, Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *beNDMWWindow_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -185,7 +185,7 @@ void beNDMWWindow_InitFields(void) {
     ((igObjectRefMetaField *)modelCloseInfoNameList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)modelCloseInfoNameList)->_construct = 1;
     modelCloseRamNoList = (void *)(igMetaObject_GetFieldAt(meta, base + 0x10));
-    ((igObjectRefMetaField *)modelCloseRamNoList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)modelCloseRamNoList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)modelCloseRamNoList)->_construct = 1;
     modelCloseSeqNameList = (void *)(igMetaObject_GetFieldAt(meta, base + 0x11));
     ((igObjectRefMetaField *)modelCloseSeqNameList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();

@@ -42,7 +42,7 @@ void beNDMWStatusCtrlFlag_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWStatusCtrlFlag_Register);
 }
 
-static igMetaObjectCallback g_beNDMWStatusCtrlFlag_callbackList[] = { igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWStatusCtrlFlag_callbackList[] = { Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *beNDMWStatusCtrlFlag_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -88,7 +88,7 @@ void beNDMWStatusCtrlFlag_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWStatusCtrlFlag_ctorTable, 1);
     impItems = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)impItems)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)impItems)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)impItems)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWStatusCtrlFlag_fieldTable, g_beNDMWStatusCtrlFlag_fieldHandles, g_beNDMWStatusCtrlFlag_fieldOffsets, base);
 }

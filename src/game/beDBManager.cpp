@@ -35,47 +35,47 @@ extern "C" int beDBManager_OnMessageText(beDBManager *self, beBaseInfoRam *ram, 
 
 beDataObjInt *igProperty_GetRecord(igObject *container, const char *key)
 {
-    return (beDataObjInt *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
+    return (beDataObjInt *)((Gap::Core::igObjectList *)container)->search((Gap::Core::igStringMetaField *)g_propertyNameField, key);
 }
 
 beDataObjIntList *igProperty_GetRecordIntList(igObject *container, const char *key)
 {
-    return (beDataObjIntList *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
+    return (beDataObjIntList *)((Gap::Core::igObjectList *)container)->search((Gap::Core::igStringMetaField *)g_propertyNameField, key);
 }
 
 beDataObjBool *igProperty_GetRecordByte(igObject *container, const char *key)
 {
-    return (beDataObjBool *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
+    return (beDataObjBool *)((Gap::Core::igObjectList *)container)->search((Gap::Core::igStringMetaField *)g_propertyNameField, key);
 }
 
 beDataObjBoolList *igProperty_GetRecordArray(igObject *container, const char *key)
 {
-    return (beDataObjBoolList *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
+    return (beDataObjBoolList *)((Gap::Core::igObjectList *)container)->search((Gap::Core::igStringMetaField *)g_propertyNameField, key);
 }
 
 beDataObjString *igProperty_GetRecordString(igObject *container, const char *key)
 {
-    return (beDataObjString *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
+    return (beDataObjString *)((Gap::Core::igObjectList *)container)->search((Gap::Core::igStringMetaField *)g_propertyNameField, key);
 }
 
 beDataObjStringList *igProperty_GetRecordStringList(igObject *container, const char *key)
 {
-    return (beDataObjStringList *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
+    return (beDataObjStringList *)((Gap::Core::igObjectList *)container)->search((Gap::Core::igStringMetaField *)g_propertyNameField, key);
 }
 
 beDataObjObjectList *igProperty_GetRecordFolder(igObject *container, const char *key)
 {
-    return (beDataObjObjectList *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
+    return (beDataObjObjectList *)((Gap::Core::igObjectList *)container)->search((Gap::Core::igStringMetaField *)g_propertyNameField, key);
 }
 
 beDataObjFloatList *igProperty_GetRecordFloatList(igObject *container, const char *key)
 {
-    return (beDataObjFloatList *)igProperty_FindByName((igObjectList *)container, g_propertyNameField, key);
+    return (beDataObjFloatList *)((Gap::Core::igObjectList *)container)->search((Gap::Core::igStringMetaField *)g_propertyNameField, key);
 }
 
 #define BEDATABASE_NO_INDEX (-1)
 /* Flat index of the cell for (record, key) in the data list that pairs with the offset list
- * `columns`. The key is resolved to a column name through igProperty_FindByName, then located
+ * `columns`. The key is resolved to a column name through Gap::Core::igObjectList::search, then located
  * among the list entries; the result is columnCount * record + columnPosition, or -1 when the list
  * has no columns or does not contain the key. */
 int beDataBase_FindRecordValueIndex(beDataBase *self, int record, const char *key,
@@ -86,7 +86,7 @@ int beDataBase_FindRecordValueIndex(beDataBase *self, int record, const char *ke
     if (!columnCount) {
         return -1;
     }
-    found = igProperty_FindByName((igObjectList *)columns, (igMetaField *)g_propertyNameField, key);
+    found = (int)((Gap::Core::igObjectList *)columns)->search((Gap::Core::igStringMetaField *)g_propertyNameField, key);
     if (!found) {
         return -1;
     }

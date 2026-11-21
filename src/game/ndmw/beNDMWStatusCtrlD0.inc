@@ -52,7 +52,7 @@ void beNDMWStatusCtrlD0_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWStatusCtrlD0_Register);
 }
 
-static igMetaObjectCallback g_beNDMWStatusCtrlD0_callbackList[] = { igIntList_EnsureRegistered, igBoolList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWStatusCtrlD0_callbackList[] = { Gap::Core::igIntList::arkRegister, Gap::Core::igBoolList::arkRegister, 0 };
 
 CallbackArray *beNDMWStatusCtrlD0_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -127,11 +127,11 @@ void beNDMWStatusCtrlD0_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWStatusCtrlD0_ctorTable, 8);
     kindList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)kindList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)kindList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)kindList)->_construct = 1;
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 6)))->setDefault(1);
     decideList = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
-    ((igObjectRefMetaField *)decideList)->_metaObject = (int)igBoolList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)decideList)->_metaObject = (int)Gap::Core::igBoolList::getClassTypeLazy();
     ((igRefMetaField *)decideList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWStatusCtrlD0_fieldTable, g_beNDMWStatusCtrlD0_fieldHandles, g_beNDMWStatusCtrlD0_fieldOffsets, base);
 }

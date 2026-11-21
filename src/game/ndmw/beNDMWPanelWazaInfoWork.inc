@@ -117,7 +117,7 @@ void beNDMWPanelWazaInfoWork_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWPanelWazaInfoWork_Register);
 }
 
-static igMetaObjectCallback g_beNDMWPanelWazaInfoWork_callbackList[] = { beNDMWPanelObjectWaza_EnsureRegistered, beNDMWPanelObjectItem_EnsureRegistered, beNDMWPanelObjectStat_EnsureRegistered, beNDMWMdlPlayerInfoWork_EnsureRegistered, igStringRefList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWPanelWazaInfoWork_callbackList[] = { beNDMWPanelObjectWaza_EnsureRegistered, beNDMWPanelObjectItem_EnsureRegistered, beNDMWPanelObjectStat_EnsureRegistered, beNDMWMdlPlayerInfoWork_EnsureRegistered, igStringRefList_EnsureRegistered, Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *beNDMWPanelWazaInfoWork_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -224,7 +224,7 @@ void beNDMWPanelWazaInfoWork_InitFields(void) {
     ((igObjectRefMetaField *)textSetList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)textSetList)->_construct = 1;
     textColorList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xA));
-    ((igObjectRefMetaField *)textColorList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)textColorList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)textColorList)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWPanelWazaInfoWork_fieldTable, g_beNDMWPanelWazaInfoWork_fieldHandles, g_beNDMWPanelWazaInfoWork_fieldOffsets, base);
 }

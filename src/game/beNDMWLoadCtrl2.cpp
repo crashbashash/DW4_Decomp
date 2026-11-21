@@ -49,7 +49,7 @@
 #include "dw4/core/igTDataList.h"
 #include "dw4/game/ndmw/beNDMWItemBaseDispatchView.h"
 #include "dw4/support/list-services.h"
-#define IDS(DST, REC, CAP, RESIZE) { igObjectList *l = ((igObjectList *)igProperty_GetRecordFolder((igObject *)props, REC)->_data); int i; if (RESIZE) { if (l->_count > CAP) ObjectList_ResizeRetained((igTDataList<igObject *> *)l, CAP); } i = 0; if (0 < l->_count) { do { DST[i] = ((IdObject **)l->_data)[i]->GetId(); i++; } while (i < l->_count); } if (i < CAP) { do { DST[i] = -1; i++; } while (i < CAP); } }
+#define IDS(DST, REC, CAP, RESIZE) { igObjectList *l = ((igObjectList *)igProperty_GetRecordFolder((igObject *)props, REC)->_data); int i; if (RESIZE) { if (l->_count > CAP) ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)l))->setCount(CAP); } i = 0; if (0 < l->_count) { do { DST[i] = ((IdObject **)l->_data)[i]->GetId(); i++; } while (i < l->_count); } if (i < CAP) { do { DST[i] = -1; i++; } while (i < CAP); } }
 #define BYTES(DST, FN, REC) { igTDataList<unsigned char> *l = (igTDataList<unsigned char> *)FN((igObject *)props, REC)->_data; int i = 0; if (0 < l->_count) { do { DST[i] = l->_data[i]; i++; } while (i < l->_count); } }
 #define FINDN(DST, REC, N) { igObjectList *l = ((igObjectList *)igProperty_GetRecordFolder((igObject *)props, REC)->_data); igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "DEVICEFOLDER")->_data); int a; for (a = 0; a < N; a++) { IdObject *v = ((IdObject **)l->_data)[a]; if (v == 0) { DST[a] = -1; } else { DST[a] = t->find(v); } } }
 #define FIND1(DSTV, REC) { igObjectList *l = ((igObjectList *)igProperty_GetRecordFolder((igObject *)props, REC)->_data); igTDataList<IdObject *> *t = (igTDataList<IdObject *> *)((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "DEVICEFOLDER")->_data); IdObject *v = ((IdObject **)l->_data)[0]; if (v == 0) { DSTV = -1; } else { DSTV = t->find(v); } }
@@ -58,7 +58,7 @@
 #define OWNER_ALLOCATOR(dst, obj) { int alloc = (int)((Gap::Core::igObject *)(obj))->getMemoryPool(); if (g_useOwnerAllocator != 0) { dst = alloc; } else { dst = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); } }
 
 extern "C" void beNDMWDegiData__CopyFrom(beNDMWDegiData *dst, beNDMWDegiData *src);
-/* kept local: ObjectList_ResizeRetained has no include/dw4 home (only CoreLibrary.h declares it). */
+/* kept local: Gap::Core::igObjectList::setCount has no include/dw4 home (only CoreLibrary.h declares it). */
 extern "C" int beNDMWLoadCtrl2__GetInfoMeta(void);
 extern "C" int beNDMWLoadCtrl2__GetMeta(void);
 extern "C" void TextOrder_Configure(beNDMWLoadIntf2TextOrder *order, const char *line, const char *font, const char *text, int align, int color);
@@ -1366,7 +1366,7 @@ int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *intf, in
                 for (i = 0; i < 4; i++) {
                     ALLOC(alloc, intf);
                     DegiDataRef degi((igObject *)beNDMWDegiData_Create((int)alloc));
-                    ObjectList_AppendRetained((igObjectList *)SLOT_PLAYER(slotPlayer.p)->_saveDataList, degi.p);
+                    ((Gap::Core::igObjectList *)(SLOT_PLAYER(slotPlayer.p)->_saveDataList))->append((Gap::Core::igObject *)degi.p);
                 }
                 beNDMWLoadSlotPlayer__ReadFromBuffer((beNDMWLoadSlotPlayer *)slotPlayer.p, (int)(((beSaveDataDeliver *)MCU(intf)->_svData)->_data));
                 SLOT_PLAYER(slotPlayer.p)->_connectNO = slot;
@@ -1375,7 +1375,7 @@ int beNDMWLoadCtrl2CommonIntf__StepReadMedia(beNDMWLoadCtrl2CommonIntf *intf, in
                 if (count < accessList->_capacity) accessList->_count = countOf(accessList) + 1;
                 else ((Gap::Core::igDataList *)accessList)->resizeAndSetCount(count + 1, 4);
                 ((int *)accessList->_data)[count] = player;
-                ObjectList_AppendRetained((igObjectList *)intf->_slotSaveData, slotPlayer.p);
+                ((Gap::Core::igObjectList *)intf->_slotSaveData)->append((Gap::Core::igObject *)slotPlayer.p);
                 for (j = 0; j < 4; j++) {
                     DegiDataRef degi((igObject *)((beNDMWDegiData **)((igObjectList *)SLOT_PLAYER(slotPlayer.p)->_saveDataList)->_data)[j]);
                     if (degi.p != 0) REFS(degi.p) = REFS(degi.p) + 1;
@@ -1879,7 +1879,7 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
         for (; i < 8; i++)
             dst[i] = 0;
     }
-    ObjectList_AppendRetained(playerNameList, (igObject *)nameText.p);
+    ((Gap::Core::igObjectList *)playerNameList)->append((Gap::Core::igObject *)nameText.p);
     }
     igProperty_GetRecord((igObject *)props, "XDATA")->_data = record->xdata;
     igProperty_GetRecord((igObject *)props, "BIT")->_data = record->bit;
@@ -1890,7 +1890,7 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
         if (id == -1)
             break;
         ItemRef item = beNDMWDegiData__CreateItem(degi, id);
-        ObjectList_AppendRetained(deviceFolderList, (igObject *)item.p);
+        ((Gap::Core::igObjectList *)deviceFolderList)->append((Gap::Core::igObject *)item.p);
     }
     igObjectList *diskFolderList = ((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "DISKFOLDER")->_data);
     ObjectListOps::Clear(diskFolderList);
@@ -1899,7 +1899,7 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
         if (id == -1)
             break;
         ItemRef item = beNDMWDegiData__CreateItem(degi, id);
-        ObjectList_AppendRetained(diskFolderList, (igObject *)item.p);
+        ((Gap::Core::igObjectList *)diskFolderList)->append((Gap::Core::igObject *)item.p);
     }
     igUnsignedCharList *cardList = (igUnsignedCharList *)((igTDataList<unsigned char> *)igProperty_GetRecordArray((igObject *)props, "CARDLIST")->_data);
     for (int i = 0; i < 50; i++) {
@@ -1914,7 +1914,7 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
         if (id == -1)
             break;
         ItemRef item = beNDMWDegiData__CreateItem(degi, id);
-        ObjectList_AppendRetained(bankDeviceList, (igObject *)item.p);
+        ((Gap::Core::igObjectList *)bankDeviceList)->append((Gap::Core::igObject *)item.p);
     }
     igProperty_GetRecord((igObject *)props, "BANKBIT")->_data = record->bankBit;
     igObjectList *powerSocketList = ((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "POWERSOCKET")->_data);
@@ -1925,9 +1925,9 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
             ItemRef item(((RefCounted **)((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "DEVICEFOLDER")->_data)->_data)[id]);
             if (item.p)
                 item.p->refCount++;
-            ObjectList_AppendRetained(powerSocketList, (igObject *)item.p);
+            ((Gap::Core::igObjectList *)powerSocketList)->append((Gap::Core::igObject *)item.p);
         } else {
-            ObjectList_AppendRetained(powerSocketList, 0);
+            ((Gap::Core::igObjectList *)powerSocketList)->append(0);
         }
     }
     igObjectList *powerPocketList = ((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "POWERPOCKET")->_data);
@@ -1938,9 +1938,9 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
             ItemRef item(((RefCounted **)((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "DEVICEFOLDER")->_data)->_data)[id]);
             if (item.p)
                 item.p->refCount++;
-            ObjectList_AppendRetained(powerPocketList, (igObject *)item.p);
+            ((Gap::Core::igObjectList *)powerPocketList)->append((Gap::Core::igObject *)item.p);
         } else {
-            ObjectList_AppendRetained(powerPocketList, 0);
+            ((Gap::Core::igObjectList *)powerPocketList)->append(0);
         }
     }
     igObjectList *mainSlotList = ((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "MAINSLOT")->_data);
@@ -1951,9 +1951,9 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
             ItemRef item(((RefCounted **)((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "DEVICEFOLDER")->_data)->_data)[id]);
             if (item.p)
                 item.p->refCount++;
-            ObjectList_AppendRetained(mainSlotList, (igObject *)item.p);
+            ((Gap::Core::igObjectList *)mainSlotList)->append((Gap::Core::igObject *)item.p);
         } else {
-            ObjectList_AppendRetained(mainSlotList, 0);
+            ((Gap::Core::igObjectList *)mainSlotList)->append(0);
         }
     }
     igObjectList *mainPocketList = ((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "MAINPOCKET")->_data);
@@ -1964,9 +1964,9 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
             ItemRef item(((RefCounted **)((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "DEVICEFOLDER")->_data)->_data)[id]);
             if (item.p)
                 item.p->refCount++;
-            ObjectList_AppendRetained(mainPocketList, (igObject *)item.p);
+            ((Gap::Core::igObjectList *)mainPocketList)->append((Gap::Core::igObject *)item.p);
         } else {
-            ObjectList_AppendRetained(mainPocketList, 0);
+            ((Gap::Core::igObjectList *)mainPocketList)->append(0);
         }
     }
     igObjectList *subSlotList = ((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "SUBSLOT")->_data);
@@ -1976,9 +1976,9 @@ void beNDMWDegiData__StoreToProperties(beNDMWDegiData *degi, void *props, int fo
         ItemRef item(((RefCounted **)((igObjectList *)igProperty_GetRecordFolder((igObject *)props, "DEVICEFOLDER")->_data)->_data)[subSlotId]);
         if (item.p)
             item.p->refCount++;
-        ObjectList_AppendRetained(subSlotList, (igObject *)item.p);
+        ((Gap::Core::igObjectList *)subSlotList)->append((Gap::Core::igObject *)item.p);
     } else {
-        ObjectList_AppendRetained(subSlotList, 0);
+        ((Gap::Core::igObjectList *)subSlotList)->append(0);
     }
     igUnsignedCharList *baseFlagList = (igUnsignedCharList *)((igTDataList<unsigned char> *)igProperty_GetRecordArray((igObject *)props, "BASE_FLAG")->_data);
     for (int i = 0; i < 1024; i++) {
@@ -2085,7 +2085,7 @@ void beNDMWMcUtilCtrl__Init(beNDMWMcUtilCtrl *util, int messenger, int kindHard)
             int owner = (int)((Gap::Core::igObject *)util)->getMemoryPool();
             int alloc = g_useOwnerAllocator ? owner : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             SlotRef<0> slot(beNDMWMcSlotPS2_Create(alloc));
-            ObjectList_AppendRetained((igObjectList *)util->_slot, slot.p);
+            ((Gap::Core::igObjectList *)util->_slot)->append((Gap::Core::igObject *)slot.p);
         }
         return;
     case 1:
@@ -2093,7 +2093,7 @@ void beNDMWMcUtilCtrl__Init(beNDMWMcUtilCtrl *util, int messenger, int kindHard)
             int owner = (int)((Gap::Core::igObject *)util)->getMemoryPool();
             int alloc = g_useOwnerAllocator ? owner : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             SlotRef<1> slot(beNDMWMcSlotGC_Create(alloc));
-            ObjectList_AppendRetained((igObjectList *)util->_slot, slot.p);
+            ((Gap::Core::igObjectList *)util->_slot)->append((Gap::Core::igObject *)slot.p);
         }
         return;
     case 2:
@@ -2101,7 +2101,7 @@ void beNDMWMcUtilCtrl__Init(beNDMWMcUtilCtrl *util, int messenger, int kindHard)
             int owner = (int)((Gap::Core::igObject *)util)->getMemoryPool();
             int alloc = g_useOwnerAllocator ? owner : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             SlotRef<2> slot(beNDMWMcSlotXbox_Create(alloc));
-            ObjectList_AppendRetained((igObjectList *)util->_slot, slot.p);
+            ((Gap::Core::igObjectList *)util->_slot)->append((Gap::Core::igObject *)slot.p);
         }
         break;
     }
@@ -2360,7 +2360,7 @@ void beNDMWLoadCtrl2_UpdateRam(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
             }
             ram->_dataList = (int)o;
         }
-        ctrl = (beNDMWLoadCtrl2CtrlData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "CTRL");
+        ctrl = (beNDMWLoadCtrl2CtrlData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "CTRL");
         if (ram->_dataList == 0) {
             igObject *o;
             igObject *old;
@@ -2379,7 +2379,7 @@ void beNDMWLoadCtrl2_UpdateRam(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
             }
             ram->_dataList = (int)o;
         }
-        intf = (beNDMWLoadCtrl2CommonIntf *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMONINTF");
+        intf = (beNDMWLoadCtrl2CommonIntf *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMONINTF");
         switch (ctrl->_st0) {
         case 0:
             break;
@@ -2624,7 +2624,7 @@ int beNDMWLoadCtrl2_OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBaseI
             OWNER_ALLOCATOR(a, self);
             {
             CtrlDataRef ctrl(beNDMWLoadCtrl2CtrlData_Create(a));
-            ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)ctrl.p);
+            ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)ctrl.p);
             beNDMWLoadCtrl2CtrlData *o = (beNDMWLoadCtrl2CtrlData *)ctrl.p;
             i = 1;
             o->_st0 = i;
@@ -2669,18 +2669,18 @@ int beNDMWLoadCtrl2_OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBaseI
                 OWNER_ALLOCATOR(a, self);
                 {
                 DegiDataRef degi(((igObject *)beNDMWDegiData_Create(a)));
-                ObjectList_AppendRetained((igObjectList *)((beNDMWLoadCtrl2CommonIntf *)common.p)->_gameUseData, (igObject *)degi.p);
+                ((Gap::Core::igObjectList *)(((beNDMWLoadCtrl2CommonIntf *)common.p)->_gameUseData))->append((Gap::Core::igObject *)degi.p);
                 }
                 OWNER_ALLOCATOR(a, self);
                 {
                 FlagWorkRef flag(beNDMWLoadSavePlWork_Create(a));
-                ObjectList_AppendRetained((igObjectList *)((beNDMWLoadCtrl2CommonIntf *)common.p)->_flagWork, (igObject *)flag.p);
+                ((Gap::Core::igObjectList *)(((beNDMWLoadCtrl2CommonIntf *)common.p)->_flagWork))->append((Gap::Core::igObject *)flag.p);
                 }
                 i++;
             } while (i < 4);
             ((beNDMWLoadCtrl2CommonIntf *)common.p)->_kindHard = 0;
             beNDMWMcUtilCtrl__Init((beNDMWMcUtilCtrl *)(((beNDMWLoadCtrl2CommonIntf *)common.p)->_mcUtilCtrl), (int)self->_messenger, 0);
-            ObjectList_AppendRetained((igObjectList *)ram->_dataList, (igObject *)common.p);
+            ((Gap::Core::igObjectList *)ram->_dataList)->append((Gap::Core::igObject *)common.p);
             }
             }
         }
@@ -2699,7 +2699,7 @@ int beNDMWLoadCtrl2_OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBaseI
         ram->_dataList = (int)t;
         }
     }
-    igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "CTRL");
+    ((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "CTRL");
     switch (message) {
     case 2:
         return 1;
@@ -2716,7 +2716,7 @@ int beNDMWLoadCtrl2_OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBaseI
                 ram->_dataList = (int)t;
                 }
             }
-            beMessenger_AppendObject((beMessenger *)self->_messenger, (igObject *)((int)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "COMMONINTF")));
+            beMessenger_AppendObject((beMessenger *)self->_messenger, (igObject *)((int)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMONINTF")));
         }
         return 1;
     default:

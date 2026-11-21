@@ -47,7 +47,7 @@ void beNDMWLoadSlotPlayer_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWLoadSlotPlayer_Register);
 }
 
-static igMetaObjectCallback g_beNDMWLoadSlotPlayer_callbackList[] = { beNDMWDegiDataList_EnsureRegistered, igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWLoadSlotPlayer_callbackList[] = { beNDMWDegiDataList_EnsureRegistered, Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *beNDMWLoadSlotPlayer_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -105,7 +105,7 @@ void beNDMWLoadSlotPlayer_InitFields(void) {
     ((igObjectRefMetaField *)saveDataList)->_metaObject = (int)beNDMWDegiDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)saveDataList)->_construct = 1;
     accessPlList = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)accessPlList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)accessPlList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)accessPlList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWLoadSlotPlayer_fieldTable, g_beNDMWLoadSlotPlayer_fieldHandles, g_beNDMWLoadSlotPlayer_fieldOffsets, base);
 }

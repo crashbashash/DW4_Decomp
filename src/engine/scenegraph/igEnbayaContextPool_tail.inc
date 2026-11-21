@@ -112,7 +112,7 @@ void FUN_001c17e0(EnbayaContextPoolView *o, int boneCount) {
     if (findIndex(l0, n0, boneCount, i) == -1) {
         PoolListHolder list;
         list.p = (PoolObject *)igPointerList_Create((int)((Gap::Core::igObject *)o)->getMemoryPool());
-        ObjectList_AppendRetained((igObjectList *)o->_poolList, (igObject *)list.p);
+        ((Gap::Core::igObjectList *)o->_poolList)->append((Gap::Core::igObject *)list.p);
         l1 = o->_boneCountList;
         n1 = l1->_count;
         if (n1 < l1->_capacity) {

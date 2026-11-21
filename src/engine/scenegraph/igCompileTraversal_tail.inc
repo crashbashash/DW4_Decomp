@@ -145,8 +145,8 @@ void Gap__Sg__igCompileTraversal__vfunc_23(igCompileTraversal *self, int arg1) {
     igMatrix44f_SetIdentity((float *)identity);
     igCommonTraversal_SetViewMatrix((int)self, (int *)identity);
     matrix->setMatrix((int)&self->_viewMat);
-    ObjectList_AppendRetained((igObjectList *)self->_mvmList, (igObject *)matrix.p);
-    ObjectList_AppendRetained((igObjectList *)self->_xformInfoList, (igObject *)info.p);
+    ((Gap::Core::igObjectList *)self->_mvmList)->append((Gap::Core::igObject *)matrix.p);
+    ((Gap::Core::igObjectList *)self->_xformInfoList)->append((Gap::Core::igObject *)info.p);
     FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)matrix.p);
     }
     if (self->_userTimeState != 0) {
@@ -306,8 +306,8 @@ int igCompileTraversal_TraverseGeometry(igCompileTraversal *self, igGeometry *ge
             info->_blendIndex = -1;
             info->_shared = 0;
             igObject *mvm = (igObject *)FUN_0013f680();
-            ObjectList_AppendRetained((igObjectList *)self->_mvmList, mvm);
-            ObjectList_AppendRetained((igObjectList *)self->_xformInfoList, (igObject *)info.p);
+            ((Gap::Core::igObjectList *)self->_mvmList)->append((Gap::Core::igObject *)mvm);
+            ((Gap::Core::igObjectList *)self->_xformInfoList)->append((Gap::Core::igObject *)info.p);
             FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)mvm);
             restore = topAttr(stackFor_1bc1e0((igAttrStackManager *)self->_attrStack, listMeta));
             FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)restore);
@@ -322,8 +322,8 @@ int igCompileTraversal_TraverseGeometry(igCompileTraversal *self, igGeometry *ge
                 info->_blendIndex = -1;
                 info->_shared = 0;
                 mvm->setMatrix(&g_matrix44Identity);
-                ObjectList_AppendRetained((igObjectList *)self->_mvmList, (igObject *)mvm.p);
-                ObjectList_AppendRetained((igObjectList *)self->_xformInfoList, (igObject *)info.p);
+                ((Gap::Core::igObjectList *)self->_mvmList)->append((Gap::Core::igObject *)mvm.p);
+                ((Gap::Core::igObjectList *)self->_xformInfoList)->append((Gap::Core::igObject *)info.p);
                 FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)mvm.p);
                 pushed = true;
             }
@@ -383,7 +383,7 @@ int FUN_001bcde0(void *arg0) {
 }
 
 int igCompileTraversal_TraverseEnvironmentMapShader2(igCompileTraversal *self, void **arg1) {
-    ObjectList_AppendRetained((igObjectList *)self->_environmentShader2List, (igObject *)arg1);
+    ((Gap::Core::igObjectList *)self->_environmentShader2List)->append((Gap::Core::igObject *)arg1);
     ((DW4VC_176_1 *)(arg1))->vX((int)(self));
     return 0;
 }
@@ -398,8 +398,8 @@ int igCompileTraversal_TraverseModelViewMatrixBoneSelect(igCompileTraversal *sel
     temp_s2 = ((X_1bce40 *)igModelViewMatrixAttr_CreateInstance((int)((Gap::Core::igObject *)self)->getMemoryPool()));
     temp_v0 = ((X_1bce40 *)FUN_001a3590((int)((Gap::Core::igObject *)self)->getMemoryPool()));
     temp_v0->f8 = arg1[8];
-    ObjectList_AppendRetained((igObjectList *)self->_mvmList, (igObject *)temp_s2);
-    ObjectList_AppendRetained((igObjectList *)self->_xformInfoList, (igObject *)temp_v0);
+    ((Gap::Core::igObjectList *)self->_mvmList)->append((Gap::Core::igObject *)temp_s2);
+    ((Gap::Core::igObjectList *)self->_xformInfoList)->append((Gap::Core::igObject *)temp_v0);
     temp_s2->f4 = temp_s2->f4 - 1;
     if (((unsigned long long) ((long long) temp_s2->f4 << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_s2);
@@ -423,7 +423,7 @@ int igCompileTraversal_TraverseBlendMatrixSelect(A_1bcf70 *arg0, B_1bcf70 *arg1)
     s0 = arg0->f52;
     arg0->f496 = 1;
     o = ((Obj_1bcf70 *)igBlendMatrixPaletteAttr_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
-    ObjectList_AppendRetained((igObjectList *)arg0->f504, (igObject *)o);
+    ((Gap::Core::igObjectList *)arg0->f504)->append((Gap::Core::igObject *)o);
     o->refs = o->refs - 1;
     if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy((igObject *)o);
     unsigned int n = arg1->f40->count;
@@ -584,7 +584,7 @@ void igAttrSet_ShareCompiledAttrs(CompiledAttrSet *set, igCompileTraversal *trav
                 CompiledAttr *copy = attr->createCopy(0);
                 setValueAt(set->_attributes, i, copy);
                 appendSlotAttr(set, copy);
-                ObjectList_AppendRetained((igObjectList *)set->_sharedAttrs, (igObject *)copy);
+                ((Gap::Core::igObjectList *)set->_sharedAttrs)->append((Gap::Core::igObject *)copy);
                 releaseRefCounted(copy);
             }
         }
@@ -638,7 +638,7 @@ int FUN_001bd890(RemapOwner *o, RemapContext *ctx) {
             RemapTable *t;
             unsigned int n;
             int j;
-            ObjectList_AppendRetained((igObjectList *)o->_entries, (igObject *)e);
+            ((Gap::Core::igObjectList *)o->_entries)->append((Gap::Core::igObject *)e);
             releaseRefCounted(e);
             t = ((RemapTable *)igBlendMatrixPaletteAttr_Create(((Gap::Core::igObject *)ctx)->getMemoryPool()));
             setTarget(e, t);
@@ -656,7 +656,7 @@ int FUN_001bd890(RemapOwner *o, RemapContext *ctx) {
             }
         } else if (((Gap::Core::igObject *)item)->isOfType(g_igBlendMatrixPaletteAttr_metaObject) != 0) {
             RemapEntry *e = ((RemapEntry *)FUN_001a2c70((int)(((void *)((Gap::Core::igObject *)ctx)->getMemoryPool()))));
-            ObjectList_AppendRetained((igObjectList *)o->_entries, (igObject *)e);
+            ((Gap::Core::igObjectList *)o->_entries)->append((Gap::Core::igObject *)e);
             releaseRefCounted(e);
             setTarget(e, item);
             e->_slot = &o->_items->_data[i];

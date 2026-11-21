@@ -113,7 +113,7 @@ int beFileListInfoManager_AddInfo(beFileListInfoManager *self, igObject *info) {
             igObject *first = info;
             insertWords(list, 0, 1, &first);
         } else {
-            ObjectList_AppendRetained(list, info);
+            ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)info);
         }
         self->_proc = 0;
         ((beSystem *)self->_system)->_isSResetEnable = 0;
@@ -257,14 +257,14 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
                                 scene = 0;
                             }
                             if (scene->_cameras != 0 && ((igObjectList *)scene->_cameras)->_count > 0) {
-                                ObjectList_AppendRetained((igObjectList *)self->_importantInfoList, (igObject *)info);
+                                ((Gap::Core::igObjectList *)self->_importantInfoList)->append((Gap::Core::igObject *)info);
                             } else {
                                 char *name = (char *)((igInfo *)scene->_sceneGraph)->_name;
                                 char *rootText = name ? name : emptyString;
                                 if (rootText == rootAttr.p) {
-                                    ObjectList_AppendRetained((igObjectList *)self->_importantInfoList, (igObject *)info);
+                                    ((Gap::Core::igObjectList *)self->_importantInfoList)->append((Gap::Core::igObject *)info);
                                 } else {
-                                    ObjectList_AppendRetained((igObjectList *)self->_infoList, (igObject *)info);
+                                    ((Gap::Core::igObjectList *)self->_infoList)->append((Gap::Core::igObject *)info);
                                 }
                             }
                         } else {
@@ -282,7 +282,7 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
                                 } while (j < ((igInfoList *)self->_readInfoList)->_count);
                             }
                             if (readIndex == -1) {
-                                ObjectList_AppendRetained((igObjectList *)self->_readInfoList, (igObject *)info);
+                                ((Gap::Core::igObjectList *)self->_readInfoList)->append((Gap::Core::igObject *)info);
                             } else {
                                 insertReadInfo(self, readIndex, InfoWord((int *)info));
                             }
@@ -309,7 +309,7 @@ unsigned char beFileListInfoManager_LoadNextFile(beFileListInfoManager *self, ig
             self->_onetimeCount = self->_onetimeCount - 1;
         }
         igStringRef fileName = StringList_CopyRetained(fileNames, self->_loaded);
-        ObjectList_AppendRetained((igObjectList *)self->_dirList, igResource_LoadDirectory((igResource *)g_globalContext, fileName.p));
+        ((Gap::Core::igObjectList *)self->_dirList)->append((Gap::Core::igObject *)(igResource_LoadDirectory((igResource *)g_globalContext, fileName.p)));
     }
     return 0;
 }

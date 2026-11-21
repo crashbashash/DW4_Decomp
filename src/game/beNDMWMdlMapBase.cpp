@@ -68,7 +68,7 @@ void beNDMWMdlMapBase_OnGenerate(beNDMWMdlMapBase *self, beBaseInfoRam *ram) {
          * takes the stack slot below the named info-work reference, as retail's +0x58 does) */
         Slot::adopt(ram, created);
     }
-    beModelCtrlInfoRamData *s3 = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
+    beModelCtrlInfoRamData *s3 = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
     {
         igMemoryPoolView *a2 = ((Gap::Core::igObject *)self)->getMemoryPool();
         igMemoryPoolView *al2 = g_useOwnerAllocator != 0 ? a2 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
@@ -153,7 +153,7 @@ void beNDMWMdlMapBase_OnUpdateRam(beNDMWMdlMapBase *self, beBaseInfoRam *ram) {
         }
         ram->_dataList = (int)s0;
     }
-    r = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, "ONE");
+    r = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
     igMatrix44f_SetTranslation((float *)((char *)r->_node + 32), (const float *)&sum);
 }
 

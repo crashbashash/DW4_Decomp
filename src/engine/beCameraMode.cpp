@@ -765,7 +765,7 @@ void igPickMode_OnAttach(igPickMode *pickMode) {
     igMatrix44f_Invert(pickMode->_inverseProjectionMatrix, ((igViewerParameters *)pickMode->_parameters)->_projectionMatrix);
     igSmartPointer<igProbe> probe(igProbe_Create(0), AdoptReference());
     created = probe.get();
-    ObjectList_AppendRetained((igObjectList *)created->_rays, (igObject *)pickMode->_ray);
+    ((Gap::Core::igObjectList *)created->_rays)->append((Gap::Core::igObject *)pickMode->_ray);
     faceTypes = (igIntList *)created->_intersectFaceType;
     top = count_of(faceTypes);
     if (top < faceTypes->_capacity) {

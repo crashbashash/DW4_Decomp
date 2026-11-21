@@ -39,7 +39,7 @@ void beDataObjFloatList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beDataObjFloatList_Register);
 }
 
-static igMetaObjectCallback g_beDataObjFloatList_callbackList[] = { igFloatList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beDataObjFloatList_callbackList[] = { Gap::Core::igFloatList::arkRegister, 0 };
 
 CallbackArray *beDataObjFloatList_Register(void) {
     BecLibrary_MarkRegistered();
@@ -85,7 +85,7 @@ void beDataObjFloatList_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beDataObjFloatList_ctorTable, 1);
     data = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)data)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)data)->_metaObject = (int)Gap::Core::igFloatList::getClassTypeLazy();
     ((igRefMetaField *)data)->_construct = 1;
     igMetaObject_NameFields(meta, g_beDataObjFloatList_fieldTable, g_beDataObjFloatList_fieldHandles, g_beDataObjFloatList_fieldOffsets, base);
 }

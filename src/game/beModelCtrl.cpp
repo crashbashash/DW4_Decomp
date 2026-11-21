@@ -453,7 +453,7 @@ void beModelCtrl_DrawDebugHitBox(beModelCtrl *self, igNode *node, igAABox *box, 
 
 igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, beBaseInfoRam *ram, int matrix, long long time) {
     if (body->_isFirst != 0) {
-        beModelCtrlInfoDataHit *hit = ((beModelCtrlInfoDataHit *)igProperty_FindByName((igObjectList *)((beBaseInfo *)ram->_parentInfo)->_dataList, g_propertyNameField, HIT));
+        beModelCtrlInfoDataHit *hit = ((beModelCtrlInfoDataHit *)((Gap::Core::igObjectList *)(((beBaseInfo *)ram->_parentInfo)->_dataList))->search((Gap::Core::igStringMetaField *)g_propertyNameField, HIT));
         igAABoxList *boxes = (igAABoxList *)hit->_hitBulletAABoxList;
         body->_orgAABoxList = (int)boxes;
         body->_count = boxes->_count;
@@ -498,7 +498,7 @@ igAABoxList *beModelCtrlInfoHitBody_GetAABoxList(beModelCtrlInfoHitBody *body, b
                 int a;
                 if (g_useOwnerAllocator != 0) a = alloc; else a = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
                 igSmartPointer<igAABox> created(igAABox_CreateInstance(a));
-                { igAABox *boxPtr = created.p; igAABoxList *boxList = (igAABoxList *)body->_AABoxList; ObjectList_AppendRetained((igObjectList *)boxList, (igObject *)boxPtr); }
+                { igAABox *boxPtr = created.p; igAABoxList *boxList = (igAABoxList *)body->_AABoxList; ((Gap::Core::igObjectList *)boxList)->append((Gap::Core::igObject *)boxPtr); }
             }
         }
         body->_isFirst = 0;
@@ -558,7 +558,7 @@ void beModelCtrl_OnAddRam(beModelCtrl *self, beBaseInfoRam *ram) {
 
     info = (beBaseInfo *)ram->_parentInfo;
     beMessenger_RegisterReceiverFromInfo((beMessenger *)self->_messenger, ram, MODELCTRL_7);
-    hit = (beModelCtrlInfoDataHit *)igProperty_FindByName((igObjectList *)info->_dataList, g_propertyNameField, HIT);
+    hit = (beModelCtrlInfoDataHit *)((Gap::Core::igObjectList *)info->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, HIT);
     if (hit != 0) {
         if (hit->_isHitPlayerBullet != 0) {
             beMessenger_RegisterReceiverFromInfo((beMessenger *)self->_messenger, ram, HITPLAYERBULLET_2);
@@ -599,7 +599,7 @@ void beModelCtrl_UpdateMapAI(beModelCtrl *self, void *info, beBaseInfoRam *ram, 
         pool = (g_useOwnerAllocator != 0) ? pool : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         DataListInstall::make(ram, pool);
     }
-    ramData = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_3));
+    ramData = ((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_3));
     ai = (beModelCtrlInfoAI *)work->_aI;
     igStringRef seqName;
     if (beBaseInfoRam_IsTimerExpired(ram, AITIMER)) {
@@ -733,7 +733,7 @@ void beModelCtrl_UpdateHomingAI(beModelCtrl *self, beModelCtrlInfo *info, beBase
         allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         DataListInstall::make(ram, allocator);
     }
-    ramData = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_3));
+    ramData = ((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_3));
     ai = (beModelCtrlInfoAI *)work->_aI;
     turnX = 1;
     turnY = 0;
@@ -852,14 +852,14 @@ void beModelCtrl_UpdateControl(beModelCtrl *self, beBaseInfoRam *ram) {
         }
         ram->_dataList = (int)list;
     }
-    work = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_3))->_work;
-    property = (beBaseInfoData *)igProperty_FindByName((igObjectList *)info->_dataList, g_propertyNameField, AIM);
+    work = ((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_3))->_work;
+    property = (beBaseInfoData *)((Gap::Core::igObjectList *)info->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, AIM);
     if (property != 0) {
         if (((igObjectList *)((beModelCtrlInfoDataAIM *)property)->_aIMapList)->_count != 0) {
             beModelCtrl_UpdateMapAI(self, info, ram, (beModelCtrlInfoWork *)work, (beModelCtrlInfoDataAIM *)property);
         }
     } else {
-        property = (beBaseInfoData *)igProperty_FindByName((igObjectList *)info->_dataList, g_propertyNameField, AIH);
+        property = (beBaseInfoData *)((Gap::Core::igObjectList *)info->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, AIH);
         if (property != 0) {
             beModelCtrl_UpdateHomingAI(self, (beModelCtrlInfo *)info, ram, (beModelCtrlInfoWork *)work, (beModelCtrlInfoDataAIH *)property);
         }
@@ -1377,7 +1377,7 @@ void beModelCtrl_ApplyMoves(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *
                     ram->_dataList = (int)created;
                 }
             }
-            ramData = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_3));
+            ramData = ((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_3));
             igMatrix44f_Copy(matrix, NodeMatrix(ramData->_node));
             step[0] = beModelCtrlMoveObject_Step(MoveObjects(work)[0], frames);
             step[1] = beModelCtrlMoveObject_Step(MoveObjects(work)[1], frames);
@@ -1407,7 +1407,7 @@ unsigned char beModelCtrl_RunMove(beModelCtrl *self, beBaseInfoRam *ram, beModel
             igObject *pool, *old;
             Locals::CreateDataList(ram, allocator, pool, old);
         }
-        Vec3f_TransformDirection(&forward[0], g_vec3ZAxis.vec, NodeMatrix(((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_3))->_node));
+        Vec3f_TransformDirection(&forward[0], g_vec3ZAxis.vec, NodeMatrix(((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_3))->_node));
         {
             float angle = atan2f(forward[0], forward[2]);
             work->_direction[1] = angle;
@@ -1422,22 +1422,22 @@ unsigned char beModelCtrl_RunMove(beModelCtrl *self, beBaseInfoRam *ram, beModel
         old = object.p;
         if (old != 0) { old->_refCount = old->_refCount - 1; if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old); }
         object.p = (igObject *)beModelCtrlMoveObject_Create(allocator);
-        { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ObjectList_AppendRetained((igObjectList *)list, created); }
+        { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created); }
         SELECT_ALLOCATOR(allocator, self);
         old = object.p;
         if (old != 0) { old->_refCount = old->_refCount - 1; if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old); }
         object.p = (igObject *)beModelCtrlMoveObject_Create(allocator);
-        { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ObjectList_AppendRetained((igObjectList *)list, created); }
+        { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created); }
         SELECT_ALLOCATOR(allocator, self);
         old = object.p;
         if (old != 0) { old->_refCount = old->_refCount - 1; if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old); }
         object.p = (igObject *)beModelCtrlMoveObject_Create(allocator);
-        { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ObjectList_AppendRetained((igObjectList *)list, created); }
+        { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created); }
         SELECT_ALLOCATOR(allocator, self);
         old = object.p;
         if (old != 0) { old->_refCount = old->_refCount - 1; if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old); }
         object.p = (igObject *)beModelCtrlMoveObject_Create(allocator);
-        { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ObjectList_AppendRetained((igObjectList *)list, created); }
+        { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created); }
     }
     meta = g_beModelCtrlMOVE_metaObject;
     if (meta == ((igObjectDispatchView *)command)->GetMeta()) {
@@ -1759,7 +1759,7 @@ void beModelCtrl_CallLua(beModelCtrl *self, beBaseInfoRam *ram, const char *func
         }
         ram->_dataList = (int)p;
     }
-    ramData = ((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_3));
+    ramData = ((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_3));
     work = (beModelCtrlInfoWork *)ramData->_work;
     g_mdlEntity = ram;
     g_mdlRamNo = ram->_ramNo;
@@ -1844,10 +1844,10 @@ unsigned char beModelCtrl_RunAiMap(beModelCtrl *self, beModelCtrlInfo *info, beB
     int *infoName;
     beModelCtrlInfoAI *ai;
     beModelCtrlAIMap *map;
-    maps = (beModelCtrlAIMapList *)((beModelCtrlInfoDataAIM *)igProperty_FindByName((igObjectList *)info->_dataList, g_propertyNameField, AIM))->_aIMapList;
+    maps = (beModelCtrlAIMapList *)((beModelCtrlInfoDataAIM *)((Gap::Core::igObjectList *)info->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, AIM))->_aIMapList;
     name = (int *)command->_name;
     name = name != 0 ? name : (int *)emptyString;
-    map = (beModelCtrlAIMap *)igProperty_FindByName((igObjectList *)maps, g_propertyNameField, (const char *)name);
+    map = (beModelCtrlAIMap *)((Gap::Core::igObjectList *)maps)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name);
     beModelCtrlAIMap *key = map;
     count = maps->_count;
     for (i = 0; i < count; i++) { if (*(beModelCtrlAIMap **)&key == ((beModelCtrlAIMap **)maps->_data)[i]) { idx = i; goto found; } }
@@ -2150,7 +2150,7 @@ void beModelCtrl_UpdateDirection(beModelCtrl *self, beBaseInfo *info, beBaseInfo
         }
         ram->_dataList = (int)list;
     }
-    matrix = (int)NodeMatrix(((beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)((igObject *)ram->_dataList), g_propertyNameField, ONE_3))->_node);
+    matrix = (int)NodeMatrix(((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)((igObject *)ram->_dataList))->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_3))->_node);
     igMatrix44f_GetTranslation((const float *)matrix, translation);
     igMatrix44f_MakeEulerRotation((void *)matrix, rotation[0], ((float*)&rotation)[1], ((float*)&rotation)[2]);
     igMatrix44f_SetTranslation((float *)matrix, (const float *)translation);
@@ -2188,7 +2188,7 @@ void beModelCtrl_UpdateRam(beModelCtrl *self, beBaseInfoRam *ram) {
         if (g_useOwnerAllocator != 0) { chosen = allocator; } else { chosen = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1); }
         DataListInstall::make(ram, chosen);
     }
-    beModelCtrlInfoRamData *ramData = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_3);
+    beModelCtrlInfoRamData *ramData = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_3);
     beModelCtrlInfoWork *work = (beModelCtrlInfoWork *)ramData->_work;
     if (ram->_isRun != 0 && work->_isOnFreeze == 0) {
         int token;
@@ -2354,7 +2354,7 @@ void beModelCtrl__OnGenerateFromParent(beModelCtrl *self, beBaseInfoRam *ram) {
             ram->_dataList = (int)created;
         }
     }
-    ramData = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_3);
+    ramData = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_3);
     work = (beModelCtrlInfoWork *)ramData->_work;
     if (beMessenger_GetStringCount((beMessenger *)self->_messenger) == 0) return;
     if (beMessenger_GetStringCount((beMessenger *)self->_messenger) == 1) return;
@@ -2443,7 +2443,7 @@ void beModelCtrl__OnGenerate(beModelCtrl *self, beBaseInfoRam *ram) {
             ram->_dataList = (int)created;
         }
     }
-    ramData = (beModelCtrlInfoRamData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_3);
+    ramData = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_3);
     if (beMessenger_GetVec3Count((beMessenger *)self->_messenger) != 0) {
         igMatrix44f_Copy(matrix, NodeMatrix(ramData->_node));
         igMatrix44f_SetTranslation(matrix, beMessenger_GetVec3((beMessenger *)self->_messenger, 0).vec);
@@ -2506,7 +2506,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
     igObject *node2;
     beModelCtrlInfoRideOn *held;
     ENSURE_DATA_LIST(ram)
-    beModelCtrlInfoRamData *ramData = (beModelCtrlInfoRamData *)((beBaseInfoData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, ONE_3));
+    beModelCtrlInfoRamData *ramData = (beModelCtrlInfoRamData *)((beBaseInfoData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_3));
     beModelCtrlInfoWork *work = (beModelCtrlInfoWork *)ramData->_work;
     if (((beModelCtrlDispatchView *)self)->OnPreMessage(ram, message) == 1) return 1;
     unsigned sel = beMessenger_ResolveEnumValue((beMessenger *)MESSENGER, beModelCtrl_GetMessageEnum(), message);
@@ -2538,8 +2538,8 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
         float ang = atan2f(startForward[0], startForward[2]);
         started->_direction[1] = ang;
         started->_targetDirection[1] = ang;
-        if (((beBaseInfoData *)igProperty_FindByName((igObjectList *)info->_dataList, g_propertyNameField, AIM)) != 0 ||
-            ((beBaseInfoData *)igProperty_FindByName((igObjectList *)info->_dataList, g_propertyNameField, AIH)) != 0) {
+        if (((beBaseInfoData *)((Gap::Core::igObjectList *)info->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, AIM)) != 0 ||
+            ((beBaseInfoData *)((Gap::Core::igObjectList *)info->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, AIH)) != 0) {
             ALLOCATOR(a, self)
             ObjRef<0> r((igObject *)beModelCtrlInfoAI_Create(a));
             igObject *s = r.p;
@@ -2605,7 +2605,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
         }
         return 1;
     case MSG_GETSEQNAMELIST: {
-        beModelCtrlInfoDataSeq *seq = (beModelCtrlInfoDataSeq *)((beBaseInfoData *)igProperty_FindByName((igObjectList *)info->_dataList, g_propertyNameField, SEQ));
+        beModelCtrlInfoDataSeq *seq = (beModelCtrlInfoDataSeq *)((beBaseInfoData *)((Gap::Core::igObjectList *)info->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, SEQ));
         igObjectList *l = (igObjectList *)seq->_dataList;
         int n = l->_count;
         beMessenger_AppendString((beMessenger *)MESSENGER, ((char *)SQ_ERAS_2));
@@ -2664,7 +2664,7 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
     case MSG_GETTRCDATA:
         if (ram->_isRun != 0) {
             ENSURE_DATA_LIST(ram)
-            beBaseInfoData *t = ((beBaseInfoData *)igProperty_FindByName((igObjectList *)ram->_dataList, g_propertyNameField, TRC));
+            beBaseInfoData *t = ((beBaseInfoData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, TRC));
             if (t != 0) beMessenger_AppendObject((beMessenger *)MESSENGER, (igObject *)t);
         }
         return 1;
@@ -2856,8 +2856,8 @@ int beModelCtrl_OnMessageText(beModelCtrl *self, beBaseInfoRam *ram, const char 
                 beMessenger_PopArgContext((beMessenger *)MESSENGER);
             } else {
                 const char *tk;
-                beModelCtrlInfoDataSeq *fb = (beModelCtrlInfoDataSeq *)((beBaseInfoData *)igProperty_FindByName((igObjectList *)info->_dataList, g_propertyNameField, SEQ));
-                beModelCtrlData *t = (beModelCtrlData *)((beBaseInfoData *)igProperty_FindByName((igObjectList *)fb->_dataList, g_propertyNameField, (const char *)message));
+                beModelCtrlInfoDataSeq *fb = (beModelCtrlInfoDataSeq *)((beBaseInfoData *)((Gap::Core::igObjectList *)info->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, SEQ));
+                beModelCtrlData *t = (beModelCtrlData *)((beBaseInfoData *)((Gap::Core::igObjectList *)fb->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)message));
                 POOL()
                 tk = ((const char *)StringPool_Intern(g_stringPool, message));
                 const char *old = (const char *)work->_seqCodeName;

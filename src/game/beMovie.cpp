@@ -444,7 +444,7 @@ void beBaseInfoRam_StartTimer(beBaseInfoRam *self, const char *name, long long e
     float scaled;
 
     ensureTimerList(self);
-    timer = (beBaseInfoRamTimer *)igProperty_FindByName((igObjectList *)self->_dataList, g_propertyNameField, name);
+    timer = (beBaseInfoRamTimer *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name);
     if (timer == 0) {
         TimerHolder created(beBaseInfoRamTimer_Create(allocatorFor(self)));
         igNamedObject_SetName((igNamedObject *)created.p, name);
@@ -455,7 +455,7 @@ void beBaseInfoRam_StartTimer(beBaseInfoRam *self, const char *name, long long e
             igRelease((igObject *)self->_dataList);
             self->_dataList = (int)retained;
         }
-        ObjectList_AppendRetained((igObjectList *)self->_dataList, created.p);
+        ((Gap::Core::igObjectList *)self->_dataList)->append((Gap::Core::igObject *)created.p);
         timer = (beBaseInfoRamTimer *)created.p;
     }
     now = worldTimeOf(self);
@@ -470,14 +470,14 @@ void beBaseInfoRam_StartTimer(beBaseInfoRam *self, const char *name, long long e
 
 unsigned char beBaseInfoRam_HasTimer(beBaseInfoRam *self, const char *name) {
     ensureTimerList(self);
-    return igProperty_FindByName((igObjectList *)self->_dataList, g_propertyNameField, name) != 0;
+    return ((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name) != 0;
 }
 
 unsigned char beBaseInfoRam_IsTimerExpired(beBaseInfoRam *self, const char *name) {
     beBaseInfoRamTimer *timer;
     long long endTime;
     ensureTimerList(self);
-    timer = (beBaseInfoRamTimer *)igProperty_FindByName((igObjectList *)self->_dataList, g_propertyNameField, name);
+    timer = (beBaseInfoRamTimer *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name);
     if (timer == 0) {
         return 1;
     }
@@ -488,7 +488,7 @@ unsigned char beBaseInfoRam_IsTimerExpired(beBaseInfoRam *self, const char *name
 long long beBaseInfoRam_GetTimerElapsed(beBaseInfoRam *self, const char *name) {
     beBaseInfoRamTimer *timer;
     ensureTimerList(self);
-    timer = (beBaseInfoRamTimer *)igProperty_FindByName((igObjectList *)self->_dataList, g_propertyNameField, name);
+    timer = (beBaseInfoRamTimer *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name);
     int ticks = (int)(worldTimeOf(self) >> 0x12);
     float scaled = (float)(unsigned int)ticks;
     scaled = scaled * timer->_timeScale;
@@ -504,7 +504,7 @@ float beBaseInfoRam_GetTimerFrameDelta(beBaseInfoRam *self, const char *name) {
     long long time;
     float frames;
     ensureTimerList(self);
-    timer = (beBaseInfoRamTimer *)igProperty_FindByName((igObjectList *)self->_dataList, g_propertyNameField, name);
+    timer = (beBaseInfoRamTimer *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name);
     now = worldTimeOf(self);
     if (now != timer->_svWorldTime) {
         time = beBaseInfoRam_GetTimerElapsed(self, name);
@@ -533,7 +533,7 @@ void beBaseInfoRam_SetTimerScale(beBaseInfoRam *self, int name, float scale) {
     long long time;
 
     ensureTimerList(self);
-    timer = (beBaseInfoRamTimer *)igProperty_FindByName((igObjectList *)self->_dataList, g_propertyNameField, (const char *)name);
+    timer = (beBaseInfoRamTimer *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name);
     oldScale = timer->_timeScale;
     if (scale != oldScale) {
         ticks = (float)(unsigned int)(int)(worldTimeOf(self) >> 0x12);
@@ -574,7 +574,7 @@ void beBaseInfoRam_RemoveTimer(beBaseInfoRam *self, const char *name) {
     igObject *found;
     if (self->_dataList != 0) {
         ensureTimerList(self);
-        found = (igObject *)igProperty_FindByName((igObjectList *)self->_dataList, g_propertyNameField, name);
+        found = (igObject *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name);
         if (found != 0) {
             list = (igTDataList<igObject *> *)self->_dataList;
             index = list->find(found);

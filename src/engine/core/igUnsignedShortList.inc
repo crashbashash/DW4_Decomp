@@ -1,77 +1,80 @@
-igMetaObject *g_igUnsignedShortList_metaObject;
-int g_igUnsignedShortList_dataDescriptorCell;
+namespace Gap {
+namespace Core {
+
+igMetaObject *igUnsignedShortList::_Meta;
+igMetaField *igUnsignedShortList::k_data;
+}
+}
 
 igUnsignedShortList *igUnsignedShortList_Create(int pool) {
-    igUnsignedShortList_EnsureRegistered();
-    return (igUnsignedShortList *)igMetaObject_CreateInstance(g_igUnsignedShortList_metaObject, (igMemoryPoolView *)pool);
+    Gap::Core::igUnsignedShortList::arkRegister();
+    return (igUnsignedShortList *)igMetaObject_CreateInstance(Gap::Core::igUnsignedShortList::getClassMeta(), (igMemoryPoolView *)pool);
 }
 
-igMetaObject *igUnsignedShortList_GetOrCreateMetaObject(void) {
-    if (g_igUnsignedShortList_metaObject == 0) {
-        g_igUnsignedShortList_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igUnsignedShortList_metaObject;
-}
+namespace Gap {
+namespace Core {
 
-igMetaObject *igUnsignedShortList_GetMetaObject(void)
+igMetaObject *igUnsignedShortList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igUnsignedShortList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igUnsignedShortList_EnsureRegistered();
-    return g_igUnsignedShortList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igUnsignedShortList_GetVTable(void) {
-    igUnsignedShortList list;
-
-    igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&g_igUnsignedShortList_vtable[0];
-    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
-}
-
-void igUnsignedShortList_EnsureRegistered(void)
+igMetaObject *igUnsignedShortList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igUnsignedShortList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igUnsignedShortList_Register(void) {
+void *igUnsignedShortList::retrieveVTablePointer()
+{
+    igUnsignedShortList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igUnsignedShortList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igUnsignedShortList::arkRegisterInternal()
+{
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igUnsignedShortList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igDataList::arkRegisterInternal,
         Gap::Core::igDataList::getClassMeta,
-        igUnsignedShortList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igUnsignedShortList",
-        0x14,
-        igUnsignedShortList_GetVTable,
-        igUnsignedShortList_InitFields,
+        sizeof(igUnsignedShortList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
         0,
         0
     );
 }
 
-void igUnsignedShortList_GetMetaObjectFunction(void) {
-    igUnsignedShortList_GetMetaObject();
-}
+void igUnsignedShortList::arkRegisterInitialize()
+{
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
 
-void igUnsignedShortList_InitFields(void) {
-    int index;
-    void **found;
-    igMemoryRefMetaField *field;
-    igMetaObject *meta;
-
-    meta = g_igUnsignedShortList_metaObject;
-    found = (void **)igMetaObject_FindFieldByName(meta, data);
-    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
-    field = (igMemoryRefMetaField *)((igObjectDispatchView *)found)->CloneViaMetadata(1);
-    field->_memType = (int)Gap::Core::igUnsignedShortMetaField::getMetaField();
-    field->_memSize = 0;
-    field->_externalEnumStorage = (int)&g_igUnsignedShortList_dataDescriptorCell;
-    igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);
-    field->_refCount = (int)((int) (field->_refCount - 1));
-    if (((unsigned long long) ((long long) (int) field->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(field);
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_FindFieldByName(metaObject, "_data");
+        int metaIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)metaObject->_metaFields, (int)metaField);
+        metaField = (igMemoryRefMetaField *)((igObjectDispatchView *)metaField)->CloneViaMetadata(1);
+        metaField->_memType = (int)Gap::Core::igUnsignedShortMetaField::getMetaField();
+        metaField->_memSize = 0;
+        metaField->_externalEnumStorage = (int)&k_data;
+        igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
+        metaField->_refCount = metaField->_refCount - 1;
+        if (((unsigned long long)(long long)metaField->_refCount & 0x7fffffULL) == 0) {
+            igObject_Destroy((::igObject *)metaField);
+        }
     }
+}
+}
 }
 

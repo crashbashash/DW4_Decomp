@@ -95,7 +95,7 @@ void **igQueue_StartServiceThread(void *queue, int function, unsigned stackSize)
     ((igPsx2ThreadView *)a)->SetArg((int)args);
     ((igPsx2ThreadView *)a)->SetStackSize(stackSize);
     if (((igPsx2ThreadView *)a)->Start() == g_resultSuccess) {
-        ObjectList_AppendRetained((igObjectList *)((igStandardQueueView *)queue)->_serviceThreads, (igObject *)a);
+        ((Gap::Core::igObjectList *)(((igStandardQueueView *)queue)->_serviceThreads))->append((Gap::Core::igObject *)a);
     }
     return a;
 }

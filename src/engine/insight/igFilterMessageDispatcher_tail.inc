@@ -21,7 +21,7 @@ igSmartPointer<MessageFilter> igFilterMessageDispatcher_GetFilterOrCreate(Filter
         filter.release();
         filter.p = (MessageFilter *)FUN_00231b40((int)allocator);
         filter->_target = target;
-        ObjectList_AppendRetained((igObjectList *)self->_filters, (igObject *)(filter.get()));
+        ((Gap::Core::igObjectList *)self->_filters)->append((Gap::Core::igObject *)(filter.get()));
     }
     return filter;
 }

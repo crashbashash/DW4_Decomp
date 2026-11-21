@@ -76,13 +76,13 @@ void igInsightCore_RegisterAllPlugins(igInsightCore *core) {
 }
 
 void igInsightCore_RegisterPlugin(igInsightCore *self, void **arg1) {
-    ObjectList_AppendRetained((igObjectList *)self->_plugins, (igObject *)arg1);
+    ((Gap::Core::igObjectList *)self->_plugins)->append((Gap::Core::igObject *)arg1);
     ((DW4VC_92_1 *)(arg1))->vX((int)(self));
 }
 
 void igInsightCore_UnregisterPlugin(igInsightCore *self, void **arg1) {
     ((DW4VC_96_1 *)(arg1))->vX((int)(self));
-    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)(self->_plugins), (igObject *)arg1, 0);
+    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)(self->_plugins)))->removeByValue((Gap::Core::igObject *)arg1, 0);
 }
 
 void igInsightCore_UnregisterAllPlugins(igInsightCore *core) {

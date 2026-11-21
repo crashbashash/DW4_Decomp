@@ -113,7 +113,14 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    smart pointer of the flat struct), the I/O members (`writeToMemory`, `readFromMemory`), the `operator new`
    pair (`igObject_AllocateRawStorage`); and the release idiom: the callers outside igObject still call
    `igObject_Destroy` by its C name, since `internalRelease` is private, until their inline release is written as
-   the kit's `release()`;
+   the kit's `release()`. The kit's form reproduces retail's: with the reference word declared as the kit's union
+   (`_both`, and a struct of `_refCount : 23` then `_memPoolIndex : 9`, the little-endian order; the kit
+   header, alchemy-kit_202309 igCore/igObject.h, splits a `_scriptFlag : 1` off a 22-bit count), `release()` as the kit's `_both--; if
+   (_either._refCount == 0) internalRelease();` and the static `release(const igObject *)` testing for null,
+   MWCC writes the decrement, the reload and the `dsll32 9`/`dsrl32 9` test every release site has, in a loop as
+   alone, and the static `ref` the `addiu 1` increment. Today's open spellings, the 64-bit shift pair and the
+   `& 0x7fffff` mask, compile to the same instructions. Writing it means typing `_refCount` as that union in the
+   generated root (every converted body reads `_refCount` as a word today) and then replacing the open releases;
 2. the metafield family: `Gap::Core::igMetaField` is converted (`IG_BOOTSTRAP_ABSTRACT_OBJECT_DEFINE`, its three
    constructors, the 38 slots 21-58 in retail's vtable order with kit names, igen's registration); DW4's vtable has
    no `computeTypeCount`, no virtual `readFromMemory`/`writeToMemory` and no `postRead`, and overrides
@@ -213,11 +220,27 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    Retail kept those inline copies and igObjectList's vtable from attrs; core's copies are `duplicates` rows
    (its `userPreWrite` copy also fits igStringRefList's identical body, so the core row is written with `--drop`),
    and attrs' C definitions stay until attrs builds its lists in C++. The flat view template `igTDataList<T>`
-   stays for unconverted code; inside `Gap::Core` it is spelled `::igTDataList`. igObjectList's services
-   (`ObjectList_AppendRetained` is the kit's `append`, `AppendRetainedList` `concatenate`, `FillRetained` `setAll`,
-   `ClearRetainedPreserveCount` `clearAll`, `ResizeRetained` `setCount`, `RemoveFirstRetained` `removeByValue`,
-   `RemoveAllRetained` `removeAllByValue`, `AppendUniqueRetained` `appendUnique`, the `igProperty_Find*` searches
-   and `SortByField` the field-keyed `search`/`sortedSearch`/`bubbleSort`) are still free. Then
+   stays for unconverted code; inside `Gap::Core` it is spelled `::igTDataList`. igObjectList's services are its
+   public members with the kit's names: `append` (`ObjectList_AppendRetained`, which grows through
+   `resizeAndSetCount4For1`), `concatenate`, `setAll`, `clearAll`, `setCount`, `removeByValue`, `removeAllByValue` (an `int`: scenegraph's caller tests the count signed, where
+   the kit's header has `igUnsignedInt`),
+   `appendUnique` (through the kit's inline `find`, the template's `find(const T &, int)`), the field-keyed
+   `search(igStringMetaField *, const char *)` and `search(igObjectRefMetaField *, const igObject *)`,
+   `sortedSearch`, `fastBinaryFind` (`igProperty_FindInsertionIndex`) and `bubbleSort(igRefMetaField *)`; the kit's
+   `igConstRawRef` values are `const void *`, whose comparisons are retail's unsigned ones. Their releases are still
+   written open (the kit's `igObject::release()` waits for the root's `_refCount` bitfield, below), and attrs still
+   calls `append`, `appendUnique` and `setCount` by their C names until attrs converts. The typed data lists
+   `igIntList`, `igBoolList`, `igCharList`, `igShortList`, `igUnsignedShortList`, `igUnsignedCharList`, `igFloatList`
+   and `igPointerList` are converted over the kit template `igTDataList<T>` (alchemy-kit_202309
+   igCore/igCoreLists.h: `IG_OBJECT_DEFINE`, the private `k_data`, igen's boilerplate), with `igIntListNoClean` and
+   `igCharListNoClean` overriding `trimCapacity` empty (the kit's `clean`). Each instance's `trimCapacity` and
+   `getElementSize` are the compiler's copies, at retail's places at the end of the core unit; the template
+   instance's vtable the compiler also writes is referenced by nothing and is not in retail. Their factories
+   (`Create`) stay free, as the metafields' do, since callers pass allocator words. One gfx vertex-stream binder still
+   reads the char/short list metas by their C names: through the inline `getClassMeta` MWCC keeps the meta in one
+   saved register fewer than retail. `igLongList` (whose copies are gfx's `igTDataList` of an 8-byte element),
+   `igUnsignedIntList` and `igDoubleList` (vtables and copies in scenegraph), `igDependencyList` and the
+   `igTObjectList<T>` lists follow. Then
    `igMetaObject`: converting it makes `igMetaObject` in every Gap scope the class, so every converted class's
    `_Meta`, the registrar's `igMetaObject_RegisterClass(…, &_Meta, …)` and the ~2,250 field-adder calls
    (`igMetaObject_GetFieldAt` is the kit's `getIndexedMetaField`, `CreateFields` `instantiateAndAppendFields`,
@@ -225,10 +248,10 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    once, across ~1,100 files; the generator's templates change with it, and `RegisterClass`/`RunStaticInit` are the
    kit's free `igArkRegister` overloads. igMetaObject, igIGBFile and igObjectDirEntry then also call igObject's
    protected and private construction members directly (the kit makes them friends). Of the 154 classes the core
-   unit registers, 40 are converted; the other 56 the kit declares (the memory pools, files and media, directory
-   entries, igMetaEnum, igRegistry, the threads and timers, …) follow, and 58 have no kit header (DW4's typed lists
-   such as igIntList, the `igPsx2*` platform classes, `__internal*ObjectList`, igDependencyMetaField and
-   igMemoryDescriptorMetaField), which take their form from retail alone;
+   unit registers, 50 are converted; the other kit-declared ones (the remaining typed lists, the memory pools, files
+   and media, directory entries, igMetaEnum, igRegistry, the threads and timers, …) follow, and those without a kit
+   header (the `igPsx2*` platform classes, `__internal*ObjectList`, igDependencyMetaField and
+   igMemoryDescriptorMetaField) take their form from retail alone;
 5. attrs, then gfx, then scenegraph, then gui/insight/viewer. Attrs so far: `Gap::Attrs::igAttr` (abstract;
    DW4's slots 21-29 read off retail's concrete vtables: `apply(igContext *)`, `apply(igVisualContext *)`,
    `setUnitID`, `synchronizeDefault` ×2, `reset`, `setup` ×2, `getUnitCount`, all kit inlines but `setUnitID`; no

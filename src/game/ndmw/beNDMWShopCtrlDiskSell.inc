@@ -44,7 +44,7 @@ void beNDMWShopCtrlDiskSell_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWShopCtrlDiskSell_Register);
 }
 
-static igMetaObjectCallback g_beNDMWShopCtrlDiskSell_callbackList[] = { igIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWShopCtrlDiskSell_callbackList[] = { Gap::Core::igIntList::arkRegister, 0 };
 
 CallbackArray *beNDMWShopCtrlDiskSell_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -106,7 +106,7 @@ void beNDMWShopCtrlDiskSell_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWShopCtrlDiskSell_ctorTable, 5);
     diskIdList = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)diskIdList)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)diskIdList)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)diskIdList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWShopCtrlDiskSell_fieldTable, g_beNDMWShopCtrlDiskSell_fieldHandles, g_beNDMWShopCtrlDiskSell_fieldOffsets, base);
 }

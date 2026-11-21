@@ -889,7 +889,7 @@ void beNumVerData_userConstruct(beNumVerData *self, int flag) {
             allocator = (g_useOwnerAllocator != 0) ? allocator : ((void *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
             {
                 igSmartPointer<beNumVerInsideData> item((beNumVerInsideData *)beNumVerInsideData_Create((int)allocator));
-                ObjectList_AppendRetained((igObjectList *)self->_verDataList, (igObject *)item.p);
+                ((Gap::Core::igObjectList *)self->_verDataList)->append((Gap::Core::igObject *)item.p);
             }
             i += 1;
         } while (i < 6);

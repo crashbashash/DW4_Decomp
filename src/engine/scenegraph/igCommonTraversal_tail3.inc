@@ -273,7 +273,7 @@ void FUN_001b7770(igCommonTraversal *self, int name, int value) {
     } else {
         stack = ((igObject **)((igObjectList *)self->_segmentOverrideStacks)->_data)[index];
     }
-    ObjectList_AppendRetained((igObjectList *)stack, (igObject *)value);
+    ((Gap::Core::igObjectList *)stack)->append((Gap::Core::igObject *)value);
     str->_refCount = str->_refCount - 1;
     if (((unsigned long long)((long long)(int)str->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)str);

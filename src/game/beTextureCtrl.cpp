@@ -65,7 +65,7 @@ void beTextureCtrl_OnAddRam(beTextureCtrl *self, beBaseInfoRam *ram) {
         if (0 < count) {
             offset = 0;
             do {
-                ObjectList_AppendRetained((igObjectList *)((beTextureCtrlWork *)self->_work)->_textureList, *(igObject **)((char *)((igObjectList *)info->_dataList_)->_data + offset));
+                ((Gap::Core::igObjectList *)(((beTextureCtrlWork *)self->_work)->_textureList))->append((Gap::Core::igObject *)(*(igObject **)((char *)((igObjectList *)info->_dataList_)->_data + offset)));
                 i += 1;
                 offset += 4;
             } while (i < count);
@@ -76,7 +76,7 @@ void beTextureCtrl_OnAddRam(beTextureCtrl *self, beBaseInfoRam *ram) {
         if (0 < count) {
             offset = 0;
             do {
-                ObjectList_AppendRetained((igObjectList *)((beTextureCtrlWork *)self->_work)->_attributeList, *(igObject **)((char *)((igObjectList *)info->_dataList_)->_data + offset));
+                ((Gap::Core::igObjectList *)(((beTextureCtrlWork *)self->_work)->_attributeList))->append((Gap::Core::igObject *)(*(igObject **)((char *)((igObjectList *)info->_dataList_)->_data + offset)));
                 i += 1;
                 offset += 4;
             } while (i < count);
@@ -118,7 +118,7 @@ void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
                     } else {
                         name = (int *)emptyString;
                     }
-                    property = (beTextureCtrlData *)igProperty_FindByName((igObjectList *)work->_textureList, g_propertyNameField, (const char *)name);
+                    property = (beTextureCtrlData *)((Gap::Core::igObjectList *)work->_textureList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name);
                     if (property != 0) {
                         allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
                         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
@@ -133,14 +133,14 @@ void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
                                 bindMeta = g_igTextureBindAttr_metaObject;
                                 existing = (igObjectDispatchView *)*(int *)(((igAttrList *)attrSet->_attributes)->_data + boundOffset);
                                 if (bindMeta == existing->GetMeta()) {
-                                    ObjectList_RemoveFirstRetained((igTDataList<igObject *> *)attrSet->_attributes, (igObject *)existing, 0);
+                                    ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)attrSet->_attributes))->removeByValue((Gap::Core::igObject *)existing, 0);
                                     break;
                                 }
                                 boundIndex++;
                                 boundOffset += 4;
                             } while (boundIndex < boundCount);
                         }
-                        ObjectList_AppendRetained((igObjectList *)attrSet->_attributes, (igObject *)attr.p);
+                        ((Gap::Core::igObjectList *)attrSet->_attributes)->append((Gap::Core::igObject *)attr.p);
                     }
                     attributeIndex++;
                     offset += 4;

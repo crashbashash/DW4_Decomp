@@ -176,7 +176,7 @@ void FUN_00452ca0(int arg0) {
     }
     *(int *)((char *)(temp_s1) + 8) = 0;
     ((Gap::Core::igMetaField *)temp_s1)->validate();
-    ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s1);
+    ((Gap::Core::igObjectList *)arg0)->append((Gap::Core::igObject *)temp_s1);
     *(int *)((char *)(temp_s1) + 4) = (int)((int) (*(int *)((char *)(temp_s1) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_s1);
@@ -206,7 +206,7 @@ void FUN_00452ca0(int arg0) {
     }
     *(int *)((char *)(temp_s1_2) + 8) = 4;
     ((Gap::Core::igMetaField *)temp_s1_2)->validate();
-    ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s1_2);
+    ((Gap::Core::igObjectList *)arg0)->append((Gap::Core::igObject *)temp_s1_2);
     *(int *)((char *)(temp_s1_2) + 4) = (int)((int) (*(int *)((char *)(temp_s1_2) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_2) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_s1_2);
@@ -236,7 +236,7 @@ void FUN_00452ca0(int arg0) {
     }
     *(int *)((char *)(temp_s1_3) + 8) = 8;
     ((Gap::Core::igMetaField *)temp_s1_3)->validate();
-    ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s1_3);
+    ((Gap::Core::igObjectList *)arg0)->append((Gap::Core::igObject *)temp_s1_3);
     *(int *)((char *)(temp_s1_3) + 4) = (int)((int) (*(int *)((char *)(temp_s1_3) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_3) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_s1_3);
@@ -266,7 +266,7 @@ void FUN_00452ca0(int arg0) {
     }
     *(int *)((char *)(temp_s1_4) + 8) = 0x10;
     ((Gap::Core::igMetaField *)temp_s1_4)->validate();
-    ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s1_4);
+    ((Gap::Core::igObjectList *)arg0)->append((Gap::Core::igObject *)temp_s1_4);
     *(int *)((char *)(temp_s1_4) + 4) = (int)((int) (*(int *)((char *)(temp_s1_4) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_4) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_s1_4);
@@ -296,7 +296,7 @@ void FUN_00452ca0(int arg0) {
     }
     *(int *)((char *)(temp_s1_5) + 8) = 0x18;
     ((Gap::Core::igMetaField *)temp_s1_5)->validate();
-    ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s1_5);
+    ((Gap::Core::igObjectList *)arg0)->append((Gap::Core::igObject *)temp_s1_5);
     *(int *)((char *)(temp_s1_5) + 4) = (int)((int) (*(int *)((char *)(temp_s1_5) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_5) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_s1_5);
@@ -326,7 +326,7 @@ void FUN_00452ca0(int arg0) {
     }
     *(int *)((char *)(temp_s1_6) + 8) = 0x20;
     ((Gap::Core::igMetaField *)temp_s1_6)->validate();
-    ObjectList_AppendRetained((igObjectList *)arg0, (igObject *)temp_s1_6);
+    ((Gap::Core::igObjectList *)arg0)->append((Gap::Core::igObject *)temp_s1_6);
     *(int *)((char *)(temp_s1_6) + 4) = (int)((int) (*(int *)((char *)(temp_s1_6) + 4) - 1));
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_6) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_s1_6);

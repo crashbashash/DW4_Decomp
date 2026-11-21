@@ -144,7 +144,7 @@ void igMemoryDescriptorMetaField_AddSubFields(int fieldList) {
     }
     ((igMetaField *)field)->_offset = 0;
     ((Gap::Core::igMetaField *)field)->validate();
-    ObjectList_AppendRetained((igObjectList *)fieldList, (igObject *)field);
+    ((Gap::Core::igObjectList *)fieldList)->append((Gap::Core::igObject *)field);
     ((igObject *)field)->_refCount = (int)((int) (((igObject *)field)->_refCount - 1));
     if (((unsigned long long) ((long long) (int) ((igObject *)field)->_refCount << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)field);

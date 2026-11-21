@@ -71,7 +71,7 @@ void beNDMWStatusInfoWork_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWStatusInfoWork_Register);
 }
 
-static igMetaObjectCallback g_beNDMWStatusInfoWork_callbackList[] = { igIntList_EnsureRegistered, beNDMWItemBaseList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWStatusInfoWork_callbackList[] = { Gap::Core::igIntList::arkRegister, beNDMWItemBaseList_EnsureRegistered, 0 };
 
 CallbackArray *beNDMWStatusInfoWork_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -148,10 +148,10 @@ void beNDMWStatusInfoWork_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWStatusInfoWork_ctorTable, 7);
     parameter = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
-    ((igObjectRefMetaField *)parameter)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)parameter)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)parameter)->_construct = 1;
     preview = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
-    ((igObjectRefMetaField *)preview)->_metaObject = igIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)preview)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
     ((igRefMetaField *)preview)->_construct = 1;
     weaponSalesList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2));
     ((igObjectRefMetaField *)weaponSalesList)->_metaObject = (int)beNDMWItemBaseList_GetOrCreateMetaObject();

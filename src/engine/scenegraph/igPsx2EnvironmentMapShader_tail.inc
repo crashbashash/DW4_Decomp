@@ -236,7 +236,7 @@ int FUN_001ab770(void *arg0, void **arg1, void **arg2) {
     }
     if (var_s0 != 0) {
         *(int *)((char *)(temp_v0) + 16) = var_s0;
-        ObjectList_AppendRetained((igObjectList *)(*(int *)((char *)(arg0) + 16)), (igObject *)temp_v0);
+        ((Gap::Core::igObjectList *)(*(int *)((char *)(arg0) + 16)))->append((Gap::Core::igObject *)temp_v0);
         *arg2 = temp_v0;
     } else {
         *arg2 = 0;

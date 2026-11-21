@@ -76,7 +76,7 @@ void igCompressedAnimationSequenceQS_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igCompressedAnimationSequenceQS_Register);
 }
 
-static igMetaObjectCallback g_igCompressedAnimationSequenceQS_callbackList[] = { igUnsignedShortList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igCompressedAnimationSequenceQS_callbackList[] = { Gap::Core::igUnsignedShortList::arkRegister, 0 };
 
 CallbackArray *igCompressedAnimationSequenceQS_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -170,11 +170,11 @@ void igCompressedAnimationSequenceQS_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, g_igCompressedAnimationSequenceQS_ctorTable, 0xC);
     temp_s2 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0));
-    temp_s2->f56 = (int)igUnsignedShortList_GetOrCreateMetaObject();
+    temp_s2->f56 = (int)Gap::Core::igUnsignedShortList::getClassTypeLazy();
     temp_s2_2 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 1));
-    temp_s2_2->f56 = (int)igUnsignedShortList_GetOrCreateMetaObject();
+    temp_s2_2->f56 = (int)Gap::Core::igUnsignedShortList::getClassTypeLazy();
     temp_s2_3 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 2));
-    temp_s2_3->f56 = (int)igUnsignedShortList_GetOrCreateMetaObject();
+    temp_s2_3->f56 = (int)Gap::Core::igUnsignedShortList::getClassTypeLazy();
     ((Gap::Core::igUnsignedLongMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s0 + 7)))->setDefault(0xFFFFFFFFFFFFFFFFULL);
     temp_v0 = ((struct Fld_1a29e0 *)igMetaObject_GetFieldAt(temp_s1, temp_s0 + 8));
     ((Gap::Core::igEnumMetaField *)temp_v0)->setDefault(0);

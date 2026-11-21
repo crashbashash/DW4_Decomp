@@ -61,7 +61,7 @@ void FUN_001ad5c0(A_1ad5c0 *arg0, It *arg1, int arg2) {
     l = arg0->ll->data[arg2];
     n = l->count;
     if (n == 0) {
-        ObjectList_AppendRetained((igObjectList *)l, (igObject *)arg1);
+        ((Gap::Core::igObjectList *)l)->append((Gap::Core::igObject *)arg1);
         il = arg0->il;
         if (il->count != 0 && arg2 >= 0 && arg2 < il->count) {
             il->data[arg2] = 0;
@@ -76,7 +76,7 @@ void FUN_001ad5c0(A_1ad5c0 *arg0, It *arg1, int arg2) {
         i++;
     } while (i != n);
     if (i == n) {
-        ObjectList_AppendRetained((igObjectList *)l, (igObject *)arg1);
+        ((Gap::Core::igObjectList *)l)->append((Gap::Core::igObject *)arg1);
     } else {
         insertRetained(l, i, arg1);
         il2 = arg0->il;
@@ -201,7 +201,7 @@ int FUN_001ad990(CombinerBlendView *c, CombinerAnimation *anim, int combineMode,
     state->_new = 1;
     state->_base.slot21();
     state->_blendStartTime = 0;
-    ObjectList_AppendRetained((igObjectList *)c->_animationStateList, (igObject *)state);
+    ((Gap::Core::igObjectList *)c->_animationStateList)->append((Gap::Core::igObject *)state);
     state->_timeRequested = FUN_001acb10((igTimeView *)c);
     for (i = 0; i < bones; i++) {
         int t = binding->_boneMap[i];
@@ -543,7 +543,7 @@ int igAnimationCombiner_ResetToPose(igAnimationCombiner *combiner, igAnimationCo
     state->_new = 1;
     state->_base.slot21();
     state->_blendStartTime = 0;
-    ObjectList_AppendRetained((igObjectList *)c->_animationStateList, (igObject *)state);
+    ((Gap::Core::igObjectList *)c->_animationStateList)->append((Gap::Core::igObject *)state);
     for (i = 0; i < bones; i++) {
         CombinerBoneInfo *info = (CombinerBoneInfo *)poolTake(((CombinerPool *)g_igAnimationCombinerBoneInfoPool_instance.p), (void *)igAnimationCombinerBoneInfo_Create);
         float *m;
