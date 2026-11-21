@@ -28,7 +28,7 @@ void igLightStateAttrPool_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igLightStateAttrPool_Register);
 }
 
-static igMetaObjectCallback g_igLightStateAttrPool_callbackList[] = { igLightStateAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igLightStateAttrPool_callbackList[] = { Gap::Attrs::igLightStateAttr::arkRegister, 0 };
 
 CallbackArray *igLightStateAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();

@@ -336,10 +336,10 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Attrs::igTextureCoordSourceAttr::arkRegister();
     igSetRenderDestinationAttr_EnsureRegistered();
     igRenderDestinationAttr_EnsureRegistered();
-    igLightStateAttr_EnsureRegistered();
-    igLightAttr_EnsureRegistered();
-    igLightStateAttrList_EnsureRegistered();
-    igLightList_EnsureRegistered();
+    Gap::Attrs::igLightStateAttr::arkRegister();
+    Gap::Attrs::igLightAttr::arkRegister();
+    Gap::Attrs::igLightStateAttrList::arkRegister();
+    Gap::Attrs::igLightList::arkRegister();
     Gap::Attrs::igFogAttr::arkRegister();
     Gap::Attrs::igNonRefCountedAttrList::arkRegister();
     igCopyRenderDestinationAttr_EnsureRegistered();

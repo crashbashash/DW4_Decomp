@@ -395,7 +395,7 @@ void igAttrStackManager_PopLightStateAttr(igAttrStackManager *self, igLightState
         return;
     }
     if (self->_simpleLightMgr == 1) {
-        LightStateAttrView *undo = (LightStateAttrView *)takePooled((igObjectPool *)self->_lightDisableAttrPool, (void *)igLightStateAttr_Create);
+        LightStateAttrView *undo = (LightStateAttrView *)takePooled((igObjectPool *)self->_lightDisableAttrPool, (void *)Gap::Attrs::igLightStateAttr::_instantiateFromPool);
         int n;
         igTDataList<LightStateAttrView *> *updates;
         light = attr->_light;
@@ -457,7 +457,7 @@ void FUN_001b0dc0(O_1b0dc0 *arg0) {
     int n, i;
     n = arg0->c24->n;
     for (i = 0; i < n; i++) {
-        E2 *e = arg0->l->arr[i + arg0->base[g_igLightStateAttr_metaObject->_id]]->f14;
+        E2 *e = arg0->l->arr[i + arg0->base[Gap::Attrs::igLightStateAttr::getClassMeta()->_id]]->f14;
         R_1b0dc0 **slot = &e->f10;
         R_1b0dc0 *r = *slot;
         if (r != 0) {
@@ -482,7 +482,7 @@ int igAttrStackManager_IsLightEnabled(igAttrStackManager *self, igLightAttr *lig
     index = lights->sortedFind(&key);
     if (index != -1) {
         int base = ((int *)((igIntList *)self->_lightAttrStackAddrs)->_data)[index];
-        igMetaObject *meta = igLightStateAttr_GetMetaObject();
+        igMetaObject *meta = Gap::Attrs::igLightStateAttr::getClassTypeSafe();
         AttrObjectStack *stack = ((AttrObjectStackList *)self->_attrStacks)->_data[base + ((int *)self->_attrStackIndexTable)[meta->_id]];
         igLightStateAttr *state;
         int current = stack->_cachedOverride;

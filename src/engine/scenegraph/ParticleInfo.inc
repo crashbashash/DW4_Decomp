@@ -570,10 +570,10 @@ int getSgMaxLightStateCount(void) {
 }
 
 int FUN_001d8270(int arg0) {
-    if ((igMetaObject *)arg0 == g_igLightAttr_metaObject) {
+    if ((igMetaObject *)arg0 == Gap::Attrs::igLightAttr::getClassMeta()) {
         return 1;
     }
-    if (arg0 == ((int)g_igLightStateAttr_metaObject)) {
+    if (arg0 == ((int)Gap::Attrs::igLightStateAttr::getClassMeta())) {
         return getSgMaxLightStateCount();
     }
     return 0;

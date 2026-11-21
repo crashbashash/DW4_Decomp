@@ -206,8 +206,8 @@ void beShadow01_UpdateRam(beShadow01 *self, beBaseInfoRam *ram) {
             igLightAttr *light = (igLightAttr *)((igProjectiveShadowShader *)info->_projShadowShader)->_light;
             float *direction = (float *)((char *)light + g_igLightAttr_directionMetaField->_offset);
             ((igLightAttrDispatchView *)light)->setPosition(centre.vec);
-            Vec3Copy(light->_cachedPosition.vec, centre.vec);
-            Vec3Copy(light->_cachedDirection.vec, direction);
+            Vec3Copy(light->_cachedPosition, centre.vec);
+            Vec3Copy(light->_cachedDirection, direction);
             Vec3Copy(self->_savePos.vec, centre.vec);
         }
     }

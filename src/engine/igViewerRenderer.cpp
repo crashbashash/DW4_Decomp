@@ -83,7 +83,7 @@ static inline void release(igObject *object) {
     igObject::release(object);
 }
 struct ItemType {};
-static inline igObject *createLightState(ItemType) { return (igObject *)igLightStateAttr_Create(0); }
+static inline igObject *createLightState(ItemType) { return (igObject *)Gap::Attrs::igLightStateAttr::_instantiateFromPool(0); }
 
 #include "dw4/core/igMetaObject.h"
 extern int text_meta[4];

@@ -40,7 +40,9 @@ public:
     /* igPsx2VisualContext::vfunc_35: an empty hook, then releases _pVertexArray, _pIndexArray and _pStripLengthArray */
     virtual void releaseVertexArrays();                                     /* slot 33 */
     virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43();
-    virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47();
+    virtual void d44();
+    virtual void deleteRenderDestination(int handle);                       /* slot 45 */
+    virtual void d46(); virtual void d47();
     virtual int getCurrentRenderDestination() const;                        /* slot 48 */
     virtual void d49(); virtual void d50();
     virtual void getRenderDestinationSize(int handle, int &width, int &height) const; /* slot 51 */
@@ -54,7 +56,9 @@ public:
     virtual igVertexComponentFilter getVertexMask() const;                  /* slot 68 */
     virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73();
     virtual bool getLightingState() const;                                  /* slot 74 */
-    virtual void d75(); virtual void d76(); virtual void d77();
+    virtual void d75();
+    virtual void deleteLight(int lighthandle);                              /* slot 76 */
+    virtual void d77();
     virtual bool getLightState(int lightHandle) const;                      /* slot 78 */
     virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88();
     virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96();

@@ -30,8 +30,8 @@ void igAttrPool::resetFields(int flag)
     clearBytes((char *)metas, sizeof(metas));
     metas[0] = igTextureBindAttr_GetMetaObject();
     metas[1] = igTextureAttr_GetMetaObject();
-    metas[2] = igLightAttr_GetMetaObject();
-    metas[3] = igLightStateAttr_GetMetaObject();
+    metas[2] = Gap::Attrs::igLightAttr::getClassTypeSafe();
+    metas[3] = Gap::Attrs::igLightStateAttr::getClassTypeSafe();
     for (i = 0; i < 4; i++) {
         addNonSharableType(metas[i]);
     }

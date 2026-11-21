@@ -2,7 +2,7 @@
 #define DW4_IGLIGHTSTATEATTRDISPATCHVIEW_H
 #include "dw4/core/igObjectDispatchView.h"
 
-/* igLightStateAttr's virtual functions: slot 30 switches the light on or off (igLightStateAttr_SetState).
+/* igLightStateAttr's virtual functions: slot 30 switches the light on or off (Gap::Attrs::igLightStateAttr::setState).
  * ABI view only: never instantiated. */
 class igLightStateAttrDispatchView : public igObjectDispatchView {
 public:

@@ -349,23 +349,49 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    igAttrRef the Gap `igSmartPointer<igAttr>` (igAttrPool's list fields stay flat smart pointers for now: its code
    reads them through flat list casts); `igAttrList`, `igAttrListList`, `igModelViewMatrixAttrList` and
    `igBlendMatrixPaletteAttrList` derive from the kit's `igTObjectList<T>` (include/dw4/core/igTObjectList.h, whose
-   `getElementMeta` is `T::getClassMeta()`), so attrs compiles igObjectList's vtable and inline copies. Next: the
-   remaining igVisualAttribute subclasses, coupled through their smart-pointer fields: `igTextureAttr` with
-   `igTextureCubeAttr`, `igTextureBindAttr` and `igCopyRenderDestinationAttr`; `igLightAttr` with
-   `igLightStateAttr`; `igRenderDestinationAttr` with `igSetRenderDestinationAttr`; `igGeometryAttr`,
-   `igGeometryAttr1_5` and `igGeometrySetAttr`; `igParticleAttr` (its array is a Gap::Bec class) and
-   `igVertexBlendMatrixListAttr`, each with its list (`igTextureList`, `igImageMipMapList`, `igLightList`,
-   `igLightStateAttrList`, `igGeometryAttrList`, over `igTObjectList<T>` once T is converted). Core's
-   `igNonRefCountedObjectList` is converted (`IG_OBJECT_DEFINE` over the kit's `igTDataList<igObject *>`, the
+   `getElementMeta` is `T::getClassMeta()`), so attrs compiles igObjectList's vtable and inline copies.
+   `igLightAttr` (`_vc` an `igSmartPointer<igVisualContext>`, flat until gfx converts; the kit's igBool `_changed`
+   and `_cacheable`; `lightChanged` the invariance callback; `reset` through `igVisualContextDispatchView`'s
+   `deleteLight`, slot 76) and `igLightStateAttr` (`_light` an `igSmartPointer<igLightAttr>`), with `igLightList` and
+   `igLightStateAttrList` over `igTObjectList<T>`, are converted. What is left in attrs, and why:
+   - the texture group (`igTextureAttr`, `igTextureCubeAttr`, `igTextureBindAttr`, `igCopyRenderDestinationAttr`,
+     `igRenderDestinationAttr`, `igSetRenderDestinationAttr`, `igTextureList`, `igImageMipMapList`): converted and
+     matching in the attrs unit in a work-in-progress patch (scratch/Attrs5/texture-batch-wip.patch, spec
+     scratch/Attrs5/specs/texture.py), not landed because two callers stop matching: igMovieManager assigns
+     `igTextureList::_instantiateFromPool` to a flat `igSmartPointer< ::igTextureList>` (needs a cast or the Gap
+     type), and beTextureCtrl_UpdateRam's loop allocates s0/s1 the other way round once it reads
+     `igTextureBindAttr::getClassMeta()`. The patch carries what the group needs: the kit's `set(index, value)` on
+     `igTDataList`/`igObjectList`/`igTObjectList`, slots 35 `getCapability` and 129 `deleteTexture` of the dispatch
+     view, the kit's `IG_GFX_TEXTURE_SOURCE` and `IG_GFX_RENDERDESTINATION_TYPE`, a typed reference array
+     (`igTextureCubeAttr::_cubeImage[6]`) in scripts/gen_type_headers.py, the decompiled
+     `igSetRenderDestinationAttr::apply` (0x140060, whose PS2 setters take a trailing 0), `igImageMipMapList` over
+     `igTObjectList<igImage>` with the element meta specialised for the flat igImage, and the compiler's
+     smart-pointer destructors placed at 0x130140, 0x132130, 0x1321b0 and 0x132390 (`--at`), whose C copies go;
+   - the geometry group (`igGeometryAttr`, `igGeometryAttr1_5`, `igGeometrySetAttr`, `igGeometryAttrList`): DW4's
+     `igGeometryAttr1_5` carries twelve slots (configure, transform, computeBound, intersectRay, tangents, ...) that
+     still read igVertexArray/igIndexArray through stand-in views and one helper not yet decompiled (0x13dbb0); it
+     converts with gfx's vertex arrays;
+   - `igParticleAttr` (its array is a Gap::Bec class) and `igVertexBlendMatrixListAttr` (whose probe stamps
+     igVisualAttribute's vtable from its matrix members' destructor chain) are not started;
+   - igAttrPool's list fields (`_metaList`, `_nonSharableMetaList`, `_attributeList`) stay flat smart pointers: its
+     code reads them through flat list casts and `igMetaObjectList` is core's.
+   Core's `igNonRefCountedObjectList` is converted (`IG_OBJECT_DEFINE` over the kit's `igTDataList<igObject *>`, the
    private `k_data`, the inline `userPreWrite` and `getElementMeta`), and attrs' `igNonRefCountedAttrList` derives
    from the kit's `igTNonRefCountedObjectList<T>` (include/dw4/core/igTNonRefCountedObjectList.h): attrs compiles
    the list's vtable, its inline copies and the copy of `getClassMeta` at 0x13aeb0 that the subclasses in core,
    gfx, gui, datapump and scenegraph register through, so their C copies are gone.
    The specs stay in the agents' scratch (`scratch/Attrs2/specs/visual.py`, `visual2.py`;
    `scratch/Attrs3/specs/unit.py`, `simple.py`, `ext.py`; `scratch/Attrs4/specs/mgr.py`;
-   `scratch/CoreWave9/specs/`). memberize casts a pool
+   `scratch/Attrs5/specs/light.py`, `texture.py`; `scratch/CoreWave9/specs/`). memberize casts a pool
    passed as `int` to a factory taking `igMemoryPoolView *` (or drops the `int` cast). Gfx then starts from
-   `igVisualContext`, whose dispatch view already names the slots the attrs call;
+   `igVisualContext` (alchemy-kit_202309 igGfx/igVisualContext.h) and `igPsx2VisualContext`: its slots are
+   `igVisualContextDispatchView`'s, already named from igPsx2VisualContext's overrides (the state getters 51-250,
+   `deleteRenderDestination` 45, `deleteLight` 76, `deleteRenderList` 191; the texture patch adds `getCapability` 35
+   and `deleteTexture` 129), so converting it turns each `((igVisualContextDispatchView *)vc)->name(...)` into
+   `vc->name(...)` and each direct `igPsx2VisualContext_<Name>((igPsx2VisualContext *)vc, ...)` the attrs call
+   into the member; the attrs' `igSmartPointer<igVisualContext>` fields then hold the Gap class, and the view
+   retires once no caller is left. igImage, igVertexArray and igIndexArray follow, which unblock the texture
+   group's flat smart pointers and the geometry attrs;
 6. the game's `be*` classes last.
 
 ## Known differences and gaps

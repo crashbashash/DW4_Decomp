@@ -1,62 +1,37 @@
-igMetaObject *g_igLightStateAttr_metaObject;
-igMetaField *g_igLightStateAttr_lightMetaField;
-igMetaField *g_igLightStateAttr_enabledMetaField;
-igMetaField *g_igLightStateAttr_internalMetaField;
+namespace Gap {
+namespace Attrs {
 
-igLightStateAttr *igLightStateAttr_Create(igMemoryPoolView *pool) {
-    igLightStateAttr_EnsureRegistered();
-    return (igLightStateAttr *)igMetaObject_CreateInstance(g_igLightStateAttr_metaObject, pool);
-}
+igMetaObject *igLightStateAttr::_Meta;
+igMetaField *igLightStateAttr::k_light;
+igMetaField *igLightStateAttr::k_enabled;
+igMetaField *igLightStateAttr::k_internal;
 
-igMetaObject *igLightStateAttr_GetOrCreateMetaObject(void) {
-    if (g_igLightStateAttr_metaObject == 0) {
-        g_igLightStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igLightStateAttr_metaObject;
-}
-
-igMetaObject *igLightStateAttr_GetMetaObject(void)
+igLightStateAttr *igLightStateAttr::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igLightStateAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igLightStateAttr_EnsureRegistered();
-    return g_igLightStateAttr_metaObject;
+    arkRegister();
+    return (igLightStateAttr *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igLightStateAttr_GetVTable(void) {
-    union U_136290 u;
-    int t;
-    char *o;
-    int *a1;
-    int v0;
-    S_ref *p0, *p1;
-    igObject_InitHeader((igObject *)u.b);
-    p0 = (S_ref *)&u.b[12];
-    p1 = (S_ref *)&u.b[16];
-    u.vt = (int)&g_igLightStateAttr_vtable[0];
-    *(int *)p0 = 0;
-    *(int *)p1 = 0;
-    t = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igLightStateAttr_vtable[0];
-    if (p1 != 0) {
-        p1 = *(S_ref **)p1;
-        if (p1 != 0) {
-            p1->f4 = (int)((int) (p1->f4 - 1));
-            if (((unsigned long long) ((long long) p1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)p1);
-            }
-        }
-    }
-    if (p0 != 0) {
-        p0 = *(S_ref **)p0;
-        if (p0 != 0) {
-            p0->f4 = (int)((int) (p0->f4 - 1));
-            if (((unsigned long long) ((long long) p0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)p0);
-            }
-        }
-    }
-    return t;
+igMetaObject *igLightStateAttr::getClassTypeLazy()
+{
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
+}
+
+igMetaObject *igLightStateAttr::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igLightStateAttr::retrieveVTablePointer()
+{
+    igLightStateAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+}
 }
 
 ObjectRefWord *FUN_00136370(ObjectRefWord *self,int delete_storage) {
@@ -81,70 +56,59 @@ igSmartPointer<igObject> *igSmartPointer_igObject_Destruct(igSmartPointer<igObje
     return self;
 }
 
-void igLightStateAttr_EnsureRegistered(void)
+namespace Gap {
+namespace Attrs {
+
+void igLightStateAttr::arkRegister()
 {
-    igMetaObject_RunStaticInit(igLightStateAttr_Register);
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-static igMetaObjectCallback g_igLightStateAttr_callbackList[] = { igLightAttr_EnsureRegistered, Gap::Core::igObject::arkRegister, 0 };
+CallbackArray *igLightStateAttr::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igLightAttr::arkRegister, Gap::Core::igObject::arkRegister, 0 };
 
-CallbackArray *igLightStateAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igLightStateAttr_metaObject,
+        false,
+        &_Meta,
         Gap::Attrs::igVisualAttribute::arkRegisterInternal,
         Gap::Attrs::igVisualAttribute::getClassMeta,
-        igLightStateAttr_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igLightStateAttr",
-        0x18, /* instance size */
-        igLightStateAttr_GetVTable,
-        &igLightStateAttr_InitFields,
-        0, /* extra callback item */
-        g_igLightStateAttr_callbackList /* callback list */
+        sizeof(igLightStateAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igLightStateAttr_GetMetaObjectFunction(void) {
-    igLightStateAttr_GetMetaObject();
+void igLightStateAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igBoolMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_light", "_enabled", "_internal" };
+    static igMetaField **enumStorage[] = { &k_light, &k_enabled, &k_internal };
+    static int offsets[] = { 16, 20, 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Attrs::igLightAttr::getClassTypeLazy();
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(1);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)Gap::Core::igObject::getClassMeta();
+        metaField->_persistent = 0;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igLightStateAttr_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igLightStateAttr_fieldTable[] = {
-    "_light",
-    "_enabled",
-    "_internal",
-};
-static igMetaField **g_igLightStateAttr_fieldHandles[] = {
-    &g_igLightStateAttr_lightMetaField,
-    &g_igLightStateAttr_enabledMetaField,
-    &g_igLightStateAttr_internalMetaField,
-};
-static int g_igLightStateAttr_fieldOffsets[] = {
-    16,
-    20,
-    12,
-};
-
-void igLightStateAttr_InitFields(void) {
-    int base;
-    void *field;
-    void *field2;
-    igMetaObject *meta;
-
-    meta = g_igLightStateAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igLightStateAttr_ctorTable, 3);
-    field2 = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)field2)->_metaObject = (int)igLightAttr_GetOrCreateMetaObject();
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(1);
-    field = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igObject::getClassMeta();
-    ((igMetaField *)field)->_persistent = 0;
-    igMetaObject_NameFields(meta, g_igLightStateAttr_fieldTable, g_igLightStateAttr_fieldHandles, g_igLightStateAttr_fieldOffsets, base);
+}
 }
 

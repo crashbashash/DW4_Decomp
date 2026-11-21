@@ -14603,49 +14603,17 @@ typedef struct igLightAttr {
     short _cachedUnitID;                           /* +10   igShortMetaField */
     int _lightType;                                /* +12   igEnumMetaField */
     int _lightId;                                  /* +16   igIntMetaField */
-#ifdef __cplusplus
-    igVec3f _position;                             /* +20   igVec3fMetaField */
-#else
     float _position[3];                            /* +20   igVec3fMetaField */
-#endif
-#ifdef __cplusplus
-    igVec4f _ambient;                              /* +32   igVec4fMetaField */
-#else
     float _ambient[4];                             /* +32   igVec4fMetaField */
-#endif
-#ifdef __cplusplus
-    igVec4f _diffuse;                              /* +48   igVec4fMetaField */
-#else
     float _diffuse[4];                             /* +48   igVec4fMetaField */
-#endif
-#ifdef __cplusplus
-    igVec4f _specular;                             /* +64   igVec4fMetaField */
-#else
     float _specular[4];                            /* +64   igVec4fMetaField */
-#endif
-#ifdef __cplusplus
-    igVec3f _direction;                            /* +80   igVec3fMetaField */
-#else
     float _direction[3];                           /* +80   igVec3fMetaField */
-#endif
     float _falloff;                                /* +92   igFloatMetaField */
     float _cutoff;                                 /* +96   igFloatMetaField */
-#ifdef __cplusplus
-    igVec3f _attenuation;                          /* +100  igVec3fMetaField */
-#else
     float _attenuation[3];                         /* +100  igVec3fMetaField */
-#endif
     float _shininess;                              /* +112  igFloatMetaField */
-#ifdef __cplusplus
-    igVec3f _cachedPosition;                       /* +116  igVec3fMetaField */
-#else
     float _cachedPosition[3];                      /* +116  igVec3fMetaField */
-#endif
-#ifdef __cplusplus
-    igVec3f _cachedDirection;                      /* +128  igVec3fMetaField */
-#else
     float _cachedDirection[3];                     /* +128  igVec3fMetaField */
-#endif
     int _vc;                                       /* +140  igObjectRefMetaField */
     unsigned char _changed;                        /* +144  igBoolMetaField */
     unsigned char _cacheable;                      /* +145  igBoolMetaField */
@@ -21061,7 +21029,7 @@ typedef struct libNdmwRuntimePlugin {
 #include "dw4/core/igResult.h"
 #include "dw4/core/igStringRef.h"
 namespace Gap {
-namespace Attrs { class igAlphaFunctionAttr; class igAlphaStateAttr; class igAttr; class igAttrDefaultManager; class igAttrList; class igAttrListList; class igAttrPool; class igBlendFunctionAttr; class igBlendMatricesAttr; class igBlendMatrixPaletteAttr; class igBlendMatrixPaletteAttrList; class igBlendStateAttr; class igClearAttr; class igClippingStateAttr; class igColorAttr; class igColorMaskAttr; class igCullFaceAttr; class igDepthStateAttr; class igDepthWriteStateAttr; class igDisplayListAttr; class igFogAttr; class igFogStateAttr; class igGenericAttrDefaultManager; class igGeometryMaskAttr; class igLightingStateAttr; class igMaterialAttr; class igMatrixOptStateAttr; class igModelViewMatrixAttr; class igModelViewMatrixAttrList; class igMultiPassStateAttr; class igNonRefCountedAttrList; class igNormalizeNormalsStateAttr; class igPixelPipelineModeAttr; class igPolygonModeAttr; class igProjectionMatrixAttr; class igRenderListAttr; class igShadeModelAttr; class igStencilFunctionAttr; class igStencilStateAttr; class igTexGenMatrixAttr; class igTextureCoordSourceAttr; class igTextureFunctionAttr; class igTextureMatrixAttr; class igTextureMatrixStateAttr; class igTextureStateAttr; class igTextureUnloadAttr; class igTimeAttr; class igVertexBlendMatrixAttr; class igVertexBlendStateAttr; class igViewportAttr; class igVisualAttribute; class igVisualContextAttrDefaultManager; }
+namespace Attrs { class igAlphaFunctionAttr; class igAlphaStateAttr; class igAttr; class igAttrDefaultManager; class igAttrList; class igAttrListList; class igAttrPool; class igBlendFunctionAttr; class igBlendMatricesAttr; class igBlendMatrixPaletteAttr; class igBlendMatrixPaletteAttrList; class igBlendStateAttr; class igClearAttr; class igClippingStateAttr; class igColorAttr; class igColorMaskAttr; class igCullFaceAttr; class igDepthStateAttr; class igDepthWriteStateAttr; class igDisplayListAttr; class igFogAttr; class igFogStateAttr; class igGenericAttrDefaultManager; class igGeometryMaskAttr; class igLightAttr; class igLightList; class igLightStateAttr; class igLightStateAttrList; class igLightingStateAttr; class igMaterialAttr; class igMatrixOptStateAttr; class igModelViewMatrixAttr; class igModelViewMatrixAttrList; class igMultiPassStateAttr; class igNonRefCountedAttrList; class igNormalizeNormalsStateAttr; class igPixelPipelineModeAttr; class igPolygonModeAttr; class igProjectionMatrixAttr; class igRenderListAttr; class igShadeModelAttr; class igStencilFunctionAttr; class igStencilStateAttr; class igTexGenMatrixAttr; class igTextureCoordSourceAttr; class igTextureFunctionAttr; class igTextureMatrixAttr; class igTextureMatrixStateAttr; class igTextureStateAttr; class igTextureUnloadAttr; class igTimeAttr; class igVertexBlendMatrixAttr; class igVertexBlendStateAttr; class igViewportAttr; class igVisualAttribute; class igVisualContextAttrDefaultManager; }
 namespace Core { class igBoolArrayMetaField; class igBoolList; class igBoolMetaField; class igCharArrayMetaField; class igCharList; class igCharListNoClean; class igCharMetaField; class igCompoundMetaField; class igDataList; class igDependencyList; class igDoubleArrayMetaField; class igDoubleList; class igDoubleMetaField; class igEnumArrayMetaField; class igEnumMetaField; class igFloatArrayMetaField; class igFloatList; class igFloatMetaField; class igIntArrayMetaField; class igIntList; class igIntListNoClean; class igIntMetaField; class igLongArrayMetaField; class igLongList; class igLongMetaField; class igMemoryRefArrayMetaField; class igMemoryRefMetaField; class igMetaEnum; class igMetaField; class igNonRefCountedObjectList; class igObject; class igObjectList; class igObjectRefArrayMetaField; class igObjectRefMetaField; class igPointerList; class igRawRefArrayMetaField; class igRawRefMetaField; class igRefMetaField; class igShortArrayMetaField; class igShortList; class igShortMetaField; class igStringArrayMetaField; class igStringMetaField; class igStructMetaField; class igUnsignedCharArrayMetaField; class igUnsignedCharList; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntList; class igUnsignedIntListNoClean; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortList; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
 namespace Gui { class igClearRenderer; class igRenderer; }
 namespace Insight { class igFlushRenderer; }
@@ -21114,6 +21082,10 @@ using Core::igIntArrayMetaField;
 using Core::igIntList;
 using Core::igIntListNoClean;
 using Core::igIntMetaField;
+using Attrs::igLightAttr;
+using Attrs::igLightList;
+using Attrs::igLightStateAttr;
+using Attrs::igLightStateAttrList;
 using Attrs::igLightingStateAttr;
 using Core::igLongArrayMetaField;
 using Core::igLongList;
@@ -22417,6 +22389,116 @@ class igIntListNoClean : public Gap::Core::igIntList {
 public:
     IG_OBJECT_DEFINE(igIntListNoClean)
     inline virtual void trimCapacity() {}
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55f088, 20 field(s), sizeof 148 (registered instance size) */
+class igLightAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    int _lightType;                                /* +12   igEnumMetaField */
+    int _lightId;                                  /* +16   igIntMetaField */
+    igVec3f _position;                             /* +20   igVec3fMetaField */
+    igVec4f _ambient;                              /* +32   igVec4fMetaField */
+    igVec4f _diffuse;                              /* +48   igVec4fMetaField */
+    igVec4f _specular;                             /* +64   igVec4fMetaField */
+    igVec3f _direction;                            /* +80   igVec3fMetaField */
+    float _falloff;                                /* +92   igFloatMetaField */
+    float _cutoff;                                 /* +96   igFloatMetaField */
+    igVec3f _attenuation;                          /* +100  igVec3fMetaField */
+    float _shininess;                              /* +112  igFloatMetaField */
+    igVec3f _cachedPosition;                       /* +116  igVec3fMetaField */
+    igVec3f _cachedDirection;                      /* +128  igVec3fMetaField */
+    igSmartPointer<igVisualContext> _vc;           /* +140  igObjectRefMetaField */
+    bool _changed;                                 /* +144  igBoolMetaField */
+    bool _cacheable;                               /* +145  igBoolMetaField */
+    char _pad146[2];
+    IG_OBJECT_DEFINE(igLightAttr)
+private:
+    static igMetaField *k_lightType;
+    static igMetaField *k_lightId;
+    static igMetaField *k_position;
+    static igMetaField *k_ambient;
+    static igMetaField *k_diffuse;
+    static igMetaField *k_specular;
+    static igMetaField *k_direction;
+    static igMetaField *k_falloff;
+    static igMetaField *k_cutoff;
+    static igMetaField *k_attenuation;
+    static igMetaField *k_shininess;
+    static igMetaField *k_cachedPosition;
+    static igMetaField *k_cachedDirection;
+    static igMetaField *k_vc;
+    static igMetaField *k_changed;
+    static igMetaField *k_cacheable;
+    static void lightChanged(igObject *obj);
+public:
+    virtual void releaseDefaults();
+    virtual void apply(igVisualContext *vc);
+    inline IG_GFX_LIGHT_TYPE getType() const { return (IG_GFX_LIGHT_TYPE)_lightType; }
+    inline int getHandle() const { return _lightId; }
+    virtual void setDiffuse(const igVec4f &d);
+    virtual void setAmbient(const igVec4f &a);
+    virtual void setSpecular(const igVec4f &s);
+    virtual void setPosition(const igVec3f &p);
+    virtual void setDirection(const igVec3f &d);
+    virtual void setCutoffAngle(float c);
+    inline float getCutoffAngle() { return _cutoff; }
+    virtual void setFalloffRate(float e);
+    inline float getFalloffRate() { return _falloff; }
+    virtual void setAttenuation(const igVec3f &a);
+    virtual void synchronizeDefault(igVisualContext *vc);
+    inline virtual void setVisualContext(igVisualContext *vc) { _vc = vc; }
+    inline igVisualContext *getVisualContext() { return _vc; }
+    virtual void reset();
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55f080, 5 field(s), sizeof 20 (registered instance size) */
+class igLightList : public Gap::Core::igTObjectList<igLightAttr> {
+public:
+    IG_OBJECT_DEFINE(igLightList)
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55f060, 7 field(s), sizeof 24 (registered instance size) */
+class igLightStateAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    igSmartPointer<igObject> _internal;            /* +12   igObjectRefMetaField */
+    igSmartPointer<igLightAttr> _light;            /* +16   igObjectRefMetaField */
+    bool _enabled;                                 /* +20   igBoolMetaField */
+    char _pad21[3];
+    IG_OBJECT_DEFINE(igLightStateAttr)
+private:
+    static igMetaField *k_internal;
+    static igMetaField *k_light;
+    static igMetaField *k_enabled;
+public:
+    virtual void apply(igVisualContext *vc);
+    virtual void setState(bool enb);
+    inline bool getState() const { return _enabled; }
+    inline void setLight(igLightAttr *li) { _light = li; }
+    inline igLightAttr *getLight() const { return _light; }
+    virtual void synchronizeDefault(igVisualContext *vc);
+    virtual void setup(igVisualContext *context);
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55f058, 5 field(s), sizeof 20 (registered instance size) */
+class igLightStateAttrList : public Gap::Core::igTObjectList<igLightStateAttr> {
+public:
+    IG_OBJECT_DEFINE(igLightStateAttrList)
 };
 }
 }

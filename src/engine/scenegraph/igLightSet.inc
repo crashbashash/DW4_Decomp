@@ -37,7 +37,7 @@ void igLightSet_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igLightSet_Register);
 }
 
-static igMetaObjectCallback g_igLightSet_callbackList[] = { igLightList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igLightSet_callbackList[] = { Gap::Attrs::igLightList::arkRegister, 0 };
 
 CallbackArray *igLightSet_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -86,7 +86,7 @@ void igLightSet_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igLightSet_ctorTable, 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igLightList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Attrs::igLightList::getClassTypeLazy();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     ((igMetaField *)temp_s1)->_deepCopyMethod = 0;
     ((igMetaField *)temp_s1)->_shallowCopyMethod = 2;

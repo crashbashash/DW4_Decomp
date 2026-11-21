@@ -1,32 +1,32 @@
-void igLightStateAttr_apply(S_13ef30 *arg0, igPsx2VisualContext *arg1) {
-    if (arg0->f16 != 0) {
-        if (arg0->f16->f16 == -1) {
-            arg0->f16->vX();
-        }
-        igPsx2VisualContext_SetLightState(arg1, arg0->f16->f16, arg0->f20);
+namespace Gap {
+namespace Attrs {
+
+void igLightStateAttr::apply(igVisualContext *vc)
+{
+    if (_light != 0) {
+        if (_light->getHandle() == -1)
+            _light->apply(vc);
+        igPsx2VisualContext_SetLightState((igPsx2VisualContext *)vc, _light->getHandle(), _enabled);
     }
 }
 
-void igLightStateAttr_SynchronizeDefault(igLightStateAttr *arg0, void **arg1) {
-    void *temp_v1;
-
-    temp_v1 = (void *)(arg0->_light);
-    if (temp_v1 != 0) {
-        ((DW4VC_128_1 *)(((char *)(arg0) + 0)))->vX((int)(((DW4VC_320_1 *)(arg1))->vX((int)(*(int *)((char *)(temp_v1) + 16)))));
-    }
+void igLightStateAttr::synchronizeDefault(igVisualContext *vc)
+{
+    if (_light != 0)
+        setState(((igVisualContextDispatchView *)vc)->getLightState(_light->getHandle()));
 }
 
 /* Setter for the attribute's reflected _enabled flag. */
-void igLightStateAttr_SetState(igLightStateAttr *self, char enabled) {
-    self->_enabled = enabled;
+void igLightStateAttr::setState(bool enb)
+{
+    _enabled = enb;
 }
 
-void igLightStateAttr_Setup(igLightStateAttr *self) {
-    void **light;
-
-    light = (void **)(self->_light);
-    if (light != 0) {
-        ((BoundLightVtable *)(light))->vX();
-    }
+void igLightStateAttr::setup(igVisualContext *context)
+{
+    if (_light != 0)
+        _light->setup(context);
+}
+}
 }
 

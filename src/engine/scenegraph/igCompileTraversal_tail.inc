@@ -567,7 +567,7 @@ void igAttrSet_ShareCompiledAttrs(CompiledAttrSet *set, igCompileTraversal *trav
             appendValue(set->_attrSlots, &set->_attributes->_data[i]);
             int shared = set->_sharedAttrs->_count;
             unique = true;
-            if (g_igLightStateAttr_metaObject != attr->getMeta()) {
+            if (Gap::Attrs::igLightStateAttr::getClassMeta() != attr->getMeta()) {
                 int j;
                 for (j = 0; j < shared; j++) {
                     CompiledAttr *other = set->_sharedAttrs->_data[j];

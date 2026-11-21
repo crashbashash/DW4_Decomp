@@ -170,7 +170,7 @@ void igPlanarShadowShader_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPlanarShadowShader_Register);
 }
 
-static igMetaObjectCallback g_igPlanarShadowShader_callbackList[] = { igLightList_EnsureRegistered, Gap::Attrs::igModelViewMatrixAttrList::arkRegister, igGeometryList_EnsureRegistered, Gap::Attrs::igAttrList::arkRegister, igVolume_EnsureRegistered, Gap::Attrs::igColorAttr::arkRegister, Gap::Attrs::igStencilStateAttr::arkRegister, 0 };
+static igMetaObjectCallback g_igPlanarShadowShader_callbackList[] = { Gap::Attrs::igLightList::arkRegister, Gap::Attrs::igModelViewMatrixAttrList::arkRegister, igGeometryList_EnsureRegistered, Gap::Attrs::igAttrList::arkRegister, igVolume_EnsureRegistered, Gap::Attrs::igColorAttr::arkRegister, Gap::Attrs::igStencilStateAttr::arkRegister, 0 };
 
 CallbackArray *igPlanarShadowShader_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -283,7 +283,7 @@ void igPlanarShadowShader_InitFields(void) {
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igPlanarShadowShader_ctorTable, 0xD);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
-    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igLightList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)Gap::Attrs::igLightList::getClassTypeLazy();
     ((igRefMetaField *)temp_s2)->_construct = 1;
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)Gap::Attrs::igModelViewMatrixAttrList::getClassTypeLazy();

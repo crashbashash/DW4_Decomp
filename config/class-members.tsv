@@ -1161,6 +1161,55 @@ igAttrList	IG_OBJECT_DEFINE(igAttrList)
 igAttrListList	IG_OBJECT_DEFINE(igAttrListList)
 igModelViewMatrixAttrList	IG_OBJECT_DEFINE(igModelViewMatrixAttrList)
 igBlendMatrixPaletteAttrList	IG_OBJECT_DEFINE(igBlendMatrixPaletteAttrList)
+igLightAttr	IG_OBJECT_DEFINE(igLightAttr)
+igLightAttr	private: static igMetaField *k_lightType;
+igLightAttr	private: static igMetaField *k_lightId;
+igLightAttr	private: static igMetaField *k_position;
+igLightAttr	private: static igMetaField *k_ambient;
+igLightAttr	private: static igMetaField *k_diffuse;
+igLightAttr	private: static igMetaField *k_specular;
+igLightAttr	private: static igMetaField *k_direction;
+igLightAttr	private: static igMetaField *k_falloff;
+igLightAttr	private: static igMetaField *k_cutoff;
+igLightAttr	private: static igMetaField *k_attenuation;
+igLightAttr	private: static igMetaField *k_shininess;
+igLightAttr	private: static igMetaField *k_cachedPosition;
+igLightAttr	private: static igMetaField *k_cachedDirection;
+igLightAttr	private: static igMetaField *k_vc;
+igLightAttr	private: static igMetaField *k_changed;
+igLightAttr	private: static igMetaField *k_cacheable;
+igLightAttr	private: static void lightChanged(igObject *obj);
+igLightAttr	virtual void releaseDefaults();
+igLightAttr	virtual void apply(igVisualContext *vc);
+igLightAttr	inline IG_GFX_LIGHT_TYPE getType() const { return (IG_GFX_LIGHT_TYPE)_lightType; }
+igLightAttr	inline int getHandle() const { return _lightId; }
+igLightAttr	virtual void setDiffuse(const igVec4f &d);
+igLightAttr	virtual void setAmbient(const igVec4f &a);
+igLightAttr	virtual void setSpecular(const igVec4f &s);
+igLightAttr	virtual void setPosition(const igVec3f &p);
+igLightAttr	virtual void setDirection(const igVec3f &d);
+igLightAttr	virtual void setCutoffAngle(float c);
+igLightAttr	inline float getCutoffAngle() { return _cutoff; }
+igLightAttr	virtual void setFalloffRate(float e);
+igLightAttr	inline float getFalloffRate() { return _falloff; }
+igLightAttr	virtual void setAttenuation(const igVec3f &a);
+igLightAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igLightAttr	inline virtual void setVisualContext(igVisualContext *vc) { _vc = vc; }
+igLightAttr	inline igVisualContext *getVisualContext() { return _vc; }
+igLightAttr	virtual void reset();
+igLightStateAttr	IG_OBJECT_DEFINE(igLightStateAttr)
+igLightStateAttr	private: static igMetaField *k_internal;
+igLightStateAttr	private: static igMetaField *k_light;
+igLightStateAttr	private: static igMetaField *k_enabled;
+igLightStateAttr	virtual void apply(igVisualContext *vc);
+igLightStateAttr	virtual void setState(bool enb);
+igLightStateAttr	inline bool getState() const { return _enabled; }
+igLightStateAttr	inline void setLight(igLightAttr *li) { _light = li; }
+igLightStateAttr	inline igLightAttr *getLight() const { return _light; }
+igLightStateAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igLightStateAttr	virtual void setup(igVisualContext *context);
+igLightList	IG_OBJECT_DEFINE(igLightList)
+igLightStateAttrList	IG_OBJECT_DEFINE(igLightStateAttrList)
 igNonRefCountedObjectList	IG_OBJECT_DEFINE(igNonRefCountedObjectList)
 igNonRefCountedObjectList	private: static igMetaField *k_data;
 igNonRefCountedObjectList	private: typedef igTDataList<igObject *> Parent;
