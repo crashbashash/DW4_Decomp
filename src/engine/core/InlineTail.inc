@@ -386,7 +386,7 @@ igMetaObject *igNonRefCountedThreadList_GetMeta(void) {
 }
 
 int igContextList_GetElementMeta(void) {
-    return (int)g_igContext_metaObject;
+    return (int)Gap::Core::igContext::getClassMeta();
 }
 
 igMetaObject *igNonRefCountedThreadList_GetElementMeta(void) {

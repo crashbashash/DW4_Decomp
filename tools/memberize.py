@@ -769,8 +769,9 @@ class Planner:
     def ref_argument(self, fr, span, cls, const, ctx):
         """Edits giving an argument passed for a reference parameter `const cls &`, where the C form took a pointer
         to the value: a temporary's array member (`cls(...).vec`) is the temporary, a name declared as `cls` stays,
-        and any other pointer (a float array, a cast to one, a stand-in struct's address) is dereferenced as a
-        `cls` (`*(const cls *)v`), its own pointer cast dropped."""
+        an argument already written as the value (`*p`, `*(cls *)p`) stays, and any other pointer (a float array,
+        a cast to one, a stand-in struct's address) is dereferenced as a `cls` (`*(const cls *)v`), its own pointer
+        cast dropped."""
         s, e = span
         expr = fr.text[s:e].strip()
         head = re.match(r"%s\s*\(" % re.escape(cls), expr)
@@ -783,6 +784,9 @@ class Planner:
         if re.fullmatch(r"[A-Za-z_]\w*", bare) and ctx is not None and re.search(
                 r"\b%s(?:\s+const)?(?:\s+|\s*&\s*)%s\b\s*[,;=(\[)]" % (re.escape(cls), re.escape(bare)),
                 fr.text[ctx[1]:ctx[2]]):
+            return
+        deref = re.match(r"\*\s*(?:\(\s*(?:const\s+)?[A-Za-z_][\w:]*(?:\s+const)?\s*\*\s*\)\s*)?", bare)
+        if deref and _POSTFIX.match(_strip_parens(bare[deref.end():])):
             return
         cast = re.match(r"\(\s*(?:const\s+)?[A-Za-z_][\w:]*(?:\s+const)?\s*\*\s*\)\s*", expr)
         start = s + (cast.end() if cast else 0)

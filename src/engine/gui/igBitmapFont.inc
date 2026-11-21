@@ -39,7 +39,7 @@ void igBitmapFont_RunStaticInit(void)
     igMetaObject_RunStaticInit(igBitmapFont_Register);
 }
 
-static igMetaObjectCallback g_igBitmapFont_callbackList[] = { igCharMetricsList_RunStaticInit, igTextureBindAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igBitmapFont_callbackList[] = { igCharMetricsList_RunStaticInit, Gap::Attrs::igTextureBindAttr::arkRegister, 0 };
 
 CallbackArray *igBitmapFont_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -96,7 +96,7 @@ void igBitmapFont_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igCharMetricsList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igTextureBindAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)Gap::Attrs::igTextureBindAttr::getClassTypeLazy();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igBitmapFont_fieldTable, g_igBitmapFont_fieldHandles, g_igBitmapFont_fieldOffsets, temp_s2);
 }

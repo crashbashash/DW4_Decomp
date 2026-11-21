@@ -661,6 +661,7 @@ igObjectList	inline virtual void userPreWrite() { trimCapacity(); }
 igObjectList	inline virtual igMetaObject *getElementMeta() const { return igObject::getClassMeta(); }
 igObjectList	void append(igObject *object);
 igObjectList	void concatenate(const igObjectList *list);
+igObjectList	inline void set(int index, igObject *object) { igObject::ref(object); igObject::release(get(index)); Parent::set(index, object); }
 igObjectList	void setAll(igObject *object);
 igObjectList	igObject *search(igStringMetaField *field, const char *name) const;
 igObjectList	igObject *search(igObjectRefMetaField *field, const igObject *obj) const;
@@ -1236,6 +1237,148 @@ igUnsignedIntListNoClean	IG_OBJECT_DEFINE(igUnsignedIntListNoClean)
 igUnsignedIntListNoClean	inline virtual void trimCapacity() {}
 igDependencyList	IG_OBJECT_DEFINE(igDependencyList)
 igDependencyList	private: static igMetaField *k_data;
+igTextureAttr	IG_OBJECT_DEFINE(igTextureAttr)
+igTextureAttr	protected: static igMetaField *k_bColor;
+igTextureAttr	protected: static igMetaField *k_magFilter;
+igTextureAttr	protected: static igMetaField *k_minFilter;
+igTextureAttr	protected: static igMetaField *k_wrapS;
+igTextureAttr	protected: static igMetaField *k_wrapT;
+igTextureAttr	protected: static igMetaField *k_texId;
+igTextureAttr	protected: static igMetaField *k_mipmapMode;
+igTextureAttr	protected: static igMetaField *k_source;
+igTextureAttr	protected: static igMetaField *k_image;
+igTextureAttr	protected: static igMetaField *k_paging;
+igTextureAttr	protected: static igMetaField *k_tu;
+igTextureAttr	protected: static igMetaField *k_imageCount;
+igTextureAttr	protected: static igMetaField *k_imageMipMaps;
+igTextureAttr	protected: static igMetaField *k_vc;
+igTextureAttr	protected: static igMetaField *k_videoBuffer;
+igTextureAttr	virtual void releaseDefaults();
+igTextureAttr	virtual void userPostLoad();
+igTextureAttr	virtual void apply(igVisualContext *vc);
+igTextureAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igTextureAttr	virtual void reset();
+igTextureAttr	inline virtual void setMagnificationFilter(IG_GFX_TEXTURE_FILTER mag) { _magFilter = mag; }
+igTextureAttr	inline virtual void setMinificationFilter(IG_GFX_TEXTURE_FILTER min) { _minFilter = min; }
+igTextureAttr	inline IG_GFX_TEXTURE_FILTER getMagnificationFilter() const { return (IG_GFX_TEXTURE_FILTER)_magFilter; }
+igTextureAttr	inline IG_GFX_TEXTURE_FILTER getMinificationFilter() const { return (IG_GFX_TEXTURE_FILTER)_minFilter; }
+igTextureAttr	inline virtual void setWrapS(IG_GFX_TEXTURE_WRAP wrap) { _wrapS = wrap; }
+igTextureAttr	inline virtual void setWrapT(IG_GFX_TEXTURE_WRAP wrap) { _wrapT = wrap; }
+igTextureAttr	inline IG_GFX_TEXTURE_WRAP getWrapS() const { return (IG_GFX_TEXTURE_WRAP)_wrapS; }
+igTextureAttr	inline IG_GFX_TEXTURE_WRAP getWrapT() const { return (IG_GFX_TEXTURE_WRAP)_wrapT; }
+igTextureAttr	inline void setSource(IG_GFX_TEXTURE_SOURCE source) { _source = source; }
+igTextureAttr	inline IG_GFX_TEXTURE_SOURCE getSource() { return (IG_GFX_TEXTURE_SOURCE)_source; }
+igTextureAttr	void setImage(igImage *img, int level);
+igTextureAttr	igImage *getImage(int level) const;
+igTextureAttr	inline void setHandle(int id) { _texId = id; }
+igTextureAttr	inline int getHandle() { return _texId; }
+igTextureAttr	inline virtual void setVisualContext(igVisualContext *vc) { _vc = vc; }
+igTextureAttr	inline igVisualContext *getVisualContext() { return _vc; }
+igTextureAttr	virtual char *generateKey(bool stripPath, igMemoryPoolView *mp);
+igTextureAttr	virtual bool isKeyForAttr(char *key);
+igTextureCubeAttr	IG_OBJECT_DEFINE(igTextureCubeAttr)
+igTextureCubeAttr	private: static igMetaField *k_cubeImage;
+igTextureCubeAttr	private: static igMetaField *k_applyType;
+igTextureCubeAttr	private: static igMetaField *k_unused;
+igTextureCubeAttr	enum CubeFaceID { FACE_NEG_X = 0, FACE_POS_X, FACE_NEG_Y, FACE_POS_Y, FACE_NEG_Z, FACE_POS_Z };
+igTextureCubeAttr	enum ApplyType { NOT_SET = 0, CUBE_MAP, SPHERE_MAP };
+igTextureCubeAttr	static igMetaEnum *getApplyTypeMetaEnum();
+igTextureCubeAttr	private: static igMetaEnum *ApplyType_Meta;
+igTextureCubeAttr	virtual void releaseDefaults();
+igTextureCubeAttr	virtual void apply(igVisualContext *vc);
+igTextureCubeAttr	inline void setCubeImage(igImage *image, CubeFaceID faceIndex) { _cubeImage[faceIndex] = image; }
+igTextureCubeAttr	inline igImage *getCubeImage(CubeFaceID faceIndex) { return _cubeImage[faceIndex]; }
+igTextureCubeAttr	inline void setApplyType(ApplyType type) { _applyType = type; }
+igTextureCubeAttr	inline ApplyType getApplyType() { return (ApplyType)_applyType; }
+igTextureCubeAttr	void releaseImage(ApplyType type);
+igTextureBindAttr	IG_OBJECT_DEFINE(igTextureBindAttr)
+igTextureBindAttr	protected: static igMetaField *k_texture;
+igTextureBindAttr	protected: static igMetaField *k_unitID;
+igTextureBindAttr	private: static void synchronizeCachedUnitID(igObject *obj);
+igTextureBindAttr	static void userRegister();
+igTextureBindAttr	private: static void arkRegisterUser();
+igTextureBindAttr	virtual void reset();
+igTextureBindAttr	virtual void setup(igVisualContext *context);
+igTextureBindAttr	virtual void apply(igVisualContext *vc);
+igTextureBindAttr	virtual void applyFast(igVisualContext *vc);
+igTextureBindAttr	inline virtual void setTexture(igTextureAttr *tex) { _texture = tex; }
+igTextureBindAttr	inline igTextureAttr *getTexture() const { return _texture; }
+igTextureBindAttr	virtual void userPostLoad();
+igTextureBindAttr	inline short getNonCachedUnitID() const { return (short)_unitID; }
+igTextureBindAttr	virtual void setUnitID(short id);
+igTextureBindAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igTextureBindAttr	virtual int getUnitCount(igCapabilityManager *capabilityManager);
+igCopyRenderDestinationAttr	IG_OBJECT_DEFINE(igCopyRenderDestinationAttr)
+igCopyRenderDestinationAttr	protected: static igMetaField *k_copyType;
+igCopyRenderDestinationAttr	protected: static igMetaField *k_pRDAttr;
+igCopyRenderDestinationAttr	protected: static igMetaField *k_pImage;
+igCopyRenderDestinationAttr	protected: static igMetaField *k_pTextureAttr;
+igCopyRenderDestinationAttr	protected: static igMetaField *k_sourceX;
+igCopyRenderDestinationAttr	protected: static igMetaField *k_sourceY;
+igCopyRenderDestinationAttr	protected: static igMetaField *k_destinationX;
+igCopyRenderDestinationAttr	protected: static igMetaField *k_destinationY;
+igCopyRenderDestinationAttr	protected: static igMetaField *k_sizeW;
+igCopyRenderDestinationAttr	protected: static igMetaField *k_sizeH;
+igCopyRenderDestinationAttr	enum CopyType { NOT_SET, FROM_RENDERDESTINATION_TO_TEXTURE, FROM_RENDERDESTINATION_TO_MEMORY, FROM_RENDERDESTINATION_DEPTH_TO_TEXTURE, FROM_RENDERDESTINATION_DEPTH_TO_MEMORY };
+igCopyRenderDestinationAttr	static igMetaEnum *getCopyTypeMetaEnum();
+igCopyRenderDestinationAttr	private: static igMetaEnum *CopyType_Meta;
+igCopyRenderDestinationAttr	virtual void apply(igVisualContext *pVC);
+igCopyRenderDestinationAttr	inline igRenderDestinationAttr *getRenderDestinationAttr(void) { return _pRDAttr; }
+igCopyRenderDestinationAttr	inline igTextureAttr *getTexture(void) { return _pTextureAttr; }
+igCopyRenderDestinationAttr	inline CopyType getCopyType(void) { return (CopyType)_copyType; }
+igCopyRenderDestinationAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igRenderDestinationAttr	IG_OBJECT_DEFINE(igRenderDestinationAttr)
+igRenderDestinationAttr	private: static igMetaField *k_iCreateMode;
+igRenderDestinationAttr	private: static igMetaField *k_iTexCreateMode;
+igRenderDestinationAttr	private: static igMetaField *k_iRDHandle;
+igRenderDestinationAttr	private: static igMetaField *k_bEnabled;
+igRenderDestinationAttr	private: static igMetaField *k_iPrevRDHandle;
+igRenderDestinationAttr	private: static igMetaField *k_pTex;
+igRenderDestinationAttr	private: static igMetaField *k_iType;
+igRenderDestinationAttr	private: static igMetaField *k_iSizeX;
+igRenderDestinationAttr	private: static igMetaField *k_iSizeY;
+igRenderDestinationAttr	private: static igMetaField *k_iColorBitCount;
+igRenderDestinationAttr	private: static igMetaField *k_iAlphaBitCount;
+igRenderDestinationAttr	private: static igMetaField *k_iDepthBitCount;
+igRenderDestinationAttr	private: static igMetaField *k_iStencilBitCount;
+igRenderDestinationAttr	private: static igMetaField *k_vc;
+igRenderDestinationAttr	enum RENDERDESTINATION_CREATE_MODE { RENDERDESTINATION_CREATE_MODE_INHERIT = 0, RENDERDESTINATION_CREATE_MODE_AUTONOMOUS = 1, RENDERDESTINATION_CREATE_MODE_USE_DEFAULT = 2 };
+igRenderDestinationAttr	static igMetaEnum *getRENDERDESTINATION_CREATE_MODEMetaEnum();
+igRenderDestinationAttr	private: static igMetaEnum *RENDERDESTINATION_CREATE_MODE_Meta;
+igRenderDestinationAttr	enum RENDERDESTINATION_TEXTURE_CREATE_MODE { RENDERDESTINATION_TEXTURE_CREATE_MODE_AUTO_CREATE = 0, RENDERDESTINATION_TEXTURE_CREATE_MODE_USE_SPECIFIED = 1 };
+igRenderDestinationAttr	static igMetaEnum *getRENDERDESTINATION_TEXTURE_CREATE_MODEMetaEnum();
+igRenderDestinationAttr	private: static igMetaEnum *RENDERDESTINATION_TEXTURE_CREATE_MODE_Meta;
+igRenderDestinationAttr	virtual void releaseDefaults();
+igRenderDestinationAttr	virtual void apply(igVisualContext *vc);
+igRenderDestinationAttr	inline IG_GFX_RENDERDESTINATION_TYPE getType(void) const { return (IG_GFX_RENDERDESTINATION_TYPE)_iType; }
+igRenderDestinationAttr	inline RENDERDESTINATION_CREATE_MODE getCreateMode(void) { return (RENDERDESTINATION_CREATE_MODE)_iCreateMode; }
+igRenderDestinationAttr	inline int getHandle(void) { return _iRDHandle; }
+igRenderDestinationAttr	inline void setSize(int w, int h) { _iSizeX = w; _iSizeY = h; }
+igRenderDestinationAttr	inline igTextureAttr *getTexture(void) { return _pTex; }
+igRenderDestinationAttr	inline RENDERDESTINATION_TEXTURE_CREATE_MODE getTextureCreateMode(void) { return (RENDERDESTINATION_TEXTURE_CREATE_MODE)_iTexCreateMode; }
+igRenderDestinationAttr	virtual void synchronizeDefault(igVisualContext *pVC);
+igRenderDestinationAttr	virtual void reset();
+igSetRenderDestinationAttr	IG_OBJECT_DEFINE(igSetRenderDestinationAttr)
+igSetRenderDestinationAttr	private: static igMetaField *k_pRDAttr;
+igSetRenderDestinationAttr	virtual void releaseDefaults();
+igSetRenderDestinationAttr	virtual void reset();
+igSetRenderDestinationAttr	virtual void apply(igVisualContext *pVC);
+igSetRenderDestinationAttr	inline igRenderDestinationAttr *getRenderDestinationAttr(void) { return _pRDAttr; }
+igSetRenderDestinationAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igImageMipMapList	IG_OBJECT_DEFINE(igImageMipMapList)
+igTextureList	IG_OBJECT_DEFINE(igTextureList)
+igContext	IG_ABSTRACT_OBJECT_DEFINE(igContext)
+igContext	protected: static igMetaField *k_pExtList;
+igContext	static igMetaField *k_iNumExts;
+igContext	static igMetaField *k_pExtInstances;
+igContext	void generateExtList();
+igContext	const igMetaObject *getExtMeta(char *pExtName);
+igContext	igContextExt *findExtInstance(const igMetaObject *extMeta);
+igContext	public: virtual void makeCurrent();
+igContext	virtual bool isCurrent() const;
+igContext	virtual const igContextExtInfoList *getExtList();
+igContext	virtual igContextExt *getExt(char *pExtName);
+igContext	inline virtual void detectDriverDatabaseProperties(igDriverDatabase *driverDB) {}
 igNamedObject	IG_OBJECT_DEFINE(igNamedObject)
 igNamedObject	static igMetaField *k_name;
 igNamedObject	void setName(const char *name);

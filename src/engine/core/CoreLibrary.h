@@ -616,9 +616,6 @@ extern "C" int igContextList_GetVTable(void);
 extern "C" void igContextList_EnsureRegistered(void);
 extern "C" CallbackArray *igContextList_Register(void);
 extern "C" void igContextList_GetMetaObjectFunction(void);
-extern "C" void igContext_EnsureRegistered(void);
-extern "C" void igContext_GetMetaObjectFunction(void);
-extern "C" void igContext_InitFields(void);
 extern "C" igMetaObject *igCallStackTracer_GetOrCreateMetaObject(void);
 extern "C" int igCallStackTracer_GetVTable(void);
 extern "C" void igCallStackTracer_EnsureRegistered(void);
@@ -801,7 +798,6 @@ extern "C" int igCallStackTracer_HasSymbols(void);
 extern "C" void igCallStackTracer_PreExit(void);
 extern "C" void igCallStackTracer_Exit(void);
 extern "C" int **igCharMetaField_Construct(int **arg0, int extra1);
-extern "C" int igContext_GetMeta(void);
 extern "C" void igDependencyOrderedList_TopologicalSort(igDependencyOrderedList *self);
 extern "C" void igDirectory_RegisterDependentMetaObjects(void);
 extern "C" void *igDirectory_GetEntryAlias(int *arg0, int arg1);
@@ -1608,7 +1604,6 @@ extern "C" igMetaObject *igContextExt_GetMetaObject(void);
 extern "C" igMetaObject *g_igContextList_metaObject;
 extern "C" igMetaObject *igContextList_GetMetaObject(void);
 extern "C" int g_igContextList_vtable[4];
-extern "C" igMetaObject *igContext_GetMetaObject(void);
 extern "C" igMetaObject *g_igCallStackTracer_metaObject;
 extern "C" igMetaObject *igCallStackTracer_GetMetaObject(void);
 extern "C" int g_igCallStackTracer_vtable[4];
@@ -1876,9 +1871,6 @@ extern "C" void igCallStackTracer_FormatAddress(igResult *result, igCallStackTra
 extern "C" igResult igThread_SetPriority(igPsx2Thread *self, int priority);
 extern "C" igResult igCallStackTracer_LookupAddress(void *self, int addr, char *buf, int size, int *offset, char *name, int nameSize, int *line);
 extern "C" int percent_d_7[4];
-extern "C" void igContext_BuildExtensionInfoList(igContext *arg0);
-extern "C" int igContext_GetExtensionInfoList(igContext *arg0);
-extern "C" int igContext_FindExtensionMeta(igContext *arg0, int arg1);
 /* igContextExt's own virtual functions past igObject's (slot n at vtable byte offset 4 * n): IsSupported
  * decides whether the extension can serve the context, SetContext binds it. ABI view only: never instantiated. */
 class igContextExtView {
@@ -1890,8 +1882,6 @@ public:
     virtual int IsSupported(igVisualContext *context);                          /* +112 */
     virtual int SetContext(igVisualContext *context);                           /* +116 */
 };
-extern "C" void *igContext_GetExtension(igVisualContext *arg0, int extra1);
-extern "C" int igContext_FindExtensionInstance(igContext *arg0, int arg1);
 extern "C" void List_AppendBytes(igDataList *l, int cnt, int src, int sz);
 typedef int (*Cmp)(int *, void *);
 struct DependencyPair { void *a; void *b; };

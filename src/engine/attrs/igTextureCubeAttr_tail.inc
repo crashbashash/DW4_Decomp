@@ -1,56 +1,56 @@
-void igTextureCubeAttr_apply(int *arg0, int *arg1) {
-    int a4 = arg0[9];
-    if (a4 < 0) {
-        switch (arg0[24]) {
-        case 0:
-            if (((VB_141080 *)arg1)->v148(0x15, 2) != 0 && arg0[18] != 0) {
-                arg0[24] = 1;
+namespace Gap {
+namespace Attrs {
+
+void igTextureCubeAttr::apply(igVisualContext *vc)
+{
+    if (_texId < 0) {
+        switch (_applyType) {
+        case NOT_SET:
+            if (((igVisualContextDispatchView *)vc)->getCapability(IG_GFX_CAPABILITY_CUBE_MAP_SUPPORT) != 0 && _cubeImage[0] != 0) {
+                _applyType = CUBE_MAP;
             } else {
-                arg0[24] = 2;
+                _applyType = SPHERE_MAP;
             }
-            ((VA_141080 *)arg0)->v96(arg1);
+            apply(vc);
             break;
-        case 1:
-            if (a4 < 0) {
-                arg0[24] = 2;
-                ((VA_141080 *)arg0)->v96(arg1);
+        case CUBE_MAP:
+            if (_texId < 0) {
+                _applyType = SPHERE_MAP;
+                apply(vc);
             }
             break;
-        case 2:
-            igTextureAttr_apply((igTextureAttr *)arg0, (igObject *)arg1);
+        case SPHERE_MAP:
+            igTextureAttr::apply(vc);
             break;
         }
-        if (arg0[9] >= 0) {
-            goto b14;
+        if (_texId >= 0) {
+            goto applied;
         }
     } else {
-b14:
-        igTextureAttr_apply((igTextureAttr *)arg0, (igObject *)arg1);
+    applied:
+        igTextureAttr::apply(vc);
     }
 }
 
-void igTextureCubeAttr_ReleaseDefaults(void **arg0) {
-    igTextureAttr_ReleaseDefaults(arg0);
+void igTextureCubeAttr::releaseDefaults()
+{
+    igTextureAttr::releaseDefaults();
 }
 
-void FUN_00141190(int *arg0, int arg1) {
+void igTextureCubeAttr::releaseImage(ApplyType type)
+{
     int i;
-    R_141190 *p;
-    if (arg1 == 1) {
+
+    if (type == CUBE_MAP) {
         for (i = 0; i < 6; i++) {
-            p = (R_141190 *)arg0[18 + i];
-            if (p != 0) {
-                if (p != 0) {
-                    p->refs = p->refs - 1;
-                    if (((unsigned long long)((long long)p->refs << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy((igObject *)p);
-                    }
-                }
-                arg0[18 + i] = 0;
+            if (_cubeImage[i] != 0) {
+                _cubeImage[i] = 0;
             }
         }
-    } else if (arg1 == 2) {
-        igTextureAttr_SetImage((igTextureAttr *)arg0, 0, 0);
+    } else if (type == SPHERE_MAP) {
+        setImage(0, 0);
     }
+}
+}
 }
 

@@ -381,44 +381,43 @@ igStringRef igCompoundMetaField::getStringFromMemory(const void *srcMem, igDirec
     free(buffer);
     return result;
 }
-}
-}
 
-void igContextExt_MakeCurrent(void) {
+void igContext::makeCurrent() {
 
 }
 
-int igContextExt_IsCurrent(void) {
-    return 1;
+bool igContext::isCurrent() const
+{
+    return true;
 }
 
-void igContext_BuildExtensionInfoList(igContext *self) {
-    if (self->_pExtList == 0) {
+void igContext::generateExtList() {
+    if (_pExtList == 0) {
         igContextExtInfoList *list;
         int meta;
         int i;
-        list = ((igContextExtInfoList *)igContextExtInfoList_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
+        list = ((igContextExtInfoList *)igContextExtInfoList_Create(((int)((Gap::Core::igObject *)this)->getMemoryPool())));
         if (list != 0) ++list->_refCount;
-        igObject::release((igObject *)self->_pExtList);
-        self->_pExtList = (int)list;
+        ::igObject::release((::igObject *)_pExtList);
+        _pExtList = (int)list;
         {
-            igContextExtInfoList *o = (igContextExtInfoList *)self->_pExtList;
+            igContextExtInfoList *o = (igContextExtInfoList *)_pExtList;
             o->release();
         }
-        ((igObjectDispatchView *)self)->GetMeta();
+        ((igObjectDispatchView *)this)->GetMeta();
         meta = igObjectSystem_FindMetaByNameDefault("igContextExt");
-        self->_iNumExts = igMetaObject_CountTree((igMetaObject *)meta) - 1;
-        if (self->_iNumExts >= ((igContextExtInfoList *)self->_pExtList)->_count) ((Gap::Core::igDataList *)((igContextExtInfoList *)self->_pExtList))->setCapacity(self->_iNumExts, 4);
-        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)((igContextExtInfoList *)self->_pExtList)))->setCount(self->_iNumExts);
-        for (i = 0; i < self->_iNumExts; i++) {
+        _iNumExts = igMetaObject_CountTree((igMetaObject *)meta) - 1;
+        if (_iNumExts >= ((igContextExtInfoList *)_pExtList)->_count) ((Gap::Core::igDataList *)((igContextExtInfoList *)_pExtList))->setCapacity(_iNumExts, 4);
+        ((Gap::Core::igObjectList *)((igTDataList< ::igObject *> *)((igContextExtInfoList *)_pExtList)))->setCount(_iNumExts);
+        for (i = 0; i < _iNumExts; i++) {
             int name;
             igMetaObject *node;
             igContextExtInfo *info;
             igContextExtInfoList *infoList;
             node = ((igMetaObject *)igMetaObject_GetTreeNode((igMetaObject *)meta, i + 1));
-            info = ((igContextExtInfo *)igContextExtInfo_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
+            info = ((igContextExtInfo *)igContextExtInfo_Create(((int)((Gap::Core::igObject *)this)->getMemoryPool())));
             if (node != 0) ++node->_refCount;
-            igObject::release((igObject *)info->_pMeta);
+            ::igObject::release((::igObject *)info->_pMeta);
             info->_pMeta = (int)node;
             name = node->_name;
             if (g_stringPool == 0) {
@@ -438,46 +437,44 @@ void igContext_BuildExtensionInfoList(igContext *self) {
                 info->_pName = interned;
             }
             info->_pVendorName = 0;
-            infoList = (igContextExtInfoList *)self->_pExtList;
+            infoList = (igContextExtInfoList *)_pExtList;
             if (info != 0) ++info->_refCount;
-            igObject::release(((igObject **)infoList->_data)[i]);
+            ::igObject::release(((::igObject **)infoList->_data)[i]);
             if (infoList->_count != 0 && i >= 0 && i < infoList->_count) ((igContextExtInfo **)infoList->_data)[i] = info;
             info->release();
         }
     }
 }
 
-int igContext_GetMeta(void) {
-    return (int)g_igContext_metaObject;
-}
-
-int igContext_GetExtensionInfoList(igContext *self) {
-    if (self->_pExtList == 0) {
-        igContext_BuildExtensionInfoList(self);
+const igContextExtInfoList *igContext::getExtList()
+{
+    if (_pExtList == 0) {
+        generateExtList();
     }
-    if (self->_iNumExts <= 0) {
+    if (_iNumExts <= 0) {
         return 0;
     }
-    return self->_pExtList;
+    return (const igContextExtInfoList *)_pExtList;
 }
 
-int igContext_FindExtensionMeta(igContext *self, int name) {
+const igMetaObject *igContext::getExtMeta(char *pExtName)
+{
     int i;
     bool found;
     igContextExtInfo *info;
 
     info = 0;
-    if (self->_pExtList == 0) {
-        igContext_BuildExtensionInfoList(self);
+    if (_pExtList == 0) {
+        generateExtList();
     }
     i = 0;
-    if (self->_iNumExts <= 0) {
+    if (_iNumExts <= 0) {
         return 0;
     }
     found = true;
-    while (i < self->_iNumExts && found) {
-        info = ((igContextExtInfo **)((igContextExtInfoList *)self->_pExtList)->_data)[i];
-        if (strcmp((const char *)info->_pName, (const char *)name) == 0) {
+    while (i < _iNumExts && found) {
+        info = ((igContextExtInfo **)((igContextExtInfoList *)_pExtList)->_data)[i];
+        if (strcmp((const char *)info->_pName, pExtName) == 0) {
             found = false;
         } else {
             i += 1;
@@ -486,41 +483,45 @@ int igContext_FindExtensionMeta(igContext *self, int name) {
     if ((found & 0xFF) == 1) {
         return 0;
     }
-    return info->_pMeta;
+    return (const igMetaObject *)info->_pMeta;
 }
 
-void *igContext_GetExtension(igVisualContext *self, int name) {
-    int meta;
-    igObject *extension;
+igContextExt *igContext::getExt(char *pExtName)
+{
+    const igMetaObject *meta;
+    ::igObject *extension;
 
-    meta = igContext_FindExtensionMeta((igContext *)self, name);
+    meta = getExtMeta(pExtName);
     if (meta == 0) {
         return 0;
     }
-    extension = (igObject *)(((void *)igContext_FindExtensionInstance((igContext *)self, meta)));
+    extension = (::igObject *)findExtInstance(meta);
     if (extension == 0) {
-        extension = (igObject *)(((void *)igMetaObject_CreateInstance((igMetaObject *)meta, (igMemoryPoolView *)(((int)((Gap::Core::igObject *)self)->getMemoryPool())))));
+        extension = (::igObject *)igMetaObject_CreateInstance((::igMetaObject *)meta, (igMemoryPoolView *)(int)getMemoryPool());
         if (extension != 0) {
-            if (((igContextExtView *)extension)->IsSupported(self) == 0) {
+            if (((igContextExtView *)extension)->IsSupported((igVisualContext *)this) == 0) {
                 extension->release();
-                extension = (igObject *)(0);
+                extension = (::igObject *)(0);
             } else {
-                ((Gap::Core::igObjectList *)self->_pExtInstances)->append((Gap::Core::igObject *)extension);
+                ((igObjectList *)_pExtInstances)->append((igObject *)extension);
                 extension->release();
-                ((igContextExtView *)extension)->SetContext(self);
+                ((igContextExtView *)extension)->SetContext((igVisualContext *)this);
             }
         }
     }
-    return extension;
+    return (igContextExt *)extension;
 }
 
-int igContext_FindExtensionInstance(igContext *self, int meta) {
+igContextExt *igContext::findExtInstance(const igMetaObject *extMeta)
+{
     int i;
-    for (i = 0; i < ((igObjectList *)self->_pExtInstances)->_count; i++) {
-        if (((Gap::Core::igObject *)(((int *)((igObjectList *)self->_pExtInstances)->_data)[i]))->isOfType((igMetaObject *)meta) != 0) {
-            return ((int *)((igObjectList *)self->_pExtInstances)->_data)[i];
+    for (i = 0; i < ((igObjectList *)_pExtInstances)->_count; i++) {
+        if (((igObject *)(((int *)((igObjectList *)_pExtInstances)->_data)[i]))->isOfType((igMetaObject *)extMeta) != 0) {
+            return (igContextExt *)((int *)((igObjectList *)_pExtInstances)->_data)[i];
         }
     }
     return 0;
+}
+}
 }
 

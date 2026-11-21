@@ -121,12 +121,12 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_51(S_1e1210 *self) {
     A_1e1210 *a;
     FUN_001c20b0((Controller *)self);
     *(int *)((char *)self->f32 + 96) = 2;
-    if ((((A_1e1210 *)igTextureAttr_GetImage((igTextureAttr *)self->f32, 0)) != 0) == 0) FUN_001c31e0((igTextureAttr *)self->f32);
-    if (self->f52 != 0 && ((A_1e1210 *)igTextureAttr_GetImage((igTextureAttr *)self->f52, 0)) != 0 && *(int *)((char *)((A_1e1210 *)igTextureAttr_GetImage((igTextureAttr *)self->f52, 0)) + 44) == 0) {
-        a = ((A_1e1210 *)igTextureAttr_GetImage((igTextureAttr *)self->f52, 0));
+    if ((((A_1e1210 *)((Gap::Attrs::igTextureAttr *)self->f32)->getImage(0)) != 0) == 0) FUN_001c31e0((igTextureAttr *)self->f32);
+    if (self->f52 != 0 && ((A_1e1210 *)((Gap::Attrs::igTextureAttr *)self->f52)->getImage(0)) != 0 && *(int *)((char *)((A_1e1210 *)((Gap::Attrs::igTextureAttr *)self->f52)->getImage(0)) + 44) == 0) {
+        a = ((A_1e1210 *)((Gap::Attrs::igTextureAttr *)self->f52)->getImage(0));
         a->v28(1);
     }
-    if (self->f73 != 0) FUN_00141190((int *)self->f32, 1);
+    if (self->f73 != 0) ((Gap::Attrs::igTextureCubeAttr *)self->f32)->releaseImage(Gap::Attrs::igTextureCubeAttr::CUBE_MAP);
     self->f80->v30(2);
     alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
     t = self->f116;
@@ -281,7 +281,7 @@ void FUN_001e16a0(EnvMapShaderView *arg0, void *) {
         ((Gap::Core::igObjectList *)attrListA.p)->append((Gap::Core::igObject *)g_envMapTextureUnit1On.p);
         ((Gap::Core::igObjectList *)attrListB.p)->append((Gap::Core::igObject *)g_envMapTextureUnit1On.p);
         EnvMapRef texBindAttr;
-        texBindAttr.p = ((EnvMapAttr *)igTextureBindAttr_CreateInstance((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
+        texBindAttr.p = ((EnvMapAttr *)Gap::Attrs::igTextureBindAttr::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
         ((EnvMapAttrOps *)texBindAttr.p)->d23(1);
         ((EnvMapAttrOps *)texBindAttr.p)->vY(arg0->f36->f12);
         ((Gap::Core::igObjectList *)attrListA.p)->append((Gap::Core::igObject *)texBindAttr.p);
@@ -478,7 +478,7 @@ void FUN_001e22c0(EnvMapShaderView_1e22c0 *arg0, void *) {
         ((Gap::Core::igObjectList *)a.p)->append((Gap::Core::igObject *)(((EnvMapAttr *)g_envMapTextureUnit2On.p)));
         ((Gap::Core::igObjectList *)b.p)->append((Gap::Core::igObject *)(((EnvMapAttr *)g_envMapTextureUnit2On.p)));
         EnvMapRef c;
-        c.p = ((EnvMapAttr *)igTextureBindAttr_CreateInstance((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
+        c.p = ((EnvMapAttr *)Gap::Attrs::igTextureBindAttr::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
         ((EnvMapAttrOps *)c.p)->d23(2);
         ((EnvMapAttrOps *)c.p)->vY(arg0->f36->f12);
         ((Gap::Core::igObjectList *)a.p)->append((Gap::Core::igObject *)c.p);

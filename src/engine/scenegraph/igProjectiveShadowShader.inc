@@ -175,7 +175,7 @@ void igProjectiveShadowShader_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igProjectiveShadowShader_Register);
 }
 
-static igMetaObjectCallback g_igProjectiveShadowShader_callbackList[] = { igNodeList_EnsureRegistered, Gap::Attrs::igNonRefCountedAttrList::arkRegister, Gap::Attrs::igModelViewMatrixAttr::arkRegister, Gap::Attrs::igProjectionMatrixAttr::arkRegister, igGeometry_EnsureRegistered, igGeometryAttr_EnsureRegistered, Gap::Attrs::igColorAttr::arkRegister, Gap::Attrs::igTextureMatrixAttr::arkRegister, igRenderDestinationAttr_EnsureRegistered, igSetRenderDestinationAttr_EnsureRegistered, igTextureAttr_EnsureRegistered, igTextureBindAttr_EnsureRegistered, igCopyRenderDestinationAttr_EnsureRegistered, igImage_EnsureRegistered, Gap::Attrs::igViewportAttr::arkRegister, Gap::Attrs::igLightAttr::arkRegister, Gap::Attrs::igTextureUnloadAttr::arkRegister, 0 };
+static igMetaObjectCallback g_igProjectiveShadowShader_callbackList[] = { igNodeList_EnsureRegistered, Gap::Attrs::igNonRefCountedAttrList::arkRegister, Gap::Attrs::igModelViewMatrixAttr::arkRegister, Gap::Attrs::igProjectionMatrixAttr::arkRegister, igGeometry_EnsureRegistered, igGeometryAttr_EnsureRegistered, Gap::Attrs::igColorAttr::arkRegister, Gap::Attrs::igTextureMatrixAttr::arkRegister, Gap::Attrs::igRenderDestinationAttr::arkRegister, Gap::Attrs::igSetRenderDestinationAttr::arkRegister, Gap::Attrs::igTextureAttr::arkRegister, Gap::Attrs::igTextureBindAttr::arkRegister, Gap::Attrs::igCopyRenderDestinationAttr::arkRegister, igImage_EnsureRegistered, Gap::Attrs::igViewportAttr::arkRegister, Gap::Attrs::igLightAttr::arkRegister, Gap::Attrs::igTextureUnloadAttr::arkRegister, 0 };
 
 CallbackArray *igProjectiveShadowShader_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -475,39 +475,39 @@ void igProjectiveShadowShader_InitFields(void) {
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x17)))->setDefault(1);
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x18)))->setDefault(1);
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x19));
-    temp_s2->f56 = (int)igRenderDestinationAttr_GetOrCreateMetaObject();
+    temp_s2->f56 = (int)Gap::Attrs::igRenderDestinationAttr::getClassTypeLazy();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1A));
-    temp_s2->f56 = (int)igSetRenderDestinationAttr_GetOrCreateMetaObject();
+    temp_s2->f56 = (int)Gap::Attrs::igSetRenderDestinationAttr::getClassTypeLazy();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1B));
-    temp_s2->f56 = (int)igTextureAttr_GetOrCreateMetaObject();
+    temp_s2->f56 = (int)Gap::Attrs::igTextureAttr::getClassTypeLazy();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1C));
-    temp_s2->f56 = (int)igTextureBindAttr_GetOrCreateMetaObject();
+    temp_s2->f56 = (int)Gap::Attrs::igTextureBindAttr::getClassTypeLazy();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1D));
-    temp_s2->f56 = (int)igRenderDestinationAttr_GetOrCreateMetaObject();
+    temp_s2->f56 = (int)Gap::Attrs::igRenderDestinationAttr::getClassTypeLazy();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1E));
-    temp_s2->f56 = (int)igSetRenderDestinationAttr_GetOrCreateMetaObject();
+    temp_s2->f56 = (int)Gap::Attrs::igSetRenderDestinationAttr::getClassTypeLazy();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1F));
-    temp_s2->f56 = (int)igTextureAttr_GetOrCreateMetaObject();
+    temp_s2->f56 = (int)Gap::Attrs::igTextureAttr::getClassTypeLazy();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x20));
-    temp_s2->f56 = (int)igTextureBindAttr_GetOrCreateMetaObject();
+    temp_s2->f56 = (int)Gap::Attrs::igTextureBindAttr::getClassTypeLazy();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x21));
-    temp_s2->f56 = (int)igCopyRenderDestinationAttr_GetOrCreateMetaObject();
+    temp_s2->f56 = (int)Gap::Attrs::igCopyRenderDestinationAttr::getClassTypeLazy();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x22));
@@ -525,7 +525,7 @@ void igProjectiveShadowShader_InitFields(void) {
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x25));
     temp_s2->f56 = (int)Gap::Attrs::igLightAttr::getClassTypeLazy();
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x26));
-    temp_s2->f56 = (int)igTextureBindAttr_GetOrCreateMetaObject();
+    temp_s2->f56 = (int)Gap::Attrs::igTextureBindAttr::getClassTypeLazy();
     temp_s2->f52 = 1;
     temp_s2->f38 = 0;
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x28)))->setDefault(5.0f);

@@ -126,6 +126,15 @@ igUnsignedIntList	Core	igTDataList<unsigned int>
 igDoubleList	Core	igTDataList<double>
 igUnsignedIntListNoClean	Core
 igDependencyList	Core	igTDataList<igDependency>
+igTextureAttr	Attrs
+igTextureCubeAttr	Attrs
+igTextureBindAttr	Attrs
+igCopyRenderDestinationAttr	Attrs
+igRenderDestinationAttr	Attrs
+igSetRenderDestinationAttr	Attrs
+igImageMipMapList	Attrs	igTObjectList<igImage>
+igTextureList	Attrs	igTObjectList<igTextureAttr>
+igContext	Core
 igNamedObject	Core
 igDirEntry	Core
 igObjectDirEntry	Core

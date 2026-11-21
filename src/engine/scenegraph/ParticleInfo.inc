@@ -276,7 +276,7 @@ void FUN_001d7120(ProjectiveShadowView *s) {
     s->texture->s31(0);
     s->texture->s32(0);
     s->texture->s33(0);
-    igTextureAttr_SetImage((igTextureAttr *)s->texture, (igImage *)s->image, 0);
+    ((Gap::Attrs::igTextureAttr *)s->texture)->setImage((igImage *)s->image, 0);
     ((ShadowTexState *)s->texture)->width = 3;
     if (igVisualContext_FindFirst() != 0) {
         ShadowStateObj *t = s->texture;

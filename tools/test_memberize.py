@@ -427,13 +427,18 @@ class Memberize(unittest.TestCase):
                     "void Users_Set(Widget *w, struct S *s) {\n    float a[3];\n    Vec v(0.0f);\n"
                     "    Widget_SetValue(w, a);\n    Widget_SetValue(w, (const float *)&s);\n"
                     "    Widget_SetValue(w, Vec(1.0f).f);\n    Widget_SetValue(w, v);\n"
-                    "    Widget_SetValue(w, a + 1);\n}\n")
+                    "    Widget_SetValue(w, a + 1);\n}\n"
+                    "void Users_Pass(Widget *w, Vec *value, int *q) {\n    Widget_SetValue(w, *value);\n"
+                    "    Widget_SetValue(w, *(Vec *)q);\n    Widget_SetValue(w, *(value));\n}\n")
         self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Widget_SetValue\n")
         write(self.table, TABLE + "Widget_SetValue\tWidget::setValue\n")
         self.assertEqual(self.run_tool("--apply"), 0)
+        users = self.read("src/game/Users.inc")
         self.assertIn("    w->setValue(*(const Vec *)a);\n    w->setValue(*(const Vec *)&s);\n"
                       "    w->setValue(Vec(1.0f));\n    w->setValue(v);\n"
-                      "    w->setValue(*(const Vec *)(a + 1));\n", self.read("src/game/Users.inc"))
+                      "    w->setValue(*(const Vec *)(a + 1));\n", users)
+        # an argument already written as the value is not dereferenced again
+        self.assertIn("    w->setValue(*value);\n    w->setValue(*(Vec *)q);\n    w->setValue(*(value));\n", users)
 
     def test_a_static_whose_return_type_changed_keeps_its_uses_types(self):
         # the C form returned an int (and the member a pointer): an assignment of the result and a field table

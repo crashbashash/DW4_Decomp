@@ -1,64 +1,75 @@
 int g_igTextureBindAttr_applySlotFast;
 int g_igTextureBindAttr_applySlotDefault;
-void igTextureBindAttr_GetUnitCount(igTextureBindAttrView *self, igVisualContextView *context)
+namespace Gap {
+namespace Attrs {
+
+int igTextureBindAttr::getUnitCount(igCapabilityManager *capabilityManager)
 {
-    context->vfunc_21(22);
+    return ((igCapabilityManagerDispatchView *)capabilityManager)->getCapability(IG_GFX_CAPABILITY_MAX_TEXTURE_STAGES_PSX2);
 }
 
 /* Empty leaf in igTextureBindAttr vtable slot 26 (+0x68): a do-nothing default for a virtual this
  * attribute does not need. */
-void igTextureBindAttr_SynchronizeDefault(igTextureBindAttr *self) {
+void igTextureBindAttr::synchronizeDefault(igVisualContext *vc)
+{
+
 }
 
-void igTextureBindAttr_Reset(igTextureBindAttr *self) {
-    void **texture;
-
-    texture = (void **)(self->_texture);
-    if (texture != 0) {
-        ((BoundTextureVtable *)(texture))->vX();
+void igTextureBindAttr::reset()
+{
+    if (_texture != 0) {
+        _texture->reset();
     }
 }
 
-void igTextureBindAttr_Setup(igTextureBindAttr *self) {
-    void **texture;
-
-    texture = (void **)(self->_texture);
-    if (texture != 0) {
-        ((BoundTextureVtable_140d60 *)(texture))->vX();
+void igTextureBindAttr::setup(igVisualContext *context)
+{
+    if (_texture != 0) {
+        _texture->setup(context);
     }
 }
 
-void Gap__Attrs__igTextureBindAttr__vfunc_32(igTextureBindAttr *attr, igPsx2VisualContext *context) {
-    igTextureAttr *texture = (igTextureAttr *)attr->_texture;
-    igPsx2VisualContext_SetTexture(context, texture ? texture->_texId : -1, attr->_unitID);
+void igTextureBindAttr::applyFast(igVisualContext *vc)
+{
+    igTextureAttr *texture = _texture;
+
+    igPsx2VisualContext_SetTexture((igPsx2VisualContext *)vc, texture ? texture->getHandle() : -1, _unitID);
 }
 
-void igTextureBindAttr_apply(igTextureBindAttr *attr, igPsx2VisualContext *context) {
-    igTextureAttrView *texture = (igTextureAttrView *)attr->_texture;
+void igTextureBindAttr::apply(igVisualContext *vc)
+{
     int texId;
-    if (texture == 0) {
-        igPsx2VisualContext_SetTexture(context, -1, attr->_unitID);
+
+    if (_texture == 0) {
+        igPsx2VisualContext_SetTexture((igPsx2VisualContext *)vc, -1, _unitID);
         return;
     }
-    texture->prepare();
-    texId = ((igTextureAttr *)attr->_texture)->_texId;
+    _texture->apply(vc);
+    texId = _texture->getHandle();
     if (texId >= 0) {
-        igPsx2VisualContext_SetTexture(context, texId, attr->_unitID);
+        igPsx2VisualContext_SetTexture((igPsx2VisualContext *)vc, texId, _unitID);
     }
 }
 
-void igTextureBindAttr_SynchronizeCachedUnitID(igTextureBindAttr *self) {
-    self->_cachedUnitID = self->_unitID;
+void igTextureBindAttr::synchronizeCachedUnitID(igObject *obj)
+{
+    igTextureBindAttr *attr = (igTextureBindAttr *)obj;
+
+    attr->setCachedUnitID(attr->_unitID);
 }
 
-void igTextureBindAttr_UserPostLoad(igTextureBindAttr *self) {
-    igAttr_UserPostLoad(self);
-    igAttr_SetUnitID((int)self, (short)self->_unitID);
+void igTextureBindAttr::userPostLoad()
+{
+    igVisualAttribute::userPostLoad();
+    igAttr::setUnitID((short)_unitID);
 }
 
-void igTextureBindAttr_SetUnitID(igTextureBindAttr *self, int unitID) {
-    self->_unitID = (short)unitID;
-    igAttr_SetUnitID((int)self, unitID);
+void igTextureBindAttr::setUnitID(short id)
+{
+    _unitID = id;
+    igAttr::setUnitID(id);
+}
+}
 }
 
 void igTextureBindAttr_SetFastApply(int arg0) {
@@ -67,7 +78,7 @@ void igTextureBindAttr_SetFastApply(int arg0) {
     int var_a1;
     int idx;
     int temp_a4;
-    temp_a4 = *(int *)((char *)(g_igTextureBindAttr_metaObject) + 92);
+    temp_a4 = *(int *)((char *)(Gap::Attrs::igTextureBindAttr::getClassMeta()) + 92);
     idx = sp10.b;
     if (g_igTextureBindAttr_slotsCached == 0) {
         g_igTextureBindAttr_applySlotDefault = *(int *)(temp_a4 + idx);
@@ -84,11 +95,17 @@ void igTextureBindAttr_SetFastApply(int arg0) {
     g_igTextureBindAttr_fastApplyEnabled = arg0;
 }
 
-void igTextureBindAttr_ConfigureFastApply(void) {
-    unsigned char sp1F;
+namespace Gap {
+namespace Attrs {
 
-    sp1F = 0;
-    igRegistry_GetValueBool((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 7, "enableIgTextureAttrFastApply", (unsigned char *)&sp1F, 0, 0);
-    igTextureBindAttr_SetFastApply(sp1F);
+void igTextureBindAttr::userRegister()
+{
+    unsigned char enable;
+
+    enable = 0;
+    igRegistry_GetValueBool((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 7, "enableIgTextureAttrFastApply", &enable, 0, 0);
+    igTextureBindAttr_SetFastApply(enable);
+}
+}
 }
 

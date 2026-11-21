@@ -32,7 +32,7 @@ void igTextureUnloadAttr::arkRegister()
 
 CallbackArray *igTextureUnloadAttr::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { igTextureAttr_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igTextureAttr::arkRegister, 0 };
 
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -62,7 +62,7 @@ void igTextureUnloadAttr::arkRegisterInitialize()
     igMetaObject_CreateFields(metaObject, instFuncs, 2);
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
-        metaField->_metaObject = (int)igTextureAttr_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Attrs::igTextureAttr::getClassTypeLazy();
         metaField->_refCounted = 0;
     }
     {

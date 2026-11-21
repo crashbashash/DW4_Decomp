@@ -97,7 +97,6 @@ void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
     int boundCount;
     igMetaObject *bindMeta;
     int attributeIndex;
-    int boundOffset;
     if (self->_isFirstTime != 0) {
         if (((beTextureCtrlInfo *)ram->_parentInfo)->_isTexture == 0) {
             attributeCount = ((igObjectList *)((beTextureCtrlWork *)self->_work)->_attributeList)->_count;
@@ -117,22 +116,20 @@ void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
                     if (property != 0) {
                         allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
                         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-                        igSmartPointer<igTextureBindAttrDispatchView> attr((igTextureBindAttrDispatchView *)igTextureBindAttr_CreateInstance(allocator));
+                        igSmartPointer<igTextureBindAttrDispatchView> attr((igTextureBindAttrDispatchView *)Gap::Attrs::igTextureBindAttr::_instantiateFromPool((igMemoryPoolView *)allocator));
                         attr.p->setTexture((igObject *)property->_tex);
                         attrSet = (igAttrSet *)entry->_attrSet;
                         boundCount = ((igAttrList *)attrSet->_attributes)->_count;
                         boundIndex = 0;
                         if (0 < boundCount) {
-                            boundOffset = 0;
                             do {
-                                bindMeta = g_igTextureBindAttr_metaObject;
-                                existing = (igObjectDispatchView *)*(int *)(((igAttrList *)attrSet->_attributes)->_data + boundOffset);
+                                bindMeta = Gap::Attrs::igTextureBindAttr::getClassMeta();
+                                existing = (igObjectDispatchView *)((int *)((igAttrList *)attrSet->_attributes)->_data)[boundIndex];
                                 if (bindMeta == existing->GetMeta()) {
                                     ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)attrSet->_attributes))->removeByValue((Gap::Core::igObject *)existing, 0);
                                     break;
                                 }
                                 boundIndex++;
-                                boundOffset += 4;
                             } while (boundIndex < boundCount);
                         }
                         ((Gap::Core::igObjectList *)attrSet->_attributes)->append((Gap::Core::igObject *)attr.p);

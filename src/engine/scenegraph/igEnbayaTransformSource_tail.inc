@@ -138,7 +138,7 @@ void FUN_001c20b0(Controller *self) {
   flag = 1;
   igGetRegistryValue_Bool((igRegistry *)props, 7, "envMapDiscardUnusedImages", &flag, 1, 1);
   self->enabled = flag;
-  assign(self->f76, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureBindAttr_CreateInstance((int)((Gap::Core::igObject *)self)->getMemoryPool()))));
+  assign(self->f76, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureBindAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
   self->f76->setValue(self->a32);
   self->f76->configure(0);
   assign(self->f80, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureCoordSourceAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
@@ -165,7 +165,7 @@ void FUN_001c20b0(Controller *self) {
     }
   }
   if (self->a52 != 0) {
-    assign(self->f100, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureBindAttr_CreateInstance((int)((Gap::Core::igObject *)self)->getMemoryPool()))));
+    assign(self->f100, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureBindAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
     self->f100->setValue(self->a52);
     self->f100->configure(0);
     s1 = self->f88;
@@ -317,7 +317,7 @@ void igPsx2EnvironmentMapShader_SetEnvironmentMapTexture(S0_1c2eb0 *arg0, Rc *ar
     }
     arg0->f32 = (E_1c2eb0 *)arg1;
     arg0->f32->f96 = 0;
-    bool b = igTextureAttr_GetImage((igTextureAttr *)arg0->f32, 0) != 0;
+    bool b = ((Gap::Attrs::igTextureAttr *)arg0->f32)->getImage(0) != 0;
     if (!b) {
         FUN_001c31e0((igTextureAttr *)arg0->f32);
     }
@@ -391,10 +391,10 @@ void FUN_001c3090(V_1c3090 *arg0, int arg1) {
             igObject_Destroy((igObject *)o);
         }
         arg0->f32->f96 = 2;
-        if ((igTextureAttr_GetImage((igTextureAttr *)arg0->f32, 0) != 0) == 0) {
+        if ((((Gap::Attrs::igTextureAttr *)arg0->f32)->getImage(0) != 0) == 0) {
             FUN_001c31e0((igTextureAttr *)arg0->f32);
             if (arg0->f73 != 0) {
-                FUN_00141190((int *)arg0->f32, 1);
+                ((Gap::Attrs::igTextureCubeAttr *)arg0->f32)->releaseImage(Gap::Attrs::igTextureCubeAttr::CUBE_MAP);
             }
         }
         ((Gap::Core::igObjectList *)o)->append((Gap::Core::igObject *)arg0->f80);
@@ -461,7 +461,7 @@ void FUN_001c31e0(igTextureAttr *texture) {
     FUN_00156340(image.p, &igStringRef("SphereImage"));
     igImage_SetPixels(image.p, pixels, faces[0].p->_pfmt, width, height);
     temporaryPool()->Free(pixels);
-    igTextureAttr_SetImage(texture, image.p, 0);
+    ((Gap::Attrs::igTextureAttr *)texture)->setImage(image.p, 0);
     texture->_source = 0;
 }
 

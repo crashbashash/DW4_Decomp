@@ -52,8 +52,16 @@
 #include "dw4/core/igNamedObject.h"
 #include "dw4/core/igMetaObject.h"
 #include "dw4/core/igMemoryPoolContext.h"
+#include "dw4/core/igMemoryPoolView.h"
 #include "dw4/maths/igMatrix44f.h"
 #include "dw4/gfx/igImage.h"
+
+/* igImageMipMapList is the kit's igTObjectList<igImage>; igImage is still the flat struct, so its class meta,
+ * the kit's igImage::getClassMeta(), is read from the C datum. */
+template <> inline igMetaObject *Gap::Core::igTObjectList< ::igImage>::getElementMeta() const
+{
+    return g_igImage_metaObject;
+}
 #include "dw4/core/igDataLists.h"
 #include "dw4/game/beModelCtrlInfo.h"
 #include "dw4/core/StringPool.h"
@@ -124,17 +132,8 @@ extern "C" int FUN_00131c50(void);
  * igObjectRefMetaField are unrelated structs to the compiler, and stores through three types schedule differently. */
 struct MetaFieldSetupView { char p0[38]; char _persistent; char _shallowCopyMethod; char _deepCopyMethod; char p41[3]; char _isAlikeShallowMethod; char p45[3]; void (*_invarianceFunction)(void); void (*_getMetaEnumFunction)(void); int _metaObject; };
 extern "C" void FUN_00131f70(void);
-extern "C" igMetaEnum *igTextureCubeAttr_GetApplyTypeMetaEnum(void);
-extern "C" igMetaObject *g_igTextureCubeAttr_metaObject;
-extern "C" igMetaObject *igTextureCubeAttr_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igTextureCubeAttr_GetMetaObject(void);
 struct W { int *vt; int f[27]; };
-extern "C" int g_igTextureCubeAttr_vtable[4];
-extern "C" int igTextureCubeAttr_GetVTable(void);
 struct Ref { int pad; union { int w; struct { unsigned cnt:23; unsigned f:9; } b; } u; };
-extern "C" void **FUN_00132130(struct Ref **self, short flag);
-extern "C" void **FUN_001321b0(void **arg0, long long arg1);
-extern "C" int g_igTextureAttr_vtable[4];
 struct R { int w0; int rc; };
 struct S_132230 {
     void *f0;
@@ -147,67 +146,21 @@ struct S_132230 {
     char pad4[4];
     struct R *f64;
 };
-extern "C" void *FUN_00132230(struct S_132230 *arg0, short arg1);
-extern "C" int *FUN_00132410(int *p);
-extern "C" void igTextureCubeAttr_EnsureRegistered(void);
-extern "C" igMetaObject *igTextureAttr_GetPublishedMetaObject(void);
-extern "C" CallbackArray *igTextureCubeAttr_Register(void);
-extern "C" void igTextureCubeAttr_GetMetaObjectFunction(void);
-extern "C" igMetaObject *g_igTextureAttr_metaObject;
-extern "C" igMetaObject *igTextureAttr_GetPublishedMetaObject(void);
 
-extern "C" void igTextureCubeAttr_InitFields(void);
-extern "C" igMetaObject *igTextureBindAttr_GetOrCreateMetaObject(void);
 struct Obj_1328f0 { int *vt; char pad[8]; char *m; char pad2[16]; };
-extern "C" int g_igTextureBindAttr_vtable[4];
-extern "C" int igTextureBindAttr_GetVTable(void);
 /* Deleting destructor; the deletion flag is a signed short. */
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;
-extern "C" CallbackArray *igTextureBindAttr_Register(void);
-extern "C" void igTextureBindAttr_GetMetaObjectFunction(void);
-extern "C" void igTextureBindAttr_InitFields(void);
-extern "C" void thunk_igTextureBindAttr_ConfigureFastApply(void);
-extern "C" igMetaObject *igTextureAttr_GetMetaObject(void);
 union U_132c40 { int vt; char b[80]; };
-extern "C" int igTextureAttr_GetVTable(void);
-extern "C" CallbackArray *igTextureAttr_Register(void);
-extern "C" void igTextureAttr_GetMetaObjectFunction(void);
 
-extern "C" void igTextureAttr_InitFields(void);
-extern "C" igMetaObject *g_igImageMipMapList_metaObject;
-extern "C" igMetaObject *igImageMipMapList_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igImageMipMapList_GetMetaObject(void);
 typedef struct { int *vt; int pad[7]; } Obj_133090;
-extern "C" int g_igImageMipMapList_vtable[4];
-extern "C" int igImageMipMapList_GetVTable(void);
 
-extern "C" CallbackArray *igImageMipMapList_Register(void);
-extern "C" void igImageMipMapList_GetMetaObjectFunction(void);
 union U_133240 { int vt; char b[80]; };
 typedef struct S_temp_a0_1338d0 { char pad4[4]; int f4; } S_temp_a0_1338d0;
-extern "C" igMetaObject *g_igSetRenderDestinationAttr_metaObject;
-extern "C" igMetaObject *igSetRenderDestinationAttr_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igSetRenderDestinationAttr_GetMetaObject(void);
-extern "C" int g_igSetRenderDestinationAttr_vtable[4];
 union U_133c10 { int vt; int w[4]; void *p[4]; char b[16]; };
-extern "C" int igSetRenderDestinationAttr_GetVTable(void);
 extern "C" ObjectRefWord *FUN_00133ca0(ObjectRefWord *self,int delete_storage);
-extern "C" CallbackArray *igSetRenderDestinationAttr_Register(void);
-extern "C" void igSetRenderDestinationAttr_GetMetaObjectFunction(void);
-extern "C" void igSetRenderDestinationAttr_InitFields(void);
 union U_133ef0 { int vt; char b[32]; };
-extern "C" igMetaEnum *igRenderDestinationAttr_GetTextureCreateModeMetaEnum(void);
-extern "C" igMetaEnum *igRenderDestinationAttr_GetCreateModeMetaEnum(void);
-extern "C" igMetaObject *g_igRenderDestinationAttr_metaObject;
-extern "C" igMetaObject *igRenderDestinationAttr_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igRenderDestinationAttr_GetMetaObject(void);
-extern "C" int g_igRenderDestinationAttr_vtable[4];
 union U_134290 { int vt; char b[80]; };
-extern "C" int igRenderDestinationAttr_GetVTable(void);
-extern "C" CallbackArray *igRenderDestinationAttr_Register(void);
-extern "C" void igRenderDestinationAttr_GetMetaObjectFunction(void);
-extern "C" void igRenderDestinationAttr_InitFields(void);
 union U_134bf0 { int vt; int w[4]; void *p[4]; char b[16]; };
 extern "C" igMetaObject *igParticleAttr_GetMetaObject(void);
 typedef struct Q { char pad4[4]; int f4; } Q;
@@ -262,25 +215,10 @@ extern "C" void igGeometryAttr_InitFields(void);
 struct O_137b40 { int *vt; int p; };
 typedef struct S_temp_a0_1380e0 { char pad4[4]; int f4; } S_temp_a0_1380e0;
 extern "C" void **FUN_001380e0(void **arg0, short arg1);
-extern "C" igMetaEnum *igCopyRenderDestinationAttr_GetCopyTypeMetaEnum(void);
-extern "C" igMetaObject *g_igCopyRenderDestinationAttr_metaObject;
-extern "C" igMetaObject *igCopyRenderDestinationAttr_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igCopyRenderDestinationAttr_GetMetaObject(void);
-extern "C" int g_igCopyRenderDestinationAttr_vtable[4];
 union U_1389f0 { int vt; char b[64]; };
-extern "C" int igCopyRenderDestinationAttr_GetVTable(void);
-extern "C" CallbackArray *igCopyRenderDestinationAttr_Register(void);
-extern "C" void igCopyRenderDestinationAttr_GetMetaObjectFunction(void);
-extern "C" void igCopyRenderDestinationAttr_InitFields(void);
 union U_139a70 { int vt; char b[32]; };
 union U_139fb0 { int vt; char b[64]; };
-extern "C" igMetaObject *g_igTextureList_metaObject;
-extern "C" igMetaObject *igTextureList_GetMetaObject(void);
 struct Obj_13a400 { int *vt; char pad[28]; };
-extern "C" int g_igTextureList_vtable[4];
-extern "C" int igTextureList_GetVTable(void);
-extern "C" CallbackArray *igTextureList_Register(void);
-extern "C" void igTextureList_GetMetaObjectFunction(void);
 extern "C" igMetaObject *g_igGeometryAttrList_metaObject;
 extern "C" igMetaObject *igGeometryAttrList_GetMetaObject(void);
 extern "C" int g_igGeometryAttrList_vtable[4];
@@ -303,7 +241,6 @@ class DW4VC_128_1 { public: virtual void d0(); virtual void d1(); virtual void d
 class DW4VC_132_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual int vX(float); };
 
 extern "C" void FUN_0013b800(void);
-extern "C" void igAttr_SetUnitID(int a0, int a1);
 
 extern "C" void igAttr_UserPostLoad(void *a);
 
@@ -418,8 +355,6 @@ struct S_13c940 {
     int f44, f48;
 };
 
-extern "C" void igCopyRenderDestinationAttr_apply(S_13c940 *arg0, Q_13c940 *arg1);
-extern "C" void igCopyRenderDestinationAttr_SynchronizeDefault(void);
 
 
 
@@ -730,21 +665,15 @@ class DW4VC_220_1 { public: virtual void d0(); virtual void d1(); virtual void d
 class DW4VC_224_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual int vX(int); };
 class DW4VC_228_1 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual int vX(int); };
 struct OO { char pad[20]; int f20; char pad2[12]; int f36; int f40; int f44; int f48; int f52; int f56; int f60; };
-extern "C" void igRenderDestinationAttr_SynchronizeDefault(OO *arg0, void **arg1);
-extern "C" void igRenderDestinationAttr_ReleaseDefaults(void **arg0);
 typedef struct R_13fea0 { int w0; int refs; } R_13fea0;
 class DW4VC_188 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual int vX(int); };
 struct X_13fea0 { char pad0[12]; int w12; char pad1[4]; int w20; char pad2[40]; R_13fea0 *obj; };
-extern "C" void igRenderDestinationAttr_Reset(X_13fea0 *arg0);
 extern "C" int igVisualContext_GetScissorType(igVisualContext *self);
 class Destination : public igObject { public: };
 class Renderable { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void vX(int); };
 struct Attr { char p[12]; Destination *f12; };
-extern "C" void igSetRenderDestinationAttr_SynchronizeDefault(Attr *self, int value);
-extern "C" void igSetRenderDestinationAttr_ReleaseDefaults(void **arg0);
 /* Stand-in receiver: the dummy virtuals only put `vX` at the right vtable slot. */
 class BoundRenderDestinationVtable { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual int vX(); };
-extern "C" void igSetRenderDestinationAttr_Reset(igSetRenderDestinationAttr *self);
 
 extern "C" void FUN_00140360(void *arg0, int arg1);
 
@@ -752,53 +681,10 @@ class DW4VC_136_1 { public: virtual void d0(); virtual void d1(); virtual void d
 
 
 extern "C" char *igTextureAttr_GetFileName(char *arg0);
-struct Image : public igObject { char p[80]; int name; };
-struct TextureAttr { char p[16]; int bColor; int magFilter; int minFilter; int wrapS; int wrapT; char p2[4]; int mipmapMode; int source; char p3[4]; unsigned char paging; };
-
-class Allocator { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual int allocate(int n); };
-extern "C" int Gap__Attrs__igTextureAttr__vfunc_37(TextureAttr *attr, int unused, Allocator *allocator);
-typedef struct T_140740 { char p[88]; int f88; } T_140740;
-typedef struct Arg { char p[16]; int f16; int f20; int f24; int f28; int f32; char p2[4]; int f40; int f44; char p3[4]; unsigned char f52; } Arg;
-
-extern "C" int Gap__Attrs__igTextureAttr__vfunc_38(Arg *arg0, int arg1);
-extern "C" void igTextureAttr_SynchronizeDefault(void);
-typedef struct S0 { char pad60[60]; int f3C; } S0;
-extern "C" void igTextureAttr_UserPostLoad(S0 *arg0);
-typedef struct L_140ad0 { char p[8]; int n; int p1; int *d; } L_140ad0;
-typedef struct T_140ad0 { char p[48]; int *f48; char q[4]; int f56; int f60; L_140ad0 *f64; } T_140ad0;
-extern "C" void igTextureAttr_ReleaseDefaults(void **arg0);
-class VC_140c70 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97(); virtual void d98(); virtual void d99(); virtual void d100(); virtual void d101(); virtual void d102(); virtual void d103(); virtual void d104(); virtual void d105(); virtual void d106(); virtual void d107(); virtual void d108(); virtual void d109(); virtual void d110(); virtual void d111(); virtual void d112(); virtual void d113(); virtual void d114(); virtual void d115(); virtual void d116(); virtual void d117(); virtual void d118(); virtual void d119(); virtual void d120(); virtual void d121(); virtual void d122(); virtual void d123(); virtual void d124(); virtual void d125(); virtual void d126(); virtual void d127(); virtual void d128();  virtual int vX(int); };
-struct R_140c70 : VC_140c70 { int refs; };
-struct S_140c70 { char pad12[12]; R_140c70 *f12; char pad16[20]; int f36; };
-extern "C" void igTextureAttr_Reset(S_140c70 *arg0);
-class igTextureBindAttrView;
-extern "C" void igTextureBindAttr_GetUnitCount(igTextureBindAttrView *self, igVisualContextView *context);
-extern "C" void igTextureBindAttr_SynchronizeDefault(igTextureBindAttr *self);
-/* Stand-in receiver: the dummy virtuals only put `vX` at the right vtable slot. */
-class BoundTextureVtable { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual int vX(); };
-extern "C" void igTextureBindAttr_Reset(igTextureBindAttr *self);
-/* Stand-in receiver: the dummy virtuals only put `vX` at the right vtable slot. */
-class BoundTextureVtable_140d60 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual int vX(); };
-extern "C" void igTextureBindAttr_Setup(igTextureBindAttr *self);
-
-extern "C" void Gap__Attrs__igTextureBindAttr__vfunc_32(igTextureBindAttr *attr, igPsx2VisualContext *context);
-class igTextureAttrView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5();
-    virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11();
-    virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17();
-    virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21();
-    virtual void prepare();
-};
-extern "C" void igTextureBindAttr_apply(igTextureBindAttr *attr, igPsx2VisualContext *context);
-extern "C" void igTextureBindAttr_SynchronizeCachedUnitID(igTextureBindAttr *self);
-extern "C" void igTextureBindAttr_UserPostLoad(igTextureBindAttr *self);
-extern "C" void igTextureBindAttr_SetUnitID(igTextureBindAttr *self, int unitID);
 typedef struct V3 { int a; int b; float c; } V3;
 extern "C" char DAT_00560000[];
 extern "C" void igTextureBindAttr_SetFastApply(int arg0);
 
-extern "C" void igTextureBindAttr_ConfigureFastApply(void);
 
 class igTextureCoordSourceAttrView;
 class VisualContextDispatch {
@@ -821,14 +707,7 @@ public:
 
     virtual void getTextureCoordSource(int unitID, int *mode, int *texCoordIndex);
 };
-extern "C" void igTextureAttr_apply(igTextureAttr *self, igObject *context);
 extern "C" void igPsx2VisualContext_SetTextureSourceLevel(igObject *context, int texture, igImage *image, int level);
-class VA_141080 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int v96(int *); };
-class VB_141080 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual int v148(int,int); };
-extern "C" void igTextureCubeAttr_apply(int *arg0, int *arg1);
-extern "C" void igTextureCubeAttr_ReleaseDefaults(void **arg0);
-typedef struct R_141190 { int w0; int refs; } R_141190;
-extern "C" void FUN_00141190(int *arg0, int arg1);
 extern "C" void * DAT_0055ed08[4];
 extern "C" void FUN_001412a0(void);
 class igTextureFunctionAttrView;
@@ -856,20 +735,9 @@ extern "C" void igVertexBlendMatrixListAttr_ReleaseDefaults(igVertexBlendMatrixL
 
 
 extern "C" igMetaObject *igVertexBlendMatrixListAttr_GetMeta(void);
-extern "C" igMetaObject *igTextureCubeAttr_GetMeta(void);
-extern "C" void igTextureAttr_SetMagnificationFilter(igTextureAttr *arg0, int arg1);
-extern "C" void igTextureAttr_SetMinificationFilter(igTextureAttr *arg0, int arg1);
-extern "C" void igTextureAttr_SetWrapS(igTextureAttr *arg0, int arg1);
-extern "C" void igTextureAttr_SetWrapT(igTextureAttr *arg0, int arg1);
 typedef struct S1_142400 { char pad4[4]; int f4; } S1_142400;
 typedef struct S0_142400 { char pad12[12]; int fC; } S0_142400;
 typedef struct S_temp_a0_142400 { char pad4[4]; int f4; } S_temp_a0_142400;
-extern "C" void igTextureAttr_SetVisualContext(S0_142400 *arg0, S1_142400 *arg1);
-extern "C" igMetaObject *igTextureBindAttr_GetMeta(void);
-extern "C" void igTextureBindAttr_SetTexture(igTextureBindAttr *self, igObject *texture);
-extern "C" igMetaObject *igTextureAttr_GetMeta(void);
-extern "C" igMetaObject *igSetRenderDestinationAttr_GetMeta(void);
-extern "C" igMetaObject *igRenderDestinationAttr_GetMeta(void);
 extern "C" igMetaObject *igParticleAttr_GetMeta(void);
 class DW4VC_152_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual int vX(); };
 extern "C" void igParticleAttr_Reset(igParticleAttr *self);
@@ -893,13 +761,10 @@ public:
 };
 extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_41(igGeometryAttr1_5View *self);
 extern "C" igMetaObject *FUN_001428a0(void);
-extern "C" igMetaObject *igCopyRenderDestinationAttr_GetMeta(void);
 typedef struct Obj_1429d0 { char pad[20]; int f20; int f24; } Obj_1429d0;
 typedef struct Obj_142a00 { char pad[16]; int f16; int f20; } Obj_142a00;
 extern "C" igMetaObject *igGeometryAttrList_GetMeta(void);
-extern "C" igMetaObject *igTextureList_GetMeta(void);
 extern "C" int igVec3fList_GetMeta(void);
-extern "C" igMetaObject *igImageMipMapList_GetMeta(void);
 
 extern "C" int igNamedObject_GetMeta(void);
 extern "C" int igVec3fList_GetElementSize(void);

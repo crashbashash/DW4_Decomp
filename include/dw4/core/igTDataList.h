@@ -22,6 +22,15 @@ public:
     }
     inline const T *getArray() const { return (const T *)_data; }
     inline T &get(int index) const { return getArrayInternal()[index]; }
+    inline void set(int index, const T &value) {
+        if (!(_count != 0)) {
+            return;
+        }
+        if (!((index >= 0) && (index < _count))) {
+            return;
+        }
+        getArrayInternal()[index] = value;
+    }
     inline int find(const T &value, int startIndex) const {
         const int count = _count;
         for (int i = startIndex; i < count; i++) {

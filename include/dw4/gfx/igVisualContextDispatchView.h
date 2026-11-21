@@ -39,7 +39,9 @@ public:
     virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32();
     /* igPsx2VisualContext::vfunc_35: an empty hook, then releases _pVertexArray, _pIndexArray and _pStripLengthArray */
     virtual void releaseVertexArrays();                                     /* slot 33 */
-    virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43();
+    virtual void d34();
+    virtual int getCapability(IG_GFX_CAPABILITY which) const;                /* slot 35 */
+    virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43();
     virtual void d44();
     virtual void deleteRenderDestination(int handle);                       /* slot 45 */
     virtual void d46(); virtual void d47();
@@ -76,7 +78,9 @@ public:
     virtual void d113(); virtual void d114(); virtual void d115();
     virtual bool getTextureStageState(int stage) const;                     /* slot 116 */
     virtual void d117(); virtual void d118(); virtual void d119(); virtual void d120(); virtual void d121(); virtual void d122(); virtual void d123(); virtual void d124(); virtual void d125(); virtual void d126();
-    virtual void d127(); virtual void d128(); virtual void d129(); virtual void d130(); virtual void d131(); virtual void d132(); virtual void d133(); virtual void d134(); virtual void d135(); virtual void d136();
+    virtual void d127(); virtual void d128();
+    virtual void deleteTexture(int texHandle);                              /* slot 129 */
+    virtual void d130(); virtual void d131(); virtual void d132(); virtual void d133(); virtual void d134(); virtual void d135(); virtual void d136();
     virtual void d137(); virtual void d138(); virtual void d139(); virtual void d140(); virtual void d141(); virtual void d142(); virtual void d143(); virtual void d144();
     virtual IG_GFX_PIXEL_PIPELINE_MODE getPixelPipelineMode() const;        /* slot 145 */
     virtual void d146();

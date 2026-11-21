@@ -22,20 +22,6 @@ void *igVisualContextAttrDefaultManager::retrieveVTablePointer()
     igVisualContextAttrDefaultManager temporary;
     return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
-}
-}
-
-igSmartPointer<igObject> *igSmartPointer_igVisualContext_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (deleteFlag > 0) operator delete(self);
-    }
-    return self;
-}
-
-namespace Gap {
-namespace Attrs {
 
 void igVisualContextAttrDefaultManager::arkRegister()
 {

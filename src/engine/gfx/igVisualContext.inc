@@ -60,7 +60,7 @@ CallbackArray *igVisualContext_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igVisualContext_metaObject,
-        igContext_Register,
+        Gap::Core::igContext::arkRegisterInternal,
         igContext_GetPublishedMetaObject,
         igVisualContext_GetMetaObjectFunction,
         "igVisualContext",
@@ -77,7 +77,7 @@ void igVisualContext_GetMetaObjectFunction(void) {
 }
 
 int FUN_0014a170(void) {
-    return (int)g_igContext_metaObject;
+    return (int)Gap::Core::igContext::getClassMeta();
 }
 
 static FieldFactory g_igVisualContext_ctorTable[] = {

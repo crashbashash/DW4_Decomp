@@ -293,7 +293,7 @@ static inline igAttrSet *AsAttrSet(igObject *object) {
 }
 
 static inline igTextureBindAttrView *AsTextureBindAttr(igObject *object) {
-    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_igTextureBindAttr_metaObject)) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(Gap::Attrs::igTextureBindAttr::getClassMeta())) {
         return (igTextureBindAttrView *)object;
     }
     return 0;
@@ -590,7 +590,7 @@ void igMovieManager_RemoveAllInfo(igMovieManager *self) {
 int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
     if (movie->_width != -1 && movie->_height != -1) {
         igSmartPointer<igTextureBindAttrList> binds(0, kRetainReference);
-        igSmartPointer<igTextureList> textures(0, kRetainReference);
+        igSmartPointer<Gap::Attrs::igTextureList> textures(0, kRetainReference);
         int tileWidth;
         int tileHeight;
         int tilesAcross;
@@ -650,9 +650,9 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                             if (textures == 0) {
                                 int allocator = MovieAllocator(self);
                                 textures.release();
-                                textures.p = igTextureList_CreateInstance(allocator);
+                                textures.p = Gap::Attrs::igTextureList::_instantiateFromPool((igMemoryPoolView *)allocator);
                             }
-                            ((Gap::Core::igObjectList *)textures.p)->append((Gap::Core::igObject *)bind->_texture);
+                            textures->append((Gap::Attrs::igTextureAttr *)bind->_texture);
                         }
                     }
                 }
@@ -745,7 +745,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                     {
                         int allocator = MovieAllocator(self);
                         bind.release();
-                        bind.p = (igTextureBindAttrView *)igTextureBindAttr_CreateInstance(allocator);
+                        bind.p = (igTextureBindAttrView *)Gap::Attrs::igTextureBindAttr::_instantiateFromPool((igMemoryPoolView *)allocator);
                     }
                     ((Gap::Core::igObjectList *)binds.p)->append((Gap::Core::igObject *)bind.p);
                     ((Gap::Core::igObjectList *)tile->_attributes)->append((Gap::Core::igObject *)bind.p);
@@ -787,7 +787,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
         if (textures == 0) {
             int allocator = MovieAllocator(self);
             textures.release();
-            textures.p = igTextureList_CreateInstance(allocator);
+            textures.p = Gap::Attrs::igTextureList::_instantiateFromPool((igMemoryPoolView *)allocator);
         }
         igSmartPointer<igImageDispatchView> image;
         igSmartPointer<igTextureAttrDispatchView> texture;
@@ -806,19 +806,19 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             {
                 int allocator = MovieAllocator(self);
                 texture.release();
-                texture.p = (igTextureAttrDispatchView *)igTextureAttr_CreateInstance(allocator);
+                texture.p = (igTextureAttrDispatchView *)Gap::Attrs::igTextureAttr::_instantiateFromPool((igMemoryPoolView *)allocator);
             }
             texture->_source = 2;
             texture->_videoBuffer = image->_pImage;
             texture->setMinFilter(movie->_minificationFilter);
             texture->setMagFilter(movie->_magnificationFilter);
-            igTextureAttr_SetImage((igTextureAttr *)texture.p, (igImage *)image.p, 0);
+            ((Gap::Attrs::igTextureAttr *)texture.p)->setImage((igImage *)image.p, 0);
             ((igTextureBindAttrView **)binds->_data)[i]->setTexture((igObject *)texture.p);
-            ((Gap::Core::igObjectList *)textures.p)->append((Gap::Core::igObject *)texture.p);
+            textures->append((Gap::Attrs::igTextureAttr *)texture.p);
         }
-        (igSmartPointer<igTextureList> &)movie->_runtimeTextures = textures;
+        (igSmartPointer<Gap::Attrs::igTextureList> &)movie->_runtimeTextures = textures;
         if (binds->_count == 1) {
-            image = (igImageDispatchView *)igTextureAttr_GetImage((igTextureAttr *)((igTextureBindAttrView **)binds->_data)[0]->_texture, 0);
+            image = (igImageDispatchView *)((Gap::Attrs::igTextureAttr *)(((igTextureBindAttrView **)binds->_data)[0]->_texture))->getImage(0);
         } else {
             {
                 int allocator = MovieAllocator(self);

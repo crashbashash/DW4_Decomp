@@ -1,5 +1,5 @@
 void FUN_001d4180(void) {
-    DAT_005628d8[0] = (int)igTextureBindAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_005628d8[0] = (int)Gap::Attrs::igTextureBindAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_005627e8[0] = (int)Gap::Attrs::igTextureStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_005627f0[0] = (int)Gap::Attrs::igTextureStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_005627f8[0] = (int)Gap::Attrs::igTextureStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
@@ -21,7 +21,7 @@ void FUN_001d4180(void) {
     DAT_00562828[0] = (int)Gap::Attrs::igAlphaFunctionAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562830[0] = (int)Gap::Attrs::igAlphaStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_005628d0[0] = (int)Gap::Attrs::igAlphaStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_005627e0[0] = (int)igRenderDestinationAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_005627e0[0] = (int)Gap::Attrs::igRenderDestinationAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
 }
 
 void igProjectiveShadowShader_userConstruct(void **arg0, int arg1) {
@@ -41,11 +41,11 @@ void igProjectiveShadowShader_ConfigureSharedAttrs(void) {
     ((ShadowSetupObj *)DAT_005628d8[0])->s23(0);
     {
         ShadowRef image;
-        image.p = (ShadowSetupObj *)igTextureAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+        image.p = (ShadowSetupObj *)Gap::Attrs::igTextureAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
         ((ShadowSetupObj *)DAT_005628d8[0])->s31((int)image.p);
         ShadowRef texture;
         texture.p = (ShadowSetupObj *)igImage_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-        igTextureAttr_SetImage((igTextureAttr *)image.p, (igImage *)texture.p, 0);
+        ((Gap::Attrs::igTextureAttr *)image.p)->setImage((igImage *)texture.p, 0);
         texture.p->s26(1);
         texture.p->s27(1);
         texture.p->s28(5);

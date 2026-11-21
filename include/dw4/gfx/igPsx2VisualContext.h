@@ -41,7 +41,9 @@ void igPsx2VisualContext_SetTextureMinificationFilter(struct igPsx2VisualContext
 void igPsx2VisualContext_SetTextureMagnificationFilter(struct igPsx2VisualContext *self, int texture, IG_GFX_TEXTURE_FILTER magFilter);
 void igPsx2VisualContext_SetFogColor(struct igPsx2VisualContext *self, const struct igVec4f *color);
 int igPsx2VisualContext_SetTextureSourceFromBuffer(struct igPsx2VisualContext *self, int texture, int videoBuffer);
-void igPsx2VisualContext_SetRenderDestination(struct igPsx2VisualContext *self, int bufferIndex);
+/* setRenderDestination (slot 46) and its texture form (slot 47): igSetRenderDestinationAttr::apply passes a
+ * trailing 0 the PS2 overrides ignore. */
+void igPsx2VisualContext_SetRenderDestination(struct igPsx2VisualContext *self, int bufferIndex, int unused);
 void igPsx2VisualContext_DrawMultiple(struct igPsx2VisualContext *self, int arg1, int arg2, int arg3, int arg4);
 int igPsx2VisualContext_CreateLight(struct igPsx2VisualContext *self, int arg1);
 void igPsx2VisualContext_SetNormalizeNormalsState(struct igPsx2VisualContext *self, bool arg1);
@@ -84,7 +86,8 @@ void igPsx2VisualContext_SetFogDensity(struct igPsx2VisualContext *self, float f
 void igPsx2VisualContext_SetFogMode(struct igPsx2VisualContext *self, int arg1);
 void igPsx2VisualContext_SetFogNear(struct igPsx2VisualContext *self, float fparg0);
 void igPsx2VisualContext_SetFogFar(struct igPsx2VisualContext *arg0, float fparg0);
-void igPsx2VisualContext_SetRenderDestinationWithTexture(struct igPsx2VisualContext *self, int bufferIndex, int *textureIndex);
+void igPsx2VisualContext_SetRenderDestinationWithTexture(struct igPsx2VisualContext *self, int bufferIndex, int *textureIndex,
+                                                        int unused);
 int igPsx2VisualContext_GetCurrentRenderDestination(struct igPsx2VisualContext *self);
 void igPsx2VisualContext_GetRenderDestinationSize(struct igPsx2VisualContext *self, int bufferIndex, int *word0, int *word1);
 int igPsx2VisualContext_GetColorBitsPerPixel(struct igPsx2VisualContext *self, int bufferIndex);

@@ -1343,7 +1343,7 @@ void igTextureBindAttrList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTextureBindAttrList_Register);
 }
 
-static igMetaObjectCallback g_igTextureBindAttrList_callbackList[] = { igTextureBindAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igTextureBindAttrList_callbackList[] = { Gap::Attrs::igTextureBindAttr::arkRegister, 0 };
 
 CallbackArray *igTextureBindAttrList_Register(void) {
     AdxMovieLibrary_MarkRegistered();
@@ -1495,7 +1495,7 @@ void igMovieInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMovieInfo_Register);
 }
 
-static igMetaObjectCallback g_igMovieInfo_callbackList[] = { igTextureBindAttrList_EnsureRegistered, igMovieCodec_EnsureRegistered, igSceneInfo_EnsureRegistered, igImage_EnsureRegistered, igTextureList_EnsureRegistered, Gap::Core::igObject::arkRegister, 0 };
+static igMetaObjectCallback g_igMovieInfo_callbackList[] = { igTextureBindAttrList_EnsureRegistered, igMovieCodec_EnsureRegistered, igSceneInfo_EnsureRegistered, igImage_EnsureRegistered, Gap::Attrs::igTextureList::arkRegister, Gap::Core::igObject::arkRegister, 0 };
 
 CallbackArray *igMovieInfo_Register(void) {
     AdxMovieLibrary_MarkRegistered();
@@ -1663,7 +1663,7 @@ void igMovieInfo_InitFields(void) {
     runtimeImageField->_metaObject = (int)igImage_GetOrCreateMetaObject();
     runtimeImageField->_persistent = 0;
     runtimeTexturesField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x11);
-    runtimeTexturesField->_metaObject = (int)igTextureList_GetOrCreateMetaObject();
+    runtimeTexturesField->_metaObject = (int)Gap::Attrs::igTextureList::getClassTypeLazy();
     runtimeTexturesField->_persistent = 0;
     imageFormatField = (igEnumMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x12);
     ((Gap::Core::igEnumMetaField *)imageFormatField)->setDefault(7);
@@ -2094,7 +2094,7 @@ igMetaObject *igMovieInfoList_GetElementMeta(void)
 
 igMetaObject *igTextureBindAttrList_GetElementMeta(void)
 {
-    return g_igTextureBindAttr_metaObject;
+    return Gap::Attrs::igTextureBindAttr::getClassMeta();
 }
 
 igMetaObject *igAdxAfsFileList_GetElementMeta(void)

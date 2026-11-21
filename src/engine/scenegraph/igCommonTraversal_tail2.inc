@@ -43,7 +43,7 @@ int FUN_001b3ad0(igCommonTraversal *arg0, int arg1) {
         a2 = ((int *)a0->_data)[km];
     }
     ((H_1b2fa0 *)DAT_005625f0)->vX(arg1, a2);
-    mo = igTextureBindAttr_GetMetaObject();
+    mo = Gap::Attrs::igTextureBindAttr::getClassTypeSafe();
     p = (igAttrStackManager *)arg0->_attrStack;
     l = ((igAttrStack **)((igAttrStackList *)p->_attrStacks)->_data)[((int *)p->_attrStackIndexTable)[mo->_id]];
     if (l != 0) {
@@ -182,7 +182,7 @@ int FUN_001b4130(struct O4130 *arg0) {
         return 0;
     }
     if (arg0->f160 == 0) {
-        temp_v0 = ((struct Rc_1b2fa0 *)igTextureAttr_GetImage((igTextureAttr *)arg0->f32->f12, 0));
+        temp_v0 = ((struct Rc_1b2fa0 *)((Gap::Attrs::igTextureAttr *)arg0->f32->f12)->getImage(0));
         if (temp_v0 != 0) {
             temp_v0->rc = temp_v0->rc + 1;
         }
@@ -360,10 +360,10 @@ void igCommonTraversal_DrawCartoonShader(igCartoonShader *self, igCommonTraversa
         return;
     }
     self->_oTex->setEnabled(0);
-    if (((ImageView_1b4c40 *)igTextureAttr_GetImage((igTextureAttr *)self->_oTex->_texture, 0))->_format != 1) {
+    if (((ImageView_1b4c40 *)((Gap::Attrs::igTextureAttr *)self->_oTex->_texture)->getImage(0))->_format != 1) {
         return;
     }
-    image = (ImageView_1b4c40 *)igTextureAttr_GetImage((igTextureAttr *)self->_oTex->_texture, 0);
+    image = (ImageView_1b4c40 *)((Gap::Attrs::igTextureAttr *)self->_oTex->_texture)->getImage(0);
     if (image->_levels != 1) {
         FUN_00157200((igImage *)image, 1, (igImage *)image);
     }
@@ -521,7 +521,7 @@ void igCommonTraversal_userConstruct(igCommonTraversal *self, int arg1) {
 void igCommonTraversal_UserRegister(void) {
     g_igCommonTraversal_travProcs = (igTDataList<igTraversalFunctionPtr> *)igTraversalFunctionList_CreateInstance((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
     Gap::Attrs::igAttr::arkRegister();
-    igTextureBindAttr_EnsureRegistered();
+    Gap::Attrs::igTextureBindAttr::arkRegister();
     Gap::Attrs::igModelViewMatrixAttr::arkRegister();
     Gap::Attrs::igVertexBlendMatrixAttr::arkRegister();
     Gap::Attrs::igTextureMatrixAttr::arkRegister();

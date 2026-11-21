@@ -34,7 +34,7 @@ void beTextureCtrlData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beTextureCtrlData_Register);
 }
 
-static igMetaObjectCallback g_beTextureCtrlData_callbackList[] = { igTextureAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beTextureCtrlData_callbackList[] = { Gap::Attrs::igTextureAttr::arkRegister, 0 };
 
 CallbackArray *beTextureCtrlData_Register(void) {
     BecLibrary_MarkRegistered();
@@ -80,7 +80,7 @@ void beTextureCtrlData_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beTextureCtrlData_ctorTable, 1);
     tex = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)tex)->_metaObject = (int)igTextureAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)tex)->_metaObject = (int)Gap::Attrs::igTextureAttr::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beTextureCtrlData_fieldTable, g_beTextureCtrlData_fieldHandles, g_beTextureCtrlData_fieldOffsets, base);
 }
 

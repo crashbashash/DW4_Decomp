@@ -8,11 +8,7 @@ struct igTextureBindAttr;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igTextureBindAttr_metaObject;
-struct igTextureBindAttr *igTextureBindAttr_CreateInstance(int allocator);
-struct igMetaObject *igTextureBindAttr_GetMetaObject(void);
 
-struct igMetaObject *igTextureBindAttr_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

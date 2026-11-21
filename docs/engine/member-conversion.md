@@ -378,20 +378,19 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `igLightAttr` (`_vc` an `igSmartPointer<igVisualContext>`, flat until gfx converts; the kit's igBool `_changed`
    and `_cacheable`; `lightChanged` the invariance callback; `reset` through `igVisualContextDispatchView`'s
    `deleteLight`, slot 76) and `igLightStateAttr` (`_light` an `igSmartPointer<igLightAttr>`), with `igLightList` and
-   `igLightStateAttrList` over `igTObjectList<T>`, are converted. What is left in attrs, and why:
-   - the texture group (`igTextureAttr`, `igTextureCubeAttr`, `igTextureBindAttr`, `igCopyRenderDestinationAttr`,
-     `igRenderDestinationAttr`, `igSetRenderDestinationAttr`, `igTextureList`, `igImageMipMapList`): converted and
-     matching in the attrs unit in a work-in-progress patch (scratch/Attrs5/texture-batch-wip.patch, spec
-     scratch/Attrs5/specs/texture.py), not landed because two callers stop matching: igMovieManager assigns
-     `igTextureList::_instantiateFromPool` to a flat `igSmartPointer< ::igTextureList>` (needs a cast or the Gap
-     type), and beTextureCtrl_UpdateRam's loop allocates s0/s1 the other way round once it reads
-     `igTextureBindAttr::getClassMeta()`. The patch carries what the group needs: the kit's `set(index, value)` on
-     `igTDataList`/`igObjectList`/`igTObjectList`, slots 35 `getCapability` and 129 `deleteTexture` of the dispatch
-     view, the kit's `IG_GFX_TEXTURE_SOURCE` and `IG_GFX_RENDERDESTINATION_TYPE`, a typed reference array
-     (`igTextureCubeAttr::_cubeImage[6]`) in scripts/gen_type_headers.py, the decompiled
-     `igSetRenderDestinationAttr::apply` (0x140060, whose PS2 setters take a trailing 0), `igImageMipMapList` over
-     `igTObjectList<igImage>` with the element meta specialised for the flat igImage, and the compiler's
-     smart-pointer destructors placed at 0x130140, 0x132130, 0x1321b0 and 0x132390 (`--at`), whose C copies go;
+   `igLightStateAttrList` over `igTObjectList<T>`, are converted. So is the texture group (`igTextureAttr`,
+   `igTextureCubeAttr`, `igTextureBindAttr`, `igCopyRenderDestinationAttr`, `igRenderDestinationAttr`,
+   `igSetRenderDestinationAttr`, `igTextureList`, `igImageMipMapList`; spec scratch/Attrs5/specs/texture.py): the
+   kit's `set(index, value)` on `igTDataList`/`igObjectList`/`igTObjectList`, slots 35 `getCapability` and 129
+   `deleteTexture` of the dispatch view, the kit's `IG_GFX_TEXTURE_SOURCE` and `IG_GFX_RENDERDESTINATION_TYPE`, a
+   typed reference array (`igTextureCubeAttr::_cubeImage[6]`) in scripts/gen_type_headers.py, the decompiled
+   `igSetRenderDestinationAttr::apply` (0x140060, whose PS2 setters take a trailing 0), `igImageMipMapList` over
+   `igTObjectList<igImage>` with the element meta specialised for the flat igImage, and the compiler's smart-pointer
+   destructors placed at 0x130140, 0x132130, 0x1321b0 and 0x132390 (`--at`). igMovieManager holds its texture list
+   as `igSmartPointer<Gap::Attrs::igTextureList>` and appends through the typed list's `append(igTextureAttr *)`;
+   beTextureCtrl_UpdateRam indexes the attribute list's data (`((int *)list->_data)[i]`) where it kept a byte
+   offset, which keeps retail's register allocation once it reads `igTextureBindAttr::getClassMeta()` (the inline's
+   temporary otherwise takes the offset's register). What is left in attrs, and why:
    - the geometry group (`igGeometryAttr`, `igGeometryAttr1_5`, `igGeometrySetAttr`, `igGeometryAttrList`): DW4's
      `igGeometryAttr1_5` carries twelve slots (configure, transform, computeBound, intersectRay, tangents, ...) that
      still read igVertexArray/igIndexArray through stand-in views and one helper not yet decompiled (0x13dbb0); it
@@ -407,16 +406,34 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    gfx, gui, datapump and scenegraph register through, so their C copies are gone.
    The specs stay in the agents' scratch (`scratch/Attrs2/specs/visual.py`, `visual2.py`;
    `scratch/Attrs3/specs/unit.py`, `simple.py`, `ext.py`; `scratch/Attrs4/specs/mgr.py`;
-   `scratch/Attrs5/specs/light.py`, `texture.py`; `scratch/CoreWave9/specs/`). memberize casts a pool
-   passed as `int` to a factory taking `igMemoryPoolView *` (or drops the `int` cast). Gfx then starts from
-   `igVisualContext` (alchemy-kit_202309 igGfx/igVisualContext.h) and `igPsx2VisualContext`: its slots are
-   `igVisualContextDispatchView`'s, already named from igPsx2VisualContext's overrides (the state getters 51-250,
-   `deleteRenderDestination` 45, `deleteLight` 76, `deleteRenderList` 191; the texture patch adds `getCapability` 35
-   and `deleteTexture` 129), so converting it turns each `((igVisualContextDispatchView *)vc)->name(...)` into
-   `vc->name(...)` and each direct `igPsx2VisualContext_<Name>((igPsx2VisualContext *)vc, ...)` the attrs call
-   into the member; the attrs' `igSmartPointer<igVisualContext>` fields then hold the Gap class, and the view
-   retires once no caller is left. igImage, igVertexArray and igIndexArray follow, which unblock the texture
-   group's flat smart pointers and the geometry attrs;
+   `scratch/Attrs5/specs/light.py`, `texture.py`; `scratch/CoreWave9/specs/`; `scratch/Gfx1/specs/context.py`).
+   memberize casts a pool passed as `int` to a factory taking `igMemoryPoolView *` (or drops the `int` cast).
+   Core's `igContext` is converted (alchemy-kit_202309 igCore/igContext.h: `IG_ABSTRACT_OBJECT_DEFINE`, the protected
+   handles, `generateExtList`, `getExtMeta`, `findExtInstance`, DW4's slots 21-25 `makeCurrent`, `isCurrent`,
+   `getExtList`, `getExt` and the inline `detectDriverDatabaseProperties`; the kit's `synchronizeContextExt` and
+   `userRelease` are not in DW4's vtable). Its extension fields stay reference words, and its inline slot 25's
+   copy (gfx, 0x180c10) stays a C definition until gfx builds the vtable in C++: retail's igContext vtable
+   (0x530a10) and igVisualContext vtable (0x525e50) are gfx's data, and DW4's `igContextExt` registers under
+   igContext (an ext's probe stamps 0x530a10). Gfx then converts `igVisualContext` (alchemy-kit_202309
+   igGfx/igVisualContext.h) and `igPsx2VisualContext`. What retail shows: igVisualContext has its own vtable,
+   pure slots written 0, with its own definitions in slots 1 (`constructFields`), 7/8 (userConstruct/Destruct),
+   20, 21-22, 26-29, 31-34, 45 (an inline copy in attrs, 0x13ff40), 70-71, 141-145, 189 (an inline copy in attrs,
+   0x140050), 195-196, 211-214 and 258-271 (the custom-state slots at 0x155340-0x1562d0, unnamed, and 0x165e50);
+   its constructor (0x1510e0) and destructor (0x150af0) are out of line, so its typed fields (the eight memory
+   pools and the timer as smart pointers, the two `igMatrix44f`, the sixteen `igVertexArray2` references built with
+   `__construct_array`, the custom state lists) must reproduce them; igPsx2VisualContext overrides about 220 slots
+   (273 C functions), whose C heads take stand-in view receivers and need rewriting to the member's parameters
+   before memberize accepts them, and four of whose slots (0x170ed0 `setLightDirection`, `setLightAttenuation`,
+   `setTextureSourceLevel`, 0x16de00) are not decompiled. The dispatch view's named slots (the state getters 51-250,
+   `deleteRenderDestination` 45, `deleteLight` 76, `deleteRenderList` 191, `getCapability` 35, `deleteTexture` 129)
+   then become `vc->name(...)`, the attrs' `igSmartPointer<igVisualContext>` fields hold the Gap class, and the
+   view retires once no caller is left. igImage, igVertexArray and igIndexArray follow, which unblock the texture
+   group's flat smart pointers and the geometry attrs. igIndexArray's retail vtable (0x526760) already holds every
+   slot 21-34 (igPsx2IndexArray overrides only `getMeta`): `configure`/`reconfigure` take the kit's four
+   parameters, `getEditableIndices16/32`, two `commitIndexEdits`, `setIndex16/32`, `setIndex`, `getIndex16/32`,
+   `getIndex`, and the inline `reset` (its copy at 0x13d020 is attrs') and `cache`; there is no 8-bit pair. The
+   gfx classes' registration is igen's, but tools/gen_odl_source.py finds no gfx class until gfx's
+   library-registered marker (unnamed, at 0x149bc0) carries its name;
 6. the game's `be*` classes last.
 
 ## Known differences and gaps

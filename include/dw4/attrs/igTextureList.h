@@ -8,8 +8,6 @@ struct igTextureList;
 extern "C" {
 #endif
 
-struct igTextureList *igTextureList_CreateInstance(int allocator);
-struct igMetaObject *igTextureList_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

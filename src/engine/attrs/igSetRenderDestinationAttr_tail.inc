@@ -1,3 +1,41 @@
+namespace Gap {
+namespace Attrs {
+
+void igSetRenderDestinationAttr::apply(igVisualContext *pVC)
+{
+    if (_pRDAttr == 0) {
+        return;
+    }
+    if (_pRDAttr->getHandle() < 0) {
+        _pRDAttr->apply(pVC);
+        if (_pRDAttr->getHandle() < 0) {
+            return;
+        }
+    }
+    if (_pRDAttr->getType() == IG_GFX_RENDERDESTINATION_TEXTURE) {
+        int texId;
+
+        if (_pRDAttr->getTexture() == 0) {
+            return;
+        }
+        if (_pRDAttr->getTexture()->getSource() != IG_GFX_TEXTURE_SOURCE_BUFFER) {
+            _pRDAttr->getTexture()->reset();
+            _pRDAttr->getTexture()->setSource(IG_GFX_TEXTURE_SOURCE_BUFFER);
+        }
+        texId = _pRDAttr->getTexture()->getHandle();
+        if (texId > -1) {
+            igPsx2VisualContext_SetRenderDestinationWithTexture((igPsx2VisualContext *)pVC, _pRDAttr->getHandle(), &texId, 0);
+        } else if (_pRDAttr->getTextureCreateMode() == igRenderDestinationAttr::RENDERDESTINATION_TEXTURE_CREATE_MODE_AUTO_CREATE) {
+            igPsx2VisualContext_SetRenderDestinationWithTexture((igPsx2VisualContext *)pVC, _pRDAttr->getHandle(), &texId, 0);
+            _pRDAttr->getTexture()->setHandle(texId);
+        }
+    } else {
+        igPsx2VisualContext_SetRenderDestination((igPsx2VisualContext *)pVC, _pRDAttr->getHandle(), 0);
+    }
+}
+}
+}
+
 static inline void setDestination(Attr *self, const igSmartPointer<Destination> &destination) {
     Destination *held = destination.get();
     Destination *previous;
@@ -7,24 +45,29 @@ static inline void setDestination(Attr *self, const igSmartPointer<Destination> 
     self->f12 = held;
 }
 
-void igSetRenderDestinationAttr_SynchronizeDefault(Attr *self, int value) {
-    if (self->f12 == 0) {
-        setDestination(self, igSmartPointer<Destination>((Destination *)igRenderDestinationAttr_Create(((Gap::Core::igObject *)self)->getMemoryPool())));
+namespace Gap {
+namespace Attrs {
+
+void igSetRenderDestinationAttr::synchronizeDefault(igVisualContext *vc)
+{
+    if (_pRDAttr == 0) {
+        _pRDAttr = igSmartPointer<igRenderDestinationAttr>(igRenderDestinationAttr::_instantiateFromPool(getMemoryPool()));
     }
-    ((Renderable *)self->f12)->vX(value);
+    _pRDAttr->synchronizeDefault(vc);
 }
 
-void igSetRenderDestinationAttr_ReleaseDefaults(void **arg0) {
-    ((DW4VC_112_0 *)(arg0))->vX();
-    igObject_ReleaseDefaults((igObject *)arg0);
+void igSetRenderDestinationAttr::releaseDefaults()
+{
+    reset();
+    igVisualAttribute::releaseDefaults();
 }
 
-void igSetRenderDestinationAttr_Reset(igSetRenderDestinationAttr *self) {
-    void **renderDestination;
-
-    renderDestination = (void **)(self->_pRDAttr);
-    if (renderDestination != 0) {
-        ((BoundRenderDestinationVtable *)(renderDestination))->vX();
+void igSetRenderDestinationAttr::reset()
+{
+    if (_pRDAttr != 0) {
+        _pRDAttr->reset();
     }
+}
+}
 }
 

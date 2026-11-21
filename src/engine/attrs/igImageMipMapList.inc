@@ -1,53 +1,52 @@
-igMetaObject *g_igImageMipMapList_metaObject;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igImageMipMapList_GetOrCreateMetaObject(void) {
-    if (g_igImageMipMapList_metaObject == 0) {
-        g_igImageMipMapList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igImageMipMapList_metaObject;
-}
+igMetaObject *igImageMipMapList::_Meta;
 
-igMetaObject *igImageMipMapList_GetMetaObject(void)
+igMetaObject *igImageMipMapList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igImageMipMapList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igImageMipMapList_EnsureRegistered();
-    return g_igImageMipMapList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igImageMipMapList_GetVTable(void) {
-    Obj_133090 o;
-
-    igObject_InitHeader((igObject *)&o);
-    o.vt = &g_igImageMipMapList_vtable[0];
-    return *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
-}
-
-void igImageMipMapList_EnsureRegistered(void)
+igMetaObject *igImageMipMapList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igImageMipMapList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igImageMipMapList_callbackList[] = { igImage_EnsureRegistered, 0 };
+void *igImageMipMapList::retrieveVTablePointer()
+{
+    igImageMipMapList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igImageMipMapList_Register(void) {
+void igImageMipMapList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igImageMipMapList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igImage_EnsureRegistered, 0 };
+
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igImageMipMapList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igImageMipMapList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igImageMipMapList",
-        0x14, /* instance size */
-        igImageMipMapList_GetVTable,
+        sizeof(igImageMipMapList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igImageMipMapList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igImageMipMapList_GetMetaObjectFunction(void) {
-    igImageMipMapList_GetMetaObject();
+}
 }
 

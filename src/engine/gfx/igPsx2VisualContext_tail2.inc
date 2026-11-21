@@ -113,7 +113,7 @@ void igPsx2VisualContext_DeleteRenderDestination(igPsx2VisualContext *arg0, int 
     }
 }
 
-void igPsx2VisualContext_SetRenderDestination(igPsx2VisualContext *self, int arg1) {
+void igPsx2VisualContext_SetRenderDestination(igPsx2VisualContext *self, int arg1, int unused) {
     I *base;
     I *s0;
     I *cur;
@@ -138,7 +138,8 @@ void igPsx2VisualContext_SetRenderDestination(igPsx2VisualContext *self, int arg
     ((V_1690d0 *)self)->vX(1);
 }
 
-void igPsx2VisualContext_SetRenderDestinationWithTexture(igPsx2VisualContext *context, int bufferIndex, int *textureIndex) {
+void igPsx2VisualContext_SetRenderDestinationWithTexture(igPsx2VisualContext *context, int bufferIndex, int *textureIndex,
+                                                        int unused) {
     int index;
     int format;
     bool create;

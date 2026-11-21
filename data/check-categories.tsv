@@ -1644,6 +1644,7 @@
 0013ff90	igRenderListAttr_ReleaseDefaults	match	-
 0013ffd0	igRenderListAttr_Reset	match	-
 00140050	igVisualContext_GetScissorType	match	-
+00140060	igSetRenderDestinationAttr_apply	match	-
 00140190	igSetRenderDestinationAttr_SynchronizeDefault	match	-
 00140280	igSetRenderDestinationAttr_ReleaseDefaults	match	-
 001402c0	igSetRenderDestinationAttr_Reset	match	-
@@ -14148,26 +14149,26 @@
 00338f40	igMovieCodec_InitializeDrawing	match	-
 00338f50	igMovieCodec_ReleaseDrawing	match	-
 00338f60	igMovieCodec_GetMeta	match	-
-00338f70	igMovieInfo_GetTiling	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-003390d0	igMovieManager_Activate	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-003390e0	igMovieManager_Deactivate	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-00339110	igMovieManager_InitializeDrawing	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-00339200	igMovieManager_ReleaseDrawing	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-00339280	igMovieManager_Start	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-00339290	igMovieManager_Stop	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-003392a0	igMovieManager_AddInfo	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-00339bf0	igMovieManager_StopMovie	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-00339eb0	igMovieManager_RemoveAllInfo	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-00339f20	igMovieManager_BuildScene	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-0033bbc0	igMovieManager_Update	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-0033bbd0	igMovieManager_UpdateMovies	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-0033bc60	igMovieManager_GetMovieState	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-0033bd30	igMovieRenderer_InitializeDrawing	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-0033bdf0	igMovieRenderer_Traverse	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-0033be00	igMovieRenderer_Render	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-0033be20	igMovieRenderer_ReleaseDrawing	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-0033be40	igMovieRenderer_GetMeta	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
-0033be50	igMovieManager_GetMeta	match	DEFERRED duplicate 0x130140 __dt__25igSmartPointer<8igObject>Fv 128B (compared under the profile of its retail unit)
+00338f70	igMovieInfo_GetTiling	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+003390d0	igMovieManager_Activate	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+003390e0	igMovieManager_Deactivate	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+00339110	igMovieManager_InitializeDrawing	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+00339200	igMovieManager_ReleaseDrawing	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+00339280	igMovieManager_Start	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+00339290	igMovieManager_Stop	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+003392a0	igMovieManager_AddInfo	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+00339bf0	igMovieManager_StopMovie	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+00339eb0	igMovieManager_RemoveAllInfo	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+00339f20	igMovieManager_BuildScene	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+0033bbc0	igMovieManager_Update	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+0033bbd0	igMovieManager_UpdateMovies	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+0033bc60	igMovieManager_GetMovieState	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+0033bd30	igMovieRenderer_InitializeDrawing	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+0033bdf0	igMovieRenderer_Traverse	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+0033be00	igMovieRenderer_Render	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+0033be20	igMovieRenderer_ReleaseDrawing	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+0033be40	igMovieRenderer_GetMeta	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
+0033be50	igMovieManager_GetMeta	match	DEFERRED duplicate 0x239300 __dt__25igSmartPointer<8igCamera>Fv 128B (compared under the profile of its retail unit)
 0033be60	igMoviePlugin_Attach	match	-
 0033bf10	igMoviePlugin_Detach	match	-
 0033bf40	igMoviePlugin_GetMeta	match	-

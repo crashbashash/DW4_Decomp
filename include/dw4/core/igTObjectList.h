@@ -16,6 +16,7 @@ template <class T> class igTObjectList : public igObjectList {
 public:
     inline T *const *getArray() const { return (T *const *)igObjectList::getArray(); }
     inline T *get(int index) const { return (T *)igObjectList::get(index); }
+    inline void set(int index, T *object) { igObjectList::set(index, (igObject *)object); }
     inline void setAll(T *object) { igObjectList::setAll(object); }
     inline void append(T *object) { igObjectList::append(object); }
     inline void concatenate(const igTObjectList<T> *list) { igObjectList::concatenate((const igObjectList *)list); }

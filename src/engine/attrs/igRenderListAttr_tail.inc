@@ -34,11 +34,3 @@ int igVisualContext_GetScissorType(igVisualContext *self) {
     return self->_scissorType;
 }
 
-struct SetRenderDestinationAttrView {
-    int _vtable;
-    unsigned int _refCount;
-    short _cachedAttrIndex;
-    short _cachedUnitID;
-    RenderDestinationAttrView *_pRDAttr;
-};
-

@@ -1,18 +1,29 @@
-void igCopyRenderDestinationAttr_apply(S_13c940 *arg0, Q_13c940 *arg1) {
-    int v;
-    if (arg0->f16 != 0) v = arg0->f16->f20;
-    else v = arg1->getId();
-    switch (arg0->mode) {
-    case 1:
-        if (arg0->f24->f36 < 0) arg0->f24->touch(arg1);
-        igPsx2VisualContext_CopyRenderDestinationToTexture((igPsx2VisualContext *)arg1, v, arg0->f24->f36, arg0->f28, arg0->f32, arg0->f44, arg0->f48, arg0->f36, (long long)arg0->f40);
+namespace Gap {
+namespace Attrs {
+
+void igCopyRenderDestinationAttr::apply(igVisualContext *pVC)
+{
+    int handle;
+
+    if (_pRDAttr != 0) {
+        handle = _pRDAttr->getHandle();
+    } else {
+        handle = ((igVisualContextDispatchView *)pVC)->getCurrentRenderDestination();
+    }
+    switch (_copyType) {
+    case FROM_RENDERDESTINATION_TO_TEXTURE:
+        if (_pTextureAttr->getHandle() < 0) {
+            _pTextureAttr->apply(pVC);
+        }
+        igPsx2VisualContext_CopyRenderDestinationToTexture((igPsx2VisualContext *)pVC, handle, _pTextureAttr->getHandle(), _sourceX, _sourceY, _sizeW, _sizeH, _destinationX, (long long)_destinationY);
         return;
-    case 2:
-        igPsx2VisualContext_CopyRenderDestinationToMemory((igPsx2VisualContext *)arg1, v, arg0->f20, arg0->f28, arg0->f32, arg0->f44, arg0->f48);
+    case FROM_RENDERDESTINATION_TO_MEMORY:
+        igPsx2VisualContext_CopyRenderDestinationToMemory((igPsx2VisualContext *)pVC, handle, (int)(igImage *)_pImage, _sourceX, _sourceY, _sizeW, _sizeH);
         break;
-    case 0:
+    case NOT_SET:
         break;
-    case 3: case 4:
+    case FROM_RENDERDESTINATION_DEPTH_TO_TEXTURE:
+    case FROM_RENDERDESTINATION_DEPTH_TO_MEMORY:
         break;
     default:
         break;
@@ -21,7 +32,10 @@ void igCopyRenderDestinationAttr_apply(S_13c940 *arg0, Q_13c940 *arg1) {
 
 /* Empty override of attribute vtable slot 26, which igLightAttr implements as a reset to the
  * unassigned state: the copy-render-destination attribute has nothing to reset here. */
-void igCopyRenderDestinationAttr_SynchronizeDefault(void) {
+void igCopyRenderDestinationAttr::synchronizeDefault(igVisualContext *vc)
+{
 
+}
+}
 }
 

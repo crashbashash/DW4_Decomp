@@ -26,7 +26,7 @@ void igContextList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igContextList_Register);
 }
 
-static igMetaObjectCallback g_igContextList_callbackList[] = { igContext_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igContextList_callbackList[] = { Gap::Core::igContext::arkRegister, 0 };
 
 CallbackArray *igContextList_Register(void) {
     CoreLibrary_MarkRegistered();

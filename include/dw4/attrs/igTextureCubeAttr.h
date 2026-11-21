@@ -17,8 +17,6 @@ enum CubeFaceID {
 extern "C" {
 #endif
 
-void igTextureCubeAttr_EnsureRegistered(void);
-struct igMetaObject *igTextureCubeAttr_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

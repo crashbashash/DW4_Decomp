@@ -13,6 +13,19 @@ LAYOUTS = {
 }
 
 
+class TypedDeclaration(unittest.TestCase):
+    def test_a_typed_array_keeps_its_dimensions(self):
+        self.assertEqual(gth.typed_declaration("igSmartPointer<igImage>", "_cubeImage", "int _cubeImage[6];"),
+                         "igSmartPointer<igImage> _cubeImage[6];")
+
+    def test_a_type_replacing_a_float_array_takes_it_whole(self):
+        self.assertEqual(gth.typed_declaration("igMatrix44f", "_m", "float _m[16];"), "igMatrix44f _m;")
+
+    def test_a_scalar_and_a_pointer_type(self):
+        self.assertEqual(gth.typed_declaration("bool", "_paging", "unsigned char _paging;"), "bool _paging;")
+        self.assertEqual(gth.typed_declaration("igTextureAttr *", "_texture"), "igTextureAttr *_texture;")
+
+
 class Access(unittest.TestCase):
     def test_a_label_opens_the_declaration_and_none_is_public(self):
         self.assertEqual(gth.split_access("protected: igObject();"), ("protected", "igObject();"))

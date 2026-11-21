@@ -318,6 +318,14 @@ def load_typed_fields(path):
     return {(cls, field): ctype.strip() for cls, field, ctype in table_rows(path, 3)}
 
 
+def typed_declaration(typed, field_name, flat_decl=""):
+    """A typed field's C++ declaration. `flat_decl` is the flat struct's declaration of a field the typed-fields
+    table types: an array of reference words keeps its dimensions (igTextureCubeAttr's six image references); a
+    float array the type replaces whole (a matrix's sixteen floats) does not."""
+    dims = re.search(r"(\[\d+\])+(?=;$)", flat_decl) if flat_decl.startswith("int ") else None
+    return "%s%s%s%s;" % (typed, "" if typed.endswith("*") else " ", field_name, dims.group(0) if dims else "")
+
+
 def load_converted(path):
     """{class: library namespace} from `config/converted-classes.tsv`: the classes declared, under C++, as
     `Gap::<library>::<class>` polymorphic classes beside their flat struct."""
@@ -642,12 +650,13 @@ def main(argv=None):
                 body.append("    char _pad%d[%d];" % (cursor, off - cursor))
             line = "    %-46s /* +%-4d %s */" % (decl, off, f["type"])
             typed = typed_fields.get((name, raw_name))
+            array = decl if typed else ""
             kit = KIT_VECTOR.get(f["type"])
             if not typed and kit and decl == "float %s[%d];" % (field_name, VECTOR[f["type"]][1]):
                 # the whole vector, float-aligned: the kit's type under C++
                 typed = kit[0]
             if typed:
-                spelled = "%s%s%s;" % (typed, "" if typed.endswith("*") else " ", field_name)
+                spelled = typed_declaration(typed, field_name, array)
                 typed_line = "    %-46s /* +%-4d %s */" % (spelled, off, f["type"])
             if typed and flat:
                 body.extend(["#ifdef __cplusplus", typed_line, "#else", line, "#endif"])

@@ -28,8 +28,8 @@ void igAttrPool::resetFields(int flag)
 
     igObject::resetFields(flag);
     clearBytes((char *)metas, sizeof(metas));
-    metas[0] = igTextureBindAttr_GetMetaObject();
-    metas[1] = igTextureAttr_GetMetaObject();
+    metas[0] = Gap::Attrs::igTextureBindAttr::getClassTypeSafe();
+    metas[1] = Gap::Attrs::igTextureAttr::getClassTypeSafe();
     metas[2] = Gap::Attrs::igLightAttr::getClassTypeSafe();
     metas[3] = Gap::Attrs::igLightStateAttr::getClassTypeSafe();
     for (i = 0; i < 4; i++) {

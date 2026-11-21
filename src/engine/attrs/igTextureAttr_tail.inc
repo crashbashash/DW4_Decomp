@@ -15,201 +15,172 @@ char *igTextureAttr_GetFileName(char *arg0) {
     return p;
 }
 
-static inline void retain(Image *o) { igObject::ref(o); }
+namespace Gap {
+namespace Attrs {
 
-static inline unsigned magFilter(const TextureAttr *a) { return a->magFilter; }
-
-static inline unsigned minFilter(const TextureAttr *a) { return a->minFilter; }
-
-static inline unsigned wrapS(const TextureAttr *a) { return a->wrapS; }
-
-static inline unsigned wrapT(const TextureAttr *a) { return a->wrapT; }
-
-int Gap__Attrs__igTextureAttr__vfunc_37(TextureAttr *attr, int unused, Allocator *allocator) {
+char *igTextureAttr::generateKey(bool stripPath, igMemoryPoolView *mp)
+{
     char text[8204];
-    if (allocator == 0) {
-        allocator = (Allocator *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault);
+
+    if (mp == 0) {
+        mp = (igMemoryPoolView *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleDefault);
     }
-    igSmartPointer<Image> image((Image *)igTextureAttr_GetImage((igTextureAttr *)attr, 0), kRetainReference);
+    igSmartPointer<igImage> image(getImage(0), kRetainReference);
     const char *name = "NO_IMAGE";
-    if (image.p != 0) {
-        if (image.p->name != 0) {
-            name = igTextureAttr_GetFileName((char *)image.p->name);
+    if (image != 0) {
+        if (image->_pNameString != 0) {
+            name = igTextureAttr_GetFileName((char *)image->_pNameString);
         }
     }
-    sprintf(text, "%s %d %d %d %d %d %d %d %d", name, attr->bColor, magFilter(attr), minFilter(attr), wrapS(attr), wrapT(attr), (long long)attr->mipmapMode, (long long)attr->source, (long long)attr->paging);
-    int copy = allocator->allocate(strlen(text) + 1);
-    strcpy((char *)copy, text);
-    return copy;
+    sprintf(text, "%s %d %d %d %d %d %d %d %d", name, _bColor, getMagnificationFilter(), getMinificationFilter(), getWrapS(), getWrapT(), (long long)_mipmapMode, (long long)_source, (long long)_paging);
+    char *key = (char *)mp->Allocate(strlen(text) + 1);
+    strcpy(key, text);
+    return key;
 }
 
-int Gap__Attrs__igTextureAttr__vfunc_38(Arg *arg0, int arg1) {
-    int sp206C;
-    int sp2068;
-    int sp2064;
-    int sp2060;
-    int sp205C;
-    int sp2058;
-    int sp2054;
-    int sp2050;
-    char sp50[8192];
-    const char *var_a1;
-    const char *var_s1;
+bool igTextureAttr::isKeyForAttr(char *key)
+{
+    int bColor;
+    int magFilter;
+    int minFilter;
+    int wrapS;
+    int wrapT;
+    int mipmapMode;
+    int source;
+    int paging;
+    char name[8192];
+    const char *imageName;
+    const char *fileName;
 
-    if (sscanf((const char *)arg1, "%s %d %d %d %d %d %d %d %d", sp50, &sp206C, &sp2068, &sp2064, &sp2060, &sp205C, &sp2058, &sp2054, &sp2050) != 9) {
-        return 0;
+    if (sscanf(key, "%s %d %d %d %d %d %d %d %d", name, &bColor, &magFilter, &minFilter, &wrapS, &wrapT, &mipmapMode, &source, &paging) != 9) {
+        return false;
     }
-    var_s1 = "NO_IMAGE";
-    var_a1 = "NO_IMAGE";
-    if (igTextureAttr_GetImage((igTextureAttr *)arg0, 0) != 0) {
-        if (((T_140740 *)igTextureAttr_GetImage((igTextureAttr *)arg0, 0))->f88 != 0) {
-            var_s1 = (igTextureAttr_GetFileName((char *)((T_140740 *)igTextureAttr_GetImage((igTextureAttr *)arg0, 0))->f88));
+    fileName = "NO_IMAGE";
+    imageName = "NO_IMAGE";
+    if (getImage(0) != 0) {
+        if (getImage(0)->_pNameString != 0) {
+            fileName = igTextureAttr_GetFileName((char *)getImage(0)->_pNameString);
         }
-        var_a1 = var_s1;
+        imageName = fileName;
     }
-    if (strcmp(sp50, var_a1) == 0) {
-        if (sp206C == arg0->f16) {
-            if ((sp2068 == arg0->f20) && (sp2064 == arg0->f24) && (sp2060 == arg0->f28) && (sp205C == arg0->f32) && (sp2058 == arg0->f40) && (sp2054 == arg0->f44) && (sp2050 == arg0->f52)) {
-                return 1;
+    if (strcmp(name, imageName) == 0) {
+        if (bColor == _bColor) {
+            if ((magFilter == _magFilter) && (minFilter == _minFilter) && (wrapS == _wrapS) && (wrapT == _wrapT) && (mipmapMode == _mipmapMode) && (source == _source) && (paging == _paging)) {
+                return true;
             }
         }
     }
-    return 0;
+    return false;
 }
 
-void igTextureAttr_SynchronizeDefault(void) {
+void igTextureAttr::synchronizeDefault(igVisualContext *vc)
+{
 
 }
 
-void igTextureAttr_UserPostLoad(S0 *arg0) {
-    if (arg0->f3C == 0) {
-        arg0->f3C = 1;
+void igTextureAttr::userPostLoad()
+{
+    if (_imageCount == 0) {
+        _imageCount = 1;
     }
-    igAttr_UserPostLoad(arg0);
+    igVisualAttribute::userPostLoad();
 }
 
-void igTextureAttr_apply(igTextureAttr *self, igObject *context) {
-    if (self->_texId < 0) {
+void igTextureAttr::apply(igVisualContext *vc)
+{
+    if (_texId < 0) {
         igImage *image;
-        switch (self->_source) {
-        case 0:
-        case 1:
+        switch (_source) {
+        case IG_GFX_TEXTURE_SOURCE_IMAGE:
+        case IG_GFX_TEXTURE_SOURCE_IMAGE_REF:
         default: {
             int level;
-            image = (igImage *)self->_image;
+            image = _image;
             if (image == 0) {
                 return;
             }
-            self->_texId = Gap__Gfx__igPsx2VisualContext__createTexture((igPsx2VisualContext *)context, image->_px, image->_py, image->_pfmt, 0, self->_mipmapMode, self->_imageCount);
-            for (level = 0; level < self->_imageCount; level++) {
+            _texId = Gap__Gfx__igPsx2VisualContext__createTexture((igPsx2VisualContext *)vc, image->_px, image->_py, image->_pfmt, 0, _mipmapMode, _imageCount);
+            for (level = 0; level < _imageCount; level++) {
                 igImage *levelImage;
                 if (level == 0) {
-                    levelImage = (igImage *)self->_image;
+                    levelImage = _image;
                 } else {
-                    levelImage = ((igImage **)((igObjectList *)self->_imageMipMaps)->_data)[level - 1];
+                    levelImage = ((igImage **)((::igImageMipMapList *)(igImageMipMapList *)_imageMipMaps)->_data)[level - 1];
                 }
-                igPsx2VisualContext_SetTextureSourceLevel(context, self->_texId, levelImage, level);
+                igPsx2VisualContext_SetTextureSourceLevel(vc, _texId, levelImage, level);
             }
             break;
         }
-        case 2:
-            image = (igImage *)self->_image;
+        case IG_GFX_TEXTURE_SOURCE_VIDEO:
+            image = _image;
             if (image == 0) {
                 return;
             }
-            self->_texId = Gap__Gfx__igPsx2VisualContext__createTexture((igPsx2VisualContext *)context, image->_px, image->_py, image->_pfmt, 2, 0, 1);
+            _texId = Gap__Gfx__igPsx2VisualContext__createTexture((igPsx2VisualContext *)vc, image->_px, image->_py, image->_pfmt, 2, 0, 1);
             break;
-        case 3:
-        case 4:
-            image = (igImage *)self->_image;
+        case IG_GFX_TEXTURE_SOURCE_BUFFER:
+        case IG_GFX_TEXTURE_SOURCE_BUFFER_REF:
+            image = _image;
             if (image == 0) {
                 return;
             }
-            self->_texId = Gap__Gfx__igPsx2VisualContext__createTexture((igPsx2VisualContext *)context, image->_px, image->_py, image->_pfmt, 3, 0, 1);
+            _texId = Gap__Gfx__igPsx2VisualContext__createTexture((igPsx2VisualContext *)vc, image->_px, image->_py, image->_pfmt, 3, 0, 1);
             break;
         }
-        igObject::ref(context);
-        igObject::release((igObject *)self->_vc);
-        self->_vc = (int)context;
+        _vc = vc;
     }
-    if (self->_source == 2) {
-        igPsx2VisualContext_SetTextureSourceFromBuffer((igPsx2VisualContext *)context, self->_texId, self->_videoBuffer);
+    if (_source == IG_GFX_TEXTURE_SOURCE_VIDEO) {
+        igPsx2VisualContext_SetTextureSourceFromBuffer((igPsx2VisualContext *)vc, _texId, _videoBuffer);
     }
-    igPsx2VisualContext_SetTextureAddressingMode((igPsx2VisualContext *)context, self->_texId, (IG_GFX_TEXTURE_WRAP)self->_wrapS, (IG_GFX_TEXTURE_WRAP)self->_wrapT);
-    igPsx2VisualContext_SetTextureMinificationFilter((igPsx2VisualContext *)context, self->_texId, (IG_GFX_TEXTURE_FILTER)self->_minFilter);
-    igPsx2VisualContext_SetTextureMagnificationFilter((igPsx2VisualContext *)context, self->_texId, (IG_GFX_TEXTURE_FILTER)self->_magFilter);
+    igPsx2VisualContext_SetTextureAddressingMode((igPsx2VisualContext *)vc, _texId, getWrapS(), getWrapT());
+    igPsx2VisualContext_SetTextureMinificationFilter((igPsx2VisualContext *)vc, _texId, getMinificationFilter());
+    igPsx2VisualContext_SetTextureMagnificationFilter((igPsx2VisualContext *)vc, _texId, getMagnificationFilter());
 }
 
-void igTextureAttr_SetImage(igTextureAttr *self, igImage *image, int level) {
-    T_140ad0 *arg0 = (T_140ad0 *)self;
-    L_140ad0 *s1;
-    int s0;
-    int n;
-    int *a0;
-    int v1;
-    int *a0b;
+void igTextureAttr::setImage(igImage *img, int level)
+{
     if (level == 0) {
-        igObject::ref(image);
-        a0 = arg0->f48;
-        if (a0 != 0) {
-            a0[1] = a0[1] - 1;
-            if ((a0[1] & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)a0);
-            }
-        }
-        arg0->f48 = (int *)image;
+        _image = img;
         return;
     }
-    if (arg0->f64->n == 0) {
-        ((Gap::Core::igObjectList *)arg0->f64)->setCount(arg0->f60 - 1);
+    if (_imageMipMaps->getCount() == 0) {
+        _imageMipMaps->setCount(_imageCount - 1);
     }
-    s1 = arg0->f64;
-    igObject::ref(image);
-    s0 = level * 4;
-    a0b = *(int **)((char *)s1->d + s0 - 4);
-    if (a0b != 0) {
-        a0b[1] = a0b[1] - 1;
-        if ((a0b[1] & 0x7FFFFF) == 0) {
-            igObject_Destroy((igObject *)a0b);
-        }
-    }
-    n = s1->n;
-    v1 = level - 1;
-    if (n != 0 && v1 >= 0 && v1 < n) {
-        *(int **)(s0 + (int)s1->d - 4) = (int *)image;
+    /* the kit's _imageMipMaps->set(level - 1, img), written through the flat list: retail keeps level * 4 for both
+     * the read of the old image and the store */
+    ::igImageMipMapList *list = (::igImageMipMapList *)(igImageMipMapList *)_imageMipMaps;
+    ::igObject::ref(img);
+    int offset = level * 4;
+    ::igObject::release(*(::igObject **)((char *)list->_data + offset - 4));
+    int count = list->_count;
+    int index = level - 1;
+    if (count != 0 && index >= 0 && index < count) {
+        *(igImage **)(offset + (int)list->_data - 4) = img;
     }
 }
 
-igImage *igTextureAttr_GetImage(igTextureAttr *self, int level) {
+igImage *igTextureAttr::getImage(int level) const
+{
     if (level == 0) {
-        return (igImage *)self->_image;
+        return _image;
     }
-    return ((igImage **)((igImageMipMapList *)self->_imageMipMaps)->_data)[level - 1];
+    /* through the flat list's data word: with the kit's get() MWCC swaps the list and index registers */
+    return ((igImage **)((::igImageMipMapList *)(igImageMipMapList *)_imageMipMaps)->_data)[level - 1];
 }
 
-void igTextureAttr_ReleaseDefaults(void **arg0) {
-    ((DW4VC_112_0 *)(arg0))->vX();
-    igObject_ReleaseDefaults((igObject *)arg0);
+void igTextureAttr::releaseDefaults()
+{
+    reset();
+    igVisualAttribute::releaseDefaults();
 }
 
-void igTextureAttr_Reset(S_140c70 *arg0) {
-    int temp_a1;
-    R_140c70 *t;
-
-    temp_a1 = arg0->f36;
-    if (temp_a1 != -1) {
-        if (arg0->f12 != 0) {
-            arg0->f12->vX(temp_a1);
-        }
-    }
-    arg0->f36 = -1;
-    t = arg0->f12;
-    if (t != 0) {
-        t->refs = t->refs - 1;
-        if ((t->refs & 0x7fffff) == 0) {
-            igObject_Destroy((igObject *)t);
-        }
-    }
-    arg0->f12 = 0;
+void igTextureAttr::reset()
+{
+    if (_texId != -1 && _vc != 0)
+        ((igVisualContextDispatchView *)(igVisualContext *)_vc)->deleteTexture(_texId);
+    _texId = -1;
+    _vc = 0;
+}
+}
 }
 

@@ -1,58 +1,58 @@
-igMetaObject *g_igTextureList_metaObject;
+namespace Gap {
+namespace Attrs {
 
-igTextureList *igTextureList_CreateInstance(int allocator) {
-    igTextureList_EnsureRegistered();
-    return (igTextureList *)igMetaObject_CreateInstance(g_igTextureList_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *igTextureList::_Meta;
 
-igMetaObject *igTextureList_GetOrCreateMetaObject(void) {
-    if (g_igTextureList_metaObject == 0) {
-        g_igTextureList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igTextureList_metaObject;
-}
-
-igMetaObject *igTextureList_GetMetaObject(void)
+igTextureList *igTextureList::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igTextureList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igTextureList_EnsureRegistered();
-    return g_igTextureList_metaObject;
+    arkRegister();
+    return (igTextureList *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igTextureList_GetVTable(void) {
-    struct Obj_13a400 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igTextureList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igTextureList_EnsureRegistered(void)
+igMetaObject *igTextureList::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igTextureList_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igTextureList_callbackList[] = { igTextureAttr_EnsureRegistered, 0 };
+igMetaObject *igTextureList::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *igTextureList_Register(void) {
+void *igTextureList::retrieveVTablePointer()
+{
+    igTextureList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igTextureList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igTextureList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igTextureAttr::arkRegister, 0 };
+
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igTextureList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igTextureList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igTextureList",
-        0x14, /* instance size */
-        igTextureList_GetVTable,
+        sizeof(igTextureList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igTextureList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igTextureList_GetMetaObjectFunction(void) {
-    igTextureList_GetMetaObject();
+}
 }
 
