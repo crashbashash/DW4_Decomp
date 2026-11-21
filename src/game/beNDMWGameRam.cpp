@@ -3039,7 +3039,7 @@ done:
         void *fightComEnum = (void *)(FightCom_GetMetaEnum());
         const char *commandString = (const char *)beNDMWGameRam_igStringRef_Get((int *)&commandName.p);
         unsigned int fightCommand;
-        igMetaEnum_GetValueByName((igMetaEnum *)fightComEnum, commandString, (int *)&fightCommand);
+        ((Gap::Core::igMetaEnum *)fightComEnum)->getEnumValue(commandString, (int &)fightCommand);
         switch (fightCommand) {
         case FIGHTCOM_P2EISHITCHECK: {
             hitPlayerIndex = beMessenger_GetInt((beMessenger *)self->_messenger, 0);

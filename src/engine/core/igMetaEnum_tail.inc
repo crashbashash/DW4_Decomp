@@ -1,20 +1,23 @@
 /* not-found status */
 
-igResult igMetaEnum_GetValueByName(igMetaEnum *meta, const char *name, int *value)
+namespace Gap {
+namespace Core {
+
+igResult igMetaEnum::getEnumValue(const char *enumName, igEnum &value) const
 {
     int index;
     int match;
     int count;
 
-    if ((igTDataList<char *> *)meta->_names) {
-        count = ((igTDataList<char *> *)meta->_names)->_count;
+    if (_names) {
+        count = _names->_count;
         for (index = 0; index < count; ++index) {
             {
-                igStringRef retained = StringList_CopyRetained((igStringRefList *)meta->_names, index);
-                match = strcmp(retained.p, name) == 0;
+                igStringRef retained = StringList_CopyRetained(_names, index);
+                match = strcmp(retained.p, enumName) == 0;
             }
             if (match) {
-                *value = ((igTDataList<int> *)meta->_values)->_data[index];
+                value = _values->get(index);
                 return g_resultSuccess;
             }
         }
@@ -22,18 +25,19 @@ igResult igMetaEnum_GetValueByName(igMetaEnum *meta, const char *name, int *valu
     return g_resultFailure;
 }
 
-igStringRef igMetaEnum_GetNameByValue(const igMetaEnum *self, int value) {
+igStringRef igMetaEnum::getEnumName(igEnum enumValue) const
+{
     int i;
     int n;
-    int names;
-    names = self->_names;
+    igStringRefList *names = _names;
+
     if (names != 0) {
-        n = ((igIntList *)self->_values)->_count;
+        n = _values->getCount();
         i = 0;
         goto test;
 body:
-        if (value == ((int *)((igIntList *)self->_values)->_data)[i]) {
-            return StringList_CopyRetained((igStringRefList *)names, i);
+        if (enumValue == _values->get(i)) {
+            return StringList_CopyRetained(names, i);
         }
         i++;
 test:
@@ -42,37 +46,35 @@ test:
     return igStringRef();
 }
 
-/* Number of names in the enum: the `_count` of its `_names` list (a list with the igDataList
- * header: _count +8, _capacity +12, _data +16). */
+/* The number of names: the `_count` of the `_names` list. */
 
-int igMetaEnum_GetNameCount(igMetaEnum *self) {
-    return ((igDataList *)self->_names)->_count;
+int igMetaEnum::getEnumCount() const
+{
+    return _names->_count;
 }
 
-igStringRef igMetaEnum_GetNameAt(igMetaEnum *self, int index) {
-    igTDataList<char *> *names;
+igStringRef igMetaEnum::getIndexedEnumName(int index) const
+{
+    igStringRefList *names = _names;
 
-    names = (igTDataList<char *> *)self->_names;
     if ((names != 0) && (index >= 0) && (index < names->_count)) {
-        return StringList_CopyRetained((igStringRefList *)names, index);
+        return StringList_CopyRetained(names, index);
     }
     return igStringRef();
 }
 
-int igMetaEnum_GetValueAt(void *self, int index)
+igEnum igMetaEnum::getIndexedEnumValue(int index) const
 {
-  int *value;
-  igIntList *values;
-  values = (igIntList *) ((igMetaEnum *) self)->_values;
-  if (values != 0)
-  {
-    if ((index >= 0) && (index < values->_count))
-    {
-      return *(value = (int *) (values->_data + (index * 4)));
+    igIntList *values = _values;
+
+    if (values != 0) {
+        if ((index >= 0) && (index < values->getCount())) {
+            return values->get(index);
+        }
     }
-  }
-  return 0;
-  return 0;
+    return 0;
+}
+}
 }
 
 static inline int enumStringPool(void) {
@@ -94,29 +96,32 @@ static inline void dropValues(igTDataList<int> *o) {
 
 static inline void setValue(igTDataList<int> *l, int i, int *v) { if (l->_count != 0 && i >= 0 && i < l->_count) { l->_data[i] = *v; } }
 
-igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values, int count) {
+namespace Gap {
+namespace Core {
+
+igMetaEnum *igMetaEnum::createMetaEnum(const char *name, const char **names, igEnum *values, int count) {
     MetaEnumView *metaEnum;
     int i;
     char *interned;
     const char *entry;
     char *held;
     char *old;
-    igTDataList<char *> *nameList;
-    igTDataList<int> *valueList;
+    ::igTDataList<char *> *nameList;
+    ::igTDataList<int> *valueList;
     int pool;
     char **slot;
-    metaEnum = ((MetaEnumView *)igMetaEnum_CreateInstance(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
+    metaEnum = ((MetaEnumView *)_instantiateFromPool((igMemoryPoolView *)((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
     interned = ((char *)StringPool_Intern((StringPool *)(enumStringPool()), (const char *)name));
     old = metaEnum->name;
     releaseString(old);
     metaEnum->name = interned;
     pool = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     dropEnumNames(metaEnum->names);
-    metaEnum->names = ((igTDataList<char *> *)igStringRefList_Create(pool));
+    metaEnum->names = ((::igTDataList<char *> *)igStringRefList_Create(pool));
     StringList_Resize(metaEnum->names, count);
     pool = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     dropValues(metaEnum->values);
-    metaEnum->values = ((igTDataList<int> *)igIntList_Create(pool));
+    metaEnum->values = ((::igTDataList<int> *)igIntList_Create(pool));
     valueList = metaEnum->values;
     if (count >= 0) {
         if (!(count > valueList->_capacity)) {
@@ -146,7 +151,9 @@ igMetaEnum *igMetaEnum_Create(const char *name, const char **names, int *values,
     }
     igObjectSystem_AppendMetaEnum((int *)(((*(int *)&g_objectSystem))), (int)metaEnum);
     metaEnum->_refCount = metaEnum->_refCount - 1;
-    if (((unsigned long long)((long long)metaEnum->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy((igObject *)metaEnum); }
+    if (((unsigned long long)((long long)metaEnum->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy((::igObject *)metaEnum); }
     return (igMetaEnum *)metaEnum;
+}
+}
 }
 

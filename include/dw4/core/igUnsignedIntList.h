@@ -10,10 +10,6 @@ extern "C" {
 #endif
 
 struct igMetaObject *igUnsignedIntList_GetPublishedMetaObject(void);
-void igUnsignedIntList_EnsureRegistered(void);
-struct igMetaObject *igUnsignedIntList_GetOrCreateMetaObject(void);
-struct CallbackArray *igUnsignedIntList_Register(void);
-extern struct igMetaObject *g_igUnsignedIntList_metaObject;
 
 #ifdef __cplusplus
 }

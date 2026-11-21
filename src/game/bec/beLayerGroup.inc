@@ -62,7 +62,7 @@ static int g_beLayerGroup_swtCtlValues[] = {
 
 igMetaEnum *beLayerCtl_GetSwtCtlEnum(void) {
     if (g_beLayerGroup_swtCtlMetaEnum == 0) {
-        g_beLayerGroup_swtCtlMetaEnum = igMetaEnum_Create("SwtCtl", g_beLayerGroup_swtCtlNames, g_beLayerGroup_swtCtlValues, 5);
+        g_beLayerGroup_swtCtlMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("SwtCtl", g_beLayerGroup_swtCtlNames, g_beLayerGroup_swtCtlValues, 5);
     }
     return g_beLayerGroup_swtCtlMetaEnum;
 }
@@ -78,7 +78,7 @@ static int g_beLayerGroup_messageValues[] = {
 
 igMetaEnum *beLayerCtl_GetMessageEnum(void) {
     if (g_beLayerGroup_messageMetaEnum == 0) {
-        g_beLayerGroup_messageMetaEnum = igMetaEnum_Create("Message", g_beLayerGroup_messageNames, g_beLayerGroup_messageValues, 6);
+        g_beLayerGroup_messageMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_beLayerGroup_messageNames, g_beLayerGroup_messageValues, 6);
     }
     return g_beLayerGroup_messageMetaEnum;
 }

@@ -82,7 +82,7 @@ void igSymbolTable_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igSymbolTable_Register);
 }
 
-static igMetaObjectCallback g_igSymbolTable_callbackList[] = { igUnsignedIntListNoClean_EnsureRegistered, Gap::Core::igIntListNoClean::arkRegister, igStringTable_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igSymbolTable_callbackList[] = { Gap::Core::igUnsignedIntListNoClean::arkRegister, Gap::Core::igIntListNoClean::arkRegister, igStringTable_EnsureRegistered, 0 };
 
 CallbackArray *igSymbolTable_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -164,7 +164,7 @@ void igSymbolTable_InitFields(void) {
     ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)))->setDefault(-1);
     ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)))->setDefault(1);
     symbolsField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)));
-    ((igObjectRefMetaField *)symbolsField)->_metaObject = (int)igUnsignedIntListNoClean_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)symbolsField)->_metaObject = (int)Gap::Core::igUnsignedIntListNoClean::getClassTypeLazy();
     ((igRefMetaField *)symbolsField)->_construct = 1;
     hashIndexField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)));
     ((igObjectRefMetaField *)hashIndexField)->_metaObject = (int)Gap::Core::igIntListNoClean::getClassTypeLazy();

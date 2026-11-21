@@ -25,7 +25,7 @@ igMetaField *g_igRotateMode_translationMetaField;
 
 igMetaEnum *FUN_0045c540(void) {
     if (g_igRotateMode_CONSTRAINT_AXISMetaEnum == 0) {
-        g_igRotateMode_CONSTRAINT_AXISMetaEnum = igMetaEnum_Create("CONSTRAINT_AXIS", g_igRotateMode_CONSTRAINT_AXISNames, g_igRotateMode_CONSTRAINT_AXISValues, 3);
+        g_igRotateMode_CONSTRAINT_AXISMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("CONSTRAINT_AXIS", g_igRotateMode_CONSTRAINT_AXISNames, g_igRotateMode_CONSTRAINT_AXISValues, 3);
     }
     return g_igRotateMode_CONSTRAINT_AXISMetaEnum;
 }

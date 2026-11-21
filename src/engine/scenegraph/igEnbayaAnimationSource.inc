@@ -9,7 +9,7 @@ igMetaEnum *g_igEnbayaAnimationSource_playModeMetaEnum;
 
 igMetaEnum *FUN_001a21b0(void) {
     if (g_igEnbayaAnimationSource_playModeMetaEnum == 0) {
-        g_igEnbayaAnimationSource_playModeMetaEnum = igMetaEnum_Create("PLAY_MODE", g_igEnbayaAnimationSource_playModeNames, g_igEnbayaAnimationSource_playModeValues, 5);
+        g_igEnbayaAnimationSource_playModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("PLAY_MODE", g_igEnbayaAnimationSource_playModeNames, g_igEnbayaAnimationSource_playModeValues, 5);
     }
     return g_igEnbayaAnimationSource_playModeMetaEnum;
 }

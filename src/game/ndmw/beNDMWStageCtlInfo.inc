@@ -65,7 +65,7 @@ static int g_beNDMWStageCtlInfo_messageValues[] = {
 
 igMetaEnum *beNDMWStageCtlInfo_GetMessageEnum(void) {
     if (g_beNDMWStageCtlInfo_messageMetaEnum == 0) {
-        g_beNDMWStageCtlInfo_messageMetaEnum = igMetaEnum_Create("Message", g_beNDMWStageCtlInfo_messageNames, g_beNDMWStageCtlInfo_messageValues, 3);
+        g_beNDMWStageCtlInfo_messageMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_beNDMWStageCtlInfo_messageNames, g_beNDMWStageCtlInfo_messageValues, 3);
     }
     return g_beNDMWStageCtlInfo_messageMetaEnum;
 }

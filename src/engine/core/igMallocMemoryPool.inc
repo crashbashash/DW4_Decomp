@@ -5,10 +5,9 @@ static int g_igMallocMemoryPool_messageLevelValues[] = {
     0, 1, 2, 3,
 };
 
-
 int igMallocMemoryPool_GetMessageLevelMetaEnum(void) {
     if (g_igMallocMemoryPool_messageLevelMetaEnum == 0) {
-        g_igMallocMemoryPool_messageLevelMetaEnum = ((int)igMetaEnum_Create((char *)"MessageLevel", g_igMallocMemoryPool_messageLevelNames, g_igMallocMemoryPool_messageLevelValues, 4));
+        g_igMallocMemoryPool_messageLevelMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)"MessageLevel", g_igMallocMemoryPool_messageLevelNames, g_igMallocMemoryPool_messageLevelValues, 4));
     }
     return g_igMallocMemoryPool_messageLevelMetaEnum;
 }

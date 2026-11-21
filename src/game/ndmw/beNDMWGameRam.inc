@@ -64,7 +64,7 @@ static int g_FightCom_commandIds[] = {
 
 igMetaEnum *FightCom_GetMetaEnum(void) {
     if (g_FightCom_metaEnum == 0) {
-        g_FightCom_metaEnum = igMetaEnum_Create("FightCom", g_FightCom_commandNames, g_FightCom_commandIds, 22);
+        g_FightCom_metaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("FightCom", g_FightCom_commandNames, g_FightCom_commandIds, 22);
     }
     return g_FightCom_metaEnum;
 }
@@ -120,7 +120,7 @@ static int g_GameRamMessage_commandIds[] = {
 
 igMetaEnum *GameRamMessage_GetMetaEnum(void) {
     if (g_GameRamMessage_metaEnum == 0) {
-        g_GameRamMessage_metaEnum = igMetaEnum_Create("Message", g_GameRamMessage_commandNames, g_GameRamMessage_commandIds, 22);
+        g_GameRamMessage_metaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_GameRamMessage_commandNames, g_GameRamMessage_commandIds, 22);
     }
     return g_GameRamMessage_metaEnum;
 }

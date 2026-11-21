@@ -405,7 +405,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
                 IntList_Set((igIntList *)work->_timerList, STATUS_BIND, 0);
                 ((beBaseInfoManagerDispatchView *)self)->OnMessageText(ram, "SQ_WAIT");
             } else {
-                if (!(igMetaEnum_GetValueByName(DamageSeq_GetMetaEnum(), (const char *)work->_seqCodeName, &damageSeq) == g_resultSuccess)) {
+                if (!(((Gap::Core::igMetaEnum *)(DamageSeq_GetMetaEnum()))->getEnumValue((const char *)work->_seqCodeName, damageSeq) == g_resultSuccess)) {
                     igObjectList *moves = (igObjectList *)work->_moveObjectList;
                     int count = moves->_count;
                     int i;
@@ -845,7 +845,7 @@ int beNDMWMdlPEBase_OnPreMessage(beNDMWMdlPEBase *self, beBaseInfoRam *ram, int 
         bool running = false;
         if (work != 0 && work->_dispRamNoList != 0 && work->_timerList != 0) {
             const char *name = (const char *)beMessenger_GetString((beMessenger *)self->_messenger, 0);
-            if (igMetaEnum_GetValueByName(StatusName_GetMetaEnum(), name, &status) == g_resultSuccess && IntAt(work->_timerList, status) != 0) running = true;
+            if (((Gap::Core::igMetaEnum *)(StatusName_GetMetaEnum()))->getEnumValue(name, status) == g_resultSuccess && IntAt(work->_timerList, status) != 0) running = true;
         }
         beMessenger_AppendBool((beMessenger *)self->_messenger, running);
         return 1;

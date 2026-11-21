@@ -103,7 +103,7 @@ static int g_beMovieInfoData_messageValues[] = {
 
 igMetaEnum *beMovie_GetMessageEnum(void) {
     if (g_beMovieInfoData_messageMetaEnum == 0) {
-        g_beMovieInfoData_messageMetaEnum = igMetaEnum_Create("Message", g_beMovieInfoData_messageNames, g_beMovieInfoData_messageValues, 4);
+        g_beMovieInfoData_messageMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_beMovieInfoData_messageNames, g_beMovieInfoData_messageValues, 4);
     }
     return g_beMovieInfoData_messageMetaEnum;
 }

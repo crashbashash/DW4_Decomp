@@ -32,7 +32,7 @@ igMetaField *g_igSearchSceneGraph_nextOfTypeCodeMetaField;
 
 int FUN_00238d70(void) {
     if (g_igSearchSceneGraph_applicationFindTypeMetaEnum == 0) {
-        g_igSearchSceneGraph_applicationFindTypeMetaEnum = igMetaEnum_Create("IG_APPLICATION_FIND_TYPE", g_igSearchSceneGraph_applicationFindTypeNames, g_igSearchSceneGraph_applicationFindTypeValues, 3);
+        g_igSearchSceneGraph_applicationFindTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_APPLICATION_FIND_TYPE", g_igSearchSceneGraph_applicationFindTypeNames, g_igSearchSceneGraph_applicationFindTypeValues, 3);
     }
     return (int)g_igSearchSceneGraph_applicationFindTypeMetaEnum;
 }

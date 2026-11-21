@@ -1,57 +1,52 @@
-igMetaObject *g_igNonRefCountedAttrList_metaObject;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igNonRefCountedAttrList_GetOrCreateMetaObject(void) {
-    if (g_igNonRefCountedAttrList_metaObject == 0) {
-        g_igNonRefCountedAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igNonRefCountedAttrList_metaObject;
-}
+igMetaObject *igNonRefCountedAttrList::_Meta;
 
-igMetaObject *igNonRefCountedAttrList_GetMetaObject(void)
+igMetaObject *igNonRefCountedAttrList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igNonRefCountedAttrList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igNonRefCountedAttrList_EnsureRegistered();
-    return g_igNonRefCountedAttrList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igNonRefCountedAttrList_GetVTable(void) {
-    struct Obj_13ade0 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igNonRefCountedAttrList_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igNonRefCountedAttrList_EnsureRegistered(void)
+igMetaObject *igNonRefCountedAttrList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igNonRefCountedAttrList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igNonRefCountedAttrList_callbackList[] = { Gap::Attrs::igAttr::arkRegister, 0 };
+void *igNonRefCountedAttrList::retrieveVTablePointer()
+{
+    igNonRefCountedAttrList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igNonRefCountedAttrList_Register(void) {
+void igNonRefCountedAttrList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igNonRefCountedAttrList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igAttr::arkRegister, 0 };
+
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igNonRefCountedAttrList_metaObject,
-        igNonRefCountedObjectList_Register,
-        igNonRefCountedObjectList_GetPublishedMetaObject,
-        igNonRefCountedAttrList_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Core::igNonRefCountedObjectList::arkRegisterInternal,
+        Gap::Core::igNonRefCountedObjectList::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igNonRefCountedAttrList",
-        0x14, /* instance size */
-        igNonRefCountedAttrList_GetVTable,
+        sizeof(igNonRefCountedAttrList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igNonRefCountedAttrList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igNonRefCountedAttrList_GetMetaObjectFunction(void) {
-    igNonRefCountedAttrList_GetMetaObject();
 }
-
-int FUN_0013aeb0(void) {
-    return (int)g_igNonRefCountedObjectList_metaObject;
 }
 

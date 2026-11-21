@@ -63,7 +63,7 @@ static int g_beNumberCtrlInfo_messageValues[] = {
 
 igMetaEnum *beNumberCtrl_GetMessageEnum(void) {
     if (g_beNumberCtrlInfo_messageMetaEnum == 0) {
-        g_beNumberCtrlInfo_messageMetaEnum = igMetaEnum_Create("Message", g_beNumberCtrlInfo_messageNames, g_beNumberCtrlInfo_messageValues, 4);
+        g_beNumberCtrlInfo_messageMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_beNumberCtrlInfo_messageNames, g_beNumberCtrlInfo_messageValues, 4);
     }
     return g_beNumberCtrlInfo_messageMetaEnum;
 }

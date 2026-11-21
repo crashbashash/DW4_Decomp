@@ -1,56 +1,60 @@
-igMetaObject *g_igUnsignedIntListNoClean_metaObject;
+namespace Gap {
+namespace Core {
+
+igMetaObject *igUnsignedIntListNoClean::_Meta;
+}
+}
 
 void * igUnsignedIntListNoClean_Create(int pool) {
-    igUnsignedIntListNoClean_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance(g_igUnsignedIntListNoClean_metaObject, (igMemoryPoolView *)pool));
+    Gap::Core::igUnsignedIntListNoClean::arkRegister();
+    return (void *)(igMetaObject_CreateInstance(Gap::Core::igUnsignedIntListNoClean::getClassMeta(), (igMemoryPoolView *)pool));
 }
 
-igMetaObject *igUnsignedIntListNoClean_GetOrCreateMetaObject(void) {
-    if (g_igUnsignedIntListNoClean_metaObject == 0) {
-        g_igUnsignedIntListNoClean_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igUnsignedIntListNoClean_metaObject;
-}
+namespace Gap {
+namespace Core {
 
-igMetaObject *igUnsignedIntListNoClean_GetMetaObject(void)
+igMetaObject *igUnsignedIntListNoClean::getClassTypeLazy()
 {
-    igMetaObject *g = g_igUnsignedIntListNoClean_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igUnsignedIntListNoClean_EnsureRegistered();
-    return g_igUnsignedIntListNoClean_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igUnsignedIntListNoClean_GetVTable(void) {
-    igUnsignedIntListNoClean list;
-
-    igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&g_igUnsignedIntListNoClean_vtable[0];
-    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
-}
-
-void igUnsignedIntListNoClean_EnsureRegistered(void)
+igMetaObject *igUnsignedIntListNoClean::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igUnsignedIntListNoClean_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igUnsignedIntListNoClean_Register(void) {
+void *igUnsignedIntListNoClean::retrieveVTablePointer()
+{
+    igUnsignedIntListNoClean temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igUnsignedIntListNoClean::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igUnsignedIntListNoClean::arkRegisterInternal()
+{
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igUnsignedIntListNoClean_metaObject,
-        igUnsignedIntList_Register,
-        (igMetaObjectGetFunction)igUnsignedIntList_GetPublishedMetaObject,
-        igUnsignedIntListNoClean_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Core::igUnsignedIntList::arkRegisterInternal,
+        Gap::Core::igUnsignedIntList::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igUnsignedIntListNoClean",
-        0x14,
-        igUnsignedIntListNoClean_GetVTable,
+        sizeof(igUnsignedIntListNoClean),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
         0,
         0
     );
 }
-
-void igUnsignedIntListNoClean_GetMetaObjectFunction(void) {
-    igUnsignedIntListNoClean_GetMetaObject();
+}
 }
 

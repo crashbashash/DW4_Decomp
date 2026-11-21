@@ -89,7 +89,7 @@ static int g_beWeaponSeqData_msgActionValues[] = {
 
 igMetaEnum *beWeaponSeqData_GetMsgActionEnum(void) {
     if (g_beWeaponSeqData_msgActionMetaEnum == 0) {
-        g_beWeaponSeqData_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beWeaponSeqData_msgActionNames, g_beWeaponSeqData_msgActionValues, 3);
+        g_beWeaponSeqData_msgActionMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("MsgAction", g_beWeaponSeqData_msgActionNames, g_beWeaponSeqData_msgActionValues, 3);
     }
     return g_beWeaponSeqData_msgActionMetaEnum;
 }

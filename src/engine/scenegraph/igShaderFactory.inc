@@ -8,7 +8,7 @@ igMetaEnum *g_igShaderFactory_fileCachingModeMetaEnum;
 
 igMetaEnum *FUN_00199110(void) {
     if (g_igShaderFactory_fileCachingModeMetaEnum == 0) {
-        g_igShaderFactory_fileCachingModeMetaEnum = igMetaEnum_Create("FILE_CACHING_MODE", g_igShaderFactory_fileCachingModeNames, g_igShaderFactory_fileCachingModeValues, 4);
+        g_igShaderFactory_fileCachingModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("FILE_CACHING_MODE", g_igShaderFactory_fileCachingModeNames, g_igShaderFactory_fileCachingModeValues, 4);
     }
     return g_igShaderFactory_fileCachingModeMetaEnum;
 }

@@ -185,7 +185,7 @@ static int g_beNDMWPanelObject_messageValues[] = {
 
 igMetaEnum *beNDMWPanelObject_GetMessageEnum(void) {
     if (g_beNDMWPanelObject_messageMetaEnum == 0) {
-        g_beNDMWPanelObject_messageMetaEnum = igMetaEnum_Create("Message", g_beNDMWPanelObject_messageNames, g_beNDMWPanelObject_messageValues, 11);
+        g_beNDMWPanelObject_messageMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_beNDMWPanelObject_messageNames, g_beNDMWPanelObject_messageValues, 11);
     }
     return g_beNDMWPanelObject_messageMetaEnum;
 }

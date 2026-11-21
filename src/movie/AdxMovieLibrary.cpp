@@ -1381,7 +1381,7 @@ igMetaEnum *g_igMovieInfo_movieStateMetaEnum;
 
 igMetaEnum *igMovieInfo_GetMovieStateMetaEnum(void) {
     if (g_igMovieInfo_movieStateMetaEnum == 0) {
-        g_igMovieInfo_movieStateMetaEnum = igMetaEnum_Create("IG_MOVIE_STATE", g_igMovieInfo_movieStateNames, g_igMovieInfo_movieStateValues, 3);
+        g_igMovieInfo_movieStateMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_MOVIE_STATE", g_igMovieInfo_movieStateNames, g_igMovieInfo_movieStateValues, 3);
     }
     return g_igMovieInfo_movieStateMetaEnum;
 }
@@ -1402,7 +1402,7 @@ igMetaEnum *g_igMovieInfo_movieTypeMetaEnum;
 
 igMetaEnum *igMovieInfo_GetMovieTypeMetaEnum(void) {
     if (g_igMovieInfo_movieTypeMetaEnum == 0) {
-        g_igMovieInfo_movieTypeMetaEnum = igMetaEnum_Create("IG_MOVIE_TYPE", g_igMovieInfo_movieTypeNames, g_igMovieInfo_movieTypeValues, 4);
+        g_igMovieInfo_movieTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_MOVIE_TYPE", g_igMovieInfo_movieTypeNames, g_igMovieInfo_movieTypeValues, 4);
     }
     return g_igMovieInfo_movieTypeMetaEnum;
 }

@@ -100,7 +100,7 @@ static int g_beSwitchCtrlInfo_msgActionValues[] = {
 
 igMetaEnum *beSwitchCtrl_GetMessageEnum(void) {
     if (g_beSwitchCtrlInfo_msgActionMetaEnum == 0) {
-        g_beSwitchCtrlInfo_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beSwitchCtrlInfo_msgActionNames, g_beSwitchCtrlInfo_msgActionValues, 2);
+        g_beSwitchCtrlInfo_msgActionMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("MsgAction", g_beSwitchCtrlInfo_msgActionNames, g_beSwitchCtrlInfo_msgActionValues, 2);
     }
     return g_beSwitchCtrlInfo_msgActionMetaEnum;
 }

@@ -53,7 +53,6 @@
 #include "dw4/game/ParticleArray.h"
 #include <math.h>
 #include "dw4/maths/igVec4fMetaField.h"
-#include "dw4/core/igNonRefCountedObjectList.h"
 #include "dw4/core/igMemoryRefMetaField.h"
 #include "dw4/maths/igMatrix44fMetaField.h"
 #include "dw4/maths/igMathConstants.h"

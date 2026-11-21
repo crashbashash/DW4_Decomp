@@ -34,7 +34,7 @@ CallbackArray *igBitMask_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBitMask_metaObject,
-        igUnsignedIntList_Register,
+        Gap::Core::igUnsignedIntList::arkRegisterInternal,
         igUnsignedIntList_GetPublishedMetaObject,
         igBitMask_GetMetaObjectFunction,
         "igBitMask",
@@ -51,7 +51,7 @@ void igBitMask_GetMetaObjectFunction(void) {
 }
 
 int FUN_001a4f00(void) {
-    return (int)g_igUnsignedIntList_metaObject;
+    return (int)Gap::Core::igUnsignedIntList::getClassMeta();
 }
 
 static FieldFactory g_igBitMask_ctorTable[] = {

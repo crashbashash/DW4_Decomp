@@ -27,7 +27,7 @@ static int g_igRenderDestinationAttr_textureCreateValues[] = {
 
 igMetaEnum *igRenderDestinationAttr_GetTextureCreateModeMetaEnum(void) {
     if (g_igRenderDestinationAttr_textureCreateMetaEnum == 0) {
-        g_igRenderDestinationAttr_textureCreateMetaEnum = igMetaEnum_Create("RENDERDESTINATION_TEXTURE_CREATE_MODE", g_igRenderDestinationAttr_textureCreateNames, g_igRenderDestinationAttr_textureCreateValues, 2);
+        g_igRenderDestinationAttr_textureCreateMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("RENDERDESTINATION_TEXTURE_CREATE_MODE", g_igRenderDestinationAttr_textureCreateNames, g_igRenderDestinationAttr_textureCreateValues, 2);
     }
     return g_igRenderDestinationAttr_textureCreateMetaEnum;
 }
@@ -45,7 +45,7 @@ static int g_igRenderDestinationAttr_createModeValues[] = {
 
 igMetaEnum *igRenderDestinationAttr_GetCreateModeMetaEnum(void) {
     if (g_igRenderDestinationAttr_createModeMetaEnum == 0) {
-        g_igRenderDestinationAttr_createModeMetaEnum = igMetaEnum_Create("RENDERDESTINATION_CREATE_MODE", g_igRenderDestinationAttr_createModeNames, g_igRenderDestinationAttr_createModeValues, 3);
+        g_igRenderDestinationAttr_createModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("RENDERDESTINATION_CREATE_MODE", g_igRenderDestinationAttr_createModeNames, g_igRenderDestinationAttr_createModeValues, 3);
     }
     return g_igRenderDestinationAttr_createModeMetaEnum;
 }

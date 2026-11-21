@@ -78,7 +78,7 @@ static int g_beStaticInfoCtl_messageValues[] = {
 
 igMetaEnum *beStaticInfoCtl_GetMessageEnum(void) {
     if (g_beStaticInfoCtl_messageMetaEnum == 0) {
-        g_beStaticInfoCtl_messageMetaEnum = igMetaEnum_Create("Message", g_beStaticInfoCtl_messageNames, g_beStaticInfoCtl_messageValues, 1);
+        g_beStaticInfoCtl_messageMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_beStaticInfoCtl_messageNames, g_beStaticInfoCtl_messageValues, 1);
     }
     return g_beStaticInfoCtl_messageMetaEnum;
 }

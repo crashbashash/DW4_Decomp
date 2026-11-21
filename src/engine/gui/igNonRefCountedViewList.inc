@@ -35,8 +35,8 @@ CallbackArray *igNonRefCountedViewList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igNonRefCountedViewList_metaObject,
-        igNonRefCountedObjectList_Register,
-        igNonRefCountedObjectList_GetPublishedMetaObject,
+        Gap::Core::igNonRefCountedObjectList::arkRegisterInternal,
+        Gap::Core::igNonRefCountedObjectList::getClassMeta,
         igNonRefCountedViewList_GetMetaObjectFunction,
         "igNonRefCountedViewList",
         0x14, /* instance size */

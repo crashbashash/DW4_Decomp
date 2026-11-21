@@ -95,7 +95,7 @@ static int g_beMatCtrlData_messageValues[] = {
 
 igMetaEnum *beMatCtrl_GetMessageEnum(void) {
     if (g_beMatCtrlData_messageMetaEnum == 0) {
-        g_beMatCtrlData_messageMetaEnum = igMetaEnum_Create("Message", g_beMatCtrlData_messageNames, g_beMatCtrlData_messageValues, 6);
+        g_beMatCtrlData_messageMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_beMatCtrlData_messageNames, g_beMatCtrlData_messageValues, 6);
     }
     return g_beMatCtrlData_messageMetaEnum;
 }

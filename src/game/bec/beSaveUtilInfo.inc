@@ -66,7 +66,7 @@ static int g_beSaveUtil_messageValues[] = {
 
 igMetaEnum *beSaveUtil_GetMessageEnum(void) {
     if (g_beSaveUtil_messageMetaEnum == 0) {
-        g_beSaveUtil_messageMetaEnum = igMetaEnum_Create("Message", g_beSaveUtil_messageNames, g_beSaveUtil_messageValues, 0x12);
+        g_beSaveUtil_messageMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_beSaveUtil_messageNames, g_beSaveUtil_messageValues, 0x12);
     }
     return g_beSaveUtil_messageMetaEnum;
 }

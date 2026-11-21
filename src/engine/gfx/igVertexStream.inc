@@ -16,7 +16,7 @@ igMetaEnum *g_igVertexStream_vertexStreamCompileModeMetaEnum;
 
 int IG_VERTEX_STREAM_COMPILE_MODE_GetMetaEnum(void) {
     if (g_igVertexStream_vertexStreamCompileModeMetaEnum == 0) {
-        g_igVertexStream_vertexStreamCompileModeMetaEnum = igMetaEnum_Create("IG_VERTEX_STREAM_COMPILE_MODE", g_igVertexStream_vertexStreamCompileModeNames, g_igVertexStream_vertexStreamCompileModeValues, 3);
+        g_igVertexStream_vertexStreamCompileModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_VERTEX_STREAM_COMPILE_MODE", g_igVertexStream_vertexStreamCompileModeNames, g_igVertexStream_vertexStreamCompileModeValues, 3);
     }
     return (int)g_igVertexStream_vertexStreamCompileModeMetaEnum;
 }
@@ -31,7 +31,7 @@ igMetaEnum *g_igVertexStream_vertexAccessModeMetaEnum;
 
 int IG_VERTEX_ACCESS_MODE_GetMetaEnum(void) {
     if (g_igVertexStream_vertexAccessModeMetaEnum == 0) {
-        g_igVertexStream_vertexAccessModeMetaEnum = igMetaEnum_Create("IG_VERTEX_ACCESS_MODE", g_igVertexStream_vertexAccessModeNames, g_igVertexStream_vertexAccessModeValues, 4);
+        g_igVertexStream_vertexAccessModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_VERTEX_ACCESS_MODE", g_igVertexStream_vertexAccessModeNames, g_igVertexStream_vertexAccessModeValues, 4);
     }
     return (int)g_igVertexStream_vertexAccessModeMetaEnum;
 }

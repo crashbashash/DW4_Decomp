@@ -112,7 +112,7 @@ static int g_beParticleCtrl2Info_messageValues[] = {
 
 igMetaEnum *beParticleCtrl2_GetMessageEnum(void) {
     if (g_beParticleCtrl2Info_messageMetaEnum == 0) {
-        g_beParticleCtrl2Info_messageMetaEnum = igMetaEnum_Create("Message", g_beParticleCtrl2Info_messageNames, g_beParticleCtrl2Info_messageValues, 8);
+        g_beParticleCtrl2Info_messageMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_beParticleCtrl2Info_messageNames, g_beParticleCtrl2Info_messageValues, 8);
     }
     return g_beParticleCtrl2Info_messageMetaEnum;
 }

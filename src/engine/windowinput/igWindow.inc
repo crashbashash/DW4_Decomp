@@ -107,7 +107,7 @@ igMetaEnum *g_igInterfaceManager_keyValuesMetaEnum;
 
 igMetaEnum *FUN_00145eb0(void) {
     if (g_igInterfaceManager_keyValuesMetaEnum == 0) {
-        g_igInterfaceManager_keyValuesMetaEnum = igMetaEnum_Create("KEY_VALUES", g_igInterfaceManager_keyValuesNames, g_igInterfaceManager_keyValuesValues, 0x69);
+        g_igInterfaceManager_keyValuesMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("KEY_VALUES", g_igInterfaceManager_keyValuesNames, g_igInterfaceManager_keyValuesValues, 0x69);
     }
     return g_igInterfaceManager_keyValuesMetaEnum;
 }

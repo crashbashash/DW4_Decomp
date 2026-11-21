@@ -84,7 +84,7 @@ void igTransformSequence1_5_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTransformSequence1_5_Register);
 }
 
-static igMetaObjectCallback g_igTransformSequence1_5_callbackList[] = { igLongList_EnsureRegistered, igVec3fList_EnsureRegistered, igCompressedTransformSequence1_5Data_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igTransformSequence1_5_callbackList[] = { Gap::Core::igLongList::arkRegister, igVec3fList_EnsureRegistered, igCompressedTransformSequence1_5Data_EnsureRegistered, 0 };
 
 CallbackArray *igTransformSequence1_5_Register(void) {
     SceneGraphLibrary_MarkRegistered();  /* Shared set-once latch run before every registration of this family. */

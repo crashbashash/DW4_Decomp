@@ -58,7 +58,6 @@
 #include "dw4/game/beModelCtrlInfo.h"
 #include "dw4/core/StringPool.h"
 #include "dw4/gfx/GfxMetaEnums.h"
-#include "dw4/core/igNonRefCountedObjectList.h"
 #include "dw4/core/igMetaObjectList.h"
 #include "dw4/maths/igMathConstants.h"
 #include "dw4/core/igInfo.h"
@@ -322,16 +321,7 @@ extern "C" void **FUN_0013a800(void **arg0, short arg1);
 
 extern "C" void thunk_igAttrPool_UserUnregister(void);
 struct Obj_13ac70 { int *vt; char pad[28]; };
-extern "C" igMetaObject *g_igNonRefCountedAttrList_metaObject;
-extern "C" igMetaObject *igNonRefCountedAttrList_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igNonRefCountedAttrList_GetMetaObject(void);
-struct Obj_13ade0 { int *vt; char pad[28]; };
-extern "C" int g_igNonRefCountedAttrList_vtable[4];
-extern "C" int igNonRefCountedAttrList_GetVTable(void);
 
-extern "C" CallbackArray *igNonRefCountedAttrList_Register(void);
-extern "C" void igNonRefCountedAttrList_GetMetaObjectFunction(void);
-extern "C" int FUN_0013aeb0(void);
 struct Obj_13afa0 { int *vt; char pad[28]; };
 
 typedef struct { int pad[3]; unsigned int a; float b; } S2;
@@ -953,16 +943,6 @@ extern "C" igMetaObject *FUN_001428a0(void);
 extern "C" igMetaObject *igCopyRenderDestinationAttr_GetMeta(void);
 typedef struct Obj_1429d0 { char pad[20]; int f20; int f24; } Obj_1429d0;
 typedef struct Obj_142a00 { char pad[16]; int f16; int f20; } Obj_142a00;
-extern "C" igMetaObject *igNonRefCountedAttrList_GetMeta(void);
-class igNonRefCountedObjectListView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void vfunc_16();
-};
-extern "C" void igNonRefCountedObjectList_UserPreWrite(igNonRefCountedObjectListView *self);
-extern "C" int igNonRefCountedObjectList_GetMeta(void);
-extern "C" igMetaObject *igNonRefCountedObjectList_GetElementMeta(void);
 extern "C" igMetaObject *igGeometryAttrList_GetMeta(void);
 extern "C" igMetaObject *igTextureList_GetMeta(void);
 extern "C" igMetaObject *igLightList_GetMeta(void);
@@ -971,7 +951,6 @@ extern "C" int igVec3fList_GetMeta(void);
 extern "C" igMetaObject *igImageMipMapList_GetMeta(void);
 
 extern "C" int igNamedObject_GetMeta(void);
-extern "C" igMetaObject *igNonRefCountedAttrList_GetElementMeta(void);
 extern "C" int igVec3fList_GetElementSize(void);
 
 #include "dw4/attrs/igObjectList.h"

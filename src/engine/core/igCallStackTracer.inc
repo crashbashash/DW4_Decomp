@@ -34,8 +34,8 @@ CallbackArray *igCallStackTracer_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igCallStackTracer_metaObject,
-        igUnsignedIntListNoClean_Register,
-        igUnsignedIntListNoClean_GetPublishedMetaObject,
+        Gap::Core::igUnsignedIntListNoClean::arkRegisterInternal,
+        Gap::Core::igUnsignedIntListNoClean::getClassMeta,
         igCallStackTracer_GetMetaObjectFunction,
         "igCallStackTracer",
         0x14,
@@ -48,10 +48,6 @@ CallbackArray *igCallStackTracer_Register(void) {
 
 void igCallStackTracer_GetMetaObjectFunction(void) {
     igCallStackTracer_GetMetaObject();
-}
-
-igMetaObject *igUnsignedIntListNoClean_GetPublishedMetaObject(void) {
-    return g_igUnsignedIntListNoClean_metaObject;
 }
 
 void igCallStackTracer_SetAbstractProxy(void) {

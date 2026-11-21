@@ -75,7 +75,7 @@ void igTransformSequence1_5_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount(temp_s1);
     igMetaObject_CreateFields(temp_s1, g_igTransformSequence1_5_ctorTable, 9);
     temp_s0 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2));
-    temp_s0->_metaObject = (int)igLongList_GetOrCreateMetaObject();
+    temp_s0->_metaObject = (int)Gap::Core::igLongList::getClassTypeLazy();
     temp_s0->_construct = 1;
     temp_v0 = (void **)(igMetaObject_FindFieldByName(temp_s1, "_timeList"));
     temp_s3 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)temp_s1->_metaFields, (int)temp_v0);
@@ -117,7 +117,7 @@ void igTransformSequence_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTransformSequence_Register);
 }
 
-static igMetaObjectCallback g_igTransformSequence_callbackList[] = { igVec3fList_EnsureRegistered, igQuaternionfList_EnsureRegistered, igDoubleList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igTransformSequence_callbackList[] = { igVec3fList_EnsureRegistered, igQuaternionfList_EnsureRegistered, Gap::Core::igDoubleList::arkRegister, 0 };
 
 CallbackArray *igTransformSequence_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -214,7 +214,7 @@ void igTransformSequence_InitFields(void) {
     temp_s2_3->f56 = (int)igVec3fList_GetOrCreateMetaObject();
     temp_s2_3->f52 = 1;
     temp_s2_4 = ((struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3));
-    temp_s2_4->f56 = (int)igDoubleList_GetOrCreateMetaObject();
+    temp_s2_4->f56 = (int)Gap::Core::igDoubleList::getClassTypeLazy();
     temp_s2_4->f52 = 1;
     ((Gap::Core::igDoubleMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4)))->setDefault(-1.0);
     temp_v0 = ((struct Fld *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6));

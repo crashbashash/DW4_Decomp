@@ -1168,7 +1168,9 @@ class Planner:
     def retyped_cast(self, fr, conv, pos, called):
         """The cast keeping a use of static member `conv` the type its C form had, where the definition's return
         type changed (`c_ret`, rewrite_definition) or a parameter did (`c_params`): a call assigned where the C
-        form's integer went (`*(int *)p = Class::getMetaField()`) is cast back to it, and the member named as a
+        form's integer went (`*(int *)p = Class::getMetaField()`) is cast back to it, as is one assigned at file
+        scope where the C form returned the converted class's flat struct (`g = (igMetaEnum *)Gap::Core::
+        igMetaEnum::createMetaEnum(…)`, a holder still declared flat), and the member named as a
         value in an array initialiser of a function-pointer typedef (a field table's `FieldFactory`) is cast to
         that type. A use already cast keeps its cast."""
         c_ret = getattr(conv, "c_ret", None)
@@ -1181,6 +1183,10 @@ class Planner:
             if c_ret in _INTEGERS and (conv.ret or "").endswith("*") and before.endswith("=") and \
                     not before.endswith(("==", "!=", "<=", ">=")):
                 return "(%s)" % c_ret
+            if c_ret and c_ret not in _INTEGERS and _base_name(c_ret.rstrip("* ")) in self.converted and \
+                    before.endswith("=") and not before.endswith(("==", "!=", "<=", ">=")) and \
+                    not self.gap_scope(fr, pos):
+                return "(%s)" % c_ret.replace("*", " *").strip()
             return ""
         table = re.search(r"\b([A-Za-z_]\w*)\s+[A-Za-z_]\w*\s*\[[^\]]*\]\s*=\s*\{[^;{}]*$", before[-4000:])
         if table and table.group(1) not in _INTEGERS and table.group(1) not in ("void", "char", "float", "double"):
@@ -1283,6 +1289,9 @@ class Planner:
                                   % (fr.rel, conv.cname, ret_norm or "nothing", conv.qualified, conv.ret))
                 ret = conv.ret.replace("*", " *").replace("  ", " ").strip()
                 conv.c_ret = ret_norm                    # its uses keep the C type (retyped_cast)
+            elif conv.static and conv.cls.startswith("Gap::") and (ret_norm or "").endswith("*") and \
+                    _base_name(ret_norm.rstrip("* ")) in self.converted and not self.gap_scope(fr, start, ctx):
+                conv.c_ret = ret_norm                    # it returned the flat struct, which file-scope holders keep
         plist = ", ".join(("%s %s" % (t, n) if not t.endswith(("*", "&")) else "%s%s" % (t, n)) if n else t
                           for t, n in params)
         if conv.cls.startswith("Gap::"):                 # in the class's scope a converted class is its bare name

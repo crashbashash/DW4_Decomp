@@ -8,7 +8,7 @@ igMetaEnum *g_igPsx2ControllerManager_multitapPortMetaEnum;
 
 igMetaEnum *FUN_00146d90(void) {
     if (g_igPsx2ControllerManager_multitapPortMetaEnum == 0) {
-        g_igPsx2ControllerManager_multitapPortMetaEnum = igMetaEnum_Create("MultitapPort", g_igPsx2ControllerManager_multitapPortNames, g_igPsx2ControllerManager_multitapPortValues, 4);
+        g_igPsx2ControllerManager_multitapPortMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("MultitapPort", g_igPsx2ControllerManager_multitapPortNames, g_igPsx2ControllerManager_multitapPortValues, 4);
     }
     return g_igPsx2ControllerManager_multitapPortMetaEnum;
 }

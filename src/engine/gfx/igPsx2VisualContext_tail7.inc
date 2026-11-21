@@ -99,7 +99,7 @@ bool FUN_0017df40(B_17eb90 *context, int vertexData, int firstVertex, int *posit
     }
     entry = (Node *)FUN_0015f4a0((S_15f430 *)vertexData, 2, 0);
     if (entry != 0) {
-        if (isListOf(entry->obj, g_igUnsignedIntList_metaObject)) {
+        if (isListOf(entry->obj, Gap::Core::igUnsignedIntList::getClassMeta())) {
             *colors = entry->obj->f16;
         } else if (isListOf(entry->obj, g_igVec4ucList_metaObject)) {
             *colors = entry->obj->f16;

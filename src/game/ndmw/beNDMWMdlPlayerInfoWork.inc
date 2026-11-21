@@ -223,7 +223,7 @@ static int g_beNDMWMdlPlayerInfoWork_damageSeqValues[] = {
 
 igMetaEnum *DamageSeq_GetMetaEnum(void) {
     if (g_beNDMWMdlPlayerInfoWork_damageSeqMetaEnum == 0) {
-        g_beNDMWMdlPlayerInfoWork_damageSeqMetaEnum = igMetaEnum_Create("DamageSeq", g_beNDMWMdlPlayerInfoWork_damageSeqNames, g_beNDMWMdlPlayerInfoWork_damageSeqValues, 10);
+        g_beNDMWMdlPlayerInfoWork_damageSeqMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("DamageSeq", g_beNDMWMdlPlayerInfoWork_damageSeqNames, g_beNDMWMdlPlayerInfoWork_damageSeqValues, 10);
     }
     return g_beNDMWMdlPlayerInfoWork_damageSeqMetaEnum;
 }
@@ -257,7 +257,7 @@ static int g_beNDMWMdlPlayerInfoWork_statusNameValues[] = {
 
 igMetaEnum *StatusName_GetMetaEnum(void) {
     if (g_beNDMWMdlPlayerInfoWork_statusNameMetaEnum == 0) {
-        g_beNDMWMdlPlayerInfoWork_statusNameMetaEnum = igMetaEnum_Create("StatusName", g_beNDMWMdlPlayerInfoWork_statusNameNames, g_beNDMWMdlPlayerInfoWork_statusNameValues, 11);
+        g_beNDMWMdlPlayerInfoWork_statusNameMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("StatusName", g_beNDMWMdlPlayerInfoWork_statusNameNames, g_beNDMWMdlPlayerInfoWork_statusNameValues, 11);
     }
     return g_beNDMWMdlPlayerInfoWork_statusNameMetaEnum;
 }
@@ -301,7 +301,7 @@ static int g_beNDMWMdlPlayerInfoWork_msgActionValues[] = {
 
 igMetaEnum *MsgAction_GetMetaEnum(void) {
     if (g_beNDMWMdlPlayerInfoWork_msgActionMetaEnum == 0) {
-        g_beNDMWMdlPlayerInfoWork_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beNDMWMdlPlayerInfoWork_msgActionNames, g_beNDMWMdlPlayerInfoWork_msgActionValues, 16);
+        g_beNDMWMdlPlayerInfoWork_msgActionMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("MsgAction", g_beNDMWMdlPlayerInfoWork_msgActionNames, g_beNDMWMdlPlayerInfoWork_msgActionValues, 16);
     }
     return g_beNDMWMdlPlayerInfoWork_msgActionMetaEnum;
 }

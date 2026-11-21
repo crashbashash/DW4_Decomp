@@ -108,7 +108,7 @@ static int g_beFontImage_alignValues[] = {
 
 igMetaEnum *beFont_GetAlignEnum(void) {
     if (g_beFontImage_alignMetaEnum == 0) {
-        g_beFontImage_alignMetaEnum = igMetaEnum_Create("Align", g_beFontImage_alignNames, g_beFontImage_alignValues, 3);
+        g_beFontImage_alignMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Align", g_beFontImage_alignNames, g_beFontImage_alignValues, 3);
     }
     return g_beFontImage_alignMetaEnum;
 }
@@ -123,7 +123,7 @@ static int g_beFontImage_swtCtlValues[] = {
 
 igMetaEnum *beFont_GetSwitchEnum(void) {
     if (g_beFontImage_swtCtlMetaEnum == 0) {
-        g_beFontImage_swtCtlMetaEnum = igMetaEnum_Create("SwtCtl", g_beFontImage_swtCtlNames, g_beFontImage_swtCtlValues, 4);
+        g_beFontImage_swtCtlMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("SwtCtl", g_beFontImage_swtCtlNames, g_beFontImage_swtCtlValues, 4);
     }
     return g_beFontImage_swtCtlMetaEnum;
 }
@@ -141,7 +141,7 @@ static int g_beFontImage_messageValues[] = {
 
 igMetaEnum *beFont_GetMessageEnum(void) {
     if (g_beFontImage_messageMetaEnum == 0) {
-        g_beFontImage_messageMetaEnum = igMetaEnum_Create("Message", g_beFontImage_messageNames, g_beFontImage_messageValues, 9);
+        g_beFontImage_messageMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_beFontImage_messageNames, g_beFontImage_messageValues, 9);
     }
     return g_beFontImage_messageMetaEnum;
 }

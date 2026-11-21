@@ -147,7 +147,7 @@ static int g_beCameraCtrlInfoRamShake_msgActionValues[] = {
 
 igMetaEnum *beCameraCtrl_GetMessageEnum(void) {
     if (g_beCameraCtrlInfoRamShake_msgActionMetaEnum == 0) {
-        g_beCameraCtrlInfoRamShake_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beCameraCtrlInfoRamShake_msgActionNames, g_beCameraCtrlInfoRamShake_msgActionValues, 0xF);
+        g_beCameraCtrlInfoRamShake_msgActionMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("MsgAction", g_beCameraCtrlInfoRamShake_msgActionNames, g_beCameraCtrlInfoRamShake_msgActionValues, 0xF);
     }
     return g_beCameraCtrlInfoRamShake_msgActionMetaEnum;
 }

@@ -5,10 +5,9 @@ static int g_igFile_readModeValues[] = {
     0, 1, 2,
 };
 
-
 int igFile_GetReadModeMetaEnum(void) {
     if (g_igFile_readModeMetaEnum == 0) {
-        g_igFile_readModeMetaEnum = ((int)igMetaEnum_Create((char *)("ReadMode"), g_igFile_readModeNames, g_igFile_readModeValues, 3));
+        g_igFile_readModeMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)("ReadMode"), g_igFile_readModeNames, g_igFile_readModeValues, 3));
     }
     return g_igFile_readModeMetaEnum;
 }
@@ -23,10 +22,9 @@ static int g_igFile_openModeValues[] = {
     8,
 };
 
-
 int igFile_GetOpenModeMetaEnum(void) {
     if (g_igFile_openModeMetaEnum == 0) {
-        g_igFile_openModeMetaEnum = ((int)igMetaEnum_Create((char *)("OpenMode"), g_igFile_openModeNames, g_igFile_openModeValues, 9));
+        g_igFile_openModeMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)("OpenMode"), g_igFile_openModeNames, g_igFile_openModeValues, 9));
     }
     return g_igFile_openModeMetaEnum;
 }

@@ -54,7 +54,7 @@ void igDisplayListAttr::arkRegister()
 
 CallbackArray *igDisplayListAttr::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { igNonRefCountedAttrList_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igNonRefCountedAttrList::arkRegister, 0 };
 
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -84,7 +84,7 @@ void igDisplayListAttr::arkRegisterInitialize()
     igMetaObject_CreateFields(metaObject, instFuncs, 1);
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
-        metaField->_metaObject = (int)igNonRefCountedAttrList_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Attrs::igNonRefCountedAttrList::getClassTypeLazy();
         metaField->_construct = 1;
     }
     igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);

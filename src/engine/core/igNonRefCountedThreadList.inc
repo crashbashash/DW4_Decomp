@@ -34,8 +34,8 @@ CallbackArray *igNonRefCountedThreadList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igNonRefCountedThreadList_metaObject,
-        igNonRefCountedObjectList_Register,
-        (igMetaObjectGetFunction)igNonRefCountedObjectList_GetPublishedMetaObject,
+        Gap::Core::igNonRefCountedObjectList::arkRegisterInternal,
+        (igMetaObjectGetFunction)Gap::Core::igNonRefCountedObjectList::getClassMeta,
         igNonRefCountedThreadList_GetMetaObjectFunction,
         "igNonRefCountedThreadList",
         0x14,

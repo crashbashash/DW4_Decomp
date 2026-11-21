@@ -79,7 +79,7 @@ static int g_beNDMWWindowList_subWndValues[] = {
 
 igMetaEnum *SubWnd_GetMetaEnum(void) {
     if (g_beNDMWWindowList_subWndMetaEnum == 0) {
-        g_beNDMWWindowList_subWndMetaEnum = igMetaEnum_Create("SubWnd", g_beNDMWWindowList_subWndNames, g_beNDMWWindowList_subWndValues, 11);
+        g_beNDMWWindowList_subWndMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("SubWnd", g_beNDMWWindowList_subWndNames, g_beNDMWWindowList_subWndValues, 11);
     }
     return g_beNDMWWindowList_subWndMetaEnum;
 }

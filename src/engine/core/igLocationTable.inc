@@ -50,7 +50,7 @@ void igLocationTable_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igLocationTable_Register);
 }
 
-static igMetaObjectCallback g_igLocationTable_callbackList[] = { igUnsignedIntListNoClean_EnsureRegistered, Gap::Core::igIntListNoClean::arkRegister, igStringTable_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igLocationTable_callbackList[] = { Gap::Core::igUnsignedIntListNoClean::arkRegister, Gap::Core::igIntListNoClean::arkRegister, igStringTable_EnsureRegistered, 0 };
 
 CallbackArray *igLocationTable_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -118,7 +118,7 @@ void igLocationTable_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igLocationTable_ctorTable, 6);
     locationsField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)locationsField)->_metaObject = (int)igUnsignedIntListNoClean_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)locationsField)->_metaObject = (int)Gap::Core::igUnsignedIntListNoClean::getClassTypeLazy();
     ((igRefMetaField *)locationsField)->_construct = 1;
     hashIndexField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
     ((igObjectRefMetaField *)hashIndexField)->_metaObject = (int)Gap::Core::igIntListNoClean::getClassTypeLazy();

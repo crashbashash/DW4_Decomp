@@ -159,10 +159,9 @@ static int g_arenaMemoryPoolFlagsValues[] = {
     0x100, 0x200,
 };
 
-
 int igArenaMemoryPool_GetArenaMemoryPoolFlagsMetaEnum(void) {
     if (g_arenaMemoryPoolFlagsMetaEnum == 0) {
-        g_arenaMemoryPoolFlagsMetaEnum = ((int)igMetaEnum_Create((char *)"ArenaMemoryPoolFlags", g_arenaMemoryPoolFlagsNames, g_arenaMemoryPoolFlagsValues, 0xA));
+        g_arenaMemoryPoolFlagsMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)"ArenaMemoryPoolFlags", g_arenaMemoryPoolFlagsNames, g_arenaMemoryPoolFlagsValues, 0xA));
     }
     return g_arenaMemoryPoolFlagsMetaEnum;
 }
@@ -174,10 +173,9 @@ static int g_messageLevelValues[] = {
     0, 1, 2, 3,
 };
 
-
 int igArenaMemoryPool_GetMessageLevelMetaEnum(void) {
     if (g_messageLevelMetaEnum == 0) {
-        g_messageLevelMetaEnum = ((int)igMetaEnum_Create((char *)"MessageLevel", g_messageLevelNames, g_messageLevelValues, 4));
+        g_messageLevelMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)"MessageLevel", g_messageLevelNames, g_messageLevelValues, 4));
     }
     return g_messageLevelMetaEnum;
 }
@@ -189,10 +187,9 @@ static int g_heapIntegrityCheckLevelValues[] = {
     0, 1, 2, 3,
 };
 
-
 int igArenaMemoryPool_GetHeapIntegrityCheckLevelMetaEnum(void) {
     if (g_heapIntegrityCheckLevelMetaEnum == 0) {
-        g_heapIntegrityCheckLevelMetaEnum = ((int)igMetaEnum_Create((char *)"HeapIntegrityCheckLevel", g_heapIntegrityCheckLevelNames, g_heapIntegrityCheckLevelValues, 4));
+        g_heapIntegrityCheckLevelMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)"HeapIntegrityCheckLevel", g_heapIntegrityCheckLevelNames, g_heapIntegrityCheckLevelValues, 4));
     }
     return g_heapIntegrityCheckLevelMetaEnum;
 }

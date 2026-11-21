@@ -480,7 +480,7 @@ unsigned int beMessenger_ResolveEnumValue(beMessenger *self, igMetaEnum *metaEnu
     if ((g_resolveEnumLastMetaEnum[0] == (int)metaEnum) && (strcmp((const char *)&g_resolveEnumLastName[0], name) == 0)) {
         return g_resolveEnumLastValue[0];
     }
-    if (igMetaEnum_GetValueByName(metaEnum, name, &value) == g_resultSuccess) {
+    if (((Gap::Core::igMetaEnum *)metaEnum)->getEnumValue(name, value) == g_resultSuccess) {
         g_resolveEnumLastMetaEnum[0] = (int)metaEnum;
         strcpy((char *)&g_resolveEnumLastName[0], name);
         g_resolveEnumLastValue[0] = value;

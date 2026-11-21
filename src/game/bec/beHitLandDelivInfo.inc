@@ -61,7 +61,7 @@ static int g_beHitLandDelivInfo_messageValues[] = {
 
 igMetaEnum *beHitLandDelivInfo_GetMessageEnum(void) {
     if (g_beHitLandDelivInfo_messageMetaEnum == 0) {
-        g_beHitLandDelivInfo_messageMetaEnum = igMetaEnum_Create("Message", g_beHitLandDelivInfo_messageNames, g_beHitLandDelivInfo_messageValues, 5);
+        g_beHitLandDelivInfo_messageMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_beHitLandDelivInfo_messageNames, g_beHitLandDelivInfo_messageValues, 5);
     }
     return g_beHitLandDelivInfo_messageMetaEnum;
 }

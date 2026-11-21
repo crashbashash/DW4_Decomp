@@ -6,10 +6,9 @@ static int g_igThread_priorityValues[] = {
     0, 0x32, 0x80, 0xc8, 0xff, 0xff,
 };
 
-
 int igThread_GetPriorityMetaEnum(void) {
     if (g_igThread_priorityMetaEnum == 0) {
-        g_igThread_priorityMetaEnum = ((int)igMetaEnum_Create((char *)"Priority", g_igThread_priorityNames, g_igThread_priorityValues, 6));
+        g_igThread_priorityMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)"Priority", g_igThread_priorityNames, g_igThread_priorityValues, 6));
     }
     return g_igThread_priorityMetaEnum;
 }
@@ -21,10 +20,9 @@ static int g_igThread_stateValues[] = {
     0, 1,
 };
 
-
 int igThread_GetStateMetaEnum(void) {
     if (g_igThread_stateMetaEnum == 0) {
-        g_igThread_stateMetaEnum = ((int)igMetaEnum_Create((char *)"State", g_igThread_stateNames, g_igThread_stateValues, 2));
+        g_igThread_stateMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)"State", g_igThread_stateNames, g_igThread_stateValues, 2));
     }
     return g_igThread_stateMetaEnum;
 }
@@ -36,10 +34,9 @@ static int g_igThread_scopeValues[] = {
     0, 1, 2,
 };
 
-
 int igThread_GetScopeMetaEnum(void) {
     if (g_igThread_scopeMetaEnum == 0) {
-        g_igThread_scopeMetaEnum = ((int)igMetaEnum_Create((char *)"Scope", g_igThread_scopeNames, g_igThread_scopeValues, 3));
+        g_igThread_scopeMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)"Scope", g_igThread_scopeNames, g_igThread_scopeValues, 3));
     }
     return g_igThread_scopeMetaEnum;
 }
@@ -51,10 +48,9 @@ static int g_igThread_typeValues[] = {
     0, 1,
 };
 
-
 int igThread_GetTypeMetaEnum(void) {
     if (g_igThread_typeMetaEnum == 0) {
-        g_igThread_typeMetaEnum = ((int)igMetaEnum_Create((char *)"Type", g_igThread_typeNames, g_igThread_typeValues, 2));
+        g_igThread_typeMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)"Type", g_igThread_typeNames, g_igThread_typeValues, 2));
     }
     return g_igThread_typeMetaEnum;
 }

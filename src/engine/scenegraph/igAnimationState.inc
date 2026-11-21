@@ -8,7 +8,7 @@ igMetaEnum *g_igAnimationState_statusMetaEnum;
 
 igMetaEnum *FUN_001a6a90(void) {
     if (g_igAnimationState_statusMetaEnum == 0) {
-        g_igAnimationState_statusMetaEnum = igMetaEnum_Create("Status", g_igAnimationState_statusNames, g_igAnimationState_statusValues, 4);
+        g_igAnimationState_statusMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Status", g_igAnimationState_statusNames, g_igAnimationState_statusValues, 4);
     }
     return g_igAnimationState_statusMetaEnum;
 }
@@ -24,7 +24,7 @@ igMetaEnum *g_igAnimationState_transitionModeMetaEnum;
 
 igMetaEnum *FUN_001a6af0(void) {
     if (g_igAnimationState_transitionModeMetaEnum == 0) {
-        g_igAnimationState_transitionModeMetaEnum = igMetaEnum_Create("TransitionMode", g_igAnimationState_transitionModeNames, g_igAnimationState_transitionModeValues, 6);
+        g_igAnimationState_transitionModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("TransitionMode", g_igAnimationState_transitionModeNames, g_igAnimationState_transitionModeValues, 6);
     }
     return g_igAnimationState_transitionModeMetaEnum;
 }
@@ -39,7 +39,7 @@ igMetaEnum *g_igAnimationState_combineModeMetaEnum;
 
 igMetaEnum *FUN_001a6b50(void) {
     if (g_igAnimationState_combineModeMetaEnum == 0) {
-        g_igAnimationState_combineModeMetaEnum = igMetaEnum_Create("CombineMode", g_igAnimationState_combineModeNames, g_igAnimationState_combineModeValues, 3);
+        g_igAnimationState_combineModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("CombineMode", g_igAnimationState_combineModeNames, g_igAnimationState_combineModeValues, 3);
     }
     return g_igAnimationState_combineModeMetaEnum;
 }

@@ -399,7 +399,7 @@ bool igRegistry_ParseEnumFlags(char *text, int *value, int metaEnum, char *forma
                 strncpy(name, token, length);
                 name[length] = 0;
                 flag = 0;
-                if (igMetaEnum_GetValueByName((igMetaEnum *)metaEnum, name, &flag) == g_resultSuccess) {
+                if (((Gap::Core::igMetaEnum *)metaEnum)->getEnumValue(name, flag) == g_resultSuccess) {
                     *value |= (unsigned int)flag;
                 } else {
                     ok = false;
@@ -465,7 +465,7 @@ int igRegistry_ParseEnumValue(char *text, int *value, igMetaEnum *metaEnum, char
             }
             strncpy(name, token, length);
             name[length] = 0;
-            if (igMetaEnum_GetValueByName(metaEnum, name, value) == g_resultSuccess) {
+            if (((Gap::Core::igMetaEnum *)metaEnum)->getEnumValue(name, *value) == g_resultSuccess) {
                 return 1;
             }
             return 0;

@@ -43,3 +43,6 @@ igVisualContextAttrDefaultManager	_visualContext	igSmartPointer<igVisualContext>
 igAttrPool	_metaList	igSmartPointer< ::igMetaObjectList>
 igAttrPool	_nonSharableMetaList	igSmartPointer< ::igMetaObjectList>
 igAttrPool	_attributeList	igSmartPointer< ::igAttrListList>
+igMetaEnum	_name	igStringRef
+igMetaEnum	_names	igSmartPointer<igStringRefList>
+igMetaEnum	_values	igSmartPointer<igIntList>

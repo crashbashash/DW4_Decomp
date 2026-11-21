@@ -15,7 +15,7 @@ igMetaEnum *g_igMathSpatialRegionMetaEnum;
 
 igMetaEnum *FUN_001869e0(void) {
     if (g_igMathSpatialRegionMetaEnum == 0) {
-        g_igMathSpatialRegionMetaEnum = igMetaEnum_Create("IG_MATH_SPATIAL_REGION", g_igMathSpatialRegionNames, g_igMathSpatialRegionValues, 8);
+        g_igMathSpatialRegionMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_MATH_SPATIAL_REGION", g_igMathSpatialRegionNames, g_igMathSpatialRegionValues, 8);
     }
     return g_igMathSpatialRegionMetaEnum;
 }

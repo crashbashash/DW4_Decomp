@@ -614,7 +614,7 @@ int g_emptyMetaEnum;
 
 int igMetaEnum_GetEmpty(void) {
     if (g_emptyMetaEnum == 0) {
-        g_emptyMetaEnum = ((int)igMetaEnum_Create((char *)(""), 0, 0, 0));
+        g_emptyMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)(""), 0, 0, 0));
     }
     return g_emptyMetaEnum;
 }

@@ -154,7 +154,7 @@ static int g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListValues[] = {
 
 igMetaEnum *PanelCloseSeqList_GetMetaEnum(void) {
     if (g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListMetaEnum == 0) {
-        g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListMetaEnum = igMetaEnum_Create("PanelCloseSeqList", g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListNames, g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListValues, 7);
+        g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("PanelCloseSeqList", g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListNames, g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListValues, 7);
     }
     return g_beNDMWMdlPlayer2InfoWork_panelCloseSeqListMetaEnum;
 }

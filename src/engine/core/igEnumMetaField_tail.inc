@@ -10,7 +10,7 @@ int igEnumMetaField::setMemoryByString(void *dstMem, const char *strVal, igDirec
     consumed = 0;
     scanned = sscanf(strVal, "%d%n", (int *)dstMem, &consumed);
     if (((scanned == 0) || (scanned == -1)) && (strVal != 0)) {
-        if (g_resultSuccess == igMetaEnum_GetValueByName((igMetaEnum *)getMetaEnum(), strVal, &named)) {
+        if (g_resultSuccess == ((igMetaEnum *)(getMetaEnum()))->getEnumValue(strVal, named)) {
             *(int *)dstMem = named;
             consumed = strlen(strVal);
         }
@@ -20,7 +20,7 @@ int igEnumMetaField::setMemoryByString(void *dstMem, const char *strVal, igDirec
 
 igStringRef igEnumMetaField::getStringFromMemory(const void *srcMem, igDirectory *dir)
 {
-    return igMetaEnum_GetNameByValue(getMetaEnum(), *(const int *)srcMem);
+    return ((igMetaEnum *)(getMetaEnum()))->getEnumName(*(const int *)srcMem);
 }
 
 igEnumMetaField::igEnumMetaField(bool boot) : igMetaField(boot)

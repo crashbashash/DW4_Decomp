@@ -1,125 +1,75 @@
-igMetaObject *g_igMetaEnum_metaObject;
-igMetaField *g_igMetaEnum_nameMetaField;
-igMetaField *g_igMetaEnum_namesMetaField;
-igMetaField *g_igMetaEnum_valuesMetaField;
+namespace Gap {
+namespace Core {
 
-void * igMetaEnum_CreateInstance(int allocator) {
-    igMetaEnum_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance(g_igMetaEnum_metaObject, (igMemoryPoolView *)allocator));
-}
+igMetaObject *igMetaEnum::_Meta;
+igMetaField *igMetaEnum::k_name;
+igMetaField *igMetaEnum::k_names;
+igMetaField *igMetaEnum::k_values;
 
-igMetaObject *igMetaEnum_GetMetaObject(void)
+igMetaEnum *igMetaEnum::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igMetaEnum_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMetaEnum_EnsureRegistered();
-    return g_igMetaEnum_metaObject;
+    arkRegister();
+    return (igMetaEnum *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igMetaEnum_GetVTable(void) {
-    igMetaEnum metaEnum;
-    int t;
-    igObject *a;
-    int *a1;
-    int v0;
-    char *c;
-    void **q4c;
-    void **q48;
-    void **q50;
-    igObject_InitHeader((igObject *)&metaEnum);
-    q48 = (void **)&metaEnum._name;
-    q4c = (void **)&metaEnum._names;
-    q50 = (void **)&metaEnum._values;
-    metaEnum._vtable = (int)&g_igMetaEnum_vtable[0];
-    *q48 = 0;
-    *q4c = 0;
-    *q50 = 0;
-    t = *(int *)((char *)&metaEnum + g_objectSystem->vtableProbeOffset);
-    metaEnum._vtable = (int)&g_igMetaEnum_vtable[0];
-    if (q50 != 0) {
-        a = (igObject *)*q50;
-        igObject::release(a);
-    }
-    if (q4c != 0) {
-        a = (igObject *)*q4c;
-        igObject::release(a);
-    }
-    if (q48 != 0) {
-        c = (char *)*q48;
-        if (c != 0) {
-            a1 = (int *)(c - 8);
-            v0 = *(int *)(c - 4) - 1;
-            *(int *)(c - 4) = v0;
-            if (v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*a1), (StringTokenHeader *)a1);
-            }
-        }
-    }
-    return t;
-}
-
-void igMetaEnum_EnsureRegistered(void)
+igMetaObject *igMetaEnum::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igMetaEnum_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igMetaEnum_callbackList[] = { igStringRefList_EnsureRegistered, Gap::Core::igIntList::arkRegister, 0 };
+void *igMetaEnum::retrieveVTablePointer()
+{
+    igMetaEnum temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igMetaEnum_Register(void) {
+void igMetaEnum::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igMetaEnum::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igStringRefList_EnsureRegistered, Gap::Core::igIntList::arkRegister, 0 };
+
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igMetaEnum_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igMetaEnum_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMetaEnum",
-        0x14,
-        igMetaEnum_GetVTable,
-        igMetaEnum_InitFields,
+        sizeof(igMetaEnum),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
         0,
-        g_igMetaEnum_callbackList
+        regFunctions
     );
 }
 
-void igMetaEnum_GetMetaObjectFunction(void) {
-    igMetaEnum_GetMetaObject();
+void igMetaEnum::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igStringMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_name", "_names", "_values" };
+    static igMetaField **enumStorage[] = { &k_name, &k_names, &k_values };
+    static int offsets[] = { 8, 12, 16 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igMetaEnum_ctorTable[] = {
-    (FieldFactory)igStringMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igMetaEnum_fieldTable[] = {
-    "_name",
-    "_names",
-    "_values",
-};
-static igMetaField **g_igMetaEnum_fieldDescriptors[] = {
-    &g_igMetaEnum_nameMetaField,
-    &g_igMetaEnum_namesMetaField,
-    &g_igMetaEnum_valuesMetaField,
-};
-static int g_igMetaEnum_fieldOffsets[] = {
-    8,
-    12,
-    16,
-};
-
-void igMetaEnum_InitFields(void) {
-    int base;
-    void *values;
-    void *names;
-    void *meta;
-
-    meta = (void *)g_igMetaEnum_metaObject;
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igMetaEnum_ctorTable, 3);
-    names = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igObjectRefMetaField *)names)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
-    values = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)values)->_metaObject = (int)Gap::Core::igIntList::getClassTypeLazy();
-    igMetaObject_NameFields((igMetaObject *)meta, g_igMetaEnum_fieldTable, g_igMetaEnum_fieldDescriptors, g_igMetaEnum_fieldOffsets, base);
+}
 }
 

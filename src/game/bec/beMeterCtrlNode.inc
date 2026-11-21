@@ -41,7 +41,7 @@ void beMeterCtrlNode_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beMeterCtrlNode_Register);
 }
 
-static igMetaObjectCallback g_beMeterCtrlNode_callbackList[] = { igLongList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beMeterCtrlNode_callbackList[] = { Gap::Core::igLongList::arkRegister, 0 };
 
 CallbackArray *beMeterCtrlNode_Register(void) {
     BecLibrary_MarkRegistered();
@@ -95,7 +95,7 @@ void beMeterCtrlNode_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beMeterCtrlNode_ctorTable, 3);
     timeList = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)timeList)->_metaObject = (int)igLongList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)timeList)->_metaObject = (int)Gap::Core::igLongList::getClassTypeLazy();
     ((igRefMetaField *)timeList)->_construct = 1;
     igMetaObject_NameFields(meta, g_beMeterCtrlNode_fieldTable, g_beMeterCtrlNode_fieldHandles, g_beMeterCtrlNode_fieldOffsets, base);
 }

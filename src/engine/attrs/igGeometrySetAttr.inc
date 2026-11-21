@@ -19,7 +19,7 @@ static int g_igGeometrySetAttr_attrFlagsValues[] = {
 
 igMetaEnum *igGeometrySetAttr_GetAttrFlagsMetaEnum(void) {
     if (g_igGeometrySetAttr_attrFlagsMetaEnum == 0) {
-        g_igGeometrySetAttr_attrFlagsMetaEnum = igMetaEnum_Create("ATTR_FLAGS", g_igGeometrySetAttr_attrFlagsNames, g_igGeometrySetAttr_attrFlagsValues, 3);
+        g_igGeometrySetAttr_attrFlagsMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("ATTR_FLAGS", g_igGeometrySetAttr_attrFlagsNames, g_igGeometrySetAttr_attrFlagsValues, 3);
     }
     return g_igGeometrySetAttr_attrFlagsMetaEnum;
 }

@@ -19,7 +19,7 @@ igMetaEnum *g_igPsx2ParticleArray_particleCoordMetaEnum;
 
 int IG_GFX_PARTICLE_COORD_GetMetaEnum(void) {
     if (g_igPsx2ParticleArray_particleCoordMetaEnum == 0) {
-        g_igPsx2ParticleArray_particleCoordMetaEnum = igMetaEnum_Create("IG_GFX_PARTICLE_COORD", g_igPsx2ParticleArray_particleCoordNames, g_igPsx2ParticleArray_particleCoordValues, 4);
+        g_igPsx2ParticleArray_particleCoordMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_PARTICLE_COORD", g_igPsx2ParticleArray_particleCoordNames, g_igPsx2ParticleArray_particleCoordValues, 4);
     }
     return (int)g_igPsx2ParticleArray_particleCoordMetaEnum;
 }

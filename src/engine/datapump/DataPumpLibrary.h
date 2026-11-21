@@ -73,7 +73,6 @@ extern "C" igMetaObject *igNonRefCountedMatrixObjectList_GetMetaObject(void);
 extern "C" int g_igNonRefCountedMatrixObjectList_vtable[4];
 extern "C" int igNonRefCountedMatrixObjectList_GetVTable(void);
 extern "C" void igNonRefCountedMatrixObjectList_EnsureRegistered(void);
-#include "dw4/core/igNonRefCountedObjectList.h"
 extern "C" CallbackArray *igNonRefCountedMatrixObjectList_Register(void);
 extern "C" void igNonRefCountedMatrixObjectList_GetMetaObjectFunction(void);
 extern "C" igMetaObject *igMatrixObjectList_GetOrCreateMetaObject(void);

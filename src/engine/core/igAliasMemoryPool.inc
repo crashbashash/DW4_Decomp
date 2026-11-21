@@ -208,10 +208,9 @@ static int g_igPageMemoryPool_messageLevelValues[] = {
     0, 1, 2, 3,
 };
 
-
 int igPageMemoryPool_GetMessageLevelMetaEnum(void) {
     if (g_igPageMemoryPool_messageLevelMetaEnum == 0) {
-        g_igPageMemoryPool_messageLevelMetaEnum = ((int)igMetaEnum_Create((char *)"MessageLevel", g_igPageMemoryPool_messageLevelNames, g_igPageMemoryPool_messageLevelValues, 4));
+        g_igPageMemoryPool_messageLevelMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)"MessageLevel", g_igPageMemoryPool_messageLevelNames, g_igPageMemoryPool_messageLevelValues, 4));
     }
     return g_igPageMemoryPool_messageLevelMetaEnum;
 }

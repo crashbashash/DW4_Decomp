@@ -25,7 +25,7 @@ igMetaEnum *g_igPsx2Image_contextTrackableMetaEnum;
 
 int CONTEXT_TRACKABLE_GetMetaEnum(void) {
     if (g_igPsx2Image_contextTrackableMetaEnum == 0) {
-        g_igPsx2Image_contextTrackableMetaEnum = igMetaEnum_Create("CONTEXT_TRACKABLE", g_igPsx2Image_contextTrackableNames, g_igPsx2Image_contextTrackableValues, 22);
+        g_igPsx2Image_contextTrackableMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("CONTEXT_TRACKABLE", g_igPsx2Image_contextTrackableNames, g_igPsx2Image_contextTrackableValues, 22);
     }
     return (int)g_igPsx2Image_contextTrackableMetaEnum;
 }

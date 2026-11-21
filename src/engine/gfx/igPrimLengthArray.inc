@@ -98,7 +98,7 @@ igMetaEnum *g_igPrimLengthArray_spriteTypeMetaEnum;
 
 int IG_GFX_SPRITE_TYPE_GetMetaEnum(void) {
     if (g_igPrimLengthArray_spriteTypeMetaEnum == 0) {
-        g_igPrimLengthArray_spriteTypeMetaEnum = igMetaEnum_Create("IG_GFX_SPRITE_TYPE", g_igPrimLengthArray_spriteTypeNames, g_igPrimLengthArray_spriteTypeValues, 2);
+        g_igPrimLengthArray_spriteTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_SPRITE_TYPE", g_igPrimLengthArray_spriteTypeNames, g_igPrimLengthArray_spriteTypeValues, 2);
     }
     return (int)g_igPrimLengthArray_spriteTypeMetaEnum;
 }

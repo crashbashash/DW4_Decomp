@@ -67,10 +67,9 @@ static int g_igMetaField_resetTypeValues[] = {
     0, 1, 2, 3,
 };
 
-
 int igMetaField_GetResetTypeMetaEnum(void) {
     if (g_igMetaField_resetTypeMetaEnum == 0) {
-        g_igMetaField_resetTypeMetaEnum = ((int)igMetaEnum_Create((char *)"ResetType", g_igMetaField_resetTypeNames, g_igMetaField_resetTypeValues, 4));
+        g_igMetaField_resetTypeMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)"ResetType", g_igMetaField_resetTypeNames, g_igMetaField_resetTypeValues, 4));
     }
     return g_igMetaField_resetTypeMetaEnum;
 }

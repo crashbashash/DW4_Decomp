@@ -19,7 +19,7 @@ igMetaEnum *g_igVertexData_vertexComponentTypeMetaEnum;
 
 int IG_VERTEX_COMPONENT_TYPE_GetMetaEnum(void) {
     if (g_igVertexData_vertexComponentTypeMetaEnum == 0) {
-        g_igVertexData_vertexComponentTypeMetaEnum = igMetaEnum_Create("IG_VERTEX_COMPONENT_TYPE", g_igVertexData_vertexComponentTypeNames, g_igVertexData_vertexComponentTypeValues, 11);
+        g_igVertexData_vertexComponentTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_VERTEX_COMPONENT_TYPE", g_igVertexData_vertexComponentTypeNames, g_igVertexData_vertexComponentTypeValues, 11);
     }
     return (int)g_igVertexData_vertexComponentTypeMetaEnum;
 }

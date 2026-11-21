@@ -578,8 +578,8 @@ unsigned char FUN_00157200(igImage *self, int format, igImage *source) {
         return true;
     }
     igMetaEnum *formatEnum = IG_GFX_TEXTURE_FORMAT_GetMetaEnum();
-    igStringRef fromName = igMetaEnum_GetNameByValue(formatEnum, source->_pfmt);
-    igStringRef toName = igMetaEnum_GetNameByValue(formatEnum, format);
+    igStringRef fromName = ((Gap::Core::igMetaEnum *)formatEnum)->getEnumName(source->_pfmt);
+    igStringRef toName = ((Gap::Core::igMetaEnum *)formatEnum)->getEnumName(format);
     if (!FUN_00157140((O_157140 *)source, format, convert)) {
         return false;
     }

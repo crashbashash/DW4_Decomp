@@ -34,7 +34,7 @@ void igGeometryAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igGeometryAttr_Register);
 }
 
-static igMetaObjectCallback g_igGeometryAttr_callbackList[] = { igVertexArray_EnsureRegistered, igIndexArray_EnsureRegistered, igUnsignedIntList_EnsureRegistered, igVec3fList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igGeometryAttr_callbackList[] = { igVertexArray_EnsureRegistered, igIndexArray_EnsureRegistered, Gap::Core::igUnsignedIntList::arkRegister, igVec3fList_EnsureRegistered, 0 };
 
 CallbackArray *igGeometryAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -123,7 +123,7 @@ void igGeometryAttr_InitFields(void) {
     ((Gap::Core::igEnumMetaField *)field6)->setDefault(0);
     ((igEnumMetaField *)field6)->_getMetaEnumFunction = (int)(&IG_GFX_DRAW_GetMetaEnum);
     field3 = (void *)(igMetaObject_GetFieldAt(meta, base + 5));
-    ((igObjectRefMetaField *)field3)->_metaObject = (int)igUnsignedIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field3)->_metaObject = (int)Gap::Core::igUnsignedIntList::getClassTypeLazy();
     field4 = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
     ((igObjectRefMetaField *)field4)->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
     field5 = (void *)(igMetaObject_GetFieldAt(meta, base + 8));

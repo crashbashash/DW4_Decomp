@@ -5,10 +5,9 @@ static int g_sectionOverrideModeValues[] = {
     0, 1,
 };
 
-
 int igDriverDatabase_GetSectionOverrideModeMetaEnum(void) {
     if (g_sectionOverrideModeMetaEnum == 0) {
-        g_sectionOverrideModeMetaEnum = ((int)igMetaEnum_Create((char *)("SECTION_OVERRIDE_MODE"), g_sectionOverrideModeNames, g_sectionOverrideModeValues, 2));
+        g_sectionOverrideModeMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)("SECTION_OVERRIDE_MODE"), g_sectionOverrideModeNames, g_sectionOverrideModeValues, 2));
     }
     return g_sectionOverrideModeMetaEnum;
 }

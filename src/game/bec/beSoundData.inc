@@ -136,7 +136,7 @@ static int g_beSoundData_messageValues[] = {
 
 igMetaEnum *beSound_GetMessageEnum(void) {
     if (g_beSoundData_messageMetaEnum == 0) {
-        g_beSoundData_messageMetaEnum = igMetaEnum_Create("Message", g_beSoundData_messageNames, g_beSoundData_messageValues, 0x17);
+        g_beSoundData_messageMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_beSoundData_messageNames, g_beSoundData_messageValues, 0x17);
     }
     return g_beSoundData_messageMetaEnum;
 }

@@ -8,7 +8,7 @@ igMetaEnum *g_gfxIndexDataSizeMetaEnum;
 
 int IG_GFX_INDEX_DATA_SIZE_GetMetaEnum(void) {
     if (g_gfxIndexDataSizeMetaEnum == 0) {
-        g_gfxIndexDataSizeMetaEnum = igMetaEnum_Create("IG_GFX_INDEX_DATA_SIZE", g_gfxIndexDataSizeNames, g_gfxIndexDataSizeValues, 2);
+        g_gfxIndexDataSizeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_INDEX_DATA_SIZE", g_gfxIndexDataSizeNames, g_gfxIndexDataSizeValues, 2);
     }
     return (int)g_gfxIndexDataSizeMetaEnum;
 }
@@ -23,7 +23,7 @@ igMetaEnum *g_gfxScissorTypeMetaEnum;
 
 int IG_GFX_SCISSOR_TYPE_GetMetaEnum(void) {
     if (g_gfxScissorTypeMetaEnum == 0) {
-        g_gfxScissorTypeMetaEnum = igMetaEnum_Create("IG_GFX_SCISSOR_TYPE", g_gfxScissorTypeNames, g_gfxScissorTypeValues, 2);
+        g_gfxScissorTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_SCISSOR_TYPE", g_gfxScissorTypeNames, g_gfxScissorTypeValues, 2);
     }
     return (int)g_gfxScissorTypeMetaEnum;
 }
@@ -39,7 +39,7 @@ igMetaEnum *g_gfxStencilOperationMetaEnum;
 
 int IG_GFX_STENCIL_OPERATION_GetMetaEnum(void) {
     if (g_gfxStencilOperationMetaEnum == 0) {
-        g_gfxStencilOperationMetaEnum = igMetaEnum_Create("IG_GFX_STENCIL_OPERATION", g_gfxStencilOperationNames, g_gfxStencilOperationValues, 8);
+        g_gfxStencilOperationMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_STENCIL_OPERATION", g_gfxStencilOperationNames, g_gfxStencilOperationValues, 8);
     }
     return (int)g_gfxStencilOperationMetaEnum;
 }
@@ -55,7 +55,7 @@ igMetaEnum *g_gfxStencilFunctionMetaEnum;
 
 int IG_GFX_STENCIL_FUNCTION_GetMetaEnum(void) {
     if (g_gfxStencilFunctionMetaEnum == 0) {
-        g_gfxStencilFunctionMetaEnum = igMetaEnum_Create("IG_GFX_STENCIL_FUNCTION", g_gfxStencilFunctionNames, g_gfxStencilFunctionValues, 8);
+        g_gfxStencilFunctionMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_STENCIL_FUNCTION", g_gfxStencilFunctionNames, g_gfxStencilFunctionValues, 8);
     }
     return (int)g_gfxStencilFunctionMetaEnum;
 }
@@ -70,7 +70,7 @@ igMetaEnum *g_gfxFogModeMetaEnum;
 
 int IG_GFX_FOG_MODE_GetMetaEnum(void) {
     if (g_gfxFogModeMetaEnum == 0) {
-        g_gfxFogModeMetaEnum = igMetaEnum_Create("IG_GFX_FOG_MODE", g_gfxFogModeNames, g_gfxFogModeValues, 3);
+        g_gfxFogModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_FOG_MODE", g_gfxFogModeNames, g_gfxFogModeValues, 3);
     }
     return (int)g_gfxFogModeMetaEnum;
 }
@@ -85,7 +85,7 @@ igMetaEnum *g_gfxRenderModeMetaEnum;
 
 int IG_GFX_RENDER_MODE_GetMetaEnum(void) {
     if (g_gfxRenderModeMetaEnum == 0) {
-        g_gfxRenderModeMetaEnum = igMetaEnum_Create("IG_GFX_RENDER_MODE", g_gfxRenderModeNames, g_gfxRenderModeValues, 3);
+        g_gfxRenderModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_RENDER_MODE", g_gfxRenderModeNames, g_gfxRenderModeValues, 3);
     }
     return (int)g_gfxRenderModeMetaEnum;
 }
@@ -100,7 +100,7 @@ igMetaEnum *g_gfxCullFaceModeMetaEnum;
 
 int IG_GFX_CULL_FACE_MODE_GetMetaEnum(void) {
     if (g_gfxCullFaceModeMetaEnum == 0) {
-        g_gfxCullFaceModeMetaEnum = igMetaEnum_Create("IG_GFX_CULL_FACE_MODE", g_gfxCullFaceModeNames, g_gfxCullFaceModeValues, 2);
+        g_gfxCullFaceModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_CULL_FACE_MODE", g_gfxCullFaceModeNames, g_gfxCullFaceModeValues, 2);
     }
     return (int)g_gfxCullFaceModeMetaEnum;
 }
@@ -115,7 +115,7 @@ igMetaEnum *g_gfxShadingModeMetaEnum;
 
 int IG_GFX_SHADING_MODE_GetMetaEnum(void) {
     if (g_gfxShadingModeMetaEnum == 0) {
-        g_gfxShadingModeMetaEnum = igMetaEnum_Create("IG_GFX_SHADING_MODE", g_gfxShadingModeNames, g_gfxShadingModeValues, 2);
+        g_gfxShadingModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_SHADING_MODE", g_gfxShadingModeNames, g_gfxShadingModeValues, 2);
     }
     return (int)g_gfxShadingModeMetaEnum;
 }
@@ -131,7 +131,7 @@ igMetaEnum *g_gfxAlphaFunctionMetaEnum;
 
 int IG_GFX_ALPHA_FUNCTION_GetMetaEnum(void) {
     if (g_gfxAlphaFunctionMetaEnum == 0) {
-        g_gfxAlphaFunctionMetaEnum = igMetaEnum_Create("IG_GFX_ALPHA_FUNCTION", g_gfxAlphaFunctionNames, g_gfxAlphaFunctionValues, 8);
+        g_gfxAlphaFunctionMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_ALPHA_FUNCTION", g_gfxAlphaFunctionNames, g_gfxAlphaFunctionValues, 8);
     }
     return (int)g_gfxAlphaFunctionMetaEnum;
 }
@@ -149,7 +149,7 @@ igMetaEnum *g_gfxBlendingFunctionMetaEnum;
 
 int IG_GFX_BLENDING_FUNCTION_GetMetaEnum(void) {
     if (g_gfxBlendingFunctionMetaEnum == 0) {
-        g_gfxBlendingFunctionMetaEnum = igMetaEnum_Create("IG_GFX_BLENDING_FUNCTION", g_gfxBlendingFunctionNames, g_gfxBlendingFunctionValues, 11);
+        g_gfxBlendingFunctionMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_BLENDING_FUNCTION", g_gfxBlendingFunctionNames, g_gfxBlendingFunctionValues, 11);
     }
     return (int)g_gfxBlendingFunctionMetaEnum;
 }
@@ -165,7 +165,7 @@ igMetaEnum *g_gfxTextureCoordSourceMetaEnum;
 
 int IG_GFX_TEXTURE_COORD_SOURCE_GetMetaEnum(void) {
     if (g_gfxTextureCoordSourceMetaEnum == 0) {
-        g_gfxTextureCoordSourceMetaEnum = igMetaEnum_Create("IG_GFX_TEXTURE_COORD_SOURCE", g_gfxTextureCoordSourceNames, g_gfxTextureCoordSourceValues, 6);
+        g_gfxTextureCoordSourceMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_TEXTURE_COORD_SOURCE", g_gfxTextureCoordSourceNames, g_gfxTextureCoordSourceValues, 6);
     }
     return (int)g_gfxTextureCoordSourceMetaEnum;
 }
@@ -181,7 +181,7 @@ igMetaEnum *g_gfxPixelPipelineModeMetaEnum;
 
 int IG_GFX_PIXEL_PIPELINE_MODE_GetMetaEnum(void) {
     if (g_gfxPixelPipelineModeMetaEnum == 0) {
-        g_gfxPixelPipelineModeMetaEnum = igMetaEnum_Create("IG_GFX_PIXEL_PIPELINE_MODE", g_gfxPixelPipelineModeNames, g_gfxPixelPipelineModeValues, 5);
+        g_gfxPixelPipelineModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_PIXEL_PIPELINE_MODE", g_gfxPixelPipelineModeNames, g_gfxPixelPipelineModeValues, 5);
     }
     return (int)g_gfxPixelPipelineModeMetaEnum;
 }
@@ -196,7 +196,7 @@ igMetaEnum *g_gfxTextureModeMetaEnum;
 
 int IG_GFX_TEXTURE_MODE_GetMetaEnum(void) {
     if (g_gfxTextureModeMetaEnum == 0) {
-        g_gfxTextureModeMetaEnum = igMetaEnum_Create("IG_GFX_TEXTURE_MODE", g_gfxTextureModeNames, g_gfxTextureModeValues, 4);
+        g_gfxTextureModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_TEXTURE_MODE", g_gfxTextureModeNames, g_gfxTextureModeValues, 4);
     }
     return (int)g_gfxTextureModeMetaEnum;
 }
@@ -212,7 +212,7 @@ igMetaEnum *g_gfxTextureSourceMetaEnum;
 
 int IG_GFX_TEXTURE_SOURCE_GetMetaEnum(void) {
     if (g_gfxTextureSourceMetaEnum == 0) {
-        g_gfxTextureSourceMetaEnum = igMetaEnum_Create("IG_GFX_TEXTURE_SOURCE", g_gfxTextureSourceNames, g_gfxTextureSourceValues, 5);
+        g_gfxTextureSourceMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_TEXTURE_SOURCE", g_gfxTextureSourceNames, g_gfxTextureSourceValues, 5);
     }
     return (int)g_gfxTextureSourceMetaEnum;
 }
@@ -227,7 +227,7 @@ igMetaEnum *g_gfxTextureWrapMetaEnum;
 
 int IG_GFX_TEXTURE_WRAP_GetMetaEnum(void) {
     if (g_gfxTextureWrapMetaEnum == 0) {
-        g_gfxTextureWrapMetaEnum = igMetaEnum_Create("IG_GFX_TEXTURE_WRAP", g_gfxTextureWrapNames, g_gfxTextureWrapValues, 4);
+        g_gfxTextureWrapMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_TEXTURE_WRAP", g_gfxTextureWrapNames, g_gfxTextureWrapValues, 4);
     }
     return (int)g_gfxTextureWrapMetaEnum;
 }
@@ -243,7 +243,7 @@ igMetaEnum *g_gfxTextureFilterMetaEnum;
 
 igMetaEnum *IG_GFX_TEXTURE_FILTER_GetMetaEnum(void) {
     if (g_gfxTextureFilterMetaEnum == 0) {
-        g_gfxTextureFilterMetaEnum = igMetaEnum_Create("IG_GFX_TEXTURE_FILTER", g_gfxTextureFilterNames, g_gfxTextureFilterValues, 6);
+        g_gfxTextureFilterMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_TEXTURE_FILTER", g_gfxTextureFilterNames, g_gfxTextureFilterValues, 6);
     }
     return g_gfxTextureFilterMetaEnum;
 }
@@ -279,7 +279,7 @@ igMetaEnum *g_gfxTextureFormatMetaEnum;
 
 igMetaEnum *IG_GFX_TEXTURE_FORMAT_GetMetaEnum(void) {
     if (g_gfxTextureFormatMetaEnum == 0) {
-        g_gfxTextureFormatMetaEnum = igMetaEnum_Create("IG_GFX_TEXTURE_FORMAT", g_gfxTextureFormatNames, g_gfxTextureFormatValues, 59);
+        g_gfxTextureFormatMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_TEXTURE_FORMAT", g_gfxTextureFormatNames, g_gfxTextureFormatValues, 59);
     }
     return g_gfxTextureFormatMetaEnum;
 }
@@ -294,7 +294,7 @@ igMetaEnum *g_gfxLightTypeMetaEnum;
 
 int IG_GFX_LIGHT_TYPE_GetMetaEnum(void) {
     if (g_gfxLightTypeMetaEnum == 0) {
-        g_gfxLightTypeMetaEnum = igMetaEnum_Create("IG_GFX_LIGHT_TYPE", g_gfxLightTypeNames, g_gfxLightTypeValues, 3);
+        g_gfxLightTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_LIGHT_TYPE", g_gfxLightTypeNames, g_gfxLightTypeValues, 3);
     }
     return (int)g_gfxLightTypeMetaEnum;
 }
@@ -310,7 +310,7 @@ igMetaEnum *g_gfxDrawMetaEnum;
 
 int IG_GFX_DRAW_GetMetaEnum(void) {
     if (g_gfxDrawMetaEnum == 0) {
-        g_gfxDrawMetaEnum = igMetaEnum_Create("IG_GFX_DRAW", g_gfxDrawNames, g_gfxDrawValues, 6);
+        g_gfxDrawMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_DRAW", g_gfxDrawNames, g_gfxDrawValues, 6);
     }
     return (int)g_gfxDrawMetaEnum;
 }
@@ -325,7 +325,7 @@ igMetaEnum *g_gfxRenderdestinationTypeMetaEnum;
 
 int IG_GFX_RENDERDESTINATION_TYPE_GetMetaEnum(void) {
     if (g_gfxRenderdestinationTypeMetaEnum == 0) {
-        g_gfxRenderdestinationTypeMetaEnum = igMetaEnum_Create("IG_GFX_RENDERDESTINATION_TYPE", g_gfxRenderdestinationTypeNames, g_gfxRenderdestinationTypeValues, 3);
+        g_gfxRenderdestinationTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_RENDERDESTINATION_TYPE", g_gfxRenderdestinationTypeNames, g_gfxRenderdestinationTypeValues, 3);
     }
     return (int)g_gfxRenderdestinationTypeMetaEnum;
 }
@@ -412,7 +412,7 @@ igMetaEnum *g_gfxStatisticMetaEnum;
 
 int IG_GFX_STATISTIC_GetMetaEnum(void) {
     if (g_gfxStatisticMetaEnum == 0) {
-        g_gfxStatisticMetaEnum = igMetaEnum_Create("IG_GFX_STATISTIC", g_gfxStatisticNames, g_gfxStatisticValues, 195);
+        g_gfxStatisticMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_STATISTIC", g_gfxStatisticNames, g_gfxStatisticValues, 195);
     }
     return (int)g_gfxStatisticMetaEnum;
 }

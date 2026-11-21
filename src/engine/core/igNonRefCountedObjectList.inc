@@ -1,63 +1,61 @@
-igMetaObject *g_igNonRefCountedObjectList_metaObject;
-int g_igNonRefCountedObjectList_dataStorage;
+namespace Gap {
+namespace Core {
 
-igMetaObject *igNonRefCountedObjectList_GetMetaObject(void)
+igMetaObject *igNonRefCountedObjectList::_Meta;
+igMetaField *igNonRefCountedObjectList::k_data;
+
+igMetaObject *igNonRefCountedObjectList::getClassTypeSafe()
 {
-    igMetaObject *g = g_igNonRefCountedObjectList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igNonRefCountedObjectList_EnsureRegistered();
-    return g_igNonRefCountedObjectList_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igNonRefCountedObjectList_GetVTable(void) {
-    igNonRefCountedObjectList list;
-
-    igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&g_igNonRefCountedObjectList_vtable[0];
-    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
-}
-
-void igNonRefCountedObjectList_EnsureRegistered(void)
+void *igNonRefCountedObjectList::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igNonRefCountedObjectList_Register);
+    igNonRefCountedObjectList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-CallbackArray *igNonRefCountedObjectList_Register(void) {
+void igNonRefCountedObjectList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igNonRefCountedObjectList::arkRegisterInternal()
+{
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igNonRefCountedObjectList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igDataList::arkRegisterInternal,
         Gap::Core::igDataList::getClassMeta,
-        igNonRefCountedObjectList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igNonRefCountedObjectList",
-        0x14,
-        igNonRefCountedObjectList_GetVTable,
-        igNonRefCountedObjectList_InitFields,
+        sizeof(igNonRefCountedObjectList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
         0,
         0
     );
 }
 
-void igNonRefCountedObjectList_GetMetaObjectFunction(void) {
-    igNonRefCountedObjectList_GetMetaObject();
+void igNonRefCountedObjectList::arkRegisterInitialize()
+{
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_FindFieldByName(metaObject, "_data");
+        int metaIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)metaObject->_metaFields, (int)metaField);
+        metaField = (igMemoryRefMetaField *)((igObjectDispatchView *)metaField)->CloneViaMetadata(1);
+        metaField->_memType = (int)Gap::Core::igObjectRefMetaField::getMetaField();
+        metaField->_memSize = 0;
+        metaField->_refCounted = 0;
+        metaField->_externalEnumStorage = (int)&k_data;
+        igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
+        metaField->release();
+    }
 }
-
-void igNonRefCountedObjectList_InitFields(void) {
-    igMemoryRefMetaField *field;
-    int index;
-    void **found;
-    void *meta;
-
-    meta = (void *)(g_igNonRefCountedObjectList_metaObject);
-    found = (void **)(((void **)igMetaObject_FindFieldByName((igMetaObject *)meta, data)));
-    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)((char *)((igMetaObject *)meta)->_metaFields), (int)found);
-    field = (igMemoryRefMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
-    field->_memType = (int)Gap::Core::igObjectRefMetaField::getMetaField();
-    field->_memSize = 0;
-    field->_refCounted = 0;
-    field->_externalEnumStorage = (int)(&g_igNonRefCountedObjectList_dataStorage);
-    igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)field);
-    field->release();
+}
 }
 

@@ -15,7 +15,7 @@ igMetaField *g_igDefaultAspectElement_vMarginMetaField;
 
 igMetaEnum *FUN_00451ac0(void) {
     if (g_igDefaultAspectElement_fitModeMetaEnum == 0) {
-        g_igDefaultAspectElement_fitModeMetaEnum = igMetaEnum_Create("FIT_MODE", g_igDefaultAspectElement_fitModeNames, g_igDefaultAspectElement_fitModeValues, 4);
+        g_igDefaultAspectElement_fitModeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("FIT_MODE", g_igDefaultAspectElement_fitModeNames, g_igDefaultAspectElement_fitModeValues, 4);
     }
     return g_igDefaultAspectElement_fitModeMetaEnum;
 }

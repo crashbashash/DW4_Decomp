@@ -8,7 +8,7 @@ static int g_ParticleInfo_particleTimeTypeValues[] = {
 
 igMetaEnum *ParticleInfo_GetParticleTimeTypeMetaEnum(void) {
     if (g_ParticleInfo_particleTimeTypeMetaEnum == 0) {
-        g_ParticleInfo_particleTimeTypeMetaEnum = igMetaEnum_Create("IG_PARTICLE_TIME_TYPE", g_ParticleInfo_particleTimeTypeNames, g_ParticleInfo_particleTimeTypeValues, 3);
+        g_ParticleInfo_particleTimeTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_PARTICLE_TIME_TYPE", g_ParticleInfo_particleTimeTypeNames, g_ParticleInfo_particleTimeTypeValues, 3);
     }
     return g_ParticleInfo_particleTimeTypeMetaEnum;
 }
@@ -23,7 +23,7 @@ static int g_ParticleInfo_particleAlphaFunctionValues[] = {
 
 igMetaEnum *ParticleInfo_GetParticleAlphaFunctionMetaEnum(void) {
     if (g_ParticleInfo_particleAlphaFunctionMetaEnum == 0) {
-        g_ParticleInfo_particleAlphaFunctionMetaEnum = igMetaEnum_Create("IG_PARTICLE_ALPHA_FUNCTION", g_ParticleInfo_particleAlphaFunctionNames, g_ParticleInfo_particleAlphaFunctionValues, 2);
+        g_ParticleInfo_particleAlphaFunctionMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_PARTICLE_ALPHA_FUNCTION", g_ParticleInfo_particleAlphaFunctionNames, g_ParticleInfo_particleAlphaFunctionValues, 2);
     }
     return g_ParticleInfo_particleAlphaFunctionMetaEnum;
 }
@@ -38,7 +38,7 @@ static int g_ParticleInfo_particleAlphaTypeValues[] = {
 
 igMetaEnum *ParticleInfo_GetParticleAlphaTypeMetaEnum(void) {
     if (g_ParticleInfo_particleAlphaTypeMetaEnum == 0) {
-        g_ParticleInfo_particleAlphaTypeMetaEnum = igMetaEnum_Create("IG_PARTICLE_ALPHA_TYPE", g_ParticleInfo_particleAlphaTypeNames, g_ParticleInfo_particleAlphaTypeValues, 3);
+        g_ParticleInfo_particleAlphaTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_PARTICLE_ALPHA_TYPE", g_ParticleInfo_particleAlphaTypeNames, g_ParticleInfo_particleAlphaTypeValues, 3);
     }
     return g_ParticleInfo_particleAlphaTypeMetaEnum;
 }
@@ -54,7 +54,7 @@ static int g_ParticleInfo_particleEmitterTypeValues[] = {
 
 igMetaEnum *ParticleInfo_GetParticleEmitterTypeMetaEnum(void) {
     if (g_ParticleInfo_particleEmitterTypeMetaEnum == 0) {
-        g_ParticleInfo_particleEmitterTypeMetaEnum = igMetaEnum_Create("IG_PARTICLE_EMITTER_TYPE", g_ParticleInfo_particleEmitterTypeNames, g_ParticleInfo_particleEmitterTypeValues, 5);
+        g_ParticleInfo_particleEmitterTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_PARTICLE_EMITTER_TYPE", g_ParticleInfo_particleEmitterTypeNames, g_ParticleInfo_particleEmitterTypeValues, 5);
     }
     return g_ParticleInfo_particleEmitterTypeMetaEnum;
 }

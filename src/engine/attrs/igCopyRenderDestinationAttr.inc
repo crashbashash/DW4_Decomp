@@ -28,7 +28,7 @@ static int g_igCopyRenderDestinationAttr_copyTypeValues[] = {
 
 igMetaEnum *igCopyRenderDestinationAttr_GetCopyTypeMetaEnum(void) {
     if (g_igCopyRenderDestinationAttr_copyTypeMetaEnum == 0) {
-        g_igCopyRenderDestinationAttr_copyTypeMetaEnum = igMetaEnum_Create("CopyType", g_igCopyRenderDestinationAttr_copyTypeNames, g_igCopyRenderDestinationAttr_copyTypeValues, 5);
+        g_igCopyRenderDestinationAttr_copyTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("CopyType", g_igCopyRenderDestinationAttr_copyTypeNames, g_igCopyRenderDestinationAttr_copyTypeValues, 5);
     }
     return g_igCopyRenderDestinationAttr_copyTypeMetaEnum;
 }

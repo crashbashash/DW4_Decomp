@@ -46,7 +46,7 @@ void igMemoryDictionary_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMemoryDictionary_Register);
 }
 
-static igMetaObjectCallback g_igMemoryDictionary_callbackList[] = { igUnsignedIntListNoClean_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igMemoryDictionary_callbackList[] = { Gap::Core::igUnsignedIntListNoClean::arkRegister, 0 };
 
 CallbackArray *igMemoryDictionary_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -103,7 +103,7 @@ void igMemoryDictionary_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igMemoryDictionary_ctorTable, 4);
     field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)igUnsignedIntListNoClean_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igUnsignedIntListNoClean::getClassTypeLazy();
     ((igObjectRefMetaField *)field)->_construct = 1;
     *(char *)((char *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3))) + 38) = 0;
     igMetaObject_NameFields((igMetaObject *)meta, g_igMemoryDictionary_fieldTable, g_igMemoryDictionary_fieldDescriptors, g_igMemoryDictionary_fieldOffsets, base);

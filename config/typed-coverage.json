@@ -459,7 +459,7 @@
   "igCriMovieCodec": 5,
   "igCriMovieData": 15,
   "igCullFaceAttr": 4,
-  "igDataList": 373,
+  "igDataList": 372,
   "igDataPump": 16,
   "igDataPumpInfo": 2,
   "igDataPumpList": 17,
@@ -468,7 +468,6 @@
   "igDefaultAspectElement": 12,
   "igDefaultAspectElementList": 2,
   "igDefaultInterfaceManager": 16,
-  "igDependencyList": 2,
   "igDependencyOrderedList": 9,
   "igDepthStateAttr": 2,
   "igDepthWriteStateAttr": 2,
@@ -531,7 +530,7 @@
   "igIniShaderFactory": 7,
   "igInsightCore": 96,
   "igIntArrayMetaField": 21,
-  "igIntList": 315,
+  "igIntList": 311,
   "igIntMetaField": 46,
   "igInterface": 2,
   "igIntersectTraversal": 21,
@@ -687,7 +686,7 @@
   "igStringMetaField": 55,
   "igStringObj": 105,
   "igStringObjList": 10,
-  "igStringRefList": 100,
+  "igStringRefList": 103,
   "igStringTable": 43,
   "igStructMetaField": 16,
   "igSwitch": 21,
@@ -784,12 +783,12 @@
   },
   "engine": {
    "files": 50,
-   "offset_casts": 2366,
-   "other_members": 12735,
-   "recovered": 12424,
-   "recovered_pct": 38.32,
+   "offset_casts": 2364,
+   "other_members": 12748,
+   "recovered": 12420,
+   "recovered_pct": 38.3,
    "synthetic": 4898,
-   "total": 32423
+   "total": 32430
   },
   "game": {
    "files": 85,
@@ -865,9 +864,9 @@
   }
  },
  "note": "Baseline for tools/typed_coverage.py --check. The gate is on the *count* of recovered accesses, never on the percentage: the m2c loop keeps adding matched (and so untyped) C, so the ratio can fall while the count only grows. Update it deliberately with --update-baseline and commit, so every change in coverage is a reviewed diff.",
- "offset_casts": 3069,
- "recovered": 31887,
+ "offset_casts": 3067,
+ "recovered": 31883,
  "synthetic": 5846,
- "total": 70940,
+ "total": 70947,
  "typeable": 0
 }

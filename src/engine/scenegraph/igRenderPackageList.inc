@@ -35,8 +35,8 @@ CallbackArray *igRenderPackageList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igRenderPackageList_metaObject,
-        igNonRefCountedObjectList_Register,
-        igNonRefCountedObjectList_GetPublishedMetaObject,
+        Gap::Core::igNonRefCountedObjectList::arkRegisterInternal,
+        Gap::Core::igNonRefCountedObjectList::getClassMeta,
         igRenderPackageList_GetMetaObjectFunction,
         "igRenderPackageList",
         0x14, /* instance size */

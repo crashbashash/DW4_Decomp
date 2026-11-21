@@ -14,7 +14,7 @@ void igDisplayListAttr::apply(igVisualContext *rc)
 
 void igDisplayListAttr::setup(igVisualContext *vc)
 {
-    igNonRefCountedAttrList *contents = _contents;
+    igNonRefCountedAttrList *contents = getAttrs();
     igAttr **attr = (igAttr **)contents->_data;
     igAttr **end = attr + contents->_count;
 

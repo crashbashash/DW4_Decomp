@@ -1161,3 +1161,29 @@ igAttrList	IG_OBJECT_DEFINE(igAttrList)
 igAttrListList	IG_OBJECT_DEFINE(igAttrListList)
 igModelViewMatrixAttrList	IG_OBJECT_DEFINE(igModelViewMatrixAttrList)
 igBlendMatrixPaletteAttrList	IG_OBJECT_DEFINE(igBlendMatrixPaletteAttrList)
+igNonRefCountedObjectList	IG_OBJECT_DEFINE(igNonRefCountedObjectList)
+igNonRefCountedObjectList	private: static igMetaField *k_data;
+igNonRefCountedObjectList	private: typedef igTDataList<igObject *> Parent;
+igNonRefCountedObjectList	inline virtual void userPreWrite() { trimCapacity(); }
+igNonRefCountedObjectList	inline virtual igMetaObject *getElementMeta() const { return igObject::getClassMeta(); }
+igNonRefCountedAttrList	IG_OBJECT_DEFINE(igNonRefCountedAttrList)
+igMetaEnum	IG_OBJECT_DEFINE(igMetaEnum)
+igMetaEnum	private: static igMetaField *k_name;
+igMetaEnum	private: static igMetaField *k_names;
+igMetaEnum	private: static igMetaField *k_values;
+igMetaEnum	public: igResult getEnumValue(const char *enumName, igEnum &value) const;
+igMetaEnum	igStringRef getEnumName(igEnum enumValue) const;
+igMetaEnum	int getEnumCount() const;
+igMetaEnum	igStringRef getIndexedEnumName(int index) const;
+igMetaEnum	igEnum getIndexedEnumValue(int index) const;
+igMetaEnum	static igMetaEnum *createMetaEnum(const char *name, const char **names, igEnum *values, int count);
+igLongList	IG_OBJECT_DEFINE(igLongList)
+igLongList	private: static igMetaField *k_data;
+igUnsignedIntList	IG_OBJECT_DEFINE(igUnsignedIntList)
+igUnsignedIntList	private: static igMetaField *k_data;
+igDoubleList	IG_OBJECT_DEFINE(igDoubleList)
+igDoubleList	private: static igMetaField *k_data;
+igUnsignedIntListNoClean	IG_OBJECT_DEFINE(igUnsignedIntListNoClean)
+igUnsignedIntListNoClean	inline virtual void trimCapacity() {}
+igDependencyList	IG_OBJECT_DEFINE(igDependencyList)
+igDependencyList	private: static igMetaField *k_data;

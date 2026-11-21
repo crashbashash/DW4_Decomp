@@ -88,7 +88,7 @@ static int g_beNDMWWindowCtrl_messageValues[] = {
 
 igMetaEnum *StatusMessage_GetMetaEnum(void) {
     if (g_beNDMWWindowCtrl_messageMetaEnum == 0) {
-        g_beNDMWWindowCtrl_messageMetaEnum = igMetaEnum_Create("Message", g_beNDMWWindowCtrl_messageNames, g_beNDMWWindowCtrl_messageValues, 7);
+        g_beNDMWWindowCtrl_messageMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_beNDMWWindowCtrl_messageNames, g_beNDMWWindowCtrl_messageValues, 7);
     }
     return g_beNDMWWindowCtrl_messageMetaEnum;
 }

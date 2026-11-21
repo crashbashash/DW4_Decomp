@@ -455,6 +455,25 @@ class Memberize(unittest.TestCase):
         self.assertIn("    *p = (int)Widget::make();\n    p[1] = (int)Widget::make();\n"
                       "    if (Widget::make() == 0) {\n", users)
 
+    def test_a_converted_static_returning_its_class_keeps_flat_holders_flat(self):
+        # the C form returned the flat struct, the member the Gap class: an assignment to a holder at file scope
+        # (declared as the flat struct) casts the result back to it; one in Gap's scope takes the class as is
+        write(os.path.join(self.root, "config", "converted-classes.tsv"), "Widget\tGame\n")
+        self.append("config/class-members.tsv", "Widget\tstatic Widget *make();\n")
+        self.append("src/game/Game.h", "extern \"C\" Widget *Widget_Make(void);\n")
+        self.append("src/game/Widget.inc", "Widget *Widget_Make(void) {\n    return 0;\n}\n")
+        self.append("src/game/Users.inc",
+                    "Widget *g_made;\nvoid Users_Make(void) {\n    g_made = Widget_Make();\n"
+                    "    if (Widget_Make() == 0) {\n    }\n}\n"
+                    "namespace Gap {\nnamespace Game {\nvoid Users_Gap(Widget *w) {\n    w = Widget_Make();\n}\n}\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Widget_Make\n")
+        write(self.table, TABLE + "Widget_Make\tWidget::make\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        users = self.read("src/game/Users.inc")
+        self.assertIn("    g_made = (Widget *)Gap::Game::Widget::make();\n"
+                      "    if (Gap::Game::Widget::make() == 0) {\n", users)
+        self.assertIn("    w = Gap::Game::Widget::make();\n", users)
+
     def test_an_integer_the_member_takes_as_a_pointer_is_cast_at_its_calls(self):
         # the C forms take the pool as an int (one in its definition, one only in its prototype, as classconv
         # leaves it after retyping the definition): the heads take the member's pointer, each call drops its int

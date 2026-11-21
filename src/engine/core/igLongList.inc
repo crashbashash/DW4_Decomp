@@ -1,69 +1,67 @@
-igMetaObject *g_igLongList_metaObject;
-int g_igLongList_dataDescriptorCell;
+namespace Gap {
+namespace Core {
 
-igMetaObject *igLongList_GetOrCreateMetaObject(void) {
-    if (g_igLongList_metaObject == 0) {
-        g_igLongList_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igLongList_metaObject;
-}
+igMetaObject *igLongList::_Meta;
+igMetaField *igLongList::k_data;
 
-igMetaObject *igLongList_GetMetaObject(void)
+igMetaObject *igLongList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igLongList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igLongList_EnsureRegistered();
-    return g_igLongList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igLongList_GetVTable(void) {
-    igLongList list;
-
-    igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&g_igLongList_vtable[0];
-    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
-}
-
-void igLongList_EnsureRegistered(void)
+igMetaObject *igLongList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igLongList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igLongList_Register(void) {
+void *igLongList::retrieveVTablePointer()
+{
+    igLongList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igLongList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igLongList::arkRegisterInternal()
+{
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igLongList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igDataList::arkRegisterInternal,
         Gap::Core::igDataList::getClassMeta,
-        igLongList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igLongList",
-        0x14,
-        igLongList_GetVTable,
-        igLongList_InitFields,
+        sizeof(igLongList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
         0,
         0
     );
 }
 
-void igLongList_GetMetaObjectFunction(void) {
-    igLongList_GetMetaObject();
+void igLongList::arkRegisterInitialize()
+{
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_FindFieldByName(metaObject, "_data");
+        int metaIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)metaObject->_metaFields, (int)metaField);
+        metaField = (igMemoryRefMetaField *)((igObjectDispatchView *)metaField)->CloneViaMetadata(1);
+        metaField->_memType = (int)Gap::Core::igLongMetaField::getMetaField();
+        metaField->_memSize = 0;
+        metaField->_externalEnumStorage = (int)&k_data;
+        igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
+        metaField->release();
+    }
 }
-
-void igLongList_InitFields(void) {
-    igMemoryRefMetaField *field;
-    int index;
-    void **found;
-    igMetaObject *meta;
-
-    meta = g_igLongList_metaObject;
-    found = (void **)igMetaObject_FindFieldByName(meta, data);
-    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
-    field = (igMemoryRefMetaField *)((igObjectDispatchView *)found)->CloneViaMetadata(1);
-    field->_memType = (int)Gap::Core::igLongMetaField::getMetaField();
-    field->_memSize = 0;
-    field->_externalEnumStorage = (int)(&g_igLongList_dataDescriptorCell);
-    igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);
-    field->release();
+}
 }
 

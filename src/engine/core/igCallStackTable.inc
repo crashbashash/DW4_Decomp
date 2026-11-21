@@ -49,7 +49,7 @@ void igCallStackTable_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igCallStackTable_Register);
 }
 
-static igMetaObjectCallback g_igCallStackTable_callbackList[] = { igUnsignedIntListNoClean_EnsureRegistered, Gap::Core::igIntListNoClean::arkRegister, 0 };
+static igMetaObjectCallback g_igCallStackTable_callbackList[] = { Gap::Core::igUnsignedIntListNoClean::arkRegister, Gap::Core::igIntListNoClean::arkRegister, 0 };
 
 CallbackArray *igCallStackTable_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -107,7 +107,7 @@ void igCallStackTable_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igCallStackTable_ctorTable, 4);
     callStacks = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)callStacks)->_metaObject = (int)igUnsignedIntListNoClean_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)callStacks)->_metaObject = (int)Gap::Core::igUnsignedIntListNoClean::getClassTypeLazy();
     ((igRefMetaField *)callStacks)->_construct = 1;
     hashIndex = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
     ((igObjectRefMetaField *)hashIndex)->_metaObject = (int)Gap::Core::igIntListNoClean::getClassTypeLazy();

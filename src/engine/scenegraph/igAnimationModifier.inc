@@ -8,7 +8,7 @@ igMetaEnum *g_igAnimationModifier_modifierTypeMetaEnum;
 
 igMetaEnum *FUN_001a7440(void) {
     if (g_igAnimationModifier_modifierTypeMetaEnum == 0) {
-        g_igAnimationModifier_modifierTypeMetaEnum = igMetaEnum_Create("ModifierType", g_igAnimationModifier_modifierTypeNames, g_igAnimationModifier_modifierTypeValues, 4);
+        g_igAnimationModifier_modifierTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("ModifierType", g_igAnimationModifier_modifierTypeNames, g_igAnimationModifier_modifierTypeValues, 4);
     }
     return g_igAnimationModifier_modifierTypeMetaEnum;
 }

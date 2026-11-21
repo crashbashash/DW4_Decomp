@@ -376,7 +376,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_40(igVertexArray2Helper *arg0, int ar
     S_15ff10 *temp_v0;
     int temp_s1_2;
     temp_v0 = (S_15ff10 *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 2, 0));
-    temp_s1 = (int)g_igUnsignedIntList_metaObject;
+    temp_s1 = (int)Gap::Core::igUnsignedIntList::getClassMeta();
     if (temp_s1 == temp_v0->f12->vX()) {
         T_15ff10 *a = temp_v0->f12;
         int v1 = a->f8;
@@ -405,7 +405,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_41(igVertexArray2Helper *arg0, int ar
     int temp_s1_2;
     U_15ff10 packedColor;
     temp_v0 = (S_15ff10 *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 2, 0));
-    temp_s1 = (int)g_igUnsignedIntList_metaObject;
+    temp_s1 = (int)Gap::Core::igUnsignedIntList::getClassMeta();
     if (temp_s1 == temp_v0->f12->vX()) {
         T_15ff10 *a = temp_v0->f12;
         int r = igVec4f_PackColor((float *)arg2, 1);
@@ -439,7 +439,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_42(A_15ff10 *arg0, int arg1) {
 
     temp_v0 = (X_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 2, 0);
     temp_a0 = temp_v0->f12;
-    temp_s0 = (int)g_igUnsignedIntList_metaObject;
+    temp_s0 = (int)Gap::Core::igUnsignedIntList::getClassMeta();
     if (temp_s0 == temp_a0->vX()) {
         return temp_v0->f12->f16[arg1];
     }
@@ -457,7 +457,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_43(igVertexArray2Helper *arg0, int ar
     int temp_s1_2;
 
     temp_v0 = (S43 *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 2, 0));
-    temp_s1 = (int)g_igUnsignedIntList_metaObject;
+    temp_s1 = (int)Gap::Core::igUnsignedIntList::getClassMeta();
     if (temp_s1 == ((DW4VC_88_0 *)(temp_v0->f12))->vX()) {
         Color4f_Unpack((igVec4f *)arg2, 1, temp_v0->f12->f16[arg1]);
         return;
@@ -1161,7 +1161,7 @@ int *FUN_001649f0(void) {
 }
 
 int *FUN_00164a60(void) {
-    static int listMetaObjects[2] = { (int)g_igUnsignedIntList_metaObject, (int)g_igVec4ucList_metaObject };
+    static int listMetaObjects[2] = { (int)Gap::Core::igUnsignedIntList::getClassMeta(), (int)g_igVec4ucList_metaObject };
     return listMetaObjects;
 }
 

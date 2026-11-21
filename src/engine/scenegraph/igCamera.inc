@@ -130,7 +130,7 @@ igMetaEnum *g_igCamera_cameraTypeMetaEnum;
 
 igMetaEnum *FUN_001a47d0(void) {
     if (g_igCamera_cameraTypeMetaEnum == 0) {
-        g_igCamera_cameraTypeMetaEnum = igMetaEnum_Create("CameraType", g_igCamera_cameraTypeNames, g_igCamera_cameraTypeValues, 2);
+        g_igCamera_cameraTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("CameraType", g_igCamera_cameraTypeNames, g_igCamera_cameraTypeValues, 2);
     }
     return g_igCamera_cameraTypeMetaEnum;
 }

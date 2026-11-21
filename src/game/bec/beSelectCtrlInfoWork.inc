@@ -127,7 +127,7 @@ static int g_beSelectCtrlInfoWork_msgActionValues[] = {
 
 igMetaEnum *beSelectCtrl_GetMessageEnum(void) {
     if (g_beSelectCtrlInfoWork_msgActionMetaEnum == 0) {
-        g_beSelectCtrlInfoWork_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beSelectCtrlInfoWork_msgActionNames, g_beSelectCtrlInfoWork_msgActionValues, 7);
+        g_beSelectCtrlInfoWork_msgActionMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("MsgAction", g_beSelectCtrlInfoWork_msgActionNames, g_beSelectCtrlInfoWork_msgActionValues, 7);
     }
     return g_beSelectCtrlInfoWork_msgActionMetaEnum;
 }

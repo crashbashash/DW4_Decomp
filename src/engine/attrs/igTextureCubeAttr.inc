@@ -17,7 +17,7 @@ static int g_igTextureCubeAttr_applyTypeValues[] = {
 
 igMetaEnum *igTextureCubeAttr_GetApplyTypeMetaEnum(void) {
     if (g_igTextureCubeAttr_applyTypeMetaEnum == 0) {
-        g_igTextureCubeAttr_applyTypeMetaEnum = igMetaEnum_Create("ApplyType", g_igTextureCubeAttr_applyTypeNames, g_igTextureCubeAttr_applyTypeValues, 3);
+        g_igTextureCubeAttr_applyTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("ApplyType", g_igTextureCubeAttr_applyTypeNames, g_igTextureCubeAttr_applyTypeValues, 3);
     }
     return g_igTextureCubeAttr_applyTypeMetaEnum;
 }

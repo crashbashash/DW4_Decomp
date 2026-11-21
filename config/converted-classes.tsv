@@ -114,3 +114,11 @@ igAttrList	Attrs	igTObjectList<igAttr>
 igAttrListList	Attrs	igTObjectList<igAttrList>
 igModelViewMatrixAttrList	Attrs	igTObjectList<igModelViewMatrixAttr>
 igBlendMatrixPaletteAttrList	Attrs	igTObjectList<igBlendMatrixPaletteAttr>
+igNonRefCountedObjectList	Core	igTDataList<igObject *>
+igNonRefCountedAttrList	Attrs	igTNonRefCountedObjectList<igAttr>
+igMetaEnum	Core
+igLongList	Core	igTDataList<long long>
+igUnsignedIntList	Core	igTDataList<unsigned int>
+igDoubleList	Core	igTDataList<double>
+igUnsignedIntListNoClean	Core
+igDependencyList	Core	igTDataList<igDependency>

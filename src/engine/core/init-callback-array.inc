@@ -30,7 +30,7 @@ void igObjectSystem_Startup(ObjectSystemView *self) {
     self->active = 1;
     self->bootMetaObjectCount = ((__internalObjectList *)self->metaRegistry)->_count;
     self->bootMetaFieldCount = g_metaFieldList->_count;
-    igMetaEnum_EnsureRegistered();
+    Gap::Core::igMetaEnum::arkRegister();
     igMallocMemoryPool_EnsureRegistered();
     igArenaMemoryPool_EnsureRegistered();
     igAliasMemoryPool_EnsureRegistered();
@@ -40,8 +40,8 @@ void igObjectSystem_Startup(ObjectSystemView *self) {
     Gap::Core::igCharListNoClean::arkRegister();
     Gap::Core::igIntList::arkRegister();
     Gap::Core::igIntListNoClean::arkRegister();
-    igUnsignedIntList_EnsureRegistered();
-    igUnsignedIntListNoClean_EnsureRegistered();
+    Gap::Core::igUnsignedIntList::arkRegister();
+    Gap::Core::igUnsignedIntListNoClean::arkRegister();
     igStringTable_EnsureRegistered();
     igSymbolTable_EnsureRegistered();
     igCallStackTable_EnsureRegistered();

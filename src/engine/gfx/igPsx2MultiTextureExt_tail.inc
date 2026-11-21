@@ -8,7 +8,7 @@ igMetaEnum *g_igPsx2MultiTextureExt_blendingFunctionAlphaPsx2MetaEnum;
 
 int BLENDING_FUNCTION_ALPHA_PSX2_GetMetaEnum(void) {
     if (g_igPsx2MultiTextureExt_blendingFunctionAlphaPsx2MetaEnum == 0) {
-        g_igPsx2MultiTextureExt_blendingFunctionAlphaPsx2MetaEnum = igMetaEnum_Create("BLENDING_FUNCTION_ALPHA_PSX2", g_igPsx2MultiTextureExt_blendingFunctionAlphaPsx2Names, g_igPsx2MultiTextureExt_blendingFunctionAlphaPsx2Values, 3);
+        g_igPsx2MultiTextureExt_blendingFunctionAlphaPsx2MetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("BLENDING_FUNCTION_ALPHA_PSX2", g_igPsx2MultiTextureExt_blendingFunctionAlphaPsx2Names, g_igPsx2MultiTextureExt_blendingFunctionAlphaPsx2Values, 3);
     }
     return (int)g_igPsx2MultiTextureExt_blendingFunctionAlphaPsx2MetaEnum;
 }
@@ -23,7 +23,7 @@ igMetaEnum *g_igPsx2MultiTextureExt_blendingFunctionColorPsx2MetaEnum;
 
 int BLENDING_FUNCTION_COLOR_PSX2_GetMetaEnum(void) {
     if (g_igPsx2MultiTextureExt_blendingFunctionColorPsx2MetaEnum == 0) {
-        g_igPsx2MultiTextureExt_blendingFunctionColorPsx2MetaEnum = igMetaEnum_Create("BLENDING_FUNCTION_COLOR_PSX2", g_igPsx2MultiTextureExt_blendingFunctionColorPsx2Names, g_igPsx2MultiTextureExt_blendingFunctionColorPsx2Values, 3);
+        g_igPsx2MultiTextureExt_blendingFunctionColorPsx2MetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("BLENDING_FUNCTION_COLOR_PSX2", g_igPsx2MultiTextureExt_blendingFunctionColorPsx2Names, g_igPsx2MultiTextureExt_blendingFunctionColorPsx2Values, 3);
     }
     return (int)g_igPsx2MultiTextureExt_blendingFunctionColorPsx2MetaEnum;
 }
@@ -41,7 +41,7 @@ igMetaEnum *g_igPsx2MultiTextureExt_textureFunctionPsx2MetaEnum;
 
 int TEXTURE_FUNCTION_PSX2_GetMetaEnum(void) {
     if (g_igPsx2MultiTextureExt_textureFunctionPsx2MetaEnum == 0) {
-        g_igPsx2MultiTextureExt_textureFunctionPsx2MetaEnum = igMetaEnum_Create("TEXTURE_FUNCTION_PSX2", g_igPsx2MultiTextureExt_textureFunctionPsx2Names, g_igPsx2MultiTextureExt_textureFunctionPsx2Values, 12);
+        g_igPsx2MultiTextureExt_textureFunctionPsx2MetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("TEXTURE_FUNCTION_PSX2", g_igPsx2MultiTextureExt_textureFunctionPsx2Names, g_igPsx2MultiTextureExt_textureFunctionPsx2Values, 12);
     }
     return (int)g_igPsx2MultiTextureExt_textureFunctionPsx2MetaEnum;
 }

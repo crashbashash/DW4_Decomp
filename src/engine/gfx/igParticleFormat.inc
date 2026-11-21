@@ -174,7 +174,7 @@ igMetaEnum *g_igParticleFormat_textureArgumentMetaEnum;
 
 int TEXTURE_ARGUMENT_GetMetaEnum(void) {
     if (g_igParticleFormat_textureArgumentMetaEnum == 0) {
-        g_igParticleFormat_textureArgumentMetaEnum = igMetaEnum_Create("TEXTURE_ARGUMENT", g_igParticleFormat_textureArgumentNames, g_igParticleFormat_textureArgumentValues, 4);
+        g_igParticleFormat_textureArgumentMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("TEXTURE_ARGUMENT", g_igParticleFormat_textureArgumentNames, g_igParticleFormat_textureArgumentValues, 4);
     }
     return (int)g_igParticleFormat_textureArgumentMetaEnum;
 }
@@ -189,7 +189,7 @@ igMetaEnum *g_igParticleFormat_textureStageTypeMetaEnum;
 
 int TEXTURE_STAGE_TYPE_GetMetaEnum(void) {
     if (g_igParticleFormat_textureStageTypeMetaEnum == 0) {
-        g_igParticleFormat_textureStageTypeMetaEnum = igMetaEnum_Create("TEXTURE_STAGE_TYPE", g_igParticleFormat_textureStageTypeNames, g_igParticleFormat_textureStageTypeValues, 3);
+        g_igParticleFormat_textureStageTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("TEXTURE_STAGE_TYPE", g_igParticleFormat_textureStageTypeNames, g_igParticleFormat_textureStageTypeValues, 3);
     }
     return (int)g_igParticleFormat_textureStageTypeMetaEnum;
 }
@@ -204,7 +204,7 @@ igMetaEnum *g_igParticleFormat_textureFunctionTypeMetaEnum;
 
 int TEXTURE_FUNCTION_TYPE_GetMetaEnum(void) {
     if (g_igParticleFormat_textureFunctionTypeMetaEnum == 0) {
-        g_igParticleFormat_textureFunctionTypeMetaEnum = igMetaEnum_Create("TEXTURE_FUNCTION_TYPE", g_igParticleFormat_textureFunctionTypeNames, g_igParticleFormat_textureFunctionTypeValues, 3);
+        g_igParticleFormat_textureFunctionTypeMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("TEXTURE_FUNCTION_TYPE", g_igParticleFormat_textureFunctionTypeNames, g_igParticleFormat_textureFunctionTypeValues, 3);
     }
     return (int)g_igParticleFormat_textureFunctionTypeMetaEnum;
 }

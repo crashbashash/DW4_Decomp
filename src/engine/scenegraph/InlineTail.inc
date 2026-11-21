@@ -643,7 +643,7 @@ int igBitMask_GetMeta(void) {
 }
 
 int igUnsignedIntList_GetMeta(void) {
-    return (int)g_igUnsignedIntList_metaObject;
+    return (int)Gap::Core::igUnsignedIntList::getClassMeta();
 }
 
 igMetaObject *igBlendMatrixSelect_GetMeta(void) {
@@ -819,7 +819,7 @@ igMetaObject *igRenderPackageList_GetMeta(void) {
 }
 
 int igDoubleList_GetMeta(void) {
-    return (int)g_igDoubleList_metaObject;
+    return (int)Gap::Core::igDoubleList::getClassMeta();
 }
 
 igMetaObject *igTransformStack_GetMeta(void) {

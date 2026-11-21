@@ -726,7 +726,7 @@ void beNDMWMdlPlayer_OnSequenceChange(beNDMWMdlPlayer *self, beBaseInfoRam *ram)
         beMessenger_DispatchSelected((beMessenger *)self->_messenger, "SETEFFECT");
     }
     if (work->_isPanel != 0) {
-        if (igMetaEnum_GetValueByName(PanelCloseSeqList_GetMetaEnum(), (const char *)work->_seqCodeName, &enumValue) == g_resultSuccess) {
+        if (((Gap::Core::igMetaEnum *)(PanelCloseSeqList_GetMetaEnum()))->getEnumValue((const char *)work->_seqCodeName, enumValue) == g_resultSuccess) {
             work->_isPanel = 0;
             beMessenger_SendNamed((beMessenger *)self->_messenger, ("NDMWPANEL"), 0, ram->_ramNo, ("REMOVE"));
         }

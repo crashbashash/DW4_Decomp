@@ -112,7 +112,7 @@ static int g_bePoint01Info_msgActionValues[] = {
 
 igMetaEnum *bePoint01_GetMsgActionEnum(void) {
     if (g_bePoint01Info_msgActionMetaEnum == 0) {
-        g_bePoint01Info_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_bePoint01Info_msgActionNames, g_bePoint01Info_msgActionValues, 7);
+        g_bePoint01Info_msgActionMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("MsgAction", g_bePoint01Info_msgActionNames, g_bePoint01Info_msgActionValues, 7);
     }
     return g_bePoint01Info_msgActionMetaEnum;
 }

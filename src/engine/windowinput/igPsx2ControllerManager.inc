@@ -30,7 +30,7 @@ igMetaEnum *g_igController_buttonsMetaEnum;
 
 igMetaEnum *FUN_00146850(void) {
     if (g_igController_buttonsMetaEnum == 0) {
-        g_igController_buttonsMetaEnum = igMetaEnum_Create("BUTTONS", g_igController_buttonsNames, g_igController_buttonsValues, 0x31);
+        g_igController_buttonsMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("BUTTONS", g_igController_buttonsNames, g_igController_buttonsValues, 0x31);
     }
     return g_igController_buttonsMetaEnum;
 }

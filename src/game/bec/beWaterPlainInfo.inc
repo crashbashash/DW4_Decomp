@@ -63,7 +63,7 @@ static int g_beWaterPlainInfo_messageValues[] = {
 
 igMetaEnum *beWaterPlain_GetMessageEnum(void) {
     if (g_beWaterPlainInfo_messageMetaEnum == 0) {
-        g_beWaterPlainInfo_messageMetaEnum = igMetaEnum_Create("Message", g_beWaterPlainInfo_messageNames, g_beWaterPlainInfo_messageValues, 1);
+        g_beWaterPlainInfo_messageMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_beWaterPlainInfo_messageNames, g_beWaterPlainInfo_messageValues, 1);
     }
     return g_beWaterPlainInfo_messageMetaEnum;
 }

@@ -96,7 +96,7 @@ static int g_beGeneraterItemDataOne_msgActionValues[] = {
 
 igMetaEnum *beGenerater_GetMsgActionEnum(void) {
     if (g_beGeneraterItemDataOne_msgActionMetaEnum == 0) {
-        g_beGeneraterItemDataOne_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beGeneraterItemDataOne_msgActionNames, g_beGeneraterItemDataOne_msgActionValues, 8);
+        g_beGeneraterItemDataOne_msgActionMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("MsgAction", g_beGeneraterItemDataOne_msgActionNames, g_beGeneraterItemDataOne_msgActionValues, 8);
     }
     return g_beGeneraterItemDataOne_msgActionMetaEnum;
 }

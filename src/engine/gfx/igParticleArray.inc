@@ -32,7 +32,7 @@ igMetaEnum *g_igParticleArray_particleArrayLifeControlMetaEnum;
 
 int IG_GFX_PARTICLE_ARRAY_LIFE_CONTROL_GetMetaEnum(void) {
     if (g_igParticleArray_particleArrayLifeControlMetaEnum == 0) {
-        g_igParticleArray_particleArrayLifeControlMetaEnum = igMetaEnum_Create("IG_GFX_PARTICLE_ARRAY_LIFE_CONTROL", g_igParticleArray_particleArrayLifeControlNames, g_igParticleArray_particleArrayLifeControlValues, 3);
+        g_igParticleArray_particleArrayLifeControlMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_PARTICLE_ARRAY_LIFE_CONTROL", g_igParticleArray_particleArrayLifeControlNames, g_igParticleArray_particleArrayLifeControlValues, 3);
     }
     return (int)g_igParticleArray_particleArrayLifeControlMetaEnum;
 }

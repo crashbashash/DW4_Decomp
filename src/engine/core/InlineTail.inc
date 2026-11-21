@@ -44,10 +44,6 @@ int igPsx2CallStackTracer_GetMeta(void)
     return (int)g_igPsx2CallStackTracer_metaObject;
 }
 
-void igUnsignedIntListNoClean_TrimCapacity(void) {
-
-}
-
 int igStandardQueue_GetMeta(void) {
     return (int)g_igStandardQueue_metaObject;
 }
@@ -277,14 +273,6 @@ igMetaObject *igContextExtList_GetMeta(void) {
     return g_igContextExtList_metaObject;
 }
 
-igMetaObject *igLongList_GetMeta(void) {
-    return g_igLongList_metaObject;
-}
-
-igMetaObject *igUnsignedIntListNoClean_GetMeta(void) {
-    return g_igUnsignedIntListNoClean_metaObject;
-}
-
 igMetaObject *igShortListList_GetMeta(void) {
     return g_igShortListList_metaObject;
 }
@@ -329,10 +317,6 @@ int igDependencyMetaField_GetDescriptor(void) {
     return (*(int *)&g_igDependencyMetaField_descriptor);
 }
 
-int igDependencyList_GetMeta(void) {
-    return (int)g_igDependencyList_metaObject;
-}
-
 igMetaObject *igDirectoryList_GetMeta(void) {
     return g_igDirectoryList_metaObject;
 }
@@ -371,10 +355,6 @@ igMetaObject *igMemoryFileEntryList_GetMeta(void) {
 
 igMetaObject *igMemoryPoolInfoList_GetMeta(void) {
     return g_igMemoryPoolInfoList_metaObject;
-}
-
-int igMetaEnum_GetMeta(void) {
-    return (int)g_igMetaEnum_metaObject;
 }
 
 igMetaObject *igNamedObjectList_GetMeta(void) {
@@ -424,14 +404,6 @@ int igContextList_GetElementMeta(void) {
 igMetaObject *igNonRefCountedThreadList_GetElementMeta(void) {
     return g_igThread_metaObject;
 }
-
-/* Element size in bytes of the list's items: 8. The same class's TrimCapacity (vfunc_18) re-sizes
- * the buffer with Gap::Core::igDataList::setCapacity(self, count, 8), and the sibling lists igCharMetricsList (0x28) and
- * igPsx2AudioSourceList (0x24) return their item size from this same slot 23. */
-int igDependencyList_GetElementSize(void) {
-    return 8;
-}
-
 
 int List_LowerBoundWords(igTDataList<unsigned int> *list, unsigned int *key) {
     unsigned int value;
@@ -561,21 +533,5 @@ igMetaObject *igFloatListList_GetElementMeta(void) {
 
 igMetaObject *igShortListList_GetElementMeta(void) {
     return Gap::Core::igShortList::getClassMeta();
-}
-
-
-
-
-
-
-
-
-void igDependencyList_TrimCapacity(igDependencyList *self) {
-    int count;
-
-    count = self->_count;
-    if (count < self->_capacity) {
-        ((Gap::Core::igDataList *)self)->setCapacity(count, 8);
-    }
 }
 

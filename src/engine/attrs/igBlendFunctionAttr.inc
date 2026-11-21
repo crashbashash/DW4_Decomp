@@ -34,7 +34,7 @@ namespace Attrs {
 
 igMetaEnum *igBlendFunctionAttr::getBLENDING_FUNCTION_ALPHA_PSX2MetaEnum() {
     if (BLENDING_FUNCTION_ALPHA_PSX2_Meta == 0) {
-        BLENDING_FUNCTION_ALPHA_PSX2_Meta = igMetaEnum_Create("BLENDING_FUNCTION_ALPHA_PSX2", g_igBlendFunctionAttr_alphaPsx2Names, g_igBlendFunctionAttr_alphaPsx2Values, 3);
+        BLENDING_FUNCTION_ALPHA_PSX2_Meta = Gap::Core::igMetaEnum::createMetaEnum("BLENDING_FUNCTION_ALPHA_PSX2", g_igBlendFunctionAttr_alphaPsx2Names, g_igBlendFunctionAttr_alphaPsx2Values, 3);
     }
     return BLENDING_FUNCTION_ALPHA_PSX2_Meta;
 }
@@ -57,7 +57,7 @@ namespace Attrs {
 
 igMetaEnum *igBlendFunctionAttr::getBLENDING_FUNCTION_COLOR_PSX2MetaEnum() {
     if (BLENDING_FUNCTION_COLOR_PSX2_Meta == 0) {
-        BLENDING_FUNCTION_COLOR_PSX2_Meta = igMetaEnum_Create("BLENDING_FUNCTION_COLOR_PSX2", g_igBlendFunctionAttr_colorPsx2Names, g_igBlendFunctionAttr_colorPsx2Values, 3);
+        BLENDING_FUNCTION_COLOR_PSX2_Meta = Gap::Core::igMetaEnum::createMetaEnum("BLENDING_FUNCTION_COLOR_PSX2", g_igBlendFunctionAttr_colorPsx2Names, g_igBlendFunctionAttr_colorPsx2Values, 3);
     }
     return BLENDING_FUNCTION_COLOR_PSX2_Meta;
 }

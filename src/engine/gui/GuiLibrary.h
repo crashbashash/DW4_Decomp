@@ -68,7 +68,6 @@ extern "C" int g_igNonRefCountedViewList_vtable[4];
 #include "dw4/core/igObjectSystem.h"
 extern "C" int igNonRefCountedViewList_GetVTable(void);
 extern "C" void igNonRefCountedViewList_EnsureRegistered(void);
-#include "dw4/core/igNonRefCountedObjectList.h"
 extern "C" CallbackArray *igNonRefCountedViewList_Register(void);
 extern "C" void igNonRefCountedViewList_GetMetaObjectFunction(void);
 extern "C" igMetaObject *g_igViewList_metaObject;

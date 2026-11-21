@@ -101,7 +101,7 @@ static int g_beLightCtrlInfo_msgActionValues[] = {
 
 igMetaEnum *beLightCtrl_GetMsgActionEnum(void) {
     if (g_beLightCtrlInfo_msgActionMetaEnum == 0) {
-        g_beLightCtrlInfo_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beLightCtrlInfo_msgActionNames, g_beLightCtrlInfo_msgActionValues, 1);
+        g_beLightCtrlInfo_msgActionMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("MsgAction", g_beLightCtrlInfo_msgActionNames, g_beLightCtrlInfo_msgActionValues, 1);
     }
     return g_beLightCtrlInfo_msgActionMetaEnum;
 }

@@ -9,7 +9,7 @@ igMetaEnum *g_igPsx2Controller_controllerPhaseMetaEnum;
 
 igMetaEnum *FUN_00147030(void) {
     if (g_igPsx2Controller_controllerPhaseMetaEnum == 0) {
-        g_igPsx2Controller_controllerPhaseMetaEnum = igMetaEnum_Create("ControllerPhase", g_igPsx2Controller_controllerPhaseNames, g_igPsx2Controller_controllerPhaseValues, 8);
+        g_igPsx2Controller_controllerPhaseMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("ControllerPhase", g_igPsx2Controller_controllerPhaseNames, g_igPsx2Controller_controllerPhaseValues, 8);
     }
     return g_igPsx2Controller_controllerPhaseMetaEnum;
 }

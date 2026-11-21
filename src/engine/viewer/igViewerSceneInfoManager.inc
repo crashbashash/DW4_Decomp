@@ -53,7 +53,7 @@ igMetaField *g_igViewerSceneInfoManager_hideAllStatisticsMenuItemMetaField;
 
 igMetaEnum *FUN_004592e0(void) {
     if (g_igViewerSceneInfoManager_GUI_VISIBILITYMetaEnum == 0) {
-        g_igViewerSceneInfoManager_GUI_VISIBILITYMetaEnum = igMetaEnum_Create("GUI_VISIBILITY", g_igViewerSceneInfoManager_GUI_VISIBILITYNames, g_igViewerSceneInfoManager_GUI_VISIBILITYValues, 3);
+        g_igViewerSceneInfoManager_GUI_VISIBILITYMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("GUI_VISIBILITY", g_igViewerSceneInfoManager_GUI_VISIBILITYNames, g_igViewerSceneInfoManager_GUI_VISIBILITYValues, 3);
     }
     return g_igViewerSceneInfoManager_GUI_VISIBILITYMetaEnum;
 }

@@ -5,10 +5,9 @@ static int g_locationTypeValues[] = {
     0, 1, 2,
 };
 
-
 int igPluginRepository_GetLocationTypeMetaEnum(void) {
     if (g_locationTypeMetaEnum == 0) {
-        g_locationTypeMetaEnum = ((int)igMetaEnum_Create((char *)"LOCATION_TYPE", g_locationTypeNames, g_locationTypeValues, 3));
+        g_locationTypeMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)"LOCATION_TYPE", g_locationTypeNames, g_locationTypeValues, 3));
     }
     return g_locationTypeMetaEnum;
 }

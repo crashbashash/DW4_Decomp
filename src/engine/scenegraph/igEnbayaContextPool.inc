@@ -68,7 +68,7 @@ void igEnbayaContextPool_RunStaticInit(void)
     igMetaObject_RunStaticInit(igEnbayaContextPool_Register);
 }
 
-static igMetaObjectCallback g_igEnbayaContextPool_callbackList[] = { igPointerListList_EnsureRegistered, igUnsignedIntList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igEnbayaContextPool_callbackList[] = { igPointerListList_EnsureRegistered, Gap::Core::igUnsignedIntList::arkRegister, 0 };
 
 CallbackArray *igEnbayaContextPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -127,11 +127,11 @@ void igEnbayaContextPool_InitFields(void) {
     ((igRefMetaField *)poolListField)->_construct = 1;
     ((igMetaField *)poolListField)->_persistent = 0;
     boneCountListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igObjectRefMetaField *)boneCountListField)->_metaObject = (int)igUnsignedIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)boneCountListField)->_metaObject = (int)Gap::Core::igUnsignedIntList::getClassTypeLazy();
     ((igRefMetaField *)boneCountListField)->_construct = 1;
     ((igMetaField *)boneCountListField)->_persistent = 0;
     freeIndexListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)freeIndexListField)->_metaObject = (int)igUnsignedIntList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)freeIndexListField)->_metaObject = (int)Gap::Core::igUnsignedIntList::getClassTypeLazy();
     ((igRefMetaField *)freeIndexListField)->_construct = 1;
     ((igMetaField *)freeIndexListField)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)meta, g_igEnbayaContextPool_fieldTable, g_igEnbayaContextPool_fieldHandles, g_igEnbayaContextPool_fieldOffsets, base);

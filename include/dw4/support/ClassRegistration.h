@@ -11,7 +11,6 @@ extern "C" {
 /* Core */
 void igDependencyMetaField_EnsureRegistered(void);
 void igFloatListList_EnsureRegistered(void);
-void igLongList_EnsureRegistered(void);
 void igMemoryDescriptorMetaField_EnsureRegistered(void);
 void igMemoryFileEntryList_EnsureRegistered(void);
 void igNamedObjectInfo_EnsureRegistered(void);
@@ -55,7 +54,6 @@ void igLightAttr_EnsureRegistered(void);
 void igLightList_EnsureRegistered(void);
 void igLightStateAttrList_EnsureRegistered(void);
 void igLightStateAttr_EnsureRegistered(void);
-void igNonRefCountedAttrList_EnsureRegistered(void);
 void igParticleAttr_EnsureRegistered(void);
 void igRenderDestinationAttr_EnsureRegistered(void);
 void igSetRenderDestinationAttr_EnsureRegistered(void);

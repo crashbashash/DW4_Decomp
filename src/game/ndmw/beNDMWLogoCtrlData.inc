@@ -123,7 +123,7 @@ static int g_beNDMWLogoCtrlData_messageValues[] = {
 
 igMetaEnum *beNDMWLogoCtrlData_GetMessageEnum(void) {
     if (g_beNDMWLogoCtrlData_messageMetaEnum == 0) {
-        g_beNDMWLogoCtrlData_messageMetaEnum = igMetaEnum_Create("Message", g_beNDMWLogoCtrlData_messageNames, g_beNDMWLogoCtrlData_messageValues, 1);
+        g_beNDMWLogoCtrlData_messageMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("Message", g_beNDMWLogoCtrlData_messageNames, g_beNDMWLogoCtrlData_messageValues, 1);
     }
     return g_beNDMWLogoCtrlData_messageMetaEnum;
 }

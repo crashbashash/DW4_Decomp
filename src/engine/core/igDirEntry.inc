@@ -5,10 +5,9 @@ static int g_igDirEntry_refTypeValues[] = {
     0, 1, 2,
 };
 
-
 int igDirEntry_GetRefTypeMetaEnum(void) {
     if (g_igDirEntry_refTypeMetaEnum == 0) {
-        g_igDirEntry_refTypeMetaEnum = ((int)igMetaEnum_Create((char *)"RefType", g_igDirEntry_refTypeNames, g_igDirEntry_refTypeValues, 3));
+        g_igDirEntry_refTypeMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)"RefType", g_igDirEntry_refTypeNames, g_igDirEntry_refTypeValues, 3));
     }
     return g_igDirEntry_refTypeMetaEnum;
 }
@@ -20,10 +19,9 @@ static int g_igDirEntry_resolveMethodValues[] = {
     0, 1, 2,
 };
 
-
 int igDirEntry_GetResolveMethodMetaEnum(void) {
     if (g_igDirEntry_resolveMethodMetaEnum == 0) {
-        g_igDirEntry_resolveMethodMetaEnum = ((int)igMetaEnum_Create((char *)"ResolveMethod", g_igDirEntry_resolveMethodNames, g_igDirEntry_resolveMethodValues, 3));
+        g_igDirEntry_resolveMethodMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)"ResolveMethod", g_igDirEntry_resolveMethodNames, g_igDirEntry_resolveMethodValues, 3));
     }
     return g_igDirEntry_resolveMethodMetaEnum;
 }

@@ -275,8 +275,13 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    instance's vtable the compiler also writes is referenced by nothing and is not in retail. Their factories
    (`Create`) stay free, as the metafields' do, since callers pass allocator words. One gfx vertex-stream binder still
    reads the char/short list metas by their C names: through the inline `getClassMeta` MWCC keeps the meta in one
-   saved register fewer than retail. `igLongList` (whose copies are gfx's `igTDataList` of an 8-byte element),
-   `igUnsignedIntList` and `igDoubleList` (vtables and copies in scenegraph), `igDependencyList` and the
+   saved register fewer than retail. `igLongList` (`igTDataList<long long>`, the kit's igLong; its template copies
+   are gfx's `igTDataList` of an 8-byte element), `igUnsignedIntList`, `igUnsignedIntListNoClean` (the empty
+   `trimCapacity`) and `igDoubleList` are converted the same way. igUnsignedIntList's and igDoubleList's vtables and
+   inline copies are scenegraph's in retail: their C copies (`getMeta` reading `getClassMeta()`, `trimCapacity`,
+   `getElementSize`) stay there, and core's compiled copies are duplicates, until scenegraph builds those lists in
+   C++. `igDependencyList` is `igTDataList<igDependency>` (the kit's two-pointer pair, include/dw4/core/igCore.h),
+   its `trimCapacity`/`getElementSize` the compiler's copies at retail's places in core's inline tail. The
    `igTObjectList<T>` lists follow. Then
    `igMetaObject`: converting it makes `igMetaObject` in every Gap scope the class, so every converted class's
    `_Meta`, the registrar's `igMetaObject_RegisterClass(…, &_Meta, …)` and the ~2,250 field-adder calls
@@ -284,9 +289,18 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `NameFields` `setMetaFieldBasicPropertiesAndValidateAll`, `GetFieldCount` `getMetaFieldCount`) change type at
    once, across ~1,100 files; the generator's templates change with it, and `RegisterClass`/`RunStaticInit` are the
    kit's free `igArkRegister` overloads. igMetaObject, igIGBFile and igObjectDirEntry then also call igObject's
-   protected and private construction members directly (the kit makes them friends). Of the 154 classes the core
-   unit registers, 50 are converted; the other kit-declared ones (the remaining typed lists, the memory pools, files
-   and media, directory entries, igMetaEnum, igRegistry, the threads and timers, …) follow, and those without a kit
+   protected and private construction members directly (the kit makes them friends). `igMetaEnum` is converted
+   (alchemy-kit_202309 igCore/igMetaEnum.h: `_name` the kit's igStringRef, `_names`/`_values` smart pointers, the
+   private field handles, `getEnumValue(const char *, igEnum &)`, `getEnumName`, `getEnumCount`,
+   `getIndexedEnumName`, `getIndexedEnumValue` and the static `createMetaEnum`; `igEnum` is the kit's `int`,
+   include/dw4/core/igCore.h). Its eight callers pass the out value by reference, as the kit's signature asks
+   (`(int &)fightCommand` for an unsigned one), with no change in code. The name tables stay `const char *`
+   arrays, so `createMetaEnum` takes `const char **` where the kit has `igChar *[]`; the holders that are still
+   flat `igMetaEnum *` take the result through a cast (`(igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum(…)`,
+   which memberize writes). DW4's mask and value-name formatters (`igMetaEnum_GetNamesByMask`,
+   `igMetaEnum_GetValueName`) and the empty enum's getter stay free. Of the 154 classes the core unit registers,
+   57 are converted; the other kit-declared ones (the remaining typed lists, the memory pools, files and media,
+   directory entries, igRegistry, the threads and timers, …) follow, and those without a kit
    header (the `igPsx2*` platform classes, `__internal*ObjectList`, igDependencyMetaField and
    igMemoryDescriptorMetaField) take their form from retail alone;
 5. attrs, then gfx, then scenegraph, then gui/insight/viewer. Attrs so far: `Gap::Attrs::igAttr` (abstract;
@@ -341,11 +355,15 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `igLightStateAttr`; `igRenderDestinationAttr` with `igSetRenderDestinationAttr`; `igGeometryAttr`,
    `igGeometryAttr1_5` and `igGeometrySetAttr`; `igParticleAttr` (its array is a Gap::Bec class) and
    `igVertexBlendMatrixListAttr`, each with its list (`igTextureList`, `igImageMipMapList`, `igLightList`,
-   `igLightStateAttrList`, `igGeometryAttrList`, over `igTObjectList<T>` once T is converted); and
-   `igNonRefCountedAttrList`, which needs core's `igNonRefCountedObjectList` converted first (its subclasses in
-   core, gfx, gui, datapump and scenegraph register through the attrs copy of its getClassMeta, 0x13aeb0).
+   `igLightStateAttrList`, `igGeometryAttrList`, over `igTObjectList<T>` once T is converted). Core's
+   `igNonRefCountedObjectList` is converted (`IG_OBJECT_DEFINE` over the kit's `igTDataList<igObject *>`, the
+   private `k_data`, the inline `userPreWrite` and `getElementMeta`), and attrs' `igNonRefCountedAttrList` derives
+   from the kit's `igTNonRefCountedObjectList<T>` (include/dw4/core/igTNonRefCountedObjectList.h): attrs compiles
+   the list's vtable, its inline copies and the copy of `getClassMeta` at 0x13aeb0 that the subclasses in core,
+   gfx, gui, datapump and scenegraph register through, so their C copies are gone.
    The specs stay in the agents' scratch (`scratch/Attrs2/specs/visual.py`, `visual2.py`;
-   `scratch/Attrs3/specs/unit.py`, `simple.py`, `ext.py`; `scratch/Attrs4/specs/mgr.py`). memberize casts a pool
+   `scratch/Attrs3/specs/unit.py`, `simple.py`, `ext.py`; `scratch/Attrs4/specs/mgr.py`;
+   `scratch/CoreWave9/specs/`). memberize casts a pool
    passed as `int` to a factory taking `igMemoryPoolView *` (or drops the `int` cast). Gfx then starts from
    `igVisualContext`, whose dispatch view already names the slots the attrs call;
 6. the game's `be*` classes last.

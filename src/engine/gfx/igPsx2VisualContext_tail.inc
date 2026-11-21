@@ -8,7 +8,7 @@ igMetaEnum *g_igPsx2VisualContext_clearrenderdestinationTypePsx2MetaEnum;
 
 int IG_GFX_CLEARRENDERDESTINATION_TYPE_PSX2_GetMetaEnum(void) {
     if (g_igPsx2VisualContext_clearrenderdestinationTypePsx2MetaEnum == 0) {
-        g_igPsx2VisualContext_clearrenderdestinationTypePsx2MetaEnum = igMetaEnum_Create("IG_GFX_CLEARRENDERDESTINATION_TYPE_PSX2", g_igPsx2VisualContext_clearrenderdestinationTypePsx2Names, g_igPsx2VisualContext_clearrenderdestinationTypePsx2Values, 2);
+        g_igPsx2VisualContext_clearrenderdestinationTypePsx2MetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_CLEARRENDERDESTINATION_TYPE_PSX2", g_igPsx2VisualContext_clearrenderdestinationTypePsx2Names, g_igPsx2VisualContext_clearrenderdestinationTypePsx2Values, 2);
     }
     return (int)g_igPsx2VisualContext_clearrenderdestinationTypePsx2MetaEnum;
 }
@@ -23,7 +23,7 @@ igMetaEnum *g_igPsx2VisualContext_clippingTypePsx2MetaEnum;
 
 int IG_GFX_CLIPPING_TYPE_PSX2_GetMetaEnum(void) {
     if (g_igPsx2VisualContext_clippingTypePsx2MetaEnum == 0) {
-        g_igPsx2VisualContext_clippingTypePsx2MetaEnum = igMetaEnum_Create("IG_GFX_CLIPPING_TYPE_PSX2", g_igPsx2VisualContext_clippingTypePsx2Names, g_igPsx2VisualContext_clippingTypePsx2Values, 2);
+        g_igPsx2VisualContext_clippingTypePsx2MetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_CLIPPING_TYPE_PSX2", g_igPsx2VisualContext_clippingTypePsx2Names, g_igPsx2VisualContext_clippingTypePsx2Values, 2);
     }
     return (int)g_igPsx2VisualContext_clippingTypePsx2MetaEnum;
 }

@@ -176,7 +176,7 @@ static int g_beMeterCtrlOneData_msgActionValues[] = {
 
 igMetaEnum *beMeterCtrl_GetMsgActionEnum(void) {
     if (g_beMeterCtrlOneData_msgActionMetaEnum == 0) {
-        g_beMeterCtrlOneData_msgActionMetaEnum = igMetaEnum_Create("MsgAction", g_beMeterCtrlOneData_msgActionNames, g_beMeterCtrlOneData_msgActionValues, 8);
+        g_beMeterCtrlOneData_msgActionMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("MsgAction", g_beMeterCtrlOneData_msgActionNames, g_beMeterCtrlOneData_msgActionValues, 8);
     }
     return g_beMeterCtrlOneData_msgActionMetaEnum;
 }

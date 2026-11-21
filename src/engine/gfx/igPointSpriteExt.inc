@@ -28,7 +28,7 @@ igMetaEnum *g_igPointSpriteExt_spriteSizeSpaceMetaEnum;
 
 int IG_GFX_SPRITE_SIZE_SPACE_GetMetaEnum(void) {
     if (g_igPointSpriteExt_spriteSizeSpaceMetaEnum == 0) {
-        g_igPointSpriteExt_spriteSizeSpaceMetaEnum = igMetaEnum_Create("IG_GFX_SPRITE_SIZE_SPACE", g_igPointSpriteExt_spriteSizeSpaceNames, g_igPointSpriteExt_spriteSizeSpaceValues, 2);
+        g_igPointSpriteExt_spriteSizeSpaceMetaEnum = (igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum("IG_GFX_SPRITE_SIZE_SPACE", g_igPointSpriteExt_spriteSizeSpaceNames, g_igPointSpriteExt_spriteSizeSpaceValues, 2);
     }
     return (int)g_igPointSpriteExt_spriteSizeSpaceMetaEnum;
 }
