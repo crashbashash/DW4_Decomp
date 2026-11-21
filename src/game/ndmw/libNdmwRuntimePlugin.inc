@@ -40,11 +40,7 @@ int libNdmwRuntimePlugin_GetVTable(void) {
 igSmartPointer<igObject> *igSmartPointer_beNDMWAfsSetup_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -53,11 +49,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWAfsSetup_Destruct(igSmartPointer<
 igSmartPointer<igObject> *igSmartPointer_beNDMWStageCtl_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -66,11 +58,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWStageCtl_Destruct(igSmartPointer<
 igSmartPointer<igObject> *igSmartPointer_beNDMWPanelWaza_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -79,11 +67,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWPanelWaza_Destruct(igSmartPointer
 igSmartPointer<igObject> *igSmartPointer_beNDMWLogo_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -92,11 +76,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWLogo_Destruct(igSmartPointer<igOb
 igSmartPointer<igObject> *igSmartPointer_beNDMWTitle2_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -105,11 +85,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWTitle2_Destruct(igSmartPointer<ig
 igSmartPointer<igObject> *igSmartPointer_beNDMWLoadCtrl2_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -118,11 +94,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWLoadCtrl2_Destruct(igSmartPointer
 igSmartPointer<igObject> *igSmartPointer_beNDMWLoadIntf2_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -131,11 +103,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWLoadIntf2_Destruct(igSmartPointer
 igSmartPointer<igObject> *igSmartPointer_beNDMWSaveCtrl_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -144,11 +112,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWSaveCtrl_Destruct(igSmartPointer<
 igSmartPointer<igObject> *igSmartPointer_beNDMWSaveIntf_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -157,11 +121,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWSaveIntf_Destruct(igSmartPointer<
 igSmartPointer<igObject> *igSmartPointer_beNDMWGameRam_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -170,11 +130,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWGameRam_Destruct(igSmartPointer<i
 igSmartPointer<igObject> *igSmartPointer_beNDMWStatus_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -183,11 +139,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWStatus_Destruct(igSmartPointer<ig
 igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPlayer_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -196,11 +148,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPlayer_Destruct(igSmartPointer
 igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPlayer2_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -209,11 +157,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPlayer2_Destruct(igSmartPointe
 igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPBullet_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -222,11 +166,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlPBullet_Destruct(igSmartPointe
 igSmartPointer<igObject> *igSmartPointer_beNDMWMdlEnemy_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -235,11 +175,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlEnemy_Destruct(igSmartPointer<
 igSmartPointer<igObject> *igSmartPointer_beNDMWMdlEBullet_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -248,11 +184,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlEBullet_Destruct(igSmartPointe
 igSmartPointer<igObject> *igSmartPointer_beNDMWMdlObject_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -261,11 +193,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlObject_Destruct(igSmartPointer
 igSmartPointer<igObject> *igSmartPointer_beNDMWMdlItem_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -274,11 +202,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlItem_Destruct(igSmartPointer<i
 igSmartPointer<igObject> *igSmartPointer_beNDMWMdlEffect_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -287,11 +211,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlEffect_Destruct(igSmartPointer
 igSmartPointer<igObject> *igSmartPointer_beNDMWMdlMapBase_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -300,11 +220,7 @@ igSmartPointer<igObject> *igSmartPointer_beNDMWMdlMapBase_Destruct(igSmartPointe
 igSmartPointer<igObject> *igSmartPointer_beNDMWMdlMapCursor_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;

@@ -503,9 +503,7 @@ int igStackMemoryPool_GetEventTracker(igStackMemoryPool *self) {
 void igStackMemoryPool_SetEventTracker(igStackMemoryPool *self, igObject *tracker) {
     igObject *old;
     if ((tracker == 0) || (((void *)((Gap::Core::igObject *)tracker)->getMemoryPool()) != self)) {
-        if (tracker != 0) {
-            tracker->_refCount = (int)((int) (tracker->_refCount + 1));
-        }
+        igObject::ref(tracker);
         old = (igObject *)self->_eventTracker;
         IG_OBJECT_RELEASE(old);
         self->_eventTracker = (int)tracker;

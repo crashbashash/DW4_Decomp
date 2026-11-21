@@ -13,32 +13,17 @@ void Gap__Bec__ParticleArray__vfunc_36(ParticleArray *arg0) {
     PointSpriteView *s0;
 
     t = (igObject *)arg0->_context;
-    if (t != 0) {
-        t->_refCount = t->_refCount - 1;
-        if ((t->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(t);
-        }
-    }
+    igObject::release(t);
     arg0->_context = 0;
     s0 = (PointSpriteView *)arg0->_pointSpriteInterface;
     if (s0 != 0) {
         if ((DW4VC_236 *)s0->f24 == (DW4VC_236 *)arg0->_internalVertexArray) {
             t = s0->getF24();
-            if (t != 0) {
-                t->_refCount = t->_refCount - 1;
-                if ((t->_refCount & 0x7FFFFF) == 0) {
-                    igObject_Destroy(t);
-                }
-            }
+            igObject::release(t);
             s0->f24 = 0;
         }
         t = (igObject *)arg0->_pointSpriteInterface;
-        if (t != 0) {
-            t->_refCount = t->_refCount - 1;
-            if ((t->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(t);
-            }
-        }
+        igObject::release(t);
         arg0->_pointSpriteInterface = 0;
     }
     if (arg0->_internalVertexArray != 0) {

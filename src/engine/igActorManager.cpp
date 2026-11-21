@@ -45,16 +45,9 @@ void igActorManager_Start(igActorManager *self) {
     igObject *oldViewerScene;
 
     sceneInfoManager = igInsightCore_FindManager((igInsightCore *)self->_insight, g_igViewerSceneInfoManager_metaObject);
-    if (sceneInfoManager != 0) {
-        sceneInfoManager->_refCount = sceneInfoManager->_refCount + 1;
-    }
+    igObject::ref(sceneInfoManager);
     oldViewerScene = (igObject *)self->_vsim;
-    if (oldViewerScene != 0) {
-        oldViewerScene->_refCount = oldViewerScene->_refCount - 1;
-        if ((oldViewerScene->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(oldViewerScene);
-        }
-    }
+    igObject::release(oldViewerScene);
     self->_vsim = (int)sceneInfoManager;
     ((W *)self->_viewport)->vX(0, 0, 0, 0, 0.0f, 1.0f);
     ((W *)self->_skelViewport)->vX(0, 0, 0, 0, 0.0f, 0.2f);
@@ -79,12 +72,7 @@ void igActorManager_RemoveAllInfo(igActorManager *self) {
     int i;
     for (i = 0; i < count; i++) {
         igObject *actor = ((igObject **)actors->_data)[i];
-        if (actor != 0) {
-            actor->_refCount = actor->_refCount - 1;
-            if ((actor->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(actor);
-            }
-        }
+        igObject::release(actor);
     }
     int remaining = actors->_count;
     int j;

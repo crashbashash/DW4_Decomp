@@ -185,16 +185,9 @@ void igHotKeyEventReceiver_AddButton(igHotKeyEventReceiver *receiver, int button
 
 static inline void assign(igObject **slot, igObject *value) {
     igObject *old;
-    if (value != 0) {
-        value->_refCount = value->_refCount + 1;
-    }
+    igObject::ref(value);
     old = *slot;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     *slot = value;
 }
 

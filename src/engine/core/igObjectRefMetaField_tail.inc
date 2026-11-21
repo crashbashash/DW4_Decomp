@@ -20,13 +20,10 @@ void igObjectRefMetaField::set(igObject *obj, igObject *val) const
 
     if (_refCounted || _destruct) {
         if (value != 0) {
-            value->_refCount = value->_refCount + 1;
+            value->ref();
         }
         if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(old);
-        }
+        old->release();
     }
     }
     *(::igObject **)((char *)obj + _offset) = value;
@@ -48,15 +45,10 @@ void igObjectRefMetaField::setDefault(igObject *val)
     ::igObject *old;
 
     slot = (::igObject **)_default;
-    if (val != 0) {
-        val->_refCount = val->_refCount + 1;
-    }
+    igObject::ref(val);
     old = *slot;
     if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(old);
-        }
+        old->release();
     }
     *slot = (::igObject *)val;
 }
@@ -70,7 +62,7 @@ int igObjectRefMetaField::readRawFieldMemory(void *fieldMem, const void *srcMem,
     if (_refCounted || _destruct) {
         object = *(::igObject **)fieldMem;
         if (object != 0) {
-            object->_refCount = object->_refCount + 1;
+            object->ref();
         }
     }
     return size;
@@ -97,10 +89,7 @@ void igObjectRefMetaField::construct(igObject *src)
     child = (::igObject *)igMetaObject_CreateInstance((igMetaObject *)_metaObject, pool);
     set(src, (igObject *)child);
     if ((_refCounted || _destruct) && (child != 0)) {
-        child->_refCount = child->_refCount - 1;
-        if ((child->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(child);
-        }
+        child->release();
     }
 }
 
@@ -111,10 +100,7 @@ void igObjectRefMetaField::destruct(igObject *src)
     if (_destruct) {
         child = *(::igObject **)((char *)src + _offset);
         if (child != 0) {
-        child->_refCount = child->_refCount - 1;
-        if ((child->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(child);
-        }
+        child->release();
     }
     }
 }
@@ -126,10 +112,7 @@ void igObjectRefMetaField::decommission(igObject *src)
     if (_refCounted) {
         child = *(::igObject **)((char *)src + _offset);
         if (child != 0) {
-        child->_refCount = child->_refCount - 1;
-        if ((child->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(child);
-        }
+        child->release();
     }
     }
     igRefMetaField::decommission(src);
@@ -174,10 +157,7 @@ void igObjectRefMetaField::copyByValue(igObject *dst, const igObject *src)
             copy = (::igObject *)from->cloneViaMetadata(1);
             set(dst, (igObject *)copy);
             if (_destruct == 0 && copy != 0) {
-                copy->_refCount = copy->_refCount - 1;
-                if ((copy->_refCount & 0x7fffff) == 0) {
-                    igObject_Destroy(copy);
-                }
+                copy->release();
             }
         } else if (from == 0) {
             set(dst, 0);
@@ -204,10 +184,7 @@ void igObjectRefMetaField::copyByValueShallow(igObject *dst, const igObject *src
             copy = (::igObject *)from->cloneViaMetadata(0);
             set(dst, (igObject *)copy);
             if ((_destruct == 0) && (copy != 0)) {
-                copy->_refCount = copy->_refCount - 1;
-                if ((copy->_refCount & 0x7fffff) == 0) {
-                    igObject_Destroy(copy);
-                }
+                copy->release();
             }
         } else if (from == 0) {
             set(dst, 0);
@@ -348,12 +325,7 @@ void igObjectStringMap_Add(igObjectStringMap *self, const char *name, void *obje
     ((Gap::Core::igObjectList *)self->_names)->append((Gap::Core::igObject *)entry);
     ((Gap::Core::igObjectList *)self->_data)->append((Gap::Core::igObject *)object);
     held = entry;
-    if (held != 0) {
-        held->_refCount = held->_refCount - 1;
-        if (((unsigned long long)((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(held);
-        }
-    }
+    igObject::release(held);
 }
 
 int igObjectStringMap_GetObject(void *self, const char *name) {
@@ -404,10 +376,7 @@ void igObjectStringMap_Clear(igObjectStringMap *o) {
     int i;
     for (i = 0; i < n; i++) {
         igObject *p = ((igObject **)l->_data)[i];
-        if (p) {
-            p->_refCount = p->_refCount - 1;
-            if ((((unsigned long long)(long long)p->_refCount) & 0x7fffffULL) == 0) igObject_Destroy((igObject *)p);
-        }
+        igObject::release(p);
     }
     { int m = l->_count; for (i = 0; i < m; i++) ((igObject **)l->_data)[i] = 0; }
     l->_count = 0;
@@ -415,10 +384,7 @@ void igObjectStringMap_Clear(igObjectStringMap *o) {
     n = l->_count;
     for (i = 0; i < n; i++) {
         igObject *p = ((igObject **)l->_data)[i];
-        if (p) {
-            p->_refCount = p->_refCount - 1;
-            if ((((unsigned long long)(long long)p->_refCount) & 0x7fffffULL) == 0) igObject_Destroy((igObject *)p);
-        }
+        igObject::release(p);
     }
     { int m = l->_count; for (i = 0; i < m; i++) ((igObject **)l->_data)[i] = 0; }
     l->_count = 0;
@@ -445,7 +411,7 @@ void igObjectStringMap_RemoveAt(igObjectStringMap *self, int index) {
     l1 = (igObjectList *)self->_data;
     s4 = 4 * idx;
     s6 = ((igObject **)((char *)l1->_data + s4 - 4))[0];
-    if (s6) { s6->_refCount = 1 + (int)s6->_refCount; }
+    igObject::ref(s6);
     a4 = 4 * index;
     o = ((igObject **)((char *)l1->_data + a4))[0];
     REL(o)
@@ -462,7 +428,7 @@ void igObjectStringMap_RemoveAt(igObjectStringMap *self, int index) {
     ((igObject **)(l3->_data + 4 * l3->_count))[0] = 0;
     l4 = (igObjectList *)self->_names;
     s6b = ((igObject **)(s4 + (char *)l4->_data - 4))[0];
-    if (s6b) { s6b->_refCount = 1 + (int)s6b->_refCount; }
+    igObject::ref(s6b);
     o = ((igObject **)((char *)l4->_data + a4))[0];
     REL(o)
     if (l4->_count && index >= 0 && index < l4->_count) { ((igObject **)(a4 + (char *)l4->_data))[0] = s6b; }

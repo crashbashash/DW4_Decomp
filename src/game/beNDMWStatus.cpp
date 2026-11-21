@@ -121,7 +121,7 @@ extern "C" int beNDMWStatus__GetMeta(void);
 
 /* Owning reference to a freshly created shop item: the destructor drops one reference and destroys
  * at zero. Each item kind is its own class, so one destructor is emitted per "kind". */
-template <int K> struct ItemRef { igObject *p; ItemRef(igObject *o) : p(o) {} ~ItemRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
+template <int K> struct ItemRef { igObject *p; ItemRef(igObject *o) : p(o) {} ~ItemRef() { igObject *o = p; igObject::release(o); } };
 
 /* A sales list holds 36 slots. */
 struct SalesList { static inline void Reserve(const igObjectList *list) { if (list->_count < 37) ((Gap::Core::igDataList *)list)->setCapacity(36, 4); } };
@@ -133,12 +133,7 @@ static inline int countOf(const igIntList *list) { return list->_count; }
 
 void beNDMWStatus_Prepare(beNDMWStatus *self) {
     igObject *window = (igObject *)self->_windowPro;
-    if (window != 0) {
-        window->_refCount = window->_refCount - 1;
-        if ((window->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(window);
-        }
-    }
+    igObject::release(window);
     self->_windowPro = 0;
 }
 

@@ -154,12 +154,7 @@ void FUN_001acb50(igAnimationCombiner *c) {
                         ((igAnimationState *)s->_baseState)->_status = 3;
                         {
                             igAnimationState *base = (igAnimationState *)s->_baseState;
-                            if (base != 0) {
-                                base->_refCount = base->_refCount - 1;
-                                if (((unsigned long long)((long long)(int)base->_refCount << 0x29) >> 0x29) == 0) {
-                                    igObject_Destroy((igObject *)base);
-                                }
-                            }
+                            igObject::release(base);
                         }
                         s->_baseState = 0;
                     } else {

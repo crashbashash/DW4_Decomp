@@ -65,9 +65,7 @@ typedef igTDataList<igAttr *> AttrList;
    inline helper, so its frame slot (168) sorts below the box reference (172); a named local took 172 instead. */
 struct RamDataList { static inline void assign(beBaseInfoRam *ram, const igSmartPointer<igObject> &created) {
         igObject *list = created.p;
-        if (list != 0) {
-            list->_refCount++;
-        }
+        igObject::ref(list);
         igRelease((igObject *)ram->_dataList);
         ram->_dataList = (int)list;
 }

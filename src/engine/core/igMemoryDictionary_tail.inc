@@ -227,12 +227,7 @@ int igMemoryDictionary_Resize(igResult *result, igMemoryDictionaryView *self, in
     self->_cachedIndex = 0;
     allocator = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
     table = self->_memoryEntries;
-    if (table != 0) {
-        table->_refCount = table->_refCount - 1;
-        if ((table->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(table);
-        }
-    }
+    igObject::release(table);
     self->_memoryEntries = (igTDataList<MemoryDictionaryEntry> *)igUnsignedIntListNoClean_Create(allocator);
     words = self->_capacity * 2;
     if (words >= self->_memoryEntries->_count) {

@@ -159,12 +159,7 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
         while (((igObjectList *)node->_overrideAttrList)->_count != 0) {
             list = OverrideAttrsOf(node);
             attr = ((igObject **)list->_data)[0];
-            if (attr != 0) {
-                attr->_refCount = attr->_refCount - 1;
-                if ((attr->_refCount & 0x7FFFFF) == 0) {
-                    igObject_Destroy(attr);
-                }
-            }
+            igObject::release(attr);
             List_RemoveWordAt((igDataList *)list, 0);
             ((igObject **)list->_data)[list->_count] = 0;
         }
@@ -274,12 +269,7 @@ void beLua_ResetLuaState(beLua *self) {
         allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     }
     luaState = (igObject *)self->_luaState;
-    if (luaState != 0) {
-        --luaState->_refCount;
-        if (((unsigned long long)(long long)luaState->_refCount & 0x7fffffULL) == 0) {
-            igObject_Destroy(luaState);
-        }
-    }
+    igObject::release(luaState);
     self->_luaState = (int)beLuaState_Create(allocator);
 }
 

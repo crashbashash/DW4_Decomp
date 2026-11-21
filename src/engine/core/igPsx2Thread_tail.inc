@@ -31,12 +31,7 @@ int igPsx2Thread_GetVTable(void) {
     thread._vtable = (int)&g_igPsx2Thread_vtable[0];
     if (p1 != 0) {
         p1 = *(igObject **)p1;
-        if (p1 != 0) {
-            p1->_refCount = (int)((int) (p1->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) p1->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p1);
-            }
-        }
+        igObject::release(p1);
     }
     thread._vtable = (int)&g_igNamedObject_vtable[0];
     if (p0 != 0) {

@@ -26,7 +26,7 @@ class ReaderRef {
 public:
     igObject *p;
     ReaderRef(igObject *o) : p(o) {}
-    ~ReaderRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~ReaderRef() { igObject *o = p; igObject::release(o); }
 };
 extern "C" int beLuaState_RunFile(beLuaState *self, const char *fileName);
 

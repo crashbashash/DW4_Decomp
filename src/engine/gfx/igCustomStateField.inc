@@ -59,11 +59,7 @@ int igCustomStateField_GetVTable(void) {
 igSmartPointer<igObject> *igSmartPointer_igMetaField_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;

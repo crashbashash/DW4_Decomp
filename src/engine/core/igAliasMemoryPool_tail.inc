@@ -10,11 +10,7 @@ void igAliasMemoryPool_AssignAlias(igAliasMemoryPool *self, igMemoryPoolView *al
     igMemoryPoolView *old;
     if (alias) ((igObject *)alias)->_refCount++;
     old = (igMemoryPoolView *)self->_aliasedMemoryPool;
-    if (old) {
-        ((igObject *)old)->_refCount--;
-        if ((((igObject *)old)->_refCount & 0x7fffff) == 0)
-            igObject_Destroy((igObject *)old);
-    }
+    igObject::release(((igObject *)old));
     self->_aliasedMemoryPool = (int)alias;
     if (alias) self->_isReassignable = alias->CanTransferTo((igMemoryPoolView *)self);
     else self->_isReassignable = 0;
@@ -373,16 +369,9 @@ int igAliasMemoryPool_GetEventTracker(igAliasMemoryPool *self) {
  * low 23 bits of igObject::_refCount. */
 void igAliasMemoryPool_SetEventTracker(igAliasMemoryPool *self, igObject *tracker) {
     igObject *previous;
-    if (tracker != 0) {
-        tracker->_refCount = tracker->_refCount + 1;
-    }
+    igObject::ref(tracker);
     previous = (igObject *)(self->_eventTracker);
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     self->_eventTracker = (int)(tracker);
 }
 

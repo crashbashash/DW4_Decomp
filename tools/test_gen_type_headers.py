@@ -49,6 +49,34 @@ class Access(unittest.TestCase):
         self.assertEqual(root[:5], ["class igObject {", "public:", "    igObject();", "    virtual void destruct();",
                                     "    unsigned int _refCount;"])
 
+    def test_the_kits_reference_union_takes_the_place_of_the_word(self):
+        union = ("protected: union { mutable unsigned int _both; struct { mutable unsigned int _refCount : 23; "
+                 "unsigned int _memPoolIndex : 9; } _either; } _refAndMemPool;")
+        members = {"igObject": ["virtual void destruct();", union]}
+        out = gth.converted_classes({"igObject": "Core"}, {}, LAYOUTS, members)
+        root = out[out.index("class igObject {"):]
+        self.assertEqual(root[:6], ["class igObject {", "public:", "    virtual void destruct();", "protected:",
+                                    "    " + union.split(": ", 1)[1], "};"])
+
+
+class FlatView(unittest.TestCase):
+    def test_a_flat_view_row_is_declared_in_the_struct_and_defined_after_the_gap_class(self):
+        decl, body = gth.split_inline("inline void release() const { ((const Gap::Core::igObject *)this)->release(); }",
+                                      "igObject")
+        self.assertEqual(decl, "inline void release() const;")
+        self.assertEqual(body, "inline void igObject::release() const { ((const Gap::Core::igObject *)this)->release(); }")
+        decl, body = gth.split_inline("static inline void ref(const igObject *obj) { if (obj != 0) obj->ref(); }",
+                                      "igObject")
+        self.assertEqual(decl, "static inline void ref(const igObject *obj);")
+        self.assertEqual(body, "inline void igObject::ref(const igObject *obj) { if (obj != 0) obj->ref(); }")
+
+    def test_the_definitions_follow_the_converted_classes(self):
+        members = {"igObject": ["virtual void destruct();"],
+                   "::igObject": ["inline void ref() const { ((const Gap::Core::igObject *)this)->ref(); }"]}
+        out = gth.converted_classes({"igObject": "Core"}, {}, LAYOUTS, members)
+        self.assertEqual(out[-3:], ["inline void igObject::ref() const { ((const Gap::Core::igObject *)this)->ref(); }",
+                                    "#endif", ""])
+
 
 if __name__ == "__main__":
     unittest.main()

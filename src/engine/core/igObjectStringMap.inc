@@ -36,21 +36,11 @@ int igObjectStringMap_GetVTable(void) {
     map._vtable = (int)&g_igObjectStringMap_vtable[0];
     if (dataSlot != 0) {
         object = (igObject *)*dataSlot;
-        if (object != 0) {
-            object->_refCount = object->_refCount - 1;
-            if ((object->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
+        igObject::release(object);
     }
     if (namesSlot != 0) {
         object = (igObject *)*namesSlot;
-        if (object != 0) {
-            object->_refCount = object->_refCount - 1;
-            if ((object->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
+        igObject::release(object);
     }
     return vtable;
 }

@@ -118,17 +118,10 @@ void FUN_001d86f0(struct S_1d86f0 *arg0, int arg1, igObject *arg2) {
     int n;
     igObject *old;
     l = arg0->f8;
-    if (arg2 != 0) {
-        arg2->_refCount = arg2->_refCount + 1;
-    }
+    igObject::ref(arg2);
     off = arg1 * 4;
     old = *(igObject **)(l->_data + off);
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if (((unsigned long long) ((long long) (int) old->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)old);
-        }
-    }
+    igObject::release(old);
     n = l->_count;
     if (n != 0 && arg1 >= 0 && arg1 < n) {
         *(igObject **)(l->_data + off) = arg2;
@@ -141,17 +134,10 @@ void FUN_001d87b0(igTransformSequence *arg0, int arg1, igObject *arg2) {
     int temp_v1;
     igObject *temp_a0;
     temp_s1 = (igObjectList *)arg0->_quatList;
-    if (arg2 != 0) {
-        arg2->_refCount = arg2->_refCount + 1;
-    }
+    igObject::ref(arg2);
     temp_s0 = arg1 * 4;
     temp_a0 = *(igObject **)(temp_s1->_data + temp_s0);
-    if (temp_a0 != 0) {
-        temp_a0->_refCount = temp_a0->_refCount - 1;
-        if ((temp_a0->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
-        }
-    }
+    igObject::release(temp_a0);
     temp_v1 = temp_s1->_count;
     if ((temp_v1 != 0) && (arg1 >= 0) && (arg1 < temp_v1)) {
         *(igObject **)(temp_s1->_data + temp_s0) = arg2;
@@ -164,17 +150,10 @@ void FUN_001d8870(struct A_1d8870 *arg0, int arg1, igObject *arg2) {
     int n;
     int off;
     l = arg0->f20;
-    if (arg2 != 0) {
-        arg2->_refCount = arg2->_refCount + 1;
-    }
+    igObject::ref(arg2);
     off = arg1 * 4;
     old = *(igObject **)(l->_data + off);
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy((igObject *)old);
-        }
-    }
+    igObject::release(old);
     n = l->_count;
     if (n != 0 && arg1 >= 0 && arg1 < n) {
         *(igObject **)(l->_data + off) = arg2;

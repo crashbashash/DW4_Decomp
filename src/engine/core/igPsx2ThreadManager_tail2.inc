@@ -20,15 +20,9 @@ void igPsx2ThreadManager_DestroyGlobal(void) {
 
     manager = (igObject *)g_threadManager->GetCurrentThread();
     g_threadManager->RemoveThread((igPsx2ThreadView *)manager);
-    manager->_refCount = (int)((int) manager->_refCount - 1);
-    if (((unsigned long long) ((long long) (int) manager->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(manager);
-    }
+    manager->release();
     o = (igObject *)(*(void * *)&g_threadManager);
-    o->_refCount = (int) o->_refCount - 1;
-    if (((unsigned long long) ((long long) (int) o->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(o);
-    }
+    o->release();
     (*(void * *)&g_threadManager) = (void *)(0);
 }
 

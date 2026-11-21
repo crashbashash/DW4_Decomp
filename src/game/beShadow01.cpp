@@ -14,11 +14,7 @@
 extern "C" igMetaObject *beShadow01_GetInfoMeta(void);
 extern "C" igMetaObject *beShadow01_GetMeta(void);
 struct ReleaseRef { static inline void go(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
+    igObject::release(object);
 } };
 extern "C" void beShadow01_Prepare(beShadow01 *self);
 extern "C" void beShadow01_AttachPendingInfos(beShadow01 *self, beShadow01Info *info);

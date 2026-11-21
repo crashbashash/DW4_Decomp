@@ -98,14 +98,11 @@ void igLuaState::userConstruct(int flag) {
     pool = (::igObject *)getMemoryPool();
     pool = g_useOwnerAllocator != 0 ? pool : (::igObject *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleLevel);
     if (pool != 0) {
-        pool->_refCount = pool->_refCount + 1;
+        pool->ref();
     }
     old = _memPool;
     if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(old);
-        }
+        old->release();
     }
     _memPool = pool;
     _luaState = lua_open(0, (igMemoryPoolView *)_memPool);

@@ -350,12 +350,7 @@ void FUN_001563b0(igImage *self, igImage *source, int deep) {
 }
 
 static inline void release(T_1566c0 *object) {
-    if (object != 0) {
-        object->_refCount = object->_refCount - 1;
-        if ((object->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(object);
-        }
-    }
+    igObject::release(object);
 }
 
 void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, int arg5) {
@@ -677,9 +672,7 @@ unsigned char FUN_00157200(igImage *self, int format, igImage *source) {
         self->_pImage = (int)post;
     }
     if ((igObject *)self->_pClut != clut) {
-        if (clut != 0) {
-            clut->_refCount = clut->_refCount + 1;
-        }
+        igObject::ref(clut);
         igRelease((igObject *)self->_pClut);
         self->_pClut = (int)clut;
         igRelease((igObject *)self->_pClut);

@@ -2,9 +2,9 @@ namespace Gap {
 namespace Core {
 
 igObject::igObject() {
-    ((igRefCountWord *)&_refCount)->header.count = 1;
-    ((igRefCountWord *)&_refCount)->header.flag = 0;
-    ((igRefCountWord *)&_refCount)->header.poolIndex = 0;
+    ((igRefCountWord *)&_refAndMemPool)->header.count = 1;
+    ((igRefCountWord *)&_refAndMemPool)->header.flag = 0;
+    ((igRefCountWord *)&_refAndMemPool)->header.poolIndex = 0;
 }
 
 /* The copy constructor and the bootstrap constructor are the ones the bootstrap classes (igMetaField,
@@ -13,9 +13,9 @@ igObject::igObject() {
  * the source's flag bit. */
 igObject::igObject(const igObject &other) {
     new (this, 0) igObject;
-    ((igRefCountWord *)&_refCount)->bytes.flag = ((igRefCountWord *)&other._refCount)->bytes.flag;
+    ((igRefCountWord *)&_refAndMemPool)->bytes.flag = ((igRefCountWord *)&other._refAndMemPool)->bytes.flag;
     if (g_objectSystem->active != 0) {
-        ((igRefCountWord *)&_refCount)->bytes.poolIndex = ((char)igAllocator_EncodeIndex((igMemoryPoolView *)(Memory_FindOwningAllocator((int)(getClassStorage())))));
+        ((igRefCountWord *)&_refAndMemPool)->bytes.poolIndex = ((char)igAllocator_EncodeIndex((igMemoryPoolView *)(Memory_FindOwningAllocator((int)(getClassStorage())))));
     }
 }
 
@@ -26,12 +26,12 @@ igObject::igObject(bool bootstrap) {
     if (g_objectSystem->active != 0) {
         owner = (void **)(Memory_FindOwningAllocator((int)(getClassStorage())));
         if (owner != 0) {
-            ((igRefCountWord *)&_refCount)->bytes.poolIndex = ((igMemoryPoolView *)(owner))->GetPoolIndex();
+            ((igRefCountWord *)&_refAndMemPool)->bytes.poolIndex = ((igMemoryPoolView *)(owner))->GetPoolIndex();
         } else {
-            ((igRefCountWord *)&_refCount)->bytes.poolIndex = 0;
+            ((igRefCountWord *)&_refAndMemPool)->bytes.poolIndex = 0;
         }
     } else {
-        ((igRefCountWord *)&_refCount)->bytes.poolIndex = 0;
+        ((igRefCountWord *)&_refAndMemPool)->bytes.poolIndex = 0;
     }
 }
 
@@ -137,14 +137,14 @@ void igObject::constructDerived(igMetaObject *meta) {
     igMemoryPoolView *a;
     igMetaObject *l;
     *(int *)((char *)this + g_objectSystem->vtableProbeOffset) = meta->_vTablePointer;
-    ((igRefCountWord *)&_refCount)->word = 0;
-    ((igRefCountWord *)&_refCount)->bits.count = 1;
-    ((igRefCountWord *)&_refCount)->bytes.flag = 0;
+    ((igRefCountWord *)&_refAndMemPool)->word = 0;
+    ((igRefCountWord *)&_refAndMemPool)->bits.count = 1;
+    ((igRefCountWord *)&_refAndMemPool)->bytes.flag = 0;
     a = (igMemoryPoolView *)Memory_FindOwningAllocator((int)(getClassStorage()));
     if (a != 0) {
-        ((igRefCountWord *)&_refCount)->bytes.poolIndex = a->GetPoolIndex();
+        ((igRefCountWord *)&_refAndMemPool)->bytes.poolIndex = a->GetPoolIndex();
     } else {
-        ((igRefCountWord *)&_refCount)->bytes.poolIndex = 0;
+        ((igRefCountWord *)&_refAndMemPool)->bytes.poolIndex = 0;
     }
     commission();
     construct();
@@ -164,13 +164,13 @@ void igObject::constructDerivedFromFile(igMetaObject *meta) {
     igMemoryPoolView *g;
 
     *(int *)((char *)this + g_objectSystem->vtableProbeOffset) = meta->_vTablePointer;
-    ((igRefCountWord *)&_refCount)->pooled.count = 1;
-    ((igRefCountWord *)&_refCount)->pooled.flag = 0 & 1;
+    ((igRefCountWord *)&_refAndMemPool)->pooled.count = 1;
+    ((igRefCountWord *)&_refAndMemPool)->pooled.flag = 0 & 1;
     g = (igMemoryPoolView *)Memory_FindOwningAllocator((int)(getClassStorage()));
     if (g != 0) {
-        ((igRefCountWord *)&_refCount)->pooled.poolIndex = g->GetPoolIndex();
+        ((igRefCountWord *)&_refAndMemPool)->pooled.poolIndex = g->GetPoolIndex();
     } else {
-        ((igRefCountWord *)&_refCount)->pooled.poolIndex = 0;
+        ((igRefCountWord *)&_refAndMemPool)->pooled.poolIndex = 0;
     }
     commission();
 }
@@ -283,10 +283,7 @@ void igObject::arkRegisterInitialize() {
     refCountField->_persistent = 0;
     refCountField->_resetMethod = 3;
     igMetaObject_FinalizeAndAppendField(_Meta, refCountField);
-    refCountField->_refCount = (int)refCountField->_refCount - 1;
-    if (((unsigned long long)((long long)(int)refCountField->_refCount << 0x29) >> 0x29) == 0) {
-        ((igObject *)refCountField)->internalRelease();
-    }
+    refCountField->release();
     poolIndexField = ((igUnsignedIntMetaField *)igUnsignedIntMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     poolIndexField->_offset = 4;
     poolIndexField->_externalEnumStorage = (int)(&g_igObject_memPoolIndexDescriptorCell);
@@ -315,10 +312,7 @@ void igObject::arkRegisterInitialize() {
     poolIndexField->_persistent = 0;
     poolIndexField->_resetMethod = 3;
     igMetaObject_FinalizeAndAppendField(_Meta, poolIndexField);
-    poolIndexField->_refCount = (int)poolIndexField->_refCount - 1;
-    if (((unsigned long long)((long long)(int)poolIndexField->_refCount << 0x29) >> 0x29) == 0) {
-        ((igObject *)poolIndexField)->internalRelease();
-    }
+    poolIndexField->release();
 }
 }
 }
@@ -844,7 +838,7 @@ char *igObject::strdup(const char *string) const {
 }
 
 igMemoryPoolView *igObject::getMemoryPool() const {
-    return ((igMemoryPoolView *)igAllocator_ResolveEncodedIndex(((igRefCountWord *)&_refCount)->bytes.poolIndex));
+    return ((igMemoryPoolView *)igAllocator_ResolveEncodedIndex(((igRefCountWord *)&_refAndMemPool)->bytes.poolIndex));
 }
 }
 }

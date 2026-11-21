@@ -2348,16 +2348,9 @@ int igArenaMemoryPool_GetEventTracker(igArenaMemoryPool *self) {
 void igArenaMemoryPool_SetEventTracker(igArenaMemoryPool *self, igObject *tracker) {
     igObject *previous;
     if (tracker == 0 || (igArenaMemoryPool *)((void *)((Gap::Core::igObject *)tracker)->getMemoryPool()) != self) {
-        if (tracker != 0) {
-            tracker->_refCount++;
-        }
+        igObject::ref(tracker);
         previous = (igObject *)self->_eventTracker;
-        if (previous != 0) {
-            --previous->_refCount;
-            if ((previous->_refCount & 0x7fffff) == 0) {
-                igObject_Destroy(previous);
-            }
-        }
+        igObject::release(previous);
         self->_eventTracker = (int)tracker;
     }
 }

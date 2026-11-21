@@ -67,32 +67,17 @@ int igAliasMemoryPool_GetVTable(void) {
     aliasedSlot = (igObject *)&pool._aliasedMemoryPool;
     if (aliasedSlot != 0) {
         aliasedSlot = *(igObject **)aliasedSlot;
-        if (aliasedSlot != 0) {
-            aliasedSlot->_refCount = (int)((int) (aliasedSlot->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) aliasedSlot->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(aliasedSlot);
-            }
-        }
+        igObject::release(aliasedSlot);
     }
     trackerSlot = (igObject *)&pool._eventTracker;
     if (trackerSlot != 0) {
         trackerSlot = *(igObject **)trackerSlot;
-        if (trackerSlot != 0) {
-            trackerSlot->_refCount = (int)((int) (trackerSlot->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) trackerSlot->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(trackerSlot);
-            }
-        }
+        igObject::release(trackerSlot);
     }
     lockSlot = (igObject *)&pool._allocationLock;
     if (lockSlot != 0) {
         lockSlot = *(igObject **)lockSlot;
-        if (lockSlot != 0) {
-            lockSlot->_refCount = (int)((int) (lockSlot->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) lockSlot->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(lockSlot);
-            }
-        }
+        igObject::release(lockSlot);
     }
     return vtable;
 }

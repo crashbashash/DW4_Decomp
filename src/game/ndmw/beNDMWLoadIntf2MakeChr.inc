@@ -110,10 +110,7 @@ void beNDMWLoadIntf2MakeChr_InitFields(void) {
     ((Gap::Core::igStringMetaField *)nameField)->setDefault("MAKECHR");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2MakeChr_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, nameIndex, (igMetaField *)nameField);
-    nameField->_refCount = nameField->_refCount - 1;
-    if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
-        igObject_Destroy(nameField);
-    }
+    nameField->release();
     igCharArrayMetaField *degiName = (igCharArrayMetaField *)igMetaObject_GetFieldAt(meta, base + 1);
     degiName->_num = 0x20;
     igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWLoadIntf2MakeChr_fieldTable, g_beNDMWLoadIntf2MakeChr_fieldHandles, g_beNDMWLoadIntf2MakeChr_fieldOffsets, base);

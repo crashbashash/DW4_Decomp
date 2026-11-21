@@ -172,10 +172,7 @@ void beNDMWLoadIntf2Diffselect_InitFields(void) {
     ((Gap::Core::igStringMetaField *)nameField)->setDefault("DIFFSELECT");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2Diffselect_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, nameIndex, (igMetaField *)nameField);
-    nameField->_refCount = nameField->_refCount - 1;
-    if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
-        igObject_Destroy(nameField);
-    }
+    nameField->release();
     padManager = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7));
     ((igObjectRefMetaField *)padManager)->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)padManager)->_refCounted = 0;

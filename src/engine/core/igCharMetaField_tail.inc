@@ -403,8 +403,7 @@ void igContext_BuildExtensionInfoList(igContext *self) {
         self->_pExtList = (int)list;
         {
             igContextExtInfoList *o = (igContextExtInfoList *)self->_pExtList;
-            --o->_refCount;
-            if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)((igObject *)o));
+            o->release();
         }
         ((igObjectDispatchView *)self)->GetMeta();
         meta = igObjectSystem_FindMetaByNameDefault("igContextExt");
@@ -443,8 +442,7 @@ void igContext_BuildExtensionInfoList(igContext *self) {
             if (info != 0) ++info->_refCount;
             igRelease(((igObject **)infoList->_data)[i]);
             if (infoList->_count != 0 && i >= 0 && i < infoList->_count) ((igContextExtInfo **)infoList->_data)[i] = info;
-            --info->_refCount;
-            if ((info->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)((igObject *)info));
+            info->release();
         }
     }
 }
@@ -504,17 +502,11 @@ void *igContext_GetExtension(igVisualContext *self, int name) {
         extension = (igObject *)(((void *)igMetaObject_CreateInstance((igMetaObject *)meta, (igMemoryPoolView *)(((int)((Gap::Core::igObject *)self)->getMemoryPool())))));
         if (extension != 0) {
             if (((igContextExtView *)extension)->IsSupported(self) == 0) {
-                extension->_refCount = extension->_refCount - 1;
-                if ((extension->_refCount & 0x7FFFFF) == 0) {
-                    igObject_Destroy(extension);
-                }
+                extension->release();
                 extension = (igObject *)(0);
             } else {
                 ((Gap::Core::igObjectList *)self->_pExtInstances)->append((Gap::Core::igObject *)extension);
-                extension->_refCount = extension->_refCount - 1;
-                if ((extension->_refCount & 0x7FFFFF) == 0) {
-                    igObject_Destroy(extension);
-                }
+                extension->release();
                 ((igContextExtView *)extension)->SetContext(self);
             }
         }

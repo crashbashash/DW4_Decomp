@@ -47,6 +47,12 @@ A converted class's members and typed fields go only into its `Gap::` declaratio
 still names the flat struct. A typed field's flat struct still spells the reference as `int`, so
 `reflected.untyped_refs` (`tools/progress.py`) leaves out the fields `typed-fields.tsv` lists.
 
+A flat struct's C++ view may carry the kit's inlines of its converted class, forwarding to the `Gap::` class, so
+code holding a flat pointer already reads in the kit's form and keeps it when its class converts. Their rows are
+`class-members.tsv` rows keyed `::<class>`: the generator declares them in the flat struct under `#ifdef
+__cplusplus` and defines them after the `Gap::` classes. The flat `igObject` has `ref()`, `release()` and the
+static `ref`/`release(const igObject *)`, each forwarding to `Gap::Core::igObject`'s; C keeps the word.
+
 Where converted and unconverted code meet, the boundary keeps the retail **C names** as prototypes:
 
 - a class that is not converted yet still calls the root's slot defaults and its constructor by their C
@@ -111,16 +117,23 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    overload from the virtual `resetFields(int)` slot by its parameters), `free(igRawRef)` (`igObject_FreeStorage`),
    `createCopyRef` (`igObject_Clone`, whose return type is a
    smart pointer of the flat struct), the I/O members (`writeToMemory`, `readFromMemory`), the `operator new`
-   pair (`igObject_AllocateRawStorage`); and the release idiom: the callers outside igObject still call
-   `igObject_Destroy` by its C name, since `internalRelease` is private, until their inline release is written as
-   the kit's `release()`. The kit's form reproduces retail's: with the reference word declared as the kit's union
-   (`_both`, and a struct of `_refCount : 23` then `_memPoolIndex : 9`, the little-endian order; the kit
-   header, alchemy-kit_202309 igCore/igObject.h, splits a `_scriptFlag : 1` off a 22-bit count), `release()` as the kit's `_both--; if
-   (_either._refCount == 0) internalRelease();` and the static `release(const igObject *)` testing for null,
-   MWCC writes the decrement, the reload and the `dsll32 9`/`dsrl32 9` test every release site has, in a loop as
-   alone, and the static `ref` the `addiu 1` increment. Today's open spellings, the 64-bit shift pair and the
-   `& 0x7fffff` mask, compile to the same instructions. Writing it means typing `_refCount` as that union in the
-   generated root (every converted body reads `_refCount` as a word today) and then replacing the open releases;
+   pair (`igObject_AllocateRawStorage`); and the release idiom, which is now the kit's. The root's reference word
+   is the kit's union (`_refAndMemPool`: `_both`, and a struct of `_refCount : 23` then `_memPoolIndex : 9`, the
+   little-endian order; the kit header, alchemy-kit_202309 igCore/igObject.h, splits a `_scriptFlag : 1` off a
+   22-bit count), protected as in the kit; igObject's own constructors and `getMemoryPool` read it through the
+   `igRefCountWord` views. `release()` is `_both--; if (_either._refCount == 0) internalRelease();`, `ref()` is
+   `_both++`, and the static `release`/`ref(const igObject *)` test for null. MWCC writes the decrement, the reload
+   and the `dsll32 9`/`dsrl32 9` test every release site has, and the `addiu 1` increment. The kit's `release()`
+   calls a `decrementRefCount()` that holds that body; DW4's is written in `release()` itself, because the units
+   built without `-inline level=8` (GameMain, igAdx, the movie units) stop inlining one call short of the flat
+   view's `release()` -> `igObject::release()` -> `decrementRefCount()` chain and call an out-of-line copy. The
+   same depth limit is why a release inside a `static inline` helper or an inline destructor of those units stays
+   open. `tools/releaseconv.py` rewrites the open sites (`p->release()`, and `igObject::release(p)` for one under
+   its own null test; the same for `ref`); a site stays open when its pointer is a view without the members (`f4`,
+   `refs`, `rc`, `references`, or `+4` through casts), when it is in a macro, or when the unit no longer matches
+   with it (a pointer whose address escaped and is reloaded after the decrement, or a register allocation that
+   moves: the `<Class>_InitFields` copies of C classes, where declaring the field local first restores retail's
+   allocation, as in the core unit's four);
 2. the metafield family: `Gap::Core::igMetaField` is converted (`IG_BOOTSTRAP_ABSTRACT_OBJECT_DEFINE`, its three
    constructors, the 38 slots 21-58 in retail's vtable order with kit names, igen's registration); DW4's vtable has
    no `computeTypeCount`, no virtual `readFromMemory`/`writeToMemory` and no `postRead`, and overrides

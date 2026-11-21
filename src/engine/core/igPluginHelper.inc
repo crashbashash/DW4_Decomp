@@ -40,12 +40,7 @@ void **igSmartPointer_igPluginRepositoryList_Destruct(void **pointer, long long 
 
     if (pointer != 0) {
         list = (igObject *)*pointer;
-        if (list != 0) {
-            list->_refCount = list->_refCount - 1;
-            if ((list->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(list);
-            }
-        }
+        igObject::release(list);
         if ((short)flags > 0) {
             operator delete(pointer);
         }
@@ -74,11 +69,7 @@ void **igSmartPointer_igLibraryLoader_Destruct(void **pointer, short flags) {
 igSmartPointer<igObject> *igSmartPointer_igLibraryList_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if(self) {
         igObject *object=self->p;
-        if(object) {
-            --object->_refCount;
-            if(((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL)==0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if((short)delete_storage>0) operator delete(self);
     }
     return self;

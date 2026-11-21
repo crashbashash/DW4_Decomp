@@ -38,11 +38,7 @@ void FUN_001d6410(TraversedNode *collector, TraversedNode *node, void *path) {
 igSmartPointer<igObject> *igSmartPointer_igGraphPath_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -51,22 +47,12 @@ igSmartPointer<igObject> *igSmartPointer_igGraphPath_Destruct(igSmartPointer<igO
 void igSceneInfo_CollectCameras(igSceneInfo *info) {
     O_1d65e0 *self = (O_1d65e0 *)info;
     igObject *created = ((igObject *)FUN_0019f480((int)((Gap::Core::igObject *)self)->getMemoryPool()));
-    if (created != 0) {
-        created->_refCount = created->_refCount + 1;
-    }
+    igObject::ref(created);
     igObject *previous = self->f28;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     self->f28 = created;
     igObject *held = self->f28;
-    held->_refCount = held->_refCount - 1;
-    if ((held->_refCount & 0x7FFFFF) == 0) {
-        igObject_Destroy(held);
-    }
+    held->release();
     igSmartPointer<igObject> second(((igObject *)igGraphPath_Create((int)((Gap::Core::igObject *)self)->getMemoryPool())));
     FUN_001c5730((int *)(second.get()), (igObject *)self->f20);
     FUN_001d6410((TraversedNode *)self, (TraversedNode *)self->f20, (void *)(second.get()));

@@ -127,10 +127,7 @@ void beNDMWTitle2CtrlData_InitFields(void) {
     ((Gap::Core::igStringMetaField *)nameField)->setDefault("CTRL");
     nameField->_externalEnumStorage = (int)(&g_beNDMWTitle2CtrlData_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, nameIndex, (igMetaField *)nameField);
-    nameField->_refCount = nameField->_refCount - 1;
-    if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
-        igObject_Destroy(nameField);
-    }
+    nameField->release();
     igMetaObject_NameFields((igMetaObject *)meta, g_beNDMWTitle2CtrlData_fieldTable, g_beNDMWTitle2CtrlData_fieldHandles, g_beNDMWTitle2CtrlData_fieldOffsets, base);
 }
 

@@ -199,10 +199,7 @@ void beSvPlatDataPS2_InitFields(void) {
     ((Gap::Core::igIntMetaField *)clone)->setDefault(5);
     clone->_externalEnumStorage = (int)(&g_beSvPlatDataPS2_connectMaxStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)clone);
-    clone->_refCount = (int)clone->_refCount - 1;
-    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(clone);
-    }
+    clone->release();
     field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 4); field->_getMetaEnumFunction = 4;
     field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 5); field->_getMetaEnumFunction = 4;
     field = (igEnumMetaField *)igMetaObject_GetFieldAt(meta, base + 6); field->_getMetaEnumFunction = 4;

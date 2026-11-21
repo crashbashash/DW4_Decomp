@@ -259,12 +259,7 @@ void beNDMWLoadCtrl2CommonIntf_userDestruct(beNDMWLoadCtrl2CommonIntf *self) {
         igObject *o;
         for (i = 0; i < n; i++) {
             o = ((igObject **)l->_data)[i];
-            if (o != 0) {
-                o->_refCount = (int)o->_refCount - 1;
-                if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(o);
-                }
-            }
+            igObject::release(o);
         }
         {
             int m = l->_count;
@@ -283,12 +278,7 @@ void beNDMWLoadCtrl2CommonIntf_userDestruct(beNDMWLoadCtrl2CommonIntf *self) {
         igObject *o;
         for (i = 0; i < n; i++) {
             o = ((igObject **)l2->_data)[i];
-            if (o != 0) {
-                o->_refCount = (int)o->_refCount - 1;
-                if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(o);
-                }
-            }
+            igObject::release(o);
         }
         {
             int m = l2->_count;
@@ -491,12 +481,7 @@ void beNDMWPanelWazaInfoWork_TrimCapacity(beNDMWPanelWazaInfoWork *self) {
     }
     self->_retWazaLabel = (int)empty;
     playerWork = (igObject *)self->_playerWork;
-    if (playerWork != 0) {
-        playerWork->_refCount = playerWork->_refCount - 1;
-        if ((playerWork->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(playerWork);
-        }
-    }
+    igObject::release(playerWork);
     self->_playerWork = 0;
     {
         InternedStringRef empty(0);

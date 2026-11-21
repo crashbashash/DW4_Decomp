@@ -266,18 +266,12 @@ void FUN_001b7770(igCommonTraversal *self, int name, int value) {
         stacks = self->_segmentOverrideStacks;
         newStackRef.retain();
         List_InsertWords((igDataList *)stacks, pos, 1, &newStackRef);
-        stack->_refCount = stack->_refCount - 1;
-        if (((unsigned long long)((long long)(int)stack->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)stack);
-        }
+        stack->release();
     } else {
         stack = ((igObject **)((igObjectList *)self->_segmentOverrideStacks)->_data)[index];
     }
     ((Gap::Core::igObjectList *)stack)->append((Gap::Core::igObject *)value);
-    str->_refCount = str->_refCount - 1;
-    if (((unsigned long long)((long long)(int)str->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy((igObject *)str);
-    }
+    str->release();
 }
 
 igObject *FUN_001b7920(igCommonTraversal *self, int name) {

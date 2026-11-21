@@ -46,12 +46,7 @@ int igContextExtInfo_GetVTable(void) {
     }
     if (metaSlot != 0) {
         metaSlot = *(igObject **)metaSlot;
-        if (metaSlot != 0) {
-            metaSlot->_refCount = (int)((int) (metaSlot->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) metaSlot->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(metaSlot);
-            }
-        }
+        igObject::release(metaSlot);
     }
     return vtable;
 }

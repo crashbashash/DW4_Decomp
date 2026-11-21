@@ -152,16 +152,9 @@ void igActor_SetAnimationSystem(igActor *self, igAnimationCombiner *combiner) {
     int boneMatrix;
     igAnimationCombiner *old;
 
-    if (combiner != 0) {
-        combiner->_refCount = combiner->_refCount + 1;
-    }
+    igObject::ref(combiner);
     old = (igAnimationCombiner *)self->_animationSystem;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     self->_animationSystem = (int)combiner;
     boneCount = ((AnimHierarchyCounts *)((igAnimationCombiner *)self->_animationSystem)->_animHierarchy)->getBoneCount();
     blendCount = ((AnimHierarchyCounts *)((igAnimationCombiner *)self->_animationSystem)->_animHierarchy)->getBlendMatrixCount();
@@ -195,11 +188,7 @@ void igActor_SetAnimationSystem(igActor *self, igAnimationCombiner *combiner) {
 igSmartPointer<igObject> *igSmartPointer_igLightingStateAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;

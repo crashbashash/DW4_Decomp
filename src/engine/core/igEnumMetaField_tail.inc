@@ -65,10 +65,7 @@ void igErrorHandler_ReleaseInstance(void) {
     if (g_igErrorHandler_instance != 0) {
         {
             igObject *held = (igObject *)g_igErrorHandler_instance;
-            held->_refCount = held->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(held);
-            }
+            held->release();
         }
     }
     g_igErrorHandler_instance = (void *)(0);

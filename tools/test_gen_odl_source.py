@@ -104,8 +104,8 @@ class TypeHeaderTables(unittest.TestCase):
             self.assertEqual(len(slots), 21)       # 20 slots and the inline getMeta at slot 20
             self.assertTrue(slots[19].startswith("virtual igObject *cloneViaMetadata"))
             self.assertIn("getMeta() const", slots[20])
-            # the slot declarations come before the reference count, which follows the vptr
-            self.assertLess(root.index("getMeta() const"), root.index("_refCount;"))
+            # the slot declarations come before the reference word (the kit's union), which follows the vptr
+            self.assertLess(root.index("getMeta() const"), root.index("_refAndMemPool;"))
             self.assertIn("class igRenderer : public Gap::Core::igObject {", cpp)
             clear = cpp[cpp.index("class igClearRenderer : public Gap::Gui::igRenderer {"):]
             clear = clear[:clear.index("};")]

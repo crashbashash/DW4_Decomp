@@ -150,10 +150,7 @@ void beSvPlatDataGC_InitFields(void) {
     ((Gap::Core::igIntMetaField *)clone)->setDefault(2);
     clone->_externalEnumStorage = (int)(&g_beSvPlatDataGC_connectMaxStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
-    clone->_refCount = (int)clone->_refCount - 1;
-    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(clone);
-    }
+    clone->release();
     dataOffSet = igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2);
     ((igIntArrayMetaField *)dataOffSet)->_num = 2;
     banTplData = (igMetaObject_GetFieldAt((igMetaObject *)meta, base + 9));

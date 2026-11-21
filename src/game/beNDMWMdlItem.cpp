@@ -61,11 +61,7 @@ struct Store {
 extern "C" void beNDMWMdlItem_OnGenerate(beNDMWMdlItem *self, beBaseInfoRam *info);
 /* matching construct: inline release helper reproduces the retail inlined refcount release */
 struct RefRelease { static inline void go(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
+    igObject::release(object);
 } };
 extern "C" void beNDMWMdlItem_OnErase(beNDMWMdlItem *self, beBaseInfoRam *ram);
 extern "C" void beNDMWMdlItem_OnSequenceChange(beNDMWMdlItem *self, beBaseInfoRam *ram);
@@ -130,12 +126,7 @@ void beNDMWMdlItem_Prepare(beNDMWMdlItem *self) {
     n = l->_count;
     for (i = 0; i < n; i++) {
         r = ((igObject **)l->_data)[i];
-        if (r != 0) {
-            --r->_refCount;
-            if (((unsigned long long)(long long)r->_refCount & 0x7fffffULL) == 0) {
-                igObject_Destroy(r);
-            }
-        }
+        igObject::release(r);
     }
     n2 = l->_count;
     for (i2 = 0; i2 < n2; i2++) {
@@ -298,9 +289,7 @@ void beNDMWMdlItem_UpdateControl(beNDMWMdlItem *self, beBaseInfoRam *ram) {
         }
         ObjectRef created(beBaseInfoDataList_Create(a));
         igObject *s0 = created.p;
-        if (s0 != 0) {
-            s0->_refCount++;
-        }
+        igObject::ref(s0);
         RefRelease::go((igObject *)ram->_dataList);
         ram->_dataList = (int)s0;
     }
@@ -497,9 +486,7 @@ void beNDMWMdlItem_OnErase(beNDMWMdlItem *self, beBaseInfoRam *ram) {
         }
         ObjectRef created(beBaseInfoDataList_Create(a));
         igObject *s0 = created.p;
-        if (s0 != 0) {
-            s0->_refCount++;
-        }
+        igObject::ref(s0);
         RefRelease::go((igObject *)ram->_dataList);
         ram->_dataList = (int)s0;
     }
@@ -564,9 +551,7 @@ void beNDMWMdlItem_OnAction1(beNDMWMdlItem *self, beNDMWGameRamInfoRam *ram) {
         }
         ObjectRef ref(beBaseInfoDataList_Create(a));
         dataList = ref.p;
-        if (dataList != 0) {
-            dataList->_refCount++;
-        }
+        igObject::ref(dataList);
         RefRelease::go((igObject *)ram->_dataList);
         ram->_dataList = (int)dataList;
     }

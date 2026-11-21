@@ -50,12 +50,7 @@ void beTextureCtrl_OnAddRam(beTextureCtrl *self, beBaseInfoRam *ram) {
             allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         }
         old = (igObject *)self->_work;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(old);
-            }
-        }
+        igObject::release(old);
         self->_work = (int)beTextureCtrlWork_Create(allocator);
     }
     info = (beTextureCtrlInfo *)ram->_parentInfo;

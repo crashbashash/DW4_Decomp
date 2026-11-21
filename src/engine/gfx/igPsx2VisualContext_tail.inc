@@ -98,11 +98,7 @@ int igPsx2VisualContext_GetVTable(void) {
 igSmartPointer<igObject> *igSmartPointer_igMemoryPool_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -111,11 +107,7 @@ igSmartPointer<igObject> *igSmartPointer_igMemoryPool_Destruct(igSmartPointer<ig
 igSmartPointer<igObject> *igSmartPointer_igTimer_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -151,11 +143,7 @@ Obj_1506b0 *FUN_00150af0(Obj_1506b0 *arg0, short arg1) {
 igSmartPointer<igObject> *igSmartPointer_igIntList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;

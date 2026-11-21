@@ -38,10 +38,7 @@ pool = g_useOwnerAllocator != 0 ? pool : ((int)Memory_GetAllocatorBySelector(kIG
         held = (igObject *)g_stringTableSemaphore;
         if (held != 0) {
             g_stringTableSemaphore = 0;
-            held->_refCount = (int)held->_refCount - 1;
-            if (((unsigned long long)(long long)(int)held->_refCount & 0x7fffffULL) == 0) {
-                igObject_Destroy(held);
-            }
+            held->release();
         }
     }
 }

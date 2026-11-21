@@ -14,11 +14,7 @@ extern "C" void beStaticInfoCtl_UpdateRam(void);
 extern "C" igMetaObject *beStaticInfoCtl_GetMeta(void);
 /* matching construct: the inlined refcount release is a static member so the compiler expands it as retail does */
 struct ReleaseRefInline { static inline void go(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
+    igObject::release(object);
 } };
 extern "C" void beStaticInfoCtl_Stop(beStaticInfoCtl *self);
 extern "C" void beStaticInfoCtl_Prepare(beStaticInfoCtl *self);

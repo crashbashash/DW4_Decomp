@@ -511,7 +511,7 @@ class SlotPlayerRef {
 public:
     igObject *p;
     SlotPlayerRef(igObject *o) : p(o) {}
-    ~SlotPlayerRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
+    ~SlotPlayerRef() { igObject *o = p; igObject::release(o); }
 };
 /* Owning stack reference to one Digimon record (a new one appended to the slot player, then each
  * one re-read from its list): released at the end of each loop pass. Its destructor is emitted out
@@ -520,7 +520,7 @@ class DegiDataRef {
 public:
     igObject *p;
     DegiDataRef(igObject *o) : p(o) {}
-    ~DegiDataRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
+    ~DegiDataRef() { igObject *o = p; igObject::release(o); }
 };
 /* A Digimon's save block: the data block of a beNDMWDegiData, one record per property of the
  * save. playerName[0] is 0xFFFF once the name has been converted to unicode. */
@@ -605,7 +605,7 @@ template <int kind> class SlotRef {
 public:
     igObject *p;
     SlotRef(igObject *o) : p(o) {}
-    ~SlotRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy((igObject *)o); } }
+    ~SlotRef() { igObject *o = p; igObject::release(o); }
 };
 extern "C" void beNDMWLoadCtrl2_Prepare(beNDMWLoadCtrl2 *self);
 extern "C" void beNDMWLoadCtrl2_OnAddRam(beNDMWLoadCtrl2 *self, int info);
@@ -617,27 +617,23 @@ class CtrlDataRef {
 public:
     igObject *p;
     CtrlDataRef(igObject *o) : p(o) {}
-    ~CtrlDataRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~CtrlDataRef() { igObject *o = p; igObject::release(o); }
 };
 class CommonIntfRef {
 public:
     igObject *p;
     CommonIntfRef(igObject *o) : p(o) {}
-    ~CommonIntfRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~CommonIntfRef() { igObject *o = p; igObject::release(o); }
 };
 class FlagWorkRef {
 public:
     igObject *p;
     FlagWorkRef(igObject *o) : p(o) {}
-    ~FlagWorkRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~FlagWorkRef() { igObject *o = p; igObject::release(o); }
 };
 /* Releases an object reference, used for the old list during the list install. */
 struct ReleaseRef { static inline void Apply(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if ((object->_refCount & 0x7fffff) == 0)
-            igObject_Destroy(object);
-    }
+    igObject::release(object);
 } };
 extern "C" int beNDMWLoadCtrl2_OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBaseInfo *info);
 
@@ -1621,10 +1617,7 @@ void beNDMWLoadCtrl2CommonIntf__RemoveAccessPlayer(beNDMWLoadCtrl2CommonIntf *in
         for (int i = slotPlayers->_count - 1; i >= 0; i--) {
             beNDMWLoadSlotPlayer *slotPlayer = ((beNDMWLoadSlotPlayer **)slotPlayers->_data)[i];
             if (((igIntList *)slotPlayer->_accessPlList)->_count == 0) {
-                if (slotPlayer != 0) {
-                    slotPlayer->_refCount = slotPlayer->_refCount - 1;
-                    if ((slotPlayer->_refCount & 0x7FFFFF) == 0) igObject_Destroy(slotPlayer);
-                }
+                igObject::release(slotPlayer);
                 List_RemoveWordAt((igDataList *)slotPlayers, i);
                 ((beNDMWLoadSlotPlayer **)slotPlayers->_data)[slotPlayers->_count] = 0;
             }
@@ -1768,7 +1761,7 @@ void beNDMWDegiData__LoadFromProperties(beNDMWDegiData *degi, int props) {
 }
 
 /* matching construct: one releasing holder class per retail destructor copy (the table at 0x544c20 names 0x3d9d50, 0x3d9cd0, 0x3d9c50, 0x3d9bd0 and 0x3b9ba0; the last is not the copy other members of this file name for their holders) */
-template <int K> struct CreatedItemRef { igObject *p; CreatedItemRef(igObject *o) : p(o) {} ~CreatedItemRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
+template <int K> struct CreatedItemRef { igObject *p; CreatedItemRef(igObject *o) : p(o) {} ~CreatedItemRef() { igObject *o = p; igObject::release(o); } };
 
 static inline int itemAllocator(void *owner) {
     int alloc = (int)((Gap::Core::igObject *)owner)->getMemoryPool();
@@ -2313,16 +2306,9 @@ void beNDMWLoadCtrl2_Prepare(beNDMWLoadCtrl2 *self) {
     igObject *previous;
     if (self->_padManager == 0) {
         found = (igObject *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
-        if (found != 0) {
-            found->_refCount = found->_refCount + 1;
-        }
+        igObject::ref(found);
         previous = (igObject *)self->_padManager;
-        if (previous != 0) {
-            previous->_refCount = previous->_refCount - 1;
-            if ((previous->_refCount & 0x7fffff) == 0) {
-                igObject_Destroy(previous);
-            }
-        }
+        igObject::release(previous);
         self->_padManager = (int)found;
     }
 }
@@ -2352,12 +2338,7 @@ void beNDMWLoadCtrl2_UpdateRam(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
             o = list.p;
             if (o != 0) o->_refCount = o->_refCount + 1;
             old = (igObject *)ram->_dataList;
-            if (old != 0) {
-                old->_refCount = old->_refCount - 1;
-                if ((old->_refCount & 0x7FFFFF) == 0) {
-                    igObject_Destroy(old);
-                }
-            }
+            igObject::release(old);
             ram->_dataList = (int)o;
         }
         ctrl = (beNDMWLoadCtrl2CtrlData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "CTRL");
@@ -2371,12 +2352,7 @@ void beNDMWLoadCtrl2_UpdateRam(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
             o = list.p;
             if (o != 0) o->_refCount = o->_refCount + 1;
             old = (igObject *)ram->_dataList;
-            if (old != 0) {
-                old->_refCount = old->_refCount - 1;
-                if ((old->_refCount & 0x7FFFFF) == 0) {
-                    igObject_Destroy(old);
-                }
-            }
+            igObject::release(old);
             ram->_dataList = (int)o;
         }
         intf = (beNDMWLoadCtrl2CommonIntf *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMONINTF");

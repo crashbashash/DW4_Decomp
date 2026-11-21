@@ -401,16 +401,9 @@ int igPageMemoryPool_GetEventTracker(igPageMemoryPool *self) {
 void igPageMemoryPool_SetEventTracker(igPageMemoryPool *self, igObject *tracker) {
     igObject *o;
     if (tracker == 0 || (void *)((Gap::Core::igObject *)tracker)->getMemoryPool() != self) {
-        if (tracker != 0) {
-            tracker->_refCount++;
-        }
+        igObject::ref(tracker);
         o = (igObject *)self->_eventTracker;
-        if (o != 0) {
-            --o->_refCount;
-            if ((o->_refCount & 0x7fffff) == 0) {
-                igObject_Destroy(o);
-            }
-        }
+        igObject::release(o);
         self->_eventTracker = (int)tracker;
     }
 }

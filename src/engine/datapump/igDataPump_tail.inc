@@ -7,28 +7,14 @@ void igDataPump_SetDestByFieldName(igDataPump *self, igObjectDispatchView **dest
     int newv;
     int oldv;
     object = (igObject *)*destObj;
-    if (object != 0) {
-        object->_refCount = object->_refCount + 1;
-    }
+    igObject::ref(object);
     old = (igObject *)self->_destObj;
-    if (old != 0) {
-        --old->_refCount;
-        if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     self->_destObj = (int)object;
     fld = (igMetaField *)igMetaObject_FindFieldByName((*destObj)->GetMeta(), destName);
-    if (fld != 0) {
-        fld->_refCount = fld->_refCount + 1;
-    }
+    igObject::ref(fld);
     old = (igObject *)self->_destMeta;
-    if (old != 0) {
-        --old->_refCount;
-        if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     self->_destMeta = (int)fld;
     name = ((igMetaObject *)((igMetaField *)self->_destMeta)->_parentMetaObject)->_name;
     if (g_stringPool == 0) {
@@ -74,16 +60,9 @@ void igDataPump_SetDataPumpInterface(igDataPump *self, igObject **dpi) {
     igObject *old;
     igObject *interface;
     interface = *dpi;
-    if (interface != 0) {
-        interface->_refCount = (int)((int) (interface->_refCount + 1));
-    }
+    igObject::ref(interface);
     old = (igObject *)self->_dpi;
-    if (old != 0) {
-        old->_refCount = (int)((int) (old->_refCount - 1));
-        if (((unsigned long long) ((long long) (int) old->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     self->_dpi = (int)interface;
 }
 
@@ -112,16 +91,9 @@ void igDataPump_UserPostLoad(igDataPump *pump) {
     if (meta.get() != 0) {
         igObject *field = igMetaObject_FindFieldByName((igMetaObject *)(meta.get()), (const char *)pump->_destMetaFieldName);
         igObject *old;
-        if (field != 0) {
-            field->_refCount = field->_refCount + 1;
-        }
+        igObject::ref(field);
         old = (igObject *)pump->_destMeta;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(old);
-            }
-        }
+        igObject::release(old);
         pump->_destMeta = (int)field;
     }
 }

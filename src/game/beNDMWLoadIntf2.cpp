@@ -4445,9 +4445,7 @@ static inline void ReleaseReference(ObjectRefTarget *object)
 static inline void SetDataList(beBaseInfoRam *ram, beBaseInfoDataList *list) {
     igObject *previous;
 
-    if (list != 0) {
-        list->_refCount = list->_refCount + 1;
-    }
+    igObject::ref(list);
     previous = (igObject *)ram->_dataList;
     igRelease(previous);
     ram->_dataList = (int)list;
@@ -4636,9 +4634,7 @@ void beNDMWLoadIntf2_Prepare(beNDMWLoadIntf2 *self) {
 
     if (self->_padManager == 0) {
         found = igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
-        if (found != 0) {
-            found->_refCount = (int)found->_refCount + 1;
-        }
+        igObject::ref(found);
         previous = (igObject *)self->_padManager;
         IG_OBJECT_RELEASE(previous);
         self->_padManager = (int)found;

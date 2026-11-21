@@ -1537,9 +1537,7 @@ void beSvReadMediaApi_Start(beSvReadMediaApiWork *self, beSvDeliver *deliver) {
     platform = (beSvPlatDataPS2 *)deliver->_platformData;
     self->_connect = deliver->_targetConnect;
     gameData = (igObject *)deliver->_gameData;
-    if (gameData != 0) {
-        gameData->_refCount = gameData->_refCount + 1;
-    }
+    igObject::ref(gameData);
     old = self->_lodeData;
     IG_OBJECT_RELEASE(old);
     self->_lodeData = gameData;

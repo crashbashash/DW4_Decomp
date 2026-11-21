@@ -48,12 +48,7 @@ igObject **igSmartPointer_igCharListNoClean_Destruct(igObject **self, short flag
 
     if (self != 0) {
         object = *self;
-        if (object != 0) {
-            object->_refCount = object->_refCount - 1;
-            if ((object->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(object);
-            }
-        }
+        igObject::release(object);
         if (flags > 0) {
             operator delete(self);
         }

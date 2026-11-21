@@ -45,18 +45,10 @@ int FUN_00167410(Owner_167410 *arg0, png_structp arg1, png_infop arg2, png_infop
     if (o != 0) {
         o->vX();
         o = arg0->f92;
-        ((igObject *)o)->_refCount = (int)((int) (((igObject *)o)->_refCount - 1));
-        if (((unsigned long long) ((long long) (int) ((igObject *)o)->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)o);
-        }
+        ((igObject *)o)->release();
     }
     o = arg0->f92;
-    if (o != 0) {
-        ((igObject *)o)->_refCount = (int)((int) (((igObject *)o)->_refCount - 1));
-        if (((unsigned long long) ((long long) (int) ((igObject *)o)->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)o);
-        }
-    }
+    igObject::release(((igObject *)o));
     arg0->f92 = 0;
     return arg6;
 }

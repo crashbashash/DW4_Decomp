@@ -43,12 +43,7 @@ void LuaGlue_Shutdown(void) {
         }
     }
     pool = g_luaGluePool;
-    if (pool != 0) {
-        pool->_refCount = pool->_refCount - 1;
-        if ((pool->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(pool);
-        }
-    }
+    igObject::release(pool);
 }
 
 LuaFieldWalker::~LuaFieldWalker() {

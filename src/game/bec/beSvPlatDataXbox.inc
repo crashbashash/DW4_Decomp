@@ -105,10 +105,7 @@ void beSvPlatDataXbox_InitFields(void) {
     ((Gap::Core::igIntMetaField *)clone)->setDefault(9);
     clone->_externalEnumStorage = (int)(&g_beSvPlatDataXbox_connectMaxStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
-    clone->_refCount = (int)clone->_refCount - 1;
-    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(clone);
-    }
+    clone->release();
     image = (igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
     ((igObjectRefMetaField *)image)->_metaObject = (int)beXboxImage24k_GetOrCreateMetaObject();
     ((igRefMetaField *)image)->_construct = 1;

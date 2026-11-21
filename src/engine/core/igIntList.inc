@@ -61,10 +61,7 @@ CallbackArray *igIntList::arkRegisterInternal()
 }
 
 static inline void releaseDataField(igMemoryRefMetaField *f) {
-    f->_refCount = (int)f->_refCount - 1;
-    if (((unsigned long long)((long long)(int)f->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(f);
-    }
+    f->release();
 }
 
 namespace Gap {
@@ -82,10 +79,7 @@ void igIntList::arkRegisterInitialize()
         metaField->_memSize = 0;
         metaField->_externalEnumStorage = (int)&k_data;
         igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
-        metaField->_refCount = metaField->_refCount - 1;
-        if (((unsigned long long)(long long)metaField->_refCount & 0x7fffffULL) == 0) {
-            igObject_Destroy((::igObject *)metaField);
-        }
+        metaField->release();
     }
 }
 }

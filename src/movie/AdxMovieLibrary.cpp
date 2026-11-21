@@ -1060,11 +1060,7 @@ int igCriMovieCodec_GetVTable(void) {
 igSmartPointer<igObject> *igSmartPointer_igAudioContext_Destruct(igSmartPointer<igObject> *self, short flag) {
     if (self != 0) {
         igObject *object = self->p;
-        if (object != 0) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (flag > 0) operator delete(self);
     }
     return self;
@@ -1479,11 +1475,7 @@ int igMovieInfo_GetVTable(void) {
 igSmartPointer<igObject> *igSmartPointer_igTextureBindAttrList_Destruct(igSmartPointer<igObject> *self, short flag) {
     if (self != 0) {
         igObject *object = self->p;
-        if (object != 0) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (flag > 0) operator delete(self);
     }
     return self;
@@ -1492,11 +1484,7 @@ igSmartPointer<igObject> *igSmartPointer_igTextureBindAttrList_Destruct(igSmartP
 igSmartPointer<igObject> *igSmartPointer_igMovieCodec_Destruct(igSmartPointer<igObject> *self, short flag) {
     if (self != 0) {
         igObject *object = self->p;
-        if (object != 0) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (flag > 0) operator delete(self);
     }
     return self;
@@ -1729,11 +1717,7 @@ int igMovieRenderer_GetVTable(void) {
 igSmartPointer<igObject> *igSmartPointer_igMovieManager_Destruct(igSmartPointer<igObject> *self, short flag) {
     if (self != 0) {
         igObject *object = self->p;
-        if (object != 0) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (flag > 0) operator delete(self);
     }
     return self;
@@ -1852,11 +1836,7 @@ int igMovieManager_GetVTable(void) {
 igSmartPointer<igObject> *igSmartPointer_igMovieInfoList_Destruct(igSmartPointer<igObject> *self, short flag) {
     if (self != 0) {
         igObject *object = self->p;
-        if (object != 0) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (flag > 0) operator delete(self);
     }
     return self;
@@ -1865,11 +1845,7 @@ igSmartPointer<igObject> *igSmartPointer_igMovieInfoList_Destruct(igSmartPointer
 igSmartPointer<igObject> *igSmartPointer_igMovieCodecList_Destruct(igSmartPointer<igObject> *self, short flag) {
     if (self != 0) {
         igObject *object = self->p;
-        if (object != 0) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (flag > 0) operator delete(self);
     }
     return self;
@@ -1878,11 +1854,7 @@ igSmartPointer<igObject> *igSmartPointer_igMovieCodecList_Destruct(igSmartPointe
 igSmartPointer<igObject> *igSmartPointer_igMovieRenderer_Destruct(igSmartPointer<igObject> *self, short flag) {
     if (self != 0) {
         igObject *object = self->p;
-        if (object != 0) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (flag > 0) operator delete(self);
     }
     return self;

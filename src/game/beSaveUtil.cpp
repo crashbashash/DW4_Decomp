@@ -41,9 +41,7 @@ unsigned char beSaveUtil_StartApi(beSaveUtil *self, beSaveUtilInfoRam *info, beS
 
     started = 0;
     if (self->_api == 0) {
-        if (request != 0) {
-            request->_refCount = request->_refCount + 1;
-        }
+        igObject::ref(request);
         old = (igObject *)self->_api;
         IG_OBJECT_RELEASE(old);
         self->_api = (int)request;

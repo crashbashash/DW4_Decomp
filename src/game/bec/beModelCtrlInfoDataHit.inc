@@ -104,10 +104,7 @@ void beModelCtrlInfoDataHit_InitFields(void) {
     ((Gap::Core::igStringMetaField *)clone)->setDefault("HIT");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataHit_nameStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
-    clone->_refCount = (int)clone->_refCount - 1;
-    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(clone);
-    }
+    clone->release();
     hitBulletAABoxList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2));
     ((igObjectRefMetaField *)hitBulletAABoxList)->_metaObject = (int)igAABoxList_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)meta, g_beModelCtrlInfoDataHit_fieldTable, g_beModelCtrlInfoDataHit_fieldHandles, g_beModelCtrlInfoDataHit_fieldOffsets, base);

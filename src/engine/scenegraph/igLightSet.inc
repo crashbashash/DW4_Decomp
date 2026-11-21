@@ -106,11 +106,7 @@ igMetaObject *igAnimationSequence_GetPublishedMetaObject(void) {
 igSmartPointer<igObject> *igSmartPointer_igAnimationTransitionDefinitionList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -119,11 +115,7 @@ igSmartPointer<igObject> *igSmartPointer_igAnimationTransitionDefinitionList_Des
 igSmartPointer<igObject> *igSmartPointer_igAnimationTrackList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -132,11 +124,7 @@ igSmartPointer<igObject> *igSmartPointer_igAnimationTrackList_Destruct(igSmartPo
 igSmartPointer<igObject> *igSmartPointer_igAnimationBindingList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;

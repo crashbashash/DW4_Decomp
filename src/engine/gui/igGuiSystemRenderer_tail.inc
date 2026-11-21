@@ -15,16 +15,9 @@ void igGuiSystemRenderer_Traverse(int *arg0) {
     ((C29 *)arg0[5])->vX();
     ((C23 *)arg0[5])->vX(arg0[3]);
     temp_v0 = ((C28_456670 *)arg0[5])->vX();
-    if (temp_v0 != 0) {
-        temp_v0->_refCount = temp_v0->_refCount + 1;
-    }
+    igObject::ref(temp_v0);
     temp_a0_4 = (igObject *)arg0[6];
-    if (temp_a0_4 != 0) {
-        temp_a0_4->_refCount = temp_a0_4->_refCount - 1;
-        if ((temp_a0_4->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(temp_a0_4);
-        }
-    }
+    igObject::release(temp_a0_4);
     arg0[6] = (int)temp_v0;
 }
 

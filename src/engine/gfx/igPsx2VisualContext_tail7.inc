@@ -395,11 +395,6 @@ void FUN_0017eb90(B_17eb90 *arg0, int arg1, int arg2, int arg3, int arg4, int ar
 }
 
 static inline void release_17f2b0(Rc_17f2b0 *object) {
-    if (object != 0) {
-        object->_refCount = object->_refCount - 1;
-        if ((object->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(object);
-        }
-    }
+    igObject::release(object);
 }
 

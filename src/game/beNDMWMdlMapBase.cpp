@@ -20,7 +20,7 @@ extern "C" int beNDMWMdlMapBase_GetMeta(void);
 extern "C" int KIND_MAPBASE[4];
 extern "C" char MAPBASE[];
 extern "C" void beNDMWMdlMapBase_RegisterReceiver(beNDMWMdlMapBase *self, int info, char *unused);
-struct Rel { static inline void go(igObject *o) { igObject *t = o; if (t != 0) { --t->_refCount; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); } } };
+struct Rel { static inline void go(igObject *o) { igObject *t = o; igObject::release(t); } };
 /* Owning stack reference to the slot's new data list; released on scope exit (reference count in
  * the low 23 bits of _refCount). */
 
@@ -29,7 +29,7 @@ class InfoWorkRef {
 public:
     igObject *p;
     InfoWorkRef(igObject *o) : p(o) {}
-    ~InfoWorkRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~InfoWorkRef() { igObject *o = p; igObject::release(o); }
 };
 struct Slot { static inline void setDataList(beBaseInfoRam *ram, const igSmartPointer<igObject> &r) {
     igObject *t = r.p;
@@ -143,14 +143,9 @@ void beNDMWMdlMapBase_OnUpdateRam(beNDMWMdlMapBase *self, beBaseInfoRam *ram) {
         }
         igSmartPointer<igObject> created(beBaseInfoDataList_Create((int)a));
         igObject *s0 = created.p;
-        if (s0 != 0) {
-            s0->_refCount++;
-        }
+        igObject::ref(s0);
         igObject *old = (igObject *)ram->_dataList;
-        if (old != 0) {
-            --old->_refCount;
-            if ((old->_refCount & 0x7fffff) == 0) igObject_Destroy(old);
-        }
+        igObject::release(old);
         ram->_dataList = (int)s0;
     }
     r = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");

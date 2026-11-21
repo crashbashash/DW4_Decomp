@@ -894,20 +894,10 @@ void FUN_0017a070(int *a) {
     a[9] = -1;
     a[10] = -1;
     temp_a0 = (igObject *)(a[12]);
-    if (temp_a0 != 0) {
-        temp_a0->_refCount = (int)temp_a0->_refCount - 1;
-        if ((temp_a0->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(temp_a0);
-        }
-    }
+    igObject::release(temp_a0);
     a[12] = 0;
     temp_a0_2 = (igObject *)(a[13]);
-    if (temp_a0_2 != 0) {
-        temp_a0_2->_refCount = (int)temp_a0_2->_refCount - 1;
-        if ((temp_a0_2->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(temp_a0_2);
-        }
-    }
+    igObject::release(temp_a0_2);
     a[13] = 0;
     a[14] = 0;
     a[15] = 0;

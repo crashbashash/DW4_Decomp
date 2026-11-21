@@ -1,11 +1,8 @@
-static inline void sortRetain(Gap::Core::igObject *o) { if (o != 0) { o->_refCount = (int)o->_refCount + 1; } }
+static inline void sortRetain(Gap::Core::igObject *o) { if (o != 0) { o->ref(); } }
 
 static inline void sortRelease(Gap::Core::igObject *o) {
     if (o != 0) {
-        o->_refCount = (int)o->_refCount - 1;
-        if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((::igObject *)o);
-        }
+        o->release();
     }
 }
 
@@ -39,17 +36,12 @@ void igObjectList::setAll(igObject *object)
     n = _count;
     if (object != 0) {
         for (i = 0; i < n; i++) {
-            object->_refCount = object->_refCount + 1;
+            object->ref();
         }
     }
     for (j = 0; j < n; j++) {
         t = get(j);
-        if (t != 0) {
-            t->_refCount = t->_refCount - 1;
-            if (((unsigned long long)((long long)(int)t->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((::igObject *)t);
-            }
-        }
+        igObject::release(t);
     }
     cnt = _count;
     data = (igObject **)_data;
@@ -67,12 +59,7 @@ void igObjectList::clearAll()
     n = _count;
     for (i = 0; i < n; i++) {
         o = get(i);
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy((::igObject *)o);
-            }
-        }
+        igObject::release(o);
     }
     if (_count != 0) {
         memset(_data, 0, _count * sizeof(igObject *));
@@ -83,9 +70,7 @@ void igObjectList::append(igObject *object)
 {
     int count;
 
-    if (object != 0) {
-        object->_refCount = object->_refCount + 1;
-    }
+    igObject::ref(object);
     count = _count;
     if (count < _capacity) {
         _count = count + 1;
@@ -104,9 +89,7 @@ void igObjectList::concatenate(const igObjectList *list)
 
     for (i = 0; i < count; i++) {
         object = data[i];
-        if (object != 0) {
-            object->_refCount = object->_refCount + 1;
-        }
+        igObject::ref(object);
     }
     append4(list->_count, list->_data);
 }
@@ -122,12 +105,7 @@ void igObjectList::setCount(int newCount)
     if (newCount <= n) {
         for (j = newCount; j < n; j++) {
             t = get(j);
-            if (t != 0) {
-                t->_refCount = t->_refCount - 1;
-                if (((unsigned long long)((long long)(int)t->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((::igObject *)t);
-                }
-            }
+            igObject::release(t);
         }
         for (k = newCount; k < n; k++) {
             get(k) = 0;
@@ -152,12 +130,7 @@ igResult igObjectList::removeByValue(const igObject *obj, int startIndex)
     if (i >= 0) {
         igObject *o = get(i);
         unsigned int k = i;
-        if (o != 0) {
-            o->_refCount = (int)o->_refCount - 1;
-            if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((::igObject *)o);
-            }
-        }
+        igObject::release(o);
         remove4(k);
         get(_count) = 0;
         return g_resultSuccess;
@@ -172,12 +145,7 @@ int igObjectList::removeAllByValue(const igObject *obj, int startIndex)
 
     while (i >= 0) {
         igObject *element = get(i);
-        if (element != 0) {
-            element->_refCount = element->_refCount - 1;
-            if ((element->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy((::igObject *)element);
-            }
-        }
+        igObject::release(element);
         remove4(i);
         get(_count) = 0;
         removed++;

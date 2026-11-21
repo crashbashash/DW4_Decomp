@@ -24,11 +24,7 @@ extern "C" int GETMATRIX_5[4];
 extern "C" int GENERATE_9[4];
 extern "C" int SQ_ERAS_3[4];
 struct Rel { static inline void go(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
+    igObject::release(object);
 } };
 extern "C" int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram, beMessengerWork *work);
 
@@ -58,12 +54,7 @@ void beParticleCtrl2_Prepare(beParticleCtrl2 *self) {
                     ram = *(beParticleCtrl2InfoRam **)((char *)((igObjectList *)info->_ramList)->_data + ramOffset);
                     ram->_isRun = 0;
                     work = (igObject *)ram->_work;
-                    if (work != 0) {
-                        --work->_refCount;
-                        if (((unsigned long long)(long long)work->_refCount & 0x7fffffULL) == 0) {
-                            igObject_Destroy((igObject *)work);
-                        }
-                    }
+                    igObject::release(work);
                     ram->_work = 0;
                     j++;
                     ramOffset += 4;
@@ -161,12 +152,7 @@ void beParticleCtrl2_OnAddRam(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram
     beMessenger_RegisterReceiver((beMessenger *)self->_messenger, (beBaseInfoRam *)ram, (const char *)&MODELCTRL_12[0], (const char *)name, ramNo);
     ram->_isRun = 0;
     work = (igObject *)ram->_work;
-    if (work != 0) {
-        work->_refCount = (int)work->_refCount - 1;
-        if (((unsigned long long) ((long long) (int)work->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)work);
-        }
-    }
+    igObject::release(work);
     ram->_work = 0;
 }
 
@@ -206,16 +192,12 @@ int beParticleCtrl2_OnMessage(beParticleCtrl2 *self, beParticleCtrl2InfoRam *ram
                 igSmartPointer<beParticleCtrl2InfoWork> lockWork((beParticleCtrl2InfoWork *)beParticleCtrl2InfoWork_Create(a));
                 igObject *node = (igObject *)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
                 beParticleCtrl2InfoWork *held = lockWork.p;
-                if (node != 0) {
-                    node->_refCount = node->_refCount + 1;
-                }
+                igObject::ref(node);
                 Rel::go((igObject *)held->_positionLockNode);
                 held->_positionLockNode = (int)node;
                 lockWork->_positionLockOffset = offset;
                 held = lockWork.p;
-                if (held != 0) {
-                    held->_refCount = held->_refCount + 1;
-                }
+                igObject::ref(held);
                 Rel::go((igObject *)ram->_work);
                 ram->_work = (int)held;
             }

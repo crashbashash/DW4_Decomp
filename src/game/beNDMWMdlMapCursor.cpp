@@ -19,7 +19,7 @@ extern "C" unsigned char beNDMWMdlMapCursor_IsKind(int dummy0, const char *kind)
 extern "C" int beNDMWMdlMapCursor_GetMeta(void);
 /* matching construct: inline retain/release helpers reproduce the retail inlined refcount code */
 struct RefCount { static inline void addref(igObject *o) { if (o != 0) o->_refCount = o->_refCount + 1; }
- static inline void release(igObject *o) { if (o != 0) { o->_refCount = o->_refCount - 1; if (((unsigned long long)(long long)o->_refCount & 0x7fffffULL) == 0) igObject_Destroy(o); } } };
+ static inline void release(igObject *o) { igObject::release(o); } };
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
 
@@ -28,7 +28,7 @@ class ValueRef {
 public:
     beModelCtrlInfoWork *p;
     ValueRef(beModelCtrlInfoWork *o) : p(o) {}
-    ~ValueRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~ValueRef() { igObject *o = p; igObject::release(o); }
 };
 /* Inlined helper shared by the model-controller "apply ram" methods: a ram without a data list gets a
  * fresh beBaseInfoDataList (allocator chosen by the global selector flag).  Being an inlined callee, its
@@ -47,11 +47,7 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
 extern "C" void beNDMWMdlMapCursor_OnGenerate(beNDMWMdlMapCursor *self, beBaseInfoRam *ram);
 /* matching construct: inline release helper reproduces the retail inlined release of the previous data list */
 struct RefRelease { static inline void go(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
+    igObject::release(object);
 } };
 extern "C" void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *self, beBaseInfoRam *ram);
 
@@ -171,9 +167,7 @@ void beNDMWMdlMapCursor_OnUpdateRam(beNDMWMdlMapCursor *self, beBaseInfoRam *ram
                 }
                 igSmartPointer<igObject> ref(beBaseInfoDataList_Create((int)a));
                 s0 = ref.p;
-                if (s0 != 0) {
-                    s0->_refCount++;
-                }
+                igObject::ref(s0);
                 RefRelease::go((igObject *)ram->_dataList);
                 ram->_dataList = (int)s0;
             }

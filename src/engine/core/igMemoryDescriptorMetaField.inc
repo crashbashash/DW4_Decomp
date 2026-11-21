@@ -27,12 +27,7 @@ int igMemoryDescriptorMetaField_GetVTable(void) {
     field._vtable = (int)&g_igCompoundMetaField_vtable[0];
     if (fieldList != 0) {
         fieldList = *(igObject **)fieldList;
-        if (fieldList != 0) {
-            fieldList->_refCount = (int)((int) (fieldList->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) fieldList->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(fieldList);
-            }
-        }
+        igObject::release(fieldList);
     }
     fieldName = (char *)&field._fieldName;
     field._vtable = (int)&g_igMetaField_vtable[0];
@@ -88,10 +83,7 @@ void igMemoryDescriptorMetaField_CreateDefaultDescriptor(void) {
             MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
             {
                 void *held = (void *)g_igMemoryDescriptorMetaField_descriptor;
-                ((igObject *)held)->_refCount = ((igObject *)held)->_refCount - 1;
-                if (((unsigned long long) ((long long) (int) ((igObject *)held)->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((igObject *)held);
-                }
+                ((igObject *)held)->release();
             }
             ((igMetaField *)g_igMemoryDescriptorMetaField_descriptor)->_internalIndex = (short) (Gap::Core::igMetaField::getMetaFieldTypes()->_count - 1);
             ((Gap::Core::igMetaField *)g_igMemoryDescriptorMetaField_descriptor)->validate();
@@ -145,9 +137,6 @@ void igMemoryDescriptorMetaField_AddSubFields(int fieldList) {
     ((igMetaField *)field)->_offset = 0;
     ((Gap::Core::igMetaField *)field)->validate();
     ((Gap::Core::igObjectList *)fieldList)->append((Gap::Core::igObject *)field);
-    ((igObject *)field)->_refCount = (int)((int) (((igObject *)field)->_refCount - 1));
-    if (((unsigned long long) ((long long) (int) ((igObject *)field)->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy((igObject *)field);
-    }
+    ((igObject *)field)->release();
 }
 

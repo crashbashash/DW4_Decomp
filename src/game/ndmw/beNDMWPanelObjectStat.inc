@@ -135,10 +135,7 @@ void beNDMWPanelObjectStat_InitFields(void) {
     ((Gap::Core::igIntMetaField *)pageField)->setDefault(2);
     pageField->_externalEnumStorage = (int)(&g_beNDMWPanelObjectStat_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, pageIndex, (igMetaField *)pageField);
-    pageField->_refCount = pageField->_refCount - 1;
-    if (((unsigned long long)(long long)pageField->_refCount & 0x7fffffULL) == 0) {
-        igObject_Destroy(pageField);
-    }
+    pageField->release();
     listFolder = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base));
     listFolder->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     listFolder->_construct = 1;

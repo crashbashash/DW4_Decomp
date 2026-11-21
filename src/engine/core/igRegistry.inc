@@ -44,30 +44,15 @@ int igRegistry_GetVTable(void) {
     registry._vtable = (int)&g_igRegistry_vtable[0];
     if (q0 != 0) {
         q0 = *(igObject **)q0;
-        if (q0 != 0) {
-            q0->_refCount = (int)((int) (q0->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) q0->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
-            }
-        }
+        igObject::release(q0);
     }
     if (q1 != 0) {
         q1 = *(igObject **)q1;
-        if (q1 != 0) {
-            q1->_refCount = (int)((int) (q1->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) q1->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q1);
-            }
-        }
+        igObject::release(q1);
     }
     if (q2 != 0) {
         q2 = *(igObject **)q2;
-        if (q2 != 0) {
-            q2->_refCount = (int)((int) (q2->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) q2->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q2);
-            }
-        }
+        igObject::release(q2);
     }
     return vtable;
 }

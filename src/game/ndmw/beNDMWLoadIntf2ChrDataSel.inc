@@ -171,10 +171,7 @@ void beNDMWLoadIntf2ChrDataSel_InitFields(void) {
     ((Gap::Core::igStringMetaField *)nameField)->setDefault("CHRDATASEL");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2ChrDataSel_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, nameIndex, (igMetaField *)nameField);
-    nameField->_refCount = nameField->_refCount - 1;
-    if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
-        igObject_Destroy(nameField);
-    }
+    nameField->release();
     messenger = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base));
     messenger->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     messenger->_refCounted = 0;

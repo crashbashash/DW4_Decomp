@@ -53,12 +53,7 @@ static inline int PluginAllocator(libBecRuntimePlugin *plugin) {
 
 static inline void ReleaseRef(int field) {
     igObject *object = (igObject *)field;
-    if (object != 0) {
-        object->_refCount = object->_refCount - 1;
-        if ((object->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(object);
-        }
-    }
+    igObject::release(object);
 }
 
 static inline void AddManager(igInsightCore *core, int manager) {

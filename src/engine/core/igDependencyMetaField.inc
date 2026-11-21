@@ -27,12 +27,7 @@ int igDependencyMetaField_GetVTable(void) {
     field._vtable = (int)&g_igCompoundMetaField_vtable[0];
     if (fieldList != 0) {
         fieldList = *(igObject **)fieldList;
-        if (fieldList != 0) {
-            fieldList->_refCount = (int)((int) (fieldList->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) fieldList->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(fieldList);
-            }
-        }
+        igObject::release(fieldList);
     }
     fieldName = (char *)&field._fieldName;
     field._vtable = (int)&g_igMetaField_vtable[0];
@@ -88,10 +83,7 @@ void igDependencyMetaField_CreateDefaultDescriptor(void) {
             MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
             {
                 void *held = (void *)g_igDependencyMetaField_descriptor;
-                ((igObject *)held)->_refCount = ((igObject *)held)->_refCount - 1;
-                if (((unsigned long long) ((long long) (int) ((igObject *)held)->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((igObject *)held);
-                }
+                ((igObject *)held)->release();
             }
             ((igMetaField *)g_igDependencyMetaField_descriptor)->_internalIndex = (short) (Gap::Core::igMetaField::getMetaFieldTypes()->_count - 1);
             ((Gap::Core::igMetaField *)g_igDependencyMetaField_descriptor)->validate();
@@ -156,10 +148,7 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
     ((igMetaField *)beforeField)->_offset = 0;
     ((Gap::Core::igMetaField *)beforeField)->validate();
     ((Gap::Core::igObjectList *)fieldList)->append((Gap::Core::igObject *)beforeField);
-    ((igObject *)beforeField)->_refCount = (int)((int) (((igObject *)beforeField)->_refCount - 1));
-    if (((unsigned long long) ((long long) (int) ((igObject *)beforeField)->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy((igObject *)beforeField);
-    }
+    ((igObject *)beforeField)->release();
     afterField = (void *)(((void *)igRawRefMetaField_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
     if ("_after" == 0) {
         afterText = (void *)(0);
@@ -186,9 +175,6 @@ void igDependencyMetaField_AddSubFields(int fieldList) {
     ((igMetaField *)afterField)->_offset = 4;
     ((Gap::Core::igMetaField *)afterField)->validate();
     ((Gap::Core::igObjectList *)fieldList)->append((Gap::Core::igObject *)afterField);
-    ((igObject *)afterField)->_refCount = (int)((int) (((igObject *)afterField)->_refCount - 1));
-    if (((unsigned long long) ((long long) (int) ((igObject *)afterField)->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy((igObject *)afterField);
-    }
+    ((igObject *)afterField)->release();
 }
 

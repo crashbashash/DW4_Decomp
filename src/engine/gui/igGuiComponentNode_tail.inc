@@ -7,16 +7,9 @@ void igGuiComponentNode_resetFields(Node *self, int flags) {
     origin.z = 0;
     FUN_001900d0((void **)(transform.get()), (int)&origin);
     igObject *retained = transform.get();
-    if (retained != 0) {
-        retained->_refCount = retained->_refCount + 1;
-    }
+    igObject::ref(retained);
     igObject *previous = self->child;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     self->child = retained;
 }
 

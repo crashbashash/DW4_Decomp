@@ -40,12 +40,7 @@ void igParticleArray_ReleaseDefaults(ParticleArray *arg0) {
     temp_s0 = (PointSpriteInterfaceView *)arg0->_pointSpriteInterface;
     if ((temp_s0 != 0) && (f24_of(temp_s0) == (igObject *)arg0->_internalVertexArray)) {
         temp_a0_2 = temp_s0->f24;
-        if (temp_a0_2 != 0) {
-            temp_a0_2->_refCount = temp_a0_2->_refCount - 1;
-            if ((temp_a0_2->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(temp_a0_2);
-            }
-        }
+        igObject::release(temp_a0_2);
         temp_s0->f24 = 0;
     }
 }

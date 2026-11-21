@@ -50,21 +50,11 @@ int beNDMWMcUtilCtrl_GetVTable(void) {
     *(int **)&obj._vtable = &g_beNDMWMcUtilCtrl_vtable[0];
     if (&obj._slot != 0) {
         o = (igObject *)obj._slot;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
+        igObject::release(o);
     }
     if (&obj._svData != 0) {
         o = (igObject *)obj._svData;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
+        igObject::release(o);
     }
     return t;
 }

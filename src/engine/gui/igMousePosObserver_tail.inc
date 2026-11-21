@@ -4,16 +4,9 @@ static inline void setEvent(MousePosObserverView *self, const igSmartPointer<Obs
     igObject *retained = event.get();
     ObserverModelView *model = self->m;
     igObject *previous;
-    if (retained != 0) {
-        retained->_refCount = retained->_refCount + 1;
-    }
+    igObject::ref(retained);
     previous = model->ref;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     model->ref = retained;
 }
 
@@ -62,9 +55,7 @@ void igMousePosObserver_OnModelChange(igMousePosObserver *self, struct GuiMessag
             FUN_00456c20(model, (igGuiComponent *)under);
         }
         if (model->_mousePressed) {
-            if (under != 0) {
-                under->_refCount = under->_refCount + 1;
-            }
+            igObject::ref(under);
             igRelease((igObject *)model->_pushedComponent);
             model->_pushedComponent = (int)under;
         } else {
@@ -85,10 +76,7 @@ static inline void setPick(Z *z, const igSmartPointer<Obj_455f50> &value) {
     Obj_455f50 *old;
     if (held != 0) held->_refCount = held->_refCount + 1;
     old = z->f32;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-    }
+    igObject::release(old);
     z->f32 = held;
 }
 
@@ -121,12 +109,7 @@ void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b) {
         a->_impactLength = ((igRay *)a->_ray)->_len;
         a->_hit = 0;
         t = (igObject *)a->_hitPath;
-        if (t != 0) {
-            t->_refCount = t->_refCount - 1;
-            if (((unsigned long long)((long long)(int)t->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
-            }
-        }
+        igObject::release(t);
         a->_hitPath = 0;
         g_activeMousePosObserver = (int)a;
         ((IntersectTraversalCalls *)a->_intersectTraversal)->v23(((igGuiComponent *)b->_rootComponent)->_node);
@@ -135,17 +118,10 @@ void FUN_00456050(igMousePosObserver *a, igGuiSystemModel *b) {
             s0 = (igObject *)FUN_00455510((A_455510 *)((void *)a->_hitPath));
         }
     }
-    if (s0 != 0) {
-        s0->_refCount = s0->_refCount + 1;
-    }
+    igObject::ref(s0);
     {
         igObject *t = (igObject *)b->_componentUnderMouse;
-        if (t != 0) {
-            t->_refCount = t->_refCount - 1;
-            if (((unsigned long long)((long long)(int)t->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(t);
-            }
-        }
+        igObject::release(t);
     }
     b->_componentUnderMouse = (int)s0;
     sp[0] = 2;

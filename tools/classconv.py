@@ -80,9 +80,7 @@ DESCRIPTOR = ("void {C}::arkRegisterMetaValidate()\n{{\n    {C} *metaField;\n\n 
               "kIGMemoryPoolHandleMetaData));\n        metaField = _MetaField;\n        if (metaField != 0) {{\n"
               "            MetaRefList_AppendRetained(getMetaFieldTypes(), (::igObject *)metaField);\n"
               "            {{\n                ::igObject *held = (::igObject *)_MetaField;\n"
-              "                held->_refCount = (int)held->_refCount - 1;\n"
-              "                if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {{\n"
-              "                    igObject_Destroy(held);\n                }}\n            }}\n"
+              "                held->release();\n            }}\n"
               "            _MetaField->_internalIndex = (short)(getMetaFieldTypes()->_count - 1);\n"
               "            _MetaField->validate();\n        }}\n    }}\n}}")
 GETMF = "{C} *{C}::getMetaField()\n{{\n    if (_MetaField == 0)\n        arkRegister();\n    return _MetaField;\n}}"

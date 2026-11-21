@@ -69,7 +69,7 @@ class ObjectRef {
 public:
     igObject *p;
     ObjectRef(igObject *o) : p(o) {}
-    ~ObjectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~ObjectRef() { igObject *o = p; igObject::release(o); }
 };
 
 void beWeapon_OnAddRam(beWeapon *self, beWeaponInfoRam *ram) {
@@ -82,16 +82,9 @@ void beWeapon_OnAddRam(beWeapon *self, beWeaponInfoRam *ram) {
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<igObject> list(beWeaponAttachDataList_Create(allocator));
         retained = list.p;
-        if (retained != 0) {
-            retained->_refCount = retained->_refCount + 1;
-        }
+        igObject::ref(retained);
         old = (igObject *)self->_attachDataList;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7fffff) == 0) {
-                igObject_Destroy(old);
-            }
-        }
+        igObject::release(old);
         self->_attachDataList = (int)retained;
         for (attachIndex = 0; attachIndex < 4; attachIndex++) {
             allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();

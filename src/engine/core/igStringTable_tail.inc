@@ -278,12 +278,7 @@ void igStringTable_SetHashing(igStringTableView *self, int enable) {
         if (self->_hashIndex == 0) {
             alloc = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
             old = self->_hashIndex;
-            if (old != 0) {
-                --old->_refCount;
-                if (((unsigned long long)(long long)(int)old->_refCount & 0x7fffffULL) == 0) {
-                    igObject_Destroy(old);
-                }
-            }
+            igObject::release(old);
             self->_hashIndex = (igTDataList<int> *)igIntListNoClean_Create(alloc);
         }
         l = self->_hashIndex;
@@ -318,12 +313,7 @@ void igStringTable_SetHashing(igStringTableView *self, int enable) {
     } else {
         old = self->_hashIndex;
         if (old != 0) {
-            if (old != 0) {
-                --old->_refCount;
-                if (((unsigned long long)(long long)(int)old->_refCount & 0x7fffffULL) == 0) {
-                    igObject_Destroy(old);
-                }
-            }
+            igObject::release(old);
             self->_hashIndex = 0;
         }
     }

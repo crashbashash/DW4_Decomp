@@ -1540,16 +1540,9 @@ unsigned char MDLisSeqName(const char *sequence) {
         igObject *old;
         igSmartPointer<igObject> created(beBaseInfoDataList_Create(allocatorFor(model)));
         igObject *list = created.get();
-        if (list != 0) {
-            list->_refCount = list->_refCount + 1;
-        }
+        igObject::ref(list);
         old = (igObject *)model->_dataList;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(old);
-            }
-        }
+        igObject::release(old);
         model->_dataList = (int)list;
     }
     beModelCtrlInfoRamData *data = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)model->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");

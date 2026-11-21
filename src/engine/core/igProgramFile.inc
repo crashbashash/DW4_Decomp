@@ -24,12 +24,7 @@ int igProgramFile_GetVTable(void) {
     obj._vtable = (int)&g_igProgramFile_vtable[0];
     if (&obj._file != 0) {
         o = (char *)obj._file;
-        if (o != 0) {
-            ((igObject *)o)->_refCount = ((igObject *)o)->_refCount - 1;
-            if ((((igObject *)o)->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)o);
-            }
-        }
+        igObject::release(((igObject *)o));
     }
     if (&obj._fileName != 0) {
         o = (char *)obj._fileName;

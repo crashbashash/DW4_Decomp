@@ -225,16 +225,9 @@ void beNDMWWindow_RequestChildrenClose(beNDMWWindow *self) {
 void beNDMWWindow_BindContext(beNDMWWindow *self, igObject *mother, int insight, int playerNo, int entCode) {
     igObject *old;
 
-    if (mother != 0) {
-        mother->_refCount = mother->_refCount + 1;
-    }
+    igObject::ref(mother);
     old = (igObject *)self->_mother;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     self->_mother = (int)mother;
     self->_insight = insight;
     self->_messenger = (int)igInsightCore_FindManager((igInsightCore *)insight, g_beMessenger_metaObject);
@@ -280,12 +273,7 @@ void beNDMWWindow_UpdateTree(beNDMWWindow *w) {
             k = (igObjectList *)w->_subWindow;
             ch = *(beNDMWWindow **)(k->_data + off);
             if (ch->_isRun == 0) {
-                if (ch != 0) {
-                    ch->_refCount = (int)ch->_refCount - 1;
-                    if (((unsigned long long)((long long)(int)ch->_refCount << 0x29) >> 0x29) == 0) {
-                        igObject_Destroy(ch);
-                    }
-                }
+                igObject::release(ch);
                 List_RemoveWordAt((igDataList *)k, i);
                 i--;
                 n--;

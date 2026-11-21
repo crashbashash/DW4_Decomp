@@ -11,7 +11,8 @@ The table names each conversion, one per line, tab-separated (blank lines and `#
 *context)`, `igMetaObject *igRenderer::getMeta() const`, `static igMetaObject *igRenderer::_Meta`), whose
 declaration is added to config/class-members.tsv when the class does not declare it yet. The class may be
 qualified by its namespaces (`Gap::Gui::igRenderer`); the source then spells it that way. Several C names may
-name one member (an alias a header declares for the same address, such as a published accessor).
+name one member (an alias a header declares for the same address, such as a published accessor), and one table
+may convert overloads of one name, each row giving its full signature (`igObjectList::search` by field kind).
 
 For each conversion, across every source, header and `.inc` fragment of src/ and include/:
 
@@ -1624,7 +1625,8 @@ def plan(root, table):
             planner.defined[conv.cname] = found[0]
     by_member = collections.defaultdict(list)
     for conv in convs:
-        by_member[(conv.kind, conv.qualified)].append(conv)
+        # several C names of one member are aliases; overloads (one name, other parameters) are members apart
+        by_member[(conv.kind, conv.qualified, conv.params, conv.const)].append(conv)
     for key, group in by_member.items():
         if not any(c.cname in planner.defined for c in group):
             raise Refused("no definition of %s in src/ (%s)" % (key[1], ", ".join(c.cname for c in group)))

@@ -1,14 +1,7 @@
 static inline void set(R_456780 *&field, R_456780 *value) {
-    if (value != 0) {
-        value->_refCount = value->_refCount + 1;
-    }
+    igObject::ref(value);
     R_456780 *old = field;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     field = value;
 }
 
@@ -122,16 +115,9 @@ void FUN_00456b80(int *arg0, float *arg1) {
 void FUN_00456c20(igGuiSystemModel *arg0, igGuiComponent *arg1) {
     int sp30[3];
     igGuiComponent *o;
-    if (arg1 != 0) {
-        arg1->_refCount = arg1->_refCount + 1;
-    }
+    igObject::ref(arg1);
     o = (igGuiComponent *)arg0->_focusedComponent;
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if ((o->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(o);
-        }
-    }
+    igObject::release(o);
     arg0->_focusedComponent = (int)arg1;
     sp30[0] = 2;
     sp30[1] = 0;

@@ -38,21 +38,11 @@ int igMetaEnum_GetVTable(void) {
     metaEnum._vtable = (int)&g_igMetaEnum_vtable[0];
     if (q50 != 0) {
         a = (igObject *)*q50;
-        if (a != 0) {
-            a->_refCount = a->_refCount - 1;
-            if ((a->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(a);
-            }
-        }
+        igObject::release(a);
     }
     if (q4c != 0) {
         a = (igObject *)*q4c;
-        if (a != 0) {
-            a->_refCount = a->_refCount - 1;
-            if ((a->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(a);
-            }
-        }
+        igObject::release(a);
     }
     if (q48 != 0) {
         c = (char *)*q48;

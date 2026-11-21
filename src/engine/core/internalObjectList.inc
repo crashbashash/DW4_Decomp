@@ -19,8 +19,7 @@ void *InternalObjectList_CopyConstruct(__internalObjectList *list, __internalObj
 void InternalObjectList_Destruct(__internalObjectList *list){InternalObjectList_SetCount(list,0);ObjectPointerList_Destruct((__internalNonRefCountedObjectList *)list);}
 
 void InternalObjectList_InsertRetained(__internalObjectList *list, int index, igObject *value) {
-    if (value)
-        ++value->_refCount;
+    igObject::ref(value);
     ObjectPointerList_Insert((__internalNonRefCountedObjectList *)list, index, (int)value);
 }
 
@@ -38,15 +37,13 @@ void InternalObjectList_SetCount(__internalObjectList *list,int count){
 }
 
 int MetaRefList_AppendRetained(__internalObjectList *list, igObject *value) {
-    if (value)
-        ++value->_refCount;
+    igObject::ref(value);
     return ObjectPointerList_Append((__internalNonRefCountedObjectList *)list, (int)value);
 }
 
 void InternalObjectList_SetAtRetained(__internalObjectList *list, int index, igObject *value) {
     igObject *old;
-    if (value)
-        ++value->_refCount;
+    igObject::ref(value);
     old = ((igObject **)list->_data)[index];
     if (old) {
         --old->_refCount;

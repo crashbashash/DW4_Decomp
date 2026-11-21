@@ -65,11 +65,7 @@ extern "C" void beNDMWPanelObject_Open(beNDMWPanelObject *panel, int generate, i
 extern "C" void beNDMWPanelObject_MoveCursorUp(beNDMWPanelObject *panel);
 extern "C" void beNDMWPanelObject_MoveCursorDown(beNDMWPanelObject *panel);
 struct Rel { static inline void go(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
+    igObject::release(object);
 } };
 extern "C" void beNDMWPanelObjectWaza_Refresh(beNDMWPanelObjectWaza *self);
 extern "C" void beNDMWPanelObjectWaza_Fire(beNDMWPanelObjectWaza *self, int *label, long long *wait);
@@ -324,9 +320,7 @@ void beNDMWPanelObjectWaza_Refresh(beNDMWPanelObjectWaza *self) {
         beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
         beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GETPLAYER");
         igObject *o = (igObject *)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
-        if (o != 0) {
-            o->_refCount = o->_refCount + 1;
-        }
+        igObject::ref(o);
         Rel::go((igObject *)self->_playerDataList);
         self->_playerDataList = (int)o;
     }
@@ -464,9 +458,7 @@ void beNDMWPanelObjectItem_Refresh(beNDMWPanelObjectItem *self) {
         beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
         beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GETPLAYER");
         igObject *o = (igObject *)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
-        if (o != 0) {
-            o->_refCount = o->_refCount + 1;
-        }
+        igObject::ref(o);
         Rel::go((igObject *)self->_playerDataList);
         self->_playerDataList = (int)o;
     }
@@ -642,9 +634,7 @@ void beNDMWPanelObjectStat_Refresh(beNDMWPanelObjectStat *self) {
         beMessenger_AppendInt((beMessenger *)self->_messenger, self->_playerNo);
         beMessenger_DispatchSelected((beMessenger *)self->_messenger, "GETPLAYER");
         igObject *o = (igObject *)beMessenger_GetObject((beMessenger *)self->_messenger, 0);
-        if (o != 0) {
-            o->_refCount = o->_refCount + 1;
-        }
+        igObject::ref(o);
         Rel::go((igObject *)self->_playerDataList);
         self->_playerDataList = (int)o;
     }
@@ -1085,15 +1075,11 @@ void beNDMWPanelWaza_OpenPanel(int self, beNDMWPanelWazaInfoRam *ram, int page, 
     }
     work->_page = page;
     work->_retIsFire = 0;
-    if (player != 0) {
-        player->_refCount = player->_refCount + 1;
-    }
+    igObject::ref(player);
     Rel::go((igObject *)work->_playerWork);
     work->_playerWork = (int)player;
     stat = (beNDMWPanelObjectStat *)work->_panelStat;
-    if (player != 0) {
-        player->_refCount = player->_refCount + 1;
-    }
+    igObject::ref(player);
     Rel::go((igObject *)stat->_playerWork);
     stat->_playerWork = (int)player;
 }

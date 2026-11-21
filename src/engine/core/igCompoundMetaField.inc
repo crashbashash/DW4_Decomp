@@ -66,10 +66,7 @@ void igCompoundMetaField::arkRegisterMetaValidate()
             MetaRefList_AppendRetained(getMetaFieldTypes(), (::igObject *)metaField);
             {
                 ::igObject *held = (::igObject *)_MetaField;
-                held->_refCount = (int)held->_refCount - 1;
-                if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(held);
-                }
+                held->release();
             }
             _MetaField->_internalIndex = (short)(getMetaFieldTypes()->_count - 1);
             _MetaField->validate();

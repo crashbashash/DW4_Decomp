@@ -1,12 +1,7 @@
 void igLod_Reset(igLod *self) {
     igObject *lastRange;
     lastRange = (igObject *)(self->_lastRange);
-    if (lastRange != 0) {
-        lastRange->_refCount = lastRange->_refCount - 1;
-        if (((unsigned long long) ((long long)(int) lastRange->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)lastRange);
-        }
-    }
+    igObject::release(lastRange);
     self->_lastRange = 0;
     self->_lastIndex = -1;
     self->_lastLower = 0;

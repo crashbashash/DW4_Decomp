@@ -1,16 +1,9 @@
 static inline void setRetained(SchedulerManager *manager, ManagerArray *list, int index) {
     igObject *previous;
 
-    if (manager != 0) {
-        ((igObject *)manager)->_refCount = ((igObject *)manager)->_refCount + 1;
-    }
+    igObject::ref(((igObject *)manager));
     previous = (igObject *)list->_data[index];
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     if (list->_count != 0 && index >= 0 && index < list->_count) {
         list->_data[index] = manager;
     }

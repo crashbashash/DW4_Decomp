@@ -15,11 +15,7 @@ extern "C" int beNDMWMdlEffect_GetMeta(void);
 extern "C" int KIND_EFFECT[4];
 /* matching construct: inline static helper reproduces the retail release sequence */
 struct ReleaseRef { static inline void go(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
+    igObject::release(object);
 } };
 /* Owning stack reference to the freshly created property data list; released at the end of the
  * full expression that stores it (reference count in the low 23 bits of _refCount). */
@@ -29,20 +25,14 @@ class EffectRef {
 public:
     igObject *p;
     EffectRef(igObject *o) : p(o) {}
-    ~EffectRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~EffectRef() { igObject *o = p; igObject::release(o); }
 };
 struct DataList { static inline void store(beBaseInfoRam *ram, const igSmartPointer<igObject> &list) {
     igObject *created = list.p;
     igObject *old;
-    if (created != 0) {
-        created->_refCount++;
-    }
+    igObject::ref(created);
     old = (igObject *)ram->_dataList;
-    if (old) {
-        --old->_refCount;
-        if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(old);
-    }
+    igObject::release(old);
     ram->_dataList = (int)created;
 }
 static inline void create(beBaseInfoRam *ram, igMemoryPoolView *a) { igSmartPointer<igObject> list(beBaseInfoDataList_Create((int)a)); store(ram, list); }
@@ -85,9 +75,7 @@ void beNDMWMdlEffect_OnGenerate(beNDMWMdlEffect *self, beBaseInfoRam *ram) {
      * temporary; named locals take their frame slots before temporaries (effect +0x5c, list +0x58) */
     EffectRef effect(beModelCtrlInfoWork_Create((int)a));
     s0 = effect.p;
-    if (s0 != 0) {
-        s0->_refCount++;
-    }
+    igObject::ref(s0);
     ReleaseRef::go((igObject *)s1->_work);
     s1->_work = (int)s0;
     beModelCtrl__OnGenerateFromParent((beModelCtrl *)self, ram);

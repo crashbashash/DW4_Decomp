@@ -728,7 +728,7 @@ template <class Window> static inline void SendCellCommand(Window *window, const
 static inline void AssignReference(int *slot, igObject *object)
 {
     igObject *old;
-    if (object != 0) { object->_refCount = object->_refCount + 1; }
+    igObject::ref(object);
     old = (igObject *)*slot;
     RELEASE_REFERENCE(old);
     *slot = (int)object;
@@ -756,7 +756,7 @@ static inline void BoolList_Set(igBoolList *list, int index, const bool &value)
 static inline void ObjectList_Set(igObjectList *list, int index, igObject *object)
 {
     igObject *old;
-    if (object != 0) { object->_refCount = object->_refCount + 1; }
+    igObject::ref(object);
     old = ((igObject **)list->_data)[index];
     RELEASE_REFERENCE(old);
     if (list->_count != 0 && index >= 0 && index < list->_count) {
@@ -1392,7 +1392,7 @@ void beNDMWStatusCtrlBaseEquip_Update(beNDMWStatusCtrlBaseEquip *p)
                     int list = (int)hl.p;
                     beNDMWStatusSelectE1 *window = hw.p;
                     igObject *old;
-                    if (list != 0) { ((igObject *)list)->_refCount = ((igObject *)list)->_refCount + 1; }
+                    igObject::ref(((igObject *)list));
                     old = (igObject *)window->_decideList;
                     RELEASE_REFERENCE(old);
                     window->_decideList = list;
@@ -2094,9 +2094,7 @@ void beNDMWStatusPowerSocket_OpenSlotMenu(beNDMWStatusPowerSocket *self) {
      * and the list exchange registers */
     { const igSmartPointer<igBoolList> &view = flags; l0 = view.p; }
     w = win.p;
-    if (l0 != 0) {
-        l0->_refCount = l0->_refCount + 1;
-    }
+    igObject::ref(l0);
     REL(w->_decideList)
     w->_decideList = (int)l0;
     i = 0;
@@ -2305,9 +2303,7 @@ static inline void append(const igSmartPointer<igBoolList> &list, const unsigned
 static inline void setDecideList(const igSmartPointer<beNDMWStatusSelectE0> &win, const igSmartPointer<igBoolList> &list) {
     igBoolList *l0 = list.p;
     beNDMWStatusSelectE0 *w = win.p;
-    if (l0 != 0) {
-        l0->_refCount = l0->_refCount + 1;
-    }
+    igObject::ref(l0);
     REL((igObject *)w->_decideList)
     w->_decideList = (int)l0;
 }
@@ -2680,9 +2676,7 @@ void beNDMWStatusMainSlot_OpenSlotMenu(beNDMWStatusMainSlot *self) {
      * and the list exchange registers */
     { const igSmartPointer<igBoolList> &view = flags; l0 = view.p; }
     w = win.p;
-    if (l0 != 0) {
-        l0->_refCount = l0->_refCount + 1;
-    }
+    igObject::ref(l0);
     REL(w->_decideList)
     w->_decideList = (int)l0;
     i = 0;
@@ -3174,9 +3168,7 @@ void beNDMWStatusSubSlot_OpenSlotMenu(beNDMWStatusSubSlot *self) {
     /* matching construct: as in the power socket's menu, the list is read through a const view of the holder */
     { const igSmartPointer<igBoolList> &view = flags; l0 = view.p; }
     w = win.p;
-    if (l0 != 0) {
-        l0->_refCount = l0->_refCount + 1;
-    }
+    igObject::ref(l0);
     REL(w->_decideList)
     w->_decideList = (int)l0;
     i = 0;
@@ -3578,9 +3570,7 @@ void beNDMWStatusCtrlD0_RefreshText(beNDMWStatusCtrlD0 *self, int refreshRows, i
     char buf2[2];
     char buf3[2];
     igVec3f vec;
-    if (sp.p != 0) {
-        sp.p->_refCount = sp.p->_refCount + 1;
-    }
+    igObject::ref(sp.p);
     if (refreshRows != 0) {
         i = 0;
         do {
@@ -3919,7 +3909,7 @@ void beNDMWStatusCtrlFolder_Update(beNDMWStatusCtrlFolder *self) {
                         {
                             beNDMWStatusSubMenu *o = (beNDMWStatusSubMenu *)subMenu.p;
                             igObject *old;
-                            if (found != 0) { found->_refCount = (int)found->_refCount + 1; }
+                            igObject::ref(found);
                             old = (igObject *)o->_deviceFolderList;
                             IG_OBJECT_RELEASE(old);
                             o->_deviceFolderList = (int)found;
@@ -4716,16 +4706,9 @@ void ObjectList_ReleaseRange(igObjectList *list, int first, int count) {
 void **ObjectRef_AssignRetained(void **slot, igObject *object) {
     igObject *old;
 
-    if (object != 0) {
-        object->_refCount = (unsigned int)((int) (object->_refCount + 1));
-    }
+    igObject::ref(object);
     old = (igObject *)(*slot);
-    if (old != 0) {
-        old->_refCount = (unsigned int)((int) (old->_refCount - 1));
-        if (((unsigned long long) ((long long) (int) old->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     *slot = object;
     return slot;
 }
@@ -4882,10 +4865,7 @@ void beNDMWStatusCtrlBit_Update(beNDMWStatusCtrlBit *self) {
                         igObject *old;
                         if (lst != 0) lst->_refCount = lst->_refCount + 1;
                         old = (igObject *)w->_playerNoList;
-                        if (old != 0) {
-                            old->_refCount = old->_refCount - 1;
-                            if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-                        }
+                        igObject::release(old);
                         w->_playerNoList = (int)lst;
                     }
                 }
@@ -5002,9 +4982,7 @@ void beNDMWStatusCtrlSendBit_Update(beNDMWStatusCtrlSendBit *p) {
                     n2 = (int)beMessenger_GetObject((beMessenger *)p->_messenger, 0);
                     {
                     DeviceRef r11C((void *)*(int *)(*(int *)(igProperty_GetRecordFolder((igObject *)n2, PLAYERNAME_3)->_data + 16)));
-                    if (r11C.p != 0) {
-                        r11C.p->_refCount = r11C.p->_refCount + 1;
-                    }
+                    igObject::ref(r11C.p);
                     SEL(TEXTCTL_5); APS(STWINFONT14_2); APS(*tbl); APO(r11C.p); DSP(TEXTSET_3);
                     sprintf((char *)rowBitsText, percent_d_3, igProperty_GetRecord((igObject *)n2, BIT_5)->_data);
                     SEL(TEXTCTL_5); APS(STWINFONT27); APS(*tbl); APS(rowBitsText); DSP(TEXTSET_3);

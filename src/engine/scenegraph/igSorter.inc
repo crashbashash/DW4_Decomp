@@ -124,11 +124,7 @@ int igSorter_GetVTable(void) {
 igSmartPointer<igObject> *igSmartPointer_igRenderPackagePool_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -137,11 +133,7 @@ igSmartPointer<igObject> *igSmartPointer_igRenderPackagePool_Destruct(igSmartPoi
 igSmartPointer<igObject> *igSmartPointer_igDepthWriteStateAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -150,11 +142,7 @@ igSmartPointer<igObject> *igSmartPointer_igDepthWriteStateAttr_Destruct(igSmartP
 igSmartPointer<igObject> *igSmartPointer_igCullFaceAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -163,11 +151,7 @@ igSmartPointer<igObject> *igSmartPointer_igCullFaceAttr_Destruct(igSmartPointer<
 igSmartPointer<igObject> *igSmartPointer_igRenderPackageList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -176,11 +160,7 @@ igSmartPointer<igObject> *igSmartPointer_igRenderPackageList_Destruct(igSmartPoi
 igSmartPointer<igObject> *igSmartPointer_igDisplayListAttr_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -189,11 +169,7 @@ igSmartPointer<igObject> *igSmartPointer_igDisplayListAttr_Destruct(igSmartPoint
 igSmartPointer<igObject> *igSmartPointer_igGeometry_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -202,11 +178,7 @@ igSmartPointer<igObject> *igSmartPointer_igGeometry_Destruct(igSmartPointer<igOb
 igSmartPointer<igObject> *igSmartPointer_igRenderPackage_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;

@@ -31,21 +31,11 @@ int igPsx2ScissorExt_GetVTable(void) {
     u.vt = (int)&DAT_00530a10[0];
     if (q2 != 0) {
         a = *(igObject **)q2;
-        if (a != 0) {
-            a->_refCount = (int)((int) ((int)a->_refCount - 1));
-            if (((unsigned long long) ((long long)(int)a->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(a);
-            }
-        }
+        igObject::release(a);
     }
     if (q1 != 0) {
         a = *(igObject **)q1;
-        if (a != 0) {
-            a->_refCount = (int)((int) ((int)a->_refCount - 1));
-            if (((unsigned long long) ((long long)(int)a->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(a);
-            }
-        }
+        igObject::release(a);
     }
     return temp_s0;
 }

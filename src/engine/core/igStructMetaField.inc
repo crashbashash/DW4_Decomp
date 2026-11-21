@@ -59,10 +59,7 @@ CallbackArray *igStructMetaField::arkRegisterInternal()
 }
 
 static inline void releaseField(igMetaField *f) {
-    f->_refCount = (int)f->_refCount - 1;
-    if (((unsigned long long)((long long)(int)f->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(f);
-    }
+    f->release();
 }
 
 namespace Gap {
@@ -86,10 +83,7 @@ void igStructMetaField::arkRegisterInitialize()
         metaField->_persistent = 0;
         metaField->_externalEnumStorage = (int)&k_size;
         igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
-        metaField->_refCount = metaField->_refCount - 1;
-        if (((unsigned long long)(long long)metaField->_refCount & 0x7fffffULL) == 0) {
-            igObject_Destroy((::igObject *)metaField);
-        }
+        metaField->release();
     }
     {
         igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
@@ -110,10 +104,7 @@ void igStructMetaField::arkRegisterMetaValidate()
             MetaRefList_AppendRetained(getMetaFieldTypes(), (::igObject *)metaField);
             {
                 ::igObject *held = (::igObject *)_MetaField;
-                held->_refCount = (int)held->_refCount - 1;
-                if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(held);
-                }
+                held->release();
             }
             _MetaField->_internalIndex = (short)(getMetaFieldTypes()->_count - 1);
             _MetaField->validate();

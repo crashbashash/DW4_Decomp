@@ -30,12 +30,7 @@ int igMemoryPoolContextInfo_GetVTable(void) {
     info._vtable = (int)&g_igMemoryPoolContextInfo_vtable[0];
     if (&info._memoryPoolInfos != 0) {
         r = (igObject *)info._memoryPoolInfos;
-        if (r != 0) {
-            r->_refCount = r->_refCount - 1;
-            if ((r->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(r);
-            }
-        }
+        igObject::release(r);
     }
     info._vtable = (int)&g_igNamedObject_vtable[0];
     if (&info._name != 0) {

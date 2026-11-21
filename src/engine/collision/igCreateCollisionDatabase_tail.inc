@@ -103,7 +103,7 @@ void FUN_0023c250(int *arg0) {    igSmartPointer<Rc> a((Rc *)igIGBFile_Create(0)
     Inst *s0 = (Inst *)b.get();
     if (s1) s1->_refCount = s1->_refCount + 1;
     Rc *t = s0->f20;
-    if (t) { t->_refCount = t->_refCount - 1; if ((t->_refCount & 0x7FFFFF) == 0) igObject_Destroy(t); }
+    igObject::release(t);
     s0->f20 = s1;
     }
     igDirectory_AddInfo(a.get(), b.get());

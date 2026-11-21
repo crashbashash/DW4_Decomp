@@ -84,11 +84,7 @@ template <int kind> struct AttrRef {
     AttrRef(igObject *o) : p(o) {}
     ~AttrRef() {
         igObject *object = p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
     }
 };
 
@@ -756,12 +752,7 @@ void beAction2_UpdateRam(beAction2 *self, beAction2InfoRam *ram) {
 
 inline WorkRef::~WorkRef() {
     beAction2InfoWork *held = p;
-    if (held != 0) {
-        held->_refCount = held->_refCount - 1;
-        if ((held->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(held);
-        }
-    }
+    igObject::release(held);
 }
 
 /* Slot 33: answers ISCOMEND, ISRUN, GETNAMELIST, GETAPPEARANCELIST and GETBONEMATRIX, freezes and
@@ -775,9 +766,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
     igBitMask *mask;
 
     workRef.p = (beAction2InfoWork *)ram->_work;
-    if (workRef.p != 0) {
-        workRef.p->_refCount = workRef.p->_refCount + 1;
-    }
+    igObject::ref(workRef.p);
     info = (beAction2Info *)ram->_parentInfo;
     ramNo = ram->_ramNo;
     switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beAction2_GetMessageEnum(), (const char *)name)) {

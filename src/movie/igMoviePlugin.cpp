@@ -15,12 +15,7 @@ void igMoviePlugin_Attach(igMoviePlugin *self, igInsightCore *insight) {
     allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = g_useOwnerAllocator != 0 ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser0);
     old = (igMovieManager *)self->_movieManager;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     self->_movieManager = (int)igMovieManager_CreateInstance(allocator);
     ((igMovieManager *)self->_movieManager)->_audioDisabled = 1;
     igInsightCore_AddManager(insight, (igMovieManager *)self->_movieManager);

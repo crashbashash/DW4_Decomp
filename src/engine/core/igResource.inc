@@ -72,11 +72,7 @@ int igResource_GetVTable(void) {
 igSmartPointer<igObject> *igSmartPointer_igDirectoryList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -85,7 +81,7 @@ igSmartPointer<igObject> *igSmartPointer_igDirectoryList_Destruct(igSmartPointer
 igQueue **igSmartPointer_igQueue_Destruct(igQueue **self, short deleteFlag) {
     if (self) {
         igQueue *queue = *self;
-        if (queue) { queue->_refCount -= 1; if ((queue->_refCount & 0x7fffff) == 0) igObject_Destroy(queue); }
+        igObject::release(queue);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;

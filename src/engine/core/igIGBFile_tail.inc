@@ -596,7 +596,7 @@ igResult igIGBFile_FreeReadBuffers(igIGBFileView *o) {
     o->_memoryPoolNameBufferSize = 0;
     if (o->_memoryPoolNameBuffer) { o->_temporaryMemoryPool->Free(o->_memoryPoolNameBuffer); o->_memoryPoolNameBuffer = 0; }
     igIntList *r = o->_memoryPoolHandles;
-    if (r) { r->_refCount -= 1; if ((r->_refCount & 0x7fffff) == 0) igObject_Destroy(r); }
+    igObject::release(r);
     o->_memoryPoolHandles = 0;
     return g_resultSuccess;
 }
@@ -728,16 +728,12 @@ igResult igIGBFile_ReadHeader(igIGBFileView *self) {
     h = (IgbFileHeader *)self->_chunk;
     self->_file->Read(h, 4, 0xC);
     o = (igObject *)Gap::Core::igIntMetaField::getMetaField();
-    if (o != 0) {
-        o->_refCount = o->_refCount + 1;
-    }
+    igObject::ref(o);
     t = (igObject *)self->imf;
     IG_OBJECT_RELEASE(t);
     self->imf = (igMetaFieldView *)o;
     o = (igObject *)Gap::Core::igShortMetaField::getMetaField();
-    if (o != 0) {
-        o->_refCount = o->_refCount + 1;
-    }
+    igObject::ref(o);
     t = (igObject *)self->smf;
     IG_OBJECT_RELEASE(t);
     self->smf = (igMetaFieldView *)o;
@@ -1085,10 +1081,7 @@ igResult igIGBFile_ReadObjectSection(igIGBFileView *file) {
     file->_bufferSize = file->_entryBufferSize;
     list = file->_uniqueEntryList;
     pool = (int)file->_temporaryMemoryPool;
-    if (list != 0) {
-        list->_refCount = list->_refCount - 1;
-        if ((list->_refCount & 0x7FFFFF) == 0) igObject_Destroy(list);
-    }
+    igObject::release(list);
     file->_uniqueEntryList = (igObjectList *)igDirectory_Create(pool);
     ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)file->_uniqueEntryList))->setCount(file->_entryCount);
     if (igIGBFile_ReadNextChunk(file) == g_resultFailure) {
@@ -1111,10 +1104,7 @@ igResult igIGBFile_ReadObjectSection(igIGBFileView *file) {
         list = file->_uniqueEntryList;
         if (entry != 0) entry->_refCount = entry->_refCount + 1;
         igObject *old = ((igObject **)list->_data)[i];
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-        }
+        igObject::release(old);
         if (list->_count != 0 && i >= 0 && i < list->_count) {
             ((igDirEntryView **)list->_data)[i] = entry;
         }
@@ -1176,12 +1166,7 @@ igResult igIGBFile_ReadFinished(igIGBFileView *self) {
     oldRefList = self->_refList;
     count = self->_count;
     pool = (int)self->_temporaryMemoryPool;
-    if (oldRefList != 0) {
-        oldRefList->_refCount = oldRefList->_refCount - 1;
-        if (((unsigned long long)(long long)(int)oldRefList->_refCount & 0x7fffffULL) == 0) {
-            igObject_Destroy(oldRefList);
-        }
-    }
+    igObject::release(oldRefList);
     self->_refList = (igTDataList<int> *)igPointerList_Create(pool);
     refList = self->_refList;
     if (count >= 0) {
@@ -1311,7 +1296,7 @@ igResult igIGBFile_ReadMetaFieldList(igIGBFileView *self) {
     {
         igObjectList *v = ((igObjectList *)igMetaFieldList_Create((int)self->_temporaryMemoryPool));
         igObjectList *old;
-        if (v != 0) { v->_refCount = v->_refCount + 1; }
+        igObject::ref(v);
         old = self->_metaFieldListInFile;
         IG_OBJECT_RELEASE(old);
         self->_metaFieldListInFile = v;
@@ -1338,11 +1323,7 @@ igResult igIGBFile_ReadMetaFieldList(igIGBFileView *self) {
 }
 
 static inline void releasePool(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
+    igObject::release(object);
 }
 
 void Gap__Core__igIGBFile__resetFields(igIGBFileView *self) {
@@ -1531,9 +1512,7 @@ igResult igIGBFile_ReadInfoList(igIGBFileView *self) {
             self->imf->SwapBytes((char *)self + g_igIGBFile_infoListPlaceField->_offset, 1);
         }
         infoList = (igObject *)((igDirEntryView *)igDirectory_GetEntry((int *)self, self->_infoListPlace))->_ref;
-        if (infoList != 0) {
-            infoList->_refCount = infoList->_refCount + 1;
-        }
+        igObject::ref(infoList);
         t = (igObject *)self->_infoList;
         IG_OBJECT_RELEASE(t);
         self->_infoList = (igTDataList<igInfoView *> *)infoList;

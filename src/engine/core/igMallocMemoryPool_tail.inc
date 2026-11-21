@@ -341,18 +341,12 @@ void igMallocMemoryPool_SetDefaults(igMallocMemoryPool *self) {
     self->_size = 0;
     self->_alignment = 1;
     r = (igObject *)self->_eventTracker;
-    if (r != 0) {
-        r->_refCount = r->_refCount - 1;
-        if ((r->_refCount & 0x7fffff) == 0) igObject_Destroy(r);
-    }
+    igObject::release(r);
     self->_eventTracker = 0;
     self->_isActive = 0;
     g_igMallocMemoryPool_instanceCount += 1;
     r = (igObject *)self->_allocationLock;
-    if (r != 0) {
-        r->_refCount = r->_refCount - 1;
-        if ((r->_refCount & 0x7fffff) == 0) igObject_Destroy(r);
-    }
+    igObject::release(r);
     self->_allocationLock = 0;
     self->_messageLevel = 1;
     self->_poolOptionFlags = 12;
@@ -709,16 +703,9 @@ int igMallocMemoryPool_GetEventTracker(void *pool) {
 void igMallocMemoryPool_SetEventTracker(igMallocMemoryPool *self, igObject *tracker) {
     igObject *old;
     if ((tracker == 0) || (((void *)((Gap::Core::igObject *)tracker)->getMemoryPool()) != self)) {
-        if (tracker != 0) {
-            tracker->_refCount = tracker->_refCount + 1;
-        }
+        igObject::ref(tracker);
         old = (igObject *)self->_eventTracker;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7fffff) == 0) {
-                igObject_Destroy(old);
-            }
-        }
+        igObject::release(old);
         self->_eventTracker = (int)tracker;
     }
 }

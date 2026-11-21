@@ -92,10 +92,7 @@ void beModelCtrlInfoDataSeq_InitFields(void) {
     ((Gap::Core::igStringMetaField *)clone)->setDefault("SEQ");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataSeq_nameStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
-    clone->_refCount = (int)clone->_refCount - 1;
-    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(clone);
-    }
+    clone->release();
     dataList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
     ((igObjectRefMetaField *)dataList)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)dataList)->_construct = 1;

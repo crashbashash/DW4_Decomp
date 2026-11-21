@@ -1,7 +1,5 @@
 static inline void setComponent_4561e0(int *slot, igObject *next) {
-    if (next != 0) {
-        next->_refCount = next->_refCount + 1;
-    }
+    igObject::ref(next);
     igRelease((igObject *)*slot);
     *slot = (int)next;
 }

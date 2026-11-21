@@ -36,11 +36,7 @@ int beNDMWStatusInfoRam_GetVTable(void) {
 igSmartPointer<igObject> *igSmartPointer_beNDMWStatusInfoWork_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;

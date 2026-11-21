@@ -372,9 +372,7 @@ void igAttrStackManager_PushLightStateAttr(igAttrStackManager *self, igLightStat
         List_InsertWords((igDataList *)self->_lightAttrStackAddrs, index, 1, &stackIndex);
         slot = stackIndex + ((int *)self->_attrStackIndexTable)[attr->_cachedAttrIndex];
         LightStateAttrView *defaults = ((igTDataList<LightStateAttrView *> *)self->_attrDefaults)->_data[slot];
-        if (light != 0) {
-            light->_refCount = light->_refCount + 1;
-        }
+        igObject::ref(light);
         igRelease((igObject *)defaults->_light);
         defaults->_light = light;
         ((igTDataList<LightStateAttrView *> *)self->_attrDefaults)->_data[slot]->setEnabled(false);
@@ -401,15 +399,10 @@ void igAttrStackManager_PopLightStateAttr(igAttrStackManager *self, igLightState
         int n;
         igTDataList<LightStateAttrView *> *updates;
         light = attr->_light;
-        if (light != 0) {
-            light->_refCount = light->_refCount + 1;
-        }
+        igObject::ref(light);
         if (undo->_light != 0) {
             igLightAttr *old = undo->_light;
-            old->_refCount = old->_refCount - 1;
-            if (((unsigned long long)((long long)(int)old->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(old);
-            }
+            old->release();
         }
         undo->_light = light;
         undo->setEnabled(!attr->_enabled);

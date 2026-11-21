@@ -13,9 +13,7 @@ static inline int indexOfObject(const igTDataList<igObject *> *list, igObject *o
 
 /* Inserts object at index, holding a reference to it. */
 static inline void insertRetained(igTDataList<igObject *> *list, int index, igObject *object) {
-    if (object != 0) {
-        object->_refCount++;
-    }
+    igObject::ref(object);
     List_InsertWords((igDataList *)list, index, 1, &object);
 }
 
@@ -79,12 +77,7 @@ void igDependencyOrderedList_Rebuild(igDependencyOrderedListView *owner) {
     int i;
     for (i = 0; i < count; i++) {
         igObject *child = children->_data[i];
-        if (child != 0) {
-            child->_refCount = child->_refCount - 1;
-            if ((child->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(child);
-            }
-        }
+        igObject::release(child);
     }
     int end = children->_count;
     int j;
@@ -106,12 +99,7 @@ void igRendererOrderedList_Clear(igDependencyOrderedList *self) {
     n = list->_count;
     for (i = 0; i < n; i++) {
         object = list->_data[i];
-        if (object != 0) {
-            object->_refCount = (int)((int) (object->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) object->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(object);
-            }
-        }
+        igObject::release(object);
     }
     n = list->_count;
     for (i = 0; i < n; i++) {

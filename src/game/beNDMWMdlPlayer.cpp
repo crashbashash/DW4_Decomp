@@ -107,32 +107,28 @@ extern "C" int beNDMWMdlPlayer__GetMeta(void);
     if (beMessenger_GetBoolCount((beMessenger *)((messenger))) != 0) (work)->_isPanel = 1; }
 
 static inline void ReleaseObject(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
+    igObject::release(object);
 }
 
 /* Owning stack reference to the hit box the main lobby builds on the 0x4000 button. */
 struct HitBoxRef {
     beModelCtrlHITBOX *p;
     HitBoxRef(beModelCtrlHITBOX *x) { p = x; }
-    ~HitBoxRef() { igObject *o = (igObject *)p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~HitBoxRef() { igObject *o = (igObject *)p; igObject::release(o); }
 };
 /* Owning stack reference to the new player info work. */
 class InfoWorkRef {
 public:
     igObject *p;
     InfoWorkRef(igObject *o) : p(o) {}
-    ~InfoWorkRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~InfoWorkRef() { igObject *o = p; igObject::release(o); }
 };
 /* Owning stack reference to the new turn-attack timer list. */
 class IntListRef {
 public:
     igIntList *p;
     IntListRef(igIntList *l) : p(l) {}
-    ~IntListRef() { igIntList *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~IntListRef() { igIntList *o = p; igObject::release(o); }
 };
 
 /* matching construct: slot order. The data list's holder is a local of this static inline member, allocated below
@@ -407,9 +403,7 @@ void beNDMWMdlPlayer_OnWaitCheck(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         }
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(alloc));
         created = list.p;
-        if (created != 0) {
-            created->_refCount++;
-        }
+        igObject::ref(created);
         ReleaseObject((igObject *)ram->_dataList);
         ram->_dataList = (int)created;
     }
@@ -491,9 +485,7 @@ void beNDMWMdlPlayer_OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         }
         InfoWorkRef newWork(beNDMWMdlPlayerInfoWork_Create(alloc));
         created = newWork.p;
-        if (created != 0) {
-            created->_refCount++;
-        }
+        igObject::ref(created);
         ReleaseObject((igObject *)record->_work);
         record->_work = (int)created;
         work = (beNDMWMdlPlayerInfoWork *)newWork.p;
@@ -529,9 +521,7 @@ void beNDMWMdlPlayer_OnGenerate(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
                 memset((void *)timers->_data, 0, timers->_count * 4);
             }
             timers = newTimers.p;
-            if (timers != 0) {
-                timers->_refCount++;
-            }
+            igObject::ref(timers);
             ReleaseObject((igObject *)work->_turnAtkTimer);
             work->_turnAtkTimer = (int)timers;
         }
@@ -654,16 +644,9 @@ void beNDMWMdlPlayer_OnControlOff(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         int owner = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         igSmartPointer<igObject> list(beBaseInfoDataList_Create((int)(g_useOwnerAllocator != 0 ? owner : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1))));
         igObject *created = list.p;
-        if (created != 0) {
-            created->_refCount = created->_refCount + 1;
-        }
+        igObject::ref(created);
         igObject *old = (igObject *)ram->_dataList;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(old);
-            }
-        }
+        igObject::release(old);
         ram->_dataList = (int)created;
     }
     work = (beNDMWMdlPlayerInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE"))->_work;
@@ -686,14 +669,9 @@ void beNDMWMdlPlayer_OnFreeze(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         }
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(alloc));
         created = list.p;
-        if (created != 0) {
-            created->_refCount++;
-        }
+        igObject::ref(created);
         old = (igObject *)ram->_dataList;
-        if (old != 0) {
-            --old->_refCount;
-            if ((old->_refCount & 0x7fffff) == 0) igObject_Destroy(old);
-        }
+        igObject::release(old);
         ram->_dataList = (int)created;
     }
     beNDMWMdlPlayerInfoWork *work = (beNDMWMdlPlayerInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE"))->_work;
@@ -717,10 +695,7 @@ static inline void EnsureDataList(beBaseInfoRam *ram)
         igObject *created = list.p;
         if (created) created->_refCount++;
         igObject *old = (igObject *)ram->_dataList;
-        if (old) {
-            old->_refCount--;
-            if ((old->_refCount & 0x7fffff) == 0) igObject_Destroy(old);
-        }
+        igObject::release(old);
         ram->_dataList = (int)created;
     }
 }
@@ -774,9 +749,7 @@ void beNDMWMdlPlayer_OnErase(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         {
             igSmartPointer<igObject> list(beBaseInfoDataList_Create(alloc));
             created = list.p;
-            if (created != 0) {
-                created->_refCount++;
-            }
+            igObject::ref(created);
             ReleaseObject((igObject *)ram->_dataList);
             ram->_dataList = (int)created;
         }
@@ -811,9 +784,7 @@ void beNDMWMdlPlayer_OnRemove(beNDMWMdlPlayer *self, beBaseInfoRam *ram) {
         }
         igSmartPointer<igObject> list(beBaseInfoDataList_Create(alloc));
         created = list.p;
-        if (created != 0) {
-            created->_refCount++;
-        }
+        igObject::ref(created);
         ReleaseObject(((igObject *)ram->_dataList));
         ram->_dataList = (int)created;
     }

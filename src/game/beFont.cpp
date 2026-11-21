@@ -876,33 +876,19 @@ void beFont_ReplaceVertexArray(beFont *self, igGeometryAttr *geometry, int fontI
     igVertexArray *held;
     igVertexArray *created;
     held = vertices.p;
-    if (held != 0) {
-        held->_refCount = held->_refCount + 1;
-    }
+    igObject::ref(held);
     allocator = ((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     held = vertices.p;
-    if (held != 0) {
-        held->_refCount = held->_refCount - 1;
-        if ((held->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(held);
-        }
-    }
+    igObject::release(held);
     vertices.p = (igVertexArray *)igVertexArray_Create((int)allocator);
     format = ((beFontImage **)((beFontImageList *)self->_fonts)->_data)[fontIndex]->_vertexFlags;
     format = format & ~4u;
     ((igVertexArrayView *)vertices.p)->configure(format, vertexCount, 0, 0);
     created = vertices.p;
-    if (created != 0) {
-        created->_refCount = created->_refCount + 1;
-    }
+    igObject::ref(created);
     held = (igVertexArray *)geometry->_vertexArray;
-    if (held != 0) {
-        held->_refCount = held->_refCount - 1;
-        if ((held->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(held);
-        }
-    }
+    igObject::release(held);
     geometry->_vertexArray = (int)created;
 }
 
@@ -923,9 +909,7 @@ void beFont_PrepareGeometry(beFont *self, igGeometryAttr *geometry, int text, in
     {
         igSmartPointer<igVertexArray> vertices((igVertexArray *)geometry->_vertexArray);
         held = vertices.p;
-        if (held != 0) {
-            held->_refCount = held->_refCount + 1;
-        }
+        igObject::ref(held);
         held = vertices.p;
         if (held != 0) {
             if (held->_numVerts < vertexCount) {

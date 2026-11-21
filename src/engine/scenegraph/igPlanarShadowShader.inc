@@ -86,11 +86,7 @@ void *FUN_0019c0e0(struct S_19c0e0 *arg0, short arg1) {
 igSmartPointer<igObject> *igSmartPointer_igLightList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -99,11 +95,7 @@ igSmartPointer<igObject> *igSmartPointer_igLightList_Destruct(igSmartPointer<igO
 igSmartPointer<igObject> *igSmartPointer_igGeometryList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;

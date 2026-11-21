@@ -15,11 +15,7 @@ extern "C" int beNDMWMdlEBullet_GetMeta(void);
 extern "C" int KIND_EBULLET[4];
 /* matching construct: inline release helper reproduces the retail release sequence */
 struct ReleaseRef { static inline void go(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(object);
-    }
+    igObject::release(object);
 } };
 /* Owning stack reference to the freshly created data list (reference count in the low 23 bits of
  * _refCount); released on scope exit. */
@@ -29,7 +25,7 @@ class ValueRef {
 public:
     igObject *p;
     ValueRef(igObject *o) : p(o) {}
-    ~ValueRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~ValueRef() { igObject *o = p; igObject::release(o); }
 };
 /* Inlined helper shared by the model-controller "apply ram" methods: a ram without a data list gets a
  * fresh beBaseInfoDataList (allocator chosen by the global selector flag).  Being an inlined callee, its
@@ -46,9 +42,7 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
         }
         igSmartPointer<igObject> list(beBaseInfoDataList_Create((int)a));
         s0 = list.p;
-        if (s0 != 0) {
-            s0->_refCount++;
-        }
+        igObject::ref(s0);
         ReleaseRef::go((igObject *)ram->_dataList);
         ram->_dataList = (int)s0;
     }
@@ -81,9 +75,7 @@ void beNDMWMdlEBullet_OnGenerate(beNDMWMdlEBullet *self, beBaseInfoRam *ram) {
     }
     ValueRef value(beModelCtrlInfoWork_Create((int)a));
     s0 = value.p;
-    if (s0 != 0) {
-        s0->_refCount++;
-    }
+    igObject::ref(s0);
     ReleaseRef::go((igObject *)s1->_work);
     s1->_work = (int)s0;
     beModelCtrl__OnGenerateFromParent((beModelCtrl *)self, ram);

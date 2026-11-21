@@ -54,11 +54,7 @@ int beMessenger_GetVTable(void) {
 igSmartPointer<igObject> *igSmartPointer_beMessengerArgData_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -67,11 +63,7 @@ igSmartPointer<igObject> *igSmartPointer_beMessengerArgData_Destruct(igSmartPoin
 igSmartPointer<igObject> *igSmartPointer_beMessengerGroupList_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -80,11 +72,7 @@ igSmartPointer<igObject> *igSmartPointer_beMessengerGroupList_Destruct(igSmartPo
 igSmartPointer<igObject> *igSmartPointer_beMessengerWorkList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if (delete_storage > 0) operator delete(self);
     }
     return self;
@@ -93,11 +81,7 @@ igSmartPointer<igObject> *igSmartPointer_beMessengerWorkList_Destruct(igSmartPoi
 igSmartPointer<igObject> *igSmartPointer_beMessengerDelayList_Destruct(igSmartPointer<igObject> *self, short delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if (delete_storage > 0) operator delete(self);
     }
     return self;
@@ -106,11 +90,7 @@ igSmartPointer<igObject> *igSmartPointer_beMessengerDelayList_Destruct(igSmartPo
 igSmartPointer<igObject> *igSmartPointer_beMessengerArgDataList_Destruct(igSmartPointer<igObject> *self, long long delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;

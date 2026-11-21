@@ -565,8 +565,7 @@ CallbackArray *igMetaObject_RegisterClass(bool abstract, igMetaObject **metaObje
                 }
                 meta->_validity |= 2;
                 igMetaObject_AssignTypeId(meta);
-                meta->_refCount = meta->_refCount - 1;
-                if ((meta->_refCount & 0x7FFFFF) == 0) igObject_Destroy(meta);
+                meta->release();
                 ObjectSystemView *system = g_objectSystem;
                 if (system->copyVTables != 0 && system->fastPool != 0 && system->vtableClassNames != 0 &&
                     igStringTable_Find(system->vtableClassNames, (unsigned int)className) != -1) {

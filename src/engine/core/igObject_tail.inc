@@ -54,10 +54,7 @@ void igMemoryDictionary_SetCurrent(void *dictionary) {
         if (current != 0) {
             (*(void * *)&g_memoryDictionary) = (void *)(0);
             ((igMemoryDictionaryView *)current)->Clear();
-            ((igObject *)current)->_refCount = (int)((int) (((igObject *)current)->_refCount - 1));
-            if (((unsigned long long) ((long long) (int) ((igObject *)current)->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)current);
-            }
+            ((igObject *)current)->release();
         }
         (*(void * *)&g_memoryDictionary) = (void *)(dictionary);
     }

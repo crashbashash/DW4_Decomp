@@ -96,10 +96,7 @@ void beModelCtrlInfoDataTrc_InitFields(void) {
     ((Gap::Core::igStringMetaField *)clone)->setDefault("TRC");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataTrc_nameStorage);
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)clone);
-    clone->_refCount = (int)clone->_refCount - 1;
-    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(clone);
-    }
+    clone->release();
     recorderNode = (void *)(igMetaObject_GetFieldAt(meta, base));
     ((igObjectRefMetaField *)recorderNode)->_metaObject = (int)igTransformRecorder_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beModelCtrlInfoDataTrc_fieldTable, g_beModelCtrlInfoDataTrc_fieldHandles, g_beModelCtrlInfoDataTrc_fieldOffsets, base);

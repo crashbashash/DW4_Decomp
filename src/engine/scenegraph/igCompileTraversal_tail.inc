@@ -227,8 +227,7 @@ public:
 };
 struct BoolAttr_1bc1e0 { char _pad0[12]; unsigned char _enabled; };
 static inline void releaseKnown_1bc1e0(igObject *o) {
-    o->_refCount = o->_refCount - 1;
-    if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
+    o->release();
 }
 static inline AttrObjectStack *stackFor_1bc1e0(igAttrStackManager *m, igMetaObject *meta) {
     return ((AttrObjectStackList *)m->_attrStacks)->_data[((int *)m->_attrStackIndexTable)[meta->_id]];

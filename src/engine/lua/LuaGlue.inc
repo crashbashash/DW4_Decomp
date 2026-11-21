@@ -15,7 +15,7 @@ void LuaGlue_Initialize(void) {
     if (g_luaGluePool == 0) {
         /* the alias hands the current context back as a word */
         g_luaGluePool = ((LuaMemoryContext *)Memory_GetCurrentContextAlias())->getPool(16);
-        g_luaGluePool->_refCount = g_luaGluePool->_refCount + 1;
+        g_luaGluePool->ref();
         g_luaArrayClasses[LUA_KIND_CHAR] = new (g_luaGluePool) LuaArrayClass<LUA_KIND_CHAR>(
             "igCharArray", LuaCharArray_Delete, LuaCharArray_Get, LuaCharArray_Set, LuaCharArray_New);
         g_luaArrayClasses[LUA_KIND_UCHAR] = new (g_luaGluePool) LuaArrayClass<LUA_KIND_UCHAR>(

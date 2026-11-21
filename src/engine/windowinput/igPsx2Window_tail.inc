@@ -40,16 +40,9 @@ int Gap__igPsx2Window__vfunc_39(igPsx2Window *self, igObject *viewContext) {
     igObject *previous;
     if (viewContext != 0) {
         /* The NULL test is repeated around the retain; dropping it changes the bytes. */
-        if (viewContext != 0) {
-            viewContext->_refCount = viewContext->_refCount + 1;
-        }
+        igObject::ref(viewContext);
         previous = (igObject *)(self->_vc);
-        if (previous != 0) {
-            previous->_refCount = previous->_refCount - 1;
-            if ((previous->_refCount & 0x7fffff) == 0) {
-                igObject_Destroy(previous);
-            }
-        }
+        igObject::release(previous);
         self->_vc = (int)(viewContext);
         return 1;
     }

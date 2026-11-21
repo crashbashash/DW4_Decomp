@@ -72,7 +72,7 @@ void igMemoryRefMetaField::refObjects(igObject *obj)
     for (i = 0; i < n; i++) {
         value = data[i];
         if (value) {
-            ++value->_refCount;
+            value->ref();
         }
     }
 }

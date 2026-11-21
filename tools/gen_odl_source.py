@@ -1072,7 +1072,7 @@ class Writer:
                 lines.append("        igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, %s);"
                              % self.cast_to("igMetaField *", "metaField", mtype + " *"))
                 j += 1
-                # the copy's release: refcount store, the masked test, the destroy call
+                # the copy's release (refcount store, the masked test, the destroy call): the kit's release()
                 if j < len(events) and events[j]["k"] == "store" and events[j]["base"] == clone \
                         and events[j]["off"] == 4:
                     j += 1
@@ -1081,11 +1081,7 @@ class Writer:
                     e = events[j]
                     if not (e["k"] == "call" and e["target"] == svc["igObject_Destroy"] and e["cond"]):
                         raise Unsupported("an override without the release of its copy")
-                    lines.extend(["        metaField->_refCount = metaField->_refCount - 1;",
-                                  "        if (((unsigned long long)(long long)metaField->_refCount & 0x7fffffULL) == 0) {",
-                                  "            igObject_Destroy(%s);"
-                                  % self.cast_to("igObject *", "metaField", mtype + " *"),
-                                  "        }"])
+                    lines.append("        metaField->release();")
                     j += 1
                 lines.append("    }")
                 body.extend(lines)

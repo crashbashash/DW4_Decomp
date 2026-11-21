@@ -158,16 +158,16 @@ class IntListRef {
 public:
     igIntList *p;
     IntListRef(igIntList *list) : p(list) {}
-    void release() { igIntList *held = p; if (held != 0) { --held->_refCount; if ((held->_refCount & 0x7fffff) == 0) igObject_Destroy(held); } }
-    ~IntListRef() { igIntList *held = p; if (held != 0) { --held->_refCount; if ((held->_refCount & 0x7fffff) == 0) igObject_Destroy(held); } }
+    void release() { igIntList *held = p; igObject::release(held); }
+    ~IntListRef() { igIntList *held = p; igObject::release(held); }
 };
 /* Same role for the work's bool list. */
 class BoolListRef {
 public:
     igBoolList *p;
     BoolListRef(igBoolList *list) : p(list) {}
-    void release() { igBoolList *held = p; if (held != 0) { --held->_refCount; if ((held->_refCount & 0x7fffff) == 0) igObject_Destroy(held); } }
-    ~BoolListRef() { igBoolList *held = p; if (held != 0) { --held->_refCount; if ((held->_refCount & 0x7fffff) == 0) igObject_Destroy(held); } }
+    void release() { igBoolList *held = p; igObject::release(held); }
+    ~BoolListRef() { igBoolList *held = p; igObject::release(held); }
 };
 
 void beNDMWShinkaCtrl_Setup(beNDMWShinkaCtrl *self, int insight, int playerNo) {
@@ -218,9 +218,7 @@ void beNDMWShinkaCtrl_BuildFormList(beNDMWShinkaCtrl *self) {
                 retained = (igObject *)inserted; /* matching construct: hand spelling — one-element array, the retained word is re-read through its address */
                 inserted[0] = entry.p;
                 retained = *(igObject **)retained;
-                if (retained != 0) {
-                    retained->_refCount = retained->_refCount + 1;
-                }
+                igObject::ref(retained);
                 List_InsertWords((igDataList *)list, 0, 1, inserted);
             } else {
                 ((Gap::Core::igObjectList *)self->_list)->append((Gap::Core::igObject *)entry.p);

@@ -68,22 +68,12 @@ int igMallocMemoryPool_GetVTable(void) {
     q0 = (igObject *)&pool._eventTracker;
     if (q0 != 0) {
         q0 = *(igObject **)q0;
-        if (q0 != 0) {
-            q0->_refCount = (int)((int) (q0->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) q0->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
-            }
-        }
+        igObject::release(q0);
     }
     q1 = (igObject *)&pool._allocationLock;
     if (q1 != 0) {
         q1 = *(igObject **)q1;
-        if (q1 != 0) {
-            q1->_refCount = (int)((int) (q1->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) q1->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q1);
-            }
-        }
+        igObject::release(q1);
     }
 
     return vtable;

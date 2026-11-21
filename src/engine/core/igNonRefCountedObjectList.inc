@@ -44,9 +44,9 @@ void igNonRefCountedObjectList_GetMetaObjectFunction(void) {
 }
 
 void igNonRefCountedObjectList_InitFields(void) {
+    igMemoryRefMetaField *field;
     int index;
     void **found;
-    igMemoryRefMetaField *field;
     void *meta;
 
     meta = (void *)(g_igNonRefCountedObjectList_metaObject);
@@ -58,9 +58,6 @@ void igNonRefCountedObjectList_InitFields(void) {
     field->_refCounted = 0;
     field->_externalEnumStorage = (int)(&g_igNonRefCountedObjectList_dataStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)field);
-    field->_refCount = (int)((int) (field->_refCount - 1));
-    if (((unsigned long long) ((long long)(int)field->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(field);
-    }
+    field->release();
 }
 

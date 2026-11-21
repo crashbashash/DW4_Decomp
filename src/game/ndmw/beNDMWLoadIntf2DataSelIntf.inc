@@ -209,10 +209,7 @@ void beNDMWLoadIntf2DataSelIntf_InitFields(void) {
     ((Gap::Core::igStringMetaField *)nameField)->setDefault("DATASELINTF");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2DataSelIntf_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, nameIndex, (igMetaField *)nameField);
-    nameField->_refCount = nameField->_refCount - 1;
-    if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
-        igObject_Destroy(nameField);
-    }
+    nameField->release();
     padManager = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base + 2));
     padManager->_metaObject = (int)bePadManager_GetOrCreateMetaObject();
     padManager->_refCounted = 0;

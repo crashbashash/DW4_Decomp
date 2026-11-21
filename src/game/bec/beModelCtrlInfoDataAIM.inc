@@ -89,10 +89,7 @@ void beModelCtrlInfoDataAIM_InitFields(void) {
     ((Gap::Core::igStringMetaField *)clone)->setDefault("AIM");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataAIM_nameStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
-    clone->_refCount = (int)clone->_refCount - 1;
-    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(clone);
-    }
+    clone->release();
     aIMapList = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
     ((igObjectRefMetaField *)aIMapList)->_metaObject = (int)beModelCtrlAIMapList_GetOrCreateMetaObject();
     ((igRefMetaField *)aIMapList)->_construct = 1;

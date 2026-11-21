@@ -129,10 +129,7 @@ void beCameraCtrlInfoRamShake_InitFields(void) {
     ((Gap::Core::igStringMetaField *)clone)->setDefault("SHK");
     clone->_externalEnumStorage = (int)(&g_beCameraCtrlInfoRamShake_nameStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
-    clone->_refCount = (int)clone->_refCount - 1;
-    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(clone);
-    }
+    clone->release();
     igMetaObject_NameFields((igMetaObject *)meta, g_beCameraCtrlInfoRamShake_fieldTable, g_beCameraCtrlInfoRamShake_fieldHandles, g_beCameraCtrlInfoRamShake_fieldOffsets, base);
 }
 

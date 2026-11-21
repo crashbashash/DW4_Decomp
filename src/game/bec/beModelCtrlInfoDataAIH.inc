@@ -120,10 +120,7 @@ void beModelCtrlInfoDataAIH_InitFields(void) {
     ((Gap::Core::igStringMetaField *)clone)->setDefault("AIH");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoDataAIH_nameStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
-    clone->_refCount = (int)clone->_refCount - 1;
-    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(clone);
-    }
+    clone->release();
     igMetaObject_NameFields((igMetaObject *)meta, g_beModelCtrlInfoDataAIH_fieldTable, g_beModelCtrlInfoDataAIH_fieldHandles, g_beModelCtrlInfoDataAIH_fieldOffsets, base);
 }
 

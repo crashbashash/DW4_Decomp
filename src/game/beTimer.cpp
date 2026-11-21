@@ -48,12 +48,7 @@ void beTimer_RemoveAllInfo(beTimer *self) {
     igObject *o;
     for (i = 0; i < n; i++) {
         o = ((igObject **)l->_data)[i];
-        if (o != 0) {
-            o->_refCount = (int)o->_refCount - 1;
-            if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
-            }
-        }
+        igObject::release(o);
     }
     {
         /* matching construct: block-local zero loop */
@@ -111,12 +106,7 @@ void beTimer_Update(beTimer *self) {
                         beLua__RunNamedChunk((beLua *)self->_luaManager, (const char *)it->_callLuaFile, 0);
                         l = (beTimerDataList *)self->_dataList;
                         o = ((igObject **)l->_data)[i];
-                        if (o != 0) {
-                            o->_refCount = o->_refCount - 1;
-                            if (((unsigned long long)((long long)o->_refCount & 0x7fffffULL)) == 0) {
-                                igObject_Destroy(o);
-                            }
-                        }
+                        igObject::release(o);
                         List_RemoveWordAt((igDataList *)l, i);
                         n--;
                         i--;

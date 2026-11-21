@@ -110,10 +110,7 @@ void beNDMWLoadIntf2DegiStateCtrl_InitFields(void) {
     ((Gap::Core::igStringMetaField *)nameField)->setDefault("DEGISTATECTRL");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2DegiStateCtrl_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, nameIndex, (igMetaField *)nameField);
-    nameField->_refCount = nameField->_refCount - 1;
-    if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
-        igObject_Destroy(nameField);
-    }
+    nameField->release();
     statDataList = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(meta, base));
     statDataList->_metaObject = (int)beNDMWLoadIntf2DegiStateList_GetOrCreateMetaObject();
     statDataList->_construct = 1;

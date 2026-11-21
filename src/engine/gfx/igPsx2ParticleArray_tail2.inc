@@ -224,16 +224,9 @@ void igPsx2PointSpriteExt_BeginSprites(UCodeState *state) {
     UCodeAttr *attr = state->source->currentAttr();
     UCodeAttr *previous;
 
-    if (attr != 0) {
-        attr->_refCount = attr->_refCount + 1;
-    }
+    igObject::ref(attr);
     previous = state->attr;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     state->attr = attr;
     if (!(state->attr->flags & 0x10)) {
         igPointSpriteExt_BeginSprites((OO *)state);

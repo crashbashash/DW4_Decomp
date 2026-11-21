@@ -41,6 +41,12 @@ struct igCapabilityManager;
 typedef struct igObject {
     int _vtable;                                   /* +0    igObjectRefMetaField */
     unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+#ifdef __cplusplus
+    inline void ref() const;
+    inline void release() const;
+    static inline void release(const igObject *obj);
+    static inline void ref(const igObject *obj);
+#endif
 } igObject;
 
 #ifdef __cplusplus
@@ -21235,10 +21241,15 @@ public:
 private:
     void internalRelease() const;
 public:
+    inline void release() const { _refAndMemPool._both--; if (_refAndMemPool._either._refCount == 0) internalRelease(); }
+    static inline void release(const igObject *obj) { if (obj != 0) obj->release(); }
+    static inline void ref(const igObject *obj) { if (obj != 0) obj->ref(); }
+    inline void ref() const { _refAndMemPool._both++; }
     int isOfType(const igMetaObject *meta) const;
     void copy(igObject *source, int copyMode);
     igMemoryPoolView *getMemoryPool() const;
-    unsigned int _refCount;                        /* +4    igUnsignedIntMetaField */
+protected:
+    union { mutable unsigned int _both; struct { mutable unsigned int _refCount : 23; unsigned int _memPoolIndex : 9; } _either; } _refAndMemPool;
 };
 }
 }
@@ -23573,6 +23584,11 @@ public:
 };
 }
 }
+
+inline void igObject::ref() const { ((const Gap::Core::igObject *)this)->ref(); }
+inline void igObject::release() const { ((const Gap::Core::igObject *)this)->release(); }
+inline void igObject::release(const igObject *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->release(); }
+inline void igObject::ref(const igObject *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->ref(); }
 #endif
 
 #endif /* DW4_REFLECTED_H */

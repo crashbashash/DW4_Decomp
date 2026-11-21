@@ -91,12 +91,7 @@ void beNDMWAfsSetup_RemoveAllInfo(beNDMWAfsSetup *self) {
     n = l->_count;
     for (i = 0; i < n; i++) {
         p = ((igObject **)l->_data)[i];
-        if (p != 0) {
-            p->_refCount = p->_refCount - 1;
-            if ((p->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(p);
-            }
-        }
+        igObject::release(p);
     }
     n2 = l->_count;
     for (j = 0; j < n2; j++) {

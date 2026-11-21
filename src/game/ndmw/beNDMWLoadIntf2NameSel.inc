@@ -223,10 +223,7 @@ void beNDMWLoadIntf2NameSel_InitFields(void) {
     ((Gap::Core::igStringMetaField *)nameField)->setDefault("NAMESEL");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2NameSel_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, nameIndex, (igMetaField *)nameField);
-    nameField->_refCount = nameField->_refCount - 1;
-    if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
-        igObject_Destroy(nameField);
-    }
+    nameField->release();
     messenger = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
     ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)messenger)->_refCounted = 0;

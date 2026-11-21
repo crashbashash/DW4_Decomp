@@ -56,9 +56,9 @@ void igStringRefList_GetMetaObjectFunction(void) {
 }
 
 void igStringRefList_InitFields(void) {
+    igMemoryRefMetaField *field;
     int index;
     void **found;
-    igMemoryRefMetaField *field;
     igMetaObject *meta;
 
     meta = (igMetaObject *)((void *)g_igStringRefList_metaObject);
@@ -69,9 +69,6 @@ void igStringRefList_InitFields(void) {
     field->_memSize = 0;
     field->_externalEnumStorage = (int)(&g_igStringRefList_dataDescriptorCell);
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);
-    field->_refCount = (int)((int)field->_refCount - 1);
-    if (((unsigned long long) ((long long)(int)field->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(field);
-    }
+    field->release();
 }
 

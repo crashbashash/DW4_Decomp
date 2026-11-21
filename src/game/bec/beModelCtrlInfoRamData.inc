@@ -31,11 +31,7 @@ int beModelCtrlInfoRamData_GetVTable(void) {
 igSmartPointer<igObject> *igSmartPointer_beModelCtrlInfoWork_Destruct(igSmartPointer<igObject> *self, int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -105,10 +101,7 @@ void beModelCtrlInfoRamData_InitFields(void) {
     ((Gap::Core::igStringMetaField *)clone)->setDefault("ONE");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoRamData_nameStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
-    clone->_refCount = (int)clone->_refCount - 1;
-    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(clone);
-    }
+    clone->release();
     node = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base));
     ((igObjectRefMetaField *)node)->_metaObject = (int)beModelCtrlNode2_GetOrCreateMetaObject();
     work = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));

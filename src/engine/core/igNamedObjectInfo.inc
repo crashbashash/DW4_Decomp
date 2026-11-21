@@ -28,12 +28,7 @@ int igNamedObjectInfo_GetVTable(void) {
     info._vtable = (int)&g_igNamedObjectInfo_vtable[0];
     if (q0 != 0) {
         q0 = *(igObject **)q0;
-        if (q0 != 0) {
-            q0->_refCount = (int)((int) (q0->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) q0->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q0);
-            }
-        }
+        igObject::release(q0);
     }
     info._vtable = (int)&g_igNamedObject_vtable[0];
     if (q1 != 0) {

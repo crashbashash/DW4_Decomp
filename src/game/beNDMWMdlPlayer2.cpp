@@ -42,7 +42,7 @@ class ValueRef {
 public:
     igObject *p;
     ValueRef(igObject *o) : p(o) {}
-    ~ValueRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~ValueRef() { igObject *o = p; igObject::release(o); }
 };
 /* Inlined helper shared by the model-controller "apply ram" methods: a ram without a data list gets a
  * fresh beBaseInfoDataList (allocator chosen by the global selector flag).  Being an inlined callee, its
@@ -61,9 +61,7 @@ struct RamDataList { static inline void Ensure(beBaseInfoRam *ram) {
         /* matching construct: retained, released and stored by hand; through igSmartPointer::operator= this
          * unit's profile leaves the operator an out-of-line call inside the inline */
         igObject *s0 = list.p;
-        if (s0 != 0) {
-            s0->_refCount++;
-        }
+        igObject::ref(s0);
         igRelease((igObject *)ram->_dataList);
         ram->_dataList = (int)s0;
     }
@@ -180,14 +178,9 @@ void beNDMWMdlPlayer2_UpdateControl(beNDMWMdlPlayer2 *self, beBaseInfoRam *ram) 
         }
         igSmartPointer<igObject> created(beBaseInfoDataList_Create(a));
         igObject *s0 = created.p;
-        if (s0 != 0) {
-            s0->_refCount++;
-        }
+        igObject::ref(s0);
         igObject *old = (igObject *)ram->_dataList;
-        if (old != 0) {
-            --old->_refCount;
-            if ((old->_refCount & 0x7fffff) == 0) igObject_Destroy(old);
-        }
+        igObject::release(old);
         ram->_dataList = (int)s0;
     }
     prop = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_13);

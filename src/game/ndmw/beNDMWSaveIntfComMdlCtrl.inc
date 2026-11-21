@@ -30,11 +30,7 @@ int beNDMWSaveIntfComMdlCtrl_GetVTable(void) {
 igSmartPointer<igObject> *igSmartPointer_beSaveIntfComMdlDataList_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)object);
-        }
+        igObject::release(object);
         if ((short)delete_storage > 0) operator delete(self);
     }
     return self;
@@ -115,10 +111,7 @@ void beNDMWSaveIntfComMdlCtrl_InitFields(void) {
     ((Gap::Core::igStringMetaField *)nameField)->setDefault("COMMDLCTRL");
     nameField->_externalEnumStorage = (int)(&g_beNDMWSaveIntfComMdlCtrl_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, nameIndex, (igMetaField *)nameField);
-    nameField->_refCount = nameField->_refCount - 1;
-    if (((unsigned long long)(long long)nameField->_refCount & 0x7fffffULL) == 0) {
-        igObject_Destroy(nameField);
-    }
+    nameField->release();
     messenger = (void *)(igMetaObject_GetFieldAt(meta, base));
     ((igObjectRefMetaField *)messenger)->_metaObject = (int)beMessenger_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)messenger)->_refCounted = 0;

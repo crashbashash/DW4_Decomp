@@ -454,16 +454,9 @@ void igProjectiveShadowShader_Reset(igProjectiveShadowShader *self) {
 
 void igSceneInfo_SetSceneGraph(igSceneInfo *self, igNode *sceneGraph) {
     igObject *old;
-    if (sceneGraph != 0) {
-        sceneGraph->_refCount = sceneGraph->_refCount + 1;
-    }
+    igObject::ref(sceneGraph);
     old = (igObject *)self->_sceneGraph;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     self->_sceneGraph = (int)sceneGraph;
 }
 

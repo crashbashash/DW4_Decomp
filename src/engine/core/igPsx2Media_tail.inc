@@ -39,30 +39,15 @@ int igPsx2Media_GetVTable(void) {
     media._vtable = (int)(&g_igPsx2Media_vtable[0]);
     if (conversionString != 0) {
         conversionString = *(igObject **)conversionString;
-        if (conversionString != 0) {
-            conversionString->_refCount = (int)((int) (conversionString->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) conversionString->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(conversionString);
-            }
-        }
+        igObject::release(conversionString);
     }
     if (sema != 0) {
         sema = *(igObject **)sema;
-        if (sema != 0) {
-            sema->_refCount = (int)((int) (sema->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) sema->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(sema);
-            }
-        }
+        igObject::release(sema);
     }
     if (connection != 0) {
         connection = *(igObject **)connection;
-        if (connection != 0) {
-            connection->_refCount = (int)((int) (connection->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) connection->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(connection);
-            }
-        }
+        igObject::release(connection);
     }
     return result;
 }

@@ -79,12 +79,7 @@ template <int Tag> struct TitleRef {
     TitleRef(void *v) : p(v) {}
     ~TitleRef() {
         igObject *o = (igObject *)p;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if (((unsigned long long)(long long)(int)o->_refCount & 0x7fffffULL) == 0) {
-                igObject_Destroy(o);
-            }
-        }
+        igObject::release(o);
     }
 };
 extern "C" void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam);
@@ -137,26 +132,14 @@ void beNDMWTitle2_Prepare(beNDMWTitle2 *self) {
     igObject *held;
     if (self->_padManager == 0) {
         padManager = (igObject *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
-        if (padManager != 0) {
-            padManager->_refCount = padManager->_refCount + 1;
-        }
+        igObject::ref(padManager);
         held = (igObject *)self->_padManager;
-        if (held != 0) {
-            held->_refCount = held->_refCount - 1;
-            if ((held->_refCount & 0x7fffff) == 0) {
-                igObject_Destroy(held);
-            }
-        }
+        igObject::release(held);
         self->_padManager = (int)padManager;
     }
     held = (igObject *)self->_mcUtilCtrl;
     if (held != 0) {
-        if (held != 0) {
-            held->_refCount = held->_refCount - 1;
-            if ((held->_refCount & 0x7fffff) == 0) {
-                igObject_Destroy(held);
-            }
-        }
+        igObject::release(held);
         self->_mcUtilCtrl = 0;
     }
 }

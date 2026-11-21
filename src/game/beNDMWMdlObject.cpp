@@ -15,13 +15,13 @@ extern "C" unsigned char beNDMWMdlObject_IsKind(int dummy0, int kind);
 extern "C" void beNDMWMdlObject_RegisterReceiver(void);
 extern "C" int beNDMWMdlObject_GetMeta(void);
 extern "C" int KIND_OBJECT[4];
-struct RefRelease { static inline void go(igObject *o) { igObject *t = o; if (t != 0) { --t->_refCount; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); } } };
+struct RefRelease { static inline void go(igObject *o) { igObject *t = o; igObject::release(t); } };
 /* Owning stack reference to the new map info work; released on scope exit. */
 class InfoWorkRef {
 public:
     igObject *p;
     InfoWorkRef(igObject *o) : p(o) {}
-    ~InfoWorkRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~InfoWorkRef() { igObject *o = p; igObject::release(o); }
 };
 struct DataListSlot { static inline void setDataList(beBaseInfoRam *ram, const igSmartPointer<igObject> &r) {
     igObject *t = r.p;

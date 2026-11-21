@@ -13,13 +13,10 @@ void igObjectRefArrayMetaField::set(igObject *obj, int index, igObject *val) con
 
     if (_refCounted) {
         if (value != 0) {
-            value->_refCount = value->_refCount + 1;
+            value->ref();
         }
         if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7fffff) == 0) {
-                igObject_Destroy(old);
-            }
+            old->release();
         }
     }
     ((::igObject **)((char *)obj + _offset))[index] = value;
@@ -60,10 +57,7 @@ void igObjectRefArrayMetaField::construct(igObject *src)
             element = (::igObject *)igMetaObject_CreateInstance((igMetaObject *)_metaObject, pool);
             set(src, i, (igObject *)element);
             if (_refCounted) {
-                element->_refCount = element->_refCount - 1;
-                if ((element->_refCount & 0x7fffff) == 0) {
-                    igObject_Destroy(element);
-                }
+                element->release();
             }
         }
     }
@@ -78,10 +72,7 @@ void igObjectRefArrayMetaField::destruct(igObject *src)
         for (i = 0; i < getNum(); i++) {
             element = ((::igObject **)((char *)src + _offset))[i];
             if (element != 0) {
-                element->_refCount = element->_refCount - 1;
-                if ((element->_refCount & 0x7fffff) == 0) {
-                    igObject_Destroy(element);
-                }
+                element->release();
             }
         }
     }
@@ -97,10 +88,7 @@ void igObjectRefArrayMetaField::decommission(igObject *src)
             for (i = 0; i < getNum(); i++) {
                 element = ((::igObject **)((char *)src + _offset))[i];
                 if (element != 0) {
-                    element->_refCount = element->_refCount - 1;
-                    if ((element->_refCount & 0x7fffff) == 0) {
-                        igObject_Destroy(element);
-                    }
+                    element->release();
                 }
             }
         }
@@ -155,10 +143,7 @@ void igObjectRefArrayMetaField::copyByValue(igObject *dst, const igObject *src)
         } else if (to == 0) {
             set(dst, i, from->cloneViaMetadata(1));
         } else if (from == 0) {
-            to->_refCount = to->_refCount - 1;
-            if ((to->_refCount & 0x7fffff) == 0) {
-                igObject_Destroy(to);
-            }
+            to->release();
             set(dst, i, 0);
         }
         i++;
@@ -189,10 +174,7 @@ void igObjectRefArrayMetaField::copyByValueShallow(igObject *dst, const igObject
             } else if (to == 0) {
                 set(dst, i, from->cloneViaMetadata(1));
             } else if (from == 0) {
-                to->_refCount = to->_refCount - 1;
-                if ((to->_refCount & 0x7fffff) == 0) {
-                    igObject_Destroy(to);
-                }
+                to->release();
                 set(dst, i, 0);
             }
             i += 1;

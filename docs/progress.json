@@ -737,10 +737,10 @@
  "typed": {
   "error": null,
   "offset_casts": 3068,
-  "pct": 46.71,
-  "recovered": 34131,
+  "pct": 45.0,
+  "recovered": 31985,
   "synthetic": 5846,
-  "total": 73073,
+  "total": 71074,
   "typeable": 0,
   "typeable_pct": 0.0
  }

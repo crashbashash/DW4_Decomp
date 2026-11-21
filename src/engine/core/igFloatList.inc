@@ -69,10 +69,7 @@ void igFloatList::arkRegisterInitialize()
         metaField->_memSize = 0;
         metaField->_externalEnumStorage = (int)&k_data;
         igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
-        metaField->_refCount = metaField->_refCount - 1;
-        if (((unsigned long long)(long long)metaField->_refCount & 0x7fffffULL) == 0) {
-            igObject_Destroy((::igObject *)metaField);
-        }
+        metaField->release();
     }
 }
 }

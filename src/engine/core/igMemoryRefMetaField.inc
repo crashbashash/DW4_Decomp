@@ -99,10 +99,7 @@ void igMemoryRefMetaField::arkRegisterInitialize()
         metaField->setDefault(2);
         metaField->_externalEnumStorage = (int)&k_shallowCopyMethod;
         igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
-        metaField->_refCount = metaField->_refCount - 1;
-        if (((unsigned long long)(long long)metaField->_refCount & 0x7fffffULL) == 0) {
-            igObject_Destroy((::igObject *)metaField);
-        }
+        metaField->release();
     }
     {
         igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
@@ -131,10 +128,7 @@ void igMemoryRefMetaField::arkRegisterInitialize()
         *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igMetaField_GetResetTypeMetaEnum;
         metaField->_externalEnumStorage = (int)&k_resetMethod;
         igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, (::igMetaField *)metaField);
-        metaField->_refCount = metaField->_refCount - 1;
-        if (((unsigned long long)(long long)metaField->_refCount & 0x7fffffULL) == 0) {
-            igObject_Destroy((::igObject *)metaField);
-        }
+        metaField->release();
     }
     {
         igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
@@ -163,10 +157,7 @@ void igMemoryRefMetaField::arkRegisterMetaValidate()
             MetaRefList_AppendRetained(getMetaFieldTypes(), (::igObject *)metaField);
             {
                 ::igObject *held = (::igObject *)_MetaField;
-                held->_refCount = (int)held->_refCount - 1;
-                if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(held);
-                }
+                held->release();
             }
             _MetaField->_internalIndex = (short)(getMetaFieldTypes()->_count - 1);
             _MetaField->validate();

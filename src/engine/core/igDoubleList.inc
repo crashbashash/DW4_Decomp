@@ -59,9 +59,6 @@ void igDoubleList_InitFields(void) {
     field->_memSize = 0;
     field->_externalEnumStorage = (int)&g_igDoubleList_dataDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);
-    field->_refCount = (int)field->_refCount - 1;
-    if (((unsigned long long)((long long)(int)field->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(field);
-    }
+    field->release();
 }
 

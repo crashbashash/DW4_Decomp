@@ -305,7 +305,7 @@ class ItemRef {
 public:
     igObject *p;
     ItemRef(igObject *o) : p(o) {}
-    ~ItemRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~ItemRef() { igObject *o = p; igObject::release(o); }
 };
 extern "C" void beNDMWGameRam_ResetPlayer(beNDMWGameRam *self, int player);
 /* Owning stack reference to the new per-player data-list list, released the same way. */
@@ -313,7 +313,7 @@ class PlayerDataListListRef {
 public:
     igObject *p;
     PlayerDataListListRef(igObject *o) : p(o) {}
-    ~PlayerDataListListRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~PlayerDataListListRef() { igObject *o = p; igObject::release(o); }
 };
 extern "C" void beNDMWGameRam_Start(beNDMWGameRam *self);
 /* reference-counted engine object header: refcount word at +4 */
@@ -327,7 +327,7 @@ class RamRef {
 public:
     beNDMWGameRamInfoRam *p;
     RamRef(beNDMWGameRamInfoRam *o) : p(o) {}
-    ~RamRef() { beNDMWGameRamInfoRam *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~RamRef() { beNDMWGameRamInfoRam *o = p; igObject::release(o); }
 };
 extern "C" int beNDMWGameRam_AddInfo(beNDMWGameRam *self);
 extern "C" int beNDMWGameRam_FindSpecies(beNDMWGameRam *self, const char *modelName);
@@ -364,11 +364,7 @@ typedef igObject Ref;
 struct StatHelpers {
     static inline void release_ref(Ref *object)
     {
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
     }
     static inline Ref *shinka(beNDMWGameRam *g)
     {
@@ -386,11 +382,7 @@ struct StatHelpers {
 struct AttributeHelpers {
     static inline void release_ref(igObject *object)
     {
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
     }
     static inline igObject *shinka(beNDMWGameRam *g)
     {
@@ -452,11 +444,7 @@ extern "C" char DATABASE_4[];
 struct RecomputeHelpers {
     static inline void release_ref(igObject *object)
     {
-        if (object) {
-            --object->_refCount;
-            if (((unsigned long long)(long long)object->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
     }
 
     static inline igObject *shinka(beNDMWGameRam *g)
@@ -631,10 +619,7 @@ static inline void storePlayerData(beNDMWGameRam *self, int index, const igSmart
     igObject *o;
     if (s2 != 0) s2->_refCount = s2->_refCount + 1;
     o = ((igObject **)pl->_data)[index];
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-    }
+    igObject::release(o);
     if (pl->_count != 0 && index >= 0 && index < pl->_count)
         ((igObject **)pl->_data)[index] = s2;
 }
@@ -654,10 +639,7 @@ void beNDMWGameRam_ResetPlayer(beNDMWGameRam *self, int player) {
         oldCount = common->_count;
         for (i = 0; i < oldCount; i++) {
             o = ((igObject **)common->_data)[i];
-            if (o != 0) {
-                o->_refCount = o->_refCount - 1;
-                if ((o->_refCount & 0x7FFFFF) == 0) igObject_Destroy(o);
-            }
+            igObject::release(o);
         }
         clearCount = common->_count;
         for (j = 0; j < clearCount; j++) ((int *)common->_data)[j] = 0;
@@ -1088,11 +1070,7 @@ void beNDMWGameRam_EquipWeapon(beNDMWGameRam *self, int index, int apply)
         int oldCount = sockets->_count;
         for (int r = 0; r < oldCount; r++) {
             beNDMWItemBase *prev = ((beNDMWItemBase **)sockets->_data)[r];
-            if (prev) {
-                --prev->_refCount;
-                if (((unsigned long long)(long long)(int)prev->_refCount & 0x7fffffULL) == 0)
-                    igObject_Destroy(prev);
-            }
+            igObject::release(prev);
         }
         int clearCount = sockets->_count;
         for (int c = 0; c < clearCount; c++) ((beNDMWItemBase **)sockets->_data)[c] = 0;
@@ -1178,11 +1156,7 @@ void beNDMWGameRam_EquipWeapon(beNDMWGameRam *self, int index, int apply)
             beNDMWItemBase *chosen = ((beNDMWItemBase **)pocket->_data)[best];
             if (chosen) ++chosen->_refCount;
             beNDMWItemBase *first = ((beNDMWItemBase **)sockets->_data)[0];
-            if (first) {
-                --first->_refCount;
-                if (((unsigned long long)(long long)(int)first->_refCount & 0x7fffffULL) == 0)
-                    igObject_Destroy(first);
-            }
+            igObject::release(first);
             int sc = sockets->_count;
             int zero = 0;
             if (sc != 0 && zero < sc) ((beNDMWItemBase **)sockets->_data)[0] = chosen;
@@ -1306,10 +1280,7 @@ void beNDMWGameRam_JoinPlayerWithName(beNDMWGameRam *self, int index, void *mode
         n = names->_count;
         for (i = 0; i < n; i++) {
             released = ((igObject **)names->_data)[i];
-            if (released != 0) {
-                released->_refCount = released->_refCount - 1;
-                if ((released->_refCount & 0x7FFFFF) == 0) igObject_Destroy(released);
-            }
+            igObject::release(released);
         }
         n2 = names->_count;
         for (j = 0; j < n2; j++) ((igObject **)names->_data)[j] = 0;
@@ -1334,12 +1305,7 @@ void beNDMWGameRam_JoinPlayerWithUnicodeName(beNDMWGameRam *self, int index, voi
         n = names->_count;
         for (i = 0; i < n; i++) {
             released = ((igObject **)names->_data)[i];
-            if (released != 0) {
-                released->_refCount = released->_refCount - 1;
-                if ((released->_refCount & 0x7FFFFF) == 0) {
-                    igObject_Destroy(released);
-                }
-            }
+            igObject::release(released);
         }
         n2 = names->_count;
         for (j = 0; j < n2; j++) {

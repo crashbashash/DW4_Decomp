@@ -11,11 +11,7 @@ extern "C" {
 igSmartPointer<igObject> *igSmartPointer_igViewerGuiFactory_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -24,11 +20,7 @@ igSmartPointer<igObject> *igSmartPointer_igViewerGuiFactory_Destruct(igSmartPoin
 igSmartPointer<igObject> *igSmartPointer_igRadioGroup_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -37,11 +29,7 @@ igSmartPointer<igObject> *igSmartPointer_igRadioGroup_Destruct(igSmartPointer<ig
 igSmartPointer<igObject> *igSmartPointer_igViewerSceneInfoManager_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -50,11 +38,7 @@ igSmartPointer<igObject> *igSmartPointer_igViewerSceneInfoManager_Destruct(igSma
 igSmartPointer<igObject> *igSmartPointer_igStatisticsItem_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;

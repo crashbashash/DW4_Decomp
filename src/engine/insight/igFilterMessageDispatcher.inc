@@ -22,21 +22,11 @@ int igFilterMessageDispatcher_GetVTable(void) {
     *(int **)&obj._vtable = &g_igFilterMessageDispatcher_vtable[0];
     if (&obj._filters != 0) {
         o = (igObject *)obj._filters;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
+        igObject::release(o);
     }
     if (&obj._defaultFilters != 0) {
         o = (igObject *)obj._defaultFilters;
-        if (o != 0) {
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
-            }
-        }
+        igObject::release(o);
     }
     return t;
 }

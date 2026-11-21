@@ -4,10 +4,7 @@ int Gap__Gfx__igPsx2VertexArray2__vfunc_23(igVertexArray2 *array, int primitive,
         Rc_17f2b0 *stream = created.p;
         if (stream != 0) stream->_refCount = stream->_refCount + 1;
         Rc_17f2b0 *old = (Rc_17f2b0 *)array->_vertexStream;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-        }
+        igObject::release(old);
         array->_vertexStream = (int)stream;
     }
     igVertexStream *vs = (igVertexStream *)array->_vertexStream;

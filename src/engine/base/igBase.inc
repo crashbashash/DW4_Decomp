@@ -37,11 +37,7 @@ void igBase_GetMetaObjectFunction(void) {
 igSmartPointer<igObject> *igSmartPointer_igGroup_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -50,11 +46,7 @@ igSmartPointer<igObject> *igSmartPointer_igGroup_Destruct(igSmartPointer<igObjec
 igSmartPointer<igObject> *igSmartPointer_igIterateGraph_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;

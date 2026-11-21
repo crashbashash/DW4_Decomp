@@ -47,10 +47,7 @@ static inline int PoolAllocator(int owner) {
 /* Releases the object a slot holds, through the 64-bit masked count test; the slot is left as it was. */
 static inline void ReleaseObject(igObject **slot) {
     igObject *o = slot[0];
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if (((unsigned long long)(long long)o->_refCount & 0x7fffffULL) == 0) igObject_Destroy(o);
-    }
+    igObject::release(o);
 }
 /* Takes a use of the shared viewer options, creating them on first use. */
 static inline void AcquireSharedOptions() {
@@ -177,10 +174,7 @@ struct Assign {
         igStringRefList *old;
         if (list != 0) list->_refCount = list->_refCount + 1;
         old = dst;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old);
-        }
+        igObject::release(old);
         dst = list;
     }
 };

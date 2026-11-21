@@ -234,12 +234,7 @@ void igAdx_CreateScratchString(void) {
 
     allocator = Memory_GetAllocatorByName("User0");
     old = g_adxScratchString.p;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     g_adxScratchString.p = (igStringObj *)(igStringObj_Create((int)allocator));
 }
 
@@ -249,20 +244,10 @@ void igAdx_Shutdown(void) {
 
     igAdx_SetPartitionCount(0);
     object = g_adxAfsFileList.p;
-    if (object != 0) {
-        object->_refCount = object->_refCount - 1;
-        if ((object->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(object);
-        }
-    }
+    igObject::release(object);
     g_adxAfsFileList.p = 0;
     object = g_adxScratchString.p;
-    if (object != 0) {
-        object->_refCount = object->_refCount - 1;
-        if ((object->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(object);
-        }
-    }
+    igObject::release(object);
     g_adxScratchString.p = 0;
     mwPlyFinishSfdFx();
     SNDF_Finish();
@@ -492,12 +477,7 @@ void igAdx_SetPartitionCount(int count) {
             } while (cleared < g_adxPartitionCount);
         }
         object = g_adxPartitionNames.p;
-        if (object != 0) {
-            object->_refCount = (int)object->_refCount - 1;
-            if (((unsigned long long)(long long)(int)object->_refCount & 0x7fffffULL) == 0) {
-                igObject_Destroy(object);
-            }
-        }
+        igObject::release(object);
         g_adxPartitionNames.p = (igStringRefList *)igStringRefList_Create((int)allocator);
     }
 }
@@ -566,16 +546,9 @@ void igAdx_AddPartitionName(int partition, const char *name) {
 void igAdx_SetInsideFiles(igAdxAfsFileList *files) {
     igAdxAfsFileList *old;
     if (files != 0) {
-        if (files != 0) {
-            files->_refCount = files->_refCount + 1;
-        }
+        igObject::ref(files);
         old = g_adxAfsFileList.p;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(old);
-            }
-        }
+        igObject::release(old);
         g_adxAfsFileList.p = files;
     }
 }

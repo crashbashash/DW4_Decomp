@@ -629,9 +629,7 @@ void beBaseInfoRam_RemoveAllTimers(beBaseInfoRam *self) {
 /* Takes a reference to the insight's movie manager. */
 void beMovie_Prepare(beMovie *self) {
     igObject *manager = igInsightCore_FindManager((igInsightCore *)self->_insight, g_igMovieManager_metaObject);
-    if (manager != 0) {
-        manager->_refCount = manager->_refCount + 1;
-    }
+    igObject::ref(manager);
     igRelease((igObject *)self->_movie);
     self->_movie = (int)manager;
 }

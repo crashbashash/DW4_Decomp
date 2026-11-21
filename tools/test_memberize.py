@@ -177,6 +177,25 @@ class Memberize(unittest.TestCase):
         self.assertEqual(self.run_tool("--apply"), 2)
         self.assertEqual(before, self.read("src/game/Widget.inc"))
 
+    def test_two_overloads_of_one_member_in_one_table(self):
+        self.append("src/game/Widget.inc",
+                    "\nint Widget_FindByKey(Widget *self, int key) {\n    return self->_count == key;\n}\n"
+                    "\nint Widget_FindByName(Widget *self, const char *name) {\n    return name != 0;\n}\n")
+        self.append("src/game/Users.inc", "int Users_Find(Widget *w) {\n"
+                    "    return Widget_FindByKey(w, 1) + Widget_FindByName(w, \"a\");\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000010 Widget_FindByKey\n"
+                    "00100110 000010 Widget_FindByName\n")
+        write(self.table, TABLE + "Widget_FindByKey\tint Widget::find(int key)\n"
+              "Widget_FindByName\tint Widget::find(const char *name)\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        widget = self.read("src/game/Widget.inc")
+        self.assertIn("int Widget::find(int key) {\n    return _count == key;\n}", widget)
+        self.assertIn("int Widget::find(const char *name) {\n    return name != 0;\n}", widget)
+        self.assertIn("return w->find(1) + w->find(\"a\");", self.read("src/game/Users.inc"))
+        members = self.read("config/class-members.tsv")
+        self.assertIn("Widget\tint find(int key);\n", members)
+        self.assertIn("Widget\tint find(const char *name);\n", members)
+
     def test_an_undeclared_short_member_is_refused(self):
         write(self.table, TABLE + "User_Count\tWidget::count\n")
         self.assertEqual(self.run_tool(), 2)

@@ -1140,11 +1140,7 @@ ObjectRefWord *FUN_00164870(ObjectRefWord *self,int delete_storage) {
 igSmartPointer<igObject> *igSmartPointer_igShortList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -1153,11 +1149,7 @@ igSmartPointer<igObject> *igSmartPointer_igShortList_Destruct(igSmartPointer<igO
 igSmartPointer<igObject> *igSmartPointer_igCharList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;

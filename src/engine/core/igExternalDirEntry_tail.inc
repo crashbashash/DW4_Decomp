@@ -60,16 +60,9 @@ void igExternalDirEntry_SetDirectoryName(igExternalDirEntry *self, int name) {
 
 void igExternalDirEntry_SetRef(igDirEntry *self, igObject *ref) {
     igObject *old;
-    if (ref != 0) {
-        ref->_refCount = (int)((int) (ref->_refCount + 1));
-    }
+    igObject::ref(ref);
     old = (igObject *)((void *)(self->_ref));
-    if (old != 0) {
-        old->_refCount = (int)((int) (old->_refCount - 1));
-        if (((unsigned long long) ((long long)(int) old->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     self->_ref = (int)(ref);
 }
 

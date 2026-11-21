@@ -1,10 +1,7 @@
 static inline char *keyText(igStringObj *s) { char *t = (char *)s->_buffer; if (t == 0) { return (g_stringObjEmptyText); } return t; }
 
 static inline void dropKey(igStringObj *o) {
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); }
-    }
+    igObject::release(o);
 }
 
 static inline void dropValues(igTDataList<char *> *o) {
@@ -58,9 +55,7 @@ void Gap__Core__igPluginHelper__userDestruct(igPluginHelper *self) {
     count = ((igLibraryList *)self->_loadedPlugins)->_count;
     for (i = 0; i < count; i++) {
         library = ((igLibrary **)((igLibraryList *)self->_loadedPlugins)->_data)[i];
-        if (library != 0) {
-            library->_refCount = library->_refCount + 1;
-        }
+        igObject::ref(library);
         ((igLibraryLoaderView *)self->_libraryLoader)->UnloadLibrary(&library);
         if (library != 0) {
             library->_refCount = library->_refCount - 1;

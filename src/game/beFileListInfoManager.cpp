@@ -334,10 +334,7 @@ int beFileListInfoManager_AddReadInfos(beFileListInfoManager *self) {
         o = ((igObject **)l->_data)[k];
         if (o != 0) {
             /* matching construct: _refCount is unsigned in the metadata; the retail load is the signed lw */
-            o->_refCount = (int)o->_refCount - 1;
-            if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
-            }
+            o->release();
         }
     }
     {

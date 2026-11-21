@@ -53,20 +53,13 @@ int igObjectDirEntry_GetMeta(void) {
 
 /* Takes one more reference on `object` (null-safe): bumps its shared igObject _refCount. */
 void igObjectDirEntry_RetainSharedRef(igObjectDirEntry *self, igObject *object) {
-    if (object != 0) {
-        object->_refCount = object->_refCount + 1;
-    }
+    igObject::ref(object);
 }
 
 /* Release one reference to `object`: drop its reference count and destroy it when the 23-bit count
  * (the `<< 0x29 >> 0x29` mask) reaches zero. `self` is not used. */
 void igObjectDirEntry_ReleaseSharedRef(igObjectDirEntry *self, igObject *object) {
-    if (object != 0) {
-        object->_refCount = (int)object->_refCount - 1;
-        if (((unsigned long long)((long long)(int)object->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(object);
-        }
-    }
+    igObject::release(object);
 }
 
 void igObjectDirEntry_SetTypeMeta(igObjectDirEntry *self, igMetaObject *meta) {
@@ -91,16 +84,9 @@ void igObjectDirEntry_SetTypeMeta(igObjectDirEntry *self, igMetaObject *meta) {
  * the old one (destroying it when its 23-bit count reaches zero), then store the new one. */
 void igObjectDirEntry_SetRef(igObjectDirEntry *self, igObject *object) {
     igObject *previousObject;
-    if (object != 0) {
-        object->_refCount = object->_refCount + 1;
-    }
+    igObject::ref(object);
     previousObject = (igObject *)(self->_ref);
-    if (previousObject != 0) {
-        previousObject->_refCount = previousObject->_refCount - 1;
-        if ((previousObject->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(previousObject);
-        }
-    }
+    igObject::release(previousObject);
     self->_ref = (int)object;
 }
 
@@ -176,11 +162,10 @@ void igObjectDirEntry_ResolveRef(igObjectDirEntry *self, igIGBFileView *file) {
     file->SetObjectCursor(cursor + read);
 }
 
-static inline void addRef(igObject *o) { if (o != 0) { o->_refCount = (int)o->_refCount + 1; } }
+static inline void addRef(igObject *o) { igObject::ref(o); }
 
 static inline void dropRef(igObject *o) {
-    o->_refCount = (int)o->_refCount - 1;
-    if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) { igObject_Destroy(o); }
+    o->release();
 }
 
 static inline void setMeta(igObjectDirEntryView *self, igMetaObject *m) {
@@ -227,20 +212,13 @@ void igObjectDirEntry_CreateObject(igObjectDirEntryView *self, igIGBFileView *fi
 
 /* Takes one more reference on `object` (null-safe): bumps its shared igObject _refCount. */
 void igObjectDirEntry_RetainRef(igObjectDirEntry *self, igObject *object) {
-    if (object != 0) {
-        object->_refCount = object->_refCount + 1;
-    }
+    igObject::ref(object);
 }
 
 /* Release one reference to `object`: drop its reference count and destroy it when the 23-bit count
  * (the `<< 0x29 >> 0x29` mask) reaches zero. `self` is not used. */
 void igObjectDirEntry_ReleaseRef(igObjectDirEntry *self, igObject *object) {
-    if (object != 0) {
-        object->_refCount = (int)object->_refCount - 1;
-        if (((unsigned long long)((long long)(int)object->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(object);
-        }
-    }
+    igObject::release(object);
 }
 
 /* igObjectDirEntry vtable slot 29: setter for `_memoryPoolHandle` (+44), the pool handle field of

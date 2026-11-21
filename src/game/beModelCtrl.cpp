@@ -160,16 +160,9 @@ extern "C" char SQ_WALK[];
 struct DataListInstall { static inline void go(beBaseInfoRam *ram, const igSmartPointer<igObject> &fresh) {
     igObject *o = fresh.p;
     igObject *old;
-    if (o != 0) {
-        o->_refCount = o->_refCount + 1;
-    }
+    igObject::ref(o);
     old = (igObject *)ram->_dataList;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     ram->_dataList = (int)o;
 }
 static inline void make(beBaseInfoRam *ram, int v) { igSmartPointer<igObject> fresh(beBaseInfoDataList_Create(v)); go(ram, fresh); }
@@ -207,10 +200,10 @@ extern "C" char HITFLOORADJUST[];
 extern "C" char SQ_SLEP[];
 extern "C" char SQ_FALL[];
 extern "C" char FHit[];
-struct Slot { beModelCtrlInfoRideOn4 *p; void set(beModelCtrlInfoRideOn4 *n) { beModelCtrlInfoRideOn4 *o = p; if (o) { --o->_refCount; if (((unsigned long long)(long long)o->_refCount & 0x7fffffULL) == 0) igObject_Destroy(o); } p = n; } };
+struct Slot { beModelCtrlInfoRideOn4 *p; void set(beModelCtrlInfoRideOn4 *n) { beModelCtrlInfoRideOn4 *o = p; igObject::release(o); p = n; } };
 /* Scope holder for the freshly built ride-on record. The constructor takes the allocation result,
  * so the protected range starts after the allocation call. */
-struct RideOnRef { beModelCtrlInfoRideOn4 *p; RideOnRef(beModelCtrlInfoRideOn4 *x) { p = x; } ~RideOnRef() { beModelCtrlInfoRideOn4 *o = p; if (o) { --o->_refCount; if (((unsigned long long)(long long)o->_refCount & 0x7fffffULL) == 0) igObject_Destroy(o); } } };
+struct RideOnRef { beModelCtrlInfoRideOn4 *p; RideOnRef(beModelCtrlInfoRideOn4 *x) { p = x; } ~RideOnRef() { beModelCtrlInfoRideOn4 *o = p; igObject::release(o); } };
 extern "C" void beModelCtrl_CheckWallAndFloor(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *ram, beModelCtrlInfoWork *work);
 extern "C" unsigned char beModelCtrl_QueryMove(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfoWork *work, unsigned int query);
 extern "C" void beModelCtrlMoveObject_Start(beModelCtrlMoveObject *self, int mode, float value, float frames, float endTime);
@@ -231,7 +224,7 @@ extern "C" char GETTRCDATA[];
 struct MoveRef {
     igObject *p;
     MoveRef() { p = 0; }
-    ~MoveRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~MoveRef() { igObject *o = p; igObject::release(o); }
 };
 
 /* matching construct: the data-list holder (slot 152) must sit below the move-object holder (slot 156), so it is
@@ -245,10 +238,7 @@ struct Locals {
             p = sp98.p;
             if (p != 0) p->_refCount = p->_refCount + 1;
             old = (igObject *)ram->_dataList;
-            if (old != 0) {
-                old->_refCount = old->_refCount - 1;
-                if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-            }
+            igObject::release(old);
             ram->_dataList = (int)p;
         }
     }
@@ -309,7 +299,7 @@ extern "C" char SQ_ERAS2[];
 template <int kind> struct ObjRef {
     igObject *p;
     ObjRef(igObject *q) : p(q) {}
-    ~ObjRef() { igObject *x = p; if (x) { --x->_refCount; if ((x->_refCount & 0x7fffff) == 0) igObject_Destroy(x); } }
+    ~ObjRef() { igObject *x = p; igObject::release(x); }
 };
 
 /* Creates the ram's data list on first use.
@@ -840,16 +830,9 @@ void beModelCtrl_UpdateControl(beModelCtrl *self, beBaseInfoRam *ram) {
         allocator = (g_useOwnerAllocator != 0) ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
         list = ref.p;
-        if (list != 0) {
-            list->_refCount = list->_refCount + 1;
-        }
+        igObject::ref(list);
         old = (igObject *)ram->_dataList;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(old);
-            }
-        }
+        igObject::release(old);
         ram->_dataList = (int)list;
     }
     work = ((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_3))->_work;
@@ -981,15 +964,9 @@ void beModelCtrlInfoRideOn_SetModel(beModelCtrlInfoRideOn *self, int modelName, 
     }
     self->_modelName = token;
     self->_modelRamNo = ramNo;
-    if (node != 0) {
-        node->_refCount = node->_refCount + 1;
-    }
+    igObject::ref(node);
     oldNode = (igObject *)self->_modelNode;
-    if (oldNode != 0) {
-        oldNode->_refCount = oldNode->_refCount - 1;
-        if (((unsigned long long)(long long)oldNode->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy((igObject *)oldNode);
-    }
+    igObject::release(oldNode);
     self->_modelNode = (int)node;
     igMatrix44f_Copy((float *)&self->_oldMatrix, (const float *)matrix);
 }
@@ -1364,16 +1341,9 @@ void beModelCtrl_ApplyMoves(beModelCtrl *self, beBaseInfo *info, beBaseInfoRam *
                 {
                     igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
                     created = ref.p;
-                    if (created != 0) {
-                        created->_refCount = created->_refCount + 1;
-                    }
+                    igObject::ref(created);
                     old = (igObject *)ram->_dataList;
-                    if (old != 0) {
-                        old->_refCount = old->_refCount - 1;
-                        if ((old->_refCount & 0x7FFFFF) == 0) {
-                            igObject_Destroy(old);
-                        }
-                    }
+                    igObject::release(old);
                     ram->_dataList = (int)created;
                 }
             }
@@ -1420,22 +1390,22 @@ unsigned char beModelCtrl_RunMove(beModelCtrl *self, beBaseInfoRam *ram, beModel
         MoveRef object;
         SELECT_ALLOCATOR(allocator, self);
         old = object.p;
-        if (old != 0) { old->_refCount = old->_refCount - 1; if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old); }
+        igObject::release(old);
         object.p = (igObject *)beModelCtrlMoveObject_Create(allocator);
         { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created); }
         SELECT_ALLOCATOR(allocator, self);
         old = object.p;
-        if (old != 0) { old->_refCount = old->_refCount - 1; if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old); }
+        igObject::release(old);
         object.p = (igObject *)beModelCtrlMoveObject_Create(allocator);
         { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created); }
         SELECT_ALLOCATOR(allocator, self);
         old = object.p;
-        if (old != 0) { old->_refCount = old->_refCount - 1; if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old); }
+        igObject::release(old);
         object.p = (igObject *)beModelCtrlMoveObject_Create(allocator);
         { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created); }
         SELECT_ALLOCATOR(allocator, self);
         old = object.p;
-        if (old != 0) { old->_refCount = old->_refCount - 1; if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old); }
+        igObject::release(old);
         object.p = (igObject *)beModelCtrlMoveObject_Create(allocator);
         { igObject *created = object.p; beModelCtrlMoveObjectList *list = *(beModelCtrlMoveObjectList **)&work->_moveObjectList; ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created); }
     }
@@ -1501,10 +1471,7 @@ unsigned char beModelCtrl_RunMove(beModelCtrl *self, beBaseInfoRam *ram, beModel
                     trc = beMessenger_GetObject((beMessenger *)self->_messenger, 0);
                     if (trc != 0) trc->_refCount = trc->_refCount + 1;
                     old = (igObject *)work->_posLockTrc;
-                    if (old != 0) {
-                        old->_refCount = old->_refCount - 1;
-                        if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-                    }
+                    igObject::release(old);
                     work->_posLockTrc = (int)trc;
                 }
             } else {
@@ -1595,7 +1562,7 @@ unsigned char beModelCtrl_RunPdMove(beModelCtrl *self, beBaseInfoRam *ram, beMod
 
 static inline int intListCount(const igIntList *list) { return list->_count; }
 /* Holder of the label lists created on first use; the table names its own out-of-line destructor copy. */
-struct LabelListRef { igObject *p; LabelListRef() { p = 0; } ~LabelListRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } } };
+struct LabelListRef { igObject *p; LabelListRef() { p = 0; } ~LabelListRef() { igObject *o = p; igObject::release(o); } };
 
 void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beModelCtrlInfoWork *work, const char *seqName, const char *labelName) {
     igStringRefList *seqList, *labelList;
@@ -1616,18 +1583,12 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
             allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         }
         released = listRef.p;
-        if (released != 0) {
-            released->_refCount = released->_refCount - 1;
-            if ((released->_refCount & 0x7fffff) == 0) igObject_Destroy(released);
-        }
+        igObject::release(released);
         listRef.p = (igObject *)igStringRefList_Create(allocator);
         created = listRef.p;
         if (created != 0) created->_refCount = created->_refCount + 1;
         released = (igObject *)work->_labelSeqList;
-        if (released != 0) {
-            released->_refCount = released->_refCount - 1;
-            if ((released->_refCount & 0x7fffff) == 0) igObject_Destroy(released);
-        }
+        igObject::release(released);
         work->_labelSeqList = (int)created;
         seqList = (igStringRefList *)listRef.p;
 
@@ -1638,18 +1599,12 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
             allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         }
         released = listRef.p;
-        if (released != 0) {
-            released->_refCount = released->_refCount - 1;
-            if ((released->_refCount & 0x7fffff) == 0) igObject_Destroy(released);
-        }
+        igObject::release(released);
         listRef.p = (igObject *)igStringRefList_Create(allocator);
         created = listRef.p;
         if (created != 0) created->_refCount = created->_refCount + 1;
         released = (igObject *)work->_labelNameList;
-        if (released != 0) {
-            released->_refCount = released->_refCount - 1;
-            if ((released->_refCount & 0x7fffff) == 0) igObject_Destroy(released);
-        }
+        igObject::release(released);
         work->_labelNameList = (int)created;
         labelList = (igStringRefList *)listRef.p;
 
@@ -1660,18 +1615,12 @@ void beModelCtrlInfoWork_SetSeqLabel(beModelCtrl *self, beBaseInfoRam *ram, beMo
             allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         }
         released = intListRef.p;
-        if (released != 0) {
-            released->_refCount = released->_refCount - 1;
-            if ((released->_refCount & 0x7fffff) == 0) igObject_Destroy(released);
-        }
+        igObject::release(released);
         intListRef.p = igIntList_Create(allocator);
         created = intListRef.p;
         if (created != 0) created->_refCount = created->_refCount + 1;
         released = (igObject *)work->_labelOffsetList;
-        if (released != 0) {
-            released->_refCount = released->_refCount - 1;
-            if ((released->_refCount & 0x7fffff) == 0) igObject_Destroy(released);
-        }
+        igObject::release(released);
         work->_labelOffsetList = (int)created;
         offsetList = (igIntList *)intListRef.p;
     }
@@ -1747,16 +1696,9 @@ void beModelCtrl_CallLua(beModelCtrl *self, beBaseInfoRam *ram, const char *func
         }
         igSmartPointer<igObject> created(beBaseInfoDataList_Create(allocator));
         p = created.p;
-        if (p != 0) {
-            p->_refCount = p->_refCount + 1;
-        }
+        igObject::ref(p);
         old = (igObject *)ram->_dataList;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7fffff) == 0) {
-                igObject_Destroy(old);
-            }
-        }
+        igObject::release(old);
         ram->_dataList = (int)p;
     }
     ramData = ((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_3));
@@ -2144,10 +2086,7 @@ void beModelCtrl_UpdateDirection(beModelCtrl *self, beBaseInfo *info, beBaseInfo
         igObject *list = (igObject *)created.p;
         if (list != 0) list->_refCount = list->_refCount + 1;
         igObject *old = ((igObject *)ram->_dataList);
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7fffff) == 0) igObject_Destroy(old);
-        }
+        igObject::release(old);
         ram->_dataList = (int)list;
     }
     matrix = (int)NodeMatrix(((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)((igObject *)ram->_dataList))->search((Gap::Core::igStringMetaField *)g_propertyNameField, ONE_3))->_node);
@@ -2341,16 +2280,9 @@ void beModelCtrl__OnGenerateFromParent(beModelCtrl *self, beBaseInfoRam *ram) {
         {
             igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
             created = ref.p;
-            if (created != 0) {
-                created->_refCount = created->_refCount + 1;
-            }
+            igObject::ref(created);
             old = (igObject *)ram->_dataList;
-            if (old != 0) {
-                old->_refCount = old->_refCount - 1;
-                if ((old->_refCount & 0x7FFFFF) == 0) {
-                    igObject_Destroy(old);
-                }
-            }
+            igObject::release(old);
             ram->_dataList = (int)created;
         }
     }
@@ -2388,16 +2320,9 @@ void beModelCtrl__OnGenerateFromParent(beModelCtrl *self, beBaseInfoRam *ram) {
     if (posLock) {
         igObject *node = beMessenger_GetObject((beMessenger *)self->_messenger, 0);
         igObject *oldNode;
-        if (node != 0) {
-            node->_refCount = node->_refCount + 1;
-        }
+        igObject::ref(node);
         oldNode = (igObject *)work->_posLockNode;
-        if (oldNode != 0) {
-            oldNode->_refCount = oldNode->_refCount - 1;
-            if ((oldNode->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(oldNode);
-            }
-        }
+        igObject::release(oldNode);
         work->_posLockNode = (int)node;
         work->_posLockOffset[0] = offset[0];
         work->_posLockOffset[1] = offset[1];
@@ -2430,16 +2355,9 @@ void beModelCtrl__OnGenerate(beModelCtrl *self, beBaseInfoRam *ram) {
         {
             igSmartPointer<igObject> ref(beBaseInfoDataList_Create(allocator));
             created = ref.p;
-            if (created != 0) {
-                created->_refCount = created->_refCount + 1;
-            }
+            igObject::ref(created);
             old = (igObject *)ram->_dataList;
-            if (old != 0) {
-                old->_refCount = old->_refCount - 1;
-                if ((old->_refCount & 0x7FFFFF) == 0) {
-                    igObject_Destroy(old);
-                }
-            }
+            igObject::release(old);
             ram->_dataList = (int)created;
         }
     }

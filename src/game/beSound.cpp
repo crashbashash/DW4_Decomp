@@ -166,9 +166,7 @@ typedef igSmartPointer<PlaySEList> PlaySEListRef;
 void beSound_Prepare(beSound *self) {
     if (self->_cri == 0) {
         igObject *cri = (igObject *)igInsightCore_FindManager((igInsightCore *)self->_insight, g_beCri_metaObject);
-        if (cri != 0) {
-            cri->_refCount = cri->_refCount + 1;
-        }
+        igObject::ref(cri);
         igRelease((igObject *)self->_cri);
         self->_cri = (int)cri;
     }

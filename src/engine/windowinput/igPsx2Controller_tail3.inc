@@ -3,16 +3,9 @@
  * reaches zero), then store the new one. */
 void Gap__igPsx2Controller__vfunc_36(igPsx2Controller *self, igObject *window) {
     igObject *previousWindow;
-    if (window != 0) {
-        window->_refCount = window->_refCount + 1;
-    }
+    igObject::ref(window);
     previousWindow = (igObject *)(self->_attachedWindow);
-    if (previousWindow != 0) {
-        previousWindow->_refCount = previousWindow->_refCount - 1;
-        if ((previousWindow->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(previousWindow);
-        }
-    }
+    igObject::release(previousWindow);
     self->_attachedWindow = (int)window;
 }
 

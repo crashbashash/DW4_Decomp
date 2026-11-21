@@ -44,20 +44,10 @@ void igResource_ReleaseDefaults(igResource *self) {
         igResource_StopAsyncLoading((igResourceView *)self);
     }
     strings = (igObject *)self->_alignmentStrings;
-    if (strings != 0) {
-        strings->_refCount = strings->_refCount - 1;
-        if (((unsigned long long) ((long long)(int) strings->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(strings);
-        }
-    }
+    igObject::release(strings);
     self->_alignmentStrings = 0;
     values = (igObject *)self->_alignmentValues;
-    if (values != 0) {
-        values->_refCount = values->_refCount - 1;
-        if (((unsigned long long) ((long long)(int) values->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(values);
-        }
-    }
+    igObject::release(values);
     self->_alignmentValues = 0;
     igObject_ReleaseDefaults((igObject *)self);
 }
@@ -246,12 +236,7 @@ void igResource_ClearDirectories(igResource *self) {
     n = l->_count;
     for (i = 0; i < n; i++) {
         p = l->_data[i];
-        if (p != 0) {
-            p->_refCount = p->_refCount - 1;
-            if (((unsigned long long)((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p);
-            }
-        }
+        igObject::release(p);
     }
     m = l->_count;
     for (j = 0; j < m; j++) {
@@ -259,12 +244,7 @@ void igResource_ClearDirectories(igResource *self) {
     }
     l->_count = 0;
     q = (igObject *)self->_imageDirectory;
-    if (q != 0) {
-        q->_refCount = q->_refCount - 1;
-        if (((unsigned long long)((long long)(int)q->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(q);
-        }
-    }
+    igObject::release(q);
     self->_imageDirectory = 0;
 }
 
@@ -278,12 +258,7 @@ void igResource_RemoveIGBFiles(igResource *self) {
         if (((Gap::Core::igObject *)(*(igObject **)((char *)((igTDataList<igObject *> *)self->_directoryList)->_data + off)))->isOfType((igMetaObject *)((int)g_igIGBFile_metaObject)) != 0) {
             l = (igTDataList<igObject *> *)self->_directoryList;
             o = *(igObject **)((char *)l->_data + off);
-            if (o != 0) {
-                o->_refCount = o->_refCount - 1;
-                if ((o->_refCount & 0x7FFFFF) == 0) {
-                    igObject_Destroy((igObject *)o);
-                }
-            }
+            igObject::release(o);
             List_RemoveWordAt((igDataList *)l, i);
             *(igObject **)((char *)l->_data + l->_count * 4) = 0;
         }
@@ -345,8 +320,7 @@ void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromNa
                     {
                         /* drop the reference the creation returned */
                         igObject *created = target.p;
-                        created->_refCount = created->_refCount - 1;
-                        if (((unsigned long long)(long long)created->_refCount & 0x7fffffULL) == 0) igObject_Destroy(created);
+                        created->release();
                     }
                     fieldCount = igMetaObject_GetFieldCount(fromMeta);
                     for (field = igMetaObject_GetFieldCount((igMetaObject *)Gap::Core::igObject::getClassMeta()); field < fieldCount; field++) {
@@ -390,8 +364,7 @@ void igResource_WrapRootInSceneInfo(int directory) {
                     if (t) t->_refCount = t->_refCount + 1;
                     {
                         igObject *u = info;
-                        u->_refCount = u->_refCount - 1;
-                        if (((unsigned long long)(long long)(int)u->_refCount & 0x7fffffULL) == 0) igObject_Destroy(u);
+                        u->release();
                     }
                     sceneGraphField = AsObjectRefMetaField(igMetaObject_FindFieldByName(((igObjectDispatchView *)info)->GetMeta(), (const char *)"_sceneGraph"));
                     ((Gap::Core::igObjectRefMetaField *)sceneGraphField)->set((Gap::Core::igObject *)info, (Gap::Core::igObject *)root);
@@ -403,10 +376,7 @@ void igResource_WrapRootInSceneInfo(int directory) {
                     igDirectory_AddInfo((void *)directory, (void *)info);
                     {
                         igObject *u = info;
-                        if (u != 0) {
-                            u->_refCount = u->_refCount - 1;
-                            if (((unsigned long long)(long long)(int)u->_refCount & 0x7fffffULL) == 0) igObject_Destroy(u);
-                        }
+                        igObject::release(u);
                     }
                 }
             }

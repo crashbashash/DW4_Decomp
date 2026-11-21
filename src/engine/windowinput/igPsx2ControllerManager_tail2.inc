@@ -41,10 +41,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
             }
         }
         q = sp8C;
-        if (q != 0) {
-            q->_refCount = q->_refCount - 1;
-            if (((unsigned long long)(long long)q->_refCount & 0x7fffffULL) == 0) igObject_Destroy(q);
-        }
+        igObject::release(q);
         sp8C = 0;
         s3 = 0;
         if (arg0->_multitap != 0) {
@@ -84,21 +81,14 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
             s3 += 1;
         } while (s3 < 2);
         q = sp8C;
-        if (q != 0) {
-            q->_refCount = q->_refCount - 1;
-            if (((unsigned long long)(long long)q->_refCount & 0x7fffffULL) == 0) igObject_Destroy(q);
-        }
+        igObject::release(q);
     }
 }
 
 igSmartPointer<igObject> *igSmartPointer_igStringObj_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;

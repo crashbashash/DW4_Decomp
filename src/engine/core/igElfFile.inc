@@ -44,12 +44,7 @@ int igElfFile_GetVTable(void) {
     elf._vtable = (int)&g_igProgramFile_vtable[0];
     if (q2 != 0) {
         q2 = *(igObject **)q2;
-        if (q2 != 0) {
-            q2->_refCount = (int)((int) (q2->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) q2->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(q2);
-            }
-        }
+        igObject::release(q2);
     }
     if (q1 != 0) {
         tv1 = *(int **)q1;

@@ -41,12 +41,7 @@ void Gap__igPsx2AudioContext__vfunc_25(igPsx2AudioContext *context) {
     if (context->_connection != 0) {
         igPsx2IopRpcConnection_CallNoData((igPsx2IopRpcConnectionView *)context->_connection, 0x30000, 1);
         connection = (igObject *)context->_connection;
-        if (connection != 0) {
-            connection->_refCount = connection->_refCount - 1;
-            if ((connection->_refCount & 0x7fffff) == 0) {
-                igObject_Destroy(connection);
-            }
-        }
+        igObject::release(connection);
         context->_connection = 0;
     }
     if (context->_batchMemory != 0) {

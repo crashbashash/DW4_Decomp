@@ -50,9 +50,9 @@ void igDependencyList_GetMetaObjectFunction(void) {
 }
 
 void igDependencyList_InitFields(void) {
+    igMemoryRefMetaField *field;
     int index;
     igMetaField *original;
-    igMemoryRefMetaField *field;
     igMetaObject *meta;
 
     meta = (igMetaObject *)g_igDependencyList_metaObject;
@@ -63,9 +63,6 @@ void igDependencyList_InitFields(void) {
     field->_memSize = 0;
     field->_externalEnumStorage = (int)(&g_igDependencyList_dataDescriptorCell);
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);
-    field->_refCount = (int)((int) (field->_refCount - 1));
-    if (((unsigned long long) ((long long)(int)field->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(field);
-    }
+    field->release();
 }
 

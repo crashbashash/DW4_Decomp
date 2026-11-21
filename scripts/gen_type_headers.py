@@ -292,6 +292,26 @@ def member_lines(decls, access):
     return out, access
 
 
+# A class-members.tsv key `::<class>` gives rows for a converted class's flat struct (its C view, which
+# unconverted code still reads): kit inlines it carries under C++ that forward to the `Gap::` class, so a
+# call site already reads in the kit's form (`p->release()`) before its class converts.
+FLAT_VIEW = "::"
+_INLINE = re.compile(r"^(static\s+)?(inline\s+)?(.*?\b)(\w+)(\s*\([^)]*\)(?:\s*const)?)\s*(\{.*\})$")
+
+
+def split_inline(decl, cls=None):
+    """A flat-view row's (in-class declaration, out-of-class definition as `cls`'s member): the struct is
+    declared before the Gap class its body forwards to, so the body is defined after it."""
+    access, text = split_access(decl)
+    m = _INLINE.match(text)
+    if not m:
+        sys.exit("config/class-members.tsv: flat-view row is not an inline function with a body: %s" % decl)
+    static, _inline, ret, name, params, body = m.groups()
+    declared = ("" if access == "public" else access + ": ") + \
+        "%sinline %s%s%s;" % (static or "", ret, name, params)
+    return declared, "inline %s%s::%s%s %s" % (ret, cls, name, params, body)
+
+
 def load_typed_fields(path):
     """{(class, field): C++ type} from `config/typed-fields.tsv`: an object-reference field a class declares
     with its referenced type under C++ (C keeps the word)."""
@@ -403,10 +423,15 @@ def converted_classes(converted, parent, layouts, members, bases=None):
             out.append("%s:" % access)
             lines, access = member_lines(members[cls], access)
             out.extend(lines)
-            if access != "public":
-                out.append("public:")                    # the fields: C code reads them as data
             cursor = 4
             placed = [p for p in placed if p[0] >= 4]
+            if any(re.search(r"\b_refAndMemPool;$", split_access(decl)[1]) for decl in members[cls]):
+                # a row declares the kit's reference word (the union of `_both` and the count/pool-index
+                # bitfields, alchemy-kit_202309 igCore/igObject.h) over the +4 word the overlay names
+                cursor = 8
+                placed = [p for p in placed if p[0] >= 8]
+            if placed and access != "public":
+                out.append("public:")                    # the fields: C code reads them as data
         else:
             base = parent[cls]
             spelled = bases.get(cls)
@@ -435,6 +460,12 @@ def converted_classes(converted, parent, layouts, members, bases=None):
         out.append("};")
         out.append("}")
         out.append("}")
+    for cls in order:
+        view = members.get(FLAT_VIEW + cls)
+        if view:
+            # the flat struct's kit inlines, defined once the Gap class they forward to is complete
+            out.append("")
+            out.extend(split_inline(decl, cls)[1] for decl in view)
     out.append("#endif")
     out.append("")
     return out
@@ -659,9 +690,10 @@ def main(argv=None):
             lines.extend(body[2:])
         else:
             lines.extend(body)
-        if flat and members.get(name):
+        view = members.get(name) if flat else members.get(FLAT_VIEW + name)
+        if view:
             lines.append("#ifdef __cplusplus")
-            lines.extend(member_lines(members[name], "public")[0])
+            lines.extend(member_lines(view if flat else [split_inline(d)[0] for d in view], "public")[0])
             lines.append("#endif")
         lines.append("} %s;" % name)
         lines.append("")
@@ -669,7 +701,10 @@ def main(argv=None):
     if converted:
         lines.extend(converted_classes(converted, parent, layouts, members, load_bases(args.converted)))
     for cls in sorted(members):
-        if cls not in converted and cls not in layouts:
+        if cls.startswith(FLAT_VIEW):
+            if cls[len(FLAT_VIEW):] not in converted or cls[len(FLAT_VIEW):] in unflat:
+                sys.exit("config/class-members.tsv: %s names no converted class with a flat struct" % cls)
+        elif cls not in converted and cls not in layouts:
             sys.exit("config/class-members.tsv: %s has no reflected struct to hold members; "
                      "declare it in config/converted-classes.tsv" % cls)
     lines.append("#endif /* DW4_REFLECTED_H */")

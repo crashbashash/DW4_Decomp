@@ -48,10 +48,7 @@ static inline void setMember(const igSmartPointer<BuildResource> &owner, const i
     BuildResource *old;
     if (held != 0) held->_refCount = held->_refCount + 1;
     old = target->f12;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-    }
+    igObject::release(old);
     target->f12 = held;
 }
 

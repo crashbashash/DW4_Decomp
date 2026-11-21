@@ -83,9 +83,9 @@ static inline void AddShakeOffset(float *coord, const float *direction, const fl
 
 /* Strong references to a newly created object, one class per emitted destructor copy. The exception range
  * starts where each one is constructed, so only the calls after construction are covered. */
-struct DataListRef { igObject *p; DataListRef(void *created) { p = (igObject *)created; } ~DataListRef() { igObject *q = p; if (q != 0) { q->_refCount = q->_refCount - 1; if (((unsigned long long)(long long)(int)q->_refCount & 0x7fffffULL) == 0) igObject_Destroy(q); } } };
-struct CameraModeRef { igObject *p; CameraModeRef(void *created) { p = (igObject *)created; } ~CameraModeRef() { igObject *q = p; if (q != 0) { q->_refCount = q->_refCount - 1; if (((unsigned long long)(long long)(int)q->_refCount & 0x7fffffULL) == 0) igObject_Destroy(q); } } };
-struct ShakeRef { igObject *p; ShakeRef(void *created) { p = (igObject *)created; } ~ShakeRef() { igObject *q = p; if (q != 0) { q->_refCount = q->_refCount - 1; if (((unsigned long long)(long long)(int)q->_refCount & 0x7fffffULL) == 0) igObject_Destroy(q); } } };
+struct DataListRef { igObject *p; DataListRef(void *created) { p = (igObject *)created; } ~DataListRef() { igObject *q = p; igObject::release(q); } };
+struct CameraModeRef { igObject *p; CameraModeRef(void *created) { p = (igObject *)created; } ~CameraModeRef() { igObject *q = p; igObject::release(q); } };
+struct ShakeRef { igObject *p; ShakeRef(void *created) { p = (igObject *)created; } ~ShakeRef() { igObject *q = p; igObject::release(q); } };
 
 /* the per-ram data list, created on first use */
 struct DataList {
@@ -129,12 +129,7 @@ void beCameraCtrl_Prepare(beCameraCtrl *self) {
         igViewerSceneInfoManager_ResetOperationMode((igViewerSceneInfoManager *)self->_viewerMang);
     }
     mode = (igObject *)self->_cameraMode;
-    if (mode != 0) {
-        mode->_refCount -= 1;
-        if ((mode->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(mode);
-        }
-    }
+    igObject::release(mode);
     self->_cameraMode = 0;
 }
 
@@ -415,7 +410,7 @@ void beCameraCtrl_UpdateDemoCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
             igObject *r = created.p;
             if (r != 0) r->_refCount = r->_refCount + 1;
             igObject *old = (igObject *)self->_cameraMode;
-            if (old != 0) { old->_refCount = old->_refCount - 1; if ((old->_refCount & 0x7fffff) == 0) igObject_Destroy(old); }
+            igObject::release(old);
             self->_cameraMode = (int)r;
             mode = (beCameraMode *)created.p;
         }
@@ -665,29 +660,15 @@ void beCameraMode_SetCameraPath(beCameraMode *mode, igObject *path) {
     igObject *camera;
     igObject *old;
     if (path != 0) {
-        if (path != 0) {
-            path->_refCount = path->_refCount + 1;
-        }
+        igObject::ref(path);
         old = (igObject *)mode->_cameraPath;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if (((unsigned long long)(long long)(int)old->_refCount & 0x7fffffULL) == 0) {
-                igObject_Destroy(old);
-            }
-        }
+        igObject::release(old);
         mode->_cameraPath = (int)path;
         camera = igGraphPath_GetTail((igGraphPath *)path);
         camera = AsCamera(camera);
-        if (camera != 0) {
-            camera->_refCount = camera->_refCount + 1;
-        }
+        igObject::ref(camera);
         old = (igObject *)mode->_camera;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if (((unsigned long long)(long long)(int)old->_refCount & 0x7fffffULL) == 0) {
-                igObject_Destroy(old);
-            }
-        }
+        igObject::release(old);
         mode->_camera = (int)camera;
     }
 }

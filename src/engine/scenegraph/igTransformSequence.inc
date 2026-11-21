@@ -84,10 +84,7 @@ void igTransformSequence1_5_InitFields(void) {
     *(char *)((char *)(temp_v0_2) + 52) = 0;
     temp_v0_2->_externalEnumStorage = (int)(&g_igTransformSequence1_5_timeListMetaField);
     igMetaObject_FinalizeAndReplaceField(temp_s1, temp_s3, temp_v0_2);
-    temp_v0_2->_refCount = (int)((int) (temp_v0_2->_refCount - 1));
-    if ((temp_v0_2->_refCount & 0x7FFFFF) == 0) {
-        igObject_Destroy(temp_v0_2);
-    }
+    temp_v0_2->release();
     temp_s0_2 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 1));
     temp_s0_2->_metaObject = (int)igVec3fList_GetOrCreateMetaObject();
     temp_s0_3 = (igObjectRefMetaField *)(igMetaObject_GetFieldAt(temp_s1, temp_s2 + 2));

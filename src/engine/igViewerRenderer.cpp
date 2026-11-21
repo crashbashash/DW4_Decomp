@@ -81,12 +81,7 @@ static inline igObject *createFrustCullTraversal() {
     } \
     l->_count = 0; }
 static inline void release(igObject *object) {
-    if (object != 0) {
-        object->_refCount = object->_refCount - 1;
-        if ((object->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(object);
-        }
-    }
+    igObject::release(object);
 }
 struct ItemType {};
 static inline igObject *createLightState(ItemType) { return (igObject *)igLightStateAttr_Create(0); }
@@ -153,20 +148,10 @@ void igViewerRenderer_Traverse(igViewerRenderer *self) {
     ((igVisualContextDispatchView *)self->_visualContext)->setMatrix(IG_GFX_MATRIX_PROJECTION, (int)((igViewerParameters *)self->_parameters)->_projectionMatrix);
     ((igVisualContextDispatchView *)self->_visualContext)->SetViewMatrixHint(((igViewerParameters *)self->_parameters)->_viewMatrix);
     previous = (igObject *)self->_lightOutput;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if (((unsigned long long)((long long)(int)previous->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     self->_lightOutput = 0;
     previous = (igObject *)self->_sceneOutput;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if (((unsigned long long)((long long)(int)previous->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     self->_sceneOutput = 0;
     if (((igViewerParameters *)self->_parameters)->_scene != 0) {
         if (self->_lightingState != 0) {
@@ -174,16 +159,9 @@ void igViewerRenderer_Traverse(igViewerRenderer *self) {
             ((igCommonTraversalDispatchView *)self->_lightTraversal)->setTime(((igViewerParameters *)self->_parameters)->_drawTime);
             ((igCommonTraversalDispatchView *)self->_lightTraversal)->apply((igObject *)self->_attrSet);
             output = ((igCommonTraversalDispatchView *)self->_lightTraversal)->getOutput();
-            if (output != 0) {
-                output->_refCount = output->_refCount + 1;
-            }
+            igObject::ref(output);
             previous = (igObject *)self->_lightOutput;
-            if (previous != 0) {
-                previous->_refCount = previous->_refCount - 1;
-                if (((unsigned long long)((long long)(int)previous->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(previous);
-                }
-            }
+            igObject::release(previous);
             self->_lightOutput = (int)output;
         }
         ((igCommonTraversalDispatchView *)self->_sceneTraversal)->reset();
@@ -192,32 +170,18 @@ void igViewerRenderer_Traverse(igViewerRenderer *self) {
         ((igCommonTraversalDispatchView *)self->_sceneTraversal)->apply((igObject *)self->_attrSet);
         igViewerRenderer_PopLightStates(self);
         output = ((igCommonTraversalDispatchView *)self->_sceneTraversal)->getOutput();
-        if (output != 0) {
-            output->_refCount = output->_refCount + 1;
-        }
+        igObject::ref(output);
         previous = (igObject *)self->_sceneOutput;
-        if (previous != 0) {
-            previous->_refCount = previous->_refCount - 1;
-            if (((unsigned long long)((long long)(int)previous->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(previous);
-            }
-        }
+        igObject::release(previous);
         self->_sceneOutput = (int)output;
     }
 }
 
 void igViewerRenderer_InitializeDrawing(igViewerRenderer *self) {
     igObject *extension = ((igVisualContextDispatchView *)self->_visualContext)->GetExtension((const char *)text_igDisableExt);
-    if (extension != 0) {
-        extension->_refCount = extension->_refCount + 1;
-    }
+    igObject::ref(extension);
     igObject *previous = (igObject *)self->_disableExtension;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if (((unsigned long long)((long long)(int)previous->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     self->_disableExtension = (int)extension;
     ((igCommonTraversalDispatchView *)self->_lightTraversal)->setVisualContext((igObject *)self->_visualContext);
     ((igCommonTraversalDispatchView *)self->_sceneTraversal)->setVisualContext((igObject *)self->_visualContext);
@@ -442,14 +406,9 @@ void igViewerRenderer_resetFields(igViewerRenderer *self) {
     {
         igObject *headlight = (igObject *)self->_headlightAttr;
         igLightStateAttr *headlightState = (igLightStateAttr *)self->_headlightStateAttr;
-        if (headlight != 0) {
-            headlight->_refCount = headlight->_refCount + 1;
-        }
+        igObject::ref(headlight);
         previous = (igObject *)headlightState->_light;
-        if (previous) {
-            previous->_refCount = previous->_refCount - 1;
-            if ((previous->_refCount & 0x7FFFFF) == 0) igObject_Destroy(previous);
-        }
+        igObject::release(previous);
         headlightState->_light = (int)headlight;
     }
     if (g_sharedViewerOptions != 0) {
@@ -484,10 +443,7 @@ void igViewerRenderer_resetFields(igViewerRenderer *self) {
     if (previous) previous->_refCount = previous->_refCount + 1;
     {
         igObject *old = (igObject *)self->_sceneTraversal;
-        if (old) {
-            old->_refCount = old->_refCount - 1;
-            if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-        }
+        igObject::release(old);
     }
     self->_sceneTraversal = (int)previous;
 }

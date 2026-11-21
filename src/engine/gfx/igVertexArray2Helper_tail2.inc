@@ -5,12 +5,7 @@ int igVertexArray2Helper_GetMeta(void) {
 void Gap__Gfx__igVertexArray2Helper__vfunc_55(igVertexArray2Helper *self) {
     igObject *vertexArray;
     vertexArray = (igObject *)(self->_vertexArray);
-    if (vertexArray != 0) {
-        vertexArray->_refCount = vertexArray->_refCount - 1;
-        if (((unsigned long long) ((long long)(int) vertexArray->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(vertexArray);
-        }
-    }
+    igObject::release(vertexArray);
     self->_vertexArray = 0;
 }
 

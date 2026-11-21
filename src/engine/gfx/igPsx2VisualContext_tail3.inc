@@ -72,16 +72,9 @@ void igPsx2VisualContext_SetVertexArray(igPsx2VisualContext *self, igVertexArray
     if ((igVertexArray *)self->_pVertexArray == vertexArray) {
         DAT_005608c0[0] += 1;
     }
-    if (vertexArray) {
-        vertexArray->_refCount++;
-    }
+    igObject::ref(vertexArray);
     old = (igVertexArray *)self->_pVertexArray;
-    if (old != 0) {
-        --old->_refCount;
-        if ((old->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     self->_pVertexArray = (int)vertexArray;
     if (vertexArray != 0) {
         ((VC_16d190 *)self)->vX(0, 0);
@@ -100,16 +93,9 @@ void igPsx2VisualContext_SetPrimLengthArray(igPsx2VisualContext *self, igPrimLen
     if ((igPrimLengthArray *)self->_pStripLengthArray == stripLengths) {
         DAT_005608c4[0] += 1;
     }
-    if (stripLengths) {
-        stripLengths->_refCount++;
-    }
+    igObject::ref(stripLengths);
     old = (igPrimLengthArray *)self->_pStripLengthArray;
-    if (old != 0) {
-        --old->_refCount;
-        if ((old->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     self->_pStripLengthArray = (int)stripLengths;
 }
 
@@ -122,16 +108,9 @@ void igPsx2VisualContext_SetIndexArray(igPsx2VisualContext *self, igIndexArray *
     if ((igIndexArray *)self->_pIndexArray == indexArray) {
         DAT_005608c8[0] += 1;
     }
-    if (indexArray) {
-        indexArray->_refCount++;
-    }
+    igObject::ref(indexArray);
     old = (igIndexArray *)self->_pIndexArray;
-    if (old != 0) {
-        --old->_refCount;
-        if ((old->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(old);
-        }
-    }
+    igObject::release(old);
     self->_pIndexArray = (int)indexArray;
 }
 

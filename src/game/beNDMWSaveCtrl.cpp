@@ -41,25 +41,25 @@ class SaveCtrlDataRef {
 public:
     igObject *p;
     SaveCtrlDataRef(igObject *o) : p(o) {}
-    ~SaveCtrlDataRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~SaveCtrlDataRef() { igObject *o = p; igObject::release(o); }
 };
 class CommonIntfRef {
 public:
     igObject *p;
     CommonIntfRef(igObject *o) : p(o) {}
-    ~CommonIntfRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~CommonIntfRef() { igObject *o = p; igObject::release(o); }
 };
 class DegiDataRef {
 public:
     igObject *p;
     DegiDataRef(igObject *o) : p(o) {}
-    ~DegiDataRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~DegiDataRef() { igObject *o = p; igObject::release(o); }
 };
 class FlagWorkRef {
 public:
     igObject *p;
     FlagWorkRef(igObject *o) : p(o) {}
-    ~FlagWorkRef() { igObject *o = p; if (o != 0) { o->_refCount = o->_refCount - 1; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~FlagWorkRef() { igObject *o = p; igObject::release(o); }
 };
 /* Owning stack reference to a pooled string token (reference count at p[-1], chunk header at p[-2]);
  * releases the token on scope exit. */
@@ -72,11 +72,7 @@ public:
 
 /* Releases an object reference, used for the old list during the list install. */
 struct ReleaseRef { static inline void Apply(igObject *object) {
-    if (object) {
-        --object->_refCount;
-        if ((object->_refCount & 0x7fffff) == 0)
-            igObject_Destroy(object);
-    }
+    igObject::release(object);
 } };
 
 /* Drops one reference to a pooled string token. */
@@ -112,16 +108,9 @@ void beNDMWSaveCtrl_Prepare(beNDMWSaveCtrl *self) {
 
     if (self->_padManager == 0) {
         found = igInsightCore_FindManager((igInsightCore *)self->_insight, g_bePadManager_metaObject);
-        if (found != 0) {
-            found->_refCount = found->_refCount + 1;
-        }
+        igObject::ref(found);
         previous = (igObject *)self->_padManager;
-        if (previous != 0) {
-            previous->_refCount = previous->_refCount - 1;
-            if ((previous->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(previous);
-            }
-        }
+        igObject::release(previous);
         self->_padManager = (int)found;
     }
 }

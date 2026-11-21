@@ -143,10 +143,7 @@ void FUN_0015e2b0(igVertexArray1_1 *arg0, int arg1) {
         if (v0 != 0) v0->_refCount = v0->_refCount + 1;
         {
             igObject *a = (igObject *)arg0->_memPool;
-            if (a != 0) {
-                a->_refCount = a->_refCount - 1;
-                if (((unsigned long long)((long long)(int)a->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(a);
-            }
+            igObject::release(a);
         }
         arg0->_memPool = (int)v0;
     }
@@ -213,10 +210,7 @@ int FUN_0015e4e0(VA_15e4e0 *arg0) {
         if (v0 != 0) v0->_refCount = v0->_refCount + 1;
         {
             igObject *a = (igObject *)arg0->f24;
-            if (a != 0) {
-                a->_refCount = a->_refCount - 1;
-                if (((unsigned long long)((long long)(int)a->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(a);
-            }
+            igObject::release(a);
         }
         arg0->f24 = (Alloc_15e4e0 *)v0;
     }

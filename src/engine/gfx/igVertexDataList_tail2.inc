@@ -710,7 +710,7 @@ void FUN_001830b0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
         igVertexArray1_1 *va = (igVertexArray1_1 *)arg5;
         if (arg4 != 0) ++arg4->_refCount;
         t = (igObject *)va->_memPool;
-        if (t != 0) { --t->_refCount; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); }
+        igObject::release(t);
         va->_memPool = (int)arg4;
         end = i + arg0;
         while (i < end) {
@@ -733,7 +733,7 @@ void FUN_001830b0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             i++;
         }
         t = (igObject *)va->_memPool;
-        if (t != 0) { --t->_refCount; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); }
+        igObject::release(t);
         va->_memPool = 0;
         return;
     }
@@ -826,7 +826,7 @@ void FUN_001836f0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
         igObject *t;
         if (arg4 != 0) ++arg4->_refCount;
         t = arg5->f24;
-        if (t != 0) { --t->_refCount; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); }
+        igObject::release(t);
         arg5->f24 = arg4;
         end = i + arg0;
         while (i < end) {
@@ -849,7 +849,7 @@ void FUN_001836f0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             i++;
         }
         t = arg5->f24;
-        if (t != 0) { --t->_refCount; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); }
+        igObject::release(t);
         arg5->f24 = 0;
         return;
     }
@@ -1290,7 +1290,7 @@ void FUN_00184cc0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
         igObject *t;
         if (arg4 != 0) ++arg4->_refCount;
         t = arg5->f24;
-        if (t != 0) { --t->_refCount; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); }
+        igObject::release(t);
         arg5->f24 = arg4;
         end = i + arg0;
         while (i < end) {
@@ -1313,7 +1313,7 @@ void FUN_00184cc0(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             i++;
         }
         t = arg5->f24;
-        if (t != 0) { --t->_refCount; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); }
+        igObject::release(t);
         arg5->f24 = 0;
         return;
     }
@@ -1617,7 +1617,7 @@ int f2;
     if (arg5 != 0) {
         if (arg4 != 0) ++arg4->_refCount;
         t = arg5->f24;
-        if (t != 0) { --t->_refCount; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); }
+        igObject::release(t);
         arg5->f24 = arg4;
         end = i + arg0;
         while (i < end) {
@@ -1636,7 +1636,7 @@ int f2;
             i++;
         }
         t2 = arg5->f24;
-        if (t2 != 0) { --t2->_refCount; if ((t2->_refCount & 0x7fffff) == 0) igObject_Destroy(t2); }
+        igObject::release(t2);
         arg5->f24 = 0;
         return;
     }
@@ -1747,7 +1747,7 @@ void FUN_00186300(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
         igObject *t;
         if (arg4 != 0) ++arg4->_refCount;
         t = arg5->f24;
-        if (t != 0) { --t->_refCount; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); }
+        igObject::release(t);
         arg5->f24 = arg4;
         end = i + arg0;
         while (i < end) {
@@ -1770,7 +1770,7 @@ void FUN_00186300(int arg0, unsigned arg1, int arg2, int arg3, igObject *arg4, A
             i++;
         }
         t = arg5->f24;
-        if (t != 0) { --t->_refCount; if ((t->_refCount & 0x7fffff) == 0) igObject_Destroy(t); }
+        igObject::release(t);
         arg5->f24 = 0;
         return;
     }

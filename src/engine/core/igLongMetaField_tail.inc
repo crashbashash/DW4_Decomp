@@ -62,12 +62,7 @@ void igMedia_CreateMediaList(void) {
 
     pool = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     list = g_fileDeviceList.p;
-    if (list != 0) {
-        list->_refCount = list->_refCount - 1;
-        if ((list->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(list);
-        }
-    }
+    igObject::release(list);
     g_fileDeviceList.p = (igObjectList *)(igMediaList_Create(pool));
 }
 

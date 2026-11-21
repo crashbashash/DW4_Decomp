@@ -76,10 +76,7 @@ void beModelCtrlInfoRideOn2_InitFields(void) {
     ((Gap::Core::igIntMetaField *)clone)->setDefault(0x66);
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoRideOn2_modelRamNoStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, index, (igMetaField *)clone);
-    clone->_refCount = (int)clone->_refCount - 1;
-    if (((unsigned long long) ((long long)(int)clone->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(clone);
-    }
+    clone->release();
     igMetaObject_NameFields((igMetaObject *)meta, g_beModelCtrlInfoRideOn2_fieldTable, g_beModelCtrlInfoRideOn2_fieldHandles, g_beModelCtrlInfoRideOn2_fieldOffsets, base);
 }
 

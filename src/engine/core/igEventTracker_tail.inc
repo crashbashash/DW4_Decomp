@@ -1781,28 +1781,19 @@ igResult igEventTracker_WriteFile(igEventTrackerView *self, int fileName) {
     o = file.p;
     if (a != 0) a->_refCount = a->_refCount + 1;
     old = (igObject *)o->_temporaryMemoryPool;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old);
-    }
+    igObject::release(old);
     o->_temporaryMemoryPool = (igMemoryPoolView *)a;
     a = ((igObject *)((Gap::Core::igObject *)self)->getMemoryPool());
     o = file.p;
     if (a != 0) a->_refCount = a->_refCount + 1;
     old = (igObject *)o->_objectMemoryPool;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old);
-    }
+    igObject::release(old);
     o->_objectMemoryPool = (igMemoryPoolView *)a;
     a = ((igObject *)((Gap::Core::igObject *)self)->getMemoryPool());
     o = file.p;
     if (a != 0) a->_refCount = a->_refCount + 1;
     old = (igObject *)o->_dataMemoryPool;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old);
-    }
+    igObject::release(old);
     o->_dataMemoryPool = (igMemoryPoolView *)a;
     file.p->_useMemoryPoolAssignmentsState = 1;
     igDirectory_AddObjectRecursive((int)file.p, (int)self, (int)g_igEventTracker_memoryDataName, 0);

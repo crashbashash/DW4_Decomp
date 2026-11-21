@@ -248,8 +248,7 @@ void igObjectSystem_PreExit(ObjectSystemView *self) {
 
 /* Release one reference the object system holds, without testing for none. */
 static inline void releaseObject(igObject *object) {
-    object->_refCount = object->_refCount - 1;
-    if ((object->_refCount & 0x7fffff) == 0) igObject_Destroy(object);
+    object->release();
 }
 
 AllocatorRegistry *g_primaryAllocatorList;
@@ -364,8 +363,7 @@ void igObjectSystem_Shutdown(ObjectSystemView *self) {
     int pool;
     igObject *o;
     o = (igObject *)self->metaEnumList;
-    o->_refCount = o->_refCount - 1;
-    if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
+    o->release();
     self->metaEnumList = 0;
     igAdxFile_SetBasePath(0);
     igArray_Destruct((CallbackArray *)self->registrationCallbacks, 1);
@@ -378,16 +376,11 @@ void igObjectSystem_Shutdown(ObjectSystemView *self) {
     }
     self->active = 0;
     o = (igObject *)g_metaFieldList;
-    o->_refCount = o->_refCount - 1;
-    if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
+    o->release();
     o = (igObject *)self->metaRegistry;
-    o->_refCount = o->_refCount - 1;
-    if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
+    o->release();
     o = self->retainedObject;
-    if (o != 0) {
-        o->_refCount = o->_refCount - 1;
-        if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o);
-    }
+    igObject::release(o);
     if (g_stringPool == 0) {
         pool = ((int)StringPool_Allocate(16));
         if (pool != 0) pool = ((int)StringPool_Construct((StringPool *)pool));

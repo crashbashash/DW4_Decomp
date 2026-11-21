@@ -72,22 +72,12 @@ int igArenaMemoryPool_GetVTable(void) {
     p = (igObject *)&pool._eventTracker;
     if (p != 0) {
         p = *(igObject **)p;
-        if (p != 0) {
-            p->_refCount = (int)((int) (p->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) p->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p);
-            }
-        }
+        igObject::release(p);
     }
     r = (igObject *)&pool._allocationLock;
     if (r != 0) {
         r = *(igObject **)r;
-        if (r != 0) {
-            r->_refCount = (int)((int) (r->_refCount - 1));
-            if (((unsigned long long) ((long long)(int) r->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(r);
-            }
-        }
+        igObject::release(r);
     }
     return vtable;
 }

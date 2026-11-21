@@ -67,9 +67,18 @@ igObject	void *reallocAligned(void *storage, int size, unsigned short alignment)
 igObject	void free(void *storage) const;
 igObject	char *strdup(const char *string) const;
 igObject	private: void internalRelease() const;
+igObject	inline void release() const { _refAndMemPool._both--; if (_refAndMemPool._either._refCount == 0) internalRelease(); }
+igObject	static inline void release(const igObject *obj) { if (obj != 0) obj->release(); }
+igObject	static inline void ref(const igObject *obj) { if (obj != 0) obj->ref(); }
+igObject	inline void ref() const { _refAndMemPool._both++; }
 igObject	int isOfType(const igMetaObject *meta) const;
 igObject	void copy(igObject *source, int copyMode);
 igObject	igMemoryPoolView *getMemoryPool() const;
+igObject	protected: union { mutable unsigned int _both; struct { mutable unsigned int _refCount : 23; unsigned int _memPoolIndex : 9; } _either; } _refAndMemPool;
+::igObject	inline void ref() const { ((const Gap::Core::igObject *)this)->ref(); }
+::igObject	inline void release() const { ((const Gap::Core::igObject *)this)->release(); }
+::igObject	static inline void release(const igObject *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->release(); }
+::igObject	static inline void ref(const igObject *obj) { if (obj != 0) ((const Gap::Core::igObject *)obj)->ref(); }
 igRenderer	IG_ABSTRACT_OBJECT_DEFINE(igRenderer)
 igRenderer	protected: static igMetaField *k_visualContext;
 igRenderer	void setVisualContext(igVisualContext *context);

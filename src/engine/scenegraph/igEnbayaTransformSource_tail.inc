@@ -326,16 +326,9 @@ void igPsx2EnvironmentMapShader_SetEnvironmentMapTexture(S0_1c2eb0 *arg0, Rc *ar
 
 void igPsx2EnvironmentMapShader_SetDiffuseTexture(igPsx2EnvironmentMapShader *self, igObject *value) {
     igObject *previous;
-    if (value != 0) {
-        value->_refCount = value->_refCount + 1;
-    }
+    igObject::ref(value);
     previous = (igObject *)(self->_diffuseTextureBind);
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     self->_diffuseTextureBind = (int)(value);
     self->_configured = 0;
 }
@@ -351,16 +344,9 @@ void igPsx2EnvironmentMapShader_SetDiffuseTextureCoordIndex(igPsx2EnvironmentMap
 
 void igPsx2EnvironmentMapShader_SetGlossMapTexture(igPsx2EnvironmentMapShader *self, igObject *value) {
     igObject *previous;
-    if (value != 0) {
-        value->_refCount = value->_refCount + 1;
-    }
+    igObject::ref(value);
     previous = (igObject *)(self->_glossMapTexture);
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7fffff) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     self->_glossMapTexture = (int)(value);
     self->_configured = 0;
 }

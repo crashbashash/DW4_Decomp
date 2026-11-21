@@ -5031,9 +5031,7 @@ void beNDMWShopCtrlDiskSell_Update(beNDMWShopCtrlDiskSell *self) {
                 {
                     igBoolList *decide = (igBoolList *)sellable.p;
                     beNDMWStatusSelectE1 *window = selector.p;
-                    if (decide != 0) {
-                        decide->_refCount = decide->_refCount + 1;
-                    }
+                    igObject::ref(decide);
                     ReleaseObject((igObject *)window->_decideList);
                     window->_decideList = (int)decide;
                 }

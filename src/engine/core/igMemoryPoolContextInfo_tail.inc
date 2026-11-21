@@ -105,7 +105,7 @@ void igMemoryPoolContextInfo_SetAllocator(MemoryContext *self, int index, igObje
             if (previous) self->RemoveAllocator(index);
             *slot = value;
             if (value) {
-                ++value->_refCount;
+                value->ref();
                 if (index >= self->usedRecords) self->usedRecords = index + 1;
             }
         }
@@ -260,8 +260,7 @@ igResult igMemoryPoolContextInfo_GetPoolInfos(MemoryContext *self, int file) {
             igMemoryPoolInfo *o = (igMemoryPoolInfo *)igMemoryPoolInfo_Create(((int)((Gap::Core::igObject *)file)->getMemoryPool()));
             if (self->FillMemoryPoolInfo(i, o) == g_resultFailure) {
                 result = g_resultFailure;
-                o->_refCount = o->_refCount - 1;
-                if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(o);
+                o->release();
             } else {
                 igMemoryPoolContextInfo_AdoptMemoryPoolInfo((void *)file, (void *)o);
             }
@@ -577,7 +576,7 @@ void igMemoryPoolContextInfo_CreateDefaultPools(MemoryContext *self) {
             }
         }
         i++;
-        ((igObject *)p)->_refCount = ((igObject *)p)->_refCount + 1;
+        ((igObject *)p)->ref();
     } while (i < 46);
 }
 
@@ -693,8 +692,7 @@ igResult igMemoryPoolContextInfo_Initialize(MemoryContext *self) {
         if (nextSize > 0) { o->SetPreSize(nextSize); }
         o->Activate();
         self->SetAllocator(3, (igObject *)o);
-        ((igObject *)o)->_refCount = ((igObject *)o)->_refCount - 1;
-        if (((unsigned long long)((long long)(int)((igObject *)o)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)o);
+        ((igObject *)o)->release();
     }
     if (self->CreateDefaultContextInfo(config, g_memoryPoolsSectionName) == g_resultFailure) { result = g_resultFailure; }
     if (self->SetPoolInfos((int)self->contextInfo, 0) == g_resultFailure) { result = g_resultFailure; }
@@ -705,8 +703,7 @@ igResult igMemoryPoolContextInfo_Initialize(MemoryContext *self) {
                 igMemoryPoolView **slot = (igMemoryPoolView **)&self->records[i].allocator;
                 igMemoryPoolView *p = *slot;
                 if (p == mainPool) {
-                    ((igObject *)p)->_refCount = ((igObject *)p)->_refCount - 1;
-                    if (((unsigned long long)((long long)(int)((igObject *)p)->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy((igObject *)p);
+                    ((igObject *)p)->release();
                     *slot = 0;
                 }
             }
@@ -965,7 +962,7 @@ void MemoryContext_BuildAllocator(int *out, igMemoryPoolContextInfo *context, in
     if (mbc == 0) Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked);
     if (idx == 2) {
         slot->allocator = allocB;
-        allocB->_refCount = allocB->_refCount + 1;
+        allocB->ref();
     }
     if (cfg == 0) {
         if (idx >= 30) { *out = g_resultSuccess.v; return; }
@@ -1079,7 +1076,7 @@ b78:
 common:
                     if (((igMemoryPoolView *)a)->IsActive() == 0) ((igMemoryPoolView *)a)->Activate();
                     r5 = ((igMemoryPoolView *)o2)->SetRawMemory((int)((igMemoryPoolView *)a)->Allocate(size), (long long)size, 1);
-                    a->_refCount = a->_refCount + 1;
+                    a->ref();
                     slot->storageFlags = slot->storageFlags | 1;
                 }
             }
@@ -1269,8 +1266,7 @@ void igMemoryPoolContextInfo_ConfigureEventTracking(MemoryContext *self) {
         if (loader != 0) {
             if (loader->Open((char *)symbolsFileName.p) == g_resultSuccess) {
                 if (loader->LoadSymbolTable(loaded, 1) == g_resultFailure) {
-                    loaded->_refCount = loaded->_refCount - 1;
-                    if (((unsigned long long)((long long)(int)loaded->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(loaded);
+                    loaded->release();
                     loaded = 0;
                 }
                 unsigned char showSectionHeaders = 0;
@@ -1831,7 +1827,7 @@ igResult igMemoryPoolContextInfo_PushContext(void *context) {
     if ((context != 0) && (g_memoryContextStackDepth >= 0) && (g_memoryContextStackDepth < 4)) {
         g_memoryContextStack[g_memoryContextStackDepth] = context;
         g_memoryContextStackDepth += 1;
-        ((igObject *)context)->_refCount = (int)((int) (((igObject *)context)->_refCount + 1));
+        ((igObject *)context)->ref();
         return g_resultSuccess;
     } else {
         return g_resultFailure;
@@ -1939,10 +1935,7 @@ int igMemoryPoolContextInfo_GetMemoryPoolInfo(void *info, int index) {
 void igMemoryPoolContextInfo_AdoptMemoryPoolInfo(void *info, void *poolInfo) {
     if (poolInfo != 0) {
         ((Gap::Core::igObjectList *)(((igMemoryPoolContextInfo *)info)->_memoryPoolInfos))->append((Gap::Core::igObject *)poolInfo);
-        ((igObject *)poolInfo)->_refCount = (int) (((igObject *)poolInfo)->_refCount - 1);
-        if (((unsigned long long) ((long long)(int)((igObject *)poolInfo)->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)poolInfo);
-        }
+        ((igObject *)poolInfo)->release();
     }
 }
 

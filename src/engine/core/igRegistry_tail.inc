@@ -179,29 +179,17 @@ int igRegistry_GetValueStringObj(igRegistry *registry, int section, const char *
     node = igRegistry_FindValue((igRegistry *)registry, section, key, 0);
     if (node != 0) {
         string = (igStringObj *)node->_value;
-        if (string) {
-            ++string->_refCount;
-        }
+        igObject::ref(string);
         old = *out;
-        if (old) {
-            --old->_refCount;
-            if (((unsigned long long)(long long)(int)old->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)old);
-        }
+        igObject::release(old);
         *out = string;
     } else {
         igSmartPointer<igStringObj> created((igStringObj *)igStringObj_Create(((int)((Gap::Core::igObject *)registry)->getMemoryPool())));
         igStringObj_Set(created.p, defaultValue);
         string = created.p;
-        if (string) {
-            ++string->_refCount;
-        }
+        igObject::ref(string);
         old = *out;
-        if (old) {
-            --old->_refCount;
-            if (((unsigned long long)(long long)(int)old->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy((igObject *)old);
-        }
+        igObject::release(old);
         *out = string;
         if (create != 0) {
             igRegistry_SetValueString((void *)registry, section, key, (const char *)defaultValue);
@@ -325,12 +313,7 @@ bool igRegistry_GetValueStringList(void *self, int section, const char *key, igS
             releaseRef(tmp);
         }
         held = a;
-        if (held != 0) {
-            held->_refCount = held->_refCount - 1;
-            if (((unsigned long long)((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(held);
-            }
-        }
+        igObject::release(held);
     } else if (create != 0) {
         *(igStringObj **)&b = (igStringObj *)(igStringObj_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
         n = list->_count;
@@ -347,12 +330,7 @@ bool igRegistry_GetValueStringList(void *self, int section, const char *key, igS
         }
         igRegistry_SetValueString(self, section, saved, (const char *)(listValueText(b)));
         held = b;
-        if (held != 0) {
-            held->_refCount = held->_refCount - 1;
-            if (((unsigned long long)((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(held);
-            }
-        }
+        igObject::release(held);
     }
     return p != 0;
 }
@@ -585,12 +563,7 @@ void igRegistry_Clear(igRegistry *self) {
     n1 = l->_count;
     for (i = 0; i < n1; i++) {
         p = l->_data[i];
-        if (p != 0) {
-            p->_refCount = p->_refCount - 1;
-            if (((unsigned long long)((long long)(int)p->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(p);
-            }
-        }
+        igObject::release(p);
     }
     n2 = l->_count;
     for (j = 0; j < n2; j++) {
@@ -701,10 +674,7 @@ igRegistryValue *igRegistry_FindValue(igRegistry *self, int section, const char 
         igRegistryValue *old;
         if (entry != 0) entry->_refCount = entry->_refCount + 1;
         old = r.p;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old);
-        }
+        igObject::release(old);
         r.p = entry;
         if (r.p != 0 && section == r.p->_section) {
             int name;
@@ -734,19 +704,13 @@ igRegistryValue *igRegistry_FindValue(igRegistry *self, int section, const char 
         }
         entry = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
         old = r.p;
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old);
-        }
+        igObject::release(old);
         r.p = (igRegistryValue *)igRegistryValue_Create(entry);
         values = (igRegistryValueList *)self->_valueTable;
         self = (igRegistry *)r.p;
         if (self != 0) ((igRegistryValue *)self)->_refCount = ((igRegistryValue *)self)->_refCount + 1;
         old = ((igRegistryValue **)values->_data)[freeSlot];
-        if (old != 0) {
-            old->_refCount = old->_refCount - 1;
-            if (((unsigned long long)(long long)old->_refCount & 0x7fffffULL) == 0) igObject_Destroy(old);
-        }
+        igObject::release(old);
         if (values->_count != 0 && freeSlot >= 0 && freeSlot < values->_count) ((igRegistryValue **)values->_data)[freeSlot] = (igRegistryValue *)self;
         r.p->_section = section;
         igStringObj_Set((igStringObj *)r.p->_valueName, key);
@@ -948,10 +912,7 @@ static inline void setNames(igResource *self, const igSmartPointer<igObject> &va
     igObject *old;
     if (held) held->_refCount = held->_refCount + 1;
     old = (igObject *)self->_alignmentStrings;
-    if (old) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-    }
+    igObject::release(old);
     self->_alignmentStrings = (int)held;
 }
 
@@ -960,10 +921,7 @@ static inline void setValues(igResource *self, const igSmartPointer<igObject> &v
     igObject *old;
     if (held) held->_refCount = held->_refCount + 1;
     old = (igObject *)self->_alignmentValues;
-    if (old) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7FFFFF) == 0) igObject_Destroy(old);
-    }
+    igObject::release(old);
     self->_alignmentValues = (int)held;
 }
 
@@ -990,10 +948,7 @@ static inline void setImageDirectory(igResource *owner, const igSmartPointer<igD
     igDirectory *old;
     if (held != 0) held->_refCount = held->_refCount + 1;
     old = (igDirectory *)owner->_imageDirectory;
-    if (old != 0) {
-        old->_refCount = old->_refCount - 1;
-        if ((old->_refCount & 0x7fffff) == 0) igObject_Destroy(old);
-    }
+    igObject::release(old);
     owner->_imageDirectory = (int)held;
 }
 

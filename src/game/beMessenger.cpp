@@ -68,7 +68,7 @@ struct WorkRef {
     WorkRef(Obj *o, RetainReference) { p = o; if (p) p->_refCount++; }
     /* The assignment inside the condition is what reproduces retail's
      * register choice around the inlined copies of this release. */
-    ~WorkRef() { Obj *o; if ((o = p) != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~WorkRef() { Obj *o; if ((o = p) != 0) { o->release(); } }
 };
 
 typedef igObject RefObj;
@@ -90,11 +90,7 @@ public:
     }
     ~ObjectRef() { RefObj *o = p; release(o); }
     static void release(RefObj *o) {
-        if (o) {
-            --o->_refCount;
-            if (((unsigned long long)(long long)(int)o->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(o);
-        }
+        igObject::release(o);
     }
     static void assign(RefObj **dest, RefObj *incoming) {
         RefObj *outgoing;
@@ -168,10 +164,7 @@ void beMessenger_InitializeMemory(beMessenger *self)
     l->_count = 0; }
 void beMessenger_ResetMemory(beMessenger *self) {
     igObject *t = (igObject *)self->_argData;
-    if (t != 0) {
-        t->_refCount = (int)t->_refCount - 1;
-        if (((unsigned long long)((long long)(int)t->_refCount << 0x29) >> 0x29) == 0) igObject_Destroy(t);
-    }
+    igObject::release(t);
     self->_argData = 0;
     CLEAR(self->_groupList)
     if (((igObjectList *)self->_groupList)->_count < 5) ((Gap::Core::igDataList *)self->_groupList)->setCapacity(4, 4);
@@ -273,12 +266,7 @@ void beMessengerArgData_Clear(beMessengerArgData *self) {
     n2 = lo->_count;
     for (i2 = 0; i2 < n2; i2++) {
         igObject *o = ((igObject **)lo->_data)[i2];
-        if (o != 0) {
-            o->_refCount = (int)o->_refCount - 1;
-            if (((unsigned long long)((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
-            }
-        }
+        igObject::release(o);
     }
 
     {
@@ -958,11 +946,7 @@ void beMessenger_PushArgContext(beMessenger *self) {
 
 struct ArgRef {
     static void release(RefObj *o) {
-        if (o) {
-            --o->_refCount;
-            if (((unsigned long long)(long long)o->_refCount & 0x7fffffULL) == 0)
-                igObject_Destroy(o);
-        }
+        igObject::release(o);
     }
     static void assign(RefObj **dest, RefObj *incoming) {
         RefObj *outgoing;
@@ -1226,12 +1210,7 @@ void beMessenger_ClearObjects(beMessenger *self) {
     n = l->_count;
     for (i = 0; i < n; i++) {
         o = ((igObject **)l->_data)[i];
-        if (o != 0) {
-            o->_refCount = (int)o->_refCount - 1;
-            if (((unsigned long long) ((long long)(int)o->_refCount << 0x29) >> 0x29) == 0) {
-                igObject_Destroy(o);
-            }
-        }
+        igObject::release(o);
     }
     n2 = l->_count;
     for (j = 0; j < n2; j++) {

@@ -541,12 +541,7 @@ int igStringObj_Erase(igStringObj *self, unsigned int pos, unsigned int len) {
     igStringObj_Insert((igStringObj *)tmp, (char *)self->_buffer, 0, pos);
     igStringObj_Set(self, igStringObj_Text(tmp));
     held = tmp;
-    if (held != 0) {
-        held->_refCount = held->_refCount - 1;
-        if (((unsigned long long)((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(held);
-        }
-    }
+    igObject::release(held);
     return 1;
 }
 

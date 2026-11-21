@@ -88,32 +88,18 @@ static inline void setProbe(igPickMode *pickMode, const igSmartPointer<igProbe> 
     igObject *retained = (igObject *)probe.get();
     igIntersectTraversal *traversal = (igIntersectTraversal *)pickMode->_intersectTraversal;
     igObject *previous;
-    if (retained != 0) {
-        retained->_refCount = retained->_refCount + 1;
-    }
+    igObject::ref(retained);
     previous = (igObject *)traversal->_probe;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     traversal->_probe = (int)retained;
 }
 
 static inline void setHitPath(igPickMode *pickMode, const igSmartPointer<igGraphPath> &path) {
     igGraphPath *held = path.get();
     igGraphPath *previous;
-    if (held != 0) {
-        held->_refCount = held->_refCount + 1;
-    }
+    igObject::ref(held);
     previous = (igGraphPath *)pickMode->_hitPath;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     pickMode->_hitPath = (int)held;
 }
 static inline igGraphPath *createGraphPath() { AdoptReference tag = AdoptReference(); return igGraphPath_Create(0); }
@@ -207,29 +193,15 @@ void igCameraMode_SetCameraPath(igCameraMode *self, igObject *path) {
     igObject *previous;
     igObject *camera;
     if (path != 0) {
-        if (path != 0) {
-            path->_refCount = path->_refCount + 1;
-        }
+        igObject::ref(path);
         previous = (igObject *)self->_cameraPath;
-        if (previous != 0) {
-            previous->_refCount = previous->_refCount - 1;
-            if (((unsigned long long)(long long)(int)previous->_refCount & 0x7fffffULL) == 0) {
-                igObject_Destroy(previous);
-            }
-        }
+        igObject::release(previous);
         self->_cameraPath = (int)path;
         camera = igGraphPath_GetTail((igGraphPath *)path);
         camera = asCamera(camera);
-        if (camera != 0) {
-            camera->_refCount = camera->_refCount + 1;
-        }
+        igObject::ref(camera);
         previous = (igObject *)self->_camera;
-        if (previous != 0) {
-            previous->_refCount = previous->_refCount - 1;
-            if (((unsigned long long)(long long)(int)previous->_refCount & 0x7fffffULL) == 0) {
-                igObject_Destroy(previous);
-            }
-        }
+        igObject::release(previous);
         self->_camera = (int)camera;
     }
 }
@@ -734,12 +706,7 @@ void igPickMode_OnMouseButton(igPickMode *self, int button, int pressed) {
         } else if (button == 1) {
             selected = &((igViewerParameters *)self->_parameters)->_selectedObject;
             object = (igObject *)*selected;
-            if (object != 0) {
-                object->_refCount = object->_refCount - 1;
-                if (((unsigned long long)((long long)(int)object->_refCount << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy(object);
-                }
-            }
+            igObject::release(object);
             *selected = 0;
             changed.type = VIEW_MODEL_FIELD_CHANGED;
             changed.sender = 0;
@@ -781,16 +748,9 @@ void igPickMode_OnAttach(igPickMode *pickMode) {
     ((igIntersectTraversal *)pickMode->_intersectTraversal)->_userTimeState = 1;
     if (pickMode->_guiSystem != 0) {
         cursor = (igObject *)((igGuiSystem *)pickMode->_guiSystem)->_mouseCursor;
-        if (cursor != 0) {
-            cursor->_refCount = cursor->_refCount + 1;
-        }
+        igObject::ref(cursor);
         previous = (igObject *)pickMode->_savedCursor;
-        if (previous != 0) {
-            previous->_refCount = previous->_refCount - 1;
-            if ((previous->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(previous);
-            }
-        }
+        igObject::release(previous);
         pickMode->_savedCursor = (int)cursor;
         pickMode->_savedCursorState = ((igGuiSystem *)pickMode->_guiSystem)->_mouseCursorVisible;
         igGuiSystem_SetMouseCursor((igGuiSystem *)pickMode->_guiSystem, (igMouseCursor *)pickMode->_cursor);
@@ -834,11 +794,7 @@ void igPickMode_Pick(igPickMode *self) {
     self->_impactLength = ((igRay *)self->_ray)->_len;
     self->_hit = 0;
     previous = (igObject *)self->_hitPath;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if (((unsigned long long)(long long)(int)previous->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(previous);
-    }
+    igObject::release(previous);
     self->_hitPath = 0;
     igIntersectTraversal_ResetStacks((igIntersectTraversal *)((igIntersectTraversalDispatchView *)self->_intersectTraversal));
     ((igIntersectTraversalDispatchView *)self->_intersectTraversal)->SetTimeAsLong(model->_drawTime);
@@ -847,15 +803,9 @@ void igPickMode_Pick(igPickMode *self) {
     g_pickingMode[0] = 0;
     selected = &((igViewerParameters *)self->_parameters)->_selectedObject;
     hitPath = (igObject *)self->_hitPath;
-    if (hitPath != 0) {
-        hitPath->_refCount = hitPath->_refCount + 1;
-    }
+    igObject::ref(hitPath);
     previous = (igObject *)*selected;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if (((unsigned long long)(long long)(int)previous->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy(previous);
-    }
+    igObject::release(previous);
     *selected = (int)hitPath;
     changed[0] = VIEW_MODEL_FIELD_CHANGED;
     changed[1] = 0;

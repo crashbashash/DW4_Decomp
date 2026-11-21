@@ -159,12 +159,7 @@ int FUN_001ad860(igAnimationCombiner *arg0, igAnimationState *arg1) {
                 } else if (var_s1) {
                     temp_a0_2 = (igAnimationState *)temp_s0->_cycleMatchTargetState;
                     if (temp_a0_2 == arg1) {
-                        if (temp_a0_2 != 0) {
-                            temp_a0_2->_refCount = (int)temp_a0_2->_refCount - 1;
-                            if (((unsigned long long) ((long long) (int)temp_a0_2->_refCount << 0x29) >> 0x29) == 0) {
-                                igObject_Destroy((igObject *)temp_a0_2);
-                            }
-                        }
+                        igObject::release(temp_a0_2);
                         temp_s0->_cycleMatchTargetState = 0;
                     }
                 }
@@ -372,16 +367,9 @@ void FUN_001ae1b0(void *arg0, float fparg0, float fparg1, float fparg2, float fp
 void **FUN_001ae1d0(void **arg0, void *arg1) {
     void *temp_a0;
 
-    if (arg1 != 0) {
-        ((igObject *)arg1)->_refCount = (int) ((int)((igObject *)arg1)->_refCount + 1);
-    }
+    igObject::ref(((igObject *)arg1));
     temp_a0 = *arg0;
-    if (temp_a0 != 0) {
-        ((igObject *)temp_a0)->_refCount = (int) ((int)((igObject *)temp_a0)->_refCount - 1);
-        if (((unsigned long long) ((long long) (int)((igObject *)temp_a0)->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
-        }
-    }
+    igObject::release(((igObject *)temp_a0));
     *arg0 = arg1;
     return arg0;
 }
@@ -389,16 +377,9 @@ void **FUN_001ae1d0(void **arg0, void *arg1) {
 void **FUN_001ae250(void **arg0, igObject *arg1) {
     igObject *temp_a0;
 
-    if (arg1 != 0) {
-        arg1->_refCount = (int) (arg1->_refCount + 1);
-    }
+    igObject::ref(arg1);
     temp_a0 = (igObject *)*arg0;
-    if (temp_a0 != 0) {
-        temp_a0->_refCount = (int) (temp_a0->_refCount - 1);
-        if (((unsigned long long) ((long long) (int)temp_a0->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(temp_a0);
-        }
-    }
+    igObject::release(temp_a0);
     *arg0 = arg1;
     return arg0;
 }

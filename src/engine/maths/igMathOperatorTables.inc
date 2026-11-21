@@ -117,11 +117,7 @@ igSmartPointer<igVolumeList> FUN_0018f760(igMemoryPoolView *allocator) {
 igSmartPointer<igObject> *FUN_0018f980(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;

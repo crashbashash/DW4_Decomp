@@ -100,9 +100,6 @@ void __internalObjectList_InitFields(void) {
     clone->_refCounted = 1;
     clone->_externalEnumStorage = (int)(&g___internalObjectList_dataDescriptorCell);
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)clone);
-    clone->_refCount = clone->_refCount - 1;
-    if ((clone->_refCount & 0x7fffff) == 0) {
-        igObject_Destroy(clone);
-    }
+    clone->release();
 }
 

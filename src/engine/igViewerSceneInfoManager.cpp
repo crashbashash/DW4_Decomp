@@ -158,61 +158,33 @@ static inline void setCursor(const igSmartPointer<igPickMode> &ref, const igSmar
     igObject *value = cursor.p;
     igPickMode *owner = ref.p;
     igObject *previous;
-    if (value != 0) {
-        value->_refCount = value->_refCount + 1;
-    }
+    igObject::ref(value);
     previous = (igObject *)owner->_cursor;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     owner->_cursor = (int)value;
 }
 static inline void setParameters(const igSmartPointer<igPickMode> &ref, igObject *value) {
     igPickMode *owner = ref.p;
     igObject *previous;
-    if (value != 0) {
-        value->_refCount = value->_refCount + 1;
-    }
+    igObject::ref(value);
     previous = (igObject *)owner->_parameters;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     owner->_parameters = (int)value;
 }
 static inline void setGuiSystem(const igSmartPointer<igPickMode> &ref, igObject *value) {
     igPickMode *owner = ref.p;
     igObject *previous;
-    if (value != 0) {
-        value->_refCount = value->_refCount + 1;
-    }
+    igObject::ref(value);
     previous = (igObject *)owner->_guiSystem;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     owner->_guiSystem = (int)value;
 }
 static inline void setWindow(const igSmartPointer<igFlyMode> &ref, igObject *value) {
     igFlyMode *owner = ref.p;
     igObject *previous;
-    if (value != 0) {
-        value->_refCount = value->_refCount + 1;
-    }
+    igObject::ref(value);
     previous = (igObject *)owner->_window;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if ((previous->_refCount & 0x7FFFFF) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     owner->_window = (int)value;
 }
 
@@ -379,9 +351,7 @@ void Gap__Viewer__igViewerSceneInfoManager__resetFields(igViewerSceneInfoManager
     {
         igObject *s2 = (igObject *)self->_parameters;
         RendererLink *s1 = (RendererLink *)self->_viewerRenderer;
-        if (s2 != 0) {
-            s2->_refCount = (int)s2->_refCount + 1;
-        }
+        igObject::ref(s2);
         igObject *a0 = s1->parameters;
         IG_OBJECT_RELEASE(a0);
         s1->parameters = s2;
@@ -389,9 +359,7 @@ void Gap__Viewer__igViewerSceneInfoManager__resetFields(igViewerSceneInfoManager
     {
         igObject *s2 = (igObject *)self->_parameters;
         RendererLink *s1 = (RendererLink *)self->_bboxRenderer;
-        if (s2 != 0) {
-            s2->_refCount = (int)s2->_refCount + 1;
-        }
+        igObject::ref(s2);
         igObject *a0 = s1->parameters;
         IG_OBJECT_RELEASE(a0);
         s1->parameters = s2;
@@ -399,9 +367,7 @@ void Gap__Viewer__igViewerSceneInfoManager__resetFields(igViewerSceneInfoManager
     {
         igObject *s2 = (igObject *)self->_parameters;
         RendererLink *s1 = (RendererLink *)self->_normalsRenderer;
-        if (s2 != 0) {
-            s2->_refCount = (int)s2->_refCount + 1;
-        }
+        igObject::ref(s2);
         igObject *a0 = s1->parameters;
         IG_OBJECT_RELEASE(a0);
         s1->parameters = s2;
@@ -475,9 +441,7 @@ struct MessageReceiver : igObject {
     igObject *handler;
     ResizeFunction function;
     void setHandler(igObject *object, ResizeFunction f) {
-        if (object != 0) {
-            object->_refCount = object->_refCount + 1;
-        }
+        igObject::ref(object);
         igRelease(handler);
         handler = object;
         function = f;

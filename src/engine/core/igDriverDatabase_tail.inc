@@ -212,10 +212,7 @@ test:
         goto next;
     }
 done:
-    list->_refCount = (int)list->_refCount - 1;
-    if (((unsigned long long)((long long)(int)list->_refCount << 0x29) >> 0x29) == 0) {
-        igObject_Destroy(list);
-    }
+    list->release();
     return;
 first:
     if (0 < list->_count) {
@@ -418,10 +415,7 @@ ConfigNode *igDriverDatabase_ParseNode(igDriverDatabase *self) {
         }
         {
             igStringObj *held = word;
-            held->_refCount = held->_refCount - 1;
-            if ((held->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)held);
-            }
+            held->release();
         }
     }
     return result;
@@ -609,10 +603,7 @@ static inline void storeText(igStringObj *target, igStringObj *token) {
 
 /* Drop the parser's reference to a token it has used. */
 static inline void dropText(igStringObj *token) {
-    token->_refCount = token->_refCount - 1;
-    if ((token->_refCount & 0x7FFFFF) == 0) {
-        igObject_Destroy(token);
-    }
+    token->release();
 }
 
 /* Parse a settings block: an optional parenthesised section name, then `{ key mode value ... }`. */
@@ -840,14 +831,10 @@ ConfigPair *igDriverDatabase_Setting_Destruct(ConfigPair *self, int delete_stora
     if (self) {
         ((ConfigPairData *)self)->vtable = (int)&g_ConfigPair_vtable[0];
         p = self->key;
-        --p->_refCount;
-        if (((unsigned long long)(long long)(int)p->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy((igObject *)p);
+        p->release();
         self->key = 0;
         q = self->value;
-        --q->_refCount;
-        if (((unsigned long long)(long long)(int)q->_refCount & 0x7fffffULL) == 0)
-            igObject_Destroy((igObject *)q);
+        q->release();
         self->value = 0;
         if ((short)delete_storage > 0) Memory_FreeBufferAliasB(self);
     }
@@ -892,12 +879,10 @@ void *igDriverDatabase_SettingsNode_Destruct(ConfigSettingsNode *self, long long
             }
         }
         a0 = (igObject *)self->entries;
-        a0->_refCount = a0->_refCount - 1;
-        if ((a0->_refCount & 0x7fffff) == 0) igObject_Destroy(a0);
+        a0->release();
         self->entries = 0;
         a0 = self->name;
-        a0->_refCount = a0->_refCount - 1;
-        if ((a0->_refCount & 0x7fffff) == 0) igObject_Destroy(a0);
+        a0->release();
         self->name = 0;
         if (self != 0) {
             self->vtable = (int)&g_ConfigNode_vtable[0];
@@ -938,13 +923,11 @@ void *igDriverDatabase_PropertyNode_Destruct(ConfigSectionNode *self, long long 
     if (self != 0) {
         self->vtable = (int)&g_ConfigSectionNode_vtable[0];
         a0 = self->name;
-        a0->_refCount = a0->_refCount - 1;
-        if ((a0->_refCount & 0x7fffff) == 0) igObject_Destroy(a0);
+        a0->release();
         self->name = 0;
         a0 = self->selector;
         if (a0 != 0) {
-            a0->_refCount = a0->_refCount - 1;
-            if ((a0->_refCount & 0x7fffff) == 0) igObject_Destroy(a0);
+            a0->release();
             self->selector = 0;
         }
         for (i = 0; i < self->children->_count; i++) {
@@ -960,8 +943,7 @@ void *igDriverDatabase_PropertyNode_Destruct(ConfigSectionNode *self, long long 
             }
         }
         a0 = (igObject *)self->children;
-        a0->_refCount = a0->_refCount - 1;
-        if ((a0->_refCount & 0x7fffff) == 0) igObject_Destroy(a0);
+        a0->release();
         self->children = 0;
         if (self != 0) {
             self->vtable = (int)&g_ConfigNode_vtable[0];

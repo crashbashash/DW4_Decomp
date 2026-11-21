@@ -73,11 +73,7 @@ int igSkin_GetVTable(void) {
 igSmartPointer<igObject> *igSmartPointer_igAABox_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;
@@ -86,11 +82,7 @@ igSmartPointer<igObject> *igSmartPointer_igAABox_Destruct(igSmartPointer<igObjec
 igSmartPointer<igObject> *igSmartPointer_igNode_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
     if (self) {
         igObject *object = self->p;
-        if (object) {
-            --object->_refCount;
-            if ((object->_refCount & 0x7fffff) == 0)
-                igObject_Destroy(object);
-        }
+        igObject::release(object);
         if (deleteFlag > 0) operator delete(self);
     }
     return self;

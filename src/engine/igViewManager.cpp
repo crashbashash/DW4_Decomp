@@ -36,8 +36,7 @@ extern unsigned char GPR_00554e80;
 
 /* The maker hands back a box that already holds one reference; the smart pointer takes its own. */
 static inline void dropCreatedReference(igAABox *box) {
-    box->_refCount = box->_refCount - 1;
-    if ((box->_refCount & 0x7FFFFF) == 0) igObject_Destroy(box);
+    box->release();
 }
 void igViewManager_GetObjectProps(igNode *scene, float *center, float *size, bool wholeAnimation, long long time);
 
@@ -214,16 +213,9 @@ void igViewManager_SetViewMode(igViewManager *manager, igViewMode *mode) {
     if (previous != 0) {
         igView_SetModel((igView *)previous, 0);
     }
-    if (mode != 0) {
-        mode->_refCount = mode->_refCount + 1;
-    }
+    igObject::ref(mode);
     previous = (igObject *)manager->_viewMode;
-    if (previous != 0) {
-        previous->_refCount = previous->_refCount - 1;
-        if (((unsigned long long)((long long)(int)previous->_refCount << 0x29) >> 0x29) == 0) {
-            igObject_Destroy(previous);
-        }
-    }
+    igObject::release(previous);
     manager->_viewMode = (int)mode;
     if (mode != 0) {
         igView_SetModel((igView *)mode, (igModel *)manager->_viewModel);

@@ -31,10 +31,7 @@ extern "C" int SETRAREICON[4];
 #define RARE_ICON_DELAY 60
 
 static inline void ReleaseObject(igObject *object) {
-    if (object != 0) {
-        object->_refCount = object->_refCount - 1;
-        if ((object->_refCount & 0x7fffff) == 0) igObject_Destroy(object);
-    }
+    igObject::release(object);
 }
 
 /* Owning stack reference to the new enemy info work; released on scope exit. */
@@ -42,7 +39,7 @@ class InfoWorkRef {
 public:
     igObject *p;
     InfoWorkRef(igObject *o) : p(o) {}
-    ~InfoWorkRef() { igObject *o = p; if (o != 0) { --o->_refCount; if ((o->_refCount & 0x7fffff) == 0) igObject_Destroy(o); } }
+    ~InfoWorkRef() { igObject *o = p; igObject::release(o); }
 };
 
 struct DataListSlot {
