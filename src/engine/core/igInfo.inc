@@ -43,7 +43,7 @@ void igInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igInfo_Register);
 }
 
-static igMetaObjectCallback g_igInfo_callbackList[] = { igDirectory_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igInfo_callbackList[] = { Gap::Core::igDirectory::arkRegister, 0 };
 
 CallbackArray *igInfo_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -92,7 +92,7 @@ void igInfo_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igInfo_ctorTable, 2);
     field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)igDirectory_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field)->_metaObject = (int)Gap::Core::igDirectory::getClassTypeLazy();
     ((igObjectRefMetaField *)field)->_refCounted = 0;
     ((igMetaField *)field)->_persistent = 0;
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)))->setDefault(1);

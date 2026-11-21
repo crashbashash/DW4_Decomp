@@ -465,7 +465,7 @@ igResult igIGBFile_ShareEntries(igIGBFileView *self) {
         igObjectList *old = self->_uniqueEntryList;
         int pool = (int)self->_temporaryMemoryPool;
         IG_OBJECT_RELEASE(old);
-        self->_uniqueEntryList = (igObjectList *)igDirectory_Create(pool);
+        self->_uniqueEntryList = (igObjectList *)Gap::Core::igDirectory::_instantiateFromPool((igMemoryPoolView *)pool);
     }
     n = self->_count;
     for (i = 0; i < n; i++) {
@@ -522,7 +522,7 @@ igResult igIGBFile_AllocateObjectBuffer(igIGBFileView *o) {
     o->_objectBufferPlace = (int)o->_objBuf;
     n = o->_count;
     for (i = 0; i < n; i++) {
-        ((igDirEntryView *)igDirectory_GetEntry((int *)o, i))->WriteObject(o);
+        ((igDirEntryView *)((Gap::Core::igDirectory *)o)->get(i))->WriteObject(o);
     }
     return g_resultSuccess;
 }
@@ -606,7 +606,7 @@ igResult igIGBFile_AddInfoListEntry(void *self) {
 
     infoList = (void *)(((igIGBFileView *)self)->_infoList);
     if (((igTDataList<igInfoView *> *)infoList)->_count > 0) {
-        ((igIGBFileView *)self)->_infoListPlace = igDirectory_AddObjectRecursive((int)self, (int)infoList, 0, 0);
+        ((igIGBFileView *)self)->_infoListPlace = ((Gap::Core::igDirectory *)((int)self))->addObject((Gap::Core::igObject *)((igObject *)infoList), 0, 0);
         ((igIGBFileView *)self)->_hasInfo = 1;
     }
     return g_resultSuccess;
@@ -1063,7 +1063,7 @@ SectionObjectRef igIGBFile_ReadObject(igIGBFile *file) {
     if (file->_magicVersion < 4) {
         read = igObject_ReadFields((igObjectDispatchView *)object.p, (FieldRecordHead *)record, file, (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
     } else {
-        read = igObject_ReadPersistentFields((igObjectDispatchView *)object.p, (FieldRecordHead *)record, (igDirectoryView *)file, (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
+        read = igObject_ReadPersistentFields((igObjectDispatchView *)object.p, (FieldRecordHead *)record, (Gap::Core::igDirectory *)file, (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
     }
     file->_chunkPlace = file->_chunkPlace + read;
     file->_bufferPlace = file->_bufferPlace + read;
@@ -1082,7 +1082,7 @@ igResult igIGBFile_ReadObjectSection(igIGBFileView *file) {
     list = file->_uniqueEntryList;
     pool = (int)file->_temporaryMemoryPool;
     igObject::release(list);
-    file->_uniqueEntryList = (igObjectList *)igDirectory_Create(pool);
+    file->_uniqueEntryList = (igObjectList *)Gap::Core::igDirectory::_instantiateFromPool((igMemoryPoolView *)pool);
     ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)file->_uniqueEntryList))->setCount(file->_entryCount);
     if (igIGBFile_ReadNextChunk(file) == g_resultFailure) {
         return g_resultFailure;
@@ -1177,7 +1177,7 @@ igResult igIGBFile_ReadFinished(igIGBFileView *self) {
         }
     }
     for (i = 0; i < count; i++) {
-        ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ReadFinished(self);
+        ((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i))->ReadFinished(self);
     }
     return g_resultSuccess;
 }
@@ -1409,19 +1409,19 @@ igResult igIGBFile_ReadObjects(igIGBFileView *self) {
     n = self->_count;
     for (i = 0; i < n; i++) {
         if (((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) {
-            ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ResolveEntry(self);
+            ((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i))->ResolveEntry(self);
         }
     }
     if (self->_magicVersion < 4) {
         for (i = 0; i < n; i++) {
             if (((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) {
-                ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ResolveRefOld(self);
+                ((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i))->ResolveRefOld(self);
             }
         }
     } else {
         for (i = 0; i < n; i++) {
             if (((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) {
-                igSmartPointer<igDirEntryView> e((igDirEntryView *)igDirectory_GetEntry((int *)self, i), kRetainReference);
+                igSmartPointer<igDirEntryView> e((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i), kRetainReference);
                 e.p->ResolveRef(self);
             }
         }
@@ -1433,19 +1433,19 @@ igResult igIGBFile_ReadMemoryRefs(igIGBFileView *self) {
     int i;
     for (i = 0; i < self->_count; i++) {
         if (((((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) ^ 1) != 0) {
-            ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ResolveEntry(self);
+            ((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i))->ResolveEntry(self);
         }
     }
     if (self->_magicVersion < 4) {
         for (i = 0; i < self->_count; i++) {
             if (((((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) ^ 1) != 0) {
-                ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ResolveRefOld(self);
+                ((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i))->ResolveRefOld(self);
             }
         }
     } else {
         for (i = 0; i < self->_count; i++) {
             if (((((Gap::Core::igObject *)self->_data[i])->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) ^ 1) != 0) {
-                ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ResolveRef(self);
+                ((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i))->ResolveRef(self);
             }
         }
     }
@@ -1511,7 +1511,7 @@ igResult igIGBFile_ReadInfoList(igIGBFileView *self) {
         if (self->_endianSwap != 0) {
             self->imf->SwapBytes((char *)self + g_igIGBFile_infoListPlaceField->_offset, 1);
         }
-        infoList = (igObject *)((igDirEntryView *)igDirectory_GetEntry((int *)self, self->_infoListPlace))->_ref;
+        infoList = (igObject *)((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(self->_infoListPlace))->_ref;
         igObject::ref(infoList);
         t = (igObject *)self->_infoList;
         IG_OBJECT_RELEASE(t);
@@ -1636,7 +1636,7 @@ igResult igIGBFile_MakeConcrete(igIGBFileView *self) {
     n = self->_count;
     flag = !self->_concreteState;
     while (i < n) {
-        e = (igDirEntryView *)igDirectory_GetEntry((int *)self, i);
+        e = (igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i);
         e->RegisterRef(flag);
         i += 1;
     }
@@ -1650,7 +1650,7 @@ igResult igIGBFile_PostProcessEntries(igIGBFileView *self) {
     int i;
     void **entry;
     for (i = 0; i < self->_count; i++) {
-        entry = (void **)(igDirectory_GetEntry((int *)self, i));
+        entry = (void **)(((Gap::Core::igDirectory *)self)->get(i));
         ((igDirEntryView *)(entry))->PostProcess(self);
     }
     return g_resultSuccess;
@@ -1729,7 +1729,7 @@ int igIGBFile_ReadFile(igIGBFileView *self, const char *path) {
 
 void igIGBFile_EnsureConcrete(int *result, void *self) {
     if (((igIGBFileView *)self)->_concreteState == 0) {
-        igDirectory_MakeConcrete((igDirectoryView *)self);
+        ((Gap::Core::igDirectory *)self)->makeAllConcrete();
     }
     *result = g_resultSuccess.v;
 }
@@ -1781,7 +1781,7 @@ int igIGBFile_WriteMemoryRefs(igIGBFileView *o) {
     o->_memoryBytesCopied = 0;
     o->_bytesRemainingInChunk = o->_chunkSize;
     for (i = 0; i < o->_count; i++) {
-        ((igDirEntryView *)igDirectory_GetEntry((int *)o, i))->WriteMemory(o);
+        ((igDirEntryView *)((Gap::Core::igDirectory *)o)->get(i))->WriteMemory(o);
     }
     o->_temporaryMemoryPool->Free(o->_chunk);
     o->_chunk = 0;
@@ -1822,7 +1822,7 @@ void igIGBFile_ReadMemoryEntries(int *result, igIGBFileView *self) {
     self->_bytesRemainingInChunk = 0;
     n = self->_count;
     for (i = 0; i < n; i++) {
-        ((igDirEntryView *)igDirectory_GetEntry((int *)self, i))->ReadMemory(self);
+        ((igDirEntryView *)((Gap::Core::igDirectory *)self)->get(i))->ReadMemory(self);
     }
     *result = g_resultSuccess.v;
 }

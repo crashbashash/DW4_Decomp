@@ -474,8 +474,6 @@ int igRegistry_ParseEnumValue(char *text, int *value, igMetaEnum *metaEnum, char
     return 0;
 }
 
-
-
 static inline int enumValueText(void *o) { int a = *(int *)((char *)(*(int *)((char *)(o) + 12)) + 8); if (a == 0) { return (*(int *)&g_stringObjEmptyText); } return a; }
 
 int igRegistry_GetValueEnum(int registry, int section, const char *key, int metaEnum, int *out, int defaultValue, int create) {
@@ -899,7 +897,7 @@ igSmartPointer<igObject> igResource_GetDirectory(void *directory, const char *na
     if (strcmp(name, "igImageDirectory") == 0) {
         return igSmartPointer<igObject>((igObject *)igResource_GetImageDirectory((igResource *)directory), kRetainReference);
     }
-    return igSmartPointer<igObject>((igObject *)((Gap::Core::igObjectList *)(((igResource *)directory)->_directoryList))->search((Gap::Core::igStringMetaField *)g_igDirectory_nameField, name), kRetainReference);
+    return igSmartPointer<igObject>((igObject *)((Gap::Core::igObjectList *)(((igResource *)directory)->_directoryList))->search((Gap::Core::igStringMetaField *)Gap::Core::igDirectory::k_name, name), kRetainReference);
 }
 
 void igResource_AddDirectory(int *p, int directory)
@@ -959,7 +957,7 @@ igDirectory *igResource_GetImageDirectory(igResource *self) {
         int s2;
         igDirectory *s0;
         int old;
-        setImageDirectory(self, igSmartPointer<igDirectory>(((igDirectory *)igDirectory_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()))));
+        setImageDirectory(self, igSmartPointer<igDirectory>(((igDirectory *)Gap::Core::igDirectory::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
         s0 = (igDirectory *)self->_imageDirectory;
         if (0 == g_stringPool) {
             v = ((int)StringPool_Allocate(16));

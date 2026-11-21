@@ -3,8 +3,8 @@ namespace Core {
 
 void igExternalIndexedEntry::readPreRead(igIGBFile *igb)
 {
-    setRef((void *)igDirectory_GetObject((void *)((int *)((::igObjectList *)((::igDirectory *)igb)->_externalDirectoryList)->_data)[_directoryIndex], _entryIndex));
-    igDirectory_SetEntryRef((igDirectoryView *)igb, _index, _ref);
+    setRef((void *)((igDirectory *)(((int *)((::igObjectList *)((::igDirectory *)igb)->_externalDirectoryList)->_data)[_directoryIndex]))->getRef(_entryIndex));
+    ((igDirectory *)igb)->setRef(_index, (void *)_ref);
 }
 }
 }

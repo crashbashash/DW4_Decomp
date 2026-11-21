@@ -69,15 +69,6 @@ int igResource_GetVTable(void) {
     return t;
 }
 
-igSmartPointer<igObject> *igSmartPointer_igDirectoryList_Destruct(igSmartPointer<igObject> *self, short deleteFlag) {
-    if (self) {
-        igObject *object = self->p;
-        igObject::release(object);
-        if (deleteFlag > 0) operator delete(self);
-    }
-    return self;
-}
-
 igQueue **igSmartPointer_igQueue_Destruct(igQueue **self, short deleteFlag) {
     if (self) {
         igQueue *queue = *self;
@@ -92,7 +83,7 @@ void igResource_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igResource_Register);
 }
 
-static igMetaObjectCallback g_igResource_callbackList[] = { igDirectory_EnsureRegistered, igDirectoryList_EnsureRegistered, igQueue_EnsureRegistered, igThread_EnsureRegistered, igStringObjList_EnsureRegistered, Gap::Core::igIntList::arkRegister, igMemoryPool_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igResource_callbackList[] = { Gap::Core::igDirectory::arkRegister, Gap::Core::igDirectoryList::arkRegister, igQueue_EnsureRegistered, igThread_EnsureRegistered, igStringObjList_EnsureRegistered, Gap::Core::igIntList::arkRegister, igMemoryPool_EnsureRegistered, 0 };
 
 CallbackArray *igResource_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -209,9 +200,9 @@ void igResource_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igResource_ctorTable, 0x11);
     imageDirectoryField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    ((igObjectRefMetaField *)imageDirectoryField)->_metaObject = (int)igDirectory_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)imageDirectoryField)->_metaObject = (int)Gap::Core::igDirectory::getClassTypeLazy();
     directoryListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igObjectRefMetaField *)directoryListField)->_metaObject = (int)igDirectoryList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)directoryListField)->_metaObject = (int)Gap::Core::igDirectoryList::getClassTypeLazy();
     ((igRefMetaField *)directoryListField)->_construct = 1;
     ((igMetaField *)directoryListField)->_persistent = 0;
     ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)))->setDefault(0);

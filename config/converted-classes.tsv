@@ -146,6 +146,8 @@ igTimer	Core
 igMedia	Core
 __internalNonRefCountedObjectList	Core
 __internalObjectList	Core
+igDirectory	Core	igTObjectList<igDirEntry>
+igDirectoryList	Core	igTObjectList<igDirectory>
 igIndexArray	Gfx
 igPsx2IndexArray	Gfx
 igVertexArray	Gfx

@@ -487,7 +487,6 @@ extern "C" int *igSmartPointer_igMetaFieldList_Construct(int *p);
 extern "C" int *igSmartPointer_igFile_Construct(int *p);
 extern "C" CallbackArray *igIGBFile_Register(void);
 extern "C" void igIGBFile_GetMetaObjectFunction(void);
-extern "C" igMetaObject *igDirectory_GetPublishedMetaObject(void);
 extern "C" void igIGBFile_InitFields(void);
 extern "C" void igIGBFile_StaticInitCallback(void);
 extern "C" int igFolder_GetVTable(void);
@@ -521,14 +520,6 @@ extern "C" void igDriverDatabase_EnsureRegistered(void);
 extern "C" CallbackArray *igDriverDatabase_Register(void);
 extern "C" void igDriverDatabase_GetMetaObjectFunction(void);
 extern "C" void igDriverDatabase_InitFields(void);
-extern "C" int igDirectoryList_GetVTable(void);
-extern "C" CallbackArray *igDirectoryList_Register(void);
-extern "C" void igDirectoryList_GetMetaObjectFunction(void);
-extern "C" int igDirectory_GetVTable(void);
-extern "C" CallbackArray *igDirectory_Register(void);
-extern "C" void igDirectory_GetMetaObjectFunction(void);
-extern "C" void igDirectory_InitFields(void);
-extern "C" void igDirectory_StaticInitCallback(void);
 extern "C" int igDependencyOrderedList_GetVTable(void);
 extern "C" void igDependencyOrderedList_EnsureRegistered(void);
 extern "C" void igDependencyOrderedList_GetMetaObjectFunction(void);
@@ -781,18 +772,8 @@ extern "C" void igCallStackTracer_PreExit(void);
 extern "C" void igCallStackTracer_Exit(void);
 extern "C" int **igCharMetaField_Construct(int **arg0, int extra1);
 extern "C" void igDependencyOrderedList_TopologicalSort(igDependencyOrderedList *self);
-extern "C" void igDirectory_RegisterDependentMetaObjects(void);
 extern "C" void *igDirectory_GetEntryAlias(int *arg0, int arg1);
-extern "C" int igDirectory_GetObject(void *arg0, int arg1);
-extern "C" void * igDirectory_FindInfoByName(int *arg0, const char *arg1);
-extern "C" int igDirectory_GetInfo(void *arg0, int arg1);
-extern "C" int igDirectory_HasEntry(void *dir, unsigned key);
-extern "C" int igDirectory_GetRefByName(int arg0, int arg1);
-extern "C" int igDirectory_GetObjectByName(int arg0, int arg1);
-extern "C" void *igDirectory_GetEntryByName(int arg0, int arg1);
-extern "C" int igDirectory_GetInfoCount(void *arg0);
 struct igDirectoryView;
-extern "C" int igDirectory_AddLoadedRef(igDirectoryView *arg0);
 extern "C" void igDriverDatabase_ReleaseDefaults(int self);
 extern "C" int igDriverDatabase_GetCurrentProperty(void *arg0, int arg1);
 extern "C" void igDriverDatabase_ClearRawDatabase(int *p);
@@ -1305,7 +1286,6 @@ extern "C" igMetaObject *igFolder_GetMeta(void);
 extern "C" igMetaObject *igFile_GetMeta(void);
 extern "C" int igEventTracker_GetMeta(void);
 extern "C" int igDriverDatabase_GetMeta(void);
-extern "C" int igDirectory_GetMeta(void);
 extern "C" int igCallStackTracer_GetMeta(void);
 extern "C" igMetaObject *igCallStackTable_GetMeta(void);
 extern "C" int igMemoryDescriptorMetaField_GetMeta(void);
@@ -1336,7 +1316,6 @@ extern "C" igMetaObject *igObjectListList_GetMeta(void);
 extern "C" igMetaObject *igStringRefListList_GetMeta(void);
 extern "C" igMetaObject *igDependencyMetaField_GetMeta(void);
 extern "C" int igDependencyMetaField_GetDescriptor(void);
-extern "C" igMetaObject *igDirectoryList_GetMeta(void);
 extern "C" int igErrorHandler_GetMeta(void);
 extern "C" int igInfoList_GetMeta(void);
 extern "C" int igLibraryList_GetMeta(void);
@@ -1365,8 +1344,6 @@ extern "C" igMetaObject *igMemoryPoolInfoList_GetElementMeta(void);
 extern "C" int igInfoList_GetElementMeta(void);
 extern "C" int igPluginRepositoryList_GetElementMeta(void);
 extern "C" igMetaObject *igRegistryValueList_GetElementMeta(void);
-extern "C" igMetaObject *igDirectoryList_GetElementMeta(void);
-extern "C" igMetaObject *igDirectory_GetElementMeta(void);
 extern "C" igMetaObject *igStringObjList_GetElementMeta(void);
 extern "C" igMetaObject *igThreadList_GetElementMeta(void);
 extern "C" int beDataObjList_GetElementMeta(void);
@@ -1514,7 +1491,6 @@ extern "C" int g_igObjectListBase_vtable[4];
 extern "C" int g_igDataList_vtable[4];
 extern "C" int g_igDirectoryBase_vtable[4];
 extern "C" void *igDirectory_Construct(igIGBFile *arg0);
-extern "C" igMetaObject *g_igDirectory_metaObject;
 extern "C" int text_capacity[4];
 extern "C" int text_count[4];
 extern "C" igMetaObject *g_igIGBFile_metaObject;
@@ -1532,10 +1508,6 @@ extern "C" int g_igErrorHandler_vtable[4];
 extern "C" igMetaObject *g_igDriverDatabase_metaObject;
 extern "C" igMetaObject *igDriverDatabase_GetMetaObject(void);
 extern "C" int g_igDriverDatabase_vtable[4];
-extern "C" igMetaObject *g_igDirectoryList_metaObject;
-extern "C" igMetaObject *igDirectoryList_GetMetaObject(void);
-extern "C" int g_igDirectoryList_vtable[4];
-extern "C" igMetaObject *igDirectory_GetMetaObject(void);
 extern "C" igMetaObject *igDependencyOrderedList_GetMetaObject(void);
 extern "C" igMetaObject *g_igDependencyMetaField_metaObject;
 extern "C" igMetaObject *igDependencyMetaField_GetMetaObject(void);
@@ -1938,25 +1910,13 @@ static inline void objectListRemoveRetained(igTDataList<igObject *> *list, int i
     List_RemoveWordAt((igDataList *)list, index);
     list->_data[list->_count] = 0;
 }
-extern "C" void igDirectory_ReleaseDefaults(igDirectoryView *arg0);
-extern "C" int igDirectory_GetEntryByRef(igDirectoryView *arg0, unsigned key);
-extern "C" void igDirectory_SetEntryRef(igDirectoryView *a, int i, int x);
-extern "C" int igDirectory_ReplaceReference(igDirectoryView *self, const igSmartPointer<igVirtualObject> &field, const igSmartPointer<igVirtualObject> &value);
-extern "C" void igDirectory_RemoveInfo(igDirectoryView *h, igObject *object);
-extern "C" int igDirectory_FindObjectReferenceInInfos(igDirectoryView *arg0, int arg1, int arg2);
-extern "C" int igDirectory_AddObjectCallback(int arg0, igMetaFieldView *arg1, igDirectoryView *arg2);
+extern "C" int igDirectory_ReplaceReference(Gap::Core::igDirectory *self, const igSmartPointer<igVirtualObject> &field, const igSmartPointer<igVirtualObject> &value);
+extern "C" int igDirectory_AddObjectCallback(int arg0, igMetaFieldView *arg1, Gap::Core::igDirectory *arg2);
 /* An object list's insert: the list takes its own reference, then copies the pointer word in. */
 template <class T> static inline void insertObject(igDataList *list, int index, T *object) {
     RetainedWord<T> word(object);
     List_InsertWords(list, index, 1, &word);
 }
-extern "C" int igDirectory_InsertObject(igDirectoryView *self, igObjectDispatchView *obj, char *name, int resolveMethod);
-extern "C" int igDirectory_AddMemoryRef(igDirectoryView *arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, unsigned char arg7);
-extern "C" int igDirectory_AddRawRef(igDirectoryView *list, int key, int name, int val);
-extern "C" void igDirectory_MakeConcrete(igDirectoryView *arg0);
-extern "C" int igDirectory_ResolveExternalEntry(igDirectoryView *c, igExternalDirEntryView *o);
-extern "C" int igDirectory_UnrefLoaded(igDirectoryView *self);
-extern "C" void igDirectory_CreateLoadingSemaphore(igDirectoryView *directory);
 extern "C" void igDriverDatabase_InitDefaults(igDriverDatabase *database);
 extern "C" int igDriverDatabase_GetSubPropertyValue(igDriverDatabase *arg0, int arg1, int arg2);
 /* igVisualContext (an igPsx2VisualContext at run time): slot 25 is vfunc_27, which records the
@@ -2197,7 +2157,7 @@ class igIGBFileView : public igDirectoryView { public:
 };
 class igInfoView { public:
     virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20();
-    virtual int FindObjectReference(int directory, int object);
+    virtual int FindObjectReference(Gap::Core::igDirectory *directory, void *object);
     virtual int GetFieldValueByName(int name);
     virtual igResult ReadFromRegistry(igRegistry *ini, char *section);
     virtual igResult UserRegistryLoad(igRegistry *ini, int index);
@@ -2730,7 +2690,7 @@ extern "C" int igObject_WritePersistentFields(igObjectDispatchView *object, int 
  * the count of persistent fields written. */
 struct FieldRecordHead { int kind; int size; int fieldCount; };
 extern "C" int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igIGBFile *file, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap);
-extern "C" int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead *head, igDirectoryView *dir, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap);
+extern "C" int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead *head, Gap::Core::igDirectory *dir, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap);
 /* An igObjectList of igObjectDirEntry, or of such lists (an igIGBFile's _entryPool, one per type meta). */
 static inline igObjectDirEntry *objectDirEntryAt(const igObjectList *list, int index) { return ((igObjectDirEntry *const *)list->_data)[index]; }
 /* igObjectDirEntry: a directory entry holding one object (_ref) of meta-object _typeMeta; the IGB
@@ -2769,7 +2729,6 @@ extern "C" void igRegistry_ParseFile(igRegistry *self, igFileView *file, int ove
 extern "C" bool igRegistry_ReadLine(void *unused, igFileView *s, char *buf, int *lines);
 extern "C" igRegistryValue *igRegistry_FindValue(igRegistry *arg0, int arg1, const char *arg2, int arg3);
 extern "C" void igRegistry_ProcessInclude(igRegistry *self, igFileView *file, char *line, int lineNo, int overwrite);
-extern "C" igMetaField *g_igDirectory_nameField;
 extern "C" igDirectory *igResource_GetImageDirectory(igResource *self);
 /* igResource (reflected.h) with its asynchronous-loading fields: the queue the loader thread
  * serves and the thread. */

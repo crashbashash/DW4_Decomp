@@ -175,10 +175,6 @@ int igDriverDatabase_GetMeta(void) {
     return (int)g_igDriverDatabase_metaObject;
 }
 
-int igDirectory_GetMeta(void) {
-    return (int)g_igDirectory_metaObject;
-}
-
 int igCallStackTracer_GetMeta(void) {
     return (int)g_igCallStackTracer_metaObject;
 }
@@ -303,10 +299,6 @@ igMetaObject *igDependencyMetaField_GetMeta(void) {
 
 int igDependencyMetaField_GetDescriptor(void) {
     return (*(int *)&g_igDependencyMetaField_descriptor);
-}
-
-igMetaObject *igDirectoryList_GetMeta(void) {
-    return g_igDirectoryList_metaObject;
 }
 
 int igErrorHandler_GetMeta(void) {
@@ -446,14 +438,6 @@ int igPluginRepositoryList_GetElementMeta(void) {
 
 igMetaObject *igRegistryValueList_GetElementMeta(void) {
     return g_igRegistryValue_metaObject;
-}
-
-igMetaObject *igDirectoryList_GetElementMeta(void) {
-    return g_igDirectory_metaObject;
-}
-
-igMetaObject *igDirectory_GetElementMeta(void) {
-    return Gap::Core::igDirEntry::getClassMeta();
 }
 
 igMetaObject *igStringObjList_GetElementMeta(void) {

@@ -10,8 +10,9 @@ namespace Core {
 
 /* The kit's typed object list (alchemy-kit_202309 igCore/igTObjectList.h): igObjectList's services taking and
  * returning T, and the element type T's meta (the kit's getElementType, DW4's slot getElementMeta). It adds no
- * fields; its vtable is the compiler's and referenced by nothing, since a derived class's constructor stamps only
- * its own. */
+ * fields; its vtable is the compiler's, and a derived class's inlined constructor stamps only its own, so only an
+ * out-of-line constructor copy references it (igDirectory's, which stamps igTObjectList<igDirEntry>'s, retail's
+ * 0x532590). */
 template <class T> class igTObjectList : public igObjectList {
 public:
     inline T *const *getArray() const { return (T *const *)igObjectList::getArray(); }

@@ -167,13 +167,13 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
     igReport_ReadSettings();
     self->resource = (igResource *)igResource_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
     g_globalContext = (igResourceView *)self->resource;
-    igSmartPointer<igObject> directory((igObject *)igDirectory_Create((int)ownerOrSystemPool()));
+    igSmartPointer<igObject> directory((igObject *)Gap::Core::igDirectory::_instantiateFromPool(ownerOrSystemPool()));
     setName((igDirectory *)directory.p, (char *)"system");
     ((igResourceView *)self->resource)->addDirectory(directory);
-    igDirectory_AddLoadedRef((igDirectoryView *)directory.p);
+    ((Gap::Core::igDirectory *)directory.p)->loadRef();
     igSmartPointer<igObject> metaFieldInfo((igObject *)igMetaFieldInfo_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     ((Gap::Core::igNamedObject *)metaFieldInfo.p)->setName("metafield info");
-    igDirectory_AddInfo(directory.p, metaFieldInfo.p);
+    ((Gap::Core::igDirectory *)directory.p)->appendInfo((igInfo *)metaFieldInfo.p);
     igRegistry_GetValueBool(self->configRegistry, 2,"failOnDllVersionMismatch", &self->reportHeaderVersionMismatch, 1, 0);
     igRegistry_GetValueBool(self->configRegistry, 2,"warnOnDllDateMismatch", &self->warnOnDllDateMismatch, 1, 0);
     igRegistry_GetValueInt(self->configRegistry, 2,"resourceTempMemoryPoolSize", (int *)&self->resourceTempPoolSize, 0, 0);

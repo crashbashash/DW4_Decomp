@@ -60,7 +60,7 @@ void beFileListInfoManager_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beFileListInfoManager_Register);
 }
 
-static igMetaObjectCallback g_beFileListInfoManager_callbackList[] = { beSystem_EnsureRegistered, beMessenger_EnsureRegistered, igViewerSceneInfoManager_EnsureRegistered, igStringRefList_EnsureRegistered, igInfoList_EnsureRegistered, igDirectoryList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beFileListInfoManager_callbackList[] = { beSystem_EnsureRegistered, beMessenger_EnsureRegistered, igViewerSceneInfoManager_EnsureRegistered, igStringRefList_EnsureRegistered, igInfoList_EnsureRegistered, Gap::Core::igDirectoryList::arkRegister, 0 };
 
 CallbackArray *beFileListInfoManager_Register(void) {
     BecLibrary_MarkRegistered();
@@ -173,7 +173,7 @@ void beFileListInfoManager_InitFields(void) {
     ((igObjectRefMetaField *)infoList)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)infoList)->_construct = 1;
     dirList = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
-    ((igObjectRefMetaField *)dirList)->_metaObject = (int)igDirectoryList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)dirList)->_metaObject = (int)Gap::Core::igDirectoryList::getClassTypeLazy();
     ((igRefMetaField *)dirList)->_construct = 1;
     readInfoList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
     ((igObjectRefMetaField *)readInfoList)->_metaObject = (int)igInfoList_GetOrCreateMetaObject();

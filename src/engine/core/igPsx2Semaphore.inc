@@ -47,16 +47,3 @@ void **igSmartPointer_igCallStackTable_Destruct(void **pointer, short flags) {
     return pointer;
 }
 
-void **igSmartPointer_igSemaphore_Destruct(igObject **self, short flag) {
-    igObject *p;
-    if (self != 0) {
-        p = *self;
-        if (p != 0) {
-            ((igRefCountWord *)&p->_refCount)->word = ((igRefCountWord *)&p->_refCount)->word - 1;
-            if (((igRefCountWord *)&p->_refCount)->bits.count == 0) igObject_Destroy(p);
-        }
-        if (flag > 0) operator delete(self);
-    }
-    return (void **)self;
-}
-

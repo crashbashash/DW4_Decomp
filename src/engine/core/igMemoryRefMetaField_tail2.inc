@@ -46,20 +46,20 @@ int igMemoryRefMetaField::addToDirectory(igObject *obj, igDirectory *dir)
     }
     if (((igMetaField *)_memType)->isOfType(igMemoryRefMetaField::getClassMeta()) != 0) {
         n = Memory_GetBufferSize((void *)p) >> 2;
-        ref = igDirectory_AddMemoryRef((igDirectoryView *)dir, (int)this, p, _memType, _alignmentType, 0, 0, 1);
+        ref = ((igDirectory *)dir)->addMemoryRef((igMemoryRefMetaField *)((igMemoryRefMetaField *)this), (void *)p, (igMetaField *)(igMetaField *)_memType, _alignmentType, 0, 0, 1);
         for (i = 0; i < (int)n; i++) {
             int e = *(int *)(p + i * 4);
             if (e != 0) {
-                igDirectory_AddMemoryRef((igDirectoryView *)dir, (int)this, e, 0, _alignmentType, 0, 0, 1);
+                ((igDirectory *)dir)->addMemoryRef((igMemoryRefMetaField *)((igMemoryRefMetaField *)this), (void *)e, 0, _alignmentType, 0, 0, 1);
             }
         }
         return ref;
     }
     if (((igMetaField *)_memType)->isOfType(igObjectRefMetaField::getClassMeta()) != 0) {
-        ref = igDirectory_AddMemoryRef((igDirectoryView *)dir, (int)this, p, _memType, _alignmentType, 0, 0, _refCounted);
+        ref = ((igDirectory *)dir)->addMemoryRef((igMemoryRefMetaField *)((igMemoryRefMetaField *)this), (void *)p, (igMetaField *)(igMetaField *)_memType, _alignmentType, 0, 0, _refCounted);
         return ref;
     }
-    return igDirectory_AddMemoryRef((igDirectoryView *)dir, (int)this, p, _memType, _alignmentType, 0, 0, 1);
+    return ((igDirectory *)dir)->addMemoryRef((igMemoryRefMetaField *)((igMemoryRefMetaField *)this), (void *)p, (igMetaField *)(igMetaField *)_memType, _alignmentType, 0, 0, 1);
 }
 
 bool igMemoryRefMetaField::isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const
@@ -114,7 +114,7 @@ int igMemoryRefMetaField::readRawFieldMemory(void *fieldMem, const void *srcMem,
         if (endianSwap) {
             igIntMetaField::getMetaField()->endianSwapMemory(&index.w0, 1);
         }
-        entry = (igMemoryDirEntry *)igDirectory_GetEntry((int *)dir, index.w0);
+        entry = (igMemoryDirEntry *)((igDirectory *)dir)->get(index.w0);
         if (entry != 0) {
             *out = entry->_ref;
             if (_memType == 0 && this != _MetaField) {

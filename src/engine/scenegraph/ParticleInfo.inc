@@ -60,8 +60,8 @@ void igSceneInfo_CollectCameras(igSceneInfo *info) {
 
 void igSceneInfo_ComputeAnimationRange(igSceneInfo *info) {
     ChildOwner *self = (ChildOwner *)info;
-    igSmartPointer<ChildObject> created((ChildObject *)igDirectory_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
-    igDirectory_AddObjectRecursive((int)(created.get()), self->f20, 0, 0);
+    igSmartPointer<ChildObject> created((ChildObject *)Gap::Core::igDirectory::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
+    ((Gap::Core::igDirectory *)((int)(created.get())))->addObject((Gap::Core::igObject *)(igObject *)self->f20, 0, 0);
     FUN_001d6790((OO_1d6790 *)self, (AA *)(created.get()));
 }
 
@@ -79,7 +79,7 @@ void FUN_001d6790(OO_1d6790 *arg0, AA *arg1) {
     temp_s3 = arg1->n;
     var_s2 = 0;
     while (var_s2 < temp_s3) {
-        temp_v0 = (EE_1d6790 *)igDirectory_GetEntry((int *)arg1, var_s2);
+        temp_v0 = (EE_1d6790 *)((Gap::Core::igDirectory *)arg1)->get(var_s2);
         if (0 != ((Gap::Core::igObject *)temp_v0)->isOfType(Gap::Core::igObjectDirEntry::getClassMeta())) {
             temp_s6 = temp_v0->f24;
             if (((Gap::Core::igObject *)temp_s6)->isOfType(g_igTransformSource_metaObject) != 0) {

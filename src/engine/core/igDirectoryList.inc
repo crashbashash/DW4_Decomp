@@ -1,52 +1,52 @@
-igMetaObject *g_igDirectoryList_metaObject;
+namespace Gap {
+namespace Core {
 
-igMetaObject *igDirectoryList_GetOrCreateMetaObject(void) {
-    if (g_igDirectoryList_metaObject == 0) {
-        g_igDirectoryList_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igDirectoryList_metaObject;
-}
+igMetaObject *igDirectoryList::_Meta;
 
-igMetaObject *igDirectoryList_GetMetaObject(void)
+igMetaObject *igDirectoryList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igDirectoryList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igDirectoryList_EnsureRegistered();
-    return g_igDirectoryList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igDirectoryList_GetVTable(void) {
-    igDirectoryList list;
-    igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&g_igDirectoryList_vtable[0];
-    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
-}
-
-void igDirectoryList_EnsureRegistered(void)
+igMetaObject *igDirectoryList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igDirectoryList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igDirectoryList_callbackList[] = { igDirectory_EnsureRegistered, 0 };
+void *igDirectoryList::retrieveVTablePointer()
+{
+    igDirectoryList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igDirectoryList_Register(void) {
+void igDirectoryList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igDirectoryList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igDirectory::arkRegister, 0 };
+
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igDirectoryList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igDirectoryList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igDirectoryList",
-        0x14,
-        igDirectoryList_GetVTable,
+        sizeof(igDirectoryList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
         0,
-        g_igDirectoryList_callbackList
+        regFunctions
     );
 }
-
-void igDirectoryList_GetMetaObjectFunction(void) {
-    igDirectoryList_GetMetaObject();
+}
 }
 

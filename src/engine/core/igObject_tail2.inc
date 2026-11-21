@@ -490,7 +490,7 @@ int igObject_WritePersistentFields(igObjectDispatchView *object, int *buffer, ig
     for (; i < count; i++) {
         igMetaField *field = (igMetaField *)igMetaObject_GetFieldAt(writeMeta, i);
         if (field->_persistent == 1 && field->_isRunTime == 0) {
-            buffer = (int *)((char *)buffer + ((Gap::Core::igMetaField *)field)->writeToMemory((Gap::Core::igObject *)object, buffer, (igDirectory *)file, endianSwap));
+            buffer = (int *)((char *)buffer + ((Gap::Core::igMetaField *)field)->writeToMemory((Gap::Core::igObject *)object, buffer, (Gap::Core::igDirectory *)file, endianSwap));
         }
     }
     return ((Gap::Core::igObject *)object)->getIoSize();
@@ -530,7 +530,7 @@ int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igI
                 if (endianSwap) Gap::Core::igShortMetaField::getMetaField()->endianSwapMemory(data, 2);
             } else {
                 readFields += 1;
-                data += ((Gap::Core::igMetaField *)field)->readFromMemoryVersion3((Gap::Core::igObject *)object, data, (igDirectory *)file, endianSwap);
+                data += ((Gap::Core::igMetaField *)field)->readFromMemoryVersion3((Gap::Core::igObject *)object, data, (Gap::Core::igDirectory *)file, endianSwap);
             }
         }
     }
@@ -542,7 +542,7 @@ int igObject_ReadFields(igObjectDispatchView *object, FieldRecordHead *head, igI
     }
 }
 
-int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead *head, igDirectoryView *dir, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap) {
+int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead *head, Gap::Core::igDirectory *dir, igTDataList<igMetaObject *> *metaObjectList, bool endianSwap) {
     igMetaObject *meta;
     igTDataList<igTDataList<short> *> *lists;
     igTDataList<short> *offsets;
@@ -559,7 +559,7 @@ int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead 
     if (meta->_persistent == 0) {
         return 0;
     }
-    lists = dir->_metaFieldPerObjectIndices;
+    lists = (igTDataList<igTDataList<short> *> *)dir->_metaFieldPerObjectIndices.p;
     if (endianSwap) {
         Gap::Core::igIntMetaField::getMetaField()->endianSwapMemory(head, 2);
     }
@@ -583,7 +583,7 @@ int igObject_ReadPersistentFields(igObjectDispatchView *object, FieldRecordHead 
             }
         } else {
             done++;
-            data += ((Gap::Core::igMetaField *)field)->readFromMemory((Gap::Core::igObject *)object, data, (igDirectory *)dir, endianSwap);
+            data += ((Gap::Core::igMetaField *)field)->readFromMemory((Gap::Core::igObject *)object, data, dir, endianSwap);
             if (done == offsets->_count) {
                 limit = count;
             } else {

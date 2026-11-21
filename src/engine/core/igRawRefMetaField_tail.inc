@@ -11,7 +11,7 @@ void igRawRefMetaField::print(const igObject *src, unsigned int deep, const char
 int igRawRefMetaField::addToDirectory(igObject *obj, igDirectory *dir)
 {
     if (_persistent == 1) {
-        return igDirectory_AddRawRef((igDirectoryView *)dir, *(int *)((char *)obj + _offset), 0, 0);
+        return ((igDirectory *)dir)->addRawRef((void *)(*(int *)((char *)obj + _offset)), 0, 0);
     }
     return -1;
 }

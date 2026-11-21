@@ -148,7 +148,7 @@ void igObjectDirEntry::readReadVersion3(igIGBFile *igb) {
 void igObjectDirEntry::readRead(igIGBFile *igb) {
     igIGBFileView *file = (igIGBFileView *)igb;
     igObjectDispatchView *object = (igObjectDispatchView *)_ref;
-    int read = igObject_ReadPersistentFields(object, (FieldRecordHead *)file->ObjectCursor(), (igDirectoryView *)file,
+    int read = igObject_ReadPersistentFields(object, (FieldRecordHead *)file->ObjectCursor(), (Gap::Core::igDirectory *)file,
                             (::igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
     int cursor = file->ObjectCursor();
     file->SetObjectCursor(cursor + read);
@@ -179,13 +179,13 @@ void igObjectDirEntry::readSetup(igIGBFile *igb) {
         obj = (igObject *)igMetaObject_CreateInstanceWithPool(_typeMeta, (igMemoryPoolView *)pool);
         if (obj == 0) {
             file->_hasCriticalFailure = 1;
-            igDirectory_SetEntryRef((igDirectoryView *)file, _index, (int)0);
+            ((igDirectory *)file)->setRef(_index, (void *)(0));
             return;
         }
-        igDirectory_SetEntryRef((igDirectoryView *)file, _index, (int)obj);
+        ((igDirectory *)file)->setRef(_index, (void *)obj);
         obj->release();
     } else {
-        igDirectory_SetEntryRef((igDirectoryView *)file, _index, (int)0);
+        ((igDirectory *)file)->setRef(_index, (void *)(0));
     }
 }
 

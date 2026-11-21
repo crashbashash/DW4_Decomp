@@ -336,10 +336,26 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    through a placement new MWCC tests the block twice. igen's override of an inherited field finds its index with
    `((__internalNonRefCountedObjectList *)metaObject->_metaFields)->find(metaField)`, and a metafield's
    descriptor registers with `getMetaFieldTypes()->append(metaField)`. Of the 154 classes the core
-   unit registers, 69 are converted (igContext with them); the other kit-declared ones (the remaining typed lists, the memory pools,
-   files and media, igDirectory, igRegistry, the threads and timers, …) follow, and those without a kit
+   unit registers, 71 are converted (igContext with them); the other kit-declared ones (the remaining typed lists, the memory pools,
+   files and media, igRegistry, the threads and timers, …) follow, and those without a kit
    header (the `igPsx2*` platform classes, igDependencyMetaField and igMemoryDescriptorMetaField) take their
-   form from retail alone;
+   form from retail alone. `igDirectory` and `igDirectoryList` (alchemy-kit_202309 igCore/igDirectory.h) derive
+   from the kit's `igTObjectList<igDirEntry>`/`igTObjectList<igDirectory>`: the template instance's vtable is
+   retail's 0x532590, which igIGBFile's out-of-line copy of the directory constructor (`igDirectory_Construct`,
+   still C while igIGBFile is flat, as is the destructor copy `igDirectory_Destroy`) stamps between igObjectList's
+   and igDirectory's. `_name` is the kit's igStringRef (so `setDirectoryName` is the kit's `_name = newName`), the
+   list, directory, pointer-list, short-list-list and semaphore fields smart pointers, and the members are the
+   kit's names: `addObject`, `addObjectRef`, `addMemoryRef`, `addRawRef`, `findEntryByEntryName`,
+   `findRefByEntryName`, `findObjectRefByEntryName`, `binaryFind`, `getRef`, `setRef`, `get` (with the kit's
+   inline `getNonShared`), `makeAllConcrete`, `resolveExternal` (slot 23), `appendInfo`, `removeInfo` ×2,
+   `getInfo` ×2, `getInfoCount`, `loadRef`, `loadRelease`, `createLoadingSemaphore`, `attemptResolve`, `contains`,
+   `fastFindRefEntry`, `releaseDefaults` and `userRegister`. igInfo, igInfoList, igSemaphore and igResource are
+   still flat, so their uses go through `igInfoView`, `igSemaphoreView` and flat list casts; the out-of-line
+   smart-pointer destructors of the semaphore, directory list and short-list list and the two template
+   `getElementMeta` copies are now the compiler's, their C names bound by the compiler-name map.
+   `igDirectory_ReplaceReference` (the kit's `replaceObjectInstance`, whose by-value smart pointers DW4 passes by
+   reference) and the traversal callback `igDirectory_AddObjectCallback` stay free over the Gap class;
+   `igDirectoryView` remains only as igIGBFileView's base and in the external-info helpers;
 5. attrs, then gfx, then scenegraph, then gui/insight/viewer. Attrs so far: `Gap::Attrs::igAttr` (abstract;
    DW4's slots 21-29 read off retail's concrete vtables: `apply(igContext *)`, `apply(igVisualContext *)`,
    `setUnitID`, `synchronizeDefault` ×2, `reset`, `setup` ×2, `getUnitCount`, all kit inlines but `setUnitID`; no

@@ -77,6 +77,13 @@ igExternalIndexedEntry	_objectType	igSmartPointer<igMetaObject>
 igExternalInfoEntry	_key	igStringRef
 igExternalInfoEntry	_infoName	igStringRef
 __internalNonRefCountedObjectList	_data	igObject **
+igDirectory	_name	igStringRef
+igDirectory	_externalDirectoryList	igSmartPointer<igDirectoryList>
+igDirectory	_infoList	igSmartPointer< ::igInfoList>
+igDirectory	_uniqueEntryList	igSmartPointer<igDirectory>
+igDirectory	_refList	igSmartPointer<igPointerList>
+igDirectory	_metaFieldPerObjectIndices	igSmartPointer< ::igShortListList>
+igDirectory	_loadingSemaphore	igSmartPointer< ::igSemaphore>
 igIndexArray	_memPool	igSmartPointer<igMemoryPool>
 igIndexArray	_indexData	unsigned char *
 igVertexArray	_vdata	void **

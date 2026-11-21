@@ -124,15 +124,6 @@ int igIGBFile_GetVTable(void) {
     return vtable;
 }
 
-igSmartPointer<igObject> *igSmartPointer_igShortListList_Destruct(igSmartPointer<igObject> *self,int delete_storage) {
-    if(self) {
-        igObject *object=self->p;
-        igObject::release(object);
-        if((short)delete_storage>0) operator delete(self);
-    }
-    return self;
-}
-
 igDirectory *igDirectory_Destroy(igDirectory *p, short n) {
     if (p) {
         p->_vtable = (int)&g_igDirectory_vtable[0];
@@ -195,6 +186,7 @@ void *igDirectory_Construct(igIGBFile *self) {
     return self;
 }
 
+
 void igIGBFile_EnsureRegistered(void)
 {
     igMetaObject_RunStaticInit(igIGBFile_Register);
@@ -207,8 +199,8 @@ CallbackArray *igIGBFile_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igIGBFile_metaObject,
-        igDirectory_Register,
-        igDirectory_GetPublishedMetaObject,
+        Gap::Core::igDirectory::arkRegisterInternal,
+        Gap::Core::igDirectory::getClassMeta,
         igIGBFile_GetMetaObjectFunction,
         "igIGBFile",
         sizeof(igIGBFile),
@@ -223,35 +215,32 @@ void igIGBFile_GetMetaObjectFunction(void) {
     igIGBFile_GetMetaObject();
 }
 
-igMetaObject *g_igDirectory_metaObject;
-igMetaField *g_igDirectory_nameField;
-igMetaField *g_igDirectory_externalDirectoryListMetaField;
-igMetaField *g_igDirectory_infoListMetaField;
-igMetaField *g_igDirectory_managingResourceMetaField;
-igMetaField *g_igDirectory_loadPendingStateMetaField;
-igMetaField *g_igDirectory_validStateMetaField;
-igMetaField *g_igDirectory_compatibleStateMetaField;
-igMetaField *g_igDirectory_loadedRefCountMetaField;
-igMetaField *g_igDirectory_metaFieldPerObjectIndicesMetaField;
-igMetaField *g_igDirectory_concreteStateMetaField;
-igMetaField *g_igDirectory_sharingStateMetaField;
-igMetaField *g_igDirectory_trackUniqueEntriesMetaField;
-igMetaField *g_igDirectory_uniqueEntryListMetaField;
-igMetaField *g_igDirectory_refListMetaField;
-igMetaField *g_igDirectory_autoWriteFilePreProcessStateMetaField;
-igMetaField *g_igDirectory_useMemoryPoolAssignmentsStateMetaField;
-igMetaField *g_igDirectory_forceWriteMemoryPoolInfoFromMetaStateMetaField;
-igMetaField *g_igDirectory_loadingSemaphoreMetaField;
 namespace Gap {
 namespace Core {
+
+igMetaObject *igDirectory::_Meta;
+igMetaField *igDirectory::k_name;
+igMetaField *igDirectory::k_externalDirectoryList;
+igMetaField *igDirectory::k_infoList;
+igMetaField *igDirectory::k_managingResource;
+igMetaField *igDirectory::k_loadPendingState;
+igMetaField *igDirectory::k_validState;
+igMetaField *igDirectory::k_compatibleState;
+igMetaField *igDirectory::k_loadedRefCount;
+igMetaField *igDirectory::k_metaFieldPerObjectIndices;
+igMetaField *igDirectory::k_concreteState;
+igMetaField *igDirectory::k_sharingState;
+igMetaField *igDirectory::k_trackUniqueEntries;
+igMetaField *igDirectory::k_uniqueEntryList;
+igMetaField *igDirectory::k_refList;
+igMetaField *igDirectory::k_autoWriteFilePreProcessState;
+igMetaField *igDirectory::k_useMemoryPoolAssignmentsState;
+igMetaField *igDirectory::k_forceWriteMemoryPoolInfoFromMetaState;
+igMetaField *igDirectory::k_loadingSemaphore;
 
 igMetaEnum *igDirEntry::RefType_Meta;
 igMetaEnum *igDirEntry::ResolveMethod_Meta;
 }
-}
-
-igMetaObject *igDirectory_GetPublishedMetaObject(void) {
-    return g_igDirectory_metaObject;
 }
 
 static FieldFactory g_igIGBFile_ctorTable[] = {

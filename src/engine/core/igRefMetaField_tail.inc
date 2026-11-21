@@ -30,7 +30,7 @@ int igRefMetaField::readRawFieldMemory(void *fieldMem, const void *srcMem, igDir
         if (endianSwap) {
             igIntMetaField::getMetaField()->endianSwapMemory(&index, 1);
         }
-        entry = (igDirEntry *)igDirectory_GetEntry((int *)dir, index);
+        entry = (igDirEntry *)((igDirectory *)dir)->get(index);
         if (entry != 0) {
             *object = entry->_ref;
         } else {
@@ -56,7 +56,7 @@ int igRefMetaField::writeRawFieldMemory(const void *fieldMem, void *dstMem, igDi
     int *index = (int *)dstMem;
     igDirEntryView *entry;
     if (dir != 0 && *(const int *)fieldMem != 0) {
-        entry = (igDirEntryView *)igDirectory_GetEntryByRef((igDirectoryView *)dir, *(const int *)fieldMem);
+        entry = (igDirEntryView *)dir->fastFindRefEntry(*(void *const *)fieldMem);
         if (*(const int *)fieldMem != 0 && entry == 0) {
             if (_parentMetaObject != 0) {
                 if (!g_igMemoryRefMetaField_unresolvedFieldRefWarned) {
@@ -132,7 +132,7 @@ block12:
         }
         w = buf + strlen(buf);
         if (dir != 0) {
-            igDirEntryView *r = (igDirEntryView *)igDirectory_GetEntryByRef((igDirectoryView *)dir, (unsigned)(*(const int *)mem));
+            igDirEntryView *r = (igDirEntryView *)dir->fastFindRefEntry(*(void *const *)mem);
             if (r != 0) {
                 sprintf(w, "Reference[ %d ]", r->_index);
             } else {
@@ -162,7 +162,7 @@ int igRefMetaField::convertStringToMemory(const char *val, void *mem, int num, i
             s = igRefMetaField_SkipPastChar((char *)s, '[');
             if (sscanf(s, (const char *)&percent_d_7[0], &idx) == 0) idx = -1;
             if (idx >= 0 && idx < dir->_count) {
-                e = ((igDirEntry *)igDirectory_GetEntry((int *)dir, idx));
+                e = ((igDirEntry *)((igDirectory *)dir)->get(idx));
                 if (e != 0) o[i] = e->_ref;
                 else o[i] = 0;
             } else o[i] = 0;

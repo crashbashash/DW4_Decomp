@@ -94,7 +94,7 @@ bool igAnimationDatabase_FindObjectReference(AnimDbRec *db, int file, AnimDbObje
     }
     igSmartPointer<AnimDbObject> held(obj, kRetainReference);
     igSmartPointer<AnimDbObject> skel(castSkeleton(held.p), kRetainReference);
-    if (skel.p != 0 && igDirectory_FindSortedInsertIndex((igDirectoryView *)db->_directory, (igMetaField *)DAT_00586730, (unsigned int)obj) < db->_directory->_count) {
+    if (skel.p != 0 && ((Gap::Core::igDirectory *)db->_directory)->binaryFind((Gap::Core::igRefMetaField *)DAT_00586730, obj) < db->_directory->_count) {
         int i;
         int n;
         if (DAT_00562568 == 0) {

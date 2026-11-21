@@ -29,9 +29,9 @@ void igMemoryDirEntry::readSetup(igIGBFile *file) {
         }
     }
     if (align < 5) {
-        igDirectory_SetEntryRef((igDirectoryView *)file, _index, (int)pool->Allocate(_memSize));
+        ((igDirectory *)file)->setRef(_index, (void *)pool->Allocate(_memSize));
     } else {
-        igDirectory_SetEntryRef((igDirectoryView *)file, _index, (int)pool->AllocateAligned(_memSize, align & 0xFFFF));
+        ((igDirectory *)file)->setRef(_index, (void *)pool->AllocateAligned(_memSize, align & 0xFFFF));
     }
 }
 

@@ -168,10 +168,36 @@ class Memberize(unittest.TestCase):
         self.assertIn("Widget\tvoid attach(struct Ctx *ctx);\n", members)
         self.assertEqual(members.count("getCount"), 1)
 
-    def test_a_receiver_assigned_is_refused(self):
+    def test_a_receiver_reused_as_a_local(self):
+        self.append("src/game/Widget.inc",
+                    "int Widget_Next(Widget *self, Widget *other) {\n    int n = self->_count;\n"
+                    "    if (n != 0) {\n        self = other;\n        n += self->_count;\n    }\n    return n;\n}\n"
+                    "int Widget_Last(Widget *self, Widget *other) {\n    int n = self->_count;\n"
+                    "    if (n != 0) {\n        self = other;\n    }\n    return self->_count + n;\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000010 Widget_Next\n00100110 000010 Widget_Last\n")
+        write(self.table, TABLE + "Widget_Next\tint Widget::next(Widget *other)\n"
+              "Widget_Last\tint Widget::last(Widget *other)\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        widget = self.read("src/game/Widget.inc")
+        self.assertIn("int Widget::next(Widget *other) {\n    int n = _count;\n    if (n != 0) {\n"
+                      "        Widget *self = other;\n        n += self->_count;\n    }\n    return n;\n}", widget)
+        self.assertIn("int Widget::last(Widget *other) {\n    Widget *self;\n    int n = _count;\n    if (n != 0) {\n"
+                      "        self = other;\n    }\n    return self->_count + n;\n}", widget)
+
+    def test_a_receiver_assigned_in_a_loop_that_read_it_is_refused(self):
+        self.append("src/game/Widget.inc",
+                    "int Widget_Walk(Widget *self, Widget *other) {\n    int n = 0;\n"
+                    "    while (n < 4) {\n        n += self->_count;\n        self = other;\n    }\n    return n;\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000010 Widget_Walk\n")
+        write(self.table, TABLE + "Widget_Walk\tint Widget::walk(Widget *other)\n")
+        before = self.read("src/game/Widget.inc")
+        self.assertEqual(self.run_tool("--apply"), 2)
+        self.assertEqual(before, self.read("src/game/Widget.inc"))
+
+    def test_a_receiver_assigned_in_an_expression_is_refused(self):
         path = os.path.join(self.root, "src", "game", "Widget.inc")
         write(path, self.read("src/game/Widget.inc")
-              + "int Widget_Next(Widget *self) {\n    self = 0;\n    return 0;\n}\n")
+              + "int Widget_Next(Widget *self) {\n    return (self = 0) != 0;\n}\n")
         write(self.table, TABLE + "Widget_Next\tint Widget::next()\n")
         before = self.read("src/game/Widget.inc")
         self.assertEqual(self.run_tool("--apply"), 2)
@@ -429,7 +455,9 @@ class Memberize(unittest.TestCase):
                     "    Widget_SetValue(w, Vec(1.0f).f);\n    Widget_SetValue(w, v);\n"
                     "    Widget_SetValue(w, a + 1);\n}\n"
                     "void Users_Pass(Widget *w, Vec *value, int *q) {\n    Widget_SetValue(w, *value);\n"
-                    "    Widget_SetValue(w, *(Vec *)q);\n    Widget_SetValue(w, *(value));\n}\n")
+                    "    Widget_SetValue(w, *(Vec *)q);\n    Widget_SetValue(w, *(value));\n}\n"
+                    "void Users_Local(Widget *w, Vec other, int n) {\n"
+                    "    Widget_SetValue(w, &other);\n    Widget_SetValue(w, &n);\n}\n")
         self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Widget_SetValue\n")
         write(self.table, TABLE + "Widget_SetValue\tWidget::setValue\n")
         self.assertEqual(self.run_tool("--apply"), 0)
@@ -439,6 +467,8 @@ class Memberize(unittest.TestCase):
                       "    w->setValue(*(const Vec *)(a + 1));\n", users)
         # an argument already written as the value is not dereferenced again
         self.assertIn("    w->setValue(*value);\n    w->setValue(*(Vec *)q);\n    w->setValue(*(value));\n", users)
+        # the address of a value declared as the referenced type is the value; another type's is dereferenced
+        self.assertIn("    w->setValue(other);\n    w->setValue(*(const Vec *)&n);\n", users)
 
     def test_a_static_whose_return_type_changed_keeps_its_uses_types(self):
         # the C form returned an int (and the member a pointer): an assignment of the result and a field table

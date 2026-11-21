@@ -24,7 +24,10 @@ For each conversion, across every source, header and `.inc` fragment of src/ and
     receiver declared as some other type `T` (a dispatch view), else `this->x`; a bare `self` becomes `this`
     (cast to `T *` where it was declared as `T`, to `::Class *` where it was the flat struct of a converted class,
     except returned). A converted class's body moving in from file scope keeps what its types meant: a bare
-    `Class` there was the flat struct and becomes `::Class`. A receiver the body assigns or takes the address of is
+    `Class` there was the flat struct and becomes `::Class`. A body that reuses its receiver's variable once done
+    with it (a statement `self = (T *)r.p;`) keeps it as a local of the receiver's type from there on, declared by
+    that assignment (`T *self = ...;`, or at the body's top when a later use is outside its block); a receiver
+    assigned inside an expression or a loop that read it before, incremented or having its address taken is
     refused. A C function whose parameters already equal the member's (an instance member whose receiver was
     unused) keeps its list. A member the class defines inline (its declaration has a body) loses the C
     definition instead. A class of config/converted-classes.tsv is `Gap::<Library>::Class` (the table may name it
@@ -93,7 +96,7 @@ It refuses the batch, before writing anything, when a C name has no definition (
 has), a file-scope `static` is named (it stays a free function), the member is not declared and the table gives
 no signature, the declaration and the C definition disagree in parameters (other than an integer the member
 takes as a pointer), an instance member is used as a value or called without a receiver, or the receiver is
-assigned or has its address taken.
+assigned where it cannot become a local (above) or has its address taken.
 
 Dry run by default (`--diff` shows the source changes); `--apply` writes. Then regenerate
 include/dw4/support/reflected.h (`python3 scripts/gen_type_headers.py`) when config/class-members.tsv changed,
@@ -769,7 +772,8 @@ class Planner:
     def ref_argument(self, fr, span, cls, const, ctx):
         """Edits giving an argument passed for a reference parameter `const cls &`, where the C form took a pointer
         to the value: a temporary's array member (`cls(...).vec`) is the temporary, a name declared as `cls` stays,
-        an argument already written as the value (`*p`, `*(cls *)p`) stays, and any other pointer (a float array,
+        an argument already written as the value (`*p`, `*(cls *)p`) stays, the address of a local or parameter declared
+        as `cls` (`&count` for an `int &`) is the name, and any other pointer (a float array,
         a cast to one, a stand-in struct's address) is dereferenced as a `cls` (`*(const cls *)v`), its own pointer
         cast dropped."""
         s, e = span
@@ -787,6 +791,12 @@ class Planner:
             return
         deref = re.match(r"\*\s*(?:\(\s*(?:const\s+)?[A-Za-z_][\w:]*(?:\s+const)?\s*\*\s*\)\s*)?", bare)
         if deref and _POSTFIX.match(_strip_parens(bare[deref.end():])):
+            return
+        amp = re.fullmatch(r"&\s*([A-Za-z_]\w*)", bare)
+        if amp and ctx is not None and re.search(
+                r"\b%s(?:\s+const)?\s+(?:[A-Za-z_]\w*\s*(?:=\s*[^,;()]*)?,\s*)*%s\s*[,;=)]"
+                % (re.escape(cls), re.escape(amp.group(1))), fr.text[ctx[1]:ctx[2]]):
+            fr.edits.append((s, e, amp.group(1)))       # the address of a value declared as `cls`: the value
             return
         cast = re.match(r"\(\s*(?:const\s+)?[A-Za-z_][\w:]*(?:\s+const)?\s*\*\s*\)\s*", expr)
         start = s + (cast.end() if cast else 0)
@@ -1386,11 +1396,14 @@ class Planner:
         member_names = set(members) | {c.name for c in self.convs if c.base == conv.base} | \
             self.declared_names.get(conv.base, set())
         cast = "this" if same else "((%s *)this)" % _pointee(rtype)
+        reused = self.reused_receiver(fr, conv, ctx, rtype, rname)
         for m in re.finditer(r"\b%s\b" % re.escape(rname), body):
             pos, after = brace + m.start(), brace + m.end()
             before = fr.clean[max(start, pos - 3):pos].rstrip()
             if before.endswith((".", "->", "::")):
                 continue
+            if reused is not None and pos >= reused:
+                continue                                 # the local that takes the receiver's name, as it was
             line = fr.text.count("\n", 0, pos) + 1
             arrow = _ARROW.match(fr.clean, after)
             address = fr.clean[max(start, pos - 1):pos] == "&" and fr.clean[max(start, pos - 2):pos] != "&&"
@@ -1415,6 +1428,64 @@ class Planner:
                 fr.edits.append((pos, after, "this"))
             else:
                 fr.edits.append((pos, after, "(::%s *)this" % conv.base if same else "(%s *)this" % _pointee(rtype)))
+
+    def reused_receiver(self, fr, conv, ctx, rtype, rname):
+        """Where a body that reuses its receiver's variable starts using it as a local, or None.
+
+        A C body may assign its receiver once it no longer needs it (`self = (T *)r.p;`), which `this` cannot
+        take. From that statement on, the name is a local of the receiver's declared type: the assignment
+        declares it (`T *self = (T *)r.p;`) when every later use is inside its block, else the body's first
+        line does; the uses before it are the receiver's. Refused (the caller's check): a first assignment
+        inside an expression (`f(self = x)`) or a compound one; here, a loop holding both the assignment and a
+        receiver use before it, whose next pass would read the local as the receiver."""
+        _name, start, end = ctx
+        brace = fr.head_end(start)
+        uses, first = [], None
+        for m in re.finditer(r"\b%s\b" % re.escape(rname), fr.clean[brace:end]):
+            pos, after = brace + m.start(), brace + m.end()
+            if fr.clean[max(start, pos - 3):pos].rstrip().endswith((".", "->", "::")):
+                continue
+            if first is None and re.compile(r"\s*=(?!=)").match(fr.clean, after) and \
+                    fr.clean[:pos].rstrip()[-1:] in (";", "{", "}"):
+                first = pos
+            uses.append(pos)
+        if first is None:
+            return None
+        for m in re.finditer(r"\b(for|while|do)\b", fr.clean[brace:first]):
+            loop, at = brace + m.start(), brace + m.end()
+            if m.group(1) != "do":
+                depth, at = 0, fr.clean.index("(", at)
+                while True:
+                    depth += {"(": 1, ")": -1}.get(fr.clean[at], 0)
+                    at += 1
+                    if depth == 0:
+                        break
+            while fr.clean[at].isspace():
+                at += 1
+            stop = units._match_brace(fr.clean, at) if fr.clean[at] == "{" else fr.clean.index(";", at) + 1
+            if loop <= first < stop and any(loop <= p < first for p in uses):
+                raise Refused("%s:%d: %s assigns its receiver `%s` in a loop that reads it as the receiver first: "
+                              "it cannot become `this`" % (fr.rel, fr.text.count("\n", 0, first) + 1, conv.cname,
+                                                           rname))
+        decl = rtype.strip()
+        if conv.cls.startswith("Gap::") and not self.gap_scope(fr, start, ctx) and self.converted:
+            names = "|".join(re.escape(n) for n in sorted(self.converted, key=len, reverse=True))
+            decl = re.sub(r"(?<!::)\b(%s)\b" % names, r"::\1", decl)
+        decl = decl if decl.endswith(("*", "&")) else decl + " "
+        depth, open_ = 0, brace
+        for k in range(first - 1, brace, -1):            # the block holding the assignment
+            if fr.clean[k] == "}":
+                depth += 1
+            elif fr.clean[k] == "{":
+                if depth == 0:
+                    open_ = k
+                    break
+                depth -= 1
+        if all(p < units._match_brace(fr.clean, open_) for p in uses if p > first):
+            fr.edits.append((first, first + len(rname), decl + rname))
+        else:
+            fr.edits.append((brace + 1, brace + 1, "\n    %s%s;" % (decl, rname)))
+        return first
 
 
 def _pointee(t):

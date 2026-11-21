@@ -85,6 +85,11 @@ conversion order are in [member conversion](engine/member-conversion.md).
   it. A parameter spelled `Gap::<Library>::Class *` in a C form compares equal to the member's bare `Class *`
   and is written bare in the class's scope. Rows a batch adds to `class-members.tsv` go after their class's
   last row.
+- **A reused receiver.** A C body that assigns its receiver once done with it (`self = (igRegistry *)r.p;`)
+  keeps the name as a local of the receiver's declared type from that statement on: the assignment declares it
+  when every later use is inside its block, else the body's first line does. An assignment inside an expression,
+  or inside a loop that read the receiver before it, is refused. An argument `&x` for a reference parameter
+  `T &`, where `x` is declared as `T`, is `x`.
 - **Rows.** `tools/whole_file_rows.py --unit-va <va> --cxx --write` regenerates a unit's row from its present
   row: the addresses, strips, static-initializer entry and data names it settled stay settled, the retail
   functions it left to link from retail (a partial file) stay so without `--partial`, a name it left out

@@ -1796,7 +1796,7 @@ igResult igEventTracker_WriteFile(igEventTrackerView *self, int fileName) {
     igObject::release(old);
     o->_dataMemoryPool = (igMemoryPoolView *)a;
     file.p->_useMemoryPoolAssignmentsState = 1;
-    igDirectory_AddObjectRecursive((int)file.p, (int)self, (int)g_igEventTracker_memoryDataName, 0);
+    ((Gap::Core::igDirectory *)((int)file.p))->addObject((Gap::Core::igObject *)((igObject *)self), (char const *)g_igEventTracker_memoryDataName, 0);
     r = file.p->WriteFile(fileName);
     }
     self->_flags = had ? (self->_flags | 2) : (self->_flags & ~2);

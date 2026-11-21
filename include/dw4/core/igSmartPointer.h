@@ -23,7 +23,7 @@ struct AdoptReference {};
 enum RetainReference { kRetainReference };
 
 /* The pointer word an object list copies in on insert, holding the reference the list takes. It is
- * a class member, not a plain pointer local: igDirectory_InsertObject and igIGBFile_ShareEntries store the word and load
+ * a class member, not a plain pointer local: Gap::Core::igDirectory::addObjectRef and igIGBFile_ShareEntries store the word and load
  * it back from its stack slot before the null test (`sw v0,104(sp); lw v1,104(sp); beqz v1`), which
  * MWCC emits for a member read after the constructor's store. A scalar local or parameter is tested
  * from the register and stored in the branch delay slot (712 bytes against retail's 716, and 720

@@ -14,7 +14,7 @@ void igExternalDirEntry::readSetup(igIGBFile *igb)
             g_igExternalDirEntry_loadFailureWarned = 1;
         }
     }
-    igDirectory_SetEntryRef((igDirectoryView *)igb, _index, _ref);
+    ((igDirectory *)igb)->setRef(_index, (void *)_ref);
 }
 
 void igExternalDirEntry::setDirectoryName(const char *dirName)
@@ -52,9 +52,9 @@ bool igExternalDirEntry::load(igResolveFunction *userFunction)
         stream.get()->ReadFile(buf);
         free((void *)buf);
     }
-    setRef((void *)igDirectory_GetRefByName((int)(stream.get()), (int)_entryName.p));
+    setRef((void *)((igDirectory *)((int)(stream.get())))->findRefByEntryName((char const *)_entryName.p));
     if (_ref == 0) {
-        setRef((void *)igDirectory_GetRefByName((int)(stream.get()), (int)"root"));
+        setRef((void *)((igDirectory *)((int)(stream.get())))->findRefByEntryName((char const *)("root")));
     }
     return _ref != 0;
 }
@@ -83,8 +83,8 @@ bool igExternalDirEntry::resolve(igResolveFunction *userFunction)
     if (directory.get() == 0) {
         pool = getMemoryPool();
         directory.release();
-        directory.p = (::igObject *)igDirectory_Create((int)pool);
-        igDirectory_SetName((igDirectoryView *)directory.get(), _directoryName.p);
+        directory.p = (::igObject *)Gap::Core::igDirectory::_instantiateFromPool(pool);
+        ((igDirectory *)(directory.get()))->setDirectoryName(_directoryName.p);
         igResource_AddDirectory((int *)resource, (int)directory.get());
     }
     ((igDirectoryDispatchView *)directory.get())->ResolveExternalEntry((igExternalDirEntryView *)this);

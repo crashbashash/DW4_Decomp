@@ -1369,8 +1369,8 @@ igImageMipMapList	IG_OBJECT_DEFINE(igImageMipMapList)
 igTextureList	IG_OBJECT_DEFINE(igTextureList)
 igContext	IG_ABSTRACT_OBJECT_DEFINE(igContext)
 igContext	protected: static igMetaField *k_pExtList;
-igContext	static igMetaField *k_iNumExts;
-igContext	static igMetaField *k_pExtInstances;
+igContext	protected: static igMetaField *k_iNumExts;
+igContext	protected: static igMetaField *k_pExtInstances;
 igContext	void generateExtList();
 igContext	const igMetaObject *getExtMeta(char *pExtName);
 igContext	igContextExt *findExtInstance(const igMetaObject *extMeta);
@@ -1556,6 +1556,56 @@ __internalObjectList	void setCount(int cnt);
 __internalObjectList	int append(igObject *obj);
 __internalObjectList	void insert(int index, igObject *obj);
 __internalObjectList	void set(int index, igObject *obj);
+igDirectory	IG_OBJECT_DEFINE(igDirectory)
+igDirectory	static igMetaField *k_name;
+igDirectory	static igMetaField *k_externalDirectoryList;
+igDirectory	static igMetaField *k_infoList;
+igDirectory	static igMetaField *k_managingResource;
+igDirectory	static igMetaField *k_loadPendingState;
+igDirectory	static igMetaField *k_validState;
+igDirectory	static igMetaField *k_compatibleState;
+igDirectory	static igMetaField *k_loadedRefCount;
+igDirectory	static igMetaField *k_metaFieldPerObjectIndices;
+igDirectory	static igMetaField *k_concreteState;
+igDirectory	static igMetaField *k_sharingState;
+igDirectory	static igMetaField *k_trackUniqueEntries;
+igDirectory	static igMetaField *k_uniqueEntryList;
+igDirectory	static igMetaField *k_refList;
+igDirectory	static igMetaField *k_autoWriteFilePreProcessState;
+igDirectory	static igMetaField *k_useMemoryPoolAssignmentsState;
+igDirectory	static igMetaField *k_forceWriteMemoryPoolInfoFromMetaState;
+igDirectory	static igMetaField *k_loadingSemaphore;
+igDirectory	int addObject(igObject *obj, const char *name, int resolveMethod);
+igDirectory	int addObjectRef(igObject *obj, const char *name, int resolveMethod);
+igDirectory	int addMemoryRef(igMemoryRefMetaField *containingMetaField, void *mem, igMetaField *memType, int alignmentIndex, const char *name, int resolveMethod, unsigned char doRefOnRead);
+igDirectory	int addRawRef(void *raw, const char *name, int resolveMethod);
+igDirectory	igDirEntry *findEntryByEntryName(const char *s) const;
+igDirectory	void *findRefByEntryName(const char *name) const;
+igDirectory	igObject *findObjectRefByEntryName(const char *name) const;
+igDirectory	inline igDirEntry *getNonShared(int index) const { return (igDirEntry *)igObjectList::get(index); }
+igDirectory	int binaryFind(const igRefMetaField *field, const void *key) const;
+igDirectory	void *getRef(int index) const;
+igDirectory	void setRef(int index, void *ref);
+igDirectory	igDirEntry *get(int index) const;
+igDirectory	void makeAllConcrete();
+igDirectory	void setDirectoryName(const char *newName);
+igDirectory	virtual bool resolveExternal(igExternalDirEntry *externalEntry);
+igDirectory	void appendInfo(igInfo *info);
+igDirectory	void removeInfo(igInfo *info);
+igDirectory	void removeInfo(const char *infoName);
+igDirectory	igInfo *getInfo(int index);
+igDirectory	igInfo *getInfo(const char *infoName);
+igDirectory	unsigned int getInfoCount() const;
+igDirectory	int loadRef();
+igDirectory	int loadRelease();
+igDirectory	void createLoadingSemaphore();
+igDirectory	bool attemptResolve(igDirectory *parentDir, void *ref);
+igDirectory	bool contains(void *ref);
+igDirectory	igDirEntry *fastFindRefEntry(void *ref) const;
+igDirectory	virtual void releaseDefaults();
+igDirectory	static void userRegister();
+igDirectory	private: static void arkRegisterUser();
+igDirectoryList	IG_OBJECT_DEFINE(igDirectoryList)
 igIndexArray	IG_ABSTRACT_OBJECT_DEFINE(igIndexArray)
 igIndexArray	static igMetaField *k_memPool;
 igIndexArray	protected: static igMetaField *k_indexData;

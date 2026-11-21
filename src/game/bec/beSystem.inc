@@ -92,7 +92,7 @@ void beSystem_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beSystem_Register);
 }
 
-static igMetaObjectCallback g_beSystem_callbackList[] = { igRandomNumber_EnsureRegistered, igStringRefList_EnsureRegistered, igDirectory_EnsureRegistered, igStringObj_EnsureRegistered, igInfoList_EnsureRegistered, igGroup_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beSystem_callbackList[] = { igRandomNumber_EnsureRegistered, igStringRefList_EnsureRegistered, Gap::Core::igDirectory::arkRegister, igStringObj_EnsureRegistered, igInfoList_EnsureRegistered, igGroup_EnsureRegistered, 0 };
 
 CallbackArray *beSystem_Register(void) {
     BecLibrary_MarkRegistered();
@@ -252,7 +252,7 @@ void beSystem_InitFields(void) {
     ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xA)))->setDefault(0);
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xB)))->setDefault(1);
     bootDirectory = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
-    ((igObjectRefMetaField *)bootDirectory)->_metaObject = (int)igDirectory_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)bootDirectory)->_metaObject = (int)Gap::Core::igDirectory::getClassTypeLazy();
     globalStrObj = (void *)(igMetaObject_GetFieldAt(meta, base + 0xD));
     ((igObjectRefMetaField *)globalStrObj)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
     ((igRefMetaField *)globalStrObj)->_construct = 1;

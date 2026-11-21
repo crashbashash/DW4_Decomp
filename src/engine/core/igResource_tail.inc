@@ -64,7 +64,7 @@ void *igResource_GetOrLoadDirectory(igResource *self, int path) {
     int v;
     o = (igIGBFile *)igResource_GetDirectory(self, (const char *)path).p;
     if (o != 0) {
-        igDirectory_AddLoadedRef((igDirectoryView *)o);
+        ((Gap::Core::igDirectory *)o)->loadRef();
         return o;
     }
     igSmartPointer<igIGBFile> file((igIGBFile *)igIGBFile_Create((int)RESOURCE_POOL(self, _temporaryMemoryPool)));
@@ -107,7 +107,7 @@ void *igResource_GetOrLoadDirectory(igResource *self, int path) {
     }
     o->_name = v;
     file.p->_managingResource = (int)self;
-    igDirectory_AddLoadedRef((igDirectoryView *)file.p);
+    ((Gap::Core::igDirectory *)file.p)->loadRef();
     igResource_AddDirectory((int *)self, (int)file.p);
     return igResource_ReadFileWithSearchPaths(self, (igIGBFileView *)file.p);
 }
@@ -125,7 +125,7 @@ igDirectory *igResource_LoadDirectory(igResource *self, const char *path) {
     igObject *t;
     r = (igObject *)igResource_GetDirectory(self, path).p;
     if (r != 0) {
-        igDirectory_AddLoadedRef((igDirectoryView *)r);
+        ((Gap::Core::igDirectory *)r)->loadRef();
         return (igDirectory *)r;
     }
     igSmartPointer<igIGBFile> file((igIGBFile *)igIGBFile_Create(self->_temporaryMemoryPool));
@@ -140,7 +140,7 @@ igDirectory *igResource_LoadDirectory(igResource *self, const char *path) {
     if (pool != 0) { ASSIGN_O(o, _objectMemoryPool, pool) }
     if (self->_asyncLoadState == 1) {
         file.p->_autoReadFilePostProcessState = self->_postProcessAsyncronousFilesState;
-        igDirectory_CreateLoadingSemaphore((igDirectoryView *)file.p);
+        ((Gap::Core::igDirectory *)file.p)->createLoadingSemaphore();
     }
     file.p->_validState = 0;
     file.p->_loadPendingState = 1;
@@ -160,12 +160,12 @@ igDirectory *igResource_LoadDirectory(igResource *self, const char *path) {
     }
     o->_name = v;
     file.p->_managingResource = (int)self;
-    igDirectory_AddLoadedRef((igDirectoryView *)file.p);
+    ((Gap::Core::igDirectory *)file.p)->loadRef();
     igResource_AddDirectory((int *)self, (int)file.p);
     if (self->_asyncLoadState == 0) {
         return (igDirectory *)igResource_ReadFileWithSearchPaths(self, (igIGBFileView *)file.p);
     }
-    igDirectory_AddLoadedRef((igDirectoryView *)file.p);
+    ((Gap::Core::igDirectory *)file.p)->loadRef();
     queued = ((igStandardQueueView *)self->_loadQueue)->Insert((int)file.p, 1);
     res = file.p;
     return (igDirectory *)res;
@@ -216,7 +216,7 @@ void igResource_UnloadDirectory(igResource *self, const char *name) {
     if (entry->_managingResource == 0) {
         entry->_managingResource = (int)self;
     }
-    int remaining = igDirectory_UnrefLoaded((igDirectoryView *)found.get());
+    int remaining = ((Gap::Core::igDirectory *)(found.get()))->loadRelease();
     if (current && remaining <= 0) {
         igObject::release((igObject *)self->_imageDirectory);
         self->_imageDirectory = 0;
@@ -280,10 +280,10 @@ int igDirectory_GetNthObjectOfType(igResource *resource, const char *name, const
         return 0;
     }
     found = 0;
-    for (i = 0; i < (unsigned int)igDirectory_GetInfoCount(directory.get()); i++) {
-        if (((Gap::Core::igObject *)(igDirectory_GetInfo(directory.get(), i)))->isOfType((igMetaObject *)meta.get()) != 0) {
+    for (i = 0; i < (unsigned int)((Gap::Core::igDirectory *)(directory.get()))->getInfoCount(); i++) {
+        if (((Gap::Core::igObject *)(((Gap::Core::igDirectory *)(directory.get()))->getInfo(i)))->isOfType((igMetaObject *)meta.get()) != 0) {
             if (found++ == wanted) {
-                return igDirectory_GetInfo(directory.get(), i);
+                return (int)((Gap::Core::igDirectory *)(directory.get()))->getInfo(i);
             }
         }
     }
@@ -312,7 +312,7 @@ void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromNa
         if (fromMeta != 0) {
             count = directory->_count;
             for (i = 0; i < count; i++) {
-                entry = AsObjectDirEntry(igDirectory_GetEntry((int *)directory, i));
+                entry = AsObjectDirEntry(((Gap::Core::igDirectory *)directory)->get(i));
                 if (entry != 0 && ((Gap::Core::igObject *)entry->_ref)->isOfType(fromMeta) != 0) {
                     if (toMeta == 0) return;
                     igSmartPointer<igObject> source((igObject *)entry->_ref, kRetainReference);
@@ -335,9 +335,9 @@ void igDirectory_ConvertObjectsOfType(igDirectory *directory, const char *fromNa
                             ((Gap::Core::igMetaField *)((int)from))->copyShallow((Gap::Core::igObject *)((int)((char *)target.p + to->_offset - from->_offset)), (Gap::Core::igObject *)((int)source.p));
                         }
                     }
-                    igDirectory_ReplaceReference((igDirectoryView *)directory, igSmartPointer<igVirtualObject>(source), igSmartPointer<igVirtualObject>(target));
+                    igDirectory_ReplaceReference((Gap::Core::igDirectory *)directory, igSmartPointer<igVirtualObject>(source), igSmartPointer<igVirtualObject>(target));
                     if (((Gap::Core::igObject *)target.p)->isOfType((igMetaObject *)g_igInfo_metaObject) != 0) {
-                        igDirectory_AddInfo(directory, target.p);
+                        ((Gap::Core::igDirectory *)directory)->appendInfo((igInfo *)target.p);
                     }
                 }
             }
@@ -352,7 +352,7 @@ void igResource_WrapRootInSceneInfo(int directory) {
     if (directory != 0) {
         nodeMeta = igObjectSystem_FindMetaByNameDefault((const char *)"igNode");
         if (nodeMeta != 0) {
-            root = ((void *)igDirectory_GetObjectByName(directory, (int)"root"));
+            root = ((void *)((Gap::Core::igDirectory *)directory)->findObjectRefByEntryName((char const *)("root")));
             if (root != 0 && ((Gap::Core::igObject *)root)->isOfType((igMetaObject *)nodeMeta) != 0) {
                 infoMeta = igObjectSystem_FindMetaByNameDefault((const char *)"igSceneInfo");
                 if (infoMeta != 0) {
@@ -373,7 +373,7 @@ void igResource_WrapRootInSceneInfo(int directory) {
                     sceneGraphList = AsObjectList(*(void **)((char *)info + sceneGraphListField->_offset));
                     if (sceneGraphList != 0) ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)sceneGraphList))->appendUnique((Gap::Core::igObject *)root);
                     ((Gap::Core::igObjectRefMetaField *)camerasField)->set((Gap::Core::igObject *)info, (Gap::Core::igObject *)0);
-                    igDirectory_AddInfo((void *)directory, (void *)info);
+                    ((Gap::Core::igDirectory *)directory)->appendInfo((igInfo *)info);
                     {
                         igObject *u = info;
                         igObject::release(u);

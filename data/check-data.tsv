@@ -13308,6 +13308,7 @@
 005304f0	244	.vtables	002b5d50	match
 00530690	244	.vtables	002b5d50	match
 00530790	244	.vtables	002b5d50	match
+00530890	104	.vtables	002b5d50	match
 00530900	172	.vtables	002b5d50	match
 005309b0	96	.vtables	002b5d50	match
 00530a80	244	.vtables	002b5d50	match
@@ -13327,6 +13328,7 @@
 00531e20	96	.vtables	002b5d50	match
 00531ef0	96	.vtables	002b5d50	match
 00532360	96	.vtables	002b5d50	match
+005323c0	100	.vtables	002b5d50	match
 00532430	244	.vtables	002b5d50	match
 00532670	244	.vtables	002b5d50	match
 00532770	92	.vtables	002b5d50	match
