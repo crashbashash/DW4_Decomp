@@ -7,8 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-void igClippingStateAttr_EnsureRegistered(void);
-struct igMetaObject *igClippingStateAttr_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

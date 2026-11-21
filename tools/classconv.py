@@ -521,6 +521,27 @@ def step_splice(tree, classes, specs):
             n = re.sub(r"_memType = (Gap::\w+::\w+::getMetaField\(\);)", r"_memType = (int)\1", t)
             if n != t:
                 tree.write(path, n)
+        drop_empty_fragments(tree, lib)
+
+
+def drop_empty_fragments(tree, lib):
+    """A library fragment (`.inc`) the conversion left empty (an inline's retail copy it held is the compiler's
+    now) goes, and with it the `#include` naming it; the paths dropped."""
+    dropped = [p for p in tree.files(lib) if p.endswith(".inc") and not tree.read(p).strip()]
+    if not dropped:
+        return []
+    for path in tree.files(lib):
+        if path in dropped:
+            continue
+        t = tree.read(path)
+        n = "".join(l for l in t.splitlines(True)
+                    if not any(l.strip() == '#include "%s"' % d for d in dropped))
+        if n != t:
+            tree.write(path, n)
+    for path in dropped:
+        os.unlink(tree.path(path))
+        print("%s: empty, dropped with its #include" % path)
+    return dropped
 
 
 def leftover_declarations(report):

@@ -1,8 +1,15 @@
-void igNormalizeNormalsStateAttr_apply(igNormalizeNormalsStateAttr *self, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetNormalizeNormalsState(arg1, self->_enabled);
+namespace Gap {
+namespace Attrs {
+
+void igNormalizeNormalsStateAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetNormalizeNormalsState((igPsx2VisualContext *)vc, _enabled);
 }
 
-void igNormalizeNormalsStateAttr_SynchronizeDefault(igNormalizeNormalsStateAttr *self, void **arg1) {
-    self->_enabled = ((DW4VC_456_0 *)(arg1))->vX();
+void igNormalizeNormalsStateAttr::synchronizeDefault(igVisualContext *vc)
+{
+    _enabled = ((igVisualContextDispatchView *)vc)->getNormalizeNormalsState();
+}
+}
 }
 

@@ -34,8 +34,8 @@ CallbackArray *igShadeModelAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igShadeModelAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igShadeModelAttr_GetMetaObjectFunction,
         "igShadeModelAttr",
         0x10, /* instance size */

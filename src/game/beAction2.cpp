@@ -235,7 +235,7 @@ unsigned char beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram,
     if (work->_lightingStateAttr == 0) {
         int ownerAllocator = (int)((Gap::Core::igObject *)manager)->getMemoryPool();
         int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-        AttrRef<2> created((igObject *)igLightingStateAttr_CreateInstance(allocator));
+        AttrRef<2> created((igObject *)Gap::Attrs::igLightingStateAttr::_instantiateFromPool((igMemoryPoolView *)allocator));
         igObject *attr;
         igObject *old;
         ObjectList_AppendRetained((igObjectList *)list, created.p);
@@ -438,7 +438,7 @@ unsigned char beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, 
             int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             igObject *attr;
             igObject *old;
-            AttrRef<1> created((igObject *)igBlendStateAttr_CreateInstance(allocator));
+            AttrRef<1> created((igObject *)Gap::Attrs::igBlendStateAttr::_instantiateFromPool((igMemoryPoolView *)allocator));
             ObjectList_AppendRetained((igObjectList *)list, created.p);
             attr = created.p;
             if (attr != 0) attr->_refCount = attr->_refCount + 1;
@@ -451,7 +451,7 @@ unsigned char beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, 
             int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             igObject *attr;
             igObject *old;
-            AttrRef<2> created((igObject *)igLightingStateAttr_CreateInstance(allocator));
+            AttrRef<2> created((igObject *)Gap::Attrs::igLightingStateAttr::_instantiateFromPool((igMemoryPoolView *)allocator));
             ObjectList_AppendRetained((igObjectList *)list, created.p);
             attr = created.p;
             if (attr != 0) attr->_refCount = attr->_refCount + 1;

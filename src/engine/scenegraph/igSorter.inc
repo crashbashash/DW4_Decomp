@@ -265,7 +265,7 @@ void igSorter_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igSorter_Register);
 }
 
-static igMetaObjectCallback g_igSorter_callbackList[] = { igDisplayListAttr_EnsureRegistered, igRenderPackagePool_EnsureRegistered, igNonRefCountedAttrList_EnsureRegistered, igRenderPackageList_EnsureRegistered, igIntList_EnsureRegistered, igDepthWriteStateAttr_EnsureRegistered, igCullFaceAttr_EnsureRegistered, igRenderPackage_EnsureRegistered, igGeometry_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igSorter_callbackList[] = { igDisplayListAttr_EnsureRegistered, igRenderPackagePool_EnsureRegistered, igNonRefCountedAttrList_EnsureRegistered, igRenderPackageList_EnsureRegistered, igIntList_EnsureRegistered, Gap::Attrs::igDepthWriteStateAttr::arkRegister, igCullFaceAttr_EnsureRegistered, igRenderPackage_EnsureRegistered, igGeometry_EnsureRegistered, 0 };
 
 CallbackArray *igSorter_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -514,7 +514,7 @@ void igSorter_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_13)->_metaObject = (int)igIntList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)temp_s2_13)->_construct = 1;
     temp_s2_14 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xE)));
-    ((igObjectRefMetaField *)temp_s2_14)->_metaObject = (int)igDepthWriteStateAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_14)->_metaObject = (int)Gap::Attrs::igDepthWriteStateAttr::getClassTypeLazy();
     ((igObjectRefMetaField *)temp_s2_14)->_construct = 1;
     temp_s2_15 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xF)));
     ((igObjectRefMetaField *)temp_s2_15)->_metaObject = (int)igCullFaceAttr_GetOrCreateMetaObject();

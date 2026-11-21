@@ -253,15 +253,15 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igTextureMatrixStateAttr_EnsureRegistered();
     igTextureFunctionAttr_EnsureRegistered();
     igTextureBindAttr_EnsureRegistered();
-    igLightingStateAttr_EnsureRegistered();
-    igDepthWriteStateAttr_EnsureRegistered();
+    Gap::Attrs::igLightingStateAttr::arkRegister();
+    Gap::Attrs::igDepthWriteStateAttr::arkRegister();
     igCullFaceAttr_EnsureRegistered();
-    igBlendStateAttr_EnsureRegistered();
+    Gap::Attrs::igBlendStateAttr::arkRegister();
     igBlendFunctionAttr_EnsureRegistered();
     igAttrPool_EnsureRegistered();
     igAttrListList_EnsureRegistered();
     igAttrList_EnsureRegistered();
-    igAlphaStateAttr_EnsureRegistered();
+    Gap::Attrs::igAlphaStateAttr::arkRegister();
     Gap::Math::igVec4fArrayMetaField::arkRegister();
     igTraversalFunctionList_EnsureRegistered();
     igShaderInfo_EnsureRegistered();
@@ -296,7 +296,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igIndexArray_EnsureRegistered();
     igBoolList_EnsureRegistered();
     igFloatList_EnsureRegistered();
-    igVertexBlendStateAttr_EnsureRegistered();
+    Gap::Attrs::igVertexBlendStateAttr::arkRegister();
     igSkin_EnsureRegistered();
     igSkinList_EnsureRegistered();
     igSkeletonBoneInfo_EnsureRegistered();
@@ -324,8 +324,8 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igActorList_EnsureRegistered();
     igProjectionMatrixAttr_EnsureRegistered();
     igModelViewMatrixAttr_EnsureRegistered();
-    igFogStateAttr_EnsureRegistered();
-    igDepthStateAttr_EnsureRegistered();
+    Gap::Attrs::igFogStateAttr::arkRegister();
+    Gap::Attrs::igDepthStateAttr::arkRegister();
     igLongList_EnsureRegistered();
     igVec3fList_EnsureRegistered();
     igGroup_EnsureRegistered();
@@ -333,7 +333,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igQuaternionfList_EnsureRegistered();
     igAlphaFunctionAttr_EnsureRegistered();
     igBillboard_EnsureRegistered();
-    igNormalizeNormalsStateAttr_EnsureRegistered();
+    Gap::Attrs::igNormalizeNormalsStateAttr::arkRegister();
     igColorMaskAttr_EnsureRegistered();
     igParticleFormat_EnsureRegistered();
     igParticleAttr_EnsureRegistered();

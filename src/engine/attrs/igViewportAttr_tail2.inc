@@ -11,11 +11,3 @@ void igViewportAttr_SetRegion(igViewportAttr *arg0, int arg1, int arg2, int arg3
     arg0->_farZ = fparg1;
 }
 
-void igAttr_ApplyToContext(void) {
-
-}
-
-void igAttr_SynchronizeDefaultFromContext(void) {
-
-}
-

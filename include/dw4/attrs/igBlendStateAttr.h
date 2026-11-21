@@ -8,8 +8,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-struct igBlendStateAttr *igBlendStateAttr_CreateInstance(int allocator);
-struct igMetaObject *igBlendStateAttr_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

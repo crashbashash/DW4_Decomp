@@ -240,7 +240,7 @@ void igViewerRenderer_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igViewerRenderer_Register);
 }
 
-static igMetaObjectCallback g_igViewerRenderer_callbackList[] = { igViewerParameters_EnsureRegistered, igCullFaceAttr_EnsureRegistered, igAlphaStateAttr_EnsureRegistered, igShadeModelAttr_EnsureRegistered, igPolygonModeAttr_EnsureRegistered, igLightingStateAttr_EnsureRegistered, igLightAttr_EnsureRegistered, igLightStateAttr_EnsureRegistered, igAttrSet_EnsureRegistered, igOverrideAttrSet_EnsureRegistered, igTransform_EnsureRegistered, igLightSet_EnsureRegistered, igLightList_EnsureRegistered, igLightStateAttrList_EnsureRegistered, igCommonTraversal_EnsureRegistered, igDisplayListAttr_EnsureRegistered, igDisableExt_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igViewerRenderer_callbackList[] = { igViewerParameters_EnsureRegistered, igCullFaceAttr_EnsureRegistered, Gap::Attrs::igAlphaStateAttr::arkRegister, igShadeModelAttr_EnsureRegistered, igPolygonModeAttr_EnsureRegistered, Gap::Attrs::igLightingStateAttr::arkRegister, igLightAttr_EnsureRegistered, igLightStateAttr_EnsureRegistered, igAttrSet_EnsureRegistered, igOverrideAttrSet_EnsureRegistered, igTransform_EnsureRegistered, igLightSet_EnsureRegistered, igLightList_EnsureRegistered, igLightStateAttrList_EnsureRegistered, igCommonTraversal_EnsureRegistered, igDisplayListAttr_EnsureRegistered, igDisableExt_EnsureRegistered, 0 };
 
 CallbackArray *igViewerRenderer_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -384,7 +384,7 @@ void igViewerRenderer_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igCullFaceAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2));
-    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igAlphaStateAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)Gap::Attrs::igAlphaStateAttr::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igShadeModelAttr_GetOrCreateMetaObject();
@@ -393,7 +393,7 @@ void igViewerRenderer_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igPolygonModeAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)(igLightingStateAttr_GetOrCreateMetaObject());
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)(Gap::Attrs::igLightingStateAttr::getClassTypeLazy());
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)igLightAttr_GetOrCreateMetaObject();

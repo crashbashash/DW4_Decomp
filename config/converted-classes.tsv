@@ -53,3 +53,16 @@ igVec4fArrayMetaField	Math
 igCompoundMetaField	Core
 igDataList	Core
 igObjectList	Core	igTDataList<igObject *>
+igAttr	Attrs
+igVisualAttribute	Attrs
+igAlphaStateAttr	Attrs
+igBlendStateAttr	Attrs
+igClippingStateAttr	Attrs
+igDepthStateAttr	Attrs
+igDepthWriteStateAttr	Attrs
+igFogStateAttr	Attrs
+igLightingStateAttr	Attrs
+igMatrixOptStateAttr	Attrs
+igStencilStateAttr	Attrs
+igVertexBlendStateAttr	Attrs
+igNormalizeNormalsStateAttr	Attrs

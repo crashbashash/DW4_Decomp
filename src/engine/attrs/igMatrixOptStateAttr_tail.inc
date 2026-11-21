@@ -1,13 +1,21 @@
-void igMatrixOptStateAttr_apply(igMatrixOptStateAttr *self, int arg1) {
-    igPsx2VisualContext_SetMatrixOptimizationState((igPsx2VisualContext *)arg1, self->_enabled);
+namespace Gap {
+namespace Attrs {
+
+void igMatrixOptStateAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetMatrixOptimizationState((igPsx2VisualContext *)vc, _enabled);
 }
 
-void igMatrixOptStateAttr_SynchronizeDefault(igMatrixOptStateAttrView *self, igPsx2VisualContext *context) {
-    self->setState(igPsx2VisualContext_GetMatrixOptimizationState(context));
+void igMatrixOptStateAttr::synchronizeDefault(igVisualContext *vc)
+{
+    setState(igPsx2VisualContext_GetMatrixOptimizationState((igPsx2VisualContext *)vc));
 }
 
 /* Setter for the attribute's reflected _enabled flag. */
-void igMatrixOptStateAttr_SetState(igMatrixOptStateAttr *self, char enabled) {
-    self->_enabled = enabled;
+void igMatrixOptStateAttr::setState(bool enabled)
+{
+    _enabled = enabled;
+}
+}
 }
 

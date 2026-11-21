@@ -37,8 +37,8 @@ CallbackArray *igStencilFunctionAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igStencilFunctionAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igStencilFunctionAttr_GetMetaObjectFunction,
         "igStencilFunctionAttr",
         0x28, /* instance size */

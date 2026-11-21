@@ -10,3 +10,14 @@ igMemoryRefMetaField	_memTypeRef	igSmartPointer< ::igMetaField>
 igMemoryRefMetaField	_poolName	igStringRef
 igCompoundMetaField	_fieldList	igSmartPointer<igMetaFieldList>
 igDataList	_data	unsigned char *
+igAlphaStateAttr	_enabled	bool
+igBlendStateAttr	_enabled	bool
+igClippingStateAttr	_enabled	bool
+igDepthStateAttr	_enabled	bool
+igDepthWriteStateAttr	_enabled	bool
+igFogStateAttr	_enabled	bool
+igLightingStateAttr	_enabled	bool
+igMatrixOptStateAttr	_enabled	bool
+igStencilStateAttr	_enabled	bool
+igVertexBlendStateAttr	_enabled	bool
+igNormalizeNormalsStateAttr	_enabled	bool

@@ -1,5 +1,5 @@
 igSmartPointer<igAttr> igGenericAttrDefaultManager_createDefault(igObject *self, igMetaObject *meta) {
-    igMetaObject_IsOfType(meta, g_igAttr_metaObject);
+    igMetaObject_IsOfType(meta, Gap::Attrs::igAttr::getClassMeta());
     return igMetaObject_CreateInstanceDefaultRef(meta);
 }
 

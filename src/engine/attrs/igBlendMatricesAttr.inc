@@ -34,8 +34,8 @@ CallbackArray *igBlendMatricesAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBlendMatricesAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igBlendMatricesAttr_GetMetaObjectFunction,
         "igBlendMatricesAttr",
         0x18, /* instance size */

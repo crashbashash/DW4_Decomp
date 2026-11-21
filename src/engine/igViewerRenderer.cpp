@@ -97,7 +97,6 @@ static inline igObject *createLightState(ItemType) { return (igObject *)igLightS
 
 #include "dw4/core/igMetaObject.h"
 extern int text_meta[4];
-#include "dw4/attrs/igAttr.h"
 #include "dw4/attrs/igAttrPool.h"
 static inline int asObjectRefField(int field) {
     if (field != 0 && ((Gap::Core::igObject *)field)->isOfType(Gap::Core::igObjectRefMetaField::getClassMeta()) != 0) {
@@ -675,7 +674,7 @@ void igViewerRenderer_UpdateRenderStates(igViewerRenderer *self) {
 
 /* The attribute in `attrSet` of the same class as `attr`. */
 int igViewerRenderer_FindAttrFromType(igObjectDispatchView *attr, igAttrSet *attrSet) {
-    int field = asObjectRefField((int)igMetaObject_FindFieldByName(g_igAttr_metaObject, (const char *)text_meta));
+    int field = asObjectRefField((int)igMetaObject_FindFieldByName(Gap::Attrs::igAttr::getClassMeta(), (const char *)text_meta));
     return igProperty_FindByPointer((void *)attrSet->_attributes, (void *)field, (int)attr->GetMeta());
 }
 

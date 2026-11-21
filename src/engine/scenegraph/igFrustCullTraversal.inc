@@ -435,7 +435,7 @@ void igFrustCullTraversal_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igFrustCullTraversal_Register);
 }
 
-static igMetaObjectCallback g_igFrustCullTraversal_callbackList[] = { igClippingStateAttr_EnsureRegistered, igAABox_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igFrustCullTraversal_callbackList[] = { Gap::Attrs::igClippingStateAttr::arkRegister, igAABox_EnsureRegistered, 0 };
 
 CallbackArray *igFrustCullTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -550,7 +550,7 @@ void igFrustCullTraversal_InitFields(void) {
     ((Gap::Math::igMatrix44fMetaField *)temp_s2)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
                                                      igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
-    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igClippingStateAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)Gap::Attrs::igClippingStateAttr::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4)))->setDefault(1.0f);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5)))->setDefault(2.0f);

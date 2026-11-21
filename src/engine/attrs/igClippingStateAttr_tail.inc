@@ -1,14 +1,22 @@
-void igClippingStateAttr_apply(igClippingStateAttr *self, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetViewportClippingState(arg1, self->_enabled);
+namespace Gap {
+namespace Attrs {
+
+void igClippingStateAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetViewportClippingState((igPsx2VisualContext *)vc, _enabled);
 }
 
-void igClippingStateAttr_SynchronizeDefault(void **arg0, void **arg1) {
-    ((DW4VC_128_1 *)(arg0))->vX((int)(((DW4VC_896_0 *)(arg1))->vX()));
+void igClippingStateAttr::synchronizeDefault(igVisualContext *vc)
+{
+    setState(((igVisualContextDispatchView *)vc)->getViewportClippingState());
 }
 
 /* Setter: stores the clipping-state enable flag (`_enabled`, an igBoolMetaField of the reflected
  * igClippingStateAttr). */
-void igClippingStateAttr_SetState(igClippingStateAttr *self, char enabled) {
-    self->_enabled = enabled;
+void igClippingStateAttr::setState(bool enabled)
+{
+    _enabled = enabled;
+}
+}
 }
 

@@ -104,8 +104,8 @@ CallbackArray *igBlendFunctionAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igBlendFunctionAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igBlendFunctionAttr_GetMetaObjectFunction,
         "igBlendFunctionAttr",
         0x34, /* instance size */

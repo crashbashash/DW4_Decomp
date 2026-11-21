@@ -40,8 +40,8 @@ CallbackArray *igCullFaceAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCullFaceAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igCullFaceAttr_GetMetaObjectFunction,
         "igCullFaceAttr",
         0x14, /* instance size */

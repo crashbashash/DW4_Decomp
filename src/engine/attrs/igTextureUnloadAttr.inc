@@ -41,8 +41,8 @@ CallbackArray *igTextureUnloadAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureUnloadAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igTextureUnloadAttr_GetMetaObjectFunction,
         "igTextureUnloadAttr",
         0x14, /* instance size */

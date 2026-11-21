@@ -39,8 +39,8 @@ CallbackArray *igModelViewMatrixAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igModelViewMatrixAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igModelViewMatrixAttr_GetMetaObjectFunction,
         "igModelViewMatrixAttr",
         0x4C,                                              /* instance size (the reflected struct is shorter: igMatrix44f is reflected as one int) */
@@ -72,7 +72,6 @@ void igModelViewMatrixAttr_InitFields(void) {
     int base;
     int field;
     igMetaObject *meta;
-
 
     meta = g_igModelViewMatrixAttr_metaObject;
     base = igMetaObject_GetFieldCount(meta);

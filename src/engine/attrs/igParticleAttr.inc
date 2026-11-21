@@ -49,8 +49,8 @@ CallbackArray *igParticleAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igParticleAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igParticleAttr_GetMetaObjectFunction,
         "igParticleAttr",
         0x30, /* instance size */

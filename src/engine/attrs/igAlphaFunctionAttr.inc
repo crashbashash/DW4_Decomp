@@ -33,8 +33,8 @@ CallbackArray *igAlphaFunctionAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAlphaFunctionAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igAlphaFunctionAttr_GetMetaObjectFunction,
         "igAlphaFunctionAttr",
         0x14, /* instance size */

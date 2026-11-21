@@ -28,7 +28,7 @@ void igNonRefCountedAttrList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igNonRefCountedAttrList_Register);
 }
 
-static igMetaObjectCallback g_igNonRefCountedAttrList_callbackList[] = { igAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igNonRefCountedAttrList_callbackList[] = { Gap::Attrs::igAttr::arkRegister, 0 };
 
 CallbackArray *igNonRefCountedAttrList_Register(void) {
     AttrsLibrary_MarkRegistered();

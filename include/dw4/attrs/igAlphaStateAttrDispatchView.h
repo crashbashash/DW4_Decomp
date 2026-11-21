@@ -2,7 +2,7 @@
 #define DW4_IGALPHASTATEATTRDISPATCHVIEW_H
 #include "dw4/core/igObjectDispatchView.h"
 
-/* igAlphaStateAttr's virtual functions: slot 30 switches the alpha test on or off (igAlphaStateAttr_SetState).
+/* igAlphaStateAttr's virtual functions: slot 30 switches the alpha test on or off (Gap::Attrs::igAlphaStateAttr::setState).
  * ABI view only: never instantiated. */
 class igAlphaStateAttrDispatchView : public igObjectDispatchView {
 public:

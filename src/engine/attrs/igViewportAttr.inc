@@ -57,8 +57,8 @@ CallbackArray *igViewportAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igViewportAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igViewportAttr_GetMetaObjectFunction,
         "igViewportAttr",
         0x28, /* instance size */
@@ -71,10 +71,6 @@ CallbackArray *igViewportAttr_Register(void) {
 
 void igViewportAttr_GetMetaObjectFunction(void) {
     igViewportAttr_GetMetaObject();
-}
-
-igMetaObject *igVisualAttribute_GetPublishedMetaObject(void) {
-    return g_igVisualAttribute_metaObject;
 }
 
 static FieldFactory g_igViewportAttr_ctorTable[] = {

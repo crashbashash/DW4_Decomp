@@ -118,7 +118,7 @@ void igTransform_EnsureRegistered(void)
     igMetaObject_RunStaticInit((CallbackArray * (*)())igTransform_Register);
 }
 
-static igMetaObjectCallback g_igTransform_callbackList[] = { igVisualAttribute_EnsureRegistered, igTransformSource_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igTransform_callbackList[] = { Gap::Attrs::igVisualAttribute::arkRegister, igTransformSource_EnsureRegistered, 0 };
 
 CallbackArray *igTransform_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -181,7 +181,7 @@ void igTransform_InitFields(void) {
                                                      igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)))->setDefault(0);
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
-    *(int *)((char *)(temp_s1_2) + 56) = (int)igVisualAttribute_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s1_2) + 56) = (int)Gap::Attrs::igVisualAttribute::getClassTypeLazy();
     *(char *)((char *)(temp_s1_2) + 38) = 0;
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3)));
     *(int *)((char *)(temp_s1_3) + 56) = (int)igTransformSource_GetOrCreateMetaObject();

@@ -41,8 +41,8 @@ CallbackArray *igGeometryAttr_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igGeometryAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igGeometryAttr_GetMetaObjectFunction,
         "igGeometryAttr",
         0x30, /* instance size */

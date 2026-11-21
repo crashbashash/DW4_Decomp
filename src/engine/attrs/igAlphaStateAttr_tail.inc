@@ -1,44 +1,57 @@
-void igAlphaStateAttr_apply(igAlphaStateAttr *self, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetAlphaTestState(arg1, self->_enabled);
+namespace Gap {
+namespace Attrs {
+
+void igAlphaStateAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetAlphaTestState((igPsx2VisualContext *)vc, _enabled);
 }
 
-void igAlphaStateAttr_SynchronizeDefault(void **arg0, void **arg1) {
-    ((DW4VC_128_1 *)(arg0))->vX((int)(((DW4VC_872_0 *)(arg1))->vX()));
+void igAlphaStateAttr::synchronizeDefault(igVisualContext *vc)
+{
+    setState(((igVisualContextDispatchView *)vc)->getAlphaTestState());
 }
 
-void igAlphaStateAttr_SetState(igAlphaStateAttr *self, char arg1) {
-    self->_enabled = arg1;
+void igAlphaStateAttr::setState(bool enabled)
+{
+    _enabled = enabled;
+}
+}
 }
 
 void FUN_0013b800(void)
 {
 }
 
-void igAttr_SetUnitID(int a0, int a1)
+namespace Gap {
+namespace Attrs {
+
+void igAttr::setUnitID(short id)
 {
-    *(short *)((char *)a0 + 10) = a1;
+    _cachedUnitID = id;
 }
 
-void igAttr_UserPostLoad(void *a) {
-    igObject_UserPostLoad();
-    ((short *)a)[5] = 0;
-    ((short *)a)[4] = (((VC *)a)->vX())[2];
-}
-
-void igAttr_resetFields(void *p, int flags)
+void igAttr::userPostLoad()
 {
-    Gap__Core__igObject__resetFields((igObject *)p, flags);
-    int t = ((A *)p)->v20()->f;
-    ((short *)p)[4] = (short)t;
+    igObject::userPostLoad();
+    _cachedUnitID = 0;
+    _cachedAttrIndex = (short)getMeta()->_id;
 }
 
-void igAttr_RegisterClass(igMetaObject *meta) {
-    short temp_a0;
+void igAttr::resetFields(int flag)
+{
+    igObject::resetFields(flag);
+    _cachedAttrIndex = (short)getMeta()->_id;
+}
 
-    if ((igMetaObject_IsOfType(meta, igAttr_GetMetaObject()) != 0) && (meta->_abstractState == 0)) {
-        temp_a0 = g_igAttr_nextAttrIndex;
-        g_igAttr_nextAttrIndex = temp_a0 + 1;
-        meta->_id = (int)((int) temp_a0);
+void igAttr::registerClass(igMetaObject *meta)
+{
+    if (igMetaObject_IsOfType(meta, getClassTypeSafe()) && !meta->_abstractState) {
+        short index = _gNextAttrIndex;
+
+        _gNextAttrIndex = index + 1;
+        meta->_id = index;
     }
+}
+}
 }
 

@@ -18,8 +18,13 @@ void igDisplayListAttr_Setup(int *arg0, int arg1) {
     }
 }
 
-void igVisualAttribute_Setup(igAttrView *self)
+namespace Gap {
+namespace Attrs {
+
+void igVisualAttribute::setup(igVisualContext *vc)
 {
-    self->vfunc_22();
+    apply(vc);
+}
+}
 }
 

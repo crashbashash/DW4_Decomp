@@ -229,9 +229,25 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    entries, igMetaEnum, igRegistry, the threads and timers, …) follow, and 58 have no kit header (DW4's typed lists
    such as igIntList, the `igPsx2*` platform classes, `__internal*ObjectList`, igDependencyMetaField and
    igMemoryDescriptorMetaField), which take their form from retail alone;
-5. attrs, then gfx, then scenegraph, then gui/insight/viewer. For attrs: list each class's C names against its
-   vtable slots and the kit header (`igAttr` first, then the attrs in `AttrsLibrary.cpp`'s include order), write
-   one spec per batch of a few classes, and convert parents before children;
+5. attrs, then gfx, then scenegraph, then gui/insight/viewer. Attrs so far: `Gap::Attrs::igAttr` (abstract;
+   DW4's slots 21-29 read off retail's concrete vtables: `apply(igContext *)`, `apply(igVisualContext *)`,
+   `setUnitID`, `synchronizeDefault` ×2, `reset`, `setup` ×2, `getUnitCount`, all kit inlines but `setUnitID`; no
+   `compile`/`getMaxCompiledSize`; the kit's `userResetFields`/`postFileRead` are igObject's `resetFields(int)` and
+   `userPostLoad`), `igVisualAttribute` (DW4's abstract layer; overrides `setup(igVisualContext *)` as
+   `apply(vc)`), and the eleven boolean state attrs (`igAlphaStateAttr`, `igBlendStateAttr`,
+   `igClippingStateAttr`, `igDepthStateAttr`, `igDepthWriteStateAttr`, `igFogStateAttr`, `igLightingStateAttr`,
+   `igMatrixOptStateAttr`, `igStencilStateAttr`, `igVertexBlendStateAttr`, `igNormalizeNormalsStateAttr`: `_enabled`
+   typed `bool`, `setState` out of line as slot 30 since retail keeps it beside `apply`, `synchronizeDefault`
+   through `igVisualContextDispatchView`'s state getters, named from igPsx2VisualContext's overrides). The attrs
+   unit compiles each converted attr's vtable (a `.vtables` data row) and the inline copies it names (getMeta, igAttr's
+   empty slots), placed by name at their retail addresses, so conversion order inside the unit is free; igAttr's and
+   igVisualAttribute's vtables (absent from retail) and the inline copies only they name are `stripped`. Next:
+   the other igVisualAttribute subclasses (specs in the agent's scratch `specs/`: one per family, the getter slot from
+   the C form's `DW4VC_<offset>` view, slot = (offset - 8) / 4, named after the igPsx2VisualContext override at that
+   slot), then retire `include/dw4/attrs/*DispatchView.h` by calling the converted classes; the default managers
+   (`igAttrDefaultManager` first) and `igAttrPool`; the attr lists wait for `igObjectList`. A factory's callers that
+   passed the pool as an `int` need a cast to `igMemoryPoolView *` (memberize leaves them). Gfx then starts from
+   `igVisualContext`, whose dispatch view already names the slots the attrs call;
 6. the game's `be*` classes last.
 
 ## Known differences and gaps

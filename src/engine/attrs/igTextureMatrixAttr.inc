@@ -43,8 +43,8 @@ CallbackArray *igTextureMatrixAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureMatrixAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igTextureMatrixAttr_GetMetaObjectFunction,
         "igTextureMatrixAttr",
         0x54, /* instance size */

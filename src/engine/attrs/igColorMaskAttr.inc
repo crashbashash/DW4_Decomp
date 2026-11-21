@@ -36,8 +36,8 @@ CallbackArray *igColorMaskAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igColorMaskAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igColorMaskAttr_GetMetaObjectFunction,
         "igColorMaskAttr",
         0x14, /* instance size */

@@ -30,8 +30,8 @@ CallbackArray *igFogAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igFogAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igFogAttr_GetMetaObjectFunction,
         "igFogAttr",
         0x2C, /* instance size */

@@ -44,13 +44,13 @@ int igPsx2VisualContext_SetTextureSourceFromBuffer(struct igPsx2VisualContext *s
 void igPsx2VisualContext_SetRenderDestination(struct igPsx2VisualContext *self, int bufferIndex);
 void igPsx2VisualContext_DrawMultiple(struct igPsx2VisualContext *self, int arg1, int arg2, int arg3, int arg4);
 int igPsx2VisualContext_CreateLight(struct igPsx2VisualContext *self, int arg1);
-void igPsx2VisualContext_SetNormalizeNormalsState(struct igPsx2VisualContext *self, unsigned char arg1);
+void igPsx2VisualContext_SetNormalizeNormalsState(struct igPsx2VisualContext *self, bool arg1);
 unsigned char igPsx2VisualContext_SetTexture(struct igPsx2VisualContext *self, int index, int stage);
 void igPsx2VisualContext_UnloadTexture(struct igPsx2VisualContext *self, int index);
 void igPsx2VisualContext_SetPixelPipelineMode(struct igPsx2VisualContext *context, int mode);
 void igPsx2VisualContext_SetTextureStageFunc(struct igPsx2VisualContext *self, int arg1, int arg2);
 void igPsx2VisualContext_SetTextureStageCoordSource(struct igPsx2VisualContext *self, int n, int x, int y);
-void igPsx2VisualContext_SetBlendingState(struct igPsx2VisualContext *self, unsigned char arg1);
+void igPsx2VisualContext_SetBlendingState(struct igPsx2VisualContext *self, bool arg1);
 void FUN_00174510(struct igPsx2VisualContext *self, IG_GFX_BLENDING_FUNCTION source, IG_GFX_BLENDING_FUNCTION destination, unsigned char blendConstant, int stage);
 void igPsx2VisualContext_SetStencilRefVal(struct igPsx2VisualContext *self, int arg1);
 void igPsx2VisualContext_SetStencilFunc(struct igPsx2VisualContext *self, unsigned int arg1);
@@ -70,14 +70,14 @@ void igPsx2VisualContext_BeginRenderListDraw(struct igPsx2VisualContext *self, i
 int igPsx2VisualContext_EndRenderListDraw(struct igPsx2VisualContext *self);
 void igPsx2VisualContext_SetBlendingMatrices(struct igPsx2VisualContext *self, int arg1, int arg2);
 void igPsx2VisualContext_SetMatrix(struct igPsx2VisualContext *self, int arg1, char *arg2);
-void igPsx2VisualContext_SetAlphaTestState(struct igPsx2VisualContext *self, unsigned char enable);
+void igPsx2VisualContext_SetAlphaTestState(struct igPsx2VisualContext *self, bool enable);
 void igPsx2VisualContext_SetAlphaFunc(struct igPsx2VisualContext *self, int arg1);
 void igPsx2VisualContext_SetAlphaRefValue(struct igPsx2VisualContext *self, float fparg0);
-void igPsx2VisualContext_SetViewportClippingState(struct igPsx2VisualContext *self, unsigned char a);
+void igPsx2VisualContext_SetViewportClippingState(struct igPsx2VisualContext *self, bool a);
 void igPsx2VisualContext_SetColorMask(struct igPsx2VisualContext *self, unsigned char arg1, unsigned char arg2, unsigned char arg3, unsigned char arg4);
 void igPsx2VisualContext_SetShadingMode(struct igPsx2VisualContext *self, int arg1);
 void igPsx2VisualContext_SetCullFaceMode(struct igPsx2VisualContext *self, int arg1);
-void igPsx2VisualContext_SetDepthWriteState(struct igPsx2VisualContext *self, unsigned char arg1);
+void igPsx2VisualContext_SetDepthWriteState(struct igPsx2VisualContext *self, bool arg1);
 void igPsx2VisualContext_SetRenderMode(struct igPsx2VisualContext *self, int arg1);
 void igPsx2VisualContext_SetFogDensity(struct igPsx2VisualContext *self, float fparg0);
 void igPsx2VisualContext_SetFogMode(struct igPsx2VisualContext *self, int arg1);
@@ -92,7 +92,7 @@ int igPsx2VisualContext_GetDepthBitsPerPixel(struct igPsx2VisualContext *self, i
 int igPsx2VisualContext_GetStencilBitsPerPixel(struct igPsx2VisualContext *self, int buffer_index);
 void igPsx2VisualContext_SetColorPacked(struct igPsx2VisualContext *self, unsigned int arg1);
 void igPsx2VisualContext_SetVertexMask(struct igPsx2VisualContext *self, int *arg1);
-void igPsx2VisualContext_SetLightingState(struct igPsx2VisualContext *self, unsigned char arg1);
+void igPsx2VisualContext_SetLightingState(struct igPsx2VisualContext *self, bool arg1);
 int igPsx2VisualContext_SetLightState(struct igPsx2VisualContext *self, int arg1, int arg2);
 void igPsx2VisualContext_SetLightDiffuse(struct igPsx2VisualContext *self, int arg1, float *arg2);
 void igPsx2VisualContext_SetLightAmbient(struct igPsx2VisualContext *self, int arg1, float *arg2);
@@ -111,8 +111,8 @@ void igPsx2VisualContext_CallDmaChain(struct igPsx2VisualContext *self, void *pa
 int igPsx2VisualContext_IsDisplayingFirstBuffer(struct igPsx2VisualContext *self);
 void igPsx2VisualContext_SetMatrixPsx2(struct igPsx2VisualContext *self, int stack, const float *matrix);
 void igPsx2VisualContext_GetMatrixPsx2(struct igPsx2VisualContext *self, int stack, float *matrix);
-void igPsx2VisualContext_SetMatrixOptimizationState(struct igPsx2VisualContext *self, unsigned char enable);
-unsigned char igPsx2VisualContext_GetMatrixOptimizationState(struct igPsx2VisualContext *self);
+void igPsx2VisualContext_SetMatrixOptimizationState(struct igPsx2VisualContext *self, bool enable);
+bool igPsx2VisualContext_GetMatrixOptimizationState(struct igPsx2VisualContext *self);
 void igPsx2VisualContext_SetTextureMatrixProjectiveState(struct igPsx2VisualContext *self, int stage, unsigned char enable);
 unsigned char igPsx2VisualContext_GetTextureMatrixProjectiveState(struct igPsx2VisualContext *self, int stage);
 

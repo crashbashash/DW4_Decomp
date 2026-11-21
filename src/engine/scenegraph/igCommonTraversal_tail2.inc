@@ -527,12 +527,12 @@ void igCommonTraversal_userConstruct(igCommonTraversal *self, int arg1) {
 
 void igCommonTraversal_UserRegister(void) {
     g_igCommonTraversal_travProcs = (igTDataList<igTraversalFunctionPtr> *)igTraversalFunctionList_CreateInstance((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
-    igAttr_EnsureRegistered();
+    Gap::Attrs::igAttr::arkRegister();
     igTextureBindAttr_EnsureRegistered();
     igModelViewMatrixAttr_EnsureRegistered();
     igVertexBlendMatrixAttr_EnsureRegistered();
     igTextureMatrixAttr_EnsureRegistered();
-    igVertexBlendStateAttr_EnsureRegistered();
+    Gap::Attrs::igVertexBlendStateAttr::arkRegister();
     igVertexBlendMatrixListAttr_EnsureRegistered();
 }
 

@@ -89,7 +89,7 @@ void beAction2InfoWork_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beAction2InfoWork_Register);
 }
 
-static igMetaObjectCallback g_beAction2InfoWork_callbackList[] = { beAction2Data_EnsureRegistered, igColorAttr_EnsureRegistered, igBlendStateAttr_EnsureRegistered, igTextureStateAttr_EnsureRegistered, igLightingStateAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beAction2InfoWork_callbackList[] = { beAction2Data_EnsureRegistered, igColorAttr_EnsureRegistered, Gap::Attrs::igBlendStateAttr::arkRegister, igTextureStateAttr_EnsureRegistered, Gap::Attrs::igLightingStateAttr::arkRegister, 0 };
 
 CallbackArray *beAction2InfoWork_Register(void) {
     BecLibrary_MarkRegistered();
@@ -223,11 +223,11 @@ void beAction2InfoWork_InitFields(void) {
     colorAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 0x11));
     ((igObjectRefMetaField *)colorAttr)->_metaObject = (int)igColorAttr_GetOrCreateMetaObject();
     blendStateAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 0x12));
-    ((igObjectRefMetaField *)blendStateAttr)->_metaObject = (int)igBlendStateAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)blendStateAttr)->_metaObject = (int)Gap::Attrs::igBlendStateAttr::getClassTypeLazy();
     textureStateAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 0x13));
     ((igObjectRefMetaField *)textureStateAttr)->_metaObject = (int)igTextureStateAttr_GetOrCreateMetaObject();
     lightingStateAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 0x14));
-    ((igObjectRefMetaField *)lightingStateAttr)->_metaObject = (int)igLightingStateAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)lightingStateAttr)->_metaObject = (int)Gap::Attrs::igLightingStateAttr::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_beAction2InfoWork_fieldTable, g_beAction2InfoWork_fieldHandles, g_beAction2InfoWork_fieldOffsets, base);
 }
 

@@ -26,7 +26,7 @@ CallbackArray *igAttrDefaultManager_Register(void) {
         1, /* abstract */
         &g_igAttrDefaultManager_metaObject,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
+        Gap::Core::igObject::getClassMeta,
         igAttrDefaultManager_GetMetaObjectFunction,
         "igAttrDefaultManager",
         8, /* instance size */

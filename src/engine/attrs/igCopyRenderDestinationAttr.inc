@@ -107,8 +107,8 @@ CallbackArray *igCopyRenderDestinationAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCopyRenderDestinationAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igCopyRenderDestinationAttr_GetMetaObjectFunction,
         "igCopyRenderDestinationAttr",
         0x34, /* instance size */

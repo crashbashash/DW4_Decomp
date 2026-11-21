@@ -8,8 +8,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-struct igLightingStateAttr *igLightingStateAttr_CreateInstance(int allocator);
-struct igMetaObject *igLightingStateAttr_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

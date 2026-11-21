@@ -105,10 +105,11 @@ KIT_VECTOR = {
     "igVec3fMetaField": ("igVec3f", "dw4/maths/igVec3f.h"),
     "igVec4fMetaField": ("igVec4f", "dw4/maths/igVec4f.h"),
 }
-# Kit value types a converted class's member rows name by reference only (igMatrix44fMetaField's
-# `setDefault(const igMatrix44f &)`): declared ahead under C++. A matrix field stays sixteen floats, since
-# igMatrix44f's constructor would give every class holding one a constructor.
-FORWARD_TYPES = ("igMatrix44f",)
+# Kit types a converted class's member rows name by reference or pointer only (igMatrix44fMetaField's
+# `setDefault(const igMatrix44f &)`, igAttr's `getUnitCount(igCapabilityManager *)`): declared ahead under C++.
+# A matrix field stays sixteen floats, since igMatrix44f's constructor would give every class holding one a
+# constructor; igCapabilityManager has no reflected record here.
+FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager")
 
 # Inline arrays: the element type comes from the kind, the element count from the distance to the
 # next field (reflection records no count), or for a last field from the registered instance size.

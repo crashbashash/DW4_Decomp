@@ -1,47 +1,44 @@
-igMetaObject *g_igVisualAttribute_metaObject;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igVisualAttribute_GetOrCreateMetaObject(void) {
-    if (g_igVisualAttribute_metaObject == 0) {
-        g_igVisualAttribute_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igVisualAttribute_metaObject;
-}
+igMetaObject *igVisualAttribute::_Meta;
 
-igMetaObject *igVisualAttribute_GetMetaObject(void)
+igMetaObject *igVisualAttribute::getClassTypeLazy()
 {
-    igMetaObject *g = g_igVisualAttribute_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igVisualAttribute_EnsureRegistered();
-    return g_igVisualAttribute_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-void igVisualAttribute_EnsureRegistered(void)
+igMetaObject *igVisualAttribute::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igVisualAttribute_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igVisualAttribute_Register(void) {
+void igVisualAttribute::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igVisualAttribute::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igVisualAttribute_metaObject,
-        igAttr_Register,
-        igAttr_GetPublishedMetaObject,
-        igVisualAttribute_GetMetaObjectFunction,
+        true,
+        &_Meta,
+        Gap::Attrs::igAttr::arkRegisterInternal,
+        Gap::Attrs::igAttr::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igVisualAttribute",
-        0xC, /* instance size */
+        sizeof(igVisualAttribute),
         0,
         0,
-        0, /* extra callback item */
-        0 /* callback list */
+        0,
+        0
     );
 }
-
-void igVisualAttribute_GetMetaObjectFunction(void) {
-    igVisualAttribute_GetMetaObject();
 }
-
-igMetaObject *igAttr_GetPublishedMetaObject(void) {
-    return g_igAttr_metaObject;
 }
 

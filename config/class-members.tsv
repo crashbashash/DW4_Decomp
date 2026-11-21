@@ -649,3 +649,91 @@ igObjectList	IG_OBJECT_DEFINE(igObjectList)
 igObjectList	private: static igMetaField *k_data;
 igObjectList	inline virtual void userPreWrite() { trimCapacity(); }
 igObjectList	inline virtual igMetaObject *getElementMeta() const { return igObject::getClassMeta(); }
+igAttr	IG_ABSTRACT_OBJECT_DEFINE(igAttr)
+igAttr	private: static igMetaField *k_cachedAttrIndex;
+igAttr	protected: static igMetaField *k_cachedUnitID;
+igAttr	private: static short _gNextAttrIndex;
+igAttr	static void userRegister();
+igAttr	virtual void resetFields(int flag);
+igAttr	inline int getAttrIndex() const { return (int)_cachedAttrIndex; }
+igAttr	static void registerClass(igMetaObject *meta);
+igAttr	inline virtual void apply(igContext *context) {}
+igAttr	inline virtual void apply(igVisualContext *vc) {}
+igAttr	inline short getUnitID() const { return _cachedUnitID; }
+igAttr	virtual void setUnitID(short id);
+igAttr	inline virtual void synchronizeDefault(igVisualContext *vc) {}
+igAttr	inline virtual void synchronizeDefault(igContext *context) {}
+igAttr	inline virtual void reset() {}
+igAttr	inline virtual void setup(igVisualContext *vc) {}
+igAttr	inline virtual void setup(igContext *vc) {}
+igAttr	inline virtual int getUnitCount(igCapabilityManager *capabilityManager) { return 1; }
+igAttr	inline void setCachedUnitID(short id) { _cachedUnitID = id; }
+igAttr	virtual void userPostLoad();
+igVisualAttribute	IG_ABSTRACT_OBJECT_DEFINE(igVisualAttribute)
+igVisualAttribute	virtual void setup(igVisualContext *vc);
+igAlphaStateAttr	IG_OBJECT_DEFINE(igAlphaStateAttr)
+igAlphaStateAttr	private: static igMetaField *k_enabled;
+igAlphaStateAttr	virtual void apply(igVisualContext *vc);
+igAlphaStateAttr	virtual void setState(bool enabled);
+igAlphaStateAttr	inline bool getState() const { return _enabled; }
+igAlphaStateAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igBlendStateAttr	IG_OBJECT_DEFINE(igBlendStateAttr)
+igBlendStateAttr	private: static igMetaField *k_enabled;
+igBlendStateAttr	virtual void apply(igVisualContext *vc);
+igBlendStateAttr	virtual void setState(bool enabled);
+igBlendStateAttr	inline bool getState() const { return _enabled; }
+igBlendStateAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igClippingStateAttr	IG_OBJECT_DEFINE(igClippingStateAttr)
+igClippingStateAttr	private: static igMetaField *k_enabled;
+igClippingStateAttr	virtual void apply(igVisualContext *vc);
+igClippingStateAttr	virtual void setState(bool enabled);
+igClippingStateAttr	inline bool getState() const { return _enabled; }
+igClippingStateAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igDepthStateAttr	IG_OBJECT_DEFINE(igDepthStateAttr)
+igDepthStateAttr	private: static igMetaField *k_enabled;
+igDepthStateAttr	virtual void apply(igVisualContext *vc);
+igDepthStateAttr	virtual void setState(bool enabled);
+igDepthStateAttr	inline bool getState() const { return _enabled; }
+igDepthStateAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igDepthWriteStateAttr	IG_OBJECT_DEFINE(igDepthWriteStateAttr)
+igDepthWriteStateAttr	private: static igMetaField *k_enabled;
+igDepthWriteStateAttr	virtual void apply(igVisualContext *vc);
+igDepthWriteStateAttr	virtual void setState(bool enabled);
+igDepthWriteStateAttr	inline bool getState() const { return _enabled; }
+igDepthWriteStateAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igFogStateAttr	IG_OBJECT_DEFINE(igFogStateAttr)
+igFogStateAttr	private: static igMetaField *k_enabled;
+igFogStateAttr	virtual void apply(igVisualContext *vc);
+igFogStateAttr	virtual void setState(bool enabled);
+igFogStateAttr	inline bool getState() const { return _enabled; }
+igFogStateAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igLightingStateAttr	IG_OBJECT_DEFINE(igLightingStateAttr)
+igLightingStateAttr	private: static igMetaField *k_enabled;
+igLightingStateAttr	virtual void apply(igVisualContext *vc);
+igLightingStateAttr	virtual void setState(bool enabled);
+igLightingStateAttr	inline bool getState() const { return _enabled; }
+igLightingStateAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igMatrixOptStateAttr	IG_OBJECT_DEFINE(igMatrixOptStateAttr)
+igMatrixOptStateAttr	private: static igMetaField *k_enabled;
+igMatrixOptStateAttr	virtual void apply(igVisualContext *vc);
+igMatrixOptStateAttr	virtual void setState(bool enabled);
+igMatrixOptStateAttr	inline bool getState() const { return _enabled; }
+igMatrixOptStateAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igStencilStateAttr	IG_OBJECT_DEFINE(igStencilStateAttr)
+igStencilStateAttr	private: static igMetaField *k_enabled;
+igStencilStateAttr	virtual void apply(igVisualContext *vc);
+igStencilStateAttr	virtual void setState(bool enabled);
+igStencilStateAttr	inline bool getState() const { return _enabled; }
+igStencilStateAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igVertexBlendStateAttr	IG_OBJECT_DEFINE(igVertexBlendStateAttr)
+igVertexBlendStateAttr	private: static igMetaField *k_enabled;
+igVertexBlendStateAttr	virtual void apply(igVisualContext *vc);
+igVertexBlendStateAttr	virtual void setState(bool enabled);
+igVertexBlendStateAttr	inline bool getState() const { return _enabled; }
+igVertexBlendStateAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igNormalizeNormalsStateAttr	IG_OBJECT_DEFINE(igNormalizeNormalsStateAttr)
+igNormalizeNormalsStateAttr	private: static igMetaField *k_enabled;
+igNormalizeNormalsStateAttr	virtual void apply(igVisualContext *vc);
+igNormalizeNormalsStateAttr	inline void setState(bool enabled) { _enabled = enabled; }
+igNormalizeNormalsStateAttr	inline bool getState() const { return _enabled; }
+igNormalizeNormalsStateAttr	virtual void synchronizeDefault(igVisualContext *vc);

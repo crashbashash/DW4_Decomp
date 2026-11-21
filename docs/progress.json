@@ -164,13 +164,13 @@
    "ptr": 3040,
    "ref": 69523,
    "region": 109384,
-   "source": 510289,
+   "source": 511737,
    "str": 68640,
    "table": 22212,
-   "vtable": 114060
+   "vtable": 112612
   },
-  "matched": 510289,
-  "matched_pct": 39.26,
+  "matched": 511737,
+  "matched_pct": 39.37,
   "pct": 99.62,
   "start_only": 185099,
   "start_only_pct": 14.24,
@@ -406,7 +406,7 @@
   "counters": {
    "asm_body.bytes": 0,
    "asm_body.functions": 0,
-   "boilerplate.functions": 7113,
+   "boilerplate.functions": 7015,
    "code_only.bytes": 0,
    "code_only.differ.bytes": 0,
    "code_only.differ.functions": 0,
@@ -427,17 +427,17 @@
    "decl.varargs": 0,
    "foreign_profile.bytes": 0,
    "foreign_profile.functions": 0,
-   "free_methods.bytes": 1763820,
-   "free_methods.functions": 11277,
+   "free_methods.bytes": 1756648,
+   "free_methods.functions": 11130,
    "fun_dat_refs": 2,
    "inline_asm.other": 0,
    "inventory.unsymbolised_bytes": 0,
    "inventory_gap.bytes": 0,
    "inventory_gap.functions": 0,
-   "layout.tail_fragments": 481,
+   "layout.tail_fragments": 469,
    "m2c_idiom.units": 0,
    "matching_constructs": 535,
-   "members.offset_named": 2575,
+   "members.offset_named": 2573,
    "mismatch.bytes": 0,
    "mismatch.functions": 0,
    "name_defect.bytes": 0,
@@ -457,8 +457,8 @@
    "unmatched.bytes": 170340,
    "unmatched.functions": 118,
    "vfunc_slots.functions": 402,
-   "views.local": 299,
-   "virtual_views.slots": 31866,
+   "views.local": 298,
+   "virtual_views.slots": 31813,
    "virtual_views.types": 234
   }
  },
@@ -530,14 +530,14 @@
  ],
  "link": {
   "asm_bytes": 170340,
-  "data_bytes": 400636,
+  "data_bytes": 402084,
   "from_asm_body_bytes": 0,
   "from_asm_body_pct": 0.0,
   "from_asm_body_units": 0,
   "from_assembly_bytes": 8288,
   "from_assembly_units": 165,
-  "from_c_bytes": 3694708,
-  "from_c_pct": 81.36,
+  "from_c_bytes": 3696156,
+  "from_c_pct": 81.39,
   "from_c_units": 20293,
   "image_bytes": 4772480,
   "jtbl_asm_body_bytes": 0,
@@ -562,23 +562,23 @@
   "vtables": 478
  },
  "readable": {
-  "bytes": 2712488,
+  "bytes": 2714244,
   "failing": {
    "addresses": {
-    "bytes": 481428,
-    "functions": 2166
+    "bytes": 481248,
+    "functions": 2163
    },
    "declarations": {
     "bytes": 0,
     "functions": 0
    },
    "fields": {
-    "bytes": 235520,
-    "functions": 1089
+    "bytes": 235512,
+    "functions": 1088
    },
    "idioms": {
-    "bytes": 306020,
-    "functions": 1621
+    "bytes": 305140,
+    "functions": 1597
    },
    "name": {
     "bytes": 322540,
@@ -593,15 +593,15 @@
     "functions": 933
    },
    "types": {
-    "bytes": 276136,
-    "functions": 1047
+    "bytes": 274808,
+    "functions": 1026
    },
    "virtuals": {
-    "bytes": 133124,
-    "functions": 516
+    "bytes": 132320,
+    "functions": 503
    }
   },
-  "functions": 17249,
+  "functions": 17289,
   "matched_functions": 20458
  },
  "regions": [
@@ -736,11 +736,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 3073,
+  "offset_casts": 3072,
   "pct": 46.61,
-  "recovered": 34054,
+  "recovered": 34058,
   "synthetic": 5887,
-  "total": 73062,
+  "total": 73070,
   "typeable": 0,
   "typeable_pct": 0.0
  }

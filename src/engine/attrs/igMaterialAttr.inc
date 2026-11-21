@@ -32,8 +32,8 @@ CallbackArray *igMaterialAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMaterialAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igMaterialAttr_GetMetaObjectFunction,
         "igMaterialAttr",
         0x54, /* instance size */

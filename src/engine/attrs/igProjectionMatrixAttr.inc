@@ -39,8 +39,8 @@ CallbackArray *igProjectionMatrixAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igProjectionMatrixAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igProjectionMatrixAttr_GetMetaObjectFunction,
         "igProjectionMatrixAttr",
         0x4C, /* instance size */

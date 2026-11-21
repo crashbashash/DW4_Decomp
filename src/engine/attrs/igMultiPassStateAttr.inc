@@ -38,8 +38,8 @@ CallbackArray *igMultiPassStateAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMultiPassStateAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igMultiPassStateAttr_GetMetaObjectFunction,
         "igMultiPassStateAttr",
         0x10, /* instance size */

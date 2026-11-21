@@ -124,7 +124,7 @@ void FUN_00170510(Obj_170510 *o, int arg1) {
     }
 }
 
-void igPsx2VisualContext_SetLightingState(igPsx2VisualContext *self, unsigned char arg1) {
+void igPsx2VisualContext_SetLightingState(igPsx2VisualContext *self, bool arg1) {
     S0_1706d0 *arg0 = (S0_1706d0 *)self;
     if (arg0->f1340 == (arg1 & 0xFF)) {
         DAT_00560848[0] += 1;
@@ -1257,7 +1257,7 @@ void igPsx2VisualContext_ResetToDefault(void *a0, int arg1) {
     ((VC696 *)a0)->vX();
 }
 
-void igPsx2VisualContext_SetNormalizeNormalsState(igPsx2VisualContext *self, unsigned char arg1) {
+void igPsx2VisualContext_SetNormalizeNormalsState(igPsx2VisualContext *self, bool arg1) {
     S0_174300 *arg0 = (S0_174300 *)self;
     int temp_v1;
 
@@ -1293,7 +1293,7 @@ unsigned char igPsx2VisualContext_GetVertexBlendingState(igPsx2VisualContext *se
     return self->_bVertexBlendingEnabled;
 }
 
-void igPsx2VisualContext_SetBlendingState(igPsx2VisualContext *self, unsigned char arg1) {
+void igPsx2VisualContext_SetBlendingState(igPsx2VisualContext *self, bool arg1) {
     struct S_1743c0 *arg0 = (struct S_1743c0 *)self;
     if (g_igPsx2DisableExt_ext2Enabled != 0) {
         arg1 = 0;
@@ -1417,7 +1417,7 @@ void FUN_00174640(int arg0, int arg1) {
     p2SetBlendEquation(var_a0, var_a1, var_a2, var_a3, var_a4);
 }
 
-void igPsx2VisualContext_SetAlphaTestState(igPsx2VisualContext *self, unsigned char enable)
+void igPsx2VisualContext_SetAlphaTestState(igPsx2VisualContext *self, bool enable)
 {
     if (g_igPsx2DisableExt_ext7Enabled != 0)
         enable = 0;
@@ -1464,7 +1464,7 @@ float igPsx2VisualContext_GetAlphaRefValue(igPsx2VisualContext *self) {
 
 void FUN_001747f0(S_1747f0 *s) { if (s->b == 1) { int a = (int)(128.0f * (float)s->f); p2SetAlphaTest(DAT_0048a500[s->i], a, 0); } }
 
-void igPsx2VisualContext_SetMatrixOptimizationState(igPsx2VisualContext *self, unsigned char enable) {
+void igPsx2VisualContext_SetMatrixOptimizationState(igPsx2VisualContext *self, bool enable) {
     int state;
     if (g_igPsx2DisableExt_ext11Enabled != 0) {
         enable = 0;
@@ -1481,12 +1481,12 @@ void igPsx2VisualContext_SetMatrixOptimizationState(igPsx2VisualContext *self, u
     p2EnableCapability(0x13);
 }
 
-unsigned char igPsx2VisualContext_GetMatrixOptimizationState(igPsx2VisualContext *self)
+bool igPsx2VisualContext_GetMatrixOptimizationState(igPsx2VisualContext *self)
 {
-    return self->_matrixOptimizationEnable;
+    return *(bool *)&self->_matrixOptimizationEnable;
 }
 
-void igPsx2VisualContext_SetViewportClippingState(igPsx2VisualContext *self, unsigned char a) {
+void igPsx2VisualContext_SetViewportClippingState(igPsx2VisualContext *self, bool a) {
     O_1748d0 *o = (O_1748d0 *)self;
     if (g_igPsx2DisableExt_ext8Enabled != 0) a = 0;
     if (o->v == a) DAT_005608b8[0] += 1;
@@ -1618,7 +1618,7 @@ int igPsx2VisualContext_GetDepthTestFunction(igPsx2VisualContext *self) {
     return self->_depthTestFunc;
 }
 
-void igPsx2VisualContext_SetDepthWriteState(igPsx2VisualContext *self, unsigned char arg1) {
+void igPsx2VisualContext_SetDepthWriteState(igPsx2VisualContext *self, bool arg1) {
     struct S_174d70 *arg0 = (struct S_174d70 *)self;
     if (arg0->b == (arg1 & 0xFF)) {
         DAT_005609b4[0] += 1;

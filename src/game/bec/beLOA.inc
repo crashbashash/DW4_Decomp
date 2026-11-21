@@ -54,7 +54,7 @@ void beLOA_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beLOA_Register);
 }
 
-static igMetaObjectCallback g_beLOA_callbackList[] = { igAttrList_EnsureRegistered, igBlendStateAttr_EnsureRegistered, igBlendFunctionAttr_EnsureRegistered, igColorAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beLOA_callbackList[] = { igAttrList_EnsureRegistered, Gap::Attrs::igBlendStateAttr::arkRegister, igBlendFunctionAttr_EnsureRegistered, igColorAttr_EnsureRegistered, 0 };
 
 CallbackArray *beLOA_Register(void) {
     BecLibrary_MarkRegistered();
@@ -150,7 +150,7 @@ void beLOA_InitFields(void) {
     ((igObjectRefMetaField *)overrideAttrList)->_metaObject = (int)igAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)overrideAttrList)->_construct = 1;
     blendStateAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
-    ((igObjectRefMetaField *)blendStateAttr)->_metaObject = (int)igBlendStateAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)blendStateAttr)->_metaObject = (int)Gap::Attrs::igBlendStateAttr::getClassTypeLazy();
     ((igRefMetaField *)blendStateAttr)->_construct = 1;
     blendFunctionAttr = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
     ((igObjectRefMetaField *)blendFunctionAttr)->_metaObject = (int)igBlendFunctionAttr_GetOrCreateMetaObject();

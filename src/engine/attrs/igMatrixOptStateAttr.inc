@@ -1,80 +1,74 @@
-igMetaObject *g_igMatrixOptStateAttr_metaObject;
-igMetaField *g_igMatrixOptStateAttr_enabledMetaField;
+namespace Gap {
+namespace Attrs {
 
-igMatrixOptStateAttr *igMatrixOptStateAttr_Create(igMemoryPoolView *pool) {
-    igMatrixOptStateAttr_EnsureRegistered();
-    return (igMatrixOptStateAttr *)igMetaObject_CreateInstance(g_igMatrixOptStateAttr_metaObject, pool);
-}
+igMetaObject *igMatrixOptStateAttr::_Meta;
+igMetaField *igMatrixOptStateAttr::k_enabled;
 
-igMetaObject *igMatrixOptStateAttr_GetOrCreateMetaObject(void) {
-    if (g_igMatrixOptStateAttr_metaObject == 0) {
-        g_igMatrixOptStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igMatrixOptStateAttr_metaObject;
-}
-
-igMetaObject *igMatrixOptStateAttr_GetMetaObject(void)
+igMatrixOptStateAttr *igMatrixOptStateAttr::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igMatrixOptStateAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMatrixOptStateAttr_EnsureRegistered();
-    return g_igMatrixOptStateAttr_metaObject;
+    arkRegister();
+    return (igMatrixOptStateAttr *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igMatrixOptStateAttr_GetVTable(void) {
-    struct Obj obj;
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igMatrixOptStateAttr_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igMatrixOptStateAttr_EnsureRegistered(void)
+igMetaObject *igMatrixOptStateAttr::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igMatrixOptStateAttr_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igMatrixOptStateAttr_Register(void) {
+igMetaObject *igMatrixOptStateAttr::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igMatrixOptStateAttr::retrieveVTablePointer()
+{
+    igMatrixOptStateAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igMatrixOptStateAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igMatrixOptStateAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igMatrixOptStateAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
-        igMatrixOptStateAttr_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMatrixOptStateAttr",
-        0x10, /* instance size */
-        igMatrixOptStateAttr_GetVTable,
-        &igMatrixOptStateAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igMatrixOptStateAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igMatrixOptStateAttr_GetMetaObjectFunction(void) {
-    igMatrixOptStateAttr_GetMetaObject();
+void igMatrixOptStateAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igBoolMetaField_Create };
+    static const char *names[] = { "_enabled" };
+    static igMetaField **enumStorage[] = { &k_enabled };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(1);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igMatrixOptStateAttr_ctorTable[] = {
-    (FieldFactory)igBoolMetaField_Create,
-};
-static const char *g_igMatrixOptStateAttr_fieldTable[] = {
-    "_enabled",
-};
-static igMetaField **g_igMatrixOptStateAttr_fieldHandles[] = {
-    &g_igMatrixOptStateAttr_enabledMetaField,
-};
-static int g_igMatrixOptStateAttr_fieldOffsets[] = {
-    12,
-};
-
-void igMatrixOptStateAttr_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_igMatrixOptStateAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igMatrixOptStateAttr_ctorTable, 1);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(1);
-    igMetaObject_NameFields(meta, g_igMatrixOptStateAttr_fieldTable, g_igMatrixOptStateAttr_fieldHandles, g_igMatrixOptStateAttr_fieldOffsets, base);
+}
 }
 

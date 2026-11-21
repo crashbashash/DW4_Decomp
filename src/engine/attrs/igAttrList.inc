@@ -33,7 +33,7 @@ void igAttrList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igAttrList_Register);
 }
 
-static igMetaObjectCallback g_igAttrList_callbackList[] = { igAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igAttrList_callbackList[] = { Gap::Attrs::igAttr::arkRegister, 0 };
 
 CallbackArray *igAttrList_Register(void) {
     AttrsLibrary_MarkRegistered();

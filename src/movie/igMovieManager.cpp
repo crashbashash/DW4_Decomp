@@ -680,7 +680,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                 root.p = igAttrSet_CreateInstance(allocator);
             }
             igNamedObject_SetName((igNamedObject *)root.p, Scene_Root);
-            igSmartPointer<igBlendStateAttrDispatchView> blend((igBlendStateAttrDispatchView *)igBlendStateAttr_CreateInstance(MovieAllocator(self)));
+            igSmartPointer<igBlendStateAttrDispatchView> blend((igBlendStateAttrDispatchView *)Gap::Attrs::igBlendStateAttr::_instantiateFromPool((igMemoryPoolView *)MovieAllocator(self)));
             blend->setEnabled(true);
             ObjectList_AppendRetained((igObjectList *)root->_attributes, (igObject *)blend.p);
             igSmartPointer<igTextureStateAttrDispatchView> textureState((igTextureStateAttrDispatchView *)igTextureStateAttr_CreateInstance(MovieAllocator(self)));

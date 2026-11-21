@@ -311,7 +311,7 @@ int igCompileTraversal_TraverseGeometry(igCompileTraversal *self, igGeometry *ge
             FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)mvm);
             restore = topAttr(stackFor_1bc1e0((igAttrStackManager *)self->_attrStack, listMeta));
             FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)restore);
-        } else if (((BoolAttr_1bc1e0 *)current_1bc1e0(stackFor_1bc1e0((igAttrStackManager *)self->_attrStack, g_igVertexBlendStateAttr_metaObject)))->_enabled != 0) {
+        } else if (((BoolAttr_1bc1e0 *)current_1bc1e0(stackFor_1bc1e0((igAttrStackManager *)self->_attrStack, Gap::Attrs::igVertexBlendStateAttr::getClassMeta())))->_enabled != 0) {
             igTDataList<igObject *> *palettes = (igTDataList<igObject *> *)self->_boneMatrixPaletteList;
             igObject *palette = palettes->_count > 0 ? palettes->get(palettes->_count - 1) : 0;
             if (palette != 0) {
@@ -661,7 +661,7 @@ int FUN_001bd890(RemapOwner *o, RemapContext *ctx) {
             setTarget(e, item);
             e->_slot = &o->_items->_data[i];
             setAt(o->_items, i, item);
-        } else if (g_igMatrixOptStateAttr_metaObject == item->getMeta()) {
+        } else if (Gap::Attrs::igMatrixOptStateAttr::getClassMeta() == item->getMeta()) {
             RemapObject *v = o->_fallback;
             setAt(o->_items, i, v);
         }

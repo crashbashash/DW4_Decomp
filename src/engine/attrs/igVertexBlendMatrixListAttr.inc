@@ -57,8 +57,8 @@ CallbackArray *igVertexBlendMatrixListAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVertexBlendMatrixListAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igVertexBlendMatrixListAttr_GetMetaObjectFunction,
         "igVertexBlendMatrixListAttr",
         0x9C, /* instance size */

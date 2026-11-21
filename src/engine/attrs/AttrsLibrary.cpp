@@ -2,7 +2,12 @@
 #include "dw4/support/unregisteredClasses.h"
 
 unsigned char g_AttrsLibrary_registered;
-short g_igAttr_nextAttrIndex;
+namespace Gap {
+namespace Attrs {
+
+short igAttr::_gNextAttrIndex;
+}
+}
 char g_igTextureBindAttr_fastApplyEnabled;
 unsigned char g_igTextureBindAttr_slotsCached;
 
@@ -149,8 +154,6 @@ igSmartPointer<igCustomVectorStateList> g_igVectorConstantAttr_stateList(0, kRet
 #include "src/engine/attrs/igDisplayListAttr_tail2.inc"
 #include "src/engine/attrs/igVisualContextAttrDefaultManager_tail.inc"
 #include "src/engine/attrs/igViewportAttr_tail2.inc"
-#include "src/engine/attrs/igVisualAttribute_tail.inc"
-#include "src/engine/attrs/igVertexBlendStateAttr_tail2.inc"
 #include "src/engine/attrs/igVertexBlendMatrixListAttr_tail2.inc"
 #include "src/engine/attrs/igVertexBlendMatrixAttr_tail2.inc"
 #include "src/engine/attrs/igTimeAttr_tail2.inc"
@@ -165,7 +168,6 @@ igSmartPointer<igCustomVectorStateList> g_igVectorConstantAttr_stateList(0, kRet
 #include "src/engine/attrs/igTextureBindAttr_tail2.inc"
 #include "src/engine/attrs/igTextureAttr_tail3.inc"
 #include "src/engine/attrs/igTexGenMatrixAttr_tail2.inc"
-#include "src/engine/attrs/igStencilStateAttr_tail2.inc"
 #include "src/engine/attrs/igStencilFunctionAttr_tail2.inc"
 #include "src/engine/attrs/igShadeModelAttr_tail2.inc"
 #include "src/engine/attrs/igSetRenderDestinationAttr_tail2.inc"
@@ -175,34 +177,25 @@ igSmartPointer<igCustomVectorStateList> g_igVectorConstantAttr_stateList(0, kRet
 #include "src/engine/attrs/igPolygonModeAttr_tail2.inc"
 #include "src/engine/attrs/igPixelPipelineModeAttr_tail2.inc"
 #include "src/engine/attrs/igParticleAttr_tail3.inc"
-#include "src/engine/attrs/igNormalizeNormalsStateAttr_tail2.inc"
 #include "src/engine/attrs/igMultiPassStateAttr_tail2.inc"
 #include "src/engine/attrs/igModelViewMatrixAttr_tail2.inc"
-#include "src/engine/attrs/igMatrixOptStateAttr_tail2.inc"
 #include "src/engine/attrs/igMaterialAttr_tail2.inc"
-#include "src/engine/attrs/igLightingStateAttr_tail2.inc"
 #include "src/engine/attrs/igLightStateAttr_tail2.inc"
 #include "src/engine/attrs/igLightAttr_tail2.inc"
 #include "src/engine/attrs/igGeometrySetAttr_tail2.inc"
 #include "src/engine/attrs/igGeometryMaskAttr_tail2.inc"
 #include "src/engine/attrs/igGeometryAttr1_5_tail2.inc"
 #include "src/engine/attrs/igGenericAttrDefaultManager_tail2.inc"
-#include "src/engine/attrs/igFogStateAttr_tail2.inc"
 #include "src/engine/attrs/igFogAttr_tail2.inc"
 #include "src/engine/attrs/igDisplayListAttr_tail3.inc"
-#include "src/engine/attrs/igDepthWriteStateAttr_tail2.inc"
-#include "src/engine/attrs/igDepthStateAttr_tail2.inc"
 #include "src/engine/attrs/igCullFaceAttr_tail2.inc"
 #include "src/engine/attrs/igCopyRenderDestinationAttr_tail2.inc"
 #include "src/engine/attrs/igColorMaskAttr_tail2.inc"
 #include "src/engine/attrs/igColorAttr_tail2.inc"
-#include "src/engine/attrs/igClippingStateAttr_tail2.inc"
 #include "src/engine/attrs/igClearAttr_tail2.inc"
-#include "src/engine/attrs/igBlendStateAttr_tail2.inc"
 #include "src/engine/attrs/igBlendMatrixPaletteAttr_tail2.inc"
 #include "src/engine/attrs/igBlendMatricesAttr_tail2.inc"
 #include "src/engine/attrs/igAttrPool_tail2.inc"
-#include "src/engine/attrs/igAlphaStateAttr_tail2.inc"
 #include "src/engine/attrs/igAlphaFunctionAttr_tail.inc"
 #include "src/engine/attrs/igAttrList_tail.inc"
 #include "src/engine/attrs/igObjectList_tail2.inc"

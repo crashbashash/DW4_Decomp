@@ -78,7 +78,7 @@ void igCommonTraversal_Setup(A_1b6f30 *arg0, R_1b6f30 *arg1, R_1b6f30 *arg2) {
         }
     }
     arg0->f36 = arg1;
-    igAttrStackManager_Setup((igAttrStackManager *)arg0->f52, g_igAttr_metaObject, (igAttrDefaultManager *)arg0->f36,
+    igAttrStackManager_Setup((igAttrStackManager *)arg0->f52, Gap::Attrs::igAttr::getClassMeta(), (igAttrDefaultManager *)arg0->f36,
                  (igVisualContextCapabilityManager *)arg0->f32);
 }
 

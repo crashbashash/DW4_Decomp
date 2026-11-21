@@ -32,8 +32,8 @@ CallbackArray *igGeometryMaskAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGeometryMaskAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igGeometryMaskAttr_GetMetaObjectFunction,
         "igGeometryMaskAttr",
         0x10, /* instance size */

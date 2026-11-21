@@ -119,8 +119,8 @@ CallbackArray *igRenderDestinationAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igRenderDestinationAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igRenderDestinationAttr_GetMetaObjectFunction,
         "igRenderDestinationAttr",
         0x44, /* instance size */

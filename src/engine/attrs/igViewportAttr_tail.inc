@@ -34,7 +34,7 @@ public:
 
 /* The object when it is an igAttr, otherwise none. */
 static inline igObject *asAttr(igObject *object) {
-    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType((igMetaObject *)g_igAttr_metaObject) != 0) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType((igMetaObject *)Gap::Attrs::igAttr::getClassMeta()) != 0) {
         return object;
     }
     return 0;

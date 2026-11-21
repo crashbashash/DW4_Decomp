@@ -5,13 +5,13 @@ void igPlanarShadowShader_userConstruct(void **arg0, int arg1) {
         DAT_005627a0[0] = (void **)(((void * *)igBlendFunctionAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(DAT_005627a0[0]))->vX((int)(0));
         ((DW4VC_132_1 *)(DAT_005627a0[0]))->vX((int)(0));
-        DAT_005627a8[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
+        DAT_005627a8[0] = (void **)(((void * *)Gap::Attrs::igBlendStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(DAT_005627a8[0]))->vX((int)(1));
-        DAT_005627b0[0] = (void **)(((void * *)igLightingStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
+        DAT_005627b0[0] = (void **)(((void * *)Gap::Attrs::igLightingStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(DAT_005627b0[0]))->vX((int)(0));
         DAT_005627b8[0] = (void **)(((void * *)igTextureStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(DAT_005627b8[0]))->vX((int)(0));
-        DAT_005627c8[0] = (void **)(((void * *)igAlphaStateAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
+        DAT_005627c8[0] = (void **)(((void * *)Gap::Attrs::igAlphaStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(DAT_005627c8[0]))->vX((int)(0));
         DAT_005627c0[0] = (void *)(igGeometryMaskAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
         *(int *)((char *)(DAT_005627c0[0]) + 12) = 1;

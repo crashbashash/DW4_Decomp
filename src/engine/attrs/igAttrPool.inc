@@ -107,7 +107,7 @@ CallbackArray *igAttrPool_Register(void) {
         0, /* abstract */
         &g_igAttrPool_metaObject,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
+        Gap::Core::igObject::getClassMeta,
         igAttrPool_GetMetaObjectFunction,
         "igAttrPool",
         0x14, /* instance size */

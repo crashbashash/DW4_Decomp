@@ -7,7 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-struct igMetaObject *igNormalizeNormalsStateAttr_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

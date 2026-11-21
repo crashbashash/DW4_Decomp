@@ -1,4 +1,4 @@
-static igMetaObjectCallback g_igCommonTraversal_callbackList[] = { igAttrStackManager_EnsureRegistered, igTransformStack_EnsureRegistered, igVisualContext_EnsureRegistered, igCapabilityManager_EnsureRegistered, igAttrDefaultManager_EnsureRegistered, igNonRefCountedAttrList_EnsureRegistered, igSorter_EnsureRegistered, igModelViewMatrixAttrPool_EnsureRegistered, igTimeAttrPool_EnsureRegistered, igVertexBlendMatrixAttrPool_EnsureRegistered, igTextureMatrixAttrPool_EnsureRegistered, igVertexBlendMatrixListAttrPool_EnsureRegistered, igMatrixObjectPool_EnsureRegistered, igProjectionMatrixAttrPool_EnsureRegistered, igMatrixOptStateAttr_EnsureRegistered, igNormalizeNormalsStateAttr_EnsureRegistered, igLongStack_EnsureRegistered, igNonRefCountedMatrixObjectList_EnsureRegistered, igNonRefCountedTransformList_EnsureRegistered, igIntList_EnsureRegistered, igStringObjList_EnsureRegistered, igNodeListList_EnsureRegistered, igBlendMatricesAttrPool_EnsureRegistered, igTimeAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igCommonTraversal_callbackList[] = { igAttrStackManager_EnsureRegistered, igTransformStack_EnsureRegistered, igVisualContext_EnsureRegistered, igCapabilityManager_EnsureRegistered, igAttrDefaultManager_EnsureRegistered, igNonRefCountedAttrList_EnsureRegistered, igSorter_EnsureRegistered, igModelViewMatrixAttrPool_EnsureRegistered, igTimeAttrPool_EnsureRegistered, igVertexBlendMatrixAttrPool_EnsureRegistered, igTextureMatrixAttrPool_EnsureRegistered, igVertexBlendMatrixListAttrPool_EnsureRegistered, igMatrixObjectPool_EnsureRegistered, igProjectionMatrixAttrPool_EnsureRegistered, Gap::Attrs::igMatrixOptStateAttr::arkRegister, Gap::Attrs::igNormalizeNormalsStateAttr::arkRegister, igLongStack_EnsureRegistered, igNonRefCountedMatrixObjectList_EnsureRegistered, igNonRefCountedTransformList_EnsureRegistered, igIntList_EnsureRegistered, igStringObjList_EnsureRegistered, igNodeListList_EnsureRegistered, igBlendMatricesAttrPool_EnsureRegistered, igTimeAttr_EnsureRegistered, 0 };
 
 CallbackArray *igCommonTraversal_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -254,10 +254,10 @@ void igCommonTraversal_InitFields(void) {
     ((Gap::Math::igMatrix44fMetaField *)temp_s2_16)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
                                                         igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
     temp_s2_17 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x11)));
-    ((igObjectRefMetaField *)temp_s2_17)->_metaObject = (int)igMatrixOptStateAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_17)->_metaObject = (int)Gap::Attrs::igMatrixOptStateAttr::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_17)->_construct = 1;
     temp_s2_18 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x12)));
-    ((igObjectRefMetaField *)temp_s2_18)->_metaObject = (int)igNormalizeNormalsStateAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_18)->_metaObject = (int)Gap::Attrs::igNormalizeNormalsStateAttr::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_18)->_construct = 1;
     temp_s2_19 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x13)));
     ((igObjectRefMetaField *)temp_s2_19)->_metaObject = (int)igLongStack_GetOrCreateMetaObject();

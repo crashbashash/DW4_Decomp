@@ -1,75 +1,68 @@
-igMetaObject *g_igDepthWriteStateAttr_metaObject;
-igMetaField *g_igDepthWriteStateAttr_enabledMetaField;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igDepthWriteStateAttr_GetOrCreateMetaObject(void) {
-    if (g_igDepthWriteStateAttr_metaObject == 0) {
-        g_igDepthWriteStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igDepthWriteStateAttr_metaObject;
-}
+igMetaObject *igDepthWriteStateAttr::_Meta;
+igMetaField *igDepthWriteStateAttr::k_enabled;
 
-igMetaObject *igDepthWriteStateAttr_GetMetaObject(void)
+igMetaObject *igDepthWriteStateAttr::getClassTypeLazy()
 {
-    igMetaObject *g = g_igDepthWriteStateAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igDepthWriteStateAttr_EnsureRegistered();
-    return g_igDepthWriteStateAttr_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igDepthWriteStateAttr_GetVTable(void) {
-    struct Obj_138340 obj;
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igDepthWriteStateAttr_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igDepthWriteStateAttr_EnsureRegistered(void)
+igMetaObject *igDepthWriteStateAttr::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igDepthWriteStateAttr_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igDepthWriteStateAttr_Register(void) {
+void *igDepthWriteStateAttr::retrieveVTablePointer()
+{
+    igDepthWriteStateAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igDepthWriteStateAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igDepthWriteStateAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igDepthWriteStateAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
-        igDepthWriteStateAttr_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igDepthWriteStateAttr",
-        0x10, /* instance size */
-        igDepthWriteStateAttr_GetVTable,
-        &igDepthWriteStateAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igDepthWriteStateAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igDepthWriteStateAttr_GetMetaObjectFunction(void) {
-    igDepthWriteStateAttr_GetMetaObject();
+void igDepthWriteStateAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igBoolMetaField_Create };
+    static const char *names[] = { "_enabled" };
+    static igMetaField **enumStorage[] = { &k_enabled };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(1);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igDepthWriteStateAttr_ctorTable[] = {
-    (FieldFactory)igBoolMetaField_Create,
-};
-static const char *g_igDepthWriteStateAttr_fieldTable[] = {
-    "_enabled",
-};
-static igMetaField **g_igDepthWriteStateAttr_fieldHandles[] = {
-    &g_igDepthWriteStateAttr_enabledMetaField,
-};
-static int g_igDepthWriteStateAttr_fieldOffsets[] = {
-    12,
-};
-
-void igDepthWriteStateAttr_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_igDepthWriteStateAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igDepthWriteStateAttr_ctorTable, 1);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(1);
-    igMetaObject_NameFields(meta, g_igDepthWriteStateAttr_fieldTable, g_igDepthWriteStateAttr_fieldHandles, g_igDepthWriteStateAttr_fieldOffsets, base);
+}
 }
 

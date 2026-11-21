@@ -97,8 +97,8 @@ CallbackArray *igLightStateAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igLightStateAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igLightStateAttr_GetMetaObjectFunction,
         "igLightStateAttr",
         0x18, /* instance size */

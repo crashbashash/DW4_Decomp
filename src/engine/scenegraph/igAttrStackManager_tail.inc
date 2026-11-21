@@ -79,7 +79,7 @@ void igAttrStackManager_RegisterClass(char *arg0) {
     int n;
     int i;
     int idx;
-    if (igMetaObject_IsOfType((igMetaObject *)arg0, igAttr_GetMetaObject()) != 0 && *(unsigned char *)(arg0 + 26) == 0) {
+    if (igMetaObject_IsOfType((igMetaObject *)arg0, Gap::Attrs::igAttr::getClassTypeSafe()) != 0 && *(unsigned char *)(arg0 + 26) == 0) {
         if (((RefObj * *)DAT_00562578)[0] == 0) {
             ((RefObj * *)DAT_00562578)[0] = (RefObj *)igMetaObjectList_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
         }

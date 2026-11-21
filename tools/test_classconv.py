@@ -166,6 +166,16 @@ class TreeTest(unittest.TestCase):
         row = json.loads(self.tree.read(cc.UNIT_OBJECTS))["0x00100000"]
         self.assertEqual(row["emitted"], {"__ct__Q33Gap4Core14igFooMetaFieldFv": "0x00100000"})
 
+    def test_empty_fragment_goes_with_its_include(self):
+        self.tree.write("src/engine/core/igFooMetaField_tail.inc", "\n")
+        self.tree.write("src/engine/core/CoreLibrary.cpp", '#include "src/engine/core/igFooMetaField.inc"\n'
+                        '#include "src/engine/core/igFooMetaField_tail.inc"\n')
+        self.assertEqual(cc.drop_empty_fragments(self.tree, "Core"), ["src/engine/core/igFooMetaField_tail.inc"])
+        self.assertFalse(os.path.exists(self.tree.path("src/engine/core/igFooMetaField_tail.inc")))
+        self.assertEqual(self.tree.read("src/engine/core/CoreLibrary.cpp"),
+                         '#include "src/engine/core/igFooMetaField.inc"\n')
+        self.assertEqual(cc.drop_empty_fragments(self.tree, "Core"), [])
+
     def test_spec_file(self):
         path = os.path.join(self.tmp.name, "spec.py")
         with open(path, "w") as f:

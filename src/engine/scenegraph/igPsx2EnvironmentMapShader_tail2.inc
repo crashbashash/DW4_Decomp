@@ -26,7 +26,7 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_49(void) {
     if (g_envMapMatrixOptStateAttr.p == 0) {
         temp_s0 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapMatrixOptStateAttr.release();
-        g_envMapMatrixOptStateAttr.p = (igMatrixOptStateAttr *)igMatrixOptStateAttr_Create((igMemoryPoolView *)temp_s0);
+        g_envMapMatrixOptStateAttr.p = (igMatrixOptStateAttr *)Gap::Attrs::igMatrixOptStateAttr::_instantiateFromPool((igMemoryPoolView *)temp_s0);
         ((DW4VC_128_1 *)g_envMapMatrixOptStateAttr.p)->vX(0);
         temp_s0_2 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapTextureMatrixStateAttr.release();

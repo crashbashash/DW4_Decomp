@@ -45,8 +45,8 @@ CallbackArray *igTextureCoordSourceAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTextureCoordSourceAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igTextureCoordSourceAttr_GetMetaObjectFunction,
         "igTextureCoordSourceAttr",
         0x18, /* instance size */

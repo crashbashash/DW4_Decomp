@@ -93,17 +93,17 @@ void FUN_001c1e10(void) {
         ((DW4VC_100_1 *)(((void * * *)DAT_00562730)[0]))->vX((int)(0));
     }
     if (((void * * *)DAT_00562738)[0] == 0) {
-        ((void * * *)DAT_00562738)[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
+        ((void * * *)DAT_00562738)[0] = (void **)(((void * *)Gap::Attrs::igBlendStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(((void * * *)DAT_00562738)[0]))->vX((int)(1));
     }
     if (DAT_00562740[0] == 0) {
-        DAT_00562740[0] = (void **)(((void * *)igBlendStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
+        DAT_00562740[0] = (void **)(((void * *)Gap::Attrs::igBlendStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(DAT_00562740[0]))->vX((int)(0));
     }
     if (g_igAlphaStateAttr_instance.p == 0) {
         temp_s0 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_igAlphaStateAttr_instance.release();
-        g_igAlphaStateAttr_instance.p = (igAlphaStateAttr *)igAlphaStateAttr_Create((igMemoryPoolView *)temp_s0);
+        g_igAlphaStateAttr_instance.p = (igAlphaStateAttr *)Gap::Attrs::igAlphaStateAttr::_instantiateFromPool((igMemoryPoolView *)temp_s0);
         ((DW4VC_128_1 *)g_igAlphaStateAttr_instance.p)->vX(0);
     }
 }

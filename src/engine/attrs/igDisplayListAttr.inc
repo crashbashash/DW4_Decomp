@@ -67,8 +67,8 @@ CallbackArray *igDisplayListAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igDisplayListAttr_metaObject,
-        igAttr_Register,
-        igAttr_GetPublishedMetaObject,
+        Gap::Attrs::igAttr::arkRegisterInternal,
+        Gap::Attrs::igAttr::getClassMeta,
         igDisplayListAttr_GetMetaObjectFunction,
         "igDisplayListAttr",
         0x10, /* instance size */

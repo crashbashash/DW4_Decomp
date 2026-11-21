@@ -1,67 +1,57 @@
-igMetaObject *g_igVertexBlendStateAttr_metaObject;
-igMetaField *g_igVertexBlendStateAttr_enabledMetaField;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igVertexBlendStateAttr_GetMetaObject(void)
+igMetaObject *igVertexBlendStateAttr::_Meta;
+igMetaField *igVertexBlendStateAttr::k_enabled;
+
+igMetaObject *igVertexBlendStateAttr::getClassTypeSafe()
 {
-    igMetaObject *g = g_igVertexBlendStateAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igVertexBlendStateAttr_EnsureRegistered();
-    return g_igVertexBlendStateAttr_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igVertexBlendStateAttr_GetVTable(void) {
-    struct Obj obj;
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igVertexBlendStateAttr_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igVertexBlendStateAttr_EnsureRegistered(void)
+void *igVertexBlendStateAttr::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igVertexBlendStateAttr_Register);
+    igVertexBlendStateAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-CallbackArray *igVertexBlendStateAttr_Register(void) {
+void igVertexBlendStateAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igVertexBlendStateAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igVertexBlendStateAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
-        igVertexBlendStateAttr_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igVertexBlendStateAttr",
-        0x10, /* instance size */
-        igVertexBlendStateAttr_GetVTable,
-        &igVertexBlendStateAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igVertexBlendStateAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igVertexBlendStateAttr_GetMetaObjectFunction(void) {
-    igVertexBlendStateAttr_GetMetaObject();
+void igVertexBlendStateAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igBoolMetaField_Create };
+    static const char *names[] = { "_enabled" };
+    static igMetaField **enumStorage[] = { &k_enabled };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igVertexBlendStateAttr_ctorTable[] = {
-    (FieldFactory)igBoolMetaField_Create,
-};
-static const char *g_igVertexBlendStateAttr_fieldTable[] = {
-    "_enabled",
-};
-static igMetaField **g_igVertexBlendStateAttr_fieldHandles[] = {
-    &g_igVertexBlendStateAttr_enabledMetaField,
-};
-static int g_igVertexBlendStateAttr_fieldOffsets[] = {
-    12,
-};
-
-void igVertexBlendStateAttr_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_igVertexBlendStateAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igVertexBlendStateAttr_ctorTable, 1);
-    igMetaObject_NameFields(meta, g_igVertexBlendStateAttr_fieldTable, g_igVertexBlendStateAttr_fieldHandles, g_igVertexBlendStateAttr_fieldOffsets, base);
+}
 }
 

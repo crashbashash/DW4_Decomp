@@ -32,8 +32,8 @@ CallbackArray *igPixelPipelineModeAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPixelPipelineModeAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igPixelPipelineModeAttr_GetMetaObjectFunction,
         "igPixelPipelineModeAttr",
         0x10, /* instance size */

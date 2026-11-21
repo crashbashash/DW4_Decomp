@@ -1,74 +1,64 @@
-igMetaObject *g_igStencilStateAttr_metaObject;
-igMetaField *g_igStencilStateAttr_enabledMetaField;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igStencilStateAttr_GetOrCreateMetaObject(void) {
-    if (g_igStencilStateAttr_metaObject == 0) {
-        g_igStencilStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igStencilStateAttr_metaObject;
-}
+igMetaObject *igStencilStateAttr::_Meta;
+igMetaField *igStencilStateAttr::k_enabled;
 
-igMetaObject *igStencilStateAttr_GetMetaObject(void)
+igMetaObject *igStencilStateAttr::getClassTypeLazy()
 {
-    igMetaObject *g = g_igStencilStateAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igStencilStateAttr_EnsureRegistered();
-    return g_igStencilStateAttr_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igStencilStateAttr_GetVTable(void) {
-    struct Obj_1334d0 obj;
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igStencilStateAttr_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igStencilStateAttr_EnsureRegistered(void)
+igMetaObject *igStencilStateAttr::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igStencilStateAttr_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igStencilStateAttr_Register(void) {
+void *igStencilStateAttr::retrieveVTablePointer()
+{
+    igStencilStateAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igStencilStateAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igStencilStateAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igStencilStateAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
-        igStencilStateAttr_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igStencilStateAttr",
-        0x10, /* instance size */
-        igStencilStateAttr_GetVTable,
-        &igStencilStateAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igStencilStateAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igStencilStateAttr_GetMetaObjectFunction(void) {
-    igStencilStateAttr_GetMetaObject();
+void igStencilStateAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igBoolMetaField_Create };
+    static const char *names[] = { "_enabled" };
+    static igMetaField **enumStorage[] = { &k_enabled };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igStencilStateAttr_ctorTable[] = {
-    (FieldFactory)igBoolMetaField_Create,
-};
-static const char *g_igStencilStateAttr_fieldTable[] = {
-    "_enabled",
-};
-static igMetaField **g_igStencilStateAttr_fieldHandles[] = {
-    &g_igStencilStateAttr_enabledMetaField,
-};
-static int g_igStencilStateAttr_fieldOffsets[] = {
-    12,
-};
-
-void igStencilStateAttr_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_igStencilStateAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igStencilStateAttr_ctorTable, 1);
-    igMetaObject_NameFields(meta, g_igStencilStateAttr_fieldTable, g_igStencilStateAttr_fieldHandles, g_igStencilStateAttr_fieldOffsets, base);
+}
 }
 

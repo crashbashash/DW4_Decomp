@@ -1,12 +1,20 @@
-void igStencilStateAttr_apply(igStencilStateAttr *self, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetStencilState(arg1, *(bool *)&self->_enabled);
+namespace Gap {
+namespace Attrs {
+
+void igStencilStateAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetStencilState((igPsx2VisualContext *)vc, _enabled);
 }
 
-void igStencilStateAttr_SynchronizeDefault(void **arg0, void **arg1) {
-    ((DW4VC_128_1 *)(arg0))->vX((int)(((DW4VC_640_0 *)(arg1))->vX()));
+void igStencilStateAttr::synchronizeDefault(igVisualContext *vc)
+{
+    setState(((igVisualContextDispatchView *)vc)->getStencilState());
 }
 
-void igStencilStateAttr_SetState(igStencilStateAttr *self, char arg1) {
-    self->_enabled = arg1;
+void igStencilStateAttr::setState(bool enabled)
+{
+    _enabled = enabled;
+}
+}
 }
 

@@ -44,8 +44,8 @@ CallbackArray *igTexGenMatrixAttr_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTexGenMatrixAttr_metaObject,
-        igVisualAttribute_Register,
-        igVisualAttribute_GetPublishedMetaObject,
+        Gap::Attrs::igVisualAttribute::arkRegisterInternal,
+        Gap::Attrs::igVisualAttribute::getClassMeta,
         igTexGenMatrixAttr_GetMetaObjectFunction,
         "igTexGenMatrixAttr",
         0x50, /* instance size */
