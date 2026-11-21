@@ -466,13 +466,26 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    the index they pass to the 16-bit pair, whose own parameter is the kit's unsigned int; `_memPool` a smart
    pointer, so the gfx unit compiles both vtables), the abstract `igVertexArray` (igGfx/igVertexArray.h: DW4's
    pure slots 21-58 in the kit's order, read off igPsx2VertexArray1_1's vtable, with the inline `setUsageFlags`
-   as slot 24, whose copy is attrs' 0x13f800; the format word and DW4's component lock `igVertexArrayLock`, the
-   kit's igComponentEditInfo, are declared ahead in reflected.h; no retail vtable, its subclasses stay flat), and
+   as slot 24, whose copy is attrs' 0x13f800; DW4's component lock `igVertexArrayLock`, the kit's
+   igComponentEditInfo, is declared ahead in reflected.h), and
    `igClut`/`igPsx2Clut` (igGfx/igClut.h: slots 21-23 `load(fileName)`, `load(fmt, numEntries, clutData)`,
    `loadBuffer`; `releaseDefaults` frees the table; DW4's `copy` returns nothing and `scaleAlpha`/`unScaleAlpha`
-   return int, which their callers use unmasked; `loadAct` still reads through the igFile view). Still flat:
-   igVertexArray1_1/igPsx2VertexArray1_1 (about 50 slot bodies on stand-in views), the igVertexArray2 family,
-   igImage/igPsx2Image (23 slots), and the geometry attrs that wait on them;
+   return int, which their callers use unmasked; `loadAct` still reads through the igFile view). The vertex
+   format word is the kit's `igVertexFormat` class (include/dw4/gfx/igVertexFormat.h, one of reflected.h's kit
+   headers): igVertexComponentFilter holds one, and the units that build formats (the particle array, the movie
+   manager) use its setters; its out-of-line `operator&` is retail's 0x164e90, still bound as an external.
+   `igVertexArray1_1` (igGfx/igVertexArray1_1.h; spec scratch/Gfx3/specs/vertex11.py) has its own retail vtable
+   (0x526480) and out-of-line destructor (0x1524c0, the compiler's now): slot 11 is the kit's userResetFields
+   (`resetFields(int)`), slot 18 its makeConcrete (`userMakeConcrete`, folding the pre-1.1 per-weight streams
+   into `_blendWeights`/`_blendIndices`), `getVertexFormat` is out of line and read through the vtable,
+   `userRegister` aligns the weight storage, and `using igVertexArray::configure` keeps the format overload
+   visible beside its own flags overload. `_vdata` is a table of twenty stream pointers (0 positions, 1 normals,
+   2 colours, 3-10 the pre-1.1 weights and indices, 11-14 texture coordinates, 15-16 point-sprite sizes, 17
+   binormals, 18 tangents, 19 sprite angles). `igPsx2VertexArray1_1` (no kit header; its names follow the kit's
+   slots, with `allocateBlendedVertexLists`/`freeBlendedVertexLists` for the skinning lists) holds
+   `_pBlendedVertsList`/`_pBlendedNormsList` as `igSmartPointer<igPointerList>` and the flat `igPsx2LongList`
+   wait list. Still flat: the igVertexArray2 family, igImage/igPsx2Image (23 slots), and the geometry attrs that
+   wait on them;
 6. the game's `be*` classes last.
 
 ## Known differences and gaps

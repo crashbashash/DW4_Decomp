@@ -66,7 +66,7 @@ void igVertexArray::arkRegisterInitialize()
         metaField->_deepCopyMethod = 0;
     }
     igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
-    *(void (**)())&_Meta->_abstractProxy = (void (*)())igPsx2VertexArray1_1_GetMetaObjectFunction;
+    *(void (**)())&_Meta->_abstractProxy = (void (*)())Gap::Gfx::igPsx2VertexArray1_1::getClassMetaSafe;
 }
 }
 }

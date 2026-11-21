@@ -69,15 +69,6 @@ struct Particle {
     igVec2f texCoord1Acceleration;
 };
 
-/* The vertex layout the point sprites build their arrays with. */
-struct igVertexFormat {
-    unsigned int bits;
-    void setHasPositions(bool on) { if (on) bits |= 1; else bits &= ~1; }
-    void setHasColors(bool on) { if (on) bits |= 4; else bits &= ~4; }
-    void setTextureCoordCount(unsigned int count) { bits &= ~0xF0000; bits |= (count & 0xF) << 16; }
-    void setPointSize(unsigned int size) { bits &= ~0x300000; bits |= (size & 3) << 20; }
-};
-
 /* ParticleArray's virtuals: slot 21 configures the array for a format, slot 24 returns a particle,
  * slot 30 the format, and slot 38 whether igParticleArray's own update is enough.
  * ABI view only: never instantiated. */
@@ -288,11 +279,10 @@ int ParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int off
         igObject::release((igObject *)self->_vertexArray2);
         self->_vertexArray2 = (int)Gap::Gfx::igVertexArray::_instantiateFromPool((igMemoryPoolView *)allocator);
         igVertexFormat format;
-        format.bits = 0;
         format.setHasPositions(true);
-        format.setHasColors(true);
+        format.setHasVertexColors(true);
         if (particleFormat(self)->_textureCoord != IG_GFX_PARTICLE_COORD_NONE) format.setTextureCoordCount(1);
-        format.setPointSize(2);
+        format.setPointSpriteCoordCount(2);
         pointSprite(self)->configure((igObject *)self->_vertexArray1, &format, self->_maxNum, 4);
         pointSprite(self)->configure((igObject *)self->_vertexArray2, &format, self->_maxNum, 4);
         setSpriteVertexArray(self, (igObject *)self->_vertexArray1);

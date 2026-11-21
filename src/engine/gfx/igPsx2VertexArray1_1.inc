@@ -1,17 +1,19 @@
-igMetaObject *g_igPsx2VertexArray1_1_metaObject;
-igMetaField *g_igPsx2VertexArray1_1_pBlendedVertsListMetaField;
-igMetaField *g_igPsx2VertexArray1_1_pBlendedNormsListMetaField;
-igMetaField *g_igPsx2VertexArray1_1_pWaitSeqListMetaField;
-igMetaField *g_igPsx2VertexArray1_1_lastArrayUsedMetaField;
-igMetaField *g_igPsx2VertexArray1_1_lSequenceMetaField;
-igMetaField *g_igPsx2VertexArray1_1_textureCoordCompiledMetaField;
-igMetaField *g_igPsx2VertexArray1_1_multipassCompiledMetaField;
+namespace Gap {
+namespace Gfx {
 
-void igPsx2VertexArray1_1_GetMetaObjectFunction(void) {
-    igPsx2VertexArray1_1_GetMetaObject();
+igMetaObject *igPsx2VertexArray1_1::_Meta;
+igMetaField *igPsx2VertexArray1_1::k_pBlendedVertsList;
+igMetaField *igPsx2VertexArray1_1::k_pBlendedNormsList;
+igMetaField *igPsx2VertexArray1_1::k_pWaitSeqList;
+igMetaField *igPsx2VertexArray1_1::k_lastArrayUsed;
+igMetaField *igPsx2VertexArray1_1::k_lSequence;
+igMetaField *igPsx2VertexArray1_1::k_textureCoordCompiled;
+igMetaField *igPsx2VertexArray1_1::k_multipassCompiled;
+
+void igVertexArray1_1::arkRegisterUser()
+{
+    userRegister();
 }
-
-void thunk_FUN_0015e010(void) {
-    FUN_0015e010();
+}
 }
 

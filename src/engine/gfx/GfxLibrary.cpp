@@ -117,7 +117,6 @@
 #include "src/engine/gfx/igPsx2VertexStream_tail4.inc"
 #include "src/engine/gfx/igVertexStream_tail3.inc"
 #include "src/engine/gfx/igPsx2VertexArray2_tail2.inc"
-#include "src/engine/gfx/igPsx2VertexArray1_1_tail3.inc"
 #include "src/engine/gfx/igPsx2UserUCodeExt_tail3.inc"
 #include "src/engine/gfx/igPsx2ParticleArray_tail3.inc"
 #include "src/engine/gfx/ParticleArray_tail3.inc"

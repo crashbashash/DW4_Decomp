@@ -13,6 +13,7 @@ struct igVertexArrayLock {
     int reserved;
     char *getData() { return data; }
     unsigned int getStride() { return stride; }
+    int getComponentIndex() const { return componentIndex; }
 };
 
 extern "C" igVertexArrayLock *igVertexArrayLock_Init(igVertexArrayLock *lock);

@@ -1710,3 +1710,80 @@ igClut	private: static int estimateClutSizeAndStride(IG_GFX_TEXTURE_FORMAT pfmt,
 igPsx2Clut	IG_OBJECT_DEFINE(igPsx2Clut)
 igPsx2Clut	private: static igMetaField *k_id;
 igPsx2Clut	private: static igMetaField *k_refCount;
+igVertexArray1_1	IG_ABSTRACT_OBJECT_DEFINE(igVertexArray1_1)
+igVertexArray1_1	static igMetaField *k_memPool;
+igVertexArray1_1	protected: static igMetaField *k_vertexFormat;
+igVertexArray1_1	protected: static igMetaField *k_blendWeights;
+igVertexArray1_1	protected: static igMetaField *k_blendIndices;
+igVertexArray1_1	protected: static igMetaField *k_blendIndex;
+igVertexArray1_1	protected: static igMetaField *k_pointSpriteSize;
+igVertexArray1_1	inline const float *getBlendWeights() const { return _blendWeights; }
+igVertexArray1_1	inline const unsigned char *getBlendIndices() const { return _blendIndices; }
+igVertexArray1_1	inline void setBlendSequence(unsigned int blendSequenceParam) { _blendIndex = blendSequenceParam; }
+igVertexArray1_1	inline unsigned int getBlendSequence() const { return _blendIndex; }
+igVertexArray1_1	protected: unsigned int allocateAbstractVertexArrayMemory();
+igVertexArray1_1	protected: void freeAbstractVertexArrayMemory();
+igVertexArray1_1	protected: void checkVDataSize();
+igVertexArray1_1	virtual void resetFields(int flag);
+igVertexArray1_1	virtual void userMakeConcrete(igMetaObject *meta);
+igVertexArray1_1	static void userRegister();
+igVertexArray1_1	private: static void arkRegisterUser();
+igVertexArray1_1	using igVertexArray::configure;
+igVertexArray1_1	virtual unsigned int reconfigure(const igVertexFormat &vertexFormat, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context);
+igVertexArray1_1	virtual void cache();
+igVertexArray1_1	virtual unsigned int configure(unsigned int vertexFormatFlags, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context);
+igVertexArray1_1	virtual const igVertexFormat &getVertexFormat() const;
+igVertexArray1_1	virtual void setWeight(unsigned int which, unsigned int idx, float weight);
+igVertexArray1_1	virtual float getWeight(unsigned int which, unsigned int idx) const;
+igVertexArray1_1	virtual void validateBlendWeights();
+igVertexArray1_1	virtual void setBlendMatrixIndex(unsigned int which, unsigned int idx, unsigned char matrixIndex);
+igVertexArray1_1	virtual unsigned char getBlendMatrixIndex(unsigned int which, unsigned int idx) const;
+igVertexArray1_1	virtual void setPointSpriteSize(unsigned int idx, float size);
+igVertexArray1_1	virtual float getPointSpriteSize(unsigned int idx) const;
+igVertexArray1_1	virtual void setPointSpriteRadian(unsigned int idx, float size);
+igVertexArray1_1	virtual float getPointSpriteRadian(unsigned int idx) const;
+igVertexArray1_1	virtual void setPointSpriteSize(unsigned int idx, igVec2f size);
+igVertexArray1_1	virtual void getPointSpriteSize(unsigned int idx, igVec2f &size) const;
+igVertexArray1_1	virtual void setBinormal(unsigned int idx, const igVec3f &binormal);
+igVertexArray1_1	virtual void getBinormal(unsigned int idx, igVec3f &binormal) const;
+igVertexArray1_1	virtual const igVec3f *getBinormal(unsigned int idx) const;
+igVertexArray1_1	virtual void setTangent(unsigned int idx, const igVec3f &tangent);
+igVertexArray1_1	virtual void getTangent(unsigned int idx, igVec3f &tangent) const;
+igVertexArray1_1	virtual const igVec3f *getTangent(unsigned int idx) const;
+igVertexArray1_1	virtual void freePointSpriteMemory();
+igVertexArray1_1	virtual void freeAbstractBiNormalsAndTangentsMemory();
+igVertexArray1_1	virtual unsigned int allocatePointSpriteMemory();
+igVertexArray1_1	virtual unsigned int allocateAbstractBiNormalsAndTangentsMemory();
+igPsx2VertexArray1_1	IG_OBJECT_DEFINE(igPsx2VertexArray1_1)
+igPsx2VertexArray1_1	private: static igMetaField *k_pBlendedVertsList;
+igPsx2VertexArray1_1	private: static igMetaField *k_pBlendedNormsList;
+igPsx2VertexArray1_1	private: static igMetaField *k_pWaitSeqList;
+igPsx2VertexArray1_1	private: static igMetaField *k_lastArrayUsed;
+igPsx2VertexArray1_1	private: static igMetaField *k_lSequence;
+igPsx2VertexArray1_1	private: static igMetaField *k_textureCoordCompiled;
+igPsx2VertexArray1_1	private: static igMetaField *k_multipassCompiled;
+igPsx2VertexArray1_1	virtual void initDefaults();
+igPsx2VertexArray1_1	virtual void releaseDefaults();
+igPsx2VertexArray1_1	virtual void userApplyWriteProxy(int value);
+igPsx2VertexArray1_1	virtual void userMakeConcrete(igMetaObject *meta);
+igPsx2VertexArray1_1	virtual unsigned int configure(const igVertexFormat &vertexFormat, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context);
+igPsx2VertexArray1_1	virtual void getEditableComponent(igVertexArrayLock *componentInfo, unsigned int editFlags);
+igPsx2VertexArray1_1	virtual void commitComponentEdits(const igVertexArrayLock &componentInfo, unsigned int commitFlags);
+igPsx2VertexArray1_1	virtual void setPosition(unsigned int idx, const igVec3f &position);
+igPsx2VertexArray1_1	virtual void getPosition(unsigned int idx, igVec3f &position) const;
+igPsx2VertexArray1_1	virtual const igVec3f *getPosition(unsigned int idx) const;
+igPsx2VertexArray1_1	virtual void setNormal(unsigned int idx, const igVec3f &normal);
+igPsx2VertexArray1_1	virtual void getNormal(unsigned int idx, igVec3f &normal) const;
+igPsx2VertexArray1_1	virtual const igVec3f *getNormal(unsigned int idx) const;
+igPsx2VertexArray1_1	virtual void setColor(unsigned int idx, unsigned int abgr);
+igPsx2VertexArray1_1	virtual void setColor(unsigned int idx, const igVec4f &rgba);
+igPsx2VertexArray1_1	virtual unsigned int getColor(unsigned int idx) const;
+igPsx2VertexArray1_1	virtual void getColor(unsigned int idx, igVec4f &rgba) const;
+igPsx2VertexArray1_1	virtual void setTextureCoord(unsigned int which, unsigned int idx, const igVec2f &coord);
+igPsx2VertexArray1_1	virtual void getTextureCoord(unsigned int which, unsigned int idx, igVec2f &coord) const;
+igPsx2VertexArray1_1	virtual const igVec2f *getTextureCoord(unsigned int which, unsigned int idx) const;
+igPsx2VertexArray1_1	virtual void setPointSpriteRadian(unsigned int idx, float radian);
+igPsx2VertexArray1_1	virtual float getPointSpriteRadian(unsigned int idx) const;
+igPsx2VertexArray1_1	virtual void reset();
+igPsx2VertexArray1_1	protected: void allocateBlendedVertexLists();
+igPsx2VertexArray1_1	protected: void freeBlendedVertexLists();

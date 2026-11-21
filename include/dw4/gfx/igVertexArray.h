@@ -3,7 +3,7 @@
 
 struct igMetaObject;
 struct igVertexArray;
-struct igVertexFormat;
+class igVertexFormat;
 struct igVec2f;
 struct igVec3f;
 struct igVec4f;

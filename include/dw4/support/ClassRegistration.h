@@ -41,7 +41,6 @@ void igImage_EnsureRegistered(void);
 void igParticleFormat_EnsureRegistered(void);
 void igPrimLengthArray1_1_EnsureRegistered(void);
 void igTrackedElementMetaField_EnsureRegistered(void);
-void igVertexArray1_1_EnsureRegistered(void);
 
 /* Attrs */
 void igGeometryAttr1_5_EnsureRegistered(void);

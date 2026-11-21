@@ -15,59 +15,39 @@ igVertexArrayLock *igVertexArrayLock_Init(igVertexArrayLock *lock) {
     return lock;
 }
 
-void igPsx2VertexArray1_1_resetFields(S0_15df80 *arg0, int flags) {
-    S_temp_a0 *temp_a0;
-    S_temp_v0 *temp_v0;
-    Gap__Core__igObject__resetFields((igObject *)arg0, flags);
-    temp_v0 = (S_temp_v0 *)((void *)(((Gap::Core::igObject *)arg0)->getMemoryPool()));
-    if (temp_v0 != 0) {
-        temp_v0->f4 = (int)((int) (temp_v0->f4 + 1));
-    }
-    temp_a0 = (S_temp_a0 *)((void *)(arg0->f18));
-    if (temp_a0 != 0) {
-        temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-        if (((unsigned long long) ((long long) temp_a0->f4 << 0x29) >> 0x29) == 0) {
-            igObject_Destroy((igObject *)temp_a0);
-        }
-    }
-    arg0->f18 = (int)(temp_v0);
+namespace Gap {
+namespace Gfx {
+
+void igVertexArray1_1::resetFields(int flag)
+{
+    igVertexArray::resetFields(flag);
+    _memPool = (igMemoryPool *)getMemoryPool();
 }
 
-void FUN_0015e010(void) {
+void igVertexArray1_1::userRegister()
+{
     igResource_AddAlignment((igResource *)g_globalContext, "VertexArrayData", 0x10);
-    ((Gap::Core::igMemoryRefMetaField *)g_igVertexArray1_1_blendWeightsMetaField)->setAlignmentType("VertexArrayData");
+    ((igMemoryRefMetaField *)k_blendWeights)->setAlignmentType("VertexArrayData");
 }
 
-void FUN_0015e050(struct S_arg0_15e050 *arg0) {
-    int temp_a0;
-    int temp_v0;
-    int temp_s0;
-    struct S_temp_v0_2 *temp_a0_2;
-    struct S_temp_v0_2 *temp_v0_2;
+void igVertexArray1_1::checkVDataSize()
+{
+    unsigned int size;
+    int missing;
 
-    temp_a0 = arg0->f8;
-    if (temp_a0 != 0) {
-        temp_v0 = Memory_GetBufferSize((void *)temp_a0);
-        temp_s0 = 0x50 - temp_v0;
-        if (temp_s0 > 0) {
-            arg0->f8 = (int)((Gap::Core::igObject *)arg0)->realloc((void *)arg0->f8, 0x50);
-            memset((void *)(arg0->f8 + temp_v0), 0, temp_s0);
+    if (_vdata != 0) {
+        size = Memory_GetBufferSize(_vdata);
+        missing = 0x50 - size;
+        if (missing > 0) {
+            _vdata = (void **)realloc(_vdata, 0x50);
+            memset((char *)_vdata + size, 0, missing);
         }
     }
-    if (arg0->f24 == 0) {
-        temp_v0_2 = (struct S_temp_v0_2 *)(((Gap::Core::igObject *)arg0)->getMemoryPool());
-        if (temp_v0_2 != 0) {
-            temp_v0_2->f4 = (int)((int) (temp_v0_2->f4 + 1));
-        }
-        temp_a0_2 = (struct S_temp_v0_2 *)(arg0->f24);
-        if (temp_a0_2 != 0) {
-            temp_a0_2->f4 = temp_a0_2->f4 - 1;
-            if ((temp_a0_2->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)temp_a0_2);
-            }
-        }
-        arg0->f24 = (int)(temp_v0_2);
+    if (_memPool == 0) {
+        _memPool = (igMemoryPool *)getMemoryPool();
     }
+}
+}
 }
 
 /* Population count. */
@@ -82,518 +62,496 @@ int FUN_0015e130(unsigned int v)
     return n;
 }
 
-void FUN_0015e160(unsigned int *arg0, unsigned int arg1) {
-    unsigned int v;
-    unsigned int t;
-    v = 0;
-    if (arg1 & 3) {
-        v |= 1;
+/* The vertex format a pre-1.1 vertex array's `_vtype` word describes: two bits each for positions and normals,
+ * four for colours, and one bit per texture coordinate set, blend weight and blend index. */
+igVertexFormat FUN_0015e160(unsigned int vtype) {
+    unsigned int flags;
+    unsigned int count;
+    flags = 0;
+    if (vtype & 3) {
+        flags |= 1;
     } else {
-        v &= ~1;
+        flags &= ~1;
     }
-    if (arg1 & 0xC) {
-        v |= 2;
+    if (vtype & 0xC) {
+        flags |= 2;
     } else {
-        v &= ~2;
+        flags &= ~2;
     }
-    if (arg1 & 0xF0) {
-        v |= 4;
+    if (vtype & 0xF0) {
+        flags |= 4;
     } else {
-        v &= ~4;
+        flags &= ~4;
     }
-    t = FUN_0015e130(arg1 & 0xF0000);
-    t &= 0xFF;
-    t <<= 16;
-    v &= 0xFFF0FFFF;
-    v |= t;
-    t = FUN_0015e130(arg1 & 0xF00);
-    t &= 0xFF;
-    t <<= 4;
-    v &= ~0xF0;
-    v |= t;
-    t = FUN_0015e130(arg1 & 0xF000);
-    t &= 0xFF;
-    t <<= 8;
-    v &= ~0xF00;
-    v |= t;
-    *arg0 = v;
+    count = FUN_0015e130(vtype & 0xF0000);
+    count &= 0xFF;
+    count <<= 16;
+    flags &= 0xFFF0FFFF;
+    flags |= count;
+    count = FUN_0015e130(vtype & 0xF00);
+    count &= 0xFF;
+    count <<= 4;
+    flags &= ~0xF0;
+    flags |= count;
+    count = FUN_0015e130(vtype & 0xF000);
+    count &= 0xFF;
+    count <<= 8;
+    flags &= ~0xF00;
+    flags |= count;
+    return igVertexFormat(flags);
 }
 
-void igVertexArray1_1_ConfigureFromFlags(void **arg0, int arg1, int arg2, int arg3, int arg4) {
-    int sp5C;
-    FUN_0015e160((unsigned int *)&sp5C, arg1);
-    ((DW4VC_96_4 *)arg0)->vX(&sp5C, arg2, arg3, arg4);
+namespace Gap {
+namespace Gfx {
+
+unsigned int igVertexArray1_1::configure(unsigned int vertexFormatFlags, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context)
+{
+    igVertexFormat vertexFormat = FUN_0015e160(vertexFormatFlags);
+    return configure(vertexFormat, vertexCount, usageFlags, context);
 }
 
-void FUN_0015e2b0(igVertexArray1_1 *arg0, int arg1) {
-    /* matching construct: declaration-order sweep — unsigned int count with an unsigned char cast, and this order, give the first loop count s5 and off s2 */
+/* Moves a pre-1.1 array's per-weight and per-index streams (3-6 and 7-10) into the interleaved _blendWeights and
+ * _blendIndices, and its `_vtype` word into _vertexFormat. */
+void igVertexArray1_1::userMakeConcrete(igMetaObject *meta)
+{
+    /* matching construct: declaration-order sweep (an unsigned int count, this order) gives retail's registers;
+     * retail takes the stream table's address on every pass of the label loops (matching-decomp.md) */
     unsigned int count;
     unsigned int i;
-    int *src;
-    unsigned int n;
-    int **vdata;
-    unsigned int fmt;
+    void *source;
+    unsigned int vertexCount;
+    void ***streams;
+    igVertexFormat vertexFormat = FUN_0015e160(_vtype);
     unsigned int j;
-    int off;
-    FUN_0015e160(&fmt, arg0->_vtype);
-    arg0->_vertexFormat = fmt;
-    arg0->_vtype = 0;
-    if (arg0->_memPool == 0) {
-        igObject *v0 = (igObject *)((Gap::Core::igObject *)arg0)->getMemoryPool();
-        if (v0 != 0) v0->_refCount = v0->_refCount + 1;
-        {
-            igObject *a = (igObject *)arg0->_memPool;
-            igObject::release(a);
-        }
-        arg0->_memPool = (int)v0;
+    int offset;
+
+    _vertexFormat = vertexFormat;
+    _vtype = 0;
+    if (_memPool == 0) {
+        _memPool = (igMemoryPool *)getMemoryPool();
     }
-    count = (unsigned char)((fmt & 0xF0) >> 4);
-    n = arg0->_numVerts;
+    count = vertexFormat.getBlendWeightCount();
+    vertexCount = _numVerts;
     if (count != 0) {
-        Alloc *al = (Alloc *)arg0->_memPool;
-        arg0->_blendWeights = (int)al->v53(n * (count * 4), 0x10);
-        /* matching construct: docs loop-invariant shape — b52 hoists &_vdata out of a for loop; retail recomputes it per pass */
+        _blendWeights = (float *)((igMemoryPoolView *)_memPool.p)->allocateAligned(vertexCount * (count * 4), 0x10);
         i = 0;
-        goto test1;
-    top1:
-        vdata = (int **)&arg0->_vdata;
-        off = (i + 3) * 4;
-        src = *(int **)((char *)arg0->_vdata + off);
-        for (j = 0; j < n; j++) {
-            (*(float **)&arg0->_blendWeights)[i + count * j] = ((float *)src)[j];
+        goto testWeights;
+    weights:
+        streams = &_vdata;
+        offset = (i + 3) * sizeof(void *);
+        source = *(void **)((char *)_vdata + offset);
+        for (j = 0; j < vertexCount; j++) {
+            _blendWeights[i + count * j] = ((float *)source)[j];
         }
-        Memory_FreeBuffer(src);
-        *(int *)((char *)*vdata + off) = 0;
+        Memory_FreeBuffer(source);
+        *(void **)((char *)*streams + offset) = 0;
         i++;
-    test1:
-        if (i < count) goto top1;
+    testWeights:
+        if (i < count) goto weights;
     }
-    count = (unsigned char)((fmt & 0xF00) >> 8);
+    count = vertexFormat.getBlendIndexCount();
     if (count != 0) {
-        Alloc *al = (Alloc *)arg0->_memPool;
-        arg0->_blendIndices = (int)al->v53(count * n, 0x10);
+        _blendIndices = (unsigned char *)((igMemoryPoolView *)_memPool.p)->allocateAligned(count * vertexCount, 0x10);
         i = 0;
-        goto test2;
-    top2:
-        vdata = (int **)&arg0->_vdata;
-        off = (i + 7) * 4;
-        src = *(int **)((char *)arg0->_vdata + off);
-        for (j = 0; j < n; j++) {
-            (*(unsigned char **)&arg0->_blendIndices)[i + count * j] = *((unsigned char *)src + j);
+        goto testIndices;
+    indices:
+        streams = &_vdata;
+        offset = (i + 7) * sizeof(void *);
+        source = *(void **)((char *)_vdata + offset);
+        for (j = 0; j < vertexCount; j++) {
+            _blendIndices[i + count * j] = ((unsigned char *)source)[j];
         }
-        Memory_FreeBuffer(src);
-        *(int *)((char *)*vdata + off) = 0;
+        Memory_FreeBuffer(source);
+        *(void **)((char *)*streams + offset) = 0;
         i++;
-    test2:
-        if (i < count) goto top2;
+    testIndices:
+        if (i < count) goto indices;
     }
 }
 
-/* igPsx2VertexArray1_1 vtable slot 61. Empty virtual slot: returns immediately. */
-void igVertexArray1_1_Cache(void) {
-
+void igVertexArray1_1::cache()
+{
 }
 
-int FUN_0015e4e0(VA_15e4e0 *arg0) {
-//DECL
-    igObject *v0;
-    int s2;
-    unsigned int *s1;
-    int sz;
+unsigned int igVertexArray1_1::allocateAbstractVertexArrayMemory()
+{
+    unsigned int total;
+    unsigned int size;
     unsigned int i;
-    int s4;
-//ENDDECL
-    s2 = 0;
-    s1 = arg0->v23();
-    if (arg0->f24 == 0) {
-        v0 = (igObject *)((Gap::Core::igObject *)arg0)->getMemoryPool();
-        if (v0 != 0) v0->_refCount = v0->_refCount + 1;
-        {
-            igObject *a = (igObject *)arg0->f24;
-            igObject::release(a);
+
+    total = 0;
+    const igVertexFormat &vertexFormat = getVertexFormat();
+    if (_memPool == 0) {
+        _memPool = (igMemoryPool *)getMemoryPool();
+    }
+    if (vertexFormat.hasPositions()) {
+        size = _numVerts * 12;
+        _vdata[0] = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        total += size;
+    }
+    if (vertexFormat.hasNormals()) {
+        size = _numVerts * 12;
+        if (vertexFormat.hasBinormals() || vertexFormat.hasTangents()) {
+            size += _numVerts * 24;
         }
-        arg0->f24 = (Alloc_15e4e0 *)v0;
+        _vdata[1] = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        total += size;
     }
-    if (*s1 & 1) {
-        sz = arg0->f12 * 0xC;
-        *(int *)(arg0->f8 + 0) = arg0->f24->v52(sz);
-        s2 += sz;
+    if (vertexFormat.hasVertexColors()) {
+        size = _numVerts * 4;
+        _vdata[2] = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        total += size;
     }
-    {
-    unsigned int f = *s1;
-    if (f & 2) {
-        int a0 = arg0->f12;
-        sz = a0 * 0xC;
-        if ((f & 0x400000) || (f & 0x800000)) sz += a0 * 0x18;
-        *(int *)(arg0->f8 + 4) = arg0->f24->v52(sz);
-        s2 += sz;
-    }
-    }
-    if (*s1 & 4) {
-        sz = arg0->f12 * 4;
-        *(int *)(arg0->f8 + 8) = arg0->f24->v52(sz);
-        s2 += sz;
-    }
-    {
-        unsigned char c = (*s1 & 0xF0) >> 4;
-        if (c != 0) {
-            int a1 = arg0->f12 * c * 4;
-            s2 += a1;
-            if (arg0->f32 == 0) arg0->f32 = arg0->f24->v53(a1, 0x10);
+    if (vertexFormat.getBlendWeightCount() != 0) {
+        size = _numVerts * vertexFormat.getBlendWeightCount() * 4;
+        total += size;
+        if (_blendWeights == 0) {
+            _blendWeights = (float *)((igMemoryPoolView *)_memPool.p)->allocateAligned(size, 0x10);
         }
     }
-    {
-        unsigned char c = (*s1 & 0xF00) >> 8;
-        i = 0;
-        if (c != 0) {
-            int a1 = arg0->f12 * c;
-            s2 += a1;
-            if (arg0->f36 == 0) arg0->f36 = arg0->f24->v53(a1, 0x10);
-            i = 0;
-        }
-        unsigned int fv = *s1;
-        while (i < (unsigned char)((fv & 0xF0000) >> 16)) {
-            s4 = arg0->f12 * 8;
-            int a0 = arg0->f24->v52(s4);
-            int off = (i + 11) * 4;
-            i++;
-            s2 += s4;
-            *(int *)(arg0->f8 + off) = a0;
-            fv = *s1;
+    if (vertexFormat.getBlendIndexCount() != 0) {
+        size = _numVerts * vertexFormat.getBlendIndexCount();
+        total += size;
+        if (_blendIndices == 0) {
+            _blendIndices = (unsigned char *)((igMemoryPoolView *)_memPool.p)->allocateAligned(size, 0x10);
         }
     }
-    s2 += arg0->v62();
-    s2 += arg0->v63();
-    return s2;
+    for (i = 0; i < vertexFormat.getTextureCoordCount(); i++) {
+        unsigned int stream = i + 11;
+        size = _numVerts * 8;
+        _vdata[stream] = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        total += size;
+    }
+    total += allocatePointSpriteMemory();
+    total += allocateAbstractBiNormalsAndTangentsMemory();
+    return total;
 }
 
-int igVertexArray1_1_GetVertexFormat(int arg0) {
-    return arg0 + 0x1C;
+const igVertexFormat &igVertexArray1_1::getVertexFormat() const
+{
+    return _vertexFormat;
 }
 
-void FUN_0015e7b0(VertexBufferOwner *o) {
-unsigned i;
-int **p;
-int b;
-int a;
-VertexFormatInfo *info;
-int **q;
-int off;
-info = o->getInfo();
-if (info->flags & 1) { p = &o->arr; a = (*p)[0]; if (a != 0) { Memory_FreeBuffer((void *)a); (*p)[0] = 0; } }
-if (info->flags & 2) { p = &o->arr; a = (*p)[1]; if (a != 0) { Memory_FreeBuffer((void *)a); (*p)[1] = 0; } }
-if (info->flags & 4) { p = &o->arr; a = (*p)[2]; if (a != 0) { Memory_FreeBuffer((void *)a); (*p)[2] = 0; } }
+void igVertexArray1_1::freeAbstractVertexArrayMemory()
+{
+    unsigned int i;
+    void ***streams;
+    void *stream;
+    const igVertexFormat &vertexFormat = getVertexFormat();
+    void ***coordStreams;
+    unsigned int index;
 
-    if (o->f32 != 0) { Memory_FreeBuffer((void *)o->f32); o->f32 = 0; }
-    if (o->f36 != 0) { Memory_FreeBuffer((void *)o->f36); o->f36 = 0; }
+    if (vertexFormat.hasPositions()) {
+        streams = &_vdata;
+        stream = (*streams)[0];
+        if (stream != 0) {
+            Memory_FreeBuffer(stream);
+            (*streams)[0] = 0;
+        }
+    }
+    if (vertexFormat.hasNormals()) {
+        streams = &_vdata;
+        stream = (*streams)[1];
+        if (stream != 0) {
+            Memory_FreeBuffer(stream);
+            (*streams)[1] = 0;
+        }
+    }
+    if (vertexFormat.hasVertexColors()) {
+        streams = &_vdata;
+        stream = (*streams)[2];
+        if (stream != 0) {
+            Memory_FreeBuffer(stream);
+            (*streams)[2] = 0;
+        }
+    }
+    if (_blendWeights != 0) {
+        Memory_FreeBuffer(_blendWeights);
+        _blendWeights = 0;
+    }
+    if (_blendIndices != 0) {
+        Memory_FreeBuffer(_blendIndices);
+        _blendIndices = 0;
+    }
+    /* matching construct: retail takes the stream table's address on every pass (matching-decomp.md) */
     i = 0;
     goto test;
 top:
-    off = (i + 11) * 4;
-    q = &o->arr;
-    b = *(int *)((char *)*q + off);
-    if (b != 0) { Memory_FreeBuffer((void *)b); *(int *)((char *)*q + off) = 0; }
+    index = i + 11;
+    coordStreams = &_vdata;
+    stream = (*coordStreams)[index];
+    if (stream != 0) {
+        Memory_FreeBuffer(stream);
+        (*coordStreams)[index] = 0;
+    }
     i++;
 test:
-    if (i < (unsigned char)((info->flags & 0xF0000) >> 16)) goto top;
-    o->f60();
-    o->f61();
+    if (i < vertexFormat.getTextureCoordCount()) goto top;
+    freePointSpriteMemory();
+    freeAbstractBiNormalsAndTangentsMemory();
 }
 
-void igVertexArray1_1_SetWeight(S_15e940 *arg0, int arg1, int arg2, float fparg0) {
-    float *temp_s0 = arg0->f32;
-    temp_s0[arg1 + arg2 * ((((*arg0->vX()) & 0xF0) >> 4) & 0xFF)] = fparg0;
+void igVertexArray1_1::setWeight(unsigned int which, unsigned int idx, float weight)
+{
+    float *weights = _blendWeights;
+    weights[which + idx * getVertexFormat().getBlendWeightCount()] = weight;
 }
 
-float igVertexArray1_1_GetWeight(S_15e9c0 *arg0, int arg1, int arg2) {
-    float *temp_s0 = arg0->f32;
-    return temp_s0[arg1 + arg2 * ((((*arg0->vX()) & 0xF0) >> 4) & 0xFF)];
+float igVertexArray1_1::getWeight(unsigned int which, unsigned int idx) const
+{
+    float *weights = _blendWeights;
+    return weights[which + idx * getVertexFormat().getBlendWeightCount()];
 }
 
-void igVertexArray1_1_ValidateBlendWeights(int *arg0) {
-    unsigned int n;
-    int base;
+void igVertexArray1_1::validateBlendWeights()
+{
+    unsigned int count;
+    float *weights;
     unsigned int i;
     unsigned int j;
-    unsigned int off;
+    unsigned int first;
     float sum;
-    float r;
-    int *p = ((VC_15ea30 *)arg0)->vX();
-    n = ((unsigned int)(*p & 0xF0) >> 4) & 0xFF;
-    if (n != 0) {
-        base = arg0[8];
-        for (i = 0; i < (unsigned int)arg0[3]; i++) {
-            off = i * n;
+    float last;
+
+    count = getVertexFormat().getBlendWeightCount();
+    if (count != 0) {
+        weights = _blendWeights;
+        for (i = 0; i < _numVerts; i++) {
+            first = i * count;
             sum = 0.0f;
-            for (j = 0; j + 1 < n; j++) {
-                sum += ((float *)base)[j + off];
+            for (j = 0; j + 1 < count; j++) {
+                sum += weights[j + first];
             }
-            r = 1.0f - sum;
-            if (r < 0.0f) {
-                r = 0.0f;
+            last = 1.0f - sum;
+            if (last < 0.0f) {
+                last = 0.0f;
             }
-            ((float *)base)[n + off - 1] = r;
+            weights[count + first - 1] = last;
         }
     }
 }
 
-void igVertexArray1_1_SetBlendMatrixIndex(int *arg0, int arg1, int arg2, char arg3) {
-    int s1 = arg0[9];
-    int *p = ((VC_15eaf0 *)arg0)->vX();
-    unsigned int m = (unsigned int)(*p & 0xF0) >> 4;
-    *(char *)(s1 + arg1 + arg2 * (m & 0xFF)) = arg3;
+void igVertexArray1_1::setBlendMatrixIndex(unsigned int which, unsigned int idx, unsigned char matrixIndex)
+{
+    unsigned char *indices = _blendIndices;
+    indices[which + idx * getVertexFormat().getBlendWeightCount()] = matrixIndex;
 }
 
-unsigned char igVertexArray1_1_GetBlendMatrixIndex(int *arg0, int arg1, int arg2) {
-    int s0 = arg0[9];
-    int *p = ((VC_15eb60 *)arg0)->vX();
-    unsigned int m = (unsigned int)(*p & 0xF0) >> 4;
-    return *(unsigned char *)(s0 + arg1 + arg2 * (m & 0xFF));
+unsigned char igVertexArray1_1::getBlendMatrixIndex(unsigned int which, unsigned int idx) const
+{
+    unsigned char *indices = _blendIndices;
+    return indices[which + idx * getVertexFormat().getBlendWeightCount()];
 }
 
-void igVertexArray1_1_SetPointSpriteSize(igPsx2VertexArray1_1 *arg0, int arg1, float fparg0) {
-    *(float *)(*(int *)((char *)(arg0->_vdata) + 60) + (arg1 * 4)) = 0.5f * fparg0;
+void igVertexArray1_1::setPointSpriteSize(unsigned int idx, float size)
+{
+    ((float *)_vdata[15])[idx] = 0.5f * size;
 }
 
-float igVertexArray1_1_GetPointSpriteSize(igPsx2VertexArray1_1 *arg0, int arg1) {
-    int a, idx, c;
-    a = arg0->_vdata;
-    idx = arg1 * 4;
-    c = *(int *)(a + 60);
-    return 2.0f * *(float *)(c + idx);
+float igVertexArray1_1::getPointSpriteSize(unsigned int idx) const
+{
+    return 2.0f * ((float *)_vdata[15])[idx];
 }
 
-void igVertexArray1_1_SetPointSpriteSize2(A_15ec30 *arg0, int arg1, float *arg2) {
-    float x = arg2[0];
-    float y = arg2[1];
-    float *dst;
-    x = x * 0.5f;
-    y = y * 0.5f;
-    dst = (float *)(arg0->b->data + arg1 * 8);
-    dst[0] = x;
-    dst[1] = y;
+void igVertexArray1_1::setPointSpriteSize(unsigned int idx, igVec2f size)
+{
+    float width = size[0];
+    float height = size[1];
+    float *half;
+
+    width = width * 0.5f;
+    height = height * 0.5f;
+    half = (float *)((igVec2f *)_vdata[15] + idx);
+    half[0] = width;
+    half[1] = height;
 }
 
-void igVertexArray1_1_GetPointSpriteSize2(igPsx2VertexArray1_1 *arg0, int arg1, float *arg2) {
-    float *p;
-    float k = 2.0f;
-    p = (float *)(*(int *)((char *)(arg0->_vdata) + 60) + (arg1 * 8));
-    arg2[0] = p[0];
-    arg2[1] = p[1];
-    arg2[0] = arg2[0] * k;
-    arg2[1] = arg2[1] * k;
+void igVertexArray1_1::getPointSpriteSize(unsigned int idx, igVec2f &size) const
+{
+    float scale = 2.0f;
+
+    size = ((igVec2f *)_vdata[15])[idx];
+    size[0] = size[0] * scale;
+    size[1] = size[1] * scale;
 }
 
-void FUN_0015ecc0(void *arg0, int arg1, float fparg0) {
-    ((float *)*(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 76))[arg1] = fparg0;
+void igVertexArray1_1::setPointSpriteRadian(unsigned int idx, float size)
+{
+    ((float *)_vdata[19])[idx] = size;
 }
 
-float FUN_0015ece0(void *arg0, int arg1) {
-    int a, idx, c;
-    a = *(int *)((char *)arg0 + 8);
-    idx = arg1 * 4;
-    c = *(int *)(a + 76);
-    return *(float *)(c + idx);
+float igVertexArray1_1::getPointSpriteRadian(unsigned int idx) const
+{
+    return ((float *)_vdata[19])[idx];
 }
 
-int igVertexArray1_1_Reconfigure(V_15ed00 *arg0, int arg1, unsigned int arg2, int arg3, int arg4) {
-    igSmartPointer<V_15ed00> resized((V_15ed00 *)igVertexArray1_1_Create((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
-    unsigned int n;
-    int sp88;
-    int r;
+unsigned int igVertexArray1_1::reconfigure(const igVertexFormat &vertexFormat, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context)
+{
+    igSmartPointer<igVertexArray1_1> resized(_instantiateFromPool(getMemoryPool()));
+    unsigned int count;
+    unsigned int result;
     unsigned int i;
-    resized.p->f24 = arg0->f24;
-    r = resized.p->v22(arg1, arg2, arg3, arg4);
-    n = arg0->f12;
-    n = (n < arg2) ? n : arg2;
-    FUN_00164e90((igVertexFormat *)&sp88, (const igVertexFormat *)arg1, (const igVertexFormat *)arg0->v23());
-    for (i = 0; i < n; i++) {
-        FUN_0015dbc0((igVertexArrayAccess *)resized.p, i, (igVertexArrayAccess *)arg0, i, (const igVertexFormat *)&sp88);
+
+    resized->_memPool = _memPool;
+    result = resized->configure(vertexFormat, vertexCount, usageFlags, context);
+    count = _numVerts;
+    count = (count < vertexCount) ? count : vertexCount;
+    igVertexFormat common = vertexFormat & getVertexFormat();
+    for (i = 0; i < count; i++) {
+        FUN_0015dbc0((igVertexArrayAccess *)resized.p, i, (igVertexArrayAccess *)this, i, &common);
     }
-    resized.p->v45();
-    resized.p->v17((int)g_igVertexArray1_1_metaObject);
-    arg0->v17((int)g_igVertexArray1_1_metaObject);
-    FUN_0015e7b0((VertexBufferOwner *)arg0);
-    Memory_FreeBuffer((void *)arg0->f8);
-    arg0->f12 = arg2;
-    arg0->f8 = resized.p->f8;
-    arg0->f32 = resized.p->f32;
-    arg0->f36 = resized.p->f36;
-    arg0->f40 = resized.p->f40;
-    arg0->f28 = resized.p->f28;
-    arg0->f24 = resized.p->f24;
-    resized.p->f12 = 0;
-    resized.p->f8 = 0;
-    resized.p->f32 = 0;
-    resized.p->f36 = 0;
-    resized.p->f40 = 0;
-    resized.p->f28 = 0;
-    arg0->v18((int)g_igVertexArray1_1_metaObject);
-    arg0->v59();
-    return r;
+    resized->validateBlendWeights();
+    resized->userApplyWriteProxy((int)_Meta);
+    userApplyWriteProxy((int)_Meta);
+    freeAbstractVertexArrayMemory();
+    Memory_FreeBuffer(_vdata);
+    _numVerts = vertexCount;
+    _vdata = resized->_vdata;
+    _blendWeights = resized->_blendWeights;
+    _blendIndices = resized->_blendIndices;
+    _blendIndex = resized->_blendIndex;
+    _vertexFormat = resized->_vertexFormat;
+    _memPool = resized->_memPool;
+    resized->_numVerts = 0;
+    resized->_vdata = 0;
+    resized->_blendWeights = 0;
+    resized->_blendIndices = 0;
+    resized->_blendIndex = 0;
+    resized->_vertexFormat.clear();
+    userMakeConcrete(_Meta);
+    cache();
+    return result;
 }
 
-/* Write the position of vertex `index` from `in` (3 floats). Counterpart of igVertexArray1_1_GetBinormal: does nothing
- * unless the vertex format has the position bit set, and stores into the position stream at _vdata
- * + 68, 12 bytes per vertex. */
+/* Binormals (stream 17) and tangents (stream 18) are kept only when the vertex format holds them. */
 
-
-
-
-void igVertexArray1_1_SetBinormal(igPsx2VertexArray1_1 *self, int index, float *in) {
-    float *position;
-
-    if (self->_vertexFormat & VERTEX_FORMAT_POSITIONS) {
-        position = (float *)(*(int *)((char *)(self->_vdata) + VDATA_POSITION_STREAM) + (index * POSITION_STRIDE));
-        position[0] = in[0];
-        position[1] = in[1];
-        position[2] = in[2];
+void igVertexArray1_1::setBinormal(unsigned int idx, const igVec3f &binormal)
+{
+    if (_vertexFormat.hasBinormals()) {
+        ((igVec3f *)_vdata[17])[idx] = binormal;
     }
 }
 
-/* Read the position of vertex `index` into `out` (3 floats). Does nothing unless the vertex format
- * has the position bit set. _vdata is the runtime table of stream pointers; the position stream is
- * at +68, 12 bytes per vertex. */
-
-
-
-
-void igVertexArray1_1_GetBinormal(igPsx2VertexArray1_1 *self, int index, float *out) {
-    float *position;
-
-    if (self->_vertexFormat & VERTEX_FORMAT_POSITIONS) {
-        position = (float *)(*(int *)((char *)(self->_vdata) + VDATA_POSITION_STREAM) + (index * POSITION_STRIDE));
-        out[0] = position[0];
-        out[1] = position[1];
-        out[2] = position[2];
+void igVertexArray1_1::getBinormal(unsigned int idx, igVec3f &binormal) const
+{
+    if (_vertexFormat.hasBinormals()) {
+        binormal = ((igVec3f *)_vdata[17])[idx];
     }
 }
 
-int igVertexArray1_1_GetBinormalPointer(igPsx2VertexArray1_1 *arg0, int arg1) {
-    if (arg0->_vertexFormat & 0x400000) {
-        return *(int *)((char *)(arg0->_vdata) + 68) + (arg1 * 0xC);
+const igVec3f *igVertexArray1_1::getBinormal(unsigned int idx) const
+{
+    if (_vertexFormat.hasBinormals()) {
+        return (igVec3f *)_vdata[17] + idx;
     }
     return 0;
 }
 
-/* Write the normal of vertex `index` from `in` (3 floats). Does nothing unless the vertex format
- * has the normal bit set; stores into the normal stream at _vdata + 72, 12 bytes per vertex
- *. */
-
-
-
-
-void igVertexArray1_1_SetTangent(igPsx2VertexArray1_1 *self, int index, float *in) {
-    float *normal;
-
-    if (self->_vertexFormat & VERTEX_FORMAT_NORMALS) {
-        normal = (float *)(*(int *)((char *)(self->_vdata) + VDATA_NORMAL_STREAM) + (index * NORMAL_STRIDE));
-        normal[0] = in[0];
-        normal[1] = in[1];
-        normal[2] = in[2];
+void igVertexArray1_1::setTangent(unsigned int idx, const igVec3f &tangent)
+{
+    if (_vertexFormat.hasTangents()) {
+        ((igVec3f *)_vdata[18])[idx] = tangent;
     }
 }
 
-/* Read the normal of vertex `index` into `out` (3 floats). Counterpart of igVertexArray1_1_SetTangent: does nothing
- * unless the vertex format has the normal bit set. The normal stream is at _vdata + 72, 12 bytes
- * per vertex. */
-
-
-
-
-void igVertexArray1_1_GetTangent(igPsx2VertexArray1_1 *self, int index, float *out) {
-    float *normal;
-
-    if (self->_vertexFormat & VERTEX_FORMAT_NORMALS) {
-        normal = (float *)(*(int *)((char *)(self->_vdata) + VDATA_NORMAL_STREAM) + (index * NORMAL_STRIDE));
-        out[0] = normal[0];
-        out[1] = normal[1];
-        out[2] = normal[2];
+void igVertexArray1_1::getTangent(unsigned int idx, igVec3f &tangent) const
+{
+    if (_vertexFormat.hasTangents()) {
+        tangent = ((igVec3f *)_vdata[18])[idx];
     }
 }
 
-int igVertexArray1_1_GetTangentPointer(igPsx2VertexArray1_1 *arg0, int arg1) {
-    if (arg0->_vertexFormat & 0x800000) {
-        return *(int *)((char *)(arg0->_vdata) + 72) + (arg1 * 0xC);
+const igVec3f *igVertexArray1_1::getTangent(unsigned int idx) const
+{
+    if (_vertexFormat.hasTangents()) {
+        return (igVec3f *)_vdata[18] + idx;
     }
     return 0;
 }
 
-void igVertexArray1_1_FreePointSpriteMemory(void *arg0) {
-    int temp_a0;
-    int temp_a0_2;
-    int temp_a0_3;
+void igVertexArray1_1::freePointSpriteMemory()
+{
+    void **&streams = _vdata;
 
-    temp_a0 = *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 64);
-    if (temp_a0 != 0) {
-        Memory_FreeBuffer((void *)temp_a0);
-        *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 64) = 0;
+    if (streams[16] != 0) {
+        Memory_FreeBuffer(streams[16]);
+        streams[16] = 0;
     }
-    temp_a0_2 = *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 60);
-    if (temp_a0_2 != 0) {
-        Memory_FreeBuffer((void *)temp_a0_2);
-        *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 60) = 0;
+    if (streams[15] != 0) {
+        Memory_FreeBuffer(streams[15]);
+        streams[15] = 0;
     }
-    temp_a0_3 = *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 76);
-    if (temp_a0_3 != 0) {
-        Memory_FreeBuffer((void *)temp_a0_3);
-        *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 76) = 0;
+    if (streams[19] != 0) {
+        Memory_FreeBuffer(streams[19]);
+        streams[19] = 0;
     }
 }
 
-int igVertexArray1_1_AllocatePointSpriteMemory(A_15f200 *arg0) {
-    int size;
-    unsigned flags;
-    int n;
-    unsigned char t;
-    void **dst;
-    B_15f200 **pf;
-    flags = *(unsigned *)arg0->getFlags();
-    t = ((flags & 0x300000) >> 20) & 0xFF;
-    size = 0;
-    if (t != 0) {
-        n = arg0->f12 * ((t & 0xFF) * 4);
-        dst = &arg0->f8->f60;
-        *dst = arg0->f24->alloc(n);
-        size += n;
-    }
-    pf = &arg0->f8;
-    (*pf)->f64 = 0;
-    if (flags & 0x1000000) {
-        n = arg0->f12 * 4;
-        dst = &(*pf)->f76;
-        *dst = arg0->f24->alloc(n);
-        size += n;
-    }
-    return size;
-}
+unsigned int igVertexArray1_1::allocatePointSpriteMemory()
+{
+    unsigned int total;
+    unsigned int size;
+    unsigned char count;
+    void **stream;
 
-void igVertexArray1_1_FreeAbstractBiNormalsAndTangentsMemory(void *arg0) {
-    int temp_a0;
-    int temp_a0_2;
-
-    temp_a0 = *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 68);
-    if (temp_a0 != 0) {
-        Memory_FreeBuffer((void *)temp_a0);
-        *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 68) = 0;
-    }
-    temp_a0_2 = *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 72);
-    if (temp_a0_2 != 0) {
-        Memory_FreeBuffer((void *)temp_a0_2);
-        *(int *)((char *)(*(int *)((char *)(arg0) + 8)) + 72) = 0;
-    }
-}
-
-int igVertexArray1_1_AllocateAbstractBiNormalsAndTangentsMemory(ArraySizeOwner *arg0) {
-    int total;
-    int *dst;
-    unsigned int flags;
-    int n;
-    flags = *arg0->vX();
+    igVertexFormat vertexFormat = getVertexFormat();
+    count = vertexFormat.getPointSpriteCoordCount();
     total = 0;
-    if (flags & 0x400000) { dst = (int *)(arg0->f8 + 0x44); n = arg0->f12 * 12; *dst = arg0->f24->vX(n); total += n; }
-    if (flags & 0x800000) { dst = (int *)(arg0->f8 + 0x48); n = arg0->f12 * 12; *dst = arg0->f24->vX(n); total += n; }
+    if (count != 0) {
+        /* matching construct: retail zero-extends the count a second time before the multiply */
+        size = _numVerts * ((count & 0xFF) * sizeof(float));
+        stream = &_vdata[15];
+        *stream = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        total += size;
+    }
+    void **&streams = _vdata;
+    streams[16] = 0;
+    if (vertexFormat.hasSpriteRadians()) {
+        size = _numVerts * 4;
+        stream = &streams[19];
+        *stream = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        total += size;
+    }
     return total;
+}
+
+void igVertexArray1_1::freeAbstractBiNormalsAndTangentsMemory()
+{
+    void **&streams = _vdata;
+
+    if (streams[17] != 0) {
+        Memory_FreeBuffer(streams[17]);
+        streams[17] = 0;
+    }
+    if (streams[18] != 0) {
+        Memory_FreeBuffer(streams[18]);
+        streams[18] = 0;
+    }
+}
+
+unsigned int igVertexArray1_1::allocateAbstractBiNormalsAndTangentsMemory()
+{
+    unsigned int total;
+    void **stream;
+    unsigned int size;
+
+    igVertexFormat vertexFormat = getVertexFormat();
+    total = 0;
+    if (vertexFormat.hasBinormals()) {
+        stream = &_vdata[17];
+        size = _numVerts * 12;
+        *stream = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        total += size;
+    }
+    if (vertexFormat.hasTangents()) {
+        stream = &_vdata[18];
+        size = _numVerts * 12;
+        *stream = ((igMemoryPoolView *)_memPool.p)->malloc(size);
+        total += size;
+    }
+    return total;
+}
+}
 }
 
 static int FUN_0015f430(void *arg0, int arg1, int arg2, int arg3) { if (arg1 == *(int *)((char *)(arg0) + 16)) { if (arg2 == *(int *)((char *)(arg0) + 20)) { return 1; } } return 0; }

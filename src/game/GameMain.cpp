@@ -270,7 +270,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igEnbayaContextPool_RunStaticInit();
     Gap::Gfx::igClut::arkRegister();
     igAABox_EnsureRegistered();
-    igVertexArray1_1_EnsureRegistered();
+    Gap::Gfx::igVertexArray1_1::arkRegister();
     Gap::Attrs::igTextureList::arkRegister();
     Gap::Attrs::igShadeModelAttr::arkRegister();
     Gap::Attrs::igMaterialAttr::arkRegister();

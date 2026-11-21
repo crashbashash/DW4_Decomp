@@ -2,7 +2,13 @@ igMetaObject *igPsx2VisualContext_GetMeta(void) {
     return g_igPsx2VisualContext_metaObject;
 }
 
-void thunk_igObject_InitDefaults(igObject *self) {
-    igObject_InitDefaults(self);
+namespace Gap {
+namespace Gfx {
+
+void igPsx2VertexArray1_1::initDefaults()
+{
+    igVertexArray1_1::initDefaults();
+}
+}
 }
 

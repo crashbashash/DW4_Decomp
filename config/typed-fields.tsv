@@ -90,3 +90,11 @@ igVertexArray	_vdata	void **
 igClut	_pData	unsigned char *
 igClut	_clutDirty	bool
 igClut	_isAlphaScaled	bool
+igVertexArray1_1	_memPool	igSmartPointer<igMemoryPool>
+igVertexArray1_1	_vertexFormat	igVertexFormat
+igVertexArray1_1	_blendWeights	float *
+igVertexArray1_1	_blendIndices	unsigned char *
+igVertexArray1_1	_pointSpriteSize	float *
+igPsx2VertexArray1_1	_pBlendedVertsList	igSmartPointer<igPointerList>
+igPsx2VertexArray1_1	_pBlendedNormsList	igSmartPointer<igPointerList>
+igPsx2VertexArray1_1	_pWaitSeqList	igSmartPointer< ::igPsx2LongList>

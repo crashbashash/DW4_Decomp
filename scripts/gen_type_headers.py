@@ -109,15 +109,16 @@ KIT_VECTOR = {
 # `setDefault(const igMatrix44f &)`, igAttr's `getUnitCount(igCapabilityManager *)`): declared ahead under C++.
 # A matrix field stays sixteen floats unless config/typed-fields.tsv types it igMatrix44f, the kit's type whose
 # constructor gives the class holding it one (the matrix attrs' retail vtable probes construct theirs);
-# igCapabilityManager has no reflected record here. igVertexArray's slots take the vertex format word and the
-# component lock (the kit's igComponentEditInfo) by reference or pointer; the units that build formats define
-# the format word with the accessors they use.
-FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager", "igVertexFormat", "igVertexArrayLock")
+# igCapabilityManager has no reflected record here. igVertexArray's slots take the component lock (the kit's
+# igComponentEditInfo) by reference or pointer.
+FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager", "igVertexArrayLock")
 # Kit headers reflected.h reads under C++ for the types converted classes name: the kit's enums (igGfx/igGfx.h:
 # IG_GFX_ALPHA_FUNCTION, ...) the attributes' accessors take and return while their fields keep the reflected
-# `int` storage (the kit's igEnum), igMatrix44f for a typed matrix field, and igVertexComponentFilter, the mask
-# igGeometryMaskAttr's accessors take and return over its `_mask` word.
-KIT_TYPE_HEADERS = ("dw4/gfx/GfxMetaEnums.h", "dw4/maths/igMatrix44f.h", "dw4/gfx/igVertexComponentFilter.h")
+# `int` storage (the kit's igEnum), igMatrix44f for a typed matrix field, igVertexComponentFilter, the mask
+# igGeometryMaskAttr's accessors take and return over its `_mask` word, and igVertexFormat, the vertex arrays'
+# format word (igVertexArray1_1's `_vertexFormat` field, the argument of their configure slots).
+KIT_TYPE_HEADERS = ("dw4/gfx/GfxMetaEnums.h", "dw4/maths/igMatrix44f.h", "dw4/gfx/igVertexComponentFilter.h",
+                    "dw4/gfx/igVertexFormat.h")
 
 # Inline arrays: the element type comes from the kind, the element count from the distance to the
 # next field (reflection records no count), or for a last field from the registered instance size.

@@ -251,7 +251,7 @@ void igPsx2VisualContext_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPsx2VisualContext_Register);
 }
 
-static igMetaObjectCallback g_igPsx2VisualContext_callbackList[] = { Gap::Core::igIntList::arkRegister, igPsx2VertexArray1_1_EnsureRegistered, Gap::Gfx::igIndexArray::arkRegister, igPrimLengthArray_EnsureRegistered, igMatrixStack_EnsureRegistered, igPsx2ScissorExt_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igPsx2VisualContext_callbackList[] = { Gap::Core::igIntList::arkRegister, Gap::Gfx::igPsx2VertexArray1_1::arkRegister, Gap::Gfx::igIndexArray::arkRegister, igPrimLengthArray_EnsureRegistered, igMatrixStack_EnsureRegistered, igPsx2ScissorExt_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2VisualContext_Register(void) {
     GfxLibrary_MarkRegistered();
@@ -997,7 +997,7 @@ void igPsx2VisualContext_InitFields(void) {
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x28)))->setDefault(0.0f);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x29)))->setDefault(1.0f);
     temp_s2_6 = igMetaObject_GetFieldAt(meta, fieldStart + 0x2A);
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)igPsx2VertexArray1_1_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)Gap::Gfx::igPsx2VertexArray1_1::getClassTypeLazy();
     temp_s2_7 = igMetaObject_GetFieldAt(meta, fieldStart + 0x2B);
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)Gap::Gfx::igIndexArray::getClassTypeLazy();
     temp_s2_8 = igMetaObject_GetFieldAt(meta, fieldStart + 0x2C);

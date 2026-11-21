@@ -78,23 +78,6 @@ public:
     virtual void setWindow(igObject *window);                                                    /* slot 24 */
 };
 
-/* Which components a vertex array holds: positions, normals and a count of texture coordinate sets. */
-struct igVertexFormat {
-    unsigned int _flags;
-    void setVertices(bool on) {
-        if (on) _flags |= 1;
-        else _flags &= ~1;
-    }
-    void setNormals(bool on) {
-        if (on) _flags |= 2;
-        else _flags &= ~2;
-    }
-    void setTextureCoordCount(unsigned int count) {
-        _flags &= ~0xF0000;
-        _flags |= count << 16;
-    }
-};
-
 /* The scene-graph classes the movie scene is built from, with the virtual functions it calls.
  * ABI view only: never instantiated. */
 class igStateAttrDispatchView : public igObjectDispatchView {
@@ -710,9 +693,8 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             float maxU = (float)usedWidth / (float)texturesWidth;
             float maxV = (float)usedHeight / (float)texturesHeight;
             igVertexFormat format;
-            format._flags = 0;
-            format.setVertices(true);
-            format.setNormals(true);
+            format.setHasPositions(true);
+            format.setHasNormals(true);
             format.setTextureCoordCount(1);
             {
                 int allocator = MovieAllocator(self);

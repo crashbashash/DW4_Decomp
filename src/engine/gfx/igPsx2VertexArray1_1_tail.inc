@@ -1,174 +1,98 @@
-igMetaObject *igPsx2VertexArray1_1_GetOrCreateMetaObject(void) {
-    if (g_igPsx2VertexArray1_1_metaObject == 0) {
-        g_igPsx2VertexArray1_1_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igPsx2VertexArray1_1_metaObject;
-}
+namespace Gap {
+namespace Gfx {
 
-igMetaObject *igPsx2VertexArray1_1_GetMetaObject(void)
+igMetaObject *igPsx2VertexArray1_1::getClassTypeLazy()
 {
-    igMetaObject *g = g_igPsx2VertexArray1_1_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igPsx2VertexArray1_1_EnsureRegistered();
-    return g_igPsx2VertexArray1_1_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igPsx2VertexArray1_1_GetVTable(void) {
-    struct Obj_152410 obj;
-    int t;
-    igObject_InitHeader((igObject *)&obj);
-    obj.w[5] = 0;
-    obj.w[6] = 0;
-    obj.vt = &g_igPsx2VertexArray1_1_vtable[0];
-    obj.w[11] = 0;
-    obj.w[12] = 0;
-    obj.w[13] = 0;
-    t = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj.vt = &g_igPsx2VertexArray1_1_vtable[0];
-    FUN_00152560((void **)&obj.w[13], -1);
-    igSmartPointer_igPointerList_Destruct((igSmartPointer<igObject> *)&obj.w[12], -1);
-    igSmartPointer_igPointerList_Destruct((igSmartPointer<igObject> *)&obj.w[11], -1);
-    FUN_001524c0((S_1524c0 *)&obj, 0);
-    return t;
-}
-
-void *FUN_001524c0(struct S_1524c0 *arg0, short arg1) {
-    void *p;
-    int rc;
-
-    if (arg0 != 0) {
-        arg0->f0 = &DAT_00526480[0];
-        if (&arg0->f18) {
-            p = arg0->f18;
-            if (p != 0) {
-                rc = *(int *)((char *)(p) + 4) - 1;
-                *(int *)((char *)(p) + 4) = rc;
-                if (((unsigned long long) ((long long) *(int *)((char *)(p) + 4) << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((igObject *)p);
-                }
-            }
-        }
-        if (arg1 > 0) {
-            Memory_FreeBufferAliasC(arg0);
-        }
-    }
-    return arg0;
-}
-
-void **FUN_00152560(void **arg0, short arg1) {
-    S_temp_a0 *temp_a0;
-
-    if (arg0 != 0) {
-        temp_a0 = (S_temp_a0 *)((void *)(*arg0));
-        if (temp_a0 != 0) {
-            temp_a0->f4 = (int)((int) (temp_a0->f4 - 1));
-            if ((temp_a0->f4 & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
-        }
-        if (arg1 > 0) {
-            operator delete(arg0);
-        }
-    }
-    return arg0;
-}
-
-void igPsx2VertexArray1_1_EnsureRegistered(void)
+igMetaObject *igPsx2VertexArray1_1::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igPsx2VertexArray1_1_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igPsx2VertexArray1_1_callbackList[] = { Gap::Core::igPointerList::arkRegister, igPsx2LongList_EnsureRegistered, 0 };
+void *igPsx2VertexArray1_1::retrieveVTablePointer()
+{
+    igPsx2VertexArray1_1 temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igPsx2VertexArray1_1_Register(void) {
+void igPsx2VertexArray1_1::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igPsx2VertexArray1_1::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igPointerList::arkRegister, igPsx2LongList_EnsureRegistered, 0 };
+
     GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igPsx2VertexArray1_1_metaObject,
-        igVertexArray1_1_Register,
-        igVertexArray1_1_GetPublishedMetaObject,
-        igPsx2VertexArray1_1_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Gfx::igVertexArray1_1::arkRegisterInternal,
+        Gap::Gfx::igVertexArray1_1::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igPsx2VertexArray1_1",
-        0x90, /* instance size */
-        igPsx2VertexArray1_1_GetVTable,
-        &igPsx2VertexArray1_1_InitFields,
-        0, /* extra callback item */
-        g_igPsx2VertexArray1_1_callbackList /* callback list */
+        sizeof(igPsx2VertexArray1_1),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-igMetaObject *igVertexArray1_1_GetPublishedMetaObject(void) {
-    return g_igVertexArray1_1_metaObject;
+void igPsx2VertexArray1_1::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create, igIntMetaField_Create, (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igIntArrayMetaField::_instantiateFromPool, igIntMetaField_Create };
+    static const char *names[] = { "_pBlendedVertsList", "_pBlendedNormsList", "_pWaitSeqList", "_lastArrayUsed", "_lSequence", "_textureCoordCompiled", "_multipassCompiled" };
+    static igMetaField **enumStorage[] = { &k_pBlendedVertsList, &k_pBlendedNormsList, &k_pWaitSeqList, &k_lastArrayUsed, &k_lSequence, &k_textureCoordCompiled, &k_multipassCompiled };
+    static int offsets[] = { 48, 52, 56, 60, 64, 72, 136 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 7);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)Gap::Core::igPointerList::getClassTypeLazy();
+        metaField->_persistent = 0;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)Gap::Core::igPointerList::getClassTypeLazy();
+        metaField->_persistent = 0;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = igPsx2LongList_GetOrCreateMetaObject();
+        metaField->_persistent = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->setDefault(-1);
+        metaField->_persistent = 0;
+    }
+    {
+        igLongMetaField *metaField = (igLongMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_persistent = 0;
+    }
+    {
+        igIntArrayMetaField *metaField = (igIntArrayMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->_num = 16;
+        metaField->_persistent = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 6);
+        metaField->_persistent = 0;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+    *(void (**)())&_Meta->_writeProxy = (void (*)())Gap::Gfx::igVertexArray1_1::getClassMetaSafe;
 }
-
-static FieldFactory g_igPsx2VertexArray1_1_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igIntArrayMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-};
-static const char *g_igPsx2VertexArray1_1_fieldTable[] = {
-    "_pBlendedVertsList",
-    "_pBlendedNormsList",
-    "_pWaitSeqList",
-    "_lastArrayUsed",
-    "_lSequence",
-    "_textureCoordCompiled",
-    "_multipassCompiled",
-};
-static igMetaField **g_igPsx2VertexArray1_1_fieldHandles[] = {
-    &g_igPsx2VertexArray1_1_pBlendedVertsListMetaField,
-    &g_igPsx2VertexArray1_1_pBlendedNormsListMetaField,
-    &g_igPsx2VertexArray1_1_pWaitSeqListMetaField,
-    &g_igPsx2VertexArray1_1_lastArrayUsedMetaField,
-    &g_igPsx2VertexArray1_1_lSequenceMetaField,
-    &g_igPsx2VertexArray1_1_textureCoordCompiledMetaField,
-    &g_igPsx2VertexArray1_1_multipassCompiledMetaField,
-};
-static int g_igPsx2VertexArray1_1_fieldOffsets[] = {
-    48,
-    52,
-    56,
-    60,
-    64,
-    72,
-    136,
-};
-
-void igPsx2VertexArray1_1_InitFields(void) {
-    void *f5;
-    void *f1;
-    void *f2;
-    int fieldStart;
-    void *f4;
-    void *f3;
-    igMetaObject *meta;
-
-    meta = g_igPsx2VertexArray1_1_metaObject;
-    fieldStart = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igPsx2VertexArray1_1_ctorTable, 7);
-    f1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)f1)->_metaObject = (int)Gap::Core::igPointerList::getClassTypeLazy();
-    ((igObjectRefMetaField *)f1)->_persistent = 0;
-    f2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
-    ((igObjectRefMetaField *)f2)->_metaObject = (int)Gap::Core::igPointerList::getClassTypeLazy();
-    ((igObjectRefMetaField *)f2)->_persistent = 0;
-    f3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));
-    ((igObjectRefMetaField *)f3)->_metaObject = igPsx2LongList_GetOrCreateMetaObject();
-    ((igObjectRefMetaField *)f3)->_persistent = 0;
-    f4 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 3));
-    ((Gap::Core::igIntMetaField *)f4)->setDefault(-1);
-    ((igIntMetaField *)f4)->_persistent = 0;
-    ((igLongMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 4)))->_persistent = 0;
-    f5 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 5));
-    ((igIntArrayMetaField *)f5)->_num = 0x10;
-    ((igIntArrayMetaField *)f5)->_persistent = 0;
-    ((igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 6)))->_persistent = 0;
-    igMetaObject_NameFields(meta, g_igPsx2VertexArray1_1_fieldTable, g_igPsx2VertexArray1_1_fieldHandles, g_igPsx2VertexArray1_1_fieldOffsets, fieldStart);
-    ((igMetaObject *)(g_igPsx2VertexArray1_1_metaObject))->_writeProxy = (int)(&igVertexArray1_1_GetMetaObjectFunction);
+}
 }
 
 int igPsx2LongList_Create(int arg0) {

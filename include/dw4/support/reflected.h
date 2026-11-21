@@ -29,13 +29,13 @@
 #include "dw4/core/igObjectMacros.h"
 #include "dw4/gfx/GfxMetaEnums.h"
 #include "dw4/gfx/igVertexComponentFilter.h"
+#include "dw4/gfx/igVertexFormat.h"
 #include "dw4/maths/igMatrix44f.h"
 #include "dw4/maths/igVec2f.h"
 #include "dw4/maths/igVec3f.h"
 #include "dw4/maths/igVec4f.h"
 struct igMatrix44f;
 struct igCapabilityManager;
-struct igVertexFormat;
 struct igVertexArrayLock;
 #endif
 
@@ -21034,7 +21034,7 @@ typedef struct libNdmwRuntimePlugin {
 namespace Gap {
 namespace Attrs { class igAlphaFunctionAttr; class igAlphaStateAttr; class igAttr; class igAttrDefaultManager; class igAttrList; class igAttrListList; class igAttrPool; class igBlendFunctionAttr; class igBlendMatricesAttr; class igBlendMatrixPaletteAttr; class igBlendMatrixPaletteAttrList; class igBlendStateAttr; class igClearAttr; class igClippingStateAttr; class igColorAttr; class igColorMaskAttr; class igCopyRenderDestinationAttr; class igCullFaceAttr; class igDepthStateAttr; class igDepthWriteStateAttr; class igDisplayListAttr; class igFogAttr; class igFogStateAttr; class igGenericAttrDefaultManager; class igGeometryMaskAttr; class igImageMipMapList; class igLightAttr; class igLightList; class igLightStateAttr; class igLightStateAttrList; class igLightingStateAttr; class igMaterialAttr; class igMatrixOptStateAttr; class igModelViewMatrixAttr; class igModelViewMatrixAttrList; class igMultiPassStateAttr; class igNonRefCountedAttrList; class igNormalizeNormalsStateAttr; class igPixelPipelineModeAttr; class igPolygonModeAttr; class igProjectionMatrixAttr; class igRenderDestinationAttr; class igRenderListAttr; class igSetRenderDestinationAttr; class igShadeModelAttr; class igStencilFunctionAttr; class igStencilStateAttr; class igTexGenMatrixAttr; class igTextureAttr; class igTextureBindAttr; class igTextureCoordSourceAttr; class igTextureCubeAttr; class igTextureFunctionAttr; class igTextureList; class igTextureMatrixAttr; class igTextureMatrixStateAttr; class igTextureStateAttr; class igTextureUnloadAttr; class igTimeAttr; class igVertexBlendMatrixAttr; class igVertexBlendStateAttr; class igViewportAttr; class igVisualAttribute; class igVisualContextAttrDefaultManager; }
 namespace Core { class __internalNonRefCountedObjectList; class __internalObjectList; class igBoolArrayMetaField; class igBoolList; class igBoolMetaField; class igCharArrayMetaField; class igCharList; class igCharListNoClean; class igCharMetaField; class igCompoundMetaField; class igContext; class igDataList; class igDependencyList; class igDirEntry; class igDirectory; class igDirectoryList; class igDoubleArrayMetaField; class igDoubleList; class igDoubleMetaField; class igEnumArrayMetaField; class igEnumMetaField; class igExternalDirEntry; class igExternalIndexedEntry; class igExternalInfoEntry; class igFloatArrayMetaField; class igFloatList; class igFloatMetaField; class igIntArrayMetaField; class igIntList; class igIntListNoClean; class igIntMetaField; class igLongArrayMetaField; class igLongList; class igLongMetaField; class igMedia; class igMemoryDirEntry; class igMemoryRefArrayMetaField; class igMemoryRefMetaField; class igMetaEnum; class igMetaField; class igNamedObject; class igNonRefCountedObjectList; class igObject; class igObjectDirEntry; class igObjectList; class igObjectRefArrayMetaField; class igObjectRefMetaField; class igPointerList; class igRawRefArrayMetaField; class igRawRefMetaField; class igRefMetaField; class igShortArrayMetaField; class igShortList; class igShortMetaField; class igStringArrayMetaField; class igStringMetaField; class igStructMetaField; class igTimer; class igUnsignedCharArrayMetaField; class igUnsignedCharList; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntList; class igUnsignedIntListNoClean; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortList; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
-namespace Gfx { class igClut; class igIndexArray; class igPsx2Clut; class igPsx2IndexArray; class igVertexArray; }
+namespace Gfx { class igClut; class igIndexArray; class igPsx2Clut; class igPsx2IndexArray; class igPsx2VertexArray1_1; class igVertexArray; class igVertexArray1_1; }
 namespace Gui { class igClearRenderer; class igRenderer; }
 namespace Insight { class igFlushRenderer; }
 namespace Math { class igMatrix44fMetaField; class igVec2fMetaField; class igVec3fMetaField; class igVec4fArrayMetaField; class igVec4fMetaField; class igVec4ucMetaField; }
@@ -21134,6 +21134,7 @@ using Attrs::igPolygonModeAttr;
 using Attrs::igProjectionMatrixAttr;
 using Gfx::igPsx2Clut;
 using Gfx::igPsx2IndexArray;
+using Gfx::igPsx2VertexArray1_1;
 using Core::igRawRefArrayMetaField;
 using Core::igRawRefMetaField;
 using Core::igRefMetaField;
@@ -21181,6 +21182,7 @@ using Math::igVec4fArrayMetaField;
 using Math::igVec4fMetaField;
 using Math::igVec4ucMetaField;
 using Gfx::igVertexArray;
+using Gfx::igVertexArray1_1;
 using Attrs::igVertexBlendMatrixAttr;
 using Attrs::igVertexBlendStateAttr;
 using Attrs::igViewportAttr;
@@ -23650,6 +23652,185 @@ public:
 }
 
 namespace Gap {
+namespace Gfx {
+/* handle 0x55fac8, 6 field(s), sizeof 24 (registered instance size) */
+class igVertexArray : public Gap::Core::igObject {
+public:
+    void **_vdata;                                 /* +8    igMemoryRefMetaField */
+    unsigned int _numVerts;                        /* +12   igUnsignedIntMetaField */
+    unsigned int _vtype;                           /* +16   igUnsignedIntMetaField */
+    unsigned int _usageFlags;                      /* +20   igUnsignedIntMetaField */
+    IG_ABSTRACT_OBJECT_DEFINE(igVertexArray)
+protected:
+    static igMetaField *k_vdata;
+    static igMetaField *k_numVerts;
+    static igMetaField *k_vtype;
+    static igMetaField *k_usageFlags;
+public:
+    virtual unsigned int configure(unsigned int vertexFormatFlags, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context) = 0;
+    virtual unsigned int configure(const igVertexFormat &vertexFormat, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context) = 0;
+    virtual const igVertexFormat &getVertexFormat() const = 0;
+    inline virtual void setUsageFlags(unsigned int flags) { _usageFlags = flags; }
+    virtual void getEditableComponent(igVertexArrayLock *componentInfo, unsigned int editFlags) = 0;
+    virtual void commitComponentEdits(const igVertexArrayLock &componentInfo, unsigned int commitFlags) = 0;
+    virtual void setPosition(unsigned int idx, const igVec3f &position) = 0;
+    virtual void getPosition(unsigned int idx, igVec3f &position) const = 0;
+    virtual const igVec3f *getPosition(unsigned int idx) const = 0;
+    virtual void setNormal(unsigned int idx, const igVec3f &normal) = 0;
+    virtual void getNormal(unsigned int idx, igVec3f &normal) const = 0;
+    virtual const igVec3f *getNormal(unsigned int idx) const = 0;
+    virtual void setBinormal(unsigned int idx, const igVec3f &binormal) = 0;
+    virtual void getBinormal(unsigned int idx, igVec3f &binormal) const = 0;
+    virtual const igVec3f *getBinormal(unsigned int idx) const = 0;
+    virtual void setTangent(unsigned int idx, const igVec3f &tangent) = 0;
+    virtual void getTangent(unsigned int idx, igVec3f &tangent) const = 0;
+    virtual const igVec3f *getTangent(unsigned int idx) const = 0;
+    virtual void setColor(unsigned int idx, unsigned int abgr) = 0;
+    virtual void setColor(unsigned int idx, const igVec4f &rgba) = 0;
+    virtual unsigned int getColor(unsigned int idx) const = 0;
+    virtual void getColor(unsigned int idx, igVec4f &rgba) const = 0;
+    virtual void setWeight(unsigned int which, unsigned int idx, float weight) = 0;
+    virtual float getWeight(unsigned int which, unsigned int idx) const = 0;
+    virtual void validateBlendWeights() = 0;
+    virtual void setBlendMatrixIndex(unsigned int which, unsigned int vertexIndex, unsigned char matrixIndex) = 0;
+    virtual unsigned char getBlendMatrixIndex(unsigned int which, unsigned int idx) const = 0;
+    virtual void setTextureCoord(unsigned int which, unsigned int idx, const igVec2f &coord) = 0;
+    virtual void getTextureCoord(unsigned int which, unsigned int idx, igVec2f &coord) const = 0;
+    virtual const igVec2f *getTextureCoord(unsigned int which, unsigned int idx) const = 0;
+    virtual void setPointSpriteSize(unsigned int idx, float size) = 0;
+    virtual float getPointSpriteSize(unsigned int idx) const = 0;
+    virtual void setPointSpriteSize(unsigned int idx, igVec2f size) = 0;
+    virtual void getPointSpriteSize(unsigned int idx, igVec2f &size) const = 0;
+    virtual void setPointSpriteRadian(unsigned int idx, float radian) = 0;
+    virtual float getPointSpriteRadian(unsigned int idx) const = 0;
+    virtual void reset() = 0;
+    virtual unsigned int reconfigure(const igVertexFormat &vertexFormat, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context) = 0;
+    inline void **getRawVertexData() const { return _vdata; }
+    inline unsigned int getCount() const { return _numVerts; }
+    inline unsigned int getUsageFlags() const { return _usageFlags; }
+};
+}
+}
+
+namespace Gap {
+namespace Gfx {
+/* handle 0x55fa90, 12 field(s), sizeof 48 (registered instance size) */
+class igVertexArray1_1 : public Gap::Gfx::igVertexArray {
+public:
+    igSmartPointer<igMemoryPool> _memPool;         /* +24   igObjectRefMetaField */
+    igVertexFormat _vertexFormat;                  /* +28   igStructMetaField */
+    float *_blendWeights;                          /* +32   igMemoryRefMetaField */
+    unsigned char *_blendIndices;                  /* +36   igMemoryRefMetaField */
+    unsigned int _blendIndex;                      /* +40   igUnsignedIntMetaField */
+    float *_pointSpriteSize;                       /* +44   igMemoryRefMetaField */
+    IG_ABSTRACT_OBJECT_DEFINE(igVertexArray1_1)
+    static igMetaField *k_memPool;
+protected:
+    static igMetaField *k_vertexFormat;
+    static igMetaField *k_blendWeights;
+    static igMetaField *k_blendIndices;
+    static igMetaField *k_blendIndex;
+    static igMetaField *k_pointSpriteSize;
+public:
+    inline const float *getBlendWeights() const { return _blendWeights; }
+    inline const unsigned char *getBlendIndices() const { return _blendIndices; }
+    inline void setBlendSequence(unsigned int blendSequenceParam) { _blendIndex = blendSequenceParam; }
+    inline unsigned int getBlendSequence() const { return _blendIndex; }
+protected:
+    unsigned int allocateAbstractVertexArrayMemory();
+    void freeAbstractVertexArrayMemory();
+    void checkVDataSize();
+public:
+    virtual void resetFields(int flag);
+    virtual void userMakeConcrete(igMetaObject *meta);
+    static void userRegister();
+private:
+    static void arkRegisterUser();
+public:
+    using igVertexArray::configure;
+    virtual unsigned int reconfigure(const igVertexFormat &vertexFormat, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context);
+    virtual void cache();
+    virtual unsigned int configure(unsigned int vertexFormatFlags, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context);
+    virtual const igVertexFormat &getVertexFormat() const;
+    virtual void setWeight(unsigned int which, unsigned int idx, float weight);
+    virtual float getWeight(unsigned int which, unsigned int idx) const;
+    virtual void validateBlendWeights();
+    virtual void setBlendMatrixIndex(unsigned int which, unsigned int idx, unsigned char matrixIndex);
+    virtual unsigned char getBlendMatrixIndex(unsigned int which, unsigned int idx) const;
+    virtual void setPointSpriteSize(unsigned int idx, float size);
+    virtual float getPointSpriteSize(unsigned int idx) const;
+    virtual void setPointSpriteRadian(unsigned int idx, float size);
+    virtual float getPointSpriteRadian(unsigned int idx) const;
+    virtual void setPointSpriteSize(unsigned int idx, igVec2f size);
+    virtual void getPointSpriteSize(unsigned int idx, igVec2f &size) const;
+    virtual void setBinormal(unsigned int idx, const igVec3f &binormal);
+    virtual void getBinormal(unsigned int idx, igVec3f &binormal) const;
+    virtual const igVec3f *getBinormal(unsigned int idx) const;
+    virtual void setTangent(unsigned int idx, const igVec3f &tangent);
+    virtual void getTangent(unsigned int idx, igVec3f &tangent) const;
+    virtual const igVec3f *getTangent(unsigned int idx) const;
+    virtual void freePointSpriteMemory();
+    virtual void freeAbstractBiNormalsAndTangentsMemory();
+    virtual unsigned int allocatePointSpriteMemory();
+    virtual unsigned int allocateAbstractBiNormalsAndTangentsMemory();
+};
+}
+}
+
+namespace Gap {
+namespace Gfx {
+/* handle 0x560480, 19 field(s), sizeof 144 (registered instance size) */
+class igPsx2VertexArray1_1 : public Gap::Gfx::igVertexArray1_1 {
+public:
+    igSmartPointer<igPointerList> _pBlendedVertsList; /* +48   igObjectRefMetaField */
+    igSmartPointer<igPointerList> _pBlendedNormsList; /* +52   igObjectRefMetaField */
+    igSmartPointer< ::igPsx2LongList> _pWaitSeqList; /* +56   igObjectRefMetaField */
+    int _lastArrayUsed;                            /* +60   igIntMetaField */
+    long long _lSequence;                          /* +64   igLongMetaField */
+    int _textureCoordCompiled[16];                 /* +72   igIntArrayMetaField */
+    int _multipassCompiled;                        /* +136  igIntMetaField */
+    char _pad140[4];
+    IG_OBJECT_DEFINE(igPsx2VertexArray1_1)
+private:
+    static igMetaField *k_pBlendedVertsList;
+    static igMetaField *k_pBlendedNormsList;
+    static igMetaField *k_pWaitSeqList;
+    static igMetaField *k_lastArrayUsed;
+    static igMetaField *k_lSequence;
+    static igMetaField *k_textureCoordCompiled;
+    static igMetaField *k_multipassCompiled;
+public:
+    virtual void initDefaults();
+    virtual void releaseDefaults();
+    virtual void userApplyWriteProxy(int value);
+    virtual void userMakeConcrete(igMetaObject *meta);
+    virtual unsigned int configure(const igVertexFormat &vertexFormat, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context);
+    virtual void getEditableComponent(igVertexArrayLock *componentInfo, unsigned int editFlags);
+    virtual void commitComponentEdits(const igVertexArrayLock &componentInfo, unsigned int commitFlags);
+    virtual void setPosition(unsigned int idx, const igVec3f &position);
+    virtual void getPosition(unsigned int idx, igVec3f &position) const;
+    virtual const igVec3f *getPosition(unsigned int idx) const;
+    virtual void setNormal(unsigned int idx, const igVec3f &normal);
+    virtual void getNormal(unsigned int idx, igVec3f &normal) const;
+    virtual const igVec3f *getNormal(unsigned int idx) const;
+    virtual void setColor(unsigned int idx, unsigned int abgr);
+    virtual void setColor(unsigned int idx, const igVec4f &rgba);
+    virtual unsigned int getColor(unsigned int idx) const;
+    virtual void getColor(unsigned int idx, igVec4f &rgba) const;
+    virtual void setTextureCoord(unsigned int which, unsigned int idx, const igVec2f &coord);
+    virtual void getTextureCoord(unsigned int which, unsigned int idx, igVec2f &coord) const;
+    virtual const igVec2f *getTextureCoord(unsigned int which, unsigned int idx) const;
+    virtual void setPointSpriteRadian(unsigned int idx, float radian);
+    virtual float getPointSpriteRadian(unsigned int idx) const;
+    virtual void reset();
+protected:
+    void allocateBlendedVertexLists();
+    void freeBlendedVertexLists();
+};
+}
+}
+
+namespace Gap {
 namespace Core {
 /* handle 0x585a80, 22 field(s), sizeof 56 (registered instance size) */
 class igRawRefMetaField : public Gap::Core::igRefMetaField {
@@ -24662,67 +24843,6 @@ public:
     virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
     virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
     virtual int computeRequiredAlignment();
-};
-}
-}
-
-namespace Gap {
-namespace Gfx {
-/* handle 0x55fac8, 6 field(s), sizeof 24 (registered instance size) */
-class igVertexArray : public Gap::Core::igObject {
-public:
-    void **_vdata;                                 /* +8    igMemoryRefMetaField */
-    unsigned int _numVerts;                        /* +12   igUnsignedIntMetaField */
-    unsigned int _vtype;                           /* +16   igUnsignedIntMetaField */
-    unsigned int _usageFlags;                      /* +20   igUnsignedIntMetaField */
-    IG_ABSTRACT_OBJECT_DEFINE(igVertexArray)
-protected:
-    static igMetaField *k_vdata;
-    static igMetaField *k_numVerts;
-    static igMetaField *k_vtype;
-    static igMetaField *k_usageFlags;
-public:
-    virtual unsigned int configure(unsigned int vertexFormatFlags, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context) = 0;
-    virtual unsigned int configure(const igVertexFormat &vertexFormat, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context) = 0;
-    virtual const igVertexFormat &getVertexFormat() const = 0;
-    inline virtual void setUsageFlags(unsigned int flags) { _usageFlags = flags; }
-    virtual void getEditableComponent(igVertexArrayLock *componentInfo, unsigned int editFlags) = 0;
-    virtual void commitComponentEdits(const igVertexArrayLock &componentInfo, unsigned int commitFlags) = 0;
-    virtual void setPosition(unsigned int idx, const igVec3f &position) = 0;
-    virtual void getPosition(unsigned int idx, igVec3f &position) const = 0;
-    virtual const igVec3f *getPosition(unsigned int idx) const = 0;
-    virtual void setNormal(unsigned int idx, const igVec3f &normal) = 0;
-    virtual void getNormal(unsigned int idx, igVec3f &normal) const = 0;
-    virtual const igVec3f *getNormal(unsigned int idx) const = 0;
-    virtual void setBinormal(unsigned int idx, const igVec3f &binormal) = 0;
-    virtual void getBinormal(unsigned int idx, igVec3f &binormal) const = 0;
-    virtual const igVec3f *getBinormal(unsigned int idx) const = 0;
-    virtual void setTangent(unsigned int idx, const igVec3f &tangent) = 0;
-    virtual void getTangent(unsigned int idx, igVec3f &tangent) const = 0;
-    virtual const igVec3f *getTangent(unsigned int idx) const = 0;
-    virtual void setColor(unsigned int idx, unsigned int abgr) = 0;
-    virtual void setColor(unsigned int idx, const igVec4f &rgba) = 0;
-    virtual unsigned int getColor(unsigned int idx) const = 0;
-    virtual void getColor(unsigned int idx, igVec4f &rgba) const = 0;
-    virtual void setWeight(unsigned int which, unsigned int idx, float weight) = 0;
-    virtual float getWeight(unsigned int which, unsigned int idx) const = 0;
-    virtual void validateBlendWeights() = 0;
-    virtual void setBlendMatrixIndex(unsigned int which, unsigned int vertexIndex, unsigned char matrixIndex) = 0;
-    virtual unsigned char getBlendMatrixIndex(unsigned int which, unsigned int idx) const = 0;
-    virtual void setTextureCoord(unsigned int which, unsigned int idx, const igVec2f &coord) = 0;
-    virtual void getTextureCoord(unsigned int which, unsigned int idx, igVec2f &coord) const = 0;
-    virtual const igVec2f *getTextureCoord(unsigned int which, unsigned int idx) const = 0;
-    virtual void setPointSpriteSize(unsigned int idx, float size) = 0;
-    virtual float getPointSpriteSize(unsigned int idx) const = 0;
-    virtual void setPointSpriteSize(unsigned int idx, igVec2f size) = 0;
-    virtual void getPointSpriteSize(unsigned int idx, igVec2f &size) const = 0;
-    virtual void setPointSpriteRadian(unsigned int idx, float radian) = 0;
-    virtual float getPointSpriteRadian(unsigned int idx) const = 0;
-    virtual void reset() = 0;
-    virtual unsigned int reconfigure(const igVertexFormat &vertexFormat, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context) = 0;
-    inline void **getRawVertexData() const { return _vdata; }
-    inline unsigned int getCount() const { return _numVerts; }
-    inline unsigned int getUsageFlags() const { return _usageFlags; }
 };
 }
 }
