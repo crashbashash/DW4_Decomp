@@ -736,11 +736,11 @@
  ],
  "typed": {
   "error": null,
-  "offset_casts": 3126,
-  "pct": 46.44,
-  "recovered": 33782,
-  "synthetic": 5829,
-  "total": 72739,
+  "offset_casts": 3136,
+  "pct": 46.53,
+  "recovered": 34007,
+  "synthetic": 5887,
+  "total": 73084,
   "typeable": 0,
   "typeable_pct": 0.0
  }

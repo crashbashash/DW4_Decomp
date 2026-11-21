@@ -136,16 +136,17 @@ class Conversion(unittest.TestCase):
         flat, member = self.measure(FLAT, False), self.measure(MEMBER, True)
         self.assertEqual(flat["by_class"], {"igMetaObject": 1, "igRenderer": 3, "igVisualContext": 9, "igObject": 1})
         self.assertEqual(member["by_class"],
-                         {"igMetaObject": 1, "igRenderer": 4, "igVisualContext": 9, "igObject": 1})
+                         {"igMetaObject": 1, "igRenderer": 6, "igVisualContext": 9, "igObject": 1})
         self.assertGreaterEqual(member["recovered"], flat["recovered"])
 
     def test_where_the_member_form_counts_them(self):
         stats = self.measure(MEMBER, True)
         per = {name: fc["recovered"] for (_path, name), fc in stats["per_function"].items()}
-        # isValid() reads _validity; three bare reads, operator= (five reference-count accesses) and a read through
-        # the typed member; the constructor's bare field; the implicit destructor reads and releases the member
-        self.assertEqual(per, {"igRenderer::getClassTypeSafe": 1, "Gap::Gui::igRenderer::setVisualContext": 9,
-                               "Gap::Core::igObject::igObject": 1, "igRenderer::~igRenderer": 4})
+        # isValid() reads _validity; two bare reads, operator= (it reads the member's word and stores it, and makes
+        # five reference-count accesses) and a read through the typed member; the constructor's bare field; the
+        # implicit destructor tests the member's address, reads its word and releases it (three accesses)
+        self.assertEqual(per, {"igRenderer::getClassTypeSafe": 1, "Gap::Gui::igRenderer::setVisualContext": 10,
+                               "Gap::Core::igObject::igObject": 1, "igRenderer::~igRenderer": 5})
 
     def test_a_destructor_the_source_defines_is_not_counted_twice(self):
         stats = self.measure(MEMBER + "Gap::Gui::igRenderer::~igRenderer() {\n}\n", True)
@@ -173,6 +174,148 @@ class Conversion(unittest.TestCase):
     def test_cxx_view_keeps_the_cplusplus_arm(self):
         text = "#ifdef __cplusplus\nstruct A : public B {\n#else\nstruct A {\n#endif\n  int x;\n};\n"
         self.assertEqual(tc.cxx_view(text).split("\n"), ["", "struct A : public B {", "", "", "", "  int x;", "};", ""])
+
+
+def measure_tree(files):
+    """tc.measure over a scratch tree holding `files` ({relative path: text})."""
+    with tempfile.TemporaryDirectory() as tree:
+        for rel, text in files.items():
+            os.makedirs(os.path.dirname(os.path.join(tree, rel)), exist_ok=True)
+            with open(os.path.join(tree, rel), "w") as fh:
+                fh.write(text)
+        return tc.measure(os.path.join(tree, "data", "reflection.json"), os.path.join(tree, "src"))
+
+
+def per_function(stats):
+    return {name: fc["recovered"] for (_path, name), fc in stats["per_function"].items() if fc["recovered"]}
+
+
+PROBE = {
+    "data/reflection.json": json.dumps({"classes": {
+        "0x1": {"class": "igBase", "fields": [{"offset": 8, "name": "_base", "type": "igIntMetaField"}]},
+        "0x2": {"class": "igProbe", "fields": [
+            {"offset": 12, "name": "_n", "type": "igIntMetaField"},
+            {"offset": 16, "name": "_pos", "type": "igVec3fMetaField"},
+            {"offset": 28, "name": "_arr", "type": "igIntArrayMetaField"}]}}}),
+    "data/class-hierarchy.tsv": "igProbe\tigBase\n",
+    "include/dw4/probe.h": (
+        "struct igVec3f {\n    float vec[3];\n"
+        "    void set(const float *v) { vec[0] = v[0]; vec[1] = v[1]; vec[2] = v[2]; }\n"
+        "    igVec3f &operator+=(const igVec3f &o) { vec[0] += o.vec[0]; return *this; }\n};\n"
+        "class igBase {\npublic:\n    int _base;\n};\n"
+        "class igProbe : public igBase {\npublic:\n    int _n;\n    igVec3f _pos;\n    int _arr[4];\n"
+        "    int get(igVec3f *v, igProbe *a);\n    int shadow(int _n);\n};\n"),
+}
+# the same reads written as a free function, as a member function in a namespace block, and in the class body:
+# a whole-vector operation (`_pos.set(...)`, `a->_pos += *v`) is one access, an inherited field (`_base`) is the
+# class's, and a parameter or local of a field's name hides it
+PROBE_FREE = (
+    "int igProbe_Get(igProbe *self, igVec3f *v, igProbe *a) {\n    self->_pos.set(v->vec);\n    a->_pos += *v;\n"
+    "    return self->_n + self->_base + self->_pos.vec[1] + self->_arr[2];\n}\n"
+    "int igProbe_Shadow(igProbe *self, int _n) {\n    int _base = 1;\n    return _n + _base + self->_arr[0];\n}\n")
+PROBE_GET = ("get(igVec3f *v, igProbe *a) {\n    _pos.set(v->vec);\n    a->_pos += *v;\n"
+             "    return _n + _base + _pos.vec[1] + this->_arr[2];\n}\n")
+PROBE_SHADOW = "shadow(int _n) {\n    int _base = 1;\n    return _n + _base + _arr[0];\n}\n"
+PROBE_MEMBER = ("namespace Gap {\nnamespace Core {\n\nint igProbe::" + PROBE_GET + "\nint igProbe::" + PROBE_SHADOW +
+                "\n}\n}\n")
+PROBE_INLINE = ("namespace Gap {\nnamespace Core {\nclass igProbe : public igBase {\npublic:\n    int " +
+                PROBE_GET.replace("\n", "\n    ") + "int " + PROBE_SHADOW.replace("\n", "\n    ") + "};\n}\n}\n")
+
+
+class ImplicitThis(unittest.TestCase):
+    """A member function of a class reads the class's (and its bases') fields through the implicit `this` as the
+    free function did through its receiver pointer."""
+
+    def measure(self, source):
+        return measure_tree(dict(PROBE, **{"src/probe.cpp": source}))
+
+    def test_a_free_function_and_its_member_forms_count_the_same(self):
+        free, member, inline = self.measure(PROBE_FREE), self.measure(PROBE_MEMBER), self.measure(PROBE_INLINE)
+        self.assertEqual(per_function(free), {"igProbe_Get": 6, "igProbe_Shadow": 1})
+        self.assertEqual(per_function(member), {"igProbe::get": 6, "igProbe::shadow": 1})
+        self.assertEqual(per_function(inline), {"igProbe::get": 6, "igProbe::shadow": 1})
+        self.assertEqual(free["by_class"], {"igProbe": 7})
+        self.assertEqual(member["by_class"], free["by_class"])
+        self.assertEqual(inline["by_class"], free["by_class"])
+
+    def test_a_whole_vector_operation_is_one_access(self):
+        stats = self.measure("void igProbe::move(igVec3f *v, igProbe *a) {\n    a->_pos += *v;\n"
+                             "    _pos.set(v->vec);\n    _pos = *v;\n}\n")
+        self.assertEqual(per_function(stats), {"igProbe::move": 3})
+
+    def test_in_class_bodies_are_split_from_the_function_before(self):
+        text = "int f(void) {\n    return 0;\n}\nstruct S {\n    int g() { return 1; }\n    S() : x(0) {}\n    int x;\n};\n"
+        self.assertEqual([(n, a) for n, a, _s, _e in tc.split_functions(text)],
+                         [("f", "void"), ("S::g", ""), ("S::S", "")])
+
+
+POOL = {
+    "data/reflection.json": json.dumps({"classes": {
+        "0x1": {"class": "igObject", "fields": [{"offset": 0, "name": "_vtable", "type": "igObjectRefMetaField"},
+                                                {"offset": 4, "name": "_refCount", "type": "igUnsignedIntMetaField"}]},
+        "0x2": {"class": "igPool", "fields": [{"offset": 8, "name": "_size", "type": "igIntMetaField"},
+                                              {"offset": 12, "name": "_poolName", "type": "igStringMetaField"}]}}}),
+    "data/class-hierarchy.tsv": "igPool\tigObject\n",
+    "config/converted-classes.tsv": "igObject\tCore\nigPool\tCore\n",
+    "config/SLUS-20836/compiler-names.tsv": "__dt__Q33Gap4Core6igPoolFv\t0x00100000\tigPool_Destroy\n",
+    "include/dw4/pool.h": (
+        "static inline void releaseString(const char *s) {\n    if (s != 0) StringChunk_Release(s);\n}\n"
+        "struct igStringRef {\n    char *p;\n    igStringRef() : p(0) {}\n    ~igStringRef() { releaseString(p); }\n"
+        "    igStringRef &operator=(const char *chars) {\n        char *interned = (char *)StringPool_Intern(chars);\n"
+        "        releaseString(p);\n        p = interned;\n        return *this;\n    }\n};\n"
+        "namespace Gap { namespace Core {\nclass igPool : public Gap::Core::igObject {\npublic:\n    int _size;\n"
+        "    igStringRef _poolName;\n    igPool();\n    void setPool(const char *name);\n};\n}}\n"),
+}
+# the C form spelled what the compiler writes for a member with a destructor (igStringRef): the constructor's clear,
+# the assignment's release of the old string, the destructor's test of the member's address and its release
+POOL_FREE = (
+    "igPool *igPool_Construct(igPool *self) {\n    self->_vtable = (int)g_igPool_vtable;\n"
+    "    self->_poolName = 0;\n    self->_size = 4;\n    return self;\n}\n"
+    "void igPool_SetPool(igPool *self, const char *name) {\n    char *previous = (char *)self->_poolName;\n"
+    "    release(previous);\n    self->_poolName = (int)intern(name);\n}\n"
+    "igPool *igPool_Destroy(igPool *self, short flags) {\n    if (self != 0) {\n"
+    "        self->_vtable = (int)g_igPool_vtable;\n        if (&self->_poolName != 0) {\n"
+    "            char *p = (char *)self->_poolName;\n            release(p);\n        }\n    }\n    return self;\n}\n")
+POOL_MEMBER = ("namespace Gap {\nnamespace Core {\n\nigPool::igPool()\n{\n    _size = 4;\n}\n\n"
+               "void igPool::setPool(const char *name)\n{\n    _poolName = name;\n}\n\n}\n}\n")
+
+
+class Holders(unittest.TestCase):
+    """A member whose class has a destructor is constructed, assigned and destroyed by that class's inline members;
+    what they do to its word counts as the C form's accesses of the field."""
+
+    def measure(self, source, converted):
+        files = dict(POOL, **{"src/pool.cpp": source})
+        if not converted:
+            del files["config/converted-classes.tsv"], files["config/SLUS-20836/compiler-names.tsv"]
+        return measure_tree(files)
+
+    def test_the_member_form_counts_what_the_free_form_counted(self):
+        free, member = self.measure(POOL_FREE, False), self.measure(POOL_MEMBER, True)
+        self.assertEqual(per_function(free), {"igPool_Construct": 3, "igPool_SetPool": 2, "igPool_Destroy": 3})
+        # the constructor: its vtable store, the default-constructed _poolName, `_size`; setPool: operator= reads
+        # the old string and stores the new; the implicit destructor: the vtable, _poolName's address and its word
+        self.assertEqual(per_function(member), {"igPool::igPool": 3, "igPool::setPool": 2, "igPool::~igPool": 3})
+        self.assertEqual(member["by_class"], free["by_class"])
+
+    def test_a_member_initialiser_constructs_the_member_once(self):
+        stats = self.measure("igPool::igPool(const char *name) : _poolName(name) {\n}\n", True)
+        self.assertEqual(per_function(stats)["igPool::igPool"], 2)
+
+    def test_a_destructor_the_source_defines_adds_the_compilers_part(self):
+        stats = self.measure(POOL_MEMBER + "Gap::Core::igPool::~igPool() {\n    _size = 0;\n}\n", True)
+        self.assertEqual(per_function(stats)["Gap::Core::igPool::~igPool"], 4)
+        self.assertNotIn(("(implicit)", "igPool::~igPool"), stats["per_function"])
+
+
+class ClassMembers(unittest.TestCase):
+    def test_an_initialiser_list_is_not_an_access_label(self):
+        body = "\n    char *p;\n    H() : p(0) {}\npublic:\n    ~H() { release(p); }\n"
+        self.assertEqual([i[:2] for i in tc.class_members(body)], [("data", "char *"), ("method", "H"), ("method", "~H")])
+
+    def test_initializers(self):
+        self.assertEqual(tc.initializers(" Base(a, b), p((T *)o.p), n(0) "),
+                         [("Base", "a, b"), ("p", "(T *)o.p"), ("n", "0")])
 
 
 if __name__ == "__main__":

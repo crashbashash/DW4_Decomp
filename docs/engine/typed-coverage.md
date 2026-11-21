@@ -39,12 +39,10 @@ What the count means and does not mean:
   class, a struct derived from it, or accesses inside a static member are not counted, so use the
   reflected name in the declaration where the compiler allows it (the shop helpers gained 52
   accesses that way).
-- **Two readable spellings are under-counted**, so moving a hand-spelled release into a class-body
-  holder lowers the metric with the typing unchanged. A reference release in an inline destructor
-  or static member inside a class body is invisible, because the function splitter sees only
-  top-level definitions. A field read through a typed global array element
-  (`g_<Class>_metaObject[0]->_validity`) has no declared local to attribute the class to. Counting
-  class-body member functions and typed array elements would remove the gap.
+- **A read through a typed global array element is under-counted**
+  (`g_<Class>_metaObject[0]->_validity`): it has no declared local to attribute the class to. Counting typed
+  array elements would remove the gap. Member functions a class defines in its body (inline destructors,
+  static members of a class-body holder) are split out as `Class::name` and counted like any other function.
 - **`((T *)base)->field` counts as recovered.** The access scanner has a `CAST_MEMBER_RE` for that
   form, which is how the typing passes spell an access whose class came from reflection rather
   than a declaration.
@@ -142,19 +140,45 @@ header is byte for byte what the reflection alone gives:
   and typed fields of a converted class go only into this declaration; its flat struct stays the C view.
 
 A converted class's code is counted as its free-function form was, so a conversion never lowers the count.
-A member function (a constructor too) counts `this->x`, its class's bare fields and reads through a typed
-member (`_visualContext->_mode`); any function counts a read through a reference to a class (`other._refCount` in
-`igObject(const igObject &other)`) as it counts one through a pointer, and a constructor of a converted class
-counts its store of the vtable into `_vtable`, which the compiler writes where the C form spelled
-`self->_vtable = (int)&g_X_vtable[0]`. Where the member form reaches a field through what the headers define inline,
-each use counts the inline body's accesses: an inline member called on an object of known class
-(`_Meta->isValid()` reads `_validity`, as the free form's `g->_validity & 4` did), a smart-pointer member's
-assignment (igSmartPointer's `operator=`, the reference counts the free form spelled out), and, once per class, a
-converted class's implicit destructor (a `__dt__` name of `compiler-names.tsv` with no `Class::~Class` in src/:
-each smart-pointer member read and released), listed under the `(implicit)` folder. Measured this way, the root
-and renderer conversions (a6f2edc32 to 5f9e3e300) take the count from 33,817 to 33,820. The first igObject batch
-(35468f0fe) lowered the count by 2 before the reference and constructor rules; with them the tree counts 33,832
-(the 3 vtable stores of igObject's constructors, `other._refCount`, and 7 reference reads elsewhere: 33,821 before).
+A member function counts `this->x`, its class's and its bases' bare fields (`_n`, `_pos.vec[1]`, `_pos.set(v)`,
+`_arr[k]`) exactly as the free function counted `self->x`, unless a parameter or local of that name hides the
+field, wherever it is written: out of its class, inside a namespace block, or in the class body (the splitter
+names those `Class::name`; their bodies run to the next definition, as top-level ones do). A constructor or
+destructor is a member function too. It also counts reads through a typed member (`_visualContext->_mode`); any
+function counts a read through a reference to a class (`other._refCount` in `igObject(const igObject &other)`) as it
+counts one through a pointer, and a constructor of a converted class counts its store of the vtable into `_vtable`,
+which the compiler writes where the C form spelled `self->_vtable = (int)&g_X_vtable[0]`. A whole-vector operation
+on a typed field (`a->_pos += b`, `_pos = *v`, `_pos.set(v)`) is one access, as an element access is.
+
+Where the member form reaches a field through what the headers define inline, each use counts the inline body's
+accesses, on the class of the object it runs on: an inline member called on an object of known class
+(`_Meta->isValid()` reads `_validity`, as the free form's `g->_validity & 4` did; `getFieldName()` in an
+igMemoryRefMetaField member reads that object's `_fieldName`). A member whose class has a destructor
+(`igSmartPointer<T>`, `igStringRef`) is a one-word *holder*, and what its inline members do to that word are the
+field accesses the C form spelled on `self->_field`:
+
+- an assignment runs the holder's `operator=`: `_poolName = name` reads the old string to release it and stores
+  the new (2, as `igMemoryRefMetaField_SetPoolName` did), igSmartPointer's adds the reference counts;
+- a constructor constructs each holder member the class declares, from its member initialiser (one store) or by
+  the holder's default constructor (`p(0)`: the C form's `self->_poolName = 0`);
+- a destructor the compiler writes -- once per converted class with a `__dt__` name of `compiler-names.tsv` and no
+  `Class::~Class` in src/, listed under the `(implicit)` folder, and after the body of one src defines -- stores
+  the vtable at each polymorphic class level that has a destructor (a holder member, its own, or a base's), then
+  destroys each holder member: the destructor's `this != 0` test on the member's address, then its release. The
+  bases' destructors are inlined up to one src defines.
+
+Measured this way, the root and renderer conversions (a6f2edc32 to 5f9e3e300) take the count from 33,817 to
+33,820. The first igObject batch (35468f0fe) lowered the count by 2 before the reference and constructor rules;
+with them the tree counts 33,832 (the 3 vtable stores of igObject's constructors, `other._refCount`, and 7
+reference reads elsewhere: 33,821 before). The metafield batch of f2701794d (igEnumArray, igRawRefArray,
+igObjectRef, igMemoryRef) lowered the count by 2 (33,784 to 33,782) before the holder rules and in-class splitting.
+With them its parent counts 33,991 and it counts 34,007. igMemoryRefMetaField's own functions count 129 in the
+free form and 135 as members: its constructors 31 (vtable, the two holders, the defaults), the implicit
+destructor 12 (three vtable stores; `_poolName`, `_memTypeRef` and the inherited `_fieldName` each tested and
+released; the three reference-count accesses of `_memTypeRef`'s release), `setPool` 2. Per class,
+igMemoryRefMetaField is 3 lower, and igRawRefArrayMetaField and igObjectRefMetaField are lower too, because the
+converted `arkRegisterMetaValidate` releases its descriptor through a `::igObject *` local: those reference counts
+are igObject's now (igObject +14).
 
 ### Sizing fields by their MetaField kind and the registered instance size
 
