@@ -1,78 +1,69 @@
-igMetaObject *g_igPolygonModeAttr_metaObject;
-igMetaField *g_igPolygonModeAttr_modeMetaField;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igPolygonModeAttr_GetOrCreateMetaObject(void) {
-    if (g_igPolygonModeAttr_metaObject == 0) {
-        g_igPolygonModeAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igPolygonModeAttr_metaObject;
-}
+igMetaObject *igPolygonModeAttr::_Meta;
+igMetaField *igPolygonModeAttr::k_mode;
 
-igMetaObject *igPolygonModeAttr_GetMetaObject(void)
+igMetaObject *igPolygonModeAttr::getClassTypeLazy()
 {
-    igMetaObject *g = g_igPolygonModeAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igPolygonModeAttr_EnsureRegistered();
-    return g_igPolygonModeAttr_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igPolygonModeAttr_GetVTable(void) {
-    struct Obj obj;
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igPolygonModeAttr_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igPolygonModeAttr_EnsureRegistered(void)
+igMetaObject *igPolygonModeAttr::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igPolygonModeAttr_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igPolygonModeAttr_Register(void) {
+void *igPolygonModeAttr::retrieveVTablePointer()
+{
+    igPolygonModeAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igPolygonModeAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igPolygonModeAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igPolygonModeAttr_metaObject,
+        false,
+        &_Meta,
         Gap::Attrs::igVisualAttribute::arkRegisterInternal,
         Gap::Attrs::igVisualAttribute::getClassMeta,
-        igPolygonModeAttr_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igPolygonModeAttr",
-        0x10, /* instance size */
-        igPolygonModeAttr_GetVTable,
-        &igPolygonModeAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igPolygonModeAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igPolygonModeAttr_GetMetaObjectFunction(void) {
-    igPolygonModeAttr_GetMetaObject();
+void igPolygonModeAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igEnumMetaField_Create };
+    static const char *names[] = { "_mode" };
+    static igMetaField **enumStorage[] = { &k_mode };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())IG_GFX_RENDER_MODE_GetMetaEnum;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igPolygonModeAttr_ctorTable[] = {
-    (FieldFactory)igEnumMetaField_Create,
-};
-static const char *g_igPolygonModeAttr_fieldTable[] = {
-    "_mode",
-};
-static igMetaField **g_igPolygonModeAttr_fieldHandles[] = {
-    &g_igPolygonModeAttr_modeMetaField,
-};
-static int g_igPolygonModeAttr_fieldOffsets[] = {
-    12,
-};
-
-void igPolygonModeAttr_InitFields(void) {
-    int base;
-    void *field;
-    igMetaObject *meta;
-
-    meta = g_igPolygonModeAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igPolygonModeAttr_ctorTable, 1);
-    field = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((Gap::Core::igEnumMetaField *)field)->setDefault(0);
-    ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)(&IG_GFX_RENDER_MODE_GetMetaEnum);
-    igMetaObject_NameFields(meta, g_igPolygonModeAttr_fieldTable, g_igPolygonModeAttr_fieldHandles, g_igPolygonModeAttr_fieldOffsets, base);
+}
 }
 

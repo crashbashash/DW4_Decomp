@@ -1,77 +1,68 @@
-igMetaObject *g_igPixelPipelineModeAttr_metaObject;
-igMetaField *g_igPixelPipelineModeAttr_pipelineModeMetaField;
+namespace Gap {
+namespace Attrs {
 
-igPixelPipelineModeAttr *igPixelPipelineModeAttr_Create(igMemoryPoolView *pool) {
-    igPixelPipelineModeAttr_EnsureRegistered();
-    return (igPixelPipelineModeAttr *)igMetaObject_CreateInstance(g_igPixelPipelineModeAttr_metaObject, pool);
-}
+igMetaObject *igPixelPipelineModeAttr::_Meta;
+igMetaField *igPixelPipelineModeAttr::k_pipelineMode;
 
-igMetaObject *igPixelPipelineModeAttr_GetMetaObject(void)
+igPixelPipelineModeAttr *igPixelPipelineModeAttr::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igPixelPipelineModeAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igPixelPipelineModeAttr_EnsureRegistered();
-    return g_igPixelPipelineModeAttr_metaObject;
+    arkRegister();
+    return (igPixelPipelineModeAttr *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igPixelPipelineModeAttr_GetVTable(void) {
-    union U_134bf0 u;
-
-    igObject_InitHeader((igObject *)u.b);
-    u.w[0] = (int)(&g_igPixelPipelineModeAttr_vtable[0]);
-    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-}
-
-void igPixelPipelineModeAttr_EnsureRegistered(void)
+igMetaObject *igPixelPipelineModeAttr::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igPixelPipelineModeAttr_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igPixelPipelineModeAttr_Register(void) {
+void *igPixelPipelineModeAttr::retrieveVTablePointer()
+{
+    igPixelPipelineModeAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igPixelPipelineModeAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igPixelPipelineModeAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igPixelPipelineModeAttr_metaObject,
+        false,
+        &_Meta,
         Gap::Attrs::igVisualAttribute::arkRegisterInternal,
         Gap::Attrs::igVisualAttribute::getClassMeta,
-        igPixelPipelineModeAttr_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igPixelPipelineModeAttr",
-        0x10, /* instance size */
-        igPixelPipelineModeAttr_GetVTable,
-        &igPixelPipelineModeAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igPixelPipelineModeAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igPixelPipelineModeAttr_GetMetaObjectFunction(void) {
-    igPixelPipelineModeAttr_GetMetaObject();
+void igPixelPipelineModeAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igEnumMetaField_Create };
+    static const char *names[] = { "_pipelineMode" };
+    static igMetaField **enumStorage[] = { &k_pipelineMode };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())IG_GFX_PIXEL_PIPELINE_MODE_GetMetaEnum;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igPixelPipelineModeAttr_ctorTable[] = {
-    (FieldFactory)igEnumMetaField_Create,
-};
-static const char *g_igPixelPipelineModeAttr_fieldTable[] = {
-    "_pipelineMode",
-};
-static igMetaField **g_igPixelPipelineModeAttr_fieldHandles[] = {
-    &g_igPixelPipelineModeAttr_pipelineModeMetaField,
-};
-static int g_igPixelPipelineModeAttr_fieldOffsets[] = {
-    12,
-};
-
-void igPixelPipelineModeAttr_InitFields(void) {
-    int base;
-    void *field;
-    igMetaObject *meta;
-
-    meta = g_igPixelPipelineModeAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igPixelPipelineModeAttr_ctorTable, 1);
-    field = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((Gap::Core::igEnumMetaField *)field)->setDefault(0);
-    ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)(&IG_GFX_PIXEL_PIPELINE_MODE_GetMetaEnum);
-    igMetaObject_NameFields(meta, g_igPixelPipelineModeAttr_fieldTable, g_igPixelPipelineModeAttr_fieldHandles, g_igPixelPipelineModeAttr_fieldOffsets, base);
+}
 }
 

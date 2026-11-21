@@ -28,7 +28,7 @@ void igProjectionMatrixAttrPool_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igProjectionMatrixAttrPool_Register);
 }
 
-static igMetaObjectCallback g_igProjectionMatrixAttrPool_callbackList[] = { igProjectionMatrixAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igProjectionMatrixAttrPool_callbackList[] = { Gap::Attrs::igProjectionMatrixAttr::arkRegister, 0 };
 
 CallbackArray *igProjectionMatrixAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();

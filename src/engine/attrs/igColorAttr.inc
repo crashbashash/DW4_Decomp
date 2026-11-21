@@ -1,100 +1,81 @@
-igMetaObject *g_igColorAttr_metaObject;
-igMetaField *g_igColorAttr_colorMetaField;
-igMetaField *g_igColorAttr_colorPackedMetaField;
+namespace Gap {
+namespace Attrs {
 
-igColorAttr *igColorAttr_CreateInstance(int allocator) {
-    igColorAttr_EnsureRegistered();
-    return (igColorAttr *)igMetaObject_CreateInstance(g_igColorAttr_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *igColorAttr::_Meta;
+igMetaField *igColorAttr::k_color;
+igMetaField *igColorAttr::k_colorPacked;
 
-igMetaObject *igColorAttr_GetOrCreateMetaObject(void) {
-    if (g_igColorAttr_metaObject == 0) {
-        g_igColorAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igColorAttr_metaObject;
-}
-
-igMetaObject *igColorAttr_GetMetaObject(void)
+igColorAttr *igColorAttr::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igColorAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igColorAttr_EnsureRegistered();
-    return g_igColorAttr_metaObject;
+    arkRegister();
+    return (igColorAttr *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igColorAttr_GetVTable(void) {
-    struct Obj_138fc0 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igColorAttr_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igColorAttr_EnsureRegistered(void)
+igMetaObject *igColorAttr::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igColorAttr_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igColorAttr_Register(void) {
+igMetaObject *igColorAttr::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igColorAttr::retrieveVTablePointer()
+{
+    igColorAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igColorAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igColorAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igColorAttr_metaObject,
+        false,
+        &_Meta,
         Gap::Attrs::igVisualAttribute::arkRegisterInternal,
         Gap::Attrs::igVisualAttribute::getClassMeta,
-        igColorAttr_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igColorAttr",
-        0x20, /* instance size */
-        igColorAttr_GetVTable,
-        &igColorAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igColorAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igColorAttr_GetMetaObjectFunction(void) {
-    igColorAttr_GetMetaObject();
+void igColorAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool, igUnsignedIntMetaField_Create };
+    static const char *names[] = { "_color", "_colorPacked" };
+    static igMetaField **enumStorage[] = { &k_color, &k_colorPacked };
+    static int offsets[] = { 12, 28 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igVec4fMetaField *metaField = (igVec4fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(igVec4f(1.0f, 1.0f, 1.0f, 1.0f));
+        *(void (**)())&metaField->_invarianceFunction = (void (*)())Gap::Attrs::igColorAttr::colorChanged;
+    }
+    {
+        igUnsignedIntMetaField *metaField = (igUnsignedIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(-1);
+        metaField->_persistent = 0;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igColorAttr_ctorTable[] = {
-    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-};
-static const char *g_igColorAttr_fieldTable[] = {
-    "_color",
-    "_colorPacked",
-};
-static igMetaField **g_igColorAttr_fieldHandles[] = {
-    &g_igColorAttr_colorMetaField,
-    &g_igColorAttr_colorPackedMetaField,
-};
-static int g_igColorAttr_fieldOffsets[] = {
-    12,
-    28,
-};
-
-void igColorAttr_InitFields(void) {
-    void *field;
-    void *field2;
-    int value[4];
-    int base;
-    void *field3;
-    igMetaObject *meta;
-
-    meta = g_igColorAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igColorAttr_ctorTable, 2);
-    field3 = (void *)(igMetaObject_GetFieldAt(meta, base));
-    field = (void *)(field3);
-    value[0] = 0x3F800000;
-    value[1] = 0x3F800000;
-    value[2] = 0x3F800000;
-    value[3] = 0x3F800000;
-    ((Gap::Math::igVec4fMetaField *)field)->setDefault(*(const igVec4f *)value);
-    ((igMetaField *)field3)->_invarianceFunction = (int)&igColorAttr_SynchronizeColorPacked;
-    field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((Gap::Core::igUnsignedIntMetaField *)field2)->setDefault(-1);
-    ((igMetaField *)field2)->_persistent = 0;
-    igMetaObject_NameFields(meta, g_igColorAttr_fieldTable, g_igColorAttr_fieldHandles, g_igColorAttr_fieldOffsets, base);
+}
 }
 

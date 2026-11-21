@@ -1,105 +1,78 @@
-igMetaObject *g_igMaterialAttr_metaObject;
-igMetaField *g_igMaterialAttr_shininessMetaField;
-igMetaField *g_igMaterialAttr_diffuseMetaField;
-igMetaField *g_igMaterialAttr_ambientMetaField;
-igMetaField *g_igMaterialAttr_emissionMetaField;
-igMetaField *g_igMaterialAttr_specularMetaField;
-igMetaField *g_igMaterialAttr_flagsMetaField;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igMaterialAttr_GetMetaObject(void)
+igMetaObject *igMaterialAttr::_Meta;
+igMetaField *igMaterialAttr::k_shininess;
+igMetaField *igMaterialAttr::k_diffuse;
+igMetaField *igMaterialAttr::k_ambient;
+igMetaField *igMaterialAttr::k_emission;
+igMetaField *igMaterialAttr::k_specular;
+igMetaField *igMaterialAttr::k_flags;
+
+igMetaObject *igMaterialAttr::getClassTypeSafe()
 {
-    igMetaObject *g = g_igMaterialAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMaterialAttr_EnsureRegistered();
-    return g_igMaterialAttr_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igMaterialAttr_GetVTable(void) {
-    struct Obj_135c30 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igMaterialAttr_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igMaterialAttr_EnsureRegistered(void)
+void *igMaterialAttr::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igMaterialAttr_Register);
+    igMaterialAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-CallbackArray *igMaterialAttr_Register(void) {
+void igMaterialAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igMaterialAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igMaterialAttr_metaObject,
+        false,
+        &_Meta,
         Gap::Attrs::igVisualAttribute::arkRegisterInternal,
         Gap::Attrs::igVisualAttribute::getClassMeta,
-        igMaterialAttr_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMaterialAttr",
-        0x54, /* instance size */
-        igMaterialAttr_GetVTable,
-        &igMaterialAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igMaterialAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igMaterialAttr_GetMetaObjectFunction(void) {
-    igMaterialAttr_GetMetaObject();
+void igMaterialAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool, igUnsignedIntMetaField_Create };
+    static const char *names[] = { "_shininess", "_diffuse", "_ambient", "_emission", "_specular", "_flags" };
+    static igMetaField **enumStorage[] = { &k_shininess, &k_diffuse, &k_ambient, &k_emission, &k_specular, &k_flags };
+    static int offsets[] = { 12, 16, 32, 48, 64, 80 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 6);
+    {
+        igVec4fMetaField *metaField = (igVec4fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 1.0f));
+    }
+    {
+        igVec4fMetaField *metaField = (igVec4fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 1.0f));
+    }
+    {
+        igVec4fMetaField *metaField = (igVec4fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 1.0f));
+    }
+    {
+        igVec4fMetaField *metaField = (igVec4fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 1.0f));
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igMaterialAttr_ctorTable[] = {
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
-    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-};
-static const char *g_igMaterialAttr_fieldTable[] = {
-    "_shininess",
-    "_diffuse",
-    "_ambient",
-    "_emission",
-    "_specular",
-    "_flags",
-};
-static igMetaField **g_igMaterialAttr_fieldHandles[] = {
-    &g_igMaterialAttr_shininessMetaField,
-    &g_igMaterialAttr_diffuseMetaField,
-    &g_igMaterialAttr_ambientMetaField,
-    &g_igMaterialAttr_emissionMetaField,
-    &g_igMaterialAttr_specularMetaField,
-    &g_igMaterialAttr_flagsMetaField,
-};
-static int g_igMaterialAttr_fieldOffsets[] = {
-    12,
-    16,
-    32,
-    48,
-    64,
-    80,
-};
-
-void igMaterialAttr_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-    int field;
-    int field2;
-    int field3;
-    int field4;
-
-    meta = g_igMaterialAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igMaterialAttr_ctorTable, 6);
-    field4 = (int)igMetaObject_GetFieldAt(meta, base + 1);
-    ((Gap::Math::igVec4fMetaField *)field4)->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 1.0f));
-    field3 = (int)igMetaObject_GetFieldAt(meta, base + 2);
-    ((Gap::Math::igVec4fMetaField *)field3)->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 1.0f));
-    field2 = (int)igMetaObject_GetFieldAt(meta, base + 3);
-    ((Gap::Math::igVec4fMetaField *)field2)->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 1.0f));
-    field = (int)igMetaObject_GetFieldAt(meta, base + 4);
-    ((Gap::Math::igVec4fMetaField *)field)->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 1.0f));
-    igMetaObject_NameFields(meta, g_igMaterialAttr_fieldTable, g_igMaterialAttr_fieldHandles, g_igMaterialAttr_fieldOffsets, base);
+}
 }
 

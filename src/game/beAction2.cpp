@@ -209,7 +209,7 @@ unsigned char beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram,
     if (work->_colorAttr == 0) {
         int ownerAllocator = (int)((Gap::Core::igObject *)manager)->getMemoryPool();
         int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-        AttrRef<0> created((igObject *)igColorAttr_CreateInstance(allocator));
+        AttrRef<0> created((igObject *)Gap::Attrs::igColorAttr::_instantiateFromPool((igMemoryPoolView *)allocator));
         igObject *attr;
         igObject *old;
         ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created.p);
@@ -425,7 +425,7 @@ unsigned char beAction2FADESET_Start(beAction2 *manager, beAction2InfoRam *ram, 
             int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
             igObject *attr;
             igObject *old;
-            AttrRef<0> created((igObject *)igColorAttr_CreateInstance(allocator));
+            AttrRef<0> created((igObject *)Gap::Attrs::igColorAttr::_instantiateFromPool((igMemoryPoolView *)allocator));
             ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created.p);
             attr = created.p;
             if (attr != 0) attr->_refCount = attr->_refCount + 1;

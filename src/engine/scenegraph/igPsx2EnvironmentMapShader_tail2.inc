@@ -45,7 +45,7 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_49(void) {
     if (g_envMapPixelPipelineModeAttr.p == 0) {
         temp_s0_4 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapPixelPipelineModeAttr.release();
-        g_envMapPixelPipelineModeAttr.p = (igPixelPipelineModeAttr *)igPixelPipelineModeAttr_Create((igMemoryPoolView *)temp_s0_4);
+        g_envMapPixelPipelineModeAttr.p = (igPixelPipelineModeAttr *)Gap::Attrs::igPixelPipelineModeAttr::_instantiateFromPool((igMemoryPoolView *)temp_s0_4);
         ((T_1e08b0 *)g_envMapPixelPipelineModeAttr.p)->f12 = 3;
     }
     if (g_envMapTextureUnit1On.p == 0) {
@@ -95,7 +95,7 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_49(void) {
     if (g_envMapColorMaskAttr.p == 0) {
         temp_s0_11 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapColorMaskAttr.release();
-        g_envMapColorMaskAttr.p = (igColorMaskAttr *)igColorMaskAttr_Create((igMemoryPoolView *)temp_s0_11);
+        g_envMapColorMaskAttr.p = (igColorMaskAttr *)Gap::Attrs::igColorMaskAttr::_instantiateFromPool((igMemoryPoolView *)temp_s0_11);
         ((DW4VC_128_4 *)g_envMapColorMaskAttr.p)->vX(0, 0, 0, 1);
     }
 }
@@ -150,7 +150,7 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_51(S_1e1210 *self) {
         t->refs = t->refs - 1;
         if (((unsigned long long)(long long)t->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)t);
     }
-    self->f120 = (Rc_1e1210 *)igMultiPassStateAttr_Create((igMemoryPoolView *)alloc);
+    self->f120 = (Rc_1e1210 *)Gap::Attrs::igMultiPassStateAttr::_instantiateFromPool((igMemoryPoolView *)alloc);
 }
 
 void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_52(S_1e1400 *arg0) {

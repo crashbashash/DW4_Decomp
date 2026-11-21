@@ -9,11 +9,7 @@ struct igMemoryPoolView;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igProjectionMatrixAttr_metaObject;
-struct igMetaObject *igProjectionMatrixAttr_GetMetaObject(void);
-struct igProjectionMatrixAttr *igProjectionMatrixAttr_Create(struct igMemoryPoolView *pool);
 
-struct igMetaObject *igProjectionMatrixAttr_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

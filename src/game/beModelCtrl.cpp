@@ -383,7 +383,7 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
             time = ((long long *)times->_data)[0];
             timePool = (igObjectPool *)traversal->_timePool;
             if (timePool->_freeIndex >= timePool->_count) {
-                igObjectPool_Grow(timePool, (igObject *(*)(int))igTimeAttr_CreateInstance);
+                igObjectPool_Grow(timePool, (igObject *(*)(int))Gap::Attrs::igTimeAttr::_instantiateFromPool);
             }
             slot = timePool->_freeIndex;
             timePool->_freeIndex = slot + 1;
@@ -406,7 +406,7 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
         depth = matrices->_count - 1;
         igMatrix44f_Copy(modelView, (const float *)((char *)((void **)matrices->_data)[depth] + 12));
         igMatrix44f_GetTranslation((const float *)modelView, (float *)&translation);
-        clock = (igTimeAttr *)TakePooled((igObjectPool *)traversal->_timePool, (igObject *(*)(int))igTimeAttr_CreateInstance);
+        clock = (igTimeAttr *)TakePooled((igObjectPool *)traversal->_timePool, (igObject *(*)(int))Gap::Attrs::igTimeAttr::_instantiateFromPool);
         count = ((igObjectList *)meter->_timeList)->_count;
         for (i = 0; i < count; i++) {
             time = ((long long *)((igObjectList *)meter->_timeList)->_data)[i];

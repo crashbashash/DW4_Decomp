@@ -1,17 +1,23 @@
-void igProjectionMatrixAttr_apply(char * arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetMatrix(arg1, 0, (char *)(arg0 + 12));
-}
+namespace Gap {
+namespace Attrs {
 
-void igProjectionMatrixAttr_SynchronizeDefault(igProjectionMatrixAttr *self, igObject *context)
+void igProjectionMatrixAttr::apply(igVisualContext *vc)
 {
-    float m[16];
-
-    igMatrix44f_SetIdentity(m);
-    ((VisualContextMatrixSlots *)context)->getMatrix(0, m);
-    ((MatrixAttrSlots *)self)->setMatrix(m);
+    igPsx2VisualContext_SetMatrix((igPsx2VisualContext *)vc, IG_GFX_MATRIX_STACK_PROJECTION, (char *)_m.m);
 }
 
-void igProjectionMatrixAttr_SetMatrix(igProjectionMatrixAttr *self, const float *matrix) {
-    igMatrix44f_Copy(self->_m, matrix);
+void igProjectionMatrixAttr::synchronizeDefault(igVisualContext *vc)
+{
+    igMatrix44f m;
+
+    ((igVisualContextDispatchView *)vc)->getMatrix(IG_GFX_MATRIX_STACK_PROJECTION, m);
+    setMatrix(m);
+}
+
+void igProjectionMatrixAttr::setMatrix(const igMatrix44f &matrix)
+{
+    igMatrix44f_Copy(_m.m, matrix.m);
+}
+}
 }
 

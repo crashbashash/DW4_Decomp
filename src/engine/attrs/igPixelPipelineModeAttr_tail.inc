@@ -1,9 +1,16 @@
-void igPixelPipelineModeAttr_apply(igPixelPipelineModeAttr *self, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetPixelPipelineMode(arg1, self->_pipelineMode);
+namespace Gap {
+namespace Attrs {
+
+void igPixelPipelineModeAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetPixelPipelineMode((igPsx2VisualContext *)vc, _pipelineMode);
 }
 
-void igPixelPipelineModeAttr_SynchronizeDefault(igPixelPipelineModeAttr *self, void **arg1) {
-    self->_pipelineMode = ((DW4VC_588_0 *)(arg1))->vX();
+void igPixelPipelineModeAttr::synchronizeDefault(igVisualContext *vc)
+{
+    _pipelineMode = ((igVisualContextDispatchView *)vc)->getPixelPipelineMode();
+}
+}
 }
 
 /* Stores a float at +0x1c of the receiver. That offset lies past the 20 bytes the reflected

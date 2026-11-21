@@ -7,8 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-void igPolygonModeAttr_EnsureRegistered(void);
-struct igMetaObject *igPolygonModeAttr_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

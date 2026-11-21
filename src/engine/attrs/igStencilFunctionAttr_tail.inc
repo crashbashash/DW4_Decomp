@@ -1,25 +1,34 @@
-void igStencilFunctionAttr_apply(igStencilFunctionAttr *arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetStencilOps(arg1, arg0->_stenFailOp, arg0->_stenPassZPassOp, arg0->_stenPassZFailOp);
-    igPsx2VisualContext_SetStencilRefVal(arg1, arg0->_refVal);
-    igPsx2VisualContext_SetStencilFunc(arg1, arg0->_func);
-    igPsx2VisualContext_SetStencilReadMask(arg1, arg0->_readMask);
-    igPsx2VisualContext_SetStencilWriteMask(arg1, arg0->_writeMask);
+namespace Gap {
+namespace Attrs {
+
+void igStencilFunctionAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetStencilOps((igPsx2VisualContext *)vc, _stenFailOp, _stenPassZPassOp, _stenPassZFailOp);
+    igPsx2VisualContext_SetStencilRefVal((igPsx2VisualContext *)vc, _refVal);
+    igPsx2VisualContext_SetStencilFunc((igPsx2VisualContext *)vc, getFunc());
+    igPsx2VisualContext_SetStencilReadMask((igPsx2VisualContext *)vc, _readMask);
+    igPsx2VisualContext_SetStencilWriteMask((igPsx2VisualContext *)vc, _writeMask);
 }
 
-void igStencilFunctionAttr_SynchronizeDefault(igStencilFunctionAttr *self, igStencilFunctionAttr *source) {
-    ((DW4VC_128_1 *)(self))->vX((int)(((DW4VC_648_0 *)(source))->vX()));
-    ((DW4VC_136_1 *)(self))->vX((int)(((DW4VC_656_0 *)(source))->vX()));
+void igStencilFunctionAttr::synchronizeDefault(igVisualContext *vc)
+{
+    setRefVal(((igVisualContextDispatchView *)vc)->getStencilRefVal());
+    setFunc(((igVisualContextDispatchView *)vc)->getStencilFunc());
 }
 
 /* Setter for the reflected _func field (the stencil compare function enum). */
 
-void igStencilFunctionAttr_SetFunc(igStencilFunctionAttr *self, int func) {
-    self->_func = func;
+void igStencilFunctionAttr::setFunc(IG_GFX_STENCIL_FUNCTION func)
+{
+    _func = func;
 }
 
 /* Setter for the reflected _refVal field (the stencil reference value). */
 
-void igStencilFunctionAttr_SetRefVal(igStencilFunctionAttr *self, int ref_val) {
-    self->_refVal = ref_val;
+void igStencilFunctionAttr::setRefVal(unsigned int refVal)
+{
+    _refVal = refVal;
+}
+}
 }
 

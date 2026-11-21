@@ -7,10 +7,7 @@ struct igTimeAttr;
 extern "C" {
 #endif
 
-struct igTimeAttr *igTimeAttr_CreateInstance(int allocator);
 
-void igTimeAttr_EnsureRegistered(void);
-struct igMetaObject *igTimeAttr_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

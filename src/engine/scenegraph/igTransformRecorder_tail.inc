@@ -16,7 +16,7 @@ int FUN_001baa10(RecorderTraversalView *o, TransformRecorderVisitor *v) {
     pool = o->_frames;
     state = o->_state;
     if (!(pool->_used < pool->_capacity)) {
-        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))igTimeAttr_CreateInstance);
+        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))Gap::Attrs::igTimeAttr::_instantiateFromPool);
     }
     i = pool->_used;
     pool->_used = i + 1;

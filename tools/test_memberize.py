@@ -436,6 +436,34 @@ class Memberize(unittest.TestCase):
         self.assertIn("    *p = (int)Widget::make();\n    p[1] = (int)Widget::make();\n"
                       "    if (Widget::make() == 0) {\n", users)
 
+    def test_an_integer_the_member_takes_as_a_pointer_is_cast_at_its_calls(self):
+        # the C forms take the pool as an int (one in its definition, one only in its prototype, as classconv
+        # leaves it after retyping the definition): the heads take the member's pointer, each call drops its int
+        # cast where the argument already has the pointer's type and casts it to the pointer otherwise
+        self.append("config/class-members.tsv",
+                    "Widget\tstatic Widget *make(struct Pool *pool);\nWidget\tstatic Widget *build(struct Pool *pool);\n")
+        self.append("src/game/Game.h", "extern \"C\" Widget *Widget_Make(int pool);\n"
+                                       "extern \"C\" Widget *Widget_Build(int pool);\n"
+                                       "extern \"C\" struct Pool *Pool_Get(int which);\n")
+        self.append("src/game/Widget.inc", "Widget *Widget_Make(int pool) {\n    return 0;\n}\n"
+                                           "Widget *Widget_Build(struct Pool *pool) {\n    return 0;\n}\n")
+        self.append("src/game/Users.inc",
+                    "typedef Widget *(*Factory)(int);\n"
+                    "static Factory g_factories[] = {\n    Widget_Make,\n};\n"
+                    "void Users_Make(Widget *w, int n) {\n    Widget_Make((int)Pool_Get(3));\n"
+                    "    Widget_Make((int)w);\n    Widget_Make(0);\n    Widget_Make(n + 4);\n"
+                    "    Widget_Build((int)(Pool_Get(1)));\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Widget_Make\n00100120 000020 Widget_Build\n")
+        write(self.table, TABLE + "Widget_Make\tWidget::make\nWidget_Build\tWidget::build\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        widget = self.read("src/game/Widget.inc")
+        self.assertIn("Widget *Widget::make(Pool *pool) {", widget)
+        self.assertIn("Widget *Widget::build(struct Pool *pool) {", widget)
+        users = self.read("src/game/Users.inc")
+        self.assertIn("    (Factory)Widget::make,\n", users)
+        self.assertIn("    Widget::make(Pool_Get(3));\n    Widget::make((Pool *)w);\n    Widget::make(0);\n"
+                      "    Widget::make((Pool *)(n + 4));\n    Widget::build(Pool_Get(1));\n", users)
+
 
 class Helpers(unittest.TestCase):
     MACROS = {"OBJ_BOOT": (("C",), "public: C(); virtual void __bootstrapDestruct(); "

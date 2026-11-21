@@ -1,81 +1,76 @@
-igMetaObject *g_igShadeModelAttr_metaObject;
-igMetaField *g_igShadeModelAttr_modeMetaField;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igShadeModelAttr_GetOrCreateMetaObject(void) {
-    if (g_igShadeModelAttr_metaObject == 0) {
-        g_igShadeModelAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igShadeModelAttr_metaObject;
-}
+igMetaObject *igShadeModelAttr::_Meta;
+igMetaField *igShadeModelAttr::k_mode;
 
-igMetaObject *igShadeModelAttr_GetMetaObject(void)
+igMetaObject *igShadeModelAttr::getClassTypeLazy()
 {
-    igMetaObject *g = g_igShadeModelAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igShadeModelAttr_EnsureRegistered();
-    return g_igShadeModelAttr_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igShadeModelAttr_GetVTable(void) {
-    struct Obj obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igShadeModelAttr_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igShadeModelAttr_EnsureRegistered(void)
+igMetaObject *igShadeModelAttr::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igShadeModelAttr_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igShadeModelAttr_Register(void) {
+void *igShadeModelAttr::retrieveVTablePointer()
+{
+    igShadeModelAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igShadeModelAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igShadeModelAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igShadeModelAttr_metaObject,
+        false,
+        &_Meta,
         Gap::Attrs::igVisualAttribute::arkRegisterInternal,
         Gap::Attrs::igVisualAttribute::getClassMeta,
-        igShadeModelAttr_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igShadeModelAttr",
-        0x10, /* instance size */
-        igShadeModelAttr_GetVTable,
-        &igShadeModelAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igShadeModelAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
-
-void igShadeModelAttr_GetMetaObjectFunction(void) {
-    igShadeModelAttr_GetMetaObject();
 }
-
-static FieldFactory g_igShadeModelAttr_ctorTable[] = {
-    (FieldFactory)igEnumMetaField_Create,
-};
-static const char *g_igShadeModelAttr_fieldTable[] = {
-    "_mode",
-};
-static igMetaField **g_igShadeModelAttr_fieldHandles[] = {
-    &g_igShadeModelAttr_modeMetaField,
-};
-static int g_igShadeModelAttr_fieldOffsets[] = {
-    12,
-};
+}
 
 int g_igShadeModelAttr_modeDefault = 1;
 
-void igShadeModelAttr_InitFields(void) {
-    int base;
-    void *field;
-    igMetaObject *meta;
+namespace Gap {
+namespace Attrs {
 
-    meta = g_igShadeModelAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igShadeModelAttr_ctorTable, 1);
-    field = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((Gap::Core::igEnumMetaField *)field)->setDefault(g_igShadeModelAttr_modeDefault);
-    ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)(&IG_GFX_SHADING_MODE_GetMetaEnum);
-    igMetaObject_NameFields(meta, g_igShadeModelAttr_fieldTable, g_igShadeModelAttr_fieldHandles, g_igShadeModelAttr_fieldOffsets, base);
+void igShadeModelAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igEnumMetaField_Create };
+    static const char *names[] = { "_mode" };
+    static igMetaField **enumStorage[] = { &k_mode };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(1);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())IG_GFX_SHADING_MODE_GetMetaEnum;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+}
+}
 }
 

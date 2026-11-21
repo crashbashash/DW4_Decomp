@@ -1,84 +1,75 @@
-igMetaObject *g_igProjectionMatrixAttr_metaObject;
-igMetaField *g_igProjectionMatrixAttr_mMetaField;
+namespace Gap {
+namespace Attrs {
 
-igProjectionMatrixAttr *igProjectionMatrixAttr_Create(igMemoryPoolView *pool) {
-    igProjectionMatrixAttr_EnsureRegistered();
-    return (igProjectionMatrixAttr *)igMetaObject_CreateInstance(g_igProjectionMatrixAttr_metaObject, pool);
-}
+igMetaObject *igProjectionMatrixAttr::_Meta;
+igMetaField *igProjectionMatrixAttr::k_m;
 
-igMetaObject *igProjectionMatrixAttr_GetOrCreateMetaObject(void) {
-    if (g_igProjectionMatrixAttr_metaObject == 0) {
-        g_igProjectionMatrixAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igProjectionMatrixAttr_metaObject;
-}
-
-igMetaObject *igProjectionMatrixAttr_GetMetaObject(void)
+igProjectionMatrixAttr *igProjectionMatrixAttr::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igProjectionMatrixAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igProjectionMatrixAttr_EnsureRegistered();
-    return g_igProjectionMatrixAttr_metaObject;
+    arkRegister();
+    return (igProjectionMatrixAttr *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igProjectionMatrixAttr_GetVTable(void) {
-    struct Obj_134770 o;
-    igObject_InitHeader((igObject *)&o);
-    o.vt = &g_igProjectionMatrixAttr_vtable[0];
-    igMatrix44f_SetIdentity((float *)&o.pad[8]);
-    return *(int *)((char *)&o + g_objectSystem->vtableProbeOffset);
-}
-
-void igProjectionMatrixAttr_EnsureRegistered(void)
+igMetaObject *igProjectionMatrixAttr::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igProjectionMatrixAttr_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igProjectionMatrixAttr_Register(void) {
+igMetaObject *igProjectionMatrixAttr::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igProjectionMatrixAttr::retrieveVTablePointer()
+{
+    igProjectionMatrixAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igProjectionMatrixAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igProjectionMatrixAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igProjectionMatrixAttr_metaObject,
+        false,
+        &_Meta,
         Gap::Attrs::igVisualAttribute::arkRegisterInternal,
         Gap::Attrs::igVisualAttribute::getClassMeta,
-        igProjectionMatrixAttr_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igProjectionMatrixAttr",
-        0x4C, /* instance size */
-        igProjectionMatrixAttr_GetVTable,
-        &igProjectionMatrixAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igProjectionMatrixAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igProjectionMatrixAttr_GetMetaObjectFunction(void) {
-    igProjectionMatrixAttr_GetMetaObject();
+void igProjectionMatrixAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool };
+    static const char *names[] = { "_m" };
+    static igMetaField **enumStorage[] = { &k_m };
+    static int offsets[] = { 12 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igMatrix44fMetaField *metaField = (igMatrix44fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                          igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igProjectionMatrixAttr_ctorTable[] = {
-    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
-};
-static const char *g_igProjectionMatrixAttr_fieldTable[] = {
-    "_m",
-};
-static igMetaField **g_igProjectionMatrixAttr_fieldHandles[] = {
-    &g_igProjectionMatrixAttr_mMetaField,
-};
-static int g_igProjectionMatrixAttr_fieldOffsets[] = {
-    12,
-};
-
-void igProjectionMatrixAttr_InitFields(void) {
-    int base;
-    int field;
-    igMetaObject *meta;
-
-    meta = g_igProjectionMatrixAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igProjectionMatrixAttr_ctorTable, 1);
-    field = (int)igMetaObject_GetFieldAt(meta, base);
-    ((Gap::Math::igMatrix44fMetaField *)field)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
-                                                   igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
-    igMetaObject_NameFields(meta, g_igProjectionMatrixAttr_fieldTable, g_igProjectionMatrixAttr_fieldHandles, g_igProjectionMatrixAttr_fieldOffsets, base);
+}
 }
 

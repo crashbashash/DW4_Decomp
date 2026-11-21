@@ -752,6 +752,159 @@ igNormalizeNormalsStateAttr	virtual void apply(igVisualContext *vc);
 igNormalizeNormalsStateAttr	inline void setState(bool enabled) { _enabled = enabled; }
 igNormalizeNormalsStateAttr	inline bool getState() const { return _enabled; }
 igNormalizeNormalsStateAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igAlphaFunctionAttr	IG_OBJECT_DEFINE(igAlphaFunctionAttr)
+igAlphaFunctionAttr	private: static igMetaField *k_func;
+igAlphaFunctionAttr	private: static igMetaField *k_refValue;
+igAlphaFunctionAttr	virtual void apply(igVisualContext *vc);
+igAlphaFunctionAttr	virtual void setAlphaFunc(IG_GFX_ALPHA_FUNCTION afunc);
+igAlphaFunctionAttr	inline IG_GFX_ALPHA_FUNCTION getAlphaFunc() const { return (IG_GFX_ALPHA_FUNCTION)_func; }
+igAlphaFunctionAttr	virtual void setRefValue(float val);
+igAlphaFunctionAttr	inline float getRefValue() const { return _refValue; }
+igAlphaFunctionAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igPolygonModeAttr	IG_OBJECT_DEFINE(igPolygonModeAttr)
+igPolygonModeAttr	private: static igMetaField *k_mode;
+igPolygonModeAttr	virtual void apply(igVisualContext *vc);
+igPolygonModeAttr	virtual void setMode(IG_GFX_RENDER_MODE mode);
+igPolygonModeAttr	inline IG_GFX_RENDER_MODE getMode() const { return (IG_GFX_RENDER_MODE)_mode; }
+igPolygonModeAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igShadeModelAttr	IG_OBJECT_DEFINE(igShadeModelAttr)
+igShadeModelAttr	private: static igMetaField *k_mode;
+igShadeModelAttr	virtual void apply(igVisualContext *vc);
+igShadeModelAttr	virtual void setMode(IG_GFX_SHADING_MODE m);
+igShadeModelAttr	inline IG_GFX_SHADING_MODE getMode() const { return (IG_GFX_SHADING_MODE)_mode; }
+igShadeModelAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igPixelPipelineModeAttr	IG_OBJECT_DEFINE(igPixelPipelineModeAttr)
+igPixelPipelineModeAttr	protected: static igMetaField *k_pipelineMode;
+igPixelPipelineModeAttr	inline void setPipelineMode(IG_GFX_PIXEL_PIPELINE_MODE mode) { _pipelineMode = mode; }
+igPixelPipelineModeAttr	inline IG_GFX_PIXEL_PIPELINE_MODE getPipelineMode() { return (IG_GFX_PIXEL_PIPELINE_MODE)_pipelineMode; }
+igPixelPipelineModeAttr	virtual void apply(igVisualContext *vc);
+igPixelPipelineModeAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igMultiPassStateAttr	IG_OBJECT_DEFINE(igMultiPassStateAttr)
+igMultiPassStateAttr	private: static igMetaField *k_numPasses;
+igMultiPassStateAttr	virtual void apply(igVisualContext *vc);
+igMultiPassStateAttr	virtual void setNumPasses(int num);
+igMultiPassStateAttr	inline int getNumPasses() const { return _numPasses; }
+igMultiPassStateAttr	virtual void synchronizeDefault(igVisualContext *visualContext);
+igCullFaceAttr	IG_OBJECT_DEFINE(igCullFaceAttr)
+igCullFaceAttr	private: static igMetaField *k_enabled;
+igCullFaceAttr	private: static igMetaField *k_mode;
+igCullFaceAttr	virtual void apply(igVisualContext *vc);
+igCullFaceAttr	virtual void setMode(IG_GFX_CULL_FACE_MODE m);
+igCullFaceAttr	inline IG_GFX_CULL_FACE_MODE getMode() const { return (IG_GFX_CULL_FACE_MODE)_mode; }
+igCullFaceAttr	virtual void setState(bool enabled);
+igCullFaceAttr	inline bool getState() const { return _enabled; }
+igCullFaceAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igStencilFunctionAttr	IG_OBJECT_DEFINE(igStencilFunctionAttr)
+igStencilFunctionAttr	private: static igMetaField *k_refVal;
+igStencilFunctionAttr	private: static igMetaField *k_func;
+igStencilFunctionAttr	private: static igMetaField *k_writeMask;
+igStencilFunctionAttr	private: static igMetaField *k_readMask;
+igStencilFunctionAttr	private: static igMetaField *k_stenFailOp;
+igStencilFunctionAttr	private: static igMetaField *k_stenPassZPassOp;
+igStencilFunctionAttr	private: static igMetaField *k_stenPassZFailOp;
+igStencilFunctionAttr	virtual void apply(igVisualContext *vc);
+igStencilFunctionAttr	virtual void setRefVal(unsigned int refVal);
+igStencilFunctionAttr	inline virtual unsigned int getRefVal() const { return _refVal; }
+igStencilFunctionAttr	virtual void setFunc(IG_GFX_STENCIL_FUNCTION func);
+igStencilFunctionAttr	inline IG_GFX_STENCIL_FUNCTION getFunc() const { return (IG_GFX_STENCIL_FUNCTION)_func; }
+igStencilFunctionAttr	inline virtual void setOperations(IG_GFX_STENCIL_OPERATION failOp, IG_GFX_STENCIL_OPERATION passZPassOp, IG_GFX_STENCIL_OPERATION passZFailOp) { _stenFailOp = failOp; _stenPassZPassOp = passZPassOp; _stenPassZFailOp = passZFailOp; }
+igStencilFunctionAttr	inline virtual void getOperations(IG_GFX_STENCIL_OPERATION &failOp, IG_GFX_STENCIL_OPERATION &passZPassOp, IG_GFX_STENCIL_OPERATION &passZFailOp) const { failOp = (IG_GFX_STENCIL_OPERATION)_stenFailOp; passZPassOp = (IG_GFX_STENCIL_OPERATION)_stenPassZPassOp; passZFailOp = (IG_GFX_STENCIL_OPERATION)_stenPassZFailOp; }
+igStencilFunctionAttr	inline virtual void setReadMask(unsigned int readMask) { _readMask = readMask; }
+igStencilFunctionAttr	inline unsigned int getReadMask() const { return _readMask; }
+igStencilFunctionAttr	inline virtual void setWriteMask(unsigned int writeMask) { _writeMask = writeMask; }
+igStencilFunctionAttr	inline unsigned int getWriteMask() const { return _writeMask; }
+igStencilFunctionAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igColorMaskAttr	IG_OBJECT_DEFINE(igColorMaskAttr)
+igColorMaskAttr	private: static igMetaField *k_red;
+igColorMaskAttr	private: static igMetaField *k_green;
+igColorMaskAttr	private: static igMetaField *k_blue;
+igColorMaskAttr	private: static igMetaField *k_alpha;
+igColorMaskAttr	private: static igMetaField *k_unused;
+igColorMaskAttr	virtual void apply(igVisualContext *vc);
+igColorMaskAttr	virtual void setMask(bool r, bool g, bool b, bool a);
+igColorMaskAttr	inline void getMask(bool &r, bool &g, bool &b, bool &a) const { r = _red; g = _green; b = _blue; a = _alpha; }
+igColorMaskAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igViewportAttr	IG_OBJECT_DEFINE(igViewportAttr)
+igViewportAttr	private: static igMetaField *k_x;
+igViewportAttr	private: static igMetaField *k_y;
+igViewportAttr	private: static igMetaField *k_w;
+igViewportAttr	private: static igMetaField *k_h;
+igViewportAttr	private: static igMetaField *k_scissorExt;
+igViewportAttr	private: static igMetaField *k_nearZ;
+igViewportAttr	private: static igMetaField *k_farZ;
+igViewportAttr	virtual void apply(igVisualContext *vc);
+igViewportAttr	inline virtual void setRegion(int x, int y, int w, int h, float nearZ = 0.f, float farZ = 1.f) { _x = x; _y = y; _w = w; _h = h; _nearZ = nearZ; _farZ = farZ; }
+igViewportAttr	inline void getRegion(int &x, int &y, int &w, int &h) const { x = _x; y = _y; w = _w; h = _h; }
+igViewportAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igFogAttr	IG_OBJECT_DEFINE(igFogAttr)
+igFogAttr	private: static igMetaField *k_mode;
+igFogAttr	private: static igMetaField *k_nearVal;
+igFogAttr	private: static igMetaField *k_farVal;
+igFogAttr	private: static igMetaField *k_density;
+igFogAttr	private: static igMetaField *k_color;
+igFogAttr	virtual void apply(igVisualContext *rc);
+igFogAttr	inline void setDensity(float fDensity) { _density = fDensity; }
+igFogAttr	inline float getDensity() const { return _density; }
+igFogAttr	inline void setMode(IG_GFX_FOG_MODE iMode) { _mode = iMode; }
+igFogAttr	inline int getMode() const { return _mode; }
+igFogAttr	inline void setColor(const igVec4f &color) { _color = color; }
+igFogAttr	inline void setNearFar(float fNear, float fFar) { _nearVal = fNear; _farVal = fFar; }
+igFogAttr	inline void getNearFar(float *pfNear, float *pfFar) const { *pfNear = _nearVal; *pfFar = _farVal; }
+igFogAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igClearAttr	IG_OBJECT_DEFINE(igClearAttr)
+igClearAttr	private: static igMetaField *k_clearMode;
+igClearAttr	private: static igMetaField *k_color;
+igClearAttr	private: static igMetaField *k_accum;
+igClearAttr	private: static igMetaField *k_depth;
+igClearAttr	private: static igMetaField *k_stencil;
+igClearAttr	private: static igMetaField *k_colorPacked;
+igClearAttr	private: static igMetaField *k_depthF;
+igClearAttr	virtual void initDefaults();
+igClearAttr	virtual void userPostLoad();
+igClearAttr	virtual void apply(igVisualContext *vc);
+igClearAttr	inline void setMode(unsigned int cmode) { _clearMode = cmode; }
+igClearAttr	inline unsigned int getMode() { return _clearMode; }
+igClearAttr	inline void setDepth(float depth) { _depth = depth; _depthF = depth; }
+igClearAttr	inline float getDepth() { return _depthF; }
+igClearAttr	inline void setStencil(unsigned int stencil) { _stencil = stencil; }
+igClearAttr	inline unsigned int getStencil() { return _stencil; }
+igClearAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igColorAttr	IG_OBJECT_DEFINE(igColorAttr)
+igColorAttr	private: static igMetaField *k_color;
+igColorAttr	private: static igMetaField *k_colorPacked;
+igColorAttr	private: static void colorChanged(igObject *obj);
+igColorAttr	virtual void initDefaults();
+igColorAttr	virtual void userPostLoad();
+igColorAttr	virtual void apply(igVisualContext *vc);
+igColorAttr	inline virtual void set(const igVec4f &color) { _color = color; colorChanged(this); }
+igColorAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igTimeAttr	IG_OBJECT_DEFINE(igTimeAttr)
+igTimeAttr	private: static igMetaField *k_time;
+igTimeAttr	virtual void apply(igVisualContext *rc);
+igTimeAttr	inline void set(long long time) { _time = time; }
+igTimeAttr	inline long long get() { return _time; }
+igTimeAttr	virtual void synchronizeDefault(igVisualContext *visualContext);
+igMaterialAttr	IG_OBJECT_DEFINE(igMaterialAttr)
+igMaterialAttr	private: static igMetaField *k_shininess;
+igMaterialAttr	private: static igMetaField *k_diffuse;
+igMaterialAttr	private: static igMetaField *k_ambient;
+igMaterialAttr	private: static igMetaField *k_emission;
+igMaterialAttr	private: static igMetaField *k_specular;
+igMaterialAttr	private: static igMetaField *k_flags;
+igMaterialAttr	virtual void apply(igVisualContext *rc);
+igMaterialAttr	virtual void setShininess(float sh);
+igMaterialAttr	inline float getShininess() const { return _shininess; }
+igMaterialAttr	virtual void setDiffuse(const igVec4f &d);
+igMaterialAttr	virtual void setEmissive(const igVec4f &e);
+igMaterialAttr	virtual void setAmbient(const igVec4f &a);
+igMaterialAttr	virtual void setSpecular(const igVec4f &s);
+igMaterialAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igProjectionMatrixAttr	IG_OBJECT_DEFINE(igProjectionMatrixAttr)
+igProjectionMatrixAttr	private: static igMetaField *k_m;
+igProjectionMatrixAttr	virtual void apply(igVisualContext *vc);
+igProjectionMatrixAttr	virtual void setMatrix(const igMatrix44f &matrix);
+igProjectionMatrixAttr	inline igMatrix44f *getMatrix() { return (igMatrix44f *)&_m; }
+igProjectionMatrixAttr	virtual void synchronizeDefault(igVisualContext *vc);
 igIntList	IG_OBJECT_DEFINE(igIntList)
 igIntList	private: static igMetaField *k_data;
 igIntListNoClean	IG_OBJECT_DEFINE(igIntListNoClean)

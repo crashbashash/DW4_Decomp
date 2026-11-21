@@ -133,7 +133,7 @@ void igPsx2EnvironmentMapShader_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igPsx2EnvironmentMapShader_Register);
 }
 
-static igMetaObjectCallback g_igPsx2EnvironmentMapShader_callbackList[] = { igBlendFunctionAttr_EnsureRegistered, igTexGenMatrixAttr_EnsureRegistered, igMultiPassStateAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igPsx2EnvironmentMapShader_callbackList[] = { igBlendFunctionAttr_EnsureRegistered, igTexGenMatrixAttr_EnsureRegistered, Gap::Attrs::igMultiPassStateAttr::arkRegister, 0 };
 
 CallbackArray *igPsx2EnvironmentMapShader_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -194,7 +194,7 @@ void igPsx2EnvironmentMapShader_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igTexGenMatrixAttr_GetOrCreateMetaObject();
     ((igMetaField *)temp_s1_2)->_persistent = 0;
     temp_s1_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, 2 + temp_s2)));
-    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)igMultiPassStateAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)Gap::Attrs::igMultiPassStateAttr::getClassTypeLazy();
     ((igMetaField *)temp_s1_3)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igPsx2EnvironmentMapShader_fieldTable, g_igPsx2EnvironmentMapShader_fieldHandles, g_igPsx2EnvironmentMapShader_fieldOffsets, temp_s2);
     ((igMetaObject *)(g_igPsx2EnvironmentMapShader_metaObject))->_writeProxy = (int)igEnvironmentMapShader2_GetMetaObjectFunction;

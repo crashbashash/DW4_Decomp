@@ -607,7 +607,7 @@ int beFont_OnMessage(beFont *self, beBaseInfoRam *ram, beMessengerWork *work) {
                     if (0 < attributes->_count) {
                         do {
                         attribute = ((igNodeView **)attributes->_data)[a];
-                        if (g_igColorAttr_metaObject == attribute->GetMeta()) {
+                        if (Gap::Attrs::igColorAttr::getClassMeta() == attribute->GetMeta()) {
                             igVec4f color;
                             Color4f_Unpack(&color, 1, ((igColorAttr *)attribute)->_colorPacked);
                             color[0] = red;

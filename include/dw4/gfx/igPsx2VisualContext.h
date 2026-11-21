@@ -74,7 +74,7 @@ void igPsx2VisualContext_SetAlphaTestState(struct igPsx2VisualContext *self, boo
 void igPsx2VisualContext_SetAlphaFunc(struct igPsx2VisualContext *self, int arg1);
 void igPsx2VisualContext_SetAlphaRefValue(struct igPsx2VisualContext *self, float fparg0);
 void igPsx2VisualContext_SetViewportClippingState(struct igPsx2VisualContext *self, bool a);
-void igPsx2VisualContext_SetColorMask(struct igPsx2VisualContext *self, unsigned char arg1, unsigned char arg2, unsigned char arg3, unsigned char arg4);
+void igPsx2VisualContext_SetColorMask(struct igPsx2VisualContext *self, bool r, bool g, bool b, bool a);
 void igPsx2VisualContext_SetShadingMode(struct igPsx2VisualContext *self, int arg1);
 void igPsx2VisualContext_SetCullFaceMode(struct igPsx2VisualContext *self, int arg1);
 void igPsx2VisualContext_SetDepthWriteState(struct igPsx2VisualContext *self, bool arg1);

@@ -165,7 +165,7 @@ void igTextureAttr_SetImage(igTextureAttr *self, igImage *image, int level) {
         return;
     }
     if (arg0->f64->n == 0) {
-        ObjectList_ResizeRetained((igTDataList<igObject *> *)arg0->f64, arg0->f60 - 1);
+        ((Gap::Core::igObjectList *)arg0->f64)->setCount(arg0->f60 - 1);
     }
     s1 = arg0->f64;
     if (image != 0) {

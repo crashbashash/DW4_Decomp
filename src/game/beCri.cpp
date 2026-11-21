@@ -154,7 +154,7 @@ int beCopyModelCtrl2_Traverse(beCopyModelCtrl2 *node, igCommonTraversal *travers
     matrixAttr = (igModelViewMatrixAttrDispatchView *)TakePooled(matrixPool, (igObject *(*)(int))igModelViewMatrixAttr_CreateInstance);
     matrixAttr->setMatrix(modelView);
     timePool = (igObjectPool *)traversal->_timePool;
-    timeAttr = (igTimeAttr *)TakePooled(timePool, (igObject *(*)(int))igTimeAttr_CreateInstance);
+    timeAttr = (igTimeAttr *)TakePooled(timePool, (igObject *(*)(int))Gap::Attrs::igTimeAttr::_instantiateFromPool);
     timeAttr->_time = time;
     ((igCommonTraversalDispatchView *)traversal)->pushTime(time);
     matrixAttrIndex = &((igAttr *)matrixAttr)->_cachedAttrIndex;

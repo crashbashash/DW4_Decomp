@@ -1,22 +1,29 @@
-void igViewportAttr_apply(int *arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetViewport(arg1, arg0[3], arg0[4], arg0[5], arg0[6], *(float *)&arg0[8], *(float *)&arg0[9]);
+namespace Gap {
+namespace Attrs {
+
+void igViewportAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetViewport((igPsx2VisualContext *)vc, _x, _y, _w, _h, _nearZ, _farZ);
 }
 
-void igViewportAttr_SynchronizeDefault(igViewportAttr *arg0, void **arg1) {
-    int sp3C;
-    int sp38;
-    int sp34;
-    int sp30;
-    float sp2C;
-    float sp28;
+void igViewportAttr::synchronizeDefault(igVisualContext *vc)
+{
+    int x;
+    int y;
+    int w;
+    int h;
+    float nearZ;
+    float farZ;
 
-    ((DW4VC_748_6 *)(arg1))->vX(&sp3C, &sp38, &sp34, &sp30, &sp2C, &sp28);
-    arg0->_x = sp3C;
-    arg0->_y = sp38;
-    arg0->_w = sp34;
-    arg0->_h = sp30;
-    arg0->_nearZ = sp2C;
-    arg0->_farZ = sp28;
+    ((igVisualContextDispatchView *)vc)->getViewport(x, y, w, h, nearZ, farZ);
+    _x = x;
+    _y = y;
+    _w = w;
+    _h = h;
+    _nearZ = nearZ;
+    _farZ = farZ;
+}
+}
 }
 
 /* igAttr seen through its vptr: slot 25 sets the unit (stage) the attribute applies to, slot 26

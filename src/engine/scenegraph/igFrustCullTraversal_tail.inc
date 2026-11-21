@@ -245,7 +245,7 @@ int FUN_001c4ac0(CullFrustumView *o, CullBoundsView *b) {
     CullAttrState *st;
     /* matching construct: permuter — st assigned inside the first lookup, so the second reloads its fields */
     float *world = currentEntry_1c4ac0(stackOf_1c4ac0(st = o->_state, ((CullMeta *)g_igModelViewMatrixAttr_metaObject)))->_matrix;
-    float *view = currentEntry_1c4ac0(stackOf_1c4ac0(st, (CullMeta *)g_igProjectionMatrixAttr_metaObject))->_matrix;
+    float *view = currentEntry_1c4ac0(stackOf_1c4ac0(st, (CullMeta *)Gap::Attrs::igProjectionMatrixAttr::getClassMeta()))->_matrix;
     int same = o->_lastWorld == world;
     if (same) {
         same = o->_lastView == view;

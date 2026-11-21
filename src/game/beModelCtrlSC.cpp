@@ -133,7 +133,7 @@ int beModelCtrlNode2_Traverse(beModelCtrlNode2 *node, igCommonTraversal *trav) {
     }
     matAttr = (igModelViewMatrixAttr *)TakePooled((igObjectPool *)trav->_matrixPool, (igObject *(*)(int))igModelViewMatrixAttr_CreateInstance);
     ((igModelViewMatrixAttrDispatchView *)matAttr)->setMatrix(m);
-    timeAttr = (igTimeAttr *)TakePooled((igObjectPool *)trav->_timePool, (igObject *(*)(int))igTimeAttr_CreateInstance);
+    timeAttr = (igTimeAttr *)TakePooled((igObjectPool *)trav->_timePool, (igObject *(*)(int))Gap::Attrs::igTimeAttr::_instantiateFromPool);
     timeAttr->_time = time;
     ((igCommonTraversalDispatchView *)trav)->pushTime(time);
 

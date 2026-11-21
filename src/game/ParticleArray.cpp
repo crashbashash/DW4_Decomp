@@ -203,7 +203,7 @@ int ParticleTimer_Traverse(ParticleTimer *timer, igCommonTraversal *traversal)
     pool = (igTimeAttrPool *)traversal->_timePool;
     stacks = (igAttrStackManager *)traversal->_attrStack;
     if (pool->_freeIndex >= pool->_count) {
-        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))igTimeAttr_CreateInstance);
+        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))Gap::Attrs::igTimeAttr::_instantiateFromPool);
     }
     index = pool->_freeIndex;
     pool->_freeIndex = index + 1;

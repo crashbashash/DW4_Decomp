@@ -449,7 +449,8 @@ def respell_data(text, cls, rows):
 def splice_class(tree, c, spec, frag):
     """Write the generator's and the hand definitions of one class over its memberized ones."""
     lib = lib_of(spec)
-    if "%s: not written" % c in frag:
+    if "%s: not written" % c in frag and spec.get("gen", GEN):
+        # a class whose registration the spec writes by hand (`gen` empty, the bodies igen's form) needs no generator
         raise ConvError("generator: " + re.search(r"%s: not written: .*" % re.escape(c), frag).group(0))
     gen = fragment_pieces(frag, c)
     hand = {m: b.replace("{C}", c) for m, b in spec.get("bodies", {}).items()}

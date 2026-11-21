@@ -15,11 +15,11 @@ void igPlanarShadowShader_userConstruct(void **arg0, int arg1) {
         ((DW4VC_128_1 *)(DAT_005627c8[0]))->vX((int)(0));
         DAT_005627c0[0] = (void *)(igGeometryMaskAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
         *(int *)((char *)(DAT_005627c0[0]) + 12) = 1;
-        DAT_005627d0[0] = (void **)(igStencilFunctionAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
+        DAT_005627d0[0] = (void **)(Gap::Attrs::igStencilFunctionAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
         ((DW4VC_128_1 *)(DAT_005627d0[0]))->vX((int)(1));
         ((DW4VC_136_1 *)(DAT_005627d0[0]))->vX((int)(2));
         ((DW4VC_140_3 *)(DAT_005627d0[0]))->vX((int)(0), (int)(3), (int)(3));
-        DAT_005627d8[0] = (void **)(igCullFaceAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
+        DAT_005627d8[0] = (void **)(Gap::Attrs::igCullFaceAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
         ((DW4VC_132_1 *)(DAT_005627d8[0]))->vX((int)(0));
     }
 }
@@ -136,7 +136,7 @@ void FUN_001d3e20(igPlanarShadowShader *arg0, igCommonTraversal *arg1) {
             igMatrix44f_Copy((float *)sp70, arg1->_viewMatInv);
             igMatrix44f_Multiply((float *)sp70, (const float *)sp70, (const float *)((char *)m + 12));
             igMatrix44f_Multiply((float *)sp70, (const float *)sp70, arg1->_viewMat);
-            nd = (igAttrStack *)((int *)((igObjectList *)s1->_attrStacks)->_data)[((int *)s1->_attrStackIndexTable)[((igMetaObject *)g_igProjectionMatrixAttr_metaObject)->_id]];
+            nd = (igAttrStack *)((int *)((igObjectList *)s1->_attrStacks)->_data)[((int *)s1->_attrStackIndexTable)[((igMetaObject *)Gap::Attrs::igProjectionMatrixAttr::getClassMeta())->_id]];
             if (nd->_cachedOverride >= 0) {
                 s5 = (int *)((int *)nd->_data)[nd->_cachedOverride];
             } else if (nd->_count != 0) {
@@ -146,7 +146,7 @@ void FUN_001d3e20(igPlanarShadowShader *arg0, igCommonTraversal *arg1) {
                 s5 = (int *)nd->_default;
             }
             pool = (igObjectPool *)arg1->_projectionMatrixPool;
-            if (pool->_freeIndex >= pool->_count) igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))((void *)&igProjectionMatrixAttr_Create));
+            if (pool->_freeIndex >= pool->_count) igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))((void *)&Gap::Attrs::igProjectionMatrixAttr::_instantiateFromPool));
             o = (char *)((int *)pool->_data)[pool->_freeIndex++];
             igMatrix44f_Multiply((float *)(o + 12), (const float *)sp70, (const float *)((char *)s5 + 12));
             FUN_001b1030((igAttrStackManager *)s1, (igAttr *)o);

@@ -124,7 +124,7 @@ void Gap__Sg__igCompileTraversal__vfunc_23(igCompileTraversal *self, int arg1) {
     int a1 = self->_vc;
     if (a1 != 0) {
         L0 *stack = (L0 *)self->_attrStack;
-        ((VC104 *)(stack->f16->f16[stack->f68[g_igClearAttr_metaObject->_id]]->f20))->vX(a1, (int)stack);
+        ((VC104 *)(stack->f16->f16[stack->f68[Gap::Attrs::igClearAttr::getClassMeta()->_id]]->f20))->vX(a1, (int)stack);
     }
     {
     igSmartPointer<T_1bb880> matrix((T_1bb880 *)((void *)igModelViewMatrixAttr_CreateInstance((int)((Gap::Core::igObject *)self)->getMemoryPool())));

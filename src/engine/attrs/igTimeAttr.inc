@@ -1,80 +1,74 @@
-igMetaObject *g_igTimeAttr_metaObject;
-igMetaField *g_igTimeAttr_timeMetaField;
+namespace Gap {
+namespace Attrs {
 
-igTimeAttr *igTimeAttr_CreateInstance(int allocator) {
-    igTimeAttr_EnsureRegistered();
-    return (igTimeAttr *)igMetaObject_CreateInstance(g_igTimeAttr_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *igTimeAttr::_Meta;
+igMetaField *igTimeAttr::k_time;
 
-igMetaObject *igTimeAttr_GetOrCreateMetaObject(void) {
-    if (g_igTimeAttr_metaObject == 0) {
-        g_igTimeAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igTimeAttr_metaObject;
-}
-
-igMetaObject *igTimeAttr_GetMetaObject(void)
+igTimeAttr *igTimeAttr::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igTimeAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igTimeAttr_EnsureRegistered();
-    return g_igTimeAttr_metaObject;
+    arkRegister();
+    return (igTimeAttr *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igTimeAttr_GetVTable(void) {
-    union U_131000 u;
-    igObject_InitHeader((igObject *)u.b);
-    u.vt = (int)&g_igTimeAttr_vtable[0];
-    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-}
-
-void igTimeAttr_EnsureRegistered(void)
+igMetaObject *igTimeAttr::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igTimeAttr_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igTimeAttr_Register(void) {
+igMetaObject *igTimeAttr::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igTimeAttr::retrieveVTablePointer()
+{
+    igTimeAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igTimeAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igTimeAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igTimeAttr_metaObject,
+        false,
+        &_Meta,
         Gap::Attrs::igVisualAttribute::arkRegisterInternal,
         Gap::Attrs::igVisualAttribute::getClassMeta,
-        igTimeAttr_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igTimeAttr",
-        0x18, /* instance size */
-        igTimeAttr_GetVTable,
-        &igTimeAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igTimeAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igTimeAttr_GetMetaObjectFunction(void) {
-    igTimeAttr_GetMetaObject();
+void igTimeAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Core::igLongMetaField::_instantiateFromPool };
+    static const char *names[] = { "_time" };
+    static igMetaField **enumStorage[] = { &k_time };
+    static int offsets[] = { 16 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igLongMetaField *metaField = (igLongMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(0);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igTimeAttr_ctorTable[] = {
-    (FieldFactory)igLongMetaField_Create,
-};
-static const char *g_igTimeAttr_fieldTable[] = {
-    "_time",
-};
-static igMetaField **g_igTimeAttr_fieldHandles[] = {
-    &g_igTimeAttr_timeMetaField,
-};
-static int g_igTimeAttr_fieldOffsets[] = {
-    16,
-};
-
-void igTimeAttr_InitFields(void) {
-    int base;
-    igMetaObject *meta;
-
-    meta = g_igTimeAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igTimeAttr_ctorTable, 1);
-    ((Gap::Core::igLongMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(0);
-    igMetaObject_NameFields(meta, g_igTimeAttr_fieldTable, g_igTimeAttr_fieldHandles, g_igTimeAttr_fieldOffsets, base);
+}
 }
 

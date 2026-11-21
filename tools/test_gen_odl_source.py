@@ -376,6 +376,15 @@ class MemberCalls(unittest.TestCase):
         ctx["cls"] = "igObjectRefMetaField"
         self.assertEqual(w.call_expr(call, 1, [], ctx), "getMetaField()")
 
+    def test_a_kit_vector_temporary_is_written_as_its_constructor(self):
+        # setDefault(const igVec4f &) on a stack temporary: every word of it, not the first alone
+        w = odl.Writer(None, set(), {}, {}, {}, {}, None, {})
+        ctx = {"cls": "igFogAttr", "names": {}, "types": {}, "start": None}
+        at = {"frame": {16: ("k", 0), 20: ("k", 0), 24: ("k", 0), 28: ("k", 0x3f800000)}}
+        self.assertEqual(w.value(("sp", 16), "const igVec4f &", [], ctx, at), "igVec4f(0.0f, 0.0f, 0.0f, 1.0f)")
+        with self.assertRaises(odl.Unsupported):
+            w.value(("sp", 16), "const igMatrix44f &", [], ctx, {"frame": {}})
+
 
 if __name__ == "__main__":
     unittest.main()

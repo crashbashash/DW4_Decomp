@@ -1,6 +1,6 @@
 int igAttrPool_AddNonSharableType(int *p, void *meta)
 {
-    return ObjectList_AppendUniqueRetained((igTDataList<igObject *> *)(*(int *)((char *)p + 12)), (igObject *)meta);
+    return ((Gap::Core::igObjectList *)(*(int *)((char *)p + 12)))->appendUnique((Gap::Core::igObject *)meta);
 }
 
 static inline void clearBytes(char *p, unsigned int n) {

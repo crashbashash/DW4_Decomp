@@ -7,9 +7,7 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igViewportAttr_metaObject;
 
-struct igMetaObject *igViewportAttr_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

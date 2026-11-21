@@ -42,7 +42,7 @@ extern "C" int beNodeAnim_Traverse(beNodeAnim *node, igCommonTraversal *traversa
     time = beNodeAnim_UpdateTime(node, now);
     timePool = (igObjectPool *)traversal->_timePool;
     if (timePool->_freeIndex >= timePool->_count) {
-        igObjectPool_Grow(timePool, (igObject *(*)(int))igTimeAttr_CreateInstance);
+        igObjectPool_Grow(timePool, (igObject *(*)(int))Gap::Attrs::igTimeAttr::_instantiateFromPool);
     }
     slot = timePool->_freeIndex;
     timePool->_freeIndex = slot + 1;

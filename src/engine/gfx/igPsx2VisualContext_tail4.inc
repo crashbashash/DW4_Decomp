@@ -1507,12 +1507,12 @@ void FUN_00174950(void *d0, int arg1) {
     p2DisableCapability(0x19);
 }
 
-void igPsx2VisualContext_SetColorMask(igPsx2VisualContext *self, unsigned char arg1, unsigned char arg2, unsigned char arg3, unsigned char arg4) {
-    *(char *)((char *)(self) + 1252) = arg1;
-    *(char *)((char *)(self) + 1253) = arg2;
-    *(char *)((char *)(self) + 1254) = arg3;
-    *(char *)((char *)(self) + 1255) = arg4;
-    p2SetColourMask(arg1 & 0xFF, arg2 & 0xFF, arg3 & 0xFF, arg4 & 0xFF);
+void igPsx2VisualContext_SetColorMask(igPsx2VisualContext *self, bool r, bool g, bool b, bool a) {
+    *(char *)((char *)(self) + 1252) = r;
+    *(char *)((char *)(self) + 1253) = g;
+    *(char *)((char *)(self) + 1254) = b;
+    *(char *)((char *)(self) + 1255) = a;
+    p2SetColourMask(r, g, b, a);
 }
 
 void igPsx2VisualContext_GetColorMask(igPsx2VisualContext *self, unsigned char *arg1, unsigned char *arg2, unsigned char *arg3, unsigned char *arg4) {

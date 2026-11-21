@@ -66,6 +66,21 @@ igMatrixOptStateAttr	Attrs
 igStencilStateAttr	Attrs
 igVertexBlendStateAttr	Attrs
 igNormalizeNormalsStateAttr	Attrs
+igAlphaFunctionAttr	Attrs
+igPolygonModeAttr	Attrs
+igShadeModelAttr	Attrs
+igPixelPipelineModeAttr	Attrs
+igMultiPassStateAttr	Attrs
+igCullFaceAttr	Attrs
+igStencilFunctionAttr	Attrs
+igColorMaskAttr	Attrs
+igViewportAttr	Attrs
+igFogAttr	Attrs
+igClearAttr	Attrs
+igColorAttr	Attrs
+igTimeAttr	Attrs
+igMaterialAttr	Attrs
+igProjectionMatrixAttr	Attrs
 igIntList	Core	igTDataList<int>
 igIntListNoClean	Core
 igBoolList	Core	igTDataList<bool>

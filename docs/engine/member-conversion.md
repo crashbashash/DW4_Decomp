@@ -264,13 +264,25 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    through `igVisualContextDispatchView`'s state getters, named from igPsx2VisualContext's overrides). The attrs
    unit compiles each converted attr's vtable (a `.vtables` data row) and the inline copies it names (getMeta, igAttr's
    empty slots), placed by name at their retail addresses, so conversion order inside the unit is free; igAttr's and
-   igVisualAttribute's vtables (absent from retail) and the inline copies only they name are `stripped`. Next:
-   the other igVisualAttribute subclasses (specs in the agent's scratch `specs/`: one per family, the getter slot from
-   the C form's `DW4VC_<offset>` view, slot = (offset - 8) / 4, named after the igPsx2VisualContext override at that
-   slot), then retire `include/dw4/attrs/*DispatchView.h` by calling the converted classes; the default managers
-   (`igAttrDefaultManager` first) and `igAttrPool`; the attr lists wait for `igObjectList`. A factory's callers that
-   passed the pool as an `int` need a cast to `igMemoryPoolView *` (memberize leaves them). Gfx then starts from
-   `igVisualContext`, whose dispatch view already names the slots the attrs call;
+   igVisualAttribute's vtables (absent from retail) and the inline copies only they name are `stripped`. Also
+   converted: `igAlphaFunctionAttr`, `igPolygonModeAttr`, `igShadeModelAttr`, `igPixelPipelineModeAttr`,
+   `igMultiPassStateAttr`, `igCullFaceAttr`, `igStencilFunctionAttr`, `igColorMaskAttr`, `igViewportAttr`,
+   `igFogAttr`, `igClearAttr`, `igColorAttr`, `igTimeAttr`, `igMaterialAttr`, `igProjectionMatrixAttr`. Their
+   accessors are the kit's: enum-typed (`include/dw4/gfx/GfxMetaEnums.h` carries the kit's igGfx enums, which
+   reflected.h reads) over the reflected `int` storage, a cast to the enum is what retail's codegen shows; a
+   virtual setter is out of line where retail keeps it beside `apply` and the kit's inline where it sits in the
+   unit's inline tail; matrix fields are the kit's `igMatrix44f` (typed-fields.tsv) where retail's vtable probe
+   constructs one; `synchronizeDefault` reads `igVisualContextDispatchView`'s getters (slots 51-250, named after
+   igPsx2VisualContext's overrides with the kit's igGfx/igVisualContext.h names and enum types), in retail's call
+   order. Classes tools/gen_odl_source.py cannot write (`--list` says CANNOT) get igen's registration by hand
+   (`gen` empty in the spec). Next: the rest of the igVisualAttribute subclasses (the unit-ID family with its
+   static `synchronizeCachedUnitID` invariance callback, `setUnitID`, `userPostLoad` and `getUnitCount`
+   through igCapabilityManager's `getCapability`; the texture, light, geometry and render-destination attrs with
+   smart-pointer fields; the remaining matrix attrs), then retire `include/dw4/attrs/*DispatchView.h` by calling
+   the converted classes; the default managers (`igAttrDefaultManager` first) and `igAttrPool`; the attr lists over
+   `igObjectList`. The specs are in the agent's scratch (`scratch/Attrs2/specs/visual.py`, `visual2.py`). memberize
+   casts a pool passed as `int` to a factory taking `igMemoryPoolView *` (or drops the `int` cast). Gfx then starts
+   from `igVisualContext`, whose dispatch view already names the slots the attrs call;
 6. the game's `be*` classes last.
 
 ## Known differences and gaps

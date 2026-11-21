@@ -49,11 +49,11 @@ void igViewerRenderer_FindLights(igViewerRenderer *self, igGroup *node);
 struct Tag { };
 static inline igObject *createColorAttr() {
     Tag tag = Tag();
-    return (igObject *)igColorAttr_CreateInstance(0);
+    return (igObject *)Gap::Attrs::igColorAttr::_instantiateFromPool(0);
 }
 static inline igObject *createAlphaFunctionAttr() {
     Tag tag = Tag();
-    return (igObject *)igAlphaFunctionAttr_Create(0);
+    return (igObject *)Gap::Attrs::igAlphaFunctionAttr::_instantiateFromPool(0);
 }
 static inline igObject *createFrustCullTraversal() {
     Tag tag = Tag();
@@ -500,7 +500,7 @@ void igViewerRenderer_ViewportResized(igViewerRenderer *self) {
     igFrustCullTraversal *traversal;
 
     traversal = (igFrustCullTraversal *)self->_sceneTraversal;
-    igAttrStackManager_Setup((igAttrStackManager *)traversal->_attrStack, g_igViewportAttr_metaObject,
+    igAttrStackManager_Setup((igAttrStackManager *)traversal->_attrStack, Gap::Attrs::igViewportAttr::getClassMeta(),
                  (igAttrDefaultManager *)traversal->_defaultManager, (igVisualContextCapabilityManager *)traversal->_capabilityManager);
 }
 

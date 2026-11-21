@@ -1,22 +1,34 @@
-void igColorAttr_InitDefaults(igColorAttr *self) {
-    igObject_InitDefaults((igObject *)self);
-    self->_colorPacked = igVec4f_PackColor((const float *)((char *)self + 0xC), 1);
+namespace Gap {
+namespace Attrs {
+
+void igColorAttr::initDefaults()
+{
+    igVisualAttribute::initDefaults();
+    _colorPacked = igVec4f_PackColor(_color.vec, 1);
 }
 
-void igColorAttr_UserPostLoad(igColorAttr *self) {
-    igAttr_UserPostLoad(self);
-    self->_colorPacked = igVec4f_PackColor((const float *)((char *)self + 0xC), 1);
+void igColorAttr::userPostLoad()
+{
+    igVisualAttribute::userPostLoad();
+    _colorPacked = igVec4f_PackColor(_color.vec, 1);
 }
 
-void igColorAttr_apply(igColorAttr *self, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetColorPacked(arg1, self->_colorPacked);
+void igColorAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetColorPacked((igPsx2VisualContext *)vc, _colorPacked);
 }
 
-void igColorAttr_SynchronizeDefault(igColorAttr *self, void **arg1) {
-    self->_colorPacked = ((DW4VC_272_0 *)(arg1))->vX();
+void igColorAttr::synchronizeDefault(igVisualContext *vc)
+{
+    _colorPacked = ((igVisualContextDispatchView *)vc)->getColor();
 }
 
-void igColorAttr_SynchronizeColorPacked(igColorAttr *self) {
-    self->_colorPacked = igVec4f_PackColor((const float *)((char *)self + 0xC), 1);
+void igColorAttr::colorChanged(igObject *obj)
+{
+    igColorAttr *attr = (igColorAttr *)obj;
+
+    attr->_colorPacked = igVec4f_PackColor(attr->_color.vec, 1);
+}
+}
 }
 

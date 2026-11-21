@@ -27,8 +27,6 @@ void List_AppendWords(struct igDataList *list, int count, const int *words);
 /* Retains `value` and appends it to the meta-object list. */
 int MetaRefList_AppendRetained(struct __internalObjectList *list, struct igObject *value);
 /* Appends `object` (retained) unless the list holds it already; returns its index. */
-int ObjectList_AppendUniqueRetained(igTDataList<struct igObject *> *list, struct igObject *object);
-void ObjectList_ResizeRetained(igTDataList<struct igObject *> *self, int count);
 
 #ifdef __cplusplus
 }

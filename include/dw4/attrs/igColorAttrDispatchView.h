@@ -2,7 +2,7 @@
 #define DW4_IGCOLORATTRDISPATCHVIEW_H
 #include "dw4/core/igObjectDispatchView.h"
 
-/* igColorAttr's virtual functions: slot 30 stores the colour (igColorAttr_SetColor).
+/* igColorAttr's virtual functions: slot 30 stores the colour (Gap::Attrs::igColorAttr::set).
  * ABI view only: never instantiated. */
 class igColorAttrDispatchView : public igObjectDispatchView {
 public:

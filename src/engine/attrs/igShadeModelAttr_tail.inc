@@ -1,15 +1,23 @@
-void igShadeModelAttr_apply(igShadeModelAttr *self, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetShadingMode(arg1, (unsigned int)self->_mode);
+namespace Gap {
+namespace Attrs {
+
+void igShadeModelAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetShadingMode((igPsx2VisualContext *)vc, getMode());
 }
 
-void igShadeModelAttr_SynchronizeDefault(void **arg0, void **arg1) {
-    ((DW4VC_128_1 *)(arg0))->vX((int)(((DW4VC_912_0 *)(arg1))->vX()));
+void igShadeModelAttr::synchronizeDefault(igVisualContext *vc)
+{
+    setMode(((igVisualContextDispatchView *)vc)->getShadingMode());
 }
 
 /* Setter for the reflected _mode field (the shading mode enum). */
 
-void igShadeModelAttr_SetMode(igShadeModelAttr *self, int mode) {
-    self->_mode = mode;
+void igShadeModelAttr::setMode(IG_GFX_SHADING_MODE m)
+{
+    _mode = m;
+}
+}
 }
 
 void FUN_00140360(void *arg0, int arg1) {

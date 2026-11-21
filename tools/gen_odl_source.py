@@ -87,6 +87,9 @@ SERVICES = {
 
 # igObject's virtual slot igen's override clones the inherited field through (createCopy(kDeepCopy)).
 CLONE_SLOT = 19
+# the kit vectors a field adder passes as a stack temporary (`setDefault(igVec4f(0.0f, 0.0f, 0.0f, 1.0f))`):
+# their element counts
+KIT_VECTORS = {"igVec2f": 2, "igVec3f": 3, "igVec4f": 4}
 CLONE_NAME = "CloneViaMetadata"
 
 # Saved and argument registers of the EE ABI the tracer follows.
@@ -1230,8 +1233,15 @@ class Writer:
             return "(%s)%s" % (ptype.strip(), text)
         if v[0] == "sp":
             slot = at["frame"].get(v[1])
+            base = ptype.rstrip("&").replace("const ", "").strip()
+            size = KIT_VECTORS.get(base)
+            if ref and size:
+                # a kit vector bound to a `const igVec4f &`: the temporary its constructor fills, word by word
+                words = [at["frame"].get(v[1] + 4 * i) for i in range(size)]
+                if all(w is not None and w[0] in ("k", "f") for w in words):
+                    return "%s(%s)" % (base, ", ".join(float_literal(w[1]) for w in words))
             if ref and slot is not None:
-                return self.value(slot, ptype.rstrip("&").replace("const ", "").strip(), events, ctx, at)
+                return self.value(slot, base, events, ctx, at)
             raise Unsupported("a stack temporary the generator has no template for")
         if v[0] == "f":
             return float_literal(v[1])

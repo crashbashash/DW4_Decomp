@@ -1,47 +1,59 @@
+namespace Gap {
+namespace Attrs {
+
 /* Setter for the material's reflected _shininess field. */
-void igMaterialAttr_SetShininess(igMaterialAttr *self, float shininess) {
-    self->_shininess = shininess;
+void igMaterialAttr::setShininess(float sh)
+{
+    _shininess = sh;
 }
 
-void igMaterialAttr_SetDiffuse(igMaterialAttr *self, const igVec4f *color) {
-    self->_diffuse = *color;
-    self->_diffuse.makeMax(g_vec4Zero);
-    self->_diffuse.makeMin(g_vec4One);
+void igMaterialAttr::setDiffuse(const igVec4f &d)
+{
+    _diffuse = d;
+    _diffuse.makeMax(g_vec4Zero);
+    _diffuse.makeMin(g_vec4One);
 }
 
-void igMaterialAttr_SetSpecular(igMaterialAttr *self, const igVec4f *color) {
-    self->_specular = *color;
-    self->_specular.makeMax(g_vec4Zero);
-    self->_specular.makeMin(g_vec4One);
+void igMaterialAttr::setSpecular(const igVec4f &s)
+{
+    _specular = s;
+    _specular.makeMax(g_vec4Zero);
+    _specular.makeMin(g_vec4One);
 }
 
-void igMaterialAttr_SetAmbient(igMaterialAttr *self, const igVec4f *color) {
-    self->_ambient = *color;
-    self->_ambient.makeMax(g_vec4Zero);
-    self->_ambient.makeMin(g_vec4One);
+void igMaterialAttr::setAmbient(const igVec4f &a)
+{
+    _ambient = a;
+    _ambient.makeMax(g_vec4Zero);
+    _ambient.makeMin(g_vec4One);
 }
 
-void igMaterialAttr_SetEmission(igMaterialAttr *self, const igVec4f *color) {
-    self->_emission = *color;
-    self->_emission.makeMax(g_vec4Zero);
-    self->_emission.makeMin(g_vec4One);
+void igMaterialAttr::setEmissive(const igVec4f &e)
+{
+    _emission = e;
+    _emission.makeMax(g_vec4Zero);
+    _emission.makeMin(g_vec4One);
 }
 
-void igMaterialAttr_apply(igMaterialAttr *self, igObject *context) {
-    igPsx2VisualContext_SetMaterial((igPsx2VisualContext *)context, self->_ambient.vec, self->_diffuse.vec, self->_specular.vec, self->_emission.vec, self->_shininess);
+void igMaterialAttr::apply(igVisualContext *rc)
+{
+    igPsx2VisualContext_SetMaterial((igPsx2VisualContext *)rc, _ambient.vec, _diffuse.vec, _specular.vec, _emission.vec, _shininess);
 }
 
-void igMaterialAttr_SynchronizeDefault(MaterialAttrView *material, MaterialContextView *context) {
+void igMaterialAttr::synchronizeDefault(igVisualContext *vc)
+{
     igVec4f color;
 
-    context->getMaterialDiffuse(&color);
-    material->setDiffuse(&color);
-    context->getMaterialAmbient(&color);
-    material->setAmbient(&color);
-    context->getMaterialSpecular(&color);
-    material->setSpecular(&color);
-    context->getMaterialEmission(&color);
-    material->setEmission(&color);
-    material->setShininess(context->getMaterialShininess());
+    ((igVisualContextDispatchView *)vc)->getMaterialAmbient(color);
+    setAmbient(color);
+    ((igVisualContextDispatchView *)vc)->getMaterialDiffuse(color);
+    setDiffuse(color);
+    ((igVisualContextDispatchView *)vc)->getMaterialSpecular(color);
+    setSpecular(color);
+    ((igVisualContextDispatchView *)vc)->getMaterialEmissive(color);
+    setEmissive(color);
+    setShininess(((igVisualContextDispatchView *)vc)->getMaterialShininess());
+}
+}
 }
 

@@ -21,3 +21,10 @@ igMatrixOptStateAttr	_enabled	bool
 igStencilStateAttr	_enabled	bool
 igVertexBlendStateAttr	_enabled	bool
 igNormalizeNormalsStateAttr	_enabled	bool
+igCullFaceAttr	_enabled	bool
+igColorMaskAttr	_red	bool
+igColorMaskAttr	_green	bool
+igColorMaskAttr	_blue	bool
+igColorMaskAttr	_alpha	bool
+igViewportAttr	_scissorExt	igSmartPointer<igScissorExt>
+igProjectionMatrixAttr	_m	igMatrix44f

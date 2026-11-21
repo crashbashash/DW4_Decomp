@@ -55,6 +55,11 @@ For each conversion, across every source, header and `.inc` fragment of src/ and
   * a static member whose return type differs from the C definition's keeps its uses' types: a call assigned
     where the C form's integer went is cast back to it (`*p = (int)Class::make()`), and the member named in an
     array initialiser of a function-pointer typedef (a field table) is cast to that typedef;
+  * a parameter the C form (its definition or a prototype) takes as an integer where the member takes a pointer
+    (a factory's memory pool passed as `int`) is the member's type in the head, and each call's argument is
+    cast: `(int)E` becomes `E` where E already has the pointer type (a cast, a local or parameter, a function's
+    or member's declared return), else `(T *)E`; a literal `0` stays; the function named as a value is a static
+    member whose type changed (cast in a field table, as above);
   * a virtual function (its class-members.tsv row says `virtual`) called by its C name runs that implementation,
     not the object's override, so it never becomes `obj->name(a)`: a call on `this` inside a member of the class
     or a subclass becomes the qualified `Class::name(a)`, and every other use keeps the C name, with its
@@ -85,8 +90,9 @@ For each conversion, across every source, header and `.inc` fragment of src/ and
 
 It refuses the batch, before writing anything, when a C name has no definition (and is not an alias of one that
 has), a file-scope `static` is named (it stays a free function), the member is not declared and the table gives
-no signature, the declaration and the C definition disagree in parameters, an instance member is used as a value
-or called without a receiver, or the receiver is assigned or has its address taken.
+no signature, the declaration and the C definition disagree in parameters (other than an integer the member
+takes as a pointer), an instance member is used as a value or called without a receiver, or the receiver is
+assigned or has its address taken.
 
 Dry run by default (`--diff` shows the source changes); `--apply` writes. Then regenerate
 include/dw4/support/reflected.h (`python3 scripts/gen_type_headers.py`) when config/class-members.tsv changed,
@@ -141,6 +147,7 @@ class Conversion:
         self.va = None
         self.access = None                             # `private`/`protected` from its class-members.tsv row
         self.getter = None                             # a public static inline `{ return name; }` of the class
+        self.c_params = {}                             # index -> (C integer type, member pointer type) retyped
 
     @property
     def base(self):
@@ -469,6 +476,42 @@ _CAST_AT = re.compile(r"\(\s*(?:struct\s+|class\s+)?((?:::\s*)?[A-Za-z_][\w:]*)\
 _POSTFIX = re.compile(r"^[A-Za-z_]\w*(?:\s*(?:->|\.)\s*[A-Za-z_]\w*|\s*\[[^\[\]]*\])*$")
 _INTEGERS = ("int", "unsigned int", "short", "unsigned short", "long", "unsigned long", "char", "unsigned char")
 _MEMBER_HEAD = re.compile(r"([A-Za-z_][\w:]*)\s*::\s*~?[A-Za-z_]\w*\s*\($")
+
+
+def retyped_params(c_params, params):
+    """{index: (C type, member type)} where the C form takes an integer and the member a pointer at the same
+    position (`int allocator` for `igMemoryPoolView *pool`), every other parameter equal; else None."""
+    if len(c_params) != len(params):
+        return None
+    out = {}
+    for i, (c, m) in enumerate(zip(c_params, params)):
+        if c == m:
+            continue
+        if c not in _INTEGERS or not (m or "").endswith("*"):
+            return None
+        out[i] = (c, m)
+    return out
+
+
+def _postfix_expr(e):
+    """Whether `e` is one postfix expression (a name or parenthesised group followed by calls, subscripts and
+    member accesses), which a cast may precede without parentheses."""
+    m = re.match(r"(?:::\s*)?[A-Za-z_][\w:]*", e)
+    if m:
+        i = m.end()
+    elif e.startswith("("):
+        i = declarations._close(e, 0) + 1
+    else:
+        return False
+    while i and i < len(e):
+        m = re.compile(r"\s*(?:->|\.)\s*[A-Za-z_]\w*|\s*([(\[])").match(e, i)
+        if not m:
+            return False
+        if m.group(1):
+            i = declarations._close(e, m.start(1), *(("[", "]") if m.group(1) == "[" else ("(", ")"))) + 1
+        else:
+            i = m.end()
+    return i == len(e)
 
 
 def _strip_parens(e):
@@ -805,6 +848,7 @@ class Planner:
         after = re.match(r"\s*\(", fr.clean[end:])
         if conv.kind == "data" or conv.static:
             fr.edits.append((pos, end, conv.qualified))
+            self.retype_call(fr, conv, end, None)
             return
         if not after:
             self.errors.append("%s:%d: instance member %s is used as a value (%s); convert that use by hand"
@@ -865,6 +909,7 @@ class Planner:
             fr.edits.append((pos, end, self.retyped_cast(fr, conv, pos, after) + self.qual(conv, inside)))
             if conv.inline and conv.kind == "func" and not after:
                 self.inline_users[conv.qualified].add(fr.rel)
+            self.retype_call(fr, conv, end, ctx)
             return
         if not after:
             self.errors.append("%s:%d: instance member %s is used as a value (%s); convert that use by hand"
@@ -886,9 +931,20 @@ class Planner:
         fr.edits.append((pos, stop, (receiver or "") + conv.name + "("))
         self.typed_arguments(fr, conv, spans[1:], ctx, inside, gap)
 
+    def retype_call(self, fr, conv, end, ctx):
+        """A static member's call at `end` (after its name): its retyped arguments (retyped_arguments)."""
+        after = re.match(r"\s*\(", fr.clean[end:])
+        if not conv.c_params or not after:
+            return
+        open_ = end + after.end() - 1
+        self.retyped_arguments(fr, conv, _arg_spans(fr.clean, open_, declarations._close(fr.clean, open_), fr.text),
+                               ctx)
+
     def typed_arguments(self, fr, conv, spans, ctx, inside, gap):
         """A call's arguments cast where its parameter needs: to a converted class's Gap type for a pointer to
-        one, a pointer to the value for a reference (`ref_argument`)."""
+        one, a pointer to the value for a reference (`ref_argument`), an integer the member takes as a pointer
+        (`retyped_arguments`)."""
+        self.retyped_arguments(fr, conv, spans, ctx)
         for span, param in zip(spans, conv.params):
             ref = re.fullmatch(r"([A-Za-z_]\w*)( const)?&", param or "")
             if ref:
@@ -1005,6 +1061,63 @@ class Planner:
                 return e + "->"
         return "((%s *)%s)->" % (cls, e if _POSTFIX.match(e) else "(%s)" % e)
 
+    def retyped_arguments(self, fr, conv, spans, ctx):
+        """The arguments of a call whose parameter the C form spelled as an integer and the member as a pointer
+        (a memory pool passed as `int`, conv.c_params): `(int)E` becomes `E` where E already has the member's
+        type, else `(T *)E`; an argument without the integer cast is cast (`0` stays)."""
+        for i, (s, e) in enumerate(spans):
+            if i not in conv.c_params:
+                continue
+            c_type, m_type = conv.c_params[i]
+            arg = fr.text[s:e]
+            m = re.fullmatch(r"\(\s*(%s)\s*\)\s*(.+)" % "|".join(re.escape(t) for t in _INTEGERS), arg, re.S)
+            expr = m.group(2) if m else arg
+            if not m and _strip_parens(expr) in ("0", "NULL"):
+                continue
+            bare = _strip_parens(expr)
+            if not _postfix_expr(bare):
+                bare = "(%s)" % bare
+            if self.expr_type(fr, expr, ctx) == m_type:
+                if m:
+                    fr.edits.append((s, e, bare))
+                continue
+            fr.edits.append((s, e, "(%s *)%s" % (m_type[:-1], bare)))
+
+    def expr_type(self, fr, expr, ctx):
+        """The normalised type of a simple expression where it can be read off the tree: a cast, a local or
+        parameter, a free function's return or a class member's (class-members.tsv); else None."""
+        e = _strip_parens(expr)
+        cast = _CAST.match(e)
+        if cast:
+            return _normal_type(cast.group(1).split("::")[-1]) + "*"
+        if re.fullmatch(r"[A-Za-z_]\w*", e) and ctx is not None:
+            t = _declared_type(e, fr.text[ctx[1]:ctx[2]])
+            return t.split("::")[-1] + "*" if t else None
+        call = re.fullmatch(r"(?:.*(->|\.|::)\s*)?([A-Za-z_]\w*)\s*\((.*)\)", e, re.S)
+        if not call or declarations._close(e, e.index("(", call.start(3) - 1)) != len(e) - 1:
+            return None
+        name = call.group(2)
+        if call.group(1):
+            rets = {r for r in self.member_returns().get(name, ())}
+        else:
+            rets = {d.ret for ds in self.index.decls.values() for d in ds
+                    if d.name == name and d.kind == "func" and d.ret}
+        rets = {_normal_type(r) for r in rets}
+        return rets.pop() if len(rets) == 1 else None
+
+    def member_returns(self):
+        """{member name: {return types}} of the class-members.tsv rows."""
+        if getattr(self, "_member_returns", None) is None:
+            self._member_returns = collections.defaultdict(set)
+            for rows in (getattr(self, "members", None) or {}).values():
+                for r in rows:
+                    r = re.sub(r"^\s*(?:public|protected|private)\s*:\s*", "", r)
+                    m = re.match(r"(?:(?:virtual|static|inline)\s+)*([A-Za-z_][\w:<>\s]*?[\s*&]+)([A-Za-z_]\w*)\s*\(",
+                                 r)
+                    if m:
+                        self._member_returns[m.group(2)].add(m.group(1).strip())
+        return self._member_returns
+
     def def_params(self, fr, ctx):
         """[(declared type, name)] of a definition's parameters."""
         head = fr.text[ctx[1]:fr.head_end(ctx[1])]
@@ -1047,17 +1160,18 @@ class Planner:
                                % (fr.rel, fr.text.count("\n", 0, pos) + 1, conv.qualified, conv.cname))
             return
         fr.edits.append((pos, end, self.retyped_cast(fr, conv, pos, nxt == "(") + conv.qualified))
+        self.retype_call(fr, conv, end, None)
         if conv.inline:
             self.inline_users[conv.qualified].add(fr.rel)
 
     def retyped_cast(self, fr, conv, pos, called):
         """The cast keeping a use of static member `conv` the type its C form had, where the definition's return
-        type changed (`c_ret`, rewrite_definition): a call assigned where the C form's integer went
-        (`*(int *)p = Class::getMetaField()`) is cast back to it, and the member named as a value in an array
-        initialiser of a function-pointer typedef (a field table's `FieldFactory`) is cast to that type. A use
-        already cast keeps its cast."""
+        type changed (`c_ret`, rewrite_definition) or a parameter did (`c_params`): a call assigned where the C
+        form's integer went (`*(int *)p = Class::getMetaField()`) is cast back to it, and the member named as a
+        value in an array initialiser of a function-pointer typedef (a field table's `FieldFactory`) is cast to
+        that type. A use already cast keeps its cast."""
         c_ret = getattr(conv, "c_ret", None)
-        if c_ret is None or conv.kind != "func" or not conv.static:
+        if (c_ret is None and not conv.c_params) or conv.kind != "func" or not conv.static:
             return ""
         before = fr.clean[:pos].rstrip()
         if before.endswith(")"):
@@ -1145,8 +1259,14 @@ class Planner:
                            lambda m: m.group(1) if m.group(1) in self.converted else m.group(0), q)
                     if q else q for q in (types.param(t + " " + (n or "")) for t, n in params))
         if got != tuple(conv.params):
-            raise Refused("%s: %s's parameters (%s) are not %s's (%s)" % (
-                fr.rel, conv.cname, ", ".join(got), conv.qualified, ", ".join(conv.params)))
+            retyped = retyped_params(got, conv.params)
+            if retyped is None:
+                raise Refused("%s: %s's parameters (%s) are not %s's (%s)" % (
+                    fr.rel, conv.cname, ", ".join(got), conv.qualified, ", ".join(conv.params)))
+            # an integer the member takes as a pointer (a memory pool passed as `int`): the head takes the
+            # member's type and the callers' arguments are cast (retyped_arguments)
+            conv.c_params.update(retyped)
+            params = [(retyped[i][1][:-1] + " *", n) if i in retyped else (t, n) for i, (t, n) in enumerate(params)]
         ret = head[:head.rfind(conv.cname, 0, p)].rstrip()
         initializer = ""
         if conv.special == "ctor":
@@ -1480,6 +1600,20 @@ def plan(root, table):
         if any(c.cname in text for c in convs):
             originals[rel] = text
     planner.base_ctors = base_constructors(root, convs)
+    planner.members = members
+    # a C prototype taking an integer where the member takes a pointer (`X_CreateInstance(int allocator)`, whose
+    # definition classconv may have retyped already): its callers' arguments are cast (retyped_arguments)
+    wanted = {c.cname for c in convs if c.kind == "func"}
+    protos = collections.defaultdict(list)
+    for ds in index.decls.values():
+        for d in ds:
+            if d.name in wanted and d.kind == "func" and d.params is not None:
+                protos[d.name].append(tuple(p for p in d.params if p != "void"))
+    for conv in convs:
+        for ps in protos.get(conv.cname, ()):
+            if not conv.static and not conv.special and len(ps) == len(conv.params) + 1:
+                ps = ps[1:]                              # the receiver
+            conv.c_params.update(retyped_params(ps, conv.params) or {})
     # 1. the definitions: heads, receivers, data definitions, inline members' C copies removed
     first = {rel: FileRewrite(rel, text) for rel, text in originals.items()}
     for conv in convs:

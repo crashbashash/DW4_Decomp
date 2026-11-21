@@ -1,15 +1,23 @@
-void igPolygonModeAttr_apply(igPolygonModeAttr *self, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetRenderMode(arg1, (unsigned int)self->_mode);
+namespace Gap {
+namespace Attrs {
+
+void igPolygonModeAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetRenderMode((igPsx2VisualContext *)vc, getMode());
 }
 
-void igPolygonModeAttr_SynchronizeDefault(void **arg0, void **arg1) {
-    ((DW4VC_128_1 *)(arg0))->vX((int)(((DW4VC_960_0 *)(arg1))->vX()));
+void igPolygonModeAttr::synchronizeDefault(igVisualContext *vc)
+{
+    setMode(((igVisualContextDispatchView *)vc)->getRenderMode());
 }
 
 /* Setter for the attribute's reflected _mode enum field (+0x0c); stores the value as given without
  * validation. */
 
-void igPolygonModeAttr_SetMode(igPolygonModeAttr *self, int mode) {
-    self->_mode = mode;
+void igPolygonModeAttr::setMode(IG_GFX_RENDER_MODE mode)
+{
+    _mode = mode;
+}
+}
 }
 

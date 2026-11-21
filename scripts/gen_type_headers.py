@@ -107,9 +107,14 @@ KIT_VECTOR = {
 }
 # Kit types a converted class's member rows name by reference or pointer only (igMatrix44fMetaField's
 # `setDefault(const igMatrix44f &)`, igAttr's `getUnitCount(igCapabilityManager *)`): declared ahead under C++.
-# A matrix field stays sixteen floats, since igMatrix44f's constructor would give every class holding one a
-# constructor; igCapabilityManager has no reflected record here.
+# A matrix field stays sixteen floats unless config/typed-fields.tsv types it igMatrix44f, the kit's type whose
+# constructor gives the class holding it one (the matrix attrs' retail vtable probes construct theirs);
+# igCapabilityManager has no reflected record here.
 FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager")
+# Kit headers reflected.h reads under C++ for the types converted classes name: the kit's enums (igGfx/igGfx.h:
+# IG_GFX_ALPHA_FUNCTION, ...) the attributes' accessors take and return while their fields keep the reflected
+# `int` storage (the kit's igEnum), and igMatrix44f for a typed matrix field.
+KIT_TYPE_HEADERS = ("dw4/gfx/GfxMetaEnums.h", "dw4/maths/igMatrix44f.h")
 
 # Inline arrays: the element type comes from the kind, the element count from the distance to the
 # next field (reflection records no count), or for a last field from the registered instance size.
@@ -561,7 +566,7 @@ def main(argv=None):
     if converted:
         # the polymorphic root every converted class derives from
         converted.setdefault("igObject", "Core")
-    kit_headers = sorted({header for _type, header in KIT_VECTOR.values()})
+    kit_headers = sorted({header for _type, header in KIT_VECTOR.values()} | set(KIT_TYPE_HEADERS))
     if members or converted or kit_headers:
         lines.extend(["#ifdef __cplusplus"]
                      + (["#include \"dw4/core/igObjectMacros.h\""] if members or converted else [])

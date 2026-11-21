@@ -54,7 +54,7 @@ igObjectPointer igAttrPool_GetSharedAttr(igAttrPool *pool, igObjectPointer attr)
     }
     igObjectPointer cloned = igObject_Clone((igObjectDispatchView *)attr.get(), 0);
     igObjectPointer shared = cloned;
-    ObjectList_AppendRetained((igObjectList *)list.get(), shared);
+    ((Gap::Core::igObjectList *)list.get())->append((Gap::Core::igObject *)shared.get());
     return shared;
 }
 

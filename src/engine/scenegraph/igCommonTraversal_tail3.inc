@@ -157,11 +157,11 @@ void Gap__Sg__igCommonTraversal__vfunc_23(igCommonTraversalOps *t, int root) {
     igMetaObject *meta;
     int vc = t->_vc;
     if (vc != 0) {
-        meta = igClearAttr_GetMetaObject();
+        meta = Gap::Attrs::igClearAttr::getClassTypeSafe();
         m = t->_attrStack;
         pushAttr(m, meta, vc);
         vc = t->_vc;
-        meta = igProjectionMatrixAttr_GetMetaObject();
+        meta = Gap::Attrs::igProjectionMatrixAttr::getClassTypeSafe();
         m = t->_attrStack;
         pushAttr(m, meta, vc);
     }

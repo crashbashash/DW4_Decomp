@@ -77,7 +77,7 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
         igObjectPool *pool = (igObjectPool *)trav->_timePool;
         time = ((long long *)((igLongList *)trav->_timeStack)->_data)[0];
         if (pool->_freeIndex >= pool->_count)
-            igObjectPool_Grow(pool, (igObject *(*)(int))igTimeAttr_CreateInstance);
+            igObjectPool_Grow(pool, (igObject *(*)(int))Gap::Attrs::igTimeAttr::_instantiateFromPool);
         timeAttr = ((igTimeAttr **)pool->_data)[pool->_freeIndex++];
         timeAttr->_time = time;
     }

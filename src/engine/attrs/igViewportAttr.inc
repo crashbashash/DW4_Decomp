@@ -1,133 +1,93 @@
-igMetaObject *g_igViewportAttr_metaObject;
-igMetaField *g_igViewportAttr_xMetaField;
-igMetaField *g_igViewportAttr_yMetaField;
-igMetaField *g_igViewportAttr_wMetaField;
-igMetaField *g_igViewportAttr_hMetaField;
-igMetaField *g_igViewportAttr_scissorExtMetaField;
-igMetaField *g_igViewportAttr_nearZMetaField;
-igMetaField *g_igViewportAttr_farZMetaField;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igViewportAttr_GetOrCreateMetaObject(void) {
-    if (g_igViewportAttr_metaObject == 0) {
-        g_igViewportAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igViewportAttr_metaObject;
-}
+igMetaObject *igViewportAttr::_Meta;
+igMetaField *igViewportAttr::k_x;
+igMetaField *igViewportAttr::k_y;
+igMetaField *igViewportAttr::k_w;
+igMetaField *igViewportAttr::k_h;
+igMetaField *igViewportAttr::k_scissorExt;
+igMetaField *igViewportAttr::k_nearZ;
+igMetaField *igViewportAttr::k_farZ;
 
-igMetaObject *igViewportAttr_GetMetaObject(void)
+igMetaObject *igViewportAttr::getClassTypeLazy()
 {
-    igMetaObject *g = g_igViewportAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igViewportAttr_EnsureRegistered();
-    return g_igViewportAttr_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igViewportAttr_GetVTable(void) {
-    union U_1304e0 u;
-    int temp_s0;
-    char *ps;
-    int *temp_a0;
-    igObject_InitHeader((igObject *)u.b);
-    u.vt = (int)&g_igViewportAttr_vtable[0];
-    ps = &u.b[28];
-    *(int *)ps = 0;
-    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igViewportAttr_vtable[0];
-    if (ps != 0) {
-        temp_a0 = *(int **)ps;
-        if (temp_a0 != 0) {
-            temp_a0[1] = temp_a0[1] - 1;
-            if (((unsigned long long) ((long long) temp_a0[1] << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
-        }
-    }
-    return temp_s0;
-}
-
-void igViewportAttr_EnsureRegistered(void)
+igMetaObject *igViewportAttr::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igViewportAttr_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igViewportAttr_callbackList[] = { igScissorExt_EnsureRegistered, 0 };
+void *igViewportAttr::retrieveVTablePointer()
+{
+    igViewportAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igViewportAttr_Register(void) {
+void igViewportAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igViewportAttr::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igScissorExt_EnsureRegistered, 0 };
+
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igViewportAttr_metaObject,
+        false,
+        &_Meta,
         Gap::Attrs::igVisualAttribute::arkRegisterInternal,
         Gap::Attrs::igVisualAttribute::getClassMeta,
-        igViewportAttr_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igViewportAttr",
-        0x28, /* instance size */
-        igViewportAttr_GetVTable,
-        &igViewportAttr_InitFields,
-        0, /* extra callback item */
-        g_igViewportAttr_callbackList /* callback list */
+        sizeof(igViewportAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igViewportAttr_GetMetaObjectFunction(void) {
-    igViewportAttr_GetMetaObject();
+void igViewportAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igObjectRefMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool };
+    static const char *names[] = { "_x", "_y", "_w", "_h", "_scissorExt", "_nearZ", "_farZ" };
+    static igMetaField **enumStorage[] = { &k_x, &k_y, &k_w, &k_h, &k_scissorExt, &k_nearZ, &k_farZ };
+    static int offsets[] = { 12, 16, 20, 24, 28, 32, 36 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 7);
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(639);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->setDefault(447);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_metaObject = (int)igScissorExt_GetOrCreateMetaObject();
+        metaField->_persistent = 0;
+        metaField->_deepCopyMethod = 1;
+        metaField->_shallowCopyMethod = 1;
+        metaField->_isAlikeShallowMethod = 3;
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 6);
+        metaField->setDefault(1.0f);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igViewportAttr_ctorTable[] = {
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-};
-static const char *g_igViewportAttr_fieldTable[] = {
-    "_x",
-    "_y",
-    "_w",
-    "_h",
-    "_scissorExt",
-    "_nearZ",
-    "_farZ",
-};
-static igMetaField **g_igViewportAttr_fieldHandles[] = {
-    &g_igViewportAttr_xMetaField,
-    &g_igViewportAttr_yMetaField,
-    &g_igViewportAttr_wMetaField,
-    &g_igViewportAttr_hMetaField,
-    &g_igViewportAttr_scissorExtMetaField,
-    &g_igViewportAttr_nearZMetaField,
-    &g_igViewportAttr_farZMetaField,
-};
-static int g_igViewportAttr_fieldOffsets[] = {
-    12,
-    16,
-    20,
-    24,
-    28,
-    32,
-    36,
-};
-
-void igViewportAttr_InitFields(void) {
-    int base;
-    void *field;
-    igMetaObject *meta;
-
-    meta = g_igViewportAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igViewportAttr_ctorTable, 7);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(0x27F);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 3)))->setDefault(0x1BF);
-    field = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)igScissorExt_GetOrCreateMetaObject();
-    ((igMetaField *)field)->_persistent = 0;
-    ((igMetaField *)field)->_deepCopyMethod = 1;
-    ((igMetaField *)field)->_shallowCopyMethod = 1;
-    ((igMetaField *)field)->_isAlikeShallowMethod = 3;
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 6)))->setDefault(1.0f);
-    igMetaObject_NameFields(meta, g_igViewportAttr_fieldTable, g_igViewportAttr_fieldHandles, g_igViewportAttr_fieldOffsets, base);
+}
 }
 
 igStringRef *igStringRef_Destruct(igStringRef *self, short deleteFlag) {

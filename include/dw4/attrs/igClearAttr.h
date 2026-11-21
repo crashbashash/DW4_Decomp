@@ -9,9 +9,6 @@ struct igMemoryPoolView;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igClearAttr_metaObject;
-struct igMetaObject *igClearAttr_GetMetaObject(void);
-struct igClearAttr *igClearAttr_Create(struct igMemoryPoolView *pool);
 
 #ifdef __cplusplus
 }

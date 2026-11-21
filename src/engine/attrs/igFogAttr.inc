@@ -1,102 +1,81 @@
-igMetaObject *g_igFogAttr_metaObject;
-igMetaField *g_igFogAttr_modeMetaField;
-igMetaField *g_igFogAttr_nearValMetaField;
-igMetaField *g_igFogAttr_farValMetaField;
-igMetaField *g_igFogAttr_densityMetaField;
-igMetaField *g_igFogAttr_colorMetaField;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igFogAttr_GetMetaObject(void)
+igMetaObject *igFogAttr::_Meta;
+igMetaField *igFogAttr::k_mode;
+igMetaField *igFogAttr::k_nearVal;
+igMetaField *igFogAttr::k_farVal;
+igMetaField *igFogAttr::k_density;
+igMetaField *igFogAttr::k_color;
+
+igMetaObject *igFogAttr::getClassTypeSafe()
 {
-    igMetaObject *g = g_igFogAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igFogAttr_EnsureRegistered();
-    return g_igFogAttr_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igFogAttr_GetVTable(void) {
-    struct Obj_137df0 obj;
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igFogAttr_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igFogAttr_EnsureRegistered(void)
+void *igFogAttr::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igFogAttr_Register);
+    igFogAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-CallbackArray *igFogAttr_Register(void) {
+void igFogAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igFogAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igFogAttr_metaObject,
+        false,
+        &_Meta,
         Gap::Attrs::igVisualAttribute::arkRegisterInternal,
         Gap::Attrs::igVisualAttribute::getClassMeta,
-        igFogAttr_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igFogAttr",
-        0x2C, /* instance size */
-        igFogAttr_GetVTable,
-        &igFogAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igFogAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
-
-void igFogAttr_GetMetaObjectFunction(void) {
-    igFogAttr_GetMetaObject();
 }
-
-static FieldFactory g_igFogAttr_ctorTable[] = {
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
-};
-static const char *g_igFogAttr_fieldTable[] = {
-    "_mode",
-    "_nearVal",
-    "_farVal",
-    "_density",
-    "_color",
-};
-static igMetaField **g_igFogAttr_fieldHandles[] = {
-    &g_igFogAttr_modeMetaField,
-    &g_igFogAttr_nearValMetaField,
-    &g_igFogAttr_farValMetaField,
-    &g_igFogAttr_densityMetaField,
-    &g_igFogAttr_colorMetaField,
-};
-static int g_igFogAttr_fieldOffsets[] = {
-    12,
-    16,
-    20,
-    24,
-    28,
-};
+}
 
 int g_igFogAttr_modeDefault = 2;
 
-void igFogAttr_InitFields(void) {
-    int base;
-    float sp[4];
-    void *field;
-    void *field2;
-    igMetaObject *meta;
+namespace Gap {
+namespace Attrs {
 
-    meta = g_igFogAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igFogAttr_ctorTable, 5);
-    field = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((Gap::Core::igEnumMetaField *)field)->setDefault(g_igFogAttr_modeDefault);
-    ((igEnumMetaField *)field)->_getMetaEnumFunction = (int)&IG_GFX_FOG_MODE_GetMetaEnum;
-    ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(1000.0f);
-    field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
-    sp[0] = 0.0f;
-    sp[3] = 1.0f;
-    sp[1] = 0.0f;
-    sp[2] = 0.0f;
-    ((Gap::Math::igVec4fMetaField *)field2)->setDefault(*(const igVec4f *)sp);
-    igMetaObject_NameFields(meta, g_igFogAttr_fieldTable, g_igFogAttr_fieldHandles, g_igFogAttr_fieldOffsets, base);
+void igFogAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igEnumMetaField_Create, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Core::igFloatMetaField::_instantiateFromPool, (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool };
+    static const char *names[] = { "_mode", "_nearVal", "_farVal", "_density", "_color" };
+    static igMetaField **enumStorage[] = { &k_mode, &k_nearVal, &k_farVal, &k_density, &k_color };
+    static int offsets[] = { 12, 16, 20, 24, 28 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 5);
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(2);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())IG_GFX_FOG_MODE_GetMetaEnum;
+    }
+    {
+        igFloatMetaField *metaField = (igFloatMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(1000.0f);
+    }
+    {
+        igVec4fMetaField *metaField = (igVec4fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 1.0f));
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+}
+}
 }
 

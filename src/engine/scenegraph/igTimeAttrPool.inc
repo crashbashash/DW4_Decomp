@@ -27,7 +27,7 @@ void igTimeAttrPool_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTimeAttrPool_Register);
 }
 
-static igMetaObjectCallback g_igTimeAttrPool_callbackList[] = { igTimeAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igTimeAttrPool_callbackList[] = { Gap::Attrs::igTimeAttr::arkRegister, 0 };
 
 CallbackArray *igTimeAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();
