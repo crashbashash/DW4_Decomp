@@ -79,7 +79,7 @@ void igFileImagePng_EnsureRegistered(void)
 static igMetaObjectCallback g_igFileImagePng_callbackList[] = { igFile_EnsureRegistered, 0 };
 
 CallbackArray *igFileImagePng_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igFileImagePng_metaObject,

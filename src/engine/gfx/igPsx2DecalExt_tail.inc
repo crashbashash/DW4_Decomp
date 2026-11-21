@@ -51,7 +51,7 @@ void igPsx2DecalExt_EnsureRegistered(void)
 static igMetaObjectCallback g_igPsx2DecalExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2DecalExt_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2DecalExt_metaObject,

@@ -141,7 +141,6 @@
 #include "src/engine/gfx/igGenericCapabilityManager_tail2.inc"
 #include "src/engine/gfx/igExternalImageEntry_tail2.inc"
 #include "src/engine/gfx/igClut_tail2.inc"
-#include "src/engine/gfx/igPsx2Clut_tail2.inc"
 #include "src/engine/gfx/igPsx2IndexArray_tail2.inc"
 #include "src/engine/gfx/igPsx2LongList_tail.inc"
 #include "src/engine/gfx/igCustomStateCollection_tail.inc"

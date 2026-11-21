@@ -265,7 +265,7 @@ void *FUN_00165e50(Self *self, Obj_165e50 *src) {
     /* matching construct: random sweep — the order of the local declarations */
     int k; int nb; Obj_165e50 *dst; Mat *buf; V_165e50 *q; int m; int i; int n; int j; Fl flags; V_165e50 acc, t, nacc, nt; Obj_165e50 *al;
     if (src != 0) {
-    dst = (Obj_165e50 *)igVertexArray_Create(igVisualContext_GetVertexMemoryPool((int *)self));
+    dst = (Obj_165e50 *)Gap::Gfx::igVertexArray::_instantiateFromPool((igMemoryPoolView *)igVisualContext_GetVertexMemoryPool((int *)self));
     flags = *src->v100();
     flags.b &= ~0xF0;
     flags.b &= ~0xF00;
@@ -552,7 +552,6 @@ int FUN_00166fc0(void) {
 int igVisualContext_GetLastError(void) {
     return 0;
 }
-
 
 igSmartPointer<igObject> FUN_00167130(SlotObject_166fe0 *object) {
     return object->f12;

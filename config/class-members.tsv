@@ -1556,3 +1556,107 @@ __internalObjectList	void setCount(int cnt);
 __internalObjectList	int append(igObject *obj);
 __internalObjectList	void insert(int index, igObject *obj);
 __internalObjectList	void set(int index, igObject *obj);
+igIndexArray	IG_ABSTRACT_OBJECT_DEFINE(igIndexArray)
+igIndexArray	static igMetaField *k_memPool;
+igIndexArray	protected: static igMetaField *k_indexData;
+igIndexArray	protected: static igMetaField *k_numIndices;
+igIndexArray	protected: static igMetaField *k_dataSize;
+igIndexArray	protected: static igMetaField *k_usageFlags;
+igIndexArray	virtual unsigned int configure(unsigned int num, unsigned int usageFlags, IG_GFX_INDEX_DATA_SIZE dataSize, igVisualContext *context);
+igIndexArray	virtual unsigned int reconfigure(unsigned int num, unsigned int usageFlags, IG_GFX_INDEX_DATA_SIZE dataSize, igVisualContext *context);
+igIndexArray	inline const unsigned char *getRawIndexData() const { return _indexData; }
+igIndexArray	inline unsigned int getCount() const { return _numIndices; }
+igIndexArray	inline IG_GFX_INDEX_DATA_SIZE getDataSize() const { return (IG_GFX_INDEX_DATA_SIZE)_dataSize; }
+igIndexArray	inline unsigned int getUsageFlags() const { return _usageFlags; }
+igIndexArray	virtual unsigned short *getEditableIndices16(unsigned int editFlags, unsigned int startIndex = 0, unsigned int num = 0xFFFFFFFF);
+igIndexArray	virtual unsigned int *getEditableIndices32(unsigned int editFlags, unsigned int startIndex = 0, unsigned int num = 0xFFFFFFFF);
+igIndexArray	virtual void commitIndexEdits(unsigned short *indices, unsigned int commitFlags, unsigned int startIndex = 0, unsigned int num = 0xFFFFFFFF);
+igIndexArray	virtual void commitIndexEdits(unsigned int *indices, unsigned int commitFlags, unsigned int startIndex = 0, unsigned int num = 0xFFFFFFFF);
+igIndexArray	virtual void setIndex16(unsigned int indexNumber, unsigned short value);
+igIndexArray	virtual void setIndex32(unsigned int indexNumber, unsigned int value);
+igIndexArray	virtual void setIndex(unsigned int indexNumber, unsigned int value);
+igIndexArray	virtual unsigned short getIndex16(unsigned int indexNumber);
+igIndexArray	virtual unsigned int getIndex32(unsigned int indexNumber);
+igIndexArray	virtual unsigned int getIndex(unsigned int indexNumber);
+igIndexArray	inline virtual void reset() {}
+igIndexArray	inline virtual void cache() {}
+igPsx2IndexArray	IG_OBJECT_DEFINE(igPsx2IndexArray)
+igVertexArray	IG_ABSTRACT_OBJECT_DEFINE(igVertexArray)
+igVertexArray	protected: static igMetaField *k_vdata;
+igVertexArray	protected: static igMetaField *k_numVerts;
+igVertexArray	protected: static igMetaField *k_vtype;
+igVertexArray	protected: static igMetaField *k_usageFlags;
+igVertexArray	virtual unsigned int configure(unsigned int vertexFormatFlags, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context) = 0;
+igVertexArray	virtual unsigned int configure(const igVertexFormat &vertexFormat, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context) = 0;
+igVertexArray	virtual const igVertexFormat &getVertexFormat() const = 0;
+igVertexArray	inline virtual void setUsageFlags(unsigned int flags) { _usageFlags = flags; }
+igVertexArray	virtual void getEditableComponent(igVertexArrayLock *componentInfo, unsigned int editFlags) = 0;
+igVertexArray	virtual void commitComponentEdits(const igVertexArrayLock &componentInfo, unsigned int commitFlags) = 0;
+igVertexArray	virtual void setPosition(unsigned int idx, const igVec3f &position) = 0;
+igVertexArray	virtual void getPosition(unsigned int idx, igVec3f &position) const = 0;
+igVertexArray	virtual const igVec3f *getPosition(unsigned int idx) const = 0;
+igVertexArray	virtual void setNormal(unsigned int idx, const igVec3f &normal) = 0;
+igVertexArray	virtual void getNormal(unsigned int idx, igVec3f &normal) const = 0;
+igVertexArray	virtual const igVec3f *getNormal(unsigned int idx) const = 0;
+igVertexArray	virtual void setBinormal(unsigned int idx, const igVec3f &binormal) = 0;
+igVertexArray	virtual void getBinormal(unsigned int idx, igVec3f &binormal) const = 0;
+igVertexArray	virtual const igVec3f *getBinormal(unsigned int idx) const = 0;
+igVertexArray	virtual void setTangent(unsigned int idx, const igVec3f &tangent) = 0;
+igVertexArray	virtual void getTangent(unsigned int idx, igVec3f &tangent) const = 0;
+igVertexArray	virtual const igVec3f *getTangent(unsigned int idx) const = 0;
+igVertexArray	virtual void setColor(unsigned int idx, unsigned int abgr) = 0;
+igVertexArray	virtual void setColor(unsigned int idx, const igVec4f &rgba) = 0;
+igVertexArray	virtual unsigned int getColor(unsigned int idx) const = 0;
+igVertexArray	virtual void getColor(unsigned int idx, igVec4f &rgba) const = 0;
+igVertexArray	virtual void setWeight(unsigned int which, unsigned int idx, float weight) = 0;
+igVertexArray	virtual float getWeight(unsigned int which, unsigned int idx) const = 0;
+igVertexArray	virtual void validateBlendWeights() = 0;
+igVertexArray	virtual void setBlendMatrixIndex(unsigned int which, unsigned int vertexIndex, unsigned char matrixIndex) = 0;
+igVertexArray	virtual unsigned char getBlendMatrixIndex(unsigned int which, unsigned int idx) const = 0;
+igVertexArray	virtual void setTextureCoord(unsigned int which, unsigned int idx, const igVec2f &coord) = 0;
+igVertexArray	virtual void getTextureCoord(unsigned int which, unsigned int idx, igVec2f &coord) const = 0;
+igVertexArray	virtual const igVec2f *getTextureCoord(unsigned int which, unsigned int idx) const = 0;
+igVertexArray	virtual void setPointSpriteSize(unsigned int idx, float size) = 0;
+igVertexArray	virtual float getPointSpriteSize(unsigned int idx) const = 0;
+igVertexArray	virtual void setPointSpriteSize(unsigned int idx, igVec2f size) = 0;
+igVertexArray	virtual void getPointSpriteSize(unsigned int idx, igVec2f &size) const = 0;
+igVertexArray	virtual void setPointSpriteRadian(unsigned int idx, float radian) = 0;
+igVertexArray	virtual float getPointSpriteRadian(unsigned int idx) const = 0;
+igVertexArray	virtual void reset() = 0;
+igVertexArray	virtual unsigned int reconfigure(const igVertexFormat &vertexFormat, unsigned int vertexCount, unsigned int usageFlags, igVisualContext *context) = 0;
+igVertexArray	inline void **getRawVertexData() const { return _vdata; }
+igVertexArray	inline unsigned int getCount() const { return _numVerts; }
+igVertexArray	inline unsigned int getUsageFlags() const { return _usageFlags; }
+igClut	IG_OBJECT_DEFINE(igClut)
+igClut	protected: static igMetaField *k_fmt;
+igClut	protected: static igMetaField *k_numEntries;
+igClut	protected: static igMetaField *k_stride;
+igClut	protected: static igMetaField *k_pData;
+igClut	protected: static igMetaField *k_clutSize;
+igClut	protected: static igMetaField *k_clutDirty;
+igClut	protected: static igMetaField *k_isAlphaScaled;
+igClut	inline void setClutDirty(bool clutDirtyParam) { _clutDirty = clutDirtyParam; }
+igClut	inline bool getClutDirty() const { return _clutDirty; }
+igClut	inline void setIsAlphaScaled(bool isAlphaScaledParam) { _isAlphaScaled = isAlphaScaledParam; }
+igClut	inline bool getIsAlphaScaled() const { return _isAlphaScaled; }
+igClut	inline int getSize() const { return _clutSize; }
+igClut	inline unsigned char *getData() { setClutDirty(true); return _pData; }
+igClut	inline const unsigned char *getData() const { return _pData; }
+igClut	inline int getNumEntries() const { return (int)_numEntries; }
+igClut	inline IG_GFX_TEXTURE_FORMAT getPixelFormat() const { return (IG_GFX_TEXTURE_FORMAT)_fmt; }
+igClut	inline int getStride() const { return _stride; }
+igClut	virtual bool load(const char *fileName);
+igClut	bool loadAct(const char *fileName);
+igClut	virtual bool load(IG_GFX_TEXTURE_FORMAT fmt, unsigned int numEntries, unsigned char *clutData);
+igClut	virtual bool loadBuffer(IG_GFX_TEXTURE_FORMAT fmt, unsigned int numEntries, unsigned char *clutData);
+igClut	void copy(const igClut *src, bool copy = true);
+igClut	void resize(int numClutEntries);
+igClut	virtual void releaseDefaults();
+igClut	int scaleAlpha();
+igClut	int unScaleAlpha();
+igClut	protected: bool scaleAlphaWork();
+igClut	protected: bool unScaleAlphaWork();
+igClut	private: static int estimateClutSizeAndStride(IG_GFX_TEXTURE_FORMAT pfmt, unsigned int nEntries, int &clutSize, int &stride);
+igPsx2Clut	IG_OBJECT_DEFINE(igPsx2Clut)
+igPsx2Clut	private: static igMetaField *k_id;
+igPsx2Clut	private: static igMetaField *k_refCount;

@@ -27,12 +27,12 @@ void igVertexArray1_1_EnsureRegistered(void)
 static igMetaObjectCallback g_igVertexArray1_1_callbackList[] = { igMemoryPool_EnsureRegistered, 0 };
 
 CallbackArray *igVertexArray1_1_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igVertexArray1_1_metaObject,
-        igVertexArray_Register,
-        igVertexArray_GetPublishedMetaObject,
+        Gap::Gfx::igVertexArray::arkRegisterInternal,
+        Gap::Gfx::igVertexArray::getClassMeta,
         igVertexArray1_1_GetMetaObjectFunction,
         "igVertexArray1_1",
         0x30, /* instance size */
@@ -45,10 +45,6 @@ CallbackArray *igVertexArray1_1_Register(void) {
 
 void igVertexArray1_1_GetMetaObjectFunction(void) {
     igVertexArray1_1_GetMetaObject();
-}
-
-igMetaObject *igVertexArray_GetPublishedMetaObject(void) {
-    return g_igVertexArray_metaObject;
 }
 
 static FieldFactory g_igVertexArray1_1_ctorTable[] = {

@@ -107,7 +107,7 @@ void igVertexStream_EnsureRegistered(void)
 static igMetaObjectCallback g_igVertexStream_callbackList[] = { igVertexDataList_EnsureRegistered, 0 };
 
 CallbackArray *igVertexStream_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVertexStream_metaObject,

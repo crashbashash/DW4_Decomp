@@ -81,7 +81,7 @@ void igPsx2VertexArray1_1_EnsureRegistered(void)
 static igMetaObjectCallback g_igPsx2VertexArray1_1_callbackList[] = { Gap::Core::igPointerList::arkRegister, igPsx2LongList_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2VertexArray1_1_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2VertexArray1_1_metaObject,

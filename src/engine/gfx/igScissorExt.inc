@@ -14,7 +14,7 @@ void igScissorExt_EnsureRegistered(void)
 }
 
 CallbackArray *igScissorExt_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igScissorExt_metaObject,

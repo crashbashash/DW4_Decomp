@@ -2130,7 +2130,7 @@
 00149aa0	IG_GFX_DRAW_GetMetaEnum	match	DEFERRED duplicate 0x143720 getClassMeta__Q33Gap4Core10igDataListFv 12B (compared under the profile of its retail unit)
 00149b00	IG_GFX_RENDERDESTINATION_TYPE_GetMetaEnum	match	DEFERRED duplicate 0x143720 getClassMeta__Q33Gap4Core10igDataListFv 12B (compared under the profile of its retail unit)
 00149b60	IG_GFX_STATISTIC_GetMetaEnum	match	DEFERRED duplicate 0x143720 getClassMeta__Q33Gap4Core10igDataListFv 12B (compared under the profile of its retail unit)
-00149bc0	FUN_00149bc0	match	DEFERRED duplicate 0x143720 getClassMeta__Q33Gap4Core10igDataListFv 12B (compared under the profile of its retail unit)
+00149bc0	GfxLibrary_MarkRegistered	match	DEFERRED duplicate 0x143720 getClassMeta__Q33Gap4Core10igDataListFv 12B (compared under the profile of its retail unit)
 00149c30	igVisualContextCapabilityManager_Create	match	DEFERRED duplicate 0x143720 getClassMeta__Q33Gap4Core10igDataListFv 12B (compared under the profile of its retail unit)
 00149c70	igVisualContextCapabilityManager_GetMetaObject	match	DEFERRED duplicate 0x143720 getClassMeta__Q33Gap4Core10igDataListFv 12B (compared under the profile of its retail unit)
 00149cc0	igVisualContextCapabilityManager_GetVTable	match	DEFERRED duplicate 0x143720 getClassMeta__Q33Gap4Core10igDataListFv 12B (compared under the profile of its retail unit)

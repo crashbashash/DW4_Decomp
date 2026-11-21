@@ -22,7 +22,7 @@ void igDecalExt_EnsureRegistered(void)
 }
 
 CallbackArray *igDecalExt_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igDecalExt_metaObject,

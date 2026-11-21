@@ -35,7 +35,7 @@ void igVertexDataList_EnsureRegistered(void)
 static igMetaObjectCallback g_igVertexDataList_callbackList[] = { igVertexData_EnsureRegistered, 0 };
 
 CallbackArray *igVertexDataList_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVertexDataList_metaObject,

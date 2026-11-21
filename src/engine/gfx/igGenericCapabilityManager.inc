@@ -26,7 +26,7 @@ void igGenericCapabilityManager_EnsureRegistered(void)
 }
 
 CallbackArray *igGenericCapabilityManager_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGenericCapabilityManager_metaObject,

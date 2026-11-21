@@ -283,10 +283,10 @@ int ParticleArray_Update(ParticleArray *self, unsigned int num, unsigned int off
     if (self->_vertexArray1 == 0) {
         int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         igObject::release((igObject *)self->_vertexArray1);
-        self->_vertexArray1 = (int)igVertexArray_Create(allocator);
+        self->_vertexArray1 = (int)Gap::Gfx::igVertexArray::_instantiateFromPool((igMemoryPoolView *)allocator);
         allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         igObject::release((igObject *)self->_vertexArray2);
-        self->_vertexArray2 = (int)igVertexArray_Create(allocator);
+        self->_vertexArray2 = (int)Gap::Gfx::igVertexArray::_instantiateFromPool((igMemoryPoolView *)allocator);
         igVertexFormat format;
         format.bits = 0;
         format.setHasPositions(true);

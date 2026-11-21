@@ -38,7 +38,7 @@ void igVertexArray2Helper_EnsureRegistered(void)
 static igMetaObjectCallback g_igVertexArray2Helper_callbackList[] = { igVertexArray2_EnsureRegistered, 0 };
 
 CallbackArray *igVertexArray2Helper_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVertexArray2Helper_metaObject,

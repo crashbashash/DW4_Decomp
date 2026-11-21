@@ -100,7 +100,7 @@ void igPsx2UserUCodeExt_EnsureRegistered(void)
 static igMetaObjectCallback g_igPsx2UserUCodeExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, Gap::Core::igIntMetaField::arkRegister, Gap::Core::igRawRefMetaField::arkRegister, 0 };
 
 CallbackArray *igPsx2UserUCodeExt_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2UserUCodeExt_metaObject,

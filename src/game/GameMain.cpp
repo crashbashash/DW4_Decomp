@@ -268,7 +268,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igAnimationStatePool_RunStaticInit();
     igIniShaderFactory_EnsureRegistered();
     igEnbayaContextPool_RunStaticInit();
-    igClut_EnsureRegistered();
+    Gap::Gfx::igClut::arkRegister();
     igAABox_EnsureRegistered();
     igVertexArray1_1_EnsureRegistered();
     Gap::Attrs::igTextureList::arkRegister();
@@ -287,7 +287,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igGraphPathList_EnsureRegistered();
     igTransform_EnsureRegistered();
     igPrimLengthArray1_1_EnsureRegistered();
-    igIndexArray_EnsureRegistered();
+    Gap::Gfx::igIndexArray::arkRegister();
     Gap::Core::igBoolList::arkRegister();
     Gap::Core::igFloatList::arkRegister();
     Gap::Attrs::igVertexBlendStateAttr::arkRegister();

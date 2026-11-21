@@ -22,7 +22,7 @@ void igLineWidthExt_EnsureRegistered(void)
 }
 
 CallbackArray *igLineWidthExt_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igLineWidthExt_metaObject,

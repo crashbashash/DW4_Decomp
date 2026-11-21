@@ -26,7 +26,7 @@ void igPrimLengthArray1_1_EnsureRegistered(void)
 }
 
 CallbackArray *igPrimLengthArray1_1_Register(void) {
-    FUN_00149bc0();  /* Set-once guard that first runs the sibling registrars it chains to. */
+    GfxLibrary_MarkRegistered();  /* Set-once guard that first runs the sibling registrars it chains to. */
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPrimLengthArray1_1_metaObject,

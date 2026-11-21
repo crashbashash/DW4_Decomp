@@ -12,9 +12,6 @@ struct igVec4f;
 extern "C" {
 #endif
 
-struct igVertexArray *igVertexArray_Create(int allocator);
-void igVertexArray_EnsureRegistered(void);
-struct igMetaObject *igVertexArray_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

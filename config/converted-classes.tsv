@@ -146,3 +146,8 @@ igTimer	Core
 igMedia	Core
 __internalNonRefCountedObjectList	Core
 __internalObjectList	Core
+igIndexArray	Gfx
+igPsx2IndexArray	Gfx
+igVertexArray	Gfx
+igClut	Gfx
+igPsx2Clut	Gfx

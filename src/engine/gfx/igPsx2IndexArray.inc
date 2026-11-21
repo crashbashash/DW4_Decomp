@@ -1,6 +1,7 @@
-igMetaObject *g_igPsx2IndexArray_metaObject;
+namespace Gap {
+namespace Gfx {
 
-void igPsx2IndexArray_GetMetaObjectFunction(void) {
-    igPsx2IndexArray_GetMetaObject();
+igMetaObject *igPsx2IndexArray::_Meta;
+}
 }
 

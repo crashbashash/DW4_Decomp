@@ -86,7 +86,7 @@ void igVertexData_EnsureRegistered(void)
 static igMetaObjectCallback g_igVertexData_callbackList[] = { Gap::Core::igDataList::arkRegister, 0 };
 
 CallbackArray *igVertexData_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVertexData_metaObject,

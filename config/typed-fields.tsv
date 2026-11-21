@@ -77,3 +77,9 @@ igExternalIndexedEntry	_objectType	igSmartPointer<igMetaObject>
 igExternalInfoEntry	_key	igStringRef
 igExternalInfoEntry	_infoName	igStringRef
 __internalNonRefCountedObjectList	_data	igObject **
+igIndexArray	_memPool	igSmartPointer<igMemoryPool>
+igIndexArray	_indexData	unsigned char *
+igVertexArray	_vdata	void **
+igClut	_pData	unsigned char *
+igClut	_clutDirty	bool
+igClut	_isAlphaScaled	bool

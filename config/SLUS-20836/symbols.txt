@@ -2137,7 +2137,7 @@
 00149aa0 000054 IG_GFX_DRAW_GetMetaEnum
 00149b00 000054 IG_GFX_RENDERDESTINATION_TYPE_GetMetaEnum
 00149b60 000054 IG_GFX_STATISTIC_GetMetaEnum
-00149bc0 000064 FUN_00149bc0
+00149bc0 000064 GfxLibrary_MarkRegistered
 00149c30 000034 igVisualContextCapabilityManager_Create
 00149c70 000048 igVisualContextCapabilityManager_GetMetaObject
 00149cc0 00008c igVisualContextCapabilityManager_GetVTable

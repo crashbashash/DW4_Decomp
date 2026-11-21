@@ -82,7 +82,7 @@ void igExternalImageEntry_EnsureRegistered(void)
 }
 
 CallbackArray *igExternalImageEntry_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igExternalImageEntry_metaObject,

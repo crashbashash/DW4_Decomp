@@ -1,74 +1,64 @@
-igMetaObject *igPsx2Clut_GetMetaObject(void)
+namespace Gap {
+namespace Gfx {
+
+igMetaObject *igPsx2Clut::getClassTypeSafe()
 {
-    igMetaObject *g = g_igPsx2Clut_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igPsx2Clut_EnsureRegistered();
-    return g_igPsx2Clut_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igPsx2Clut_GetVTable(void) {
-    struct Obj_154450 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igPsx2Clut_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igPsx2Clut_EnsureRegistered(void)
+void *igPsx2Clut::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igPsx2Clut_Register);
+    igPsx2Clut temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-CallbackArray *igPsx2Clut_Register(void) {
-    FUN_00149bc0();
+void igPsx2Clut::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igPsx2Clut::arkRegisterInternal()
+{
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igPsx2Clut_metaObject,
-        igClut_Register,
-        igClut_GetPublishedMetaObject,
-        igPsx2Clut_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Gfx::igClut::arkRegisterInternal,
+        Gap::Gfx::igClut::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igPsx2Clut",
-        0x28, /* instance size */
-        igPsx2Clut_GetVTable,
-        &igPsx2Clut_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igPsx2Clut),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-igMetaObject *igClut_GetPublishedMetaObject(void) {
-    return g_igClut_metaObject;
+void igPsx2Clut::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igIntMetaField_Create, igIntMetaField_Create };
+    static const char *names[] = { "_id", "_refCount" };
+    static igMetaField **enumStorage[] = { &k_id, &k_refCount };
+    static int offsets[] = { 32, 36 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(-1);
+        metaField->_persistent = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_persistent = 0;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+    *(void (**)())&_Meta->_writeProxy = (void (*)())Gap::Gfx::igClut::getClassMetaSafe;
 }
-
-static FieldFactory g_igPsx2Clut_ctorTable[] = {
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-};
-static const char *g_igPsx2Clut_fieldTable[] = {
-    "_id",
-    "_refCount",
-};
-static igMetaField **g_igPsx2Clut_fieldHandles[] = {
-    &g_igPsx2Clut_idMetaField,
-    &g_igPsx2Clut_refCountMetaField,
-};
-static int g_igPsx2Clut_fieldOffsets[] = {
-    32,
-    36,
-};
-
-void igPsx2Clut_InitFields(void) {
-    int fieldStart;
-    void *temp_v0;
-    igMetaObject *meta;
-    meta = g_igPsx2Clut_metaObject;
-    fieldStart = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igPsx2Clut_ctorTable, 2);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((Gap::Core::igIntMetaField *)temp_v0)->setDefault(-1);
-    *(char *)((char *)(temp_v0) + 38) = 0;
-    *(char *)((char *)(igMetaObject_GetFieldAt(meta, fieldStart + 1)) + 38) = 0;
-    igMetaObject_NameFields(meta, g_igPsx2Clut_fieldTable, g_igPsx2Clut_fieldHandles, g_igPsx2Clut_fieldOffsets, fieldStart);
-    *(int *)((char *)(g_igPsx2Clut_metaObject) + 64) = (int)igClut_GetMetaObjectFunction;
+}
 }
 

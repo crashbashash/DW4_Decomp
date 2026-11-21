@@ -881,7 +881,7 @@ void beFont_ReplaceVertexArray(beFont *self, igGeometryAttr *geometry, int fontI
     allocator = (g_useOwnerAllocator != 0) ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     held = vertices.p;
     igObject::release(held);
-    vertices.p = (igVertexArray *)igVertexArray_Create((int)allocator);
+    vertices.p = (igVertexArray *)Gap::Gfx::igVertexArray::_instantiateFromPool((igMemoryPoolView *)allocator);
     format = ((beFontImage **)((beFontImageList *)self->_fonts)->_data)[fontIndex]->_vertexFlags;
     format = format & ~4u;
     ((igVertexArrayView *)vertices.p)->configure(format, vertexCount, 0, 0);

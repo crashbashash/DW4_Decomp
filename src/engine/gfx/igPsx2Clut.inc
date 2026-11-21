@@ -1,9 +1,10 @@
-igMetaObject *g_igPsx2Clut_metaObject;
-igMetaField *g_igPsx2Clut_idMetaField;
-igMetaField *g_igPsx2Clut_refCountMetaField;
+namespace Gap {
+namespace Gfx {
 
-void igPsx2Clut_GetMetaObjectFunction(void) {
-    igPsx2Clut_GetMetaObject();
+igMetaObject *igPsx2Clut::_Meta;
+igMetaField *igPsx2Clut::k_id;
+igMetaField *igPsx2Clut::k_refCount;
+}
 }
 
 igMetaObject *igCapabilityManager_GetOrCreateMetaObject(void) {

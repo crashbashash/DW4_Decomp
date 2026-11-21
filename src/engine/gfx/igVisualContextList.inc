@@ -29,7 +29,7 @@ void igVisualContextList_EnsureRegistered(void)
 static igMetaObjectCallback g_igVisualContextList_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
 
 CallbackArray *igVisualContextList_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVisualContextList_metaObject,

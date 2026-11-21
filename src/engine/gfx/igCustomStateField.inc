@@ -73,7 +73,7 @@ void igCustomStateField_EnsureRegistered(void)
 static igMetaObjectCallback g_igCustomStateField_callbackList[] = { Gap::Core::igMetaField::arkRegister, 0 };
 
 CallbackArray *igCustomStateField_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCustomStateField_metaObject,

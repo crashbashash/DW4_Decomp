@@ -81,7 +81,7 @@ void beWaterPlainInfoRam_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beWaterPlainInfoRam_Register);
 }
 
-static igMetaObjectCallback g_beWaterPlainInfoRam_callbackList[] = { igVertexArray_EnsureRegistered, Gap::Core::igFloatList::arkRegister, Gap::Core::igIntList::arkRegister, igFloatListList_EnsureRegistered, beWaterMove_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beWaterPlainInfoRam_callbackList[] = { Gap::Gfx::igVertexArray::arkRegister, Gap::Core::igFloatList::arkRegister, Gap::Core::igIntList::arkRegister, igFloatListList_EnsureRegistered, beWaterMove_EnsureRegistered, 0 };
 
 CallbackArray *beWaterPlainInfoRam_Register(void) {
     BecLibrary_MarkRegistered();
@@ -235,7 +235,7 @@ void beWaterPlainInfoRam_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beWaterPlainInfoRam_ctorTable, 0x1B);
     vertexArray = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xA));
-    ((igObjectRefMetaField *)vertexArray)->_metaObject = (int)igVertexArray_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)vertexArray)->_metaObject = (int)Gap::Gfx::igVertexArray::getClassTypeLazy();
     dampeningGrid = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xB));
     ((igObjectRefMetaField *)dampeningGrid)->_metaObject = (int)Gap::Core::igFloatList::getClassTypeLazy();
     ((igRefMetaField *)dampeningGrid)->_construct = 1;

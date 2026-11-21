@@ -43,7 +43,7 @@ void igParticleFormat_EnsureRegistered(void)
 }
 
 CallbackArray *igParticleFormat_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igParticleFormat_metaObject,

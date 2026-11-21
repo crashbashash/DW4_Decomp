@@ -36,7 +36,7 @@ void igCustomStateFieldList_EnsureRegistered(void)
 static igMetaObjectCallback g_igCustomStateFieldList_callbackList[] = { igCustomStateField_EnsureRegistered, 0 };
 
 CallbackArray *igCustomStateFieldList_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCustomStateFieldList_metaObject,

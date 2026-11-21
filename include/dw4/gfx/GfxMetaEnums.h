@@ -3,6 +3,11 @@
 
 struct igMetaEnum;
 
+/* DW4's metaenum has the kit's first two values; there is no 8-bit size. */
+typedef enum IG_GFX_INDEX_DATA_SIZE {
+    IG_GFX_INDEX_SIZE_16_BIT, IG_GFX_INDEX_SIZE_32_BIT
+} IG_GFX_INDEX_DATA_SIZE;
+
 typedef enum IG_GFX_TEXTURE_WRAP {
     IG_GFX_TEXTURE_WRAP_CLAMP, IG_GFX_TEXTURE_WRAP_REPEAT, IG_GFX_TEXTURE_WRAP_REGION_CLAMP, IG_GFX_TEXTURE_WRAP_REGION_REPEAT
 } IG_GFX_TEXTURE_WRAP;

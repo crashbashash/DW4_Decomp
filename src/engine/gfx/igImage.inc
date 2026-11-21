@@ -46,10 +46,10 @@ void igImage_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igImage_Register);
 }
 
-static igMetaObjectCallback g_igImage_callbackList[] = { igClut_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igImage_callbackList[] = { Gap::Gfx::igClut::arkRegister, 0 };
 
 CallbackArray *igImage_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igImage_metaObject,
@@ -188,7 +188,7 @@ void igImage_InitFields(void) {
     *(int *)((char *)(temp_s1_2) + 60) = (int)Gap::Core::igCharMetaField::getMetaField();
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xD)))->setDefault(1);
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xF));
-    *(int *)((char *)(temp_s1_3) + 56) = (int)igClut_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s1_3) + 56) = (int)Gap::Gfx::igClut::getClassTypeLazy();
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x11)))->setDefault(-1);
     igMetaObject_NameFields(meta, g_igImage_fieldTable, g_igImage_fieldHandles, g_igImage_fieldOffsets, fieldStart);
     *(int *)((char *)(g_igImage_metaObject) + 60) = (int)igPsx2Image_GetMetaObjectFunction;

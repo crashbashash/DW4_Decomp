@@ -13253,6 +13253,10 @@
 005248e0	100	.vtables	00130000	match
 00524950	92	.vtables	002b5d50	match
 005249b0	100	.vtables	002b5d50	match
+00526760	148	.vtables	001493e0	match
+005269f0	104	.vtables	001493e0	match
+00526a60	104	.vtables	001493e0	match
+00526ad0	148	.vtables	001493e0	match
 005271e0	244	.vtables	001869e0	match
 005272e0	244	.vtables	001869e0	match
 005273e0	244	.vtables	001869e0	match

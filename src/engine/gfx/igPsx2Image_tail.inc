@@ -49,7 +49,7 @@ void igPsx2Image_EnsureRegistered(void)
 }
 
 CallbackArray *igPsx2Image_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2Image_metaObject,

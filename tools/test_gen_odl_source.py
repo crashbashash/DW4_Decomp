@@ -281,6 +281,14 @@ class RetailRoles(unittest.TestCase):
         self.assertEqual(roles["arkRegisterInitialize"], 0x44c7f0)
         self.assertEqual(self.lib.library_of("igRenderer"), "Gui")
 
+    def test_gfx_classes_are_found_through_the_gfx_latch(self):
+        # every gfx registrar calls GfxLibrary_MarkRegistered (0x149bc0) first, which names the library
+        roles = self.lib.classes["igIndexArray"]
+        self.assertEqual(roles["latch"], 0x149bc0)
+        self.assertEqual(roles["arkRegisterInternal"], 0x14d8a0)
+        self.assertEqual(self.lib.library_of("igIndexArray"), "Gfx")
+        self.assertEqual(self.lib.library_of("igPsx2IndexArray"), "Gfx")
+
     def test_fragment(self):
         written, rows, failed, _w = odl.generate(
             self.lib, ["igRenderer"], os.path.join(ROOT, "config", "class-members.tsv"),

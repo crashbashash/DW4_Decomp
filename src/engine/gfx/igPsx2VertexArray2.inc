@@ -34,7 +34,7 @@ void igPsx2VertexArray2_EnsureRegistered(void)
 }
 
 CallbackArray *igPsx2VertexArray2_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2VertexArray2_metaObject,

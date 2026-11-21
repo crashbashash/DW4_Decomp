@@ -157,7 +157,6 @@ void igPsx2VertexArray1_1_GetNormal(igVertexArray *self, int arg1, void *arg2) {
 /* Address of vertex `vertexIndex` in the array's vertex data: `_vdata` points at a block whose
  * second word (+4) is the base of the 12-byte (three-float) entries. */
 
-
 int igPsx2VertexArray1_1_GetNormalPointer(igPsx2VertexArray1_1 *self, int vertexIndex) {
     return *(int *)((char *)(self->_vdata) + 4) + (vertexIndex * VERTEX_ENTRY_SIZE);
 }
@@ -372,7 +371,7 @@ void igPsx2VertexArray1_1_UserMakeConcrete(igPsx2VertexArray1_1 *self, int arg1)
     unsigned int temp_a4;
 
     FUN_0015e050((S_arg0_15e050 *)self);
-    if ((int)g_igVertexArray_metaObject == arg1) {
+    if (Gap::Gfx::igVertexArray::getClassMeta() == (igMetaObject *)arg1) {
         FUN_0015e2b0((igVertexArray1_1 *)self, arg1);
     }
     FUN_0017d170((V_17d170 *)self);

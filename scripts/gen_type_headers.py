@@ -109,8 +109,10 @@ KIT_VECTOR = {
 # `setDefault(const igMatrix44f &)`, igAttr's `getUnitCount(igCapabilityManager *)`): declared ahead under C++.
 # A matrix field stays sixteen floats unless config/typed-fields.tsv types it igMatrix44f, the kit's type whose
 # constructor gives the class holding it one (the matrix attrs' retail vtable probes construct theirs);
-# igCapabilityManager has no reflected record here.
-FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager")
+# igCapabilityManager has no reflected record here. igVertexArray's slots take the vertex format word and the
+# component lock (the kit's igComponentEditInfo) by reference or pointer; the units that build formats define
+# the format word with the accessors they use.
+FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager", "igVertexFormat", "igVertexArrayLock")
 # Kit headers reflected.h reads under C++ for the types converted classes name: the kit's enums (igGfx/igGfx.h:
 # IG_GFX_ALPHA_FUNCTION, ...) the attributes' accessors take and return while their fields keep the reflected
 # `int` storage (the kit's igEnum), igMatrix44f for a typed matrix field, and igVertexComponentFilter, the mask

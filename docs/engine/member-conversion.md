@@ -439,13 +439,24 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `setTextureSourceLevel`, 0x16de00) are not decompiled. The dispatch view's named slots (the state getters 51-250,
    `deleteRenderDestination` 45, `deleteLight` 76, `deleteRenderList` 191, `getCapability` 35, `deleteTexture` 129)
    then become `vc->name(...)`, the attrs' `igSmartPointer<igVisualContext>` fields hold the Gap class, and the
-   view retires once no caller is left. igImage, igVertexArray and igIndexArray follow, which unblock the texture
-   group's flat smart pointers and the geometry attrs. igIndexArray's retail vtable (0x526760) already holds every
-   slot 21-34 (igPsx2IndexArray overrides only `getMeta`): `configure`/`reconfigure` take the kit's four
-   parameters, `getEditableIndices16/32`, two `commitIndexEdits`, `setIndex16/32`, `setIndex`, `getIndex16/32`,
-   `getIndex`, and the inline `reset` (its copy at 0x13d020 is attrs') and `cache`; there is no 8-bit pair. The
-   gfx classes' registration is igen's, but tools/gen_odl_source.py finds no gfx class until gfx's
-   library-registered marker (unnamed, at 0x149bc0) carries its name;
+   view retires once no caller is left. The gfx classes' registration is igen's: gfx's latch at 0x149bc0 is
+   `GfxLibrary_MarkRegistered` (it tests and sets `g_GfxLibrary_registered` and registers the eight extensions, as
+   core's latch registers its threads), so tools/gen_odl_source.py finds the gfx classes (`--library Gfx`).
+   Converted so far (specs in scratch/Gfx2/specs/index.py, vertex.py, clut.py): `igIndexArray` and
+   `igPsx2IndexArray` (alchemy-kit_202309 igGfx/igIndexArray.h; retail's vtable 0x526760 holds every slot 21-34
+   and the PS2 class overrides only `getMeta`: `configure`/`reconfigure` with the kit's four parameters,
+   `getEditableIndices16/32`, two `commitIndexEdits`, `setIndex16/32`, `setIndex`, `getIndex16/32`, `getIndex`,
+   the inline `reset`, whose copy is attrs' 0x13d020, and `cache`; no 8-bit pair; `setIndex`/`getIndex` narrow
+   the index they pass to the 16-bit pair, whose own parameter is the kit's unsigned int; `_memPool` a smart
+   pointer, so the gfx unit compiles both vtables), the abstract `igVertexArray` (igGfx/igVertexArray.h: DW4's
+   pure slots 21-58 in the kit's order, read off igPsx2VertexArray1_1's vtable, with the inline `setUsageFlags`
+   as slot 24, whose copy is attrs' 0x13f800; the format word and DW4's component lock `igVertexArrayLock`, the
+   kit's igComponentEditInfo, are declared ahead in reflected.h; no retail vtable, its subclasses stay flat), and
+   `igClut`/`igPsx2Clut` (igGfx/igClut.h: slots 21-23 `load(fileName)`, `load(fmt, numEntries, clutData)`,
+   `loadBuffer`; `releaseDefaults` frees the table; DW4's `copy` returns nothing and `scaleAlpha`/`unScaleAlpha`
+   return int, which their callers use unmasked; `loadAct` still reads through the igFile view). Still flat:
+   igVertexArray1_1/igPsx2VertexArray1_1 (about 50 slot bodies on stand-in views), the igVertexArray2 family,
+   igImage/igPsx2Image (23 slots), and the geometry attrs that wait on them;
 6. the game's `be*` classes last.
 
 ## Known differences and gaps

@@ -56,7 +56,7 @@ void igVisualContext_EnsureRegistered(void)
 static igMetaObjectCallback g_igVisualContext_callbackList[] = { Gap::Core::igTimer::arkRegister, igVertexArray2_EnsureRegistered, igCustomStateCollectionList_EnsureRegistered, igCustomStateFieldList_EnsureRegistered, igMemoryPool_EnsureRegistered, 0 };
 
 CallbackArray *igVisualContext_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igVisualContext_metaObject,

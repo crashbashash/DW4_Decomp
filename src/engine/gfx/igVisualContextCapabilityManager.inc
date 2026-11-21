@@ -3,7 +3,7 @@ igMetaField *g_igVisualContextCapabilityManager_visualContextMetaField;
 
 unsigned char g_GfxLibrary_registered;
 
-void FUN_00149bc0(void) {
+void GfxLibrary_MarkRegistered(void) {
     if (g_GfxLibrary_registered == 0) {
         g_GfxLibrary_registered = 1;
         igUserUCodeExt_EnsureRegistered();
@@ -51,7 +51,7 @@ void igVisualContextCapabilityManager_EnsureRegistered(void)
 static igMetaObjectCallback g_igVisualContextCapabilityManager_callbackList[] = { igVisualContext_EnsureRegistered, 0 };
 
 CallbackArray *igVisualContextCapabilityManager_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVisualContextCapabilityManager_metaObject,

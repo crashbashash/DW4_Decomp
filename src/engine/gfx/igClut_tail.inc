@@ -1,191 +1,200 @@
-static inline unsigned int clutSize(const struct S_154980 *c) { return c->f24; }
+namespace Gap {
+namespace Gfx {
 
-int Gap__Gfx__igClut__vfunc_25(struct S_154980 *arg0, int arg1, int arg2, int arg3) {
-    int sp5C;
-    int sp58;
-    if (arg3 != 0 && arg0->f20 == arg3 && arg1 == arg0->f8 && arg1 != -1) {
-        FUN_00154e40((S0_154e40 *)arg0, arg2);
-        return 1;
+bool igClut::loadBuffer(IG_GFX_TEXTURE_FORMAT fmt, unsigned int numEntries, unsigned char *clutData)
+{
+    int clutSize;
+    int stride;
+
+    if (clutData != 0 && _pData == clutData && fmt == _fmt && fmt != IG_GFX_TEXTURE_FORMAT_INVALID) {
+        resize(numEntries);
+        return true;
     }
-    if (arg0->f20 != 0) {
-        ((Gap::Core::igObject *)arg0)->free((void *)arg0->f20);
+    if (_pData != 0) {
+        free(_pData);
     }
-    arg0->f8 = arg1;
-    arg0->f12 = arg2;
-    FUN_00154b80(arg1, arg2, &sp5C, &sp58);
-    arg0->f24 = sp5C;
-    arg0->f16 = sp58;
-    arg0->f20 = (int)((Gap::Core::igObject *)arg0)->mallocAligned(arg0->f24, 0x80);
-    if (arg3 != 0) {
-        memcpy((void *)arg0->f20, (void *)arg3, clutSize(arg0));
+    _fmt = fmt;
+    _numEntries = numEntries;
+    estimateClutSizeAndStride(fmt, numEntries, clutSize, stride);
+    _clutSize = clutSize;
+    _stride = stride;
+    _pData = (unsigned char *)mallocAligned(_clutSize, 0x80);
+    if (clutData != 0) {
+        memcpy(_pData, clutData, getSize());
     } else {
-        memset((void *)arg0->f20, 0, clutSize(arg0));
+        memset(_pData, 0, getSize());
     }
-    return 1;
+    return true;
 }
 
-int Gap__Gfx__igClut__vfunc_24(void **arg0) {
-    int temp_s0;
+bool igClut::load(IG_GFX_TEXTURE_FORMAT fmt, unsigned int numEntries, unsigned char *clutData)
+{
+    bool result;
 
-    temp_s0 = ((DW4VC_100_0 *)(arg0))->vX() & 0xFF;
-    FUN_00154d40((Obj_154d40 *)arg0);
-    return temp_s0;
+    result = loadBuffer(fmt, numEntries, clutData);
+    scaleAlpha();
+    return result;
 }
 
-unsigned char igClut_UnscaleAlpha(igClut *clut)
+bool igClut::unScaleAlphaWork()
 {
     unsigned int i;
     unsigned char *entry;
-    unsigned char unscaled = 0;
+    bool done = false;
 
-    if (clut->_fmt == 7) {
-        entry = (unsigned char *)clut->_pData;
-        for (i = 0; i < clut->_numEntries; i++) {
+    if (_fmt == IG_GFX_TEXTURE_FORMAT_RGBA_8888_32) {
+        entry = _pData;
+        for (i = 0; i < _numEntries; i++) {
             entry[3] = (entry[3] & 0x80) ? ~(entry[3] & 0xFF) << 1 : entry[3] << 1;
             entry += 4;
         }
-        unscaled = 1;
-    } else if (clut->_fmt != 5) {
-        return 0;
+        done = true;
+    } else if (_fmt != IG_GFX_TEXTURE_FORMAT_RGB_888_24) {
+        return false;
     }
-    return unscaled;
+    return done;
 }
 
-int FUN_00154b40(Obj_154b40 *arg0) {
-    int temp_v0;
-    if (arg0->f29 != 0) {
-        temp_v0 = igClut_UnscaleAlpha((igClut *)arg0);
-        arg0->f29 = 0U;
-        return temp_v0 & 0xFF;
+int igClut::unScaleAlpha()
+{
+    int result;
+
+    if (_isAlphaScaled) {
+        result = unScaleAlphaWork();
+        _isAlphaScaled = false;
+        return result;
     }
-    return 1;
+    return true;
 }
 
-int FUN_00154b80(int arg0, int arg1, int *arg2, int *arg3) {
-    switch (arg0) {
-    case 0x0: *arg3 = 1; break;
-    case 0x1: *arg3 = 1; break;
-    case 0x2: *arg3 = 1; break;
-    case 0x3: *arg3 = 2; break;
-    case 0x4: *arg3 = 1; break;
-    case 0x5: *arg3 = 3; break;
-    case 0x6: *arg3 = 1; break;
-    case 0x7: *arg3 = 4; break;
-    case 0x8: *arg3 = 2; break;
-    case 0x10000: *arg3 = 1; break;
-    case 0x10001: *arg3 = 1; break;
+int igClut::estimateClutSizeAndStride(IG_GFX_TEXTURE_FORMAT pfmt, unsigned int nEntries, int &clutSize, int &stride)
+{
+    switch (pfmt) {
+    case IG_GFX_TEXTURE_FORMAT_L_8: stride = 1; break;
+    case IG_GFX_TEXTURE_FORMAT_A_8: stride = 1; break;
+    case IG_GFX_TEXTURE_FORMAT_LA_44_8: stride = 1; break;
+    case IG_GFX_TEXTURE_FORMAT_LA_88_16: stride = 2; break;
+    case IG_GFX_TEXTURE_FORMAT_RGB_332_8: stride = 1; break;
+    case IG_GFX_TEXTURE_FORMAT_RGB_888_24: stride = 3; break;
+    case IG_GFX_TEXTURE_FORMAT_RGBA_2222_8: stride = 1; break;
+    case IG_GFX_TEXTURE_FORMAT_RGBA_8888_32: stride = 4; break;
+    case IG_GFX_TEXTURE_FORMAT_RGBA_5551_16: stride = 2; break;
+    case IG_GFX_TEXTURE_FORMAT_X_8: stride = 1; break;
+    case IG_GFX_TEXTURE_FORMAT_X_4: stride = 1; break;
     default:
-        *arg2 = -2;
-        *arg3 = -2;
-        return *arg2;
+        clutSize = -2;
+        stride = -2;
+        return clutSize;
     }
-    *arg2 = arg1 * *arg3;
-    return *arg2;
+    clutSize = nEntries * stride;
+    return clutSize;
 }
 
-void FUN_00154c90(igClut *arg0, igClut *arg1, int arg2) {
-    int temp_a1;
-    unsigned int sz;
-
-    if (arg0 != arg1) {
-        temp_a1 = arg0->_pData;
-        if (temp_a1 != 0) {
-            ((Gap::Core::igObject *)arg0)->free((void *)temp_a1);
-            arg0->_pData = 0;
+void igClut::copy(const igClut *src, bool copy)
+{
+    if (this != src) {
+        if (_pData != 0) {
+            free(_pData);
+            _pData = 0;
         }
-        arg0->_fmt = arg1->_fmt;
-        arg0->_numEntries = arg1->_numEntries;
-        arg0->_stride = arg1->_stride;
-        arg0->_clutSize = arg1->_clutSize;
-        arg0->_isAlphaScaled = arg1->_isAlphaScaled;
-        if (arg2 != 0) {
-            arg0->_pData = (int)((Gap::Core::igObject *)arg0)->mallocAligned(arg0->_clutSize, 0x80);
-            sz = arg0->_clutSize;
-            memcpy((void *)arg0->_pData, (void *)arg1->_pData, sz);
+        _fmt = src->_fmt;
+        _numEntries = src->_numEntries;
+        _stride = src->_stride;
+        _clutSize = src->_clutSize;
+        _isAlphaScaled = src->_isAlphaScaled;
+        if (copy) {
+            _pData = (unsigned char *)mallocAligned(_clutSize, 0x80);
+            memcpy(_pData, src->_pData, (unsigned int)_clutSize);
         }
     }
 }
 
-int FUN_00154d40(Obj_154d40 *arg0) {
-    int temp_v0;
-    if (arg0->f29 == 0) {
-        temp_v0 = FUN_00154d90((igClut *)arg0) & 0xFF;
-        arg0->f29 = 1U;
-        return temp_v0;
+int igClut::scaleAlpha()
+{
+    int result;
+
+    if (!_isAlphaScaled) {
+        result = scaleAlphaWork();
+        _isAlphaScaled = true;
+        return result;
     }
-    return 1;
+    return true;
 }
 
-unsigned char FUN_00154d90(igClut *clut)
+bool igClut::scaleAlphaWork()
 {
     unsigned int i;
     unsigned char *entry;
-    unsigned char scaled = 0;
+    bool done = false;
 
-    if (clut->_fmt == 7) {
-        entry = (unsigned char *)clut->_pData;
-        for (i = 0; i < clut->_numEntries; i++) {
+    if (_fmt == IG_GFX_TEXTURE_FORMAT_RGBA_8888_32) {
+        entry = _pData;
+        for (i = 0; i < _numEntries; i++) {
             entry[3] = (entry[3] >> 1) + (entry[3] & 1);
             entry += 4;
         }
-        scaled = 1;
-    } else if (clut->_fmt != 5) {
-        return 0;
+        done = true;
+    } else if (_fmt != IG_GFX_TEXTURE_FORMAT_RGB_888_24) {
+        return false;
     }
-    return scaled;
+    return done;
 }
 
-void igClut_ReleaseDefaults(S0 *arg0) {
-    int temp_a1;
-
-    temp_a1 = arg0->f14;
-    if (temp_a1 != 0) {
-        ((Gap::Core::igObject *)arg0)->free((void *)temp_a1);
-        arg0->f14 = 0;
+void igClut::releaseDefaults()
+{
+    if (_pData != 0) {
+        free(_pData);
+        _pData = 0;
     }
 }
 
-void FUN_00154e40(S0_154e40 *arg0, int arg1) {
-    if (arg1 != arg0->fC) {
-        arg0->f14 = (int)((Gap::Core::igObject *)arg0)->reallocAligned((void *)arg0->f14, arg1 * arg0->f10, 0x80);
-        arg0->fC = arg1;
-        arg0->f18 = (int)((int) (arg1 * arg0->f10));
+void igClut::resize(int numClutEntries)
+{
+    if (numClutEntries != _numEntries) {
+        _pData = (unsigned char *)reallocAligned(_pData, numClutEntries * _stride, 0x80);
+        _numEntries = numClutEntries;
+        _clutSize = numClutEntries * _stride;
     }
 }
 
-int Gap__Gfx__igClut__vfunc_23(int arg0, int arg1) {
-    int temp_v0;
+bool igClut::load(const char *fileName)
+{
+    const char *extension;
 
-    temp_v0 = FUN_0015ad50((char *)arg1);
-    if (temp_v0 != 0) {
-        if (strcmp((char *)temp_v0, ".act") != 0) {
-            if (strcmp((char *)temp_v0, ".ACT") == 0) {
-                goto block_4;
-            }
-            goto block_5;
-        }
-block_4:
-        return FUN_00154f30((Arr *)arg0, arg1);
+    extension = (const char *)FUN_0015ad50((char *)fileName);
+    if (extension != 0 && (strcmp(extension, ".act") == 0 || strcmp(extension, ".ACT") == 0)) {
+        return loadAct(fileName);
     }
-block_5:
-    return 0;
+    return false;
 }
 
-int FUN_00154f30(Arr *self, int arg1) {
-    int a, b;
+bool igClut::loadAct(const char *fileName)
+{
+    int pool;
+    int allocator;
     int i;
     int *p;
-    a = (int)((Gap::Core::igObject *)self)->getMemoryPool();
-    if (g_useOwnerAllocator != 0) { b = a; } else { b = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary); } a = b;
-    igSmartPointer<DW4VC_100_2> h((DW4VC_100_2 *)igFile_Create(a), kRetainReference);
-    { DW4VC_100_2 *x = h.p; --x->_refCount; if ((x->_refCount & 0x7fffff) == 0) igObject_Destroy(x); }
-    if (self->a20 != 0) ((Gap::Core::igObject *)self)->free(self->a20);
-    self->a20 = 0;
-    if (h.p->vX(arg1, (int)"rb") == 0) {
-        return 0;
+
+    pool = (int)getMemoryPool();
+    if (g_useOwnerAllocator != 0) {
+        allocator = pool;
+    } else {
+        allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
     }
-    self->a20 = (void *)((Gap::Core::igObject *)self)->mallocAligned(0x400, 0x80);
-    p = (int *)self->a20;
+    pool = allocator;
+    igSmartPointer<DW4VC_100_2> h((DW4VC_100_2 *)igFile_Create(pool), kRetainReference);
+    {
+        DW4VC_100_2 *x = h.p;
+        --x->_refCount;
+        if ((x->_refCount & 0x7fffff) == 0) igObject_Destroy(x);
+    }
+    if (_pData != 0) free(_pData);
+    _pData = 0;
+    if (h.p->vX((int)fileName, (int)"rb") == 0) {
+        return false;
+    }
+    _pData = (unsigned char *)mallocAligned(0x400, 0x80);
+    p = (int *)_pData;
     i = 0;
     do {
         h.p->v25((int)p, 1, 3);
@@ -194,11 +203,13 @@ int FUN_00154f30(Arr *self, int arg1) {
         p++;
     } while ((unsigned)i < 0x100);
     if ((unsigned)i < 0x100) memset(p, 0, (0x100 - i) * 4);
-    self->a24 = 0x400;
-    self->a16 = 4;
-    self->a12 = 0x100;
-    self->a8 = 7;
+    _clutSize = 0x400;
+    _stride = 4;
+    _numEntries = 0x100;
+    _fmt = IG_GFX_TEXTURE_FORMAT_RGBA_8888_32;
     h.p->v24();
-    return 1;
+    return true;
+}
+}
 }
 

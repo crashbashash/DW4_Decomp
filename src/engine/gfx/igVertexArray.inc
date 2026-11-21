@@ -1,92 +1,73 @@
-igMetaObject *g_igVertexArray_metaObject;
-igMetaField *g_igVertexArray_vdataMetaField;
-igMetaField *g_igVertexArray_numVertsMetaField;
-igMetaField *g_igVertexArray_vtypeMetaField;
-igMetaField *g_igVertexArray_usageFlagsMetaField;
+namespace Gap {
+namespace Gfx {
 
-igVertexArray *igVertexArray_Create(int allocator) {
-    igVertexArray_EnsureRegistered();
-    return (igVertexArray *)igMetaObject_CreateInstance(g_igVertexArray_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *igVertexArray::_Meta;
+igMetaField *igVertexArray::k_vdata;
+igMetaField *igVertexArray::k_numVerts;
+igMetaField *igVertexArray::k_vtype;
+igMetaField *igVertexArray::k_usageFlags;
 
-igMetaObject *igVertexArray_GetOrCreateMetaObject(void) {
-    if (g_igVertexArray_metaObject == 0) {
-        g_igVertexArray_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igVertexArray_metaObject;
-}
-
-igMetaObject *igVertexArray_GetMetaObject(void)
+igVertexArray *igVertexArray::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igVertexArray_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igVertexArray_EnsureRegistered();
-    return g_igVertexArray_metaObject;
+    arkRegister();
+    return (igVertexArray *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-void igVertexArray_EnsureRegistered(void)
+igMetaObject *igVertexArray::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igVertexArray_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igVertexArray_Register(void) {
-    FUN_00149bc0();
+igMetaObject *igVertexArray::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void igVertexArray::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igVertexArray::arkRegisterInternal()
+{
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igVertexArray_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igVertexArray_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igVertexArray",
-        0x18, /* instance size */
+        sizeof(igVertexArray),
         0,
-        &igVertexArray_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igVertexArray_GetMetaObjectFunction(void) {
-    igVertexArray_GetMetaObject();
+void igVertexArray::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igMemoryRefMetaField_Create, igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create };
+    static const char *names[] = { "_vdata", "_numVerts", "_vtype", "_usageFlags" };
+    static igMetaField **enumStorage[] = { &k_vdata, &k_numVerts, &k_vtype, &k_usageFlags };
+    static int offsets[] = { 8, 12, 16, 20 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 4);
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_memType = (int)Gap::Core::igMemoryRefMetaField::getMetaField();
+        metaField->_deepCopyMethod = 0;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+    *(void (**)())&_Meta->_abstractProxy = (void (*)())igPsx2VertexArray1_1_GetMetaObjectFunction;
 }
-
-static FieldFactory g_igVertexArray_ctorTable[] = {
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-};
-static const char *g_igVertexArray_fieldTable[] = {
-    "_vdata",
-    "_numVerts",
-    "_vtype",
-    "_usageFlags",
-};
-static igMetaField **g_igVertexArray_fieldHandles[] = {
-    &g_igVertexArray_vdataMetaField,
-    &g_igVertexArray_numVertsMetaField,
-    &g_igVertexArray_vtypeMetaField,
-    &g_igVertexArray_usageFlagsMetaField,
-};
-static int g_igVertexArray_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    20,
-};
-
-void igVertexArray_InitFields(void) {
-    int fieldStart;
-    void *temp_s1;
-    igMetaObject *meta;
-
-    meta = g_igVertexArray_metaObject;
-    fieldStart = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igVertexArray_ctorTable, 4);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    *(int *)((char *)(temp_s1) + 60) = (int)Gap::Core::igMemoryRefMetaField::getMetaField();
-    *(char *)((char *)(temp_s1) + 40) = 0;
-    igMetaObject_NameFields(meta, g_igVertexArray_fieldTable, g_igVertexArray_fieldHandles, g_igVertexArray_fieldOffsets, fieldStart);
-    *(int *)((char *)(g_igVertexArray_metaObject) + 60) = (int)(&igPsx2VertexArray1_1_GetMetaObjectFunction);
+}
 }
 

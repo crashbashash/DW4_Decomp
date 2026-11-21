@@ -397,7 +397,6 @@ struct Rc { int w0; int refs; };
 #include "dw4/attrs/igAlphaFunctionAttr.h"
 #include "dw4/datapump/igMatrixObjectList.h"
 #include "dw4/gfx/igBlendEquationExt.h"
-#include "dw4/gfx/igIndexArray.h"
 #include "dw4/gfx/igParticleArray.h"
 #include "dw4/gfx/igPrimLengthArray.h"
 #include "dw4/gfx/igScissorExt.h"

@@ -14,7 +14,7 @@ void igImageUtils_EnsureRegistered(void)
 }
 
 CallbackArray *igImageUtils_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igImageUtils_metaObject,

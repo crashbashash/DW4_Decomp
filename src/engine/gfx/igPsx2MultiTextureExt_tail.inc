@@ -78,7 +78,7 @@ void igPsx2MultiTextureExt_EnsureRegistered(void)
 static igMetaObjectCallback g_igPsx2MultiTextureExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2MultiTextureExt_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2MultiTextureExt_metaObject,

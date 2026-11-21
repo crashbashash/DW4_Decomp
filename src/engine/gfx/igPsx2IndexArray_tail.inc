@@ -1,52 +1,48 @@
-igMetaObject *igPsx2IndexArray_GetMetaObject(void)
+namespace Gap {
+namespace Gfx {
+
+igMetaObject *igPsx2IndexArray::getClassTypeSafe()
 {
-    igMetaObject *g = g_igPsx2IndexArray_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igPsx2IndexArray_EnsureRegistered();
-    return g_igPsx2IndexArray_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igPsx2IndexArray_GetVTable(void) {
-    Obj_153aa0 obj;
-    int r;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.ref = 0;
-    obj.vt = &DAT_00526760[0];
-    obj.vt = &g_igPsx2IndexArray_vtable[0];
-    r = *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-    obj.vt = &DAT_00526760[0];
-    obj.releaseRef();
-    return r;
-}
-
-void igPsx2IndexArray_EnsureRegistered(void)
+void *igPsx2IndexArray::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igPsx2IndexArray_Register);
+    igPsx2IndexArray temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-CallbackArray *igPsx2IndexArray_Register(void) {
-    FUN_00149bc0();
+void igPsx2IndexArray::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igPsx2IndexArray::arkRegisterInternal()
+{
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igPsx2IndexArray_metaObject,
-        igIndexArray_Register,
-        igIndexArray_GetPublishedMetaObject,
-        igPsx2IndexArray_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Gfx::igIndexArray::arkRegisterInternal,
+        Gap::Gfx::igIndexArray::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igPsx2IndexArray",
-        0x1C, /* instance size */
-        igPsx2IndexArray_GetVTable,
-        igPsx2IndexArray_InitFields_00153bd0,     /* Field adder. */
-        0,                                            /* extra callback-vector item (none) */
-        0                                             /* zero-terminated callback-vector item list (none) */
+        sizeof(igPsx2IndexArray),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-igMetaObject *FUN_00153bc0(void) {
-    return g_igIndexArray_metaObject;
-}
+void igPsx2IndexArray::arkRegisterInitialize()
+{
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
 
-void FUN_00153bd0(void) {
-    *(int *)((char *)(g_igPsx2IndexArray_metaObject) + 64) = (int)(&igIndexArray_GetMetaObjectFunction);
+    *(void (**)())&metaObject->_writeProxy = (void (*)())Gap::Gfx::igIndexArray::getClassMetaSafe;
+}
+}
 }
 

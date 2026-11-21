@@ -36,10 +36,8 @@ void igTransformFunctionList_EnsureRegistered(void);
 void igVec3fList_EnsureRegistered(void);
 
 /* Gfx */
-void igClut_EnsureRegistered(void);
 void igExternalImageEntry_EnsureRegistered(void);
 void igImage_EnsureRegistered(void);
-void igIndexArray_EnsureRegistered(void);
 void igParticleFormat_EnsureRegistered(void);
 void igPrimLengthArray1_1_EnsureRegistered(void);
 void igTrackedElementMetaField_EnsureRegistered(void);

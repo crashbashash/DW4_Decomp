@@ -728,7 +728,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                     }
                     igSmartPointer<igGeometry> geometry(igGeometry_CreateInstance(MovieAllocator(self)));
                     igSmartPointer<igGeometryAttrDispatchView> geometryAttr((igGeometryAttrDispatchView *)igGeometryAttr_Create(MovieAllocator(self)));
-                    igSmartPointer<igVertexArrayDispatchView> vertices((igVertexArrayDispatchView *)igVertexArray_Create(MovieAllocator(self)));
+                    igSmartPointer<igVertexArrayDispatchView> vertices((igVertexArrayDispatchView *)Gap::Gfx::igVertexArray::_instantiateFromPool((igMemoryPoolView *)MovieAllocator(self)));
                     vertices->configure(format, 4, 2, 0);
                     /* the quad's left edge (0) and right edge (1), top vertex then bottom */
                     for (int edge = 0; edge <= 1; edge++) {

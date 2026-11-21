@@ -19,7 +19,7 @@ void igImageConvert_EnsureRegistered(void)
 }
 
 CallbackArray *igImageConvert_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igImageConvert_metaObject,

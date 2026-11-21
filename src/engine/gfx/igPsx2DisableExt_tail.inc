@@ -52,7 +52,7 @@ void igPsx2DisableExt_EnsureRegistered(void)
 static igMetaObjectCallback g_igPsx2DisableExt_callbackList[] = { igPsx2VisualContext_EnsureRegistered, 0 };
 
 CallbackArray *igPsx2DisableExt_Register(void) {
-    FUN_00149bc0();
+    GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2DisableExt_metaObject,

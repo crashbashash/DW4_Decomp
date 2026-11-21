@@ -110,7 +110,6 @@ StringRef FUN_001554a0(int arg1) {
     return StringRef((char *)r);
 }
 
-
 void *igObject_GetMetaObject_Virtual(void){return Gap::Core::igObject::getClassMeta();}
 
 void FUN_00155c00(igResult *out, Owner *owner, int id) {
@@ -343,8 +342,8 @@ void FUN_001563b0(igImage *self, igImage *source, int deep) {
         if (source->_pClut != 0) {
             int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
             igObject::release((igObject *)self->_pClut);
-            self->_pClut = igClut_Create(allocator);
-            FUN_00154c90((igClut *)self->_pClut, (igClut *)source->_pClut, 1);
+            self->_pClut = (int)Gap::Gfx::igClut::_instantiateFromPool((igMemoryPoolView *)allocator);
+            ((Gap::Gfx::igClut *)self->_pClut)->copy((Gap::Gfx::igClut *)source->_pClut, 1);
         }
     }
 }
@@ -409,8 +408,8 @@ void FUN_001566c0(S_1566c0 *arg0, S_1566c0 *arg1, int arg2, int arg3, int arg4, 
     if (arg1->f68 != 0) {
         void **a2 = (void **)((Gap::Core::igObject *)arg0)->getMemoryPool();
         release(arg0->f68);
-        arg0->f68 = (T_1566c0 *)igClut_Create((int)a2);
-        FUN_00154c90((igClut *)arg0->f68, (igClut *)arg1->f68, 1);
+        arg0->f68 = (T_1566c0 *)Gap::Gfx::igClut::_instantiateFromPool((igMemoryPoolView *)a2);
+        ((Gap::Gfx::igClut *)arg0->f68)->copy((Gap::Gfx::igClut *)arg1->f68, 1);
     }
     if ((arg1->f84 + (arg1->f64 + (arg1->f72 + (arg1->f40 + (arg1->f36 + (arg1->f28 + arg1->f32)))))) & 7) {
         FUN_00157200((igImage *)arg0, arg1->f44, (igImage *)arg0);
@@ -534,12 +533,11 @@ void FUN_00156ba0(igImage *self, int width, int height, igImage *source) {
     self->_pImage = (int)pixels;
     self->_localImage = 1;
     if (FUN_00159f70(source->_pfmt) && source != self && source->_pClut != 0) {
-        igSmartPointer<igObject> clut((igObject *)igClut_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
-        FUN_00154c90((igClut *)clut.p, (igClut *)source->_pClut, 1);
+        igSmartPointer<igObject> clut((igObject *)Gap::Gfx::igClut::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
+        ((Gap::Gfx::igClut *)clut.p)->copy((Gap::Gfx::igClut *)source->_pClut, 1);
         FUN_00156b20((S0_156b20 *)self, (S1_156b20 *)clut.p);
     }
 }
-
 
 bool FUN_00157140(O_157140 *arg0, int arg1, igSmartPointer<igImageConvertRows> converter) {
     bool r = false;
@@ -559,7 +557,6 @@ bool FUN_00157140(O_157140 *arg0, int arg1, igSmartPointer<igImageConvertRows> c
     }
     return r;
 }
-
 
 unsigned char FUN_00157200(igImage *self, int format, igImage *source) {
     igSmartPointer<igImageConvertRows> convert((igImageConvertRows *)igImageConvert_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
@@ -634,8 +631,8 @@ unsigned char FUN_00157200(igImage *self, int format, igImage *source) {
             clut = (igObject *)self->_pClut;
         }
     } else if (FUN_00159f70(source->_pfmt) && FUN_00159f70(format) && source->_pClut != 0) {
-        clut = (igObject *)igClut_Create((int)poolOf(self, kIGMemoryPoolHandleClut));
-        FUN_00154c90((igClut *)clut, (igClut *)source->_pClut, 1);
+        clut = (igObject *)Gap::Gfx::igClut::_instantiateFromPool(poolOf(self, kIGMemoryPoolHandleClut));
+        ((Gap::Gfx::igClut *)clut)->copy((Gap::Gfx::igClut *)source->_pClut, 1);
     }
     sourceClut = source->_pClut;
     if ((unsigned int)(format - IG_GFX_TEXTURE_FORMAT_RGB_DXT1) <= 3 || format == IG_GFX_TEXTURE_FORMAT_TILED_DXT1_GAMECUBE ||
@@ -727,7 +724,6 @@ void FUN_00157a50(void **arg0, void **arg1) {
     }
     ((DW4VC_152_2 *)(arg0))->vX((int)(var_s0), (int)(0));
 }
-
 
 void FUN_00158400(S0_158400 *arg0, int arg1, int arg2) {
     int temp_a0;
@@ -1451,7 +1447,6 @@ void FUN_00159a80(int format, int *bitsInt, int *bitsIdx, int *bitsRed, int *bit
     }
 }
 
-
 int FUN_00159f00(int a) {
     int r;
     switch (a) {
@@ -1599,7 +1594,7 @@ int FUN_0015a380(S_15a380 *arg0) {
         FUN_0015a300((unsigned char *)arg0->f52, arg0->f8 * arg0->f12, arg0->f44);
     }
     if (FUN_00159f70(arg0->f44) != 0 && arg0->f68 != 0) {
-        return FUN_00154b40((Obj_154b40 *)arg0->f68);
+        return ((Gap::Gfx::igClut *)arg0->f68)->unScaleAlpha();
     }
     return 1;
 }
@@ -1649,7 +1644,7 @@ int FUN_0015a600(T_15a600 *arg0) {
     if (FUN_00159f70(arg0->f2c) != 0) {
         t = arg0->f44;
         if (t != 0) {
-            return FUN_00154d40((Obj_154d40 *)t);
+            return ((Gap::Gfx::igClut *)t)->scaleAlpha();
         }
     }
     return 1;
@@ -1683,7 +1678,6 @@ void FUN_0015a6a0(Img *arg0, E *out) {
         r1 += w;
     }
 }
-
 
 void FUN_0015aaf0(unsigned char *dst, unsigned char *src, int count)
 {
@@ -1778,127 +1772,118 @@ int FUN_0015ad50(char *arg0) {
     return 0;
 }
 
-int FUN_0015adb0(S0_15adb0 *arg0, int arg1, int arg2, int arg3) {
-    int var_s1;
-    Rc_15adb0 *temp_a0;
-    V_15adb0 *temp_a0_2;
-    Rc_15adb0 *temp_v0;
+namespace Gap {
+namespace Gfx {
 
-    if (arg0->f12 != 0) {
+unsigned int igIndexArray::configure(unsigned int num, unsigned int usageFlags, IG_GFX_INDEX_DATA_SIZE dataSize, igVisualContext *context)
+{
+    unsigned int size;
+
+    if (_indexData != 0) {
         return 0;
     }
-    arg0->f16 = arg1;
-    arg0->f20 = arg3;
-    arg0->f24 = arg2;
-    if (arg3 == 0) {
-        var_s1 = arg0->f16 * 2;
+    _numIndices = num;
+    _dataSize = dataSize;
+    _usageFlags = usageFlags;
+    if (dataSize == IG_GFX_INDEX_SIZE_16_BIT) {
+        size = _numIndices * 2;
     } else {
-        var_s1 = arg0->f16 * 4;
+        size = _numIndices * 4;
     }
-    if (arg0->f8 == 0) {
-        temp_v0 = (Rc_15adb0 *)((Gap::Core::igObject *)arg0)->getMemoryPool();
-        if (temp_v0 != 0) {
-            temp_v0->rc = temp_v0->rc + 1;
-        }
-        temp_a0 = (Rc_15adb0 *)arg0->f8;
-        if (temp_a0 != 0) {
-            temp_a0->rc = temp_a0->rc - 1;
-            if ((temp_a0->rc & 0x7FFFFF) == 0) {
-                igObject_Destroy((igObject *)temp_a0);
-            }
-        }
-        arg0->f8 = (V_15adb0 *)temp_v0;
+    if (_memPool == 0) {
+        _memPool = (igMemoryPool *)getMemoryPool();
     }
-    temp_a0_2 = arg0->f8;
-    arg0->f12 = temp_a0_2->vX(var_s1);
-    return var_s1;
+    _indexData = (unsigned char *)((igMemoryPoolView *)_memPool.p)->malloc(size);
+    return size;
 }
 
-int FUN_0015aea0(O_15aea0 *arg0, unsigned int arg1, int arg2, int arg3, int arg4) {
-    unsigned int n;
-    int *s1;
-    unsigned short *s0;
-    int ret;
+unsigned int igIndexArray::reconfigure(unsigned int num, unsigned int usageFlags, IG_GFX_INDEX_DATA_SIZE dataSize, igVisualContext *context)
+{
+    unsigned int count;
+    unsigned int *oldIndices32;
+    unsigned short *oldIndices16;
+    unsigned int result;
     unsigned int i;
-    int *d4;
-    short *d2;
+    unsigned int *indices32;
+    unsigned short *indices16;
 
-    n = arg0->f10;
-    n = (n < arg1) ? n : arg1;
-    s1 = 0;
-    s0 = 0;
-    arg0->v33();
-    if (arg3 == 0) {
-        s0 = (unsigned short *)arg0->f0c;
+    count = _numIndices;
+    count = (count < num) ? count : num;
+    oldIndices32 = 0;
+    oldIndices16 = 0;
+    reset();
+    if (dataSize == IG_GFX_INDEX_SIZE_16_BIT) {
+        oldIndices16 = (unsigned short *)_indexData;
     } else {
-        s1 = (int *)arg0->f0c;
+        oldIndices32 = (unsigned int *)_indexData;
     }
-    arg0->f0c = 0;
-    arg0->f10 = 0;
-    ret = arg0->v21(arg1, arg2, arg3, arg4);
-    if (s0 != 0) {
-        if (arg3 == 0) {
-            memcpy(arg0->f0c, s0, n * 2);
+    _indexData = 0;
+    _numIndices = 0;
+    result = configure(num, usageFlags, dataSize, context);
+    if (oldIndices16 != 0) {
+        if (dataSize == IG_GFX_INDEX_SIZE_16_BIT) {
+            memcpy(_indexData, oldIndices16, count * 2);
         } else {
-            d4 = (int *)arg0->f0c;
-            for (i = 0; i < n; i++) {
-                d4[i] = s0[i];
+            indices32 = (unsigned int *)_indexData;
+            for (i = 0; i < count; i++) {
+                indices32[i] = oldIndices16[i];
             }
         }
-        Memory_FreeBuffer(s0);
+        Memory_FreeBuffer(oldIndices16);
     } else {
-        if (arg3 == 1) {
-            memcpy(arg0->f0c, s1, n * 4);
+        if (dataSize == IG_GFX_INDEX_SIZE_32_BIT) {
+            memcpy(_indexData, oldIndices32, count * 4);
         } else {
-            d2 = (short *)arg0->f0c;
-            for (i = 0; i < n; i++) {
-                d2[i] = s1[i];
+            indices16 = (unsigned short *)_indexData;
+            for (i = 0; i < count; i++) {
+                indices16[i] = oldIndices32[i];
             }
         }
-        Memory_FreeBuffer(s1);
+        Memory_FreeBuffer(oldIndices32);
     }
-    arg0->v34();
-    return ret;
+    cache();
+    return result;
 }
 
-/* Empty override (a bare return) in vtable slot 36 of Gap::Core::igPsx2IndexArray, next to slot
- * 35, which is also empty. */
-void FUN_0015b050(void) {
+void igIndexArray::setIndex16(unsigned int indexNumber, unsigned short value)
+{
+    ((unsigned short *)_indexData)[indexNumber] = value;
 }
 
-void FUN_0015b060(void *arg0, int arg1, int arg2) {
-    *(short *)(*(int *)((char *)(arg0) + 12) + (arg1 * 2)) = arg2;
+void igIndexArray::setIndex32(unsigned int indexNumber, unsigned int value)
+{
+    ((unsigned int *)_indexData)[indexNumber] = value;
 }
 
-void FUN_0015b080(void *arg0, int arg1, int arg2) {
-    *(int *)(*(int *)((char *)(arg0) + 12) + (arg1 * 4)) = arg2;
+void igIndexArray::setIndex(unsigned int indexNumber, unsigned int value)
+{
+    switch (_dataSize) {
+    case IG_GFX_INDEX_SIZE_32_BIT:
+        setIndex32(indexNumber, value);
+        break;
+    case IG_GFX_INDEX_SIZE_16_BIT:
+        setIndex16((unsigned short)indexNumber, value);
+        break;
+    }
 }
 
-void FUN_0015b0a0(void *a0, int arg1, int arg2) {
- O_15b0a0 *arg0=(O_15b0a0*)a0;
-switch (arg0->f14) {
- case 1: ((VC_120 *)arg0)->vX(); break;
- case 0: ((VC_116 *)arg0)->vX(arg1 & 0xFFFF, arg2 & 0xFFFF); break;
- }
+unsigned short igIndexArray::getIndex16(unsigned int indexNumber)
+{
+    return ((unsigned short *)_indexData)[indexNumber];
 }
 
-unsigned short FUN_0015b100(void *arg0, int arg1) {
-    return *(int *)(*(int *)((char *)(arg0) + 12) + (arg1 * 2));
+unsigned int igIndexArray::getIndex32(unsigned int indexNumber)
+{
+    return ((unsigned int *)_indexData)[indexNumber];
 }
 
-int FUN_0015b120(void *arg0, int arg1) {
-    return *(int *)(*(int *)((char *)(arg0) + 12) + (arg1 * 4));
-}
-
-int FUN_0015b140(igPsx2IndexArray *self, int index) {
-    int dataSize;
-
-    dataSize = self->_dataSize;
-    switch (dataSize) {
-    case 1:
-        return ((IndexArrayWideReadSlot *)(self))->ReadWide(index);
-    case 0:
-        return ((IndexArrayNarrowReadSlot *)(self))->ReadNarrow((int)(index & 0xFFFF)) & 0xFFFF;
+unsigned int igIndexArray::getIndex(unsigned int indexNumber)
+{
+    switch (_dataSize) {
+    case IG_GFX_INDEX_SIZE_32_BIT:
+        return getIndex32(indexNumber);
+    case IG_GFX_INDEX_SIZE_16_BIT:
+        return getIndex16((unsigned short)indexNumber);
     default:
         return 0;
     }
@@ -1906,20 +1891,24 @@ int FUN_0015b140(igPsx2IndexArray *self, int index) {
 
 /* arg1 is unused but must stay: the value arrives in the third parameter (a2), and a two-parameter
  * spelling would put it in a1. */
-int FUN_0015b1a0(int arg0, int arg1, int arg2) {
-    return *(int *)((char *)(arg0) + 12) + (arg2 * 2);
+unsigned short *igIndexArray::getEditableIndices16(unsigned int editFlags, unsigned int startIndex, unsigned int num)
+{
+    return (unsigned short *)_indexData + startIndex;
 }
 
-int FUN_0015b1b0(int arg0, int arg1, int arg2) {
-    return *(int *)((char *)(arg0) + 12) + (arg2 * 4);
+unsigned int *igIndexArray::getEditableIndices32(unsigned int editFlags, unsigned int startIndex, unsigned int num)
+{
+    return (unsigned int *)_indexData + startIndex;
 }
 
-void FUN_0015b1c0(void) {
+void igIndexArray::commitIndexEdits(unsigned short *indices, unsigned int commitFlags, unsigned int startIndex, unsigned int num) {
 
 }
 
-void FUN_0015b1d0(void) {
+void igIndexArray::commitIndexEdits(unsigned int *indices, unsigned int commitFlags, unsigned int startIndex, unsigned int num) {
 
+}
+}
 }
 
 void FUN_0015b1e0(void *arg0) {

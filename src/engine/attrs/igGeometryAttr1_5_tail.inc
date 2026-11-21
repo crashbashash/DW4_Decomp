@@ -14,7 +14,7 @@ void igGeometryAttr1_5_SynchronizeDefault(void) {
 
 extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_32(igGeometryAttr1_5 *self, int a, int b, int c, int d) {
     if (self->_vertexArray == 0) {
-        igObject *created = (igObject *)igVertexArray_Create((int)((Gap::Core::igObject *)self)->getMemoryPool());
+        igObject *created = (igObject *)Gap::Gfx::igVertexArray::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool());
         igObject *previous;
         igObject::ref(created);
         previous = (igObject *)self->_vertexArray;

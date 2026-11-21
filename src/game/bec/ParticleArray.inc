@@ -45,7 +45,7 @@ void ParticleArray_EnsureRegistered(void)
     igMetaObject_RunStaticInit(ParticleArray_Register);
 }
 
-static igMetaObjectCallback g_ParticleArray_callbackList[] = { igVertexArray_EnsureRegistered, 0 };
+static igMetaObjectCallback g_ParticleArray_callbackList[] = { Gap::Gfx::igVertexArray::arkRegister, 0 };
 
 CallbackArray *ParticleArray_Register(void) {
     BecLibrary_MarkRegistered();
@@ -136,10 +136,10 @@ void ParticleArray_InitFields(void) {
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 2)))->setDefault(1);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(0.0f);
     vertexArray1 = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
-    ((igObjectRefMetaField *)vertexArray1)->_metaObject = (int)igVertexArray_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)vertexArray1)->_metaObject = (int)Gap::Gfx::igVertexArray::getClassTypeLazy();
     ((igMetaField *)vertexArray1)->_persistent = 0;
     vertexArray2 = (void *)(igMetaObject_GetFieldAt(meta, base + 7));
-    ((igObjectRefMetaField *)vertexArray2)->_metaObject = (int)igVertexArray_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)vertexArray2)->_metaObject = (int)Gap::Gfx::igVertexArray::getClassTypeLazy();
     ((igMetaField *)vertexArray2)->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 8))->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 9))->_persistent = 0;
