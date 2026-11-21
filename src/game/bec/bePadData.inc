@@ -72,8 +72,8 @@ void bePadData_GetMetaObjectFunction(void)
 
 static FieldFactory g_bePadData_ctorTable[] = {
     igBoolMetaField_Create,
-    igVec2fMetaField_CreateInstance,
-    igVec2fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool,
     igIntMetaField_Create,
     igIntMetaField_Create,
     igIntMetaField_Create,
@@ -177,9 +177,9 @@ void bePadData_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_bePadData_ctorTable, 0x16);
     LStick = ((int)igMetaObject_GetFieldAt(meta, base + 1));
-    igVec2fMetaField_SetDefault((igMetaField *)LStick, igVec2f(0.0f, 0.0f).vec);
+    ((Gap::Math::igVec2fMetaField *)LStick)->setDefault(igVec2f(0.0f, 0.0f));
     RStick = ((int)igMetaObject_GetFieldAt(meta, base + 2));
-    igVec2fMetaField_SetDefault((igMetaField *)RStick, igVec2f(0.0f, 0.0f).vec);
+    ((Gap::Math::igVec2fMetaField *)RStick)->setDefault(igVec2f(0.0f, 0.0f));
     igMetaObject_NameFields(meta, g_bePadData_fieldTable, g_bePadData_fieldHandles, g_bePadData_fieldOffsets, base);
 }
 

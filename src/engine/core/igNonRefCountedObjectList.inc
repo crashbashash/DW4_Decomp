@@ -27,8 +27,8 @@ CallbackArray *igNonRefCountedObjectList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igNonRefCountedObjectList_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igNonRefCountedObjectList_GetMetaObjectFunction,
         "igNonRefCountedObjectList",
         0x14,

@@ -50,7 +50,7 @@ void igVertexBlendMatrixAttr_GetMetaObjectFunction(void) {
 }
 
 static FieldFactory g_igVertexBlendMatrixAttr_ctorTable[] = {
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
     (FieldFactory)igUnsignedShortMetaField_Create,
 };
 static const char *g_igVertexBlendMatrixAttr_fieldTable[] = {
@@ -76,8 +76,8 @@ void igVertexBlendMatrixAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igVertexBlendMatrixAttr_ctorTable, 2);
     field = (int)igMetaObject_GetFieldAt(meta, base);
-    FUN_0018c640((igMetaField *)field, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
-                                                   igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
+    ((Gap::Math::igMatrix44fMetaField *)field)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                   igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
     tf = (int)igMetaObject_GetFieldAt(meta, base + 1);
     ((igMetaField *)tf)->_invarianceFunction = (int)&igVertexBlendMatrixAttr_SynchronizeCachedUnitID;
     igMetaObject_NameFields(meta, g_igVertexBlendMatrixAttr_fieldTable, g_igVertexBlendMatrixAttr_fieldHandles, g_igVertexBlendMatrixAttr_fieldOffsets, base);

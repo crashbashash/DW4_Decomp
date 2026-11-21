@@ -55,8 +55,8 @@ static FieldFactory g_beModelCtrlSCHitBox_ctorTable[] = {
     igIntMetaField_Create,
     igIntMetaField_Create,
     igFloatMetaField_Create,
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     igBoolMetaField_Create,
 };
 static const char *g_beModelCtrlSCHitBox_fieldTable[] = {

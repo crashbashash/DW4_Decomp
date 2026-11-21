@@ -31,8 +31,8 @@ CallbackArray *igPsx2AudioSourceList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2AudioSourceList_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igPsx2AudioSourceList_GetMetaObjectFunction,
         "igPsx2AudioSourceList",
         0x14, /* instance size */
@@ -46,6 +46,4 @@ CallbackArray *igPsx2AudioSourceList_Register(void) {
 void igPsx2AudioSourceList_GetMetaObjectFunction(void) {
     igPsx2AudioSourceList_GetMetaObject();
 }
-
-igMetaObject *igDataList_GetPublishedMetaObject(void){return g_igDataList_metaObject;}
 

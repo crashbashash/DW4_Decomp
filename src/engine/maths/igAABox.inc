@@ -58,8 +58,8 @@ void igAABox_GetMetaObjectFunction(void) {
 }
 
 static FieldFactory g_igAABox_ctorTable[] = {
-    (FieldFactory)igVec3fMetaField_CreateInstance,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
 };
 
 static const char *g_igAABox_fieldTable[] = {
@@ -92,12 +92,12 @@ void igAABox_InitFields(void) {
     va[0] = 3.402823466e+38f;
     va[1] = 3.402823466e+38f;
     va[2] = 3.402823466e+38f;
-    igVec3fMetaField_SetDefault((igMetaField *)field, va);
+    ((Gap::Math::igVec3fMetaField *)field)->setDefault(*(const igVec3f *)va);
     field2 = (int)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1);
     vb[0] = -3.402823466e+38f;
     vb[1] = -3.402823466e+38f;
     vb[2] = -3.402823466e+38f;
-    igVec3fMetaField_SetDefault((igMetaField *)field2, vb);
+    ((Gap::Math::igVec3fMetaField *)field2)->setDefault(*(const igVec3f *)vb);
     igMetaObject_NameFields((igMetaObject *)meta, (const char **)g_igAABox_fieldTable, (igMetaField ***)g_igAABox_fieldHandles, (int *)g_igAABox_fieldOffsets, base);
 }
 
@@ -406,7 +406,6 @@ int igAABox_IntersectPoint(const igAABox *box, const float *point) {
     }
     return 0;
 }
-
 
 void igAABox_ExtendByRay(igAABox *box, igRay *ray) {
     Box *bounds = (Box *)box;

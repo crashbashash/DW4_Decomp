@@ -82,7 +82,7 @@ void beShadow01_GetMetaObjectFunction(void)
 
 static FieldFactory g_beShadow01_ctorTable[] = {
     igObjectRefMetaField_Create,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
 };
 static const char *g_beShadow01_fieldTable[] = {
     "_svInfoList",

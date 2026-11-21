@@ -75,8 +75,8 @@ void igVertexBlendMatrixListAttr_GetMetaObjectFunction(void) {
 
 static FieldFactory g_igVertexBlendMatrixListAttr_ctorTable[] = {
     (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
     (FieldFactory)igRawRefMetaField_Create,
     (FieldFactory)igBoolMetaField_Create,
     (FieldFactory)igBoolMetaField_Create,

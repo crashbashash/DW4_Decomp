@@ -500,7 +500,7 @@ igMetaObject *igCommonTraversal_GetPublishedMetaObject(void) {
 }
 
 static FieldFactory g_igFrustCullTraversal_ctorTable[] = {
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
     (FieldFactory)igRawRefMetaField_Create,
     (FieldFactory)igRawRefMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
@@ -547,8 +547,8 @@ void igFrustCullTraversal_InitFields(void) {
     temp_s0 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igFrustCullTraversal_ctorTable, 7);
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0)));
-    FUN_0018c640((igMetaField *)temp_s2, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
-                                                     igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
+    ((Gap::Math::igMatrix44fMetaField *)temp_s2)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                     igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 3)));
     ((igObjectRefMetaField *)temp_s2_2)->_metaObject = (int)igClippingStateAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_2)->_construct = 1;

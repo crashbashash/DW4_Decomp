@@ -85,17 +85,17 @@ void igLightAttr_GetMetaObjectFunction(void) {
 static FieldFactory g_igLightAttr_ctorTable[] = {
     (FieldFactory)igEnumMetaField_Create,
     (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     (FieldFactory)igFloatMetaField_Create,
     (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     (FieldFactory)igObjectRefMetaField_Create,
     (FieldFactory)igBoolMetaField_Create,
     (FieldFactory)igBoolMetaField_Create,
@@ -186,23 +186,23 @@ void igLightAttr_InitFields(void) {
     field->_isAlikeShallowMethod = 3;
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 2);
     vh[0] = 0; vh[1] = 0; vh[2] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)field, vh);
+    ((Gap::Math::igVec3fMetaField *)field)->setDefault(*(const igVec3f *)vh);
     field->_invarianceFunction = (void (*)())igLightAttr_MarkChanged;
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 3);
     vc[3] = 1.0f; vc[0] = 0.6f; vc[1] = 0.6f; vc[2] = 0.6f;
-    igVec4fMetaField_SetDefault((igMetaField *)field, vc);
+    ((Gap::Math::igVec4fMetaField *)field)->setDefault(*(const igVec4f *)vc);
     field->_invarianceFunction = (void (*)())igLightAttr_MarkChanged;
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 4);
     vb[0] = 1.0f; vb[1] = 1.0f; vb[2] = 1.0f; vb[3] = 1.0f;
-    igVec4fMetaField_SetDefault((igMetaField *)field, vb);
+    ((Gap::Math::igVec4fMetaField *)field)->setDefault(*(const igVec4f *)vb);
     field->_invarianceFunction = (void (*)())igLightAttr_MarkChanged;
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 5);
     va[3] = 1.0f; va[0] = 0; va[1] = 0; va[2] = 0;
-    igVec4fMetaField_SetDefault((igMetaField *)field, va);
+    ((Gap::Math::igVec4fMetaField *)field)->setDefault(*(const igVec4f *)va);
     field->_invarianceFunction = (void (*)())igLightAttr_MarkChanged;
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 6);
     vg[2] = 1.0f; vg[0] = 0; vg[1] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)field, vg);
+    ((Gap::Math::igVec3fMetaField *)field)->setDefault(*(const igVec3f *)vg);
     field->_invarianceFunction = (void (*)())igLightAttr_MarkChanged;
     tv = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 7);
     tv->_invarianceFunction = (void (*)())igLightAttr_MarkChanged;
@@ -211,16 +211,16 @@ void igLightAttr_InitFields(void) {
     field->_invarianceFunction = (void (*)())igLightAttr_MarkChanged;
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 9);
     vf[0] = 1.0f; vf[1] = 0; vf[2] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)field, vf);
+    ((Gap::Math::igVec3fMetaField *)field)->setDefault(*(const igVec3f *)vf);
     field->_invarianceFunction = (void (*)())igLightAttr_MarkChanged;
     tv = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 0xA);
     tv->_invarianceFunction = (void (*)())igLightAttr_MarkChanged;
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 0xB);
     ve[0] = 0; ve[1] = 0; ve[2] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)field, ve);
+    ((Gap::Math::igVec3fMetaField *)field)->setDefault(*(const igVec3f *)ve);
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 0xC);
     vd[0] = 0; vd[2] = -1.0f; vd[1] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)field, vd);
+    ((Gap::Math::igVec3fMetaField *)field)->setDefault(*(const igVec3f *)vd);
     field = (MetaFieldSetupView *)igMetaObject_GetFieldAt(meta, base + 0xD);
     field->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
     field->_persistent = 0;

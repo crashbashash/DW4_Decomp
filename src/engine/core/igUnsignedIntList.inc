@@ -39,8 +39,8 @@ CallbackArray *igUnsignedIntList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igUnsignedIntList_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igUnsignedIntList_GetMetaObjectFunction,
         "igUnsignedIntList",
         0x14,
@@ -54,7 +54,6 @@ CallbackArray *igUnsignedIntList_Register(void) {
 void igUnsignedIntList_GetMetaObjectFunction(void) {
     igUnsignedIntList_GetMetaObject();
 }
-
 
 void igUnsignedIntList_InitFields(void) {
     igMetaObject *meta = g_igUnsignedIntList_metaObject;

@@ -47,8 +47,8 @@ void igBlendMatrixSelect_GetMetaObjectFunction(void) {
 
 static FieldFactory g_igBlendMatrixSelect_ctorTable[] = {
     (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
 };
 static const char *g_igBlendMatrixSelect_fieldTable[] = {
     "_blendMatrixIndices",

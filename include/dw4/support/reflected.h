@@ -30,6 +30,7 @@
 #include "dw4/maths/igVec2f.h"
 #include "dw4/maths/igVec3f.h"
 #include "dw4/maths/igVec4f.h"
+struct igMatrix44f;
 #endif
 
 /* handle 0x587198, 2 field(s), sizeof 8 (registered instance size) */
@@ -21077,14 +21078,17 @@ typedef struct libNdmwRuntimePlugin {
 #include "dw4/core/igSmartPointer.h"
 #include "dw4/core/igStringRef.h"
 namespace Gap {
-namespace Core { class igBoolArrayMetaField; class igBoolMetaField; class igCharArrayMetaField; class igCharMetaField; class igDoubleArrayMetaField; class igDoubleMetaField; class igEnumArrayMetaField; class igEnumMetaField; class igFloatArrayMetaField; class igFloatMetaField; class igIntArrayMetaField; class igIntMetaField; class igLongArrayMetaField; class igLongMetaField; class igMemoryRefArrayMetaField; class igMemoryRefMetaField; class igMetaField; class igObject; class igObjectRefArrayMetaField; class igObjectRefMetaField; class igRawRefArrayMetaField; class igRawRefMetaField; class igRefMetaField; class igShortArrayMetaField; class igShortMetaField; class igStringArrayMetaField; class igStringMetaField; class igStructMetaField; class igUnsignedCharArrayMetaField; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
+namespace Core { class igBoolArrayMetaField; class igBoolMetaField; class igCharArrayMetaField; class igCharMetaField; class igCompoundMetaField; class igDataList; class igDoubleArrayMetaField; class igDoubleMetaField; class igEnumArrayMetaField; class igEnumMetaField; class igFloatArrayMetaField; class igFloatMetaField; class igIntArrayMetaField; class igIntMetaField; class igLongArrayMetaField; class igLongMetaField; class igMemoryRefArrayMetaField; class igMemoryRefMetaField; class igMetaField; class igObject; class igObjectRefArrayMetaField; class igObjectRefMetaField; class igRawRefArrayMetaField; class igRawRefMetaField; class igRefMetaField; class igShortArrayMetaField; class igShortMetaField; class igStringArrayMetaField; class igStringMetaField; class igStructMetaField; class igUnsignedCharArrayMetaField; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
 namespace Gui { class igClearRenderer; class igRenderer; }
 namespace Insight { class igFlushRenderer; }
+namespace Math { class igMatrix44fMetaField; class igVec2fMetaField; class igVec3fMetaField; class igVec4fArrayMetaField; class igVec4fMetaField; class igVec4ucMetaField; }
 using Core::igBoolArrayMetaField;
 using Core::igBoolMetaField;
 using Core::igCharArrayMetaField;
 using Core::igCharMetaField;
 using Gui::igClearRenderer;
+using Core::igCompoundMetaField;
+using Core::igDataList;
 using Core::igDoubleArrayMetaField;
 using Core::igDoubleMetaField;
 using Core::igEnumArrayMetaField;
@@ -21096,6 +21100,7 @@ using Core::igIntArrayMetaField;
 using Core::igIntMetaField;
 using Core::igLongArrayMetaField;
 using Core::igLongMetaField;
+using Math::igMatrix44fMetaField;
 using Core::igMemoryRefArrayMetaField;
 using Core::igMemoryRefMetaField;
 using Core::igMetaField;
@@ -21119,6 +21124,11 @@ using Core::igUnsignedLongArrayMetaField;
 using Core::igUnsignedLongMetaField;
 using Core::igUnsignedShortArrayMetaField;
 using Core::igUnsignedShortMetaField;
+using Math::igVec2fMetaField;
+using Math::igVec3fMetaField;
+using Math::igVec4fArrayMetaField;
+using Math::igVec4fMetaField;
+using Math::igVec4ucMetaField;
 using Core::igVirtualCFuncMetaField;
 }
 
@@ -21316,6 +21326,7 @@ public:
     virtual int convertStringToMemory(const char *val, void *mem, int num, igDirectory *dir);
     virtual void userPostRead();
     short getTypeIndex();
+    inline unsigned short getSize() const { return _size; }
     virtual int constructPerformsReset() const;
 };
 }
@@ -21426,6 +21437,72 @@ public:
     virtual void initializeDrawing();
     virtual void terminateDrawing() {}
     virtual void draw();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x586918, 21 field(s), sizeof 56 (registered instance size) */
+class igCompoundMetaField : public Gap::Core::igMetaField {
+public:
+    igSmartPointer<igMetaFieldList> _fieldList;    /* +52   igObjectRefMetaField */
+    IG_ABSTRACT_OBJECT_DEFINE(igCompoundMetaField)
+    IG_METAFIELD_SETUP(igCompoundMetaField)
+protected:
+    static igMetaField *k_fieldList;
+public:
+    inline igMetaFieldList *getFieldList() const { return _fieldList; }
+    virtual unsigned short computeSize();
+    virtual void initDefaults();
+    static void arkRegisterCompoundFields(igMetaFieldList *fieldList);
+    virtual int computeTypeSize();
+    virtual int computeRequiredAlignment();
+    virtual void resetByValue(igObject *src);
+    virtual void resetByReference(igObject *src);
+    virtual void construct(igObject *src);
+    virtual void destruct(igObject *src);
+    virtual void commission(igObject *src);
+    virtual void decommission(igObject *src);
+    virtual void copyByValue(igObject *dst, const igObject *src);
+    virtual void copyByReference(igObject *dst, const igObject *src);
+    virtual void copyByReset(igObject *dst, const igObject *src);
+    virtual void copyByNoCopy(igObject *dst, const igObject *src);
+    virtual void print(const igObject *src, unsigned int deep, const char *indent);
+    virtual void traverse(igObject *obj, void *visitFunc, void *traversalData);
+    virtual int addToDirectory(igObject *obj, igDirectory *dir);
+    virtual int compare(const igObject *obj1, const igObject *obj2) const;
+    virtual bool isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const;
+    virtual bool isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const;
+    virtual bool isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const;
+    virtual bool isAlikeCompareNoCompare(const igObject *obj1, const igObject *obj2) const;
+    virtual int getIoSize(const igObject *obj) const;
+    virtual int writeRawFieldMemory(const void *fieldMem, void *dstMem, igDirectory *dir, bool endianSwap) const;
+    virtual int readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const;
+    virtual void endianSwapMemory(void *fieldMem, int nFieldElts) const;
+    virtual void endianSwap(igObject *obj) const;
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x586788, 5 field(s), sizeof 20 (registered instance size) */
+class igDataList : public Gap::Core::igObject {
+public:
+    int _count;                                    /* +8    igIntMetaField */
+    int _capacity;                                 /* +12   igIntMetaField */
+    int _data;                                     /* +16   igMemoryRefMetaField */
+    IG_OBJECT_DEFINE(igDataList)
+protected:
+    static igMetaField *k_count;
+    static igMetaField *k_capacity;
+    static igMetaField *k_data;
+public:
+    inline int getCount() const { return _count; }
+    virtual int getElementSize() const;
 };
 }
 }
@@ -21622,6 +21699,23 @@ public:
     inline int getNum() const { return _num; }
     virtual unsigned short computeSize();
     virtual void endianSwapMemory(void *mem, int num) const;
+};
+}
+}
+
+namespace Gap {
+namespace Math {
+/* handle 0x561000, 20 field(s), sizeof 52 (registered instance size) */
+class igMatrix44fMetaField : public Gap::Core::igMetaField {
+public:
+    IG_OBJECT_DEFINE(igMatrix44fMetaField)
+    IG_METAFIELD_SETUP(igMatrix44fMetaField)
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(const igMatrix44f &def);
+    virtual int computeRequiredAlignment();
 };
 }
 }
@@ -22125,6 +22219,93 @@ public:
     inline int getNum() const { return _num; }
     virtual unsigned short computeSize();
     virtual void endianSwapMemory(void *mem, int num) const;
+};
+}
+}
+
+namespace Gap {
+namespace Math {
+/* handle 0x560f88, 20 field(s), sizeof 52 (registered instance size) */
+class igVec2fMetaField : public Gap::Core::igMetaField {
+public:
+    IG_OBJECT_DEFINE(igVec2fMetaField)
+    IG_METAFIELD_SETUP(igVec2fMetaField)
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(const igVec2f &def);
+    virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Math {
+/* handle 0x560f70, 20 field(s), sizeof 52 (registered instance size) */
+class igVec3fMetaField : public Gap::Core::igMetaField {
+public:
+    IG_OBJECT_DEFINE(igVec3fMetaField)
+    IG_METAFIELD_SETUP(igVec3fMetaField)
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(const igVec3f &def);
+    virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Math {
+/* handle 0x560f38, 20 field(s), sizeof 52 (registered instance size) */
+class igVec4fMetaField : public Gap::Core::igMetaField {
+public:
+    IG_OBJECT_DEFINE(igVec4fMetaField)
+    IG_METAFIELD_SETUP(igVec4fMetaField)
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    void setDefault(const igVec4f &def);
+    virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Math {
+/* handle 0x560f48, 21 field(s), sizeof 56 (registered instance size) */
+class igVec4fArrayMetaField : public Gap::Math::igVec4fMetaField {
+public:
+    int _num;                                      /* +52   igIntMetaField */
+    IG_OBJECT_DEFINE(igVec4fArrayMetaField)
+    IG_METAFIELD_SETUP(igVec4fArrayMetaField)
+private:
+    static igMetaField *k_num;
+public:
+    inline void setNum(int numParam) { _num = numParam; }
+    inline int getNum() const { return _num; }
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
+    void setDefault(unsigned int index, const igVec4f &val);
+};
+}
+}
+
+namespace Gap {
+namespace Math {
+/* handle 0x560f28, 20 field(s), sizeof 52 (registered instance size) */
+class igVec4ucMetaField : public Gap::Core::igMetaField {
+public:
+    IG_OBJECT_DEFINE(igVec4ucMetaField)
+    IG_METAFIELD_SETUP(igVec4ucMetaField)
+    virtual unsigned short computeSize();
+    virtual void endianSwapMemory(void *mem, int num) const;
+    virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+    virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+    virtual int computeRequiredAlignment();
 };
 }
 }

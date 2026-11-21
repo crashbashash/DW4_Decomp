@@ -32,8 +32,8 @@ CallbackArray *igUnsignedCharList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igUnsignedCharList_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igUnsignedCharList_GetMetaObjectFunction,
         "igUnsignedCharList",
         0x14,
@@ -47,7 +47,6 @@ CallbackArray *igUnsignedCharList_Register(void) {
 void igUnsignedCharList_GetMetaObjectFunction(void) {
     igUnsignedCharList_GetMetaObject();
 }
-
 
 void igUnsignedCharList_InitFields(void) {
     int index;

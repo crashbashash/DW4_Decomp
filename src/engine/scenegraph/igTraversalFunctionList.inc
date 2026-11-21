@@ -38,8 +38,8 @@ CallbackArray *igTraversalFunctionList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTraversalFunctionList_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igTraversalFunctionList_GetMetaObjectFunction,
         "igTraversalFunctionList",
         0x14, /* instance size */

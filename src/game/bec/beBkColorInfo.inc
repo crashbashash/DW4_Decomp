@@ -52,7 +52,7 @@ void beBkColorInfo_GetMetaObjectFunction(void)
 }
 
 static FieldFactory g_beBkColorInfo_ctorTable[] = {
-    igVec4fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
 };
 static const char *g_beBkColorInfo_fieldTable[] = {
     "_rgba",

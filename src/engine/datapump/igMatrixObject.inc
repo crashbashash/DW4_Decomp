@@ -49,7 +49,7 @@ void igMatrixObject_GetMetaObjectFunction(void) {
 }
 
 static FieldFactory g_igMatrixObject_ctorTable[] = {
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
 };
 static const char *g_igMatrixObject_fieldTable[] = {
     "_m",

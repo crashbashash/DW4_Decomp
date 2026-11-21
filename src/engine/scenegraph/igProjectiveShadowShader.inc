@@ -199,8 +199,8 @@ void igProjectiveShadowShader_GetMetaObjectFunction(void) {
 }
 
 static FieldFactory g_igProjectiveShadowShader_ctorTable[] = {
-    (FieldFactory)igVec3fMetaField_CreateInstance,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     (FieldFactory)igFloatMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
@@ -220,7 +220,7 @@ static FieldFactory g_igProjectiveShadowShader_ctorTable[] = {
     (FieldFactory)igBoolMetaField_Create,
     (FieldFactory)igFloatMetaField_Create,
     (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     (FieldFactory)igObjectRefMetaField_Create,
     (FieldFactory)igBoolMetaField_Create,
     (FieldFactory)igBoolMetaField_Create,
@@ -414,10 +414,10 @@ void igProjectiveShadowShader_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igProjectiveShadowShader_ctorTable, 0x30);
     temp_a0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1));
     v1[0] = 0; v1[1] = 4.0f; v1[2] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, v1);
+    ((Gap::Math::igVec3fMetaField *)temp_a0)->setDefault(*(const igVec3f *)v1);
     temp_a0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1));
     v2[0] = 0; v2[1] = -1.0f; v2[2] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, v2);
+    ((Gap::Math::igVec3fMetaField *)temp_a0)->setDefault(*(const igVec3f *)v2);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)))->setDefault(30.0f);
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3));
     temp_s2->f56 = (int)igNodeList_GetOrCreateMetaObject();
@@ -467,7 +467,7 @@ void igProjectiveShadowShader_InitFields(void) {
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x14)))->setDefault(1000.0f);
     temp_a0 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x15));
     v3[0] = 1.0f; v3[1] = 0; v3[2] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, v3);
+    ((Gap::Math::igVec3fMetaField *)temp_a0)->setDefault(*(const igVec3f *)v3);
     temp_s2 = ((struct Fld_19b8a0 *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x16));
     temp_s2->f56 = (int)igTextureMatrixAttr_GetOrCreateMetaObject();
     temp_s2->f52 = 1;

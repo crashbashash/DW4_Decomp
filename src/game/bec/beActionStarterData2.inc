@@ -62,7 +62,7 @@ igMetaObject *beActionStarterData_GetPublishedMetaObject(void) {
 }
 
 static FieldFactory g_beActionStarterData2_ctorTable[] = {
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
 };
 static const char *g_beActionStarterData2_fieldTable[] = {
     "_rotation",

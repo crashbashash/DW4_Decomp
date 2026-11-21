@@ -88,8 +88,8 @@ static FieldFactory g_beHitLandModelOrder_ctorTable[] = {
     igStringMetaField_Create,
     igIntMetaField_Create,
     igIntMetaField_Create,
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     igIntMetaField_Create,
     igObjectRefMetaField_Create,
     igIntMetaField_Create,
@@ -147,12 +147,12 @@ void beHitLandModelOrder_InitFields(void) {
     rayMaxDefault[0] = 0;
     rayMaxDefault[1] = 0;
     rayMaxDefault[2] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)raymax, (const float *)rayMaxDefault);
+    ((Gap::Math::igVec3fMetaField *)raymax)->setDefault(*(const igVec3f *)rayMaxDefault);
     raymin = (void *)(igMetaObject_GetFieldAt(meta, base + 4));
     rayMinDefault[0] = 0;
     rayMinDefault[1] = 0;
     rayMinDefault[2] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)raymin, (const float *)rayMinDefault);
+    ((Gap::Math::igVec3fMetaField *)raymin)->setDefault(*(const igVec3f *)rayMinDefault);
     rayList = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
     ((igObjectRefMetaField *)rayList)->_metaObject = (int)igRayList_GetOrCreateMetaObject();
     ((igRefMetaField *)rayList)->_construct = 1;

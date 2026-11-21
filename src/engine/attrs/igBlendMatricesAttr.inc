@@ -80,7 +80,7 @@ void igBlendMatricesAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igBlendMatricesAttr_ctorTable, 3);
     field = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igMemoryRefMetaField *)field)->_memType = FUN_001888e0();
+    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Math::igMatrix44fMetaField::getMetaField();
     ((igRefMetaField *)field)->_destruct = 1;
     ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)field)->_releaseOnReset = 1;

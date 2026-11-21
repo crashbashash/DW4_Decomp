@@ -49,6 +49,12 @@ For each conversion, across every source, header and `.inc` fragment of src/ and
     the flat struct of the same name is another type: a receiver declared as it (or a flat subclass) is cast to
     the Gap class too (`Class` alone in Gap's scope), and so is an argument for a `Class *` parameter that is not
     declared as the Gap class or a Gap subclass, while a cast of `this` to the flat struct passed there goes;
+  * an argument for a reference parameter `const T &` where the C form took a pointer to the value is
+    dereferenced (`*(const T *)v`, its own pointer cast dropped), a temporary's array member (`T(...).vec`) is the
+    temporary, and a name declared as `T` stays;
+  * a static member whose return type differs from the C definition's keeps its uses' types: a call assigned
+    where the C form's integer went is cast back to it (`*p = (int)Class::make()`), and the member named in an
+    array initialiser of a function-pointer typedef (a field table) is cast to that typedef;
   * a virtual function (its class-members.tsv row says `virtual`) called by its C name runs that implementation,
     not the object's override, so it never becomes `obj->name(a)`: a call on `this` inside a member of the class
     or a subclass becomes the qualified `Class::name(a)`, and every other use keeps the C name, with its
@@ -461,6 +467,7 @@ _ASSIGNED = re.compile(r"\s*(?:=(?!=)|\+\+|--|[-+*/%&|^]=|<<=|>>=)")
 _CAST = re.compile(r"^\(\s*(?:struct\s+|class\s+)?((?:::\s*)?[A-Za-z_][\w:]*)\s*\*\s*\)\s*(.+)$", re.S)
 _CAST_AT = re.compile(r"\(\s*(?:struct\s+|class\s+)?((?:::\s*)?[A-Za-z_][\w:]*)\s*\*\s*\)")
 _POSTFIX = re.compile(r"^[A-Za-z_]\w*(?:\s*(?:->|\.)\s*[A-Za-z_]\w*|\s*\[[^\[\]]*\])*$")
+_INTEGERS = ("int", "unsigned int", "short", "unsigned short", "long", "unsigned long", "char", "unsigned char")
 _MEMBER_HEAD = re.compile(r"([A-Za-z_][\w:]*)\s*::\s*~?[A-Za-z_]\w*\s*\($")
 
 
@@ -715,6 +722,34 @@ class Planner:
             fr.edits.append((s, s, "(%s *)(" % self.spell(cls, gap)))
             fr.edits.append((e, e, ")"))
 
+    def ref_argument(self, fr, span, cls, const, ctx):
+        """Edits giving an argument passed for a reference parameter `const cls &`, where the C form took a pointer
+        to the value: a temporary's array member (`cls(...).vec`) is the temporary, a name declared as `cls` stays,
+        and any other pointer (a float array, a cast to one, a stand-in struct's address) is dereferenced as a
+        `cls` (`*(const cls *)v`), its own pointer cast dropped."""
+        s, e = span
+        expr = fr.text[s:e].strip()
+        head = re.match(r"%s\s*\(" % re.escape(cls), expr)
+        if head:
+            close = declarations._close(fr.clean, s + head.end() - 1)
+            if re.fullmatch(r"\s*\.\s*[A-Za-z_]\w*\s*", fr.text[close + 1:e]):
+                fr.edits.append((close + 1, e, ""))
+                return
+        bare = _strip_parens(expr)
+        if re.fullmatch(r"[A-Za-z_]\w*", bare) and ctx is not None and re.search(
+                r"\b%s(?:\s+const)?(?:\s+|\s*&\s*)%s\b\s*[,;=(\[)]" % (re.escape(cls), re.escape(bare)),
+                fr.text[ctx[1]:ctx[2]]):
+            return
+        cast = re.match(r"\(\s*(?:const\s+)?[A-Za-z_][\w:]*(?:\s+const)?\s*\*\s*\)\s*", expr)
+        start = s + (cast.end() if cast else 0)
+        inner = expr[start - s:]
+        deref = "*(%s%s *)" % ("const " if const else "", cls)
+        if _POSTFIX.match(inner) or re.fullmatch(r"&\s*[A-Za-z_]\w*(?:\s*\[[^\[\]]*\])*", inner):
+            fr.edits.append((s, start, deref))
+        else:
+            fr.edits.append((s, start, deref + "("))
+            fr.edits.append((e, e, ")"))
+
     def plan_file(self, fr):
         c_side, cxx_side = c_reads(self.index, fr.rel), cxx_reads(self.index, fr.rel)
         names = set(self.by_cname)
@@ -793,11 +828,7 @@ class Planner:
             inner = expr if _POSTFIX.match(expr) and expr not in params else "(%s)" % expr
         stop = spans[1][0] if len(spans) > 1 else close
         fr.edits.append((pos, stop, "((%s *)%s)->%s(" % (cls, inner, conv.name)))
-        if conv.cls.startswith("Gap::"):
-            for span, param in zip(spans[1:], conv.params):
-                pointee = re.fullmatch(r"([A-Za-z_]\w*)(?: const)?\*", param or "")
-                if pointee and pointee.group(1) in self.converted:
-                    self.gap_argument(fr, span, pointee.group(1), None, None, gap)
+        self.typed_arguments(fr, conv, spans[1:], None, None, gap)
 
     def may_access(self, conv, inside):
         """Whether a member function of class `inside` may name `conv`'s member: any for a public one, the class's
@@ -831,7 +862,7 @@ class Planner:
             self.plan_virtual_use(fr, conv, pos, end, after, inside)
             return
         if conv.kind == "data" or conv.static:
-            fr.edits.append((pos, end, self.qual(conv, inside)))
+            fr.edits.append((pos, end, self.retyped_cast(fr, conv, pos, after) + self.qual(conv, inside)))
             if conv.inline and conv.kind == "func" and not after:
                 self.inline_users[conv.qualified].add(fr.rel)
             return
@@ -853,11 +884,21 @@ class Planner:
         # to a converted class's Gap type where a parameter is a pointer to one
         stop = spans[1][0] if len(spans) > 1 else close
         fr.edits.append((pos, stop, (receiver or "") + conv.name + "("))
-        if conv.cls.startswith("Gap::"):
-            for span, param in zip(spans[1:], conv.params):
-                pointee = re.fullmatch(r"([A-Za-z_]\w*)(?: const)?\*", param or "")
-                if pointee and pointee.group(1) in self.converted:
-                    self.gap_argument(fr, span, pointee.group(1), ctx, inside, gap)
+        self.typed_arguments(fr, conv, spans[1:], ctx, inside, gap)
+
+    def typed_arguments(self, fr, conv, spans, ctx, inside, gap):
+        """A call's arguments cast where its parameter needs: to a converted class's Gap type for a pointer to
+        one, a pointer to the value for a reference (`ref_argument`)."""
+        for span, param in zip(spans, conv.params):
+            ref = re.fullmatch(r"([A-Za-z_]\w*)( const)?&", param or "")
+            if ref:
+                self.ref_argument(fr, span, ref.group(1), bool(ref.group(2)), ctx)
+                continue
+            if not conv.cls.startswith("Gap::"):
+                continue
+            pointee = re.fullmatch(r"([A-Za-z_]\w*)(?: const)?\*", param or "")
+            if pointee and pointee.group(1) in self.converted:
+                self.gap_argument(fr, span, pointee.group(1), ctx, inside, gap)
 
     def plan_special_use(self, fr, conv, pos, end, after, ctx):
         """A call of a constructor's or destructor's C name. The calls a converted subclass's constructor made of
@@ -1005,9 +1046,31 @@ class Planner:
             self.errors.append("%s:%d: instance member %s is used as a value (%s); convert that use by hand"
                                % (fr.rel, fr.text.count("\n", 0, pos) + 1, conv.qualified, conv.cname))
             return
-        fr.edits.append((pos, end, conv.qualified))
+        fr.edits.append((pos, end, self.retyped_cast(fr, conv, pos, nxt == "(") + conv.qualified))
         if conv.inline:
             self.inline_users[conv.qualified].add(fr.rel)
+
+    def retyped_cast(self, fr, conv, pos, called):
+        """The cast keeping a use of static member `conv` the type its C form had, where the definition's return
+        type changed (`c_ret`, rewrite_definition): a call assigned where the C form's integer went
+        (`*(int *)p = Class::getMetaField()`) is cast back to it, and the member named as a value in an array
+        initialiser of a function-pointer typedef (a field table's `FieldFactory`) is cast to that type. A use
+        already cast keeps its cast."""
+        c_ret = getattr(conv, "c_ret", None)
+        if c_ret is None or conv.kind != "func" or not conv.static:
+            return ""
+        before = fr.clean[:pos].rstrip()
+        if before.endswith(")"):
+            return ""
+        if called:
+            if c_ret in _INTEGERS and (conv.ret or "").endswith("*") and before.endswith("=") and \
+                    not before.endswith(("==", "!=", "<=", ">=")):
+                return "(%s)" % c_ret
+            return ""
+        table = re.search(r"\b([A-Za-z_]\w*)\s+[A-Za-z_]\w*\s*\[[^\]]*\]\s*=\s*\{[^;{}]*$", before[-4000:])
+        if table and table.group(1) not in _INTEGERS and table.group(1) not in ("void", "char", "float", "double"):
+            return "(%s)" % table.group(1)
+        return ""
 
     def plan_definition(self, fr, conv):
         """The definition of a converted C name in `fr`, or False when `fr` has none."""
@@ -1098,6 +1161,7 @@ class Planner:
                 self.notes.append("%s: %s returns %s, %s is declared to return %s: the head takes the declaration's"
                                   % (fr.rel, conv.cname, ret_norm or "nothing", conv.qualified, conv.ret))
                 ret = conv.ret.replace("*", " *").replace("  ", " ").strip()
+                conv.c_ret = ret_norm                    # its uses keep the C type (retyped_cast)
         plist = ", ".join(("%s %s" % (t, n) if not t.endswith(("*", "&")) else "%s%s" % (t, n)) if n else t
                           for t, n in params)
         if conv.cls.startswith("Gap::"):                 # in the class's scope a converted class is its bare name

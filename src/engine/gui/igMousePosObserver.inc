@@ -107,7 +107,7 @@ static FieldFactory g_igMousePosObserver_ctorTable[] = {
     igFloatMetaField_Create,
     igBoolMetaField_Create,
     igObjectRefMetaField_Create,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
 };
 static const char *g_igMousePosObserver_fieldTable[] = {
     "_guiSystem",

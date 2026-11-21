@@ -11,8 +11,6 @@ extern "C" {
 #endif
 
 extern struct igMetaObject *g_igVec2fMetaField_metaObject;
-struct igMetaField *igVec2fMetaField_CreateInstance(struct igMemoryPoolView *pool);
-void igVec2fMetaField_SetDefault(struct igMetaField *self, const float *value);
 
 #ifdef __cplusplus
 }

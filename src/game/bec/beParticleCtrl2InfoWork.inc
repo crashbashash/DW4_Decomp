@@ -71,7 +71,7 @@ void beParticleCtrl2InfoWork_GetMetaObjectFunction(void)
 
 static FieldFactory g_beParticleCtrl2InfoWork_ctorTable[] = {
     igObjectRefMetaField_Create,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
 };
 static const char *g_beParticleCtrl2InfoWork_fieldTable[] = {
     "_positionLockNode",

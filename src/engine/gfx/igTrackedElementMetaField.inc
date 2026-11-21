@@ -74,7 +74,7 @@ CallbackArray *igTrackedElementMetaField_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTrackedElementMetaField_metaObject,
-        igCompoundMetaField_Register,
+        Gap::Core::igCompoundMetaField::arkRegisterInternal,
         igCompoundMetaField_GetPublishedMetaObject,
         igTrackedElementMetaField_GetMetaObjectFunction,
         "igTrackedElementMetaField",
@@ -91,7 +91,7 @@ void igTrackedElementMetaField_GetMetaObjectFunction(void) {
 }
 
 int FUN_0014e530(void) {
-    return (int)g_igCompoundMetaField_metaObject;
+    return (int)Gap::Core::igCompoundMetaField::getClassMeta();
 }
 
 Q * g_igTrackedElementMetaField_instance;

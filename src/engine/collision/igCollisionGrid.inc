@@ -141,7 +141,7 @@ static FieldFactory g_igCollisionGrid_ctorTable[] = {
     igIntMetaField_Create,
     igFloatMetaField_Create,
     igObjectRefMetaField_Create,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     igIntMetaField_Create,
     igIntMetaField_Create,
 };

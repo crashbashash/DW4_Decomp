@@ -94,7 +94,7 @@ static FieldFactory g_beNDMWLoadIntf2ComMdlCtrl_ctorTable[] = {
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
 };
 static const char *g_beNDMWLoadIntf2ComMdlCtrl_fieldTable[] = {
     "_messenger",

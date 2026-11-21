@@ -74,7 +74,7 @@ static FieldFactory g_igLod_ctorTable[] = {
     (FieldFactory)igIntMetaField_Create,
     (FieldFactory)igFloatMetaField_Create,
     (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igLod_fieldTable[] = {
@@ -141,7 +141,7 @@ void igLod_InitFields(void) {
     defaultCenter[0] = 0;
     defaultCenter[1] = 0;
     defaultCenter[2] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)centerField, (const float *)defaultCenter);
+    ((Gap::Math::igVec3fMetaField *)centerField)->setDefault(*(const igVec3f *)defaultCenter);
     hysteresisListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)));
     ((igObjectRefMetaField *)hysteresisListField)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)meta, g_igLod_fieldTable, g_igLod_fieldHandles, g_igLod_fieldOffsets, base);

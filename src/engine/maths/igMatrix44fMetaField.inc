@@ -1,99 +1,81 @@
-igMetaObject *g_igMatrix44fMetaField_metaObject;
-int g_igMatrix44fMetaField_descriptor;
+namespace Gap {
+namespace Math {
 
-igMetaField *igMatrix44fMetaField_CreateInstance(igMemoryPoolView *pool) {
-    igMatrix44fMetaField_EnsureRegistered();
-    return (igMetaField *)igMetaObject_CreateInstance(g_igMatrix44fMetaField_metaObject, pool);
-}
+igMetaObject *igMatrix44fMetaField::_Meta;
+igMatrix44fMetaField *igMatrix44fMetaField::_MetaField;
 
-igMetaObject *igMatrix44fMetaField_GetMetaObject(void)
+igMatrix44fMetaField *igMatrix44fMetaField::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igMatrix44fMetaField_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMatrix44fMetaField_EnsureRegistered();
-    return g_igMatrix44fMetaField_metaObject;
+    arkRegister();
+    return (igMatrix44fMetaField *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igMatrix44fMetaField_GetVTable(void) {
-    union U u;
-    int temp_s0;
-    char *ps;
-    int *temp_v1;
-    int *temp_a1;
-    int temp_v0;
-
-    igMetaField_Init((igMetaField *)u.b);
-    u.vt = (int)&g_igMatrix44fMetaField_vtable[0];
-    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igMetaField_vtable[0];
-    ps = &u.b[12];
-    if (ps != 0) {
-        temp_v1 = *(int **)ps;
-        if (temp_v1 != 0) {
-            temp_a1 = temp_v1 - 2;
-            temp_v0 = temp_v1[-1] - 1;
-            temp_v1[-1] = temp_v0;
-            if (temp_v0 == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)*temp_a1, (StringTokenHeader *)temp_a1);
-            }
-        }
-    }
-    return temp_s0;
-}
-
-void igMatrix44fMetaField_EnsureRegistered(void)
+igMetaObject *igMatrix44fMetaField::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igMatrix44fMetaField_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igMatrix44fMetaField_callbackList[] = { FUN_00188810, 0 };
+void *igMatrix44fMetaField::retrieveVTablePointer()
+{
+    igMatrix44fMetaField temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igMatrix44fMetaField_Register(void) {
+void igMatrix44fMetaField::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igMatrix44fMetaField::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { arkRegisterMetaValidate, 0 };
+
     FUN_00186a40();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igMatrix44fMetaField_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igMetaField::arkRegisterInternal,
-        igMetaField_GetPublishedMetaObject,
-        igMatrix44fMetaField_GetMetaObjectFunction,
+        Gap::Core::igMetaField::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMatrix44fMetaField",
-        0x34, /* instance size */
-        igMatrix44fMetaField_GetVTable,
+        sizeof(igMatrix44fMetaField),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        (igMetaObjectCallback *)g_igMatrix44fMetaField_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
 
-void igMatrix44fMetaField_GetMetaObjectFunction(void) {
-    igMatrix44fMetaField_GetMetaObject();
-}
+void igMatrix44fMetaField::arkRegisterMetaValidate()
+{
+    igMatrix44fMetaField *metaField;
 
-void FUN_00188810(void) {
-    void *temp_s0;
-
-    if (g_igMatrix44fMetaField_descriptor == 0) {
-        g_igMatrix44fMetaField_descriptor = (int)(igMetaObject_CreateInstance(g_igMatrix44fMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
-        temp_s0 = (void *)(g_igMatrix44fMetaField_descriptor);
-        if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)temp_s0);
+    if (_MetaField == 0) {
+        _MetaField = (igMatrix44fMetaField *)igMetaObject_CreateInstance(_Meta, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+        metaField = _MetaField;
+        if (metaField != 0) {
+            MetaRefList_AppendRetained(getMetaFieldTypes(), (::igObject *)metaField);
             {
-                void *held = (void *)g_igMatrix44fMetaField_descriptor;
-                *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;
-                if (((unsigned long long) ((long long) *(int *)((char *)(held) + 4) << 0x29) >> 0x29) == 0) {
-                    igObject_Destroy((igObject *)held);
+                ::igObject *held = (::igObject *)_MetaField;
+                held->_refCount = (int)held->_refCount - 1;
+                if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
+                    igObject_Destroy(held);
                 }
             }
-            *(short *)((char *)(g_igMatrix44fMetaField_descriptor) + 18) = (short) (*(int *)((char *)(Gap::Core::igMetaField::getMetaFieldTypes()) + 12) - 1);
-            ((Gap::Core::igMetaField *)g_igMatrix44fMetaField_descriptor)->validate();
+            _MetaField->_internalIndex = (short)(getMetaFieldTypes()->_count - 1);
+            _MetaField->validate();
         }
     }
 }
 
-int FUN_001888e0(void) {
-    if (g_igMatrix44fMetaField_descriptor == 0) {
-        igMatrix44fMetaField_EnsureRegistered();
-    }
-    return g_igMatrix44fMetaField_descriptor;
+igMatrix44fMetaField *igMatrix44fMetaField::getMetaField()
+{
+    if (_MetaField == 0)
+        arkRegister();
+    return _MetaField;
+}
+}
 }
 

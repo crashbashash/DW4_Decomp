@@ -165,7 +165,7 @@ static FieldFactory g_igSceneInfo_ctorTable[] = {
     (FieldFactory)igObjectRefMetaField_Create,
     (FieldFactory)igLongMetaField_Create,
     (FieldFactory)igLongMetaField_Create,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     (FieldFactory)igObjectRefMetaField_Create,
 };
 static const char *g_igSceneInfo_fieldTable[] = {
@@ -225,7 +225,7 @@ void igSceneInfo_InitFields(void) {
     v.x = 0;
     v.y = 0x3F800000;
     v.z = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)&v);
+    ((Gap::Math::igVec3fMetaField *)temp_a0)->setDefault(*(const igVec3f *)&v);
     temp_s2_4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)));
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)igNodeList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;

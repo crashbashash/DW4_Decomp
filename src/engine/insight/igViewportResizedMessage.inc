@@ -50,8 +50,8 @@ void igViewportResizedMessage_GetMetaObjectFunction(void) {
 }
 
 static FieldFactory g_igViewportResizedMessage_ctorTable[] = {
-    (FieldFactory)igVec2fMetaField_CreateInstance,
-    (FieldFactory)igVec2fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool,
 };
 static const char *g_igViewportResizedMessage_fieldTable[] = {
     "_origin",

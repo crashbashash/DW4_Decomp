@@ -74,7 +74,7 @@ void beSelectCtrlInfoWork_GetMetaObjectFunction(void)
 }
 
 static FieldFactory g_beSelectCtrlInfoWork_ctorTable[] = {
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     igIntMetaField_Create,
     igBoolMetaField_Create,
     igStringMetaField_Create,

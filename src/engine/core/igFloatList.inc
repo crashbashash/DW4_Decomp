@@ -39,8 +39,8 @@ CallbackArray *igFloatList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igFloatList_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igFloatList_GetMetaObjectFunction,
         "igFloatList",
         0x14,
@@ -54,7 +54,6 @@ CallbackArray *igFloatList_Register(void) {
 void igFloatList_GetMetaObjectFunction(void) {
     igFloatList_GetMetaObject();
 }
-
 
 void igFloatList_InitFields(void) {
     int index;

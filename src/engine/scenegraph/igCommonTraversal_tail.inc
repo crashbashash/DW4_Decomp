@@ -36,8 +36,8 @@ static FieldFactory g_igCommonTraversal_ctorTable[] = {
     (FieldFactory)igObjectRefMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
     (FieldFactory)igIntMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
@@ -51,11 +51,11 @@ static FieldFactory g_igCommonTraversal_ctorTable[] = {
     (FieldFactory)igObjectRefMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
     (FieldFactory)igObjectRefMetaField_Create,
     (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
     (FieldFactory)igBoolMetaField_Create,
 };
 static const char *g_igCommonTraversal_fieldTable[] = {
@@ -248,11 +248,11 @@ void igCommonTraversal_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_14)->_metaObject = (int)igProjectionMatrixAttrPool_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_14)->_construct = 1;
     temp_s2_15 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xE)));
-    FUN_0018c640((igMetaField *)temp_s2_15, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
-                                                        igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
+    ((Gap::Math::igMatrix44fMetaField *)temp_s2_15)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                        igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
     temp_s2_16 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xF)));
-    FUN_0018c640((igMetaField *)temp_s2_16, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
-                                                        igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
+    ((Gap::Math::igMatrix44fMetaField *)temp_s2_16)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                        igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
     temp_s2_17 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x11)));
     ((igObjectRefMetaField *)temp_s2_17)->_metaObject = (int)igMatrixOptStateAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_17)->_construct = 1;
@@ -295,19 +295,19 @@ void igCommonTraversal_InitFields(void) {
     ((igRefMetaField *)temp_s2_26)->_construct = 1;
     ((igMetaField *)temp_s2_26)->_persistent = 0;
     temp_s2_27 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1D)));
-    FUN_0018c640((igMetaField *)temp_s2_27, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
-                                                        igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
+    ((Gap::Math::igMatrix44fMetaField *)temp_s2_27)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                        igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
     temp_s2_28 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1E)));
     ((igObjectRefMetaField *)temp_s2_28)->_metaObject = (int)igTimeAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_28)->_construct = 1;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x1F)))->_persistent = 0;
     temp_s2_29 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x20)));
-    FUN_0018c640((igMetaField *)temp_s2_29, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
-                                                        igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
+    ((Gap::Math::igMatrix44fMetaField *)temp_s2_29)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                        igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
     ((igMetaField *)temp_s2_29)->_persistent = 0;
     temp_s2_30 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x21)));
-    FUN_0018c640((igMetaField *)temp_s2_30, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
-                                                        igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
+    ((Gap::Math::igMatrix44fMetaField *)temp_s2_30)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                        igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
     ((igMetaField *)temp_s2_30)->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x22)))->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igCommonTraversal_fieldTable, g_igCommonTraversal_fieldHandles, g_igCommonTraversal_fieldOffsets, temp_s1);

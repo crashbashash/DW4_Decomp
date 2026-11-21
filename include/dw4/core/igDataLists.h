@@ -29,14 +29,11 @@ int List_LowerBound(struct igDataList *list, void *key, int (*compare)(int *, vo
 /* Retains `object` (reference count +1) and appends it. */
 int ObjectList_AppendRetained(struct igObjectList *list, struct igObject *object);
 int igProperty_FindByName(struct igObjectList *list, struct igMetaField *field, const char *name);
-struct CallbackArray *igDataList_Register(void);
-struct igMetaObject *igDataList_GetPublishedMetaObject(void);
 extern struct igMetaObject *g_igDataList_metaObject;
 void ObjectList_ClearRetainedPreserveCount(igTDataList<struct igObject *> *list);
 void List_InsertBytes(struct igDataList *list, int index, int count, const void *src, int stride);
 void List_RemoveAt(struct igDataList *l, int i, int sz);
 int igDataList_GetCount(struct igDataList *list);
-void igDataList_EnsureRegistered(void);
 struct igMetaObject *igDataList_GetOrCreateMetaObject(void);
 int igProperty_FindByPointer(void *listObject, void *fieldObject, int key);
 

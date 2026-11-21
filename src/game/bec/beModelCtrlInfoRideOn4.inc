@@ -59,8 +59,8 @@ igMetaObject *beModelCtrlInfoRideOn_GetPublishedMetaObject(void) {
 }
 
 static FieldFactory g_beModelCtrlInfoRideOn4_ctorTable[] = {
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igIntMetaField_Create,

@@ -62,7 +62,7 @@ CallbackArray *igDependencyMetaField_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igDependencyMetaField_metaObject,
-        igCompoundMetaField_Register,
+        Gap::Core::igCompoundMetaField::arkRegisterInternal,
         (igMetaObjectGetFunction)igCompoundMetaField_GetPublishedMetaObject,
         igDependencyMetaField_GetMetaObjectFunction,
         "igDependencyMetaField",
@@ -77,7 +77,6 @@ CallbackArray *igDependencyMetaField_Register(void) {
 void igDependencyMetaField_GetMetaObjectFunction(void) {
     igDependencyMetaField_GetMetaObject();
 }
-
 
 void igDependencyMetaField_CreateDefaultDescriptor(void) {
     void *descriptor;

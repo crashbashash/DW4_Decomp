@@ -62,7 +62,7 @@ static FieldFactory g_beModelCtrlInfoRideOn_ctorTable[] = {
     igStringMetaField_Create,
     igIntMetaField_Create,
     igObjectRefMetaField_Create,
-    igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
 };
 static const char *g_beModelCtrlInfoRideOn_fieldTable[] = {
     "_modelName",

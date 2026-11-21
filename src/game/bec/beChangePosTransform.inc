@@ -67,7 +67,7 @@ void beChangePosTransform_GetMetaObjectFunction(void)
 }
 
 static FieldFactory g_beChangePosTransform_ctorTable[] = {
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
 };
 static const char *g_beChangePosTransform_fieldTable[] = {
     "_oldPos",

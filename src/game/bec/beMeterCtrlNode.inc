@@ -68,7 +68,7 @@ void beMeterCtrlNode_GetMetaObject(void)
 static FieldFactory g_beMeterCtrlNode_ctorTable[] = {
     igBoolMetaField_Create,
     igObjectRefMetaField_Create,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
 };
 static const char *g_beMeterCtrlNode_fieldTable[] = {
     "_isMeter",

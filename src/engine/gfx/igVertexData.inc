@@ -83,7 +83,7 @@ void igVertexData_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igVertexData_Register);
 }
 
-static igMetaObjectCallback g_igVertexData_callbackList[] = { igDataList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igVertexData_callbackList[] = { Gap::Core::igDataList::arkRegister, 0 };
 
 CallbackArray *igVertexData_Register(void) {
     FUN_00149bc0();

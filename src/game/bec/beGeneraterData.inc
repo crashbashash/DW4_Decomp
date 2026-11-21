@@ -90,7 +90,7 @@ void beGeneraterData_GetMetaObjectFunction(void)
 }
 
 static FieldFactory g_beGeneraterData_ctorTable[] = {
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     igBoolMetaField_Create,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,

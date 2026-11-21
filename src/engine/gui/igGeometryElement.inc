@@ -49,8 +49,8 @@ void igGeometryElement_GetMetaObjectFunction(void) {
 
 static FieldFactory g_igGeometryElement_ctorTable[] = {
     igObjectRefMetaField_Create,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
     igObjectRefMetaField_Create,
 };
 static const char *g_igGeometryElement_fieldTable[] = {
@@ -93,13 +93,13 @@ void igGeometryElement_InitFields(void) {
     v3[0] = 0.0f;
     v3[1] = 0.0f;
     v3[2] = 0.0f;
-    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, v3);
+    ((Gap::Math::igVec3fMetaField *)temp_a0)->setDefault(*(const igVec3f *)v3);
     temp_a0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
     v4[0] = 1.0f;
     v4[1] = 1.0f;
     v4[2] = 1.0f;
     v4[3] = 1.0f;
-    igVec4fMetaField_SetDefault((igMetaField *)temp_a0_2, v4);
+    ((Gap::Math::igVec4fMetaField *)temp_a0_2)->setDefault(*(const igVec4f *)v4);
     temp_s1_2 = (struct GeometryMetaFieldView *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3));
     temp_s1_2->f56 = (int)(igAttrList_GetOrCreateMetaObject());
     temp_s1_2->f52 = 1;

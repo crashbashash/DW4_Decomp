@@ -61,7 +61,7 @@ CallbackArray *igCharMetricsMetaField_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCharMetricsMetaField_metaObject,
-        igCompoundMetaField_Register,
+        Gap::Core::igCompoundMetaField::arkRegisterInternal,
         igCompoundMetaField_GetPublishedMetaObject,
         thunk_igCharMetricsMetaField_GetMetaObject,
         "igCharMetricsMetaField",
@@ -211,7 +211,7 @@ void FUN_00452ca0(int arg0) {
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_2) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_s1_2);
     }
-    temp_s1_3 = (void *)(igVec2fMetaField_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    temp_s1_3 = (void *)(Gap::Math::igVec2fMetaField::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     if ("offset" == 0) {
         var_v0_5 = (void *)(0);
     } else {
@@ -241,7 +241,7 @@ void FUN_00452ca0(int arg0) {
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_3) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_s1_3);
     }
-    temp_s1_4 = (void *)(igVec2fMetaField_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    temp_s1_4 = (void *)(Gap::Math::igVec2fMetaField::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     if ("size" == 0) {
         var_v0_7 = (void *)(0);
     } else {
@@ -271,7 +271,7 @@ void FUN_00452ca0(int arg0) {
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_4) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_s1_4);
     }
-    temp_s1_5 = (void *)(igVec2fMetaField_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    temp_s1_5 = (void *)(Gap::Math::igVec2fMetaField::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     if ("texCoordMin" == 0) {
         var_v0_9 = (void *)(0);
     } else {
@@ -301,7 +301,7 @@ void FUN_00452ca0(int arg0) {
     if (((unsigned long long) ((long long) *(int *)((char *)(temp_s1_5) + 4) << 0x29) >> 0x29) == 0) {
         igObject_Destroy((igObject *)temp_s1_5);
     }
-    temp_s1_6 = (void *)(igVec2fMetaField_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
+    temp_s1_6 = (void *)(Gap::Math::igVec2fMetaField::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     if ("texCoordMax" == 0) {
         var_v0_11 = (void *)(0);
     } else {

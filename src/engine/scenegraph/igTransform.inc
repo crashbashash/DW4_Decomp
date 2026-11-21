@@ -142,7 +142,7 @@ void igTransform_GetMetaObjectFunction(void) {
 }
 
 static FieldFactory g_igTransform_ctorTable[] = {
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
     (FieldFactory)igIntMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
@@ -177,8 +177,8 @@ void igTransform_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igTransform_ctorTable, 4);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    FUN_0018c640((igMetaField *)temp_s1, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
-                                                     igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
+    ((Gap::Math::igMatrix44fMetaField *)temp_s1)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                     igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)))->setDefault(0);
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)));
     *(int *)((char *)(temp_s1_2) + 56) = (int)igVisualAttribute_GetOrCreateMetaObject();

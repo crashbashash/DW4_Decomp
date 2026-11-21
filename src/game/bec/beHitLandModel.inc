@@ -90,7 +90,7 @@ static FieldFactory g_beHitLandModel_ctorTable[] = {
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
     igBoolMetaField_Create,
-    igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
 };
 static const char *g_beHitLandModel_fieldTable[] = {
     "_order",

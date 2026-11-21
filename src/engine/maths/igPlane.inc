@@ -50,7 +50,7 @@ void igPlane_GetMetaObjectFunction(void) {
 }
 
 static FieldFactory g_igPlane_ctorTable[] = {
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     (FieldFactory)igFloatMetaField_Create,
     (FieldFactory)igEnumMetaField_Create,
 };

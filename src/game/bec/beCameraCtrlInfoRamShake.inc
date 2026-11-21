@@ -74,8 +74,8 @@ void beCameraCtrlInfoRamShake_GetMetaObjectFunction(void)
 
 static FieldFactory g_beCameraCtrlInfoRamShake_ctorTable[] = {
     igBoolMetaField_Create,
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     igStringMetaField_Create,
     igFloatMetaField_Create,
     igFloatMetaField_Create,

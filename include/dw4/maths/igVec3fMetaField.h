@@ -10,10 +10,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igVec3fMetaField_metaObject;
-struct igMetaField *igVec3fMetaField_CreateInstance(struct igMemoryPoolView *pool);
-void igVec3fMetaField_SetDefault(struct igMetaField *self, const float *value);
-int FUN_00187b10(void);
 
 #ifdef __cplusplus
 }

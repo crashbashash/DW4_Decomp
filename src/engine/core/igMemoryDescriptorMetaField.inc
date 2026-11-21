@@ -62,7 +62,7 @@ CallbackArray *igMemoryDescriptorMetaField_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igMemoryDescriptorMetaField_metaObject,
-        igCompoundMetaField_Register,
+        Gap::Core::igCompoundMetaField::arkRegisterInternal,
         (igMetaObjectGetFunction)igCompoundMetaField_GetPublishedMetaObject,
         igMemoryDescriptorMetaField_GetMetaObjectFunction,
         "igMemoryDescriptorMetaField",
@@ -77,7 +77,6 @@ CallbackArray *igMemoryDescriptorMetaField_Register(void) {
 void igMemoryDescriptorMetaField_GetMetaObjectFunction(void) {
     igMemoryDescriptorMetaField_GetMetaObject();
 }
-
 
 void igMemoryDescriptorMetaField_CreateDefaultDescriptor(void) {
     void *descriptor;

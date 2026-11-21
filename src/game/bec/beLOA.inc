@@ -84,7 +84,7 @@ static FieldFactory g_beLOA_ctorTable[] = {
     igFloatMetaField_Create,
     igLongMetaField_Create,
     igIntMetaField_Create,
-    igVec4fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
@@ -145,7 +145,7 @@ void beLOA_InitFields(void) {
     colorDefault[1] = 0x3F800000;
     colorDefault[2] = 0x3F800000;
     colorDefault[3] = 0x3F800000;
-    igVec4fMetaField_SetDefault((igMetaField *)color, (const float *)colorDefault);
+    ((Gap::Math::igVec4fMetaField *)color)->setDefault(*(const igVec4f *)colorDefault);
     overrideAttrList = (void *)(igMetaObject_GetFieldAt(meta, base + 6));
     ((igObjectRefMetaField *)overrideAttrList)->_metaObject = (int)igAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)overrideAttrList)->_construct = 1;

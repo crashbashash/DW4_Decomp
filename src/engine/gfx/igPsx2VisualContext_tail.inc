@@ -305,7 +305,7 @@ static FieldFactory g_igPsx2VisualContext_ctorTable[] = {
     (FieldFactory)igEnumArrayMetaField_Create,
     (FieldFactory)igEnumArrayMetaField_Create,
     (FieldFactory)igIntArrayMetaField_Create,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
     (FieldFactory)igIntMetaField_Create,
     (FieldFactory)igIntMetaField_Create,
     (FieldFactory)igIntMetaField_Create,
@@ -316,7 +316,7 @@ static FieldFactory g_igPsx2VisualContext_ctorTable[] = {
     (FieldFactory)igMemoryRefMetaField_Create,
     (FieldFactory)igRawRefMetaField_Create,
     (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
     (FieldFactory)igFloatMetaField_Create,
     (FieldFactory)igUnsignedIntMetaField_Create,
     (FieldFactory)igUnsignedIntMetaField_Create,
@@ -383,7 +383,7 @@ static FieldFactory g_igPsx2VisualContext_ctorTable[] = {
     (FieldFactory)igBoolMetaField_Create,
     (FieldFactory)igFloatMetaField_Create,
     (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
     (FieldFactory)igFloatMetaField_Create,
     (FieldFactory)igFloatMetaField_Create,
     (FieldFactory)igRawRefMetaField_Create,
@@ -406,7 +406,7 @@ static FieldFactory g_igPsx2VisualContext_ctorTable[] = {
     (FieldFactory)igIntMetaField_Create,
     (FieldFactory)igBoolMetaField_Create,
     (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
     (FieldFactory)igBoolMetaField_Create,
     (FieldFactory)igBoolMetaField_Create,
     (FieldFactory)igBoolMetaField_Create,
@@ -1002,7 +1002,7 @@ void igPsx2VisualContext_InitFields(void) {
     sp60[1] = 0;
     sp60[2] = 0;
     sp60[3] = 0;
-    igVec4fMetaField_SetDefault(temp_a0, (const float *)sp60);
+    ((Gap::Math::igVec4fMetaField *)temp_a0)->setDefault(*(const igVec4f *)sp60);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x1E)))->setDefault(1.0f);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x26)))->setDefault(0x280);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x27)))->setDefault(0x1C0);
@@ -1102,7 +1102,7 @@ void igPsx2VisualContext_InitFields(void) {
     sp50[1] = 0;
     sp50[2] = 0;
     sp50[3] = 0;
-    igVec4fMetaField_SetDefault(temp_a0_2, (const float *)sp50);
+    ((Gap::Math::igVec4fMetaField *)temp_a0_2)->setDefault(*(const igVec4f *)sp50);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x61)))->setDefault(1.0f);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x62)))->setDefault(10000.0f);
     { igMetaField *q = igMetaObject_GetFieldAt(meta, fieldStart + 0x66); ((igMetaField *)q)->_size = 0x18; }
@@ -1130,7 +1130,7 @@ void igPsx2VisualContext_InitFields(void) {
     sp40[0] = 0.501960754f;
     sp40[1] = 0.501960754f;
     sp40[2] = 0.501960754f;
-    igVec4fMetaField_SetDefault(temp_a0_3, sp40);
+    ((Gap::Math::igVec4fMetaField *)temp_a0_3)->setDefault(*(const igVec4f *)sp40);
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x79)))->setDefault(1);
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x7A)))->setDefault(1);
     temp_v0_24 = igMetaObject_GetFieldAt(meta, fieldStart + 0x7B);

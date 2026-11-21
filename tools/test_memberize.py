@@ -398,6 +398,44 @@ class Memberize(unittest.TestCase):
         # a write cannot go through the getter: it keeps the C name
         self.assertIn("g_Widget_meta = 0;", users)
 
+    def test_a_pointer_passed_for_a_reference_is_dereferenced(self):
+        # the C form took a pointer to the value; the member takes the kit's reference
+        self.append("config/class-members.tsv", "Widget\tvoid setValue(const Vec &v);\n")
+        self.append("src/game/Game.h", "struct Vec { float f[3]; Vec(float x); };\n"
+                                       "extern \"C\" void Widget_SetValue(Widget *self, const Vec &v);\n")
+        self.append("src/game/Widget.inc", "void Widget_SetValue(Widget *self, const Vec &v) {\n}\n")
+        self.append("src/game/Users.inc",
+                    "void Users_Set(Widget *w, struct S *s) {\n    float a[3];\n    Vec v(0.0f);\n"
+                    "    Widget_SetValue(w, a);\n    Widget_SetValue(w, (const float *)&s);\n"
+                    "    Widget_SetValue(w, Vec(1.0f).f);\n    Widget_SetValue(w, v);\n"
+                    "    Widget_SetValue(w, a + 1);\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Widget_SetValue\n")
+        write(self.table, TABLE + "Widget_SetValue\tWidget::setValue\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        self.assertIn("    w->setValue(*(const Vec *)a);\n    w->setValue(*(const Vec *)&s);\n"
+                      "    w->setValue(Vec(1.0f));\n    w->setValue(v);\n"
+                      "    w->setValue(*(const Vec *)(a + 1));\n", self.read("src/game/Users.inc"))
+
+    def test_a_static_whose_return_type_changed_keeps_its_uses_types(self):
+        # the C form returned an int (and the member a pointer): an assignment of the result and a field table
+        # naming the function keep the C type through a cast
+        self.append("config/class-members.tsv", "Widget\tstatic Widget *make();\n")
+        self.append("src/game/Game.h", "extern \"C\" int Widget_Make(void);\n")
+        self.append("src/game/Widget.inc", "int Widget_Make(void) {\n    return 0;\n}\n")
+        self.append("src/game/Users.inc",
+                    "typedef Widget *(*Factory)(void);\n"
+                    "static Factory g_factories[] = {\n    Widget_Make,\n    (Factory)Widget_Make,\n};\n"
+                    "void Users_Make(int *p) {\n    *p = Widget_Make();\n    p[1] = (int)Widget_Make();\n"
+                    "    if (Widget_Make() == 0) {\n    }\n}\n")
+        self.append("config/SLUS-20836/symbols.txt", "00100100 000020 Widget_Make\n")
+        write(self.table, TABLE + "Widget_Make\tWidget::make\n")
+        self.assertEqual(self.run_tool("--apply"), 0)
+        self.assertIn("Widget *Widget::make() {", self.read("src/game/Widget.inc"))
+        users = self.read("src/game/Users.inc")
+        self.assertIn("    (Factory)Widget::make,\n    (Factory)Widget::make,\n", users)
+        self.assertIn("    *p = (int)Widget::make();\n    p[1] = (int)Widget::make();\n"
+                      "    if (Widget::make() == 0) {\n", users)
+
 
 class Helpers(unittest.TestCase):
     MACROS = {"OBJ_BOOT": (("C",), "public: C(); virtual void __bootstrapDestruct(); "

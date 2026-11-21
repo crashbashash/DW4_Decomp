@@ -1189,12 +1189,12 @@ int FUN_0022d120(Q *arg0, int arg1, Q *arg2, int arg3, int arg4) {
     Q *var_s3;
     Q *var_s1;
 
-    if ((arg0 != 0) && (((Gap::Core::igObject *)arg0)->isOfType(g_igVec3fMetaField_metaObject) != 0)) {
+    if ((arg0 != 0) && (((Gap::Core::igObject *)arg0)->isOfType(Gap::Math::igVec3fMetaField::getClassMeta()) != 0)) {
         var_s3 = arg0;
     } else {
         var_s3 = 0;
     }
-    if ((arg2 != 0) && (((Gap::Core::igObject *)arg2)->isOfType(g_igVec3fMetaField_metaObject) != 0)) {
+    if ((arg2 != 0) && (((Gap::Core::igObject *)arg2)->isOfType(Gap::Math::igVec3fMetaField::getClassMeta()) != 0)) {
         var_s1 = arg2;
     } else {
         var_s1 = 0;

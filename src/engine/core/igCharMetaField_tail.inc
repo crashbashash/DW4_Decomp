@@ -53,317 +53,335 @@ void igCharMetaField::setDefault(char def)
 int igCharMetaField::computeRequiredAlignment() {
     return 1;
 }
-}
+
+int igCompoundMetaField::computeTypeSize()
+{
+    return getSize();
 }
 
-unsigned short igCompoundMetaField_GetElementSize(void *self) {
-    return *(int *)&((igCompoundMetaField *)self)->_size;
-}
-
-int igCompoundMetaField_GetAlignment(igCompoundMetaField *self) {
+int igCompoundMetaField::computeRequiredAlignment()
+{
     int alignment = 0;
-    int i = 0;
-    while (i < ((igMetaFieldList *)self->_fieldList)->_count) {
-        int fieldAlignment = ((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i]->GetAlignment();
-        if (alignment < fieldAlignment) alignment = fieldAlignment;
-        i++;
+    int i;
+
+    for (i = 0; i < _fieldList->_count; i++) {
+        int fieldAlignment = ((igMetaField **)_fieldList->_data)[i]->computeRequiredAlignment();
+
+        if (alignment < fieldAlignment) {
+            alignment = fieldAlignment;
+        }
     }
     return alignment;
 }
 
-void igCompoundMetaField_SetToDefault(void *self, int object) {
+void igCompoundMetaField::resetByValue(igObject *src)
+{
     int i;
-    igMetaFieldList *fields;
-    void *field;
 
-    for (i = 0; fields = (igMetaFieldList *)((igCompoundMetaField *)self)->_fieldList, i < fields->_count; i++) {
-        field = (void *)(((int *)fields->_data)[i]);
-        ((igMetaFieldView *)field)->SetToDefault(object);
+    for (i = 0; i < _fieldList->_count; i++) {
+        ((igMetaField **)_fieldList->_data)[i]->resetByValue(src);
     }
 }
 
-void igCompoundMetaField_CopyDefaultToValue(void *self, int object) {
+void igCompoundMetaField::resetByReference(igObject *src)
+{
     int i;
-    igMetaFieldList *fields;
-    for (i = 0; fields = (igMetaFieldList *)((igCompoundMetaField *)self)->_fieldList, i < fields->_count; i++) {
-        ((igMetaFieldView *)(((int *)fields->_data)[i]))->CopyDefaultToValue(object);
+
+    for (i = 0; i < _fieldList->_count; i++) {
+        ((igMetaField **)_fieldList->_data)[i]->resetByReference(src);
     }
 }
 
-void igCompoundMetaField_ConstructValue(igCompoundMetaField *self, int object) {
+void igCompoundMetaField::construct(igObject *src)
+{
     int i;
-    igMetaFieldList *fields;
-    i = 0;
-    while (fields = (igMetaFieldList *)self->_fieldList, i < fields->_count) {
-        ((igMetaFieldView **)fields->_data)[i]->ConstructValue(object);
-        i++;
+
+    for (i = 0; i < _fieldList->_count; i++) {
+        ((igMetaField **)_fieldList->_data)[i]->construct(src);
     }
 }
 
-void igCompoundMetaField_DestructValue(igCompoundMetaField *self, int object) {
+void igCompoundMetaField::destruct(igObject *src)
+{
     int i;
-    igMetaFieldView *field;
-    for (i = 0; i < ((igMetaFieldList *)self->_fieldList)->_count; i++) {
-        field = ((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i];
-        field->DestructValue(object);
+
+    for (i = 0; i < _fieldList->_count; i++) {
+        ((igMetaField **)_fieldList->_data)[i]->destruct(src);
     }
 }
 
-void igCompoundMetaField_ZeroValue(igCompoundMetaField *a, int x) {
+void igCompoundMetaField::commission(igObject *src)
+{
     int i;
-    for (i = 0; i < ((igMetaFieldList *)a->_fieldList)->_count; i++) {
-        ((igMetaFieldView **)((igMetaFieldList *)a->_fieldList)->_data)[i]->ZeroValue(x);
+
+    for (i = 0; i < _fieldList->_count; i++) {
+        ((igMetaField **)_fieldList->_data)[i]->commission(src);
     }
 }
 
-void igCompoundMetaField_ClearValue(igCompoundMetaField *self, int object) {
-    int i = 0;
-    while (i < ((igMetaFieldList *)self->_fieldList)->_count) {
-        ((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i]->ClearValue(object);
-        i++;
-    }
-}
-
-void igCompoundMetaField_DeepCopy(void *self, int dest, int source) {
+void igCompoundMetaField::decommission(igObject *src)
+{
     int i;
-    for (i = 0; i < ((igMetaFieldList *)((igCompoundMetaField *)self)->_fieldList)->_count; i++) {
-        ((igMetaFieldView **)((igMetaFieldList *)((igCompoundMetaField *)self)->_fieldList)->_data)[i]->DeepCopy(dest, source);
+
+    for (i = 0; i < _fieldList->_count; i++) {
+        ((igMetaField **)_fieldList->_data)[i]->decommission(src);
     }
 }
 
-void igCompoundMetaField_CopyReference(void *self, int dest, int source) {
+void igCompoundMetaField::copyByValue(igObject *dst, const igObject *src)
+{
     int i;
-    for (i = 0; i < ((igMetaFieldList *)((igCompoundMetaField *)self)->_fieldList)->_count; i++) {
-        igMetaFieldView *field = ((igMetaFieldView **)((igMetaFieldList *)((igCompoundMetaField *)self)->_fieldList)->_data)[i];
-        field->CopyReference(dest, source);
+
+    for (i = 0; i < _fieldList->_count; i++) {
+        ((igMetaField **)_fieldList->_data)[i]->copyByValue(dst, src);
     }
 }
 
-void igCompoundMetaField_ResetValue(igCompoundMetaField *self, int dest, int source) {
+void igCompoundMetaField::copyByReference(igObject *dst, const igObject *src)
+{
     int i;
-    igMetaFieldView *field;
-    for (i = 0; i < ((igMetaFieldList *)self->_fieldList)->_count; i++) {
-        field = ((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i];
-        field->ResetValue(dest, source);
+
+    for (i = 0; i < _fieldList->_count; i++) {
+        ((igMetaField **)_fieldList->_data)[i]->copyByReference(dst, src);
     }
 }
 
-void igCompoundMetaField_IgnoreCopy(igCompoundMetaField *self, int dest, int source) {
-    int i = 0;
-    while (i < ((igMetaFieldList *)self->_fieldList)->_count) {
-        ((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i]->IgnoreCopy(dest, source);
-        i++;
+void igCompoundMetaField::copyByReset(igObject *dst, const igObject *src)
+{
+    int i;
+
+    for (i = 0; i < _fieldList->_count; i++) {
+        ((igMetaField **)_fieldList->_data)[i]->copyByReset(dst, src);
     }
 }
 
-void igCompoundMetaField_Print(igCompoundMetaField *self, int object, int a2, int a3) {
-    unsigned int count;
+void igCompoundMetaField::copyByNoCopy(igObject *dst, const igObject *src)
+{
+    int i;
+
+    for (i = 0; i < _fieldList->_count; i++) {
+        ((igMetaField **)_fieldList->_data)[i]->copyByNoCopy(dst, src);
+    }
+}
+
+void igCompoundMetaField::print(const igObject *src, unsigned int deep, const char *indent)
+{
+    unsigned int count = _fieldList->_count;
     unsigned int i;
 
-    count = ((igMetaFieldList *)self->_fieldList)->_count;
     for (i = 0; i < count; i++) {
-        ((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i]->Print(object, a2, a3);
+        ((igMetaField **)_fieldList->_data)[i]->print(src, deep, indent);
     }
 }
 
-void igCompoundMetaField_ReleaseElements(igCompoundMetaField *self, int object, int a2, int a3) {
+void igCompoundMetaField::traverse(igObject *obj, void *visitFunc, void *traversalData)
+{
     int i;
 
-    for (i = 0; i < ((igMetaFieldList *)self->_fieldList)->_count; i++) {
-        ((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i]->ReleaseElements(object, a2, a3);
+    for (i = 0; i < _fieldList->_count; i++) {
+        ((igMetaField **)_fieldList->_data)[i]->traverse(obj, visitFunc, traversalData);
     }
 }
 
-int igCompoundMetaField_Write(igCompoundMetaField *self, int object, int file) {
-    int sum = 0;
+int igCompoundMetaField::addToDirectory(igObject *obj, igDirectory *dir)
+{
+    int count = 0;
     int i;
-    for (i = 0; i < ((igMetaFieldList *)self->_fieldList)->_count; i++) {
-        sum += ((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i]->Write(object, file);
+
+    for (i = 0; i < _fieldList->_count; i++) {
+        count += ((igMetaField **)_fieldList->_data)[i]->addToDirectory(obj, dir);
     }
-    return sum;
+    return count;
 }
 
-int igCompoundMetaField_Compare(igCompoundMetaField *self, int object, int other) {
+int igCompoundMetaField::compare(const igObject *obj1, const igObject *obj2) const
+{
     int i;
-    igMetaFieldView *field;
 
-    for (i = 0; i < ((igMetaFieldList *)self->_fieldList)->_count; i++) {
-        field = ((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i];
-        if (field->Compare(object, other) != 0) {
+    for (i = 0; i < _fieldList->_count; i++) {
+        if (((igMetaField **)_fieldList->_data)[i]->compare(obj1, obj2) != 0) {
             return -1;
         }
     }
     return 0;
 }
 
-int igCompoundMetaField_IsAlikeExactly(igCompoundMetaField *self, int object, int other) {
-    int i;
-    for (i = 0; i < ((igMetaFieldList *)self->_fieldList)->_count; i++) {
-        if (((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i]->IsAlikeExactly(object, other) == 0) {
-            return 0;
-        }
-    }
-    return 1;
-}
-
-int igCompoundMetaField_IsAlikeDeep(igCompoundMetaField *self, int object, int other) {
+bool igCompoundMetaField::isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const
+{
     int i;
 
-    for (i = 0; i < ((igMetaFieldList *)self->_fieldList)->_count; i++) {
-        if (((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i]->IsAlikeDeep(object, other) == 0) {
-            return 0;
+    for (i = 0; i < _fieldList->_count; i++) {
+        if (!((igMetaField **)_fieldList->_data)[i]->isAlikeCompareExactly(obj1, obj2)) {
+            return false;
         }
     }
-    return 1;
+    return true;
 }
 
-int igCompoundMetaField_IsAlikeShallow(igCompoundMetaField *self, int object, int other) {
+bool igCompoundMetaField::isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const
+{
     int i;
 
-    for (i = 0; i < ((igMetaFieldList *)self->_fieldList)->_count; i++) {
-        if (((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i]->IsAlikeShallow(object, other) == 0) {
-            return 0;
+    for (i = 0; i < _fieldList->_count; i++) {
+        if (!((igMetaField **)_fieldList->_data)[i]->isAlikeCompareDeep(obj1, obj2)) {
+            return false;
         }
     }
-    return 1;
+    return true;
 }
 
-int igCompoundMetaField_IsAlikeIgnore(igCompoundMetaField *self, int object, int other) {
+bool igCompoundMetaField::isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const
+{
     int i;
-    for (i = 0; i < ((igMetaFieldList *)self->_fieldList)->_count; i++) {
-        if (((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i]->IsAlikeIgnore(object, other) == 0) {
-            return 0;
+
+    for (i = 0; i < _fieldList->_count; i++) {
+        if (!((igMetaField **)_fieldList->_data)[i]->isAlikeCompareShallow(obj1, obj2)) {
+            return false;
         }
     }
-    return 1;
+    return true;
 }
 
-int igCompoundMetaField_GetRawFieldMemSize(igCompoundMetaField *self, int object) {
+bool igCompoundMetaField::isAlikeCompareNoCompare(const igObject *obj1, const igObject *obj2) const
+{
+    int i;
+
+    for (i = 0; i < _fieldList->_count; i++) {
+        if (!((igMetaField **)_fieldList->_data)[i]->isAlikeCompareNoCompare(obj1, obj2)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int igCompoundMetaField::getIoSize(const igObject *obj) const
+{
     int size = 0;
     int padding = 0;
     int i;
-    for (i = 0; i < ((igMetaFieldList *)self->_fieldList)->_count; i++) {
-        size += ((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i]->GetRawFieldMemSize(object) + padding;
+
+    for (i = 0; i < _fieldList->_count; i++) {
+        size += ((igMetaField **)_fieldList->_data)[i]->getIoSize(obj) + padding;
     }
     return size;
 }
 
-int igCompoundMetaField_WriteRawFieldMem(igCompoundMetaField *self, int dest, int source, int a3, unsigned char swap) {
-    int sum = 0;
+int igCompoundMetaField::writeRawFieldMemory(const void *fieldMem, void *dstMem, igDirectory *dir, bool endianSwap) const
+{
+    int size = 0;
     int count;
     int base;
     int i;
-    base = self->_offset;
-    count = ((igMetaFieldList *)self->_fieldList)->_count;
+
+    base = _offset;
+    count = _fieldList->_count;
+
     for (i = 0; i < count; i++) {
-        igMetaFieldView *field = ((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i];
-        int offset = ((igMetaField *)field)->_offset;
-        sum += field->WriteRawFieldMem((dest + offset) - base, (source + offset) - base, a3, swap);
+        igMetaField *field = ((igMetaField **)_fieldList->_data)[i];
+        int offset = field->_offset;
+
+        size += field->writeRawFieldMemory((const char *)fieldMem + offset - base, (char *)dstMem + offset - base,
+                                           dir, endianSwap);
     }
-    return sum;
+    return size;
 }
 
-int igCompoundMetaField_ReadRawFieldMem(igCompoundMetaField *self, int dest, int source, int a3, unsigned char swap) {
-    igMetaFieldView *field;
-    int sum;
-    int offset;
+int igCompoundMetaField::readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const
+{
+    int size = 0;
     int count;
     int base;
     int i;
 
-    sum = 0;
-    i = 0;
-    base = self->_offset;
-    count = ((igMetaFieldList *)self->_fieldList)->_count;
-    for (; i < count; i++) {
-        field = ((igMetaFieldView **)((igMetaFieldList *)self->_fieldList)->_data)[i];
-        offset = ((igMetaField *)field)->_offset;
-        sum += field->ReadRawFieldMem((dest + offset) - base, (source + offset) - base, a3, swap);
+    base = _offset;
+    count = _fieldList->_count;
+
+    for (i = 0; i < count; i++) {
+        igMetaField *field = ((igMetaField **)_fieldList->_data)[i];
+        int offset = field->_offset;
+
+        size += field->readRawFieldMemory((char *)fieldMem + offset - base, (const char *)srcMem + offset - base,
+                                          dir, endianSwap);
     }
-    return sum;
+    return size;
 }
 
-void igCompoundMetaField_SwapBytes(igMetaFieldView *self, int buffer, int count) {
-    int element;
-    igMetaFieldList *fields;
-    igMetaFieldView *field;
+void igCompoundMetaField::endianSwapMemory(void *fieldMem, int nFieldElts) const
+{
+    char *element = (char *)fieldMem;
+    igMetaFieldList *fieldList = ((igCompoundMetaField *)getGenericMetaField())->_fieldList;
     int i;
     int j;
 
-    element = buffer;
-    fields = (igMetaFieldList *)self->GetDescriptor()->_fieldList;
-    for (i = 0; i < count; i++) {
-        for (j = 0; j < fields->_count; j++) {
-            field = ((igMetaFieldView **)fields->_data)[j];
-            field->SwapBytes((void *)(element + ((igMetaField *)field)->_offset), 1);
+    for (i = 0; i < nFieldElts; i++) {
+        for (j = 0; j < fieldList->_count; j++) {
+            igMetaField *field = ((igMetaField **)fieldList->_data)[j];
+
+            field->endianSwapMemory(element + field->_offset, 1);
         }
-        element += ((igCompoundMetaField *)self)->_size;
+        element += _size;
     }
 }
 
-int igCompoundMetaField_GetDescriptor(void) {
-    return (*(int *)&g_igCompoundMetaField_descriptor);
-}
-
-void igCompoundMetaField_SwapValue(void *self, int object) {
+void igCompoundMetaField::endianSwap(igObject *obj) const
+{
     int i;
-    igMetaFieldList *fields;
-    igMetaFieldView *field;
-    i = 0;
-    while (fields = (igMetaFieldList *)((igCompoundMetaField *)self)->_fieldList, i < fields->_count) {
-        field = (igMetaFieldView *)(((int *)fields->_data)[i]);
-        field->SwapValue(object);
-        i += 1;
+
+    for (i = 0; i < _fieldList->_count; i++) {
+        ((igMetaField **)_fieldList->_data)[i]->endianSwap(obj);
     }
 }
 
-int igCompoundMetaField_ValueFromString(int *self, int object, int text, int directory) {
+int igCompoundMetaField::setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir)
+{
     int closeLength;
-    int openLength;
-    igMetaFieldList *fields;
+    int openLength = 0;
+    igMetaFieldList *fieldList;
     int i;
 
-    openLength = 0;
-    sscanf((const char *)text, "{%n", &openLength);
-    fields = (igMetaFieldList *)((igMetaFieldView *)self)->GetDescriptor()->_fieldList;
-    for (i = 0; i < fields->_count; i++) {
-        igMetaFieldView *field = ((igMetaFieldView **)fields->_data)[i];
-        field->ValueFromString(object + ((igMetaField *)field)->_offset, text + openLength, directory);
+    sscanf(strVal, "{%n", &openLength);
+    fieldList = ((igCompoundMetaField *)getGenericMetaField())->_fieldList;
+    for (i = 0; i < fieldList->_count; i++) {
+        igMetaField *field = ((igMetaField **)fieldList->_data)[i];
+
+        field->setMemoryByString((char *)dstMem + field->_offset, strVal + openLength, dir);
     }
-    sscanf((const char *)text, "}%n", &closeLength);
+    sscanf(strVal, "}%n", &closeLength);
     return openLength + closeLength;
 }
 
-int igCompoundMetaField_ValueToString(igStringRef *out, igMetaFieldView *ctx, int a2, int a3) {
-    char *sepA = (char *)" { ";
-    char *sepB = (char *)" } ";
-    igMetaFieldList *list = (igMetaFieldList *)ctx->GetDescriptor()->_fieldList;
-    int n = list->_count;
-    igStringRef *arr = (igStringRef *)((void *)((Gap::Core::igObject *)ctx)->calloc(n, 4));
-    int total = 9;
+igStringRef igCompoundMetaField::getStringFromMemory(const void *srcMem, igDirectory *dir)
+{
+    const char *open = " { ";
+    const char *close = " } ";
+    igMetaFieldList *fieldList = ((igCompoundMetaField *)getGenericMetaField())->_fieldList;
+    int count = fieldList->_count;
+    igStringRef *strings = (igStringRef *)calloc(count, sizeof(igStringRef));
+    int length = 9;
     int i;
-    for (i = 0; i < n; i++) {
-        int off = i * 4;
-        igMetaFieldView *e = ((igMetaFieldView **)list->_data)[i];
-        *(igStringRef *)((char *)arr + off) = e->ValueToString(a2 + ((igMetaField *)e)->_offset, a3);
-        total += strlen(((igStringRef *)((char *)arr + off))->p) + 1;
+
+    for (i = 0; i < count; i++) {
+        igMetaField *field = ((igMetaField **)fieldList->_data)[i];
+
+        strings[i] = field->getStringFromMemory((const char *)srcMem + field->_offset, dir);
+        length += strlen(strings[i].p) + 1;
     }
-    char *buf = ((char *)((Gap::Core::igObject *)ctx)->malloc(total));
-    strcpy(buf, sepA);
-    char *p = buf + 4;
-    buf[3] = 0x20;
-    for (i = 0; i < n; i++) {
-        strcpy(p, arr[i].p);
-        p += strlen(arr[i].p);
-        *p = 0x20;
-        p++;
+    char *buffer = (char *)malloc(length);
+    strcpy(buffer, open);
+    char *cursor = buffer + 4;
+    buffer[3] = ' ';
+    for (i = 0; i < count; i++) {
+        strcpy(cursor, strings[i].p);
+        cursor += strlen(strings[i].p);
+        *cursor = ' ';
+        cursor++;
     }
-    strcpy(p, sepB);
-    igStringRef res(buf);
-    ((Gap::Core::igObject *)ctx)->free((void *)buf);
-    out->p = res.p;
-    if (out->p != 0) *(int *)(out->p - 4) = *(int *)(out->p - 4) + 1;
-    return 0;
+    strcpy(cursor, close);
+    igStringRef result(buffer);
+    free(buffer);
+    return result;
+}
+}
 }
 
 void igContextExt_MakeCurrent(void) {

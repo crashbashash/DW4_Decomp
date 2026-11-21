@@ -262,10 +262,6 @@ int Gap__Core__igAliasMemoryPool__vfunc_83(void) {
     return 1;
 }
 
-igMetaObject *igCompoundMetaField_GetMeta(void) {
-    return g_igCompoundMetaField_metaObject;
-}
-
 int igContextList_GetMeta(void) {
     return (int)g_igContextList_metaObject;
 }

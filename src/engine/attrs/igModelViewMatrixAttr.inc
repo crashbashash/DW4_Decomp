@@ -56,7 +56,7 @@ void igModelViewMatrixAttr_GetMetaObjectFunction(void) {
 }
 
 static FieldFactory g_igModelViewMatrixAttr_ctorTable[] = {
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
 };
 static const char *g_igModelViewMatrixAttr_fieldTable[] = {
     "_m",
@@ -78,8 +78,8 @@ void igModelViewMatrixAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igModelViewMatrixAttr_ctorTable, 1);
     field = (int)igMetaObject_GetFieldAt(meta, base);
-    FUN_0018c640((igMetaField *)field, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
-                                                   igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
+    ((Gap::Math::igMatrix44fMetaField *)field)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                   igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
     igMetaObject_NameFields(meta, g_igModelViewMatrixAttr_fieldTable, g_igModelViewMatrixAttr_fieldHandles, g_igModelViewMatrixAttr_fieldOffsets, base);
     igMetaObject_AddExitCallback((int)&thunk_igModelViewMatrixAttr_UserUnregister);
 }

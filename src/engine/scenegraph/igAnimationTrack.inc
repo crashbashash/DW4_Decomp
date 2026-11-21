@@ -82,8 +82,8 @@ void igAnimationTrack_GetMetaObjectFunction(void) {
 
 static FieldFactory g_igAnimationTrack_ctorTable[] = {
     (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
 };
 static const char *g_igAnimationTrack_fieldTable[] = {
     "_source",

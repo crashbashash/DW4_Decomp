@@ -61,7 +61,7 @@ void igAnimationHierarchy_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igAnimationHierarchy_ctorTable, 1);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igMemoryRefMetaField *)temp_s1)->_memType = FUN_00187b10();
+    ((igMemoryRefMetaField *)temp_s1)->_memType = (int)Gap::Math::igVec3fMetaField::getMetaField();
     ((igRefMetaField *)temp_s1)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s1)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s1)->_releaseOnReset = 1;

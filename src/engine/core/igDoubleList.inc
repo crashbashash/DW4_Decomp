@@ -34,8 +34,8 @@ CallbackArray *igDoubleList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igDoubleList_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igDoubleList_GetMetaObjectFunction,
         "igDoubleList",
         0x14,
@@ -49,7 +49,6 @@ CallbackArray *igDoubleList_Register(void) {
 void igDoubleList_GetMetaObjectFunction(void) {
     igDoubleList_GetMetaObject();
 }
-
 
 void igDoubleList_InitFields(void) {
     igMetaObject *meta = g_igDoubleList_metaObject;

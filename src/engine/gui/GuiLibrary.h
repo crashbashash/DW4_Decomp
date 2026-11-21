@@ -48,7 +48,6 @@
 #include "dw4/core/igMetaField.h"
 extern "C" void FUN_0019e440(void);
 #include "dw4/scenegraph/igNode.h"
-extern "C" igMetaField *FUN_00187560(void *);
 #include "dw4/gfx/igVisualContext.h"
 class igMemoryPoolView;
 

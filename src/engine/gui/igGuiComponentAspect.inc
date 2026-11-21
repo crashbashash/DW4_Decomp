@@ -48,8 +48,8 @@ void igGuiComponentAspect_GetMetaObjectFunction(void) {
 
 static FieldFactory g_igGuiComponentAspect_ctorTable[] = {
     igObjectRefMetaField_Create,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
 };
 static const char *g_igGuiComponentAspect_fieldTable[] = {
     "_node",
@@ -86,12 +86,12 @@ void igGuiComponentAspect_InitFields(void) {
     v1[0] = 0.0f;
     v1[1] = 0.0f;
     v1[2] = 0.0f;
-    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, v1);
+    ((Gap::Math::igVec3fMetaField *)temp_a0)->setDefault(*(const igVec3f *)v1);
     temp_a0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2));
     v2[2] = 1.0f;
     v2[0] = 3.4028235e+38f;
     v2[1] = 3.4028235e+38f;
-    igVec3fMetaField_SetDefault((igMetaField *)temp_a0_2, v2);
+    ((Gap::Math::igVec3fMetaField *)temp_a0_2)->setDefault(*(const igVec3f *)v2);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igGuiComponentAspect_fieldTable, g_igGuiComponentAspect_fieldHandles, g_igGuiComponentAspect_fieldOffsets, temp_s2);
 }
 

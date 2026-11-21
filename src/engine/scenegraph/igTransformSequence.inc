@@ -156,7 +156,7 @@ static FieldFactory g_igTransformSequence_ctorTable[] = {
     (FieldFactory)igBoolMetaField_Create,
     (FieldFactory)igEnumMetaField_Create,
     (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
 };
 static const char *g_igTransformSequence_fieldTable[] = {
     "_xlateList",
@@ -230,7 +230,7 @@ void igTransformSequence_InitFields(void) {
     sp40[0] = 0;
     sp40[1] = 0;
     sp40[2] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)sp40);
+    ((Gap::Math::igVec3fMetaField *)temp_a0)->setDefault(*(const igVec3f *)sp40);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igTransformSequence_fieldTable, g_igTransformSequence_fieldHandles, g_igTransformSequence_fieldOffsets, temp_s1);
     *(int *)((char *)(g_igTransformSequence_metaObject) + 60) = (int)(igTransformSequence1_5_GetMetaObjectFunction);
 }

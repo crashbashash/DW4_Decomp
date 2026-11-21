@@ -26,8 +26,8 @@ CallbackArray *igPsx2LongList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igPsx2LongList_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igPsx2LongList_GetMetaObjectFunction,
         "igPsx2LongList",
         0x14, /* instance size */

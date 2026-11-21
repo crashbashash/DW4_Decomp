@@ -51,7 +51,7 @@ void igViewMode_GetMetaObjectFunction(void) {
 }
 
 static FieldFactory g_igViewMode_ctorTable[] = {
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
 };
 static const char *g_igViewMode_fieldTable[] = {
     "_inverseMatrix",

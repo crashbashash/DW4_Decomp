@@ -50,7 +50,7 @@ int FUN_00155340(FieldTypeTable *table, unsigned int type) {
         case 37:
         case 38:
         case 39:
-            return (int)g_igVec4fMetaField_metaObject;
+            return (int)Gap::Math::igVec4fMetaField::getClassMeta();
         case 40:
         case 41:
         case 42:
@@ -58,7 +58,7 @@ int FUN_00155340(FieldTypeTable *table, unsigned int type) {
         case 44:
         case 45:
         case 46:
-            return (int)g_igMatrix44fMetaField_metaObject;
+            return (int)Gap::Math::igMatrix44fMetaField::getClassMeta();
         default:
             return 0;
         }

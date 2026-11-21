@@ -49,7 +49,8 @@ class TextTest(unittest.TestCase):
                          "igFooMetaField * igFooMetaField_Get(void)")
         text, ok = cc.stub_text(C_SOURCE, "igFooMetaField_GetSize", "unsigned short igFooMetaField_GetSize(X *self)")
         self.assertTrue(ok)
-        self.assertIn("unsigned short igFooMetaField_GetSize(X *self)\n{\n}\n\nvoid igFooMetaField_Other", text)
+        # the C form's return type stays: memberize casts the uses the member's return type changes
+        self.assertIn("int igFooMetaField_GetSize(X *self)\n{\n}\n\nvoid igFooMetaField_Other", text)
 
     def test_replace_member_and_fragment(self):
         text = ("namespace Gap {\nnamespace Core {\n\nint igFoo::size() const\n{\n    return 1;\n}\n\n"
@@ -153,7 +154,7 @@ class TreeTest(unittest.TestCase):
 
     def test_stub_and_table(self):
         cc.stub(self.tree, "igFooMetaField", self.specs["igFooMetaField"])
-        self.assertIn("unsigned short igFooMetaField_GetSize(igFooMetaField *self)\n{\n}\n",
+        self.assertIn("\nint igFooMetaField_GetSize(igFooMetaField *self)\n{\n}\n",
                       self.tree.read("src/engine/core/igFooMetaField.inc"))
         table, unmapped = cc.memberize_table(self.tree, ["igFooMetaField"], self.specs)
         self.assertEqual(table, [("igFooMetaField_GetSize", "Gap::Core::igFooMetaField::computeSize")])

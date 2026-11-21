@@ -66,8 +66,8 @@ static FieldFactory g_beModelCtrlHITBOX_ctorTable[] = {
     igIntMetaField_Create,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
-    igVec3fMetaField_CreateInstance,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
 };
 static const char *g_beModelCtrlHITBOX_fieldTable[] = {
     "_kind",

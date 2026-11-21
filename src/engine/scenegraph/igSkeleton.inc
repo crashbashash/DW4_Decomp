@@ -122,7 +122,7 @@ void igSkeleton_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igSkeletonBoneInfoList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1)->_construct = 1;
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
-    ((igMemoryRefMetaField *)temp_s1_2)->_memType = FUN_001888e0();
+    ((igMemoryRefMetaField *)temp_s1_2)->_memType = (int)Gap::Math::igMatrix44fMetaField::getMetaField();
     ((igRefMetaField *)temp_s1_2)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s1_2)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s1_2)->_releaseOnReset = 1;

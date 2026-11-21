@@ -62,7 +62,7 @@ CallbackArray *igItemDataBaseField_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igItemDataBaseField_metaObject,
-        (igMetaObjectRegisterFunction)igCompoundMetaField_Register,
+        (igMetaObjectRegisterFunction)Gap::Core::igCompoundMetaField::arkRegisterInternal,
         (igMetaObjectGetFunction)igCompoundMetaField_GetPublishedMetaObject,
         igItemDataBaseField_GetMetaObjectFunction,
         "igItemDataBaseField",

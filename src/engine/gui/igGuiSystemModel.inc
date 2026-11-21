@@ -79,11 +79,11 @@ void thunk_igGuiSystemModel_GetMetaObject(void) {
 }
 
 static FieldFactory g_igGuiSystemModel_ctorTable[] = {
-    (FieldFactory)igVec2fMetaField_CreateInstance,
-    (FieldFactory)igVec2fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool,
     igBoolMetaField_Create,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
     igBoolMetaField_Create,
     igObjectRefMetaField_Create,
     igObjectRefMetaField_Create,
@@ -149,11 +149,11 @@ void igGuiSystemModel_InitFields(void) {
     temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     sp48[0] = 0;
     sp48[1] = 0;
-    igVec2fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)sp48);
+    ((Gap::Math::igVec2fMetaField *)temp_a0)->setDefault(*(const igVec2f *)sp48);
     temp_a0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     sp40[0] = 0;
     sp40[1] = 0;
-    igVec2fMetaField_SetDefault((igMetaField *)temp_a0_2, (const float *)sp40);
+    ((Gap::Math::igVec2fMetaField *)temp_a0_2)->setDefault(*(const igVec2f *)sp40);
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 5)))->setDefault(1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6));
     *(int *)((char *)(temp_s1) + 56) = (int)igGuiComponent_GetOrCreateMetaObject();

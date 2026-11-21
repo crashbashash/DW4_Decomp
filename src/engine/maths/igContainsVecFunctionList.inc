@@ -31,8 +31,8 @@ CallbackArray *igContainsVecFunctionList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igContainsVecFunctionList_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igContainsVecFunctionList_GetMetaObjectFunction,
         "igContainsVecFunctionList",
         0x14, /* instance size */

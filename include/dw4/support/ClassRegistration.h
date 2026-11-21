@@ -34,16 +34,10 @@ void igExtendByVecFunctionList_EnsureRegistered(void);
 void igGetCenterFunctionList_EnsureRegistered(void);
 void igIntersectionFunctionList_EnsureRegistered(void);
 void igIsEmptyFunctionList_EnsureRegistered(void);
-void igMatrix44fMetaField_EnsureRegistered(void);
 void igQuaternionfList_EnsureRegistered(void);
 void igRayIntersectionFunctionList_EnsureRegistered(void);
 void igTransformFunctionList_EnsureRegistered(void);
-void igVec2fMetaField_EnsureRegistered(void);
 void igVec3fList_EnsureRegistered(void);
-void igVec3fMetaField_EnsureRegistered(void);
-void igVec4fArrayMetaField_EnsureRegistered(void);
-void igVec4fMetaField_EnsureRegistered(void);
-void igVec4ucMetaField_EnsureRegistered(void);
 
 /* Gfx */
 void igClut_EnsureRegistered(void);

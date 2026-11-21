@@ -85,8 +85,8 @@ void igAnimationCombinerBoneInfo_GetMetaObjectFunction(void) {
 static FieldFactory g_igAnimationCombinerBoneInfo_ctorTable[] = {
     (FieldFactory)igObjectRefMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     (FieldFactory)igIntMetaField_Create,
     (FieldFactory)igBoolMetaField_Create,
     (FieldFactory)igIntMetaField_Create,

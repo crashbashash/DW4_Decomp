@@ -31,8 +31,8 @@ CallbackArray *igExtendByRayFunctionList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igExtendByRayFunctionList_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igExtendByRayFunctionList_GetMetaObjectFunction,
         "igExtendByRayFunctionList",
         0x14, /* instance size */

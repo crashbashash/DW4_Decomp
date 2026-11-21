@@ -165,8 +165,8 @@ void igTransformRecorder_GetMetaObjectFunction(void) {
 }
 
 static FieldFactory g_igTransformRecorder_ctorTable[] = {
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
 };
 static const char *g_igTransformRecorder_fieldTable[] = {
     "_m",

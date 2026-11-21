@@ -239,11 +239,11 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igIntersectionFunctionList_EnsureRegistered();
     igExtendByFunctionList_EnsureRegistered();
     igContainsFunctionList_EnsureRegistered();
-    igVec3fMetaField_EnsureRegistered();
-    igVec2fMetaField_EnsureRegistered();
-    igVec4fMetaField_EnsureRegistered();
-    igVec4ucMetaField_EnsureRegistered();
-    igMatrix44fMetaField_EnsureRegistered();
+    Gap::Math::igVec3fMetaField::arkRegister();
+    Gap::Math::igVec2fMetaField::arkRegister();
+    Gap::Math::igVec4fMetaField::arkRegister();
+    Gap::Math::igVec4ucMetaField::arkRegister();
+    Gap::Math::igMatrix44fMetaField::arkRegister();
     igTrackedElementMetaField_EnsureRegistered();
     igImage_EnsureRegistered();
     igViewportAttr_EnsureRegistered();
@@ -262,7 +262,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     igAttrListList_EnsureRegistered();
     igAttrList_EnsureRegistered();
     igAlphaStateAttr_EnsureRegistered();
-    igVec4fArrayMetaField_EnsureRegistered();
+    Gap::Math::igVec4fArrayMetaField::arkRegister();
     igTraversalFunctionList_EnsureRegistered();
     igShaderInfo_EnsureRegistered();
     igShaderFactoryList_EnsureRegistered();

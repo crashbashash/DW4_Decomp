@@ -40,7 +40,6 @@ struct IndexedWordPairKey;
 struct PairKeyedItem;
 struct IndexedSlotKey;
 struct IndexedWordKey;
-class igVec3fMetaFieldView;
 typedef enum Intersection {
     kDisjoint,
     kIntersecting
@@ -54,12 +53,6 @@ typedef void (*igMetaObjectCallback)();
 #include "dw4/core/internalNonRefCountedObjectList.h"
 #include "dw4/support/list-services.h"
 #include "dw4/core/igUnsignedCharMetaField.h"
-void FUN_00187190(void);
-void FUN_00187450(void);
-void FUN_001877c0(void);
-void FUN_00187a40(void);
-void FUN_00187d00(void);
-void FUN_00188810(void);
 
 
 void igVectorMorphing_EnsureRegistered(void);
@@ -128,60 +121,6 @@ void igVectorBlending_StaticInitCallback(void);
 
 
 void igVectorBlending_InstallFunctions(void);
-igMetaObject *igVec4ucMetaField_GetMetaObject(void);
-
-extern int g_igVec4ucMetaField_vtable[4];
-union U { int vt; char b[64]; };
-
-CallbackArray *igVec4ucMetaField_Register(void);
-
-extern char thunk_igVec4ucMetaField_GetMetaObject_00187170[];
-
-
-
-
-igMetaObject *igVec4fMetaField_GetMetaObject(void);
-
-struct Obj4 { int *vt; int pad[2]; };
-struct F { struct Obj4 obj; int *ref; int pad[12]; };
-extern int g_igVec4fMetaField_vtable[4];
-
-CallbackArray *igVec4fMetaField_Register(void);
-void igVec4fMetaField_GetMetaObjectFunction(void);
-
-
-
-igMetaObject *igVec4fArrayMetaField_GetMetaObject(void);
-
-extern int g_igVec4fArrayMetaField_vtable[4];
-
-CallbackArray *igVec4fArrayMetaField_Register(void);
-void igVec4fArrayMetaField_GetMetaObjectFunction(void);
-
-igMetaObject *igVec4fMetaField_GetPublishedMetaObject(void);
-void igVec4fArrayMetaField_InitFields(void);
-
-
-
-igMetaObject *igVec3fMetaField_GetMetaObject(void);
-
-struct Obj5 { int *vt; char pad[8]; char *m; char pad2[48]; };
-extern int g_igVec3fMetaField_vtable[4];
-
-CallbackArray *igVec3fMetaField_Register(void);
-void igVec3fMetaField_GetMetaObjectFunction(void);
-
-
-
-igMetaObject *igVec2fMetaField_GetMetaObject(void);
-
-typedef struct { int *vt; int p1; int p2; void *str; int pad[12]; } Obj6;
-extern int g_igVec2fMetaField_vtable[4];
-
-CallbackArray *igVec2fMetaField_Register(void);
-void igVec2fMetaField_GetMetaObjectFunction(void);
-
-
 
 void igSphere_EnsureRegistered(void);
 
@@ -242,12 +181,8 @@ void igPlane_InitFields(void);
 void FUN_0018c660(void);
 
 
-igMetaObject *igMatrix44fMetaField_GetMetaObject(void);
 
-extern int g_igMatrix44fMetaField_vtable[4];
 
-CallbackArray *igMatrix44fMetaField_Register(void);
-void igMatrix44fMetaField_GetMetaObjectFunction(void);
 
 
 igMetaObject *igGetCenterFunctionList_GetMetaObject(void);
@@ -511,21 +446,6 @@ static inline float dot3(float ax, float ay, float az, float bx, float by, float
 static inline float lerp(float o, float t, float d) { float m = t * d; return o + m; }
 
 
-void igMatrix44fMetaField_SwapBytes(igMatrix44fMetaField *arg0, int arg1, int arg2);
-
-class DW4VC_208_2 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual int vX(int, int); };
-
-
-class igMatrix44fMetaFieldView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31();
-    virtual void d32();
-    virtual void SetDefault(const void *value);
-};
-
 void FUN_0018cc10(void);
 
 void FUN_0018d110(int arg0, struct S18d110 *arg1);
@@ -606,65 +526,6 @@ typedef struct S5 { char pad[8]; float x, y, z; float dx, dy, dz; float s; } S5;
 
 void FUN_001900d0(void **arg0, int arg1);
 void FUN_0018d630(igSphere *sphere, const float *matrix);
-void igVec2fMetaField_SwapBytes(igVec2fMetaField *arg0, int arg1, int arg2);
-
-
-
-static inline int internString(const char *text) {
-    if (text == 0) {
-        return 0;
-    }
-    if (g_stringPool == 0) {
-        void *pool = StringPool_Allocate(16);
-        if (pool != 0) {
-            pool = StringPool_Construct((StringPool *)pool);
-        }
-        g_stringPool = (StringPool *)pool;
-    }
-    return (int)StringPool_Intern(g_stringPool, text);
-}
-
-class igVec2fMetaFieldView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31();
-    virtual void d32();
-    virtual void SetDefault(const void *value);
-};
-
-void igVec3fMetaField_SwapBytes(igVec3fMetaField *arg0, int arg1, int arg2);
-
-
-class igVec3fMetaFieldView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31();
-    virtual void d32();
-    virtual void SetDefault(const void *value);
-};
-
-void igVec4fArrayMetaField_SwapBytes(igVec4fArrayMetaField *arg0, int arg1, int arg2);
-void igVec4fMetaField_SwapBytes(igVec4fMetaField *arg0, int arg1, int arg2);
-
-
-class igVec4fMetaFieldView {
-public:
-    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
-    virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15();
-    virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23();
-    virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31();
-    virtual void d32();
-    virtual void SetDefault(const void *value);
-};
-
-
-void igVec4ucMetaField_SwapBytes(igVec4ucMetaField *arg0, int arg1, int arg2);
-
-
 
 /* Skins count vertices (in: four floats each) through the bone matrices; weightCount bone indices and weights per
    vertex; out advances by outStride bytes. */

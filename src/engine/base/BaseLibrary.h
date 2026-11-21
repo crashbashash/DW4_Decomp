@@ -681,7 +681,7 @@ static inline void storeHeld(Lst *list, int index, const igSmartPointer<T_5> &va
     }
     it->held = held;
 }
-static inline void * cast0(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igVec4ucMetaField_metaObject) != 0) { return o; } return 0; }
+static inline void * cast0(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Math::igVec4ucMetaField::getClassMeta()) != 0) { return o; } return 0; }
 static inline void * cast0_2(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Core::igUnsignedShortMetaField::getClassMeta()) != 0) { return o; } return 0; }
 static inline void * cast0_3(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Core::igUnsignedIntMetaField::getClassMeta()) != 0) { return o; } return 0; }
 static inline void * cast0_4(void * o) { if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Core::igStringMetaField::getClassMeta()) != 0) { return o; } return 0; }

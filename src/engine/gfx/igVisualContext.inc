@@ -94,8 +94,8 @@ static FieldFactory g_igVisualContext_ctorTable[] = {
     (FieldFactory)igUnsignedIntMetaField_Create,
     (FieldFactory)igLongMetaField_Create,
     (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
     (FieldFactory)igBoolMetaField_Create,
     (FieldFactory)igObjectRefArrayMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
@@ -231,7 +231,7 @@ void igVisualContext_InitFields(void) {
     ((igIntMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 6))->_persistent = 0;
     ((igUnsignedIntMetaField *)igMetaObject_GetFieldAt(meta, fieldStart + 7))->_persistent = 0;
     temp_s2_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 8));
-    ((igMemoryRefMetaField *)temp_s2_2)->_memType = FUN_001888e0();
+    ((igMemoryRefMetaField *)temp_s2_2)->_memType = (int)Gap::Math::igMatrix44fMetaField::getMetaField();
     ((igMemoryRefMetaField *)temp_s2_2)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s2_2)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s2_2)->_releaseOnReset = 1;

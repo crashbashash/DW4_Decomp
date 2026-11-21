@@ -39,8 +39,8 @@ CallbackArray *igShortList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igShortList_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igShortList_GetMetaObjectFunction,
         "igShortList",
         0x14,
@@ -54,7 +54,6 @@ CallbackArray *igShortList_Register(void) {
 void igShortList_GetMetaObjectFunction(void) {
     igShortList_GetMetaObject();
 }
-
 
 void igShortList_InitFields(void) {
     int index;

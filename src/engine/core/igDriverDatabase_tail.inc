@@ -170,7 +170,7 @@ igTDataList<ConfigNode *> *igDriverDatabase_ParseDatabase(igDriverDatabase *s) {
     igTDataList<ConfigNode *> *l;
     int v;
 
-    l = ((igTDataList<ConfigNode *> *)igDataList_Create(((int)((Gap::Core::igObject *)s)->getMemoryPool())));
+    l = ((igTDataList<ConfigNode *> *)Gap::Core::igDataList::_instantiateFromPool(((Gap::Core::igObject *)s)->getMemoryPool()));
     s->_currentLine = 1;
     v = ((igStringObj *)s->_rawDatabase)->_buffer;
     if (v == 0) {
@@ -855,17 +855,17 @@ ConfigPair *igDriverDatabase_Setting_Destruct(ConfigPair *self, int delete_stora
 }
 
 void *igDriverDatabase_SettingsNode_Construct(void *self) {
-    int allocator;
+    igMemoryPoolView *allocator;
 
     ((ConfigSettingsNode *)self)->vtable = (int)(&g_ConfigNode_vtable[0]);
     ((ConfigSettingsNode *)self)->kind = 1;
     ((ConfigSettingsNode *)self)->vtable = (int)(&g_ConfigSettingsNode_vtable[0]);
     if (g_useOwnerAllocator != 0) {
-        allocator = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent));
+        allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent);
     } else {
-        allocator = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList));
+        allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList);
     }
-    ((ConfigSettingsNode *)self)->entries = (igTDataList<ConfigPair *> *)igDataList_Create(allocator);
+    ((ConfigSettingsNode *)self)->entries = (igTDataList<ConfigPair *> *)Gap::Core::igDataList::_instantiateFromPool(allocator);
     ((ConfigSettingsNode *)self)->name = (igStringObj *)igStringObj_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)));
     return self;
 }
@@ -910,7 +910,7 @@ void *igDriverDatabase_SettingsNode_Destruct(ConfigSettingsNode *self, long long
 }
 
 void *igDriverDatabase_PropertyNode_Construct(void *self, int property) {
-    int allocator;
+    igMemoryPoolView *allocator;
 
     ((ConfigSectionNode *)self)->vtable = (int)(&g_ConfigNode_vtable[0]);
     ((ConfigSectionNode *)self)->kind = 0;
@@ -920,11 +920,11 @@ void *igDriverDatabase_PropertyNode_Construct(void *self, int property) {
     ((ConfigSectionNode *)self)->selector = 0;
     ((ConfigSectionNode *)self)->name = (igStringObj *)igStringObj_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString)));
     if (g_useOwnerAllocator != 0) {
-        allocator = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent));
+        allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent);
     } else {
-        allocator = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList));
+        allocator = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleList);
     }
-    ((ConfigSectionNode *)self)->children = (igTDataList<ConfigNode *> *)igDataList_Create(allocator);
+    ((ConfigSectionNode *)self)->children = (igTDataList<ConfigNode *> *)Gap::Core::igDataList::_instantiateFromPool(allocator);
     return self;
 }
 

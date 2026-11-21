@@ -170,16 +170,47 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `set(obj, index, val)`) are converted. The whole isAlike family is the kit's `igBool` (`bool`): igObject's
    `isAlike*` and `userIsAlike*`, igMetaField's `isAlike*` and every `isAlikeCompare*` slot; a caller tests the
    result directly (`if (!f->isAlikeDeep(…))`), since `== 0` widens it. `igStringRef`'s destructor is written
-   compactly: MWCC's bottom-up inliner weighs an inline's size, and retail inlines it two base destructors deep;
-3. the rest of the metafields: `igCompoundMetaField` (31 slot overrides, each a loop over `_fieldList`; its flat
-   subclasses igDependencyMetaField, igMemoryDescriptorMetaField, igTrackedElementMetaField,
-   igCharMetricsMetaField and igItemDataBaseField call its C names), then the Math library's
-   `igVec2f/3f/4f/4ucMetaField`, `igVec4fArrayMetaField` and `igMatrix44fMetaField` (`lib="Math"`, the first
-   `Gap::Math` classes; their descriptor creators and `getMetaField`s are unnamed `FUN_` functions mapped through
-   `extra`, the factory `CreateInstance` is the generator's `_instantiateFromPool`);
-4. `igMetaObject`, `igDataList`/`igObjectList` (the generator writes their boilerplate, the field adder's
-   `getMetaField` call included); igMetaObject, igIGBFile and igObjectDirEntry then also call igObject's
-   protected and private construction members directly (the kit makes them friends);
+   compactly: MWCC's bottom-up inliner weighs an inline's size, and retail inlines it two base destructors deep.
+   The Math library's metafields `igVec2fMetaField`, `igVec3fMetaField`, `igVec4fMetaField`, `igVec4ucMetaField`,
+   `igMatrix44fMetaField` and `igVec4fArrayMetaField` are the first `Gap::Math` classes (`IG_OBJECT_DEFINE`,
+   `IG_METAFIELD_SETUP`; their descriptor creators and `getMetaField`s were unnamed `FUN_` functions, their factory
+   `CreateInstance` is the generator's `_instantiateFromPool`). `endianSwapMemory` is the kit's
+   `IG_ARRAYBASED_IMPL` (`int numElts = getSize() / sizeof(float)`, through igMetaField's kit inline `getSize()`),
+   the array's the kit's `IG_ARRAY_IMPL`, and `setDefault` takes the kit's `const igVec3f &` (`const igMatrix44f &`:
+   reflected.h declares `igMatrix44f` ahead, since a matrix field stays sixteen floats). The field adders that pass
+   a float array dereference it as the vector (`setDefault(*(const igVec3f *)v)`) until their own classes convert,
+   and pass the identity temporaries themselves (`setDefault(igMatrix44f(...))`). Retail's out-of-line copy of
+   `igMetaField::getClassMeta` that the registrars name is the compiler's (a `duplicates` row in the Math unit).
+   `igCompoundMetaField` is converted (`IG_ABSTRACT_OBJECT_DEFINE`, so it registers no vtable probe; the
+   protected `k_fieldList`, `_fieldList` an `igSmartPointer<igMetaFieldList>` under C++, the slot-9 override
+   `initDefaults` calling the static `arkRegisterCompoundFields`, and its 29 slot overrides, each a loop over
+   `_fieldList`'s elements; `computeTypeSize` is the kit's `getSize()`). Its flat subclasses igDependencyMetaField,
+   igMemoryDescriptorMetaField, igTrackedElementMetaField, igCharMetricsMetaField and igItemDataBaseField still
+   probe their vtables in C, stamping the compound vtable by its C name, and register through
+   `igCompoundMetaField::arkRegisterInternal`. `igDataList` is converted (`IG_OBJECT_DEFINE`, the protected
+   `k_count`/`k_capacity`/`k_data`, the kit's inline `getCount()` and the slot-21 `getElementSize()`, -1 here). Its
+   inline virtual `getMeta` and its `getCount` have out-of-line retail copies in the attrs and base units (the
+   units that compiled igDataList's vtable and called `getCount` uninlined), which stay C functions there until
+   those units build their lists in C++; DW4's `GetOrCreateMetaObject` and the list services (`List_Reserve`, the
+   kit's protected `setCapacity`, and the rest) are still free;
+3. the flat metafield subclasses above, with igMetaFieldList (a kit `igTObjectList<igMetaField>`), so that the
+   compound's loops read `_fieldList->get(i)`;
+4. igDataList's list services as its protected members (`List_Reserve` is `setCapacity`, `List_Resize`
+   `resizeAndSetCount`, `List_InsertBytes` `insert`, …), then `igObjectList`: the kit derives it from
+   `igTDataList<igObject *>`, whose inline overrides (`userPreWrite` calling `trimCapacity`, `trimCapacity` through
+   `setCapacity`, `getElementSize` returning 4, the new slot 22 `getElementMeta`, `getMeta`) have their retail copies
+   in attrs, as igDataList's do; its field adder replaces `_data` with a clone retyped to igObjectRefMetaField. Then
+   `igMetaObject`: converting it makes `igMetaObject` in every Gap scope the class, so every converted class's
+   `_Meta`, the registrar's `igMetaObject_RegisterClass(…, &_Meta, …)` and the ~2,250 field-adder calls
+   (`igMetaObject_GetFieldAt` is the kit's `getIndexedMetaField`, `CreateFields` `instantiateAndAppendFields`,
+   `NameFields` `setMetaFieldBasicPropertiesAndValidateAll`, `GetFieldCount` `getMetaFieldCount`) change type at
+   once, across ~1,100 files; the generator's templates change with it, and `RegisterClass`/`RunStaticInit` are the
+   kit's free `igArkRegister` overloads. igMetaObject, igIGBFile and igObjectDirEntry then also call igObject's
+   protected and private construction members directly (the kit makes them friends). Of the 154 classes the core
+   unit registers, 39 are converted; the other 57 the kit declares (the memory pools, files and media, directory
+   entries, igMetaEnum, igRegistry, the threads and timers, …) follow, and 58 have no kit header (DW4's typed lists
+   such as igIntList, the `igPsx2*` platform classes, `__internal*ObjectList`, igDependencyMetaField and
+   igMemoryDescriptorMetaField), which take their form from retail alone;
 5. attrs, then gfx, then scenegraph, then gui/insight/viewer. For attrs: list each class's C names against its
    vtable slots and the kit header (`igAttr` first, then the attrs in `AttrsLibrary.cpp`'s include order), write
    one spec per batch of a few classes, and convert parents before children;
@@ -197,7 +228,14 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
   `->copy((Gap::Core::igObject *)g_x, 1)`, `igObject` alone in Gap's scope), a cast of `this` to the flat struct
   passed to a Gap parameter goes, and a body moving into the class keeps what its types meant: its bare receiver
   passed on is `(::igObject *)this`, and every other bare `igObject` in it `::igObject`. A C form taking a reference
-  where the member takes one (`igObject(const igObject &)`) is refused and written by hand.
+  where the member takes one (`igObject(const igObject &)`) is refused and written by hand; a caller passing a
+  pointer where the member takes a reference dereferences it (`setDefault(*(const igVec3f *)v)`), or passes the
+  temporary whose array it passed (`igVec4f(…).vec` becomes `igVec4f(…)`).
+- `tools/classconv.py` stubs a C function with the member's parameters and its own return type; where the member
+  returns another type (an unnamed descriptor getter returning `int` becomes `igVec3fMetaField *getMetaField()`),
+  memberize casts the uses back: an assignment of the result to the C form's integer
+  (`*(int *)p = (int)X::getMetaField()`), and the function named in a field table
+  (`(FieldFactory)X::_instantiateFromPool`).
 - `tools/whole_file_rows.py` keeps a caller unit's row as it was where the compile did not change it: an entry
   stays in its place while its name still binds at its address (the object names it, or symbols.txt,
   data-names.tsv, the compiler-name map, another unit's row or the address in the name binds it), so stale aliases

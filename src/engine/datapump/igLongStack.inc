@@ -34,8 +34,8 @@ CallbackArray *igLongStack_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igLongStack_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igLongStack_GetMetaObjectFunction,
         "igLongStack",
         0x14, /* instance size */

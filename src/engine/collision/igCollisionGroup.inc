@@ -66,10 +66,10 @@ void igCollisionGroup_GetMetaObjectFunction(void) {
 
 static FieldFactory g_igCollisionGroup_ctorTable[] = {
     igObjectRefMetaField_Create,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igIntMetaField_Create,

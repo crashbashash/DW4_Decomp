@@ -50,10 +50,10 @@ void igMaterialAttr_GetMetaObjectFunction(void) {
 
 static FieldFactory g_igMaterialAttr_ctorTable[] = {
     (FieldFactory)igFloatMetaField_Create,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
     (FieldFactory)igUnsignedIntMetaField_Create,
 };
 static const char *g_igMaterialAttr_fieldTable[] = {
@@ -93,13 +93,13 @@ void igMaterialAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igMaterialAttr_ctorTable, 6);
     field4 = (int)igMetaObject_GetFieldAt(meta, base + 1);
-    igVec4fMetaField_SetDefault((igMetaField *)field4, igVec4f(0.0f, 0.0f, 0.0f, 1.0f).vec);
+    ((Gap::Math::igVec4fMetaField *)field4)->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 1.0f));
     field3 = (int)igMetaObject_GetFieldAt(meta, base + 2);
-    igVec4fMetaField_SetDefault((igMetaField *)field3, igVec4f(0.0f, 0.0f, 0.0f, 1.0f).vec);
+    ((Gap::Math::igVec4fMetaField *)field3)->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 1.0f));
     field2 = (int)igMetaObject_GetFieldAt(meta, base + 3);
-    igVec4fMetaField_SetDefault((igMetaField *)field2, igVec4f(0.0f, 0.0f, 0.0f, 1.0f).vec);
+    ((Gap::Math::igVec4fMetaField *)field2)->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 1.0f));
     field = (int)igMetaObject_GetFieldAt(meta, base + 4);
-    igVec4fMetaField_SetDefault((igMetaField *)field, igVec4f(0.0f, 0.0f, 0.0f, 1.0f).vec);
+    ((Gap::Math::igVec4fMetaField *)field)->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 1.0f));
     igMetaObject_NameFields(meta, g_igMaterialAttr_fieldTable, g_igMaterialAttr_fieldHandles, g_igMaterialAttr_fieldOffsets, base);
 }
 

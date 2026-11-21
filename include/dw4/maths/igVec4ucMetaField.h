@@ -8,7 +8,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igVec4ucMetaField_metaObject;
 
 #ifdef __cplusplus
 }

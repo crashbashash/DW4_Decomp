@@ -1,25 +1,35 @@
-void igVec4ucMetaField_SwapBytes(igVec4ucMetaField *arg0, int arg1, int arg2) {
-    void **temp_v0;
+namespace Gap {
+namespace Math {
 
-    temp_v0 = (void **)(Gap::Core::igUnsignedCharMetaField::getMetaField());
-    ((DW4VC_208_2 *)(temp_v0))->vX((int)(arg1), (int)(arg2 * arg0->_size));
+void igVec4ucMetaField::endianSwapMemory(void *rawMem, int num) const
+{
+    int numElts = getSize() / sizeof(unsigned char);
+    igUnsignedCharMetaField::getMetaField()->endianSwapMemory(rawMem, num * numElts);
 }
 
-void igVec4ucMetaField_ValueFromString(int arg0, int arg1, int arg2) {
-    FUN_0018be80((const char *)arg2, (void *)arg1, 4, 1, 0);
+int igVec4ucMetaField::setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir)
+{
+    return FUN_0018be80(strVal, dstMem, 4, 1, 0);
 }
 
-void igVec4ucMetaField_ValueToString(int *out, void *field, const unsigned char *value) {
-    char text[1024];
-    sprintf(text, "%uc,%uc,%uc,%uc", value[0], value[1], value[2], value[3]);
-    *out = internString(text);
+igStringRef igVec4ucMetaField::getStringFromMemory(const void *srcMem, igDirectory *dir)
+{
+    char buffer[1024];
+    const unsigned char *value = (const unsigned char *)srcMem;
+
+    sprintf(buffer, "%uc,%uc,%uc,%uc", value[0], value[1], value[2], value[3]);
+    return igStringRef(buffer);
 }
 
-int Gap__igVec4ucMetaField__vfunc_25(void) {
+unsigned short igVec4ucMetaField::computeSize()
+{
     return 4;
 }
 
-int igVec4ucMetaField_GetAlignment(void) {
+int igVec4ucMetaField::computeRequiredAlignment()
+{
     return 1;
+}
+}
 }
 

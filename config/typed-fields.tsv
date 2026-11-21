@@ -7,3 +7,4 @@ igMetaField	_fieldName	igStringRef
 igObjectRefMetaField	_poolName	igStringRef
 igMemoryRefMetaField	_memTypeRef	igSmartPointer< ::igMetaField>
 igMemoryRefMetaField	_poolName	igStringRef
+igCompoundMetaField	_fieldList	igSmartPointer<igMetaFieldList>

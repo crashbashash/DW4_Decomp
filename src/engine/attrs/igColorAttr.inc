@@ -57,7 +57,7 @@ void igColorAttr_GetMetaObjectFunction(void) {
 }
 
 static FieldFactory g_igColorAttr_ctorTable[] = {
-    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
     (FieldFactory)igUnsignedIntMetaField_Create,
 };
 static const char *g_igColorAttr_fieldTable[] = {
@@ -90,7 +90,7 @@ void igColorAttr_InitFields(void) {
     value[1] = 0x3F800000;
     value[2] = 0x3F800000;
     value[3] = 0x3F800000;
-    igVec4fMetaField_SetDefault((igMetaField *)field, (const float *)value);
+    ((Gap::Math::igVec4fMetaField *)field)->setDefault(*(const igVec4f *)value);
     ((igMetaField *)field3)->_invarianceFunction = (int)&igColorAttr_SynchronizeColorPacked;
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((Gap::Core::igUnsignedIntMetaField *)field2)->setDefault(-1);

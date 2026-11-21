@@ -55,8 +55,8 @@ void igClearAttr_GetMetaObjectFunction(void) {
 
 static FieldFactory g_igClearAttr_ctorTable[] = {
     (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
     (FieldFactory)igDoubleMetaField_Create,
     (FieldFactory)igUnsignedIntMetaField_Create,
     (FieldFactory)igUnsignedIntMetaField_Create,
@@ -102,9 +102,9 @@ void igClearAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igClearAttr_ctorTable, 7);
     field4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1));
-    igVec4fMetaField_SetDefault((igMetaField *)field4, igVec4f(0.0f, 0.0f, 0.0f, 1.0f).vec);
+    ((Gap::Math::igVec4fMetaField *)field4)->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 1.0f));
     field3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2));
-    igVec4fMetaField_SetDefault((igMetaField *)field3, igVec4f(0.0f, 0.0f, 0.0f, 0.0f).vec);
+    ((Gap::Math::igVec4fMetaField *)field3)->setDefault(igVec4f(0.0f, 0.0f, 0.0f, 0.0f));
     ((Gap::Core::igDoubleMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)))->setDefault(1.0);
     field2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5));
     ((Gap::Core::igUnsignedIntMetaField *)field2)->setDefault(-1);

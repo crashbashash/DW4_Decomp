@@ -77,7 +77,7 @@ void igGraphPath_GetMetaObjectFunction(void) {
 
 static FieldFactory g_igGraphPath_ctorTable[] = {
     (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     (FieldFactory)igFloatMetaField_Create,
 };
 static const char *g_igGraphPath_fieldTable[] = {
@@ -114,7 +114,7 @@ void igGraphPath_InitFields(void) {
     defaultCenter.x = 0;
     defaultCenter.y = 0;
     defaultCenter.z = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)centerField, (const float *)&defaultCenter);
+    ((Gap::Math::igVec3fMetaField *)centerField)->setDefault(*(const igVec3f *)&defaultCenter);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)))->setDefault(1.0f);
     igMetaObject_NameFields((igMetaObject *)meta, g_igGraphPath_fieldTable, g_igGraphPath_fieldHandles, g_igGraphPath_fieldOffsets, base);
 }

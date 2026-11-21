@@ -167,15 +167,19 @@ def stub_head(cls, cname, decl):
 
 
 def stub_text(text, cname, head):
-    """`text` with the C definition of `cname` emptied under `head`, and whether it had one."""
+    """`text` with the C definition of `cname` emptied under `head` (the member's parameters, the C form's return
+    type: memberize casts the uses whose type the member's return changes), and whether it had one."""
     span = find_c_def(text, cname)
     if not span:
         return text, False
+    ret = text[span[0]:text.index(cname, span[0])].strip()
+    head = "%s%s%s" % (ret, "" if ret.endswith("*") else " ", head[head.index(cname):])
     return text[:span[0]] + head + "\n{\n}" + text[span[1]:], True
 
 
 FILE_TABLES = (r"\n(static )?(igMetaObjectCallback |FieldFactory |const char \*|igMetaField \*\*|int )"
-               r"g_%s_(callbackList|ctorTable|fieldTable|fieldDescriptors|fieldOffsets)\[\] = \{[^}]*\};(?=\n)")
+               r"g_%s_(callbackList|ctorTable|fieldTable|fieldDescriptors|fieldHandles|fieldOffsets)\[\] = \{[^}]*\};"
+               r"(?=\n)")
 
 
 def drop_file_tables(text, cls):

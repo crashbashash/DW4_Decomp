@@ -57,8 +57,8 @@ void igRay_GetMetaObjectFunction(void) {
 }
 
 static FieldFactory g_igRay_ctorTable[] = {
-    (FieldFactory)igVec3fMetaField_CreateInstance,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     (FieldFactory)igFloatMetaField_Create,
 };
 
@@ -95,12 +95,12 @@ void igRay_InitFields(void) {
     value[0] = 0;
     value[1] = 0;
     value[2] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)field2, (const float *)&value[0]);
+    ((Gap::Math::igVec3fMetaField *)field2)->setDefault(*(const igVec3f *)&value[0]);
     field = (int)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1);
     value2[0] = 0;
     value2[1] = 0x3F800000;
     value2[2] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)field, (const float *)&value2[0]);
+    ((Gap::Math::igVec3fMetaField *)field)->setDefault(*(const igVec3f *)&value2[0]);
     igMetaObject_NameFields((igMetaObject *)meta, (const char **)g_igRay_fieldTable, (igMetaField ***)g_igRay_fieldHandles, (int *)g_igRay_fieldOffsets, base);
 }
 

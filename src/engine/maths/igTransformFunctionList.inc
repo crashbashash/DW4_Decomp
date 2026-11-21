@@ -31,8 +31,8 @@ CallbackArray *igTransformFunctionList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igTransformFunctionList_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igTransformFunctionList_GetMetaObjectFunction,
         "igTransformFunctionList",
         0x14, /* instance size */

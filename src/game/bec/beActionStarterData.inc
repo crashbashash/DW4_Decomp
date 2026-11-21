@@ -63,7 +63,7 @@ void beActionStarterData_GetMetaObjectFunction(void)
 static FieldFactory g_beActionStarterData_ctorTable[] = {
     igStringMetaField_Create,
     igIntMetaField_Create,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     igBoolMetaField_Create,
     igBoolMetaField_Create,
 };

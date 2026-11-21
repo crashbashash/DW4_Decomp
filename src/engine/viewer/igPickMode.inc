@@ -92,8 +92,8 @@ static FieldFactory g_igPickMode_ctorTable[] = {
     igFloatMetaField_Create,
     igBoolMetaField_Create,
     igObjectRefMetaField_Create,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
-    (FieldFactory)igVec2fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool,
 };
 static const char *g_igPickMode_fieldTable[] = {
     "_parameters",
@@ -174,7 +174,7 @@ void igPickMode_InitFields(void) {
     temp_a0 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xB));
     sp48[0] = 0;
     sp48[1] = 0;
-    igVec2fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)sp48);
+    ((Gap::Math::igVec2fMetaField *)temp_a0)->setDefault(*(const igVec2f *)sp48);
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igPickMode_fieldTable, g_igPickMode_fieldHandles, g_igPickMode_fieldOffsets, temp_s0);
 }
 

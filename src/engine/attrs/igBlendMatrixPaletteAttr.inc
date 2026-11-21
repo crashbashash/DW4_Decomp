@@ -92,7 +92,7 @@ void igBlendMatrixPaletteAttr_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igBlendMatrixPaletteAttr_ctorTable, 4);
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igMemoryRefMetaField *)field2)->_memType = FUN_001888e0();
+    ((igMemoryRefMetaField *)field2)->_memType = (int)Gap::Math::igMatrix44fMetaField::getMetaField();
     ((igRefMetaField *)field2)->_destruct = 1;
     ((igMemoryRefMetaField *)field2)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)field2)->_releaseOnReset = 1;

@@ -106,13 +106,13 @@ void thunk_igViewerParameters_GetMetaObject(void) {
 
 static FieldFactory g_igViewerParameters_ctorTable[] = {
     igObjectRefMetaField_Create,
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
     igFloatMetaField_Create,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
     igLongMetaField_Create,
     igBoolMetaField_Create,
     igBoolMetaField_Create,
@@ -143,7 +143,7 @@ static FieldFactory g_igViewerParameters_ctorTable[] = {
     igIntMetaField_Create,
     igIntMetaField_Create,
     igFloatMetaField_Create,
-    (FieldFactory)igVec2fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec2fMetaField::_instantiateFromPool,
 };
 static const char *g_igViewerParameters_fieldTable[] = {
     "_scene",
@@ -291,7 +291,7 @@ void igViewerParameters_InitFields(void) {
     sp50[0] = 0;
     sp50[1] = 0x3F800000;
     sp50[2] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)sp50);
+    ((Gap::Math::igVec3fMetaField *)temp_a0)->setDefault(*(const igVec3f *)sp50);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)))->setDefault(1.0f);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)))->setDefault(45.0f);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 4)))->setDefault(1.0f);
@@ -316,7 +316,7 @@ void igViewerParameters_InitFields(void) {
     temp_a0_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0x26));
     sp48[0] = 0;
     sp48[1] = 0;
-    igVec2fMetaField_SetDefault((igMetaField *)temp_a0_2, (const float *)sp48);
+    ((Gap::Math::igVec2fMetaField *)temp_a0_2)->setDefault(*(const igVec2f *)sp48);
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igViewerParameters_fieldTable, g_igViewerParameters_fieldHandles, g_igViewerParameters_fieldOffsets, temp_s1);
 }
 

@@ -39,8 +39,8 @@ CallbackArray *igUnsignedShortList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igUnsignedShortList_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igUnsignedShortList_GetMetaObjectFunction,
         "igUnsignedShortList",
         0x14,
@@ -54,7 +54,6 @@ CallbackArray *igUnsignedShortList_Register(void) {
 void igUnsignedShortList_GetMetaObjectFunction(void) {
     igUnsignedShortList_GetMetaObject();
 }
-
 
 void igUnsignedShortList_InitFields(void) {
     int index;

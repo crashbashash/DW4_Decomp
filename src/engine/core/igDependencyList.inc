@@ -33,8 +33,8 @@ CallbackArray *igDependencyList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igDependencyList_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igDependencyList_GetMetaObjectFunction,
         "igDependencyList",
         0x14,
@@ -48,7 +48,6 @@ CallbackArray *igDependencyList_Register(void) {
 void igDependencyList_GetMetaObjectFunction(void) {
     igDependencyList_GetMetaObject();
 }
-
 
 void igDependencyList_InitFields(void) {
     int index;

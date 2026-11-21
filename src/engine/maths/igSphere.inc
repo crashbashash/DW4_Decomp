@@ -60,7 +60,7 @@ igMetaObject *igVolume_GetPublishedMetaObject(void) {
 }
 
 static FieldFactory g_igSphere_ctorTable[] = {
-    (FieldFactory)igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     (FieldFactory)igFloatMetaField_Create,
 };
 
@@ -92,7 +92,7 @@ void igSphere_InitFields(void) {
     v[0] = 0;
     v[1] = 0;
     v[2] = 0;
-    igVec3fMetaField_SetDefault((igMetaField *)field, (const float *)v);
+    ((Gap::Math::igVec3fMetaField *)field)->setDefault(*(const igVec3f *)v);
     ((Gap::Core::igFloatMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)))->setDefault(-1.0f);
     igMetaObject_NameFields((igMetaObject *)meta, (const char **)g_igSphere_fieldTable, (igMetaField ***)g_igSphere_fieldHandles, (int *)g_igSphere_fieldOffsets, base);
 }

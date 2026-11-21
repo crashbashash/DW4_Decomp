@@ -1,5 +1,11 @@
-int igDataList_GetElementSize(void) {
+namespace Gap {
+namespace Core {
+
+int igDataList::getElementSize() const
+{
     return -1;
+}
+}
 }
 
 void List_Reserve(igDataList *list, int capacity, int elementSize) {

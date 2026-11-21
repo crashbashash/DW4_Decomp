@@ -108,11 +108,11 @@ static FieldFactory g_igActor_ctorTable[] = {
     (FieldFactory)igObjectRefMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
     (FieldFactory)igBoolMetaField_Create,
     (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
-    (FieldFactory)igMatrix44fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
     (FieldFactory)igBoolMetaField_Create,
     (FieldFactory)igBoolMetaField_Create,
 };
@@ -183,12 +183,12 @@ void igActor_InitFields(void) {
     temp_s2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1)));
     ((igObjectRefMetaField *)temp_s2)->_metaObject = (int)igAnimationSystem_GetOrCreateMetaObject();
     temp_s2_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)));
-    ((igMemoryRefMetaField *)temp_s2_2)->_memType = FUN_001888e0();
+    ((igMemoryRefMetaField *)temp_s2_2)->_memType = (int)Gap::Math::igMatrix44fMetaField::getMetaField();
     ((igRefMetaField *)temp_s2_2)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s2_2)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s2_2)->_releaseOnReset = 1;
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)));
-    ((igMemoryRefMetaField *)temp_s2_3)->_memType = FUN_001888e0();
+    ((igMemoryRefMetaField *)temp_s2_3)->_memType = (int)Gap::Math::igMatrix44fMetaField::getMetaField();
     ((igRefMetaField *)temp_s2_3)->_destruct = 1;
     ((igMemoryRefMetaField *)temp_s2_3)->_releaseOnCopy = 1;
     ((igMemoryRefMetaField *)temp_s2_3)->_releaseOnReset = 1;
@@ -200,17 +200,17 @@ void igActor_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)igAnimationModifierList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)));
-    FUN_0018c640((igMetaField *)temp_s2_7, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
-                                                       igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
+    ((Gap::Math::igMatrix44fMetaField *)temp_s2_7)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                       igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 7)))->_persistent = 0;
     ((igMetaField *)((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 8)))->_persistent = 0;
     temp_s2_8 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 9)));
-    FUN_0018c640((igMetaField *)temp_s2_8, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
-                                                       igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
+    ((Gap::Math::igMatrix44fMetaField *)temp_s2_8)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                       igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
     ((igMetaField *)temp_s2_8)->_persistent = 0;
     temp_s2_9 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xA)));
-    FUN_0018c640((igMetaField *)temp_s2_9, igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
-                                                       igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)).m);
+    ((Gap::Math::igMatrix44fMetaField *)temp_s2_9)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                                       igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
     ((igMetaField *)temp_s2_9)->_persistent = 0;
     temp_v0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 0xB)));
     ((Gap::Core::igBoolMetaField *)temp_v0)->setDefault(1);

@@ -1,60 +1,17 @@
-igMetaObject *igVec4ucMetaField_GetMeta(void) {
-    return g_igVec4ucMetaField_metaObject;
-}
-
-int igVec4ucMetaField_GetDescriptor(void) {
-    return (int)g_igVec4ucMetaField_descriptor;
-}
-
-igMetaObject *igVec4fMetaField_GetMeta(void) {
-    return g_igVec4fMetaField_metaObject;
-}
-
 /* Returns the published default descriptor of igVec4fMetaField: the cached instance that the
  * class's registration wrapper creates on first use. */
-int igVec4fMetaField_GetDescriptor(void) {
-    return g_igVec4fMetaField_descriptor;
-}
-
-igMetaObject *igVec4fArrayMetaField_GetMeta(void) {
-    return g_igVec4fArrayMetaField_metaObject;
-}
 
 /* Returns the published default descriptor of igVec4fArrayMetaField: the cached instance that the
  * class's registration wrapper creates on first use. */
-M *igVec4fArrayMetaField_GetDescriptor(void) {
-    return g_igVec4fArrayMetaField_descriptor;
-}
-
-igMetaObject *igVec3fMetaField_GetMeta(void) {
-    return g_igVec3fMetaField_metaObject;
-}
 
 /* Returns the published default descriptor of igVec3fMetaField: the cached instance that the
  * class's registration wrapper creates on first use. */
-int igVec3fMetaField_GetDescriptor(void) {
-    return g_igVec3fMetaField_descriptor;
-}
-
-igMetaObject *igVec2fMetaField_GetMeta(void) {
-    return g_igVec2fMetaField_metaObject;
-}
 
 /* Returns the published default descriptor of igVec2fMetaField: the cached instance that the
  * class's registration wrapper creates on first use. */
-int igVec2fMetaField_GetDescriptor(void) {
-    return g_igVec2fMetaField_descriptor;
-}
-
-igMetaObject *igMatrix44fMetaField_GetMeta(void) {
-    return g_igMatrix44fMetaField_metaObject;
-}
 
 /* Returns the published default descriptor of igMatrix44fMetaField: the cached instance that the
  * class's registration wrapper creates on first use. */
-int igMatrix44fMetaField_GetDescriptor(void) {
-    return g_igMatrix44fMetaField_descriptor;
-}
 
 igMetaObject *igAABox_GetMeta(void) {
     return g_igAABox_metaObject;

@@ -44,8 +44,8 @@ CallbackArray *igIntList_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igIntList_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igIntList_GetMetaObjectFunction,
         "igIntList",
         0x14,
@@ -66,7 +66,6 @@ static inline void releaseDataField(igMemoryRefMetaField *f) {
         igObject_Destroy(f);
     }
 }
-
 
 void igIntList_InitFields(void) {
     igMetaObject *meta = g_igIntList_metaObject;

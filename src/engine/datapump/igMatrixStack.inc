@@ -34,8 +34,8 @@ CallbackArray *igMatrixStack_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMatrixStack_metaObject,
-        igDataList_Register,
-        igDataList_GetPublishedMetaObject,
+        Gap::Core::igDataList::arkRegisterInternal,
+        Gap::Core::igDataList::getClassMeta,
         igMatrixStack_GetMetaObjectFunction,
         "igMatrixStack",
         0x14, /* instance size */
@@ -60,7 +60,7 @@ void igMatrixStack_InitFields(void) {
     found = (void **)igMetaObject_FindFieldByName(meta, "_data");
     index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
     field = (igMemoryRefMetaField *)((igObjectDispatchView *)found)->CloneViaMetadata(1);
-    field->_memType = FUN_001888e0();
+    field->_memType = (int)Gap::Math::igMatrix44fMetaField::getMetaField();
     field->_memSize = 0;
     field->_externalEnumStorage = (int)&g_igMatrixStack_dataMetaField;
     igMetaObject_FinalizeAndReplaceField(meta, index, (igMetaField *)field);

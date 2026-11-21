@@ -13189,6 +13189,12 @@
 00522480	16	.vtables	00100390	match
 00522490	16	.vtables	00100390	match
 005224a0	16	.vtables	00100cf0	match
+005271e0	244	.vtables	001869e0	match
+005272e0	244	.vtables	001869e0	match
+005273e0	244	.vtables	001869e0	match
+005274e0	244	.vtables	001869e0	match
+005275e0	244	.vtables	001869e0	match
+005276e0	244	.vtables	001869e0	match
 0052ca80	108	.vtables	00230f50	match
 0052d060	108	.vtables	00230f50	match
 0052d540	92	.vtables	0023c440	match
@@ -13227,6 +13233,7 @@
 005304f0	244	.vtables	002b5d50	match
 00530690	244	.vtables	002b5d50	match
 00530790	244	.vtables	002b5d50	match
+005309b0	96	.vtables	002b5d50	match
 00530a80	244	.vtables	002b5d50	match
 00530c80	244	.vtables	002b5d50	match
 00531540	244	.vtables	002b5d50	match

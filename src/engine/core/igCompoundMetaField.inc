@@ -1,103 +1,95 @@
-igMetaObject *g_igCompoundMetaField_metaObject;
-void *g_igCompoundMetaField_descriptor;
-igMetaField *g_igCompoundMetaField_fieldListMetaField;
+namespace Gap {
+namespace Core {
 
-igMetaObject *igCompoundMetaField_GetMetaObject(void)
+igMetaObject *igCompoundMetaField::_Meta;
+igCompoundMetaField *igCompoundMetaField::_MetaField;
+igMetaField *igCompoundMetaField::k_fieldList;
+
+igMetaObject *igCompoundMetaField::getClassTypeSafe()
 {
-    igMetaObject *g = g_igCompoundMetaField_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igCompoundMetaField_EnsureRegistered();
-    return g_igCompoundMetaField_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-void igCompoundMetaField_EnsureRegistered(void)
+void igCompoundMetaField::arkRegister()
 {
-    igMetaObject_RunStaticInit(igCompoundMetaField_Register);
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-static igMetaObjectCallback g_igCompoundMetaField_callbackList[] = { igMetaFieldList_EnsureRegistered, igCompoundMetaField_CreateDefaultDescriptor, 0 };
+CallbackArray *igCompoundMetaField::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igMetaFieldList_EnsureRegistered, arkRegisterMetaValidate, 0 };
 
-CallbackArray *igCompoundMetaField_Register(void) {
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1,
-        &g_igCompoundMetaField_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igMetaField::arkRegisterInternal,
-        igMetaField_GetPublishedMetaObject,
-        igCompoundMetaField_GetMetaObjectFunction,
+        Gap::Core::igMetaField::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igCompoundMetaField",
-        0x38,
+        sizeof(igCompoundMetaField),
         0,
-        igCompoundMetaField_InitFields,
+        &arkRegisterInitialize,
         0,
-        g_igCompoundMetaField_callbackList
+        regFunctions
     );
 }
 
-void igCompoundMetaField_GetMetaObjectFunction(void) {
-    igCompoundMetaField_GetMetaObject();
+void igCompoundMetaField::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create };
+    static const char *names[] = { "_fieldList" };
+    static igMetaField **enumStorage[] = { &k_fieldList };
+    static int offsets[] = { 52 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 1);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)igMetaFieldList_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
 
-static FieldFactory g_igCompoundMetaField_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igCompoundMetaField_fieldTable[] = {
-    "_fieldList",
-};
-static igMetaField **g_igCompoundMetaField_fieldDescriptors[] = {
-    &g_igCompoundMetaField_fieldListMetaField,
-};
-static int g_igCompoundMetaField_fieldOffsets[] = {
-    52,
-};
+void igCompoundMetaField::arkRegisterMetaValidate()
+{
+    igCompoundMetaField *metaField;
 
-void igCompoundMetaField_InitFields(void) {
-    int first;
-    void *field;
-    void *meta;
-
-    meta = (void *)g_igCompoundMetaField_metaObject;
-    first = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igCompoundMetaField_ctorTable, 1);
-    field = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first)));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)igMetaFieldList_GetOrCreateMetaObject();
-    ((igRefMetaField *)field)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)meta, g_igCompoundMetaField_fieldTable, g_igCompoundMetaField_fieldDescriptors, g_igCompoundMetaField_fieldOffsets, first);
-}
-
-
-void igCompoundMetaField_CreateDefaultDescriptor(void) {
-    void *descriptor;
-    igCompoundMetaField *o;
-    int t;
-
-    if (g_igCompoundMetaField_descriptor == 0) {
-        g_igCompoundMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igCompoundMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
-        descriptor = (void *)(g_igCompoundMetaField_descriptor);
-        if (descriptor != 0) {
-            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
-            o = (igCompoundMetaField *)g_igCompoundMetaField_descriptor;
-            o->_refCount = o->_refCount - 1;
-            if ((o->_refCount & 0x7FFFFF) == 0) {
-                igObject_Destroy(o);
+    if (_MetaField == 0) {
+        _MetaField = (igCompoundMetaField *)igMetaObject_CreateInstance(_Meta, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+        metaField = _MetaField;
+        if (metaField != 0) {
+            MetaRefList_AppendRetained(getMetaFieldTypes(), (::igObject *)metaField);
+            {
+                ::igObject *held = (::igObject *)_MetaField;
+                held->_refCount = (int)held->_refCount - 1;
+                if (((unsigned long long) ((long long)(int)held->_refCount << 0x29) >> 0x29) == 0) {
+                    igObject_Destroy(held);
+                }
             }
-            t = Gap::Core::igMetaField::getMetaFieldTypes()->_count - 1;
-            ((igCompoundMetaField *)g_igCompoundMetaField_descriptor)->_internalIndex = (short) t;
-            ((Gap::Core::igMetaField *)g_igCompoundMetaField_descriptor)->validate();
+            _MetaField->_internalIndex = (short)(getMetaFieldTypes()->_count - 1);
+            _MetaField->validate();
         }
     }
 }
 
-int igCompoundMetaField_GetSize(void) {
+unsigned short igCompoundMetaField::computeSize()
+{
     return 1;
 }
 
-void igCompoundMetaField_InitDefaults(igCompoundMetaField *self)
+void igCompoundMetaField::initDefaults()
 {
-    igCompoundMetaField_AddSubFields(self->_fieldList);
+    arkRegisterCompoundFields(_fieldList);
 }
 
-void igCompoundMetaField_AddSubFields(int value)
+void igCompoundMetaField::arkRegisterCompoundFields(igMetaFieldList *fieldList)
 {
+}
+}
 }
 

@@ -70,7 +70,7 @@ void beModelCtrlInfoAI_GetMetaObjectFunction(void)
 static FieldFactory g_beModelCtrlInfoAI_ctorTable[] = {
     igStringMetaField_Create,
     igIntMetaField_Create,
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
     igIntMetaField_Create,
     igIntMetaField_Create,
 };

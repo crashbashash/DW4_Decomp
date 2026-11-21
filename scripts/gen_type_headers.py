@@ -105,6 +105,10 @@ KIT_VECTOR = {
     "igVec3fMetaField": ("igVec3f", "dw4/maths/igVec3f.h"),
     "igVec4fMetaField": ("igVec4f", "dw4/maths/igVec4f.h"),
 }
+# Kit value types a converted class's member rows name by reference only (igMatrix44fMetaField's
+# `setDefault(const igMatrix44f &)`): declared ahead under C++. A matrix field stays sixteen floats, since
+# igMatrix44f's constructor would give every class holding one a constructor.
+FORWARD_TYPES = ("igMatrix44f",)
 
 # Inline arrays: the element type comes from the kind, the element count from the distance to the
 # next field (reflection records no count), or for a last field from the registered instance size.
@@ -535,7 +539,8 @@ def main(argv=None):
     if members or converted or kit_headers:
         lines.extend(["#ifdef __cplusplus"]
                      + (["#include \"dw4/core/igObjectMacros.h\""] if members or converted else [])
-                     + ["#include \"%s\"" % header for header in kit_headers] + ["#endif", ""])
+                     + ["#include \"%s\"" % header for header in kit_headers]
+                     + ["struct %s;" % name for name in FORWARD_TYPES] + ["#endif", ""])
     mismatches = []
     aggregates = 0
     sized = 0

@@ -42,3 +42,11 @@ igStringMetaField	Core
 igStringArrayMetaField	Core
 igMemoryRefArrayMetaField	Core
 igObjectRefArrayMetaField	Core
+igVec4ucMetaField	Math
+igVec4fMetaField	Math
+igVec3fMetaField	Math
+igVec2fMetaField	Math
+igMatrix44fMetaField	Math
+igVec4fArrayMetaField	Math
+igCompoundMetaField	Core
+igDataList	Core

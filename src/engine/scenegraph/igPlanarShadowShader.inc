@@ -212,8 +212,8 @@ igMetaObject *igAttrSet_GetPublishedMetaObject(void) {
 static FieldFactory g_igPlanarShadowShader_ctorTable[] = {
     (FieldFactory)igObjectRefMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
-    (FieldFactory)igVec4fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
+    (FieldFactory)Gap::Math::igVec4fMetaField::_instantiateFromPool,
     (FieldFactory)igBoolMetaField_Create,
     (FieldFactory)igBoolMetaField_Create,
     (FieldFactory)igObjectRefMetaField_Create,
@@ -298,10 +298,10 @@ void igPlanarShadowShader_InitFields(void) {
     ((igRefMetaField *)temp_s2_2)->_construct = 1;
     temp_a0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 2)));
     spA.x = 0; spA.y = 1.0f; spA.z = 0; spA.w = 0;
-    igVec4fMetaField_SetDefault((igMetaField *)temp_a0, (const float *)&spA);
+    ((Gap::Math::igVec4fMetaField *)temp_a0)->setDefault(*(const igVec4f *)&spA);
     temp_a0_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 3)));
     spB.x = 0; spB.w = 1.0f; spB.y = 0; spB.z = 0;
-    igVec4fMetaField_SetDefault((igMetaField *)temp_a0_2, (const float *)&spB);
+    ((Gap::Math::igVec4fMetaField *)temp_a0_2)->setDefault(*(const igVec4f *)&spB);
     temp_s2_3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 6)));
     ((igObjectRefMetaField *)temp_s2_3)->_metaObject = (int)igModelViewMatrixAttrList_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s2_3)->_construct = 1;

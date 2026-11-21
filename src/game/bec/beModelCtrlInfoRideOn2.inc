@@ -48,7 +48,7 @@ void beModelCtrlInfoRideOn2_GetMetaObjectFunction(void)
 }
 
 static FieldFactory g_beModelCtrlInfoRideOn2_ctorTable[] = {
-    igVec3fMetaField_CreateInstance,
+    (FieldFactory)Gap::Math::igVec3fMetaField::_instantiateFromPool,
 };
 static const char *g_beModelCtrlInfoRideOn2_fieldTable[] = {
     "_vector",

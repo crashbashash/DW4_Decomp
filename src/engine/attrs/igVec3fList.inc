@@ -3,6 +3,6 @@ int igVec3fList_GetMeta(void) {
 }
 
 int igDataList_GetMetaObject_Virtual(void) {
-    return (int)g_igDataList_metaObject;
+    return (int)Gap::Core::igDataList::getClassMeta();
 }
 
