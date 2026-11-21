@@ -41,7 +41,7 @@ void igGeometry_EnsureRegistered(void)
     igMetaObject_RunStaticInit((CallbackArray * (*)())igGeometry_Register);
 }
 
-static igMetaObjectCallback g_igGeometry_callbackList[] = { igRenderListAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igGeometry_callbackList[] = { Gap::Attrs::igRenderListAttr::arkRegister, 0 };
 
 CallbackArray *igGeometry_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -99,7 +99,7 @@ void FUN_0019fca0(void) {
         igObject_Destroy((igObject *)temp_v0_2);
     }
     temp_s0 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s2)));
-    *(int *)((char *)(temp_s0) + 56) = (int)igRenderListAttr_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s0) + 56) = (int)Gap::Attrs::igRenderListAttr::getClassTypeLazy();
     *(char *)((char *)(temp_s0) + 38) = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igGeometry_fieldTable, g_igGeometry_fieldHandles, g_igGeometry_fieldOffsets, temp_s2);
 }

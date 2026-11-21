@@ -80,7 +80,7 @@ int igCommonTraversal_TraverseModelViewMatrixBoneSelect(DrawItemSource *arg0, Dr
     int off;
     BaseTable *a;
     if (pool->idx >= pool->cap) {
-        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))igModelViewMatrixAttr_CreateInstance);
+        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool);
     }
     idx = pool->idx;
     pool->idx = idx + 1;
@@ -103,7 +103,7 @@ int igCommonTraversal_TraverseModelViewMatrixBoneSelect(DrawItemSource *arg0, Dr
     obj->v(buf);
     FUN_001b1030((igAttrStackManager *)x, (igAttr *)obj);
     r = igTraversal_TraverseChildren((igTraversal *)arg0, (igNode *)arg1);
-    FUN_001b11b0((struct A_1b11b0 *)x, (struct B_1b11b0 *)((int)g_igModelViewMatrixAttr_metaObject));
+    FUN_001b11b0((struct A_1b11b0 *)x, (struct B_1b11b0 *)((int)Gap::Attrs::igModelViewMatrixAttr::getClassMeta()));
     if (r == 2) {
         return 2;
     }
@@ -124,7 +124,7 @@ int igCommonTraversal_TraverseBlendMatrixSelect(CompileTraversalHead *o, BlendNo
     pool = o->_frames;
     state = o->_state;
     if (!(pool->_used < pool->_capacity)) {
-        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))igBlendMatricesAttr_Create);
+        igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))Gap::Attrs::igBlendMatricesAttr::_instantiateFromPool);
     }
     slot = pool->_used;
     pool->_used = slot + 1;

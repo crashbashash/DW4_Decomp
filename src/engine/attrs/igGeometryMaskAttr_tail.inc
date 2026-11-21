@@ -1,14 +1,19 @@
-void igGeometryMaskAttr_apply(igGeometryMaskAttr *self, igPsx2VisualContext *arg1) {
-    int sp1C;
+namespace Gap {
+namespace Attrs {
 
-    sp1C = self->_mask;
-    igPsx2VisualContext_SetVertexMask(arg1, &sp1C);
+void igGeometryMaskAttr::apply(igVisualContext *vc)
+{
+    igVertexComponentFilter mask = getMask();
+
+    igPsx2VisualContext_SetVertexMask((igPsx2VisualContext *)vc, (int *)&mask);
 }
 
-void igGeometryMaskAttr_SynchronizeDefault(igGeometryMaskAttr *self, void **source) {
-    MaskValue mask;
+void igGeometryMaskAttr::synchronizeDefault(igVisualContext *vc)
+{
+    igVertexComponentFilter mask = ((igVisualContextDispatchView *)vc)->getVertexMask();
 
-    mask = ((MaskSourceVtable *)(source))->getMask();
-    self->_mask = mask.word;
+    _mask = mask;
+}
+}
 }
 

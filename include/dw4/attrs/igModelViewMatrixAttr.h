@@ -8,11 +8,7 @@ struct igModelViewMatrixAttr;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igModelViewMatrixAttr_metaObject;
-struct igModelViewMatrixAttr *igModelViewMatrixAttr_CreateInstance(int allocator);
-void igModelViewMatrixAttr_UserUnregister(void);
 
-struct igMetaObject *igModelViewMatrixAttr_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

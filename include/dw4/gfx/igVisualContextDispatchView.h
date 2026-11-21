@@ -2,6 +2,7 @@
 #define DW4_IGVISUALCONTEXTDISPATCHVIEW_H
 #include "dw4/core/igObjectDispatchView.h"
 #include "dw4/gfx/GfxMetaEnums.h"
+#include "dw4/gfx/igVertexComponentFilter.h"
 
 class igVec4f;
 struct igMatrix44f;
@@ -49,7 +50,9 @@ public:
     virtual int getStencilBitsPerPixel(int handle) const;                   /* slot 55 */
     virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65();
     virtual unsigned int getColor() const;                                  /* slot 66 */
-    virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73();
+    virtual void d67();
+    virtual igVertexComponentFilter getVertexMask() const;                  /* slot 68 */
+    virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73();
     virtual bool getLightingState() const;                                  /* slot 74 */
     virtual void d75(); virtual void d76(); virtual void d77();
     virtual bool getLightState(int lightHandle) const;                      /* slot 78 */
@@ -102,7 +105,9 @@ public:
     virtual void d183();
     virtual void getViewport(int *x, int *y, int *width, int *height);      /* slot 184 */
     virtual void getViewport(int &x, int &y, int &w, int &h, float &nearZ, float &farZ) const; /* slot 185 */
-    virtual void d186(); virtual void d187(); virtual void d188(); virtual void d189(); virtual void d190(); virtual void d191(); virtual void d192(); virtual void d193(); virtual void d194(); virtual void d195();
+    virtual void d186(); virtual void d187(); virtual void d188(); virtual void d189(); virtual void d190();
+    virtual void deleteRenderList(int dlistHandle);                         /* slot 191 */
+    virtual void d192(); virtual void d193(); virtual void d194(); virtual void d195();
     virtual void d196(); virtual void d197(); virtual void d198(); virtual void d199(); virtual void d200();
     virtual int setMatrix(int type, int matrix);                            /* slot 201 */
     virtual void d202(); virtual void d203(); virtual void d204(); virtual void d205();

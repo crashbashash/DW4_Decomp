@@ -57,7 +57,7 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
     igModelViewMatrixAttr *matAttr;
     igTimeAttr *timeAttr;
     igAttrStackManager *mgr = (igAttrStackManager *)trav->_attrStack;
-    igObjectList *mvStack = (igObjectList *)AttrStackOps::stackFor(mgr, g_igModelViewMatrixAttr_metaObject->_id);
+    igObjectList *mvStack = (igObjectList *)AttrStackOps::stackFor(mgr, Gap::Attrs::igModelViewMatrixAttr::getClassMeta()->_id);
     igMatrix44f_SetIdentity(m);
     matAttr = 0;
     if (node->_isResetRotAndScale) {
@@ -67,7 +67,7 @@ int beResetNode_Traverse(beResetNode *node, igCommonTraversal *trav) {
         igMatrix44f_SetTranslation(m, t);
         igObjectPool *pool = (igObjectPool *)trav->_matrixPool;
         if (pool->_freeIndex >= pool->_count)
-            igObjectPool_Grow(pool, (igObject *(*)(int))igModelViewMatrixAttr_CreateInstance);
+            igObjectPool_Grow(pool, (igObject *(*)(int))Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool);
         matAttr = ((igModelViewMatrixAttr **)pool->_data)[pool->_freeIndex++];
         ((igModelViewMatrixAttrDispatchView *)matAttr)->setMatrix(m);
     }

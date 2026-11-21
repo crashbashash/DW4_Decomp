@@ -44,7 +44,7 @@ void igBlendListRecord_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igBlendListRecord_Register);
 }
 
-static igMetaObjectCallback g_igBlendListRecord_callbackList[] = { igBlendMatrixPaletteAttr_EnsureRegistered, Gap::Attrs::igAttr::arkRegister, 0 };
+static igMetaObjectCallback g_igBlendListRecord_callbackList[] = { Gap::Attrs::igBlendMatrixPaletteAttr::arkRegister, Gap::Attrs::igAttr::arkRegister, 0 };
 
 CallbackArray *igBlendListRecord_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -94,7 +94,7 @@ void igBlendListRecord_InitFields(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igBlendListRecord_ctorTable, 2);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2)));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igBlendMatrixPaletteAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Attrs::igBlendMatrixPaletteAttr::getClassTypeLazy();
     ((igMetaField *)temp_s1)->_persistent = 0;
     temp_s1_2 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1)));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)Gap::Attrs::igAttr::getClassTypeLazy();

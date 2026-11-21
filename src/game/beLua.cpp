@@ -123,7 +123,7 @@ int beLOA_Traverse(beLOA *node, igCommonTraversal *traversal)
     switch (node->_status) {
     case 0:
     case 2:
-        modelView = (igModelViewMatrixAttr *)CurrentAttr(traversal, g_igModelViewMatrixAttr_metaObject);
+        modelView = (igModelViewMatrixAttr *)CurrentAttr(traversal, Gap::Attrs::igModelViewMatrixAttr::getClassMeta());
         igMatrix44f_GetTranslation(modelView->_m, position);
         if (position[0] * position[0] + position[1] * position[1] + position[2] * position[2] < node->_range) {
             if (node->_status == 0) {

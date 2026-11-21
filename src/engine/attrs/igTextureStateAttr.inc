@@ -1,91 +1,75 @@
-igMetaObject *g_igTextureStateAttr_metaObject;
-igMetaField *g_igTextureStateAttr_enabledMetaField;
-igMetaField *g_igTextureStateAttr_unitIDMetaField;
+namespace Gap {
+namespace Attrs {
 
-igTextureStateAttr *igTextureStateAttr_CreateInstance(int allocator) {
-    igTextureStateAttr_EnsureRegistered();
-    return (igTextureStateAttr *)igMetaObject_CreateInstance(g_igTextureStateAttr_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *igTextureStateAttr::_Meta;
+igMetaField *igTextureStateAttr::k_enabled;
+igMetaField *igTextureStateAttr::k_unitID;
 
-igMetaObject *igTextureStateAttr_GetOrCreateMetaObject(void) {
-    if (g_igTextureStateAttr_metaObject == 0) {
-        g_igTextureStateAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igTextureStateAttr_metaObject;
-}
-
-igMetaObject *igTextureStateAttr_GetMetaObject(void)
+igTextureStateAttr *igTextureStateAttr::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    unsigned char ready;
-    if (g_igTextureStateAttr_metaObject != 0) {
-        ready = (g_igTextureStateAttr_metaObject->_validity & 4) != 0;
-        if (ready != 0) goto done;
-    }
-    igTextureStateAttr_EnsureRegistered();
-done:
-    return g_igTextureStateAttr_metaObject;
+    arkRegister();
+    return (igTextureStateAttr *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igTextureStateAttr_GetVTable(void) {
-    struct Obj_131470 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igTextureStateAttr_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igTextureStateAttr_EnsureRegistered(void)
+igMetaObject *igTextureStateAttr::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igTextureStateAttr_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igTextureStateAttr_Register(void) {
+igMetaObject *igTextureStateAttr::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igTextureStateAttr::retrieveVTablePointer()
+{
+    igTextureStateAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igTextureStateAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igTextureStateAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igTextureStateAttr_metaObject,
+        false,
+        &_Meta,
         Gap::Attrs::igVisualAttribute::arkRegisterInternal,
         Gap::Attrs::igVisualAttribute::getClassMeta,
-        igTextureStateAttr_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igTextureStateAttr",
-        0x14, /* instance size */
-        igTextureStateAttr_GetVTable,
-        &igTextureStateAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igTextureStateAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igTextureStateAttr_GetMetaObjectFunction(void) {
-    igTextureStateAttr_GetMetaObject();
+void igTextureStateAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igBoolMetaField_Create, igIntMetaField_Create };
+    static const char *names[] = { "_enabled", "_unitID" };
+    static igMetaField **enumStorage[] = { &k_enabled, &k_unitID };
+    static int offsets[] = { 12, 16 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        *(void (**)())&metaField->_invarianceFunction = (void (*)())Gap::Attrs::igTextureStateAttr::synchronizeCachedUnitID;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igTextureStateAttr_ctorTable[] = {
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-};
-static const char *g_igTextureStateAttr_fieldTable[] = {
-    "_enabled",
-    "_unitID",
-};
-static igMetaField **g_igTextureStateAttr_fieldHandles[] = {
-    &g_igTextureStateAttr_enabledMetaField,
-    &g_igTextureStateAttr_unitIDMetaField,
-};
-static int g_igTextureStateAttr_fieldOffsets[] = {
-    12,
-    16,
-};
-
-void igTextureStateAttr_InitFields(void) {
-    int base;
-    void *field;
-    igMetaObject *meta;
-    meta = g_igTextureStateAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igTextureStateAttr_ctorTable, 2);
-    field = igMetaObject_GetFieldAt(meta, base + 1);
-    ((igMetaField *)field)->_invarianceFunction = (int)igTextureStateAttr_SynchronizeCachedUnitID;
-    igMetaObject_NameFields(meta, g_igTextureStateAttr_fieldTable, g_igTextureStateAttr_fieldHandles, g_igTextureStateAttr_fieldOffsets, base);
+}
 }
 

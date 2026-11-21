@@ -28,7 +28,7 @@ void igVertexBlendMatrixAttrPool_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igVertexBlendMatrixAttrPool_Register);
 }
 
-static igMetaObjectCallback g_igVertexBlendMatrixAttrPool_callbackList[] = { igVertexBlendMatrixAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igVertexBlendMatrixAttrPool_callbackList[] = { Gap::Attrs::igVertexBlendMatrixAttr::arkRegister, 0 };
 
 CallbackArray *igVertexBlendMatrixAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();

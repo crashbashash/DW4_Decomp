@@ -34,7 +34,7 @@ void igEnvironmentMapShader2_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igEnvironmentMapShader2_Register);
 }
 
-static igMetaObjectCallback g_igEnvironmentMapShader2_callbackList[] = { igTextureCubeAttr_EnsureRegistered, igTextureBindAttr_EnsureRegistered, igTextureAttr_EnsureRegistered, igAttrListList_EnsureRegistered, igTextureBindAttr_EnsureRegistered, igTextureCoordSourceAttr_EnsureRegistered, igTextureFunctionAttr_EnsureRegistered, Gap::Attrs::igBlendStateAttr::arkRegister, 0 };
+static igMetaObjectCallback g_igEnvironmentMapShader2_callbackList[] = { igTextureCubeAttr_EnsureRegistered, igTextureBindAttr_EnsureRegistered, igTextureAttr_EnsureRegistered, igAttrListList_EnsureRegistered, igTextureBindAttr_EnsureRegistered, Gap::Attrs::igTextureCoordSourceAttr::arkRegister, Gap::Attrs::igTextureFunctionAttr::arkRegister, Gap::Attrs::igBlendStateAttr::arkRegister, 0 };
 
 CallbackArray *igEnvironmentMapShader2_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -193,16 +193,16 @@ void igEnvironmentMapShader2_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)igTextureBindAttr_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_6)->_persistent = 0;
     temp_s2_7 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xD)));
-    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)igTextureCoordSourceAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)Gap::Attrs::igTextureCoordSourceAttr::getClassTypeLazy();
     ((igMetaField *)temp_s2_7)->_persistent = 0;
     temp_s2_8 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xE)));
-    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)igTextureFunctionAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_8)->_metaObject = (int)Gap::Attrs::igTextureFunctionAttr::getClassTypeLazy();
     ((igMetaField *)temp_s2_8)->_persistent = 0;
     temp_s2_9 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0xF)));
-    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)igTextureCoordSourceAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_9)->_metaObject = (int)Gap::Attrs::igTextureCoordSourceAttr::getClassTypeLazy();
     ((igMetaField *)temp_s2_9)->_persistent = 0;
     temp_s2_10 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0x10)));
-    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)igTextureFunctionAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_10)->_metaObject = (int)Gap::Attrs::igTextureFunctionAttr::getClassTypeLazy();
     ((igMetaField *)temp_s2_10)->_persistent = 0;
     temp_s2_11 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0x11)));
     ((igObjectRefMetaField *)temp_s2_11)->_metaObject = (int)Gap::Attrs::igBlendStateAttr::getClassTypeLazy();
@@ -211,10 +211,10 @@ void igEnvironmentMapShader2_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_12)->_metaObject = (int)igTextureBindAttr_GetOrCreateMetaObject();
     ((igMetaField *)temp_s2_12)->_persistent = 0;
     temp_s2_13 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0x13)));
-    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = (int)igTextureCoordSourceAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_13)->_metaObject = (int)Gap::Attrs::igTextureCoordSourceAttr::getClassTypeLazy();
     ((igMetaField *)temp_s2_13)->_persistent = 0;
     temp_s2_14 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 0x14)));
-    ((igObjectRefMetaField *)temp_s2_14)->_metaObject = (int)igTextureFunctionAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_14)->_metaObject = (int)Gap::Attrs::igTextureFunctionAttr::getClassTypeLazy();
     ((igMetaField *)temp_s2_14)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igEnvironmentMapShader2_fieldTable, g_igEnvironmentMapShader2_fieldHandles, g_igEnvironmentMapShader2_fieldOffsets, temp_s0);
     ((igMetaObject *)(g_igEnvironmentMapShader2_metaObject))->_abstractProxy = (int)(&igPsx2EnvironmentMapShader_GetMetaObjectFunction);

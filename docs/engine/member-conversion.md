@@ -275,14 +275,32 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    constructs one; `synchronizeDefault` reads `igVisualContextDispatchView`'s getters (slots 51-250, named after
    igPsx2VisualContext's overrides with the kit's igGfx/igVisualContext.h names and enum types), in retail's call
    order. Classes tools/gen_odl_source.py cannot write (`--list` says CANNOT) get igen's registration by hand
-   (`gen` empty in the spec). Next: the rest of the igVisualAttribute subclasses (the unit-ID family with its
-   static `synchronizeCachedUnitID` invariance callback, `setUnitID`, `userPostLoad` and `getUnitCount`
-   through igCapabilityManager's `getCapability`; the texture, light, geometry and render-destination attrs with
-   smart-pointer fields; the remaining matrix attrs), then retire `include/dw4/attrs/*DispatchView.h` by calling
-   the converted classes; the default managers (`igAttrDefaultManager` first) and `igAttrPool`; the attr lists over
-   `igObjectList`. The specs are in the agent's scratch (`scratch/Attrs2/specs/visual.py`, `visual2.py`). memberize
-   casts a pool passed as `int` to a factory taking `igMemoryPoolView *` (or drops the `int` cast). Gfx then starts
-   from `igVisualContext`, whose dispatch view already names the slots the attrs call;
+   (`gen` empty in the spec). The unit-ID family is converted too (`igTextureStateAttr`,
+   `igTextureMatrixStateAttr`, `igTextureCoordSourceAttr`, `igTextureUnloadAttr`, `igTexGenMatrixAttr`,
+   `igTextureMatrixAttr`, `igVertexBlendMatrixAttr`, `igBlendFunctionAttr`, `igTextureFunctionAttr`): the static
+   `synchronizeCachedUnitID` invariance callback (`setCachedUnitID` from the unit field), `setUnitID`, `userPostLoad`
+   (the kit's `postFileRead`) and `getUnitCount` through `igCapabilityManagerDispatchView`'s slot 21 `getCapability`
+   (the kit's `IG_GFX_CAPABILITY`). `igModelViewMatrixAttr` (with `userRegister`, the registration's
+   `arkRegisterUser` callback, `userUnregister` and `getIdentityAttr`), `igGeometryMaskAttr` (its mask the kit's
+   `igVertexComponentFilter`, include/dw4/gfx/igVertexComponentFilter.h), `igBlendMatricesAttr`,
+   `igBlendMatrixPaletteAttr` (igPsx2VisualContext_SetBlendingMatrices takes the kit's unsigned count and
+   `igMatrix44f *`, which retail's scheduling needs), `igDisplayListAttr` (an igAttr) and `igRenderListAttr` are
+   converted as well. The two extension attrs keep the kit's static `_extension` and call it through
+   `igBlendEquationExtDispatchView` and `igMultiTextureExtDispatchView`. A field naming another Gap class stays an
+   `igSmartPointer<::flat>` until igSmartPointer can hold a Gap class (it releases through the flat `igRelease`).
+   igViewerRenderer calls the converted colour, alpha-function, shade and polygon attrs' members, and their
+   dispatch views are gone; the kit's `setState(igBool)` normalises the unsigned char fields the viewer passes, so
+   the alpha-test, cull-face and lighting state calls keep their views. Next: the remaining igVisualAttribute
+   subclasses, coupled through their smart-pointer fields: `igTextureAttr` with `igTextureCubeAttr`,
+   `igTextureBindAttr` and `igCopyRenderDestinationAttr`; `igLightAttr` with `igLightStateAttr`;
+   `igRenderDestinationAttr` with `igSetRenderDestinationAttr`; `igGeometryAttr`, `igGeometryAttr1_5` and
+   `igGeometrySetAttr`; `igParticleAttr` (its array is a Gap::Bec class) and `igVertexBlendMatrixListAttr`. Then the
+   game's `igModelViewMatrixAttrDispatchView` uses (beCri, beModelCtrl, beModelCtrlSC, beSeCtl, igTraversalView.h),
+   the default managers (`igAttrDefaultManager` first) and `igAttrPool`, and the attr lists over `igObjectList`.
+   The specs stay in the agents' scratch (`scratch/Attrs2/specs/visual.py`, `visual2.py`;
+   `scratch/Attrs3/specs/unit.py`, `simple.py`, `ext.py`). memberize casts a pool passed as `int` to a factory
+   taking `igMemoryPoolView *` (or drops the `int` cast). Gfx then starts from `igVisualContext`, whose dispatch
+   view already names the slots the attrs call;
 6. the game's `be*` classes last.
 
 ## Known differences and gaps
@@ -309,6 +327,7 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
   stays in its place while its name still binds at its address (the object names it, or symbols.txt,
   data-names.tsv, the compiler-name map, another unit's row or the address in the name binds it), so stale aliases
   (`DAT_004fb410` beside `g_resultSuccess`) stay until their name stops binding.
-- `tools/whole_file_rows.py --unit-va <va> --write` cannot regenerate some caller units' rows (an ambiguous retail
-  start such as `0x37a600`, which three duplicate smart-pointer destructors fit, or a unit name with two source
-  files), on main as well; their rows stay as they were and still verify.
+- `tools/whole_file_rows.py --unit-va <va> --write` cannot regenerate a unit whose name has two source files
+  (`sony_libkernl_exit`) without `--source`; its row stays as it was and still verifies. A start the present row
+  places (`0x37a600`, which three duplicate smart-pointer destructors fit) is its name's alone: the other
+  byte-identical destructors stay duplicates, and those rows regenerate unchanged.

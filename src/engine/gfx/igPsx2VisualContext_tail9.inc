@@ -1,7 +1,7 @@
-void igPsx2VisualContext_SetBlendingMatrices(igPsx2VisualContext *self, int arg1, int arg2) {
+void igPsx2VisualContext_SetBlendingMatrices(igPsx2VisualContext *self, unsigned int count, igMatrix44f *matrices) {
     struct S_180030 *arg0 = (struct S_180030 *)self;
-    arg0->f72 = arg1;
-    arg0->f84 = arg2;
+    arg0->f72 = count;
+    arg0->f84 = (int)matrices;
     arg0->f1424 = 1;
     arg0->f76 = arg0->f76 + 1;
     p2SetBlendMatrices(arg0->f84, arg0->f72);

@@ -1,34 +1,46 @@
-void igModelViewMatrixAttr_apply(char * arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetMatrix(arg1, 1, (char *)(arg0 + 12));
+namespace Gap {
+namespace Attrs {
+
+void igModelViewMatrixAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetMatrix((igPsx2VisualContext *)vc, IG_GFX_MATRIX_STACK_MODELVIEW, (char *)_m.m);
 }
 
-void FUN_0013f670(void) {
+void igModelViewMatrixAttr::userRegister()
+{
 
 }
 
-igModelViewMatrixAttr *FUN_0013f680(void) {
+igModelViewMatrixAttr *igModelViewMatrixAttr::getIdentityAttr()
+{
     int allocator;
+
     if (g_igModelViewMatrixAttr_instance == 0) {
         if (g_useOwnerAllocator != 0) { int owner = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent); allocator = owner; } else { int fallback = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleAttribute); allocator = fallback; }
         g_igModelViewMatrixAttr_instance.release();
-        g_igModelViewMatrixAttr_instance.p = (igModelViewMatrixAttr *)igModelViewMatrixAttr_CreateInstance(allocator);
+        g_igModelViewMatrixAttr_instance.p = (::igModelViewMatrixAttr *)_instantiateFromPool((igMemoryPoolView *)allocator);
     }
-    return g_igModelViewMatrixAttr_instance;
+    return (igModelViewMatrixAttr *)g_igModelViewMatrixAttr_instance.p;
 }
 
-void igModelViewMatrixAttr_UserUnregister(void) {
+void igModelViewMatrixAttr::userUnregister()
+{
     g_igModelViewMatrixAttr_instance.clear();
 }
 
-void igModelViewMatrixAttr_SynchronizeDefault(void *arg0, void *arg1) {
-    float m[16];
-    igMatrix44f_SetIdentity(m);
-    ((VA *)arg1)->vX(1, m);
-    ((VB_13f790 *)arg0)->vY(m);
+void igModelViewMatrixAttr::synchronizeDefault(igVisualContext *vc)
+{
+    igMatrix44f m;
+
+    ((igVisualContextDispatchView *)vc)->getMatrix(IG_GFX_MATRIX_STACK_MODELVIEW, m);
+    setMatrix(m);
 }
 
-void igModelViewMatrixAttr_SetMatrix(igModelViewMatrixAttr *self, const float *matrix) {
-    igMatrix44f_Copy(self->_m, matrix);
+void igModelViewMatrixAttr::setMatrix(const igMatrix44f &matrix)
+{
+    igMatrix44f_Copy(_m.m, matrix.m);
+}
+}
 }
 
 void FUN_0013f800(void *arg0, int arg1) {

@@ -1,76 +1,88 @@
-int g_igTextureFunctionAttr_multiTextureExt;
-void igTextureFunctionAttr_SynchronizeCachedUnitID(igTextureFunctionAttr *self) {
-    self->_cachedUnitID = self->_unitID;
+namespace Gap {
+namespace Attrs {
+
+igMultiTextureExt *igTextureFunctionAttr::_extension;
+void igTextureFunctionAttr::synchronizeCachedUnitID(igObject *obj)
+{
+    igTextureFunctionAttr *attr = (igTextureFunctionAttr *)obj;
+
+    attr->setCachedUnitID(attr->_unitID);
 }
 
-void igTextureFunctionAttr_SetUnitID(igTextureFunctionAttr *self, int unitID) {
-    self->_unitID = (short)unitID;
-    igAttr_SetUnitID((int)self, unitID);
+void igTextureFunctionAttr::setUnitID(short id)
+{
+    _unitID = id;
+    igAttr::setUnitID(id);
 }
 
-void igTextureFunctionAttr_UserPostLoad(igTextureFunctionAttr *self) {
-    igAttr_UserPostLoad(self);
-    igAttr_SetUnitID((int)self, (short)self->_unitID);
+void igTextureFunctionAttr::userPostLoad()
+{
+    igVisualAttribute::userPostLoad();
+    igAttr::setUnitID((short)_unitID);
+}
+}
 }
 
 void FUN_001412a0(void) {
     *(int *)((char *)(DAT_0055ed08[0]) + 52) = (int)(&TEXTURE_FUNCTION_PSX2_GetMetaEnum);
 }
 
-void igTextureFunctionAttr_InitDefaults(igTextureFunctionAttr *self) {
-    igObject_InitDefaults((igObject *)self);
-    self->_arg0 = 3;
-    self->_arg1 = 0;
-    self->_type = 2;
-    self->_functionType = 2;
-}
+namespace Gap {
+namespace Attrs {
 
-void igTextureFunctionAttr_ReleaseDefaults(void **arg0) {
-    if (igMetaObject_CountInstances((igMetaObject *)(((DW4VC_88_0 *)(arg0))->vX()), 1) == 0) {
-        g_igTextureFunctionAttr_multiTextureExt = 0;
-    }
-    igObject_ReleaseDefaults((igObject *)arg0);
-}
-
-igMetaObject *igTextureFunctionAttr_GetMeta(void) {
-    return g_igTextureFunctionAttr_metaObject;
-}
-
-void igTextureFunctionAttr_SynchronizeDefault(igTextureFunctionAttr *arg0, void **arg1) {
-    arg0->_mode = ((DW4VC_596_1 *)(arg1))->vX((int)(arg0->_unitID));
-    if (g_igTextureFunctionAttr_multiTextureExt == 0) {
-        g_igTextureFunctionAttr_multiTextureExt = ((DW4VC_104_1 *)(arg1))->vX("igMultiTextureExt");
-    }
-}
-
-void igTextureFunctionAttr_GetUnitCount(igTextureFunctionAttrView *self, igVisualContextView *context)
+void igTextureFunctionAttr::initDefaults()
 {
-    context->vfunc_21(22);
+    igVisualAttribute::initDefaults();
+    _arg0 = 3;
+    _arg1 = 0;
+    _type = 2;
+    _functionType = 2;
+}
+
+void igTextureFunctionAttr::releaseDefaults()
+{
+    if (igMetaObject_CountInstances(getMeta(), 1) == 0)
+        _extension = 0;
+    igVisualAttribute::releaseDefaults();
+}
+
+void igTextureFunctionAttr::synchronizeDefault(igVisualContext *vc)
+{
+    _mode = ((igVisualContextDispatchView *)vc)->getTextureStageFunc(_unitID);
+    if (_extension == 0)
+        _extension = (igMultiTextureExt *)((igVisualContextDispatchView *)vc)->GetExtension("igMultiTextureExt");
+}
+
+int igTextureFunctionAttr::getUnitCount(igCapabilityManager *capabilityManager)
+{
+    return ((igCapabilityManagerDispatchView *)capabilityManager)->getCapability(IG_GFX_CAPABILITY_MAX_TEXTURE_STAGES_PSX2);
 }
 
 /* Setter for `_type`; it also clears `_call_state`, the attribute's per-call state byte, so the
  * new type is applied afresh on the next apply. */
 
-void igTextureFunctionAttr_SetType(igTextureFunctionAttr *self, int type) {
-    self->_type = type;
-    self->_call_state = 0;
+void igTextureFunctionAttr::setStageType(int type)
+{
+    _type = type;
+    _call_state = 0;
 }
 
-void igTextureFunctionAttr_apply(void *arg0x, igPsx2VisualContext *arg1) {
-    A_141410 *arg0 = (A_141410 *)arg0x;
-    int temp_s0;
-    if (g_igTextureFunctionAttr_multiTextureExt != 0) {
-        temp_s0 = arg0->f36;
-        if (arg0->f32 == 2) {
-            igPsx2VisualContext_SetTextureStageFunc(arg1, arg0->f16, arg0->f12);
+void igTextureFunctionAttr::apply(igVisualContext *vc)
+{
+    if (_extension != 0) {
+        int functionType = _functionType;
+
+        if (_call_state == 2) {
+            igPsx2VisualContext_SetTextureStageFunc((igPsx2VisualContext *)vc, _unitID, _mode);
             return;
         }
-        if (arg0->f16 > 0) {
-            ((G *)g_igTextureFunctionAttr_multiTextureExt)->v124(arg0->f16, temp_s0, arg0->f12);
-        }
-        ((G *)g_igTextureFunctionAttr_multiTextureExt)->v120(arg0->f16, temp_s0, arg0->f28);
+        if (_unitID > 0)
+            ((igMultiTextureExtDispatchView *)_extension)->setTextureStageFunction(_unitID, functionType, _mode);
+        ((igMultiTextureExtDispatchView *)_extension)->setTextureStageType(_unitID, functionType, _type);
         return;
     }
-    igPsx2VisualContext_SetTextureStageFunc(arg1, arg0->f16, arg0->f12);
+    igPsx2VisualContext_SetTextureStageFunc((igPsx2VisualContext *)vc, _unitID, _mode);
+}
+}
 }
 

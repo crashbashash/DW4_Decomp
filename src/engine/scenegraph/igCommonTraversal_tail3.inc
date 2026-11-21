@@ -135,7 +135,7 @@ V128 *FUN_001b7330(O_1b7330 *arg0, float *arg1) {
     int idx;
     V128 *e;
     if (l->count >= l->cap) {
-        igObjectPool_Grow((igObjectPool *)l, (igObject *(*)(int))&igModelViewMatrixAttr_CreateInstance);
+        igObjectPool_Grow((igObjectPool *)l, (igObject *(*)(int))&Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool);
     }
     idx = l->count;
     l->count = idx + 1;
@@ -146,7 +146,7 @@ V128 *FUN_001b7330(O_1b7330 *arg0, float *arg1) {
 }
 
 void FUN_001b73d0(struct S_1b73d0 *arg0) {
-    FUN_001b11b0((struct A_1b11b0 *)arg0->x, (struct B_1b11b0 *)((int)g_igModelViewMatrixAttr_metaObject));
+    FUN_001b11b0((struct A_1b11b0 *)arg0->x, (struct B_1b11b0 *)((int)Gap::Attrs::igModelViewMatrixAttr::getClassMeta()));
 }
 
 void Gap__Sg__igCommonTraversal__vfunc_23(igCommonTraversalOps *t, int root) {
@@ -379,7 +379,7 @@ int FUN_001b7d70(void *arg0, void *arg1) {
     sp30.y = *(float *)((char *)(arg1) + 80);
     sp30.z = *(float *)((char *)(arg1) + 84);
     temp_a1 = (void *)(*(int *)((char *)(arg0) + 52));
-    temp_a0 = (void *)(*(int *)(*(int *)((char *)(*(int *)((char *)(temp_a1) + 16)) + 16) + (*(int *)(*(int *)((char *)(temp_a1) + 68) + (*(int *)((char *)(((void *)g_igModelViewMatrixAttr_metaObject)) + 8) * 4)) * 4)));
+    temp_a0 = (void *)(*(int *)(*(int *)((char *)(*(int *)((char *)(temp_a1) + 16)) + 16) + (*(int *)(*(int *)((char *)(temp_a1) + 68) + (*(int *)((char *)(((void *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta())) + 8) * 4)) * 4)));
     temp_v0 = *(int *)((char *)(temp_a0) + 24);
     if (temp_v0 >= 0) {
         var_v0 = *(int *)(*(int *)((char *)(temp_a0) + 16) + (temp_v0 * 4));
@@ -463,11 +463,11 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
     manager = traversal->_attrStack;
     switch (target) {
     case 0:
-        top = (MatrixAttrView *)topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[((int *)manager->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject->_id]]);
+        top = (MatrixAttrView *)topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[((int *)manager->_attrStackIndexTable)[Gap::Attrs::igModelViewMatrixAttr::getClassMeta()->_id]]);
         if (top != 0) {
             parent = top->_m;
         }
-        attr = (MatrixAttrView *)takePooled(traversal->_matrixPool, (void *)igModelViewMatrixAttr_CreateInstance);
+        attr = (MatrixAttrView *)takePooled(traversal->_matrixPool, (void *)Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool);
         if (parent != 0) {
             igMatrix44f_Multiply(attr->_m, self->_m, parent);
         } else {
@@ -478,11 +478,11 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
         return attr->_m;
     case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16:
         unit = target - 9;
-        top = (MatrixAttrView *)topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[unit + ((int *)manager->_attrStackIndexTable)[g_igTextureMatrixAttr_metaObject->_id]]);
+        top = (MatrixAttrView *)topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[unit + ((int *)manager->_attrStackIndexTable)[Gap::Attrs::igTextureMatrixAttr::getClassMeta()->_id]]);
         if (top != 0) {
             parent = top->_m;
         }
-        attr = (MatrixAttrView *)takePooled(traversal->_texMatPool, (void *)igTextureMatrixAttr_Create);
+        attr = (MatrixAttrView *)takePooled(traversal->_texMatPool, (void *)Gap::Attrs::igTextureMatrixAttr::_instantiateFromPool);
         ((TextureMatrixAttrView *)attr)->_outputElementCount = -1;
         ((TextureMatrixAttrView *)attr)->_isProjective = 0;
         attr->setUnitID((short)unit);
@@ -496,11 +496,11 @@ float *igTransform_PushMatrix(TransformView *self, CommonTraversalView *traversa
         return (float *)((char *)attr + g_igTextureMatrixAttr_mField[0]->_offset);
     default:
         blendIndex = target - 1;
-        top = (MatrixAttrView *)topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[blendIndex + ((int *)manager->_attrStackIndexTable)[g_igVertexBlendMatrixAttr_metaObject->_id]]);
+        top = (MatrixAttrView *)topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[blendIndex + ((int *)manager->_attrStackIndexTable)[Gap::Attrs::igVertexBlendMatrixAttr::getClassMeta()->_id]]);
         if (top != 0) {
             parent = (float *)((char *)top + g_igVertexBlendMatrixAttr_mField[0]->_offset);
         }
-        attr = (MatrixAttrView *)takePooled(traversal->_blendMatrixPool, (void *)igVertexBlendMatrixAttr_Create);
+        attr = (MatrixAttrView *)takePooled(traversal->_blendMatrixPool, (void *)Gap::Attrs::igVertexBlendMatrixAttr::_instantiateFromPool);
         attr->setUnitID((short)blendIndex);
         if (parent != 0) {
             igMatrix44f_Multiply((float *)((char *)attr + g_igVertexBlendMatrixAttr_mField[0]->_offset), self->_m, (const float *)parent);
@@ -528,15 +528,15 @@ int igTransform_TraverseChildrenAndPopMatrix(float *matrix, igTransform *self, i
     unit = 0;
     switch (target) {
     case 0:
-        meta = g_igModelViewMatrixAttr_metaObject;
+        meta = Gap::Attrs::igModelViewMatrixAttr::getClassMeta();
         break;
     case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16:
-        meta = g_igTextureMatrixAttr_metaObject;
+        meta = Gap::Attrs::igTextureMatrixAttr::getClassMeta();
         unit = target - 9;
         break;
     default:
         unit = target - 1;
-        meta = g_igVertexBlendMatrixAttr_metaObject;
+        meta = Gap::Attrs::igVertexBlendMatrixAttr::getClassMeta();
         break;
     }
     slot = unit + ((int *)manager->_attrStackIndexTable)[meta->_id];

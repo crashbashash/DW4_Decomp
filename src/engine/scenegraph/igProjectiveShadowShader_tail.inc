@@ -1,10 +1,10 @@
 void FUN_001d4180(void) {
     DAT_005628d8[0] = (int)igTextureBindAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_005627e8[0] = (int)igTextureStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_005627f0[0] = (int)igTextureStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_005627f8[0] = (int)igTextureStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562800[0] = (int)igBlendFunctionAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562808[0] = (int)igBlendFunctionAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_005627e8[0] = (int)Gap::Attrs::igTextureStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_005627f0[0] = (int)Gap::Attrs::igTextureStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_005627f8[0] = (int)Gap::Attrs::igTextureStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562800[0] = (int)Gap::Attrs::igBlendFunctionAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562808[0] = (int)Gap::Attrs::igBlendFunctionAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562810[0] = (int)Gap::Attrs::igBlendStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562818[0] = (int)Gap::Attrs::igBlendStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562820[0] = (int)Gap::Attrs::igLightingStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
@@ -12,12 +12,12 @@ void FUN_001d4180(void) {
     DAT_00562840[0] = (int)Gap::Attrs::igClearAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562848[0] = (int)Gap::Attrs::igClearAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562850[0] = (int)Gap::Attrs::igDepthStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562858[0] = (int)igTextureCoordSourceAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562860[0] = (int)igTextureCoordSourceAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    g_shadowTextureFunctionAttr0[0] = (igTextureFunctionAttr *)igTextureFunctionAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562870[0] = (int)igTextureFunctionAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562878[0] = (int)igTextureMatrixStateAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    DAT_00562880[0] = (int)igTextureMatrixStateAttr_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562858[0] = (int)Gap::Attrs::igTextureCoordSourceAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562860[0] = (int)Gap::Attrs::igTextureCoordSourceAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    g_shadowTextureFunctionAttr0[0] = (igTextureFunctionAttr *)Gap::Attrs::igTextureFunctionAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562870[0] = (int)Gap::Attrs::igTextureFunctionAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562878[0] = (int)Gap::Attrs::igTextureMatrixStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+    DAT_00562880[0] = (int)Gap::Attrs::igTextureMatrixStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562828[0] = (int)Gap::Attrs::igAlphaFunctionAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_00562830[0] = (int)Gap::Attrs::igAlphaStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
     DAT_005628d0[0] = (int)Gap::Attrs::igAlphaStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));

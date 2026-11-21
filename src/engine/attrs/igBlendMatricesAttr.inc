@@ -1,89 +1,72 @@
-igMetaObject *g_igBlendMatricesAttr_metaObject;
-igMetaField *g_igBlendMatricesAttr_matrixCacheMetaField;
-igMetaField *g_igBlendMatricesAttr_currentMatrixCountMetaField;
-igMetaField *g_igBlendMatricesAttr_matrixCacheCapacityMetaField;
+namespace Gap {
+namespace Attrs {
 
-igBlendMatricesAttr *igBlendMatricesAttr_Create(igMemoryPoolView *pool) {
-    igBlendMatricesAttr_EnsureRegistered();
-    return (igBlendMatricesAttr *)igMetaObject_CreateInstance(g_igBlendMatricesAttr_metaObject, pool);
-}
+igMetaObject *igBlendMatricesAttr::_Meta;
+igMetaField *igBlendMatricesAttr::k_matrixCache;
+igMetaField *igBlendMatricesAttr::k_currentMatrixCount;
+igMetaField *igBlendMatricesAttr::k_matrixCacheCapacity;
 
-igMetaObject *igBlendMatricesAttr_GetMetaObject(void)
+igBlendMatricesAttr *igBlendMatricesAttr::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igBlendMatricesAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igBlendMatricesAttr_EnsureRegistered();
-    return g_igBlendMatricesAttr_metaObject;
+    arkRegister();
+    return (igBlendMatricesAttr *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igBlendMatricesAttr_GetVTable(void) {
-    struct Obj_139ca0 obj;
-
-    igObject_InitHeader((igObject *)&obj);
-    obj.vt = &g_igBlendMatricesAttr_vtable[0];
-    return *(int *)((char *)&obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igBlendMatricesAttr_EnsureRegistered(void)
+igMetaObject *igBlendMatricesAttr::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igBlendMatricesAttr_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igBlendMatricesAttr_Register(void) {
+void *igBlendMatricesAttr::retrieveVTablePointer()
+{
+    igBlendMatricesAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igBlendMatricesAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igBlendMatricesAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igBlendMatricesAttr_metaObject,
+        false,
+        &_Meta,
         Gap::Attrs::igVisualAttribute::arkRegisterInternal,
         Gap::Attrs::igVisualAttribute::getClassMeta,
-        igBlendMatricesAttr_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igBlendMatricesAttr",
-        0x18, /* instance size */
-        igBlendMatricesAttr_GetVTable,
-        &igBlendMatricesAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igBlendMatricesAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igBlendMatricesAttr_GetMetaObjectFunction(void) {
-    igBlendMatricesAttr_GetMetaObject();
+void igBlendMatricesAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igMemoryRefMetaField_Create, igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create };
+    static const char *names[] = { "_matrixCache", "_currentMatrixCount", "_matrixCacheCapacity" };
+    static igMetaField **enumStorage[] = { &k_matrixCache, &k_currentMatrixCount, &k_matrixCacheCapacity };
+    static int offsets[] = { 12, 16, 20 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_memType = (int)Gap::Math::igMatrix44fMetaField::getMetaField();
+        metaField->_destruct = 1;
+        metaField->_releaseOnCopy = 1;
+        metaField->_releaseOnReset = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igBlendMatricesAttr_ctorTable[] = {
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-};
-static const char *g_igBlendMatricesAttr_fieldTable[] = {
-    "_matrixCache",
-    "_currentMatrixCount",
-    "_matrixCacheCapacity",
-};
-static igMetaField **g_igBlendMatricesAttr_fieldHandles[] = {
-    &g_igBlendMatricesAttr_matrixCacheMetaField,
-    &g_igBlendMatricesAttr_currentMatrixCountMetaField,
-    &g_igBlendMatricesAttr_matrixCacheCapacityMetaField,
-};
-static int g_igBlendMatricesAttr_fieldOffsets[] = {
-    12,
-    16,
-    20,
-};
-
-void igBlendMatricesAttr_InitFields(void) {
-    int base;
-    void *field;
-    igMetaObject *meta;
-
-    meta = g_igBlendMatricesAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igBlendMatricesAttr_ctorTable, 3);
-    field = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Math::igMatrix44fMetaField::getMetaField();
-    ((igRefMetaField *)field)->_destruct = 1;
-    ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)field)->_releaseOnReset = 1;
-    igMetaObject_NameFields(meta, g_igBlendMatricesAttr_fieldTable, g_igBlendMatricesAttr_fieldHandles, g_igBlendMatricesAttr_fieldOffsets, base);
+}
 }
 

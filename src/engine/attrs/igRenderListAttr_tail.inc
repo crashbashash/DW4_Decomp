@@ -1,35 +1,33 @@
-void igRenderListAttr_apply(igRenderListAttr *self, igPsx2VisualContext *arg1) {
-    int temp_v1;
+namespace Gap {
+namespace Attrs {
 
-    temp_v1 = self->_handle;
-    if (temp_v1 >= 0) {
-        igPsx2VisualContext_ExecuteRenderList(arg1, temp_v1);
-    }
+void igRenderListAttr::apply(igVisualContext *vc)
+{
+    int handle = _handle;
+
+    if (handle >= 0)
+        igPsx2VisualContext_ExecuteRenderList((igPsx2VisualContext *)vc, handle);
 }
 
-void igRenderListAttr_SynchronizeDefault(void) {
+void igRenderListAttr::synchronizeDefault(igVisualContext *vc)
+{
 
 }
 
-void igRenderListAttr_ReleaseDefaults(void **arg0) {
-    ((DW4VC_112_0 *)(arg0))->vX();
-    igObject_ReleaseDefaults((igObject *)arg0);
+void igRenderListAttr::releaseDefaults()
+{
+    reset();
+    igVisualAttribute::releaseDefaults();
 }
 
-void igRenderListAttr_Reset(O_13ffd0 *arg0) {
-    V772 *o;
-    if (arg0->f12 != -1) {
-        arg0->obj->vX(arg0->f12);
-    }
-    arg0->f12 = -1;
-    o = arg0->obj;
-    if (o != 0) {
-        o->references = o->references - 1;
-        if (((unsigned long long)(long long)o->references & 0x7fffffULL) == 0) {
-            igObject_Destroy((igObject *)o);
-        }
-    }
-    arg0->obj = 0;
+void igRenderListAttr::reset()
+{
+    if (_handle != -1)
+        ((igVisualContextDispatchView *)(igVisualContext *)_vc)->deleteRenderList(_handle);
+    _handle = -1;
+    _vc = 0;
+}
+}
 }
 
 int igVisualContext_GetScissorType(igVisualContext *self) {
@@ -43,6 +41,4 @@ struct SetRenderDestinationAttrView {
     short _cachedUnitID;
     RenderDestinationAttrView *_pRDAttr;
 };
-
-
 

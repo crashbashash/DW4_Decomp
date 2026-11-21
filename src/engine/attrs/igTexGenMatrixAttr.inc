@@ -1,96 +1,80 @@
-igMetaObject *g_igTexGenMatrixAttr_metaObject;
-igMetaField *g_igTexGenMatrixAttr_mMetaField;
-igMetaField *g_igTexGenMatrixAttr_unitIDMetaField;
+namespace Gap {
+namespace Attrs {
 
-igTexGenMatrixAttr *igTexGenMatrixAttr_Create(igMemoryPoolView *pool) {
-    igTexGenMatrixAttr_EnsureRegistered();
-    return (igTexGenMatrixAttr *)igMetaObject_CreateInstance(g_igTexGenMatrixAttr_metaObject, pool);
-}
+igMetaObject *igTexGenMatrixAttr::_Meta;
+igMetaField *igTexGenMatrixAttr::kM;
+igMetaField *igTexGenMatrixAttr::k_unitID;
 
-igMetaObject *igTexGenMatrixAttr_GetOrCreateMetaObject(void) {
-    if (g_igTexGenMatrixAttr_metaObject == 0) {
-        g_igTexGenMatrixAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igTexGenMatrixAttr_metaObject;
-}
-
-igMetaObject *igTexGenMatrixAttr_GetMetaObject(void)
+igTexGenMatrixAttr *igTexGenMatrixAttr::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    unsigned char ready;
-    if (g_igTexGenMatrixAttr_metaObject != 0) {
-        ready = (g_igTexGenMatrixAttr_metaObject->_validity & 4) != 0;
-        if (ready != 0) goto done;
-    }
-    igTexGenMatrixAttr_EnsureRegistered();
-done:
-    return g_igTexGenMatrixAttr_metaObject;
+    arkRegister();
+    return (igTexGenMatrixAttr *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igTexGenMatrixAttr_GetVTable(void) {
-    union U_133240 u;
-    igObject_InitHeader((igObject *)u.b);
-    u.vt = (int)&g_igTexGenMatrixAttr_vtable[0];
-    igMatrix44f_SetIdentity((float *)&u.b[12]);
-    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-}
-
-void igTexGenMatrixAttr_EnsureRegistered(void)
+igMetaObject *igTexGenMatrixAttr::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igTexGenMatrixAttr_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igTexGenMatrixAttr_Register(void) {
+igMetaObject *igTexGenMatrixAttr::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igTexGenMatrixAttr::retrieveVTablePointer()
+{
+    igTexGenMatrixAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igTexGenMatrixAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igTexGenMatrixAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igTexGenMatrixAttr_metaObject,
+        false,
+        &_Meta,
         Gap::Attrs::igVisualAttribute::arkRegisterInternal,
         Gap::Attrs::igVisualAttribute::getClassMeta,
-        igTexGenMatrixAttr_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igTexGenMatrixAttr",
-        0x50, /* instance size */
-        igTexGenMatrixAttr_GetVTable,
-        &igTexGenMatrixAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igTexGenMatrixAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igTexGenMatrixAttr_GetMetaObjectFunction(void) {
-    igTexGenMatrixAttr_GetMetaObject();
+void igTexGenMatrixAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool, igIntMetaField_Create };
+    static const char *names[] = { "m", "_unitID" };
+    static igMetaField **enumStorage[] = { &kM, &k_unitID };
+    static int offsets[] = { 12, 76 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 2);
+    {
+        igMatrix44fMetaField *metaField = (igMatrix44fMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
+                                          igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        *(void (**)())&metaField->_invarianceFunction = (void (*)())Gap::Attrs::igTexGenMatrixAttr::synchronizeCachedUnitID;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igTexGenMatrixAttr_ctorTable[] = {
-    (FieldFactory)Gap::Math::igMatrix44fMetaField::_instantiateFromPool,
-    (FieldFactory)igIntMetaField_Create,
-};
-static const char *g_igTexGenMatrixAttr_fieldTable[] = {
-    "m",
-    "_unitID",
-};
-static igMetaField **g_igTexGenMatrixAttr_fieldHandles[] = {
-    &g_igTexGenMatrixAttr_mMetaField,
-    &g_igTexGenMatrixAttr_unitIDMetaField,
-};
-static int g_igTexGenMatrixAttr_fieldOffsets[] = {
-    12,
-    76,
-};
-
-void igTexGenMatrixAttr_InitFields(void) {
-    int base;
-    void *field;
-    igMetaObject *meta;
-    struct Fld *fld;
-
-    meta = g_igTexGenMatrixAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igTexGenMatrixAttr_ctorTable, 2);
-    field = igMetaObject_GetFieldAt(meta, base);
-    ((Gap::Math::igMatrix44fMetaField *)field)->setDefault(igMatrix44f(igVec4f(1.0f, 0.0f, 0.0f, 0.0f), igVec4f(0.0f, 1.0f, 0.0f, 0.0f),
-                                                   igVec4f(0.0f, 0.0f, 1.0f, 0.0f), igVec4f(0.0f, 0.0f, 0.0f, 1.0f)));
-    fld = (Fld *)igMetaObject_GetFieldAt(meta, base + 1);
-    ((igMetaField *)fld)->_invarianceFunction = (int)igTexGenMatrixAttr_SynchronizeCachedUnitID;
-    igMetaObject_NameFields(meta, g_igTexGenMatrixAttr_fieldTable, g_igTexGenMatrixAttr_fieldHandles, g_igTexGenMatrixAttr_fieldOffsets, base);
+}
 }
 

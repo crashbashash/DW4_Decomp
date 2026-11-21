@@ -1,34 +1,46 @@
-void igTextureStateAttr_SynchronizeCachedUnitID(igTextureStateAttr *self) {
-    self->_cachedUnitID = self->_unitID;
+namespace Gap {
+namespace Attrs {
+
+void igTextureStateAttr::synchronizeCachedUnitID(igObject *obj)
+{
+    igTextureStateAttr *attr = (igTextureStateAttr *)obj;
+
+    attr->setCachedUnitID(attr->_unitID);
 }
 
-void igTextureStateAttr_apply(igTextureStateAttr *self, igPsx2VisualContext *context) {
-    /* reflected.h spells the igBool _enabled as unsigned char; the setter takes the kit's igBool (bool). */
-    igPsx2VisualContext_SetTextureStageState(context, self->_unitID, *(bool *)&self->_enabled);
+void igTextureStateAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetTextureStageState((igPsx2VisualContext *)vc, _unitID, _enabled);
 }
 
-void igTextureStateAttr_UserPostLoad(igTextureStateAttr *self) {
-    igAttr_UserPostLoad(self);
-    igAttr_SetUnitID((int)self, (short)self->_unitID);
+void igTextureStateAttr::userPostLoad()
+{
+    igVisualAttribute::userPostLoad();
+    igAttr::setUnitID((short)_unitID);
 }
 
-void igTextureStateAttr_SetUnitID(igTextureStateAttr *self, int unitID) {
-    self->_unitID = (short)unitID;
-    igAttr_SetUnitID((int)self, unitID);
+void igTextureStateAttr::setUnitID(short id)
+{
+    _unitID = id;
+    igAttr::setUnitID(id);
 }
 
-void igTextureStateAttr_SynchronizeDefault(igTextureStateAttr *self, void **arg1) {
-    ((DW4VC_128_1 *)(((char *)(self) + 0)))->vX((int)(((DW4VC_472_1 *)(arg1))->vX((int)(self->_unitID))));
+void igTextureStateAttr::synchronizeDefault(igVisualContext *vc)
+{
+    setState(((igVisualContextDispatchView *)vc)->getTextureStageState(_unitID));
 }
 
 /* Setter for the reflected bool field _enabled. */
 
-void igTextureStateAttr_SetState(igTextureStateAttr *self, char enabled) {
-    self->_enabled = enabled;
+void igTextureStateAttr::setState(bool enb)
+{
+    _enabled = enb;
 }
 
-void igTextureStateAttr_GetUnitCount(igTextureStateAttrView *self, igVisualContextView *context)
+int igTextureStateAttr::getUnitCount(igCapabilityManager *capabilityManager)
 {
-    context->vfunc_21(22);
+    return ((igCapabilityManagerDispatchView *)capabilityManager)->getCapability(IG_GFX_CAPABILITY_MAX_TEXTURE_STAGES_PSX2);
+}
+}
 }
 

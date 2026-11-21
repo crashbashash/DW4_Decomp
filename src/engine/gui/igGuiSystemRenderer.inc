@@ -44,7 +44,7 @@ void igGuiSystemRenderer_RunStaticInit(void)
     igMetaObject_RunStaticInit(igGuiSystemRenderer_Register);
 }
 
-static igMetaObjectCallback g_igGuiSystemRenderer_callbackList[] = { igNode_EnsureRegistered, igGuiSystemModel_RunStaticInit, igCommonTraversal_EnsureRegistered, igDisplayListAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igGuiSystemRenderer_callbackList[] = { igNode_EnsureRegistered, igGuiSystemModel_RunStaticInit, igCommonTraversal_EnsureRegistered, Gap::Attrs::igDisplayListAttr::arkRegister, 0 };
 
 CallbackArray *igGuiSystemRenderer_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -111,7 +111,7 @@ void igGuiSystemRenderer_InitFields(void) {
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)FUN_001a38e0();
     ((igRefMetaField *)temp_s1_3)->_construct = 1;
     temp_s1_4 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3));
-    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)igDisplayListAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_4)->_metaObject = (int)Gap::Attrs::igDisplayListAttr::getClassTypeLazy();
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igGuiSystemRenderer_fieldTable, g_igGuiSystemRenderer_fieldHandles, g_igGuiSystemRenderer_fieldOffsets, temp_s2);
 }
 

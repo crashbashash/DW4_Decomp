@@ -1,36 +1,46 @@
-void igTextureUnloadAttr_apply(igTextureUnloadAttr *self, igPsx2VisualContext *arg1) {
-    int temp_a2;
-    void *temp_v1;
+namespace Gap {
+namespace Attrs {
 
-    temp_v1 = (void *)(self->_texture);
-    if (temp_v1 != 0) {
-        temp_a2 = *(int *)((char *)(temp_v1) + 36);
-        if (temp_a2 != -1) {
-            igPsx2VisualContext_UnloadTexture(arg1, temp_a2);
-        }
+void igTextureUnloadAttr::apply(igVisualContext *vc)
+{
+    igTextureAttr *texture = _texture;
+
+    if (texture != 0) {
+        int texId = texture->_texId;
+
+        if (texId != -1)
+            igPsx2VisualContext_UnloadTexture((igPsx2VisualContext *)vc, texId);
     }
 }
 
-void igTextureUnloadAttr_SynchronizeCachedUnitID(igTextureUnloadAttr *self) {
-    self->_cachedUnitID = self->_unitID;
-}
-
-void igTextureUnloadAttr_UserPostLoad(igTextureUnloadAttr *self) {
-    igAttr_UserPostLoad(self);
-    igAttr_SetUnitID((int)self, (short)self->_unitID);
-}
-
-void igTextureUnloadAttr_SetUnitID(igTextureUnloadAttr *self, int unitID) {
-    self->_unitID = (short)unitID;
-    igAttr_SetUnitID((int)self, unitID);
-}
-
-void igTextureUnloadAttr_SynchronizeDefault(void) {
-
-}
-
-void igTextureUnloadAttr_GetUnitCount(igTextureUnloadAttrView *self, igVisualContextView *context)
+void igTextureUnloadAttr::synchronizeCachedUnitID(igObject *obj)
 {
-    context->vfunc_21(22);
+    igTextureUnloadAttr *attr = (igTextureUnloadAttr *)obj;
+
+    attr->setCachedUnitID(attr->_unitID);
+}
+
+void igTextureUnloadAttr::userPostLoad()
+{
+    igVisualAttribute::userPostLoad();
+    igAttr::setUnitID((short)_unitID);
+}
+
+void igTextureUnloadAttr::setUnitID(short id)
+{
+    _unitID = id;
+    igAttr::setUnitID(id);
+}
+
+void igTextureUnloadAttr::synchronizeDefault(igVisualContext *vc)
+{
+
+}
+
+int igTextureUnloadAttr::getUnitCount(igCapabilityManager *capabilityManager)
+{
+    return ((igCapabilityManagerDispatchView *)capabilityManager)->getCapability(IG_GFX_CAPABILITY_MAX_TEXTURE_STAGES_PSX2);
+}
+}
 }
 

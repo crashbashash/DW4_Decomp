@@ -8,9 +8,7 @@ struct igMemoryPoolView;
 extern "C" {
 #endif
 
-struct igTextureFunctionAttr *igTextureFunctionAttr_Create(struct igMemoryPoolView *pool);
 
-struct igMetaObject *igTextureFunctionAttr_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

@@ -257,7 +257,7 @@ void FUN_001d0130(SceneTransformNode *self, SceneRenderer *renderer, SceneMatrix
         } else {
             pool = renderer->pool;
             if (!(pool->used < pool->capacity)) {
-                igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))((void *)igModelViewMatrixAttr_CreateInstance));
+                igObjectPool_Grow((igObjectPool *)pool, (igObject *(*)(int))((void *)Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool));
             }
             item = pool->data[pool->used++];
             item->setMatrix(&world);

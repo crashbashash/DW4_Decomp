@@ -12,7 +12,7 @@ int Gap__Sg__igActor__vfunc_37(ActorView *o0, ActorTraversal *t0) {
     t = (ActorTraversal *)(int)t0;
     if (o->_animate) {
         ActorAttrState *st = t->_state;
-        igMatrix44f_Copy(o->_world, lastEntry(st->_stacks->_data[st->_slotOfIndex[((ActorMeta *)g_igModelViewMatrixAttr_metaObject)->_offset]])->_matrix);
+        igMatrix44f_Copy(o->_world, lastEntry(st->_stacks->_data[st->_slotOfIndex[((ActorMeta *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta())->_offset]])->_matrix);
         igMatrix44f_Copy(o->_view, t->_view);
         if (o->_nodes->_count == 0 && o->_forced == 0) {
             o->_useCached = 0;
@@ -106,7 +106,7 @@ int igCommonTraversal_TraverseJointTransform(igCommonTraversal *self, int arg1) 
     void *temp_a2;
 
     temp_a2 = (void *)(self->_attrStack);
-    temp_a1 = (void *)(*(int *)(*(int *)((char *)(*(int *)((char *)(temp_a2) + 16)) + 16) + (*(int *)(*(int *)((char *)(temp_a2) + 68) + (*(int *)((char *)(((void *)g_igModelViewMatrixAttr_metaObject)) + 8) * 4)) * 4)));
+    temp_a1 = (void *)(*(int *)(*(int *)((char *)(*(int *)((char *)(temp_a2) + 16)) + 16) + (*(int *)(*(int *)((char *)(temp_a2) + 68) + (*(int *)((char *)(((void *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta())) + 8) * 4)) * 4)));
     temp_v0 = *(int *)((char *)(temp_a1) + 8);
     if (temp_v0 != 0) {
         temp_s2 = (int *)(*(int *)(*(int *)((char *)(temp_a1) + 16) + ((temp_v0 - 1) * 4)) + 0xC);
@@ -136,7 +136,7 @@ void FUN_001b8cf0(igCommonTraversal *arg0, char *arg1) {
     char *dst;
     ((VC_156b *)arg1)->vX(((VC_104a *)arg0)->vX());
     a2 = (igAttrStackManager *)arg0->_attrStack;
-    a0 = ((igAttrStack **)((igAttrStackList *)a2->_attrStacks)->_data)[((int *)a2->_attrStackIndexTable)[((igMetaObject *)((int)g_igModelViewMatrixAttr_metaObject))->_id]];
+    a0 = ((igAttrStack **)((igAttrStackList *)a2->_attrStacks)->_data)[((int *)a2->_attrStackIndexTable)[((igMetaObject *)((int)Gap::Attrs::igModelViewMatrixAttr::getClassMeta()))->_id]];
     n = a0->_count;
     a1 = 0;
     if (n == 0) { v = 0; } else { k = n - 1; v = ((int *)a0->_data)[k]; }
@@ -160,7 +160,7 @@ int FUN_001b8de0(Dst_1b8de0 *arg0, Src_1b8de0 *arg1) {
         LB *lb = arg0->l72;
         int b = a + ((G_1b8de0 * *)DAT_00561918)[0]->f8;
         V128_1b8de0 *o;
-        if (lb->count >= lb->cap) igObjectPool_Grow((igObjectPool *)lb, (igObject *(*)(int))((void *)&igModelViewMatrixAttr_CreateInstance));
+        if (lb->count >= lb->cap) igObjectPool_Grow((igObjectPool *)lb, (igObject *(*)(int))((void *)&Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool));
         o = lb->data[lb->count++];
         o->vY(b);
         FUN_001b1030((igAttrStackManager *)s4, (igAttr *)o);
@@ -183,7 +183,7 @@ int igCommonTraversal_TraverseBillboard(C_1b8f20 *arg0, D *arg1) {
     int n;
     char *s0;
     x = arg0->x;
-    a = (Arr *)x->a16->data[x->a68[((G_1b8f20 *)g_igModelViewMatrixAttr_metaObject)->f8]];
+    a = (Arr *)x->a16->data[x->a68[((G_1b8f20 *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta())->f8]];
     s0 = arg0->v164;
     n = a->count;
     if (n == 0) v = 0; else v = *(int *)((char *)a->data + (n - 1) * 4);
@@ -194,7 +194,7 @@ int igCommonTraversal_TraverseBillboard(C_1b8f20 *arg0, D *arg1) {
         FUN_001b1aa0((igBillboard *)arg1, (float *)sp80, (const float *)&g_matrix44Identity, (const float *)s0);
     }
     lb = arg0->l72;
-    if (lb->count >= lb->cap) igObjectPool_Grow((igObjectPool *)lb, (igObject *(*)(int))((void *)&igModelViewMatrixAttr_CreateInstance));
+    if (lb->count >= lb->cap) igObjectPool_Grow((igObjectPool *)lb, (igObject *(*)(int))((void *)&Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool));
     o = lb->data[lb->count++];
     if (o != 0) o->refs++;
     old = arg1->f60;
@@ -424,7 +424,7 @@ int igCommonTraversal_TraverseLightSet(LightTraversalView *o, LightSceneView *sc
     float matrix[16];
     int i;
     FUN_001dc400((igSorter *)o->_collector, (igGroup *)scene, (igAttrStackManager *)o->_state);
-    igMatrix44f_Multiply(matrix, currentEntry(stackOf_1b9d90(o->_state, ((CullMeta *)g_igModelViewMatrixAttr_metaObject)))->_matrix, o->_view);
+    igMatrix44f_Multiply(matrix, currentEntry(stackOf_1b9d90(o->_state, ((CullMeta *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta())))->_matrix, o->_view);
     for (i = 0; i < scene->_lights->_count; i++) {
         LightView *light = scene->_lights->_data[i];
         Vec3f_TransformProjective((float *)&position, (const float *)((char *)light + DAT_0055f0a0[0]->_offset), matrix);
@@ -487,7 +487,7 @@ int igCommonTraversal_TraverseLod(CullTraversalView *o, CullNodeView *node) {
     center.y = node->_center.y;
     center.z = node->_center.z;
     st = o->_state;
-    stack = st->_stacks->_data[st->_slotOfIndex[((CullMeta *)g_igModelViewMatrixAttr_metaObject)->_index]];
+    stack = st->_stacks->_data[st->_slotOfIndex[((CullMeta *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta())->_index]];
     Vec3f_TransformProjective((float *)&out, (const float *)&center, currentEntry_1ba080(stack)->_matrix);
     child = ((int)FUN_001d0520((RangeLookup *)node, out.x * out.x + out.y * out.y + out.z * out.z));
     if (child != 0) {
@@ -673,7 +673,7 @@ int igCommonTraversal_TraverseTransformRecorder(igCommonTraversal *arg0, VC1 *ar
     int sp30[16];
     igAttrStack *l;
     int i, k, v;
-    l = ((igAttrStack **)((igAttrStackList *)((igAttrStackManager *)arg0->_attrStack)->_attrStacks)->_data)[((int *)((igAttrStackManager *)arg0->_attrStack)->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject->_id]];
+    l = ((igAttrStack **)((igAttrStackList *)((igAttrStackManager *)arg0->_attrStack)->_attrStacks)->_data)[((int *)((igAttrStackManager *)arg0->_attrStack)->_attrStackIndexTable)[Gap::Attrs::igModelViewMatrixAttr::getClassMeta()->_id]];
     i = l->_cachedOverride;
     if (i >= 0) {
         v = ((int *)l->_data)[i];
@@ -688,7 +688,7 @@ int igCommonTraversal_TraverseTransformRecorder(igCommonTraversal *arg0, VC1 *ar
     }
     igMatrix44f_Multiply((float *)sp30, (const float *)(v + 0xC), arg0->_viewMatInv);
     ((VC0 *)arg1)->vX(sp30);
-    l = ((igAttrStack **)((igAttrStackList *)((igAttrStackManager *)arg0->_attrStack)->_attrStacks)->_data)[((int *)((igAttrStackManager *)arg0->_attrStack)->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject->_id]];
+    l = ((igAttrStack **)((igAttrStackList *)((igAttrStackManager *)arg0->_attrStack)->_attrStacks)->_data)[((int *)((igAttrStackManager *)arg0->_attrStack)->_attrStackIndexTable)[Gap::Attrs::igModelViewMatrixAttr::getClassMeta()->_id]];
     i = l->_cachedOverride;
     if (i >= 0) {
         v = ((int *)l->_data)[i];

@@ -28,3 +28,13 @@ igColorMaskAttr	_blue	bool
 igColorMaskAttr	_alpha	bool
 igViewportAttr	_scissorExt	igSmartPointer<igScissorExt>
 igProjectionMatrixAttr	_m	igMatrix44f
+igTextureStateAttr	_enabled	bool
+igTextureMatrixStateAttr	_enabled	bool
+igTextureUnloadAttr	_texture	igTextureAttr *
+igTexGenMatrixAttr	m	igMatrix44f
+igTextureMatrixAttr	_m	igMatrix44f
+igVertexBlendMatrixAttr	_m	igMatrix44f
+igModelViewMatrixAttr	_m	igMatrix44f
+igDisplayListAttr	_contents	igSmartPointer<igNonRefCountedAttrList>
+igRenderListAttr	_vc	igSmartPointer<igVisualContext>
+igBlendFunctionAttr	_blendEquationExt	igSmartPointer<igBlendEquationExt>

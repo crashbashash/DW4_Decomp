@@ -34,7 +34,7 @@ int FUN_001b3ad0(igCommonTraversal *arg0, int arg1) {
     unsigned w2;
 
     p = (igAttrStackManager *)arg0->_attrStack;
-    a0 = ((igAttrStack **)((igAttrStackList *)p->_attrStacks)->_data)[((int *)p->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject->_id]];
+    a0 = ((igAttrStack **)((igAttrStackList *)p->_attrStacks)->_data)[((int *)p->_attrStackIndexTable)[Gap::Attrs::igModelViewMatrixAttr::getClassMeta()->_id]];
     k = a0->_count;
     km = k - 1;
     if (k == 0) {
@@ -258,7 +258,7 @@ int FUN_001b4bb0(igCommonTraversal *traversal, int node) {
     int v;
 
     manager = (igAttrStackManager *)traversal->_attrStack;
-    l = ((igAttrStack **)((igAttrStackList *)manager->_attrStacks)->_data)[((int *)manager->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject->_id]];
+    l = ((igAttrStack **)((igAttrStackList *)manager->_attrStacks)->_data)[((int *)manager->_attrStackIndexTable)[Gap::Attrs::igModelViewMatrixAttr::getClassMeta()->_id]];
     if (l->_count == 0) {
         v = 0;
     } else {
@@ -395,7 +395,7 @@ void igCommonTraversal_DrawCartoonShader(igCartoonShader *self, igCommonTraversa
     FUN_001b4570((LightingTexGenView *)self, traversal);
     if (((ShaderAttrView_1b4c40 *)traversal->_capabilityManager)->query(8) >= 2) {
         if (DAT_00562620 == 0) {
-            DAT_00562620 = (ShaderAttrView_1b4c40 *)igTextureStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+            DAT_00562620 = (ShaderAttrView_1b4c40 *)Gap::Attrs::igTextureStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
             DAT_00562620->set30(1);
             DAT_00562620->setEnabled(1);
         }
@@ -529,9 +529,9 @@ void igCommonTraversal_UserRegister(void) {
     g_igCommonTraversal_travProcs = (igTDataList<igTraversalFunctionPtr> *)igTraversalFunctionList_CreateInstance((int)Memory_GetAllocatorBySelector(*(int *)0x587038));
     Gap::Attrs::igAttr::arkRegister();
     igTextureBindAttr_EnsureRegistered();
-    igModelViewMatrixAttr_EnsureRegistered();
-    igVertexBlendMatrixAttr_EnsureRegistered();
-    igTextureMatrixAttr_EnsureRegistered();
+    Gap::Attrs::igModelViewMatrixAttr::arkRegister();
+    Gap::Attrs::igVertexBlendMatrixAttr::arkRegister();
+    Gap::Attrs::igTextureMatrixAttr::arkRegister();
     Gap::Attrs::igVertexBlendStateAttr::arkRegister();
     igVertexBlendMatrixListAttr_EnsureRegistered();
 }

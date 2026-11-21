@@ -113,8 +113,9 @@ KIT_VECTOR = {
 FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager")
 # Kit headers reflected.h reads under C++ for the types converted classes name: the kit's enums (igGfx/igGfx.h:
 # IG_GFX_ALPHA_FUNCTION, ...) the attributes' accessors take and return while their fields keep the reflected
-# `int` storage (the kit's igEnum), and igMatrix44f for a typed matrix field.
-KIT_TYPE_HEADERS = ("dw4/gfx/GfxMetaEnums.h", "dw4/maths/igMatrix44f.h")
+# `int` storage (the kit's igEnum), igMatrix44f for a typed matrix field, and igVertexComponentFilter, the mask
+# igGeometryMaskAttr's accessors take and return over its `_mask` word.
+KIT_TYPE_HEADERS = ("dw4/gfx/GfxMetaEnums.h", "dw4/maths/igMatrix44f.h", "dw4/gfx/igVertexComponentFilter.h")
 
 # Inline arrays: the element type comes from the kind, the element count from the distance to the
 # next field (reflection records no count), or for a last field from the registered instance size.

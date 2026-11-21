@@ -30,14 +30,14 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_49(void) {
         ((DW4VC_128_1 *)g_envMapMatrixOptStateAttr.p)->vX(0);
         temp_s0_2 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapTextureMatrixStateAttr.release();
-        g_envMapTextureMatrixStateAttr.p = (igTextureMatrixStateAttr *)igTextureMatrixStateAttr_Create((igMemoryPoolView *)temp_s0_2);
+        g_envMapTextureMatrixStateAttr.p = (igTextureMatrixStateAttr *)Gap::Attrs::igTextureMatrixStateAttr::_instantiateFromPool((igMemoryPoolView *)temp_s0_2);
         ((DW4VC_128_1 *)g_envMapTextureMatrixStateAttr.p)->vX(0);
         ((DW4VC_100_1 *)g_envMapTextureMatrixStateAttr.p)->vX(0);
     }
     if (g_envMapBlendZeroSrcAlphaUnit1.p == 0) {
         temp_s0_3 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapBlendZeroSrcAlphaUnit1.release();
-        g_envMapBlendZeroSrcAlphaUnit1.p = (igBlendFunctionAttr *)igBlendFunctionAttr_Create((igMemoryPoolView *)temp_s0_3);
+        g_envMapBlendZeroSrcAlphaUnit1.p = (igBlendFunctionAttr *)Gap::Attrs::igBlendFunctionAttr::_instantiateFromPool((igMemoryPoolView *)temp_s0_3);
         ((DW4VC_100_1 *)g_envMapBlendZeroSrcAlphaUnit1.p)->vX(1);
         ((DW4VC_128_1 *)g_envMapBlendZeroSrcAlphaUnit1.p)->vX(0);
         ((DW4VC_132_1 *)g_envMapBlendZeroSrcAlphaUnit1.p)->vX(4);
@@ -51,35 +51,35 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_49(void) {
     if (g_envMapTextureUnit1On.p == 0) {
         temp_s0_5 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapTextureUnit1On.release();
-        g_envMapTextureUnit1On.p = (igTextureStateAttr *)igTextureStateAttr_CreateInstance(temp_s0_5);
+        g_envMapTextureUnit1On.p = (igTextureStateAttr *)Gap::Attrs::igTextureStateAttr::_instantiateFromPool((igMemoryPoolView *)temp_s0_5);
         ((DW4VC_128_1 *)g_envMapTextureUnit1On.p)->vX(1);
         ((DW4VC_100_1 *)g_envMapTextureUnit1On.p)->vX(1);
     }
     if (g_envMapTextureUnit2On.p == 0) {
         temp_s0_6 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapTextureUnit2On.release();
-        g_envMapTextureUnit2On.p = (igTextureStateAttr *)igTextureStateAttr_CreateInstance(temp_s0_6);
+        g_envMapTextureUnit2On.p = (igTextureStateAttr *)Gap::Attrs::igTextureStateAttr::_instantiateFromPool((igMemoryPoolView *)temp_s0_6);
         ((DW4VC_128_1 *)g_envMapTextureUnit2On.p)->vX(1);
         ((DW4VC_100_1 *)g_envMapTextureUnit2On.p)->vX(2);
     }
     if (g_envMapTextureUnit1Off.p == 0) {
         temp_s0_7 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapTextureUnit1Off.release();
-        g_envMapTextureUnit1Off.p = (igTextureStateAttr *)igTextureStateAttr_CreateInstance(temp_s0_7);
+        g_envMapTextureUnit1Off.p = (igTextureStateAttr *)Gap::Attrs::igTextureStateAttr::_instantiateFromPool((igMemoryPoolView *)temp_s0_7);
         ((DW4VC_128_1 *)g_envMapTextureUnit1Off.p)->vX(0);
         ((DW4VC_100_1 *)g_envMapTextureUnit1Off.p)->vX(1);
     }
     if (g_envMapTextureUnit2Off.p == 0) {
         temp_s0_8 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapTextureUnit2Off.release();
-        g_envMapTextureUnit2Off.p = (igTextureStateAttr *)igTextureStateAttr_CreateInstance(temp_s0_8);
+        g_envMapTextureUnit2Off.p = (igTextureStateAttr *)Gap::Attrs::igTextureStateAttr::_instantiateFromPool((igMemoryPoolView *)temp_s0_8);
         ((DW4VC_128_1 *)g_envMapTextureUnit2Off.p)->vX(0);
         ((DW4VC_100_1 *)g_envMapTextureUnit2Off.p)->vX(2);
     }
     if (g_envMapBlendOneOneUnit1.p == 0) {
         temp_s0_9 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapBlendOneOneUnit1.release();
-        g_envMapBlendOneOneUnit1.p = (igBlendFunctionAttr *)igBlendFunctionAttr_Create((igMemoryPoolView *)temp_s0_9);
+        g_envMapBlendOneOneUnit1.p = (igBlendFunctionAttr *)Gap::Attrs::igBlendFunctionAttr::_instantiateFromPool((igMemoryPoolView *)temp_s0_9);
         ((DW4VC_100_1 *)g_envMapBlendOneOneUnit1.p)->vX(1);
         ((DW4VC_128_1 *)g_envMapBlendOneOneUnit1.p)->vX(1);
         ((DW4VC_132_1 *)g_envMapBlendOneOneUnit1.p)->vX(1);
@@ -87,7 +87,7 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_49(void) {
     if (g_envMapBlendOneOneUnit2.p == 0) {
         temp_s0_10 = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
         g_envMapBlendOneOneUnit2.release();
-        g_envMapBlendOneOneUnit2.p = (igBlendFunctionAttr *)igBlendFunctionAttr_Create((igMemoryPoolView *)temp_s0_10);
+        g_envMapBlendOneOneUnit2.p = (igBlendFunctionAttr *)Gap::Attrs::igBlendFunctionAttr::_instantiateFromPool((igMemoryPoolView *)temp_s0_10);
         ((DW4VC_100_1 *)g_envMapBlendOneOneUnit2.p)->vX(2);
         ((DW4VC_128_1 *)g_envMapBlendOneOneUnit2.p)->vX(1);
         ((DW4VC_132_1 *)g_envMapBlendOneOneUnit2.p)->vX(1);
@@ -134,14 +134,14 @@ void Gap__Sg__igPsx2EnvironmentMapShader__vfunc_51(S_1e1210 *self) {
         t->refs = t->refs - 1;
         if (((unsigned long long)(long long)t->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)t);
     }
-    self->f116 = (Rc_1e1210 *)igTexGenMatrixAttr_Create((igMemoryPoolView *)alloc);
+    self->f116 = (Rc_1e1210 *)Gap::Attrs::igTexGenMatrixAttr::_instantiateFromPool((igMemoryPoolView *)alloc);
     alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
     t = (Rc_1e1210 *)self->f112;
     if (t != 0) {
         t->refs = t->refs - 1;
         if (((unsigned long long)(long long)t->refs & 0x7fffffULL) == 0) igObject_Destroy((igObject *)t);
     }
-    self->f112 = ((B_1e1210 *)igBlendFunctionAttr_Create((igMemoryPoolView *)alloc));
+    self->f112 = ((B_1e1210 *)Gap::Attrs::igBlendFunctionAttr::_instantiateFromPool((igMemoryPoolView *)alloc));
     self->f112->v30(1);
     self->f112->v31(1);
     alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
@@ -424,7 +424,7 @@ void FUN_001e22c0(EnvMapShaderView_1e22c0 *arg0, void *) {
     EnvMapRef a;
     EnvMapRef b;
     if (arg0->f104 == arg0->f88) {
-        assignRef_1e22c0(arg0->f104, EnvMapTempRef(((EnvMapAttr *)igTextureCoordSourceAttr_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()))));
+        assignRef_1e22c0(arg0->f104, EnvMapTempRef(((EnvMapAttr *)Gap::Attrs::igTextureCoordSourceAttr::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()))));
         arg0->f104->vX(0);
         arg0->f104->vY(arg0->f56);
     }

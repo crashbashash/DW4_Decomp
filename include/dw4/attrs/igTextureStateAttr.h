@@ -8,8 +8,6 @@ struct igTextureStateAttr;
 extern "C" {
 #endif
 
-struct igTextureStateAttr *igTextureStateAttr_CreateInstance(int allocator);
-struct igMetaObject *igTextureStateAttr_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

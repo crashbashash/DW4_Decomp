@@ -88,7 +88,7 @@ void FUN_001c1e10(void) {
     int temp_s0;
 
     if (((void * * *)DAT_00562730)[0] == 0) {
-        ((void * * *)DAT_00562730)[0] = (void **)(((void * *)igTextureStateAttr_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
+        ((void * * *)DAT_00562730)[0] = (void **)(((void * *)Gap::Attrs::igTextureStateAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
         ((DW4VC_128_1 *)(((void * * *)DAT_00562730)[0]))->vX((int)(1));
         ((DW4VC_100_1 *)(((void * * *)DAT_00562730)[0]))->vX((int)(0));
     }
@@ -141,19 +141,19 @@ void FUN_001c20b0(Controller *self) {
   assign(self->f76, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureBindAttr_CreateInstance((int)((Gap::Core::igObject *)self)->getMemoryPool()))));
   self->f76->setValue(self->a32);
   self->f76->configure(0);
-  assign(self->f80, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureCoordSourceAttr_Create(((Gap::Core::igObject *)self)->getMemoryPool()))));
+  assign(self->f80, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureCoordSourceAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
   self->f80->setKind(2);
   self->f80->configure(0);
-  assign(self->f84, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureFunctionAttr_Create(((Gap::Core::igObject *)self)->getMemoryPool()))));
+  assign(self->f84, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureFunctionAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
   self->f84->field12 = 2;
   self->f84->configure(0);
   if (self->p36 != 0) {
     self->p36->configure(0);
-    assign(self->f88, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureCoordSourceAttr_Create(((Gap::Core::igObject *)self)->getMemoryPool()))));
+    assign(self->f88, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureCoordSourceAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
     self->f88->setKind(0);
     self->f88->configure(0);
     self->f88->setValue(self->a40);
-    assign(self->f92, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureFunctionAttr_Create(((Gap::Core::igObject *)self)->getMemoryPool()))));
+    assign(self->f92, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureFunctionAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
     self->f92->field12 = 1;
     self->f92->configure(0);
     if (self->flag48) {
@@ -172,12 +172,12 @@ void FUN_001c20b0(Controller *self) {
     if (s1 != 0 && self->a56 == self->a40) {
       assign(self->f104, s1);
     } else {
-      assign(self->f104, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureCoordSourceAttr_Create(((Gap::Core::igObject *)self)->getMemoryPool()))));
+      assign(self->f104, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureCoordSourceAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
       self->f104->setKind(0);
       self->f104->configure(0);
       self->f104->setValue(self->a56);
     }
-    assign(self->f108, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)igTextureFunctionAttr_Create(((Gap::Core::igObject *)self)->getMemoryPool()))));
+    assign(self->f108, igSmartPointer<Obj_1c20b0>(((Obj_1c20b0 *)Gap::Attrs::igTextureFunctionAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()))));
     self->f108->field12 = 0;
     self->f108->configure(0);
   }

@@ -1,38 +1,49 @@
-void igTextureMatrixAttr_apply(igTextureMatrixAttr *self, igPsx2VisualContext *context) {
-    igPsx2VisualContext_SetTextureMatrixProjectiveState(context, self->_unitID, self->_isProjective);
-    igPsx2VisualContext_SetMatrix(context, self->_unitID + 2, (char *)self->_m);
-}
+namespace Gap {
+namespace Attrs {
 
-void igTextureMatrixAttr_SynchronizeCachedUnitID(igTextureMatrixAttr *self) {
-    self->_cachedUnitID = self->_unitID;
-}
-
-void igTextureMatrixAttr_UserPostLoad(igTextureMatrixAttr *self) {
-    igAttr_UserPostLoad(self);
-    igAttr_SetUnitID((int)self, (short)self->_unitID);
-}
-
-void igTextureMatrixAttr_SetUnitID(igTextureMatrixAttr *self, int unitID) {
-    self->_unitID = (short)unitID;
-    igAttr_SetUnitID((int)self, unitID);
-}
-
-void igTextureMatrixAttr_SynchronizeDefault(igTextureMatrixAttr *self, igObject *context)
+void igTextureMatrixAttr::apply(igVisualContext *vc)
 {
-    float m[16];
-
-    igMatrix44f_SetIdentity(m);
-    ((VisualContextMatrixSlots *)context)->getMatrix(self->_unitID + 2, m);
-    ((MatrixAttrSlots *)self)->setMatrix(m);
-    self->_isProjective = igPsx2VisualContext_GetTextureMatrixProjectiveState((igPsx2VisualContext *)context, self->_unitID);
+    igPsx2VisualContext_SetTextureMatrixProjectiveState((igPsx2VisualContext *)vc, _unitID, _isProjective);
+    igPsx2VisualContext_SetMatrix((igPsx2VisualContext *)vc, _unitID + IG_GFX_MATRIX_STACK_TEXTURE_0, (char *)_m.m);
 }
 
-void igTextureMatrixAttr_SetMatrix(igTextureMatrixAttr *self, const float *matrix) {
-    igMatrix44f_Copy(self->_m, matrix);
-}
-
-void igTextureMatrixAttr_GetUnitCount(igTextureMatrixAttrView *self, igVisualContextView *context)
+void igTextureMatrixAttr::synchronizeCachedUnitID(igObject *obj)
 {
-    context->vfunc_21(22);
+    igTextureMatrixAttr *attr = (igTextureMatrixAttr *)obj;
+
+    attr->setCachedUnitID(attr->_unitID);
+}
+
+void igTextureMatrixAttr::userPostLoad()
+{
+    igVisualAttribute::userPostLoad();
+    igAttr::setUnitID((short)_unitID);
+}
+
+void igTextureMatrixAttr::setUnitID(short id)
+{
+    _unitID = id;
+    igAttr::setUnitID(id);
+}
+
+void igTextureMatrixAttr::synchronizeDefault(igVisualContext *vc)
+{
+    igMatrix44f m;
+
+    ((igVisualContextDispatchView *)vc)->getMatrix((IG_GFX_MATRIX_STACK)(_unitID + IG_GFX_MATRIX_STACK_TEXTURE_0), m);
+    setMatrix(m);
+    _isProjective = igPsx2VisualContext_GetTextureMatrixProjectiveState((igPsx2VisualContext *)vc, _unitID);
+}
+
+void igTextureMatrixAttr::setMatrix(const igMatrix44f &matrix)
+{
+    igMatrix44f_Copy(_m.m, matrix.m);
+}
+
+int igTextureMatrixAttr::getUnitCount(igCapabilityManager *capabilityManager)
+{
+    return ((igCapabilityManagerDispatchView *)capabilityManager)->getCapability(IG_GFX_CAPABILITY_MAX_TEXTURE_STAGES_PSX2);
+}
+}
 }
 

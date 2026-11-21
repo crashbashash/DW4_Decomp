@@ -1,33 +1,46 @@
-void igTextureMatrixStateAttr_SynchronizeCachedUnitID(igTextureMatrixStateAttr *self) {
-    self->_cachedUnitID = self->_unitID;
+namespace Gap {
+namespace Attrs {
+
+void igTextureMatrixStateAttr::synchronizeCachedUnitID(igObject *obj)
+{
+    igTextureMatrixStateAttr *attr = (igTextureMatrixStateAttr *)obj;
+
+    attr->setCachedUnitID(attr->_unitID);
 }
 
-void igTextureMatrixStateAttr_apply(S_141630 *arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetTextureMatrixState(arg1, arg0->f16, arg0->b);
+void igTextureMatrixStateAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetTextureMatrixState((igPsx2VisualContext *)vc, _unitID, _enabled);
 }
 
-void igTextureMatrixStateAttr_UserPostLoad(igTextureMatrixStateAttr *self) {
-    igAttr_UserPostLoad(self);
-    igAttr_SetUnitID((int)self, (short)self->_unitID);
+void igTextureMatrixStateAttr::userPostLoad()
+{
+    igVisualAttribute::userPostLoad();
+    igAttr::setUnitID((short)_unitID);
 }
 
-void igTextureMatrixStateAttr_SetUnitID(igTextureMatrixStateAttr *self, int unitID) {
-    self->_unitID = (short)unitID;
-    igAttr_SetUnitID((int)self, unitID);
+void igTextureMatrixStateAttr::setUnitID(short id)
+{
+    _unitID = id;
+    igAttr::setUnitID(id);
 }
 
-void igTextureMatrixStateAttr_SynchronizeDefault(igTextureMatrixStateAttr *self, void **arg1) {
-    ((DW4VC_128_1 *)(((char *)(self) + 0)))->vX((int)(((DW4VC_840_1 *)(arg1))->vX((int)(self->_unitID))));
+void igTextureMatrixStateAttr::synchronizeDefault(igVisualContext *vc)
+{
+    setState(((igVisualContextDispatchView *)vc)->getTextureMatrixState(_unitID));
 }
 
 /* Setter for the reflected bool field _enabled. */
 
-void igTextureMatrixStateAttr_SetState(igTextureMatrixStateAttr *self, char enabled) {
-    self->_enabled = enabled;
+void igTextureMatrixStateAttr::setState(bool enb)
+{
+    _enabled = enb;
 }
 
-void igTextureMatrixStateAttr_GetUnitCount(igTextureMatrixStateAttrView *self, igVisualContextView *context)
+int igTextureMatrixStateAttr::getUnitCount(igCapabilityManager *capabilityManager)
 {
-    context->vfunc_21(22);
+    return ((igCapabilityManagerDispatchView *)capabilityManager)->getCapability(IG_GFX_CAPABILITY_MAX_TEXTURE_STAGES_PSX2);
+}
+}
 }
 

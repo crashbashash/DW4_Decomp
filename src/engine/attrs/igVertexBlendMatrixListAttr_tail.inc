@@ -46,7 +46,7 @@ void igVertexBlendMatrixListAttr_apply(struct S_141e10 *arg0, igPsx2VisualContex
             igMatrix44f_Copy((float *)(arg0->f16 + (i << 6)), (const float *)(o + g_igMatrixObject_mMetaField->_offset));
         }
     }
-    igPsx2VisualContext_SetBlendingMatrices(arg1, n, arg0->f16);
+    igPsx2VisualContext_SetBlendingMatrices(arg1, n, (igMatrix44f *)arg0->f16);
 }
 
 /* Empty default virtual (slot 26): does nothing and leaves the receiver untouched. */

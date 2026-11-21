@@ -1,27 +1,37 @@
-void igTexGenMatrixAttr_SynchronizeCachedUnitID(igTexGenMatrixAttr *self) {
-    self->_cachedUnitID = self->_unitID;
-}
+namespace Gap {
+namespace Attrs {
 
-void igTexGenMatrixAttr_SetUnitID(igTexGenMatrixAttr *self, int unitID) {
-    self->_unitID = (short)unitID;
-    igAttr_SetUnitID((int)self, unitID);
-}
-
-void igTexGenMatrixAttr_UserPostLoad(igTexGenMatrixAttr *self) {
-    igAttr_UserPostLoad(self);
-    igAttr_SetUnitID((int)self, (short)self->_unitID);
-}
-
-void igTexGenMatrixAttr_apply(char * arg0, int arg1) {
-    igPsx2VisualContext_SetMatrixPsx2((igPsx2VisualContext *)arg1, 14, (const float *)(arg0 + 12));
-}
-
-void igTexGenMatrixAttr_SynchronizeDefault(igTexGenMatrixAttr *self, void *context)
+void igTexGenMatrixAttr::synchronizeCachedUnitID(igObject *obj)
 {
-    float m[16];
+    igTexGenMatrixAttr *attr = (igTexGenMatrixAttr *)obj;
 
-    igMatrix44f_SetIdentity(m);
-    igPsx2VisualContext_GetMatrixPsx2((igPsx2VisualContext *)context, 14, m);
-    igMatrix44f_Copy(self->m, m);
+    attr->setCachedUnitID(attr->_unitID);
+}
+
+void igTexGenMatrixAttr::setUnitID(short id)
+{
+    _unitID = id;
+    igAttr::setUnitID(id);
+}
+
+void igTexGenMatrixAttr::userPostLoad()
+{
+    igVisualAttribute::userPostLoad();
+    igAttr::setUnitID((short)_unitID);
+}
+
+void igTexGenMatrixAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetMatrixPsx2((igPsx2VisualContext *)vc, 14, m.m);
+}
+
+void igTexGenMatrixAttr::synchronizeDefault(igVisualContext *vc)
+{
+    igMatrix44f matrix;
+
+    igPsx2VisualContext_GetMatrixPsx2((igPsx2VisualContext *)vc, 14, matrix.m);
+    igMatrix44f_Copy(m.m, matrix.m);
+}
+}
 }
 

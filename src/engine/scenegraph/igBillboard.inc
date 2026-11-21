@@ -35,7 +35,7 @@ void igBillboard_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igBillboard_Register);
 }
 
-static igMetaObjectCallback g_igBillboard_callbackList[] = { igModelViewMatrixAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igBillboard_callbackList[] = { Gap::Attrs::igModelViewMatrixAttr::arkRegister, 0 };
 
 CallbackArray *igBillboard_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -106,7 +106,7 @@ void igBillboard_InitFields(void) {
     spB[2] = 0;
     ((Gap::Math::igVec3fMetaField *)temp_a0_2)->setDefault(*(const igVec3f *)spB);
     temp_s1 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3)));
-    *(int *)((char *)(temp_s1) + 56) = (int)igModelViewMatrixAttr_GetOrCreateMetaObject();
+    *(int *)((char *)(temp_s1) + 56) = (int)Gap::Attrs::igModelViewMatrixAttr::getClassTypeLazy();
     *(char *)((char *)(temp_s1) + 38) = 0;
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igBillboard_fieldTable, g_igBillboard_fieldHandles, g_igBillboard_fieldOffsets, temp_s2);
 }

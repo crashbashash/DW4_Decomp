@@ -1,8 +1,15 @@
-void igBlendMatricesAttr_apply(struct S_13c4f0 *arg0, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetBlendingMatrices(arg1, arg0->f16, arg0->f12);
+namespace Gap {
+namespace Attrs {
+
+void igBlendMatricesAttr::apply(igVisualContext *vc)
+{
+    igPsx2VisualContext_SetBlendingMatrices((igPsx2VisualContext *)vc, _currentMatrixCount, getMatrixArray());
 }
 
-void igBlendMatricesAttr_SynchronizeDefault(void) {
+void igBlendMatricesAttr::synchronizeDefault(igVisualContext *vc)
+{
 
+}
+}
 }
 

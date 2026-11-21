@@ -27,7 +27,7 @@ void igModelViewMatrixAttrPool_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igModelViewMatrixAttrPool_Register);
 }
 
-static igMetaObjectCallback g_igModelViewMatrixAttrPool_callbackList[] = { igModelViewMatrixAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igModelViewMatrixAttrPool_callbackList[] = { Gap::Attrs::igModelViewMatrixAttr::arkRegister, 0 };
 
 CallbackArray *igModelViewMatrixAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();

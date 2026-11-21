@@ -28,6 +28,7 @@
 #ifdef __cplusplus
 #include "dw4/core/igObjectMacros.h"
 #include "dw4/gfx/GfxMetaEnums.h"
+#include "dw4/gfx/igVertexComponentFilter.h"
 #include "dw4/maths/igMatrix44f.h"
 #include "dw4/maths/igVec2f.h"
 #include "dw4/maths/igVec3f.h"
@@ -21051,7 +21052,7 @@ typedef struct libNdmwRuntimePlugin {
 #include "dw4/core/igSmartPointer.h"
 #include "dw4/core/igStringRef.h"
 namespace Gap {
-namespace Attrs { class igAlphaFunctionAttr; class igAlphaStateAttr; class igAttr; class igBlendStateAttr; class igClearAttr; class igClippingStateAttr; class igColorAttr; class igColorMaskAttr; class igCullFaceAttr; class igDepthStateAttr; class igDepthWriteStateAttr; class igFogAttr; class igFogStateAttr; class igLightingStateAttr; class igMaterialAttr; class igMatrixOptStateAttr; class igMultiPassStateAttr; class igNormalizeNormalsStateAttr; class igPixelPipelineModeAttr; class igPolygonModeAttr; class igProjectionMatrixAttr; class igShadeModelAttr; class igStencilFunctionAttr; class igStencilStateAttr; class igTimeAttr; class igVertexBlendStateAttr; class igViewportAttr; class igVisualAttribute; }
+namespace Attrs { class igAlphaFunctionAttr; class igAlphaStateAttr; class igAttr; class igBlendFunctionAttr; class igBlendMatricesAttr; class igBlendMatrixPaletteAttr; class igBlendStateAttr; class igClearAttr; class igClippingStateAttr; class igColorAttr; class igColorMaskAttr; class igCullFaceAttr; class igDepthStateAttr; class igDepthWriteStateAttr; class igDisplayListAttr; class igFogAttr; class igFogStateAttr; class igGeometryMaskAttr; class igLightingStateAttr; class igMaterialAttr; class igMatrixOptStateAttr; class igModelViewMatrixAttr; class igMultiPassStateAttr; class igNormalizeNormalsStateAttr; class igPixelPipelineModeAttr; class igPolygonModeAttr; class igProjectionMatrixAttr; class igRenderListAttr; class igShadeModelAttr; class igStencilFunctionAttr; class igStencilStateAttr; class igTexGenMatrixAttr; class igTextureCoordSourceAttr; class igTextureFunctionAttr; class igTextureMatrixAttr; class igTextureMatrixStateAttr; class igTextureStateAttr; class igTextureUnloadAttr; class igTimeAttr; class igVertexBlendMatrixAttr; class igVertexBlendStateAttr; class igViewportAttr; class igVisualAttribute; }
 namespace Core { class igBoolArrayMetaField; class igBoolList; class igBoolMetaField; class igCharArrayMetaField; class igCharList; class igCharListNoClean; class igCharMetaField; class igCompoundMetaField; class igDataList; class igDoubleArrayMetaField; class igDoubleMetaField; class igEnumArrayMetaField; class igEnumMetaField; class igFloatArrayMetaField; class igFloatList; class igFloatMetaField; class igIntArrayMetaField; class igIntList; class igIntListNoClean; class igIntMetaField; class igLongArrayMetaField; class igLongMetaField; class igMemoryRefArrayMetaField; class igMemoryRefMetaField; class igMetaField; class igObject; class igObjectList; class igObjectRefArrayMetaField; class igObjectRefMetaField; class igPointerList; class igRawRefArrayMetaField; class igRawRefMetaField; class igRefMetaField; class igShortArrayMetaField; class igShortList; class igShortMetaField; class igStringArrayMetaField; class igStringMetaField; class igStructMetaField; class igUnsignedCharArrayMetaField; class igUnsignedCharList; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortList; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
 namespace Gui { class igClearRenderer; class igRenderer; }
 namespace Insight { class igFlushRenderer; }
@@ -21059,6 +21060,9 @@ namespace Math { class igMatrix44fMetaField; class igVec2fMetaField; class igVec
 using Attrs::igAlphaFunctionAttr;
 using Attrs::igAlphaStateAttr;
 using Attrs::igAttr;
+using Attrs::igBlendFunctionAttr;
+using Attrs::igBlendMatricesAttr;
+using Attrs::igBlendMatrixPaletteAttr;
 using Attrs::igBlendStateAttr;
 using Core::igBoolArrayMetaField;
 using Core::igBoolList;
@@ -21077,6 +21081,7 @@ using Attrs::igCullFaceAttr;
 using Core::igDataList;
 using Attrs::igDepthStateAttr;
 using Attrs::igDepthWriteStateAttr;
+using Attrs::igDisplayListAttr;
 using Core::igDoubleArrayMetaField;
 using Core::igDoubleMetaField;
 using Core::igEnumArrayMetaField;
@@ -21087,6 +21092,7 @@ using Core::igFloatMetaField;
 using Insight::igFlushRenderer;
 using Attrs::igFogAttr;
 using Attrs::igFogStateAttr;
+using Attrs::igGeometryMaskAttr;
 using Core::igIntArrayMetaField;
 using Core::igIntList;
 using Core::igIntListNoClean;
@@ -21100,6 +21106,7 @@ using Attrs::igMatrixOptStateAttr;
 using Core::igMemoryRefArrayMetaField;
 using Core::igMemoryRefMetaField;
 using Core::igMetaField;
+using Attrs::igModelViewMatrixAttr;
 using Attrs::igMultiPassStateAttr;
 using Attrs::igNormalizeNormalsStateAttr;
 using Core::igObject;
@@ -21113,6 +21120,7 @@ using Attrs::igProjectionMatrixAttr;
 using Core::igRawRefArrayMetaField;
 using Core::igRawRefMetaField;
 using Core::igRefMetaField;
+using Attrs::igRenderListAttr;
 using Gui::igRenderer;
 using Attrs::igShadeModelAttr;
 using Core::igShortArrayMetaField;
@@ -21123,6 +21131,13 @@ using Attrs::igStencilStateAttr;
 using Core::igStringArrayMetaField;
 using Core::igStringMetaField;
 using Core::igStructMetaField;
+using Attrs::igTexGenMatrixAttr;
+using Attrs::igTextureCoordSourceAttr;
+using Attrs::igTextureFunctionAttr;
+using Attrs::igTextureMatrixAttr;
+using Attrs::igTextureMatrixStateAttr;
+using Attrs::igTextureStateAttr;
+using Attrs::igTextureUnloadAttr;
 using Attrs::igTimeAttr;
 using Core::igUnsignedCharArrayMetaField;
 using Core::igUnsignedCharList;
@@ -21139,6 +21154,7 @@ using Math::igVec3fMetaField;
 using Math::igVec4fArrayMetaField;
 using Math::igVec4fMetaField;
 using Math::igVec4ucMetaField;
+using Attrs::igVertexBlendMatrixAttr;
 using Attrs::igVertexBlendStateAttr;
 using Attrs::igViewportAttr;
 using Core::igVirtualCFuncMetaField;
@@ -21309,6 +21325,121 @@ public:
     virtual void apply(igVisualContext *vc);
     virtual void setState(bool enabled);
     inline bool getState() const { return _enabled; }
+    virtual void synchronizeDefault(igVisualContext *vc);
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55f3b8, 15 field(s), sizeof 52 (registered instance size) */
+class igBlendFunctionAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    int _src;                                      /* +12   igEnumMetaField */
+    int _dst;                                      /* +16   igEnumMetaField */
+    int _eq;                                       /* +20   igEnumMetaField */
+    igSmartPointer<igBlendEquationExt> _blendEquationExt; /* +24   igObjectRefMetaField */
+    unsigned char _blendConstant;                  /* +28   igUnsignedCharMetaField */
+    char _pad29[1];
+    short _blendStage;                             /* +30   igShortMetaField */
+    float _blendConstantFloat;                     /* +32   igFloatMetaField */
+    int _blendA;                                   /* +36   igEnumMetaField */
+    int _blendB;                                   /* +40   igEnumMetaField */
+    int _blendC;                                   /* +44   igEnumMetaField */
+    int _blendD;                                   /* +48   igEnumMetaField */
+    IG_OBJECT_DEFINE(igBlendFunctionAttr)
+private:
+    static igMetaField *k_src;
+    static igMetaField *k_dst;
+    static igMetaField *k_eq;
+    static igMetaField *k_blendEquationExt;
+    static igMetaField *k_blendConstant;
+    static igMetaField *k_blendStage;
+    static igMetaField *k_blendConstantFloat;
+public:
+    static igMetaEnum *getBLENDING_FUNCTION_COLOR_PSX2MetaEnum();
+private:
+    static igMetaEnum *BLENDING_FUNCTION_COLOR_PSX2_Meta;
+public:
+    static igMetaEnum *getBLENDING_FUNCTION_ALPHA_PSX2MetaEnum();
+private:
+    static igMetaEnum *BLENDING_FUNCTION_ALPHA_PSX2_Meta;
+    static void synchronizeCachedUnitID(igObject *obj);
+protected:
+    static igMetaField *k_blendA;
+    static igMetaField *k_blendB;
+    static igMetaField *k_blendC;
+    static igMetaField *k_blendD;
+private:
+    static void constantChanged(igObject *obj);
+public:
+    inline int getBlendA() const { return _blendA; }
+    inline int getBlendB() const { return _blendB; }
+    inline int getBlendC() const { return _blendC; }
+    inline int getBlendD() const { return _blendD; }
+private:
+    static igBlendEquationExt *_extension;
+public:
+    virtual void releaseDefaults();
+    virtual void apply(igVisualContext *vc);
+    virtual void setSource(IG_GFX_BLENDING_FUNCTION s);
+    inline IG_GFX_BLENDING_FUNCTION getSource() const { return (IG_GFX_BLENDING_FUNCTION)_src; }
+    virtual void setDestination(IG_GFX_BLENDING_FUNCTION d);
+    inline IG_GFX_BLENDING_FUNCTION getDestination() const { return (IG_GFX_BLENDING_FUNCTION)_dst; }
+    virtual void userPostLoad();
+    virtual void setUnitID(short id);
+    virtual void synchronizeDefault(igVisualContext *vc);
+    virtual int getUnitCount(igCapabilityManager *capabilityManager);
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55f388, 7 field(s), sizeof 24 (registered instance size) */
+class igBlendMatricesAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    int _matrixCache;                              /* +12   igMemoryRefMetaField */
+    unsigned int _currentMatrixCount;              /* +16   igUnsignedIntMetaField */
+    unsigned int _matrixCacheCapacity;             /* +20   igUnsignedIntMetaField */
+    IG_OBJECT_DEFINE(igBlendMatricesAttr)
+protected:
+    static igMetaField *k_matrixCache;
+    static igMetaField *k_currentMatrixCount;
+    static igMetaField *k_matrixCacheCapacity;
+public:
+    inline void setCurrentMatrixCount(unsigned int currentMatrixCountParam) { _currentMatrixCount = currentMatrixCountParam; }
+    inline unsigned int getCurrentMatrixCount() const { return _currentMatrixCount; }
+    inline igMatrix44f *getMatrixArray() const { return (igMatrix44f *)_matrixCache; }
+    inline unsigned int getMatrixCacheCapacity() const { return _matrixCacheCapacity; }
+    inline virtual void userPostLoad() { if (_matrixCacheCapacity == 0) _matrixCacheCapacity = _currentMatrixCount; }
+    virtual void apply(igVisualContext *vc);
+    virtual void synchronizeDefault(igVisualContext *vc);
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55f360, 8 field(s), sizeof 28 (registered instance size) */
+class igBlendMatrixPaletteAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    int _matrixCache;                              /* +12   igMemoryRefMetaField */
+    int _matrixIndices;                            /* +16   igMemoryRefMetaField */
+    unsigned int _currentMatrixCount;              /* +20   igUnsignedIntMetaField */
+    unsigned int _capacity;                        /* +24   igUnsignedIntMetaField */
+    IG_OBJECT_DEFINE(igBlendMatrixPaletteAttr)
+protected:
+    static igMetaField *k_matrixCache;
+    static igMetaField *k_matrixIndices;
+    static igMetaField *k_currentMatrixCount;
+    static igMetaField *k_capacity;
+public:
+    inline unsigned int getCurrentMatrixCount() const { return _currentMatrixCount; }
+    inline igMatrix44f *getMatrixArray() const { return (igMatrix44f *)_matrixCache; }
+    inline unsigned int getCapacity() const { return _capacity; }
+    inline virtual void userPostLoad() { if (_capacity == 0) _capacity = _currentMatrixCount; }
+    virtual void apply(igVisualContext *vc);
     virtual void synchronizeDefault(igVisualContext *vc);
 };
 }
@@ -21842,6 +21973,25 @@ public:
 }
 
 namespace Gap {
+namespace Attrs {
+/* handle 0x55f208, 5 field(s), sizeof 16 (registered instance size) */
+class igDisplayListAttr : public Gap::Attrs::igAttr {
+public:
+    igSmartPointer<igNonRefCountedAttrList> _contents; /* +12   igObjectRefMetaField */
+    IG_OBJECT_DEFINE(igDisplayListAttr)
+protected:
+    static igMetaField *k_contents;
+public:
+    inline igNonRefCountedAttrList *getAttrs() { return _contents; }
+    virtual void apply(igVisualContext *rc);
+    virtual void synchronizeDefault(igVisualContext *vc);
+    virtual void reset();
+    virtual void setup(igVisualContext *vc);
+};
+}
+}
+
+namespace Gap {
 namespace Core {
 /* handle 0x586638, 20 field(s), sizeof 52 (registered instance size) */
 class igDoubleMetaField : public Gap::Core::igMetaField {
@@ -22023,6 +22173,24 @@ public:
     virtual void apply(igVisualContext *vc);
     virtual void setState(bool enabled);
     inline bool getState() const { return _enabled; }
+    virtual void synchronizeDefault(igVisualContext *vc);
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55f148, 5 field(s), sizeof 16 (registered instance size) */
+class igGeometryMaskAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    unsigned int _mask;                            /* +12   igUnsignedIntMetaField */
+    IG_OBJECT_DEFINE(igGeometryMaskAttr)
+private:
+    static igMetaField *k_mask;
+public:
+    virtual void apply(igVisualContext *vc);
+    inline igVertexComponentFilter getMask() const { return igVertexComponentFilter(_mask); }
+    inline void setMask(igVertexComponentFilter vertexMask) { _mask = vertexMask; }
     virtual void synchronizeDefault(igVisualContext *vc);
 };
 }
@@ -22329,6 +22497,29 @@ public:
 
 namespace Gap {
 namespace Attrs {
+/* handle 0x55efe8, 5 field(s), sizeof 76 (registered instance size) */
+class igModelViewMatrixAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    igMatrix44f _m;                                /* +12   igMatrix44fMetaField */
+    IG_OBJECT_DEFINE(igModelViewMatrixAttr)
+private:
+    static igMetaField *k_m;
+public:
+    virtual void apply(igVisualContext *vc);
+    virtual void setMatrix(const igMatrix44f &matrix);
+    inline igMatrix44f *getMatrix() { return &_m; }
+    virtual void synchronizeDefault(igVisualContext *vc);
+    static void userRegister();
+    static void userUnregister();
+    static igModelViewMatrixAttr *getIdentityAttr();
+private:
+    static void arkRegisterUser();
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
 /* handle 0x55efd0, 5 field(s), sizeof 16 (registered instance size) */
 class igMultiPassStateAttr : public Gap::Attrs::igVisualAttribute {
 public:
@@ -22578,6 +22769,27 @@ public:
 
 namespace Gap {
 namespace Attrs {
+/* handle 0x55eeb0, 6 field(s), sizeof 20 (registered instance size) */
+class igRenderListAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    int _handle;                                   /* +12   igIntMetaField */
+    igSmartPointer<igVisualContext> _vc;           /* +16   igObjectRefMetaField */
+    IG_OBJECT_DEFINE(igRenderListAttr)
+private:
+    static igMetaField *k_handle;
+    static igMetaField *k_vc;
+public:
+    virtual void releaseDefaults();
+    virtual void apply(igVisualContext *vc);
+    virtual void synchronizeDefault(igVisualContext *vc);
+    virtual void reset();
+    inline virtual void setVisualContext(igVisualContext *vc) { _vc = vc; }
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
 /* handle 0x55ee90, 5 field(s), sizeof 16 (registered instance size) */
 class igShadeModelAttr : public Gap::Attrs::igVisualAttribute {
 public:
@@ -22788,6 +23000,214 @@ public:
     virtual void resetByReference(igObject *src);
     virtual int constructPerformsReset() const;
     virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55ee28, 6 field(s), sizeof 80 (registered instance size) */
+class igTexGenMatrixAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    igMatrix44f m;                                 /* +12   igMatrix44fMetaField */
+    int _unitID;                                   /* +76   igIntMetaField */
+    IG_OBJECT_DEFINE(igTexGenMatrixAttr)
+private:
+    static igMetaField *kM;
+    static igMetaField *k_unitID;
+    static void synchronizeCachedUnitID(igObject *obj);
+public:
+    virtual void apply(igVisualContext *vc);
+    inline virtual void setMatrix(const igMatrix44f &matrix) { igMatrix44f_Copy(m.m, matrix.m); }
+    inline igMatrix44f *getMatrix() { return &m; }
+    virtual void userPostLoad();
+    inline short getNonCachedUnitID() const { return (short)_unitID; }
+    virtual void setUnitID(short id);
+    virtual void synchronizeDefault(igVisualContext *vc);
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55ed68, 7 field(s), sizeof 24 (registered instance size) */
+class igTextureCoordSourceAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    int _mode;                                     /* +12   igEnumMetaField */
+    int _texCoordIndex;                            /* +16   igIntMetaField */
+    int _unitID;                                   /* +20   igIntMetaField */
+    IG_OBJECT_DEFINE(igTextureCoordSourceAttr)
+private:
+    static igMetaField *k_mode;
+    static igMetaField *k_texCoordIndex;
+    static igMetaField *k_unitID;
+    static void synchronizeCachedUnitID(igObject *obj);
+public:
+    virtual void apply(igVisualContext *vc);
+    inline virtual void setMode(IG_GFX_TEXTURE_COORD_SOURCE mode) { _mode = mode; }
+    inline IG_GFX_TEXTURE_COORD_SOURCE getMode() const { return (IG_GFX_TEXTURE_COORD_SOURCE)_mode; }
+    inline virtual void setTexCoordIndex(int index) { _texCoordIndex = index; }
+    inline int getTexCoordIndex() const { return _texCoordIndex; }
+    virtual void userPostLoad();
+    inline short getNonCachedUnitID() const { return (short)_unitID; }
+    virtual void setUnitID(short id);
+    virtual void synchronizeDefault(igVisualContext *vc);
+    virtual int getUnitCount(igCapabilityManager *capabilityManager);
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55ed00, 11 field(s), sizeof 40 (registered instance size) */
+class igTextureFunctionAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    int _mode;                                     /* +12   igEnumMetaField */
+    int _unitID;                                   /* +16   igIntMetaField */
+    int _arg0;                                     /* +20   igEnumMetaField */
+    int _arg1;                                     /* +24   igEnumMetaField */
+    int _type;                                     /* +28   igEnumMetaField */
+    unsigned char _call_state;                     /* +32   igUnsignedCharMetaField */
+    char _pad33[3];
+    int _functionType;                             /* +36   igEnumMetaField */
+    IG_OBJECT_DEFINE(igTextureFunctionAttr)
+private:
+    static igMetaField *k_mode;
+    static igMetaField *k_unitID;
+    static igMetaField *k_arg0;
+    static igMetaField *k_arg1;
+    static igMetaField *k_type;
+    static igMetaField *k_call_state;
+    static igMetaField *k_functionType;
+    static void synchronizeCachedUnitID(igObject *obj);
+protected:
+    static igMultiTextureExt *_extension;
+public:
+    virtual void initDefaults();
+    virtual void releaseDefaults();
+    virtual void apply(igVisualContext *vc);
+    inline void setMode(int mode) { _mode = mode; }
+    inline int getMode() const { return _mode; }
+    virtual void setStageType(int type);
+    inline virtual int getStageType() const { return _type; }
+    inline virtual void setFunctionType(int functionType) { _functionType = functionType; }
+    inline virtual int getFunctionType() const { return _functionType; }
+    virtual void userPostLoad();
+    inline short getNonCachedUnitID() const { return (short)_unitID; }
+    virtual void setUnitID(short id);
+    virtual void synchronizeDefault(igVisualContext *vc);
+    virtual int getUnitCount(igCapabilityManager *capabilityManager);
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55ecd8, 8 field(s), sizeof 84 (registered instance size) */
+class igTextureMatrixAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    igMatrix44f _m;                                /* +12   igMatrix44fMetaField */
+    int _unitID;                                   /* +76   igIntMetaField */
+    short _outputElementCount;                     /* +80   igShortMetaField */
+    unsigned char _isProjective;                   /* +82   igBoolMetaField */
+    char _pad83[1];
+    IG_OBJECT_DEFINE(igTextureMatrixAttr)
+private:
+    static igMetaField *k_m;
+    static igMetaField *k_unitID;
+    static igMetaField *k_outputElementCount;
+    static igMetaField *k_isProjective;
+    static void synchronizeCachedUnitID(igObject *obj);
+public:
+    virtual void apply(igVisualContext *vc);
+    virtual void setMatrix(const igMatrix44f &matrix);
+    inline igMatrix44f *getMatrix() { return &_m; }
+    inline void setOutputElementCount(int n) { _outputElementCount = (short)n; }
+    inline int getOutputElementCount() const { return _outputElementCount; }
+    inline void setProjectiveState(bool en) { _isProjective = en; }
+    inline bool getProjectiveState() const { return _isProjective; }
+    virtual void userPostLoad();
+    inline short getNonCachedUnitID() const { return (short)_unitID; }
+    virtual void setUnitID(short id);
+    virtual void synchronizeDefault(igVisualContext *vc);
+    virtual int getUnitCount(igCapabilityManager *capabilityManager);
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55ecc0, 6 field(s), sizeof 20 (registered instance size) */
+class igTextureMatrixStateAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    bool _enabled;                                 /* +12   igBoolMetaField */
+    char _pad13[3];
+    int _unitID;                                   /* +16   igIntMetaField */
+    IG_OBJECT_DEFINE(igTextureMatrixStateAttr)
+private:
+    static igMetaField *k_enabled;
+    static igMetaField *k_unitID;
+    static void synchronizeCachedUnitID(igObject *obj);
+public:
+    virtual void apply(igVisualContext *vc);
+    virtual void setState(bool enb);
+    inline bool getState() const { return _enabled; }
+    virtual void userPostLoad();
+    inline short getNonCachedUnitID() const { return (short)_unitID; }
+    virtual void setUnitID(short id);
+    virtual void synchronizeDefault(igVisualContext *vc);
+    virtual int getUnitCount(igCapabilityManager *capabilityManager);
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55eca8, 6 field(s), sizeof 20 (registered instance size) */
+class igTextureStateAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    bool _enabled;                                 /* +12   igBoolMetaField */
+    char _pad13[3];
+    int _unitID;                                   /* +16   igIntMetaField */
+    IG_OBJECT_DEFINE(igTextureStateAttr)
+private:
+    static igMetaField *k_enabled;
+    static igMetaField *k_unitID;
+    static void synchronizeCachedUnitID(igObject *obj);
+public:
+    virtual void apply(igVisualContext *vc);
+    virtual void setState(bool enb);
+    inline bool getState() const { return _enabled; }
+    virtual void userPostLoad();
+    inline short getNonCachedUnitID() const { return (short)_unitID; }
+    virtual void setUnitID(short id);
+    virtual void synchronizeDefault(igVisualContext *vc);
+    virtual int getUnitCount(igCapabilityManager *capabilityManager);
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55ec90, 6 field(s), sizeof 20 (registered instance size) */
+class igTextureUnloadAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    igTextureAttr *_texture;                       /* +12   igObjectRefMetaField */
+    int _unitID;                                   /* +16   igIntMetaField */
+    IG_OBJECT_DEFINE(igTextureUnloadAttr)
+private:
+    static igMetaField *k_texture;
+    static igMetaField *k_unitID;
+    static void synchronizeCachedUnitID(igObject *obj);
+public:
+    virtual void apply(igVisualContext *vc);
+    inline virtual void setTexture(igTextureAttr *tex) { _texture = tex; }
+    inline igTextureAttr *getTexture() const { return _texture; }
+    virtual void userPostLoad();
+    inline short getNonCachedUnitID() const { return (short)_unitID; }
+    virtual void setUnitID(short id);
+    virtual void synchronizeDefault(igVisualContext *vc);
+    virtual int getUnitCount(igCapabilityManager *capabilityManager);
 };
 }
 }
@@ -23058,6 +23478,32 @@ public:
     virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
     virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
     virtual int computeRequiredAlignment();
+};
+}
+}
+
+namespace Gap {
+namespace Attrs {
+/* handle 0x55ec68, 6 field(s), sizeof 80 (registered instance size) */
+class igVertexBlendMatrixAttr : public Gap::Attrs::igVisualAttribute {
+public:
+    igMatrix44f _m;                                /* +12   igMatrix44fMetaField */
+    unsigned short _blendMatID;                    /* +76   igUnsignedShortMetaField */
+    char _pad78[2];
+    IG_OBJECT_DEFINE(igVertexBlendMatrixAttr)
+private:
+    static igMetaField *k_m;
+    static igMetaField *k_blendMatID;
+    static void synchronizeCachedUnitID(igObject *obj);
+public:
+    virtual void apply(igVisualContext *vc);
+    virtual void setMatrix(const igMatrix44f &matrix);
+    inline igMatrix44f *getMatrix() { return &_m; }
+    virtual void userPostLoad();
+    inline short getNonCachedUnitID() const { return (short)_blendMatID; }
+    virtual void setUnitID(short id);
+    virtual void synchronizeDefault(igVisualContext *vc);
+    virtual int getUnitCount(igCapabilityManager *capabilityManager);
 };
 }
 }

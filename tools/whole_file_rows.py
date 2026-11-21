@@ -61,7 +61,8 @@ its row unchanged and a conversion's row diff is what the conversion changed (st
 `--drop` keeps a function out of the
 range when it fits a start another function owns: stock `lua_dofile` and `lua_dobuffer` fit one retail start,
 and only a call target tells them apart; two inline destructors of one shape do too, and the one a member still
-reaches becomes a duplicate.
+reaches becomes a duplicate. A start a name is placed at (symbols.txt, the present row, `--at`) needs no `--drop`:
+the byte-identical functions that fit it alone are no members (locate).
 
 `--unit-va <va>` measures the whole-file unit of units.tsv that holds `va`: its source (the file under src/ its
 unit name ends with, or `--source`), range, compiler, flags and exception mode come from its row, and `--write`
@@ -238,7 +239,10 @@ class Twins:
 
 def locate(functions, retail, starts, placed, dropped=()):
     """{name: va} for the functions with a retail copy. A function that fits several starts is
-    settled by the others: a file keeps its functions in order, and each start is used once."""
+    settled by the others: a file keeps its functions in order, and each start is used once. A start a
+    name is placed at (symbols.txt, the present row, `--at`) is that name's: a byte-identical function
+    fitting only it is no member (a duplicate when reached, else stripped), as verify binds the start
+    to the placed name alone."""
     found, open_ = {}, {}
     for name, function in functions.items():
         if name in dropped:
@@ -254,6 +258,8 @@ def locate(functions, retail, starts, placed, dropped=()):
             found[name] = hits[0]
         elif hits:
             open_[name] = hits
+    owner = {va: name for name, va in found.items() if name in placed}
+    found = {name: va for name, va in found.items() if name in placed or va not in owner}
     clash = [v for v, n in collections.Counter(found.values()).items() if n > 1]
     if clash:
         sys.exit("one retail start fits two functions: %s; settle with --at or --drop"

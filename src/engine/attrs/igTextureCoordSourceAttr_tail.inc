@@ -1,29 +1,44 @@
-void igTextureCoordSourceAttr_apply(S_140f90* p, igPsx2VisualContext *q) { igPsx2VisualContext_SetTextureStageCoordSource(q, p->c, p->a, p->b); }
+namespace Gap {
+namespace Attrs {
 
-void igTextureCoordSourceAttr_GetUnitCount(igTextureCoordSourceAttrView *self, igVisualContextView *context)
+void igTextureCoordSourceAttr::apply(igVisualContext *vc)
 {
-    context->vfunc_21(22);
+    igPsx2VisualContext_SetTextureStageCoordSource((igPsx2VisualContext *)vc, _unitID, getMode(), _texCoordIndex);
 }
 
-void igTextureCoordSourceAttr_SynchronizeCachedUnitID(igTextureCoordSourceAttr *self) {
-    self->_cachedUnitID = self->_unitID;
+int igTextureCoordSourceAttr::getUnitCount(igCapabilityManager *capabilityManager)
+{
+    return ((igCapabilityManagerDispatchView *)capabilityManager)->getCapability(IG_GFX_CAPABILITY_MAX_TEXTURE_STAGES_PSX2);
 }
 
-void igTextureCoordSourceAttr_UserPostLoad(igTextureCoordSourceAttr *self) {
-    igAttr_UserPostLoad(self);
-    igAttr_SetUnitID((int)self, (short)self->_unitID);
+void igTextureCoordSourceAttr::synchronizeCachedUnitID(igObject *obj)
+{
+    igTextureCoordSourceAttr *attr = (igTextureCoordSourceAttr *)obj;
+
+    attr->setCachedUnitID(attr->_unitID);
 }
 
-void igTextureCoordSourceAttr_SetUnitID(igTextureCoordSourceAttr *self, int unitID) {
-    self->_unitID = (short)unitID;
-    igAttr_SetUnitID((int)self, unitID);
+void igTextureCoordSourceAttr::userPostLoad()
+{
+    igVisualAttribute::userPostLoad();
+    igAttr::setUnitID((short)_unitID);
 }
 
-void igTextureCoordSourceAttr_SynchronizeDefault(igTextureCoordSourceAttr *self, VisualContextDispatch *context) {
-    int mode = self->_mode;
-    int texCoordIndex;
-    context->getTextureCoordSource(self->_unitID, &mode, &texCoordIndex);
-    self->_mode = mode;
-    self->_texCoordIndex = texCoordIndex;
+void igTextureCoordSourceAttr::setUnitID(short id)
+{
+    _unitID = id;
+    igAttr::setUnitID(id);
+}
+
+void igTextureCoordSourceAttr::synchronizeDefault(igVisualContext *vc)
+{
+    IG_GFX_TEXTURE_COORD_SOURCE source = (IG_GFX_TEXTURE_COORD_SOURCE)_mode;
+    int index;
+
+    ((igVisualContextDispatchView *)vc)->getTextureStageCoordSource(_unitID, source, index);
+    _mode = source;
+    _texCoordIndex = index;
+}
+}
 }
 

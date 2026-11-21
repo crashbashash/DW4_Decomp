@@ -7,8 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-void igRenderListAttr_EnsureRegistered(void);
-struct igMetaObject *igRenderListAttr_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

@@ -222,7 +222,7 @@ unsigned char beAction2FLASHSET_Start(beAction2 *manager, beAction2InfoRam *ram,
     if (work->_textureStateAttr == 0) {
         int ownerAllocator = (int)((Gap::Core::igObject *)manager)->getMemoryPool();
         int allocator = g_useOwnerAllocator ? ownerAllocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-        AttrRef<3> created((igObject *)igTextureStateAttr_CreateInstance(allocator));
+        AttrRef<3> created((igObject *)Gap::Attrs::igTextureStateAttr::_instantiateFromPool((igMemoryPoolView *)allocator));
         igObject *attr;
         igObject *old;
         ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)created.p);

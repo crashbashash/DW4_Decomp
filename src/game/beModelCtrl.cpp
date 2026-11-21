@@ -374,7 +374,7 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
     short *matrixUnitID;
 
     attrs = (igAttrStackManager *)traversal->_attrStack;
-    attrId = g_igModelViewMatrixAttr_metaObject->_id;
+    attrId = Gap::Attrs::igModelViewMatrixAttr::getClassMeta()->_id;
     matrices = ((igAttrStack **)((igObjectList *)attrs->_attrStacks)->_data)[((int *)attrs->_attrStackIndexTable)[attrId]];
     result = 0;
     if (meter->_isMeter) {
@@ -402,7 +402,7 @@ int beMeterCtrlNode_Traverse(void *node, igCommonTraversal *traversal, void *dat
     } else {
         firstChild = ((void **)((igObjectList *)((beMeterCtrlNode *)data)->_childList)->_data)[0];
         igMatrix44f_SetIdentity(modelView);
-        matrixAttr = (igModelViewMatrixAttrDispatchView *)TakePooled((igObjectPool *)traversal->_matrixPool, (igObject *(*)(int))igModelViewMatrixAttr_CreateInstance);
+        matrixAttr = (igModelViewMatrixAttrDispatchView *)TakePooled((igObjectPool *)traversal->_matrixPool, (igObject *(*)(int))Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool);
         depth = matrices->_count - 1;
         igMatrix44f_Copy(modelView, (const float *)((char *)((void **)matrices->_data)[depth] + 12));
         igMatrix44f_GetTranslation((const float *)modelView, (float *)&translation);

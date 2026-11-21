@@ -8,10 +8,7 @@ struct igMemoryPoolView;
 extern "C" {
 #endif
 
-struct igTexGenMatrixAttr *igTexGenMatrixAttr_Create(struct igMemoryPoolView *pool);
 
-void igTexGenMatrixAttr_EnsureRegistered(void);
-struct igMetaObject *igTexGenMatrixAttr_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

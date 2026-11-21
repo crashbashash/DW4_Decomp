@@ -1,106 +1,87 @@
-igMetaObject *g_igBlendMatrixPaletteAttr_metaObject;
-igMetaField *g_igBlendMatrixPaletteAttr_matrixCacheMetaField;
-igMetaField *g_igBlendMatrixPaletteAttr_matrixIndicesMetaField;
-igMetaField *g_igBlendMatrixPaletteAttr_currentMatrixCountMetaField;
-igMetaField *g_igBlendMatrixPaletteAttr_capacityMetaField;
+namespace Gap {
+namespace Attrs {
 
-igBlendMatrixPaletteAttr *igBlendMatrixPaletteAttr_Create(igMemoryPoolView *pool) {
-    igBlendMatrixPaletteAttr_EnsureRegistered();
-    return (igBlendMatrixPaletteAttr *)igMetaObject_CreateInstance(g_igBlendMatrixPaletteAttr_metaObject, pool);
-}
+igMetaObject *igBlendMatrixPaletteAttr::_Meta;
+igMetaField *igBlendMatrixPaletteAttr::k_matrixCache;
+igMetaField *igBlendMatrixPaletteAttr::k_matrixIndices;
+igMetaField *igBlendMatrixPaletteAttr::k_currentMatrixCount;
+igMetaField *igBlendMatrixPaletteAttr::k_capacity;
 
-igMetaObject *igBlendMatrixPaletteAttr_GetOrCreateMetaObject(void) {
-    if (g_igBlendMatrixPaletteAttr_metaObject == 0) {
-        g_igBlendMatrixPaletteAttr_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igBlendMatrixPaletteAttr_metaObject;
-}
-
-igMetaObject *igBlendMatrixPaletteAttr_GetMetaObject(void)
+igBlendMatrixPaletteAttr *igBlendMatrixPaletteAttr::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igBlendMatrixPaletteAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igBlendMatrixPaletteAttr_EnsureRegistered();
-    return g_igBlendMatrixPaletteAttr_metaObject;
+    arkRegister();
+    return (igBlendMatrixPaletteAttr *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igBlendMatrixPaletteAttr_GetVTable(void) {
-    union U_139a70 u;
-    igObject_InitHeader((igObject *)u.b);
-    u.vt = (int)&g_igBlendMatrixPaletteAttr_vtable[0];
-    return *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-}
-
-void igBlendMatrixPaletteAttr_EnsureRegistered(void)
+igMetaObject *igBlendMatrixPaletteAttr::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igBlendMatrixPaletteAttr_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igBlendMatrixPaletteAttr_Register(void) {
+igMetaObject *igBlendMatrixPaletteAttr::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void *igBlendMatrixPaletteAttr::retrieveVTablePointer()
+{
+    igBlendMatrixPaletteAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igBlendMatrixPaletteAttr::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igBlendMatrixPaletteAttr::arkRegisterInternal()
+{
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igBlendMatrixPaletteAttr_metaObject,
+        false,
+        &_Meta,
         Gap::Attrs::igVisualAttribute::arkRegisterInternal,
         Gap::Attrs::igVisualAttribute::getClassMeta,
-        igBlendMatrixPaletteAttr_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igBlendMatrixPaletteAttr",
-        0x1C, /* instance size */
-        igBlendMatrixPaletteAttr_GetVTable,
-        &igBlendMatrixPaletteAttr_InitFields,
-        0, /* extra callback item */
-        0 /* callback list */
+        sizeof(igBlendMatrixPaletteAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-void igBlendMatrixPaletteAttr_GetMetaObjectFunction(void) {
-    igBlendMatrixPaletteAttr_GetMetaObject();
+void igBlendMatrixPaletteAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igMemoryRefMetaField_Create, igMemoryRefMetaField_Create, igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create };
+    static const char *names[] = { "_matrixCache", "_matrixIndices", "_currentMatrixCount", "_capacity" };
+    static igMetaField **enumStorage[] = { &k_matrixCache, &k_matrixIndices, &k_currentMatrixCount, &k_capacity };
+    static int offsets[] = { 12, 16, 20, 24 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 4);
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_memType = (int)Gap::Math::igMatrix44fMetaField::getMetaField();
+        metaField->_destruct = 1;
+        metaField->_releaseOnCopy = 1;
+        metaField->_releaseOnReset = 1;
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_memType = (int)Gap::Core::igUnsignedIntMetaField::getMetaField();
+        metaField->_destruct = 1;
+        metaField->_releaseOnCopy = 1;
+        metaField->_releaseOnReset = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igBlendMatrixPaletteAttr_ctorTable[] = {
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-};
-static const char *g_igBlendMatrixPaletteAttr_fieldTable[] = {
-    "_matrixCache",
-    "_matrixIndices",
-    "_currentMatrixCount",
-    "_capacity",
-};
-static igMetaField **g_igBlendMatrixPaletteAttr_fieldHandles[] = {
-    &g_igBlendMatrixPaletteAttr_matrixCacheMetaField,
-    &g_igBlendMatrixPaletteAttr_matrixIndicesMetaField,
-    &g_igBlendMatrixPaletteAttr_currentMatrixCountMetaField,
-    &g_igBlendMatrixPaletteAttr_capacityMetaField,
-};
-static int g_igBlendMatrixPaletteAttr_fieldOffsets[] = {
-    12,
-    16,
-    20,
-    24,
-};
-
-void igBlendMatrixPaletteAttr_InitFields(void) {
-    int base;
-    void *field;
-    void *field2;
-    igMetaObject *meta;
-
-    meta = g_igBlendMatrixPaletteAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igBlendMatrixPaletteAttr_ctorTable, 4);
-    field2 = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igMemoryRefMetaField *)field2)->_memType = (int)Gap::Math::igMatrix44fMetaField::getMetaField();
-    ((igRefMetaField *)field2)->_destruct = 1;
-    ((igMemoryRefMetaField *)field2)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)field2)->_releaseOnReset = 1;
-    field = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igUnsignedIntMetaField::getMetaField();
-    ((igRefMetaField *)field)->_destruct = 1;
-    ((igMemoryRefMetaField *)field)->_releaseOnCopy = 1;
-    ((igMemoryRefMetaField *)field)->_releaseOnReset = 1;
-    igMetaObject_NameFields(meta, g_igBlendMatrixPaletteAttr_fieldTable, g_igBlendMatrixPaletteAttr_fieldHandles, g_igBlendMatrixPaletteAttr_fieldOffsets, base);
+}
 }
 

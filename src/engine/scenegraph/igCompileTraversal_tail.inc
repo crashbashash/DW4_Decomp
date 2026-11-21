@@ -127,7 +127,7 @@ void Gap__Sg__igCompileTraversal__vfunc_23(igCompileTraversal *self, int arg1) {
         ((VC104 *)(stack->f16->f16[stack->f68[Gap::Attrs::igClearAttr::getClassMeta()->_id]]->f20))->vX(a1, (int)stack);
     }
     {
-    igSmartPointer<T_1bb880> matrix((T_1bb880 *)((void *)igModelViewMatrixAttr_CreateInstance((int)((Gap::Core::igObject *)self)->getMemoryPool())));
+    igSmartPointer<T_1bb880> matrix((T_1bb880 *)((void *)Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool())));
     igSmartPointer<T_1bb880> info((T_1bb880 *)((void *)FUN_001a3590((int)((Gap::Core::igObject *)self)->getMemoryPool())));
     T_1bb880 **slot = &info->f12;
     T_1bb880 *old = *slot;
@@ -176,9 +176,9 @@ int igTransform_CompileChildrenAndPopMatrix(float *matrix, igTransform *self, ig
     target = self->_target;
     result = igTraversal_TraverseChildren((igTraversal *)traversal, (igNode *)self);
     if (target == 0) {
-        FUN_001b11b0((A_1b11b0 *)manager, (B_1b11b0 *)g_igModelViewMatrixAttr_metaObject);
+        FUN_001b11b0((A_1b11b0 *)manager, (B_1b11b0 *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta());
     } else {
-        FUN_001b1250((A_1b1250 *)manager, (B_1b1250 *)g_igVertexBlendMatrixAttr_metaObject, target - 1);
+        FUN_001b1250((A_1b1250 *)manager, (B_1b1250 *)Gap::Attrs::igVertexBlendMatrixAttr::getClassMeta(), target - 1);
     }
     return result == 2 ? 2 : 0;
 }
@@ -189,7 +189,7 @@ int igCompileTraversal_TraverseJointTransform(igTraversal *traversal, igTransfor
     self->_jointChainCount_++;
     if (self->_jointChainCount_ == 1) {
         igAttrStackManager *manager = (igAttrStackManager *)self->_attrStack;
-        igObject *top = topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[((int *)manager->_attrStackIndexTable)[g_igModelViewMatrixAttr_metaObject->_id]]);
+        igObject *top = topAttr(((AttrObjectStackList *)manager->_attrStacks)->_data[((int *)manager->_attrStackIndexTable)[Gap::Attrs::igModelViewMatrixAttr::getClassMeta()->_id]]);
         igTDataList<igObject *> *mvms = (igTDataList<igObject *> *)self->_mvmList;
         self->_jointBaseMvmIndex = mvms->find(top);
     }
@@ -305,7 +305,7 @@ int igCompileTraversal_TraverseGeometry(igCompileTraversal *self, igGeometry *ge
             info->_matrixIndex = -2;
             info->_blendIndex = -1;
             info->_shared = 0;
-            igObject *mvm = (igObject *)FUN_0013f680();
+            igObject *mvm = (igObject *)Gap::Attrs::igModelViewMatrixAttr::getIdentityAttr();
             ((Gap::Core::igObjectList *)self->_mvmList)->append((Gap::Core::igObject *)mvm);
             ((Gap::Core::igObjectList *)self->_xformInfoList)->append((Gap::Core::igObject *)info.p);
             FUN_001b1030((igAttrStackManager *)self->_attrStack, (igAttr *)mvm);
@@ -315,7 +315,7 @@ int igCompileTraversal_TraverseGeometry(igCompileTraversal *self, igGeometry *ge
             igTDataList<igObject *> *palettes = (igTDataList<igObject *> *)self->_boneMatrixPaletteList;
             igObject *palette = palettes->_count > 0 ? palettes->get(palettes->_count - 1) : 0;
             if (palette != 0) {
-                igSmartPointer<MatrixAttrView_1bc1e0> mvm((MatrixAttrView_1bc1e0 *)igModelViewMatrixAttr_CreateInstance((int)((Gap::Core::igObject *)self)->getMemoryPool()));
+                igSmartPointer<MatrixAttrView_1bc1e0> mvm((MatrixAttrView_1bc1e0 *)Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
                 igSmartPointer<XformInfo_1bc1e0> info((XformInfo_1bc1e0 *)FUN_001a3590((int)((Gap::Core::igObject *)self)->getMemoryPool()));
                 info->_transform = 0;
                 info->_matrixIndex = 0;
@@ -331,9 +331,9 @@ int igCompileTraversal_TraverseGeometry(igCompileTraversal *self, igGeometry *ge
         FUN_001db720((igSorter *)self->_sorter, (igGeometry *)geometry, (igAttrStackManager *)self->_attrStack);
         if (hasList) {
             FUN_001b1100((struct A_1b1100 *)self->_attrStack, (struct B_1b1100 *)restore);
-            FUN_001b11b0((struct A_1b11b0 *)self->_attrStack, (struct B_1b11b0 *)g_igModelViewMatrixAttr_metaObject);
+            FUN_001b11b0((struct A_1b11b0 *)self->_attrStack, (struct B_1b11b0 *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta());
         } else if (pushed) {
-            FUN_001b11b0((struct A_1b11b0 *)self->_attrStack, (struct B_1b11b0 *)g_igModelViewMatrixAttr_metaObject);
+            FUN_001b11b0((struct A_1b11b0 *)self->_attrStack, (struct B_1b11b0 *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta());
         }
     }
     return 0;
@@ -395,7 +395,7 @@ int igCompileTraversal_TraverseModelViewMatrixBoneSelect(igCompileTraversal *sel
     int temp_s1;
     temp_s0 = self->_attrStack;
     self->_isSkin = 1;
-    temp_s2 = ((X_1bce40 *)igModelViewMatrixAttr_CreateInstance((int)((Gap::Core::igObject *)self)->getMemoryPool()));
+    temp_s2 = ((X_1bce40 *)Gap::Attrs::igModelViewMatrixAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
     temp_v0 = ((X_1bce40 *)FUN_001a3590((int)((Gap::Core::igObject *)self)->getMemoryPool()));
     temp_v0->f8 = arg1[8];
     ((Gap::Core::igObjectList *)self->_mvmList)->append((Gap::Core::igObject *)temp_s2);
@@ -422,7 +422,7 @@ int igCompileTraversal_TraverseBlendMatrixSelect(A_1bcf70 *arg0, B_1bcf70 *arg1)
     int s0;
     s0 = arg0->f52;
     arg0->f496 = 1;
-    o = ((Obj_1bcf70 *)igBlendMatrixPaletteAttr_Create(((Gap::Core::igObject *)arg0)->getMemoryPool()));
+    o = ((Obj_1bcf70 *)Gap::Attrs::igBlendMatrixPaletteAttr::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool()));
     ((Gap::Core::igObjectList *)arg0->f504)->append((Gap::Core::igObject *)o);
     o->refs = o->refs - 1;
     if ((o->refs & 0x7FFFFF) == 0) igObject_Destroy((igObject *)o);
@@ -473,7 +473,7 @@ void FUN_001bd170(struct A_1bd170 *arg0, struct B_1bd170 *arg1) {
     n = arg1->list->n;
     for (i = 0; i < n; i++) {
         c = (struct B_1bd170 *)arg1->list->data[i];
-        if (((Gap::Core::igObject *)c)->isOfType(g_igDisplayListAttr_metaObject) != 0) {
+        if (((Gap::Core::igObject *)c)->isOfType(Gap::Attrs::igDisplayListAttr::getClassMeta()) != 0) {
             FUN_001bd170(arg0, c);
         } else {
             o = arg0->out;
@@ -640,7 +640,7 @@ int FUN_001bd890(RemapOwner *o, RemapContext *ctx) {
             int j;
             ((Gap::Core::igObjectList *)o->_entries)->append((Gap::Core::igObject *)e);
             releaseRefCounted(e);
-            t = ((RemapTable *)igBlendMatrixPaletteAttr_Create(((Gap::Core::igObject *)ctx)->getMemoryPool()));
+            t = ((RemapTable *)Gap::Attrs::igBlendMatrixPaletteAttr::_instantiateFromPool(((Gap::Core::igObject *)ctx)->getMemoryPool()));
             setTarget(e, t);
             releaseRefCounted(t);
             e->_slot = &o->_items->_data[i];
@@ -654,7 +654,7 @@ int FUN_001bd890(RemapOwner *o, RemapContext *ctx) {
                 }
                 t->_data[(unsigned int)j] = r;
             }
-        } else if (((Gap::Core::igObject *)item)->isOfType(g_igBlendMatrixPaletteAttr_metaObject) != 0) {
+        } else if (((Gap::Core::igObject *)item)->isOfType(Gap::Attrs::igBlendMatrixPaletteAttr::getClassMeta()) != 0) {
             RemapEntry *e = ((RemapEntry *)FUN_001a2c70((int)(((void *)((Gap::Core::igObject *)ctx)->getMemoryPool()))));
             ((Gap::Core::igObjectList *)o->_entries)->append((Gap::Core::igObject *)e);
             releaseRefCounted(e);

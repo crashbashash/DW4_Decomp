@@ -28,7 +28,7 @@ void igModelViewMatrixAttrList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igModelViewMatrixAttrList_Register);
 }
 
-static igMetaObjectCallback g_igModelViewMatrixAttrList_callbackList[] = { igModelViewMatrixAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igModelViewMatrixAttrList_callbackList[] = { Gap::Attrs::igModelViewMatrixAttr::arkRegister, 0 };
 
 CallbackArray *igModelViewMatrixAttrList_Register(void) {
     AttrsLibrary_MarkRegistered();

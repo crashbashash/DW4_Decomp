@@ -1,36 +1,48 @@
-void igVertexBlendMatrixAttr_apply(igVertexBlendMatrixAttr *self, igPsx2VisualContext *arg1) {
-    igPsx2VisualContext_SetMatrix(arg1, self->_blendMatID + 10, (char *)self + 0xC);
-}
+namespace Gap {
+namespace Attrs {
 
-void igVertexBlendMatrixAttr_SynchronizeCachedUnitID(igVertexBlendMatrixAttr *self) {
-    self->_cachedUnitID = self->_blendMatID;
-}
-
-void igVertexBlendMatrixAttr_SetUnitID(igVertexBlendMatrixAttr *self, int unitID) {
-    self->_blendMatID = (short)unitID;
-    igAttr_SetUnitID((int)self, unitID);
-}
-
-void igVertexBlendMatrixAttr_UserPostLoad(igVertexBlendMatrixAttr *self) {
-    igAttr_UserPostLoad(self);
-    igAttr_SetUnitID((int)self, (short)self->_blendMatID);
-}
-
-void igVertexBlendMatrixAttr_SynchronizeDefault(igVertexBlendMatrixAttr *self, void **arg1) {
-    int sp30[16];
-
-    igMatrix44f_SetIdentity((float *)sp30);
-    ((V832 *)arg1)->vX(self->_blendMatID + 0xA, sp30);
-    ((V128 *)self)->vX(sp30);
-}
-
-void igVertexBlendMatrixAttr_SetMatrix(igVertexBlendMatrixAttr *self, const float *matrix) {
-    igMatrix44f_Copy(self->_m, matrix);
-}
-
-void igVertexBlendMatrixAttr_GetUnitCount(igVertexBlendMatrixAttrView *self, igVisualContextView *context)
+void igVertexBlendMatrixAttr::apply(igVisualContext *vc)
 {
-    context->vfunc_21(13);
+    igPsx2VisualContext_SetMatrix((igPsx2VisualContext *)vc, _blendMatID + IG_GFX_MATRIX_STACK_VERTEX_BLEND_0, (char *)_m.m);
+}
+
+void igVertexBlendMatrixAttr::synchronizeCachedUnitID(igObject *obj)
+{
+    igVertexBlendMatrixAttr *attr = (igVertexBlendMatrixAttr *)obj;
+
+    attr->setCachedUnitID(attr->_blendMatID);
+}
+
+void igVertexBlendMatrixAttr::setUnitID(short id)
+{
+    _blendMatID = id;
+    igAttr::setUnitID(id);
+}
+
+void igVertexBlendMatrixAttr::userPostLoad()
+{
+    igVisualAttribute::userPostLoad();
+    igAttr::setUnitID((short)_blendMatID);
+}
+
+void igVertexBlendMatrixAttr::synchronizeDefault(igVisualContext *vc)
+{
+    igMatrix44f m;
+
+    ((igVisualContextDispatchView *)vc)->getMatrix((IG_GFX_MATRIX_STACK)(_blendMatID + IG_GFX_MATRIX_STACK_VERTEX_BLEND_0), m);
+    setMatrix(m);
+}
+
+void igVertexBlendMatrixAttr::setMatrix(const igMatrix44f &matrix)
+{
+    igMatrix44f_Copy(_m.m, matrix.m);
+}
+
+int igVertexBlendMatrixAttr::getUnitCount(igCapabilityManager *capabilityManager)
+{
+    return ((igCapabilityManagerDispatchView *)capabilityManager)->getCapability(IG_GFX_CAPABILITY_MAX_VERTEX_BLEND_MATRICES);
+}
+}
 }
 
 static inline bool InRange(float x, float lo, float hi) {

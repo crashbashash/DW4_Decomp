@@ -27,7 +27,7 @@ void igBlendMatrixPaletteAttrList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igBlendMatrixPaletteAttrList_Register);
 }
 
-static igMetaObjectCallback g_igBlendMatrixPaletteAttrList_callbackList[] = { igBlendMatrixPaletteAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igBlendMatrixPaletteAttrList_callbackList[] = { Gap::Attrs::igBlendMatrixPaletteAttr::arkRegister, 0 };
 
 CallbackArray *igBlendMatrixPaletteAttrList_Register(void) {
     AttrsLibrary_MarkRegistered();

@@ -68,7 +68,8 @@ int igPsx2VisualContext_CreateRenderList(struct igPsx2VisualContext *self);
 void igPsx2VisualContext_DeleteRenderList(struct igPsx2VisualContext *self, int arg1);
 void igPsx2VisualContext_BeginRenderListDraw(struct igPsx2VisualContext *self, int arg1);
 int igPsx2VisualContext_EndRenderListDraw(struct igPsx2VisualContext *self);
-void igPsx2VisualContext_SetBlendingMatrices(struct igPsx2VisualContext *self, int arg1, int arg2);
+/* The kit's setBlendingMatrices(igUnsignedInt, igMatrix44f *): the attrs pass their count and matrix cache. */
+void igPsx2VisualContext_SetBlendingMatrices(struct igPsx2VisualContext *self, unsigned int count, struct igMatrix44f *matrices);
 void igPsx2VisualContext_SetMatrix(struct igPsx2VisualContext *self, int arg1, char *arg2);
 void igPsx2VisualContext_SetAlphaTestState(struct igPsx2VisualContext *self, bool enable);
 void igPsx2VisualContext_SetAlphaFunc(struct igPsx2VisualContext *self, int arg1);

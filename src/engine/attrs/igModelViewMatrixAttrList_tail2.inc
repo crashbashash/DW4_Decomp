@@ -1,4 +1,4 @@
 igMetaObject *igModelViewMatrixAttrList_GetElementMeta(void) {
-    return g_igModelViewMatrixAttr_metaObject;
+    return Gap::Attrs::igModelViewMatrixAttr::getClassMeta();
 }
 

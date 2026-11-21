@@ -28,7 +28,7 @@ void igTextureMatrixAttrPool_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTextureMatrixAttrPool_Register);
 }
 
-static igMetaObjectCallback g_igTextureMatrixAttrPool_callbackList[] = { igTextureMatrixAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igTextureMatrixAttrPool_callbackList[] = { Gap::Attrs::igTextureMatrixAttr::arkRegister, 0 };
 
 CallbackArray *igTextureMatrixAttrPool_Register(void) {
     SceneGraphLibrary_MarkRegistered();

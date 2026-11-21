@@ -50,7 +50,6 @@ void igVertexArray1_1_EnsureRegistered(void);
 void igAttrListList_EnsureRegistered(void);
 void igAttrList_EnsureRegistered(void);
 void igAttrPool_EnsureRegistered(void);
-void igBlendFunctionAttr_EnsureRegistered(void);
 void igCopyRenderDestinationAttr_EnsureRegistered(void);
 void igGeometryAttr1_5_EnsureRegistered(void);
 void igGeometrySetAttr_EnsureRegistered(void);
@@ -59,20 +58,13 @@ void igLightAttr_EnsureRegistered(void);
 void igLightList_EnsureRegistered(void);
 void igLightStateAttrList_EnsureRegistered(void);
 void igLightStateAttr_EnsureRegistered(void);
-void igModelViewMatrixAttr_EnsureRegistered(void);
 void igNonRefCountedAttrList_EnsureRegistered(void);
 void igParticleAttr_EnsureRegistered(void);
 void igRenderDestinationAttr_EnsureRegistered(void);
 void igSetRenderDestinationAttr_EnsureRegistered(void);
 void igTextureAttr_EnsureRegistered(void);
 void igTextureBindAttr_EnsureRegistered(void);
-void igTextureCoordSourceAttr_EnsureRegistered(void);
-void igTextureFunctionAttr_EnsureRegistered(void);
 void igTextureList_EnsureRegistered(void);
-void igTextureMatrixAttr_EnsureRegistered(void);
-void igTextureMatrixStateAttr_EnsureRegistered(void);
-void igTextureStateAttr_EnsureRegistered(void);
-void igTextureUnloadAttr_EnsureRegistered(void);
 
 /* SceneGraph */
 void igActorList_EnsureRegistered(void);

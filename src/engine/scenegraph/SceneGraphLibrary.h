@@ -5451,7 +5451,7 @@ static inline TransformAttrView *topOf(TransformStackView *s) {
     return s->_default;
 }
 static inline TransformStackView *stackOf(TransformStateView *st) {
-    return st->_stacks->_data[st->_slotOfIndex[((AttrClassView *)g_igModelViewMatrixAttr_metaObject)->_stackIndex]];
+    return st->_stacks->_data[st->_slotOfIndex[((AttrClassView *)Gap::Attrs::igModelViewMatrixAttr::getClassMeta())->_stackIndex]];
 }
 static inline CullMatrixEntry *entryAt_1b9d90(CullMatrixStack *s, int i) { return s->_data[i]; }
 static inline CullMatrixEntry *currentEntry(CullMatrixStack *s) {
@@ -5757,7 +5757,6 @@ static inline void assignRef_1e22c0(EnvMapAttrOps *&field, const EnvMapTempRef &
 static inline int n_of_1e3270(const T_1e3270 *list) { return list->n; }
 
 extern "C" igMetaField *g_igTextureMatrixAttr_mField[4];
-extern "C" igMetaField *g_igVertexBlendMatrixAttr_mField[4];
 
 typedef igTDataList<AttrObjectStack *> AttrObjectStackList;
 static inline AttrObjectStack *getAttrStack(igAttrStackManager *manager, int attrHandle) {
@@ -5880,7 +5879,6 @@ extern "C" float *igTransform_PushMatrix(TransformView *self, CommonTraversalVie
 extern "C" int igTransform_TraverseChildrenAndPopMatrix(float *matrix, igTransform *self, igCommonTraversal *traversal);
 extern "C" int igCommonTraversal_TraverseOverrideAttrSet(igCommonTraversal *self, igOverrideAttrSet *set);
 extern "C" int igCommonTraversal_TraverseAttrSet(igCommonTraversal *self, igAttrSet *set);
-extern "C" igModelViewMatrixAttr* FUN_0013f680(void);
 extern "C" int igCommonTraversal_TraverseSelfShadowShader(igCommonTraversal *self, igProjectiveShadowShader *shader);
 extern "C" int igTransform_CompileChildrenAndPopMatrix(float *matrix, igTransform *self, igCompileTraversal *traversal);
 extern "C" int igCompileTraversal_TraverseJointTransform(igTraversal *traversal, igTransform *node);

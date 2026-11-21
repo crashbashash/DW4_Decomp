@@ -1,8 +1,10 @@
-igMetaObject *igDisplayListAttr_GetMeta(void) {
-    return g_igDisplayListAttr_metaObject;
-}
+namespace Gap {
+namespace Attrs {
 
-void igDisplayListAttr_Reset(igDisplayListAttr *self) {
-    *(int *)((char *)(self->_contents) + 8) = 0;
+void igDisplayListAttr::reset()
+{
+    _contents->_count = 0;
+}
+}
 }
 

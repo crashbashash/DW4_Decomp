@@ -9,8 +9,6 @@ struct igMemoryPoolView;
 extern "C" {
 #endif
 
-struct igMetaObject *igBlendFunctionAttr_GetOrCreateMetaObject(void);
-struct igBlendFunctionAttr *igBlendFunctionAttr_Create(struct igMemoryPoolView *pool);
 
 #ifdef __cplusplus
 }

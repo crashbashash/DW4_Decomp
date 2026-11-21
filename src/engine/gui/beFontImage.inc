@@ -124,7 +124,7 @@ void igBitmapFont_resetFields(FontImage *self, int enable) {
         igSmartPointer<FillLayer> first((FillLayer *)Gap::Attrs::igBlendStateAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
         first.get()->setEnabled(1);
         ((Gap::Core::igObjectList *)((unsigned)self->layers))->append((Gap::Core::igObject *)(first.get()));
-        igSmartPointer<OutlineLayer> second((OutlineLayer *)igTextureStateAttr_CreateInstance((int)(((Gap::Core::igObject *)self)->getMemoryPool())));
+        igSmartPointer<OutlineLayer> second((OutlineLayer *)Gap::Attrs::igTextureStateAttr::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
         second.get()->setEnabled(1);
         ((Gap::Core::igObjectList *)((unsigned)self->layers))->append((Gap::Core::igObject *)(second.get()));
         self->state = 0x10001;

@@ -308,6 +308,14 @@ class Rows(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "one retail start fits two"):
             whole_file_rows.locate(functions, {0x100: 1}, [0x100], {})
 
+    def test_a_placed_start_is_its_names_alone(self):
+        # the present row places one of several byte-identical inline destructors at the start; the others
+        # are no members (each is a duplicate where a member reaches it)
+        retail = {0x100: 1, 0x110: 2}
+        functions = {"kept": self.Function(2), "twin": self.Function(2), "other": self.Function(1)}
+        placed = whole_file_rows.locate(functions, retail, sorted(retail), {"kept": 0x110})
+        self.assertEqual(placed, {"kept": 0x110, "other": 0x100})
+
     def test_units_rows_cut_the_row_around_the_range(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "units.tsv"

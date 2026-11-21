@@ -91,3 +91,18 @@ igUnsignedCharList	Core	igTDataList<unsigned char>
 igFloatList	Core	igTDataList<float>
 igPointerList	Core	igTDataList<void *>
 igCharListNoClean	Core
+igTextureStateAttr	Attrs
+igTextureMatrixStateAttr	Attrs
+igTextureCoordSourceAttr	Attrs
+igTextureUnloadAttr	Attrs
+igTexGenMatrixAttr	Attrs
+igTextureMatrixAttr	Attrs
+igVertexBlendMatrixAttr	Attrs
+igModelViewMatrixAttr	Attrs
+igGeometryMaskAttr	Attrs
+igBlendMatricesAttr	Attrs
+igBlendMatrixPaletteAttr	Attrs
+igDisplayListAttr	Attrs
+igRenderListAttr	Attrs
+igBlendFunctionAttr	Attrs
+igTextureFunctionAttr	Attrs

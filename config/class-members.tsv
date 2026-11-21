@@ -925,3 +925,205 @@ igPointerList	IG_OBJECT_DEFINE(igPointerList)
 igPointerList	private: static igMetaField *k_data;
 igCharListNoClean	IG_OBJECT_DEFINE(igCharListNoClean)
 igCharListNoClean	inline virtual void trimCapacity() {}
+igTextureStateAttr	IG_OBJECT_DEFINE(igTextureStateAttr)
+igTextureStateAttr	private: static igMetaField *k_enabled;
+igTextureStateAttr	private: static igMetaField *k_unitID;
+igTextureStateAttr	private: static void synchronizeCachedUnitID(igObject *obj);
+igTextureStateAttr	virtual void apply(igVisualContext *vc);
+igTextureStateAttr	virtual void setState(bool enb);
+igTextureStateAttr	inline bool getState() const { return _enabled; }
+igTextureStateAttr	virtual void userPostLoad();
+igTextureStateAttr	inline short getNonCachedUnitID() const { return (short)_unitID; }
+igTextureStateAttr	virtual void setUnitID(short id);
+igTextureStateAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igTextureStateAttr	virtual int getUnitCount(igCapabilityManager *capabilityManager);
+igTextureMatrixStateAttr	IG_OBJECT_DEFINE(igTextureMatrixStateAttr)
+igTextureMatrixStateAttr	private: static igMetaField *k_enabled;
+igTextureMatrixStateAttr	private: static igMetaField *k_unitID;
+igTextureMatrixStateAttr	private: static void synchronizeCachedUnitID(igObject *obj);
+igTextureMatrixStateAttr	virtual void apply(igVisualContext *vc);
+igTextureMatrixStateAttr	virtual void setState(bool enb);
+igTextureMatrixStateAttr	inline bool getState() const { return _enabled; }
+igTextureMatrixStateAttr	virtual void userPostLoad();
+igTextureMatrixStateAttr	inline short getNonCachedUnitID() const { return (short)_unitID; }
+igTextureMatrixStateAttr	virtual void setUnitID(short id);
+igTextureMatrixStateAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igTextureMatrixStateAttr	virtual int getUnitCount(igCapabilityManager *capabilityManager);
+igTextureCoordSourceAttr	IG_OBJECT_DEFINE(igTextureCoordSourceAttr)
+igTextureCoordSourceAttr	private: static igMetaField *k_mode;
+igTextureCoordSourceAttr	private: static igMetaField *k_texCoordIndex;
+igTextureCoordSourceAttr	private: static igMetaField *k_unitID;
+igTextureCoordSourceAttr	private: static void synchronizeCachedUnitID(igObject *obj);
+igTextureCoordSourceAttr	virtual void apply(igVisualContext *vc);
+igTextureCoordSourceAttr	inline virtual void setMode(IG_GFX_TEXTURE_COORD_SOURCE mode) { _mode = mode; }
+igTextureCoordSourceAttr	inline IG_GFX_TEXTURE_COORD_SOURCE getMode() const { return (IG_GFX_TEXTURE_COORD_SOURCE)_mode; }
+igTextureCoordSourceAttr	inline virtual void setTexCoordIndex(int index) { _texCoordIndex = index; }
+igTextureCoordSourceAttr	inline int getTexCoordIndex() const { return _texCoordIndex; }
+igTextureCoordSourceAttr	virtual void userPostLoad();
+igTextureCoordSourceAttr	inline short getNonCachedUnitID() const { return (short)_unitID; }
+igTextureCoordSourceAttr	virtual void setUnitID(short id);
+igTextureCoordSourceAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igTextureCoordSourceAttr	virtual int getUnitCount(igCapabilityManager *capabilityManager);
+igTextureUnloadAttr	IG_OBJECT_DEFINE(igTextureUnloadAttr)
+igTextureUnloadAttr	private: static igMetaField *k_texture;
+igTextureUnloadAttr	private: static igMetaField *k_unitID;
+igTextureUnloadAttr	private: static void synchronizeCachedUnitID(igObject *obj);
+igTextureUnloadAttr	virtual void apply(igVisualContext *vc);
+igTextureUnloadAttr	inline virtual void setTexture(igTextureAttr *tex) { _texture = tex; }
+igTextureUnloadAttr	inline igTextureAttr *getTexture() const { return _texture; }
+igTextureUnloadAttr	virtual void userPostLoad();
+igTextureUnloadAttr	inline short getNonCachedUnitID() const { return (short)_unitID; }
+igTextureUnloadAttr	virtual void setUnitID(short id);
+igTextureUnloadAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igTextureUnloadAttr	virtual int getUnitCount(igCapabilityManager *capabilityManager);
+igTexGenMatrixAttr	IG_OBJECT_DEFINE(igTexGenMatrixAttr)
+igTexGenMatrixAttr	private: static igMetaField *kM;
+igTexGenMatrixAttr	private: static igMetaField *k_unitID;
+igTexGenMatrixAttr	private: static void synchronizeCachedUnitID(igObject *obj);
+igTexGenMatrixAttr	virtual void apply(igVisualContext *vc);
+igTexGenMatrixAttr	inline virtual void setMatrix(const igMatrix44f &matrix) { igMatrix44f_Copy(m.m, matrix.m); }
+igTexGenMatrixAttr	inline igMatrix44f *getMatrix() { return &m; }
+igTexGenMatrixAttr	virtual void userPostLoad();
+igTexGenMatrixAttr	inline short getNonCachedUnitID() const { return (short)_unitID; }
+igTexGenMatrixAttr	virtual void setUnitID(short id);
+igTexGenMatrixAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igTextureMatrixAttr	IG_OBJECT_DEFINE(igTextureMatrixAttr)
+igTextureMatrixAttr	private: static igMetaField *k_m;
+igTextureMatrixAttr	private: static igMetaField *k_unitID;
+igTextureMatrixAttr	private: static igMetaField *k_outputElementCount;
+igTextureMatrixAttr	private: static igMetaField *k_isProjective;
+igTextureMatrixAttr	private: static void synchronizeCachedUnitID(igObject *obj);
+igTextureMatrixAttr	virtual void apply(igVisualContext *vc);
+igTextureMatrixAttr	virtual void setMatrix(const igMatrix44f &matrix);
+igTextureMatrixAttr	inline igMatrix44f *getMatrix() { return &_m; }
+igTextureMatrixAttr	inline void setOutputElementCount(int n) { _outputElementCount = (short)n; }
+igTextureMatrixAttr	inline int getOutputElementCount() const { return _outputElementCount; }
+igTextureMatrixAttr	inline void setProjectiveState(bool en) { _isProjective = en; }
+igTextureMatrixAttr	inline bool getProjectiveState() const { return _isProjective; }
+igTextureMatrixAttr	virtual void userPostLoad();
+igTextureMatrixAttr	inline short getNonCachedUnitID() const { return (short)_unitID; }
+igTextureMatrixAttr	virtual void setUnitID(short id);
+igTextureMatrixAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igTextureMatrixAttr	virtual int getUnitCount(igCapabilityManager *capabilityManager);
+igVertexBlendMatrixAttr	IG_OBJECT_DEFINE(igVertexBlendMatrixAttr)
+igVertexBlendMatrixAttr	private: static igMetaField *k_m;
+igVertexBlendMatrixAttr	private: static igMetaField *k_blendMatID;
+igVertexBlendMatrixAttr	private: static void synchronizeCachedUnitID(igObject *obj);
+igVertexBlendMatrixAttr	virtual void apply(igVisualContext *vc);
+igVertexBlendMatrixAttr	virtual void setMatrix(const igMatrix44f &matrix);
+igVertexBlendMatrixAttr	inline igMatrix44f *getMatrix() { return &_m; }
+igVertexBlendMatrixAttr	virtual void userPostLoad();
+igVertexBlendMatrixAttr	inline short getNonCachedUnitID() const { return (short)_blendMatID; }
+igVertexBlendMatrixAttr	virtual void setUnitID(short id);
+igVertexBlendMatrixAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igVertexBlendMatrixAttr	virtual int getUnitCount(igCapabilityManager *capabilityManager);
+igModelViewMatrixAttr	IG_OBJECT_DEFINE(igModelViewMatrixAttr)
+igModelViewMatrixAttr	private: static igMetaField *k_m;
+igModelViewMatrixAttr	virtual void apply(igVisualContext *vc);
+igModelViewMatrixAttr	virtual void setMatrix(const igMatrix44f &matrix);
+igModelViewMatrixAttr	inline igMatrix44f *getMatrix() { return &_m; }
+igModelViewMatrixAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igModelViewMatrixAttr	static void userRegister();
+igModelViewMatrixAttr	static void userUnregister();
+igModelViewMatrixAttr	static igModelViewMatrixAttr *getIdentityAttr();
+igModelViewMatrixAttr	private: static void arkRegisterUser();
+igGeometryMaskAttr	IG_OBJECT_DEFINE(igGeometryMaskAttr)
+igGeometryMaskAttr	private: static igMetaField *k_mask;
+igGeometryMaskAttr	virtual void apply(igVisualContext *vc);
+igGeometryMaskAttr	inline igVertexComponentFilter getMask() const { return igVertexComponentFilter(_mask); }
+igGeometryMaskAttr	inline void setMask(igVertexComponentFilter vertexMask) { _mask = vertexMask; }
+igGeometryMaskAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igBlendMatricesAttr	IG_OBJECT_DEFINE(igBlendMatricesAttr)
+igBlendMatricesAttr	protected: static igMetaField *k_matrixCache;
+igBlendMatricesAttr	protected: static igMetaField *k_currentMatrixCount;
+igBlendMatricesAttr	protected: static igMetaField *k_matrixCacheCapacity;
+igBlendMatricesAttr	inline void setCurrentMatrixCount(unsigned int currentMatrixCountParam) { _currentMatrixCount = currentMatrixCountParam; }
+igBlendMatricesAttr	inline unsigned int getCurrentMatrixCount() const { return _currentMatrixCount; }
+igBlendMatricesAttr	inline igMatrix44f *getMatrixArray() const { return (igMatrix44f *)_matrixCache; }
+igBlendMatricesAttr	inline unsigned int getMatrixCacheCapacity() const { return _matrixCacheCapacity; }
+igBlendMatricesAttr	inline virtual void userPostLoad() { if (_matrixCacheCapacity == 0) _matrixCacheCapacity = _currentMatrixCount; }
+igBlendMatricesAttr	virtual void apply(igVisualContext *vc);
+igBlendMatricesAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igBlendMatrixPaletteAttr	IG_OBJECT_DEFINE(igBlendMatrixPaletteAttr)
+igBlendMatrixPaletteAttr	protected: static igMetaField *k_matrixCache;
+igBlendMatrixPaletteAttr	protected: static igMetaField *k_matrixIndices;
+igBlendMatrixPaletteAttr	protected: static igMetaField *k_currentMatrixCount;
+igBlendMatrixPaletteAttr	protected: static igMetaField *k_capacity;
+igBlendMatrixPaletteAttr	inline unsigned int getCurrentMatrixCount() const { return _currentMatrixCount; }
+igBlendMatrixPaletteAttr	inline igMatrix44f *getMatrixArray() const { return (igMatrix44f *)_matrixCache; }
+igBlendMatrixPaletteAttr	inline unsigned int getCapacity() const { return _capacity; }
+igBlendMatrixPaletteAttr	inline virtual void userPostLoad() { if (_capacity == 0) _capacity = _currentMatrixCount; }
+igBlendMatrixPaletteAttr	virtual void apply(igVisualContext *vc);
+igBlendMatrixPaletteAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igDisplayListAttr	IG_OBJECT_DEFINE(igDisplayListAttr)
+igDisplayListAttr	protected: static igMetaField *k_contents;
+igDisplayListAttr	inline igNonRefCountedAttrList *getAttrs() { return _contents; }
+igDisplayListAttr	virtual void apply(igVisualContext *rc);
+igDisplayListAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igDisplayListAttr	virtual void reset();
+igDisplayListAttr	virtual void setup(igVisualContext *vc);
+igRenderListAttr	IG_OBJECT_DEFINE(igRenderListAttr)
+igRenderListAttr	private: static igMetaField *k_handle;
+igRenderListAttr	private: static igMetaField *k_vc;
+igRenderListAttr	virtual void releaseDefaults();
+igRenderListAttr	virtual void apply(igVisualContext *vc);
+igRenderListAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igRenderListAttr	virtual void reset();
+igRenderListAttr	inline virtual void setVisualContext(igVisualContext *vc) { _vc = vc; }
+igBlendFunctionAttr	IG_OBJECT_DEFINE(igBlendFunctionAttr)
+igBlendFunctionAttr	private: static igMetaField *k_src;
+igBlendFunctionAttr	private: static igMetaField *k_dst;
+igBlendFunctionAttr	private: static igMetaField *k_eq;
+igBlendFunctionAttr	private: static igMetaField *k_blendEquationExt;
+igBlendFunctionAttr	private: static igMetaField *k_blendConstant;
+igBlendFunctionAttr	private: static igMetaField *k_blendStage;
+igBlendFunctionAttr	private: static igMetaField *k_blendConstantFloat;
+igBlendFunctionAttr	static igMetaEnum *getBLENDING_FUNCTION_COLOR_PSX2MetaEnum();
+igBlendFunctionAttr	private: static igMetaEnum *BLENDING_FUNCTION_COLOR_PSX2_Meta;
+igBlendFunctionAttr	static igMetaEnum *getBLENDING_FUNCTION_ALPHA_PSX2MetaEnum();
+igBlendFunctionAttr	private: static igMetaEnum *BLENDING_FUNCTION_ALPHA_PSX2_Meta;
+igBlendFunctionAttr	private: static void synchronizeCachedUnitID(igObject *obj);
+igBlendFunctionAttr	protected: static igMetaField *k_blendA;
+igBlendFunctionAttr	protected: static igMetaField *k_blendB;
+igBlendFunctionAttr	protected: static igMetaField *k_blendC;
+igBlendFunctionAttr	protected: static igMetaField *k_blendD;
+igBlendFunctionAttr	private: static void constantChanged(igObject *obj);
+igBlendFunctionAttr	inline int getBlendA() const { return _blendA; }
+igBlendFunctionAttr	inline int getBlendB() const { return _blendB; }
+igBlendFunctionAttr	inline int getBlendC() const { return _blendC; }
+igBlendFunctionAttr	inline int getBlendD() const { return _blendD; }
+igBlendFunctionAttr	private: static igBlendEquationExt *_extension;
+igBlendFunctionAttr	virtual void releaseDefaults();
+igBlendFunctionAttr	virtual void apply(igVisualContext *vc);
+igBlendFunctionAttr	virtual void setSource(IG_GFX_BLENDING_FUNCTION s);
+igBlendFunctionAttr	inline IG_GFX_BLENDING_FUNCTION getSource() const { return (IG_GFX_BLENDING_FUNCTION)_src; }
+igBlendFunctionAttr	virtual void setDestination(IG_GFX_BLENDING_FUNCTION d);
+igBlendFunctionAttr	inline IG_GFX_BLENDING_FUNCTION getDestination() const { return (IG_GFX_BLENDING_FUNCTION)_dst; }
+igBlendFunctionAttr	virtual void userPostLoad();
+igBlendFunctionAttr	virtual void setUnitID(short id);
+igBlendFunctionAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igBlendFunctionAttr	virtual int getUnitCount(igCapabilityManager *capabilityManager);
+igTextureFunctionAttr	IG_OBJECT_DEFINE(igTextureFunctionAttr)
+igTextureFunctionAttr	private: static igMetaField *k_mode;
+igTextureFunctionAttr	private: static igMetaField *k_unitID;
+igTextureFunctionAttr	private: static igMetaField *k_arg0;
+igTextureFunctionAttr	private: static igMetaField *k_arg1;
+igTextureFunctionAttr	private: static igMetaField *k_type;
+igTextureFunctionAttr	private: static igMetaField *k_call_state;
+igTextureFunctionAttr	private: static igMetaField *k_functionType;
+igTextureFunctionAttr	private: static void synchronizeCachedUnitID(igObject *obj);
+igTextureFunctionAttr	protected: static igMultiTextureExt *_extension;
+igTextureFunctionAttr	virtual void initDefaults();
+igTextureFunctionAttr	virtual void releaseDefaults();
+igTextureFunctionAttr	virtual void apply(igVisualContext *vc);
+igTextureFunctionAttr	inline void setMode(int mode) { _mode = mode; }
+igTextureFunctionAttr	inline int getMode() const { return _mode; }
+igTextureFunctionAttr	virtual void setStageType(int type);
+igTextureFunctionAttr	inline virtual int getStageType() const { return _type; }
+igTextureFunctionAttr	inline virtual void setFunctionType(int functionType) { _functionType = functionType; }
+igTextureFunctionAttr	inline virtual int getFunctionType() const { return _functionType; }
+igTextureFunctionAttr	virtual void userPostLoad();
+igTextureFunctionAttr	inline short getNonCachedUnitID() const { return (short)_unitID; }
+igTextureFunctionAttr	virtual void setUnitID(short id);
+igTextureFunctionAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igTextureFunctionAttr	virtual int getUnitCount(igCapabilityManager *capabilityManager);

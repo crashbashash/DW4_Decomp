@@ -8,9 +8,7 @@ struct igMemoryPoolView;
 extern "C" {
 #endif
 
-struct igBlendMatricesAttr *igBlendMatricesAttr_Create(struct igMemoryPoolView *pool);
 
-void igBlendMatricesAttr_EnsureRegistered(void);
 
 #ifdef __cplusplus
 }

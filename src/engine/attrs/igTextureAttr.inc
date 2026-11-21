@@ -68,7 +68,7 @@ void igTextureAttr_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTextureAttr_Register);
 }
 
-static igMetaObjectCallback g_igTextureAttr_callbackList[] = { igImage_EnsureRegistered, igTextureUnloadAttr_EnsureRegistered, igImageMipMapList_EnsureRegistered, igVisualContext_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igTextureAttr_callbackList[] = { igImage_EnsureRegistered, Gap::Attrs::igTextureUnloadAttr::arkRegister, igImageMipMapList_EnsureRegistered, igVisualContext_EnsureRegistered, 0 };
 
 CallbackArray *igTextureAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
@@ -208,7 +208,7 @@ void igTextureAttr_InitFields(void) {
     field = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
     ((igObjectRefMetaField *)field)->_metaObject = (int)igImage_GetOrCreateMetaObject();
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 0xA));
-    ((igObjectRefMetaField *)field2)->_metaObject = (int)igTextureUnloadAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)Gap::Attrs::igTextureUnloadAttr::getClassTypeLazy();
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xB)))->setDefault(1);
     field3 = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
     ((igObjectRefMetaField *)field3)->_metaObject = (int)igImageMipMapList_GetOrCreateMetaObject();

@@ -23,15 +23,11 @@
 #include "dw4/viewer/igViewerParameters.h"
 #include "dw4/scenegraph/igCommonTraversalDispatchView.h"
 #include "dw4/scenegraph/igTransformDispatchView.h"
-#include "dw4/attrs/igColorAttrDispatchView.h"
-#include "dw4/attrs/igAlphaFunctionAttrDispatchView.h"
 #include "dw4/attrs/igLightAttrDispatchView.h"
-#include "dw4/attrs/igLightStateAttrDispatchView.h"
 #include "dw4/attrs/igLightingStateAttrDispatchView.h"
 #include "dw4/attrs/igAlphaStateAttrDispatchView.h"
 #include "dw4/attrs/igCullFaceAttrDispatchView.h"
-#include "dw4/attrs/igShadeModelAttrDispatchView.h"
-#include "dw4/attrs/igPolygonModeAttrDispatchView.h"
+#include "dw4/attrs/igLightStateAttrDispatchView.h"
 #include "dw4/gfx/GfxMetaEnums.h"
 #include "dw4/maths/igMathConstants.h"
 extern "C" {
@@ -420,7 +416,7 @@ void igViewerRenderer_resetFields(igViewerRenderer *self) {
     igObject *previous;
     igSmartPointer<igObject> color(createColorAttr());
     white[0] = 1.0f; white[1] = 1.0f; white[2] = 1.0f; white[3] = 1.0f;
-    ((igColorAttrDispatchView *)color.p)->SetColor(white);
+    ((Gap::Attrs::igColorAttr *)color.p)->set(*(igVec4f *)white);
     if (g_sharedViewerOptions == 0) {
         SharedViewerOptions *f = (SharedViewerOptions *)operator new(sizeof(SharedViewerOptions));
         if (f != 0) f = igViewerDefaults_Construct(f);
@@ -429,8 +425,8 @@ void igViewerRenderer_resetFields(igViewerRenderer *self) {
     g_sharedViewerOptions->useCount = g_sharedViewerOptions->useCount + 1;
     options = g_sharedViewerOptions;
     igSmartPointer<igObject> alphaFunction(createAlphaFunctionAttr());
-    ((igAlphaFunctionAttrDispatchView *)alphaFunction.p)->SetAlphaFunc(IG_GFX_ALPHA_FUNCTION_GREATER);
-    ((igAlphaFunctionAttrDispatchView *)alphaFunction.p)->SetRefValue(options->alphaTestReference);
+    ((Gap::Attrs::igAlphaFunctionAttr *)alphaFunction.p)->setAlphaFunc(IG_GFX_ALPHA_FUNCTION_GREATER);
+    ((Gap::Attrs::igAlphaFunctionAttr *)alphaFunction.p)->setRefValue(options->alphaTestReference);
     ((igLightAttrDispatchView *)self->_headlightAttr)->setDiffuse(options->headLightDiffuse);
     ((igLightAttrDispatchView *)self->_headlightAttr)->setSpecular(g_vec4Zero.vec);
     ((igLightAttrDispatchView *)self->_headlightAttr)->setAmbient(options->headLightAmbient);
@@ -664,10 +660,10 @@ void igViewerRenderer_UpdateRenderStates(igViewerRenderer *self) {
     ((igCullFaceAttrDispatchView *)self->_backFaceCullingAttr)->SetState(((igViewerParameters *)self->_parameters)->_backFaceCulling);
     igViewerRenderer_UpdateAttr(self, (igObject *)self->_backFaceCullingAttr);
     igViewerRenderer_SetOverride(self, (igObject *)self->_backFaceCullingAttr, ((igViewerParameters *)self->_parameters)->_backFaceCullingForce);
-    ((igShadeModelAttrDispatchView *)self->_shadeModelAttr)->SetMode(((igViewerParameters *)self->_parameters)->_flatShading ? IG_GFX_SHADING_MODE_FACET : IG_GFX_SHADING_MODE_SMOOTH);
+    ((Gap::Attrs::igShadeModelAttr *)self->_shadeModelAttr)->setMode(((igViewerParameters *)self->_parameters)->_flatShading ? IG_GFX_SHADING_MODE_FACET : IG_GFX_SHADING_MODE_SMOOTH);
     igViewerRenderer_UpdateAttr(self, (igObject *)self->_shadeModelAttr);
     igViewerRenderer_SetOverride(self, (igObject *)self->_shadeModelAttr, ((igViewerParameters *)self->_parameters)->_flatShadingForce);
-    ((igPolygonModeAttrDispatchView *)self->_polygonModeAttr)->SetMode(((igViewerParameters *)self->_parameters)->_wireframe ? IG_GFX_RENDER_MODE_LINES : IG_GFX_RENDER_MODE_FILL);
+    ((Gap::Attrs::igPolygonModeAttr *)self->_polygonModeAttr)->setMode(((igViewerParameters *)self->_parameters)->_wireframe ? IG_GFX_RENDER_MODE_LINES : IG_GFX_RENDER_MODE_FILL);
     igViewerRenderer_UpdateAttr(self, (igObject *)self->_polygonModeAttr);
     igViewerRenderer_SetOverride(self, (igObject *)self->_polygonModeAttr, ((igViewerParameters *)self->_parameters)->_wireframeForce);
 }
