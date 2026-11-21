@@ -49,7 +49,7 @@ CallbackArray *igSkeletonBoneInfo_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igSkeletonBoneInfo_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         thunk_igSkeletonBoneInfo_GetMetaObject_00198ac0,
         "igSkeletonBoneInfo",

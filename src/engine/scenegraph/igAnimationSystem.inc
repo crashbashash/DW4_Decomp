@@ -28,7 +28,7 @@ CallbackArray *igAnimationSystem_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igAnimationSystem_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         igAnimationSystem_GetMetaObjectFunction,
         "igAnimationSystem",

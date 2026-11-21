@@ -59,7 +59,7 @@ CallbackArray *igFile_Register(void) {
     return igMetaObject_RegisterClass(
         1,
         &g_igFile_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igFile_GetMetaObjectFunction,
         "igFile",

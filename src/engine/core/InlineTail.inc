@@ -167,18 +167,6 @@ igMetaObject *igFile_GetMeta(void) {
     return g_igFile_metaObject;
 }
 
-int igExternalInfoEntry_GetMeta(void) {
-    return (int)g_igExternalInfoEntry_metaObject;
-}
-
-int igExternalIndexedEntry_GetMeta(void) {
-    return (int)g_igExternalIndexedEntry_metaObject;
-}
-
-int igExternalDirEntry_GetMeta(void) {
-    return (int)g_igExternalDirEntry_metaObject;
-}
-
 int igEventTracker_GetMeta(void) {
     return (int)g_igEventTracker_metaObject;
 }
@@ -432,12 +420,6 @@ int List_LowerBoundWords(igTDataList<unsigned int> *list, unsigned int *key) {
     return lo;
 }
 
-
-
-
-
-
-
 int igStringRefList_GetElementSize(void) {
     return 4;
 }
@@ -451,7 +433,7 @@ igMetaObject *igContextExtInfoList_GetElementMeta(void) {
 }
 
 igMetaObject *igMediaList_GetElementMeta(void) {
-    return g_igMedia_metaObject;
+    return Gap::Core::igMedia::getClassMeta();
 }
 
 igMetaObject *igMemoryFileEntryList_GetElementMeta(void) {
@@ -479,7 +461,7 @@ igMetaObject *igDirectoryList_GetElementMeta(void) {
 }
 
 igMetaObject *igDirectory_GetElementMeta(void) {
-    return g_igDirEntry_metaObject;
+    return Gap::Core::igDirEntry::getClassMeta();
 }
 
 igMetaObject *igStringObjList_GetElementMeta(void) {
@@ -492,7 +474,7 @@ igMetaObject *igThreadList_GetElementMeta(void) {
 
 int beDataObjList_GetElementMeta(void)
 {
-    return (int)g_igNamedObject_metaObject;
+    return (int)Gap::Core::igNamedObject::getClassMeta();
 }
 
 int igLibraryList_GetElementMeta(void) {

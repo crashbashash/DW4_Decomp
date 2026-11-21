@@ -138,9 +138,9 @@ void beNDMWSaveCtrl_UpdateRam(beNDMWSaveCtrl *self, beBaseInfoRam *ram) {
         return;
     }
     ensureDataList(ram);
-    ctrl = (beNDMWSaveCtrlCtrlData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "CTRL");
+    ctrl = (beNDMWSaveCtrlCtrlData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "CTRL");
     ensureDataList(ram);
-    common = (beNDMWLoadCtrl2CommonIntf *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMONINTF");
+    common = (beNDMWLoadCtrl2CommonIntf *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "COMMONINTF");
     switch (ctrl->_st0) {
     case 0:
         break;
@@ -391,7 +391,7 @@ int beNDMWSaveCtrl_OnMessage(beNDMWSaveCtrl *self, beBaseInfoRam *ram, beBaseInf
     }
     if (ram->_dataList == 0) return 1;
     ensureDataList(ram);
-    ((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "CTRL");
+    ((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "CTRL");
     switch (message) {
     case 1:
         return 1;
@@ -400,7 +400,7 @@ int beNDMWSaveCtrl_OnMessage(beNDMWSaveCtrl *self, beBaseInfoRam *ram, beBaseInf
     case 3:
         if (beMessenger_GetObjectCount((beMessenger *)self->_messenger) == 0) {
             ensureDataList(ram);
-            beMessenger_AppendObject((beMessenger *)self->_messenger, (igObject *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMONINTF"));
+            beMessenger_AppendObject((beMessenger *)self->_messenger, (igObject *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "COMMONINTF"));
         }
         return 1;
     default:

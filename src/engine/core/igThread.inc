@@ -97,7 +97,7 @@ CallbackArray *igThread_Register(void) {
     return igMetaObject_RegisterClass(
         1,
         &g_igThread_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igThread_GetMetaObjectFunction,
         "igThread",

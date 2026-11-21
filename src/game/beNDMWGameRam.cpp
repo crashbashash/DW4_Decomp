@@ -516,14 +516,14 @@ void beNDMWGameRam_BuildDataList(beNDMWGameRam *self, igObjectList *out, const D
         case DATA_INT: {
             ALLOC(self, alloc)
             igSmartPointer<beDataObjInt> s0((beDataObjInt *)beDataObjInt_Create((int)alloc));
-            igNamedObject_SetName((igNamedObject *)s0.p, (const char *)entry->name);
+            ((Gap::Core::igNamedObject *)s0.p)->setName((const char *)entry->name);
             ((Gap::Core::igObjectList *)out)->append((Gap::Core::igObject *)s0.p);
             break;
         }
         case DATA_INT_LIST: {
             ALLOC(self, alloc)
             igSmartPointer<beDataObjIntList> s1((beDataObjIntList *)beDataObjIntList_Create((int)alloc));
-            igNamedObject_SetName((igNamedObject *)s1.p, (const char *)entry->name);
+            ((Gap::Core::igNamedObject *)s1.p)->setName((const char *)entry->name);
             RESERVE(igIntList, s1.p, 4)
             RESIZE(igIntList, s1.p, 4)
             {
@@ -538,14 +538,14 @@ void beNDMWGameRam_BuildDataList(beNDMWGameRam *self, igObjectList *out, const D
         case DATA_BOOL: {
             ALLOC(self, alloc)
             igSmartPointer<beDataObjBool> s2((beDataObjBool *)beDataObjBool_Create((int)alloc));
-            igNamedObject_SetName((igNamedObject *)s2.p, (const char *)entry->name);
+            ((Gap::Core::igNamedObject *)s2.p)->setName((const char *)entry->name);
             ((Gap::Core::igObjectList *)out)->append((Gap::Core::igObject *)s2.p);
             break;
         }
         case DATA_BOOL_LIST: {
             ALLOC(self, alloc)
             igSmartPointer<beDataObjBoolList> s3((beDataObjBoolList *)beDataObjBoolList_Create((int)alloc));
-            igNamedObject_SetName((igNamedObject *)s3.p, (const char *)entry->name);
+            ((Gap::Core::igNamedObject *)s3.p)->setName((const char *)entry->name);
             RESERVE(igBoolList, s3.p, 1)
             RESIZE(igBoolList, s3.p, 1)
             {
@@ -560,14 +560,14 @@ void beNDMWGameRam_BuildDataList(beNDMWGameRam *self, igObjectList *out, const D
         case DATA_STRING: {
             ALLOC(self, alloc)
             igSmartPointer<beDataObjString> s4((beDataObjString *)beDataObjString_Create((int)alloc));
-            igNamedObject_SetName((igNamedObject *)s4.p, (const char *)entry->name);
+            ((Gap::Core::igNamedObject *)s4.p)->setName((const char *)entry->name);
             ((Gap::Core::igObjectList *)out)->append((Gap::Core::igObject *)s4.p);
             break;
         }
         case DATA_STRING_LIST: {
             ALLOC(self, alloc)
             igSmartPointer<beDataObjStringList> s5((beDataObjStringList *)beDataObjStringList_Create((int)alloc));
-            igNamedObject_SetName((igNamedObject *)s5.p, (const char *)entry->name);
+            ((Gap::Core::igNamedObject *)s5.p)->setName((const char *)entry->name);
             RESERVE(igStringRefList, s5.p, 4)
             StringList_Resize((igTDataList<char *> *)(void *)s5.p->_data, entry->count);
             Fill::emptyStrings(s5.p, StringRef(0), n5, d5, i5);
@@ -577,7 +577,7 @@ void beNDMWGameRam_BuildDataList(beNDMWGameRam *self, igObjectList *out, const D
         case DATA_OBJECT_LIST: {
             ALLOC(self, alloc)
             igSmartPointer<beDataObjObjectList> s6((beDataObjObjectList *)beDataObjObjectList_Create((int)alloc));
-            igNamedObject_SetName((igNamedObject *)s6.p, (const char *)entry->name);
+            ((Gap::Core::igNamedObject *)s6.p)->setName((const char *)entry->name);
             RESERVE(igObjectList, s6.p, 4)
             ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)(void *)s6.p->_data))->setCount(entry->count);
             ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)(void *)s6.p->_data))->setAll(0);
@@ -587,7 +587,7 @@ void beNDMWGameRam_BuildDataList(beNDMWGameRam *self, igObjectList *out, const D
         case DATA_FLOAT_LIST: {
             ALLOC(self, alloc)
             igSmartPointer<beDataObjFloatList> s7((beDataObjFloatList *)beDataObjFloatList_Create((int)alloc));
-            igNamedObject_SetName((igNamedObject *)s7.p, (const char *)entry->name);
+            ((Gap::Core::igNamedObject *)s7.p)->setName((const char *)entry->name);
             RESERVE(igFloatList, s7.p, 4)
             RESIZE(igFloatList, s7.p, 4)
             {
@@ -812,7 +812,7 @@ int beNDMWGameRam_AddInfo(beNDMWGameRam *self) {
         allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         RamRef ram(beNDMWGameRamInfoRam_Create(allocator));
-        igNamedObject_SetName((igNamedObject *)info.p, "gameram");
+        ((Gap::Core::igNamedObject *)info.p)->setName("gameram");
         ram.p->_parentInfo = (int)info.p;
         ram.p->_parentManager = (int)self;
         created = ram.p;
@@ -4187,7 +4187,7 @@ loop_449:
                 if (beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Get(&rankEnemy->_dataList) == 0) {
                     ObjectRefAssigner::Assign(&rankEnemy->_dataList, (int)((Gap::Core::igObject *)rankEnemy)->getMemoryPool());
                 }
-                rankMoveList = (void *)(beNDMWGameRam_igSmartPointer_beModelCtrlMoveObjectList_Get(&((beNDMWMdlPEBaseInfoWork *)beNDMWGameRam_igSmartPointer_beModelCtrlInfoWork_Get(&((beModelCtrlInfoRamData *)beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&rankEnemy->_dataList), (int)g_propertyNameField, "ONE"))->_work))->_moveObjectList));
+                rankMoveList = (void *)(beNDMWGameRam_igSmartPointer_beModelCtrlMoveObjectList_Get(&((beNDMWMdlPEBaseInfoWork *)beNDMWGameRam_igSmartPointer_beModelCtrlInfoWork_Get(&((beModelCtrlInfoRamData *)beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&rankEnemy->_dataList), (int)Gap::Core::igNamedObject::k_name, "ONE"))->_work))->_moveObjectList));
                 if (((beModelCtrlMoveObjectList *)rankMoveList)->_count != 0) {
                     rankMoveObject = (void *)(beNDMWGameRam_beModelCtrlMoveObjectList_Get((igDataList *)rankMoveList, 1));
                     if (((beModelCtrlMoveObject *)rankMoveObject)->_isRun != 0) {

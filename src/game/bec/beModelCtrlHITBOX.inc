@@ -45,7 +45,7 @@ CallbackArray *beModelCtrlHITBOX_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beModelCtrlHITBOX_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         beModelCtrlHITBOX_GetMetaObjectFunction,
         "beModelCtrlHITBOX",

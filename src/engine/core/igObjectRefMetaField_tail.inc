@@ -314,14 +314,12 @@ void igObjectRefMetaField::__bootstrapDestruct()
 }
 }
 
-
-
 void igObjectStringMap_Add(igObjectStringMap *self, const char *name, void *object) {
     igObject *entry;
     igObject *held;
 
-    *(igObject **)&entry = (igObject *)(igNamedObject_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
-    igNamedObject_SetName((igNamedObject *)entry, name);
+    *(igObject **)&entry = (igObject *)(Gap::Core::igNamedObject::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
+    ((Gap::Core::igNamedObject *)entry)->setName(name);
     ((Gap::Core::igObjectList *)self->_names)->append((Gap::Core::igObject *)entry);
     ((Gap::Core::igObjectList *)self->_data)->append((Gap::Core::igObject *)object);
     held = entry;
@@ -339,7 +337,7 @@ int igObjectStringMap_GetObject(void *self, const char *name) {
 }
 
 int igObjectStringMap_GetIndexByName(igObjectStringMap *map, const char *name) {
-    igObject *field = ((igObject *)((Gap::Core::igObjectList *)map->_names)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name));
+    igObject *field = ((igObject *)((Gap::Core::igObjectList *)map->_names)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, name));
     if (field == 0) {
         return -1;
     }
@@ -558,7 +556,7 @@ void igPluginHelper_AddRepository(igPluginHelper *helper, int name, int location
     igPluginRepository *target;
     char *old;
     igSmartPointer<igPluginRepository> repository(((igPluginRepository *)igPluginRepository_Create(((int)((Gap::Core::igObject *)helper)->getMemoryPool()))));
-    igNamedObject_SetName((igNamedObject *)repository.p, (const char *)name);
+    ((Gap::Core::igNamedObject *)repository.p)->setName((const char *)name);
     target = repository.p;
     if (g_stringPool == 0) {
         pool = ((int)StringPool_Allocate(0x10));
@@ -607,7 +605,7 @@ void igPluginHelper_AddRepositoryFromConfig(igPluginHelper *self, int name, cons
     static const int alchemyRootLength = strlen(g_alchemyRootToken);
     static const int applicationRootLength = strlen(g_applicationRootToken);
     igSmartPointer<igPluginRepository> repository((igPluginRepository *)igPluginRepository_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
-    igNamedObject_SetName((igNamedObject *)repository.get(), (const char *)name);
+    ((Gap::Core::igNamedObject *)(repository.get()))->setName((const char *)name);
     if (strncmp(path, g_alchemyRootToken, alchemyRootLength) == 0) {
         setRepositoryLocation(repository, path, alchemyRootLength);
         repository.get()->_locationType = 1;

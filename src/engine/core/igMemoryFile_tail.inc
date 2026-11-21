@@ -2,7 +2,7 @@ void igMemoryFile_AddMemoryFileEntry(int name, int buffer, int size) {
     igMemoryFile_EnsureRegistered();
     if (buffer != 0) {
         igSmartPointer<igMemoryFileEntry> entry((igMemoryFileEntry *)igMemoryFileEntry_Create(((int)((Gap::Core::igObject *)(*(igObject **)&g_memoryFileEntries))->getMemoryPool())));
-        igNamedObject_SetName((igNamedObject *)entry.p, (const char *)name);
+        ((Gap::Core::igNamedObject *)entry.p)->setName((const char *)name);
         entry->_size = size;
         entry->_buffer = buffer;
         ((Gap::Core::igObjectList *)(*(int *)&g_memoryFileEntries))->append((Gap::Core::igObject *)entry.p);
@@ -17,7 +17,7 @@ void igMemoryFile_LookupMemoryBuffer(int name, int *buffer, int *size) {
     *size = 0;
     entries = (*(int *)&g_memoryFileEntries);
     if (entries != 0) {
-        entry = ((igMemoryFileEntry *)((Gap::Core::igObjectList *)entries)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name));
+        entry = ((igMemoryFileEntry *)((Gap::Core::igObjectList *)entries)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, (const char *)name));
         if (entry != 0) {
             *buffer = entry->_buffer;
             *size = entry->_size;

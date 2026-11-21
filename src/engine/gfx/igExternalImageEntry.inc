@@ -86,7 +86,7 @@ CallbackArray *igExternalImageEntry_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igExternalImageEntry_metaObject,
-        igExternalDirEntry_Register,
+        Gap::Core::igExternalDirEntry::arkRegisterInternal,
         igExternalDirEntry_GetPublishedMetaObject,
         thunk_igExternalImageEntry_GetMetaObject_0014f750,
         "igExternalImageEntry",
@@ -103,7 +103,7 @@ void igExternalImageEntry_GetMetaObjectFunction(void) {
 }
 
 int FUN_0014f760(void) {
-    return (int)g_igExternalDirEntry_metaObject;
+    return (int)Gap::Core::igExternalDirEntry::getClassMeta();
 }
 
 igMetaObject *igDisableExt_GetOrCreateMetaObject(void) {

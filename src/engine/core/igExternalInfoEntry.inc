@@ -1,99 +1,77 @@
-igMetaObject *g_igExternalInfoEntry_metaObject;
-igMetaField *g_igExternalInfoEntry_keyMetaField;
-igMetaField *g_igExternalInfoEntry_directoryIndexMetaField;
-igMetaField *g_igExternalInfoEntry_infoNameMetaField;
+namespace Gap {
+namespace Core {
 
-void *igExternalInfoEntry_Create(int pool) {
-    igExternalInfoEntry_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance(g_igExternalInfoEntry_metaObject, (igMemoryPoolView *)pool));
-}
+igMetaObject *igExternalInfoEntry::_Meta;
+igMetaField *igExternalInfoEntry::k_key;
+igMetaField *igExternalInfoEntry::k_directoryIndex;
+igMetaField *igExternalInfoEntry::k_infoName;
 
-igMetaObject *igExternalInfoEntry_GetMetaObject(void)
+igExternalInfoEntry *igExternalInfoEntry::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igExternalInfoEntry_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igExternalInfoEntry_EnsureRegistered();
-    return g_igExternalInfoEntry_metaObject;
+    arkRegister();
+    return (igExternalInfoEntry *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igExternalInfoEntry_GetVTable(void) {
-    igExternalInfoEntry entry;
-    int vtable;
-    int *p;
-    int *q;
-
-    igObject_InitHeader((igObject *)&entry);
-    entry._name = 0;
-    entry._vtable = (int)&g_igExternalInfoEntry_vtable[0];
-    p = &entry._key;
-    q = &entry._infoName;
-    *p = 0;
-    *q = 0;
-    vtable = *(int *)((char *)&entry + g_objectSystem->vtableProbeOffset);
-    entry._vtable = (int)&g_igExternalInfoEntry_vtable[0];
-    igStringRef_Destruct((igStringRef *)q, -1);
-    igStringRef_Destruct((igStringRef *)p, -1);
-    igDirEntry_Destroy((igDirEntry *)&entry, 0);
-    return vtable;
-}
-
-void igExternalInfoEntry_EnsureRegistered(void)
+igMetaObject *igExternalInfoEntry::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igExternalInfoEntry_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igExternalInfoEntry_Register(void) {
+void *igExternalInfoEntry::retrieveVTablePointer()
+{
+    igExternalInfoEntry temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igExternalInfoEntry::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igExternalInfoEntry::arkRegisterInternal()
+{
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igExternalInfoEntry_metaObject,
-        igDirEntry_Register,
-        igDirEntry_GetPublishedMetaObject,
-        igExternalInfoEntry_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Core::igDirEntry::arkRegisterInternal,
+        Gap::Core::igDirEntry::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igExternalInfoEntry",
-        0x28,
-        igExternalInfoEntry_GetVTable,
-        igExternalInfoEntry_InitFields,
+        sizeof(igExternalInfoEntry),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
         0,
         0
     );
 }
 
-void igExternalInfoEntry_GetMetaObjectFunction(void) {
-    igExternalInfoEntry_GetMetaObject();
+void igExternalInfoEntry::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igStringMetaField_Create, igIntMetaField_Create, igStringMetaField_Create };
+    static const char *names[] = { "_key", "_directoryIndex", "_infoName" };
+    static igMetaField **enumStorage[] = { &k_key, &k_directoryIndex, &k_infoName };
+    static int offsets[] = { 28, 32, 36 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    {
+        igStringMetaField *metaField = (igStringMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(0);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(-1);
+    }
+    {
+        igStringMetaField *metaField = (igStringMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(0);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igExternalInfoEntry_ctorTable[] = {
-    (FieldFactory)igStringMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igStringMetaField_Create,
-};
-static const char *g_igExternalInfoEntry_fieldTable[] = {
-    "_key",
-    "_directoryIndex",
-    "_infoName",
-};
-static igMetaField **g_igExternalInfoEntry_fieldDescriptors[] = {
-    &g_igExternalInfoEntry_keyMetaField,
-    &g_igExternalInfoEntry_directoryIndexMetaField,
-    &g_igExternalInfoEntry_infoNameMetaField,
-};
-static int g_igExternalInfoEntry_fieldOffsets[] = {
-    28,
-    32,
-    36,
-};
-
-void igExternalInfoEntry_InitFields(void) {
-    int first;
-    void *meta;
-
-    meta = (void *)g_igExternalInfoEntry_metaObject;
-    first = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igExternalInfoEntry_ctorTable, 3);
-    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first)))->setDefault(0);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 1)))->setDefault(-1);
-    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2)))->setDefault(0);
-    igMetaObject_NameFields((igMetaObject *)meta, g_igExternalInfoEntry_fieldTable, g_igExternalInfoEntry_fieldDescriptors, g_igExternalInfoEntry_fieldOffsets, first);
+}
 }
 

@@ -228,7 +228,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
         if (ram->_dataList != 0) {
             ENSURE_DATA_LIST(ram)
             {
-                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "SHK");
+                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "SHK");
                 if (shake != 0) {
                     if (shake->_isFirst != 0) {
                         shake->_isFirst = 0;
@@ -351,7 +351,7 @@ void beCameraCtrl_UpdateBoxCamera(beCameraCtrl *self, beBaseInfoRam *ram) {
         if (ram->_dataList != 0) {
             ENSURE_DATA_LIST(ram)
             {
-                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "SHK");
+                beCameraCtrlInfoRamShake *shake = (beCameraCtrlInfoRamShake *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "SHK");
                 if (shake != 0) {
                     float *matrix44;
                     int k = 0;
@@ -568,7 +568,7 @@ int beCameraCtrl_OnMessageText(beCameraCtrl *self, beBaseInfoRam *ram, int messa
                 ram->_dataList = (int)r;
             }
             DataList::Ensure(ram, ram);
-            shake = (beCameraCtrlInfoRamShake *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "SHK");
+            shake = (beCameraCtrlInfoRamShake *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "SHK");
             if (shake == 0) {
                 int alloc;
                 SELECT_ALLOCATOR(alloc, self)

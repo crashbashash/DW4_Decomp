@@ -242,8 +242,13 @@ igMetaField *g_igDirectory_autoWriteFilePreProcessStateMetaField;
 igMetaField *g_igDirectory_useMemoryPoolAssignmentsStateMetaField;
 igMetaField *g_igDirectory_forceWriteMemoryPoolInfoFromMetaStateMetaField;
 igMetaField *g_igDirectory_loadingSemaphoreMetaField;
-int g_igDirEntry_refTypeMetaEnum;
-int g_igDirEntry_resolveMethodMetaEnum;
+namespace Gap {
+namespace Core {
+
+igMetaEnum *igDirEntry::RefType_Meta;
+igMetaEnum *igDirEntry::ResolveMethod_Meta;
+}
+}
 
 igMetaObject *igDirectory_GetPublishedMetaObject(void) {
     return g_igDirectory_metaObject;

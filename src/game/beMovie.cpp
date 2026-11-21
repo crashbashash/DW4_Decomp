@@ -444,10 +444,10 @@ void beBaseInfoRam_StartTimer(beBaseInfoRam *self, const char *name, long long e
     float scaled;
 
     ensureTimerList(self);
-    timer = (beBaseInfoRamTimer *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name);
+    timer = (beBaseInfoRamTimer *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, name);
     if (timer == 0) {
         TimerHolder created(beBaseInfoRamTimer_Create(allocatorFor(self)));
-        igNamedObject_SetName((igNamedObject *)created.p, name);
+        ((Gap::Core::igNamedObject *)created.p)->setName(name);
         if (self->_dataList == 0) {
             igSmartPointer<igObject> list(beBaseInfoDataList_Create(allocatorFor(self)));
             igObject *retained = list.p;
@@ -470,14 +470,14 @@ void beBaseInfoRam_StartTimer(beBaseInfoRam *self, const char *name, long long e
 
 unsigned char beBaseInfoRam_HasTimer(beBaseInfoRam *self, const char *name) {
     ensureTimerList(self);
-    return ((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name) != 0;
+    return ((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, name) != 0;
 }
 
 unsigned char beBaseInfoRam_IsTimerExpired(beBaseInfoRam *self, const char *name) {
     beBaseInfoRamTimer *timer;
     long long endTime;
     ensureTimerList(self);
-    timer = (beBaseInfoRamTimer *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name);
+    timer = (beBaseInfoRamTimer *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, name);
     if (timer == 0) {
         return 1;
     }
@@ -488,7 +488,7 @@ unsigned char beBaseInfoRam_IsTimerExpired(beBaseInfoRam *self, const char *name
 long long beBaseInfoRam_GetTimerElapsed(beBaseInfoRam *self, const char *name) {
     beBaseInfoRamTimer *timer;
     ensureTimerList(self);
-    timer = (beBaseInfoRamTimer *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name);
+    timer = (beBaseInfoRamTimer *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, name);
     int ticks = (int)(worldTimeOf(self) >> 0x12);
     float scaled = (float)(unsigned int)ticks;
     scaled = scaled * timer->_timeScale;
@@ -504,7 +504,7 @@ float beBaseInfoRam_GetTimerFrameDelta(beBaseInfoRam *self, const char *name) {
     long long time;
     float frames;
     ensureTimerList(self);
-    timer = (beBaseInfoRamTimer *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name);
+    timer = (beBaseInfoRamTimer *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, name);
     now = worldTimeOf(self);
     if (now != timer->_svWorldTime) {
         time = beBaseInfoRam_GetTimerElapsed(self, name);
@@ -533,7 +533,7 @@ void beBaseInfoRam_SetTimerScale(beBaseInfoRam *self, int name, float scale) {
     long long time;
 
     ensureTimerList(self);
-    timer = (beBaseInfoRamTimer *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name);
+    timer = (beBaseInfoRamTimer *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, (const char *)name);
     oldScale = timer->_timeScale;
     if (scale != oldScale) {
         ticks = (float)(unsigned int)(int)(worldTimeOf(self) >> 0x12);
@@ -574,7 +574,7 @@ void beBaseInfoRam_RemoveTimer(beBaseInfoRam *self, const char *name) {
     igObject *found;
     if (self->_dataList != 0) {
         ensureTimerList(self);
-        found = (igObject *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name);
+        found = (igObject *)((Gap::Core::igObjectList *)self->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, name);
         if (found != 0) {
             list = (igTDataList<igObject *> *)self->_dataList;
             index = list->find(found);
@@ -747,7 +747,7 @@ int beMovie_OnMessage(beMovie *self, beBaseInfoRam *ram, beMessengerWork *work) 
             if (strcmp((const char *)movieName, nameOf(data)) != 0) continue;
             if (self->_movie != 0) {
                 igSmartPointer<igMovieInfo> movie(igMovieInfo_Create(allocatorFor(self)));
-                igNamedObject_SetName((igNamedObject *)movie.p, "Movie Player");
+                ((Gap::Core::igNamedObject *)movie.p)->setName("Movie Player");
                 setMovieString(movie, &igMovieInfo::_codecType, "igCriMovieCodec");
                 setMovieString(movie, &igMovieInfo::_path, nameOf(data));
                 igInsightCore_AddInfo((igInsightCore *)self->_insight, (igObject *)movie.p);

@@ -208,7 +208,7 @@ void beSelectCtrl_UpdateRam(beSelectCtrl *self, beBaseInfoRam *ram) {
         RELEASE(igObject, ram->_dataList)
         ram->_dataList = (int)created;
     }
-    data = (beSelectCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
+    data = (beSelectCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "ONE");
     work = (beSelectCtrlInfoWork *)data->_work;
     pad = bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, ram->_ramNo);
     state = ram->_st0;
@@ -393,7 +393,7 @@ int beSelectCtrl_OnMessageText(beSelectCtrl *self, beBaseInfoRam *ram, int messa
         PICK_ALLOCATOR(allocator, ram)
         DataList::create(ram, allocator);
     }
-    data = (beSelectCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
+    data = (beSelectCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "ONE");
     work = (beSelectCtrlInfoWork *)data->_work;
     switch (beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, beSelectCtrl_GetMessageEnum(), (const char *)message)) {
     case MESSAGE_GENERATE:

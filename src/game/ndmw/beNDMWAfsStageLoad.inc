@@ -36,7 +36,7 @@ void beNDMWAfsStageLoad_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beNDMWAfsStageLoad_Register);
 }
 
-static igMetaObjectCallback g_beNDMWAfsStageLoad_callbackList[] = { igInsightCore_EnsureRegistered, igNamedObject_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beNDMWAfsStageLoad_callbackList[] = { igInsightCore_EnsureRegistered, Gap::Core::igNamedObject::arkRegister, 0 };
 
 CallbackArray *beNDMWAfsStageLoad_Register(void) {
     NdmwLibrary_MarkRegistered();
@@ -94,7 +94,7 @@ void beNDMWAfsStageLoad_InitFields(void) {
     ((igObjectRefMetaField *)insight)->_metaObject = (int)igInsightCore_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)insight)->_refCounted = 0;
     stage = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((igObjectRefMetaField *)stage)->_metaObject = (int)igNamedObject_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)stage)->_metaObject = (int)Gap::Core::igNamedObject::getClassTypeLazy();
     ((igRefMetaField *)stage)->_construct = 1;
     igMetaObject_NameFields(meta, g_beNDMWAfsStageLoad_fieldTable, g_beNDMWAfsStageLoad_fieldHandles, g_beNDMWAfsStageLoad_fieldOffsets, base);
 }

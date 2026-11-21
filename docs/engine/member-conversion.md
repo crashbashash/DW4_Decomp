@@ -298,9 +298,34 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    arrays, so `createMetaEnum` takes `const char **` where the kit has `igChar *[]`; the holders that are still
    flat `igMetaEnum *` take the result through a cast (`(igMetaEnum *)Gap::Core::igMetaEnum::createMetaEnum(…)`,
    which memberize writes). DW4's mask and value-name formatters (`igMetaEnum_GetNamesByMask`,
-   `igMetaEnum_GetValueName`) and the empty enum's getter stay free. Of the 154 classes the core unit registers,
-   57 are converted; the other kit-declared ones (the remaining typed lists, the memory pools, files and media,
-   directory entries, igRegistry, the threads and timers, …) follow, and those without a kit
+   `igMetaEnum_GetValueName`) and the empty enum's getter stay free. `igNamedObject` (`_name` the kit's
+   igStringRef, `setName`; attrs keeps retail's out-of-line `getMeta` copy at 0x142b60 as a C function reading
+   `getClassMeta()`, and gfx/attrs the out-of-line destructors `igNamedObject_Destroy`/`igDirEntry_Destroy` the
+   flat subclasses' probes call) and the directory entries are converted (alchemy-kit_202309 igCore/igDirEntry.h,
+   igObjectDirEntry.h, igMemoryDirEntry.h, igExternalDirEntry.h, igExternalIndexedEntry.h,
+   igExternalInfoEntry.h). DW4's igDirEntry has an older slot set than the kit's: slots 21-40 are `setRef`,
+   `refRef`, `releaseRef`, `share`, `refEntry`, `releaseEntry`, `setMemoryPoolHandle`, `getMemoryPoolHandle`,
+   `readSetup`, `readPreRead`, `readReadVersion3`, `readRead`, `readMemorySpecial`, `readFinishConstruction`,
+   `readPostRead`, `writeMakeProxy`, `writeComputeBufferSize`, `writeWrite`, `writeMemorySpecial` and
+   `refNeedsEntryForPostFileReadCleanup` (named from which subclasses override which slot), with no
+   `readFastRead`, `getSize`, `appendToCloneInfo`, `cleanupOnFailure` or `dump`; the read slots return void
+   and `refNeedsEntryForPostFileReadCleanup` returns `int`, since igMemoryDirEntry's tail-calls `isOfType`,
+   DW4's `int`. igExternalDirEntry adds `resolve` and `load` (slots 41-42) taking the kit's
+   `igResolveFunction` (include/dw4/core/igCore.h). The string and meta-object reference fields are the kit's
+   igStringRef and smart pointers, so the generator's `retrieveVTablePointer` destroys them as retail's probes
+   do; a string passed on is its `.p` to a `const char *` parameter (`igDirectory_SetName`,
+   `igDirectory_FindInfoByName` take the kit's igString), since an `(int)` cast of it schedules the load
+   early. The directory code still reaches entries through `igDirEntryView`. The abstract `igTimer` and `igMedia`
+   (alchemy-kit_202309 igCore/igTimer.h, igMedia.h) are converted too: they have no field of their own and so
+   no reflected struct, and a `converted-classes.tsv` row is all the generator needs to write their
+   registration (gen_type_headers lays out a field-less converted class from reflection.json). Their slots
+   21-34 and 21-30 are the kit's pure virtuals in retail's order (igPsx2LongTimer's and igPsx2Media's vtables
+   fill them); `arkRegisterInitialize` sets the abstract proxy (`_Meta->_abstractProxy`), igMedia's also adds
+   the exit callback `_classDestructor`, and igMedia's `userRegister`/`userUnregister`, `registerMedia` and
+   `setDefaultMedia` are members. `findMedia` (`igMediaFile_FindDeviceForPath`) and the two statics stay free
+   while the media classes are views. Of the 154 classes the core
+   unit registers, 66 are converted; the other kit-declared ones (the remaining typed lists, the memory pools,
+   files and media, igDirectory, igRegistry, the threads and timers, …) follow, and those without a kit
    header (the `igPsx2*` platform classes, `__internal*ObjectList`, igDependencyMetaField and
    igMemoryDescriptorMetaField) take their form from retail alone;
 5. attrs, then gfx, then scenegraph, then gui/insight/viewer. Attrs so far: `Gap::Attrs::igAttr` (abstract;

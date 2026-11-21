@@ -217,20 +217,20 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
         TitleRef<TitleWorkList> workListRef(beBaseInfoDataList_Create(allocator));
         SET_DATA(workListRef);
     }
-    ctrl = (beNDMWTitle2CtrlData *)(((Gap::Core::igObjectList *)infoRam->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField,
+    ctrl = (beNDMWTitle2CtrlData *)(((Gap::Core::igObjectList *)infoRam->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name,
                                                           "CTRL"));
     if (infoRam->_dataList == 0) {
         ALLOC(allocator, infoRam);
         TitleRef<TitleWorkList> workListRef(beBaseInfoDataList_Create(allocator));
         SET_DATA(workListRef);
     }
-    models = (beNDMWLoadIntf2ComMdlCtrl *)(((Gap::Core::igObjectList *)infoRam->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMDLCTRL"));
+    models = (beNDMWLoadIntf2ComMdlCtrl *)(((Gap::Core::igObjectList *)infoRam->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "COMMDLCTRL"));
     if (infoRam->_dataList == 0) {
         ALLOC(allocator, infoRam);
         TitleRef<TitleWorkList> workListRef(beBaseInfoDataList_Create(allocator));
         SET_DATA(workListRef);
     }
-    text = (beNDMWLoadIntf2TextOrder *)(((Gap::Core::igObjectList *)infoRam->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "TEXTORDER"));
+    text = (beNDMWLoadIntf2TextOrder *)(((Gap::Core::igObjectList *)infoRam->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "TEXTORDER"));
     beNDMWLoadIntf2ComMdlCtrl__Poll(models);
     pad = (bePadData *)(bePadManager_GetPadForPlayer((bePadManager *)self->_padManager, 0));
     pressed = pad->_trigger;
@@ -498,7 +498,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
             TitleRef<TitleWorkList> workListRef(beBaseInfoDataList_Create(allocator));
             SET_DATA(workListRef);
         }
-        option = (beNDMWTitle2Option *)(((Gap::Core::igObjectList *)infoRam->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField,
+        option = (beNDMWTitle2Option *)(((Gap::Core::igObjectList *)infoRam->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name,
                                                               "OPTION"));
         switch (ctrl->_st1) {
         case 0:
@@ -1003,7 +1003,7 @@ void beNDMWTitle2_UpdateRam(beNDMWTitle2 *self, beBaseInfoRam *infoRam) {
                 TitleRef<TitleWorkList> workListRef(beBaseInfoDataList_Create(allocator));
                 SET_DATA(workListRef);
             }
-            option = (beNDMWTitle2Option *)(((Gap::Core::igObjectList *)infoRam->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField,
+            option = (beNDMWTitle2Option *)(((Gap::Core::igObjectList *)infoRam->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name,
                                                        "OPTION"));
             cameraMode = option->_comConf;
             lightMode = option->_lightConf;

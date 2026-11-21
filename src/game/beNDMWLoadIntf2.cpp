@@ -503,7 +503,7 @@ static inline void CopyTypedName(unsigned short *destination, beNDMWLoadIntf2Nam
 }
 /* One named object of the player's working set (host->_dataList). */
 static inline void *FindWorkObject(beBaseInfoRam *host, const void *name) {
-  return beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&host->_dataList), (int)g_propertyNameField, name);
+  return beNDMWLoadIntf2_beBaseInfoDataList_FindProperty(beNDMWLoadIntf2_igSmartPointer_beBaseInfoDataList_Deref(&host->_dataList), (int)Gap::Core::igNamedObject::k_name, name);
 }
 /* The memory-card slot picked on the slot screen. */
 static inline beNDMWMcSlot *SelectedCardSlot(beNDMWLoadCtrl2CommonIntf *common, beNDMWLoadIntf2SelSlot *slots) {
@@ -4465,7 +4465,7 @@ struct ChildList {
     }
     static inline void *Find(beBaseInfoRam *ram, const void *name) {
         Ensure(ram);
-        return (void *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name);
+        return (void *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, (const char *)name);
     }
 };
 

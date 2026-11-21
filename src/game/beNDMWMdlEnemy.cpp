@@ -84,7 +84,7 @@ void beNDMWMdlEnemy_OnGenerate(beNDMWMdlEnemy *self, beBaseInfoRam *ram) {
          * takes the stack slot below the named info-work reference, as retail's +0x68 does) */
         DataListSlot::adopt(ram, created);
     }
-    record = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
+    record = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "ONE");
     {
         igMemoryPoolView *allocator = ((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);

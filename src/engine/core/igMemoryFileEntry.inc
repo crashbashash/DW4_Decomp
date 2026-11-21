@@ -53,7 +53,7 @@ CallbackArray *igMemoryFileEntry_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igMemoryFileEntry_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igMemoryFileEntry_GetMetaObjectFunction,
         "igMemoryFileEntry",

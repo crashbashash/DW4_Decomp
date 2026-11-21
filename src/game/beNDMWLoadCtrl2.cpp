@@ -2340,7 +2340,7 @@ void beNDMWLoadCtrl2_UpdateRam(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
             igObject::release(old);
             ram->_dataList = (int)o;
         }
-        ctrl = (beNDMWLoadCtrl2CtrlData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "CTRL");
+        ctrl = (beNDMWLoadCtrl2CtrlData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "CTRL");
         if (ram->_dataList == 0) {
             igObject *o;
             igObject *old;
@@ -2354,7 +2354,7 @@ void beNDMWLoadCtrl2_UpdateRam(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram) {
             igObject::release(old);
             ram->_dataList = (int)o;
         }
-        intf = (beNDMWLoadCtrl2CommonIntf *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMONINTF");
+        intf = (beNDMWLoadCtrl2CommonIntf *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "COMMONINTF");
         switch (ctrl->_st0) {
         case 0:
             break;
@@ -2674,7 +2674,7 @@ int beNDMWLoadCtrl2_OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBaseI
         ram->_dataList = (int)t;
         }
     }
-    ((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "CTRL");
+    ((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "CTRL");
     switch (message) {
     case 2:
         return 1;
@@ -2691,7 +2691,7 @@ int beNDMWLoadCtrl2_OnMessage(beNDMWLoadCtrl2 *self, beBaseInfoRam *ram, beBaseI
                 ram->_dataList = (int)t;
                 }
             }
-            beMessenger_AppendObject((beMessenger *)self->_messenger, (igObject *)((int)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "COMMONINTF")));
+            beMessenger_AppendObject((beMessenger *)self->_messenger, (igObject *)((int)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "COMMONINTF")));
         }
         return 1;
     default:

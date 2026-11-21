@@ -34,7 +34,7 @@ CallbackArray *beModelCtrlACTION_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beModelCtrlACTION_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         beModelCtrlACTION_GetMetaObjectFunction,
         "beModelCtrlACTION",

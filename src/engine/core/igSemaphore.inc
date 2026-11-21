@@ -30,7 +30,7 @@ CallbackArray *igSemaphore_Register(void) {
     return igMetaObject_RegisterClass(
         1,
         &g_igSemaphore_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igSemaphore_GetMetaObjectFunction,
         "igSemaphore",

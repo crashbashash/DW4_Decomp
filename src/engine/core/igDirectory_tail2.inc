@@ -1,10 +1,10 @@
 void igDirectory_RegisterDependentMetaObjects(void) {
-    igDirEntry_GetMetaObject();
-    igObjectDirEntry_GetMetaObject();
-    igMemoryDirEntry_GetMetaObject();
-    igExternalDirEntry_GetMetaObject();
-    igExternalIndexedEntry_GetMetaObject();
-    igExternalInfoEntry_GetMetaObject();
+    Gap::Core::igDirEntry::getClassTypeSafe();
+    Gap::Core::igObjectDirEntry::getClassTypeSafe();
+    Gap::Core::igMemoryDirEntry::getClassTypeSafe();
+    Gap::Core::igExternalDirEntry::getClassTypeSafe();
+    Gap::Core::igExternalIndexedEntry::getClassTypeSafe();
+    Gap::Core::igExternalInfoEntry::getClassTypeSafe();
     igInfo_GetMetaObject();
     igResource_GetMetaObject();
 }
@@ -71,7 +71,7 @@ found:
         }
         return 0;
     }
-    return (int)((Gap::Core::igObjectList *)self)->sortedSearch((Gap::Core::igRefMetaField *)g_igDirEntry_refField, (const void *)key);
+    return (int)((Gap::Core::igObjectList *)self)->sortedSearch((Gap::Core::igRefMetaField *)Gap::Core::igDirEntry::k_ref, (const void *)key);
 }
 
 void *igDirectory_GetEntryAlias(int *directory, int index)
@@ -114,7 +114,7 @@ void *igDirectory_GetEntry(int *directory, int index) {
 }
 
 static inline igObjectDirEntry *castBinding(igObjectDirEntry *o) {
-    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType((igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
+    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) {
         return o;
     }
     return 0;
@@ -177,7 +177,7 @@ int igDirectory_ReplaceReference(igDirectoryView *self, const igSmartPointer<igV
 }
 
 void igDirectory_RemoveInfoByName(void *directory, int name) {
-    igDirectory_RemoveInfo((igDirectoryView *)directory, (igObject *)((void *)((Gap::Core::igObjectList *)(((igDirectoryView *)directory)->_infoList))->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name)));
+    igDirectory_RemoveInfo((igDirectoryView *)directory, (igObject *)((void *)((Gap::Core::igObjectList *)(((igDirectoryView *)directory)->_infoList))->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, (const char *)name)));
 }
 
 void igDirectory_RemoveInfo(igDirectoryView *h, igObject *object) {
@@ -195,8 +195,8 @@ void igDirectory_AddInfo(void *directory, void *info) {
     ((igInfoView *)info)->_directory = (int)directory;
 }
 
-void * igDirectory_FindInfoByName(int *directory, int name) {
-    return ((void *)((Gap::Core::igObjectList *)(((igDirectoryView *)directory)->_infoList))->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name));
+void * igDirectory_FindInfoByName(int *directory, const char *name) {
+    return ((void *)((Gap::Core::igObjectList *)(((igDirectoryView *)directory)->_infoList))->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, name));
 }
 
 /* The lower bound is spelled `arg1 <= -1` so it fuses into slti at. */
@@ -259,8 +259,8 @@ int igDirectory_AddObjectRecursive(int directory, int object, int name, int extr
 
     if (object != 0) {
         ((Gap::Core::igObject *)object)->traverseFields((int (*)(void *, void *, void *))&igDirectory_AddObjectCallback, (void *)directory);
-        index = igDirectory_FindSortedInsertIndex((igDirectoryView *)directory, (igMetaField *)g_igDirEntry_refField, object);
-        igNamedObject_SetName((igNamedObject *)(igDirectory_GetEntry((int *)directory, index)), (const char *)name);
+        index = igDirectory_FindSortedInsertIndex((igDirectoryView *)directory, (igMetaField *)Gap::Core::igDirEntry::k_ref, object);
+        ((Gap::Core::igNamedObject *)(igDirectory_GetEntry((int *)directory, index)))->setName((const char *)name);
         return index;
     }
     return -1;
@@ -302,7 +302,7 @@ int igDirectory_InsertObject(igDirectoryView *self, igObjectDispatchView *obj, c
         return -1;
     }
     if (self->_count > 0) {
-        index = igDirectory_FindSortedInsertIndex(self, (igMetaField *)g_igDirEntry_refField, (unsigned)obj);
+        index = igDirectory_FindSortedInsertIndex(self, (igMetaField *)Gap::Core::igDirEntry::k_ref, (unsigned)obj);
         if (self->_count > index && (igObjectDispatchView *)igDirectory_GetObject(self, index) == obj) {
             return -1;
         }
@@ -323,11 +323,11 @@ int igDirectory_InsertObject(igDirectoryView *self, igObjectDispatchView *obj, c
             }
         }
     }
-    igSmartPointer<igDirEntryView> record(((igDirEntryView *)igObjectDirEntry_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool())))));
+    igSmartPointer<igDirEntryView> record(((igDirEntryView *)Gap::Core::igObjectDirEntry::_instantiateFromPool((igMemoryPoolView *)(void *)((Gap::Core::igObject *)self)->getMemoryPool())));
     record.get()->_index = index;
     insertObject((igDataList *)self, index, record.get());
     if (name != 0) {
-        igNamedObject_SetName((igNamedObject *)(record.get()), (const char *)name);
+        ((Gap::Core::igNamedObject *)(record.get()))->setName((const char *)name);
     }
     record.get()->_resolveMethod = resolveMethod;
     record.get()->_refType = 0;
@@ -350,7 +350,7 @@ int igDirectory_InsertObject(igDirectoryView *self, igObjectDispatchView *obj, c
         }
     }
     if (obj != 0) {
-        igObjectDirEntry_SetTypeMeta((igObjectDirEntry *)(record.get()), obj->GetMeta());
+        ((Gap::Core::igObjectDirEntry *)(record.get()))->setTypeMeta(obj->GetMeta());
     }
     return index;
 }
@@ -362,17 +362,17 @@ int igDirectory_AddMemoryRef(igDirectoryView *self, int field, int memory, int m
     if (memory == 0) return -1;
     index = 0;
     if (self->_count > 0) {
-        index = igDirectory_FindSortedInsertIndex(self, (igMetaField *)g_igDirEntry_refField, memory);
+        index = igDirectory_FindSortedInsertIndex(self, (igMetaField *)Gap::Core::igDirEntry::k_ref, memory);
         if (index < self->_count) { int r = igDirectory_GetObject(self, index); if (r == memory) return -1; }
     }
     if (memType == 0) memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    igSmartPointer<igMemoryDirEntryView> record(((igMemoryDirEntryView *)igMemoryDirEntry_Create((int)((Gap::Core::igObject *)self)->getMemoryPool())));
+    igSmartPointer<igMemoryDirEntryView> record(((igMemoryDirEntryView *)Gap::Core::igMemoryDirEntry::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool())));
     record.get()->_index = index;
     insertObject((igDataList *)self, index, record.get());
-    if (name) igNamedObject_SetName((igNamedObject *)(record.get()), (const char *)name);
+    if (name) ((Gap::Core::igNamedObject *)(record.get()))->setName((const char *)name);
     record.get()->_resolveMethod = resolveMethod;
     record.get()->_refType = 1;
-    igMemoryDirEntry_SetMemType((igMemoryDirEntry *)(record.get()), (igObjectDispatchView *)memType);
+    ((Gap::Core::igMemoryDirEntry *)(record.get()))->setMemType((Gap::Core::igMetaField *)memType);
     int size = ((int)Memory_GetBufferSize((void *)memory));
     record.get()->_memSize = size;
     record.get()->_alignmentTypeIndex = alignmentTypeIndex;
@@ -396,7 +396,7 @@ int igDirectory_AddRawRef(igDirectoryView *list, int key, int name, int val) {
     if (key == 0) {
         return -1;
     }
-    idx = igDirectory_FindSortedInsertIndex(list, (igMetaField *)g_igDirEntry_refField, key);
+    idx = igDirectory_FindSortedInsertIndex(list, (igMetaField *)Gap::Core::igDirEntry::k_ref, key);
     cnt = list->_count;
     if (cnt > 0) {
         if (idx < cnt) {
@@ -404,8 +404,8 @@ int igDirectory_AddRawRef(igDirectoryView *list, int key, int name, int val) {
             if (f == key) return -1;
         }
     }
-    igSmartPointer<igDirEntryView> entry((igDirEntryView *)igDirEntry_Create((int)(((void *)((Gap::Core::igObject *)list)->getMemoryPool()))));
-    igNamedObject_SetName((igNamedObject *)(entry.get()), (const char *)name);
+    igSmartPointer<igDirEntryView> entry((igDirEntryView *)Gap::Core::igDirEntry::_instantiateFromPool((igMemoryPoolView *)(void *)((Gap::Core::igObject *)list)->getMemoryPool()));
+    ((Gap::Core::igNamedObject *)(entry.get()))->setName((const char *)name);
     entry.get()->_resolveMethod = val;
     entry.get()->_refType = 2;
     entry.get()->SetRef(key);

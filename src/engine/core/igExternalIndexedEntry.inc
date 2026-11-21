@@ -1,114 +1,82 @@
-igMetaObject *g_igExternalIndexedEntry_metaObject;
-igMetaField *g_igExternalIndexedEntry_directoryIndexMetaField;
-igMetaField *g_igExternalIndexedEntry_entryIndexMetaField;
-igMetaField *g_igExternalIndexedEntry_entryTypeMetaField;
-igMetaField *g_igExternalIndexedEntry_entryTypeIndexMetaField;
-igMetaField *g_igExternalIndexedEntry_objectTypeMetaField;
-igMetaField *g_igExternalIndexedEntry_objectTypeIndexMetaField;
+namespace Gap {
+namespace Core {
 
-igMetaObject *igExternalIndexedEntry_GetMetaObject(void)
+igMetaObject *igExternalIndexedEntry::_Meta;
+igMetaField *igExternalIndexedEntry::k_directoryIndex;
+igMetaField *igExternalIndexedEntry::k_entryIndex;
+igMetaField *igExternalIndexedEntry::k_entryType;
+igMetaField *igExternalIndexedEntry::k_entryTypeIndex;
+igMetaField *igExternalIndexedEntry::k_objectType;
+igMetaField *igExternalIndexedEntry::k_objectTypeIndex;
+
+igMetaObject *igExternalIndexedEntry::getClassTypeSafe()
 {
-    igMetaObject *g = g_igExternalIndexedEntry_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igExternalIndexedEntry_EnsureRegistered();
-    return g_igExternalIndexedEntry_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igExternalIndexedEntry_GetVTable(void) {
-    igExternalIndexedEntry entry;
-    int vtable;
-
-    igObject_InitHeader((igObject *)&entry);
-    entry._name = 0;
-    entry._vtable = (int)(&g_igExternalIndexedEntry_vtable[0]);
-    entry._entryType = 0;
-    entry._objectType = 0;
-    vtable = *(int *)((char *)&entry + g_objectSystem->vtableProbeOffset);
-    entry._vtable = (int)(&g_igExternalIndexedEntry_vtable[0]);
-    igSmartPointer_igMetaObject_Destruct((igSmartPointer<igObject> *)&entry._objectType, -1);
-    igSmartPointer_igMetaObject_Destruct((igSmartPointer<igObject> *)&entry._entryType, -1);
-    igDirEntry_Destroy((igDirEntry *)&entry, 0);
-    return vtable;
-}
-
-void igExternalIndexedEntry_EnsureRegistered(void)
+void *igExternalIndexedEntry::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igExternalIndexedEntry_Register);
+    igExternalIndexedEntry temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-static igMetaObjectCallback g_igExternalIndexedEntry_callbackList[] = { igMetaObject_EnsureRegistered, 0 };
+void igExternalIndexedEntry::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
 
-CallbackArray *igExternalIndexedEntry_Register(void) {
+CallbackArray *igExternalIndexedEntry::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igMetaObject_EnsureRegistered, 0 };
+
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igExternalIndexedEntry_metaObject,
-        igDirEntry_Register,
-        igDirEntry_GetPublishedMetaObject,
-        igExternalIndexedEntry_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Core::igDirEntry::arkRegisterInternal,
+        Gap::Core::igDirEntry::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igExternalIndexedEntry",
-        0x34,
-        igExternalIndexedEntry_GetVTable,
-        igExternalIndexedEntry_InitFields,
+        sizeof(igExternalIndexedEntry),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
         0,
-        g_igExternalIndexedEntry_callbackList
+        regFunctions
     );
 }
 
-void igExternalIndexedEntry_GetMetaObjectFunction(void) {
-    igExternalIndexedEntry_GetMetaObject();
+void igExternalIndexedEntry::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igIntMetaField_Create, igIntMetaField_Create, igObjectRefMetaField_Create, igIntMetaField_Create, igObjectRefMetaField_Create, igIntMetaField_Create };
+    static const char *names[] = { "_directoryIndex", "_entryIndex", "_entryType", "_entryTypeIndex", "_objectType", "_objectTypeIndex" };
+    static igMetaField **enumStorage[] = { &k_directoryIndex, &k_entryIndex, &k_entryType, &k_entryTypeIndex, &k_objectType, &k_objectTypeIndex };
+    static int offsets[] = { 28, 32, 36, 40, 44, 48 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 6);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
+        metaField->_persistent = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->setDefault(-1);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
+        metaField->_persistent = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->setDefault(-1);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igExternalIndexedEntry_ctorTable[] = {
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-};
-static const char *g_igExternalIndexedEntry_fieldTable[] = {
-    "_directoryIndex",
-    "_entryIndex",
-    "_entryType",
-    "_entryTypeIndex",
-    "_objectType",
-    "_objectTypeIndex",
-};
-static igMetaField **g_igExternalIndexedEntry_fieldDescriptors[] = {
-    &g_igExternalIndexedEntry_directoryIndexMetaField,
-    &g_igExternalIndexedEntry_entryIndexMetaField,
-    &g_igExternalIndexedEntry_entryTypeMetaField,
-    &g_igExternalIndexedEntry_entryTypeIndexMetaField,
-    &g_igExternalIndexedEntry_objectTypeMetaField,
-    &g_igExternalIndexedEntry_objectTypeIndexMetaField,
-};
-static int g_igExternalIndexedEntry_fieldOffsets[] = {
-    28,
-    32,
-    36,
-    40,
-    44,
-    48,
-};
-
-void igExternalIndexedEntry_InitFields(void) {
-    int first;
-    void *objectTypeField;
-    void *entryTypeField;
-    void *meta;
-
-    meta = (void *)g_igExternalIndexedEntry_metaObject;
-    first = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igExternalIndexedEntry_ctorTable, 6);
-    entryTypeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2)));
-    ((igObjectRefMetaField *)entryTypeField)->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
-    ((igMetaField *)entryTypeField)->_persistent = 0;
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 3)))->setDefault(-1);
-    objectTypeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 4)));
-    ((igObjectRefMetaField *)objectTypeField)->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
-    ((igMetaField *)objectTypeField)->_persistent = 0;
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 5)))->setDefault(-1);
-    igMetaObject_NameFields((igMetaObject *)meta, g_igExternalIndexedEntry_fieldTable, g_igExternalIndexedEntry_fieldDescriptors, g_igExternalIndexedEntry_fieldOffsets, first);
+}
 }
 

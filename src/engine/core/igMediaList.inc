@@ -27,7 +27,7 @@ void igMediaList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMediaList_Register);
 }
 
-static igMetaObjectCallback g_igMediaList_callbackList[] = { igMedia_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igMediaList_callbackList[] = { Gap::Core::igMedia::arkRegister, 0 };
 
 CallbackArray *igMediaList_Register(void) {
     CoreLibrary_MarkRegistered();

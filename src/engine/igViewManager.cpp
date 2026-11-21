@@ -105,7 +105,7 @@ ViewerSetup::ViewerSetup(igObject *w)
         }
         igInsightCore_AddManager((igInsightCore *)core.p, sceneInfo.p);
         igInsightCore_AddManager((igInsightCore *)core.p, dataPump.p);
-        igNamedObject_SetName((igNamedObject *)actors.p, "Actor manager");
+        ((Gap::Core::igNamedObject *)actors.p)->setName("Actor manager");
         igInsightCore_AddManager((igInsightCore *)core.p, actors.p);
     }
 }

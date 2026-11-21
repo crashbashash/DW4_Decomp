@@ -1236,3 +1236,153 @@ igUnsignedIntListNoClean	IG_OBJECT_DEFINE(igUnsignedIntListNoClean)
 igUnsignedIntListNoClean	inline virtual void trimCapacity() {}
 igDependencyList	IG_OBJECT_DEFINE(igDependencyList)
 igDependencyList	private: static igMetaField *k_data;
+igNamedObject	IG_OBJECT_DEFINE(igNamedObject)
+igNamedObject	static igMetaField *k_name;
+igNamedObject	void setName(const char *name);
+igNamedObject	inline const char *getName() const { return _name.p ? (const char *)_name.p : ""; }
+igNamedObject	inline const igStringRef &getNameRef() const { return _name; }
+igDirEntry	IG_OBJECT_DEFINE(igDirEntry)
+igDirEntry	static igMetaEnum *getResolveMethodMetaEnum();
+igDirEntry	private: static igMetaEnum *ResolveMethod_Meta;
+igDirEntry	public: static igMetaEnum *getRefTypeMetaEnum();
+igDirEntry	private: static igMetaEnum *RefType_Meta;
+igDirEntry	public: static igMetaField *k_index;
+igDirEntry	static igMetaField *k_resolveMethod;
+igDirEntry	static igMetaField *k_refType;
+igDirEntry	static igMetaField *k_ref;
+igDirEntry	inline void *getRef() const { return (void *)_ref; }
+igDirEntry	virtual void initDefaults();
+igDirEntry	virtual void setRef(void *refParam);
+igDirEntry	virtual void refRef(void *refParam);
+igDirEntry	virtual void releaseRef(void *refParam);
+igDirEntry	virtual igDirEntry *share(igIGBFile *igb);
+igDirEntry	virtual void refEntry(void *ref);
+igDirEntry	virtual void releaseEntry(void *ref);
+igDirEntry	virtual void setMemoryPoolHandle(int handle);
+igDirEntry	virtual int getMemoryPoolHandle();
+igDirEntry	virtual void readSetup(igIGBFile *igb);
+igDirEntry	virtual void readPreRead(igIGBFile *igb);
+igDirEntry	virtual void readReadVersion3(igIGBFile *igb);
+igDirEntry	virtual void readRead(igIGBFile *igb);
+igDirEntry	virtual void readMemorySpecial(igIGBFile *igb);
+igDirEntry	virtual void readFinishConstruction(bool doMakeConcrete);
+igDirEntry	virtual void readPostRead(igIGBFile *igb);
+igDirEntry	virtual void writeMakeProxy(igIGBFile *igb);
+igDirEntry	virtual void writeComputeBufferSize(igIGBFile *igb);
+igDirEntry	virtual void writeWrite(igIGBFile *igb);
+igDirEntry	virtual void writeMemorySpecial(igIGBFile *igb);
+igDirEntry	virtual int refNeedsEntryForPostFileReadCleanup();
+igObjectDirEntry	IG_OBJECT_DEFINE(igObjectDirEntry)
+igObjectDirEntry	static igMetaField *k_typeMeta;
+igObjectDirEntry	static igMetaField *k_typeMetaName;
+igObjectDirEntry	static igMetaField *k_majorVersion;
+igObjectDirEntry	static igMetaField *k_minorVersion;
+igObjectDirEntry	static igMetaField *k_ref;
+igObjectDirEntry	static igMetaField *k_memoryPoolHandle;
+igObjectDirEntry	private: static igMetaField *k_typeMetaIndex;
+igObjectDirEntry	public: void setTypeMeta(igMetaObject *meta);
+igObjectDirEntry	virtual void releaseDefaults();
+igObjectDirEntry	virtual void setRef(void *refParam);
+igObjectDirEntry	virtual void refRef(void *refParam);
+igObjectDirEntry	virtual void releaseRef(void *refParam);
+igObjectDirEntry	virtual igDirEntry *share(igIGBFile *igb);
+igObjectDirEntry	virtual void refEntry(void *ref);
+igObjectDirEntry	virtual void releaseEntry(void *ref);
+igObjectDirEntry	virtual void setMemoryPoolHandle(int handle);
+igObjectDirEntry	virtual int getMemoryPoolHandle();
+igObjectDirEntry	virtual void readSetup(igIGBFile *igb);
+igObjectDirEntry	virtual void readReadVersion3(igIGBFile *igb);
+igObjectDirEntry	virtual void readRead(igIGBFile *igb);
+igObjectDirEntry	virtual void readFinishConstruction(bool doMakeConcrete);
+igObjectDirEntry	virtual void readPostRead(igIGBFile *igb);
+igObjectDirEntry	virtual void writeMakeProxy(igIGBFile *igb);
+igObjectDirEntry	virtual void writeComputeBufferSize(igIGBFile *igb);
+igObjectDirEntry	virtual void writeWrite(igIGBFile *igb);
+igMemoryDirEntry	IG_OBJECT_DEFINE(igMemoryDirEntry)
+igMemoryDirEntry	static igMetaField *k_memSize;
+igMemoryDirEntry	static igMetaField *k_memTypeSize;
+igMemoryDirEntry	static igMetaField *k_memType;
+igMemoryDirEntry	static igMetaField *k_memTypeIndex;
+igMemoryDirEntry	static igMetaField *k_alignmentTypeIndex;
+igMemoryDirEntry	static igMetaField *k_memoryPoolHandle;
+igMemoryDirEntry	private: static igMetaField *k_refCounted;
+igMemoryDirEntry	public: void setMemType(igMetaField *type);
+igMemoryDirEntry	inline igMetaField *getMemType() { return (igMetaField *)_memType; }
+igMemoryDirEntry	virtual igDirEntry *share(igIGBFile *igb);
+igMemoryDirEntry	virtual void setMemoryPoolHandle(int handle);
+igMemoryDirEntry	virtual int getMemoryPoolHandle();
+igMemoryDirEntry	virtual void readSetup(igIGBFile *igb);
+igMemoryDirEntry	virtual void readReadVersion3(igIGBFile *igb);
+igMemoryDirEntry	virtual void readRead(igIGBFile *igb);
+igMemoryDirEntry	virtual void readMemorySpecial(igIGBFile *igb);
+igMemoryDirEntry	virtual void readFinishConstruction(bool doMakeConcrete);
+igMemoryDirEntry	virtual void writeComputeBufferSize(igIGBFile *igb);
+igMemoryDirEntry	virtual void writeMemorySpecial(igIGBFile *igb);
+igMemoryDirEntry	virtual int refNeedsEntryForPostFileReadCleanup();
+igExternalDirEntry	IG_OBJECT_DEFINE(igExternalDirEntry)
+igExternalDirEntry	private: static igMetaField *k_ref;
+igExternalDirEntry	static igMetaField *k_directoryName;
+igExternalDirEntry	static igMetaField *k_entryName;
+igExternalDirEntry	static igMetaField *k_entryIndex;
+igExternalDirEntry	protected: static igMetaField *k_externalFilePath;
+igExternalDirEntry	public: void setDirectoryName(const char *dirName);
+igExternalDirEntry	inline const char *getDirectoryName() const { return _directoryName.p; }
+igExternalDirEntry	inline const char *getEntryName() const { return _entryName.p; }
+igExternalDirEntry	virtual bool resolve(igResolveFunction *userFunction);
+igExternalDirEntry	virtual bool load(igResolveFunction *userFunction);
+igExternalDirEntry	virtual void initDefaults();
+igExternalDirEntry	virtual void releaseDefaults();
+igExternalDirEntry	virtual void setRef(void *refParam);
+igExternalDirEntry	virtual void readSetup(igIGBFile *igb);
+igExternalIndexedEntry	IG_OBJECT_DEFINE(igExternalIndexedEntry)
+igExternalIndexedEntry	private: static igMetaField *k_directoryIndex;
+igExternalIndexedEntry	static igMetaField *k_entryIndex;
+igExternalIndexedEntry	static igMetaField *k_entryType;
+igExternalIndexedEntry	static igMetaField *k_entryTypeIndex;
+igExternalIndexedEntry	static igMetaField *k_objectType;
+igExternalIndexedEntry	static igMetaField *k_objectTypeIndex;
+igExternalIndexedEntry	public: inline void setDirectoryIndex(int directoryIndexParam) { _directoryIndex = directoryIndexParam; }
+igExternalIndexedEntry	inline int getDirectoryIndex() const { return _directoryIndex; }
+igExternalIndexedEntry	inline void setEntryIndex(int entryIndexParam) { _entryIndex = entryIndexParam; }
+igExternalIndexedEntry	inline int getEntryIndex() const { return _entryIndex; }
+igExternalIndexedEntry	virtual void readPreRead(igIGBFile *igb);
+igExternalInfoEntry	IG_OBJECT_DEFINE(igExternalInfoEntry)
+igExternalInfoEntry	private: static igMetaField *k_key;
+igExternalInfoEntry	static igMetaField *k_directoryIndex;
+igExternalInfoEntry	static igMetaField *k_infoName;
+igExternalInfoEntry	public: inline const char *getKey() const { return _key.p; }
+igExternalInfoEntry	inline void setDirectoryIndex(int directoryIndexParam) { _directoryIndex = directoryIndexParam; }
+igExternalInfoEntry	inline int getDirectoryIndex() const { return _directoryIndex; }
+igExternalInfoEntry	inline const char *getInfoName() const { return _infoName.p; }
+igExternalInfoEntry	virtual void readSetup(igIGBFile *igb);
+igTimer	IG_ABSTRACT_OBJECT_DEFINE(igTimer)
+igTimer	virtual double getResolutionAsDouble() const = 0;
+igTimer	virtual long long getResolutionAsLong() const = 0;
+igTimer	virtual double getTimeAsDouble() const = 0;
+igTimer	virtual long long getTimeAsLong() const = 0;
+igTimer	virtual void start() = 0;
+igTimer	virtual void stop() = 0;
+igTimer	virtual void reset() = 0;
+igTimer	virtual void resetAndStop() = 0;
+igTimer	virtual void resetAndStart() = 0;
+igTimer	virtual void setResetTime(double resetTime) = 0;
+igTimer	virtual void setResetTime(long long resetTime) = 0;
+igTimer	virtual double getResetTimeAsDouble() const = 0;
+igTimer	virtual long long getResetTimeAsLong() const = 0;
+igTimer	virtual bool isStopped() const = 0;
+igMedia	IG_ABSTRACT_OBJECT_DEFINE(igMedia)
+igMedia	virtual int createFile() = 0;
+igMedia	virtual void deleteFile(int fileHandle) = 0;
+igMedia	virtual igResult open(int fileHandle, igStringRef name, int openMode) = 0;
+igMedia	virtual void close(int fileHandle) = 0;
+igMedia	virtual int write(int fileHandle, const void *mem, int numBytes) = 0;
+igMedia	virtual int read(int fileHandle, void *mem, int numBytes) = 0;
+igMedia	virtual void readAsynchronous(int fileHandle, void *mem, int numBytes, int (*function)(int, int), int token) = 0;
+igMedia	virtual int seek(int fileHandle, int offset, int whence) = 0;
+igMedia	virtual int tell(int fileHandle) = 0;
+igMedia	virtual bool handlesPrefix(const char *filename, int prefixSize) = 0;
+igMedia	static void setDefaultMedia(igMedia *media);
+igMedia	static void registerMedia(igMedia *media);
+igMedia	private: static void userRegister();
+igMedia	static void userUnregister();
+igMedia	static void _classDestructor();

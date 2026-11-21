@@ -57,7 +57,7 @@ void igMediaFile_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMediaFile_Register);
 }
 
-static igMetaObjectCallback g_igMediaFile_callbackList[] = { igMedia_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igMediaFile_callbackList[] = { Gap::Core::igMedia::arkRegister, 0 };
 
 CallbackArray *igMediaFile_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -137,7 +137,7 @@ void igMediaFile_InitFields(void) {
     bufferField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 7)));
     ((igMemoryRefMetaField *)bufferField)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     mediaField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 8)));
-    ((igObjectRefMetaField *)mediaField)->_metaObject = (int)igMedia_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)mediaField)->_metaObject = (int)Gap::Core::igMedia::getClassTypeLazy();
     igMetaObject_NameFields((igMetaObject *)meta, g_igMediaFile_fieldTable, g_igMediaFile_fieldDescriptors, g_igMediaFile_fieldOffsets, first);
 }
 

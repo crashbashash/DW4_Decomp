@@ -78,7 +78,7 @@ void Gap__Core__igPsx2Media__destructFields(igPsx2MediaView *self) {
 
 void Gap__Core__igPsx2Media__userConstruct(int self) {
     Gap__Core__igObject__userConstruct((igObject *)self);
-    igMedia_SetDefaultMedia(self);
+    Gap::Core::igMedia::setDefaultMedia((Gap::Core::igMedia *)self);
 }
 
 bool g_igPsx2Media_prefixIsCdrom;

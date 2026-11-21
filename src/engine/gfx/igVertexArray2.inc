@@ -93,7 +93,7 @@ CallbackArray *igVertexArray2_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVertexArray2_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         igVertexArray2_GetMetaObjectFunction,
         "igVertexArray2",

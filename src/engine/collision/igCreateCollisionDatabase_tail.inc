@@ -75,7 +75,7 @@ int Gap__igCreateCollisionDatabase__vfunc_28(igCreateCollisionDatabase *self, ig
             FUN_0018d630((igSphere *)(sphere.get()), (const float *)world);
             igSmartPointer<igCollisionGroup> group = igMetaObject_CreateInstanceDefaultRef((igMetaObject *)self->_staticGroupType);
             const char *name = (const char *)geometry->_name;
-            igNamedObject_SetName((igNamedObject *)group.get(), name != 0 ? name : emptyString);
+            ((Gap::Core::igNamedObject *)(group.get()))->setName(name != 0 ? name : emptyString);
             setBound(group.get(), sphere.get());
             FUN_0023bc30(group.get());
             FUN_0023b820((Grid *)self->_grid, (Arg1 *)group.get());
@@ -96,7 +96,7 @@ int Gap__igCreateCollisionDatabase__vfunc_33(void) {
 /* Selects the constructor that takes over the factory's reference. */
 
 void FUN_0023c250(int *arg0) {    igSmartPointer<Rc> a((Rc *)igIGBFile_Create(0), AdoptReference());
-    igDirectory_SetName((igDirectoryView *)(a.get()), arg0[13]);
+    igDirectory_SetName((igDirectoryView *)(a.get()), (const char *)arg0[13]);
     igSmartPointer<Rc> b(igCollisionInfo_Create(0), AdoptReference());
     {
     Rc *s1 = (Rc *)arg0[14];

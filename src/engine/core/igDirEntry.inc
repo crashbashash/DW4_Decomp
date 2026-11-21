@@ -5,11 +5,16 @@ static int g_igDirEntry_refTypeValues[] = {
     0, 1, 2,
 };
 
-int igDirEntry_GetRefTypeMetaEnum(void) {
-    if (g_igDirEntry_refTypeMetaEnum == 0) {
-        g_igDirEntry_refTypeMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)"RefType", g_igDirEntry_refTypeNames, g_igDirEntry_refTypeValues, 3));
+namespace Gap {
+namespace Core {
+
+igMetaEnum *igDirEntry::getRefTypeMetaEnum() {
+    if (RefType_Meta == 0) {
+        RefType_Meta = Gap::Core::igMetaEnum::createMetaEnum("RefType", g_igDirEntry_refTypeNames, g_igDirEntry_refTypeValues, 3);
     }
-    return g_igDirEntry_refTypeMetaEnum;
+    return RefType_Meta;
+}
+}
 }
 
 static const char *g_igDirEntry_resolveMethodNames[] = {
@@ -19,127 +24,91 @@ static int g_igDirEntry_resolveMethodValues[] = {
     0, 1, 2,
 };
 
-int igDirEntry_GetResolveMethodMetaEnum(void) {
-    if (g_igDirEntry_resolveMethodMetaEnum == 0) {
-        g_igDirEntry_resolveMethodMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)"ResolveMethod", g_igDirEntry_resolveMethodNames, g_igDirEntry_resolveMethodValues, 3));
+namespace Gap {
+namespace Core {
+
+igMetaEnum *igDirEntry::getResolveMethodMetaEnum() {
+    if (ResolveMethod_Meta == 0) {
+        ResolveMethod_Meta = Gap::Core::igMetaEnum::createMetaEnum("ResolveMethod", g_igDirEntry_resolveMethodNames, g_igDirEntry_resolveMethodValues, 3);
     }
-    return g_igDirEntry_resolveMethodMetaEnum;
+    return ResolveMethod_Meta;
 }
 
-void * igDirEntry_Create(int pool) {
-    igDirEntry_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance(g_igDirEntry_metaObject, (igMemoryPoolView *)pool));
-}
-
-igMetaObject *igDirEntry_GetMetaObject(void)
+igDirEntry *igDirEntry::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igDirEntry_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igDirEntry_EnsureRegistered();
-    return g_igDirEntry_metaObject;
+    arkRegister();
+    return (igDirEntry *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igDirEntry_GetVTable(void) {
-    igDirEntry entry;
-    int vtable;
-    char *ps;
-    int *chars;
-    int *header;
-    int refCount;
-    igObject_InitHeader((igObject *)&entry);
-    ps = (char *)&entry._name;
-    *(int *)ps = 0;
-    entry._vtable = (int)&g_igNamedObject_vtable[0];
-    entry._vtable = (int)&g_igDirEntry_vtable[0];
-    vtable = *(int *)((char *)&entry + g_objectSystem->vtableProbeOffset);
-    entry._vtable = (int)&g_igNamedObject_vtable[0];
-    if (ps != 0) {
-        chars = *(int **)ps;
-        if (chars != 0) {
-            header = chars - 2;
-            refCount = chars[-1] - 1;
-            chars[-1] = refCount;
-            if (refCount == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
-            }
-        }
-    }
-    return vtable;
-}
-
-void igDirEntry_EnsureRegistered(void)
+igMetaObject *igDirEntry::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igDirEntry_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igDirEntry_Register(void) {
+void *igDirEntry::retrieveVTablePointer()
+{
+    igDirEntry temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igDirEntry::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igDirEntry::arkRegisterInternal()
+{
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igDirEntry_metaObject,
-        igNamedObject_Register,
-        (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
-        igDirEntry_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Core::igNamedObject::arkRegisterInternal,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igDirEntry",
-        0x1C,
-        igDirEntry_GetVTable,
-        igDirEntry_InitFields,
+        sizeof(igDirEntry),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
         0,
         0
     );
 }
 
-void igDirEntry_GetMetaObjectFunction(void) {
-    igDirEntry_GetMetaObject();
+void igDirEntry::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igIntMetaField_Create, igEnumMetaField_Create, igEnumMetaField_Create, igRawRefMetaField_Create };
+    static const char *names[] = { "_index", "_resolveMethod", "_refType", "_ref" };
+    static igMetaField **enumStorage[] = { &k_index, &k_resolveMethod, &k_refType, &k_ref };
+    static int offsets[] = { 12, 16, 20, 24 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 4);
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(-1);
+        metaField->_persistent = 0;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(0);
+        metaField->_persistent = 0;
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())Gap::Core::igDirEntry::getResolveMethodMetaEnum;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(0);
+        metaField->_persistent = 0;
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())Gap::Core::igDirEntry::getRefTypeMetaEnum;
+    }
+    {
+        igRawRefMetaField *metaField = (igRawRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->_persistent = 0;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igDirEntry_ctorTable[] = {
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igRawRefMetaField_Create,
-};
-static const char *g_igDirEntry_fieldTable[] = {
-    "_index",
-    "_resolveMethod",
-    "_refType",
-    "_ref",
-};
-static igMetaField **g_igDirEntry_fieldDescriptors[] = {
-    &g_igDirEntry_indexMetaField,
-    &g_igDirEntry_resolveMethodMetaField,
-    &g_igDirEntry_refTypeMetaField,
-    &g_igDirEntry_refField,
-};
-static int g_igDirEntry_fieldOffsets[] = {
-    12,
-    16,
-    20,
-    24,
-};
-
-void igDirEntry_InitFields(void) {
-    int first;
-    void *refTypeField;
-    void *resolveMethodField;
-    void *indexField;
-    void *meta;
-
-    meta = (void *)g_igDirEntry_metaObject;
-    first = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igDirEntry_ctorTable, 4);
-    indexField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first)));
-    ((Gap::Core::igIntMetaField *)indexField)->setDefault(-1);
-    ((igIntMetaField *)indexField)->_persistent = 0;
-    resolveMethodField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 1)));
-    ((Gap::Core::igEnumMetaField *)resolveMethodField)->setDefault(0);
-    ((igEnumMetaField *)resolveMethodField)->_persistent = 0;
-    ((igEnumMetaField *)resolveMethodField)->_getMetaEnumFunction = (int)(&igDirEntry_GetResolveMethodMetaEnum);
-    refTypeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2)));
-    ((Gap::Core::igEnumMetaField *)refTypeField)->setDefault(0);
-    ((igEnumMetaField *)refTypeField)->_persistent = 0;
-    ((igEnumMetaField *)refTypeField)->_getMetaEnumFunction = (int)(igDirEntry_GetRefTypeMetaEnum);
-    *(char *)((char *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, first + 3))) + 38) = 0;
-    igMetaObject_NameFields((igMetaObject *)meta, g_igDirEntry_fieldTable, g_igDirEntry_fieldDescriptors, g_igDirEntry_fieldOffsets, first);
+}
 }
 

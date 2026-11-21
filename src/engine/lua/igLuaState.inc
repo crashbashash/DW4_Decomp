@@ -47,7 +47,7 @@ CallbackArray *igLuaState_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igLuaState_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         thunk_igLuaState_GetMetaObject,
         "igLuaState",

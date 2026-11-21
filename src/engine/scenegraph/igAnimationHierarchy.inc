@@ -23,7 +23,7 @@ CallbackArray *igAnimationHierarchy_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igAnimationHierarchy_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         igAnimationHierarchy_GetMetaObjectFunction,
         "igAnimationHierarchy",

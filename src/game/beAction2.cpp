@@ -617,7 +617,7 @@ unsigned char beAction2MOTIONSET_Start(beAction2 *manager, beAction2InfoRam *ram
     int name = component->_name;
     int nameOrEmpty;
     if (name != 0) nameOrEmpty = name; else nameOrEmpty = (int)emptyString;
-    igAnimation *animation = (igAnimation *)((Gap::Core::igObjectList *)animations)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)nameOrEmpty);
+    igAnimation *animation = (igAnimation *)((Gap::Core::igObjectList *)animations)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, (const char *)nameOrEmpty);
     igAnimationCombiner *combiner = ((igAnimationCombiner **)((igAnimationCombinerList *)((igAnimationDatabase *)info->_animationDatabase)->_combinerList)->_data)[ram->_ramNo];
     long biasOld; /* matching construct: decomp-permuter (found on beAction2MOTIONSET_Update) — the saved time bias is a `long` (igLong, 64-bit under mwccps2), not `long long` */
     float zero = 0.0f;
@@ -955,7 +955,7 @@ int beAction2_OnMessageText(beAction2 *self, beAction2InfoRam *ram, void *name)
             workRef.p->_isNoHokan = 0;
         }
         {
-            int data = (int)((Gap::Core::igObjectList *)info->_dataList_)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name);
+            int data = (int)((Gap::Core::igObjectList *)info->_dataList_)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, (const char *)name);
             beAction2InfoWork *work = workRef.p;
             if (work->_comData != data) {
                 if (data != 0) ((igObject *)data)->_refCount = ((igObject *)data)->_refCount + 1;

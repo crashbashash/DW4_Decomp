@@ -614,7 +614,7 @@ int igAdx_FindAfsFile(const char *name) {
                 igStringObj_Set(g_adxScratchString.p, digits);
                 igStringObj_ToInt(g_adxScratchString.p, &fileNumber);
                 entry = afsFileAt(g_adxAfsFileList.p, 0);
-                igNamedObject_SetName((igNamedObject *)entry, name);
+                ((Gap::Core::igNamedObject *)entry)->setName(name);
                 entry->_ptNumber = partition;
                 entry->_fileNumber = fileNumber;
                 return 0;

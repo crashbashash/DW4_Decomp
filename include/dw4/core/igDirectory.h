@@ -23,7 +23,7 @@ int igDirectory_AddObjectRecursive(int directory, int object, int name, int);
 void *igDirectory_GetEntry(int *directory, int index);
 void igDirectory_RemoveInfoByName(void *directory, int name);
 void igDirectory_AddInfo(void *directory, void *info);
-void igDirectory_SetName(struct igDirectoryView *self, int name);
+void igDirectory_SetName(struct igDirectoryView *self, const char *name);
 
 #ifdef __cplusplus
 }

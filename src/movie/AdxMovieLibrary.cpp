@@ -547,7 +547,7 @@ CallbackArray *igFileName_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igFileName_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         igFileName_GetMetaObjectFunction,
         "igFileName",
@@ -1009,7 +1009,7 @@ CallbackArray *igMovieCodec_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igMovieCodec_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         igMovieCodec_GetMetaObjectFunction,
         "igMovieCodec",

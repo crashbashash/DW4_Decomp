@@ -99,7 +99,7 @@ int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork 
             igSwitch *old = LAYER_SWITCH(self);
             IG_OBJECT_RELEASE(old);
             self->_layerSwt = (int)igSwitch_CreateInstance((int)allocator);
-            igNamedObject_SetName((igNamedObject *)self->_layerSwt, "LayerSwt");
+            ((Gap::Core::igNamedObject *)self->_layerSwt)->setName("LayerSwt");
             igGroup *lights = 0;
             int i;
             for (i = 0; i < CHILD_COUNT(CHILDREN(root)); i++) {
@@ -125,13 +125,13 @@ int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork 
             void *allocator;
             PICK_ALLOCATOR(allocator, self, kIGMemoryPoolHandleUser1)
             igSmartPointer<igNamedObject> layer((igNamedObject *)igGroup_CreateInstance((int)allocator));
-            igNamedObject_SetName(layer.p, NAME_OF(NODE_AT(groups, g)));
+            ((Gap::Core::igNamedObject *)layer.p)->setName(NAME_OF(NODE_AT(groups, g)));
             igSwitch_AppendChild(LAYER_SWITCH(self), (igNode *)layer.p);
         }
         void *noneAllocator;
         PICK_ALLOCATOR(noneAllocator, self, kIGMemoryPoolHandleUser1)
         igSmartPointer<igNamedObject> none((igNamedObject *)igGroup_CreateInstance((int)noneAllocator));
-        igNamedObject_SetName(none.p, "NONE");
+        ((Gap::Core::igNamedObject *)none.p)->setName("NONE");
         igSwitch_AppendChild(LAYER_SWITCH(self), (igNode *)none.p);
         int index;
         igGroup *layer;
@@ -142,7 +142,7 @@ int beLayerCtl_OnMessage(beLayerCtl *self, beLayerInfoRam *ram, beMessengerWork 
         index = 0;
         while (index < CHILD_COUNT(CHILDREN(root))) {
             node = NODE_AT(CHILDREN(root), index);
-            if (NAME_OF(node) == 0) igNamedObject_SetName((igNamedObject *)node, "NONE");
+            if (NAME_OF(node) == 0) ((Gap::Core::igNamedObject *)node)->setName("NONE");
             if (strcmp("ROOTATTR", NAME_OF(node)) == 0 || g_igLightStateSet_metaObject == META_OF(node)) {
                 index += 1;
             } else {

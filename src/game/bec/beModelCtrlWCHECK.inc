@@ -31,7 +31,7 @@ CallbackArray *beModelCtrlWCHECK_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beModelCtrlWCHECK_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         beModelCtrlWCHECK_GetMetaObjectFunction,
         "beModelCtrlWCHECK",

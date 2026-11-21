@@ -1,140 +1,99 @@
-igMetaObject *g_igMemoryDirEntry_metaObject;
-igMetaField *g_igMemoryDirEntry_memSizeMetaField;
-igMetaField *g_igMemoryDirEntry_memTypeSizeMetaField;
-igMetaField *g_igMemoryDirEntry_memTypeMetaField;
-igMetaField *g_igMemoryDirEntry_memTypeIndexMetaField;
-igMetaField *g_igMemoryDirEntry_refCountedMetaField;
-igMetaField *g_igMemoryDirEntry_alignmentTypeIndexMetaField;
-igMetaField *g_igMemoryDirEntry_memoryPoolHandleMetaField;
+namespace Gap {
+namespace Core {
 
-int igMemoryDirEntry_Create(int allocator) {
-    igMemoryDirEntry_EnsureRegistered();
-    return (int)igMetaObject_CreateInstance(g_igMemoryDirEntry_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *igMemoryDirEntry::_Meta;
+igMetaField *igMemoryDirEntry::k_memSize;
+igMetaField *igMemoryDirEntry::k_memTypeSize;
+igMetaField *igMemoryDirEntry::k_memType;
+igMetaField *igMemoryDirEntry::k_memTypeIndex;
+igMetaField *igMemoryDirEntry::k_refCounted;
+igMetaField *igMemoryDirEntry::k_alignmentTypeIndex;
+igMetaField *igMemoryDirEntry::k_memoryPoolHandle;
 
-igMetaObject *igMemoryDirEntry_GetMetaObject(void)
+igMemoryDirEntry *igMemoryDirEntry::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igMemoryDirEntry_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMemoryDirEntry_EnsureRegistered();
-    return g_igMemoryDirEntry_metaObject;
+    arkRegister();
+    return (igMemoryDirEntry *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igMemoryDirEntry_GetVTable(void) {
-    igMemoryDirEntry entry;
-    int vtable;
-    char *nameSlot;
-    int *text, *header;
-    int count;
-    
-    
-    igObject_InitHeader((igObject *)&entry);
-    entry._vtable = (int)(&g_igNamedObject_vtable[0]);
-    nameSlot = (char *)&entry._name;
-    *(int *)nameSlot = 0;
-    entry._vtable = (int)(&g_igMemoryDirEntry_vtable[0]);
-    vtable = *(int *)((char *)&entry + g_objectSystem->vtableProbeOffset);
-    entry._vtable = (int)(&g_igNamedObject_vtable[0]);
-    if (nameSlot != 0) {
-        text = *(int **)nameSlot;
-        if (text != 0) {
-            header = text - 2;
-            count = text[-1] - 1;
-            text[-1] = count;
-            if (count == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
-            }
-        }
-    }
-    return vtable;
-}
-
-void igMemoryDirEntry_EnsureRegistered(void)
+igMetaObject *igMemoryDirEntry::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igMemoryDirEntry_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igMemoryDirEntry_callbackList[] = { Gap::Core::igMetaField::arkRegister, 0 };
+void *igMemoryDirEntry::retrieveVTablePointer()
+{
+    igMemoryDirEntry temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igMemoryDirEntry_Register(void) {
+void igMemoryDirEntry::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igMemoryDirEntry::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igMetaField::arkRegister, 0 };
+
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igMemoryDirEntry_metaObject,
-        igDirEntry_Register,
-        igDirEntry_GetPublishedMetaObject,
-        igMemoryDirEntry_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Core::igDirEntry::arkRegisterInternal,
+        Gap::Core::igDirEntry::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMemoryDirEntry",
-        0x38,
-        igMemoryDirEntry_GetVTable,
-        igMemoryDirEntry_InitFields,
+        sizeof(igMemoryDirEntry),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
         0,
-        g_igMemoryDirEntry_callbackList
+        regFunctions
     );
 }
 
-void igMemoryDirEntry_GetMetaObjectFunction(void) {
-    igMemoryDirEntry_GetMetaObject();
+void igMemoryDirEntry::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igIntMetaField_Create, igIntMetaField_Create, igObjectRefMetaField_Create, igIntMetaField_Create, igBoolMetaField_Create, igIntMetaField_Create, igIntMetaField_Create };
+    static const char *names[] = { "_memSize", "_memTypeSize", "_memType", "_memTypeIndex", "_refCounted", "_alignmentTypeIndex", "_memoryPoolHandle" };
+    static igMetaField **enumStorage[] = { &k_memSize, &k_memTypeSize, &k_memType, &k_memTypeIndex, &k_refCounted, &k_alignmentTypeIndex, &k_memoryPoolHandle };
+    static int offsets[] = { 28, 32, 36, 40, 52, 44, 48 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 7);
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(-1);
+        metaField->_persistent = 0;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
+        metaField->setDefault((igObject *)Gap::Core::igCharMetaField::getMetaField());
+        metaField->_refCounted = 0;
+        metaField->_persistent = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->setDefault(-1);
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->setDefault(1);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->setDefault(-1);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 6);
+        metaField->setDefault(-1);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igMemoryDirEntry_ctorTable[] = {
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-};
-static const char *g_igMemoryDirEntry_fieldTable[] = {
-    "_memSize",
-    "_memTypeSize",
-    "_memType",
-    "_memTypeIndex",
-    "_refCounted",
-    "_alignmentTypeIndex",
-    "_memoryPoolHandle",
-};
-static igMetaField **g_igMemoryDirEntry_fieldDescriptors[] = {
-    &g_igMemoryDirEntry_memSizeMetaField,
-    &g_igMemoryDirEntry_memTypeSizeMetaField,
-    &g_igMemoryDirEntry_memTypeMetaField,
-    &g_igMemoryDirEntry_memTypeIndexMetaField,
-    &g_igMemoryDirEntry_refCountedMetaField,
-    &g_igMemoryDirEntry_alignmentTypeIndexMetaField,
-    &g_igMemoryDirEntry_memoryPoolHandleMetaField,
-};
-static int g_igMemoryDirEntry_fieldOffsets[] = {
-    28,
-    32,
-    36,
-    40,
-    52,
-    44,
-    48,
-};
-
-void igMemoryDirEntry_InitFields(void) {
-    int base;
-    void *memTypeSizeField;
-    void *memTypeField;
-    void *meta;
-
-    meta = (void *)g_igMemoryDirEntry_metaObject;
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igMemoryDirEntry_ctorTable, 7);
-    memTypeSizeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((Gap::Core::igIntMetaField *)memTypeSizeField)->setDefault(-1);
-    ((igMetaField *)memTypeSizeField)->_persistent = 0;
-    memTypeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)memTypeField)->_metaObject = (int)Gap::Core::igMetaField::getClassTypeLazy();
-    ((Gap::Core::igObjectRefMetaField *)memTypeField)->setDefault((Gap::Core::igObject *)(Gap::Core::igCharMetaField::getMetaField()));
-    ((igObjectRefMetaField *)memTypeField)->_refCounted = 0;
-    ((igObjectRefMetaField *)memTypeField)->_persistent = 0;
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)))->setDefault(-1);
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)))->setDefault(1);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)))->setDefault(-1);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)))->setDefault(-1);
-    igMetaObject_NameFields((igMetaObject *)meta, g_igMemoryDirEntry_fieldTable, g_igMemoryDirEntry_fieldDescriptors, g_igMemoryDirEntry_fieldOffsets, base);
+}
 }
 

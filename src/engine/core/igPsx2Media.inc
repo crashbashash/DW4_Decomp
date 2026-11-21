@@ -2,11 +2,16 @@ void igPsx2Media_GetMetaObjectFunction(void) {
     igPsx2Media_GetMetaObject();
 }
 
-void igMedia_StaticInitCallback(void) {
+namespace Gap {
+namespace Core {
+
+void igMedia::userRegister() {
     igMedia_CreateMediaList();
 }
 
-void igMedia_ExitCallback(void) {
-    igMedia_ReleaseMediaList();
+void igMedia::_classDestructor() {
+    userUnregister();
+}
+}
 }
 

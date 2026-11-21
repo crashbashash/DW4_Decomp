@@ -77,7 +77,7 @@ CallbackArray *igCustomStateField_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igCustomStateField_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         igCustomStateField_GetMetaObjectFunction,
         "igCustomStateField",

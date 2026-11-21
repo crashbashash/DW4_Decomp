@@ -190,7 +190,7 @@ int beModelCtrlSCHitBox_Start(beModelCtrlSCHitBox *self, beBaseInfoRam *ram) {
         int own = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
         RamDataList::create(ram, g_useOwnerAllocator != 0 ? own : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
     }
-    ramData = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
+    ramData = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "ONE");
     work = (beModelCtrlInfoWork *)ramData->_work;
     ctrl = (beModelCtrl *)ram->_parentManager;
     int own = (int)((Gap::Core::igObject *)self)->getMemoryPool();
@@ -317,7 +317,7 @@ int beModelCtrlSCEffect_Start(beModelCtrlSCEffect *self, beBaseInfoRam *ram) {
             int own = (int)((Gap::Core::igObject *)ram)->getMemoryPool();
             RamDataList::create(ram, g_useOwnerAllocator != 0 ? own : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1));
         }
-        work = (beModelCtrlInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE"))->_work;
+        work = (beModelCtrlInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "ONE"))->_work;
         if (work->_hitParentName == 0) {
             name = (int *)info->_name;
             if (name != 0) ownerName = name; else ownerName = (int *)emptyString;

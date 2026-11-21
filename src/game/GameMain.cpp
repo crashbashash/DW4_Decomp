@@ -692,7 +692,7 @@ void GameMain_RunBenchmark(Blk *app) {
             } while (step < skipFrames);
         }
         ViewerSetup_Update(&app->viewer);
-        igSmartPointer<igTimerDispatchView> timer((igTimerDispatchView *)igTimer_Create(0), AdoptReference());
+        igSmartPointer<igTimerDispatchView> timer((igTimerDispatchView *)Gap::Core::igTimer::_instantiateFromPool(0), AdoptReference());
         timer->Restart();
         i = 0;
         if (0 < frames - 1) {

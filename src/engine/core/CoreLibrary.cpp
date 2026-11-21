@@ -178,7 +178,6 @@
 #include "src/engine/core/igDirectory_tail.inc"
 #include "src/engine/core/igDirEntry_tail.inc"
 #include "src/engine/core/igDirectory_tail2.inc"
-#include "src/engine/core/igDirEntry_tail2.inc"
 #include "src/engine/core/igDirectory_tail3.inc"
 #include "src/engine/core/igDoubleArrayMetaField_tail.inc"
 #include "src/engine/core/igDoubleMetaField_tail.inc"

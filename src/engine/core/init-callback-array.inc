@@ -145,8 +145,8 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
     if (useFileIO) {
         igSmartPointer<igObject> media((igObject *)igPsx2Media_Create((int)ownerOrSystemPool()));
         if (((igPsx2Media *)media.p)->_initialized == 1) {
-            igMedia_AddMedia((int)media.p);
-            igMedia_SetDefaultMedia((int)media.p);
+            Gap::Core::igMedia::registerMedia((Gap::Core::igMedia *)media.p);
+            Gap::Core::igMedia::setDefaultMedia((Gap::Core::igMedia *)media.p);
             igMediaFile_EnsureRegistered();
             g_igFile_metaObject->_abstractProxy = (int)igMediaFile_GetPublishedMetaObject;
         }
@@ -172,7 +172,7 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
     ((igResourceView *)self->resource)->addDirectory(directory);
     igDirectory_AddLoadedRef((igDirectoryView *)directory.p);
     igSmartPointer<igObject> metaFieldInfo((igObject *)igMetaFieldInfo_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
-    igNamedObject_SetName((igNamedObject *)metaFieldInfo.p, "metafield info");
+    ((Gap::Core::igNamedObject *)metaFieldInfo.p)->setName("metafield info");
     igDirectory_AddInfo(directory.p, metaFieldInfo.p);
     igRegistry_GetValueBool(self->configRegistry, 2,"failOnDllVersionMismatch", &self->reportHeaderVersionMismatch, 1, 0);
     igRegistry_GetValueBool(self->configRegistry, 2,"warnOnDllDateMismatch", &self->warnOnDllDateMismatch, 1, 0);
@@ -197,7 +197,7 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
     }
     igRegistry_GetValueInt(self->configRegistry, 2,"stringPoolStatisticsLevel", &self->stringPoolStatisticsLevel, 0, 0);
     igAdxFile_LoadSearchFilePath();
-    g_igIGBFile_loadTimer = (igLongTimerView *)igTimer_Create((int)self->systemPool);
+    g_igIGBFile_loadTimer = (igLongTimerView *)Gap::Core::igTimer::_instantiateFromPool((igMemoryPoolView *)self->systemPool);
     g_igIGBFile_loadTimer->Start();
     igReport_Printf("\n%s\n\n", g_alchemyVersionString);
     igReport_Flush();

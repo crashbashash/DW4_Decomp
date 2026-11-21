@@ -35,7 +35,7 @@ CallbackArray *beAction2WAITCHECK_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beAction2WAITCHECK_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         beAction2WAITCHECK_GetMetaObjectFunction,
         "beAction2WAITCHECK",

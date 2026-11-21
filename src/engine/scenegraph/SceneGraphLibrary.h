@@ -5302,7 +5302,7 @@ static inline void setBase(CombinerStateView *c, int bone, int value) {
     c->_cacheValid = 0;
 }
 static inline AnimDbRecord *castToNamed(AnimDbRecord *object) {
-    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(g_igNamedObject_metaObject) != 0) {
+    if (object != 0 && ((Gap::Core::igObject *)object)->isOfType(Gap::Core::igNamedObject::getClassMeta()) != 0) {
         return object;
     }
     return 0;

@@ -49,7 +49,7 @@ CallbackArray *beDataObjBoolList_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beDataObjBoolList_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         beDataObjBoolList_GetMetaObjectFunction,
         "beDataObjBoolList",

@@ -1,10 +1,3 @@
-/* Drop the entry's object reference: the _ref setter retains the new value and releases the old one,
- * so calling it with 0 releases the held object; the igObject default then runs. */
-void igObjectDirEntry_ReleaseDefaults(igObjectDirEntry *self) {
-    ((igDirEntryView *)self)->SetRef(0);
-    igObject_ReleaseDefaults((igObject *)self);
-}
-
 static inline const char *entryNameOf(const igObjectDirEntry *entry) {
     return entry->_name != 0 ? (const char *)entry->_name : ((char *)emptyString);
 }
@@ -14,181 +7,167 @@ static inline igObjectList *asObjectEntryList(igObject *object) {
     return 0;
 }
 
-igObjectDirEntry *igObjectDirEntry_GetSharedEntry(igObjectDirEntry *self, igIGBFile *file) {
-    igSmartPointer<igObjectList> lists((igObjectList *)file->_entryPool, kRetainReference);
-    if (lists.p == 0) return self;
-    int index = ((igObjectDispatchView *)self)->GetMeta()->_index;
+namespace Gap {
+namespace Core {
+
+/* Drop the entry's object reference: the _ref setter retains the new value and releases the old one,
+ * so calling it with 0 releases the held object; the igObject default then runs. */
+void igObjectDirEntry::releaseDefaults() {
+    setRef(0);
+    igObject_ReleaseDefaults((::igObject *)this);
+}
+
+igDirEntry *igObjectDirEntry::share(igIGBFile *file) {
+    igSmartPointer< ::igObjectList> lists((::igObjectList *)file->_entryPool, kRetainReference);
+    if (lists.p == 0) return this;
+    int index = ((igObjectDispatchView *)this)->GetMeta()->_index;
     if (lists->_count <= index) {
-        ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)lists.p))->setCount(index + 1);
+        ((igObjectList *)((::igTDataList< ::igObject *> *)lists.p))->setCount(index + 1);
         objectListSetRetained(index, 0, lists.p);
     }
-    igSmartPointer<igObjectList> entries(asObjectEntryList(((igObject **)lists->_data)[index]), kRetainReference);
+    igSmartPointer< ::igObjectList> entries(asObjectEntryList(((::igObject **)lists->_data)[index]), kRetainReference);
     if (entries.p == 0) {
         int pool = file->_temporaryMemoryPool;
         entries.release();
-        entries.p = ((igObjectList *)Gap::Core::igObjectList::_instantiateFromPool((igMemoryPoolView *)pool));
+        entries.p = ((::igObjectList *)igObjectList::_instantiateFromPool((igMemoryPoolView *)pool));
         objectListSetRetained(index, entries.p, lists.p);
     }
     int i;
-    igObjectList *list;
+    ::igObjectList *list;
     igObjectDirEntry *entry;
     int count;
     count = entries->_count;
-    self->_index = -1;
+    _index = -1;
     list = entries.p;
     for (i = 0; i < count; i++) {
         entry = ((igObjectDirEntry **)list->_data)[i];
-        if (entry->_typeMeta == self->_typeMeta && entryNameOf(entry) == entryNameOf(self) &&
-            entry->_memoryPoolHandle == self->_memoryPoolHandle) {
-            return objectDirEntryAt(list, i);
+        if (entry->_typeMeta == _typeMeta && entryNameOf((::igObjectDirEntry *)entry) == entryNameOf((::igObjectDirEntry *)this) &&
+            entry->_memoryPoolHandle == _memoryPoolHandle) {
+            return (igObjectDirEntry *)objectDirEntryAt(list, i);
         }
     }
-    ((Gap::Core::igObjectList *)list)->append((Gap::Core::igObject *)self);
-    return self;
+    ((igObjectList *)list)->append(this);
+    return this;
 }
 
-int igObjectDirEntry_GetMeta(void) {
-    return (int)g_igObjectDirEntry_metaObject;
+/* Takes one more reference on `ref` (null-safe). */
+void igObjectDirEntry::refEntry(void *ref) {
+    igObject::ref((igObject *)ref);
 }
 
-/* Takes one more reference on `object` (null-safe): bumps its shared igObject _refCount. */
-void igObjectDirEntry_RetainSharedRef(igObjectDirEntry *self, igObject *object) {
-    igObject::ref(object);
+/* Releases one reference to `ref`, destroying it when its count reaches zero. */
+void igObjectDirEntry::releaseEntry(void *ref) {
+    igObject::release((igObject *)ref);
 }
 
-/* Release one reference to `object`: drop its reference count and destroy it when the 23-bit count
- * (the `<< 0x29 >> 0x29` mask) reaches zero. `self` is not used. */
-void igObjectDirEntry_ReleaseSharedRef(igObjectDirEntry *self, igObject *object) {
-    igObject::release(object);
-}
-
-void igObjectDirEntry_SetTypeMeta(igObjectDirEntry *self, igMetaObject *meta) {
-    char *interned;
-    (igSmartPointer<igMetaObject> &)self->_typeMeta = meta;
+void igObjectDirEntry::setTypeMeta(igMetaObject *meta) {
+    _typeMeta = meta;
     if (meta) {
-        char *name = (char *)meta->_name;
-        StringPool *pool = InternedStrings::get();
-        interned = ((char *)StringPool_Intern(pool, (const char *)name));
-        releaseString((const char *)self->_typeMetaName);
-        self->_typeMetaName = (int)interned;
+        _typeMetaName = (const char *)meta->_name;
     } else {
-        StringPool *pool = InternedStrings::get();
-        interned = ((char *)StringPool_Intern(pool, (const char *)"NoMeta"));
-        releaseString((const char *)self->_typeMetaName);
-        self->_typeMetaName = (int)interned;
+        _typeMetaName = "NoMeta";
     }
 }
 
-/* slot 23 of igObjectDirEntry: set the _ref reference (+24; reflected as a raw ref, but the code
- * treats it as a counted igObject). Reference-counted assignment: retain the new object, release
- * the old one (destroying it when its 23-bit count reaches zero), then store the new one. */
-void igObjectDirEntry_SetRef(igObjectDirEntry *self, igObject *object) {
+/* _ref is reflected as a raw ref, but an object entry counts the object it holds: retain the new one,
+ * release the old one, then store the new one. */
+void igObjectDirEntry::setRef(void *ref) {
     igObject *previousObject;
-    igObject::ref(object);
-    previousObject = (igObject *)(self->_ref);
+    igObject::ref((igObject *)ref);
+    previousObject = (igObject *)_ref;
     igObject::release(previousObject);
-    self->_ref = (int)object;
+    _ref = (int)ref;
 }
 
 /* Write the referenced object's persistent fields at the file's object cursor and move past them. */
-void igObjectDirEntry_WriteObject(igObjectDirEntry *self, igIGBFileView *file) {
+void igObjectDirEntry::writeWrite(igIGBFile *igb) {
+    igIGBFileView *file = (igIGBFileView *)igb;
     int cursor = file->ObjectCursor();
-    file->SetObjectCursor(cursor + igObject_WritePersistentFields((igObjectDispatchView *)self->_ref, (int *)cursor, (igIGBFile *)file,
-                                                                  (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap));
+    file->SetObjectCursor(cursor + igObject_WritePersistentFields((igObjectDispatchView *)_ref, (int *)cursor, (igIGBFile *)file,
+                                                                  (::igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap));
 }
 
-void igObjectDirEntry_PrepareWrite(igObjectDirEntryView *self) {
-    igObjectDispatchView *object = (igObjectDispatchView *)self->_ref;
+void igObjectDirEntry::writeMakeProxy(igIGBFile *igb) {
+    igObjectDispatchView *object = (igObjectDispatchView *)_ref;
     if (object != 0) {
         int (*writeProxy)() = (int (*)())object->GetMeta()->_writeProxy;
         if (writeProxy != 0) {
-            igObjectDirEntry_SetTypeMeta((igObjectDirEntry *)self, (igMetaObject *)writeProxy());
+            setTypeMeta((igMetaObject *)writeProxy());
         }
     }
 }
 
-void igObjectDirEntry_ComputeWriteSize(igObjectDirEntryView *self, igIGBFile *file) {
+void igObjectDirEntry::writeComputeBufferSize(igIGBFile *file) {
     int bufferSize;
     void *(*writeProxy)();
     igObjectDispatchView *object;
     void *meta;
 
-    object = (igObjectDispatchView *)self->_ref;
+    object = (igObjectDispatchView *)_ref;
     igMetaObject *objectMeta = object->GetMeta();
     meta = objectMeta;
     writeProxy = (void *(*)())objectMeta->_writeProxy;
     if (writeProxy != 0) {
         meta = writeProxy();
     }
-    self->_typeMetaIndex = igMetaObject_AddToMetaObjectList((igTDataList<igMetaObject *> *)file->_metaObjectListInFile, (igMetaObject *)meta);
+    _typeMetaIndex = igMetaObject_AddToMetaObjectList((::igTDataList<igMetaObject *> *)file->_metaObjectListInFile, (igMetaObject *)meta);
     bufferSize = file->_objectBufferSize;
-    file->_objectBufferSize = bufferSize + ((Gap::Core::igObject *)object)->getIoSize();
+    file->_objectBufferSize = bufferSize + ((igObject *)object)->getIoSize();
     file->_objectCount = file->_objectCount + 1;
 }
 
-void igObjectDirEntry_RegisterRef(igObjectDirEntry *self, int withMeta) {
+void igObjectDirEntry::readFinishConstruction(bool doMakeConcrete) {
     int ref;
 
-    ref = self->_ref;
+    ref = _ref;
     if (ref != 0) {
-        if (withMeta != 0) {
-            igObject_RegisterInstance((void **)ref, (void *)self->_typeMeta);
+        if (doMakeConcrete) {
+            igObject_RegisterInstance((void **)ref, (void *)_typeMeta.get());
             return;
         }
         igObject_RegisterInstance((void **)ref, (void *)0);
     }
 }
 
-void igObjectDirEntry_PostProcess(igObjectDirEntryView *self)
+void igObjectDirEntry::readPostRead(igIGBFile *igb)
 {
-    ((igObjectDispatchView *)self->_ref)->userPostLoad();
+    ((igObjectDispatchView *)_ref)->userPostLoad();
 }
 
 /* Read the referenced object's fields from the file's object cursor and move past them. */
-void igObjectDirEntry_ResolveRefOld(igObjectDirEntry *self, igIGBFileView *file) {
-    igObjectDispatchView *object = (igObjectDispatchView *)self->_ref;
+void igObjectDirEntry::readReadVersion3(igIGBFile *igb) {
+    igIGBFileView *file = (igIGBFileView *)igb;
+    igObjectDispatchView *object = (igObjectDispatchView *)_ref;
     int read = igObject_ReadFields(object, (FieldRecordHead *)file->ObjectCursor(), (igIGBFile *)file,
-                            (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
+                            (::igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
     int cursor = file->ObjectCursor();
     file->SetObjectCursor(cursor + read);
 }
 
 /* Resolve the referenced object's references to other entries the same way, from the object cursor. */
-void igObjectDirEntry_ResolveRef(igObjectDirEntry *self, igIGBFileView *file) {
-    igObjectDispatchView *object = (igObjectDispatchView *)self->_ref;
+void igObjectDirEntry::readRead(igIGBFile *igb) {
+    igIGBFileView *file = (igIGBFileView *)igb;
+    igObjectDispatchView *object = (igObjectDispatchView *)_ref;
     int read = igObject_ReadPersistentFields(object, (FieldRecordHead *)file->ObjectCursor(), (igDirectoryView *)file,
-                            (igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
+                            (::igTDataList<igMetaObject *> *)file->_metaObjectListInFile, file->_endianSwap);
     int cursor = file->ObjectCursor();
     file->SetObjectCursor(cursor + read);
 }
 
-static inline void addRef(igObject *o) { igObject::ref(o); }
-
-static inline void dropRef(igObject *o) {
-    o->release();
-}
-
-static inline void setMeta(igObjectDirEntryView *self, igMetaObject *m) {
-    igMetaObject *old;
-    addRef(m);
-    old = self->_typeMeta;
-    if (old != 0) { dropRef(old); }
-    self->_typeMeta = m;
-}
-
-void igObjectDirEntry_CreateObject(igObjectDirEntryView *self, igIGBFileView *file) {
+void igObjectDirEntry::readSetup(igIGBFile *igb) {
+    igIGBFileView *file = (igIGBFileView *)igb;
     int index;
     igObject *obj;
     int pool;
     int sel;
-    index = self->_typeMetaIndex;
+    index = _typeMetaIndex;
     if (index == -1) {
-        setMeta(self, ((igMetaObject *)igObjectSystem_FindMetaByNameDefault((const char *)self->_typeMetaName)));
+        _typeMeta = (igMetaObject *)igObjectSystem_FindMetaByNameDefault(_typeMetaName.p);
     } else {
-        setMeta(self, ((igMetaObject **)file->_metaObjectListInFile->_data)[index]);
+        _typeMeta = ((igMetaObject **)file->_metaObjectListInFile->_data)[index];
     }
-    if (self->_typeMeta != 0) {
-        sel = self->_memoryPoolHandle;
+    if (_typeMeta != 0) {
+        sel = _memoryPoolHandle;
         if (sel == -1 || sel == 1 || sel == 2) {
             pool = (int)file->_objectMemoryPool;
         } else {
@@ -197,38 +176,35 @@ void igObjectDirEntry_CreateObject(igObjectDirEntryView *self, igIGBFileView *fi
                 pool = (int)file->_objectMemoryPool;
             }
         }
-        obj = ((igObject *)igMetaObject_CreateInstanceWithPool(self->_typeMeta, (igMemoryPoolView *)pool));
+        obj = (igObject *)igMetaObject_CreateInstanceWithPool(_typeMeta, (igMemoryPoolView *)pool);
         if (obj == 0) {
             file->_hasCriticalFailure = 1;
-            igDirectory_SetEntryRef((igDirectoryView *)file, self->_index, (int)0);
+            igDirectory_SetEntryRef((igDirectoryView *)file, _index, (int)0);
             return;
         }
-        igDirectory_SetEntryRef((igDirectoryView *)file, self->_index, (int)obj);
-        dropRef(obj);
+        igDirectory_SetEntryRef((igDirectoryView *)file, _index, (int)obj);
+        obj->release();
     } else {
-        igDirectory_SetEntryRef((igDirectoryView *)file, self->_index, (int)0);
+        igDirectory_SetEntryRef((igDirectoryView *)file, _index, (int)0);
     }
 }
 
-/* Takes one more reference on `object` (null-safe): bumps its shared igObject _refCount. */
-void igObjectDirEntry_RetainRef(igObjectDirEntry *self, igObject *object) {
-    igObject::ref(object);
+/* Takes one more reference on `refParam` (null-safe). */
+void igObjectDirEntry::refRef(void *refParam) {
+    igObject::ref((igObject *)refParam);
 }
 
-/* Release one reference to `object`: drop its reference count and destroy it when the 23-bit count
- * (the `<< 0x29 >> 0x29` mask) reaches zero. `self` is not used. */
-void igObjectDirEntry_ReleaseRef(igObjectDirEntry *self, igObject *object) {
-    igObject::release(object);
+/* Releases one reference to `refParam`, destroying it when its count reaches zero. */
+void igObjectDirEntry::releaseRef(void *refParam) {
+    igObject::release((igObject *)refParam);
 }
 
-/* igObjectDirEntry vtable slot 29: setter for `_memoryPoolHandle` (+44), the pool handle field of
- * the directory entry. Slot 30 is the matching getter; igMemoryDirEntry has the same pair. */
-void igObjectDirEntry_SetMemoryPoolHandle(igObjectDirEntry *self, int memoryPoolHandle) {
-    self->_memoryPoolHandle = memoryPoolHandle;
+void igObjectDirEntry::setMemoryPoolHandle(int handle) {
+    _memoryPoolHandle = handle;
 }
 
-/* IgObjectDirEntry vtable slot 30, a plain getter that returns the reflected field
- * _memoryPoolHandle (+44). */
-int igObjectDirEntry_GetMemoryPoolHandle(igObjectDirEntry *self) {
-    return self->_memoryPoolHandle;
+int igObjectDirEntry::getMemoryPoolHandle() {
+    return _memoryPoolHandle;
+}
+}
 }

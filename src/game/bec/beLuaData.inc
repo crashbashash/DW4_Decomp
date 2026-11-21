@@ -44,7 +44,7 @@ CallbackArray *beLuaData_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beLuaData_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         beLuaData_GetMetaObjectFunction,
         "beLuaData",

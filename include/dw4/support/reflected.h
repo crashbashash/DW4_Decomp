@@ -21030,7 +21030,7 @@ typedef struct libNdmwRuntimePlugin {
 #include "dw4/core/igStringRef.h"
 namespace Gap {
 namespace Attrs { class igAlphaFunctionAttr; class igAlphaStateAttr; class igAttr; class igAttrDefaultManager; class igAttrList; class igAttrListList; class igAttrPool; class igBlendFunctionAttr; class igBlendMatricesAttr; class igBlendMatrixPaletteAttr; class igBlendMatrixPaletteAttrList; class igBlendStateAttr; class igClearAttr; class igClippingStateAttr; class igColorAttr; class igColorMaskAttr; class igCullFaceAttr; class igDepthStateAttr; class igDepthWriteStateAttr; class igDisplayListAttr; class igFogAttr; class igFogStateAttr; class igGenericAttrDefaultManager; class igGeometryMaskAttr; class igLightAttr; class igLightList; class igLightStateAttr; class igLightStateAttrList; class igLightingStateAttr; class igMaterialAttr; class igMatrixOptStateAttr; class igModelViewMatrixAttr; class igModelViewMatrixAttrList; class igMultiPassStateAttr; class igNonRefCountedAttrList; class igNormalizeNormalsStateAttr; class igPixelPipelineModeAttr; class igPolygonModeAttr; class igProjectionMatrixAttr; class igRenderListAttr; class igShadeModelAttr; class igStencilFunctionAttr; class igStencilStateAttr; class igTexGenMatrixAttr; class igTextureCoordSourceAttr; class igTextureFunctionAttr; class igTextureMatrixAttr; class igTextureMatrixStateAttr; class igTextureStateAttr; class igTextureUnloadAttr; class igTimeAttr; class igVertexBlendMatrixAttr; class igVertexBlendStateAttr; class igViewportAttr; class igVisualAttribute; class igVisualContextAttrDefaultManager; }
-namespace Core { class igBoolArrayMetaField; class igBoolList; class igBoolMetaField; class igCharArrayMetaField; class igCharList; class igCharListNoClean; class igCharMetaField; class igCompoundMetaField; class igDataList; class igDependencyList; class igDoubleArrayMetaField; class igDoubleList; class igDoubleMetaField; class igEnumArrayMetaField; class igEnumMetaField; class igFloatArrayMetaField; class igFloatList; class igFloatMetaField; class igIntArrayMetaField; class igIntList; class igIntListNoClean; class igIntMetaField; class igLongArrayMetaField; class igLongList; class igLongMetaField; class igMemoryRefArrayMetaField; class igMemoryRefMetaField; class igMetaEnum; class igMetaField; class igNonRefCountedObjectList; class igObject; class igObjectList; class igObjectRefArrayMetaField; class igObjectRefMetaField; class igPointerList; class igRawRefArrayMetaField; class igRawRefMetaField; class igRefMetaField; class igShortArrayMetaField; class igShortList; class igShortMetaField; class igStringArrayMetaField; class igStringMetaField; class igStructMetaField; class igUnsignedCharArrayMetaField; class igUnsignedCharList; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntList; class igUnsignedIntListNoClean; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortList; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
+namespace Core { class igBoolArrayMetaField; class igBoolList; class igBoolMetaField; class igCharArrayMetaField; class igCharList; class igCharListNoClean; class igCharMetaField; class igCompoundMetaField; class igDataList; class igDependencyList; class igDirEntry; class igDoubleArrayMetaField; class igDoubleList; class igDoubleMetaField; class igEnumArrayMetaField; class igEnumMetaField; class igExternalDirEntry; class igExternalIndexedEntry; class igExternalInfoEntry; class igFloatArrayMetaField; class igFloatList; class igFloatMetaField; class igIntArrayMetaField; class igIntList; class igIntListNoClean; class igIntMetaField; class igLongArrayMetaField; class igLongList; class igLongMetaField; class igMedia; class igMemoryDirEntry; class igMemoryRefArrayMetaField; class igMemoryRefMetaField; class igMetaEnum; class igMetaField; class igNamedObject; class igNonRefCountedObjectList; class igObject; class igObjectDirEntry; class igObjectList; class igObjectRefArrayMetaField; class igObjectRefMetaField; class igPointerList; class igRawRefArrayMetaField; class igRawRefMetaField; class igRefMetaField; class igShortArrayMetaField; class igShortList; class igShortMetaField; class igStringArrayMetaField; class igStringMetaField; class igStructMetaField; class igTimer; class igUnsignedCharArrayMetaField; class igUnsignedCharList; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntList; class igUnsignedIntListNoClean; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortList; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
 namespace Gui { class igClearRenderer; class igRenderer; }
 namespace Insight { class igFlushRenderer; }
 namespace Math { class igMatrix44fMetaField; class igVec2fMetaField; class igVec3fMetaField; class igVec4fArrayMetaField; class igVec4fMetaField; class igVec4ucMetaField; }
@@ -21064,12 +21064,16 @@ using Core::igDataList;
 using Core::igDependencyList;
 using Attrs::igDepthStateAttr;
 using Attrs::igDepthWriteStateAttr;
+using Core::igDirEntry;
 using Attrs::igDisplayListAttr;
 using Core::igDoubleArrayMetaField;
 using Core::igDoubleList;
 using Core::igDoubleMetaField;
 using Core::igEnumArrayMetaField;
 using Core::igEnumMetaField;
+using Core::igExternalDirEntry;
+using Core::igExternalIndexedEntry;
+using Core::igExternalInfoEntry;
 using Core::igFloatArrayMetaField;
 using Core::igFloatList;
 using Core::igFloatMetaField;
@@ -21093,6 +21097,8 @@ using Core::igLongMetaField;
 using Attrs::igMaterialAttr;
 using Math::igMatrix44fMetaField;
 using Attrs::igMatrixOptStateAttr;
+using Core::igMedia;
+using Core::igMemoryDirEntry;
 using Core::igMemoryRefArrayMetaField;
 using Core::igMemoryRefMetaField;
 using Core::igMetaEnum;
@@ -21100,10 +21106,12 @@ using Core::igMetaField;
 using Attrs::igModelViewMatrixAttr;
 using Attrs::igModelViewMatrixAttrList;
 using Attrs::igMultiPassStateAttr;
+using Core::igNamedObject;
 using Attrs::igNonRefCountedAttrList;
 using Core::igNonRefCountedObjectList;
 using Attrs::igNormalizeNormalsStateAttr;
 using Core::igObject;
+using Core::igObjectDirEntry;
 using Core::igObjectList;
 using Core::igObjectRefArrayMetaField;
 using Core::igObjectRefMetaField;
@@ -21133,6 +21141,7 @@ using Attrs::igTextureMatrixStateAttr;
 using Attrs::igTextureStateAttr;
 using Attrs::igTextureUnloadAttr;
 using Attrs::igTimeAttr;
+using Core::igTimer;
 using Core::igUnsignedCharArrayMetaField;
 using Core::igUnsignedCharList;
 using Core::igUnsignedCharMetaField;
@@ -22088,6 +22097,69 @@ public:
 }
 
 namespace Gap {
+namespace Core {
+/* handle 0x585bd8, 3 field(s), sizeof 12 (registered instance size) */
+class igNamedObject : public Gap::Core::igObject {
+public:
+    igStringRef _name;                             /* +8    igStringMetaField */
+    IG_OBJECT_DEFINE(igNamedObject)
+    static igMetaField *k_name;
+    void setName(const char *name);
+    inline const char *getName() const { return _name.p ? (const char *)_name.p : ""; }
+    inline const igStringRef &getNameRef() const { return _name; }
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x586710, 7 field(s), sizeof 28 (registered instance size) */
+class igDirEntry : public Gap::Core::igNamedObject {
+public:
+    int _index;                                    /* +12   igIntMetaField */
+    int _resolveMethod;                            /* +16   igEnumMetaField */
+    int _refType;                                  /* +20   igEnumMetaField */
+    int _ref;                                      /* +24   igRawRefMetaField */
+    IG_OBJECT_DEFINE(igDirEntry)
+    static igMetaEnum *getResolveMethodMetaEnum();
+private:
+    static igMetaEnum *ResolveMethod_Meta;
+public:
+    static igMetaEnum *getRefTypeMetaEnum();
+private:
+    static igMetaEnum *RefType_Meta;
+public:
+    static igMetaField *k_index;
+    static igMetaField *k_resolveMethod;
+    static igMetaField *k_refType;
+    static igMetaField *k_ref;
+    inline void *getRef() const { return (void *)_ref; }
+    virtual void initDefaults();
+    virtual void setRef(void *refParam);
+    virtual void refRef(void *refParam);
+    virtual void releaseRef(void *refParam);
+    virtual igDirEntry *share(igIGBFile *igb);
+    virtual void refEntry(void *ref);
+    virtual void releaseEntry(void *ref);
+    virtual void setMemoryPoolHandle(int handle);
+    virtual int getMemoryPoolHandle();
+    virtual void readSetup(igIGBFile *igb);
+    virtual void readPreRead(igIGBFile *igb);
+    virtual void readReadVersion3(igIGBFile *igb);
+    virtual void readRead(igIGBFile *igb);
+    virtual void readMemorySpecial(igIGBFile *igb);
+    virtual void readFinishConstruction(bool doMakeConcrete);
+    virtual void readPostRead(igIGBFile *igb);
+    virtual void writeMakeProxy(igIGBFile *igb);
+    virtual void writeComputeBufferSize(igIGBFile *igb);
+    virtual void writeWrite(igIGBFile *igb);
+    virtual void writeMemorySpecial(igIGBFile *igb);
+    virtual int refNeedsEntryForPostFileReadCleanup();
+};
+}
+}
+
+namespace Gap {
 namespace Attrs {
 /* handle 0x55f208, 5 field(s), sizeof 16 (registered instance size) */
 class igDisplayListAttr : public Gap::Attrs::igAttr {
@@ -22190,6 +22262,90 @@ public:
     virtual unsigned short computeSize();
     virtual void endianSwapMemory(void *mem, int num) const;
     void setDefault(int val);
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x586450, 11 field(s), sizeof 44 (registered instance size) */
+class igExternalDirEntry : public Gap::Core::igDirEntry {
+public:
+    igStringRef _directoryName;                    /* +28   igStringMetaField */
+    igStringRef _entryName;                        /* +32   igStringMetaField */
+    int _entryIndex;                               /* +36   igIntMetaField */
+    igStringRef _externalFilePath;                 /* +40   igStringMetaField */
+    IG_OBJECT_DEFINE(igExternalDirEntry)
+private:
+    static igMetaField *k_ref;
+public:
+    static igMetaField *k_directoryName;
+    static igMetaField *k_entryName;
+    static igMetaField *k_entryIndex;
+protected:
+    static igMetaField *k_externalFilePath;
+public:
+    void setDirectoryName(const char *dirName);
+    inline const char *getDirectoryName() const { return _directoryName.p; }
+    inline const char *getEntryName() const { return _entryName.p; }
+    virtual bool resolve(igResolveFunction *userFunction);
+    virtual bool load(igResolveFunction *userFunction);
+    virtual void initDefaults();
+    virtual void releaseDefaults();
+    virtual void setRef(void *refParam);
+    virtual void readSetup(igIGBFile *igb);
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x586418, 13 field(s), sizeof 52 (registered instance size) */
+class igExternalIndexedEntry : public Gap::Core::igDirEntry {
+public:
+    int _directoryIndex;                           /* +28   igIntMetaField */
+    int _entryIndex;                               /* +32   igIntMetaField */
+    igSmartPointer<igMetaObject> _entryType;       /* +36   igObjectRefMetaField */
+    int _entryTypeIndex;                           /* +40   igIntMetaField */
+    igSmartPointer<igMetaObject> _objectType;      /* +44   igObjectRefMetaField */
+    int _objectTypeIndex;                          /* +48   igIntMetaField */
+    IG_OBJECT_DEFINE(igExternalIndexedEntry)
+private:
+    static igMetaField *k_directoryIndex;
+public:
+    static igMetaField *k_entryIndex;
+    static igMetaField *k_entryType;
+    static igMetaField *k_entryTypeIndex;
+    static igMetaField *k_objectType;
+    static igMetaField *k_objectTypeIndex;
+    inline void setDirectoryIndex(int directoryIndexParam) { _directoryIndex = directoryIndexParam; }
+    inline int getDirectoryIndex() const { return _directoryIndex; }
+    inline void setEntryIndex(int entryIndexParam) { _entryIndex = entryIndexParam; }
+    inline int getEntryIndex() const { return _entryIndex; }
+    virtual void readPreRead(igIGBFile *igb);
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x5863f8, 10 field(s), sizeof 40 (registered instance size) */
+class igExternalInfoEntry : public Gap::Core::igDirEntry {
+public:
+    igStringRef _key;                              /* +28   igStringMetaField */
+    int _directoryIndex;                           /* +32   igIntMetaField */
+    igStringRef _infoName;                         /* +36   igStringMetaField */
+    IG_OBJECT_DEFINE(igExternalInfoEntry)
+private:
+    static igMetaField *k_key;
+public:
+    static igMetaField *k_directoryIndex;
+    static igMetaField *k_infoName;
+    inline const char *getKey() const { return _key.p; }
+    inline void setDirectoryIndex(int directoryIndexParam) { _directoryIndex = directoryIndexParam; }
+    inline int getDirectoryIndex() const { return _directoryIndex; }
+    inline const char *getInfoName() const { return _infoName.p; }
+    virtual void readSetup(igIGBFile *igb);
 };
 }
 }
@@ -22639,6 +22795,73 @@ public:
 
 namespace Gap {
 namespace Core {
+/* handle 0x586020, 2 field(s), sizeof 8 (registered instance size) */
+class igMedia : public Gap::Core::igObject {
+public:
+    IG_ABSTRACT_OBJECT_DEFINE(igMedia)
+    virtual int createFile() = 0;
+    virtual void deleteFile(int fileHandle) = 0;
+    virtual igResult open(int fileHandle, igStringRef name, int openMode) = 0;
+    virtual void close(int fileHandle) = 0;
+    virtual int write(int fileHandle, const void *mem, int numBytes) = 0;
+    virtual int read(int fileHandle, void *mem, int numBytes) = 0;
+    virtual void readAsynchronous(int fileHandle, void *mem, int numBytes, int (*function)(int, int), int token) = 0;
+    virtual int seek(int fileHandle, int offset, int whence) = 0;
+    virtual int tell(int fileHandle) = 0;
+    virtual bool handlesPrefix(const char *filename, int prefixSize) = 0;
+    static void setDefaultMedia(igMedia *media);
+    static void registerMedia(igMedia *media);
+private:
+    static void userRegister();
+public:
+    static void userUnregister();
+    static void _classDestructor();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585f60, 14 field(s), sizeof 56 (registered instance size) */
+class igMemoryDirEntry : public Gap::Core::igDirEntry {
+public:
+    int _memSize;                                  /* +28   igIntMetaField */
+    int _memTypeSize;                              /* +32   igIntMetaField */
+    int _memType;                                  /* +36   igObjectRefMetaField */
+    int _memTypeIndex;                             /* +40   igIntMetaField */
+    int _alignmentTypeIndex;                       /* +44   igIntMetaField */
+    int _memoryPoolHandle;                         /* +48   igIntMetaField */
+    unsigned char _refCounted;                     /* +52   igBoolMetaField */
+    char _pad53[3];
+    IG_OBJECT_DEFINE(igMemoryDirEntry)
+    static igMetaField *k_memSize;
+    static igMetaField *k_memTypeSize;
+    static igMetaField *k_memType;
+    static igMetaField *k_memTypeIndex;
+    static igMetaField *k_alignmentTypeIndex;
+    static igMetaField *k_memoryPoolHandle;
+private:
+    static igMetaField *k_refCounted;
+public:
+    void setMemType(igMetaField *type);
+    inline igMetaField *getMemType() { return (igMetaField *)_memType; }
+    virtual igDirEntry *share(igIGBFile *igb);
+    virtual void setMemoryPoolHandle(int handle);
+    virtual int getMemoryPoolHandle();
+    virtual void readSetup(igIGBFile *igb);
+    virtual void readReadVersion3(igIGBFile *igb);
+    virtual void readRead(igIGBFile *igb);
+    virtual void readMemorySpecial(igIGBFile *igb);
+    virtual void readFinishConstruction(bool doMakeConcrete);
+    virtual void writeComputeBufferSize(igIGBFile *igb);
+    virtual void writeMemorySpecial(igIGBFile *igb);
+    virtual int refNeedsEntryForPostFileReadCleanup();
+};
+}
+}
+
+namespace Gap {
+namespace Core {
 /* handle 0x585a60, 22 field(s), sizeof 56 (registered instance size) */
 class igRefMetaField : public Gap::Core::igMetaField {
 public:
@@ -22873,6 +23096,49 @@ public:
     inline void setState(bool enabled) { _enabled = enabled; }
     inline bool getState() const { return _enabled; }
     virtual void synchronizeDefault(igVisualContext *vc);
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585b70, 13 field(s), sizeof 52 (registered instance size) */
+class igObjectDirEntry : public Gap::Core::igDirEntry {
+public:
+    igSmartPointer<igMetaObject> _typeMeta;        /* +28   igObjectRefMetaField */
+    igStringRef _typeMetaName;                     /* +32   igStringMetaField */
+    int _majorVersion;                             /* +36   igIntMetaField */
+    int _minorVersion;                             /* +40   igIntMetaField */
+    int _memoryPoolHandle;                         /* +44   igIntMetaField */
+    int _typeMetaIndex;                            /* +48   igIntMetaField */
+    IG_OBJECT_DEFINE(igObjectDirEntry)
+    static igMetaField *k_typeMeta;
+    static igMetaField *k_typeMetaName;
+    static igMetaField *k_majorVersion;
+    static igMetaField *k_minorVersion;
+    static igMetaField *k_ref;
+    static igMetaField *k_memoryPoolHandle;
+private:
+    static igMetaField *k_typeMetaIndex;
+public:
+    void setTypeMeta(igMetaObject *meta);
+    virtual void releaseDefaults();
+    virtual void setRef(void *refParam);
+    virtual void refRef(void *refParam);
+    virtual void releaseRef(void *refParam);
+    virtual igDirEntry *share(igIGBFile *igb);
+    virtual void refEntry(void *ref);
+    virtual void releaseEntry(void *ref);
+    virtual void setMemoryPoolHandle(int handle);
+    virtual int getMemoryPoolHandle();
+    virtual void readSetup(igIGBFile *igb);
+    virtual void readReadVersion3(igIGBFile *igb);
+    virtual void readRead(igIGBFile *igb);
+    virtual void readFinishConstruction(bool doMakeConcrete);
+    virtual void readPostRead(igIGBFile *igb);
+    virtual void writeMakeProxy(igIGBFile *igb);
+    virtual void writeComputeBufferSize(igIGBFile *igb);
+    virtual void writeWrite(igIGBFile *igb);
 };
 }
 }
@@ -23519,6 +23785,30 @@ public:
     inline void set(long long time) { _time = time; }
     inline long long get() { return _time; }
     virtual void synchronizeDefault(igVisualContext *visualContext);
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585788, 2 field(s), sizeof 8 (registered instance size) */
+class igTimer : public Gap::Core::igObject {
+public:
+    IG_ABSTRACT_OBJECT_DEFINE(igTimer)
+    virtual double getResolutionAsDouble() const = 0;
+    virtual long long getResolutionAsLong() const = 0;
+    virtual double getTimeAsDouble() const = 0;
+    virtual long long getTimeAsLong() const = 0;
+    virtual void start() = 0;
+    virtual void stop() = 0;
+    virtual void reset() = 0;
+    virtual void resetAndStop() = 0;
+    virtual void resetAndStart() = 0;
+    virtual void setResetTime(double resetTime) = 0;
+    virtual void setResetTime(long long resetTime) = 0;
+    virtual double getResetTimeAsDouble() const = 0;
+    virtual long long getResetTimeAsLong() const = 0;
+    virtual bool isStopped() const = 0;
 };
 }
 }

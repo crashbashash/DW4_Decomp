@@ -42,7 +42,7 @@ CallbackArray *igVertexArray2Helper_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igVertexArray2Helper_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         igVertexArray2Helper_GetMetaObjectFunction,
         "igVertexArray2Helper",
@@ -59,7 +59,7 @@ void igVertexArray2Helper_GetMetaObjectFunction(void) {
 }
 
 int FUN_0014a6e0(void) {
-    return (int)g_igNamedObject_metaObject;
+    return (int)Gap::Core::igNamedObject::getClassMeta();
 }
 
 static FieldFactory g_igVertexArray2Helper_ctorTable[] = {

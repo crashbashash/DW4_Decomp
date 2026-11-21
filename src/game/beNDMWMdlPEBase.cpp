@@ -282,7 +282,7 @@ int beNDMWMdlPEBase_ShowStatusIcon(beNDMWMdlPEBase *self, beBaseInfoRam *ram, co
     beBaseInfoRam *icon;
     igVec3f position, openPosition, movePosition, moveOffset;
     EnsureDataList(ram);
-    data = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
+    data = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "ONE");
     igMatrix44f_GetTranslation(((igTransform *)data->_node)->_m, (float *)&position);
     if (iconRamNo == -1) {
         beMessenger_SendNamed((beMessenger *)self->_messenger, "MODELCTRL", iconName, -1, "FIND_SPACE");
@@ -313,7 +313,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
     beNDMWMdlPEBaseInfoWork *work;
     int damageSeq;
     EnsureDataList(ram);
-    work = (beNDMWMdlPEBaseInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE"))->_work;
+    work = (beNDMWMdlPEBaseInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "ONE"))->_work;
     if (work->_timerList != 0) {
         if (((beDataObjInt *)work->_hp)->_data == 0) {
             int i;
@@ -550,7 +550,7 @@ void beNDMWMdlPEBase_OnUpdateRam(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
 void beNDMWMdlPEBase_OnSequenceChange(beNDMWMdlPEBase *self, beBaseInfoRam *ram) {
     beNDMWMdlPEBaseInfoWork *work;
     EnsureDataList(ram);
-    work = (beNDMWMdlPEBaseInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE"))->_work;
+    work = (beNDMWMdlPEBaseInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "ONE"))->_work;
     if (work->_dispRamNoList != 0) {
         if (((igIntList *)work->_dispRamNoList)->_count != 0 && ((beDataObjInt *)work->_hp)->_data == 0) {
             int i;
@@ -648,7 +648,7 @@ int beNDMWMdlPEBase_OnPreMessage(beNDMWMdlPEBase *self, beBaseInfoRam *ram, int 
     beNDMWMdlPEBaseInfoWork *work;
     int action;
     EnsureDataList(ram);
-    work = (beNDMWMdlPEBaseInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE"))->_work;
+    work = (beNDMWMdlPEBaseInfoWork *)((beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "ONE"))->_work;
     action = beMessenger_ResolveEnumValue((beMessenger *)self->_messenger, MsgAction_GetMetaEnum(), (const char *)message);
     switch (action) {
     default:

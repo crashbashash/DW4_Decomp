@@ -26,8 +26,8 @@ CallbackArray *igLongTimer_Register(void) {
     return igMetaObject_RegisterClass(
         1,
         &g_igLongTimer_metaObject,
-        igTimer_Register,
-        igTimer_GetPublishedMetaObject,
+        Gap::Core::igTimer::arkRegisterInternal,
+        Gap::Core::igTimer::getClassMeta,
         igLongTimer_GetMetaObjectFunction,
         "igLongTimer",
         0x28,
@@ -36,10 +36,6 @@ CallbackArray *igLongTimer_Register(void) {
         0,
         0
     );
-}
-
-igMetaObject *igTimer_GetPublishedMetaObject(void) {
-    return g_igTimer_metaObject;
 }
 
 static FieldFactory g_igLongTimer_ctorTable[] = {

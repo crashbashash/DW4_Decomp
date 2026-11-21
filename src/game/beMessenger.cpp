@@ -495,14 +495,14 @@ void beMessenger_RegisterReceiver(beMessenger *self, beBaseInfoRam *recv, const 
     igIntList *l;
     int n;
 
-    igSmartPointer<beMessengerGroup> grp((beMessengerGroup *)((Gap::Core::igObjectList *)self->_groupList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, name));
+    igSmartPointer<beMessengerGroup> grp((beMessengerGroup *)((Gap::Core::igObjectList *)self->_groupList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, name));
     RETAIN_REF(grp.p)
     if (grp.p == 0) {
         allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
         RELEASE_REF(grp.p)
         grp.p = beMessengerGroup_Create(allocator);
-        igNamedObject_SetName((igNamedObject *)grp.p, name);
+        ((Gap::Core::igNamedObject *)grp.p)->setName(name);
         ((Gap::Core::igObjectList *)self->_groupList)->append((Gap::Core::igObject *)grp.p);
     }
     ((Gap::Core::igObjectList *)grp.p->_ramList)->append((Gap::Core::igObject *)recv);
@@ -633,7 +633,7 @@ void beMessenger_SelectReceivers(beMessenger *self, const char *category, const 
 
     work = (Work *)LDATA((List *)self->_workStack)[0];
     if (((List *)work->_findRamList)->_count == 0) {
-        g = (Group *)((Gap::Core::igObjectList *)self->_groupList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)work->_groupName);
+        g = (Group *)((Gap::Core::igObjectList *)self->_groupList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, (const char *)work->_groupName);
         if (g) {
             m = ((List *)g->_ramList)->_count;
             for (k = 0; k < m; k++) {

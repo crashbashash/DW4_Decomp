@@ -34,7 +34,7 @@ CallbackArray *beAction2FLASHSET_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beAction2FLASHSET_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         beAction2FLASHSET_GetMetaObjectFunction,
         "beAction2FLASHSET",

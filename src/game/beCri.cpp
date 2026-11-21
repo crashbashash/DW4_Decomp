@@ -296,13 +296,13 @@ void beCri_Start(beCri *self) {
     igObject::release(old);
     self->_hdBGM = (int)beCriHandle_Create(allocator);
     beCriAudio_Setup((beCriAudio *)Bgm(self)->_audio, 2);
-    igNamedObject_SetName((igNamedObject *)self->_hdBGM, 0);
+    ((Gap::Core::igNamedObject *)self->_hdBGM)->setName(0);
     ambienceAllocator = (void *)HandleAllocator(self);
     old = Env(self);
     igObject::release(old);
     self->_hdENV = (int)beCriHandle_Create((int)ambienceAllocator);
     beCriAudio_Setup((beCriAudio *)Env(self)->_audio, 2);
-    igNamedObject_SetName((igNamedObject *)self->_hdENV, 0);
+    ((Gap::Core::igNamedObject *)self->_hdENV)->setName(0);
     beCri_CreateEffectVoices(self);
     self->_pauseOnetime = 0;
     for (i = 0; i < 32; i++) {
@@ -502,7 +502,7 @@ long long beCri_PlayStream(beCri *self, igObjectList *names, beSoundData *cue) {
         handle->_playID = playID;
         handle->_type = cue->_type;
         name = NameOf(cue->_name);
-        igNamedObject_SetName((igNamedObject *)handle, name);
+        ((Gap::Core::igNamedObject *)handle)->setName(name);
         return playID;
     }
     return 0;
@@ -617,7 +617,7 @@ long long beCri_PlayEffect(beCri *self, igObjectList *names, beSoundData *cue) {
         handle->_playID = playID;
         handle->_type = cue->_type;
         name = NameOf(cue->_name);
-        igNamedObject_SetName((igNamedObject *)handle, name);
+        ((Gap::Core::igNamedObject *)handle)->setName(name);
         handle->_priority = cue->_priority;
         return playID;
     }
@@ -644,7 +644,7 @@ void beCri_StopHandle(beCri *self, beCriHandle *handle) {
         beCriAudio_SetVolume(audio, -999);
     }
     beCriAudio_Stop(audio);
-    igNamedObject_SetName((igNamedObject *)handle, 0);
+    ((Gap::Core::igNamedObject *)handle)->setName(0);
 }
 
 /* Stops the handle playing `playID`. */
@@ -784,7 +784,7 @@ void beCri_ReleasePartitions(beCri *self)
 static inline void AppendVoice(beCri *self, int channels) {
     igSmartPointer<beCriHandle> handle(beCriHandle_Create(HandleAllocator(self)));
     beCriAudio_Setup((beCriAudio *)handle->_audio, channels);
-    igNamedObject_SetName((igNamedObject *)handle.p, 0);
+    ((Gap::Core::igNamedObject *)handle.p)->setName(0);
     ((Gap::Core::igObjectList *)self->_hdSEs)->append((Gap::Core::igObject *)handle.get());
 }
 

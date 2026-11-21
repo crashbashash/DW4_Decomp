@@ -1,53 +1,56 @@
-igMetaObject *g_igTimer_metaObject;
+namespace Gap {
+namespace Core {
 
-igTimer *igTimer_Create(int allocator) {
-    igTimer_EnsureRegistered();
-    return (igTimer *)igMetaObject_CreateInstance(g_igTimer_metaObject, (igMemoryPoolView *)allocator);
-}
+igMetaObject *igTimer::_Meta;
 
-igMetaObject *igTimer_GetOrCreateMetaObject(void) {
-    if (g_igTimer_metaObject == 0) {
-        g_igTimer_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igTimer_metaObject;
-}
-
-igMetaObject *igTimer_GetMetaObject(void)
+igTimer *igTimer::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igTimer_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igTimer_EnsureRegistered();
-    return g_igTimer_metaObject;
+    arkRegister();
+    return (igTimer *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-void igTimer_EnsureRegistered(void)
+igMetaObject *igTimer::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igTimer_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igTimer_Register(void) {
+igMetaObject *igTimer::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void igTimer::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igTimer::arkRegisterInternal()
+{
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1,
-        &g_igTimer_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igTimer_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igTimer",
-        8,
+        sizeof(igTimer),
         0,
-        igTimer_SetAbstractProxy,
+        &arkRegisterInitialize,
         0,
         0
     );
 }
 
-void igTimer_GetMetaObjectFunction(void) {
-    igTimer_GetMetaObject();
+void igTimer::arkRegisterInitialize()
+{
+    _Meta->_abstractProxy = (int)&igLongTimer_GetMetaObjectFunction;
 }
-
-void igTimer_SetAbstractProxy(void) {
-    *(int *)((char *)((void *)g_igTimer_metaObject) + 60) = (int)(&igLongTimer_GetMetaObjectFunction);
+}
 }
 
 void igLongTimer_GetMetaObjectFunction(void) {

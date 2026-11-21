@@ -19,7 +19,7 @@ CallbackArray *beBaseInfoData_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_beBaseInfoData_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         beBaseInfoData_GetMetaObjectFunction,
         "beBaseInfoData",

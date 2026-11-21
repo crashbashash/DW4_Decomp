@@ -1,7 +1,7 @@
 int igDirectory_GetRefByName(int directory, int name) {
     igDirEntryView *entry;
 
-    entry = (igDirEntryView *)(((void *)((Gap::Core::igObjectList *)directory)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name)));
+    entry = (igDirEntryView *)(((void *)((Gap::Core::igObjectList *)directory)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, (const char *)name)));
     if (entry == 0) {
         return 0;
     }
@@ -10,11 +10,11 @@ int igDirectory_GetRefByName(int directory, int name) {
 
 int igDirectory_GetObjectByName(int directory, int name) {
     igObjectDirEntry *entry;
-    entry = (igObjectDirEntry *)((void *)((Gap::Core::igObjectList *)directory)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name)); if (entry == 0) return 0; if (((Gap::Core::igObject *)entry)->isOfType((igMetaObject *)g_igObjectDirEntry_metaObject) != 0) return entry->_ref; return 0;
+    entry = (igObjectDirEntry *)((void *)((Gap::Core::igObjectList *)directory)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, (const char *)name)); if (entry == 0) return 0; if (((Gap::Core::igObject *)entry)->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) return entry->_ref; return 0;
 }
 
 void *igDirectory_GetEntryByName(int directory, int name) {
-    return ((void *)((Gap::Core::igObjectList *)directory)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name));
+    return ((void *)((Gap::Core::igObjectList *)directory)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, (const char *)name));
 }
 
 void igDirectory_MakeConcrete(igDirectoryView *self) {
@@ -26,7 +26,7 @@ void igDirectory_MakeConcrete(igDirectoryView *self) {
         i = 0;
         while (i < count) {
             entry = (igObjectDirEntry *)igDirectory_GetEntry((int *)self, i);
-            if (entry != 0 && ((Gap::Core::igObject *)entry)->isOfType((igMetaObject *)g_igObjectDirEntry_metaObject) != 0) {
+            if (entry != 0 && ((Gap::Core::igObject *)entry)->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) {
                 if (entry->_typeMeta != 0 && ((igMetaObject *)entry->_typeMeta)->_abstractProxy != 0) {
                     ((igObjectDispatchView *)entry->_ref)->userMakeConcrete((igMetaObject *)entry->_typeMeta);
                 }
@@ -37,7 +37,7 @@ void igDirectory_MakeConcrete(igDirectoryView *self) {
     }
 }
 
-void igDirectory_SetName(igDirectoryView *self, int name) {
+void igDirectory_SetName(igDirectoryView *self, const char *name) {
     int *header;
     int refs;
     int pool;
@@ -51,7 +51,7 @@ void igDirectory_SetName(igDirectoryView *self, int name) {
         }
         g_stringPool = (StringPool *)pool;
     }
-    interned = (int *)StringPool_Intern((StringPool *)g_stringPool, (const char *)name);
+    interned = (int *)StringPool_Intern((StringPool *)g_stringPool, name);
     oldName = (int *)self->_name;
     if (oldName != 0) {
         header = oldName - 2;

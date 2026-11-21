@@ -80,7 +80,7 @@ void FUN_001d6790(OO_1d6790 *arg0, AA *arg1) {
     var_s2 = 0;
     while (var_s2 < temp_s3) {
         temp_v0 = (EE_1d6790 *)igDirectory_GetEntry((int *)arg1, var_s2);
-        if (0 != ((Gap::Core::igObject *)temp_v0)->isOfType(g_igObjectDirEntry_metaObject)) {
+        if (0 != ((Gap::Core::igObject *)temp_v0)->isOfType(Gap::Core::igObjectDirEntry::getClassMeta())) {
             temp_s6 = temp_v0->f24;
             if (((Gap::Core::igObject *)temp_s6)->isOfType(g_igTransformSource_metaObject) != 0) {
                 temp_s1 = ((DW4VC_124_0_1d6790 *)(temp_s6))->vX();

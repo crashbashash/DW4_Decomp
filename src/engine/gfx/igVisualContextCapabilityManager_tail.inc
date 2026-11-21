@@ -115,7 +115,7 @@ void igVisualContext_constructFields(igVisualContextFieldsView *self, int flags)
         }
     }
 
-    self->timer = (igObjectSlotView *)igTimer_Create(igVisualContext_GetInternalMemoryPool((int *)self));
+    self->timer = (igObjectSlotView *)Gap::Core::igTimer::_instantiateFromPool((igMemoryPoolView *)igVisualContext_GetInternalMemoryPool((int *)self));
     ((igTimerDispatchView *)self->timer.p)->Restart();
 
     pool = igVisualContext_GetListMemoryPool((int *)self);

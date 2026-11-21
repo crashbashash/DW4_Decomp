@@ -28,7 +28,7 @@ void igNamedObjectList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igNamedObjectList_Register);
 }
 
-static igMetaObjectCallback g_igNamedObjectList_callbackList[] = { igNamedObject_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igNamedObjectList_callbackList[] = { Gap::Core::igNamedObject::arkRegister, 0 };
 
 CallbackArray *igNamedObjectList_Register(void) {
     CoreLibrary_MarkRegistered();

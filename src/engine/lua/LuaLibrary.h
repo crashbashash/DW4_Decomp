@@ -97,15 +97,6 @@ struct LuaStateImage : ObjectImage {
 };
 
 namespace Gap {
-namespace Core {
-/* igNamedObject's virtual functions: an igObject with a name. */
-class igNamedObject : public igObject {
-public:
-    char *_name;
-
-    igMetaObject *getMeta() const;
-};
-}
 namespace Lua {
 /* A Lua state as an Alchemy object. Built, it opens the state in its memory pool with the standard
  * libraries and the glue's; going, it closes it. Its own virtual functions run a chunk from a

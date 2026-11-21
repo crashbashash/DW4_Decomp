@@ -38,6 +38,6 @@ int FUN_001551f0(S_1551f0 *arg0, V_1551f0 *arg1) {
 
 void igExternalImageEntry_InitDefaults(int arg0) {
     igExternalDirEntry_InitDefaults((igDirEntry *)arg0);
-    igExternalDirEntry_SetDirectoryName((igExternalDirEntry *)arg0, (int)&text_igImageDirectory[0]);
+    ((Gap::Core::igExternalDirEntry *)arg0)->setDirectoryName((char const *)(&text_igImageDirectory[0]));
 }
 

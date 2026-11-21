@@ -550,7 +550,6 @@ extern "C" igMetaObject *igExternalImageEntry_GetMetaObject(void);
 struct W_14f470 { int *vt; int f[11]; };
 extern "C" int g_igExternalImageEntry_vtable[4];
 extern "C" int igExternalImageEntry_GetVTable(void);
-extern "C" int g_igDirEntry_vtable[4];
 
 struct Str { int *p;
     ~Str() { if (p != 0) { int *h = p - 2; int r = p[-1] - 1; p[-1] = r; if (r == 0) StringChunk_ReleaseHeader((StringChunk *)*h, (StringTokenHeader *)h); } }

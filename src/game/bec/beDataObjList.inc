@@ -30,7 +30,7 @@ void beDataObjList_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beDataObjList_Register);
 }
 
-static igMetaObjectCallback g_beDataObjList_callbackList[] = { igNamedObject_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beDataObjList_callbackList[] = { Gap::Core::igNamedObject::arkRegister, 0 };
 
 CallbackArray *beDataObjList_Register(void) {
     BecLibrary_MarkRegistered();

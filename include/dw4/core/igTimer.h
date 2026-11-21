@@ -8,9 +8,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-struct igTimer *igTimer_Create(int allocator);
-void igTimer_EnsureRegistered(void);
-struct igMetaObject *igTimer_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

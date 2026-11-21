@@ -44,7 +44,7 @@ CallbackArray *beDataObjString_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beDataObjString_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         beDataObjString_GetMetaObjectFunction,
         "beDataObjString",

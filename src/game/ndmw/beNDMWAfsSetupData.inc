@@ -37,7 +37,7 @@ CallbackArray *beNDMWAfsSetupData_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_beNDMWAfsSetupData_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         igNamedObject_GetPublishedMetaObject,
         beNDMWAfsSetupData_GetMetaObject,
         "beNDMWAfsSetupData",

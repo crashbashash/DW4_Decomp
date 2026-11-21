@@ -64,8 +64,8 @@ CallbackArray *igPsx2Media_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igPsx2Media_metaObject,
-        igMedia_Register,
-        igMedia_GetPublishedMetaObject,
+        Gap::Core::igMedia::arkRegisterInternal,
+        Gap::Core::igMedia::getClassMeta,
         igPsx2Media_GetMetaObjectFunction,
         "igPsx2Media",
         0x28,
@@ -74,10 +74,6 @@ CallbackArray *igPsx2Media_Register(void) {
         0,
         g_igPsx2Media_callbackList
     );
-}
-
-igMetaObject *igMedia_GetPublishedMetaObject(void) {
-    return g_igMedia_metaObject;
 }
 
 static FieldFactory g_igPsx2Media_ctorTable[] = {

@@ -64,7 +64,7 @@ void beNDMWMdlEffect_OnGenerate(beNDMWMdlEffect *self, beBaseInfoRam *ram) {
         }
         DataList::create(ram, a);
     }
-    s1 = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, "ONE");
+    s1 = (beModelCtrlInfoRamData *)((Gap::Core::igObjectList *)ram->_dataList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, "ONE");
     alloc = ((Gap::Core::igObject *)self)->getMemoryPool();
     if (g_useOwnerAllocator != 0) {
         a = alloc;

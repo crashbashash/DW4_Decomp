@@ -66,11 +66,15 @@ void igMedia_CreateMediaList(void) {
     g_fileDeviceList.p = (igObjectList *)(igMediaList_Create(pool));
 }
 
-void igMedia_AddMedia(int media) {
-    ((Gap::Core::igObjectList *)g_fileDeviceList.p)->append((Gap::Core::igObject *)media);
+namespace Gap {
+namespace Core {
+
+void igMedia::registerMedia(igMedia *media)
+{
+    ((igObjectList *)g_fileDeviceList.p)->append(media);
 }
 
-void igMedia_ReleaseMediaList(void) {
+void igMedia::userUnregister() {
     int *o;
 
     (*(int *)&g_defaultMedia) = 0;
@@ -78,13 +82,16 @@ void igMedia_ReleaseMediaList(void) {
     if (o != 0) {
         o[1] = o[1] - 1;
         if ((o[1] & 0x7FFFFF) == 0) {
-            igObject_Destroy((igObject *)o);
+            igObject_Destroy((::igObject *)o);
         }
     }
     g_fileDeviceList.p = 0;
 }
 
-void igMedia_SetDefaultMedia(int media) {
-    *(int *)0x586F28 = media;
+void igMedia::setDefaultMedia(igMedia *media)
+{
+    g_defaultMedia = (igMediaView *)media;
+}
+}
 }
 

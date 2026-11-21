@@ -674,7 +674,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                 root.release();
                 root.p = igAttrSet_CreateInstance(allocator);
             }
-            igNamedObject_SetName((igNamedObject *)root.p, Scene_Root);
+            ((Gap::Core::igNamedObject *)root.p)->setName(Scene_Root);
             igSmartPointer<igBlendStateAttrDispatchView> blend((igBlendStateAttrDispatchView *)Gap::Attrs::igBlendStateAttr::_instantiateFromPool((igMemoryPoolView *)MovieAllocator(self)));
             blend->setEnabled(true);
             ((Gap::Core::igObjectList *)root->_attributes)->append((Gap::Core::igObject *)blend.p);
@@ -762,11 +762,11 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             igMatrix44f_FromTranslation(view.m, igVec3f(0.0f, 0.0f, -1.2f));
             igMatrix44f_Invert(view.m, view.m);
             igSmartPointer<igCamera> camera(igCamera_CreateInstance(MovieAllocator(self)));
-            igNamedObject_SetName((igNamedObject *)camera.p, Movie_camera);
+            ((Gap::Core::igNamedObject *)camera.p)->setName(Movie_camera);
             camera->_nearPlane = 0.0f;
             camera->_farPlane = 1.2f;
             igSmartPointer<igTransformDispatchView> transform((igTransformDispatchView *)igTransform_CreateInstance(MovieAllocator(self)));
-            igNamedObject_SetName((igNamedObject *)transform.p, Default_primitive_camera);
+            ((Gap::Core::igNamedObject *)transform.p)->setName(Default_primitive_camera);
             transform->SetMatrix(view.m);
             igGroup_AppendChild((igGroup *)transform.p, (igNode *)camera.p);
             igGroup_AppendChild((igGroup *)root.p, (igNode *)transform.p);
@@ -777,7 +777,7 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
                 sceneInfo.release();
                 sceneInfo.p = igSceneInfo_CreateInstance(allocator);
             }
-            igNamedObject_SetName((igNamedObject *)sceneInfo.p, name);
+            ((Gap::Core::igNamedObject *)sceneInfo.p)->setName(name);
             (igSmartPointer<igAttrSet> &)sceneInfo->_sceneGraph = root;
             igSceneInfo_CollectCameras(sceneInfo.p);
             igInsightCore_AddInfo((igInsightCore *)self->_insight, sceneInfo.p);

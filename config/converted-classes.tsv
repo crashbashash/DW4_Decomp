@@ -126,3 +126,12 @@ igUnsignedIntList	Core	igTDataList<unsigned int>
 igDoubleList	Core	igTDataList<double>
 igUnsignedIntListNoClean	Core
 igDependencyList	Core	igTDataList<igDependency>
+igNamedObject	Core
+igDirEntry	Core
+igObjectDirEntry	Core
+igMemoryDirEntry	Core
+igExternalDirEntry	Core
+igExternalIndexedEntry	Core
+igExternalInfoEntry	Core
+igTimer	Core
+igMedia	Core

@@ -50,7 +50,7 @@ CallbackArray *igInfo_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igInfo_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igInfo_GetMetaObjectFunction,
         "igInfo",

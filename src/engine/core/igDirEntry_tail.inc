@@ -1,85 +1,90 @@
-void igDirEntry_RetainSharedRef(void) {
+namespace Gap {
+namespace Core {
+
+void igDirEntry::refEntry(void *ref) {
 
 }
 
-void igDirEntry_ReleaseSharedRef(void) {
+void igDirEntry::releaseEntry(void *ref) {
 
 }
 
-int igDirEntry_GetSharedEntry(int self) {
-    return self;
+igDirEntry *igDirEntry::share(igIGBFile *igb) {
+    return this;
 }
 
-int igDirEntry_IsRefMemory(void) {
+int igDirEntry::refNeedsEntryForPostFileReadCleanup() {
     return 0;
 }
 
-void igDirEntry_SetMemoryPoolHandle(void) {
+void igDirEntry::setMemoryPoolHandle(int handle) {
 
 }
 
-int igDirEntry_GetMemoryPoolHandle(void) {
+int igDirEntry::getMemoryPoolHandle() {
     return -1;
 }
 
-void igDirEntry_WriteMemory(void) {
+void igDirEntry::writeMemorySpecial(igIGBFile *igb) {
 
 }
 
-void igDirEntry_WriteObject(void) {
+void igDirEntry::writeWrite(igIGBFile *igb) {
 
 }
 
-void igDirEntry_PrepareWrite(void) {
+void igDirEntry::writeMakeProxy(igIGBFile *igb) {
 
 }
 
-void igDirEntry_ComputeWriteSize(void) {
+void igDirEntry::writeComputeBufferSize(igIGBFile *igb) {
 
 }
 
-void igDirEntry_ReadMemory(void) {
+void igDirEntry::readMemorySpecial(igIGBFile *igb) {
 
 }
 
-void igDirEntry_RegisterRef(void) {
+void igDirEntry::readFinishConstruction(bool doMakeConcrete) {
 
 }
 
-void igDirEntry_PostProcess(void) {
+void igDirEntry::readPostRead(igIGBFile *igb) {
 
 }
 
-void igDirEntry_ResolveRefOld(void) {
+void igDirEntry::readReadVersion3(igIGBFile *igb) {
 
 }
 
-void igDirEntry_ResolveRef(void) {
+void igDirEntry::readRead(igIGBFile *igb) {
 
 }
 
-void igDirEntry_Resolve(void) {
+void igDirEntry::readPreRead(igIGBFile *igb) {
 
 }
 
-void igDirEntry_CreateRef(void) {
+void igDirEntry::readSetup(igIGBFile *igb) {
 
 }
 
-void igDirEntry_InitDefaults(int self) {
-    igObject_InitDefaults((igObject *)self);
-    igNamedObject_SetName((igNamedObject *)self, 0);
+void igDirEntry::initDefaults() {
+    igObject_InitDefaults((::igObject *)this);
+    setName(0);
 }
 
-void igDirEntry_SetRef(igDirEntry *self, int ref) {
-    self->_ref = ref;
+void igDirEntry::setRef(void *refParam) {
+    _ref = (int)refParam;
 }
 
-void igDirEntry_RetainRef(void) {
+void igDirEntry::refRef(void *refParam) {
 
 }
 
-void igDirEntry_ReleaseRef(void) {
+void igDirEntry::releaseRef(void *refParam) {
 
+}
+}
 }
 

@@ -52,3 +52,13 @@ igLightStateAttr	_enabled	bool
 igMetaEnum	_name	igStringRef
 igMetaEnum	_names	igSmartPointer<igStringRefList>
 igMetaEnum	_values	igSmartPointer<igIntList>
+igNamedObject	_name	igStringRef
+igObjectDirEntry	_typeMeta	igSmartPointer<igMetaObject>
+igObjectDirEntry	_typeMetaName	igStringRef
+igExternalDirEntry	_directoryName	igStringRef
+igExternalDirEntry	_entryName	igStringRef
+igExternalDirEntry	_externalFilePath	igStringRef
+igExternalIndexedEntry	_entryType	igSmartPointer<igMetaObject>
+igExternalIndexedEntry	_objectType	igSmartPointer<igMetaObject>
+igExternalInfoEntry	_key	igStringRef
+igExternalInfoEntry	_infoName	igStringRef

@@ -1,48 +1,50 @@
-igMetaObject *g_igMedia_metaObject;
+namespace Gap {
+namespace Core {
 
-igMetaObject *igMedia_GetOrCreateMetaObject(void) {
-    if (g_igMedia_metaObject == 0) {
-        g_igMedia_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igMedia_metaObject;
-}
+igMetaObject *igMedia::_Meta;
 
-igMetaObject *igMedia_GetMetaObject(void)
+igMetaObject *igMedia::getClassTypeLazy()
 {
-    igMetaObject *g = g_igMedia_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMedia_EnsureRegistered();
-    return g_igMedia_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-void igMedia_EnsureRegistered(void)
+igMetaObject *igMedia::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igMedia_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igMedia_Register(void) {
+void igMedia::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igMedia::arkRegisterInternal()
+{
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1,
-        &g_igMedia_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igMedia_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMedia",
-        8,
+        sizeof(igMedia),
         0,
-        igMedia_SetAbstractProxy,
-        igMedia_StaticInitCallback,
+        &arkRegisterInitialize,
+        (igMetaObjectCallback)Gap::Core::igMedia::userRegister,
         0
     );
 }
 
-void igMedia_GetMetaObjectFunction(void) {
-    igMedia_GetMetaObject();
+void igMedia::arkRegisterInitialize()
+{
+    _Meta->_abstractProxy = (int)&igPsx2Media_GetMetaObjectFunction;
+    igMetaObject_AddExitCallback((int)&_classDestructor);
 }
-
-void igMedia_SetAbstractProxy(void) {
-    *(int *)((char *)(((int)g_igMedia_metaObject)) + 60) = (int)&igPsx2Media_GetMetaObjectFunction;
-    igMetaObject_AddExitCallback((int)&igMedia_ExitCallback);
+}
 }
 

@@ -262,25 +262,31 @@ int igMemoryDictionary_Resize(igResult *result, igMemoryDictionaryView *self, in
     return 0;
 }
 
-void igMemoryDirEntry_SetMemType(igMemoryDirEntry *self, igObjectDispatchView *memType) {
+namespace Gap {
+namespace Core {
+
+void igMemoryDirEntry::setMemType(igMetaField *type)
+{
     __internalObjectList *l;
     int i;
     int n;
     igObjectDispatchView *o;
     igMetaObject *r;
 
-    self->_memType = (int)memType;
-    if (memType != 0) {
-        l = ((__internalObjectList *)Gap::Core::igMetaField::getMetaFieldTypes());
+    _memType = (int)type;
+    if (type != 0) {
+        l = (__internalObjectList *)igMetaField::getMetaFieldTypes();
         n = l->_count;
         for (i = 0; i < n; i++) {
             o = ((igObjectDispatchView **)l->_data)[i];
             r = o->GetMeta();
-            if (r == memType->GetMeta()) {
-                self->_memTypeIndex = i;
+            if (r == type->getMeta()) {
+                _memTypeIndex = i;
                 return;
             }
         }
     }
+}
+}
 }
 

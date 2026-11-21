@@ -113,7 +113,7 @@ void beTextureCtrl_UpdateRam(beTextureCtrl *self, beBaseInfoRam *ram) {
                     } else {
                         name = (int *)emptyString;
                     }
-                    property = (beTextureCtrlData *)((Gap::Core::igObjectList *)work->_textureList)->search((Gap::Core::igStringMetaField *)g_propertyNameField, (const char *)name);
+                    property = (beTextureCtrlData *)((Gap::Core::igObjectList *)work->_textureList)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, (const char *)name);
                     if (property != 0) {
                         allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
                         allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);

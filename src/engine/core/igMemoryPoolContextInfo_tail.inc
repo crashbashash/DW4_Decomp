@@ -154,7 +154,7 @@ void igMemoryPoolContextInfo_SetPoolName(int self, int recordIndex, int name) {
         record->name[CONTEXT_RECORD_NAME_MAX] = 0;
         boundObject = (igNamedObject *)record->descriptor;
         if (boundObject != 0) {
-            igNamedObject_SetName(boundObject, (const char *)name);
+            ((Gap::Core::igNamedObject *)boundObject)->setName((const char *)name);
         }
     }
 }
@@ -291,7 +291,7 @@ igResult igMemoryPoolContextInfo_SetPoolInfos(MemoryContext *self, int file, int
 }
 
 /* MemoryContext slot 34: fills `info` from record `index`. When the index is in 0..45 it copies the
- * record name via igNamedObject_SetName and, if the record has a descriptor, the descriptor's
+ * record name via Gap::Core::igNamedObject::setName and, if the record has a descriptor, the descriptor's
  * integer fields and its ten interned strings (each assigned through the shared StringPool with the
  * usual retain/release of the old token). The record's allocator updates the descriptor's _size
  * first when it reports a size. _handleName is built from 'kIGMemoryPoolHandle%s' and the record's
@@ -313,7 +313,7 @@ void igMemoryPoolContextInfo_FillMemoryPoolInfo(int *result, MemoryContext *cont
     status = g_resultSuccess.v;
     if (index >= 0 && index < 46) {
         entry = &context->records[index];
-        igNamedObject_SetName((igNamedObject *)info, (const char *)entry->name);
+        ((Gap::Core::igNamedObject *)info)->setName((const char *)entry->name);
         if (entry->descriptor != 0) {
             ASSIGN_TOKEN(info->_aliasedTo, entry->descriptor->_aliasedTo);
             object = (igMemoryPoolView *)context->records[index].allocator;
@@ -810,7 +810,7 @@ void igMemoryPoolContextInfo_CreateDefaultContextInfo(int *out, MemoryContext *s
     i = 0;
     do {
         rec = (igMemoryPoolInfo *)igMemoryPoolInfo_Create((int)((igMemoryPool *)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap)));
-        igNamedObject_SetName((igNamedObject *)rec, (const char *)self->GetPoolInfo(i));
+        ((Gap::Core::igNamedObject *)rec)->setName((const char *)self->GetPoolInfo(i));
         setDescString(&rec->_handleName, g_memoryContextNames[i]);
         switch (i) {
         case 0:
@@ -2105,7 +2105,7 @@ igResult igMemoryPoolContextInfo_ReadFromRegistrySection(igMemoryPoolContextInfo
             igInfoView *loader = (igInfoView *)poolInfo.p;
             if (loader->ReadFromRegistry(ini, igStringObj_Text(infoSection)) == g_resultSuccess) {
                 if (poolInfoName(poolInfo) == 0 || *poolInfoName(poolInfo) == 0) {
-                    igNamedObject_SetName((igNamedObject *)poolInfo.p, (const char *)igStringObj_Text(key));
+                    ((Gap::Core::igNamedObject *)poolInfo.p)->setName((const char *)igStringObj_Text(key));
                 }
                 char *handle = (char *)poolInfo->_handleName;
                 if (handle != 0 && *handle != 0) {

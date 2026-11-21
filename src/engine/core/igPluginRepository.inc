@@ -82,7 +82,7 @@ CallbackArray *igPluginRepository_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igPluginRepository_metaObject,
-        igNamedObject_Register,
+        Gap::Core::igNamedObject::arkRegisterInternal,
         (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
         igPluginRepository_GetMetaObjectFunction,
         "igPluginRepository",

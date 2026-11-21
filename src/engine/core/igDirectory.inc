@@ -59,7 +59,7 @@ void igDirectory_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igDirectory_Register);
 }
 
-static igMetaObjectCallback g_igDirectory_callbackList[] = { igDirEntry_EnsureRegistered, igDirectoryList_EnsureRegistered, igInfoList_EnsureRegistered, igResource_EnsureRegistered, igShortListList_EnsureRegistered, Gap::Core::igPointerList::arkRegister, igSemaphore_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igDirectory_callbackList[] = { Gap::Core::igDirEntry::arkRegister, igDirectoryList_EnsureRegistered, igInfoList_EnsureRegistered, igResource_EnsureRegistered, igShortListList_EnsureRegistered, Gap::Core::igPointerList::arkRegister, igSemaphore_EnsureRegistered, 0 };
 
 CallbackArray *igDirectory_Register(void) {
     CoreLibrary_MarkRegistered();

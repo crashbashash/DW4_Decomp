@@ -17,6 +17,10 @@ public:
     const void *_after;
     inline igDependency() : _before(0), _after(0) {}
 };
+class igExternalDirEntry;
+/* An external entry's load callback (alchemy-kit_202309 igCore/igExternalDirEntry.h). */
+typedef bool igResolveFunction(igExternalDirEntry *externalEntry);
+typedef igResolveFunction *igResolveFunctionPtr;
 }
 }
 #endif

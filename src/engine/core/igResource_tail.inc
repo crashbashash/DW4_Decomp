@@ -291,7 +291,7 @@ int igDirectory_GetNthObjectOfType(igResource *resource, const char *name, const
 }
 
 static inline igObjectDirEntryView *AsObjectDirEntry(void *p) {
-    if (p != 0 && ((Gap::Core::igObject *)p)->isOfType((igMetaObject *)g_igObjectDirEntry_metaObject) != 0) { return (igObjectDirEntryView *)p; }
+    if (p != 0 && ((Gap::Core::igObject *)p)->isOfType((igMetaObject *)Gap::Core::igObjectDirEntry::getClassMeta()) != 0) { return (igObjectDirEntryView *)p; }
     return 0;
 }
 
