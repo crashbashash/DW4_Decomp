@@ -197,13 +197,14 @@ class Image:
             return None
         return struct.unpack_from("<I", self.data, off)[0]
 
-    def string(self, va):
-        """The NUL-terminated printable string at `va`, or None."""
+    def string(self, va, empty=False):
+        """The NUL-terminated printable string at `va`, or None; `empty`: a lone NUL is the empty string (a
+        `char *` argument's "" literal), else None."""
         off = va - VADDR_BASE + FILE_BASE
         if not 0 <= off < len(self.data):
             return None
         end = self.data.find(b"\0", off, off + 512)
-        if end <= off:
+        if end < off or (end == off and not empty):
             return None
         raw = self.data[off:end]
         if all(32 <= b < 127 for b in raw):
@@ -1038,8 +1039,8 @@ class Writer:
             lines = ["    {",
                      "        __internalNonRefCountedObjectList *metaFields = "
                      "(__internalNonRefCountedObjectList *)metaObject->_metaFields;",
-                     "        int metaIndex = ObjectPointerList_FindIndex(metaFields, "
-                     "(int)igMetaObject_FindFieldByName(metaObject, \"%s\"));" % name,
+                     "        int metaIndex = metaFields->find("
+                     "(igObject *)igMetaObject_FindFieldByName(metaObject, \"%s\"));" % name,
                      "        %s *metaField = (%s *)%s;" % (mtype, mtype, self.call_expr(e, j, events, ctx))]
         else:
             if not (e["k"] == "vcall" and e["target"] == ("fld", ("fld", found, 0), 8 + 4 * CLONE_SLOT)
@@ -1053,11 +1054,13 @@ class Writer:
             ctx["names"][found] = "metaField"
             ctx["types"][found] = mtype
             ctx["names"][index] = "metaIndex"
+            # the kit's igObject a Gap metafield converts to; a flat one is cast
+            found_arg = "metaField" if mtype in self.converted else "(igObject *)metaField"
             lines = ["    {",
                      "        %s *metaField = (%s *)igMetaObject_FindFieldByName(metaObject, \"%s\");"
                      % (mtype, mtype, name),
-                     "        int metaIndex = ObjectPointerList_FindIndex("
-                     "(__internalNonRefCountedObjectList *)metaObject->_metaFields, (int)metaField);",
+                     "        int metaIndex = ((__internalNonRefCountedObjectList *)metaObject->_metaFields)"
+                     "->find(%s);" % found_arg,
                      "        metaField = (%s *)((igObjectDispatchView *)metaField)->%s(%d);"
                      % (mtype, CLONE_NAME, copy_mode)]
         j += 1
@@ -1260,7 +1263,7 @@ class Writer:
                 if n in self.lib.by_va:
                     text = self.function(n, ctx["cls"])
                     return "(int)%s" % text if ptype.strip() == "int" else text
-                s = self.lib.image.string(n)
+                s = self.lib.image.string(n, empty=True)
                 if s is not None and ("char" in ptype):
                     return '"%s"' % s.replace("\\", "\\\\").replace('"', '\\"')
                 if ref:

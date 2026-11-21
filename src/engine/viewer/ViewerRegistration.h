@@ -83,7 +83,6 @@ struct Obj { int *vt; int w1; int w2; int w3; int w4; int w5; int w6; int w7; in
 #include "dw4/core/igObject.h"
 extern "C" int g_igViewerStatisticsManager_vtable[4];
 #include "dw4/core/igObjectSystem.h"
-#include "dw4/core/internalNonRefCountedObjectList.h"
 extern "C" int igViewerStatisticsManager_GetVTable(void);
 typedef struct ObjectRefTarget { int word0; int references; } ObjectRefTarget;
 typedef struct ObjectRefWord { ObjectRefTarget *value; } ObjectRefWord;

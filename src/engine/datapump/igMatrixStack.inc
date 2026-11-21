@@ -58,7 +58,7 @@ void igMatrixStack_InitFields(void) {
 
     meta = g_igMatrixStack_metaObject;
     found = (void **)igMetaObject_FindFieldByName(meta, "_data");
-    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
+    index = ((Gap::Core::__internalNonRefCountedObjectList *)meta->_metaFields)->find((Gap::Core::igObject *)found);
     field = (igMemoryRefMetaField *)((igObjectDispatchView *)found)->CloneViaMetadata(1);
     field->_memType = (int)Gap::Math::igMatrix44fMetaField::getMetaField();
     field->_memSize = 0;

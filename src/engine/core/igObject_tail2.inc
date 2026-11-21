@@ -155,7 +155,7 @@ void igObject::constructDerived(igMetaObject *meta) {
     if (l != 0) {
         l->_instanceCount = l->_instanceCount + 1;
         if (l->_instances != 0) {
-            ObjectPointerList_Append((__internalNonRefCountedObjectList *)l->_instances, (int)this);
+            ((__internalNonRefCountedObjectList *)l->_instances)->append(this);
         }
     }
 }
@@ -190,7 +190,7 @@ void igObject::finishConstructDerivedFromFile(igMetaObject *meta) {
         type->_instanceCount = (int)((int) (type->_instanceCount + 1));
         instances = type->_instances;
         if (instances != 0) {
-            ObjectPointerList_Append((__internalNonRefCountedObjectList *)instances, (int)this);
+            ((__internalNonRefCountedObjectList *)instances)->append(this);
         }
     }
 }
@@ -357,7 +357,7 @@ void igObject::internalRelease() const {
         igMetaObject *type = object->getMeta();
         type->_instanceCount = (int)((unsigned)type->_instanceCount - 1);
         void *instances = (void *)type->_instances;
-        if (instances) ObjectPointerList_EraseAt((__internalNonRefCountedObjectList *)instances, ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)instances, (int)object));
+        if (instances) ((__internalNonRefCountedObjectList *)instances)->remove(((__internalNonRefCountedObjectList *)instances)->find((igObject *)object));
         object->trimCapacity();
         object->userDestruct();
         object->releaseDefaults();

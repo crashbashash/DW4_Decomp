@@ -323,11 +323,23 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    fill them); `arkRegisterInitialize` sets the abstract proxy (`_Meta->_abstractProxy`), igMedia's also adds
    the exit callback `_classDestructor`, and igMedia's `userRegister`/`userUnregister`, `registerMedia` and
    `setDefaultMedia` are members. `findMedia` (`igMediaFile_FindDeviceForPath`) and the two statics stay free
-   while the media classes are views. Of the 154 classes the core
-   unit registers, 66 are converted; the other kit-declared ones (the remaining typed lists, the memory pools,
+   while the media classes are views. The bootstrap lists the object system keeps its metaobjects and metafields
+   in, `__internalNonRefCountedObjectList` and `__internalObjectList`, are converted (alchemy-kit_202309
+   igCore/igInternalObjectList.h: `IG_BOOTSTRAP_OBJECT_DEFINE`, `_data` the kit's `igObject **` under C++, the
+   slot-16 override `trimCapacity` (the kit's `clean`), `setCount`, `setCapacity`, `append`, `insert`,
+   `remove(int)`, `set`, `search(igStringMetaField *, const char *)`, `find` and the kit's inlines, and
+   `__internalObjectList`'s reference-counting `setCount`, `append`, `insert` and `set`; DW4's image has no
+   `remove(igObject *)`). Their constructors and `__bootstrapDestruct` replace the retail C names
+   (`ObjectPointerList_*`, `InternalObjectList_*`, classconv's `boot_names`), and `_instantiateFromPool`
+   constructs through the bool constructor's C name until igObject's kit `operator new(size_t, size_t,
+   igMemoryPool *)` pair (`igObject_AllocateRawStorage`, `igObject_AllocateRawStorageDefault`) is a member:
+   through a placement new MWCC tests the block twice. igen's override of an inherited field finds its index with
+   `((__internalNonRefCountedObjectList *)metaObject->_metaFields)->find(metaField)`, and a metafield's
+   descriptor registers with `getMetaFieldTypes()->append(metaField)`. Of the 154 classes the core
+   unit registers, 69 are converted (igContext with them); the other kit-declared ones (the remaining typed lists, the memory pools,
    files and media, igDirectory, igRegistry, the threads and timers, …) follow, and those without a kit
-   header (the `igPsx2*` platform classes, `__internal*ObjectList`, igDependencyMetaField and
-   igMemoryDescriptorMetaField) take their form from retail alone;
+   header (the `igPsx2*` platform classes, igDependencyMetaField and igMemoryDescriptorMetaField) take their
+   form from retail alone;
 5. attrs, then gfx, then scenegraph, then gui/insight/viewer. Attrs so far: `Gap::Attrs::igAttr` (abstract;
    DW4's slots 21-29 read off retail's concrete vtables: `apply(igContext *)`, `apply(igVisualContext *)`,
    `setUnitID`, `synchronizeDefault` ×2, `reset`, `setup` ×2, `getUnitCount`, all kit inlines but `setUnitID`; no

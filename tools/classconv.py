@@ -34,10 +34,14 @@ A spec file is Python defining SPECS = {<class>: dict(...)}; `import classconv` 
   keep     C suffixes that stay free functions (memberize leaves them; anything else unmapped is reported)
   data     {datum suffix: member} for `g_<Class>_<suffix>`
   gen      members whose definitions the generator writes (default GEN)
-  bodies   {member: definition}, `{C}` the class; a member may name several overloads only through `bodies`
-           keyed `member` (the first definition of that name is replaced)
+  bodies   {member: definition}, `{C}` the class (the first definition of that name is replaced)
+  overloads   a `map`/`extra` member and its `bodies` key may be the overload's full declaration, as its `rows`
+           row spells it (`void removeInfo(const char *infoName);`): memberize gets the full signature, the stub
+           its parameters, and the splice replaces the definition with those parameter types
   boot     {Init|CopyConstruct|Construct|Clone|Destruct: definition} overriding the default bootstrap bodies
            (str.format: `{C}` the class, `{B}` the base, braces doubled)
+  boot_names  {Init|CopyConstruct|Construct|Destruct: C name} for a bootstrap class whose C names do not
+           start with the class's (`ObjectPointerList_Init` for __internalNonRefCountedObjectList)
   descriptor  write igen's metafield descriptor (`arkRegisterMetaValidate`, `getMetaField`); default: the class
            name ends in MetaField
 """
@@ -78,7 +82,7 @@ BOOT = ("Clone", "Construct", "Init", "CopyConstruct", "Destruct")
 DESCRIPTOR = ("void {C}::arkRegisterMetaValidate()\n{{\n    {C} *metaField;\n\n    if (_MetaField == 0) {{\n"
               "        _MetaField = ({C} *)igMetaObject_CreateInstance(_Meta, Memory_GetAllocatorBySelector("
               "kIGMemoryPoolHandleMetaData));\n        metaField = _MetaField;\n        if (metaField != 0) {{\n"
-              "            MetaRefList_AppendRetained(getMetaFieldTypes(), (::igObject *)metaField);\n"
+              "            getMetaFieldTypes()->append(metaField);\n"
               "            {{\n                ::igObject *held = (::igObject *)_MetaField;\n"
               "                held->release();\n            }}\n"
               "            _MetaField->_internalIndex = (short)(getMetaFieldTypes()->_count - 1);\n"
@@ -125,15 +129,46 @@ def find_c_def(text, cname):
 
 
 def member_def_re(cls, member):
-    return re.compile(r"^[^\n;{}]*\b%s::%s\s*\([^;{]*?\)[^;{]*\{" % (re.escape(cls), re.escape(member)), re.M)
+    return re.compile(r"^[^\n;{}]*\b%s::%s\s*\(([^;{]*?)\)[^;{]*\{" % (re.escape(cls), re.escape(member)), re.M)
+
+
+def member_name(member):
+    """The name a spec member names: `name` itself, or the one an overload's full declaration declares."""
+    m = re.search(r"(~?\w+)\s*\(", member)
+    return m.group(1) if m else member
+
+
+def param_types(params):
+    """The types of a parameter list, names dropped and spacing normalised (`const char *name` -> `const char*`)."""
+    out = []
+    for p in params.split(","):
+        p = " ".join(p.split())
+        if not p or p == "void":
+            continue
+        p = re.sub(r"(?<=[\s*&])[A-Za-z_]\w*$", "", p).strip()
+        out.append(re.sub(r"\s*([*&])\s*", r"\1", p))
+    return out
 
 
 def replace_member(text, cls, member, body):
-    """`text` with the first definition of `cls::member` replaced by `body`, and whether there was one."""
-    m = member_def_re(cls, member).search(text)
-    if not m:
-        return text, False
-    return text[:m.start()] + body.rstrip("\n") + text[block_end(text, m.end() - 1):], True
+    """`text` with the first definition of `cls::member` replaced by `body`, and whether there was one. A member
+    given as a full declaration (an overload) is the definition whose parameter types are the declaration's."""
+    name = member_name(member)
+    want = param_types(re.search(r"\((.*)\)", member).group(1)) if "(" in member else None
+    for m in member_def_re(cls, name).finditer(text):
+        if want is None or param_types(m.group(1)) == want:
+            return text[:m.start()] + body.rstrip("\n") + text[block_end(text, m.end() - 1):], True
+    return text, False
+
+
+def qualified_member(q, member):
+    """The memberize table's spelling of a spec member: `Gap::Lib::Class::name`, or an overload's full signature
+    with the class qualified (`void Gap::Core::igFoo::remove(const char *name)`)."""
+    if "(" not in member:
+        return "%s::%s" % (q, member)
+    decl = re.sub(r"^\s*(public|protected|private)\s*:\s*", "", member).strip().rstrip(";").strip()
+    name = member_name(decl)
+    return re.sub(r"\b%s\s*\(" % re.escape(name), "%s::%s(" % (q, name), decl, count=1)
 
 
 def fragment_pieces(text, cls):
@@ -364,8 +399,8 @@ MACRO_DECLS = {"_instantiateFromPool": (True, "{C} *", "igMemoryPoolView *pool")
 
 
 def member_decl(cls, rows, member):
-    """decl_of `member` in `rows`, else the object macros' declaration of it."""
-    d = decl_of(rows, member)
+    """decl_of `member` in `rows` (an overload's own full declaration), else the object macros' declaration of it."""
+    d = decl_of([member] if "(" in member else rows, member_name(member))
     if d is None and member in MACRO_DECLS:
         static, ret, params = MACRO_DECLS[member]
         d = static, ret.replace("{C}", cls), params
@@ -398,10 +433,10 @@ def memberize_table(tree, classes, specs):
         for g, m in spec.get("data", {}).items():
             table.append(("g_%s_%s" % (c, g), "%s::%s" % (q, m)))
         for cname, m in spec.get("extra", {}).items():
-            table.append((cname, "%s::%s" % (q, m)))
+            table.append((cname, qualified_member(q, m)))
         for n in tree.symbols(c):
             if n in spec["map"]:
-                table.append(("%s_%s" % (c, n), "%s::%s" % (q, spec["map"][n])))
+                table.append(("%s_%s" % (c, n), qualified_member(q, spec["map"][n])))
             elif n not in spec.get("keep", ()) and n not in BOOT:
                 unmapped.append("%s_%s" % (c, n))
     return table, unmapped
@@ -474,8 +509,16 @@ def splice_class(tree, c, spec, frag):
     wanted = (set(spec.get("gen", GEN)) & set(gen)) | set(spec.get("bodies", {}))
     missing = sorted(wanted - done)
     print("%s: spliced %d%s" % (c, len(done), (" MISSING " + " ".join(missing)) if missing else ""))
-    if "Construct" in tree.symbols(c):
+    if "Construct" in boot_cnames(tree, c, spec):
         splice_boot(tree, c, spec)
+
+
+def boot_cnames(tree, c, spec):
+    """{BOOT suffix: C name} of the bootstrap bodies `c` has: `<c>_<suffix>` from symbols.txt, or the spec's
+    `boot_names`."""
+    out = {n: "%s_%s" % (c, n) for n in tree.symbols(c) if n in BOOT}
+    out.update(spec.get("boot_names", {}))
+    return out
 
 
 def splice_boot(tree, c, spec):
@@ -484,12 +527,12 @@ def splice_boot(tree, c, spec):
     bodies = boot_bodies(c, spec["base"])
     for n, override in spec.get("boot", {}).items():
         bodies[n] = (override,) + bodies[n][1:]
-    names = tree.symbols(c)
+    cnames = boot_cnames(tree, c, spec)
     rekeys = []
     for n, (body, member, params) in bodies.items():
-        if n not in names:
+        if n not in cnames:
             continue
-        cname = "%s_%s" % (c, n)
+        cname = cnames[n]
         body = body.format(C=c, B=spec["base"])
         params = [p.format(C=c, L=lib) for p in params]
         for path in tree.files_naming(lib, cname):

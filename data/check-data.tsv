@@ -13325,6 +13325,8 @@
 00532360	96	.vtables	002b5d50	match
 00532430	244	.vtables	002b5d50	match
 00532670	244	.vtables	002b5d50	match
+00532770	92	.vtables	002b5d50	match
+005327d0	92	.vtables	002b5d50	match
 00532a50	244	.vtables	002b5d50	match
 00532b50	92	.vtables	002b5d50	match
 00532c80	244	.vtables	002b5d50	match

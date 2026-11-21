@@ -74,7 +74,7 @@ void beSvStartApi_InitFields(void) {
 
     meta = g_beSvStartApi_metaObject;
     found = (void **)(igMetaObject_FindFieldByName(meta, "_orderType"));
-    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(((igMetaObject *)meta)->_metaFields), (int)found);
+    index = ((Gap::Core::__internalNonRefCountedObjectList *)(((igMetaObject *)meta)->_metaFields))->find((Gap::Core::igObject *)found);
     clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     ((Gap::Core::igIntMetaField *)clone)->setDefault(0xA);
     clone->_externalEnumStorage = (int)(&g_beSvStartApi_orderTypeStorage);

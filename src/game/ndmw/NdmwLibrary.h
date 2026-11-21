@@ -196,7 +196,6 @@
 #include "dw4/core/igStringMetaField.h"
 #include "dw4/core/igUnsignedShortArrayMetaField.h"
 #include "dw4/maths/igVec3fMetaField.h"
-#include "dw4/core/internalNonRefCountedObjectList.h"
 #include "dw4/core/igIntListList.h"
 #include "dw4/core/igCharMetaField.h"
 

@@ -1278,7 +1278,7 @@ igResult igIGBFile_FreeBasePath(igIGBFileView *self) {
 }
 
 igResult igIGBFile_ReadMetaFieldList(igIGBFileView *self) {
-    __internalObjectList *table;
+    Gap::Core::__internalObjectList *table;
     int count;
     int *sizes;
     char *name;

@@ -25,7 +25,6 @@ int igStringRefList_IndexOf(struct igStringRefList *list, char *const *key, int 
 void igStringMetaField_AssignRetainedToken(struct igStringMetaField *field, void *object, char **token);
 void List_AppendWords(struct igDataList *list, int count, const int *words);
 /* Retains `value` and appends it to the meta-object list. */
-int MetaRefList_AppendRetained(struct __internalObjectList *list, struct igObject *value);
 /* Appends `object` (retained) unless the list holds it already; returns its index. */
 
 #ifdef __cplusplus

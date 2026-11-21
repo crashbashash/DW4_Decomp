@@ -202,7 +202,7 @@ void beNDMWLoadIntf2SelSlot_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beNDMWLoadIntf2SelSlot_ctorTable, 0x16);
     inheritedName = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
-    nameIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)((char *)((igMetaObject *)meta)->_metaFields), (int)inheritedName);
+    nameIndex = ((Gap::Core::__internalNonRefCountedObjectList *)((char *)((igMetaObject *)meta)->_metaFields))->find((Gap::Core::igObject *)inheritedName);
     nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
     ((Gap::Core::igStringMetaField *)nameField)->setDefault("SELSLOT");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2SelSlot_nameExternalEnumStorage);

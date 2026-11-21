@@ -50,7 +50,6 @@ typedef void (*igMetaObjectCallback)();
 #include "dw4/core/igFloatMetaField.h"
 #include "dw4/core/igIntMetaField.h"
 #include "dw4/core/igMetaEnum.h"
-#include "dw4/core/internalNonRefCountedObjectList.h"
 #include "dw4/support/list-services.h"
 #include "dw4/core/igUnsignedCharMetaField.h"
 

@@ -96,7 +96,7 @@ void igStringMetaField::arkRegisterInitialize()
     igMetaObject_CreateFields(metaObject, instFuncs, 1);
     {
         igCharMetaField *metaField = (igCharMetaField *)igMetaObject_FindFieldByName(metaObject, "_shallowCopyMethod");
-        int metaIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)metaObject->_metaFields, (int)metaField);
+        int metaIndex = ((__internalNonRefCountedObjectList *)metaObject->_metaFields)->find(metaField);
         metaField = (igCharMetaField *)((igObjectDispatchView *)metaField)->CloneViaMetadata(1);
         metaField->setDefault(2);
         metaField->_externalEnumStorage = (int)&k_shallowCopyMethod;
@@ -105,7 +105,7 @@ void igStringMetaField::arkRegisterInitialize()
     }
     {
         igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_FindFieldByName(metaObject, "_destruct");
-        int metaIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)metaObject->_metaFields, (int)metaField);
+        int metaIndex = ((__internalNonRefCountedObjectList *)metaObject->_metaFields)->find(metaField);
         metaField = (igBoolMetaField *)((igObjectDispatchView *)metaField)->CloneViaMetadata(1);
         metaField->setDefault(1);
         metaField->_externalEnumStorage = (int)&k_destruct;
@@ -127,7 +127,7 @@ void igStringMetaField::arkRegisterMetaValidate()
         _MetaField = (igStringMetaField *)igMetaObject_CreateInstance(_Meta, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
         metaField = _MetaField;
         if (metaField != 0) {
-            MetaRefList_AppendRetained(getMetaFieldTypes(), (::igObject *)metaField);
+            getMetaFieldTypes()->append(metaField);
             {
                 ::igObject *held = (::igObject *)_MetaField;
                 held->release();

@@ -58,7 +58,7 @@ void igExternalDirEntry::arkRegisterInitialize()
     igMetaObject_CreateFields(metaObject, instFuncs, 4);
     {
         __internalNonRefCountedObjectList *metaFields = (__internalNonRefCountedObjectList *)metaObject->_metaFields;
-        int metaIndex = ObjectPointerList_FindIndex(metaFields, (int)igMetaObject_FindFieldByName(metaObject, "_ref"));
+        int metaIndex = metaFields->find((igObject *)igMetaObject_FindFieldByName(metaObject, "_ref"));
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igObjectRefMetaField_Create(Memory_GetAllocatorBySelector((int)kIGMemoryPoolHandleMetaData));
         metaField->setBasicProperties("_ref", &k_ref, 24, metaObject);
         metaField->_metaObject = (int)Gap::Core::igObject::getClassMeta();

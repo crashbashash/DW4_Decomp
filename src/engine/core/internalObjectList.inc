@@ -1,55 +1,56 @@
-void *InternalObjectList_Construct(__internalObjectList *list, int extra1) {
-    ObjectPointerList_Construct((__internalNonRefCountedObjectList *)list, extra1);
-    list->_vtable = (int)g_InternalObjectList_vtable;
-    return list;
+namespace Gap {
+namespace Core {
+
+__internalObjectList::__internalObjectList(bool boot) : __internalNonRefCountedObjectList(boot)
+{
 }
 
-void *InternalObjectList_Init(__internalObjectList *list) {
-    ObjectPointerList_Init((__internalNonRefCountedObjectList *)list);
-    list->_vtable = (int)g_InternalObjectList_vtable;
-    return list;
+__internalObjectList::__internalObjectList()
+{
 }
 
-void *InternalObjectList_CopyConstruct(__internalObjectList *list, __internalObjectList *source) {
-    ObjectPointerList_CopyConstruct((__internalNonRefCountedObjectList *)list, (__internalNonRefCountedObjectList *)source);
-    list->_vtable = (int)g_InternalObjectList_vtable;
-    return list;
+__internalObjectList::__internalObjectList(const __internalObjectList &other) : __internalNonRefCountedObjectList(other)
+{
 }
 
-void InternalObjectList_Destruct(__internalObjectList *list){InternalObjectList_SetCount(list,0);ObjectPointerList_Destruct((__internalNonRefCountedObjectList *)list);}
-
-void InternalObjectList_InsertRetained(__internalObjectList *list, int index, igObject *value) {
-    igObject::ref(value);
-    ObjectPointerList_Insert((__internalNonRefCountedObjectList *)list, index, (int)value);
+void __internalObjectList::__bootstrapDestruct()
+{
+    setCount(0);
+    __internalNonRefCountedObjectList::__bootstrapDestruct();
 }
 
-void InternalObjectList_SetCount(__internalObjectList *list,int count){
-    int i=list->_count;
-    if(count<i){
+void __internalObjectList::insert(int index, igObject *obj)
+{
+    igObject::ref(obj);
+    __internalNonRefCountedObjectList::insert(index, obj);
+}
+
+void __internalObjectList::setCount(int cnt)
+{
+    int i = _count;
+
+    if (cnt < i) {
         i--;
-        while(i>=count){
-            igObject *item=((igObject **)list->_data)[i];
-            if(item){--item->_refCount;if(!(item->_refCount&0x7fffff))igObject_Destroy(item);}
+        while (i >= cnt) {
+            igObject::release(_data[i]);
             i--;
         }
     }
-    ObjectPointerList_SetCount((__internalNonRefCountedObjectList *)list,count);
+    __internalNonRefCountedObjectList::setCount(cnt);
 }
 
-int MetaRefList_AppendRetained(__internalObjectList *list, igObject *value) {
-    igObject::ref(value);
-    return ObjectPointerList_Append((__internalNonRefCountedObjectList *)list, (int)value);
+int __internalObjectList::append(igObject *obj)
+{
+    igObject::ref(obj);
+    return __internalNonRefCountedObjectList::append(obj);
 }
 
-void InternalObjectList_SetAtRetained(__internalObjectList *list, int index, igObject *value) {
-    igObject *old;
-    igObject::ref(value);
-    old = ((igObject **)list->_data)[index];
-    if (old) {
-        --old->_refCount;
-        if (!(old->_refCount & REF_COUNT_MASK))
-            igObject_Destroy(old);
-    }
-    ObjectPointerList_SetAt((__internalNonRefCountedObjectList *)list, index, (int)value);
+void __internalObjectList::set(int index, igObject *obj)
+{
+    igObject::ref(obj);
+    igObject::release(_data[index]);
+    __internalNonRefCountedObjectList::set(index, obj);
+}
+}
 }
 

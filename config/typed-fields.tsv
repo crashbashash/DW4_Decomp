@@ -76,3 +76,4 @@ igExternalIndexedEntry	_entryType	igSmartPointer<igMetaObject>
 igExternalIndexedEntry	_objectType	igSmartPointer<igMetaObject>
 igExternalInfoEntry	_key	igStringRef
 igExternalInfoEntry	_infoName	igStringRef
+__internalNonRefCountedObjectList	_data	igObject **

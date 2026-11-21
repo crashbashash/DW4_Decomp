@@ -84,7 +84,7 @@ void FUN_00452b70(void) {
         g_igCharMetricsMetaField_instance = (void *)(igMetaObject_CreateInstance((igMetaObject *)((int)g_igCharMetricsMetaField_metaObject), (igMemoryPoolView *)((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
         temp_s0 = (void *)(g_igCharMetricsMetaField_instance);
         if (temp_s0 != 0) {
-            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)temp_s0);
+            Gap::Core::igMetaField::getMetaFieldTypes()->append((Gap::Core::igObject *)temp_s0);
             {
                 void *held = (void *)g_igCharMetricsMetaField_instance;
                 *(int *)((char *)(held) + 4) = *(int *)((char *)(held) + 4) - 1;

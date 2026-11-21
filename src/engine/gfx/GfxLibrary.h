@@ -85,7 +85,6 @@ typedef void (*igMetaObjectCallback)();
 #include "dw4/core/igUnsignedIntMetaField.h"
 #include "dw4/core/igUnsignedLongMetaField.h"
 #include "dw4/support/emptyString.h"
-#include "dw4/core/internalNonRefCountedObjectList.h"
 #include "dw4/support/list-services.h"
 #include "dw4/maths/igVec4f.h"
 #include "dw4/core/igCharList.h"

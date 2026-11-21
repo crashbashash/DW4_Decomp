@@ -77,7 +77,7 @@ void igStructMetaField::arkRegisterInitialize()
     igMetaObject_CreateFields(metaObject, instFuncs, 3);
     {
         igUnsignedShortMetaField *metaField = (igUnsignedShortMetaField *)igMetaObject_FindFieldByName(metaObject, "_size");
-        int metaIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)metaObject->_metaFields, (int)metaField);
+        int metaIndex = ((__internalNonRefCountedObjectList *)metaObject->_metaFields)->find(metaField);
         metaField = (igUnsignedShortMetaField *)((igObjectDispatchView *)metaField)->CloneViaMetadata(1);
         metaField->setDefault(1);
         metaField->_persistent = 0;
@@ -101,7 +101,7 @@ void igStructMetaField::arkRegisterMetaValidate()
         _MetaField = (igStructMetaField *)igMetaObject_CreateInstance(_Meta, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
         metaField = _MetaField;
         if (metaField != 0) {
-            MetaRefList_AppendRetained(getMetaFieldTypes(), (::igObject *)metaField);
+            getMetaFieldTypes()->append(metaField);
             {
                 ::igObject *held = (::igObject *)_MetaField;
                 held->release();

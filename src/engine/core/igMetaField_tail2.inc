@@ -64,8 +64,8 @@ void igMetaField::__bootstrapDestruct() {
 }
 
 __internalObjectList *igMetaField::getMetaFieldTypes() {
-    if ((*(int *)&g_metaFieldList) == 0) {
-        (*(int *)&g_metaFieldList) = ((int)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
+    if (g_metaFieldList == 0) {
+        g_metaFieldList = __internalObjectList::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
     }
     return g_metaFieldList;
 }

@@ -52,7 +52,6 @@ extern "C" void FUN_0019e440(void);
 class igMemoryPoolView;
 
 #include "dw4/core/igMetaObject.h"
-#include "dw4/core/internalNonRefCountedObjectList.h"
 #include "dw4/support/list-services.h"
 #include "dw4/core/igDataLists.h"
 extern "C" int DAT_0058c618[4];

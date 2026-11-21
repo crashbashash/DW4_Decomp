@@ -57,7 +57,7 @@ void igVirtualCFuncMetaField::arkRegisterMetaValidate()
         _MetaField = (igVirtualCFuncMetaField *)igMetaObject_CreateInstance(_Meta, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
         metaField = _MetaField;
         if (metaField != 0) {
-            MetaRefList_AppendRetained(getMetaFieldTypes(), (::igObject *)metaField);
+            getMetaFieldTypes()->append(metaField);
             {
                 ::igObject *held = (::igObject *)_MetaField;
                 held->release();

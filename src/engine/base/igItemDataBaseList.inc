@@ -62,7 +62,7 @@ void igItemDataBaseList_InitFields(void) {
 
     meta = g_igItemDataBaseList_metaObject;
     field2 = (void **)(igMetaObject_FindFieldByName(meta, "_data"));
-    field = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(*(int *)((char *)(meta) + 40)), (int)field2);
+    field = ((Gap::Core::__internalNonRefCountedObjectList *)(*(int *)((char *)(meta) + 40)))->find((Gap::Core::igObject *)field2);
     field3 = (S_obj *)(((DW4VC_84_1 *)(field2))->vX((int)(1)));
     field3->f60 = FUN_00228570();
     field3->f56 = 0;

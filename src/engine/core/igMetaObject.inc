@@ -114,7 +114,7 @@ void igMetaObject_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMetaObject_Register);
 }
 
-static igMetaObjectCallback g_igMetaObject_callbackList[] = { __internalObjectList_EnsureRegistered, __internalNonRefCountedObjectList_EnsureRegistered, Gap::Core::igObject::arkRegister, 0 };
+static igMetaObjectCallback g_igMetaObject_callbackList[] = { Gap::Core::__internalObjectList::arkRegister, Gap::Core::__internalNonRefCountedObjectList::arkRegister, Gap::Core::igObject::arkRegister, 0 };
 
 CallbackArray *igMetaObject_Register(void) {
     return igMetaObject_RegisterClass(
@@ -276,18 +276,18 @@ void igMetaObject_InitFields(void) {
     ((igMetaField *)field3)->_persistent = 0;
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 9))))->_persistent = 0;
     field4 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xA)));
-    ((igObjectRefMetaField *)field4)->_metaObject = (int)__internalObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field4)->_metaObject = (int)Gap::Core::__internalObjectList::getClassTypeLazy();
     ((igObjectRefMetaField *)field4)->_construct = 1;
     ((igObjectRefMetaField *)field4)->_destruct = 1;
     ((igObjectRefMetaField *)field4)->_refCounted = 0;
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xB))))->_persistent = 0;
     field5 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xC)));
-    ((igObjectRefMetaField *)field5)->_metaObject = (int)__internalNonRefCountedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field5)->_metaObject = (int)Gap::Core::__internalNonRefCountedObjectList::getClassTypeLazy();
     ((igObjectRefMetaField *)field5)->_destruct = 1;
     ((igObjectRefMetaField *)field5)->_refCounted = 0;
     ((igObjectRefMetaField *)field5)->_persistent = 0;
     field6 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0xD)));
-    ((igObjectRefMetaField *)field6)->_metaObject = (int)__internalNonRefCountedObjectList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field6)->_metaObject = (int)Gap::Core::__internalNonRefCountedObjectList::getClassTypeLazy();
     ((igObjectRefMetaField *)field6)->_destruct = 1;
     ((igObjectRefMetaField *)field6)->_refCounted = 0;
     ((igObjectRefMetaField *)field6)->_persistent = 0;

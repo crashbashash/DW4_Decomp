@@ -284,7 +284,6 @@ static inline int isValid(igMetaObject *m) { return (m->_validity & 4) != 0; }
 #include "dw4/maths/igVec3fMetaField.h"
 #include "dw4/maths/igVec4fMetaField.h"
 #include "dw4/support/emptyString.h"
-#include "dw4/core/internalNonRefCountedObjectList.h"
 #include "dw4/maths/igAABox.h"
 #include "dw4/maths/igAABoxList.h"
 #include "dw4/maths/igMatrix44fList.h"

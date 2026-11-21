@@ -51,7 +51,7 @@ void igNonRefCountedObjectStack_InitFields(void) {
 
     meta = g_igNonRefCountedObjectStack_metaObject;
     found = (void **)igMetaObject_FindFieldByName(meta, "_data");
-    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
+    index = ((Gap::Core::__internalNonRefCountedObjectList *)meta->_metaFields)->find((Gap::Core::igObject *)found);
     field = (igMemoryRefMetaField *)((igObjectDispatchView *)found)->CloneViaMetadata(1);
     field->_memType = (int)Gap::Core::igObjectRefMetaField::getMetaField();
     field->_memSize = 0;

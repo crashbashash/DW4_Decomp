@@ -80,7 +80,7 @@ void igDependencyMetaField_CreateDefaultDescriptor(void) {
         g_igDependencyMetaField_descriptor = (void *)(((void *)igMetaObject_CreateInstance((igMetaObject *)g_igDependencyMetaField_metaObject, Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData))));
         descriptor = (void *)(g_igDependencyMetaField_descriptor);
         if (descriptor != 0) {
-            MetaRefList_AppendRetained(Gap::Core::igMetaField::getMetaFieldTypes(), (igObject *)descriptor);
+            Gap::Core::igMetaField::getMetaFieldTypes()->append((Gap::Core::igObject *)descriptor);
             {
                 void *held = (void *)g_igDependencyMetaField_descriptor;
                 ((igObject *)held)->release();

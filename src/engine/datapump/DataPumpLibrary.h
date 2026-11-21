@@ -33,7 +33,6 @@ extern "C" int g_igLongStack_vtable[4];
 extern "C" int igLongStack_GetVTable(void);
 extern "C" void igLongStack_EnsureRegistered(void);
 #include "dw4/core/igDataLists.h"
-#include "dw4/core/internalNonRefCountedObjectList.h"
 #include "dw4/core/igLongMetaField.h"
 extern "C" CallbackArray *igLongStack_Register(void);
 extern "C" void igLongStack_GetMetaObjectFunction(void);

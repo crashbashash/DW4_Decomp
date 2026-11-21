@@ -1529,3 +1529,30 @@ igMedia	static void registerMedia(igMedia *media);
 igMedia	private: static void userRegister();
 igMedia	static void userUnregister();
 igMedia	static void _classDestructor();
+__internalNonRefCountedObjectList	IG_BOOTSTRAP_OBJECT_DEFINE(__internalNonRefCountedObjectList)
+__internalNonRefCountedObjectList	private: static igMetaField *k_data;
+__internalNonRefCountedObjectList	private: static igMetaField *k_count;
+__internalNonRefCountedObjectList	inline int getCapacity() const { return (int)((_data == 0) ? 0 : Memory_GetBufferSize(_data) / sizeof(igObject *)); }
+__internalNonRefCountedObjectList	inline const igObject **asArray() const { return (const igObject **)_data; }
+__internalNonRefCountedObjectList	inline igObject **asArray() { return _data; }
+__internalNonRefCountedObjectList	virtual void trimCapacity();
+__internalNonRefCountedObjectList	void setCount(int cnt);
+__internalNonRefCountedObjectList	void setCapacity(int capacity);
+__internalNonRefCountedObjectList	int append(igObject *obj);
+__internalNonRefCountedObjectList	void insert(int index, igObject *obj);
+__internalNonRefCountedObjectList	int remove(int index);
+__internalNonRefCountedObjectList	void set(int index, igObject *obj);
+__internalNonRefCountedObjectList	inline igObject *get(int index) const { return (igObject *)asArray()[index]; }
+__internalNonRefCountedObjectList	igObject *search(igStringMetaField *field, const char *name) const;
+__internalNonRefCountedObjectList	int find(const igObject *obj) const;
+__internalNonRefCountedObjectList	inline int findAndRemove(igObject *obj) { return remove(find(obj)); }
+__internalNonRefCountedObjectList	inline igMetaObject *getMetaObject(int index) const { return (igMetaObject *)asArray()[index]; }
+__internalNonRefCountedObjectList	inline igMetaObject *fastGetMetaObject(int index) { return (igMetaObject *)asArray()[index]; }
+__internalNonRefCountedObjectList	inline int getCount() const { return _count; }
+__internalNonRefCountedObjectList	inline void *getClassStorage() const { return (void *)this; }
+__internalObjectList	IG_BOOTSTRAP_OBJECT_DEFINE(__internalObjectList)
+__internalObjectList	private: static igMetaField *k_data;
+__internalObjectList	void setCount(int cnt);
+__internalObjectList	int append(igObject *obj);
+__internalObjectList	void insert(int index, igObject *obj);
+__internalObjectList	void set(int index, igObject *obj);

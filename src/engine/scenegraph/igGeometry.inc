@@ -89,7 +89,7 @@ void FUN_0019fca0(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igGeometry_ctorTable, 1);
     temp_v0 = (void **)(((void * *)igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_trigger")));
-    temp_s3 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(*(int *)((char *)(temp_s1) + 40)), (int)temp_v0);
+    temp_s3 = ((Gap::Core::__internalNonRefCountedObjectList *)(*(int *)((char *)(temp_s1) + 40)))->find((Gap::Core::igObject *)temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     ((Gap::Core::igBoolMetaField *)temp_v0_2)->setDefault(1);
     *(int *)((char *)(temp_v0_2) + 28) = (int)(&g_igGeometry_triggerMetaField);

@@ -1,5 +1,5 @@
 MemoryContext *g_currentMemoryContext;
-__internalObjectList *g_metaFieldList;
+Gap::Core::__internalObjectList *g_metaFieldList;
 
 void igObjectSystem_Startup(ObjectSystemView *self) {
     void *m;
@@ -15,11 +15,11 @@ void igObjectSystem_Startup(ObjectSystemView *self) {
         g_currentMemoryContext = (MemoryContext *)m;
     }
     g_currentMemoryContext->CreateDefaultPools();
-    self->metaRegistry = ((__internalObjectList *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap))));
+    self->metaRegistry = Gap::Core::__internalObjectList::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
     l = (__internalObjectList *)self->metaRegistry;
     if (l->_data == 0) n = 0; else n = Memory_GetBufferSize((void *)l->_data) >> 2;
-    if ((int)n < 0x401) ObjectPointerList_EnsureIndex((__internalNonRefCountedObjectList *)l, 0x400);
-    self->metaEnumList = ((__internalObjectList *)InternalObjectList_Create(((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap))));
+    if ((int)n < 0x401) ((Gap::Core::__internalNonRefCountedObjectList *)l)->setCapacity(0x400);
+    self->metaEnumList = Gap::Core::__internalObjectList::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
     b = ((int)Memory_AllocateDefaultBuffer((unsigned int)12));
     if (b != 0) b = ((int)igArray_Construct((CallbackArray *)b));
     self->exitCallbacks = (void *)b;
@@ -312,9 +312,9 @@ void igObjectSystem_Finalize(ObjectSystemView *self) {
     igResource_ClearDirectories(self->resource);
     releaseObject((igObject *)self->driverDatabase);
     releaseObject((igObject *)g_igIGBFile_loadTimer);
-    InternalObjectList_SetCount((__internalObjectList *)g_metaFieldList, self->metaFieldCount);
+    g_metaFieldList->setCount(self->metaFieldCount);
     for (i = ((__internalObjectList *)self->metaRegistry)->_count - 1; i >= self->metaObjectCount; i--) {
-        InternalObjectList_SetAtRetained((__internalObjectList *)self->metaRegistry, i, (igObject *)0);
+        ((Gap::Core::__internalObjectList *)self->metaRegistry)->set(i, (Gap::Core::igObject *)0);
     }
     releaseObject((igObject *)self->pluginHelper);
     self->pluginHelper = 0;
@@ -370,9 +370,9 @@ void igObjectSystem_Shutdown(ObjectSystemView *self) {
     if (g_currentMemoryContext != 0) {
         g_currentMemoryContext->RemoveAllAllocators();
     }
-    InternalObjectList_SetCount((__internalObjectList *)g_metaFieldList, self->bootMetaFieldCount);
+    g_metaFieldList->setCount(self->bootMetaFieldCount);
     for (i = self->metaObjectCount - 1; i >= self->bootMetaObjectCount; i--) {
-        InternalObjectList_SetAtRetained((__internalObjectList *)self->metaRegistry, i, (igObject *)0);
+        ((Gap::Core::__internalObjectList *)self->metaRegistry)->set(i, (Gap::Core::igObject *)0);
     }
     self->active = 0;
     o = (igObject *)g_metaFieldList;
@@ -400,19 +400,19 @@ void igObjectSystem_Shutdown(ObjectSystemView *self) {
 
 /* Register a metaobject in the object system's registry, retaining it. */
 void igObjectSystem_AppendMetaObject(void *system,igMetaObject *meta){
-    MetaRefList_AppendRetained((__internalObjectList *)((ObjectSystemView *)system)->metaRegistry, (igObject *)meta);
+    ((Gap::Core::__internalObjectList *)(((ObjectSystemView *)system)->metaRegistry))->append((Gap::Core::igObject *)meta);
 }
 
 int igObjectSystem_FindMetaByName(ObjectSystemView *objectSystem, const char *className) {
     if (objectSystem->active != 0) {
-        return (int)ObjectPointerList_FindByStringField((__internalNonRefCountedObjectList *)objectSystem->metaRegistry, g_igMetaObjectNameField, className);
+        return (int)((Gap::Core::__internalNonRefCountedObjectList *)objectSystem->metaRegistry)->search((Gap::Core::igStringMetaField *)g_igMetaObjectNameField, className);
     }
     return 0;
 }
 
 int igObjectSystem_AppendMetaEnum(int *p, int metaEnum)
 {
-    return MetaRefList_AppendRetained((__internalObjectList *)((ObjectSystemView *)p)->metaEnumList, (igObject *)metaEnum);
+    return ((Gap::Core::__internalObjectList *)(((ObjectSystemView *)p)->metaEnumList))->append((Gap::Core::igObject *)metaEnum);
 }
 
 int igObjectSystem_AddExitCallback(int *p, int callback)

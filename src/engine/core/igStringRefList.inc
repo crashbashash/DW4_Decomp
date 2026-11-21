@@ -63,7 +63,7 @@ void igStringRefList_InitFields(void) {
 
     meta = (igMetaObject *)((void *)g_igStringRefList_metaObject);
     found = (void **)(((void **)igMetaObject_FindFieldByName(meta, data)));
-    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)found);
+    index = ((Gap::Core::__internalNonRefCountedObjectList *)meta->_metaFields)->find((Gap::Core::igObject *)found);
     field = (igMemoryRefMetaField *)(((igObjectDispatchView *)(found))->CloneViaMetadata((int)(1)));
     field->_memType = (int)Gap::Core::igStringMetaField::getMetaField();
     field->_memSize = 0;

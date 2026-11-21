@@ -63,7 +63,7 @@ void igCharList::arkRegisterInitialize()
 
     {
         igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_FindFieldByName(metaObject, "_data");
-        int metaIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)metaObject->_metaFields, (int)metaField);
+        int metaIndex = ((__internalNonRefCountedObjectList *)metaObject->_metaFields)->find(metaField);
         metaField = (igMemoryRefMetaField *)((igObjectDispatchView *)metaField)->CloneViaMetadata(1);
         metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
         metaField->_memSize = 0;

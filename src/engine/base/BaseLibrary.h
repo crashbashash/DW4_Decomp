@@ -61,7 +61,6 @@
 #include <stdio.h>
 #include "dw4/support/emptyString.h"
 #include "dw4/core/igStringRef.h"
-#include "dw4/core/internalNonRefCountedObjectList.h"
 #include "dw4/support/list-services.h"
 #include "dw4/base/igOptBase.h"
 #include "dw4/scenegraph/igNonRefCountedNodeList.h"

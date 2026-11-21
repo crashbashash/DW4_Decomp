@@ -90,6 +90,24 @@ class TextTest(unittest.TestCase):
         self.assertIn("igFooMetaField(const igFooMetaField &other) : igMetaField(other)",
                       body.format(C="igFooMetaField", B="igMetaField"))
 
+    def test_overloads_by_full_declaration(self):
+        decl = "void removeInfo(const char *infoName);"
+        self.assertEqual(cc.member_name(decl), "removeInfo")
+        self.assertEqual(cc.param_types("const char *infoName, int"), ["const char*", "int"])
+        self.assertEqual(cc.param_types("void"), [])
+        self.assertEqual(cc.qualified_member("Gap::Core::igFoo", "private: " + decl),
+                         "void Gap::Core::igFoo::removeInfo(const char *infoName)")
+        self.assertEqual(cc.qualified_member("Gap::Core::igFoo", "removeInfo"), "Gap::Core::igFoo::removeInfo")
+        self.assertEqual(cc.member_decl("igFoo", ["void removeInfo(igInfo *info);"], decl),
+                         (False, "void", "const char *infoName"))
+        text = ("void igFoo::removeInfo(igInfo *info)\n{\n    a();\n}\n\n"
+                "void igFoo::removeInfo(const char * name)\n{\n    b();\n}\n")
+        new, ok = cc.replace_member(text, "igFoo", decl, "void igFoo::removeInfo(const char *infoName)\n{\n}")
+        self.assertTrue(ok)
+        self.assertIn("    a();", new)
+        self.assertNotIn("    b();", new)
+        self.assertEqual(cc.replace_member(text, "igFoo", "void removeInfo(int);", "x"), (text, False))
+
     def test_array_spec(self):
         spec = cc.array_spec("igCharArrayMetaField", "igCharMetaField", "char", "index")
         self.assertIn("void setDefault(unsigned int index, char val);", spec["rows"])
@@ -163,6 +181,17 @@ class TreeTest(unittest.TestCase):
     def test_rekey_finds_the_unit(self):
         self.assertEqual(self.tree.rekey([("igFooMetaField_Init", "__ct__Q33Gap4Core14igFooMetaFieldFv"),
                                           ("absent", "x")]), ["absent"])
+        row = json.loads(self.tree.read(cc.UNIT_OBJECTS))["0x00100000"]
+        self.assertEqual(row["emitted"], {"__ct__Q33Gap4Core14igFooMetaFieldFv": "0x00100000"})
+
+    def test_boot_names_for_c_names_of_another_stem(self):
+        # a bootstrap class whose C names are not its own (__internalNonRefCountedObjectList's ObjectPointerList_*)
+        self.tree.write(cc.UNIT_OBJECTS, json.dumps({"0x00100000": {"emitted": {"FooList_Init": "0x00100000"}}}))
+        self.tree.write("src/engine/core/FooList.inc", "void *FooList_Init(igFooMetaField *self) {\n    return self;\n}\n")
+        spec = dict(self.specs["igFooMetaField"], base="igMetaField", boot_names={"Init": "FooList_Init"})
+        self.assertEqual(cc.boot_cnames(self.tree, "igFooMetaField", spec), {"Init": "FooList_Init"})
+        cc.splice_boot(self.tree, "igFooMetaField", spec)
+        self.assertIn("igFooMetaField::igFooMetaField()\n{\n}\n", self.tree.read("src/engine/core/FooList.inc"))
         row = json.loads(self.tree.read(cc.UNIT_OBJECTS))["0x00100000"]
         self.assertEqual(row["emitted"], {"__ct__Q33Gap4Core14igFooMetaFieldFv": "0x00100000"})
 

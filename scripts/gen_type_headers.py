@@ -401,6 +401,9 @@ def converted_classes(converted, parent, layouts, members, bases=None):
     if any(re.search(r"\bigResult\b", decl) for cls in order for decl in members.get(cls, [])):
         # a member returning a status returns the core library's result class
         out.append("#include \"dw4/core/igResult.h\"")
+    if any("Memory_GetBufferSize" in decl for cls in order for decl in members.get(cls, [])):
+        # a list's capacity is the size of its storage block (the kit's igMemory::getSize)
+        out.append("#include \"dw4/core/igMemory.h\"")
     # a smart-pointer member needs the template, included once the Gap root is complete (below): its
     # ref/release are the kit's static igObject::ref/release on Gap::Core::igObject
     smart = any("igSmartPointer<" in line for cls in order for _off, _size, line in layouts[cls][4])

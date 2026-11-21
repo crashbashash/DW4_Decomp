@@ -317,14 +317,6 @@ int igInfoList_GetMeta(void) {
     return (int)g_igInfoList_metaObject;
 }
 
-igMetaObject *__internalNonRefCountedObjectList_GetMeta(void) {
-    return g___internalNonRefCountedObjectList_metaObject;
-}
-
-igMetaObject *__internalObjectList_GetMeta(void) {
-    return g___internalObjectList_metaObject;
-}
-
 int igLibraryList_GetMeta(void) {
     return (int)g_igLibraryList_metaObject;
 }

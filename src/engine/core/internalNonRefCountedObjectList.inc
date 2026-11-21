@@ -1,155 +1,164 @@
-void *ObjectPointerList_Construct(__internalNonRefCountedObjectList *self, int extra1) {
-    void **allocator;
+namespace Gap {
+namespace Core {
 
-    igObject_ConstructHeader(self);
-    self->_vtable = (int)(&g_ObjectPointerList_vtable[0]);
-    if (self != 0) {
-        ObjectPointerList_Init(self);
-    }
-    allocator = (void **)(((void **)((Gap::Core::igObject *)self)->getMemoryPool()));
-    self->_data = (int)((igMemoryPoolView *)allocator)->Allocate(0x10);
-    return self;
+__internalNonRefCountedObjectList::__internalNonRefCountedObjectList(bool boot) : igObject(boot)
+{
+    new (this, 0) __internalNonRefCountedObjectList;
+    _data = (igObject **)getMemoryPool()->Allocate(16);
 }
 
-__internalNonRefCountedObjectList *ObjectPointerList_Init(__internalNonRefCountedObjectList *list) {
-    igObject_InitHeader((igObject *)list);
-    list->_vtable = (int)g_ObjectPointerList_vtable;
-    list->_data = 0;
-    list->_count = 0;
-    return list;
+__internalNonRefCountedObjectList::__internalNonRefCountedObjectList()
+{
+    _data = 0;
+    _count = 0;
 }
 
-__internalNonRefCountedObjectList *ObjectPointerList_CopyConstruct(__internalNonRefCountedObjectList *self, __internalNonRefCountedObjectList *source) {
-    int bytes;
-    igObject_CopyConstructHeader((igObject *)self, (igObject *)source);
-    self->_vtable = (int)g_ObjectPointerList_vtable;
-    self->_count = source->_count;
-    if (source->_data) {
-        bytes = self->_count * 4;
-        igMemoryPoolView *allocator = (igMemoryPoolView *)((Gap::Core::igObject *)self)->getMemoryPool();
-        self->_data = (int)allocator->Allocate(bytes);
-        memcpy((void *)self->_data, (void *)source->_data, bytes);
+__internalNonRefCountedObjectList::__internalNonRefCountedObjectList(const __internalNonRefCountedObjectList &other) : igObject(other)
+{
+    _count = other._count;
+    if (other._data) {
+        int size = _count * sizeof(igObject *);
+
+        _data = (igObject **)getMemoryPool()->Allocate(size);
+        memcpy(_data, other._data, size);
     } else {
-        self->_data = 0;
+        _data = 0;
     }
-    return self;
 }
 
-void ObjectPointerList_Destruct(__internalNonRefCountedObjectList *self) {
-    int buffer;
-    void **allocator;
-
-    buffer = self->_data;
-    if (buffer != 0) {
-        allocator = (void **)(((void **)((Gap::Core::igObject *)self)->getMemoryPool()));
-        ((igMemoryPoolView *)allocator)->Free((void *)buffer);
+void __internalNonRefCountedObjectList::__bootstrapDestruct()
+{
+    if (_data != 0) {
+        getMemoryPool()->Free(_data);
     }
-    igObject_Destruct((int)self);
+    igObject::__bootstrapDestruct();
 }
+}
+}
+
+
 
 static inline unsigned int pointerListCapacity(__internalNonRefCountedObjectList *list) {
     return list->_data == 0 ? 0 : Memory_GetBufferSize((void *)list->_data) >> 2;
 }
 
-void ObjectPointerList_EnsureIndex(__internalNonRefCountedObjectList *list, int index) {
-    if (index >= (int)pointerListCapacity(list)) {
-        unsigned int old = pointerListCapacity(list);
-        unsigned int n = old;
+namespace Gap {
+namespace Core {
+
+void __internalNonRefCountedObjectList::setCapacity(int capacity)
+{
+    if (capacity >= getCapacity()) {
+        unsigned int old = _data == 0 ? 0 : Memory_GetBufferSize(_data) / sizeof(igObject *);
+        unsigned int size = old;
+
         if (old == 0) {
-            n = 4;
+            size = 4;
         }
-        while (!(index < (int)n)) {
-            if ((int)n < 512) n *= 2; else n += 512;
+        while (!(capacity < (int)size)) {
+            if ((int)size < 512) {
+                size *= 2;
+            } else {
+                size += 512;
+            }
         }
-        list->_data = (int)((Gap::Core::igObject *)list)->realloc((void *)list->_data, n * 4);
-        char *p = (char *)list->_data;
-        p += old * 4;
-        memset(p, 0, (n - old) * 4);
+        _data = (igObject **)realloc(_data, size * sizeof(igObject *));
+        char *cleared = (char *)_data;
+        cleared += old * sizeof(igObject *);
+        memset(cleared, 0, (size - old) * sizeof(igObject *));
     }
 }
 
-void *ObjectPointerList_FindByStringField(__internalNonRefCountedObjectList *list,igMetaField *selector,const char *name){
-    int i;int byteOffset;
-    for(i=0;i<list->_count;i++){
-        byteOffset=i*4;
-        if(strcmp(*(char **)((char *)*(void **)((char *)list->_data+byteOffset)+selector->_offset),name)==0)
-            return *(void **)((char *)list->_data+byteOffset);
+igObject *__internalNonRefCountedObjectList::search(igStringMetaField *field, const char *name) const
+{
+    int i;
+
+    for (i = 0; i < _count; i++) {
+        if (strcmp(*(const char **)((char *)_data[i] + field->_offset), name) == 0) {
+            return _data[i];
+        }
     }
     return 0;
 }
 
-int ObjectPointerList_FindIndex(__internalNonRefCountedObjectList *list, int object) {
-    int *d = (int *)list->_data;
-    int n = list->_count;
+int __internalNonRefCountedObjectList::find(const igObject *obj) const
+{
+    igObject **data = _data;
+    int count = _count;
     int i;
-    int entry;
-    for (i = 0; i < n; i++) {
-        entry = d[i];
-        if (entry == object) {
+
+    for (i = 0; i < count; i++) {
+        if (data[i] == obj) {
             return i;
         }
     }
     return -1;
 }
 
-void ObjectPointerList_ClearUnused(__internalNonRefCountedObjectList *list){
-    int i=list->_count;
-    while(i<(int)(list->_data?Memory_GetBufferSize((void *)list->_data)>>2:0)){((int *)list->_data)[i]=0;i++;}
-}
+void __internalNonRefCountedObjectList::trimCapacity()
+{
+    int i = _count;
 
-void ObjectPointerList_Insert(__internalNonRefCountedObjectList *list,int index,int value){
-    int i;int count=list->_count;
-    unsigned capacity;void *buffer=(void *)list->_data;
-    if(buffer==0){capacity=0;}else{capacity=Memory_GetBufferSize(buffer)>>2;}
-    if(count>=(int)capacity)ObjectPointerList_EnsureIndex(list,count);
-    i=list->_count;
-    while(i>index){((int *)list->_data)[i]=((int *)list->_data)[i-1];i--;}
-    ((int *)list->_data)[index]=value;
-    list->_count++;
-}
-
-void ObjectPointerList_SetCount(__internalNonRefCountedObjectList *list, int count) {
-    void *buffer = (void *)list->_data;
-    unsigned capacity;
-    if (buffer == 0) {
-        capacity = 0;
-    } else {
-        capacity = Memory_GetBufferSize(buffer) >> 2;
+    while (i < getCapacity()) {
+        _data[i] = 0;
+        i++;
     }
-    if (count >= (int)capacity)
-        ObjectPointerList_EnsureIndex(list, count);
-    list->_count = count;
 }
 
-int ObjectPointerList_EraseAt(__internalNonRefCountedObjectList *list,int index){
+void __internalNonRefCountedObjectList::insert(int index, igObject *obj)
+{
     int i;
-    if(index<list->_count){
-        for(i=index;i<list->_count-1;i++)((int *)list->_data)[i]=((int *)list->_data)[i+1];
-        list->_count--;
+    int count = _count;
+
+    if (count >= getCapacity()) {
+        setCapacity(count);
+    }
+    for (i = _count; i > index; i--) {
+        _data[i] = _data[i - 1];
+    }
+    _data[index] = obj;
+    _count++;
+}
+
+void __internalNonRefCountedObjectList::setCount(int cnt)
+{
+    if (cnt >= getCapacity()) {
+        setCapacity(cnt);
+    }
+    _count = cnt;
+}
+
+int __internalNonRefCountedObjectList::remove(int index)
+{
+    int i;
+
+    if (index < _count) {
+        for (i = index; i < _count - 1; i++) {
+            _data[i] = _data[i + 1];
+        }
+        _count--;
         return index;
     }
     return -1;
 }
 
-int ObjectPointerList_Append(__internalNonRefCountedObjectList *list,int value){
-    int count=list->_count;
-    unsigned capacity;void *buffer=(void *)list->_data;
-    if(buffer==0){capacity=0;}else{capacity=Memory_GetBufferSize(buffer)>>2;}
-    if(count>=(int)capacity)ObjectPointerList_EnsureIndex(list,count);
-    ((int *)list->_data)[list->_count]=value;
-    return list->_count++;
+int __internalNonRefCountedObjectList::append(igObject *obj)
+{
+    int count = _count;
+
+    if (count >= getCapacity()) {
+        setCapacity(count);
+    }
+    _data[_count] = obj;
+    return _count++;
 }
 
-void ObjectPointerList_SetAt(__internalNonRefCountedObjectList *list, int index, int value) {
-    void *buffer = (void *)list->_data;
-    unsigned capacity;
-    if (buffer == 0) {
-        capacity = 0;
-    } else {
-        capacity = Memory_GetBufferSize(buffer) >> 2;
+void __internalNonRefCountedObjectList::set(int index, igObject *obj)
+{
+    if (index >= getCapacity()) {
+        setCapacity(index);
     }
-    if (index >= (int)capacity)
-        ObjectPointerList_EnsureIndex(list, index);
-    ((int *)list->_data)[index] = value;
+    _data[index] = obj;
+}
+}
 }
 

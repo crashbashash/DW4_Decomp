@@ -144,3 +144,5 @@ igExternalIndexedEntry	Core
 igExternalInfoEntry	Core
 igTimer	Core
 igMedia	Core
+__internalNonRefCountedObjectList	Core
+__internalObjectList	Core

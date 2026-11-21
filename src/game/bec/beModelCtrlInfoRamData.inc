@@ -96,7 +96,7 @@ void beModelCtrlInfoRamData_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beModelCtrlInfoRamData_ctorTable, 2);
     found = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
-    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(((igMetaObject *)meta)->_metaFields), (int)found);
+    index = ((Gap::Core::__internalNonRefCountedObjectList *)(((igMetaObject *)meta)->_metaFields))->find((Gap::Core::igObject *)found);
     clone = (igStringMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     ((Gap::Core::igStringMetaField *)clone)->setDefault("ONE");
     clone->_externalEnumStorage = (int)(&g_beModelCtrlInfoRamData_nameStorage);

@@ -119,7 +119,6 @@ template <class T> static inline void setCapacity(igTDataList<T> *list, int capa
 #include "dw4/core/igUnsignedCharArrayMetaField.h"
 #include "dw4/core/igUnsignedCharList.h"
 #include "dw4/core/igUnsignedShortList.h"
-#include "dw4/core/internalNonRefCountedObjectList.h"
 #include "dw4/support/list-services.h"
 #include "dw4/runtime/init_cpp.h"
 #include "dw4/sony/libcdvd_calls.h"
@@ -474,23 +473,6 @@ extern "C" void igLibrary_EnsureRegistered(void);
 extern "C" CallbackArray *igLibrary_Register(void);
 extern "C" void igLibrary_GetMetaObjectFunction(void);
 extern "C" void igLibrary_InitFields(void);
-extern "C" void **InternalObjectList_Create(int allocator);
-extern "C" int __internalObjectList_Clone(int arg0, int arg1);
-extern "C" igMetaObject *__internalObjectList_GetOrCreateMetaObject(void);
-extern "C" int __internalObjectList_GetVTable(void);
-extern "C" void __internalObjectList_EnsureRegistered(void);
-extern "C" CallbackArray *__internalObjectList_Register(void);
-extern "C" void __internalObjectList_GetMetaObjectFunction(void);
-extern "C" igMetaObject *__internalNonRefCountedObjectList_GetPublishedMetaObject(void);
-extern "C" void __internalObjectList_InitFields(void);
-extern "C" void **__internalNonRefCountedObjectList_Create(int arg0);
-extern "C" int __internalNonRefCountedObjectList_Clone(int arg0, int arg1);
-extern "C" igMetaObject *__internalNonRefCountedObjectList_GetOrCreateMetaObject(void);
-extern "C" int __internalNonRefCountedObjectList_GetVTable(void);
-extern "C" void __internalNonRefCountedObjectList_EnsureRegistered(void);
-extern "C" CallbackArray *__internalNonRefCountedObjectList_Register(void);
-extern "C" void __internalNonRefCountedObjectList_GetMetaObjectFunction(void);
-extern "C" void __internalNonRefCountedObjectList_InitFields(void);
 extern "C" int igInfoList_GetVTable(void);
 extern "C" CallbackArray *igInfoList_Register(void);
 extern "C" void igInfoList_GetMetaObjectFunction(void);
@@ -1357,8 +1339,6 @@ extern "C" int igDependencyMetaField_GetDescriptor(void);
 extern "C" igMetaObject *igDirectoryList_GetMeta(void);
 extern "C" int igErrorHandler_GetMeta(void);
 extern "C" int igInfoList_GetMeta(void);
-extern "C" igMetaObject *__internalNonRefCountedObjectList_GetMeta(void);
-extern "C" igMetaObject *__internalObjectList_GetMeta(void);
 extern "C" int igLibraryList_GetMeta(void);
 extern "C" igMetaObject *igMediaList_GetMeta(void);
 extern "C" igMetaObject *igMemoryFileEntry_GetMeta(void);
@@ -1519,10 +1499,6 @@ extern "C" igMetaObject *igLibraryList_GetMetaObject(void);
 extern "C" int g_igLibraryList_vtable[4];
 extern "C" igMetaObject *g_igLibrary_metaObject;
 extern "C" igMetaObject *igLibrary_GetMetaObject(void);
-extern "C" igMetaObject *g___internalObjectList_metaObject;
-extern "C" igMetaObject *__internalObjectList_GetMetaObject(void);
-extern "C" igMetaObject *g___internalNonRefCountedObjectList_metaObject;
-extern "C" igMetaObject *__internalNonRefCountedObjectList_GetMetaObject(void);
 extern "C" igMetaObject *g_igInfoList_metaObject;
 extern "C" igMetaObject *igInfoList_GetMetaObject(void);
 extern "C" int g_igInfoList_vtable[4];
@@ -2303,8 +2279,8 @@ extern "C" igResult igIGBFile_ReadObjectSectionOld(igIGBFileView *file);
 extern "C" void igIGBFile_SetCurrentPosition(igIGBFileView *self, int at);
 extern "C" igResult igIGBFile_FreeBasePath(igIGBFileView *arg1);
 /* The registered meta-field descriptors Gap::Core::igMetaField::getMetaFieldTypes returns; each entry's getMeta is its meta object. */
-static inline igObjectDispatchView *registeredMetaField(__internalObjectList *fields, int index) {
-    return ((igObjectDispatchView **)fields->_data)[index];
+static inline igObjectDispatchView *registeredMetaField(Gap::Core::__internalObjectList *fields, int index) {
+    return (igObjectDispatchView *)fields->get(index);
 }
 extern "C" igResult igIGBFile_ReadMetaFieldList(igIGBFileView *self);
 extern "C" void Gap__Core__igIGBFile__resetFields(igIGBFileView *arg0);
@@ -2334,27 +2310,8 @@ extern "C" int igIGBFile_WriteMemoryRefs(igIGBFileView *o);
 extern "C" igResult igIGBFile_GetSectionBuffer(igIGBFileView *arg1, int arg2);
 extern "C" void igIGBFile_ReadMemoryEntries(int *arg0, igIGBFileView *arg1);
 extern "C" void *igIntMetaField_Construct(igMetaField *self, int extra1);
-extern "C" int g_ObjectPointerList_vtable[4];
 extern "C" void *ObjectPointerList_Construct(__internalNonRefCountedObjectList *self, int extra1);
-extern "C" __internalNonRefCountedObjectList *ObjectPointerList_Init(__internalNonRefCountedObjectList *list);
-extern "C" __internalNonRefCountedObjectList *ObjectPointerList_CopyConstruct(__internalNonRefCountedObjectList *self, __internalNonRefCountedObjectList *source);
-extern "C" void ObjectPointerList_Destruct(__internalNonRefCountedObjectList *self);
-extern "C" void ObjectPointerList_EnsureIndex(__internalNonRefCountedObjectList *list, int index);
-extern "C" void *ObjectPointerList_FindByStringField(__internalNonRefCountedObjectList *list,igMetaField *selector,const char *name);
-extern "C" void ObjectPointerList_ClearUnused(__internalNonRefCountedObjectList *list);
-extern "C" void ObjectPointerList_Insert(__internalNonRefCountedObjectList *list,int index,int value);
-extern "C" void ObjectPointerList_SetCount(__internalNonRefCountedObjectList *list, int count);
-extern "C" int ObjectPointerList_EraseAt(__internalNonRefCountedObjectList *list,int index);
-extern "C" int ObjectPointerList_Append(__internalNonRefCountedObjectList *list,int value);
-extern "C" void ObjectPointerList_SetAt(__internalNonRefCountedObjectList *list, int index, int value);
-extern "C" int g_InternalObjectList_vtable[4];
 extern "C" void *InternalObjectList_Construct(__internalObjectList *list, int extra1);
-extern "C" void *InternalObjectList_Init(__internalObjectList *list);
-extern "C" void *InternalObjectList_CopyConstruct(__internalObjectList *list, __internalObjectList *source);
-extern "C" void InternalObjectList_Destruct(__internalObjectList *list);
-extern "C" void InternalObjectList_InsertRetained(__internalObjectList *list, int index, igObject *value);
-extern "C" void InternalObjectList_SetCount(__internalObjectList *list,int count);
-extern "C" void InternalObjectList_SetAtRetained(__internalObjectList *list, int index, igObject *value);
 extern "C" void StringPool_DestroyChunks(StringPool *pool);
 extern "C" void igLocationTable_Clear(igLocationTableView *table);
 extern "C" int igLocationTable_GetCount(igLocationTable *self);

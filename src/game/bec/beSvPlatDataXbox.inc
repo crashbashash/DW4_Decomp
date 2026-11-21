@@ -100,7 +100,7 @@ void beSvPlatDataXbox_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_beSvPlatDataXbox_ctorTable, 4);
     found = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_connectMax"));
-    index = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(((igMetaObject *)meta)->_metaFields), (int)found);
+    index = ((Gap::Core::__internalNonRefCountedObjectList *)(((igMetaObject *)meta)->_metaFields))->find((Gap::Core::igObject *)found);
     clone = (igIntMetaField *)(((igObjectDispatchView *)found)->CloneViaMetadata(1));
     ((Gap::Core::igIntMetaField *)clone)->setDefault(9);
     clone->_externalEnumStorage = (int)(&g_beSvPlatDataXbox_connectMaxStorage);

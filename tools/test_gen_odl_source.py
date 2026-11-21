@@ -313,13 +313,46 @@ class RetailRoles(unittest.TestCase):
         self.assertIn(
             "        __internalNonRefCountedObjectList *metaFields = (__internalNonRefCountedObjectList *)"
             "metaObject->_metaFields;\n"
-            "        int metaIndex = ObjectPointerList_FindIndex(metaFields, "
-            "(int)igMetaObject_FindFieldByName(metaObject, \"_resetMethod\"));\n"
+            "        int metaIndex = metaFields->find("
+            "(igObject *)igMetaObject_FindFieldByName(metaObject, \"_resetMethod\"));\n"
             "        igEnumMetaField *metaField = (igEnumMetaField *)igEnumMetaField_Create(", text)
         self.assertIn("        metaField->setBasicProperties(\"_resetMethod\", &k_resetMethod, 36, metaObject);\n",
                       text)
         self.assertIn("        metaField->_externalEnumStorage = (int)&k_resetMethod;\n"
                       "        igMetaObject_FinalizeAndReplaceField(metaObject, metaIndex, ", text)
+
+    def test_an_inherited_field_cloned(self):
+        # __internalObjectList's adder clones the inherited _data, counts its references and puts the copy in
+        # place: the inherited field's index is the internal list's find
+        written, _rows, failed, _w = odl.generate(
+            self.lib, ["__internalObjectList"], os.path.join(ROOT, "config", "class-members.tsv"),
+            os.path.join(ROOT, "config", "converted-classes.tsv"),
+            os.path.join(ROOT, "config", "SLUS-20836", "compiler-names.tsv"),
+            os.path.join(ROOT, "include", "dw4", "support", "reflected.h"))
+        self.assertEqual(failed, {})
+        self.assertIn(
+            "        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_FindFieldByName("
+            "metaObject, \"_data\");\n"
+            "        int metaIndex = ((__internalNonRefCountedObjectList *)metaObject->_metaFields)->find(metaField);\n"
+            "        metaField = (igMemoryRefMetaField *)((igObjectDispatchView *)metaField)->CloneViaMetadata(1);\n",
+            "\n".join(written[0][1]))
+
+    def test_an_empty_string_default_is_the_literal(self):
+        # igExternalDirEntry's adder passes the image's lone NUL as _dirName's default: igen wrote ""
+        written, _rows, failed, _w = odl.generate(
+            self.lib, ["igExternalDirEntry"], os.path.join(ROOT, "config", "class-members.tsv"),
+            os.path.join(ROOT, "config", "converted-classes.tsv"),
+            os.path.join(ROOT, "config", "SLUS-20836", "compiler-names.tsv"),
+            os.path.join(ROOT, "include", "dw4", "support", "reflected.h"))
+        self.assertEqual(failed, {})
+        text = "\n".join(written[0][1])
+        self.assertIn('setDefault("");', text)
+        self.assertNotIn("emptyString", text)
+
+    def test_image_string_takes_the_empty_one_only_when_asked(self):
+        # 0x4f7910 is the lone NUL data-names.tsv calls emptyString_4
+        self.assertEqual(self.lib.image.string(0x4f7910, empty=True), "")
+        self.assertIsNone(self.lib.image.string(0x4f7910))
 
 
 class FlatCasts(unittest.TestCase):

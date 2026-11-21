@@ -19,7 +19,7 @@ void *igMetaObject_Construct(igMetaObject *meta, int extra1){
     meta->_name=0;
     meta->_poolName=0;
     if(meta)igMetaObject_Init(meta);
-    meta->_metaFields=((int)InternalObjectList_Create(0));
+    meta->_metaFields=((int)Gap::Core::__internalObjectList::_instantiateFromPool(0));
     return meta;
 }
 
@@ -178,8 +178,8 @@ use_fallback:
 
 void igMetaObject_InheritFromBase(igMetaObject *meta,igMetaObject *parent){
     if(parent!=0){
-        if(parent->_children==0)parent->_children=(int)__internalNonRefCountedObjectList_Create((int)(Memory_GetAllocatorBySelector(*(int *)0x587040)));
-        ObjectPointerList_Append((__internalNonRefCountedObjectList *)((void *)parent->_children), (int)meta);
+        if(parent->_children==0)parent->_children=(int)Gap::Core::__internalNonRefCountedObjectList::_instantiateFromPool(Memory_GetAllocatorBySelector(*(int *)0x587040));
+        ((Gap::Core::__internalNonRefCountedObjectList *)((void *)parent->_children))->append((Gap::Core::igObject *)meta);
         meta->_parent=(int)parent;
         meta->_vTablePointer=parent->_vTablePointer;
         meta->_requiredAlignment=((igMetaObject *)meta->_parent)->_requiredAlignment;
@@ -235,7 +235,7 @@ void igMetaObject_SetName(igMetaObject *meta, int name) {
 
 void igMetaObject_AppendField(igMetaObject *meta, igMetaField *field)
 {
-    MetaRefList_AppendRetained((__internalObjectList *)((void *)meta->_metaFields), (igObject *)field);
+    ((Gap::Core::__internalObjectList *)((void *)meta->_metaFields))->append((Gap::Core::igObject *)field);
 }
 
 void igMetaObject_FinalizeAndAppendField(void *meta,void *field){
@@ -244,7 +244,7 @@ void igMetaObject_FinalizeAndAppendField(void *meta,void *field){
 
 void igMetaObject_FinalizeAndReplaceField(igMetaObject *meta,int index,igMetaField *field){
     ((Gap::Core::igMetaField *)field)->validate();
-    InternalObjectList_SetAtRetained((__internalObjectList *)((void *)meta->_metaFields), index, (igObject *)field);
+    ((Gap::Core::__internalObjectList *)((void *)meta->_metaFields))->set(index, (Gap::Core::igObject *)field);
 }
 
 int FUN_002fdef0(int a0, int a1)
@@ -258,7 +258,7 @@ igMetaField *igMetaObject_GetFieldAt(igMetaObject *self, int index) {
 }
 
 igMetaField *igMetaObject_FindFieldByName(igMetaObject *meta, const char *name) {
-    return (igMetaField *)ObjectPointerList_FindByStringField((__internalNonRefCountedObjectList *)((void *)meta->_metaFields), (igMetaField *)Gap::Core::igMetaField::k_fieldName, name);
+    return (igMetaField *)((Gap::Core::__internalNonRefCountedObjectList *)((void *)meta->_metaFields))->search((Gap::Core::igStringMetaField *)Gap::Core::igMetaField::k_fieldName, name);
 }
 
 void igMetaObject_CreateFields(igMetaObject *meta,FieldFactory *factories,int count){
@@ -426,12 +426,12 @@ void igMetaObject_AddField(igMetaObject *self, void *object) {
     field->_isRunTime = 1;
     field->_parentMetaObject = (int)(self);
     ((Gap::Core::igMetaField *)field)->validate();
-    index = MetaRefList_AppendRetained((__internalObjectList *)((void *)self->_metaFields), (igObject *)field);
+    index = ((Gap::Core::__internalObjectList *)((void *)self->_metaFields))->append((Gap::Core::igObject *)field);
     nodeCount = igMetaObject_CountTree((igMetaObject *)self);
     for (i = 1; i < nodeCount; i++) {
         node = (igMetaObject *)igMetaObject_GetTreeNode(self, i);
         node->_validity = node->_validity & ~4;
-        InternalObjectList_InsertRetained((__internalObjectList *)node->_metaFields, index, (igObject *)field);
+        ((Gap::Core::__internalObjectList *)node->_metaFields)->insert(index, (Gap::Core::igObject *)field);
     }
 }
 
@@ -481,10 +481,10 @@ int igMetaObject_GetPersistentFieldCount(int self) {
 /* Search the object system's registry; when absent (-1) append the metaobject and search again,
  * since appending can replace the registry. */
 void igMetaObject_AssignTypeId(igMetaObject *meta){
-    meta->_index=ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(((ObjectSystemView *)(*(void * *)&g_objectSystem))->metaRegistry), (int)meta);
+    meta->_index=((Gap::Core::__internalNonRefCountedObjectList *)(((ObjectSystemView *)(*(void * *)&g_objectSystem))->metaRegistry))->find((Gap::Core::igObject *)meta);
     if(meta->_index==-1){
         igObjectSystem_AppendMetaObject((*(void * *)&g_objectSystem),meta);
-        meta->_index=ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(((ObjectSystemView *)(*(void * *)&g_objectSystem))->metaRegistry), (int)meta);
+        meta->_index=((Gap::Core::__internalNonRefCountedObjectList *)(((ObjectSystemView *)(*(void * *)&g_objectSystem))->metaRegistry))->find((Gap::Core::igObject *)meta);
     }
 }
 

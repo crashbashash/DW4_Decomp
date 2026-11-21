@@ -111,7 +111,7 @@ void FUN_0045c040(void) {
     temp_s2 = igMetaObject_GetFieldCount((igMetaObject *)temp_s1);
     igMetaObject_CreateFields((igMetaObject *)temp_s1, g_igViewerDataPumpManager_ctorTable, 1);
     temp_v0 = (void **)(igMetaObject_FindFieldByName((igMetaObject *)temp_s1, "_name"));
-    temp_s3 = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)(*(int *)((char *)(temp_s1) + 40)), (int)temp_v0);
+    temp_s3 = ((Gap::Core::__internalNonRefCountedObjectList *)(*(int *)((char *)(temp_s1) + 40)))->find((Gap::Core::igObject *)temp_v0);
     temp_v0_2 = (void *)(((DW4VC_84_1 *)(temp_v0))->vX((int)(1)));
     ((Gap::Core::igStringMetaField *)temp_v0_2)->setDefault("Viewer data pump manager");
     *(int *)((char *)(temp_v0_2) + 28) = (int)(&g_igViewerDataPumpManager_nameMetaField);
