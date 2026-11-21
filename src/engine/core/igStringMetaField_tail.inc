@@ -1,143 +1,68 @@
-void igStringMetaField_ReleaseDefaults(int self) {
-    igStringMetaField_SetDefaultText((igMetaField *)self, 0);
-    igObject_ReleaseDefaults((igObject *)self);
+namespace Gap {
+namespace Core {
+
+void igStringMetaField::releaseDefaults()
+{
+    setDefault(0);
+    igObject::releaseDefaults();
 }
 
-/* Post-construction defaults; same two steps. */
-void igStringMetaField_InitDefaults(void **self) {
-    igObject_InitDefaults((igObject *)self);
-    ((igMetaFieldView *)self)->SetDefault(0);
+/* Post-construction defaults: the root's, then a default slot of its own. */
+void igStringMetaField::initDefaults()
+{
+    igObject::initDefaults();
+    setDefaultMemory(0);
 }
 
-void igStringMetaField_ValueFromString(int self, int objectBase, int text) {
-    int *header;
-    int refCount;
-    int pool;
-    void *previous;
-    void **slot;
-    void *interned;
+int igStringMetaField::setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir)
+{
+    igStringRef *string = (igStringRef *)dstMem;
 
-    slot = (void **)objectBase;
-    if (g_stringPool == 0) {
-        pool = ((int)StringPool_Allocate(0x10));
-        if (pool != 0) {
-            pool = ((int)StringPool_Construct((StringPool *)pool));
-        }
-        g_stringPool = (StringPool *)pool;
-    }
-    interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)text)));
-    previous = (void *)(*slot);
-    if (previous != 0) {
-        header = (int *)((char *)previous - 8);
-        refCount = *(int *)((char *)(previous) - 4) - 1;
-        *(int *)((char *)(previous) - 4) = refCount;
-        if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
-        }
-    }
-    *slot = interned;
-    strlen((const char *)text);
+    *string = strVal;
+    return strlen(strVal);
 }
 
-/* Interns the text behind *textCell (null stays null), stores the token via
- * igStringMetaField_AssignRetainedToken, then drops the temporary reference. The shared pool is
- * created on first use. */
-void igStringMetaField_AssignText(igStringMetaField *self, int object, int *textCell) {
-    void *token;
-    StringTokenHeader *header;
-    int text;
-    int count;
-    int pool;
-    void *interned;
-
-    text = *textCell;
-    if (text == 0) {
-        interned = 0;
-    } else {
-        if (g_stringPool == 0) {
-            pool = ((int)StringPool_Allocate(0x10));
-            if (pool != 0) {
-                pool = ((int)StringPool_Construct((StringPool *)pool));
-            }
-            g_stringPool = (StringPool *)pool;
-        }
-        interned = ((void *)StringPool_Intern((StringPool *)g_stringPool, (const char *)text));
-    }
-    token = interned;
-    igStringMetaField_AssignRetainedToken(self, (void *)object, (char **)&token);
-    if (token != 0) {
-        header = (StringTokenHeader *)token - 1;
-        count = header->refCount - 1;
-        header->refCount = count;
-        if (count == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)header->owner, (StringTokenHeader *)header);
-        }
-    }
+/* The kit's inline set() is left out of line here (scenegraph's copy is the one retail keeps). */
+void igStringMetaField::setFromMemory(igObject *object, const void *fieldStorage)
+{
+    set(object, *(const char *const *)fieldStorage);
 }
 
-/* Output-first retained copy: *output = *sourceCell, taking one more reference on the token. */
-void igStringMetaField_ValueToString(void **output, void *field, void **sourceCell) {
-    void *token;
-    StringTokenHeader *header;
-
-    *output = *sourceCell;
-    token = *output;
-    if (token != 0) {
-        header = (StringTokenHeader *)token - 1;
-        header->refCount = header->refCount + 1;
-    }
+igStringRef igStringMetaField::getStringFromMemory(const void *srcMem, igDirectory *dir)
+{
+    return *(const igStringRef *)srcMem;
 }
 
 /* Value storage size: one pointer. */
-int igStringMetaField_GetTypeSize(void) {
+unsigned short igStringMetaField::computeSize()
+{
     return 4;
 }
 
-void igStringMetaField_SetDefaultText(igMetaField *self, const char *text) {
-    int *header;
-    int refCount;
-    int pool;
-    void **slot;
-    void *previous;
-    void *interned;
-
-    slot = (void **)self->_default;
-    if (g_stringPool == 0) {
-        pool = ((int)StringPool_Allocate(0x10));
-        if (pool != 0) {
-            pool = ((int)StringPool_Construct((StringPool *)pool));
-        }
-        g_stringPool = (StringPool *)pool;
-    }
-    interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, text)));
-    previous = (void *)(*slot);
-    if (previous != 0) {
-        header = (int *)((char *)previous - 8);
-        refCount = *(int *)((char *)(previous) - 4) - 1;
-        *(int *)((char *)(previous) - 4) = refCount;
-        if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
-        }
-    }
-    *slot = interned;
+void igStringMetaField::setDefault(const char *def)
+{
+    *(igStringRef *)_default = def;
 }
 
-int igStringMetaField_GetRawFieldMemSize(igStringMetaField *self, int object) {
+int igStringMetaField::getIoSize(const igObject *obj) const
+{
     int text;
     int size;
     int len;
 
-    if (self->_persistent == 0) {
+    if (_persistent == 0) {
         return 0;
     }
     size = 0;
-    text = *(int *)(object + self->_offset);
+    text = *(int *)((const char *)obj + _offset);
     size += 4;
     if (text != 0) {
         len = strlen((const char *)text) + 1;
         size += (len + 3) & ~3;
     }
     return size;
+}
+}
 }
 
 /* The pool a temporary buffer for a field of `owner` comes from. */
@@ -149,14 +74,18 @@ static inline igMemoryPoolView *temporaryPool(void *owner) {
 /* The raw form of a string field: a byte count, then the characters padded to a word. */
 struct RawStringValue { int size; char text[4]; };
 
-/* Reads a string written by igStringMetaField_WriteRawValue. Returns the bytes consumed. */
-int igStringMetaField_ReadRawValue(void *self, void *value, void *source, int directory, int swap) {
+namespace Gap {
+namespace Core {
+
+/* Reads a string written by writeRawFieldMemory. Returns the bytes consumed. */
+int igStringMetaField::readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const
+{
     int consumed = 0;
-    igStringRef *string = (igStringRef *)value;
-    RawStringValue *raw = (RawStringValue *)source;
+    igStringRef *string = (igStringRef *)fieldMem;
+    RawStringValue *raw = (RawStringValue *)srcMem;
     int size = raw->size;
-    if (swap != 0) {
-        Gap::Core::igIntMetaField::getMetaField()->endianSwapMemory(&size, 1);
+    if (endianSwap) {
+        igIntMetaField::getMetaField()->endianSwapMemory(&size, 1);
     }
     consumed += 4;
     if (size > 0) {
@@ -169,11 +98,11 @@ int igStringMetaField_ReadRawValue(void *self, void *value, void *source, int di
         if (remaining != 0) {
             *string = raw->text;
         } else {
-            char *copy = (char *)temporaryPool(self)->Allocate(size + 1);
+            char *copy = (char *)temporaryPool((void *)this)->Allocate(size + 1);
             memcpy(copy, raw->text, size);
             copy[size] = 0;
             *string = copy;
-            temporaryPool(self)->Free(copy);
+            temporaryPool((void *)this)->Free(copy);
         }
         consumed += size;
     } else {
@@ -182,118 +111,69 @@ int igStringMetaField_ReadRawValue(void *self, void *value, void *source, int di
     return consumed;
 }
 
-int igStringMetaField_WriteRawValue(void *self, void *value, void *dst, int a3, int swap) {
- char **v; char *cursor; int size; int len;
- v = (char **)value;
- cursor = (char *)dst;
- if (*v != 0) {
-  len = strlen(*v) + 1;
-  size = (len + 3) & ~3;
-  *(int *)cursor = size;
-  if (swap != 0) {
-   Gap::Core::igIntMetaField *d = Gap::Core::igIntMetaField::getMetaField();
-   d->endianSwapMemory((int *)cursor, 1);
-  }
-  cursor += 4;
-  strcpy(cursor, *v);
-  cursor += size;
- } else {
-  *(int *)cursor = 0;
-  cursor += 4;
- }
- return cursor - (char *)dst;
-}
+int igStringMetaField::writeRawFieldMemory(const void *fieldMem, void *dstMem, igDirectory *dir, bool endianSwap) const
+{
+    char *const *v;
+    char *cursor;
+    int size;
+    int len;
 
-/* no-op value hook. */
-void igStringMetaField_SwapValue(void) {
-
-}
-
-/* no-op value hook. */
-void igStringArrayMetaField_SwapValue(void) {
-
-}
-
-void igStringMetaField_ResetValue(int *self, int object) {
-    char *token;
-    char *interned;
-    int *header;
-    int refCount;
-    int defaultText = *(int *)self[8];
-    int pool;
-    if (defaultText == 0) {
-        interned = 0;
+    v = (char *const *)fieldMem;
+    cursor = (char *)dstMem;
+    if (*v != 0) {
+        len = strlen(*v) + 1;
+        size = (len + 3) & ~3;
+        *(int *)cursor = size;
+        if (endianSwap) {
+            igIntMetaField *d = igIntMetaField::getMetaField();
+            d->endianSwapMemory((int *)cursor, 1);
+        }
+        cursor += 4;
+        strcpy(cursor, *v);
+        cursor += size;
     } else {
-        if (g_stringPool == 0) {
-            pool = ((int)StringPool_Allocate(16));
-            if (pool != 0) {
-                pool = ((int)StringPool_Construct((StringPool *)pool));
-            }
-            g_stringPool = (StringPool *)pool;
-        }
-        interned = ((char *)StringPool_Intern((StringPool *)g_stringPool, (const char *)defaultText));
+        *(int *)cursor = 0;
+        cursor += 4;
     }
-    token = interned;
-    igStringMetaField_AssignRetainedToken((igStringMetaField *)self, (void *)object, &token);
-    if (token != 0) {
-        header = (int *)(token - 8);
-        refCount = header[1] - 1;
-        header[1] = refCount;
-        if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
-        }
-    }
+    return cursor - (char *)dstMem;
 }
 
-void igStringMetaField_CopyValue(igStringMetaField *self, int destination, int source) {
-    void *token;
-    int *header;
-    int refCount;
-
-    token = (void *)(*(int *)(source + self->_offset));
-    if (token != 0) {
-        *(int *)((char *)(token) - 4) = (int)((int) (*(int *)((char *)(token) - 4) + 1));
-    }
-    igStringMetaField_AssignRetainedToken(self, (void *)destination, (char **)&token);
-    if (token != 0) {
-        header = (int *)((char *)token - 8);
-        refCount = *(int *)((char *)(token) - 4) - 1;
-        *(int *)((char *)(token) - 4) = refCount;
-        if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
-        }
-    }
+/* no-op value hook. */
+void igStringMetaField::endianSwapMemory(void *mem, int nElts) const
+{
 }
 
-void igStringMetaField_ShallowCopy(igStringArrayMetaField *self, int destination, int source) {
-    void *token;
-    int *header;
-    int refCount;
-    token = (void *)(*(int *)(source + self->_offset));
-    if (token != 0) {
-        *(int *)((char *)(token) - 4) = (int)((int) (*(int *)((char *)(token) - 4) + 1));
-    }
-    igStringMetaField_AssignRetainedToken((igStringMetaField *)self, (void *)destination, (char **)&token);
-    if (token != 0) {
-        header = (int *)((char *)token - 8);
-        refCount = *(int *)((char *)(token) - 4) - 1;
-        *(int *)((char *)(token) - 4) = refCount;
-        if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
-        }
-    }
+/* no-op value hook. */
+void igStringMetaField::endianSwap(igObject *obj) const
+{
+}
+
+void igStringMetaField::resetByValue(igObject *src)
+{
+    set(src, *(const char **)_default);
+}
+
+void igStringMetaField::copyByValue(igObject *dst, const igObject *src)
+{
+    set(dst, *(const igStringRef *)((const char *)src + _offset));
+}
+
+void igStringMetaField::copyByValueShallow(igObject *dst, const igObject *src)
+{
+    set(dst, *(const igStringRef *)((const char *)src + _offset));
 }
 
 /* Null-aware lexical comparison: two nulls compare equal, null sorts before non-null, otherwise
  * strcmp. */
-int igStringMetaField_Compare(igStringArrayMetaField *self, int objectA, int objectB) {
+int igStringMetaField::compare(const igObject *obj1, const igObject *obj2) const
+{
     int tokenA;
     int tokenB;
     int offset;
 
-    offset = self->_offset;
-    tokenA = *(int *)(objectA + offset);
-    tokenB = *(int *)(objectB + offset);
+    offset = _offset;
+    tokenA = *(const int *)((const char *)obj1 + offset);
+    tokenB = *(const int *)((const char *)obj2 + offset);
     if (tokenA == 0) {
         return -(tokenB != 0);
     }
@@ -303,86 +183,86 @@ int igStringMetaField_Compare(igStringArrayMetaField *self, int objectA, int obj
     return strcmp((const char *)tokenA, (const char *)tokenB);
 }
 
-void igStringMetaField_ConstructValue(void) {
-
+void igStringMetaField::construct(igObject *src)
+{
 }
 
 /* When the field is flagged _destruct, assigns a null token to the object's member, which releases
  * the string it held. */
-void igStringMetaField_DestructValue(igStringMetaField *self, int object) {
-    void *token;
-    StringTokenHeader *header;
-    int count;
-    if (self->_destruct != 0) {
-        token = 0;
-        igStringMetaField_AssignRetainedToken(self, (void *)object, (char **)&token);
-        if (token != 0) {
-            header = (StringTokenHeader *)token - 1;
-            count = header->refCount - 1;
-            header->refCount = count;
-            if (count == 0) {
-                StringChunk_ReleaseHeader((StringChunk *)header->owner, (StringTokenHeader *)header);
-            }
-        }
+void igStringMetaField::destruct(igObject *src)
+{
+    if (_destruct != 0) {
+        set(src, igStringRef());
     }
 }
 
-bool igStringMetaField_IsAlikeExactly(igStringMetaField *field,const void *one,const void *two){
-    int offset=field->_offset;
-    const char *left=*(const char **)((const char *)one+offset);
-    const char *right=*(const char **)((const char *)two+offset);
-    if(left==right)return true;
-    if(!left||!right)return false;
-    return !bool(strcmp(left,right));
-}
+bool igStringMetaField::isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const
+{
+    int offset = _offset;
+    const char *left = *(const char **)((const char *)obj1 + offset);
+    const char *right = *(const char **)((const char *)obj2 + offset);
 
-bool igStringMetaField_IsAlikeDeep(igStringMetaField *field,const void *one,const void *two){
-    int offset=field->_offset;
-    const char *left=*(const char **)((const char *)one+offset);
-    const char *right=*(const char **)((const char *)two+offset);
-    if(left==right)return true;
-    if(!left||!right)return false;
-    return !bool(strcmp(left,right));
-}
-
-bool igStringMetaField_IsAlikeShallow(igStringMetaField *field,const void *one,const void *two){
-    int offset=field->_offset;
-    const char *left=*(const char **)((const char *)one+offset);
-    const char *right=*(const char **)((const char *)two+offset);
-    if(left==right)return true;
-    if(!left||!right)return false;
-    return !bool(strcmp(left,right));
-}
-
-void *igStringMetaField_Construct(igStringMetaField *self, int extra1) {
-    igRefMetaField_Construct((igRefMetaField *)self);
-    self->_vtable = (int)g_igStringMetaField_vtable;
-    if (self) {
-        igStringMetaField_Init(self);
+    if (left == right) {
+        return true;
     }
-    return self;
+    if (!left || !right) {
+        return false;
+    }
+    return !strcmp(left, right);
 }
 
-void *igStringMetaField_Init(igStringMetaField *self) {
-    igRefMetaField_Init((igRefMetaField *)self);
-    self->_vtable = (int)g_igStringMetaField_vtable;
-    self->_refCounted = 1;
-    self->_shallowCopyMethod = 2;
-    self->_destruct = 1;
-    return self;
+bool igStringMetaField::isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const
+{
+    int offset = _offset;
+    const char *left = *(const char **)((const char *)obj1 + offset);
+    const char *right = *(const char **)((const char *)obj2 + offset);
+
+    if (left == right) {
+        return true;
+    }
+    if (!left || !right) {
+        return false;
+    }
+    return !strcmp(left, right);
 }
 
-void *igStringMetaField_CopyConstruct(void *object, void *other) {
-    igStringMetaField *self = (igStringMetaField *)object;
-    igStringMetaField *source = (igStringMetaField *)other;
-    igRefMetaField_CopyConstruct((igRefMetaField *)object, (igRefMetaField *)other);
-    self->_vtable = (int)(&g_igStringMetaField_vtable[0]);
-    self->_refCounted = source->_refCounted;
-    return object;
+bool igStringMetaField::isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const
+{
+    int offset = _offset;
+    const char *left = *(const char **)((const char *)obj1 + offset);
+    const char *right = *(const char **)((const char *)obj2 + offset);
+
+    if (left == right) {
+        return true;
+    }
+    if (!left || !right) {
+        return false;
+    }
+    return !strcmp(left, right);
 }
 
-void igStringMetaField_Destruct(igStringMetaField *self) {
-    igRefMetaField_Destruct((igRefMetaField *)self);
+igStringMetaField::igStringMetaField(bool boot) : igRefMetaField(boot)
+{
+    new (this, 0) igStringMetaField;
+}
+
+igStringMetaField::igStringMetaField()
+{
+    _refCounted = 1;
+    _shallowCopyMethod = 2;
+    _destruct = 1;
+}
+
+igStringMetaField::igStringMetaField(const igStringMetaField &other) : igRefMetaField(other)
+{
+    _refCounted = other._refCounted;
+}
+
+void igStringMetaField::__bootstrapDestruct()
+{
+    igRefMetaField::__bootstrapDestruct();
+}
+}
 }
 
 void igStringObj_SetN(igStringObj *self, int text, int length) {
@@ -647,7 +527,6 @@ int igStringObj_HasFileExtensionText(char *text, char *extension) {
         return result == 0;
     }
 }
-
 
 int igStringObj_Erase(igStringObj *self, unsigned int pos, unsigned int len) {
     unsigned int end;

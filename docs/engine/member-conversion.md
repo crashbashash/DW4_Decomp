@@ -82,6 +82,19 @@ local `…View` classes) go away as their users convert.
 6. Run `tools/check.py --function <va> --cand <source>` for every touched unit. Each must report `MATCH`. Then
    `tools/memberize.py --check` (no C-name declaration left over) and `tools/typed_coverage.py --check`.
 
+### The batch tool
+
+`tools/classconv.py <spec.py> {tables,memberize,splice,decls,all} [<class> ...]` runs steps 1-3 for a batch from a
+spec file (Python defining `SPECS`; its docstring lists the keys: `rows`, `typed`, `map`/`extra`/`keep`/`data`,
+`gen`, hand `bodies` in the kit's form, `boot` overrides, `lib`, `base`). It stubs every C function a hand body or
+the generator replaces with the member's parameters before `memberize.py --apply`, splices the generator's
+boilerplate and the hand bodies over the memberized definitions, writes a metafield's igen descriptor creator and
+`getMetaField`, writes a bootstrap class's three constructors, copy slot and `__bootstrapDestruct` in the kit's
+form (renaming their `unit-objects.json` keys), respells static data in their declared types and drops the
+C-name declarations `memberize.py --check` reports. Run `decls` once more after the rows are regenerated: a
+vtable's C name goes unused only then. `classconv.array_spec` builds a scalar array metafield's spec.
+Tests: `tools/test_classconv.py`.
+
 ## Conversion order
 
 The root and the renderers (`igRenderer`, `igClearRenderer`, `igFlushRenderer`) are converted, and of igObject's
@@ -149,11 +162,28 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    retail's `igMemoryRefMetaField_Destroy`; the kit's `setPool`/`getPool`, `setAlignmentType`,
    `setDefault(igMemoryRef)`, the private `refObjects`/`releaseObjects`, and its slot overrides) is converted;
    its field adder replaces the inherited `_resetMethod` by a new `igEnumMetaField`, which the generator
-   writes;
-3. `igMetaObject`, `igDataList`/`igObjectList`; igMetaObject, igIGBFile and igObjectDirEntry then also call
-   igObject's protected and private construction members directly (the kit makes them friends);
-4. attrs, then gfx, then scenegraph, then gui/insight/viewer;
-5. the game's `be*` classes last.
+   writes. `igStringMetaField` (bootstrap; the kit's inline `set(igObject *, igStringRef)` behind its copy,
+   reset and destruct slots: retail keeps the out-of-line copy scenegraph emits at 0x1c8c00, which stays a C
+   definition there until its not-yet-decompiled caller is, and core's copy is a `duplicates` row) and the
+   arrays `igStringArrayMetaField`, `igMemoryRefArrayMetaField` and `igObjectRefArrayMetaField` (the kit's
+   `IG_ARRAY_IMPL`, raw readers looping through the element class's, the ObjectRef array's out-of-line
+   `set(obj, index, val)`) are converted. The whole isAlike family is the kit's `igBool` (`bool`): igObject's
+   `isAlike*` and `userIsAlike*`, igMetaField's `isAlike*` and every `isAlikeCompare*` slot; a caller tests the
+   result directly (`if (!f->isAlikeDeep(…))`), since `== 0` widens it. `igStringRef`'s destructor is written
+   compactly: MWCC's bottom-up inliner weighs an inline's size, and retail inlines it two base destructors deep;
+3. the rest of the metafields: `igCompoundMetaField` (31 slot overrides, each a loop over `_fieldList`; its flat
+   subclasses igDependencyMetaField, igMemoryDescriptorMetaField, igTrackedElementMetaField,
+   igCharMetricsMetaField and igItemDataBaseField call its C names), then the Math library's
+   `igVec2f/3f/4f/4ucMetaField`, `igVec4fArrayMetaField` and `igMatrix44fMetaField` (`lib="Math"`, the first
+   `Gap::Math` classes; their descriptor creators and `getMetaField`s are unnamed `FUN_` functions mapped through
+   `extra`, the factory `CreateInstance` is the generator's `_instantiateFromPool`);
+4. `igMetaObject`, `igDataList`/`igObjectList` (the generator writes their boilerplate, the field adder's
+   `getMetaField` call included); igMetaObject, igIGBFile and igObjectDirEntry then also call igObject's
+   protected and private construction members directly (the kit makes them friends);
+5. attrs, then gfx, then scenegraph, then gui/insight/viewer. For attrs: list each class's C names against its
+   vtable slots and the kit header (`igAttr` first, then the attrs in `AttrsLibrary.cpp`'s include order), write
+   one spec per batch of a few classes, and convert parents before children;
+6. the game's `be*` classes last.
 
 ## Known differences and gaps
 

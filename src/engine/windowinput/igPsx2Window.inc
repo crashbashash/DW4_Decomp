@@ -165,7 +165,7 @@ void igPsx2Window_InitFields(void) {
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 4));
     *(int *)((char *)(temp_s1) + 56) = (int)igVisualContext_GetOrCreateMetaObject();
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 5)))->setDefault(1);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6)))->setDefault(0);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 7)))->setDefault(-1);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 9)))->setDefault(0x18);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 0xA)))->setDefault(8);

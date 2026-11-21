@@ -1,70 +1,57 @@
-void igStringArrayMetaField_SwapBytes(igStringArrayMetaField *self, int item, int count) {
-    void **descriptor;
+namespace Gap {
+namespace Core {
 
-    descriptor = (void **)(((void **)igStringMetaField_GetDefaultDescriptor()));
-    ((igMetaFieldView *)(descriptor))->SwapBytes((void *)(item), (int)(count * self->_num));
+void igStringArrayMetaField::endianSwapMemory(void *mem, int num) const
+{
+    igStringMetaField::getMetaField()->endianSwapMemory(mem, getNum() * num);
 }
 
-int igStringArrayMetaField_ReadRawFieldMem(igStringArrayMetaField *self, void *values, void *buffer, int directory, int swapBytes) {
-    int value = (int)values;
-    int cursor = (int)buffer;
-    int start = cursor;
+int igStringArrayMetaField::readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const
+{
+    igStringRef *field = (igStringRef *)fieldMem;
+    const char *src = (const char *)srcMem;
+    const char *start = src;
     int i;
-    for (i = 0; i < self->_num; i++) {
-        cursor = cursor + igStringMetaField_ReadRawValue((void *)self, (void *)value, (void *)cursor, directory, swapBytes);
-        value += 4;
+
+    for (i = 0; i < getNum(); i++) {
+        src += igStringMetaField::readRawFieldMemory(field, src, dir, endianSwap);
+        field++;
     }
-    return cursor - start;
+    return src - start;
 }
 
-int igStringArrayMetaField_WriteRawFieldMem(igStringArrayMetaField *self, void *values, void *buffer, int directory, int swapBytes) {
-    int value = (int)values;
-    int cursor = (int)buffer;
-    int start = cursor;
+int igStringArrayMetaField::writeRawFieldMemory(const void *fieldMem, void *dstMem, igDirectory *dir, bool endianSwap) const
+{
+    const igStringRef *field = (const igStringRef *)fieldMem;
+    char *dst = (char *)dstMem;
+    char *start = dst;
     int i;
-    for (i = 0; i < self->_num; i++) {
-        cursor = cursor + igStringMetaField_WriteRawValue((void *)self, (void *)value, (void *)cursor, directory, swapBytes);
-        value += 4;
+
+    for (i = 0; i < getNum(); i++) {
+        dst += igStringMetaField::writeRawFieldMemory(field, dst, dir, endianSwap);
+        field++;
     }
-    return ((cursor - start) + 3) & ~3;
+    return ((dst - start) + 3) & ~3;
 }
 
-void igStringArrayMetaField_DestructValue(igStringArrayMetaField *self, int object) {
-    int *header;
-    int references;
-    int pool;
-    int *slot;
+void igStringArrayMetaField::destruct(igObject *src)
+{
+    igStringRef *mem;
     int i;
-    int previous;
-    int empty;
 
-    if (self->_destruct != 0) {
-        slot = (int *)(object + self->_offset);
-        for (i = 0; i < self->_num; i++) {
-            if (g_stringPool == 0) {
-                pool = ((int)StringPool_Allocate(0x10));
-                if (pool != 0) {
-                    pool = ((int)StringPool_Construct((StringPool *)pool));
-                }
-                g_stringPool = (StringPool *)pool;
-            }
-            empty = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)0);
-            previous = *slot;
-            if (previous != 0) {
-                header = (int *)(previous - 8);
-                references = *(int *)(previous - 4) - 1;
-                *(int *)(previous - 4) = references;
-                if (references == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
-                }
-            }
-            *slot = empty;
-            slot += 1;
+    if (_destruct) {
+        mem = (igStringRef *)((char *)src + _offset);
+        for (i = 0; i < getNum(); i++) {
+            *mem = (const char *)0;
+            mem++;
         }
     }
 }
 
-int igStringArrayMetaField_GetSize(void *field) {
-    return (((igStringArrayMetaField *)field)->_num * 4) & 0xFFFF;
+unsigned short igStringArrayMetaField::computeSize()
+{
+    return getNum() * sizeof(igStringRef);
+}
+}
 }
 

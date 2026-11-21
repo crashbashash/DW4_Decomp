@@ -130,7 +130,7 @@ void igSearchSceneGraph_InitFields(void) {
     firstRef = igMetaObject_GetFieldAt(meta, first);
     *(int *)((char *)firstRef + 56) = (int)igIterateGraph_GetOrCreateMetaObject();
     *(unsigned char *)((char *)firstRef + 52) = 1;
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, first + 1), "");
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, first + 1)))->setDefault("");
     secondRef = igMetaObject_GetFieldAt(meta, first + 2);
     *(int *)((char *)secondRef + 56) = (int)igMetaObject_GetOrCreateMetaObject();
     enumField = igMetaObject_GetFieldAt(meta, first + 3);

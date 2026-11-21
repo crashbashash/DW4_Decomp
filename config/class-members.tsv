@@ -17,8 +17,8 @@ igObject	virtual void constructFields(int flag);
 igObject	virtual void destructFields();
 igObject	virtual void userDeepCopy(igObject *source);
 igObject	virtual void userShallowCopy(int source);
-igObject	virtual int userIsAlikeDeep(igObject *other);
-igObject	virtual int userIsAlikeShallow(igObject *other);
+igObject	virtual bool userIsAlikeDeep(igObject *other);
+igObject	virtual bool userIsAlikeShallow(igObject *other);
 igObject	virtual void userConstruct(int flag);
 igObject	virtual void userDestruct();
 igObject	virtual void initDefaults();
@@ -54,9 +54,9 @@ igObject	void decommission();
 igObject	void traverseFields(Visitor callback, void *context);
 igObject	void copyDeep(igObject *source);
 igObject	void copyShallow(int source);
-igObject	int isAlikeExactly(void *other) const;
-igObject	int isAlikeDeep(igObject *other);
-igObject	int isAlikeShallow(igObject *other);
+igObject	bool isAlikeExactly(void *other) const;
+igObject	bool isAlikeDeep(igObject *other);
+igObject	bool isAlikeShallow(igObject *other);
 igObject	int getIoSize() const;
 igObject	void printFields(int depth, int indent);
 igObject	void *malloc(int size) const;
@@ -124,10 +124,10 @@ igMetaField	void reset(igObject *src);
 igMetaField	void copyDeep(igObject *dst, const igObject *src);
 igMetaField	void copyShallow(igObject *dst, const igObject *src);
 igMetaField	int align(int size);
-igMetaField	private: int isAlike(const igObject *obj1, const igObject *obj2, int method) const;
-igMetaField	int isAlikeExactly(const igObject *obj1, const igObject *obj2) const;
-igMetaField	int isAlikeDeep(const igObject *obj1, const igObject *obj2) const;
-igMetaField	int isAlikeShallow(const igObject *obj1, const igObject *obj2) const;
+igMetaField	private: bool isAlike(const igObject *obj1, const igObject *obj2, int method) const;
+igMetaField	bool isAlikeExactly(const igObject *obj1, const igObject *obj2) const;
+igMetaField	bool isAlikeDeep(const igObject *obj1, const igObject *obj2) const;
+igMetaField	bool isAlikeShallow(const igObject *obj1, const igObject *obj2) const;
 igMetaField	void validate();
 igMetaField	virtual unsigned short computeSize();
 igMetaField	virtual int computeTypeSize();
@@ -149,10 +149,10 @@ igMetaField	virtual void print(const igObject *src, unsigned int deep, const cha
 igMetaField	virtual void traverse(igObject *obj, void *visitFunc, void *traversalData);
 igMetaField	virtual int addToDirectory(igObject *obj, igDirectory *dir);
 igMetaField	virtual int compare(const igObject *obj1, const igObject *obj2) const;
-igMetaField	virtual int isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const;
-igMetaField	virtual int isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const;
-igMetaField	virtual int isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const;
-igMetaField	virtual int isAlikeCompareNoCompare(const igObject *obj1, const igObject *obj2) const;
+igMetaField	virtual bool isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const;
+igMetaField	virtual bool isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const;
+igMetaField	virtual bool isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const;
+igMetaField	virtual bool isAlikeCompareNoCompare(const igObject *obj1, const igObject *obj2) const;
 igMetaField	virtual int getIoSize(const igObject *obj) const;
 igMetaField	int readFromMemoryVersion3(igObject *obj, const void *src, igDirectory *dir, bool endianSwap);
 igMetaField	int readFromMemory(igObject *obj, const void *src, igDirectory *dir, bool endianSwap);
@@ -421,9 +421,9 @@ igObjectRefMetaField	virtual void copyByReference(igObject *dst, const igObject 
 igObjectRefMetaField	virtual void copyByValue(igObject *dst, const igObject *src);
 igObjectRefMetaField	virtual void copyByValueShallow(igObject *dst, const igObject *src);
 igObjectRefMetaField	virtual int compare(const igObject *obj1, const igObject *obj2) const;
-igObjectRefMetaField	virtual int isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const;
-igObjectRefMetaField	virtual int isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const;
-igObjectRefMetaField	virtual int isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const;
+igObjectRefMetaField	virtual bool isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const;
+igObjectRefMetaField	virtual bool isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const;
+igObjectRefMetaField	virtual bool isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const;
 igObjectRefMetaField	virtual void copyByReset(igObject *dst, const igObject *src);
 igObjectRefMetaField	virtual void print(const igObject *src, unsigned int deep, const char *indent);
 igObjectRefMetaField	virtual void traverse(igObject *obj, void *visitFunc, void *traversalData);
@@ -464,10 +464,84 @@ igMemoryRefMetaField	virtual void copyByValueShallow(igObject *dst, const igObje
 igMemoryRefMetaField	virtual void print(const igObject *src, unsigned int deep, const char *indent);
 igMemoryRefMetaField	virtual void traverse(igObject *obj, void *visitFunc, void *traversalData);
 igMemoryRefMetaField	virtual int addToDirectory(igObject *obj, igDirectory *dir);
-igMemoryRefMetaField	virtual int isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const;
-igMemoryRefMetaField	virtual int isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const;
-igMemoryRefMetaField	virtual int isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const;
+igMemoryRefMetaField	virtual bool isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const;
+igMemoryRefMetaField	virtual bool isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const;
+igMemoryRefMetaField	virtual bool isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const;
 igMemoryRefMetaField	void setDefault(void *val);
 igMemoryRefMetaField	void setAlignmentType(const char *alignment);
 igMemoryRefMetaField	private: void refObjects(igObject *obj);
 igMemoryRefMetaField	private: void releaseObjects(igObject *obj);
+igStringMetaField	IG_BOOTSTRAP_OBJECT_DEFINE(igStringMetaField)
+igStringMetaField	IG_METAFIELD_SETUP(igStringMetaField)
+igStringMetaField	private: static igMetaField *k_shallowCopyMethod;
+igStringMetaField	private: static igMetaField *k_destruct;
+igStringMetaField	private: static igMetaField *k_refCounted;
+igStringMetaField	virtual unsigned short computeSize();
+igStringMetaField	virtual int setMemoryByString(void *dstMem, const char *strVal, igDirectory *dir);
+igStringMetaField	virtual igStringRef getStringFromMemory(const void *srcMem, igDirectory *dir);
+igStringMetaField	virtual int getIoSize(const igObject *obj) const;
+igStringMetaField	virtual int readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const;
+igStringMetaField	virtual int writeRawFieldMemory(const void *fieldMem, void *dstMem, igDirectory *dir, bool endianSwap) const;
+igStringMetaField	virtual void resetByValue(igObject *src);
+igStringMetaField	virtual void copyByValue(igObject *dst, const igObject *src);
+igStringMetaField	virtual void copyByValueShallow(igObject *dst, const igObject *src);
+igStringMetaField	virtual int compare(const igObject *obj1, const igObject *obj2) const;
+igStringMetaField	virtual void construct(igObject *src);
+igStringMetaField	virtual void destruct(igObject *src);
+igStringMetaField	virtual bool isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const;
+igStringMetaField	virtual bool isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const;
+igStringMetaField	virtual bool isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const;
+igStringMetaField	virtual void endianSwap(igObject *obj) const;
+igStringMetaField	virtual void endianSwapMemory(void *mem, int nElts) const;
+igStringMetaField	virtual void releaseDefaults();
+igStringMetaField	virtual void initDefaults();
+igStringMetaField	inline void set(igObject *obj, igStringRef val) const { *(igStringRef *)((char *)obj + _offset) = val; }
+igStringMetaField	virtual void setFromMemory(igObject *object, const void *fieldStorage);
+igStringMetaField	void setDefault(const char *def);
+igStringArrayMetaField	IG_OBJECT_DEFINE(igStringArrayMetaField)
+igStringArrayMetaField	IG_METAFIELD_SETUP(igStringArrayMetaField)
+igStringArrayMetaField	private: static igMetaField *k_num;
+igStringArrayMetaField	inline void setNum(int numParam) { _num = numParam; }
+igStringArrayMetaField	inline int getNum() const { return _num; }
+igStringArrayMetaField	virtual unsigned short computeSize();
+igStringArrayMetaField	virtual void endianSwapMemory(void *mem, int num) const;
+igStringArrayMetaField	virtual int readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const;
+igStringArrayMetaField	virtual int writeRawFieldMemory(const void *fieldMem, void *dstMem, igDirectory *dir, bool endianSwap) const;
+igStringArrayMetaField	void setDefault(unsigned int index, igStringRef val);
+igStringArrayMetaField	virtual void destruct(igObject *src);
+igMemoryRefArrayMetaField	IG_OBJECT_DEFINE(igMemoryRefArrayMetaField)
+igMemoryRefArrayMetaField	IG_METAFIELD_SETUP(igMemoryRefArrayMetaField)
+igMemoryRefArrayMetaField	private: static igMetaField *k_num;
+igMemoryRefArrayMetaField	inline void setNum(int numParam) { _num = numParam; }
+igMemoryRefArrayMetaField	inline int getNum() const { return _num; }
+igMemoryRefArrayMetaField	virtual unsigned short computeSize();
+igMemoryRefArrayMetaField	virtual void endianSwapMemory(void *mem, int num) const;
+igMemoryRefArrayMetaField	virtual int readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const;
+igMemoryRefArrayMetaField	virtual int writeRawFieldMemory(const void *fieldMem, void *dstMem, igDirectory *dir, bool endianSwap) const;
+igMemoryRefArrayMetaField	void setDefault(unsigned int index, void *val);
+igMemoryRefArrayMetaField	virtual void traverse(igObject *obj, void *visitFunc, void *traversalData);
+igObjectRefArrayMetaField	IG_OBJECT_DEFINE(igObjectRefArrayMetaField)
+igObjectRefArrayMetaField	IG_METAFIELD_SETUP(igObjectRefArrayMetaField)
+igObjectRefArrayMetaField	private: static igMetaField *k_num;
+igObjectRefArrayMetaField	inline void setNum(int numParam) { _num = numParam; }
+igObjectRefArrayMetaField	inline int getNum() const { return _num; }
+igObjectRefArrayMetaField	virtual unsigned short computeSize();
+igObjectRefArrayMetaField	virtual void endianSwapMemory(void *mem, int num) const;
+igObjectRefArrayMetaField	virtual void construct(igObject *src);
+igObjectRefArrayMetaField	virtual void destruct(igObject *src);
+igObjectRefArrayMetaField	virtual void decommission(igObject *src);
+igObjectRefArrayMetaField	virtual int readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const;
+igObjectRefArrayMetaField	virtual int writeRawFieldMemory(const void *fieldMem, void *dstMem, igDirectory *dir, bool endianSwap) const;
+igObjectRefArrayMetaField	virtual void resetByValue(igObject *src);
+igObjectRefArrayMetaField	virtual void resetByReference(igObject *src);
+igObjectRefArrayMetaField	virtual void copyByReference(igObject *dst, const igObject *src);
+igObjectRefArrayMetaField	virtual void copyByValue(igObject *dst, const igObject *src);
+igObjectRefArrayMetaField	virtual void copyByValueShallow(igObject *dst, const igObject *src);
+igObjectRefArrayMetaField	virtual void copyByReset(igObject *dst, const igObject *src);
+igObjectRefArrayMetaField	virtual bool isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const;
+igObjectRefArrayMetaField	virtual bool isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const;
+igObjectRefArrayMetaField	virtual bool isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const;
+igObjectRefArrayMetaField	void set(igObject *obj, int index, igObject *val) const;
+igObjectRefArrayMetaField	inline igObject *get(const igObject *obj, int index) const { return ((igObject **)((char *)obj + _offset))[index]; }
+igObjectRefArrayMetaField	void setDefault(unsigned int index, igObject *val);
+igObjectRefArrayMetaField	virtual void traverse(igObject *obj, void *visitFunc, void *traversalData);

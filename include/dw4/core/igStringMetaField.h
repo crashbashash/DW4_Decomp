@@ -10,10 +10,8 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-extern struct igMetaObject *g_igStringMetaField_metaObject;
 int igStrcasecmp(const char *s1, const char *s2);
 struct igMetaField *igStringMetaField_Create(struct igMemoryPoolView *pool);
-void igStringMetaField_SetDefaultText(struct igMetaField *self, const char *text);
 
 #ifdef __cplusplus
 }

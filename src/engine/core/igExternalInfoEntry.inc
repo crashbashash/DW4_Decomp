@@ -91,9 +91,9 @@ void igExternalInfoEntry_InitFields(void) {
     meta = (void *)g_igExternalInfoEntry_metaObject;
     first = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igExternalInfoEntry_ctorTable, 3);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, first), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first)))->setDefault(0);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 1)))->setDefault(-1);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, first + 2)))->setDefault(0);
     igMetaObject_NameFields((igMetaObject *)meta, g_igExternalInfoEntry_fieldTable, g_igExternalInfoEntry_fieldDescriptors, g_igExternalInfoEntry_fieldOffsets, first);
 }
 

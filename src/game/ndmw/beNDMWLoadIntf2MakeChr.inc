@@ -107,7 +107,7 @@ void beNDMWLoadIntf2MakeChr_InitFields(void) {
     inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     nameIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)inheritedName);
     nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
-    igStringMetaField_SetDefaultText((igMetaField *)nameField, "MAKECHR");
+    ((Gap::Core::igStringMetaField *)nameField)->setDefault("MAKECHR");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2MakeChr_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, nameIndex, (igMetaField *)nameField);
     nameField->_refCount = nameField->_refCount - 1;

@@ -270,7 +270,7 @@ void igMetaObject_InitFields(void) {
     ((igMetaField *)field2)->_persistent = 0;
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)))->setDefault(1);
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)))->setDefault(1);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7)))->setDefault(0);
     field3 = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 8)));
     ((Gap::Core::igIntMetaField *)field3)->setDefault(-1);
     ((igMetaField *)field3)->_persistent = 0;

@@ -169,7 +169,7 @@ void beNDMWLoadIntf2Diffselect_InitFields(void) {
     inheritedName = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
     nameIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)((char *)((igMetaObject *)meta)->_metaFields), (int)inheritedName);
     nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
-    igStringMetaField_SetDefaultText((igMetaField *)nameField, "DIFFSELECT");
+    ((Gap::Core::igStringMetaField *)nameField)->setDefault("DIFFSELECT");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2Diffselect_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, nameIndex, (igMetaField *)nameField);
     nameField->_refCount = nameField->_refCount - 1;

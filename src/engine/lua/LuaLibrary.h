@@ -251,7 +251,6 @@ extern "C" int strcmp(const char *a, const char *b);
 extern "C" char *strstr(const char *haystack, const char *needle);
 extern "C" int sprintf(char *buffer, const char *format, ...);
 extern "C" int vsprintf(char *buffer, const char *format, va_list args);
-extern "C" igMetaObject *g_igStringMetaField_metaObject;
 
 /* An Alchemy object as the binding sees it: slot 20 of every igObject returns its meta-object.
  * Bit 23 of the reference count marks an object a script holds a reference to. */

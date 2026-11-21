@@ -208,7 +208,7 @@ void beNDMWLoadCtrl2CommonIntf_InitFields(void) {
     inheritedName = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
     nameIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)((char *)((igMetaObject *)meta)->_metaFields), (int)inheritedName);
     nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
-    igStringMetaField_SetDefaultText((igMetaField *)nameField, "COMMONINTF");
+    ((Gap::Core::igStringMetaField *)nameField)->setDefault("COMMONINTF");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadCtrl2CommonIntf_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, nameIndex, (igMetaField *)nameField);
     nameField->_refCount = nameField->_refCount - 1;

@@ -16,13 +16,10 @@ void igFloatList_EnsureRegistered(void);
 void igLongList_EnsureRegistered(void);
 void igMemoryDescriptorMetaField_EnsureRegistered(void);
 void igMemoryFileEntryList_EnsureRegistered(void);
-void igMemoryRefArrayMetaField_EnsureRegistered(void);
 void igNamedObjectInfo_EnsureRegistered(void);
 void igNamedObjectList_EnsureRegistered(void);
-void igObjectRefArrayMetaField_EnsureRegistered(void);
 void igObjectStringMap_EnsureRegistered(void);
 void igPointerListList_EnsureRegistered(void);
-void igStringArrayMetaField_EnsureRegistered(void);
 void igUnsignedShortList_EnsureRegistered(void);
 
 /* Maths */

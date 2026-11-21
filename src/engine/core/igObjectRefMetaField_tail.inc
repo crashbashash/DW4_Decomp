@@ -259,7 +259,7 @@ int igObjectRefMetaField::compare(const igObject *obj1, const igObject *obj2) co
     return *(const int *)((const char *)obj1 + offset) - *(const int *)((const char *)obj2 + offset);
 }
 
-int igObjectRefMetaField::isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const
+bool igObjectRefMetaField::isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const
 {
     int fieldOffset;
     igObject *refA;
@@ -277,7 +277,7 @@ int igObjectRefMetaField::isAlikeCompareExactly(const igObject *obj1, const igOb
     return refA->isAlikeExactly(refB);
 }
 
-int igObjectRefMetaField::isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const
+bool igObjectRefMetaField::isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const
 {
     int fieldOffset;
     igObject *refA;
@@ -295,7 +295,7 @@ int igObjectRefMetaField::isAlikeCompareDeep(const igObject *obj1, const igObjec
     return refA->isAlikeDeep(refB);
 }
 
-int igObjectRefMetaField::isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const
+bool igObjectRefMetaField::isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const
 {
     int fieldOffset;
     igObject *refA;

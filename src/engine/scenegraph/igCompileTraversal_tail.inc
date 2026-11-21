@@ -572,7 +572,7 @@ void igAttrSet_ShareCompiledAttrs(CompiledAttrSet *set, igCompileTraversal *trav
                 int j;
                 for (j = 0; j < shared; j++) {
                     CompiledAttr *other = set->_sharedAttrs->_data[j];
-                    if (((Gap::Core::igObject *)other)->isAlikeShallow((Gap::Core::igObject *)attr) != 0) {
+                    if (((Gap::Core::igObject *)other)->isAlikeShallow((Gap::Core::igObject *)attr)) {
                         setValueAt(set->_attributes, i, other);
                         appendSlotAttr(set, other);
                         unique = false;

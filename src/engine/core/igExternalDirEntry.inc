@@ -105,10 +105,10 @@ void igExternalDirEntry_InitFields(void) {
     field->_externalEnumStorage = (int)&g_igExternalDirEntry_refDescriptorCell;
     igMetaObject_FinalizeAndReplaceField(meta, index, field);
     releaseField(field);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base), "Intrinsic");
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 1), "default");
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault("Intrinsic");
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault("default");
     field = (igMetaField *)igMetaObject_GetFieldAt(meta, base + 3);
-    igStringMetaField_SetDefaultText((igMetaField *)field, "");
+    ((Gap::Core::igStringMetaField *)field)->setDefault("");
     field->_persistent = 0;
     igMetaObject_NameFields(meta, g_igExternalDirEntry_fieldTable, g_igExternalDirEntry_fieldDescriptors, g_igExternalDirEntry_fieldOffsets, base);
 }

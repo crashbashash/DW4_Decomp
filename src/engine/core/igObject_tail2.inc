@@ -72,13 +72,13 @@ void igObject::userShallowCopy(int source)
 }
 
 /* Slot 5 default: always 1. */
-int igObject::userIsAlikeDeep(igObject *other)
+bool igObject::userIsAlikeDeep(igObject *other)
 {
     return 1;
 }
 
 /* Slot 6 default: always 1. */
-int igObject::userIsAlikeShallow(igObject *other)
+bool igObject::userIsAlikeShallow(igObject *other)
 {
     return 1;
 }
@@ -677,7 +677,7 @@ void igObject::copyShallow(int source) {
     ((igObjectDispatchView *)this)->userShallowCopy(source);
 }
 
-int igObject::isAlikeDeep(igObject *b) {
+bool igObject::isAlikeDeep(igObject *b) {
     int i;
     __internalObjectList *fl;
     int n;
@@ -686,12 +686,12 @@ int igObject::isAlikeDeep(igObject *b) {
     n = fl->_count;
     i = igMetaObject_GetFieldCount(Gap::Core::igObject::getClassMeta());
     for (; i < n; i++) {
-        if (((igMetaField *)(((int *)fl->_data)[i]))->isAlikeDeep((igObject *)((int)this), (igObject *)((int)b)) == 0) return 0;
+        if (!((igMetaField *)(((int *)fl->_data)[i]))->isAlikeDeep((igObject *)((int)this), (igObject *)((int)b))) return 0;
     }
     return userIsAlikeDeep(b);
 }
 
-int igObject::isAlikeShallow(igObject *b) {
+bool igObject::isAlikeShallow(igObject *b) {
     igMetaObject *meta;
     int i;
     __internalObjectList *fields;
@@ -703,14 +703,14 @@ int igObject::isAlikeShallow(igObject *b) {
     fields = (__internalObjectList *)getMeta()->_metaFields;
     count = fields->_count;
     for (i = igMetaObject_GetFieldCount(Gap::Core::igObject::getClassMeta()); i < count; i++) {
-        if (((igMetaField *)(((int *)fields->_data)[i]))->isAlikeShallow((igObject *)((int)this), (igObject *)((int)b)) == 0) {
+        if (!((igMetaField *)(((int *)fields->_data)[i]))->isAlikeShallow((igObject *)((int)this), (igObject *)((int)b))) {
             return 0;
         }
     }
     return userIsAlikeShallow(b);
 }
 
-int igObject::isAlikeExactly(void *b) const {
+bool igObject::isAlikeExactly(void *b) const {
     int meta;
     int i;
     __internalObjectList *fields;
@@ -723,7 +723,7 @@ int igObject::isAlikeExactly(void *b) const {
     fields = (__internalObjectList *)((igObjectDispatchView *)this)->GetMeta()->_metaFields;
     count = fields->_count;
     for (i = igMetaObject_GetFieldCount(Gap::Core::igObject::_Meta); i < count; i++) {
-        if (((igMetaField *)(((int *)fields->_data)[i]))->isAlikeExactly((igObject *)((int)(void *)this), (igObject *)((int)b)) == 0) {
+        if (!((igMetaField *)(((int *)fields->_data)[i]))->isAlikeExactly((igObject *)((int)(void *)this), (igObject *)((int)b))) {
             return 0;
         }
     }

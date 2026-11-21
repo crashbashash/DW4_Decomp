@@ -364,6 +364,18 @@ class MemberCalls(unittest.TestCase):
         self.assertEqual(w.callback(0x1000, "igOther", "igMetaObjectCallback", ("void", [])),
                          "Gap::Core::igIntArrayMetaField::arkRegisterMetaValidate")
 
+    def test_a_static_the_metafield_macro_declares_is_called(self):
+        # IG_METAFIELD_SETUP declares getMetaField; no class-members.tsv row names it (igObjectList's adder)
+        lib = types.SimpleNamespace(role_at={}, parent={})
+        w = odl.Writer(lib, set(), {"igObjectRefMetaField": "Core", "igObjectList": "Core"},
+                       {0x1000: "getMetaField__Q33Gap4Core20igObjectRefMetaFieldFv"}, {}, {}, None, {})
+        call = {"k": "call", "target": 0x1000, "args": [], "fargs": [], "stack": {}}
+        ctx = {"cls": "igObjectList", "names": {}, "types": {}, "start": None}
+        self.assertEqual(w.call_expr(call, 1, [], ctx), "Gap::Core::igObjectRefMetaField::getMetaField()")
+        self.assertEqual(w.returns(0x1000, "igObjectList"), "igObjectRefMetaField *")
+        ctx["cls"] = "igObjectRefMetaField"
+        self.assertEqual(w.call_expr(call, 1, [], ctx), "getMetaField()")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -258,7 +258,7 @@ LuaType LuaType_FromMetaField(LuaMetaFieldView *field) {
         result.kind = LUA_KIND_FLOAT;
     } else if (Gap::Core::igDoubleMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_DOUBLE;
-    } else if (g_igStringMetaField_metaObject == meta) {
+    } else if (Gap::Core::igStringMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_STRING;
     } else if (Gap::Core::igBoolMetaField::getClassMeta() == meta) {
         result.kind = LUA_KIND_BOOL;

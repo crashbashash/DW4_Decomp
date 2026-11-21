@@ -90,7 +90,7 @@ void igViewerLoadingFileMessage_InitFields(void) {
     temp_s0 = g_igViewerLoadingFileMessage_metaObject;
     temp_s1 = igMetaObject_GetFieldCount((igMetaObject *)temp_s0);
     igMetaObject_CreateFields((igMetaObject *)temp_s0, g_igViewerLoadingFileMessage_ctorTable, 2);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1), "");
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s1 + 1)))->setDefault("");
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igViewerLoadingFileMessage_fieldTable, g_igViewerLoadingFileMessage_fieldHandles, g_igViewerLoadingFileMessage_fieldOffsets, temp_s1);
 }
 

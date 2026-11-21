@@ -156,7 +156,7 @@ void igTextElement_InitFields(void) {
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
     ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igGeometryAttr_GetOrCreateMetaObject();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2), "");
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)))->setDefault("");
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igTextElement_fieldTable, g_igTextElement_fieldHandles, g_igTextElement_fieldOffsets, temp_s2);
 }
 

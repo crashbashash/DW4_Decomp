@@ -179,7 +179,7 @@ void igDirectory_InitFields(void) {
     base = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igDirectory_ctorTable, 0x12);
     nameField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
-    igStringMetaField_SetDefaultText((igMetaField *)nameField, 0);
+    ((Gap::Core::igStringMetaField *)nameField)->setDefault(0);
     ((igStringMetaField *)nameField)->_destruct = 1;
     externalDirectoryListField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
     ((igObjectRefMetaField *)externalDirectoryListField)->_metaObject = (int)igDirectoryList_GetOrCreateMetaObject();

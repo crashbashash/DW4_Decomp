@@ -109,6 +109,7 @@ ROLE_SIGNATURES = {
     "getClassMeta": ("igMetaObject *", []),
     "arkRegisterInitialize": ("void", []),
     "arkRegisterMetaValidate": ("void", []),
+    "getMetaField": (None, []),
 }
 
 
@@ -1156,6 +1157,11 @@ class Writer:
         if role and (name == role[1] or name.endswith("::" + role[1])):
             ret = ROLE_SIGNATURES[role[1]][0]
             return ret if ret is not None else role[0] + " *"
+        macro = re.match(r"Gap::\w+::(\w+)::(\w+)$", name)
+        if macro and macro.group(2) in ROLE_SIGNATURES and self.member_signature(name) is None:
+            # a static member an object macro declares (IG_METAFIELD_SETUP's getMetaField)
+            ret = ROLE_SIGNATURES[macro.group(2)][0]
+            return ret if ret is not None else macro.group(1) + " *"
         return self.protos.signature(name)[0]
 
     def call_expr(self, e, i, events, ctx):
@@ -1181,7 +1187,14 @@ class Writer:
                     receiver = "((%s *)%s)" % (cls, self.value(this, "void *", events, ctx, e))
                 name = name.split("::")[-1]
             else:
-                params = self.protos.params(name)
+                macro = re.match(r"Gap::\w+::(\w+)::(\w+)$", name)
+                if macro and macro.group(2) in ROLE_SIGNATURES:
+                    # a static member an object macro declares (IG_METAFIELD_SETUP's getMetaField)
+                    params = ROLE_SIGNATURES[macro.group(2)][1]
+                    if macro.group(1) == ctx["cls"]:
+                        name = macro.group(2)
+                else:
+                    params = self.protos.params(name)
         if params is None:
             raise Unsupported("no declaration of %s" % name)
         args, ints, floats = [], 1 if receiver is not None else 0, 0

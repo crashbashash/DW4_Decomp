@@ -142,7 +142,7 @@ void beHitLandModelOrder_InitFields(void) {
     meta = g_beHitLandModelOrder_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beHitLandModelOrder_ctorTable, 9);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base), "");
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault("");
     raymax = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
     rayMaxDefault[0] = 0;
     rayMaxDefault[1] = 0;

@@ -175,7 +175,7 @@ void igIniShaderFactory_InitFields(void) {
     ((igObjectRefMetaField *)interfaceField)->_metaObject = (int)igRegistry_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)interfaceField)->_persistent = 0;
     interfaceFileNameField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)));
-    igStringMetaField_SetDefaultText((igMetaField *)interfaceFileNameField, 0);
+    ((Gap::Core::igStringMetaField *)interfaceFileNameField)->setDefault(0);
     ((igStringMetaField *)interfaceFileNameField)->_persistent = 0;
     interfaceSectionField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)));
     ((Gap::Core::igIntMetaField *)interfaceSectionField)->setDefault(-1);

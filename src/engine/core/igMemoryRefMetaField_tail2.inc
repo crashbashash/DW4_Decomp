@@ -62,7 +62,7 @@ int igMemoryRefMetaField::addToDirectory(igObject *obj, igDirectory *dir)
     return igDirectory_AddMemoryRef((igDirectoryView *)dir, (int)this, p, _memType, _alignmentType, 0, 0, 1);
 }
 
-int igMemoryRefMetaField::isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const
+bool igMemoryRefMetaField::isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const
 {
     int offset;
 
@@ -70,7 +70,7 @@ int igMemoryRefMetaField::isAlikeCompareExactly(const igObject *obj1, const igOb
     return *(const int *)((const char *)obj1 + offset) == *(const int *)((const char *)obj2 + offset);
 }
 
-int igMemoryRefMetaField::isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const
+bool igMemoryRefMetaField::isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const
 {
     int off;
     int n;
@@ -129,7 +129,7 @@ int igMemoryRefMetaField::readRawFieldMemory(void *fieldMem, const void *srcMem,
     return 4;
 }
 
-int igMemoryRefMetaField::isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const
+bool igMemoryRefMetaField::isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const
 {
     int off;
     int n;

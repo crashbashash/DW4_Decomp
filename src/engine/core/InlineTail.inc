@@ -107,14 +107,6 @@ void igStringRefList_TrimCapacity(igStringRefList *l) {
     }
 }
 
-igMetaObject *igStringArrayMetaField_GetMeta(void) {
-    return g_igStringArrayMetaField_metaObject;
-}
-
-int igStringArrayMetaField_GetDescriptor(void) {
-    return (*(int *)&g_igStringArrayMetaField_descriptor);
-}
-
 int igResource_GetMeta(void) {
     return (int)g_igResource_metaObject;
 }
@@ -131,28 +123,12 @@ int igPluginHelper_GetMeta(void) {
     return (int)g_igPluginHelper_metaObject;
 }
 
-igMetaObject *igObjectRefArrayMetaField_GetMeta(void) {
-    return g_igObjectRefArrayMetaField_metaObject;
-}
-
-int igObjectRefArrayMetaField_GetDescriptor(void) {
-    return (*(int *)&g_igObjectRefArrayMetaField_descriptor);
-}
-
 int igNamedObjectInfo_GetMeta(void) {
     return (int)g_igNamedObjectInfo_metaObject;
 }
 
 igMetaObject *igMetaFieldInfo_GetMeta(void) {
     return g_igMetaFieldInfo_metaObject;
-}
-
-int igMemoryRefArrayMetaField_GetMeta(void) {
-    return (int)g_igMemoryRefArrayMetaField_metaObject;
-}
-
-int igMemoryRefArrayMetaField_GetDescriptor(void) {
-    return (int)g_igMemoryRefArrayMetaField_descriptor;
 }
 
 int igMemoryPoolInfo_GetMeta(void) {
@@ -476,14 +452,6 @@ int igRegistryValue_GetMeta(void) {
 
 igMetaObject *igRegistryValueList_GetMeta(void) {
     return g_igRegistryValueList_metaObject;
-}
-
-igMetaObject *igStringMetaField_GetMeta(void) {
-    return g_igStringMetaField_metaObject;
-}
-
-int igStringMetaField_GetDescriptor(void) {
-    return (*(int *)&g_igStringMetaField_descriptor);
 }
 
 int igStringObj_GetMeta(void) {

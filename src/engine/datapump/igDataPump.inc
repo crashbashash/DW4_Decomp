@@ -111,8 +111,8 @@ void igDataPump_InitFields(void) {
     destMetaField = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 1));
     *(int *)((char *)(destMetaField) + 56) = (int)Gap::Core::igMetaField::getClassTypeLazy();
     *(char *)((char *)(destMetaField) + 38) = 0;
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 2), 0);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 3), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 2)))->setDefault(0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 3)))->setDefault(0);
     dpiField = (void *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 4));
     *(int *)((char *)(dpiField) + 56) = (int)igDataPumpInterface_GetOrCreateMetaObject();
     igMetaObject_NameFields((igMetaObject *)meta, g_igDataPump_fieldTable, g_igDataPump_fieldHandles, g_igDataPump_fieldOffsets, firstField);

@@ -1,57 +1,66 @@
-void igMemoryRefArrayMetaField_SwapBytes(igMemoryRefArrayMetaField *self, int buffer, int count) {
-    void **elementField;
+namespace Gap {
+namespace Core {
 
-    elementField = (void **)(((void **)Gap::Core::igMemoryRefMetaField::getMetaField()));
-    ((igMetaFieldView *)(elementField))->SwapBytes((void *)(buffer), (int)(count * self->_num));
+void igMemoryRefArrayMetaField::endianSwapMemory(void *mem, int num) const
+{
+    igMemoryRefMetaField::getMetaField()->endianSwapMemory(mem, getNum() * num);
 }
 
-int igMemoryRefArrayMetaField_ReadRawFieldMem(void *self, void *object, void *data, int directory, int swap) {
-    void ** src;
-    char * off;
-    char * start;
+int igMemoryRefArrayMetaField::readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const
+{
+    void * *field = (void * *)fieldMem;
+    const char *src = (const char *)srcMem;
+    const char *start = src;
     int i;
-    src = (void **)object; off = (char *)data; start = off;
-    for (i = 0; i < ((igMemoryRefArrayMetaField *)self)->_num; i++) {
-        off += igMemoryRefMetaField_ReadRawFieldMem((igMemoryRefMetaField *)self, (int)src, (int *)off, (void *)directory, swap);
-        src++;
+
+    for (i = 0; i < getNum(); i++) {
+        src += igMemoryRefMetaField::readRawFieldMemory(field, src, dir, endianSwap);
+        field++;
     }
-    return off - start;
+    return src - start;
 }
 
-int igMemoryRefArrayMetaField_WriteRawFieldMem(void *self, void *object, void *data, int directory, int swap) {
-    void ** src;
-    char * off;
-    char * start;
+int igMemoryRefArrayMetaField::writeRawFieldMemory(const void *fieldMem, void *dstMem, igDirectory *dir, bool endianSwap) const
+{
+    const void * *field = (const void * *)fieldMem;
+    char *dst = (char *)dstMem;
+    char *start = dst;
     int i;
-    src = (void **)object; off = (char *)data; start = off;
-    for (i = 0; i < ((igMemoryRefArrayMetaField *)self)->_num; i++) {
-        off += igMemoryRefMetaField_WriteRawFieldMem((igMetaFieldView *)self, (int *)src, off, directory, swap);
-        src++;
+
+    for (i = 0; i < getNum(); i++) {
+        dst += igMemoryRefMetaField::writeRawFieldMemory(field, dst, dir, endianSwap);
+        field++;
     }
-    return ((off - start) + 3) & ~3;
+    return ((dst - start) + 3) & ~3;
 }
 
-int igMemoryRefArrayMetaField_GetSize(igMemoryRefArrayMetaField *self) {
-    return (self->_num * 4) & 0xFFFF;
+unsigned short igMemoryRefArrayMetaField::computeSize()
+{
+    return getNum() * sizeof(void *);
 }
 
-void igMemoryRefArrayMetaField_ReleaseElements(igMemoryRefArrayMetaField *self, int object, int visitor, int context) {
+void igMemoryRefArrayMetaField::traverse(igObject *obj, void *visitFunc, void *traversalData)
+{
     int i;
-    if (((Gap::Core::igObject *)self->_memType)->isOfType((igMetaObject *)Gap::Core::igObjectRefMetaField::getClassMeta()) != 0) {
-        for (i = 0; i < self->_num; i++) {
-            int block = *(int *)(object + self->_offset + i * 4);
-            if (block != 0) {
-                unsigned int count = Memory_GetBufferSize((void *)block) >> 2;
+
+    if (((igMetaField *)_memType)->isOfType(igObjectRefMetaField::getClassMeta()) != 0) {
+        for (i = 0; i < getNum(); i++) {
+            igObject **elements = ((igObject ***)((char *)obj + _offset))[i];
+
+            if (elements != 0) {
+                unsigned int count = Memory_GetBufferSize((void *)elements) >> 2;
                 int j;
+
                 for (j = 0; j < (int)count; j++) {
-                    igObjectDispatchView **slot = (igObjectDispatchView **)(block + j * 4);
-                    if (*slot != 0) {
-                        (*slot)->TrimCapacity();
-                        ((Gap::Core::igObject *)(*slot))->traverseFields((int (*)(void *, void *, void *))visitor, (void *)context);
+                    if (elements[j] != 0) {
+                        elements[j]->trimCapacity();
+                        elements[j]->traverseFields((Visitor)visitFunc, traversalData);
                     }
                 }
             }
         }
     }
+}
+}
 }
 

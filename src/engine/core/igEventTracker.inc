@@ -327,7 +327,7 @@ void igEventTracker_InitFields(void) {
     callStackTracer->_persistent = 0;
     { igIntArrayMetaField *q = (igIntArrayMetaField *)((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x15)); q->_num = 0x20; }
     defaultMemoryEventFormat = ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x16));
-    igStringMetaField_SetDefaultText((igMetaField *)defaultMemoryEventFormat, 0);
+    ((Gap::Core::igStringMetaField *)defaultMemoryEventFormat)->setDefault(0);
     ((igStringMetaField *)defaultMemoryEventFormat)->_refCounted = 0;
     defaultMemoryEventFormat->_persistent = 0;
     { igIntArrayMetaField *q = (igIntArrayMetaField *)((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 0x17)); q->_num = 0x20; }

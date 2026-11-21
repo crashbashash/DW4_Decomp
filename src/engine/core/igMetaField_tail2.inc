@@ -361,7 +361,7 @@ int igMetaField::addToDirectory(igObject *obj, igDirectory *dir) {
     return -(_persistent == 0);
 }
 
-int igMetaField::isAlike(const igObject *obj1, const igObject *obj2, int method) const {
+bool igMetaField::isAlike(const igObject *obj1, const igObject *obj2, int method) const {
     switch (method) {
     case 0:
         return isAlikeCompareExactly(obj1, obj2);
@@ -376,19 +376,19 @@ int igMetaField::isAlike(const igObject *obj1, const igObject *obj2, int method)
     }
 }
 
-int igMetaField::isAlikeExactly(const igObject *obj1, const igObject *obj2) const {
+bool igMetaField::isAlikeExactly(const igObject *obj1, const igObject *obj2) const {
     return isAlike(obj1, obj2, _isAlikeExactlyMethod);
 }
 
-int igMetaField::isAlikeDeep(const igObject *obj1, const igObject *obj2) const {
+bool igMetaField::isAlikeDeep(const igObject *obj1, const igObject *obj2) const {
     return isAlike(obj1, obj2, _isAlikeDeepMethod);
 }
 
-int igMetaField::isAlikeShallow(const igObject *obj1, const igObject *obj2) const {
+bool igMetaField::isAlikeShallow(const igObject *obj1, const igObject *obj2) const {
     return isAlike(obj1, obj2, _isAlikeShallowMethod);
 }
 
-int igMetaField::isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const {
+bool igMetaField::isAlikeCompareExactly(const igObject *obj1, const igObject *obj2) const {
     const unsigned char *p1;
     const unsigned char *p2;
     int n;
@@ -406,17 +406,17 @@ int igMetaField::isAlikeCompareExactly(const igObject *obj1, const igObject *obj
     return 1;
 }
 
-int igMetaField::isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const
+bool igMetaField::isAlikeCompareDeep(const igObject *obj1, const igObject *obj2) const
 {
     return isAlikeCompareExactly(obj1, obj2);
 }
 
-int igMetaField::isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const
+bool igMetaField::isAlikeCompareShallow(const igObject *obj1, const igObject *obj2) const
 {
     return isAlikeCompareExactly(obj1, obj2);
 }
 
-int igMetaField::isAlikeCompareNoCompare(const igObject *obj1, const igObject *obj2) const {
+bool igMetaField::isAlikeCompareNoCompare(const igObject *obj1, const igObject *obj2) const {
     return 1;
 }
 

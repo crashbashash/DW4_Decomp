@@ -49,7 +49,16 @@ struct igStringRef {
         p = interned;
     }
     igStringRef(const igStringRef &other) : p(other.p) { retainString(p); }
-    ~igStringRef() { releaseString(p); }
+    /* Written compactly: MWCC's bottom-up inliner weighs an inline's size, and retail inlines this two base
+     * destructors deep (igObjectRefArrayMetaField's vtable probe releases _poolName and _fieldName inline). */
+    ~igStringRef() {
+        if (p != 0) {
+            StringTokenHeader *header = (StringTokenHeader *)p - 1;
+            if (--header->refCount == 0) {
+                StringChunk_ReleaseHeader((StringChunk *)header->owner, header);
+            }
+        }
+    }
     igStringRef &operator=(const igStringRef &other) {
         retainString(other.p);
         releaseString(p);

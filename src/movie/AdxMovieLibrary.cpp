@@ -883,7 +883,7 @@ void igAdxAudio_InitFields(void) {
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 3)))->setDefault(2);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 5)))->setDefault(4);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 6)))->setDefault(0xBB80);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 8), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 8)))->setDefault(0);
     igMetaObject_NameFields((igMetaObject *)meta, g_igAdxAudio_fieldTable, g_igAdxAudio_fieldHandles, g_igAdxAudio_fieldOffsets, firstField);
 }
 
@@ -1642,7 +1642,7 @@ void igMovieInfo_InitFields(void) {
     meta = g_igMovieInfo_metaObject;
     firstField = igMetaObject_GetFieldCount((igMetaObject *)meta);
     igMetaObject_CreateFields((igMetaObject *)meta, g_igMovieInfo_ctorTable, 0x15);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField)))->setDefault(0);
     typeField = (igEnumMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 1);
     ((Gap::Core::igEnumMetaField *)typeField)->setDefault(0);
     typeField->_getMetaEnumFunction = (int)igMovieInfo_GetMovieTypeMetaEnum;
@@ -1661,7 +1661,7 @@ void igMovieInfo_InitFields(void) {
     *(void (**)(void))&magnificationFilterField->_getMetaEnumFunction = (void (*)())IG_GFX_TEXTURE_FILTER_GetMetaEnum;
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xA)))->setDefault(-1);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xB)))->setDefault(-1);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xC), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xC)))->setDefault(0);
     codecField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xD);
     codecField->_metaObject = (int)igMovieCodec_GetOrCreateMetaObject();
     codecField->_persistent = 0;

@@ -227,6 +227,9 @@ igSmartPointer<igObject> *igSmartPointer_igDataPumpInterface_Destruct(igSmartPoi
     return self;
 }
 
+/* The kit's inline Gap::Core::igStringMetaField::set(igObject *, igStringRef) left out of line; this unit's copy
+ * is the one retail keeps (core's is a duplicate of it). It stays a C definition until its caller here,
+ * FUN_001c7680, is decompiled and emits it. */
 void igStringMetaField_AssignRetainedToken(igStringMetaField *arg0, void *object, char **arg2) {
     int *temp_a1;
     int temp_v1;
@@ -329,7 +332,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
         ShaderCacheView *cache = ((ShaderCacheView *)FUN_001ca6b0((int *)self, self->kind));
         ShaderObject_1ca6c0 *existing = ((ShaderObject_1ca6c0 *)igObjectStringMap_GetObject(cache, (const char *)name));
         if (existing != 0) {
-            if (((Gap::Core::igObject *)existing)->isAlikeShallow((Gap::Core::igObject *)object.p) != 0) {
+            if (((Gap::Core::igObject *)existing)->isAlikeShallow((Gap::Core::igObject *)object.p)) {
                 return igSmartPointer<ShaderObject_1ca6c0>(existing, kRetainReference);
             }
             return object;

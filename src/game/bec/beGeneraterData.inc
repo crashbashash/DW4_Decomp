@@ -162,8 +162,8 @@ void beGeneraterData_InitFields(void) {
     geneRotYRadianList = (void *)(igMetaObject_GetFieldAt(meta, base + 3));
     ((igObjectRefMetaField *)geneRotYRadianList)->_metaObject = (int)igFloatList_GetOrCreateMetaObject();
     ((igRefMetaField *)geneRotYRadianList)->_construct = 1;
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 5), 0);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0xA), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 5)))->setDefault(0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xA)))->setDefault(0);
     playerDataList = (void *)(igMetaObject_GetFieldAt(meta, base + 0xB));
     ((igObjectRefMetaField *)playerDataList)->_metaObject = (int)beGeneraterPlayerDataList_GetOrCreateMetaObject();
     ((igRefMetaField *)playerDataList)->_construct = 1;

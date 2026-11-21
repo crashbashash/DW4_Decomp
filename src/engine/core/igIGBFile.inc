@@ -581,7 +581,7 @@ void igIGBFile_InitFields(void) {
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x24)))->setDefault(-1);
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x25));
     ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0x27), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 0x27)))->setDefault(0);
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x28));
     ((igMemoryRefMetaField *)field)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
     field = ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 0x2A));

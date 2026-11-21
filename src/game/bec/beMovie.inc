@@ -97,7 +97,7 @@ void beMovie_InitFields(void) {
     igMetaObject_CreateFields(meta, g_beMovie_ctorTable, 2);
     movie = (void *)(igMetaObject_GetFieldAt(meta, base));
     ((igObjectRefMetaField *)movie)->_metaObject = (int)igMovieManager_GetOrCreateMetaObject();
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 1), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 1)))->setDefault(0);
     igMetaObject_NameFields(meta, g_beMovie_fieldTable, g_beMovie_fieldHandles, g_beMovie_fieldOffsets, base);
 }
 

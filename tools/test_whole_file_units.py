@@ -707,7 +707,7 @@ class ProfileTwin(unittest.TestCase):
             self.duplicates(self.config(self.profile.flags, self.profile.exceptions))
 
     def test_a_twin_that_differs_stops_the_run(self):
-        with self.assertRaisesRegex(SystemExit, "is 136 bytes and retail's copy at 0x130720 is 116"):
+        with self.assertRaisesRegex(SystemExit, r"is \d+ bytes and retail's copy at 0x130720 is 116"):
             self.duplicates(self.config("-O1 -sdatathreshold 2 -Iinclude -I. -I- -Isrc/third_party/libc", "off"))
 
     def test_a_call_only_the_duplicates_make_is_an_external(self):

@@ -127,7 +127,7 @@ void igOptInterface_InitFields(void) {
     ((igObjectRefMetaField *)field)->_metaObject = (int)igMetaObjectList_GetOrCreateMetaObject();
     ((igRefMetaField *)field)->_construct = 1;
     field4 = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
-    igStringMetaField_SetDefaultText((igMetaField *)field4, "");
+    ((Gap::Core::igStringMetaField *)field4)->setDefault("");
     ((igStringMetaField *)field4)->_destruct = 1;
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
     ((igObjectRefMetaField *)field2)->_metaObject = (int)igFileInfo_GetOrCreateMetaObject();

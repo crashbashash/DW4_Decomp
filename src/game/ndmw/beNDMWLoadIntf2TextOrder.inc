@@ -104,7 +104,7 @@ void beNDMWLoadIntf2TextOrder_InitFields(void) {
     inheritedName = (void **)(igMetaObject_FindFieldByName((igMetaObject *)meta, "_name"));
     nameIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)((char *)((igMetaObject *)meta)->_metaFields), (int)inheritedName);
     nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
-    igStringMetaField_SetDefaultText((igMetaField *)nameField, "TEXTORDER");
+    ((Gap::Core::igStringMetaField *)nameField)->setDefault("TEXTORDER");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2TextOrder_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField((igMetaObject *)meta, nameIndex, (igMetaField *)nameField);
     nameField->_refCount = nameField->_refCount - 1;

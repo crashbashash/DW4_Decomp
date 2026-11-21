@@ -129,7 +129,7 @@ void igObjectDirEntry_InitFields(void) {
     ref->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
     ((igMetaField *)ref)->_persistent = 0;
     text = (igStringMetaField *)igMetaObject_GetFieldAt(meta, base + 1);
-    igStringMetaField_SetDefaultText((igMetaField *)text, "NoMeta");
+    ((Gap::Core::igStringMetaField *)text)->setDefault("NoMeta");
     text->_destruct = 1;
     ((igMetaField *)text)->_persistent = 0;
     ((igMetaField *)igMetaObject_GetFieldAt(meta, base + 2))->_persistent = 0;

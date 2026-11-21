@@ -84,7 +84,7 @@ void beNDMWShopSelect00_InitFields(void) {
     meta = g_beNDMWShopSelect00_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beNDMWShopSelect00_ctorTable, 1);
-    igStringMetaField_SetDefaultText((igMetaObject_GetFieldAt(meta, base)), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(0);
     igMetaObject_NameFields(meta, g_beNDMWShopSelect00_fieldTable, g_beNDMWShopSelect00_fieldHandles, g_beNDMWShopSelect00_fieldOffsets, base);
 }
 

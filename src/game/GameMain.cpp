@@ -209,14 +209,14 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Core::igUnsignedLongArrayMetaField::arkRegister();
     Gap::Core::igUnsignedIntArrayMetaField::arkRegister();
     Gap::Core::igUnsignedCharArrayMetaField::arkRegister();
-    igStringArrayMetaField_EnsureRegistered();
+    Gap::Core::igStringArrayMetaField::arkRegister();
     Gap::Core::igShortArrayMetaField::arkRegister();
     Gap::Core::igRawRefArrayMetaField::arkRegister();
     igObjectStringMap_EnsureRegistered();
     igNamedObjectList_EnsureRegistered();
-    igObjectRefArrayMetaField_EnsureRegistered();
+    Gap::Core::igObjectRefArrayMetaField::arkRegister();
     igNamedObjectInfo_EnsureRegistered();
-    igMemoryRefArrayMetaField_EnsureRegistered();
+    Gap::Core::igMemoryRefArrayMetaField::arkRegister();
     igMemoryFileEntryList_EnsureRegistered();
     Gap::Core::igLongArrayMetaField::arkRegister();
     Gap::Core::igFloatArrayMetaField::arkRegister();

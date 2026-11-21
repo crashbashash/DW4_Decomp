@@ -206,7 +206,7 @@ void beNDMWLoadIntf2DataSelIntf_InitFields(void) {
     inheritedName = (void **)(igMetaObject_FindFieldByName(meta, "_name"));
     nameIndex = ObjectPointerList_FindIndex((__internalNonRefCountedObjectList *)meta->_metaFields, (int)inheritedName);
     nameField = (igStringMetaField *)((igObjectDispatchView *)inheritedName)->CloneViaMetadata(1);
-    igStringMetaField_SetDefaultText((igMetaField *)nameField, "DATASELINTF");
+    ((Gap::Core::igStringMetaField *)nameField)->setDefault("DATASELINTF");
     nameField->_externalEnumStorage = (int)(&g_beNDMWLoadIntf2DataSelIntf_nameExternalEnumStorage);
     igMetaObject_FinalizeAndReplaceField(meta, nameIndex, (igMetaField *)nameField);
     nameField->_refCount = nameField->_refCount - 1;

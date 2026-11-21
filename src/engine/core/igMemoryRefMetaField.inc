@@ -81,11 +81,6 @@ CallbackArray *igMemoryRefMetaField::arkRegisterInternal()
         regFunctions
     );
 }
-}
-}
-
-namespace Gap {
-namespace Core {
 
 void igMemoryRefMetaField::arkRegisterInitialize()
 {

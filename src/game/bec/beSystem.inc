@@ -253,7 +253,7 @@ void beSystem_InitFields(void) {
     readFileList = (void *)(igMetaObject_GetFieldAt(meta, base + 8));
     ((igObjectRefMetaField *)readFileList)->_metaObject = (int)igStringRefList_GetOrCreateMetaObject();
     ((igRefMetaField *)readFileList)->_construct = 1;
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base + 0xA), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xA)))->setDefault(0);
     ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 0xB)))->setDefault(1);
     bootDirectory = (void *)(igMetaObject_GetFieldAt(meta, base + 0xC));
     ((igObjectRefMetaField *)bootDirectory)->_metaObject = (int)igDirectory_GetOrCreateMetaObject();

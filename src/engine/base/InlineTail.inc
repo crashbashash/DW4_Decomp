@@ -863,7 +863,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
             return true;
         }
     }
-    if (((Gap::Core::igObject *)field)->isOfType(g_igStringMetaField_metaObject) != 0) {
+    if (((Gap::Core::igObject *)field)->isOfType(Gap::Core::igStringMetaField::getClassMeta()) != 0) {
         igSmartPointer<igStringObj> value(createStringObj());
         if (igRegistry_GetValueStringObj(registry, section, stringObjText(*key), (igStringObj **)&value, "", 0)) {
             assignToken(field, object, RecoveryString(internString(stringObjText(*value))));

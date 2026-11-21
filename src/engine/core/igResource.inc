@@ -218,8 +218,8 @@ void igResource_InitFields(void) {
     ((igObjectRefMetaField *)directoryListField)->_metaObject = (int)igDirectoryList_GetOrCreateMetaObject();
     ((igRefMetaField *)directoryListField)->_construct = 1;
     ((igMetaField *)directoryListField)->_persistent = 0;
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2), 0);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)))->setDefault(0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)))->setDefault(0);
     loadQueueField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)));
     ((igObjectRefMetaField *)loadQueueField)->_metaObject = (int)igQueue_GetOrCreateMetaObject();
     loadThreadField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)));

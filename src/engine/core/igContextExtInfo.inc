@@ -118,7 +118,7 @@ void igContextExtInfo_InitFields(void) {
     metaField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base)));
     ((igObjectRefMetaField *)metaField)->_metaObject = (int)igMetaObject_GetOrCreateMetaObject();
     nameField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    igStringMetaField_SetDefaultText((igMetaField *)nameField, 0);
+    ((Gap::Core::igStringMetaField *)nameField)->setDefault(0);
     ((igStringMetaField *)nameField)->_destruct = 1;
     vendorNameField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
     ((igMemoryRefMetaField *)vendorNameField)->_memType = (int)Gap::Core::igCharMetaField::getMetaField();

@@ -88,7 +88,7 @@ void beFileListInfo_InitFields(void) {
     meta = g_beFileListInfo_metaObject;
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beFileListInfo_ctorTable, 2);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, base), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, base)))->setDefault(0);
     fnames = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)fnames)->_metaObject = (int)igNamedObjectList_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_beFileListInfo_fieldTable, g_beFileListInfo_fieldHandles, g_beFileListInfo_fieldOffsets, base);

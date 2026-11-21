@@ -80,7 +80,7 @@ void igCustomStateCollection_InitFields(void) {
     meta = g_igCustomStateCollection_metaObject;
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igCustomStateCollection_ctorTable, 2);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt(meta, fieldStart), "");
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart)))->setDefault("");
     igMetaObject_NameFields(meta, g_igCustomStateCollection_fieldTable, g_igCustomStateCollection_fieldHandles, g_igCustomStateCollection_fieldOffsets, fieldStart);
 }
 

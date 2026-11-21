@@ -135,7 +135,7 @@ void igCreateCollisionDatabase_InitFields(void) {
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)))->setDefault(1);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 3)))->setDefault(1);
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 4)))->setDefault(1);
-    igStringMetaField_SetDefaultText(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 5), 0);
+    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 5)))->setDefault(0);
     temp_s1_3 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 6));
     ((igObjectRefMetaField *)temp_s1_3)->_metaObject = (int)igCollisionGrid_GetOrCreateMetaObject();
     ((igMetaField *)temp_s1_3)->_persistent = 0;
