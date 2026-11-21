@@ -136,9 +136,9 @@ SharedViewerOptions *igViewerDefaults_Construct(SharedViewerOptions *self) {
 void igViewerDefaults_LoadFromRegistry(SharedViewerOptions *self) {
     int section;
     igRegistry *registry = g_objectSystem->configRegistry;
-    section = igRegistry_GetSectionIndex(registry, (char *)"INSIGHT", 0);
+    section = ((Gap::Core::igRegistry *)registry)->findSection((char *)"INSIGHT", 0);
     if (section < 0) {
-        section = igRegistry_GetSectionIndex(registry, (char *)"Viewer", 0);
+        section = ((Gap::Core::igRegistry *)registry)->findSection((char *)"Viewer", 0);
         if (section < 0) return;
     }
     { const char *key = "extraCommandLine"; if (key) igGetRegistryValue_String(registry, section, key, &self->extraCommandLine, self->extraCommandLine, 0); }

@@ -614,7 +614,7 @@ igResult igIGBFile_AddInfoListEntry(void *self) {
 
 int igIGBFile_WriteFile(igIGBFileView *self, const char *fileName) {
     int *pp; igObject *t; igObject *t2; igObject *a; igObject *b;
-    igRegistry_GetValueBool(g_objectSystem->configRegistry, 2, (const char *)"forceWriteMemoryPoolInfoFromMetaState", &self->_forceWriteMemoryPoolInfoFromMetaState, 0, 0);
+    ((Gap::Core::igRegistry *)g_objectSystem->configRegistry)->getValue(2, (const char *)"forceWriteMemoryPoolInfoFromMetaState", self->_forceWriteMemoryPoolInfoFromMetaState, 0, 0);
     igResult openResult = igIGBFile_OpenForWrite(self, fileName);
     pp = (int *)((int)&openResult + 0);
     if (*pp == g_resultFailure.v) return 0;
@@ -1011,7 +1011,7 @@ igResult igIGBFile_SetupBasePath(igIGBFileView *self) {
 }
 
 void igIGBFile_RegisterBlindObjectsConfig(void) {
-    igRegistry_GetValueBool(g_objectSystem->configRegistry, 2, (const char *)"blindObjects", (unsigned char *)&g_igIGBFile_blindObjects, 0, 0);
+    ((Gap::Core::igRegistry *)g_objectSystem->configRegistry)->getValue(2, (const char *)"blindObjects", g_igIGBFile_blindObjects, 0, 0);
 }
 
 igResult igIGBFile_ReadNextChunk(igIGBFileView *self) {

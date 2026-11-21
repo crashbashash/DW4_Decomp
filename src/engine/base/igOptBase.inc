@@ -15,7 +15,7 @@ void FUN_00225f80(void)
     igMetaObject_RunStaticInit((igMetaObjectRegisterFunction)igOptBase_Register);
 }
 
-static igMetaObjectCallback g_igOptBase_callbackList[] = { igRegistry_EnsureRegistered, FUN_00225ea0, 0 };
+static igMetaObjectCallback g_igOptBase_callbackList[] = { Gap::Core::igRegistry::arkRegister, FUN_00225ea0, 0 };
 
 CallbackArray *igOptBase_Register(void) {
     BaseLibrary_MarkRegistered();
@@ -69,7 +69,7 @@ void igOptBase_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igOptBase_ctorTable, 2);
     field2 = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)field2)->_metaObject = (int)igRegistry_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)field2)->_metaObject = (int)Gap::Core::igRegistry::getClassTypeLazy();
     field = (void *)(igMetaObject_GetFieldAt(meta, base + 1));
     ((igObjectRefMetaField *)field)->_metaObject = (int)igOptConfiguration_GetOrCreateMetaObject();
     igMetaObject_NameFields(meta, g_igOptBase_fieldTable, g_igOptBase_fieldHandles, g_igOptBase_fieldOffsets, base);

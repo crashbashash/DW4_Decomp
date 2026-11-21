@@ -68,8 +68,8 @@ void igIniShaderFactory_PreloadFileCache(IniShaderFactoryFields *self) {
                 igDriverDatabase_DeleteConfigNodeList(shader.get(), (igTDataList<ConfigNode *> *)nodes);
             }
         }
-        for (int i = 0; i < igRegistry_GetValueCount((void *)self->f28); i++) {
-            IniFactoryEntry *e = (IniFactoryEntry *)igRegistry_GetValueEntry((void *)self->f28, i);
+        for (int i = 0; i < ((Gap::Core::igRegistry *)self->f28)->getRawValueCount(); i++) {
+            IniFactoryEntry *e = (IniFactoryEntry *)((Gap::Core::igRegistry *)self->f28)->getRawValue(i);
             if (e != 0 && e->f16 != 0 && e->f12 != 0 && igStringObj_HasFileExtension((igStringObj *)e->f16, ".file") != 0) {
                 char *path;
                 if (e->f12->name == 0) path = g_stringObjEmptyText; else path = e->f12->name;
@@ -162,7 +162,7 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
         }
         SLOT(IniDocument, found) = ((IniDocument *)igObjectStringMap_GetObject(cache, (const char *)name));
         { IniDocument *a_ = found; ADD(a_); }
-        if (found != 0 && ((Gap::Core::igObject *)found)->isOfType(g_igRegistry_metaObject) != 0) {
+        if (found != 0 && ((Gap::Core::igObject *)found)->isOfType(Gap::Core::igRegistry::getClassMeta()) != 0) {
             IniDocument *keep = found;
             ADD(keep);
             DROP(IniDocument, parsed);
@@ -182,11 +182,11 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
             char *text;
             IniDocument *loading;
             DROP(IniDocument, parsed);
-            SLOT(IniDocument, parsed) = (IniDocument *)igRegistry_Create((int)allocator);
+            SLOT(IniDocument, parsed) = (IniDocument *)Gap::Core::igRegistry::_instantiateFromPool((igMemoryPoolView *)allocator);
             loading = parsed;
             text = path->text;
             text = (text == 0) ? g_stringObjEmptyText : text;
-            if (!igRegistry_Load((igRegistry *)loading, text, "")) {
+            if (!((Gap::Core::igRegistry *)loading)->load(text, "")) {
                 SET_OUT(0);
                 DROP(IniDocument, path);
                 FINISH();
@@ -205,8 +205,8 @@ int FUN_001cd150(IniDocument **out, IniFactoryState *self, char *name) {
     } else {
         void *allocator = ((void *)((Gap::Core::igObject *)self)->getMemoryPool());
         DROP(IniDocument, result);
-        SLOT(IniDocument, result) = (IniDocument *)igRegistry_Create((int)allocator);
-        igRegistry_Merge(result, (igRegistry *)parsed, 1);
+        SLOT(IniDocument, result) = (IniDocument *)Gap::Core::igRegistry::_instantiateFromPool((igMemoryPoolView *)allocator);
+        ((Gap::Core::igRegistry *)result)->merge((Gap::Core::igRegistry *)parsed, 1);
     }
     SET_OUT(result);
     FINISH();

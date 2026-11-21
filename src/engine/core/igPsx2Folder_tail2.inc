@@ -57,7 +57,7 @@ char *igPsx2_ResolveModulePath(char *name, int kind) {
         } else {
             key ="intrinsicModulePath";
         }
-        if (igRegistry_GetValueStringObj(g_objectSystem->configRegistry, 2, key, (igStringObj **)&path, (const char *)"", 0) != 0) {
+        if (((Gap::Core::igRegistry *)g_objectSystem->configRegistry)->getValue(2, key, *(igStringObjRef *)&path, (const char *)"", 0)) {
             igPsx2Folder_TrimPath((igStringObj *)path.p);
             char *dir = (char *)((igStringObj *)path.p)->_buffer;
             dir = (dir == 0) ? g_stringObjEmptyText : dir;
@@ -230,7 +230,7 @@ static inline int fileAllocator(void) {
 
 void igPsx2_SetupOutputFiles(void) {
     unsigned char enabled;
-    igRegistry_GetValueBool(g_objectSystem->configRegistry, 2, (const char *)"useOutputFilesForAtmon", &enabled, 1, 0);
+    ((Gap::Core::igRegistry *)g_objectSystem->configRegistry)->getValue(2, (const char *)"useOutputFilesForAtmon", enabled, 1, 0);
     if (enabled != 0) {
         igReport_SetOutputFile(0);
         igReport_SetErrorFile(0);

@@ -20,17 +20,17 @@ void igPluginHelper_LoadPluginsFromRegistry(void *self) {
     char *text;
     igTDataList<char *> *held;
     ini = g_objectSystem->configRegistry;
-    section = igRegistry_GetSectionIndex((igRegistry *)ini,"PLUGINS", 1);
+    section = ((Gap::Core::igRegistry *)ini)->findSection("PLUGINS", 1);
     if (section >= 0) {
-        n = ((unsigned int)igRegistry_GetNumValuesInSection((int)ini, section));
+        n = ((Gap::Core::igRegistry *)ini)->getKeyCount(section);
         for (i = 0; i < n; i++) {
             key = 0;
-            if (!igRegistry_GetKeyName((int)ini, section, i, &key)) {
+            if (!((Gap::Core::igRegistry *)ini)->getKeyName(section, i, *(igStringObjRef *)&key)) {
                 dropKey(key);
             } else {
                 *(igTDataList<char *> **)&values = ((igTDataList<char *> *)igStringRefList_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
                 held = values;
-                if (!igRegistry_GetValueStringList(ini, section, keyText(key), (igStringRefList *)held, 0)) {
+                if (!((Gap::Core::igRegistry *)ini)->getValue(section, keyText(key), (igStringRefList *)held, 0)) {
                     dropValues(values);
                     dropKey(key);
                 } else {

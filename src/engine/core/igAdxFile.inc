@@ -171,7 +171,7 @@ void igAdxFile_LoadSearchFilePath(void) {
     int path;
     if (registry != 0) {
         text = (igStringObj *)igStringObj_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
-        igRegistry_GetValueStringObj((igRegistry *)registry, 2, (const char *)"searchFilePath", &text, searchPathKey, 0);
+        ((Gap::Core::igRegistry *)registry)->getValue(2, (const char *)"searchFilePath", *(igStringObjRef *)&text, searchPathKey, 0);
         path = text->_buffer;
         if (path == 0) {
             path = (int)g_stringObjEmptyText;

@@ -74,7 +74,7 @@ void igIniShaderFactory_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igIniShaderFactory_Register);
 }
 
-static igMetaObjectCallback g_igIniShaderFactory_callbackList[] = { igObjectStringMap_EnsureRegistered, igRegistry_EnsureRegistered, igMemoryPool_EnsureRegistered, igInterpretedShaderData_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igIniShaderFactory_callbackList[] = { igObjectStringMap_EnsureRegistered, Gap::Core::igRegistry::arkRegister, igMemoryPool_EnsureRegistered, igInterpretedShaderData_EnsureRegistered, 0 };
 
 CallbackArray *igIniShaderFactory_Register(void) {
     SceneGraphLibrary_MarkRegistered();
@@ -165,10 +165,10 @@ void igIniShaderFactory_InitFields(void) {
     ((igObjectRefMetaField *)fileCacheField)->_metaObject = (int)igObjectStringMap_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)fileCacheField)->_construct = 1;
     implementationField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)implementationField)->_metaObject = (int)igRegistry_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)implementationField)->_metaObject = (int)Gap::Core::igRegistry::getClassTypeLazy();
     ((igObjectRefMetaField *)implementationField)->_persistent = 0;
     interfaceField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
-    ((igObjectRefMetaField *)interfaceField)->_metaObject = (int)igRegistry_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)interfaceField)->_metaObject = (int)Gap::Core::igRegistry::getClassTypeLazy();
     ((igObjectRefMetaField *)interfaceField)->_persistent = 0;
     interfaceFileNameField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)));
     ((Gap::Core::igStringMetaField *)interfaceFileNameField)->setDefault(0);

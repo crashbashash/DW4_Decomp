@@ -106,39 +106,39 @@ int igConvertToString_Vec4f(char **result, const float *vector, const char *form
     return 0;
 }
 
-bool igGetRegistryValue_Int(igRegistry *registry, int section, const char *key, int *out, int defaultValue, int create)
+bool igGetRegistryValue_Int(igRegistry *registry, int section, const char *key, int *out, int defaultValue, unsigned char create)
 {
-    return igRegistry_GetValueInt(registry, section, key, out, defaultValue, create);
+    return ((Gap::Core::igRegistry *)registry)->getValue(section, key, *out, defaultValue, create);
 }
 
-bool igGetRegistryValue_Float(igRegistry *registry, int section, const char *key, float *out, int create, float defaultValue)
+bool igGetRegistryValue_Float(igRegistry *registry, int section, const char *key, float *out, unsigned char create, float defaultValue)
 {
-    return igRegistry_GetValueFloat(registry, section, key, out, create, defaultValue);
+    return ((Gap::Core::igRegistry *)registry)->getValue(section, key, *out, defaultValue, create);
 }
 
-int igGetRegistryValue_StringObj(igRegistry *registry, int section, const char *key, igStringObj **out, const char *defaultValue, int create)
+bool igGetRegistryValue_StringObj(igRegistry *registry, int section, const char *key, igStringObj **out, const char *defaultValue, unsigned char create)
 {
-    return igRegistry_GetValueStringObj(registry, section, key, out, defaultValue, create);
+    return ((Gap::Core::igRegistry *)registry)->getValue(section, key, *(igStringObjRef *)out, defaultValue, create);
 }
 
-int igGetRegistryValue_String(igRegistry *registry, int section, const char *key, char **out, char *def, int create)
+bool igGetRegistryValue_String(igRegistry *registry, int section, const char *key, char **out, char *def, unsigned char create)
 {
-    return igRegistry_GetValueString(registry, section, key, out, def, create);
+    return ((Gap::Core::igRegistry *)registry)->getValue(section, key, *(igStringRef *)out, def, create);
 }
 
-unsigned char igGetRegistryValue_Bool(igRegistry *registry, int section, const char *name, unsigned char *value, int defaultValue, int create)
+bool igGetRegistryValue_Bool(igRegistry *registry, int section, const char *name, unsigned char *value, unsigned char defaultValue, unsigned char create)
 {
-    return igRegistry_GetValueBool(registry, section, name, value, defaultValue, create);
+    return ((Gap::Core::igRegistry *)registry)->getValue(section, name, *value, defaultValue, create);
 }
 
-int igGetRegistryValue_Vec3f(igRegistry *registry, int section, const char *key, float *value, const float *defaultValue, int create) {
+int igGetRegistryValue_Vec3f(igRegistry *registry, int section, const char *key, float *value, const float *defaultValue, unsigned char create) {
     char *text;
     char *defaultText;
     int converted;
 
     text = 0;
     igConvertToString_Vec3f(&defaultText, defaultValue, "<%f,%f,%f>");
-    if (igRegistry_GetValueString(registry, section, key, &text, defaultText, create) != 0) {
+    if (((Gap::Core::igRegistry *)registry)->getValue(section, key, *(igStringRef *)&text, defaultText, create)) {
         converted = igConvertString_Vec3f(text, value, " < %f , %f , %f > ") & 0xFF;
         releaseString(defaultText);
         releaseString(text);
@@ -149,14 +149,14 @@ int igGetRegistryValue_Vec3f(igRegistry *registry, int section, const char *key,
     return 0;
 }
 
-int igGetRegistryValue_Vec4f(igRegistry *registry, int section, const char *key, float *value, const float *defaultValue, int create) {
+int igGetRegistryValue_Vec4f(igRegistry *registry, int section, const char *key, float *value, const float *defaultValue, unsigned char create) {
     char *text;
     char *defaultText;
     int converted;
 
     text = 0;
     igConvertToString_Vec4f(&defaultText, defaultValue, "<%f,%f,%f,%f>");
-    if (igRegistry_GetValueString(registry, section, key, &text, defaultText, create) != 0) {
+    if (((Gap::Core::igRegistry *)registry)->getValue(section, key, *(igStringRef *)&text, defaultText, create)) {
         converted = igConvertString_Vec4f(text, value, " < %f , %f , %f , %f > ") & 0xFF;
         releaseString(defaultText);
         releaseString(text);

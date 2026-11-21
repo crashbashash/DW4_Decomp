@@ -14,14 +14,14 @@ void igEnbayaContextPool_resetFields(int arg0, int flags) {
     var_v0 = (int)((Gap::Core::igObject *)arg0)->getMemoryPool();
     var_v0 = (int)(g_useOwnerAllocator != 0 ? var_v0 : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary));
     sp5C = (void *)(igStringObj_Create(var_v0));
-    temp_s0 = igRegistry_GetNumValuesInSection(temp_s2, 7);
+    temp_s0 = ((Gap::Core::igRegistry *)temp_s2)->getKeyCount(7);
     var_s1 = 0;
     while (var_s1 < temp_s0) {
-        if (igRegistry_GetKeyName(temp_s2, 7, var_s1, (igStringObj **)&sp5C)) {
+        if (((Gap::Core::igRegistry *)temp_s2)->getKeyName(7, var_s1, *(igStringObjRef *)&sp5C)) {
             sp58 = 0;
             var_a2 = *(int *)((char *)(sp5C) + 8);
             var_a2 = (var_a2 == 0) ? ((int)g_stringObjEmptyText) : var_a2;
-            if (igRegistry_GetValueInt((igRegistry *)temp_s2, 7, (char *)var_a2, &sp58, 0, 0)) {
+            if (((Gap::Core::igRegistry *)temp_s2)->getValue(7, (char *)var_a2, sp58, 0, 0)) {
                 sp54 = 0;
                 var_a0 = *(int *)((char *)(sp5C) + 8);
                 var_a0 = (var_a0 == 0) ? ((int)g_stringObjEmptyText) : var_a0;

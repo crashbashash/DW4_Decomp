@@ -249,12 +249,12 @@ void beCri_Activate(beCri *self) {
     igInsightCore_AddToScheduler((igInsightCore *)self->_insight, (igObject *)self);
     registry = g_objectSystem->configRegistry;
     if (registry == 0) return;
-    section = igRegistry_GetSectionIndex(registry, "BECRUNTIME", 0);
+    section = ((Gap::Core::igRegistry *)registry)->findSection("BECRUNTIME", 0);
     if (section == -1) return;
     int allocator = (int)((Gap::Core::igObject *)self)->getMemoryPool();
     allocator = g_useOwnerAllocator ? allocator : (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
     igSmartPointer<igStringObj> path((igStringObj *)igStringObj_Create(allocator));
-    if (igRegistry_GetValueStringObj(registry, section, "AdxModulePath", (igStringObj **)&path, "", 0) == 0) {
+    if (!((Gap::Core::igRegistry *)registry)->getValue(section, "AdxModulePath", path, "", 0)) {
         if (strcmp("9.31s281", "9.18") == 0)
             igStringObj_Set((igStringObj *)path, "C:/cri/ps2/iop/modules");
         else

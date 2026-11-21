@@ -660,19 +660,19 @@ igResult igMemoryPoolContextInfo_Initialize(MemoryContext *self) {
     igResult result = g_resultSuccess;
     useFlag = (self->flags & 4) != 0;
     lockFlag = g_igMemoryPool_defaultUpdateStatistics;
-    igRegistry_GetValueInt((igRegistry *)config, 2,"bootstrapPoolPreSize", &mainSize, 0, 0);
+    ((Gap::Core::igRegistry *)config)->getValue(2,"bootstrapPoolPreSize", mainSize, 0, 0);
     if (mainSize > 0) { mainPool->SetPreSize(mainSize); }
-    igRegistry_GetValueBool((igRegistry *)config, 2,"updatePoolStatistics", &lockFlag, lockFlag, 0);
+    ((Gap::Core::igRegistry *)config)->getValue(2,"updatePoolStatistics", lockFlag, lockFlag, 0);
     g_igMemoryPool_defaultUpdateStatistics = lockFlag;
-    igRegistry_GetValueBool((igRegistry *)config, 2,"useAliasMemoryPoolRelease", &useFlag, useFlag, 0);
+    ((Gap::Core::igRegistry *)config)->getValue(2,"useAliasMemoryPoolRelease", useFlag, useFlag, 0);
     self->SetFlags(useFlag != 0 ? self->flags | 4 : self->flags & ~4);
-    igRegistry_GetValueFlags(config, 2,"arenaMemoryPoolOptionFlagsRelease", igArenaMemoryPool_GetArenaMemoryPoolFlagsMetaEnum(), &options, g_igArenaMemoryPool_defaultPoolOptionFlags, 0);
-    igRegistry_GetValueEnum(config, 2,"arenaMemoryPoolMessageLevelRelease", igArenaMemoryPool_GetMessageLevelMetaEnum(), &optB, g_igArenaMemoryPool_defaultMessageLevel, 0);
-    igRegistry_GetValueEnum(config, 2,"arenaMemoryPoolHeapIntegrityCheckLevelRelease", igArenaMemoryPool_GetHeapIntegrityCheckLevelMetaEnum(), &optC, g_igArenaMemoryPool_defaultHeapIntegrityCheckLevel, 0);
+    ((Gap::Core::igRegistry *)config)->getFlagsValue(2,"arenaMemoryPoolOptionFlagsRelease", (Gap::Core::igMetaEnum *)(igArenaMemoryPool_GetArenaMemoryPoolFlagsMetaEnum()), *(unsigned *)&options, g_igArenaMemoryPool_defaultPoolOptionFlags, 0);
+    ((Gap::Core::igRegistry *)config)->getEnumValue(2,"arenaMemoryPoolMessageLevelRelease", (Gap::Core::igMetaEnum *)(igArenaMemoryPool_GetMessageLevelMetaEnum()), optB, g_igArenaMemoryPool_defaultMessageLevel, 0);
+    ((Gap::Core::igRegistry *)config)->getEnumValue(2,"arenaMemoryPoolHeapIntegrityCheckLevelRelease", (Gap::Core::igMetaEnum *)(igArenaMemoryPool_GetHeapIntegrityCheckLevelMetaEnum()), optC, g_igArenaMemoryPool_defaultHeapIntegrityCheckLevel, 0);
     {
         int v = (options & 0x200) != 0;
         optFlag = v;
-        igRegistry_GetValueBool((igRegistry *)config, 2,"inhibitArenaCountMessage", &optFlag, v, 0);
+        ((Gap::Core::igRegistry *)config)->getValue(2,"inhibitArenaCountMessage", optFlag, v, 0);
     }
     if (optFlag != 0) { options |= 0x200; }
     g_igArenaMemoryPool_defaultPoolOptionFlags = options;
@@ -684,7 +684,7 @@ igResult igMemoryPoolContextInfo_Initialize(MemoryContext *self) {
             igArenaMemoryPool_SetPoolOptionFlags((igArenaMemoryPool *)o, (options & ~1) | (((igArenaMemoryPool *)o)->_poolOptionFlags & 1));
         }
     }
-    igRegistry_GetValueInt((igRegistry *)config, 2,"nonTrackedPoolPreSize", &nextSize, 0, 0);
+    ((Gap::Core::igRegistry *)config)->getValue(2,"nonTrackedPoolPreSize", nextSize, 0, 0);
     MemoryContext *top = g_currentMemoryContext;
     igMemoryPoolView *fb = (igMemoryPoolView *)self->records[3].allocator;
     if (self == top && fb == mainPool) {
@@ -832,7 +832,7 @@ void igMemoryPoolContextInfo_CreateDefaultContextInfo(int *out, MemoryContext *s
         case 1:
             if (self == ((*(void * *)&g_currentMemoryContext))) {
                 defaultSize = 0;
-                igRegistry_GetValueInt((igRegistry *)config, 2,"defaultPoolPreSize", &defaultSize, 0, 0);
+                ((Gap::Core::igRegistry *)config)->getValue(2,"defaultPoolPreSize", defaultSize, 0, 0);
                 if (defaultSize > 0) {
                     rec->_size = defaultSize;
                     char *n = g_presetPoolClassName;
@@ -845,7 +845,7 @@ void igMemoryPoolContextInfo_CreateDefaultContextInfo(int *out, MemoryContext *s
         case 4:
             if (self == ((*(void * *)&g_currentMemoryContext))) {
                 systemSize = 0;
-                igRegistry_GetValueInt((igRegistry *)config, 2,"systemPoolPreSize", &systemSize, 0, 0);
+                ((Gap::Core::igRegistry *)config)->getValue(2,"systemPoolPreSize", systemSize, 0, 0);
                 if (systemSize > 0) {
                     rec->_size = systemSize;
                     char *n = g_presetPoolClassName;
@@ -857,8 +857,8 @@ void igMemoryPoolContextInfo_CreateDefaultContextInfo(int *out, MemoryContext *s
         case 6:
             break;
         case 7:
-            igRegistry_GetValueInt((igRegistry *)ctxConfig, 2,"scratchPoolSize", &scratchSize, 0, 0);
-            igRegistry_GetValueInt((igRegistry *)ctxConfig, 2,"scratchPadPoolSize", &scratchSize, scratchSize, 0);
+            ((Gap::Core::igRegistry *)ctxConfig)->getValue(2,"scratchPoolSize", scratchSize, 0, 0);
+            ((Gap::Core::igRegistry *)ctxConfig)->getValue(2,"scratchPadPoolSize", scratchSize, scratchSize, 0);
             if (scratchSize != 0) {
                 if (scratchSize > 16384) { scratchSize = 16384; }
                 rec->_address = 0x70000000;
@@ -874,7 +874,7 @@ void igMemoryPoolContextInfo_CreateDefaultContextInfo(int *out, MemoryContext *s
         case 20:
             if (self == ((*(void * *)&g_currentMemoryContext))) {
                 driverSize = 0;
-                igRegistry_GetValueInt((igRegistry *)config, 2,"driverPoolSize", &driverSize, 0, 0);
+                ((Gap::Core::igRegistry *)config)->getValue(2,"driverPoolSize", driverSize, 0, 0);
                 if (driverSize != 0) {
                     rec = self->records[20].descriptor;
                     rec->_size = driverSize;
@@ -1222,43 +1222,43 @@ void igMemoryPoolContextInfo_ConfigureEventTracking(MemoryContext *self) {
     int notificationTypeFilter;
     int notificationCodeFilter;
     igStringRef systemPoolEventTrackerFileName;
-    igRegistry_GetValueBool((igRegistry *)registry, 2,"useGlobalEventTracker", &useGlobalEventTracker, globalTrackerByDefault, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"useGlobalEventTracker", useGlobalEventTracker, globalTrackerByDefault, 0);
     self->SetFlags(useGlobalEventTracker ? self->flags | 1 : self->flags & ~1);
     g_objectSystem->useGlobalEventTracker = useGlobalEventTracker;
-    igRegistry_GetValueBool((igRegistry *)registry, 2,"useSeparateEventTrackers", &useSeparateEventTrackers, useSeparateEventTrackers, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"useSeparateEventTrackers", useSeparateEventTrackers, useSeparateEventTrackers, 0);
     self->SetFlags(useSeparateEventTrackers ? self->flags | 2 : self->flags & ~2);
-    igRegistry_GetValueBool((igRegistry *)registry, 2,"showLeaksOnExit", &showLeaksOnExit, 0, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"showLeaksOnExit", showLeaksOnExit, 0, 0);
     g_objectSystem->showLeaksOnExit = showLeaksOnExit;
-    igRegistry_GetValueBool((igRegistry *)registry, 2,"showMemoryStatisticsOnExit", &showMemoryStatisticsOnExit, 0, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"showMemoryStatisticsOnExit", showMemoryStatisticsOnExit, 0, 0);
     g_objectSystem->showMemoryStatisticsOnExit = showMemoryStatisticsOnExit;
-    igRegistry_GetValueBool((igRegistry *)registry, 2,"showObjectStatisticsOnExit", &showObjectStatisticsOnExit, 0, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"showObjectStatisticsOnExit", showObjectStatisticsOnExit, 0, 0);
     g_objectSystem->showObjectStatisticsOnExit = showObjectStatisticsOnExit;
-    igRegistry_GetValueInt((igRegistry *)registry, 2,"eventTrackerInitialCapacity", &initialCapacity, 0x80000, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"eventTrackerInitialCapacity", initialCapacity, 0x80000, 0);
     g_objectSystem->eventTrackerInitialCapacity = (void *)initialCapacity;
-    igRegistry_GetValueInt((igRegistry *)registry, 2,"eventTrackerEventTypeFilter", &eventTypeFilter, -1, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"eventTrackerEventTypeFilter", eventTypeFilter, -1, 0);
     g_objectSystem->eventTrackerEventTypeFilter = eventTypeFilter;
-    igRegistry_GetValueInt((igRegistry *)registry, 2,"eventTrackerMarkerTypeFilter", &markerTypeFilter, -1, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"eventTrackerMarkerTypeFilter", markerTypeFilter, -1, 0);
     g_objectSystem->eventTrackerMarkerTypeFilter = markerTypeFilter;
-    igRegistry_GetValueInt((igRegistry *)registry, 2,"eventTrackerMaxCallStackDepth", &g_eventTrackerMaxCallStackDepth, g_eventTrackerMaxCallStackDepth, 0);
-    igRegistry_GetValueInt((igRegistry *)registry, 2,"eventTrackerNotificationTypeFilter", &notificationTypeFilter, -1, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"eventTrackerMaxCallStackDepth", *(int *)&g_eventTrackerMaxCallStackDepth, g_eventTrackerMaxCallStackDepth, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"eventTrackerNotificationTypeFilter", notificationTypeFilter, -1, 0);
     g_objectSystem->eventTrackerNotificationTypeFilter = notificationTypeFilter;
-    igRegistry_GetValueInt((igRegistry *)registry, 2,"eventTrackerNotificationCodeFilter", &notificationCodeFilter, -1, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"eventTrackerNotificationCodeFilter", notificationCodeFilter, -1, 0);
     g_objectSystem->eventTrackerNotificationCodeFilter = notificationCodeFilter;
-    igRegistry_GetValueString((igRegistry *)registry, 2,"memoryEventFormat", &memoryEventFormat.p, (char *)"", 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"memoryEventFormat", memoryEventFormat, (char *)"", 0);
     igObjectSystem_SetMemoryEventFormat(g_objectSystem, (char *)memoryEventFormat.p);
-    igRegistry_GetValueString((igRegistry *)registry, 2,"markerEventFormat", &markerEventFormat.p, (char *)"", 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"markerEventFormat", markerEventFormat, (char *)"", 0);
     igObjectSystem_SetMarkerEventFormat(g_objectSystem, (char *)markerEventFormat.p);
-    igRegistry_GetValueString((igRegistry *)registry, 2,"notificationEventFormat", &notificationEventFormat.p, (char *)"", 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"notificationEventFormat", notificationEventFormat, (char *)"", 0);
     igObjectSystem_SetNotificationEventFormat(g_objectSystem, (char *)notificationEventFormat.p);
-    igRegistry_GetValueInt((igRegistry *)registry, 2,"eventTrackerScopeFlags", &scopeFlags, -1, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"eventTrackerScopeFlags", scopeFlags, -1, 0);
     igMemoryPool_SetScopeFlags(scopeFlags);
-    igRegistry_GetValueBool((igRegistry *)registry, 2,"saveEventTrackerOnExit", &saveEventTrackerOnExit, 0, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"saveEventTrackerOnExit", saveEventTrackerOnExit, 0, 0);
     g_objectSystem->saveEventTrackerOnExit = saveEventTrackerOnExit;
-    igRegistry_GetValueString((igRegistry *)registry, 2,"eventTrackerFileName", &eventTrackerFileName.p, (char *)"", 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"eventTrackerFileName", eventTrackerFileName, (char *)"", 0);
     igObjectSystem_SetEventTrackerFileName((char *)g_objectSystem, (char *)eventTrackerFileName.p);
-    igRegistry_GetValueString((igRegistry *)registry, 2,"systemPoolEventTrackerFileName", &systemPoolEventTrackerFileName.p, (char *)"", 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"systemPoolEventTrackerFileName", systemPoolEventTrackerFileName, (char *)"", 0);
     igObjectSystem_SetSystemPoolEventTrackerFileName((char *)g_objectSystem, (char *)systemPoolEventTrackerFileName.p);
-    igRegistry_GetValueString((igRegistry *)registry, 2,"symbolsFileName", &symbolsFileName.p, (char *)"", 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(2,"symbolsFileName", symbolsFileName, (char *)"", 0);
     igObjectSystem_SetSymbolsFileName(g_objectSystem, (int)symbolsFileName.p);
     if (symbolsFileName.p != 0 && *symbolsFileName.p != 0) {
         ElfFileView *loader = (ElfFileView *)igElfFile_Create(alloc);
@@ -1270,10 +1270,10 @@ void igMemoryPoolContextInfo_ConfigureEventTracking(MemoryContext *self) {
                     loaded = 0;
                 }
                 unsigned char showSectionHeaders = 0;
-                igRegistry_GetValueBool((igRegistry *)registry, 2,"showSectionHeaders", &showSectionHeaders, 0, 0);
+                ((Gap::Core::igRegistry *)registry)->getValue(2,"showSectionHeaders", showSectionHeaders, 0, 0);
                 if (showSectionHeaders != 0) { loader->PrintSectionHeaders(); }
                 unsigned char showSymbols = 0;
-                igRegistry_GetValueBool((igRegistry *)registry, 2,"showSymbols", &showSymbols, 0, 0);
+                ((Gap::Core::igRegistry *)registry)->getValue(2,"showSymbols", showSymbols, 0, 0);
                 if (showSymbols != 0) { loader->PrintSymbols(); }
                 loader->Close();
             }
@@ -2043,7 +2043,7 @@ igResult igMemoryPoolContextInfo_ReadFromRegistry(igMemoryPoolContextInfoView *s
     if (section == 0 || *section == 0) {
         section = g_memoryPoolsSectionName;
     }
-    index = igRegistry_GetSectionIndex(ini, section, 0);
+    index = ((Gap::Core::igRegistry *)ini)->findSection(section, 0);
     if (index == -1) {
         return g_resultFailure;
     }
@@ -2069,20 +2069,20 @@ igResult igMemoryPoolContextInfo_ReadFromRegistrySection(igMemoryPoolContextInfo
         return g_resultFailure;
     }
     if (index == -1) {
-        index = igRegistry_GetSectionIndex(ini, g_memoryPoolsSectionName, 0);
+        index = ((Gap::Core::igRegistry *)ini)->findSection(g_memoryPoolsSectionName, 0);
         if (index == -1) {
             return g_resultFailure;
         }
     }
-    unsigned int count = igRegistry_GetNumValuesInSection((int)ini, index);
+    unsigned int count = ((Gap::Core::igRegistry *)ini)->getKeyCount(index);
     igSmartPointer<igStringObj> key;
     igSmartPointer<igStringObj> infoSection;
     igSmartPointer<igMemoryPoolInfo> poolInfo;
     for (unsigned int i = 0; i < count; i++) {
-        if (!igRegistry_GetKeyName((int)ini, index, i, &key.p)) {
+        if (!((Gap::Core::igRegistry *)ini)->getKeyName(index, i, key)) {
             break;
         }
-        if (igRegistry_GetValueStringObj(ini, index, igStringObj_Text(key), &infoSection.p, (const char *)"", 0)
+        if (((Gap::Core::igRegistry *)ini)->getValue(index, igStringObj_Text(key), infoSection, (const char *)"", 0)
             && infoSection.p != 0 && infoSection->_length != 0) {
             bool created;
             poolInfo = igMemoryPoolContextInfo_FindMemoryPoolInfoByName(self, (int)igStringObj_Text(key));

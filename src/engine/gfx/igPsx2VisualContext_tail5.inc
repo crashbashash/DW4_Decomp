@@ -855,7 +855,7 @@ void FUN_00179e00(StatContext *arg0) {
     a1 = indexText->f8;
     if (a1 == 0) a1 = (int)g_stringObjEmptyText;
     igStringObj_Insert((igStringObj *)(O_1778e0 *)sectionName, (char *)a1, x, y); }
-    while ((idx = igRegistry_GetSectionIndex((igRegistry *)s3, (char *)(sectionName->f8 == 0 ? (int)g_stringObjEmptyText : sectionName->f8), 0)) != -1) {
+    while ((idx = ((Gap::Core::igRegistry *)s3)->findSection((char *)(sectionName->f8 == 0 ? (int)g_stringObjEmptyText : sectionName->f8), 0)) != -1) {
         n = (StatNode *)((StatAllocator *)igVisualContext_GetStatisticsMemoryPool((int *)arg0))->v52(960);
         if (n == 0) break;
         n->f16 = 1;

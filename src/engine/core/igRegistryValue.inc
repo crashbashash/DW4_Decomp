@@ -1,105 +1,81 @@
-igMetaObject *g_igRegistryValue_metaObject;
-igMetaField *g_igRegistryValue_sectionMetaField;
-igMetaField *g_igRegistryValue_valueMetaField;
-igMetaField *g_igRegistryValue_valueNameMetaField;
+namespace Gap {
+namespace Core {
 
-void * igRegistryValue_Create(int allocator) {
-    igRegistryValue_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance(g_igRegistryValue_metaObject, (igMemoryPoolView *)allocator));
-}
+igMetaObject *igRegistryValue::_Meta;
+igMetaField *igRegistryValue::k_section;
+igMetaField *igRegistryValue::k_value;
+igMetaField *igRegistryValue::k_valueName;
 
-igMetaObject *igRegistryValue_GetMetaObject(void)
+igRegistryValue *igRegistryValue::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igRegistryValue_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igRegistryValue_EnsureRegistered();
-    return g_igRegistryValue_metaObject;
+    arkRegister();
+    return (igRegistryValue *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igRegistryValue_GetVTable(void) {
-    igRegistryValue value;
-    int r;
-    int *valueRef;
-    int *valueName;
-
-    igObject_InitHeader((igObject *)&value);
-    value._vtable = (int)&g_igRegistryValue_vtable[0];
-    valueRef = &value._value;
-    *valueRef = 0;
-    valueName = &value._valueName;
-    *valueName = 0;
-    r = *(int *)((char *)&value + g_objectSystem->vtableProbeOffset);
-    value._vtable = (int)&g_igRegistryValue_vtable[0];
-    ReleaseObjectField(valueName);
-    ReleaseObjectField(valueRef);
-    return r;
-}
-
-void igRegistryValue_EnsureRegistered(void)
+igMetaObject *igRegistryValue::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igRegistryValue_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igRegistryValue_callbackList[] = { igStringObj_EnsureRegistered, 0 };
+void *igRegistryValue::retrieveVTablePointer()
+{
+    igRegistryValue temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igRegistryValue_Register(void) {
+void igRegistryValue::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igRegistryValue::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igStringObj_EnsureRegistered, 0 };
+
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igRegistryValue_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igRegistryValue_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igRegistryValue",
-        0x14,
-        igRegistryValue_GetVTable,
-        igRegistryValue_InitFields,
+        sizeof(igRegistryValue),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
         0,
-        g_igRegistryValue_callbackList
+        regFunctions
     );
 }
 
-void igRegistryValue_GetMetaObjectFunction(void) {
-    igRegistryValue_GetMetaObject();
+void igRegistryValue::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igIntMetaField_Create, igObjectRefMetaField_Create, igObjectRefMetaField_Create };
+    static const char *names[] = { "_section", "_value", "_valueName" };
+    static igMetaField **enumStorage[] = { &k_section, &k_value, &k_valueName };
+    static int offsets[] = { 8, 12, 16 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 3);
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault(-1);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
+        metaField->_construct = 1;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igRegistryValue_ctorTable[] = {
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-};
-static const char *g_igRegistryValue_fieldTable[] = {
-    "_section",
-    "_value",
-    "_valueName",
-};
-static igMetaField **g_igRegistryValue_fieldDescriptors[] = {
-    &g_igRegistryValue_sectionMetaField,
-    &g_igRegistryValue_valueMetaField,
-    &g_igRegistryValue_valueNameMetaField,
-};
-static int g_igRegistryValue_fieldOffsets[] = {
-    8,
-    12,
-    16,
-};
-
-void igRegistryValue_InitFields(void) {
-    int base;
-    void *valueName;
-    void *value;
-    void *meta;
-
-    meta = (void *)g_igRegistryValue_metaObject;
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igRegistryValue_ctorTable, 3);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)))->setDefault(-1);
-    value = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igObjectRefMetaField *)value)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
-    ((igRefMetaField *)value)->_construct = 1;
-    valueName = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((igObjectRefMetaField *)valueName)->_metaObject = (int)igStringObj_GetOrCreateMetaObject();
-    ((igRefMetaField *)valueName)->_construct = 1;
-    igMetaObject_NameFields((igMetaObject *)meta, g_igRegistryValue_fieldTable, g_igRegistryValue_fieldDescriptors, g_igRegistryValue_fieldOffsets, base);
+}
 }
 

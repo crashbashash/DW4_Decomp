@@ -98,14 +98,14 @@ int FUN_001c66c0(Node *self, int force)
     REL_STR(self->f36)
     self->f36 = s;
     self->f40 = -1;
-    idx = igRegistry_GetSectionIndex((igRegistry *)self->f28, (char *)"Interface", 0);
+    idx = ((Gap::Core::igRegistry *)self->f28)->findSection((char *)"Interface", 0);
     if (idx < 0) {
         return 0;
     }
     fileName = 0;
     sectionName = 0;
     {
-        unsigned char found = igRegistry_GetValueString((igRegistry *)self->f28, idx, "fileName", &fileName, "", 0);
+        unsigned char found = ((Gap::Core::igRegistry *)self->f28)->getValue(idx, "fileName", *(igStringRef *)&fileName, "", 0);
         fileDoc.p = 0;
         RET_OBJ(fileDoc.p)
         ownDoc.p = 0;
@@ -117,7 +117,7 @@ int FUN_001c66c0(Node *self, int force)
             fileName = self->f24;
         }
     }
-    if (!(igRegistry_GetValueString((igRegistry *)self->f28, idx, "section", &sectionName, "", 0) & 0xFF)) {
+    if (!(((Gap::Core::igRegistry *)self->f28)->getValue(idx, "section", *(igStringRef *)&sectionName, "", 0) & 0xFF)) {
         REL_ALL()
         return 0;
     }
@@ -167,7 +167,7 @@ int FUN_001c66c0(Node *self, int force)
             return 0;
         }
     }
-    self->f40 = igRegistry_GetSectionIndex((igRegistry *)self->f32, sectionName, 0);
+    self->f40 = ((Gap::Core::igRegistry *)self->f32)->findSection(sectionName, 0);
     if (self->f40 == -1) {
         REL_OBJ(self->f32)
         self->f32 = 0;
@@ -192,12 +192,12 @@ IniStrRef FUN_001c6fa0(IniSectionNode *node) {
     if (FUN_001c6520((O_1c6520 *)node, 0) == 0) {
         return IniStrRef(0);
     }
-    index = igRegistry_GetSectionIndex((igRegistry *)node->_parent, "configuration", 0);
+    index = ((Gap::Core::igRegistry *)node->_parent)->findSection("configuration", 0);
     if (index == -1) {
         return IniStrRef(0);
     }
     IniStrRef text(0);
-    if ((unsigned char)igRegistry_GetValueString((igRegistry *)node->_parent, index, "fileName", &text.p, "", 0) == 0) {
+    if ((unsigned char)((Gap::Core::igRegistry *)node->_parent)->getValue(index, "fileName", *(igStringRef *)(&text.p), "", 0) == 0) {
         return IniStrRef(0);
     }
     return text;
@@ -208,7 +208,7 @@ igSmartPointer<ShaderObject> igIniShaderFactory_GetInterfaceParameterString(Fact
     if (FUN_001c66c0((Node *)self, 0) == 0) {
         return igSmartPointer<ShaderObject>(0, kRetainReference);
     }
-    if (!igRegistry_GetValueStringObj((igRegistry *)self->f32, self->f40, name, (igStringObj **)&shader.p, "", 0)) {
+    if (!((Gap::Core::igRegistry *)self->f32)->getValue(self->f40, name, *(igStringObjRef *)&shader, "", 0)) {
         return igSmartPointer<ShaderObject>(0, kRetainReference);
     }
     return shader;
@@ -290,12 +290,12 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
     char *field;
     void *info;
     unsigned char cached;
-    section = igRegistry_GetSectionIndex((igRegistry *)self->ini, name, 0);
+    section = ((Gap::Core::igRegistry *)self->ini)->findSection(name, 0);
     if (section == -1) {
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
     IniStrRef text(0);
-    if ((unsigned char)igRegistry_GetValueString((igRegistry *)self->ini, section, "type", &text.p, "", 0) == 0) {
+    if ((unsigned char)((Gap::Core::igRegistry *)self->ini)->getValue(section, "type", *(igStringRef *)(&text.p), "", 0) == 0) {
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
     meta = (ShaderMetaView *)igObjectSystem_FindMetaByNameDefault(text.p);
@@ -307,7 +307,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
         return igSmartPointer<ShaderObject_1ca6c0>(0, kRetainReference);
     }
     igSmartPointer<ShaderNameList> names((ShaderNameList *)igStringRefList_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool()))));
-    igRegistry_GetValueStringList((void *)self->ini, section, "fields", (igStringRefList *)names.p, 0);
+    ((Gap::Core::igRegistry *)self->ini)->getValue(section, "fields", (igStringRefList *)names.p, 0);
     count = names.p->count;
     for (i = 0; i < count; i++) {
         field = StringList_CopyRetained((igStringRefList *)names.p, i).p;
@@ -322,7 +322,7 @@ igSmartPointer<ShaderObject_1ca6c0> FUN_001ca6c0(ShaderProcessorView *self, char
     {
         bool initial = !(bool)flag;
         cached = initial;
-        igRegistry_GetValueBool((igRegistry *)self->ini, section, "const", &cached, initial, 0);
+        ((Gap::Core::igRegistry *)self->ini)->getValue(section, "const", cached, initial, 0);
     }
     if (cached != 0) {
         ShaderCacheView *cache = ((ShaderCacheView *)FUN_001ca6b0((int *)self, self->kind));

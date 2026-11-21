@@ -5,6 +5,12 @@ struct igStringObj;
 struct igMetaObject;
 
 #ifdef __cplusplus
+/* The kit's smart pointer to a string object (alchemy-kit_202309 igCore/igRegistry.h, igStringObj.h). */
+template <class T> struct igSmartPointer;
+typedef igSmartPointer<igStringObj> igStringObjRef;
+#endif
+
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -31,7 +37,7 @@ void igStringObj_ToLower(struct igStringObj *self);
 void igStringObj_KeepExtension(struct igStringObj *self);
 void igStringObj_StripDirectory(struct igStringObj *self);
 void igStringObj_SetFloat(int string, const char *format, float value);
-void igStringObj_SetBool(int self, int value, int upperCase);
+void igStringObj_SetBool(int self, unsigned char value, unsigned char upperCase);
 int igStringObj_HasFileExtension(struct igStringObj *self, char *extension);
 extern struct igMetaObject *g_igStringObj_metaObject;
 

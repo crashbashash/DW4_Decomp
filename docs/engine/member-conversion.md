@@ -355,7 +355,22 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    `getElementMeta` copies are now the compiler's, their C names bound by the compiler-name map.
    `igDirectory_ReplaceReference` (the kit's `replaceObjectInstance`, whose by-value smart pointers DW4 passes by
    reference) and the traversal callback `igDirectory_AddObjectCallback` stay free over the Gap class;
-   `igDirectoryView` remains only as igIGBFileView's base and in the external-info helpers;
+   `igDirectoryView` remains only as igIGBFileView's base and in the external-info helpers. `igRegistry`,
+   `igRegistryValue` and `igRegistryValueList` (alchemy-kit_202309 igCore/igRegistry.h) are converted: DW4's
+   registry is older than the kit's, with no section list (the value table is the `igTObjectList<igRegistryValue>`,
+   the extra sections an `igStringObjList`, both smart pointers, as are the file and the value's two strings,
+   whose type is the kit's `igStringObjRef`, include/dw4/core/igStringObj.h). The members are the kit's that the
+   image has: `load`, `merge`, `reset`, `findSection`, `getSectionName`, `getKeyCount`, `getKeyName`, the six
+   `getValue` overloads (int, igBool, igStringObjRef, igStringRef, igStringRefList, float), `getEnumValue`,
+   `getFlagsValue`, `getRawValue`, `getRawValueCount`, the four `setValue` overloads, the protected `parseRegistry`,
+   `readLine`, `findValue` (returning the raw value: retail returns no smart pointer) and `preProcessLine`, and
+   slot 9 `initDefaults` (the kit's `userInstantiate`). Retail shows the kit's igBool parameters (`createValue`,
+   `replaceDuplicates`, the bool value) as `unsigned char`: a `bool` or `unsigned char` parameter is not masked
+   where it is tested (`if (createValue)`), but is where it is compared (`!= 0`) or widened to an `int`
+   parameter, and every caller holds the flag in an `unsigned char`, which a `bool` parameter would normalise
+   (`igStringObj_SetBool` takes its flags the same way). A caller tests the `bool` result directly (`if
+   (r->getValue(...))`), since `!= 0` masks it. The enum parsers stay free, as do the data-pump library's
+   tail-jump readers `igGetRegistryValue_*`, whose flags are the members' types;
 5. attrs, then gfx, then scenegraph, then gui/insight/viewer. Attrs so far: `Gap::Attrs::igAttr` (abstract;
    DW4's slots 21-29 read off retail's concrete vtables: `apply(igContext *)`, `apply(igVisualContext *)`,
    `setUnitID`, `synchronizeDefault` ×2, `reset`, `setup` ×2, `getUnitCount`, all kit inlines but `setUnitID`; no

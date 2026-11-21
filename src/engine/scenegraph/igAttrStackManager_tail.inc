@@ -37,7 +37,7 @@ void igAttrStackManager_userConstruct(unsigned char *arg0, int arg1) {
         l->data[idx] = (int)arg0;
         z = ((struct Z *)g_objectSystem)->f56;
         sp4F = arg0[60];
-        igRegistry_GetValueBool((igRegistry *)z, 7, "simpleLightManagementState", &sp4F, 0, 0);
+        ((Gap::Core::igRegistry *)z)->getValue(7, "simpleLightManagementState", sp4F, 0, 0);
         arg0[60] = sp4F;
     }
 }

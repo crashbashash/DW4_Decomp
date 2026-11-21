@@ -1,53 +1,52 @@
-igMetaObject *g_igRegistryValueList_metaObject;
+namespace Gap {
+namespace Core {
 
-igMetaObject *igRegistryValueList_GetOrCreateMetaObject(void) {
-    if (g_igRegistryValueList_metaObject == 0) {
-        g_igRegistryValueList_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igRegistryValueList_metaObject;
-}
+igMetaObject *igRegistryValueList::_Meta;
 
-igMetaObject *igRegistryValueList_GetMetaObject(void)
+igMetaObject *igRegistryValueList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igRegistryValueList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igRegistryValueList_EnsureRegistered();
-    return g_igRegistryValueList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igRegistryValueList_GetVTable(void) {
-    igRegistryValueList list;
-
-    igObject_InitHeader((igObject *)&list);
-    list._vtable = (int)&g_igRegistryValueList_vtable[0];
-    return *(int *)((char *)&list + g_objectSystem->vtableProbeOffset);
-}
-
-void igRegistryValueList_EnsureRegistered(void)
+igMetaObject *igRegistryValueList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igRegistryValueList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igRegistryValueList_callbackList[] = { igRegistryValue_EnsureRegistered, 0 };
+void *igRegistryValueList::retrieveVTablePointer()
+{
+    igRegistryValueList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igRegistryValueList_Register(void) {
+void igRegistryValueList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igRegistryValueList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igRegistryValue::arkRegister, 0 };
+
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igRegistryValueList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igRegistryValueList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igRegistryValueList",
-        0x14,
-        igRegistryValueList_GetVTable,
+        sizeof(igRegistryValueList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
         0,
-        g_igRegistryValueList_callbackList
+        regFunctions
     );
 }
-
-void igRegistryValueList_GetMetaObjectFunction(void) {
-    igRegistryValueList_GetMetaObject();
+}
 }
 

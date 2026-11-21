@@ -34,7 +34,7 @@ void FUN_001abca0(void) {
     allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem);
     g_igAnimation_instance.release();
     g_igAnimation_instance.p = (igAnimation *)FUN_001a90f0(allocator);
-    igRegistry_GetValueBool((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 7, "cleanCombinerStates", (unsigned char *)&g_cleanCombinerStates, 0, 0);
+    ((Gap::Core::igRegistry *)(*(int *)((char *)g_objectSystem + 56)))->getValue(7, "cleanCombinerStates", *(unsigned char *)&g_cleanCombinerStates, 0, 0);
 }
 
 void FUN_001abdf0(void) {

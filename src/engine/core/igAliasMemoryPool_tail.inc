@@ -559,7 +559,7 @@ void igObjectSystem_Acquire(int headerVersion) {
         igStringObj_EnsureRegistered();
         igStringObjList_EnsureRegistered();
         igFile_EnsureRegistered();
-        igRegistry_EnsureRegistered();
+        Gap::Core::igRegistry::arkRegister();
         igResource_EnsureRegistered();
         probe = (int *)(&DAT_00530d80[0]);
         FUN_002d1690((int)&probe);

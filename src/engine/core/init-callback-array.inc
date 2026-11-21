@@ -124,24 +124,24 @@ int g_igPsx2_atfilePrefix;
  * manager with its "system" directory, read the core settings, and cache the vtables the ini lists. */
 void igObjectSystem_Initialize(ObjectSystemView *self) {
     igObjectSystem_InitPaths(self);
-    self->configRegistry = (igRegistry *)igRegistry_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
+    self->configRegistry = (igRegistry *)Gap::Core::igRegistry::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
     if (g_loadAlchemyIni && igRegistry_IsLoadingEnabled()) {
         if (g_alchemyIniPath != 0) {
             igSmartPointer<igObject> file((igObject *)igPsx2File_Create((int)ownerOrSystemPool()));
             clearPrefix(file);
             setRegistryFile(self->configRegistry, file);
-            igRegistry_Load(self->configRegistry, g_alchemyIniPath, (char *)"");
+            ((Gap::Core::igRegistry *)self->configRegistry)->load(g_alchemyIniPath, (char *)"");
         } else {
             if (g_alchemyIniText != 0) {
                 igSmartPointer<igObject> file((igObject *)igMemoryFile_Create((int)ownerOrSystemPool()));
                 igMemoryFile_AddMemoryFileEntry((int)"alchemy.ini", (int)g_alchemyIniText, strlen(g_alchemyIniText));
                 setRegistryFile(self->configRegistry, file);
             }
-            igRegistry_Load(self->configRegistry, (char *)"", (char *)"");
+            ((Gap::Core::igRegistry *)self->configRegistry)->load((char *)"", (char *)"");
         }
     }
     bool useFileIO = true;
-    igRegistry_GetValueBool(self->configRegistry, 2,"useFileIO", (unsigned char *)&useFileIO, 1, 0);
+    ((Gap::Core::igRegistry *)self->configRegistry)->getValue(2,"useFileIO", *(unsigned char *)&useFileIO, 1, 0);
     if (useFileIO) {
         igSmartPointer<igObject> media((igObject *)igPsx2Media_Create((int)ownerOrSystemPool()));
         if (((igPsx2Media *)media.p)->_initialized == 1) {
@@ -174,9 +174,9 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
     igSmartPointer<igObject> metaFieldInfo((igObject *)igMetaFieldInfo_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData)));
     ((Gap::Core::igNamedObject *)metaFieldInfo.p)->setName("metafield info");
     ((Gap::Core::igDirectory *)directory.p)->appendInfo((igInfo *)metaFieldInfo.p);
-    igRegistry_GetValueBool(self->configRegistry, 2,"failOnDllVersionMismatch", &self->reportHeaderVersionMismatch, 1, 0);
-    igRegistry_GetValueBool(self->configRegistry, 2,"warnOnDllDateMismatch", &self->warnOnDllDateMismatch, 1, 0);
-    igRegistry_GetValueInt(self->configRegistry, 2,"resourceTempMemoryPoolSize", (int *)&self->resourceTempPoolSize, 0, 0);
+    ((Gap::Core::igRegistry *)self->configRegistry)->getValue(2,"failOnDllVersionMismatch", self->reportHeaderVersionMismatch, 1, 0);
+    ((Gap::Core::igRegistry *)self->configRegistry)->getValue(2,"warnOnDllDateMismatch", self->warnOnDllDateMismatch, 1, 0);
+    ((Gap::Core::igRegistry *)self->configRegistry)->getValue(2,"resourceTempMemoryPoolSize", *(int *)(&self->resourceTempPoolSize), 0, 0);
     if (g_currentMemoryContext != 0) {
         g_currentMemoryContext->Initialize();
     }
@@ -195,23 +195,23 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
         self->resourceTempPool->Activate();
         setTemporaryMemoryPool(self->resource, (igObject *)self->resourceTempPool);
     }
-    igRegistry_GetValueInt(self->configRegistry, 2,"stringPoolStatisticsLevel", &self->stringPoolStatisticsLevel, 0, 0);
+    ((Gap::Core::igRegistry *)self->configRegistry)->getValue(2,"stringPoolStatisticsLevel", *(int *)(&self->stringPoolStatisticsLevel), 0, 0);
     igAdxFile_LoadSearchFilePath();
     g_igIGBFile_loadTimer = (igLongTimerView *)Gap::Core::igTimer::_instantiateFromPool((igMemoryPoolView *)self->systemPool);
     g_igIGBFile_loadTimer->Start();
     igReport_Printf("\n%s\n\n", g_alchemyVersionString);
     igReport_Flush();
     if (self->copyVTables != 0) {
-        int section = igRegistry_GetSectionIndex(self->configRegistry,"CLASSES_TO_VTABLE_CACHE", 1);
+        int section = ((Gap::Core::igRegistry *)self->configRegistry)->findSection("CLASSES_TO_VTABLE_CACHE", 1);
         if (section != -1) {
-            int count = igRegistry_GetValueCount(self->configRegistry);
+            int count = ((Gap::Core::igRegistry *)self->configRegistry)->getRawValueCount();
             int i;
             self->vtableClassNames = (igStringTableView *)igStringTable_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleBootstrap));
             igStringTable_SetCapacity((int)self->vtableClassNames, 512);
             igStringTable_SetHashCapacity((int)self->vtableClassNames, 16);
             igStringTable_Reserve(self->vtableClassNames);
             for (i = 0; i < count; i++) {
-                igRegistryValue *entry = (igRegistryValue *)igRegistry_GetValueEntry(self->configRegistry, i);
+                igRegistryValue *entry = (igRegistryValue *)((Gap::Core::igRegistry *)self->configRegistry)->getRawValue(i);
                 if (entry != 0 && entry->_section == section) {
                     igStringObj *value = (igStringObj *)entry->_value;
                     if (value == 0 || igStringObj_Text(value) == 0 || *igStringObj_Text(value) != '0') {

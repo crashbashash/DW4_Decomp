@@ -11,18 +11,18 @@ igResult igMemoryPoolInfo_LoadFromRegistry(igInfoView *self, igRegistry *ini, ch
         return g_resultFailure;
     }
     if (section == 0 || *section == 0) {
-        defaults = igRegistry_GetSectionIndex(ini, g_memoryPoolsSectionName, 0);
+        defaults = ((Gap::Core::igRegistry *)ini)->findSection(g_memoryPoolsSectionName, 0);
         if (defaults == -1) {
             return g_resultFailure;
         }
-        if (igRegistry_GetValueStringObj(ini, defaults, self->_name != 0 ? (const char *)self->_name : (const char *)emptyString, &value.p,
-                         (const char *)"", 0) == 0) {
+        if (!((Gap::Core::igRegistry *)ini)->getValue(defaults, self->_name != 0 ? (const char *)self->_name : (const char *)emptyString, value,
+                         (const char *)"", 0)) {
             return g_resultFailure;
         }
         section = igStringObj_Text(value.p);
     }
     if (section != 0 && *section != 0) {
-        index = igRegistry_GetSectionIndex(ini, section, 0);
+        index = ((Gap::Core::igRegistry *)ini)->findSection(section, 0);
         if (index == -1) {
             return g_resultFailure;
         }
@@ -59,23 +59,23 @@ void igMemoryPoolInfo_UserRegistryLoad(int *result, int *info, int ini, int sect
     if (ini == 0) {
         *result = g_resultFailure.v;
     } else {
-        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoNameKey, (char **)&info[2], (char *)info[2], 0);
-        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoHandleKey, (char **)&info[5], (char *)info[5], 0);
-        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoAliasedToKey, (char **)&info[6], (char *)info[6], 0);
-        igRegistry_GetValueInt((igRegistry *)ini, section, g_memoryPoolInfoSizeKey, &info[7], info[7], 0);
-        igRegistry_GetValueInt((igRegistry *)ini, section, g_memoryPoolInfoMaxSizeKey, &info[8], info[8], 0);
-        igRegistry_GetValueInt((igRegistry *)ini, section, g_memoryPoolInfoAddressKey, &info[9], info[9], 0);
-        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoClassKey, (char **)&info[10], (char *)info[10], 0);
-        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoArenaTypeKey, (char **)&info[11], (char *)info[11], 0);
-        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoSourceKey, (char **)&info[12], (char *)info[12], 0);
-        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoScopeKey, (char **)&info[13], (char *)info[13], 0);
-        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoDebugOptionsKey, (char **)&info[14], (char *)info[14], 0);
-        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoReleaseOptionsKey, (char **)&info[15], (char *)info[15], 0);
-        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoDebugCheckingKey, (char **)&info[16], (char *)info[16], 0);
-        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoReleaseCheckingKey, (char **)&info[17], (char *)info[17], 0);
-        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoDebugMessagesKey, (char **)&info[18], (char *)info[18], 0);
-        igRegistry_GetValueString((igRegistry *)ini, section, g_memoryPoolInfoReleaseMessagesKey, (char **)&info[19], (char *)info[19], 0);
-        igRegistry_GetValueInt((igRegistry *)ini, section, g_memoryPoolInfoEventTrackerCapacityKey, &info[20], info[20], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoNameKey, *(igStringRef *)((char **)&info[2]), (char *)info[2], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoHandleKey, *(igStringRef *)((char **)&info[5]), (char *)info[5], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoAliasedToKey, *(igStringRef *)((char **)&info[6]), (char *)info[6], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoSizeKey, *(int *)&info[7], info[7], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoMaxSizeKey, *(int *)&info[8], info[8], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoAddressKey, *(int *)&info[9], info[9], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoClassKey, *(igStringRef *)((char **)&info[10]), (char *)info[10], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoArenaTypeKey, *(igStringRef *)((char **)&info[11]), (char *)info[11], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoSourceKey, *(igStringRef *)((char **)&info[12]), (char *)info[12], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoScopeKey, *(igStringRef *)((char **)&info[13]), (char *)info[13], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoDebugOptionsKey, *(igStringRef *)((char **)&info[14]), (char *)info[14], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoReleaseOptionsKey, *(igStringRef *)((char **)&info[15]), (char *)info[15], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoDebugCheckingKey, *(igStringRef *)((char **)&info[16]), (char *)info[16], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoReleaseCheckingKey, *(igStringRef *)((char **)&info[17]), (char *)info[17], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoDebugMessagesKey, *(igStringRef *)((char **)&info[18]), (char *)info[18], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoReleaseMessagesKey, *(igStringRef *)((char **)&info[19]), (char *)info[19], 0);
+        ((Gap::Core::igRegistry *)ini)->getValue(section, g_memoryPoolInfoEventTrackerCapacityKey, *(int *)&info[20], info[20], 0);
         *result = g_resultSuccess.v;
     }
 }

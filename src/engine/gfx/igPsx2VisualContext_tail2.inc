@@ -1025,14 +1025,14 @@ OpenResult igPsx2VisualContext_Open(OpenContext *self) {
     if (size > 0) p2SetPoolSize(12, size);
     igGetRegistryValue_Int(registry, 4, "IG_GFX_INTERNAL_STRUCT_RENDERLIST_PSX2", &size, -1, 0);
     if (size > 0) p2SetPoolSize(13, size);
-    igRegistry_GetValueInt(registry, 4, "IG_GFX_CAPABILITY_MAX_TEXTURE_STAGES", &self->_maxStageNum, 1, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(4, "IG_GFX_CAPABILITY_MAX_TEXTURE_STAGES", *(int *)(&self->_maxStageNum), 1, 0);
     self->_maxStageNum = self->_maxStageNum < 16 ? self->_maxStageNum : 16;
     self->_maxStageNum = self->_maxStageNum > 1 ? self->_maxStageNum : 1;
     syncMode = 0;
-    igRegistry_GetValueInt(registry, 4, "IG_GFX_TEXTURE_SYNC_MODE_PSX2", &syncMode, 1, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(4, "IG_GFX_TEXTURE_SYNC_MODE_PSX2", syncMode, 1, 0);
     p2SetTextureWaitMode(syncMode);
     useWatchdog = true;
-    igRegistry_GetValueBool(registry, 4, "useWatchdog", (unsigned char *)&useWatchdog, 1, 0);
+    ((Gap::Core::igRegistry *)registry)->getValue(4, "useWatchdog", *(unsigned char *)&useWatchdog, 1, 0);
     p2EnableWatchdog(useWatchdog);
     FUN_00179e00((StatContext *)self);
     {

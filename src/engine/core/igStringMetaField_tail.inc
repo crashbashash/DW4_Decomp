@@ -380,12 +380,12 @@ void igStringObj_SetFloat(int string, const char *format, float value) {
     igStringObj_Format((igStringObj *)string, format, value);
 }
 
-void igStringObj_SetBool(int self, int value, int upperCase) {
+void igStringObj_SetBool(int self, unsigned char value, unsigned char upperCase) {
     int *upperText;
     int *lowerText;
 
-    if (upperCase != 0) {
-        if (value != 0) {
+    if (upperCase) {
+        if (value) {
             upperText = (int *)("TRUE");
         } else {
             upperText = (int *)("FALSE");
@@ -393,7 +393,7 @@ void igStringObj_SetBool(int self, int value, int upperCase) {
         igStringObj_Set((igStringObj *)self, (const char *)upperText);
         return;
     }
-    if (value != 0) {
+    if (value) {
         lowerText = (int *)("true");
     } else {
         lowerText = (int *)("false");

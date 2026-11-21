@@ -107,10 +107,6 @@ int igResource_GetMeta(void) {
     return (int)g_igResource_metaObject;
 }
 
-igMetaObject *igRegistry_GetMeta(void) {
-    return g_igRegistry_metaObject;
-}
-
 igMetaObject *igQueue_GetMeta(void) {
     return g_igQueue_metaObject;
 }
@@ -345,14 +341,6 @@ igMetaObject *igPluginRepositoryList_GetMeta(void) {
     return g_igPluginRepositoryList_metaObject;
 }
 
-int igRegistryValue_GetMeta(void) {
-    return (int)g_igRegistryValue_metaObject;
-}
-
-igMetaObject *igRegistryValueList_GetMeta(void) {
-    return g_igRegistryValueList_metaObject;
-}
-
 int igStringObj_GetMeta(void) {
     return (int)g_igStringObj_metaObject;
 }
@@ -434,10 +422,6 @@ int igInfoList_GetElementMeta(void) {
 
 int igPluginRepositoryList_GetElementMeta(void) {
     return (int)g_igPluginRepository_metaObject;
-}
-
-igMetaObject *igRegistryValueList_GetElementMeta(void) {
-    return g_igRegistryValue_metaObject;
 }
 
 igMetaObject *igStringObjList_GetElementMeta(void) {

@@ -409,7 +409,12 @@ def converted_classes(converted, parent, layouts, members, bases=None):
         out.append("#include \"dw4/core/igMemory.h\"")
     # a smart-pointer member needs the template, included once the Gap root is complete (below): its
     # ref/release are the kit's static igObject::ref/release on Gap::Core::igObject
-    smart = any("igSmartPointer<" in line for cls in order for _off, _size, line in layouts[cls][4])
+    smart = any(re.search(r"igSmartPointer<|\bigStringObjRef\b", line)
+                for cls in order for _off, _size, line in layouts[cls][4])
+    if any(re.search(r"\bigStringObjRef\b", text) for cls in order
+           for text in members.get(cls, []) + [line for _off, _size, line in layouts[cls][4]]):
+        # the kit's smart pointer to a string object (igStringObjRef) is the string header's typedef
+        out.append("#include \"dw4/core/igStringObj.h\"")
     if any(re.search(r"\bigStringRef \w+;", line) for cls in order for _off, _size, line in layouts[cls][4]):
         # a string member is the pool's counted reference
         out.append("#include \"dw4/core/igStringRef.h\"")

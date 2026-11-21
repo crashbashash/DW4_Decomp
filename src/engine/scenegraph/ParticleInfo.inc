@@ -563,8 +563,8 @@ int getSgMaxLightStateCount(void) {
 
     if (DAT_0048dae0[0] == -1) {
         temp_s0 = *(int *)((char *)g_objectSystem + 56);
-        igRegistry_GetValueInt((igRegistry *)temp_s0, 7, "maxLightStateCount", &DAT_0048dae0[0], 0x100, 1);
-        igRegistry_GetValueBool((igRegistry *)temp_s0, 7, "disableBumpDotProduct", (unsigned char *)&g_disableBumpDotProduct, 0, 1);
+        ((Gap::Core::igRegistry *)temp_s0)->getValue(7, "maxLightStateCount", *(int *)&DAT_0048dae0[0], 0x100, 1);
+        ((Gap::Core::igRegistry *)temp_s0)->getValue(7, "disableBumpDotProduct", *(unsigned char *)&g_disableBumpDotProduct, 0, 1);
     }
     return DAT_0048dae0[0];
 }

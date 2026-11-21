@@ -37,7 +37,7 @@ unsigned char g_useScratchPadForTraversal;
 
 void FUN_001e0410(void) {
     ((int *)DAT_00562a38)[0] = igTraversalFunctionList_CreateInstance((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    igRegistry_GetValueBool((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 7, "useScratchPadForTraversal", &g_useScratchPadForTraversal, g_useScratchPadForTraversal, 1);
+    ((Gap::Core::igRegistry *)(*(int *)((char *)g_objectSystem + 56)))->getValue(7, "useScratchPadForTraversal", g_useScratchPadForTraversal, g_useScratchPadForTraversal, 1);
 }
 
 void FUN_001e0470(void) {

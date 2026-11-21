@@ -4,7 +4,7 @@ void igDriverDatabase_InitDefaults(igDriverDatabase *database) {
     unsigned char verbose;
     int i;
     igObject_InitDefaults((igObject *)database);
-    igRegistry_GetValueBool(g_objectSystem->configRegistry, 2,"driverDatabaseVerbose", &verbose, database->_verbose, 1);
+    ((Gap::Core::igRegistry *)g_objectSystem->configRegistry)->getValue(2,"driverDatabaseVerbose", verbose, database->_verbose, 1);
     database->_verbose = verbose;
     ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)database->_currentProperties))->setCount(13);
     ((Gap::Core::igObjectList *)((igTDataList<igObject *> *)database->_subPropertyNames))->setCount(13);
@@ -231,16 +231,16 @@ void *igDriverDatabase_ConfigNode_Destruct(void *node, long long deleteFlag) {
     return node;
 }
 
-int igDriverDatabase_ApplyToRegistry(igDriverDatabase *self, int registry, int section, int mergeMode) {
+int igDriverDatabase_ApplyToRegistry(igDriverDatabase *self, int registry, int section, unsigned char mergeMode) {
     int r;
     igTDataList<ConfigNode *> *a;
     int i;
-    igSmartPointer<igRegistry> parsed(((igRegistry *)igRegistry_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool()))));
+    igSmartPointer<igRegistry> parsed((igRegistry *)Gap::Core::igRegistry::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
     a = igDriverDatabase_ParseDatabase(self);
     for (i = 0; i < a->_count; i++) {
         igDriverDatabase_ProcessConfigNode(self, a->_data[i], parsed.p, section);
     }
-    igRegistry_Merge((void *)registry, parsed.p, mergeMode);
+    ((Gap::Core::igRegistry *)registry)->merge((Gap::Core::igRegistry *)parsed.p, mergeMode);
     r = *(char *)self->_dbIndex == 0;
     igDriverDatabase_DeleteConfigNodeList((void *)self, a);
     igDriverDatabase_ClearRawDatabase((int *)self);
@@ -467,10 +467,10 @@ void igDriverDatabase_ApplySettings(igDriverDatabase *self, igTDataList<ConfigPa
     for (i = 0; i < entries->_count; i++) {
         pair = entries->_data[i];
         key = igStringObj_Text(pair->key);
-        igRegistry_GetValueStringObj(registry, section, key, &scratch, (const char *)"", 0);
+        ((Gap::Core::igRegistry *)registry)->getValue(section, key, *(igStringObjRef *)&scratch, (const char *)"", 0);
         key = igStringObj_Text(pair->key);
         value = igStringObj_Text(pair->value);
-        igRegistry_SetValueString(registry, section, key, value);
+        ((Gap::Core::igRegistry *)registry)->setValue(section, key, value);
     }
     igObject::release(scratch);
 }
@@ -497,12 +497,12 @@ int igDriverDatabase_ResolveSettingsSection(igDriverDatabase *self, igStringObj 
         char *s = (char *)sectionName->_buffer;
         char *key = (s == 0) ? g_stringObjEmptyText : s;
         s = (s == 0) ? g_stringObjEmptyText : s;
-        if ((igRegistry_GetValueStringObj((igRegistry *)self->_overrideSource, self->_overrideSourceSection, key, &name, s, 0) & 0xff) == 0 && self->_overrideMode == 1) {
+        if ((((Gap::Core::igRegistry *)self->_overrideSource)->getValue(self->_overrideSourceSection, key, *(igStringObjRef *)&name, s, 0) & 0xff) == 0 && self->_overrideMode == 1) {
             igObject::release(name);
             return -1;
         }
     }
-    result = igRegistry_GetSectionIndex(registry, igStringObj_Text(name), 1);
+    result = ((Gap::Core::igRegistry *)registry)->findSection(igStringObj_Text(name), 1);
     igObject::release(name);
     return result;
 }

@@ -69,7 +69,7 @@ void igDriverDatabase_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igDriverDatabase_Register);
 }
 
-static igMetaObjectCallback g_igDriverDatabase_callbackList[] = { igStringObjList_EnsureRegistered, igStringRefListList_EnsureRegistered, igRegistry_EnsureRegistered, igFile_EnsureRegistered, igStringObj_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igDriverDatabase_callbackList[] = { igStringObjList_EnsureRegistered, igStringRefListList_EnsureRegistered, Gap::Core::igRegistry::arkRegister, igFile_EnsureRegistered, igStringObj_EnsureRegistered, 0 };
 
 CallbackArray *igDriverDatabase_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -176,7 +176,7 @@ void igDriverDatabase_InitFields(void) {
     ((igObjectRefMetaField *)subPropertyValuesField)->_metaObject = (int)igStringRefListList_GetOrCreateMetaObject();
     ((igObjectRefMetaField *)subPropertyValuesField)->_construct = 1;
     overrideSourceField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3)));
-    ((igObjectRefMetaField *)overrideSourceField)->_metaObject = (int)igRegistry_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)overrideSourceField)->_metaObject = (int)Gap::Core::igRegistry::getClassTypeLazy();
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)))->setDefault(-1);
     overrideModeField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)));
     ((Gap::Core::igEnumMetaField *)overrideModeField)->setDefault(0);

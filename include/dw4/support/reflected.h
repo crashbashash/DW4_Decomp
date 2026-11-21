@@ -21030,10 +21030,11 @@ typedef struct libNdmwRuntimePlugin {
 #include "dw4/core/igCore.h"
 #include "dw4/core/igResult.h"
 #include "dw4/core/igMemory.h"
+#include "dw4/core/igStringObj.h"
 #include "dw4/core/igStringRef.h"
 namespace Gap {
 namespace Attrs { class igAlphaFunctionAttr; class igAlphaStateAttr; class igAttr; class igAttrDefaultManager; class igAttrList; class igAttrListList; class igAttrPool; class igBlendFunctionAttr; class igBlendMatricesAttr; class igBlendMatrixPaletteAttr; class igBlendMatrixPaletteAttrList; class igBlendStateAttr; class igClearAttr; class igClippingStateAttr; class igColorAttr; class igColorMaskAttr; class igCopyRenderDestinationAttr; class igCullFaceAttr; class igDepthStateAttr; class igDepthWriteStateAttr; class igDisplayListAttr; class igFogAttr; class igFogStateAttr; class igGenericAttrDefaultManager; class igGeometryMaskAttr; class igImageMipMapList; class igLightAttr; class igLightList; class igLightStateAttr; class igLightStateAttrList; class igLightingStateAttr; class igMaterialAttr; class igMatrixOptStateAttr; class igModelViewMatrixAttr; class igModelViewMatrixAttrList; class igMultiPassStateAttr; class igNonRefCountedAttrList; class igNormalizeNormalsStateAttr; class igPixelPipelineModeAttr; class igPolygonModeAttr; class igProjectionMatrixAttr; class igRenderDestinationAttr; class igRenderListAttr; class igSetRenderDestinationAttr; class igShadeModelAttr; class igStencilFunctionAttr; class igStencilStateAttr; class igTexGenMatrixAttr; class igTextureAttr; class igTextureBindAttr; class igTextureCoordSourceAttr; class igTextureCubeAttr; class igTextureFunctionAttr; class igTextureList; class igTextureMatrixAttr; class igTextureMatrixStateAttr; class igTextureStateAttr; class igTextureUnloadAttr; class igTimeAttr; class igVertexBlendMatrixAttr; class igVertexBlendStateAttr; class igViewportAttr; class igVisualAttribute; class igVisualContextAttrDefaultManager; }
-namespace Core { class __internalNonRefCountedObjectList; class __internalObjectList; class igBoolArrayMetaField; class igBoolList; class igBoolMetaField; class igCharArrayMetaField; class igCharList; class igCharListNoClean; class igCharMetaField; class igCompoundMetaField; class igContext; class igDataList; class igDependencyList; class igDirEntry; class igDirectory; class igDirectoryList; class igDoubleArrayMetaField; class igDoubleList; class igDoubleMetaField; class igEnumArrayMetaField; class igEnumMetaField; class igExternalDirEntry; class igExternalIndexedEntry; class igExternalInfoEntry; class igFloatArrayMetaField; class igFloatList; class igFloatMetaField; class igIntArrayMetaField; class igIntList; class igIntListNoClean; class igIntMetaField; class igLongArrayMetaField; class igLongList; class igLongMetaField; class igMedia; class igMemoryDirEntry; class igMemoryRefArrayMetaField; class igMemoryRefMetaField; class igMetaEnum; class igMetaField; class igNamedObject; class igNonRefCountedObjectList; class igObject; class igObjectDirEntry; class igObjectList; class igObjectRefArrayMetaField; class igObjectRefMetaField; class igPointerList; class igRawRefArrayMetaField; class igRawRefMetaField; class igRefMetaField; class igShortArrayMetaField; class igShortList; class igShortMetaField; class igStringArrayMetaField; class igStringMetaField; class igStructMetaField; class igTimer; class igUnsignedCharArrayMetaField; class igUnsignedCharList; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntList; class igUnsignedIntListNoClean; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortList; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
+namespace Core { class __internalNonRefCountedObjectList; class __internalObjectList; class igBoolArrayMetaField; class igBoolList; class igBoolMetaField; class igCharArrayMetaField; class igCharList; class igCharListNoClean; class igCharMetaField; class igCompoundMetaField; class igContext; class igDataList; class igDependencyList; class igDirEntry; class igDirectory; class igDirectoryList; class igDoubleArrayMetaField; class igDoubleList; class igDoubleMetaField; class igEnumArrayMetaField; class igEnumMetaField; class igExternalDirEntry; class igExternalIndexedEntry; class igExternalInfoEntry; class igFloatArrayMetaField; class igFloatList; class igFloatMetaField; class igIntArrayMetaField; class igIntList; class igIntListNoClean; class igIntMetaField; class igLongArrayMetaField; class igLongList; class igLongMetaField; class igMedia; class igMemoryDirEntry; class igMemoryRefArrayMetaField; class igMemoryRefMetaField; class igMetaEnum; class igMetaField; class igNamedObject; class igNonRefCountedObjectList; class igObject; class igObjectDirEntry; class igObjectList; class igObjectRefArrayMetaField; class igObjectRefMetaField; class igPointerList; class igRawRefArrayMetaField; class igRawRefMetaField; class igRefMetaField; class igRegistry; class igRegistryValue; class igRegistryValueList; class igShortArrayMetaField; class igShortList; class igShortMetaField; class igStringArrayMetaField; class igStringMetaField; class igStructMetaField; class igTimer; class igUnsignedCharArrayMetaField; class igUnsignedCharList; class igUnsignedCharMetaField; class igUnsignedIntArrayMetaField; class igUnsignedIntList; class igUnsignedIntListNoClean; class igUnsignedIntMetaField; class igUnsignedLongArrayMetaField; class igUnsignedLongMetaField; class igUnsignedShortArrayMetaField; class igUnsignedShortList; class igUnsignedShortMetaField; class igVirtualCFuncMetaField; }
 namespace Gfx { class igClut; class igIndexArray; class igPsx2Clut; class igPsx2IndexArray; class igPsx2VertexArray1_1; class igVertexArray; class igVertexArray1_1; }
 namespace Gui { class igClearRenderer; class igRenderer; }
 namespace Insight { class igFlushRenderer; }
@@ -21138,6 +21139,9 @@ using Gfx::igPsx2VertexArray1_1;
 using Core::igRawRefArrayMetaField;
 using Core::igRawRefMetaField;
 using Core::igRefMetaField;
+using Core::igRegistry;
+using Core::igRegistryValue;
+using Core::igRegistryValueList;
 using Attrs::igRenderDestinationAttr;
 using Attrs::igRenderListAttr;
 using Gui::igRenderer;
@@ -23861,6 +23865,82 @@ public:
     virtual void endianSwapMemory(void *mem, int num) const;
     virtual int readRawFieldMemory(void *fieldMem, const void *srcMem, igDirectory *dir, bool endianSwap) const;
     virtual int writeRawFieldMemory(const void *fieldMem, void *dstMem, igDirectory *dir, bool endianSwap) const;
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585a08, 7 field(s), sizeof 24 (registered instance size) */
+class igRegistry : public Gap::Core::igObject {
+public:
+    igSmartPointer<igRegistryValueList> _valueTable; /* +8    igObjectRefMetaField */
+    igSmartPointer< ::igFile> _registryFile;       /* +12   igObjectRefMetaField */
+    igSmartPointer< ::igStringObjList> _additionalSectionNames; /* +16   igObjectRefMetaField */
+    unsigned char _showQueries;                    /* +20   igBoolMetaField */
+    unsigned char _valueNameCaseSensitive;         /* +21   igBoolMetaField */
+    char _pad22[2];
+    IG_OBJECT_DEFINE(igRegistry)
+private:
+    static igMetaField *k_valueTable;
+    static igMetaField *k_registryFile;
+    static igMetaField *k_additionalSectionNames;
+    static igMetaField *k_showQueries;
+    static igMetaField *k_valueNameCaseSensitive;
+protected:
+    void parseRegistry(igFile *file, unsigned char replaceDuplicates);
+    bool readLine(igFile *file, char *buffer, int *lineNum);
+    igRegistryValue *findValue(int sectionHandle, const char *valueName, unsigned char create);
+    void preProcessLine(igFile *file, char *lineBuffer, int lineNum, unsigned char replaceDuplicates);
+public:
+    virtual void initDefaults();
+    bool load(const char *registryFile, const char *path);
+    bool merge(igRegistry *sourceRegistry, unsigned char replaceDuplicates);
+    void reset();
+    int findSection(const char *sectionName, unsigned char create);
+    const char *getSectionName(int sectionHandle);
+    unsigned int getKeyCount(int sectionHandle);
+    bool getKeyName(int sectionHandle, const unsigned int index, igStringObjRef &strVal);
+    bool getValue(int sectionHandle, const char *valueName, int &intVal, int defaultVal, unsigned char createValue);
+    bool getValue(int sectionHandle, const char *valueName, unsigned char &boolVal, unsigned char defaultVal, unsigned char createValue);
+    bool getValue(int sectionHandle, const char *valueName, igStringObjRef &strVal, const char *defaultVal, unsigned char createValue);
+    bool getValue(int sectionHandle, const char *valueName, igStringRef &strVal, const char *defaultVal, unsigned char createValue);
+    bool getValue(int sectionHandle, const char *valueName, igStringRefList *strListVal, unsigned char createValue);
+    bool getValue(int sectionHandle, const char *valueName, float &floatVal, float defaultVal, unsigned char createValue);
+    bool getEnumValue(int sectionHandle, const char *valueName, igMetaEnum *metaEnum, int &enumVal, int defaultVal, unsigned char createValue);
+    bool getFlagsValue(int sectionHandle, const char *valueName, igMetaEnum *metaEnum, unsigned int &flagsVal, unsigned int defaultVal, unsigned char createValue);
+    igRegistryValue *getRawValue(int index);
+    int getRawValueCount() const;
+    bool setValue(int sectionHandle, const char *valueName, int intVal);
+    bool setValue(int sectionHandle, const char *valueName, float floatVal);
+    bool setValue(int sectionHandle, const char *valueName, const char *strVal);
+    bool setValue(int sectionHandle, const char *valueName, unsigned char boolVal);
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585a40, 5 field(s), sizeof 20 (registered instance size) */
+class igRegistryValue : public Gap::Core::igObject {
+public:
+    int _section;                                  /* +8    igIntMetaField */
+    igStringObjRef _value;                         /* +12   igObjectRefMetaField */
+    igStringObjRef _valueName;                     /* +16   igObjectRefMetaField */
+    IG_OBJECT_DEFINE(igRegistryValue)
+    static igMetaField *k_section;
+    static igMetaField *k_value;
+    static igMetaField *k_valueName;
+};
+}
+}
+
+namespace Gap {
+namespace Core {
+/* handle 0x585a38, 5 field(s), sizeof 20 (registered instance size) */
+class igRegistryValueList : public Gap::Core::igTObjectList<igRegistryValue> {
+public:
+    IG_OBJECT_DEFINE(igRegistryValueList)
 };
 }
 }

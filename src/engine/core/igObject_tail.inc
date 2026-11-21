@@ -79,7 +79,7 @@ igResult Memory_RegisterAllocation(int address, igMemoryPoolView *pool) {
     int dictionarySize;
     if (g_memoryDictionary == 0) {
         dictionarySize = 0x1000;
-        igRegistry_GetValueInt(g_objectSystem->configRegistry, 2,"memoryDictionarySize", &dictionarySize, 0x1000, 0);
+        ((Gap::Core::igRegistry *)g_objectSystem->configRegistry)->getValue(2,"memoryDictionarySize", dictionarySize, 0x1000, 0);
         g_memoryDictionary = (igMemoryDictionaryView *)igMemoryDictionary_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleNonTracked));
         g_memoryDictionary->SetCapacity(dictionarySize);
         g_memoryDictionary->InitEntries();

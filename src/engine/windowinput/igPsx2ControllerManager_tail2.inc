@@ -27,7 +27,7 @@ void Gap__igPsx2ControllerManager__vfunc_24(igPsx2ControllerManager *arg0, int a
             al = Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
         }
         sp8C = (PropertyText *)igStringObj_Create((int)al);
-        if (igRegistry_GetValueStringObj(*(igRegistry **)((char *)g_objectSystem + 56), 3, "supportMultitap", (igStringObj **)&sp8C, "", 0) != 0) {
+        if (((Gap::Core::igRegistry *)g_objectSystem->configRegistry)->getValue(3, "supportMultitap", *(igStringObjRef *)&sp8C, "", 0)) {
             s0 = sp8C->chars;
             s0 = (s0 == 0) ? g_stringObjEmptyText : s0;
             if (strcmp(s0, "ALL") == 0) {

@@ -515,7 +515,7 @@ void igVisualContext_LoadDefaultDriverDatabase(int value)
     igSmartPointer<igIntList> list((igIntList *)igContextList_Create((int)igVisualContext_GetInternalMemoryPool((int *)value)));
     bool found = false;
 
-    igRegistry_GetValueBool((igRegistry *)registry, 4, "ignoreDriverDatabase", (unsigned char *)&found, 0, 1);
+    ((Gap::Core::igRegistry *)registry)->getValue(4, "ignoreDriverDatabase", *(unsigned char *)&found, 0, 1);
     if (found) return;
     igIntList *l = list;
     count = l->_count;

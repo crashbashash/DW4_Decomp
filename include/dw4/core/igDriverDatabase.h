@@ -10,7 +10,7 @@ extern "C" {
 void igDriverDatabase_SetSubPropertyValue(struct igDriverDatabase *self, int section, const char *key, char *value);
 void *igDriverDatabase_Create(int pool);
 int igDriverDatabase_LoadFromFile(void *self, int text, int fileName);
-int igDriverDatabase_ApplyToRegistry(struct igDriverDatabase *self, int registry, int section, int mergeMode);
+int igDriverDatabase_ApplyToRegistry(struct igDriverDatabase *self, int registry, int section, unsigned char mergeMode);
 /* ApplyToRegistry's stub twin, called after it with the same arguments: does nothing and returns 1. */
 int FUN_002daab0(struct igDriverDatabase *self, int registry, int section, int mergeMode);
 igTDataList<struct ConfigNode *> *igDriverDatabase_ParseDatabase(struct igDriverDatabase *s);

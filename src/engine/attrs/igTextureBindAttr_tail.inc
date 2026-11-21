@@ -103,7 +103,7 @@ void igTextureBindAttr::userRegister()
     unsigned char enable;
 
     enable = 0;
-    igRegistry_GetValueBool((igRegistry *)(*(int *)((char *)g_objectSystem + 56)), 7, "enableIgTextureAttrFastApply", &enable, 0, 0);
+    ((igRegistry *)(*(int *)((char *)g_objectSystem + 56)))->getValue(7, "enableIgTextureAttrFastApply", enable, 0, 0);
     igTextureBindAttr_SetFastApply(enable);
 }
 }

@@ -822,7 +822,7 @@ static inline void assignToken(igMetaField *field, void *object, const RecoveryS
 extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, int section, igMetaField *field, void *object) {
     if (((Gap::Core::igObject *)field)->isOfType(Gap::Core::igIntMetaField::getClassMeta()) != 0) {
         int value;
-        if (igRegistry_GetValueInt(registry, section, stringObjText(*key), &value, 0, 0)) {
+        if (((Gap::Core::igRegistry *)registry)->getValue(section, stringObjText(*key), value, 0, 0)) {
             *(int *)((char *)object + field->_offset) = value;
             log->put("(%s:%d) ", stringObjText(*key), value);
             return true;
@@ -830,7 +830,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
     }
     if (((Gap::Core::igObject *)field)->isOfType(Gap::Core::igEnumMetaField::getClassMeta()) != 0) {
         int value;
-        if (igRegistry_GetValueInt(registry, section, stringObjText(*key), &value, 0, 0)) {
+        if (((Gap::Core::igRegistry *)registry)->getValue(section, stringObjText(*key), value, 0, 0)) {
             *(int *)((char *)object + field->_offset) = value;
             log->put("(%s:%d) ", stringObjText(*key), value);
             return true;
@@ -838,7 +838,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
     }
     if (((Gap::Core::igObject *)field)->isOfType(Gap::Core::igUnsignedIntMetaField::getClassMeta()) != 0) {
         int value;
-        if (igRegistry_GetValueInt(registry, section, stringObjText(*key), &value, 0, 0)) {
+        if (((Gap::Core::igRegistry *)registry)->getValue(section, stringObjText(*key), value, 0, 0)) {
             if (value < 0) {
                 printf("(%s:%d skipped: not >0!) ", stringObjText(*key), value);
             }
@@ -849,7 +849,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
     }
     if (((Gap::Core::igObject *)field)->isOfType(Gap::Core::igFloatMetaField::getClassMeta()) != 0) {
         float value;
-        if (igRegistry_GetValueFloat(registry, section, stringObjText(*key), &value, 0, 0.0f)) {
+        if (((Gap::Core::igRegistry *)registry)->getValue(section, stringObjText(*key), value, 0.0f, 0)) {
             *(float *)((char *)object + field->_offset) = value;
             log->put("(%s:%f) ", stringObjText(*key), value);
             return true;
@@ -857,7 +857,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
     }
     if (((Gap::Core::igObject *)field)->isOfType(Gap::Core::igBoolMetaField::getClassMeta()) != 0) {
         bool value;
-        if (igRegistry_GetValueBool(registry, section, stringObjText(*key), (unsigned char *)&value, 0, 0)) {
+        if (((Gap::Core::igRegistry *)registry)->getValue(section, stringObjText(*key), *(unsigned char *)&value, 0, 0)) {
             *(bool *)((char *)object + field->_offset) = value;
             log->put("(%s:%s) ", stringObjText(*key), value ? "true" : "false");
             return true;
@@ -865,7 +865,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
     }
     if (((Gap::Core::igObject *)field)->isOfType(Gap::Core::igStringMetaField::getClassMeta()) != 0) {
         igSmartPointer<igStringObj> value(createStringObj());
-        if (igRegistry_GetValueStringObj(registry, section, stringObjText(*key), (igStringObj **)&value, "", 0)) {
+        if (((Gap::Core::igRegistry *)registry)->getValue(section, stringObjText(*key), value, "", 0)) {
             assignToken(field, object, RecoveryString(internString(stringObjText(*value))));
             log->put("(%s:%s) ", stringObjText(*key), stringObjText(*value));
             return true;
@@ -874,7 +874,7 @@ extern "C" int FUN_0022c150(igRegistry *registry, B_2 *log, igStringObj *key, in
     if (((Gap::Core::igObject *)field)->isOfType(Gap::Core::igObjectRefMetaField::getClassMeta()) != 0) {
         if ((igMetaObject *)((igObjectRefMetaField *)field)->_metaObject == g_igMetaObject_metaObject) {
             igSmartPointer<igStringObj> value(createStringObj());
-            if (igRegistry_GetValueStringObj(registry, section, stringObjText(*key), (igStringObj **)&value, "", 0)) {
+            if (((Gap::Core::igRegistry *)registry)->getValue(section, stringObjText(*key), value, "", 0)) {
                 igMetaObject *meta = (igMetaObject *)igObjectSystem_FindMetaByNameDefault(stringObjText(*value));
                 if (meta != 0) {
                     ((Gap::Core::igObjectRefMetaField *)field)->set((Gap::Core::igObject *)object, (Gap::Core::igObject *)meta);

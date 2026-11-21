@@ -13,8 +13,8 @@ extern "C" {
 int igConvertString_Vec4f(const char *text, float *vector, const char *format);
 int igConvertToString_Vec3f(char **result, const float *vector, const char *format);
 int igConvertToString_Vec4f(char **result, const float *vector, const char *format);
-int igGetRegistryValue_Vec3f(struct igRegistry *registry, int section, const char *key, float *value, const float *defaultValue, int create);
-int igGetRegistryValue_Vec4f(struct igRegistry *registry, int section, const char *key, float *value, const float *defaultValue, int create);
+int igGetRegistryValue_Vec3f(struct igRegistry *registry, int section, const char *key, float *value, const float *defaultValue, unsigned char create);
+int igGetRegistryValue_Vec4f(struct igRegistry *registry, int section, const char *key, float *value, const float *defaultValue, unsigned char create);
 #ifdef __cplusplus
 }
 #endif

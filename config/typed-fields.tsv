@@ -98,3 +98,8 @@ igVertexArray1_1	_pointSpriteSize	float *
 igPsx2VertexArray1_1	_pBlendedVertsList	igSmartPointer<igPointerList>
 igPsx2VertexArray1_1	_pBlendedNormsList	igSmartPointer<igPointerList>
 igPsx2VertexArray1_1	_pWaitSeqList	igSmartPointer< ::igPsx2LongList>
+igRegistryValue	_value	igStringObjRef
+igRegistryValue	_valueName	igStringObjRef
+igRegistry	_valueTable	igSmartPointer<igRegistryValueList>
+igRegistry	_registryFile	igSmartPointer< ::igFile>
+igRegistry	_additionalSectionNames	igSmartPointer< ::igStringObjList>
