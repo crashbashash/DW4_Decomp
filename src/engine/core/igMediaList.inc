@@ -1,52 +1,51 @@
-igMetaObject *g_igMediaList_metaObject;
+namespace Gap {
+namespace Core {
 
-void * igMediaList_Create(int pool) {
-    igMediaList_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance(g_igMediaList_metaObject, (igMemoryPoolView *)pool));
-}
+igMetaObject *igMediaList::_Meta;
 
-igMetaObject *igMediaList_GetMetaObject(void)
+igMediaList *igMediaList::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igMediaList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMediaList_EnsureRegistered();
-    return g_igMediaList_metaObject;
+    arkRegister();
+    return (igMediaList *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igMediaList_GetVTable(void) {
-    int tmp[8];
-    int off;
-    igObject_InitHeader((igObject *)&tmp[0]);
-    tmp[0] = (int)&g_igMediaList_vtable[0];
-    off = g_objectSystem->vtableProbeOffset;
-    return *(int *)((char *)tmp + off);
-}
-
-void igMediaList_EnsureRegistered(void)
+igMetaObject *igMediaList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igMediaList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igMediaList_callbackList[] = { Gap::Core::igMedia::arkRegister, 0 };
+void *igMediaList::retrieveVTablePointer()
+{
+    igMediaList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igMediaList_Register(void) {
+void igMediaList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igMediaList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igMedia::arkRegister, 0 };
+
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igMediaList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igMediaList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMediaList",
-        0x14,
-        igMediaList_GetVTable,
+        sizeof(igMediaList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
         0,
-        g_igMediaList_callbackList
+        regFunctions
     );
 }
-
-void igMediaList_GetMetaObjectFunction(void) {
-    igMediaList_GetMetaObject();
+}
 }
 

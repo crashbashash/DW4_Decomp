@@ -133,8 +133,8 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
             ((Gap::Core::igRegistry *)self->configRegistry)->load(g_alchemyIniPath, (char *)"");
         } else {
             if (g_alchemyIniText != 0) {
-                igSmartPointer<igObject> file((igObject *)igMemoryFile_Create((int)ownerOrSystemPool()));
-                igMemoryFile_AddMemoryFileEntry((int)"alchemy.ini", (int)g_alchemyIniText, strlen(g_alchemyIniText));
+                igSmartPointer<igObject> file((igObject *)Gap::Core::igMemoryFile::_instantiateFromPool(ownerOrSystemPool()));
+                Gap::Core::igMemoryFile::setMemoryFile((char const *)("alchemy.ini"), (void const *)g_alchemyIniText, strlen(g_alchemyIniText));
                 setRegistryFile(self->configRegistry, file);
             }
             ((Gap::Core::igRegistry *)self->configRegistry)->load((char *)"", (char *)"");
@@ -147,8 +147,8 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
         if (((igPsx2Media *)media.p)->_initialized == 1) {
             Gap::Core::igMedia::registerMedia((Gap::Core::igMedia *)media.p);
             Gap::Core::igMedia::setDefaultMedia((Gap::Core::igMedia *)media.p);
-            igMediaFile_EnsureRegistered();
-            g_igFile_metaObject->_abstractProxy = (int)igMediaFile_GetPublishedMetaObject;
+            Gap::Core::igMediaFile::arkRegister();
+            Gap::Core::igFile::getClassMeta()->_abstractProxy = (int)Gap::Core::igMediaFile::getClassMeta;
         }
     } else {
         igPsx2_LoadIopModule((char *)"libsd.irx", 1, 0, 0);
@@ -196,7 +196,7 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
         setTemporaryMemoryPool(self->resource, (igObject *)self->resourceTempPool);
     }
     ((Gap::Core::igRegistry *)self->configRegistry)->getValue(2,"stringPoolStatisticsLevel", *(int *)(&self->stringPoolStatisticsLevel), 0, 0);
-    igAdxFile_LoadSearchFilePath();
+    Gap::Core::igFile::setSearchPathFromRegistry();
     g_igIGBFile_loadTimer = (igLongTimerView *)Gap::Core::igTimer::_instantiateFromPool((igMemoryPoolView *)self->systemPool);
     g_igIGBFile_loadTimer->Start();
     igReport_Printf("\n%s\n\n", g_alchemyVersionString);
@@ -229,10 +229,6 @@ void igObjectSystem_Initialize(ObjectSystemView *self) {
         }
     }
     StringTable_SetSynchronization(1);
-}
-
-igMetaObject *igMediaFile_GetPublishedMetaObject(void) {
-    return g_igMediaFile_metaObject;
 }
 
 void igObjectSystem_PreExit(ObjectSystemView *self) {
@@ -365,7 +361,7 @@ void igObjectSystem_Shutdown(ObjectSystemView *self) {
     o = (igObject *)self->metaEnumList;
     o->release();
     self->metaEnumList = 0;
-    igAdxFile_SetBasePath(0);
+    Gap::Core::igFile::setSearchPath(0);
     igArray_Destruct((CallbackArray *)self->registrationCallbacks, 1);
     if (g_currentMemoryContext != 0) {
         g_currentMemoryContext->RemoveAllAllocators();

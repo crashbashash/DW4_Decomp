@@ -7,8 +7,6 @@ struct igMetaObject;
 extern "C" {
 #endif
 
-void igGeometryAttrList_EnsureRegistered(void);
-struct igMetaObject *igGeometryAttrList_GetOrCreateMetaObject(void);
 
 #ifdef __cplusplus
 }

@@ -2,7 +2,7 @@
  * was last opened in). A relative name is tried under each entry of the search path list in turn.
  * A text file is read whole into the buffer. */
 void igPsx2File_OpenWithMode(int *result, igPsx2FileView *file, unsigned int mode) {
-    char *searchPaths;
+    const char *searchPaths;
     char path[512];
     bool absolute;
     int flags;
@@ -47,9 +47,9 @@ void igPsx2File_OpenWithMode(int *result, igPsx2FileView *file, unsigned int mod
             } while (n != 0);
         }
         more = 1;
-        absolute = FilePath_IsAbsolute(file->_fileName);
-        hasDirectory = FilePath_HasDirectory(file->_fileName);
-        searchPaths = (char *)igAdxFile_GetSearchPaths();
+        absolute = Gap::Core::igFile::isAbsolutePath(file->_fileName);
+        hasDirectory = Gap::Core::igFile::containsRelativePath(file->_fileName);
+        searchPaths = Gap::Core::igFile::getSearchPath();
         attempt = 0;
         while (more && attempt < 0x100) {
             if (absolute) {
@@ -62,7 +62,7 @@ void igPsx2File_OpenWithMode(int *result, igPsx2FileView *file, unsigned int mod
                 hasDirectory = 0;
                 goto open;
             }
-            more = igAdxFile_GetNextSearchPath(&searchPaths, path, sizeof(path));
+            more = Gap::Core::igFile::getNextPath(&searchPaths, path, sizeof(path));
             if (more) {
 open:
                 strcat(path, file->_fileName);
@@ -128,7 +128,7 @@ void **igPsx2File_OpenFile(void **self, const char *fileName, int modeText) {
     igResult readResult;
     int opened;
 
-    igFile_SetFileName((igFile *)self, fileName);
+    ((Gap::Core::igFile *)self)->setFileName(fileName);
     if (strcmp((const char *)modeText, "r") == 0) {
         readResult = ((igFileView *)(self))->OpenWithMode((int)(0));
         opened = readResult.v;

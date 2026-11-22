@@ -400,7 +400,7 @@ int igCriMovieCodec_Open(igCriMovieCodec *self, igMovieInfo *movie) {
     } else {
         pool = ((Gap::Core::igObject *)self)->getMemoryPool();
         pool = g_useOwnerAllocator ? pool : Memory_GetAllocatorBySelector(kIGMemoryPoolHandleUser1);
-        igSmartPointer<igFileDispatchView> file((igFileDispatchView *)igFile_Create((int)pool));
+        igSmartPointer<igFileDispatchView> file((igFileDispatchView *)Gap::Core::igFile::_instantiateFromPool(pool));
         path = file->MakeCompleteFilename((const char *)movie->_path);
     }
     afsIndex = igAdx_FindAfsFile(path);

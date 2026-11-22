@@ -55,13 +55,6 @@
 #include "dw4/core/igMemoryPoolView.h"
 #include "dw4/maths/igMatrix44f.h"
 #include "dw4/gfx/igImage.h"
-
-/* igImageMipMapList is the kit's igTObjectList<igImage>; igImage is still the flat struct, so its class meta,
- * the kit's igImage::getClassMeta(), is read from the C datum. */
-template <> inline igMetaObject *Gap::Core::igTObjectList< ::igImage>::getElementMeta() const
-{
-    return g_igImage_metaObject;
-}
 #include "dw4/core/igDataLists.h"
 #include "dw4/game/beModelCtrlInfo.h"
 #include "dw4/core/StringPool.h"
@@ -179,15 +172,9 @@ extern "C" ObjectRefWord *FUN_00136370(ObjectRefWord *self,int delete_storage);
 struct Obj_136680 { int *vt; char pad[28]; };
 union U_1367f0 { int vt; char b[160]; };
 extern "C" igMetaEnum *igGeometrySetAttr_GetAttrFlagsMetaEnum(void);
-extern "C" igMetaObject *g_igGeometrySetAttr_metaObject;
-extern "C" int g_igGeometrySetAttr_vtable[4];
 union U_136d30 { int vt; char b[32]; };
-extern "C" int igGeometrySetAttr_GetVTable(void);
 extern "C" void **FUN_00136e10(void **arg0, int arg1);
-extern "C" CallbackArray *igGeometrySetAttr_Register(void);
-extern "C" void igGeometrySetAttr_GetMetaObjectFunction(void);
 struct F_136f30 { char p[38]; char f38; char f39; char f40; char p2[3]; char f44; char p3[7]; int f52; int f56; };
-extern "C" void igGeometrySetAttr_InitFields(void);
 extern "C" void **FUN_00137260(void **arg0, short arg1);
 extern "C" void **FUN_001372e0(struct Ref **self, short flag);
 extern "C" void **FUN_00137360(void **arg0, long long arg1);
@@ -203,15 +190,8 @@ extern "C" O_137530 *FUN_00137530(O_137530 *arg0, short arg1);
 extern "C" igMetaObject *igGeometryAttr_GetPublishedMetaObject(void);
 extern "C" CallbackArray *igGeometryAttr1_5_Register(void);
 extern "C" void igGeometryAttr1_5_GetMetaObjectFunction(void);
-extern "C" igMetaObject *FUN_00137770(void);
 extern "C" void igGeometryAttr1_5_InitFields(void);
-extern "C" igMetaObject *igGeometryAttr_GetOrCreateMetaObject(void);
-extern "C" igMetaObject *igGeometryAttr_GetMetaObject(void);
-extern "C" void igGeometryAttr_EnsureRegistered(void);
-extern "C" CallbackArray *igGeometryAttr_Register(void);
-extern "C" void igGeometryAttr_GetMetaObjectFunction(void);
 
-extern "C" void igGeometryAttr_InitFields(void);
 struct O_137b40 { int *vt; int p; };
 typedef struct S_temp_a0_1380e0 { char pad4[4]; int f4; } S_temp_a0_1380e0;
 extern "C" void **FUN_001380e0(void **arg0, short arg1);
@@ -219,12 +199,6 @@ union U_1389f0 { int vt; char b[64]; };
 union U_139a70 { int vt; char b[32]; };
 union U_139fb0 { int vt; char b[64]; };
 struct Obj_13a400 { int *vt; char pad[28]; };
-extern "C" igMetaObject *g_igGeometryAttrList_metaObject;
-extern "C" igMetaObject *igGeometryAttrList_GetMetaObject(void);
-extern "C" int g_igGeometryAttrList_vtable[4];
-extern "C" int igGeometryAttrList_GetVTable(void);
-extern "C" CallbackArray *igGeometryAttrList_Register(void);
-extern "C" void igGeometryAttrList_GetMetaObjectFunction(void);
 union U_13a6d0 { int vt; char b[32]; };
 typedef struct S_temp_a0_13a800 { char pad4[4]; int f4; } S_temp_a0_13a800;
 extern "C" void **FUN_0013a800(void **arg0, short arg1);
@@ -511,22 +485,15 @@ struct Item { virtual void b0(); virtual void b1(); virtual void b2(); virtual v
 /* matching construct: dummy-virtual view so ->v30() dispatches through the object vtable */
 struct Self { virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3(); virtual void c4(); virtual void c5(); virtual void c6(); virtual void c7(); virtual void c8(); virtual void c9(); virtual void c10(); virtual void c11(); virtual void c12(); virtual void c13(); virtual void c14(); virtual void c15(); virtual void c16(); virtual void c17(); virtual void c18(); virtual void c19(); virtual void c20(); virtual void c21(); virtual void c22(); virtual void c23(); virtual void c24(); virtual void c25(); virtual void c26(); virtual void c27(); virtual void c28(); virtual void c29(); virtual void v30(int); };
 
-extern "C" bool FUN_0013e6e0(igGeometrySetAttr *arg0, int arg1);
-extern "C" void igGeometrySetAttr_SetVisualContext(igGeometrySetAttr *self, igObject *newVc);
 class EV { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual int vX(int); };
 
 struct L_13e8d0 { char pad[8]; int n; char pad2[4]; EV **d; };
 struct T_13e8d0 { char pad[16]; int f16; L_13e8d0 *f20; int f24; unsigned char f28; };
-extern "C" void igGeometrySetAttr_apply(T_13e8d0 *arg0, int arg1);
-extern "C" void igGeometrySetAttr_Setup(igGeometrySetAttr *arg0, int arg1);
 class DW4VC_112_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual int vX(); };
-extern "C" void igGeometrySetAttr_ReleaseDefaults(void **arg0);
 class I { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void vX(); };
 class H { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual void d36(); virtual void d37(); virtual void d38(); virtual void d39(); virtual void d40(); virtual void d41(); virtual void d42(); virtual void d43(); virtual void d44(); virtual void d45(); virtual void d46(); virtual void d47(); virtual void d48(); virtual void d49(); virtual void d50(); virtual void d51(); virtual void d52(); virtual void d53(); virtual void d54(); virtual void d55(); virtual void d56(); virtual void d57(); virtual void d58(); virtual void d59(); virtual void d60(); virtual void d61(); virtual void d62(); virtual void d63(); virtual void d64(); virtual void d65(); virtual void d66(); virtual void d67(); virtual void d68(); virtual void d69(); virtual void d70(); virtual void d71(); virtual void d72(); virtual void d73(); virtual void d74(); virtual void d75(); virtual void d76(); virtual void d77(); virtual void d78(); virtual void d79(); virtual void d80(); virtual void d81(); virtual void d82(); virtual void d83(); virtual void d84(); virtual void d85(); virtual void d86(); virtual void d87(); virtual void d88(); virtual void d89(); virtual void d90(); virtual void d91(); virtual void d92(); virtual void d93(); virtual void d94(); virtual void d95(); virtual void d96(); virtual void d97(); virtual void d98(); virtual void d99(); virtual void d100(); virtual void d101(); virtual void d102(); virtual void d103(); virtual void d104(); virtual void d105(); virtual void d106(); virtual void d107(); virtual void d108(); virtual void d109(); virtual void d110(); virtual void d111(); virtual void d112(); virtual void d113(); virtual void d114(); virtual void d115(); virtual void d116(); virtual void d117(); virtual void d118(); virtual void d119(); virtual void d120(); virtual void d121(); virtual void d122(); virtual void d123(); virtual void d124(); virtual void d125(); virtual void d126(); virtual void d127(); virtual void d128(); virtual void d129(); virtual void d130(); virtual void d131(); virtual void d132(); virtual void d133(); virtual void d134(); virtual void d135(); virtual void d136(); virtual void d137(); virtual void d138(); virtual void d139(); virtual void d140(); virtual void d141(); virtual void d142(); virtual void d143(); virtual void d144(); virtual void d145(); virtual void d146(); virtual void d147(); virtual void d148(); virtual void d149(); virtual void d150(); virtual void d151(); virtual void d152(); virtual void d153(); virtual void d154(); virtual void d155(); virtual void d156(); virtual void d157(); virtual void d158(); virtual void d159(); virtual void d160(); virtual void d161(); virtual void d162(); virtual void d163(); virtual void d164(); virtual void d165(); virtual void d166(); virtual void d167(); virtual void d168(); virtual void d169(); virtual void d170(); virtual void d171(); virtual void d172(); virtual void d173(); virtual void d174(); virtual void d175(); virtual void d176(); virtual void d177(); virtual void d178(); virtual void d179(); virtual void d180(); virtual void d181(); virtual void d182(); virtual void d183(); virtual void d184(); virtual void d185(); virtual void d186(); virtual void d187(); virtual void d188(); virtual void d189(); virtual void d190(); virtual void vX(int); int references; };
 struct Lst { char p[8]; int n; int p2; I **arr; };
 struct A_13ea20 { char p[12]; H *f12; int f16; Lst *f20; };
-extern "C" void igGeometrySetAttr_Reset(A_13ea20 *arg0);
-extern "C" void igGeometrySetAttr_SynchronizeDefault(void);
 
 
 extern "C" void igPsx2VisualContext_SetLightDirection(igObject *context, int light, float *direction);
@@ -740,7 +707,6 @@ typedef struct S_temp_a0_142400 { char pad4[4]; int f4; } S_temp_a0_142400;
 extern "C" igMetaObject *igParticleAttr_GetMeta(void);
 class DW4VC_152_0 { public: virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3(); virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7(); virtual void d8(); virtual void d9(); virtual void d10(); virtual void d11(); virtual void d12(); virtual void d13(); virtual void d14(); virtual void d15(); virtual void d16(); virtual void d17(); virtual void d18(); virtual void d19(); virtual void d20(); virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25(); virtual void d26(); virtual void d27(); virtual void d28(); virtual void d29(); virtual void d30(); virtual void d31(); virtual void d32(); virtual void d33(); virtual void d34(); virtual void d35(); virtual int vX(); };
 extern "C" void igParticleAttr_Reset(igParticleAttr *self);
-extern "C" int igGeometrySetAttr_GetMeta(void);
 extern "C" igMetaObject *igGeometryAttr1_5_GetMeta(void);
 extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_43(int *arg0, int *arg1);
 class igPrimLengthArrayView {
@@ -762,7 +728,6 @@ extern "C" void Gap__Attrs__igGeometryAttr1_5__vfunc_41(igGeometryAttr1_5View *s
 extern "C" igMetaObject *FUN_001428a0(void);
 typedef struct Obj_1429d0 { char pad[20]; int f20; int f24; } Obj_1429d0;
 typedef struct Obj_142a00 { char pad[16]; int f16; int f20; } Obj_142a00;
-extern "C" igMetaObject *igGeometryAttrList_GetMeta(void);
 extern "C" int igVec3fList_GetMeta(void);
 
 extern "C" int igNamedObject_GetMeta(void);
@@ -772,7 +737,6 @@ extern "C" int igVec3fList_GetElementSize(void);
 extern "C" igMetaObject *igLightStateAttrList_GetElementMeta(void);
 extern "C" igMetaObject *igLightList_GetElementMeta(void);
 extern "C" igMetaObject *igTextureList_GetElementMeta(void);
-extern "C" igMetaObject *igGeometryAttrList_GetElementMeta(void);
 
 extern "C" int igImageMipMapList_GetElementMeta(void);
 extern "C" void igVec3fList_TrimCapacity(igDataList *arg0);

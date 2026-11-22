@@ -1,6 +1,12 @@
-igSmartPointer<igObject> igFolder_GetFullPath(igFolder *folder, int name) {
-    igSmartPointer<igObject> item(((igObject *)igStringObj_Create(((int)((Gap::Core::igObject *)folder)->getMemoryPool()))));
-    igStringObj_Format((igStringObj *)item.get(),"%s/%s", folder->_folderName, name);
+namespace Gap {
+namespace Core {
+
+igStringObjRef igFolder::getPathToFile(const char *fileName) const
+{
+    igStringObjRef item((igStringObj *)igStringObj_Create((int)getMemoryPool()));
+    igStringObj_Format(item.get(), "%s/%s", _folderName.p, fileName);
     return item;
+}
+}
 }
 

@@ -1516,19 +1516,23 @@ igTimer	virtual bool isStopped() const = 0;
 igMedia	IG_ABSTRACT_OBJECT_DEFINE(igMedia)
 igMedia	virtual int createFile() = 0;
 igMedia	virtual void deleteFile(int fileHandle) = 0;
-igMedia	virtual igResult open(int fileHandle, igStringRef name, int openMode) = 0;
+igMedia	virtual igResult open(int fileHandle, igStringRef name, igFile::OpenMode openMode) = 0;
 igMedia	virtual void close(int fileHandle) = 0;
 igMedia	virtual int write(int fileHandle, const void *mem, int numBytes) = 0;
 igMedia	virtual int read(int fileHandle, void *mem, int numBytes) = 0;
-igMedia	virtual void readAsynchronous(int fileHandle, void *mem, int numBytes, int (*function)(int, int), int token) = 0;
+igMedia	virtual void readAsynchronous(int fileHandle, void *mem, int numBytes, igIOCallbackFunction *function, int token) = 0;
 igMedia	virtual int seek(int fileHandle, int offset, int whence) = 0;
 igMedia	virtual int tell(int fileHandle) = 0;
 igMedia	virtual bool handlesPrefix(const char *filename, int prefixSize) = 0;
+igMedia	static igMedia *findMedia(const char *filename);
 igMedia	static void setDefaultMedia(igMedia *media);
 igMedia	static void registerMedia(igMedia *media);
+igMedia	private: static void arkRegisterUser();
 igMedia	private: static void userRegister();
-igMedia	static void userUnregister();
-igMedia	static void _classDestructor();
+igMedia	private: static void userUnregister();
+igMedia	private: static igMedia *gDefaultMedia;
+igMedia	private: static igSmartPointer<igMediaList> gRegisteredMedia;
+igMedia	private: static void _classDestructor();
 __internalNonRefCountedObjectList	IG_BOOTSTRAP_OBJECT_DEFINE(__internalNonRefCountedObjectList)
 __internalNonRefCountedObjectList	private: static igMetaField *k_data;
 __internalNonRefCountedObjectList	private: static igMetaField *k_count;
@@ -1824,3 +1828,272 @@ igRegistry	bool setValue(int sectionHandle, const char *valueName, int intVal);
 igRegistry	bool setValue(int sectionHandle, const char *valueName, float floatVal);
 igRegistry	bool setValue(int sectionHandle, const char *valueName, const char *strVal);
 igRegistry	bool setValue(int sectionHandle, const char *valueName, unsigned char boolVal);
+igVertexArray2	IG_OBJECT_DEFINE(igVertexArray2)
+igVertexArray2	private: static igMetaField *k_internalBuffer;
+igVertexArray2	protected: static igMetaField *k_objList;
+igVertexArray2	protected: static igMetaField *k_vertexStream;
+igVertexArray2	inline void setVertexStream(igVertexStream *vertexStreamParam) { _vertexStream = vertexStreamParam; }
+igVertexArray2	inline igVertexStream *getVertexStream() const { return _vertexStream; }
+igVertexArray2	inline igObjectList *getObjectList() { return _objList; }
+igVertexArray2	virtual bool configure(IG_GFX_DRAW primitive, igIndexArray *indexArray = 0, igPrimLengthArray *primLengthArray = 0, igVisualContext *vc = 0);
+igVertexArray2	inline virtual void reset() {}
+igVertexArray2	virtual unsigned int getCount(unsigned int index = 0) const;
+igVertexArray2	igVertexData *findVertexData(unsigned int type, unsigned int index = 0) const;
+igVertexArray2	void buildVertexDataList(igSmartPointer<igVertexDataList> list);
+igVertexArray2	bool isVertexDataSupported(const igVertexData *vertexData) const;
+igPsx2VertexArray2	IG_OBJECT_DEFINE(igPsx2VertexArray2)
+igPsx2VertexArray2	virtual void releaseDefaults();
+igPsx2VertexArray2	virtual bool configure(IG_GFX_DRAW primitive, igIndexArray *indexArray = 0, igPrimLengthArray *primLengthArray = 0, igVisualContext *vc = 0);
+igPsx2VertexArray2	virtual void reset();
+igGeometryAttr	IG_ABSTRACT_OBJECT_DEFINE(igGeometryAttr)
+igGeometryAttr	static igMetaField *k_vertexArray;
+igGeometryAttr	static igMetaField *k_indexArray;
+igGeometryAttr	static igMetaField *k_primType;
+igGeometryAttr	static igMetaField *k_numPrims;
+igGeometryAttr	static igMetaField *k_offset;
+igGeometryAttr	static igMetaField *k_primLengths;
+igGeometryAttr	static igMetaField *k_handle;
+igGeometryAttr	static igMetaField *k_dPds;
+igGeometryAttr	static igMetaField *k_dPdt;
+igGeometryAttrList	IG_OBJECT_DEFINE(igGeometryAttrList)
+igGeometrySetAttr	IG_OBJECT_DEFINE(igGeometrySetAttr)
+igGeometrySetAttr	private: static igMetaField *k_vc;
+igGeometrySetAttr	private: static igMetaField *k_renderListHandle;
+igGeometrySetAttr	private: static igMetaField *k_geometryAttrList;
+igGeometrySetAttr	private: static igMetaField *k_renderListState;
+igGeometrySetAttr	private: static igMetaField *k_drawState;
+igGeometrySetAttr	virtual void releaseDefaults();
+igGeometrySetAttr	virtual void apply(igVisualContext *vc);
+igGeometrySetAttr	virtual void synchronizeDefault(igVisualContext *vc);
+igGeometrySetAttr	virtual void reset();
+igGeometrySetAttr	virtual void setup(igVisualContext *vc);
+igGeometrySetAttr	virtual void setVisualContext(igVisualContext *vc);
+igGeometrySetAttr	protected: bool createRenderList(igVisualContext *vc);
+igImage	IG_ABSTRACT_OBJECT_DEFINE(igImage)
+igImage	protected: static igMetaField *k_px;
+igImage	protected: static igMetaField *k_py;
+igImage	protected: static igMetaField *k_pz;
+igImage	protected: static igMetaField *k_ps;
+igImage	protected: static igMetaField *k_order;
+igImage	protected: static igMetaField *k_bitsRed;
+igImage	protected: static igMetaField *k_bitsGrn;
+igImage	protected: static igMetaField *k_bitsBlu;
+igImage	protected: static igMetaField *k_bitsAlpha;
+igImage	protected: static igMetaField *k_pfmt;
+igImage	protected: static igMetaField *k_imageSize;
+igImage	protected: static igMetaField *k_pImage;
+igImage	protected: static igMetaField *k_pName;
+igImage	protected: static igMetaField *k_localImage;
+igImage	protected: static igMetaField *k_bitsInt;
+igImage	protected: static igMetaField *k_pClut;
+igImage	protected: static igMetaField *k_bitsIdx;
+igImage	protected: static igMetaField *k_bytesPerRow;
+igImage	protected: static igMetaField *k_compressed;
+igImage	protected: static igMetaField *k_bitsDepth;
+igImage	protected: static igMetaField *k_pNameString;
+igImage	inline void setBitsRed(unsigned int bitsRedParam) { _bitsRed = bitsRedParam; }
+igImage	inline unsigned int getBitsRed() const { return _bitsRed; }
+igImage	inline void setBitsGreen(unsigned int bitsGreenParam) { _bitsGrn = bitsGreenParam; }
+igImage	inline unsigned int getBitsGreen() const { return _bitsGrn; }
+igImage	inline void setBitsBlue(unsigned int bitsBlueParam) { _bitsBlu = bitsBlueParam; }
+igImage	inline unsigned int getBitsBlue() const { return _bitsBlu; }
+igImage	inline void setBitsAlpha(unsigned int bitsAlphaParam) { _bitsAlpha = bitsAlphaParam; }
+igImage	inline unsigned int getBitsAlpha() const { return _bitsAlpha; }
+igImage	inline void setImageSize(int imageSizeParam) { _imageSize = imageSizeParam; }
+igImage	inline void setLocalImage(bool localImageParam) { _localImage = localImageParam; }
+igImage	inline bool getLocalImage() const { return _localImage; }
+igImage	inline void setBitsLuminance(unsigned int bitsLuminanceParam) { _bitsInt = bitsLuminanceParam; }
+igImage	inline unsigned int getBitsLuminance() const { return _bitsInt; }
+igImage	inline void setBitsIndex(unsigned int bitsIndexParam) { _bitsIdx = bitsIndexParam; }
+igImage	inline unsigned int getBitsIndex() const { return _bitsIdx; }
+igImage	inline void setBytesPerRow(int bytesPerRowParam) { _bytesPerRow = bytesPerRowParam; }
+igImage	inline void setCompressed(bool compressedParam) { _compressed = compressedParam; }
+igImage	inline bool getCompressed() const { return _compressed; }
+igImage	inline void setBitsDepth(unsigned int bitsDepthParam) { _bitsDepth = bitsDepthParam; }
+igImage	inline unsigned int getBitsDepth() const { return _bitsDepth; }
+igImage	protected: void fixBytesPerRowAndReallocate();
+igImage	void setName(igStringRef name);
+igImage	inline const char *getName() const { return _pNameString.p; }
+igImage	inline const igStringRef &getNameRef() const { return _pNameString; }
+igImage	virtual void copy(const igImage *src, bool copyImage = true);
+igImage	virtual void copySubImage(const igImage *src, int offX, int offY, int width, int height);
+igImage	virtual void scale(int x, int y, igImage *src = 0);
+igImage	void setClut(igClut *clut);
+igImage	bool canConvert(IG_GFX_TEXTURE_FORMAT tfmt, igSmartPointer<igImageConvertRows> convert) const;
+igImage	unsigned char convert(IG_GFX_TEXTURE_FORMAT format, const igImage *src);
+igImage	virtual void reduce(igImage *img);
+igImage	inline int getSize() const { return _imageSize; }
+igImage	inline void *getData() { return _pImage; }
+igImage	inline const void *getData() const { return _pImage; }
+igImage	virtual void setData(void *data, int size);
+igImage	inline int getNumPixels() const { return (int)(_px * _py); }
+igImage	inline int getWidth() const { return (int)_px; }
+igImage	inline virtual void setWidth(int w) { _px = (unsigned short)w; }
+igImage	inline int getHeight() const { return (int)_py; }
+igImage	inline virtual void setHeight(int h) { _py = (unsigned short)h; }
+igImage	inline int getNumComponents() const { return (int)_pz; }
+igImage	virtual void setPixelFormat(IG_GFX_TEXTURE_FORMAT pixelFormat);
+igImage	inline IG_GFX_TEXTURE_FORMAT getPixelFormat() const { return (IG_GFX_TEXTURE_FORMAT)_pfmt; }
+igImage	inline int getBytesPerRow() const { return _bytesPerRow; }
+igImage	virtual void allocateImageMemory();
+igImage	inline int getTotalBitsPerPixel() const { return (int)(_bitsRed + _bitsGrn + _bitsBlu + _bitsAlpha + _bitsIdx + _bitsInt + _bitsDepth); }
+igImage	inline virtual void setComponentOrder(IG_GFX_IMAGE_ORDER order) { _order = order; }
+igImage	inline IG_GFX_IMAGE_ORDER getComponentOrder() const { return (IG_GFX_IMAGE_ORDER)_order; }
+igImage	virtual unsigned char load(const char *fileName);
+igImage	inline igClut *getClut() { return _pClut; }
+igImage	inline const igClut *getClut() const { return _pClut; }
+igImage	inline bool isCompressed() const { return _compressed; }
+igImage	inline int getImageSize() const { return _imageSize; }
+igImage	virtual bool swapComponentOrder();
+igImage	inline virtual void setNumComponents(int num) { _pz = (unsigned short)num; }
+igImage	virtual void setPixel(int x, int y, const void *src);
+igImage	virtual void load(void *data, IG_GFX_TEXTURE_FORMAT pixelFormat, IG_GFX_IMAGE_ORDER order, int width, int height);
+igImage	void load(void *data, IG_GFX_TEXTURE_FORMAT pixelFormat, int width, int height);
+igImage	virtual void reduceAux(igImage *img, int reduceType);
+igImage	virtual unsigned char platformLoad(const char *fileName);
+igImage	virtual unsigned char platformLoad(igFile *file);
+igImage	virtual unsigned char platformSave(igFile *file);
+igImage	virtual unsigned char platformConvert(IG_GFX_TEXTURE_FORMAT format, const igImage *img);
+igImage	inline virtual void correctBytesPerRow(int &bytesPerRow) {}
+igImage	virtual unsigned char oldLoad(igFile *file);
+igImage	virtual bool toggleComponentOrder() = 0;
+igImage	protected: unsigned char newLoad(igFile *file);
+igImage	virtual void releaseDefaults();
+igImage	virtual void userPostRead();
+igImage	virtual void userPostLoad();
+igImage	static void userRegister();
+igImage	private: static void arkRegisterUser();
+igImage	int unScaleAlpha();
+igImage	int scaleAlpha();
+igImage	static void unScaleAlpha(unsigned char *dp, int nSample, IG_GFX_TEXTURE_FORMAT fmt);
+igImage	static void scaleAlpha(unsigned char *dp, int nSample, IG_GFX_TEXTURE_FORMAT fmt);
+igImage	int estimateImageSize(IG_GFX_TEXTURE_FORMAT pfmt, unsigned int w, unsigned int h, int &imageSize, unsigned int &stride, int &pitch);
+igImage	static void estimateBitDepths(IG_GFX_TEXTURE_FORMAT pfmt, unsigned int &bI, unsigned int &bIdx, unsigned int &bR, unsigned int &bG, unsigned int &bB, unsigned int &bA, unsigned int &bD);
+igImage	static IG_GFX_TEXTURE_FORMAT guessPixelFormatFromNumComponents(unsigned int numComponents);
+igImage	static IG_GFX_TEXTURE_FORMAT estimateUnpackedFmt2(IG_GFX_TEXTURE_FORMAT packed);
+igImage	static bool isPacked(IG_GFX_TEXTURE_FORMAT fmt);
+igImage	static bool isUninterpreted(IG_GFX_TEXTURE_FORMAT fmt);
+igImage	static bool isIndexed(IG_GFX_TEXTURE_FORMAT fmt);
+igImage	static bool isPackedSubByte(IG_GFX_TEXTURE_FORMAT fmt);
+igImage	static unsigned char hasAlpha(IG_GFX_TEXTURE_FORMAT fmt);
+igImage	void setPlatformSpecificOrder();
+igImage	void autoSetUnfilledParameters();
+igMemoryImage	IG_ABSTRACT_OBJECT_DEFINE(igMemoryImage)
+igPsx2Image	IG_OBJECT_DEFINE(igPsx2Image)
+igPsx2Image	virtual void initDefaults();
+igPsx2Image	virtual void releaseDefaults();
+igPsx2Image	virtual void userApplyWriteProxy(int value);
+igPsx2Image	virtual void userMakeConcrete(igMetaObject *meta);
+igPsx2Image	virtual void copy(const igImage *src, bool copyImage = true);
+igPsx2Image	virtual void load(void *data, IG_GFX_TEXTURE_FORMAT pixelFormat, IG_GFX_IMAGE_ORDER order, int width, int height);
+igPsx2Image	virtual unsigned char platformLoad(const char *fileName);
+igPsx2Image	virtual unsigned char platformLoad(igFile *file);
+igPsx2Image	virtual unsigned char platformSave(igFile *file);
+igPsx2Image	virtual unsigned char platformConvert(IG_GFX_TEXTURE_FORMAT format, const igImage *img);
+igPsx2Image	virtual unsigned char oldLoad(igFile *file);
+igPsx2Image	virtual bool toggleComponentOrder();
+igFile	IG_ABSTRACT_OBJECT_DEFINE(igFile)
+igFile	enum OpenMode { kRead, kWrite, kAppend, kReadWrite, kReadBinary, kWriteBinary, kAppendBinary, kReadWriteBinary, kDefaultOpenMode };
+igFile	static igMetaEnum *getOpenModeMetaEnum();
+igFile	private: static igMetaEnum *OpenMode_Meta;
+igFile	public: enum ReadMode { kDefaultReadMode, kSequentialReadMode, kChunkReadMode };
+igFile	static igMetaEnum *getReadModeMetaEnum();
+igFile	private: static igMetaEnum *ReadMode_Meta;
+igFile	public: static igMetaField *k_fileName;
+igFile	public: static igMetaField *k_readMode;
+igFile	public: static igMetaField *k_openMode;
+igFile	public: static igMetaField *k_fileHandle;
+igFile	private: static igMetaField *k_optimalReadChunkSize;
+igFile	private: static igMetaField *k_optimalWriteChunkSize;
+igFile	private: static igMetaField *k_pageSize;
+igFile	protected: static igMetaField *k_completeFilename;
+igFile	public: void setFileName(const char *fname);
+igFile	void setOpenMode(OpenMode openMode);
+igFile	virtual igResult open(OpenMode e = kDefaultOpenMode) = 0;
+igFile	virtual void close() = 0;
+igFile	virtual igFile *fopen(const char *path, const char *mode) = 0;
+igFile	virtual void fclose() = 0;
+igFile	virtual int fread(void *ptr, int size, int nElts) = 0;
+igFile	virtual void freadAsynchronous(void *ptr, int sizeInBytes, igIOCallbackFunction *callback, int token);
+igFile	virtual int fwrite(const void *ptr, int size, int nElts) = 0;
+igFile	virtual int fscanf(const char *format, ...) = 0;
+igFile	virtual int fprintf(const char *format, ...) = 0;
+igFile	virtual int fflush() = 0;
+igFile	virtual int fgetc() = 0;
+igFile	virtual int ungetc(int c) = 0;
+igFile	virtual int fputc(int c) = 0;
+igFile	virtual char *fgets(char *s, int n) = 0;
+igFile	virtual int fputs(const char *s) = 0;
+igFile	virtual int fseek(int offset, int whence) = 0;
+igFile	virtual int ftell() = 0;
+igFile	virtual void readPastChar(char c);
+igFile	static bool isAbsolutePath(const char *path);
+igFile	static bool containsRelativePath(const char *path);
+igFile	static void setSearchPath(const char *path);
+igFile	static void setSearchPathFromRegistry();
+igFile	static const char *getSearchPath();
+igFile	static bool getNextPath(const char **path, char *buffer, unsigned int size);
+igFile	virtual const char *generateFilename(const char *name);
+igMediaFile	IG_OBJECT_DEFINE(igMediaFile)
+igMediaFile	private: static igMetaField *k_isBinary;
+igMediaFile	private: static igMetaField *k_isOpen;
+igMediaFile	private: static igMetaField *k_write;
+igMediaFile	private: static igMetaField *k_read;
+igMediaFile	private: static igMetaField *k_bufSize;
+igMediaFile	private: static igMetaField *k_fileSize;
+igMediaFile	private: static igMetaField *k_bufPos;
+igMediaFile	private: static igMetaField *k_fBuf;
+igMediaFile	private: static igMetaField *k_media;
+igMediaFile	public: virtual igResult open(OpenMode e = kDefaultOpenMode);
+igMediaFile	virtual void close();
+igMediaFile	virtual igFile *fopen(const char *path, const char *mode);
+igMediaFile	virtual void fclose();
+igMediaFile	virtual int fread(void *ptr, int size, int nElts);
+igMediaFile	virtual void freadAsynchronous(void *ptr, int sizeInBytes, igIOCallbackFunction *callback, int token);
+igMediaFile	virtual int fwrite(const void *ptr, int size, int nElts);
+igMediaFile	virtual int fscanf(const char *format, ...);
+igMediaFile	virtual int fprintf(const char *format, ...);
+igMediaFile	virtual int fflush();
+igMediaFile	virtual int fgetc();
+igMediaFile	virtual int ungetc(int c);
+igMediaFile	virtual int fputc(int c);
+igMediaFile	virtual char *fgets(char *s, int n);
+igMediaFile	virtual int fputs(const char *s);
+igMediaFile	virtual int fseek(int offset, int whence);
+igMediaFile	virtual int ftell();
+igMediaFile	private: void fit(int newSize);
+igMemoryFile	IG_OBJECT_DEFINE(igMemoryFile)
+igMemoryFile	private: static igMetaField *k_bIsOpen;
+igMemoryFile	private: static igMetaField *k_buffer;
+igMemoryFile	private: static igMetaField *k_iBufferSize;
+igMemoryFile	private: static igMetaField *k_iSeekPosition;
+igMemoryFile	public: static void userRegister();
+igMemoryFile	static void userUnregister();
+igMemoryFile	static void setMemoryFile(const char *filename, const void *pFileBuffer, int iBufferSize);
+igMemoryFile	static void getMemoryFile(const char *filename, const void *&pOutBuffer, int &iBufferSize);
+igMemoryFile	virtual igResult open(OpenMode e = kDefaultOpenMode);
+igMemoryFile	virtual void close();
+igMemoryFile	virtual igFile *fopen(const char *path, const char *mode);
+igMemoryFile	virtual void fclose();
+igMemoryFile	virtual int fread(void *ptr, int size, int nElts);
+igMemoryFile	virtual int fwrite(const void *ptr, int size, int nElts);
+igMemoryFile	virtual int fscanf(const char *format, ...);
+igMemoryFile	virtual int fprintf(const char *format, ...);
+igMemoryFile	virtual int fflush();
+igMemoryFile	virtual int fgetc();
+igMemoryFile	virtual int ungetc(int c);
+igMemoryFile	virtual int fputc(int c);
+igMemoryFile	virtual char *fgets(char *s, int n);
+igMemoryFile	virtual int fputs(const char *s);
+igMemoryFile	virtual int fseek(int offset, int whence);
+igMemoryFile	virtual int ftell();
+igMemoryFile	private: static ::igMemoryFileEntryList *_entryList;
+igMemoryFile	private: static void arkRegisterUser();
+igMemoryFile	private: static void _classDestructor();
+igFolder	IG_OBJECT_DEFINE(igFolder)
+igFolder	protected: static igMetaField *k_folderName;
+igFolder	public: virtual igStringObjRef getPathToFile(const char *fileName) const;
+igFolder	virtual igSmartPointer<igStringRefList> getFiles() const { return igSmartPointer<igStringRefList>((igStringRefList *)0, kRetainReference); }
+igFolder	virtual igSmartPointer<igStringRefList> getSubFolders() const { return igSmartPointer<igStringRefList>((igStringRefList *)0, kRetainReference); }
+igFolder	virtual igSmartPointer<igStringRefList> getFilesAndSubFolders() const { return igSmartPointer<igStringRefList>((igStringRefList *)0, kRetainReference); }
+igMediaList	IG_OBJECT_DEFINE(igMediaList)

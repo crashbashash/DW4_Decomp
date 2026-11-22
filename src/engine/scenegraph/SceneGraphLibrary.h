@@ -50,7 +50,6 @@
 #include "dw4/scenegraph/igObjectPool.h"
 #include "dw4/scenegraph/igTransformSource.h"
 #include "dw4/scenegraph/igTraversal.h"
-#include "dw4/gfx/igVertexArray2.h"
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
@@ -1271,7 +1270,8 @@ extern "C" int DAT_005625e8[4];
 extern "C" void *DAT_005625f0;
 extern "C" VC_1b2fa0 *DAT_00562638[4];
 
-extern "C" void FUN_001b3030(igProjectiveShadowShader *shader, igCommonTraversal *traversal);
+struct igBumpMapShader;
+extern "C" void FUN_001b3030(igBumpMapShader *self, igCommonTraversal *traversal);
 extern "C" void FUN_001dc610(igSorter *sorter);
 
 class igTraversalStackView {

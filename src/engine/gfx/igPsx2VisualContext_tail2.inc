@@ -355,7 +355,7 @@ int FUN_00169e40(VisualContextTextures *self, int index, TextureImage *image, vo
         image->setPixels(pixels, format, 100, width, height);
         Memory_FreeBuffer(pixels);
     } else {
-        igImage_SetPixels((igImage *)image, pixels, format, width, height);
+        ((Gap::Gfx::igImage *)image)->load(pixels, (IG_GFX_TEXTURE_FORMAT)format, width, height);
     }
     return 1;
 }
@@ -868,7 +868,7 @@ struct BufferRecordList {
     BufferRecord *data;
 };
 /* _videoMode: display timing the context opens with. */
-struct VideoMode {
+struct OpenVideoMode {
     unsigned char f0;
     unsigned char custom;
     short pad2;
@@ -895,7 +895,7 @@ public:
     int _iDisplayWidth;                /* +908 */
     int _iDisplayHeight;               /* +912 */
     char pad916[432];
-    VideoMode _videoMode;              /* +1348 */
+    OpenVideoMode _videoMode;          /* +1348 */
     char pad1372[100];
     int _maxStageNum;                  /* +1472 */
     BufferRecord *bufferRecord(int i) { return &_pBufList->data[i]; }

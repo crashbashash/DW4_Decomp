@@ -799,7 +799,7 @@ static inline int internedPool(void) {
 }
 
 void igInsightCore_UserRegister(void) {
-    igSmartPointer<NamedObject> r((NamedObject *)igFolder_Create((int)(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem))));
+    igSmartPointer<NamedObject> r((NamedObject *)Gap::Core::igFolder::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem)));
     NamedObject *s0 = r.get();
     int *s1 = (int *)StringPool_Intern((StringPool *)(internedPool()), "plugins");
     int *old = (int *)s0->name;

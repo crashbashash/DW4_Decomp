@@ -245,23 +245,20 @@ void igMemoryDirEntry::setMemoryPoolHandle(int memoryPoolHandle) {
 int igMemoryDirEntry::getMemoryPoolHandle() {
     return _memoryPoolHandle;
 }
+
+void igMemoryFile::userRegister()
+{
+    _entryList = (::igMemoryFileEntryList *)igMemoryFileEntryList_Create(
+        (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+}
+
+::igMemoryFileEntryList *igMemoryFile::_entryList;
+
+void igMemoryFile::userUnregister()
+{
+    ((::igObject *)_entryList)->release();
+    _entryList = 0;
 }
 }
-
-void igMemoryFile_CreateEntryList(void) {
-    *(int *)0x586F48 = igMemoryFileEntryList_Create(((int)Memory_GetAllocatorBySelector(*(int *)0x587038)));
-}
-
-int *g_memoryFileEntries;
-
-void igMemoryFile_ReleaseEntryList(void) {
-    int *o;
-
-    o = g_memoryFileEntries;
-    o[1] = o[1] - 1;
-    if ((o[1] & 0x7FFFFF) == 0) {
-        igObject_Destroy((igObject *)o);
-    }
-    g_memoryFileEntries = 0;
 }
 

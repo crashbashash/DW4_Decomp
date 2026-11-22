@@ -21,6 +21,9 @@ class igExternalDirEntry;
 /* An external entry's load callback (alchemy-kit_202309 igCore/igExternalDirEntry.h). */
 typedef bool igResolveFunction(igExternalDirEntry *externalEntry);
 typedef igResolveFunction *igResolveFunctionPtr;
+/* An asynchronous call's completion callback (alchemy-kit_202309 igCore/igFile.h): the id the call was given
+ * and its result. */
+typedef void igIOCallbackFunction(int requestID, int result);
 }
 }
 #endif

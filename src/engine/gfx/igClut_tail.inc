@@ -182,22 +182,18 @@ bool igClut::loadAct(const char *fileName)
         allocator = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
     }
     pool = allocator;
-    igSmartPointer<DW4VC_100_2> h((DW4VC_100_2 *)igFile_Create(pool), kRetainReference);
-    {
-        DW4VC_100_2 *x = h.p;
-        --x->_refCount;
-        if ((x->_refCount & 0x7fffff) == 0) igObject_Destroy(x);
-    }
+    igSmartPointer<igFile> h(igFile::_instantiateFromPool((igMemoryPoolView *)pool), kRetainReference);
+    h.p->release();
     if (_pData != 0) free(_pData);
     _pData = 0;
-    if (h.p->vX((int)fileName, (int)"rb") == 0) {
+    if (h.p->fopen(fileName, "rb") == 0) {
         return false;
     }
     _pData = (unsigned char *)mallocAligned(0x400, 0x80);
     p = (int *)_pData;
     i = 0;
     do {
-        h.p->v25((int)p, 1, 3);
+        h.p->fread(p, 1, 3);
         i++;
         *((unsigned char *)p + 3) = 0xff;
         p++;
@@ -207,7 +203,7 @@ bool igClut::loadAct(const char *fileName)
     _stride = 4;
     _numEntries = 0x100;
     _fmt = IG_GFX_TEXTURE_FORMAT_RGBA_8888_32;
-    h.p->v24();
+    h.p->fclose();
     return true;
 }
 }

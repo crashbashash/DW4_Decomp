@@ -266,7 +266,7 @@ void beCri_Activate(beCri *self) {
     igAdx_SetHostRootPath(0);
     g_adxMediaMode = 2;
     igAdx_Initialize(1);
-    igMetaObject *file = g_igFile_metaObject;
+    igMetaObject *file = Gap::Core::igFile::getClassMeta();
     g_savedIgFileAbstractProxy = file->_abstractProxy;
     file->_abstractProxy = (int)beCri_AdxFileProxy;
 }
@@ -278,7 +278,7 @@ int beCri_AdxFileProxy(void) {
 
 /* Detach: restores igFile's proxy and leaves the insight. */
 void beCri_Deactivate(beCri *self) {
-    g_igFile_metaObject->_abstractProxy = g_savedIgFileAbstractProxy;
+    Gap::Core::igFile::getClassMeta()->_abstractProxy = g_savedIgFileAbstractProxy;
     igInsightCore_RemoveFromScheduler((igInsightCore *)self->_insight, (igObject *)self);
 }
 

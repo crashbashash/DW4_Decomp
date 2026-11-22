@@ -5,11 +5,16 @@ static int g_igFile_readModeValues[] = {
     0, 1, 2,
 };
 
-int igFile_GetReadModeMetaEnum(void) {
-    if (g_igFile_readModeMetaEnum == 0) {
-        g_igFile_readModeMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)("ReadMode"), g_igFile_readModeNames, g_igFile_readModeValues, 3));
+namespace Gap {
+namespace Core {
+
+igMetaEnum *igFile::getReadModeMetaEnum() {
+    if (ReadMode_Meta == 0) {
+        ReadMode_Meta = igMetaEnum::createMetaEnum("ReadMode", g_igFile_readModeNames, g_igFile_readModeValues, 3);
     }
-    return g_igFile_readModeMetaEnum;
+    return ReadMode_Meta;
+}
+}
 }
 
 static const char *g_igFile_openModeNames[] = {
@@ -22,118 +27,106 @@ static int g_igFile_openModeValues[] = {
     8,
 };
 
-int igFile_GetOpenModeMetaEnum(void) {
-    if (g_igFile_openModeMetaEnum == 0) {
-        g_igFile_openModeMetaEnum = ((int)Gap::Core::igMetaEnum::createMetaEnum((char *)("OpenMode"), g_igFile_openModeNames, g_igFile_openModeValues, 9));
+namespace Gap {
+namespace Core {
+
+igMetaEnum *igFile::getOpenModeMetaEnum() {
+    if (OpenMode_Meta == 0) {
+        OpenMode_Meta = igMetaEnum::createMetaEnum("OpenMode", g_igFile_openModeNames, g_igFile_openModeValues, 9);
     }
-    return g_igFile_openModeMetaEnum;
+    return OpenMode_Meta;
 }
 
-void * igFile_Create(int allocator) {
-    igFile_EnsureRegistered();
-    return (void *)(igMetaObject_CreateInstance(g_igFile_metaObject, (igMemoryPoolView *)allocator));
-}
-
-igMetaObject *igFile_GetOrCreateMetaObject(void) {
-    if (g_igFile_metaObject == 0) {
-        g_igFile_metaObject = (igMetaObject *)igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igFile_metaObject;
-}
-
-igMetaObject *igFile_GetMetaObject(void)
+igFile *igFile::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igFile_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igFile_EnsureRegistered();
-    return g_igFile_metaObject;
+    arkRegister();
+    return (igFile *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-void igFile_EnsureRegistered(void)
+igMetaObject *igFile::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igFile_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-CallbackArray *igFile_Register(void) {
+igMetaObject *igFile::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
+
+void igFile::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igFile::arkRegisterInternal()
+{
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1,
-        &g_igFile_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igNamedObject::arkRegisterInternal,
-        (igMetaObjectGetFunction)igNamedObject_GetPublishedMetaObject,
-        igFile_GetMetaObjectFunction,
+        Gap::Core::igNamedObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igFile",
-        0x2C,
+        sizeof(igFile),
         0,
-        igFile_InitFields,
+        &arkRegisterInitialize,
         0,
         0
     );
 }
 
-static FieldFactory g_igFile_ctorTable[] = {
-    (FieldFactory)igStringMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igRawRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igStringMetaField_Create,
-};
-static const char *g_igFile_fieldTable[] = {
-    "_fileName",
-    "_readMode",
-    "_openMode",
-    "_fileHandle",
-    "_optimalReadChunkSize",
-    "_optimalWriteChunkSize",
-    "_pageSize",
-    "_completeFilename",
-};
-static igMetaField **g_igFile_fieldDescriptors[] = {
-    &g_igFile_fileNameMetaField,
-    &g_igFile_readModeMetaField,
-    &g_igFile_openModeMetaField,
-    &g_igFile_fileHandleMetaField,
-    &g_igFile_optimalReadChunkSizeMetaField,
-    &g_igFile_optimalWriteChunkSizeMetaField,
-    &g_igFile_pageSizeMetaField,
-    &g_igFile_completeFilenameMetaField,
-};
-static int g_igFile_fieldOffsets[] = {
-    12,
-    16,
-    20,
-    24,
-    28,
-    32,
-    36,
-    40,
-};
+void igFile::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igStringMetaField_Create, igEnumMetaField_Create, igEnumMetaField_Create, igRawRefMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igIntMetaField_Create, igStringMetaField_Create };
+    static const char *names[] = { "_fileName", "_readMode", "_openMode", "_fileHandle", "_optimalReadChunkSize", "_optimalWriteChunkSize", "_pageSize", "_completeFilename" };
+    static igMetaField **enumStorage[] = { &k_fileName, &k_readMode, &k_openMode, &k_fileHandle, &k_optimalReadChunkSize, &k_optimalWriteChunkSize, &k_pageSize, &k_completeFilename };
+    static int offsets[] = { 12, 16, 20, 24, 28, 32, 36, 40 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
 
-void igFile_InitFields(void) {
-    int base;
-    void *openMode;
-    void *readMode;
-    void *meta;
-
-    meta = (void *)((void *)g_igFile_metaObject);
-    base = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igFile_ctorTable, 8);
-    ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base)))->setDefault("DefaultFileName");
-    readMode = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((Gap::Core::igEnumMetaField *)readMode)->setDefault(0);
-    ((igEnumMetaField *)readMode)->_getMetaEnumFunction = (int)(&igFile_GetReadModeMetaEnum);
-    openMode = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 2)));
-    ((Gap::Core::igEnumMetaField *)openMode)->setDefault(0);
-    ((igEnumMetaField *)openMode)->_getMetaEnumFunction = (int)(&igFile_GetOpenModeMetaEnum);
-    ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 3))->_persistent = 0;
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 4)))->setDefault(0x100000);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 5)))->setDefault(0x100000);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)))->setDefault(0x1000);
-    ((igMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7))->_persistent = 0;
-    igMetaObject_NameFields((igMetaObject *)meta, g_igFile_fieldTable, g_igFile_fieldDescriptors, g_igFile_fieldOffsets, base);
-    *(int *)((char *)((void *)g_igFile_metaObject) + 60) = (int)(&igPsx2File_GetMetaObjectFunction);
+    igMetaObject_CreateFields(metaObject, instFuncs, 8);
+    {
+        igStringMetaField *metaField = (igStringMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->setDefault("DefaultFileName");
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())Gap::Core::igFile::getReadModeMetaEnum;
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->setDefault(0);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())Gap::Core::igFile::getOpenModeMetaEnum;
+    }
+    {
+        igRawRefMetaField *metaField = (igRawRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->_persistent = 0;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->setDefault(1048576);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 5);
+        metaField->setDefault(1048576);
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 6);
+        metaField->setDefault(4096);
+    }
+    {
+        igStringMetaField *metaField = (igStringMetaField *)igMetaObject_GetFieldAt(metaObject, start + 7);
+        metaField->_persistent = 0;
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+    *(void (**)())&_Meta->_abstractProxy = (void (*)())igPsx2File_GetMetaObjectFunction;
+}
+}
 }
 

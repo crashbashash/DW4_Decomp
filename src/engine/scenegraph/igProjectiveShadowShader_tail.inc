@@ -44,8 +44,8 @@ void igProjectiveShadowShader_ConfigureSharedAttrs(void) {
         image.p = (ShadowSetupObj *)Gap::Attrs::igTextureAttr::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
         ((ShadowSetupObj *)DAT_005628d8[0])->s31((int)image.p);
         ShadowRef texture;
-        texture.p = (ShadowSetupObj *)igImage_CreateInstance(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-        ((Gap::Attrs::igTextureAttr *)image.p)->setImage((igImage *)texture.p, 0);
+        texture.p = (ShadowSetupObj *)Gap::Gfx::igImage::_instantiateFromPool(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
+        ((Gap::Attrs::igTextureAttr *)image.p)->setImage((Gap::Gfx::igImage *)texture.p, 0);
         texture.p->s26(1);
         texture.p->s27(1);
         texture.p->s28(5);

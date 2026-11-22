@@ -380,7 +380,7 @@ void igAliasMemoryPool_Dump(igAliasMemoryPool *self, int a1, int a2, int a3, int
     igAliasMemoryPool_Lock(self);
     g = "The method dump() has no meaning for an igAliasMemoryPool\n";
     if (t0 != 0) {
-        igSmartPointer<igFileView> r((igFileView *)igFile_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool()))));
+        igSmartPointer<igFileView> r((igFileView *)Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)(void *)((Gap::Core::igObject *)self)->getMemoryPool()));
         if (r.p->Open((const char *)t0, (const char *)"w") == 0) {
             igAliasMemoryPool_Unlock(self);
             return;
@@ -558,7 +558,7 @@ void igObjectSystem_Acquire(int headerVersion) {
         igObjectSystem_Startup((ObjectSystemView *)system);
         igStringObj_EnsureRegistered();
         igStringObjList_EnsureRegistered();
-        igFile_EnsureRegistered();
+        Gap::Core::igFile::arkRegister();
         Gap::Core::igRegistry::arkRegister();
         igResource_EnsureRegistered();
         probe = (int *)(&DAT_00530d80[0]);

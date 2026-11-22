@@ -1,6 +1,6 @@
 /* The game's lua_dofile: Lua's own reads through stdio, this one through an igFile. */
 int lua_dofile(lua_State *L, const char *filename) {
-    igSmartPointer<igFileView> file((igFileView *)igFile_Create(0), AdoptReference());
+    igSmartPointer<igFileView> file((igFileView *)Gap::Core::igFile::_instantiateFromPool(0), AdoptReference());
     int size;
     char *buffer;
     int result;

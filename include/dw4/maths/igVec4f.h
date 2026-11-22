@@ -14,6 +14,13 @@ public:
         return igVec4f(vec[0] + vector.vec[0], vec[1] + vector.vec[1], vec[2] + vector.vec[2], vec[3] + vector.vec[3]);
     }
     igVec4f operator*(const float &t) const { return igVec4f(vec[0] * t, vec[1] * t, vec[2] * t, vec[3] * t); }
+    igVec4f &operator+=(const igVec4f &vector) {
+        vec[0] += vector.vec[0];
+        vec[1] += vector.vec[1];
+        vec[2] += vector.vec[2];
+        vec[3] += vector.vec[3];
+        return *this;
+    }
     igVec4f &operator=(const igVec4f &vector) {
         vec[0] = vector.vec[0];
         vec[1] = vector.vec[1];

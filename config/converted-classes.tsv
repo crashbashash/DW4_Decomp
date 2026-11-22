@@ -158,3 +158,16 @@ igPsx2VertexArray1_1	Gfx
 igRegistryValue	Core
 igRegistryValueList	Core	igTObjectList<igRegistryValue>
 igRegistry	Core
+igVertexArray2	Gfx
+igPsx2VertexArray2	Gfx
+igGeometryAttr	Attrs
+igGeometryAttrList	Attrs	igTObjectList<igGeometryAttr>
+igGeometrySetAttr	Attrs
+igImage	Gfx
+igMemoryImage	Gfx
+igPsx2Image	Gfx
+igFile	Core
+igMediaFile	Core
+igMemoryFile	Core
+igFolder	Core
+igMediaList	Core	igTObjectList<igMedia>

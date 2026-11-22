@@ -55,7 +55,7 @@ void igNormalsRenderer_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igNormalsRenderer_Register);
 }
 
-static igMetaObjectCallback g_igNormalsRenderer_callbackList[] = { igViewerParameters_EnsureRegistered, Gap::Attrs::igAttrList::arkRegister, Gap::Attrs::igModelViewMatrixAttr::arkRegister, Gap::Attrs::igColorAttr::arkRegister, igGeometryAttrList_EnsureRegistered, igGraphPath_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igNormalsRenderer_callbackList[] = { igViewerParameters_EnsureRegistered, Gap::Attrs::igAttrList::arkRegister, Gap::Attrs::igModelViewMatrixAttr::arkRegister, Gap::Attrs::igColorAttr::arkRegister, Gap::Attrs::igGeometryAttrList::arkRegister, igGraphPath_EnsureRegistered, 0 };
 
 CallbackArray *igNormalsRenderer_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -152,7 +152,7 @@ void igNormalsRenderer_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)(Gap::Attrs::igColorAttr::getClassTypeLazy());
     ((igRefMetaField *)temp_s2_5)->_construct = 1;
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)(igGeometryAttrList_GetOrCreateMetaObject());
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)(Gap::Attrs::igGeometryAttrList::getClassTypeLazy());
     ((igRefMetaField *)temp_s2_6)->_construct = 1;
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 7));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)(igGraphPath_GetOrCreateMetaObject());

@@ -35,7 +35,7 @@ void igVertexArray2Helper_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igVertexArray2Helper_Register);
 }
 
-static igMetaObjectCallback g_igVertexArray2Helper_callbackList[] = { igVertexArray2_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igVertexArray2Helper_callbackList[] = { Gap::Gfx::igVertexArray2::arkRegister, 0 };
 
 CallbackArray *igVertexArray2Helper_Register(void) {
     GfxLibrary_MarkRegistered();
@@ -56,10 +56,6 @@ CallbackArray *igVertexArray2Helper_Register(void) {
 
 void igVertexArray2Helper_GetMetaObjectFunction(void) {
     igVertexArray2Helper_GetMetaObject();
-}
-
-int FUN_0014a6e0(void) {
-    return (int)Gap::Core::igNamedObject::getClassMeta();
 }
 
 static FieldFactory g_igVertexArray2Helper_ctorTable[] = {
@@ -84,7 +80,7 @@ void igVertexArray2Helper_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igVertexArray2Helper_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igVertexArray2_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Gfx::igVertexArray2::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_igVertexArray2Helper_fieldTable, g_igVertexArray2Helper_fieldHandles, g_igVertexArray2Helper_fieldOffsets, fieldStart);
 }
 

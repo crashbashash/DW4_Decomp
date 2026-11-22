@@ -32,65 +32,51 @@ void igLongMetaField::setDefault(long long def)
 int igLongMetaField::computeRequiredAlignment() {
     return 8;
 }
-}
-}
 
-igMediaView *g_defaultMedia;
+igMedia *igMedia::gDefaultMedia;
 
-igMediaView *igMediaFile_FindDeviceForPath(const char *path) {
+igMedia *igMedia::findMedia(const char *filename) {
     const char *colon;
     int prefixLength;
     int i;
-    igMediaView *media;
+    igMedia *media;
 
-    colon = strchr(path, ':');
+    colon = strchr(filename, ':');
     if (colon != 0) {
-        prefixLength = colon - path;
-        for (i = g_fileDeviceList.p->_count - 1; i <= 0; i--) {
-            media = ((igMediaView **)g_fileDeviceList.p->_data)[i];
-            if (media->HandlesDevice(path, prefixLength) != 0) {
+        prefixLength = colon - filename;
+        for (i = gRegisteredMedia->getCount() - 1; i <= 0; i--) {
+            media = gRegisteredMedia->get(i);
+            if (media->handlesPrefix(filename, prefixLength)) {
                 return media;
             }
         }
     }
-    return g_defaultMedia;
+    return gDefaultMedia;
 }
 
-void igMedia_CreateMediaList(void) {
+void igMedia::userRegister() {
     int pool;
-    igObjectList *list;
+    igMediaList *list;
 
     pool = ((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleSystem));
-    list = g_fileDeviceList.p;
-    igObject::release(list);
-    g_fileDeviceList.p = (igObjectList *)(igMediaList_Create(pool));
+    list = gRegisteredMedia.p;
+    ::igObject::release((::igObject *)list);
+    gRegisteredMedia.p = igMediaList::_instantiateFromPool((igMemoryPoolView *)pool);
 }
-
-namespace Gap {
-namespace Core {
 
 void igMedia::registerMedia(igMedia *media)
 {
-    ((igObjectList *)g_fileDeviceList.p)->append(media);
+    gRegisteredMedia->append(media);
 }
 
 void igMedia::userUnregister() {
-    int *o;
-
-    (*(int *)&g_defaultMedia) = 0;
-    o = (int *)g_fileDeviceList.p;
-    if (o != 0) {
-        o[1] = o[1] - 1;
-        if ((o[1] & 0x7FFFFF) == 0) {
-            igObject_Destroy((::igObject *)o);
-        }
-    }
-    g_fileDeviceList.p = 0;
+    gDefaultMedia = 0;
+    gRegisteredMedia = 0;
 }
 
 void igMedia::setDefaultMedia(igMedia *media)
 {
-    g_defaultMedia = (igMediaView *)media;
+    gDefaultMedia = media;
 }
 }
 }

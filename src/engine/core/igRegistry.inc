@@ -41,7 +41,7 @@ void igRegistry::arkRegister()
 
 CallbackArray *igRegistry::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { Gap::Core::igRegistryValueList::arkRegister, igFile_EnsureRegistered, igStringObjList_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Core::igRegistryValueList::arkRegister, Gap::Core::igFile::arkRegister, igStringObjList_EnsureRegistered, 0 };
 
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -76,7 +76,7 @@ void igRegistry::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
-        metaField->_metaObject = (int)igFile_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Core::igFile::getClassTypeLazy();
         metaField->_construct = 1;
     }
     {

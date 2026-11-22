@@ -229,7 +229,7 @@ igAdxFile *igAdxFile_OpenFile(igAdxFile *self, const char *fileName, const char 
 {
     bool opened;
 
-    igFile_SetFileName((igFile *)self, fileName); /* igAdxFile extends igFile; reflected.h derives it from igObject */
+    ((Gap::Core::igFile *)self)->setFileName(fileName); /* igAdxFile extends igFile; reflected.h derives it from igObject */
     if (strcmp(mode, "rb") == 0) {
         opened = ((igAdxFileDispatchView *)self)->OpenWithMode(kReadBinary) == g_resultSuccess;
     } else if (strcmp(mode, "r") == 0) {

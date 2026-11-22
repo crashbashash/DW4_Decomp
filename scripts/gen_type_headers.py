@@ -111,7 +111,7 @@ KIT_VECTOR = {
 # constructor gives the class holding it one (the matrix attrs' retail vtable probes construct theirs);
 # igCapabilityManager has no reflected record here. igVertexArray's slots take the component lock (the kit's
 # igComponentEditInfo) by reference or pointer.
-FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager", "igVertexArrayLock")
+FORWARD_TYPES = ("igMatrix44f", "igCapabilityManager", "igVertexArrayLock", "igImageConvertRows")
 # Kit headers reflected.h reads under C++ for the types converted classes name: the kit's enums (igGfx/igGfx.h:
 # IG_GFX_ALPHA_FUNCTION, ...) the attributes' accessors take and return while their fields keep the reflected
 # `int` storage (the kit's igEnum), igMatrix44f for a typed matrix field, igVertexComponentFilter, the mask
@@ -295,6 +295,19 @@ def member_lines(decls, access):
     return out, access
 
 
+_ENUM_ROW = re.compile(r"^(?:public\s*:\s*)?(enum\s+\w+\s*\{[^}]*\};)$")
+
+
+def split_enum_rows(decls):
+    """([enum declaration], other rows): a class's `enum Name { ... };` rows come before its fields, so a field
+    can be of the enum's type (the kit's `OpenMode _openMode`); they are public and affect no layout."""
+    enums, rest = [], []
+    for decl in decls:
+        m = _ENUM_ROW.match(decl.strip())
+        (enums if m else rest).append(m.group(1) if m else decl)
+    return enums, rest
+
+
 # A class-members.tsv key `::<class>` gives rows for a converted class's flat struct (its C view, which
 # unconverted code still reads): kit inlines it carries under C++ that forward to the `Gap::` class, so a
 # call site already reads in the kit's form (`p->release()`) before its class converts.
@@ -465,6 +478,8 @@ def converted_classes(converted, parent, layouts, members, bases=None):
                 out.append("class %s : public Gap::%s::%s {" % (cls, converted[base], base))
             out.append("public:")
             cursor = layouts[base][3]
+            enums, class_rows = split_enum_rows(members.get(cls, []))
+            out.extend("    " + decl for decl in enums)
         for off, fsize, line in placed:
             if off < cursor:
                 sys.exit("%s: field at +%d lies inside its parent (%d bytes)" % (cls, off, cursor))
@@ -475,7 +490,7 @@ def converted_classes(converted, parent, layouts, members, bases=None):
         if size > cursor:
             out.append("    char _pad%d[%d];" % (cursor, size - cursor))
         if cls != "igObject":
-            out.extend(member_lines(members.get(cls, []), "public")[0])
+            out.extend(member_lines(class_rows, "public")[0])
         out.append("};")
         out.append("}")
         out.append("}")

@@ -1,60 +1,50 @@
-igMetaObject *g_igPsx2VertexArray2_metaObject;
+namespace Gap {
+namespace Gfx {
 
-igMetaObject *igPsx2VertexArray2_GetMetaObject(void)
+igMetaObject *igPsx2VertexArray2::_Meta;
+
+igMetaObject *igPsx2VertexArray2::getClassTypeSafe()
 {
-    unsigned char ready;
-    if (g_igPsx2VertexArray2_metaObject != 0) {
-        ready = (g_igPsx2VertexArray2_metaObject->_validity & 4) != 0;
-        if (ready != 0) goto done;
-    }
-    igPsx2VertexArray2_EnsureRegistered();
-done:
-    return g_igPsx2VertexArray2_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igPsx2VertexArray2_GetVTable(void) {
-    union U_152250 u;
-    int temp_s0;
-
-    igObject_InitHeader((igObject *)u.b);
-    *(int *)&u.b[8] = 0;
-    *(int *)&u.b[12] = 0;
-    *(int *)&u.b[16] = 0;
-    *(int *)&u.b[20] = 0;
-    u.vt = (int)&g_igPsx2VertexArray2_vtable[0];
-    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igPsx2VertexArray2_vtable[0];
-    FUN_0014a910((Obj_14a910 *)u.b, 0);
-    return temp_s0;
-}
-
-void igPsx2VertexArray2_EnsureRegistered(void)
+void *igPsx2VertexArray2::retrieveVTablePointer()
 {
-    igMetaObject_RunStaticInit(igPsx2VertexArray2_Register);
+    igPsx2VertexArray2 temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
 }
 
-CallbackArray *igPsx2VertexArray2_Register(void) {
+void igPsx2VertexArray2::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igPsx2VertexArray2::arkRegisterInternal()
+{
     GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igPsx2VertexArray2_metaObject,
-        igVertexArray2_Register,
-        igVertexArray2_GetPublishedMetaObject,
-        thunk_igPsx2VertexArray2_GetMetaObject_0014acf0,
+        false,
+        &_Meta,
+        Gap::Gfx::igVertexArray2::arkRegisterInternal,
+        Gap::Gfx::igVertexArray2::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igPsx2VertexArray2",
-        0x18, /* instance size */
-        igPsx2VertexArray2_GetVTable,
-        igPsx2VertexArray2_InitFields_00152350,      /* Field adder. */
-        0,                                               /* extra callback-vector item (none) */
-        0                                                /* zero-terminated callback-vector item list (none) */
+        sizeof(igPsx2VertexArray2),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        0
     );
 }
 
-igMetaObject *igVertexArray2_GetPublishedMetaObject(void) {
-    return g_igVertexArray2_metaObject;
-}
+void igPsx2VertexArray2::arkRegisterInitialize()
+{
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
 
-void FUN_00152350(void) {
-    *(int *)((char *)(g_igPsx2VertexArray2_metaObject) + 64) = (int)(&igVertexArray2_GetMetaObjectFunction);
+    *(void (**)())&metaObject->_writeProxy = (void (*)())Gap::Gfx::igVertexArray2::getClassMetaSafe;
+}
+}
 }
 

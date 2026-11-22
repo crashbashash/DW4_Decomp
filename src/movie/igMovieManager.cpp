@@ -106,19 +106,6 @@ public:
     igTextureAttrDispatchView *_texture;                                     /* +12 */
 };
 
-class igImageDispatchView : public igObjectDispatchView {
-public:
-    virtual void d21(); virtual void d22(); virtual void d23(); virtual void d24(); virtual void d25();
-    virtual void setWidth(int width);                                        /* slot 26 */
-    virtual void setHeight(int height);                                      /* slot 27 */
-    virtual void setFormat(int format);                                      /* slot 28 */
-    virtual void allocateImage();                                            /* slot 29 */
-    virtual void setOrder(int order);                                        /* slot 30 */
-    char _pad8[40];
-    int _imageSize;                                                          /* +48 */
-    void *_pImage;                                                           /* +52 */
-};
-
 class igVertexArrayDispatchView : public igObjectDispatchView {
 public:
     virtual void d21();
@@ -771,19 +758,19 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             textures.release();
             textures.p = Gap::Attrs::igTextureList::_instantiateFromPool((igMemoryPoolView *)allocator);
         }
-        igSmartPointer<igImageDispatchView> image;
+        igSmartPointer<Gap::Gfx::igImage> image;
         igSmartPointer<igTextureAttrDispatchView> texture;
         for (int i = 0; i < binds->_count; i++) {
             {
                 int allocator = MovieAllocator(self);
                 image.release();
-                image.p = (igImageDispatchView *)igImage_CreateInstance((igMemoryPoolView *)allocator);
+                image.p = Gap::Gfx::igImage::_instantiateFromPool((igMemoryPoolView *)allocator);
             }
             image->setWidth(textureWidth);
             image->setHeight(textureHeight);
-            image->setFormat(movie->_imageFormat);
-            image->setOrder(102);
-            image->allocateImage();
+            image->setPixelFormat((IG_GFX_TEXTURE_FORMAT)movie->_imageFormat);
+            image->setComponentOrder(IG_GFX_IMAGE_ORDER_PSX2);
+            image->allocateImageMemory();
             memset(image->_pImage, 0, image->_imageSize);
             {
                 int allocator = MovieAllocator(self);
@@ -794,29 +781,29 @@ int igMovieManager_BuildScene(igMovieManager *self, igMovieInfo *movie) {
             texture->_videoBuffer = image->_pImage;
             texture->setMinFilter(movie->_minificationFilter);
             texture->setMagFilter(movie->_magnificationFilter);
-            ((Gap::Attrs::igTextureAttr *)texture.p)->setImage((igImage *)image.p, 0);
+            ((Gap::Attrs::igTextureAttr *)texture.p)->setImage(image.p, 0);
             ((igTextureBindAttrView **)binds->_data)[i]->setTexture((igObject *)texture.p);
             textures->append((Gap::Attrs::igTextureAttr *)texture.p);
         }
         (igSmartPointer<Gap::Attrs::igTextureList> &)movie->_runtimeTextures = textures;
         if (binds->_count == 1) {
-            image = (igImageDispatchView *)((Gap::Attrs::igTextureAttr *)(((igTextureBindAttrView **)binds->_data)[0]->_texture))->getImage(0);
+            image = ((Gap::Attrs::igTextureAttr *)(((igTextureBindAttrView **)binds->_data)[0]->_texture))->getImage(0);
         } else {
             {
                 int allocator = MovieAllocator(self);
                 image.release();
-                image.p = (igImageDispatchView *)igImage_CreateInstance((igMemoryPoolView *)allocator);
+                image.p = Gap::Gfx::igImage::_instantiateFromPool((igMemoryPoolView *)allocator);
             }
             image->setWidth(movie->_width);
             image->setHeight(movie->_height);
-            image->setFormat(movie->_imageFormat);
-            image->setOrder(102);
+            image->setPixelFormat((IG_GFX_TEXTURE_FORMAT)movie->_imageFormat);
+            image->setComponentOrder(IG_GFX_IMAGE_ORDER_PSX2);
             if (tileWidth != kMacroblockSize || tileHeight != movie->_height) {
-                image->allocateImage();
+                image->allocateImageMemory();
                 memset(image->_pImage, 0, image->_imageSize);
             }
         }
-        (igSmartPointer<igImageDispatchView> &)movie->_runtimeImage = image;
+        (igSmartPointer<Gap::Gfx::igImage> &)movie->_runtimeImage = image;
         return 1;
     }
     if (g_movieSceneNoSizeMuted == 0) {

@@ -1,52 +1,52 @@
-igMetaObject *g_igGeometryAttrList_metaObject;
+namespace Gap {
+namespace Attrs {
 
-igMetaObject *igGeometryAttrList_GetOrCreateMetaObject(void) {
-    if (g_igGeometryAttrList_metaObject == 0) {
-        g_igGeometryAttrList_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igGeometryAttrList_metaObject;
-}
+igMetaObject *igGeometryAttrList::_Meta;
 
-igMetaObject *igGeometryAttrList_GetMetaObject(void)
+igMetaObject *igGeometryAttrList::getClassTypeLazy()
 {
-    igMetaObject *g = g_igGeometryAttrList_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igGeometryAttrList_EnsureRegistered();
-    return g_igGeometryAttrList_metaObject;
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-int igGeometryAttrList_GetVTable(void) {
-    int obj[8];
-    igObject_InitHeader((igObject *)obj);
-    obj[0] = (int)&g_igGeometryAttrList_vtable[0];
-    return *(int *)((char *)obj + g_objectSystem->vtableProbeOffset);
-}
-
-void igGeometryAttrList_EnsureRegistered(void)
+igMetaObject *igGeometryAttrList::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igGeometryAttrList_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igGeometryAttrList_callbackList[] = { igGeometryAttr_EnsureRegistered, 0 };
+void *igGeometryAttrList::retrieveVTablePointer()
+{
+    igGeometryAttrList temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
 
-CallbackArray *igGeometryAttrList_Register(void) {
+void igGeometryAttrList::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igGeometryAttrList::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igGeometryAttr::arkRegister, 0 };
+
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igGeometryAttrList_metaObject,
+        false,
+        &_Meta,
         Gap::Core::igObjectList::arkRegisterInternal,
         Gap::Core::igObjectList::getClassMeta,
-        igGeometryAttrList_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igGeometryAttrList",
-        0x14, /* instance size */
-        igGeometryAttrList_GetVTable,
+        sizeof(igGeometryAttrList),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
         0,
-        0, /* extra callback item */
-        g_igGeometryAttrList_callbackList /* callback list */
+        0,
+        regFunctions
     );
 }
-
-void igGeometryAttrList_GetMetaObjectFunction(void) {
-    igGeometryAttrList_GetMetaObject();
+}
 }
 

@@ -28,8 +28,8 @@ char *igTextureAttr::generateKey(bool stripPath, igMemoryPoolView *mp)
     igSmartPointer<igImage> image(getImage(0), kRetainReference);
     const char *name = "NO_IMAGE";
     if (image != 0) {
-        if (image->_pNameString != 0) {
-            name = igTextureAttr_GetFileName((char *)image->_pNameString);
+        if (image->getName() != 0) {
+            name = igTextureAttr_GetFileName((char *)image->getName());
         }
     }
     sprintf(text, "%s %d %d %d %d %d %d %d %d", name, _bColor, getMagnificationFilter(), getMinificationFilter(), getWrapS(), getWrapT(), (long long)_mipmapMode, (long long)_source, (long long)_paging);
@@ -58,8 +58,8 @@ bool igTextureAttr::isKeyForAttr(char *key)
     fileName = "NO_IMAGE";
     imageName = "NO_IMAGE";
     if (getImage(0) != 0) {
-        if (getImage(0)->_pNameString != 0) {
-            fileName = igTextureAttr_GetFileName((char *)getImage(0)->_pNameString);
+        if (getImage(0)->getName() != 0) {
+            fileName = igTextureAttr_GetFileName((char *)getImage(0)->getName());
         }
         imageName = fileName;
     }
@@ -107,7 +107,7 @@ void igTextureAttr::apply(igVisualContext *vc)
                 } else {
                     levelImage = ((igImage **)((::igImageMipMapList *)(igImageMipMapList *)_imageMipMaps)->_data)[level - 1];
                 }
-                igPsx2VisualContext_SetTextureSourceLevel(vc, _texId, levelImage, level);
+                igPsx2VisualContext_SetTextureSourceLevel(vc, _texId, (::igImage *)levelImage, level);
             }
             break;
         }
@@ -149,7 +149,7 @@ void igTextureAttr::setImage(igImage *img, int level)
     /* the kit's _imageMipMaps->set(level - 1, img), written through the flat list: retail keeps level * 4 for both
      * the read of the old image and the store */
     ::igImageMipMapList *list = (::igImageMipMapList *)(igImageMipMapList *)_imageMipMaps;
-    ::igObject::ref(img);
+    ::igObject::ref((::igObject *)img);
     int offset = level * 4;
     ::igObject::release(*(::igObject **)((char *)list->_data + offset - 4));
     int count = list->_count;

@@ -79,13 +79,13 @@ bool igRegistry::load(const char *registryFile, const char *path) {
             path = ((char *)igObjectSystem_GetRootPath((int *)(((*(void * *)&g_objectSystem)))));
         }
         if (path != 0 && strlen(path) != 0) {
-            igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create((int)getMemoryPool()));
+            igSmartPointer<igFolderView> folder((igFolderView *)Gap::Core::igFolder::_instantiateFromPool((igMemoryPoolView *)getMemoryPool()));
             folder.p->setFolderName((char *)path);
             found = openPath(this, folder.p->GetFullPath(fileName.p));
         }
     }
     if (found == 0) {
-        igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create((int)getMemoryPool()));
+        igSmartPointer<igFolderView> folder((igFolderView *)Gap::Core::igFolder::_instantiateFromPool((igMemoryPoolView *)getMemoryPool()));
         folder.p->setFolderName(((char *)igObjectSystem_GetBasePath((int *)(((*(void * *)&g_objectSystem))))));
         found = openPath(this, folder.p->GetFullPath(fileName.p));
     }
@@ -681,7 +681,6 @@ void igRegistry::preProcessLine(igFile *file, char *lineBuffer, int lineNum, uns
 }
 }
 }
-
 
 int igReportNotice(const char *format, ...) {
     int named = __builtin_args_info(2);

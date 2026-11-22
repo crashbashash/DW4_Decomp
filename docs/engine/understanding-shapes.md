@@ -710,8 +710,21 @@ Units are named by their source file. An entry is a `- **Title.**` bullet under 
   - *Spelling:* `int padding = 0;` and `size += field->ioSize(object) + padding;`. Where the local is declared
     and which side of the sum it stands on make no difference. What the zero stood for in the original is not
     known; the name is a guess.
-  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2d5960). The graphics library has the same instruction after a
-    load (0x17f1bc).
+  - *Unit:* `src/engine/core/CoreLibrary.cpp` (0x2d5960). The `x + 0` survives there because its left operand is a
+    call: `DoTransformations11` (b52 0x5201b0) drops `x + 0` unless an operand has a side effect, is a float, or the
+    zero is not a `TYPEINT` constant (`IRO_IsIntConstant`, 0x4f9a20, checks the operand's type).
+- **`x == a || x == a + 1` keeps its `+ 0` when `x` is read through an inline getter returning an enum field.**
+  - *Symptom:* `lw v1,N(s1); addu v1,v1,zero; sltiu at,v1,2` (objdump `move v1,v1`): a range test of a field.
+  - *Cause:* pass 0's `IRO_CommonSubs` turns the twice-read field into a temporary, and pass 1's
+    `IRO_SimplifyConditionals` merges the two compares into `(unsigned)(t + -a) <= 1`, typing the constant as the
+    temporary's read. The front end retypes an enum operand of `==` to `int` in place, so a field or local read
+    makes an `int` temporary and `DoTransformations11` drops the `+ 0`. An inline getter's inlined body keeps the
+    field's enum type (the compare retyped the call node), so the temporary and the merged zero are `enum` and the
+    zero is not an int constant. A getter returning `(Enum)intField`, a direct enum field or local, an enum
+    parameter, `(int)` casts, a `switch` and `>= && <=` all lose it.
+  - *Spelling:* the kit's `IG_VERTEX_ACCESS_MODE getAccessMode() { return _accessMode; }` over the enum-typed
+    field, `s->getAccessMode() == IG_VERTEX_ACCESS_READ_WRITE || s->getAccessMode() == IG_VERTEX_ACCESS_READ`.
+  - *Unit:* `src/engine/gfx/GfxLibrary.cpp` (0x17f080, the `addu` at 0x17f1bc).
 - **An expression goes back into its use only when the variable has one use in its block and none in another.**
   Read from the compiler (`IRO_ExpressionPropagation`, 0x5263b0): for each assignment `v = expression` it counts
   the uses of `v` in the same flow node; a constant or a plain copy is always propagated, any other expression

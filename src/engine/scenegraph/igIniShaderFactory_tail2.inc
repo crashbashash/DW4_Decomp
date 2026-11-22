@@ -280,7 +280,7 @@ igSmartPointer<IniSectionText> FUN_001cdbb0(IniFactoryView *self, char *name) {
             IniFileHandle *opening;
             result.release();
             result.p = ((IniSectionText *)igStringObj_Create((int)allocator));
-            igSmartPointer<IniFileHandle> file((IniFileHandle *)igFile_Create((int)((Gap::Core::igObject *)self)->getMemoryPool()));
+            igSmartPointer<IniFileHandle> file((IniFileHandle *)Gap::Core::igFile::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
             text = path.p->text;
             opening = file.p;
             text = (text == 0) ? g_stringObjEmptyText : text;

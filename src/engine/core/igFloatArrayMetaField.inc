@@ -4,10 +4,11 @@ namespace Core {
 igMetaObject *igFloatArrayMetaField::_Meta;
 igFloatArrayMetaField *igFloatArrayMetaField::_MetaField;
 igMetaField *igFloatArrayMetaField::k_num;
+
+igMetaEnum *igFile::ReadMode_Meta;
+igMetaEnum *igFile::OpenMode_Meta;
 }
 }
-int g_igFile_readModeMetaEnum;
-int g_igFile_openModeMetaEnum;
 
 igMetaField *igFloatArrayMetaField_Create(igMemoryPoolView *pool) {
     Gap::Core::igFloatArrayMetaField::arkRegister();

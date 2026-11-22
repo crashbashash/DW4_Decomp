@@ -230,7 +230,6 @@
 #include "src/engine/core/igObjectList_tail.inc"
 #include "src/engine/core/igObjectRefArrayMetaField_tail.inc"
 #include "src/engine/core/igObjectRefMetaField_tail.inc"
-#include "src/engine/core/igFolder_tail2.inc"
 #include "src/engine/core/igPluginHelper_tail.inc"
 #include "src/engine/core/igRawRefArrayMetaField_tail.inc"
 #include "src/engine/core/igRawRefMetaField_tail.inc"
@@ -286,7 +285,12 @@
  * contexts, the two statuses and the process memory map. The statuses are constants: retail keeps them in
  * .rodata, success first. */
 extern "C" {
-igSmartPointer<igObjectList> g_fileDeviceList;
+namespace Gap {
+namespace Core {
+
+igSmartPointer<igMediaList> igMedia::gRegisteredMedia;
+}
+}
 igMemoryPoolHandle kIGMemoryPoolHandleBootstrap(0);
 igMemoryPoolHandle kIGMemoryPoolHandleDefault(1);
 igMemoryPoolHandle kIGMemoryPoolHandleCurrent(2);

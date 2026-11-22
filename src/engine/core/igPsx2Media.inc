@@ -5,8 +5,8 @@ void igPsx2Media_GetMetaObjectFunction(void) {
 namespace Gap {
 namespace Core {
 
-void igMedia::userRegister() {
-    igMedia_CreateMediaList();
+void igMedia::arkRegisterUser() {
+    userRegister();
 }
 
 void igMedia::_classDestructor() {

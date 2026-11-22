@@ -45,48 +45,28 @@ void ***igAdxFile_GetSearchPathHolder(void) {
     return &g_searchFilePath;
 }
 
-void igFile_SetFileName(igFile *self, const char *name) {
-    int *header;
-    int refCount;
-    int pool;
-    void *previous;
-    void *interned;
+namespace Gap {
+namespace Core {
 
-    if (g_stringPool == 0) {
-        pool = ((int)StringPool_Allocate(0x10));
-        if (pool != 0) {
-            pool = ((int)StringPool_Construct((StringPool *)pool));
-        }
-        g_stringPool = (StringPool *)pool;
-    }
-    interned = (void *)(((void *)StringPool_Intern((StringPool *)g_stringPool, name)));
-    previous = (void *)self->_fileName;
-    if (previous != 0) {
-        header = (int *)((char *)previous - 8);
-        refCount = *(int *)((char *)(previous) - 4) - 1;
-        *(int *)((char *)(previous) - 4) = refCount;
-        if (refCount == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*header), (StringTokenHeader *)header);
-        }
-    }
-    self->_fileName = (int)interned;
-}
-
-void igFile_SkipToChar(igFileView *self, long long character) {
-    signed char want = (signed char)character;
-    signed char c;
-    do {
-        c = (signed char)self->GetChar();
-    } while (want != c && c != -1);
-}
-
-void igAdxFile_SetOpenMode(int object, int openMode)
+void igFile::setFileName(const char *fname)
 {
-    igAdxFile *self = (igAdxFile *)object;
-    self->_openMode = openMode;
+    _fileName = fname;
 }
 
-bool FilePath_IsAbsolute(const char *path) {
+void igFile::readPastChar(char c)
+{
+    char ch;
+    do {
+        ch = (char)fgetc();
+    } while (c != ch && ch != -1);
+}
+
+void igFile::setOpenMode(OpenMode openMode)
+{
+    _openMode = openMode;
+}
+
+bool igFile::isAbsolutePath(const char *path) {
     char c;
 
     if (path == 0) {
@@ -99,7 +79,7 @@ bool FilePath_IsAbsolute(const char *path) {
     return ((int)strchr(path, ':')) != 0;
 }
 
-bool FilePath_HasDirectory(const char *path) {
+bool igFile::containsRelativePath(const char *path) {
     if (path == 0) {
         return 0;
     }
@@ -109,7 +89,7 @@ bool FilePath_HasDirectory(const char *path) {
     return 1;
 }
 
-void igAdxFile_SetBasePath(int path) {
+void igFile::setSearchPath(const char *path) {
     int *oldHeader;
     int *header;
     int oldRefCount;
@@ -160,34 +140,35 @@ void igAdxFile_SetBasePath(int path) {
     }
 }
 
-void igFile_ReadAsync(igFileView *self, int buffer, int size, int (*callback)(int, int), int context) {
-    callback(self->Read((void *)buffer, 1, size), context);
+void igFile::freadAsynchronous(void *ptr, int sizeInBytes, igIOCallbackFunction *callback, int token)
+{
+    callback(fread(ptr, 1, sizeInBytes), token);
 }
 
-void igAdxFile_LoadSearchFilePath(void) {
+void igFile::setSearchPathFromRegistry() {
     const char *searchPathKey = (const char *)g_searchFilePathDefault;
     int registry = (int)g_objectSystem->configRegistry;
     igStringObj *text;
-    int path;
+    const char *path;
     if (registry != 0) {
         text = (igStringObj *)igStringObj_Create((int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleString));
         ((Gap::Core::igRegistry *)registry)->getValue(2, (const char *)"searchFilePath", *(igStringObjRef *)&text, searchPathKey, 0);
-        path = text->_buffer;
+        path = (const char *)text->_buffer;
         if (path == 0) {
-            path = (int)g_stringObjEmptyText;
+            path = g_stringObjEmptyText;
         }
-        igAdxFile_SetBasePath(path);
-        igObject::release(text);
+        setSearchPath(path);
+        ::igObject::release(text);
     }
 }
 
-int igAdxFile_GetSearchPaths(void) {
-    return **((int **)igAdxFile_GetSearchPathHolder());
+const char *igFile::getSearchPath() {
+    return (const char *)**((int **)igAdxFile_GetSearchPathHolder());
 }
 
-int igAdxFile_GetNextSearchPath(char **cursor, char *out, int outSize) {
-    char *start;
-    char *comma;
+bool igFile::getNextPath(const char **cursor, char *out, unsigned int outSize) {
+    const char *start;
+    const char *comma;
     char last;
     unsigned int length;
 
@@ -199,14 +180,14 @@ int igAdxFile_GetNextSearchPath(char **cursor, char *out, int outSize) {
     comma = strchr(start, 0x2C);
     if (comma == 0) {
         length = ((unsigned int)strlen(start));
-        if ((unsigned int) (outSize - 2) <= length) {
+        if (outSize - 2 <= length) {
             return 0;
         }
         strcpy(out, start);
         *cursor = 0;
     } else {
         length = comma - start;
-        if ((unsigned int) (outSize - 2) <= length) {
+        if (outSize - 2 <= length) {
             return 0;
         }
         strncpy(out, start, length);
@@ -226,30 +207,11 @@ int igAdxFile_GetNextSearchPath(char **cursor, char *out, int outSize) {
     return 1;
 }
 
-int igFile_SetCompleteFilename(igFileView *self, int path) {
-    int s0;
-    int *a0;
-    int *hdr;
-    int v;
-    int obj;
-    if (g_stringPool == 0) {
-        obj = ((int)StringPool_Allocate(0x10));
-        if (obj != 0) {
-            obj = ((int)StringPool_Construct((StringPool *)obj));
-        }
-        g_stringPool = (StringPool *)obj;
-    }
-    s0 = (int)StringPool_Intern((StringPool *)g_stringPool, (const char *)path);
-    a0 = (int *)self->_completeFilename;
-    if (a0 != 0) {
-        hdr = a0 - 2;
-        v = a0[-1] - 1;
-        a0[-1] = v;
-        if (v == 0) {
-            StringChunk_ReleaseHeader((StringChunk *)(*hdr), (StringTokenHeader *)hdr);
-        }
-    }
-    self->_completeFilename = (char *)s0;
-    return path;
+const char *igFile::generateFilename(const char *name)
+{
+    _completeFilename = name;
+    return name;
+}
+}
 }
 

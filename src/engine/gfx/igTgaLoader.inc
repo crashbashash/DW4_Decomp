@@ -61,7 +61,7 @@ void igTgaLoader_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTgaLoader_Register);
 }
 
-static igMetaObjectCallback g_igTgaLoader_callbackList[] = { igFile_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igTgaLoader_callbackList[] = { Gap::Core::igFile::arkRegister, 0 };
 
 CallbackArray *igTgaLoader_Register(void) {
     GfxLibrary_MarkRegistered();
@@ -149,7 +149,7 @@ void igTgaLoader_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igTgaLoader_ctorTable, 0xA);
     fileField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)fileField)->_metaObject = (int)igFile_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)fileField)->_metaObject = (int)Gap::Core::igFile::getClassTypeLazy();
     paletteField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 1));
     ((igMemoryRefMetaField *)paletteField)->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
     tempMapField = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 2));

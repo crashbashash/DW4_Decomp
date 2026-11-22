@@ -510,7 +510,7 @@ int igViewerSceneInfoManager_HasGeometry(igDisplayListAttr *attr) {
     if (attr == 0) {
         return 0;
     }
-    if (((Gap::Core::igObject *)attr)->isOfType(g_igGeometryAttr_metaObject) != 0) {
+    if (((Gap::Core::igObject *)attr)->isOfType(Gap::Attrs::igGeometryAttr::getClassMeta()) != 0) {
         return 1;
     }
     if (((Gap::Core::igObject *)attr)->isOfType(g_igParticleAttr_metaObject) != 0) {

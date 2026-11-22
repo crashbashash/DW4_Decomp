@@ -94,7 +94,7 @@ void igTextElement_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igTextElement_Register);
 }
 
-static igMetaObjectCallback g_igTextElement_callbackList[] = { igFont_EnsureRegistered, igGeometryAttr_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igTextElement_callbackList[] = { igFont_EnsureRegistered, Gap::Attrs::igGeometryAttr::arkRegister, 0 };
 
 CallbackArray *igTextElement_Register(void) {
     GuiLibrary_MarkRegistered();
@@ -154,7 +154,7 @@ void igTextElement_InitFields(void) {
     temp_s1 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2));
     ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igFont_GetOrCreateMetaObject();
     temp_s1_2 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 1));
-    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)igGeometryAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1_2)->_metaObject = (int)Gap::Attrs::igGeometryAttr::getClassTypeLazy();
     ((igRefMetaField *)temp_s1_2)->_construct = 1;
     ((Gap::Core::igStringMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s0, temp_s2 + 2)))->setDefault("");
     igMetaObject_NameFields((igMetaObject *)temp_s0, g_igTextElement_fieldTable, g_igTextElement_fieldHandles, g_igTextElement_fieldOffsets, temp_s2);

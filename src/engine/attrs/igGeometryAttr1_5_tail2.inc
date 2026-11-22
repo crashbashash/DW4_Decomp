@@ -17,6 +17,6 @@ void Gap__Attrs__igGeometryAttr1_5__vfunc_41(igGeometryAttr1_5View *self)
 }
 
 igMetaObject *FUN_001428a0(void) {
-    return g_igGeometryAttr_metaObject;
+    return Gap::Attrs::igGeometryAttr::getClassMeta();
 }
 

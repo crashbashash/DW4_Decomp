@@ -53,7 +53,7 @@ void igVisualContext_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igVisualContext_Register);
 }
 
-static igMetaObjectCallback g_igVisualContext_callbackList[] = { Gap::Core::igTimer::arkRegister, igVertexArray2_EnsureRegistered, igCustomStateCollectionList_EnsureRegistered, igCustomStateFieldList_EnsureRegistered, igMemoryPool_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igVisualContext_callbackList[] = { Gap::Core::igTimer::arkRegister, Gap::Gfx::igVertexArray2::arkRegister, igCustomStateCollectionList_EnsureRegistered, igCustomStateFieldList_EnsureRegistered, igMemoryPool_EnsureRegistered, 0 };
 
 CallbackArray *igVisualContext_Register(void) {
     GfxLibrary_MarkRegistered();
@@ -250,7 +250,7 @@ void igVisualContext_InitFields(void) {
     ((Gap::Core::igBoolMetaField *)temp_v0_3)->setDefault(1);
     ((igBoolMetaField *)temp_v0_3)->_persistent = 0;
     temp_s2_3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x10));
-    ((igObjectRefArrayMetaField *)temp_s2_3)->_metaObject = (int)igVertexArray2_GetOrCreateMetaObject();
+    ((igObjectRefArrayMetaField *)temp_s2_3)->_metaObject = (int)Gap::Gfx::igVertexArray2::getClassTypeLazy();
     ((igObjectRefArrayMetaField *)temp_s2_3)->_num = 0x10;
     ((igObjectRefArrayMetaField *)temp_s2_3)->_persistent = 0;
     temp_s2_4 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x11));

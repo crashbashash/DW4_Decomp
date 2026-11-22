@@ -48,8 +48,8 @@ CallbackArray *igPsx2File_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igPsx2File_metaObject,
-        igFile_Register,
-        igFile_GetPublishedMetaObject,
+        Gap::Core::igFile::arkRegisterInternal,
+        Gap::Core::igFile::getClassMeta,
         igPsx2File_GetMetaObjectFunction,
         "igPsx2File",
         0x4C,
@@ -115,7 +115,7 @@ void igPsx2File_InitFields(void) {
     prefixField = ((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 7));
     ((igMetaField *)prefixField)->_resetMethod = 3;
     igMetaObject_NameFields((igMetaObject *)meta, g_igPsx2File_fieldTable, g_igPsx2File_fieldDescriptors, g_igPsx2File_fieldOffsets, base);
-    ((igMetaObject *)g_igPsx2File_metaObject)->_writeProxy = (int)(&igFile_GetMetaObjectFunction);
+    ((igMetaObject *)g_igPsx2File_metaObject)->_writeProxy = (int)(&Gap::Core::igFile::getClassMetaSafe);
 }
 
 void igPsx2File_StaticInitCallback(void) {

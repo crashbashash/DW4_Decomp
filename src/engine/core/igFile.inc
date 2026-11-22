@@ -1,12 +1,13 @@
-void igFile_GetMetaObjectFunction(void) {
-    igFile_GetMetaObject();
+namespace Gap {
+namespace Core {
+
+void igMemoryFile::arkRegisterUser() {
+    userRegister();
 }
 
-void igMemoryFile_StaticInitCallback(void) {
-    igMemoryFile_CreateEntryList();
+void igMemoryFile::_classDestructor() {
+    userUnregister();
 }
-
-void igMemoryFile_ExitCallback(void) {
-    igMemoryFile_ReleaseEntryList();
+}
 }
 

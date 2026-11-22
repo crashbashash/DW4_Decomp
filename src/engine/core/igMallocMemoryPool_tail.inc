@@ -715,7 +715,7 @@ void igMallocMemoryPool_Dump(void *self, int unused1, int unused2, int unused3, 
     igMallocMemoryPool_Lock(self);
     message = "The method dump() has no meaning for an igMallocMemoryPool\n";
     if (fileName != 0) {
-        igSmartPointer<igFileView> file((igFileView *)igFile_Create((int)(((void *)((Gap::Core::igObject *)self)->getMemoryPool()))));
+        igSmartPointer<igFileView> file((igFileView *)Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)(void *)((Gap::Core::igObject *)self)->getMemoryPool()));
         if (file.p->Open((const char *)fileName, (const char *)"w") == 0) {
             if (((igMallocMemoryPool *)self)->_messageLevel >= 2) {
                 igReport_Warning("igMallocMemoryPool::dump() Could not open file (%s) for output\n", fileName);
@@ -985,8 +985,6 @@ void *igMallocMemoryPool_ReallocateBlock(igMallocMemoryPoolView *self, char *p, 
     fresh->size = size;
     return (char *)fresh + (fresh->big == 0 ? 4 : 12);
 }
-
-
 
 void *igMallocMemoryPool_AllocateAlignedBlock(igMallocMemoryPoolView *self, unsigned alignment, unsigned size) {
     unsigned overhead;

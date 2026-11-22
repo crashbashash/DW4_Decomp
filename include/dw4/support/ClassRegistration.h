@@ -37,14 +37,12 @@ void igVec3fList_EnsureRegistered(void);
 
 /* Gfx */
 void igExternalImageEntry_EnsureRegistered(void);
-void igImage_EnsureRegistered(void);
 void igParticleFormat_EnsureRegistered(void);
 void igPrimLengthArray1_1_EnsureRegistered(void);
 void igTrackedElementMetaField_EnsureRegistered(void);
 
 /* Attrs */
 void igGeometryAttr1_5_EnsureRegistered(void);
-void igGeometrySetAttr_EnsureRegistered(void);
 void igParticleAttr_EnsureRegistered(void);
 
 /* SceneGraph */

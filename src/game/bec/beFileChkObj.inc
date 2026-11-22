@@ -34,7 +34,7 @@ void beFileChkObj_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beFileChkObj_Register);
 }
 
-static igMetaObjectCallback g_beFileChkObj_callbackList[] = { igFile_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beFileChkObj_callbackList[] = { Gap::Core::igFile::arkRegister, 0 };
 
 CallbackArray *beFileChkObj_Register(void) {
     BecLibrary_MarkRegistered();
@@ -80,7 +80,7 @@ void beFileChkObj_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beFileChkObj_ctorTable, 1);
     fd = (void *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)fd)->_metaObject = (int)igFile_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)fd)->_metaObject = (int)Gap::Core::igFile::getClassTypeLazy();
     ((igRefMetaField *)fd)->_construct = 1;
     igMetaObject_NameFields(meta, g_beFileChkObj_fieldTable, g_beFileChkObj_fieldHandles, g_beFileChkObj_fieldOffsets, base);
 }

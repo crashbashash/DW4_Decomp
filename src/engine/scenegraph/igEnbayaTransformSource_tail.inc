@@ -422,25 +422,25 @@ static inline igMemoryPoolView *temporaryPool(void) {
  * used as they are. */
 void FUN_001c31e0(igTextureAttr *texture) {
     igTextureCubeAttr *cube = (igTextureCubeAttr *)texture;
-    igSmartPointer<igImage> faces[6];
+    igSmartPointer<Gap::Gfx::igImage> faces[6];
     int i;
     int bytesPerPixel;
     int size;
-    igImage *first;
+    Gap::Gfx::igImage *first;
     int width;
     int height;
     unsigned char *pixels;
 
     for (i = 0; i < 6; i++) {
-        faces[i] = igTextureCubeAttr_GetCubeImage(cube, (CubeFaceID)i);
+        faces[i] = (Gap::Gfx::igImage *)igTextureCubeAttr_GetCubeImage(cube, (CubeFaceID)i);
         if (faces[i].p == 0) {
             return;
         }
     }
     if (faces[0].p->_pClut != 0) {
         for (i = 0; i < 6; i++) {
-            igSmartPointer<igImage> converted(igImage_CreateInstance(((Gap::Core::igObject *)texture)->getMemoryPool()));
-            if (!FUN_00157200(converted.p, IG_GFX_TEXTURE_FORMAT_RGBA_8888_32, faces[i].p)) {
+            igSmartPointer<Gap::Gfx::igImage> converted(Gap::Gfx::igImage::_instantiateFromPool(((Gap::Core::igObject *)texture)->getMemoryPool()));
+            if (!converted->convert(IG_GFX_TEXTURE_FORMAT_RGBA_8888_32, faces[i].p)) {
                 if (i > 0) {
                     return;
                 }
@@ -452,14 +452,14 @@ void FUN_001c31e0(igTextureAttr *texture) {
     first = faces[0].p;
     width = first->_px;
     height = first->_py;
-    bytesPerPixel = (int)(first->_bitsDepth + (first->_bitsInt + (first->_bitsIdx + (first->_bitsAlpha + (first->_bitsBlu + (first->_bitsRed + first->_bitsGrn)))))) / 8;
+    bytesPerPixel = first->getTotalBitsPerPixel() / 8;
     size = bytesPerPixel * (width * height);
     pixels = (unsigned char *)temporaryPool()->Allocate(size);
     memset(pixels, 0, size);
     FUN_001c3ab0(width, height, bytesPerPixel, faces[1].p, faces[0].p, faces[3].p, faces[2].p, faces[5].p, faces[4].p, pixels);
-    igSmartPointer<igImage> image(igImage_CreateInstance(((Gap::Core::igObject *)texture)->getMemoryPool()));
-    FUN_00156340(image.p, &igStringRef("SphereImage"));
-    igImage_SetPixels(image.p, pixels, faces[0].p->_pfmt, width, height);
+    igSmartPointer<Gap::Gfx::igImage> image(Gap::Gfx::igImage::_instantiateFromPool(((Gap::Core::igObject *)texture)->getMemoryPool()));
+    image->setName("SphereImage");
+    image->load(pixels, (IG_GFX_TEXTURE_FORMAT)faces[0].p->_pfmt, width, height);
     temporaryPool()->Free(pixels);
     ((Gap::Attrs::igTextureAttr *)texture)->setImage(image.p, 0);
     texture->_source = 0;

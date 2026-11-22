@@ -95,7 +95,7 @@ int FUN_001ceab0(HitTraversal *self, HitNode *node) {
                 }
                 for (a = 0; a < attrCount; a++) {
                     HitAttr *attr = attrs->data[a];
-                    if (((Gap::Core::igObject *)attr)->isOfType((igMetaObject *)(((void *)g_igGeometryAttr_metaObject))) != 0 || ((Gap::Core::igObject *)attr)->isOfType(((igMetaObject **)DAT_0055f158)[0]) != 0) {
+                    if (((Gap::Core::igObject *)attr)->isOfType((igMetaObject *)(((void *)Gap::Attrs::igGeometryAttr::getClassMeta()))) != 0 || ((Gap::Core::igObject *)attr)->isOfType(((igMetaObject **)DAT_0055f158)[0]) != 0) {
                         int *f = &pointReport.first;
                         int *g = &pointReport.second;
                         *f = -1;

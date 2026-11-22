@@ -76,7 +76,7 @@ void igFileImagePng_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igFileImagePng_Register);
 }
 
-static igMetaObjectCallback g_igFileImagePng_callbackList[] = { igFile_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igFileImagePng_callbackList[] = { Gap::Core::igFile::arkRegister, 0 };
 
 CallbackArray *igFileImagePng_Register(void) {
     GfxLibrary_MarkRegistered();
@@ -125,7 +125,7 @@ void igFileImagePng_InitFields(void) {
     fieldStart = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_igFileImagePng_ctorTable, 1);
     temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart));
-    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)igFile_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s1)->_metaObject = (int)Gap::Core::igFile::getClassTypeLazy();
     igMetaObject_NameFields(meta, g_igFileImagePng_fieldTable, g_igFileImagePng_fieldHandles, g_igFileImagePng_fieldOffsets, fieldStart);
 }
 

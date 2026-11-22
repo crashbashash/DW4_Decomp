@@ -18,7 +18,7 @@ CallbackArray *igFileImage_Register(void) {
     return igMetaObject_RegisterClass(
         1, /* abstract */
         &g_igFileImage_metaObject,
-        igImage_Register,
+        Gap::Gfx::igImage::arkRegisterInternal,
         igImage_GetPublishedMetaObject,
         igFileImage_GetMetaObjectFunction,
         "igFileImage",

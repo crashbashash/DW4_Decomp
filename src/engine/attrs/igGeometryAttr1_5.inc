@@ -125,8 +125,8 @@ CallbackArray *igGeometryAttr1_5_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igGeometryAttr1_5_metaObject,
-        igGeometryAttr_Register,
-        igGeometryAttr_GetPublishedMetaObject,
+        Gap::Attrs::igGeometryAttr::arkRegisterInternal,
+        Gap::Attrs::igGeometryAttr::getClassMeta,
         igGeometryAttr1_5_GetMetaObjectFunction,
         "igGeometryAttr1_5",
         0x34, /* instance size */
@@ -139,10 +139,6 @@ CallbackArray *igGeometryAttr1_5_Register(void) {
 
 void igGeometryAttr1_5_GetMetaObjectFunction(void) {
     igGeometryAttr1_5_GetMetaObject();
-}
-
-igMetaObject *FUN_00137770(void) {
-    return g_igGeometryAttr_metaObject;
 }
 
 static FieldFactory g_igGeometryAttr1_5_ctorTable[] = {

@@ -1,122 +1,130 @@
-void igPsx2Image_UserApplyWriteProxy(igPsx2Image *self) {
-    FUN_0015a380((S_15a380 *)self);
-    if (self->_order == 0x66) {
-        ((DW4VC_136_0 *)(((char *)(self) + 0)))->vX();
+namespace Gap {
+namespace Gfx {
+
+void igPsx2Image::userApplyWriteProxy(int value)
+{
+    unScaleAlpha();
+    if (_order == IG_GFX_IMAGE_ORDER_PSX2) {
+        swapComponentOrder();
     }
 }
 
-void igPsx2Image_UserMakeConcrete(void *arg0) {
-    C_16e320 *c = (C_16e320 *)arg0;
-    int temp_v1 = c->st;
-    if ((temp_v1 == 0x64) || (temp_v1 == 0)) {
-        c->st = 0x64;
-        c->vX();
+void igPsx2Image::userMakeConcrete(igMetaObject *meta)
+{
+    int order = _order;
+    if ((order == IG_GFX_IMAGE_ORDER_DEFAULT) || (order == 0)) {
+        _order = IG_GFX_IMAGE_ORDER_DEFAULT;
+        swapComponentOrder();
     }
-    FUN_0015a600((T_15a600 *)arg0);
+    scaleAlpha();
 }
 
-void igPsx2Image_InitDefaults(igObject *self) {
-    igObject_InitDefaults(self);
+void igPsx2Image::initDefaults()
+{
+    igObject::initDefaults();
 }
 
-void thunk_FUN_001592c0__0016e390(LongListStorageView *self) {
-    FUN_001592c0(self);
+void igPsx2Image::releaseDefaults()
+{
+    igImage::releaseDefaults();
 }
 
-void Gap__Gfx__igPsx2Image__vfunc_23(igImage *self, void **arg1, int deep) {
-    FUN_001563b0(self, (igImage *)arg1, deep);
-    ((DW4VC_88_0 *)(arg1))->vX();
+void igPsx2Image::copy(const igImage *src, bool copyImage)
+{
+    igImage::copy(src, copyImage);
+    src->getMeta();
 }
 
-unsigned char Gap__Gfx__igPsx2Image__vfunc_42(igPsx2Image *self, int format, igPsx2Image *source) {
-    unsigned char supported = 0;
+unsigned char igPsx2Image::platformConvert(IG_GFX_TEXTURE_FORMAT format, const igImage *source)
+{
+    bool supported = false;
     switch (source->_pfmt) {
-    case 0:
+    case IG_GFX_TEXTURE_FORMAT_L_8:
         switch (format) {
-        case 0x10000:
-            supported = 1;
+        case IG_GFX_TEXTURE_FORMAT_X_8:
+            supported = true;
             break;
-        case 1:
-        case 0:
-            supported = 1;
+        case IG_GFX_TEXTURE_FORMAT_A_8:
+        case IG_GFX_TEXTURE_FORMAT_L_8:
+            supported = true;
             break;
         }
         break;
-    case 1:
+    case IG_GFX_TEXTURE_FORMAT_A_8:
         switch (format) {
-        case 0x10000:
-            supported = 1;
+        case IG_GFX_TEXTURE_FORMAT_X_8:
+            supported = true;
             break;
-        case 0:
-        case 1:
-            supported = 1;
+        case IG_GFX_TEXTURE_FORMAT_L_8:
+        case IG_GFX_TEXTURE_FORMAT_A_8:
+            supported = true;
             break;
         }
         break;
-    case 3:
+    case IG_GFX_TEXTURE_FORMAT_LA_88_16:
         break;
-    case 2:
+    case IG_GFX_TEXTURE_FORMAT_LA_44_8:
         switch (format) {
-        case 0x10000:
-            supported = 1;
+        case IG_GFX_TEXTURE_FORMAT_X_8:
+            supported = true;
             break;
-        case 2:
+        case IG_GFX_TEXTURE_FORMAT_LA_44_8:
             break;
         }
         break;
     }
     if (supported) {
-        if (self != source || !self->_localImage) {
-            ((ImageCalls *)self)->copyFrom(source, 1);
+        if (this != source || !_localImage) {
+            copy(source, true);
         }
         switch (source->_pfmt) {
-        case 0:
+        case IG_GFX_TEXTURE_FORMAT_L_8:
             switch (format) {
-            case 0x10000:
-                ((ImageCalls *)self)->setFormat(0x10000);
-                self->_bitsInt = 0;
-                self->_bitsIdx = 8;
-                supported = 1;
+            case IG_GFX_TEXTURE_FORMAT_X_8:
+                setPixelFormat(IG_GFX_TEXTURE_FORMAT_X_8);
+                _bitsInt = 0;
+                _bitsIdx = 8;
+                supported = true;
                 break;
-            case 1:
-                ((ImageCalls *)self)->setFormat(1);
-                self->_bitsInt = 0;
-                self->_bitsAlpha = 8;
+            case IG_GFX_TEXTURE_FORMAT_A_8:
+                setPixelFormat(IG_GFX_TEXTURE_FORMAT_A_8);
+                _bitsInt = 0;
+                _bitsAlpha = 8;
                 break;
-            case 0:
+            case IG_GFX_TEXTURE_FORMAT_L_8:
                 break;
             }
             break;
-        case 1:
+        case IG_GFX_TEXTURE_FORMAT_A_8:
             switch (format) {
-            case 0x10000:
-                ((ImageCalls *)self)->setFormat(0x10000);
-                self->_bitsAlpha = 0;
-                self->_bitsIdx = 8;
-                supported = 1;
+            case IG_GFX_TEXTURE_FORMAT_X_8:
+                setPixelFormat(IG_GFX_TEXTURE_FORMAT_X_8);
+                _bitsAlpha = 0;
+                _bitsIdx = 8;
+                supported = true;
                 break;
-            case 0:
-                ((ImageCalls *)self)->setFormat(0);
-                self->_bitsAlpha = 0;
-                self->_bitsInt = 8;
+            case IG_GFX_TEXTURE_FORMAT_L_8:
+                setPixelFormat(IG_GFX_TEXTURE_FORMAT_L_8);
+                _bitsAlpha = 0;
+                _bitsInt = 8;
                 break;
-            case 1:
+            case IG_GFX_TEXTURE_FORMAT_A_8:
                 break;
             }
             break;
-        case 3:
+        case IG_GFX_TEXTURE_FORMAT_LA_88_16:
             break;
-        case 2:
+        case IG_GFX_TEXTURE_FORMAT_LA_44_8:
             switch (format) {
-            case 0x10000:
-                ((ImageCalls *)self)->setFormat(0x10000);
-                self->_bitsInt = 0;
-                self->_bitsAlpha = 0;
-                self->_bitsIdx = 8;
-                supported = 1;
-                self->_pz = 1;
+            case IG_GFX_TEXTURE_FORMAT_X_8:
+                setPixelFormat(IG_GFX_TEXTURE_FORMAT_X_8);
+                _bitsInt = 0;
+                _bitsAlpha = 0;
+                _bitsIdx = 8;
+                supported = true;
+                _pz = 1;
                 break;
-            case 2:
+            case IG_GFX_TEXTURE_FORMAT_LA_44_8:
                 break;
             }
             break;
@@ -125,144 +133,155 @@ unsigned char Gap__Gfx__igPsx2Image__vfunc_42(igPsx2Image *self, int format, igP
     return supported;
 }
 
-int Gap__Gfx__igPsx2Image__vfunc_39(G *arg0, int arg1)
+unsigned char igPsx2Image::platformLoad(const char *fileName)
 {
-  int var_s0 = 0;
-  int s;
-  s = FUN_0015ad50((char *)arg1);
-  if (s != 0) {
-    if (strcmp((char *)s, ".tga") != 0) {
-      if (strcmp((char *)s, ".TGA") == 0) goto block_4;
-      goto block_22;
+    unsigned char var_s0 = 0;
+    int s;
+    s = FUN_0015ad50((char *)fileName);
+    if (s != 0) {
+        if (strcmp((char *)s, ".tga") != 0) {
+            if (strcmp((char *)s, ".TGA") == 0) goto block_4;
+            goto block_22;
+        }
+    block_4:
+        {
+            igSmartPointer<O0> name((O0 *)igStringObj_Create((int)getMemoryPool()));
+            igStringObj_Set((igStringObj *)((int)name.p), (char *)fileName);
+            LoaderRef loader((O1 *)igTgaLoader_Create((int)getMemoryPool()));
+            var_s0 = loader.p->v21(name.p, this) & 0xFF;
+            setName(fileName);
+        }
+        return var_s0;
     }
-block_4:
-    {
-      igSmartPointer<O0> name((O0 *)igStringObj_Create((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
-      igStringObj_Set((igStringObj *)((int)name.p), (char *)arg1);
-      LoaderRef loader((O1 *)igTgaLoader_Create((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
-      var_s0 = loader.p->v21(name.p, arg0) & 0xFF;
-      FUN_00156340((igImage *)arg0, &igStringRef((const char *)arg1));
+    block_22:
+    if (s != 0) {
+        if (strcmp((char *)s, ".png") != 0) {
+            if (strcmp((char *)s, ".PNG") == 0) goto block_26;
+        } else {
+    block_26:
+            ReaderRef reader((O2 *)igFileImagePng_Create((int)getMemoryPool()));
+            var_s0 = reader.p->v31((int)fileName) & 0xFF;
+            if (var_s0 != 0) {
+                copy((igImage *)reader.p, true);
+            }
+        }
     }
     return var_s0;
-  }
-block_22:
-  if (s != 0) {
-    if (strcmp((char *)s, ".png") != 0) {
-      if (strcmp((char *)s, ".PNG") == 0) goto block_26;
-    } else {
-block_26:
-      ReaderRef reader((O2 *)igFileImagePng_Create((int)((Gap::Core::igObject *)arg0)->getMemoryPool()));
-      var_s0 = reader.p->v31(arg1) & 0xFF;
-      if (var_s0 != 0) {
-        arg0->v21(reader.p, 1);
-      }
-    }
-  }
-  return var_s0;
 }
 
-int Gap__Gfx__igPsx2Image__vfunc_40(Img_16e8f0 *p, Strm *s) {
+unsigned char igPsx2Image::platformLoad(igFile *file)
+{
     unsigned int b;
     unsigned int a;
-    s->Read(&p->f48, 4, 1);
-    s->Read(&p->f8, 4, 1);
-    s->Read(&p->f12, 4, 1);
-    s->Read(&p->f16, 4, 1);
-    s->Read(&p->f20, 4, 1);
+    Strm *s = (Strm *)file;
+    s->Read(&_imageSize, 4, 1);
+    s->Read(&_px, 4, 1);
+    s->Read(&_py, 4, 1);
+    s->Read(&_pz, 4, 1);
+    s->Read(&_ps, 4, 1);
     s->Read(&a, 4, 1);
-    p->f28 = (a >> 24) & 0xFF;
-    p->f32 = (a >> 16) & 0xFF;
-    p->f36 = (a >> 8) & 0xFF;
-    p->f40 = (unsigned char)a;
-    p->f72 = 0;
-    p->f64 = 0;
-    p->f84 = 0;
+    _bitsRed = (a >> 24) & 0xFF;
+    _bitsGrn = (a >> 16) & 0xFF;
+    _bitsBlu = (a >> 8) & 0xFF;
+    _bitsAlpha = (unsigned char)a;
+    _bitsIdx = 0;
+    _bitsInt = 0;
+    _bitsDepth = 0;
     s->Read(&b, 4, 1);
     s->Read(&b, 4, 1);
-    p->f52 = (int)((Gap::Core::igObject *)p)->mallocAligned(p->f48, 0x80);
-    p->f60 = 1;
-    s->Read((void *)p->f52, 1, p->f48);
-    s->d24();
-    p->f44 = FUN_00159f00(p->f16);
-    p->f24 = 0x66;
-    FUN_0015a600((T_15a600 *)p);
-    return 1;
+    _pImage = (unsigned char *)mallocAligned(_imageSize, 0x80);
+    _localImage = true;
+    s->Read(_pImage, 1, _imageSize);
+    ((VStream *)s)->v24();
+    _pfmt = guessPixelFormatFromNumComponents(_pz);
+    _order = IG_GFX_IMAGE_ORDER_PSX2;
+    scaleAlpha();
+    return true;
 }
 
-int Gap__Gfx__igPsx2Image__vfunc_41(igPsx2Image *image, Stream *stream) {
-    igSmartPointer<ConvertedImage> converted((ConvertedImage *)igImage_CreateInstance(((Gap::Core::igObject *)image)->getMemoryPool()));
+unsigned char igPsx2Image::platformSave(igFile *file)
+{
+    igSmartPointer<igImage> converted(igImage::_instantiateFromPool(getMemoryPool()));
     int word;
     int masks;
-    converted->convert(image, 1);
-    FUN_0015a380((S_15a380 *)converted.p);
+    Stream *stream = (Stream *)file;
+    converted->copy(this, true);
+    converted->unScaleAlpha();
     word = 0x312A57F2;
     stream->write(&word, 4, 1);
-    stream->write(&image->_imageSize, 4, 1);
-    stream->write(&image->_px, 4, 1);
-    stream->write(&image->_py, 4, 1);
-    stream->write(&image->_pz, 4, 1);
-    stream->write(&image->_ps, 4, 1);
-    masks = (image->_bitsRed << 24) | (image->_bitsGrn << 16) | (image->_bitsBlu << 8) | image->_bitsAlpha;
+    stream->write(&_imageSize, 4, 1);
+    stream->write(&_px, 4, 1);
+    stream->write(&_py, 4, 1);
+    stream->write(&_pz, 4, 1);
+    stream->write(&_ps, 4, 1);
+    masks = (_bitsRed << 24) | (_bitsGrn << 16) | (_bitsBlu << 8) | _bitsAlpha;
     stream->write(&masks, 4, 1);
     word = 0;
     stream->write(&word, 4, 1);
     stream->write(&word, 4, 1);
-    stream->write(converted->pixels, 1, image->_imageSize);
+    stream->write(converted->_pImage, 1, _imageSize);
     stream->close();
     stream->release();
-    return 1;
+    return true;
 }
 
-int Gap__Gfx__igPsx2Image__vfunc_44(Img_16ece0 *arg0, Strm_16ece0 *arg1) {
-    int sp6C;
-    int sp68;
-    int sp64;
-    int sp60;
-    int sp5C;
-    int sp58;
-    int sp54;
-    int sp50;
-    int sp4C;
-    int sp48;
-    int temp_s2;
-    arg1->v25((char *)arg0 + 48, 4, 1);
-    arg1->v25((char *)arg0 + 16, 4, 1);
-    arg1->v25((char *)arg0 + 8, 4, 1);
-    arg1->v25((char *)arg0 + 12, 4, 1);
-    arg0->f20 = 1;
-    arg0->f52 = (int)((Gap::Core::igObject *)arg0)->mallocAligned(arg0->f48, 0x80);
-    arg0->f60 = 1;
-    arg1->v25((void *)arg0->f52, 1, arg0->f48);
-    arg1->v24();
-    arg0->f44 = FUN_00159f00(arg0->f16);
-    FUN_0015a600((T_15a600 *)arg0);
-    temp_s2 = arg0->f44;
-    FUN_00159320(arg0, temp_s2, arg0->f8, arg0->f12, &sp6C, &sp68, &sp64);
-    arg0->f76 = sp64;
-    FUN_00159a80(temp_s2, &sp60, &sp5C, &sp58, &sp54, &sp50, &sp4C, &sp48);
-    arg0->f64 = sp60;
-    arg0->f72 = sp5C;
-    arg0->f28 = sp58;
-    arg0->f32 = sp54;
-    arg0->f36 = sp50;
-    arg0->f40 = sp4C;
-    arg0->f84 = sp48;
-    arg0->f24 = 0x66;
-    *(int *)((char *)arg1 + 4) = *(int *)((char *)arg1 + 4) - 1;
-    if ((*(int *)((char *)arg1 + 4) & 0x7FFFFF) == 0) {
-        igObject_Destroy((igObject *)arg1);
-    }
-    return 1;
+unsigned char igPsx2Image::oldLoad(igFile *file)
+{
+    int imageSize;
+    unsigned int components;
+    int bytesPerRow;
+    unsigned int bitsInt;
+    unsigned int bitsIdx;
+    unsigned int bitsRed;
+    unsigned int bitsGrn;
+    unsigned int bitsBlu;
+    unsigned int bitsAlpha;
+    unsigned int bitsDepth;
+    IG_GFX_TEXTURE_FORMAT format;
+    Strm_16ece0 *stream = (Strm_16ece0 *)file;
+    stream->v25(&_imageSize, 4, 1);
+    stream->v25(&_pz, 4, 1);
+    stream->v25(&_px, 4, 1);
+    stream->v25(&_py, 4, 1);
+    _ps = 1;
+    _pImage = (unsigned char *)mallocAligned(_imageSize, 0x80);
+    _localImage = true;
+    stream->v25(_pImage, 1, _imageSize);
+    stream->v24();
+    _pfmt = guessPixelFormatFromNumComponents(_pz);
+    scaleAlpha();
+    format = (IG_GFX_TEXTURE_FORMAT)_pfmt;
+    estimateImageSize(format, _px, _py, imageSize, components, bytesPerRow);
+    _bytesPerRow = bytesPerRow;
+    estimateBitDepths(format, bitsInt, bitsIdx, bitsRed, bitsGrn, bitsBlu, bitsAlpha, bitsDepth);
+    _bitsInt = bitsInt;
+    _bitsIdx = bitsIdx;
+    _bitsRed = bitsRed;
+    _bitsGrn = bitsGrn;
+    _bitsBlu = bitsBlu;
+    _bitsAlpha = bitsAlpha;
+    _bitsDepth = bitsDepth;
+    _order = IG_GFX_IMAGE_ORDER_PSX2;
+    ((igObject *)file)->release();
+    return true;
+}
+}
 }
 
 static inline unsigned imageSize(const ImageBuffer *i) { return i->size; }
 
-void Gap__Gfx__igPsx2Image__vfunc_37(ImageBuffer *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
-    ((DW4VC_120_1 *)(((char *)(arg0) + 0)))->vX((int)(arg2));
-    ((DW4VC_112_1 *)(((char *)(arg0) + 0)))->vX((int)(arg4));
-    ((DW4VC_116_1 *)(((char *)(arg0) + 0)))->vX((int)(arg5));
-    ((DW4VC_128_1 *)(((char *)(arg0) + 0)))->vX((int)(arg3));
-    ((DW4VC_124_0 *)(((char *)(arg0) + 0)))->vX();
-    memcpy((void *)arg0->data, (void *)arg1, imageSize(arg0));
+namespace Gap {
+namespace Gfx {
+
+void igPsx2Image::load(void *data, IG_GFX_TEXTURE_FORMAT pixelFormat, IG_GFX_IMAGE_ORDER order, int width, int height)
+{
+    setPixelFormat(pixelFormat);
+    setWidth(width);
+    setHeight(height);
+    setComponentOrder(order);
+    allocateImageMemory();
+    memcpy(_pImage, data, _imageSize);
+}
+}
 }
 

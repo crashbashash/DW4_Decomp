@@ -1,196 +1,132 @@
-igMetaObject *g_igImage_metaObject;
-igMetaField *g_igImage_pxMetaField;
-igMetaField *g_igImage_pyMetaField;
-igMetaField *g_igImage_pzMetaField;
-igMetaField *g_igImage_psMetaField;
-igMetaField *g_igImage_orderMetaField;
-igMetaField *g_igImage_bitsRedMetaField;
-igMetaField *g_igImage_bitsGrnMetaField;
-igMetaField *g_igImage_bitsBluMetaField;
-igMetaField *g_igImage_bitsAlphaMetaField;
-igMetaField *g_igImage_pfmtMetaField;
-igMetaField *g_igImage_imageSizeMetaField;
-igMetaField *g_igImage_pImageMetaField;
-igMetaField *g_igImage_pNameMetaField;
-igMetaField *g_igImage_localImageMetaField;
-igMetaField *g_igImage_bitsIntMetaField;
-igMetaField *g_igImage_pClutMetaField;
-igMetaField *g_igImage_bitsIdxMetaField;
-igMetaField *g_igImage_bytesPerRowMetaField;
-igMetaField *g_igImage_compressedMetaField;
-igMetaField *g_igImage_bitsDepthMetaField;
-igMetaField *g_igImage_pNameStringMetaField;
+namespace Gap {
+namespace Gfx {
 
-igImage *igImage_CreateInstance(igMemoryPoolView *pool) {
-    igImage_EnsureRegistered();
-    return (igImage *)igMetaObject_CreateInstance(g_igImage_metaObject, pool);
-}
+igMetaObject *igImage::_Meta;
+igMetaField *igImage::k_px;
+igMetaField *igImage::k_py;
+igMetaField *igImage::k_pz;
+igMetaField *igImage::k_ps;
+igMetaField *igImage::k_order;
+igMetaField *igImage::k_bitsRed;
+igMetaField *igImage::k_bitsGrn;
+igMetaField *igImage::k_bitsBlu;
+igMetaField *igImage::k_bitsAlpha;
+igMetaField *igImage::k_pfmt;
+igMetaField *igImage::k_imageSize;
+igMetaField *igImage::k_pImage;
+igMetaField *igImage::k_pName;
+igMetaField *igImage::k_localImage;
+igMetaField *igImage::k_bitsInt;
+igMetaField *igImage::k_pClut;
+igMetaField *igImage::k_bitsIdx;
+igMetaField *igImage::k_bytesPerRow;
+igMetaField *igImage::k_compressed;
+igMetaField *igImage::k_bitsDepth;
+igMetaField *igImage::k_pNameString;
 
-igMetaObject *igImage_GetOrCreateMetaObject(void) {
-    if (g_igImage_metaObject == 0) {
-        g_igImage_metaObject = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
-    }
-    return g_igImage_metaObject;
-}
-
-igMetaObject *igImage_GetMetaObject(void)
+igImage *igImage::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igImage_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igImage_EnsureRegistered();
-    return g_igImage_metaObject;
+    arkRegister();
+    return (igImage *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-void igImage_EnsureRegistered(void)
+igMetaObject *igImage::getClassTypeLazy()
 {
-    igMetaObject_RunStaticInit(igImage_Register);
+    if (_Meta == 0)
+        _Meta = igMetaObject_Create(Memory_GetAllocatorBySelector(kIGMemoryPoolHandleMetaData));
+    return _Meta;
 }
 
-static igMetaObjectCallback g_igImage_callbackList[] = { Gap::Gfx::igClut::arkRegister, 0 };
+igMetaObject *igImage::getClassTypeSafe()
+{
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
+}
 
-CallbackArray *igImage_Register(void) {
+void igImage::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igImage::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { Gap::Gfx::igClut::arkRegister, 0 };
+
     GfxLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        1, /* abstract */
-        &g_igImage_metaObject,
+        true,
+        &_Meta,
         Gap::Core::igObject::arkRegisterInternal,
-        igObject_GetMetaObject_ParentAccessor,
-        igImage_GetMetaObjectFunction,
+        Gap::Core::igObject::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igImage",
-        0x5C, /* instance size */
+        sizeof(igImage),
         0,
-        &igImage_InitFields,
-        thunk_FUN_00156300, /* extra callback item */
-        g_igImage_callbackList /* callback list */
+        &arkRegisterInitialize,
+        (igMetaObjectCallback)Gap::Gfx::igImage::arkRegisterUser,
+        regFunctions
     );
 }
-
-void igImage_GetMetaObjectFunction(void) {
-    igImage_GetMetaObject();
 }
-
-static FieldFactory g_igImage_ctorTable[] = {
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igMemoryRefMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igUnsignedIntMetaField_Create,
-    (FieldFactory)igStringMetaField_Create,
-};
-static const char *g_igImage_fieldTable[] = {
-    "_px",
-    "_py",
-    "_pz",
-    "_ps",
-    "_order",
-    "_bitsRed",
-    "_bitsGrn",
-    "_bitsBlu",
-    "_bitsAlpha",
-    "_pfmt",
-    "_imageSize",
-    "_pImage",
-    "_pName",
-    "_localImage",
-    "_bitsInt",
-    "_pClut",
-    "_bitsIdx",
-    "_bytesPerRow",
-    "_compressed",
-    "_bitsDepth",
-    "_pNameString",
-};
-static igMetaField **g_igImage_fieldHandles[] = {
-    &g_igImage_pxMetaField,
-    &g_igImage_pyMetaField,
-    &g_igImage_pzMetaField,
-    &g_igImage_psMetaField,
-    &g_igImage_orderMetaField,
-    &g_igImage_bitsRedMetaField,
-    &g_igImage_bitsGrnMetaField,
-    &g_igImage_bitsBluMetaField,
-    &g_igImage_bitsAlphaMetaField,
-    &g_igImage_pfmtMetaField,
-    &g_igImage_imageSizeMetaField,
-    &g_igImage_pImageMetaField,
-    &g_igImage_pNameMetaField,
-    &g_igImage_localImageMetaField,
-    &g_igImage_bitsIntMetaField,
-    &g_igImage_pClutMetaField,
-    &g_igImage_bitsIdxMetaField,
-    &g_igImage_bytesPerRowMetaField,
-    &g_igImage_compressedMetaField,
-    &g_igImage_bitsDepthMetaField,
-    &g_igImage_pNameStringMetaField,
-};
-static int g_igImage_fieldOffsets[] = {
-    8,
-    12,
-    16,
-    20,
-    24,
-    28,
-    32,
-    36,
-    40,
-    44,
-    48,
-    52,
-    56,
-    60,
-    64,
-    68,
-    72,
-    76,
-    80,
-    84,
-    88,
-};
+}
 
 static int g_igImage_pfmtDefault = 7;
 
-void igImage_InitFields(void) {
-    void *temp_s1;
-    int fieldStart;
-    void *temp_s1_2;
-    void *temp_s1_3;
-    void *temp_v0;
-    igMetaObject *meta;
+namespace Gap {
+namespace Gfx {
 
-    meta = g_igImage_metaObject;
-    fieldStart = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igImage_ctorTable, 0x15);
-    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 3)))->setDefault(1);
-    ((Gap::Core::igUnsignedIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 4)))->setDefault(0x64);
-    temp_v0 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 9));
-    ((Gap::Core::igEnumMetaField *)temp_v0)->setDefault(g_igImage_pfmtDefault);
-    *(int *)((char *)(temp_v0) + 52) = (int)(&IG_GFX_TEXTURE_FORMAT_GetMetaEnum);
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xA)))->setDefault(-2);
-    temp_s1 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xB));
-    *(int *)((char *)(temp_s1) + 60) = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
-    ((Gap::Core::igMemoryRefMetaField *)temp_s1)->setPool("Image");
-    temp_s1_2 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xC));
-    *(int *)((char *)(temp_s1_2) + 60) = (int)Gap::Core::igCharMetaField::getMetaField();
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xD)))->setDefault(1);
-    temp_s1_3 = (void *)(igMetaObject_GetFieldAt(meta, fieldStart + 0xF));
-    *(int *)((char *)(temp_s1_3) + 56) = (int)Gap::Gfx::igClut::getClassTypeLazy();
-    ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt(meta, fieldStart + 0x11)))->setDefault(-1);
-    igMetaObject_NameFields(meta, g_igImage_fieldTable, g_igImage_fieldHandles, g_igImage_fieldOffsets, fieldStart);
-    *(int *)((char *)(g_igImage_metaObject) + 60) = (int)igPsx2Image_GetMetaObjectFunction;
+void igImage::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create, igUnsignedIntMetaField_Create, igEnumMetaField_Create, igIntMetaField_Create, igMemoryRefMetaField_Create, igMemoryRefMetaField_Create, igBoolMetaField_Create, igUnsignedIntMetaField_Create, igObjectRefMetaField_Create, igUnsignedIntMetaField_Create, igIntMetaField_Create, igBoolMetaField_Create, igUnsignedIntMetaField_Create, igStringMetaField_Create };
+    static const char *names[] = { "_px", "_py", "_pz", "_ps", "_order", "_bitsRed", "_bitsGrn", "_bitsBlu", "_bitsAlpha", "_pfmt", "_imageSize", "_pImage", "_pName", "_localImage", "_bitsInt", "_pClut", "_bitsIdx", "_bytesPerRow", "_compressed", "_bitsDepth", "_pNameString" };
+    static igMetaField **enumStorage[] = { &k_px, &k_py, &k_pz, &k_ps, &k_order, &k_bitsRed, &k_bitsGrn, &k_bitsBlu, &k_bitsAlpha, &k_pfmt, &k_imageSize, &k_pImage, &k_pName, &k_localImage, &k_bitsInt, &k_pClut, &k_bitsIdx, &k_bytesPerRow, &k_compressed, &k_bitsDepth, &k_pNameString };
+    static int offsets[] = { 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76, 80, 84, 88 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 21);
+    {
+        igUnsignedIntMetaField *metaField = (igUnsignedIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->setDefault(1);
+    }
+    {
+        igUnsignedIntMetaField *metaField = (igUnsignedIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->setDefault(100);
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 9);
+        metaField->setDefault(7);
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())IG_GFX_TEXTURE_FORMAT_GetMetaEnum;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 10);
+        metaField->setDefault(-2);
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 11);
+        metaField->_memType = (int)Gap::Core::igUnsignedCharMetaField::getMetaField();
+        metaField->setPool("Image");
+    }
+    {
+        igMemoryRefMetaField *metaField = (igMemoryRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 12);
+        metaField->_memType = (int)Gap::Core::igCharMetaField::getMetaField();
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 13);
+        metaField->setDefault(1);
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 15);
+        metaField->_metaObject = (int)Gap::Gfx::igClut::getClassTypeLazy();
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 17);
+        metaField->setDefault(-1);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+    *(void (**)())&_Meta->_abstractProxy = (void (*)())Gap::Gfx::igPsx2Image::getClassMetaSafe;
+}
+}
 }
 

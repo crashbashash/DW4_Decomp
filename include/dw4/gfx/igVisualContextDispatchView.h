@@ -161,6 +161,8 @@ public:
     virtual float getFogFar() const;                                        /* slot 250 */
     virtual void d251();
     virtual void getVideoMode(VideoMode *mode);                             /* slot 252 */
+    virtual void d253(); virtual void d254(); virtual void d255(); virtual void d256(); virtual void d257(); virtual void d258();
+    virtual void setVertexArray(igVertexArray2 *va, unsigned int stream);   /* slot 259 */
 };
 
 #endif

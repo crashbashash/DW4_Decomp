@@ -55,7 +55,7 @@ void igBoundingBoxRenderer_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igBoundingBoxRenderer_Register);
 }
 
-static igMetaObjectCallback g_igBoundingBoxRenderer_callbackList[] = { igViewerParameters_EnsureRegistered, Gap::Attrs::igDisplayListAttr::arkRegister, Gap::Attrs::igAttrList::arkRegister, Gap::Attrs::igModelViewMatrixAttr::arkRegister, igGeometryAttr_EnsureRegistered, igGraphPath_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igBoundingBoxRenderer_callbackList[] = { igViewerParameters_EnsureRegistered, Gap::Attrs::igDisplayListAttr::arkRegister, Gap::Attrs::igAttrList::arkRegister, Gap::Attrs::igModelViewMatrixAttr::arkRegister, Gap::Attrs::igGeometryAttr::arkRegister, igGraphPath_EnsureRegistered, 0 };
 
 CallbackArray *igBoundingBoxRenderer_Register(void) {
     ViewerLibrary_MarkRegistered();
@@ -145,9 +145,9 @@ void igBoundingBoxRenderer_InitFields(void) {
     ((igObjectRefMetaField *)temp_s2_4)->_metaObject = (int)Gap::Attrs::igModelViewMatrixAttr::getClassTypeLazy();
     ((igRefMetaField *)temp_s2_4)->_construct = 1;
     temp_s2_5 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 4));
-    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)igGeometryAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_5)->_metaObject = (int)Gap::Attrs::igGeometryAttr::getClassTypeLazy();
     temp_s2_6 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 5));
-    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)igGeometryAttr_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)temp_s2_6)->_metaObject = (int)Gap::Attrs::igGeometryAttr::getClassTypeLazy();
     temp_s2_7 = (void *)(igMetaObject_GetFieldAt((igMetaObject *)temp_s1, temp_s0 + 6));
     ((igObjectRefMetaField *)temp_s2_7)->_metaObject = (int)(igGraphPath_GetOrCreateMetaObject());
     igMetaObject_NameFields((igMetaObject *)temp_s1, g_igBoundingBoxRenderer_fieldTable, g_igBoundingBoxRenderer_fieldHandles, g_igBoundingBoxRenderer_fieldOffsets, temp_s0);

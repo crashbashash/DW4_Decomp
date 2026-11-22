@@ -92,7 +92,7 @@ void igBoundingSphereMaker_InitFields(void) {
 }
 
 static inline igGeometryAttr *asGeometryAttr(igObject *o) {
-    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(g_igGeometryAttr_metaObject) != 0) return (igGeometryAttr *)o;
+    if (o != 0 && ((Gap::Core::igObject *)o)->isOfType(Gap::Attrs::igGeometryAttr::getClassMeta()) != 0) return (igGeometryAttr *)o;
     return 0;
 }
 

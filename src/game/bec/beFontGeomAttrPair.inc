@@ -47,7 +47,7 @@ void beFontGeomAttrPair_EnsureRegistered(void)
     igMetaObject_RunStaticInit(beFontGeomAttrPair_Register);
 }
 
-static igMetaObjectCallback g_beFontGeomAttrPair_callbackList[] = { igGeometryAttrList_EnsureRegistered, 0 };
+static igMetaObjectCallback g_beFontGeomAttrPair_callbackList[] = { Gap::Attrs::igGeometryAttrList::arkRegister, 0 };
 
 CallbackArray *beFontGeomAttrPair_Register(void) {
     BecLibrary_MarkRegistered();
@@ -101,7 +101,7 @@ void beFontGeomAttrPair_InitFields(void) {
     base = igMetaObject_GetFieldCount(meta);
     igMetaObject_CreateFields(meta, g_beFontGeomAttrPair_ctorTable, 3);
     geomAttrs = (void *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)geomAttrs)->_metaObject = (int)igGeometryAttrList_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)geomAttrs)->_metaObject = (int)Gap::Attrs::igGeometryAttrList::getClassTypeLazy();
     ((igRefMetaField *)geomAttrs)->_construct = 1;
     igMetaObject_NameFields(meta, g_beFontGeomAttrPair_fieldTable, g_beFontGeomAttrPair_fieldHandles, g_beFontGeomAttrPair_fieldOffsets, base);
 }

@@ -239,7 +239,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Math::igVec4ucMetaField::arkRegister();
     Gap::Math::igMatrix44fMetaField::arkRegister();
     igTrackedElementMetaField_EnsureRegistered();
-    igImage_EnsureRegistered();
+    Gap::Gfx::igImage::arkRegister();
     Gap::Attrs::igViewportAttr::arkRegister();
     Gap::Attrs::igTextureAttr::arkRegister();
     Gap::Attrs::igImageMipMapList::arkRegister();
@@ -274,7 +274,7 @@ extern "C" void GameMain_RegisterEngineClasses(void) {
     Gap::Attrs::igTextureList::arkRegister();
     Gap::Attrs::igShadeModelAttr::arkRegister();
     Gap::Attrs::igMaterialAttr::arkRegister();
-    igGeometrySetAttr_EnsureRegistered();
+    Gap::Attrs::igGeometrySetAttr::arkRegister();
     igGeometryAttr1_5_EnsureRegistered();
     Gap::Attrs::igColorAttr::arkRegister();
     igNonRefCountedNodeList_EnsureRegistered();
@@ -563,7 +563,7 @@ static inline void setFolderName(igFolder *folder, const char *name) {
 
 Blk::Blk()
     : viewer(igInsightCore_CreateWindow(0)), reservedA(0, kRetainReference), reservedB(0, kRetainReference), repeatCounts(0, kRetainReference),
-      modelNames(0, kRetainReference), isFinished(false), fileNames(0, kRetainReference), folder(igFolder_Create(0), AdoptReference()),
+      modelNames(0, kRetainReference), isFinished(false), fileNames(0, kRetainReference), folder((igFolder *)Gap::Core::igFolder::_instantiateFromPool(0), AdoptReference()),
       loadingMessage(igViewerLoadingFileMessage_Create(0), AdoptReference()) {
     setFolderName(folder, "cdrom0:");
     GameMain_ListIgbFiles(this);

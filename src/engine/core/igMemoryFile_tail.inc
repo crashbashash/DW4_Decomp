@@ -1,198 +1,215 @@
-void igMemoryFile_AddMemoryFileEntry(int name, int buffer, int size) {
-    igMemoryFile_EnsureRegistered();
-    if (buffer != 0) {
-        igSmartPointer<igMemoryFileEntry> entry((igMemoryFileEntry *)igMemoryFileEntry_Create(((int)((Gap::Core::igObject *)(*(igObject **)&g_memoryFileEntries))->getMemoryPool())));
-        ((Gap::Core::igNamedObject *)entry.p)->setName((const char *)name);
-        entry->_size = size;
-        entry->_buffer = buffer;
-        ((Gap::Core::igObjectList *)(*(int *)&g_memoryFileEntries))->append((Gap::Core::igObject *)entry.p);
+namespace Gap {
+namespace Core {
+
+void igMemoryFile::setMemoryFile(const char *filename, const void *pFileBuffer, int iBufferSize)
+{
+    arkRegister();
+    if (pFileBuffer != 0) {
+        igSmartPointer< ::igMemoryFileEntry> entry(
+            (::igMemoryFileEntry *)igMemoryFileEntry_Create((int)((Gap::Core::igObject *)_entryList)->getMemoryPool()));
+        ((Gap::Core::igNamedObject *)entry.p)->setName(filename);
+        entry->_size = iBufferSize;
+        entry->_buffer = (int)pFileBuffer;
+        ((Gap::Core::igObjectList *)_entryList)->append((Gap::Core::igObject *)entry.p);
     }
 }
 
-void igMemoryFile_LookupMemoryBuffer(int name, int *buffer, int *size) {
-    int entries;
-    igMemoryFileEntry *entry;
+void igMemoryFile::getMemoryFile(const char *filename, const void *&pOutBuffer, int &iBufferSize)
+{
+    ::igMemoryFileEntry *entry;
 
-    *buffer = 0;
-    *size = 0;
-    entries = (*(int *)&g_memoryFileEntries);
-    if (entries != 0) {
-        entry = ((igMemoryFileEntry *)((Gap::Core::igObjectList *)entries)->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, (const char *)name));
+    pOutBuffer = 0;
+    iBufferSize = 0;
+    if (_entryList != 0) {
+        entry = (::igMemoryFileEntry *)((Gap::Core::igObjectList *)_entryList)
+                    ->search((Gap::Core::igStringMetaField *)Gap::Core::igNamedObject::k_name, filename);
         if (entry != 0) {
-            *buffer = entry->_buffer;
-            *size = entry->_size;
+            pOutBuffer = (const void *)entry->_buffer;
+            iBufferSize = entry->_size;
         }
     }
 }
 
-void igMemoryFile_OpenWithMode(int *result, igMemoryFileView *self, unsigned int mode) {
-    int buffer;
+igResult igMemoryFile::open(OpenMode mode)
+{
+    const void *buffer;
     int size;
 
-    if (self->_bIsOpen != 0) {
-        *result = g_resultSuccess.v;
-        return;
+    if (_bIsOpen != 0) {
+        return g_resultSuccess;
     }
-    if (mode == 8) {
-        mode = self->_openMode;
+    if (mode == kDefaultOpenMode) {
+        mode = _openMode;
     }
     switch (mode) {
-    case 1:
-    case 2:
-    case 3:
-    case 5:
-    case 6:
-        *result = g_resultFailure.v;
-        return;
+    case kWrite:
+    case kAppend:
+    case kReadWrite:
+    case kWriteBinary:
+    case kAppendBinary:
+        return g_resultFailure;
     default:
-        *result = g_resultFailure.v;
-        return;
-    case 0:
-    case 4:
-        igMemoryFile_LookupMemoryBuffer((int)self->_fileName, &buffer, &size);
+        return g_resultFailure;
+    case kRead:
+    case kReadBinary:
+        getMemoryFile(_fileName.p, buffer, size);
         if (buffer == 0) {
-            *result = g_resultFailure.v;
-            return;
+            return g_resultFailure;
         }
-        self->_iSeekPosition = 0;
-        self->_buffer = (char *)buffer;
-        self->_iBufferSize = size;
-        self->_bIsOpen = 1;
-        self->_fileHandle = buffer;
-        *result = g_resultSuccess.v;
-        return;
+        _iSeekPosition = 0;
+        _buffer = (char *)buffer;
+        _iBufferSize = size;
+        _bIsOpen = 1;
+        _fileHandle = (int)buffer;
+        return g_resultSuccess;
     }
 }
 
-void igMemoryFile_Close(igMemoryFileView *self) {
-    self->_bIsOpen = 0;
+void igMemoryFile::close()
+{
+    _bIsOpen = 0;
 }
 
-igFileView *igMemoryFile_OpenFile(igFileView *self, const char *fileName, int mode) {
+igFile *igMemoryFile::fopen(const char *path, const char *mode)
+{
     int ok;
-    igFile_SetFileName((igFile *)self, fileName);
-    if (strcmp((const char *)mode, "r") == 0) {
-        ok = self->OpenWithMode(0) == g_resultSuccess;
-    } else if (strcmp((const char *)mode, (const char *)&((int *)"rb")[0]) == 0) {
-        ok = self->OpenWithMode(4) == g_resultSuccess;
+    setFileName(path);
+    if (strcmp(mode, "r") == 0) {
+        ok = open(kRead) == g_resultSuccess;
+    } else if (strcmp(mode, "rb") == 0) {
+        ok = open(kReadBinary) == g_resultSuccess;
     } else {
         return 0;
     }
-    return ok ? self : 0;
+    return ok ? this : 0;
 }
 
-void igMemoryFile_CloseFile(igMemoryFileView *self)
+void igMemoryFile::fclose()
 {
-    self->CloseHandle();
+    close();
 }
 
-int igMemoryFile_Read(igMemoryFileView *self, void *buffer, int size, int count) {
+int igMemoryFile::fread(void *ptr, int size, int nElts)
+{
     int n;
     int pos;
     int left;
 
-    if (self->_bIsOpen == 0) {
+    if (_bIsOpen == 0) {
         return -1;
     }
-    pos = self->_iSeekPosition;
-    n = size * count;
-    left = self->_iBufferSize - pos;
+    pos = _iSeekPosition;
+    n = size * nElts;
+    left = _iBufferSize - pos;
     if (left < n) {
         n = left;
     }
     if (n <= 0) {
         return 0;
     }
-    memcpy(buffer, self->_buffer + pos, n);
-    self->_iSeekPosition += n;
+    memcpy(ptr, _buffer + pos, n);
+    _iSeekPosition += n;
     return n / size;
 }
 
 /* Vtable slot 29 of igMemoryFile: an unsupported-operation stub returning -1, the error value
  * vfunc_33 (read one byte) returns at end of buffer. The receiver is not touched, hence no
  * parameters. */
-int igMemoryFile_Write(void) {
+int igMemoryFile::fwrite(const void *ptr, int size, int nElts)
+{
     return -1;
 }
 
-int igMemoryFile_Scanf(void *self, int format, ...) {
+int igMemoryFile::fscanf(const char *format, ...)
+{
     return -1;
 }
 
-int igMemoryFile_Printf(int a, int b, ...) {
+int igMemoryFile::fprintf(const char *format, ...)
+{
     return -1;
 }
 
 /* Vtable slot 32 of igMemoryFile: a stub returning 0 (success, nothing to do) for an operation a
  * buffer-backed file does not need. The receiver is not touched, hence no parameters. */
-int igMemoryFile_Flush(void) {
+int igMemoryFile::fflush()
+{
     return 0;
 }
 
-char igMemoryFile_GetChar(igMemoryFileView *self) {
+int igMemoryFile::fgetc()
+{
     int position;
     char r;
 
-    if (self->_bIsOpen == 0) {
+    if (_bIsOpen == 0) {
         return -1;
     }
-    position = self->_iSeekPosition;
-    if ((self->_iBufferSize - position) <= 0) {
+    position = _iSeekPosition;
+    if ((_iBufferSize - position) <= 0) {
         return -1;
     }
-    r = *(char *)(position + (int)self->_buffer);
-    self->_iSeekPosition = position + 1;
+    r = *(char *)(position + (int)_buffer);
+    _iSeekPosition = position + 1;
     return r;
 }
 
 /* Vtable slot 35 of igMemoryFile: an unsupported-operation stub returning -1, the error value
  * vfunc_33 (read one byte) returns at end of buffer. The receiver is not touched, hence no
  * parameters. */
-int igMemoryFile_PutChar(void) {
+int igMemoryFile::fputc(int c)
+{
     return -1;
 }
 
 /* Vtable slot 36 of igMemoryFile: a stub returning 0 (success, nothing to do) for an operation a
  * buffer-backed file does not need. The receiver is not touched, hence no parameters. */
-int igMemoryFile_GetString(void) {
+char *igMemoryFile::fgets(char *s, int n)
+{
     return 0;
 }
 
 /* Vtable slot 37 of igMemoryFile: an unsupported-operation stub returning -1, the error value
  * vfunc_33 (read one byte) returns at end of buffer. The receiver is not touched, hence no
  * parameters. */
-int igMemoryFile_PutString(void) {
+int igMemoryFile::fputs(const char *s)
+{
     return -1;
 }
 
-int igMemoryFile_Seek(igMemoryFileView *self, int offset, int whence) {
+int igMemoryFile::fseek(int offset, int whence)
+{
     int t;
     switch (whence) {
     case 0:
-        self->_iSeekPosition = offset;
+        _iSeekPosition = offset;
         break;
     case 1:
-        self->_iSeekPosition = self->_iSeekPosition + offset;
+        _iSeekPosition = _iSeekPosition + offset;
         break;
     case 2:
-        self->_iSeekPosition = self->_iBufferSize + offset;
+        _iSeekPosition = _iBufferSize + offset;
         break;
     }
-    t = self->_iSeekPosition;
+    t = _iSeekPosition;
     if (t < 0) return -1;
-    return -(self->_iBufferSize < t);
+    return -(_iBufferSize < t);
 }
 
 /* Accessor: the current read/seek offset into the file's memory buffer (`_iSeekPosition`, +56). */
 
-int igMemoryFile_Tell(igMemoryFileView *self) {
-    return self->_iSeekPosition;
+int igMemoryFile::ftell()
+{
+    return _iSeekPosition;
 }
 
 /* Vtable slot 34 of igMemoryFile: an unsupported-operation stub returning -1, the error value
  * vfunc_33 (read one byte) returns at end of buffer. The receiver is not touched, hence no
  * parameters. */
-int igMemoryFile_UngetChar(void) {
+int igMemoryFile::ungetc(int character)
+{
     return -1;
+}
+}
 }
 

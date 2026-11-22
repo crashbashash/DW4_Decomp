@@ -117,7 +117,7 @@ int igDriverDatabase_Load(igDriverDatabase *self, const char *fileName, const ch
     {
         int al = ((int)((Gap::Core::igObject *)self)->getMemoryPool());
         igObject::release((igObject *)self->_databaseFile);
-        self->_databaseFile = (int)((igObject *)igFile_Create(al));
+        self->_databaseFile = (int)((igObject *)Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)al));
     }
     opened = ((igFileView *)self->_databaseFile)->Open(name.p, (const char *)"r");
     if (opened == 0) {
@@ -125,13 +125,13 @@ int igDriverDatabase_Load(igDriverDatabase *self, const char *fileName, const ch
             rootPath = ((const char *)igObjectSystem_GetRootPath((int *)((*(int *)&g_objectSystem))));
         }
         if (rootPath != 0 && strlen(rootPath) != 0) {
-            igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
+            igSmartPointer<igFolderView> folder((igFolderView *)Gap::Core::igFolder::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
             folder.p->setFolderName((char *)rootPath);
             opened = openPath(self, folder.p->GetFullPath(name.p));
         }
     }
     if (opened == 0) {
-        igSmartPointer<igFolderView> folder((igFolderView *)igFolder_Create(((int)((Gap::Core::igObject *)self)->getMemoryPool())));
+        igSmartPointer<igFolderView> folder((igFolderView *)Gap::Core::igFolder::_instantiateFromPool(((Gap::Core::igObject *)self)->getMemoryPool()));
         folder.p->setFolderName((char *)igObjectSystem_GetBasePath((int *)((*(int *)&g_objectSystem))));
         opened = openPath(self, folder.p->GetFullPath(name.p));
     }

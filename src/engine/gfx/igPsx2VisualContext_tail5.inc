@@ -110,7 +110,7 @@ int FUN_00177010(igPsx2VisualContext *vc, int *arg1, int *arg2, int arg3, int ar
     return result;
 }
 
-int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, unsigned char *useTexture) {
+int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, bool *useTexture) {
     int j;
     int limit;
     AttrNode1774 *node;
@@ -123,7 +123,7 @@ int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, unsigned char *use
     int result = 0;
 
     prebuilt = geom->f128;
-    *useTexture = 0;
+    *useTexture = false;
     if (vc->_bVertexBlendingEnabled) {
         matrices = 0;
         texture = 0;
@@ -157,22 +157,22 @@ int FUN_001774c0(igPsx2VisualContext *vc, Geometry1774 *geom, unsigned char *use
                     int a = node->f32;
                     p2SetComponentLayout(3, 1, 7 - a, a);
                     texture = value->f16;
-                    *useTexture = 1;
+                    *useTexture = true;
                 } else if ((int)Gap::Core::igUnsignedCharList::getClassMeta() == node->obj->meta()) {
                     int a = node->f32;
                     p2SetComponentLayout(3, 0, 8 - a, a);
                     texture = value->f16;
-                    *useTexture = 1;
+                    *useTexture = true;
                 } else if ((int)Gap::Core::igShortList::getClassMeta() == node->obj->meta()) {
                     int a = node->f32;
                     p2SetComponentLayout(3, 1, 0xF - a, a);
                     texture = value->f16;
-                    *useTexture = 1;
+                    *useTexture = true;
                 } else if ((int)Gap::Core::igUnsignedShortList::getClassMeta() == node->obj->meta()) {
                     int a = node->f32;
                     p2SetComponentLayout(3, 0, 0x10 - a, a);
                     texture = value->f16;
-                    *useTexture = 1;
+                    *useTexture = true;
                 } else {
                     texture = node->obj->f16;
                 }
@@ -1194,7 +1194,7 @@ int Gap__Gfx__igPsx2VisualContext__createTexture(igPsx2VisualContext *self, int 
 inline void adoptNewImage(MipImage *&image, AdoptReference)
 {
     igVirtualObject::release(image);
-    image = (MipImage *)igImage_CreateInstance(0);
+    image = (MipImage *)Gap::Gfx::igImage::_instantiateFromPool(0);
 }
 
 int igPsx2VisualContext_CreateTexture(TexContext *context, int width, int height, int format, int kind, unsigned int flags,
@@ -1457,7 +1457,7 @@ void FUN_0017b5f0(TexContext *context, TexEntry *entry)
     int format;
     int count;
 
-    if (FUN_00159f70(entry->format)) {
+    if (Gap::Gfx::igImage::isIndexed((IG_GFX_TEXTURE_FORMAT)entry->format)) {
         format = DAT_0048acb0[entry->format - 0x10000];
     } else {
         format = DAT_0048ac40[entry->format];
@@ -1473,12 +1473,12 @@ void FUN_0017b5f0(TexContext *context, TexEntry *entry)
             int i;
 
             for (i = 0; i < count; i++) {
-                igSmartPointer<MipImage> mip((MipImage *)igImage_CreateInstance((igMemoryPoolView *)igVisualContext_GetImageMemoryPool((int *)context)));
+                igSmartPointer<MipImage> mip((MipImage *)Gap::Gfx::igImage::_instantiateFromPool((igMemoryPoolView *)igVisualContext_GetImageMemoryPool((int *)context)));
                 int mipFormat;
 
                 mip->reduceFrom(previous);
                 entry->mipImages[i] = mip;
-                if (FUN_00159f70(entry->format)) {
+                if (Gap::Gfx::igImage::isIndexed((IG_GFX_TEXTURE_FORMAT)entry->format)) {
                     mipFormat = DAT_0048acb0[entry->format - 0x10000];
                 } else {
                     mipFormat = DAT_0048ac40[entry->format];
@@ -1504,7 +1504,7 @@ void FUN_0017b5f0(TexContext *context, TexEntry *entry)
                 int mipFormat;
                 MipImage *mip;
 
-                if (FUN_00159f70(entry->format)) {
+                if (Gap::Gfx::igImage::isIndexed((IG_GFX_TEXTURE_FORMAT)entry->format)) {
                     mipFormat = DAT_0048acb0[entry->format - 0x10000];
                 } else {
                     mipFormat = DAT_0048ac40[entry->format];

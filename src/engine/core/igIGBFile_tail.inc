@@ -20,16 +20,16 @@ igResult igIGBFile_OpenFile(igIGBFileView *self, const char *fileName, int mode)
         return self->_file->OpenWithMode(mode);
     }
     if (self->_file == 0 && fileName != 0) {
-        assignReference(self->_file, igSmartPointer<igFileView>((igFileView *)igFile_Create((int)self->_temporaryMemoryPool)));
+        assignReference(self->_file, igSmartPointer<igFileView>((igFileView *)Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)self->_temporaryMemoryPool)));
         if (self->_file == 0) {
             return g_resultFailure;
         }
-        igFile_SetFileName((igFile *)self->_file, fileName);
+        ((Gap::Core::igFile *)self->_file)->setFileName(fileName);
         return self->_file->OpenWithMode(mode);
     }
     self->_file->CloseHandle();
-    assignReference(self->_file, igSmartPointer<igFileView>((igFileView *)igFile_Create((int)self->_temporaryMemoryPool)));
-    igFile_SetFileName((igFile *)self->_file, fileName);
+    assignReference(self->_file, igSmartPointer<igFileView>((igFileView *)Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)self->_temporaryMemoryPool)));
+    ((Gap::Core::igFile *)self->_file)->setFileName(fileName);
     return self->_file->OpenWithMode(mode);
 }
 
@@ -104,7 +104,7 @@ igResult igIGBFile_OpenForWrite(igIGBFileView *f, const char *fileName) {
         return g_resultFailure;
     }
     igIGBFile_SetDefaultName((int *)f);
-    igAdxFile_SetOpenMode((int)f->_file, 5);
+    ((Gap::Core::igFile *)((int)f->_file))->setOpenMode(Gap::Core::igFile::kWriteBinary);
     return g_resultSuccess;
 }
 
@@ -713,7 +713,7 @@ igResult igIGBFile_BeginRead(igIGBFileView *self, const char *fileName) {
         return g_resultFailure;
     }
     igIGBFile_SetDefaultName((int *)self);
-    igAdxFile_SetOpenMode((int)self->_file, 4);
+    ((Gap::Core::igFile *)((int)self->_file))->setOpenMode(Gap::Core::igFile::kReadBinary);
     return g_resultSuccess;
 }
 

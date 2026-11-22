@@ -51,7 +51,7 @@ void igTextureAttr::arkRegister()
 
 CallbackArray *igTextureAttr::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { igImage_EnsureRegistered, Gap::Attrs::igTextureUnloadAttr::arkRegister, Gap::Attrs::igImageMipMapList::arkRegister, igVisualContext_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Gfx::igImage::arkRegister, Gap::Attrs::igTextureUnloadAttr::arkRegister, Gap::Attrs::igImageMipMapList::arkRegister, igVisualContext_EnsureRegistered, 0 };
 
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -127,7 +127,7 @@ void igTextureAttr::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 8);
-        metaField->_metaObject = (int)igImage_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Gfx::igImage::getClassTypeLazy();
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 10);

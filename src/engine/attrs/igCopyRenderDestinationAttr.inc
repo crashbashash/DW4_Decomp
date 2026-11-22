@@ -68,7 +68,7 @@ void igCopyRenderDestinationAttr::arkRegister()
 
 CallbackArray *igCopyRenderDestinationAttr::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igRenderDestinationAttr::arkRegister, igImage_EnsureRegistered, Gap::Attrs::igTextureAttr::arkRegister, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Attrs::igRenderDestinationAttr::arkRegister, Gap::Gfx::igImage::arkRegister, Gap::Attrs::igTextureAttr::arkRegister, 0 };
 
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -107,7 +107,7 @@ void igCopyRenderDestinationAttr::arkRegisterInitialize()
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
-        metaField->_metaObject = (int)igImage_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Gfx::igImage::getClassTypeLazy();
     }
     {
         igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);

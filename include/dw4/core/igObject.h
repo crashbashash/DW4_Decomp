@@ -41,7 +41,6 @@ int Memory_FreeBufferAliasC(void *block);
 
 int igObject_GetFieldValueByName(void **self, int name);
 void igObject_ResetFields(struct igObjectDispatchView *object);
-void igObject_UserPostRead(void);
 
 #ifdef __cplusplus
 }

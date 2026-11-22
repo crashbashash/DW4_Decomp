@@ -1,12 +1,18 @@
-bool Gap__Gfx__igPsx2Image__vfunc_45(S_16f250 *p) {
+namespace Gap {
+namespace Gfx {
+
+bool igPsx2Image::toggleComponentOrder()
+{
     bool r = true;
-    if (p->f24 == 0x64) {
-        p->f24 = 0x66;
-    } else if (p->f24 == 0x66) {
-        p->f24 = 0x64;
+    if (_order == IG_GFX_IMAGE_ORDER_DEFAULT) {
+        _order = IG_GFX_IMAGE_ORDER_PSX2;
+    } else if (_order == IG_GFX_IMAGE_ORDER_PSX2) {
+        _order = IG_GFX_IMAGE_ORDER_DEFAULT;
     } else {
         r = false;
     }
     return r;
+}
+}
 }
 

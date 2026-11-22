@@ -165,7 +165,7 @@ void Memory_DumpMemory(unsigned int size, unsigned int perLine, unsigned int dig
         int alloc;
         if (g_useOwnerAllocator) alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleCurrent);
         else alloc = (int)Memory_GetAllocatorBySelector(kIGMemoryPoolHandleTemporary);
-        file = (igFileView *)igFile_Create(alloc);
+        file = (igFileView *)Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)alloc);
         if (0 == file->Open(name, (const char *)"w")) goto done;
     }
     {

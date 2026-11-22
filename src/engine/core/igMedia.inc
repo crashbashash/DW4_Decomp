@@ -35,7 +35,7 @@ CallbackArray *igMedia::arkRegisterInternal()
         sizeof(igMedia),
         0,
         &arkRegisterInitialize,
-        (igMetaObjectCallback)Gap::Core::igMedia::userRegister,
+        (igMetaObjectCallback)Gap::Core::igMedia::arkRegisterUser,
         0
     );
 }

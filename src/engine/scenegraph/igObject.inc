@@ -37,7 +37,7 @@ void FUN_001b21d0(A_1b21d0 *arg0, igVec3f *arg1, igVec3f *arg2) {
     arg1->vec[0] = arg1->vec[1] = arg1->vec[2] = 1.00000002e+20f;
     arg2->vec[0] = arg2->vec[1] = arg2->vec[2] = -1.00000002e+20f;
     FUN_001b23b0((int *)&sp7C, (int *)arg0);
-    s3 = (igVec3fList *)igVertexArray2__FindVertexData(sp7C, 1, 0);
+    s3 = (igVec3fList *)((Gap::Gfx::igVertexArray2 *)sp7C)->findVertexData(1, 0);
     if (sp7C != 0) {
         sp7C->_refCount = sp7C->_refCount - 1;
         if (((unsigned long long)(long long)(int)sp7C->_refCount & 0x7fffffULL) == 0) igObject_Destroy((igObject *)sp7C);
@@ -94,7 +94,7 @@ int FUN_001b24d0(int arg0, int arg1) {
     bounds.get()->max = max;
     igVolume_ExtendBy((void **)arg0, (void **)(bounds.get()));
     FUN_001b23b0((int *)&array, (int *)arg1);
-    int missing = (int)igVertexArray2__FindVertexData((igVertexArray2 *)array, 5, 0);
+    int missing = (int)((Gap::Gfx::igVertexArray2 *)array)->findVertexData(5, 0);
     if (array != 0) {
         array->_refCount = array->_refCount - 1;
         if ((array->_refCount & 0x7FFFFF) == 0) {
@@ -115,7 +115,7 @@ bool igGeometry_ExtendBound(int arg0, void *arg1) {
     n = l->count;
     for (i = 0; i < n; i++) {
         e = l->data[i];
-        if (((Gap::Core::igObject *)e)->isOfType(g_igGeometryAttr_metaObject) != 0) {
+        if (((Gap::Core::igObject *)e)->isOfType(Gap::Attrs::igGeometryAttr::getClassMeta()) != 0) {
             if (FUN_001b23e0(arg0, (Y *)e) == 0) {
                 ok = false;
             }

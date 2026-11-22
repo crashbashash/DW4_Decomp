@@ -1,40 +1,47 @@
-int Gap__Gfx__igPsx2VertexArray2__vfunc_23(igVertexArray2 *array, int primitive, int arg2, Info *info, Disp *display) {
-    if (array->_vertexStream == 0) {
-        igSmartPointer<Rc_17f2b0> created((Rc_17f2b0 *)igVertexStream_Create((int)((Gap::Core::igObject *)array)->getMemoryPool()));
-        Rc_17f2b0 *stream = created.p;
-        if (stream != 0) stream->_refCount = stream->_refCount + 1;
-        Rc_17f2b0 *old = (Rc_17f2b0 *)array->_vertexStream;
-        igObject::release(old);
-        array->_vertexStream = (int)stream;
+namespace Gap {
+namespace Gfx {
+
+bool igPsx2VertexArray2::configure(IG_GFX_DRAW primitive, igIndexArray *indexArray, igPrimLengthArray *primLengthArray, igVisualContext *vc)
+{
+    if (_vertexStream == 0) {
+        igSmartPointer<igVertexStream> stream((igVertexStream *)igVertexStream_Create((int)getMemoryPool()));
+        _vertexStream = stream;
     }
-    igVertexStream *vs = (igVertexStream *)array->_vertexStream;
-    if (vs->_isConfigured != 0) return 1;
-    igSmartPointer<Rc_17f2b0> format((Rc_17f2b0 *)igVertexDataList_Create((int)((Gap::Core::igObject *)array)->getMemoryPool()));
-    FUN_0015f660(array, format);
-    if (info != 0 && info->f12 > 1 && !(primitive & 0x2000)) {
+    igVertexStream *vs = _vertexStream.p;
+    if (vs->_isConfigured != 0) {
+        return true;
+    }
+    igSmartPointer<igVertexDataList> list((igVertexDataList *)igVertexDataList_Create((int)getMemoryPool()));
+    buildVertexDataList(list);
+    if (primLengthArray != 0 && primLengthArray->_numStrips > 1 && !(primitive & IG_GFX_DRAW_DRAWMULTIPLE)) {
         switch (primitive) {
-        case 4: primitive = 0x2001; break;
-        case 2: primitive = 0x2000; break;
-        case 5: primitive = 0x2002; break;
+        case IG_GFX_DRAW_TRIANGLE_STRIP:
+            primitive = (IG_GFX_DRAW)(IG_GFX_DRAW_DRAWMULTIPLE | IG_GFX_DRAW_MULTIPLE_TRIANGLE_STRIPS);
+            break;
+        case IG_GFX_DRAW_LINE_STRIP:
+            primitive = (IG_GFX_DRAW)(IG_GFX_DRAW_DRAWMULTIPLE | IG_GFX_DRAW_MULTIPLE_LINE_STRIPS);
+            break;
+        case IG_GFX_DRAW_TRIANGLE_FAN:
+            primitive = (IG_GFX_DRAW)(IG_GFX_DRAW_DRAWMULTIPLE | IG_GFX_DRAW_MULTIPLE_TRIANGLE_FANS);
+            break;
         }
     }
     vs->_primitive = primitive;
-    display->v1044(array, 0);
-    int result = ((Impl *)vs)->v104(format, arg2, info, display) & 0xFF;
-    return result;
+    ((igVisualContextDispatchView *)vc)->setVertexArray((::igVertexArray2 *)this, 0);
+    return ((igVertexStreamDispatchView *)vs)->configure(list, (::igIndexArray *)indexArray, primLengthArray, vc);
 }
 
-void igPsx2VertexArray2_ReleaseDefaults(igPsx2VertexArray2View *self)
+void igPsx2VertexArray2::releaseDefaults()
 {
-    self->vfunc_22();
+    reset();
 }
 
-void Gap__Gfx__igPsx2VertexArray2__vfunc_24(igPsx2VertexArray2 *self) {
-    void **temp_a0;
-
-    temp_a0 = (void **)(self->_vertexStream);
-    if (temp_a0 != 0) {
-        ((DW4VC_108_0 *)(temp_a0))->vX();
+void igPsx2VertexArray2::reset()
+{
+    if (_vertexStream != 0) {
+        ((igVertexStreamDispatchView *)_vertexStream.p)->reset();
     }
+}
+}
 }
 

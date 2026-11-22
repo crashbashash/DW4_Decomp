@@ -322,8 +322,8 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    21-34 and 21-30 are the kit's pure virtuals in retail's order (igPsx2LongTimer's and igPsx2Media's vtables
    fill them); `arkRegisterInitialize` sets the abstract proxy (`_Meta->_abstractProxy`), igMedia's also adds
    the exit callback `_classDestructor`, and igMedia's `userRegister`/`userUnregister`, `registerMedia` and
-   `setDefaultMedia` are members. `findMedia` (`igMediaFile_FindDeviceForPath`) and the two statics stay free
-   while the media classes are views. The bootstrap lists the object system keeps its metaobjects and metafields
+   `setDefaultMedia` are members. `findMedia` (`igMediaFile_FindDeviceForPath`), `gDefaultMedia` and `gRegisteredMedia` (an `igSmartPointer<igMediaList>`)
+   are members; `igMediaList` is converted over `igTObjectList<igMedia>`. The bootstrap lists the object system keeps its metaobjects and metafields
    in, `__internalNonRefCountedObjectList` and `__internalObjectList`, are converted (alchemy-kit_202309
    igCore/igInternalObjectList.h: `IG_BOOTSTRAP_OBJECT_DEFINE`, `_data` the kit's `igObject **` under C++, the
    slot-16 override `trimCapacity` (the kit's `clean`), `setCount`, `setCapacity`, `append`, `insert`,
@@ -371,6 +371,18 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    (`igStringObj_SetBool` takes its flags the same way). A caller tests the `bool` result directly (`if
    (r->getValue(...))`), since `!= 0` masks it. The enum parsers stay free, as do the data-pump library's
    tail-jump readers `igGetRegistryValue_*`, whose flags are the members' types;
+   Files and folders (alchemy-kit_202309 igCore/igFile.h, igMediaFile.h, igMemoryFile.h, igFolder.h) are converted:
+   `igFile` (abstract; DW4's slots 21-39 are `open` ... `ftell`, `readPastChar` and `generateFilename`, with no
+   `getSize`; `_openMode`/`_readMode` are the kit's enum-typed fields, whose `enum` rows gen_type_headers.py writes
+   ahead of the fields; the statics `isAbsolutePath`, `containsRelativePath`, `setSearchPath`,
+   `setSearchPathFromRegistry`, `getSearchPath`, `getNextPath`; its implicit destructor is retail's `igFile_Destroy`,
+   still named by the flat `igPsx2File`/`igAdxFile` probes), `igMediaFile` (`_media` an `igSmartPointer<igMedia>`,
+   `fit`), `igMemoryFile` (statics `userRegister`, `userUnregister`, `setMemoryFile`, `getMemoryFile`; its entry list
+   `_entryList` is still the flat `igMemoryFileEntryList`) and `igFolder` (`getPathToFile`; the three inline
+   `get*Folders` slots return a retained null list, whose out-of-line copies in scenegraph and GameMain stay C and
+   are duplicates here). Flat callers reach them through `Gap::Core::igFile::_instantiateFromPool` and the views.
+   Not converted yet: `igIGBFile` (about 2,400 lines; needs `igDirectory_Construct`/`_Destroy` copies and its
+   `igFileView`/`igIGBFileView` uses retired), `igPsx2File`, `igPsx2Folder`, `igMemoryFileEntry(List)`.
 5. attrs, then gfx, then scenegraph, then gui/insight/viewer. Attrs so far: `Gap::Attrs::igAttr` (abstract;
    DW4's slots 21-29 read off retail's concrete vtables: `apply(igContext *)`, `apply(igVisualContext *)`,
    `setUnitID`, `synchronizeDefault` ×2, `reset`, `setup` ×2, `getUnitCount`, all kit inlines but `setUnitID`; no
@@ -434,10 +446,13 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    beTextureCtrl_UpdateRam indexes the attribute list's data (`((int *)list->_data)[i]`) where it kept a byte
    offset, which keeps retail's register allocation once it reads `igTextureBindAttr::getClassMeta()` (the inline's
    temporary otherwise takes the offset's register). What is left in attrs, and why:
-   - the geometry group (`igGeometryAttr`, `igGeometryAttr1_5`, `igGeometrySetAttr`, `igGeometryAttrList`): DW4's
-     `igGeometryAttr1_5` carries twelve slots (configure, transform, computeBound, intersectRay, tangents, ...) that
-     still read igVertexArray/igIndexArray through stand-in views and one helper not yet decompiled (0x13dbb0); it
-     converts with gfx's vertex arrays;
+   - the geometry group: `igGeometryAttr` (abstract, no vtable of its own; typed vertex/index/primLength/dPds/dPdt
+     smart pointers, no virtual declared until its subclass converts), `igGeometryAttrList` (over
+     `igTObjectList<igGeometryAttr>`) and `igGeometrySetAttr` (slots `releaseDefaults`, `apply`, empty
+     `synchronizeDefault`, `reset`, `setup`, `setVisualContext`, and the protected `createRenderList`, 0x13e6e0;
+     specs scratch/Gfx4/specs/geom.py, geomlist.py, geomset.py) are converted. `igGeometryAttr1_5` stays flat: its
+     twelve slots (configure, transform, computeBound, intersectRay, tangents, ...) still read igVertexArray /
+     igIndexArray through stand-in views and one helper not yet decompiled (0x13dbb0, which keeps its C name);
    - `igParticleAttr` (its array is a Gap::Bec class) and `igVertexBlendMatrixListAttr` (whose probe stamps
      igVisualAttribute's vtable from its matrix members' destructor chain) are not started;
    - igAttrPool's list fields (`_metaList`, `_nonSharableMetaList`, `_attributeList`) stay flat smart pointers: its
@@ -499,8 +514,19 @@ construction steps (`constructDerived`, `constructDerivedFromFile`, `finishConst
    binormals, 18 tangents, 19 sprite angles). `igPsx2VertexArray1_1` (no kit header; its names follow the kit's
    slots, with `allocateBlendedVertexLists`/`freeBlendedVertexLists` for the skinning lists) holds
    `_pBlendedVertsList`/`_pBlendedNormsList` as `igSmartPointer<igPointerList>` and the flat `igPsx2LongList`
-   wait list. Still flat: the igVertexArray2 family, igImage/igPsx2Image (23 slots), and the geometry attrs that
-   wait on them;
+   wait list. `igVertexArray2` and `igPsx2VertexArray2` (igGfx/igVertexArray2.h; spec scratch/Gfx4/specs/vertex2.py) are converted: slots 21 `configure`
+   (the base one builds an internal igVertexArray through igVertexArray2HelperAccess and copies each stream; decompiled, 0x15f7d0), 22 `reset` (empty in the base, whose copy is attrs'
+   0x13e660; the PS2 class resets its vertex stream), 23 `getCount`; `findVertexData`, `buildVertexDataList`, `isVertexDataSupported`;
+   `igVertexStreamDispatchView` (slots 24/25) and `igVisualContextDispatchView::setVertexArray` (slot 259) replace the old stand-ins.
+   `igVertexArrayLock` keeps DW4's name and layout: the kit's igComponentEditInfo orders its fields differently and has no
+   `_componentIndex`. `igImage`, `igMemoryImage` and `igPsx2Image` are converted (spec scratch/GfxImage/specs/image.py): igImage's 23 slots 23-45 in retail's
+   order (copy, copySubImage, scale, reduce, setData, setWidth, setHeight, setPixelFormat, allocateImageMemory,
+   setComponentOrder, load, swapComponentOrder, setNumComponents, setPixel, the five-argument load, reduceAux, the
+   platformLoad/platformSave/platformConvert hooks, correctBytesPerRow, oldLoad and the pure toggleComponentOrder; the
+   hook and slot-45 names are DW4's own); the hooks and `convert` return `unsigned char` as retail's callers mask them;
+   `_pClut` is `igSmartPointer<igClut>`, `_pNameString` an `igStringRef`; `setName` takes the string as the kit does;
+   igImageMipMapList's element meta is now the Gap class's. reduceAux (0x157ad0) and the tile copy at 0x15a750 have no
+   source yet. Still flat: igVertexArray2Helper, igFileImage, igFileImagePng and igExternalImageEntry;
 6. the game's `be*` classes last.
 
 ## Known differences and gaps

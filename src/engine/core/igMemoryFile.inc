@@ -1,161 +1,78 @@
-igMetaObject *g_igMemoryFile_metaObject;
-igMetaField *g_igMemoryFile_bIsOpenMetaField;
-igMetaField *g_igMemoryFile_bufferMetaField;
-igMetaField *g_igMemoryFile_iBufferSizeMetaField;
-igMetaField *g_igMemoryFile_iSeekPositionMetaField;
+namespace Gap {
+namespace Core {
 
-void *igMemoryFile_Create(int pool) {
-    igMemoryFile_EnsureRegistered();
-    return (void *)igMetaObject_CreateInstance(g_igMemoryFile_metaObject, (igMemoryPoolView *)pool);
-}
+igMetaObject *igMemoryFile::_Meta;
+igMetaField *igMemoryFile::k_bIsOpen;
+igMetaField *igMemoryFile::k_buffer;
+igMetaField *igMemoryFile::k_iBufferSize;
+igMetaField *igMemoryFile::k_iSeekPosition;
 
-igMetaObject *igMemoryFile_GetMetaObject(void)
+igMemoryFile *igMemoryFile::_instantiateFromPool(igMemoryPoolView *pool)
 {
-    igMetaObject *g = g_igMemoryFile_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igMemoryFile_EnsureRegistered();
-    return g_igMemoryFile_metaObject;
+    arkRegister();
+    return (igMemoryFile *)igMetaObject_CreateInstance(_Meta, pool);
 }
 
-int igMemoryFile_GetVTable(void) {
-    igMemoryFile file;
-    int vtable;
-
-    igObject_InitHeader((igObject *)&file);
-    file._name = 0;
-    file._fileName = 0;
-    file._completeFilename = 0;
-    file._vtable = (int)(&g_igMemoryFile_vtable[0]);
-    vtable = *(int *)((char *)&file + g_objectSystem->vtableProbeOffset);
-    file._vtable = (int)(&g_igMemoryFile_vtable[0]);
-    igFile_Destroy((igFile *)&file, 0);
-    return vtable;
-}
-
-void *igFile_Destroy(igFile *self, short deleteFlag) {
-    void *p;
-    int *h;
-    int rc;
-
-    if (self != 0) {
-        self->_vtable = (int)&g_igFile_vtable[0];
-        if (&self->_completeFilename) {
-            p = (void *)self->_completeFilename;
-            if (p != 0) {
-                h = (int *)((char *)(p) - 8);
-                rc = *(int *)((char *)(p) - 4) - 1;
-                *(int *)((char *)(p) - 4) = rc;
-                if (rc == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)(*h), (StringTokenHeader *)h);
-                }
-            }
-        }
-        if (&self->_fileName) {
-            p = (void *)self->_fileName;
-            if (p != 0) {
-                h = (int *)((char *)(p) - 8);
-                rc = *(int *)((char *)(p) - 4) - 1;
-                *(int *)((char *)(p) - 4) = rc;
-                if (rc == 0) {
-                    StringChunk_ReleaseHeader((StringChunk *)(*h), (StringTokenHeader *)h);
-                }
-            }
-        }
-        if (self != 0) {
-            self->_vtable = (int)&g_igNamedObject_vtable[0];
-            if (&self->_name) {
-                p = (void *)self->_name;
-                if (p != 0) {
-                    h = (int *)((char *)(p) - 8);
-                    rc = *(int *)((char *)(p) - 4) - 1;
-                    *(int *)((char *)(p) - 4) = rc;
-                    if (rc == 0) {
-                        StringChunk_ReleaseHeader((StringChunk *)(*h), (StringTokenHeader *)h);
-                    }
-                }
-            }
-        }
-        if (deleteFlag > 0) {
-            Memory_FreeBufferAliasC(self);
-        }
-    }
-    return self;
-}
-
-void igMemoryFile_EnsureRegistered(void)
+igMetaObject *igMemoryFile::getClassTypeSafe()
 {
-    igMetaObject_RunStaticInit(igMemoryFile_Register);
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-CallbackArray *igMemoryFile_Register(void) {
+void *igMemoryFile::retrieveVTablePointer()
+{
+    igMemoryFile temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+
+void igMemoryFile::arkRegister()
+{
+    igMetaObject_RunStaticInit(arkRegisterInternal);
+}
+
+CallbackArray *igMemoryFile::arkRegisterInternal()
+{
     CoreLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0,
-        &g_igMemoryFile_metaObject,
-        igFile_Register,
-        igFile_GetPublishedMetaObject,
-        igMemoryFile_GetMetaObjectFunction,
+        false,
+        &_Meta,
+        Gap::Core::igFile::arkRegisterInternal,
+        Gap::Core::igFile::getClassMeta,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igMemoryFile",
-        0x3C,
-        igMemoryFile_GetVTable,
-        igMemoryFile_InitFields,
-        igMemoryFile_StaticInitCallback,
+        sizeof(igMemoryFile),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        (igMetaObjectCallback)Gap::Core::igMemoryFile::arkRegisterUser,
         0
     );
 }
 
-void igMemoryFile_GetMetaObjectFunction(void) {
-    igMemoryFile_GetMetaObject();
+igMetaObject *igFile::_Meta;
+igMetaField *igFile::k_fileName;
+igMetaField *igFile::k_readMode;
+igMetaField *igFile::k_openMode;
+igMetaField *igFile::k_fileHandle;
+igMetaField *igFile::k_optimalReadChunkSize;
+igMetaField *igFile::k_optimalWriteChunkSize;
+igMetaField *igFile::k_pageSize;
+igMetaField *igFile::k_completeFilename;
+
+void igMemoryFile::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igBoolMetaField_Create, igRawRefMetaField_Create, igIntMetaField_Create, igIntMetaField_Create };
+    static const char *names[] = { "_bIsOpen", "_buffer", "_iBufferSize", "_iSeekPosition" };
+    static igMetaField **enumStorage[] = { &k_bIsOpen, &k_buffer, &k_iBufferSize, &k_iSeekPosition };
+    static int offsets[] = { 44, 48, 52, 56 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 4);
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
+    *(void (**)())&_Meta->_writeProxy = (void (*)())Gap::Core::igFile::getClassMetaSafe;
+    igMetaObject_AddExitCallback((int)Gap::Core::igMemoryFile::_classDestructor);
 }
-
-igMetaObject *g_igFile_metaObject;
-igMetaField *g_igFile_fileNameMetaField;
-igMetaField *g_igFile_readModeMetaField;
-igMetaField *g_igFile_openModeMetaField;
-igMetaField *g_igFile_fileHandleMetaField;
-igMetaField *g_igFile_optimalReadChunkSizeMetaField;
-igMetaField *g_igFile_optimalWriteChunkSizeMetaField;
-igMetaField *g_igFile_pageSizeMetaField;
-igMetaField *g_igFile_completeFilenameMetaField;
-
-igMetaObject *igFile_GetPublishedMetaObject(void) {
-    return g_igFile_metaObject;
 }
-
-static FieldFactory g_igMemoryFile_ctorTable[] = {
-    (FieldFactory)igBoolMetaField_Create,
-    (FieldFactory)igRawRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-};
-static const char *g_igMemoryFile_fieldTable[] = {
-    "_bIsOpen",
-    "_buffer",
-    "_iBufferSize",
-    "_iSeekPosition",
-};
-static igMetaField **g_igMemoryFile_fieldDescriptors[] = {
-    &g_igMemoryFile_bIsOpenMetaField,
-    &g_igMemoryFile_bufferMetaField,
-    &g_igMemoryFile_iBufferSizeMetaField,
-    &g_igMemoryFile_iSeekPositionMetaField,
-};
-static int g_igMemoryFile_fieldOffsets[] = {
-    44,
-    48,
-    52,
-    56,
-};
-
-void igMemoryFile_InitFields(void) {
-    int first;
-    void *meta;
-
-    meta = (void *)(g_igMemoryFile_metaObject);
-    first = igMetaObject_GetFieldCount((igMetaObject *)meta);
-    igMetaObject_CreateFields((igMetaObject *)meta, g_igMemoryFile_ctorTable, 4);
-    igMetaObject_NameFields((igMetaObject *)meta, g_igMemoryFile_fieldTable, g_igMemoryFile_fieldDescriptors, g_igMemoryFile_fieldOffsets, first);
-    g_igMemoryFile_metaObject->_writeProxy = (int)(&igFile_GetMetaObjectFunction);
-    igMetaObject_AddExitCallback((int)&igMemoryFile_ExitCallback);
 }
 

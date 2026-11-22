@@ -1,11 +1,13 @@
-igMetaObject *g_igPsx2Image_metaObject;
+namespace Gap {
+namespace Gfx {
 
-void igPsx2Image_GetMetaObjectFunction(void) {
-    igPsx2Image_GetMetaObject();
+igMetaObject *igPsx2Image::_Meta;
+
+void igImage::arkRegisterUser()
+{
+    userRegister();
 }
-
-void thunk_FUN_00156300(void) {
-    FUN_00156300();
+}
 }
 
 static const char *g_igPsx2Image_contextTrackableNames[] = {

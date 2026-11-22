@@ -69,7 +69,7 @@ void igDriverDatabase_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igDriverDatabase_Register);
 }
 
-static igMetaObjectCallback g_igDriverDatabase_callbackList[] = { igStringObjList_EnsureRegistered, igStringRefListList_EnsureRegistered, Gap::Core::igRegistry::arkRegister, igFile_EnsureRegistered, igStringObj_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igDriverDatabase_callbackList[] = { igStringObjList_EnsureRegistered, igStringRefListList_EnsureRegistered, Gap::Core::igRegistry::arkRegister, Gap::Core::igFile::arkRegister, igStringObj_EnsureRegistered, 0 };
 
 CallbackArray *igDriverDatabase_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -182,7 +182,7 @@ void igDriverDatabase_InitFields(void) {
     ((Gap::Core::igEnumMetaField *)overrideModeField)->setDefault(0);
     ((igEnumMetaField *)overrideModeField)->_getMetaEnumFunction = (int)(&igDriverDatabase_GetSectionOverrideModeMetaEnum);
     databaseFileField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 6)));
-    ((igObjectRefMetaField *)databaseFileField)->_metaObject = (int)igFile_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)databaseFileField)->_metaObject = (int)Gap::Core::igFile::getClassTypeLazy();
     ((igObjectRefMetaField *)databaseFileField)->_persistent = 0;
     ((igObjectRefMetaField *)databaseFileField)->_deepCopyMethod = 3;
     ((igObjectRefMetaField *)databaseFileField)->_shallowCopyMethod = 3;

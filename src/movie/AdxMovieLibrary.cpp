@@ -644,8 +644,8 @@ CallbackArray *igAdxFile_Register(void) {
     return igMetaObject_RegisterClass(
         0, /* abstract */
         &g_igAdxFile_metaObject,
-        igFile_Register,
-        igFile_GetPublishedMetaObject,
+        Gap::Core::igFile::arkRegisterInternal,
+        Gap::Core::igFile::getClassMeta,
         igAdxFile_GetMetaObjectFunction,
         "igAdxFile",
         0x68, /* instance size */
@@ -740,7 +740,7 @@ void igAdxFile_InitFields(void) {
     ((Gap::Core::igIntMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xC)))->setDefault(0x800);
     ((Gap::Core::igUnsignedLongMetaField *)(igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0xD)))->setDefault(0xFE502A);
     igMetaObject_NameFields((igMetaObject *)meta, g_igAdxFile_fieldTable, g_igAdxFile_fieldHandles, g_igAdxFile_fieldOffsets, firstField);
-    g_igAdxFile_metaObject->_writeProxy = (int)(&igFile_GetMetaObjectFunction);
+    g_igAdxFile_metaObject->_writeProxy = (int)(&Gap::Core::igFile::getClassMetaSafe);
     igMetaObject_AddExitCallback((int)&igAdxFile_ExitCallback);
 }
 
@@ -1495,7 +1495,7 @@ void igMovieInfo_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igMovieInfo_Register);
 }
 
-static igMetaObjectCallback g_igMovieInfo_callbackList[] = { igTextureBindAttrList_EnsureRegistered, igMovieCodec_EnsureRegistered, igSceneInfo_EnsureRegistered, igImage_EnsureRegistered, Gap::Attrs::igTextureList::arkRegister, Gap::Core::igObject::arkRegister, 0 };
+static igMetaObjectCallback g_igMovieInfo_callbackList[] = { igTextureBindAttrList_EnsureRegistered, igMovieCodec_EnsureRegistered, igSceneInfo_EnsureRegistered, Gap::Gfx::igImage::arkRegister, Gap::Attrs::igTextureList::arkRegister, Gap::Core::igObject::arkRegister, 0 };
 
 CallbackArray *igMovieInfo_Register(void) {
     AdxMovieLibrary_MarkRegistered();
@@ -1660,7 +1660,7 @@ void igMovieInfo_InitFields(void) {
     sceneInfoField->_metaObject = (int)igSceneInfo_GetOrCreateMetaObject();
     sceneInfoField->_persistent = 0;
     runtimeImageField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x10);
-    runtimeImageField->_metaObject = (int)igImage_GetOrCreateMetaObject();
+    runtimeImageField->_metaObject = (int)Gap::Gfx::igImage::getClassTypeLazy();
     runtimeImageField->_persistent = 0;
     runtimeTexturesField = (igObjectRefMetaField *)igMetaObject_GetFieldAt((igMetaObject *)meta, firstField + 0x11);
     runtimeTexturesField->_metaObject = (int)Gap::Attrs::igTextureList::getClassTypeLazy();

@@ -1,10 +1,15 @@
 igMetaEnum *g_igGeometrySetAttr_attrFlagsMetaEnum;
-igMetaObject *g_igGeometrySetAttr_metaObject;
-igMetaField *g_igGeometrySetAttr_vcMetaField;
-igMetaField *g_igGeometrySetAttr_renderListHandleMetaField;
-igMetaField *g_igGeometrySetAttr_geometryAttrListMetaField;
-igMetaField *g_igGeometrySetAttr_renderListStateMetaField;
-igMetaField *g_igGeometrySetAttr_drawStateMetaField;
+namespace Gap {
+namespace Attrs {
+
+igMetaObject *igGeometrySetAttr::_Meta;
+igMetaField *igGeometrySetAttr::k_vc;
+igMetaField *igGeometrySetAttr::k_renderListHandle;
+igMetaField *igGeometrySetAttr::k_geometryAttrList;
+igMetaField *igGeometrySetAttr::k_renderListState;
+igMetaField *igGeometrySetAttr::k_drawState;
+}
+}
 
 static const char *g_igGeometrySetAttr_attrFlagsNames[] = {
     "IMMEDIATE",
@@ -24,47 +29,22 @@ igMetaEnum *igGeometrySetAttr_GetAttrFlagsMetaEnum(void) {
     return g_igGeometrySetAttr_attrFlagsMetaEnum;
 }
 
-igMetaObject *igGeometrySetAttr_GetMetaObject(void)
+namespace Gap {
+namespace Attrs {
+
+igMetaObject *igGeometrySetAttr::getClassTypeSafe()
 {
-    igMetaObject *g = g_igGeometrySetAttr_metaObject;
-    if (!g || ((g->_validity & 4) != 0) == false)
-        igGeometrySetAttr_EnsureRegistered();
-    return g_igGeometrySetAttr_metaObject;
+    if ((_Meta == 0) || !_Meta->isValid())
+        arkRegister();
+    return _Meta;
 }
 
-int igGeometrySetAttr_GetVTable(void) {
-    union U_136d30 u;
-    int temp_s0;
-    S_ref *q0;
-    S_ref *q1;
-
-    igObject_InitHeader((igObject *)u.b);
-    u.vt = (int)&g_igGeometrySetAttr_vtable[0];
-    q1 = (S_ref *)&u.b[12];
-    *(int *)q1 = 0;
-    q0 = (S_ref *)&u.b[20];
-    *(int *)q0 = 0;
-    temp_s0 = *(int *)&u.b[g_objectSystem->vtableProbeOffset];
-    u.vt = (int)&g_igGeometrySetAttr_vtable[0];
-    if (q0 != 0) {
-        q0 = *(S_ref **)q0;
-        if (q0 != 0) {
-            q0->f4 = (int)((int) (q0->f4 - 1));
-            if (((unsigned long long) ((long long) q0->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q0);
-            }
-        }
-    }
-    if (q1 != 0) {
-        q1 = *(S_ref **)q1;
-        if (q1 != 0) {
-            q1->f4 = (int)((int) (q1->f4 - 1));
-            if (((unsigned long long) ((long long) q1->f4 << 0x29) >> 0x29) == 0) {
-                igObject_Destroy((igObject *)q1);
-            }
-        }
-    }
-    return temp_s0;
+void *igGeometrySetAttr::retrieveVTablePointer()
+{
+    igGeometrySetAttr temporary;
+    return *(void **)(((char *)&temporary) + g_objectSystem->vtableProbeOffset);
+}
+}
 }
 
 void **FUN_00136e10(void **arg0, int arg1) {
@@ -85,93 +65,76 @@ void **FUN_00136e10(void **arg0, int arg1) {
     return arg0;
 }
 
-void igGeometrySetAttr_EnsureRegistered(void)
+namespace Gap {
+namespace Attrs {
+
+void igGeometrySetAttr::arkRegister()
 {
-    igMetaObject_RunStaticInit(igGeometrySetAttr_Register);
+    igMetaObject_RunStaticInit(arkRegisterInternal);
 }
 
-static igMetaObjectCallback g_igGeometrySetAttr_callbackList[] = { igVisualContext_EnsureRegistered, igGeometryAttrList_EnsureRegistered, 0 };
+CallbackArray *igGeometrySetAttr::arkRegisterInternal()
+{
+    static igMetaObjectCallback regFunctions[] = { igVisualContext_EnsureRegistered, Gap::Attrs::igGeometryAttrList::arkRegister, 0 };
 
-CallbackArray *igGeometrySetAttr_Register(void) {
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
-        0, /* abstract */
-        &g_igGeometrySetAttr_metaObject,
+        false,
+        &_Meta,
         Gap::Attrs::igVisualAttribute::arkRegisterInternal,
         Gap::Attrs::igVisualAttribute::getClassMeta,
-        igGeometrySetAttr_GetMetaObjectFunction,
+        (igMetaObjectCallback)getClassMetaSafe,
         "igGeometrySetAttr",
-        0x20, /* instance size */
-        igGeometrySetAttr_GetVTable,
-        &igGeometrySetAttr_InitFields,
-        0, /* extra callback item */
-        g_igGeometrySetAttr_callbackList /* callback list */
+        sizeof(igGeometrySetAttr),
+        (igMetaObjectGetVTableFunction)retrieveVTablePointer,
+        &arkRegisterInitialize,
+        0,
+        regFunctions
     );
 }
 
-void igGeometrySetAttr_GetMetaObjectFunction(void) {
-    igGeometrySetAttr_GetMetaObject();
+void igGeometrySetAttr::arkRegisterInitialize()
+{
+    static FieldFactory instFuncs[] = { igObjectRefMetaField_Create, igIntMetaField_Create, igObjectRefMetaField_Create, igEnumMetaField_Create, igBoolMetaField_Create };
+    static const char *names[] = { "_vc", "_renderListHandle", "_geometryAttrList", "_renderListState", "_drawState" };
+    static igMetaField **enumStorage[] = { &k_vc, &k_renderListHandle, &k_geometryAttrList, &k_renderListState, &k_drawState };
+    static int offsets[] = { 12, 16, 20, 24, 28 };
+    igMetaObject *metaObject = _Meta;	// cache in a local variable
+    int start = igMetaObject_GetFieldCount(metaObject);
+
+    igMetaObject_CreateFields(metaObject, instFuncs, 5);
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
+        metaField->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
+        metaField->_persistent = 0;
+        metaField->_deepCopyMethod = 1;
+        metaField->_shallowCopyMethod = 1;
+        metaField->_isAlikeShallowMethod = 3;
+    }
+    {
+        igIntMetaField *metaField = (igIntMetaField *)igMetaObject_GetFieldAt(metaObject, start + 1);
+        metaField->setDefault(-1);
+        metaField->_persistent = 0;
+        metaField->_deepCopyMethod = 4;
+        metaField->_shallowCopyMethod = 4;
+        metaField->_isAlikeShallowMethod = 3;
+    }
+    {
+        igObjectRefMetaField *metaField = (igObjectRefMetaField *)igMetaObject_GetFieldAt(metaObject, start + 2);
+        metaField->_metaObject = (int)Gap::Attrs::igGeometryAttrList::getClassTypeLazy();
+    }
+    {
+        igEnumMetaField *metaField = (igEnumMetaField *)igMetaObject_GetFieldAt(metaObject, start + 3);
+        metaField->setDefault(0);
+        metaField->_persistent = 0;
+        *(void (**)())&metaField->_getMetaEnumFunction = (void (*)())igGeometrySetAttr_GetAttrFlagsMetaEnum;
+    }
+    {
+        igBoolMetaField *metaField = (igBoolMetaField *)igMetaObject_GetFieldAt(metaObject, start + 4);
+        metaField->setDefault(1);
+    }
+    igMetaObject_NameFields(metaObject, names, enumStorage, offsets, start);
 }
-
-static FieldFactory g_igGeometrySetAttr_ctorTable[] = {
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igIntMetaField_Create,
-    (FieldFactory)igObjectRefMetaField_Create,
-    (FieldFactory)igEnumMetaField_Create,
-    (FieldFactory)igBoolMetaField_Create,
-};
-static const char *g_igGeometrySetAttr_fieldTable[] = {
-    "_vc",
-    "_renderListHandle",
-    "_geometryAttrList",
-    "_renderListState",
-    "_drawState",
-};
-static igMetaField **g_igGeometrySetAttr_fieldHandles[] = {
-    &g_igGeometrySetAttr_vcMetaField,
-    &g_igGeometrySetAttr_renderListHandleMetaField,
-    &g_igGeometrySetAttr_geometryAttrListMetaField,
-    &g_igGeometrySetAttr_renderListStateMetaField,
-    &g_igGeometrySetAttr_drawStateMetaField,
-};
-static int g_igGeometrySetAttr_fieldOffsets[] = {
-    12,
-    16,
-    20,
-    24,
-    28,
-};
-
-void igGeometrySetAttr_InitFields(void) {
-    int base;
-    struct F_136f30 *field;
-    struct F_136f30 *field2;
-    struct F_136f30 *field3;
-    struct F_136f30 *field4;
-    igMetaObject *meta;
-
-    meta = g_igGeometrySetAttr_metaObject;
-    base = igMetaObject_GetFieldCount(meta);
-    igMetaObject_CreateFields(meta, g_igGeometrySetAttr_ctorTable, 5);
-    field = (struct F_136f30 *)(igMetaObject_GetFieldAt(meta, base));
-    ((igObjectRefMetaField *)field)->_metaObject = (int)igVisualContext_GetOrCreateMetaObject();
-    ((igMetaField *)field)->_persistent = 0;
-    ((igMetaField *)field)->_deepCopyMethod = 1;
-    ((igMetaField *)field)->_shallowCopyMethod = 1;
-    ((igMetaField *)field)->_isAlikeShallowMethod = 3;
-    field3 = (struct F_136f30 *)(igMetaObject_GetFieldAt(meta, base + 1));
-    ((Gap::Core::igIntMetaField *)field3)->setDefault(-1);
-    ((igMetaField *)field3)->_persistent = 0;
-    ((igMetaField *)field3)->_deepCopyMethod = 4;
-    ((igMetaField *)field3)->_shallowCopyMethod = 4;
-    ((igMetaField *)field3)->_isAlikeShallowMethod = 3;
-    field2 = (struct F_136f30 *)(igMetaObject_GetFieldAt(meta, base + 2));
-    ((igObjectRefMetaField *)field2)->_metaObject = (int)igGeometryAttrList_GetOrCreateMetaObject();
-    field4 = (struct F_136f30 *)(igMetaObject_GetFieldAt(meta, base + 3));
-    ((Gap::Core::igEnumMetaField *)field4)->setDefault(0);
-    ((igMetaField *)field4)->_persistent = 0;
-    ((igEnumMetaField *)field4)->_getMetaEnumFunction = (int)&igGeometrySetAttr_GetAttrFlagsMetaEnum;
-    ((Gap::Core::igBoolMetaField *)(igMetaObject_GetFieldAt(meta, base + 4)))->setDefault(1);
-    igMetaObject_NameFields(meta, g_igGeometrySetAttr_fieldTable, g_igGeometrySetAttr_fieldHandles, g_igGeometrySetAttr_fieldOffsets, base);
+}
 }
 

@@ -57,7 +57,7 @@ void igTextureCubeAttr::arkRegister()
 
 CallbackArray *igTextureCubeAttr::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { igImage_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Gfx::igImage::arkRegister, 0 };
 
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(
@@ -87,7 +87,7 @@ void igTextureCubeAttr::arkRegisterInitialize()
     igMetaObject_CreateFields(metaObject, instFuncs, 3);
     {
         igObjectRefArrayMetaField *metaField = (igObjectRefArrayMetaField *)igMetaObject_GetFieldAt(metaObject, start + 0);
-        metaField->_metaObject = (int)igImage_GetOrCreateMetaObject();
+        metaField->_metaObject = (int)Gap::Gfx::igImage::getClassTypeLazy();
         metaField->_num = 6;
     }
     {

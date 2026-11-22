@@ -45,7 +45,7 @@ void igProgramFile_EnsureRegistered(void)
     igMetaObject_RunStaticInit(igProgramFile_Register);
 }
 
-static igMetaObjectCallback g_igProgramFile_callbackList[] = { igFile_EnsureRegistered, 0 };
+static igMetaObjectCallback g_igProgramFile_callbackList[] = { Gap::Core::igFile::arkRegister, 0 };
 
 CallbackArray *igProgramFile_Register(void) {
     CoreLibrary_MarkRegistered();
@@ -96,7 +96,7 @@ void igProgramFile_InitFields(void) {
     igMetaObject_CreateFields((igMetaObject *)meta, g_igProgramFile_ctorTable, 2);
     ((igMetaField *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base))))->_persistent = 0;
     fileField = (void *)(((void *)igMetaObject_GetFieldAt((igMetaObject *)meta, base + 1)));
-    ((igObjectRefMetaField *)fileField)->_metaObject = (int)igFile_GetOrCreateMetaObject();
+    ((igObjectRefMetaField *)fileField)->_metaObject = (int)Gap::Core::igFile::getClassTypeLazy();
     ((igObjectRefMetaField *)fileField)->_construct = 0;
     ((igObjectRefMetaField *)fileField)->_persistent = 0;
     igMetaObject_NameFields((igMetaObject *)meta, g_igProgramFile_fieldTable, g_igProgramFile_fieldDescriptors, g_igProgramFile_fieldOffsets, base);

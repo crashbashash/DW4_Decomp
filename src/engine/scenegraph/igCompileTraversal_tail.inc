@@ -264,7 +264,7 @@ int igCompileTraversal_TraverseGeometry(igCompileTraversal *self, igGeometry *ge
         igVec3f bmin;
         igVec3f bmax;
         igObject *attr = list->_data[i];
-        if (((Gap::Core::igObject *)attr)->isOfType(g_igGeometryAttr_metaObject) != 0) {
+        if (((Gap::Core::igObject *)attr)->isOfType(Gap::Attrs::igGeometryAttr::getClassMeta()) != 0) {
             FUN_001b1fa0((igGeometryAttr *)attr, &bmin, &bmax);
             grow_1bc1e0(mn, mx, bmin, bmax);
             found = true;

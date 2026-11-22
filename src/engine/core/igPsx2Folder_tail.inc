@@ -46,8 +46,8 @@ CallbackArray *igPsx2Folder_Register(void) {
     return igMetaObject_RegisterClass(
         0,
         &g_igPsx2Folder_metaObject,
-        igFolder_Register,
-        igFolder_GetPublishedMetaObject,
+        Gap::Core::igFolder::arkRegisterInternal,
+        Gap::Core::igFolder::getClassMeta,
         igPsx2Folder_GetMetaObjectFunction,
         "igPsx2Folder",
         0xC,
@@ -56,9 +56,5 @@ CallbackArray *igPsx2Folder_Register(void) {
         0,
         0
     );
-}
-
-igMetaObject *igFolder_GetPublishedMetaObject(void) {
-    return g_igFolder_metaObject;
 }
 

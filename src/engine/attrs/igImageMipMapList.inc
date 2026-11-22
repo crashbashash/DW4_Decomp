@@ -30,7 +30,7 @@ void igImageMipMapList::arkRegister()
 
 CallbackArray *igImageMipMapList::arkRegisterInternal()
 {
-    static igMetaObjectCallback regFunctions[] = { igImage_EnsureRegistered, 0 };
+    static igMetaObjectCallback regFunctions[] = { Gap::Gfx::igImage::arkRegister, 0 };
 
     AttrsLibrary_MarkRegistered();
     return igMetaObject_RegisterClass(

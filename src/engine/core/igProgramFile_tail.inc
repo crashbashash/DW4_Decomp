@@ -70,8 +70,8 @@ igResult igProgramFile_Open(igProgramFile *self, const char *path) {
             igObject_Destroy(stream);
         }
     }
-    file->stream = (igFileView *)igFile_Create(allocator);
-    igFile_SetFileName((igFile *)file->stream, file->path);
+    file->stream = (igFileView *)Gap::Core::igFile::_instantiateFromPool((igMemoryPoolView *)allocator);
+    ((Gap::Core::igFile *)file->stream)->setFileName(file->path);
     if (file->stream->OpenWithMode(4) == g_resultFailure) {
         igReport_Printf((const char *)"Unable to open: %s\n", (int)file->path);
         igReport_Flush();

@@ -135,16 +135,8 @@ int MemoryContext_GetMeta(void) {
     return g_MemoryContext_metaObject;
 }
 
-int igMemoryFile_GetMeta(void) {
-    return (int)g_igMemoryFile_metaObject;
-}
-
 int igMemoryDictionary_GetMeta(void) {
     return (int)g_igMemoryDictionary_metaObject;
-}
-
-igMetaObject *igMediaFile_GetMeta(void) {
-    return g_igMediaFile_metaObject;
 }
 
 int igLocationTable_GetMeta(void) {
@@ -153,14 +145,6 @@ int igLocationTable_GetMeta(void) {
 
 int igIGBFile_GetMeta(void) {
     return (int)g_igIGBFile_metaObject;
-}
-
-igMetaObject *igFolder_GetMeta(void) {
-    return g_igFolder_metaObject;
-}
-
-igMetaObject *igFile_GetMeta(void) {
-    return g_igFile_metaObject;
 }
 
 int igEventTracker_GetMeta(void) {
@@ -309,10 +293,6 @@ int igLibraryList_GetMeta(void) {
     return (int)g_igLibraryList_metaObject;
 }
 
-igMetaObject *igMediaList_GetMeta(void) {
-    return g_igMediaList_metaObject;
-}
-
 igMetaObject *igMemoryFileEntry_GetMeta(void) {
     return g_igMemoryFileEntry_metaObject;
 }
@@ -402,10 +382,6 @@ igMetaObject *igContextExtList_GetElementMeta(void) {
 
 igMetaObject *igContextExtInfoList_GetElementMeta(void) {
     return g_igContextExtInfo_metaObject;
-}
-
-igMetaObject *igMediaList_GetElementMeta(void) {
-    return Gap::Core::igMedia::getClassMeta();
 }
 
 igMetaObject *igMemoryFileEntryList_GetElementMeta(void) {

@@ -101,5 +101,35 @@ igPsx2VertexArray1_1	_pWaitSeqList	igSmartPointer< ::igPsx2LongList>
 igRegistryValue	_value	igStringObjRef
 igRegistryValue	_valueName	igStringObjRef
 igRegistry	_valueTable	igSmartPointer<igRegistryValueList>
-igRegistry	_registryFile	igSmartPointer< ::igFile>
+igRegistry	_registryFile	igSmartPointer<igFile>
 igRegistry	_additionalSectionNames	igSmartPointer< ::igStringObjList>
+igVertexArray2	_internalBuffer	igSmartPointer<igObject>
+igVertexArray2	_objList	igSmartPointer<igObjectList>
+igVertexArray2	_vertexStream	igSmartPointer<igVertexStream>
+igGeometryAttr	_vertexArray	igSmartPointer<igVertexArray>
+igGeometryAttr	_indexArray	igSmartPointer<igIndexArray>
+igGeometryAttr	_primLengths	igSmartPointer<igUnsignedIntList>
+igGeometryAttr	_dPds	igSmartPointer< ::igVec3fList>
+igGeometryAttr	_dPdt	igSmartPointer< ::igVec3fList>
+igGeometrySetAttr	_vc	igSmartPointer<igVisualContext>
+igGeometrySetAttr	_geometryAttrList	igSmartPointer<igGeometryAttrList>
+igGeometrySetAttr	_drawState	bool
+igImage	_pImage	unsigned char *
+igImage	_pName	char *
+igImage	_localImage	bool
+igImage	_pClut	igSmartPointer<igClut>
+igImage	_compressed	bool
+igImage	_pNameString	igStringRef
+igFile	_fileName	igStringRef
+igFile	_completeFilename	igStringRef
+igMediaFile	_isBinary	bool
+igMediaFile	_isOpen	bool
+igMediaFile	_write	bool
+igMediaFile	_read	bool
+igMediaFile	_fBuf	unsigned char *
+igMediaFile	_media	igSmartPointer<igMedia>
+igMemoryFile	_bIsOpen	bool
+igMemoryFile	_buffer	char *
+igFolder	_folderName	igStringRef
+igFile	_readMode	ReadMode
+igFile	_openMode	OpenMode

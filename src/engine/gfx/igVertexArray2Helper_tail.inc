@@ -2,7 +2,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_23(igVertexArray2Helper *arg0, unsigne
     RP array;
     RP record;
     if (arg0->_vertexArray != 0) { return 0; }
-    array.p = (RC *)igVertexArray2_Create((int)((Gap::Core::igObject *)arg0)->getMemoryPool());
+    array.p = (RC *)Gap::Gfx::igVertexArray2::_instantiateFromPool(((Gap::Core::igObject *)arg0)->getMemoryPool());
     {
         RC *a_ = array.p;
         if (a_ != 0) a_->rc = a_->rc + 1;
@@ -199,7 +199,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_27(igVertexArray2Helper *self) {
 }
 
 void Gap__Gfx__igVertexArray2Helper__vfunc_28(H *arg0, int arg1, igVec3f *arg2) {
-    A28 *a = A28::Cast((A28 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 1, 0)->_data);
+    A28 *a = A28::Cast((A28 *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(1, 0)->_data);
     int n = a->f8;
     if (n != 0 && arg1 >= 0 && arg1 < n) {
         igVec3f *p = &a->f16[arg1];
@@ -213,7 +213,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_29(igVertexArray2Helper *arg0, int ar
     igVec3fList *var_s0;
     float *temp_v1;
 
-    var_s0 = (igVec3fList *)dw4_cast_or_null((char *)(((igVertexData *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 1, 0))->_data), &g_igVec3fList_metaObject);
+    var_s0 = (igVec3fList *)dw4_cast_or_null((char *)(((igVertexData *)((Gap::Gfx::igVertexArray2 *)arg0->_vertexArray)->findVertexData(1, 0))->_data), &g_igVec3fList_metaObject);
     temp_v1 = (float *)(var_s0->_data + (arg1 * 0xC));
     arg2[0] = temp_v1[0];
     arg2[1] = temp_v1[1];
@@ -221,7 +221,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_29(igVertexArray2Helper *arg0, int ar
 }
 
 int Gap__Gfx__igVertexArray2Helper__vfunc_30(struct A30 *arg0, int arg1) {
-    struct B_15ff10 *p = (struct B_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->d, 1, 0)->_data;
+    struct B_15ff10 *p = (struct B_15ff10 *)((Gap::Gfx::igVertexArray2 *)arg0->d)->findVertexData(1, 0)->_data;
     if (p != 0 && ((Gap::Core::igObject *)p)->isOfType(g_igVec3fList_metaObject) != 0) {
         p = (struct B_15ff10 *)p;
     } else {
@@ -231,7 +231,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_30(struct A30 *arg0, int arg1) {
 }
 
 void Gap__Gfx__igVertexArray2Helper__vfunc_31(struct H31 *arg0, int arg1, float *arg2) {
-    struct M *m = (struct M *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->a, 3, 0)->_data;
+    struct M *m = (struct M *)((Gap::Gfx::igVertexArray2 *)arg0->a)->findVertexData(3, 0)->_data;
     int n;
     float *p;
     if (m != 0 && ((Gap::Core::igObject *)m)->isOfType(g_igVec3fList_metaObject) != 0) { m = (struct M*)m; } else { m = 0; }
@@ -249,7 +249,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_32(A_15ff10 *arg0, int arg1, igVec3f 
     Q_15ff10 *var_s0;
     Q_15ff10 *t;
 
-    t = (Q_15ff10 *)((O_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 3, 0))->f12;
+    t = (Q_15ff10 *)((O_15ff10 *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(3, 0))->f12;
     if ((t != 0) && (((Gap::Core::igObject *)t)->isOfType(g_igVec3fList_metaObject) != 0)) {
         var_s0 = t;
     } else {
@@ -264,7 +264,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_32(A_15ff10 *arg0, int arg1, igVec3f 
 int Gap__Gfx__igVertexArray2Helper__vfunc_33(igVertexArray2Helper *arg0, int arg1) {
     void *var_s0;
     void *r;
-    var_s0 = (void *)(*(int *)((char *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 3, 0)) + 12));
+    var_s0 = (void *)(*(int *)((char *)(((Gap::Gfx::igVertexArray2 *)arg0->_vertexArray)->findVertexData(3, 0)) + 12));
     if ((var_s0 != 0) && (((Gap::Core::igObject *)var_s0)->isOfType(g_igVec3fList_metaObject) != 0)) {
         r = var_s0;
     } else {
@@ -279,7 +279,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_34(A_15ff10 *arg0, int arg1, igVec3f 
     int n;
     igVec3f *p;
 
-    t = (Q34 *)((O_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 7, 0))->f12;
+    t = (Q34 *)((O_15ff10 *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(7, 0))->f12;
     if ((t != 0) && (((Gap::Core::igObject *)t)->isOfType(g_igVec3fList_metaObject) != 0)) {
         var_s1 = t;
     } else {
@@ -298,7 +298,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_35(igVertexArray2Helper *arg0, int ar
     void *temp_v1;
     igVec3fList *var_s0;
 
-    var_s0 = (igVec3fList *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 7, 0)->_data);
+    var_s0 = (igVec3fList *)(((Gap::Gfx::igVertexArray2 *)arg0->_vertexArray)->findVertexData(7, 0)->_data);
     if ((var_s0 != 0) && (((Gap::Core::igObject *)var_s0)->isOfType(g_igVec3fList_metaObject) != 0)) {
         var_s0 = (igVec3fList *)var_s0;
 
@@ -315,7 +315,7 @@ igVec3f *Gap__Gfx__igVertexArray2Helper__vfunc_36(A_15ff10 *arg0, int arg1) {
     Q_15ff10 *var_s0;
     Q_15ff10 *t;
 
-    t = (Q_15ff10 *)((O_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 7, 0))->f12;
+    t = (Q_15ff10 *)((O_15ff10 *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(7, 0))->f12;
     if ((t != 0) && (((Gap::Core::igObject *)t)->isOfType(g_igVec3fList_metaObject) != 0)) {
         var_s0 = t;
     } else {
@@ -329,7 +329,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_37(igVertexArray2Helper *arg0, int ar
     void *temp_v1_2;
     igVec3fList *var_s1;
 
-    var_s1 = (igVec3fList *)dw4_cast_or_null((char *)(((igVertexData *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 8, 0))->_data), &g_igVec3fList_metaObject);
+    var_s1 = (igVec3fList *)dw4_cast_or_null((char *)(((igVertexData *)((Gap::Gfx::igVertexArray2 *)arg0->_vertexArray)->findVertexData(8, 0))->_data), &g_igVec3fList_metaObject);
     temp_v1 = var_s1->_count;
     if ((temp_v1 != 0) && (arg1 >= 0) && (arg1 < temp_v1)) {
         temp_v1_2 = (void *)(var_s1->_data + (arg1 * 0xC));
@@ -346,7 +346,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_38(igVertexArray2Helper *arg0, int ar
     void *var_s0;
     igVec3fList *t;
 
-    var_s0 = (void *)(*(int *)((char *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 8, 0)) + 12));
+    var_s0 = (void *)(*(int *)((char *)(((Gap::Gfx::igVertexArray2 *)arg0->_vertexArray)->findVertexData(8, 0)) + 12));
     if ((var_s0 != 0) && (((Gap::Core::igObject *)var_s0)->isOfType(g_igVec3fList_metaObject) != 0)) {
         t = (igVec3fList *)var_s0;
     } else {
@@ -362,7 +362,7 @@ igVec3f *Gap__Gfx__igVertexArray2Helper__vfunc_39(A_15ff10 *arg0, int arg1) {
     Q_15ff10 *var_s0;
     Q_15ff10 *t;
 
-    t = (Q_15ff10 *)((O_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 8, 0))->f12;
+    t = (Q_15ff10 *)((O_15ff10 *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(8, 0))->f12;
     if ((t != 0) && (((Gap::Core::igObject *)t)->isOfType(g_igVec3fList_metaObject) != 0)) {
         var_s0 = t;
     } else {
@@ -375,7 +375,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_40(igVertexArray2Helper *arg0, int ar
     int temp_s1;
     S_15ff10 *temp_v0;
     int temp_s1_2;
-    temp_v0 = (S_15ff10 *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 2, 0));
+    temp_v0 = (S_15ff10 *)(((Gap::Gfx::igVertexArray2 *)arg0->_vertexArray)->findVertexData(2, 0));
     temp_s1 = (int)Gap::Core::igUnsignedIntList::getClassMeta();
     if (temp_s1 == temp_v0->f12->vX()) {
         T_15ff10 *a = temp_v0->f12;
@@ -404,7 +404,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_41(igVertexArray2Helper *arg0, int ar
     S_15ff10 *temp_v0;
     int temp_s1_2;
     U_15ff10 packedColor;
-    temp_v0 = (S_15ff10 *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 2, 0));
+    temp_v0 = (S_15ff10 *)(((Gap::Gfx::igVertexArray2 *)arg0->_vertexArray)->findVertexData(2, 0));
     temp_s1 = (int)Gap::Core::igUnsignedIntList::getClassMeta();
     if (temp_s1 == temp_v0->f12->vX()) {
         T_15ff10 *a = temp_v0->f12;
@@ -437,7 +437,7 @@ int Gap__Gfx__igVertexArray2Helper__vfunc_42(A_15ff10 *arg0, int arg1) {
     X_15ff10 *temp_v0;
     int temp_s0_2;
 
-    temp_v0 = (X_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 2, 0);
+    temp_v0 = (X_15ff10 *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(2, 0);
     temp_a0 = temp_v0->f12;
     temp_s0 = (int)Gap::Core::igUnsignedIntList::getClassMeta();
     if (temp_s0 == temp_a0->vX()) {
@@ -456,7 +456,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_43(igVertexArray2Helper *arg0, int ar
     S43 *temp_v0;
     int temp_s1_2;
 
-    temp_v0 = (S43 *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 2, 0));
+    temp_v0 = (S43 *)(((Gap::Gfx::igVertexArray2 *)arg0->_vertexArray)->findVertexData(2, 0));
     temp_s1 = (int)Gap::Core::igUnsignedIntList::getClassMeta();
     if (temp_s1 == ((DW4VC_88_0 *)(temp_v0->f12))->vX()) {
         Color4f_Unpack((igVec4f *)arg2, 1, temp_v0->f12->f16[arg1]);
@@ -472,7 +472,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_44(igVertexArray2Helper *arg0, int ar
     S44 *v;
     int s3;
     T44 *c;
-    v = (S44 *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 5, 0));
+    v = (S44 *)(((Gap::Gfx::igVertexArray2 *)arg0->_vertexArray)->findVertexData(5, 0));
     s3 = (int)Gap::Core::igFloatList::getClassMeta();
     if (s3 == v->f12->vX()) {
         int idx;
@@ -525,7 +525,7 @@ float Gap__Gfx__igVertexArray2Helper__vfunc_45(igVertexArray2Helper *arg0, int a
     float vec4[4];
     float *p;
     int idx;
-    v = (S44 *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 5, 0));
+    v = (S44 *)(((Gap::Gfx::igVertexArray2 *)arg0->_vertexArray)->findVertexData(5, 0));
     s3 = (int)Gap::Core::igFloatList::getClassMeta();
     if (s3 == v->f12->vX()) {
         idx = arg1 + arg2 * v->f24;
@@ -563,7 +563,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_46(igVertexArray2Helper *helper, int 
     VertexData *v;
     int meta;
     ByteList *l;
-    v = (VertexData *)igVertexArray2__FindVertexData((igVertexArray2 *)helper->_vertexArray, 6, 0);
+    v = (VertexData *)((Gap::Gfx::igVertexArray2 *)helper->_vertexArray)->findVertexData(6, 0);
     meta = (int)Gap::Core::igUnsignedCharList::getClassMeta();
     if (meta == v->list->getMeta()) {
         int i;
@@ -605,7 +605,7 @@ unsigned char Gap__Gfx__igVertexArray2Helper__vfunc_47(igVertexArray2Helper *arg
     unsigned char *p;
     int idx;
     T47 *t;
-    v = (S47 *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 6, 0));
+    v = (S47 *)(((Gap::Gfx::igVertexArray2 *)arg0->_vertexArray)->findVertexData(6, 0));
     s3 = (int)Gap::Core::igUnsignedCharList::getClassMeta();
     if (s3 == v->f12->vX()) {
         idx = arg1 + arg2 * v->f24;
@@ -637,7 +637,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_48(igVertexArray2Helper *arg0, int ar
     void *var_s0;
     igVec2fList *p;
 
-    var_s0 = (void *)(*(int *)((char *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 4, arg1)) + 12));
+    var_s0 = (void *)(*(int *)((char *)(((Gap::Gfx::igVertexArray2 *)arg0->_vertexArray)->findVertexData(4, arg1)) + 12));
     if ((var_s0 != 0) && (((Gap::Core::igObject *)var_s0)->isOfType(g_igVec2fList_metaObject) != 0)) {
         p = (igVec2fList *)var_s0;
     } else {
@@ -656,7 +656,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_49(igVertexArray2Helper *arg0, int ar
     igVec2fList *var_s0;
     igVec2fList *r;
 
-    var_s0 = (igVec2fList *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 4, arg1)->_data);
+    var_s0 = (igVec2fList *)(((Gap::Gfx::igVertexArray2 *)arg0->_vertexArray)->findVertexData(4, arg1)->_data);
     if ((var_s0 != 0) && (((Gap::Core::igObject *)var_s0)->isOfType(g_igVec2fList_metaObject) != 0)) {
 
         r = var_s0;
@@ -670,7 +670,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_49(igVertexArray2Helper *arg0, int ar
 
 int Gap__Gfx__igVertexArray2Helper__vfunc_50(igVertexArray2Helper *arg0, int arg1, int arg2) {
     char *var_s0; char *p;
-    var_s0 = (char *)(*(int *)((char *)(igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 4, arg1)) + 12));
+    var_s0 = (char *)(*(int *)((char *)(((Gap::Gfx::igVertexArray2 *)arg0->_vertexArray)->findVertexData(4, arg1)) + 12));
     if ((var_s0 != 0) && (((Gap::Core::igObject *)var_s0)->isOfType(g_igVec2fList_metaObject) != 0)) {
         p = var_s0;
     } else {
@@ -683,7 +683,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_51(A_15ff10 *arg0, int arg1, float fp
     Q51 *var_s0;
     Q51 *t;
 
-    t = (Q51 *)((O_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 9, 0))->f12;
+    t = (Q51 *)((O_15ff10 *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(9, 0))->f12;
     if ((t != 0) && (((Gap::Core::igObject *)t)->isOfType(Gap::Core::igFloatList::getClassMeta()) != 0)) {
         var_s0 = t;
     } else {
@@ -696,7 +696,7 @@ float Gap__Gfx__igVertexArray2Helper__vfunc_52(A_15ff10 *arg0, int arg1) {
     Q51 *var_s0;
     Q51 *t;
 
-    t = (Q51 *)((O_15ff10 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 9, 0))->f12;
+    t = (Q51 *)((O_15ff10 *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(9, 0))->f12;
     if ((t != 0) && (((Gap::Core::igObject *)t)->isOfType(Gap::Core::igFloatList::getClassMeta()) != 0)) {
         var_s0 = t;
     } else {
@@ -706,7 +706,7 @@ float Gap__Gfx__igVertexArray2Helper__vfunc_52(A_15ff10 *arg0, int arg1) {
 }
 
 void Gap__Gfx__igVertexArray2Helper__vfunc_53(H *arg0, int arg1, V53 *arg2) {
-    A53 *a = A53::Cast((A53 *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 9, 0)->_data);
+    A53 *a = A53::Cast((A53 *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(9, 0)->_data);
     int n = a->f8;
     if (n != 0 && arg1 >= 0 && arg1 < n) {
         V53 *p = &a->f16[arg1];
@@ -719,26 +719,26 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_54(igVertexArray2Helper *arg0, int ar
     igVec2fList *var_s0;
     char *temp_v1;
 
-    var_s0 = (igVec2fList *)dw4_cast_or_null((char *)(((igVertexData *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->_vertexArray, 9, 0))->_data), &g_igVec2fList_metaObject);
+    var_s0 = (igVec2fList *)dw4_cast_or_null((char *)(((igVertexData *)((Gap::Gfx::igVertexArray2 *)arg0->_vertexArray)->findVertexData(9, 0))->_data), &g_igVec2fList_metaObject);
     temp_v1 = (char *)(var_s0->_data + (arg1 * 8));
     *(float *)((char *)(arg2) + 0) = *(float *)(temp_v1 + 0);
     *(float *)((char *)(arg2) + 4) = *(float *)(temp_v1 + 4);
 }
 
 /* Looks up the bound vertex array's stream with component type 5, index 0
- * (igVertexArray2__FindVertexData) and passes it to FUN_00162b50, which switches on the class of
+ * (Gap::Gfx::igVertexArray2::findVertexData) and passes it to FUN_00162b50, which switches on the class of
  * the stream's data list and leaves its component count in v0. The declared return type is void. */
 
 void Gap__Gfx__igVertexArray2Helper__vfunc_24(igVertexArray2Helper *self) {
-    FUN_00162b50((A162b50 *)igVertexArray2__FindVertexData((igVertexArray2 *)self->_vertexArray, 5, 0));
+    FUN_00162b50((A162b50 *)((Gap::Gfx::igVertexArray2 *)self->_vertexArray)->findVertexData(5, 0));
 }
 
 /* Same as slot 24 for the stream with component type 6, index 0: looks it up with
- * igVertexArray2__FindVertexData and passes it to FUN_00162ca0 (same shape as FUN_00162b50 with
+ * Gap::Gfx::igVertexArray2::findVertexData and passes it to FUN_00162ca0 (same shape as FUN_00162b50 with
  * fewer data-list classes), whose component count is left in v0. The declared return type is void. */
 
 void Gap__Gfx__igVertexArray2Helper__vfunc_25(igVertexArray2Helper *self) {
-    FUN_00162ca0(igVertexArray2__FindVertexData((igVertexArray2 *)self->_vertexArray, 6, 0));
+    FUN_00162ca0(((Gap::Gfx::igVertexArray2 *)self->_vertexArray)->findVertexData(6, 0));
 }
 
 void Gap__Gfx__igVertexArray2Helper__vfunc_56(void **arg0, int arg1, void **arg2, int arg3, int *arg4) {
@@ -804,14 +804,14 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_58(H58 *arg0, unsigned int *arg1) {
     unsigned int v;
     int n;
     unsigned char sel;
-    s3 = (igVertexData *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 1, 0);
-    s2 = (igVertexData *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 3, 0);
-    s1 = (igVertexData *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 2, 0);
-    s6 = (igVertexData *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 5, 0);
-    s7 = (igVertexData *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 6, 0);
-    s8 = (igVertexData *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 8, 0);
-    vertexData = (igVertexData *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 7, 0);
-    s0 = (igVertexData *)igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 9, 0);
+    s3 = (igVertexData *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(1, 0);
+    s2 = (igVertexData *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(3, 0);
+    s1 = (igVertexData *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(2, 0);
+    s6 = (igVertexData *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(5, 0);
+    s7 = (igVertexData *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(6, 0);
+    s8 = (igVertexData *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(8, 0);
+    vertexData = (igVertexData *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(7, 0);
+    s0 = (igVertexData *)((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(9, 0);
     if (s3 != 0) {
         *arg1 |= 1;
     }
@@ -852,7 +852,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_58(H58 *arg0, unsigned int *arg1) {
         }
     }
     n = 0;
-    while (igVertexArray2__FindVertexData((igVertexArray2 *)arg0->f12, 4, n) != 0) {
+    while (((Gap::Gfx::igVertexArray2 *)arg0->f12)->findVertexData(4, n) != 0) {
         n += 1;
     }
     *arg1 &= 0xFFF0FFFF;
@@ -902,7 +902,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_59(igVertexArray2Helper *self, int ty
      * the pair (case 4) and quad blocks set the float register order */
     float x, y, z;
 
-    vd = (VData *)igVertexArray2__FindVertexData((igVertexArray2 *)self->_vertexArray, type, index);
+    vd = (VData *)((Gap::Gfx::igVertexArray2 *)self->_vertexArray)->findVertexData(type, index);
     *out = 1e23f;
     list = vd->list;
     if ((list != 0) && (((Gap::Core::igObject *)list)->isOfType(Gap::Core::igFloatList::getClassMeta()) != 0)) { scalars = list; } else { scalars = 0; }
@@ -1002,7 +1002,7 @@ void Gap__Gfx__igVertexArray2Helper__vfunc_60(igVertexArray2Helper *self, int ty
      * the pair (case 4) and quad blocks set the float register order */
     float x, y, z;
 
-    vd = (VData *)igVertexArray2__FindVertexData((igVertexArray2 *)self->_vertexArray, type, index);
+    vd = (VData *)((Gap::Gfx::igVertexArray2 *)self->_vertexArray)->findVertexData(type, index);
     *out = -1e23f;
     list = vd->list;
     if ((list != 0) && (((Gap::Core::igObject *)list)->isOfType(Gap::Core::igFloatList::getClassMeta()) != 0)) { scalars = list; } else { scalars = 0; }
@@ -1123,7 +1123,6 @@ float FUN_00163800(int arg0, int arg1) {
     return (float) (arg0 >> arg1);
 }
 
-
 ObjectRefWord *FUN_00164870(ObjectRefWord *self,int delete_storage) {
     if(self) {
         ObjectRefTarget *object=self->value;
@@ -1204,28 +1203,33 @@ int *FUN_00164d50(void) {
     return &DAT_00560750[0];
 }
 
-int FUN_00164d60(int arg0, A_164d60 *arg1) {
-    int *p; int v;
-    p = 0;
-    switch (arg1->f16) {
-    case 1: p = (int *)FUN_001649f0(); break;
-    case 2: p = (int *)FUN_00164a60(); break;
-    case 3: p = (int *)FUN_00164aa0(); break;
-    case 4: p = (int *)FUN_00164b10(); break;
-    case 5: p = (int *)FUN_00164b80(); break;
-    case 6: p = (int *)FUN_00164c20(); break;
-    case 7: p = (int *)FUN_00164c70(); break;
-    case 8: p = (int *)FUN_00164ca0(); break;
-    case 9: p = (int *)FUN_00164cd0(); break;
-    case 10: p = (int *)FUN_00164d50(); break;
+namespace Gap {
+namespace Gfx {
+
+bool igVertexArray2::isVertexDataSupported(const igVertexData *vertexData) const
+{
+    int *metas = 0;
+    int meta;
+    switch (vertexData->_componentType) {
+    case 1: metas = FUN_001649f0(); break;
+    case 2: metas = FUN_00164a60(); break;
+    case 3: metas = FUN_00164aa0(); break;
+    case 4: metas = FUN_00164b10(); break;
+    case 5: metas = FUN_00164b80(); break;
+    case 6: metas = FUN_00164c20(); break;
+    case 7: metas = FUN_00164c70(); break;
+    case 8: metas = FUN_00164ca0(); break;
+    case 9: metas = FUN_00164cd0(); break;
+    case 10: metas = FUN_00164d50(); break;
     }
-    goto test;
-body:
-    if (v == arg1->f12->v88()) { return 1; }
-    p = p + 1;
-test:
-    v = *p;
-    if (v != 0) goto body;
-    return 0;
+    while ((meta = *metas) != 0) {
+        if (meta == (int)((igDataList *)vertexData->_data)->getMeta()) {
+            return true;
+        }
+        metas++;
+    }
+    return false;
+}
+}
 }
 
